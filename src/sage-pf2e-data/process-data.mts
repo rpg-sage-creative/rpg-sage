@@ -66,7 +66,6 @@ function processSources() {
 	info(`Processing source-list.json ... ${total} items; u${unique} IDs; +${created} IDs; ♻️${recreated} IDs; ~${normalized} IDs; +${aoned} aonIDs`);
 }
 
-
 /** Returns TRUE if the source is valid and is missing aonId */
 function validateSource(path: string, core: TCore) {
 	if (core.objectType !== "Source") {
@@ -101,6 +100,7 @@ function updatePreviousId(core: TCore) {
 	return false;
 }
 function processData(filePathAndName: string) {
+console.log(filePathAndName, fs.existsSync(filePathAndName))
 	const coreList = utils.FsUtils.readJsonFileSync(filePathAndName) as TCore[];
 
 	//#region invalid file/data
@@ -207,7 +207,6 @@ function processData(filePathAndName: string) {
 	return coreList;
 }
 
-
 function processMissingSpells() {
 	info(`\nChecking for missing spells ...`);
 	const missing = getPf2ToolsData().filter(pf2 => !allCores.find(core => compareNames(core, pf2)));
@@ -244,7 +243,9 @@ function processLore() {
 }
 //#endregion
 
-loadPf2ToolsData().then(() => {
+export default async function process(): Promise<void> {
+	await loadPf2ToolsData();
+
 	processSources();
 	processAbcData();
 	processMissingSpells();
@@ -253,4 +254,4 @@ loadPf2ToolsData().then(() => {
 	parsePf2Data();
 
 	info(""); // spacer for bash script
-});
+}

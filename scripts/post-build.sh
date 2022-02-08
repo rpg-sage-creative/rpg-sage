@@ -17,6 +17,7 @@ eval "ln -s $cloudSageDataDir sage"
 
 cd "$sageRootDir/dist/data/pf2e"
 eval "ln -s ../../../data/pf2e/dist dist"
+eval "ln -s ../../../data/pf2e/pf2-tools.json pf2-tools.json"
 
 # Add any other post-build tasks here
 

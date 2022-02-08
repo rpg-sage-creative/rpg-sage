@@ -7,6 +7,9 @@ dist/
 node_modules/
 types/
 **/.DS_Store
+abc-data.json
+all-lores.csv
+pf2-tools.json
 
 # ignore scripts (to ignore the root level links)
 *.sh

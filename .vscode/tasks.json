@@ -54,8 +54,8 @@
 		{
 			"label": "run-tests",
 			"type": "shell",
-			"command": "node",
-			"args": [" --es-module-specifier-resolution=node", "./tests/run.mjs"],
+			"command": "bash",
+			"args": ["./scripts/run-tests.sh"],
 			"group": {
 				"kind": "test",
 				"isDefault": true

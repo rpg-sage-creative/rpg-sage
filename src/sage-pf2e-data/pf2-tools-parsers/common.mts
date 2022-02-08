@@ -44,6 +44,7 @@ export function findAndRemove(lines: string[], key: string, count?: number): str
 	}
 	return undefined;
 }
+
 // function successFailure(lines: string[]): THasSuccessOrFailure {
 // 	const criticalSuccess = findAndRemove(lines, "Critical Success", 1);
 // 	const success = findAndRemove(lines, "Success", 1);
@@ -51,6 +52,7 @@ export function findAndRemove(lines: string[], key: string, count?: number): str
 // 	const criticalFailure = findAndRemove(lines, "Critical Failure", 1);
 // 	return { criticalSuccess, success, failure, criticalFailure }
 // }
+
 function cleanDetails(lines: TDetail[]): void {
 	const regex = /^\*\*((?:Critical )?(?:Success|Failure))\*\*\s*(.*?)$/i;
 	const matches: OrNull<RegExpMatchArray>[] = [];
@@ -86,16 +88,19 @@ export function parseBody<T extends BaseCore>(body: string): Partial<T> {
 	return parsedBody;
 }
 
-
 //#region pf2tools
+
 const pf2ToolsData: Pf2Tools.Pf2ToolsDataCore[] = [];
+const PF2_TOOLS_PATH = "../data/pf2e/pf2-tools.json";
+const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
+
 export async function loadPf2ToolsData() {
 	if (!pf2ToolsData.length) {
-		let data = await utils.FsUtils.readJsonFile<Pf2Tools.Pf2ToolsDataCore[]>(`./data/pf2-tools/array.json`).catch(() => null);
+		let data = await utils.FsUtils.readJsonFile<Pf2Tools.Pf2ToolsDataCore[]>(PF2_TOOLS_PATH).catch(() => null);
 		if (!data) {
 			info(`Fetching new data from pf2 tools ...`);
-			data = await utils.HttpsUtils.getJson("https://character.pf2.tools/assets/json/all.json").catch(() => null);
-			utils.FsUtils.writeFileSync(`./data/pf2-tools/array.json`, data, true, true);
+			data = await utils.HttpsUtils.getJson(PF2_TOOLS_URL).catch(() => null);
+			await utils.FsUtils.writeFile(PF2_TOOLS_PATH, data, true, true);
 		}
 		pf2ToolsData.push(...data!);
 	}
@@ -115,22 +120,26 @@ export function getPf2ToolsData() {
 // 	if (sageCore.objectType === "Gear") return "item";
 // 	return sageCore.objectType.toLowerCase();
 // }
+
 // function nameGotFixed(pf2: Pf2Tools.Pf2ToolsDataCore, sage: TCore) {
 // 	return pf2?.name === "MONKEY TOWN" && sage?.name === "HOT STUFF";
 // 	// if (sage.objectType === "Domain" && pf2.name === `${sage.name} Domain`) return sage.name = `${sage.name} Domain`;
 // }
+
 function testPf2Name(pf2: Pf2Tools.Pf2ToolsDataCore, sage: TCore) {
 	if (compareNames(pf2, sage)) return true;
 	if (sage.objectType === "Domain") return pf2.name === `${sage.name} Domain`;
 	if (sage.objectType === "Deity") return pf2.name.split("(")[0].trim() === sage.name;
 	return false;
 }
+
 // export function checkPf2ToolsForName(core: TCore) {
 // 	if (["Rule"].includes(core.objectType)) return;
 // 	const pf2Type = objectTypeToPf2Type(core);
 // 	const filtered = getPf2ToolsData().filter(o => o.type === pf2Type);
 // 	return filtered.find(pf2 => nameGotFixed(pf2, core));
 // }
+
 export function checkPf2ToolsForAonId(core: TCore) {
 	if (["Rule"].includes(core.objectType)) return undefined;
 	const pf2Type = Pf2Tools.default.objectTypeToPf2Type(core);
@@ -149,6 +158,7 @@ export function checkPf2ToolsForAonId(core: TCore) {
 	}
 	return undefined;
 }
+
 //#endregion
 
 //#region parse pf2data

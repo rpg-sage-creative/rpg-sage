@@ -106,9 +106,9 @@ export { IWeatherDayResult, IWeatherHourResult, default as WeatherGenerator } fr
 
 export * from "./common";
 
-export function registerAndLoad(pf2DataPath?: string): Promise<void> {
+export function registerAndLoad(pf2DataPath: string, includePf2ToolsData = false): Promise<void> {
 	registerBaseObjects();
 	registerBestiaryObjects();
 	registerObjects();
-	return loadData(pf2DataPath);
+	return loadData(pf2DataPath, includePf2ToolsData);
 }

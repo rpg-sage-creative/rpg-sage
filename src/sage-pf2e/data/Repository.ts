@@ -246,11 +246,11 @@ export function searchBySource<T extends HasSource>(objectType: string, searchIn
 
 const missing: string[] = [];
 
-export function loadData(dataPath = "./data2e", includePf2ToolsData = false): Promise<void> {
+export function loadData(dataPath: string, includePf2ToolsData = false): Promise<void> {
 	const distPath = `${dataPath}/dist`.replace(/\/+/g, "/");
 	return loadDataFromDist(distPath).then(() => {
 		if (includePf2ToolsData) {
-			return Pf2ToolsData.load(distPath);
+			return Pf2ToolsData.load(dataPath);
 		}
 		return Promise.resolve();
 	});

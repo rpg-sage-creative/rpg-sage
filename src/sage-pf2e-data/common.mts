@@ -1,8 +1,8 @@
 import utils from "../sage-utils";
 import type { TCore } from "./types.mjs";
 
-export const SrcDataPath = "./data/src";
-export const DistDataPath = "./data/dist";
+export const SrcDataPath = "../data/pf2e/src";
+export const DistDataPath = "../data/pf2e/dist";
 
 const VERBOSE = false;
 const DEBUGGING = false;
