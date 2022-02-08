@@ -1,0 +1,142 @@
+[
+	{
+		"name": "Clownish Curse",
+		"level": 4,
+		"objectType": "Spell",
+		"traits": [ "Uncommon", "Attack", "Curse", "Enchantment", "Mental", "Misfortune" ],
+		"traditions": [ "arcane", "occult" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "touch",
+		"targets": "1 creature",
+		"savingThrow": "Will",
+		"duration": "varies",
+		"details": [
+			"ou afflict the target with a curse that causes it to emit ridiculous noises as it moves. Furthermore, the target's hands and feet become awkward and uncoordinated, as though it were wearing oversized gloves and shoes.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"For 1 round, the target must roll twice and use the worse result whenever attempting an Acrobatics, Stealth, or Thievery check. If the target rolls a failure at an Acrobatics, Stealth, or Thievery check, it gets a critical failure instead."
+				],
+				"failure": [
+					"As success, but the effect is 1 hour."
+				],
+				"criticalFailure": [
+					"As success, except the effect is permanent."
+				]
+			}
+		],
+		"page": 77,
+		"source": "PZO90152",
+		"focus": false,
+		"aonId": 642,
+		"id": "99bb2a3f-a0e2-4415-ad79-ef55992d788f"
+	},
+	{
+		"name": "Favorable Review",
+		"level": 4,
+		"objectType": "Spell",
+		"traits": [ "Uncommon", "Enchantment", "Incapacitation", "Mental" ],
+		"traditions": [ "arcane", "occult" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "touch",
+		"targets": "1 creature",
+		"savingThrow": "Will",
+		"duration": "varies",
+		"details": [
+			"You enchant a creature to ensure they have only good things to say about your show. Identify a single creature, location, or performance, such as \"Dame Ellendia,\" \"Savories Meats,\" or \"the Theater of the Mind's latest magic show.\" The target must attempt Will save. You can Dismiss the spell.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected and knows you tried to trick it."
+				],
+				"success": [
+					"The target is unaffected but thinks your spell was something harmless instead of <i>favorable review</i>, unless it identifies the spell (usually using Identify Magic)."
+				],
+				"failure": [
+					"The target cannot speak unfavorably about the subject for 1 week. This doesn't change the target's opinion about the subject, but the target's attempts to speak ill of the subject-whether in speech, writing, or other communication-always twist into compliments and praise instead. The target likely becomes aware of this effect quickly and can avoid speaking about the subject entirely if they choose."
+				],
+				"criticalFailure": [
+					"As failure, except the duration is permanent and the target genuinely holds a favorable opinion about the subject, with their attitude toward the creature (or creatures associated with the subject, such as the owner of a location or artists in a performance) becoming two degrees better (for example, helpful instead of indifferent)."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The range increases to 60 feet and you can target up to 10 creatures.", "level": 8 }
+		],
+		"page": 77,
+		"source": "PZO90152",
+		"focus": false,
+		"aonId": 644,
+		"id": "367a8009-4a34-4232-8a3e-2bd9bb27f5cf"
+	},
+	{
+		"name": "Pyrotechnics",
+		"level": 3,
+		"objectType": "Spell",
+		"traits": [ "Uncommon", "Fire", "Transmutation" ],
+		"traditions": [ "arcane", "occult" ],
+		"cast": "[A][A]",
+		"components": [ "material", "somatic" ],
+		"range": "120 feet",
+		"targets": "1 fire",
+		"savingThrow": "Fortitude",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You turn a fire into either a burst of blinding fireworks or a thick cloud of choking smoke, chosen when you Cast the Spell. The spell targets one fire source, which is immediately extinguished if it is a non-magical fire the size of a campfire or smaller. If the fire source is a creature, the creature takes 1d6 points of cold damage and is not extinguished.",
+			"<b>Fireworks</b> The targeted fire explodes into a colorful array of flashy, fiery, glowing aerial fireworks in a 20-foot-radius burst. The first time you Sustain the Spell each round, you can cause the area of fireworks to ascend up to 20 feet, but you cannot move the area laterally. Creatures that start their turn within the area of the fireworks must attempt a Fortitude save, and are then temporarily immune for 1 minute.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature is dazzled for 1 round."
+				],
+				"failure": [
+					"The creature is blinded for 1 round."
+				],
+				"criticalFailure": [
+					"The creature is blinded for 1 minute."
+				]
+			},
+			"<b>Smoke Cloud</b> Thick smoke billows out from the fire and coalesces into a cloud that spreads to fill a 20-foot-radius burst centered on the targeted fire. Creatures within the smoke cloud take a -4 circumstance penalty to visual Perception checks, and creatures outside the smoke cloud take a -4 circumstance penalty to visual Perception checks to detect creatures or objects within it. The first time you Sustain the Spell each round, you can cause the smoke cloud to descend up to 20 feet, but you cannot move the area laterally. Creatures that start their turn within the smoke cloud must attempt a Fortitude save, and are then temporarily immune for 1 minute.",
+			{
+				"success": [
+					"The creature is unaffected."
+				],
+				"failure": [
+					"The creature is sickened 1."
+				],
+				"criticalFailure": [
+					"The creature is sickened 1 and cannot recover from the sickened condition while in the area of the smoke cloud."
+				]
+			}
+		],
+		"page": 77,
+		"source": "PZO90152",
+		"focus": false,
+		"aonId": 645,
+		"id": "fd5f961e-afef-4fa8-b3cd-72d363f5f78a"
+	},
+	{
+		"name": "Pillar of Water",
+		"level": 3,
+		"objectType": "Spell",
+		"traits": [ "Uncommon", "Evocation", "Water" ],
+		"traditions": [ "arcane", "primal" ],
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"range": "120 feet",
+		"duration": "1 minute",
+		"details": [
+			"You create a large, self-contained cylinder of still fresh water. The pillar has a maximum radius of 15 feet and a maximum height of 60 feet. Creatures inside the pillar can swim through the water as normal (Swim DC 10), or, if the spell was cast on solid ground, walk along the bottom (which is difficult terrain). Any creature that exits the pillar falls or lands accordingly."
+		],
+		"page": 77,
+		"source": "PZO90152",
+		"focus": false,
+		"aonId": 646,
+		"id": "c50d4a71-d19b-4c63-82b5-733853eb791a"
+	}
+]

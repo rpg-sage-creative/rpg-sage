@@ -1,0 +1,45 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Oracle",
+		"duringCombatEncounters": [
+			"You draw upon your mystery to empower yourself in combat, balancing miraculous effects with the increasing severity of your curse as conflicting divine demands overtax your physical body.",
+			"You cast spells to aid your allies and devastate your foes, or depending on your mystery, you might wade into battle yourself."
+		],
+		"duringSocialEncounters": [
+			"You rely upon the insights drawn from your mystery.",
+			"You might leverage your curse to intimidate people or hide its effects to better blend in."
+		],
+		"whileExploring": [
+			"You recenter yourself to bring the terrible metaphysical conflicts causing your curse back under control so you can draw upon your mystery's power again later.",
+			"You remain aware of supernatural forces acting around you, perhaps peeking into the future to gain insights."
+		],
+		"inDowntime": [
+			"You might seek to learn more about your mystery and the divine wellsprings that fuel your power.",
+			"Associating with others interested in the subject of your mystery can make it easier to live with your curse.",
+			"You could associate with an organized religion or even start your own faithful following devoted to your mystery."
+		],
+		"youMight": [
+			"View your oracular powers as a blessing, a curse, or both.",
+			"Push yourself to the limits of what you can withstand to work great acts of magic.",
+			"Rely on magical items to provide a pool of safer and more reliable magic."
+		],
+		"othersProbably": [
+			"Don't realize your spellcasting draws upon divine power and instead believe you command stranger-and possibly evil-powers.",
+			"Assume you performed some terrible transgression to become cursed by the gods.",
+			"Admire your determination and the sacrifices you make to perform wondrous acts."
+		],
+		"classPath": "Mystery",
+		"aonId": 14,
+		"source": "PZO2105",
+		"id": "0c7d1a8b-1829-4fe0-8861-bcab3ffa6c03"
+	},
+	{ "objectType": "ClassPath", "name": "Ancestors", "class": "Oracle", "source": "PZO2105", "id": "720edbd6-883d-4057-af88-c8068bf7fb1c", "aonId": 1 },
+	{ "objectType": "ClassPath", "name": "Battle", "class": "Oracle", "source": "PZO2105", "id": "f200187a-e915-4c7e-aef8-c9d1d35ef62d", "aonId": 2 },
+	{ "objectType": "ClassPath", "name": "Bones", "class": "Oracle", "source": "PZO2105", "id": "40843945-a4bc-4d14-8fe3-208a5220f6fd", "aonId": 3 },
+	{ "objectType": "ClassPath", "name": "Cosmos", "class": "Oracle", "source": "PZO2105", "id": "469198c6-0a0a-408d-b0a8-cf635141812a", "aonId": 4 },
+	{ "objectType": "ClassPath", "name": "Flames", "class": "Oracle", "source": "PZO2105", "id": "77088a51-b1cd-443e-a043-cd522cfe2313", "aonId": 5 },
+	{ "objectType": "ClassPath", "name": "Life", "class": "Oracle", "source": "PZO2105", "id": "d9ca2568-9c42-40dc-92fb-96a143d1cccc", "aonId": 6 },
+	{ "objectType": "ClassPath", "name": "Lore", "class": "Oracle", "source": "PZO2105", "id": "b7891f9b-7c31-4f77-b0d3-b928883be6c8", "aonId": 7 },
+	{ "objectType": "ClassPath", "name": "Tempest", "class": "Oracle", "source": "PZO2105", "id": "22d60e71-8f3f-4a6d-8de7-c8e08369747e", "aonId": 8 }
+]

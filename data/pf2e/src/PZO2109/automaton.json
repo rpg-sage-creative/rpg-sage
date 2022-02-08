@@ -1,0 +1,25 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Automaton",
+		"traits": [ "Rare" ],
+		"youMight": [
+			"Have lived for several centuries and through many significant events.",
+			"Be hesitant to trust others until they've earned it.",
+			"Remember little of your life before becoming an automaton."
+		],
+		"othersProbably": [
+			"Mistake you for a mindless construct when they first see you.",
+			"Assume you have secret knowledge about magic and technology.",
+			"Look upon you with awe."
+		],
+		"aonId": 0,
+		"source": "PZO2109",
+		"page": 36,
+		"id": "e6451ea8-a5f0-47d8-81be-33bf62e3f027"
+	},
+	{ "objectType": "Heritage", "name": "Hunter Automaton", "ancestry": "Automaton", "source": "PZO2109", "id": "1a919ba8-ec58-4ff8-8f9a-79d56453ec03", "aonId": 0 },
+	{ "objectType": "Heritage", "name": "Mage Automaton", "ancestry": "Automaton", "source": "PZO2109", "id": "d3ac8009-71eb-4755-bde4-2b54622e3599", "aonId": 0 },
+	{ "objectType": "Heritage", "name": "Sharpshooter Automaton", "ancestry": "Automaton", "source": "PZO2109", "id": "06e12fb3-ec06-4785-8243-79598e9d6942", "aonId": 0 },
+	{ "objectType": "Heritage", "name": "Warrior Automaton", "ancestry": "Automaton", "source": "PZO2109", "id": "f5b91830-8fb5-422e-a371-7b0c095d3360", "aonId": 0 }
+]

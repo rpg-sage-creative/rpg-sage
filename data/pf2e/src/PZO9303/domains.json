@@ -1,0 +1,103 @@
+[
+	{
+		"objectType": "Domain",
+		"name": "Change",
+		"description": "You can restructure the physical and metaphysical.",
+		"spells": [ "Adapt Self", "Adaptive Ablation" ],
+		"source": "PZO9303",
+		"aonId": 40,
+		"id": "5e214331-41a4-4dc6-80bc-fd2608487290"
+	},
+	{ "objectType": "Domain", "name": "Cold", "description": "You control ice, snow, and freezing temperatures.", "spells": [ "Winter Bolt", "Diamond Dust" ], "source": "PZO9303", "aonId": 41, "id": "63d54bb8-bc3d-4d50-9824-c4a04fea35ea" },
+	{
+		"objectType": "Domain",
+		"name": "Decay",
+		"description": "You have the power to spoil and deteriorate matter.",
+		"spells": [ "Withering Grasp", "Fallow Field" ],
+		"source": "PZO9303",
+		"aonId": 42,
+		"id": "a24bb660-7510-41b4-b775-efc8c5a4bf5a"
+	},
+	{
+		"objectType": "Domain",
+		"name": "Delirium",
+		"description": "You can bring about hallucinations and restlessness.",
+		"spells": [ "Hyperfocus Ephemeral", "Hazards" ],
+		"source": "PZO9303",
+		"aonId": 43,
+		"id": "6d428bd2-1b21-450d-a644-db1ad799f45b"
+	},
+	{ "objectType": "Domain", "name": "Dust", "description": "You have the power to dry and crumble what opposes you.", "spells": [ "Parch", "Dust Storm" ], "source": "PZO9303", "aonId": 44, "id": "b89fe422-43df-4e6f-b950-9ba2fe1d9aa4" },
+	{
+		"objectType": "Domain",
+		"name": "Duty",
+		"description": "You defend oaths and carry out your divine missions with great dedication.",
+		"spells": [
+			"Oathkeeper's Insignia",
+			"Dutiful Challenge"
+		],
+		"source": "PZO9303",
+		"aonId": 45,
+		"id": "ad177c0c-c715-49fd-aced-5ef466e9e4c1"
+	},
+	{
+		"objectType": "Domain",
+		"name": "Glyph",
+		"description": "You wield power over written words and symbols.",
+		"spells": [ "Redact", "Ghostly Transcription" ],
+		"source": "PZO9303",
+		"aonId": 46,
+		"id": "c1659a0d-993a-47d1-a40b-1e3473303731"
+	},
+	{
+		"objectType": "Domain",
+		"name": "Lightning",
+		"description": "You control electricity, thunder, and storms.",
+		"spells": [ "Charged Javelin", "Bottle the Storm" ],
+		"source": "PZO9303",
+		"aonId": 47,
+		"id": "50fad601-2d9f-4702-89cf-76fb686477e7"
+	},
+	{
+		"objectType": "Domain",
+		"name": "Plague",
+		"description": "You wield disease and pestilence like a weapon.",
+		"spells": [ "Divine Plagues", "Foul Miasma" ],
+		"source": "PZO9303",
+		"aonId": 48,
+		"id": "2266c7f2-611a-41d0-8f46-f561291b9c40"
+	},
+	{ "objectType": "Domain", "name": "Repose", "description": "You ease mental burdens.", "spells": [ "Share Burden", "Font of Serenity" ], "source": "PZO9303", "aonId": 49, "id": "2ee30d53-708c-4036-9335-2482aa7ef1b4" },
+	{
+		"objectType": "Domain",
+		"name": "Sorrow",
+		"description": "You have a painful connection to melancholy and sadness.",
+		"spells": [ "Lament", "Overflowing Sorrow" ],
+		"source": "PZO9303",
+		"aonId": 50,
+		"id": "50df50c9-13b3-475a-924e-2c12bc9d2412"
+	},
+	{ "objectType": "Domain", "name": "Soul", "description": "You wield power over the spiritual.", "spells": [ "Eject Soul", "Ectoplasmic Interstice" ], "source": "PZO9303", "aonId": 51, "id": "a44da126-6c1e-4e3f-a1a7-be196e8f0ca4" },
+	{ "objectType": "Domain", "name": "Star", "description": "You command the power of the stars.", "spells": [ "Zenith Star", "Asterism" ], "source": "PZO9303", "aonId": 52, "id": "49420741-e5f0-4100-8cf4-2c504b8e17e0" },
+	{ "objectType": "Domain", "name": "Swarm", "description": "You exert control over masses of creatures.", "spells": [ "Swarmsense Swarm", "Form" ], "source": "PZO9303", "aonId": 53, "id": "a204d15d-6064-43bc-8f48-7c7faef771a9" },
+	{ "objectType": "Domain", "name": "Time", "description": "You reign over the flow of time.", "spells": [ "Delay Consequence", "Stasis" ], "source": "PZO9303", "aonId": 54, "id": "cd0c2b78-c2b0-4d82-a3a9-42f8da0ad2e5" },
+	{
+		"objectType": "Domain",
+		"name": "Vigil",
+		"description": "You watch over those long passed and guard their secrets.",
+		"spells": [ "Object Memory", "Remember the Lost" ],
+		"source": "PZO9303",
+		"aonId": 55,
+		"id": "36b90b15-0212-4c42-b7c4-05ae93a85f52"
+	},
+	{ "objectType": "Domain", "name": "Void", "description": "You draw power from emptiness.", "spells": [ "Empty Inside", "Door To Beyond" ], "source": "PZO9303", "aonId": 56, "id": "d86cb05b-beff-433e-91c8-f17d23d05fd0" },
+	{
+		"objectType": "Domain",
+		"name": "Wyrmkin",
+		"description": "You draw on the power of dragons, linnorms, and other powerful reptilian creatures.",
+		"spells": [ "Draconic Barrage", "Roar of the Wyrm" ],
+		"source": "PZO9303",
+		"aonId": 57,
+		"id": "9c180561-5682-43f3-9cc3-85c4cf0acbca"
+	}
+]

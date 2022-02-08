@@ -1,0 +1,24 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Catfolk",
+		"youMight": [
+			"Demonstrate genuine interest by asking a lot of enthusiastic questions.",
+			"Avoid interpersonal conflict by giving someone a cold shoulder or by simply leaving the area.",
+			"Carefully scout a target or problem before striking at it quickly."
+		],
+		"othersProbably": [
+			"Think you monopolize conversations with your incessant queries or opinions.",
+			"Consider you haughty or prideful.",
+			"Ascribe more emotion than you feel to your involuntary purrs or growling."
+		],
+		"aonId": 17,
+		"source": "PZO2105",
+		"id": "8b8b6f60-2e5e-4b06-af8a-b33dd30ccb3a"
+	},
+	{ "objectType": "Heritage", "name": "Clawed Catfolk", "ancestry": "Catfolk", "source": "PZO2105", "id": "0c0a295e-5393-4ac3-9714-5ef9fd4774c1", "aonId": 58 },
+	{ "objectType": "Heritage", "name": "Hunting Catfolk", "ancestry": "Catfolk", "source": "PZO2105", "id": "ee1e1ac7-393b-4e25-aa78-644714e711e6", "aonId": 59 },
+	{ "objectType": "Heritage", "name": "Jungle Catfolk", "ancestry": "Catfolk", "source": "PZO2105", "id": "65e26192-8ad6-4687-88cb-44d6a28f1d48", "aonId": 60 },
+	{ "objectType": "Heritage", "name": "Nine Lives Catfolk", "ancestry": "Catfolk", "source": "PZO2105", "id": "f26da830-4977-4b73-8a67-24775ae4f790", "aonId": 61 },
+	{ "objectType": "Heritage", "name": "Winter Catfolk", "ancestry": "Catfolk", "source": "PZO2105", "id": "21d500ee-22eb-4d5c-a3e5-18b2204035c4", "aonId": 62 }
+]

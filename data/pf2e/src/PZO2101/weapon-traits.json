@@ -1,0 +1,284 @@
+[
+	{
+		"objectType": "Trait",
+		"name": "Agile",
+		"details": [
+			"The multiple attack penalty you take with this weapon on the second attack on your turn is -4 instead of -5, and -8 instead of -10 on the third and subsequent attacks in the turn."
+		],
+		"page": 282,
+		"source": "PZO2101",
+		"id": "522be564-0ad7-450a-9f02-e91cc9d99925",
+		"aonId": 170
+	},
+	{
+		"objectType": "Trait",
+		"name": "Attached",
+		"details": [
+			"An attached weapon must be combined with another piece of gear to be used. The trait lists what type of item the weapon must be attached to. You must be wielding or wearing the item the weapon is attached to in order to attack with it. For example, shield spikes are attached to a shield, allowing you to attack with the spikes instead of a shield bash, but only if you're wielding the shield. An attached weapon is usually bolted onto or built into the item it's attached to, and typically an item can have only one weapon attached to it. An attached weapon can be affixed to an item with 10 minutes of work and a successful DC 10 Crafting check; this includes the time needed to remove the weapon from a previous item, if necessary. If an item is destroyed, its attached weapon can usually be salvaged."
+		],
+		"page": 282,
+		"source": "PZO2101",
+		"id": "65c519aa-7b0a-4263-be9b-ff333db04d67",
+		"aonId": 171
+	},
+	{
+		"objectType": "Trait",
+		"name": "Backstabber",
+		"details": [
+			"When you hit a flat-footed creature, this weapon deals 1 precision damage in addition to its normal damage. The precision damage increases to 2 if the weapon is a <i>+3 weapon</i>."
+		],
+		"page": 282,
+		"source": "PZO2101",
+		"id": "11a7f0b4-62dd-48b6-a825-e920f2f2b03b",
+		"aonId": 172
+	},
+	{
+		"objectType": "Trait",
+		"name": "Backswing",
+		"details": [
+			"You can use the momentum from a missed attack with this weapon to lead into your next attack. After missing with this weapon on your turn, you gain a +1 circumstance bonus to your next attack with this weapon before the end of your turn."
+		],
+		"page": 282,
+		"source": "PZO2101",
+		"id": "97c626f0-6f17-4b48-b2af-384d8a827eea",
+		"aonId": 173
+	},
+	{
+		"objectType": "Trait",
+		"name": "Deadly",
+		"details": [
+			"On a critical hit, the weapon adds a weapon damage die of the listed size. Roll this after doubling the weapon's damage. This increases to two dice if the weapon has a <i>greater striking</i> rune and three dice if the weapon has a <i>major striking</i> rune. For instance, a rapier with a <i>greater striking</i> rune deals 2d8 extra piercing damage on a critical hit. An ability that changes the size of the weapon's normal damage dice doesn't change the size of its deadly die."
+		],
+		"page": 282,
+		"source": "PZO2101",
+		"id": "3ced788b-cba8-4125-9f41-5b460815a450",
+		"aonId": 174
+	},
+	{
+		"objectType": "Trait",
+		"name": "Disarm",
+		"details": [
+			"You can use this weapon to Disarm with the Athletics skill even if you don't have a free hand. This uses the weapon's reach (if different from your own) and adds the weapon's item bonus to attack rolls (if any) as an item bonus to the Athletics check. If you critically fail a check to Disarm using the weapon, you can drop the weapon to take the effects of a failure instead of a critical failure. On a critical success, you still need a free hand if you want to take the item."
+		],
+		"page": 282,
+		"source": "PZO2101",
+		"id": "11dbdb90-15d6-43a5-8094-331d1936e64f",
+		"aonId": 175
+	},
+	{ "objectType": "Trait", "name": "Dwarf", "details": [ "Dwarves craft and use these weapons." ], "page": 282, "source": "PZO2101", "id": "ddca559e-dac1-46fb-aee2-2ad8dbc3f1fd", "aonId": 54 },
+	{ "objectType": "Trait", "name": "Elf", "details": [ "Elves craft and use these weapons." ], "page": 282, "source": "PZO2101", "id": "b1368634-107f-4d9e-8f3e-2330c9d4e316", "aonId": 58 },
+	{
+		"objectType": "Trait",
+		"name": "Fatal",
+		"details": [
+			"The fatal trait includes a die size. On a critical hit, the weapon's damage die increases to that die size instead of the normal die size, and the weapon adds one additional damage die of the listed size."
+		],
+		"page": 282,
+		"source": "PZO2101",
+		"id": "bb161f4e-13bb-4972-a058-b85de466f89e",
+		"aonId": 178
+	},
+	{
+		"objectType": "Trait",
+		"name": "Finesse",
+		"details": [
+			"You can use your Dexterity modifier instead of your Strength modifier on attack rolls using this melee weapon. You still use your Strength modifier when calculating damage."
+		],
+		"page": 282,
+		"source": "PZO2101",
+		"id": "a04ecc42-6041-4d49-a325-94f5701df37e",
+		"aonId": 179
+	},
+	{
+		"objectType": "Trait",
+		"name": "Forceful",
+		"details": [
+			"This weapon becomes more dangerous as you build momentum. When you attack with it more than once on your turn, the second attack gains a circumstance bonus to damage equal to the number of weapon damage dice, and each subsequent attack gains a circumstance bonus to damage equal to double the number of weapon damage dice."
+		],
+		"page": 282,
+		"source": "PZO2101",
+		"id": "685bdf0b-a7e9-46fd-9f05-a554c17970e2",
+		"aonId": 180
+	},
+	{
+		"objectType": "Trait",
+		"name": "Free-Hand",
+		"details": [
+			"This weapon doesn't take up your hand, usually because it is built into your armor. A free-hand weapon can't be Disarmed. You can use the hand covered by your free-hand weapon to wield other items, perform manipulate actions, and so on. You can't attack with a free-hand weapon if you're wielding anything in that hand or otherwise using that hand. When you're not wielding anything and not otherwise using the hand, you can use abilities that require you to have a hand free as well as those that require you to be wielding a weapon in that hand. Each of your hands can have only one free-hand weapon on it."
+		],
+		"page": 282,
+		"source": "PZO2101",
+		"id": "ae826f49-f59d-42c3-a080-5421bdcc5d06",
+		"aonId": 181
+	},
+	{ "objectType": "Trait", "name": "Gnome", "details": [ "Gnomes craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "c8020c7d-ce00-49fe-8250-d22214bce4e6", "aonId": 80 },
+	{ "objectType": "Trait", "name": "Goblin", "details": [ "Goblins craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "7fc8c6e7-00b8-4036-953c-69a3fe6c9283", "aonId": 81 },
+	{
+		"objectType": "Trait",
+		"name": "Grapple",
+		"details": [
+			"You can use this weapon to Grapple with the Athletics skill even if you don't have a free hand. This uses the weapon's reach (if different from your own) and adds the weapon's item bonus to attack rolls as an item bonus to the Athletics check. If you critically fail a check to Grapple using the weapon, you can drop the weapon to take the effects of a failure instead of a critical failure."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "0df397af-58e0-40d9-a58c-afc39bf34b04",
+		"aonId": 184
+	},
+	{ "objectType": "Trait", "name": "Halfling", "details": [ "Halflings craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "da0a9ef4-4a42-4ab7-b7a3-cccfb1b1c943", "aonId": 87 },
+	{
+		"objectType": "Trait",
+		"name": "Jousting",
+		"details": [
+			"The weapon is suited for mounted combat with a harness or similar means. When mounted, if you moved at least 10 feet on the action before your attack, add a circumstance bonus to damage for that attack equal to the number of damage dice for the weapon. In addition, while mounted, you can wield the weapon in one hand, changing the damage die to the listed value."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "ac9edf1b-b12d-485b-962a-2f8063ab8bae",
+		"aonId": 186
+	},
+	{ "objectType": "Trait", "name": "Monk", "details": [ "Many monks learn to use these weapons." ], "page": 283, "source": "PZO2101", "id": "0dd72226-ca9b-4c35-9e24-69f308fab54e", "aonId": 112 },
+	{
+		"objectType": "Trait",
+		"name": "Nonlethal",
+		"details": [
+			"Attacks with this weapon are nonlethal (page 453), and are used to knock creatures unconscious instead of kill them. You can use a nonlethal weapon to make a lethal attack with a -2 circumstance penalty."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "c9b25323-f5ec-4f4c-a758-54f6222f983a",
+		"aonId": 188
+	},
+	{ "objectType": "Trait", "name": "Orc", "details": [ "Orcs craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "ed94937d-2c71-4166-95a5-918e7960e45e", "aonId": 124 },
+	{
+		"objectType": "Trait",
+		"name": "Parry",
+		"details": [
+			"This weapon can be used defensively to block attacks. While wielding this weapon, if your proficiency with it is trained or better, you can spend an Interact action to position your weapon defensively, gaining a +1 circumstance bonus to AC until the start of your next turn."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "83b48650-8e31-421c-8598-f2daa6ef0fca",
+		"aonId": 190
+	},
+	{
+		"objectType": "Trait",
+		"name": "Propulsive",
+		"details": [
+			"You add half your Strength modifier (if positive) to damage rolls with a propulsive ranged weapon. If you have a negative Strength modifier, you add your full Strength modifier instead."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "ccc5a27f-45fa-4257-97ba-8f9765380571",
+		"aonId": 191
+	},
+	{
+		"objectType": "Trait",
+		"name": "Reach",
+		"details": [
+			"This weapon is long and can be used to attack creatures up to 10 feet away instead of only adjacent creatures. For creatures that already have reach with the limb or limbs that wield the weapon, the weapon increases their reach by 5 feet."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "aa12e125-c8d0-49b5-a1a9-dba1d801ede1",
+		"aonId": 192
+	},
+	{
+		"objectType": "Trait",
+		"name": "Shove",
+		"details": [
+			"You can use this weapon to Shove with the Athletics skill even if you don't have a free hand. This uses the weapon's reach (if different from your own) and adds the weapon's item bonus to attack rolls as an item bonus to the Athletics check. If you critically fail a check to Shove using the weapon, you can drop the weapon to take the effects of a failure instead of a critical failure."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "63474828-bb1f-4364-8e8e-b2d8423cc6fd",
+		"aonId": 193
+	},
+	{
+		"objectType": "Trait",
+		"name": "Sweep",
+		"details": [
+			"This weapon makes wide sweeping or spinning attacks, making it easier to attack multiple enemies. When you attack with this weapon, you gain a +1 circumstance bonus to your attack roll if you already attempted to attack a different target this turn using this weapon."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "f8ccbcf2-7cf8-4c55-9da8-13a0430c87ab",
+		"aonId": 194
+	},
+	{
+		"objectType": "Trait",
+		"name": "Thrown",
+		"details": [
+			"You can throw this weapon as a ranged attack, and it is a ranged weapon when thrown. A thrown weapon adds your Strength modifier to damage just like a melee weapon does. When this trait appears on a melee weapon, it also includes the range increment. Ranged weapons with this trait use the range increment specified in the weapon's Range entry."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "53ab4577-beed-4316-8ebe-bf41cced7be4",
+		"aonId": 195
+	},
+	{
+		"objectType": "Trait",
+		"name": "Trip",
+		"details": [
+			"You can use this weapon to Trip with the Athletics skill even if you don't have a free hand. This uses the weapon's reach (if different from your own) and adds the weapon's item bonus to attack rolls as an item bonus to the Athletics check. If you critically fail a check to Trip using the weapon, you can drop the weapon to take the effects of a failure instead of a critical failure."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "126ab7f0-14e9-4f2a-9049-9028423771f6",
+		"aonId": 196
+	},
+	{
+		"objectType": "Trait",
+		"name": "Twin",
+		"details": [
+			"These weapons are used as a pair, complementing each other. When you attack with a twin weapon, you add a circumstance bonus to the damage roll equal to the weapon's number of damage dice if you have previously attacked with a different weapon of the same type this turn. The weapons must be of the same type to benefit from this trait, but they don't need to have the same runes."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "771acea4-fcc6-4567-a2ea-4f4ca505f3c6",
+		"aonId": 197
+	},
+	{
+		"objectType": "Trait",
+		"name": "Two-Hand",
+		"details": [
+			"This weapon can be wielded with two hands. Doing so changes its weapon damage die to the indicated value. This change applies to all the weapon's damage dice, such as those from <i>striking</i> runes."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "978cf3e2-c1f6-4877-908c-59c029182994",
+		"aonId": 198
+	},
+	{
+		"objectType": "Trait",
+		"name": "Unarmed",
+		"details": [
+			"An unarmed attack uses your body rather than a manufactured weapon. An unarmed attack isn't a weapon, though it's categorized with weapons for weapon groups, and it might have weapon traits. Since it's part of your body, an unarmed attack can't be Disarmed. It also doesn't take up a hand, though a fist or other grasping appendage follows the same rules as a free-hand weapon."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "c9da1eee-05da-4989-a240-e090acab8eb9",
+		"aonId": 199
+	},
+	{
+		"objectType": "Trait",
+		"name": "Versatile",
+		"details": [
+			"A versatile weapon can be used to deal a different type of damage than that listed in the Damage entry. This trait indicates the alternate damage type. For instance, a piercing weapon that is versatile S can be used to deal piercing or slashing damage. You choose the damage type each time you make an attack."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "5e8db2e1-dd0a-485c-8b30-a2f48b2ccaf8",
+		"aonId": 200
+	},
+	{
+		"objectType": "Trait",
+		"name": "Volley",
+		"details": [
+			"This ranged weapon is less effective at close distances. Your attacks against targets that are at a distance within the range listed take a -2 penalty."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "a0969b11-43a3-4dff-a33d-879bc07dacce",
+		"aonId": 201
+	}
+]

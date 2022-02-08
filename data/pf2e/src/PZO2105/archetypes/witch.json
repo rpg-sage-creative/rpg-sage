@@ -1,0 +1,123 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Witch",
+		"details": [
+			"You have heard the whispers of a distant patron, who sent an emissary to teach you powerful magic."
+		],
+		"page": 154,
+		"source": "PZO2105",
+		"id": "18207dfa-88c3-40a2-81e6-d5a9a17bae0f",
+		"aonId": 44
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Witch Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Intelligence 14" ],
+		"details": [
+			"You cast spells like a witch. Choose a patron; you gain a familiar with two common cantrips of your choice from your chosen patron's tradition, but aside from the tradition, you don't gain any other effects the patron would usually grant. Your familiar has one less familiar ability than normal. You gain the Cast a Spell activity. You can prepare one cantrip each day from your familiar. You're trained in spell attack rolls and spell DCs from your patron's tradition. Your key spellcasting ability for witch archetype spells is Intelligence, and they are witch spells of your patron's tradition. You become trained in the skill associated with the patron's tradition; if you were already trained in it, you instead become trained in a skill of your choice."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the witch archetype."
+		],
+		"page": 154,
+		"source": "PZO2105",
+		"id": "e4115879-9b20-4efa-84d3-019260525a08",
+		"aonId": 1866
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Witch Spellcasting",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Witch Dedication" ],
+		"details": [
+			"You gain the basic spellcasting benefits (page 150). Each time you gain a spell slot of a new level from the witch archetype, add two common spells of that level to your familiar."
+		],
+		"page": 154,
+		"source": "PZO2105",
+		"id": "b9a2a412-8f98-455a-9c85-2b73267fbffb",
+		"aonId": 1867
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Witchcraft",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Witch Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level witch feat of your choice. Your familiar no longer has one less familiar ability than normal."
+		],
+		"page": 154,
+		"source": "PZO2105",
+		"id": "b533efcd-0872-415d-82f3-3db0cbb0da97",
+		"aonId": 1868
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Witchcraft",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Witchcraft" ],
+		"details": [
+			"You gain one witch feat. For the purpose of meeting its prerequisites, your witch level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another witch feat."
+		],
+		"page": 154,
+		"source": "PZO2105",
+		"id": "12c1f5b2-4bff-48ee-996f-13e7c8177e23",
+		"aonId": 1869
+	},
+	{
+		"objectType": "Feat",
+		"name": "Patron's Breadth",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Witch Spellcasting" ],
+		"details": [
+			"You can cast more spells each day. Increase the spell slots you gain from witch archetype feats by 1 for each spell level other than your two highest spell levels."
+		],
+		"page": 154,
+		"source": "PZO2105",
+		"id": "14debe4c-f60c-49b6-842a-8f7aef2460e3",
+		"aonId": 1870
+	},
+	{
+		"objectType": "Feat",
+		"name": "Expert Witch Spellcasting",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [
+			"Basic Witch Spellcasting",
+			"master in the skill associated with your patron's tradition"
+		],
+		"details": [
+			"You gain the expert spellcasting benefits (page 150)."
+		],
+		"page": 154,
+		"source": "PZO2105",
+		"id": "5dd2f215-bfa7-4d95-928e-6b8edd8318a0",
+		"aonId": 1871
+	},
+	{
+		"objectType": "Feat",
+		"name": "Master Wizard Spellcasting",
+		"level": 18,
+		"traits": [ "Archetype" ],
+		"prerequisites": [
+			"Expert Witch Spellcasting",
+			"legendary in the skill associated with your patron's tradition"
+		],
+		"details": [
+			"You gain the master spellcasting benefits (page 150)."
+		],
+		"page": 154,
+		"source": "PZO2105",
+		"id": "eff25a45-9c36-413b-ad22-499cee64e3cd",
+		"aonId": 749
+	}
+]

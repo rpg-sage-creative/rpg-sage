@@ -1,0 +1,120 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Rogue",
+		"details": [
+			"You've learned to sneak, steal, and disable traps. With time and luck, you'll become capable of moving through the shadows, striking unseen, and escaping without notice."
+		],
+		"page": 229,
+		"source": "PZO2101",
+		"id": "aa34b08e-9ac4-4165-938a-b081cf7009be",
+		"aonId": 10
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Rogue Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Dexterity 14" ],
+		"details": [
+			"You gain a skill feat and the rogue's surprise attack class feature (page 181). You become trained in light armor. In addition, you become trained in Stealth or Thievery plus one skill of your choice; if you are already trained in both Stealth and Thievery, you become trained in an additional skill of your choice. You become trained in rogue class DC."
+		],
+		"special": [
+			"You cannot gain another dedication feat until you have gained two other feats from the rogue archetype."
+		],
+		"page": 229,
+		"source": "PZO2101",
+		"id": "8005cd42-ddcc-4e9e-806c-3ab0276ab3ad",
+		"aonId": 727
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Trickery",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Rogue Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level rogue feat."
+		],
+		"page": 229,
+		"source": "PZO2101",
+		"id": "05c7e72b-d79a-41fe-a199-5e2f93e9fc0a",
+		"aonId": 728
+	},
+	{
+		"objectType": "Feat",
+		"name": "Sneak Attacker",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Rogue Dedication" ],
+		"details": [
+			"You gain the sneak attack class feature (page 181), except it deals 1d4 damage, increasing to 1d6 at 6th level. You don't increase the number of dice as you gain levels."
+		],
+		"page": 229,
+		"source": "PZO2101",
+		"id": "c30ac125-ddd2-45d6-b03b-f16d4faea4dd",
+		"aonId": 729
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Trickery",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Trickery" ],
+		"details": [
+			"You gain one rogue feat. For the purpose of meeting its prerequisites, your rogue level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another rogue feat."
+		],
+		"page": 229,
+		"source": "PZO2101",
+		"id": "a7096f57-2012-4dc0-a153-81e0c5eef42e",
+		"aonId": 730
+	},
+	{
+		"objectType": "Feat",
+		"name": "Skill Mastery",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Rogue Dedication", "trained in at least one skill and expert in at least one skill" ],
+		"details": [
+			"Increase your proficiency rank in one of your skills from expert to master and in another of your skills from trained to expert. You gain a skill feat associated with one of the skills you chose."
+		],
+		"special": [
+			"You can select this feat up to five times."
+		],
+		"page": 229,
+		"source": "PZO2101",
+		"id": "417690d2-3484-4f4f-b578-b9a0a71f5808",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Uncanny Dodge",
+		"level": 10,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Rogue Dedication" ],
+		"details": [
+			"You gain the deny advantage class feature (page 181)."
+		],
+		"page": 229,
+		"source": "PZO2101",
+		"id": "b3949e25-fd59-4d70-90f5-17b6c6edbc53",
+		"aonId": 732
+	},
+	{
+		"objectType": "Feat",
+		"name": "Evasiveness",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Rogue Dedication", "expert in Reflex saves" ],
+		"details": [
+			"Your proficiency rank for Reflex saves increases to master."
+		],
+		"page": 229,
+		"source": "PZO2101",
+		"id": "4c0f0a5f-b430-41aa-9cf8-737def82beec",
+		"aonId": 0
+	}
+]

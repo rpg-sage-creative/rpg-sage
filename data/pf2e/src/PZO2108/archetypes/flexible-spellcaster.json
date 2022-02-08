@@ -1,0 +1,17 @@
+[
+	{ "objectType": "Archetype", "name": "Flexible Spellcaster", "details": [ "" ], "additionalFeats": [ "" ], "page": 209, "source": "PZO2108", "id": "1c0a456c-e0d1-47fd-ba12-3a0c32c8c87f", "aonId": 0 },
+	{
+		"objectType": "DedicationFeat",
+		"name": "Flexible Spellcaster Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Class", "Dedication" ],
+		"prerequisites": [ "flexible spell preparation" ],
+		"details": [
+			"You now have four cantrips per day instead of three. At 4th level, you have five cantrips per day instead of four."
+		],
+		"page": 209,
+		"source": "PZO2108",
+		"id": "f6e1153e-6ea2-456d-813e-5a8466b1f03d",
+		"aonId": 0
+	}
+]

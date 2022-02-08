@@ -1,0 +1,24 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Android",
+		"youMight": [
+			"Keep your identity a secret, assuming others want to exploit or harm you.",
+			"Plan ahead, preparing multiple contingencies for even simple tasks.",
+			"Calculate the repercussions of your actions, inventions, and thoughts before sharing them."
+		],
+		"othersProbably": [
+			"Assume you understand how to operate technology and that you can capably communicate with constructs and robots.",
+			"Believe you to be immortal and envy your eternal youth and vigor.",
+			"Think you have no feelings and that you can't form emotional connections with others."
+		],
+		"aonId": 27,
+		"source": "PZO9308",
+		"id": "e67ad92e-a799-4e76-ada4-cd8e749eef27"
+	},
+	{ "objectType": "Heritage", "name": "Artisan Android", "ancestry": "Android", "source": "PZO9308", "id": "013f324d-0f64-4640-b43a-af574946ed40", "aonId": 113 },
+	{ "objectType": "Heritage", "name": "Impersonator Android", "ancestry": "Android", "source": "PZO9308", "id": "a88b25ab-80dc-4e1a-9ec9-ceb3c06777ed", "aonId": 114 },
+	{ "objectType": "Heritage", "name": "Laborer Android", "ancestry": "Android", "source": "PZO9308", "id": "79af1d03-794b-47ef-a90d-1f0309cb1226", "aonId": 115 },
+	{ "objectType": "Heritage", "name": "Polyglot Android", "ancestry": "Android", "source": "PZO9308", "id": "4c6d8aa9-eefd-409e-a7cf-69528afa7d53", "aonId": 116 },
+	{ "objectType": "Heritage", "name": "Warrior Android", "ancestry": "Android", "source": "PZO9308", "id": "6958f327-3e08-45d4-9d03-055f2e9fb91f", "aonId": 117 }
+]

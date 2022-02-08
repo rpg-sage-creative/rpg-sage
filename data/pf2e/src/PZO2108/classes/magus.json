@@ -1,0 +1,40 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Magus",
+		"duringCombatEncounters": [
+			"You channel spells through your weapon or body to hit enemies with a powerful attack and spell combination.",
+			"Because your spells per day are limited, you often rely on trusty, carefully chosen cantrips and focus spells.",
+			"When necessary, you know how to win a fight without magic."
+		],
+		"duringSocialEncounters": [
+			"Your education and breadth of experience make you knowledgeable about many subjects.",
+			"You can contribute information related to your scholarly pursuits, especially about magic."
+		],
+		"whileExploring": [
+			"Your flexibility means you might look for magical auras, remain on guard, or even sneak around.",
+			"Your ability to fill different niches means that your role often depends on the talents of the other members of your group."
+		],
+		"inDowntime": [
+			"You split your time between magical pursuits, like researching spells and crafting items, and martial practice, such as retraining combat abilities to learn new techniques."
+		],
+		"youMight": [
+			"Continually refine your spell and item selections to suit your personal style, or prepare battle plans and spell lists for a variety of situations.",
+			"Socialize with scholars of magic and veteran combatants alike, seeking out masters to teach you new techniques.",
+			"Overreach with ambitious plans that pull you in too many directions at once."
+		],
+		"othersProbably": [
+			"Wonder how you can keep on top of two disparate disciplines at the same time.",
+			"Believe you have a broad enough skill set to take care of yourself in most situations."
+		],
+		"classPath": "Hybrid Study",
+		"aonId": 0,
+		"source": "PZO2108",
+		"id": "3f4196a5-c8dc-40d0-8c2c-05db5751f0bb"
+	},
+	{ "objectType": "ClassPath", "name": "Inexorable Iron", "class": "Magus", "source": "PZO2108", "id": "97f35bce-ec6d-475f-82dc-aed03144b08b" },
+	{ "objectType": "ClassPath", "name": "Laughing Shadow", "class": "Magus", "source": "PZO2108", "id": "96b65be4-b24d-4a38-afc7-0d1c9898a4bc" },
+	{ "objectType": "ClassPath", "name": "Sparkling Targe", "class": "Magus", "source": "PZO2108", "id": "b68cf395-3f48-45b7-b0da-f1675448a0b6" },
+	{ "objectType": "ClassPath", "name": "Starlit Span", "class": "Magus", "source": "PZO2108", "id": "24c60a7c-a328-4a83-a1e4-e4e3023ef46c" },
+	{ "objectType": "ClassPath", "name": "Twisting Tree", "class": "Magus", "source": "PZO2108", "id": "4945771f-d5d9-4d9f-bc37-22a2705cb0ed" }
+]

@@ -1,0 +1,39 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Ranger",
+		"duringCombatEncounters": [
+			"You can single out particular foes to hunt, making you better at defeating them.",
+			"You target and brutalize your chosen foe with either a bow or melee weapons, while supporting your allies with your skills."
+		],
+		"duringSocialEncounters": [
+			"When you speak, it's with the voice of practical experience, especially involving wilderness exploration."
+		],
+		"whileExploring": [
+			"You guide your allies through the wilderness or follow tracks.",
+			"You keep an eye out for trouble, constantly alert for danger even when it's not overt."
+		],
+		"inDowntime": [
+			"You craft weapons and snares in preparation for your next venture.",
+			"If you prefer to get outside, you might go on hunts or scout nearby areas to better understand your environment."
+		],
+		"youMight": [
+			"Respect the raw power of nature and understand how to make the best of its bounty.",
+			"Enjoy the thrill of the hunt.",
+			"Scout out ahead of the party, reconnoitering dangers before combat begins."
+		],
+		"othersProbably": [
+			"Call upon you to protect them from the wilds or the encroachment of civilization.",
+			"Expect you to be a quiet or taciturn loner.",
+			"Think there is something dangerous and wild about you."
+		],
+		"classPath": "Hunter's Edge",
+		"source": "PZO2101",
+		"aonId": 9,
+		"aonTraitId": 136,
+		"id": "887e3cf2-8e44-4a52-a3bd-e7ad942a5b47"
+	},
+	{ "objectType": "ClassPath", "name": "Flurry", "class": "Ranger", "source": "PZO2101", "id": "2379236e-4354-4988-9583-d314d8abf356", "aonId": 1 },
+	{ "objectType": "ClassPath", "name": "Outwit", "class": "Ranger", "source": "PZO2101", "id": "70c1cdbd-34f8-48d1-a044-9e5ed8e7fb69", "aonId": 3 },
+	{ "objectType": "ClassPath", "name": "Precision", "class": "Ranger", "source": "PZO2101", "id": "39eb279f-6cfe-403d-b7e3-95a531a92358", "aonId": 2 }
+]

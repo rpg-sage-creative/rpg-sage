@@ -1,0 +1,55 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Sorcerer",
+		"duringCombatEncounters": [
+			"You use spells to injure your enemies, influence their minds, and hamper their movements.",
+			"You might be too vulnerable to get into melee combat, or your bloodline might give you abilities that help you hold your own in a brawl.",
+			"While your magic is powerful, to conserve your best spells-or when you've used them all up-you also rely on cantrips."
+		],
+		"duringSocialEncounters": [
+			"Your natural charisma makes you good at interacting with people."
+		],
+		"whileExploring": [
+			"You detect the magic around you, finding treasures and warning your adventuring group of magical traps.",
+			"When the group encounters mysteries or problems related to your bloodline, you try to solve them."
+		],
+		"inDowntime": [
+			"You craft magic items or scribe scrolls.",
+			"Your bloodline might drive you to research your ancestry or associate with affiliated people or creatures."
+		],
+		"youMight": [
+			"Have a strong independent streak, and whether you embrace or reject your magical heritage, you long to distinguish yourself both as a spellcaster and as an individual.",
+			"View your lineage with fascination, fear, or something in between-anything from wholehearted acceptance to vehement rejection.",
+			"Rely on magic items, such as scrolls and wands, to supplement your limited selection of spells."
+		],
+		"othersProbably": [
+			"Marvel at your ability to create magic from thin air and view your abilities with equal parts admiration and mistrust.",
+			"Consider you less dedicated than studious wizards, devoted clerics, and other practitioners of magic, since power comes to you naturally.",
+			"Assume you're as unpredictable as the magic you bring forth, even if your personality proves otherwise."
+		],
+		"classPath": "Bloodline",
+		"source": "PZO2101",
+		"aonId": 11,
+		"aonTraitId": 148,
+		"id": "e5dcea10-84be-48e1-94c1-d87aa870e4af"
+	},
+	{ "objectType": "ClassPath", "name": "Aberrant", "class": "Sorcerer", "source": "PZO2101", "id": "0e23445b-e90b-44c5-90f4-ea5c939943a5", "aonId": 1 },
+	{ "objectType": "ClassPath", "name": "Angelic", "class": "Sorcerer", "source": "PZO2101", "id": "f196548e-5386-47d1-86f3-8193413a74af", "aonId": 2 },
+	{ "objectType": "ClassPath", "name": "Demonic", "class": "Sorcerer", "source": "PZO2101", "id": "5865ed25-74c1-4e09-9910-bee64ade6642", "aonId": 3 },
+	{ "objectType": "ClassPath", "name": "Diabolic", "class": "Sorcerer", "source": "PZO2101", "id": "2ff7b781-c1ff-4550-a61c-a7e42b456c2e", "aonId": 4 },
+	{
+		"objectType": "ClassPath",
+		"name": "Draconic",
+		"class": "Sorcerer",
+		"types": [ "black", "blue", "green", "red", "white", "brass", "bronze", "copper", "gold", "silver" ],
+		"source": "PZO2101",
+		"id": "54079dfc-5931-4cc8-a1fa-857e71ec6be1",
+		"aonId": 5
+	},
+	{ "objectType": "ClassPath", "name": "Elemental", "class": "Sorcerer", "types": [ "air", "earth", "fire", "water" ], "source": "PZO2101", "id": "88c3f03b-9266-434f-8b48-8690b1c431db", "aonId": 6 },
+	{ "objectType": "ClassPath", "name": "Fey", "class": "Sorcerer", "source": "PZO2101", "id": "64a25f25-3699-42eb-924a-052d5ec3efdd", "aonId": 7 },
+	{ "objectType": "ClassPath", "name": "Hag", "class": "Sorcerer", "source": "PZO2101", "id": "a1ac3c4a-1990-41fd-9301-b4ca5add65cf", "aonId": 8 },
+	{ "objectType": "ClassPath", "name": "Imperial", "class": "Sorcerer", "source": "PZO2101", "id": "c387105c-0ad7-4861-8d67-b5d3c474129d", "aonId": 9 },
+	{ "objectType": "ClassPath", "name": "Undead", "class": "Sorcerer", "source": "PZO2101", "id": "53ef7d60-5f68-4dd6-a311-f82a7891478e", "aonId": 10 }
+]

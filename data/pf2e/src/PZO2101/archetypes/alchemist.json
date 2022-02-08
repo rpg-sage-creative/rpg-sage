@@ -1,0 +1,103 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Alchemist",
+		"details": [
+			"You enjoy tinkering with alchemical formulas and substances in your spare time, and your studies have progressed beyond mere experimentation."
+		],
+		"page": 220,
+		"source": "PZO2101",
+		"id": "e97d08d2-41ee-4b76-bc09-770767b2a0b2",
+		"aonId": 1
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Alchemist Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Intelligence 14" ],
+		"details": [
+			"You put your alchemical interest into practice. You become trained in alchemical bombs and Crafting; if you were already trained in Crafting, you instead become trained in a skill of your choice. You become trained in alchemist class DC.",
+			"You gain the alchemist's infused reagents class feature, gaining a number of reagents each day equal to your level. You also gain the Alchemical Crafting feat and four additional formulas for 1st-level alchemical items, as well as the ability to create free items during your daily preparations. Your advanced alchemy level is 1 and doesn't increase on its own."
+		],
+		"special": [
+			"You cannot select another dedication feat until you have gained two other feats from the alchemist archetype."
+		],
+		"page": 220,
+		"source": "PZO2101",
+		"id": "7e56acea-3ae0-4e85-acb7-4ce93fd36e87",
+		"aonId": 665
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Concoction",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Alchemist Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level alchemist feat."
+		],
+		"page": 220,
+		"source": "PZO2101",
+		"id": "19765751-8959-4932-92de-d440ed1988b1",
+		"aonId": 666
+	},
+	{
+		"objectType": "Feat",
+		"name": "Quick Alchemy",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Alchemist Dedication" ],
+		"details": [
+			"You gain the Quick Alchemy action (page 72)."
+		],
+		"page": 220,
+		"source": "PZO2101",
+		"id": "0f637ec4-31c9-447a-a589-c99c836cd6c4"
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Concoction",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Concoction" ],
+		"details": [
+			"You gain one alchemist feat. For the purpose of meeting its prerequisites, your alchemist level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another alchemist feat."
+		],
+		"page": 220,
+		"source": "PZO2101",
+		"id": "4c30163c-1065-4484-9297-2c1491afb905",
+		"aonId": 668
+	},
+	{
+		"objectType": "Feat",
+		"name": "Expert Alchemy",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Alchemist Dedication", "expert in Crafting" ],
+		"details": [
+			"Your advanced alchemy level increases to 3. At 10th level, it increases to 5."
+		],
+		"page": 220,
+		"source": "PZO2101",
+		"id": "b5840072-ddb3-4319-a78b-ed3bca3d941d",
+		"aonId": 669
+	},
+	{
+		"objectType": "Feat",
+		"name": "Master Alchemy",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Expert Alchemy", "master in Crafting" ],
+		"details": [
+			"Your advanced alchemy level increases to 7. For every level you gain beyond 12th, your advanced alchemy level increases by 1."
+		],
+		"page": 220,
+		"source": "PZO2101",
+		"id": "ad6d4a84-ff2b-4b7c-9245-35c4a8cb8e5a",
+		"aonId": 670
+	}
+]

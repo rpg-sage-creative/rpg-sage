@@ -1,0 +1,110 @@
+[
+	{ "objectType": "Archetype", "name": "Investigator", "details": [ "You've developed a keen eye for investigating mysteries." ], "page": 151, "source": "PZO2105", "id": "e0831f99-576b-49f1-8e0c-06bc7ae8cecd", "aonId": 41 },
+	{
+		"objectType": "DedicationFeat",
+		"name": "Investigator Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Intelligence 14" ],
+		"details": [
+			"You gain the on the case class feature (page 56), which grants you both the Pursue a Lead activity and Clue In reaction. You become trained in Society and another skill of your choice. If you were already trained in Society, you instead become trained in an additional skill of your choice. You also become trained in investigator class DC."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the investigator archetype."
+		],
+		"page": 151,
+		"source": "PZO2105",
+		"id": "e5d9b925-e3ec-454f-af99-d3e02b9409f9",
+		"aonId": 1844
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Deduction",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Investigator Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level investigator feat of your choice."
+		],
+		"page": 151,
+		"source": "PZO2105",
+		"id": "d7ac0828-6b34-4170-8fa6-380677554704",
+		"aonId": 1845
+	},
+	{
+		"objectType": "Feat",
+		"name": "Investigator's Stratagem",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Investigator Dedication" ],
+		"details": [
+			"You play out battles in your head, allowing you to strike when the time is right. You gain the Devise a Stratagem action (page 56); however, when you substitute its result for your attack roll, you can't use your Intelligence modifier in place of your Strength or Dexterity modifier. You also can't use your Intelligence modifier on other rolls from abilities that expand Devise a Stratagem, such as the Athletic Strategist feat."
+		],
+		"page": 151,
+		"source": "PZO2105",
+		"id": "c7fa0999-5e3d-42a1-9680-d535132f45a6",
+		"aonId": 1846
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Deduction",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Deduction" ],
+		"details": [
+			"You gain one investigator feat. For the purpose of meeting its prerequisites, your investigator level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another investigator feat."
+		],
+		"page": 151,
+		"source": "PZO2105",
+		"id": "884732ac-cf9a-41c1-bcae-83187c765a5a",
+		"aonId": 1847
+	},
+	{
+		"objectType": "Feat",
+		"name": "Keen Recollection",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Investigator Dedication" ],
+		"details": [
+			"You can recall all sorts of information. You gain the keen recollection class feature."
+		],
+		"page": 151,
+		"source": "PZO2105",
+		"id": "ed43c8ed-118f-4bc0-8b1a-40764c53c795",
+		"aonId": 1848
+	},
+	{
+		"objectType": "Feat",
+		"name": "Skill Mastery",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Investigator Dedication", "trained in at least one skill and expert in at least one skill" ],
+		"details": [
+			"Increase your proficiency rank in one of your skills from expert to master and in another of your skills from trained to expert. You gain a skill feat associated with one of the skills you chose."
+		],
+		"special": [
+			"You can select this feat up to five times."
+		],
+		"page": 151,
+		"source": "PZO2105",
+		"id": "c05460f4-4874-4bb5-be79-564922e51dc7",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Master Spotter",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Investigator Dedication", "expert in Perception" ],
+		"details": [
+			"Your proficiency rank in Perception increases to master."
+		],
+		"page": 151,
+		"source": "PZO2105",
+		"id": "27560368-cfdb-41c8-9350-001b976cb2eb",
+		"aonId": 3124
+	}
+]

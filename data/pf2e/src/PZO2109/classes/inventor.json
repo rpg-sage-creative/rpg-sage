@@ -1,0 +1,41 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Inventor",
+		"traits": [ "Uncommon" ],
+		"duringCombatEncounters": [
+			"You rely on your inventions as much as possible, testing their functionalities under a variety of conditions.",
+			"You don't set out to achieve anything as banal as simply winning a fight; you seek to collect valuable data that can be used to improve your creations!"
+		],
+		"duringSocialEncounters": [
+			"You provide useful context when discussing a variety of academic topics, particularly when speaking about those subjects related to crafting and invention.",
+			"You might often look for opportunities to acquire patronage to fund some of your more expensive or unorthodox experiments. After all, the materials needed to assemble your inventions don't pay for themselves!"
+		],
+		"whileExploring": [
+			"You study the design and construction of the environments you explore ardently, making note of clever traps, ingenious mechanisms, or especially keen architecture you come across for later."
+		],
+		"inDowntime": [
+			"You brainstorm new designs, bringing them to fruition through careful crafting and meticulous attention to detail.",
+			"You might also modify previous inventions to adjust for data you've collected in the field.",
+			"You might work as a local smith or tinker where your skills are needed, or you might keep a workshop on the edge of town where the clank and clatter of your experiments attracts less attention."
+		],
+		"youMight": [
+			"Enjoy creating new things the world has never seen before.",
+			"Be willing to take a chance on a theory, testing to see if your hypothesis proves accurate. If not, you probably record the results to try again later.",
+			"Wear clothes spattered with oil and grime, or venture off on excited and technical tangents when asked simple questions."
+		],
+		"othersProbably": [
+			"Marvel at your inventions and the variety of unbelievable wonder they can bring.",
+			"Believe that you're a genius whose work is beyond understanding.",
+			"Worry that your inventions might backfire or explode."
+		],
+		"classPath": "Innovation",
+		"aonId": 0,
+		"source": "PZO2109",
+		"page": 15,
+		"id": "9ec116fb-b6bc-4696-92e8-58a7234856aa"
+	},
+	{ "objectType": "ClassPath", "name": "Armor", "class": "Inventor", "source": "PZO2109", "id": "12f3a6dc-f877-4154-be6e-4b3c4ea57e07" },
+	{ "objectType": "ClassPath", "name": "Construct", "class": "Inventor", "source": "PZO2109", "id": "eeaf2c96-f760-47e7-8f9b-65365c1001a2" },
+	{ "objectType": "ClassPath", "name": "Weapon", "class": "Inventor", "source": "PZO2109", "id": "44044014-fd09-4677-870d-6fff3100e340" }
+]

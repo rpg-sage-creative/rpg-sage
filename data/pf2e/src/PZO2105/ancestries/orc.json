@@ -1,0 +1,23 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Orc",
+		"youMight": [
+			"Eagerly meet any chance to prove your strength in a physical contest.",
+			"Believe that lies and treachery are for those who lack the strength to seize what they want.",
+			"View dying in glorious combat as preferable to a mundane death from old age or illness."
+		],
+		"othersProbably": [
+			"See you as violent or lacking in discipline.",
+			"Underestimate your intellect, cunning, and knowledge.",
+			"Admire your forthrightness and blunt honesty."
+		],
+		"aonId": 19,
+		"source": "PZO2105",
+		"id": "391325b4-7ab3-44b8-a037-d444e1fac584"
+	},
+	{ "objectType": "Heritage", "name": "Badlands Orc", "ancestry": "Orc", "source": "PZO2105", "id": "6967003b-d412-44aa-a6e5-40752724f5f8", "aonId": 68 },
+	{ "objectType": "Heritage", "name": "Deep Orc", "ancestry": "Orc", "source": "PZO2105", "id": "b21e942b-f330-4032-8ed1-be8fe84541bc", "aonId": 69 },
+	{ "objectType": "Heritage", "name": "Hold-Scarred Orc", "ancestry": "Orc", "source": "PZO2105", "id": "0c915c38-8b44-475e-9c91-5bee7abb9a76", "aonId": 70 },
+	{ "objectType": "Heritage", "name": "Rainfall Orc", "ancestry": "Orc", "source": "PZO2105", "id": "c5f08720-6dea-4086-a38f-8fd76e000320", "aonId": 71 }
+]

@@ -1,0 +1,24 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Shisk",
+		"youMight": [
+			"See yourself as a part of nature and avoid taking anything you don't need.",
+			"Be wary of others getting one over on you by tricking you into revealing something.",
+			"Love warmth and enjoy sunbathing despite your subterranean nature."
+		],
+		"othersProbably": [
+			"Are concerned by your diet and how little you eat.",
+			"Become confused or annoyed by your refusal to give information freely.",
+			"Appreciate your incredible memory and knowledge."
+		],
+		"aonId": 47,
+		"source": "PZO9309",
+		"id": "1d2874d6-86b5-4287-a1d1-b7559a8e333d"
+	},
+	{ "objectType": "Heritage", "name": "Lorekeeper Shisk", "ancestry": "Shisk", "source": "PZO9309", "aonId": 179, "id": "53289efc-6761-4bae-aa1e-fa8826cc62cb" },
+	{ "objectType": "Heritage", "name": "Quillcoat Shisk", "ancestry": "Shisk", "source": "PZO9309", "aonId": 180, "id": "e7ea066e-f522-41ab-8a00-3ad642f43f1a" },
+	{ "objectType": "Heritage", "name": "Spellkeeper Shisk", "ancestry": "Shisk", "source": "PZO9309", "aonId": 181, "id": "1c86fab4-cdb9-4253-9f16-7af5c59be7b1" },
+	{ "objectType": "Heritage", "name": "Stonestep Shisk", "ancestry": "Shisk", "source": "PZO9309", "aonId": 183, "id": "ae075893-9eae-4a48-bc97-47ab6b1763c8" },
+	{ "objectType": "Heritage", "name": "Stronggut Shisk", "ancestry": "Shisk", "source": "PZO9309", "aonId": 182, "id": "bf57ff0f-7d28-49da-a69d-85071b2bb8fb" }
+]

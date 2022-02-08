@@ -1,0 +1,40 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Rogue",
+		"duringCombatEncounters": [
+			"You move about stealthily so you can catch foes unawares.",
+			"You're a precision instrument, more useful against a tough boss or distant spellcaster than against rank-and-file soldiers."
+		],
+		"duringSocialEncounters": [
+			"Your skills give you multiple tools to influence your opposition.",
+			"Pulling cons and ferreting out information are second nature to you."
+		],
+		"whileExploring": [
+			"You sneak to get the drop on foes and scout for danger or traps.",
+			"You're a great asset, since you can disable traps, solve puzzles, and anticipate dangers."
+		],
+		"inDowntime": [
+			"You might pick pockets or trade in illegal goods.",
+			"You can also become part of a thieves' guild, or even found one of your own."
+		],
+		"youMight": [
+			"Hone your skills through intense practice, both on your own and out in the world.",
+			"Know where to attain illicit goods.",
+			"Skirt or break the law because you think it's meaningless or have your own code."
+		],
+		"othersProbably": [
+			"Find you charming or fascinating, even if they think they know better than to trust you.",
+			"Come to you when they need someone who is willing to take risks or use questionable methods.",
+			"Suspect you're motivated primarily by greed."
+		],
+		"classPath": "Racket",
+		"source": "PZO2101",
+		"aonId": 10,
+		"aonTraitId": 139,
+		"id": "bcf45634-311d-4cd2-be3e-3a24d54eb2cc"
+	},
+	{ "objectType": "ClassPath", "name": "Ruffian", "class": "Rogue", "source": "PZO2101", "id": "68964a48-4d82-4c0d-9d30-2b0bcd85b494", "aonId": 1 },
+	{ "objectType": "ClassPath", "name": "Scoundrel", "class": "Rogue", "source": "PZO2101", "id": "850826f9-7183-40a3-a506-ae36754a5270", "aonId": 2 },
+	{ "objectType": "ClassPath", "name": "Thief", "class": "Rogue", "source": "PZO2101", "id": "e1d27cd1-7595-4da1-aa77-4260d1610b92", "aonId": 3 }
+]

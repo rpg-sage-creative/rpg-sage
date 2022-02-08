@@ -1,0 +1,53 @@
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+		"alwaysStrict": true,
+		// "allowSyntheticDefaultImports": true,
+
+		"declaration": true,
+		"declarationDir": "./types",
+		"declarationMap": true,
+
+		// "esModuleInterop": true,
+
+		"forceConsistentCasingInFileNames": true,
+
+		"importsNotUsedAsValues": "error",
+
+		"lib": [ "DOM", "ES2020" ],
+		"locale": "en-US",
+
+		"module": "ES2020",
+		"moduleResolution": "Node",
+
+		"newLine": "LF",
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+
+		"outDir": "./dist",
+
+		"pretty": true,
+
+		"removeComments": true,
+		"rootDir": "./src",
+
+		"sourceMap": true,
+		"strict": true,
+		"strictBindCallApply": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"stripInternal": true,
+
+		"target": "ES2020"
+	},
+	"exclude": [
+		"dist",
+		"scripts",
+		"types"
+	]
+}

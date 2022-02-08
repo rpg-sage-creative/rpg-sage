@@ -1,0 +1,24 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Tengu",
+		"youMight": [
+			"Be gregarious and eager to find a flock of your own.",
+			"Voraciously absorb the practices of those around you, sometimes even forgetting where they came from.",
+			"Be willing to take on any task or job, no matter what others think."
+		],
+		"othersProbably": [
+			"Look to you as a source of eclectic skills and knowledge, especially relating to languages.",
+			"Get confused by your simultaneous respect for and disregard of tradition.",
+			"Have trouble reading your expressions or regard you with suspicion and superstition."
+		],
+		"aonId": 21,
+		"source": "PZO2105",
+		"id": "a4a69397-2a67-4c36-b5f5-c39d2968c2f2"
+	},
+	{ "objectType": "Heritage", "name": "Jinxed Tengu", "ancestry": "Tengu", "source": "PZO2105", "id": "a410c800-8883-45ca-8597-bc4991b2d4bb", "aonId": 77 },
+	{ "objectType": "Heritage", "name": "Mountainkeeper Tengu", "ancestry": "Tengu", "source": "PZO2105", "id": "254c5ec2-6966-41db-b33f-bea1ca2e3a34", "aonId": 78 },
+	{ "objectType": "Heritage", "name": "Skyborn Tengu", "ancestry": "Tengu", "source": "PZO2105", "id": "edcad680-72a4-40b1-97c8-128f478080fb", "aonId": 79 },
+	{ "objectType": "Heritage", "name": "Stormtossed Tengu", "ancestry": "Tengu", "source": "PZO2105", "id": "b5721710-4a1d-4842-8733-69d3f417a495", "aonId": 80 },
+	{ "objectType": "Heritage", "name": "Taloned Tengu", "ancestry": "Tengu", "source": "PZO2105", "id": "c545a9e1-b0db-4ab1-abd4-bd4dcf8bca33", "aonId": 81 }
+]

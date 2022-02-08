@@ -1,0 +1,44 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Summoner",
+		"duringCombatEncounters": [
+			"You and your eidolon fight together as one.",
+			"You can rely on your eidolon for mundane challenges, saving your spells for when they're needed most."
+		],
+		"duringSocialEncounters": [
+			"Your powerful personality allows you to take the lead when negotiating.",
+			"You and your eidolon might engage with others in different ways, but even if your guardian remains silent, its presence reminds those around you of your power."
+		],
+		"whileExploring": [
+			"Whether you remain on alert for the presence of strange magic or keep an eye out for trouble, you and your eidolon act together to cover more ground, pool your knowledge, and leverage each other's abilities."
+		],
+		"inDowntime": [
+			"You might attempt to learn more about the nature of your eidolon and delve deeper into the secrets of its magical tradition to Learn a Spell, Craft magic items with your eidolon's help, or make allies using your social skills."
+		],
+		"youMight": [
+			"Rely on your eidolon to accomplish physical tasks while you handle the mental ones.",
+			"Develop attitudes and mannerisms in line with your eidolon's way of thinking, even as your nature shapes its behavior.",
+			"Consider your eidolon a close friend, a guiding figure, a protector, or a rival bound to you."
+		],
+		"othersProbably": [
+			"Feel safe with you (and your eidolon) at their side.",
+			"Expect that since you know information about your eidolon, you might know details about other sorts of strange monsters.",
+			"View you with awe or fear because of the powerful, strange creature that accompanies you."
+		],
+		"classPath": "Eidolon",
+		"aonId": 0,
+		"source": "PZO2108",
+		"id": "1427cb73-e3f1-438c-9426-d989d5c74c82"
+	},
+	{ "objectType": "ClassPath", "name": "Angel", "class": "Summoner", "source": "PZO2108", "id": "98bcf5cf-74d3-4f34-9313-b6aa50900642" },
+	{ "objectType": "ClassPath", "name": "Anger Phantom", "class": "Summoner", "source": "PZO2108", "id": "40c31bd2-f8c2-49ab-8ba7-2c82a3e14d0d" },
+	{ "objectType": "ClassPath", "name": "Beast", "class": "Summoner", "source": "PZO2108", "id": "49d2c525-25fe-4305-99a5-2d1e6cde5c58" },
+	{ "objectType": "ClassPath", "name": "Construct", "class": "Summoner", "source": "PZO2108", "id": "1a863997-eef9-4c83-ae86-2760688e40d5" },
+	{ "objectType": "ClassPath", "name": "Demon", "class": "Summoner", "source": "PZO2108", "id": "50b47cd2-0bb6-46ed-84bc-b669fe0d07e8" },
+	{ "objectType": "ClassPath", "name": "Devotion Phantom", "class": "Summoner", "source": "PZO2108", "id": "dc6919c8-01f4-46c8-b556-c083a338aead" },
+	{ "objectType": "ClassPath", "name": "Dragon", "class": "Summoner", "source": "PZO2108", "id": "0381093b-5854-47f6-b46d-3f22895c2a31" },
+	{ "objectType": "ClassPath", "name": "Fey", "class": "Summoner", "source": "PZO2108", "id": "465d52da-6b60-48ea-9908-65dee9a7028a" },
+	{ "objectType": "ClassPath", "name": "Plant", "class": "Summoner", "source": "PZO2108", "id": "baf9f710-4105-407a-9722-e044815d6bdd" },
+	{ "objectType": "ClassPath", "name": "Psychopomp", "class": "Summoner", "source": "PZO2108", "id": "d992275c-cc6b-4798-b4a7-cc0e29021f02" }
+]

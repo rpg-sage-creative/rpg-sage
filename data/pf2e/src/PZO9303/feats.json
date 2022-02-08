@@ -1,0 +1,201 @@
+[
+	{
+		"aonId": 1174,
+		"objectType": "Feat",
+		"name": "Battle Prayer",
+		"actionType": "[A]",
+		"level": 7,
+		"traits": [ "Divine", "General", "Skill" ],
+		"details": [
+			"Calling out to your deity, you recite scripture to harm a foe. When you select this feat, choose chaos, evil, good, or law. Your choice must match one of your deity's alignment components. This action has the trait corresponding to the chosen alignment.",
+			"Attempt a Religion check against the Will DC of a foe within 30 feet. The foe is then temporarily immune to Battle Prayers from your deity for 1 day.",
+			{
+				"criticalSuccess": [
+					"You deal 2d6 damage of the chosen alignment type, or 6d6 damage if you have legendary proficiency in Religion."
+				],
+				"success": [
+					"You deal 1d6 damage of the chosen alignment type, or 3d6 damage if you have legendary proficiency in Religion."
+				],
+				"failure": [
+					"There is no effect."
+				],
+				"criticalFailure": [
+					"The backlash of your foe's will against your prayer prevents you from using Battle Prayer again for 10 minutes."
+				]
+			}
+		],
+		"skill": "Religion",
+		"prerequisites": [ "master in Religion", "you follow a deity" ],
+		"description": "Calling out to your deity, you recite scripture to harm a foe",
+		"source": "PZO9303",
+		"page": 104,
+		"id": "2a4e3ac8-a2cb-4e9d-ac16-197a68eaa98d"
+	},
+	{
+		"aonId": 1175,
+		"objectType": "Feat",
+		"name": "Bless Tonic",
+		"level": 7,
+		"traits": [ "General", "Positive", "Skill" ],
+		"details": [
+			"You channel positive energy into restoratives that ward against harm. When you Craft an alchemical item that restores Hit Points (rather than create it with advanced alchemy, Quick Alchemy, or another means), it becomes a blessed alchemical item and gains the positive trait. For example, an elixir of life would become a blessed elixir of life. When a creature regains Hit Points using a blessed alchemical item, the overflowing energy grants them negative resistance 5 for 1 round, or negative resistance 10 if you are legendary in Crafting."
+		],
+		"skill": "Crafting",
+		"prerequisites": [
+			"master in Crafting",
+			"deity who grants <i>heal</i> divine font"
+		],
+		"description": "You channel positive energy into restoratives that ward against harm",
+		"source": "PZO9303",
+		"page": 104,
+		"id": "f6279c1c-3bd5-4fb7-b993-2824801d8361"
+	},
+	{
+		"aonId": 1176,
+		"objectType": "Feat",
+		"name": "Bless Toxin",
+		"level": 7,
+		"traits": [ "General", "Negative", "Skill" ],
+		"details": [
+			"You pour negative energy into toxins you create to further debilitate your targets. When you Craft an alchemical poison (rather than create it with advanced alchemy, Quick Alchemy, or another means), it becomes a blessed alchemical poison and gains the negative trait. When a creature is afflicted with a blessed alchemical poison, for 1 round, any Hit Points it would regain from a positive effect are reduced by 5, or by 10 if you are legendary in Crafting."
+		],
+		"skill": "Crafting",
+		"prerequisites": [
+			"master in Crafting",
+			"deity who grants <i>harm</i> divine font"
+		],
+		"description": "You pour negative energy into toxins you create to further debilitate your targets",
+		"source": "PZO9303",
+		"page": 104,
+		"id": "890ee4ff-09d4-48c8-8c18-d6632aa4de85"
+	},
+	{
+		"aonId": 1178,
+		"objectType": "Feat",
+		"name": "Charlatan",
+		"level": 1,
+		"traits": [ "General", "Skill" ],
+		"details": [
+			"You've learned to mimic the abilities of spellcasters by studying their flourishes and words. When you activate a magic item to generate a spell effect, attempt a Deception check. If you succeed against an onlooker's Perception DC, to that onlooker, you appear to Cast that Spell instead. Onlookers who successfully Recognize the Spell realize you used a magic item, though those who later successfully Identify the Magic still can't determine that the source of the effect was a magic item."
+		],
+		"skill": "Deception",
+		"prerequisites": [ "trained in Deception" ],
+		"description": "You've learned to mimic the abilities of spellcasters by studying their flourishes and words",
+		"source": "PZO9303",
+		"page": 104,
+		"id": "46ceac02-ab16-444a-b1e7-3c2d20c05f74"
+	},
+	{
+		"aonId": 1179,
+		"objectType": "Feat",
+		"name": "Environmental Grace",
+		"level": 7,
+		"traits": [ "General", "Skill" ],
+		"details": [
+			"You rapidly adapt to environments through a combination of skill, meditation, and divine grace. After spending an hour in an environment of severe cold or colder, you are protected from the effects of severe cold until you leave that environment. After spending an hour in an environment of severe heat or hotter, you are protected from the effects of severe heat until you leave that environment."
+		],
+		"prerequisites": [
+			"master in Survival; deity who grants the cold, fire, nature",
+			"or travel domain"
+		],
+		"description": "You rapidly adapt to environments through a combination of skill, meditation, and divine grace",
+		"source": "PZO9303",
+		"page": 105,
+		"id": "cedeb63d-0609-40fa-8d26-fda07ac073e8"
+	},
+	{
+		"aonId": 1180,
+		"objectType": "Feat",
+		"name": "Evangelize",
+		"actionType": "[A]",
+		"level": 7,
+		"traits": [ "Auditory", "General", "Linguistic", "Mental", "Skill" ],
+		"details": [
+			"You point out a detail that incontrovertibly supports your faith, causing a listener's mind to whirl. Attempt a Diplomacy check and compare the result to the Will DC of a single target that can hear you and understands your language; that target is then temporarily immune to Evangelize with respect to your deity or philosophy for 1 day. A creature that already agrees with you is unaffected, and at the GM's discretion, a target that genuinely changes its perspective to support your faith as a result of the argument is also otherwise unaffected.",
+			{ "criticalSuccess": [ "The target is stupefied 2 for 1 round." ], "success": [ "The target is stupefied 1 for 1 round." ], "failure": [ "The target is unaffected." ] }
+		],
+		"skill": "Diplomacy",
+		"prerequisites": [ "master in Diplomacy", "you follow a deity or philosophy" ],
+		"description": "You point out a detail that incontrovertibly supports your faith, causing a listener's mind to whirl",
+		"source": "PZO9303",
+		"page": 105,
+		"id": "95ec4fa9-7a03-4f9a-a9ab-e3e3ceff6bd9"
+	},
+	{
+		"aonId": 1181,
+		"objectType": "Feat",
+		"name": "Mortal Healing",
+		"level": 2,
+		"traits": [ "General", "Skill" ],
+		"details": [
+			"You grant greater healing when the gods don't interfere. When you roll a success to Treat Wounds for a creature that hasn't regained Hit Points from divine magic in the past 24 hours, you get a critical success on your check instead and restore the corresponding amount of Hit Points."
+		],
+		"prerequisites": [ "Godless Healing", "you follow the Laws of Mortality" ],
+		"description": "You grant greater healing when the gods don't interfere",
+		"source": "PZO9303",
+		"page": 105,
+		"id": "16b0279f-8ed9-4092-99c9-bf63e9ea4b6f"
+	},
+	{
+		"aonId": 1182,
+		"objectType": "Feat",
+		"name": "Numb to Death",
+		"level": 7,
+		"traits": [ "General" ],
+		"details": [
+			"Your past has left you numb to death's call. The first time each day that you regain Hit Points while you are dying, you regain additional Hit Points equal to your level, and you neither gain the wounded condition nor increase the value of this condition."
+		],
+		"prerequisites": [ "Diehard", "you have died at least once" ],
+		"frequency": [ "once per day" ],
+		"description": "Your past has left you numb to death's call",
+		"source": "PZO9303",
+		"page": 105,
+		"id": "1ead3b67-93a4-4d3b-adde-ad10fb1b1b9e"
+	},
+	{
+		"aonId": 1183,
+		"objectType": "Feat",
+		"name": "Sacred Defense",
+		"actionType": "[A]",
+		"level": 7,
+		"traits": [ "Divine", "General", "Skill" ],
+		"details": [
+			"You call upon your deity to grant you their protective blessing. Attempt a DC 30 Religion check. If you have legendary proficiency in Religion, you can instead attempt a DC 40 Religion check to increase the temporary Hit Points you gain on a successful check to 15 (25 on a critical success).",
+			{
+				"criticalSuccess": [
+					"You gain 10 temporary Hit Points. You lose any remaining temporary Hit Points after 1 minute."
+				],
+				"success": [
+					"You gain 5 temporary Hit Points. You lose any remaining temporary Hit Points after 1 minute."
+				],
+				"criticalFailure": [
+					"Your deity withholds their blessing. You cannot attempt to call to your deity again for 1 day."
+				]
+			}
+		],
+		"skill": "Religion",
+		"prerequisites": [ "master in Religion", "you follow a deity" ],
+		"frequency": [ "once per hour" ],
+		"description": "You call upon your deity to grant you their protective blessing",
+		"source": "PZO9303",
+		"page": 105,
+		"id": "e626da15-93c8-4b19-9268-58cf6551c1b2"
+	},
+	{
+		"aonId": 1185,
+		"objectType": "Feat",
+		"name": "Sanctify Water",
+		"actionType": "[A]",
+		"level": 7,
+		"traits": [ "General", "Skill" ],
+		"details": [
+			"You imbue water with your deity's blessing. Choose a container of water on your person that is of light Bulk. For 1 round, if you or an ally throw this container at a foe, it has the damaging effects of holy water (if you follow a good deity) or unholy water (if you follow an evil deity). The water's transient power doesn't make it gain any value, allow it to be used to supply the cost for a spell or ritual, and so on. If you have legendary proficiency in Religion, you can sanctify three containers held by you or allies within your reach instead of one."
+		],
+		"skill": "Religion",
+		"prerequisites": [ "master in Religion", "good or evil deity" ],
+		"description": "You imbue water with your deity's blessing",
+		"source": "PZO9303",
+		"page": 105,
+		"id": "3d524936-315a-4425-92fe-d1ed8d0e2e77"
+	}
+]

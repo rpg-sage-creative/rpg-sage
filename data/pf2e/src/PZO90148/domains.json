@@ -1,0 +1,13 @@
+[
+	{
+		"objectType": "Domain",
+		"alternate": true,
+		"name": "Toil",
+		"description": "You work constantly and refuse to let anything stand in your way.",
+		"spells": [ "Practice Makes Perfect", "Tireless Worker" ],
+		"source": "PZO90148",
+		"page": 63,
+		"aonId": 39,
+		"id": "8705d64c-917b-4eff-bb29-1e6db13bb1d2"
+	}
+]

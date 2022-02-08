@@ -1,0 +1,289 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Dwarf",
+		"details": [
+			"Dwarves are slow to trust those outside their kin, but this wariness is not without reason. Dwarves have a long history of forced exile from ancestral holds and struggles against the depredations of savage foes, especially giants, goblinoids, orcs, and the horrors that dwell deep below the surface. While trust from a dwarf is hard-won, once gained it is as strong as iron.",
+			"If you want to play a character who is as hard as nails, a stubborn and unrelenting adventurer, with a mix of rugged toughness and deep wisdom-or at least dogged conviction-you should play a dwarf."
+		],
+		"youMight": [
+			"Strive to uphold your personal honor, no matter the situation.",
+			"Appreciate quality craftsmanship in all forms and insist upon it for all your gear.",
+			"Don't waver or back down once you've set your mind to something."
+		],
+		"othersProbably": [
+			"See you as stubborn, though whether they see this as an asset or a detriment changes from one person to the next.",
+			"Assume you are an expert in matters related to stonework, mining, precious metals, and gems.",
+			"Recognize the deep connection you have with your family, heritage, and friends."
+		],
+		"physicalDescription": [
+			"Dwarves are short and stocky, standing about a foot shorter than most humans. They have wide, compact bodies and burly frames. Dwarves of all genders pride themselves on the length of their hair, which they often braid into intricate patterns, some of which represent specific clans. A long beard is a sign of masculinity and honor among the dwarves, and thus a clean-shaven male dwarf is considered weak, untrustworthy, or worse.",
+			"Dwarves typically reach physical adulthood around the age of 25, though their traditionalist culture places more value on completing coming of age ceremonies unique to each clan than reaching a certain age. A typical dwarf can live to around 350 years old."
+		],
+		"society": [
+			"The ancient surface empire the dwarves once ruled fell long ago, overwhelmed by orc and goblinoid enemies. Today's dwarves retain many of the qualities that propelled their people to greatness in ancient times: fierceness, gumption, and stubbornness in endeavors ranging from battle and craftsmanship to forging ties with family and friends.",
+			"While the distance between their mountain Sky Citadels can create vast cultural divides between various dwarf clans, most dwarven societies share a number of similarities. Nearly all dwarven peoples share a passion for stonework, metalwork, and gem-cutting. Most are highly skilled at architecture and mining, and many share a hatred of giants, orcs, and goblinoids.",
+			"Few dwarves are seen without their clan dagger strapped to their belt. This dagger is forged just before a dwarf's birth and bears the gemstone of their clan. A parent uses this dagger to cut the infant's umbilical cord, making it the first weapon to taste their blood."
+		],
+		"alignmentAndReligion": [
+			"Dwarves tend to value honor and closely follow the traditions of their clans and kingdoms. They have a strong sense of friendship and justice, though they are often very particular about who they consider a friend. They work hard and play harder- especially when strong ale is involved.",
+			"The typical dwarf is lawful good or lawful neutral and prefers to worship deities of those alignments. Torag, god of dwarvenkind, is the dwarves' primary deity, though worship of Torag's family members is also common."
+		],
+		"names": [
+			"Dwarves honor their children with names taken from ancestors or dwarven heroes, and it's quite rare to invent a new name or to borrow a name from another culture for a child. When introducing themselves, dwarves tend to list their family and clan, plus any number of other familial connections and honorifics. Dwarven names usually contain hard consonants and are rarely more or fewer than two syllables."
+		],
+		"sampleNames": [ "Agna", "Bodill", "Dolgrin", "Edrukk", "Grunyar", "Ingra", "Kazmuk", "Kotri", "Lupp", "Morgrym", "Rogar", "Rusilka", "Torra", "Yangrit" ],
+		"aonId": 1,
+		"source": "PZO2101",
+		"page": 34,
+		"id": "436b339b-4348-4768-b3bc-55d02545c7b7",
+		"properties": {
+			"hitPoints": 10,
+			"size": "Medium",
+			"speed": "20 feet",
+			"abilityBoosts": [ "Constitution", "Wisdom", "Free" ],
+			"abilityFlaw": [ "Charisma" ],
+			"languages": {
+				"starting": [
+					"Common",
+					"Dwarven",
+					"Additional languages equal to your Intelligence modifier (if it's positive)."
+				],
+				"choices": [
+					"Gnomish",
+					"Goblin",
+					"Jotun",
+					"Orcish",
+					"Terran",
+					"Undercommon",
+					"any other languages to which you have access (such as the languages prevalent in your region)."
+				]
+			},
+			"traits": [ "Dwarf", "Humanoid" ],
+			"other": [
+				{ "name": "Darkvision", "details": [ "You can see in darkness and dim light just as well as you can see in bright light, though your vision in darkness is in black and white." ] },
+				{ "name": "Clan Dagger", "details": [ "You get one clan dagger (page 280) for free, as it was given to you at birth. Selling this clan dagger is a terrible taboo and earns you the disdain of other dwarves." ] }
+			],
+			"adventurers": [
+				{
+					"name": "Dwarven Adventurers",
+					"details": [
+						"Dwarven adventurers tend to work as treasure hunters or sellswords. They often leave their citadels and subterranean cities in search of wealth to enrich their homeland or to reclaim long-lost dwarven treasures or lands taken by the enemies of their kin.",
+						"Typical dwarven backgrounds include acolyte, artisan, merchant, miner, and warrior. Dwarves excel at many of the martial classes, such as barbarian, fighter, monk, and ranger, but they also make excellent clerics and druids."
+					]
+				}
+			]
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Ancient-Blooded Dwarf",
+		"ancestry": "Dwarf",
+		"details": [
+			"Dwarven heroes of old could shrug off their enemies' magic, and some of that resistance manifests in you. You gain the Call on Ancient Blood reaction."
+		],
+		"source": "PZO2101",
+		"id": "c970e8aa-8794-4997-9857-0650578e2bbe",
+		"aonId": 1
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Death Warden Dwarf",
+		"ancestry": "Dwarf",
+		"details": [
+			"Your ancestors have been tomb guardians for generations, and the power they cultivated to ward off necromancy has passed on to you. If you roll a success on a saving throw against a necromancy effect, you get a critical success instead."
+		],
+		"source": "PZO2101",
+		"id": "d7321c4a-1633-4350-986b-6881057b47d9",
+		"aonId": 2
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Forge Dwarf",
+		"ancestry": "Dwarf",
+		"details": [
+			"You have a remarkable adaptation to hot environments from ancestors who inhabited blazing deserts or volcanic chambers beneath the earth. This grants you fire resistance equal to half your level (minimum 1), and you treat environmental heat effects as if they were one step less extreme (incredible heat becomes extreme, extreme heat becomes severe, and so on)."
+		],
+		"source": "PZO2101",
+		"id": "8e759449-bc0c-4ede-928a-871ddc7c7650",
+		"aonId": 3
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Rock Dwarf",
+		"ancestry": "Dwarf",
+		"details": [
+			"Your ancestors lived and worked among the great ancient stones of the mountains or the depths of the earth. This makes you solid as a rock when you plant your feet. You gain a +2 circumstance bonus to your Fortitude or Reflex DC against attempts to Shove or Trip you. This bonus also applies to saving throws against spells or effects that attempt to knock you prone. In addition, if any effect would force you to move 10 feet or more, you are moved only half the distance."
+		],
+		"source": "PZO2101",
+		"id": "02a5d487-dd04-4231-af78-a2c551ccf28a",
+		"aonId": 4
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Strong-Blooded Dwarf",
+		"ancestry": "Dwarf",
+		"details": [
+			"our blood runs hearty and strong, and you can shake off toxins. You gain poison resistance equal to half your level (minimum 1), and each of your successful saving throws against a poison affliction reduces its stage by 2, or by 1 for a virulent poison. Each critical success against an ongoing poison reduces its stage by 3, or by 2 for a virulent poison."
+		],
+		"source": "PZO2101",
+		"id": "d511ed95-b9bd-451a-b2f4-30ce550afdea",
+		"aonId": 5
+	},
+	{
+		"objectType": "Feat",
+		"name": "Dwarven Lore",
+		"level": 1,
+		"traits": [ "Dwarf" ],
+		"details": [
+			"You eagerly absorbed the old stories and traditions of your ancestors, your gods, and your people, studying in subjects and techniques passed down for generation upon generation. You gain the trained proficiency rank in Crafting and Religion. If you would automatically become trained in one of those skills (from your background or class, for example), you instead become trained in a skill of your choice. You also become trained in Dwarven Lore."
+		],
+		"page": 36,
+		"source": "PZO2101",
+		"id": "e69bcb28-a481-452f-8e4f-85f14c03253d",
+		"aonId": 1
+	},
+	{
+		"objectType": "Feat",
+		"name": "Dwarven Weapon Familiarity",
+		"level": 1,
+		"traits": [ "Dwarf" ],
+		"details": [
+			"Your kin have instilled in you an affinity for hard-hitting weapons, and you prefer these to more elegant arms. You are trained with the battle axe, pick, and warhammer.",
+			"You also gain access to all uncommon dwarf weapons. For the purpose of determining your proficiency, martial dwarf weapons are simple weapons and advanced dwarf weapons are martial weapons."
+		],
+		"page": 36,
+		"source": "PZO2101",
+		"id": "bb9d82ef-fb9a-42b1-a36f-62c85ac4c36e",
+		"aonId": 2
+	},
+	{
+		"objectType": "Feat",
+		"name": "Rock Runner",
+		"level": 1,
+		"traits": [ "Dwarf" ],
+		"details": [
+			"Your innate connection to stone makes you adept at moving across uneven surfaces. You can ignore difficult terrain caused by rubble and uneven ground made of stone and earth.",
+			"In addition, when you use the Acrobatics skill to Balance on narrow surfaces or uneven ground made of stone or earth, you aren't flat-footed, and when you roll a success at one of these Acrobatics checks, you get a critical success instead."
+		],
+		"page": 36,
+		"source": "PZO2101",
+		"id": "f23f0b1a-72d1-4a5f-a2be-13b0b763493e",
+		"aonId": 3
+	},
+	{
+		"objectType": "Feat",
+		"name": "Stonecunning",
+		"level": 1,
+		"traits": [ "Dwarf" ],
+		"details": [
+			"You have a knack for noticing even small inconsistencies and craftsmanship techniques in the stonework around you. You gain a +2 circumstance bonus to Perception checks to notice unusual stonework. This bonus applies to checks to discover mechanical traps made of stone or hidden within stone.",
+			"If you aren't using the Seek action or searching, the GM automatically rolls a secret check for you to notice unusual stonework anyway. This check doesn't gain the circumstance bonus, and it takes a -2 circumstance penalty."
+		],
+		"page": 36,
+		"source": "PZO2101",
+		"id": "d699dd09-6b4f-4c22-8c1c-fd9b2cb26d9a",
+		"aonId": 4
+	},
+	{
+		"objectType": "Feat",
+		"name": "Unburdened Iron",
+		"level": 1,
+		"traits": [ "Dwarf" ],
+		"details": [
+			"You've learned techniques first devised by your ancestors during their ancient wars, allowing you to comfortably wear massive suits of armor. Ignore the reduction to your Speed from any armor you wear.",
+			"In addition, any time you're taking a penalty to your Speed from some other reason (such as from the encumbered condition or from a spell), deduct 5 feet from the penalty. For example, the encumbered condition normally gives a -10-foot penalty to Speed, but it gives you only a -5-foot penalty. If your Speed is taking multiple penalties, pick only one penalty to reduce."
+		],
+		"page": 36,
+		"source": "PZO2101",
+		"id": "231df57b-96fb-49c1-9578-0d098a6554bf",
+		"aonId": 5
+	},
+	{
+		"objectType": "Feat",
+		"name": "Vengeful Hatred",
+		"level": 1,
+		"traits": [ "Dwarf" ],
+		"details": [
+			"You heart aches for vengeance against those who have wronged your people. Choose one of the following dwarven ancestral foes when you gain Vengeful Hatred: drow, duergar, giant, or orc. You gain a +1 circumstance bonus to damage with weapons and unarmed attacks against creatures with that trait. If your attack would deal more than one weapon die of damage (as is common at higher levels than 1st), the bonus is equal to the number of weapon dice or unarmed attack dice.",
+			"In addition, if a creature critically succeeds at an attack against you and deals damage to you, you gain your bonus to damage against that creature for 1 minute regardless of whether it has the chosen trait."
+		],
+		"special": "Your GM can add appropriate creature traits to the ancestral foes list if your character is from a community that commonly fights other types of enemies.",
+		"page": 36,
+		"source": "PZO2101",
+		"id": "3476b376-4e3e-411a-a073-66546277f0af",
+		"aonId": 6
+	},
+	{
+		"objectType": "Feat",
+		"name": "Boulder Roll",
+		"actionType": "[A][A]",
+		"level": 5,
+		"traits": [ "Dwarf" ],
+		"prerequisites": "Rock Runner",
+		"details": [
+			"Your dwarven build allows you to push foes around, just like a mighty boulder tumbles through a subterranean cavern. Take a Step into the square of a foe that is your size or smaller, and the foe must move into the empty space directly behind it. The foe must move even if doing so places it in harm's way. The foe can attempt a Fortitude saving throw against your Athletics DC to block your Step. If the foe attempts this saving throw, unless it critically succeeds, it takes bludgeoning damage equal to your level plus your Strength modifier.",
+			"If the foe can't move into an empty space (if it is surrounded by solid objects or other creatures, for example), your Boulder Roll has no effect."
+		],
+		"page": 36,
+		"source": "PZO2101",
+		"id": "25d183af-a9ff-4997-b413-a30233c37980",
+		"aonId": 7
+	},
+	{
+		"objectType": "Feat",
+		"name": "Dwarven Weapon Cunning",
+		"level": 5,
+		"traits": [ "Dwarf" ],
+		"prerequisites": "Dwarven Weapon Familiarity",
+		"details": [
+			"You've learned cunning techniques to get the best effects out of your dwarven weapons. Whenever you critically hit using a battle axe, pick, warhammer, or a dwarf weapon, you apply the weapon's critical specialization effect."
+		],
+		"page": 37,
+		"source": "PZO2101",
+		"id": "59b2a139-5e6f-423e-b463-9c3801a33f7d",
+		"aonId": 8
+	},
+	{
+		"objectType": "Feat",
+		"name": "Mountin's Stoutness",
+		"level": 9,
+		"traits": [ "Dwarf" ],
+		"details": [
+			"Your hardiness lets you withstand more punishment than most before going down. Increase your maximum Hit Points by your level. When you have the dying condition, the DC of your recovery checks is equal to 9 + your dying value (instead of 10 + your dying value).",
+			"If you also have the Toughness feat, the Hit Points gained from it and this feat are cumulative, and the DC of your recovery checks is equal to 6 + your dying value."
+		],
+		"page": 37,
+		"source": "PZO2101",
+		"id": "1765d028-f4e1-4617-9eb5-a7f0d6aff149",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Stonewalker",
+		"level": 9,
+		"traits": [ "Dwarf" ],
+		"details": [
+			"You have a deep reverence for and connection to stone. You gain meld into stone as a 3rd-level divine innate spell that you can cast once per day.",
+			"If you have the Stonecunning dwarf ancestry feat, you can attempt to find unusual stonework and stonework traps that require legendary proficiency in Perception. If you have both Stonecunning and legendary proficiency in Perception, when you're not Seeking and the GM rolls a secret check for you to notice unusual stonework, you keep the bonus from Stonecunning and don't take the -2 circumstance penalty."
+		],
+		"page": 37,
+		"source": "PZO2101",
+		"id": "6229eb96-c4e6-4cbf-a745-8ad99c600265",
+		"aonId": 10
+	},
+	{
+		"objectType": "Feat",
+		"name": "Dwarven Weapon Expertise",
+		"level": 13,
+		"traits": [ "Dwarf" ],
+		"prerequisites": "Dwarven Weapon Familiarity",
+		"details": [
+			"Your dwarven affinity blends with your training, granting you great skill with dwarven weapons. Whenever you gain a class feature that grants you expert or greater proficiency in certain weapons, you also gain that proficiency for battle axes, picks, warhammers, and all dwarven weapons in which you are trained."
+		],
+		"page": 37,
+		"source": "PZO2101",
+		"id": "2c38b817-c7ee-4f8f-913d-a4dbea378ff0",
+		"aonId": 11
+	}
+]

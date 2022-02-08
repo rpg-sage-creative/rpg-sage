@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:creator" content="@randaltmeyer" />
+		<meta property="og:title" content="RPG Sage: Quick Start Guide" />
+		<meta property="og:description" content="The Quick Start Guide for setting up Sage (Discord Bot) on your Discord Server." />
+		<meta property="og:image" content="http://rpgsage.io/images/SageBotToken.png" />
+		<meta property="og:url" content="http://rpgsage.io/quick.html" />
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+		<style>button > h1, button > h3, button > h5 { margin:0; }</style>
+		<title>RPG Sage: Quick Start Guide</title>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<header>
+						<h1 class="text-center">RPG Sage: Quick Start Guide</h1>
+					</header>
+					<div class="alert alert-warning m-2 text-center">
+						If you are looking for more, check out the <a href="index.html">Command Guide</a> for all your command needs!
+					</div>
+					<div class="alert alert-info m-2 text-center">
+						Click here to Invite Sage to your Discord server(s): <a href="https://discord.com/api/oauth2/authorize?client_id=644942473315090434&permissions=4026920017&scope=bot%20applications.commands" target="_blank">Invite Sage!</a>
+						<br/><br/>
+						Please join our Discord to chat, ask questions, or report any issues! <a href="http://discord.rpgsage.io" target="_blank">RPG Sage Discord (aka The Halfmug Tavern)</a>
+					</div>
+					<div class="accordion" id="accordion">
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="accordion-installation-heading">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-installation-collapse" aria-expanded="false" aria-controls="accordion-installation-collapse">
+									<h3>Sage Invite Notes</h3>
+								</button>
+							</h2>
+							<div id="accordion-installation-collapse" class="accordion-collapse collapse" aria-labelledby="accordion-installation-heading" data-bs-parent="#accordion">
+								<div class="accordion-body">
+									Sage asks for quite a number of permissions <i>(some of which are for features still in development)</i>:
+									<ul>
+									<li><b>Manage Roles:</b> &nbsp; A future Sage feature will create/manage roles for games. <i>(in development)</i></li>
+									<li><b>Manage Channels:</b> &nbsp; A future Sage feature will create/manage channels for games. <i>(in development)</i></li>
+									<li><b>Create Instant Invite:</b> &nbsp; A future Sage feature will create invites for games posted as looking for players. <i>(not yet in development)</i></li>
+									<li><b>Manage Emojis:</b> &nbsp; A future Sage feature may allow custom emojis for games. <i>(not yet in development)</i></li>
+									<li><b>Manage Webhooks:</b> &nbsp; A future Sage feature will use webhooks to interact with games outside Discord. <i>(not yet in development)</i></li>
+									<li><b>View Channels:</b> &nbsp; Sage needs to be able to see channels to function.</li>
+									<li><b>Send Messages:</b> &nbsp; Sage needs to be able to send messages to function.</li>
+									<li><b>Manage Messages:</b> &nbsp; Sage needs to be able to manage messages to function (such as edit, pin, or delete messages).</li>
+									<li><b>Embed Links:</b> &nbsp; Sage needs to be able to embed links to link game material to their source (such as Archives of Nethys).</li>
+									<li><b>Attach Files:</b> &nbsp; A future Sage feature may allow download of game dialog or other content.</li>
+									<li><b>Read Message History:</b> &nbsp; Sage needs to be able to search messages to function. A future Sage feature may allow for more enhanced game/dialog specific search. <i>(not yet in development)</i></li>
+									<li><b>Use External Emoji:</b> &nbsp; Sage needs access to the default emoji set on RPG Sage's Halfmug Tavern Discord server.</li>
+									<li><b>Add Reactions:</b> &nbsp; Sage needs to be able to add reactions to inform and interact with users.</li>
+									<li><b>Slash Commands:</b> &nbsp; A future Sage feature might reduce some of the more cumbersome Sage interactions. <i>(not yet in development)</i></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+<pre id="pre">
+__**Sage Prefix**__
+By default, Sage commands that start with `!` or `?` require a prefix.
+- `sage!help`
+
+You can change this prefix by setting a new one.
+- `sage!prefix set newPrefix`
+
+You can remove this prefix.
+- `sage!prefix unset`
+
+__**Admin Permissions**__
+By default, any channel Sage has access to responds to all commands. That said, "admin" commands (those that manipulate Sage, the Server, or Games) require permissions with Sage. The Server Owner has full access and must give permission to others.
+
+To allow full admin of Sage:
+- `!!admin add @UserMention SageAdmin`
+
+To allow only administration of server default settings or non-game settings:
+- `!!admin add @UserMention ServerAdmin`
+
+To allow only administration of games:
+- `!!admin add @UserMention GameAdmin`
+
+__**Channel Command Permissions**__
+By default, any channel Sage as access to allows all commands (provided you have permission to use the command). Once you start toggling features on a channel, only the options that are turned on are allowed.
+
+__**PC / GM Dialog Permissions**__
+When in a non-game channel with dialog enabled, anybody can use any dialog command (pc, npc, gm, etc). When in a game channel with dialog enabled, commands are locked to the user's role in the game: only game masters can use gm, npc, enemy, ally and only players can use pc, alt, companion, hireling.
+
+__**Your First Game**__
+> These commands will create a simple game with 3 channels (in character, out of character, and game master only), a game master, and 4 players.
+> Create a channel category for the game and then create the three channels in it.
+> We will assume `my-game` is the category, and the channels are `my-game-ic`, `my-game-ooc`, and `my-game-gm`.
+
+**Basic Game Setup**
+Run these commands from the `my-game-gm` channel.
+
+Create the game
+- `!!game create name="My Game"`
+
+Update the GM channel permissions
+- `!!channel update admin=true commands=true dice=true search=true gamemaster=write player=none`
+
+Add the In Character channel
+- `!!channel add #my-game-ic dialog=true dice=true gamemaster=write player=write`
+
+Add the Out of Charatcer channel
+- `!!channel add #my-game-ooc admin=true commands=true dialog=true dice=true search=true gamemaster=write player=write`
+
+Add the Game Master
+- `!!gm add @UserMention`
+
+Add the Players
+- `!!player add @PlayerMention @PlayerMention @PlayerMention @PlayerMention`
+
+**Adding Characters**
+At this point, you have a simple game setup with no characters.
+
+To add NPCs, the GM can run the following (best run in `my-game-gm` to hide them from players!)
+- `!!npc create name="Cool NPC Name" token=http://url_to_token_image_online avatar=http://url_to_avatar_image`
+
+To add PCs, the players can run the following (best run in `my-game-ooc` to avoid IC clutter)
+- `!!pc create name="Fancy PC Name" token=http://url_to_token_image_online avatar=http://url_to_avatar_image`
+
+To add companions, familiars, or hirelings to PCs, players can run the following
+- `!!companion create name="Fluffy Familiar Name" token=http://url_to_token_image_online avatar=http://url_to_avatar_image`
+
+NOTE! If you are concerned about the image's url or hosting, you can always post the image in chat and then get the image's url by right clicking the image.
+
+**Testing Dialog**
+At this point, you have an NPC and some PCs, possibly some companions.
+Run these commands in the `my-game-ic` channel.
+
+To test the GM's basic narration, the GM can use the following commands:
+ - `gm::This is a basic narrative dialog`
+ - `gm::(Fun Title)::This is a narrative dialog with a special title!`
+
+To test the NPC's dialog, the GM can use the following commands:
+ - `npc::Cool NPC Name::This is a simple NPC dialog`
+ - `npc::Cool NPC Name(Alernate Title)::This changes the NPC's dialog to hide the name of unknown NPCs!`
+ - `ally::Cool NPC Name::This changes the NPC's dialog color to the ally color (green by default)`
+ - `enemy::Cool NPC Name::This changes the NPC's dialog color to the enemy color (red by default)`
+
+To test the PC's dialog, a Player can use the following command:
+ - `pc::This is a simple PC dialog`
+
+If they have a companion, a Player can use the following commands:
+ - `companion::This posts as a PC's Companion`
+ - `companion::2::This posts as a PC's 2nd Companion!`
+
+NOTE! All alts, companions, and hirelings are created using the `companion` command, and thus there is only one list. When you have more than one, if you don't provide their number in the list, the command will always use the first one, regardless of which command you used to post (`alt::`, `companion::`, `hireling::`).
+
+</pre>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+		<script type="text/javascript">
+			function createSimpleHeader(header) {
+				return `
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button" type="button">
+								${header.replace(/<h5>/i, "<h5> &nbsp; - &nbsp; ")}
+							</button>
+						</h2>
+					</div>
+				`;
+			}
+			function createAccordion(groups) {
+				return groups.map((group, groupIndex) => {
+					// if (!group.body) return createSimpleHeader(group.header);
+					return `
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="heading-${groupIndex}">
+								<button class="accordion-button ${groupIndex ? "collapsed" : ""}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${groupIndex}" aria-expanded="${groupIndex ? "false" : "true"}" aria-controls="collapse-${groupIndex}">
+									${group.header.replace(/<h5>/i, "<h5> &nbsp; - &nbsp; ")}
+								</button>
+							</h2>
+							<div id="collapse-${groupIndex}" class="accordion-collapse collapse ${groupIndex ? "" : "show"}" aria-labelledby="heading-${groupIndex}" data-bs-parent="#accordion">
+								<div class="accordion-body">
+									${group.body}
+								</div>
+							</div>
+						</div>
+					`;
+				}).join("");
+			}
+			$(() => {
+				const lines = $("pre#pre").text().split(/\r?\n\r?/);
+				const groups = lines.reduce((o, s) => { if (!o.length || s.match(/\*\*(.*?)\*\*/)) o.push([]); o[o.length - 1].push(s); return o; }, []);
+				const formattedGroups = groups.map(groupLines => {
+					const formatted = groupLines.map(line =>
+						line
+							.replace(/\_\_\_\*\*(.*?)\*\*\_\_\_/g, (m, s) => `<h1>${s}</h1>`)
+							.replace(/\_\_\*\*(.*?)\*\*\_\_/g, (m, s) => `<h3>${s}</h3>`)
+							.replace(/\_\_(.*?)\_\_/g, (m, s) => `<u>${s}</u>`)
+							.replace(/\*\*(.*?)\*\*/g, (m, s) => `<h5>${s}</h5>`)
+							.replace(/\*(.*?)\*/g, (m, s) => `<i>${s}</i>`)
+							.replace(/`(.*?)`/g, (m, s) => `<code>${s}</code>`)
+							.replace(/^> (.*?)$/g, (m, s) => `<blockquote>${s}</blockquote>`)
+					);
+					return {
+						header: formatted.shift(),
+						body: formatted.join("<br/>")
+							.replace(/(<\/h\d>)<br\/>/gi, "$1")
+							.replace(/<\/blockquote>(<br\/>)+<blockquote>/gi, "$1")
+							.replace(/(<\/blockquote>)(<br\/>)+(<h\d>)/gi, "$1$2$3")
+							.replace(/(<br\/>)+$/g, "")
+							// .replace(/(<br\/>)+/g, "<br/>")
+						};
+				});
+				$("pre#pre").remove();
+				$("div#accordion").append(createAccordion(formattedGroups));
+			});
+		</script>
+	</body>
+</html>

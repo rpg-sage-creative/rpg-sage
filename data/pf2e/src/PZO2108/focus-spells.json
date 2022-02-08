@@ -1,0 +1,581 @@
+[
+	{
+		"name": "Cascade Countermeasure",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Abjuration", "Magus" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"requirements": "You're benefiting from Arcane Cascade.",
+		"duration": "until the Arcane Cascade stance ends",
+		"details": [
+			"You quickly adjust your Arcane Cascade to offer magical protection. You gain resistance 5 against damage from spells. As normal, using Arcane Cascade again means you've ended the stance, and the spell ends."
+		],
+		"heightened": [
+			{ "change": "The resistance increases by 5.", "bump": 3 }
+		],
+		"page": 143,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "808753b5-85c2-4122-b660-463b7669fbfa"
+	},
+	{
+		"name": "Dimensional Assault",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Conjuration", "Magus", "Teleportation" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"range": "half your Speed",
+		"details": [
+			"You tumble through space, making a short dimensional hop to better position yourself for an attack. Teleport to any square in range that's within reach of a creature, and then make a melee Strike against one creature within your reach."
+		],
+		"page": 143,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "2a366100-7d14-4b2c-9802-3f8c4ff91994"
+	},
+	{
+		"name": "Force Fang",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation", "Force", "Magus" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "varies",
+		"targets": "1 creature",
+		"details": [
+			"You briefly turn your attack into pure force to bypass your opponent's defenses. Choose a target within your reach, or within the reach of a melee weapon you're wielding. If you can use Spellstrike with a ranged weapon (with the starlit span hybrid study, for example), you can target a creature in the first range increment of your ranged weapon. For an instant, you transform your weapon or unarmed attack into a spike of pure force, replacing all its normal statistics and abilities. The <i>force fang</i> automatically deals 1d4+1 force damage to the target."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d4+1.", "bump": 2 }
+		],
+		"page": 143,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "0458f713-af67-42fd-993f-7148054816c5"
+	},
+	{
+		"name": "Hasted Assault",
+		"level": 7,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Magus", "Transmutation" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"duration": "1 minute",
+		"details": [
+			"You call upon your magic to speed up your attacks. You gain the quickened condition and can use the extra action each round for only Strike actions."
+		],
+		"page": 143,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "93bd1e46-0869-4d29-bb46-d152d307e38d"
+	},
+	{
+		"name": "Runic Impression",
+		"level": 4,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation", "Magus" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "touch",
+		"targets": "you or one weapon you're wielding",
+		"duration": "1 minute",
+		"details": [
+			"Your unarmed attacks or weapon gain the benefits of a weapon rune you choose when you cast this spell: <i>corrosive, flaming, frost, ghost touch, returning, shock</i>, or <i>thundering</i>. If you cast <i>runic impression</i> on a weapon, this spell ends if you cease holding the weapon.",
+			"If this spell would give a weapon more property runes than its normal maximum, one of the existing property runes (you choose) is suppressed until the spell ends. For unarmed attacks, if this spell would give you more property runes than you could have from <i>handwraps of mighty blows</i>, one of the existing property runes is similarly suppressed."
+		],
+		"heightened": [
+			{ "change": "Add <i>keen</i> to the list of runes you can choose as well as the greater types of <i>corrosive, flaming, frost, shock</i>, and <i>thundering</i>.", "level": 8 }
+		],
+		"page": 143,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "03196288-02ae-4a7d-aabb-933f0cadb6bd"
+	},
+	{
+		"name": "Shielding Strike",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Abjuration", "Magus" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"details": [
+			"As you attack a foe, warding magic transforms your momentum into action and lifts your shield. Make a melee Strike. You can then either Raise your Shield if you're wielding one or cast <i>shield</i> if you have the spell."
+		],
+		"page": 143,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "ce9b0b8b-ec9e-48d6-b6e3-5670085c898f"
+	},
+	{
+		"name": "Shooting Star",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Divination", "Magus" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"requirements": "You're wielding a ranged weapon or a thrown weapon.",
+		"details": [
+			"You let loose a projectile that flies true and leaves the blazing trail of a meteor behind it. Make a ranged Strike, ignoring the target's concealment and reducing the target's cover by one degree for this Strike only (greater to standard, standard to lesser, and lesser to none). If the Strike hits, the meteor trail hangs in the air. This gives the benefits of concealment negation and cover reduction to any attacks made against the creature (by anyone) until the start of your next turn."
+		],
+		"page": 143,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "c25b1b38-d320-4bb9-bd42-ceace2715407"
+	},
+	{
+		"name": "Spinning Staff",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation", "Magus" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"requirements": "You're wielding a staff.",
+		"details": [
+			"You spin your staff with a twirling flourish, attacking two foes and transforming the momentum into magical energy to charge for your next Spellstrike. Make a melee Strike with your staff against one foe and then a second melee Strike with your staff against a different foe. Your multiple attack penalty applies to both of these attacks as normal."
+		],
+		"page": 144,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "853089ff-5ad0-4979-b735-bcee66684635"
+	},
+	{
+		"name": "Thunderous Strike",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation", "Magus", "Sonic" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"requirements": "You're wielding a melee weapon in two hands.",
+		"details": [
+			"You swing your massive weapon, creating a wave of sonic vibrations that topples creatures. Make a melee Strike with your two-handed weapon. Each creature in a 15-foot cone from you must attempt a basic Fortitude save against your spell DC or take 2 sonic damage. On a critical failure, the creature is knocked prone. The target of your Strike must be within the cone or the effect fails."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1.", "bump": 1 }
+		],
+		"page": 144,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "d02ce85c-cd1c-4f7e-8df6-d7f945ea8cd2"
+	},
+	{
+		"name": "Boost Eidolon",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cantrip", "Evocation", "Summoner" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"range": "100 feet",
+		"targets": "your eidolon",
+		"duration": "1 round",
+		"details": [
+			"You focus deeply on the link between you and your eidolon and boost the power of your eidolon's attacks. Your eidolon gains a +2 status bonus to damage rolls with its unarmed attacks. If your eidolon's Strikes deal more than one weapon damage die, the status bonus increases to 2 per weapon damage die, to a maximum of +8 with four weapon damage dice."
+		],
+		"page": 144,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "5c55796d-5aaf-4277-b709-385bc52820ec"
+	},
+	{
+		"name": "Eidolon's Wrath",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Eidolon", "Evocation", "Summoner" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"area": "20-foot radius emanation around your eidolon",
+		"savingThrow": "basic Reflex",
+		"details": [
+			"Your eidolon releases a powerful energy attack that deals 5d6 damage of the type you chose when you took the Eidolon's Wrath feat, with a basic Reflex save."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 2d6.", "bump": 1 }
+		],
+		"page": 144,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "5cd74377-79f5-4219-9692-9f627e9f79b9"
+	},
+	{
+		"name": "Evolution Surge",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Morph", "Summoner", "Transmutation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "100 feet",
+		"targets": "your eidolon",
+		"duration": "1 minute",
+		"details": [
+			"You flood your eidolon with power, creating a temporary evolution in your eidolon's capabilities. Choose one of the following effects: <ul><li>Your eidolon gains low-light vision and darkvision.</li><li>Your eidolon gains scent as an imprecise sense up to 30 feet.</li><li>Your eidolon can breathe underwater and gains a swim Speed equal to its land Speed or 30 feet, whichever is less. Alternatively, if your eidolon is normally aquatic, it can breathe air and gains a land Speed equal to its swim Speed or 30 feet, whichever is less. Either way, it gains the amphibious trait.</li><li>Your eidolon gains a +20-foot status bonus to its Speed.</li></ul>",
+			"<b>Heightened (3rd)</b> Add the following options to the list of effects you can choose: <ul><li>Your eidolon becomes Large, instead of its previous size. This increases your eidolon's reach to 10 feet but doesn't change any other statistics for your eidolon. Because of the special link you share, you can ride your eidolon without getting in each other's way. If another creature tries to ride your eidolon, both you and the riding creature each regain only 2 actions at the start of your turns each round, as normal.</li><li>Your eidolon gains a climb Speed equal to its land Speed.</li></ul>",
+			"<b>Heightened (5th)</b> Add the options from the 3rd-level version and the following options to the list of effects you can choose: <ul><li>Your eidolon becomes Huge, instead of its previous size. This has the same effects as the 3rd-level option to become Large, except your eidolon's reach increases to 15 feet.</li><li>Your eidolon gains a fly Speed equal to its Speed.</li></ul>"
+		],
+		"page": 144,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "2b0beefc-cef0-4121-bbf7-7830e689327f"
+	},
+	{
+		"name": "Extend Boost",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Divination", "Metamagic", "Summoner" ],
+		"cast": "[F]",
+		"components": [ "verbal" ],
+		"details": [
+			"You focus on the intricacies of the magic binding you to your eidolon to extend the duration of your <i>boost eidolon</i> or <i>reinforce eidolon</i> spell. If your next action is to cast <i>boost eidolon</i> or <i>reinforce eidolon</i>, attempt a skill check with the skill associated with the tradition of magic you gain from your eidolon (such as Nature for a primal eidolon). The DC is usually a standard-diffculty DC of your level, but the GM can assign a different DC based on the circumstances. The effect depends on the result of your check.",
+			{ "criticalSuccess": [ "The spell lasts 4 rounds." ], "success": [ "The spell lasts 3 rounds." ], "failure": [ "The spell lasts 1 round, but you don't spend the Focus Point for casting this spell." ] }
+		],
+		"page": 145,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "1b10c5fd-0e5d-4eac-a10b-7d97a1bac32d"
+	},
+	{
+		"name": "Lifelink Surge",
+		"level": 2,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Healing", "Necromancy", "Positive", "Summoner" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"duration": "4 rounds",
+		"details": [
+			"You make a quick gesture, tracing the link between yourself and your eidolon and drawing on your connection to slowly strengthen your shared life force. Your eidolon gains fast healing 4 for 4 rounds."
+		],
+		"heightened": [
+			{ "change": "The fast healing increases by 2.", "bump": 1 }
+		],
+		"page": 145,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "48a1ad11-585a-4e7e-9cdb-c772aedd1772"
+	},
+	{
+		"name": "Reinforce Eidolon",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Abjuration", "Cantrip", "Summoner" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"range": "100 feet",
+		"targets": "your eidolon",
+		"duration": "1 round",
+		"details": [
+			"You focus deeply on the link between you and your eidolon and reinforce your eidolon's defenses. Your eidolon gains a +1 status bonus to AC and saving throws, plus resistance to all damage equal to half the spell's level. Your eidolon can benefit from either <i>boost eidolon</i> or <i>reinforce eidolon</i>, but not both; if you cast one of these spells during the other's duration, the newer spell replaces the older one."
+		],
+		"page": 145,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "cf0fa01b-9c30-4530-b55e-96a9abc5e4ab"
+	},
+	{
+		"name": "Unfetter Eidolon",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Abjuration", "Summoner" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "100 feet",
+		"targets": "your eidolon",
+		"duration": "1 minute",
+		"details": [
+			"You loosen the link between yourself and your eidolon, allowing it to travel farther from you for a short period of time. While the spell is active, your eidolon can travel an unlimited distance away from you. When the spell ends, if your eidolon is more than 100 feet away from you, it unmanifests."
+		],
+		"page": 145,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "9bff294a-5a6b-42a1-8426-32a93744c826"
+	},
+	{
+		"name": "Combustion",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation", "Fire" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "120 feet",
+		"targets": "1 creature",
+		"savingThrow": "Fortitude",
+		"details": [
+			"You ignite a creature in lasting flames. The fire deals 4d8 fire damage and 2d6 persistent fire damage to the creature, which must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature takes half damage and takes no persistent damage."
+				],
+				"failure": [
+					"The creature takes full damage, as well as full persistent damage."
+				],
+				"criticalFailure": [
+					"The creature takes double damage, as well as double persistent damage."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "Increase the initial damage by 1d8 and the persistent damage by 1d6.", "bump": 1 }
+		],
+		"page": 200,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "5585f9e2-4a0a-4841-83c7-abae3a737886"
+	},
+	{
+		"name": "Crushing Ground",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Earth", "Transmutation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "60 feet",
+		"targets": "1 creature",
+		"savingThrow": "Reflex",
+		"duration": "1 round",
+		"details": [
+			"You tear open the ground then slam it shut. The target creature takes 2d6 bludgeoning damage with a Reflex save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes half damage."
+				],
+				"failure": [
+					"The target takes full damage, is flat-footed, and takes a -10-foot circumstance penalty to Speed."
+				],
+				"criticalFailure": [
+					"The target takes double damage and is flat-footed and immobilized. It can attempt to Escape against your spell DC. If it doesn't Escape, the target takes an additional 2d6 bludgeoning damage when the spell ends."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "Increase the initial damage and additional damage by 2d6.", "bump": 1 }
+		],
+		"page": 200,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "7f984a06-370f-4cf0-96f3-71faf9b5742c"
+	},
+	{
+		"name": "Powerful Inhalation",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Air", "Evocation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"area": "10-foot emanation",
+		"savingThrow": "basic Fortitude",
+		"details": [
+			"You rapidly draw the air from your surroundings, hoarding it for yourself. Creatures in the area when the spell is cast take 5d6 bludgeoning damage with a basic Fortitude save. A creature that fails its save can't speak above a raspy whisper for 1 round. A creature that critically fails can't speak or use abilities that require it to breathe for 1 round. This prevents it from using effects that require speech, such as casting spells with verbal components, and from using a breath weapon or similar ability.",
+			"Creatures made of air (such as air elementals) attempting a save against this spell get a degree of success one worse than they rolled."
+		],
+		"heightened": [
+			{ "change": "Increase the damage by 2d6.", "bump": 1 }
+		],
+		"page": 201,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "26d353b9-e832-4ad7-8be3-13195a8ab1b0"
+	},
+	{
+		"name": "Pulverizing Cascade",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation", "Water" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "120 feet",
+		"area": "10-foot radius, 20-foot-tall cylinder",
+		"savingThrow": "basic Reflex",
+		"details": [
+			"You raise a pair of towering waves and slam them into each other, crushing creatures caught between them. Creatures in the area take 5d6 bludgeoning damage with a basic Reflex save."
+		],
+		"heightened": [
+			{ "change": "Increase the damage by 2d6.", "bump": 1 }
+		],
+		"page": 201,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "7599ff23-fb78-4362-be17-71eeaa951e19"
+	},
+	{
+		"name": "Rising Surf",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Conjuration", "Move", "Water" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"details": [
+			"You create a wave of water that you ride, banking around obstacles and surfing to higher ground. You move up to 35 feet, raising yourself up to 5 feet above the ground. (You can avoid many types of difficult terrain in this way.) You must end your movement on an unoccupied space where you have solid footing. This movement isn't a Stride, but you measure the distance in a similar way, and it still triggers reactions caused by movement. You can't transport anyone else with you."
+		],
+		"heightened": [
+			{ "change": "Increase the distance you move by 5 feet and the maximum height traveled above the ground by 5 feet.", "bump": 2 }
+		],
+		"page": 201,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "03541def-e6ba-4dca-bf70-1d65b58dea5c"
+	},
+	{
+		"name": "Stone Lance",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Attack", "Earth", "Evocation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "120 feet",
+		"targets": "1 creature",
+		"duration": "1 minute",
+		"details": [
+			"You conjure a jagged lance of stone and then launch it at a foe. Make a spell attack roll against the target. On a hit, you deal 6d6 piercing damage and the lance impales the creature, giving it a -10-foot circumstance penalty to its Speeds unless it Escapes. On a critical hit, if the creature is on the ground, the lance also embeds into the ground and immobilizes the creature until it Escapes. A creature that Escapes after being impaled takes 3 persistent bleed damage. When the spell ends, the lance crumbles into dirt, freeing the target if it hasn't Escaped."
+		],
+		"heightened": [
+			{ "change": "Increase the damage by 2d6 and the persistent bleed damage for Escapes by 1.", "bump": 1 }
+		],
+		"page": 201,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "b4e2afb3-868f-4c13-b57d-8c4bf7730ec7"
+	},
+	{
+		"name": "Updraft",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Air", "Evocation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "60 feet",
+		"targets": "1 creature",
+		"savingThrow": "basic Reflex",
+		"details": [
+			"A powerful blast of wind erupts from the ground, launching the target into the air and sending it crashing back down. The collision deals 2d6 bludgeoning damage with a basic Reflex save. On a failure, the target is knocked prone."
+		],
+		"heightened": [
+			{ "change": "Increase the damage by 2d6.", "bump": 1 }
+		],
+		"page": 201,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "23d3a616-b759-4e19-b7cf-71ad6675b708"
+	},
+	{
+		"name": "Wildfire",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Conjuration", "Fire" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"area": "10-foot burst",
+		"savingThrow": "Reflex",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"A thin layer of ash and flame covers the ground in the area. The area becomes hazardous terrain. A creature that moves on the ground through the area takes 1 fire damage for every square of that area it moves into. A creature that ends its turn in the area must succeed at a Reflex save or take 1 persistent fire damage.",
+			"Each time you sustain this spell, the radius of the burst increases by 5 feet."
+		],
+		"heightened": [
+			{ "change": "Increase the damage and persistent damage by 1.", "bump": 2 }
+		],
+		"page": 201,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "1aac96f4-879f-4b87-aa26-683f3ec54d43"
+	},
+	{
+		"name": "Darklight",
+		"level": 7,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Darkness", "Evocation", "Shadow" ],
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"range": "120 feet",
+		"area": "20-foot burst",
+		"duration": "1 minute",
+		"details": [
+			"Shadows pour forth from your eyes, creating a field of darkness that prevents light from emanating within the area. Light doesn't enter the area; any non-magical light sources, such as a torches or lanterns, don't emanate any light while inside the area, even if their light radius would extend beyond the darkness. The spell similarly suppresses magical light of the spell's level or lower.",
+			"Light can't pass through, so creatures in the area can't see outside. Even creatures with darkvision (but not greater darkvision) can barely see through the darkness; any creatures seen through the darkness are concealed to them. Creatures with greater darkvision can see through the darkness normally.",
+			"Creatures who move into the field or start their turn within the field have some of the life and light sucked out of them, taking 2d6 bludgeoning damage and 2d6 negative damage, with a basic Fortitude save.",
+			"When you cast this spell, choose up to four allies in the area to spare from <i>darklight</i>'s effects. Until the spell ends, they're immune to damage from <i>darklight</i> spells and can see through <i>darklight</i> (but not other darkness) as though they had greater darkvision."
+		],
+		"heightened": [
+			{ "change": "The bludgeoning and negative damage both increase to 3d6.", "level": 10 }
+		],
+		"page": 227,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "b8209a01-2f2d-4ac3-a58e-7749e68e1f0d"
+	},
+	{
+		"name": "Inscrutable Mask",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Illusion", "Shadow" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "10 minutes",
+		"details": [
+			"You shroud your form and features in an impenetrable mask of shadow. The mask grants you a +1 status bonus to Deception checks to Lie or Feint, Intimidation checks to Demoralize, and Stealth checks to Hide in areas of dim light or darkness."
+		],
+		"heightened": [
+			{ "change": "The status bonus increases to +2.", "level": 6 },
+			{ "change": "The status bonus increases to +3.", "level": 9 }
+		],
+		"page": 227,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "3e221887-c2f4-47bb-9e49-3c611ae70a12"
+	},
+	{
+		"name": "Efficient Apport",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Conjuration", "Teleportation", "Wizard" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "60 feet",
+		"targets": "1 unattended object of light Bulk or less",
+		"details": [
+			"Walking over to an item to pick it up is so much effort. Whether it's your spellbook, a reagent, or a glass of wine, it's simply more efficient to call it to your hand. You teleport the target into your open hand. If you don't have a hand free, it falls to the ground at your feet."
+		],
+		"heightened": [
+			{ "change": "You can target an unattended object with a Bulk of 1 or less.", "level": 3 },
+			{ "change": "The range increases to 120 feet, and you can target an unattended object with a Bulk of 1 or less.", "level": 5 },
+			{ "change": "The range increases to 120 feet, and you can target an unattended object with a Bulk of 2 or less.", "level": 7 }
+		],
+		"page": 241,
+		"source": "PZO2108",
+		"focus": true,
+		"aonId": 0,
+		"id": "d546c36b-7f3c-4654-8806-3820132aa174"
+	}
+]

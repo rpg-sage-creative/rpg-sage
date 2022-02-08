@@ -1,0 +1,419 @@
+[
+	{
+		"aonId": 329,
+		"name": "Talking Corpse",
+		"description": " Have a corpse answer three questions.",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You grant the target corpse a semblance of life, which it uses to speak the answers to three questions posed to it. This spell calls on the physical body's latent memories rather than summoning back the deceased's spirit, so the corpse must be mostly intact for the spell to function. The more damage the corpse has taken, the more inaccurate or patchwork its answers are, and it must have a throat and mouth to speak at all. If anyone has previously cast this spell on the corpse in the last week, the spell automatically fails. The corpse can attempt a Will save to resist answering the questions using the statistics of the original creature at its time of death, with the following effects.",
+			{
+				"criticalSuccess": [
+					"The target can lie or refuse to answer your questions, and the target's spirit haunts you for 24 hours, bothering you and causing you to be unable to gain any rest for that time."
+				],
+				"success": [
+					"The target can provide false information or refuse to answer your questions."
+				],
+				"failure": [
+					"The target must answer truthfully, but its answers can be brief, cryptic, and repetitive. It can still mislead you or attempt to stall so that the spell's duration runs out before you can ask all your questions."
+				],
+				"criticalFailure": [
+					"As failure, but the target's answers are more direct and less repetitive, though still cryptic. It takes a -2 status penalty to Deception checks to deceive or mislead you."
+				]
+			}
+		],
+		"duration": "10 minutes",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 376,
+		"range": "touch",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 corpse",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Uncommon", "Necromancy" ],
+		"focus": false,
+		"id": "c6971ce0-cebc-4f8a-a1f2-c08336d13644"
+	},
+	{
+		"aonId": 330,
+		"name": "Tanglefoot",
+		"description": "Conjure a vine to entangle a creature.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A vine covered in sticky sap appears from thin air, flicking from your hand and lashing itself to the target. Attempt a spell attack against the target.",
+			{
+				"criticalSuccess": [
+					"The target gains the immobilized condition and takes a -10-foot circumstance penalty to its Speeds for 1 round. It can attempt to Escape against your spell DC to remove the penalty and the immobilized condition."
+				],
+				"success": [
+					"The target takes a -10-foot circumstance penalty to its Speeds for 1 round. It can attempt to Escape against your spell DC to remove the penalty."
+				],
+				"failure": [
+					"The target is unaffected."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The effects last for 2 rounds.", "level": 2 },
+			{ "change": "The effects last for 1 minute.", "level": 4 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 377,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Cantrip", "Conjuration", "Plant" ],
+		"focus": false,
+		"id": "75762af7-f23d-474e-87eb-560f577495e5"
+	},
+	{
+		"aonId": 331,
+		"name": "Tangling Creepers",
+		"description": "Entangle creatures in a burst and concentrate to lash out with immobilizing vines.",
+		"area": "40-foot burst",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"Dense, twitching creepers sprout from every surface and fill any bodies of water in the area. Any creature moving on the land, or Climbing or Swimming within the creepers, takes a -10- foot circumstance penalty to its Speeds while in the area. Once per round, you can make a vine lash out from any square within the expanse of creepers by using a single action, which has the concentrate trait. This vine has a 15-foot reach and makes a melee unarmed attack using your spell attack modifier. If the attack succeeds, the vine pulls the target into the creepers and makes it immobilized for 1 round or until the creature Escapes (against your spell DC), whichever comes first."
+		],
+		"duration": "10 minutes",
+		"level": 6,
+		"objectType": "Spell",
+		"page": 377,
+		"range": "500 feet",
+		"source": "PZO2101",
+		"traditions": [ "primal" ],
+		"traits": [ "Conjuration", "Plant" ],
+		"focus": false,
+		"id": "4b010ee3-8a5b-4376-a002-a303a16eb7a4"
+	},
+	{
+		"aonId": 332,
+		"name": "Telekinetic Haul",
+		"description": "Move a large object.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You move the target up to 20 feet, potentially suspending it in midair. When you Sustain the Spell, you can do so again, or you can choose a different eligible target to move."
+		],
+		"duration": "sustained up to 1 minute",
+		"level": 5,
+		"objectType": "Spell",
+		"page": 377,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"targets": "1 object of up to 80 Bulk with no dimension longer than 20 feet",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Evocation" ],
+		"focus": false,
+		"id": "f32ea986-b61d-4b9e-9131-95076d75f60f"
+	},
+	{
+		"aonId": 333,
+		"name": "Telekinetic Maneuver",
+		"description": "Disarm, Shove, or Trip a creature telekinetically.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"With a rush of telekinetic power, you move a foe or something they carry. You can attempt to Disarm, Shove, or Trip the target using a spell attack roll instead of an Athletics check."
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 377,
+		"range": "60 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Attack", "Evocation", "Force" ],
+		"focus": false,
+		"id": "e34051c4-9897-4cf8-b978-e68f9acc1f7c"
+	},
+	{
+		"aonId": 334,
+		"name": "Telekinetic Projectile",
+		"description": "Fling an object at a creature.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You hurl a loose, unattended object that is within range and that has 1 Bulk or less at the target. Make a spell attack roll against the target. If you hit, you deal bludgeoning, piercing, or slashing damage-as appropriate for the object you hurled-equal to 1d6 plus your spellcasting ability modifier. No specific traits or magic properties of the hurled item affect the attack or the damage.",
+			{ "criticalSuccess": [ "You deal double damage." ], "success": [ "You deal full damage." ] }
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d6.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 377,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Attack", "Cantrip", "Evocation" ],
+		"focus": false,
+		"id": "74155fa9-ffe8-4bfa-9bbd-3af7832692f2"
+	},
+	{
+		"aonId": 335,
+		"name": "Telepathic Bond",
+		"description": "Link minds with willing creatures to communicate telepathically at great distances.",
+		"cast": "1 minute",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"The targets can communicate telepathically with any or all of the other targets from any point on the same planet."
+		],
+		"duration": "8 hours",
+		"level": 5,
+		"objectType": "Spell",
+		"page": 377,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "you and up to 4 willing creatures touched",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Uncommon", "Divination", "Mental" ],
+		"focus": false,
+		"id": "5421369d-0368-4cba-a0f8-89558d0faff4"
+	},
+	{
+		"aonId": 336,
+		"name": "Telepathic Demand",
+		"description": "Send a mental message that impels a creature toward a course of action.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You send the target a message of 25 words or fewer, and it can respond immediately with its own message of 25 words or fewer. Your message is insidious and has the effect of <i>suggestion</i> (page 374), with the message substituting for the spoken suggestion. On a successful save, the target is temporarily immune for 1 day, and on a critical success, the target is temporarily immune for 1 month. You can target a creature only if you have previously been in telepathic contact with it before, such as via the <i>telepathy</i> spell."
+		],
+		"duration": "varies",
+		"level": 9,
+		"objectType": "Spell",
+		"page": 377,
+		"range": "planetary",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature you've telepathically contacted before",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Enchantment", "Incapacitation", "Linguistic", "Mental" ],
+		"focus": false,
+		"id": "da895ec9-59b4-40bb-be68-acf59d04da6b"
+	},
+	{
+		"aonId": 337,
+		"name": "Telepathy",
+		"description": "Communicate telepathically with any creatures near you.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You can communicate telepathically with creatures within 30 feet. Once you establish a connection by communicating with a creature, the communication is two-way. You can communicate only with creatures that share a language with you."
+		],
+		"duration": "10 minutes",
+		"heightened": [
+			{ "change": "<i>Telepathy</i> loses the linguistic trait. You can communicate telepathically with creatures using shared mental imagery even if you don't share a language.", "level": 6 }
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 377,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Divination", "Linguistic", "Mental" ],
+		"focus": false,
+		"id": "366fc270-e317-4c83-a0cc-5d044109f4be"
+	},
+	{
+		"aonId": 338,
+		"name": "Teleport",
+		"description": "Transport you and willing creatures a great distance.",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You and the targets are instantly transported to any location within range, as long as you can identify the location precisely both by its position relative to your starting position and by its appearance (or other identifying features). Incorrect knowledge of the location's appearance usually causes the spell to fail, but it could instead lead to teleporting to an unwanted location or some other unusual mishap determined by the GM. <i>Teleport</i> is not precise over great distances. The targets appear at a distance from the intended destination equal to roughly 1 percent of the total distance traveled, in a direction determined by the GM. For short journeys, this lack of precision is irrelevant, but for long distances this could be up to 1 mile."
+		],
+		"heightened": [
+			{ "change": "You and the other targets can travel to any location within 1,000 miles.", "level": 7 },
+			{ "change": "You and the other targets can travel to any location on the same planet. If you travel more than 1,000 miles, you arrive only 10 miles off target.", "level": 8 },
+			{
+				"change": "You and the other targets can travel to any location on another planet within the same solar system. Assuming you have accurate knowledge of the location's position and appearance, you arrive on the new planet 100 miles off target.",
+				"level": 9
+			},
+			{ "change": "As the 9th-level version, but you and the other targets can travel to any planet within the same galaxy.", "level": 10 }
+		],
+		"level": 6,
+		"objectType": "Spell",
+		"page": 378,
+		"range": "100 miles",
+		"source": "PZO2101",
+		"targets": "you and up to 4 targets touched, either willing creatures or objects roughly the size of a creature.",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Uncommon", "Conjuration", "Teleportation" ],
+		"focus": false,
+		"id": "95a38061-f6d0-4bb8-b996-89e0569d354f"
+	},
+	{
+		"aonId": 339,
+		"name": "Time Stop",
+		"description": "Briefly stop time for everything but you.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You temporarily stop time for everything but yourself, allowing you to use several actions in what appears to others to be no time at all. Immediately after casting <i>time stop</i>, you can use up to 9 actions in 3 sets of up to 3 actions each. After each set of actions, 1 round passes, but only for you, effects specifically targeting or affecting you, and effects you create during the stoppage. All other creatures and objects are invulnerable to your attacks, and you can't target or affect them with anything. Once you have finished your actions, time begins to flow again for the rest of the world. If you created an effect with a duration that extends beyond the <i>time stop</i>'s duration, such as <i>wall of fire</i>, it immediately affects others again, but it doesn't have any of the effects that happen only when you first cast the spell."
+		],
+		"level": 10,
+		"objectType": "Spell",
+		"page": 378,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Transmutation" ],
+		"focus": false,
+		"id": "de8d15e3-07d2-4a76-b3ea-4ab40f5fc488"
+	},
+	{
+		"aonId": 340,
+		"name": "Tongues",
+		"description": "Let a creature understand and speak all languages.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"The target can understand all words regardless of language and also speak the languages of other creatures. When in a mixed group of creatures, each time the target speaks, it can choose a creature and speak in a language that creature understands, even if the target doesn't know what language that is."
+		],
+		"duration": "1 hour",
+		"heightened": [
+			{ "change": "The duration is 8 hours.", "level": 7 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 378,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Uncommon", "Divination" ],
+		"focus": false,
+		"id": "c72a54b3-b517-4ec4-be9d-45472fd89ee2"
+	},
+	{
+		"aonId": 341,
+		"name": "Touch of Idiocy",
+		"description": "Dull a target's mind with a touch.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You dull the target's mind; the target must attempt a Will save.",
+			{ "success": [ "The target is unaffected." ], "failure": [ "The target is stupefied 2." ], "criticalFailure": [ "The target is stupefied 4." ] }
+		],
+		"duration": "1 minute",
+		"level": 2,
+		"objectType": "Spell",
+		"page": 378,
+		"range": "touch",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 living creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Enchantment", "Mental" ],
+		"focus": false,
+		"id": "2998bbcf-be58-4bd0-886c-8015f713042e"
+	},
+	{
+		"aonId": 342,
+		"name": "Tree Shape",
+		"description": "Turn into a tree.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You transform into a Large tree. Perception checks don't reveal your true nature, but a successful Nature or Survival check against your spell DC reveals that you appear to be a tree that is strangely new to the area. While in tree form, you can observe everything around you, but you can't act other than to end the spell, and your turn, by using a single action, which has the concentrate trait. As a tree, your AC is 20, and only status bonuses, status penalties, circumstance bonuses, and circumstance penalties affect you. Any successes and critical successes you roll on Reflex saves are failures."
+		],
+		"duration": "8 hours",
+		"level": 2,
+		"objectType": "Spell",
+		"page": 378,
+		"source": "PZO2101",
+		"traditions": [ "primal" ],
+		"traits": [ "Plant", "Polymorph", "Transmutation" ],
+		"focus": false,
+		"id": "c70fe811-7b31-43b6-ae41-61d219a84893"
+	},
+	{
+		"aonId": 343,
+		"name": "Tree Stride",
+		"description": "Sculpt a foot-thick wall of ice that blocks sight and can chill creatures.",
+		"cast": "1 minute",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You step into a living tree with a trunk big enough for you to fit inside it and instantly teleport to any tree of the same species within 5 miles that also has a sufficiently large trunk. Once you enter the first tree, you instantly know the rough locations of other sufficiently large trees of the same species within range and can exit from the original tree, if you prefer. You can't carry extradimensional spaces with you; if you attempt to do so, the spell fails."
+		],
+		"heightened": [
+			{ "change": "The tree you exit can be up to 50 miles away.", "level": 6 },
+			{ "change": "The tree you exit can be up to 500 miles away.", "level": 8 },
+			{ "change": "The tree you exit can be anywhere on the same planet.", "level": 9 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 378,
+		"source": "PZO2101",
+		"traditions": [ "primal" ],
+		"traits": [ "Uncommon", "Conjuration", "Plant", "Teleportation" ],
+		"focus": false,
+		"id": "15d662e3-c93a-4456-a364-c9ed5e0f501b"
+	},
+	{
+		"aonId": 344,
+		"name": "True Seeing",
+		"description": "See through illusions and transmutations.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You see things within 60 feet as they actually are. The GM rolls a secret counteract check against any illusion or transmutation in the area, but only for the purpose of determining whether you see through it (for instance, if the check succeeds against a <i>polymorph</i> spell, you can see the creature's true form, but you don't end the <i>polymorph</i> spell)."
+		],
+		"duration": "10 minutes",
+		"level": 6,
+		"objectType": "Spell",
+		"page": 378,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Divination", "Revelation" ],
+		"focus": false,
+		"id": "e1c9af79-adaf-4023-8d94-0dac15d7332f"
+	},
+	{
+		"aonId": 345,
+		"name": "True Strike",
+		"description": "Make your next attack especially accurate.",
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"details": [
+			"A glimpse into the future ensures your next blow strikes true. The next time you make an attack roll before the end of your turn, roll the attack twice and use the better result. The attack ignores circumstance penalties to the attack roll and any flat check required due to the target being concealed or hidden."
+		],
+		"duration": "until the end of your turn",
+		"level": 1,
+		"objectType": "Spell",
+		"page": 379,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Divination", "Fortune" ],
+		"focus": false,
+		"id": "6a61a63c-0f77-4059-9992-91a331ce029a"
+	},
+	{
+		"aonId": 346,
+		"name": "True Target",
+		"description": "Make multiple attacks against a creature especially accurate.",
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"details": [
+			"You delve into the possible futures of the next few seconds to understand all the ways your target might avoid harm, then cast out a vision of that future to those around you. On the first attack roll made against the target during <i>true target</i>'s duration, the attacker rolls twice and uses the better result. The attacker also ignores circumstance penalties to the attack roll and any flat check required due to the target being concealed or hidden."
+		],
+		"duration": "until the start of your next turn",
+		"level": 7,
+		"objectType": "Spell",
+		"page": 379,
+		"range": "60 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Divination", "Fortune", "Prediction" ],
+		"focus": false,
+		"id": "60c15541-84bd-4e1f-83c6-df42d7887d14"
+	}
+]

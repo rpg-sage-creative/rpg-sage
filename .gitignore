@@ -1,0 +1,13 @@
+data/pf2e/abc-data.json
+data/pf2e/all-lores.csv
+data/pf2e/schema.json
+data/pf2e/dist
+data/pf2e/pf2-tools
+dist
+node_modules
+types
+**/.DS_Store
+./backup.sh
+./daemon.sh
+./dev.sh
+./tag.sh

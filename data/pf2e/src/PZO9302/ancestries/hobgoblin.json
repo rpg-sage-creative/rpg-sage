@@ -1,0 +1,24 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Hobgoblin",
+		"youMight": [
+			"Seek out the most effective and practical solutions to any problem.",
+			"Encourage a clear chain of command among any group you travel with, following orders even if you disagree with them.",
+			"Look for opportune alliances with other creatures, even if you don't fully understand or trust them."
+		],
+		"othersProbably": [
+			"Consider you dangerous, due to your reputation and intimidating appearance.",
+			"Assume you hate magic and other mystical arts.",
+			"Recognize your incredible endurance, dedication, and discipline."
+		],
+		"aonId": 13,
+		"source": "PZO9302",
+		"id": "59c20adf-3b70-4d6f-a04c-c94fb51e6fa4"
+	},
+	{ "objectType": "Heritage", "name": "Elfbane Hobgoblin", "ancestry": "Hobgoblin", "source": "PZO9302", "id": "8e819685-d463-4fab-b120-c52070a48258", "aonId": 40 },
+	{ "objectType": "Heritage", "name": "Runtboss Hobgoblin", "ancestry": "Hobgoblin", "source": "PZO9302", "id": "ab224db6-3e23-41e3-852a-afd1ab404d91", "aonId": 41 },
+	{ "objectType": "Heritage", "name": "Smokeworker Hobgoblin", "ancestry": "Hobgoblin", "source": "PZO9302", "id": "055605a6-44c0-4970-b018-0ec9aea14386", "aonId": 42 },
+	{ "objectType": "Heritage", "name": "Warmarch Hobgoblin", "ancestry": "Hobgoblin", "source": "PZO9302", "id": "278d61d8-8903-4e21-9ee8-c12a090c564f", "aonId": 43 },
+	{ "objectType": "Heritage", "name": "Warrenbred Hobgoblin", "ancestry": "Hobgoblin", "source": "PZO9302", "id": "60615a03-b28f-4965-a3b6-5e0b8612f044", "aonId": 44 }
+]

@@ -1,0 +1,33 @@
+{
+  "name": "rpg-sage",
+  "version": "0.0.0",
+  "description": "RPG Sage Bot",
+  "type": "module",
+  "main": "./dist/app.mjs",
+  "files": [
+    "dist"
+  ],
+  "directories": {
+    "lib": "dist"
+  },
+  "keywords": [
+    "RPG",
+    "Sage",
+    "Discord",
+    "Bot"
+  ],
+  "author": "Randal T Meyer <randal.t.meyer@gmail.com> (https://rpgsage.io)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/randaltmeyer/sage-bot/issues"
+  },
+  "homepage": "https://github.com/randaltmeyer/sage-bot#readme",
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "fs": "^0.0.1-security",
+    "xregexp": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.16"
+  }
+}

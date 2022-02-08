@@ -1,0 +1,32 @@
+[
+	{
+		"objectType": "ClassPath",
+		"name": "Wyrmblessed",
+		"class": "Sorcerer",
+		"types": [
+			"black",
+			"blue",
+			"green",
+			"red",
+			"white",
+			"brass",
+			"bronze",
+			"copper",
+			"gold",
+			"silver",
+			"brine",
+			"cloud",
+			"crystal",
+			"magma",
+			"umbral",
+			"forest",
+			"sea",
+			"sky",
+			"sovereign",
+			"underworld"
+		],
+		"source": "PZO9309",
+		"aonId": 17,
+		"id": "fc0f6099-5a27-4984-b828-6c5bf30d026c"
+	}
+]

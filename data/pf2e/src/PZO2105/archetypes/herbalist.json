@@ -1,0 +1,87 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Herbalist",
+		"details": [
+			"The plants around you can provide more remedies than the finest hospital or temple, and you are skilled in their use."
+		],
+		"page": 176,
+		"source": "PZO2105",
+		"id": "14a0c2af-bf4a-4cd5-b9f3-1514b97ff555",
+		"aonId": 62
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Herbalist Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication" ],
+		"prerequisites": [ "trained in Nature", "Natural Medicine" ],
+		"details": [
+			"You can create remedies and other herbal products. You gain the basic alchemy benefits (page 150), though they apply only for herbal items: alchemical items with the healing trait, plus antidote and antiplague. You gain batches of infused reagents per day equal to your level or half your level if you didn't make your daily preparations in the wilderness. Your advanced alchemy level for creating these is 1 and doesn't increase on its own.",
+			"You become an expert in Nature and can use Nature instead of Crafting to Craft herbal items. You don't need to be trained in Crafting or have the Alchemical Crafting feat to do so, and you can use healer's tools instead of alchemist's tools."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the herbalist archetype."
+		],
+		"page": 176,
+		"source": "PZO2105",
+		"id": "8fb6da3b-3a6f-4be0-af03-1a383b64d38f",
+		"aonId": 1982
+	},
+	{
+		"objectType": "Feat",
+		"name": "Fresh Ingredients",
+		"level": 2,
+		"traits": [ "Archetype", "Skill" ],
+		"prerequisites": [ "Herbalist Dedication", "expert in Nature" ],
+		"details": [
+			"When using Natural Medicine to Treat Wounds, you can spend a batch of herbs to gain the +2 circumstance bonus from having fresh ingredients, even if not in wilderness. If you spend a batch of herbs in wilderness, you gain a +4 circumstance bonus instead."
+		],
+		"page": 176,
+		"source": "PZO2105",
+		"id": "2b8c31fe-5c38-42b8-9af7-b495669f8e93",
+		"aonId": 1983
+	},
+	{
+		"objectType": "Feat",
+		"name": "Poultice Preparation",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Herbalist Dedication" ],
+		"details": [
+			"When you create an herbal elixir, you can prepare it as a poultice instead. A poultice gains the oil trait (but remains alchemical, not magical) and loses the elixir and ingested traits. You can apply a poultice by Interacting with one hand. When you apply a poultice, in addition to the item's normal effects, the recipient can attempt an immediate flat check to recover from a single source of persistent acid, bleed, or fire damage, with the DC reduction from appropriate assistance."
+		],
+		"page": 176,
+		"source": "PZO2105",
+		"id": "9c47f886-550f-4216-952d-de3a9bf1492c",
+		"aonId": 1984
+	},
+	{
+		"objectType": "Feat",
+		"name": "Endemic Herbs",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Herbalist Dedication", "trained in Survival" ],
+		"details": [
+			"During your daily preparations, you find medicinal plants endemic to your location. Until your next preparations, you can spend an additional batch of herbs to add a benefit to an item you create with your herbalism. The benefit of the special herbs affects the creature that the item is applied to; if the benefit is not immediate, it lasts for 1 minute unless otherwise stated. This adjustment counts as an additive (<i>Core Rulebook</i> 75), so you can't include another additive without spoiling the item. <ul><li><b>Aquatic</b> Gain a +1 circumstance bonus to Fortitude saves.</li><li><b>Arctic</b> For 1 hour, treat environmental cold effects as if they were one step less severe.</li><li><b>Desert</b> For 1 hour, treat environmental heat effects as if they were one step less severe.</li><li><b>Forest</b> Gain a +2 circumstance bonus to saves against disease and poison effects.</li><li><b>Mountain</b> Gain a +1 circumstance bonus to Reflex saves.</li><li><b>Plains</b> Gain a +1 circumstance bonus to Will saves.</li><li><b>Swamp</b> Remove one source of persistent bleed damage.</li><li><b>Underground</b> Gain a +1 circumstance bonus to Perception.</li></ul>"
+		],
+		"page": 176,
+		"source": "PZO2105",
+		"id": "08c99ca8-330e-42d0-8a3e-8e845739fe07",
+		"aonId": 1985
+	},
+	{
+		"objectType": "Feat",
+		"name": "Expert Herbalism",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Herbalist Dedication", "expert in Nature" ],
+		"details": [
+			"Your advanced alchemy level for herbalism increases to your level - 3. You gain the formulas for elixirs of life as soon as your advanced alchemy level is high enough to create them: lesser at 8th level, moderate at 12th level, greater at 16th level, and major at 18th level."
+		],
+		"page": 176,
+		"source": "PZO2105",
+		"id": "245f12a8-ae45-4e27-ac77-643d566418c7",
+		"aonId": 1986
+	}
+]

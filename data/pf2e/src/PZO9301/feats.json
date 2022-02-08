@@ -1,0 +1,41 @@
+[
+	{
+		"aonId": 870,
+		"objectType": "Feat",
+		"name": "Eye of the Arclords",
+		"actionType": "[A]",
+		"level": 2,
+		"traits": [ "Uncommon", "General", "Skill" ],
+		"details": [
+			"You open an incandescent third eye upon your forehead. The eye can remain open for 1 minute, and you can close it before then with a single action with the concentrate trait. It can remain open for 2 minutes if you're a master in Arcana, or 5 minutes if you're legendary. While the eye is open, you gain the following benefits: you gain the effects of the detect magic arcane innate spell from your Arcane Sense at the start of each of your turns without needing to cast the spell; you gain darkvision; you gain a +2 status bonus to Perception checks to Seek undetected and hidden creatures and to your Perception DC against Hide and Sneak. After your third eye closes, you are dazzled for an amount of time equal to how long you had it open."
+		],
+		"skill": "Arcana",
+		"prerequisites": [ "expert in Arcana", "Arcane Sense" ],
+		"frequency": [ "once per day" ],
+		"description": "The Arclords of Nex have achieved a unique mastery of magic.",
+		"access": [
+			"You are a member of the Arclords of Nex."
+		],
+		"source": "PZO9301",
+		"page": 81,
+		"id": "c05dabde-b39e-4f03-b98c-8c39766fc982"
+	},
+	{
+		"aonId": 869,
+		"objectType": "Feat",
+		"name": "Godless Healing",
+		"level": 2,
+		"traits": [ "General", "Skill" ],
+		"details": [
+			"You recover an additional 5 Hit Points from a successful attempt to Treat your Wounds or use Battle Medicine on you. After you or an ally use Battle Medicine on you, you become temporarily immune to that Battle Medicine for only 1 hour, instead of 1 day."
+		],
+		"prerequisites": [
+			"Battle Medicine",
+			"can't have a patron deity"
+		],
+		"description": "With limited access to divine healing magic, Rahadoumi often become adept at using ordinary medicine for when dangerous situations arise.",
+		"source": "PZO9301",
+		"page": 56,
+		"id": "971213a3-290f-41c6-992c-fae2771bfa18"
+	}
+]

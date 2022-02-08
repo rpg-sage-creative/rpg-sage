@@ -1,0 +1,311 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Scrollmaster",
+		"details": [
+			"Members who align themselves with the Scrolls branch of the Pathfinder Society are fervent seekers of lore, experts in esoterica, and masters of the wealth of knowledge at the Society's disposal. In addition to maintaining and researching the Society's massive collection of tomes and artifacts, these scholars are also eager to adventure in order to add to the Pathfinder's archives. They take tremendous pride in their ability to thoroughly observe, research, and catalog creatures and events. Members of the Scrolls value knowledge and preparation above strength and cunning, and they work to hone their intellectual skills. As a Scrollmaster, you are an elite member of this arm of the Society."
+		],
+		"page": 113,
+		"source": "PZO9302",
+		"id": "c4e04707-486e-4e7d-ab80-4ae49d9f774b",
+		"aonId": 31
+	},
+	{
+		"objectType": "Archetype",
+		"name": "Spellmaster",
+		"details": [
+			"Those who train under the Master of Spells concern themselves with all matters related to magic. Though not all members of the School of Spells are spellcasters, those who would become Spellmasters of the highest rank and influence have at least some spellcasting capabilities."
+		],
+		"page": 114,
+		"source": "PZO9302",
+		"id": "94c9e5db-69de-44a6-b016-846db3366131",
+		"aonId": 32
+	},
+	{
+		"objectType": "Archetype",
+		"name": "Swordmaster",
+		"details": [
+			"Though the ultimate goal of the Pathfinder society is to learn, knowledge cannot be spread if those who discover it fail to come back alive. The Master of Swords teaches recruits to survive, to defend other Pathfinders, and to defeat the Society's enemies. The swordmaster embodies these skills, focusing on practicality and ignoring ideals or methods that interfere with their ability to overcome any challenge."
+		],
+		"page": 115,
+		"source": "PZO9302",
+		"id": "9bb78605-f5e8-4f7c-a3fc-e029deb29d1e",
+		"aonId": 33
+	},
+	{
+		"objectType": "Feat",
+		"name": "Forced Entry",
+		"level": 6,
+		"traits": [ "Uncommon", "Archetype", "Skill" ],
+		"prerequisites": [ "expert in Athletics", "Pathfinder Agent Dedication" ],
+		"details": [
+			"You are trained to preserve the archaeological value of your location when entering. You don't take a penalty to Force Open doors, windows, or containers without a crowbar. If you roll a success on a check to Force Open, you get a critical success instead."
+		],
+		"page": 112,
+		"source": "PZO9302",
+		"id": "d5ad78db-7d82-4121-828e-0ad1c216c727",
+		"aonId": 1126
+	},
+	{
+		"objectType": "Feat",
+		"name": "Recognize Threat",
+		"actionType": "[F]",
+		"level": 8,
+		"traits": [ "Uncommon", "Archetype", "Skill" ],
+		"prerequisites": [ "master in a Recall Knowledge skill", "Pathfinder Agent Dedication" ],
+		"trigger": "Your first turn of an encounter begins, and you can see a creature.",
+		"requirements": "You have master proficiency in a skill to identify the triggering creature.",
+		"details": [
+			"You quickly assess the threat so you can relay the information to your team. Attempt a Recall Knowledge check against the triggering creature."
+		],
+		"page": 112,
+		"source": "PZO9302",
+		"id": "f9ae7ff7-d7eb-41ca-b1ee-277cb26d952f",
+		"aonId": 1127
+	},
+	{
+		"objectType": "Feat",
+		"name": "Everyone Duck!",
+		"actionType": "[R]",
+		"level": 10,
+		"traits": [ "Uncommon", "Archetype" ],
+		"prerequisites": [ "Pathfinder Agent Dedication" ],
+		"trigger": "You fail, but don't critically fail, an attempt to Disable a Device on a trap.",
+		"details": [
+			"You intentionally set off the trap, but you take special precautions to protect yourself and your allies from the trap's effects. For the next 2 rounds, if the trap rolls a critical success on an attack roll, it gets a normal success instead, and if anyone rolls a critical failure on their saving throw against the trap, they get a normal failure instead."
+		],
+		"page": 112,
+		"source": "PZO9302",
+		"id": "3a0c1ba5-8944-42b0-a506-28f1ac1e5253",
+		"aonId": 1128
+	},
+	{
+		"objectType": "Feat",
+		"name": "Educated Assessment",
+		"actionType": "[A]",
+		"level": 12,
+		"traits": [ "Uncommon", "Archetype", "Secret" ],
+		"prerequisites": [ "Pathfinder Agent Dedication" ],
+		"details": [
+			"You attempt to Recall Knowledge about a creature, and the GM uses the same secret roll result against the creature's Deception or Stealth DC, giving you the information from a Battle Assessment (<i>Pathfinder Core Rulebook</i> 184). You might get a different degree of success on the Recall Knowledge check than what you get for the Battle Assessment. If you have the Battle Assessment feat, you gain the effects of Educated Assessment whenever you Recall Knowledge (such as with the Automatic Knowledge feat)."
+		],
+		"page": 112,
+		"source": "PZO9302",
+		"id": "ca0c920e-6274-488c-8c1c-99afd2aeb781",
+		"aonId": 1129
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Scrollmaster Dedication",
+		"level": 6,
+		"traits": [ "Uncommon", "Archetype", "Dedication" ],
+		"prerequisites": [ "expert in any Lore skill", "member of the Pathfinder Society affiliated with the School of Scrolls" ],
+		"details": [
+			"Your experience chronicling adventures and discoveries grants you heightened discernment and memory. For 24 hours after learning a prominent fact-such as the name of an NPC you have met, the details of your mission briefing, and similar information-you can recall it without attempting a check, though this doesn't allow you to automatically memorize long strings of numbers or text. You also gain a +2 circumstance bonus to checks to remember a detail that has come up before in the current adventure, even if it was more than 24 hours ago.",
+			"If you have the Thorough Reports feat (<i>Lost Omens World Guide</i> 23) and have expert proficiency in the skill you're using to Recall Knowledge, your circumstance bonus to Recall Knowledge about creatures from that feat increases to +4"
+		],
+		"special": [
+			"You cannot select another dedication feat until you have gained two other feats from the Scrollmaster archetype."
+		],
+		"page": 113,
+		"source": "PZO9302",
+		"id": "96cc2abf-9b79-4548-9cbe-127258ceef3b",
+		"aonId": 1130
+	},
+	{
+		"objectType": "Feat",
+		"name": "Lore Seeker",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Scrollmaster Dedication" ],
+		"details": [
+			"You see what others don't, and you've developed magical tricks to find hidden truth. You can cast <i>comprehend language</i>, <i>restore senses</i>, and <i>see invisibility</i> as innate spells, each once per day. If you could already cast spells, these spells are of the same tradition. Otherwise, they are arcane spells, you use Intelligence as your spellcasting ability, and you become trained in spell attack rolls and spell DCs for arcane spells."
+		],
+		"page": 113,
+		"source": "PZO9302",
+		"id": "f90c6f19-9863-48fc-9ebf-df79670677bc",
+		"aonId": 1131
+	},
+	{
+		"objectType": "Feat",
+		"name": "Unravel Mysteries",
+		"level": 8,
+		"traits": [ "Archetype", "Skill" ],
+		"prerequisites": [ "master in a Decipher Writing skill", "Scrollmaster Dedication" ],
+		"details": [
+			"You can understand the true meaning of texts quickly, and even when you get lost or hit a dead end, you aren't discouraged from making further attempts to get to the bottom of things. When you Decipher Writing, you need only half as long as usual (reducing the time from about 1 minute to about half a minute per page), and if you fail, you don't take the usual -2 circumstance penalty to further checks to decipher that text."
+		],
+		"page": 113,
+		"source": "PZO9302",
+		"id": "bcb508bc-bbf2-4b54-9c8e-95bc5cc32392",
+		"aonId": 1132
+	},
+	{
+		"objectType": "Feat",
+		"name": "Font of Knowledge",
+		"level": 10,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Scrollmaster Dedication" ],
+		"details": [
+			"Experience or focused study have granted you mastery of a number of topics. When you know about something, you know about it in great detail. When you succeed at a check to Recall Knowledge, you gain additional information or context. When you critically succeed at a check to Recall Knowledge, at the GM's discretion, you might gain even more additional information or context than normal."
+		],
+		"page": 113,
+		"source": "PZO9302",
+		"id": "c01d3d2b-4af0-4885-8236-86bc376b2140",
+		"aonId": 1133
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Spellmaster Dedication",
+		"level": 6,
+		"traits": [ "Uncommon", "Archetype", "Dedication" ],
+		"prerequisites": [ "Intelligence, Wisdom, or Charisma 14", "ability to cast focus spells", "member of the Pathfinder Society affiliated with the School of Spells" ],
+		"details": [
+			"As a Spellmaster, you are adept at identifying magic. You gain a +2 circumstance bonus when you Identify Magic with a skill in which you are trained or better. If you have the Wayfinder Resonance Tinkerer feat (<i>Lost Omens World Guide</i> 23), you can change the cantrip you chose for that feat each day during your daily preparations."
+		],
+		"special": [
+			"You cannot select another dedication feat until you have gained two other feats from the Spellmaster archetype."
+		],
+		"page": 114,
+		"source": "PZO9302",
+		"id": "4af1cb17-86fe-4fdd-b085-b13a209afb9c",
+		"aonId": 1134
+	},
+	{
+		"objectType": "Feat",
+		"name": "Surreptitious Spellcaster",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Spellmaster Dedication" ],
+		"details": [
+			"You've learned that it pays for a Pathfinder to be able to cast spells without being noticed. You gain the Conceal Spell wizard class feat (<i>Pathfinder Core Rulebook</i> 210), though it's not a wizard feat for you. You also gain a +2 circumstance bonus to Stealth checks to Conceal a Spell and to Deception checks to conceal verbal components."
+		],
+		"page": 114,
+		"source": "PZO9302",
+		"id": "9b855247-afb0-4223-b7ac-1b174ba201d5",
+		"aonId": 1135
+	},
+	{
+		"objectType": "Feat",
+		"name": "Ward Casting",
+		"actionType": "[R]",
+		"level": 10,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Spellmaster Dedication", "Steady Spellcasting" ],
+		"trigger": "You attempt a flat check for Steady Spellcasting, but you haven't rolled yet.",
+		"details": [
+			"You carefully ward your spell by drawing from a mantle of magical energy you prepared to protect your casting, increasing your chance of retaining the spell. You reduce the DC of the flat check for Steady Spellcasting from 15 to 10."
+		],
+		"page": 114,
+		"source": "PZO9302",
+		"id": "b5e29398-2ec1-4dff-813c-6f57bc6ff4b4",
+		"aonId": 1136
+	},
+	{
+		"objectType": "Feat",
+		"name": "Spellmaster's Resilience",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Spellmaster Dedication" ],
+		"details": [
+			"Your experience with a specific type of harmful magic makes you more resistant to it. Choose a magical tradition (arcane, divine, occult, or primal). You gain a +1 circumstance bonus to saving throws against spells and effects with that tradition's trait and resistance 5 to all damage from spells and effects with that tradition's trait. The effect must have actually been cast or created with that tradition, rather than simply being on that tradition's spell list."
+		],
+		"page": 114,
+		"source": "PZO9302",
+		"id": "7081c9dd-dddc-46d3-ab86-3a04f079d7a6",
+		"aonId": 1137
+	},
+	{
+		"objectType": "Feat",
+		"name": "Absorb Spell",
+		"actionType": "[R]",
+		"level": 14,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Spellmaster Dedication", "spell repertoire or ability to prepare spells" ],
+		"frequency": "once per 10 minutes",
+		"trigger": "You critically succeed at a saving throw against a foe's spell, and that spell is of a level you can normally cast.",
+		"details": [
+			"You absorb a spell and store it in your body. If you are a spontaneous spellcaster, you can cast the triggering spell once during the next 10 minutes, even if it's not on your spell list as if it were in your repertoire. If you are a prepared spellcaster, you can replace one of your prepared spells of the same level with the absorbed spell, but you must cast the absorbed spell within 10 minutes or you lose that spell slot for the day. You cast the spell at the same spell level as the spell you absorbed, but the spell is of your magical tradition and uses your spell DC, spell attack roll, and other statistics to determine its effects."
+		],
+		"page": 114,
+		"source": "PZO9302",
+		"id": "6132d29e-d458-4469-a506-15d746b97f10",
+		"aonId": 1138
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Swordmaster Dedication",
+		"level": 6,
+		"traits": [ "Uncommon", "Archetype", "Dedication" ],
+		"prerequisites": [ "Strength, Dexterity, or Constitution 14", "member of the Pathfinder Society affiliated with the School of Swords" ],
+		"details": [
+			"Your Swords training taught you to never lose hold of your weapon. You gain a +2 circumstance bonus to your Reflex DC when foes attempt to Disarm you. If you have the Deft Cooperation feat (<i>Lost Omens World Guide</i> 23) and critically succeed on a check to Aid an ally's attack roll or skill check, you gain a +2 circumstance bonus from Deft Cooperation (instead of a +1 bonus) the first time you attempt an attack roll or attempt a skill check where the bonus would apply."
+		],
+		"special": [
+			"You cannot select another dedication feat until you have gained two other feats from the Swordmaster archetype."
+		],
+		"page": 115,
+		"source": "PZO9302",
+		"id": "c6326a55-4ee0-46b7-b85f-44cbdd633de0",
+		"aonId": 1139
+	},
+	{
+		"objectType": "Feat",
+		"name": "Harrying Strike",
+		"actionType": "[A]",
+		"level": 10,
+		"traits": [ "Archetype", "Attack", "Press" ],
+		"prerequisites": [ "Swordmaster Dedication" ],
+		"details": [
+			"Your attack prevents a foe from pursuing your allies. Make a melee Strike, adding the following effects in addition to the normal effects of the Strike.",
+			{
+				"criticalSuccess": [
+					"The target takes a -15-foot status penalty to its Speeds until the start of your next turn."
+				],
+				"success": [
+					"The target takes a -10-foot status penalty to its Speeds until the start of your next turn."
+				],
+				"failure": [
+					"The target takes a -5-foot status penalty to its Speeds until the start of your next turn."
+				]
+			}
+		],
+		"page": 115,
+		"source": "PZO9302",
+		"id": "6406be78-df36-451f-a1a9-1b0e466d588e",
+		"aonId": 1140
+	},
+	{
+		"objectType": "Feat",
+		"name": "Shoulder Catastrophe",
+		"actionType": "[R]",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Swordmaster Dedication" ],
+		"trigger": "An enemy critically succeeds at a Strike against an adjacent ally.",
+		"details": [
+			"You've trained to protect your allies by diverting the worst attacks to yourself. The enemy doesn't double the damage from the triggering Strike but instead applies the normal damage to both you and your ally. Both of you take any effects that would happen on a hit that dealt damage, such as poison, but neither of you are subject to any effects that would happen only on a critical success."
+		],
+		"page": 115,
+		"source": "PZO9302",
+		"id": "d2009018-3a00-4580-9501-d9a29593bea4",
+		"aonId": 1141
+	},
+	{
+		"objectType": "Feat",
+		"name": "Death's Door",
+		"actionType": "[R]",
+		"level": 14,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Swordmaster Dedication" ],
+		"frequency": "once per 10 minutes",
+		"trigger": "You take damage that would reduce you to 0 Hit Points.",
+		"details": [
+			"You continue to fight when others would fall. Just before taking the triggering damage, you gain temporary Hit Points equal to twice your level. If you have Hit Points remaining after gaining these temporary Hit Points, you aren't knocked unconscious, nor do you suffer the other effects of being reduced to 0 Hit Points. Any temporary Hit Points that remain after applying the damage last for up to 4 rounds."
+		],
+		"page": 115,
+		"source": "PZO9302",
+		"id": "5fe443fe-0f58-4d2d-a8e2-baeb9e041772",
+		"aonId": 1142
+	}
+]

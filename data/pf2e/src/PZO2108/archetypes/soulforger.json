@@ -1,0 +1,85 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Soulforger",
+		"details": [
+			"our devotion to a cause unifies your soul with an armament tethered to the very essence of your spirit."
+		],
+		"page": 236,
+		"source": "PZO2108",
+		"id": "d97acfb9-ff5f-401c-8717-25bb669675e6",
+		"aonId": 0
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Soulforger Dedication",
+		"level": 2,
+		"traits": [ "Uncommon", "Archetype", "Dedication" ],
+		"prerequisites": [ "Wis 14 or ability to cast divine spells" ],
+		"details": [
+			"You can manifest the power of your spirit in combat to realize your motivations. You manifest an armor, shield, or weapon as a soulforged armament (page 232). Choose one essence power for the armament (below). Changing an essence power requires 1 week of retraining, and you can't retrain it while you have <i>soulforged corruption</i>.",
+			"You can Manifest Soulforged Armament to summon your armaments in combat.",
+			"<b>Manifest Soulforged Armament</b> [A] (concentrate, conjuration, divine, extradimensional) Requirements summoning a weapon or shield, you have the hands free to wield it; if summoning armor, you aren't wearing any armor; Effect You immediately wield or wear the soulforged armament bound to you. The soulforged armament remains manifested until you Dismiss this effect.",
+			"Once per day when you use this ability, you can manifest the armament's essence form. You gain the armament's essence power until it's Dismissed. After 1 minute, the essence form armament is automatically Dismissed."
+		],
+		"special": [
+			"You can't select another dedication feat before gaining two other feats from this archetype."
+		],
+		"page": 236,
+		"source": "PZO2108",
+		"id": "35e361d9-1fb0-4a21-b251-682609b0dc2b",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Soul Flare",
+		"actionType": "[R]",
+		"level": 4,
+		"traits": [ "Archetype", "Concentrate" ],
+		"prerequisites": [ "Soulforger Dedication" ],
+		"trigger": "An attack you made with a soulforged weapon or shield misses a creature, or a creature hits you with an attack while you're either wearing manifested soulforged armor or have your soulforged shield raised.",
+		"requirements": "Your soulforged armament is manifested",
+		"details": [
+			"You strive to change the outcome with sheer zeal. You gain a +1 status bonus to your attack roll if making an attack or to your AC if you were hit. This can change the outcome of the roll. If this bonus turns your missed attack into a hit or the hit against you into a miss, attempt a DC 5 flat check. If you fail, your soulforged armament is Dismissed-your weapon if you attacked or your armor or shield if you were defending."
+		],
+		"page": 236,
+		"source": "PZO2108",
+		"id": "f439a6e5-3ad3-48f6-91f7-21ca1aa8045f",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Rapid Manifestation",
+		"actionType": "[F]",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Soulforger Dedication" ],
+		"trigger": "You roll initiative or a hazard attacks you.",
+		"details": [
+			"Your unwavering soul brings up your defenses as soon as you're in danger. You Manifest your Soulforged Armament."
+		],
+		"page": 236,
+		"source": "PZO2108",
+		"id": "6dd3121b-87ce-4944-959e-cf69c9d4b876",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Soul Arsenal",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Soulforger Dedication" ],
+		"details": [
+			"Choose an additional soulforged armament of a different type than the type you already chose, and choose one essence power for it. Upgrade and change armaments individually.",
+			"When you Manifest Soulforged Armament, you can summon any number of your armaments (you must meet the Requirements for each), and when you Dismiss the effect, you can choose to Dismiss some and not others. You can choose to manifest the essence form of any number of your armaments when you take the action. Each armament can manifest its essence form only once per day.",
+			"When you gain <i>soulforged corruption</i>, choose one armament's corruption flaw to affect you for stage 1. At stage 2, you take the flaws of all your soulforged armaments. While you have the curse, each armament gets a separate flat check to manifest its essence form, and failing prevents you from manifesting only that armament's essence form."
+		],
+		"special": [
+			"You can select this feat a second time at 12th level or higher, choosing the final item type."
+		],
+		"page": 236,
+		"source": "PZO2108",
+		"id": "7a87a69c-616e-4054-afe5-0125c6860946",
+		"aonId": 0
+	}
+]

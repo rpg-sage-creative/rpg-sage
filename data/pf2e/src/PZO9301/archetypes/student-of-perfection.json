@@ -1,0 +1,59 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Student of Perfection",
+		"details": [
+			"You studied martial arts at Jalmeray's Houses of Perfection."
+		],
+		"page": 83,
+		"source": "PZO9301",
+		"id": "570ecfaf-b7a4-47fb-b746-e2ca5f8b44f4",
+		"aonId": 18
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Student of Perfection Dedication",
+		"level": 2,
+		"traits": [ "Uncommon", "Archetype", "Dedication" ],
+		"prerequisites": [ "powerful fist or expert in unarmed attacks", "member of a House of Perfection" ],
+		"access": "You are from Jalmeray.",
+		"details": [
+			"You have learned the martial arts techniques of your House of Perfection. You become trained in your choice of Acrobatics or Athletics and Warfare Lore; if you were already trained, you become an expert instead. You gain the Ki Strike monk class feat, which grants you the <i>ki strike</i> ki spell and a focus pool of 1 Focus Point that you can recover using the Refocus activity as a monk does. Your ki spells from Student of Perfection are occult spells."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the student of perfection archetype."
+		],
+		"page": 83,
+		"source": "PZO9301",
+		"id": "8879b3af-2dbd-42b7-b965-e2f1a7a3aff2",
+		"aonId": 900
+	},
+	{
+		"objectType": "Feat",
+		"name": "Perfect Strike",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Student of Perfection Dedication" ],
+		"details": [
+			"You gain the <i>perfect strike</i> ki spell. Increase the number of Focus Points in your focus pool by 1."
+		],
+		"page": 83,
+		"source": "PZO9301",
+		"id": "a7ac8c18-4b1c-4392-aa74-81b68adc286b",
+		"aonId": 901
+	},
+	{
+		"objectType": "Feat",
+		"name": "Perfect Ki Adept",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Student of Perfection Dedication" ],
+		"details": [
+			"You gain the appropriate ki spell for your School of Perfection: <i>unblinking flame revelation</i> for Unblinking Flame, <i>unbreaking wave advance</i> for Unbreaking Waves, <i>unfolding wind rush</i> for Unfolding Wind, or <i>untwisting iron buffer</i> for Untwisting Iron. Increase the number of Focus Points in your focus pool by 1."
+		],
+		"page": 83,
+		"source": "PZO9301",
+		"id": "37403da1-aaaa-4912-8e40-90488ecf871f",
+		"aonId": 902
+	}
+]

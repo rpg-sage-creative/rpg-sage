@@ -1,0 +1,24 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Strix",
+		"youMight": [
+			"Dedicate and endear yourself to your family, friends, or community.",
+			"Harbor an inherited distrust of humans.",
+			"Keep strangers at arm's length and perhaps exhibit naivete about the world beyond your homeland."
+		],
+		"othersProbably": [
+			"Appreciate your dedicated friendship, even if they don't grasp the cultural history behind it.",
+			"Treat you on occasion like a carrier pigeon, asking you to deliver letters or other similar favors.",
+			"Find your appearance frightening due to complete inexperience with strix."
+		],
+		"aonId": 40,
+		"source": "PZO9308",
+		"id": "5af3c2b8-bfa5-4370-96ce-5ced4bcc5398"
+	},
+	{ "objectType": "Heritage", "name": "Nightglider Strix", "ancestry": "Strix", "source": "PZO9308", "id": "ff17ded4-ef9c-4f35-89c2-03f14e54ffb3", "aonId": 146 },
+	{ "objectType": "Heritage", "name": "Predator Strix", "ancestry": "Strix", "source": "PZO9308", "id": "2cf334be-0fcc-4ea8-a733-4d08690237cd", "aonId": 147 },
+	{ "objectType": "Heritage", "name": "Scavenger Strix", "ancestry": "Strix", "source": "PZO9308", "id": "266132fa-bc1b-42e0-aa02-6379621c9779", "aonId": 148 },
+	{ "objectType": "Heritage", "name": "Shoreline Strix", "ancestry": "Strix", "source": "PZO9308", "id": "42b30067-79d0-4427-b89a-561a976b1a6c", "aonId": 149 },
+	{ "objectType": "Heritage", "name": "Songbird Strix", "ancestry": "Strix", "source": "PZO9308", "id": "217d994e-9648-497a-b263-1753c361fb46", "aonId": 150 }
+]

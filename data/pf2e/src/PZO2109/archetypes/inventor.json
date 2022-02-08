@@ -1,0 +1,104 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Inventor",
+		"details": [
+			"You revel in the creation of clever inventions, deploying your brilliance to defeat your foes. Explosives, gadgets, and innovative technologies? You have ideas for all of them, and you're eager to test your theories."
+		],
+		"todo": "need to add multiclass inventor characters",
+		"page": 49,
+		"source": "PZO2109",
+		"id": "894444a7-16a8-4964-9822-76bfdbaad594",
+		"aonId": 0
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Inventor Dedication",
+		"level": 2,
+		"traits": [ "Uncommon", "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Intelligence 14" ],
+		"details": [
+			"You become trained in Crafting and inventor class DC. You gain the Inventor skill feat, even if you don't meet the skill feat's requirements. Choose an innovation. You gain that innovation, though you don't gain any other abilities that modify or use that innovation, such as modifications or Explode."
+		],
+		"special": [
+			"You cannot select another dedication feat until you have first gained two other feats from the inventor archetype."
+		],
+		"page": 49,
+		"source": "PZO2109",
+		"id": "0ad67e25-0305-4872-b9e4-ff5ff707e0c8",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Breakthrough",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Inventor Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level inventor feat of your choice."
+		],
+		"page": 49,
+		"source": "PZO2109",
+		"id": "054ac1dc-7d9d-4570-a73b-cf855f790704",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Brilliant Crafter",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Inventor Dedication" ],
+		"details": [
+			"Your skill at crafting is unparalleled. You become an expert in Crafting. At 7th level you become a master in Crafting, and at 15th level, you become legendary in Crafting and you become an expert in your inventor class DC."
+		],
+		"page": 49,
+		"source": "PZO2109",
+		"id": "2d7b257e-9be3-40dd-b71c-dcb197691565",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Breakthrough",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Breakthrough" ],
+		"details": [
+			"You gain one inventor feat. For the purpose of meeting its prerequisites, your inventor level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another inventor feat."
+		],
+		"page": 49,
+		"source": "PZO2109",
+		"id": "37e3c9c2-f51c-4816-b65d-ceb27bb1b22b",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Explosion",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Inventor Dedication" ],
+		"details": [
+			"Your innovation can explode on command. You gain the Explode action (page 19)."
+		],
+		"page": 49,
+		"source": "PZO2109",
+		"id": "e0130264-ad62-4ca2-bcb8-030c45464115",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Modification",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Inventor Dedication" ],
+		"details": [
+			"You've learned to modify your innovation in order to enhance its capabilities beyond what an ordinary piece of equipment can accomplish. You gain a basic modification of your choice for your innovation (page 16). Your innovation must meet any requirements for the modification you choose, as normal."
+		],
+		"page": 49,
+		"source": "PZO2109",
+		"id": "e26bf235-fc40-4a09-b7b5-6e800afbc70f",
+		"aonId": 0
+	}
+]

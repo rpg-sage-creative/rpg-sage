@@ -1,0 +1,54 @@
+import type utils from "../../sage-utils";
+import RenderableContent from "../data/RenderableContent";
+import type { SourcedCore } from "./base/HasSource";
+import HasSource from "./base/HasSource";
+
+export interface VersatileHeritageCore extends SourcedCore<"VersatileHeritage"> {
+	// features: FeatureCore[];
+
+	youMight: string[];
+	othersProbably: string[];
+}
+
+function toList(items: string[]): string {
+	const listItems = items.map(s => `<li>${s}</li>`);
+	return `<ul>${listItems.join("")}</ul>`;
+}
+
+export default class VersatileHeritage extends HasSource<VersatileHeritageCore> {
+
+	//#region properties
+
+	// public features = new Features([{ level:1, features:this.core.features }]);
+
+	//#endregion
+
+	//#region utils.RenderUtils.IRenderable
+
+	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+		const renderable = new RenderableContent(this);
+		renderable.setTitle(`<b>${this.name}</b> (Versatile Heritage)`);
+		this.appendDescriptionTo(renderable);
+		this.appendDetailsTo(renderable);
+		renderable.appendTitledSection("<b>You Might...</b>", toList(this.core.youMight));
+		renderable.appendTitledSection("<b>Others Probably...</b>", toList(this.core.othersProbably));
+		return renderable;
+	}
+
+	//#endregion
+
+	//#region static
+
+	// public static FeatureObjectType = "VersatileHeritageFeature";
+
+	// public static removeFeatures(features: FeatureCore[]): FeatureCore[] {
+	// 	return utils.ArrayUtils.remove(features, feature => feature.objectType === VersatileHeritage.FeatureObjectType);
+	// }
+	// public static replaceFeatures(level: FeatureLevelCore, versatileHeritage: VersatileHeritage): void {
+	// 	VersatileHeritage.removeFeatures(level.features);
+	// 	level.features.push(...versatileHeritage.features.get(level.level).map(feature => feature.toJSON()));
+	// }
+
+	//#endregion
+
+}

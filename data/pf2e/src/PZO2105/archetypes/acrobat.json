@@ -1,0 +1,122 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Acrobat",
+		"details": [
+			"You have trained your body to perform incredible, seemingly superhuman feats of grace. You move in ways that leave your opponents caught off guard and fumbling for a response, turning every fight into performance art."
+		],
+		"page": 155,
+		"source": "PZO2105",
+		"id": "eb64fe0c-d101-442d-861c-a2d9724de16b",
+		"aonId": 45
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Acrobat Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication" ],
+		"prerequisites": [ "trained in Acrobatics" ],
+		"details": [
+			"You become an expert in Acrobatics. At 7th level, you become a master in Acrobatics, and at 15th level, you become legendary in Acrobatics. Whenever you critically succeed at an Acrobatics check to Tumble Through an enemy's space, you don't treat the enemy's space as diffcult terrain."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the acrobat archetype."
+		],
+		"page": 155,
+		"source": "PZO2105",
+		"id": "03aab94b-7dba-4100-9453-bd8613246a6e",
+		"aonId": 1873
+	},
+	{
+		"objectType": "Feat",
+		"name": "Contortionist",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Acrobat Dedication" ],
+		"details": [
+			"You can squeeze out of tight situations surprisingly quickly, gaining an advantage against foes that try to pin you down. You gain the Quick Squeeze skill feat, and if you're a master in Acrobatics, you can Squeeze at full Speed. Whenever you successfully Escape using Acrobatics, the creature you Escaped from is flat-footed against the next attack you make against it before the end of your next turn."
+		],
+		"page": 155,
+		"source": "PZO2105",
+		"id": "e03552ea-24e5-4b77-a5f7-9e6c3fb3cce7",
+		"aonId": 1874
+	},
+	{
+		"objectType": "Feat",
+		"name": "Dodge Away",
+		"actionType": "[R]",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Acrobat Dedication" ],
+		"trigger": "You are the target of a melee attack.",
+		"requirements": "You're aware of the attack and aren't flat-footed.",
+		"details": [
+			"You use your acrobatic prowess to evade an attack, using momentum to keep yourself moving, if you choose. You gain a +1 circumstance bonus to AC against the triggering attack. If the attack misses you, you can Step after the Strike. If you're a master in Acrobatics, you can move 10 feet on this Step instead of 5 feet."
+		],
+		"page": 155,
+		"source": "PZO2105",
+		"id": "7f7f2459-09f5-4f36-89e6-40d148bb3e15",
+		"aonId": 1875
+	},
+	{
+		"objectType": "Feat",
+		"name": "Graceful Leaper",
+		"level": 7,
+		"traits": [ "Archetype", "Skill" ],
+		"prerequisites": [ "Acrobat Dedication", "master in Acrobatics" ],
+		"details": [
+			"Mass and muscle are meaningless when you leap; only grace and balance matter. You can roll an Acrobatics check instead of an Athletics check when making a High Jump or Long Jump."
+		],
+		"page": 155,
+		"source": "PZO2105",
+		"id": "cac86edb-4ffd-4836-b9b3-af8fe3fe5f28",
+		"aonId": 1876
+	},
+	{
+		"objectType": "Feat",
+		"name": "Tumbling Strike",
+		"actionType": "[A]",
+		"level": 8,
+		"traits": [ "Archetype", "Flourish", "Move" ],
+		"prerequisites": [ "Acrobat Dedication" ],
+		"requirements": "You are adjacent to an enemy.",
+		"details": [
+			"Attempt an Acrobatics check against the Reflex DC of an enemy adjacent to you.",
+			{
+				"criticalSuccess": [
+					"You move through the enemy's space to an unoccupied space on the other side of the enemy from your starting position. This movement doesn't trigger reactions. You can't move farther than your Speed, and you must end your movement adjacent to the enemy whose space you moved through. After moving, you make a melee Strike against the enemy whose space you moved through, and the enemy is flat-footed against that Strike."
+				],
+				"success": [
+					"As critical success, but the enemy isn't flat-footed against the Strike."
+				],
+				"failure": [
+					"You remain in your original space but can still Strike."
+				],
+				"criticalFailure": [
+					"No effect."
+				]
+			}
+		],
+		"page": 155,
+		"source": "PZO2105",
+		"id": "64f001f7-a481-4395-9fcc-e02433017bd8",
+		"aonId": 1877
+	},
+	{
+		"objectType": "Feat",
+		"name": "Tumbling Opportunist",
+		"actionType": "[F]",
+		"level": 10,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Acrobat Dedication" ],
+		"frequency": "once per minute",
+		"requirements": "Your most recent action was to Tumble Through or Tumbling Strike, and you successfully moved through an enemy's space.",
+		"details": [
+			"You use a burst of stamina to perform a breathtaking feat of Acrobatics as you speed through a foe's space, leaving your foe lying flat on their back. You attempt to Trip the enemy whose space you moved through. You can use Acrobatics instead of Athletics for this check."
+		],
+		"page": 155,
+		"source": "PZO2105",
+		"id": "79459837-433a-435f-8154-023c391a5c18",
+		"aonId": 1878
+	}
+]

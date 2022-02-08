@@ -1,0 +1,42 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Swashbuckler",
+		"duringCombatEncounters": [
+			"You show off to gain panache, leveraging your flair to build up to powerful finishing moves.",
+			"You stay nimble, moving into the best position to perform your maneuvers while dodging enemy blows and responding with swift ripostes.",
+			"Depending on your swashbuckler's style, you might dance among your foes; slip past their defenses; or beguile, distract, or frighten them."
+		],
+		"duringSocialEncounters": [
+			"You are equally likely to charm or intimidate others-or both.",
+			"You might be an adept socialite, or you might create distractions for others who do the talking."
+		],
+		"whileExploring": [
+			"You keep a careful eye on your surroundings and other people, always prepared to leap into action with bravado and flair.",
+			"You interact with the environment in bold, sweeping strokes rather than skulking to avoid detection."
+		],
+		"inDowntime": [
+			"You might carouse at the tavern, repair and maintain your armaments, or train to learn new techniques.",
+			"To maintain your impressive reputation, you might build an organization in your name or establish a following of admirers."
+		],
+		"youMight": [
+			"Portray yourself as a heroic daredevil or a roguish braggart, knowing you can live up to the image you present.",
+			"Hold yourself in high esteem, confident in your abilities and your reputation.",
+			"Practice your skills and maneuvers regularly to ensure you never grow rusty."
+		],
+		"othersProbably": [
+			"Admire your theatrics, bravado, and skill with a blade.",
+			"Find you arrogant unless they know you well enough to appreciate your style.",
+			"Underestimate how much of a threat you pose until they face the end of your deadly blade."
+		],
+		"classPath": "Style",
+		"aonId": 15,
+		"source": "PZO2105",
+		"id": "194603e5-be92-4612-a5c1-dba642d7f0e0"
+	},
+	{ "objectType": "ClassPath", "name": "Battledancer", "class": "Swashbuckler", "source": "PZO2105", "id": "e5dae38d-4f29-4138-b340-b13b167f31b0", "aonId": 1 },
+	{ "objectType": "ClassPath", "name": "Braggart", "class": "Swashbuckler", "source": "PZO2105", "id": "dcb4fab3-ec82-4001-8504-ae1c7fd41e39", "aonId": 2 },
+	{ "objectType": "ClassPath", "name": "Fencer", "class": "Swashbuckler", "source": "PZO2105", "id": "5584dcfb-311f-48aa-895a-446d051c3cb5", "aonId": 3 },
+	{ "objectType": "ClassPath", "name": "Gymnast", "class": "Swashbuckler", "source": "PZO2105", "id": "6e6cd6f3-af0c-4e3a-915b-05b08a129ffa", "aonId": 4 },
+	{ "objectType": "ClassPath", "name": "Wit", "class": "Swashbuckler", "source": "PZO2105", "id": "6a09cb33-1718-4928-a582-f8d3d08d4da3", "aonId": 5 }
+]

@@ -1,0 +1,92 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Medic",
+		"details": [
+			"You've studied countless techniques for providing medical aid, making you a peerless doctor and healer."
+		],
+		"page": 184,
+		"source": "PZO2105",
+		"id": "4d825d82-0f07-418b-b850-7ec9db07494f",
+		"aonId": 69
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Medic Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication" ],
+		"prerequisites": [ "trained in Medicine", "Battle Medicine" ],
+		"details": [
+			"You become an expert in Medicine. When you succeed with Battle Medicine or Treat Wounds, the target regains 5 additional HP at DC 20,10 HP at DC 30, or 15 HP at DC 40. Once per day, you can use Battle Medicine on a creature that's temporarily immune. If you're a master in Medicine, you can do so once per hour."
+		],
+		"special": [
+			"You can't select another dedication feat until you gain two other feats from the medic archetype."
+		],
+		"page": 184,
+		"source": "PZO2105",
+		"id": "78bf380d-95a2-4361-b6e8-70dfa8bb732f",
+		"aonId": 2027
+	},
+	{
+		"objectType": "Feat",
+		"name": "Doctor's Visitation",
+		"actionType": "[A] or [A][A]",
+		"level": 4,
+		"traits": [ "Archetype", "Flourish" ],
+		"prerequisites": [ "Medic Dedication" ],
+		"details": [
+			"You move to provide immediate care to those who need it. Stride, then use one of the following: Battle Medicine or Treat Poison. You can spend a second action to instead Stride and then Administer First Aid or Treat a Condition (if you have it)."
+		],
+		"page": 184,
+		"source": "PZO2105",
+		"id": "7bd73ef8-cdcf-457e-aba5-dcf75f046f23",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Treat Condition",
+		"actionType": "[A][A]",
+		"level": 4,
+		"traits": [ "Archetype", "Healing", "Manipulate", "Skill" ],
+		"prerequisites": [ "Medic Dedication" ],
+		"requirements": "You are holding healer's tools, or you are wearing them and have a hand free.",
+		"details": [
+			"You treat an adjacent creature in an attempt to reduce the clumsy, enfeebled, or sickened condition. If a creature has multiple conditions from this list, choose one. Attempt a counteract check against the condition, using your Medicine modifier as your counteract modifier and the condition's source to determine the DC. You can't treat a condition that came from an artifact or effect above 20th level unless you have Legendary Medic; even if you do, the counteract DC increases by 10. Treating a Condition that is continually applied under certain circumstances (for instance, the enfeebled condition a good character gains from carrying an <i>unholy</i> weapon) has no effect as long as the circumstances continue.",
+			{ "criticalSuccess": [ "Reduce the condition value by 2." ], "success": [ "Reduce the condition value by 1." ], "criticalFailure": [ "Increase the condition value by 1." ] }
+		],
+		"page": 184,
+		"source": "PZO2105",
+		"id": "1a541928-ff03-4d48-a1d1-beb514f0a3c7",
+		"aonId": 2029
+	},
+	{
+		"objectType": "Feat",
+		"name": "Holistic Care",
+		"level": 6,
+		"traits": [ "Archetype", "Skill" ],
+		"prerequisites": [ "trained in Diplomacy", "Treat Condition" ],
+		"details": [
+			"You provide emotional and spiritual care. Add frightened, stupefied, and stunned to the list of conditions you can reduce with Treat Condition. If the stunned condition has a duration instead of a value, you can't use Treat Condition to reduce it."
+		],
+		"page": 184,
+		"source": "PZO2105",
+		"id": "1afecf83-bc7b-421f-af1f-bb2e87715380",
+		"aonId": 2030
+	},
+	{
+		"objectType": "Feat",
+		"name": "Resuscitate",
+		"actionType": "[A][A][A]",
+		"level": 16,
+		"traits": [ "Archetype", "Healing", "Manipulate" ],
+		"prerequisites": [ "Medic Dedication", "legendary in Medicine" ],
+		"requirements": "You are holding healer's tools or are wearing them and have a hand free. Also, the target's body is mostly intact.",
+		"details": [
+			"You can use Medicine to resuscitate the dead. Attempt a DC 40 Medicine check to revive a dead creature that has been dead for no more than 3 rounds. If you succeed, the target returns to life with the effects of <i>raise dead</i>, except it still has the wounded condition it had before dying, increased by 1 (or wounded 1 if it wasn't wounded before dying). Whether you succeed or fail, the target is temporarily immune to Resuscitate for 1 day."
+		],
+		"page": 184,
+		"source": "PZO2105",
+		"id": "13c65b75-d18c-45ea-9265-57c1a17f9487",
+		"aonId": 2031
+	}
+]

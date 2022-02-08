@@ -1,0 +1,125 @@
+[
+	{
+		"objectType": "WeaponGroup",
+		"name": "Axe",
+		"specializationEffect": [
+			"Choose one creature adjacent to the initial target and within reach. If its AC is lower than your attack roll result for the critical hit, you deal damage to that creature equal to the result of the weapon damage die you rolled (including extra dice for its potency rune, if any). This amount isn't doubled, and no bonuses or other additional dice apply to this damage."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "e6547bae-1456-41ff-ba4b-d43adc9e72e6"
+	},
+	{ "objectType": "WeaponGroup", "name": "Bomb", "specializationEffect": [ "Increase the radius of the bomb's splash damage (if any) to 10 feet." ], "page": 284, "source": "PZO2101", "id": "d30a159f-2e4c-4865-bd0c-f23b570dd96f" },
+	{
+		"objectType": "WeaponGroup",
+		"name": "Bow",
+		"specializationEffect": [
+			"If the target of the critical hit is adjacent to a surface, it gets stuck to that surface by the missile. The target is immobilized and must spend an Interact action to attempt a DC 10 Athletics check to pull the missile free; it can't move from its space until it succeeds. The creature doesn't become stuck if it is incorporeal, is liquid (like a water elemental or some oozes), or could otherwise escape without effort."
+		],
+		"page": 284,
+		"source": "PZO2101",
+		"id": "bc783e15-d1f0-4ff5-b63e-365a5eb429bd"
+	},
+	{
+		"objectType": "WeaponGroup",
+		"name": "Brawling",
+		"specializationEffect": [
+			"The target must succeed at a Fortitude save against your class DC or be slowed 1 until the end of your next turn."
+		],
+		"page": 284,
+		"source": "PZO2101",
+		"id": "7c08fa20-ffc8-4a09-a40c-0210b1645331"
+	},
+	{
+		"objectType": "WeaponGroup",
+		"name": "Club",
+		"specializationEffect": [
+			"You knock the target away from you up to 10 feet (you choose the distance). This is forced movement (page 475)."
+		],
+		"page": 284,
+		"source": "PZO2101",
+		"id": "21151b81-8dec-4bca-af0b-c41669ba37c9"
+	},
+	{
+		"objectType": "WeaponGroup",
+		"name": "Dart",
+		"specializationEffect": [
+			"The target takes 1d6 persistent bleed damage. You gain an item bonus to this bleed damage equal to the weapon's item bonus to attack rolls."
+		],
+		"page": 284,
+		"source": "PZO2101",
+		"id": "675a5110-dee4-4da6-acd3-edb1ce812ac8"
+	},
+	{ "objectType": "WeaponGroup", "name": "Flail", "specializationEffect": [ "The target is knocked prone." ], "page": 284, "source": "PZO2101", "id": "82778fbb-836b-4d93-a17a-e74572ccd242" },
+	{ "objectType": "WeaponGroup", "name": "Hammer", "specializationEffect": [ "The target is knocked prone." ], "page": 284, "source": "PZO2101", "id": "8aeae898-c9a6-44b6-ae92-e52963c3becd" },
+	{
+		"objectType": "WeaponGroup",
+		"name": "Knife",
+		"specializationEffect": [
+			"The target takes 1d6 persistent bleed damage. You gain an item bonus to this bleed damage equal to the weapon's item bonus to attack rolls."
+		],
+		"page": 284,
+		"source": "PZO2101",
+		"id": "7790c567-f437-485a-8dd8-dd93c135a185"
+	},
+	{
+		"objectType": "WeaponGroup",
+		"name": "Pick",
+		"specializationEffect": [
+			"The weapon viciously pierces the target, who takes 2 additional damage per weapon damage die."
+		],
+		"page": 284,
+		"source": "PZO2101",
+		"id": "933d9867-501c-49f5-a70f-cf88ba1bc358"
+	},
+	{
+		"objectType": "WeaponGroup",
+		"name": "Polearm",
+		"specializationEffect": [
+			"The target is moved 5 feet in a direction of your choice. This is forced movement (page 475)."
+		],
+		"page": 284,
+		"source": "PZO2101",
+		"id": "fbc95357-a885-4a7b-b10e-62c29950ef57"
+	},
+	{
+		"objectType": "WeaponGroup",
+		"name": "Shield",
+		"specializationEffect": [
+			"You knock the target back from you 5 feet. This is forced movement (page 475)."
+		],
+		"page": 284,
+		"source": "PZO2101",
+		"id": "059cec5d-e7a2-49a4-a48b-fbfbf1ce814c"
+	},
+	{
+		"objectType": "WeaponGroup",
+		"name": "Sling",
+		"specializationEffect": [
+			"The target must succeed at a Fortitude save against your class DC or be stunned 1."
+		],
+		"page": 284,
+		"source": "PZO2101",
+		"id": "adc6eba5-b17a-482d-afed-7cbe6bfebf72"
+	},
+	{
+		"objectType": "WeaponGroup",
+		"name": "Spear",
+		"specializationEffect": [
+			"The weapon pierces the target, weakening its attacks. The target is clumsy 1 until the start of your next turn."
+		],
+		"page": 284,
+		"source": "PZO2101",
+		"id": "6a07f1e1-071f-4c50-b613-f11b67344e6e"
+	},
+	{
+		"objectType": "WeaponGroup",
+		"name": "Sword",
+		"specializationEffect": [
+			"The target is made off-balance by your attack, becoming flat-footed until the start of your next turn."
+		],
+		"page": 284,
+		"source": "PZO2101",
+		"id": "20a6a681-b094-4760-b638-c1bf3e68db22"
+	}
+]

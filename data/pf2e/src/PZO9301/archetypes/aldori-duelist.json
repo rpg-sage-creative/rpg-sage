@@ -1,0 +1,112 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Aldori Duelist",
+		"details": [
+			"You have sworn the Aldori swordpact and study the art of Aldori dueling, a famed school of bladecraft which has been passed down for over a millennium from the teachings of Baron Sirian Aldori. One day, you hope to demonstrate your skill at swordplay in order to become acknowledged as a true swordlord."
+		],
+		"page": 35,
+		"source": "PZO9301",
+		"id": "77df870f-9eee-4525-9a55-bd1a9f5d3706",
+		"aonId": 14
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Aldori Duelist Dedication",
+		"level": 2,
+		"traits": [ "Uncommon", "Archetype", "Dedication" ],
+		"prerequisites": [ "trained in Aldori dueling swords" ],
+		"access": "You are from the Broken Lands region",
+		"details": [
+			"Your Aldori duelist training teaches you martial techniques and increases your dedication to the Aldori dueling sword. You become trained in your choice of Acrobatics or Athletics and in Dueling Lore; if you were already trained, you become an expert instead. Whenever your profciency rank in any weapon increases to expert or beyond, you also gain that new profciency rank with Aldori dueling swords. You gain access to Aldori dueling swords (page 28)."
+		],
+		"special": [
+			"You cannot select another dedication feat until you have gained two other feats from the Aldori duelist archetype."
+		],
+		"page": 35,
+		"source": "PZO9301",
+		"id": "0775f63c-37d6-43a4-8bcf-42b15a368bda",
+		"aonId": 876
+	},
+	{
+		"objectType": "Feat",
+		"name": "Aldori Parry",
+		"actionType": "[A]",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Aldori Duelist Dedication" ],
+		"requirements": "You are wielding only an Aldori dueling sword and have your other hand or hands free.",
+		"details": [
+			"You can parry attacks against you with your Aldori dueling sword. You gain a +2 circumstance bonus to AC until the start of your next turn as long as you continue to meet the requirement."
+		],
+		"page": 35,
+		"source": "PZO9301",
+		"id": "a3b87589-9eb7-4045-b216-6caa3c9e8aaa",
+		"aonId": 877
+	},
+	{
+		"objectType": "Feat",
+		"name": "Duelist's Edge",
+		"actionType": "[F]",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Aldori Duelist Dedication" ],
+		"trigger": "You roll initiative, and you can observe at least one opponent.",
+		"details": [
+			"You hone your reaction time through duels and learn to draw your weapon seamlessly as you begin a fght. You gain a +2 circumstance bonus to the triggering initiative roll, and you can immediately Interact to draw your Aldori dueling sword."
+		],
+		"page": 35,
+		"source": "PZO9301",
+		"id": "c5602987-0c81-4047-84d2-f8257c3d015f",
+		"aonId": 878
+	},
+	{
+		"objectType": "Feat",
+		"name": "Aldori Riposte",
+		"actionType": "[R]",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Aldori Parry" ],
+		"requirements": "You are benefiting from Aldori Parry.",
+		"trigger": "An opponent within your reach critically fails a Strike against you.",
+		"details": [
+			"You riposte with your Aldori dueling sword when your enemy leaves an opening. Make a melee Strike or use a Disarm action against the triggering opponent using your Aldori dueling sword."
+		],
+		"page": 35,
+		"source": "PZO9301",
+		"id": "7b0a5070-4f93-4a26-92c4-1153c8f8f116",
+		"aonId": 879
+	},
+	{
+		"objectType": "Feat",
+		"name": "Unnerving Prowess",
+		"actionType": "[F]",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Aldori Duelist Dedication" ],
+		"trigger": "You critically succeed at a Strike or Disarm with your Aldori dueling sword",
+		"details": [
+			"Your incredible skill with your blade unnerves your foes. You attempt to Demoralize the target of your Strike or Disarm. This Demoralize attempt does not have the auditory trait, nor do you take a penalty to the check if the target doesn't understand your language."
+		],
+		"page": 35,
+		"source": "PZO9301",
+		"id": "29b103ae-32df-4473-8f80-c5a7b2a33eb6",
+		"aonId": 880
+	},
+	{
+		"objectType": "Feat",
+		"name": "Saving Slash",
+		"actionType": "[R]",
+		"level": 10,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Aldori Duelist Dedication" ],
+		"trigger": "An opponent critically hits you with a melee attack.",
+		"details": [
+			"You quickly whirl your blade, trying to defect enough momentum to avoid the worst of the attack. Attempt a DC 16 fat check. If you succeed, the attack becomes a normal hit, instead of a critical hit."
+		],
+		"page": 35,
+		"source": "PZO9301",
+		"id": "b70669f3-72e9-4b05-b2ac-c8a96d73c259",
+		"aonId": 881
+	}
+]

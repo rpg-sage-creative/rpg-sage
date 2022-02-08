@@ -1,0 +1,36 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Champion",
+		"duringCombatEncounters": [
+			"You confront enemies in hand-to-hand combat while carefully positioning yourself to protect your allies."
+		],
+		"duringSocialEncounters": [
+			"You are a voice of hope, striving to reach a peaceful solution that strengthens bonds and yields good results for all."
+		],
+		"whileExploring": [
+			"You overcome barriers both physical and spiritual, providing inspiration to your allies through your actions and-when your fellow adventurers ask for it-providing moral and ethical guidance."
+		],
+		"inDowntime": [
+			"You spend much of your time in solemn prayer and contemplation, rigorous training, charity work, and fulfilling the tenets of your code, but that doesn't mean there isn't time to take up a craft or hobby."
+		],
+		"youMight": [
+			"Believe there is always hope that good will triumph over evil, no matter how grim the odds.",
+			"Know the ends don't justify the means, since evil acts increase the power of evil.",
+			"Have a strong sense of right and wrong, and grow frustrated when greed or shortsightedness breeds evil."
+		],
+		"othersProbably": [
+			"See you as a symbol of hope, especially in a time of great need.",
+			"Worry you secretly despise them for not living up to your impossible standard, or that you are unwilling to compromise when necessary.",
+			"Know that you've sworn divine oaths of service they can trust you to keep."
+		],
+		"classPath": "Cause",
+		"source": "PZO2101",
+		"aonId": 4,
+		"aonTraitId": 24,
+		"id": "d343a117-41a2-471c-bdca-67cbaa84176d"
+	},
+	{ "objectType": "ClassPath", "name": "Paladin", "class": "Champion", "source": "PZO2101", "id": "aeb6c211-0dc3-44de-a17b-d1071528dfd2", "aonId": 1 },
+	{ "objectType": "ClassPath", "name": "Redeemer", "class": "Champion", "source": "PZO2101", "id": "df5fe60e-39b0-4c93-a867-0526fc07ce49", "aonId": 2 },
+	{ "objectType": "ClassPath", "name": "Liberator", "class": "Champion", "source": "PZO2101", "id": "a9c18e14-d679-4de5-985f-fe928abbe4c0", "aonId": 3 }
+]

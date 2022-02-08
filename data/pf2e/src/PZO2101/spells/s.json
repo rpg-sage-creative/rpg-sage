@@ -1,0 +1,1742 @@
+[
+	{
+		"aonId": 265,
+		"name": "Sanctified Ground",
+		"description": "Create a 24-hour area of protection against aberrations, celestials, dragons, fiends, or undead.",
+		"area": "30-foot burst centered on you",
+		"cast": "1 minute",
+		"duration": "24 hours",
+		"components": [ "material", "somatic", "verbal" ],
+		"cost": "1 vial of <i>holy water</i>",
+		"details": [
+			"You sanctify the area, sprinkling it with <i>holy water</i> and warding it against your foes. Choose aberrations, celestials, dragons, fiends, monitors, or undead. All creatures in the area gain a +1 status bonus to AC, attack rolls, damage rolls, and saving throws against the chosen creatures."
+		],
+		"level": 3,
+		"objectType": "Spell",
+		"page": 366,
+		"source": "PZO2101",
+		"traditions": [ "divine" ],
+		"traits": [ "Abjuration", "Consecration" ],
+		"focus": false,
+		"id": "c914bc26-4b86-4cf2-9264-f5278d50fcc2"
+	},
+	{
+		"aonId": 266,
+		"name": "Sanctuary",
+		"description": "Protect a creature from being attacked.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You ward a creature with protective energy that deters enemy attacks. Creatures attempting to attack the target must attempt a Will save each time. If the target uses a hostile action, the spell ends.",
+			{
+				"criticalSuccess": [
+					"<i>Sanctuary</i> ends."
+				],
+				"success": [
+					"The creature can attempt its attack and any other attacks against the target this turn."
+				],
+				"failure": [
+					"The creature can't attack the target and wastes the action. It can't attempt further attacks against the target this turn."
+				],
+				"criticalFailure": [
+					"The creature wastes the action and can't attempt to attack the target for the rest of <i>sanctuary</i>'s duration."
+				]
+			}
+		],
+		"duration": "1 minute",
+		"level": 1,
+		"objectType": "Spell",
+		"page": 366,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Abjuration" ],
+		"focus": false,
+		"id": "5bef3869-c095-4111-ba5a-8f3af3e47836"
+	},
+	{
+		"aonId": 267,
+		"name": "Scintillating Pattern",
+		"description": " Cause an array of color that dazzles, confuses, and stuns.",
+		"area": "20-foot burst",
+		"cast": "[A][A]",
+		"components": [ "material", "somatic" ],
+		"details": [
+			"A field of cascading, ever-changing colors manifests in the air. Creatures are dazzled while inside the pattern, as are those within 20 feet of the pattern's area. A creature must attempt a Will save if it is inside the pattern when you cast it, enters the pattern, ends its turn within the pattern, or uses a Seek or Interact action on the pattern. A creature currently affected by the pattern doesn't need to attempt new saves.",
+			{
+				"success": [
+					"The creature is unaffected."
+				],
+				"failure": [
+					"The creature is confused for 1d4 rounds."
+				],
+				"criticalFailure": [
+					"The creature is stunned for 1d4 rounds. After the stunned condition ends, the creature is confused for the remaining duration of the spell."
+				]
+			}
+		],
+		"duration": "sustained up to 1 minute",
+		"level": 8,
+		"objectType": "Spell",
+		"page": 367,
+		"range": "120 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Illusion", "Incapacitation", "Visual" ],
+		"focus": false,
+		"id": "6f3b7162-7faf-4ffd-a6e8-067bee1d68c6"
+	},
+	{
+		"aonId": 268,
+		"name": "Scrying",
+		"description": "Spy on a creature.",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You magically spy on a creature of your choice. <i>Scrying</i> works like <i>clairvoyance</i> (page 324), except that the image you receive is less precise, insuficient for <i>teleport</i> and similar spells. Instead of creating an eye in a set location within 500 feet, you instead create an eye that manifests just above the target. You can choose a target either by name or by touching one of its possessions or a piece of its body. If you haven't met the target in person, <i>scrying</i>'s DC is 2 lower, and if you are unaware of the target's identity (perhaps because you found an unknown creature's fang at a crime scene), the DC is instead 10 lower.",
+			"The effect of <i>scrying</i> depends on the target's Will save.",
+			{
+				"criticalSuccess": [
+					"The spell fails and the target is temporarily immune for 1 week. The target also gains a glimpse of you and learns its rough distance and direction from you."
+				],
+				"success": [
+					"The spell fails and the target is temporarily immune for 1 day."
+				],
+				"failure": [
+					"The spell succeeds."
+				],
+				"criticalFailure": [
+					"The spell succeeds, and the eye follows the target if it moves, traveling up to 60 feet per round."
+				]
+			}
+		],
+		"duration": "sustained up to 10 minutes",
+		"level": 6,
+		"objectType": "Spell",
+		"page": 367,
+		"range": "planetary",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Uncommon", "Divination", "Scrying" ],
+		"focus": false,
+		"id": "34934648-561d-4ecf-9ba6-7ac5dd442955"
+	},
+	{
+		"aonId": 269,
+		"name": "Searing Light",
+		"description": "A ray of burning light deals extra damage to undead and counteracts darkness.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You shoot a blazing ray of light tinged with holy energy. Make a ranged spell attack. The ray deals 5d6 fire damage. If the target is a fiend or undead, you deal an extra 5d6 good damage.",
+			{ "criticalSuccess": [ "The target takes double fire damage, as well as double good damage if a fiend or undead." ], "success": [ "The target takes full damage" ] },
+			"If the light passes through an area of magical darkness or targets a creature affected by magical darkness, <i>searing light</i> attempts to counteract the darkness. If you need to determine whether the light passes through an area of darkness, draw a line between yourself and the spell's target"
+		],
+		"heightened": [
+			{ "change": "The fire damage increases by 2d6, and the good damage against fiends and undead increases by 2d6.", "bump": 1 }
+		],
+		"level": 3,
+		"objectType": "Spell",
+		"page": 367,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine", "primal" ],
+		"traits": [ "Attack", "Evocation", "Fire", "Good", "Light" ],
+		"focus": false,
+		"id": "333407be-5fea-4aa2-a719-25ab4f2cd733"
+	},
+	{
+		"aonId": 270,
+		"name": "Secret Page",
+		"description": "Alter the appearance of a page.",
+		"cast": "1 minute",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You change the target's text to different text entirely. If the text is a spellbook or a scroll, you can change it to show a spell you know of <i>secret page</i>'s level or lower. The replacement spell cannot be cast or used to prepare a spell. You can also transform the text into some other text you have written or have access to. You can specify a password that allows a creature touching the page to change the text back and forth. You must choose the replacement text and the password, if any, when you Cast the Spell."
+		],
+		"duration": "unlimited",
+		"level": 3,
+		"objectType": "Spell",
+		"page": 367,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 page up to 3 square feet in size",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Illusion", "Visual" ],
+		"focus": false,
+		"id": "8e1d0229-1582-495d-a4d1-d5efef3198b0"
+	},
+	{
+		"aonId": 271,
+		"name": "See Invisibility",
+		"description": "See invisible creatures and objects.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You can see invisible creatures and objects. They appear to you as translucent shapes, and they are concealed to you."
+		],
+		"duration": "10 minutes",
+		"heightened": [
+			{ "change": "The spell has a duration of 8 hours.", "level": 5 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 367,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Divination", "Revelation" ],
+		"focus": false,
+		"id": "94fc7580-010f-4888-96e3-c1be98cf82a4"
+	},
+	{
+		"aonId": 272,
+		"name": "Sending",
+		"description": "Send a mental message to a creature anywhere on the planet and get a reply.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You send the creature a mental message of 25 words or fewer, and it can respond immediately with its own message of 25 words or fewer."
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 367,
+		"range": "planetary",
+		"source": "PZO2101",
+		"targets": "1 creature with whom you are familiar",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Divination", "Mental" ],
+		"focus": false,
+		"id": "18951cec-ae0e-4dc7-aebe-7ce6ee628361"
+	},
+	{
+		"aonId": 273,
+		"name": "Shadow Blast",
+		"description": "Shape a cone of shadow to deal damage of a type you choose.",
+		"area": "varies",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You shape the quasi-real substance of the Shadow Plane into a blast. Choose acid, bludgeoning, cold, electricity, fire, force, piercing, slashing, or sonic damage, and choose a 30-foot cone, a 15-foot burst within 120 feet, or a 50-foot line. The blast deals 5d8 damage of the type you chose to each creature in the area."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d8.", "bump": 1 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 367,
+		"range": "varies",
+		"savingThrow": "basic Reflex or Will (target's choice)",
+		"source": "PZO2101",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Evocation", "Shadow" ],
+		"focus": false,
+		"id": "a9ae236c-08dd-4dd2-83b7-e0bbe8655f62"
+	},
+	{
+		"aonId": 274,
+		"name": "Shadow Siphon",
+		"description": "React to lessen the damage from an enemy's spell by making it partially illusion.",
+		"cast": "[R]",
+		"components": [ "verbal" ],
+		"details": [
+			"Exchanging material energy with that of the Shadow Plane, you transform the triggering spell into a partially illusory version of itself. Attempt to counteract the target spell. If the attempt is successful, any creatures that would be damaged by the spell instead take only half as much damage, but the spell otherwise works as normal. Treat <i>shadow siphon</i>'s counteract level as 2 higher for this attempt."
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 368,
+		"range": "60 feet",
+		"source": "PZO2101",
+		"targets": "the triggering spell",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Illusion", "Shadow" ],
+		"trigger": "A spell or magical effect deals damage",
+		"focus": false,
+		"id": "e39421ca-12e4-408f-90d7-c411c79d3a72"
+	},
+	{
+		"aonId": 275,
+		"name": "Shadow Walk",
+		"description": "Travel rapidly via the Shadow Plane.",
+		"cast": "1 minute",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You access the Shadow Plane, using its warped nature to spread your travels. The targets enter the edge of the Shadow Plane where it borders the Material Plane. Targets can't see the Material Plane while on the Shadow Plane (although elements of that plane can sometimes be a hazy reflection of the Material Plane). While on the Shadow Plane, the targets are exposed to potential encounters with that plane's denizens. The shadows on the border between the planes bend space, speeding up your movement with respect to the Material Plane. Every 3 minutes the targets travel along this border, they move as far as they would through the Material Plane in 1 hour. At any point, a target can Dismiss the spell's effects, although this affects only that target. The shadow bending is inexact, so when the spell ends, the targets appear roughly 1 mile from their intended location on the Material Plane (though those who are traveling together and Dismiss the spell at the same point on the Plane of Shadow appear together)."
+		],
+		"duration": "8 hours",
+		"level": 5,
+		"objectType": "Spell",
+		"page": 368,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "you and up to 9 willing creatures touched",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Uncommon", "Conjuration", "Shadow", "Teleportation" ],
+		"focus": false,
+		"id": "7d46b338-7057-465d-a105-16697e1d5ecf"
+	},
+	{
+		"aonId": 276,
+		"name": "Shape Stone",
+		"description": "Reshape a cube of stone.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You shape the stone into a rough shape of your choice. The shaping process is too crude to produce intricate parts, fine details, moving pieces, or the like. Any creatures standing atop the stone when you reshape it must each attempt a Reflex save or Acrobatics check.",
+			{ "success": [ "The creature is unaffected." ], "failure": [ "The creature falls prone atop the stone." ], "criticalFailure": [ "The creature falls off the stone (if applicable) and lands prone." ] }
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 368,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "cube of stone 10 feet across or smaller",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Earth", "Transmutation" ],
+		"focus": false,
+		"id": "ee653b78-4451-46bb-92a7-587ad257fa3f"
+	},
+	{
+		"aonId": 277,
+		"name": "Shape Wood",
+		"description": "Reshape unworked wood as you choose.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You shape the wood into a rough shape of your choice. The shaping power is too crude to produce with intricate parts, fine details, moving pieces, or the like. You cannot use this spell to enhance the value of the wooden object you are shaping."
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 368,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "an unworked piece of wood up to 20 cubic feet in volume",
+		"traditions": [ "primal" ],
+		"traits": [ "Plant", "Transmutation" ],
+		"focus": false,
+		"id": "03f36be5-09ee-4c7a-b1eb-9eb7b0287f56"
+	},
+	{
+		"aonId": 278,
+		"name": "Shapechange",
+		"description": "Transform into a form of your choice repeatedly.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Harnessing your mastery of transformative magic, you take on a mutable form. You transform yourself into any form you could choose with a polymorph spell in your spell repertoire or that you could prepare of 8th level or lower (including any 8th-level or lower heightened versions of spells you know). You choose the type of creature as you Cast the Spell rather than when you prepare it. You can change your form to any other form you could choose with this spell by using a single action, which has the concentrate trait. You can Dismiss this spell."
+		],
+		"duration": "1 minute",
+		"level": 9,
+		"objectType": "Spell",
+		"page": 368,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Polymorph", "Transmutation" ],
+		"focus": false,
+		"id": "1092692d-e65e-44e0-88d4-0d5115352296"
+	},
+	{
+		"aonId": 279,
+		"name": "Shatter",
+		"description": " Shatter an object with a high-frequency sonic attack.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A high-frequency sonic attack shatters a nearby object. You deal 2d10 sonic damage to the object, ignoring the object's Hardness if it is 4 or lower."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d10, and the Hardness the spell ignores increases by 2.", "bump": 1 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 368,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 unattended object",
+		"traditions": [ "occult", "primal" ],
+		"traits": [ "Evocation", "Sonic" ],
+		"focus": false,
+		"id": "93d09743-cb59-4931-a896-8c5c23ff97d3"
+	},
+	{
+		"aonId": 280,
+		"name": "Shield",
+		"description": "A shield of magical force blocks attacks and magic missiles.",
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"details": [
+			"You raise a magical shield of force. This counts as using the Raise a Shield action, giving you a +1 circumstance bonus to AC until the start of your next turn, but it doesn't require a hand to use.",
+			"While the spell is in effect, you can use the Shield Block reaction with your magic shield. The shield has Hardness 5. After you use Shield Block, the spell ends and you can't cast it again for 10 minutes. Unlike a normal Shield Block, you can use the spell's reaction against the <i>magic missile</i> spell.",
+			"Heightening the spell increases the shield's Hardness."
+		],
+		"duration": "until the start of your next turn",
+		"heightened": [
+			{ "change": "The shield has Hardness 10.", "level": 3 },
+			{ "change": "The shield has Hardness 15.", "level": 5 },
+			{ "change": "The shield has Hardness 20.", "level": 7 },
+			{ "change": "The shield has Hardness 25.", "level": 9 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 369,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Abjuration", "Cantrip", "Force" ],
+		"focus": false,
+		"id": "55be44c2-9b02-4760-9bac-e3b242eb540d"
+	},
+	{
+		"aonId": 281,
+		"name": "Shield Other",
+		"description": "Absorb half the damage an ally would take.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You forge a temporary link between the target's life essence and your own. The target takes half damage from all effects that deal Hit Point damage, and you take the remainder of the damage. When you take damage through this link, you don't apply any resistances, weaknesses, or other abilities you have to that damage; you simply take that amount of damage. The spell ends if the target is ever more than 30 feet away from you. If either you or the target is reduced to 0 Hit Points, any damage from this spell is resolved and then the spell ends."
+		],
+		"duration": "10 minutes",
+		"level": 2,
+		"objectType": "Spell",
+		"page": 369,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine" ],
+		"traits": [ "Necromancy" ],
+		"focus": false,
+		"id": "5ce60a8e-5da7-4c3b-bf22-f790a7c68ea8"
+	},
+	{
+		"aonId": 282,
+		"name": "Shillelagh",
+		"description": "Make a club or staf temporarily magical, and deal more damage to unnatural creatures.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"The target grows vines and leaves, brimming with primal energy. The target becomes a <i>+1 striking</i> weapon while in your hands, gaining a +1 item bonus to attack rolls and increasing the number of weapon damage dice to two. Additionally, as long as you are on your home plane, attacks you make with the target against aberrations, extraplanar creatures, and undead increase the number of weapon damage dice to three."
+		],
+		"duration": "1 minute",
+		"level": 1,
+		"objectType": "Spell",
+		"page": 369,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 non-magical club or staff you hold",
+		"traditions": [ "primal" ],
+		"traits": [ "Plant", "Transmutation" ],
+		"focus": false,
+		"id": "70696a86-9d86-4ad1-8120-e00b2c9bf2fc"
+	},
+	{
+		"aonId": 283,
+		"name": "Shocking Grasp",
+		"description": "Zap a creature with electricity.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You shroud your hands in a crackling field of lightning. Make a melee spell attack roll. On a hit, the target takes 2d12 electricity damage. If the target is wearing metal armor or is made of metal, you gain a +1 circumstance bonus to your attack roll with <i>shocking grasp</i>, and the target also takes 1d4 persistent electricity damage on a hit. On a critical hit, double the initial damage, but not the persistent damage."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d12, and the persistent electricity damage increases by 1.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 369,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Attack", "Electricity", "Evocation" ],
+		"focus": false,
+		"id": "fc499cea-65d6-41f4-bd23-6d2b015b4c21"
+	},
+	{
+		"aonId": 284,
+		"name": "Shrink",
+		"description": "Reduce a willing creature to Tiny size.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You warp space to make a creature smaller. The target shrinks to become Tiny in size. Its equipment shrinks with it but returns to its original size if removed. The creature's reach changes to 0 feet. This spell has no effect on a Tiny creature."
+		],
+		"duration": "5 minutes",
+		"heightened": [
+			{ "change": "The spell can target up to 10 creatures.", "level": 6 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 369,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 willing creature",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Polymorph", "Transmutation" ],
+		"focus": false,
+		"id": "019053d0-7151-46b7-823b-f1af99f57e28"
+	},
+	{
+		"aonId": 285,
+		"name": "Shrink Item",
+		"description": "Reduce an object to the size of a coin.",
+		"cast": "10 minutes",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You shrink the target to roughly the size of a coin. This reduces it to negligible Bulk. You can Dismiss the spell, and the spell ends if you toss the object onto a solid surface. The object can't be used to attack or cause damage during the process of it returning to normal size. If there isn't room for the object to return to normal size when the spell ends, the spell's duration continues until the object is in a location large enough to accommodate its normal size."
+		],
+		"duration": "1 day",
+		"level": 3,
+		"objectType": "Spell",
+		"page": 369,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 non-magical object up to 20 cubic feet in volume and up to 80 Bulk",
+		"traditions": [ "arcane" ],
+		"traits": [ "Polymorph", "Transmutation" ],
+		"focus": false,
+		"id": "ddede6e3-300f-4aea-b8fd-2348329df302"
+	},
+	{
+		"aonId": 286,
+		"name": "Sigil",
+		"description": "Leave a magical mark.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You harmlessly place your unique magical sigil, which is about 1 square inch in size, on the targeted creature or object. The mark can be visible or invisible, and you can change it from one state to another by using an Interact action to touch the target. The mark can be scrubbed or scraped off with 5 minutes of work. If it's on a creature, it fades naturally over the course of a week. The time before the mark fades increases depending on your heightened level."
+		],
+		"duration": "unlimited (see below)",
+		"heightened": [
+			{ "change": "The sigil instead fades after 1 month.", "level": 3 },
+			{ "change": "The sigil instead fades after 1 year.", "level": 5 },
+			{ "change": "The sigil never fades.", "level": 7 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 369,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature or object",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Cantrip", "Transmutation" ],
+		"focus": false,
+		"id": "b5ca88bf-573b-4d95-aca9-ce0ee608537a"
+	},
+	{
+		"aonId": 287,
+		"name": "Silence",
+		"description": "Mute all sound from a creature.",
+		"cast": "[A][A]",
+		"components": [ "material", "somatic" ],
+		"details": [
+			"The target makes no sound, preventing creatures from noticing it using hearing or other senses alone. The target can't use sonic attacks, nor can it use actions with the auditory trait. This prevents it from casting spells that include verbal components."
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{
+				"change": "The spell effect emanates from the touched creature, silencing all sound in or passing through a 10- foot radius and preventing any auditory and sonic effects in the affected area. While within the radius, creatures are subject to the same effects as the target. Depending upon the position of the effect, a creature might notice the lack of sound reaching it (blocking off the noise coming from a party, for example).",
+				"level": 4
+			}
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 369,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 willing creature",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Illusion" ],
+		"focus": false,
+		"id": "db46c12f-8c12-44f6-a052-14396e2416d8"
+	},
+	{
+		"aonId": 288,
+		"name": "Sleep",
+		"description": "Cause creatures in a small area to fall asleep.",
+		"area": "5-foot burst",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Each creature in the area becomes drowsy and might fall asleep. A creature that falls unconscious from this spell doesn't fall prone or release what it's holding. This spell doesn't prevent creatures from waking up due to a successful Perception check, limiting its utility in combat.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature takes a -1 status penalty to Perception checks for 1 round."
+				],
+				"failure": [
+					"The creature falls unconscious. If it's still unconscious after 1 minute, it wakes up automatically."
+				],
+				"criticalFailure": [
+					"The creature falls unconscious. If it's still unconscious after 1 hour, it wakes up automatically."
+				]
+			}
+		],
+		"heightened": [
+			{
+				"change": "The creatures fall unconscious for 1 round on a failure or 1 minute on a critical failure. They fall prone and release what they're holding, and they can't attempt Perception checks to wake up. When the duration ends, the creature is sleeping normally instead of automatically waking up.",
+				"level": 4
+			}
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 370,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Enchantment", "Incapacitation", "Mental", "Sleep" ],
+		"focus": false,
+		"id": "a3546aca-f552-481f-b6ef-5a62e1468140"
+	},
+	{
+		"aonId": 289,
+		"name": "Slow",
+		"description": "Make a creature slower, reducing its actions.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You dilate the flow of time around the target, slowing its actions.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target is slowed 1 for 1 round."
+				],
+				"failure": [
+					"The target is slowed 1 for 1 minute."
+				],
+				"criticalFailure": [
+					"The target is slowed 2 for 1 minute."
+				]
+			}
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{ "change": "You can target up to 10 creatures.", "level": 6 }
+		],
+		"level": 3,
+		"objectType": "Spell",
+		"page": 370,
+		"range": "30 feet",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult", "primal" ],
+		"traits": [ "Transmutation" ],
+		"focus": false,
+		"id": "620ae1d2-5af0-40fe-9775-4138596a09e1"
+	},
+	{
+		"aonId": 290,
+		"name": "Solid Fog",
+		"description": "Conjure heavy fog that obscures sight and is hard to move through.",
+		"area": "20-foot burst",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure a bank of fog so thick it impedes movement as well as sight. This functions as <i>obscuring mist</i> (page 355), except that the area is also difficult terrain. You can Dismiss the spell."
+		],
+		"duration": "1 minute",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 370,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Conjuration", "Water" ],
+		"focus": false,
+		"id": "961ede92-8f07-43f0-ad18-d5d5718c8cdd"
+	},
+	{
+		"aonId": 291,
+		"name": "Soothe",
+		"description": "Heal the target and bolster them against mental attacks.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You grace the target's mind, boosting its mental defenses and healing its wounds. The target regains 1d10+4 Hit Points when you Cast the Spell and gains a +2 status bonus to saves against mental effects for the duration."
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{ "change": "The amount of healing increases by 1d10+4.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 370,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 willing living creature",
+		"traditions": [ "occult" ],
+		"traits": [ "Emotion", "Enchantment", "Healing", "Mental" ],
+		"focus": false,
+		"id": "43b0b1fd-06b3-47b8-b22e-36d65ac8ea69"
+	},
+	{
+		"aonId": 292,
+		"name": "Sound Burst",
+		"description": "Damage and deafen creatures with a powerful din.",
+		"area": "10-foot burst",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A cacophonous noise blasts out, dealing 2d10 sonic damage. Each creature must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature takes half damage."
+				],
+				"failure": [
+					"The creature takes full damage and is deafened for 1 round."
+				],
+				"criticalFailure": [
+					"The creature takes double damage, is deafened for 1 minute, and is stunned 1."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d10.", "bump": 1 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 370,
+		"range": "30 feet",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Evocation", "Sonic" ],
+		"focus": false,
+		"id": "6ceef508-e636-49a9-950d-71e4aa0346e0"
+	},
+	{
+		"aonId": 293,
+		"name": "Speak with Animals",
+		"description": "Communicate with animals.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You can ask questions of, receive answers from, and use the Diplomacy skill with animals. The spell doesn't make them more friendly than normal. Cunning animals are likely to be terse and evasive, while less intelligent ones often make inane comments."
+		],
+		"duration": "10 minutes",
+		"level": 2,
+		"objectType": "Spell",
+		"page": 370,
+		"source": "PZO2101",
+		"traditions": [ "primal" ],
+		"traits": [ "Divination" ],
+		"focus": false,
+		"id": "9bdea0e9-c6f8-4693-8e29-db6a6cd76785"
+	},
+	{
+		"aonId": 294,
+		"name": "Speak with Plants",
+		"description": "Communicate with plants and plant creatures.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You can ask questions of and receive answers from plants, but the spell doesn't make them more friendly or intelligent than normal. Most normal plants have a distinctive view of the world around them, so they don't recognize details about creatures or know anything about the world beyond their immediate vicinity. Cunning plant monsters are likely to be terse and evasive, while less intelligent ones often make inane comments."
+		],
+		"duration": "10 minutes",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 370,
+		"source": "PZO2101",
+		"traditions": [ "primal" ],
+		"traits": [ "Divination", "Plant" ],
+		"focus": false,
+		"id": "89174e91-0535-4372-8bb4-b59cb792b70b"
+	},
+	{
+		"aonId": 295,
+		"name": "Spectral Hand",
+		"description": "Create a semicorporeal hand that touches creatures to target them with your spells.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You create a semicorporeal hand out of your essence that delivers touch spells for you. Whenever you Cast a Spell with a range of touch, you can have the hand crawl to a target within range along the ground, touch it, and then crawl back to you. When making a melee spell attack with the hand, you use your normal bonuses. The hand can move as far as it needs to within range. The hand has your AC and saves, but any damage to the hand destroys it and causes you to take 1d6 damage."
+		],
+		"duration": "1 minute",
+		"level": 2,
+		"objectType": "Spell",
+		"page": 370,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Necromancy" ],
+		"focus": false,
+		"id": "52797c4e-d5f4-4b8b-9fd7-d34eddbff808"
+	},
+	{
+		"aonId": 296,
+		"name": "Spell Immunity",
+		"description": "Name a spell to negate its effects on you.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You ward a creature against the effects of a single spell. Choose a spell and name it aloud as part of the verbal component. <i>Spell immunity</i> attempts to counteract that spell whenever <i>spell immunity</i>'s target is the target of the named spell or in that spell's area. Successfully counteracting a spell that targets an area or multiple targets with <i>spell immunity</i> negates the effects only for the target affected by <i>spell immunity</i>."
+		],
+		"duration": "24 hours",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 371,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Abjuration" ],
+		"focus": false,
+		"id": "b1abdb3c-8634-47dd-81ce-ce51d0b1ff54"
+	},
+	{
+		"aonId": 297,
+		"name": "Spell Turning",
+		"description": "Reflect spells back at their caster.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"This abjuration reflects spells cast at you back at their caster. When a spell targets you, you can spend a reaction to attempt to reflect it. This uses the rules for counteracting the spell, but if the spell is successfully counteracted, the effect is turned back on the caster. Whether or not the counteract attempt is successful, <i>spell turning</i> then ends. <i>Spell turning</i> can't affect spells that aren't targeted (such as area spells).",
+			"If <i>spell turning</i> reflects a spell back at a caster who is also under the effect of <i>spell turning</i>, their spell turning can attempt to reflect their own spell back at you again; if they do so, their counteract attempt automatically succeeds."
+		],
+		"duration": "1 hour",
+		"level": 7,
+		"objectType": "Spell",
+		"page": 371,
+		"source": "PZO2101",
+		"traditions": [ "arcane" ],
+		"traits": [ "Uncommon", "Abjuration" ],
+		"focus": false,
+		"id": "c46df47c-bff3-4251-be67-6a947c6843e8"
+	},
+	{
+		"aonId": 298,
+		"name": "Spellwrack",
+		"description": "Curse a creature to be harmed when a spell is cast on it and lower the duration of its spells.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You cause any spells cast on the target to spill out their energy in harmful surges. The target must attempt a Will save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"Whenever the target becomes affected by a spell with a duration, the target takes 2d12 persistent force damage. Each time it takes persistent force damage from <i>spellwrack</i>, it reduces the remaining duration of spells affecting it by 1 round. Only a successful Arcana check against your spell DC can help the target recover from the persistent damage; the curse and the persistent damage end after 1 minute."
+				],
+				"failure": [
+					"As success, but the curse and persistent damage do not end on their own."
+				],
+				"criticalFailure": [
+					"As failure, but the persistent force damage is 4d12."
+				]
+			}
+		],
+		"level": 6,
+		"objectType": "Spell",
+		"page": 371,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Abjuration", "Curse", "Force" ],
+		"focus": false,
+		"id": "d02a7e6b-8556-4c0e-afb0-fa09f4153a75"
+	},
+	{
+		"aonId": 299,
+		"name": "Spider Climb",
+		"description": "Give a creature a climb Speed.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Tiny clinging hairs sprout across the creature's hands and feet, offering purchase on nearly any surface. The target gains a climb Speed equal to its Speed."
+		],
+		"duration": "10 minutes",
+		"heightened": [
+			{ "change": "The duration increases to 1 hour.", "level": 5 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 371,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Transmutation" ],
+		"focus": false,
+		"id": "5b6a8afc-3d2a-46c3-9e83-f2c1f73f3250"
+	},
+	{
+		"aonId": 300,
+		"name": "Spider Sting",
+		"focus": false,
+		"affliction": {
+			"description": "",
+			"level": 1,
+			"maximumDuration": "4 rounds",
+			"name": "Spider Venom",
+			"stages": [
+				{ "stage": 1, "description": "1d4 poison damage and enfeebled 1", "duration": "1 round" },
+				{ "stage": 2, "description": "1d4 poison damage and enfeebled 2", "duration": "1 round" }
+			],
+			"type": "poison"
+		},
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You magically duplicate a spider's venomous sting. You deal 1d4 piercing damage to the touched creature and afflict it with spider venom. The target must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes 1d4 poison damage."
+				],
+				"failure": [
+					"The target is afflicted with spider venom at stage 1."
+				],
+				"criticalFailure": [
+					"The target is afflicted with spider venom at stage 2."
+				]
+			}
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 371,
+		"range": "touch",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Necromancy", "Poison" ],
+		"id": "33df6928-63ff-4d97-b088-e6c8f239a803"
+	},
+	{
+		"aonId": 301,
+		"name": "Spirit Blast",
+		"description": "Damage a creature's spiritual essence.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You concentrate ethereal energy and attack a creature's spirit, dealing 16d6 force damage. Because <i>spirit blast</i> affects the creature's spirit, it can damage a target projecting its consciousness (such as via <i>project image</i>) or possessing another creature even if the target's body is elsewhere. The possessed creature isn't harmed by the blast. The blast doesn't harm creatures that have no spirit, such as constructs."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 2d6.", "bump": 1 }
+		],
+		"level": 6,
+		"objectType": "Spell",
+		"page": 371,
+		"range": "30 feet",
+		"savingThrow": "basic Fortitude",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Force", "Necromancy" ],
+		"focus": false,
+		"id": "b02c69d3-8cb2-4e0e-bd3b-7e0a4970fdd6"
+	},
+	{
+		"aonId": 302,
+		"name": "Spirit Link",
+		"description": " Continually transfer your health to someone else.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You form a spiritual link with another creature, allowing you to take in its pain. When you Cast this Spell and at the start of each of your turns, if the target is below maximum Hit Points, it regains 2 Hit Points (or the difference between its current and maximum Hit Points, if that's lower). You lose as many Hit Points as the target regained.",
+			"This is a spiritual transfer, so no effects apply that would increase the Hit Points the target regains or decrease the Hit Points you lose. This transfer also ignores any temporary Hit Points you or the target have. Since this effect doesn't involve positive or negative energy, <i>spirit link</i> works even if you or the target is undead. While the duration persists, you gain no benefit from regeneration or fast healing. You can Dismiss this spell, and if you're ever at 0 Hit Points, <i>spirit link</i> ends automatically."
+		],
+		"duration": "10 minutes",
+		"heightened": [
+			{ "change": "The number of Hit Points transferred each time increases by 2.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 371,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 willing creature",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Healing", "Necromancy" ],
+		"focus": false,
+		"id": "0a1578a2-c7d7-4446-8732-4c58fa2fbac5"
+	},
+	{
+		"aonId": 303,
+		"name": "Spirit Song",
+		"description": "Sing an eldritch song that damages any creature that has a spirit.",
+		"area": "60-foot cone",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Your eldritch song sends pulsing waves of ethereal energy to attack creatures' spirits in the area, dealing 18d6 force damage. Because <i>spirit song</i> affects creatures' spirits, it can damage a target projecting its consciousness (such as via <i>project image</i>) or possessing another creature even if the target's body is elsewhere. The vibrating waves of spiritual song penetrate into, but not through, solid barriers, damaging incorporeal creatures hiding in solid objects in the area but not passing onward to damage creatures in other rooms. Possessed creatures aren't harmed by the song. The song doesn't harm creatures that have no spirit, such as constructs."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 2d6.", "bump": 1 }
+		],
+		"level": 8,
+		"objectType": "Spell",
+		"page": 372,
+		"savingThrow": "basic Fortitude",
+		"source": "PZO2101",
+		"traditions": [ "occult" ],
+		"traits": [ "Force", "Necromancy" ],
+		"focus": false,
+		"id": "466fe02d-95e7-4842-8c8d-bfcccee43e18"
+	},
+	{
+		"aonId": 304,
+		"name": "Spiritual Epidemic",
+		"description": "Weaken a target with a communicable curse.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You curse the target, sapping its spirit and leaving a contagious trap in its essence. The target must attempt a Will save. Any creature that casts a divine or occult spell on the target while it's affected is targeted by <i>spiritual epidemic</i> and must also attempt a Will save. The curse continues to spread in this way.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target is enfeebled 2 and stupefied 2 for 1 round."
+				],
+				"failure": [
+					"The target is enfeebled 2 and stupefied 2 for 1 minute and enfeebled 1 and stupefied 1 permanently."
+				],
+				"criticalFailure": [
+					"The target is enfeebled 3 and stupefied 3 for 1 minute and enfeebled 2 and stupefied 2 permanently."
+				]
+			}
+		],
+		"duration": "varies",
+		"level": 8,
+		"objectType": "Spell",
+		"page": 372,
+		"range": "120 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Curse", "Necromancy" ],
+		"focus": false,
+		"id": "5731fc05-8554-4733-a21e-b9849ef7ecf4"
+	},
+	{
+		"aonId": 305,
+		"name": "Spiritual Guardian",
+		"description": "Create a magical guardian to attack at your command and take damage for your allies.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A Medium guardian made of magical force appears and attacks foes you designate within range. The spiritual guardian is translucent and appears to be holding your deity's favored weapon.",
+			"When you Cast the Spell, the spiritual guardian appears in an unoccupied space next to a foe of your choice within range and makes a Strike against it. Each time you Sustain the Spell, you can move the spiritual guardian to an unoccupied space next to a target within range (if necessary) and make a Strike with it. The guardian uses and contributes to your multiple attack penalty. Alternatively, when you Sustain the Spell, you can have the guardian move adjacent to an ally and protect that ally. If you do, each time the ally would take damage, the guardian takes the first 10 damage instead of your ally. It continues to do so until you move the guardian to attack an enemy or defend a different ally, or until the guardian is destroyed (it has 50 Hit Points and can't recover Hit Points by any means). The guardian can't usually take damage except when protecting an ally, though <i>disintegrate</i> automatically destroys it if it hits the spiritual guardian's AC of 25.",
+			"The guardian's Strikes are melee spell attacks. Regardless of the appearance of the guardian's weapon, the guardian deals force damage equal to 2d8 plus your spellcasting ability modifier, but you can deal damage of the type normally dealt by the weapon it holds instead of force damage. No other traits or statistics of the weapon apply, and even a ranged weapon attacks adjacent creatures only. Despite making a spell attack, the spiritual guardian's weapon is a weapon for the purposes of triggers, resistances, and so forth.",
+			"The guardian takes up space and allies can use it when flanking, but it doesn't have any other attributes a creature would normally have aside from Hit Points, and creatures can move through its space without hindrance. The guardian can't make any attack other than its Strike, and feats or spells that affect weapons or enhance allies do not apply to the guardian."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightened": [
+			{ "change": "The guardian's damage increases by 1d8, and its Hit Points increase by 20.", "bump": 2 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 373,
+		"range": "120 feet",
+		"requirements": "You have a deity.",
+		"source": "PZO2101",
+		"traditions": [ "divine" ],
+		"traits": [ "Abjuration", "Attack", "Force" ],
+		"focus": false,
+		"id": "287a90d0-279b-4f96-98a9-15d7a2ba3541"
+	},
+	{
+		"aonId": 306,
+		"name": "Spiritual Weapon",
+		"description": "Materialize a deific weapon of force that appears and attacks repeatedly.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A weapon made of pure magical force materializes and attacks foes you designate within range. This weapon has a ghostly appearance and manifests as your deity's favored weapon.",
+			"When you cast the spell, the weapon appears next to a foe you choose within range and makes a Strike against it. Each time you Sustain the Spell, you can move the weapon to a new target within range (if needed) and Strike with it. The spiritual weapon uses and contributes to your multiple attack penalty.",
+			"The weapon's Strikes are melee spell attacks. Regardless of its appearance, the weapon deals force damage equal to 1d8 plus your spellcasting ability modifier. You can deal damage of the type normally dealt by the weapon instead of force damage (or any of the available damage types for a versatile weapon). No other statistics or traits of the weapon apply, and even a ranged weapon attacks adjacent creatures only. Despite making a spell attack, the spiritual weapon is a weapon for purposes of triggers, resistances, and so forth.",
+			"The weapon doesn't take up space, grant flanking, or have any other attributes a creature would. The weapon can't make any attack other than its Strike, and feats or spells that affect weapons do not apply to it."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightened": [
+			{ "change": "The weapon's damage increases by 1d8.", "bump": 2 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 373,
+		"range": "120 feet",
+		"requirements": "You have a deity.",
+		"source": "PZO2101",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Attack", "Evocation", "Force" ],
+		"focus": false,
+		"id": "2ba25922-2810-4065-9dc4-8eb5db94a29e"
+	},
+	{
+		"aonId": 307,
+		"name": "Stabilize",
+		"description": "Stabilize a dying creature.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Positive energy shuts death's door. The target loses the dying condition, though it remains unconscious at 0 Hit Points."
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 373,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 dying creature",
+		"traditions": [ "divine", "primal" ],
+		"traits": [ "Cantrip", "Healing", "Necromancy", "Positive" ],
+		"focus": false,
+		"id": "c312d8b8-2b1a-46c3-ae0e-9817db69be6d"
+	},
+	{
+		"aonId": 308,
+		"name": "Status",
+		"description": "Keep track of a willing creature's location and well-being.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"As long as you and the target are on the same plane of existence and both alive, you remain aware of its present state. You know the target's direction from you, distance from you, and any conditions affecting it."
+		],
+		"duration": "1 day",
+		"heightened": [
+			{ "change": "The spell's range increases to 30 feet, and you can target up to 10 creatures.", "level": 4 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 373,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 willing living creature",
+		"traditions": [ "divine", "occult", "primal" ],
+		"traits": [ "Detection", "Divination" ],
+		"focus": false,
+		"id": "decf7666-f435-4cc9-88de-37fc483208a9"
+	},
+	{
+		"aonId": 309,
+		"name": "Stinking Cloud",
+		"description": "Form a cloud that sickens creatures.",
+		"area": "20-foot burst",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You create a cloud of putrid mist in the area. The cloud functions as <i>obscuring mist</i> (page 355) except it sickens creatures that end their turns within the cloud. (The concealed condition is not a poison effect.)",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature is sickened 1."
+				],
+				"failure": [
+					"The creature is sickened 1 and slowed 1 while in the cloud."
+				],
+				"criticalFailure": [
+					"The creature is sickened 2 and slowed 1 until it leaves the cloud."
+				]
+			}
+		],
+		"duration": "1 minute",
+		"level": 3,
+		"objectType": "Spell",
+		"page": 373,
+		"range": "120 feet",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Conjuration", "Poison" ],
+		"focus": false,
+		"id": "84480397-9cd8-482d-a15a-86e1946097ee"
+	},
+	{
+		"aonId": 310,
+		"name": "Stone Tell",
+		"description": "Speak to spirits within natural stone.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You can ask questions of and receive answers from natural or worked stone. While stone is not intelligent, you speak with the natural spirits of the stone, which have a personality colored by the type of stone, as well as by the type of structure the stone is part of, for worked stone. A stone's perspective, perception, and knowledge give it a worldview different enough from a human's that it doesn't consider the same details important. Stones can mostly answer questions about creatures that touched them in the past and what is concealed beneath or behind them."
+		],
+		"duration": "10 minutes",
+		"level": 6,
+		"objectType": "Spell",
+		"page": 374,
+		"source": "PZO2101",
+		"traditions": [ "divine", "primal" ],
+		"traits": [ "Uncommon", "Earth", "Evocation" ],
+		"focus": false,
+		"id": "8d5dcc82-5a98-4170-befa-f22d4bc1b248"
+	},
+	{
+		"aonId": 311,
+		"name": "Stone to Flesh",
+		"description": "Turn a creature turned to stone back to flesh.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Manipulating the fundamental particles of matter, you convert stone into flesh and blood. You restore a petrified creature to its normal state or transform a stone object into a mass of inert flesh (without stone's Hardness) in roughly the same shape."
+		],
+		"level": 6,
+		"objectType": "Spell",
+		"page": 374,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "petrified creature or human-size stone object",
+		"traditions": [ "divine", "primal" ],
+		"traits": [ "Earth", "Transmutation" ],
+		"focus": false,
+		"id": "48f2f905-cf2d-4a56-89a9-ba88abac496b"
+	},
+	{
+		"aonId": 312,
+		"name": "Stoneskin",
+		"description": "Harden a creature's skin into durable stone.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"The target's skin hardens like stone. It gains resistance 5 to physical damage, except adamantine. Each time the target is hit by a bludgeoning, piercing, or slashing attack, stoneskin's duration decreases by 1 minute."
+		],
+		"duration": "20 minutes",
+		"heightened": [
+			{ "change": "The resistance increases to 10.", "level": 6 },
+			{ "change": "The resistance increases to 15.", "level": 8 },
+			{ "change": "The resistance increases to 20.", "level": 10 }
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 374,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Abjuration", "Earth" ],
+		"focus": false,
+		"id": "59f20359-468a-414a-b15f-de2202f1fda2"
+	},
+	{
+		"aonId": 313,
+		"name": "Storm of Vengeance",
+		"description": "Create a massive, dangerous storm.",
+		"area": "360-foot burst",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"A massive storm cloud forms in the air in a 360-foot burst. Beneath it, rain begins to fall, and gales impose a -4 circumstance penalty to physical ranged attacks and weapon ranged attacks, and the air in the area becomes greater difficult terrain for flying creatures. When you Cast this Spell and the first time each round you Sustain the Spell, you can choose one of the following storm effects. You can't choose the same effect twice in a row. <ul><li><b>Acid Rain</b> Each creature in the storm takes 4d8 acid damage with no saving throw.</li><li><b>Hail</b> The storm deals 4d10 bludgeoning damage to creatures beneath it (basic Fortitude save).</li><li><b>Lightning</b> Up to 10 bolts of lightning strike down, targeting creatures of your choice in the storm. No more than one bolt can target any one creature. Each bolt deals 7d6 electricity damage (basic Reflex save).</li><li><b>Rain and Wind</b> Heavy rain and whipping wind reduce visibility and mobility, making the area under the storm cloud difficult terrain and making everything seen within or through the area concealed.</li><li><b>Thunderclap</b> Each creature in the storm must succeed at a Fortitude save or be deafened for 10 minutes. A creature that succeeds is temporarily immune to thunderclaps from <i>storm of vengeance</i> for 1 hour.</li></ul>"
+		],
+		"duration": "sustained up to 1 minute",
+		"heightened": [
+			{ "change": "The range increases to 2,200 feet, and the cloud is a 1,000-foot burst.", "level": 10 }
+		],
+		"level": 9,
+		"objectType": "Spell",
+		"page": 374,
+		"range": "800 feet",
+		"source": "PZO2101",
+		"traditions": [ "primal" ],
+		"traits": [ "Air", "Electricity", "Evocation" ],
+		"focus": false,
+		"id": "ea4200fd-dbde-4c64-bbd5-305c90a3bf18"
+	},
+	{
+		"aonId": 314,
+		"name": "Subconscious Suggestion",
+		"description": "Plant a mental suggestion that must be followed when a trigger occurs.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You implant a subconscious suggestion deep within the target's mind for them to follow when a trigger you specify occurs (as described on page 305). You suggest a course of action to the target. Your directive must be phrased in such a way as to seem like a logical course of action to the target, and it can't be self-destructive or obviously against the target's self-interest. The target must attempt a Will save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected and knows you tried to control it."
+				],
+				"success": [
+					"The target is unaffected and thinks you were talking to them normally, not casting a spell on them."
+				],
+				"failure": [
+					"The suggestion remains in the target's subconscious until the next time you prepare. If the trigger occurs before then, the target immediately follows your suggestion. The effect has a duration of 1 minute, or until the target has completed a finite suggestion or the suggestion becomes self-destructive or has other obvious negative effects."
+				],
+				"criticalFailure": [
+					"As failure, but the duration is 1 hour."
+				]
+			}
+		],
+		"duration": "varies",
+		"heightened": [
+			{ "change": "You can target up to 10 creatures.", "level": 9 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 374,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Enchantment", "Incapacitation", "Linguistic", "Mental" ],
+		"focus": false,
+		"id": "84a21f6d-7780-4ef4-9239-aeb9f016474c"
+	},
+	{
+		"aonId": 315,
+		"name": "Suggestion",
+		"description": "Suggest a course of action a creature must follow.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Your honeyed words are difficult for creatures to resist. You suggest a course of action to the target, which must be phrased in such a way as to seem like a logical course of action to the target and can't be self-destructive or obviously against the target's self-interest. The target must attempt a Will save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected and knows you tried to control it."
+				],
+				"success": [
+					"The target is unaffected and thinks you were talking to them normally, not casting a spell on them."
+				],
+				"failure": [
+					"The target immediately follows your suggestion. The spell has a duration of 1 minute, or until the target has completed a finite suggestion or the suggestion becomes self-destructive or has other obvious negative effects."
+				],
+				"criticalFailure": [
+					"As failure, but the base duration is 1 hour."
+				]
+			}
+		],
+		"duration": "varies",
+		"heightened": [
+			{ "change": "You can target up to 10 creatures.", "level": 8 }
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 374,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Enchantment", "Incapacitation", "Linguistic", "Mental" ],
+		"focus": false,
+		"id": "4bc9c849-088d-4013-bea2-c42eb7753a63"
+	},
+	{
+		"aonId": 316,
+		"name": "Summon Animal",
+		"description": "Conjure an animal to fight on your behalf.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure an animal to fight for you. You summon a common creature that has the animal trait and whose level is -1. Heightening the spell increases the maximum level of creature you can summon."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightened": [
+			{ "change": "Level 1.", "level": 2 },
+			{ "change": "Level 2.", "level": 3 },
+			{ "change": "Level 3.", "level": 4 },
+			{ "change": "Level 5.", "level": 5 },
+			{ "change": "Level 7.", "level": 6 },
+			{ "change": "Level 9.", "level": 7 },
+			{ "change": "Level 11.", "level": 8 },
+			{ "change": "Level 13.", "level": 9 },
+			{ "change": "Level 15.", "level": 10 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 375,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "c8763167-6193-40f8-8651-30fb9f6fd7a1"
+	},
+	{
+		"aonId": 317,
+		"name": "Summon Celestial",
+		"description": "Conjure a celestial to fight on your behalf.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure a celestial to fight on your behalf. This works like <i>summon animal</i> (page 375), except you summon a common creature that has the celestial trait and whose level is 5 or lower. You can't summon a creature unless its alignment is one of your deity's preferred alignments (or, if you don't have a deity, is within one step of your alignment). At the GM's discretion, some deities might restrict specific types of celestials, even if their alignments match."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightenedAs": "summon animal",
+		"heightened": [
+			{ "change": "Level 7.", "level": 6 },
+			{ "change": "Level 9.", "level": 7 },
+			{ "change": "Level 11.", "level": 8 },
+			{ "change": "Level 13.", "level": 9 },
+			{ "change": "Level 15.", "level": 10 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 375,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"traditions": [ "divine" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "04f2a0e3-ff4b-4a51-9bf7-7b14248e0f3a"
+	},
+	{
+		"aonId": 318,
+		"name": "Summon Construct",
+		"description": "Conjure a construct to fight on your behalf.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure a construct to fight for you. This works like <i>summon animal</i> (page 375), except you summon a common creature that has the construct trait and whose level is -1."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightenedAs": "summon animal",
+		"heightened": [
+			{ "change": "Level 1.", "level": 2 },
+			{ "change": "Level 2.", "level": 3 },
+			{ "change": "Level 3.", "level": 4 },
+			{ "change": "Level 5.", "level": 5 },
+			{ "change": "Level 7.", "level": 6 },
+			{ "change": "Level 9.", "level": 7 },
+			{ "change": "Level 11.", "level": 8 },
+			{ "change": "Level 13.", "level": 9 },
+			{ "change": "Level 15.", "level": 10 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 375,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "740d57bd-b24a-41f1-b57d-da7c0eae11b0"
+	},
+	{
+		"aonId": 319,
+		"name": "Summon Dragon",
+		"description": "Conjure a dragon to fight on your behalf.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure a dragon to fight for you. This works like <i>summon animal</i> (page 375), except you summon a common creature that has the dragon trait and whose level is 5 or lower."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightenedAs": "summon animal",
+		"heightened": [
+			{ "change": "Level 7.", "level": 6 },
+			{ "change": "Level 9.", "level": 7 },
+			{ "change": "Level 11.", "level": 8 },
+			{ "change": "Level 13.", "level": 9 },
+			{ "change": "Level 15.", "level": 10 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 375,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "4dcb8347-d29e-4db6-ba0c-a35ef26c4ba7"
+	},
+	{
+		"aonId": 320,
+		"name": "Summon Elemental",
+		"description": "Conjure an elemental to fight on your behalf.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure an elemental to fight for you. This works like <i>summon animal</i> (page 375), except you summon a common creature that has the elemental trait and whose level is 1 or lower."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightenedAs": "summon animal",
+		"heightened": [
+			{ "change": "Level 2.", "level": 3 },
+			{ "change": "Level 3.", "level": 4 },
+			{ "change": "Level 5.", "level": 5 },
+			{ "change": "Level 7.", "level": 6 },
+			{ "change": "Level 9.", "level": 7 },
+			{ "change": "Level 11.", "level": 8 },
+			{ "change": "Level 13.", "level": 9 },
+			{ "change": "Level 15.", "level": 10 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 375,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "a1ffba22-e304-4703-87c4-0380efa13bbb"
+	},
+	{
+		"aonId": 321,
+		"name": "Summon Entity",
+		"description": "Conjure an aberration to fight on your behalf.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure an aberration to fight for you. This works like <i>summon animal</i> (page 375), except you summon a common creature that has the aberration trait and whose level is 5 or lower."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightenedAs": "summon animal",
+		"heightened": [
+			{ "change": "Level 7.", "level": 6 },
+			{ "change": "Level 9.", "level": 7 },
+			{ "change": "Level 11.", "level": 8 },
+			{ "change": "Level 13.", "level": 9 },
+			{ "change": "Level 15.", "level": 10 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 375,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"traditions": [ "occult" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "8eb5f900-eab0-4249-be55-394553151af0"
+	},
+	{
+		"aonId": 322,
+		"name": "Summon Fey",
+		"description": " Conjure a fey to fight on your behalf.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure a fey to fight for you. This works like <i>summon animal</i> (page 375), except you summon a common creature that has the fey trait and whose level is -1."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightenedAs": "summon animal",
+		"heightened": [
+			{ "change": "Level 1.", "level": 2 },
+			{ "change": "Level 2.", "level": 3 },
+			{ "change": "Level 3.", "level": 4 },
+			{ "change": "Level 5.", "level": 5 },
+			{ "change": "Level 7.", "level": 6 },
+			{ "change": "Level 9.", "level": 7 },
+			{ "change": "Level 11.", "level": 8 },
+			{ "change": "Level 13.", "level": 9 },
+			{ "change": "Level 15.", "level": 10 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 375,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"traditions": [ "occult", "primal" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "9bff3cbf-bbd2-4c66-a3db-4f7db85572b9"
+	},
+	{
+		"aonId": 323,
+		"name": "Summon Fiend",
+		"description": "Conjure a f end to fight on your behalf.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure a fiend to fight on your behalf. This works like <i>summon animal</i> (page 375), except you summon a common creature that has the fiend trait and whose level is 5 or lower. You can't summon a creature unless its alignment is one of your deity's preferred alignments (or, if you don't have a deity, is within one step of your alignment). At the GM's discretion, some deities might restrict specific types of fiends, even if their alignments match."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightenedAs": "summon animal",
+		"heightened": [
+			{ "change": "Level 7.", "level": 6 },
+			{ "change": "Level 9.", "level": 7 },
+			{ "change": "Level 11.", "level": 8 },
+			{ "change": "Level 13.", "level": 9 },
+			{ "change": "Level 15.", "level": 10 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 375,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"traditions": [ "divine" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "45fcc9ca-6e8a-4e16-8579-d3842c971dfe"
+	},
+	{
+		"aonId": 324,
+		"name": "Summon Giant",
+		"description": "Conjure a giant to fight on your behalf.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure a giant to fight for you. This works like <i>summon animal</i> (page 375), except you summon a common creature that has the giant trait and whose level is 5 or lower."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightenedAs": "summon animal",
+		"heightened": [
+			{ "change": "Level 7.", "level": 6 },
+			{ "change": "Level 9.", "level": 7 },
+			{ "change": "Level 11.", "level": 8 },
+			{ "change": "Level 13.", "level": 9 },
+			{ "change": "Level 15.", "level": 10 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 376,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"traditions": [ "primal" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "2b12012b-40b2-4f95-be31-935ede5a137d"
+	},
+	{
+		"aonId": 325,
+		"name": "Summon Plant or Fungus",
+		"description": "Conjure a plant or fungus to fight on your behalf.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure a plant or fungus to fight for you. This works like <i>summon animal</i> (page 375), except you summon a common creature that has the plant or fungus trait and whose level is -1."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightenedAs": "summon animal",
+		"heightened": [
+			{ "change": "Level 1.", "level": 2 },
+			{ "change": "Level 2.", "level": 3 },
+			{ "change": "Level 3.", "level": 4 },
+			{ "change": "Level 5.", "level": 5 },
+			{ "change": "Level 7.", "level": 6 },
+			{ "change": "Level 9.", "level": 7 },
+			{ "change": "Level 11.", "level": 8 },
+			{ "change": "Level 13.", "level": 9 },
+			{ "change": "Level 15.", "level": 10 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 376,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"traditions": [ "primal" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "d1abc679-d96a-4e4e-a269-a91fe081c4a8"
+	},
+	{
+		"aonId": 326,
+		"name": "Sunburst",
+		"description": "A globe of sunlight deals fire damage, hurts undead, and overcomes darkness.",
+		"area": "60-foot burst",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A powerful globe of searing sunlight explodes in the area, dealing 8d10 fire damage to creatures and objects in the area, plus 8d10 additional positive damage to undead creatures. Each creature and object in the area must attempt a Reflex save.",
+			{
+				"criticalSuccess": [
+					"The creature or object is unaffected."
+				],
+				"success": [
+					"The creature or object takes half damage."
+				],
+				"failure": [
+					"The creature or object takes full damage."
+				],
+				"criticalFailure": [
+					"The creature or object takes full damage. If it's a creature, it becomes blinded permanently."
+				]
+			},
+			"If the globe overlaps with an area of magical darkness, <i>sunburst</i> attempts to counteract the darkness effect."
+		],
+		"heightened": [
+			{ "change": "The fire damage increases by 1d10, and the positive damage against undead increases by 1d10.", "bump": 1 }
+		],
+		"level": 7,
+		"objectType": "Spell",
+		"page": 376,
+		"range": "500 feet",
+		"savingThrow": "Reflex",
+		"source": "PZO2101",
+		"traditions": [ "divine", "primal" ],
+		"traits": [ "Evocation", "Fire", "Light", "Positive" ],
+		"focus": false,
+		"id": "9d7441a6-a007-4ece-afac-f6424aff7341"
+	},
+	{
+		"aonId": 327,
+		"name": "Synaptic Pulse",
+		"description": "Slow creatures with a mental blast.",
+		"area": "30-foot emanation",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You emit a pulsating mental blast that penetrates the minds of all enemies in the area. Each creature in the area must attempt a Will save.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature is stunned 1."
+				],
+				"failure": [
+					"The creature is stunned 2."
+				],
+				"criticalFailure": [
+					"The creature is stunned for 1 round."
+				]
+			}
+		],
+		"duration": "1 round",
+		"level": 5,
+		"objectType": "Spell",
+		"page": 376,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"traditions": [ "occult" ],
+		"traits": [ "Enchantment", "Incapacitation", "Mental" ],
+		"focus": false,
+		"id": "e3af0eba-d581-4db1-af6b-75622870bc9b"
+	},
+	{
+		"aonId": 328,
+		"name": "Synesthesia",
+		"description": "Rewire a creature's senses.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"The target's senses are suddenly rewired in unexpected ways, causing them to process noises as bursts of color, smells as sounds, and so on. This has three effects, and the target must attempt a Will save. <ul><li>Due to the distraction, the target must succeed at a DC 5 flat check each time it uses a concentrate action, or the action fails and is wasted.</li><li>The target's difficulty processing visual input makes all creatures and objects concealed from it.</li><li>The creature has trouble moving, making it clumsy 3 and giving it a -10-foot status penalty to its Speeds.</li></ul>",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target is affected for 1 round."
+				],
+				"failure": [
+					"The target is affected for 1 minute."
+				],
+				"criticalFailure": [
+					"As failure, and the target is stunned 2 as it attempts to process the sensory shifts."
+				]
+			}
+		],
+		"duration": "1 minute",
+		"level": 5,
+		"objectType": "Spell",
+		"page": 376,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "occult" ],
+		"traits": [ "Divination", "Mental" ],
+		"focus": false,
+		"heightened": [
+			{ "change": "You can target up to five creatures.", "level": 9 }
+		],
+		"id": "ac828e26-2287-4d1d-b699-0a83b5e5a5f3"
+	}
+]

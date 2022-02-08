@@ -1,0 +1,107 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Scout",
+		"details": [
+			"You're an expert in espionage and reconnaissance, able to skulk silently through the wilderness to gather intelligence, sneak through enemy lines to report to your comrades, or suddenly and decisively strike your foes. Your skills ease the difficulty of travel for you and your companions and keep you all on guard when you're approaching danger."
+		],
+		"additionalFeats": [
+			{ "level": 12, "name": "Camouflage" }
+		],
+		"page": 188,
+		"source": "PZO2105",
+		"id": "c90fc4dd-810a-4a18-862a-7cff192b9008",
+		"aonId": 73
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Scout Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication" ],
+		"prerequisites": [ "trained in Stealth and Survival" ],
+		"details": [
+			"You are a highly skilled scout, capable of providing your allies a timely warning of any danger. You gain the Scout's Warning ranger feat (<i>Core Rulebook</i> 172). When you're using the Scout exploration activity, you grant your allies a +2 circumstance bonus to their initiative rolls instead of a +1 circumstance bonus."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the scout archetype."
+		],
+		"page": 188,
+		"source": "PZO2105",
+		"id": "678c829e-6107-444c-bd52-8a8e041a8959",
+		"aonId": 2047
+	},
+	{
+		"objectType": "Feat",
+		"name": "Scout's Charge",
+		"actionType": "[A][A]",
+		"level": 4,
+		"traits": [ "Archetype", "Flourish" ],
+		"prerequisites": [ "Scout Dedication" ],
+		"details": [
+			"You meander around unpredictably, and then ambush your opponents without warning. Choose one enemy. Stride, Feint against that opponent, and then make a Strike against that foe. For your Feint, you can attempt a Stealth check instead of the Deception check that's usually required, because you use the terrain around you to catch your foe off-guard."
+		],
+		"page": 188,
+		"source": "PZO2105",
+		"id": "5877185d-7114-4d15-8458-fe847717d8d0",
+		"aonId": 2048
+	},
+	{
+		"objectType": "Feat",
+		"name": "Terrain Scout",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Scout Dedication" ],
+		"details": [
+			"You gain the Terrain Stalker skill feat (<i>Core Rulebook</i> 267) twice, choosing a different terrain each time. If you Avoid Notice while exploring and any allies use Follow the Expert to follow you as you do so, you can choose one of those allies to gain the benefit of any one Terrain Stalker feat you have."
+		],
+		"page": 188,
+		"source": "PZO2105",
+		"id": "286eade5-b0b6-40c6-839a-0d4779f61297",
+		"aonId": 2049
+	},
+	{
+		"objectType": "Feat",
+		"name": "Fleeting Shadow",
+		"actionType": "[A][A]",
+		"level": 6,
+		"traits": [ "Archetype", "Flourish" ],
+		"prerequisites": [ "Scout Dedication" ],
+		"details": [
+			"You're able to quickly disappear and then move about stealthily. You Hide, then Sneak twice."
+		],
+		"page": 188,
+		"source": "PZO2105",
+		"id": "74492f4d-73b8-491a-ae29-3ce0293d0fca",
+		"aonId": 2050
+	},
+	{
+		"objectType": "Feat",
+		"name": "Scout's Speed",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Scout Dedication" ],
+		"details": [
+			"You move faster, especially when traveling, allowing you to scout ahead and report back without slowing your allies. You gain a +10-foot status bonus to your Speed. When calculating your travel speed, this increases to a +20-foot status bonus."
+		],
+		"page": 188,
+		"source": "PZO2105",
+		"id": "e4056b54-cdb2-49b0-8f2c-0580a3ed4207",
+		"aonId": 2051
+	},
+	{
+		"objectType": "Feat",
+		"name": "Scout's Pounce",
+		"actionType": "[A][A]",
+		"level": 10,
+		"traits": [ "Archetype", "Flourish" ],
+		"prerequisites": [ "Scout Dedication" ],
+		"requirements": "You are hidden from or undetected by all of your opponents, and you aren't within 10 feet of any enemy.",
+		"details": [
+			"You leap from the shadows to strike your foes. Stride up to your Speed, then Strike twice. If you were hidden or unnoticed by the target of these Strikes, your foe is flat-footed against both attacks. Your multiple attack penalty applies normally for both attacks."
+		],
+		"page": 188,
+		"source": "PZO2105",
+		"id": "5206a519-67e0-426e-b00c-94a82aa6beb5",
+		"aonId": 2052
+	}
+]

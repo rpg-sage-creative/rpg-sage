@@ -1,0 +1,84 @@
+[
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Aasimar",
+		"youMight": [
+			"Possess a strong sense of fashion, favor exquisitely crafted tools, or carry yourself with instinctual grace. Feel a strong kinship with outcasts, orphans, or others who have been misunderstood or marginalized.",
+			"Have a beloved pet or a close relationship with a sibling or childhood friend."
+		],
+		"othersProbably": [
+			"Assume you are a supernatural messenger from beyond or whole-heartedly enjoy your supernatural legacy.",
+			"Treat you with worship or reverence, but distance you by putting you on a pedestal.",
+			"Think you can provide simple and free supernatural solutions for all their problems."
+		],
+		"aonId": 24,
+		"source": "PZO2105",
+		"id": "695acbd2-7554-4d4c-94cb-76bb94a62dcc"
+	},
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Changling",
+		"youMight": [
+			"Cherish and protect those friends and family who accept you as you are.",
+			"Seek to better understand your hag mother and the gifts she gave you, for good or ill, or distance yourself from your heritage.",
+			"Fear the day you hear the Call and worry you might not be able to resist-or perhaps you already fight to resist it every day."
+		],
+		"othersProbably": [
+			"Assume you practice occult or primal magic, or that you participate in a coven.",
+			"Worry that you might secretly be a monster, or become one, and turn on them.",
+			"Notice and speculate about your distinctive eyes."
+		],
+		"aonId": 22,
+		"source": "PZO2105",
+		"id": "797f50e8-3d57-4dac-be55-145793d28aa8"
+	},
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Dhampir",
+		"youMight": [
+			"Distance yourself from your heritage by trying to blend into society or even hunting undead.",
+			"Take special precautions to avoid being exposed to \"helpful\" healing magic.",
+			"Find yourself fascinated by the sight, smell, or taste of blood."
+		],
+		"othersProbably": [
+			"Feel unsettled by your ghostly pallor and sharp teeth. Wonder about or even romanticize your origins and motivations.",
+			"Find themselves strangely drawn to your grace, charm, and appearance."
+		],
+		"aonId": 23,
+		"source": "PZO2105",
+		"id": "68d9c154-0e17-4f8b-b3d3-06da3caf5892"
+	},
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Duskwalker",
+		"youMight": [
+			"Seek out opportunities to form strong friendships with a diverse array of companions.",
+			"Become focused on preventing the spread of undeath.",
+			"Be intrigued at finding your identity in a previous life."
+		],
+		"othersProbably": [
+			"Assume you're a necromancer or have some other strange interest in death or the dead.",
+			"Want to know if you remember your past life or ask you about the secrets of death or the afterlife."
+		],
+		"aonId": 25,
+		"source": "PZO2105",
+		"id": "0e6778b9-9de4-4cff-be5f-a0c9b1d967e4"
+	},
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Tiefling",
+		"youMight": [
+			"Have a strong sense of self-confidence born from a life of having to rely on yourself.",
+			"Feel a kinship with society's underprivileged or criminal elements, or even seek positions of power on the wrong side of the law.",
+			"Place incredible value on hard-won friendships and hold these companions closer than your blood family."
+		],
+		"othersProbably": [
+			"Assume you've faced numerous challenges due to your heritage.",
+			"Mistake you for an evil agent of a sinister cult, a fiend worshipper, or even a fiend yourself.",
+			"Think you have associations with powerful fiends, potentially trying to bargain with you for power of their own."
+		],
+		"aonId": 26,
+		"source": "PZO2105",
+		"id": "6651507a-23b0-4470-a25f-1b38ef74f708"
+	}
+]

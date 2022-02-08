@@ -1,0 +1,117 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Living Monolith",
+		"details": [
+			"You have delved into ancient sphinx magic to imbue your body and soul with the patience and strength of stone, as you work to create a special magical <i>ka stone</i> to finalize your oaths."
+		],
+		"page": 59,
+		"source": "PZO9301",
+		"id": "2768a86e-e61a-49ec-a0d9-8bc175d5c25a",
+		"aonId": 16
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Living Monolith Dedication",
+		"level": 2,
+		"traits": [ "Uncommon", "Archetype", "Dedication" ],
+		"prerequisites": [ "Ancient Osiriani and Sphinx languages", "trained in Crafting" ],
+		"access": "You are from the Golden Road region.",
+		"details": [
+			"You've begun to inscribe a magical stone called a <i>ka stone</i> that you will some day tie to your soul. You gain knowledge of Ancient Osirion and a connection to your nascent <i>ka stone</i>. If you fail a recovery check while dying, your dying condition does not increase; if you critically fail, your dying condition increases by only 1. You become trained in Ancient Osirion Lore, or expert if you were already trained."
+		],
+		"special": [
+			"ou cannot select another dedication feat until you have gained two other feats from the living monolith archetype."
+		],
+		"page": 59,
+		"source": "PZO9301",
+		"id": "af125c4b-525c-4c1b-bf72-eb4416610447",
+		"aonId": 888
+	},
+	{
+		"objectType": "Feat",
+		"name": "Ka Stone Ritual",
+		"level": 4,
+		"traits": [ "Rare", "Archetype" ],
+		"prerequisites": [ "Living Monolith Dedication", "a sphinx or living monolith with this feat performs a ritual with you" ],
+		"details": [
+			"You inscribe your true name on your <i>ka stone</i>, as well as oaths to gods and pharaohs, and embed it in your forehead in a special ritual with a sphinx or with a living monolith who already has this feat. The <i>ka stone</i> is an invested magic item that you automatically invest each day. It can't be removed without your permission, nor can it be dispelled, and you can never lose investiture in the <i>ka stone</i>. Its Bulk is negligible.",
+			"The <i>ka stone</i> grants you a +1 item bonus to saves against death effects and negative effects, which increases to +2 at 8th level, +3 at 14th level, and +4 at 20th level.",
+			"<b>Activate</b> [A][A] (envision), or a different activation if otherwise specified; <b>Frequency</b> a number of times each day equal to the number of class feats you have from the Living Monolith archetype; <b>Effect</b> You cast <i>enlarge</i> on yourself or use one of the other activated abilities granted by a later Living Monolith feat."
+		],
+		"page": 59,
+		"source": "PZO9301",
+		"id": "38f85bd3-692f-44b9-9096-93f55fb002a1",
+		"aonId": 889
+	},
+	{
+		"objectType": "Feat",
+		"name": "Stone Blood",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Ka Stone Ritual" ],
+		"details": [
+			"You can selectively stop your bleeding with ease. Reduce the DC of flat checks to stop persistent bleed damage you have from 15 to 10, and you can use a single action that has the concentrate trait to gain an early flat check without physically binding the wounds. You recover naturally from the drained condition twice as quickly as normal."
+		],
+		"page": 59,
+		"source": "PZO9301",
+		"id": "167bd57e-c36a-4fea-96e4-f5da7b9cbc61",
+		"aonId": 890
+	},
+	{
+		"objectType": "Feat",
+		"name": "Fortified Flesh",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Ka Stone Ritual" ],
+		"details": [
+			"Your flesh takes on the hardness of stone. You gain resistance to physical damage (except adamantine) equal to your number of class feats from the Living Monolith archetype."
+		],
+		"page": 59,
+		"source": "PZO9301",
+		"id": "e8bcfd37-eeb5-473f-9a90-742babf415a1",
+		"aonId": 891
+	},
+	{
+		"objectType": "Feat",
+		"name": "Attunement to Stone",
+		"level": 10,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Ka Stone Ritual" ],
+		"details": [
+			"You become attuned to the stone around you. When in contact with a stone surface, you gain tremorsense (imprecise) 5 feet along that surface, and you can activate your <i>ka stone</i> to cast <i>meld into stone</i>."
+		],
+		"page": 59,
+		"source": "PZO9301",
+		"id": "774e9a92-8e83-4373-b212-e4cd63efdb6f",
+		"aonId": 892
+	},
+	{
+		"objectType": "Feat",
+		"name": "Judgment of the Monolith",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Ka Stone Ritual" ],
+		"details": [
+			"You can use the oaths bound in your <i>ka stone</i> to compel the truth from the living and the dead. You can activate your <i>ka stone</i> to target a single living creature, causing that creature to experience the effects of being in a <i>zone of truth</i>. You can also activate it with a 10-minute activation (envision) to cast <i>talking corpse</i>."
+		],
+		"page": 59,
+		"source": "PZO9301",
+		"id": "ae7d6027-9024-4751-8640-71d1ca12b626",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Stone Communion",
+		"level": 14,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Ka Stone Ritual" ],
+		"details": [
+			"You gain a unique communion with the earth and stones. You learn the Terran language and you can Activate your <i>ka stone</i> with a 10-minute activation (envision) to cast <i>stone tell</i>."
+		],
+		"page": 59,
+		"source": "PZO9301",
+		"id": "46a6fad5-f564-4d4e-82ab-3329649a5c77",
+		"aonId": 894
+	}
+]

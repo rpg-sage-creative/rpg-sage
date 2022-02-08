@@ -1,0 +1,41 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Gunslinger",
+		"traits": [ "Uncommon" ],
+		"duringCombatEncounters": [
+			"You strike from range with your firearms, seeking to defeat your opponents before they can pose a true threat.",
+			"Depending on your choice of weapon, you might prefer to strike your opponent from a hidden position before they ever realize you're there, dash through a frenzied melee with pistols blazing, or glide effortlessly across the battlefield, waiting for the perfect moment to end the conflict with a single, well-placed shot."
+		],
+		"duringSocialEncounters": [
+			"You have a keen eye and can see things coming from farther than most.",
+			"You might not be the life of the party, but your companions know to pay attention when your subtle nod or concerned grunt indicates that something's amiss."
+		],
+		"whileExploring": [
+			"You scout the group's position for incoming threats and help search for secret doors and hidden passages, keeping a weather eye out for unexpected threats."
+		],
+		"inDowntime": [
+			"You might craft ammunition or keep your complex weapons clean and maintained, and you might look for work that matches your unique talents, such as working as a blacksmith, engineer, or part of the local watch.",
+			"You might wander from town to town, or stay put for a spell to enjoy the silence that lingers between gunfights."
+		],
+		"youMight": [
+			"Seek out areas of great conflict where your unique choice of weaponry can help build your reputation.",
+			"Explore new horizons, trusting your honed senses and deadly weapon to keep you safe.",
+			"Demonstrate extensive knowledge about various types of guns and ammunition, along with curiosity about the latest in gun technology."
+		],
+		"othersProbably": [
+			"Assume that since you know how your gun works, you must also understand how to resolve other mechanical challenges.",
+			"Underestimate you at first glance, thinking you rely on your gun because you lack any other skills.",
+			"Respect your eternal vigilance, unyielding grit, and excellent aim."
+		],
+		"classPath": "Way",
+		"aonId": 0,
+		"source": "PZO2109",
+		"id": "02bce895-d35b-4b94-9ea3-05503f69bf07"
+	},
+	{ "objectType": "ClassPath", "name": "Way of the Drifter", "class": "Gunslinger", "source": "PZO2109", "id": "4517b330-5d72-4347-8bd8-5c9e6e2459f1" },
+	{ "objectType": "ClassPath", "name": "Way of the Pistolero", "class": "Gunslinger", "source": "PZO2109", "id": "963d1829-478c-4c5d-bfc8-e18087a1e451" },
+	{ "objectType": "ClassPath", "name": "Way of the Sniper", "class": "Gunslinger", "source": "PZO2109", "id": "026bb9f2-7053-4a83-b0f5-df6a3396e7c2" },
+	{ "objectType": "ClassPath", "name": "Way of the Vanguard", "class": "Gunslinger", "source": "PZO2109", "id": "49c91cb9-558f-4443-8a28-529ba0e8f0cb" },
+	{ "objectType": "ClassPath", "name": "Way of the Spellshot", "class": "Gunslinger", "source": "PZO2109", "id": "9f80a589-cafc-424e-acb3-b61f70cb1653" }
+]

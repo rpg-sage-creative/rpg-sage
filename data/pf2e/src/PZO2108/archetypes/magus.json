@@ -1,0 +1,121 @@
+[
+	{ "objectType": "Archetype", "name": "Magus", "details": [ "You've mixed physical combat with spellcasting." ], "page": 75, "source": "PZO2108", "id": "0293ce97-8d46-4461-9258-4f9c849c1e01", "aonId": 0 },
+	{
+		"objectType": "DedicationFeat",
+		"name": "Magus Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Strength or Dexterity 14", "Intelligence 14" ],
+		"details": [
+			"You cast spells like a magus, gaining a spellbook with four common arcane cantrips of your choice. You gain the Cast a Spell activity. You can prepare two cantrips each day from your spellbook. Each time you gain a spell slot of a new level from the magus archetype, add a spell of that level or lower to your spellbook. You're trained in arcane spell attack rolls and spell DCs. Your key spellcasting ability for magus archetype spells is Intelligence, and they are arcane magus spells. You become trained in Arcana; if you were already trained in Arcana, you instead become trained in a skill of your choice. You become trained in simple weapons."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the magus archetype."
+		],
+		"page": 75,
+		"source": "PZO2108",
+		"id": "ebc9ae7d-5fab-4ac4-9a79-bef2c8c9511e",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Martial Magic",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Magus Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level magus feat of your choice."
+		],
+		"page": 75,
+		"source": "PZO2108",
+		"id": "ccf64f9b-5788-4113-959f-535056df80bc",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Hybrid Study Spell",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Magus Dedication" ],
+		"details": [
+			"Gain the conflux spell from a hybrid study of your choice (page 38). If you don't already have one, you gain a focus pool of 1 Focus Point, which you can Refocus by studying your spellbook and performing a physical regimen. You don't gain any of the hybrid study's other benefits."
+		],
+		"page": 75,
+		"source": "PZO2108",
+		"id": "b92ec589-f7ea-4892-8264-73362668ba81",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Spellstriker",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Magus Dedication" ],
+		"details": [
+			"You gain the magus's Spellstrike activity. You can recharge it only as an activity that takes 1 minute. This restriction applies even if you gain another ability that recharges Spellstrike."
+		],
+		"page": 75,
+		"source": "PZO2108",
+		"id": "2e0d2625-7a2a-4151-8a5f-61827d21decb",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Martial Magic",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Martial Magic" ],
+		"details": [
+			"You gain one magus feat. For the purpose of meeting its prerequisites, your magus level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another magus feat."
+		],
+		"page": 75,
+		"source": "PZO2108",
+		"id": "88d96461-025a-4166-863c-b8be53e49ee7",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Magus Spellcasting",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Magus Dedication" ],
+		"details": [
+			"You gain the basic bounded spellcasting benefits (page 74)."
+		],
+		"page": 75,
+		"source": "PZO2108",
+		"id": "367242fc-3f7b-4a1d-9bf5-1ee3b381fd0b",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Expert Magus Spellcasting",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Magus Spellcasting", "master in Arcana" ],
+		"details": [
+			"You gain the expert bounded spellcasting benefits (page 74)."
+		],
+		"page": 75,
+		"source": "PZO2108",
+		"id": "e18aa368-12e4-458c-9864-44021ed90645",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Master Magus Spellcasting",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Expert Magus Spellcasting", "legendary in Arcana" ],
+		"details": [
+			"You gain the master bounded spellcasting benefits (page 74)."
+		],
+		"page": 75,
+		"source": "PZO2108",
+		"id": "784f0100-0c71-481b-9aea-17d8a84a6eb6",
+		"aonId": 0
+	}
+]

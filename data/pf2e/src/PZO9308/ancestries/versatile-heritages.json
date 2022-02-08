@@ -1,0 +1,137 @@
+[
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Aphorite",
+		"youMight": [
+			"Seek to make something work just a bit better, whether a physical object or process.",
+			"Enjoy learning the intricacies of a language, machine, or profession.",
+			"Gain satisfaction in working alongside others."
+		],
+		"othersProbably": [
+			"Believe you're rigid in your beliefs or habits.",
+			"Think you never act before considering every possible outcome.",
+			"Assume you easily grasp complex systems and situations."
+		],
+		"aonId": 28,
+		"source": "PZO9308",
+		"id": "48c2ac57-4d0d-4705-a0d9-d40fa3ddc8b1"
+	},
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Beastkin",
+		"youMight": [
+			"Prefer the companionship of a close group of friends.",
+			"Feel an attachment to your inherent animal and seek that animal out to understand them better.",
+			"Wrestle with your animalistic side and choose to isolate yourself from those who may not understand your unique nature."
+		],
+		"othersProbably": [
+			"Believe you practice primal magic or have a direct connection to the natural world.",
+			"Assume that you love animals, especially those of the same kind as your inherent animal.",
+			"Worry that you will lose yourself to your feral instincts and attack others."
+		],
+		"aonId": 29,
+		"source": "PZO9308",
+		"id": "62a442df-65e6-4faa-a5dd-2671b8a20846"
+	},
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Ganzi",
+		"youMight": [
+			"Express your individuality through fashion and other personal choices.",
+			"Behave in dramatic or exuberant ways and refuse to get discouraged easily.",
+			"Look for creative or unique solutions to problems."
+		],
+		"othersProbably": [
+			"Expect you to behave unpredictably or impulsively.",
+			"Fear that you possess magic beyond your control.",
+			"Assume you're related to proteans."
+		],
+		"aonId": 32,
+		"source": "PZO9308",
+		"id": "725d1af7-685a-4a69-8316-12433ecbfe1e"
+	},
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Ifrit",
+		"youMight": [
+			"Relate your personal identity to elemental fire and believe fire represents core aspects of your personality.",
+			"Always keep yourself moving and busy, traveling to new places or trying new things, for fear that slowing down may dim your inner fire.",
+			"Take great pride in your elemental lineage, especially if you believe you are related to the mighty efreeti nobles, the maliks."
+		],
+		"othersProbably": [
+			"Look to you as an authority on fire magic or the elemental planes.",
+			"Think of you as a never-ending well of passion and inspiration, with an inner spark that never dies.",
+			"Assume you must be hot-headed and reckless, acting before you think."
+		],
+		"aonId": 33,
+		"source": "PZO9308",
+		"id": "4cc9e08e-a3de-4b4e-a9dd-f1b83f2a9f8f"
+	},
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Oread",
+		"youMight": [
+			"Relate your personal identity with elemental earth and believe stones or mountains represent core aspects of your personality.",
+			"Value moments of peace and quiet seclusion where you can be alone with nature.",
+			"Take great pride in your elemental lineage, especially if you believe you are related to the austere shaitan pashas."
+		],
+		"othersProbably": [
+			"Look to you as an authority on earth magic or elemental planes.",
+			"Think you are wise and cautious, moving into action only after you have considered a problem from all angles.",
+			"Assume you are stoic and quietly strong, keeping your thoughts and toyourself."
+		],
+		"aonId": 34,
+		"source": "PZO9308",
+		"id": "ca496aa9-4624-4c98-8db2-b84d0859e78a"
+	},
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Suli",
+		"youMight": [
+			"Relate your personal identity with the mixture of elements within you, believing you have sides that befit each element.",
+			"Work to harmonize or broker peace and understanding in the world around you.",
+			"Be prone to bragging, both about your own accomplishments and those of your family or allies."
+		],
+		"othersProbably": [
+			"Rely on you for your elemental abilities and expertise. Think you must be descended from a janni, if they recognize that you are a geniekin at all.",
+			"Assume your position at the nexus of opposing elements means you are a neutral diplomat."
+		],
+		"aonId": 35,
+		"source": "PZO9308",
+		"id": "5b266c1d-5321-4974-a378-a1b3b7f60399"
+	},
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Sylph",
+		"youMight": [
+			"Relate your identity with the element of air and believe the wind and storms represent core aspects of your personality.",
+			"Enjoy traveling and exploring high, secluded places where you can observe the world beneath you.",
+			"Take pride in your elemental lineage, especially if you believe you are related to the gregarious djinn viziers."
+		],
+		"othersProbably": [
+			"Look to you as an authority on air magic or the elemental Plane of Air.",
+			"Believe you easily flow through all aspects of society, while listening to those around you.",
+			"Assume you must be airheaded or capricious, prone to irresponsible behavior without regard for consequence."
+		],
+		"aonId": 36,
+		"source": "PZO9308",
+		"id": "7028f8f6-71cb-4f30-b346-f202d83e5514"
+	},
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Undine",
+		"youMight": [
+			"Relate your identity to elemental water and believe the streams and tides represent core aspects of your personality.",
+			"Be equally comfortable above the waves as you are beneath them.",
+			"Take great pride in your elemental lineage, especially if you believe you are related to the formidable marid shahzadas."
+		],
+		"othersProbably": [
+			"Look to you as an authority on water magic or the elemental planes.",
+			"Think you can speak with aquatic creatures.",
+			"Assume you are easily swayed by others, with few real opinions of your own."
+		],
+		"aonId": 37,
+		"source": "PZO9308",
+		"id": "439666e1-ec73-4675-aa8c-c684e4517463"
+	}
+]

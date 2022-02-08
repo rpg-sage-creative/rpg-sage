@@ -1,0 +1,109 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Archaeologist",
+		"details": [
+			"Adventurers raid tombs for material gain, but true archaeologists treasure the knowledge gained from such sites. You might accomplish your goals with scholarly learning, by training to overcome the tricks and traps set by ancient peoples and rivals, through magical training, or even with a bit of inexplicable luck."
+		],
+		"additionalFeats": [
+			{ "level": 4, "name": "Trap Finder" },
+			{ "level": 10, "name": "Delay Trap" }
+		],
+		"page": 156,
+		"source": "PZO2105",
+		"id": "dfb32da6-5bdc-4891-97f4-a0b1006cef98",
+		"aonId": 46
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Archaeologist Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication" ],
+		"prerequisites": [ "trained in Perception, Society, and Thievery" ],
+		"details": [
+			"You are a student of peoples and their histories, and are in constant pursuit of knowledge and artifacts from the past. You become an expert in Society and Thievery, and you gain a +1 circumstance bonus to Recall Knowledge about ancient history, peoples, and cultures."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the archaeologist archetype."
+		],
+		"page": 156,
+		"source": "PZO2105",
+		"id": "53655fa9-cfab-4630-b233-7cb139b1dbe8",
+		"aonId": 1879
+	},
+	{
+		"objectType": "Feat",
+		"name": "Magical Scholastics",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Archaeologist Dedication" ],
+		"details": [
+			"While study is key to your success, a bit of magic is a helpful tool in discovering the secrets of the past. You gain <i>detect magic</i>, <i>guidance</i>, and <i>read aura</i> as occult innate cantrips."
+		],
+		"page": 156,
+		"source": "PZO2105",
+		"id": "d586e646-63a1-44b4-b82e-da3b36565427",
+		"aonId": 1880
+	},
+	{
+		"objectType": "Feat",
+		"name": "Settlement Scholastics",
+		"level": 4,
+		"traits": [ "Archetype", "Skill" ],
+		"prerequisites": [ "Archaeologist Dedication" ],
+		"details": [
+			"Your studies open up new horizons. You become an expert in a Lore skill about a specific settlement; if you were already trained in that Lore skill, you also become trained in the Lore skill for a different settlement of your choice. Choose a single common or uncommon language prevalent in that settlement. You learn that language."
+		],
+		"special": [
+			"You can take this feat multiple times. When you take this feat again, choose a different settlement."
+		],
+		"page": 156,
+		"source": "PZO2105",
+		"id": "8420eaea-ae2c-4d7a-a72c-c343706317b8",
+		"aonId": 1881
+	},
+	{
+		"objectType": "Feat",
+		"name": "Scholastic Identification",
+		"level": 7,
+		"traits": [ "Archetype", "Skill" ],
+		"prerequisites": [ "Archaeologist Dedication", "master in Society" ],
+		"details": [
+			"You have the knowledge needed to understand ancient texts and cultural artifacts. You can use Society when Deciphering Writing, no matter the type of writing you are examining. You can also use Society to Identify Magic when examining a magic item or location with cultural significance."
+		],
+		"page": 156,
+		"source": "PZO2105",
+		"id": "bf6340fe-c280-457e-a422-198960a75599",
+		"aonId": 1882
+	},
+	{
+		"objectType": "Feat",
+		"name": "Archaeologist's Luck",
+		"level": 8,
+		"traits": [ "Archetype", "Fortune" ],
+		"prerequisites": [ "Archaeologist Dedication" ],
+		"frequency": "once per hour",
+		"trigger": "You fail a check against a trap, such as Thievery check to Disable the trap or a Reflex save to avoid its effects.",
+		"details": [
+			"You are more than just skillful; your drive to find the secrets of the past manifests as a strange kind of luck. Reroll the failed check and use the new result."
+		],
+		"page": 156,
+		"source": "PZO2105",
+		"id": "a08bdef3-6c00-42df-8c0e-e3f654123437",
+		"aonId": 1883
+	},
+	{
+		"objectType": "Feat",
+		"name": "Greater Magical Scholastics",
+		"level": 10,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Archaeologist Dedication", "Magical Scholastics" ],
+		"details": [
+			"You broaden your magical studies, allowing you to find the right path, detect objects, and conceal those objects from unscrupulous rivals. You can cast <i>augury</i>, <i>locate</i>, and <i>nondetection</i> as occult innate spells, each once per day. You can cast this <i>nondetection</i> spell only on an object, and it is automatically heightened to the same spell level as your cantrips from Magical Scholastics."
+		],
+		"page": 156,
+		"source": "PZO2105",
+		"id": "68182c94-1671-434d-8f52-2e95f9069ef6",
+		"aonId": 1884
+	}
+]

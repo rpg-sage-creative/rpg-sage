@@ -1,0 +1,57 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Barbarian",
+		"duringCombatEncounters": [
+			"You summon your rage and rush to the front lines to smash your way through.",
+			"Offense is your best defense-you'll need to drop foes before they can exploit your relatively low defenses."
+		],
+		"duringSocialEncounters": [
+			"You use intimidation to get what you need, especially when gentler persuasion can't get the job done."
+		],
+		"whileExploring": [
+			"You look out for danger, ready to rush headfirst into battle in an instant.",
+			"You climb the challenging rock wall and drop a rope for others to follow, and you wade into the risky currents to reach the hidden switch beneath the water's surface.",
+			"If something needs breaking, you're up to the task!"
+		],
+		"inDowntime": [
+			"You might head to a tavern to carouse, build up the fearsome legend of your mighty deeds, or recruit followers to become a warlord in your own right."
+		],
+		"youMight": [
+			"Have a deep-seated well of anger, hatred, or frustration.",
+			"Prefer a straightforward approach to one requiring patience and tedium.",
+			"Engage in a regimen of intense physical fitness-and punch anyone who says this conflicts with your distaste for patience and tedium."
+		],
+		"othersProbably": [
+			"Rely on your courage and your strength, and trust that you can hold your own in a fight.",
+			"See you as uncivilized or a boorish lout unfit for high society.",
+			"Believe that you are loyal to your friends and allies and will never relent until the fight is done."
+		],
+		"classPath": "Instinct",
+		"source": "PZO2101",
+		"aonId": 2,
+		"aonTraitId": 18,
+		"id": "107b511f-a1f4-49b3-b127-0b9249068575"
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Animal Instinct",
+		"types": [ "ape", "bear", "bull", "cat", "deer", "frog", "shark", "snake", "wolf" ],
+		"class": "Barbarian",
+		"source": "PZO2101",
+		"id": "8fcecd5d-24fb-487f-972f-8d0b3766ce8d",
+		"aonId": 1
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Dragon Instinct",
+		"types": [ "black", "blue", "green", "red", "white", "brass", "bronze", "copper", "gold", "silver" ],
+		"class": "Barbarian",
+		"source": "PZO2101",
+		"id": "a717e949-9218-4183-9ecf-f39a38fffeac",
+		"aonId": 2
+	},
+	{ "objectType": "ClassPath", "name": "Fury Instinct", "class": "Barbarian", "source": "PZO2101", "id": "f3638bdd-5854-49f0-abd3-e588cd4c0f09", "aonId": 3 },
+	{ "objectType": "ClassPath", "name": "Giant Instinct", "class": "Barbarian", "source": "PZO2101", "id": "7badae7d-cbd3-4ade-afd9-e246f034e082", "aonId": 4 },
+	{ "objectType": "ClassPath", "name": "Spirit Instinct", "class": "Barbarian", "source": "PZO2101", "id": "8c8a9705-d7d9-4ac1-b6c2-82337e1a5eef", "aonId": 5 }
+]

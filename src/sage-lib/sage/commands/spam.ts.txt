@@ -1,0 +1,32 @@
+/// <reference path="./cmd.ts" />
+
+namespace hmt {
+	export namespace sage {
+		export namespace commands {
+
+			async function spam(sageMessage: SageMessage): Promise<void> {
+				if (!sageMessage.isGod) {
+					return;
+				}
+				const objectTypePlural = sageMessage.args[0];
+				const objectType = pf.data.Repository.parseObjectType(objectTypePlural);
+				const entities = pf.data.Repository.all(objectType.objectType);
+				for (const entity of entities) {
+					try {
+						entity.toRenderableContent();
+						// await utils.DiscordUtils.send(message, entity.toRenderableContent());
+					}catch(ex) {
+						console.log(`Error Rendering ${objectType.objectType}: ${entity.name}\n${ex}`);
+					}
+				}
+			}
+			registerCommandRegex(/^\s*spam\s*(\w+)\s*$/i, spam);
+
+		}
+	}
+}
+
+function register(): void {
+
+}
+export default register;

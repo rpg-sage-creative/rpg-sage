@@ -1,0 +1,92 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Red Mantis Assassin",
+		"details": [
+			"You are a Red Mantis assassin, inducted by the mantis god and sworn to chase your prey to the end of the world and beyond."
+		],
+		"page": 71,
+		"source": "PZO9301",
+		"id": "5d7c22a7-d2f4-4eed-844c-63cc65aef395",
+		"aonId": 17
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Red Mantis Assassin Dedication",
+		"level": 2,
+		"traits": [ "Uncommon", "Archetype", "Dedication" ],
+		"prerequisites": [ "trained in sawtooth sabers", "deity is Achaekek", "lawful evil alignment", "member of the Red Mantis assassins" ],
+		"access": "You are from Mediogalti Island.",
+		"details": [
+			"You have learned how to stalk your foes and slay them with a sawtooth sabre. You become trained in Stealth and Assassin Lore; if you were already trained, you become an expert instead. Whenever your proficiency in any weapon increases to expert or beyond, you also gain that new proficiency with sawtooth sabers."
+		],
+		"special": [
+			"You cannot select another dedication feat until you have gained two other feats from the Red Mantis assassin archetype."
+		],
+		"page": 71,
+		"source": "PZO9301",
+		"id": "bacfccd3-3e6f-4739-89b4-0f85b2fceba9",
+		"aonId": 895
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Red Mantis Magic",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "trained in Religion", "Red Mantis Assassin Dedication" ],
+		"details": [
+			"You have learned limited divine magic from your Red Mantis training. You gain the Cast a Spell activity. You're a prepared spellcaster, able to prepare two cantrips and one 1st-level spell each day. You prepare these spells from a Red Mantis assassin spellbook, similar to a wizard's, containing three cantrips and two 1st-level spells. All the spells in your Red Mantis assassin spellbook, from this and later feats, must be either transmutation or illusion spells from the arcane spell list or a spell from the following list: <i>clairaudience, clairvoyance, darkness, dimension door, modify memory, obscuring mist, paralyze, see invisibility, true strike</i>. Regardless of their usual magical tradition, your Red Mantis assassin spells are divine spells, as are any Red Mantis focus spells you gain.",
+			"You can prepare two cantrips and one 1st-level spell each day from those found in your Red Mantis assassin spellbook. You're trained in spell attack rolls and spell DCs for casting divine spells. Your key spellcasting ability for these spells is Charisma."
+		],
+		"page": 71,
+		"source": "PZO9301",
+		"id": "b957c3f2-2777-42ae-a05d-3c1934c866d5",
+		"aonId": 896
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Red Mantis Magic",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Red Mantis Magic" ],
+		"details": [
+			"Your Red Mantis magical training has improved. Add two 2nd-level spells to your Red Mantis assassin spellbook. You gain a 2nd-level spell slot that you can use to prepare a spell from your Red Mantis assassin spellbook.",
+			"At 8th level, add two 3rd-level spells to your Red Mantis assassin spellbook. You gain a 3rd-level spell slot that you can use to prepare a spell from your Red Mantis assassin spellbook.",
+			"At 10th level, add two 4th-level spells to your Red Mantis assassin spellbook. You gain a 4th-level spell slot that you can use to prepare a spell from your Red Mantis assassin spellbook."
+		],
+		"page": 71,
+		"source": "PZO9301",
+		"id": "cc4f6d98-31ef-44f4-a1dc-2960477a0927",
+		"aonId": 897
+	},
+	{
+		"objectType": "Feat",
+		"name": "Crimson Shroud",
+		"actionType": "[A]",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Red Mantis Assassin Dedication" ],
+		"frequency": "A number of times per day equal to your number of class feats from the Red Mantis assassin archetype",
+		"details": [
+			"You swathe yourself in a veil of red mist for 1 minute. While the shroud is active, you gain fast healing equal to half your level. You can Interact with your shroud, swirling it around you, to gain a +1 circumstance bonus to AC until the beginning of your next turn. Finally, if you die while the shroud is active, you can choose to have your entire body vanish into red mist, leaving behind only your gear; you make this choice when you activate Crimson Shroud."
+		],
+		"page": 71,
+		"source": "PZO9301",
+		"id": "a7b5c15a-6ed9-459e-896c-c9bc68afb6b7",
+		"aonId": 898
+	},
+	{
+		"objectType": "Feat",
+		"name": "Mantis Form",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Red Mantis Magic" ],
+		"details": [
+			"You gain the <i>mantis form</i> focus spell. If you don't already have one, you gain a focus pool of 1 Focus Point, which you can Refocus by praying to Achaekek or researching your assigned kill."
+		],
+		"page": 71,
+		"source": "PZO9301",
+		"id": "02163a1d-16ea-4e88-a181-11290fae859b",
+		"aonId": 899
+	}
+]

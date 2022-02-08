@@ -1,0 +1,131 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Wizard",
+		"details": [
+			"You have dabbled in the arcane arts and, through discipline and academic study, learned how to cast a few spells."
+		],
+		"page": 231,
+		"source": "PZO2101",
+		"id": "ac92bf67-9dea-45ed-9652-847e8e5c93f2",
+		"aonId": 12
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Wizard Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Intelligence 14" ],
+		"details": [
+			"You cast spells like a wizard, gaining a spellbook with four common arcane cantrips of your choice. You gain the Cast a Spell activity. You can prepare two cantrips each day from your spellbook. You're trained in arcane spell attack rolls and spell DCs. Your key spellcasting ability for wizard archetype spells is Int, and they are arcane wizard spells. You become trained in Arcana; if you were already trained in Arcana, you instead become trained in a skill of your choice."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the wizard archetype."
+		],
+		"page": 231,
+		"source": "PZO2101",
+		"id": "27b3475b-5433-45c5-8041-02e596420745",
+		"aonId": 742
+	},
+	{
+		"objectType": "Feat",
+		"name": "Arcane School Spell",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Wizard Dedication" ],
+		"details": [
+			"Select one arcane school of magic. You gain the school's initial school spell. If you don't already have one, you gain a focus pool of 1 Focus Point, which you can Refocus by studying. (For more on arcane schools, see page 204.)"
+		],
+		"page": 231,
+		"source": "PZO2101",
+		"id": "4d18c1de-c8b1-41f7-ae3e-74f24aa0a745",
+		"aonId": 743
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Arcana",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Wizard Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level wizard feat of your choice."
+		],
+		"page": 231,
+		"source": "PZO2101",
+		"id": "66d9b317-b89b-4d49-b294-b805ec196b0f",
+		"aonId": 744
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Wizard Spellcasting",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Wizard Dedication" ],
+		"details": [
+			"You gain the basic spellcasting benefits (page 219). Each time you gain a spell slot of a new level from the wizard archetype, add two common spells of that level to your spellbook."
+		],
+		"page": 231,
+		"source": "PZO2101",
+		"id": "154f25c6-2401-45a5-9624-e14eaf2f1c3f",
+		"aonId": 745
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Arcana",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Arcana" ],
+		"details": [
+			"You gain one wizard feat. For the purpose of meeting its prerequisites, your wizard level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another wizard feat."
+		],
+		"page": 231,
+		"source": "PZO2101",
+		"id": "6903b72e-32ca-405f-a807-ec89667c56cf",
+		"aonId": 746
+	},
+	{
+		"objectType": "Feat",
+		"name": "Arcane Breadth",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Wizard Spellcasting" ],
+		"details": [
+			"You can cast more arcane spells each day. Increase the spell slots you gain from wizard archetype feats by 1 for each spell level other than your two highest spell levels."
+		],
+		"page": 231,
+		"source": "PZO2101",
+		"id": "691a0be1-7f8c-469a-ab8d-bde62ab4f0e8",
+		"aonId": 747
+	},
+	{
+		"objectType": "Feat",
+		"name": "Expert Wizard Spellcasting",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Wizard Spellcasting", "master in Arcana" ],
+		"details": [
+			"You gain the expert spellcasting benefits (page 219)."
+		],
+		"page": 231,
+		"source": "PZO2101",
+		"id": "5826aed5-849b-4e7a-a85c-7279c4dbe9b0",
+		"aonId": 748
+	},
+	{
+		"objectType": "Feat",
+		"name": "Master Wizard Spellcasting",
+		"level": 18,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Expert Wizard Spellcasting", "legendary in Arcana" ],
+		"details": [
+			"You gain the master spellcasting benefits (page 219)."
+		],
+		"page": 231,
+		"source": "PZO2101",
+		"id": "2d49fe13-08fc-44bc-b939-2de07758b7cf",
+		"aonId": 749
+	}
+]

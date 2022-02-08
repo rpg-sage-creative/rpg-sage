@@ -1,0 +1,13 @@
+[
+	{
+		"objectType": "Rule",
+		"name": "Rest and Daily Preparations",
+		"details": [
+			"You perform at your best when you take enough time to rest and prepare. Once every 24 hours, you can take a period of rest (typically 8 hours), after which you regain Hit Points equal to your Constitution modifier (minimum 1) times your level, and you might recover from or improve certain conditions (page 453). Sleeping in armor results in poor rest that leaves you fatigued. If you go more than 16 hours without resting, you become fatigued (you cannot recover from this until you rest at least 6 continuous hours).",
+			"After you rest, you make your daily preparations, which takes around 1 hour. You can prepare only if you've rested, and only once per day. Preparing includes the following:<ul><li>Spellcasters regain spell slots, and prepared spellcasters choose spells to have available that day.</li><li>Focus Points, other abilities that refresh during your preparations, and abilities that can be used only a certain number of times per day, including magic item uses, are reset.</li><li>You don armor and equip weapons and other gear.</li><li>You invest up to 10 worn magic items to gain their benefits for the day.</li></ul>"
+		],
+		"page": 480,
+		"source": "PZO2101",
+		"id": "761f76db-02cd-4878-bd9e-c173b329f5e4"
+	}
+]

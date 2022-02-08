@@ -1,0 +1,1517 @@
+[
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Unarmed",
+		"name": "Fist",
+		"price": "-",
+		"damage": "1d4 B",
+		"bulk": "-",
+		"hands": "1",
+		"group": "Brawling",
+		"traits": [ "Agile", "Finesse", "Nonlethal", "Unarmed" ],
+		"source": "PZO2101",
+		"id": "8a7307d4-ebd8-45ee-97dd-13c8ce5b7a41",
+		"aonId": 1
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Club",
+		"price": "0",
+		"damage": "1d6 B",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Club",
+		"traits": [
+			"Thrown 10 ft."
+		],
+		"details": [
+			"This is a piece of stout wood shaped or repurposed to bludgeon an enemy. Clubs can be intricately carved pieces of martial art or as simple as a tree branch or piece of wood."
+		],
+		"source": "PZO2101",
+		"id": "a90fb38f-e770-40f8-b777-511f77e62211",
+		"aonId": 2
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Dagger",
+		"price": "2 sp",
+		"damage": "1d4 P",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Knife",
+		"traits": [
+			"Agile",
+			"Finesse",
+			"Thrown 10 ft.",
+			"Versatile S"
+		],
+		"details": [
+			"This small, bladed weapon is held in one hand and used to stab a creature in close combat. It can also be thrown."
+		],
+		"source": "PZO2101",
+		"id": "553884b1-3dd1-4559-921a-f841c5663b78",
+		"aonId": 3
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Gauntlet",
+		"price": "2 sp",
+		"damage": "1d4 B",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Brawling",
+		"traits": [ "Agile", "Free-Hand" ],
+		"details": [
+			"A pair of these metal gloves comes with full plate, half plate, and splint armor; they can also be purchased separately and worn with other types of armor. They not only protect your hands but also transform your hands into lethal weapons."
+		],
+		"source": "PZO2101",
+		"id": "9a92c104-d70c-4587-a8ec-1e0754ecde33",
+		"aonId": 4
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Light Mace",
+		"price": "4 sp",
+		"damage": "1d4 B",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Club",
+		"traits": [ "Agile", "Finesse", "Shove" ],
+		"details": [
+			"A light mace has a short wooden or metal shaft ending with a dense metal head. Used much like a club, it delivers heavy bludgeoning blows, but with extra power derived from the head's metal ridges or spikes."
+		],
+		"source": "PZO2101",
+		"id": "ad52f4e2-f29e-477e-a6f4-c29b53dd7b8c",
+		"aonId": 5
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Longspear",
+		"price": "5 sp",
+		"damage": "1d8 P",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Spear",
+		"traits": [ "Reach" ],
+		"details": [
+			"This very long spear, sometimes called a pike, is purely for thrusting rather than throwing. Used by many soldiers and city watch for crowd control and defense against charging enemies, it must be wielded with two hands."
+		],
+		"source": "PZO2101",
+		"id": "527970c2-e32e-44ac-93f3-f506bfc844fe",
+		"aonId": 6
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Mace",
+		"price": "1 gp",
+		"damage": "1d6 B",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Club",
+		"traits": [ "Shove" ],
+		"details": [
+			"With a stout haft and a heavy metal head, a mace is sturdy and allows its wielder to deliver powerful blows and dent armor."
+		],
+		"source": "PZO2101",
+		"id": "d3153880-5110-4ddf-a093-9d6a2008f640",
+		"aonId": 7
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Morningstar",
+		"price": "1 gp",
+		"damage": "1d6 B",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Club",
+		"traits": [ "Versatile P" ],
+		"details": [
+			"This weapon has a short shaft ending in a metal ball studded with spikes."
+		],
+		"source": "PZO2101",
+		"id": "0df0f49f-6061-40ae-a53d-97f41fe75b40",
+		"aonId": 8
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Sickle",
+		"price": "2 sp",
+		"damage": "1d4 S",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Knife",
+		"traits": [ "Agile", "Finesse", "Trip" ],
+		"details": [
+			"Originally a farming tool used for reaping grain, this one-handed weapon has a short wooden handle ending in a curved blade, sometimes sharpened on both sides."
+		],
+		"source": "PZO2101",
+		"id": "e7f4f21b-0e6f-4489-9c01-00d5ea1e3fc7",
+		"aonId": 9
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Spear",
+		"price": "1 sp",
+		"damage": "1d6 P",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Spear",
+		"traits": [
+			"Thrown 20 ft."
+		],
+		"details": [
+			"A long metal shaft ending with a metal spike, a spear can be used one-handed as a melee weapon and can be thrown."
+		],
+		"source": "PZO2101",
+		"id": "cc0695a3-66da-4227-b343-2cc52bd52d24",
+		"aonId": 10
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Spiked Gauntlet",
+		"price": "3 sp",
+		"damage": "1d4 P",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Brawling",
+		"traits": [ "Agile", "Free-Hand" ],
+		"details": [
+			"Providing the same defensive function as a standard gauntlet, this version has a group of spikes protruding from the knuckles to deliver piercing damage with a punch."
+		],
+		"source": "PZO2101",
+		"id": "669f5af9-7705-4195-be23-be34c92bca3e",
+		"aonId": 11
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Staff",
+		"price": "0",
+		"damage": "1d4 B",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Club",
+		"traits": [ "Two-Hand d8" ],
+		"details": [
+			"This long piece of wood can aid in walking and deliver a mighty blow."
+		],
+		"source": "PZO2101",
+		"id": "6f2ea1a1-b732-4841-917f-52b3ce8df7a3",
+		"aonId": 12
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Clan Dagger",
+		"price": "2 gp",
+		"damage": "1d4 P",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Knife",
+		"traits": [ "Agile", "Dwarf", "Parry", "Versatile B" ],
+		"rarity": "Uncommon",
+		"details": [
+			"This broad dagger is carried by dwarves as a weapon, tool, and designation of clan. Losing or having to surrender a clan dagger is considered a mark of embarrassment to most dwarves."
+		],
+		"source": "PZO2101",
+		"id": "29e4d4e6-5ce2-461a-81c4-5efa8b7d6830",
+		"aonId": 13
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Simple",
+		"name": "Katar",
+		"price": "3 sp",
+		"damage": "1d4 P",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Knife",
+		"traits": [ "Agile", "Deadly d6", "Monk" ],
+		"rarity": "Uncommon",
+		"details": [
+			"Also known as punching daggers, katars are characterized by their H-shaped hand grip that allows the blade to jut out from the knuckles."
+		],
+		"source": "PZO2101",
+		"id": "b7371f80-2b72-443c-abfd-68f07765cf4b",
+		"aonId": 14
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Bastard Sword",
+		"price": "4 gp",
+		"damage": "1d8 S",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Sword",
+		"traits": [ "Two-Hand d12" ],
+		"details": [
+			"This broad-bladed sword, sometimes called the hand-and-a-half sword, has a longer grip so it can be held in one hand or used with two hands to provide extra piercing or slashing power."
+		],
+		"source": "PZO2101",
+		"id": "a1db868c-28d0-4f64-9ea3-1f16e449b8f5",
+		"aonId": 15
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Battle Axe",
+		"price": "1 gp",
+		"damage": "1d8 S",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Axe",
+		"traits": [ "Sweep" ],
+		"details": [
+			"These axes are designed explicitly as weapons, rather than tools. They typically weigh less, with a shaft reinforced with metal bands or bolts, and have a sharper blade, making them ideal for chopping limbs rather than wood."
+		],
+		"source": "PZO2101",
+		"id": "f039d065-0d90-450a-8742-f75f122006ca",
+		"aonId": 16
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Bo Staff",
+		"price": "2 sp",
+		"damage": "1d8 B",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Club",
+		"traits": [ "Monk", "Parry", "Reach", "Trip" ],
+		"details": [
+			"This strong but slender staff is tapered at the ends and well balanced. It's designed to be an offensive and defensive weapon."
+		],
+		"source": "PZO2101",
+		"id": "7e186332-8c1d-4de2-b9ef-84e79e338292",
+		"aonId": 17
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Falchion",
+		"price": "3 gp",
+		"damage": "1d10 S",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Sword",
+		"traits": [ "Forceful", "Sweep" ],
+		"details": [
+			"This weapon is a heavier, two-handed version of the curved-bladed scimitar. It is weighted toward the blade's end, making it a powerful slashing weapon."
+		],
+		"source": "PZO2101",
+		"id": "b74c7e0d-6da6-4be4-b219-52b08356d3ac",
+		"aonId": 18
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Flail",
+		"price": "8 sp",
+		"damage": "1d6 B",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Flail",
+		"traits": [ "Disarm", "Sweep", "Trip" ],
+		"details": [
+			"This weapon consists of a wooden handle attached to a spiked ball or cylinder by a chain, rope, or strap of leather."
+		],
+		"source": "PZO2101",
+		"id": "8347ed88-aa14-488f-9eb1-462a5f0d0062",
+		"aonId": 19
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Glaive",
+		"price": "1 gp",
+		"damage": "1d8 S",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Polearm",
+		"traits": [ "Deadly d8", "Forceful", "Reach" ],
+		"details": [
+			"This polearm consists of a long, single-edged blade on the end of a 7-foot pole. It is extremely effective at delivering lethal cuts at a distance."
+		],
+		"source": "PZO2101",
+		"id": "6a5b93d1-3408-496b-8575-61930e117ba1",
+		"aonId": 20
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Greataxe",
+		"price": "2 gp",
+		"damage": "1d12 S",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Axe",
+		"traits": [ "Sweep" ],
+		"details": [
+			"This large battle axe is too heavy to wield with only one hand. Many greataxes incorporate two blades, and they are often \"bearded,\" having a hook at the bottom to increase the strength of their chopping power."
+		],
+		"source": "PZO2101",
+		"id": "57c9b8a7-47c6-4a54-8cc7-57aae0455486",
+		"aonId": 21
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Greatclub",
+		"price": "1 gp",
+		"damage": "1d10 B",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Club",
+		"traits": [ "Backswing", "Shove" ],
+		"details": [
+			"While many greatclubs are intricately carved, others are little more than a sturdy tree branch. These massive clubs are too heavy to wield with only one hand."
+		],
+		"source": "PZO2101",
+		"id": "6d1bf32f-0163-42ce-aa4a-118210d6f173",
+		"aonId": 22
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Greatpick",
+		"price": "1 gp",
+		"damage": "1d10 P",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Pick",
+		"traits": [ "Fatal d12" ],
+		"details": [
+			"This pick has a longer handle and broader head than a regular pick. It is too heavy to wield in one hand."
+		],
+		"source": "PZO2101",
+		"id": "d3561193-4502-4d43-878f-28bd4708b23d",
+		"aonId": 23
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Greatsword",
+		"price": "2 gp",
+		"damage": "1d12 S",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Sword",
+		"traits": [ "Versatile P" ],
+		"details": [
+			"This immense two-handed sword is nearly as tall as its wielder. Its lower blade is often somewhat dulled to allow it to be gripped for extra leverage in close-quarter fights."
+		],
+		"source": "PZO2101",
+		"id": "ef5420fa-848d-4b01-ab95-2540682f39c1",
+		"aonId": 24
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Guisarme",
+		"price": "2 gp",
+		"damage": "1d10 S",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Polearm",
+		"traits": [ "Reach", "Trip" ],
+		"details": [
+			"This polearm bears a long, often one-sided, curved blade with a hook protruding from the blunt side of the blade, which can allow its wielder to trip opponents at a distance. Its shaft is usually 8 feet long."
+		],
+		"source": "PZO2101",
+		"id": "6ba5547a-1fb2-4a1c-8a3e-5cb6dd71d8b5",
+		"aonId": 25
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Halberd",
+		"price": "2 gp",
+		"damage": "1d10 P",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Polearm",
+		"traits": [ "Reach", "Versatile S" ],
+		"details": [
+			"This polearm has a relatively short, 5-foot shaft. The business end is a long spike with an axe blade attached."
+		],
+		"source": "PZO2101",
+		"id": "67df71ab-27a5-447a-ae56-3062a579061c",
+		"aonId": 26
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Hatchet",
+		"price": "4 sp",
+		"damage": "1d6 S",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Axe",
+		"traits": [
+			"Agile",
+			"Sweep",
+			"Thrown 10 ft."
+		],
+		"details": [
+			"This small axe can be used in close combat or thrown."
+		],
+		"source": "PZO2101",
+		"id": "8c17525c-0968-4d64-8821-224bc2c52093",
+		"aonId": 27
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Lance",
+		"price": "1 gp",
+		"damage": "1d8 P",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Spear",
+		"traits": [ "Deadly d8", "Jousting d6", "Reach" ],
+		"details": [
+			"This spear-like weapon is used by a mounted creature to deal a great deal of damage."
+		],
+		"source": "PZO2101",
+		"id": "0bac87de-c1c1-4675-b79d-20abd2314dd5",
+		"aonId": 28
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Light Hammer",
+		"price": "3 sp",
+		"damage": "1d6 B",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Hammer",
+		"traits": [
+			"Agile",
+			"Thrown 20 ft."
+		],
+		"details": [
+			"This smaller version of the warhammer has a wooden or metal shaft ending in a metal head. Unlike its heavier cousin, it is light enough to throw."
+		],
+		"source": "PZO2101",
+		"id": "78dc24f7-3536-4db5-b165-a562f328c40d",
+		"aonId": 29
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Light Pick",
+		"price": "4 sp",
+		"damage": "1d4 P",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Pick",
+		"traits": [ "Agile", "Fatal d8" ],
+		"details": [
+			"A light pick is a modified mining implement with a wooden shaft ending in a pick head crafted more to pierce armor and flesh than chip rocks."
+		],
+		"source": "PZO2101",
+		"id": "0cd0a8c3-360a-4724-9deb-a080bf2b8232",
+		"aonId": 30
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Longsword",
+		"price": "1 gp",
+		"damage": "1d8 S",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Sword",
+		"traits": [ "Versatile P" ],
+		"details": [
+			"Longswords can be one-edged or two-edged swords. Their blades are heavy and they're between 3 and 4 feet in length."
+		],
+		"source": "PZO2101",
+		"id": "7e8b6b35-0b08-4010-9f03-c11a454a49d1",
+		"aonId": 31
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Main-Gauche",
+		"price": "5 sp",
+		"damage": "1d4 P",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Knife",
+		"traits": [ "Agile", "Disarm", "Finesse", "Parry", "Versatile S" ],
+		"details": [
+			"This parrying dagger features a robust guard to protect the wielder's hand."
+		],
+		"source": "PZO2101",
+		"id": "66f75db3-510c-4ddf-bb6b-5159f4cd4319",
+		"aonId": 32
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Maul",
+		"price": "3 gp",
+		"damage": "1d12 B",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Hammer",
+		"traits": [ "Shove" ],
+		"details": [
+			"Mauls are massive warhammers that must be swung with two hands."
+		],
+		"source": "PZO2101",
+		"id": "91edab29-a93e-4317-a0a7-95ce2dce1113",
+		"aonId": 33
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Pick",
+		"price": "7 sp",
+		"damage": "1d6 P",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Pick",
+		"traits": [ "Fatal d10" ],
+		"details": [
+			"A pick designed solely for combat has a sturdy wooden shaft and a heavy, pointed head to deliver devastating blows."
+		],
+		"source": "PZO2101",
+		"id": "fe0f7bd2-ae4f-46ac-b6c4-759dbf69ae80",
+		"aonId": 34
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Ranseur",
+		"price": "2 gp",
+		"damage": "1d10 P",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Polearm",
+		"traits": [ "Disarm", "Reach" ],
+		"details": [
+			"This polearm is a long trident with a central prong that's longer than the other two."
+		],
+		"source": "PZO2101",
+		"id": "5fdbc46d-3afe-45cd-a62e-59c1587779d4",
+		"aonId": 35
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Rapier",
+		"price": "2 gp",
+		"damage": "1d6 P",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Sword",
+		"traits": [ "Deadly d8", "Disarm", "Finesse" ],
+		"details": [
+			"The rapier is a long and thin piercing blade with a basket hilt. It is prized among many as a dueling weapon."
+		],
+		"source": "PZO2101",
+		"id": "0a0dcbee-a849-4b12-8a5d-b9c748959df6",
+		"aonId": 36
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Sap",
+		"price": "1 sp",
+		"damage": "1d6 B",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Club",
+		"traits": [ "Agile", "Nonlethal" ],
+		"details": [
+			"A sap has a soft wrapping around a dense core, typically a leather sheath around a lead rod. Its head is wider than its grip to disperse the force of a blow, as the weapon's purpose is to knock out its victim rather than to draw blood."
+		],
+		"source": "PZO2101",
+		"id": "fd69c54f-8b10-4e0e-88e9-4962cc7a7fd0",
+		"aonId": 37
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Scimitar",
+		"price": "1 gp",
+		"damage": "1d6 S",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Sword",
+		"traits": [ "Forceful", "Sweep" ],
+		"details": [
+			"This one-handed curved blade is sharp on one side."
+		],
+		"source": "PZO2101",
+		"id": "74da547b-ff28-4c79-b7f0-cf05a3fa316c",
+		"aonId": 38
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Scythe",
+		"price": "2 gp",
+		"damage": "1d10 S",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Polearm",
+		"traits": [ "Deadly d10", "Trip" ],
+		"details": [
+			"Derived from a farming tool used to mow down long grains and cereals, this weapon has a long wooden shaft with protruding handles, capped with a curved blade set at a right angle."
+		],
+		"source": "PZO2101",
+		"id": "73cb8d14-2fc5-4412-8843-b299b4cc7da8",
+		"aonId": 39
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Shield Bash",
+		"price": "-",
+		"damage": "1d4 B",
+		"bulk": "-",
+		"hands": "1",
+		"group": "Shield",
+		"traits": [ "-" ],
+		"details": [
+			"A shield bash is not actually a weapon, but a maneuver in which you thrust or swing your shield to hit your foe with an impromptu attack."
+		],
+		"source": "PZO2101",
+		"id": "2d34e70d-b9c6-4a81-98c5-74890c2b3119",
+		"aonId": 40
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Shield Boss",
+		"price": "5 sp",
+		"damage": "1d6 B",
+		"bulk": "-",
+		"hands": "1",
+		"group": "Shield",
+		"traits": [ "Attached to shield" ],
+		"details": [
+			"Typically a round, convex, or conical piece of thick metal attached to the center of a shield, a shield boss increases the bludgeoning damage of a shield bash."
+		],
+		"source": "PZO2101",
+		"id": "812eeee5-90df-4ea7-b6ad-2353edaee6c1",
+		"aonId": 41
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Shield Spikes",
+		"price": "5 sp",
+		"damage": "1d6 P",
+		"bulk": "-",
+		"hands": "1",
+		"group": "Shield",
+		"traits": [ "Attached to shield" ],
+		"details": [
+			"These metal spikes are strategically placed on the defensive side of the shield to deal piercing damage with a shield bash."
+		],
+		"source": "PZO2101",
+		"id": "375ccba7-0ff6-4a63-bb89-346cd0a7a3c3",
+		"aonId": 42
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Shortsword",
+		"price": "9 sp",
+		"damage": "1d6 P",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Sword",
+		"traits": [ "Agile", "Finesse", "Versatile S" ],
+		"details": [
+			"These blades come in a variety of shapes and styles, but they are typically 2 feet long."
+		],
+		"source": "PZO2101",
+		"id": "8bd3ed3b-60f1-4cca-88f6-7c6ffd1ec3aa",
+		"aonId": 43
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Starknife",
+		"price": "2 gp",
+		"damage": "1d4 P",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Knife",
+		"traits": [
+			"Agile",
+			"Deadly d6",
+			"Finesse",
+			"Thrown 20 ft.",
+			"Versatile S"
+		],
+		"details": [
+			"From a central metal ring, four tapering metal blades extend like points on a compass rose. When gripping a starknife from the center, the wielder can use it as a melee weapon. It can also be thrown short distances."
+		],
+		"source": "PZO2101",
+		"id": "7a5803f9-7e94-47e2-8ef1-c5ac0fbd577b",
+		"aonId": 44
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Trident",
+		"price": "1 gp",
+		"damage": "1d8 P",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Spear",
+		"traits": [
+			"Thrown 20 ft."
+		],
+		"details": [
+			"This three-pronged, spear-like weapon typically has a 4-foot shaft. Like a spear, it can be wielded with one hand or thrown."
+		],
+		"source": "PZO2101",
+		"id": "cc8bfa9d-0960-4550-baa4-0852706922b3",
+		"aonId": 45
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "War Flail",
+		"price": "2 gp",
+		"damage": "1d10 B",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Flail",
+		"traits": [ "Disarm", "Sweep", "Trip" ],
+		"details": [
+			"This large flail has a long shaft connected to a shorter piece of stout wood or metal that's sometimes inlaid with spikes."
+		],
+		"source": "PZO2101",
+		"id": "21fd184c-ee21-4c34-af58-d1573c1231eb",
+		"aonId": 46
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Warhammer",
+		"price": "1 gp",
+		"damage": "1d8 B",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Hammer",
+		"traits": [ "Shove" ],
+		"details": [
+			"This weapon has a wooden shaft ending in a large, heavy metal head. The head of the hammer might be single-sided or double-sided, but it's always capable of delivering powerful bludgeoning blows."
+		],
+		"source": "PZO2101",
+		"id": "0f2895cc-33e2-4309-9583-34d9e15094d9",
+		"aonId": 47
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Whip",
+		"price": "1 sp",
+		"damage": "1d4 S",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Flail",
+		"traits": [ "Disarm", "Finesse", "Nonlethal", "Reach", "Trip" ],
+		"details": [
+			"This long strand of thick leather, often braided, delivers a painful but nonlethal slash at a distance, usually accompanied by a distinctive cracking sound."
+		],
+		"source": "PZO2101",
+		"id": "7b109399-bf6e-4c4a-a813-a3e05673801c",
+		"aonId": 48
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Dogslicer",
+		"price": "1 sp",
+		"damage": "1d6 S",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Sword",
+		"traits": [ "Agile", "Backstabber", "Finesse", "Goblin" ],
+		"rarity": "Uncommon",
+		"details": [
+			"This short, curved, and crude makeshift blade often has holes drilled into it to reduce its weight. It's a favored weapon of goblins."
+		],
+		"source": "PZO2101",
+		"id": "8f59d344-b9c2-4fbf-8d2b-ddfc86977908",
+		"aonId": 49
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Elven Curve Blade",
+		"price": "4 gp",
+		"damage": "1d8 S",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Sword",
+		"traits": [ "Elf", "Finesse", "Forceful" ],
+		"rarity": "Uncommon",
+		"details": [
+			"Essentially a longer version of the scimitar, this traditional elven weapon has a thinner blade than its cousin."
+		],
+		"source": "PZO2101",
+		"id": "69a44286-55b8-458d-a7fc-d9148da02b51",
+		"aonId": 50
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Filcher's Fork",
+		"price": "1 gp",
+		"damage": "1d4 P",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Spear",
+		"traits": [
+			"Agile",
+			"Backstabber",
+			"Deadly d6",
+			"Finesse",
+			"Halfling",
+			"Thrown 20 ft."
+		],
+		"rarity": "Uncommon",
+		"details": [
+			"This halfling weapon looks like a long, two-pronged fork and is used as both a weapon and a cooking implement."
+		],
+		"source": "PZO2101",
+		"id": "d536997a-b99f-400d-80ab-4070c3cefb44",
+		"aonId": 51
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Gnome Hooked Hammer",
+		"price": "2 gp",
+		"damage": "1d6 B",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Hammer",
+		"traits": [ "Gnome", "Trip", "Two-Hand d10", "Versatile P" ],
+		"rarity": "Uncommon",
+		"details": [
+			"This gnome tool and weapon features a hammer at one end and a curved pick on the other. It's such a strange and awkward weapon that others think the gnomes are slightly erratic for using it."
+		],
+		"source": "PZO2101",
+		"id": "6bac7c9b-b12d-4281-8e28-982e8c1e5d8f",
+		"aonId": 52
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Horsechopper",
+		"price": "9 sp",
+		"damage": "1d8 S",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Polearm",
+		"traits": [ "Goblin", "Reach", "Trip", "Versatile P" ],
+		"rarity": "Uncommon",
+		"details": [
+			"Created by goblins to battle horses, this weapon is essentially a long shaft ending in a blade with a large hook."
+		],
+		"source": "PZO2101",
+		"id": "dfaf11ea-ca51-4ae3-9b72-e972439247f7",
+		"aonId": 53
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Kama",
+		"price": "1 gp",
+		"damage": "1d6 S",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Knife",
+		"traits": [ "Agile", "Monk", "Trip" ],
+		"rarity": "Uncommon",
+		"details": [
+			"Similar to a sickle and used in some regions to reap grain, a kama has a short, slightly curved blade and a wooden handle."
+		],
+		"source": "PZO2101",
+		"id": "aae7cf3b-fb5c-4dcc-b39a-a9d1af0952de",
+		"aonId": 54
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Katana",
+		"price": "2 gp",
+		"damage": "1d6 S",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Sword",
+		"traits": [ "Deadly d8", "Two-Hand d10", "Versatile P" ],
+		"rarity": "Uncommon",
+		"details": [
+			"A katana is a curved, single-edged sword known for its wickedly sharped blade."
+		],
+		"source": "PZO2101",
+		"id": "4d9b6896-90a2-4ee2-bee2-881d0aea8b0d",
+		"aonId": 55
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Kukri",
+		"price": "6 sp",
+		"damage": "1d6 S",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Knife",
+		"traits": [ "Agile", "Finesse", "Trip" ],
+		"rarity": "Uncommon",
+		"details": [
+			"The blade of this foot-long knife curves inward and lacks a cross guard at the hilt."
+		],
+		"source": "PZO2101",
+		"id": "2bafcfd9-a443-46b3-8a37-dacb6e08821b",
+		"aonId": 56
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Nunchaku",
+		"price": "2 sp",
+		"damage": "1d6 B",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Club",
+		"traits": [ "Backswing", "Disarm", "Finesse", "Monk" ],
+		"rarity": "Uncommon",
+		"details": [
+			"The nunchaku is constructed of two wooden or metal bars connected by a short length of rope or chain."
+		],
+		"source": "PZO2101",
+		"id": "5029d8f8-6c27-4c19-b85c-88e2f1e77b7d",
+		"aonId": 57
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Orc Knuckle Dagger",
+		"price": "7 sp",
+		"damage": "1d6 P",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Knife",
+		"traits": [ "Agile", "Disarm", "Orc" ],
+		"rarity": "Uncommon",
+		"details": [
+			"This stout, metal blade of orc design has a horizontal basket hilt with blades jutting from each end, or sometimes one blade like that of a katar."
+		],
+		"source": "PZO2101",
+		"id": "490cdc73-7474-4492-9de4-c22f2bd6ac4c",
+		"aonId": 58
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Sai",
+		"price": "6 sp",
+		"damage": "1d4 P",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Knife",
+		"traits": [ "Agile", "Disarm", "Finesse", "Monk", "Versatile B" ],
+		"rarity": "Uncommon",
+		"details": [
+			"This piercing dagger is a metal spike flanked by a pair of prongs that can be used to trap an enemy's weapon."
+		],
+		"source": "PZO2101",
+		"id": "3a26ad70-0fb7-4c6a-9663-cf07c0cb1fd4",
+		"aonId": 59
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Spiked Chain",
+		"price": "3 gp",
+		"damage": "1d8 S",
+		"bulk": "1",
+		"hands": "2",
+		"group": "Flail",
+		"traits": [ "Disarm", "Finesse", "Trip" ],
+		"rarity": "Uncommon",
+		"details": [
+			"This 4-foot-long length of chain is covered with barbs and has spikes on one or both ends. Some feature metal hoops used as handgrips."
+		],
+		"source": "PZO2101",
+		"id": "d29aacdf-7877-4140-9ca3-957047152600",
+		"aonId": 60
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Martial",
+		"name": "Temple Sword",
+		"price": "2 gp",
+		"damage": "1d8 S",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Sword",
+		"traits": [ "Monk", "Trip" ],
+		"rarity": "Uncommon",
+		"details": [
+			"This heavy blade is favored by guardians of religious sites. It has a distinctive, crescent-shaped blade that seems to be a mix of a sickle and sword. It often has holes drilled into the blade or the pommel so that bells or other holy trinkets can be affixed to the weapon as an aid for prayer or mediation."
+		],
+		"source": "PZO2101",
+		"id": "339c096f-aadc-463f-848d-73aee975a2a2",
+		"aonId": 61
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Advanced",
+		"name": "Dwarven Waraxe",
+		"price": "3 gp",
+		"damage": "1d8 S",
+		"bulk": "2",
+		"hands": "1",
+		"group": "Axe",
+		"traits": [ "Dwarf", "Sweep", "Two-Hand d12" ],
+		"rarity": "Uncommon",
+		"details": [
+			"This favored weapon of the dwarves has a large, ornate head mounted on a thick handle. This powerful axe can be wielded with one hand or two."
+		],
+		"source": "PZO2101",
+		"id": "f46b4c4c-49d7-4713-b3ee-c81efdd46778"
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Advanced",
+		"name": "Gnome Flickmace",
+		"price": "3 gp",
+		"damage": "1d8 B",
+		"bulk": "2",
+		"hands": "1",
+		"group": "Flail",
+		"traits": [ "Gnome", "Reach" ],
+		"rarity": "Uncommon",
+		"details": [
+			"More a flail than a mace, this weapon has a short handle attached to a length of chain with a ball at the end. The ball is propelled to its reach with the flick of the wrist, the momentum of which brings the ball back to the wielder after the strike."
+		],
+		"source": "PZO2101",
+		"id": "d4bf19a4-bfaa-47eb-a497-c2abe8d891dc",
+		"aonId": 63
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Advanced",
+		"name": "Orc Necksplitter",
+		"price": "2 gp",
+		"damage": "1d8 S",
+		"bulk": "1",
+		"hands": "1",
+		"group": "Axe",
+		"traits": [ "Forceful", "Orc", "Sweep" ],
+		"rarity": "Uncommon",
+		"details": [
+			"This single-bladed bearded axe has a jagged blade that's perfect for separating bone from tendon and cartilage."
+		],
+		"source": "PZO2101",
+		"id": "1098a8bf-9812-4b35-9859-6cccd11034e9",
+		"aonId": 64
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Melee",
+		"category": "Advanced",
+		"name": "Sawtooth Saber",
+		"price": "5 gp",
+		"damage": "1d6 S",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Sword",
+		"traits": [ "Agile", "Finesse", "Twin" ],
+		"rarity": "Uncommon",
+		"details": [
+			"The signature weapon of the Red Mantis assassins, this curved blade is serrated like a saw, hence the name."
+		],
+		"source": "PZO2101",
+		"id": "70495c55-c5a4-4216-a49d-1b7ac8dc5b2b",
+		"aonId": 65
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Simple",
+		"name": "Blowgun",
+		"ammunition": "Blowgun Dart",
+		"price": "1 sp",
+		"damage": "1 P",
+		"range": "20 ft.",
+		"reload": "1",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Dart",
+		"traits": [ "Agile", "Nonlethal" ],
+		"details": [
+			"This long, narrow tube is used for shooting blowgun darts, using only the power of a forcefully exhaled breath."
+		],
+		"source": "PZO2101",
+		"id": "a85cea60-3f0f-49ae-88df-37e46ab78015",
+		"aonId": 66
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Simple",
+		"name": "Crossbow",
+		"ammunition": "Bolt",
+		"price": "3 gp",
+		"damage": "1d8 P",
+		"range": "120 ft.",
+		"reload": "1",
+		"bulk": "1",
+		"hands": "2",
+		"group": "Bow",
+		"traits": [ "-" ],
+		"details": [
+			"This ranged weapon has a bow-like assembly mounted on a handled frame called a tiller. The tiller has a mechanism to lock the bowstring in place, attached to a trigger mechanism that releases the tension and launches a bolt."
+		],
+		"source": "PZO2101",
+		"id": "dfc72bb6-0cf6-4c96-95f0-de3e5412f57c",
+		"aonId": 67
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Simple",
+		"name": "Dart",
+		"price": "1 cp",
+		"damage": "1d4 P",
+		"range": "20 ft.",
+		"reload": "-",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Dart",
+		"traits": [ "Agile", "Thrown" ],
+		"details": [
+			"This thrown weapon is larger than an arrow but shorter than a javelin. It typically has a short shaft of wood ending in a metal tip and is sometimes stabilized by feathers or fur."
+		],
+		"source": "PZO2101",
+		"id": "dfbfb472-d1b0-4d91-86c8-85327c4b02ce",
+		"aonId": 68
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Simple",
+		"name": "Hand Crossbow",
+		"ammunition": "Bolt",
+		"price": "3 gp",
+		"damage": "1d6 P",
+		"range": "60 ft.",
+		"reload": "1",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Bow",
+		"traits": [ "-" ],
+		"details": [
+			"Sometimes referred to as an alley bow by rogues or ruffians, this small crossbow fires small bolts that are sometimes used to deliver poison to the target. It's small enough to be shot one-handed, but it still requires two hands to load."
+		],
+		"source": "PZO2101",
+		"id": "d1369d91-0266-4fc0-98fa-bb7a88d8d5eb",
+		"aonId": 69
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Simple",
+		"name": "Heavy Crossbow",
+		"ammunition": "Bolt",
+		"price": "4 gp",
+		"damage": "1d10 P",
+		"range": "120 ft.",
+		"reload": "2",
+		"bulk": "2",
+		"hands": "2",
+		"group": "Bow",
+		"traits": [ "-" ],
+		"details": [
+			"This large crossbow is harder to load and more substantial than a regular crossbow, but it packs a greater punch."
+		],
+		"source": "PZO2101",
+		"id": "089d2c90-0281-47d9-9992-51084f4c8159",
+		"aonId": 70
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Simple",
+		"name": "Javelin",
+		"price": "1 sp",
+		"damage": "1d6 P",
+		"range": "30 ft.",
+		"reload": "-",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Dart",
+		"traits": [ "Thrown" ],
+		"details": [
+			"This thin spear is well balanced for throwing but is not designed for melee use."
+		],
+		"source": "PZO2101",
+		"id": "24e57cb2-0b56-4297-847b-a52abb9c265e",
+		"aonId": 71
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Simple",
+		"name": "Sling",
+		"ammunition": "Sling Bullet",
+		"price": "0",
+		"damage": "1d6 B",
+		"range": "50 ft.",
+		"reload": "1",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Sling",
+		"traits": [ "Propulsive" ],
+		"details": [
+			"Little more than a leather cup attached to a pair of straps, a sling can be used to fling smooth stones or sling bullets at a range."
+		],
+		"source": "PZO2101",
+		"id": "ab74a3af-983d-4716-a6aa-c387bde43a14",
+		"aonId": 72
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Martial",
+		"name": "Alchemical Bomb",
+		"price": "Varies",
+		"damage": "Varies",
+		"range": "20 ft.",
+		"reload": "-",
+		"bulk": "L",
+		"hands": "1",
+		"group": "Bomb",
+		"traits": [ "Varies" ],
+		"details": [
+			"These bombs come in a variety of types and levels of power, but no matter the variety, you throw the bomb at the target and it explodes, unleashing its alchemical blast."
+		],
+		"source": "PZO2101",
+		"id": "ae37d5c6-1ffa-476a-a4e6-2768a56e3ad8",
+		"aonId": 73
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Martial",
+		"name": "Composite Longbow",
+		"ammunition": "Arrow",
+		"price": "20 gp",
+		"damage": "1d8 P",
+		"range": "100 ft.",
+		"reload": "0",
+		"bulk": "2",
+		"hands": "1+",
+		"group": "Bow",
+		"traits": [
+			"Deadly d10",
+			"Propulsive",
+			"Volley 30 ft."
+		],
+		"details": [
+			"This projectile weapon is made from horn, wood, and sinew laminated together to increase the power of its pull and the force of its projectile. Like all longbows, its great size also increases the bow's range and power. You must use two hands to fire it, and it cannot be used while mounted. Any time an ability is specifically restricted to a longbow, such as Erastil's favored weapon, it also applies to composite longbows unless otherwise stated."
+		],
+		"source": "PZO2101",
+		"id": "ba64af6e-e3ee-4344-bff3-5965689a9e22",
+		"aonId": 74
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Martial",
+		"name": "Composite Shortbow",
+		"ammunition": "Arrow",
+		"price": "14 gp",
+		"damage": "1d6 P",
+		"range": "60 ft.",
+		"reload": "0",
+		"bulk": "1",
+		"hands": "1+",
+		"group": "Bow",
+		"traits": [ "Deadly d10", "Propulsive" ],
+		"details": [
+			"This shortbow is made from horn, wood, and sinew laminated together to increase the power of its pull and the force of its projectile. Its compact size and power make it a favorite of mounted archers. Any time an ability is specifically restricted to a shortbow, it also applies to composite shortbows unless otherwise stated."
+		],
+		"source": "PZO2101",
+		"id": "35abd271-6eab-4586-9fa0-f6545423c42e",
+		"aonId": 75
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Martial",
+		"name": "Longbow",
+		"ammunition": "Arrow",
+		"price": "6 gp",
+		"damage": "1d8 P",
+		"range": "100 ft.",
+		"reload": "0",
+		"bulk": "2",
+		"hands": "1+",
+		"group": "Bow",
+		"traits": [
+			"Deadly d10",
+			"Volley 30 ft."
+		],
+		"details": [
+			"This 5-foot-tall bow, usually made of a single piece of elm, hickory, or yew, has a powerful draw and is excellent at propelling arrows with great force and at an extreme distance. You must use two hands to fire a longbow, and it can't be used while mounted."
+		],
+		"source": "PZO2101",
+		"id": "8153a57f-5c95-45d7-8c85-8c24b38756df",
+		"aonId": 76
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Martial",
+		"name": "Shortbow",
+		"ammunition": "Arrow",
+		"price": "3 gp",
+		"damage": "1d6 P",
+		"range": "60 ft.",
+		"reload": "0",
+		"bulk": "1",
+		"hands": "1+",
+		"group": "Bow",
+		"traits": [ "Deadly d10" ],
+		"details": [
+			"This smaller bow is made of a single piece of wood and favored by skirmishers and cavalry."
+		],
+		"source": "PZO2101",
+		"id": "655af6d9-afd3-4f44-8252-da54e0ae686b",
+		"aonId": 77
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Martial",
+		"name": "Halfling Sling Staff",
+		"price": "5 gp",
+		"damage": "1d10 B",
+		"range": "80 ft.",
+		"reload": "1",
+		"bulk": "1",
+		"hands": "2",
+		"group": "Sling",
+		"traits": [ "Halfling", "Propulsive" ],
+		"rarity": "Uncommon",
+		"details": [
+			"This staff ends in a Y-shaped split that cradles a sling. The length of the staff provides excellent leverage when used two-handed to fling rocks or bullets from the sling."
+		],
+		"source": "PZO2101",
+		"id": "5cef39f3-d746-4c32-b964-aeb0f3ea87a1",
+		"aonId": 78
+	},
+	{
+		"objectType": "Weapon",
+		"type": "Ranged",
+		"category": "Martial",
+		"name": "Shuriken",
+		"ammunition": "Sling Bullet",
+		"price": "1 cp",
+		"damage": "1d4 P",
+		"range": "20 ft.",
+		"reload": "0",
+		"bulk": "-",
+		"hands": "1",
+		"group": "Dart",
+		"traits": [ "Agile", "Monk", "Thrown" ],
+		"rarity": "Uncommon",
+		"details": [
+			" This \"throwing star\" is a small piece of flat metal with sharp edges, designed to be flung with a flick of the wrist."
+		],
+		"source": "PZO2101",
+		"id": "1dab2d5d-b7c1-46dc-b10f-d1a45d69b90e",
+		"aonId": 79
+	}
+]

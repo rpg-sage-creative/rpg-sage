@@ -1,0 +1,92 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Snarecrafter",
+		"details": [
+			"You're able to take ordinary materials and use them to create deadly snares, special traps that you can rig up quickly when the situation demands. While traps might grant you less brute force to apply in a fair fight than weapons would, you rarely allow your fights to be fair. Instead, when a battle takes place at a location of your choice, you have a major advantage thanks to your well-placed snares. Once your foes come to realize that you may have trapped any location on the battlefield, their fear of walking into another trap can help you corral them toward the waiting blades of your allies, or even make them too paranoid to move at all, locking them in place."
+		],
+		"additionalFeats": [
+			{ "level": 8, "name": "Quick Snares" },
+			{ "level": 10, "name": "Powerful Snares" },
+			{ "level": 14, "name": "Lightning Snares" }
+		],
+		"page": 194,
+		"source": "PZO2105",
+		"id": "2a6c6616-26b9-413b-9d8a-b903c255a661",
+		"aonId": 78
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Snarecrafter Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication" ],
+		"prerequisites": [ "trained in Crafting", "Snare Crafting" ],
+		"details": [
+			"You've learned to create a limited number of snares at no cost. Each day during your daily preparations, you can prepare four snares from your formula book for quick deployment; if they normally take 1 minute to Craft, you can Craft them with 3 Interact actions. The number of snares increases to six if you're a master in Crafting and eight if you're legendary. Snares prepared in this way don't cost you any resources to Craft."
+		],
+		"special": [
+			"The feat counts as Snare Specialist for the purpose of feat prerequisites. If you also have the Snare Specialist ranger feat, the quick snares from both feats are cumulative. You can't select another dedication feat until you have gained two other feats from the snarecrafter archetype."
+		],
+		"page": 194,
+		"source": "PZO2105",
+		"id": "4c29b64c-1f5d-4737-b52b-096b6baa8e9f",
+		"aonId": 2074
+	},
+	{
+		"objectType": "Feat",
+		"name": "Surprise Snare",
+		"actionType": "[A][A][A]",
+		"level": 4,
+		"traits": [ "Archetype", "Manipulation" ],
+		"prerequisites": [ "Snarecrafter Dedication" ],
+		"details": [
+			"You install one of your snares prepared for quick deployment in a space that's occupied by an opponent. It must be a snare that normally takes 1 minute or less to Craft. The snare automatically triggers, but it takes a -2 circumstance penalty to any applicable save DC, as well as any attack rolls or other checks the snare attempts."
+		],
+		"page": 194,
+		"source": "PZO2105",
+		"id": "35bab569-f323-4baa-a224-f03650893293",
+		"aonId": 2075
+	},
+	{
+		"objectType": "Feat",
+		"name": "Remote Trigger",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Snarecrafter Dedication" ],
+		"details": [
+			"You've learned how to trigger snares from afar, creating ranged hazards to assail your opponents and allowing you to disarm enemies' snares harmlessly. You can Strike a snare to trigger it prematurely. If you crafted the snare, you automatically hit. If someone else crafted it, attempt a ranged Strike against the Crafting DC, triggering the snare only if you hit."
+		],
+		"page": 194,
+		"source": "PZO2105",
+		"id": "9b1e4aae-df03-47f9-bbdb-9eac47d3451f",
+		"aonId": 2076
+	},
+	{
+		"objectType": "Feat",
+		"name": "Giant Snare",
+		"level": 10,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Snarecrafter Dedication" ],
+		"details": [
+			"You can create bigger snares for quick deployment, making it more likely for a creature to walk into your snares. When you prepare snares for quick deployment, you can prepare some of them as giant snares. A giant snare takes up a 10-foot-by-10-foot area but costs two of your quick deployment snares. A giant snare can trigger from a creature entering any portion of its area, and all its effects apply over the full area."
+		],
+		"page": 194,
+		"source": "PZO2105",
+		"id": "6f18ef7f-7654-4f85-8162-2b49e6273abe",
+		"aonId": 2077
+	},
+	{
+		"objectType": "Feat",
+		"name": "Plentiful Snares",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Snarecrafter Dedication" ],
+		"details": [
+			"You can prepare incredible numbers of snares each day out of simple ingredients. Double the number of prepared snares granted by Snarecrafter Dedication."
+		],
+		"page": 194,
+		"source": "PZO2105",
+		"id": "b4acb9f9-a5ed-4e3a-bee3-9ea61a9f0a84",
+		"aonId": 2078
+	}
+]

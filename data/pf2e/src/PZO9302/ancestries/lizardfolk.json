@@ -1,0 +1,24 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Lizardfolk",
+		"youMight": [
+			"Demonstrate extreme patience, even when pressured to act.",
+			"Hold your people's history in high regard and look to the past for solutions to present problems.",
+			"Strive to adapt perfectly to your environment while also keeping your culture and traditions intact."
+		],
+		"othersProbably": [
+			"Assume you are beholden to tradition and have ancient knowledge.",
+			"See you as cold-blooded and callous due to your subdued physical reactions.",
+			"Respect your impressive strength and your knowledge of natural areas."
+		],
+		"aonId": 15,
+		"source": "PZO9302",
+		"id": "a52a2e9d-b9d7-46c1-8edc-2728f9374402"
+	},
+	{ "objectType": "Heritage", "name": "Cliffscale Lizardfolk", "ancestry": "Lizardfolk", "source": "PZO9302", "id": "81604d42-039a-445b-933e-c9cdf63762a2", "aonId": 49 },
+	{ "objectType": "Heritage", "name": "Frilled Lizardfolk", "ancestry": "Lizardfolk", "source": "PZO9302", "id": "5257cc0e-7299-4de9-8dbb-d9e7e7f3f0a6", "aonId": 50 },
+	{ "objectType": "Heritage", "name": "Sandstrider Lizardfolk", "ancestry": "Lizardfolk", "source": "PZO9302", "id": "74440a89-8624-459a-94ce-a104ad55d7c4", "aonId": 51 },
+	{ "objectType": "Heritage", "name": "Unseen Lizardfolk", "ancestry": "Lizardfolk", "source": "PZO9302", "id": "130a50ea-2abf-4476-8b31-f8fa70451497", "aonId": 52 },
+	{ "objectType": "Heritage", "name": "Wetlander Lizardfolk", "ancestry": "Lizardfolk", "source": "PZO9302", "id": "034ac0d3-d7b3-4172-9ad4-1491d5af40c7", "aonId": 53 }
+]

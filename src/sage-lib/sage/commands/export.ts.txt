@@ -1,0 +1,50 @@
+// /// <reference path="./admin/cmd.ts" />
+// /// <reference path="./cmd.ts" />
+
+// namespace hmt {
+// 	export namespace sage {
+// 		export namespace commands {
+
+// 			async function exportChat(this: Discord.Message): Promise<void> {
+// 				const sageMessage = await SageMessage.from(this);
+// 				if (!sageMessage.isGod) return;
+
+// 				const reaction = await this.react("🤔");
+
+// 				let messageId: string;
+// 				let message: Discord.Message;
+// 				let messages: Discord.Message[] = [];
+// 				let result: IteratorResult<Discord.Message>;
+// 				let date = new Date(), timestamp = date.getTime();
+// 				let messageCollection: Discord.Collection<string, Discord.Message>;
+// 				while ((messageCollection = await this.channel.fetchMessages({limit:100,before:messageId})).size) { USER dFETCH
+// 					let iterator = messageCollection.values();
+// 					while (!(result = iterator.next()).done) {
+// 						messages.push(message = result.value);
+// 						if (message.createdTimestamp < timestamp) {
+// 							messageId = message.id;
+// 							timestamp = message.createdTimestamp;
+// 						}
+// 					}
+// 				}
+// 				messages.sort((a, b) => a.createdTimestamp === b.createdTimestamp ? 0 : a.createdTimestamp < b.createdTimestamp ? -1 : 1);
+// 				let xml = messages.map(msg => `
+// 	<message author="${utils.DiscordUtils.authorToMention(msg.author)}" timestamp="${msg.createdTimestamp}">
+// 		<content><![CDATA[${msg.content}]]></content>
+// 		<embeds>${msg.embeds.map(embed => `<embed><![CDATA[${embed.description}]]></embed>`).join("\n")}</embeds>
+// 	</message>`);
+// 				const written = await utils.FsUtils.writeFile(`./data/export/${date.getTime()}.xml`, `<messages guildDid="${this.guild&&this.guild.id||""}" channelDid="${this.channel.id}">${xml.join("")}\n</messages>`);
+// 				sageMessage.reactSuccessOrFailure(written);
+// 				reaction.remove();
+// 			}
+// 			addCommandListener(/^exportChat$/, "", exportChat);
+
+// 		}
+// 	}
+// }
+
+
+function register(): void {
+
+}
+export default register;

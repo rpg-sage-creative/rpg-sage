@@ -1,0 +1,550 @@
+[
+	{
+		"aonId": 243,
+		"name": "Raise Dead",
+		"description": "Return a dead creature to life.",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"cost": "diamonds worth a total value of the target's level (minimum 1) x 200 gp",
+		"details": [
+			"You attempt to call forth the dead creature's soul, requiring the creature's body to be present and relatively intact. The creature must have died within the past 3 days. If Pharasma has decided that the creature's time has come (at the GM's discretion), or if the creature doesn't wish to return to life, this spell automatically fails, but the diamonds aren't consumed in the casting.",
+			"If the spell is successful, the creature returns to life with 1 Hit Point, no spells prepared or spell slots available, no points in any pools or any other daily resources, and still with any long-term debilitations of the old body. The time spent in the Boneyard leaves the target temporarily debilitated, making it clumsy 2, drained 2, and enfeebled 2 for 1 week; these conditions can't be removed or reduced by any means until the week has passed. The creature is also permanently changed by its time in the afterlife, such as a slight personality shift, a streak of white in the hair, or a strange new birthmark."
+		],
+		"heightened": [
+			{ "change": "The maximum level of the target increases to 15. The cost increases to the target's level (minimum 1) × 400 gp.", "level": 7 },
+			{ "change": "The maximum level the target increases to 17. The cost increases to the target's level (minimum 1) × 800 gp.", "level": 8 },
+			{ "change": "The maximum level of the target increases to 19. The cost increases to the target's level (minimum 1) × 1,600 gp.", "level": 9 },
+			{ "change": "The maximum level the target increases to 21. The cost increases to the target's level (minimum 1) × 3,200 gp.", "level": 10 }
+		],
+		"level": 6,
+		"objectType": "Spell",
+		"page": 362,
+		"range": "10 feet",
+		"source": "PZO2101",
+		"targets": "1 dead creature of 13th level or lower",
+		"traditions": [ "divine" ],
+		"traits": [ "Uncommon", "Healing", "Necromancy" ],
+		"focus": false,
+		"id": "de3b9053-09bf-4725-82a2-cfd24a29fe28"
+	},
+	{
+		"aonId": 244,
+		"name": "Ray of Enfeeblement",
+		"description": "Sap a creature's strength.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A ray with the power to sap a foe's strength flashes from your hand. Attempt a ranged spell attack against the target. If you succeed, that creature attempts a Fortitude save in order to determine the spell's effect. If you critically succeed on your attack roll, use the outcome for one degree of success worse than the result of its save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target becomes enfeebled 1."
+				],
+				"failure": [
+					"The target becomes enfeebled 2."
+				],
+				"criticalFailure": [
+					"The target becomes enfeebled 3."
+				]
+			}
+		],
+		"duration": "1 minute",
+		"level": 1,
+		"objectType": "Spell",
+		"page": 362,
+		"range": "30 feet",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Attack", "Necromancy" ],
+		"focus": false,
+		"id": "a80940d0-7d7f-435a-9358-273d5afed28d"
+	},
+	{
+		"aonId": 245,
+		"name": "Ray of Frost",
+		"description": "Damage a creature with cold.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You blast an icy ray. Make a spell attack roll. The ray deals cold damage equal to 1d4 + your spellcasting ability modifier.",
+			{ "criticalSuccess": [ "The target takes double damage and takes a -10-foot status penalty to its Speeds for 1 round." ], "success": [ "The target takes normal damage." ] }
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d4.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 362,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Attack", "Cantrip", "Cold", "Evocation" ],
+		"focus": false,
+		"id": "cf68e8b5-66d4-4644-a459-4439273eceb9"
+	},
+	{
+		"aonId": 246,
+		"name": "Read Aura",
+		"description": "Detect if an object is magical, and determine the school of its magic.",
+		"cast": "1 minute",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You focus on the target object, opening your mind to perceive magical auras. When the casting is complete, you know whether that item is magical, and if it is, you learn the school of magic (pages 297-298).",
+			"If the object is illusory, you detect this only if the effect's level is lower than the level of your <i>read aura</i> spell."
+		],
+		"heightened": [
+			{ "change": "You can target up to 10 objects.", "level": 3 },
+			{ "change": "You can target any number of objects.", "level": 6 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 362,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 object",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Cantrip", "Detection", "Divination" ],
+		"focus": false,
+		"id": "ee164763-34db-495b-b5d0-e45580685cd8"
+	},
+	{
+		"aonId": 247,
+		"name": "Read Omens",
+		"description": "Get a piece of advice about an upcoming event.",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You peek into the future. Choose a particular goal, event, or activity that will occur within 1 week. You learn a cryptic clue or piece of advice that could help with the chosen event, often in the form of a rhyme or omen."
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 363,
+		"source": "PZO2101",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Uncommon", "Divination", "Prediction" ],
+		"focus": false,
+		"id": "c501728a-15ba-4722-a61a-cafde8020bc8"
+	},
+	{
+		"aonId": 248,
+		"name": "Regenerate",
+		"description": "Cause a creature to heal over time, regrow organs, and reattach body parts.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"An infusion of positive energy grants a creature continuous healing. The target temporarily gains regeneration 15, which restores 15 Hit Points to it at the start of each of its turns. While it has regeneration, the target can't die from damage and its dying value can't exceed 3, though if its wounded value becomes 4 or higher, it stays unconscious until its wounds are treated. If the target takes acid or fire damage, its regeneration deactivates until after the end of its next turn.",
+			"Each time the creature regains Hit Points from regeneration, it also regrows one damaged or ruined organ (if any). During the spell's duration, the creature can also reattach severed body parts by spending an Interact action to hold the body part to the area it was severed from."
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{ "change": "The regeneration increases to 20.", "level": 9 }
+		],
+		"level": 7,
+		"objectType": "Spell",
+		"page": 363,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 willing living creature",
+		"traditions": [ "divine", "primal" ],
+		"traits": [ "Healing", "Necromancy", "Positive" ],
+		"focus": false,
+		"id": "004b72a4-7ff4-4984-875d-6aeaa8be9fcc"
+	},
+	{
+		"aonId": 249,
+		"name": "Remake",
+		"description": "Recreate a destroyed object.",
+		"cast": "1 hour",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You fully re-create an object from nothing, even if the object was destroyed. To do so, you must be able to picture the object in your mind. Additionally, the material component must be a remnant of the item, no matter how small or insignificant (even a speck of dust that remains from <i>disintegrate</i> is enough). The spell fails if your imagination relied on too much guesswork; if the object would be too large to fit in a 5-foot cube; if the object still exists and you were simply not aware of it; or if the object is an artifact, has a level over 20, or has similar vast magical power.",
+			"The item reassembles in perfect condition. Even if your mental image was of a damaged or weathered object, the new one is in this perfected form. If the object was magical, this spell typically restores its constant magical properties, but not any temporary ones, such as charges or one-time uses. An item with charges or uses per day has all of its uses expended when remade, but it replenishes them normally thereafter."
+		],
+		"level": 10,
+		"objectType": "Spell",
+		"page": 363,
+		"range": "5 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Uncommon", "Conjuration" ],
+		"focus": false,
+		"id": "50a76bd6-d5b0-468b-a5e8-bb32a52887cb"
+	},
+	{
+		"aonId": 250,
+		"name": "Remove Curse",
+		"description": "Counteract a curse af icting a creature.",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"Your touch grants a reprieve to a cursed creature. You attempt to counteract one curse afflicting the target. If the curse comes from a cursed item or other external source, a success indicates that the target creature can rid itself of the cursed item, but it doesn't remove the curse from the item."
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 363,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Healing", "Necromancy" ],
+		"focus": false,
+		"id": "e95087bf-f2bb-4041-983e-1e0c6a8edd5f"
+	},
+	{
+		"aonId": 251,
+		"name": "Remove Disease",
+		"description": "Cure a disease afflicting a creature.",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"Healing magic purges disease from a creature's body. You attempt to counteract one disease afflicting the target."
+		],
+		"level": 3,
+		"objectType": "Spell",
+		"page": 363,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine", "primal" ],
+		"traits": [ "Healing", "Necromancy" ],
+		"focus": false,
+		"id": "cd362b80-0475-4b5c-8902-567542c4dcae"
+	},
+	{
+		"aonId": 252,
+		"name": "Remove Fear",
+		"description": "Free a creature from its fright.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"With a touch, you ease a creature's fears. You can attempt to counteract a single fear effect that the target suffers from. This frees only the target, not any other creatures under the fear effect."
+		],
+		"heightened": [
+			{ "change": "The spell's range increases to 30 feet, and you can target up to 10 creatures.", "level": 6 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 363,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine", "occult", "primal" ],
+		"traits": [ "Enchantment" ],
+		"focus": false,
+		"id": "4a6fe03d-0291-43fd-99bf-045bf288e461"
+	},
+	{
+		"aonId": 253,
+		"name": "Remove Paralysis",
+		"description": " Free a creature from paralysis.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A surge of energy frees a paralyzed creature. You can attempt to counteract a single effect imposing the paralyzed condition on the target. This does not cure someone who is paralyzed from some natural state or effect, such as paralysis caused by non-magical wounds or toxins."
+		],
+		"heightened": [
+			{ "change": "The spell's range increases to 30 feet, and you can target up to 10 creatures.", "level": 6 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 363,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine", "occult", "primal" ],
+		"traits": [ "Healing", "Necromancy" ],
+		"focus": false,
+		"id": "a47553da-06ff-4788-bf6c-464960b099e1"
+	},
+	{
+		"aonId": 254,
+		"name": "Repulsion",
+		"description": "Prevent creatures from approaching you.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You manifest an aura that prevents creatures from approaching you. When casting the spell, you can make the area any radius you choose, up to 40 feet. A creature must attempt a Will save if it's within the area when you cast the spell or as soon as it enters the area while the spell is in effect. Once a creature has attempted the save, it uses the same result for that casting of repulsion. Any restrictions on a creature's movement apply only if it voluntarily moves toward you. For example, if you move closer to a creature, it doesn't then need to move away.",
+			{
+				"criticalSuccess": [
+					"The creature's movement is not restricted."
+				],
+				"success": [
+					"The creature treats each square in the area as difficult terrain when moving closer to you."
+				],
+				"failure": [
+					"The creature can't move closer to you within the area."
+				]
+			}
+		],
+		"duration": "1 minute",
+		"level": 6,
+		"objectType": "Spell",
+		"page": 363,
+		"range": "emanation up to 40-feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Abjuration", "Aura", "Mental" ],
+		"focus": false,
+		"id": "d724527b-44d6-4fd7-9c6d-edb87fa822f7"
+	},
+	{
+		"aonId": 255,
+		"name": "Resilient Sphere",
+		"description": "Create a sphere of force that blocks anything that would come through.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You create an immobile sphere of force to either trap or protect the target, blocking anything that would pass through the sphere. The sphere has AC 5, Hardness 10, and 40 Hit Points. It's immune to critical hits and precision damage. <i>Disintegrate</i> destroys the sphere instantly. If the target is unwilling, the effects of the sphere depend on the target's Reflex save.",
+			{
+				"criticalSuccess": [
+					"The target disrupts the sphere's integrity, causing it to collapse entirely."
+				],
+				"success": [
+					"The sphere functions normally but has only 10 Hit Points instead of 40."
+				],
+				"failure": [
+					"The sphere has its normal effect."
+				]
+			}
+		],
+		"duration": "1 minute",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 364,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 Large or smaller creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Abjuration", "Force" ],
+		"focus": false,
+		"id": "0c74feb8-16ce-4c36-9564-b8385fe24e87"
+	},
+	{
+		"aonId": 256,
+		"name": "Resist Energy",
+		"description": "Protect a creature from one type of energy damage.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A shield of elemental energy protects a creature against one type of energy damage. Choose acid, cold, electricity, fire, or sonic damage. The target and its gear gain resistance 5 against the damage type you chose."
+		],
+		"duration": "10 minutes",
+		"heightened": [
+			{ "change": "The resistance increases to 10, and you can target up to two creatures.", "level": 4 },
+			{ "change": "The resistance increases to 15, and you can target up to five creatures.", "level": 7 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 364,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Abjuration" ],
+		"focus": false,
+		"id": "eb7ed4dc-10c2-4fe8-b190-ab3548af9f20"
+	},
+	{
+		"aonId": 257,
+		"name": "Resplendent Mansion",
+		"description": "Conjure a mansion that lasts for a day.",
+		"cast": "1 minute",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure a towering mansion up to four stories tall and up to 300 feet on a side. While Casting the Spell, you hold an image of the mansion and its desired appearance in your mind. The mansion can contain as many or as few rooms as you desire, and it is decorated as you imagine it. You can imagine a purpose for each room of the mansion, and the proper accouterments appear within. Any furniture or other mundane fixtures function normally for anyone inside the mansion, but they cease to exist if taken beyond its walls. No fixture created with this spell can create magical effects, but magical devices brought into the mansion function normally.",
+			"Your mansion contains the same types and quantities of foodstuffs and servants as created by the <i>magnificent mansion</i> spell.",
+			"Each of the mansion's exterior doorways and windows are protected by <i>alarm</i> spells. You choose whether each alarm is audible or mental as you Cast the Spell, and each has a different sound (for an audible alarm) or sensation (for a mental one), allowing you to instantly determine which portal has been used."
+		],
+		"duration": "until the next time you make your daily preparations",
+		"level": 9,
+		"objectType": "Spell",
+		"page": 364,
+		"range": "500 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "14cefe95-db28-498a-a64d-97091b760735"
+	},
+	{
+		"aonId": 258,
+		"name": "Restoration",
+		"description": "Reduce a condition or lessen a toxin.",
+		"cast": "1 minute",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Restorative magic counters the effects of toxins or conditions that prevent a creature from functioning at its best. When you cast <i>restoration</i>, choose to either reduce a condition or lessen the effect of a toxin. A creature can benefit from only one <i>restoration</i> spell each day, and it can't benefit from <i>restoration</i> more than once to reduce the stage of the same exposure to a given toxin.<ul><li><b>Reduce a Condition</b> Reduce the value of the target's clumsy, enfeebled, or stupefied condition by 2. You can instead reduce two of the listed conditions by 1 each.</li><li><b>Lessen a Toxin</b> Reduce the stage of one toxin the target suffers from by one stage. This can't reduce the stage below stage 1 or cure the affliction.</li></ul>"
+		],
+		"heightened": [
+			{
+				"change": "Add drained to the list of conditions you can reduce. When you lessen a toxin, reduce the stage by two. You also gain a third option that allows you to reduce the target's doomed value by 1. You can't use this to reduce a permanent doomed condition.",
+				"level": 4
+			},
+			{
+				"change": "As the 4th-level <i>restoration</i>, but you can reduce a permanent doomed condition if you add a spellcasting action and a material component while Casting the Spell, during which you provide 100 gp worth of diamond dust as a cost.",
+				"level": 6
+			}
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 364,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine", "occult", "primal" ],
+		"traits": [ "Healing", "Necromancy" ],
+		"focus": false,
+		"id": "d19d8d33-d409-4823-bd6c-520c92055bea"
+	},
+	{
+		"aonId": 259,
+		"name": "Restore Senses",
+		"description": "Remove a blinding or deafening effect.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You attempt to counteract a single effect imposing the blinded or deafened conditions on the target, restoring its vision or hearing. This can counteract both temporary magic and permanent consequences of magic, but it doesn't cure someone who does not have the sense due to some natural state or effect, such as from birth or from a non-magical wound or toxin."
+		],
+		"heightened": [
+			{ "change": "The spell's range increases to 30 feet, and you can target up to 10 creatures. You can choose the effect to counteract separately for each selected creature.", "level": 6 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 364,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine", "occult", "primal" ],
+		"traits": [ "Healing", "Necromancy" ],
+		"focus": false,
+		"id": "73c9bcd5-435c-4825-b89e-7016f663a986"
+	},
+	{
+		"aonId": 260,
+		"name": "Retrocognition",
+		"description": "Sense impressions of past events at your location.",
+		"cast": "1 minute",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"Opening your mind to occult echoes, you gain impressions from past events that occurred in your current location. <i>Retrocognition</i> reveals psychic impressions from events that occurred over the course of the last day throughout the first minute of the duration, followed by impressions from the next day back the next minute, and so on. These echoes don't play out like a vision but instead reveal impressions of emotions and metaphors that provide cryptic clues and details of the past. If you witness a traumatic or turbulent event through an impression, the spell ends unless you succeed at a Will save with a DC of at least 30 and possibly as much as 50, depending on the severity of the event. The GM determines whether an event is traumatic and chooses the DC."
+		],
+		"duration": "sustained",
+		"heightened": [
+			{
+				"change": "You gain impressions of events that occurred over the previous year for each minute you concentrate, instead of the previous day, though the details diminish, making it harder to distinguish impressions from all but the most major events.",
+				"level": 8
+			},
+			{
+				"change": "You gain impressions of events that occurred over the previous century for each minute you concentrate, instead of the previous day, though the details diminish, making it almost impossible to distinguish impressions from all but the most major events.",
+				"level": 9
+			}
+		],
+		"level": 7,
+		"objectType": "Spell",
+		"page": 365,
+		"source": "PZO2101",
+		"traditions": [ "occult" ],
+		"traits": [ "Divination" ],
+		"focus": false,
+		"id": "91e8bbdb-22f5-4c51-873e-a90eda2142cd"
+	},
+	{
+		"aonId": 261,
+		"name": "Reverse Gravity",
+		"description": "Flip the gravitational pull in an area.",
+		"area": "20-foot radius, 40-foot-tall cylinder",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You reverse gravity in the area. Creatures and objects that aren't secured to the ground immediately fall upward to the top of the area. A creature might be able to Grab an Edge to arrest its fall if it falls past an appropriate surface. If a creature falls against a solid object (such as a ceiling), it takes the appropriate amount of falling damage and lands on the surface. Once an object or creature reaches the top of the area, it floats, caught between the normal and reversed gravity. The creature can move along the plane where the two forms of gravity meet. Creatures that can levitate or fly can use those abilities to mitigate the effects of <i>reverse gravity</i>.",
+			"When <i>reverse gravity</i> ends, all creatures and objects caught in the area fall back down. Likewise, anything that moves beyond the spell's area is subjected to normal gravity again."
+		],
+		"duration": "1 minute",
+		"level": 7,
+		"objectType": "Spell",
+		"page": 365,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Uncommon", "Evocation" ],
+		"focus": false,
+		"id": "9f9bb6e8-0eda-45b3-a0a5-857d9cbd9f52"
+	},
+	{
+		"aonId": 262,
+		"name": "Revival",
+		"description": "Heal creatures in an area and return the dead to life temporarily.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A burst of healing energy soothes living creatures and temporarily rouses those recently slain. All living targets regain 10d8+40 Hit Points. In addition, you return any number of dead targets to life temporarily, with the same effects and limitations as <i>raise dead</i> (page 362). The raised creatures have a number of temporary Hit Points equal to the Hit Points you gave living creatures, but no normal Hit Points. The raised creatures can't regain Hit Points or gain temporary Hit Points in other ways, and once <i>revival</i>'s duration ends, they lose all temporary Hit Points and die. <i>Revival</i> can't resurrect creatures killed by <i>disintegrate</i> or a death effect. It has no effect on undead."
+		],
+		"duration": "sustained up to 1 minute",
+		"level": 10,
+		"objectType": "Spell",
+		"page": 366,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "dead creatures and living creatures of your choice within range",
+		"traditions": [ "divine", "primal" ],
+		"traits": [ "Healing", "Necromancy", "Positive" ],
+		"focus": false,
+		"id": "2bc360cc-31c1-4827-8437-f085a5d2f5a8"
+	},
+	{
+		"aonId": 263,
+		"name": "Righteous Might",
+		"description": "Turn into a battle form with divine armaments.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You focus all your divine energy and transform yourself into a Medium battle form, similar to your normal form but armed with powerful divine armaments granted by your deity. While in this form, you gain the statistics and abilities listed below. You have hands in this battle form and can use manipulate actions. You can Dismiss the spell.",
+			"You gain the following statistics and abilities: <ul><li>AC = 20 + your level. Ignore your armor's check penalty and Speed reduction.</li><li>10 temporary Hit Points.</li><li>Speed 40 feet.</li><li>Resistance 3 against physical damage.</li><li>Darkvision.</li><li>A special attack with a righteous armament version of your favored weapon, which is the only attack you can use. Your attack modifier with the special weapon is +21, and your damage bonus is +8 (or +6 for a ranged attack). If your attack modifier with your deity's favored weapon is higher, you can use it instead. You deal three of your weapon's normal damage dice, or three damage dice of one size larger if your weapon is a simple weapon with a d4 or d6 damage die. The weapon has one of the following properties that matches your deity's alignment: <i>anarchic</i>, <i>axiomatic</i>, <i>holy</i>, <i>unholy</i>. If your deity is true neutral, you instead deal an extra 1d6 precision damage.</li><li>Athletics modifier of +23, unless your own modifier is higher.</li></ul>"
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{
+				"change": "Your battle form is Large, and your attacks have 10-foot reach, or 15-foot reach if your deity's favored weapon has reach. You must have enough space to expand into or the spell is lost. You instead gain AC = 21 + your level, 15 temporary HP, resistance 4 against physical damage, attack modifier +28, damage bonus +15 (+12 for a ranged attack), and Athletics +29.",
+				"level": 8
+			}
+		],
+		"level": 6,
+		"objectType": "Spell",
+		"page": 366,
+		"requirements": "You have a deity.",
+		"source": "PZO2101",
+		"traditions": [ "divine" ],
+		"traits": [ "Polymorph", "Transmutation" ],
+		"focus": false,
+		"id": "80e8b80e-31ae-4a41-a7da-00f516a537c9"
+	},
+	{
+		"aonId": 264,
+		"name": "Rope Trick",
+		"description": "Animate a rope that rises to an extradimensional hiding place.",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You cause the target rope to rise vertically into the air. Where it ends, an extradimensional space opens, connected to the top of the rope. This space can be reached only by climbing the rope.",
+			"The entrance to the space can't be seen, and it can be pinpointed only by the presence of the rope. The rope can't be removed or hidden, though it can be detached from the extradimensional space by pulling it with 16,000 pounds of weight, critically succeeding at an Athletics check against the spell's DC, or destroying the rope. The space holds up to eight Medium creatures and their gear. A Large creature counts as two Medium creatures, a Huge creature counts as four Medium creatures, and a Gargantuan creature fills the space on its own.",
+			"If the rope is detached or destroyed, or if a creature attempts to enter the space that would put it over its capacity, the space begins to unravel. It disappears in 1d4 rounds, depositing the creatures within safely on the ground below."
+		],
+		"duration": "8 hours",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 366,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 touched piece of rope from 5 to 30 feet long",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Uncommon", "Conjuration", "Extradimensional" ],
+		"focus": false,
+		"id": "68e121f3-3a34-42ee-a652-e7193498f95b"
+	}
+]

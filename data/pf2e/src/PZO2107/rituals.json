@@ -1,0 +1,123 @@
+[
+	{
+		"name": "Div Pact",
+		"level": 1,
+		"objectType": "Ritual",
+		"traits": [ "Uncommon", "Conjuration" ],
+		"cast": "1 day",
+		"primaryCheck": "Religion (expert; you must be a div)",
+		"details": [
+			"You call upon the powers of Abaddon to grant you the assistance of a div. You call upon a div whose level can be no more than double <i>div pact</i>'s spell level, two divs whose levels are each at least 2 less than double the spell level, or three divs whose levels are each at least 3 less than double the spell level.",
+			{
+				"criticalSuccess": [
+					"You conjure the div or divs, and they require nothing in return for their service."
+				],
+				"success": [
+					"You conjure the div or divs. They are not eager to pursue the task, so they require a favor in return."
+				],
+				"failure": [
+					"You don't conjure any divs."
+				],
+				"criticalFailure": [
+					"You don't conjure any divs, and they send a spiritual backlash that denies your use of any of your innate divine spells for 24 hours. If you are under the effect of any of your innate divine spells, the durations end."
+				]
+			}
+		],
+		"page": 310,
+		"source": "PZO2107",
+		"focus": false,
+		"aonId": 46,
+		"id": "c40ae8ab-2ef2-4d7c-bbb1-94432958079d"
+	},
+	{
+		"name": "Owb Pact",
+		"level": 3,
+		"objectType": "Ritual",
+		"traits": [ "Uncommon", "Conjuration" ],
+		"cast": "1 day",
+		"secondaryCasters": "2",
+		"primaryCheck": "Occultism (expert)",
+		"details": [
+			"You call upon an owb (page 196) to assist you in a goal. Only caligni callers can use this ritual with relative safety. If a different type of caligni attempts this ritual, they use an outcome one degree of success worse than the result of their check. If a non-caligni attempts this ritual, the result is an automatic critical failure.",
+			{
+				"criticalSuccess": [
+					"You conjure the owb. It decides your goals closely match its own and doesn't request a favor in return."
+				],
+				"success": [
+					"You conjure the owb. It isn't eager to pursue the task, so it requires a favor in return."
+				],
+				"failure": [
+					"You don't conjure an owb."
+				],
+				"criticalFailure": [
+					"You conjure an owb, but it deems you unworthy and siphons away some of your soul energy. All casters become doomed 2."
+				]
+			}
+		],
+		"page": 41,
+		"source": "PZO2107",
+		"focus": false,
+		"aonId": 45,
+		"id": "0ea9eb14-7cfd-4ae2-81df-a333bfd21ca4"
+	},
+	{
+		"name": "Abyssal Pact",
+		"level": 1,
+		"objectType": "Ritual",
+		"traits": [ "Uncommon", "Conjuration" ],
+		"cast": "1 day",
+		"primaryCheck": "Religion (expert; you must be a demon)",
+		"details": [
+			"You call in a favor from another demon whose level is no more than double <i>Abyssal pact</i>'s spell level, two demons whose levels are each at least 2 less than double the spell level, or three demons whose levels are each at least 3 less than double the spell level.",
+			{
+				"criticalSuccess": [
+					"You conjure the demon or demons. They are eager to pursue the task, so they don't ask for a favor."
+				],
+				"success": [
+					"You conjure the demon or demons. They are not eager to pursue the task, so they require a favor in return."
+				],
+				"failure": [
+					"You don't conjure any demons."
+				],
+				"criticalFailure": [
+					"The demon or demons are angry that you disturbed them. They appear before you, but they immediately attack you."
+				]
+			}
+		],
+		"page": 310,
+		"source": "PZO2107",
+		"focus": false,
+		"aonId": 46,
+		"id": "bd89472e-4d9e-4b6b-9970-43dbbe641eca"
+	},
+	{
+		"name": "Infernal Pact",
+		"level": 1,
+		"objectType": "Ritual",
+		"traits": [ "Uncommon", "Conjuration" ],
+		"cast": "1 day",
+		"primaryCheck": "Religion (expert; you must be a devil)",
+		"details": [
+			"You make an appeal to a powerful devil, asking them to bind some of their subordinates to your service. If you succeed, the devil sends you their choice of one devil whose level is no more than double <i>infernal pact</i>'s level, two devils whose levels are each at least 2 less than double the spell level, or three devils whose levels are each at least 3 less than double the spell level.",
+			{
+				"criticalSuccess": [
+					"The devils are sent to you and serve you for 1d4 weeks."
+				],
+				"success": [
+					"The devils are sent to you and serve you for 1d4 days."
+				],
+				"failure": [
+					"Your request is denied."
+				],
+				"criticalFailure": [
+					"Not only is your request denied, but the powerful devil sends word of its displeasure to your master."
+				]
+			}
+		],
+		"page": 311,
+		"source": "PZO2107",
+		"focus": false,
+		"aonId": 46,
+		"id": "f408e6b8-5bfd-4958-ae18-51c99f0267af"
+	}
+]

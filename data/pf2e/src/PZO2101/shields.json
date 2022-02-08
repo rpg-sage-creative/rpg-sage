@@ -1,0 +1,79 @@
+[
+	{
+		"objectType": "Shield",
+		"name": "Buckler",
+		"price": "1 gp",
+		"acBonus": 1,
+		"speedPenalty": null,
+		"bulk": "1",
+		"wornBulk": "L",
+		"hardness": 3,
+		"hitPoints": 6,
+		"breakThreshold": 3,
+		"details": [
+			"This very small shield is a favorite of duelists and quick, lightly armored warriors. It's typically made of steel and strapped to your forearm. You can Raise a Shield with your buckler as long as you have that hand free or are holding a light object that's not a weapon in that hand."
+		],
+		"source": "PZO2101",
+		"page": 277,
+		"id": "d999ddba-54c3-4dfb-a45e-f7d528e020ff",
+		"aonId": 1
+	},
+	{
+		"objectType": "Shield",
+		"name": "Wooden Shield",
+		"price": "1 gp",
+		"acBonus": 2,
+		"speedPenalty": null,
+		"bulk": "2",
+		"wornBulk": "1",
+		"hardness": 3,
+		"hitPoints": 12,
+		"breakThreshold": 6,
+		"details": [
+			"Though they come in a variety of shapes and sizes, the protection offered by wooden shields comes from the stoutness of their materials. While wooden shields are less expensive than steel shields, they break more easily."
+		],
+		"source": "PZO2101",
+		"page": 277,
+		"id": "2275ad03-751d-4788-adc1-87fe2215e6c2",
+		"aonId": 2
+	},
+	{
+		"objectType": "Shield",
+		"name": "Steel Shield",
+		"price": "2 gp",
+		"acBonus": 2,
+		"speedPenalty": null,
+		"bulk": "2",
+		"wornBulk": "1",
+		"hardness": 5,
+		"hitPoints": 20,
+		"breakThreshold": 10,
+		"details": [
+			"Like wooden shields, steel shields come in a variety of shapes and sizes. Though more expensive than wooden shields, they are much more durable."
+		],
+		"source": "PZO2101",
+		"page": 277,
+		"id": "07150e2f-138a-4511-922b-4ade1be39cf1",
+		"aonId": 3
+	},
+	{
+		"objectType": "Shield",
+		"name": "Tower Shield",
+		"price": "10 gp",
+		"acBonus": 2,
+		"coverAcBonus": 4,
+		"speedPenalty": -5,
+		"bulk": "5",
+		"wornBulk": "4",
+		"hardness": 5,
+		"hitPoints": 20,
+		"breakThreshold": 10,
+		"details": [
+			"These massive shields can be used to provide cover to nearly the entire body. Due to their size, they are typically made of wood reinforced with metal."
+		],
+		"source": "PZO2101",
+		"page": 277,
+		"id": "5cc7a75d-430a-44bd-8a21-530a2c24a6b0",
+		"aonId": 4
+	}
+]

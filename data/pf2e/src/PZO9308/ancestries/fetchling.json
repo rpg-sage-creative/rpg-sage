@@ -1,0 +1,24 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Fetchling",
+		"youMight": [
+			"Live and work in gloomy areas of dim light with plenty of shadows, only providing bright light when expecting visitors.",
+			"Look to people's shadows as a way of identifying them, alongside features like stature or facial structure.",
+			"Maintain composure when faced with strange creatures and circumstances."
+		],
+		"othersProbably": [
+			"Believe you have shadowy powers, such as the ability to consume light as food, melt into darkness, or travel between planes.",
+			"Expect you to be cautious, reserved, and a loner.",
+			"Express interest in your ancestral physiological connection to the Shadow Plane."
+		],
+		"aonId": 30,
+		"source": "PZO9308",
+		"id": "82985cfc-1ee4-4d67-9f70-5135b67ab1d4"
+	},
+	{ "objectType": "Heritage", "name": "Bright Fetchling", "ancestry": "Fetchling", "source": "PZO9308", "id": "6cbbbbc3-6f3e-4675-8d30-4b6e7d7d63bd", "aonId": 120 },
+	{ "objectType": "Heritage", "name": "Deep Fetchling", "ancestry": "Fetchling", "source": "PZO9308", "id": "6323b828-c8ec-40ea-8355-982958c01358", "aonId": 121 },
+	{ "objectType": "Heritage", "name": "Liminal Fetchling", "ancestry": "Fetchling", "source": "PZO9308", "id": "ca8b8f9d-586d-4a33-95fa-246486f28c96", "aonId": 122 },
+	{ "objectType": "Heritage", "name": "Resolute Fetchling", "ancestry": "Fetchling", "source": "PZO9308", "id": "eae9a129-5ea3-4de8-bc85-5dd70c3eafa7", "aonId": 123 },
+	{ "objectType": "Heritage", "name": "Wisp Fetchling", "ancestry": "Fetchling", "source": "PZO9308", "id": "11b7d318-b8f4-4bfa-ac15-5a56d8fe0d03", "aonId": 124 }
+]

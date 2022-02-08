@@ -1,0 +1,3 @@
+Pathfinder 2e Data (src)
+v0.2.9-12-g5c8ae34
+Update v0.2.9 - LOGB and G&G ancestries, archetypes, classes

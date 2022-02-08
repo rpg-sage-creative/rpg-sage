@@ -1,0 +1,95 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Bastion",
+		"details": [
+			"Some say that a good offense is the best defense, but you find such boasting smacks of overconfidence. In your experience, the best defense is a good, solid shield between you and your enemies. You've focused your training on how best to use a shield to protect yourself and those around you."
+		],
+		"additionalFeats": [
+			{ "level": 6, "name": "Shielded Stride" },
+			{ "level": 8, "name": "Reflexive Shield" },
+			{ "level": 8, "name": "Shield Warden" },
+			{ "level": 10, "name": "Quick Shield Block" },
+			{ "level": 12, "name": "Mirror Shield" }
+		],
+		"page": 159,
+		"source": "PZO2105",
+		"id": "253c9eab-06d7-4eda-aea6-32f8abc2b08a",
+		"aonId": 49
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Bastion Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication" ],
+		"prerequisites": [ "Shield Block" ],
+		"details": [
+			"You are particularly skilled at using a shield in combat. You gain the Reactive Shield fighter feat (<i>Core Rulebook</i> 145). This fulfills any prerequisites requiring Reactive Shield as normal."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the bastion archetype."
+		],
+		"page": 159,
+		"source": "PZO2105",
+		"id": "a4d220f2-9694-4d47-98ac-43487f97c4dd",
+		"aonId": 1895
+	},
+	{
+		"objectType": "Feat",
+		"name": "Disarming Block",
+		"actionType": "[F]",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Bastion Dedication", "trained in Athletics" ],
+		"trigger": "You Shield Block a melee Strike made with a held weapon.",
+		"details": [
+			"You attempt to Disarm the creature whose attack you blocked of the weapon they attacked you with. You can do so even if you don't have a hand free."
+		],
+		"page": 159,
+		"source": "PZO2105",
+		"id": "95d95a3f-661b-4781-b82d-3739f028fc29",
+		"aonId": 1896
+	},
+	{
+		"objectType": "Feat",
+		"name": "Nimble Shield Hand",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Bastion Dedication" ],
+		"details": [
+			"You are so used to wielding a shield that you can do so even while using the hand that's holding it for other purposes. The hand you use to wield a shield counts as a free hand for the purposes of the Interact action. You can also hold another object in this hand (but you still can't use it to wield a weapon). This benefit doesn't apply to tower shields, which are still too cumbersome."
+		],
+		"page": 159,
+		"source": "PZO2105",
+		"id": "4974beae-f8a1-4b00-ada6-39bb07e8ae05",
+		"aonId": 1897
+	},
+	{
+		"objectType": "Feat",
+		"name": "Destructive Block",
+		"level": 10,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Bastion Dedication" ],
+		"details": [
+			"You can protect yourself more effectively, at the expense of your shield. When you Shield Block, you can reduce the damage to yourself by double the shield's Hardness, but if you do, the shield takes double the normal amount of damage it would have taken (before applying its Hardness). You can't use Destructive Block if your shield can't be broken or destroyed, such as if you're using an <i>indestructible shield</i>."
+		],
+		"page": 159,
+		"source": "PZO2105",
+		"id": "f131e2fb-6802-4399-9d1c-de7a72b9580e",
+		"aonId": 1898
+	},
+	{
+		"objectType": "Feat",
+		"name": "Shield Salvation",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Bastion Dedication" ],
+		"details": [
+			"You can save your shield from total destruction, even after a devastating attack. If a shield would be destroyed due to damage taken during your Shield Block, the shield remains intact at 1 Hit Point instead. Its construction is weakened until you take the time to repair it, preventing you from using Shield Salvation to save the same shield until your next preparations."
+		],
+		"page": 159,
+		"source": "PZO2105",
+		"id": "7d6851a2-1c8b-4c78-a381-616e53ab5ada",
+		"aonId": 1899
+	}
+]

@@ -1,0 +1,919 @@
+[
+	{
+		"aonId": 58,
+		"name": "Dancing Lights",
+		"description": "Create four floating lights you can move.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You create up to four floating lights, no two of which are more than 10 feet apart. Each sheds light like a torch. When you Sustain the Spell, you can move any number of lights up to 60 feet. Each light must remain within 120 feet of you and within 10 feet of all others, or it winks out."
+		],
+		"duration": "sustained",
+		"level": 1,
+		"objectType": "Spell",
+		"page": 327,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult", "primal" ],
+		"traits": [ "Cantrip", "Evocation", "Light" ],
+		"focus": false,
+		"id": "603ab3fc-52b8-4f4c-947d-0718a648ce8d"
+	},
+	{
+		"aonId": 59,
+		"name": "Darkness",
+		"description": "Suppress all light in an area.",
+		"area": "20-foot burst",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You create a shroud of darkness that prevents light from penetrating or emanating within the area. Light does not enter the area and any non-magical light sources, such as a torch or lantern, do not emanate any light while inside the area, even if their light radius would extend beyond the <i>darkness</i>. This also suppresses magical light of your <i>darkness</i> spell's level or lower. Light can't pass through, so creatures in the area can't see outside. From outside, it appears as a globe of pure darkness."
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{ "change": "Even creatures with darkvision (but not greater darkvision) can barely see through the darkness. They treat targets seen through the darkness as concealed.", "level": 4 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 327,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Darkness", "Evocation" ],
+		"focus": false,
+		"id": "3afb10d7-f3fe-4087-a440-fa78ac43be15"
+	},
+	{
+		"aonId": 60,
+		"name": "Darkvision",
+		"description": "See in the dark.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You grant yourself supernatural sight in areas of darkness. You gain darkvision."
+		],
+		"duration": "1 hour",
+		"heightened": [
+			{ "change": "The spell's range is touch and it targets 1 willing creature.", "level": 3 },
+			{ "change": "The spell's range is touch and it targets 1 willing creature. The duration is until the next time you make your daily preparations.", "level": 5 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 327,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Divination" ],
+		"focus": false,
+		"id": "0bdb4166-0cc6-426f-96dd-3d386684391f"
+	},
+	{
+		"aonId": 61,
+		"name": "Daze",
+		"description": "Damage a creature's mind and possibly stun it.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You cloud the target's mind and daze it with a mental jolt. The jolt deals mental damage equal to your spellcasting ability modifier; the target must attempt a basic Will save. If the target critically fails the save, it is also stunned 1."
+		],
+		"duration": "1 round",
+		"heightened": [
+			{ "change": "The damage increases by 1d6.", "bump": 2 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 327,
+		"range": "60 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Cantrip", "Enchantment", "Mental", "Nonlethal" ],
+		"focus": false,
+		"id": "5691b5d5-8ce8-4835-8e7f-8026d9dba2a2"
+	},
+	{
+		"aonId": 62,
+		"name": "Deafness",
+		"description": "Make a creature deaf.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"The target loses hearing; it must attempt a Fortitude save. The target is then temporarily immune for 1 minute.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target is deafened for 1 round."
+				],
+				"failure": [
+					"The target is deafened for 10 minutes."
+				],
+				"criticalFailure": [
+					"The target is deafened permanently."
+				]
+			}
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 327,
+		"range": "30 feet",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Necromancy" ],
+		"focus": false,
+		"id": "b1008aae-5dc9-4392-b884-b5694468fc6e"
+	},
+	{
+		"aonId": 63,
+		"name": "Death Knell",
+		"description": "Finish of a creature who's near death.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You snuff the life out of a creature on the brink of death. The target must attempt a Will save. If this kills it, you gain 10 temporary HP and a +1 status bonus to attack and damage rolls for 10 minutes.",
+			{ "criticalSuccess": [ "The target is unaffected." ], "success": [ "The target's dying value increases by 1." ], "failure": [ "The target dies." ] }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 328,
+		"range": "touch",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 living creature that has 0 HP",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Death", "Necromancy" ],
+		"focus": false,
+		"id": "135bc0b4-852c-4d9b-96e4-9825dd397433"
+	},
+	{
+		"aonId": 64,
+		"name": "Death Ward",
+		"description": "Protect a creature against negative energy.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You shield a creature from the ravages of negative energy. It receives a +4 status bonus to saves against death and negative effects, gains negative resistance 10, and suppresses the effects of the doomed condition."
+		],
+		"duration": "10 minutes",
+		"level": 5,
+		"objectType": "Spell",
+		"page": 328,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 living creature touched",
+		"traditions": [ "divine", "occult", "primal" ],
+		"traits": [ "Abjuration" ],
+		"focus": false,
+		"id": "5e510309-cc01-493d-a185-123da1162719"
+	},
+	{
+		"aonId": 65,
+		"name": "Detect Alignment",
+		"description": "See auras of a chosen alignment.",
+		"area": "30-foot emanation",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Your eyes glow as you sense aligned auras. Choose chaotic, evil, good, or lawful. You detect auras of that alignment. You receive no information beyond presence or absence. You can choose not to detect creatures or effects you're aware have that alignment.",
+			"Only creatures of 6th level or higher-unless divine spellcasters, undead, or beings from the Outer Sphere-have alignment auras."
+		],
+		"heightened": [
+			{ "change": "You learn each aura's location and strength.", "level": 2 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 328,
+		"source": "PZO2101",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Uncommon", "Detection", "Divination" ],
+		"focus": false,
+		"id": "c37730e3-a1ac-4606-826e-e27c4cbee986"
+	},
+	{
+		"aonId": 66,
+		"name": "Detect Magic",
+		"description": "Sense whether magic is nearby.",
+		"area": "30-foot emanation",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You send out a pulse that registers the presence of magic. You receive no information beyond the presence or absence of magic. You can choose to ignore magic you're fully aware of, such as the magic items and ongoing spells of you and your allies.",
+			"You detect illusion magic only if that magic's effect has a lower level than the level of your <i>detect magic</i> spell. However, items that have an illusion aura but aren't deceptive in appearance (such as an <i>invisibility potion</i>) typically are detected normally."
+		],
+		"heightened": [
+			{ "change": "You learn the school of magic for the highest-level effect within range that the spell detects. If multiple effects are equally strong, the GM determines which you learn.", "level": 3 },
+			{
+				"change": "As 3rd level, but you also pinpoint the source of the highest-level magic. Like for an imprecise sense, you don't learn the exact location, but can narrow down the source to within a 5-foot cube (or the nearest if larger than that).",
+				"level": 4
+			}
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 328,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Cantrip", "Detection", "Divination" ],
+		"focus": false,
+		"id": "17daaed0-88ac-48c3-a3e2-f99abe1a45d3"
+	},
+	{
+		"aonId": 67,
+		"name": "Detect Poison",
+		"description": "Determine whether an object or creature is poisonous or venomous.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You detect whether a creature is venomous or poisonous, or if an object is poison or has been poisoned. You do not ascertain whether the target is poisonous in multiple ways, nor do you learn the type or types of poison. Certain substances, like lead and alcohol, are poisons and so mask other poisons."
+		],
+		"heightened": [
+			{ "change": "You learn the number and types of poison.", "level": 2 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 328,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 object or creature",
+		"traditions": [ "divine", "primal" ],
+		"traits": [ "Uncommon", "Detection", "Divination" ],
+		"focus": false,
+		"id": "ad044985-48f9-45e7-98e1-1fb4dc872539"
+	},
+	{
+		"aonId": 68,
+		"name": "Detect Scrying",
+		"description": "Find out if scrying ef ects are in the area.",
+		"area": "30-foot emanation",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"By tapping into trace divinatory auras, you detect the presence of scrying effects in the area. If <i>detect scrying</i> is higher level than a scrying effect, you gain a glimpse of the scrying creature and learn its approximate distance and direction."
+		],
+		"duration": "1 hour",
+		"heightened": [
+			{ "change": "The duration is until the next time you make your daily preparations.", "level": 6 }
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 328,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Uncommon", "Detection", "Divination" ],
+		"focus": false,
+		"id": "33270c0c-540a-4533-8aaf-354a9a82dc31"
+	},
+	{
+		"aonId": 69,
+		"name": "Dimension Door",
+		"description": "Teleport yourself up to 120 feet.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Opening a door that bypasses normal space, you instantly transport yourself and any items you're wearing and holding from your current space to a clear space within range you can see. If this would bring another creature with you-even if you're carrying it in an extradimensional container-the spell is lost."
+		],
+		"heightened": [
+			{
+				"change": "The range increases to 1 mile. You don't need to be able to see your destination, as long as you have been there in the past and know its relative location and distance from you. You are temporarily immune for 1 hour.",
+				"level": 5
+			}
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 328,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Conjuration", "Teleportation" ],
+		"focus": false,
+		"id": "e202316c-29b6-4252-a58e-3577e5e7f7e4"
+	},
+	{
+		"aonId": 70,
+		"name": "Dimensional Anchor",
+		"description": "Keep a creature from teleporting or traveling to other planes.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You interfere with the target's ability to teleport and travel between dimensions. <i>Dimensional anchor</i> attempts to counteract any teleportation effect, or any effect that would move the target to a different plane. The duration is determined by the target's Will save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The effect's duration is 1 minute."
+				],
+				"failure": [
+					"The effect's duration is 10 minutes."
+				],
+				"criticalFailure": [
+					"The effect's duration is 1 hour."
+				]
+			}
+		],
+		"duration": "varies",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 329,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Abjuration" ],
+		"focus": false,
+		"id": "eee3cde6-dd00-448c-bc86-dd423542b1c7"
+	},
+	{
+		"aonId": 71,
+		"name": "Dimensional Lock",
+		"description": "Prevent teleportation and planar travel.",
+		"area": "60-foot burst",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You create a shimmering barrier that attempts to counteract teleportation effects and planar travel into or out of the area, including items that allow access to extradimensional spaces (such as a <i>bag of holding</i>). <i>Dimensional lock</i> tries to counteract any attempt to summon a creature into the area but doesn't stop the creature from departing when the summoning ends."
+		],
+		"duration": "1 day",
+		"level": 7,
+		"objectType": "Spell",
+		"page": 329,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Uncommon", "Abjuration" ],
+		"focus": false,
+		"id": "a0b27aa5-4a4e-4f6a-807b-eb996907e7f9"
+	},
+	{
+		"aonId": 72,
+		"name": "Dinosaur Form",
+		"description": "Turn into a dinosaur.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You channel the primal forces of nature to transform into a Large animal battle form, specifically that of a powerful and terrifying dinosaur. You must have space to expand or the spell is lost. When you cast this spell, choose ankylosaurus, brontosaurus, deinonychus, stegosaurus, triceratops, or tyrannosaurus. You can decide the specific type of animal, but this has no effect on the form's Size or statistics. While in this form, you gain the animal and dinosaur traits. You can Dismiss the spell.",
+			"You gain the following statistics and abilities regardless of which battle form you choose: <ul><li>AC = 18 + your level. Ignore your armor's check penalty and Speed reduction.</li><li>15 temporary Hit Points.</li><li>Low-light vision and imprecise scent 30 feet.</li><li>One or more unarmed melee attacks specific to the battle form you choose, which are the only attacks you can use. You're trained with them. Your attack modifier is +16, and your damage bonus is +9. These attacks are Strength based (for the purpose of the enfeebled condition, for example). If your unarmed attack modifier is higher, you can use it instead.</li><li>Athletics modifier of +18, unless your own modifier is higher.</li></ul>",
+			"You also gain specific abilities based on the form you choose:<ul><li><b>Ankylosaurus</b> Speed 25 feet; <b>Melee</b>[A] tail (backswing, reach 10 feet), <b>Damage</b> 2d6 bludgeoning; <b>Melee</b> [A] foot, <b>Damage</b> 2d6 bludgeoning.</li><li><b>Brontosaurus</b> Speed 25 feet; <b>Melee</b> [A] tail (reach 15 feet), <b>Damage</b> 2d6 bludgeoning; <b>Melee</b> [A] foot, <b>Damage</b> 2d8 bludgeoning.</li><li><b>Deinonychus</b> Speed 40 feet; <b>Melee</b> [A] talon (agile), <b>Damage</b> 2d4 piercing plus 1 persistent bleed; <b>Melee</b> [A] jaws, <b>Damage</b> 1d10 piercing.</li><li><b>Stegosaurus</b> Speed 30 feet; <b>Melee</b> [A] tail (reach 10 feet), <b>Damage</b> 2d8 piercing.</li><li><b>Triceratops</b> Speed 30 feet; <b>Melee</b> [A] horn, <b>Damage</b> 2d8 piercing, plus 1d6 persistent bleed on a critical hit; <b>Melee</b>[A] foot, <b>Damage</b> 2d6 bludgeoning.</li><li><b>Tyrannosaurus</b> Speed 30 feet; <b>Melee</b> [A] jaws (deadly, reach 10 feet), <b>Damage</b> 1d12 piercing; <b>Melee</b> [A] tail (reach 10 feet), <b>Damage</b> 1d10 bludgeoning.</li></ul>"
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{
+				"change": "Your battle form is Huge and your attacks have 15-foot reach, or 20-foot reach if they started with 15-foot reach. You instead gain 20 temporary HP, an attack modifier of +18, a damage bonus of +6, double the damage dice, and Athletics +21.",
+				"level": 5
+			},
+			{
+				"change": "Your battle form is Gargantuan and your attacks have 20-foot reach, or 25-foot reach if they started with 15-foot reach. You instead gain AC = 21 + your level, 25 temporary HP, an attack modifier of +25, a damage bonus of +15, double the damage dice, and Athletics +25.",
+				"level": 7
+			}
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 329,
+		"source": "PZO2101",
+		"traditions": [ "primal" ],
+		"traits": [ "Polymorph", "Transmutation" ],
+		"focus": false,
+		"id": "f1395ea2-3a88-4dc0-af94-01d41b56fbc0"
+	},
+	{
+		"aonId": 73,
+		"name": "Disappearance",
+		"description": "Make a creature invisible, silent, and undetectable by any and all senses.",
+		"cast": "[A][A]",
+		"components": [ "material", "somatic" ],
+		"details": [
+			"You shroud a creature from others' senses. The target becomes undetected, not just to sight but to all senses, allowing the target to count as invisible no matter what precise and imprecise senses an observer might have. It's still possible for a creature to find the target by Seeking, looking for disturbed dust, hearing gaps in the sound spectrum, or finding some other way to discover the presence of an otherwise-undetectable creature."
+		],
+		"duration": "10 minutes",
+		"level": 8,
+		"objectType": "Spell",
+		"page": 330,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Illusion" ],
+		"focus": false,
+		"id": "10b671f0-a509-4220-90dc-b11f8f57de98"
+	},
+	{
+		"aonId": 74,
+		"name": "Discern Lies",
+		"description": "Expertly detect lies and falsehoods.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Falsehoods ring in your ears like discordant notes. You gain a +4 status bonus to Perception checks when someone Lies."
+		],
+		"duration": "10 minutes",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 330,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Uncommon", "Divination", "Mental", "Revelation" ],
+		"focus": false,
+		"id": "213170dd-7b6a-487b-8fe8-1a654e125d3a"
+	},
+	{
+		"aonId": 75,
+		"name": "Discern Location",
+		"description": "Discover a target's exact location within unlimited range.",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You learn the name of the target's exact location (including the building, community, and country) and plane of existence.",
+			"You can target a creature only if you've seen it in person, have one of its significant belongings, or have a piece of its body. To target an object, you must have touched it or have a fragment of it. <i>Discern location</i> automatically overcomes protections against detection and divination of lower level than this spell, even if they would normally have a chance to block it."
+		],
+		"level": 8,
+		"objectType": "Spell",
+		"page": 330,
+		"range": "unlimited",
+		"source": "PZO2101",
+		"targets": "1 creature or object",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Uncommon", "Detection", "Divination" ],
+		"focus": false,
+		"id": "e7600e4c-d6e5-4f8b-b0ff-a405d34ff71f"
+	},
+	{
+		"aonId": 76,
+		"name": "Disintegrate",
+		"description": "Reduce a creature or object to dust.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You fire a green ray at your target. Make a spell attack. You deal 12d10 damage, and the target must attempt a basic Fortitude save. On a critical hit, treat the save result as one degree worse. A creature reduced to 0 HP is reduced to fine powder; its gear remains.",
+			"An object you hit is destroyed (no save), regardless of Hardness, unless it's an artifact or similarly hard to destroy. A single casting can destroy no more than a 10-foot cube of matter. This automatically destroys any force construct, such as a <i>wall of force</i>."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 2d10.", "bump": 1 }
+		],
+		"level": 6,
+		"objectType": "Spell",
+		"page": 330,
+		"range": "120 feet",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"targets": "1 creature or unattended object",
+		"traditions": [ "arcane" ],
+		"traits": [ "Attack", "Evocation" ],
+		"focus": false,
+		"id": "01ba5d94-6e2b-416a-ba52-a2e06ced8f70"
+	},
+	{
+		"aonId": 77,
+		"name": "Disjunction",
+		"description": "Deactivate or destroy a magic item.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Crackling energy disjoins the target. You attempt to counteract it (page 458). If you succeed, it's deactivated for 1 week. On a critical success, it's destroyed. If it's an artifact or similar item, you automatically fail."
+		],
+		"level": 9,
+		"objectType": "Spell",
+		"page": 330,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"targets": "1 magic item",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Uncommon", "Abjuration" ],
+		"focus": false,
+		"id": "c051f77d-7a1a-478e-a2a3-7e80218182c4"
+	},
+	{
+		"aonId": 78,
+		"name": "Dispel Magic",
+		"description": "End a spell or suppress an item's magic.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You unravel the magic behind a spell or effect. Attempt a counteract check against the target (page 458). If you succeed against a spell effect, you counteract it. If you succeed against a magic item, the item becomes a mundane item of its type for 10 minutes. This doesn't change the item's non-magical properties. If the target is an artifact or similar item, you automatically fail."
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 330,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"targets": "1 spell effect or unattended magic item",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Abjuration" ],
+		"focus": false,
+		"id": "926d210c-3a5b-40bf-bea4-d5974e652dec"
+	},
+	{
+		"aonId": 79,
+		"name": "Disrupt Undead",
+		"description": "Damage undead with positive energy.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You lance the target with energy. You deal 1d6 positive damage plus your spellcasting ability modifier. The target must attempt a basic Fortitude save. If the creature critically fails the save, it is also enfeebled 1 for 1 round."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d6.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 331,
+		"range": "30 feet",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"targets": "1 undead creature",
+		"traditions": [ "divine", "primal" ],
+		"traits": [ "Cantrip", "Necromancy", "Positive" ],
+		"focus": false,
+		"id": "6a49690f-787b-4fe6-a48c-e4985e6f9c5f"
+	},
+	{
+		"aonId": 80,
+		"name": "Disrupting Weapons",
+		"description": "Weapons deal positive damage to undead.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You infuse weapons with positive energy. Attacks with these weapons deal an extra 1d4 positive damage to undead."
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{ "change": "The damage increases to 2d4 damage.", "level": 3 },
+			{ "change": "Target up to three weapons, and the damage increases to 3d4 damage.", "level": 5 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 331,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "up to two weapons, each of which must be wielded by you or a willing ally, or else unattended",
+		"traditions": [ "divine" ],
+		"traits": [ "Necromancy", "Positive" ],
+		"focus": false,
+		"id": "18b9fbdf-4d92-42e2-aa39-7b1a43bb9114"
+	},
+	{
+		"aonId": 81,
+		"name": "Divine Aura",
+		"description": "Allies in an aura have better defenses and are protected against one alignment.",
+		"area": "10-foot emanation",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Divine power wards the targets, granting each a +1 status bonus to AC and saves while in the area.",
+			"Choose an alignment your deity has (chaotic, evil, good, or lawful). You can't cast this spell if you don't have a deity or your deity is true neutral. This spell gains the trait of the alignment you chose. The bonuses granted by the spell increase to +2 against attacks by-and effects created by-creatures with an alignment opposite to the spell (lawful if you chose chaotic, evil if you chose good). These bonuses increase to +4 against effects created by such creatures that attempt to impose the controlled condition on a target of your <i>divine aura</i>, as well as against attacks made by creatures summoned by anything opposite in alignment to your <i>divine aura</i>.",
+			"When a creature of opposite alignment hits a target with a melee attack, the creature must succeed at a Will save or be blinded for 1 minute. It's then temporarily immune for 1 minute.",
+			"The first time you Sustain the Spell each round, the <i>divine aura</i>'s radius grows 10 feet."
+		],
+		"duration": "sustained up to 1 minute",
+		"level": 8,
+		"objectType": "Spell",
+		"page": 331,
+		"source": "PZO2101",
+		"targets": "allies in the area",
+		"traditions": [ "divine" ],
+		"traits": [ "Abjuration" ],
+		"focus": false,
+		"id": "5e872006-9d6c-4674-bf2c-4977b439f795"
+	},
+	{
+		"aonId": 82,
+		"name": "Divine Decree",
+		"description": "Creatures of alignments opposed by your deity are damaged, enfeebled, paralyzed, or banished.",
+		"area": "40-foot emanation",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You utter a potent litany from your faith, a mandate that harms those who oppose your ideals. Choose an alignment your deity has (chaotic, evil, good, or lawful). You can't cast this spell if you don't have a deity or your deity is true neutral. This spell gains the trait of the alignment you chose. You deal 7d10 damage to creatures in the area; each creature must attempt a Fortitude save. Creatures with an alignment that matches the one you chose are unaffected by the spell. Those that neither match nor oppose it treat the result of their saving throw as one degree better and don't suffer effects other than damage.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature takes half damage."
+				],
+				"failure": [
+					"The creature takes full damage and is enfeebled 2 for 1 minute."
+				],
+				"criticalFailure": [
+					"The creature takes double damage and is enfeebled 2 for 1 minute. On your home plane, a creature that critically fails is banished with the effect of a failed <i>banishment</i> save. A 10th-level creature or lower must attempt a Will save. On a failure, it's paralyzed for 1 minute; on a critical failure, it dies."
+				]
+			}
+		],
+		"duration": "varies",
+		"level": 7,
+		"objectType": "Spell",
+		"page": 331,
+		"range": "40 feet",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"traditions": [ "divine" ],
+		"traits": [ "Evocation" ],
+		"heightened": [
+			{ "change": "The damage increases by 1d10, and the level of creatures that must attempt a second save on a critical failure increases by 2.", "bump": 1 }
+		],
+		"focus": false,
+		"id": "161e9f0e-0621-4350-b718-92b874124601"
+	},
+	{
+		"aonId": 83,
+		"name": "Divine Inspiration",
+		"description": "Spiritual energy recovers a creature's expended spell.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You infuse a target with spiritual energy, refreshing its magic. If it prepares spells, it recovers one 6th-level or lower spell it previously cast today and can cast that spell again. If it spontaneously casts spells, it recovers one of its 6th-level or lower spell slots. If it has a focus pool, it regains its Focus Points, as if it had Refocused."
+		],
+		"level": 8,
+		"objectType": "Spell",
+		"page": 331,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 willing creature",
+		"traditions": [ "divine" ],
+		"traits": [ "Enchantment", "Mental" ],
+		"focus": false,
+		"id": "38cc3632-4c64-4586-a95f-5747d85709c5"
+	},
+	{
+		"aonId": 84,
+		"name": "Divine Lance",
+		"description": "Throw divine energy that damages based on your deity's alignment.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You unleash a beam of divine energy. Choose an alignment your deity has (chaotic, evil, good, or lawful). You can't cast this spell if you don't have a deity or if your deity is true neutral. Make a ranged spell attack roll against the target's AC. On a hit, the target takes damage of the chosen alignment type equal to 1d4 + your spellcasting ability modifier (double damage on a critical hit). The spell gains the trait of the alignment you chose."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d4.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 331,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine" ],
+		"traits": [ "Attack", "Cantrip", "Evocation" ],
+		"focus": false,
+		"id": "b6e1f97b-bcb4-41e3-a50c-5d54587cae06"
+	},
+	{
+		"aonId": 85,
+		"name": "Divine Vessel",
+		"description": "Take on aspects of a servitor of your deity.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You accept otherworldly energies into your body; while you are still recognizably yourself, you gain the features of one of your deity's servitors. Choose an alignment your deity has (chaotic, evil, good, or lawful). You can't cast this spell if you don't have a deity or your deity is true neutral. This spell gains the trait of the alignment you chose.",
+			"If you were Medium or smaller, you become Large, as the effects of <i>enlarge</i>. You must have space to expand into, or the spell is lost. You also gain the following benefits. <ul><li>40 temporary Hit Points.</li><li>A fly Speed equal to your Speed.</li><li>Weakness 10 to the alignment opposite the one you chose.</li><li>A +1 status bonus to saves against spells.</li><li>Darkvision.</li><li>Your unarmed attacks and weapons deal 1 additional damage of the chosen alignment type.</li><li>One or more unarmed melee attacks. If you chose good or lawful, your fist attacks deal 2d8 damage. If you chose chaotic, you gain a bite unarmed attack that deals 2d10 piercing damage. If you chose evil, you gain a claws unarmed attack that deals 2d8 slashing damage and has the agile and finesse traits.</li></ul>"
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{ "change": "The temporary Hit Points increase to 60, the weakness increases to 15, and the duration increases to 10 minutes.", "level": 9 }
+		],
+		"level": 7,
+		"objectType": "Spell",
+		"page": 331,
+		"source": "PZO2101",
+		"traditions": [ "divine" ],
+		"traits": [ "Morph", "Necromancy" ],
+		"focus": false,
+		"id": "c6597d42-dd17-41f8-9123-8c2f5f5871e1"
+	},
+	{
+		"aonId": 86,
+		"name": "Divine Wrath",
+		"description": "Damage and hinder creatures of alignments opposed by your deity.",
+		"area": "20-foot burst",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You can channel the fury of your deity against foes of opposed alignment. Choose an alignment your deity has (chaotic, evil, good, or lawful). You can't cast this spell if you don't have a deity or your deity is true neutral. This spell gains the trait of the alignment you chose. You deal 4d10 damage of the alignment you chose; each creature in the area must attempt a Fortitude save. Creatures that match the alignment you chose are unaffected. Those that neither match nor oppose it treat the result of their saving throw as one degree better.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature takes half damage."
+				],
+				"failure": [
+					"The creature takes full damage and is sickened 1."
+				],
+				"criticalFailure": [
+					"The creature takes full damage and is sickened 2; while it is sickened, it is also slowed 1."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d10.", "bump": 1 }
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 332,
+		"range": "120 feet",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"traditions": [ "divine" ],
+		"traits": [ "Evocation" ],
+		"focus": false,
+		"id": "4ee2ddab-3bca-4ec7-90c5-42934690de8a"
+	},
+	{
+		"aonId": 87,
+		"name": "Dominate",
+		"description": "A humanoid must obey your orders.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You take command of the target, forcing it to obey your orders. If you issue an obviously self-destructive order, the target doesn't act until you issue a new order. The effect depends on its Will save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target is stunned 1 as it fights off your commands."
+				],
+				"failure": [
+					"The target follows your orders but can attempt a Will save at the end of each of its turns. On a success, the spell ends."
+				],
+				"criticalFailure": [
+					"As a failure, but the target receives a new save only if you give it a new order that is against its nature, such as killing its allies."
+				]
+			}
+		],
+		"duration": "until the next time you make your daily preparations",
+		"heightened": [
+			{ "change": "The duration is unlimited.", "level": 10 }
+		],
+		"level": 6,
+		"objectType": "Spell",
+		"page": 332,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Uncommon", "Enchantment", "Incapacitation", "Mental" ],
+		"focus": false,
+		"id": "32934f41-6b56-4dd7-8c80-c95acb713931"
+	},
+	{
+		"aonId": 88,
+		"name": "Dragon Form",
+		"description": "Turn into a dragon.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Calling upon powerful transformative magic, you gain a Large dragon battle form. You must have space to expand or the spell is lost. When you cast this spell, choose one type of chromatic or metallic dragon. While in this form, you gain the dragon trait. You have hands in this battle form and can take manipulate actions. You can Dismiss the spell.",
+			"You gain the following statistics and abilities regardless of which battle form you choose: <ul><li>AC = 18 + your level. Ignore your armor's check penalty and Speed reduction.</li><li>10 temporary Hit Points.</li><li>Speed 40 feet, fly Speed 100 feet.</li><li>Resistance 10 against the damage type of your breath weapon (see below).</li><li>Darkvision and imprecise scent 60 feet.</li><li>One or more unarmed melee attacks specific to the battle form you choose, which are the only attacks you can use. You're trained with them. Your attack modifier is +22, and your damage bonus is +6. These attacks are Strength based (for the purpose of the enfeebled condition, for example). If your unarmed attack modifier is higher, you can use it instead. See below for more on these attacks.</li><li>Athletics modifier of +23, unless your own modifier is higher.</li><li><b>Breath Weapon</b> [A][A] (arcane, evocation) The shape, damage, and damage type of your breath weapon depend on your specific dragon form (see below). A creature in the area attempts a basic save against your spell DC. This is a Reflex save unless stated otherwise in the special ability description for your specific dragon form. Once activated, your breath weapon can't be used again for 1d4 rounds. Your breath weapon has the trait corresponding to the type of damage it deals.</li></ul>",
+			"You also gain specific abilities based on the type of dragon you choose:<ul><li><b>Black</b> swim Speed 60 feet; <b>Melee</b>[A] jaws, <b>Damage</b> 2d12 piercing plus 2d6 acid; <b>Melee</b> [A] claw (agile), <b>Damage</b> 3d10 slashing; <b>Melee</b>[A] tail (reach 10 feet), <b>Damage</b> 3d10 bludgeoning; <b>Melee</b> [A] horns (reach 10 feet), <b>Damage</b> 3d8 piercing; breath weapon 60-foot line, 11d6 acid.</li><li><b>Blue</b> burrow Speed 20 feet; <b>Melee</b> [A] jaws, <b>Damage</b> 2d10 piercing plus 1d12 electricity; <b>Melee</b> [A] claw (agile), <b>Damage</b> 3d10 slashing; <b>Melee</b> [A] tail (reach 10 feet), <b>Damage</b> 3d10 bludgeoning; <b>Melee</b> [A] horns (reach 10 feet), <b>Damage</b> 3d8 piercing; breath weapon 80-foot line, 6d12 electricity.</li><li><b>Green</b> swim Speed 40 feet, ignores difficult terrain from non-magical foliage; <b>Melee</b> [A] jaws, <b>Damage</b> 2d12 piercing plus 2d6 poison; <b>Melee</b> [A] claw (agile), <b>Damage</b> 3d10 slashing; <b>Melee</b> [A] tail (reach 10 feet), <b>Damage</b> 3d10 bludgeoning; <b>Melee</b> [A] horns (reach 10 feet), <b>Damage</b> 3d8 piercing; breath weapon 30-foot cone, 10d6 poison (Fortitude save instead of Reflex).</li><li><b>Red</b> ignore concealed from smoke; <b>Melee</b>[A] jaws, <b>Damage</b> 2d12 piercing plus 2d6 fire; <b>Melee</b>[A] claw (agile), <b>Damage</b> 4d6 slashing; <b>Melee</b>[A] tail (reach 10 feet), <b>Damage</b> 3d10 bludgeoning; <b>Melee</b>[A] wing (reach 10 feet), <b>Damage</b> 3d8 bludgeoning; breath weapon 30-foot cone, 10d6 fire.</li><li><b>White</b> climb Speed 25 feet on ice only; <b>Melee</b>[A] jaws, <b>Damage</b> 3d6 piercing plus 2d6 cold; <b>Melee</b> [A] claw (agile), <b>Damage</b> 3d10 slashing; <b>Melee</b> [A] tail (reach 10 feet), <b>Damage</b> 3d10 bludgeoning; breath weapon 30-foot cone, 10d6 cold.</li><li><b>Brass</b> burrow Speed 20 feet; <b>Melee</b> [A] jaws, <b>Damage</b> 3d8 piercing plus 2d4 fire; <b>Melee</b>[A] claw (agile), 3d10 slashing; <b>Melee</b> [A] tail (reach 10 feet), <b>Damage</b> 3d10 bludgeoning; <b>Melee</b>[A] spikes (reach 10 feet), <b>Damage</b> 3d8 piercing; breath weapon 60-foot line, 15d4 fire.</li><li><b>Bronze</b> swim Speed 40 feet; <b>Melee</b> [A] jaws, <b>Damage</b> 2d10 piercing plus 1d12 electricity; <b>Melee</b> [A] claw (agile), <b>Damage</b> 3d10 slashing; <b>Melee</b> [A] tail (reach 10 feet), <b>Damage</b> 3d10 bludgeoning; <b>Melee</b> [A] wing (reach 10 feet), <b>Damage</b> 3d8 slashing; breath weapon 80-foot line, 6d12 electricity.</li><li><b>Copper</b> climb Speed 25 feet on stone only; <b>Melee</b> [A] jaws, <b>Damage</b> 2d12 piercing plus 2d6 acid; <b>Melee</b> [A] claw (agile), <b>Damage</b> 3d10 slashing; <b>Melee</b> [A] tail (reach 10 feet), <b>Damage</b> 3d10 bludgeoning; <b>Melee</b> [A] wing (reach 10 feet), <b>Damage</b> 3d8 bludgeoning; breath weapon 60-foot line, 10d6 acid.</li><li><b>Gold</b> swim Speed 40 feet; <b>Melee</b>[A] jaws, <b>Damage</b> 2d12 piercing plus 2d6 fire; <b>Melee</b> [A] claw (agile), <b>Damage</b> 4d6 slashing; <b>Melee</b>[A] tail (reach 10 feet), <b>Damage</b> 3d10 bludgeoning; <b>Melee</b> [A] horns (reach 10 feet), <b>Damage</b> 3d8 piercing; breath weapon 30-foot cone, 6d10 fire.</li><li><b>Silver</b> walk on clouds; <b>Melee</b> [A] jaws, <b>Damage</b> 2d12 piercing plus 2d6 cold; <b>Melee</b> [A] claw (agile), <b>Damage</b> 3d10 slashing; <b>Melee</b> [A] tail (reach 10), <b>Damage</b> 3d10 bludgeoning; breath weapon 30-foot cone, 8d8 cold.</li></ul>"
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{
+				"change": "Your battle form is Huge, you gain a +20-foot status bonus to your fly Speed, and your attacks have 10-foot reach (or 15-foot reach if they previously had 10-foot reach). You instead gain AC = 21 + your level, 15 temporary HP, an attack modifier of +28, a damage bonus of +12, Athletics +28, and a +14 status bonus to breath weapon damage.",
+				"level": 8
+			}
+		],
+		"level": 6,
+		"objectType": "Spell",
+		"page": 332,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Polymorph", "Transmutation" ],
+		"focus": false,
+		"id": "b65baac6-65a7-4489-bb8a-aab4b07f8d8f"
+	},
+	{
+		"aonId": 89,
+		"name": "Dream Council",
+		"description": "Communicate through a shared dream.",
+		"cast": "10 minutes",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"When you Cast this Spell, any targets-including you-can choose to immediately fall asleep. The spell ends for any creatures that don't choose to fall asleep. Sleepers join a shared dream, where they can communicate with one another as though they were in the same room. Individual targets leave this shared dream upon awakening, and if all the targets awaken, the spell ends."
+		],
+		"duration": "1 hour",
+		"level": 8,
+		"objectType": "Spell",
+		"page": 333,
+		"range": "planetary",
+		"source": "PZO2101",
+		"targets": "up to 12 creatures you know by name and have met in person",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Illusion", "Mental", "Sleep" ],
+		"focus": false,
+		"id": "4ad28d84-0faf-4bf6-98dc-762ab4024c74"
+	},
+	{
+		"aonId": 90,
+		"name": "Dream Message",
+		"description": "Send a message that arrives in a dream.",
+		"cast": "10 minutes",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You send a message to your target's dream. The message is one-way, up to 1 minute of speech (roughly 150 words). If the target is asleep, they receive the message instantly. If not, they receive it the next time they sleep. As soon as they receive it, the spell ends, and you know the message was sent."
+		],
+		"duration": "1 day",
+		"heightened": [
+			{ "change": "You can target up to 10 creatures you know by name and have met in person. You must send the same message to all of them; the spell ends for each creature individually.", "level": 4 }
+		],
+		"level": 3,
+		"objectType": "Spell",
+		"page": 333,
+		"range": "planetary",
+		"source": "PZO2101",
+		"targets": "1 creature you know by name and have met in person",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Enchantment", "Mental" ],
+		"focus": false,
+		"id": "39edc0d6-33c8-4efa-965a-1701cdf4d03e"
+	},
+	{
+		"aonId": 91,
+		"name": "Dreaming Potential",
+		"description": "The target retrains in its dreams.",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You draw the target into a lucid dream where it can explore the endless possibilities of its own potential within the ever-changing backdrop of its dreamscape. If it sleeps the full 8 hours uninterrupted, when it wakes, it counts as having spent a day of downtime retraining, though it can't use <i>dreaming potential</i> for any retraining that would require either an instructor or specialized knowledge it can't access within the dream."
+		],
+		"duration": "8 hours",
+		"level": 5,
+		"objectType": "Spell",
+		"page": 333,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 willing sleeping creature",
+		"traditions": [ "occult" ],
+		"traits": [ "Enchantment", "Mental" ],
+		"focus": false,
+		"id": "047c9cd4-6ff0-439f-ae3a-ba51c65d889b"
+	},
+	{
+		"aonId": 92,
+		"name": "Drop Dead",
+		"description": "The target appears to die but actually turns invisible.",
+		"cast": "[R]",
+		"components": [ "somatic" ],
+		"details": [
+			"The target appears to fall down dead, though it actually turns invisible. Its illusory corpse remains where it fell, complete with a believable fatal wound. This illusion looks and feels like a dead body. If the target's death seems absurd-for instance, a barbarian at full health appears to be slain by 2 damage-the GM can grant the attacker an immediate Perception check to disbelieve the illusion. If the target uses hostile actions, the spell ends. This ends the entire spell, so the illusory corpse disappears too."
+		],
+		"duration": "sustained up to 1 minute",
+		"heightened": [
+			{ "change": "The spell doesn't end if the target uses hostile actions.", "level": 7 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 333,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "divine" ],
+		"traits": [ "Uncommon", "Illusion", "Visual" ],
+		"trigger": "a creature within range is hit by an attack from an enemy",
+		"focus": false,
+		"id": "2168237d-c70d-472a-a8fd-1943aed9e1d7"
+	},
+	{
+		"aonId": 93,
+		"name": "Duplicate Foe",
+		"description": "Create a temporary duplicate of an enemy that f ghts for you.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You try to create a temporary duplicate of an enemy to fight on your behalf. The target can attempt a Fortitude save to disrupt the spell. The duplicate appears in an unoccupied space adjacent to the target and has the target's attack modifier, AC, saving throw modifiers, Perception, and skill modifiers, but it has only 70 Hit Points and lacks the target's special abilities, including immunities, resistances, and weaknesses. It has no magic items except weapon potency runes.",
+			"The duplicate gains the minion trait, and it can only Stride and Strike. Its Strikes deal the target's normal damage but don't apply added effects, since it doesn't have special abilities. The spell automatically ends if the duplicate's Hit Points drop to 0.",
+			"The duplicate attacks your enemies to the best of its abilities. You can also try to give it additional instructions; when you Sustain the Spell, you can also Command a Minion as part of your action, but the GM determines whether the duplicate follows your command.",
+			"The duplicate is unstable, so each turn after it takes its actions, it loses 4d6 Hit Points. It's not a living creature, and it can never regain its lost Hit Points in any way.",
+			{
+				"criticalSuccess": [
+					"You fail to create a duplicate."
+				],
+				"success": [
+					"The duplicate deals half damage with its Strikes and the duration is reduced to a maximum of 2 rounds."
+				],
+				"failure": [
+					"The duplicate works as described."
+				]
+			}
+		],
+		"duration": "sustained up to 1 minute",
+		"heightened": [
+			{ "change": "The level of creature you can target increases by 2. The duplicate has 10 more HP.", "bump": 1 }
+		],
+		"level": 7,
+		"objectType": "Spell",
+		"page": 334,
+		"range": "30 feet",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"targets": "1 enemy of level 15 or lower",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "e0618a8f-23cf-4ca4-aa84-984e37f5b8cd"
+	}
+]

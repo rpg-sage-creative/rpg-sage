@@ -1,0 +1,12 @@
+[
+	{ "objectType": "Heritage", "name": "Anvil Dwarf", "ancestry": "Dwarf", "source": "PZO9302", "id": "f43f2e98-c546-4e0a-a7ce-a0c522344856", "aonId": 31 },
+	{ "objectType": "Heritage", "name": "Elemental Heart Dwarf", "ancestry": "Dwarf", "source": "PZO9302", "id": "e7787753-5026-4959-a776-3f5f6781ef1f", "aonId": 32 },
+	{ "objectType": "Heritage", "name": "Oathkeeper Dwarf", "ancestry": "Dwarf", "source": "PZO9302", "id": "f0278e8c-ddf6-4fa2-84c7-05df366e84ad", "aonId": 33 },
+	{ "objectType": "Heritage", "name": "Ancient Elf", "ancestry": "Elf", "source": "PZO9302", "id": "6ba12c9d-2890-4201-abed-73dc683dfb8f", "aonId": 34 },
+	{ "objectType": "Heritage", "name": "Desert Elf", "ancestry": "Elf", "source": "PZO9302", "id": "1a3e84f0-18bf-4734-8039-6fb1c7c10f32", "aonId": 35 },
+	{ "objectType": "Heritage", "name": "Vivacious Gnome", "ancestry": "Gnome", "source": "PZO9302", "id": "e2aa60b0-4590-4a15-b76c-dfbf2d1fbe34", "aonId": 36 },
+	{ "objectType": "Heritage", "name": "Tailed Goblin", "ancestry": "Goblin", "source": "PZO9302", "id": "28f3a598-a83c-4d78-8f11-fff53b8c9994", "aonId": 37 },
+	{ "objectType": "Heritage", "name": "Treedweller Goblin", "ancestry": "Goblin", "source": "PZO9302", "id": "651f83f5-4ba2-4f36-bd40-5874d02d9457", "aonId": 38 },
+	{ "objectType": "Heritage", "name": "Observant Halfling", "ancestry": "Halfling", "source": "PZO9302", "id": "6402ce1e-bfa9-4e2e-bb3f-b29ba1c918da", "aonId": 39 },
+	{ "objectType": "Heritage", "name": "Wintertouched Human", "ancestry": "Human", "source": "PZO9302", "id": "d22e1271-20d0-4ac9-ab43-e355a9386b20", "aonId": 30 }
+]

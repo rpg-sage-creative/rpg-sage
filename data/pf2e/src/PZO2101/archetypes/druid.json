@@ -1,0 +1,133 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Druid",
+		"details": [
+			"You have entered a druidic circle and learned a few of the order's secrets, granting you primal power."
+		],
+		"page": 225,
+		"source": "PZO2101",
+		"id": "54e576ba-5c5d-4b50-8be9-7500fd3f783b",
+		"aonId": 6
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Druid Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Wisdom 14" ],
+		"details": [
+			"You cast spells like a druid. You gain access to the Cast a Spell activity. You can prepare two common cantrips each day from the primal spell list in this book or any other cantrips you learn or discover. You're trained in spell attack rolls and spell DCs for primal spells. Your key spellcasting ability for druid archetype spells is Wisdom, and they are primal druid spells.",
+			"You learn the Druidic language.",
+			"Choose an order as you would if you were a druid. You become a member of that order and are bound by its anathema, allowing you to take the order's feats. You become trained in Nature and your order's associated skill; for each of these skills in which you were already trained, you become trained in a skill of your choice. You don't gain any other abilities from your choice of order."
+		],
+		"special": [
+			"You cannot select another dedication feat until you have gained two other feats from the druid archetype."
+		],
+		"page": 225,
+		"source": "PZO2101",
+		"id": "f7e35bd9-7255-4ad9-a359-f896aadafe2d",
+		"aonId": 701
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Druid Spellcasting",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Druid Dedication" ],
+		"details": [
+			"You gain the basic spellcasting benefits (page 219)."
+		],
+		"page": 225,
+		"source": "PZO2101",
+		"id": "25c16ca8-56b8-448f-8c8e-3bc23a253bfb",
+		"aonId": 702
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Wilding",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Druid Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level druid feat."
+		],
+		"page": 225,
+		"source": "PZO2101",
+		"id": "ab7417af-2e7f-41b7-8bc6-624fa9f5cd6f",
+		"aonId": 703
+	},
+	{
+		"objectType": "Feat",
+		"name": "Orders Spell",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Druid Dedication" ],
+		"details": [
+			"You gain the initial order spell from your order. If you don't already have one, you gain a focus pool of 1 Focus Point, which you can Refocus by being one with nature. (For more on order spells, see page 131.)"
+		],
+		"page": 225,
+		"source": "PZO2101",
+		"id": "a640e326-6c23-44cc-a90f-d3fe12201e7a",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Wilding",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Wilding" ],
+		"details": [
+			"You gain one druid feat. For the purpose of meeting its prerequisites, your druid level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another druid feat."
+		],
+		"page": 225,
+		"source": "PZO2101",
+		"id": "16768a89-9526-4ecc-9b73-87f4d1cdf69b",
+		"aonId": 705
+	},
+	{
+		"objectType": "Feat",
+		"name": "Primal Breadth",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Druid Spellcasting" ],
+		"details": [
+			"Increase the spell slots you gain from druid archetype feats by 1 for each spell level other than your two highest spell levels."
+		],
+		"page": 225,
+		"source": "PZO2101",
+		"id": "f85651a2-a575-40e2-ad4c-53cb2c1aae06",
+		"aonId": 706
+	},
+	{
+		"objectType": "Feat",
+		"name": "Expert Druid Spellcasting",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Druid Spellcasting", "master in Nature" ],
+		"details": [
+			"You gain the expert spellcasting benefits (page 219)."
+		],
+		"page": 225,
+		"source": "PZO2101",
+		"id": "d99ac2ba-a4cc-4d9e-9887-93c39684e187",
+		"aonId": 707
+	},
+	{
+		"objectType": "Feat",
+		"name": "Master Druid Spellcasting",
+		"level": 18,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Expert Druid Spellcasting", "legendary in Nature" ],
+		"details": [
+			"You gain the master spellcasting benefits (page 219)."
+		],
+		"page": 225,
+		"source": "PZO2101",
+		"id": "91758bd3-7ef7-4fa2-ab8b-bdc108d8adc8",
+		"aonId": 708
+	}
+]

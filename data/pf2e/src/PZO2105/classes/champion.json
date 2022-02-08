@@ -1,0 +1,5 @@
+[
+	{ "objectType": "ClassPath", "name": "Tyrant", "class": "Champion", "source": "PZO2105", "id": "98c5793c-4ed6-4c3d-8fdc-ae770d8db34c", "aonId": 4 },
+	{ "objectType": "ClassPath", "name": "Desecrator", "class": "Champion", "source": "PZO2105", "id": "174fd7e7-ad2c-42e5-b759-a66369b8c380", "aonId": 5 },
+	{ "objectType": "ClassPath", "name": "Antipaladin", "class": "Champion", "source": "PZO2105", "id": "f69c2d44-5a57-467f-bec3-13aea8667a53", "aonId": 6 }
+]

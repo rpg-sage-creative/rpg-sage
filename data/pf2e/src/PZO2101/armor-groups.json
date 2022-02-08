@@ -1,0 +1,42 @@
+[
+	{
+		"objectType": "ArmorGroup",
+		"name": "Chain",
+		"specializationEffect": [
+			"The armor is so flexible it can bend with a critical hit and absorb some of the blow. Reduce the damage from critical hits by either 4 + the value of the armor's potency rune for medium armor, or 6 + the value of the armor's potency rune for heavy armor. This can't reduce the damage to less than the damage rolled for the hit before doubling for a critical hit."
+		],
+		"page": 275,
+		"source": "PZO2101",
+		"id": "a7da8607-4ba2-482c-9325-a5df996418bc"
+	},
+	{
+		"objectType": "ArmorGroup",
+		"name": "Composite",
+		"specializationEffect": [
+			"The numerous overlapping pieces of this armor protect you from piercing attacks. You gain resistance to piercing damage equal to 1 + the value of the armor's potency rune for medium armor, or 2 + the value of the armor's potency rune for heavy armor."
+		],
+		"page": 275,
+		"source": "PZO2101",
+		"id": "83972db1-462b-4f67-8506-50bdcfce4924"
+	},
+	{
+		"objectType": "ArmorGroup",
+		"name": "Leather",
+		"specializationEffect": [
+			"The thick second skin of the armor disperses blunt force to reduce bludgeoning damage. You gain resistance to bludgeoning damage equal to 1 + the value of the armor's potency rune for medium armor, or 2 + the value of the armor's potency rune for heavy armor."
+		],
+		"page": 275,
+		"source": "PZO2101",
+		"id": "229a6c68-9c55-4c9b-9f93-fa0adca0cf6c"
+	},
+	{
+		"objectType": "ArmorGroup",
+		"name": "Plate",
+		"specializationEffect": [
+			"The sturdy plate provides no purchase for a cutting edge. You gain resistance to slashing damage equal to 1 + the value of the armor's potency rune for medium armor, or 2 + the value of the armor's potency rune for heavy armor."
+		],
+		"page": 275,
+		"source": "PZO2101",
+		"id": "87d9d794-e2d2-45bc-8071-e80fb95d374d"
+	}
+]

@@ -1,0 +1,118 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Swashbuckler",
+		"details": [
+			"You fight with flair and style, adding swashbuckling tricks to your combat repertoire."
+		],
+		"page": 153,
+		"source": "PZO2105",
+		"id": "3a01a330-0ed8-4e30-aeef-e51963714430",
+		"aonId": 43
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Swashbuckler Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Charisma 14", "Dexterity 14" ],
+		"details": [
+			"Choose a swashbuckler style (page 84). You gain the panache class feature (page 84), and you can gain panache in all the ways a swashbuckler of your style can. You become trained in Acrobatics or the skill associated with your style. If you were already trained in both skills, you instead become trained in a skill of your choice. You also become trained in swashbuckler class DC. You don't gain any other effects of your chosen style."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the swashbuckler archetype."
+		],
+		"page": 153,
+		"source": "PZO2105",
+		"id": "5c3679d7-d577-4331-96e9-2ab9af5da1d9",
+		"aonId": 1859
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Flair",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Swashbuckler Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level swashbuckler feat of your choice."
+		],
+		"page": 153,
+		"source": "PZO2105",
+		"id": "68d49c46-b24c-4ea1-a072-20f9a3b1db4c",
+		"aonId": 1860
+	},
+	{
+		"objectType": "Feat",
+		"name": "Finishing Precision",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Swashbuckler Dedication" ],
+		"details": [
+			"You've learned how to land daring blows when you have panache. You gain the precise strike class feature (page 85) but you deal 1 addition damage on a hit and 1d6 damage on a finisher. This damage doesn't increase as you gain levels. In addition, you gain the Basic Finisher action.",
+			"<b>Basic Finisher</b> [A] (finisher, swashbuckler) You make a graceful, deadly attack. Make a Strike; if you hit and your weapon qualifies for precise strike, you deal the full 1d6 damage from precise strike."
+		],
+		"page": 153,
+		"source": "PZO2105",
+		"id": "92735f7e-8bff-4602-9b66-5aef86763284",
+		"aonId": 1861
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Flair",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Flair" ],
+		"details": [
+			"You gain one swashbuckler feat. For the purpose of meeting its prerequisites, your swashbuckler level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another swashbuckler feat."
+		],
+		"page": 153,
+		"source": "PZO2105",
+		"id": "7fe05946-59c5-4149-9a89-865e524f7925",
+		"aonId": 1862
+	},
+	{
+		"objectType": "Feat",
+		"name": "Swashbuckler's Riposte",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Swashbuckler Dedication" ],
+		"details": [
+			"You've learned to riposte against ill-conceived attacks. You gain the Opportune Riposte reaction (page 86)."
+		],
+		"page": 153,
+		"source": "PZO2105",
+		"id": "a5e958c5-5268-4f84-ba3b-70388319b498",
+		"aonId": 1863
+	},
+	{
+		"objectType": "Feat",
+		"name": "Swashbuckler's Speed",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Swashbuckler Dedication" ],
+		"details": [
+			"You move faster, with or without panache. Increase the status bonus to your Speeds when you have panache to a +10-foot status bonus; you also gain a +5-foot status bonus to your Speeds when you don't have panache."
+		],
+		"page": 153,
+		"source": "PZO2105",
+		"id": "e4c58d55-f6a0-4de0-9d2f-efa4c62662de",
+		"aonId": 1864
+	},
+	{
+		"objectType": "Feat",
+		"name": "Evasiveness",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Swashbuckler Dedication", "expert in Reflex saves" ],
+		"details": [
+			"Your proficiency rank for Reflex saves increases to master."
+		],
+		"page": 153,
+		"source": "PZO2105",
+		"id": "1efc06da-dbc7-462f-a0aa-7068fb7e1915",
+		"aonId": 0
+	}
+]

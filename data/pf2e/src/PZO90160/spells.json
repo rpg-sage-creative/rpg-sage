@@ -1,0 +1,177 @@
+[
+	{
+		"name": "Imp Sting",
+		"level": 2,
+		"objectType": "Spell",
+		"traits": [ "Uncommon", "Evil", "Necromancy", "Poison" ],
+		"traditions": [ "divine", "occult" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "touch",
+		"targets": "1 creature",
+		"savingThrow": "Fortitude",
+		"details": [
+			"You reproduce an imp's evil, poisonous sting, stabbing at an enemy and possibly affecting them with the devil's benumbing venom. You deal 1d4 piercing damage to the touched creature and afflict the creature with imp venom. If the target takes piercing damage, they also take 1d6 evil damage and must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes 1d6 poison damage."
+				],
+				"failure": [
+					"The target is afflicted with imp venom at stage 1."
+				],
+				"criticalFailure": [
+					"The target is afflicted with imp venom at stage 2.",
+					"<b>Imp Venom</b> (poison) <b>Level</b> 3; <b>Maximum Duration</b> 6 rounds; <b>Stage 1</b> 1d6 poison and clumsy 1; <b>Stage 2</b> 1d6 poison, clumsy 1, and slowed 1 (1 round)."
+				]
+			}
+		],
+		"page": 80,
+		"source": "PZO90160",
+		"focus": false,
+		"aonId": 826,
+		"id": "79c305b6-6c37-4787-acad-f64952f1e02c"
+	},
+	{
+		"name": "Leng Sting",
+		"level": 7,
+		"objectType": "Spell",
+		"traits": [ "Uncommon", "Necromancy", "Poison" ],
+		"traditions": [ "arcane", "occult" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "touch",
+		"targets": "1 creature",
+		"savingThrow": "Fortitude",
+		"details": [
+			"You use the power of nightmares to magically replicate the venomous attack of the aberrant and cunning Leng spiders. You deal 2d6 piercing damage to the touched creature and afflict it with Leng spider venom. If the target takes piercing damage, they must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes 2d6 poison damage."
+				],
+				"failure": [
+					"The target is afflicted with Leng spider venom at stage 1."
+				],
+				"criticalFailure": [
+					"The target is afflicted with Leng spider venom at stage 2.",
+					"<b>Leng Spider Venom</b> (incapacitation, poison) <b>Level</b> 13; <b>Maximum Duration</b> 6 rounds; <b>Stage 1</b> 2d6 poison damage and drained 1 (1 round); <b>Stage 2</b> 3d6 poison damage and drained 2 (1 round); <b>Stage 3</b> 4d6 poison damage, drained 2, and confused (1 round)."
+				]
+			}
+		],
+		"page": 80,
+		"source": "PZO90160",
+		"focus": false,
+		"aonId": 827,
+		"id": "3bffd35d-72ea-458c-ad7a-9891ffa63681"
+	},
+	{
+		"name": "Linnorm Sting",
+		"level": 9,
+		"objectType": "Spell",
+		"traits": [ "Uncommon", "Fire", "Necromancy", "Poison" ],
+		"traditions": [ "arcane", "primal" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "touch",
+		"targets": "1 creature",
+		"savingThrow": "Fortitude",
+		"details": [
+			"You replicate the fiery venom of the tor linnorm and inflict an enemy with the dread dragon's debilitating bite. You deal 2d12 piercing damage to the targeted creature and afflict it with tor linnorm venom. If the target takes piercing damage, they must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes 8d6 fire damage."
+				],
+				"failure": [
+					"The target is afflicted with tor linnorm venom at stage 1."
+				],
+				"criticalFailure": [
+					"The target is afflicted with tor linnorm venom at stage 2.",
+					"<b>Tor Linnorm Venom</b> (fire, injury, poison) <b>Level</b> 17; <b>Maximum Duration</b> 10 rounds; <b>Stage 1</b> 8d6 fire damage and drained 1 (1 round); <b>Stage 2</b> 12d6 fire damage and drained 2 (1 round)."
+				]
+			}
+		],
+		"page": 81,
+		"source": "PZO90160",
+		"focus": false,
+		"aonId": 828,
+		"id": "aa0e5ce1-c3a5-454e-99db-4e8ca75343f4"
+	},
+	{
+		"name": "Swarming Wasp Stings",
+		"level": 4,
+		"objectType": "Spell",
+		"traits": [ "Uncommon", "Necromancy", "Poison" ],
+		"traditions": [ "arcane", "primal" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"area": "10-foot burst",
+		"savingThrow": "Fortitude",
+		"details": [
+			"You manifest a swarm of disembodied wasp stingers that stab creatures in the area, possibly poisoning them. Creatures in the affected area take 1d6 piercing damage. Each creature that takes piercing damage must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes 2d6 poison damage."
+				],
+				"failure": [
+					"The target is afflicted with swarming wasp venom at stage 1."
+				],
+				"criticalFailure": [
+					"The target is afflicted with swarming wasp venom at stage 2.",
+					"<b>Swarming Wasp Venom</b> (poison) <b>Level</b> 7; <b>Maximum Duration</b> 6 rounds; <b>Stage 1</b> 2d6 poison damage and clumsy 1 (1 round); <b>Stage 2</b> 3d6 poison damage and clumsy 2 (1 round)."
+				]
+			}
+		],
+		"page": 81,
+		"source": "PZO90160",
+		"focus": false,
+		"aonId": 829,
+		"id": "e56a6caf-aa5f-4621-ac47-c11f30971775"
+	},
+	{
+		"name": "Wyvern Sting",
+		"level": 5,
+		"objectType": "Spell",
+		"traits": [ "Uncommon", "Necromancy", "Poison" ],
+		"traditions": [ "arcane", "primal" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "touch",
+		"targets": "1 creature",
+		"savingThrow": "Fortitude",
+		"details": [
+			"You duplicate the venomous sting of a wyvern. You deal 3d4 piercing damage to the touched creature and afflict it with wyvern venom. If the target takes piercing damage, they must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes 5d6 poison damage."
+				],
+				"failure": [
+					"The target is afflicted with wyvern venom at stage 1."
+				],
+				"criticalFailure": [
+					"The target is afflicted with wyvern venom at stage 2.",
+					"<b>Wyvern Venom</b> (poison) <b>Level</b> 9; <b>Maximum Duration</b> 6 rounds; <b>Stage 1</b> 5d6 poison damage (1 round); <b>Stage 2</b> 6d6 poison damage (1 round); <b>Stage 3</b> 8d6 poison damage (1 round)"
+				]
+			}
+		],
+		"page": 81,
+		"source": "PZO90160",
+		"focus": false,
+		"aonId": 830,
+		"id": "bf62ecfc-37aa-43ea-a913-80190ed1c4ed"
+	}
+]

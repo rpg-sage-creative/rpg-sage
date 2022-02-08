@@ -1,0 +1,24 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Anadi",
+		"youMight": [
+			"Only reveal your true form to people who have earned your trust.",
+			"Openly express sympathy for misrepresented and unfairly stigmatized cultures.",
+			"Provide for those you hold dear and defend them from danger without hesitation."
+		],
+		"othersProbably": [
+			"Appreciate your willingness to seek nonviolent solutions to complicated problems.",
+			"Have a strong reaction to seeing your natural form.",
+			"Assume you have an affinity for druidic magic, given your ability to transform."
+		],
+		"aonId": 42,
+		"source": "PZO9309",
+		"id": "e6066d88-12e5-41c8-8b30-4a36fc50eb43"
+	},
+	{ "objectType": "Heritage", "name": "Adaptive Anadi", "ancestry": "Anadi", "source": "PZO9309", "id": "bc384bfa-d2f4-4af5-86b5-07a149b0ce23", "aonId": 156 },
+	{ "objectType": "Heritage", "name": "Polychromatic Anadi", "ancestry": "Anadi", "source": "PZO9309", "id": "7e26f48a-f541-466b-bcd7-73392a0b4964", "aonId": 157 },
+	{ "objectType": "Heritage", "name": "Snaring Anadi", "ancestry": "Anadi", "source": "PZO9309", "id": "2936b8b5-d620-43cc-9997-ab5ed13f2651", "aonId": 158 },
+	{ "objectType": "Heritage", "name": "Spindly Anadi", "ancestry": "Anadi", "source": "PZO9309", "id": "069d3d30-cde5-4e46-a65c-3fa398b46b7e", "aonId": 159 },
+	{ "objectType": "Heritage", "name": "Venomous Anadi", "ancestry": "Anadi", "source": "PZO9309", "id": "1076d5f1-8f7d-4113-bb1f-44c7374f6546", "aonId": 160 }
+]

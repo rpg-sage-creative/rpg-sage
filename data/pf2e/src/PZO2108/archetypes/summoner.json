@@ -1,0 +1,153 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Summoner",
+		"details": [
+			"You have a tenuous connection to an eidolon, a bodiless being that shares your life force, and with effort you can manifest the eidolon into the world."
+		],
+		"page": 76,
+		"source": "PZO2108",
+		"id": "ff5df6b2-6cc0-4b25-bb82-ea45ec74c200",
+		"aonId": 0
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Summoner Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Charisma 14" ],
+		"details": [
+			"You've formed a bond with an eidolon, an entity that manifests in a physical body only through its link to your life force. Your bond may be tenuous, but that doesn't make your connection any less special. You gain an eidolon (page 52) as well as the Manifest Eidolon activity. Due to your tenuous link, you can't gain or use tandem actions. Because you don't have Act Together, only you or your eidolon can perform an exploration activity at one time, so for instance you couldn't both be Searching or Investigating.",
+			"Your eidolon is trained in unarmed attacks and unarmored defense, and shares your proficiency rank for Perception, saving throws, and skill checks. Choose an eidolon type. You become trained in your eidolon's listed skills. For each of those skills that you are already trained in, you become trained in a different skill of your choice. Your eidolon's initial ability scores are reduced. It starts with a 16 in any ability score listed at 18 for its eidolon array. It otherwise gains the statistics listed for an eidolon of that type.",
+			"At 5th level, the eidolon's ability score that was reduced to 16 increases to 18, before applying ability boosts. At levels 5, 10, 15, and 20, your eidolon also gets four ability boosts, which follow the same rules as yours."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the summoner archetype."
+		],
+		"page": 76,
+		"source": "PZO2108",
+		"id": "e13cceb9-9b62-4c9c-8b66-8b264faaea68",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Synergy",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Summoner Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level summoner feat of your choice."
+		],
+		"page": 76,
+		"source": "PZO2108",
+		"id": "369bf0a2-4fed-4336-99eb-02772e563c82",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Initial Eidolon Ability",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Summoner Dedication" ],
+		"details": [
+			"Your link to your eidolon becomes stronger, granting it a new ability. Your eidolon gains the initial ability for an eidolon of its type."
+		],
+		"page": 77,
+		"source": "PZO2108",
+		"id": "a59ca12e-8c1c-4b07-8294-c69d8b81b109",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Synergy",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Synergy" ],
+		"details": [
+			"You gain one summoner feat. For the purpose of meeting its prerequisites, your summoner level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another summoner feat."
+		],
+		"page": 77,
+		"source": "PZO2108",
+		"id": "65d30700-c155-4c4d-bc27-23e2af33592c",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Summoner Spellcasting",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Summoner Dedication" ],
+		"details": [
+			"You gain the basic bounded spellcasting benefits (page 74). You gain the Cast a Spell activity. Your key spellcasting ability for summoner archetype spells is Charisma, and they are summoner spells of your eidolon's tradition. You become trained in spell attack rolls and spell DCs of that tradition. You gain a spell repertoire and two cantrips. Each time you gain a spell slot of a new level from the summoner archetype, add a spell of that level or lower to your repertoire. Each time you lose spell slots of a particular level, remove those spells from your repertoire."
+		],
+		"page": 77,
+		"source": "PZO2108",
+		"id": "2433e92f-1ffa-48c6-85f4-e37c290ed8b8",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Expert Combat Eidolon",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Summoner Dedication" ],
+		"details": [
+			"Your eidolon advances its capabilities in combat. Your eidolon becomes an expert in unarmed attacks. If you are an expert in unarmored defense, your eidolon also becomes an expert in unarmored defense. If you have weapon specialization, your eidolon also gains weapon specialization."
+		],
+		"page": 77,
+		"source": "PZO2108",
+		"id": "dbbd4766-b39f-4dc1-9fce-6477e8fd6fa4",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Expert Summoner Spellcasting",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [
+			"Basic Summoner Spellcasting",
+			"master in the skill associated with your eidolon's tradition"
+		],
+		"details": [
+			"You gain the expert bounded spellcasting benefits (page 74)."
+		],
+		"page": 77,
+		"source": "PZO2108",
+		"id": "3d48d842-ef67-474e-b450-e4f46319114c",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Signature Synergy",
+		"level": 14,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Advanced Synergy" ],
+		"details": [
+			"Your eidolon gains an evolution integral to its form, and it comes more easily than your other synergies. You gain one evolution feat from the following list: Airborne Form, Burrowing Form, Ever-Vigilant Senses, or Hulking Size. For the purpose of meeting its prerequisites, your summoner level is equal to your character level - 4."
+		],
+		"page": 77,
+		"source": "PZO2108",
+		"id": "ce1c319e-2790-4f6b-be8b-306af5a76643",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Master Summoner Spellcasting",
+		"level": 18,
+		"traits": [ "Archetype" ],
+		"prerequisites": [
+			"Expert Summoner Spellcasting",
+			"legendary in the skill associated with your eidolon's tradition"
+		],
+		"details": [
+			"You gain the master bounded spellcasting benefits (page 74)."
+		],
+		"page": 77,
+		"source": "PZO2108",
+		"id": "f14d647d-6745-472e-bc2d-cd76d33ef2d2",
+		"aonId": 0
+	}
+]

@@ -1,0 +1,23 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Shoony",
+		"youMight": [
+			"Fight to protect those you care about and strive to do the right thing.",
+			"Work hard for long hours in a focused pursuit of distant goals.",
+			"Provide comfort, necessities such as food, and a sense of kinship to those in distress."
+		],
+		"othersProbably": [
+			"Involuntarily fawn over (or recoil from) your physical appearance.",
+			"Protect you from scary situations or terrifying phenomena, out of either friendship or overprotectiveness.",
+			"Appreciate your pragmatism and natural ability to care for others."
+		],
+		"aonId": 16,
+		"source": "PZO90153",
+		"id": "4742cbd9-7f19-428b-b30d-6c473e4fb770"
+	},
+	{ "objectType": "Heritage", "name": "Bloodhound Shoony", "ancestry": "Shoony", "source": "PZO90153", "aonId": 54, "id": "6d8dd225-f22d-45d7-b82a-e4b37ad6501a" },
+	{ "objectType": "Heritage", "name": "Fishseeker Shoony", "ancestry": "Shoony", "source": "PZO90153", "aonId": 55, "id": "5ade99bd-81a8-4a2c-b592-47d3403f72b4" },
+	{ "objectType": "Heritage", "name": "Paddler Shoony", "ancestry": "Shoony", "source": "PZO90153", "aonId": 56, "id": "4fda89d2-cba1-48f9-be44-edb3a695a027" },
+	{ "objectType": "Heritage", "name": "Thickcoat Shoony", "ancestry": "Shoony", "source": "PZO90153", "aonId": 57, "id": "66528993-f954-4dcb-b5cc-48585523b7af" }
+]

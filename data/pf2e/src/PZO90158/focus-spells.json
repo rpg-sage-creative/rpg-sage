@@ -1,0 +1,55 @@
+[
+	{
+		"name": "Speaking Sky",
+		"level": 6,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Air", "Divination" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "1 round",
+		"details": [
+			"The air speaks to you. You can precisely sense any motion within 60 feet through vibration and air movement."
+		],
+		"page": 79,
+		"source": "PZO90158",
+		"focus": true,
+		"aonId": 824,
+		"id": "c2c035fc-957f-42b0-a713-b156c963de42"
+	},
+	{
+		"name": "Steal the Sky",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Air", "Evocation" ],
+		"cast": "[R]",
+		"components": [ "verbal" ],
+		"trigger": "You make a successful unarmed Strike against a flying creature.",
+		"targets": "the creature you hit",
+		"savingThrow": "Fortitude",
+		"details": [
+			"You deny a flying creature the support of the air.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The target descends 60 feet. If it hits a surface, it takes bludgeoning damage as if it had fallen."
+				],
+				"failure": [
+					"As success, and if the target hits a surface, it falls prone and can't Fly, <i>levitate</i>, or otherwise leave the ground for 1 minute."
+				],
+				"criticalFailure": [
+					"As failure, and the creature takes double damage from hitting a surface."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "Increase the distance the creature must descend by 20 feet.", "bump": 1 }
+		],
+		"page": 79,
+		"source": "PZO90158",
+		"focus": true,
+		"aonId": 825,
+		"id": "a3601e50-c959-4a9a-855d-c9693fa36a75"
+	}
+]

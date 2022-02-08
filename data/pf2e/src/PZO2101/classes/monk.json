@@ -1,0 +1,36 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Monk",
+		"duringCombatEncounters": [
+			"You speed into the fray, dodging or leaping past obstacles with acrobatic maneuvers.",
+			"You strike opponents in a rapid flurry of attacks, using your bare fists or wielding specialized weapons that you mastered during your monastic training.",
+			"Stances let you change up your combat style for different situations, and ki abilities allow you to perform mystic feats like healing yourself and soaring through the air."
+		],
+		"duringSocialEncounters": [
+			"Your perceptiveness lets you see through falsehoods, and your philosophical training provides insight into any situation."
+		],
+		"whileExploring": [
+			"You climb up walls, dodge traps, overcome obstacles, and leap over pits.",
+			"You usually stay toward the outside of the group to protect more vulnerable members, and you're well suited to looking for danger or moving stealthily."
+		],
+		"inDowntime": [
+			"You diligently exercise, eat healthy foods, meditate, and study various philosophies.",
+			"You might also take up a craft that you strive to perfect."
+		],
+		"youMight": [
+			"Maintain a regimen of physical training and meditation.",
+			"Face adversity with a calm and measured approach, never panicking or succumbing to despair.",
+			"Look to the future for ways you can improve, while remaining at peace with your present self."
+		],
+		"othersProbably": [
+			"Marvel at your feats of physical prowess.",
+			"Think you're more than a bit uptight, given your vows and tenets.",
+			"Come to you for philosophical advice."
+		],
+		"source": "PZO2101",
+		"aonId": 8,
+		"aonTraitId": 112,
+		"id": "9717cd3e-6987-47fb-95ed-9993ca34f6e5"
+	}
+]

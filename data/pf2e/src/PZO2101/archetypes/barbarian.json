@@ -1,0 +1,108 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Barbarian",
+		"details": [
+			"There's a rage deep inside you that sometimes breaks loose, granting you some of the might of a barbarian in addition to your other abilities."
+		],
+		"page": 221,
+		"source": "PZO2101",
+		"id": "6b026633-045e-471f-b8a8-59643ba20daa",
+		"aonId": 2
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Barbarian Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Strength 14", "Constitution 14" ],
+		"details": [
+			"You become trained in Athletics; if you were already trained in Athletics, you instead become trained in a skill of your choice. You become trained in barbarian class DC.",
+			"You can use the Rage action (page 84).",
+			"Choose an instinct as you would if you were a barbarian. You have that instinct for all purposes and become bound by its anathema, but you don't gain any of the other abilities it grants."
+		],
+		"special": [
+			"You cannot select another dedication feat until you have gained two other feats from the barbarian archetype."
+		],
+		"page": 221,
+		"source": "PZO2101",
+		"id": "9ed0813b-a9f1-46eb-abfa-e6ef29f9528b",
+		"aonId": 671
+	},
+	{
+		"objectType": "Feat",
+		"name": "Barbarian Resiliency",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [
+			"Barbarian Dedication",
+			"class granting no more Hit Points per level than 10 + your Constitution modifier"
+		],
+		"details": [
+			"You gain 3 additional Hit Points for each barbarian archetype class feat you have. As you continue selecting barbarian archetype class feats, you continue to gain additional Hit Points in this way."
+		],
+		"page": 221,
+		"source": "PZO2101",
+		"id": "c770190c-3a00-4dd0-9f18-eaf3e6734f6c",
+		"aonId": 672
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Fury",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Barbarian Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level barbarian feat."
+		],
+		"page": 221,
+		"source": "PZO2101",
+		"id": "7872b0de-9d58-4709-987e-22792c26c04c",
+		"aonId": 673
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Fury",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Fury" ],
+		"details": [
+			"You gain one barbarian feat. For the purpose of meeting its prerequisites, your barbarian level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another barbarian feat."
+		],
+		"page": 221,
+		"source": "PZO2101",
+		"id": "503c5697-1ddd-431d-86c3-89cda60346db",
+		"aonId": 674
+	},
+	{
+		"objectType": "Feat",
+		"name": "Instinct Ability",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Barbarian Dedication" ],
+		"details": [
+			"You gain the instinct ability for the instinct you chose for Barbarian Dedication."
+		],
+		"page": 221,
+		"source": "PZO2101",
+		"id": "156ec5fe-e692-40e6-97f6-d190141abd42",
+		"aonId": 675
+	},
+	{
+		"objectType": "Feat",
+		"name": "Juggernaut's Fortitude",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Barbarian Dedication", "expert in Fortitude saves" ],
+		"details": [
+			"Your profciency rank in Fortitude saves increases to master."
+		],
+		"page": 221,
+		"source": "PZO2101",
+		"id": "38d10626-74b2-4740-8838-e0c4398a4402",
+		"aonId": 676
+	}
+]

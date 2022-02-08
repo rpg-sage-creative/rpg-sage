@@ -1,0 +1,1897 @@
+[
+	{
+		"objectType": "Table",
+		"name": "Income Earned",
+		"number": "4-2",
+		"page": 236,
+		"rows": [
+			[ "Task Level", "Failed", "Trained", "Expert", "Master", "Legendary" ],
+			[ "0", "1 cp", "5 cp", "5 cp", "5 cp", "5 cp" ],
+			[ "1", "2 cp", "2 sp", "2 sp", "2 sp", "2 sp" ],
+			[ "2", "4 cp", "3 sp", "3 sp", "3 sp", "3 sp" ],
+			[ "3", "8 cp", "5 sp", "5 sp", "5 sp", "5 sp" ],
+			[ "4", "1 sp", "7 sp", "8 sp", "8 sp", "8 sp" ],
+			[ "5", "2 sp", "9 sp", "1 gp", "1 gp", "1 gp" ],
+			[ "6", "3 sp", "1 gp, 5 sp", "2 gp", "2 gp", "2 gp" ],
+			[ "7", "4 sp", "2 gp", "2 gp, 5 sp", "2 gp, 5 sp", "2 gp, 5 sp" ],
+			[ "8", "5 sp", "2 gp, 5 sp", "3 gp", "3 gp", "3 gp" ],
+			[ "9", "6 sp", "3 gp", "4 gp", "4 gp", "4 gp" ],
+			[ "10", "7 sp", "4 gp", "5 gp", "6 gp", "6 gp" ],
+			[ "11", "8 sp", "5 gp", "6 gp", "8 gp", "8 gp" ],
+			[ "12", "9 sp", "6 gp", "8 gp", "10 gp", "10 gp" ],
+			[ "13", "1 gp", "7 gp", "10 gp", "15 gp", "15 gp" ],
+			[ "14", "1 gp, 5 sp", "8 gp", "15 gp", "20 gp", "20 gp" ],
+			[ "15", "2 gp", "10 gp", "20 gp", "28 gp", "28 gp" ],
+			[ "16", "2 gp, 5 sp", "13 gp", "25 gp", "36 gp", "40 gp" ],
+			[ "17", "3 gp", "15 gp", "30 gp", "45 gp", "55 gp" ],
+			[ "18", "4 gp", "20 gp", "45 gp", "70 gp", "90 gp" ],
+			[ "19", "6 gp", "30 gp", "60 gp", "100 gp", "130 gp" ],
+			[ "20", "8 gp", "40 gp", "75 gp", "150 gp", "200 gp" ],
+			[
+				"20 (critical success)",
+				"-",
+				"50 gp",
+				"90 gp",
+				"175 gp",
+				"300 gp"
+			]
+		],
+		"source": "PZO2101",
+		"id": "7404db07-bd71-4650-b7db-f7ec1b39bba4"
+	},
+	{
+		"objectType": "Table",
+		"name": "Learning a Spell",
+		"number": "4-3",
+		"page": 238,
+		"rows": [
+			[ "Spell Level", "Price", "Typical DC" ],
+			[ "1st or cantrip", "2 gp", "15" ],
+			[ "2nd", "6 gp", "18" ],
+			[ "3rd", "16 gp", "20" ],
+			[ "4th", "36 gp", "23" ],
+			[ "5th", "70 gp", "26" ],
+			[ "6th", "140 gp", "28" ],
+			[ "7th", "300 gp", "31" ],
+			[ "8th", "650 gp", "34" ],
+			[ "9th", "1,500 gp", "36" ],
+			[ "10th", "7,000 gp", "41" ]
+		],
+		"source": "PZO2101",
+		"id": "6a47e14e-b550-4c7e-a17c-3f95bd48c75c"
+	},
+	{
+		"objectType": "Table",
+		"name": "Coin Values",
+		"number": "6-1",
+		"page": 271,
+		"rows": [
+			[ "Coins", "CP", "SP", "GP", "PP" ],
+			[
+				"Copper piece (cp)",
+				"1",
+				"1/10",
+				"1/100",
+				"1/1,000"
+			],
+			[
+				"Silver piece (sp)",
+				"10",
+				"1",
+				"1/10",
+				"1/100"
+			],
+			[
+				"Gold piece (gp)",
+				"100",
+				"10",
+				"1",
+				"1/10"
+			],
+			[
+				"Platinum piece (pp)",
+				"1,000",
+				"100",
+				"10",
+				"1"
+			]
+		],
+		"source": "PZO2101",
+		"id": "959597ec-c6bb-48da-8977-c78be45af5bd"
+	},
+	{
+		"objectType": "Table",
+		"name": "Unarmored Defense",
+		"number": "6-3",
+		"page": 275,
+		"rows": [
+			[ "Unarmored Price", "AC Bonus", "Dex Cap", "Check Penalty", "Speed Penalty", "Bulk", "Armor Traits" ],
+			[
+				"No armor",
+				"-",
+				"+0",
+				"-",
+				"-",
+				"-",
+				"-",
+				"-"
+			],
+			[
+				"Explorer's clothing",
+				"1 sp",
+				"+0",
+				"+5",
+				"-",
+				"-",
+				"L",
+				"Comfort"
+			]
+		],
+		"source": "PZO2101",
+		"id": "faccfef8-4bfc-477a-8829-9e38facdde88"
+	},
+	{
+		"objectType": "Table",
+		"name": "Armor",
+		"number": "6-4",
+		"page": 275,
+		"bodies": [
+			[
+				[ "Light Armor", "Price", "AC Bonus", "Dex Cap", "Check Penalty", "Speed Penalty", "Strength", "Bulk", "Group", "Armor Traits" ],
+				[
+					"Padded armor",
+					"2 sp",
+					"+1",
+					"+3",
+					"-",
+					"-",
+					"10",
+					"L",
+					"-",
+					"Comfort"
+				],
+				[
+					"Leather",
+					"2 gp",
+					"+1",
+					"+4",
+					"-1",
+					"-",
+					"10",
+					"1",
+					"-",
+					"-"
+				],
+				[
+					"Studded leather",
+					"3 gp",
+					"+2",
+					"+3",
+					"-1",
+					"-",
+					"12",
+					"1",
+					"-",
+					"-"
+				],
+				[
+					"Chain shirt",
+					"5 gp",
+					"+2",
+					"+3",
+					"-1",
+					"-",
+					"12",
+					"1",
+					"-",
+					"Flexible,",
+					"Noisy"
+				]
+			],
+			[
+				[ "Medium Armor", "Price", "AC Bonus", "Dex Cap", "Check Penalty", "Speed Penalty", "Strength", "Bulk", "Group", "Armor Traits" ],
+				[
+					"Hide",
+					"2 gp",
+					"+3",
+					"+2",
+					"-2",
+					"-5 ft.",
+					"14",
+					"2",
+					"Leather",
+					"-"
+				],
+				[
+					"Scale mail",
+					"4 gp",
+					"+3",
+					"+2",
+					"-2",
+					"-5 ft.",
+					"14",
+					"2",
+					"Composite",
+					"-"
+				],
+				[
+					"Chain mail",
+					"6 gp",
+					"+4",
+					"+1",
+					"-2",
+					"-5 ft.",
+					"16",
+					"2",
+					"Chain",
+					"Flexible,",
+					"noisy"
+				],
+				[
+					"Breastplate",
+					"8 gp",
+					"+4",
+					"+1",
+					"-2",
+					"-5 ft.",
+					"16",
+					"2",
+					"Plate",
+					"-"
+				]
+			],
+			[
+				[ "Heavy Armor", "Price", "AC Bonus", "Dex Cap", "Check Penalty", "Speed Penalty", "Strength", "Bulk", "Group", "Armor Traits" ],
+				[
+					"Splint mail (level 1)",
+					"13 gp",
+					"+5",
+					"+1",
+					"-3",
+					"-10 ft.",
+					"16",
+					"3",
+					"Composite",
+					"-"
+				],
+				[
+					"Half plate (level 1)",
+					"18 gp",
+					"+5",
+					"+1",
+					"-3",
+					"-10 ft.",
+					"16",
+					"3",
+					"Plate",
+					"-"
+				],
+				[
+					"Full plate (level 2)",
+					"30 gp",
+					"+6",
+					"+0",
+					"-3",
+					"-10 ft.",
+					"18",
+					"4",
+					"Plate",
+					"Bulwark"
+				]
+			]
+		],
+		"source": "PZO2101",
+		"id": "e52c9330-167b-48bf-adac-d4116e32a84b"
+	},
+	{
+		"objectType": "Table",
+		"name": "Shields",
+		"number": "6-5",
+		"page": 277,
+		"rows": [
+			[
+				"Shield",
+				"Price",
+				"AC Bonus^1",
+				"Speed Penalty",
+				"Bulk",
+				"Hardness",
+				"HP (BT)"
+			],
+			[
+				"Buckler",
+				"1 gp",
+				"+1",
+				"-",
+				"L",
+				"3",
+				"6 (3)"
+			],
+			[
+				"Wooden shield",
+				"1 gp",
+				"+2",
+				"-",
+				"1",
+				"3",
+				"12 (6)"
+			],
+			[
+				"Steel shield",
+				"2 gp",
+				"+2",
+				"-",
+				"1",
+				"5",
+				"20 (10)"
+			],
+			[
+				"Tower shield",
+				"10 gp",
+				"+2/+4^2",
+				"-5 ft.",
+				"4",
+				"5",
+				"20 (10)"
+			]
+		],
+		"footer": [
+			"^1 Gaining a shield's circumstance bonus to AC requires using the Raise a Shield action (found on page 472).",
+			"^2 Getting the higher bonus for a tower shield requires using the Take Cover action (page 471) while the shield is raised."
+		],
+		"source": "PZO2101",
+		"id": "53722102-4ce0-4be4-ada8-2790c30c665e"
+	},
+	{
+		"objectType": "Table",
+		"name": "Unarmed Attacks",
+		"number": "6-6",
+		"page": 280,
+		"rows": [
+			[ "Unarmed Attack", "Price", "Damage", "Bulk", "Hands", "Group", "Weapon Traits" ],
+			[ "Fist", "-", "1d4 B", "-", "1", "Brawling", "Agile, finesse, nonlethal, unarmed" ]
+		],
+		"source": "PZO2101",
+		"id": "efccf4dd-67a7-4b85-839b-cf567a0aa100"
+	},
+	{
+		"objectType": "Table",
+		"name": "Melee Weapons",
+		"number": "6-7",
+		"pages": [ "280-281" ],
+		"bodies": [
+			[
+				[ "Simple Weapons", "Price", "Damage", "Bulk", "Hands", "Group", "Weapon Traits" ],
+				[
+					"Club",
+					"0",
+					"1d6 B",
+					"1",
+					"1",
+					"Club",
+					"Thrown 10 ft."
+				],
+				[
+					"Dagger",
+					"2 sp",
+					"1d4 P",
+					"L",
+					"1",
+					"Knife",
+					"Agile, finesse, Thrown 10 ft., Versatile S"
+				],
+				[ "Gauntlet", "2 sp", "1d4 B", "L", "1", "Brawling", "Agile, free-hand" ],
+				[ "Light mace", "4 sp", "1d4 B", "L", "1", "Club", "Agile, finesse, shove" ],
+				[ "Longspear", "5 sp", "1d8 P", "2", "2", "Spear", "Reach" ],
+				[ "Mace", "1 gp", "1d6 B", "1", "1", "Club", "Shove" ],
+				[ "Morningstar", "1 gp", "1d6 B", "1", "1", "Club", "Versatile P" ],
+				[ "Sickle", "2 sp", "1d4 S", "L", "1", "Knife", "Agile, finesse, trip" ],
+				[
+					"Spear",
+					"1 sp",
+					"1d6 P",
+					"1",
+					"1",
+					"Spear",
+					"Thrown 20 ft."
+				],
+				[ "Spiked gauntlet", "3 sp", "1d4 P", "L", "1", "Brawling", "Agile, free-hand" ],
+				[ "Staff", "0", "1d4 B", "1", "1", "Club", "Two-hand d8" ]
+			],
+			[
+				[ "Uncommon Simple Weapons", "Price", "Damage", "Bulk", "Hands", "Group", "Weapon Traits" ],
+				[ "Clan dagger", "2 gp", "1d4 P", "L", "1", "Knife", "Agile, dwarf, parry, Versatile B" ],
+				[ "Katar", "3 sp", "1d4 P", "L", "1", "Knife", "Agile, Deadly d6, monk" ]
+			],
+			[
+				[ "Martial Weapons", "Price", "Damage", "Bulk", "Hands", "Group", "Weapon Traits" ],
+				[ "Bastard sword", "4 gp", "1d8 S", "1", "1", "Sword", "Two-hand d12" ],
+				[ "Battle axe", "1 gp", "1d8 S", "1", "1", "Axe", "Sweep" ],
+				[ "Bo staff", "2 sp", "1d8 B", "2", "2", "Club", "Monk, parry, reach, trip" ],
+				[ "Falchion", "3 gp", "1d10 S", "2", "2", "Sword", "Forceful, sweep" ],
+				[ "Flail", "8 sp", "1d6 B", "1", "1", "Flail", "Disarm, sweep, trip" ],
+				[ "Glaive", "1 gp", "1d8 S", "2", "2", "Polearm", "Deadly d8, forceful, reach" ],
+				[ "Greataxe", "2 gp", "1d12 S", "2", "2", "Axe", "Sweep" ],
+				[ "Greatclub", "1 gp", "1d10 B", "2", "2", "Club", "Backswing, shove" ],
+				[ "Greatpick", "1 gp", "1d10 P", "2", "2", "Pick", "Fatal d12" ],
+				[ "Greatsword", "2 gp", "1d12 S", "2", "2", "Sword", "Versatile P" ],
+				[ "Guisarme", "2 gp", "1d10 S", "2", "2", "Polearm", "Reach, trip" ],
+				[ "Halberd", "2 gp", "1d10 P", "2", "2", "Polearm", "Reach, Versatile S" ],
+				[
+					"Hatchet",
+					"4 sp",
+					"1d6 S",
+					"L",
+					"1",
+					"Axe",
+					"Agile, sweep, Thrown 10 ft."
+				],
+				[ "Lance", "1 gp", "1d8 P", "2", "2", "Spear", "Deadly d8, jousting d6, reach" ],
+				[
+					"Light hammer",
+					"3 sp",
+					"1d6 B",
+					"L",
+					"1",
+					"Hammer",
+					"Agile, Thrown 20 ft."
+				],
+				[ "Light pick", "4 sp", "1d4 P", "L", "1", "Pick", "Agile, fatal d8" ],
+				[ "Longsword", "1 gp", "1d8 S", "1", "1", "Sword", "Versatile P" ],
+				[ "Main-gauche", "5 sp", "1d4 P", "L", "1", "Knife", "Agile, disarm, finesse, parry, Versatile S" ],
+				[ "Maul", "3 gp", "1d12 B", "2", "2", "Hammer", "Shove" ],
+				[ "Pick", "7 sp", "1d6 P", "1", "1", "Pick", "Fatal d10" ],
+				[ "Ranseur", "2 gp", "1d10 P", "2", "2", "Polearm", "Disarm, reach" ],
+				[ "Rapier", "2 gp", "1d6 P", "1", "1", "Sword", "Deadly d8, disarm, finesse" ],
+				[ "Sap", "1 sp", "1d6 B", "L", "1", "Club", "Agile, nonlethal" ],
+				[ "Scimitar", "1 gp", "1d6 S", "1", "1", "Sword", "Forceful, sweep" ],
+				[ "Scythe", "2 gp", "1d10 S", "2", "2", "Polearm", "Deadly d10, trip" ],
+				[ "Shield bash", "-", "1d4 B", "-", "1", "Shield", "-" ],
+				[ "Shield boss", "5 sp", "1d6 B", "-", "1", "Shield", "Attached to shield" ],
+				[ "Shield spikes", "5 sp", "1d6 P", "-", "1", "Shield", "Attached to shield" ],
+				[ "Shortsword", "9 sp", "1d6 P", "L", "1", "Sword", "Agile, finesse, Versatile S" ],
+				[
+					"Starknife",
+					"2 gp",
+					"1d4 P",
+					"L",
+					"1",
+					"Knife",
+					"Agile, Deadly d6, finesse, Thrown 20 ft., Versatile S"
+				],
+				[
+					"Trident",
+					"1 gp",
+					"1d8 P",
+					"1",
+					"1",
+					"Spear",
+					"Thrown 20 ft."
+				],
+				[ "War flail", "2 gp", "1d10 B", "2", "2", "Flail", "Disarm, sweep, trip" ],
+				[ "Warhammer", "1 gp", "1d8 B", "1", "1", "Hammer", "Shove" ],
+				[ "Whip", "1 sp", "1d4 S", "1", "1", "Flail", "Disarm, finesse, nonlethal, reach, trip" ]
+			],
+			[
+				[ "Uncommon Martial Weapons", "Price", "Damage", "Bulk", "Hands", "Group", "Weapon Traits" ],
+				[ "Dogslicer", "1 sp", "1d6 S", "L", "1", "Sword", "Agile, backstabber, finesse, goblin" ],
+				[ "Elven curve blade", "4 gp", "1d8 S", "2", "2", "Sword", "Elf, finesse, forceful" ],
+				[
+					"Filcher's fork",
+					"1 gp",
+					"1d4 P",
+					"L",
+					"1",
+					"Spear",
+					"Agile, backstabber, Deadly d6, finesse, halfling, Thrown 20 ft."
+				],
+				[ "Gnome hooked hammer", "2 gp", "1d6 B", "1", "1", "Hammer", "Gnome, trip, two-hand d10, Versatile P" ],
+				[ "Horsechopper", "9 sp", "1d8 S", "2", "2", "Polearm", "Goblin, reach, trip, Versatile P" ],
+				[ "Kama", "1 gp", "1d6 S", "L", "1", "Knife", "Agile, monk, trip" ],
+				[ "Katana", "2 gp", "1d6 S", "1", "1", "Sword", "Deadly d8, two-hand d10, Versatile P" ],
+				[ "Kukri", "6 sp", "1d6 S", "L", "1", "Knife", "Agile, finesse, trip" ],
+				[ "Nunchaku", "2 sp", "1d6 B", "L", "1", "Club", "Backswing, disarm, finesse, monk" ],
+				[ "Orc knuckle dagger", "7 sp", "1d6 P", "L", "1", "Knife", "Agile, disarm, orc" ],
+				[ "Sai", "6 sp", "1d4 P", "L", "1", "Knife", "Agile, disarm, finesse, monk, Versatile B" ],
+				[ "Spiked chain", "3 gp", "1d8 S", "1", "2", "Flail", "Disarm, finesse, trip" ],
+				[ "Temple sword", "2 gp", "1d8 S", "1", "1", "Sword", "Monk, trip" ]
+			],
+			[
+				[ "Uncommon Advanced Weapons", "Price", "Damage", "Bulk", "Hands", "Group", "Weapon Traits" ],
+				[ "Dwarven waraxe", "3 gp", "1d8 S", "2", "1", "Axe", "Dwarf, sweep, two-hand d12" ],
+				[ "Gnome flickmace", "3 gp", "1d8 B", "2", "1", "Flail", "Gnome, reach" ],
+				[ "Orc necksplitter", "2 gp", "1d8 S", "1", "1", "Axe", "Forceful, orc, sweep" ],
+				[ "Sawtooth saber", "5 gp", "1d6 S", "L", "1", "Sword", "Agile, finesse, twin" ]
+			]
+		],
+		"source": "PZO2101",
+		"id": "21794ac8-d150-4244-abd4-69e6a3eb428d"
+	},
+	{
+		"objectType": "Table",
+		"name": "Ranged Weapons",
+		"number": "6-8",
+		"pages": [ "281-282" ],
+		"bodies": [
+			[
+				[ "Simple Weapons", "Price", "Damage", "Range", "Reload", "Bulk", "Hands", "Group", "Weapon Traits" ],
+				[
+					"Blowgun",
+					"1 sp",
+					"1 P",
+					"20 ft.",
+					"1",
+					"L",
+					"1",
+					"Dart",
+					"Agile, nonlethal"
+				],
+				[
+					"\t10 blowgun darts",
+					"5 cp",
+					"",
+					"",
+					"",
+					"L"
+				],
+				[
+					"Crossbow",
+					"3 gp",
+					"1d8 P",
+					"120 ft.",
+					"1",
+					"1",
+					"2",
+					"Bow",
+					"-"
+				],
+				[
+					"\t10 bolts",
+					"1 sp",
+					"",
+					"",
+					"",
+					"L"
+				],
+				[
+					"Dart",
+					"1 cp",
+					"1d4 P",
+					"20 ft.",
+					"-",
+					"L",
+					"1",
+					"Dart",
+					"Agile, thrown"
+				],
+				[
+					"Hand crossbow",
+					"3 gp",
+					"1d6 P",
+					"60 ft.",
+					"1",
+					"L",
+					"1",
+					"Bow",
+					"-"
+				],
+				[
+					"\t10 bolts",
+					"1 sp",
+					"",
+					"",
+					"",
+					"L"
+				],
+				[
+					"Heavy crossbow",
+					"4 gp",
+					"1d10 P",
+					"120 ft.",
+					"2",
+					"2",
+					"2",
+					"Bow",
+					"-"
+				],
+				[
+					"\t10 bolts",
+					"1 sp",
+					"",
+					"",
+					"",
+					"L"
+				],
+				[
+					"Javelin",
+					"1 sp",
+					"1d6 P",
+					"30 ft.",
+					"-",
+					"L",
+					"1",
+					"Dart",
+					"Thrown"
+				],
+				[
+					"Sling",
+					"0",
+					"1d6 B",
+					"50 ft.",
+					"1",
+					"L",
+					"1",
+					"Sling",
+					"Propulsive"
+				],
+				[
+					"\t10 sling bullets",
+					"1 cp",
+					"",
+					"",
+					"",
+					"L"
+				]
+			],
+			[
+				[ "Martial Weapons", "Price", "Damage", "Range", "Reload", "Bulk", "Hands", "Group", "Weapon Traits" ],
+				[
+					"Alchemical bomb^",
+					"Varies",
+					"Varies",
+					"20 ft.",
+					"-",
+					"L",
+					"1",
+					"Bomb",
+					"Varies"
+				],
+				[
+					"Composite longbow",
+					"20 gp",
+					"1d8 P",
+					"100 ft.",
+					"0",
+					"2",
+					"1+",
+					"Bow",
+					"Deadly d10, propulsive, volley 30 ft."
+				],
+				[
+					"\t10 arrows",
+					"1 sp",
+					"",
+					"",
+					"",
+					"L"
+				],
+				[
+					"Composite shortbow",
+					"14 gp",
+					"1d6 P",
+					"60 ft.",
+					"0",
+					"1",
+					"1+",
+					"Bow",
+					"Deadly d10, propulsive"
+				],
+				[
+					"\t10 arrows",
+					"1 sp",
+					"",
+					"",
+					"",
+					"L"
+				],
+				[
+					"Longbow",
+					"6 gp",
+					"1d8 P",
+					"100 ft.",
+					"0",
+					"2",
+					"1+",
+					"Bow",
+					"Deadly d10, volley 30 ft."
+				],
+				[
+					"\t10 arrows",
+					"1 sp",
+					"",
+					"",
+					"",
+					"L"
+				],
+				[
+					"Shortbow",
+					"3 gp",
+					"1d6 P",
+					"60 ft.",
+					"0",
+					"1",
+					"1+",
+					"Bow",
+					"Deadly d10"
+				],
+				[
+					"\t10 arrows",
+					"1 sp",
+					"",
+					"",
+					"",
+					"L"
+				]
+			],
+			[
+				[ "Uncommon Martial Weapons", "Price", "Damage", "Range", "Reload", "Bulk", "Hands", "Group", "Weapon Traits" ],
+				[
+					"Halfling sling staff",
+					"5 gp",
+					"1d10 B",
+					"80 ft.",
+					"1",
+					"1",
+					"2",
+					"Sling",
+					"Halfling, propulsive"
+				],
+				[
+					"\t10 sling bullets",
+					"1 cp",
+					"",
+					"",
+					"",
+					"L"
+				],
+				[
+					"Shuriken",
+					"1 cp",
+					"1d4 P",
+					"20 ft.",
+					"0",
+					"-",
+					"1",
+					"Dart",
+					"Agile, monk, thrown"
+				]
+			]
+		],
+		"source": "PZO2101",
+		"id": "6293a67e-b696-4f6a-bd69-e09b676b578b"
+	},
+	{
+		"objectType": "Table",
+		"name": "Adventuring Gear",
+		"number": "6-9",
+		"pages": [ "288" ],
+		"rows": [
+			[
+				"Adventurer's pack",
+				"7 sp",
+				"2",
+				"-"
+			],
+			[
+				"Alchemist's tools",
+				"5 gp",
+				"2",
+				"2"
+			],
+			[
+				"Expanded alchemist's tools (level 3)",
+				"55 gp",
+				"2",
+				"2"
+			],
+			[
+				"Artisan's tools",
+				"4 gp",
+				"2",
+				"2"
+			],
+			[
+				"Sterling artisan's tools (level 3)",
+				"50 gp",
+				"2",
+				"2"
+			],
+			[ "Backpack", "1 sp", "-", "-" ],
+			[ "Bandolier", "1 sp", "-", "-" ],
+			[
+				"Basic crafter's book",
+				"1 sp",
+				"L",
+				"2"
+			],
+			[ "Bedroll", "1 cp", "L", "-" ],
+			[ "Belt pouch", "4 cp", "-", "-" ],
+			[ "Caltrops", "3 sp", "L", "1" ],
+			[
+				"Candle (10)",
+				"1 cp",
+				"-",
+				"1"
+			],
+			[
+				"Chain (10 feet)",
+				"4 gp",
+				"1",
+				"2"
+			],
+			[
+				"Chalk (10)",
+				"1 cp",
+				"-",
+				"1"
+			],
+			[ "Chest", "6 sp", "2", "2" ],
+			[ "Climbing kit", "5 sp", "1", "2" ],
+			[
+				"Extreme climbing kit (level 3)",
+				"40 gp",
+				"1",
+				"2"
+			],
+			[ "Clothing" ],
+			[
+				"\tOrdinary",
+				"1 sp",
+				"-",
+				"-"
+			],
+			[
+				"\tExplorer's",
+				"1 sp",
+				"L",
+				"-"
+			],
+			[
+				"\tFine",
+				"2 gp",
+				"L",
+				"-"
+			],
+			[
+				"\tHigh-fashion fine (level 3)",
+				"55 gp",
+				"L",
+				"-"
+			],
+			[
+				"\tWinter",
+				"4 sp",
+				"L",
+				"-"
+			],
+			[ "Compass", "1 gp", "-", "1" ],
+			[
+				"\tLensatic compass (level 3)",
+				"20 gp",
+				"-",
+				"1"
+			],
+			[ "Cookware", "1 gp", "2", "2" ],
+			[ "Crowbar", "5 sp", "L", "2" ],
+			[
+				"\tLevered crowbar (level 3)",
+				"20 gp",
+				"L",
+				"2"
+			],
+			[ "Disguise kit", "2 gp", "L", "2" ],
+			[
+				"\tReplacement cosmetics",
+				"1 sp",
+				"-",
+				"-"
+			],
+			[
+				"\tElite disguise kit (level 3)",
+				"40 gp",
+				"L",
+				"2"
+			],
+			[
+				"\tElite cosmetics (level 3)",
+				"5 sp",
+				"-",
+				"-"
+			],
+			[ "Fishing tackle", "8 sp", "1", "2" ],
+			[
+				"\tProfessional fishing tackle (level 3)",
+				"20 gp",
+				"1",
+				"2"
+			],
+			[ "Flint and steel", "5 cp", "-", "2" ],
+			[
+				"Formula book (blank)",
+				"1 gp",
+				"1",
+				"1"
+			],
+			[ "Grappling hook", "1 sp", "L", "1" ],
+			[ "Hammer", "1 sp", "L", "1" ],
+			[
+				"Healer's tools",
+				"5 gp",
+				"1",
+				"2"
+			],
+			[
+				"\tExpanded healer's tools (level 3)",
+				"50 gp",
+				"1",
+				"2"
+			],
+			[ "Holly and mistletoe", "0", "-", "1" ],
+			[ "Hourglass", "3 gp", "L", "1" ],
+			[
+				"Ladder (10-foot)",
+				"3 cp",
+				"3",
+				"2"
+			],
+			[ "Lantern" ],
+			[
+				"\tBull's-eye",
+				"1 gp",
+				"1",
+				"1"
+			],
+			[
+				"\tHooded",
+				"7 sp",
+				"L",
+				"1"
+			],
+			[ "Lock" ],
+			[
+				"\tPoor lock (level 0)",
+				"2 sp",
+				"-",
+				"2"
+			],
+			[
+				"\tSimple lock (level 1)",
+				"2 gp",
+				"-",
+				"2"
+			],
+			[
+				"\tAverage lock (level 3)",
+				"15 gp",
+				"-",
+				"2"
+			],
+			[
+				"\tGood lock (level 9)",
+				"200 gp",
+				"-",
+				"2"
+			],
+			[
+				"\tSuperior lock (level 17)",
+				"4,500 gp",
+				"-",
+				"2"
+			],
+			[
+				"Magnifying glass (level 3)",
+				"40 gp",
+				"-",
+				"1"
+			],
+			[ "Manacles" ],
+			[
+				"\tPoor manacles (level 0)",
+				"3 sp",
+				"-",
+				"2"
+			],
+			[
+				"\tSimple manacles (level 1)",
+				"3 gp",
+				"-",
+				"2"
+			],
+			[
+				"\tAverage manacles (level 3)",
+				"20 gp",
+				"-",
+				"2"
+			],
+			[
+				"\tGood manacles (level 9)",
+				"250 gp",
+				"-",
+				"2"
+			],
+			[
+				"\tSuperior manacles (level 17)",
+				"5,000 gp",
+				"-",
+				"2"
+			],
+			[ "Material component pouch", "5 sp", "L", "1" ],
+			[
+				"Merchant's scale",
+				"2 sp",
+				"L",
+				"2"
+			],
+			[ "Mirror", "1 gp", "-", "1" ],
+			[ "Mug", "1 cp", "-", "1" ],
+			[ "Musical instrument" ],
+			[
+				"\tHandheld",
+				"8 sp",
+				"1",
+				"2"
+			],
+			[
+				"\tVirtuoso handheld (level 3)",
+				"50 gp",
+				"1",
+				"2"
+			],
+			[
+				"\tHeavy",
+				"2 gp",
+				"16",
+				"2"
+			],
+			[
+				"\tVirtuoso heavy (level 3)",
+				"100 gp",
+				"16",
+				"2"
+			],
+			[
+				"Oil (1 pint)",
+				"1 cp",
+				"-",
+				"2"
+			],
+			[ "Piton", "1 cp", "-", "1" ],
+			[
+				"Rations (1 week)",
+				"4 sp",
+				"L",
+				"1"
+			],
+			[ "Religious symbol" ],
+			[
+				"\tWooden",
+				"1 sp",
+				"L",
+				"1"
+			],
+			[
+				"\tSilver",
+				"2 gp",
+				"L",
+				"1"
+			],
+			[ "Religious text", "1 gp", "L", "1" ],
+			[ "Repair kit", "2 gp", "1", "2" ],
+			[
+				"\tSuperb repair kit (level 3)",
+				"25 gp",
+				"1",
+				"2"
+			],
+			[ "Rope", "5 sp", "L", "2" ],
+			[
+				"Sack (5)",
+				"1 cp",
+				"L",
+				"1"
+			],
+			[ "Saddlebags", "2 sp", "L", "2" ],
+			[ "Satchel", "1 sp", "-", "2" ],
+			[ "Scroll case", "1 sp", "-", "2" ],
+			[ "Sheath", "1 cp", "-", "-" ],
+			[ "Signal whistle", "8 cp", "-", "1" ],
+			[ "Snare kit", "5 gp", "2", "2" ],
+			[
+				"\tSpecialist snare kit (level 3)",
+				"55 gp",
+				"2",
+				"2"
+			],
+			[ "Soap", "2 cp", "-", "1" ],
+			[
+				"Spellbook (blank)",
+				"1 gp",
+				"1",
+				"1"
+			],
+			[ "Spyglass", "20 gp", "L", "2" ],
+			[
+				"\tFine spyglass (level 4)",
+				"80 gp",
+				"L",
+				"2"
+			],
+			[ "Tack", "4 gp", "1", "-" ],
+			[ "Ten-foot pole", "1 cp", "1", "2" ],
+			[ "Tent" ],
+			[
+				"\tPup",
+				"8 sp",
+				"L",
+				"2"
+			],
+			[
+				"\tFour-person",
+				"5 gp",
+				"1",
+				"2"
+			],
+			[
+				"\tPavilion (level 2)",
+				"40 gp",
+				"12",
+				"2"
+			],
+			[
+				"Thieves' tools",
+				"3 gp",
+				"L",
+				"2"
+			],
+			[
+				"\tReplacement picks",
+				"3 sp",
+				"-",
+				"-"
+			],
+			[
+				"\tInfiltrator thieves' tools (level 3)",
+				"50 gp",
+				"L",
+				"2"
+			],
+			[
+				"\tInfiltrator picks (level 3)",
+				"3 gp",
+				"-",
+				"-"
+			],
+			[ "Tool" ],
+			[
+				"\tLong tool",
+				"1 gp",
+				"1",
+				"2"
+			],
+			[
+				"\tShort tool",
+				"4 sp",
+				"L",
+				"1 or 2"
+			],
+			[ "Torch", "1 cp", "L", "1" ],
+			[ "Vial", "5 cp", "-", "1" ],
+			[ "Waterskin", "5 cp", "L", "1" ],
+			[ "Writing set", "1 gp", "L", "2" ],
+			[
+				"\tExtra ink and paper",
+				"1 sp",
+				"-",
+				"-"
+			]
+		],
+		"source": "PZO2101",
+		"id": "a08fd589-1d25-48b2-a066-c2705faca627"
+	},
+	{
+		"objectType": "Table",
+		"name": "Adventuring Gear",
+		"number": "6-9",
+		"pages": [ "288" ],
+		"rows": [
+			[
+				"Adventurer's pack",
+				"7 sp",
+				"1",
+				"-"
+			],
+			[
+				"Alchemist's lab",
+				"5 gp",
+				"6",
+				"2"
+			],
+			[
+				"Expanded alchemist's lab (level 3)",
+				"55 gp",
+				"6",
+				"2"
+			],
+			[
+				"Alchemist's tools",
+				"3 gp",
+				"1",
+				"2"
+			],
+			[
+				"Artisan's tools",
+				"4 gp",
+				"2",
+				"2"
+			],
+			[
+				"Sterling artisan's tools (level 3)",
+				"50 gp",
+				"2",
+				"2"
+			],
+			[ "Backpack", "1 sp", "-", "-" ],
+			[ "Bandolier", "1 sp", "-", "-" ],
+			[
+				"Basic crafter's book",
+				"1 sp",
+				"L",
+				"2"
+			],
+			[ "Bedroll", "1 cp", "L", "-" ],
+			[ "Belt pouch", "4 cp", "-", "-" ],
+			[ "Caltrops", "3 sp", "L", "1" ],
+			[
+				"Candle (10)",
+				"1 cp",
+				"-",
+				"1"
+			],
+			[
+				"Chain (10 feet)",
+				"4 gp",
+				"1",
+				"2"
+			],
+			[
+				"Chalk (10)",
+				"1 cp",
+				"-",
+				"1"
+			],
+			[ "Chest", "6 sp", "2", "2" ],
+			[ "Climbing kit", "5 sp", "1", "2" ],
+			[
+				"Extreme climbing kit (level 3)",
+				"40 gp",
+				"1",
+				"2"
+			],
+			[ "Clothing" ],
+			[
+				"\tOrdinary",
+				"1 sp",
+				"-",
+				"-"
+			],
+			[
+				"\tExplorer's",
+				"1 sp",
+				"L",
+				"-"
+			],
+			[
+				"\tFine",
+				"2 gp",
+				"L",
+				"-"
+			],
+			[
+				"\tHigh-fashion fine (level 3)",
+				"55 gp",
+				"L",
+				"-"
+			],
+			[
+				"\tWinter",
+				"4 sp",
+				"L",
+				"-"
+			],
+			[ "Compass", "1 gp", "-", "1" ],
+			[
+				"\tLensatic compass (level 3)",
+				"20 gp",
+				"-",
+				"1"
+			],
+			[ "Cookware", "1 gp", "2", "2" ],
+			[ "Crowbar", "5 sp", "L", "2" ],
+			[
+				"\tLevered crowbar (level 3)",
+				"20 gp",
+				"L",
+				"2"
+			],
+			[ "Disguise kit", "2 gp", "L", "2" ],
+			[
+				"\tReplacement cosmetics",
+				"1 sp",
+				"-",
+				"-"
+			],
+			[
+				"\tElite disguise kit (level 3)",
+				"40 gp",
+				"L",
+				"2"
+			],
+			[
+				"\tElite cosmetics (level 3)",
+				"5 sp",
+				"-",
+				"-"
+			],
+			[ "Fishing tackle", "8 sp", "1", "2" ],
+			[
+				"\tProfessional fishing tackle (level 3)",
+				"20 gp",
+				"1",
+				"2"
+			],
+			[ "Flint and steel", "5 cp", "-", "2" ],
+			[
+				"Formula book (blank)",
+				"1 gp",
+				"L",
+				"1"
+			],
+			[ "Grappling hook", "1 sp", "L", "1" ],
+			[ "Hammer", "1 sp", "L", "1" ],
+			[
+				"Healer's tools",
+				"5 gp",
+				"1",
+				"2"
+			],
+			[
+				"\tExpanded healer's tools (level 3)",
+				"50 gp",
+				"1",
+				"2"
+			],
+			[ "Holly and mistletoe", "0", "-", "1" ],
+			[ "Hourglass", "3 gp", "L", "1" ],
+			[
+				"Ladder (10-foot)",
+				"3 cp",
+				"3",
+				"2"
+			],
+			[ "Lantern" ],
+			[
+				"\tBull's-eye",
+				"1 gp",
+				"1",
+				"1"
+			],
+			[
+				"\tHooded",
+				"7 sp",
+				"L",
+				"1"
+			],
+			[ "Lock" ],
+			[
+				"\tPoor lock (level 0)",
+				"2 sp",
+				"-",
+				"2"
+			],
+			[
+				"\tSimple lock (level 1)",
+				"2 gp",
+				"-",
+				"2"
+			],
+			[
+				"\tAverage lock (level 3)",
+				"15 gp",
+				"-",
+				"2"
+			],
+			[
+				"\tGood lock (level 9)",
+				"200 gp",
+				"-",
+				"2"
+			],
+			[
+				"\tSuperior lock (level 17)",
+				"4,500 gp",
+				"-",
+				"2"
+			],
+			[
+				"Magnifying glass (level 3)",
+				"40 gp",
+				"-",
+				"1"
+			],
+			[ "Manacles" ],
+			[
+				"\tPoor manacles (level 0)",
+				"3 sp",
+				"-",
+				"2"
+			],
+			[
+				"\tSimple manacles (level 1)",
+				"3 gp",
+				"-",
+				"2"
+			],
+			[
+				"\tAverage manacles (level 3)",
+				"20 gp",
+				"-",
+				"2"
+			],
+			[
+				"\tGood manacles (level 9)",
+				"250 gp",
+				"-",
+				"2"
+			],
+			[
+				"\tSuperior manacles (level 17)",
+				"5,000 gp",
+				"-",
+				"2"
+			],
+			[ "Material component pouch", "5 sp", "L", "1" ],
+			[
+				"Merchant's scale",
+				"2 sp",
+				"L",
+				"2"
+			],
+			[ "Mirror", "1 gp", "-", "1" ],
+			[ "Mug", "1 cp", "-", "1" ],
+			[ "Musical instrument" ],
+			[
+				"\tHandheld",
+				"8 sp",
+				"1",
+				"2"
+			],
+			[
+				"\tVirtuoso handheld (level 3)",
+				"50 gp",
+				"1",
+				"2"
+			],
+			[
+				"\tHeavy",
+				"2 gp",
+				"16",
+				"2"
+			],
+			[
+				"\tVirtuoso heavy (level 3)",
+				"100 gp",
+				"16",
+				"2"
+			],
+			[
+				"Oil (1 pint)",
+				"1 cp",
+				"-",
+				"2"
+			],
+			[ "Piton", "1 cp", "-", "1" ],
+			[
+				"Rations (1 week)",
+				"4 sp",
+				"L",
+				"1"
+			],
+			[ "Religious symbol" ],
+			[
+				"\tWooden",
+				"1 sp",
+				"L",
+				"1"
+			],
+			[
+				"\tSilver",
+				"2 gp",
+				"L",
+				"1"
+			],
+			[ "Religious text", "1 gp", "L", "1" ],
+			[ "Repair kit", "2 gp", "1", "2" ],
+			[
+				"\tSuperb repair kit (level 3)",
+				"25 gp",
+				"1",
+				"2"
+			],
+			[ "Rope", "5 sp", "L", "2" ],
+			[
+				"Sack (5)",
+				"1 cp",
+				"L",
+				"1"
+			],
+			[ "Saddlebags", "2 sp", "L", "2" ],
+			[ "Satchel", "1 sp", "-", "2" ],
+			[ "Scroll case", "1 sp", "-", "2" ],
+			[ "Sheath", "1 cp", "-", "-" ],
+			[ "Signal whistle", "8 cp", "-", "1" ],
+			[ "Snare kit", "5 gp", "2", "2" ],
+			[
+				"\tSpecialist snare kit (level 3)",
+				"55 gp",
+				"2",
+				"2"
+			],
+			[ "Soap", "2 cp", "-", "1" ],
+			[
+				"Spellbook (blank)",
+				"1 gp",
+				"L",
+				"1"
+			],
+			[ "Spyglass", "20 gp", "L", "2" ],
+			[
+				"\tFine spyglass (level 4)",
+				"80 gp",
+				"L",
+				"2"
+			],
+			[ "Tack", "4 gp", "1", "-" ],
+			[ "Ten-foot pole", "1 cp", "1", "2" ],
+			[ "Tent" ],
+			[
+				"\tPup",
+				"8 sp",
+				"L",
+				"2"
+			],
+			[
+				"\tFour-person",
+				"5 gp",
+				"1",
+				"2"
+			],
+			[
+				"\tPavilion (level 2)",
+				"40 gp",
+				"12",
+				"2"
+			],
+			[
+				"Thieves' tools",
+				"3 gp",
+				"L",
+				"2"
+			],
+			[
+				"\tReplacement picks",
+				"3 sp",
+				"-",
+				"-"
+			],
+			[
+				"\tInfiltrator thieves' tools (level 3)",
+				"50 gp",
+				"L",
+				"2"
+			],
+			[
+				"\tInfiltrator picks (level 3)",
+				"3 gp",
+				"-",
+				"-"
+			],
+			[ "Tool" ],
+			[
+				"\tLong tool",
+				"1 gp",
+				"1",
+				"2"
+			],
+			[
+				"\tShort tool",
+				"4 sp",
+				"L",
+				"1 or 2"
+			],
+			[ "Torch", "1 cp", "L", "1" ],
+			[ "Vial", "5 cp", "-", "1" ],
+			[ "Waterskin", "5 cp", "L", "1" ],
+			[ "Writing set", "1 gp", "L", "2" ],
+			[
+				"\tExtra ink and paper",
+				"1 sp",
+				"-",
+				"-"
+			]
+		],
+		"source": "PZO2101",
+		"version": 1,
+		"id": "901ce725-3cd2-4a16-a032-08ef22fa747a",
+		"previousId": "A08FD589-1D25-48B2-A066-C2705FACA627"
+	},
+	{
+		"objectType": "Table",
+		"name": "Uncommon Adventuring Gear",
+		"number": "6-10",
+		"pages": [ "288" ],
+		"rows": [
+			[ "Item", "Price", "Bulk", "Hands" ],
+			[
+				"Scholarly journal (level 3)",
+				"6 gp",
+				"L",
+				"1"
+			],
+			[
+				"Scholarly journal compendium (level 3)",
+				"30 gp",
+				"L",
+				"2"
+			],
+			[
+				"Survey map (level 3)",
+				"10 gp",
+				"L",
+				"1"
+			],
+			[
+				"Survey map atlas (level 3)",
+				"50 gp",
+				"L",
+				"2"
+			]
+		],
+		"source": "PZO2101",
+		"id": "c8b4164a-7d45-433e-bd34-6e2690a25c38"
+	},
+	{
+		"objectType": "Table",
+		"name": "Travel Speed",
+		"number": "9-2",
+		"page": 479,
+		"rows": [
+			[ "Speed", "Feet per Minute", "Miles per Hour", "Miles per Day" ],
+			[ "10 feet", "100", "1", "8" ],
+			[
+				"15 feet",
+				"150",
+				"1-1/2",
+				"12"
+			],
+			[ "20 feet", "200", "2", "16" ],
+			[
+				"25 feet",
+				"250",
+				"2-1/2",
+				"20"
+			],
+			[ "30 feet", "300", "3", "24" ],
+			[
+				"35 feet",
+				"350",
+				"3-1/2",
+				"28"
+			],
+			[ "40 feet", "400", "4", "32" ],
+			[ "50 feet", "500", "5", "40" ],
+			[ "60 feet", "600", "6", "48" ]
+		],
+		"source": "PZO2101",
+		"id": "ac43df6b-a2f5-49c5-9d0d-2e175963697e"
+	},
+	{
+		"objectType": "Table",
+		"name": "Simple DCs",
+		"number": "10-4",
+		"page": 503,
+		"rows": [
+			[ "Proficiency Rank", "DC" ],
+			[ "Untrained", "10" ],
+			[ "Trained", "15" ],
+			[ "Expert", "20" ],
+			[ "Master", "30" ],
+			[ "Legendary", "40" ]
+		],
+		"source": "PZO2101",
+		"id": "0211ecb3-eb1e-4293-a47d-58fca0445424"
+	},
+	{
+		"objectType": "Table",
+		"name": "DCs by Level",
+		"number": "10-5",
+		"page": 503,
+		"bodies": [
+			[
+				[ "Level", "DC" ],
+				[ "0", "14" ],
+				[ "1", "15" ],
+				[ "2", "16" ],
+				[ "3", "18" ],
+				[ "4", "19" ],
+				[ "5", "20" ],
+				[ "6", "22" ],
+				[ "7", "23" ],
+				[ "8", "24" ],
+				[ "9", "26" ],
+				[ "10", "27" ],
+				[ "11", "28" ],
+				[ "12", "30" ],
+				[ "13", "31" ],
+				[ "14", "32" ],
+				[ "15", "34" ],
+				[ "16", "35" ],
+				[ "17", "36" ],
+				[ "18", "38" ],
+				[ "19", "39" ],
+				[ "20", "40" ],
+				[ "21", "42" ],
+				[ "22", "44" ],
+				[ "23", "46" ],
+				[ "24", "48" ],
+				[ "25", "50" ]
+			],
+			[
+				[
+					"Spell Level^",
+					"DC"
+				],
+				[ "1st", "15" ],
+				[ "2nd", "18" ],
+				[ "3rd", "20" ],
+				[ "4th", "23" ],
+				[ "5th", "26" ],
+				[ "6th", "28" ],
+				[ "7th", "31" ],
+				[ "8th", "34" ],
+				[ "9th", "36" ],
+				[ "10th", "39" ]
+			]
+		],
+		"footer": [
+			"^If the spell is uncommon or rare, its difficulty should be adjusted accordingly."
+		],
+		"source": "PZO2101",
+		"id": "c47e74a8-8a04-40fc-ac57-f638500874db"
+	},
+	{
+		"objectType": "Table",
+		"name": "Character Wealth",
+		"number": "10-10",
+		"page": 511,
+		"rows": [
+			[ "Level", "Permanent Items", "Currency", "Lump Sum" ],
+			[ "1", "-", "15 gp", "15 gp" ],
+			[
+				"2",
+				"1st: 1",
+				"20 gp",
+				"30 gp"
+			],
+			[
+				"3",
+				"2nd: 1, 1st: 2",
+				"25 gp",
+				"75 gp"
+			],
+			[
+				"4",
+				"3rd: 1, 2nd: 2, 1st: 1",
+				"30 gp",
+				"140 gp"
+			],
+			[
+				"5",
+				"4th: 1, 3rd: 2, 2nd: 1, 1st: 2",
+				"50 gp",
+				"270 gp"
+			],
+			[
+				"6",
+				"5th: 1, 4th: 2, 3rd: 1, 2nd: 2",
+				"80 gp",
+				"450 gp"
+			],
+			[
+				"7",
+				"6th: 1, 5th: 2, 4th: 1, 3rd: 2",
+				"125 gp",
+				"720 gp"
+			],
+			[
+				"8",
+				"7th: 1, 6th: 2, 5th: 1, 4th: 2",
+				"180 gp",
+				"1,100 gp"
+			],
+			[
+				"9",
+				"8th: 1, 7th: 2, 6th: 1, 5th: 2",
+				"250 gp",
+				"1,600 gp"
+			],
+			[
+				"10",
+				"9th: 1, 8th: 2, 7th: 1, 6th: 2",
+				"350 gp",
+				"2,300 gp"
+			],
+			[
+				"11",
+				"10th: 1, 9th: 2, 8th: 1, 7th: 2",
+				"500 gp",
+				"3,200 gp"
+			],
+			[
+				"12",
+				"11th: 1, 10th: 2, 9th: 1, 8th: 2",
+				"700 gp",
+				"4,500 gp"
+			],
+			[
+				"13",
+				"12th: 1, 11th: 2, 10th: 1, 9th: 2",
+				"1,000 gp",
+				"6,400 gp"
+			],
+			[
+				"14",
+				"13th: 1, 12th: 2, 11th: 1, 10th: 2",
+				"1,500 gp",
+				"9,300 gp"
+			],
+			[
+				"15",
+				"14th: 1, 13th: 2, 12th: 1, 11th: 2",
+				"2,250 gp",
+				"13,500 gp"
+			],
+			[
+				"16",
+				"15th: 1, 14th: 2, 13th: 1, 12th: 2",
+				"3,250 gp",
+				"20,000 gp"
+			],
+			[
+				"17",
+				"16th: 1, 15th: 2, 14th: 1, 13th: 2",
+				"5,000 gp",
+				"30,000 gp"
+			],
+			[
+				"18",
+				"17th: 1, 16th: 2, 15th: 1, 14th: 2",
+				"7,500 gp",
+				"45,000 gp"
+			],
+			[
+				"19",
+				"18th: 1, 17th: 2, 16th: 1, 15th: 2",
+				"12,000 gp",
+				"69,000 gp"
+			],
+			[
+				"20",
+				"19th: 1, 18th: 2, 17th: 1, 16th: 2",
+				"20,000 gp",
+				"112,000 gp"
+			]
+		],
+		"source": "PZO2101",
+		"id": "02cc92f9-014b-45fe-af26-d9c7e4f4ff07"
+	}
+]

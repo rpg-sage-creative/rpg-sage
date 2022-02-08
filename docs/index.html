@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:creator" content="@randaltmeyer" />
+		<meta property="og:title" content="RPG Sage: Command Guide" />
+		<meta property="og:description" content="The Complete Command Guide for using Sage (Discord Bot) on your Discord Server." />
+		<meta property="og:image" content="http://rpgsage.io/images/SageBotToken.png" />
+		<meta property="og:url" content="http://rpgsage.io/index.html" />
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+		<style>button > h1, button > h3, button > h5 { margin:0; }</style>
+		<title>RPG Sage: Command Guide</title>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<header>
+						<h1 class="text-center">RPG Sage: Command Guide</h1>
+					</header>
+					<div class="alert alert-warning m-2 text-center">If you haven't read it, check out the <a href="quick.html">Quick Start Guide</a> for a primer!</div>
+					<div class="alert alert-info m-2">
+						<b>Quick Notes</b>
+						<p>
+							Most are also NOT case sensitive.
+							<br/>
+							Brackets are for emphasis, don't use them. Ex: <code>! help dialog</code> &nbsp;NOT&nbsp; <code>! help {dialog}</code>
+							<br/>
+							Long replies (those that require more than 2 actual messages sent) often are sent by DM.
+							<br/>
+							Commands that expect a boolean value (true or false) accept the following: <code>true</code>, <code>t</code>, <code>1</code> or <code>false</code>, <code>f</code>, <code>0</code>
+							<br/>
+							Many of the commands do not require spaces <code>!dcsbylevel</code> and <code>! dcs by level</code> should work the same.
+							<br/><br/>
+							Please join our Discord to chat, ask questions, or report any issues! <a href="http://discord.rpgsage.io" target="_blank">RPG Sage Discord (aka The Halfmug Tavern)</a>
+						</p>
+					</div>
+<pre id="pre">
+__**Sage Help**__
+> - `! help`
+> Lists the categories of help available.
+> - `! help {category}`
+> Lists the help commands available within the given category.
+> - `! help {category} {subCategory}`
+> Lists the help commands available within the given category and sub-category.
+
+__**Admin (Administrative) Commands**__
+`! help admin`
+
+**Sage Prefix Admin**
+`! help admin prefix`
+
+> These commands let you set or unset Sage command prefixes.
+> `!! prefix get`
+> `!! prefix set {commandPrefix; ex: sage}`
+> `!! prefix sync`
+> `!! prefix unset`
+
+**Game, Sage, Server Admin**
+`! help admin admin`
+
+> These commands are for server owners to configure admin access to Sage.
+> `!! admin add {@UserMention} {GameAdmin|ServerAdmin|SageAdmin}`
+> `!! admin remove {@UserMention}`
+> `!! admin update {@UserMention} {GameAdmin|ServerAdmin|SageAdmin}`
+> GameAdmin can only manage games.
+> Server Admin can manage games and server channels.
+> SageAdmin can manage all things Sage.
+
+**Color Admin**
+`! help admin color`
+
+> These commands are for managing the color that lines a post's embedded content.
+> `!! color get {ColorType}`
+> `!! color get {server|game} {ColorType}`
+> `!! color list`
+> `!! color list {server|game}`
+> `!! color set {ColorType} {hexColorValue}`
+> `!! color set {server|game} {ColorType} {hexColorValue}`
+> `!! color sync`
+> `!! color sync {server|game}`
+> `!! color unset {ColorType}`
+> `!! color unset {server|game} {ColorType}`
+> When choosing `server` or `game` you are deciding if you are working with Server colors or Game colors.
+> Use `!! color list` to see all of the acceptable values for ColorType.
+
+**Emoji Admin**
+`! help admin emoji`
+
+> These commands are for managing the emoji used for various parts of Sage.
+> `!! emoji get {EmojiType}`
+> `!! emoji get {server|game} {EmojiType}`
+> `!! emoji list`
+> `!! emoji list {server|game}`
+> `!! emoji set {EmojiType} {emoji}`
+> `!! emoji set {server|game} {EmojiType} {emoji}`
+> `!! emoji sync`
+> `!! emoji sync {server|game}`
+> `!! emoji unset {EmojiType}`
+> `!! emoji unset {server|game} {EmojiType}`
+> When choosing `server` or `game` you are deciding if you are working with Server emoji or Game emoji.
+> Use `!! emoji list` to see all of the acceptable values for EmojiType.
+
+**Server Role Admin *(Not Fully Functional)***
+`! help admin server`
+
+> These commands are for manging the Roles used for admins of Sage.
+> `!! server role list`
+> `!! server role remove {ServerRoleType}`
+> `!! server role set {@RoleMention} {ServerRoleType}`
+> ServerRoleType values: SageAdmin, ServerAdmin, GameAdmin
+
+__**Game Admin (Administrative) Commands**__
+
+**Game Admin**
+`! help admin game`
+
+> These commands are for managing games.
+> `!! game archive`
+> `!! game archive list`
+> `!! game count`
+> `!! game create name="{Game Name}"`
+> `!! game create name="{Game Name}" game={PF2E|NONE}`
+> `!! game details`
+> `!! game list`
+> `!! game role remove {GameRoleType}`
+> `!! game role set {@RoleMention} {GameRoleType}`
+> `!! game update diceoutput={XXS|XS|S|M|L|XL|XXL|UNSET}`
+> `!! game update game={PF2E|NONE}`
+> `!! game update name="{New Name}"`
+> `!! role list`
+> GameRoleTypes values: Spectator, Player, GameMaster, Cast, Table
+> - These roles are not fully implemented yet, but are meant to allow Sage to manage roles and permissions.
+
+**Channel Admin**
+`! help admin channel`
+
+> These commands are for managing what features are available on each channel.
+> `!! channel add {#ChannelReference} {optionKey}={optionValue}`
+> `!! channel details`
+> `!! channel list {game|server}`
+> `!! channel remove {#ChannelReference}`
+> `!! channel set {optionKey}={optionValue}`
+> Channel Options *(can set multiple options at the same time)*:
+> .
+> - admin={true|false}
+> - commands={true|false} *(also known as non-admin commands)*
+> - dialog={true|false}
+> - dice={true|false}
+> - search={true|false}
+> - - This determines which types of commands (admin, non-admin, dialog, dice, search) are allowed.
+> .
+> - crit={timestwo|rolltwice|addmax|unset}
+> - - TIMESTWO rolls the dice and multiplies the results x2. *(default)*
+> - - ROLLTWICE rolls the damage twice and adds the results together.
+> - - ADDMAX rolls the dice once and then adds max damage to the result. *(house rule)*
+> - - UNSET uses the crit method inherited from either the game or the server.
+> .
+> - diceoutput={xxs|xs|s|m|l|xl|xxl|unset}
+> - - This determines how compact or expanded the dice results are displayed.
+> - - UNSET uses the diceoutput method inherited from either the game or the server.
+> .
+> - dicepost={post|embed|unset}
+> - - POST will output dice results in a simple post.
+> - - EMBED will output dice results in an embed in a post.
+> - - ~~REPLY will output dice results in a reply to the input.~~ *(future feature)*
+> - - UNSET uses the dicepost method inherited from either the game or the server.
+> .
+> - game={pf2e|none}
+> - - This determines which game is being played.
+> - - PF2E Currently Pathfinder Second Edition is the only game that Sage recognizes.
+> - - The primary place this is noticable is the dice engine: PF2E dice know about ACs, DCs, and how to calculate Critical Success and Failure.
+> .
+> - gamemaster={none|read|react|write}
+> - nonplayer={none|read|react|write}
+> - player={none|read|react|write}
+> - - NONE The user (gamemaster, nonplayer, player) should not have access to this channel.
+> - - READ The user (gamemaster, nonplayer, player) should only be allowed to read this channel.
+> - - REACT The user (gamemaster, nonplayer, player) should be allowed to read or react to this channel.
+> - - WRITE The user (gamemaster, nonplayer, player) should not full access to this channel.
+> - - These work with permissions/roles, most importantly a channel that is gamemaster=write and player=none is considered a GM only channel and is where secret dice rolls are sent!
+
+**GM (Game Master) Admin**
+`! help admin gm`
+
+> These commands are for managing Game Masters for games.
+> `!! gm add {@UserMention}`
+> `!! gm list`
+> `!! gm remove {@UserMention}`
+
+**NPC (Non Player Character) Admin**
+`! help admin npc`
+
+> These commands are for managing Non Player Characters for games.
+> `!! npc create name="{name}" avatar="{imageUrl}" token="{imageUrl}"`
+> `!! npc delete name="{name}"`
+> `!! npc details "{name}"`
+> `!! npc list {optionalFilter}`
+> `!! npc update name="{name}" avatar="{imageUrl}"`
+> `!! npc update oldname="{oldName}" newname="{newName}"`
+> Images can be urls or embedded images.
+
+**Player Admin**
+`!help admin player`
+
+> These commands are for managing Players for games.
+> `!! player add {@PlayerMention} {@OptionalPlayerMention}`
+> `!! player list`
+> `!! player remove {@PlayerMention} {@OptionalPlayerMention}`
+> The Optional Player Mentions are there to show you can add or remove multiples.
+
+**PC (Player Character) Admin**
+`! help admin pc`
+
+> These commands are for managing Player Characters.
+> `!! pc create name="{name}" avatar="{imageUrl}" token="{imageUrl}"`
+> `!! pc delete name="{name}"`
+> `!! pc details "{name}"`
+> `!! pc list {optionalFilter}`
+> `!! pc update name="{name}" avatar="{imageUrl}"`
+> `!! pc update oldname="{oldName}" newname="{newName}"`
+> Images can be urls or embedded images.
+
+**Companion (Companion, Familiar, Hireling, etc) Admin**
+`! help admin companion`
+
+> These commands are for managing companions for player characters.
+> `!! companion create charname="{character name}" name="{name}" avatar="{imageUrl}" token="{imageUrl}"`
+> `!! companion delete charname="{character name}" name="{name}"`
+> `!! companion details {name}`
+> `!! companion list {optionalFilter}`
+> `!! companion update charname="{character name}" name="{name}" avatar="{imageUrl}"`
+> `!! companion update charname="{character name}" oldname="{oldName}" newname="{newName}"`
+> Images can be urls or embedded images.
+
+__**Dialog Commands**__
+`! help dialog`
+> These commands are how you interact with the dialog engine of Sage.
+> When posting dialog, you do not need to use a command prefix.
+> Each different dialog type can be configured to have its own default color.
+
+**Dialog Post Command**
+> `{type}::{name}(display name)::(title)::{color}::{avatar}::{content}`
+> - {type}: gm, npc, enemy, ally, pc, alt, companion, hireling
+> - {name}: the name of the npc, pc, or companion to post as
+> - - optional for PCs in a game
+> - {display name}: the name to post as
+> - - optional: defaults to character name or 'Game Master' for GM
+> - {title}: a title or descripiton of the dialog optional
+> - {color}: a color to override the dialog color with
+> - - optional: expects hex value 0x000000 or #FFFFFF
+> - {avatar}: a url to override the avatar image
+> - - optional
+> - {content}: everything you want to post in your dialog
+> - - accepts normal discord/markup as well as custom Sage markup
+
+**Dialog Edit Command**
+`! help dialog edit`
+
+> This command lets you edit your last dialog post.
+> `edit::{dialog content}`
+
+**Dialog Alias Commands**
+`! help dialog alias`
+
+> These commands are for managing aliases for your all your dialog needs.
+> `!! alias delete {alias}`
+> `!! alias list`
+> `!! alias set {alias} {dialog prefix}`
+> An alias is a simple word or name with no punctation.
+> A dialog prefix can include an alias and even some content.
+> Example: `!! alias set gorm npc::Gorm Greathammer::`
+
+__**Dice Commands**__
+`! help dice`
+> These commands are how you roll dice with Sage.
+
+**Simple Dice**
+`[1d20]`
+
+**Dice w/ description**
+`[1d20 attack]`
+`[1d6 damage]`
+
+**Dice w/ modifier**
+`[1d20 + 5 Description]`
+`[1d20 + 5]`
+`[1d8 + 2 + 1d6]`
+`[1d8 sword + 2 strength + 1d6 holy]`
+
+**Dice w/ tests**
+`[1d100 < 25]`
+`[1d20 + 5 >= 10 Description]`
+`[1d20 >= 10]`
+
+**Dice w/ multiple sets**
+`[1d20 attack; 1d8 damage]`
+`[1d20+5 attack; 1d8 + 2 slashing damage]`
+`[1d20+2 attack; 1d4 dagger + 2d6 sneak damage]`
+
+**Dice w/ multiple sets and tests**
+`[1d20 > 10 attack; 1d8 damage]`
+`[1d20 > 5 (miss chance); 1d20+5 >= 15 attack; 1d8 + 2 slashing damage]`
+
+**Dice w/ target (pf2e only)**
+`[1d20 + 5 ac 10 Description]`
+`[1d20 ac 10]`
+`[1d20 dc 10]`
+`[1d20 vs 10]`
+> Future releases will add this for other game systems.
+
+**Dice w/ output override**
+`[XL 1d20 + 20 vs ac 10 greater striking rapier, fatal d8; 1d6 piercing + 4 dex + 2d6 holy + 4d6 sneak]`
+> Output options: xxs, xs, s, m, l, xl, xxl
+
+**Dice w/ game override (pf2e)**
+`[pf2e 1d20 vs ac 10 attack]`
+> Used when a server or game defaults to a different mode than you want for your dice.
+> Future releases will add other game systems.
+
+**Dice Macros**
+`! help dice macro`
+
+> These commands are for managing macros to make complex dice rolls.
+> `!! macro delete {name}`
+> `!! macro list`
+> `!! macro set {name} [{dice}]`
+> Example: `!! macro set daggers [1d20+8;1d6][1d20+4;1d6][1d20;1d6]`
+> Usage: `[daggers]`
+> Example: `!! macro set swords [1d20+8{0};1d6][1d20+4{0};1d6][1d20{0};1d6]`
+> Usage: `[swords ac10]`
+
+__**General Commands**__
+`! help command`
+
+**Coin / Currency Calculator**
+`! {1pp} {-2gp} {+3sp} {-4cp}`
+`! {1pp} {2gp} {3sp} {4cp}`
+
+**Weather Report Generator**
+`! help command weather`
+
+> This command creates a random weather report.
+> `! weather {climate} {elevation} {season}`
+> - Climate Options: Cold | Temperate | Tropical
+> - Elevation Options: SeaLevel | Lowland | Highland
+> - Season Options: Spring | Summer | Fall | Winter
+
+__**Pathfinder 2e Commands**__
+
+**Pathfinder / Golarion Info (days & months)**
+`! help command golarion`
+> These commands are for viewing the dates, days, and months of the Golarion (Pathfinder) calendar.
+`! date {yyyy-mm-dd}`
+> - Displays the given date on Golarion *and* on Earth. Includes season.
+> `! days`
+> - Lists the days of the week on Golarion.
+> `! months`
+> - Lists the months of the Golarion year (along with how many days are in each).
+> `! today`
+> - Displays today's date on Golarion *and* on Earth. Includes season.
+
+**Pathfinder 2e DCs**
+`! help command dcs`
+
+> These commands are for viewing the various DCs used in Pathfinder 2e.
+> `! dc by level {level}`
+> `! dc by spell level {level}`
+> `! dcs by level`
+> `! simple dc {proficiency}`
+> `! {proficiency} simple dc`
+
+**Pathfinder 2e Lists**
+`! list {deities|gods} by domain {domain}`
+`! list {weapons|armor|spells} by trait {trait}`
+> Future releases will expand on these lists.
+
+**Pathfinder 2e Content Search**
+> These commands perform full text searches.
+> `? {searchTerm}`
+> `? {searchTerm} -{categoryOrObjectType}`
+> Category/ObjectType examples: Background, Feat, Spell, etc.
+> This isn't fully operational, nor is the data complete yet.
+
+**Pathfinder 2e Content Find**
+> These commands perform searches only against names.
+> `?! {searchTerm}`
+> `?! {searchTerm} -{categoryOrObjectType}`
+> Category/ObjectType examples: Background, Feat, Spell, etc.
+> This isn't fully operational, nor is the data complete yet.
+
+**Pathfinder 2e Spell Lists**
+> These commands allow you to view various types of spell lists
+> `! spells {tradition} {level|Cantrips}`
+> `! spells {tradition} {level|Cantrips} by school`
+> `! {level} {tradition} spells`
+> `! {level} {tradition} spells by school`
+> `! {tradition} cantrips`
+> `! {tradition} cantrips by school`
+> `! {tradition} spells {level|Cantrips}`
+> `! {tradition} spells {level|Cantrips} by school`
+> The following creates a specialized list of spells by merging or excluding traditions
+> `! spells {level|Cantrips} {+tradition} {-tradition} {|tradition} {&tradition}`
+
+**Pathfinder 2e Focus Spell Lists**
+`! focus spells {Archetype|Class|Domain}`
+`! {Archetype|Class|Domain} focus spells`
+
+**Pathfinder 2e Starting Wealth Info**
+`! starting wealth`
+`! starting wealth {level}`
+
+**Pathfinder 2e Income Info**
+`! income earned`
+> - Shows the entire table 4-2: Income Earned
+> `! income earned {taskLevel}`
+> - Shows the results for the given level.
+> `! income earned {proficiency} {taskLevel}`
+> - Shows the results for the given level and proficiency.
+
+__**Pathfinder Society 2e Commands**__
+
+**Pathfinder PFS / Org Play**
+`! pfs links`
+> DISABLED FOR NOW (their site changed)
+
+**Pathfinder PFS Downtime Rolls**
+`! pfs income {pcLevel} {skillProficiency} {skillModifier}`
+`! pfs income {pcLevel} {skillProficiency} {skillModifier} {days}`
+
+**Pathfinder PFS Scenario Randomizers**
+`! pfs s1-01 {pc1Level}, {pc2Level}, {pc3Level}, {pc4Level}, {pc5Level}, {pc6Level}, {pc7Level}`
+> Future releases will include more scenarios.
+> PFS Guidelines now recommend against 7 player tables
+
+**Pathfinder PFS Tier Calculator**
+`! pfs {tier} {minLevel}-{maxLevel} {pc1Level} {pc2Level} {pc3Level} {pc4Level} {pc5Level} {pc6Level} {pc7Level}`
+> PFS Guidelines now recommend against 7 player tables
+
+</pre>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+		<script type="text/javascript">
+			function createAccordion(groups) {
+				const accordionId = "accordion";
+				return `
+					<div class="accordion" id="${accordionId}">
+						${groups.map((group, groupIndex) => {
+							return `
+								<div class="accordion-item">
+									<h2 class="accordion-header" id="heading-${groupIndex}">
+										<button class="accordion-button ${groupIndex ? "collapsed" : ""}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${groupIndex}" aria-expanded="${groupIndex ? "false" : "true"}" aria-controls="collapse-${groupIndex}">
+											${group.header.replace(/<h5>/i, "<h5> &nbsp; - &nbsp; ")}
+										</button>
+									</h2>
+									<div id="collapse-${groupIndex}" class="accordion-collapse collapse ${groupIndex ? "" : "show"}" aria-labelledby="heading-${groupIndex}" data-bs-parent="#${accordionId}">
+										<div class="accordion-body">
+											${group.body}
+										</div>
+									</div>
+								</div>
+							`;
+						}).join("")}
+					</div>
+				`;
+			}
+			$(() => {
+				const lines = $("pre#pre").text().split(/\r?\n\r?/);
+				const groups = lines.reduce((o, s) => { if (!o.length || s.match(/\*\*(.*?)\*\*/)) o.push([]); o[o.length - 1].push(s); return o; }, []);
+				const formattedGroups = groups.map(groupLines => {
+					const formatted = groupLines.map(line =>
+						line
+							.replace(/\_\_\_\*\*(.*?)\*\*\_\_\_/g, (m, s) => `<h1>${s}</h1>`)
+							.replace(/\_\_\*\*(.*?)\*\*\_\_/g, (m, s) => `<h3>${s}</h3>`)
+							.replace(/\_\_(.*?)\_\_/g, (m, s) => `<u>${s}</u>`)
+							.replace(/\*\*(.*?)\*\*/g, (m, s) => `<h5>${s}</h5>`)
+							.replace(/\*(.*?)\*/g, (m, s) => `<i>${s}</i>`)
+							.replace(/`(.*?)`/g, (m, s) => `<code>${s}</code>`)
+							.replace(/^> (.*?)$/g, (m, s) => `<blockquote>${s}</blockquote>`)
+					);
+					return {
+						header: formatted.shift(),
+						body: formatted.join("<br/>")
+							.replace(/(<\/h\d>)<br\/>/gi, "$1")
+							.replace(/<\/blockquote>(<br\/>)+<blockquote>/gi, "$1")
+							.replace(/(<\/blockquote>)(<br\/>)+(<h\d>)/gi, "$1$2$3")
+							.replace(/(<br\/>)+$/g, "")
+							// .replace(/(<br\/>)+/g, "<br/>")
+						};
+				});
+				$("pre#pre").replaceWith(createAccordion(formattedGroups));
+			});
+		</script>
+	</body>
+</html>

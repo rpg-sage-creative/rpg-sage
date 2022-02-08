@@ -1,0 +1,170 @@
+[
+	{
+		"aonId": 549,
+		"name": "Exchange Image",
+		"source": "PZO90147",
+		"focus": false,
+		"description": "",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"To mislead pursuers, the Lacunafex developed the means to swap visages. You trade appearances with the target, with the effects depending on the result of the target's Will saving throw. Willing and unconscious targets automatically critically fail this saving throw.",
+			{
+				"criticalSuccess": [
+					"No effect."
+				],
+				"success": [
+					"You take on the target's appearance, and they take yours. This has the same effects as a 1st-level <i>illusory disguise</i> spell, except that the target can't Dismiss the disguise. The duration is 1 minute or until Dismissed."
+				],
+				"failure": [
+					"As success, but the duration is 1 hour or until Dismissed."
+				],
+				"criticalFailure": [
+					"As success, but the duration is 24 hours."
+				]
+			}
+		],
+		"duration": "varies",
+		"level": 1,
+		"objectType": "Spell",
+		"page": 73,
+		"range": "touch",
+		"requirements": "You have the humanoid trait.",
+		"savingThrow": "Will",
+		"targets": "you and 1 other humanoid",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Uncommon", "Illusion", "Visual" ],
+		"id": "2a4b1c11-b100-4731-8af8-a3f8dfe4594b"
+	},
+	{
+		"aonId": 550,
+		"name": "Forgotten Lines",
+		"source": "PZO90147",
+		"focus": false,
+		"description": "",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Members of the Lacunafex and other allies use this spell to restore material that Thrune agents have redacted from historical or otherwise valuable texts. You learn one piece of information that was removed from the target text after its creation. You can instead learn one piece of information from a text that had been destroyed, but you must have a fragment of the text, such as a piece of the cover, a page, or even a clasp or metal fittings."
+		],
+		"heightened": [
+			{ "change": "The spell reconstructs all missing information regarding a specific topic of your choice.", "level": 6 },
+			{ "change": "The spell also reveals information the writer self-censored and didn't commit to paper.", "level": 9 }
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 73,
+		"range": "touch",
+		"targets": "1 text or remnants thereof",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Rare", "Divination" ],
+		"id": "09623c2c-8e2d-4f39-890c-74577a1c3ddc"
+	},
+	{
+		"aonId": 551,
+		"name": "Imprint Message",
+		"source": "PZO90147",
+		"focus": false,
+		"description": "",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You project psychic vibrations onto the target object, imprinting it with a short message or emotional theme of your design. This imprinted sensation is revealed to anyone casting <i>object reading</i> on the target object, replacing any emotional events the item was present for. If the object is in the area of a <i>retrocognition</i> spell, the imprinted messages appear as major events in the timeline, but they don't interfere with any other visions. If the object is targeted with <i>read aura</i> of a higher spell level than <i>imprint message</i>, the caster learns that the object has been modified. When you Cast this Spell, any prior vibrations placed in an object by previous castings of <i>imprint message</i> fade."
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 74,
+		"range": "touch",
+		"targets": "1 object",
+		"traditions": [ "occult" ],
+		"traits": [ "Uncommon", "Divination" ],
+		"id": "c4c6fc20-cc05-4ca1-b227-4acee4e313f3"
+	},
+	{
+		"aonId": 552,
+		"name": "Join Pasts",
+		"source": "PZO90147",
+		"focus": false,
+		"description": "",
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"details": [
+			"With touches to the targets' foreheads, you bring them into mental communion. The targets can share thoughts and experiences, but not words. When one target attempts to Recall Knowledge, the other can Aid the first target's skill check, using any Lore skill (even if that Lore wouldn't normally apply) without having made any preparations to Aid."
+		],
+		"duration": "1 round",
+		"heightened": [
+			{ "change": "You can touch one additional target t include them in the spell's effects. Multiple targets can attempt checks to Aid the target who is attempting to Recall Knowledge.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 74,
+		"range": "touch",
+		"targets": "2 willing creatures",
+		"traditions": [ "occult" ],
+		"traits": [ "Uncommon", "Cantrip", "Divination", "Mental" ],
+		"id": "2badf152-d18b-43e3-ad58-4cc79350bd72"
+	},
+	{
+		"aonId": 553,
+		"name": "Object Reading",
+		"source": "PZO90147",
+		"focus": false,
+		"description": "",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You place a hand on an object to learn a piece of information about an emotional event that occurred involving the object within the past week, determined by the GM. If you cast <i>object reading</i> on the same item multiple times, you can either concentrate on a single event to gain additional pieces of information about that event, or you can gain a piece of information about another emotional event in the applicable time frame."
+		],
+		"heightened": [
+			{ "change": "You can learn about an event that occurred within the last month", "level": 2 },
+			{ "change": "You can learn about an event that occurred within the last year.", "level": 4 },
+			{ "change": "You can learn about an event that occurred within the last decade.", "level": 6 },
+			{ "change": "You can learn about an event that occurred within the last century.", "level": 8 },
+			{ "change": "You can learn about an event that occurred within the entirety of the object's history.", "level": 9 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 74,
+		"range": "touch",
+		"targets": "1 object",
+		"traditions": [ "occult" ],
+		"traits": [ "Uncommon", "Divination" ],
+		"id": "86e85042-a6c8-4c37-a79a-c5cec7674096"
+	},
+	{
+		"aonId": 554,
+		"name": "Spiritual Anamnesis",
+		"source": "PZO90147",
+		"focus": false,
+		"description": "",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Memories of a past life that seem incredibly real (and may even be) overwhelm the target's mind. This is especially disorienting for undead and creatures that have lived a previous life (such as celestials, fiends, monitors, and many other extraplanar creatures); if such creatures roll a critical success on their save, they get a success instead, and if they roll a failure, they get a critical failure instead.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature is slowed 1 for 1 round."
+				],
+				"failure": [
+					"The target is slowed 1 for 1 minute and babbles about the visions, possibly providing information about what they saw."
+				],
+				"criticalFailure": [
+					"As failure, but the target is also stunned 3."
+				]
+			}
+		],
+		"duration": "varies",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 74,
+		"range": "60 feet",
+		"savingThrow": "Will",
+		"targets": "1 creature",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Uncommon", "Mental", "Necromancy" ],
+		"id": "99f2db15-7451-4d68-baa6-3ab9f13aedad"
+	}
+]

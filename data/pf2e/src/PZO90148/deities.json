@@ -1,0 +1,27 @@
+[
+	{
+		"objectType": "Deity",
+		"name": "Droskar",
+		"alignment": "NE",
+		"title": "",
+		"details": [
+			"Cast out and cursed by Torag, the Dark Smith works constantly to prove his significance, cheating and enslaving others to further his goals."
+		],
+		"edicts": [ "achieve goals at any cost", "continually improve your abilities", "establish dominance", "work ceaselessly" ],
+		"anathema": [ "fail to work toward goals or grow in skill", "relax excessively or give in to sloth" ],
+		"followerAlignments": [ "LE", "NE", "CE" ],
+		"devoteeBenefits": {
+			"divineFont": [ "Harm" ],
+			"divineAbility": [],
+			"divineSkill": [ "Crafting" ],
+			"favoredWeapon": "Light Hammer",
+			"domains": [ "Duty", "Earth", "Trickery", "Tyranny" ],
+			"alternateDomains": [ "Ambition", "Fire", "Toil" ],
+			"clericSpells": [ "Ant Haul", "Haste", "Dominate" ]
+		},
+		"id": "9ad5318b-2b83-4ea7-a997-76f0aa4bc196",
+		"source": "PZO90148",
+		"page": 62,
+		"aonId": 28
+	}
+]

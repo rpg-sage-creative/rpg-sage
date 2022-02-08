@@ -1,0 +1,32 @@
+[
+	{
+		"objectType": "Action",
+		"name": "Sustain a Spell",
+		"actionType": "[A]",
+		"traits": [ "Concentrate" ],
+		"requirements": [
+			"You have at least one spell active with a sustained duration, and you are not fatigued."
+		],
+		"details": [
+			"Choose one spell with a sustained duration you have in effect. The duration of that spell continues until the end of your next turn. Some spells might have slightly different or expanded effects if you sustain them. Sustaining a Spell for more than 10 minutes (100 rounds) ends the spell and makes you fatigued unless the spell lists a different maximum duration (such as \"sustained up to 1 minute\" or \"sustained up to 1 hour\").",
+			"If your Sustain a Spell action is disrupted, the spell immediately ends."
+		],
+		"page": 304,
+		"source": "PZO2101",
+		"aonId": 73,
+		"id": "cac93dd7-5576-49e4-bdd2-b97b2dd21069"
+	},
+	{
+		"objectType": "Action",
+		"name": "Dismiss",
+		"actionType": "[A]",
+		"traits": [ "Concentrate" ],
+		"details": [
+			"You end one spell effect or magic item effect. This must be an effect you are allowed to dismiss, as defined by the spell or item. Dismissal might end the effect entirely or might end it just for a certain target or targets, depending on the spell or item."
+		],
+		"pages": [ 305, 534 ],
+		"source": "PZO2101",
+		"aonId": 74,
+		"id": "91a64eba-b449-41ef-bf38-2b24a5e4d1aa"
+	}
+]

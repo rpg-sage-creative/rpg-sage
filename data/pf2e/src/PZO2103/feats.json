@@ -1,0 +1,46 @@
+[
+	{
+		"objectType": "Feat",
+		"name": "Encouraging Words",
+		"actionType": "[A]",
+		"level": 2,
+		"traits": [ "Auditory", "General", "Linguistic", "Mental", "Skill", "Stamina" ],
+		"details": [
+			"You give an ally within 30 feet a quick pep talk, helping them recover. Attempt a Diplomacy check. The DC is usually 15, though the GM might adjust it based on the circumstances. If you have expert proficiency in Diplomacy, you can instead attempt a DC 20 check to increase the Stamina Points recovered by 5; if you have master proficiency, you can attempt a DC 30 check to increase the Stamina Points by 15; if you have legendary proficiency, you can attempt a DC 40 check to increase the Stamina Points by 25. No matter the result, the ally is temporarily immune to Encouraging Words until they either Take a Breather or rest for the day.",
+			{
+				"criticalSuccess": [
+					"The ally recovers 2d8 Stamina Points."
+				],
+				"success": [
+					"The ally recovers 1d8 Stamina Points."
+				],
+				"criticalFailure": [
+					"The ally takes 1d8 mental damage, but this can reduce only Stamina Points, never Hit Points."
+				]
+			}
+		],
+		"skill": "Diplomacy",
+		"prerequisites": [ "trained in Diplomacy" ],
+		"description": "You give an ally a quick pep talk, helping them recover.",
+		"source": "PZO2103",
+		"page": 201,
+		"id": "5ee6ee20-9195-4b1f-8ecc-064c7e5db849",
+		"aonId": 1210
+	},
+	{
+		"objectType": "Feat",
+		"name": "Steel Your Resolve",
+		"actionType": "[A]",
+		"level": 3,
+		"traits": [ "General", "Stamina" ],
+		"details": [
+			"Regain Stamina Points equal to half your maximum."
+		],
+		"cost": [ "1 Resolve Point" ],
+		"description": "Regain Stamina Points equal to half your maximum.",
+		"source": "PZO2103",
+		"page": 201,
+		"id": "e6e775bc-ec58-44c6-a885-d7cb2e245d8c",
+		"aonId": 1211
+	}
+]

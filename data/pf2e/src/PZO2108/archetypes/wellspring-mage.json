@@ -1,0 +1,89 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Wellspring Mage",
+		"details": [
+			"The source of your magic buckles against your control, always pressing to be released."
+		],
+		"additionalFeats": [
+			{ "level": 8, "name": "Energetic Resonance" },
+			{ "level": 8, "name": "Spell Relay" },
+			{ "level": 10, "name": "Surging Might" },
+			{ "level": 16, "name": "Scintillating Spell" },
+			{ "level": 18, "name": "Echoing Spell" }
+		],
+		"page": 248,
+		"source": "PZO2108",
+		"id": "fd9fee4b-ccc9-47e0-b94d-c17f30eac42e",
+		"aonId": 0
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Wellspring Mage Dedication",
+		"level": 2,
+		"traits": [ "Rare", "Archetype", "Class", "Dedication" ],
+		"prerequisites": [ "wellspring magic" ],
+		"details": [
+			"There's no longer a limit on how many temporary spell slots you can gain per day from wellspring magic."
+		],
+		"special": [
+			"You can't select another dedication feat until you gain two other feats from the wellspring mage archetype."
+		],
+		"page": 249,
+		"source": "PZO2108",
+		"id": "8344c752-1a26-4a39-b497-928e20f30683",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Wellspring Control",
+		"level": 4,
+		"traits": [ "Archetype", "Fortune" ],
+		"prerequisites": [ "Wellspring Mage Dedication" ],
+		"details": [
+			"When you generate a wellspring surge, roll twice on Table 5-2 (page 250) and take the result of your choice. This doesn't apply when you cause another creature to generate a wellspring surge."
+		],
+		"page": 249,
+		"source": "PZO2108",
+		"id": "dd8972de-f721-4f20-99fb-103d75365684",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Urgent Upwelling",
+		"actionType": "[R]",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Wellspring Mage Dedication" ],
+		"frequency": "once per 10 minutes",
+		"trigger": "An enemy reduces you to 0 HP, an enemy critically hits you, or you critically fail a saving throw against an enemy's effect.",
+		"details": [
+			"Defeat lets you to tap into your wellspring. Attempt the flat check for wellspring magic. If you critically succeed, you can choose to forgo gaining a temporary spell slot to instead have the triggering enemy undergo a wellspring surge. This surge functions just as it would for you, the only difference being that it emits from the enemy."
+		],
+		"page": 249,
+		"source": "PZO2108",
+		"id": "1fa80eaf-9173-4384-82f7-39c43a50c306",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Interfering Surge",
+		"actionType": "[R]",
+		"level": 12,
+		"traits": [ "Abjuration", "Archetype" ],
+		"prerequisites": [ "Wellspring Mage Dedication" ],
+		"trigger": "A creature you can see Casts a Spell.",
+		"requirements": "You have an unexpended spell slot and can see the triggering spell's manifestations.",
+		"details": [
+			"You overcharge the triggering spell with magic. You expend a spell slot and attempt to counteract the triggering spell using the energy of the expended slot. If the triggering spell is in your repertoire and the spell slot you expended was a high enough level to cast it, you take no penalty. Otherwise, you take a -2 penalty to the counteract check if the triggering spell was cast using the same magical tradition you cast, or a -5 penalty if it was cast using a different tradition.",
+			"If the triggering spell is successfully counteracted, it creates a wellspring surge from its caster in addition to the normal effects of being counteracted. If it isn't counteracted, your expended spell slot creates a wellspring surge from you."
+		],
+		"special": [
+			"This feat has the trait corresponding to the tradition of spells you cast (arcane, divine, primal, or occult)."
+		],
+		"page": 249,
+		"source": "PZO2108",
+		"id": "b61bb4fe-bc02-45c4-8369-b2ef77ffed95",
+		"aonId": 0
+	}
+]

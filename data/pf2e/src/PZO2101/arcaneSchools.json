@@ -1,0 +1,93 @@
+[
+	{
+		"objectType": "ArcaneSchool",
+		"description": null,
+		"details": [
+			"Abjurations protect and ward. They create barriers that keep out attacks, effects, or even certain types of creatures. They also create effects that harm trespassers or banish interlopers."
+		],
+		"moniker": "Abjurer",
+		"name": "Abjuration",
+		"source": "PZO2101",
+		"id": "8c4e5d3d-4375-4d73-8bfb-cf48813eec32"
+	},
+	{
+		"objectType": "ArcaneSchool",
+		"description": null,
+		"details": [
+			"Conjuration spells transport creatures via teleportation, create an object, or bring a creature or object from somewhere else (typically from another plane) to follow your commands.",
+			"Conjuration spells often have the teleportation trait, and the creatures summoned by conjuration spells have the summoned trait."
+		],
+		"moniker": "Conjurer",
+		"name": "Conjuration",
+		"source": "PZO2101",
+		"id": "b2f5a8d1-a44a-4853-a64e-3b77433a32ce"
+	},
+	{
+		"objectType": "ArcaneSchool",
+		"description": null,
+		"details": [
+			"Divinations allow you to learn the secrets of the present, past, and future. They bestow good fortune, grant you the ability to perceive remote locations, and reveal secret knowledge.",
+			"Divinations often have the detection trait if they find something, the prediction trait if they grant you insight about what might happen in the future, the revelation trait if they show things as they truly are, or the scrying trait if they let you perceive another location."
+		],
+		"moniker": "Diviner",
+		"name": "Divination",
+		"source": "PZO2101",
+		"id": "832438e8-fa82-4c0b-8719-1196e8cb799b"
+	},
+	{
+		"objectType": "ArcaneSchool",
+		"description": null,
+		"details": [
+			"Enchantments affect the minds and emotions of other creatures-sometimes to infl uence and control them, and other times to bolster them to greater heights of courage. Enchantment spells almost always have the mental trait, and many have the emotion trait or the fear trait."
+		],
+		"moniker": "Enchanter",
+		"name": "Enchantment",
+		"source": "PZO2101",
+		"id": "84ffdf5b-b28c-4094-861a-cbb89c2ebffa"
+	},
+	{
+		"objectType": "ArcaneSchool",
+		"description": null,
+		"details": [
+			"Evocations capture magical energy and then shape it to harm your foes or protect your allies. Evocation spells often have a trait that comes from the type of damage they deal, such as acid, cold, fire, force, or sonic."
+		],
+		"moniker": "Evoker",
+		"name": "Evocation",
+		"source": "PZO2101",
+		"id": "53c4e751-a513-4c52-ad23-3c87a606a3e9"
+	},
+	{
+		"objectType": "ArcaneSchool",
+		"description": null,
+		"details": [
+			"Illusions create the semblance of something real, fooling the eyes, ears, and other senses. They almost always have the mental trait, and depending on how the illusion is perceived, they might also have the auditory or visual trait."
+		],
+		"moniker": "Illusionist",
+		"name": "Illusion",
+		"source": "PZO2101",
+		"id": "24134445-076f-4507-84cb-3fa779c18b8d"
+	},
+	{
+		"objectType": "ArcaneSchool",
+		"description": null,
+		"details": [
+			"Necromancy spells harness the power of life and death. They can sap life essence or sustain creatures with life-saving healing. Necromancy spells often have the curse, death, healing, negative, or positive traits."
+		],
+		"moniker": "Necromancer",
+		"name": "Necromancy",
+		"source": "PZO2101",
+		"id": "2817c896-d36f-4791-9a4e-5012516fced3"
+	},
+	{
+		"objectType": "ArcaneSchool",
+		"description": null,
+		"details": [
+			"Transmutation spells make alterations to or transform the physical form of a creature or object. The morph and polymorph traits appear primarily in transmutation spells."
+		],
+		"moniker": "Transmuter",
+		"name": "Transmutation",
+		"source": "PZO2101",
+		"id": "fdc04c14-5cbb-4d22-9741-b21795860107"
+	},
+	{ "objectType": "ArcaneSchool", "name": "Universalist", "moniker": "Universalist", "source": "PZO2101", "id": "4f404da4-154c-4207-a49c-bc2f41735428" }
+]

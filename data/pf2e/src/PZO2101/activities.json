@@ -1,0 +1,874 @@
+[
+	{
+		"aonId": 1,
+		"objectType": "Activity",
+		"name": "Avoid Notice",
+		"traits": [ "Exploration" ],
+		"details": [
+			"You attempt a Stealth check to avoid notice while traveling at half speed. If you have the Swift Sneak feat, you can move at full Speed rather than half, but you still can't use another exploration activity while you do so. If you have the Legendary Sneak feat, you can move at full Speed and use a second exploration activity. If you're Avoiding Notice at the start of an encounter, you usually roll a Stealth check instead of a Perception check both to determine your initiative and to see if the enemies notice you (based on their Perception DCs, as normal for Sneak, regardless of their initiative check results)."
+		],
+		"page": 479,
+		"source": "PZO2101",
+		"id": "ec08cb29-9125-43e7-a4c7-d45453aa93f8"
+	},
+	{
+		"aonId": 2,
+		"objectType": "Activity",
+		"name": "Defend",
+		"traits": [ "Exploration" ],
+		"details": [
+			"You move at half your travel speed with your shield raised. If combat breaks out, you gain the benefits of Raising a Shield before your first turn begins."
+		],
+		"page": 479,
+		"source": "PZO2101",
+		"id": "afaa7107-a799-4a4b-9433-5290226f2692"
+	},
+	{
+		"aonId": 3,
+		"objectType": "Activity",
+		"name": "Detect Magic",
+		"traits": [ "Concentrate", "Exploration" ],
+		"details": [
+			"You cast detect magic at regular intervals. You move at half your travel speed or slower. You have no chance of accidentally overlooking a magic aura at a travel speed up to 300 feet per minute, but must be traveling no more than 150 feet per minute to detect magic auras before the party moves into them."
+		],
+		"page": 479,
+		"source": "PZO2101",
+		"id": "8dfe18ae-3620-4861-a45f-95d30c69d409"
+	},
+	{
+		"aonId": 4,
+		"objectType": "Activity",
+		"name": "Follow the Expert",
+		"traits": [ "Auditory", "Concentrate", "Exploration", "Visual" ],
+		"details": [
+			"Choose an ally attempting a recurring skill check while exploring, such as climbing, or performing a different exploration tactic that requires a skill check (like Avoiding Notice). The ally must be at least an expert in that skill and must be willing to provide assistance. While Following the Expert, you match their tactic or attempt similar skill checks. Thanks to your ally's assistance, you can add your level as a proficiency bonus to the associated skill check, even if you're untrained. Additionally, you gain a circumstance bonus to your skill check based on your ally's proficiency (+2 for expert, +3 for master, and +4 for legendary)."
+		],
+		"page": 479,
+		"source": "PZO2101",
+		"id": "cff657c2-f282-4bba-b5ba-f8b76f14a0ac"
+	},
+	{
+		"aonId": 5,
+		"objectType": "Activity",
+		"name": "Hustle",
+		"traits": [ "Exploration", "Move" ],
+		"details": [
+			"You strain yourself to move at double your travel speed. You can Hustle only for a number of minutes equal to your Constitution modifier × 10 (minimum 10 minutes). If you are in a group that is Hustling, use the lowest Constitution modifier among everyone to determine how fast the group can Hustle together."
+		],
+		"page": 480,
+		"source": "PZO2101",
+		"id": "3f85ffce-eb3b-4f13-a407-72ed24c06864"
+	},
+	{
+		"aonId": 6,
+		"objectType": "Activity",
+		"name": "Investigate",
+		"traits": [ "Concentrate", "Exploration" ],
+		"details": [
+			"You seek out information about your surroundings while traveling at half speed. You use Recall Knowledge as a secret check to discover clues among the various things you can see and engage with as you journey along. You can use any skill that has a Recall Knowledge action while Investigating, but the GM determines whether the skill is relevant to the clues you could find."
+		],
+		"page": 480,
+		"source": "PZO2101",
+		"id": "5d851069-b3e2-4c59-9ba7-b9bfb87b520a"
+	},
+	{
+		"aonId": 7,
+		"objectType": "Activity",
+		"name": "Repeat a Spell",
+		"traits": [ "Concentrate", "Exploration" ],
+		"details": [
+			"You repeatedly cast the same spell while moving at half speed. Typically, this spell is a cantrip that you want to have in effect in the event a combat breaks out, and it must be one you can cast in 2 actions or fewer. In order to prevent fatigue due to repeated casting, you'll likely use this activity only when something out of the ordinary occurs.",
+			"You can instead use this activity to continue Sustaining a Spell or Activation with a sustained duration. Most such spells or item effects can be sustained for 10 minutes, though some specify they can be sustained for a different duration."
+		],
+		"page": 480,
+		"source": "PZO2101",
+		"id": "7909932f-6884-478e-a777-84751e0028b0"
+	},
+	{
+		"aonId": 8,
+		"objectType": "Activity",
+		"name": "Scout",
+		"traits": [ "Concentrate", "Exploration" ],
+		"details": [
+			"You scout ahead and behind the group to watch danger, moving at half speed. At the start of the next encounter, every creature in your party gains a +1 circumstance bonus to their initiative rolls."
+		],
+		"page": 480,
+		"source": "PZO2101",
+		"id": "66cd9d68-d32f-4c8a-b60f-94d6e4de0104"
+	},
+	{
+		"aonId": 9,
+		"objectType": "Activity",
+		"name": "Search",
+		"traits": [ "Concentrate", "Exploration" ],
+		"details": [
+			"You Seek meticulously for hidden doors, concealed hazards, and so on. You can usually make an educated guess as to which locations are best to check and move at half speed, but if you want to be thorough and guarantee you checked everything, you need to travel at a Speed of no more than 300 feet per minute, or 150 feet per minute to ensure you check everything before you walk into it. You can always move more slowly while Searching to cover the area more thoroughly, and the Expeditious Search feat increases these maximum Speeds. If you come across a secret door, item, or hazard while Searching, the GM will attempt a free secret check to Seek to see if you notice the hidden object or hazard. In locations with many objects to search, you have to stop and spend significantly longer to search thoroughly."
+		],
+		"page": 480,
+		"source": "PZO2101",
+		"id": "0080f8e4-0fbf-43aa-b864-d634749fdf83"
+	},
+	{
+		"aonId": 22,
+		"objectType": "Activity",
+		"name": "Decipher Writing",
+		"skills": [ "Arcana", "Occultism", "Religion", "Society" ],
+		"trained": true,
+		"traits": [ "Concentrate", "Exploration", "Secret" ],
+		"details": [
+			"You attempt to decipher complicated writing or literature on an obscure topic. This usually takes 1 minute per page of text, but might take longer (typically an hour per page for decrypting ciphers or the like). The text must be in a language you can read, though the GM might allow you to attempt to decipher text written in an unfamiliar language using Society instead.",
+			"The DC is determined by the GM based on the state or complexity of the document. The GM might have you roll one check for a short text or a check for each section of a larger text.",
+			{
+				"criticalSuccess": [
+					"You understand the true meaning of the text."
+				],
+				"success": [
+					"You understand the true meaning of the text. If it was a coded document, you know the general meaning but might not have a word-for-word translation."
+				],
+				"failure": [
+					"You can't understand the text and take a -2 circumstance penalty to further checks to decipher it."
+				],
+				"criticalFailure": [
+					"You believe you understand the text on that page, but you have in fact misconstrued its message."
+				]
+			}
+		],
+		"page": 234,
+		"source": "PZO2101",
+		"id": "de9b0f24-4217-455c-908b-385d67daf7ae"
+	},
+	{
+		"aonId": 0,
+		"objectType": "Activity",
+		"name": "Subsist",
+		"trained": false,
+		"traits": [ "Downtime" ],
+		"details": [
+			"You try to provide food and shelter for yourself, and possibly others as well, with a standard of living described on page 294. The GM determines the DC based on the nature of the place where you're trying to Subsist. You might need a minimum proficiency rank to Subsist in particularly strange environments. Unlike most downtime activities, you can Subsist after 8 hours or less of exploration, but if you do, you take a -5 penalty.",
+			{
+				"criticalSuccess": [
+					"You either provide a subsistence living for yourself and one additional creature, or you improve your own food and shelter, granting yourself a comfortable living."
+				],
+				"success": [
+					"You find enough food and shelter with basic protection from the elements to provide you a subsistence living."
+				],
+				"failure": [
+					"You're exposed to the elements and don't get enough food, becoming fatigued until you attain sufficient food and shelter."
+				],
+				"criticalFailure": [
+					"You attract trouble, eat something you shouldn't, or otherwise worsen your situation. You take a -2 circumstance penalty to checks to Subsist for 1 week. You don't find any food at all; if you don't have any stored up, you're in danger of starving or dying of thirst if you continue failing."
+				]
+			}
+		],
+		"page": 240,
+		"source": "PZO2101",
+		"id": "b29182d3-72e3-4f51-9e4a-887bb9233fd0"
+	},
+	{
+		"aonId": 23,
+		"objectType": "Activity",
+		"name": "Earn Income",
+		"trained": true,
+		"traits": [ "Downtime" ],
+		"details": [
+			"You use one of your skills to make money during downtime. The GM assigns a task level representing the most lucrative job available. You can search for lower-level tasks, with the GM determining whether you find any. Sometimes you can attempt to find better work than the initial offerings, though this takes time and requires using the Diplomacy skill to Gather Information, doing some research, or socializing.",
+			"When you take on a job, the GM secretly sets the DC of your skill check. After your first day of work, you roll to determine your earnings. You gain an amount of income based on your result, the task's level, and your proficiency rank (as listed on Table 4-2: Income Earned).",
+			"You can continue working at the task on subsequent days without needing to roll again. For each day you spend after the first, you earn the same amount as the first day, up until the task's completion. The GM determines how long you can work at the task. Most tasks last a week or two, though some can take months or even years.",
+			{
+				"criticalSuccess": [
+					"You do outstanding work. Gain the amount of currency listed for the task level + 1 and your proficiency rank."
+				],
+				"success": [
+					"You do competent work. Gain the amount of currency listed for the task level and your proficiency rank."
+				],
+				"failure": [
+					"You do shoddy work and get paid the bare minimum for your time. Gain the amount of currency listed in the failure column for the task level. The GM will likely reduce how long you can continue at the task."
+				],
+				"criticalFailure": [
+					"You earn nothing for your work and are fired immediately. You can't continue at the task. Your reputation suffers, potentially making it difficult for you to find rewarding jobs in that community in the future."
+				]
+			}
+		],
+		"more": [
+			{
+				"name": "Crafting Goods for the Market (Crafting)",
+				"details": "Using Crafting, you can work at producing common items for the market. It's usually easy to find work making basic items whose level is 1 or 2 below your settlement's level (see Earn Income on page 504). Higher-level tasks represent special commissions, which might require you to Craft a specific item using the Craft downtime activity and sell it to a buyer at full price. These opportunities don't occur as often and might have special requirements-or serious consequences if you disappoint a prominent client."
+			},
+			{
+				"name": "Practicing a Trade (Lore)",
+				"details": "You apply the practical benefits of one of your Lore specialties during downtime by practicing your trade. This is most effective for Lore specialties such as business, law, or sailing, where there's high demand for workers. The GM might increase the DC or determine only low-level tasks are available if you're attempting to use an obscure Lore skill to Earn Income. You might also need specialized tools to accept a job, like mining tools to work in a mine or a merchant's scale to buy and sell valuables in a market."
+			},
+			{
+				"name": "Staging a Performance (Performance)",
+				"details": "You perform for an audience to make money. The available audiences determine the level of your task, since more discerning audiences are harder to impress but provide a bigger payout. The GM determines the task level based on the audiences available. Performing for a typical audience of commoners on the street is a level 0 task, but a performance for a group of artisans with more refined tastes might be a 2nd- or 3rd-level task, and ones for merchants, nobility, and royalty are increasingly higher level. Your degree of success determines whether you moved your audience and whether you were rewarded with applause or rotten fruit."
+			}
+		],
+		"page": 236,
+		"source": "PZO2101",
+		"id": "24ffa941-5775-405c-a0b7-0774110339e9"
+	},
+	{
+		"aonId": 24,
+		"objectType": "Activity",
+		"name": "Identify Magic",
+		"skills": [ "Arcana", "Religion", "Occultism", "Nature" ],
+		"trained": true,
+		"traits": [ "Concentrate", "Exploration", "Secret" ],
+		"details": [
+			"Once you discover that an item, location, or ongoing effect is magical, you can spend 10 minutes to try to identify the particulars of its magic. If your attempt is interrupted, you must start over. The GM sets the DC for your check. Cursed or esoteric subjects usually have higher DCs or might even be impossible to identify using this activity alone. Heightening a spell doesn't increase the DC to identify it.",
+			{
+				"criticalSuccess": [
+					"You learn all the attributes of the magic, including its name (for an effect), what it does, any means of activating it (for an item or location), and whether it is cursed."
+				],
+				"success": [
+					"For an item or location, you get a sense of what it does and learn any means of activating it. For an ongoing effect (such as a spell with a duration), you learn the effect's name and what it does. You can't try again in hopes of getting a critical success."
+				],
+				"failure": [
+					"You fail to identify the magic and can't try again for 1 day."
+				],
+				"criticalFailure": [
+					"You misidentify the magic as something else of the GM's choice."
+				]
+			}
+		],
+		"page": 238,
+		"source": "PZO2101",
+		"id": "cd038a7d-43ab-4c9d-a05b-97c8b8f9f402"
+	},
+	{
+		"aonId": 25,
+		"objectType": "Activity",
+		"skills": [ "" ],
+		"trained": true,
+		"name": "Learn a Spell",
+		"traits": [ "Concentrate", "Exploration" ],
+		"details": [
+			"You can gain access to a new spell of your tradition from someone who knows that spell or from magical writing like a spellbook or scroll. If you can cast spells of multiple traditions, you can Learn a Spell of any of those traditions, but you must use the corresponding skill to do so. For example, if you were a cleric with the bard multiclass archetype, you couldn't use Religion to add an occult spell to your bardic spell repertoire.",
+			"To learn the spell, you must do the following:",
+			"<ul><li>Spend 1 hour per level of the spell, during which you must remain in conversation with a person who knows the spell or have the magical writing in your possession.</li><li>Have materials with the Price indicated in Table 4-3.</li><li>Attempt a skill check for the skill corresponding to your tradition (DC determined by the GM, often close to the DC on Table 4-3). Uncommon or rare spells have higher DCs; full guidelines for the GM appear on page 503.</li></ul>",
+			"If you have a spellbook, Learning a Spell lets you add the spell to your spellbook; if you prepare spells from a list, it's added to your list; if you have a spell repertoire, you can select it when you add or swap spells.",
+			{
+				"criticalSuccess": [
+					"You expend half the materials and learn the spell."
+				],
+				"success": [
+					"You expend the materials and learn the spell."
+				],
+				"failure": [
+					"You fail to learn the spell but can try again after you gain a level. The materials aren't expended."
+				],
+				"criticalFailure": [
+					"As failure, plus you expend half the materials."
+				]
+			}
+		],
+		"page": 238,
+		"source": "PZO2101",
+		"id": "bbd31ee2-1966-432a-b3e8-afa2b1d408e7"
+	},
+	{
+		"aonId": 25,
+		"objectType": "Action",
+		"trained": false,
+		"name": "Recall Knowledge",
+		"actionType": "[A]",
+		"traits": [ "Concentrate", "Secret" ],
+		"details": [
+			"You attempt a skill check to try to remember a bit of knowledge regarding a topic related to that skill. The GM determines the DCs for such checks and which skills apply.",
+			{
+				"criticalSuccess": [
+					"You recall the knowledge accurately and gain additional information or context."
+				],
+				"success": [
+					"You recall the knowledge accurately or gain a useful clue about your current situation."
+				],
+				"criticalFailure": [
+					"You recall incorrect information or gain an erroneous or misleading clue."
+				]
+			},
+			"The following skills can be used to Recall Knowledge, getting information about the listed topics. In some cases, you can get the GM's permission to use a different but related skill, usually against a higher DC than normal. Some topics might appear on multiple lists, but the skills could give different information. For example, Arcana might tell you about the magical defenses of a golem, whereas Crafting could tell you about its sturdy resistance to physical attacks.",
+			"<ul><li><b>Arcana:</b> Arcane theories, magical traditions, creatures of arcane significance, and arcane planes.</li><li><b>Crafting:</b> Alchemical reactions and creatures, item value, engineering, unusual materials, and constructs.</li><li><b>Lore:</b> The subject of the Lore skill's subcategory.</li><li><b>Medicine:</b> Diseases, poisons, wounds, and forensics.</li><li><b>Nature:</b> The environment, flora, geography, weather, creatures of natural origin, and natural planes.</li><li><b>Occultism:</b> Ancient mysteries, obscure philosophy, creatures of occult significance, and esoteric planes.</li><li><b>Religion:</b> Divine agents, divine planes, theology, obscure myths, and creatures of religious significance.</li><li><b>Society:</b> Local history, key personalities, legal institutions, societal structure, and humanoid culture.</li></ul>",
+			"The GM might allow checks to Recall Knowledge using other skills. For example, you might assess the skill of an acrobat using Acrobatics. If you're using a physical skill (like in this example), the GM will most likely have you use a mental ability score-typically Intelligence- instead of the skill's normal physical ability score."
+		],
+		"page": 238,
+		"source": "PZO2101",
+		"id": "66261d3c-9727-4d67-a286-c032c3b21c4e"
+	},
+	{
+		"aonId": 32,
+		"objectType": "Activity",
+		"skill": "Arcana",
+		"trained": true,
+		"name": "Borrow an Arcane Spell",
+		"traits": [ "Concentrate", "Exploration" ],
+		"details": [
+			"If you're an arcane spellcaster who prepares from a spellbook, you can attempt to prepare a spell from someone else's spellbook. The GM sets the DC for the check based on the spell's level and rarity; it's typically a bit easier than Learning the Spell.",
+			{
+				"success": [
+					"You prepare the borrowed spell as part of your normal spell preparation."
+				],
+				"failure": [
+					"You fail to prepare the spell, but the spell slot remains available for you to prepare a different spell. You can't try to prepare this spell until the next time you prepare spells."
+				]
+			}
+		],
+		"page": 241,
+		"source": "PZO2101",
+		"id": "39ec903d-3e6b-4adc-9caa-d448e0a45cec"
+	},
+	{ "aonId": 52, "objectType": "Activity", "skill": "Intimidation", "trained": true, "name": "Coerce", "traits": [], "details": [], "page": 247, "source": "PZO2101", "id": "d3187bb6-4e49-4898-8074-37effe7a7fb1" },
+	{ "aonId": 65, "objectType": "Activity", "skill": "Survival", "trained": true, "name": "Cover Tracks", "traits": [], "details": [], "page": 252, "source": "PZO2101", "id": "21e93ab1-cc01-464b-8a76-ebdf1f26c1a8" },
+	{ "aonId": 22, "objectType": "Activity", "skill": "?????", "trained": true, "name": "Decipher Writing", "traits": [], "details": [], "page": 234, "source": "PZO2101", "id": "e0fa2f7b-cf65-41af-a22a-7d616b01ee66" },
+	{ "aonId": 49, "objectType": "Activity", "skill": "Diplomacy", "trained": true, "name": "Gather Information", "traits": [], "details": [], "page": 246, "source": "PZO2101", "id": "be2fa114-b639-4a20-a287-b1c9bd3c9e4f" },
+	{ "aonId": 43, "objectType": "Activity", "skill": "Craft", "trained": true, "name": "Identify Alchemy", "traits": [], "details": [], "page": 245, "source": "PZO2101", "id": "4e5a69dc-2671-42ba-a1a5-98bf7c5b8c48" },
+	{ "aonId": 24, "objectType": "Activity", "skill": "?????", "trained": true, "name": "Identify Magic", "traits": [], "details": [], "page": 238, "source": "PZO2101", "id": "26e71482-741a-49a4-ab11-e0a9105dcb48" },
+	{ "aonId": 46, "objectType": "Activity", "skill": "Deception", "trained": true, "name": "Impersonate", "traits": [], "details": [], "page": 245, "source": "PZO2101", "id": "af202a9a-92f3-40d8-a539-de9c562c889a" },
+	{ "aonId": 50, "objectType": "Activity", "skill": "Diplomacy", "trained": true, "name": "Make an Impression", "traits": [], "details": [], "page": 246, "source": "PZO2101", "id": "a65d2193-2fe9-4f8d-bfe2-18586608ef08" },
+	{ "aonId": 42, "objectType": "Activity", "skill": "Craft", "trained": true, "name": "Repair", "traits": [], "details": [], "page": 243, "source": "PZO2101", "id": "3f3f18e3-0b6c-4832-baa3-7621f146c65b" },
+	{ "aonId": 64, "objectType": "Activity", "skill": "Survival", "trained": true, "name": "Sense Direction", "traits": [], "details": [], "page": 252, "source": "PZO2101", "id": "525ba005-939c-480c-a3e5-9d357f8a8789" },
+	{ "aonId": 31, "objectType": "Activity", "skill": "Acrobatics", "trained": true, "name": "Squeeze", "traits": [], "details": [], "page": 241, "source": "PZO2101", "id": "167b1c9c-1a16-492c-aff0-5cc924b34a23" },
+	{ "aonId": 66, "objectType": "Activity", "skill": "Survival", "trained": true, "name": "Track", "traits": [], "details": [], "page": 252, "source": "PZO2101", "id": "5c210545-1f46-4638-99f1-9fe5916c4f2e" },
+	{ "aonId": 57, "objectType": "Activity", "skill": "Medicine", "trained": true, "name": "Treat Wounds", "traits": [], "details": [], "page": 249, "source": "PZO2101", "id": "a70eebaa-6170-40fa-9edc-e143b39d9e4c" },
+	{
+		"aonId": 71,
+		"objectType": "Activity",
+		"name": "Refocus",
+		"traits": [ "Concentrate", "Exploration" ],
+		"requirements": [
+			"You have a focus pool, and you have spent at least 1 Focus Point since you last regained any Focus Points."
+		],
+		"details": [
+			"You spend 10 minutes performing deeds to restore your magical connection. This restores 1 Focus Point to your focus pool. The deeds you need to perform are specified in the class or ability that gives you your focus spells. These deeds can usually overlap with other tasks that relate to the source of your focus spells. For instance, a cleric with focus spells from a good deity can usually Refocus while tending the wounds of their allies, and a wizard of the illusionist school might be able to Refocus while attempting to Identify Magic of the illusion school."
+		],
+		"page": 300,
+		"source": "PZO2101",
+		"id": "4acd381f-851c-444d-911f-746b5d29fd8d"
+	},
+	{
+		"aonId": 289,
+		"objectType": "Activity",
+		"name": "Invest an Item",
+		"details": [
+			"You invest your energy in an item with the invested trait as you don it. This process requires 1 or more Interact actions, usually taking the same amount of time it takes to don the item. Once you've Invested the Item, you benefit from its constant magical abilities as long as you meet its other requirements (for most invested items, the only other requirement is that you must be wearing the item). This investiture lasts until you remove the item.",
+			"You can invest no more than 10 items per day. If you remove an invested item, it loses its investiture. The item still counts against your daily limit after it loses its investiture. You reset the limit during your daily preparations, at which point you Invest your Items anew. If you're still wearing items you had invested the previous day, you can typically keep them invested on the new day, but they still count against your limit."
+		],
+		"page": 531,
+		"source": "PZO2101",
+		"id": "3c244de7-d07c-4260-9217-da15b78f19b0"
+	},
+	{
+		"aonId": 100,
+		"objectType": "Activity",
+		"name": "Activate an Item",
+		"requirements": [
+			"You can Activate an Item with the invested trait only if it's invested by you. If the item requires you to Interact with it, you must be wielding it (if it's a held item) or touching it with a free hand (if it's another type of item)."
+		],
+		"details": [
+			"You call forth the effect of an item by properly activating it. This is a special activity that takes a variable number of actions, as listed in the item's stat block.",
+			"Some items can be activated as a reaction or free action. In this case, you Activate the Item as a reaction or free action (as appropriate) instead of as an activity. Such cases are noted in the item's Activate entry in its stat block-for example, \"<b>Activate</b> [R] command.\"",
+			"<b>Long Activation Times</b> Some items take minutes or hours to activate. The Activate an Item activity for these items includes a mix of the listed activation components, but it's not necessary to break down which one you're providing at a given time. You can't use other actions or reactions while activating such an item, though at the GM's discretion, you might be able to speak a few sentences. As with other activities that take a long time, these activations have the exploration trait, and you can't activate them in an encounter. If combat breaks out while you're activating one, your activation is disrupted (see the Disrupting Activations sidebar).",
+			"<b>Activation Components</b> Each activation entry lists any components involved in the activation after the action icons or text, such as \"[A] command.\" The activation components, described below, add traits (listed in parentheses) and requirements to the activation. If you can't provide the components, you fail to Activate the Item.<ul><li>Command (auditory, concentrate)</li><li>Envision (concentrate)</li><li>Interact (manipulate)</li><li>Cast a Spell</li>"
+		],
+		"page": 532,
+		"source": "PZO2101",
+		"id": "aa4def91-45fa-46ad-a823-43107a4dec6e"
+	},
+	{
+		"aonId": 28,
+		"objectType": "Action",
+		"skill": "Acrobatics",
+		"trained": false,
+		"name": "Balance",
+		"actionType": "[A]",
+		"traits": [ "Move" ],
+		"requirements": [
+			"You are in a square that contains a narrow surface, uneven ground, or another similar feature."
+		],
+		"details": [
+			"You move across a narrow surface or uneven ground, attempting an Acrobatics check against its Balance DC. You are flat-footed while on a narrow surface or uneven ground.",
+			{
+				"criticalSuccess": [
+					"You move up to your Speed."
+				],
+				"success": [
+					"You move up to your Speed, treating it as difficult terrain (every 5 feet costs 10 feet of movement)."
+				],
+				"failure": [
+					"You must remain stationary to keep your balance (wasting the action) or you fall. If you fall, your turn ends."
+				],
+				"criticalFailure": [
+					"You fall and your turn ends."
+				]
+			}
+		],
+		"page": 240,
+		"source": "PZO2101",
+		"id": "d5e955b4-fd6e-4f84-bc54-332b002b9f1c"
+	},
+	{
+		"aonId": 29,
+		"objectType": "Action",
+		"skill": "Acrobatics",
+		"trained": false,
+		"name": "Tumble Through",
+		"actionType": "[A]",
+		"traits": [ "Move" ],
+		"details": [
+			"You Stride up to your Speed. During this movement, you can try to move through the space of one enemy. Attempt an Acrobatics check against the enemy's Reflex DC as soon as you try to enter its space. You can Tumble Through using Climb, Fly, Swim, or another action instead of Stride in the appropriate environment.",
+			{
+				"success": [
+					"You move through the enemy's space, treating the squares in its space as difficult terrain (every 5 feet costs 10 feet of movement). If you don't have enough Speed to move all the way through its space, you get the same effect as a failure."
+				],
+				"failure": [
+					"Your movement ends, and you trigger reactions as if you had moved out of the square you started in."
+				]
+			}
+		],
+		"page": 240,
+		"source": "PZO2101",
+		"id": "89c48ea2-0476-4818-99c2-8c0efa006614"
+	},
+	{
+		"aonId": 30,
+		"objectType": "Action",
+		"trained": true,
+		"skill": "Acrobatics",
+		"name": "Maneuver in Flight",
+		"actionType": "[A]",
+		"traits": [ "Move" ],
+		"requirements": [
+			"You have a fly Speed."
+		],
+		"details": [
+			"You try a difficult maneuver while flying. Attempt an Acrobatics check. The GM determines what maneuvers are possible, but they rarely allow you to move farther than your fly Speed.",
+			{
+				"success": [
+					"You succeed at the maneuver."
+				],
+				"failure": [
+					"Your maneuver fails. The GM chooses if you simply can't move or if some other detrimental effect happens. The outcome should be appropriate for the maneuver you attempted (for instance, being blown off course if you were trying to fly against a strong wind)."
+				],
+				"criticalFailure": [
+					"As failure, but the consequence is more dire."
+				]
+			}
+		],
+		"page": 240,
+		"source": "PZO2101",
+		"id": "820347ea-7ef0-4cb1-9fbd-311570a1d712"
+	},
+	{
+		"aonId": 0,
+		"objectType": "Activity",
+		"trained": true,
+		"skill": "Acrobatics",
+		"name": "Squeeze",
+		"traits": [ "Exploration", "Move" ],
+		"details": [
+			"You contort yourself to squeeze through a space so small you can barely fit through. This action is for exceptionally small spaces; many tight spaces are difficult terrain (page 475) that you can move through more quickly and without a check.",
+			{
+				"criticalSuccess": [
+					"You squeeze through the tight space in 1 minute per 10 feet of squeezing."
+				],
+				"success": [
+					"You squeeze through in 1 minute per 5 feet."
+				],
+				"criticalFailure": [
+					"You become stuck in the tight space. While you're stuck, you can spend 1 minute attempting another Acrobatics check at the same DC. Any result on that check other than a critical failure causes you to become unstuck."
+				]
+			}
+		],
+		"page": 241,
+		"source": "PZO2101",
+		"id": "3bf5c51e-d4fe-43fd-91bd-369e3d73e547"
+	},
+	{
+		"aonId": 0,
+		"objectType": "Activity",
+		"trained": true,
+		"skill": "Arcana",
+		"name": "Borrow an Arcane Spell",
+		"traits": [ "Concentrate", "Exploration" ],
+		"details": [
+			"If you're an arcane spellcaster who prepares from a spellbook, you can attempt to prepare a spell from someone else's spellbook. The GM sets the DC for the check based on the spell's level and rarity; it's typically a bit easier than Learning the Spell.",
+			{
+				"success": [
+					"You prepare the borrowed spell as part of your normal spell preparation."
+				],
+				"failure": [
+					"You fail to prepare the spell, but the spell slot remains available for you to prepare a different spell. You can't try to prepare this spell until the next time you prepare spells."
+				]
+			}
+		],
+		"page": 241,
+		"source": "PZO2101",
+		"id": "81741946-bcc8-4d1c-935d-33d7b7fbaa5d"
+	},
+	{
+		"aonId": 33,
+		"objectType": "Action",
+		"trained": false,
+		"skill": "Athletics",
+		"name": "Climb",
+		"actionType": "[A]",
+		"traits": [ "Move" ],
+		"requirements": [
+			"You have both hands free."
+		],
+		"details": [
+			"You move up, down, or across an incline. Unless it's particularly easy, you must attempt an Athletics check. The GM determines the DC based on the nature of the incline and environmental circumstances. You're flat-footed unless you have a climb Speed.",
+			{
+				"criticalSuccess": [
+					"You move up, across, or safely down the incline for 5 feet plus 5 feet per 20 feet of your land Speed (a total of 10 feet for most PCs)."
+				],
+				"success": [
+					"You move up, across, or safely down the incline for 5 feet per 20 feet of your land Speed (a total of 5 feet for most PCs, minimum 5 feet if your Speed is below 20 feet)."
+				],
+				"criticalFailure": [
+					"You fall. If you began the climb on stable ground, you fall and land prone."
+				]
+			}
+		],
+		"page": 241,
+		"source": "PZO2101",
+		"id": "af98b14c-d010-4b9a-a34a-068384b691e7"
+	},
+	{
+		"aonId": 34,
+		"objectType": "Action",
+		"trained": false,
+		"skill": "Athletics",
+		"name": "Force Open",
+		"actionType": "[A]",
+		"traits": [ "Attack" ],
+		"details": [
+			"Using your body, a lever, or some other tool, you attempt to forcefully open a door, window, container or heavy gate. With a high enough result, you can even smash through walls. Without a crowbar, prying something open takes a -2 item penalty to the Athletics check to Force Open.",
+			{
+				"criticalSuccess": [
+					"You open the door, window, container, or gate and can avoid damaging it in the process."
+				],
+				"success": [
+					"You break the door, window, container, or gate open, and it gains the broken condition. If it's especially sturdy, the GM might have it take damage but not be broken."
+				],
+				"criticalFailure": [
+					"Your attempt jams the door, window, container, or gate shut, imposing a -2 circumstance penalty on future attempts to Force it Open."
+				]
+			}
+		],
+		"page": 242,
+		"source": "PZO2101",
+		"id": "1718c909-aa94-4642-881e-262afa906df0"
+	},
+	{
+		"aonId": 35,
+		"objectType": "Action",
+		"skill": "Athletics",
+		"trained": false,
+		"name": "Grapple",
+		"actionType": "[A]",
+		"traits": [ "Attack" ],
+		"requirements": [
+			"You have at least one free hand or have your target grappled or restrained. Your target isn't more than one size larger than you."
+		],
+		"details": [
+			"You attempt to grab a creature or object with your free hand. Attempt an Athletics check against the target's Fortitude DC. You can Grapple a target you already have grabbed or restrained without having a hand free.",
+			{
+				"criticalSuccess": [
+					"Your target is restrained until the end of your next turn unless you move or your target Escapes (page 470)."
+				],
+				"success": [
+					"Your target is grabbed until the end of your next turn unless you move or your target Escapes."
+				],
+				"failure": [
+					"You fail to grab your target. If you already had the target grabbed or restrained using a Grapple, those conditions on that creature or object end."
+				],
+				"criticalFailure": [
+					"If you already had the target grabbed or restrained, it breaks free. Your target can either grab you, as if it succeeded at using the Grapple action against you, or force you to fall and land prone."
+				]
+			}
+		],
+		"page": 242,
+		"source": "PZO2101",
+		"id": "54f55d2a-56e7-4331-b2da-8340994dc5fa"
+	},
+	{
+		"aonId": 36,
+		"objectType": "Action",
+		"skill": "Athletics",
+		"trained": false,
+		"name": "High Jump",
+		"actionType": "[A][A]",
+		"details": [
+			"You Stride, then make a vertical Leap and attempt a DC 30 Athletics check to increase the height of your jump. If you didn't Stride at least 10 feet, you automatically fail your check. This DC might be increased or decreased due to the situation, as determined by the GM.",
+			{
+				"criticalSuccess": [
+					"Increase the maximum vertical distance to 8 feet, or increase the maximum vertical distance to 5 feet and maximum horizontal distance to 10 feet."
+				],
+				"success": [
+					"Increase the maximum vertical distance to 5 feet."
+				],
+				"failure": [
+					"You Leap normally."
+				],
+				"criticalFailure": [
+					"You don't Leap at all, and instead you fall prone in your space."
+				]
+			}
+		],
+		"other": [
+			{
+				"name": "Leap",
+				"details": "The Leap basic action is used for High Jump and Long Jump. Leap lets you take a careful, short jump. You can Leap up to 10 feet horizontally if your Speed is at least 15 feet, or up to 15 feet horizontally if your Speed is at least 30 feet. You land in the space where your Leap ends (meaning you can typically clear a 5-foot gap if your Speed is between 15 feet and 30 feet, or a 10-foot gap if your Speed is 30 feet or more). If you make a vertical Leap, you can move up to 3 feet vertically and 5 feet horizontally onto an elevated surface."
+			}
+		],
+		"page": 242,
+		"source": "PZO2101",
+		"id": "7fb8c7fb-ec35-4621-9a38-889f87c4dcc9"
+	},
+	{
+		"aonId": 37,
+		"objectType": "Action",
+		"skill": "Athletics",
+		"trained": false,
+		"name": "Long Jump",
+		"actionType": "[A][A]",
+		"details": [
+			"You Stride, then make a horizontal Leap and attempt an Athletics check to increase the length of your jump. The DC of the Athletics check is equal to the total distance in feet you're attempting to move during your Leap (so you'd need to succeed at a DC 20 check to Leap 20 feet). You can't Leap farther than your Speed.",
+			"If you didn't Stride at least 10 feet, or if you attempt to jump in a different direction than your Stride, you automatically fail your check. This DC might be increased or decreased due to the situation, as determined by the GM.",
+			{ "success": [ "Increase the maximum horizontal distance you Leap to the desired distance." ], "failure": [ "You Leap normally." ], "criticalFailure": [ "You Leap normally, but then fall and land prone." ] }
+		],
+		"other": [
+			{
+				"name": "Leap",
+				"details": "The Leap basic action is used for High Jump and Long Jump. Leap lets you take a careful, short jump. You can Leap up to 10 feet horizontally if your Speed is at least 15 feet, or up to 15 feet horizontally if your Speed is at least 30 feet. You land in the space where your Leap ends (meaning you can typically clear a 5-foot gap if your Speed is between 15 feet and 30 feet, or a 10-foot gap if your Speed is 30 feet or more). If you make a vertical Leap, you can move up to 3 feet vertically and 5 feet horizontally onto an elevated surface."
+			}
+		],
+		"page": 242,
+		"source": "PZO2101",
+		"id": "a077a805-12fd-45fa-86c6-0b003fa31c8e"
+	},
+	{
+		"aonId": 38,
+		"objectType": "Action",
+		"skill": "Athletics",
+		"trained": false,
+		"name": "Shove",
+		"actionType": "[A]",
+		"traits": [ "Attack" ],
+		"requirements": [
+			"You have at least one hand free. The target can't be more than one size larger than you."
+		],
+		"details": [
+			"You push a creature away from you. Attempt an Athletics check against your target's Fortitude DC.",
+			{
+				"criticalSuccess": [
+					"You push your target up to 10 feet away from you. You can Stride after it, but you must move the same distance and in the same direction."
+				],
+				"success": [
+					"You push your target back 5 feet. You can Stride after it, but you must move the same distance and in the same direction."
+				],
+				"criticalFailure": [
+					"You lose your balance, fall, and land prone."
+				]
+			}
+		],
+		"other": [
+			{
+				"name": "Forced Movement",
+				"details": "The Shove action can force a creature to move. When an effect forces you to move, or if you start falling, the distance you move is defined by the effect that moved you, not by your Speed. Because you're not acting to move, this doesn't trigger reactions triggered by movement."
+			}
+		],
+		"page": 243,
+		"source": "PZO2101",
+		"id": "95eeefcf-d985-45ea-97ff-059208e4596f"
+	},
+	{
+		"aonId": 39,
+		"objectType": "Action",
+		"skill": "Athletics",
+		"trained": false,
+		"name": "Swim",
+		"actionType": "[A]",
+		"traits": [ "Move" ],
+		"details": [
+			"You propel yourself through water. In most calm water, you succeed at the action without needing to attempt a check. If you must breathe air and you're submerged in water, you must hold your breath each round. If you fail to hold your breath, you begin to drown (as described on page 478). If the water you are swimming in is turbulent or otherwise dangerous, you might have to attempt an Athletics check to Swim.",
+			"If you end your turn in water and haven't succeeded at a Swim action that turn, you sink 10 feet or get moved by the current, as determined by the GM. However, if your last action on your turn was to enter the water, you don't sink or move with the current that turn.",
+			{
+				"criticalSuccess": [
+					"You move through the water 10 feet, plus 5 feet per 20 feet of your land Speed (a total of 15 feet for most PCs)."
+				],
+				"success": [
+					"You move through the water 5 feet, plus 5 feet per 20 feet of your land Speed (a total of 10 feet for most PCs)."
+				],
+				"criticalFailure": [
+					"You make no progress, and if you're holding your breath, you lose 1 round of air."
+				]
+			}
+		],
+		"page": 243,
+		"source": "PZO2101",
+		"id": "209f521a-1270-4f0e-9956-1d303b5f5f18"
+	},
+	{
+		"aonId": 40,
+		"objectType": "Action",
+		"skill": "Athletics",
+		"trained": false,
+		"name": "Trip",
+		"actionType": "[A]",
+		"traits": [ "Attack" ],
+		"requirements": [
+			"You have at least one hand free. Your target can't be more than one size larger than you."
+		],
+		"details": [
+			"You try to knock a creature to the ground. Attempt an Athletics check against the target's Reflex DC.",
+			{
+				"criticalSuccess": [
+					"The target falls and lands prone and takes 1d6 bludgeoning damage."
+				],
+				"success": [
+					"The target falls and lands prone."
+				],
+				"criticalFailure": [
+					"You lose your balance and fall and land prone."
+				]
+			}
+		],
+		"other": [
+			{
+				"name": "Falling",
+				"details": "When you fall more than 5 feet, you take falling damage when you land, which is bludgeoning damage equal to half the distance you fell. If you take any damage from a fall, you're knocked prone when you land. If you fall into water, snow, or another soft substance, calculate the damage from the fall as though your fall were 20 feet shorter. The reduction can't be greater than the depth of the water (so when falling into water that is only 10 feet deep, you treat the fall as 10 feet shorter). You can Grab an Edge as a reaction (page 472) to reduce or eliminate the damage from some falls. More detailed rules for falling damage appear on page 463."
+			}
+		],
+		"page": 243,
+		"source": "PZO2101",
+		"id": "64872979-0395-40e1-872f-a4d4011e2c87"
+	},
+	{
+		"aonId": 41,
+		"objectType": "Action",
+		"skill": "Athletics",
+		"trained": true,
+		"name": "Disarm",
+		"actionType": "[A]",
+		"traits": [ "Attack" ],
+		"requirements": [
+			"You have at least one hand free. The target can't be more than one size larger than you."
+		],
+		"details": [
+			"You try to knock something out of a creature's grasp. Attempt an Athletics check against the target's Reflex DC.",
+			{
+				"criticalSuccess": [
+					"You knock the item out of the target's grasp. It falls to the ground in the target's space."
+				],
+				"success": [
+					"You weaken your target's grasp on the item. Until the start of that creature's turn, attempts to Disarm the target of that item gain a +2 circumstance bonus, and the target takes a -2 circumstance penalty to attacks with the item or other checks requiring a firm grasp on the item."
+				],
+				"criticalFailure": [
+					"You lose your balance and become flat-footed until the start of your next turn."
+				]
+			}
+		],
+		"page": 243,
+		"source": "PZO2101",
+		"id": "ab606431-fa79-470c-8236-dc44b921e0ce"
+	},
+	{
+		"aonId": 0,
+		"objectType": "Activity",
+		"skill": "Crafting",
+		"trained": false,
+		"name": "Repair",
+		"traits": [ "Exploration", "Manipulate" ],
+		"requirements": [
+			"You are holding or wearing a repair kit (page 291)."
+		],
+		"details": [
+			"You spend 10 minutes attempting to fix a damaged item, placing the item on a stable surface and using the repair kit with both hands. The GM sets the DC, but it's usually about the same DC to Repair a given item as it is to Craft it in the first place. You can't Repair a destroyed item.",
+			{
+				"criticalSuccess": [
+					"You restore 10 Hit Points to the item, plus an additional 10 Hit Points per proficiency rank you have in Crafting (a total of 20 HP if you're trained, 30 HP if you're an expert, 40 HP if you're a master, or 50 HP if you're legendary)."
+				],
+				"success": [
+					"You restore 5 Hit Points to the item, plus an additional 5 per proficiency rank you have in Crafting (for a total of 10 HP if you are trained, 15 HP if you're an expert, 20 HP if you're a master, or 25 HP if you're legendary)."
+				],
+				"criticalFailure": [
+					"You deal 2d6 damage to the item. Apply the item's Hardness to this damage."
+				]
+			}
+		],
+		"page": 243,
+		"source": "PZO2101",
+		"id": "236b94ba-8d18-4876-b432-ad687df6affa"
+	},
+	{
+		"aonId": 0,
+		"objectType": "Activity",
+		"skill": "Crafting",
+		"trained": true,
+		"name": "Craft",
+		"traits": [ "Downtime", "Manipulate" ],
+		"details": [
+			"You can make an item from raw materials. You need the Alchemical Crafting skill feat to create alchemical items, the Magical Crafting skill feat to create magic items, and the Snare Crafting feat to create snares.",
+			"To Craft an item, you must meet the following requirements:",
+			"<ul><li>The item is your level or lower. An item that doesn't list a level is level 0. If the item is 9th level or higher, you must be a master in Crafting, and if it's 16th or higher, you must be legendary.</li><li>You have the formula for the item; see Getting Formulas below for more information.</li><li>You have an appropriate set of tools and, in many cases, a workshop. For example, you need access to a smithy to forge a metal shield, or an alchemist's lab to produce alchemical items.</li><li>You must supply raw materials worth at least half the item's Price. You always expend at least that amount of raw materials when you Craft successfully. If you're in a settlement, you can usually spend currency to get the amount of raw materials you need, except in the case of rarer precious materials.</li></ul>",
+			"You must spend 4 days at work, at which point you attempt a Crafting check. The GM determines the DC to Craft the item based on its level, rarity, and other circumstances.",
+			"If your attempt to create the item is successful, you expend the raw materials you supplied. You can pay the remaining portion of the item's Price in materials to complete the item immediately, or you can spend additional downtime days working on it. For each additional day you spend, reduce the value of the materials you need to expend to complete the item. This amount is determined using Table 4-2: Income Earned (page 236), based on your proficiency rank in Crafting and using your own level instead of a task level. After any of these downtime days, you can complete the item by spending the remaining portion of its Price in materials. If the downtime days you spend are interrupted, you can return to finish the item later, continuing where you left off. An example of Crafting appears in the sidebar.",
+			{
+				"criticalSuccess": [
+					"Your attempt is successful. Each additional day spent Crafting reduces the materials needed to complete the item by an amount based on your level + 1 and your proficiency rank in Crafting."
+				],
+				"success": [
+					"Your attempt is successful. Each additional day spent Crafting reduces the materials needed to complete the item by an amount based on your level and your proficiency rank."
+				],
+				"failure": [
+					"You fail to complete the item. You can salvage the raw materials you supplied for their full value. If you want to try again, you must start over."
+				],
+				"criticalFailure": [
+					"You fail to complete the item. You ruin 10% of the raw materials you supplied, but you can salvage the rest. If you want to try again, you must start over."
+				]
+			}
+		],
+		"other": [
+			{
+				"name": "Consumables and Ammunition",
+				"details": "You can Craft items with the consumable trait in batches, making up to four of the same item at once with a single check. This requires you to include the raw materials for all the items in the batch at the start, and you must complete the batch all at once. You also Craft non-magical ammunition in batches, using the quantity listed in Table 6-8: Ranged Weapons (typically 10)."
+			},
+			{
+				"name": "Getting Formulas",
+				"details": "You can gain access to the formulas for all common items in Chapter 6: Equipment by purchasing a basic crafter's book (page 287). See the rules on page 293 for information on how to acquire other formulas."
+			}
+		],
+		"page": 244,
+		"source": "PZO2101",
+		"id": "ce7d4bd9-ab5b-4613-96b7-74c5f13aedb9"
+	},
+	{
+		"aonId": 0,
+		"objectType": "Activity",
+		"skill": "Crafting",
+		"trained": true,
+		"name": "Identify Alchemy",
+		"traits": [ "Concentrate", "Exploration", "Secret" ],
+		"requirements": [
+			"You are holding or wearing alchemist's tools (page 287)."
+		],
+		"details": [
+			"You can identify the nature of an alchemical item with 10 minutes of testing using alchemist's tools. If your attempt is interrupted in any way, you must start over.",
+			{
+				"success": [
+					"You identify the item and the means of activating it."
+				],
+				"failure": [
+					"You fail to identify the item but can try again."
+				],
+				"criticalFailure": [
+					"You misidentify the item as another item of the GM's choice."
+				]
+			}
+		],
+		"page": 245,
+		"source": "PZO2101",
+		"id": "c43b7899-8500-45cd-8e6b-557dae22d9e4"
+	}
+]

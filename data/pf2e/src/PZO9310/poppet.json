@@ -1,0 +1,26 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Poppet",
+		"traits": [ "Rare" ],
+		"youMight": [
+			"Like surprising others with your unexpected cleverness and eloquence.",
+			"Seek out other self-aware beings that most people might overlook.",
+			"Rely on your harmless appearance to trick others."
+		],
+		"othersProbably": [
+			"Mistake you for a toy.",
+			"Doubt your ability to handle tasks that require any dexterity or complex thought.",
+			"Wonder whether your mundane form conceals other magical marvels."
+		],
+		"aonId": 0,
+		"page": 60,
+		"source": "PZO9310",
+		"id": "d937ac3b-ed3e-4b4a-9821-8d35e3edd0e8"
+	},
+	{ "objectType": "Heritage", "name": "Ghost Poppet", "ancestry": "Poppet", "source": "PZO9310", "id": "42ff7b04-d67a-4a93-9bd0-2919fc859e86", "aonId": 0 },
+	{ "objectType": "Heritage", "name": "Stuffed Poppet", "ancestry": "Poppet", "source": "PZO9310", "id": "9bb193de-1d3d-4f55-8bbe-d4bca1cf2626", "aonId": 0 },
+	{ "objectType": "Heritage", "name": "Toy Poppet", "ancestry": "Poppet", "source": "PZO9310", "id": "a855e533-a825-4d8d-8cce-ced3483089b4", "aonId": 0 },
+	{ "objectType": "Heritage", "name": "Windup Poppet", "ancestry": "Poppet", "source": "PZO9310", "id": "8a04db0a-42ed-49e5-96df-f442ffba4894", "aonId": 0 },
+	{ "objectType": "Heritage", "name": "Wishborn Poppet", "ancestry": "Poppet", "source": "PZO9310", "id": "0451dafc-178c-4c60-b92c-7375352c0b2b", "aonId": 0 }
+]

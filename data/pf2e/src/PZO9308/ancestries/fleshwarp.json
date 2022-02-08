@@ -1,0 +1,23 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Fleshwarp",
+		"youMight": [
+			"Embrace your unusual appearance to inspire respect or fear.",
+			"Be used to relying on yourself.",
+			"Distrust large groups of people, particularly mobs, based on past experiences."
+		],
+		"othersProbably": [
+			"Find your physiology fascinating or terrifying.",
+			"Assume you are an expert on strange creatures or occult phenomena.",
+			"Consider you an enigmatic and unpredictable-and perhaps even dangerous-outsider."
+		],
+		"aonId": 31,
+		"source": "PZO9308",
+		"id": "88c7b561-9e3e-4ead-b194-d5cce1d4f261"
+	},
+	{ "objectType": "Heritage", "name": "Created Fleshwarp", "ancestry": "Fleshwarp", "source": "PZO9308", "id": "e756d38a-af55-4cc0-bcbd-b7fb9150ed01", "aonId": 125 },
+	{ "objectType": "Heritage", "name": "Mutated Fleshwarp", "ancestry": "Fleshwarp", "source": "PZO9308", "id": "2d19b316-fa42-4f3b-94c7-c74547451052", "aonId": 126 },
+	{ "objectType": "Heritage", "name": "Shapewrought Fleshwarp", "ancestry": "Fleshwarp", "source": "PZO9308", "id": "bf6bb3da-08cf-448c-9eb9-e53b9caf48ed", "aonId": 127 },
+	{ "objectType": "Heritage", "name": "Technological Fleshwarp", "ancestry": "Fleshwarp", "source": "PZO9308", "id": "ee6ddb83-f2b3-4423-8623-adb589dc03c2", "aonId": 128 }
+]

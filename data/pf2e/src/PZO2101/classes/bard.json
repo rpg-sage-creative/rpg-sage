@@ -1,0 +1,39 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Bard",
+		"duringCombatEncounters": [
+			"You use magical performances to alter the odds in favor of your allies.",
+			"You confidently alternate between attacks, healing, and helpful spells as needed."
+		],
+		"duringSocialEncounters": [
+			"You persuade, prevaricate, and threaten with ease."
+		],
+		"whileExploring": [
+			"You're a font of knowledge, folktales, legends, and lore that provide a deeper context and helpful reconnaissance for the group's adventure.",
+			"Your spells and performances inspire your allies to greater discovery and success."
+		],
+		"inDowntime": [
+			"You can earn money and prestige with your performances, gaining a name for yourself and acquiring patrons.",
+			"Eventually, tales of your talents and triumphs might attract other bards to study your techniques in a bardic college."
+		],
+		"youMight": [
+			"Have a passion for your art so strong that you forge a spiritual connection with it.",
+			"Take point when tact and nonviolent solutions are required.",
+			"Follow your muse, whether it's a mysterious fey creature, a philosophical concept, a psychic force, or a deity of art or music, and with its aid learn secret lore that few others have."
+		],
+		"othersProbably": [
+			"Relish the opportunity to invite you to social events, either as a performer or a guest, but consider you to be something of a curiosity in their social circles.",
+			"Underestimate you compared to other spellcasters, believing you are little more than a foppish minstrel and overlooking the subtle power of your magic.",
+			"Respond favorably to your social charm and abilities, but remain suspicious of your beguiling magic."
+		],
+		"classPath": "Muse",
+		"source": "PZO2101",
+		"aonId": 3,
+		"aonTraitId": 19,
+		"id": "8550ca17-5868-4053-aec4-11bd41f83226"
+	},
+	{ "objectType": "ClassPath", "name": "Enigma", "class": "Bard", "source": "PZO2101", "id": "775fc704-c4c7-4626-8f37-5c78c8389e16", "aonId": 1 },
+	{ "objectType": "ClassPath", "name": "Maestro", "class": "Bard", "source": "PZO2101", "id": "5deb6c36-c1ea-4585-82b3-9d32e8f8c398", "aonId": 2 },
+	{ "objectType": "ClassPath", "name": "Polymath", "class": "Bard", "source": "PZO2101", "id": "65079beb-3ded-4e28-bf27-9f858525d393", "aonId": 3 }
+]

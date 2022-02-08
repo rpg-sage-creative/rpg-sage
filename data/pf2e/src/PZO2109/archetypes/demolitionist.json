@@ -1,0 +1,96 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Demolitionist",
+		"details": [
+			"As rippling explosions bring a castle's walls tumbling down, you grin and wipe the stone dust of your handiwork from your face. Brute force might work for others, but applying science to place the right explosives in just the right spot is essential to your craft."
+		],
+		"additionalFeats": [
+			{ "level": 4, "name": "Demolition Charge (<i>Advanced Player's Guide</i> 106)" },
+			{ "level": 6, "name": "Calculated Splash (<i>Core Rulebook</i> 77)" },
+			{ "level": 8, "name": "Directional Bombs (<i>Core Rulebook</i> 78)" },
+			{ "level": 12, "name": "Expanded Splash (<i>Core Rulebook</i> 79)" }
+		],
+		"page": 133,
+		"source": "PZO2109",
+		"id": "2676be93-5885-48a0-80ad-b93b2b951e3f",
+		"aonId": 0
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Demolitionist Dedication",
+		"level": 2,
+		"traits": [ "Uncommon", "Archetype", "Dedication" ],
+		"details": [
+			"You know how to set explosives to cause the maximum possible damage to buildings and other structures. You become trained in Engineering Lore or become an expert in it if you were already trained. You gain the Set Explosives action.",
+			"<b>Set Explosives</b> [A][A] (concentrate) <b>Requirements</b> You have 1 or 2 bombs in hand; <b>Effect</b> You attach the bombs to an inanimate object within your reach, such as a door, wall, or column, and rig them to detonate at a set time. The bombs explode at as pecific time you determine (such as after your next action or at the start of your next turn, to a maximum of 1 minute), dealing their damage and splash damage to the inanimate object. Combine this damage for the purpose of resistances and weaknesses, and this damage ignores an amount of the object's Hardness equal to your level. Any creatures adjacent to the hazard take the bombs' splash damage, also combined for the purpose of resistances and weaknesses. As a reminder, since you didn't throw the bombs, Calculated Splash and similar effects don't apply. Making sure your timing is correct requires concentration, so you can't Set Explosives again while you're waiting for a previously set bomb to detonate."
+		],
+		"special": [
+			"You can't select another dedication feat until you've gained two other feats from the demolitionist archetype."
+		],
+		"page": 133,
+		"source": "PZO2109",
+		"id": "6bec65f4-8e32-435e-a12b-a074c8874278",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Safety Measures",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Demolitionist Dedication" ],
+		"details": [
+			"You're often careful to be sure you're not hoisted on your own petard, or anyone else's, for that matter. When you have cover from a bomb, you gain resistance to damage caused by that bomb equal to half your level, plus a value equal to the circumstance bonus to AC granted by the cover. You gain these benefits against your own bombs regardless of whether you have cover."
+		],
+		"page": 133,
+		"source": "PZO2109",
+		"id": "8d0804ec-4448-416e-9153-b6aa57a18e3b",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Explosive Entry",
+		"level": 7,
+		"actionType": "[A][A]",
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Demolitionist Dedication", "master in Engineering Lore" ],
+		"details": [
+			"You know exactly how to make a memorable entrance... by detonating a bomb to produce a devastating explosion, of course! You Set Explosives on a door, window, container, or heavy gate. When the explosives detonate, you can attempt an Engineering Lore check to Force Open the target. If a bomb would add an item bonus to attack rolls, add that item bonus to your Engineering Lore check. Since you're blasting your way in, you can't avoid breaking the object or structure. If you roll a critical success, you get a success instead."
+		],
+		"page": 133,
+		"source": "PZO2109",
+		"id": "a6fbd649-8cff-4ff5-a8ca-7f441928f9aa",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Controlled Blast",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Demolitionist Dedication", "Calculated Splash, Directional Bombs, or Expanded Splash" ],
+		"details": [
+			"You maximize the effectiveness of your explosives by controlling every possible parameter of the blast meticulously. If you have the Directional Bombs feats, you can use it with Set Explosives or Demolition Charge, even though you didn't throw the bombs. If you have the Calculated Splash or Expanded Splash feats, you can apply the additional splash damage to one of the bombs when you Set Explosives or use Demolition Charge, and you can apply the increased splash area from Expanded Splash to all the bombs."
+		],
+		"page": 133,
+		"source": "PZO2109",
+		"id": "e9aac54e-f474-469e-8eb7-857dc6402056",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Collapse Wall",
+		"actionType": "[R]",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Demolitionist Dedication" ],
+		"trigger": "A creature moves into the bombs' splash area.",
+		"requirements": "You're within 30 feet of an area where you rigged bombs on a wall, cliff face, or similar vertical surface with Set Explosives or Demolition Charge.",
+		"details": [
+			"You detonate the required bombs in order to bring a wall down on a creature. If your bombs deal enough damage to reduce the wall's Hit Points below its Broken Threshold, the wall partially collapses on the creature. The creature takes bludgeoning damage equal to the damage dealt to the wall (basic Reflex save; the DC for this save is equal to your class DC or spell DC, whichever is higher). On a failure, they must spend an Interact action to dig themselves out of the collapse, and on a critical failure, they must spend 2 Interact actions to do so."
+		],
+		"page": 133,
+		"source": "PZO2109",
+		"id": "924ee23b-d298-4339-9539-b9a46a379f4b",
+		"aonId": 0
+	}
+]

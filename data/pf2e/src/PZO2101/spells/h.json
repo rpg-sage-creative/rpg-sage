@@ -1,0 +1,375 @@
+[
+	{
+		"aonId": 144,
+		"name": "Hallucination",
+		"description": "A creature believes one thing is another, canÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢t detect something, or sees something thatÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢s not really there.",
+		"cast": "[A][A]",
+		"components": [ "material", "somatic" ],
+		"details": [
+			"The target consistently detects one thing as another, can't detect something that's there, or detects something that's not there, though it doesn't alter their beliefs. You choose which of these effects applies, and you determine the specifics of the hallucination. For example, you could make the target see all elves as humans, be unable to detect the presence of their brother, see their beloved pocket watch on their person even when it isn't, or see a tower in the center of town.",
+			"The target can attempt an initial Will save, with effects below. They also receive a Will save to disbelieve the hallucination every time they Seek or directly interact with the hallucination. For example, the target could attempt to disbelieve the hallucination each time they interacted with an elf, bumped into their brother accidentally, tried to check their pocket watch, or studied the tower. The target can attempt to disbelieve with a large circumstance bonus in situations determined by the GM, such as if the target attempted to climb the nonexistent tower.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature perceives what you chose until it disbelieves, but it knows what the hallucination is."
+				],
+				"failure": [
+					"The creature perceives what you chose until it disbelieves."
+				],
+				"criticalFailure": [
+					"The creature perceives what you chose until it disbelieves, and it trusts its false senses, taking a -4 circumstance penalty to saves to disbelieve."
+				]
+			}
+		],
+		"duration": "1 hour",
+		"heightened": [
+			{ "change": "Choose to either target up to 10 creatures or change the spell's duration to until the next time you make your daily preparations.", "level": 6 },
+			{ "change": "Choose to either target any number of creatures or change the spell's duration to unlimited.", "level": 8 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 342,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Illusion", "Incapacitation", "Mental" ],
+		"focus": false,
+		"id": "1f82deb7-fd64-43e3-8bac-abc3ad2f2297"
+	},
+	{
+		"aonId": 145,
+		"name": "Hallucinatory Terrain",
+		"description": "A natural environment appears to be another kind of terrain.",
+		"area": "50-foot burst",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You create an illusion that causes natural terrain to look, sound, feel, and smell like a different kind of terrain. This doesn't disguise any structures or creatures in the area.",
+			"Any creature that touches the illusion or uses the Seek action to examine it can attempt to disbelieve your illusion."
+		],
+		"duration": "until the next time you make your daily preparations",
+		"heightened": [
+			{ "change": "Your image can also disguise structures or create illusory structures (but still doesn't disguise creatures).", "level": 5 }
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 343,
+		"range": "500 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult", "primal" ],
+		"traits": [ "Uncommon", "Illusion" ],
+		"focus": false,
+		"id": "817cf794-63e8-45da-9589-ecfb07f4d63c"
+	},
+	{
+		"aonId": 146,
+		"name": "Harm",
+		"description": " Negative energy harms the living or heals the undead, either a single creature or all in a burst.",
+		"cast": "[A] to [A][A][A]",
+		"components": [],
+		"details": [
+			"You channel negative energy to harm the living or heal the undead. If the target is a living creature, you deal 1d8 negative damage to it, and it gets a basic Fortitude save. If the target is a willing undead creature, you restore that amount of Hit Points. The number of actions you spend when Casting this Spell determines its targets, range, area, and other parameters.",
+			"[A] <b>(somatic)</b> The spell has a range of touch.",
+			"[A][A] <b>(verbal, somatic)</b> The spell has a range of 30 feet. If you're healing an undead creature, increase the Hit Points restored by 8.",
+			"[A][A][A] <b>(material, verbal, somatic)</b> You disperse negative energy in a 30-foot emanation. This targets all living and undead creatures in the area."
+		],
+		"heightened": [
+			{ "change": "The amount of healing or damage increases by 1d8, and the extra healing for the 2-action version increases by 8.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 343,
+		"range": "varies",
+		"source": "PZO2101",
+		"targets": "1 living creature or 1 willing undead creature",
+		"traditions": [ "divine" ],
+		"traits": [ "Necromancy", "Negative" ],
+		"focus": false,
+		"id": "4e133076-7afc-4c3c-9c98-061149e6f2fe"
+	},
+	{
+		"aonId": 147,
+		"name": "Haste",
+		"description": " Speed up a creature so it can attack or move more often.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Magic empowers the target to act faster. It gains the quickened condition and can use the extra action each round only for Strike and Stride actions."
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{ "change": "You can target up to 6 creatures.", "level": 7 }
+		],
+		"level": 3,
+		"objectType": "Spell",
+		"page": 343,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult", "primal" ],
+		"traits": [ "Transmutation" ],
+		"focus": false,
+		"id": "b2941441-c403-47e1-8531-8871eb6d7afc"
+	},
+	{
+		"aonId": 148,
+		"name": "Heal",
+		"description": "Positive energy heals the living or harms the undead, either a single creature or all in a burst.",
+		"cast": "[A] to [A][A][A]",
+		"components": [],
+		"details": [
+			"You channel positive energy to heal the living or damage the undead. If the target is a willing living creature, you restore 1d8 Hit Points. If the target is undead, you deal that amount of positive damage to it, and it gets a basic Fortitude save. The number of actions you spend when Casting this Spell determines its targets, range, area, and other parameters.",
+			"[A] <b>(somatic)</b> The spell has a range of touch.",
+			"[A][A] <b>(verbal, somatic)</b> The spell has a range of 30 feet. If you're healing a living creature, increase the Hit Points restored by 8.",
+			"[A][A][A] <b>(material, somatic, verbal)</b> You disperse positive energy in a 30-foot emanation. This targets all living and undead creatures in the burst."
+		],
+		"heightened": [
+			{ "change": "The amount of healing or damage increases by 1d8, and the extra healing for the 2-action version increases by 8.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 343,
+		"range": "varies",
+		"source": "PZO2101",
+		"targets": "1 willing living creature or 1 undead creature",
+		"traditions": [ "divine", "primal" ],
+		"traits": [ "Healing", "Necromancy", "Positive" ],
+		"focus": false,
+		"id": "ba5a4d8e-f7b6-412c-bbb8-24102b988013"
+	},
+	{
+		"aonId": 149,
+		"name": "Heroism",
+		"description": "Stoke a creature's inner heroism to make it more competent.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You tap into the target's inner heroism, granting it a +1 status bonus to attack rolls, Perception checks, saving throws, and skill checks."
+		],
+		"duration": "10 minutes",
+		"heightened": [
+			{ "change": "The status bonus increases to +2.", "level": 6 },
+			{ "change": "The status bonus increases to +3.", "level": 9 }
+		],
+		"level": 3,
+		"objectType": "Spell",
+		"page": 343,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 humanoid creature",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Enchantment", "Mental" ],
+		"focus": false,
+		"id": "cd8cb476-ce4e-4561-b70b-49bdfc7765e8"
+	},
+	{
+		"aonId": 150,
+		"name": "Hideous Laughter",
+		"description": "Fits of laughter make a creature unable to take all its actions.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"The target is overtaken with uncontrollable laughter. It must attempt a Will save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target is plagued with uncontrollable laugher. It can't use reactions."
+				],
+				"failure": [
+					"The target is slowed 1 and can't use reactions."
+				],
+				"criticalFailure": [
+					"The target falls prone and can't use actions or reactions for 1 round. It then suffers the failure effects."
+				]
+			}
+		],
+		"duration": "sustained",
+		"level": 2,
+		"objectType": "Spell",
+		"page": 343,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 living creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Emotion", "Enchantment", "Mental" ],
+		"focus": false,
+		"id": "814e46f7-94e9-4519-9d31-b108f31403d0"
+	},
+	{
+		"aonId": 151,
+		"name": "Holy Cascade",
+		"description": "Turn a vial of holy water into an explosion of blessed water.",
+		"area": "20-foot burst",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"cost": "one vial of <i>holy water</i> (page 571)",
+		"details": [
+			"You call upon sacred energy to amplify a vial of <i>holy water</i>, tossing it an incredible distance. It explodes in an enormous burst that deals 3d6 bludgeoning damage to creatures in the area from the cascade of water. The water deals an additional 6d6 positive damage to undead and 6d6 good damage to fiends."
+		],
+		"heightened": [
+			{ "change": "The bludgeoning damage increases by 1d6, and the additional positive and good damage each increase by 2d6.", "bump": 1 }
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 344,
+		"range": "500 feet",
+		"savingThrow": "basic Reflex",
+		"source": "PZO2101",
+		"traditions": [ "divine" ],
+		"traits": [ "Evocation", "Good", "Positive", "Water" ],
+		"focus": false,
+		"id": "a2f0ca07-f09c-4897-b36b-044d6dc6e4b7"
+	},
+	{
+		"aonId": 152,
+		"name": "Horrid Wilting",
+		"description": "Pull moisture from creatures, damaging them.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You pull the moisture from the targets' bodies, dealing 10d10 negative damage. Creatures made of water (such as water elementals) and plant creatures use the outcome for one degree of success worse than the result of their saving throw. Creatures whose bodies contain no significant moisture (such as earth elementals) are immune to <i>horrid wilting</i>."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d10.", "bump": 1 }
+		],
+		"level": 8,
+		"objectType": "Spell",
+		"page": 344,
+		"range": "500 feet",
+		"savingThrow": "basic Fortitude",
+		"source": "PZO2101",
+		"targets": "any number of living creatures",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Necromancy", "Negative" ],
+		"focus": false,
+		"id": "43980442-d79e-47fd-9702-3c86f43a522e"
+	},
+	{
+		"aonId": 153,
+		"name": "Humanoid Form",
+		"description": "Take the shape of a humanoid.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You transform your appearance to that of a Small or Medium humanoid, such as a dwarf, elf, goblin, halfling, human, orc, or lizardfolk. You gain the humanoid trait in addition to your other traits while in this form, as well as any trait related to the creature's kind (such as goblin or human). If this transformation reduces your size, it reduces your reach accordingly (as the <i>shrink</i> spell). This transformation doesn't change your statistics in any way, and you don't gain any special abilities of the humanoid form you assume. You can still wear and use your gear, which changes size (if necessary) to match your new form. If items leave your person, they return to their usual size.",
+			"<i>Humanoid form</i> grants you a +4 status bonus to Deception checks to pass as a generic member of the chosen ancestry, and you add your level even if you're untrained, but you can't make yourself look like a specific person. If you want to Impersonate an individual, you still need to create a disguise, though the GM won't factor in the difference in ancestry when determining the DC of your Deception check. You can Dismiss this spell."
+		],
+		"duration": "10 minutes",
+		"heightened": [
+			{ "change": "You gain darkvision or low-light vision if the form you assume has that ability.", "level": 3 },
+			{ "change": "You can take on the appearance of a Large humanoid. If this increases your size, you gain the effects of the <i>enlarge</i> spell.", "level": 5 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 344,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult", "primal" ],
+		"traits": [ "Polymorph", "Transmutation" ],
+		"focus": false,
+		"id": "5098e09e-1120-4895-a3b6-8c3303c819c3"
+	},
+	{
+		"aonId": 154,
+		"name": "Hydraulic Push",
+		"description": "Damage and push a creature with a blast of water.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You call forth a powerful blast of pressurized water that bludgeons the target and knocks it back. Make a ranged spell attack roll.",
+			{ "criticalSuccess": [ "The target takes 6d6 bludgeoning damage and is knocked back 10 feet." ], "success": [ "The target takes 3d6 bludgeoning damage and is knocked back 5 feet." ] }
+		],
+		"heightened": [
+			{ "change": "The damage increases by 2d6.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 344,
+		"range": "60 feet",
+		"source": "PZO2101",
+		"targets": "1 creature or object",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Attack", "Evocation", "Water" ],
+		"focus": false,
+		"id": "4ee17a70-d289-4617-afe3-3a73cabad929"
+	},
+	{
+		"aonId": 155,
+		"name": "Hydraulic Torrent",
+		"description": "Force creatures back with a damaging line of water.",
+		"area": "60-foot line",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A swirling torrent of water manifests along a straight line, battering those that are its path and possibly pushing them away from you. The torrent deals 8d6 bludgeoning damage. Each creature in the area must attempt a basic Fortitude save. Creatures that fail the save are also knocked back 5 feet (10 feet on a critical failure)."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 2d6.", "bump": 1 }
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 344,
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"traditions": [ "primal" ],
+		"traits": [ "Evocation", "Water" ],
+		"focus": false,
+		"id": "d1afd110-3e90-4206-8842-ce5df848abfb"
+	},
+	{
+		"aonId": 156,
+		"name": "Hypercognition",
+		"description": "Recall massive amounts of information in an instant.",
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"details": [
+			"You rapidly catalog and collate information relevant to your current situation. You can instantly use up to 6 Recall Knowledge actions as part of Casting this Spell. For these actions, you can't use any special abilities, reactions, or free actions that trigger when you Recall Knowledge."
+		],
+		"level": 3,
+		"objectType": "Spell",
+		"page": 344,
+		"source": "PZO2101",
+		"traditions": [ "occult" ],
+		"traits": [ "Divination" ],
+		"focus": false,
+		"id": "44ecd3c6-a24c-4061-9327-14732802f7fe"
+	},
+	{
+		"aonId": 157,
+		"name": "Hypnotic Pattern",
+		"description": "Shifting colors dazzle and fascinate creatures.",
+		"area": "10-foot burst",
+		"cast": "[A][A]",
+		"components": [ "material", "somatic" ],
+		"details": [
+			"You create a pattern of shifting colors that hovers in the air in a geometric cloud. Creatures are dazzled while inside the pattern. In addition, a creature must attempt a Will saving throw if it is inside the pattern when you cast it, when it enters the pattern, when it ends its turn within the pattern, or if it uses a Seek or Interact action on the pattern. A creature currently fascinated by the pattern doesn't attempt new saves.",
+			{
+				"success": [
+					"The target is unaffected."
+				],
+				"failure": [
+					"The target is fascinated by the pattern."
+				],
+				"criticalFailure": [
+					"The target is fascinated by the pattern. While it remains fascinated, it can't use reactions."
+				]
+			}
+		],
+		"duration": "sustained up to 1 minute",
+		"level": 3,
+		"objectType": "Spell",
+		"page": 344,
+		"range": "120 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Illusion", "Visual" ],
+		"focus": false,
+		"id": "d9ec5a4d-7bfc-47c1-9c85-ca0a062b0841"
+	}
+]

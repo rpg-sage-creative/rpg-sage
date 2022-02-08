@@ -1,0 +1,38 @@
+[
+	{
+		"name": "Anima Invocation (Modified)",
+		"level": 10,
+		"objectType": "Ritual",
+		"traits": [ "Rare", "Anjuration" ],
+		"cast": "1 hour",
+		"secondaryCasters": "4",
+		"primaryCheck": "Occultism (legendary)",
+		"secondaryChecks": "Arcana, Religion",
+		"range": "10 miles",
+		"targets": "primary and secondary casters",
+		"duration": "1 day",
+		"details": [
+			"The exact effects of the unmodified <i>Anima Invocation</i> are not necessary for this Adventure Path-what's presented here is the modified version of the ritual.",
+			"When casting the modified version of the <i>Anima Invocation</i>, it instead draws upon the latent spiritual energies of sapient creatures within range of the spell without requiring their deaths, then uses this energy to bolster the connection between body and soul among all of the ritual's casters. This shift from an offensive effect to a defensive one results in a much less dangerous spell that helps to protect against Dahak.",
+			{
+				"criticalSuccess": [
+					"You gain full access to your own potential for 1 day. You gain resistance 10 to all damage and a +4 status bonus to saves against effects created by evil creatures. Your Strikes gain the effects of the <i>ghost touch</i> rune and deal an additional 1d10 good damage. You are immune to the soul-draining effect within Alseta's Landing."
+				],
+				"success": [
+					"You tap into your own potential for 1 day. You gain resistance 5 to all damage and a +2 status bonus to saves against effects created by evil creatures. Your Strikes gain the effects of the <i>ghost touch</i> rune and deal an additional 1 good damage. You are immune to the soul-draining effect within Alseta's Landing."
+				],
+				"failure": [
+					"You are unable to tap into your own spiritual essence, but you still gain immunity to the soul- draining effect within Alseta's Landing."
+				],
+				"criticalFailure": [
+					"You botch the ritual, damaging your own spiritual essence. You gain doomed 1 or increase your doomed condition by 1 if you're already doomed. This doomed value decreases by 1 every week. This is a curse effect."
+				]
+			}
+		],
+		"page": 75,
+		"source": "PZO90150",
+		"focus": false,
+		"aonId": 0,
+		"id": "fc976fb0-22f2-47e6-9707-22da0ac905fa"
+	}
+]

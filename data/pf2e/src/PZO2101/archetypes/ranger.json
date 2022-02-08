@@ -1,0 +1,95 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Ranger",
+		"details": [
+			"You have studied hunting, tracking, and wilderness survival, adding a ranger's tools to your skill set."
+		],
+		"page": 228,
+		"source": "PZO2101",
+		"id": "f32f2efc-701f-4209-903b-6ecb3563ca60",
+		"aonId": 9
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Ranger Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Dexterity 14" ],
+		"details": [
+			"You become trained in Survival; if you were already trained in Survival, you instead become trained in another skill of your choice. You become trained in ranger class DC.",
+			"You can use the Hunt Prey action (page 168)."
+		],
+		"special": [
+			"You cannot select another dedication feat until you have gained two other feats from the ranger archetype."
+		],
+		"page": 228,
+		"source": "PZO2101",
+		"id": "886d5d38-e847-43a4-823a-67b73723e8e1",
+		"aonId": 722
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Hunter's Trick",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Ranger Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level ranger feat."
+		],
+		"page": 228,
+		"source": "PZO2101",
+		"id": "106bb857-16d6-4518-9ea6-9ac71d88dedc",
+		"aonId": 723
+	},
+	{
+		"objectType": "Feat",
+		"name": "Ranger Resiliency",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [
+			"Ranger Dedication",
+			"class granting no more Hit Points per level than 8 + your Constitution modifier"
+		],
+		"details": [
+			"You gain 3 additional Hit Points for each ranger archetype class feat you have. As you continue selecting ranger archetype class feats, you continue to gain additional Hit Points in this way."
+		],
+		"page": 228,
+		"source": "PZO2101",
+		"id": "ba599ef8-792d-4cc7-9d65-6e0fb88b3330",
+		"aonId": 724
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Hunter's Trick",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [
+			"Basic Hunter's Trick"
+		],
+		"details": [
+			"You gain one ranger feat. For the purpose of meeting its prerequisites, your ranger level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another ranger feat."
+		],
+		"page": 228,
+		"source": "PZO2101",
+		"id": "120a747a-f2db-4a15-b3d0-0d2f56f95fda",
+		"aonId": 725
+	},
+	{
+		"objectType": "Feat",
+		"name": "Master Spotter",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Ranger Dedication", "expert in Perception" ],
+		"details": [
+			"Your proficiency rank in Perception increases to master."
+		],
+		"page": 228,
+		"source": "PZO2101",
+		"id": "2cc6fb72-9a2d-4c24-bc55-079ffe259596",
+		"aonId": 3124
+	}
+]

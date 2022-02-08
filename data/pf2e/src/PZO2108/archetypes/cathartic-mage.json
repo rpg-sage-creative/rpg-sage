@@ -1,0 +1,124 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Cathartic Mage",
+		"details": [
+			"Emotions are powerful, and you can tap into that power to enhance your magic for a time. You learn to harness a particular emotional state under the right conditions, but be warned: emotions are volatile and destructive if left unchecked. The experience often leaves you reeling from the unhindered emotion, requiring a rest or distraction before tapping into it again."
+		],
+		"page": 194,
+		"source": "PZO2108",
+		"id": "16cd751b-52a0-46bf-9165-69dd8fbf13da",
+		"aonId": 0
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Cathartic Mage Dedication",
+		"level": 2,
+		"traits": [ "Uncommon", "Archetype", "Dedication" ],
+		"prerequisites": [ "Charisma 14 or ability to cast spells from spell slots" ],
+		"details": [
+			"You've learned to harness a particular emotion and mix it into your magic. Choose an emotion from the Emotional States section (page 196) to be your catharsis emotion.",
+			"If you don't already cast spells from spell slots, you learn to cast spontaneous spells and gain the Cast a Spell activity. You gain a spell repertoire with one cantrip of your choice, from a spell list of your choice. You choose this cantrip from the common spells on your chosen spell list or from other spells to which you have access on that list. You're trained in spell attack rolls and spell DCs for that tradition. Your key spellcasting ability for these spells is Charisma.",
+			"If you can already cast spells from spell slots, you learn one additional cantrip from your spellcasting tradition. If you're a prepared caster, you can prepare this spell in addition to your usual cantrips per day; if you're a spontaneous caster, you add this cantrip to your spell repertoire.",
+			"You gain the Catharsis reaction and the Settle Emotions activity.",
+			"<b>Catharsis</b> [R] (concentrate, emotion, mental) <b>Trigger</b> determined by your catharsis emotion; <b>Effect</b> You gain the catharsis activation effects listed for your catharsis emotion. You gain that emotion's emotional fervor benefits for 3 rounds. When your emotional fervor ends, you suffer the listed emotional fallout. After using Catharsis, you can't use it again until you use the Settle Emotions activity.",
+			"<b>Settle Emotions</b> (concentrate, emotion, mental) You spend 10 minutes using techniques you've developed to calm your emotions and bring them back under control. This allows you to access your Catharsis again."
+		],
+		"special": [
+			"You can't select another dedication feat until you've gained two other feats from the cathartic mage archetype."
+		],
+		"page": 194,
+		"source": "PZO2108",
+		"id": "4bdb0436-bb7a-4fd8-97b4-f01a17034a25",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Cathartic Spellcasting",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Cathartic Mage Dedication" ],
+		"details": [
+			"You gain the basic spellcasting benefits (<i>Core Rulebook</i> 219). Each time you gain a spell slot of a new level from this archetype, add a spell of that spell level from your chosen tradition to your repertoire-either a common spell or another spell you've learned or discovered."
+		],
+		"page": 195,
+		"source": "PZO2108",
+		"id": "0134f322-0c7c-4602-ac56-0bc195ac633d",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Cathartic Focus Spell",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Cathartic Mage Dedication" ],
+		"details": [
+			"You learn the focus spell listed under your emotion's entry. You can cast it only while in emotional fervor. If you don't already have one, you gain a focus pool of 1 Focus Point, which you can Refocus while you use Settle Emotions."
+		],
+		"page": 195,
+		"source": "PZO2108",
+		"id": "34c743e9-2dc1-4e3c-a23f-206ae8402d0b",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Work Yourself Up",
+		"actionType": "[A][A]",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Cathartic Mage Dedication" ],
+		"requirements": "You have a reaction available and aren't prevented from using Catharsis.",
+		"details": [
+			"You concentrate on your mental state, tapping into that raw emotional energy. Take your Catharsis reaction, causing the catharsis activation and entering your emotional fervor as normal. The fervor lasts only until the end of your turn. At the end of your emotional fervor, you experience the effects of your emotional fallout, as normal."
+		],
+		"page": 195,
+		"source": "PZO2108",
+		"id": "1a52adc3-d59c-416f-96af-b2a77ec84ffe",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Expert Cathartic Spellcasting",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Cathartic Spellcasting" ],
+		"details": [
+			"You gain the expert spellcasting benefits (<i>Core Rulebook</i> 219)."
+		],
+		"page": 195,
+		"source": "PZO2108",
+		"id": "1b711284-51c3-4c07-8633-70e20591cd4d",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Infectious Emotions",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Cathartic Mage Dedication" ],
+		"details": [
+			"When you use Catharsis, one ally within 30 feet gains the catharsis activation benefits in addition to you. If these benefits require an emotional focus, they use your emotional focus as they're experiencing an empathic imprint of your emotions.Dependingontheactivationbenefit,itmightbe impossibletograntittoanally;forinstance,pridecouldonly have an effect for an ally if both you and the ally critically failed the same saving throw against the same effect."
+		],
+		"page": 195,
+		"source": "PZO2108",
+		"id": "4db53240-8283-4011-a8e8-dda8e6cb07c6",
+		"aonId": 0
+	},
+	{
+		"objectType": "Feat",
+		"name": "Master Cathartic Spellcasting",
+		"level": 18,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Expert Cathartic Spellcasting" ],
+		"details": [
+			"You gain the master spellcasting benefits (<i>Core Rulebook</i> 219)."
+		],
+		"special": [
+			"."
+		],
+		"page": 195,
+		"source": "PZO2108",
+		"id": "dc566203-d9d8-4195-86ac-35a016182236",
+		"aonId": 0
+	}
+]

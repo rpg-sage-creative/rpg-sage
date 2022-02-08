@@ -1,0 +1,138 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Champion",
+		"details": [
+			"You have sworn a solemn oath to your deity, who has granted you champion powers to aid you in your cause."
+		],
+		"page": 223,
+		"source": "PZO2101",
+		"id": "52ceea6e-beb1-4f1d-8f94-9769c454bdbd",
+		"aonId": 4
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Champion Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Strength 14", "Charisma 14" ],
+		"details": [
+			"Choose a deity and cause as you would if you were a champion. You become trained in light, medium, and heavy armor. You become trained in Religion and your deity's associated skill; for each of these skills in which you were already trained, you instead become trained in a skill of your choice. You become trained in champion class DC.",
+			"You are bound by your deity's anathema and must follow the champion's code and alignment requirements for your cause. You don't gain any other abilities from your choice of deity or cause."
+		],
+		"special": [
+			"You cannot select another dedication feat until you have gained two other feats from the champion archetype."
+		],
+		"page": 223,
+		"source": "PZO2101",
+		"id": "17867a96-85c3-4054-8d70-20e09a636d96",
+		"aonId": 686
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Devotion",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Champion Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level champion feat."
+		],
+		"page": 223,
+		"source": "PZO2101",
+		"id": "35153264-c414-435b-a9b7-2fbda253e27c",
+		"aonId": 687
+	},
+	{
+		"objectType": "Feat",
+		"name": "Champion Resiliency",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [
+			"Champion Dedication",
+			"class granting no more Hit Points per level than 8 + your Constitution modifer"
+		],
+		"details": [
+			"You gain 3 additional Hit Points for each champion archetype class feat you have. As you continue selecting champion archetype class feats, you continue to gain additional Hit Points in this way."
+		],
+		"page": 223,
+		"source": "PZO2101",
+		"id": "b327e59a-2424-40a2-9755-b26a431cd940",
+		"aonId": 688
+	},
+	{
+		"objectType": "Feat",
+		"name": "Healing Touch",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Champion Dedication" ],
+		"details": [
+			"You gain the appropriate devotion spell for your cause (<i>lay on hands</i> for the paladin, redeemer, and liberator). If you don't already have one, you gain a focus pool of 1 Focus Point, which you can Refocus by praying or serving your deity. (For more on devotion spells, see page 107.)"
+		],
+		"page": 223,
+		"source": "PZO2101",
+		"id": "5d4ea0d5-54fe-4db1-99a9-ac9a3f36d877",
+		"aonId": 689
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Devotion",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Devotion" ],
+		"details": [
+			"You gain one champion feat. For the purpose of meeting its prerequisites, your champion level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another champion feat."
+		],
+		"page": 223,
+		"source": "PZO2101",
+		"id": "6fc1684f-a6b7-47bd-b7fd-6c183cad3d29",
+		"aonId": 690
+	},
+	{
+		"objectType": "Feat",
+		"name": "Champion's Reaction",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Champion Dedication" ],
+		"details": [
+			"You can use the champion's reaction associated with your cause."
+		],
+		"page": 223,
+		"source": "PZO2101",
+		"id": "b21211ce-63f3-41a8-b70c-5bfaeef686b4",
+		"aonId": 691
+	},
+	{
+		"objectType": "Feat",
+		"name": "Divine Ally",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Champion Dedication" ],
+		"details": [
+			"You gain a divine ally of your choice (page 108)."
+		],
+		"page": 223,
+		"source": "PZO2101",
+		"id": "6a3e7fa9-a712-4df8-aee3-a0801fbc534b",
+		"aonId": 692
+	},
+	{
+		"objectType": "Feat",
+		"name": "Diverse Armor Expert",
+		"level": 14,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Champion Dedication", "expert in unarmored defense or one or more types of armor" ],
+		"details": [
+			"Your profciency ranks for light armor, medium armor, heavy armor, and unarmored defense increase to expert."
+		],
+		"special": [
+			"."
+		],
+		"page": 223,
+		"source": "PZO2101",
+		"id": "8170c962-2f1c-45ce-a8e0-4c5217bcb1f0",
+		"aonId": 693
+	}
+]

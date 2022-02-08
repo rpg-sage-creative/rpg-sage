@@ -1,0 +1,23 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Grippli",
+		"youMight": [
+			"Seek out clever ways to exploit your environment when overcoming challenges.",
+			"Make friends slowly, concerned by cautionary tales of exploitative strangers.",
+			"Be fiercely protective of your home or community."
+		],
+		"othersProbably": [
+			"Assume you dislike cities and people who live in them.",
+			"Trust in your impartial, measured approach to understanding situations and solving problems.",
+			"Give you space, fearing that touching you would prove toxic."
+		],
+		"aonId": 46,
+		"source": "PZO9309",
+		"id": "8e5c6483-ce7f-4e2f-a2c6-d203fce8f157"
+	},
+	{ "objectType": "Heritage", "name": "Poisonhide Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "d7597da7-d1ca-4dbb-a3b1-27e1d12db444", "aonId": 175 },
+	{ "objectType": "Heritage", "name": "Snaptongue Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "4031b887-592e-4a7e-9723-c4d8dd0fe1ef", "aonId": 176 },
+	{ "objectType": "Heritage", "name": "Stickytoe Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "cee4df08-9b32-4379-8d05-5583a0716458", "aonId": 177 },
+	{ "objectType": "Heritage", "name": "Windweb Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "f2b30ed2-025d-4af9-b930-7d940ac53b78", "aonId": 178 }
+]

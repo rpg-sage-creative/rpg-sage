@@ -1,0 +1,561 @@
+import type * as Discord from "discord.js";
+import utils, { IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
+import type { CritMethodType, DiceOutputType, GameType } from "../../../sage-dice";
+import { DiscordKey } from "../../discord";
+import type { DicePostType, DiceSecretMethodType } from "../commands/dice";
+import type { IChannel } from "../repo/base/IdRepository";
+import { HasIdCoreAndSageCache, PermissionType, updateChannel } from "../repo/base/IdRepository";
+import CharacterManager from "./CharacterManager";
+import Colors from "./Colors";
+import Emoji from "./Emoji";
+import type { GameCharacterCore } from "./GameCharacter";
+import type GameCharacter from "./GameCharacter";
+import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
+import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
+import type SageCache from "./SageCache";
+import type Server from "./Server";
+
+const exists = utils.ArrayUtils.Filters.exists;
+
+export type TGameRoleType = keyof typeof GameRoleType;
+export enum GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Cast = 4, Table = 5 }
+export function getRoleTypes(roleType: GameRoleType): GameRoleType[] {
+	switch (roleType) {
+		// case GameRoleType.Table: return [];
+		// case GameRoleType.Cast: return [];
+		case GameRoleType.GameMaster: return [GameRoleType.GameMaster, GameRoleType.Cast, GameRoleType.Table];
+		case GameRoleType.Player: return [GameRoleType.Player, GameRoleType.Cast, GameRoleType.Table];
+		case GameRoleType.Spectator: return [GameRoleType.Spectator, GameRoleType.Table];
+		default: return [];
+	}
+}
+export interface IGameRole {
+	did: Discord.Snowflake;
+	type: GameRoleType;
+}
+
+export enum GameUserType { Unknown = 0, Player = 1, GameMaster = 2 }
+export interface IGameUser { did: Discord.Snowflake; type: GameUserType; }
+
+export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
+	objectType: "Game";
+	createdTs: number;
+	archivedTs?: number;
+
+	name: string;
+	gameType?: GameType;
+
+	defaultCritMethodType?: CritMethodType;
+	defaultDiceOutputType?: DiceOutputType;
+	defaultDicePostType?: DicePostType;
+	defaultDiceSecretMethodType?: DiceSecretMethodType;
+
+	serverId: UUID;
+	serverDid: Discord.Snowflake;
+
+	channels: IChannel[];
+	roles?: IGameRole[];
+
+	users?: IGameUser[];
+
+	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
+	playerCharacters?: (GameCharacter | GameCharacterCore)[];
+	gmCharacterName?: string;
+}
+
+export type TMappedGameChannel = {
+	did: Discord.Snowflake,
+	sChannel: IChannel,
+	gChannel: Discord.GuildChannel | undefined,
+	nameTags: { ic: boolean, ooc: boolean, gm: boolean }
+};
+async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<TMappedGameChannel[]> {
+	const mappedChannels: TMappedGameChannel[] = [];
+	for (const sChannel of channels) {
+		const gChannel = await sageCache.discord.fetchChannel(sChannel.did) as Discord.GuildChannel;
+		if (gChannel) {
+			mappedChannels.push({
+				did: sChannel.did,
+				sChannel: sChannel,
+				gChannel: gChannel,
+				nameTags: {
+					ic: gChannel.name.match(/\bic\b/i) !== null,
+					ooc: gChannel.name.match(/\booc\b/i) !== null,
+					gm: gChannel.name.match(/\bgms?\b/i) !== null
+				}
+			});
+		} else {
+			const ic = sChannel.gameMaster === PermissionType.Write && sChannel.player === PermissionType.Write && sChannel.dialog === true;
+			const gm = sChannel.gameMaster === PermissionType.Write && !sChannel.player;
+			mappedChannels.push({
+				did: sChannel.did,
+				sChannel: sChannel,
+				gChannel: undefined,
+				nameTags: {
+					ic: ic,
+					ooc: !ic && !gm && sChannel.gameMaster === PermissionType.Write && sChannel.player === PermissionType.Write,
+					gm: gm
+				}
+			});
+		}
+	}
+	return mappedChannels;
+}
+
+export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IComparable<Game>, IHasColorsCore, IHasEmojiCore {
+	public constructor(core: IGameCore, public server: Server, sageCache: SageCache) {
+		super(core, sageCache);
+
+		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
+		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
+	}
+
+	public get createdDate(): Date { return new Date(this.core.createdTs ?? 283305600000); }
+	public get archivedDate(): Date | undefined { return this.core.archivedTs ? new Date(this.core.archivedTs) : undefined; }
+	public get isArchived(): boolean { return this.core.createdTs && this.core.archivedTs ? this.core.createdTs < this.core.archivedTs : false; }
+
+	public get name(): string { return this.core.name; }
+	public get gameType(): GameType | undefined { return this.core.gameType; }
+	public get defaultCritMethodType(): CritMethodType | undefined { return this.core.defaultCritMethodType; }
+	public get defaultDiceOutputType(): DiceOutputType | undefined { return this.core.defaultDiceOutputType; }
+	public get defaultDicePostType(): DicePostType | undefined { return this.core.defaultDicePostType; }
+	public get defaultDiceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.defaultDiceSecretMethodType; }
+	public get serverDid(): Discord.Snowflake { return this.core.serverDid; }
+	public get serverId(): UUID { return this.core.serverId; }
+	private get discord() { return this.sageCache.discord; }
+
+	public get gmChannel(): IChannel | undefined { return this.channels.find(channel => channel.gameMaster === PermissionType.Write && !channel.player); }
+	public get gmChannelDid(): Discord.Snowflake | undefined { return this.gmChannel?.did; }
+	public get gmRole(): IGameRole | undefined { return this.roles.find(role => role.type === GameRoleType.GameMaster); }
+	public get gmRoleDid(): Discord.Snowflake | undefined { return this.gmRole?.did; }
+
+	public get playerRole(): IGameRole | undefined { return this.roles.find(role => role.type === GameRoleType.Player); }
+	public get playerRoleDid(): Discord.Snowflake | undefined { return this.playerRole?.did; }
+	public get players(): Discord.Snowflake[] { return this.users.filter(user => user.type === GameUserType.Player).map(user => user.did); }
+
+	public get channels(): IChannel[] { return this.core.channels ?? (this.core.channels = []); }
+	public get gameMasters(): Discord.Snowflake[] { return this.users.filter(user => user.type === GameUserType.GameMaster).map(user => user.did); }
+	public get gmCharacterName(): string { return this.core.gmCharacterName ?? this.server.defaultGmCharacterName; }
+	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
+	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
+	public get orphanedPlayerCharacters() { return this.playerCharacters.filter(pc => !pc.userDid || !this.players.includes(pc.userDid)); }
+	public get roles(): IGameRole[] { return this.core.roles ?? (this.core.roles = []); }
+	public get users(): IGameUser[] { return this.core.users ?? (this.core.users = []); }
+
+	//#region Guild fetches
+	public async findBestPlayerChannel(): Promise<IChannel | undefined> {
+		const channels: TMappedGameChannel[] = await mapChannels(this.channels, this.sageCache);
+		return (
+				channels.find(channel => channel.nameTags.ic)
+				?? channels.find(channel => channel.nameTags.ooc)
+				?? channels.find(channel => !channel.nameTags.gm)
+			)?.sChannel;
+	}
+	public async findBestGameMasterChannel(): Promise<IChannel> {
+		const channels: TMappedGameChannel[] = await mapChannels(this.channels, this.sageCache);
+		return (
+				channels.find(channel => channel.nameTags.gm)
+				?? channels.find(channel => channel.nameTags.ic)
+				?? channels[0]
+			)?.sChannel;
+	}
+	public gmGuildChannel(): Promise<OrNull<Discord.GuildChannel>> {
+		return this.discord.fetchChannel(this.gmChannelDid) as Promise<OrNull<Discord.GuildChannel>>;
+	}
+	public async pGuildMembers(): Promise<Discord.GuildMember[]> {
+		// TODO: investiage iterating over guild.memebers as "cleaner"
+		// return Promise.all(this.players.map(player => this.discord.fetchGuildMember(player)));
+
+		const pGuildMembers = (await Promise.all(this.players.map(player => this.discord.fetchGuildMember(player))))
+			.filter(exists);
+		const pRoleDid = this.playerRoleDid;
+		if (pRoleDid) {
+			const discordRole = await this.discord.fetchGuildRole(pRoleDid);
+			if (discordRole) {
+				const roleOnly = discordRole.members.filter(guildMember => !pGuildMembers.find(p => p.id === guildMember.id));
+				pGuildMembers.push(...roleOnly.values());
+			}
+		}
+		return pGuildMembers;
+	}
+	public async guildChannels(): Promise<Discord.GuildChannel[]> {
+		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
+		return all.filter(utils.ArrayUtils.Filters.exists) as Discord.GuildChannel[];
+	}
+	public async gmGuildMembers(): Promise<Discord.GuildMember[]> {
+		const gmGuildMembers = (await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)))).filter(exists);
+		const gmRoleDid = this.gmRoleDid;
+		if (gmRoleDid) {
+			const discordRole = await this.discord.fetchGuildRole(gmRoleDid);
+			if (discordRole) {
+				const roleOnly = discordRole.members.filter(guildMember => !gmGuildMembers.find(gm => gm.id === guildMember.id));
+				gmGuildMembers.push(...roleOnly.values());
+			}
+		}
+		return gmGuildMembers;
+	}
+	public async gmGuildMember(): Promise<Discord.GuildMember | null> {
+		return this.discord.fetchGuildMember(this.gameMasters[0]);
+		//TODO: LEARN HOW TO CHECK ONLINE STATUS
+		// let first: Discord.GuildMember;
+		// for (const gameMaster of this.gameMasters) {
+		// 	const guildMember = await this.discord.fetchGuildMember(gameMaster);
+		// 	const user = guildMember?.user;
+		// 	if (["online"].includes(user?.presence?.status)) {
+		// 		return guildMember;
+		// 	}
+		// 	first = first || guildMember;
+		// }
+		// return first || null;
+	}
+	public async guildRoles(): Promise<Discord.Role[]> {
+		return (await Promise.all(this.roles.map(role => this.discord.fetchGuildRole(role.did)))).filter(exists);
+	}
+	//#endregion
+
+	// #region Channel actions
+
+	public async addOrUpdateChannels(...channels: IChannel[]): Promise<boolean> {
+		channels.forEach(channel => {
+			const found = this.getChannel(new DiscordKey(this.serverDid, channel.did));
+			if (found) {
+				updateChannel(found, channel);
+			} else {
+				(this.core.channels || (this.core.channels = [])).push({ ...channel });
+			}
+		});
+		return this.save();
+	}
+
+	public async removeChannels(...channelDids: Discord.Snowflake[]): Promise<boolean> {
+		const count = (this.core.channels || []).length;
+		if (!count) {
+			return false;
+		}
+		channelDids.forEach(channelDid => {
+			this.core.channels = this.core.channels.filter(_channel => _channel.did !== channelDid);
+		});
+		return this.core.channels.length !== count ? this.save() : false;
+	}
+	// #endregion
+
+	// #region Role actions
+	public async addRole(roleType: GameRoleType, roleDid: Discord.Snowflake): Promise<boolean> {
+		const found = this.getRole(roleType);
+		if (found) {
+			return false;
+		}
+		const role = { did: roleDid, type: roleType };
+		(this.core.roles || (this.core.roles = [])).push(role);
+		/*
+		// const saved = await this.save();
+		// if (saved) {
+		// 	const userDids = this.getUsersByRole(role.type);
+		// 	await Roles.addRoleToUser(this.sageCache, role.did, userDids);
+		// }
+		// return saved;
+		*/
+		return this.save();
+	}
+	public async updateRole(roleType: GameRoleType, roleDid: Discord.Snowflake): Promise<boolean> {
+		const role = this.getRole(roleType);
+		if (!role || role.did === roleDid) {
+			return false;
+		}
+		/*
+		// const oldRole = { type:role.type, did:role.did };
+		*/
+		role.did = roleDid;
+		/*
+		// const saved = await this.save();
+		// if (saved) {
+		// 	const userDids = this.getUsersByRole(oldRole.type);
+		// 	await Roles.updateRoleForUser(this.sageCache, oldRole.did, role.did, userDids);
+		// }
+		// return saved;
+		*/
+		return this.save();
+	}
+	public async removeRole(roleType: GameRoleType): Promise<boolean> {
+		const role = this.getRole(roleType);
+		if (!role) {
+			return false;
+		}
+		this.core.roles = this.core.roles!.filter(_role => _role !== role);
+		/*
+		// const saved = await this.save();
+		// if (saved) {
+		// 	const userDids = this.getUsersByRole(role.type);
+		// 	await Roles.removeRoleFromUser(this.sageCache, role.did, userDids);
+		// }
+		// return saved;
+		*/
+		return this.save();
+	}
+	// #endregion
+
+	// #region GameMaster actions
+	public async addGameMasters(userDids: Discord.Snowflake[]): Promise<boolean> {
+		const filtered: Discord.Snowflake[] = [];
+		for (const userDid of userDids) {
+			const user = this.getUser(userDid);
+			if (user) {
+				if (user.type !== GameUserType.GameMaster) {
+					await this.removePlayers([userDid]);
+					filtered.push(userDid);
+				}
+			} else {
+				filtered.push(userDid);
+			}
+		}
+		if (!filtered.length) {
+			return false;
+		}
+
+		const gameMasters = userDids.map(userDid => (<IGameUser>{ did: userDid, type: GameUserType.GameMaster }));
+		(this.core.users || (this.core.users = [])).push(...gameMasters);
+		/*
+		// const saved = await this.save();
+		// if (saved) {
+		// 	const roleTypes = getRoleTypes(GameRoleType.GameMaster);
+		// 	const roleDids = this.roles.filter(role => roleTypes.includes(role.type)).map(role => role.did);
+		// 	if (roleDids.length) {
+		// 		await Roles.addRoleToUser(this.sageCache, roleDids, userDids);
+		// 	}
+		// }
+		// return saved;
+		*/
+		return this.save();
+	}
+	public async removeGameMasters(userDids: Discord.Snowflake[]): Promise<boolean> {
+		const filtered = userDids.filter(userDid => this.hasGameMaster(userDid));
+		if (!filtered.length) {
+			return false;
+		}
+
+		const nonPlayerCharacters = this.nonPlayerCharacters;
+		filtered.map(userDid => nonPlayerCharacters.filter(npc => npc.userDid === userDid)).forEach(npcs => npcs.forEach(npc => delete npc.userDid));
+
+		this.core.users = this.core.users!.filter(user => user.type !== GameUserType.GameMaster || !filtered.includes(user.did));
+		/*
+		// const saved = await this.save();
+		// if (saved) {
+		// 	const roleDids = this.roles.map(role => role.did);
+		// 	if (roleDids.length) {
+		// 		await Roles.removeRoleFromUser(this.sageCache, roleDids, filtered);
+		// 	}
+		// }
+		// return saved;
+		*/
+		return this.save();
+	}
+	// #endregion GameMaster actions
+
+	// #region Player actions
+	public async addPlayers(userDids: Discord.Snowflake[]): Promise<boolean> {
+		const filtered: Discord.Snowflake[] = [];
+		for (const userDid of userDids) {
+			const user = this.getUser(userDid);
+			if (user) {
+				if (user.type !== GameUserType.Player) {
+					await this.removeGameMasters([userDid]);
+					filtered.push(userDid);
+				}
+			} else {
+				filtered.push(userDid);
+			}
+		}
+		if (!filtered.length) {
+			return false;
+		}
+
+		const players = userDids.map(userDid => (<IGameUser>{ did: userDid, type: GameUserType.Player }));
+		(this.core.users || (this.core.users = [])).push(...players);
+		/*
+		// const saved = await this.save();
+		// if (saved) {
+		// 	const roleTypes = getRoleTypes(GameRoleType.Player);
+		// 	const roleDids = this.roles.filter(role => roleTypes.includes(role.type)).map(role => role.did);
+		// 	if (roleDids.length) {
+		// 		await Roles.addRoleToUser(this.sageCache, roleDids, userDids);
+		// 	}
+		// }
+		// return saved;
+		*/
+		return this.save();
+	}
+	public async removePlayers(userDids: Discord.Snowflake[]): Promise<boolean> {
+		const filtered = userDids.filter(userDid => this.hasPlayer(userDid));
+		if (!filtered.length) {
+			return false;
+		}
+
+		const playerCharacters = this.playerCharacters;
+		filtered.map(userDid => playerCharacters.filter(pc => pc.userDid === userDid)).forEach(pcs => pcs.forEach(pc => delete pc.userDid));
+
+		this.core.users = this.core.users!.filter(user => user.type !== GameUserType.Player || !filtered.includes(user.did));
+		/*
+		// const saved = await this.save();
+		// if (saved) {
+		// 	const roleDids = this.roles.map(role => role.did);
+		// 	if (roleDids.length) {
+		// 		await Roles.removeRoleFromUser(this.sageCache, roleDids, filtered);
+		// 	}
+		// }
+		// return saved;
+		*/
+		return this.save();
+	}
+	// #endregion PC actions
+
+	public getAutoCharacterForChannel(userDid: Discord.Snowflake, channelDid: Optional<Discord.Snowflake>): GameCharacter | undefined {
+		if (channelDid) {
+			const char = this.hasGameMaster(userDid)
+				? this.nonPlayerCharacters.findByName(this.gmCharacterName)
+				: this.playerCharacters.findByUser(userDid);
+			return char?.hasAutoChannel(channelDid) ? char : undefined;
+		}
+		return undefined;
+	}
+
+	private updateName(name: Optional<string>): void { this.core.name = name ?? this.core.name ?? ""; }
+	private updateGameType(gameType: Optional<GameType>): void { this.core.gameType = gameType === null ? undefined : gameType ?? this.core.gameType; }
+	private updateCritMethodType(critMethodType: Optional<CritMethodType>): void { this.core.defaultCritMethodType = critMethodType === null ? undefined : critMethodType ?? this.core.defaultCritMethodType; }
+	private updateDiceOutputType(diceOutputType: Optional<DiceOutputType>): void { this.core.defaultDiceOutputType = diceOutputType === null ? undefined : diceOutputType ?? this.core.defaultDiceOutputType; }
+	private updateDicePostType(dicePostType: Optional<DicePostType>): void { this.core.defaultDicePostType = dicePostType === null ? undefined : dicePostType ?? this.core.defaultDicePostType; }
+	private updateDiceSecretMethodType(diceSecretMethodType: Optional<DiceSecretMethodType>): void { this.core.defaultDiceSecretMethodType = diceSecretMethodType === null ? undefined : diceSecretMethodType ?? this.core.defaultDiceSecretMethodType; }
+	public async update(name: Optional<string>, gameType: Optional<GameType>, critMethodType: Optional<CritMethodType>, diceOutputType: Optional<DiceOutputType>, dicePostType: Optional<DicePostType>, diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
+		this.updateName(name);
+		this.updateGameType(gameType);
+		this.updateCritMethodType(critMethodType);
+		this.updateDiceOutputType(diceOutputType);
+		this.updateDicePostType(dicePostType);
+		this.updateDiceSecretMethodType(diceSecretMethodType);
+		return this.save();
+	}
+
+	public updateGmCharacterName(gmCharacterName: string): void { this.core.gmCharacterName = gmCharacterName; }
+
+	public async archive(): Promise<boolean> {
+		this.core.archivedTs = new Date().getTime();
+		return this.save();
+	}
+
+	// #region Get
+
+	public getChannel(discordKey: DiscordKey): IChannel | undefined;
+	public getChannel(channelDid: Optional<Discord.Snowflake>): IChannel | undefined;
+	public getChannel(didOrKey: Optional<Discord.Snowflake> | DiscordKey): IChannel | undefined {
+		if (didOrKey) {
+			if (typeof(didOrKey) === "string") {
+				return this.channels.find(channel => channel.did === didOrKey);
+			}
+			if (didOrKey.hasThread && didOrKey.hasChannel) {
+				return this.channels.find(channel => channel.did === didOrKey.thread)
+					?? this.channels.find(channel => channel.did === didOrKey.channel);
+			}else if (didOrKey.hasThread) {
+				return this.channels.find(channel => channel.did === didOrKey.thread);
+			}else if (didOrKey.hasChannel) {
+				return this.channels.find(channel => channel.did === didOrKey.channel);
+			}
+		}
+		return undefined;
+	}
+
+	public getRole(roleType: GameRoleType): IGameRole | undefined {
+		return this.roles.find(role => role.type === roleType);
+	}
+
+	public getUser(userDid: Optional<Discord.Snowflake>): IGameUser | undefined {
+		return this.users.find(user => user.did === userDid);
+	}
+
+	public getPlayer(userDid: Optional<Discord.Snowflake>): IGameUser | undefined {
+		return this.users.find(user => user.did === userDid && user.type === GameUserType.Player);
+	}
+
+	public getUsersByRole(roleType: GameRoleType): Discord.Snowflake[] {
+		if ([GameRoleType.Cast, GameRoleType.Table].includes(roleType)) {
+			return this.gameMasters.concat(this.players);
+		}else if (roleType === GameRoleType.GameMaster) {
+			return this.gameMasters;
+		}else if (roleType === GameRoleType.Player) {
+			return this.players;
+		}
+		return [];
+	}
+
+	// #endregion
+
+	// #region Has
+
+	public hasChannel(discordKey: DiscordKey): boolean;
+	public hasChannel(channelDid: Optional<Discord.Snowflake>): boolean;
+	public hasChannel(didOrKey: Optional<Discord.Snowflake> | DiscordKey): boolean {
+		return this.getChannel(didOrKey as DiscordKey) !== undefined;
+	}
+
+	public hasGameMaster(userDid: Optional<Discord.Snowflake>): boolean {
+		return this.getUser(userDid)?.type === GameUserType.GameMaster;
+	}
+
+	public hasPlayer(userDid: Optional<Discord.Snowflake>): boolean {
+		return this.getUser(userDid)?.type === GameUserType.Player;
+	}
+
+	public hasUser(userDid: Optional<Discord.Snowflake>): boolean {
+		return this.getUser(userDid) !== undefined;
+	}
+
+	// #endregion
+
+	public async save(): Promise<boolean> {
+		return this.sageCache.games.write(this);
+	}
+
+	// #region IComparable
+	public compareTo(other: Game): -1 | 0 | 1 {
+		return utils.ArrayUtils.Sort.stringIgnoreCase(this.name, other.name);
+	}
+	// #endregion
+
+	// #region IHasColorsCore
+
+	public colors = new Colors(this.core.colors ?? (this.core.colors = []));
+
+	public toDiscordColor(colorType: ColorType): string | null {
+		if (!this.core.colors.length) {
+			console.warn(`Colors Missing: Game (${this.name || this.id})`);
+			return this.server.toDiscordColor(colorType);
+		}
+		return this.colors.toDiscordColor(colorType)
+			?? this.server.toDiscordColor(colorType);
+	}
+
+	// #endregion
+
+	// #region IHasEmoji
+
+	public emoji = new Emoji(this.core.emoji || (this.core.emoji = []));
+
+	public emojify(text: string): string {
+		return this.server.emojify(this.emoji.emojify(text));
+	}
+
+	public getEmoji(emojiType: EmojiType): string | null {
+		return this.emoji.get(emojiType)
+			?? this.server.getEmoji(emojiType);
+	}
+
+	// #endregion
+
+	public static async from(message: Discord.Message, sageCache: SageCache): Promise<Game | null> {
+		if (message.guild) {
+			const game = await sageCache.games.findByDiscordKey(DiscordKey.fromMessage(message));
+			if (game) {
+				return game;
+			}
+		}
+		return null;
+	}
+}

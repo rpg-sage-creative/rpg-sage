@@ -1,0 +1,266 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Human",
+		"details": [
+			"Humans' ambition, versatility, and exceptional potential have led to their status as the world's predominant ancestry. Their empires and nations are vast, sprawling things, and their citizens carve names for themselves with the strength of their sword arms and the power of their spells. Humanity is diverse and tumultuous, running the gamut from nomadic to imperial, sinister to saintly. Many of them venture forth to explore, to map the expanse of the multiverse, to search for long-lost treasure, or to lead mighty armies to conquer their neighbors-for no better reason than because they can.",
+			"If you want a character who can be just about anything, you should play a human."
+		],
+		"youMight": [
+			"Strive to achieve greatness, either in your own right or on behalf of a cause.",
+			"Seek to understand your purpose in the world.",
+			"Cherish your relationships with family and friends."
+		],
+		"othersProbably": [
+			"Respect your flexibility, your adaptability, and-in most cases- your open-mindedness.",
+			"Distrust your intentions, fearing you seek only power or wealth.",
+			"Aren't sure what to expect from you and are hesitant to assume your intentions."
+		],
+		"physicalDescription": [
+			"Humans' physical characteristics are as varied as the world's climes. Humans have a wide variety of skin and hair colors, body types, and facial features. Generally speaking, their skin has a darker hue the closer to the equator they or their ancestors lived.",
+			"Humans reach physical adulthood around the age of 15, though mental maturity occurs a few years later. A typical human can live to be around 90 years old. Humans often intermarry with people of other ancestries, giving rise to children who bear the traits of both parents. The most notable half-humans are half-elves and half-orcs."
+		],
+		"society": [
+			"Human variety also manifests in terms of their governments, attitudes, and social norms. Though the oldest of human cultures can trace their shared histories thousands of years into the past, when compared to the societies of the elves or dwarves, human civilizations seem in a state of constant flux as empires fragment and new kingdoms subsume the old."
+		],
+		"alignmentAndReligion": [
+			"Humanity is perhaps the most heterogeneous of all the ancestries, withacapacityforgreatevilandboundless good. Some humans assemble into vast raging hordes, while others build sprawling cities. Considered as a whole, most humans are neutral, yet they tend to congregate into nations or communities of a shared alignment, or at least a shared tendency toward an alignment. Humans also worship a wide range of gods and practice many different religions, tending to seek favor from any divine being they encounter."
+		],
+		"names": [
+			"Unlike many ancestral cultures, which generally cleave to specific traditions and shared histories, humanity's diversity has resulted in a near-infinite set of names. The humans of northern tribes have different names than those dwelling in southern nation-states. Humans throughout much of the world speak Common (though some continents on Golarion have their own regional common languages), yet their names are as varied as their beliefs and appearances."
+		],
+		"ethnicities": [
+			"A variety of human ethnic groups-many of which have origins on distant lands- populates the continents bordering Golarion's Inner Sea. Human characters can be any of these ethnicities, regardless of what lands they call home. Information about Golarion's human ethnicities appears on page 430 in Chapter 8.",
+			"Characters of human ethnicities in the Inner Sea region speak Common (also known as Taldane), and some ethnicities grant access to an uncommon language."
+		],
+		"aonId": 6,
+		"source": "PZO2101",
+		"page": 54,
+		"id": "b07d7ac2-a72a-486c-a237-956998228d1d",
+		"properties": {
+			"hitPoints": 8,
+			"size": "Medium",
+			"speed": "25 feet",
+			"abilityBoosts": [ "Two free ability boosts" ],
+			"languages": {
+				"starting": [
+					"Common",
+					"Additional languages equal to 1 + your Intelligence modifier (if it's positive)"
+				],
+				"choices": [
+					"Choose from the list of common languages and any other languages to which you have access (such as the languages prevalent in your region)."
+				]
+			},
+			"traits": [ "Human", "Humanoid" ],
+			"other": [
+				{
+					"name": "Other Halves",
+					"details": "By default, half-elves and half-orcs descend from humans, but your GM might allow you to be the offspring of an elf, orc, or different ancestry. In these cases, the GM will let you select the half-elf or half-orc heritage as the heritage for this other ancestry. The most likely other parent of a half-elf are gnomes and halflings, and the most likely parents of a half-orc are goblins, halflings, and dwarves."
+				}
+			]
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Skilled Heritage",
+		"ancestry": "Human",
+		"details": [
+			"Your ingenuity allows you to train in a wide variety of skills. You become trained in one skill of your choice. At 5th level, you become an expert in the chosen skill."
+		],
+		"source": "PZO2101",
+		"id": "d1dda580-94b1-42cd-8cf9-201d1dde37e8",
+		"aonId": 28
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Versatile Heritage",
+		"ancestry": "Human",
+		"details": [
+			"Humanity's versatility and ambition have fueled its ascendance to be the most common ancestry in most nations throughout the world. Select a general feat of your choice for which you meet the prerequisites (as with your ancestry feat, you can select this general feat at any point during character creation)."
+		],
+		"source": "PZO2101",
+		"id": "ae3692c7-5334-4b8f-947b-2afd3356f8f6",
+		"aonId": 29
+	},
+	{
+		"objectType": "Feat",
+		"name": "Adapted Cantrip",
+		"level": 1,
+		"traits": [ "Human" ],
+		"prerequisites": "spellcasting class feature",
+		"details": [
+			"Through study of multiple magical traditions, you've altered a spell to suit your spellcasting style. Choose one cantrip from a magical tradition other than your own. If you have a spell repertoire or a spellbook, replace one of the cantrips you know or have in your spellbook with the chosen spell. If you prepare spells without a spellbook (if you're a cleric or druid, for example), one of your cantrips must always be the chosen spell, and you prepare the rest normally. You can cast this cantrip as a spell of your class's tradition.",
+			"If you swap or retrain this cantrip later, you can choose its replacement from the same alternate tradition or a different one."
+		],
+		"page": 57,
+		"source": "PZO2101",
+		"id": "0666787d-f94a-43eb-96cc-2a3be7f0b3f9",
+		"aonId": 66
+	},
+	{
+		"objectType": "Feat",
+		"name": "Cooperative Nature",
+		"level": 1,
+		"traits": [ "Human" ],
+		"details": [
+			"The short human life span lends perspective and has taught you from a young age to set aside differences and work with others to achieve greatness. You gain a +4 circumstance bonus on checks to Aid."
+		],
+		"page": 57,
+		"source": "PZO2101",
+		"id": "6e104ac2-99c0-459d-a95b-e9b4d5951e76",
+		"aonId": 67
+	},
+	{
+		"objectType": "Feat",
+		"name": "General Training",
+		"level": 1,
+		"traits": [ "Human" ],
+		"details": [
+			"Your adaptability manifests in your mastery of a range of useful abilities. You gain a 1st-level general feat. You must meet the feat's prerequisites, but if you select this feat during character creation, you can select the feat later in the process in order to determine which prerequisites you meet."
+		],
+		"special": "You can select this feat multiple times, choosing a different feat each time.",
+		"page": 57,
+		"source": "PZO2101",
+		"id": "9fc1119f-ef05-4197-9629-27867eeabad6",
+		"aonId": 68
+	},
+	{
+		"objectType": "Feat",
+		"name": "Haughty Obstinacy",
+		"level": 1,
+		"traits": [ "Human" ],
+		"details": [
+			"Your powerful ego makes it harder for others to order you around. If you roll a success on a saving throw against a mental effect that attempts to directly control your actions, you critically succeed instead. If a creature rolls a failure on a check to Coerce you using Intimidation, it gets a critical failure instead (so it can't try to Coerce you again for 1 week)."
+		],
+		"page": 57,
+		"source": "PZO2101",
+		"id": "bce7e2ff-a71b-4cfe-9391-b2a294905d95",
+		"aonId": 69
+	},
+	{
+		"objectType": "Feat",
+		"name": "Natural Ambition",
+		"level": 1,
+		"traits": [ "Human" ],
+		"details": [
+			"You were raised to be ambitious and always reach for the stars, leading you to progress quickly in your chosen field. You gain a 1st-level class feat for your class. You must meet the prerequisites, but you can select the feat later in the character creation process in order to determine which prerequisites you meet."
+		],
+		"page": 57,
+		"source": "PZO2101",
+		"id": "10de60f9-9bf2-40da-99b9-e2729ff81049",
+		"aonId": 70
+	},
+	{
+		"objectType": "Feat",
+		"name": "Natural Skill",
+		"level": 1,
+		"traits": [ "Human" ],
+		"details": [
+			"Your ingenuity allows you to learn a wide variety of skills. You gain the trained proficiency rank in two skills of your choice."
+		],
+		"page": 57,
+		"source": "PZO2101",
+		"id": "9617505c-f4e7-46a8-96ec-81a059aab7a7",
+		"aonId": 71
+	},
+	{
+		"objectType": "Feat",
+		"name": "Unconventional Weaponry",
+		"level": 1,
+		"traits": [ "Human" ],
+		"details": [
+			"You've familiarized yourself with a particular weapon, potentially from another ancestry or culture. Choose an uncommon simple or martial weapon with a trait corresponding to an ancestry (such as dwarf, goblin, or orc) or that is common in another culture. You gain access to that weapon, and for the purpose of determining your proficiency, that weapon is a simple weapon.",
+			"If you are trained in all martial weapons, you can choose an uncommon advanced weapon with such a trait. You gain access to that weapon, and for the purpose of determining your proficiency, that weapon is a martial weapon."
+		],
+		"page": 57,
+		"source": "PZO2101",
+		"id": "b46e5f3f-3d6c-40b0-b5eb-10817816848c",
+		"aonId": 72
+	},
+	{
+		"objectType": "Feat",
+		"name": "Adaptive Adept",
+		"level": 5,
+		"traits": [ "Human" ],
+		"prerequisites": [ "Adapted Cantrip", "can cast 3rd-level spells" ],
+		"details": [
+			"You've continued adapting your magic to blend your class's tradition with your adapted tradition. Choose a cantrip or 1st-level spell from the same magical tradition as your cantrip from Adapted Cantrip. You gain that spell, adding it to your spell repertoire, spellbook, or prepared spells just like the cantrip from Adapted Cantrip. You can cast this spell as a spell of your class's magical tradition. If you choose a 1st-level spell, you don't gain access to the heightened versions of that spell, meaning you can't prepare them if you prepare spells and you can't learn them or select the spell as a signature spell if you have a spell repertoire."
+		],
+		"page": 57,
+		"source": "PZO2101",
+		"id": "77b1cf77-6acd-4880-9c5d-d7c72b4e4ec3",
+		"aonId": 73
+	},
+	{
+		"objectType": "Feat",
+		"name": "Clever Improviser",
+		"level": 5,
+		"traits": [ "Human" ],
+		"details": [
+			"You've learned how to handle situations when you're out of your depth. You gain the Untrained Improvisation general feat. In addition, you can attempt skill actions that normally require you to be trained, even if you are untrained."
+		],
+		"page": 57,
+		"source": "PZO2101",
+		"id": "c0c66452-4c7a-4cef-8573-d9a5c2fff22e",
+		"aonId": 74
+	},
+	{
+		"objectType": "Feat",
+		"name": "Cooperative Soul",
+		"level": 9,
+		"traits": [ "Human" ],
+		"prerequisites": "Cooperative Nature",
+		"details": [
+			"You have developed a soul-deep bond with your comrades and maintain an even greater degree of cooperation with them. If you are at least an expert in the skill you are Aiding, you get a success on any outcome rolled to Aid other than a critical success."
+		],
+		"page": 57,
+		"source": "PZO2101",
+		"id": "e90a648e-95c2-4b26-a675-7ba2c32548f1",
+		"aonId": 75
+	},
+	{
+		"objectType": "Feat",
+		"name": "Incredible Improvisation",
+		"actionType": "[F]",
+		"level": 9,
+		"traits": [ "Human" ],
+		"prerequisites": "Clever Improviser",
+		"frequency": "once per day",
+		"trigger": "You attempt a check using a skill you're untrained in.",
+		"details": [
+			"A stroke of brilliance gives you a major advantage with a skill despite your inexperience. Gain a +4 circumstance bonus to the triggering skill check."
+		],
+		"page": 57,
+		"source": "PZO2101",
+		"id": "eef99ac1-4f4e-4bee-824b-bc86da01569d",
+		"aonId": 76
+	},
+	{
+		"objectType": "Feat",
+		"name": "Multitalented",
+		"level": 9,
+		"traits": [ "Human" ],
+		"details": [
+			"You've learned to split your focus between multiple classes with ease. You gain a 2nd-level multiclass dedication feat (for more about multiclass archetypes, see page 219), even if you normally couldn't take another dedication feat until you take more feats from your current archetype.",
+			"If you're a half-elf, you don't need to meet the feat's ability score prerequisites."
+		],
+		"page": 58,
+		"source": "PZO2101",
+		"id": "e0551829-f388-43f1-ace6-cfbecb02c81f",
+		"aonId": 77
+	},
+	{
+		"objectType": "Feat",
+		"name": "Unconventional Expertise",
+		"level": 13,
+		"traits": [ "Human" ],
+		"prerequisites": [ "Unconventional Weaponry", "trained in the weapon you chose for Unconventional Weaponry" ],
+		"details": [
+			"You've continued to advance your powers using your unconventional weapon. Whenever you gain a class feature that grants you expert or greater proficiency in certain weapons, you also gain that proficiency in the weapon you chose for Unconventional Weaponry."
+		],
+		"page": 58,
+		"source": "PZO2101",
+		"id": "60542f0e-9f70-4e5f-8797-4970d43407f9",
+		"aonId": 78
+	}
+]

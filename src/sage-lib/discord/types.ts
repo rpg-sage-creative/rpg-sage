@@ -1,0 +1,52 @@
+import type * as Discord from "discord.js";
+import type utils from "../../sage-utils";
+import type { Awaitable, IRenderable } from "../../sage-utils";
+import type SageMessage from "../sage/model/SageMessage";
+import type SageReaction from "../sage/model/SageReaction";
+import type ArgsManager from "./ArgsManager";
+
+export type TRenderableContentResolvable = string | IRenderable | utils.RenderUtils.RenderableContent;
+
+export interface IMenuRenderable extends IRenderable {
+	getMenuLength(indexes: number[]): number;
+	getMenuUnicodeArray(indexes: number[]): string[];
+	toMenuRenderableContent(indexes: number[]): utils.RenderUtils.RenderableContent;
+}
+
+/** Discord Message or Partial Message */
+export type DMessage = Discord.Message | Discord.PartialMessage;
+
+/** Discord User or Partial User */
+export type DUser = Discord.User | Discord.PartialUser;
+
+/** Guild or Guild Snowflake */
+export type TGuildResolvable = Discord.Guild | Discord.Snowflake;
+
+/** Text Channel */
+export type TChannel = Discord.ThreadChannel | Discord.TextChannel | Discord.DMChannel;
+
+/** Text Channel or Channel Snowflake */
+export type TChannelResolvable = TChannel | Discord.Snowflake;
+
+export type THandlerOutput = { tested: number; handled: number; };
+
+
+//#region message type
+
+export type TCommandAndArgs = { command?: string; args?: ArgsManager; };
+export type TCommandAndArgsAndData<T> = TCommandAndArgs & { data: T; };
+
+export type TMessageTester<T = any> = (sageMessage: SageMessage) => Awaitable<TCommandAndArgs | TCommandAndArgsAndData<T> | null>;
+export type TMessageHandler<T = any> = (sageMessage: SageMessage, data?: T) => Awaitable<void>;
+
+//#endregion
+
+//#region reaction types
+
+export type TCommand = { command: string; };
+export type TCommandAndData<T> = TCommand & { data: T; };
+
+export type TReactionTester<T = any> = (sageReaction: SageReaction) => Awaitable<TCommand | TCommandAndData<T> | null>;
+export type TReactionHandler<T = any> = (sageReaction: SageReaction, data?: T) => Awaitable<void>;
+
+//#endregion

@@ -1,0 +1,62 @@
+[
+	{
+		"name": "Practice Makes Perfect",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cleric", "Divination" ],
+		"domain": "toil",
+		"cast": "[R]",
+		"components": [ "somatic" ],
+		"trigger": "You or an ally within range fails a skill check for a skill in which you or they are trained.",
+		"range": "30 feet",
+		"details": [
+			"The target gains a +2 status bonus to the triggering check, or a +3 bonus if the target has master or better proficiency in the skill. This bonus can change the outcome of the target's check."
+		],
+		"page": 63,
+		"source": "PZO90148",
+		"focus": true,
+		"aonId": 559,
+		"id": "3c189972-363a-4d50-99a7-a5dca64b3774"
+	},
+	{
+		"name": "Tireless Worker",
+		"level": 4,
+		"objectType": "FocusSpell",
+		"traits": [ "Healing", "Necromancy" ],
+		"domain": "toil",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You suppress your choice of one of the following conditions that's affecting the target: clumsy, encumbered, enfeebled, or fatigued. If you don't remove the effect that caused the condition, the condition returns after the spell's duration expires."
+		],
+		"page": 63,
+		"source": "PZO90148",
+		"focus": true,
+		"aonId": 560,
+		"id": "4fac5986-f1c6-4b29-8ad8-c57d073e82ee"
+	},
+	{
+		"name": "Electrified Crystal Ward",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Rare", "Electricity", "Evocation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic" ],
+		"range": "touch",
+		"targets": "1 hinge or latch",
+		"details": [
+			"You create an <i>electric latch rune</i> hazard (<i>Core Rulebook</i> 523) on the target, creating a special crystalline lock on the object. You can also substitute your spell DC for any of the hazard's listed DCs. You can have only one such hazard active at a time, and if you cast this spell while a previous <i>electric latch</i> rune is active, the older hazard discharges harmlessly."
+		],
+		"heightened": [
+			{ "change": "The hazard's damage increases by 1d12.", "bump": 2 }
+		],
+		"page": 75,
+		"source": "PZO90148",
+		"focus": true,
+		"aonId": 561,
+		"id": "85cbc57d-4dc6-49ff-95e4-a300248b2527"
+	}
+]

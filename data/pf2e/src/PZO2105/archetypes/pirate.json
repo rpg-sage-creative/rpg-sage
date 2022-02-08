@@ -1,0 +1,75 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Pirate",
+		"details": [
+			"You live a life of freedom, taking by force and intimidation all that you desire. You may be a privateer, raiding and plundering on behalf of a particular nation or another authority, or you may answer to no one but your own capricious whims. Either way, you rely on intimidation, wits, and combat prowess to take what you want from those you deem less deserving.",
+			"Pirates have much in common with swashbucklers, and many pirates have the swashbuckler class (page 82) or archetype (page 153). Much like a swashbuckler's daring deeds, classic pirate maneuvers are often showy feats intended to impress, intimidate, and gain panache. For example, if you have the panache class feature and your Acrobatics check for a Boarding Assault exceeds the very hard DC for your level, you would gain panache."
+		],
+		"page": 185,
+		"source": "PZO2105",
+		"id": "4a5468bd-53f4-41cf-ad63-ae2d00e7ad64",
+		"aonId": 70
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Pirate Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication" ],
+		"prerequisites": [ "trained in Intimidation" ],
+		"details": [
+			"As a pirate, you sail the seas in search of enemy ships to plunder. You become trained in Sailing Lore, or become an expert in it if you were already trained. You ignore the effects of diffcult terrain or uneven ground caused by a ship's movement. Additionally, you gain the Boarding Assault action.",
+			"<b>Boarding Assault</b> [A][A] (flourish) Either Stride twice or attempt an Acrobatics check (DC determined by the GM, but usually DC 20) to swing on a rope up to twice your Speed. If you boarded or disembarked from a boat or similar vehicle during this movement, you can make a melee Strike that deals one additional weapon damage die."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the pirate archetype."
+		],
+		"page": 185,
+		"source": "PZO2105",
+		"id": "ba0d4002-6ee5-4a7f-801c-6abbf4d9c807",
+		"aonId": 2032
+	},
+	{
+		"objectType": "Feat",
+		"name": "Pirate Weapon Training",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Pirate Dedication" ],
+		"details": [
+			"You're particularly skilled at wielding traditional pirate weapons. You become trained with the following weapons: hatchet, rapier, scimitar, and whip. Whenever you gain a class feature that grants you expert or greater pro$ciency with a given weapon or weapons, you also gain that pro$ciency rank for these weapons."
+		],
+		"page": 185,
+		"source": "PZO2105",
+		"id": "ddb168fe-c13a-44ad-9713-e85b6fa99bdc",
+		"aonId": 2033
+	},
+	{
+		"objectType": "Feat",
+		"name": "Rope Runner",
+		"level": 4,
+		"traits": [ "Archetype", "Skill" ],
+		"prerequisites": [ "trained in Acrobatics and Athletics", "Pirate Dedication" ],
+		"details": [
+			"You run and climb across ropes and rigging almost as easily as on the ground. You gain a climb Speed of 15 feet, but only on ship's rigging or similar ropes. Whenever you succeed at an Athletics check to Climb a rope or an Acrobatics check to Balance on a rope, you get a critical success instead. You aren't flat-footed while Climbing or Balancing on a rope."
+		],
+		"page": 185,
+		"source": "PZO2105",
+		"id": "0a630453-110c-4548-b171-6be72cc13a8e",
+		"aonId": 2034
+	},
+	{
+		"objectType": "Feat",
+		"name": "Walk the Plank",
+		"actionType": "[A][A]",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Pirate Dedication" ],
+		"details": [
+			"You frighten a foe into moving where you want them, traditionally demanding they walk the plank. Attempt to Demoralize an opponent; this check gains the incapacitation trait. On a success, in addition to the normal effects, you can also force the target to Stride up to its Speed. You choose the path the target takes, and it does so as part of your Walk the Plank action. You can't force the target to move into a harmful space (one where it will take damage, fall, provoke reactions, or similar) unless the result of your check to Demoralize was a critical success. The target then becomes temporarily immune to Walk the Plank for 24 hours."
+		],
+		"page": 185,
+		"source": "PZO2105",
+		"id": "18e06c74-404a-4ac5-8b6d-afd19de1c301",
+		"aonId": 2035
+	}
+]

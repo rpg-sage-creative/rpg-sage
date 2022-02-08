@@ -1,0 +1,149 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Bard",
+		"details": [
+			"A muse has called you to dabble in occult lore, allowing you to cast a few spells. The deeper you delve, the more powerful your performances become."
+		],
+		"additionalFeats": [],
+		"page": 222,
+		"source": "PZO2101",
+		"id": "98f45c81-ee17-4412-8d38-afd4bde5ac56",
+		"aonId": 3
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Bard Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Charisma 14" ],
+		"details": [
+			"You cast spells like a bard and gain the Cast a Spell activity. You gain a spell repertoire with two common cantrips from the occult spell list, or any other cantrips you learn or discover. You're trained in spell attack rolls and spell DCs for occult spells. Your key spellcasting ability for bard archetype spells is Charisma, and they are occult bard spells. You become trained in Occultism and Performance; for each of these skills in which you were already trained, you instead become trained in a skill of your choice.",
+			"Choose a muse as you would if you were a bard. You have that muse for all purposes, allowing you to take that muse's feats, but you don't gain any of the other abilities it grants."
+		],
+		"special": [
+			"You cannot select another dedication feat until you have gained two other feats from the bard archetype."
+		],
+		"page": 222,
+		"source": "PZO2101",
+		"id": "e255dbfb-3cdc-4429-9677-185ff883ed5e",
+		"aonId": 677
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Bard Spellcasting",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Bard Dedication" ],
+		"details": [
+			"You gain the basic spellcasting benefts (page 219). Each time you gain a spell slot of a new level from the bard archetype, add a common occult spell or another spell you learned or discovered to your repertoire, of the appropriate spell level."
+		],
+		"page": 222,
+		"source": "PZO2101",
+		"id": "dce2882e-7291-4fdb-906c-496e88b252a0",
+		"aonId": 678
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Muse's Whispers",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Bard Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level bard feat."
+		],
+		"page": 222,
+		"source": "PZO2101",
+		"id": "eca0eb71-bd0b-4b31-bee1-4981d4cf727e",
+		"aonId": 679
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Muse's Whispers",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [
+			"Basic Muse's Whispers"
+		],
+		"details": [
+			"You gain one bard feat. For the purpose of meeting its prerequisites, your bard level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another bard feat."
+		],
+		"page": 222,
+		"source": "PZO2101",
+		"id": "caa52b47-44c8-4b04-9648-95369c51eee1",
+		"aonId": 680
+	},
+	{
+		"objectType": "Feat",
+		"name": "Counter Perform",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Bard Dedication" ],
+		"details": [
+			"You gain the <i>counter performance</i> composition spell. If you don't already have one, you gain a focus pool of 1 Focus Point, which you can Refocus by engaging your muse. (For more on composition spells, see page 97.)"
+		],
+		"page": 222,
+		"source": "PZO2101",
+		"id": "68653379-9e6c-42e9-81c0-f2023930bcf7",
+		"aonId": 681
+	},
+	{
+		"objectType": "Feat",
+		"name": "Inspirational Performance",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Bard Dedication" ],
+		"details": [
+			"You gain the <i>inspiring courage</i> composition cantrip."
+		],
+		"page": 222,
+		"source": "PZO2101",
+		"id": "d0336389-5c75-42f8-8a50-bb07417cb0ed",
+		"aonId": 682
+	},
+	{
+		"objectType": "Feat",
+		"name": "Occult Breadth",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Bard Spellcasting" ],
+		"details": [
+			"Your repertoire expands, and you can cast more occult spells each day. Increase the number of spells in your repertoire and the number of spell slots you gain from bard archetype feats by 1 for each spell level other than your two highest spell levels."
+		],
+		"page": 222,
+		"source": "PZO2101",
+		"id": "785490a5-1770-44be-ab62-63f8a404a5eb",
+		"aonId": 683
+	},
+	{
+		"objectType": "Feat",
+		"name": "Expert Bard Spellcasting",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Bard Spellcasting", "master in Occultism" ],
+		"details": [
+			"You gain the expert spellcasting benefts (page 219)."
+		],
+		"page": 222,
+		"source": "PZO2101",
+		"id": "f6a772aa-77d3-4f9c-a91a-3149c756314b",
+		"aonId": 684
+	},
+	{
+		"objectType": "Feat",
+		"name": "Master Bard Spellcasting",
+		"level": 18,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Expert Bard Spellcasting", "legendary in Occultism" ],
+		"details": [
+			"You gain the master spellcasting benefts (page 219)."
+		],
+		"page": 222,
+		"source": "PZO2101",
+		"id": "fd87ac0f-93d2-49c6-96e3-18668f7e2834",
+		"aonId": 685
+	}
+]

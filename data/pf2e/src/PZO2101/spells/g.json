@@ -1,0 +1,420 @@
+[
+	{
+		"aonId": 129,
+		"name": "Gaseous Form",
+		"description": "Turn a willing creature into a flying cloud.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"The target transforms into a vaporous state. In this state, the target is amorphous and loses any item bonus to AC. It gains resistance 8 to physical damage and is immune to precision damage. It can't cast spells, activate items, or use actions that have the attack or manipulate trait. It gains a fly Speed of 10 feet and can slip through tiny cracks. The target can Dismiss the spell."
+		],
+		"duration": "5 minutes",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 340,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 willing creature",
+		"traditions": [ "arcane", "occult", "primal" ],
+		"traits": [ "Polymorph", "Transmutation" ],
+		"focus": false,
+		"id": "86487ac9-c422-4a7a-a4f4-78acf37a3720"
+	},
+	{
+		"aonId": 130,
+		"name": "Gate",
+		"description": "Tear open a portal to another plane.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You tear open a rift to another plane, creating a portal that creatures can travel through in either direction. This portal is vertical and circular, with a radius of 40 feet. The portal appears at a location of your choice on the destination plane, assuming you have a clear idea of both the destination's location on the plane and what the destination looks like. If you attempt to create a gate into or out of the realm of a deity or another powerful being, that being can prevent the gate from forming."
+		],
+		"duration": "sustained up to 1 minute",
+		"level": 10,
+		"objectType": "Spell",
+		"page": 340,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Uncommon", "Conjuration", "Teleportation" ],
+		"focus": false,
+		"id": "65fcb70c-c850-430d-989f-8084f1a17c20"
+	},
+	{
+		"aonId": 131,
+		"name": "Gentle Repose",
+		"description": "A corpse doesn't decay and can't become undead.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"The targeted corpse doesn't decay, nor can it be transformed into an undead. If the corpse is subject to a spell that requires the corpse to have died within a certain amount of time (for example, <i>raise dead</i>), do not count the duration of <i>gentle repose</i> against that time. This spell also prevents ordinary bugs and pests (such as maggots) from consuming the body."
+		],
+		"duration": "until the next time you make your daily preparations",
+		"heightened": [
+			{ "change": "The spell's duration is unlimited, but the spell takes one more action to cast and requires a material component and a cost (embalming fluid worth 6 gp).", "level": 5 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 340,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 corpse",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Necromancy" ],
+		"focus": false,
+		"id": "0bc09944-3df4-4993-97cc-e7aed8a4e01b"
+	},
+	{
+		"aonId": 132,
+		"name": "Ghost Sound",
+		"description": "Make false sounds.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You create an auditory illusion of simple sounds that has a maximum volume equal to four normal humans shouting. The sounds emanate from a square you designate within range. You can't create intelligible words or other intricate sounds (such as music)."
+		],
+		"duration": "sustained",
+		"heightened": [
+			{ "change": "The range increases to 60 feet.", "level": 3 },
+			{ "change": "The range increases to 120 feet.", "level": 5 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 340,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Auditory", "Cantrip", "Illusion" ],
+		"focus": false,
+		"id": "6c7f8f35-f9ab-4956-8d51-173a98c4b560"
+	},
+	{
+		"aonId": 133,
+		"name": "Ghostly Weapon",
+		"description": "Make a weapon affect incorporeal creatures.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"The target weapon becomes translucent and ghostly, and it can affect material and incorporeal creatures and objects. It can be wielded by a corporeal or incorporeal creature and gains the effects of the <i>ghost touch</i> property rune."
+		],
+		"duration": "5 minutes",
+		"level": 3,
+		"objectType": "Spell",
+		"page": 340,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 non-magical weapon that is either unattended or wielded by you or a willing ally",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Transmutation" ],
+		"focus": false,
+		"id": "6a52248b-5d93-4d66-b07c-119fb03052f9"
+	},
+	{
+		"aonId": 134,
+		"name": "Ghoulish Cravings",
+		"description": "Infect a creature with ghoul fever.",
+		"affliction": {
+			"description": "",
+			"level": 3,
+			"maximumDuration": "",
+			"name": "Ghoul Fever",
+			"stages": [
+				{ "stage": 1, "description": "carrier with no ill effects", "duration": "1 day" },
+				{ "stage": 2, "description": "3d8 negative damage and the creature regains half as many Hit Points from all healing", "duration": "1 day" },
+				{ "stage": 3, "description": "as stage 2", "duration": "1 day" },
+				{ "stage": 4, "description": "3d8 negative damage and the creature gains no benefit from healing", "duration": "1 day" },
+				{ "stage": 5, "description": "as stage 4", "duration": "1 day" },
+				{ "stage": 6, "description": "the creature dies and rises as a ghoul at the next midnight" }
+			],
+			"type": "disease"
+		},
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You touch the target to afflict it with ghoul fever, infesting it with hunger and a steadily decreasing connection to positive energy; the target must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target is afflicted with ghoul fever at stage 1."
+				],
+				"failure": [
+					"The target is afflicted with ghoul fever at stage 2."
+				],
+				"criticalFailure": [
+					"The target is afflicted with ghoul fever at stage 3."
+				]
+			}
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 341,
+		"range": "touch",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Disease", "Evil", "Necromancy" ],
+		"focus": false,
+		"id": "f8267c54-1c74-4715-80b9-0f71e78fa24f"
+	},
+	{
+		"aonId": 135,
+		"name": "Glibness",
+		"description": "Magical sphere counteracts spells that would enter it.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Falsehoods pass your lips as smoothly as silk. You gain a +4 status bonus to Deception checks to Lie and against Perception checks to discern if you are telling the truth, and you add your level even if you're untrained. If the implausibility of your lies prompts a circumstance penalty or a DC increase, reduce that penalty or increase by half."
+		],
+		"duration": "10 minutes",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 341,
+		"source": "PZO2101",
+		"traditions": [ "occult" ],
+		"traits": [ "Uncommon", "Enchantment", "Mental" ],
+		"focus": false,
+		"id": "a2db5d70-0b9c-4ad9-b4aa-757e811ca735"
+	},
+	{
+		"aonId": 136,
+		"name": "Glitterdust",
+		"description": "Sparkling dust breaks invisibility and impedes vision.",
+		"area": "10-foot burst",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Creatures in the area are outlined by glittering dust. Each creature must attempt a Reflex save. If a creature has its invisibility negated by this spell, it is concealed instead of invisible. This applies both if the creature was already invisible and if it benefits from new invisibility effects before the end of the invisibility negation effect from this spell.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target's invisibility is negated for 2 rounds."
+				],
+				"failure": [
+					"The target is dazzled for 1 minute and its invisibility is negated for 1 minute."
+				],
+				"criticalFailure": [
+					"The target is blinded for 1 round and dazzled for 10 minutes. Its invisibility is negated for 10 minutes."
+				]
+			}
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 341,
+		"range": "120 feet",
+		"savingThrow": "Reflex",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Evocation" ],
+		"focus": false,
+		"id": "91c17e0c-fa74-4844-8461-61f0f1476705"
+	},
+	{
+		"aonId": 137,
+		"name": "Globe of Invulnerability",
+		"description": "Magical sphere counteracts spells that would enter it.",
+		"area": "10-foot burst centered on one corner of your space",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You create an immobile globe around yourself that attempts to counteract any spell from outside the globe whose area or targets enter into the globe, as if the globe were a <i>dispel magic</i> spell 1 level lower than its actual spell level. If the counteract attempt succeeds, it prevents only the portion of the spell that would have entered the globe (so if the spell also has targets outside the globe, or part of its area is beyond the globe, those targets or that area is affected normally). You must form the sphere in an unbroken open space, so its edges don't pass through any creatures or objects, or the spell is lost (though creatures can enter the globe after the spell is cast)."
+		],
+		"duration": "10 minutes",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 341,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Uncommon", "Abjuration" ],
+		"focus": false,
+		"id": "6641ae1a-19cc-4d37-986b-12ba5245a4fe"
+	},
+	{
+		"aonId": 138,
+		"name": "Glyph of Warding",
+		"description": "Store a spell in a symbol to make a trap.",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You craft a trap by binding a hostile spell into a symbol. While Casting this Spell, you also Cast a Spell of a lower spell level to store in the glyph. The stored spell must take 3 actions or fewer to cast, have a hostile effect, and target one creature or have an area. You can set a password, a trigger, or both for the glyph. Any creature that moves, opens, or touches the target container or enters the target area that doesn't speak the password or that matches the trigger activates the glyph, releasing the harmful spell within.",
+			"Once a spell is stored in the glyph, the glyph gains all the traits of that spell. If the stored spell targets one or more creatures, it targets the creature that set off the glyph. If it has an area, that area is centered on the creature that set off the glyph. <i>Glyph of warding</i>'s duration ends when the glyph is triggered. The glyph counts as a magical trap, using your spell DC for both the Perception check to notice it and the Thievery check to disable it; both checks require the creature attempting them to be trained in order to succeed.",
+			"You can Dismiss <i>glyph of warding</i>. The maximum number of <i>glyphs of warding</i> you can have active at a time is equal to your spellcasting ability modifier."
+		],
+		"duration": "unlimited",
+		"level": 3,
+		"objectType": "Spell",
+		"page": 341,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 container or a 10-foot-by-10-foot area",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Abjuration" ],
+		"focus": false,
+		"id": "dd1d110b-e34e-49ba-932e-853fe1e35f2b"
+	},
+	{
+		"aonId": 139,
+		"name": "Goblin Pox",
+		"description": "Infect a creature with goblin pox.",
+		"affliction": {
+			"description": "Goblins and goblin dogs are immune.",
+			"level": 1,
+			"maximumDuration": "",
+			"name": "Goblin Pox",
+			"stages": [
+				{ "stage": 1, "description": "sickened 1", "duration": "1 round" },
+				{ "stage": 2, "description": "sickened 1 and slowed 1", "duration": "1 round" },
+				{ "stage": 3, "description": "sickened 1 and the creature can't reduce its sickened value below 1 (1 day)" }
+			],
+			"type": "disease"
+		},
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Your touch afflicts the target with goblin pox, an irritating allergenic rash. The target must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target is sickened 1."
+				],
+				"failure": [
+					"The target is afflicted with goblin pox at stage 1."
+				],
+				"criticalFailure": [
+					"The target is afflicted with goblin pox at stage 2."
+				]
+			}
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 341,
+		"range": "touch",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Disease", "Necromancy" ],
+		"focus": false,
+		"id": "cee85277-c810-4932-b323-3493e3a6f203"
+	},
+	{
+		"aonId": 140,
+		"name": "Grease",
+		"description": "Coat a surface or object in slippery grease.",
+		"area": "4 contiguous 5-foot squares or",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You conjure grease, with effects based on choosing area or target. <ul><li><b>Area</b> All solid ground in the area is covered with grease. Each creature standing on the greasy surface must succeed at a Reflex save or an Acrobatics check against your spell DC or fall prone. Creatures using an action to move onto the greasy surface during the spell's duration must attempt either a Reflex save or an Acrobatics check to Balance. A creature that Steps or Crawls doesn't have to attempt a check or save.</li><li><b>Target</b> If you cast the spell on an unattended object, anyone trying to pick up the object must succeed at an Acrobatics check or Reflex save against your spell DC to do so. If you target an attended object, the creature that has the object must attempt an Acrobatics check or Reflex save. On a failure, the holder or wielder takes a -2 circumstance penalty to all checks that involve using the object; on a critical failure, the holder or wielder releases the item. The object lands in an adjacent square of the GM's choice. If you cast this spell on a worn object, the wearer gains a +2 circumstance bonus to Fortitude saves against attempts to grapple them.</li></ul>"
+		],
+		"duration": "1 minute",
+		"level": 1,
+		"objectType": "Spell",
+		"page": 342,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 object of Bulk 1 or less",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "7dd03640-c979-4a13-83c4-ebe1a3d7d7ea"
+	},
+	{
+		"aonId": 141,
+		"name": "Grim Tendrils",
+		"description": "Creatures in a line take negative damage and bleed.",
+		"area": "30-foot line",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Tendrils of darkness curl out from your fingertips and race through the air. You deal 2d4 negative damage and 1 persistent bleed damage to living creatures in the line. Each living creature in the line must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature takes half the negative damage and no persistent bleed damage."
+				],
+				"failure": [
+					"The creature takes full damage."
+				],
+				"criticalFailure": [
+					"The creature takes double negative damage and double persistent bleed damage."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The negative damage increases by 2d4, and the persistent bleed damage increases by 1.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 342,
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Necromancy", "Negative" ],
+		"focus": false,
+		"id": "82a8932e-f29f-446b-b869-a343cd8f8632"
+	},
+	{
+		"aonId": 142,
+		"name": "Guidance",
+		"description": "Divine guidance improves one roll.",
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"details": [
+			"You ask for divine guidance, granting the target a +1 status bonus to one attack roll, Perception check, saving throw, or skill check the target attempts before the duration ends. The target chooses which roll to use the bonus on before rolling. If the target uses the bonus, the spell ends. Either way, the target is then temporarily immune for 1 hour."
+		],
+		"duration": "until the start of your next turn",
+		"level": 1,
+		"objectType": "Spell",
+		"page": 342,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine", "occult", "primal" ],
+		"traits": [ "Cantrip", "Divination" ],
+		"focus": false,
+		"id": "f4240f58-1d58-4150-a9ef-0906419df310"
+	},
+	{
+		"aonId": 143,
+		"name": "Gust of Wind",
+		"description": "Wind blows out fires and knocks back objects and creatures.",
+		"area": "60-foot line",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A violent wind issues forth from your palm, blowing from the point where you are when you cast the spell to the line's opposite end. The wind extinguishes small non-magical fires, disperses fog and mist, blows objects of light Bulk or less around, and pushes larger objects. Large or smaller creatures in the area must attempt a Fortitude save. Large or smaller creatures that later move into the gust must attempt the save on entering.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature can't move against the wind."
+				],
+				"failure": [
+					"The creature is knocked prone. If it was flying, it suffers the effects of critical failure instead."
+				],
+				"criticalFailure": [
+					"The creature is pushed 30 feet in the wind's direction, knocked prone, and takes 2d6 bludgeoning damage."
+				]
+			}
+		],
+		"duration": "until the start of your next turn",
+		"level": 1,
+		"objectType": "Spell",
+		"page": 342,
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Air", "Evocation" ],
+		"focus": false,
+		"id": "f0e4bc2a-178c-4b01-adf4-b635ec99b012"
+	}
+]

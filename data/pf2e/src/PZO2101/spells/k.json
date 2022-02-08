@@ -1,0 +1,45 @@
+[
+	{
+		"aonId": 168,
+		"name": "Knock",
+		"description": "Make a door, lock, or container easier to open, and possibly open it immediately.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You make the target easier to open. <i>Knock</i> grants a +4 status bonus to any creature that tries to open the target door, lock, or container with an Athletics or a Thievery check. You can attempt a Thievery check to open the target as part of casting <i>knock</i>, and you add your level even if you're untrained.",
+			"<i>Knock</i> counteracts <i>lock</i>."
+		],
+		"duration": "1 minute",
+		"level": 2,
+		"objectType": "Spell",
+		"page": 347,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 door, lock, or container",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Transmutation" ],
+		"focus": false,
+		"id": "29065b67-a709-43e6-ab97-1b3be8b169ee"
+	},
+	{
+		"aonId": 169,
+		"name": "Know Direction",
+		"description": "Find true north.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"In your mind's eye, you see a path northward. You immediately know which direction is north (if it exists at your current location)."
+		],
+		"heightened": [
+			{ "change": "You can instead know the direction to a familiar location, such as a previous home or a favorite tavern.", "level": 7 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 348,
+		"source": "PZO2101",
+		"traditions": [ "divine", "occult", "primal" ],
+		"traits": [ "Cantrip", "Detection", "Divination" ],
+		"focus": false,
+		"id": "1583e1c1-c494-40fd-be88-c96787514ef3"
+	}
+]

@@ -1,0 +1,381 @@
+[
+	{
+		"objectType": "Deity",
+		"name": "Abadar",
+		"alignment": "LN",
+		"details": [
+			"The Master of the First Vault holds sway over cities, the law, merchants, and wealth. Abadar seeks to bring civilization to the wild places of the world, encourages adherence to law, and promotes commerce and trade within civilization. He also encourages cooperation among the various ancestries."
+		],
+		"edicts": [ "bring civilization to the frontiers", "earn wealth through hard work and trade", "follow the rule of law" ],
+		"anathema": [ "engage in banditry or piracy", "steal", "undermine a law-abiding court" ],
+		"followerAlignments": [ "LG", "LN", "LE" ],
+		"devoteeBenefits": { "divineFont": [ "Harm", "Heal" ], "divineSkill": [ "Society" ], "favoredWeapon": "Crossbow", "domains": [ "Cities", "Earth", "Travel", "Wealth" ], "clericSpells": [ "Illusory Object", "Creation", "Magnificent Mansion" ] },
+		"source": "PZO2101",
+		"aonId": 1,
+		"id": "4fdb3cce-00a3-43af-9b22-80e2da789d4b"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Asmodeus",
+		"alignment": "LE",
+		"details": [
+			"The Prince of Darkness reigns over contracts, pride, slavery, and tyranny, and he delights in tempting mortals to the path of evil. He promotes strict hierarchies where everyone knows their place, and he takes advantage of order for his own selfish benefit."
+		],
+		"edicts": [ "negotiate contracts to your best advantage", "rule tyrannically and torture weaker beings", "show subservience to your betters" ],
+		"anathema": [ "break a contract", "free a slave", "insult Asmodeus by showing mercy to your enemies" ],
+		"followerAlignments": [ "LE" ],
+		"devoteeBenefits": { "divineFont": [ "Harm" ], "divineSkill": [ "Deception" ], "favoredWeapon": "Mace", "domains": [ "Confidence", "Fire", "Trickery", "Tyranny" ], "clericSpells": [ "Charm", "Suggestion", "Mislead" ] },
+		"source": "PZO2101",
+		"aonId": 2,
+		"id": "534b40af-2dcf-4771-b9e2-c2f9585e19e1"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Calistria",
+		"alignment": "CN",
+		"details": [
+			"The mischievous goddess known as the Savored Sting extols the virtues of lust, revenge, and trickery. Though Calistria is most widely worshipped by elves, members of many other ancestries follow her as well."
+		],
+		"edicts": [ "pursue your personal freedom", "seek hedonistic thrills", "take revenge" ],
+		"anathema": [ "become too consumed by love or a need for revenge", "let a slight go unanswered" ],
+		"followerAlignments": [ "CG", "CN", "CE" ],
+		"devoteeBenefits": { "divineFont": [ "Harm", "Heal" ], "divineSkill": [ "Deception" ], "favoredWeapon": "Whip", "domains": [ "Pain", "Passion", "Secrecy", "Trickery" ], "clericSpells": [ "Charm", "Enthrall", "Mislead" ] },
+		"source": "PZO2101",
+		"aonId": 3,
+		"id": "c55274dc-0860-494b-a7cc-f5b367dd59c5"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Cayden Cailean",
+		"alignment": "CG",
+		"details": [
+			"The Drunken Hero ascended from mortal life on a drunken dare, becoming the god of ale, freedom, and wine. Cayden promotes freedom and encourages others to find their own path in life. He fights for just causes and delights in the best indulgences."
+		],
+		"edicts": [ "drink", "free slaves and aid the oppressed", "seek glory and adventure" ],
+		"anathema": [ "waste alcohol", "be mean or standoffish when drunk", "own a slave" ],
+		"followerAlignments": [ "NG", "CG", "CN" ],
+		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Athletics" ], "favoredWeapon": "Rapier", "domains": [ "Cities", "Freedom", "Indulgence", "Might" ], "clericSpells": [ "Fleet Step", "Touch of Idiocy", "Hallucination" ] },
+		"source": "PZO2101",
+		"aonId": 4,
+		"id": "37be51f2-0f55-459c-90ce-8d488bb67aea"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Desna",
+		"alignment": "CG",
+		"details": [
+			"The kindly Song of the Spheres presides over dreams, luck, stars, and travelers. An ancient goddess, Desna delights in freedom and mystery, and she encourages her followers to do the same."
+		],
+		"edicts": [ "aid fellow travelers", "explore new places", "express yourself through art and song", "find what life has to offer" ],
+		"anathema": [ "cause fear or despair", "cast nightmare or use similar magic to corrupt dreams", "engage in bigoted behavior" ],
+		"followerAlignments": [ "NG", "CG", "CN" ],
+		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Acrobatics" ], "favoredWeapon": "Starknife", "domains": [ "Dreams", "Luck", "Moon", "Travel" ], "clericSpells": [ "Sleep", "Fly", "Dreaming Potential" ] },
+		"source": "PZO2101",
+		"aonId": 5,
+		"id": "5b8986c9-0874-4bf6-97fb-0c1960a7754d"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Erastil",
+		"alignment": "LG",
+		"details": [
+			"Old Deadeye is god of family, farming, hunting, and trade. Long ago he was a horned god of the hunt, but his worship evolved to focus on rural communities."
+		],
+		"edicts": [ "care for your home and family", "fulfill your duties", "keep the peace", "protect the community" ],
+		"anathema": [ "abandon your home in its time of need", "choose yourself over your community", "tarnish your reputation", "tell lies" ],
+		"followerAlignments": [ "LG", "NG", "LN" ],
+		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Survival" ], "favoredWeapon": "Longbow", "domains": [ "Earth", "Family", "Nature", "Wealth" ], "clericSpells": [ "True Strike", "Wall of Thorns", "Tree Stride" ] },
+		"source": "PZO2101",
+		"aonId": 6,
+		"id": "d0016298-a881-4457-97ee-e0ed469f0edc"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Gorum",
+		"alignment": "CN",
+		"details": [
+			"Soldiers call out prayers to Our Lord in Iron, god of battle, strength, and weapons. Gorum emphasizes strength and power, encouraging his followers to seek out war and combat as the ultimate way to worship him."
+		],
+		"edicts": [ "attain victory in fair combat, push your limits, wear armor in combat" ],
+		"anathema": [ "kill prisoners or surrendering foes, prevent conflict through negotiation, win a battle through underhanded tactics or indirect magic" ],
+		"followerAlignments": [ "CN", "CE" ],
+		"devoteeBenefits": { "divineFont": [ "Harm", "Heal" ], "divineSkill": [ "Athletics" ], "favoredWeapon": "Greatsword", "domains": [ "Confidence", "Destruction", "Might", "Zeal" ], "clericSpells": [ "True Strike", "Enlarge", "Weapon Storm" ] },
+		"source": "PZO2101",
+		"aonId": 7,
+		"id": "0649ea9e-f00d-4dab-98a1-ea444e82cd05"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Gozreh",
+		"alignment": "N",
+		"details": [
+			"A deity of two aspects, known as the Wind and the Waves, Gozreh rules over nature, the sea, and weather. Gozreh is popular with druids and those who seek to preserve the wilds."
+		],
+		"edicts": [ "cherish, protect, and respect nature in all its forms" ],
+		"anathema": [ "bring civilization to intrude on the wild", "create undead", "despoil areas of natural beauty" ],
+		"followerAlignments": [ "NG", "LN", "N", "CN", "NE" ],
+		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Survival" ], "favoredWeapon": "Trident", "domains": [ "Air", "Nature", "Travel", "Water" ], "clericSpells": [ "Gust of Wind", "Lightning Bolt", "Control Water" ] },
+		"source": "PZO2101",
+		"aonId": 8,
+		"id": "b3fa31dc-7a09-4192-a8dc-18324241a46f"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Iomedae",
+		"alignment": "LG",
+		"details": [
+			"Iomedae is goddess of honor, justice, rulership, and valor, and she is called the Inheritor because she inherited her mantle when the god of humanity perished. Prior to her ascension, Iomedae walked the planet as a mortal. Many paladins follow her faith."
+		],
+		"edicts": [ "be temperate", "fight for justice and honor", "hold valor in your heart" ],
+		"anathema": [ "abandon a companion in need", "dishonor yourself", "refuse a challenge from an equal" ],
+		"followerAlignments": [ "LG", "NG" ],
+		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Intimidation" ], "favoredWeapon": "Longsword", "domains": [ "Confidence", "Might", "Truth", "Zeal" ], "clericSpells": [ "True Strike", "Enlarge", "Fire Shield" ] },
+		"source": "PZO2101",
+		"aonId": 9,
+		"id": "8a46a2d9-212f-4ff5-bd9b-dfaefb27047f"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Irori",
+		"alignment": "LN",
+		"details": [
+			"When the Master of Masters attained true enlightenment, he became a god of history, knowledge, and self-perfection. Irori promotes discipline and teaches that one who can master themself finds the greatest benefits the world can provide."
+		],
+		"edicts": [ "be humble", "help others perfect themselves", "hone your body, mind, and spirit to a more perfect state", "practice discipline" ],
+		"anathema": [ "become addicted to a substance", "destroy an important historical text", "repeatedly fail to maintain self-control" ],
+		"followerAlignments": [ "LG", "LN", "LE" ],
+		"devoteeBenefits": { "divineFont": [ "Harm", "Heal" ], "divineSkill": [ "Athletics" ], "favoredWeapon": "Fist", "domains": [ "Knowledge", "Might", "Perfection", "Truth" ], "clericSpells": [ "Jump", "Haste", "Stoneskin" ] },
+		"source": "PZO2101",
+		"aonId": 10,
+		"id": "59a3d87f-457b-4ed4-bb74-aeb5d20405c4"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Lamashtu",
+		"alignment": "CE",
+		"details": [
+			"The Mother of Monsters is goddess of aberrance, monsters, and nightmares. She seeks to corrupt mortals and populate the world with her twisted and monstrous brood."
+		],
+		"edicts": [
+			"bring power to outcasts and the downtrodden",
+			"indoctrinate children in Lamashtu's teachings",
+			"make the beautiful monstrous",
+			"reveal the corruption and flaws in all things"
+		],
+		"anathema": [
+			"attempt to treat a mental illness or deformity",
+			"provide succor to Lamashtu's enemies"
+		],
+		"followerAlignments": [ "CE" ],
+		"devoteeBenefits": { "divineFont": [ "Harm", "Heal" ], "divineSkill": [ "Survival" ], "favoredWeapon": "Falchion", "domains": [ "Family", "Might", "Nightmares", "Trickery" ], "clericSpells": [ "Magic Fang", "Animal Form", "Nightmare" ] },
+		"source": "PZO2101",
+		"aonId": 11,
+		"id": "99c11f7d-ee50-4267-a343-49f872310be8"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Nethys",
+		"alignment": "N",
+		"details": [
+			"The All-Seeing Eye, god of magic, has a dualistic nature of destruction and preservation; his ability to witness all things has shattered his mind."
+		],
+		"edicts": [ "seek out magical power and use it" ],
+		"anathema": [ "pursue mundane paths over magical ones" ],
+		"followerAlignments": [ "NG", "LN", "N", "CN", "NE" ],
+		"devoteeBenefits": {
+			"divineFont": [ "Harm", "Heal" ],
+			"divineSkill": [ "Arcana" ],
+			"favoredWeapon": "Staff",
+			"domains": [ "Destruction", "Knowledge", "Magic", "Protection" ],
+			"clericSpells": [ "Magic Missile", "Magic Mouth", "Levitate", "Blink", "Prying Eye", "Wall of Force", "Warp Mind", "Maze", "Disjunction" ]
+		},
+		"source": "PZO2101",
+		"aonId": 12,
+		"id": "0989a301-a961-4334-b928-7c455fe7b037"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Norgorber",
+		"alignment": "NE",
+		"details": [
+			"The god of greed, murder, poison, and secrets has four aspects: Blackfingers, ally of alchemists and poisoners; the murderous Father Skinsaw; the thieving Gray Master; and the secretive Reaper of Reputation."
+		],
+		"edicts": [ "keep your true identity secret", "sacrifice anyone necessary", "take every advantage in a fight", "work from the shadows" ],
+		"anathema": [ "allow your true identity to be connected to your dark dealings", "share a secret freely", "show mercy" ],
+		"followerAlignments": [ "LE", "NE", "CE", "plus N if following the Reaper of Reputation" ],
+		"devoteeBenefits": { "divineFont": [ "Harm" ], "divineSkill": [ "Stealth" ], "favoredWeapon": "Shortsword", "domains": [ "Death", "Secrecy", "Trickery", "Wealth" ], "clericSpells": [ "Illusory Disguise", "Invisibility", "Phantasmal Killer" ] },
+		"source": "PZO2101",
+		"aonId": 13,
+		"id": "cacc4bde-6762-49b3-affa-b6b46c11f558"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Pharasma",
+		"alignment": "N",
+		"details": [
+			"Ancient and powerful beyond even most other gods, the Lady of Graves presides over birth, death, fate, and prophecy. From her throne in the Boneyard, she judges the souls of all who perish, and she ensures that the natural cycle of birth and death-the River of Souls-is not disrupted."
+		],
+		"edicts": [ "strive to understand ancient prophecies, destroy undead", "lay bodies to rest" ],
+		"anathema": [ "create undead", "desecrate a corpse", "rob a tomb" ],
+		"followerAlignments": [ "NG", "LN", "N" ],
+		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Medicine" ], "favoredWeapon": "Dagger", "domains": [ "Death", "Fate", "Healing", "Knowledge" ], "clericSpells": [ "Mindlink", "Ghostly Weapon", "Phantasmal Killer" ] },
+		"source": "PZO2101",
+		"aonId": 14,
+		"id": "ea28e323-7eae-4e67-9ddc-f1a40c5fccb6"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Rovagug",
+		"alignment": "CE",
+		"details": [
+			"The Rough Beast is the god of destruction, disaster, and wrath. He was long ago imprisoned within Golarion's core at the hands of many other deities working in concert, and seeks to one day break free and wreak havoc upon the world."
+		],
+		"edicts": [ "destroy all things", "free Rovagug from his prison" ],
+		"anathema": [ "create something new", "let material ties restrain you", "torture a victim or otherwise delay its destruction" ],
+		"followerAlignments": [ "NE", "CE" ],
+		"devoteeBenefits": { "divineFont": [ "Harm" ], "divineSkill": [ "Athletics" ], "favoredWeapon": "Greataxe", "domains": [ "Air", "Destruction", "Earth", "Zeal" ], "clericSpells": [ "Burning Hands", "Enlarge", "Disintegrate" ] },
+		"source": "PZO2101",
+		"aonId": 15,
+		"id": "13334096-e702-4bdd-92c4-92eb8246b895"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Sarenrae",
+		"alignment": "NG",
+		"details": [
+			"The Dawnflower is goddess of healing, honesty, redemption, and the sun. Once a powerful angel and empyreal lord, Sarenrae led the charge to imprison Rovagug. She seeks to redeem evil where possible, or else destroy it swiftly."
+		],
+		"edicts": [ "destroy the Spawn of Rovagug", "protect allies", "provide aid to the sick and wounded", "seek and allow redemption" ],
+		"anathema": [ "create undead, lie", "deny a repentant creature an opportunity for redemption", "fail to strike down evil" ],
+		"followerAlignments": [ "LG", "NG", "CG" ],
+		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Medicine" ], "favoredWeapon": "Scimitar", "domains": [ "Fire", "Healing", "Sun", "Truth" ], "clericSpells": [ "Burning Hands", "Fireball", "Wall of Fire" ] },
+		"source": "PZO2101",
+		"aonId": 16,
+		"id": "42b1e84a-761b-427e-bba9-bf16910d6364"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Shelyn",
+		"alignment": "NG",
+		"details": [
+			"The Eternal Rose is the goddess of art, beauty, love, and music. She seeks to one day redeem her corrupted brother, Zon-Kuthon. Shelyn promotes peace and love, and she encourages her followers to create beauty in a sometimes dark world."
+		],
+		"edicts": [ " be peaceful", "choose and perfect an art", "lead by example", "see the beauty in all things" ],
+		"anathema": [ "destroy art or allow it to be destroyed, unless saving a life or pursuing greater art", "refuse to accept surrender" ],
+		"followerAlignments": [ " LG, NG, CG" ],
+		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Crafting", "Performance" ], "favoredWeapon": "Glaive", "domains": [ "Creation", "Family", "Passion", "Protection" ], "clericSpells": [ "Color Spray", "Enthrall", "Creation" ] },
+		"source": "PZO2101",
+		"aonId": 17,
+		"id": "c532ce51-6afd-4444-9ac1-e80ed2585659"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Torag",
+		"alignment": "LG",
+		"details": [
+			"The dwarven deity called the Father of Creation is god of the forge, protection, and strategy. Though most widely worshipped by dwarves, those who treasure crafting and creation also follow Torag."
+		],
+		"edicts": [ "be honorable and forthright", "keep your word", "respect the forge", "serve your people" ],
+		"anathema": [ "tell lies or cheat someone", "intentionally create inferior works", "show mercy to the enemies of your people" ],
+		"followerAlignments": [ "LG, LN" ],
+		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Crafting" ], "favoredWeapon": "Warhammer", "domains": [ "Creation", "Earth", "Family", "Protection" ], "clericSpells": [ "Mindlink", "Earthbind", "Creation" ] },
+		"source": "PZO2101",
+		"aonId": 18,
+		"id": "a2f44cec-fde4-424c-ab88-846ef7d0a82b"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Urgathoa",
+		"alignment": "NE",
+		"details": [
+			"The amoral Pallid Princess oversees disease, gluttony, and undeath."
+		],
+		"edicts": [ "become undead upon death", "create or protect the undead", "sate your appetites" ],
+		"anathema": [ "deny your appetites", "destroy undead", "sacrifice your life" ],
+		"followerAlignments": [ "LE", "NE", "CE" ],
+		"devoteeBenefits": { "divineFont": [ "Harm" ], "divineSkill": [ "Intimidation" ], "favoredWeapon": "Scythe", "domains": [ "Indulgence", "Magic", "Might", "Undeath" ], "clericSpells": [ "Goblin Pox", "False Life", "Mask of Terror" ] },
+		"source": "PZO2101",
+		"aonId": 19,
+		"id": "4c83b5fe-ff87-45a2-a1d4-3005acf248c2"
+	},
+	{
+		"objectType": "Deity",
+		"name": "Zon-Kuthon",
+		"alignment": "LE",
+		"details": [
+			"The Midnight Lord is god of darkness, envy, loss, and pain. Once a god of art, beauty, and music, like Shelyn, he returned from a sojourn in the dark spaces between the planes horribly changed."
+		],
+		"edicts": [ "bring pain to the world", "mutilate your body" ],
+		"anathema": [ "create permanent or long-lasting sources of light", "provide comfort to those who suffer" ],
+		"followerAlignments": [ "LN", "LE", "NE" ],
+		"devoteeBenefits": { "divineFont": [ "Harm" ], "divineSkill": [ "Intimidation" ], "favoredWeapon": "Spiked Chain", "domains": [ "Ambition", "Darkness", "Destruction", "Pain" ], "clericSpells": [ "Phantom Pain", "Wall of Thorns", "Shadow Walk" ] },
+		"source": "PZO2101",
+		"aonId": 20,
+		"id": "804c2867-c57b-4a18-8a87-fff0860ed75f"
+	},
+	{
+		"objectType": "Faith",
+		"name": "Atheism",
+		"details": [
+			"While most concede that the gods exist, some do not view them as worthy of worship, and a few even deny their presence altogether."
+		],
+		"edicts": [ "pursue your own agenda with faith in your own ability to excel" ],
+		"anathema": [ "offer prayers to a deity" ],
+		"followerAlignments": [ "all" ],
+		"source": "PZO2101",
+		"id": "eeefdf1b-6c73-490b-95db-ad4f752c1f56",
+		"aonId": 21
+	},
+	{
+		"objectType": "Faith",
+		"name": "Green Faith",
+		"details": [
+			"The worshippers of the Green Faith count many druids among their number. They view nature as divine and draw strength from the knowledge of their place in the natural order."
+		],
+		"edicts": [ "guide civilization to grow in harmony with nature", "preserve areas of natural wilderness", "protect endangered species" ],
+		"anathema": [ "cause damage to natural settings", "kill animals for reasons other than self-defense or sustenance", "allow abuse of natural resources" ],
+		"followerAlignments": [ "CN", "LN", "N", "NE", "NG" ],
+		"source": "PZO2101",
+		"id": "3bea5a96-1efa-422f-8032-1301f3d64815",
+		"aonId": 22
+	},
+	{
+		"objectType": "Faith",
+		"name": "Prophecies of Kalistrade",
+		"details": [
+			"The dream-records of an eccentric mystic teach that wealth can be achieved through a strict and abstemious code of behavior."
+		],
+		"edicts": [ "accumulate personal wealth", "foster and aid mercantile pursuits", "welcome newcomers regardless of gender or ancestry" ],
+		"anathema": [
+			"spend money frivolously",
+			"offer money to those who don't deserve wealth",
+			"overindulge in physical pleasures, food, or drink"
+		],
+		"followerAlignments": [ "LG", "LN", "LE" ],
+		"source": "PZO2101",
+		"id": "c5296875-adf9-4ad4-9c20-dc069631c14f",
+		"aonId": 23
+	},
+	{
+		"objectType": "Faith",
+		"name": "Whispering Way",
+		"details": [
+			"These cultists believe undeath is the truest form of existence, and life is meant to be spent in preparation for transition to a more glorious unlife after death."
+		],
+		"edicts": [
+			"seek methods to become undead (a lich if possible)",
+			"oppose those who seek to destroy undead",
+			"protect necromantic secrets",
+			"serve the Whispering Tyrant"
+		],
+		"anathema": [
+			"destroy necromantic texts (unless they reveal secrets of the Whispering Way)",
+			"teach others of the Whispering Way other than by whispering",
+			"use positive energy to harm undead"
+		],
+		"followerAlignments": [ "LE", "NE", "CE" ],
+		"source": "PZO2101",
+		"id": "267e8238-260e-473a-92f6-6ac7fefcba69",
+		"aonId": 24
+	}
+]

@@ -1,0 +1,96 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Archer",
+		"details": [
+			"Bows of all types are powerful weapons. Generals and hunters alike recognize the power in dealing death from long distances, and from behind cover. Those dedicated to the bow-from mysterious cloaked strangers to heartless snipers-are often viewed with a mixture of respect and fear. Like any weapon adept, the archer's skill is forged through experience and constant practice. A true archer becomes one with the bow and is able to accomplish with that weapon things that most would consider impossible, or at least nearly magical."
+		],
+		"additionalFeats": [
+			{ "level": 4, "name": "Assisting Shot" },
+			{ "level": 4, "name": "Point-Blank Shot" },
+			{ "level": 6, "name": "Double Shot" },
+			{ "level": 6, "name": "Parting Shot" },
+			{ "level": 6, "name": "Running Reload" },
+			{ "level": 8, "name": "Triple Shot" },
+			{ "level": 10, "name": "Mobile Shot Stance" },
+			{ "level": 18, "name": "Multishot Stance" }
+		],
+		"page": 157,
+		"source": "PZO2105",
+		"id": "a1f87b1b-c67a-4743-b92e-9bdfeea4ce2a",
+		"aonId": 47
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Archer Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication" ],
+		"details": [
+			"You become trained in all simple and martial weapons in the bow weapon group. Whenever you gain a class feature that grants you expert or greater proficiency in certain weapons, you also gain that proficiency rank in all simple and martial weapons in the bow weapon group. If you are at least an expert in the bow you are using, you gain access to the critical specialization effect with that bow."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the archer archetype."
+		],
+		"page": 157,
+		"source": "PZO2105",
+		"id": "0e1b017b-a363-4f26-ad6d-d3509ee7c7ef",
+		"aonId": 1885
+	},
+	{
+		"objectType": "Feat",
+		"name": "Quick Shot",
+		"actionType": "[A]",
+		"level": 4,
+		"traits": [ "Archetype", "Open" ],
+		"prerequisites": [ "Archer Dedication" ],
+		"details": [
+			"You draw your bow and attack with the same action. You Interact to draw a weapon from the bow weapon group that is loaded or has reload 0, then Strike with that weapon."
+		],
+		"page": 157,
+		"source": "PZO2105",
+		"id": "0a2833e6-7ba3-4dd4-86d9-937e6a384baa",
+		"aonId": 1886
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Bow Training",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Archer Dedication" ],
+		"details": [
+			"Through constant practice and the crucible of experience, you increase your skill with advanced bows. You gain proficiency with all advanced bows as if they were martial weapons in the bow weapon group."
+		],
+		"page": 157,
+		"source": "PZO2105",
+		"id": "e9f3ef29-fb3e-4a34-bf89-3140a24d5b8e",
+		"aonId": 1887
+	},
+	{
+		"objectType": "Feat",
+		"name": "Crossbow Terror",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Archer Dedication" ],
+		"details": [
+			"You are a dynamo with the crossbow. You gain a +2 circumstance bonus to damage with crossbows. If the crossbow is a simple weapon, also increase the damage die size for your attacks made with that crossbow by one step. As normal, this damage die increase can't be combined with other abilities that alter the weapon damage die (such as the ranger feat Crossbow Ace)."
+		],
+		"page": 157,
+		"source": "PZO2105",
+		"id": "036169d4-514a-451f-ba04-cd4d401f2cb6",
+		"aonId": 1888
+	},
+	{
+		"objectType": "Feat",
+		"name": "Archer's Aim",
+		"level": 8,
+		"traits": [ "Archetype", "Concentrate" ],
+		"prerequisites": [ "Archer Dedication" ],
+		"details": [
+			"You slow down, focus, and take a careful shot. Make a ranged Strike with a weapon in the bow weapon group. You gain a +2 circumstance bonus to the attack roll and ignore the target's concealed condition. If the target is hidden, reduce the flat check from being hidden from 11 to 5."
+		],
+		"page": 157,
+		"source": "PZO2105",
+		"id": "27797940-704a-4ff5-81af-39c2191d2d2d",
+		"aonId": 1889
+	}
+]

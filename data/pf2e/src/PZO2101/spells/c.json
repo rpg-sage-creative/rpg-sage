@@ -1,0 +1,741 @@
+[
+	{
+		"aonId": 31,
+		"name": "Calm Emotions",
+		"description": "Suppress strong emotions and hostility.",
+		"area": "10-foot burst",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You forcibly calm creatures in the area, soothing them into a nonviolent state; each creature must attempt a Will save.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"Calming urges impose a -1 status penalty to the creature's attack rolls."
+				],
+				"failure": [
+					"Any emotion effects that would affect the creature are suppressed and the creature can't use hostile actions. If the target is subject to hostility from any other creature, it ceases to be affected by <i>calm emotions</i>."
+				],
+				"criticalFailure": [
+					"As failure, but hostility doesn't end the effect."
+				]
+			}
+		],
+		"duration": "sustained up to 1 minute",
+		"level": 2,
+		"objectType": "Spell",
+		"page": 322,
+		"range": "120 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Emotion", "Enchantment", "Incapacitation", "Mental" ],
+		"focus": false,
+		"id": "0bf5d7e5-4a9a-4d5c-8cdb-4895fb707f21"
+	},
+	{
+		"aonId": 32,
+		"name": "Cataclysm",
+		"description": "Call an instant, damaging cataclysm.",
+		"area": "60-foot burst",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You call upon the unimaginable power of world-ending cataclysms, ripping a small piece of each cataclysm and combining them together into one horrifically powerful attack. The following effects come down upon all creatures in the area. Treat the resistances of creatures in the area as if they were 10 lower for the purpose of determining the cataclysm's damage. Each creature attempts one basic Reflex save that applies to all six types of damage. <ul><li>Flesh-dissolving acid rain deals 3d10 acid damage.</li><li>A roaring earthquake shakes and bludgeons creatures on the ground, dealing 3d10 bludgeoning damage.</li><li>A blast of freezing wind deals 3d10 cold damage.</li><li>Incredible lightning lashes the area, dealing 3d10 electricity damage.</li><li>Beating winds churn across the sky, dealing 3d10 bludgeoning damage to creatures flying in the area.</li><li>An instant tsunami sweeps over creatures in the area, dealing 3d10 bludgeoning damage with the water trait (doubled for creatures swimming in the area).</li><li>A massive wildfire burns in a sudden inferno, dealing 3d10 fire damage.</li></ul>"
+		],
+		"level": 10,
+		"objectType": "Spell",
+		"page": 322,
+		"range": "1,000 feet",
+		"savingThrow": "basic Reflex",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Acid", "Air", "Cold", "Earth", "Electricity", "Evocation", "Fire", "Water" ],
+		"focus": false,
+		"id": "aa479d5d-8667-4612-88cd-5bc653d672b2"
+	},
+	{
+		"aonId": 33,
+		"name": "Chain Lightning",
+		"description": " Lightning jumps from creature to creature.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You discharge a powerful bolt of lightning at the target, dealing 8d12 electricity damage. The target must attempt a basic Reflex save. The electricity arcs to another creature within 30 feet of the first target, jumps to another creature within 30 feet of that target, and so on. You can end the chain at any point. You can't target the same creature more than once, and you must have line of effect to all targets. Roll the damage only once, and apply it to each target (halving or doubling as appropriate for its saving throw outcome). The chain ends if any one of the targets critically succeeds at its save."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d12.", "bump": 1 }
+		],
+		"level": 6,
+		"objectType": "Spell",
+		"page": 322,
+		"range": "500 feet",
+		"savingThrow": "Reflex",
+		"source": "PZO2101",
+		"targets": "1 creature, plus any number of additional creatures",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Electricity", "Evocation" ],
+		"focus": false,
+		"id": "8dc195c3-9c33-4277-afde-556b4c7ae9f4"
+	},
+	{
+		"aonId": 34,
+		"name": "Charm",
+		"description": "A humanoid becomes more friendly to you.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"To the target, your words are honey and your visage seems bathed in a dreamy haze. It must attempt a Will save, with a +4 circumstance bonus if you or your allies recently threatened it or used hostile actions against it.",
+			"You can Dismiss the spell. If you use hostile actions against the target, the spell ends. When the spell ends, the target doesn't necessarily realize it was charmed unless its friendship with you or the actions you convinced it to take clash with its expectations, meaning you could potentially convince the target to continue being your friend via mundane means.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected and aware you tried to charm it."
+				],
+				"success": [
+					"The target is unaffected but thinks your spell was something harmless instead of <i>charm</i>, unless it identifies the spell (usually with Identifying Magic, page 305)."
+				],
+				"failure": [
+					"The target's attitude becomes friendly toward you. If it was friendly, it becomes helpful. It can't use hostile actions against you."
+				],
+				"criticalFailure": [
+					"The target's attitude becomes helpful toward you, and it can't use hostile actions against you."
+				]
+			}
+		],
+		"duration": "1 hour",
+		"heightened": [
+			{ "change": "The duration lasts until the next time you make your daily preparations.", "level": 4 },
+			{ "change": "The duration lasts until the next time you make your daily preparations, and you can target up to 10 creatures.", "level": 8 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 322,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult", "primal" ],
+		"traits": [ "Emotion", "Enchantment", "Incapacitation", "Mental" ],
+		"focus": false,
+		"id": "412a5456-6d2f-443d-9487-d04a53d365cf"
+	},
+	{
+		"aonId": 35,
+		"name": "Chill Touch",
+		"description": "Your touch hurts the living or disorients undead.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Siphoning negative energy into yourself, your hand radiates a pale darkness. Your touch weakens the living and disorients undead, possibly even causing them to flee. The effect depends on whether the target is living or undead. <ul><li><b>Living Creature</b> The spell deals negative damage equal to 1d4 plus your spellcasting modifier. The target attempts a basic Fortitude save, but is also enfeebled 1 for 1 round on a critical failure.</li><li><b>Undead Creature</b> The target is flat-footed for 1 round on a failed Fortitude save. On a critical failure, the target is also fleeing for 1 round unless it succeeds at a Will save.</li></ul>"
+		],
+		"heightened": [
+			{ "change": "The negative damage to living creatures increases by 1d4.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 323,
+		"range": "touch",
+		"savingThrow": "Fortitude",
+		"source": "PZO2101",
+		"targets": "1 living or undead creature",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Cantrip", "Necromancy", "Negative" ],
+		"focus": false,
+		"id": "7103ac35-fc6d-41b5-99b9-534a30198d0a"
+	},
+	{
+		"aonId": 36,
+		"name": "Chilling Darkness",
+		"description": "Ray of evil darkness deals cold damage, counteracts light, and harms celestials.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You shoot an utterly cold ray of darkness tinged with unholy energy. Make a ranged spell attack against the target. You deal 5d6 cold damage, plus 5d6 evil damage if the target is a celestial.",
+			"If the ray passes through an area of magical light or targets a creature affected by magical light, <i>chilling darkness</i> attempts to counteract the light. If you need to determine whether the ray passes through an area of light, draw a line between yourself and the spell's target.",
+			{ "criticalSuccess": [ "The target takes double damage." ], "success": [ "The target takes full damage." ] }
+		],
+		"heightened": [
+			{ "change": "The cold damage increases by 2d6, and the evil damage against celestials increases by 2d6.", "bump": 1 }
+		],
+		"level": 3,
+		"objectType": "Spell",
+		"page": 323,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine" ],
+		"traits": [ "Attack", "Cold", "Darkness", "Evil", "Evocation" ],
+		"focus": false,
+		"id": "a2bba791-b9e8-4f11-98ae-3d434c378032"
+	},
+	{
+		"aonId": 37,
+		"name": "Chromatic Wall",
+		"description": " A wall of light offers a unique protection based on its color.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You create an opaque wall of light in a single vibrant color. The wall is straight and vertical, stretching 60 feet long and 30 feet high. If the wall would pass through a creature, the spell is lost. The wall sheds bright light for 20 feet on each side, and dim light for the next 20 feet. You can ignore the wall's effects.",
+			"Roll 1d4 to determine the color of the wall. Each color has a particular effect on items, effects, or creatures that attempt to pass through. <i>Chromatic wall</i> can't be counteracted normally; rather, each color is automatically counteracted when targeted by a specific spell, even if that spell's level is lower than that of <i>chromatic wall</i>. <ol type=\"1\"><li><b>Red</b> The wall destroys ranged weapon ammunition (such as arrows and crossbow bolts) that would pass through, and it deals 20 fire damage to anyone passing through, with a basic Reflex save. <i>Cone of cold</i> can counteract a red <i>chromatic wall</i>.</li><li><b>Orange</b> The wall destroys thrown weapons that would pass through, and it deals 25 acid damage to anyone passing through, with a basic Reflex save. <i>Gust of wind</i> can counteract an orange <i>chromatic wall</i>.</li><li><b>Yellow</b> The wall stops acid, cold, electricity, fire, force, negative, positive, and sonic effects from passing through, and it deals 30 electricity damage to anyone passing through, with a basic Reflex save. <i>Disintegrate</i> can counteract a yellow <i>chromatic wall</i>.</li><li><b>Green</b> The wall stops toxins, gases, and breath weapons from passing through. It deals 10 poison damage to anyone passing through and makes them enfeebled 1 for 1 minute. A basic Fortitude save reduces the damage and negates the enfeebled condition on a success. <i>Passwall</i> can counteract a green <i>chromatic wall</i>.</li></ol>"
+		],
+		"duration": "10 minutes",
+		"heightened": [
+			{
+				"change": "The spell's duration increases to 1 hour. Roll 1d8 to determine the wall's color; the results for 5-8 are below. A red, orange, yellow, or green wall deals an extra 10 damage. <ol type=\"1\" start=\"5\"><li><b>Blue</b> The wall stops auditory, petrification, and visual effects from passing through, and creatures passing through are subject to the effects of <i>flesh to stone</i>. <i>Magic missile</i> can counteract a blue <i>chromatic wall</i>.</li><li><b>Indigo</b> The wall stops divination and mental effects from passing through, and those passing through are subject to the effects of <i>warp mind</i>. <i>Searing light</i> can counteract an indigo <i>chromatic wall</i>.</li><li><b>Violet</b> The wall prevents spells from targeting the other side (area effects still cross as normal). Creatures passing through must succeed at a Will save or they are slowed 1 for 1 minute; on a critical failure, the creature is instead sent to another plane, with the effect of <i>plane shift</i> . <i>Dispel magic</i> can counteract a violet <i>chromatic wall</i>.</li><li>Reroll, and creatures that pass through the wall take a -2 circumstance penalty to their saves.</li></ol>",
+				"level": 7
+			}
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 323,
+		"range": "120 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Abjuration" ],
+		"focus": false,
+		"id": "2b4e1b71-e4ea-4da2-be8d-a529d816ba79"
+	},
+	{
+		"aonId": 38,
+		"name": "Circle of Protection",
+		"description": "A creature emits an aura that protects those within against an alignment.",
+		"area": "10-foot emanation centered on the touched creature",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You ward a creature and those nearby against a specified alignment. Choose chaotic, evil, good, or lawful; this spell gains the opposing trait. Creatures in the area gain a +1 status bonus to AC against attacks by creatures of the chosen alignment and to saves against effects from such creatures. This bonus increases to +3 against effects from such creatures that directly control the target and attacks made by summoned creatures of the chosen alignment. Summoned creatures of the chosen alignment can't willingly enter the area without succeeding at a Will save; repeated attempts use the first save result."
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{ "change": "The duration increases to 1 hour.", "level": 4 }
+		],
+		"level": 3,
+		"objectType": "Spell",
+		"page": 324,
+		"range": "touch",
+		"source": "PZO2101",
+		"traditions": [ "divine", "occult" ],
+		"traits": [ "Uncommon", "Abjuration" ],
+		"focus": false,
+		"id": "7c809231-eb29-4665-8d7b-014eca3983e4"
+	},
+	{
+		"aonId": 39,
+		"name": "Clairaudience",
+		"description": "Hear through an invisible magical sensor.",
+		"cast": "1 minute",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You create an invisible floating ear at a location within range (even if it's outside your line of sight or line of effect). It can't move, but you can hear through the ear as if using your normal auditory senses."
+		],
+		"duration": "10 minutes",
+		"level": 3,
+		"objectType": "Spell",
+		"page": 324,
+		"range": "500 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Divination", "Scrying" ],
+		"focus": false,
+		"id": "946b9e5e-4bf4-4851-96a8-d099268eaddd"
+	},
+	{
+		"aonId": 40,
+		"name": "Clairvoyance",
+		"description": "See through an invisible magical sensor.",
+		"cast": "1 minute",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You create an invisible floating eye at a location within range (even if it's outside your line of sight or line of effect). The eye can't move, but you can see in all directions from that point as if using your normal visual senses."
+		],
+		"duration": "10 minutes",
+		"level": 4,
+		"objectType": "Spell",
+		"page": 324,
+		"range": "500 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Divination", "Scrying" ],
+		"focus": false,
+		"id": "e654eb19-4051-4f1f-847a-7ec5d2cf0a28"
+	},
+	{
+		"aonId": 41,
+		"name": "Cloak of Colors",
+		"description": "Bright colors dazzle creatures near the target, and attacks cause blinding fLashes of light.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"A cloak of swirling colors shrouds the target. Creatures are dazzled while adjacent to it, and attacking the target causes a brilliant flash of light. A creature that hits the target with a melee attack must attempt a Will save.",
+			{ "success": [ "The attacker is unaffected." ], "failure": [ "The attacker is blinded for 1 round." ], "criticalFailure": [ "The attacker is stunned for 1 round." ] },
+			"The creature is temporarily immune until the end of its turn; this effect has the incapacitation trait."
+		],
+		"duration": "1 minute",
+		"level": 5,
+		"objectType": "Spell",
+		"page": 324,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Illusion", "Visual" ],
+		"focus": false,
+		"id": "bb20240f-3028-4318-956f-bdedd9db9bb5"
+	},
+	{
+		"aonId": 42,
+		"name": "Cloudkill",
+		"description": "Poison creatures in a cloud that moves away from you.",
+		"area": "20-foot burst",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure a poisonous fog. This functions as <i>obscuring mist</i> (page 355), except the area moves 10 feet away from you each round. You deal 6d8 poison damage to each breathing creature that starts its turn in the spell's area. You can Dismiss the spell."
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{ "change": "The damage increases by 1d8.", "bump": 1 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 324,
+		"range": "120 feet",
+		"savingThrow": "basic Fortitude",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Death", "Necromancy", "Poison" ],
+		"focus": false,
+		"id": "f415c90c-8108-4d8c-a3a2-d4bc637ac308"
+	},
+	{
+		"aonId": 43,
+		"name": "Collective Transposition",
+		"description": "Teleport up to two creatures to new positions near you.",
+		"area": "30-foot emanation",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You teleport the targets to new positions within the area. The creatures must each be able to fit in their new space, and their positions must be unoccupied, entirely within the area, and in your line of sight. Unwilling creatures can attempt a Will save.",
+			{
+				"criticalSuccess": [
+					"The target can teleport if it wants, but it chooses the destination within range."
+				],
+				"success": [
+					"The target is unaffected."
+				],
+				"failure": [
+					"You teleport the target and choose its destination."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The number of targets increases by 1.", "bump": 1 }
+		],
+		"level": 6,
+		"objectType": "Spell",
+		"page": 324,
+		"source": "PZO2101",
+		"targets": "up to 2 creatures",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Conjuration", "Teleportation" ],
+		"focus": false,
+		"id": "7f8fd0f7-f1a0-474c-b79f-ae604d1c1307"
+	},
+	{
+		"aonId": 44,
+		"name": "Color Spray",
+		"description": "Swirling colors dazzle or stun creatures.",
+		"area": "15-foot cone",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Swirling colors affect viewers based on their Will saves.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature is dazzled for 1 round."
+				],
+				"failure": [
+					"The creature is stunned 1, blinded for 1 round, and dazzled for 1 minute."
+				],
+				"criticalFailure": [
+					"The creature is stunned for 1 round and blinded for 1 minute."
+				]
+			}
+		],
+		"duration": "1 or more rounds (see below)",
+		"level": 1,
+		"objectType": "Spell",
+		"page": 324,
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Illusion", "Incapacitation", "Visual" ],
+		"focus": false,
+		"id": "3de1aa99-dff9-4e2c-a98d-62c207a5be16"
+	},
+	{
+		"aonId": 45,
+		"name": "Command",
+		"description": "Bid a creature to approach, run, release something, lie prone, or stand up.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You shout a command that's hard to ignore. You can command the target to approach you, run away (as if it had the fleeing condition), release what it's holding, drop prone, or stand in place. It can't Delay or take any reactions until it has obeyed your command. The effects depend on the target's Will save.",
+			{
+				"success": [
+					"The creature is unaffected."
+				],
+				"failure": [
+					"For the first action on its next turn, the creature must use a single action to do as you command."
+				],
+				"criticalFailure": [
+					"The target must use all its actions on its next turn to obey your command."
+				]
+			}
+		],
+		"duration": "until the end of the target's next turn",
+		"heightened": [
+			{ "change": "You can target up to 10 creatures.", "level": 5 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 325,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Auditory", "Enchantment", "Linguistic", "Mental" ],
+		"focus": false,
+		"id": "218cff6f-b76d-4ec7-b4f7-3b9a8791d9e0"
+	},
+	{
+		"aonId": 46,
+		"name": "Comprehend Language",
+		"description": "A creature understands one language.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"The target can understand the meaning of a single language it is hearing or reading when you cast the spell. This doesn't let it understand codes, language couched in metaphor, and the like (subject to GM discretion). If the target can hear multiple languages and knows that, it can choose which language to understand; otherwise, choose one of the languages randomly."
+		],
+		"duration": "1 hour",
+		"heightened": [
+			{ "change": "The target can also speak the language.", "level": 3 },
+			{ "change": "You can target up to 10 creatures, and targets can also speak the language.", "level": 4 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 325,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "divine", "occult" ],
+		"traits": [ "Divination" ],
+		"focus": false,
+		"id": "a29a4e1d-5e7f-446a-a7ac-2f52e1520b4b"
+	},
+	{
+		"aonId": 47,
+		"name": "Cone of Cold",
+		"description": "Bitter cold damages creatures in a cone.",
+		"area": "60-foot cone",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"Icy cold rushes forth from your hands. You deal 12d6 cold damage to creatures in the area."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 2d6.", "bump": 1 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 325,
+		"savingThrow": "basic Reflex",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Cold", "Evocation" ],
+		"focus": false,
+		"id": "2b07a33a-cb28-43f9-8eb3-8f28e92a77b7"
+	},
+	{
+		"aonId": 48,
+		"name": "Confusion",
+		"description": "Befuddle a creature, making it act randomly.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You befuddle your target with strange impulses, causing it to act randomly. The effects are determined by the target's Will save. You can Dismiss the spell.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target babbles incoherently and is stunned 1."
+				],
+				"failure": [
+					"The target is confused for 1 minute. It can attempt a new save at the end of each of its turns to end the confusion."
+				],
+				"criticalFailure": [
+					"The target is confused for 1 minute, with no save to end early."
+				]
+			}
+		],
+		"duration": "1 minute",
+		"heightened": [
+			{ "change": "You can target up to 10 creatures.", "level": 8 }
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 325,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Emotion", "Enchantment", "Mental" ],
+		"focus": false,
+		"id": "59bba615-0b15-4b0d-9658-65f680a19cbd"
+	},
+	{
+		"aonId": 49,
+		"name": "Contingency",
+		"description": "Set up a spell to trigger later under your choice of circumstances.",
+		"cast": "10 minutes",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You prepare a spell that will trigger later. While casting <i>contingency</i>, you also cast another spell of 4th level or lower with a casting time of no more than 3 actions. This companion spell must be one that can affect you. You must make any decisions for the spell when you cast <i>contingency</i>, such as choosing a damage type for <i>resist energy</i>. During the casting, choose a trigger under which the spell will be cast, using the same restrictions as for the trigger of a Ready action. Once <i>contingency</i> is cast, you can cause the companion spell to come into effect as a reaction with that trigger. It affects only you, even if it would affect more creatures. If you define complicated conditions, as determined by the GM, the trigger might fail. If you cast <i>contingency</i> again, the newer casting supersedes the older."
+		],
+		"duration": "24 hours",
+		"heightened": [
+			{ "change": "You can choose a spell of 5th level or lower.", "level": 8 },
+			{ "change": "You can choose a spell of 6th level or lower.", "level": 9 },
+			{ "change": "You can choose a spell of 7th level or lower.", "level": 10 }
+		],
+		"level": 7,
+		"objectType": "Spell",
+		"page": 326,
+		"source": "PZO2101",
+		"traditions": [ "arcane" ],
+		"traits": [ "Abjuration" ],
+		"focus": false,
+		"id": "ae170ff9-837c-4f1e-9cd6-a05fa859ff79"
+	},
+	{
+		"aonId": 50,
+		"name": "Continual Flame",
+		"description": "A magical flame burns indefinitely.",
+		"cast": "[A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"cost": "6 gp of ruby dust",
+		"details": [
+			"A magical flame springs up from the object, as bright as a torch. It doesn't need oxygen, react to water, or generate heat."
+		],
+		"duration": "unlimited",
+		"heightened": [
+			{ "change": "The cost increases as follows: 16 gp for 3rd level; 30 gp for 4th, 60 gp for 5th, 120 gp for 6th,; 270 gp for 7th, 540 gp for 8th, 1,350 gp for 9th, and 3,350 gp for 10th.", "bump": 1 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 326,
+		"range": "touch",
+		"source": "PZO2101",
+		"targets": "1 object",
+		"traditions": [ "arcane", "divine", "occult", "primal" ],
+		"traits": [ "Evocation", "Light" ],
+		"focus": false,
+		"id": "f3e374c2-b07a-42d7-84ce-34fe674f0375"
+	},
+	{
+		"aonId": 51,
+		"name": "Control Water",
+		"description": "Raise or lower water in a large area.",
+		"area": "50 feet long by 50 feet wide",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"By imposing your will upon the water, you can raise or lower the level of water in the chosen area by 10 feet. Water creatures in the area are subjected to the effects of <i>slow</i>."
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 326,
+		"range": "500 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Evocation", "Water" ],
+		"focus": false,
+		"id": "9e24f91f-e4b5-4be3-880c-6ec5e9461d0e"
+	},
+	{
+		"aonId": 52,
+		"name": "Create Food",
+		"description": "Conjure food that can feed multiple creatures.",
+		"cast": "1 hour",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You create enough food to feed six Medium creatures for a day. This food is bland and unappealing, but it is nourishing. After 1 day, if no one has eaten the food, it decays and becomes inedible. Most Small creatures eat one-quarter as much as a Medium creature (one-sixteenth as much for most Tiny creatures), and most Large creatures eat 10 times as much (100 times as much for Huge creatures and so on)."
+		],
+		"heightened": [
+			{ "change": "You can feed 12 Medium creatures.", "level": 4 },
+			{ "change": "You can feed 50 Medium creatures.", "level": 6 },
+			{ "change": "You can feed 200 Medium creatures.", "level": 8 }
+		],
+		"level": 2,
+		"objectType": "Spell",
+		"page": 326,
+		"range": "30 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "primal" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "21ad143b-3576-440d-a278-f7e727ea569f"
+	},
+	{
+		"aonId": 53,
+		"name": "Create Water",
+		"description": "Conjure 2 gallons of water.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"As you cup your hands, water begins to flow forth from them. You create 2 gallons of water. If no one drinks it, it evaporates after 1 day."
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 326,
+		"range": "0 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "divine", "primal" ],
+		"traits": [ "Conjuration", "Water" ],
+		"focus": false,
+		"id": "57b68bb2-5467-4525-a626-908acb5dc323"
+	},
+	{
+		"aonId": 54,
+		"name": "Creation",
+		"description": "Make a temporary object.",
+		"cast": "1 minute",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You conjure a temporary object from eldritch energy. It must be of vegetable matter (such as wood or paper) and 5 cubic feet or smaller. It can't rely on intricate artistry or complex moving parts, never fulfills a cost or the like, and can't be made of precious materials or materials with a rarity of uncommon or higher. It is obviously temporarily conjured, and thus can't be sold or passed off as a genuine item."
+		],
+		"duration": "1 hour",
+		"heightened": [
+			{ "change": "The item is metal and can include common minerals, like feldspar or quartz.", "level": 5 }
+		],
+		"level": 4,
+		"objectType": "Spell",
+		"page": 326,
+		"range": "0 feet",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Conjuration" ],
+		"focus": false,
+		"id": "1ced7985-7a34-4e79-a0e6-30133ba90faa"
+	},
+	{
+		"aonId": 55,
+		"name": "Crisis of Faith",
+		"description": "Cause mental damage and possibly make a worshipper unable to cast spells.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You assault the target's faith, riddling the creature with doubt and mental turmoil that deal 6d6 mental damage, or 6d8 mental damage if it can cast divine spells. The effects are determined by its Will save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes half damage."
+				],
+				"failure": [
+					"The target takes full damage; if the target can cast divine spells, it's stupefied 1 for 1 round."
+				],
+				"criticalFailure": [
+					"The target takes double damage, is stupefied 1 for 1 round, and can't cast divine spells for 1 round."
+				]
+			},
+			"To many deities, casting this spell on a follower of your own deity without significant cause is anathema."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 2d6 (or by 2d8 if the target is a divine spellcaster).", "bump": 1 }
+		],
+		"level": 3,
+		"objectType": "Spell",
+		"page": 326,
+		"range": "30 feet",
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"targets": "1 creature",
+		"traditions": [ "divine" ],
+		"traits": [ "Enchantment", "Mental" ],
+		"focus": false,
+		"id": "31debbfb-5aa7-4a4d-9740-74423f4994a6"
+	},
+	{
+		"aonId": 56,
+		"name": "Crusade",
+		"description": "Creatures become dedicated to a cause of your choice.",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You issue a divine mandate to the targets. you pronounce a cause. It can be to attain an item, claim a patch of land, slay a creature, war with a group, or be entirely peaceful. Your cause can't force the targets to harm one another or themselves. The targets become completely dedicated to that cause, depending on their levels. They choose their own actions, but they favor direct action over inaction or indirect action. <ul><li><b>13th or Lower</b> The target is so dedicated to the cause that it pursues the cause to the death (unless you say otherwise).</li><li><b>14th</b> The target is dedicated to the cause, but the spell ends for the target if it's reduced to half its maximum Hit Points or fewer.</li><li><b>15th</b> As 14th, plus the target can attempt a Will save at the end of each of its turns to end the spell for itself.</li></ul>",
+			"The spell ends for all creatures if you or one of your allies uses a hostile action against a target, or when the cause is completed. The GM might determine this spell has alignment traits befitting the cause."
+		],
+		"duration": "10 minutes",
+		"heightened": [
+			{ "change": "The level for each category increases by 2.", "level": 10 }
+		],
+		"level": 9,
+		"objectType": "Spell",
+		"page": 327,
+		"range": "60 feet",
+		"source": "PZO2101",
+		"targets": "up to 4 creatures",
+		"traditions": [ "divine" ],
+		"traits": [ "Uncommon", "Enchantment", "Linguistic", "Mental" ],
+		"focus": false,
+		"id": "5386c385-6987-4e34-8529-da3a4528ac39"
+	},
+	{
+		"aonId": 57,
+		"name": "Crushing Despair",
+		"description": "Make a creature sob uncontrollably.",
+		"area": "30-foot cone",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You inflict despair on creatures in the area. The effects for each creature are determined by its Will save.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"For 1 round, the creature can't use reactions and must attempt another save at the start of its turn; on a failure, it is slowed 1 for that turn as it sobs uncontrollably."
+				],
+				"failure": [
+					"As success, but the slowed 1 duration is 1 minute."
+				],
+				"criticalFailure": [
+					"As failure, and the creature is automatically slowed 1 for 1 minute."
+				]
+			}
+		],
+		"duration": "1 or more rounds",
+		"heightened": [
+			{ "change": "The area increases to a 60-foot cone.", "level": 7 }
+		],
+		"level": 5,
+		"objectType": "Spell",
+		"page": 327,
+		"savingThrow": "Will",
+		"source": "PZO2101",
+		"traditions": [ "arcane", "occult" ],
+		"traits": [ "Emotion", "Enchantment", "Mental" ],
+		"focus": false,
+		"id": "cc0b8156-cbb9-40db-b05d-3706d41b392e"
+	}
+]

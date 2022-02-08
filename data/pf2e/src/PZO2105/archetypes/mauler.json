@@ -1,0 +1,102 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Mauler",
+		"details": [
+			"You shove your way through legions of foes, knock enemies on all sides to the ground, and deal massive blows to anyone or anything that comes near."
+		],
+		"additionalFeats": [
+			{ "level": 4, "name": "Knockdown" },
+			{ "level": 4, "name": "Power Attack" },
+			{ "level": 12, "name": "Improved Knockdown" },
+			{ "level": 14, "name": "Brutal Finish" },
+			{ "level": 14, "name": "Unbalancing Sweep" }
+		],
+		"page": 183,
+		"source": "PZO2105",
+		"id": "58fedc0c-7f15-4baf-9c14-fa5b2c97138a",
+		"aonId": 68
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Mauler Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication" ],
+		"prerequisites": [ "Strength 14" ],
+		"details": [
+			"You specialize in weapons that require two hands. You become trained in all simple and martial melee weapons that require two hands to wield or have the two-hand trait. Whenever you gain a class feature that grants you expert or greater proficiency in weapons, you also gain that proficiency rank in these weapons. If you are at least an expert in such a weapon, you gain access to the critical specialization effect with that weapon."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the mauler archetype."
+		],
+		"page": 183,
+		"source": "PZO2105",
+		"id": "24d7d9ec-0cd6-4f50-b536-7cfbb7b2f2b8",
+		"aonId": 2022
+	},
+	{
+		"objectType": "Feat",
+		"name": "Clear the Way",
+		"actionType": "[A][A]",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Mauler Dedication" ],
+		"requirements": "You're wielding a melee weapon in two hands.",
+		"details": [
+			"You put your body behind your massive weapon and swing, shoving enemies to clear a wide path. You attempt to Shove up to five creatures adjacent to you, rolling a separate Athletics check for each target. Then Stride up to half your Speed. This movement doesn't trigger reactions from any of the creatures you successfully Shoved."
+		],
+		"page": 183,
+		"source": "PZO2105",
+		"id": "862e0888-cdae-4066-8191-6dcf5e41b22c",
+		"aonId": 2023
+	},
+	{
+		"objectType": "Feat",
+		"name": "Shoving Sweep",
+		"actionType": "[R]",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Mauler Dedication", "expert in Athletics" ],
+		"trigger": "A creature within your reach leaves a square during a move action it's using.",
+		"requirements": "You're wielding a melee weapon in two hands.",
+		"details": [
+			"You swing your weapon at your foe, rebuffing them back. You attempt to Shove the triggering creature, ignoring the requirement that you have a hand free. The creature continues its movement after the Shove."
+		],
+		"page": 183,
+		"source": "PZO2105",
+		"id": "7b94664a-25b7-4b28-892c-ba937563a4f8",
+		"aonId": 2024
+	},
+	{
+		"objectType": "Feat",
+		"name": "Hammer Quake",
+		"actionType": "[A][A][A]",
+		"level": 14,
+		"traits": [ "Archetype", "Flourish", "Open" ],
+		"prerequisites": [ "Mauler Dedication" ],
+		"requirements": "You're wielding a non-finesse melee weapon in two hands.",
+		"details": [
+			"You smash the ground with your weapon, knocking nearby creatures to the ground. Choose a square within your reach, including your own space. If there's a foe in the chosen square, Strike that foe with the required weapon. Then attempt to Trip every foe in the chosen square plus each square adjacent to that square, ignoring Trip's requirement that you have a hand free. This counts as three attacks toward your multiple attack penalty, but the penalty doesn't increase until after you've made the Strike, if any, and all the Trip attempts."
+		],
+		"page": 183,
+		"source": "PZO2105",
+		"id": "cb151ab1-ffcb-47ee-acd1-48fd504ea608",
+		"aonId": 2025
+	},
+	{
+		"objectType": "Feat",
+		"name": "Avalanche Strike",
+		"actionType": "[A][A][A]",
+		"level": 16,
+		"traits": [ "Archetype", "Flourish", "Open" ],
+		"prerequisites": [ "Mauler Dedication" ],
+		"requirements": "You're wielding a melee weapon in two hands.",
+		"details": [
+			"You attack all nearby adversaries. Make a melee Strike with the required weapon against each enemy within your melee reach. Each attack counts toward your multiple attack penalty, but don't increase your penalty until you have made all your attacks."
+		],
+		"page": 183,
+		"source": "PZO2105",
+		"id": "7fbdac25-bc58-4c0b-8e3c-dca3b40d72e5",
+		"aonId": 2026
+	}
+]

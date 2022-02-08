@@ -1,0 +1,36 @@
+[
+	{
+		"aonId": 540,
+		"name": "Snowball",
+		"source": "PZO9301",
+		"focus": false,
+		"description": "",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You throw a magically propelled and chilled ball of dense snow. The target takes 2d4 cold damage and potentially other effects, depending on the result of your spell attack roll.",
+			{
+				"criticalSuccess": [
+					"The target takes double damage and a -10-foot status penalty to its Speeds for 1 round."
+				],
+				"success": [
+					"The target takes full damage and a -5-foot status penalty to its Speeds for 1 round."
+				],
+				"failure": [
+					"No effect."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The damage increases by 2d4.", "bump": 1 }
+		],
+		"level": 1,
+		"objectType": "Spell",
+		"page": 112,
+		"range": "30 feet",
+		"targets": "1 creature",
+		"traditions": [ "arcane", "primal" ],
+		"traits": [ "Attack", "Cold", "Evocation", "Water" ],
+		"id": "e8afdd28-b1bd-49da-95a2-4b7a1ed80a77"
+	}
+]

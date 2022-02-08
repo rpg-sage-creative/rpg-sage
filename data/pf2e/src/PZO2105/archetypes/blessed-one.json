@@ -1,0 +1,85 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Blessed One",
+		"details": [
+			"Through luck or deed, heritage or heroics, you carry the blessing of a deity. This blessing manifests as the ability to heal wounds and remove harmful conditions, and exists independent of worship. You might offer thanks daily to the deity whose power you wield, or you might carry these blessings reluctantly, seeking to avoid responsibility or even acting to defy the deity's influence on you. You might wear the robes of the deity's order, or you might give little thought and even less reverence to the source of your powers. However you feel about these gifts, there can be no doubt that you wield a special power. Good-aligned deities are most likely to empower a blessed one. However, deities of any alignment can grant such a blessing, as long as they are capable of granting a positive divine font to their clerics. This means such deities as Lamashtu might grant a foul version of the blessed one's powers."
+		],
+		"additionalFeats": [
+			{ "level": 6, "name": "Accelerating Touch" },
+			{ "level": 6, "name": "Mercy" },
+			{ "level": 8, "name": "Invigorating Mercy" },
+			{ "level": 10, "name": "Greater Mercy" },
+			{ "level": 12, "name": "Elucidating Mercy" },
+			{ "level": 12, "name": "Resilient Touch" },
+			{ "level": 14, "name": "Affliction Mercy" },
+			{ "level": 14, "name": "Amplifying Touch" },
+			{ "level": 20, "name": "Rejuvenating Touch" }
+		],
+		"page": 162,
+		"source": "PZO2105",
+		"id": "bfdb3286-4bb9-4806-bf90-b60dd003b2b4",
+		"aonId": 51
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Blessed One Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication" ],
+		"details": [
+			"You are touched by a deity and gifted with the ability to alleviate the suffering of others. You gain the <i>lay on hands</i> devotion spell. It costs 1 Focus Point to cast a focus spell. This feat grants a focus pool of 1 Focus Point that you can recover using the Refocus activity (<i>Core Rulebook</i> 300). You can Refocus by meditating, whether you reflect on the deity granting the blessing or not, allowing your blessing to refill your focus pool. Your devotion spells from the blessed one archetype are divine spells."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the blessed one archetype."
+		],
+		"page": 162,
+		"source": "PZO2105",
+		"id": "0ba32f8f-6215-43a5-9cd5-47404c5da182",
+		"aonId": 1910
+	},
+	{
+		"objectType": "Feat",
+		"name": "Blessed Sacrifice",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Blessed One Dedication" ],
+		"details": [
+			"You gain the <i>protector's sacrifice</i> domain spell as a devotion spell. Increase the number of Focus Points in your focus pool by 1."
+		],
+		"page": 162,
+		"source": "PZO2105",
+		"id": "859e026a-4152-4c2b-b7d4-7392841e2151",
+		"aonId": 1911
+	},
+	{
+		"objectType": "Feat",
+		"name": "Blessed Spell",
+		"level": 8,
+		"traits": [ "Archetype", "Concentrate", "Metamagic" ],
+		"prerequisites": [ "Blessed One Dedication", "ability to cast spells from spell slots", "Mercy" ],
+		"frequency": "once per 10 minutes",
+		"details": [
+			"When you focus your magic on an ally, you can remove harmful conditions. If your next action is to Cast a Spell from a spell slot, and that spell targets only a single ally, you can also attempt to remove a harmful condition from that ally. The condition must be one that could be removed by your Mercy feat, including those granted by later feats such as Greater Mercy. Attempt a counteract check based on the spell's DC and level. This effect is in addition to the normal effects of your spell."
+		],
+		"page": 162,
+		"source": "PZO2105",
+		"id": "57c7deed-1407-4b19-983a-445efa14d7a1",
+		"aonId": 1912
+	},
+	{
+		"objectType": "Feat",
+		"name": "Blessed Denial",
+		"actionType": "[R]",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Blessed One Dedication" ],
+		"trigger": "An ally within 30 feet would become frightened, drained, enfeebled, sickened, or stupefied.",
+		"details": [
+			"You exude peace and protection, lessening a harmful condition as it falls upon an ally. Reduce the value of the condition your ally would take by 1 (to a minimum of 0). If the ally takes more than one condition at the same time, choose one to reduce."
+		],
+		"page": 162,
+		"source": "PZO2105",
+		"id": "8138629f-0070-439f-86fa-30e649996dc6",
+		"aonId": 1913
+	}
+]

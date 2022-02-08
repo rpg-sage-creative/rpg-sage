@@ -1,0 +1,59 @@
+[
+	{
+		"name": "Transcribe Moment",
+		"level": 4,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation" ],
+		"cast": "[A][A]",
+		"components": [ "material", "somatic" ],
+		"details": [
+			"You instantly create a small, permanent scroll that contains a magically precise written description of your current surroundings in every direction. Any creature who spends 1 minute to read the scroll-written in a language of your choice that you know- immediately sees and experiences your surroundings during the moment that you recorded (including whatever events transpired that round) exactly as you experienced it. This depiction records only what you can sense yourself. For example, if you can't see invisible creatures, the depiction doesn't reveal them even to a reader who could normally see them; a reader can't use their Perception to notice details you missed, but they can attempt a check to Recall Knowledge based on what they just experienced if they have knowledge that you lack. You can have multiple scrolls from <i>transcribe moment</i> in existence at the same time, up to a number equal to your Intelligence modifier. If you Cast the Spell again while already at the maximum number of scrolls, choose one of the current scrolls to lose its magic, then create the new one."
+		],
+		"page": 45,
+		"source": "PZO9307",
+		"focus": true,
+		"aonId": 831,
+		"id": "ae65eb7e-527e-451f-9db1-0ca27b7f1d37"
+	},
+	{
+		"name": "Familiar Form",
+		"level": 4,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Polymorph", "Transmutation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "1 minute",
+		"details": [
+			"You transform into a Tiny animal that commonly serves as a spellcaster's familiar. You gain the effects of the spell <i>pest form</i>, heightened to the level of <i>familiar form</i> you cast. However, you can transform into only a bat, cat, raven, snake, or other Tiny animal of a type that you have seen serve as a spellcaster's familiar.",
+			"While in this form, despite the restrictions from polymorph battle forms, you retain the ability to cast spells of 1st level or lower but only those without material components. You still can't make any Strikes or other attacks in <i>pest form</i>, as normal."
+		],
+		"heightened": [
+			{ "change": "You retain the ability to cast spells of 2nd level or lower, rather than 1st, but still only those without material components. Additionally, the duration of <i>familiar form</i> increases to 10 minutes.", "level": 6 },
+			{ "change": "You retain the ability to cast spells of 3rd level or lower, rather than 1st, but still only those without material components. Additionally, the duration of <i>familiar form</i> increases to 10 minutes.", "level": 8 }
+		],
+		"page": 49,
+		"source": "PZO9307",
+		"focus": true,
+		"aonId": 832,
+		"id": "5f137a0d-d816-4906-a469-a2a87632827d"
+	},
+	{
+		"name": "Spellmaster's Ward",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Abjuration" ],
+		"cast": "[A] to [A][A][A]",
+		"components": [ "material", "somatic", "verbal" ],
+		"details": [
+			"You create one or more glowing protective runes that revolve around you. For each additional action you use when Casting the Spell, increase the number of runes you create by one, to a maximum of three runes for 3 actions. When you next take damage from a spell, a rune is expended to prevent 2d6 of that spell's damage. If damage from the triggering spell remains, additional runes are expended until the damage is completely negated, or until all runes have been spent, whichever comes first."
+		],
+		"heightened": [
+			{ "change": "Each rune prevents an additional 1 damage.", "bump": 1 }
+		],
+		"page": 49,
+		"source": "PZO9307",
+		"focus": true,
+		"aonId": 833,
+		"id": "d23dd2db-a5b4-42d0-a6b8-603841b179f0"
+	}
+]

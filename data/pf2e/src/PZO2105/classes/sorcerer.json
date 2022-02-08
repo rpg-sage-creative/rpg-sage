@@ -1,0 +1,6 @@
+[
+	{ "objectType": "ClassPath", "name": "Genie", "class": "Sorcerer", "types": [ "Janni", "Djinni", "Efreeti", "Marid", "Shaitan" ], "source": "PZO2105", "id": "bff8e5c8-2c71-4cdb-b4eb-2c35f8851526", "aonId": 11 },
+	{ "objectType": "ClassPath", "name": "Nymph", "class": "Sorcerer", "source": "PZO2105", "id": "a7b4fa76-6859-409d-84fa-7eaa1e149aa1", "aonId": 12 },
+	{ "objectType": "ClassPath", "name": "Psychopomp", "class": "Sorcerer", "source": "PZO2105", "id": "47e5f35c-6193-4581-ba89-3a5614a74c07", "aonId": 13 },
+	{ "objectType": "ClassPath", "name": "Shadow", "class": "Sorcerer", "source": "PZO2105", "id": "83d4b357-d1e7-4e74-a7d2-e755f9586c1e", "aonId": 14 }
+]

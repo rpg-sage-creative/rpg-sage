@@ -1,0 +1,106 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Fighter",
+		"details": [
+			"Youhavespenttimelearningtheartofwarfare,increasing your skill with martial arms and at wearing armor. With further training, you can become a true combat specialist."
+		],
+		"page": 226,
+		"source": "PZO2101",
+		"id": "a41ac1cf-95a4-419d-bc4e-5d33384453de",
+		"aonId": 7
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Fighter Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Strength 14", "Dexterity 14" ],
+		"details": [
+			"You become trained in simple weapons and martial weapons. You become trained in your choice of Acrobatics or Athletics; if you are already trained in both of these skills, you instead become trained in a skill of your choice. You become trained in fighter class DC."
+		],
+		"special": [
+			"You cannot select another dedication feat until you have gained two other feats from the fighter archetype."
+		],
+		"page": 226,
+		"source": "PZO2101",
+		"id": "8b75334d-13ab-4323-9f65-7a28136ca334",
+		"aonId": 709
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Maneuver",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Fighter Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level fighter feat."
+		],
+		"page": 226,
+		"source": "PZO2101",
+		"id": "fa08f3b1-a77a-499b-9ba7-4ce251ffa257",
+		"aonId": 710
+	},
+	{
+		"objectType": "Feat",
+		"name": "Fighter Resiliency",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [
+			"Fighter Dedication",
+			"class granting no more Hit Points per level than 8 + your Constitution modifier"
+		],
+		"details": [
+			"You gain 3 additional Hit Points for each fighter archetype class feat you have. As you continue selecting fighter archetype class feats, you continue to gain additional Hit Points in this way."
+		],
+		"page": 226,
+		"source": "PZO2101",
+		"id": "c0d6969a-d797-4d7c-9cc7-6216e98037e5",
+		"aonId": 711
+	},
+	{
+		"objectType": "Feat",
+		"name": "Opportunist",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Fighter Dedication" ],
+		"details": [
+			"You gain the Attack of Opportunity reaction, found on page 142."
+		],
+		"page": 226,
+		"source": "PZO2101",
+		"id": "c0cce893-2bf7-4902-b6c7-5f8a9f4e6df0",
+		"aonId": 712
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Maneuver",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Maneuver" ],
+		"details": [
+			"You gain a fighter feat. For the purpose of meeting its prerequisites, your fighter level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another fighter feat."
+		],
+		"page": 226,
+		"source": "PZO2101",
+		"id": "de76472e-7844-4c19-a290-1d2acc256472",
+		"aonId": 713
+	},
+	{
+		"objectType": "Feat",
+		"name": "Diverse Weapon Expert",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Fighter Dedication", "expert in any kind of weapon or unarmed attack" ],
+		"details": [
+			"Your proficiency ranks for simple weapons and martial weapons increase to expert, and your proficiency rank for advanced weapons increases to trained."
+		],
+		"page": 226,
+		"source": "PZO2101",
+		"id": "29edd954-3782-4f1d-aa3f-3b1794801399",
+		"aonId": 714
+	}
+]

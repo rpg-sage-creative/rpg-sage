@@ -1,0 +1,65 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Psychic",
+		"duringCombatEncounters": [
+			"You freely wield your psychic cantrips, choosing where and when to amplify them for maximum effect and biding your time until you can unleash your mind's full potential."
+		],
+		"duringSocialEncounters": [
+			"You use your expanded awareness to navigate social encounters.",
+			"If your power springs from emotion, you might maneuver with empathy; if you control your power through discipline, you might efficiently note relevant facts and figures to guide the discussion."
+		],
+		"whileExploring": [
+			"You keep your mind's eye open for the many paranormal threats that the less sensitive might not detect.",
+			"Typically, you either scan for magic or investigate for psychic impressions, veiled thoughts, and wandering spirits."
+		],
+		"inDowntime": [
+			"You strive to learn more about the depths of the mind, seeking out new spells to master and phenomena to uncover.",
+			"You test the limits of your adaptability by retraining yourself to fit your evolving understanding of your hidden potential."
+		],
+		"youMight": [
+			"Prefer meditation, imagination, dreams, or other intangible manifestations of thought over the immediacy of the physical world.",
+			"Learn new things about yourself constantly, unlocking new depths of hidden potential just when you thought you understood it all.",
+			"Use your psychic magic even when normal methods would suffice, perhaps preferring mental messages or levitating an object to a companion seated nearby."
+		],
+		"othersProbably": [
+			"Are awed by your unique mental abilities, especially when your mind is unleashed.",
+			"Have difficulty understanding that the magic you perform with your mind comes from the same source as magic wielded with incantations.",
+			"Wonder if you might be a monster, possessed by spirits, chosen by the gods, or have some other unusual reason for your strange powers."
+		],
+		"aonId": 0,
+		"source": "PZO2111",
+		"id": "8af6ea6b-4a1f-464b-93b3-8fd7baa8c093"
+	},
+	{
+		"objectType": "Class",
+		"name": "Thaumaturge",
+		"duringCombatEncounters": [
+			"You use your esoterica and implements to assist in combat, assessing and exploiting enemies' weaknesses while using the tricks up your sleeve to stay one step ahead."
+		],
+		"duringSocialEncounters": [
+			"You manipulate and understand the social connections between people, much as you do the magical connections between mysteries and concepts.",
+			"This helps you find common ground or play one side against the other."
+		],
+		"whileExploring": [
+			"You investigate mystical oddities and other unexplainable phenomena around you, taking appropriate precautions to ward yourself and your allies against paranormal threats."
+		],
+		"inDowntime": [
+			"You research deeper into the supernatural mysteries you discovered on your last adventure to see how they can be applied in the future.",
+			"You scavenge relics, cultivate herbs, or forge trinkets to update your esoterica after each new threat you encounter."
+		],
+		"youMight": [
+			"Prepare for the worst and impress your allies when you're able to handle anything that fate throws at you.",
+			"Look at everything on a deeper level, rather than be content with what you find on the surface.",
+			"Obsess over a certain supernatural phenomenon, attempting to tie everything back to it."
+		],
+		"othersProbably": [
+			"Mistake you for a spellcaster.",
+			"Look to you to explain the origin, nature, or weaknesses of a supernatural threat when one rears its head.",
+			"Rely on you to come up with a solution when the situation seems hopeless."
+		],
+		"aonId": 0,
+		"source": "PZO2111",
+		"id": "60ad1035-fa70-41fa-a002-c36e605dced0"
+	}
+]

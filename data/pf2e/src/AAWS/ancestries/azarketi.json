@@ -1,0 +1,24 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Azarketi",
+		"youMight": [
+			"Ambitiously seek to defy negative perceptions and prejudice laid against you.",
+			"Be reclusive and skeptical of strangers.",
+			"Regard the water as your home, but be intrigued by societies along the shore."
+		],
+		"othersProbably": [
+			"Assume you are an ambassador to the sea and ask for your advice on nautical matters.",
+			"Misunderstand your gentle gestures and mild expressions.",
+			"Treat you with distrust or suspicion and anticipate betrayal from you."
+		],
+		"aonId": 41,
+		"source": "AAWS",
+		"id": "67e11695-5d37-4192-bad1-8328a99f49cc"
+	},
+	{ "objectType": "Heritage", "name": "Ancient Scale Azarketi", "ancestry": "Azarketi", "source": "AAWS", "id": "fa039c61-89ee-45b6-bd8d-5a4b0b32a60a", "aonId": 151 },
+	{ "objectType": "Heritage", "name": "Benthic Azarketi", "ancestry": "Azarketi", "source": "AAWS", "id": "45a7a5b2-6cd2-4a95-bbdf-03bd7e6b8c1d", "aonId": 152 },
+	{ "objectType": "Heritage", "name": "Mistbreath Azarketi", "ancestry": "Azarketi", "source": "AAWS", "id": "3596b422-8b1e-4e5e-ab7b-3f5c1b98a8fe", "aonId": 153 },
+	{ "objectType": "Heritage", "name": "River Azarketi", "ancestry": "Azarketi", "source": "AAWS", "id": "f207555e-fe3f-446b-8103-3557a1205dca", "aonId": 154 },
+	{ "objectType": "Heritage", "name": "Thalassic Azarketi", "ancestry": "Azarketi", "source": "AAWS", "id": "c3cd61f4-18b5-48e0-a3e5-3997e0372d79", "aonId": 155 }
+]

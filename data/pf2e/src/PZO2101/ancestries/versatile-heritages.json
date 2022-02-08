@@ -1,0 +1,299 @@
+[
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Half-Elf",
+		"details": [
+			"A half-elf is born to an elf and a human, or to two half-elves. The life of a half-elf can be difficult, often marked by a struggle to fit in. Half-elves don't have their own homeland on Golarion, nor are populations of half-elves particularly tied to one another, since they often have very disparate human and elven traditions. Instead, most half-elves attempt to find acceptance in either human or elven settlements.",
+			"Half-elves often appear primarily human, with subtly pointed ears and a taller stature than most full-blooded humans. Half-elves lack the almost alien eyes of their elf parents, though they do have a natural presence-and often a striking beauty- that leads many to become artists or entertainers. Despite this innate appeal, many half-elves have difficulty forming lasting bonds with either humans or elves due to the distance they feel from both peoples as a whole.",
+			"Half-elves live longer than other humans, often reaching an age around 150 years. This causes some of them to fear friendship and romance with humans, knowing that they'll likely outlive their companions."
+		],
+		"playing": "You can create a half-elf character by selecting the half-elf heritage at 1st level. This gives you access to elf and half-elf ancestry feats in addition to human ancestry feats.",
+		"youMight": [
+			"Keep to yourself and find it difficult to form close bonds with others.",
+			"Strongly embrace or reject one side or the other of your parentage.",
+			"Identify strongly with and relate to other people with mixed ancestries."
+		],
+		"othersProbably": [
+			"Find you more attractive than humans and more approachable than elves.",
+			"Dismiss your human ethnicity and culture in light of your elven heritage.",
+			"Downplay the challenges of being caught between two cultures."
+		],
+		"aonId": 7,
+		"source": "PZO2101",
+		"page": 55,
+		"id": "39d4b70f-c787-404e-8692-7d4a6ed3ba21",
+		"properties": {
+			"hitPoints": 8,
+			"size": "Medium",
+			"speed": "25 feet",
+			"abilityBoosts": [ "Two free ability boosts" ],
+			"languages": {
+				"starting": [
+					"Common",
+					"Additional languages equal to 1 + your Intelligence modifier (if it's positive)"
+				],
+				"choices": [
+					"Choose from the list of common languages and any other languages to which you have access (such as the languages prevalent in your region)."
+				]
+			},
+			"traits": [ "Human", "Humanoid" ],
+			"other": [
+				{
+					"name": "Other Halves",
+					"details": "By default, half-elves and half-orcs descend from humans, but your GM might allow you to be the offspring of an elf, orc, or different ancestry. In these cases, the GM will let you select the half-elf or half-orc heritage as the heritage for this other ancestry. The most likely other parent of a half-elf are gnomes and halflings, and the most likely parents of a half-orc are goblins, halflings, and dwarves."
+				}
+			]
+		}
+	},
+	{
+		"objectType": "VersatileHeritage",
+		"name": "Half-Orc",
+		"details": [
+			"A half-orc is the offspring of a human and an orc, or of two half-orcs. Because some intolerant people see orcs as more akin to monsters than people, they sometimes hate and fear half-orcs simply due to their lineage. This commonly pushes half-orcs to the margins of society, where some find work in manual labor or as mercenaries, and others fall into crime or cruelty. Many who can't stand the indignities heaped on them in human society find a home among their orc kin or trek into the wilderness to live in peace, apart from society's judgment.",
+			"Humans often assume half-orcs are unintelligent or uncivilized, and half-orcs rarely find acceptance among societies with many such folk. To an orc tribe, a half-orc is considered smart enough to make a good war leader but weaker physically than other orcs. Many half-orcs thus end up having low status among orc tribes unless they can prove their strength.",
+			"A half-orc has a shorter lifespan than other humans, living to be roughly 70 years old."
+		],
+		"playing": "You can create a half-orc character by selecting the half-orc heritage at 1st level. This gives you access to orc and half-orc ancestry feats in addition to human ancestry feats.",
+		"youMight": [
+			"Ignore, embrace, or actively counter the common stereotypes about half-orcs.",
+			"Make the most of your size and strength, either physically or socially.",
+			"Keep your distance from people of most other ancestries, in case they unfairly reject you due to your orc ancestors."
+		],
+		"othersProbably": [
+			"Assume you enjoy and excel at fighting but aren't inclined toward magical or intellectual pursuits.",
+			"Pity you for the tragic circumstances they assume were involved in your birth.",
+			"Get out of your way and back down rather than face your anger."
+		],
+		"aonId": 8,
+		"source": "PZO2101",
+		"page": 55,
+		"id": "c82b2801-554d-4283-aaaa-75e9a6c3d51d",
+		"properties": {
+			"hitPoints": 8,
+			"size": "Medium",
+			"speed": "25 feet",
+			"abilityBoosts": [ "Two free ability boosts" ],
+			"languages": {
+				"starting": [
+					"Common",
+					"Additional languages equal to 1 + your Intelligence modifier (if it's positive)"
+				],
+				"choices": [
+					"Choose from the list of common languages and any other languages to which you have access (such as the languages prevalent in your region)."
+				]
+			},
+			"traits": [ "Human", "Humanoid" ],
+			"other": [
+				{
+					"name": "Other Halves",
+					"details": "By default, half-elves and half-orcs descend from humans, but your GM might allow you to be the offspring of an elf, orc, or different ancestry. In these cases, the GM will let you select the half-elf or half-orc heritage as the heritage for this other ancestry. The most likely other parent of a half-elf are gnomes and halflings, and the most likely parents of a half-orc are goblins, halflings, and dwarves."
+				}
+			]
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Half-Elf",
+		"ancestry": "Human",
+		"details": [
+			"Either one of your parents was an elf, or one or both were half-elves. You have pointed ears and other telltale signs of elf heritage. You gain the elf trait, the half-elf trait, and low-light vision. In addition, you can select elf, half-elf, and human feats whenever you gain an ancestry feat."
+		],
+		"source": "PZO2101",
+		"id": "dc99514f-69d3-4e1b-a1eb-a072d4ac8bfc",
+		"aonId": 26
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Half-Orc",
+		"ancestry": "Human",
+		"details": [
+			"One of your parents was an orc, or one or both were half-orcs. You have a green tinge to your skin and other indicators of orc heritage. You gain the orc trait, the half-orc trait, and low-light vision. In addition, you can select orc, half-orc, and human feats whenever you gain an ancestry feat."
+		],
+		"source": "PZO2101",
+		"id": "3fd69a99-fc3f-417a-960b-267432d35aea",
+		"aonId": 27
+	},
+	{
+		"objectType": "Feat",
+		"name": "Elf Atavism",
+		"level": 1,
+		"traits": [ "Half-Elf" ],
+		"details": [
+			"Your elven blood runs particularly strong, granting you features far more elven than those of a typical half-elf. You may also have been raised among elves, steeped in your elven ancestors' heritage. You gain the benefits of the elf heritage of your elven parent or ancestors. You typically can't select a heritage that depends on or improves an elven feature you don't have. For example, you couldn't gain the cavern elf's darkvision ability if you didn't have low-light vision. In these cases, at the GM's discretion, you might gain a different benefit."
+		],
+		"special": "You can take this feat only at 1st level, and you can't retrain out of this feat or into this feat.",
+		"page": 58,
+		"source": "PZO2101",
+		"id": "4760c942-0d4f-42c2-ae07-0bb48872ad21",
+		"aonId": 79
+	},
+	{
+		"objectType": "Feat",
+		"name": "Inspire Imitation",
+		"level": 5,
+		"traits": [ "Half-Elf" ],
+		"details": [
+			"Your own actions inspire your allies to great achievements. Whenever you critically succeed at a skill check, you automatically qualify to use the Aid reaction when attempting to help an ally using the same skill, even without spending an action to prepare to do so."
+		],
+		"page": 58,
+		"source": "PZO2101",
+		"id": "6674fb6f-35f7-46eb-b2f0-919ae777b84f",
+		"aonId": 80
+	},
+	{
+		"objectType": "Feat",
+		"name": "Supernatural Charm",
+		"level": 5,
+		"traits": [ "Half-Elf" ],
+		"details": [
+			"The elven magic in your blood manifests as a force you can use to become more appealing or alluring. You can cast 1st-level <i>charm</i> as an arcane innate spell once per day."
+		],
+		"page": 58,
+		"source": "PZO2101",
+		"id": "dee0e450-a9ad-47a0-ac67-af6253942bac",
+		"aonId": 81
+	},
+	{
+		"objectType": "Feat",
+		"name": "Monstrous Peacemaker",
+		"level": 1,
+		"traits": [ "Half-Orc" ],
+		"details": [
+			"Your dual human and orc nature has given you a unique perspective, allowing you to bridge the gap between humans and the many intelligent creatures in the world that humans consider monsters. You gain a +1 circumstance bonus to Diplomacy checks against non-humanoid intelligent creatures and against humanoids that are marginalized in human society (at the GM's discretion, but typically at least including giants, goblins, kobolds, and orcs). You also gain this bonus on Perception checks to Sense the Motives of such creatures."
+		],
+		"page": 59,
+		"source": "PZO2101",
+		"id": "9bf81bf9-da7c-4e41-9bd3-1fa98005a273",
+		"aonId": 82
+	},
+	{
+		"objectType": "Feat",
+		"name": "Orc Ferocity",
+		"actionType": "[R]",
+		"level": 1,
+		"traits": [ "Orc" ],
+		"frequency": "once per day",
+		"trigger": "You would be reduced to 0 Hit Points but not immediately killed.",
+		"details": [
+			"Fierceness in battle runs through your blood, and you refuse to fall from your injuries. You avoid being knocked out and remain at 1 Hit Point, and your wounded condition increases by 1."
+		],
+		"page": 59,
+		"source": "PZO2101",
+		"id": "7669ef63-b1e1-47fc-8009-f1d588b0d16d",
+		"aonId": 83
+	},
+	{
+		"objectType": "Feat",
+		"name": "Orc Sight",
+		"level": 1,
+		"traits": [ "Half-Orc" ],
+		"prerequisites": "low-light vision",
+		"details": [
+			"Your orc blood is strong enough to grant you the keen vision of your orc forebears. You gain darkvision, allowing you to see in darkness and dim light just as well as you can in bright light. However, in darkness, you see in black and white only."
+		],
+		"special": "You can take this feat only at 1st level, and you can't retrain out of this feat or into this feat.",
+		"page": 59,
+		"source": "PZO2101",
+		"id": "044f3195-0d97-4fe2-90ab-36956b1cce09",
+		"aonId": 84
+	},
+	{
+		"objectType": "Feat",
+		"name": "Orc Superstition",
+		"actionType": "[R]",
+		"level": 1,
+		"traits": [ "Concentrate", "Orc" ],
+		"trigger": "You attempt a saving throw against a spell or magical effect, before rolling.",
+		"details": [
+			"You defend yourself against magic by relying on techniques derived from orc cultural superstitions. You gain a +1 circumstance bonus to your saving throw against the triggering spell or magical effect."
+		],
+		"page": 59,
+		"source": "PZO2101",
+		"id": "64740152-19d6-4d98-9d05-16d8a543aae8",
+		"aonId": 85
+	},
+	{
+		"objectType": "Feat",
+		"name": "Orc Weapon Familiarity",
+		"level": 1,
+		"traits": [ "Orc" ],
+		"details": [
+			"In combat, you favor the brutal weapons that are traditional for your orc ancestors. You are trained with the falchion and greataxe. In addition, you gain access to all uncommon orc weapons. For the purpose of determining your proficiency, martial orc weapons are simple weapons and advanced orc weapons are martial weapons."
+		],
+		"page": 59,
+		"source": "PZO2101",
+		"id": "a83c6cac-23e6-49b4-9687-9bdf9e42553d",
+		"aonId": 86
+	},
+	{
+		"objectType": "Feat",
+		"name": "Orc Weapon Carnage",
+		"level": 5,
+		"traits": [ "Orc" ],
+		"prerequisites": "Orc Weapon Familiarity",
+		"details": [
+			"You are brutally efficient with the weapons of your orc ancestors. Whenever you critically hit using a falchion, a greataxe, or an orc weapon, you apply the weapon's critical specialization effect."
+		],
+		"page": 59,
+		"source": "PZO2101",
+		"id": "8e301334-706e-4315-ac13-5065c4486a2a",
+		"aonId": 87
+	},
+	{
+		"objectType": "Feat",
+		"name": "Victorious Vigor",
+		"actionType": "[R]",
+		"level": 5,
+		"traits": [ "Orc" ],
+		"trigger": "You bring a foe to 0 Hit Points.",
+		"details": [
+			"Your victories in battle fill you with pride and imbue you with the energy to fight a bit longer despite your wounds. You gain temporary Hit Points equal to your Constitution modifier until the end of your next turn."
+		],
+		"page": 59,
+		"source": "PZO2101",
+		"id": "779348cb-f041-4dce-899c-fe30352cea4d",
+		"aonId": 88
+	},
+	{
+		"objectType": "Feat",
+		"name": "Pervasive Superstition",
+		"level": 9,
+		"traits": [ "Orc" ],
+		"prerequisites": "Orc Superstition",
+		"details": [
+			"You steep yourself in superstition and practice ancient orc mental exercises for shrugging off the effects of magic. You gain a +1 circumstance bonus to saving throws against spells and magical effects at all times."
+		],
+		"page": 59,
+		"source": "PZO2101",
+		"id": "18756ecf-6b96-4066-ade7-8033f8e007cd",
+		"aonId": 89
+	},
+	{
+		"objectType": "Feat",
+		"name": "Incredible Ferocity",
+		"level": 13,
+		"traits": [ "Orc" ],
+		"prerequisites": "Orc Ferocity",
+		"details": [
+			"Given time to collect yourself after a near-death scrape, you can rebuild your ferocity and withstand additional finishing blows. You can use Orc Ferocity with a frequency of once per hour, rather than once per day."
+		],
+		"page": 59,
+		"source": "PZO2101",
+		"id": "51b5a911-8a79-456c-9eb3-a236e932c0a0",
+		"aonId": 90
+	},
+	{
+		"objectType": "Feat",
+		"name": "Orc Weapon Expertise",
+		"level": 13,
+		"traits": [ "Orc" ],
+		"prerequisites": "Orc Weapon Familiarity",
+		"details": [
+			"Your orc affinity blends with your class training, granting you great skill with orc weapons. Whenever you gain a class feature that grants you expert or greater proficiency in a given weapon or weapons, you also gain that proficiency in the falchion, the greataxe, and all orc weapons in which you are trained."
+		],
+		"page": 59,
+		"source": "PZO2101",
+		"id": "93e90868-e859-40cc-817a-eb22bddce3c1",
+		"aonId": 91
+	}
+]

@@ -1,0 +1,44 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Druid",
+		"duringCombatEncounters": [
+			"You call upon the forces of nature to defeat your enemies and protect your allies.",
+			"You cast spells that draw upon primal magic to protect yourself and your friends, heal their wounds, or summon deadly animals to fight at your side.",
+			"Depending on your bond to nature, you might call upon powerful elemental magic or change shape into a terrifying beast."
+		],
+		"duringSocialEncounters": [
+			"You represent balance and a reasoned approach to problems, looking for solutions that not only are best for the natural world, but also allow the creatures within it to live in harmony and peace.",
+			"You often propose compromises that allow both sides to gain what they truly need, even if they can't have all that they desire."
+		],
+		"whileExploring": [
+			"Your nature skills are invaluable.",
+			"You track down enemies, navigate the wilderness, and use spells to detect magical auras around you.",
+			"You might even ask wild animals to lend their extraordinary senses and scouting abilities to your group."
+		],
+		"inDowntime": [
+			"You might craft magic items or potions.",
+			"Alternatively, your tie to nature might lead you to tend a wilderness area, befriending beasts and healing the wounds caused by civilization.",
+			"You might even teach sustainable farming and animal husbandry techniques that allow others to subsist off the land without harming the natural balance."
+		],
+		"youMight": [
+			"Have a deep and meaningful respect for the power of nature.",
+			"Be in constant awe of the natural world, eager to share it with others but wary of their influence upon it.",
+			"Treat plants and animals as allies, working with them to reach your goals."
+		],
+		"othersProbably": [
+			"View you as a representative of nature, and are sure you can control it.",
+			"Assume you're a recluse who avoids society and cities and prefers to live in the wild.",
+			"Consider you a mystic, similar to a priest, but answering only to the forces of nature."
+		],
+		"classPath": "Druidic Order",
+		"source": "PZO2101",
+		"aonId": 6,
+		"aonTraitId": 52,
+		"id": "c53938f8-0f20-4205-a436-390d8aa31e59"
+	},
+	{ "objectType": "ClassPath", "name": "Animal", "class": "Druid", "source": "PZO2101", "id": "234a44c5-6846-44fa-9d70-bd455f976436", "aonId": 1 },
+	{ "objectType": "ClassPath", "name": "Leaf", "class": "Druid", "source": "PZO2101", "id": "f6023e37-81c1-4b69-b352-6af25734813a", "aonId": 2 },
+	{ "objectType": "ClassPath", "name": "Storm", "class": "Druid", "source": "PZO2101", "id": "97324ca9-4d6c-4bb2-a325-2b78ac450acf", "aonId": 3 },
+	{ "objectType": "ClassPath", "name": "Wild", "class": "Druid", "source": "PZO2101", "id": "28c1101d-aac6-4a08-8186-cb5a17b5248c", "aonId": 4 }
+]

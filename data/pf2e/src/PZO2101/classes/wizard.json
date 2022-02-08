@@ -1,0 +1,41 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Wizard",
+		"duringCombatEncounters": [
+			"You likely try to stay out of the fray, carefully judging when to use your spells.",
+			"You save your most powerful magic to incapacitate threatening foes and use your cantrips when only weaker foes remain.",
+			"When enemies pull out tricks like invisibility or flight, you answer with spells like glitterdust or earth bind, leveling the field for your allies."
+		],
+		"duringSocialEncounters": [
+			"You provide a well of knowledge about arcane matters and solve arguments with logic."
+		],
+		"whileExploring": [
+			"You locate magical auras and determine the arcane significance of magical writing or phenomena you uncover.",
+			"When you run across an unusual obstacle to further exploration, you probably have a scroll that will make it easier to overcome."
+		],
+		"inDowntime": [
+			"You learn new spells, craft magic items, or scribe scrolls for your party, and seek out new and exciting formulas in addition to spells.",
+			"You might even forge scholarly connections and establish a school or guild of your own."
+		],
+		"youMight": [
+			"Have an unquenchable intellectual curiosity about how everything in the world around you works-magic in particular.",
+			"Believe fervently that your school of magic is superior (if you're a specialist) or that true mastery of magic requires knowledge of all schools (if you're a universalist).",
+			"Use esoteric jargon and technical terms to precisely describe the minutiae of magical effects, even though the difference is probably lost on other people."
+		],
+		"othersProbably": [
+			"Consider you to be incredibly powerful and potentially dangerous.",
+			"Fear what your magic can do to their minds, bodies, and souls, and ask that you avoid casting spells in polite company, as few can identify whether one of your spells is harmless or malevolent until it's too late.",
+			"Assume you can easily solve all their problems, from dangerous weather to poor crop yields, and ask you for spells that can help them get whatever they desire."
+		],
+		"classPath": "Arcane Thesis",
+		"source": "PZO2101",
+		"aonId": 12,
+		"aonTraitId": 166,
+		"id": "7db9f2ff-33f9-43a2-9e5c-8995f8bcd435"
+	},
+	{ "objectType": "ClassPath", "name": "Improved Familiar Attunement", "class": "Wizard", "source": "PZO2101", "id": "ed3df9e6-3dfb-4faf-a2e5-6e243de7ea17", "aonId": 1 },
+	{ "objectType": "ClassPath", "name": "Metamagical Experimentation", "class": "Wizard", "source": "PZO2101", "id": "62060e9e-9a95-480c-8da6-5bf972ab000a", "aonId": 2 },
+	{ "objectType": "ClassPath", "name": "Spell Blending", "class": "Wizard", "source": "PZO2101", "id": "88233bb3-4b77-420e-9bf9-7404922db089", "aonId": 3 },
+	{ "objectType": "ClassPath", "name": "Spell Substitution", "class": "Wizard", "source": "PZO2101", "id": "e4b8b192-de4d-4868-ba9a-b8cc493db4e6", "aonId": 4 }
+]

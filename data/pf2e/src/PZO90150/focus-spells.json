@@ -1,0 +1,56 @@
+[
+	{
+		"name": "Apex Companion",
+		"level": 10,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Druid", "Polymorph", "Transmutation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"targets": "1 animal companion in your service",
+		"duration": "1 minute",
+		"details": [
+			"You focus on the energies of all members of your animal companion's species, transforming your animal companion into its apex battle form. Your animal companion gains the following statistics and abilities while in its apex form. <ul><li>Your animal companion becomes Huge and its attacks have 15-foot reach. It must have enough space to expand into or the spell is lost.</li><li>30 temporary Hit Points.</li><li>Darkvision.</li><li>Your animal companion's attack's damage dice increase by one step, and its attack gains the deadly d12 trait.</li><li>+10-foot status bonus to its Speeds.</li><li>Ignores difficult terrain and greater difficult terrain.</li></ul>"
+		],
+		"page": 77,
+		"source": "PZO90150",
+		"focus": true,
+		"aonId": 562,
+		"id": "a39373cd-175f-4bb9-ab53-b27ee78808b7"
+	},
+	{
+		"name": "Song of the Fallen",
+		"level": 10,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Bard", "Composition", "Necromancy" ],
+		"cast": "[A][A]",
+		"components": [ "focus", "verbal" ],
+		"range": "30 feet",
+		"targets": "up to 4 dead creatures or up to 4 undead creatures",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You chant a dirge or an elegy that either rouses the dead to action or reminds undead that they should lay to rest.",
+			"If you target dead creatures, the bodies animate and can continue acting as if they were alive. A creature animated in this way has 60 temporary Hit Points. The animated creatures are slowed 1 but can otherwise act normally. Creatures animated with this spell die again once the spell ends.",
+			"If you target undead creatures, each undead must attempt a basic Will save.",
+			{
+				"criticalSuccess": [
+					"The undead takes 5d6 positive damage."
+				],
+				"success": [
+					"The undead takes 10d6 positive damage and is slowed 1 for 1 round."
+				],
+				"failure": [
+					"The undead takes 100 positive damage and is slowed 1 for 1 minute."
+				],
+				"criticalFailure": [
+					"The undead is destroyed."
+				]
+			}
+		],
+		"page": 77,
+		"source": "PZO90150",
+		"focus": true,
+		"aonId": 563,
+		"id": "978bf74c-0372-4d55-9ed2-93b65310e340"
+	}
+]

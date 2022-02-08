@@ -1,0 +1,37 @@
+[
+	{
+		"objectType": "Class",
+		"name": "Alchemist",
+		"duringCombatEncounters": [
+			"You lob bombs at your foes, harry your enemies, and support the rest of your party with potent elixirs.",
+			"At higher levels, your mutagens warp your body into a resilient and powerful weapon."
+		],
+		"duringSocialEncounters": [
+			"You provide knowledge and experience about alchemical items and related secrets, such as poisons and diseases."
+		],
+		"whileExploring": [
+			"You keep an eye out for trouble with your bombs at the ready, while giving advice on all things alchemical and mysterious."
+		],
+		"inDowntime": [
+			"You experiment in an alchemical lab, brewing elixirs, making bombs, and furthering your alchemical knowledge."
+		],
+		"youMight": [
+			"Enjoy tinkering with strange formulas and alchemical reagents, often with a single-minded dedication and recklessness that gives others pause.",
+			"Get a kick out of wreaking havoc with the alchemical concoctions you've made, and enjoy watching things burn, dissolve, freeze, and jolt.",
+			"Endlessly experiment to discover new, more potent alchemical tools."
+		],
+		"othersProbably": [
+			"Think you're some kind of sorcerer or an eccentric wizard and don't understand that you don't cast spells; spellcasters who clumsily dabble in alchemy only heighten this misconception.",
+			"Don't understand your zeal for alchemy, creativity, and invention.",
+			"Assume that if you haven't caused a catastrophe with your experimentations, you inevitably will."
+		],
+		"classPath": "Research Field",
+		"source": "PZO2101",
+		"aonId": 1,
+		"aonTraitId": 7,
+		"id": "5fdc6782-2ccd-42d5-84f8-cd31b2c7e0f7"
+	},
+	{ "objectType": "ClassPath", "name": "Bomber", "class": "Alchemist", "source": "PZO2101", "id": "b640f752-fc04-45b0-bc9b-bad88669b53e", "aonId": 1 },
+	{ "objectType": "ClassPath", "name": "Chirurgeon", "class": "Alchemist", "source": "PZO2101", "id": "f0561e85-5f0b-47db-b13c-6432a275aa88", "aonId": 2 },
+	{ "objectType": "ClassPath", "name": "Mutagenist", "class": "Alchemist", "source": "PZO2101", "id": "f1c25e73-fd69-4b38-bc3f-42fad26cd6a5", "aonId": 3 }
+]

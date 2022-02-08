@@ -1,0 +1,120 @@
+[
+	{
+		"objectType": "Archetype",
+		"name": "Monk",
+		"details": [
+			"Monastic training has taught you martial arts and allowed you to hone your mind, body, and spirit to new heights."
+		],
+		"page": 227,
+		"source": "PZO2101",
+		"id": "9a433463-8555-4721-8e12-d8bc52bf02da",
+		"aonId": 8
+	},
+	{
+		"objectType": "DedicationFeat",
+		"name": "Monk Dedication",
+		"level": 2,
+		"traits": [ "Archetype", "Dedication", "Multiclass" ],
+		"prerequisites": [ "Strength 14", "Dexterity 14" ],
+		"details": [
+			"You become trained in unarmed attacks and gain the powerful fist class feature (page 156). You become trained in your choice of Acrobatics or Athletics; if you are already trained in both of these skills, you become trained in a skill of your choice. You become trained in monk class DC."
+		],
+		"special": [
+			"You can't select another dedication feat until you have gained two other feats from the monk archetype."
+		],
+		"page": 227,
+		"source": "PZO2101",
+		"id": "1004d3cc-6063-485c-a926-3acbbb6d0e35",
+		"aonId": 715
+	},
+	{
+		"objectType": "Feat",
+		"name": "Basic Kata",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Monk Dedication" ],
+		"details": [
+			"You gain a 1st- or 2nd-level monk feat."
+		],
+		"page": 227,
+		"source": "PZO2101",
+		"id": "a89c7a93-6144-4b2a-a8a5-83e462e05950",
+		"aonId": 716
+	},
+	{
+		"objectType": "Feat",
+		"name": "Monk Resiliency",
+		"level": 4,
+		"traits": [ "Archetype" ],
+		"prerequisites": [
+			"Monk Dedication",
+			"class granting no more Hit Points per level than 8 + your Constitution modifier"
+		],
+		"details": [
+			"You gain 3 additional Hit Points for each monk archetype class feat you have. As you continue selecting monk archetype class feats, you continue to gain additional Hit Points in this way."
+		],
+		"page": 227,
+		"source": "PZO2101",
+		"id": "0f6f355b-2e0d-4067-8a7b-55e76a8a62f2",
+		"aonId": 717
+	},
+	{
+		"objectType": "Feat",
+		"name": "Advanced Kata",
+		"level": 6,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Basic Kata" ],
+		"details": [
+			"You gain one monk feat. For the purpose of meeting its prerequisites, your monk level is equal to half your character level."
+		],
+		"special": [
+			"You can select this feat more than once. Each time you select it, you gain another monk feat."
+		],
+		"page": 227,
+		"source": "PZO2101",
+		"id": "934315bb-024b-4d09-afa8-a04530600d29",
+		"aonId": 718
+	},
+	{
+		"objectType": "Feat",
+		"name": "Monk Moves",
+		"level": 8,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Monk Dedication" ],
+		"details": [
+			"You gain a +10-foot status bonus to your Speed when you're not wearing armor."
+		],
+		"page": 227,
+		"source": "PZO2101",
+		"id": "32545a04-09c5-40e8-814f-bfc30b3f79ef",
+		"aonId": 719
+	},
+	{
+		"objectType": "Feat",
+		"name": "Monk's Flurry",
+		"level": 10,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Monk Dedication" ],
+		"details": [
+			"You gain the Flurry of Blows action (page 156)."
+		],
+		"page": 227,
+		"source": "PZO2101",
+		"id": "cec4fdc3-7dca-477d-8a62-8bf9d535897d",
+		"aonId": 720
+	},
+	{
+		"objectType": "Feat",
+		"name": "Perfection's Path",
+		"level": 12,
+		"traits": [ "Archetype" ],
+		"prerequisites": [ "Monk Dedication", "expert in at least one saving throw" ],
+		"details": [
+			"Choose one saving throw (Fortitude, Reflex, or Will) in which you are an expert. Your proficiency rank in the chosen saving throw increases to master."
+		],
+		"page": 227,
+		"source": "PZO2101",
+		"id": "0f9f6c9b-257d-494b-a284-a8d4035eb475",
+		"aonId": 721
+	}
+]

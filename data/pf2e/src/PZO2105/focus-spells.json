@@ -1,0 +1,2091 @@
+[
+	{
+		"name": "Hymn of Healing",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Bard", "Composition", "Healing", "Necromancy", "Positive" ],
+		"cast": "[A][A]",
+		"components": [ "verbal" ],
+		"range": "30 feet",
+		"targets": "you or 1 ally",
+		"duration": "sustained up to 4 rounds",
+		"details": [
+			"Your divine singing mends wounds and provides a temporary respite from harm. The target gains fast healing 2. When you Cast the Spell and each time you Sustain the Spell, the target gains 2 temporary Hit Points, which last for 1 round."
+		],
+		"heightened": [
+			{ "change": "The fast healing and temporary Hit Points each increase by 2.", "bump": 1 }
+		],
+		"page": 228,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 728,
+		"id": "178f3ef9-5682-4a67-8f14-0ead67d8a156"
+	},
+	{
+		"name": "Ode to Ouroboros",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Bard", "Composition", "Necromancy" ],
+		"cast": "[R]",
+		"components": [ "verbal" ],
+		"trigger": "A creature's dying condition would reach the value at which they would die.",
+		"range": "60 feet",
+		"targets": "the triggering creature",
+		"details": [
+			"Your ode temporarily staves off death. The target's dying condition remains 1 below the value at which it dies. This doesn't help prevent death from effects that kill the target without increasing its dying condition, such as <i>disintegrate</i> and death effects."
+		],
+		"page": 228,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 729,
+		"id": "67c9332e-e121-4bd2-983b-e918f0704840"
+	},
+	{
+		"name": "Pied Piping",
+		"level": 10,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Bard", "Composition", "Enchantment", "Incapacitation", "Mental", "Sonic" ],
+		"cast": "[A][A]",
+		"components": [ "verbal" ],
+		"area": "5-foot emanation",
+		"savingThrow": "Will",
+		"duration": "1 minute",
+		"details": [
+			"Your performance enraptures those who hear it, compelling them to follow you about in admiration. Each creature within the emanation must attempt a Will save when you Cast the Spell or the first time they enter the area, after which they become temporarily immune for 1 day. Once per turn, you can spend a single action, which has the concentrate trait, to increase the emanation's radius by 5 feet. You can Dismiss the spell.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature is fascinated with you."
+				],
+				"failure": [
+					"The creature uses all its actions to move toward you and compliment your performance. This effect ends if a hostile action is used against the affected creature."
+				],
+				"criticalFailure": [
+					"The target gains the minion trait and is controlled by you. This effect ends if a hostile action is used against the affected creature, or if you direct the creature to use any action that causes it harm."
+				]
+			}
+		],
+		"page": 228,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 730,
+		"id": "b8afa967-2165-4c25-a65e-7a88bef45cad"
+	},
+	{
+		"name": "Song of Marching",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Bard", "Cantrip", "Composition", "Enchantment", "Mental" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"area": "60-foot emanation",
+		"duration": "sustained up to 1 hour",
+		"details": [
+			"You maintain a brisk performance that keeps allies on the move. You and your allies in the area can Hustle for the spell's duration, even though you are also Sustaining the Spell. You and your allies then become temporarily immune for 1 day."
+		],
+		"heightened": [
+			{ "change": "You can Sustain the Spell for up to 2 hours.", "level": 6 },
+			{ "change": "You can Sustain the Spell for up to 4 hours.", "level": 9 }
+		],
+		"page": 228,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 0,
+		"id": "16e0acc9-fda2-49ed-9900-494c32a3fb34"
+	},
+	{
+		"name": "Song of Strength",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Bard", "Cantrip", "Composition", "Emotion", "Enchantment", "Mental" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"area": "60-foot emanation",
+		"duration": "1 round",
+		"details": [
+			"You bolster your allies' physical strength with a hearty exhortation. You and your allies gain a +1 status bonus to Athletics checks and to their DCs against Athletics skill actions such as Disarm, Shove, and Trip.",
+			"<b>Special</b> If you have the <i>inspire heroics</i> composition spell, you can use that composition to improve the bonus granted by <i>song of strength</i> in the same way as <i>inspire courage</i> or <i>inspire defense</i>."
+		],
+		"page": 228,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 0,
+		"id": "6f162727-3d35-4cd0-aeef-a60838003d50"
+	},
+	{
+		"name": "Symphony of the Unfettered Heart",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Abjuration", "Bard", "Composition" ],
+		"cast": "[A][A]",
+		"components": [ "verbal", "somatic" ],
+		"range": "30 feet",
+		"targets": "you and 1 ally",
+		"details": [
+			"Your symphony lifts listeners from their worldly concerns. Attempt a Performance check to counteract one of the following conditions affecting the target: grabbed, immobilized, paralyzed, restrained, slowed, or stunned. If you fail, you can't target that effect on the target for 1 day. Use the condition's source to determine the counteract DC (for example, the Escape DC for grabbed)."
+		],
+		"heightened": [
+			{ "change": "You can target up to four creatures.", "level": 9 }
+		],
+		"page": 228,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 733,
+		"id": "732e357c-0ba6-4387-a68b-99d0a7a19e11"
+	},
+	{
+		"name": "Litany of Depravity",
+		"level": 7,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Champion", "Evil", "Evocation", "Litany" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"range": "30 feet",
+		"targets": "1 good creature",
+		"duration": "1 round",
+		"details": [
+			"Your litany calls into question the morals your foe claims to hold dear. The target gains weakness 7 to evil, then becomes temporarily immune to all your litanies for 1 minute."
+		],
+		"heightened": [
+			{ "change": "The weakness increases by 1.", "bump": 1 }
+		],
+		"page": 228,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 734,
+		"id": "3de09318-f58d-499e-a55e-a574646e5021"
+	},
+	{
+		"name": "Litany of Self-Interest",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Champion", "Enchantment", "Evil", "Litany", "Mental" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"savingThrow": "Will",
+		"duration": "1 round",
+		"details": [
+			"You give a speech that fills your target with a drive to improve themself to the exclusion of assisting others. A creature that wants to gain the benefit of this spell and doesn't care about its limitations can voluntarily fail the save. The target then becomes temporarily immune to all your litanies for 1 minute.",
+			{
+				"success": [
+					"The target is unaffected."
+				],
+				"failure": [
+					"The target gains a +2 status bonus to attack rolls, Perception checks, saving throws, and skill checks. The target can't Aid other creatures, consider any creature an ally, or use spells or abilities that directly benefit another creature (as determined by the GM), even if they also benefit the target. Other creatures allied with the spell's target can still consider the target an ally and affect it accordingly."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The status bonus increases to +3.", "level": 8 }
+		],
+		"page": 229,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 735,
+		"id": "58b26cd3-71a8-402c-af93-ff84e5f667e9"
+	},
+	{
+		"name": "Touch of Corruption",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Champion", "Necromancy", "Negative" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "touch",
+		"targets": "1 willing undead creature or 1 living creature",
+		"details": [
+			"You infuse the target with negative energy. If the target is living, this deals 1d6 negative damage (basic Fortitude save); on a failed save, the target also takes a -2 status penalty to AC for 1 round.",
+			"If the target is a willing undead creature, the target instead regains 6 Hit Points, and if you are the undead target, you also gain a +2 status bonus to damage rolls for 1 round."
+		],
+		"heightened": [
+			{ "change": "Increase the damage dealt to a living creature by 1d6 or increase the Hit Points regained by undead by 6.", "bump": 1 }
+		],
+		"page": 229,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 819,
+		"id": "2fb7b4cb-9eae-4c09-b5d0-6a3a038ef961"
+	},
+	{
+		"name": "Clinging Shadows Stance",
+		"level": 4,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation", "Monk", "Shadow", "Stance" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"duration": "until you leave the stance",
+		"details": [
+			"You adopt the stance of clinging shadows. You can make shadow grasp Strikes. These deal 1d4 negative damage; are in the brawling group; and have the agile, grapple, reach, and unarmed traits.",
+			"While in clinging shadows stance, you gain a +2 circumstance bonus to Athletics checks to Grapple, and to the DC for creatures to Escape from you."
+		],
+		"page": 229,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 737,
+		"id": "61d67393-7c8f-4d48-9db2-57f604da8fd0"
+	},
+	{
+		"name": "Ki Form",
+		"level": 9,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Monk", "Polymorph" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"duration": "1 minute",
+		"details": [
+			"Drawing from deep wells of spiritual power, you take on a special ki form. In your ki form, your hair, feathers, skin, or scales change color and begin to glow. In this form you gain a fly Speed equal to your land Speed. Choose force, lawful (only if you are lawful), negative, or positive damage. All your Strikes deal 1d6 additional damage of the chosen type. Your entire body is also surrounded by a glowing corona of the same color as your inner ki; this is a light effect. Your corona is a 5-foot emanation that deals 2d6 damage of the chosen type to creatures who start their turn within the emanation. If the emanation overlaps with a darkness effect, the corona's glow attempts to counteract the darkness effect. Regardless of the outcome, the corona can't attempt to counteract that effect again for 1 day. As a single action, which has the concentrate trait, you can flare your corona out to become a 30-foot emanation.",
+			"In your ki form, your emotions surge to the forefront and it's difficult to moderate your attacks. Your weapons and unarmed attacks lose the nonlethal trait. You take a -2 status penalty to saves against emotion effects but gain a +2 status bonus to saves against all other mental effects."
+		],
+		"page": 229,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 738,
+		"id": "8dac4a5b-564a-4c86-a7a9-8a05eaed5e46"
+	},
+	{
+		"name": "Medusa's Wrath",
+		"level": 8,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Monk", "Transmutation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You make an attack filled with a medusa's petrifying power. Make an unarmed Strike with the following additional effects.",
+			{
+				"criticalSuccess": [
+					"The target is slowed 2 and must attempt a Fortitude save at the end of each of its turns; this ongoing save has the incapacitation trait. On a failed save, the slowed condition increases by 1 (2 on a critical failure). A successful save reduces the slowed condition by 1. When a creature is unable to act due to the slowed condition from <i>medusa's wrath</i>, it is petrified permanently. The spell ends if the creature is petrified or the slowed condition is removed."
+				],
+				"success": [
+					"As critical success, but the target is initially slowed 1."
+				]
+			}
+		],
+		"page": 229,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 739,
+		"id": "243d825d-a9af-4ea2-81fe-1ae2d7d2abe7"
+	},
+	{
+		"name": "Shadow's Web",
+		"level": 7,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation", "Monk" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"area": "30-foot burst",
+		"savingThrow": "Fortitude",
+		"details": [
+			"Grasping darkness surges from you, dealing 14d4 negative damage. Each creature in the area must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature takes half damage and is enfeebled 1 for 1 round."
+				],
+				"failure": [
+					"The creature takes full damage and is enfeebled 2 for 1 round."
+				],
+				"criticalFailure": [
+					"The creature takes double damage and is stunned 1, enfeebled 2 for 1 round, and immobilized for 1 round or until it Escapes, whichever comes first."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The negative damage increases by 2d4.", "bump": 1 }
+		],
+		"page": 229,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 740,
+		"id": "34916ddb-4296-4e2b-b067-96d71985f7a4"
+	},
+	{
+		"name": "Access Lore",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Divination", "Fortune", "Oracle" ],
+		"mystery": "lore",
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"duration": "1 minute",
+		"details": [
+			"You sift through the multiverse's divine knowledge, seeking out tidbits related to a particular subject. Choose one Lore skill. You temporarily gain the same proficiency rank in that Lore skill as your proficiency rank for your oracle spellcasting."
+		],
+		"page": 229,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 741,
+		"id": "3056d216-bb21-4c33-b380-499cebacde2e"
+	},
+	{
+		"name": "Ancestral Defense",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Abjuration", "Cursebound", "Fortune", "Mental", "Oracle" ],
+		"mystery": "ancestors",
+		"cast": "[R]",
+		"components": [ "somatic" ],
+		"trigger": "You are about to attempt a Will save.",
+		"details": [
+			"Your ancestor protects you against those who would bend your will. You roll the triggering save twice and use the better result. If you're in an encounter when you cast this spell, you immediately roll to change your predominant ancestor."
+		],
+		"page": 230,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 742,
+		"id": "f83008e4-0d44-4882-aa9b-b99420c63559"
+	},
+	{
+		"name": "Ancestral Form",
+		"level": 6,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Oracle", "Transmutation" ],
+		"mystery": "ancestors",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You take the form of your ancestral spirits, becoming invisible and quasi-corporeal. You gain resistance 10 to all damage (except force and damage from Strikes with the <i>ghost touch</i> property rune), and this resistance is doubled against non-magical and precision damage. You gain a fly Speed equal to your land Speed; when Flying, moving upward isn't difficult terrain for you. You can't move through solid objects, but you can float through tiny gaps. You can't Cast Spells (but you can Sustain a Spell), activate items, or use actions that have the attack or manipulate trait."
+		],
+		"heightened": [
+			{ "change": "The resistance increases by 5.", "bump": 2 }
+		],
+		"page": 230,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 743,
+		"id": "feeae798-b57e-4428-85e7-4dbcdd98bd0e"
+	},
+	{
+		"name": "Ancestral Touch",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Emotion", "Enchantment", "Fear", "Mental", "Oracle" ],
+		"mystery": "ancestors",
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "touch",
+		"targets": "1 living creature",
+		"savingThrow": "Will",
+		"details": [
+			"You touch a creature and force them to see and feel the ancestors surrounding you. The target takes 1d4 mental damage, with results depending on a Will save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes half damage."
+				],
+				"failure": [
+					"The target is frightened 1 and takes full damage."
+				],
+				"criticalFailure": [
+					"The target is frightened 2 and takes double damage."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The mental damage increases by 1d4.", "bump": 1 }
+		],
+		"page": 230,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 744,
+		"id": "57d4640d-75dd-4e4c-8c43-b058beb05a75"
+	},
+	{
+		"name": "Armor of Bones",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Necromancy", "Oracle" ],
+		"mystery": "bones",
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"duration": "1 minute",
+		"details": [
+			"You ossify your physical form, mimicking the durability of bone. You gain resistance 3 to cold, electricity, fire, piercing, and slashing damage."
+		],
+		"heightened": [
+			{ "change": "Increase the resistance by 1.", "bump": 1 }
+		],
+		"page": 230,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 745,
+		"id": "b8f8c998-26b8-49c5-bd8a-bec6f5f38ff4"
+	},
+	{
+		"name": "Battlefield Persistence",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Divination", "Divine", "Oracle" ],
+		"mystery": "battle",
+		"cast": "[R]",
+		"components": [ "verbal" ],
+		"trigger": "You are about to attempt a saving throw, but you haven't rolled yet.",
+		"details": [
+			"You're difficult to remove from battle. You gain a +2 status bonus to the triggering save, and if the triggering save is against an incapacitation effect, it treats you as if you were 2 levels higher."
+		],
+		"page": 230,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 746,
+		"id": "d64098ee-eb56-4de4-8918-e06ae69aa7e1"
+	},
+	{
+		"name": "Brain Drain",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Enchantment", "Mental", "Oracle" ],
+		"mystery": "lore",
+		"cast": "[A][A]",
+		"components": [ "material", "somatic" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"savingThrow": "Will",
+		"details": [
+			"You probe the target's mind to glean knowledge. This deals 1d8 mental damage with a basic Will save. If the target fails the save, you sort through the stolen memories to attempt a single check to Recall Knowledge. Choose a skill that has the Recall Knowledge action, and use the target's skill modifier for the check."
+		],
+		"heightened": [
+			{ "change": "The mental damage increases by 1d8.", "bump": 1 }
+		],
+		"page": 230,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 747,
+		"id": "a3a72411-5035-4293-bdfd-e9731d72ac28"
+	},
+	{
+		"name": "Call to Arms",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Auditory", "Cursebound", "Emotion", "Enchantment", "Mental", "Oracle" ],
+		"mystery": "battle",
+		"cast": "[R]",
+		"components": [ "verbal" ],
+		"trigger": "You are about to roll for initiative.",
+		"area": "20-foot emanation",
+		"duration": "1 minute",
+		"details": [
+			"You cry out a call to arms, inspiring your allies to enter the fray. Each ally in the area gains a +2 status bonus to their initiative roll and gains temporary Hit Points equal to the spell's level; these temporary Hit Points last for the spell's duration."
+		],
+		"heightened": [
+			{ "change": "The bonus increases to +3.", "level": 6 },
+			{ "change": "The bonus increases to +4.", "level": 9 }
+		],
+		"page": 230,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 748,
+		"id": "62c9ff8a-e00a-4564-bd86-a1d1e1c9e6c7"
+	},
+	{
+		"name": "Claim Undead",
+		"level": 6,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Incapacitation", "Necromancy", "Oracle" ],
+		"mystery": "bones",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"targets": "1 undead creature",
+		"savingThrow": "Will",
+		"duration": "10 minutes",
+		"details": [
+			"You attempt to wrest control of a target undead or force it to recognize you as its master. If the target is controlled by another creature, that controller attempts a Will saving throw to retain control; otherwise, the target must attempt a Will save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target is stunned 1 as it fights off your commands."
+				],
+				"failure": [
+					"The target becomes controlled by you and follows your orders. It (or the creature previously controlling it) can attempt a new Will save at the end of each of its turns, and the spell ends on a success. If you issue an obviously self-destructive order, the target doesn't act until you issue a new order."
+				],
+				"criticalFailure": [
+					"As failure, but the target (or the creature previously controlling it) receives a new save only if you give it a new order that is against its nature."
+				]
+			}
+		],
+		"page": 230,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 749,
+		"id": "d155a1ac-2731-4cc9-8fe2-1d7bde3fc51d"
+	},
+	{
+		"name": "Debilitating Dichotomy",
+		"level": 4,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Evocation", "Mental", "Oracle" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"targets": "1 creature other than you",
+		"savingThrow": "Will",
+		"details": [
+			"You reveal a glimpse of the impossible conflicts between the divine anathema behind your curse, forcing you to reckon with another's conflicts as well. You and the target each take 9d6 mental damage with a basic Will save, and the target is stunned 1 if it critically fails its save. You get a degree of success one better than you rolled for your saving throw."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 3d6.", "bump": 1 }
+		],
+		"page": 231,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 750,
+		"id": "c519b493-1fbe-433f-81e7-af2b7daed697"
+	},
+	{
+		"name": "Delay Affliction",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Healing", "Necromancy", "Oracle", "Positive" ],
+		"mystery": "life",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"details": [
+			"With a surge of healing energy, you push back against an affliction threatening the target and grant a small amount of healing. The target recovers 3d8 Hit Points. You attempt to counteract any one affliction you are aware the target has, suspending its effects for 1 hour on a success rather than removing it. The target is then temporarily immune to <i>delay affliction</i> for 1 day. You don't need to have identified the name of the specific affliction, but you do need to be aware of it; for instance, you couldn't delay an ingested poison during its onset period unless you were aware of the poison."
+		],
+		"heightened": [
+			{ "change": "The target recovers an additional 1d8 Hit Points and you can attempt to suspend an additional affliction.", "bump": 1 }
+		],
+		"page": 231,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 751,
+		"id": "1cea7dbe-70a3-4c71-9c3f-0a2116dd4a9d"
+	},
+	{
+		"name": "Dread Secret",
+		"level": 6,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Divination", "Emotion", "Fear", "Mental", "Oracle" ],
+		"mystery": "lore",
+		"cast": "[A][A]",
+		"components": [ "material", "somatic" ],
+		"range": "60 feet",
+		"targets": "up to 6 creatures",
+		"savingThrow": "Will",
+		"duration": "until the start of your next turn",
+		"details": [
+			"You utter a powerful secret at odds with the fundamental nature of the target creatures. Choose a specific resistance or weakness that you believe one or more of the targets have due to Recall Knowledge or previous experience with the targets, such as resistance to fire or weakness to silver. If the information is incorrect for a given target, the spell has no effect on that target. Affected targets must attempt a Will saving throw.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature takes 1 damage of the type of weakness you chose (thus triggering the creature's weakness), or loses its resistance until the end of your next turn if you chose a resistance."
+				],
+				"failure": [
+					"As success, and the creature becomes frightened 1 from the revelation of its dread secret."
+				],
+				"criticalFailure": [
+					"As failure, except the creature is frightened 3."
+				]
+			}
+		],
+		"page": 231,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 752,
+		"id": "30a66d54-4772-4e0d-945a-de3e8e86c263"
+	},
+	{
+		"name": "Flaming Fusillade",
+		"level": 6,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Evocation", "Fire", "Oracle" ],
+		"mystery": "flames",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "1 minute",
+		"details": [
+			"You call upon an endless barrage of flames, producing miniature fireballs in your hands to hurl at foes. You cast <i>produce flame</i> as part of casting <i>flaming fusillade</i>. For the duration of <i>flaming fusillade</i>, <i>produce flame</i>'s casting time is reduced from 2 actions to 1."
+		],
+		"heightened": [
+			{ "change": "For the duration, you also gain a status bonus to the damage dealt by <i>produce flame</i> equal to <i>flaming fusillade's</i> spell level.", "level": 9 }
+		],
+		"page": 232,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 753,
+		"id": "1b2b0cd8-6124-45c3-9237-33f1ec9fa4ff"
+	},
+	{
+		"name": "Heroic Feat",
+		"level": 6,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Divination", "Mental", "Oracle" ],
+		"mystery": "battle",
+		"cast": "[A][A] or [A][A][A]",
+		"components": [ "somatic", "verbal" ],
+		"details": [
+			"You gain the ability to perform a specialized combat technique from the vast wealth of martial knowledge your mystery provides. When you Cast this Spell, you use the action granted by one common fighter feat from pages 144-153 of the Core Rulebook or pages 126-127 of this book (your GM might add feats to this list). If you Cast this Spell using 2 actions, the granted action must be a single action, and if you Cast this Spell using 3 actions, you can instead choose a feat that grants a 2-action activity. The chosen feat's level can be no higher than <i>heroic feat</i>'s spell level. The feat can't have a Frequency entry, and you must meet its prerequisites and requirements in order to select it."
+		],
+		"page": 232,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 754,
+		"id": "0f0d76a3-43aa-4fb6-a5d1-55d1a6d87908"
+	},
+	{
+		"name": "Incendiary Aura",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Evocation", "Fire", "Oracle" ],
+		"mystery": "flames",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "1 minute",
+		"details": [
+			"You surround yourself with a combustible aura. Each time a creature within the emanation takes fire damage, it catches on fire, taking 2d4 persistent fire damage."
+		],
+		"heightened": [
+			{ "change": "Increase the persistent damage by 1d4 and the radius of the emanation by 5 feet.", "bump": 2 }
+		],
+		"page": 232,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 755,
+		"id": "f430edc8-c412-48a7-be7a-3fb3fb380677"
+	},
+	{
+		"name": "Interstellar Void",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cold", "Cursebound", "Evocation", "Oracle" ],
+		"mystery": "cosmos",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"savingThrow": "Fortitude",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You call upon the frigid depths of outer space to bring a terrible chill to your enemy. The target is cloaked in the freezing void, which deals 3d6 cold damage immediately and when you Sustain the Spell on future turns, with a basic Fortitude save. The target is fatigued for as long as the effect persists."
+		],
+		"heightened": [
+			{ "change": "The cold damage increases by 1d6.", "bump": 1 }
+		],
+		"page": 232,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 756,
+		"id": "6f8f671b-04be-491d-923a-4b1b6e1bffef"
+	},
+	{
+		"name": "Life-Giving Form",
+		"level": 6,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Healing", "Light", "Necromancy", "Oracle", "Positive" ],
+		"mystery": "life",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "1 minute",
+		"details": [
+			"You transcend your physical form, becoming a beacon of healing energy. Your body exudes bright light like a torch. You gain resistance 5 to precision damage and weakness 5 to negative damage, and your unarmed Strikes deal an extra 1d4 positive damage.",
+			"You can touch a living creature with an Interact action to restore 6d8 Hit Points to it, and when a creature touches you with an Interact action you can allow it to gain the same healing; either way, the creature becomes temporarily immune to <i>life-giving form</i>'s healing for 1 minute. This is a positive healing effect. You can't heal yourself with <i>life-giving form</i>. A creature harmed by positive damage (such as an undead) that touches you or damages you with an unarmed attack or non-reach melee weapon instead takes 3d4 positive damage, and it doesn't become temporarily immune.",
+			"You can Dismiss this spell."
+		],
+		"heightened": [
+			{ "change": "Increase the Hit Points restored with an Interact action by 1d8, the positive damage by 1, and the resistance and weakness by 1.", "bump": 1 }
+		],
+		"page": 232,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 757,
+		"id": "92df70a1-8b8a-4eee-b219-eb1790c93822"
+	},
+	{
+		"name": "Life Link",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Healing", "Necromancy", "Oracle", "Positive" ],
+		"mystery": "life",
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"targets": "1 creature other than you",
+		"duration": "1 minute",
+		"details": [
+			"You forge a connection of life energy between you and your target, distributing harm between both of you. When you first Cast the Spell, the target recovers 1d4 Hit Points. The first time each round that the target takes damage, reduce the damage it takes by 3 (to a minimum of 0 damage). You lose 3 Hit Points each time, or the total damage dealt, if less than 3; this damage ignores any immunities or resistances you have and can't otherwise be mitigated in any way.",
+			"The spell ends immediately if you fall unconscious. You can Dismiss the spell."
+		],
+		"heightened": [
+			{ "change": "You can target 2 creatures other than you. Increase the initial healing to 3d4 and the maximum damage reduced and Hit Points lost to 5.", "level": 3 },
+			{ "change": "You can target 3 creatures other than you. Increase the initial healing to 6d4 and the maximum damage reduced and Hit Points lost to 10.", "level": 6 },
+			{ "change": "You can target 4 creatures other than you. Increase the initial healing to 9d4 and the maximum damage reduced and Hit Points lost to 15.", "level": 9 }
+		],
+		"page": 232,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 758,
+		"id": "be6ff86a-a711-4c12-b040-05da90ca4ba9"
+	},
+	{
+		"name": "Moonlight Bridge",
+		"level": 6,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Conjuration", "Cursebound", "Light", "Oracle" ],
+		"mystery": "cosmos",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"duration": "10 minutes",
+		"details": [
+			"You summon a bridge of radiant, shimmering moonlight. The 10-foot-wide span must start at the ground on a point within range, and it extends as a horizontal plane, either in a straight line or at any angle up to 45 degrees upward or downward, for up to 120 feet. This bridge has AC 10, Hardness 30, and 60 Hit Points, and it's immune to critical hits and precision damage. You and your allies can cross the bridge normally, but other creatures simply pass through it if they try to do so. The bridge blocks physical, ethereal, and incorporeal attacks from crossing, whether from above or below. You can Dismiss the spell."
+		],
+		"heightened": [
+			{ "change": "The length of the bridge increases by 20 feet, and its Hit Points increase by 20", "bump": 1 }
+		],
+		"page": 233,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 759,
+		"id": "ae3eb159-99f6-41b2-9f1c-f215dd59016f"
+	},
+	{
+		"name": "Soul Siphon",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Necromancy", "Negative", "Oracle" ],
+		"mystery": "bones",
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"targets": "1 living creature",
+		"savingThrow": "Fortitude",
+		"details": [
+			"You siphon off a portion of the target's soul to bolster your own vitality. The target must attempt a Fortitude save or take 1d4 negative damage. You gain temporary Hit Points equal to the total amount of HP the target loses, including the HP lost from becoming drained.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature takes half damage."
+				],
+				"failure": [
+					"The creature takes full damage and becomes drained 1."
+				],
+				"criticalFailure": [
+					"The creature takes double damage and becomes drained 2."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "Increase the damage by 1d4.", "bump": 1 }
+		],
+		"page": 233,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 760,
+		"id": "50c36cec-788d-419a-a8a2-cba51bd5b394"
+	},
+	{
+		"name": "Spray of Stars",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Evocation", "Fire", "Light", "Oracle" ],
+		"mystery": "cosmos",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"area": "15-foot cone",
+		"savingThrow": "Reflex",
+		"details": [
+			"You fling a spray of tiny shooting stars, dealing 1d4 fire damage. Each creature in the area must attempt a Reflex save.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature takes half damage and is dazzled for 1 round."
+				],
+				"failure": [
+					"The creature takes full damage and is dazzled for 3 rounds."
+				],
+				"criticalFailure": [
+					"The creature takes double damage and is dazzled for 1 minute."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "Increase the damage by 1d4.", "bump": 1 }
+		],
+		"page": 233,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 761,
+		"id": "b353fe98-5343-4e6c-96f3-3fa5ad35f609"
+	},
+	{
+		"name": "Tempest Form",
+		"level": 6,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Oracle", "Polymorph", "Transmutation" ],
+		"mystery": "tempest",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"Your body becomes fluid to better suit your surroundings. When you Cast this Spell, choose whether to become air, water, or mist. The spell gains the air trait if you choose air or mist, and the water trait if you choose water or mist. You become amorphous, as does your armor. You lose any item bonus to AC and use your proficiency bonus for unarmored defense to determine your AC. You also gain resistance 10 to physical damage and become immune to precision damage. You can slip through tiny cracks and don't need to breathe. You can't cast spells, activate items, or use actions that have the attack or manipulate trait. You also gain the following effects based on your form.<ul><li><b>Air</b> You gain a fly Speed of 20 feet and become invisible while you are in the air. You can create the effects of a <i>gust of wind</i> from your space as a 2-action activity, which has the manipulate trait.</li><li><b>Mist</b> You gain a fly Speed of 20 feet, and it becomes hard to see through you. Any creature on one side of your space who is targeted by a creature on the opposite side is concealed to the targeting creature.</li><li><b>Water</b> You gain a swim Speed of 20 feet and become invisible while you are in the water. You can electrically charge yourself by taking a single action, which has the manipulate trait. If you do, you are no longer invisible in the water due to electricity indicating your location, but any creature that makes a melee attack against you takes 1d6 electricity damage; if it touches you, this is cumulative with the damage from your major curse.</li></ul>"
+		],
+		"heightened": [
+			{ "change": "Increase the resistance by 5 and the electricity damage from the charged water form by 1.", "bump": 2 }
+		],
+		"page": 233,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 762,
+		"id": "ecdeb9b0-0e5f-4b47-8105-91a6faefd2c2"
+	},
+	{
+		"name": "Tempest Touch",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cold", "Cursebound", "Evocation", "Oracle", "Water" ],
+		"mystery": "tempest",
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "touch",
+		"targets": "1 creature",
+		"savingThrow": "Fortitude",
+		"details": [
+			"Your touch calls forth a churning mass of icy water that clings to your target, dealing 1d4 bludgeoning damage and 1d4 cold damage. The target must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes half damage and a -5-foot circumstance penalty to its Speeds until the end of your next turn."
+				],
+				"failure": [
+					"The target takes full damage and a -10-foot circumstance penalty to its Speeds until the end of your next turn."
+				],
+				"criticalFailure": [
+					"As failure, but the target takes double damage."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The bludgeoning and cold damage each increase by 1d4.", "bump": 1 }
+		],
+		"page": 233,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 763,
+		"id": "e86e9a7b-5f83-4a44-8505-b772ad7f28e9"
+	},
+	{
+		"name": "Thunderburst",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Air", "Cursebound", "Evocation", "Oracle", "Sonic" ],
+		"mystery": "tempest",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "100 feet",
+		"area": "20-foot burst",
+		"savingThrow": "Fortitude",
+		"details": [
+			"You create a powerful blast of air and a loud peal of thunder, dealing 2d6 bludgeoning damage and 2d6 sonic damage. Each creature in the area must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature takes half damage."
+				],
+				"failure": [
+					"The creature takes full damage and is deafened for 1 minute."
+				],
+				"criticalFailure": [
+					"The creature takes double damage and is deafened for 1 hour."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "Increase each type of damage by 2d6 and the area by 5 feet.", "bump": 2 }
+		],
+		"page": 234,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 764,
+		"id": "71b96cfb-5417-462a-9d05-aeae4f49d2ee"
+	},
+	{
+		"name": "Vision of Weakness",
+		"level": 2,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Divination", "Oracle" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"targets": "1 creature",
+		"details": [
+			"You focus your gaze on a creature and gain a flash of divine insight into its nature. If the creature has any weaknesses, you learn them, as well as which of its three saving throw modifiers is lowest. You also learn an inherent understanding of its movements and gain a +2 status bonus to your next attack roll (or skill check made as part of an attack action) against that foe before the end of your turn. The target is then temporarily immune to <i>vision of weakness</i> for 1 day."
+		],
+		"page": 234,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 765,
+		"id": "0169c9d5-c9f4-4d0e-ae39-bc687e2c875f"
+	},
+	{
+		"name": "Whirling Flames",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cursebound", "Evocation", "Fire", "Oracle" ],
+		"mystery": "flames",
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"area": "up to two 5-foot bursts that don't overlap",
+		"savingThrow": "basic Reflex",
+		"details": [
+			"You call forth a storm of whirling flames, engulfing all creatures in that area and dealing 5d6 fire damage with a basic Reflex save."
+		],
+		"heightened": [
+			{ "change": "The damage increases by 3d6, and you can add another nonoverlapping 5-foot burst to the area.", "bump": 2 }
+		],
+		"page": 234,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 766,
+		"id": "5c6f1efa-c118-48e8-bcdd-276386f85c25"
+	},
+	{
+		"name": "Animal Feature",
+		"level": 2,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Morph", "Ranger", "Transmutation" ],
+		"cast": "[A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "1 minute",
+		"details": [
+			"Without fully transforming your body, you gain one animalistic feature, which you select from the list below each time you Cast the Spell. <ul><li><b>Cat Eyes</b> You gain low-light vision.</li><li><b>Claws</b> You gain a claw attack that deals 1d6 slashing damage and has the agile, finesse, and unarmed traits.</li><li><b>Jaws</b> You gain a jaws attack that deals 1d8 piercing damage and has the unarmed trait.</li></ul>",
+			"<b>Heightened (4th)</b> Add the following options to the list you can choose from. <ul><li><b>Fish Tail</b> You gain a swim Speed equal to your land Speed.</li><li><b>Owl Eyes</b> You gain darkvision.</li><li><b>Wings</b> You gain a fly Speed equal to your land Speed.</li></ul>"
+		],
+		"page": 234,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 767,
+		"id": "cbb5584a-980e-46a3-8ea8-d436b0ea0e9c"
+	},
+	{
+		"name": "Enlarge Companion",
+		"level": 4,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Polymorph", "Ranger", "Transmutation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"targets": "your animal companion",
+		"duration": "1 minute",
+		"details": [
+			"Your animal companion grows much larger, towering over its foes in battle. Your animal companion becomes Huge, gaining the effects of a 4th-level <i>enlarge</i> spell."
+		],
+		"page": 234,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 768,
+		"id": "5419c0ff-6023-4d8e-b192-fca795eb618f"
+	},
+	{
+		"name": "Ephemeral Tracking",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Divination", "Ranger" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "1 hour",
+		"details": [
+			"You can look at currents in the air and water and see tracks that you can follow just as you would on land. You can use Survival to Track through both air and water, noticing aerial or aquatic \"tracks\" of all creatures who passed nearby in the last hour. It's more difficult to Track in this way: the DC to Track through air or water is always at least 30, or higher after precipitation or wind (in the air) or heavy tides or currents (in the water). It's possible to Cover Tracks against this spell, but creatures might not realize they need to do so."
+		],
+		"page": 234,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 769,
+		"id": "b2b90815-a455-4f30-bf83-ef7cc4266e11"
+	},
+	{
+		"name": "Gravity Weapon",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation", "Ranger" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"duration": "1 minute",
+		"details": [
+			"You build up gravitational force and funnel it into your blows, leading to more powerful attacks with blade and bow alike. On your first weapon Strike each round, you gain a status bonus to damage equal to twice the number of weapon damage dice."
+		],
+		"page": 234,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 770,
+		"id": "01eb6544-4f90-48c8-82b0-ca7765cad1fe"
+	},
+	{
+		"name": "Heal Companion",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Healing", "Necromancy", "Positive", "Ranger" ],
+		"cast": "[A] or [A][A]",
+		"range": "touch or 30 feet",
+		"targets": "your animal companion",
+		"details": [
+			"You harness positive energy to heal your animal companion's wounds. You restore 1d10 Hit Points to your animal companion. The number of actions you spend Casting this Spell determines range and other parameters.",
+			"<b>[A] (somatic)</b> The spell has a range of touch.",
+			"<b>[A][A] (verbal)</b> The spell has a range of 30 feet and restores an additional 8 Hit Points to the target."
+		],
+		"heightened": [
+			{ "change": "The amount of healing increases by 1d10, and the additional healing for the 2-action version increases by 8.", "bump": 1 }
+		],
+		"page": 234,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 771,
+		"id": "a94b9478-806f-48bb-8344-0df186076c5c"
+	},
+	{
+		"name": "Hunter's Luck",
+		"level": 2,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Divination", "Fortune", "Ranger" ],
+		"cast": "[F]",
+		"components": [ "verbal" ],
+		"trigger": "You attempt a check to Recall Knowledge about a creature, but you haven't rolled yet.",
+		"details": [
+			"You have a preternatural ability to remember details about your foes. Roll the triggering check twice and use the better result."
+		],
+		"page": 235,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 772,
+		"id": "e27f0098-4287-4efc-934c-9322cc02df07"
+	},
+	{
+		"name": "Hunter's Vision",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Divination", "Ranger" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"range": "30 feet",
+		"targets": "1 hunted prey",
+		"duration": "10 minutes",
+		"details": [
+			"Your target glows with a magical aura visible only to you and those who follow your lead. Your target is visible to you and others sharing your Hunt Prey benefits even if it wouldn't normally be due to lighting or the concealed or invisible conditions, though cover from opaque objects still blocks your sight. You ignore the flat check against the target due to the concealed condition, and the target isn't automatically hidden from you due to darkness or being invisible."
+		],
+		"page": 235,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 773,
+		"id": "981964d2-485b-48a3-9a4e-a43fbc931563"
+	},
+	{
+		"name": "Magic Hide",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Abjuration", "Ranger" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"targets": "your animal companion",
+		"duration": "1 minute",
+		"details": [
+			"Your animal companion grows a thicker hide, matted fur, or a harder shell, granting it a +1 status bonus to AC."
+		],
+		"page": 235,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 774,
+		"id": "eb99d483-baf0-4e9b-9d0c-42bf68e03d1c"
+	},
+	{
+		"name": "Ranger's Bramble",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Plant", "Ranger", "Transmutation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "100 feet",
+		"area": "all squares that contain plants in a 5-foot burst",
+		"duration": "1 minute",
+		"details": [
+			"You cause plants in the area to entangle your foes, with the effects of <i>entangle</i>. A creature that critically fails the save takes 2d4 persistent bleed damage in addition to being immobilized. Escaping your bramble doesn't end the bleed damage."
+		],
+		"heightened": [
+			{ "change": "The bleed damage on a critical failure increases by 1d4.", "bump": 1 }
+		],
+		"page": 235,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 775,
+		"id": "a450b6b9-b4f1-4908-9660-dbdd58109c95"
+	},
+	{
+		"name": "Snare Hopping",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Conjuration", "Ranger", "Teleportation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "10 feet",
+		"targets": "one snare you built",
+		"details": [
+			"You may not have placed your snare in the right place, but you can magically move it there. You teleport the target snare to another unoccupied location in range."
+		],
+		"heightened": [
+			{ "change": "The range of the spell increases by 10 feet.", "bump": 1 }
+		],
+		"page": 235,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 776,
+		"id": "189a4ed3-f290-492d-b258-9f3e3a84a1ed"
+	},
+	{
+		"name": "Soothing Mist",
+		"level": 2,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Healing", "Necromancy", "Positive", "Ranger" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"targets": "1 willing living creature or 1 undead creature",
+		"details": [
+			"You call forth a magical mist of positive energy that envelops a creature. The mist restores 2d8 Hit Points to a target living creature and ends one source of persistent acid, bleed, fire, negative, or poison damage affecting it. If the creature is taking persistent damage from multiple sources, you select which one is removed. Against an undead target, you deal 2d8 positive damage (basic Fortitude save); if it fails the save, it also takes 2 persistent positive damage."
+		],
+		"heightened": [
+			{ "change": "The amount of healing (or damage to an undead target) increases by 1d8, and the persistent positive damage to an undead creature increases by 1.", "bump": 1 }
+		],
+		"page": 235,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 777,
+		"id": "a086509f-9515-4ada-8346-f7991e7b0385"
+	},
+	{
+		"name": "Terrain Transposition",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Conjuration", "Ranger", "Teleportation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "90 feet",
+		"details": [
+			"You mystically transpose your current location with another. While in a wilderness environment, you transport yourself and items you're holding to a clear space you can see within range. If you have Favored Terrain and both your starting and ending position are in your favored terrain, the range increases to 180 feet. If you have an animal companion and it is adjacent to you, you can transport it along with you to an adjacent open space, but if this spell would bring any other creature with you, even in an extradimensional container, the spell is lost."
+		],
+		"page": 235,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 778,
+		"id": "734c76a0-aa21-4acd-82fe-6448e751b41c"
+	},
+	{
+		"name": "Blinding Beauty",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Emotion", "Enchantment", "Incapacitation", "Sorcerer", "Visual" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"area": "30-foot cone",
+		"savingThrow": "Will",
+		"details": [
+			"You channel the allure of your nymph bloodline into a terribly beautiful glance. Each enemy in the area must attempt a Will saving throw.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature is dazzled until the start of its next turn."
+				],
+				"failure": [
+					"The creature is blinded until the start of its next turn."
+				],
+				"criticalFailure": [
+					"The creature is blinded for 1 minute."
+				]
+			}
+		],
+		"page": 235,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 779,
+		"id": "81fa876a-9079-4ecf-8fc1-d6a444bd95d7"
+	},
+	{
+		"name": "Consuming Darkness",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation", "Shadow", "Sorcerer" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"area": "10-foot emanation",
+		"targets": "enemies in the area",
+		"savingThrow": "Reflex",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"Your shadow wriggles before spreading out from you, forming a gateway of clinging, consuming shadow through which the horrors of another plane can barely be seen. The first time each turn you Sustain the Spell, the radius increases by 5 feet. Each enemy that enters the area or begins its turn in the area takes 2d6 negative damage and must attempt a Reflex save.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature sinks partially into the shadow, taking half damage and a -5-foot circumstance penalty to its Speeds for as long it remains in the area."
+				],
+				"failure": [
+					"As success, but the creature takes full damage and a -10-foot circumstance penalty."
+				],
+				"criticalFailure": [
+					"The creature is absorbed into the shadows, where it can be seen below the surface; it takes double damage and is immobilized for 1 round or until it Escapes."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d6.", "bump": 1 }
+		],
+		"page": 235,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 780,
+		"id": "433c568a-7fa1-4b73-93ef-71a8c450b159"
+	},
+	{
+		"name": "Dim the Light",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Darkness", "Evocation", "Sorcerer" ],
+		"cast": "[R]",
+		"components": [ "somatic" ],
+		"trigger": "You cast a darkness or shadow spell.",
+		"details": [
+			"You magnify the darkness from the triggering effect, causing the ambient light level to flicker briefly so you can slip from sight. You can immediately attempt a Stealth check to Hide, and you can become hidden to a creature even if you don't have cover and aren't otherwise concealed from that creature. You cease being hidden at the end of your turn unless you move into cover or become concealed before then."
+		],
+		"page": 236,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 781,
+		"id": "beecd410-5f76-4feb-8e5b-aa4cc9c2b42b"
+	},
+	{
+		"name": "Establish Ward",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Abjuration", "Sorcerer" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"area": "30-foot burst",
+		"duration": "1 minute",
+		"details": [
+			"You bind a part of your essence to your surroundings, creating a warded area that grants you power within it, but drains you outside of it. While within the area, you can make nature's wrath Strikes by commanding plants, wind, rocks, and other natural features to attack enemies. These are melee Strikes that use your spell attack modifier, can target any creature within the ward, and deal bludgeoning, piercing, or slashing damage equal to 2d8 plus your spellcasting ability modifier.",
+			"Upon Casting the Spell, you can immediately make a single nature's wrath Strike. You are quickened while inside the ward, and can use the additional action only to make nature's wrath Strikes. You are slowed 1 while outside the area."
+		],
+		"heightened": [
+			{ "change": "The area increases by 5 feet, and the Strikes deal an additional 1d8 damage.", "bump": 2 }
+		],
+		"page": 236,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 782,
+		"id": "562c85ec-4c85-4993-89d9-1f4ffa18ed92"
+	},
+	{
+		"name": "Genie's Veil",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Abjuration", "Sorcerer" ],
+		"cast": "[R]",
+		"components": [ "somatic" ],
+		"trigger": "A creature within range is attacked.",
+		"range": "30 feet",
+		"targets": "1 willing creature",
+		"details": [
+			"With a flourish, you fulfill a creature's wish for protection, bending reality to keep them from harm. The target vanishes in a burst of brightly colored smoke and sparkles, reappearing an instant later. They become concealed against the triggering attack and until the end of the current creature's turn."
+		],
+		"page": 236,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 783,
+		"id": "8a059f06-4b1e-4a7a-86da-243faa4c4cab"
+	},
+	{
+		"name": "Heart's Desire",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Emotion", "Illusion", "Mental", "Sorcerer" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "60 feet",
+		"targets": "1 creature",
+		"savingThrow": "Will",
+		"duration": "varies",
+		"details": [
+			"You surround your target with wondrous illusions of their greatest desires, which distract them from reality. The target must attempt a Will save.",
+			{
+				"criticalSuccess": [
+					"The target disbelieves the illusion and is unaffected."
+				],
+				"success": [
+					"For 1 round, the target is stupefied 2 and takes a -2 status penalty to any checks it makes to determine the effects of reactions."
+				],
+				"failure": [
+					"For 1 minute, the target is stupefied 2 and can't use reactions."
+				],
+				"criticalFailure": [
+					"As failure, and all spaces are difficult terrain for the target."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "You can target one additional creature.", "bump": 2 }
+		],
+		"page": 236,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 784,
+		"id": "7998c62f-0275-4ea6-91b6-67a3b62face6"
+	},
+	{
+		"name": "Nymph's Token",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Enchantment", "Sorcerer" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "1 minute",
+		"details": [
+			"You grant an ally a token of favor. You create a token, such as a lock of your hair or a flower, that persists for the spell's duration; as part of Casting the Spell, you can Interact to pass the token to an ally within your reach. As long as the ally has the token on their person, they gain a +1 status bonus to Performance checks and Will saves. You can Dismiss the spell as a free action."
+		],
+		"heightened": [
+			{ "change": "As long as the ally has the token on their person, you can cast spells that have a range of touch on them at a range of 30 feet.", "level": 4 }
+		],
+		"page": 236,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 785,
+		"id": "a8e08670-25fb-40a5-b669-ee6c0eff339c"
+	},
+	{
+		"name": "Sepulchral Mask",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Divination", "Emotion", "Mental", "Sorcerer", "Visual" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"area": "5-foot emanation",
+		"targets": "enemies in the area",
+		"savingThrow": "Will",
+		"duration": "1 minute",
+		"details": [
+			"You manifest a supernatural funerary mask, granting you a +1 status bonus to Will saving throws against emotion effects for 1 minute. Its somber countenance forces your foes to confront their regrets and sins. Each enemy in the area when you Cast the Spell or that starts its turn in the area takes 1d4 mental damage and must attempt a Will save.",
+			{
+				"criticalSuccess": [
+					"The creature is unaffected."
+				],
+				"success": [
+					"The creature takes half damage."
+				],
+				"failure": [
+					"The creature takes full damage and takes a -1 status penalty to Will saves against emotion effects for 1 round."
+				],
+				"criticalFailure": [
+					"The creature takes double damage and a -1 status penalty to Will saves against emotion effects for 1 minute."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "Increase the mental damage by 2d4 and the emanation's radius by 5 feet.", "bump": 2 }
+		],
+		"page": 236,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 786,
+		"id": "a016dd14-05c2-4321-be26-5b52fef0cd26"
+	},
+	{
+		"name": "Shepherd of Souls",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Healing", "Necromancy", "Sorcerer" ],
+		"cast": "[R]",
+		"components": [ "verbal" ],
+		"trigger": "A living creature within 30 feet takes damage",
+		"range": "30 feet",
+		"targets": "1 creature",
+		"details": [
+			"You stay the hand of fate for one not yet destined to die, sacrificing some of your own vitality to heal them. You lose up to 15 Hit Points as a sacrifice, and the target reduces the damage by twice the number of Hit Points sacrificed. If this reduction exceeds the amount of damage, the target recovers Hit Points equal to the excess amount."
+		],
+		"heightened": [
+			{ "change": "The maximum number of Hit Points you can sacrifice increases by 5.", "bump": 2 }
+		],
+		"page": 236,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 787,
+		"id": "8222e6d2-326e-4da8-9286-f0616099261f"
+	},
+	{
+		"name": "Spirit Veil",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Illusion", "Sorcerer" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "1 minute",
+		"details": [
+			"You draw an occluding veil of spirits around yourself, blocking yourself especially well from undead eyes. You become concealed to all creatures, and you are hidden from undead creatures regardless of what precise senses they have; this grants the effects of <i>invisibility</i>, but against all the undead creature's precise senses. If you physically interact with an undead creature or use a hostile action, the spell ends."
+		],
+		"heightened": [
+			{ "change": "You can target one additional willing creature within 30 feet. The spell ends if any target physically interacts with an undead creature or uses a hostile action.", "bump": 1 }
+		],
+		"page": 237,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 788,
+		"id": "dfa78d37-d09a-405c-a804-d6e8bfe928a8"
+	},
+	{
+		"name": "Steal Shadow",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Necromancy", "Shadow", "Sorcerer" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "60 feet",
+		"targets": "1 creature",
+		"savingThrow": "Fortitude",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You steal a creature's shadow, leaving it weakened and vulnerable. The target must attempt a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target is enfeebled 1 for 1 round."
+				],
+				"failure": [
+					"The target takes 3d4 negative damage and is enfeebled 1 for the spell's duration as you tear its shadow away, collecting it in your hand. On subsequent rounds, when you Sustain the Spell, you can throttle the shadow to deal 3d4 negative damage to the target (basic Fortitude save). Until the spell ends, the target doesn't cast a shadow."
+				],
+				"criticalFailure": [
+					"As failure, but the target is enfeebled 2."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The damage when the spell is cast and when it is sustained increases by 1d4.", "bump": 1 }
+		],
+		"page": 237,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 789,
+		"id": "2649f945-e016-46f2-82d0-cccfc01e0f14"
+	},
+	{
+		"name": "Wish-Twisted Form",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Sorcerer", "Transmutation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "60 feet",
+		"targets": "1 creature",
+		"savingThrow": "Will",
+		"duration": "varies",
+		"details": [
+			"You focus your magic upon an enemy, wishing for their defenses to fail and turning their strengths into weaknesses. The target must attempt one Will saving throw for all of the following effects. <ul><li>The target gains weakness 5 to one energy type of your choice.</li><li>The target's resistances are reduced by 5.</li><li>The target takes a -10-foot status penalty to all its Speeds.</li><li>The target takes a -1 status penalty to its saving throws.</li></ul>",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes the penalties for 1 round."
+				],
+				"failure": [
+					"The target takes the penalties for 1 minute."
+				],
+				"criticalFailure": [
+					"As failure, and the target takes a -1 status penalty to AC for the duration."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "Increase the weakness and the reduction to resistances by 1.", "bump": 1 }
+		],
+		"page": 237,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 790,
+		"id": "560feb62-11a6-4987-a746-95b57d65daf3"
+	},
+	{
+		"name": "Blood Ward",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Abjuration", "Hex", "Witch" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You consolidate warding energies with a gesture, guarding a creature against attacks from a certain type of foe. Designate one of the following creature traits: aberration, animal, beast, celestial, construct, dragon, elemental, fey, fiend, fungus, monitor, ooze, plant, or undead. The target gains a +1 status bonus to its saving throws and AC against creatures with that trait. The target is temporarily immune for 10 minutes."
+		],
+		"heightened": [
+			{ "change": "The status bonus increases to +2.", "level": 5 }
+		],
+		"page": 237,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 791,
+		"id": "75ec8bb1-cb96-4be3-9c82-f239da79186a"
+	},
+	{
+		"name": "Cackle",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Enchantment", "Hex", "Witch" ],
+		"cast": "[F]",
+		"components": [ "verbal" ],
+		"details": [
+			"With a quick burst of laughter, you prolong a magical effect you created. You Sustain a Spell."
+		],
+		"page": 237,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 792,
+		"id": "53f844cc-5d27-4547-8ff5-666de80d7e5d"
+	},
+	{
+		"name": "Clinging Ice",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cantrip", "Cold", "Conjuration", "Hex", "Witch" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"savingThrow": "Reflex",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"Freezing sleet and heavy snowfall collect on the target's feet and legs, dealing 1d4 cold damage and other effects depending on its Reflex save. Once this spell ends, the target becomes temporarily immune for 1 minute.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes half damage."
+				],
+				"failure": [
+					"The target takes full damage, and takes a -5-foot circumstance penalty to its Speeds until the spell ends."
+				],
+				"criticalFailure": [
+					"The target takes double damage and a -10-foot circumstance penalty to its Speeds until the spell ends."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The damage increases by 1d4.", "bump": 1 }
+		],
+		"page": 237,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 0,
+		"id": "704744e7-5ce1-4069-a300-f8a3c8e8f7ab"
+	},
+	{
+		"name": "Curse of Death",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Curse", "Death", "Hex", "Necromancy", "Witch" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"savingThrow": "Fortitude",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You focus your malevolent gaze on a target, causing their heart to seize in dread. The target must attempt a Fortitude saving throw. Regardless of the result, the target is temporarily immune to further castings of <i>curse of death</i> for 1 day.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target is afflicted with the curse of death at stage 1, and the stage of the curse can't increase beyond stage 1."
+				],
+				"failure": [
+					"The target is afflicted with the curse of death at stage 1."
+				],
+				"criticalFailure": [
+					"The target is afflicted with the curse of death at stage 2."
+				]
+			}
+		],
+		"CurseofDeath": [
+			"(curse) This curse ends immediately when the spell ends; <b>Stage 1</b> 4d6 negative damage and fatigued (1 round); <b>Stage 2</b> 8d6 negative damage and fatigued (1 round); <b>Stage 3</b> 12d6 negative damage and fatigued (1 round); <b>Stage 4</b> death."
+		],
+		"heightened": [
+			{ "change": "Increase the negative damage taken on a success and during the first three stages of the curse by 1d6.", "bump": 1 }
+		],
+		"page": 237,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 794,
+		"id": "743ef358-e26a-4763-b1b0-f3daaca43301"
+	},
+	{
+		"name": "Deceiver's Cloak",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Hex", "Illusion", "Witch" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "sustained",
+		"details": [
+			"You wrap yourself in a cloak of illusion, appearing as another creature of the same body shape with roughly similar height and weight as yourself. This has the effects of a 3rd-level <i>illusory disguise</i>."
+		],
+		"heightened": [
+			{ "change": "You can appear as any creature of the same size, even with a completely different body shape.", "level": 6 }
+		],
+		"page": 238,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 795,
+		"id": "4950208f-b089-49d0-b5c6-663f90bdcb0b"
+	},
+	{
+		"name": "Discern Secrets",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cantrip", "Divination", "Hex", "Witch" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You call upon your patron's power to better uncover secrets. When you Cast the Spell, the target can Recall Knowledge, Seek, or Sense Motive. The target gains a +1 status bonus to the skill or Perception used for the roll, and this bonus remains as long as you Sustain the Spell. The target is temporarily immune to <i>discern secrets</i> for 1 minute."
+		],
+		"heightened": [
+			{ "change": "You can target two creatures instead of one.", "level": 5 }
+		],
+		"page": 238,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 0,
+		"id": "2a1286a7-4c47-4867-874f-a5c6c5e4421f"
+	},
+	{
+		"name": "Elemental Betrayal",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation", "Hex", "Witch" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You call upon the elements to undermine your foe. When you Cast this Spell, choose air, earth, fire, or water. Each time the target takes damage from a spell or effect with the chosen trait, it takes an additional 2 damage of one damage type dealt by the spell or effect. If you chose fire or water, the target also takes this additional damage when taking fire or cold damage, respectively, from effects or spells without the chosen trait."
+		],
+		"heightened": [
+			{ "change": "Increase the additional damage by 1.", "bump": 2 }
+		],
+		"page": 238,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 797,
+		"id": "889014d5-a1fa-4199-8f74-631434b142d2"
+	},
+	{
+		"name": "Evil Eye",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cantrip", "Curse", "Emotion", "Enchantment", "Fear", "Hex", "Mental", "Witch" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"savingThrow": "Will",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"Your fix your eye on the target, imposing a malevolent hex. The target becomes frightened based on the results of its Will save. This condition value can't be reduced below 1 while the spell is active and you can see the target. Regardless of the outcome, the target is then temporarily immune for 1 minute.",
+			{ "success": [ "The target is unaffected." ], "failure": [ "The target is frightened 1." ], "criticalFailure": [ "The target is frightened 2." ] }
+		],
+		"page": 238,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 0,
+		"id": "b1877150-a13a-4a49-8777-5e84bb14b8c4"
+	},
+	{
+		"name": "Life Boost",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Healing", "Hex", "Necromancy", "Witch" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"duration": "4 rounds",
+		"details": [
+			"You temporarily bolster the target's vitality. The target gains fast healing equal to double the spell's level."
+		],
+		"page": 238,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 799,
+		"id": "5518e0e5-0c25-4361-b1f7-d541f803af79"
+	},
+	{
+		"name": "Malicious Shadow",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Evocation", "Hex", "Shadow", "Witch" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You reshape the target's shadow into a deadly form, such as strangling hands, a dangerous weapon, harrying runes, or the like, and command it to attack the target. When you Cast the Spell, and each time you Sustain the Spell, the shadow makes a Strike against the target. The shadow moves along with the foe, always remaining within reach. If you Sustain the Spell multiple times in a round, you gain this effect each time. The shadow uses and contributes to your multiple attack penalty.",
+			"The shadow's Strikes are melee spell attacks. Regardless of its shape, the shadow's Strikes deal damage equal to 1d10 plus your spellcasting ability modifier. You choose the type of damage when you Cast the Spell, choosing from bludgeoning, piercing, or slashing damage. The shadow doesn't take up space, grant flanking, or have any other attributes a creature would. The shadow can't make any attacks other than its Strike.",
+			"The shadow vanishes if the target moves into an area of complete darkness or enters an area with light from all directions such that the target doesn't cast a shadow. If another effect is controlling the target's shadow when you cast <i>malicious shadow</i>, you can attempt to counteract that effect to temporarily take control of the shadow, but the original effect resumes when <i>malicious shadow</i> ends."
+		],
+		"heightened": [
+			{ "change": "The Strike damage increases by 1d10.", "bump": 2 }
+		],
+		"page": 238,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 800,
+		"id": "675fc34a-c330-4153-907e-412445c86d2d"
+	},
+	{
+		"name": "Needle of Vengeance",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Enchantment", "Hex", "Mental", "Witch" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"targets": "1 enemy",
+		"savingThrow": "basic Will",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"A long, jagged needle jabs into the target foe's psyche whenever it tries to attack a specifically forbidden creature. Name yourself or one of your allies. The target takes 2 mental damage any time it uses a hostile action against the named creature."
+		],
+		"heightened": [
+			{ "change": "Increase the damage by 2.", "bump": 1 }
+		],
+		"page": 238,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 801,
+		"id": "2cbfebe5-3b54-4abe-873d-dbfa78c0f282"
+	},
+	{
+		"name": "Nudge Fate",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cantrip", "Divination", "Hex", "Witch" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"savingThrow": "Will",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You read slightly into the future and give fate a tiny push to achieve the result you desire. Once during the duration, when the target fails an attack roll, skill check, or saving throw and a +1 status bonus would turn a critical failure into a failure, or failure into a success, you grant the target a +1 status bonus to the check retroactively, changing the outcome appropriately. The spell then ends, and the target is temporarily immune for 1 minute.",
+			"If you cast <i>nudge fate</i> while a previous casting of this hex is still in effect, the previous effect ends."
+		],
+		"page": 239,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 0,
+		"id": "2d26a61e-2460-4c9e-9e74-09b2e05a997b"
+	},
+	{
+		"name": "Personal Blizzard",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Conjuration", "Hex", "Witch" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"savingThrow": "Fortitude",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You summon an isolated blizzard of obscuring, scouring ice to follow your target. The target attempts a Fortitude save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes 1d6 cold damage, and the spell ends."
+				],
+				"failure": [
+					"The target takes 1d6 cold damage and 1d6 persistent cold damage. (The persistent damage automatically ends when the spell ends.) It is concealed to other creatures, and other creatures are concealed to it."
+				],
+				"criticalFailure": [
+					"As failure, but both the cold damage and the persistent cold damage increase to 2d6."
+				]
+			}
+		],
+		"heightened": [
+			{ "change": "The cold damage and persistent cold damage increase by 1 (2 on a critical failure).", "bump": 1 }
+		],
+		"page": 239,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 803,
+		"id": "724e1c36-dbe9-4051-83b0-5171ea2441cd"
+	},
+	{
+		"name": "Phase Familiar",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Abjuration", "Hex", "Witch" ],
+		"cast": "[R]",
+		"components": [ "somatic" ],
+		"trigger": "Your familiar would take damage.",
+		"range": "60 feet",
+		"targets": "your familiar",
+		"details": [
+			"You draw upon your patron's power to momentarily shift your familiar from its solid, physical form into an ephemeral version of itself shaped of mist. Your familiar gains resistance 5 to all damage and is immune to precision damage. These apply only against the triggering damage."
+		],
+		"heightened": [
+			{ "change": "Increase the resistance by 2.", "bump": 1 }
+		],
+		"page": 239,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 804,
+		"id": "bed9340f-2d71-4a55-887d-793d10531c31"
+	},
+	{
+		"name": "Restorative Moment",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Hex", "Necromancy", "Witch" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"details": [
+			"You manipulate the threads of time around the target, giving them some of the benefits of a day's passage. The target decreases the values of any doomed and drained conditions it has by 1 and can immediately attempt one saving throw against each affliction it has with a stage length of 1 day or less. The target is then temporarily immune for 1 day."
+		],
+		"page": 239,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 805,
+		"id": "e2a9c07c-9ccc-4688-b114-debfe80d5390"
+	},
+	{
+		"name": "Shroud of Night",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cantrip", "Darkness", "Evocation", "Hex", "Witch" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"savingThrow": "Will",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"Drawing your hand in a sweeping gesture, you shroud the target in a veil of night. The target's eyes are blanketed in darkness. If you cast this hex on a willing ally (for instance, one with light blindness), the ally can choose which result it gets without rolling. Regardless of the outcome, the target is then temporarily immune for 1 minute.",
+			{ "success": [ "The target is unaffected." ], "failure": [ "The target is shrouded in murky darkness. Unless the target has darkvision, other creatures are concealed to it." ] }
+		],
+		"page": 239,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 0,
+		"id": "b8cebaeb-3f68-4889-95a7-b348dba3cbb6"
+	},
+	{
+		"name": "Stoke the Heart",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cantrip", "Emotion", "Enchantment", "Hex", "Witch" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"Intense fervor fills the target creature, empowering their blows. The target gains a +2 status bonus to damage rolls. Once this spell ends, the target becomes temporarily immune for 1 minute."
+		],
+		"heightened": [
+			{ "change": "The status bonus to damage increases by 1.", "bump": 2 }
+		],
+		"page": 239,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 0,
+		"id": "a3028892-8abe-41a6-b883-9064e3bd8965"
+	},
+	{
+		"name": "Veil of Dreams",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Enchantment", "Hex", "Mental", "Witch" ],
+		"cast": "[A]",
+		"components": [ "somatic" ],
+		"range": "30 feet",
+		"targets": "1 creature",
+		"savingThrow": "Will",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You draw the target into a drowsy state, causing daydreams and sluggishness. The target must attempt a Will save.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"The target takes a -1 status penalty to Perception, attack rolls, and Will saves. This penalty increases to -2 for Will saves against sleep effects."
+				],
+				"failure": [
+					"As success, and any time the target uses a concentrate action, it must succeed at a DC 5 flat check or the action is disrupted."
+				]
+			}
+		],
+		"page": 239,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 808,
+		"id": "5803bbd5-2574-458f-8478-7de38f1281a6"
+	},
+	{
+		"name": "Wilding Word",
+		"level": 1,
+		"objectType": "FocusSpell",
+		"traits": [ "Uncommon", "Cantrip", "Enchantment", "Hex", "Witch" ],
+		"cast": "[A]",
+		"components": [ "verbal" ],
+		"range": "30 feet",
+		"targets": "1 animal, fungus, or plant",
+		"savingThrow": "Will",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"With a few words, you convince a wild creature you are a kindred spirit, making it reluctant to harm you. The target must attempt a Will save. Regardless of the outcome, the target is then temporarily immune for 1 minute.",
+			{
+				"criticalSuccess": [
+					"The target is unaffected."
+				],
+				"success": [
+					"When the target attempts an attack roll or skill check that would harm you, it takes a -2 status penalty to its roll."
+				],
+				"failure": [
+					"As success, but the target also becomes sickened 1 each time it damages you."
+				],
+				"criticalFailure": [
+					"As success, but the target also becomes sickened 2 each time it damages you."
+				]
+			}
+		],
+		"page": 239,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 0,
+		"id": "abea464a-7890-49ae-aa12-fec1fc4527f6"
+	},
+	{
+		"name": "Dance of Darkness",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Darkness", "Evocation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"duration": "varies",
+		"details": [
+			"You dance, Striding up to half your Speed. At either the start or end of your Stride, you create an area of magical darkness in a 10-foot burst centered on your location. This area is filled with magical darkness that works the same way as that created by a <i>darkness</i> spell of the same level. When you create the darkness, attempt a Performance check to dance, with a standard DC for your level, to determine the duration of the darkness.",
+			{ "criticalSuccess": [ "1 minute" ], "success": [ "2 rounds" ], "failure": [ "1 round" ] }
+		],
+		"page": 193,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 662,
+		"id": "76c6ab83-e89c-4c0f-b74a-60648e2562b5"
+	},
+	{
+		"name": "Shadow Illusion",
+		"level": 6,
+		"objectType": "FocusSpell",
+		"traits": [ "Auditory", "Illusion", "Shadow", "Visual" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "500 feet",
+		"duration": "sustained",
+		"details": [
+			"You create a shadowy illusion of a creature or a stationary object, but the illusion can exist only in an area of dim light or darkness. The spell ends if the illusion is ever out of an area of dim light or darkness. If the illusion is an object, it must fit within a 20-foot burst, and the creature can be of any size up to Gargantuan, filling a 20-foot-by-20-foot space.",
+			"The object or creature appears to animate naturally; it even generates the appropriate sounds and smells, and feels believable to the touch, though its coloring is always muted.",
+			"If the illusion is a creature, <i>shadow illusion</i> has the effects of an <i>illusory creature</i> spell of the same level, except it deals 2d8 damage plus your spellcasting ability modifier, instead of the amount listed in <i>illusory creature</i>."
+		],
+		"heightened": [
+			{ "change": "The area that an illusory object can fit in increases by 10 feet. The damage of the illusory creature's Strike increases by 1d8.", "bump": 2 }
+		],
+		"page": 193,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 663,
+		"id": "b544bced-90b6-4b31-8762-61cacf134052"
+	},
+	{
+		"name": "Shadow Jump",
+		"level": 5,
+		"objectType": "FocusSpell",
+		"traits": [ "Conjuration", "Shadow", "Teleportation" ],
+		"cast": "[A][A]",
+		"components": [ "somatic", "verbal" ],
+		"requirements": "You are in dim light",
+		"range": "120 feet",
+		"details": [
+			"You instantly transport yourself from one shadow to another. Teleport yourself and any items you're wearing and holding from your current space to a clear space you can see that's in dim light or darkness and within range. You can transport your familiar with this spell, but if <i>shadow jump</i> would bring any other creature with you-even if you're carrying the creature in an extradimensional container-the spell is disrupted."
+		],
+		"heightened": [
+			{
+				"change": "When you arrive at your destination, you can become invisible until the end of your next turn or until you are no longer in an area of dim light or darkness, whichever comes first. The invisibility is an illusion effect.",
+				"level": 8
+			}
+		],
+		"page": 193,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 664,
+		"id": "ed9352b9-ac0d-46ca-b388-ac85cb01932d"
+	},
+	{
+		"name": "Beastmaster Trance",
+		"level": 3,
+		"objectType": "FocusSpell",
+		"traits": [ "Archetype", "Concentrate", "Divination", "Mental" ],
+		"cast": "[A][A][A]",
+		"components": [ "somatic", "verbal" ],
+		"range": "1 mile",
+		"targets": "one of your animal companions you can perceive",
+		"duration": "sustained up to 1 minute",
+		"details": [
+			"You enter a magical trance that allows you to perceive through the senses of the target companion. You attempt Perception checks using your own Perception, but you have any special senses the target has, such as low-light vision or darkvision. This spell grants no special method of communication with the chosen animal, so it follows any instructions you gave it before you entered the trance and, failing that, it does as it wishes.",
+			"For the duration of the trance, your own senses are muted, though you can still communicate. This lack of awareness makes you !at-footed. You can't take actions with the attack or move traits."
+		],
+		"heightened": [
+			{ "change": "Increase the range to 100 miles and the duration to sustained up to 10 minutes. The target can hear you through the spell, allowing you to Command the Animal or use other actions that have the auditory trait.", "level": 6 },
+			{ "change": "Increase the range to planetary and the duration to sustained up to 1 hour. You can communicate telepathically with the target for the duration of the trance.", "level": 8 }
+		],
+		"page": 161,
+		"source": "PZO2105",
+		"focus": true,
+		"aonId": 661,
+		"id": "661872d0-bdfb-4881-9399-c9620d70940b"
+	}
+]

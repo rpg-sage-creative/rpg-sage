@@ -1,0 +1,23 @@
+[
+	{
+		"objectType": "Ancestry",
+		"name": "Sprite",
+		"youMight": [
+			"Play good-natured pranks on those around you, intended to teach a lesson, aid in locating a lost item, or even help find love.",
+			"Become sidetracked by something new and eye-catching before you have fully followed through on your previous plan.",
+			"Find something magical that's so important to you, you can't help but protect it with every ounce of your strength."
+		],
+		"othersProbably": [
+			"Expect you to know strange fey mysteries and perform fantastical primal magic well beyond your actual abilities.",
+			"Consider you the prime suspect whenever unexplained hijinks or serendipity comes their way. Misconstrue the way your mind works, seeing your flitting attention as a sign of being scatterbrained."
+		],
+		"aonId": 39,
+		"source": "PZO9308",
+		"id": "607d1fed-e3d8-4563-9706-086428ce73db"
+	},
+	{ "objectType": "Heritage", "name": "Draxie", "ancestry": "Sprite", "source": "PZO9308", "id": "e106edfb-ba70-477c-a96c-89703fed5648", "aonId": 140 },
+	{ "objectType": "Heritage", "name": "Grig", "ancestry": "Sprite", "source": "PZO9308", "id": "dcbf51f9-f78c-4214-9743-3d6bb72f22ad", "aonId": 141 },
+	{ "objectType": "Heritage", "name": "Luminous Sprite", "ancestry": "Sprite", "source": "PZO9308", "id": "e64da643-202f-4bc7-a0c2-c2c0722e9cd9", "aonId": 142 },
+	{ "objectType": "Heritage", "name": "Melixie", "ancestry": "Sprite", "source": "PZO9308", "id": "b78cdf38-08bd-49e9-b62b-1729fcc0af68", "aonId": 143 },
+	{ "objectType": "Heritage", "name": "Nyktera", "ancestry": "Sprite", "source": "PZO9308", "id": "f6537dcb-71b9-4537-a30f-aa21e9ac0333", "aonId": 144 }
+]
