@@ -1,13 +1,14 @@
 data/pf2e/abc-data.json
 data/pf2e/all-lores.csv
 data/pf2e/schema.json
-data/pf2e/dist
-data/pf2e/pf2-tools
-dist
-node_modules
-types
+data/pf2e/dist/
+data/pf2e/pf2-tools/
+dist/
+node_modules/
+types/
 **/.DS_Store
-./backup.sh
-./daemon.sh
-./dev.sh
-./tag.sh
+
+# ignore scripts (to ignore the root level links)
+*.sh
+# negate ignore scripts folder scripts
+!scripts/*.sh
