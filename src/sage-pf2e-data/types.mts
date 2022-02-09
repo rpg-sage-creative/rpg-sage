@@ -6,7 +6,6 @@ export type TCore = {
 	class?:string; classPath?:string;
 	type?:string;
 	code?:string;
-	aon?:string; aonId?:number;
 	source?:string; abbreviation?:string;
 	version?: number;
 	previousId: UUID;
@@ -15,4 +14,11 @@ export type TCore = {
 	details?: TDetail[];
 	features?: any[];
 	ancestry?: string;
+
+	/** Archives linkage */
+	aon?:string; aonId?:number;
+
+	/** PF2 Tools linkage */
+	hash: string;
+
 } & THasSuccessOrFailure;

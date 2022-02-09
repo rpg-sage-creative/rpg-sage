@@ -1,5 +1,4 @@
-import { Pf2Tools } from "../../sage-pf2e";
-import { BaseCore, Source, SourceCore, TDetail, THasSuccessOrFailure } from "../../sage-pf2e";
+import { BaseCore, Pf2ToolsData, Source, SourceCore, TDetail, THasSuccessOrFailure, type Pf2ToolsDataCore } from "../../sage-pf2e";
 import utils, { OrNull } from "../../sage-utils";
 import { allCores, compareNames, info, warn } from "../common.mjs";
 import type { TCore } from "../types.mjs";
@@ -112,26 +111,24 @@ export function parseBody<T extends BaseCore>(body: string): Partial<T> {
 
 //#region pf2tools
 
-const pf2ToolsData: Pf2Tools.Pf2ToolsDataCore[] = [];
+// const pf2ToolsData: Pf2ToolsDataCore[] = [];
 const PF2_TOOLS_PATH = "../data/pf2e/pf2-tools.json";
 const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
 
-export async function loadPf2ToolsData() {
-	if (!pf2ToolsData.length) {
-		let data = await utils.FsUtils.readJsonFile<Pf2Tools.Pf2ToolsDataCore[]>(PF2_TOOLS_PATH).catch(() => null);
-		if (!data) {
-			info(`Fetching new data from pf2 tools ...`);
-			data = await utils.HttpsUtils.getJson(PF2_TOOLS_URL).catch(() => null);
-			await utils.FsUtils.writeFile(PF2_TOOLS_PATH, data, true, true);
-		}
-		pf2ToolsData.push(...data!);
+export async function loadPf2ToolsData(): Promise<Pf2ToolsDataCore[]> {
+	let cores = await Pf2ToolsData.load("../data/pf2e");
+	if (!cores.length) {
+		info(`Fetching new data from pf2 tools ...`);
+		const fetched = await utils.HttpsUtils.getJson(PF2_TOOLS_URL).catch(() => null);
+		await utils.FsUtils.writeFile(PF2_TOOLS_PATH, fetched, true, true);
+		cores.push(...fetched);
 	}
-	return pf2ToolsData;
+	return cores;
+}
+export function updatePf2ToolsData(): Promise<boolean> {
+	return utils.FsUtils.writeFile(PF2_TOOLS_PATH, Pf2ToolsData.getAll(), true, true);
 }
 
-export function getPf2ToolsData() {
-	return pf2ToolsData;
-}
 // function objectTypeToPf2Type(sageCore: TCore) {
 // 	if (sageCore.objectType === "ClassPath") {
 // 		const clss = allCores.find(core => core.objectType === "Class" && core.name === sageCore.class);
@@ -148,7 +145,7 @@ export function getPf2ToolsData() {
 // 	// if (sage.objectType === "Domain" && pf2.name === `${sage.name} Domain`) return sage.name = `${sage.name} Domain`;
 // }
 
-function testPf2Name(pf2: Pf2Tools.Pf2ToolsDataCore, sage: TCore) {
+function testPf2Name(pf2: Pf2ToolsDataCore, sage: TCore) {
 	if (compareNames(pf2, sage)) return true;
 	if (sage.objectType === "Domain") return pf2.name === `${sage.name} Domain`;
 	if (sage.objectType === "Deity") return pf2.name.split("(")[0].trim() === sage.name;
@@ -162,10 +159,10 @@ function testPf2Name(pf2: Pf2Tools.Pf2ToolsDataCore, sage: TCore) {
 // 	return filtered.find(pf2 => nameGotFixed(pf2, core));
 // }
 
-export function checkPf2ToolsForAonId(core: TCore) {
-	if (["Rule"].includes(core.objectType)) return undefined;
-	const pf2Type = Pf2Tools.default.objectTypeToPf2Type(core);
-	const filtered = getPf2ToolsData().filter(o => o.type === pf2Type);
+export function checkPf2ToolsForAonAndHash(core: TCore): [number | undefined, string | undefined] {
+	if (["Rule"].includes(core.objectType)) return [undefined, undefined];
+	const pf2Type = Pf2ToolsData.objectTypeToPf2Type(core);
+	const filtered = Pf2ToolsData.getAll().filter(o => o.type === pf2Type);
 	if (!filtered.length) {
 		warn(`\tMissing aonId for ${core.objectType}:${core.name} >> CANNOT MAP TO PF2-TOOLS`);
 	}else {
@@ -173,17 +170,17 @@ export function checkPf2ToolsForAonId(core: TCore) {
 		if (found && found.aon) {
 			warn(`\tMissing aonId for ${core.objectType}:${core.name} >> PF2-TOOLS(${found.aon})`);
 			const match = found.aon.match(/(\D+)(\d+)/i);
-			if (match) return +match[2];
+			if (match) return [+match[2], found.hash];
 		}else {
 			warn(`\tMissing aonId for ${core.objectType}:${core.name} >> CANNOT FIND IT IN PF2-TOOLS`);
 		}
 	}
-	return undefined;
+	return [undefined, undefined];
 }
 
 //#endregion
 
-//#region parse pf2data
+//#region object comparison
 type TPrimitive = string | number;
 function isPrimitive<T extends TPrimitive>(object: any): object is T {
 	return ["string","number"].includes(typeof(object));
@@ -217,12 +214,15 @@ function compare<T>(a: T, b: T): boolean {
 	}
 	return a === b;
 }
+//#endregion
 // function logToString<T>(object: T): string {
 // 	return isObject(object) ? JSON.stringify(object) : String(object);
 // }
 
+//#region parse pf2data
+
 export function parsePf2Data() {
-	pf2ToolsData
+	Pf2ToolsData.getAll()
 	.filter(core => core.type === "spell")
 	.forEach(pf2tCore => {
 		const parsed: any = parseSpell(pf2tCore);

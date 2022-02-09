@@ -4,7 +4,7 @@ import type { TCore } from "./types.mjs";
 export const SrcDataPath = "../data/pf2e/src";
 export const DistDataPath = "../data/pf2e/dist";
 
-const VERBOSE = false;
+const VERBOSE = true;
 const DEBUGGING = false;
 export function info(...args: any[]) {
 	console.info(...args);

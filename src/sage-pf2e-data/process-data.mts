@@ -1,12 +1,12 @@
 import * as fs from "fs";
-import { Pf2Tools, THasSuccessOrFailure } from "../sage-pf2e";
+import { Pf2ToolsData, THasSuccessOrFailure } from "../sage-pf2e";
 import utils, { type UUID } from "../sage-utils";
 import { allCores, compareNames, debug, DistDataPath, error, info, log, SrcDataPath, warn } from "./common.mjs";
-import { checkPf2ToolsForAonId, getPf2ToolsData, loadPf2ToolsData, parsePf2Data } from "./pf2-tools-parsers/common.mjs";
+import { checkPf2ToolsForAonAndHash, loadPf2ToolsData, parsePf2Data, updatePf2ToolsData } from "./pf2-tools-parsers/common.mjs";
 import { processAbcData } from "./process-abc.mjs";
 import type { TCore } from "./types.mjs";
 
-let total = 0, created = 0, unique = 0, recreated = 0, normalized = 0, aoned = 0;
+let total = 0, created = 0, unique = 0, recreated = 0, normalized = 0, aoned = 0, hashed = 0;
 
 //#region unique uuids
 const allIds: UUID[] = [];
@@ -112,7 +112,7 @@ function processData(filePathAndName: string) {
 	}
 	//#endregion
 
-	let _created = 0, _recreated = 0, _normalized = 0, _aoned = 0, updateFile = false;
+	let _created = 0, _recreated = 0, _normalized = 0, _aoned = 0, _hashed = 0, updateFile = false;
 
 	//#region invalid source/folder
 	if (!filePathAndName.includes("source-list") && coreList.find(core => !filePathAndName.includes(core.source!) && !filePathAndName.includes(pluralObjectType(core.objectType)))) {
@@ -154,7 +154,7 @@ function processData(filePathAndName: string) {
 		if (core.objectType === "Class" && !core.classPath) {
 			warn(`\tMissing ClassPath for ${core.name}`);
 		}
-		if (Pf2Tools.default.checkForName(core)) {
+		if (Pf2ToolsData.checkForName(core)) {
 			updateFile = true;
 		}
 		if (core.parent === core.name) {
@@ -185,11 +185,16 @@ function processData(filePathAndName: string) {
 			updateFile = true;
 		}
 		const sourceMissingAonId = validateSource(filePathAndName, core);
-		if (!sourceMissingAonId && !core.aonId && !["Table"].includes(core.objectType) && !(core.objectType === "Skill" && core.name.endsWith(" Lore"))) {
-			const aonId = checkPf2ToolsForAonId(core);
-			if (aonId) {
+		if (!sourceMissingAonId && (!core.aonId || !core.hash) && !["Table"].includes(core.objectType) && !(core.objectType === "Skill" && core.name.endsWith(" Lore"))) {
+			const [aonId, hash] = checkPf2ToolsForAonAndHash(core);
+			if (aonId && core.aonId !== aonId) {
 				core.aonId = aonId;
 				_aoned++;
+				updateFile = true;
+			}
+			if (hash && core.hash !== hash) {
+				core.hash = hash;
+				_hashed++;
 				updateFile = true;
 			}
 		}
@@ -200,7 +205,8 @@ function processData(filePathAndName: string) {
 	recreated += _recreated;
 	normalized += _normalized;
 	aoned += _aoned;
-	if (_created || _recreated || _normalized || _aoned || updateFile) {
+	hashed += _hashed;
+	if (_created || _recreated || _normalized || _aoned || _hashed || updateFile) {
 		info(`\tSaving ${_created} IDs created, ${_recreated} IDs recreated, ${_normalized} IDs normalized, and ${_aoned} aonIDs set`);
 		utils.FsUtils.writeFileSync(filePathAndName, coreList, false, true);
 	}
@@ -209,7 +215,7 @@ function processData(filePathAndName: string) {
 
 function processMissingSpells() {
 	info(`\nChecking for missing spells ...`);
-	const missing = getPf2ToolsData().filter(pf2 => !allCores.find(core => compareNames(core, pf2)));
+	const missing = Pf2ToolsData.getAll().filter(pf2 => !allCores.find(core => compareNames(core, pf2)));
 	const missingSpells = missing.filter(sp => sp.type === "spell");
 	info(`Checking for missing spells ... found ${missingSpells.length}!`);
 	log(`\t${missingSpells.map(sp => `${sp.name} (${sp.source})`).join("\n\t")}`);
@@ -250,6 +256,10 @@ export default async function process(): Promise<void> {
 	processAbcData();
 	processMissingSpells();
 	processLore();
+
+	if (hashed) {
+		await updatePf2ToolsData();
+	}
 
 	parsePf2Data();
 

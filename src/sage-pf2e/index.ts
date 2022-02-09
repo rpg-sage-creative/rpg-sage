@@ -14,7 +14,8 @@ export { default as RenderableContent } from "./data/RenderableContent";
 export * as Repository from "./data/Repository";
 export { default as ScoredMenu, IMenuRenderable } from "./data/ScoredMenu";
 export { default as SearchResults } from "./data/SearchResults";
-export * as Pf2Tools from "./data/Pf2ToolsData";
+export { default as Pf2ToolsData } from "./data/Pf2ToolsData";
+export { Pf2ToolsDataCore } from "./data/Pf2ToolsData";
 //#endregion
 
 //#region map

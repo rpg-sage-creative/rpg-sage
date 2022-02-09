@@ -1,4 +1,4 @@
-import type { TCore, TEntity, Pf2Tools } from "../../sage-pf2e";
+import type { TCore, TEntity, Pf2ToolsDataCore } from "../../sage-pf2e";
 import { findAndRemove, labelToKey, parseBody, parseSource, split, splitAndCapitalize } from "./common.mjs";
 import type { TSpellHeighten } from "../../sage-pf2e/model/Spell";
 // import utils from "sage-utils";
@@ -92,7 +92,7 @@ function parseCast(lines: string[]): string {
 	}
 	return undefined!;
 }
-export function parseSpell(pf2t: Pf2Tools.Pf2ToolsDataCore): TCore<"Spell"> {
+export function parseSpell(pf2t: Pf2ToolsDataCore): TCore<"Spell"> {
 	const source = parseSource(pf2t.source);
 	const parsedBody = parseBody<TEntity<"Spell">>(pf2t.body);
 	const cast = parseCast(parsedBody.details as string[]);

@@ -7,8 +7,6 @@ import type Class from "../model/Class";
 import RenderableContent from "./RenderableContent";
 import { find } from "./Repository";
 
-const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
-
 const allCores: Pf2ToolsDataCore[] = [];
 
 export type Pf2ToolsDataCore = {
@@ -63,9 +61,6 @@ export type Pf2ToolsDataCore = {
 type TSageCore = { objectType:string; class?:string; name:string; };
 
 const keyMap = new Map();
-export function logKeyMap() {
-	console.log(keyMap);
-}
 
 function ensureName(value: string): string {
 	return value;
@@ -258,28 +253,17 @@ export default class Pf2ToolsData
 
 	//#region all cores
 
-	public static async load(distPath: string): Promise<void> {
+	public static async load(distPath: string): Promise<Pf2ToolsDataCore[]> {
 		const path = `${distPath}/pf2-tools.json`;
-		let pf2ToolsCores = await utils.FsUtils.readJsonFile<Pf2ToolsDataCore[]>(path)
+		const pf2ToolsCores = await utils.FsUtils.readJsonFile<Pf2ToolsDataCore[]>(path)
 			.catch(utils.ConsoleUtils.Catchers.warnReturnNull);
-		if (!(pf2ToolsCores?.length)) {
-			console.info("Fetching new PF2 Tools Cores ...");
-			pf2ToolsCores = await utils.HttpsUtils.getJson<Pf2ToolsDataCore[]>(PF2_TOOLS_URL)
-				.catch(utils.ConsoleUtils.Catchers.warnReturnNull);
-			if (pf2ToolsCores?.length) {
-				const saved = await utils.FsUtils.writeFile(path, pf2ToolsCores, true, true)
-					.catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
-				if (saved) {
-					console.info(`\t\t${pf2ToolsCores.length} PF2 Tools Cores saved!`);
-				}
-			}
-		}
 		if (pf2ToolsCores?.length) {
 			allCores.push(...pf2ToolsCores);
 			console.info(`\t\t${pf2ToolsCores.length} Total PF2 Tools Cores loaded`);
 		}else {
 			console.warn(`\t\tUnable to load PF2 Tools Cores.`);
 		}
+		return pf2ToolsCores ?? [];
 	}
 
 	public static getAll(): Pf2ToolsDataCore[] {
@@ -339,6 +323,10 @@ export default class Pf2ToolsData
 	}
 
 	//#endregion
+
+	public static logKeyMap(): void {
+		console.log(keyMap);
+	}
 }
 
 function toPf2Type(value: string): string {

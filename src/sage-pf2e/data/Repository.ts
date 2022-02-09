@@ -201,7 +201,7 @@ export function loadData(dataPath: string, includePf2ToolsData = false): Promise
 	const distPath = `${dataPath}/dist`.replace(/\/+/g, "/");
 	return loadDataFromDist(distPath).then(() => {
 		if (includePf2ToolsData) {
-			return Pf2ToolsData.load(dataPath);
+			return Pf2ToolsData.load(dataPath) as unknown as Promise<void>;
 		}
 		return Promise.resolve();
 	});
