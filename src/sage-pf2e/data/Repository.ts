@@ -54,8 +54,9 @@ export function registerObject(itemConstructor: typeof Base): void {
 	console.info(`Registering Object #${repoMap.size}: ${objectType}`);
 }
 
+/** Returns the objectType values (sorted) currently loaded. */
 export function getObjectTypes(): string[] {
-	return Array.from(repoMap.keys());
+	return Array.from(repoMap.keys()).sort();
 }
 
 function _all<T extends Base>(objectType: string): T[] {
@@ -103,7 +104,7 @@ export function findById<T extends Base>(id: OrUndefined<UUID>): OrUndefined<T> 
 
 	const uuidMatcher = utils.UuidUtils.UuidMatcher.from(id);
 	if (uuidMatcher.isValid) {
-		for (const objectType of repoMap.keys()) {
+		for (const objectType of getObjectTypes()) {
 			const found = _findById(objectType, uuidMatcher);
 			if (found) {
 				return <T>found;
@@ -174,7 +175,7 @@ function objectTypeToSearchResultCategory(objectType: string): string {
 }
 export function search<T extends Base>(searchInfo: utils.SearchUtils.SearchInfo, ...searchCategories: string[]): SearchResults<T> {
 	const validObjectTypes = searchCategories.map(searchCategory => parseObjectType(searchCategory)?.objectType).filter(isDefined),
-		objectTypesToSearch = validObjectTypes.length ? validObjectTypes : Array.from(repoMap.keys()).sort(),
+		objectTypesToSearch = validObjectTypes.length ? validObjectTypes : getObjectTypes(),
 		searchResultCategory = objectTypesToSearch.length === 1 ? objectTypeToSearchResultCategory(objectTypesToSearch[0]) : undefined,
 		searchResults = new SearchResults<T>(searchInfo, searchResultCategory);
 	if (!validObjectTypes.length && !searchInfo.globalFlag) {
@@ -202,11 +203,9 @@ export function search<T extends Base>(searchInfo: utils.SearchUtils.SearchInfo,
 	return searchResults;
 }
 export function searchComparison<T extends Base>(searchInfo: utils.SearchUtils.SearchInfo, ...searchCategories: string[]): SearchResults<T> {
-	const validObjectTypes = searchCategories
-		.map(searchCategory => parseObjectType(searchCategory))
-		.filter(searchCategory => searchCategory)
-		.map(searchCategory => searchCategory!.objectType);
-	const objectTypesToSearch = validObjectTypes.length ? validObjectTypes : Array.from(repoMap.keys()).sort();
+	const validObjectTypes = searchCategories.map(parseObjectType).filter(isDefined)
+		.map(searchCategory => searchCategory.objectType);
+	const objectTypesToSearch = validObjectTypes.length ? validObjectTypes : getObjectTypes();
 	const searchResultCategory = objectTypesToSearch.length === 1 ? objectTypeToSearchResultCategory(objectTypesToSearch[0]) : undefined;
 	const searchResults = new SearchResults<T>(searchInfo, searchResultCategory);
 	if (!validObjectTypes.length && !searchInfo.globalFlag) {
