@@ -15,6 +15,7 @@ echoAndDo "cd $sageRootDir"
 echoAndDo "/bin/bash ./scripts/pre-build.sh"
 echoAndDo "tsc --build tsconfig.json"
 echoAndDo "/bin/bash ./scripts/post-build.sh"
+echoAndDo "/bin/bash ./scripts/run-tests.sh"
 
 sageDataDir="$sageRootDir/dist/data/sage"
 
