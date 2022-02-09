@@ -228,19 +228,6 @@ export function searchComparison<T extends Base>(searchInfo: utils.SearchUtils.S
 
 	return searchResults;
 }
-export function searchBySource<T extends HasSource>(objectType: string, searchInfo: utils.SearchUtils.SearchInfo, source: Source): T[] {
-	if (!source) {
-		if (!searchInfo) {
-			return all<T>(objectType);
-		}
-		return all<T>(objectType).filter(item => item.search(searchInfo));
-	}
-	if (!searchInfo) {
-		return filter(objectType, item => item.source === source);
-	}
-	// TODO: Is this needed? --> if (!repo[objectType]) { console.warn(`Searching an objectType that isn't loaded: ${objectType}`); }
-	return all<T>(objectType).filter(item => item.source === source && item.search(searchInfo));
-}
 
 //#region load data
 
