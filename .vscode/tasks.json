@@ -2,11 +2,11 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "pre-build.sh",
+			"label": "test-pre-build",
 			"type": "shell",
 			"command": "bash",
 			"args": ["./scripts/pre-build.sh"],
-			"group": "build",
+			"group": "test",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
@@ -17,12 +17,12 @@
 			}
 		},
 		{
-			"label": "Transpile",
-			"dependsOn": ["pre-build.sh"],
+			"label": "test-transpile",
+			"dependsOn": ["test-pre-build"],
 			"type": "typescript",
 			"tsconfig": "tsconfig.json",
 			"problemMatcher": "$tsc",
-			"group": "build",
+			"group": "test",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
@@ -33,15 +33,12 @@
 			}
 		},
 		{
-			"label": "post-build.sh",
-			"dependsOn": ["Transpile"],
+			"label": "test-post-build",
+			"dependsOn": ["test-transpile"],
 			"type": "shell",
 			"command": "bash",
 			"args": ["./scripts/post-build.sh"],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
+			"group": "test",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
@@ -53,6 +50,7 @@
 		},
 		{
 			"label": "run-tests",
+			"dependsOn": ["test-post-build"],
 			"type": "shell",
 			"command": "bash",
 			"args": ["./scripts/run-tests.sh"],
@@ -69,5 +67,23 @@
 				"clear": false
 			}
 		},
+		{
+			"label": "Transpile",
+			"type": "typescript",
+			"tsconfig": "tsconfig.json",
+			"problemMatcher": "$tsc",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false
+			}
+		}
 	]
 }
