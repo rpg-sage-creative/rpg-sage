@@ -16,7 +16,8 @@
 		"page": 389,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Transmutation" ],
-		"id": "6ad7b7cc-f9da-4ee8-8fa3-c938e18276cf"
+		"id": "6ad7b7cc-f9da-4ee8-8fa3-c938e18276cf",
+		"hash": "fEDAyVXQ"
 	},
 	{
 		"aonId": 400,
@@ -49,7 +50,8 @@
 		"savingThrow": "Will",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Illusion" ],
-		"id": "266fb6cb-cd35-48df-bbea-de37fe449c2b"
+		"id": "266fb6cb-cd35-48df-bbea-de37fe449c2b",
+		"hash": "tdyGrTjg"
 	},
 	{
 		"aonId": 401,
@@ -75,7 +77,8 @@
 		"source": "PZO2101",
 		"targets": "1 item or work of art that fits entirely within the range",
 		"traits": [ "Uncommon", "Cleric", "Transmutation" ],
-		"id": "4f4de514-23a8-44ec-94b8-ac4142d51d64"
+		"id": "4f4de514-23a8-44ec-94b8-ac4142d51d64",
+		"hash": "sZwXPgSc"
 	},
 	{
 		"aonId": 402,
@@ -94,7 +97,8 @@
 		"page": 389,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Transmutation" ],
-		"id": "b080faff-8cd3-45a4-9ff5-4f5eb6ded00b"
+		"id": "b080faff-8cd3-45a4-9ff5-4f5eb6ded00b",
+		"hash": "GpxqLptJ"
 	},
 	{
 		"aonId": 403,
@@ -116,7 +120,8 @@
 		"source": "PZO2101",
 		"targets": "1 willing creature",
 		"traits": [ "Uncommon", "Cleric", "Divination", "Fortune" ],
-		"id": "e20c7968-d138-4eb0-ba83-a40033070fbb"
+		"id": "e20c7968-d138-4eb0-ba83-a40033070fbb",
+		"hash": "xqqBPKlG"
 	},
 	{
 		"aonId": 404,
@@ -152,7 +157,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Mental" ],
-		"id": "7f156f4b-85fa-49f9-85de-011113eac8c7"
+		"id": "7f156f4b-85fa-49f9-85de-011113eac8c7",
+		"hash": "fdbmSRZn"
 	},
 	{
 		"aonId": 405,
@@ -191,7 +197,8 @@
 		"savingThrow": "Will",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Mental", "Visual" ],
-		"id": "66628582-b8c9-4a73-bc13-d59330684471"
+		"id": "66628582-b8c9-4a73-bc13-d59330684471",
+		"hash": "UNrLvfrM"
 	},
 	{
 		"aonId": 406,
@@ -231,7 +238,8 @@
 		"source": "PZO2101",
 		"targets": "1 humanoid creature that could find you attractive",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Incapacitation", "Mental" ],
-		"id": "0774a2ee-86f4-4a63-be9d-a052ff2602c4"
+		"id": "0774a2ee-86f4-4a63-be9d-a052ff2602c4",
+		"hash": "xcPBFQOp"
 	},
 	{
 		"aonId": 407,
@@ -253,7 +261,8 @@
 		"source": "PZO2101",
 		"targets": "1 willing creature",
 		"traits": [ "Uncommon", "Cleric", "Darkness", "Evocation", "Shadow" ],
-		"id": "05f47704-91fe-453e-9e9e-44916828ac18"
+		"id": "05f47704-91fe-453e-9e9e-44916828ac18",
+		"hash": "bQvxswJv"
 	},
 	{
 		"aonId": 408,
@@ -276,7 +285,8 @@
 		"source": "PZO2101",
 		"targets": "A creature you dealt damage to on your most recent action.",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Incapacitation", "Mental" ],
-		"id": "e02fdb6b-982b-40a9-9f85-a3eeb8054887"
+		"id": "e02fdb6b-982b-40a9-9f85-a3eeb8054887",
+		"hash": "vXDzfjzj"
 	},
 	{
 		"aonId": 409,
@@ -298,7 +308,8 @@
 		"page": 390,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Mental" ],
-		"id": "415c1d42-4b79-4ad3-86f4-5e4222325f54"
+		"id": "415c1d42-4b79-4ad3-86f4-5e4222325f54",
+		"hash": "ImgKQQSX"
 	},
 	{
 		"aonId": 410,
@@ -321,7 +332,8 @@
 		"savingThrow": "basic Fortitude",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Evocation", "Sonic" ],
-		"id": "21ae1f4c-33b2-43a1-a08e-e208b5ce454a"
+		"id": "21ae1f4c-33b2-43a1-a08e-e208b5ce454a",
+		"hash": "GKxQVRtK"
 	},
 	{
 		"aonId": 411,
@@ -357,7 +369,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Darkness", "Transmutation" ],
-		"id": "a7d65529-99d6-4f40-a984-39c97dd2e1d8"
+		"id": "a7d65529-99d6-4f40-a984-39c97dd2e1d8",
+		"hash": "GrZTqcrI"
 	},
 	{
 		"aonId": 412,
@@ -394,7 +407,8 @@
 		"savingThrow": "Fortitude",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Evocation", "Light", "Visual" ],
-		"id": "fb4e5670-0ac5-4d04-b706-2016f625a93e"
+		"id": "fb4e5670-0ac5-4d04-b706-2016f625a93e",
+		"hash": "cztMQtKA"
 	},
 	{
 		"aonId": 413,
@@ -414,7 +428,8 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Necromancy" ],
 		"trigger": "A living creature within 20 feet of you dies, or an undead creature within 20 feet of you is destroyed.",
-		"id": "85713a08-e854-4541-a825-2c3c5519f40d"
+		"id": "85713a08-e854-4541-a825-2c3c5519f40d",
+		"hash": "rspZTKYv"
 	},
 	{
 		"aonId": 414,
@@ -437,7 +452,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Mental" ],
-		"id": "ba271196-2b52-4cda-a3e1-37162d80ba6c"
+		"id": "ba271196-2b52-4cda-a3e1-37162d80ba6c",
+		"hash": "kZgRqyPP"
 	},
 	{
 		"aonId": 415,
@@ -460,7 +476,8 @@
 		"page": 391,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Evocation" ],
-		"id": "97472abe-1d6a-4a63-bf6d-1075ac4aee47"
+		"id": "97472abe-1d6a-4a63-bf6d-1075ac4aee47",
+		"hash": "sKmwlXcf"
 	},
 	{
 		"aonId": 416,
@@ -479,7 +496,8 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Air", "Cleric", "Polymorph", "Transmutation" ],
 		"trigger": "You take damage from an enemy or a hazard.",
-		"id": "6e087b47-2076-4818-bb70-3e9259eede89"
+		"id": "6e087b47-2076-4818-bb70-3e9259eede89",
+		"hash": "FFXrrwsg"
 	},
 	{
 		"aonId": 417,
@@ -503,7 +521,8 @@
 		"range": "120 feet",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Evocation", "Water" ],
-		"id": "9fd16c8a-31d5-4eb2-bda8-d9cd62ad2278"
+		"id": "9fd16c8a-31d5-4eb2-bda8-d9cd62ad2278",
+		"hash": "WgkZQQNM"
 	},
 	{
 		"aonId": 418,
@@ -539,7 +558,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Incapacitation", "Mental" ],
-		"id": "529631b2-6810-4f5d-87c2-bef471d49463"
+		"id": "529631b2-6810-4f5d-87c2-bef471d49463",
+		"hash": "rsmLZwhQ"
 	},
 	{
 		"aonId": 419,
@@ -561,7 +581,8 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Abjuration", "Cleric" ],
 		"trigger": "An attack or effect would deal damage to you.",
-		"id": "e5b139fd-d3cb-4f6f-9fce-e521f7546aa3"
+		"id": "e5b139fd-d3cb-4f6f-9fce-e521f7546aa3",
+		"hash": "RXKFyNXb"
 	},
 	{
 		"aonId": 420,
@@ -584,7 +605,8 @@
 		"savingThrow": "basic Fortitude",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Necromancy", "Positive" ],
-		"id": "5eb829f0-60d1-40b2-a7b6-577423651e25"
+		"id": "5eb829f0-60d1-40b2-a7b6-577423651e25",
+		"hash": "rqpvMYlP"
 	},
 	{
 		"aonId": 421,
@@ -606,7 +628,8 @@
 		"page": 392,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Illusion", "Visual" ],
-		"id": "b9797e63-c9b0-4c9e-aab1-82b461d280bd"
+		"id": "b9797e63-c9b0-4c9e-aab1-82b461d280bd",
+		"hash": "nGZrYkfn"
 	},
 	{
 		"aonId": 422,
@@ -630,7 +653,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature or object",
 		"traits": [ "Uncommon", "Attack", "Cleric", "Evocation", "Fire" ],
-		"id": "c84f9add-52ef-4047-9efb-4412940a4b56"
+		"id": "c84f9add-52ef-4047-9efb-4412940a4b56",
+		"hash": "JfZCwIqr"
 	},
 	{
 		"aonId": 423,
@@ -654,7 +678,8 @@
 		"targets": "the creature that would take fire damage",
 		"traits": [ "Uncommon", "Abjuration", "Cleric" ],
 		"trigger": "An effect would deal fire damage to either you or an ally within range.",
-		"id": "f7fcc334-4bcc-425d-ba79-3ce4b11dc3ca"
+		"id": "f7fcc334-4bcc-425d-ba79-3ce4b11dc3ca",
+		"hash": "JOHJyZZT"
 	},
 	{
 		"aonId": 424,
@@ -677,7 +702,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Abjuration", "Cleric" ],
-		"id": "3d955cf0-d514-43f6-b21f-d76c7a28555d"
+		"id": "3d955cf0-d514-43f6-b21f-d76c7a28555d",
+		"hash": "pNNNWDnR"
 	},
 	{
 		"aonId": 425,
@@ -701,7 +727,8 @@
 		"page": 393,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Divination", "Revelation" ],
-		"id": "03bbf5f8-b429-4bc5-97cf-a699bbaa91f7"
+		"id": "03bbf5f8-b429-4bc5-97cf-a699bbaa91f7",
+		"hash": "xwmSAjUp"
 	},
 	{
 		"aonId": 426,
@@ -726,7 +753,8 @@
 		"source": "PZO2101",
 		"targets": "1 willing living creature",
 		"traits": [ "Uncommon", "Cleric", "Necromancy" ],
-		"id": "6efee96f-733c-47d4-88cb-5fd0131aca2b"
+		"id": "6efee96f-733c-47d4-88cb-5fd0131aca2b",
+		"hash": "gKrvYGZq"
 	},
 	{
 		"aonId": 427,
@@ -750,7 +778,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Attack", "Cleric", "Earth", "Evocation" ],
-		"id": "e7471725-52ca-46e7-8d0e-b35ed40a77ad"
+		"id": "e7471725-52ca-46e7-8d0e-b35ed40a77ad",
+		"hash": "gNzCNllp"
 	},
 	{
 		"aonId": 428,
@@ -769,7 +798,8 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Divination", "Fortune" ],
 		"trigger": "You roll initiative and can see a creature, you succeed at an attack roll against a creature, or a creature fails a saving throw against one of your spells.",
-		"id": "958e5bc3-51e1-421e-bdcf-5b9413881eba"
+		"id": "958e5bc3-51e1-421e-bdcf-5b9413881eba",
+		"hash": "OQZppZpF"
 	},
 	{
 		"aonId": 429,
@@ -806,7 +836,8 @@
 		"savingThrow": "Reflex",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Earth", "Transmutation" ],
-		"id": "31dd16b8-d97a-4b6e-8350-e9d545caaefb"
+		"id": "31dd16b8-d97a-4b6e-8350-e9d545caaefb",
+		"hash": "mPHnFczJ"
 	},
 	{
 		"aonId": 430,
@@ -825,7 +856,8 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Divination", "Fortune" ],
 		"trigger": "You fail (but don't critically fail) a saving throw.",
-		"id": "d0dd1086-e35d-4ced-be20-b5d7a9f5b33f"
+		"id": "d0dd1086-e35d-4ced-be20-b5d7a9f5b33f",
+		"hash": "BtmtjzpC"
 	},
 	{
 		"aonId": 431,
@@ -846,7 +878,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Enchantment" ],
-		"id": "2b635afd-539d-4cb6-bd7d-165c91cf892d"
+		"id": "2b635afd-539d-4cb6-bd7d-165c91cf892d",
+		"hash": "SYFKrRlS"
 	},
 	{
 		"aonId": 432,
@@ -870,7 +903,8 @@
 		"source": "PZO2101",
 		"targets": "1 willing undead creature",
 		"traits": [ "Uncommon", "Cleric", "Necromancy", "Negative" ],
-		"id": "c997167c-acbe-483e-93b8-18a5ae3bca5b"
+		"id": "c997167c-acbe-483e-93b8-18a5ae3bca5b",
+		"hash": "HlwPWqOt"
 	},
 	{
 		"aonId": 433,
@@ -894,7 +928,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature or object",
 		"traits": [ "Uncommon", "Attack", "Cleric", "Evocation", "Fire", "Light" ],
-		"id": "f60c5797-f4e6-476a-b58a-0c927b847bc6"
+		"id": "f60c5797-f4e6-476a-b58a-0c927b847bc6",
+		"hash": "nRMxSfEY"
 	},
 	{
 		"aonId": 434,
@@ -915,7 +950,8 @@
 		"source": "PZO2101",
 		"targets": "1 willing creature",
 		"traits": [ "Uncommon", "Cleric", "Evocation" ],
-		"id": "a11ac120-68f7-4dfa-877d-dcc75739a827"
+		"id": "a11ac120-68f7-4dfa-877d-dcc75739a827",
+		"hash": "VqbIwjkX"
 	},
 	{
 		"aonId": 435,
@@ -937,7 +973,8 @@
 		"requirements": "You have a free hand.",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Conjuration", "Plant", "Positive" ],
-		"id": "498a64c7-116d-4310-8b2a-a91e38f4415b"
+		"id": "498a64c7-116d-4310-8b2a-a91e38f4415b",
+		"hash": "AKWwSkyE"
 	},
 	{
 		"aonId": 436,
@@ -973,7 +1010,8 @@
 		"source": "PZO2101",
 		"targets": "1 living creature",
 		"traits": [ "Uncommon", "Cleric", "Transmutation" ],
-		"id": "a80fa917-f7e0-44df-930f-4909ed96a1c1"
+		"id": "a80fa917-f7e0-44df-930f-4909ed96a1c1",
+		"hash": "OyrgbvqD"
 	},
 	{
 		"aonId": 437,
@@ -992,7 +1030,8 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Abjuration", "Cleric", "Fortune" ],
 		"trigger": "You fail a saving throw against a morph, petrification, or polymorph effect.",
-		"id": "423428a8-b0ec-488a-bbe1-db4578df661d"
+		"id": "423428a8-b0ec-488a-bbe1-db4578df661d",
+		"hash": "yIlPWrgV"
 	},
 	{
 		"aonId": 438,
@@ -1010,7 +1049,8 @@
 		"page": 394,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Abjuration", "Cleric" ],
-		"id": "e18e26ef-323a-497b-938e-d97bf90b5c8e"
+		"id": "e18e26ef-323a-497b-938e-d97bf90b5c8e",
+		"hash": "IDlRJRcp"
 	},
 	{
 		"aonId": 439,
@@ -1035,7 +1075,8 @@
 		"page": 394,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Light", "Necromancy", "Positive" ],
-		"id": "22df7931-ec3c-4ba3-b23e-0caf6bafaa77"
+		"id": "22df7931-ec3c-4ba3-b23e-0caf6bafaa77",
+		"hash": "hmGfhplI"
 	},
 	{
 		"aonId": 440,
@@ -1060,7 +1101,8 @@
 		"source": "PZO2101",
 		"targets": "1 metal weapon, up to 10 pieces of metal or metal-tipped ammunition, 1 suit of metal armor, or up to 1 bulk of metal material (such as coins)",
 		"traits": [ "Uncommon", "Cleric", "Transmutation" ],
-		"id": "a389534e-3055-4c9b-847c-afb7cb174810"
+		"id": "a389534e-3055-4c9b-847c-afb7cb174810",
+		"hash": "ZwIcwOgN"
 	},
 	{
 		"aonId": 441,
@@ -1084,7 +1126,8 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Abjuration", "Cleric" ],
 		"trigger": "An ally within 30 feet takes damage.",
-		"id": "0c888d42-3a5c-4602-858d-c739c3023a2e"
+		"id": "0c888d42-3a5c-4602-858d-c739c3023a2e",
+		"hash": "sjRtAlFx"
 	},
 	{
 		"aonId": 442,
@@ -1107,7 +1150,8 @@
 		"page": 395,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Abjuration", "Cleric" ],
-		"id": "e78c2ede-6f29-4376-861f-00c80a52b2c8"
+		"id": "e78c2ede-6f29-4376-861f-00c80a52b2c8",
+		"hash": "lvqqnpgK"
 	},
 	{
 		"aonId": 443,
@@ -1131,7 +1175,8 @@
 		"range": "25 miles",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Divination", "Scrying" ],
-		"id": "81622cb0-1e27-4eba-9230-c023fa3eac2d"
+		"id": "81622cb0-1e27-4eba-9230-c023fa3eac2d",
+		"hash": "sXgAxRrQ"
 	},
 	{
 		"aonId": 444,
@@ -1166,7 +1211,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Air", "Cleric", "Conjuration" ],
-		"id": "980e4307-fa74-4d8c-8e35-b9daa74abbe9"
+		"id": "980e4307-fa74-4d8c-8e35-b9daa74abbe9",
+		"hash": "pdcxrOJl"
 	},
 	{
 		"aonId": 445,
@@ -1187,7 +1233,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature other than you",
 		"traits": [ "Uncommon", "Cleric", "Divination", "Prediction" ],
-		"id": "675da4fc-48f2-4dc6-816b-46b814232b83"
+		"id": "675da4fc-48f2-4dc6-816b-46b814232b83",
+		"hash": "AOMSjwOY"
 	},
 	{
 		"aonId": 446,
@@ -1210,7 +1257,8 @@
 		"source": "PZO2101",
 		"targets": "1 living creature per action spent to cast this spell",
 		"traits": [ "Uncommon", "Cleric", "Healing", "Necromancy", "Positive" ],
-		"id": "ded5e346-2986-4d4e-8c54-d91578484afa"
+		"id": "ded5e346-2986-4d4e-8c54-d91578484afa",
+		"hash": "YnvyMXxK"
 	},
 	{
 		"aonId": 447,
@@ -1232,7 +1280,8 @@
 		"targets": "the triggering creature",
 		"traits": [ "Uncommon", "Abjuration", "Cleric", "Mental", "Nonlethal" ],
 		"trigger": "A creature in range damages you.",
-		"id": "801e2935-f64b-4861-8657-f4f4357067e2"
+		"id": "801e2935-f64b-4861-8657-f4f4357067e2",
+		"hash": "krDcXdkp"
 	},
 	{
 		"aonId": 448,
@@ -1254,7 +1303,8 @@
 		"source": "PZO2101",
 		"targets": "you and any number of willing allies",
 		"traits": [ "Uncommon", "Abjuration", "Cleric", "Mental" ],
-		"id": "04177d38-3b47-462b-aa6e-637b25ffd907"
+		"id": "04177d38-3b47-462b-aa6e-637b25ffd907",
+		"hash": "SkNIvVUf"
 	},
 	{
 		"aonId": 449,
@@ -1292,7 +1342,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Mental", "Nonlethal" ],
-		"id": "ca5cf6da-fd7f-4818-8fe4-86c011203a96"
+		"id": "ca5cf6da-fd7f-4818-8fe4-86c011203a96",
+		"hash": "RtWSNkqQ"
 	},
 	{
 		"aonId": 450,
@@ -1311,7 +1362,8 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Divination", "Fortune" ],
 		"trigger": "You attempt a Perception check to Seek, or you attempt a skill check to Recall Knowledge with a skill you're trained in.",
-		"id": "b1a98383-5b21-4d44-bf12-d31a0d0e57d6"
+		"id": "b1a98383-5b21-4d44-bf12-d31a0d0e57d6",
+		"hash": "tRMnTbtE"
 	},
 	{
 		"aonId": 451,
@@ -1347,7 +1399,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Incapacitation", "Mental" ],
-		"id": "53d51609-250f-4839-9e80-061144e189fd"
+		"id": "53d51609-250f-4839-9e80-061144e189fd",
+		"hash": "zbqAzWXZ"
 	},
 	{
 		"aonId": 452,
@@ -1372,7 +1425,8 @@
 		"source": "PZO2101",
 		"targets": "1 ally",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Mental" ],
-		"id": "ff1aaeb9-c3c6-417a-83b0-fac8a5742917"
+		"id": "ff1aaeb9-c3c6-417a-83b0-fac8a5742917",
+		"hash": "GLBDcWLs"
 	},
 	{
 		"aonId": 453,
@@ -1394,7 +1448,8 @@
 		"savingThrow": "Will",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Illusion", "Visual" ],
-		"id": "5a79ea98-bc00-4981-8d06-da5761a5cf32"
+		"id": "5a79ea98-bc00-4981-8d06-da5761a5cf32",
+		"hash": "ksGtgKQE"
 	},
 	{
 		"aonId": 454,
@@ -1414,7 +1469,8 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Abjuration", "Cleric", "Illusion" ],
 		"trigger": "An enemy misses you with a melee attack.",
-		"id": "27113197-a731-41d5-b663-f9a8fbb17059"
+		"id": "27113197-a731-41d5-b663-f9a8fbb17059",
+		"hash": "UZCJcrEq"
 	},
 	{
 		"aonId": 455,
@@ -1436,7 +1492,8 @@
 		"source": "PZO2101",
 		"targets": "1 willing creature",
 		"traits": [ "Uncommon", "Auditory", "Cleric", "Enchantment", "Linguistic", "Mental", "Sleep" ],
-		"id": "374a9b80-f249-4791-b8ff-30b4c47024a8"
+		"id": "374a9b80-f249-4791-b8ff-30b4c47024a8",
+		"hash": "cSKAUJFO"
 	},
 	{
 		"aonId": 456,
@@ -1460,7 +1517,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Necromancy" ],
-		"id": "bda7afdf-0c3c-4428-a5b9-92e8ecb3082d"
+		"id": "bda7afdf-0c3c-4428-a5b9-92e8ecb3082d",
+		"hash": "RHwknQbD"
 	},
 	{
 		"aonId": 457,
@@ -1485,7 +1543,8 @@
 		"targets": "the triggering creature",
 		"traits": [ "Uncommon", "Cleric", "Divination", "Fortune" ],
 		"trigger": "You or an ally within range attempts a saving throw",
-		"id": "0a19f393-8b98-4234-8018-9540d3736ffa"
+		"id": "0a19f393-8b98-4234-8018-9540d3736ffa",
+		"hash": "hEkQRbvr"
 	},
 	{
 		"aonId": 458,
@@ -1514,7 +1573,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Evocation", "Water" ],
-		"id": "b56a7869-4f66-4ca5-af18-f3f37b4c767a"
+		"id": "b56a7869-4f66-4ca5-af18-f3f37b4c767a",
+		"hash": "xXBOVqOx"
 	},
 	{
 		"aonId": 459,
@@ -1550,7 +1610,8 @@
 		"source": "PZO2101",
 		"targets": "1 living creature",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Mental" ],
-		"id": "c6b1d706-7e7b-4e15-a6dd-de369ea2c4fb"
+		"id": "c6b1d706-7e7b-4e15-a6dd-de369ea2c4fb",
+		"hash": "ZpGnzmYW"
 	},
 	{
 		"aonId": 460,
@@ -1571,7 +1632,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Light" ],
-		"id": "ebeabcb8-62dd-4403-9afa-a0aa589bcdd3"
+		"id": "ebeabcb8-62dd-4403-9afa-a0aa589bcdd3",
+		"hash": "hQXOpqpw"
 	},
 	{
 		"aonId": 461,
@@ -1609,7 +1671,8 @@
 		"source": "PZO2101",
 		"targets": "1 living creature",
 		"traits": [ "Uncommon", "Cleric", "Necromancy", "Negative" ],
-		"id": "a89b2b33-bcf6-41ef-83d5-1ac8bdffb92c"
+		"id": "a89b2b33-bcf6-41ef-83d5-1ac8bdffb92c",
+		"hash": "xTzVSzmp"
 	},
 	{
 		"aonId": 462,
@@ -1631,7 +1694,8 @@
 		"page": 398,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Evocation" ],
-		"id": "537a5d59-1674-4780-8b72-1ce136a7b791"
+		"id": "537a5d59-1674-4780-8b72-1ce136a7b791",
+		"hash": "Njvtzhxf"
 	},
 	{
 		"aonId": 463,
@@ -1667,7 +1731,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Illusion", "Visual" ],
-		"id": "aab36d73-33ad-4afa-8418-fc69c78ce9e7"
+		"id": "aab36d73-33ad-4afa-8418-fc69c78ce9e7",
+		"hash": "qVkdWVYb"
 	},
 	{
 		"aonId": 464,
@@ -1685,7 +1750,8 @@
 		"page": 398,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Transmutation" ],
-		"id": "3725ce77-fa64-452e-8ec3-17eb47cd780f"
+		"id": "3725ce77-fa64-452e-8ec3-17eb47cd780f",
+		"hash": "zgLrNAAU"
 	},
 	{
 		"aonId": 465,
@@ -1706,7 +1772,8 @@
 		"targets": "each ally targeted by the triggering spell",
 		"traits": [ "Uncommon", "Abjuration", "Cleric", "Fortune" ],
 		"trigger": "You and 1 or more allies within range are targeted by a spell or ability that allows a saving throw.",
-		"id": "6830b072-5d05-46ee-8546-e504bc2689e6"
+		"id": "6830b072-5d05-46ee-8546-e504bc2689e6",
+		"hash": "KbnDmrTb"
 	},
 	{
 		"aonId": 466,
@@ -1726,7 +1793,8 @@
 		"page": 398,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Mental" ],
-		"id": "222c46d0-e6dd-41d8-ac14-734e49ebdbe3"
+		"id": "222c46d0-e6dd-41d8-ac14-734e49ebdbe3",
+		"hash": "wBLrGPbQ"
 	},
 	{
 		"aonId": 467,
@@ -1748,7 +1816,8 @@
 		"page": 399,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Morph", "Plant", "Transmutation" ],
-		"id": "116f4c9c-02fc-4e90-b334-668e936bd0bf"
+		"id": "116f4c9c-02fc-4e90-b334-668e936bd0bf",
+		"hash": "EtvGsWVF"
 	},
 	{
 		"aonId": 468,
@@ -1785,7 +1854,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Fear", "Mental" ],
-		"id": "d4637666-d4d7-41d9-b472-bc062958feea"
+		"id": "d4637666-d4d7-41d9-b472-bc062958feea",
+		"hash": "KFtDpRsA"
 	},
 	{
 		"aonId": 469,
@@ -1806,7 +1876,8 @@
 		"source": "PZO2101",
 		"targets": "1 weapon you're wielding",
 		"traits": [ "Uncommon", "Cleric", "Evocation" ],
-		"id": "f559a49b-59c3-4777-b64d-60aaf7ea05d5"
+		"id": "f559a49b-59c3-4777-b64d-60aaf7ea05d5",
+		"hash": "SZWAcNtH"
 	},
 	{
 		"aonId": 470,
@@ -1828,7 +1899,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Mental" ],
-		"id": "c3192acb-02e1-437a-8669-acdfc7cebdb8"
+		"id": "c3192acb-02e1-437a-8669-acdfc7cebdb8",
+		"hash": "FQlFbPPQ"
 	},
 	{
 		"aonId": 471,
@@ -1848,7 +1920,8 @@
 		"page": 399,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Divination" ],
-		"id": "2afbe4b8-5c49-4fd2-b26f-b568369c80c7"
+		"id": "2afbe4b8-5c49-4fd2-b26f-b568369c80c7",
+		"hash": "UQpZdhWh"
 	},
 	{
 		"aonId": 472,
@@ -1869,6 +1942,7 @@
 		"targets": "you and the triggering ally",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Fortune", "Mental" ],
 		"trigger": "You and at least 1 ally are about to roll initiative.",
-		"id": "d607c4af-b3fd-4312-bbb1-b5a505436c61"
+		"id": "d607c4af-b3fd-4312-bbb1-b5a505436c61",
+		"hash": "OzdBdVhz"
 	}
 ]

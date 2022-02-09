@@ -16,7 +16,8 @@
 		"source": "PZO90148",
 		"focus": true,
 		"aonId": 559,
-		"id": "3c189972-363a-4d50-99a7-a5dca64b3774"
+		"id": "3c189972-363a-4d50-99a7-a5dca64b3774",
+		"hash": "ErEkvvtM"
 	},
 	{
 		"name": "Tireless Worker",
@@ -36,7 +37,8 @@
 		"source": "PZO90148",
 		"focus": true,
 		"aonId": 560,
-		"id": "4fac5986-f1c6-4b29-8ad8-c57d073e82ee"
+		"id": "4fac5986-f1c6-4b29-8ad8-c57d073e82ee",
+		"hash": "NIQbzpRE"
 	},
 	{
 		"name": "Electrified Crystal Ward",
@@ -57,6 +59,7 @@
 		"source": "PZO90148",
 		"focus": true,
 		"aonId": 561,
-		"id": "85cbc57d-4dc6-49ff-95e4-a300248b2527"
+		"id": "85cbc57d-4dc6-49ff-95e4-a300248b2527",
+		"hash": "rztERbHr"
 	}
 ]

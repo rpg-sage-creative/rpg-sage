@@ -16,7 +16,8 @@
 		"objectType": "FocusSpell",
 		"page": 90,
 		"traits": [ "Uncommon", "Evocation" ],
-		"id": "174d6346-7b88-4059-9068-908d138aec9d"
+		"id": "174d6346-7b88-4059-9068-908d138aec9d",
+		"hash": "YRgKHtZx"
 	},
 	{
 		"aonId": 557,
@@ -35,7 +36,8 @@
 		"objectType": "FocusSpell",
 		"page": 91,
 		"traits": [ "Uncommon", "Divination", "Light", "Revelation" ],
-		"id": "378f8ebc-e1ad-4104-b24b-463c7b7d851e"
+		"id": "378f8ebc-e1ad-4104-b24b-463c7b7d851e",
+		"hash": "xMIXyftN"
 	},
 	{
 		"aonId": 558,
@@ -58,6 +60,7 @@
 		"range": "60 feet",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Evocation", "Fire", "Light", "Positive" ],
-		"id": "87b9d025-f092-427b-830f-caa6b801a195"
+		"id": "87b9d025-f092-427b-830f-caa6b801a195",
+		"hash": "kVtgzqzd"
 	}
 ]

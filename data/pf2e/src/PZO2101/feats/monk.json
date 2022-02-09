@@ -8,7 +8,8 @@
 		"benefits": "You enter the stance of a crane, holding your arms in an imitation of a crane's wings.",
 		"source": "PZO2101",
 		"aonId": 430,
-		"id": "07a5bb64-c35c-4583-bd9f-699248f74320"
+		"id": "07a5bb64-c35c-4583-bd9f-699248f74320",
+		"hash": "ZqwVWYfQ"
 	},
 	{
 		"objectType": "Feat",
@@ -19,7 +20,8 @@
 		"benefits": "You enter the stance of a dragon and make powerful leg strikes like a lashing dragon's tail.",
 		"source": "PZO2101",
 		"aonId": 431,
-		"id": "65430cff-642f-4fb7-9148-83808ad4eb3c"
+		"id": "65430cff-642f-4fb7-9148-83808ad4eb3c",
+		"hash": "GVgvzRHq"
 	},
 	{
 		"objectType": "Feat",
@@ -30,7 +32,8 @@
 		"benefits": "You can use ki to move with extraordinary speed and make yourself harder to hit.",
 		"source": "PZO2101",
 		"aonId": 432,
-		"id": "bf1a6eeb-0aab-46af-b7c5-19c05b8efeec"
+		"id": "bf1a6eeb-0aab-46af-b7c5-19c05b8efeec",
+		"hash": "rCROkqyP"
 	},
 	{
 		"objectType": "Feat",
@@ -41,7 +44,8 @@
 		"benefits": "Your study of the flow of mystical energy allows you to harness it into your physical strikes.",
 		"source": "PZO2101",
 		"aonId": 433,
-		"id": "d2fbfb9f-5175-4fb0-887e-397907ef902e"
+		"id": "d2fbfb9f-5175-4fb0-887e-397907ef902e",
+		"hash": "Vbptdxww"
 	},
 	{
 		"objectType": "Feat",
@@ -52,7 +56,8 @@
 		"benefits": "You have trained with the traditional weaponry of your monastery or school.",
 		"source": "PZO2101",
 		"aonId": 434,
-		"id": "312b45ba-f023-43ed-9ee9-103ca89a9491"
+		"id": "312b45ba-f023-43ed-9ee9-103ca89a9491",
+		"hash": "sxUzGSBN"
 	},
 	{
 		"objectType": "Feat",
@@ -63,7 +68,8 @@
 		"benefits": "You enter the stance of an implacable mountain allowing you to strike with the weight of an avalanche.",
 		"source": "PZO2101",
 		"aonId": 435,
-		"id": "f0cc960f-65e4-42ab-b7f4-f94286c93219"
+		"id": "f0cc960f-65e4-42ab-b7f4-f94286c93219",
+		"hash": "prTMRvKt"
 	},
 	{
 		"objectType": "Feat",
@@ -73,8 +79,9 @@
 		"prerequisites": [ "-" ],
 		"benefits": "You enter the stance of an enraged phoenix.",
 		"source": "PZO2101",
-		"aonId": 936,
-		"id": "bce7fa5c-0af0-403e-9349-2d895d763f1c"
+		"aonId": 2269,
+		"id": "bce7fa5c-0af0-403e-9349-2d895d763f1c",
+		"hash": "sQnUkMvK"
 	},
 	{
 		"objectType": "Feat",
@@ -85,7 +92,8 @@
 		"benefits": "You enter the stance of a tiger and can make tiger claw attacks.",
 		"source": "PZO2101",
 		"aonId": 436,
-		"id": "de87cac6-b3e8-46f1-9ab3-892f858996dc"
+		"id": "de87cac6-b3e8-46f1-9ab3-892f858996dc",
+		"hash": "kqdABXzl"
 	},
 	{
 		"objectType": "Feat",
@@ -96,7 +104,8 @@
 		"benefits": "You enter the stance of a wolf, low to the ground with your hands held like fanged teeth.",
 		"source": "PZO2101",
 		"aonId": 437,
-		"id": "848d14f3-ce31-435c-86e8-d5495eee10b4"
+		"id": "848d14f3-ce31-435c-86e8-d5495eee10b4",
+		"hash": "gnCzXJQp"
 	},
 	{
 		"objectType": "Feat",
@@ -107,7 +116,8 @@
 		"benefits": "You know how to make the most of your attacks when fighting hand-to-hand.",
 		"source": "PZO2101",
 		"aonId": 438,
-		"id": "b7549821-9fed-4d5c-9446-6412b07a9a66"
+		"id": "b7549821-9fed-4d5c-9446-6412b07a9a66",
+		"hash": "yxlFArfZ"
 	},
 	{
 		"objectType": "Feat",
@@ -118,7 +128,8 @@
 		"benefits": "Like a powerful constrictor, you crush targets in your unyielding grasp.",
 		"source": "PZO2101",
 		"aonId": 439,
-		"id": "9c3c1837-d419-445f-9b70-1c7a52ff515f"
+		"id": "9c3c1837-d419-445f-9b70-1c7a52ff515f",
+		"hash": "UpzmNlIQ"
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +140,8 @@
 		"benefits": "You are as light as a leaf whirling in the breeze.",
 		"source": "PZO2101",
 		"aonId": 440,
-		"id": "1b5a432f-313e-4459-b68c-e2c2b89b430f"
+		"id": "1b5a432f-313e-4459-b68c-e2c2b89b430f",
+		"hash": "clBLOtSf"
 	},
 	{
 		"objectType": "Feat",
@@ -140,7 +152,8 @@
 		"benefits": "You call upon the power of the elements, infusing your ki with elemental energy and allowing your attacks to deal energy damage.",
 		"source": "PZO2101",
 		"aonId": 441,
-		"id": "9e673abe-c1bf-4aaf-acf9-5efc054909c7"
+		"id": "9e673abe-c1bf-4aaf-acf9-5efc054909c7",
+		"hash": "TBLJJtzp"
 	},
 	{
 		"objectType": "Feat",
@@ -151,7 +164,8 @@
 		"benefits": "The focused power of your flurry threatens to overwhelm your opponent.",
 		"source": "PZO2101",
 		"aonId": 442,
-		"id": "ed96d2f9-4459-4642-aaf9-4e4652ba16ec"
+		"id": "ed96d2f9-4459-4642-aaf9-4e4652ba16ec",
+		"hash": "OzXZZAWH"
 	},
 	{
 		"objectType": "Feat",
@@ -173,7 +187,8 @@
 		"benefits": "You flurry is a combination of maneuvers.",
 		"source": "PZO2101",
 		"aonId": 444,
-		"id": "9044874f-9a5b-436d-aaa9-3114830a65ff"
+		"id": "9044874f-9a5b-436d-aaa9-3114830a65ff",
+		"hash": "YNUhvROq"
 	},
 	{
 		"objectType": "Feat",
@@ -184,7 +199,8 @@
 		"benefits": "You launch yourself at a foe.",
 		"source": "PZO2101",
 		"aonId": 445,
-		"id": "d279e1eb-229b-43ad-93ae-47bff47b2d56"
+		"id": "d279e1eb-229b-43ad-93ae-47bff47b2d56",
+		"hash": "IKHWPWpC"
 	},
 	{
 		"objectType": "Feat",
@@ -195,7 +211,8 @@
 		"benefits": "Your guard is up, even while moving.",
 		"source": "PZO2101",
 		"aonId": 446,
-		"id": "042a50b4-d2f6-4acf-b040-85a31ecfbbb1"
+		"id": "042a50b4-d2f6-4acf-b040-85a31ecfbbb1",
+		"hash": "vQcLNpUg"
 	},
 	{
 		"objectType": "Feat",
@@ -206,7 +223,8 @@
 		"benefits": "The power of your faith suffuses your ki",
 		"source": "PZO2101",
 		"aonId": 1184,
-		"id": "e49b408f-9ab6-4da6-b064-93a9ab990047"
+		"id": "e49b408f-9ab6-4da6-b064-93a9ab990047",
+		"hash": "hrOWZgAE"
 	},
 	{
 		"objectType": "Feat",
@@ -217,7 +235,8 @@
 		"benefits": "You strike out when your foe tries to flee.",
 		"source": "PZO2101",
 		"aonId": 447,
-		"id": "5eca1a90-73d7-46ee-8d76-4fd6be01e562"
+		"id": "5eca1a90-73d7-46ee-8d76-4fd6be01e562",
+		"hash": "OKWKwXEz"
 	},
 	{
 		"objectType": "Feat",
@@ -228,7 +247,8 @@
 		"benefits": "You can restore your health by tapping into your ki.",
 		"source": "PZO2101",
 		"aonId": 448,
-		"id": "e3175771-790d-481c-ac99-c13b9d773d04"
+		"id": "e3175771-790d-481c-ac99-c13b9d773d04",
+		"hash": "hZdNZPpG"
 	},
 	{
 		"objectType": "Feat",
@@ -239,7 +259,8 @@
 		"benefits": "You can teleport yourself a short distance.",
 		"source": "PZO2101",
 		"aonId": 449,
-		"id": "f4402a23-7bec-40a3-8a01-6cd5f353ae2f"
+		"id": "f4402a23-7bec-40a3-8a01-6cd5f353ae2f",
+		"hash": "OHMrcCbr"
 	},
 	{
 		"objectType": "Feat",
@@ -250,7 +271,8 @@
 		"benefits": "You interpose your arm between yourself and your opponent.",
 		"source": "PZO2101",
 		"aonId": 450,
-		"id": "da29bdec-0995-49cb-8399-16a04641ee18"
+		"id": "da29bdec-0995-49cb-8399-16a04641ee18",
+		"hash": "MSxWbjyB"
 	},
 	{
 		"objectType": "Feat",
@@ -261,7 +283,8 @@
 		"benefits": "You bellow, instilling fear in your enemies.",
 		"source": "PZO2101",
 		"aonId": 451,
-		"id": "ee9a6a02-7072-421d-8f14-fdd7b8548929"
+		"id": "ee9a6a02-7072-421d-8f14-fdd7b8548929",
+		"hash": "dgcEnHFs"
 	},
 	{
 		"objectType": "Feat",
@@ -272,7 +295,8 @@
 		"benefits": "You can unleash an impactful cone of force by channeling your ki.",
 		"source": "PZO2101",
 		"aonId": 452,
-		"id": "782d07f2-b19d-4c64-ba75-f42290863f4f"
+		"id": "782d07f2-b19d-4c64-ba75-f42290863f4f",
+		"hash": "NksKXpzX"
 	},
 	{
 		"objectType": "Feat",
@@ -283,7 +307,8 @@
 		"benefits": "You focus on your connection to the earth and call upon the mountain to block attacks against you.",
 		"source": "PZO2101",
 		"aonId": 453,
-		"id": "97ff5052-ac25-4946-bab5-98266cfd7371"
+		"id": "97ff5052-ac25-4946-bab5-98266cfd7371",
+		"hash": "NMXSYkWK"
 	},
 	{
 		"objectType": "Feat",
@@ -294,7 +319,8 @@
 		"benefits": "You make a fierce swipe with both hands.",
 		"source": "PZO2101",
 		"aonId": 454,
-		"id": "6d62f12f-dde9-4cc8-b040-589b3355e737"
+		"id": "6d62f12f-dde9-4cc8-b040-589b3355e737",
+		"hash": "XtPOXqQv"
 	},
 	{
 		"objectType": "Feat",
@@ -305,7 +331,8 @@
 		"benefits": "You can Stride across liquid and surfaces that don't support your weight.",
 		"source": "PZO2101",
 		"aonId": 455,
-		"id": "f74f5a8f-1d37-4aa7-b5d6-2d84101bd23c"
+		"id": "f74f5a8f-1d37-4aa7-b5d6-2d84101bd23c",
+		"hash": "rxMQyksX"
 	},
 	{
 		"objectType": "Feat",
@@ -316,7 +343,8 @@
 		"benefits": "You propel your grabbed or restrained foe a great distance.",
 		"source": "PZO2101",
 		"aonId": 456,
-		"id": "7fd401a0-48a8-4575-965a-b846c1fcf036"
+		"id": "7fd401a0-48a8-4575-965a-b846c1fcf036",
+		"hash": "qmDSCEXp"
 	},
 	{
 		"objectType": "Feat",
@@ -327,7 +355,8 @@
 		"benefits": "You rip your enemy off their feet.",
 		"source": "PZO2101",
 		"aonId": 457,
-		"id": "7f677859-e425-490a-863d-06e8cad5f46b"
+		"id": "7f677859-e425-490a-863d-06e8cad5f46b",
+		"hash": "XLJMArBJ"
 	},
 	{
 		"objectType": "Feat",
@@ -338,7 +367,8 @@
 		"benefits": "You pluck missiles from the air and hurl them back at their source.",
 		"source": "PZO2101",
 		"aonId": 458,
-		"id": "7f3d0ebd-2111-458a-b265-c0b0b19bb9fe"
+		"id": "7f3d0ebd-2111-458a-b265-c0b0b19bb9fe",
+		"hash": "kqEhJHsj"
 	},
 	{
 		"objectType": "Feat",
@@ -349,7 +379,8 @@
 		"benefits": "You enter the stance of impenetrable iron, refusing to yield to any blow.",
 		"source": "PZO2101",
 		"aonId": 459,
-		"id": "8eab1624-d2c0-4aed-b4d3-96acdaf646cd"
+		"id": "8eab1624-d2c0-4aed-b4d3-96acdaf646cd",
+		"hash": "ztzZVTXt"
 	},
 	{
 		"objectType": "Feat",
@@ -360,7 +391,8 @@
 		"benefits": "You combine two different maneuvers together into a single flowing whole.",
 		"source": "PZO2101",
 		"aonId": 460,
-		"id": "c4d0c6a0-01e4-478a-8273-39e0a8e36666"
+		"id": "c4d0c6a0-01e4-478a-8273-39e0a8e36666",
+		"hash": "HVfMRnxU"
 	},
 	{
 		"objectType": "Feat",
@@ -371,7 +403,8 @@
 		"benefits": "You extend your arms like gnarled branches to interfere with your foes' movements.",
 		"source": "PZO2101",
 		"aonId": 461,
-		"id": "9808e0d9-754e-4bf5-b7ab-bacdab5f8b1c"
+		"id": "9808e0d9-754e-4bf5-b7ab-bacdab5f8b1c",
+		"hash": "FCrXtnNv"
 	},
 	{
 		"objectType": "Feat",
@@ -382,7 +415,8 @@
 		"benefits": "You defy gravity, traversing vertical planes as easily as the ground.",
 		"source": "PZO2101",
 		"aonId": 462,
-		"id": "6fa3f574-e136-4437-84b3-329d602d0e1e"
+		"id": "6fa3f574-e136-4437-84b3-329d602d0e1e",
+		"hash": "zkskSTYd"
 	},
 	{
 		"objectType": "Feat",
@@ -393,7 +427,8 @@
 		"benefits": "You learn a mystical stance that lets you attack from a distance.",
 		"source": "PZO2101",
 		"aonId": 463,
-		"id": "b52904a3-ef2f-4b58-ab04-49d875fefd36"
+		"id": "b52904a3-ef2f-4b58-ab04-49d875fefd36",
+		"hash": "jLpUhRvg"
 	},
 	{
 		"objectType": "Feat",
@@ -404,7 +439,8 @@
 		"benefits": "You focus your strength into a blow powerful enough to push an enemy away from you.",
 		"source": "PZO2101",
 		"aonId": 464,
-		"id": "b8524b54-94e7-4d6e-9a5a-ddea97019ba5"
+		"id": "b8524b54-94e7-4d6e-9a5a-ddea97019ba5",
+		"hash": "FzrzrTGI"
 	},
 	{
 		"objectType": "Feat",
@@ -415,7 +451,8 @@
 		"benefits": "You pinch crucial points of your target's nervous system, impeding its ability to function.",
 		"source": "PZO2101",
 		"aonId": 465,
-		"id": "606560e0-84d4-4ce9-a27e-23674958645f"
+		"id": "606560e0-84d4-4ce9-a27e-23674958645f",
+		"hash": "UGqWDZZD"
 	},
 	{
 		"objectType": "Feat",
@@ -426,7 +463,8 @@
 		"benefits": "You gather the wind beneath you, allowing you to soar as you jump.",
 		"source": "PZO2101",
 		"aonId": 466,
-		"id": "82270abf-770d-4b35-92b9-a00853aea0f9"
+		"id": "82270abf-770d-4b35-92b9-a00853aea0f9",
+		"hash": "dyqMBARl"
 	},
 	{
 		"objectType": "Feat",
@@ -437,7 +475,8 @@
 		"benefits": "Any journey consists of more than simply reaching your destination.",
 		"source": "PZO2101",
 		"aonId": 467,
-		"id": "79f8ba32-d065-403c-ab85-d4091606c4d1"
+		"id": "79f8ba32-d065-403c-ab85-d4091606c4d1",
+		"hash": "IsTpLYYE"
 	},
 	{
 		"objectType": "Feat",
@@ -448,7 +487,8 @@
 		"benefits": "You have fortified your body and mind against eldritch effects.",
 		"source": "PZO2101",
 		"aonId": 468,
-		"id": "a0df4bd7-c83e-423b-8b98-1fc5a7b3b6c1"
+		"id": "a0df4bd7-c83e-423b-8b98-1fc5a7b3b6c1",
+		"hash": "xkXKGXhX"
 	},
 	{
 		"objectType": "Feat",
@@ -459,7 +499,8 @@
 		"benefits": "Your strike can block a creature's inner life force.",
 		"source": "PZO2101",
 		"aonId": 469,
-		"id": "04a693a4-b30b-4b17-9cc6-f8af42542d6a"
+		"id": "04a693a4-b30b-4b17-9cc6-f8af42542d6a",
+		"hash": "rBhqsIpQ"
 	},
 	{
 		"objectType": "Feat",
@@ -470,7 +511,8 @@
 		"benefits": "Your shoves cause the target to go farther.",
 		"source": "PZO2101",
 		"aonId": 470,
-		"id": "23354d69-f774-44b9-8c15-45e3d5e56bbc"
+		"id": "23354d69-f774-44b9-8c15-45e3d5e56bbc",
+		"hash": "vvxfQBQb"
 	},
 	{
 		"objectType": "Feat",
@@ -481,7 +523,8 @@
 		"benefits": "Your meditation is so effective that you can achieve a deep focus.",
 		"source": "PZO2101",
 		"aonId": 471,
-		"id": "c5e82d5c-740f-4ec0-9f66-cb279be51fd9"
+		"id": "c5e82d5c-740f-4ec0-9f66-cb279be51fd9",
+		"hash": "ZclfNJDK"
 	},
 	{
 		"objectType": "Feat",
@@ -492,7 +535,8 @@
 		"benefits": "You enter a stance without a thought.",
 		"source": "PZO2101",
 		"aonId": 472,
-		"id": "8cb8d0a2-bbc0-4e85-9f56-b30b285a5932"
+		"id": "8cb8d0a2-bbc0-4e85-9f56-b30b285a5932",
+		"hash": "QzmSkqbx"
 	},
 	{
 		"objectType": "Feat",
@@ -503,7 +547,8 @@
 		"benefits": "You steel yourself, preparing to resist oncoming attacks and using your muscles to absorb the impact.",
 		"source": "PZO2101",
 		"aonId": 473,
-		"id": "f2c23aa4-7b33-472c-929f-e204e6c3292f"
+		"id": "f2c23aa4-7b33-472c-929f-e204e6c3292f",
+		"hash": "NzCxYnzl"
 	},
 	{
 		"objectType": "Feat",
@@ -514,7 +559,8 @@
 		"benefits": "You stomp, shaking the earth beneath you and causing quakes.",
 		"source": "PZO2101",
 		"aonId": 474,
-		"id": "6c6a6bdd-b4ec-46a2-8dee-0d8fe6ebc0b8"
+		"id": "6c6a6bdd-b4ec-46a2-8dee-0d8fe6ebc0b8",
+		"hash": "ZQdwdtPj"
 	},
 	{
 		"objectType": "Feat",
@@ -525,9 +571,21 @@
 		"benefits": "You reposition foes with raking attacks.",
 		"source": "PZO2101",
 		"aonId": 475,
-		"id": "6a30c136-cfb9-4c44-94b7-3109dff350af"
+		"id": "6a30c136-cfb9-4c44-94b7-3109dff350af",
+		"hash": "ZlpPrcEQ"
 	},
-	{ "objectType": "Feat", "name": "Timeless Body", "level": 14, "traits": [ "Monk" ], "prerequisites": [ "-" ], "benefits": "You cease aging.", "source": "PZO2101", "aonId": 476, "id": "89cd990d-4181-4769-a4c2-32e8b7df0060" },
+	{
+		"objectType": "Feat",
+		"name": "Timeless Body",
+		"level": 14,
+		"traits": [ "Monk" ],
+		"prerequisites": [ "-" ],
+		"benefits": "You cease aging.",
+		"source": "PZO2101",
+		"aonId": 476,
+		"id": "89cd990d-4181-4769-a4c2-32e8b7df0060",
+		"hash": "qXjvGdvZ"
+	},
 	{
 		"objectType": "Feat",
 		"name": "Tongue of the Sun and Moon",
@@ -537,7 +595,8 @@
 		"benefits": "You have transcended the barriers between words and meaning.",
 		"source": "PZO2101",
 		"aonId": 477,
-		"id": "b7248549-3be7-4dc6-aaa3-dcc8a0647bd7"
+		"id": "b7248549-3be7-4dc6-aaa3-dcc8a0647bd7",
+		"hash": "szqbAyyN"
 	},
 	{
 		"objectType": "Feat",
@@ -548,7 +607,8 @@
 		"benefits": "You exude an aura of resolve.",
 		"source": "PZO2101",
 		"aonId": 479,
-		"id": "0a5311dc-6fc1-477a-a7cd-6217e6d1d246"
+		"id": "0a5311dc-6fc1-477a-a7cd-6217e6d1d246",
+		"hash": "xgzQIkhM"
 	},
 	{
 		"objectType": "Feat",
@@ -559,7 +619,8 @@
 		"benefits": "You move between stances in an unceasing dance.",
 		"source": "PZO2101",
 		"aonId": 480,
-		"id": "5245d8f7-ebf6-4064-a706-d2a3a0e31a3b"
+		"id": "5245d8f7-ebf6-4064-a706-d2a3a0e31a3b",
+		"hash": "DJAdcPtp"
 	},
 	{
 		"objectType": "Feat",
@@ -570,7 +631,8 @@
 		"benefits": "Your strikes can kill foes.",
 		"source": "PZO2101",
 		"aonId": 481,
-		"id": "f6171791-56a8-49b7-bcdf-f3554c7cb5f9"
+		"id": "f6171791-56a8-49b7-bcdf-f3554c7cb5f9",
+		"hash": "QPERqrVY"
 	},
 	{
 		"objectType": "Feat",
@@ -592,7 +654,8 @@
 		"benefits": "You store up energy and release it in an enormous gust of rushing wind.",
 		"source": "PZO2101",
 		"aonId": 478,
-		"id": "bb8a7917-37df-4af9-82d9-689e7ac5e13c"
+		"id": "bb8a7917-37df-4af9-82d9-689e7ac5e13c",
+		"hash": "vszfUTsZ"
 	},
 	{
 		"objectType": "Feat",
@@ -603,7 +666,8 @@
 		"benefits": "Your body hardens as you combine your attacks, making your finishing blows more damaging.",
 		"source": "PZO2101",
 		"aonId": 483,
-		"id": "0631136e-2e41-4751-a792-898d463ae5c6"
+		"id": "0631136e-2e41-4751-a792-898d463ae5c6",
+		"hash": "YQgsPvmX"
 	},
 	{
 		"objectType": "Feat",
@@ -614,7 +678,8 @@
 		"benefits": "You transmute your body into an ethereal form.",
 		"source": "PZO2101",
 		"aonId": 484,
-		"id": "9f43830b-a100-4243-9f65-819ffb9a4682"
+		"id": "9f43830b-a100-4243-9f65-819ffb9a4682",
+		"hash": "QZUWEJEh"
 	},
 	{
 		"objectType": "Feat",
@@ -625,7 +690,8 @@
 		"benefits": "When you clear your mind, your focus comes flowing back in a powerful rush.",
 		"source": "PZO2101",
 		"aonId": 485,
-		"id": "dfd5b0fc-01bc-42e3-9e36-1deb6441ce97"
+		"id": "dfd5b0fc-01bc-42e3-9e36-1deb6441ce97",
+		"hash": "thQHIJFZ"
 	},
 	{
 		"objectType": "Feat",
@@ -636,7 +702,8 @@
 		"benefits": "You flow like water, avoiding all restraints.",
 		"source": "PZO2101",
 		"aonId": 486,
-		"id": "e14a000a-5e26-4b58-a3e7-2a949adc67cc"
+		"id": "e14a000a-5e26-4b58-a3e7-2a949adc67cc",
+		"hash": "pGRxXRGv"
 	},
 	{
 		"objectType": "Feat",
@@ -647,7 +714,8 @@
 		"benefits": "You move as fast and as high as the wind itself.",
 		"source": "PZO2101",
 		"aonId": 487,
-		"id": "cb68493c-8fe4-48ff-a4ab-7e87fc99dec5"
+		"id": "cb68493c-8fe4-48ff-a4ab-7e87fc99dec5",
+		"hash": "BzxWLpqT"
 	},
 	{
 		"objectType": "Feat",
@@ -658,7 +726,8 @@
 		"benefits": "You have combined two stances into a single stance all your own.",
 		"source": "PZO2101",
 		"aonId": 488,
-		"id": "dac1e79b-d685-4433-838a-58064805f2a7"
+		"id": "dac1e79b-d685-4433-838a-58064805f2a7",
+		"hash": "trUAWnXt"
 	},
 	{
 		"objectType": "Feat",
@@ -669,7 +738,8 @@
 		"benefits": "Strike harder and heal more rapidly.",
 		"source": "PZO2101",
 		"aonId": 1166,
-		"id": "73b3197f-803f-440e-9a02-0543c58b331a"
+		"id": "73b3197f-803f-440e-9a02-0543c58b331a",
+		"hash": "tmgjRCWR"
 	},
 	{
 		"objectType": "Feat",
@@ -680,6 +750,7 @@
 		"benefits": "You execute a maneuver that defies possibility.",
 		"source": "PZO2101",
 		"aonId": 489,
-		"id": "f6a159a4-a6fe-49fa-996a-9474f8b3e3da"
+		"id": "f6a159a4-a6fe-49fa-996a-9474f8b3e3da",
+		"hash": "gRzpgWXJ"
 	}
 ]

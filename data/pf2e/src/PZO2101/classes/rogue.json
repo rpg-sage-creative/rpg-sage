@@ -32,7 +32,8 @@
 		"source": "PZO2101",
 		"aonId": 10,
 		"aonTraitId": 139,
-		"id": "bcf45634-311d-4cd2-be3e-3a24d54eb2cc"
+		"id": "bcf45634-311d-4cd2-be3e-3a24d54eb2cc",
+		"hash": "GtyrzvRh"
 	},
 	{ "objectType": "ClassPath", "name": "Ruffian", "class": "Rogue", "source": "PZO2101", "id": "68964a48-4d82-4c0d-9d30-2b0bcd85b494", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Scoundrel", "class": "Rogue", "source": "PZO2101", "id": "850826f9-7183-40a3-a506-ae36754a5270", "aonId": 2 },

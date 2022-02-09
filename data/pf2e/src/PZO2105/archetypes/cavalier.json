@@ -12,7 +12,8 @@
 		"page": 164,
 		"source": "PZO2105",
 		"id": "6f333174-beac-48d1-ad77-23b43e78020a",
-		"aonId": 53
+		"aonId": 53,
+		"hash": "bhJrEXGU"
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -48,7 +49,8 @@
 		"page": 164,
 		"source": "PZO2105",
 		"id": "07d1bf78-dd99-4ad3-9135-1689d29e8d85",
-		"aonId": 1920
+		"aonId": 1920,
+		"hash": "fPNbqqwD"
 	},
 	{
 		"objectType": "Feat",
@@ -64,7 +66,8 @@
 		"page": 164,
 		"source": "PZO2105",
 		"id": "7db5d9a3-2783-4d9b-8942-cd65144bdf75",
-		"aonId": 1921
+		"aonId": 1921,
+		"hash": "UhwrrIUx"
 	},
 	{
 		"objectType": "Feat",
@@ -78,7 +81,8 @@
 		"page": 164,
 		"source": "PZO2105",
 		"id": "0f083dc5-674e-4f66-bea9-b502c689cef3",
-		"aonId": 1922
+		"aonId": 1922,
+		"hash": "WjWqrsIN"
 	},
 	{
 		"objectType": "Feat",
@@ -96,7 +100,8 @@
 		"page": 164,
 		"source": "PZO2105",
 		"id": "cebac6a9-868e-4ad4-915a-9c2680daeb92",
-		"aonId": 1923
+		"aonId": 1923,
+		"hash": "XfIvfZcx"
 	},
 	{
 		"objectType": "Feat",
@@ -112,7 +117,8 @@
 		"page": 164,
 		"source": "PZO2105",
 		"id": "64ed6015-b769-4c8a-bc8b-bb3c9c371b64",
-		"aonId": 1924
+		"aonId": 1924,
+		"hash": "DgqTrnCI"
 	},
 	{
 		"objectType": "Feat",
@@ -126,7 +132,8 @@
 		"page": 164,
 		"source": "PZO2105",
 		"id": "56c11248-5e47-4fc2-b8b1-79954c5bd1d8",
-		"aonId": 1925
+		"aonId": 1925,
+		"hash": "QHYpgTyT"
 	},
 	{
 		"objectType": "Feat",
@@ -140,7 +147,8 @@
 		"page": 165,
 		"source": "PZO2105",
 		"id": "0d856036-6384-4c8c-b840-227ed60b76ee",
-		"aonId": 1926
+		"aonId": 1926,
+		"hash": "ldvycnzl"
 	},
 	{
 		"objectType": "Feat",
@@ -156,7 +164,8 @@
 		"page": 165,
 		"source": "PZO2105",
 		"id": "bd976814-36df-4408-84cd-71efe51b2f2e",
-		"aonId": 1927
+		"aonId": 1927,
+		"hash": "CDxJjNWU"
 	},
 	{
 		"objectType": "Feat",
@@ -172,7 +181,8 @@
 		"page": 165,
 		"source": "PZO2105",
 		"id": "80e1849c-558b-4329-94a1-5069ad0a86c2",
-		"aonId": 1928
+		"aonId": 1928,
+		"hash": "gOpwOhUX"
 	},
 	{
 		"objectType": "Feat",
@@ -189,7 +199,8 @@
 		"page": 165,
 		"source": "PZO2105",
 		"id": "99977409-e0a9-42f7-a751-8683c3c3a4c9",
-		"aonId": 1929
+		"aonId": 1929,
+		"hash": "MRHyyyDk"
 	},
 	{
 		"objectType": "Feat",
@@ -203,6 +214,7 @@
 		"page": 165,
 		"source": "PZO2105",
 		"id": "f0201e17-26e3-43bc-ad77-fc147e20fc9f",
-		"aonId": 1930
+		"aonId": 1930,
+		"hash": "XbqZzGNC"
 	}
 ]

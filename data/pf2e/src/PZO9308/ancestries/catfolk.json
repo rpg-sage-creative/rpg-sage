@@ -1,5 +1,5 @@
 [
-	{ "objectType": "Heritage", "name": "Flexible Catfolk", "ancestry": "Catfolk", "source": "PZO9308", "id": "b65f52e0-b65e-45b9-9f53-f12ea4ce4525", "aonId": 92 },
-	{ "objectType": "Heritage", "name": "Liminal Catfolk", "ancestry": "Catfolk", "source": "PZO9308", "id": "dd71df34-993e-4ea7-841f-df681fe13eb2", "aonId": 93 },
-	{ "objectType": "Heritage", "name": "Sharp-Eared Catfolk", "ancestry": "Catfolk", "source": "PZO9308", "id": "f872d6a4-a5e9-45b1-a797-c5c9e1503620", "aonId": 94 }
+	{ "objectType": "Heritage", "name": "Flexible Catfolk", "ancestry": "Catfolk", "source": "PZO9308", "id": "b65f52e0-b65e-45b9-9f53-f12ea4ce4525", "aonId": 92, "hash": "zGmbbvrx" },
+	{ "objectType": "Heritage", "name": "Liminal Catfolk", "ancestry": "Catfolk", "source": "PZO9308", "id": "dd71df34-993e-4ea7-841f-df681fe13eb2", "aonId": 93, "hash": "fAjIUqRs" },
+	{ "objectType": "Heritage", "name": "Sharp-Eared Catfolk", "ancestry": "Catfolk", "source": "PZO9308", "id": "f872d6a4-a5e9-45b1-a797-c5c9e1503620", "aonId": 94, "hash": "QALKsZgR" }
 ]

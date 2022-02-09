@@ -32,7 +32,8 @@
 		"classPath": "Style",
 		"aonId": 15,
 		"source": "PZO2105",
-		"id": "194603e5-be92-4612-a5c1-dba642d7f0e0"
+		"id": "194603e5-be92-4612-a5c1-dba642d7f0e0",
+		"hash": "hfEHrFOk"
 	},
 	{ "objectType": "ClassPath", "name": "Battledancer", "class": "Swashbuckler", "source": "PZO2105", "id": "e5dae38d-4f29-4138-b340-b13b167f31b0", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Braggart", "class": "Swashbuckler", "source": "PZO2105", "id": "dcb4fab3-ec82-4001-8504-ae1c7fd41e39", "aonId": 2 },

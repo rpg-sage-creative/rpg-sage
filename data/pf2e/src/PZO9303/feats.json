@@ -29,7 +29,8 @@
 		"description": "Calling out to your deity, you recite scripture to harm a foe",
 		"source": "PZO9303",
 		"page": 104,
-		"id": "2a4e3ac8-a2cb-4e9d-ac16-197a68eaa98d"
+		"id": "2a4e3ac8-a2cb-4e9d-ac16-197a68eaa98d",
+		"hash": "fRtBEnKk"
 	},
 	{
 		"aonId": 1175,
@@ -48,7 +49,8 @@
 		"description": "You channel positive energy into restoratives that ward against harm",
 		"source": "PZO9303",
 		"page": 104,
-		"id": "f6279c1c-3bd5-4fb7-b993-2824801d8361"
+		"id": "f6279c1c-3bd5-4fb7-b993-2824801d8361",
+		"hash": "UzmIgQQX"
 	},
 	{
 		"aonId": 1176,
@@ -67,7 +69,8 @@
 		"description": "You pour negative energy into toxins you create to further debilitate your targets",
 		"source": "PZO9303",
 		"page": 104,
-		"id": "890ee4ff-09d4-48c8-8c18-d6632aa4de85"
+		"id": "890ee4ff-09d4-48c8-8c18-d6632aa4de85",
+		"hash": "BDJnFNfW"
 	},
 	{
 		"aonId": 1178,
@@ -83,7 +86,8 @@
 		"description": "You've learned to mimic the abilities of spellcasters by studying their flourishes and words",
 		"source": "PZO9303",
 		"page": 104,
-		"id": "46ceac02-ab16-444a-b1e7-3c2d20c05f74"
+		"id": "46ceac02-ab16-444a-b1e7-3c2d20c05f74",
+		"hash": "vdzrrQEQ"
 	},
 	{
 		"aonId": 1179,
@@ -101,7 +105,8 @@
 		"description": "You rapidly adapt to environments through a combination of skill, meditation, and divine grace",
 		"source": "PZO9303",
 		"page": 105,
-		"id": "cedeb63d-0609-40fa-8d26-fda07ac073e8"
+		"id": "cedeb63d-0609-40fa-8d26-fda07ac073e8",
+		"hash": "GckQWPrw"
 	},
 	{
 		"aonId": 1180,
@@ -119,7 +124,8 @@
 		"description": "You point out a detail that incontrovertibly supports your faith, causing a listener's mind to whirl",
 		"source": "PZO9303",
 		"page": 105,
-		"id": "95ec4fa9-7a03-4f9a-a9ab-e3e3ceff6bd9"
+		"id": "95ec4fa9-7a03-4f9a-a9ab-e3e3ceff6bd9",
+		"hash": "qtfpGWyZ"
 	},
 	{
 		"aonId": 1181,
@@ -134,7 +140,8 @@
 		"description": "You grant greater healing when the gods don't interfere",
 		"source": "PZO9303",
 		"page": 105,
-		"id": "16b0279f-8ed9-4092-99c9-bf63e9ea4b6f"
+		"id": "16b0279f-8ed9-4092-99c9-bf63e9ea4b6f",
+		"hash": "WWVXbRcv"
 	},
 	{
 		"aonId": 1182,
@@ -150,7 +157,8 @@
 		"description": "Your past has left you numb to death's call",
 		"source": "PZO9303",
 		"page": 105,
-		"id": "1ead3b67-93a4-4d3b-adde-ad10fb1b1b9e"
+		"id": "1ead3b67-93a4-4d3b-adde-ad10fb1b1b9e",
+		"hash": "IXOUwApk"
 	},
 	{
 		"aonId": 1183,
@@ -179,7 +187,8 @@
 		"description": "You call upon your deity to grant you their protective blessing",
 		"source": "PZO9303",
 		"page": 105,
-		"id": "e626da15-93c8-4b19-9268-58cf6551c1b2"
+		"id": "e626da15-93c8-4b19-9268-58cf6551c1b2",
+		"hash": "LCkThzWP"
 	},
 	{
 		"aonId": 1185,
@@ -196,6 +205,7 @@
 		"description": "You imbue water with your deity's blessing",
 		"source": "PZO9303",
 		"page": 105,
-		"id": "3d524936-315a-4425-92fe-d1ed8d0e2e77"
+		"id": "3d524936-315a-4425-92fe-d1ed8d0e2e77",
+		"hash": "pcJbmkZt"
 	}
 ]

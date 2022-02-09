@@ -31,6 +31,7 @@
 		"targets": "1 creature",
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Attack", "Cold", "Evocation", "Water" ],
-		"id": "e8afdd28-b1bd-49da-95a2-4b7a1ed80a77"
+		"id": "e8afdd28-b1bd-49da-95a2-4b7a1ed80a77",
+		"hash": "LfqdQPvg"
 	}
 ]

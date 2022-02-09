@@ -12,7 +12,8 @@
 		"devoteeBenefits": { "divineFont": [ "Harm", "Heal" ], "divineSkill": [ "Society" ], "favoredWeapon": "Crossbow", "domains": [ "Cities", "Earth", "Travel", "Wealth" ], "clericSpells": [ "Illusory Object", "Creation", "Magnificent Mansion" ] },
 		"source": "PZO2101",
 		"aonId": 1,
-		"id": "4fdb3cce-00a3-43af-9b22-80e2da789d4b"
+		"id": "4fdb3cce-00a3-43af-9b22-80e2da789d4b",
+		"hash": "QWOZdbzR"
 	},
 	{
 		"objectType": "Deity",
@@ -27,7 +28,8 @@
 		"devoteeBenefits": { "divineFont": [ "Harm" ], "divineSkill": [ "Deception" ], "favoredWeapon": "Mace", "domains": [ "Confidence", "Fire", "Trickery", "Tyranny" ], "clericSpells": [ "Charm", "Suggestion", "Mislead" ] },
 		"source": "PZO2101",
 		"aonId": 2,
-		"id": "534b40af-2dcf-4771-b9e2-c2f9585e19e1"
+		"id": "534b40af-2dcf-4771-b9e2-c2f9585e19e1",
+		"hash": "xYgctxxc"
 	},
 	{
 		"objectType": "Deity",
@@ -42,7 +44,8 @@
 		"devoteeBenefits": { "divineFont": [ "Harm", "Heal" ], "divineSkill": [ "Deception" ], "favoredWeapon": "Whip", "domains": [ "Pain", "Passion", "Secrecy", "Trickery" ], "clericSpells": [ "Charm", "Enthrall", "Mislead" ] },
 		"source": "PZO2101",
 		"aonId": 3,
-		"id": "c55274dc-0860-494b-a7cc-f5b367dd59c5"
+		"id": "c55274dc-0860-494b-a7cc-f5b367dd59c5",
+		"hash": "pfgzRZRU"
 	},
 	{
 		"objectType": "Deity",
@@ -57,7 +60,8 @@
 		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Athletics" ], "favoredWeapon": "Rapier", "domains": [ "Cities", "Freedom", "Indulgence", "Might" ], "clericSpells": [ "Fleet Step", "Touch of Idiocy", "Hallucination" ] },
 		"source": "PZO2101",
 		"aonId": 4,
-		"id": "37be51f2-0f55-459c-90ce-8d488bb67aea"
+		"id": "37be51f2-0f55-459c-90ce-8d488bb67aea",
+		"hash": "ABZzUIJh"
 	},
 	{
 		"objectType": "Deity",
@@ -72,7 +76,8 @@
 		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Acrobatics" ], "favoredWeapon": "Starknife", "domains": [ "Dreams", "Luck", "Moon", "Travel" ], "clericSpells": [ "Sleep", "Fly", "Dreaming Potential" ] },
 		"source": "PZO2101",
 		"aonId": 5,
-		"id": "5b8986c9-0874-4bf6-97fb-0c1960a7754d"
+		"id": "5b8986c9-0874-4bf6-97fb-0c1960a7754d",
+		"hash": "RHNbIgUg"
 	},
 	{
 		"objectType": "Deity",
@@ -87,7 +92,8 @@
 		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Survival" ], "favoredWeapon": "Longbow", "domains": [ "Earth", "Family", "Nature", "Wealth" ], "clericSpells": [ "True Strike", "Wall of Thorns", "Tree Stride" ] },
 		"source": "PZO2101",
 		"aonId": 6,
-		"id": "d0016298-a881-4457-97ee-e0ed469f0edc"
+		"id": "d0016298-a881-4457-97ee-e0ed469f0edc",
+		"hash": "VPvWQQAj"
 	},
 	{
 		"objectType": "Deity",
@@ -102,7 +108,8 @@
 		"devoteeBenefits": { "divineFont": [ "Harm", "Heal" ], "divineSkill": [ "Athletics" ], "favoredWeapon": "Greatsword", "domains": [ "Confidence", "Destruction", "Might", "Zeal" ], "clericSpells": [ "True Strike", "Enlarge", "Weapon Storm" ] },
 		"source": "PZO2101",
 		"aonId": 7,
-		"id": "0649ea9e-f00d-4dab-98a1-ea444e82cd05"
+		"id": "0649ea9e-f00d-4dab-98a1-ea444e82cd05",
+		"hash": "CrWkQXOW"
 	},
 	{
 		"objectType": "Deity",
@@ -117,7 +124,8 @@
 		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Survival" ], "favoredWeapon": "Trident", "domains": [ "Air", "Nature", "Travel", "Water" ], "clericSpells": [ "Gust of Wind", "Lightning Bolt", "Control Water" ] },
 		"source": "PZO2101",
 		"aonId": 8,
-		"id": "b3fa31dc-7a09-4192-a8dc-18324241a46f"
+		"id": "b3fa31dc-7a09-4192-a8dc-18324241a46f",
+		"hash": "ISWttlbN"
 	},
 	{
 		"objectType": "Deity",
@@ -132,7 +140,8 @@
 		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Intimidation" ], "favoredWeapon": "Longsword", "domains": [ "Confidence", "Might", "Truth", "Zeal" ], "clericSpells": [ "True Strike", "Enlarge", "Fire Shield" ] },
 		"source": "PZO2101",
 		"aonId": 9,
-		"id": "8a46a2d9-212f-4ff5-bd9b-dfaefb27047f"
+		"id": "8a46a2d9-212f-4ff5-bd9b-dfaefb27047f",
+		"hash": "hXwnGxfS"
 	},
 	{
 		"objectType": "Deity",
@@ -147,7 +156,8 @@
 		"devoteeBenefits": { "divineFont": [ "Harm", "Heal" ], "divineSkill": [ "Athletics" ], "favoredWeapon": "Fist", "domains": [ "Knowledge", "Might", "Perfection", "Truth" ], "clericSpells": [ "Jump", "Haste", "Stoneskin" ] },
 		"source": "PZO2101",
 		"aonId": 10,
-		"id": "59a3d87f-457b-4ed4-bb74-aeb5d20405c4"
+		"id": "59a3d87f-457b-4ed4-bb74-aeb5d20405c4",
+		"hash": "YhXpxZtM"
 	},
 	{
 		"objectType": "Deity",
@@ -170,7 +180,8 @@
 		"devoteeBenefits": { "divineFont": [ "Harm", "Heal" ], "divineSkill": [ "Survival" ], "favoredWeapon": "Falchion", "domains": [ "Family", "Might", "Nightmares", "Trickery" ], "clericSpells": [ "Magic Fang", "Animal Form", "Nightmare" ] },
 		"source": "PZO2101",
 		"aonId": 11,
-		"id": "99c11f7d-ee50-4267-a343-49f872310be8"
+		"id": "99c11f7d-ee50-4267-a343-49f872310be8",
+		"hash": "ASCbwBUH"
 	},
 	{
 		"objectType": "Deity",
@@ -191,7 +202,8 @@
 		},
 		"source": "PZO2101",
 		"aonId": 12,
-		"id": "0989a301-a961-4334-b928-7c455fe7b037"
+		"id": "0989a301-a961-4334-b928-7c455fe7b037",
+		"hash": "OrxhmqQI"
 	},
 	{
 		"objectType": "Deity",
@@ -206,7 +218,8 @@
 		"devoteeBenefits": { "divineFont": [ "Harm" ], "divineSkill": [ "Stealth" ], "favoredWeapon": "Shortsword", "domains": [ "Death", "Secrecy", "Trickery", "Wealth" ], "clericSpells": [ "Illusory Disguise", "Invisibility", "Phantasmal Killer" ] },
 		"source": "PZO2101",
 		"aonId": 13,
-		"id": "cacc4bde-6762-49b3-affa-b6b46c11f558"
+		"id": "cacc4bde-6762-49b3-affa-b6b46c11f558",
+		"hash": "XQtktXIq"
 	},
 	{
 		"objectType": "Deity",
@@ -221,7 +234,8 @@
 		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Medicine" ], "favoredWeapon": "Dagger", "domains": [ "Death", "Fate", "Healing", "Knowledge" ], "clericSpells": [ "Mindlink", "Ghostly Weapon", "Phantasmal Killer" ] },
 		"source": "PZO2101",
 		"aonId": 14,
-		"id": "ea28e323-7eae-4e67-9ddc-f1a40c5fccb6"
+		"id": "ea28e323-7eae-4e67-9ddc-f1a40c5fccb6",
+		"hash": "ZQXLQQQh"
 	},
 	{
 		"objectType": "Deity",
@@ -236,7 +250,8 @@
 		"devoteeBenefits": { "divineFont": [ "Harm" ], "divineSkill": [ "Athletics" ], "favoredWeapon": "Greataxe", "domains": [ "Air", "Destruction", "Earth", "Zeal" ], "clericSpells": [ "Burning Hands", "Enlarge", "Disintegrate" ] },
 		"source": "PZO2101",
 		"aonId": 15,
-		"id": "13334096-e702-4bdd-92c4-92eb8246b895"
+		"id": "13334096-e702-4bdd-92c4-92eb8246b895",
+		"hash": "rvRvxEhM"
 	},
 	{
 		"objectType": "Deity",
@@ -251,7 +266,8 @@
 		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Medicine" ], "favoredWeapon": "Scimitar", "domains": [ "Fire", "Healing", "Sun", "Truth" ], "clericSpells": [ "Burning Hands", "Fireball", "Wall of Fire" ] },
 		"source": "PZO2101",
 		"aonId": 16,
-		"id": "42b1e84a-761b-427e-bba9-bf16910d6364"
+		"id": "42b1e84a-761b-427e-bba9-bf16910d6364",
+		"hash": "HQIflRPO"
 	},
 	{
 		"objectType": "Deity",
@@ -266,7 +282,8 @@
 		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Crafting", "Performance" ], "favoredWeapon": "Glaive", "domains": [ "Creation", "Family", "Passion", "Protection" ], "clericSpells": [ "Color Spray", "Enthrall", "Creation" ] },
 		"source": "PZO2101",
 		"aonId": 17,
-		"id": "c532ce51-6afd-4444-9ac1-e80ed2585659"
+		"id": "c532ce51-6afd-4444-9ac1-e80ed2585659",
+		"hash": "wUEGSQCU"
 	},
 	{
 		"objectType": "Deity",
@@ -281,7 +298,8 @@
 		"devoteeBenefits": { "divineFont": [ "Heal" ], "divineSkill": [ "Crafting" ], "favoredWeapon": "Warhammer", "domains": [ "Creation", "Earth", "Family", "Protection" ], "clericSpells": [ "Mindlink", "Earthbind", "Creation" ] },
 		"source": "PZO2101",
 		"aonId": 18,
-		"id": "a2f44cec-fde4-424c-ab88-846ef7d0a82b"
+		"id": "a2f44cec-fde4-424c-ab88-846ef7d0a82b",
+		"hash": "PkxqAksN"
 	},
 	{
 		"objectType": "Deity",
@@ -296,7 +314,8 @@
 		"devoteeBenefits": { "divineFont": [ "Harm" ], "divineSkill": [ "Intimidation" ], "favoredWeapon": "Scythe", "domains": [ "Indulgence", "Magic", "Might", "Undeath" ], "clericSpells": [ "Goblin Pox", "False Life", "Mask of Terror" ] },
 		"source": "PZO2101",
 		"aonId": 19,
-		"id": "4c83b5fe-ff87-45a2-a1d4-3005acf248c2"
+		"id": "4c83b5fe-ff87-45a2-a1d4-3005acf248c2",
+		"hash": "XtRFZRfw"
 	},
 	{
 		"objectType": "Deity",
@@ -311,7 +330,8 @@
 		"devoteeBenefits": { "divineFont": [ "Harm" ], "divineSkill": [ "Intimidation" ], "favoredWeapon": "Spiked Chain", "domains": [ "Ambition", "Darkness", "Destruction", "Pain" ], "clericSpells": [ "Phantom Pain", "Wall of Thorns", "Shadow Walk" ] },
 		"source": "PZO2101",
 		"aonId": 20,
-		"id": "804c2867-c57b-4a18-8a87-fff0860ed75f"
+		"id": "804c2867-c57b-4a18-8a87-fff0860ed75f",
+		"hash": "QZcZZxqg"
 	},
 	{
 		"objectType": "Faith",
@@ -324,7 +344,8 @@
 		"followerAlignments": [ "all" ],
 		"source": "PZO2101",
 		"id": "eeefdf1b-6c73-490b-95db-ad4f752c1f56",
-		"aonId": 21
+		"aonId": 21,
+		"hash": "GLpSZdXJ"
 	},
 	{
 		"objectType": "Faith",
@@ -337,7 +358,8 @@
 		"followerAlignments": [ "CN", "LN", "N", "NE", "NG" ],
 		"source": "PZO2101",
 		"id": "3bea5a96-1efa-422f-8032-1301f3d64815",
-		"aonId": 22
+		"aonId": 22,
+		"hash": "gbQzIVjq"
 	},
 	{
 		"objectType": "Faith",
@@ -354,7 +376,8 @@
 		"followerAlignments": [ "LG", "LN", "LE" ],
 		"source": "PZO2101",
 		"id": "c5296875-adf9-4ad4-9c20-dc069631c14f",
-		"aonId": 23
+		"aonId": 23,
+		"hash": "pXjIRkCC"
 	},
 	{
 		"objectType": "Faith",
@@ -376,6 +399,7 @@
 		"followerAlignments": [ "LE", "NE", "CE" ],
 		"source": "PZO2101",
 		"id": "267e8238-260e-473a-92f6-6ac7fefcba69",
-		"aonId": 24
+		"aonId": 24,
+		"hash": "ZbNzrztc"
 	}
 ]

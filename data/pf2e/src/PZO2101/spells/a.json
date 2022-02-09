@@ -43,7 +43,8 @@
 		"targets": "1 creature",
 		"traditions": [ "Divine", "Occult" ],
 		"traits": [ "Chaotic", "Disease", "Evil", "Necromancy" ],
-		"id": "f972b233-e6aa-4690-ac63-0cf1abaea43e"
+		"id": "f972b233-e6aa-4690-ac63-0cf1abaea43e",
+		"hash": "RcCrNXTE"
 	},
 	{
 		"aonId": 2,
@@ -66,7 +67,8 @@
 		"traditions": [ "Arcane", "Primal" ],
 		"traits": [ "Acid", "Attack", "Evocation" ],
 		"focus": false,
-		"id": "6735953e-7bec-4ce0-8400-79e026c9f3a9"
+		"id": "6735953e-7bec-4ce0-8400-79e026c9f3a9",
+		"hash": "gKYbyYvp"
 	},
 	{
 		"aonId": 3,
@@ -123,7 +125,8 @@
 		"traditions": [ "Arcane", "Primal" ],
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
-		"id": "b66a0987-a5c9-45f3-ba7e-f54f691ff2b4"
+		"id": "b66a0987-a5c9-45f3-ba7e-f54f691ff2b4",
+		"hash": "ZzfKQRQF"
 	},
 	{
 		"aonId": 5,
@@ -145,7 +148,8 @@
 		"trigger": "A creature within range enters an environment where it can't breathe.",
 		"duration": "1 minute",
 		"focus": false,
-		"id": "c39ea576-2fe5-4f1a-8731-18522b52fcc9"
+		"id": "c39ea576-2fe5-4f1a-8731-18522b52fcc9",
+		"hash": "vIvprYxx"
 	},
 	{
 		"aonId": 6,
@@ -166,7 +170,8 @@
 		"traditions": [ "Divine", "Primal" ],
 		"traits": [ "Air", "Transmutation" ],
 		"focus": false,
-		"id": "68f4cef2-ec68-4a69-834c-d9ddb6b12d57"
+		"id": "68f4cef2-ec68-4a69-834c-d9ddb6b12d57",
+		"hash": "FltNvZst"
 	},
 	{
 		"aonId": 7,
@@ -191,7 +196,8 @@
 		"traditions": [ "Arcane", "Divine", "Occult", "Primal" ],
 		"traits": [ "Abjuration" ],
 		"focus": false,
-		"id": "32ea9865-53d8-4d0a-a37b-e557d2eb80f0"
+		"id": "32ea9865-53d8-4d0a-a37b-e557d2eb80f0",
+		"hash": "gjGOKBgm"
 	},
 	{
 		"aonId": 8,
@@ -210,7 +216,8 @@
 		"traditions": [ "Occult" ],
 		"traits": [ "Divination" ],
 		"focus": false,
-		"id": "2e5c6d58-8b94-494e-96b1-f7bc0fbd50ae"
+		"id": "2e5c6d58-8b94-494e-96b1-f7bc0fbd50ae",
+		"hash": "SsSBYqAI"
 	},
 	{
 		"aonId": 9,
@@ -237,7 +244,8 @@
 		"traits": [ "Enchantment", "Mental" ],
 		"trigger": "A creature performs an act anathema to your deity.",
 		"focus": false,
-		"id": "1ef86347-704c-4f89-acf3-d3df0cf7816b"
+		"id": "1ef86347-704c-4f89-acf3-d3df0cf7816b",
+		"hash": "bbqDgpFG"
 	},
 	{
 		"aonId": 10,
@@ -269,7 +277,8 @@
 		"traditions": [ "Primal" ],
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
-		"id": "fdddd726-202d-4096-820b-b3128f5a40b5"
+		"id": "fdddd726-202d-4096-820b-b3128f5a40b5",
+		"hash": "kSZHvMCq"
 	},
 	{
 		"aonId": 11,
@@ -290,7 +299,8 @@
 		"traditions": [ "Primal" ],
 		"traits": [ "Enchantment", "Mental" ],
 		"focus": false,
-		"id": "7abc4582-0266-4f0c-a0f7-bdb01b234963"
+		"id": "7abc4582-0266-4f0c-a0f7-bdb01b234963",
+		"hash": "ZqgOOULP"
 	},
 	{
 		"aonId": 12,
@@ -311,7 +321,8 @@
 		"traditions": [ "Primal" ],
 		"traits": [ "Divination", "Mental" ],
 		"focus": false,
-		"id": "30aacfc0-73df-4e02-a244-8f070ea34edf"
+		"id": "30aacfc0-73df-4e02-a244-8f070ea34edf",
+		"hash": "fdICpgbF"
 	},
 	{
 		"aonId": 13,
@@ -332,7 +343,8 @@
 		"traditions": [ "Arcane", "Primal" ],
 		"traits": [ "Transmutation" ],
 		"focus": false,
-		"id": "8f12b56b-7ad9-4d29-8352-7ba1e690f6df"
+		"id": "8f12b56b-7ad9-4d29-8352-7ba1e690f6df",
+		"hash": "IWgdPkpN"
 	},
 	{
 		"aonId": 14,
@@ -353,7 +365,8 @@
 		"traditions": [ "Arcane", "Divine", "Occult" ],
 		"traits": [ "Rare", "Abjuration" ],
 		"focus": false,
-		"id": "bd2a7148-69e5-4c97-8d6d-3c1c12e68d1f"
+		"id": "bd2a7148-69e5-4c97-8d6d-3c1c12e68d1f",
+		"hash": "ytNBttRj"
 	},
 	{
 		"aonId": 15,
@@ -372,7 +385,8 @@
 		"traditions": [ "Divine", "Occult" ],
 		"traits": [ "Divination", "Prediction" ],
 		"focus": false,
-		"id": "7bdb04aa-e260-4525-b4f4-a14f17407ba4"
+		"id": "7bdb04aa-e260-4525-b4f4-a14f17407ba4",
+		"hash": "CkpWODfw"
 	},
 	{
 		"aonId": 16,
@@ -393,6 +407,7 @@
 		"traditions": [ "Divine" ],
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
-		"id": "d2f9d5a9-f199-4073-904d-88a9271964c0"
+		"id": "d2f9d5a9-f199-4073-904d-88a9271964c0",
+		"hash": "qFByBpXS"
 	}
 ]

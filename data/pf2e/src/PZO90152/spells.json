@@ -32,7 +32,8 @@
 		"source": "PZO90152",
 		"focus": false,
 		"aonId": 642,
-		"id": "99bb2a3f-a0e2-4415-ad79-ef55992d788f"
+		"id": "99bb2a3f-a0e2-4415-ad79-ef55992d788f",
+		"hash": "kqCtxBlQ"
 	},
 	{
 		"name": "Favorable Review",
@@ -70,7 +71,8 @@
 		"source": "PZO90152",
 		"focus": false,
 		"aonId": 644,
-		"id": "367a8009-4a34-4232-8a3e-2bd9bb27f5cf"
+		"id": "367a8009-4a34-4232-8a3e-2bd9bb27f5cf",
+		"hash": "XzvLQHEZ"
 	},
 	{
 		"name": "Pyrotechnics",
@@ -118,7 +120,8 @@
 		"source": "PZO90152",
 		"focus": false,
 		"aonId": 645,
-		"id": "fd5f961e-afef-4fa8-b3cd-72d363f5f78a"
+		"id": "fd5f961e-afef-4fa8-b3cd-72d363f5f78a",
+		"hash": "ZmIZtbZk"
 	},
 	{
 		"name": "Pillar of Water",
@@ -137,6 +140,7 @@
 		"source": "PZO90152",
 		"focus": false,
 		"aonId": 646,
-		"id": "c50d4a71-d19b-4c63-82b5-733853eb791a"
+		"id": "c50d4a71-d19b-4c63-82b5-733853eb791a",
+		"hash": "VdZzmpqk"
 	}
 ]

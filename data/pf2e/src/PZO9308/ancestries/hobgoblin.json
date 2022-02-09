@@ -1,4 +1,4 @@
 [
-	{ "objectType": "Heritage", "name": "Shortshanks Hobgoblin", "ancestry": "Hobgoblin", "source": "PZO9308", "id": "fe60d923-4924-4e18-a764-72c27d3f63ef", "aonId": 95 },
-	{ "objectType": "Heritage", "name": "Steelskin Hobgoblin", "ancestry": "Hobgoblin", "source": "PZO9308", "id": "eab97b5b-0ed8-4679-9ada-d1405e608be6", "aonId": 96 }
+	{ "objectType": "Heritage", "name": "Shortshanks Hobgoblin", "ancestry": "Hobgoblin", "source": "PZO9308", "id": "fe60d923-4924-4e18-a764-72c27d3f63ef", "aonId": 95, "hash": "MXjJOxmF" },
+	{ "objectType": "Heritage", "name": "Steelskin Hobgoblin", "ancestry": "Hobgoblin", "source": "PZO9308", "id": "eab97b5b-0ed8-4679-9ada-d1405e608be6", "aonId": 96, "hash": "kgWzdpqp" }
 ]

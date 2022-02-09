@@ -22,7 +22,8 @@
 		"source": "PZO90151",
 		"focus": false,
 		"aonId": 630,
-		"id": "560a5cdf-df69-47f9-aabc-ff4d1e02ead1"
+		"id": "560a5cdf-df69-47f9-aabc-ff4d1e02ead1",
+		"hash": "ngxxrUkb"
 	},
 	{
 		"name": "Personal Rain Cloud",
@@ -46,7 +47,8 @@
 		"source": "PZO90151",
 		"focus": false,
 		"aonId": 631,
-		"id": "1d7fcb8c-d5c9-4a2f-a262-045457e7f123"
+		"id": "1d7fcb8c-d5c9-4a2f-a262-045457e7f123",
+		"hash": "GkUlRfgR"
 	},
 	{
 		"name": "Rime Slick",
@@ -72,7 +74,8 @@
 		"source": "PZO90151",
 		"focus": false,
 		"aonId": 632,
-		"id": "303cb5ce-2304-4009-b5cb-5967cefbd41d"
+		"id": "303cb5ce-2304-4009-b5cb-5967cefbd41d",
+		"hash": "WOzAJWfb"
 	},
 	{
 		"name": "Scouring Sand",
@@ -107,7 +110,8 @@
 		"source": "PZO90151",
 		"focus": false,
 		"aonId": 633,
-		"id": "da626170-13c1-492e-9337-170b1432a6a1"
+		"id": "da626170-13c1-492e-9337-170b1432a6a1",
+		"hash": "tRnTqkcz"
 	},
 	{
 		"name": "Sea Surge",
@@ -136,7 +140,8 @@
 		"source": "PZO90151",
 		"focus": false,
 		"aonId": 638,
-		"id": "03e618f9-fbd0-4685-aff4-dbf8557c2ac0"
+		"id": "03e618f9-fbd0-4685-aff4-dbf8557c2ac0",
+		"hash": "nBjQFYbM"
 	},
 	{
 		"name": "Sudden Bolt",
@@ -159,7 +164,8 @@
 		"source": "PZO90151",
 		"focus": false,
 		"aonId": 639,
-		"id": "3444b19c-f177-43d0-8c54-efb120b85df7"
+		"id": "3444b19c-f177-43d0-8c54-efb120b85df7",
+		"hash": "DQqxqqWO"
 	},
 	{
 		"name": "Unseasonable Squall",
@@ -190,7 +196,8 @@
 		"source": "PZO90151",
 		"focus": false,
 		"aonId": 640,
-		"id": "d7faec42-be14-41a1-aa34-65cf5a1558b6"
+		"id": "d7faec42-be14-41a1-aa34-65cf5a1558b6",
+		"hash": "vQxZrmxd"
 	},
 	{
 		"name": "Verdant Sprout",
@@ -211,6 +218,7 @@
 		"source": "PZO90151",
 		"focus": false,
 		"aonId": 641,
-		"id": "3017fa5d-13fb-4c8b-809f-36d74fff0a4e"
+		"id": "3017fa5d-13fb-4c8b-809f-36d74fff0a4e",
+		"hash": "QdbjBSvY"
 	}
 ]

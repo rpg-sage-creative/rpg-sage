@@ -21,7 +21,8 @@
 		"source": "PZO90154",
 		"focus": false,
 		"aonId": 648,
-		"id": "70c6a04f-563a-42c5-afe8-bbf8288a1c1a"
+		"id": "70c6a04f-563a-42c5-afe8-bbf8288a1c1a",
+		"hash": "dUQRDIZD"
 	},
 	{
 		"name": "Entrancing Eyes",
@@ -58,7 +59,8 @@
 		"source": "PZO90154",
 		"focus": false,
 		"aonId": 649,
-		"id": "aba40354-7ed6-46e5-8fad-5e156d492b2a"
+		"id": "aba40354-7ed6-46e5-8fad-5e156d492b2a",
+		"hash": "ZvWHbqgG"
 	},
 	{
 		"name": "Necrotic Radiation",
@@ -95,6 +97,7 @@
 		"source": "PZO90154",
 		"focus": false,
 		"aonId": 650,
-		"id": "321bfa4c-d6d8-424b-838f-4088fb1e262e"
+		"id": "321bfa4c-d6d8-424b-838f-4088fb1e262e",
+		"hash": "nzrNDgWv"
 	}
 ]

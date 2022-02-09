@@ -11,7 +11,8 @@
 		"benefits": "Your deity's weapon is especially powerful in your hands.",
 		"source": "PZO2101",
 		"aonId": 264,
-		"id": "a3c76617-4ad5-4d91-8199-ef5c15857002"
+		"id": "a3c76617-4ad5-4d91-8199-ef5c15857002",
+		"hash": "ZzJRlmTZ"
 	},
 	{
 		"objectType": "Feat",
@@ -22,7 +23,8 @@
 		"benefits": "Your deity bestows a special spell related to their powers.",
 		"source": "PZO2101",
 		"aonId": 265,
-		"id": "a8b543ea-8de1-497b-9ab6-b77cb540ddaf"
+		"id": "a8b543ea-8de1-497b-9ab6-b77cb540ddaf",
+		"hash": "XXyEXQQb"
 	},
 	{
 		"objectType": "Feat",
@@ -33,7 +35,8 @@
 		"benefits": "Droskar knows you may need to disguise yourself in societies that oppose your faith.",
 		"source": "PZO2101",
 		"aonId": 1144,
-		"id": "a89b3344-2a47-4276-a0dc-28901d1be6ff"
+		"id": "a89b3344-2a47-4276-a0dc-28901d1be6ff",
+		"hash": "QRqEdGjm"
 	},
 	{
 		"objectType": "Feat",
@@ -44,7 +47,8 @@
 		"benefits": "The mordant power of your negative energy grows.",
 		"source": "PZO2101",
 		"aonId": 266,
-		"id": "1b53be1f-46d0-4812-aa33-69779440be03"
+		"id": "1b53be1f-46d0-4812-aa33-69779440be03",
+		"hash": "pRyLVsIj"
 	},
 	{
 		"objectType": "Feat",
@@ -55,7 +59,8 @@
 		"benefits": "Your positive energy is even more vibrant and restorative.",
 		"source": "PZO2101",
 		"aonId": 267,
-		"id": "19ea8512-62c5-4129-9fd9-6567f35ced23"
+		"id": "19ea8512-62c5-4129-9fd9-6567f35ced23",
+		"hash": "rxkgRpKL"
 	},
 	{
 		"objectType": "Feat",
@@ -66,7 +71,8 @@
 		"benefits": "You combine holy energy with positive energy to damage demons, devils, and their evil ilk.",
 		"source": "PZO2101",
 		"aonId": 268,
-		"id": "075f170e-429a-4c54-9eb2-042add74fc7e"
+		"id": "075f170e-429a-4c54-9eb2-042add74fc7e",
+		"hash": "LbhUxjkQ"
 	},
 	{
 		"objectType": "Feat",
@@ -77,7 +83,8 @@
 		"benefits": "You can extend your spells' range.",
 		"source": "PZO2101",
 		"aonId": 181,
-		"id": "50a5f533-31c8-4712-8351-72c4f9027003"
+		"id": "50a5f533-31c8-4712-8351-72c4f9027003",
+		"hash": "btbZtxqX"
 	},
 	{
 		"objectType": "Feat",
@@ -88,7 +95,8 @@
 		"benefits": "Your faith in your deity is represented in an extremely unusual way that some might call heretical",
 		"source": "PZO2101",
 		"aonId": 1173,
-		"id": "350393d9-b679-4692-89df-a9f5474c1a9c"
+		"id": "350393d9-b679-4692-89df-a9f5474c1a9c",
+		"hash": "pZFpZLcj"
 	},
 	{
 		"objectType": "Feat",
@@ -99,7 +107,8 @@
 		"benefits": "You have come to see the overlap between two deities' teachings",
 		"source": "PZO2101",
 		"aonId": 1186,
-		"id": "088590cc-bab6-430a-9674-ca0a87f8b30c"
+		"id": "088590cc-bab6-430a-9674-ca0a87f8b30c",
+		"hash": "AHXHFVtg"
 	},
 	{
 		"objectType": "Feat",
@@ -110,7 +119,8 @@
 		"benefits": "Study broadens your range of simple spells.",
 		"source": "PZO2101",
 		"aonId": 183,
-		"id": "8b0af294-55fd-4e0b-92d4-8a382c6c9600"
+		"id": "8b0af294-55fd-4e0b-92d4-8a382c6c9600",
+		"hash": "rVVSbwxU"
 	},
 	{
 		"objectType": "Feat",
@@ -121,7 +131,8 @@
 		"benefits": "You're a conduit for positive energy, and as you channel it through you, it heals some of your minor injuries.",
 		"source": "PZO2101",
 		"aonId": 271,
-		"id": "e16e079e-7a96-4952-b9bc-1715f28f5e40"
+		"id": "e16e079e-7a96-4952-b9bc-1715f28f5e40",
+		"hash": "wQxAYQTJ"
 	},
 	{
 		"objectType": "Feat",
@@ -132,7 +143,8 @@
 		"benefits": "Carefully etching a sacred image into a physical object, you steel yourself for battle.",
 		"source": "PZO2101",
 		"aonId": 272,
-		"id": "6df33c46-f7d2-4c99-b117-5b03b33247e6"
+		"id": "6df33c46-f7d2-4c99-b117-5b03b33247e6",
+		"hash": "JTPxgSbv"
 	},
 	{
 		"objectType": "Feat",
@@ -143,7 +155,8 @@
 		"benefits": "You draw the life force out of your enemies to heal your own wounds.",
 		"source": "PZO2101",
 		"aonId": 273,
-		"id": "fb622ad5-1dcb-4790-afe6-3fccb347ead3"
+		"id": "fb622ad5-1dcb-4790-afe6-3fccb347ead3",
+		"hash": "QdcFLHbG"
 	},
 	{
 		"objectType": "Feat",
@@ -154,7 +167,8 @@
 		"benefits": "Undead harmed by your positive energy might flee, compelled by an innate aversion to the force opposite undeath.",
 		"source": "PZO2101",
 		"aonId": 274,
-		"id": "611faaba-ccc8-4d55-97a5-a20c77176a64"
+		"id": "611faaba-ccc8-4d55-97a5-a20c77176a64",
+		"hash": "GYjfWtzO"
 	},
 	{
 		"objectType": "Feat",
@@ -165,7 +179,8 @@
 		"benefits": "As you explore your deity's aspects, you move beyond restrictions on healing or harming.",
 		"source": "PZO2101",
 		"aonId": 275,
-		"id": "2925ae65-518d-4ca5-94f0-e64cc4f7ec4e"
+		"id": "2925ae65-518d-4ca5-94f0-e64cc4f7ec4e",
+		"hash": "XJGqkQym"
 	},
 	{
 		"objectType": "Feat",
@@ -176,7 +191,8 @@
 		"benefits": "You siphon the destructive energies of positive or negative energy through a melee attack and into your foe.",
 		"source": "PZO2101",
 		"aonId": 276,
-		"id": "85854766-869e-4dff-8370-9fc9c53eebd3"
+		"id": "85854766-869e-4dff-8370-9fc9c53eebd3",
+		"hash": "AjdxFUFk"
 	},
 	{
 		"objectType": "Feat",
@@ -187,7 +203,8 @@
 		"benefits": "You grasp the animating force within an undead creature and bend it to your will.",
 		"source": "PZO2101",
 		"aonId": 277,
-		"id": "82c9d55a-d6fe-47b4-a31a-4f4ab76a303b"
+		"id": "82c9d55a-d6fe-47b4-a31a-4f4ab76a303b",
+		"hash": "OxvkVhXx"
 	},
 	{
 		"objectType": "Feat",
@@ -198,7 +215,8 @@
 		"benefits": "You can shape the energy you channel in a single direction, reaching farther and in a more directed fashion.",
 		"source": "PZO2101",
 		"aonId": 278,
-		"id": "79b42360-ae91-4b5d-854c-898af82e2cf1"
+		"id": "79b42360-ae91-4b5d-854c-898af82e2cf1",
+		"hash": "TpBbQCdN"
 	},
 	{
 		"objectType": "Feat",
@@ -209,7 +227,8 @@
 		"benefits": "You have long venerated one of your deity's lesser-known aspects",
 		"source": "PZO2101",
 		"aonId": 1172,
-		"id": "f56d3b67-c35b-4921-83ba-b1b47459452e"
+		"id": "f56d3b67-c35b-4921-83ba-b1b47459452e",
+		"hash": "krtTDgyG"
 	},
 	{
 		"objectType": "Feat",
@@ -220,7 +239,8 @@
 		"benefits": "You can direct excess channeled energy outward to benefit an ally.",
 		"source": "PZO2101",
 		"aonId": 279,
-		"id": "473f50ec-f8fb-4387-b370-9555fd9d576d"
+		"id": "473f50ec-f8fb-4387-b370-9555fd9d576d",
+		"hash": "qOQsYfxR"
 	},
 	{
 		"objectType": "Feat",
@@ -231,7 +251,8 @@
 		"benefits": "You pour negative energy into your undead subject to empower its attacks.",
 		"source": "PZO2101",
 		"aonId": 280,
-		"id": "ca27f684-2157-4fe0-bef4-a792d14a1723"
+		"id": "ca27f684-2157-4fe0-bef4-a792d14a1723",
+		"hash": "MxOhqMSV"
 	},
 	{
 		"objectType": "Feat",
@@ -242,7 +263,8 @@
 		"benefits": "The sheer force of your faith can bring a foe crashing down.",
 		"source": "PZO2101",
 		"aonId": 281,
-		"id": "2c449667-ca70-4ea6-9478-1d139bb32ce8"
+		"id": "2c449667-ca70-4ea6-9478-1d139bb32ce8",
+		"hash": "gnyFsFJT"
 	},
 	{
 		"objectType": "Feat",
@@ -253,7 +275,8 @@
 		"benefits": "You siphon residual spell energy into a weapon you're wielding.",
 		"source": "PZO2101",
 		"aonId": 282,
-		"id": "f4861966-f79a-408a-a321-19b9f867c85a"
+		"id": "f4861966-f79a-408a-a321-19b9f867c85a",
+		"hash": "xDsKtwxp"
 	},
 	{
 		"objectType": "Feat",
@@ -264,7 +287,8 @@
 		"benefits": "As you call down divine power, you can prevent some enemies from benefiting or some allies from being hurt.",
 		"source": "PZO2101",
 		"aonId": 283,
-		"id": "62e3ce3b-23a7-4600-8f86-6824f0e49c87"
+		"id": "62e3ce3b-23a7-4600-8f86-6824f0e49c87",
+		"hash": "dTqplIcf"
 	},
 	{
 		"objectType": "Feat",
@@ -275,7 +299,8 @@
 		"benefits": "You don't lose spells easily.",
 		"source": "PZO2101",
 		"aonId": 194,
-		"id": "d1fb05fa-3ed5-4eb6-8387-34b21e82a53e"
+		"id": "d1fb05fa-3ed5-4eb6-8387-34b21e82a53e",
+		"hash": "YRUhhBTm"
 	},
 	{
 		"objectType": "Feat",
@@ -286,7 +311,8 @@
 		"benefits": "Your studies or prayers have unlocked deeper secrets of your deity's domain.",
 		"source": "PZO2101",
 		"aonId": 285,
-		"id": "0efa4a48-f3cd-4737-93f1-304456851b43"
+		"id": "0efa4a48-f3cd-4737-93f1-304456851b43",
+		"hash": "QtRWLQbZ"
 	},
 	{
 		"objectType": "Feat",
@@ -297,7 +323,8 @@
 		"benefits": "You bring a weapon into metaphysical concordance with your deity's beliefs.",
 		"source": "PZO2101",
 		"aonId": 286,
-		"id": "8ff3979e-78a3-4f13-acee-71b04c634ff8"
+		"id": "8ff3979e-78a3-4f13-acee-71b04c634ff8",
+		"hash": "SOQLpTnx"
 	},
 	{
 		"objectType": "Feat",
@@ -308,7 +335,8 @@
 		"benefits": "You can remove conditions with divine grace.",
 		"source": "PZO2101",
 		"aonId": 287,
-		"id": "be899c8d-333b-43f3-80b9-9003a02a4e69"
+		"id": "be899c8d-333b-43f3-80b9-9003a02a4e69",
+		"hash": "XzhLrRbI"
 	},
 	{
 		"objectType": "Feat",
@@ -319,7 +347,8 @@
 		"benefits": "Your positive energy sets undead alight.",
 		"source": "PZO2101",
 		"aonId": 288,
-		"id": "5fde1879-0726-40d0-bfe8-0100c5d210ed"
+		"id": "5fde1879-0726-40d0-bfe8-0100c5d210ed",
+		"hash": "LUsbxRzL"
 	},
 	{
 		"objectType": "Feat",
@@ -330,7 +359,8 @@
 		"benefits": "With elemental forces, you make your emblazoned symbols more potent.",
 		"source": "PZO2101",
 		"aonId": 289,
-		"id": "e9d48ed4-1d4f-4096-8fd8-6e9d66434a3c"
+		"id": "e9d48ed4-1d4f-4096-8fd8-6e9d66434a3c",
+		"hash": "LWKxcOIj"
 	},
 	{
 		"objectType": "Feat",
@@ -341,7 +371,8 @@
 		"benefits": "The force of your deity's castigation strengthens your body so you can strike down the wicked.",
 		"source": "PZO2101",
 		"aonId": 290,
-		"id": "e06cda45-91de-4f39-8f85-11022fc6793c"
+		"id": "e06cda45-91de-4f39-8f85-11022fc6793c",
+		"hash": "BDbJkOpZ"
 	},
 	{
 		"objectType": "Feat",
@@ -352,7 +383,8 @@
 		"benefits": "The restorative power of your healing invigorates the recipient.",
 		"source": "PZO2101",
 		"aonId": 291,
-		"id": "f522dba9-7b7d-410f-845f-7a8ca0d315f1"
+		"id": "f522dba9-7b7d-410f-845f-7a8ca0d315f1",
+		"hash": "zqbgsThZ"
 	},
 	{
 		"objectType": "Feat",
@@ -363,7 +395,8 @@
 		"benefits": "Undead creatures find it all but impossible to resist your commands.",
 		"source": "PZO2101",
 		"aonId": 292,
-		"id": "36e1a08c-e2b4-43a9-9a79-80a701722d07"
+		"id": "36e1a08c-e2b4-43a9-9a79-80a701722d07",
+		"hash": "BpqZsIZr"
 	},
 	{
 		"objectType": "Feat",
@@ -376,7 +409,8 @@
 		"benefits": "Striking out against your enemies draws praise and protection from your deity.",
 		"source": "PZO2101",
 		"aonId": 293,
-		"id": "70a53b13-623b-44aa-9983-14870487347f"
+		"id": "70a53b13-623b-44aa-9983-14870487347f",
+		"hash": "HcrBAhns"
 	},
 	{
 		"objectType": "Feat",
@@ -387,7 +421,8 @@
 		"benefits": "Your faith provides temporary protection in addition to healing.",
 		"source": "PZO2101",
 		"aonId": 294,
-		"id": "68235385-f670-4aee-8f0b-977ce8d691e6"
+		"id": "68235385-f670-4aee-8f0b-977ce8d691e6",
+		"hash": "NgUqThRn"
 	},
 	{
 		"objectType": "Feat",
@@ -398,7 +433,8 @@
 		"benefits": "Your devotion to your deity's domains grows greater, and so does the power granted to you.",
 		"source": "PZO2101",
 		"aonId": 295,
-		"id": "6891c730-e200-4653-8386-dda3391a2ae4"
+		"id": "6891c730-e200-4653-8386-dda3391a2ae4",
+		"hash": "wXOkFRAg"
 	},
 	{
 		"objectType": "Feat",
@@ -409,7 +445,8 @@
 		"benefits": "Your deity's symbol protects against offensive magic.",
 		"source": "PZO2101",
 		"aonId": 296,
-		"id": "2cda793e-b884-415e-bbb1-07e6b9897bae"
+		"id": "2cda793e-b884-415e-bbb1-07e6b9897bae",
+		"hash": "kskPzJSy"
 	},
 	{
 		"objectType": "Feat",
@@ -420,7 +457,8 @@
 		"benefits": "When your deity blesses your warlike acts, you can extend that favor to your allies.",
 		"source": "PZO2101",
 		"aonId": 297,
-		"id": "11a66ec7-0864-49c5-95ae-f8d1bec5c051"
+		"id": "11a66ec7-0864-49c5-95ae-f8d1bec5c051",
+		"hash": "gSAzrCzh"
 	},
 	{
 		"objectType": "Feat",
@@ -431,7 +469,8 @@
 		"benefits": "When you call upon your deity's power to fulfill the promise of their domain, you gain divine protection.",
 		"source": "PZO2101",
 		"aonId": 298,
-		"id": "09d87ffb-3aea-4ff8-bc61-ccc6a479f3c1"
+		"id": "09d87ffb-3aea-4ff8-bc61-ccc6a479f3c1",
+		"hash": "BktApBzW"
 	},
 	{
 		"objectType": "Feat",
@@ -442,7 +481,8 @@
 		"benefits": "The alignment you impose on a weapon lasts much longer.",
 		"source": "PZO2101",
 		"aonId": 299,
-		"id": "f02f198a-7063-4ff7-b6a0-088e8c2358ec"
+		"id": "f02f198a-7063-4ff7-b6a0-088e8c2358ec",
+		"hash": "tJmWjJMs"
 	},
 	{
 		"objectType": "Feat",
@@ -453,7 +493,8 @@
 		"benefits": "Divine power is always at your fingertips, swiftly responding to your call.",
 		"source": "PZO2101",
 		"aonId": 300,
-		"id": "94f1fcb1-c33e-4d02-9bf7-c0aa267e0e9e"
+		"id": "94f1fcb1-c33e-4d02-9bf7-c0aa267e0e9e",
+		"hash": "prCndkDr"
 	},
 	{
 		"objectType": "Feat",
@@ -464,7 +505,8 @@
 		"benefits": "The force of your blow sends your victim back to its home plane.",
 		"source": "PZO2101",
 		"aonId": 301,
-		"id": "e1696ddf-6479-44fc-88b7-1905ff158bc5"
+		"id": "e1696ddf-6479-44fc-88b7-1905ff158bc5",
+		"hash": "RVBvPXQJ"
 	},
 	{
 		"objectType": "Feat",
@@ -475,7 +517,8 @@
 		"benefits": "A life of evil has made you a nexus for your deity's vile power.",
 		"source": "PZO2101",
 		"aonId": 302,
-		"id": "1a002119-4b00-438b-97d9-a738878a2b59"
+		"id": "1a002119-4b00-438b-97d9-a738878a2b59",
+		"hash": "rIwmhtfP"
 	},
 	{
 		"objectType": "Feat",
@@ -486,7 +529,8 @@
 		"benefits": "Your good deeds have brought your deity's grace to you for all of eternity.",
 		"source": "PZO2101",
 		"aonId": 303,
-		"id": "bb46f349-727e-4bc4-bd2b-1640d7334fb7"
+		"id": "bb46f349-727e-4bc4-bd2b-1640d7334fb7",
+		"hash": "QxIXmXYm"
 	},
 	{
 		"objectType": "Feat",
@@ -497,7 +541,8 @@
 		"benefits": "You can cause a creature you bring back from the brink of death to thrive and continue healing.",
 		"source": "PZO2101",
 		"aonId": 304,
-		"id": "9d58fa4d-15aa-42ee-9165-f16455313325"
+		"id": "9d58fa4d-15aa-42ee-9165-f16455313325",
+		"hash": "EkvxsGRR"
 	},
 	{
 		"objectType": "Feat",
@@ -508,7 +553,8 @@
 		"benefits": "The intensity of your focus grows from the investment you've placed in your domains.",
 		"source": "PZO2101",
 		"aonId": 305,
-		"id": "7949d4a7-e7f7-4838-ae2f-f79a0920a68e"
+		"id": "7949d4a7-e7f7-4838-ae2f-f79a0920a68e",
+		"hash": "FMwKtAgr"
 	},
 	{
 		"objectType": "Feat",
@@ -519,7 +565,8 @@
 		"benefits": "When you pull forth positive or negative energy, you also create a smaller pocket of that energy.",
 		"source": "PZO2101",
 		"aonId": 306,
-		"id": "c77d4998-4940-4a5f-b176-3174f35c5cad"
+		"id": "c77d4998-4940-4a5f-b176-3174f35c5cad",
+		"hash": "rybWQSvQ"
 	},
 	{
 		"objectType": "Feat",
@@ -530,7 +577,8 @@
 		"benefits": "You easily banish creatures with your weapon.",
 		"source": "PZO2101",
 		"aonId": 307,
-		"id": "301b4653-b696-415e-8b7d-b8fb29e065d2"
+		"id": "301b4653-b696-415e-8b7d-b8fb29e065d2",
+		"hash": "QwSIUQcZ"
 	},
 	{
 		"objectType": "Feat",
@@ -541,7 +589,8 @@
 		"benefits": "Your extensive service has made you a lesser herald of your deity, which affords you certain privileges.",
 		"source": "PZO2101",
 		"aonId": 308,
-		"id": "51160044-77c1-47ee-ac32-880532e30b4d"
+		"id": "51160044-77c1-47ee-ac32-880532e30b4d",
+		"hash": "RFywYEAv"
 	},
 	{
 		"objectType": "Feat",
@@ -552,7 +601,8 @@
 		"benefits": "Emblazon more equipment at the same time.",
 		"source": "PZO2101",
 		"aonId": 1164,
-		"id": "e50ee0e6-24fb-470a-a54a-bdd6a675be18"
+		"id": "e50ee0e6-24fb-470a-a54a-bdd6a675be18",
+		"hash": "kwSgJSZn"
 	},
 	{
 		"objectType": "Feat",
@@ -563,7 +613,8 @@
 		"benefits": "You are a conduit for truly deific power.",
 		"source": "PZO2101",
 		"aonId": 309,
-		"id": "75932975-c8ba-45dd-9ca3-46beb0c4f4bf"
+		"id": "75932975-c8ba-45dd-9ca3-46beb0c4f4bf",
+		"hash": "TItvWEbn"
 	},
 	{
 		"objectType": "Feat",
@@ -574,6 +625,7 @@
 		"benefits": "Deep understanding of divine revelations into the nature of vital essence allows you to freely manipulate the effects of your positive or negative energy.",
 		"source": "PZO2101",
 		"aonId": 310,
-		"id": "ccf16d8e-48cc-4d9a-9eab-c1a7210930c1"
+		"id": "ccf16d8e-48cc-4d9a-9eab-c1a7210930c1",
+		"hash": "CQWsxfSD"
 	}
 ]

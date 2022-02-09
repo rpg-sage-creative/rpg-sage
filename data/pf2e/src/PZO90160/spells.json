@@ -32,7 +32,8 @@
 		"source": "PZO90160",
 		"focus": false,
 		"aonId": 826,
-		"id": "79c305b6-6c37-4787-acad-f64952f1e02c"
+		"id": "79c305b6-6c37-4787-acad-f64952f1e02c",
+		"hash": "CrRvtCnP"
 	},
 	{
 		"name": "Leng Sting",
@@ -67,7 +68,8 @@
 		"source": "PZO90160",
 		"focus": false,
 		"aonId": 827,
-		"id": "3bffd35d-72ea-458c-ad7a-9891ffa63681"
+		"id": "3bffd35d-72ea-458c-ad7a-9891ffa63681",
+		"hash": "BtWkCZqr"
 	},
 	{
 		"name": "Linnorm Sting",
@@ -102,7 +104,8 @@
 		"source": "PZO90160",
 		"focus": false,
 		"aonId": 828,
-		"id": "aa0e5ce1-c3a5-454e-99db-4e8ca75343f4"
+		"id": "aa0e5ce1-c3a5-454e-99db-4e8ca75343f4",
+		"hash": "GvmZWKAt"
 	},
 	{
 		"name": "Swarming Wasp Stings",
@@ -137,7 +140,8 @@
 		"source": "PZO90160",
 		"focus": false,
 		"aonId": 829,
-		"id": "e56a6caf-aa5f-4621-ac47-c11f30971775"
+		"id": "e56a6caf-aa5f-4621-ac47-c11f30971775",
+		"hash": "VSBCmknq"
 	},
 	{
 		"name": "Wyvern Sting",
@@ -172,6 +176,7 @@
 		"source": "PZO90160",
 		"focus": false,
 		"aonId": 830,
-		"id": "bf62ecfc-37aa-43ea-a913-80190ed1c4ed"
+		"id": "bf62ecfc-37aa-43ea-a913-80190ed1c4ed",
+		"hash": "kzXPtwZS"
 	}
 ]

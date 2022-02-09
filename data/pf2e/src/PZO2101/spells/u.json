@@ -33,7 +33,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Enchantment", "Incapacitation", "Mental" ],
 		"focus": false,
-		"id": "5a2514c3-83ec-4d41-b83b-66006db1be96"
+		"id": "5a2514c3-83ec-4d41-b83b-66006db1be96",
+		"hash": "qkPBzhhA"
 	},
 	{
 		"aonId": 348,
@@ -54,7 +55,8 @@
 		"traditions": [ "divine", "occult" ],
 		"traits": [ "Uncommon", "Abjuration" ],
 		"focus": false,
-		"id": "a86171fb-9fa4-431b-adac-ce8d06a983da"
+		"id": "a86171fb-9fa4-431b-adac-ce8d06a983da",
+		"hash": "tWZdRtTU"
 	},
 	{
 		"aonId": 349,
@@ -91,7 +93,8 @@
 		"traditions": [ "occult" ],
 		"traits": [ "Auditory", "Emotion", "Enchantment", "Fear", "Incapacitation", "Mental" ],
 		"focus": false,
-		"id": "92b65bee-cffe-415c-9f29-8438ce9c966e"
+		"id": "92b65bee-cffe-415c-9f29-8438ce9c966e",
+		"hash": "kAQDtjRK"
 	},
 	{
 		"aonId": 350,
@@ -115,7 +118,8 @@
 		"traditions": [ "primal" ],
 		"traits": [ "Abjuration" ],
 		"focus": false,
-		"id": "2a2d1ae5-4108-43be-837a-2a13ed1821f1"
+		"id": "2a2d1ae5-4108-43be-837a-2a13ed1821f1",
+		"hash": "ZgExnwlP"
 	},
 	{
 		"aonId": 351,
@@ -140,7 +144,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Divination", "Scrying" ],
 		"focus": false,
-		"id": "9fc1cb7b-a6da-47ff-b991-b2b9943a3346"
+		"id": "9fc1cb7b-a6da-47ff-b991-b2b9943a3346",
+		"hash": "ZKFrOIvT"
 	},
 	{
 		"aonId": 352,
@@ -193,6 +198,7 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"heightened": [],
-		"id": "1f127182-6738-4049-8b47-6892a1117f68"
+		"id": "1f127182-6738-4049-8b47-6892a1117f68",
+		"hash": "vpwqcbpX"
 	}
 ]

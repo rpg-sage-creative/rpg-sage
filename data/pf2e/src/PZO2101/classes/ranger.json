@@ -31,7 +31,8 @@
 		"source": "PZO2101",
 		"aonId": 9,
 		"aonTraitId": 136,
-		"id": "887e3cf2-8e44-4a52-a3bd-e7ad942a5b47"
+		"id": "887e3cf2-8e44-4a52-a3bd-e7ad942a5b47",
+		"hash": "JfVMghXp"
 	},
 	{ "objectType": "ClassPath", "name": "Flurry", "class": "Ranger", "source": "PZO2101", "id": "2379236e-4354-4988-9583-d314d8abf356", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Outwit", "class": "Ranger", "source": "PZO2101", "id": "70c1cdbd-34f8-48d1-a044-9e5ed8e7fb69", "aonId": 3 },

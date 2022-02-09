@@ -10,7 +10,8 @@
 		"benefits": "You gain the service of a young animal companion that travels with you.",
 		"source": "PZO2101",
 		"aonId": 311,
-		"id": "d80c7f90-9faf-4ab3-8c42-1f751ea3b1cc"
+		"id": "d80c7f90-9faf-4ab3-8c42-1f751ea3b1cc",
+		"hash": "ZvZWpzWx"
 	},
 	{
 		"objectType": "Feat",
@@ -21,7 +22,8 @@
 		"benefits": "You gain a leshy familiar, a tiny plant that embodies one of the many spirits of nature.",
 		"source": "PZO2101",
 		"aonId": 312,
-		"id": "85f1a41a-0164-4fce-938c-a5df115d39d5"
+		"id": "85f1a41a-0164-4fce-938c-a5df115d39d5",
+		"hash": "BWWsgDtO"
 	},
 	{
 		"objectType": "Feat",
@@ -32,7 +34,8 @@
 		"benefits": "You can extend your spells' range.",
 		"source": "PZO2101",
 		"aonId": 181,
-		"id": "57e7a7ab-7904-47b3-8da0-8973d2d5e09c"
+		"id": "57e7a7ab-7904-47b3-8da0-8973d2d5e09c",
+		"hash": "btbZtxqX"
 	},
 	{
 		"objectType": "Feat",
@@ -43,7 +46,8 @@
 		"benefits": "You are at home out in the elements, reveling in the power of nature unleashed.",
 		"source": "PZO2101",
 		"aonId": 314,
-		"id": "f42f5822-3555-4cd9-86b9-10f04d3fb680"
+		"id": "f42f5822-3555-4cd9-86b9-10f04d3fb680",
+		"hash": "xprQQTpy"
 	},
 	{
 		"objectType": "Feat",
@@ -54,7 +58,8 @@
 		"benefits": "You manipulate the energy of your spell, causing it to spread out and affect a wider area.",
 		"source": "PZO2101",
 		"aonId": 315,
-		"id": "cd0af35c-8481-4791-9499-10dca97f237d"
+		"id": "cd0af35c-8481-4791-9499-10dca97f237d",
+		"hash": "bUWAkEbP"
 	},
 	{
 		"objectType": "Feat",
@@ -65,7 +70,8 @@
 		"benefits": "You are one with the wild, always changing and adapting to meet any challenge.",
 		"source": "PZO2101",
 		"aonId": 316,
-		"id": "aced729c-da2b-4140-99ef-ff9ed178d347"
+		"id": "aced729c-da2b-4140-99ef-ff9ed178d347",
+		"hash": "pTbDbxHz"
 	},
 	{
 		"objectType": "Feat",
@@ -76,7 +82,8 @@
 		"benefits": "You call upon the creatures of nature to come to your aid.",
 		"source": "PZO2101",
 		"aonId": 317,
-		"id": "96b36ecd-c4fe-4d3a-8212-5f6592309d32"
+		"id": "96b36ecd-c4fe-4d3a-8212-5f6592309d32",
+		"hash": "MyzgnyBz"
 	},
 	{
 		"objectType": "Feat",
@@ -87,7 +94,8 @@
 		"benefits": "You infuse your familiar with additional primal energy, increasing its abilities.",
 		"source": "PZO2101",
 		"aonId": 318,
-		"id": "7d1ef752-97e5-417e-a7fc-0f2e3c9d3a93"
+		"id": "7d1ef752-97e5-417e-a7fc-0f2e3c9d3a93",
+		"hash": "YlWtKpFZ"
 	},
 	{
 		"objectType": "Feat",
@@ -98,7 +106,8 @@
 		"benefits": "You have learned the secrets of another druidic order.",
 		"source": "PZO2101",
 		"aonId": 319,
-		"id": "fe0f28dd-cbfa-45a5-8c2e-c8293dcdacca"
+		"id": "fe0f28dd-cbfa-45a5-8c2e-c8293dcdacca",
+		"hash": "QyItrtIW"
 	},
 	{
 		"objectType": "Feat",
@@ -109,7 +118,8 @@
 		"benefits": "Repeated exposure to toxic reagents has fortified your body against poisons of all kinds.",
 		"source": "PZO2101",
 		"aonId": 96,
-		"id": "9a3e32a9-9761-47c6-9265-6577417060a6"
+		"id": "9a3e32a9-9761-47c6-9265-6577417060a6",
+		"hash": "PXQqlEDb"
 	},
 	{
 		"objectType": "Feat",
@@ -120,7 +130,8 @@
 		"benefits": "With additional care and effort, you can take on an alternate form for a longer period of time.",
 		"source": "PZO2101",
 		"aonId": 321,
-		"id": "4af4088b-c769-450d-80ea-571f38364a2d"
+		"id": "4af4088b-c769-450d-80ea-571f38364a2d",
+		"hash": "bRWUVbMQ"
 	},
 	{
 		"objectType": "Feat",
@@ -131,7 +142,8 @@
 		"benefits": "Your animal companion grows up, becoming a mature animal companion, which grants it additional capabilities.",
 		"source": "PZO2101",
 		"aonId": 322,
-		"id": "6defdc60-4f39-45c3-b23d-69859dd25b73"
+		"id": "6defdc60-4f39-45c3-b23d-69859dd25b73",
+		"hash": "XRprYEGR"
 	},
 	{
 		"objectType": "Feat",
@@ -142,7 +154,8 @@
 		"benefits": "You have delved deeper into the teaching of a new order, gaining access to a coveted order spell.",
 		"source": "PZO2101",
 		"aonId": 323,
-		"id": "3c03c45b-f6fe-480b-9580-51214e7abd02"
+		"id": "3c03c45b-f6fe-480b-9580-51214e7abd02",
+		"hash": "bswbZdGg"
 	},
 	{
 		"objectType": "Feat",
@@ -153,7 +166,8 @@
 		"benefits": "Your form is as mutable as the weather, changing to meet your whim.",
 		"source": "PZO2101",
 		"aonId": 324,
-		"id": "d123eef9-e06a-477d-babf-3428d299159e"
+		"id": "d123eef9-e06a-477d-babf-3428d299159e",
+		"hash": "knWrgpbb"
 	},
 	{
 		"objectType": "Feat",
@@ -164,7 +178,8 @@
 		"benefits": "You can always find a path, almost as if foliage parted before you.",
 		"source": "PZO2101",
 		"aonId": 325,
-		"id": "b7c460e7-0fb5-43a5-97eb-5684ff9d367a"
+		"id": "b7c460e7-0fb5-43a5-97eb-5684ff9d367a",
+		"hash": "dqWrXQEG"
 	},
 	{
 		"objectType": "Feat",
@@ -175,7 +190,8 @@
 		"benefits": "You can communicate with plants on a basic level and use Diplomacy to Make an Impression on them and to make very simple Requests of them.",
 		"source": "PZO2101",
 		"aonId": 326,
-		"id": "3baa1816-97e2-4a4e-8a93-c308dc8b9637"
+		"id": "3baa1816-97e2-4a4e-8a93-c308dc8b9637",
+		"hash": "CLPUgkIW"
 	},
 	{
 		"objectType": "Feat",
@@ -186,7 +202,8 @@
 		"benefits": "Your understanding of life expands, allowing you to mimic a wider range of creatures.",
 		"source": "PZO2101",
 		"aonId": 327,
-		"id": "91c92980-0c34-43b3-a260-cbbacda00eef"
+		"id": "91c92980-0c34-43b3-a260-cbbacda00eef",
+		"hash": "VtnlgRQZ"
 	},
 	{
 		"objectType": "Feat",
@@ -197,7 +214,8 @@
 		"benefits": "You don't lose spells easily.",
 		"source": "PZO2101",
 		"aonId": 194,
-		"id": "ce4c10bc-ce67-45df-a40a-50d4a46d14cf"
+		"id": "ce4c10bc-ce67-45df-a40a-50d4a46d14cf",
+		"hash": "YRUhhBTm"
 	},
 	{
 		"objectType": "Feat",
@@ -208,7 +226,8 @@
 		"benefits": "You lash out, directing a burst of storming fury toward a creature that has harmed you.",
 		"source": "PZO2101",
 		"aonId": 329,
-		"id": "4684d7a2-b4f2-416c-968e-abf2cf0152e5"
+		"id": "4684d7a2-b4f2-416c-968e-abf2cf0152e5",
+		"hash": "FMhUYfqd"
 	},
 	{
 		"objectType": "Feat",
@@ -219,7 +238,8 @@
 		"benefits": "You have mastered the shape of ferocious dinosaurs.",
 		"source": "PZO2101",
 		"aonId": 330,
-		"id": "0a739525-3707-4e7e-a6bd-48ab558e33df"
+		"id": "0a739525-3707-4e7e-a6bd-48ab558e33df",
+		"hash": "tQpQtbQH"
 	},
 	{
 		"objectType": "Feat",
@@ -230,7 +250,8 @@
 		"benefits": "You have learned some of the tricks the fey use to bend primal magic toward illusions and trickery.",
 		"source": "PZO2101",
 		"aonId": 331,
-		"id": "a1e56a80-4d66-42f6-bb67-5564f9550a2f"
+		"id": "a1e56a80-4d66-42f6-bb67-5564f9550a2f",
+		"hash": "BWNXFkQs"
 	},
 	{
 		"objectType": "Feat",
@@ -241,7 +262,8 @@
 		"benefits": "Your animal companion continues to grow and develop.",
 		"source": "PZO2101",
 		"aonId": 332,
-		"id": "e529edfd-a8e6-40ce-8a86-8634a57a79ef"
+		"id": "e529edfd-a8e6-40ce-8a86-8634a57a79ef",
+		"hash": "LtfFTfqs"
 	},
 	{
 		"objectType": "Feat",
@@ -252,7 +274,8 @@
 		"benefits": "Wings free you from the shackles of the ground below.",
 		"source": "PZO2101",
 		"aonId": 333,
-		"id": "3b864e7c-9213-4da9-a59d-aee716678bfa"
+		"id": "3b864e7c-9213-4da9-a59d-aee716678bfa",
+		"hash": "KqRqPbGh"
 	},
 	{
 		"objectType": "Feat",
@@ -263,7 +286,8 @@
 		"benefits": "You bid the winds to lift and carry you through the air.",
 		"source": "PZO2101",
 		"aonId": 334,
-		"id": "98f6eb17-591a-4f31-9d42-ceb4bbe76983"
+		"id": "98f6eb17-591a-4f31-9d42-ceb4bbe76983",
+		"hash": "vqbzPtAn"
 	},
 	{
 		"objectType": "Feat",
@@ -274,7 +298,8 @@
 		"benefits": "You understand the fundamental elements of nature such that you can imbue them into your body.",
 		"source": "PZO2101",
 		"aonId": 335,
-		"id": "2e5b8cf2-6b7d-4dc7-b408-8f307c692f0f"
+		"id": "2e5b8cf2-6b7d-4dc7-b408-8f307c692f0f",
+		"hash": "ZJWqWqwZ"
 	},
 	{
 		"objectType": "Feat",
@@ -285,7 +310,8 @@
 		"benefits": "You can take advantage of shapechanging magic to close wounds and patch injuries.",
 		"source": "PZO2101",
 		"aonId": 336,
-		"id": "a2fb0204-468a-4bbf-88b3-dbf331aca91b"
+		"id": "a2fb0204-468a-4bbf-88b3-dbf331aca91b",
+		"hash": "OUvdlchp"
 	},
 	{
 		"objectType": "Feat",
@@ -296,7 +322,8 @@
 		"benefits": "You alter your spells to overcome resistances.",
 		"source": "PZO2101",
 		"aonId": 337,
-		"id": "1786a0a4-0101-43d2-abf4-bd72de49b93a"
+		"id": "1786a0a4-0101-43d2-abf4-bd72de49b93a",
+		"hash": "pTXWxMyg"
 	},
 	{
 		"objectType": "Feat",
@@ -307,7 +334,8 @@
 		"benefits": "You can take the form of a plant creature.",
 		"source": "PZO2101",
 		"aonId": 338,
-		"id": "2d49a13a-a5de-4d39-815c-b19948901b75"
+		"id": "2d49a13a-a5de-4d39-815c-b19948901b75",
+		"hash": "GxZsgIbF"
 	},
 	{
 		"objectType": "Feat",
@@ -318,7 +346,8 @@
 		"benefits": "You and your animal companion fight in tandem, distracting your foes and keeping them off balance.",
 		"source": "PZO2101",
 		"aonId": 339,
-		"id": "e0775781-4ec6-4894-ab5a-7d736b237425"
+		"id": "e0775781-4ec6-4894-ab5a-7d736b237425",
+		"hash": "XzGpqZXv"
 	},
 	{
 		"objectType": "Feat",
@@ -329,7 +358,8 @@
 		"benefits": "You can take on the form of some of the world's most fearsome creatures.",
 		"source": "PZO2101",
 		"aonId": 340,
-		"id": "d051f522-861a-4652-a163-69b24d07f253"
+		"id": "d051f522-861a-4652-a163-69b24d07f253",
+		"hash": "MtSqCOwx"
 	},
 	{
 		"objectType": "Feat",
@@ -340,7 +370,8 @@
 		"benefits": "You share a special kinship with all things green and living.",
 		"source": "PZO2101",
 		"aonId": 341,
-		"id": "ee89a0ce-b852-4ac0-82a9-8773336ae929"
+		"id": "ee89a0ce-b852-4ac0-82a9-8773336ae929",
+		"hash": "WfPnVHEn"
 	},
 	{
 		"objectType": "Feat",
@@ -351,7 +382,8 @@
 		"benefits": "Your plant form sprouts hundreds of spines, and your blood causes mild hallucinations in creatures exposed to it.",
 		"source": "PZO2101",
 		"aonId": 1152,
-		"id": "962869cb-b028-4b7e-a4ed-81d06c008f38"
+		"id": "962869cb-b028-4b7e-a4ed-81d06c008f38",
+		"hash": "fnZmWrwF"
 	},
 	{
 		"objectType": "Feat",
@@ -362,7 +394,8 @@
 		"benefits": "Your connection to nature is particularly strong, and the spirits of nature flock around you, helping you replenish your focus.",
 		"source": "PZO2101",
 		"aonId": 342,
-		"id": "0ba94926-11ec-42eb-83b4-7d91472151f5"
+		"id": "0ba94926-11ec-42eb-83b4-7d91472151f5",
+		"hash": "NtycPbgk"
 	},
 	{
 		"objectType": "Feat",
@@ -373,7 +406,8 @@
 		"benefits": "Whenever you summon an ally, you can empower it with the elemental power of air, earth, fire, or water.",
 		"source": "PZO2101",
 		"aonId": 343,
-		"id": "ce802d45-c10f-4318-b9b3-520ae458318e"
+		"id": "ce802d45-c10f-4318-b9b3-520ae458318e",
+		"hash": "WRDWPLGA"
 	},
 	{
 		"objectType": "Feat",
@@ -384,7 +418,8 @@
 		"benefits": "Your animal companion continues to grow in power and ability, and it is now cunning enough to become specialized.",
 		"source": "PZO2101",
 		"aonId": 344,
-		"id": "085f0e44-b72a-4f4d-b2ee-05fada6a02cb"
+		"id": "085f0e44-b72a-4f4d-b2ee-05fada6a02cb",
+		"hash": "djVnbUdF"
 	},
 	{
 		"objectType": "Feat",
@@ -395,7 +430,8 @@
 		"benefits": "With primal magic sustaining you, you cease aging.",
 		"source": "PZO2101",
 		"aonId": 345,
-		"id": "288bf65e-77fb-4965-bcba-eb64209307df"
+		"id": "288bf65e-77fb-4965-bcba-eb64209307df",
+		"hash": "QTAhsgDC"
 	},
 	{
 		"objectType": "Feat",
@@ -406,7 +442,8 @@
 		"benefits": "You transform into a plant version of yourself.",
 		"source": "PZO2101",
 		"aonId": 346,
-		"id": "fe7886f5-aadb-4169-a305-b5abcf031032"
+		"id": "fe7886f5-aadb-4169-a305-b5abcf031032",
+		"hash": "FQICIqEZ"
 	},
 	{
 		"objectType": "Feat",
@@ -417,7 +454,8 @@
 		"benefits": "You can maintain a spell with hardly a thought.",
 		"source": "PZO2101",
 		"aonId": 206,
-		"id": "f281ebca-70d3-41e2-a23c-e7dde2adf01b"
+		"id": "f281ebca-70d3-41e2-a23c-e7dde2adf01b",
+		"hash": "CVsqkNEk"
 	},
 	{
 		"objectType": "Feat",
@@ -428,7 +466,8 @@
 		"benefits": "You can fill an area with devastating briars that impale and impede your foes.",
 		"source": "PZO2101",
 		"aonId": 348,
-		"id": "6badebbb-115b-4300-b7f9-19b3e6d8e4c3"
+		"id": "6badebbb-115b-4300-b7f9-19b3e6d8e4c3",
+		"hash": "rhQjtMgq"
 	},
 	{
 		"objectType": "Feat",
@@ -439,7 +478,8 @@
 		"benefits": "You can transform into a powerful magical creature.",
 		"source": "PZO2101",
 		"aonId": 349,
-		"id": "836ff9b0-ca9e-4cd7-b3cb-c1a2b15e1285"
+		"id": "836ff9b0-ca9e-4cd7-b3cb-c1a2b15e1285",
+		"hash": "WYTAgbZH"
 	},
 	{
 		"objectType": "Feat",
@@ -450,7 +490,8 @@
 		"benefits": "You can invoke nature's fury upon your foes.",
 		"source": "PZO2101",
 		"aonId": 350,
-		"id": "5fb7f694-a02c-478f-813d-93e531cdd2f6"
+		"id": "5fb7f694-a02c-478f-813d-93e531cdd2f6",
+		"hash": "XUmyKXOR"
 	},
 	{
 		"objectType": "Feat",
@@ -461,7 +502,8 @@
 		"benefits": "Thanks to magic and muscle memory, you can stay in your alternate forms indefinitely.",
 		"source": "PZO2101",
 		"aonId": 351,
-		"id": "bd16386a-f980-413d-8860-65b74efc941a"
+		"id": "bd16386a-f980-413d-8860-65b74efc941a",
+		"hash": "EURssmcb"
 	},
 	{
 		"objectType": "Feat",
@@ -472,7 +514,8 @@
 		"benefits": "Your reservoir of Focus Points is a deep wellspring.",
 		"source": "PZO2101",
 		"aonId": 352,
-		"id": "2fc54487-a595-410e-adc2-76c6f82aa6ff"
+		"id": "2fc54487-a595-410e-adc2-76c6f82aa6ff",
+		"hash": "AcFsCJRc"
 	},
 	{
 		"objectType": "Feat",
@@ -483,7 +526,8 @@
 		"benefits": "Gain the apex companion focus spell.",
 		"source": "PZO2101",
 		"aonId": 1160,
-		"id": "e437f19a-de75-4e6e-85ff-a20ffe72f471"
+		"id": "e437f19a-de75-4e6e-85ff-a20ffe72f471",
+		"hash": "qOPGUXzW"
 	},
 	{
 		"objectType": "Feat",
@@ -494,7 +538,8 @@
 		"benefits": "You have entwined yourself with the natural world, and its full power flows through you.",
 		"source": "PZO2101",
 		"aonId": 353,
-		"id": "f21668bb-722a-4407-8249-b70cfbc42a5f"
+		"id": "f21668bb-722a-4407-8249-b70cfbc42a5f",
+		"hash": "GbjAspPG"
 	},
 	{
 		"objectType": "Feat",
@@ -505,7 +550,8 @@
 		"benefits": "You can cast your spells effortlessly by tapping into the leylines of the world.",
 		"source": "PZO2101",
 		"aonId": 354,
-		"id": "49e0d98c-f42a-4e8a-bead-dedf4710c33c"
+		"id": "49e0d98c-f42a-4e8a-bead-dedf4710c33c",
+		"hash": "vKKQrsBS"
 	},
 	{
 		"objectType": "Feat",
@@ -516,6 +562,7 @@
 		"benefits": "You transcend the limitations of form.",
 		"source": "PZO2101",
 		"aonId": 355,
-		"id": "d93cc866-861b-495d-94b8-ddd584374568"
+		"id": "d93cc866-861b-495d-94b8-ddd584374568",
+		"hash": "bZXYhRwk"
 	}
 ]

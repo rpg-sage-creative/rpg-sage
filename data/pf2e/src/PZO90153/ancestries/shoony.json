@@ -14,10 +14,11 @@
 		],
 		"aonId": 16,
 		"source": "PZO90153",
-		"id": "4742cbd9-7f19-428b-b30d-6c473e4fb770"
+		"id": "4742cbd9-7f19-428b-b30d-6c473e4fb770",
+		"hash": "pPbIdKYz"
 	},
-	{ "objectType": "Heritage", "name": "Bloodhound Shoony", "ancestry": "Shoony", "source": "PZO90153", "aonId": 54, "id": "6d8dd225-f22d-45d7-b82a-e4b37ad6501a" },
-	{ "objectType": "Heritage", "name": "Fishseeker Shoony", "ancestry": "Shoony", "source": "PZO90153", "aonId": 55, "id": "5ade99bd-81a8-4a2c-b592-47d3403f72b4" },
-	{ "objectType": "Heritage", "name": "Paddler Shoony", "ancestry": "Shoony", "source": "PZO90153", "aonId": 56, "id": "4fda89d2-cba1-48f9-be44-edb3a695a027" },
-	{ "objectType": "Heritage", "name": "Thickcoat Shoony", "ancestry": "Shoony", "source": "PZO90153", "aonId": 57, "id": "66528993-f954-4dcb-b5cc-48585523b7af" }
+	{ "objectType": "Heritage", "name": "Bloodhound Shoony", "ancestry": "Shoony", "source": "PZO90153", "aonId": 54, "id": "6d8dd225-f22d-45d7-b82a-e4b37ad6501a", "hash": "cNQqSxSr" },
+	{ "objectType": "Heritage", "name": "Fishseeker Shoony", "ancestry": "Shoony", "source": "PZO90153", "aonId": 55, "id": "5ade99bd-81a8-4a2c-b592-47d3403f72b4", "hash": "RIstfgkH" },
+	{ "objectType": "Heritage", "name": "Paddler Shoony", "ancestry": "Shoony", "source": "PZO90153", "aonId": 56, "id": "4fda89d2-cba1-48f9-be44-edb3a695a027", "hash": "cBppcbDG" },
+	{ "objectType": "Heritage", "name": "Thickcoat Shoony", "ancestry": "Shoony", "source": "PZO90153", "aonId": 57, "id": "66528993-f954-4dcb-b5cc-48585523b7af", "hash": "OgCZyTXV" }
 ]

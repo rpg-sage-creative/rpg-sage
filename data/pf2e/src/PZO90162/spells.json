@@ -32,7 +32,8 @@
 		"source": "PZO90162",
 		"focus": false,
 		"aonId": 837,
-		"id": "50af0cc1-62c0-4c8c-b2e5-2f2d601bd911"
+		"id": "50af0cc1-62c0-4c8c-b2e5-2f2d601bd911",
+		"hash": "vXfsSHfH"
 	},
 	{
 		"name": "Prismatic Shield",
@@ -50,6 +51,7 @@
 		"source": "PZO90162",
 		"focus": false,
 		"aonId": 838,
-		"id": "90a0ca33-4355-4177-b9ad-80d027e48cbb"
+		"id": "90a0ca33-4355-4177-b9ad-80d027e48cbb",
+		"hash": "KCmWZbJB"
 	}
 ]

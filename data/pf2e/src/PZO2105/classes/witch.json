@@ -30,7 +30,8 @@
 		"classPath": "Patron",
 		"aonId": 16,
 		"source": "PZO2105",
-		"id": "3a8e1bb6-cfd6-4f3e-92a2-54ec8638aad9"
+		"id": "3a8e1bb6-cfd6-4f3e-92a2-54ec8638aad9",
+		"hash": "hCQqARON"
 	},
 	{ "objectType": "ClassPath", "name": "Curse", "class": "Witch", "source": "PZO2105", "id": "bd547bc2-5dac-47d9-87a4-71041763a539", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Fate", "class": "Witch", "source": "PZO2105", "id": "44a03dc9-5ad2-4be0-a397-bdb14d8a2b49", "aonId": 3 },

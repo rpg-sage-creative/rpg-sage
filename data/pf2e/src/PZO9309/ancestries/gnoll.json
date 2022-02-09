@@ -14,10 +14,11 @@
 		],
 		"aonId": 44,
 		"source": "PZO9309",
-		"id": "844633bd-6148-408d-8069-8dec73537de8"
+		"id": "844633bd-6148-408d-8069-8dec73537de8",
+		"hash": "ppbmKgVf"
 	},
-	{ "objectType": "Heritage", "name": "Ant Gnoll", "ancestry": "Gnoll", "source": "PZO9309", "id": "2406befd-7457-4811-a484-c57d12377025", "aonId": 166 },
-	{ "objectType": "Heritage", "name": "Great Gnoll", "ancestry": "Gnoll", "source": "PZO9309", "id": "7eaaa210-cacc-47d9-a7d4-713b4f4191d7", "aonId": 167 },
-	{ "objectType": "Heritage", "name": "Sweetbreath Gnoll", "ancestry": "Gnoll", "source": "PZO9309", "id": "257d2d37-f968-4eb0-8aa5-9127df8fe1a3", "aonId": 168 },
-	{ "objectType": "Heritage", "name": "Witch Gnoll", "ancestry": "Gnoll", "source": "PZO9309", "id": "b4bbb2df-2a7f-4da3-a12b-a581f8c1aba3", "aonId": 169 }
+	{ "objectType": "Heritage", "name": "Ant Gnoll", "ancestry": "Gnoll", "source": "PZO9309", "id": "2406befd-7457-4811-a484-c57d12377025", "aonId": 166, "hash": "ZEOESbgg" },
+	{ "objectType": "Heritage", "name": "Great Gnoll", "ancestry": "Gnoll", "source": "PZO9309", "id": "7eaaa210-cacc-47d9-a7d4-713b4f4191d7", "aonId": 167, "hash": "FbBtqgFZ" },
+	{ "objectType": "Heritage", "name": "Sweetbreath Gnoll", "ancestry": "Gnoll", "source": "PZO9309", "id": "257d2d37-f968-4eb0-8aa5-9127df8fe1a3", "aonId": 168, "hash": "kvvUVbXy" },
+	{ "objectType": "Heritage", "name": "Witch Gnoll", "ancestry": "Gnoll", "source": "PZO9309", "id": "b4bbb2df-2a7f-4da3-a12b-a581f8c1aba3", "aonId": 169, "hash": "qgVWwgkF" }
 ]

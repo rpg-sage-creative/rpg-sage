@@ -14,7 +14,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 594,
-		"id": "b07d9ca1-1a16-4edf-b422-1fb3e9e8e16a"
+		"id": "b07d9ca1-1a16-4edf-b422-1fb3e9e8e16a",
+		"hash": "bCGxLzPC"
 	},
 	{
 		"name": "Adaptive Ablation",
@@ -35,7 +36,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 595,
-		"id": "691d1a0c-bae8-48a8-b664-09d363fb147b"
+		"id": "691d1a0c-bae8-48a8-b664-09d363fb147b",
+		"hash": "mMhCQGQc"
 	},
 	{
 		"name": "Winter Bolt",
@@ -64,7 +66,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 596,
-		"id": "d117a3b1-3edd-452d-a408-cc1b94e59eda"
+		"id": "d117a3b1-3edd-452d-a408-cc1b94e59eda",
+		"hash": "SrCpFFbR"
 	},
 	{
 		"name": "Diamond Dust",
@@ -86,7 +89,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 597,
-		"id": "8d569d8f-1543-4068-a45f-fcf1cd7e43c1"
+		"id": "8d569d8f-1543-4068-a45f-fcf1cd7e43c1",
+		"hash": "XwBMQxQn"
 	},
 	{
 		"name": "Withering Grasp",
@@ -115,7 +119,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 598,
-		"id": "f039d25a-0d1b-4758-89f9-d866fc0e1bd9"
+		"id": "f039d25a-0d1b-4758-89f9-d866fc0e1bd9",
+		"hash": "HLRZgxWZ"
 	},
 	{
 		"name": "Fallow Field",
@@ -149,7 +154,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 599,
-		"id": "eaec5ac1-fe25-430c-baf4-066ce0e73dfe"
+		"id": "eaec5ac1-fe25-430c-baf4-066ce0e73dfe",
+		"hash": "ZwhBrYZM"
 	},
 	{
 		"name": "Hyperfocus",
@@ -187,7 +193,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 600,
-		"id": "e849db90-0ed3-4e6d-9e23-e66701a7de3f"
+		"id": "e849db90-0ed3-4e6d-9e23-e66701a7de3f",
+		"hash": "QVztxGXH"
 	},
 	{
 		"name": "Ephemeral Hazards",
@@ -222,7 +229,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 601,
-		"id": "bd6d78ba-8ab9-4a0b-a711-5d54e3e27257"
+		"id": "bd6d78ba-8ab9-4a0b-a711-5d54e3e27257",
+		"hash": "rZMhnUsm"
 	},
 	{
 		"name": "Parch",
@@ -259,7 +267,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 602,
-		"id": "0a4e682c-1788-4550-bb4f-0dfc1caa238c"
+		"id": "0a4e682c-1788-4550-bb4f-0dfc1caa238c",
+		"hash": "vlWvvhfP"
 	},
 	{
 		"name": "Dust Storm",
@@ -281,7 +290,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 603,
-		"id": "92c871c5-4f0d-4878-95d1-fe1e0d7e1673"
+		"id": "92c871c5-4f0d-4878-95d1-fe1e0d7e1673",
+		"hash": "vqQHHJqT"
 	},
 	{
 		"name": "Oathkeeper's Insignia",
@@ -305,7 +315,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 604,
-		"id": "360ac694-2fd3-48e5-a2fe-037a50d082ca"
+		"id": "360ac694-2fd3-48e5-a2fe-037a50d082ca",
+		"hash": "EvgrUjpO"
 	},
 	{
 		"name": "Dutiful Challenge",
@@ -327,7 +338,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 605,
-		"id": "bfa42d08-81d9-4821-9737-5684b3aece76"
+		"id": "bfa42d08-81d9-4821-9737-5684b3aece76",
+		"hash": "hZRfzPRy"
 	},
 	{
 		"name": "Redact",
@@ -353,7 +365,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 606,
-		"id": "f0ec737e-6864-47c5-840f-e07d6fb03aa0"
+		"id": "f0ec737e-6864-47c5-840f-e07d6fb03aa0",
+		"hash": "XdGlBxzh"
 	},
 	{
 		"name": "Ghostly Transcription",
@@ -372,7 +385,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 607,
-		"id": "d49f3533-4785-4e47-a65c-152583c60ea9"
+		"id": "d49f3533-4785-4e47-a65c-152583c60ea9",
+		"hash": "nZWxGVgy"
 	},
 	{
 		"name": "Charged Javelin",
@@ -402,7 +416,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 608,
-		"id": "0901183b-f4f5-41ca-a20b-f1a0d27280ab"
+		"id": "0901183b-f4f5-41ca-a20b-f1a0d27280ab",
+		"hash": "kqNZvwFD"
 	},
 	{
 		"name": "Bottle the Storm",
@@ -424,7 +439,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 609,
-		"id": "67fc5c44-6310-403e-8747-243808f4afd3"
+		"id": "67fc5c44-6310-403e-8747-243808f4afd3",
+		"hash": "tpQODrRD"
 	},
 	{
 		"name": "Divine Plagues",
@@ -457,7 +473,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 610,
-		"id": "b4535517-5148-47a4-b43c-87bcc24230a6"
+		"id": "b4535517-5148-47a4-b43c-87bcc24230a6",
+		"hash": "ktpxCzMK"
 	},
 	{
 		"name": "Foul Miasma",
@@ -491,7 +508,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 611,
-		"id": "b84ecc93-f4a6-4105-8e80-edd92686dd54"
+		"id": "b84ecc93-f4a6-4105-8e80-edd92686dd54",
+		"hash": "QxybJXFv"
 	},
 	{
 		"name": "Share Burden",
@@ -508,7 +526,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 612,
-		"id": "a8c59681-9f18-4cf9-aba8-08db506d27c0"
+		"id": "a8c59681-9f18-4cf9-aba8-08db506d27c0",
+		"hash": "dpxQDGgI"
 	},
 	{
 		"name": "Font of Serenity",
@@ -530,7 +549,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 613,
-		"id": "30809b9f-35ba-41fa-a244-fcd33dfe5bb2"
+		"id": "30809b9f-35ba-41fa-a244-fcd33dfe5bb2",
+		"hash": "CWXRYSSx"
 	},
 	{
 		"name": "Lament",
@@ -552,7 +572,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 614,
-		"id": "43cb1e03-ea99-432a-bd39-40a396d6fe0a"
+		"id": "43cb1e03-ea99-432a-bd39-40a396d6fe0a",
+		"hash": "GCAzKpyD"
 	},
 	{
 		"name": "Overflowing Sorrow",
@@ -588,7 +609,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 615,
-		"id": "64ec1eb1-3589-4432-86f5-06c417129fcb"
+		"id": "64ec1eb1-3589-4432-86f5-06c417129fcb",
+		"hash": "XDAZsJWQ"
 	},
 	{
 		"name": "Eject Soul",
@@ -620,7 +642,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 616,
-		"id": "27dbd1d7-618c-4156-bb1c-63f244173ef8"
+		"id": "27dbd1d7-618c-4156-bb1c-63f244173ef8",
+		"hash": "JVYKPgSq"
 	},
 	{
 		"name": "Ectoplasmic Interstice",
@@ -639,7 +662,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 617,
-		"id": "6a1c6468-3ab2-496a-b3c3-5f1dc1d6b2f4"
+		"id": "6a1c6468-3ab2-496a-b3c3-5f1dc1d6b2f4",
+		"hash": "hvQzDvNf"
 	},
 	{
 		"name": "Zenith Star",
@@ -677,7 +701,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 618,
-		"id": "fe04c758-149a-49e9-9b31-0cd191f91d0c"
+		"id": "fe04c758-149a-49e9-9b31-0cd191f91d0c",
+		"hash": "DWWARkkE"
 	},
 	{
 		"name": "Asterism",
@@ -699,7 +724,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 619,
-		"id": "7b361431-5a4d-47ec-a1ba-3b361e0fa9c4"
+		"id": "7b361431-5a4d-47ec-a1ba-3b361e0fa9c4",
+		"hash": "YskFRynd"
 	},
 	{
 		"name": "Swarmsense",
@@ -721,7 +747,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 620,
-		"id": "559195b1-d5a3-442e-9aab-e4cf8658efab"
+		"id": "559195b1-d5a3-442e-9aab-e4cf8658efab",
+		"hash": "OgrWbHcR"
 	},
 	{
 		"name": "Swarm Form",
@@ -741,7 +768,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 621,
-		"id": "726ecaff-69ab-4203-a291-7244a447123e"
+		"id": "726ecaff-69ab-4203-a291-7244a447123e",
+		"hash": "gbNmwQZH"
 	},
 	{
 		"name": "Delay Consequence",
@@ -761,7 +789,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 622,
-		"id": "e2746578-9735-4af5-ba4c-bd1b1c695e8d"
+		"id": "e2746578-9735-4af5-ba4c-bd1b1c695e8d",
+		"hash": "IBMrtJQB"
 	},
 	{
 		"name": "Stasis",
@@ -795,7 +824,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 623,
-		"id": "68ca50cf-08b0-41b1-9968-9f6ff65237a5"
+		"id": "68ca50cf-08b0-41b1-9968-9f6ff65237a5",
+		"hash": "wtpzXHQr"
 	},
 	{
 		"name": "Object Memory",
@@ -816,7 +846,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 624,
-		"id": "baf346df-da38-401d-91b9-f2e57ce28b36"
+		"id": "baf346df-da38-401d-91b9-f2e57ce28b36",
+		"hash": "JZKzBJhs"
 	},
 	{
 		"name": "Remember the Lost",
@@ -837,7 +868,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 625,
-		"id": "69ac116b-d864-460b-9d13-8cc5c578ea6e"
+		"id": "69ac116b-d864-460b-9d13-8cc5c578ea6e",
+		"hash": "FBBITrtg"
 	},
 	{
 		"name": "Empty Inside",
@@ -856,7 +888,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 626,
-		"id": "fb5309fa-70be-444e-a8d1-bd55115480df"
+		"id": "fb5309fa-70be-444e-a8d1-bd55115480df",
+		"hash": "ZMmQpXgr"
 	},
 	{
 		"name": "Door to Beyond",
@@ -891,7 +924,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 627,
-		"id": "ef2ffd58-5b27-4c12-b8dc-020c962a4bf8"
+		"id": "ef2ffd58-5b27-4c12-b8dc-020c962a4bf8",
+		"hash": "ByvExcxt"
 	},
 	{
 		"name": "Draconic Barrage",
@@ -912,7 +946,8 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 628,
-		"id": "319bd1af-dc8b-4597-adf2-d360a562943e"
+		"id": "319bd1af-dc8b-4597-adf2-d360a562943e",
+		"hash": "OCrRsGFB"
 	},
 	{
 		"name": "Roar of the Wyrm",
@@ -946,6 +981,7 @@
 		"source": "PZO9303",
 		"focus": true,
 		"aonId": 629,
-		"id": "a3a6d8f3-b4d6-4110-ace4-c090a9994b71"
+		"id": "a3a6d8f3-b4d6-4110-ace4-c090a9994b71",
+		"hash": "ZyCTcVHq"
 	}
 ]

@@ -13,7 +13,8 @@
 		"description": "You have a specific disguise that you keep at the ready, worn underneath your outer garment.",
 		"source": "PZO9302",
 		"page": 71,
-		"id": "589ca46a-e3eb-4cee-8dbc-4a784b1ce832"
+		"id": "589ca46a-e3eb-4cee-8dbc-4a784b1ce832",
+		"hash": "TKAGCkUH"
 	},
 	{
 		"aonId": 1066,
@@ -29,7 +30,8 @@
 		"description": "You have a small group of admirers who tend to follow you around while you're in civilized settlements.",
 		"source": "PZO9302",
 		"page": 72,
-		"id": "e705fcbb-e269-4475-a2e2-8b766330cebd"
+		"id": "e705fcbb-e269-4475-a2e2-8b766330cebd",
+		"hash": "tZntYEvt"
 	},
 	{
 		"aonId": 1065,
@@ -59,6 +61,7 @@
 		"description": "You spread rumors, which may or may not be true, about a specific subject.",
 		"source": "PZO9302",
 		"page": 71,
-		"id": "66594538-8e7b-4401-b60d-36ba2573048a"
+		"id": "66594538-8e7b-4401-b60d-36ba2573048a",
+		"hash": "rtbAWtOv"
 	}
 ]

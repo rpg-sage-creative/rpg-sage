@@ -24,7 +24,8 @@
 		],
 		"targets": "1 ripe berry",
 		"traits": [ "Uncommon", "Druid", "Healing", "Necromancy" ],
-		"id": "4d98ed5d-bcd3-4f46-8173-458839025cd2"
+		"id": "4d98ed5d-bcd3-4f46-8173-458839025cd2",
+		"hash": "hqzbrhRx"
 	},
 	{
 		"aonId": 474,
@@ -46,7 +47,8 @@
 		"source": "PZO2101",
 		"targets": "1 willing living animal creature",
 		"traits": [ "Uncommon", "Druid", "Healing", "Necromancy", "Positive" ],
-		"id": "9850b9e6-01db-4e7f-9437-f0e9a404928a"
+		"id": "9850b9e6-01db-4e7f-9437-f0e9a404928a",
+		"hash": "BhPSJrrN"
 	},
 	{
 		"aonId": 475,
@@ -66,7 +68,8 @@
 		"page": 400,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Conjuration", "Druid", "Plant" ],
-		"id": "dce7e1d7-97ba-4d04-9eee-6fcde87eaf1a"
+		"id": "dce7e1d7-97ba-4d04-9eee-6fcde87eaf1a",
+		"hash": "GAvyRWCx"
 	},
 	{
 		"aonId": 476,
@@ -83,7 +86,8 @@
 		"page": 400,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Conjuration", "Druid" ],
-		"id": "9adc885a-a26a-40ad-9ebd-18ed2ebfa640"
+		"id": "9adc885a-a26a-40ad-9ebd-18ed2ebfa640",
+		"hash": "VmzpSbQX"
 	},
 	{
 		"aonId": 477,
@@ -104,7 +108,8 @@
 		"requirements": "You are outdoors and aboveground.",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Air", "Druid", "Electricity", "Evocation" ],
-		"id": "0a5c17b0-a26c-4f75-83ca-c6e910eb369a"
+		"id": "0a5c17b0-a26c-4f75-83ca-c6e910eb369a",
+		"hash": "NRmPUPHP"
 	},
 	{
 		"aonId": 478,
@@ -125,7 +130,8 @@
 		"page": 400,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Air", "Druid", "Transmutation" ],
-		"id": "ee9c5d27-cef0-4d15-aedf-834e95b1263a"
+		"id": "ee9c5d27-cef0-4d15-aedf-834e95b1263a",
+		"hash": "xAMgdgnQ"
 	},
 	{
 		"aonId": 479,
@@ -148,7 +154,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Air", "Druid", "Electricity", "Evocation" ],
-		"id": "3e793407-58a2-442e-857b-8f72bbf70fc0"
+		"id": "3e793407-58a2-442e-857b-8f72bbf70fc0",
+		"hash": "WRVNwrNQ"
 	},
 	{
 		"aonId": 480,
@@ -173,7 +180,8 @@
 		"page": 400,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Druid", "Morph", "Transmutation" ],
-		"id": "c8160e80-4a60-4a30-9fd1-6dbfb7e28b1a"
+		"id": "c8160e80-4a60-4a30-9fd1-6dbfb7e28b1a",
+		"hash": "vLTDkvEt"
 	},
 	{
 		"aonId": 481,
@@ -194,6 +202,7 @@
 		"page": 401,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Druid", "Polymorph", "Transmutation" ],
-		"id": "2aca2226-af33-4dc7-acc5-3c043342e80f"
+		"id": "2aca2226-af33-4dc7-acc5-3c043342e80f",
+		"hash": "dqEPtVzv"
 	}
 ]

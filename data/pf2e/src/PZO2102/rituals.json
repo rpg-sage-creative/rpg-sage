@@ -27,7 +27,8 @@
 		"source": "PZO2102",
 		"focus": false,
 		"aonId": 21,
-		"id": "358a1311-fbdb-43ff-81a8-4280fadc00d8"
+		"id": "358a1311-fbdb-43ff-81a8-4280fadc00d8",
+		"hash": "vYXmvWAM"
 	},
 	{
 		"name": "Angelic Messenger",
@@ -57,7 +58,8 @@
 		"source": "PZO2102",
 		"focus": false,
 		"aonId": 22,
-		"id": "d0f3b141-9c4b-4df3-88d0-857dbba50d61"
+		"id": "d0f3b141-9c4b-4df3-88d0-857dbba50d61",
+		"hash": "qCrsvQxs"
 	},
 	{
 		"name": "Infernal Pact",
@@ -87,6 +89,7 @@
 		"source": "PZO2102",
 		"focus": false,
 		"aonId": 23,
-		"id": "4cb24a18-1512-481b-90ac-bae124d86b2c"
+		"id": "4cb24a18-1512-481b-90ac-bae124d86b2c",
+		"hash": "zMXryEdx"
 	}
 ]

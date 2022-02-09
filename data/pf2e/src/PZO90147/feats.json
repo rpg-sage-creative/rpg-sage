@@ -12,7 +12,8 @@
 		"description": "Create a second identity for yourself with a different name, history, and background.",
 		"source": "PZO90147",
 		"page": 73,
-		"id": "16d6aafa-38dd-49c5-8a68-ddec2fcc3ea6"
+		"id": "16d6aafa-38dd-49c5-8a68-ddec2fcc3ea6",
+		"hash": "MZftpZkC"
 	},
 	{
 		"aonId": 924,
@@ -32,7 +33,8 @@
 		],
 		"source": "PZO90147",
 		"page": 73,
-		"id": "5c4b1599-0238-4bdc-bf81-f0c92fc36d9a"
+		"id": "5c4b1599-0238-4bdc-bf81-f0c92fc36d9a",
+		"hash": "RgNYcQsU"
 	},
 	{
 		"aonId": 925,
@@ -51,7 +53,8 @@
 		],
 		"source": "PZO90147",
 		"page": 73,
-		"id": "af252630-80d6-487e-ad9d-fefec52501c2"
+		"id": "af252630-80d6-487e-ad9d-fefec52501c2",
+		"hash": "nHZzMSCx"
 	},
 	{
 		"aonId": 927,
@@ -67,6 +70,7 @@
 		"description": "You can alter a creature's clothing to improve their social impact.",
 		"source": "PZO90147",
 		"page": 73,
-		"id": "8335a74b-1e0c-41a6-af15-13b6e894fbef"
+		"id": "8335a74b-1e0c-41a6-af15-13b6e894fbef",
+		"hash": "FRKrgfWU"
 	}
 ]

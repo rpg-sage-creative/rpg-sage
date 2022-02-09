@@ -14,10 +14,11 @@
 		],
 		"aonId": 46,
 		"source": "PZO9309",
-		"id": "8e5c6483-ce7f-4e2f-a2c6-d203fce8f157"
+		"id": "8e5c6483-ce7f-4e2f-a2c6-d203fce8f157",
+		"hash": "zXTlqWJZ"
 	},
-	{ "objectType": "Heritage", "name": "Poisonhide Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "d7597da7-d1ca-4dbb-a3b1-27e1d12db444", "aonId": 175 },
-	{ "objectType": "Heritage", "name": "Snaptongue Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "4031b887-592e-4a7e-9723-c4d8dd0fe1ef", "aonId": 176 },
-	{ "objectType": "Heritage", "name": "Stickytoe Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "cee4df08-9b32-4379-8d05-5583a0716458", "aonId": 177 },
-	{ "objectType": "Heritage", "name": "Windweb Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "f2b30ed2-025d-4af9-b930-7d940ac53b78", "aonId": 178 }
+	{ "objectType": "Heritage", "name": "Poisonhide Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "d7597da7-d1ca-4dbb-a3b1-27e1d12db444", "aonId": 175, "hash": "tRhqkZvc" },
+	{ "objectType": "Heritage", "name": "Snaptongue Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "4031b887-592e-4a7e-9723-c4d8dd0fe1ef", "aonId": 176, "hash": "XnvNpNkz" },
+	{ "objectType": "Heritage", "name": "Stickytoe Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "cee4df08-9b32-4379-8d05-5583a0716458", "aonId": 177, "hash": "tPKArDDS" },
+	{ "objectType": "Heritage", "name": "Windweb Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "f2b30ed2-025d-4af9-b930-7d940ac53b78", "aonId": 178, "hash": "fNrMbKbt" }
 ]

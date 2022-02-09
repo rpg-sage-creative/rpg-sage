@@ -8,7 +8,8 @@
 		"page": 166,
 		"source": "PZO2105",
 		"id": "7b28d0c1-359a-458f-b88c-1252b4456007",
-		"aonId": 54
+		"aonId": 54,
+		"hash": "yWjPKrWr"
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -50,7 +51,8 @@
 		"page": 166,
 		"source": "PZO2105",
 		"id": "22fcee8b-1948-4778-90e9-f8bbec50c73e",
-		"aonId": 1932
+		"aonId": 1932,
+		"hash": "zwywXSVC"
 	},
 	{
 		"objectType": "Feat",
@@ -66,7 +68,8 @@
 		"page": 166,
 		"source": "PZO2105",
 		"id": "478b3ba7-6010-4705-b1b7-6d63f586a4a6",
-		"aonId": 1933
+		"aonId": 1933,
+		"hash": "AscrHQDP"
 	},
 	{
 		"objectType": "Feat",
@@ -81,6 +84,7 @@
 		"page": 166,
 		"source": "PZO2105",
 		"id": "dc12fbff-5017-4590-9a25-091e9f0af13e",
-		"aonId": 1934
+		"aonId": 1934,
+		"hash": "PPXGQMnE"
 	}
 ]

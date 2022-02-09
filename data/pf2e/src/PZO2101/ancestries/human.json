@@ -58,7 +58,8 @@
 					"details": "By default, half-elves and half-orcs descend from humans, but your GM might allow you to be the offspring of an elf, orc, or different ancestry. In these cases, the GM will let you select the half-elf or half-orc heritage as the heritage for this other ancestry. The most likely other parent of a half-elf are gnomes and halflings, and the most likely parents of a half-orc are goblins, halflings, and dwarves."
 				}
 			]
-		}
+		},
+		"hash": "dyYnqpps"
 	},
 	{
 		"objectType": "Heritage",
@@ -69,7 +70,8 @@
 		],
 		"source": "PZO2101",
 		"id": "d1dda580-94b1-42cd-8cf9-201d1dde37e8",
-		"aonId": 28
+		"aonId": 28,
+		"hash": "vJxRKFws"
 	},
 	{
 		"objectType": "Heritage",
@@ -80,7 +82,8 @@
 		],
 		"source": "PZO2101",
 		"id": "ae3692c7-5334-4b8f-947b-2afd3356f8f6",
-		"aonId": 29
+		"aonId": 29,
+		"hash": "kFxhgvzK"
 	},
 	{
 		"objectType": "Feat",
@@ -95,7 +98,8 @@
 		"page": 57,
 		"source": "PZO2101",
 		"id": "0666787d-f94a-43eb-96cc-2a3be7f0b3f9",
-		"aonId": 66
+		"aonId": 66,
+		"hash": "ncvCxTtN"
 	},
 	{
 		"objectType": "Feat",
@@ -108,7 +112,8 @@
 		"page": 57,
 		"source": "PZO2101",
 		"id": "6e104ac2-99c0-459d-a95b-e9b4d5951e76",
-		"aonId": 67
+		"aonId": 67,
+		"hash": "xbKrkPRM"
 	},
 	{
 		"objectType": "Feat",
@@ -122,7 +127,8 @@
 		"page": 57,
 		"source": "PZO2101",
 		"id": "9fc1119f-ef05-4197-9629-27867eeabad6",
-		"aonId": 68
+		"aonId": 68,
+		"hash": "xrgRzBZr"
 	},
 	{
 		"objectType": "Feat",
@@ -135,7 +141,8 @@
 		"page": 57,
 		"source": "PZO2101",
 		"id": "bce7e2ff-a71b-4cfe-9391-b2a294905d95",
-		"aonId": 69
+		"aonId": 69,
+		"hash": "XBsFYObO"
 	},
 	{
 		"objectType": "Feat",
@@ -148,7 +155,8 @@
 		"page": 57,
 		"source": "PZO2101",
 		"id": "10de60f9-9bf2-40da-99b9-e2729ff81049",
-		"aonId": 70
+		"aonId": 70,
+		"hash": "GkjWFTMx"
 	},
 	{
 		"objectType": "Feat",
@@ -161,7 +169,8 @@
 		"page": 57,
 		"source": "PZO2101",
 		"id": "9617505c-f4e7-46a8-96ec-81a059aab7a7",
-		"aonId": 71
+		"aonId": 71,
+		"hash": "FUGlqtWJ"
 	},
 	{
 		"objectType": "Feat",
@@ -175,7 +184,8 @@
 		"page": 57,
 		"source": "PZO2101",
 		"id": "b46e5f3f-3d6c-40b0-b5eb-10817816848c",
-		"aonId": 72
+		"aonId": 72,
+		"hash": "gFCqkQtd"
 	},
 	{
 		"objectType": "Feat",
@@ -189,7 +199,8 @@
 		"page": 57,
 		"source": "PZO2101",
 		"id": "77b1cf77-6acd-4880-9c5d-d7c72b4e4ec3",
-		"aonId": 73
+		"aonId": 73,
+		"hash": "JIOgxhnN"
 	},
 	{
 		"objectType": "Feat",
@@ -202,7 +213,8 @@
 		"page": 57,
 		"source": "PZO2101",
 		"id": "c0c66452-4c7a-4cef-8573-d9a5c2fff22e",
-		"aonId": 74
+		"aonId": 74,
+		"hash": "lztLrWOX"
 	},
 	{
 		"objectType": "Feat",
@@ -216,7 +228,8 @@
 		"page": 57,
 		"source": "PZO2101",
 		"id": "e90a648e-95c2-4b26-a675-7ba2c32548f1",
-		"aonId": 75
+		"aonId": 75,
+		"hash": "OjqYdzdt"
 	},
 	{
 		"objectType": "Feat",
@@ -233,7 +246,8 @@
 		"page": 57,
 		"source": "PZO2101",
 		"id": "eef99ac1-4f4e-4bee-824b-bc86da01569d",
-		"aonId": 76
+		"aonId": 76,
+		"hash": "PyQjGtvk"
 	},
 	{
 		"objectType": "Feat",
@@ -247,7 +261,8 @@
 		"page": 58,
 		"source": "PZO2101",
 		"id": "e0551829-f388-43f1-ace6-cfbecb02c81f",
-		"aonId": 77
+		"aonId": 77,
+		"hash": "kVmXdYRk"
 	},
 	{
 		"objectType": "Feat",
@@ -261,6 +276,7 @@
 		"page": 58,
 		"source": "PZO2101",
 		"id": "60542f0e-9f70-4e5f-8797-4970d43407f9",
-		"aonId": 78
+		"aonId": 78,
+		"hash": "rnyzRQlY"
 	}
 ]

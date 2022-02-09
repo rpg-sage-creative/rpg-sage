@@ -1,5 +1,5 @@
 [
-	{ "objectType": "Heritage", "name": "Battle-Ready Orc", "ancestry": "Orc", "source": "PZO9308", "id": "2bdfc93b-d926-46ea-8b12-880da84b752e", "aonId": 106 },
-	{ "objectType": "Heritage", "name": "Grave Orc", "ancestry": "Orc", "source": "PZO9308", "id": "ed439e72-61d4-496b-a676-c61428bbdea8", "aonId": 107 },
-	{ "objectType": "Heritage", "name": "Winter Orc", "ancestry": "Orc", "source": "PZO9308", "id": "41ea67a0-7703-445d-9fef-ec9f7becdbcc", "aonId": 108 }
+	{ "objectType": "Heritage", "name": "Battle-Ready Orc", "ancestry": "Orc", "source": "PZO9308", "id": "2bdfc93b-d926-46ea-8b12-880da84b752e", "aonId": 106, "hash": "rxxWZkON" },
+	{ "objectType": "Heritage", "name": "Grave Orc", "ancestry": "Orc", "source": "PZO9308", "id": "ed439e72-61d4-496b-a676-c61428bbdea8", "aonId": 107, "hash": "BAxpBwrF" },
+	{ "objectType": "Heritage", "name": "Winter Orc", "ancestry": "Orc", "source": "PZO9308", "id": "41ea67a0-7703-445d-9fef-ec9f7becdbcc", "aonId": 108, "hash": "ZxTqcZfm" }
 ]

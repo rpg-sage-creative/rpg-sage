@@ -14,11 +14,12 @@
 		],
 		"aonId": 27,
 		"source": "PZO9308",
-		"id": "e67ad92e-a799-4e76-ada4-cd8e749eef27"
+		"id": "e67ad92e-a799-4e76-ada4-cd8e749eef27",
+		"hash": "QcdpXBsO"
 	},
-	{ "objectType": "Heritage", "name": "Artisan Android", "ancestry": "Android", "source": "PZO9308", "id": "013f324d-0f64-4640-b43a-af574946ed40", "aonId": 113 },
-	{ "objectType": "Heritage", "name": "Impersonator Android", "ancestry": "Android", "source": "PZO9308", "id": "a88b25ab-80dc-4e1a-9ec9-ceb3c06777ed", "aonId": 114 },
-	{ "objectType": "Heritage", "name": "Laborer Android", "ancestry": "Android", "source": "PZO9308", "id": "79af1d03-794b-47ef-a90d-1f0309cb1226", "aonId": 115 },
-	{ "objectType": "Heritage", "name": "Polyglot Android", "ancestry": "Android", "source": "PZO9308", "id": "4c6d8aa9-eefd-409e-a7cf-69528afa7d53", "aonId": 116 },
-	{ "objectType": "Heritage", "name": "Warrior Android", "ancestry": "Android", "source": "PZO9308", "id": "6958f327-3e08-45d4-9d03-055f2e9fb91f", "aonId": 117 }
+	{ "objectType": "Heritage", "name": "Artisan Android", "ancestry": "Android", "source": "PZO9308", "id": "013f324d-0f64-4640-b43a-af574946ed40", "aonId": 113, "hash": "QkyKjnFv" },
+	{ "objectType": "Heritage", "name": "Impersonator Android", "ancestry": "Android", "source": "PZO9308", "id": "a88b25ab-80dc-4e1a-9ec9-ceb3c06777ed", "aonId": 114, "hash": "bgUWqgpx" },
+	{ "objectType": "Heritage", "name": "Laborer Android", "ancestry": "Android", "source": "PZO9308", "id": "79af1d03-794b-47ef-a90d-1f0309cb1226", "aonId": 115, "hash": "CtQKqDpw" },
+	{ "objectType": "Heritage", "name": "Polyglot Android", "ancestry": "Android", "source": "PZO9308", "id": "4c6d8aa9-eefd-409e-a7cf-69528afa7d53", "aonId": 116, "hash": "bkkAlzlg" },
+	{ "objectType": "Heritage", "name": "Warrior Android", "ancestry": "Android", "source": "PZO9308", "id": "6958f327-3e08-45d4-9d03-055f2e9fb91f", "aonId": 117, "hash": "fZZQPUTw" }
 ]

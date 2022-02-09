@@ -1,5 +1,14 @@
 [
-	{ "objectType": "Domain", "name": "Air", "description": "You can control winds and the weather.", "spells": [ "Pushing Gust", "Disperse into Air" ], "source": "PZO2101", "aonId": 2, "id": "50100f91-dd2a-46db-96af-b91d5a245884" },
+	{
+		"objectType": "Domain",
+		"name": "Air",
+		"description": "You can control winds and the weather.",
+		"spells": [ "Pushing Gust", "Disperse into Air" ],
+		"source": "PZO2101",
+		"aonId": 2,
+		"id": "50100f91-dd2a-46db-96af-b91d5a245884",
+		"hash": "NlDbGbEf"
+	},
 	{
 		"objectType": "Domain",
 		"name": "Ambition",
@@ -7,7 +16,8 @@
 		"spells": [ "Blind Ambition", "Competitive Edge" ],
 		"source": "PZO2101",
 		"aonId": 1,
-		"id": "151c74fd-e30e-4d25-a9b4-106db875cce8"
+		"id": "151c74fd-e30e-4d25-a9b4-106db875cce8",
+		"hash": "dIOMsmIW"
 	},
 	{
 		"objectType": "Domain",
@@ -16,7 +26,8 @@
 		"spells": [ "Face in the Crowd", "Pulse of the City" ],
 		"source": "PZO2101",
 		"aonId": 3,
-		"id": "a2b9d5ef-ec11-4a72-9a1f-4c73a58031ce"
+		"id": "a2b9d5ef-ec11-4a72-9a1f-4c73a58031ce",
+		"hash": "BqpARDZB"
 	},
 	{
 		"objectType": "Domain",
@@ -25,7 +36,8 @@
 		"spells": [ "Veil of Confidence", "Delusional Pride" ],
 		"source": "PZO2101",
 		"aonId": 4,
-		"id": "edf1a885-f10a-4ca5-9256-841dfe79d2ec"
+		"id": "edf1a885-f10a-4ca5-9256-841dfe79d2ec",
+		"hash": "JFxqWTkf"
 	},
 	{
 		"objectType": "Domain",
@@ -34,7 +46,8 @@
 		"spells": [ "Splash of Art", "Artistic Flourish" ],
 		"source": "PZO2101",
 		"aonId": 5,
-		"id": "682f7043-c9ea-4753-82ea-fa7a81f61dab"
+		"id": "682f7043-c9ea-4753-82ea-fa7a81f61dab",
+		"hash": "WPQFJGkI"
 	},
 	{
 		"objectType": "Domain",
@@ -43,7 +56,8 @@
 		"spells": [ "Cloak of Shadow", "Darkened Eyes" ],
 		"source": "PZO2101",
 		"aonId": 6,
-		"id": "21cfef9a-0542-4186-8345-2a62818c367e"
+		"id": "21cfef9a-0542-4186-8345-2a62818c367e",
+		"hash": "TQymjXvy"
 	},
 	{
 		"objectType": "Domain",
@@ -55,7 +69,8 @@
 		],
 		"source": "PZO2101",
 		"aonId": 7,
-		"id": "121ccc96-ccd1-41dd-80d4-d9bdbcc6d556"
+		"id": "121ccc96-ccd1-41dd-80d4-d9bdbcc6d556",
+		"hash": "mrBvYVpn"
 	},
 	{
 		"objectType": "Domain",
@@ -64,7 +79,8 @@
 		"spells": [ "Cry of Destruction", "Destructive Aura" ],
 		"source": "PZO2101",
 		"aonId": 8,
-		"id": "978588a3-8cc2-4d32-9c40-d16fa72a5651"
+		"id": "978588a3-8cc2-4d32-9c40-d16fa72a5651",
+		"hash": "xIMfXbRJ"
 	},
 	{
 		"objectType": "Domain",
@@ -76,9 +92,19 @@
 		],
 		"source": "PZO2101",
 		"aonId": 9,
-		"id": "6826631b-587e-4a94-ae53-bba7171a68a5"
+		"id": "6826631b-587e-4a94-ae53-bba7171a68a5",
+		"hash": "kAkbZbzb"
 	},
-	{ "objectType": "Domain", "name": "Earth", "description": "You control soil and stone.", "spells": [ "Hurtling Stone", "Localized Quake" ], "source": "PZO2101", "aonId": 10, "id": "8dcb7626-c8a4-4839-9537-d06d35585f12" },
+	{
+		"objectType": "Domain",
+		"name": "Earth",
+		"description": "You control soil and stone.",
+		"spells": [ "Hurtling Stone", "Localized Quake" ],
+		"source": "PZO2101",
+		"aonId": 10,
+		"id": "8dcb7626-c8a4-4839-9537-d06d35585f12",
+		"hash": "IFFRqcfA"
+	},
 	{
 		"objectType": "Domain",
 		"name": "Family",
@@ -86,10 +112,20 @@
 		"spells": [ "Soothing Words", "Unity" ],
 		"source": "PZO2101",
 		"aonId": 11,
-		"id": "ee997d1d-3e49-4c75-a694-93fd564960a2"
+		"id": "ee997d1d-3e49-4c75-a694-93fd564960a2",
+		"hash": "zTqGgxXv"
 	},
-	{ "objectType": "Domain", "name": "Fate", "description": "You see and understand hidden inevitabilities.", "spells": [ "Read Fate", "Tempt Fate" ], "source": "PZO2101", "aonId": 12, "id": "7f72a020-5a27-4b25-be4a-4dd8501a660d" },
-	{ "objectType": "Domain", "name": "Fire", "description": "You control flame.", "spells": [ "Fire Ray", "Flame Barrier" ], "source": "PZO2101", "aonId": 13, "id": "65a591fa-9714-43cb-a199-81c6b4df4a51" },
+	{
+		"objectType": "Domain",
+		"name": "Fate",
+		"description": "You see and understand hidden inevitabilities.",
+		"spells": [ "Read Fate", "Tempt Fate" ],
+		"source": "PZO2101",
+		"aonId": 12,
+		"id": "7f72a020-5a27-4b25-be4a-4dd8501a660d",
+		"hash": "BXAwkzMq"
+	},
+	{ "objectType": "Domain", "name": "Fire", "description": "You control flame.", "spells": [ "Fire Ray", "Flame Barrier" ], "source": "PZO2101", "aonId": 13, "id": "65a591fa-9714-43cb-a199-81c6b4df4a51", "hash": "cXKstRWI" },
 	{
 		"objectType": "Domain",
 		"name": "Freedom",
@@ -97,7 +133,8 @@
 		"spells": [ "Unimpeded Stride", "Word of Freedom" ],
 		"source": "PZO2101",
 		"aonId": 14,
-		"id": "0c027844-b229-4de4-b15c-af99387a1fcf"
+		"id": "0c027844-b229-4de4-b15c-af99387a1fcf",
+		"hash": "nCFHSQmX"
 	},
 	{
 		"objectType": "Domain",
@@ -109,7 +146,8 @@
 		],
 		"source": "PZO2101",
 		"aonId": 15,
-		"id": "c900ab77-61ea-460b-b224-02d1a09ef276"
+		"id": "c900ab77-61ea-460b-b224-02d1a09ef276",
+		"hash": "CdMcvQXc"
 	},
 	{
 		"objectType": "Domain",
@@ -118,9 +156,19 @@
 		"spells": [ "Overstuff", "Take its Course" ],
 		"source": "PZO2101",
 		"aonId": 16,
-		"id": "be5e253e-e748-4b36-baae-a995ec8fa589"
+		"id": "be5e253e-e748-4b36-baae-a995ec8fa589",
+		"hash": "QNtHYRQs"
 	},
-	{ "objectType": "Domain", "name": "Knowledge", "description": "You receive divine insights.", "spells": [ "Scholarly Recollection", "Know the Enemy" ], "source": "PZO2101", "aonId": 17, "id": "272a8103-6c8e-457a-b783-7757ac58c4c0" },
+	{
+		"objectType": "Domain",
+		"name": "Knowledge",
+		"description": "You receive divine insights.",
+		"spells": [ "Scholarly Recollection", "Know the Enemy" ],
+		"source": "PZO2101",
+		"aonId": 17,
+		"id": "272a8103-6c8e-457a-b783-7757ac58c4c0",
+		"hash": "qRtNBHIp"
+	},
 	{
 		"objectType": "Domain",
 		"name": "Luck",
@@ -128,7 +176,8 @@
 		"spells": [ "Bit of Luck", "Lucky Break" ],
 		"source": "PZO2101",
 		"aonId": 18,
-		"id": "0620a83a-3550-4f08-867c-707fe713d450"
+		"id": "0620a83a-3550-4f08-867c-707fe713d450",
+		"hash": "pYQJUVXj"
 	},
 	{
 		"objectType": "Domain",
@@ -140,7 +189,8 @@
 		],
 		"source": "PZO2101",
 		"aonId": 19,
-		"id": "975258f4-ee88-4528-99f0-a9b5c0263ded"
+		"id": "975258f4-ee88-4528-99f0-a9b5c0263ded",
+		"hash": "SztVZPGf"
 	},
 	{
 		"objectType": "Domain",
@@ -149,9 +199,19 @@
 		"spells": [ "Athletic Rush", "Enduring Might" ],
 		"source": "PZO2101",
 		"aonId": 20,
-		"id": "5b39aabd-e31f-43ae-87b4-df58d0641a06"
+		"id": "5b39aabd-e31f-43ae-87b4-df58d0641a06",
+		"hash": "NgAgRqpt"
 	},
-	{ "objectType": "Domain", "name": "Moon", "description": "You command powers associated with the moon.", "spells": [ "Moonbeam", "Touch of the Moon" ], "source": "PZO2101", "aonId": 21, "id": "0e3e1b98-29be-47d9-9461-63a93fda14ab" },
+	{
+		"objectType": "Domain",
+		"name": "Moon",
+		"description": "You command powers associated with the moon.",
+		"spells": [ "Moonbeam", "Touch of the Moon" ],
+		"source": "PZO2101",
+		"aonId": 21,
+		"id": "0e3e1b98-29be-47d9-9461-63a93fda14ab",
+		"hash": "VhQJnlYv"
+	},
 	{
 		"objectType": "Domain",
 		"name": "Nature",
@@ -162,7 +222,8 @@
 		],
 		"source": "PZO2101",
 		"aonId": 22,
-		"id": "c0b4c36f-d794-4a75-b745-5031918f8660"
+		"id": "c0b4c36f-d794-4a75-b745-5031918f8660",
+		"hash": "kNQQgqps"
 	},
 	{
 		"objectType": "Domain",
@@ -171,7 +232,8 @@
 		"spells": [ "Walking Nightmare", "Shared Nightmare" ],
 		"source": "PZO2101",
 		"aonId": 23,
-		"id": "89017fc4-713e-45ef-972b-d3bac78376bc"
+		"id": "89017fc4-713e-45ef-972b-d3bac78376bc",
+		"hash": "VTrDQVFw"
 	},
 	{
 		"objectType": "Domain",
@@ -180,7 +242,8 @@
 		"spells": [ "Savor the Sting", "Retributive Pain" ],
 		"source": "PZO2101",
 		"aonId": 24,
-		"id": "c2adc308-55ed-4f0e-bb96-745cc5795c8c"
+		"id": "c2adc308-55ed-4f0e-bb96-745cc5795c8c",
+		"hash": "GpDvWpYW"
 	},
 	{
 		"objectType": "Domain",
@@ -189,7 +252,8 @@
 		"spells": [ "Charming Touch", "Captivating Adoration" ],
 		"source": "PZO2101",
 		"aonId": 25,
-		"id": "fa1072b4-6a31-4c2e-9a7a-86ce59e21a08"
+		"id": "fa1072b4-6a31-4c2e-9a7a-86ce59e21a08",
+		"hash": "htxwqOQJ"
 	},
 	{
 		"objectType": "Domain",
@@ -198,7 +262,8 @@
 		"spells": [ "Perfected Mind", "Perfected Form" ],
 		"source": "PZO2101",
 		"aonId": 26,
-		"id": "3236833a-c689-4f27-b16a-26ecff112090"
+		"id": "3236833a-c689-4f27-b16a-26ecff112090",
+		"hash": "tKrCtPBA"
 	},
 	{
 		"objectType": "Domain",
@@ -210,9 +275,19 @@
 		],
 		"source": "PZO2101",
 		"aonId": 27,
-		"id": "294ed01a-1be0-4008-989f-e12b3196ea97"
+		"id": "294ed01a-1be0-4008-989f-e12b3196ea97",
+		"hash": "JJcQEHSA"
 	},
-	{ "objectType": "Domain", "name": "Secrecy", "description": "You protect secrets and keep them hidden.", "spells": [ "Forced Quiet", "Safeguard Secret" ], "source": "PZO2101", "aonId": 28, "id": "f4836e49-a80d-4f9e-8b05-572b752620eb" },
+	{
+		"objectType": "Domain",
+		"name": "Secrecy",
+		"description": "You protect secrets and keep them hidden.",
+		"spells": [ "Forced Quiet", "Safeguard Secret" ],
+		"source": "PZO2101",
+		"aonId": 28,
+		"id": "f4836e49-a80d-4f9e-8b05-572b752620eb",
+		"hash": "YxvvFttF"
+	},
 	{
 		"objectType": "Domain",
 		"name": "Sun",
@@ -220,7 +295,8 @@
 		"spells": [ "Dazzling Flash", "Positive Luminance" ],
 		"source": "PZO2101",
 		"aonId": 29,
-		"id": "7d7e9479-49f4-4255-9d5a-5d38e7a9a17b"
+		"id": "7d7e9479-49f4-4255-9d5a-5d38e7a9a17b",
+		"hash": "FWCNzZtQ"
 	},
 	{
 		"objectType": "Domain",
@@ -232,7 +308,8 @@
 		],
 		"source": "PZO2101",
 		"aonId": 30,
-		"id": "8bdfb774-9d0a-4872-9a52-193b4f388ea8"
+		"id": "8bdfb774-9d0a-4872-9a52-193b4f388ea8",
+		"hash": "spqRVyxV"
 	},
 	{
 		"objectType": "Domain",
@@ -244,9 +321,19 @@
 		],
 		"source": "PZO2101",
 		"aonId": 31,
-		"id": "978fdbbb-f520-4616-974a-cbf3a0a25c51"
+		"id": "978fdbbb-f520-4616-974a-cbf3a0a25c51",
+		"hash": "TVklzOWb"
 	},
-	{ "objectType": "Domain", "name": "Truth", "description": "You pierce lies and discover the truth.", "spells": [ "Word of Truth", "Glimpse the Truth" ], "source": "PZO2101", "aonId": 32, "id": "bffb6647-6ccd-442e-9031-c8c329f61ed3" },
+	{
+		"objectType": "Domain",
+		"name": "Truth",
+		"description": "You pierce lies and discover the truth.",
+		"spells": [ "Word of Truth", "Glimpse the Truth" ],
+		"source": "PZO2101",
+		"aonId": 32,
+		"id": "bffb6647-6ccd-442e-9031-c8c329f61ed3",
+		"hash": "MqrZtxpm"
+	},
 	{
 		"objectType": "Domain",
 		"name": "Tyranny",
@@ -254,7 +341,8 @@
 		"spells": [ "Touch of Obedience", "Commanding Lash" ],
 		"source": "PZO2101",
 		"aonId": 33,
-		"id": "7c62938c-cf64-4c67-b448-d266da0c9bc9"
+		"id": "7c62938c-cf64-4c67-b448-d266da0c9bc9",
+		"hash": "Nmsdjnrq"
 	},
 	{
 		"objectType": "Domain",
@@ -263,9 +351,19 @@
 		"spells": [ "Touch of Undeath", "Malignant Sustenance" ],
 		"source": "PZO2101",
 		"aonId": 34,
-		"id": "cb7bb153-9624-4e72-af3f-9b78ba850b2c"
+		"id": "cb7bb153-9624-4e72-af3f-9b78ba850b2c",
+		"hash": "IqrNfZWg"
 	},
-	{ "objectType": "Domain", "name": "Water", "description": "You control water and bodies of water.", "spells": [ "Tidal Surge", "Downpour" ], "source": "PZO2101", "aonId": 35, "id": "fbf2c0c0-7276-4f70-ade5-d6fec0c15f37" },
+	{
+		"objectType": "Domain",
+		"name": "Water",
+		"description": "You control water and bodies of water.",
+		"spells": [ "Tidal Surge", "Downpour" ],
+		"source": "PZO2101",
+		"aonId": 35,
+		"id": "fbf2c0c0-7276-4f70-ade5-d6fec0c15f37",
+		"hash": "vTpBUWgM"
+	},
 	{
 		"objectType": "Domain",
 		"name": "Wealth",
@@ -273,7 +371,8 @@
 		"spells": [ "Appearance of Wealth", "Precious Metals" ],
 		"source": "PZO2101",
 		"aonId": 36,
-		"id": "5fe54d54-c6b7-491f-ae11-fb8265644a8e"
+		"id": "5fe54d54-c6b7-491f-ae11-fb8265644a8e",
+		"hash": "qQFKJqGO"
 	},
 	{
 		"objectType": "Domain",
@@ -282,6 +381,7 @@
 		"spells": [ "Weapon Surge", "Zeal for Battle" ],
 		"source": "PZO2101",
 		"aonId": 37,
-		"id": "4c9089bc-30d7-4aa2-8278-86317292e0e2"
+		"id": "4c9089bc-30d7-4aa2-8278-86317292e0e2",
+		"hash": "pGvOdCNd"
 	}
 ]

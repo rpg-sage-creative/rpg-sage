@@ -32,7 +32,8 @@
 		"source": "PZO2101",
 		"aonId": 11,
 		"aonTraitId": 148,
-		"id": "e5dcea10-84be-48e1-94c1-d87aa870e4af"
+		"id": "e5dcea10-84be-48e1-94c1-d87aa870e4af",
+		"hash": "bvggVbFp"
 	},
 	{ "objectType": "ClassPath", "name": "Aberrant", "class": "Sorcerer", "source": "PZO2101", "id": "0e23445b-e90b-44c5-90f4-ea5c939943a5", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Angelic", "class": "Sorcerer", "source": "PZO2101", "id": "f196548e-5386-47d1-86f3-8193413a74af", "aonId": 2 },

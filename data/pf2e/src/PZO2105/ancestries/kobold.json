@@ -13,9 +13,10 @@
 		],
 		"aonId": 18,
 		"source": "PZO2105",
-		"id": "df64767b-4bbd-4e02-8c7e-7465c9a59fc9"
+		"id": "df64767b-4bbd-4e02-8c7e-7465c9a59fc9",
+		"hash": "gbRxAjHx"
 	},
-	{ "objectType": "Heritage", "name": "Cavern Kobold", "ancestry": "Kobold", "source": "PZO2105", "id": "7441f059-d6e1-4de5-a148-c32351b922cd", "aonId": 63 },
+	{ "objectType": "Heritage", "name": "Cavern Kobold", "ancestry": "Kobold", "source": "PZO2105", "id": "7441f059-d6e1-4de5-a148-c32351b922cd", "aonId": 63, "hash": "tQRtDxZc" },
 	{
 		"objectType": "Heritage",
 		"name": "Dragonscaled Kobold",
@@ -23,9 +24,10 @@
 		"ancestry": "Kobold",
 		"source": "PZO2105",
 		"id": "2ed1a34c-36c2-4159-8c34-217940fa08aa",
-		"aonId": 64
+		"aonId": 64,
+		"hash": "zzOYnXnM"
 	},
-	{ "objectType": "Heritage", "name": "Spellscale Kobold", "ancestry": "Kobold", "source": "PZO2105", "id": "e7adb1a1-a640-43df-8e58-5e74efc57cd5", "aonId": 65 },
-	{ "objectType": "Heritage", "name": "Strongjaw Kobold", "ancestry": "Kobold", "source": "PZO2105", "id": "e06d2d50-ed36-417c-a96e-db9301571c16", "aonId": 66 },
-	{ "objectType": "Heritage", "name": "Venomtail Kobold", "ancestry": "Kobold", "source": "PZO2105", "id": "a5035631-945e-4b72-b3b4-02b52a3d0080", "aonId": 67 }
+	{ "objectType": "Heritage", "name": "Spellscale Kobold", "ancestry": "Kobold", "source": "PZO2105", "id": "e7adb1a1-a640-43df-8e58-5e74efc57cd5", "aonId": 65, "hash": "dvqYpxDM" },
+	{ "objectType": "Heritage", "name": "Strongjaw Kobold", "ancestry": "Kobold", "source": "PZO2105", "id": "e06d2d50-ed36-417c-a96e-db9301571c16", "aonId": 66, "hash": "nqzUWWkq" },
+	{ "objectType": "Heritage", "name": "Venomtail Kobold", "ancestry": "Kobold", "source": "PZO2105", "id": "a5035631-945e-4b72-b3b4-02b52a3d0080", "aonId": 67, "hash": "sFXBgtLz" }
 ]

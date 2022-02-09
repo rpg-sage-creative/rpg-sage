@@ -15,7 +15,8 @@
 		"range": "15 feet or more",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Conjuration", "Monk", "Teleportation" ],
-		"id": "ff351861-95df-417e-a7c3-3a49799cb74d"
+		"id": "ff351861-95df-417e-a7c3-3a49799cb74d",
+		"hash": "WxNkSQDm"
 	},
 	{
 		"aonId": 483,
@@ -33,7 +34,8 @@
 		"page": 401,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Conjuration", "Monk", "Teleportation" ],
-		"id": "714c8063-0501-4966-b87e-e6e7734def8b"
+		"id": "714c8063-0501-4966-b87e-e6e7734def8b",
+		"hash": "CgAZsMOx"
 	},
 	{
 		"aonId": 484,
@@ -69,7 +71,8 @@
 		"savingThrow": "Fortitude",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Evocation", "Force", "Monk" ],
-		"id": "1460e2f8-1f7a-41c2-b1ed-024f2a24b234"
+		"id": "1460e2f8-1f7a-41c2-b1ed-024f2a24b234",
+		"hash": "WblRXvPg"
 	},
 	{
 		"aonId": 485,
@@ -86,7 +89,8 @@
 		"page": 401,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Monk", "Transmutation" ],
-		"id": "8dce28c4-d582-4ae8-9b1e-316288bafe54"
+		"id": "8dce28c4-d582-4ae8-9b1e-316288bafe54",
+		"hash": "KjbxrPpk"
 	},
 	{
 		"aonId": 486,
@@ -106,7 +110,8 @@
 		"page": 401,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Monk", "Transmutation" ],
-		"id": "f7d592e3-337f-4c39-993f-b1d8d92ed1ac"
+		"id": "f7d592e3-337f-4c39-993f-b1d8d92ed1ac",
+		"hash": "BqrjqXXW"
 	},
 	{
 		"aonId": 487,
@@ -143,7 +148,8 @@
 		"savingThrow": "Fortitude",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Incapacitation", "Monk", "Necromancy" ],
-		"id": "3d990368-1375-4def-a4de-456a1c4babaa"
+		"id": "3d990368-1375-4def-a4de-456a1c4babaa",
+		"hash": "ggkkBJVx"
 	},
 	{
 		"aonId": 488,
@@ -163,7 +169,8 @@
 		"page": 402,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Healing", "Monk", "Necromancy", "Positive" ],
-		"id": "9f329c43-7ba5-4d90-a5e4-6766ae1e26bf"
+		"id": "9f329c43-7ba5-4d90-a5e4-6766ae1e26bf",
+		"hash": "RRkxrWGj"
 	},
 	{
 		"aonId": 489,
@@ -182,7 +189,8 @@
 		"page": 402,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Air", "Evocation", "Monk", "Stance" ],
-		"id": "f5c6f74c-e519-4fc0-bbb6-df2cf0e6dc91"
+		"id": "f5c6f74c-e519-4fc0-bbb6-df2cf0e6dc91",
+		"hash": "gwqhfcWW"
 	},
 	{
 		"aonId": 490,
@@ -203,6 +211,7 @@
 		"page": 402,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Air", "Monk", "Transmutation" ],
-		"id": "684608c6-d3ce-41b0-9fb3-0bb325f913d9"
+		"id": "684608c6-d3ce-41b0-9fb3-0bb325f913d9",
+		"hash": "lZgHbBZI"
 	}
 ]

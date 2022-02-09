@@ -32,7 +32,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 1,
-		"id": "0f5f7bd6-aceb-4235-97b2-0f42a1ae4dac"
+		"id": "0f5f7bd6-aceb-4235-97b2-0f42a1ae4dac",
+		"hash": "QbRKyzqJ"
 	},
 	{
 		"name": "Atone",
@@ -70,7 +71,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 2,
-		"id": "7009e94b-16db-4339-8a05-0c462da98d44"
+		"id": "7009e94b-16db-4339-8a05-0c462da98d44",
+		"hash": "lJWLpzmq"
 	},
 	{
 		"name": "Awaken Animal",
@@ -105,7 +107,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 3,
-		"id": "85365828-d6b6-4cb6-9227-f8a6a3ab7744"
+		"id": "85365828-d6b6-4cb6-9227-f8a6a3ab7744",
+		"hash": "XZIczLkc"
 	},
 	{
 		"name": "Blight",
@@ -137,7 +140,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 4,
-		"id": "9ab0662e-3c63-44d1-a65e-8a6dac358ae8"
+		"id": "9ab0662e-3c63-44d1-a65e-8a6dac358ae8",
+		"hash": "GAJSgqPS"
 	},
 	{
 		"name": "Call Spirit",
@@ -171,7 +175,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 5,
-		"id": "e3a7e7be-ef56-4b65-bfdb-c7afa99a76a9"
+		"id": "e3a7e7be-ef56-4b65-bfdb-c7afa99a76a9",
+		"hash": "BpJgBtXD"
 	},
 	{
 		"name": "Commune",
@@ -205,7 +210,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 6,
-		"id": "077fc116-7303-440d-82f8-f72a2a5a055b"
+		"id": "077fc116-7303-440d-82f8-f72a2a5a055b",
+		"hash": "GnqWHLgN"
 	},
 	{
 		"name": "Commune with Nature",
@@ -225,7 +231,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 7,
-		"id": "6b98c976-b433-4ade-8b8e-fe01e428f09f"
+		"id": "6b98c976-b433-4ade-8b8e-fe01e428f09f",
+		"hash": "thLdyJvv"
 	},
 	{
 		"name": "Consecrate",
@@ -267,7 +274,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 8,
-		"id": "92046261-4d32-4bd7-a040-6d6db5e0885a"
+		"id": "92046261-4d32-4bd7-a040-6d6db5e0885a",
+		"hash": "UGskdVGN"
 	},
 	{
 		"name": "Control Weather",
@@ -312,7 +320,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 9,
-		"id": "efaec3cf-8ef2-40a3-b35e-8fb063c80eb7"
+		"id": "efaec3cf-8ef2-40a3-b35e-8fb063c80eb7",
+		"hash": "rbgnYKBx"
 	},
 	{
 		"name": "Create Undead",
@@ -347,7 +356,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 10,
-		"id": "905ceb84-9b69-449d-b10c-02230d11931d"
+		"id": "905ceb84-9b69-449d-b10c-02230d11931d",
+		"hash": "wxJmbQgt"
 	},
 	{
 		"name": "Freedom",
@@ -382,7 +392,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 11,
-		"id": "1f91513b-9aec-487f-998b-451d331cfa13"
+		"id": "1f91513b-9aec-487f-998b-451d331cfa13",
+		"hash": "YjzMkgXX"
 	},
 	{
 		"name": "Geas",
@@ -425,7 +436,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 12,
-		"id": "189b2020-1b72-481e-9339-bf96bb4a9e5e"
+		"id": "189b2020-1b72-481e-9339-bf96bb4a9e5e",
+		"hash": "WQzGWblK"
 	},
 	{
 		"name": "Imprisonment",
@@ -470,7 +482,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 13,
-		"id": "dd7b3f4d-2928-48ec-9c32-b12dec33e707"
+		"id": "dd7b3f4d-2928-48ec-9c32-b12dec33e707",
+		"hash": "REqznfzd"
 	},
 	{
 		"name": "Inveigle",
@@ -510,7 +523,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 14,
-		"id": "728cb3fa-4392-4622-b234-a98e41352e93"
+		"id": "728cb3fa-4392-4622-b234-a98e41352e93",
+		"hash": "YGzbyhqU"
 	},
 	{
 		"name": "Legend Lore",
@@ -543,7 +557,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 15,
-		"id": "ded27967-0c1d-4d16-89f0-aab1818c29b4"
+		"id": "ded27967-0c1d-4d16-89f0-aab1818c29b4",
+		"hash": "YSgsprKw"
 	},
 	{
 		"name": "Planar Ally",
@@ -577,7 +592,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 16,
-		"id": "1e96b675-ef16-4863-bca7-665d2f034ba4"
+		"id": "1e96b675-ef16-4863-bca7-665d2f034ba4",
+		"hash": "sqtOOOtU"
 	},
 	{
 		"name": "Planar Binding",
@@ -614,7 +630,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 17,
-		"id": "d57ef354-81ed-4018-b969-1335a099667f"
+		"id": "d57ef354-81ed-4018-b969-1335a099667f",
+		"hash": "tHDjGkxR"
 	},
 	{
 		"name": "Plant Growth",
@@ -648,7 +665,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 18,
-		"id": "e9f0c7c5-6b2e-4528-b6f9-5f820e978ae3"
+		"id": "e9f0c7c5-6b2e-4528-b6f9-5f820e978ae3",
+		"hash": "MHUqzAXp"
 	},
 	{
 		"name": "Primal Call",
@@ -670,7 +688,8 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 19,
-		"id": "6af28f68-6c20-4f22-8452-41c1b2aeedbc"
+		"id": "6af28f68-6c20-4f22-8452-41c1b2aeedbc",
+		"hash": "pXOAwWWN"
 	},
 	{
 		"name": "Resurrect",
@@ -721,6 +740,7 @@
 		"source": "PZO2101",
 		"focus": false,
 		"aonId": 20,
-		"id": "640f0898-998d-4846-9fcd-b9f40cd8277d"
+		"id": "640f0898-998d-4846-9fcd-b9f40cd8277d",
+		"hash": "nxYIIOwK"
 	}
 ]

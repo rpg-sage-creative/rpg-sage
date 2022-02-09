@@ -32,7 +32,8 @@
 		"source": "PZO2101",
 		"aonId": 12,
 		"aonTraitId": 166,
-		"id": "7db9f2ff-33f9-43a2-9e5c-8995f8bcd435"
+		"id": "7db9f2ff-33f9-43a2-9e5c-8995f8bcd435",
+		"hash": "vbRjXxQb"
 	},
 	{ "objectType": "ClassPath", "name": "Improved Familiar Attunement", "class": "Wizard", "source": "PZO2101", "id": "ed3df9e6-3dfb-4faf-a2e5-6e243de7ea17", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Metamagical Experimentation", "class": "Wizard", "source": "PZO2101", "id": "62060e9e-9a95-480c-8da6-5bf972ab000a", "aonId": 2 },

@@ -8,9 +8,21 @@
 		"page": 274,
 		"source": "PZO2101",
 		"id": "159cca8b-6dc2-4531-8758-5635a729f571",
-		"aonId": 202
+		"aonId": 202,
+		"hash": "qLcbxTbS"
 	},
-	{ "objectType": "Trait", "name": "Comfort", "details": [ "The armor is so comfortable that you can rest normally while wearing it." ], "page": 275, "source": "PZO2101", "id": "0e71ed89-e621-478c-a52a-71b8a12955ae", "aonId": 203 },
+	{
+		"objectType": "Trait",
+		"name": "Comfort",
+		"details": [
+			"The armor is so comfortable that you can rest normally while wearing it."
+		],
+		"page": 275,
+		"source": "PZO2101",
+		"id": "0e71ed89-e621-478c-a52a-71b8a12955ae",
+		"aonId": 203,
+		"hash": "mZIRjdUW"
+	},
 	{
 		"objectType": "Trait",
 		"name": "Flexible",
@@ -20,7 +32,8 @@
 		"page": 275,
 		"source": "PZO2101",
 		"id": "4fbda904-677a-4cb3-84e1-8d5eec886236",
-		"aonId": 204
+		"aonId": 204,
+		"hash": "DshwUVrT"
 	},
 	{
 		"objectType": "Trait",
@@ -31,7 +44,8 @@
 		"page": 3,
 		"source": "PZO2101",
 		"id": "d2080921-86b0-4c7e-be45-01d894877893",
-		"aonId": 205
+		"aonId": 205,
+		"hash": "DdhIbpdO"
 	},
 	{
 		"objectType": "Trait",
@@ -44,6 +58,7 @@
 		"version": 1,
 		"id": "b402c4ce-9d54-451d-9ce6-0604d3b210ac",
 		"previousId": "D2080921-86B0-4C7E-BE45-01D894877893",
-		"aonId": 205
+		"aonId": 205,
+		"hash": "DdhIbpdO"
 	}
 ]

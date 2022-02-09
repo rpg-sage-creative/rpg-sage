@@ -24,7 +24,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Auditory", "Illusion", "Visual" ],
 		"focus": false,
-		"id": "cf71a1fa-7fc7-4e5f-9b87-00979fd14dd4"
+		"id": "cf71a1fa-7fc7-4e5f-9b87-00979fd14dd4",
+		"hash": "rDHxSJpV"
 	},
 	{
 		"aonId": 159,
@@ -51,7 +52,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
-		"id": "dd59d79e-3446-4010-9e20-6c57dc243641"
+		"id": "dd59d79e-3446-4010-9e20-6c57dc243641",
+		"hash": "MgGtSMzt"
 	},
 	{
 		"aonId": 160,
@@ -77,7 +79,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
-		"id": "6877feb5-0270-4ffb-9c23-1e96d1f79cd8"
+		"id": "6877feb5-0270-4ffb-9c23-1e96d1f79cd8",
+		"hash": "qgRgcXAq"
 	},
 	{
 		"aonId": 161,
@@ -104,7 +107,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Auditory", "Illusion", "Visual" ],
 		"focus": false,
-		"id": "36245924-6978-4567-aab3-55087df493d8"
+		"id": "36245924-6978-4567-aab3-55087df493d8",
+		"hash": "dSfXvvsA"
 	},
 	{
 		"aonId": 162,
@@ -129,7 +133,8 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Evocation" ],
 		"focus": false,
-		"id": "fc51e04e-ef78-4576-ba4f-bb8151101cc9"
+		"id": "fc51e04e-ef78-4576-ba4f-bb8151101cc9",
+		"hash": "BRZUcqKX"
 	},
 	{
 		"aonId": 163,
@@ -160,7 +165,8 @@
 		"traditions": [ "primal" ],
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
-		"id": "87c6927e-0e81-4b30-a7d2-0fc11f264b35"
+		"id": "87c6927e-0e81-4b30-a7d2-0fc11f264b35",
+		"hash": "DDqjMDfZ"
 	},
 	{
 		"aonId": 164,
@@ -184,7 +190,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Illusion" ],
 		"focus": false,
-		"id": "3134e6b6-50f2-4c72-bc43-67ffd446f42d"
+		"id": "3134e6b6-50f2-4c72-bc43-67ffd446f42d",
+		"hash": "NmtAxqZY"
 	},
 	{
 		"aonId": 165,
@@ -209,7 +216,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Illusion" ],
 		"focus": false,
-		"id": "bcf2e35b-5068-4bd7-a605-0e58c13dae54"
+		"id": "bcf2e35b-5068-4bd7-a605-0e58c13dae54",
+		"hash": "WbZdzOBQ"
 	},
 	{
 		"aonId": 166,
@@ -234,6 +242,7 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
-		"id": "30d5efce-9f21-4bb0-9255-382d9bc16e74"
+		"id": "30d5efce-9f21-4bb0-9255-382d9bc16e74",
+		"hash": "xhqtnfsv"
 	}
 ]

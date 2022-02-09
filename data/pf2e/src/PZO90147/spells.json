@@ -34,7 +34,8 @@
 		"targets": "you and 1 other humanoid",
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Uncommon", "Illusion", "Visual" ],
-		"id": "2a4b1c11-b100-4731-8af8-a3f8dfe4594b"
+		"id": "2a4b1c11-b100-4731-8af8-a3f8dfe4594b",
+		"hash": "vOzxgDZE"
 	},
 	{
 		"aonId": 550,
@@ -58,10 +59,11 @@
 		"targets": "1 text or remnants thereof",
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Rare", "Divination" ],
-		"id": "09623c2c-8e2d-4f39-890c-74577a1c3ddc"
+		"id": "09623c2c-8e2d-4f39-890c-74577a1c3ddc",
+		"hash": "NfmWHwWS"
 	},
 	{
-		"aonId": 551,
+		"aonId": 698,
 		"name": "Imprint Message",
 		"source": "PZO90147",
 		"focus": false,
@@ -78,7 +80,8 @@
 		"targets": "1 object",
 		"traditions": [ "occult" ],
 		"traits": [ "Uncommon", "Divination" ],
-		"id": "c4c6fc20-cc05-4ca1-b227-4acee4e313f3"
+		"id": "c4c6fc20-cc05-4ca1-b227-4acee4e313f3",
+		"hash": "nkSwqETg"
 	},
 	{
 		"aonId": 552,
@@ -105,7 +108,7 @@
 		"id": "2badf152-d18b-43e3-ad58-4cc79350bd72"
 	},
 	{
-		"aonId": 553,
+		"aonId": 705,
 		"name": "Object Reading",
 		"source": "PZO90147",
 		"focus": false,
@@ -129,7 +132,8 @@
 		"targets": "1 object",
 		"traditions": [ "occult" ],
 		"traits": [ "Uncommon", "Divination" ],
-		"id": "86e85042-a6c8-4c37-a79a-c5cec7674096"
+		"id": "86e85042-a6c8-4c37-a79a-c5cec7674096",
+		"hash": "jgXWRpDm"
 	},
 	{
 		"aonId": 554,
@@ -165,6 +169,7 @@
 		"targets": "1 creature",
 		"traditions": [ "divine", "occult" ],
 		"traits": [ "Uncommon", "Mental", "Necromancy" ],
-		"id": "99f2db15-7451-4d68-baa6-3ab9f13aedad"
+		"id": "99f2db15-7451-4d68-baa6-3ab9f13aedad",
+		"hash": "vGPQzbQR"
 	}
 ]

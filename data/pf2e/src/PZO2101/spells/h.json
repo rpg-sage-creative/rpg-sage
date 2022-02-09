@@ -37,7 +37,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Illusion", "Incapacitation", "Mental" ],
 		"focus": false,
-		"id": "1f82deb7-fd64-43e3-8bac-abc3ad2f2297"
+		"id": "1f82deb7-fd64-43e3-8bac-abc3ad2f2297",
+		"hash": "DnGbHXxh"
 	},
 	{
 		"aonId": 145,
@@ -62,7 +63,8 @@
 		"traditions": [ "arcane", "occult", "primal" ],
 		"traits": [ "Uncommon", "Illusion" ],
 		"focus": false,
-		"id": "817cf794-63e8-45da-9589-ecfb07f4d63c"
+		"id": "817cf794-63e8-45da-9589-ecfb07f4d63c",
+		"hash": "xYTTqmwD"
 	},
 	{
 		"aonId": 146,
@@ -88,7 +90,8 @@
 		"traditions": [ "divine" ],
 		"traits": [ "Necromancy", "Negative" ],
 		"focus": false,
-		"id": "4e133076-7afc-4c3c-9c98-061149e6f2fe"
+		"id": "4e133076-7afc-4c3c-9c98-061149e6f2fe",
+		"hash": "xZSAzkgW"
 	},
 	{
 		"aonId": 147,
@@ -112,7 +115,8 @@
 		"traditions": [ "arcane", "occult", "primal" ],
 		"traits": [ "Transmutation" ],
 		"focus": false,
-		"id": "b2941441-c403-47e1-8531-8871eb6d7afc"
+		"id": "b2941441-c403-47e1-8531-8871eb6d7afc",
+		"hash": "LVFKzvjk"
 	},
 	{
 		"aonId": 148,
@@ -138,7 +142,8 @@
 		"traditions": [ "divine", "primal" ],
 		"traits": [ "Healing", "Necromancy", "Positive" ],
 		"focus": false,
-		"id": "ba5a4d8e-f7b6-412c-bbb8-24102b988013"
+		"id": "ba5a4d8e-f7b6-412c-bbb8-24102b988013",
+		"hash": "XWfZJtpt"
 	},
 	{
 		"aonId": 149,
@@ -163,7 +168,8 @@
 		"traditions": [ "divine", "occult" ],
 		"traits": [ "Enchantment", "Mental" ],
 		"focus": false,
-		"id": "cd8cb476-ce4e-4561-b70b-49bdfc7765e8"
+		"id": "cd8cb476-ce4e-4561-b70b-49bdfc7765e8",
+		"hash": "MINRxSpk"
 	},
 	{
 		"aonId": 150,
@@ -199,7 +205,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Emotion", "Enchantment", "Mental" ],
 		"focus": false,
-		"id": "814e46f7-94e9-4519-9d31-b108f31403d0"
+		"id": "814e46f7-94e9-4519-9d31-b108f31403d0",
+		"hash": "QOrgrfnh"
 	},
 	{
 		"aonId": 151,
@@ -224,7 +231,8 @@
 		"traditions": [ "divine" ],
 		"traits": [ "Evocation", "Good", "Positive", "Water" ],
 		"focus": false,
-		"id": "a2f0ca07-f09c-4897-b36b-044d6dc6e4b7"
+		"id": "a2f0ca07-f09c-4897-b36b-044d6dc6e4b7",
+		"hash": "WIzQHBZf"
 	},
 	{
 		"aonId": 152,
@@ -248,7 +256,8 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Necromancy", "Negative" ],
 		"focus": false,
-		"id": "43980442-d79e-47fd-9702-3c86f43a522e"
+		"id": "43980442-d79e-47fd-9702-3c86f43a522e",
+		"hash": "xXpXUryK"
 	},
 	{
 		"aonId": 153,
@@ -272,7 +281,8 @@
 		"traditions": [ "arcane", "occult", "primal" ],
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
-		"id": "5098e09e-1120-4895-a3b6-8c3303c819c3"
+		"id": "5098e09e-1120-4895-a3b6-8c3303c819c3",
+		"hash": "wggWWtxW"
 	},
 	{
 		"aonId": 154,
@@ -296,7 +306,8 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Attack", "Evocation", "Water" ],
 		"focus": false,
-		"id": "4ee17a70-d289-4617-afe3-3a73cabad929"
+		"id": "4ee17a70-d289-4617-afe3-3a73cabad929",
+		"hash": "rJmxEOgG"
 	},
 	{
 		"aonId": 155,
@@ -319,7 +330,8 @@
 		"traditions": [ "primal" ],
 		"traits": [ "Evocation", "Water" ],
 		"focus": false,
-		"id": "d1afd110-3e90-4206-8842-ce5df848abfb"
+		"id": "d1afd110-3e90-4206-8842-ce5df848abfb",
+		"hash": "rgrmDxpW"
 	},
 	{
 		"aonId": 156,
@@ -337,7 +349,8 @@
 		"traditions": [ "occult" ],
 		"traits": [ "Divination" ],
 		"focus": false,
-		"id": "44ecd3c6-a24c-4061-9327-14732802f7fe"
+		"id": "44ecd3c6-a24c-4061-9327-14732802f7fe",
+		"hash": "WtqZHrDW"
 	},
 	{
 		"aonId": 157,
@@ -370,6 +383,7 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
-		"id": "d9ec5a4d-7bfc-47c1-9c85-ca0a062b0841"
+		"id": "d9ec5a4d-7bfc-47c1-9c85-ca0a062b0841",
+		"hash": "UpfrBxWv"
 	}
 ]

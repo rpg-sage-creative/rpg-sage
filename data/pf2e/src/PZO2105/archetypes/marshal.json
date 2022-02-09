@@ -11,7 +11,8 @@
 		"page": 180,
 		"source": "PZO2105",
 		"id": "dc22950e-e96f-451c-8ca6-aa32353db066",
-		"aonId": 66
+		"aonId": 66,
+		"hash": "MNMkqCDQ"
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -58,7 +59,8 @@
 		"page": 180,
 		"source": "PZO2105",
 		"id": "06d13a24-7f69-430a-a242-50fc7946d7ec",
-		"aonId": 2006
+		"aonId": 2006,
+		"hash": "qXyrCrXH"
 	},
 	{
 		"objectType": "Feat",
@@ -87,7 +89,8 @@
 		"page": 180,
 		"source": "PZO2105",
 		"id": "68e5db0e-5f68-4e4e-a4c3-edb0ea55d12b",
-		"aonId": 2007
+		"aonId": 2007,
+		"hash": "fKXXrbmV"
 	},
 	{
 		"objectType": "Feat",
@@ -117,7 +120,8 @@
 		"page": 180,
 		"source": "PZO2105",
 		"id": "5d21fae5-be66-4953-9f5b-d14f9e98dbef",
-		"aonId": 2009
+		"aonId": 2009,
+		"hash": "ZQEwtAFX"
 	},
 	{
 		"objectType": "Feat",
@@ -133,7 +137,8 @@
 		"page": 180,
 		"source": "PZO2105",
 		"id": "9a2cab5a-582d-45cf-9cd8-3442a667de97",
-		"aonId": 2010
+		"aonId": 2010,
+		"hash": "EvKUqhQN"
 	},
 	{
 		"objectType": "Feat",
@@ -148,7 +153,8 @@
 		"page": 180,
 		"source": "PZO2105",
 		"id": "4df5151d-a056-4b64-b353-d4d4f7c7fcac",
-		"aonId": 2011
+		"aonId": 2011,
+		"hash": "TSCSsklR"
 	},
 	{
 		"objectType": "Feat",
@@ -162,7 +168,8 @@
 		"page": 181,
 		"source": "PZO2105",
 		"id": "d605b986-e8cb-4800-89d4-c35ae6f2afcf",
-		"aonId": 2012
+		"aonId": 2012,
+		"hash": "qJXffQnk"
 	},
 	{
 		"objectType": "Feat",
@@ -193,7 +200,8 @@
 		"page": 181,
 		"source": "PZO2105",
 		"id": "5f58fa7e-1fba-413f-9a4f-bd9ba02b6b08",
-		"aonId": 2014
+		"aonId": 2014,
+		"hash": "QkhpWpnr"
 	},
 	{
 		"objectType": "Feat",
@@ -208,7 +216,8 @@
 		"page": 181,
 		"source": "PZO2105",
 		"id": "07adefb3-b57a-4612-adb8-2e04ca20655a",
-		"aonId": 2015
+		"aonId": 2015,
+		"hash": "UKgUZspB"
 	},
 	{
 		"objectType": "Feat",
@@ -222,7 +231,8 @@
 		"page": 181,
 		"source": "PZO2105",
 		"id": "2c6cedbc-5d7d-4144-830c-baaee989e2cc",
-		"aonId": 2016
+		"aonId": 2016,
+		"hash": "mmxqbhxp"
 	},
 	{
 		"objectType": "Feat",
@@ -239,6 +249,7 @@
 		"page": 181,
 		"source": "PZO2105",
 		"id": "11b469be-8a9d-45e8-9daa-398ad738e25a",
-		"aonId": 2017
+		"aonId": 2017,
+		"hash": "ZQtxrjyC"
 	}
 ]

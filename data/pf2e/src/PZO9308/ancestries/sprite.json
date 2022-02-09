@@ -13,11 +13,12 @@
 		],
 		"aonId": 39,
 		"source": "PZO9308",
-		"id": "607d1fed-e3d8-4563-9706-086428ce73db"
+		"id": "607d1fed-e3d8-4563-9706-086428ce73db",
+		"hash": "WOwQdMOt"
 	},
-	{ "objectType": "Heritage", "name": "Draxie", "ancestry": "Sprite", "source": "PZO9308", "id": "e106edfb-ba70-477c-a96c-89703fed5648", "aonId": 140 },
-	{ "objectType": "Heritage", "name": "Grig", "ancestry": "Sprite", "source": "PZO9308", "id": "dcbf51f9-f78c-4214-9743-3d6bb72f22ad", "aonId": 141 },
-	{ "objectType": "Heritage", "name": "Luminous Sprite", "ancestry": "Sprite", "source": "PZO9308", "id": "e64da643-202f-4bc7-a0c2-c2c0722e9cd9", "aonId": 142 },
-	{ "objectType": "Heritage", "name": "Melixie", "ancestry": "Sprite", "source": "PZO9308", "id": "b78cdf38-08bd-49e9-b62b-1729fcc0af68", "aonId": 143 },
-	{ "objectType": "Heritage", "name": "Nyktera", "ancestry": "Sprite", "source": "PZO9308", "id": "f6537dcb-71b9-4537-a30f-aa21e9ac0333", "aonId": 144 }
+	{ "objectType": "Heritage", "name": "Draxie", "ancestry": "Sprite", "source": "PZO9308", "id": "e106edfb-ba70-477c-a96c-89703fed5648", "aonId": 140, "hash": "DgQbxkIF" },
+	{ "objectType": "Heritage", "name": "Grig", "ancestry": "Sprite", "source": "PZO9308", "id": "dcbf51f9-f78c-4214-9743-3d6bb72f22ad", "aonId": 141, "hash": "kRZWYVqg" },
+	{ "objectType": "Heritage", "name": "Luminous Sprite", "ancestry": "Sprite", "source": "PZO9308", "id": "e64da643-202f-4bc7-a0c2-c2c0722e9cd9", "aonId": 142, "hash": "nQQZnpbp" },
+	{ "objectType": "Heritage", "name": "Melixie", "ancestry": "Sprite", "source": "PZO9308", "id": "b78cdf38-08bd-49e9-b62b-1729fcc0af68", "aonId": 143, "hash": "JGhpfcrX" },
+	{ "objectType": "Heritage", "name": "Nyktera", "ancestry": "Sprite", "source": "PZO9308", "id": "f6537dcb-71b9-4537-a30f-aa21e9ac0333", "aonId": 144, "hash": "KxrARffD" }
 ]

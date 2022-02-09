@@ -1,5 +1,16 @@
 [
-	{ "objectType": "Archetype", "name": "Oracle", "details": [ "A mysterious force granted you divine magic and a curse." ], "page": 152, "source": "PZO2105", "id": "e7dc56e5-a3bf-480f-b40e-14803dd9b54c", "aonId": 42 },
+	{
+		"objectType": "Archetype",
+		"name": "Oracle",
+		"details": [
+			"A mysterious force granted you divine magic and a curse."
+		],
+		"page": 152,
+		"source": "PZO2105",
+		"id": "e7dc56e5-a3bf-480f-b40e-14803dd9b54c",
+		"aonId": 42,
+		"hash": "zqVpzYzW"
+	},
 	{
 		"objectType": "DedicationFeat",
 		"name": "Oracle Dedication",
@@ -29,7 +40,8 @@
 		"page": 152,
 		"source": "PZO2105",
 		"id": "b92412e1-201e-4c3f-8259-05f12ef52f33",
-		"aonId": 1852
+		"aonId": 1852,
+		"hash": "xWvCkZAJ"
 	},
 	{
 		"objectType": "Feat",
@@ -43,7 +55,8 @@
 		"page": 152,
 		"source": "PZO2105",
 		"id": "240d9b3e-9083-4f72-8eba-60ae2d299a3d",
-		"aonId": 1853
+		"aonId": 1853,
+		"hash": "NgPkQnVE"
 	},
 	{
 		"objectType": "Feat",
@@ -58,7 +71,8 @@
 		"page": 152,
 		"source": "PZO2105",
 		"id": "88a1f541-02f0-4949-90be-8690d4d9d69d",
-		"aonId": 1854
+		"aonId": 1854,
+		"hash": "ATrtxSjX"
 	},
 	{
 		"objectType": "Feat",
@@ -75,7 +89,8 @@
 		"page": 152,
 		"source": "PZO2105",
 		"id": "0a1ced95-b91a-48c3-9cf8-5573d5eb3d1c",
-		"aonId": 1855
+		"aonId": 1855,
+		"hash": "GvrRWXZV"
 	},
 	{
 		"objectType": "Feat",
@@ -89,7 +104,8 @@
 		"page": 152,
 		"source": "PZO2105",
 		"id": "d0056386-ed47-493f-845e-1c125fe6a04d",
-		"aonId": 1856
+		"aonId": 1856,
+		"hash": "tOFHxwkO"
 	},
 	{
 		"objectType": "Feat",
@@ -103,7 +119,8 @@
 		"page": 152,
 		"source": "PZO2105",
 		"id": "421ea6f8-5a4b-4aca-98f9-4c0dface460e",
-		"aonId": 1857
+		"aonId": 1857,
+		"hash": "wzRsJXRg"
 	},
 	{
 		"objectType": "Feat",
@@ -117,6 +134,7 @@
 		"page": 152,
 		"source": "PZO2105",
 		"id": "74aa72f8-c117-4525-b5e3-9b58703b7ae6",
-		"aonId": 1858
+		"aonId": 1858,
+		"hash": "XLmAXJpq"
 	}
 ]

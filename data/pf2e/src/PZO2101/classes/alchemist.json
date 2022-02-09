@@ -29,7 +29,8 @@
 		"source": "PZO2101",
 		"aonId": 1,
 		"aonTraitId": 7,
-		"id": "5fdc6782-2ccd-42d5-84f8-cd31b2c7e0f7"
+		"id": "5fdc6782-2ccd-42d5-84f8-cd31b2c7e0f7",
+		"hash": "qqxXjAqW"
 	},
 	{ "objectType": "ClassPath", "name": "Bomber", "class": "Alchemist", "source": "PZO2101", "id": "b640f752-fc04-45b0-bc9b-bad88669b53e", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Chirurgeon", "class": "Alchemist", "source": "PZO2101", "id": "f0561e85-5f0b-47db-b13c-6432a275aa88", "aonId": 2 },

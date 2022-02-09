@@ -1,5 +1,16 @@
 [
-	{ "objectType": "Archetype", "name": "Investigator", "details": [ "You've developed a keen eye for investigating mysteries." ], "page": 151, "source": "PZO2105", "id": "e0831f99-576b-49f1-8e0c-06bc7ae8cecd", "aonId": 41 },
+	{
+		"objectType": "Archetype",
+		"name": "Investigator",
+		"details": [
+			"You've developed a keen eye for investigating mysteries."
+		],
+		"page": 151,
+		"source": "PZO2105",
+		"id": "e0831f99-576b-49f1-8e0c-06bc7ae8cecd",
+		"aonId": 41,
+		"hash": "ZkyOQXjp"
+	},
 	{
 		"objectType": "DedicationFeat",
 		"name": "Investigator Dedication",
@@ -29,7 +40,8 @@
 		"page": 151,
 		"source": "PZO2105",
 		"id": "d7ac0828-6b34-4170-8fa6-380677554704",
-		"aonId": 1845
+		"aonId": 1845,
+		"hash": "lIwEzWRq"
 	},
 	{
 		"objectType": "Feat",
@@ -43,7 +55,8 @@
 		"page": 151,
 		"source": "PZO2105",
 		"id": "c7fa0999-5e3d-42a1-9680-d535132f45a6",
-		"aonId": 1846
+		"aonId": 1846,
+		"hash": "MYXIjAWO"
 	},
 	{
 		"objectType": "Feat",
@@ -60,7 +73,8 @@
 		"page": 151,
 		"source": "PZO2105",
 		"id": "884732ac-cf9a-41c1-bcae-83187c765a5a",
-		"aonId": 1847
+		"aonId": 1847,
+		"hash": "rRgRNSZs"
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +88,8 @@
 		"page": 151,
 		"source": "PZO2105",
 		"id": "ed43c8ed-118f-4bc0-8b1a-40764c53c795",
-		"aonId": 1848
+		"aonId": 1848,
+		"hash": "bWTHnwIz"
 	},
 	{
 		"objectType": "Feat",
@@ -105,6 +120,7 @@
 		"page": 151,
 		"source": "PZO2105",
 		"id": "27560368-cfdb-41c8-9350-001b976cb2eb",
-		"aonId": 3124
+		"aonId": 3124,
+		"hash": "yBxXXptj"
 	}
 ]

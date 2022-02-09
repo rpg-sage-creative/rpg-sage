@@ -25,7 +25,8 @@
 		"source": "PZO2103",
 		"page": 201,
 		"id": "5ee6ee20-9195-4b1f-8ecc-064c7e5db849",
-		"aonId": 1210
+		"aonId": 1210,
+		"hash": "sAkWBxXb"
 	},
 	{
 		"objectType": "Feat",
@@ -41,6 +42,7 @@
 		"source": "PZO2103",
 		"page": 201,
 		"id": "e6e775bc-ec58-44c6-a885-d7cb2e245d8c",
-		"aonId": 1211
+		"aonId": 1211,
+		"hash": "StNYsQBR"
 	}
 ]

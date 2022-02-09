@@ -8,7 +8,8 @@
 		"benefits": "You deftly dodge out of the way.",
 		"source": "PZO2101",
 		"aonId": 550,
-		"id": "c1a45e7e-805c-439d-a729-d8a909b9be19"
+		"id": "c1a45e7e-805c-439d-a729-d8a909b9be19",
+		"hash": "QADrcQcX"
 	},
 	{
 		"objectType": "Feat",
@@ -19,7 +20,8 @@
 		"benefits": "You have an intuitive sense that alerts you to the dangers and presence of traps.",
 		"source": "PZO2101",
 		"aonId": 551,
-		"id": "3424128d-07fb-4614-9f0e-dbd2a73c58e7"
+		"id": "3424128d-07fb-4614-9f0e-dbd2a73c58e7",
+		"hash": "yyXxZpMI"
 	},
 	{
 		"objectType": "Feat",
@@ -30,7 +32,8 @@
 		"benefits": "You make a dazzling series of attacks with both weapons, using the first attack to throw your foe of guard against a second attack at a different angle.",
 		"source": "PZO2101",
 		"aonId": 552,
-		"id": "61cf148e-81f0-426a-9150-98cef35dedae"
+		"id": "61cf148e-81f0-426a-9150-98cef35dedae",
+		"hash": "dmZNtSAQ"
 	},
 	{
 		"objectType": "Feat",
@@ -41,7 +44,8 @@
 		"benefits": "After downing a foe, you menacingly remind another foe that you're coming after them next.",
 		"source": "PZO2101",
 		"aonId": 553,
-		"id": "60ac152a-ccc2-49d5-bed4-3bc44e983671"
+		"id": "60ac152a-ccc2-49d5-bed4-3bc44e983671",
+		"hash": "tbWhTOgy"
 	},
 	{
 		"objectType": "Feat",
@@ -52,7 +56,8 @@
 		"benefits": "The brutality of your critical hits shakes your foes' confidence.",
 		"source": "PZO2101",
 		"aonId": 554,
-		"id": "05c86dde-2c80-4f67-a7e5-2999b9cc7023"
+		"id": "05c86dde-2c80-4f67-a7e5-2999b9cc7023",
+		"hash": "trWbhzTR"
 	},
 	{
 		"objectType": "Feat",
@@ -63,7 +68,8 @@
 		"benefits": "Your Feints are far more distracting than normal, drawing your foes' attention and allowing you and your allies to take greater advantage.",
 		"source": "PZO2101",
 		"aonId": 555,
-		"id": "346e4195-d5c8-4d9a-8b0f-e9ca2418193d"
+		"id": "346e4195-d5c8-4d9a-8b0f-e9ca2418193d",
+		"hash": "QvkORyRO"
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +80,8 @@
 		"benefits": "You've dabbled in a variety of tricks, gaining minor magical abilities from a particular tradition.",
 		"source": "PZO2101",
 		"aonId": 556,
-		"id": "2c04bdee-0b96-429c-bb03-089c6d8aff2d"
+		"id": "2c04bdee-0b96-429c-bb03-089c6d8aff2d",
+		"hash": "jARwdRLt"
 	},
 	{
 		"objectType": "Feat",
@@ -85,7 +92,8 @@
 		"benefits": "You move in a way that denies your enemies the opportunity to retaliate.",
 		"source": "PZO2101",
 		"aonId": 557,
-		"id": "eb77c3db-67b9-4002-bff0-d198a8055120"
+		"id": "eb77c3db-67b9-4002-bff0-d198a8055120",
+		"hash": "JRsECQXH"
 	},
 	{
 		"objectType": "Feat",
@@ -96,7 +104,8 @@
 		"benefits": "You draw your weapon and attack with the same motion.",
 		"source": "PZO2101",
 		"aonId": 498,
-		"id": "e1a2dc3c-7475-40bf-995d-96f5c431ef6b"
+		"id": "e1a2dc3c-7475-40bf-995d-96f5c431ef6b",
+		"hash": "mQHvmAny"
 	},
 	{
 		"objectType": "Feat",
@@ -107,7 +116,8 @@
 		"benefits": "Interweaving your most powerful attacks in a graceful fiow, you temporarily unbalance your foes. Whenever your Strike is a critical hit and deals damage, the target is flat-footed against your attacks until the end of your next turn.",
 		"source": "PZO2101",
 		"aonId": 559,
-		"id": "6847cb65-4c41-454b-8d5b-50242425eba1"
+		"id": "6847cb65-4c41-454b-8d5b-50242425eba1",
+		"hash": "ZMvXRkvv"
 	},
 	{
 		"objectType": "Feat",
@@ -118,7 +128,8 @@
 		"benefits": "With careful observation during battle, you identify an enemy's strengths and weaknesses.",
 		"source": "PZO2101",
 		"aonId": 560,
-		"id": "3cbb9d5a-d208-44fb-a7b7-6d611d03c616"
+		"id": "3cbb9d5a-d208-44fb-a7b7-6d611d03c616",
+		"hash": "DYtnRAsx"
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +140,8 @@
 		"benefits": "You capitalize on your enemies' fear to slip past their defenses.",
 		"source": "PZO2101",
 		"aonId": 561,
-		"id": "aa738fed-4603-4fcb-950c-ab0f6a4de198"
+		"id": "aa738fed-4603-4fcb-950c-ab0f6a4de198",
+		"hash": "VmxSImUH"
 	},
 	{
 		"objectType": "Feat",
@@ -140,7 +152,8 @@
 		"benefits": "You can sneak spells past your foes' defenses as easily as any blade.",
 		"source": "PZO2101",
 		"aonId": 562,
-		"id": "ec7d6ae3-fef1-4836-9f29-9ff6bdf41dd1"
+		"id": "ec7d6ae3-fef1-4836-9f29-9ff6bdf41dd1",
+		"hash": "ZnjXcQcK"
 	},
 	{
 		"objectType": "Feat",
@@ -151,7 +164,8 @@
 		"benefits": "You apply poison to a weapon.",
 		"source": "PZO2101",
 		"aonId": 563,
-		"id": "bb849f1f-d3d9-41a8-b09f-b40c738adf8b"
+		"id": "bb849f1f-d3d9-41a8-b09f-b40c738adf8b",
+		"hash": "zrXQZVyj"
 	},
 	{
 		"objectType": "Feat",
@@ -162,7 +176,8 @@
 		"benefits": "You keep pace with a retreating foe.",
 		"source": "PZO2101",
 		"aonId": 564,
-		"id": "fa6f7337-727c-4057-8524-2b9c70f85b45"
+		"id": "fa6f7337-727c-4057-8524-2b9c70f85b45",
+		"hash": "INkHKXtp"
 	},
 	{
 		"objectType": "Feat",
@@ -173,7 +188,8 @@
 		"benefits": "You subtly damage others' equipment.",
 		"source": "PZO2101",
 		"aonId": 565,
-		"id": "77783ae1-4c23-442a-a2b8-c0c3458eeaa5"
+		"id": "77783ae1-4c23-442a-a2b8-c0c3458eeaa5",
+		"hash": "gTtcqqYM"
 	},
 	{
 		"objectType": "Feat",
@@ -184,7 +200,8 @@
 		"benefits": "You visually or audibly warn your allies of danger.",
 		"source": "PZO2101",
 		"aonId": 505,
-		"id": "ffc69adc-13a8-4d21-ad66-53bdd08f0eff"
+		"id": "ffc69adc-13a8-4d21-ad66-53bdd08f0eff",
+		"hash": "rgQtHpZf"
 	},
 	{
 		"objectType": "Feat",
@@ -195,7 +212,8 @@
 		"benefits": "You and your allies harry an opponent in concert.",
 		"source": "PZO2101",
 		"aonId": 567,
-		"id": "37b5fc88-e66a-4fd0-9c05-a392092ac7b4"
+		"id": "37b5fc88-e66a-4fd0-9c05-a392092ac7b4",
+		"hash": "tyUhfxkz"
 	},
 	{
 		"objectType": "Feat",
@@ -206,7 +224,8 @@
 		"benefits": "You aren't bothered by tricky footing.",
 		"source": "PZO2101",
 		"aonId": 568,
-		"id": "d9ac9b37-251d-4bab-b5da-0ee157e90f98"
+		"id": "d9ac9b37-251d-4bab-b5da-0ee157e90f98",
+		"hash": "RGXlYcRX"
 	},
 	{
 		"objectType": "Feat",
@@ -217,7 +236,8 @@
 		"benefits": "Your feet and weapon move in tandem.",
 		"source": "PZO2101",
 		"aonId": 510,
-		"id": "77fd0a9e-0b05-4db7-9172-cdab5582525e"
+		"id": "77fd0a9e-0b05-4db7-9172-cdab5582525e",
+		"hash": "YIspURhV"
 	},
 	{
 		"objectType": "Feat",
@@ -228,7 +248,8 @@
 		"benefits": "After stabbing your opponent in a weak spot, you tear the wound open.",
 		"source": "PZO2101",
 		"aonId": 570,
-		"id": "5f027ea0-db49-49e8-948f-81dd2d571b97"
+		"id": "5f027ea0-db49-49e8-948f-81dd2d571b97",
+		"hash": "vQqORXJD"
 	},
 	{
 		"objectType": "Feat",
@@ -239,7 +260,8 @@
 		"benefits": "Your battle instincts make you more aware of concealed and invisible opponents.",
 		"source": "PZO2101",
 		"aonId": 388,
-		"id": "c5b4f7ac-7cf7-4465-b564-059ec398a5b0"
+		"id": "c5b4f7ac-7cf7-4465-b564-059ec398a5b0",
+		"hash": "WYVqkZdO"
 	},
 	{
 		"objectType": "Feat",
@@ -250,7 +272,8 @@
 		"benefits": "You can jam the workings of a trap to delay its effects.",
 		"source": "PZO2101",
 		"aonId": 572,
-		"id": "8f520cba-a43e-464d-a4c3-7e9d81edf63c"
+		"id": "8f520cba-a43e-464d-a4c3-7e9d81edf63c",
+		"hash": "CGvbprlL"
 	},
 	{
 		"objectType": "Feat",
@@ -261,7 +284,8 @@
 		"benefits": "You deliver poisons in ways that maximize their harmful effects.",
 		"source": "PZO2101",
 		"aonId": 573,
-		"id": "d9cae3db-7922-4477-b15d-18270638a6f2"
+		"id": "d9cae3db-7922-4477-b15d-18270638a6f2",
+		"hash": "TwfNAZvN"
 	},
 	{
 		"objectType": "Feat",
@@ -272,7 +296,8 @@
 		"benefits": "You throw yourself into a roll to escape imminent danger.",
 		"source": "PZO2101",
 		"aonId": 574,
-		"id": "4686a04e-fb56-40f2-a7bc-dd5d735ca81c"
+		"id": "4686a04e-fb56-40f2-a7bc-dd5d735ca81c",
+		"hash": "pJnJzzmw"
 	},
 	{
 		"objectType": "Feat",
@@ -283,7 +308,8 @@
 		"benefits": "When your enemy is hit by your ally, you capitalize upon the distraction.",
 		"source": "PZO2101",
 		"aonId": 575,
-		"id": "46e90e33-2dbc-4161-9bce-576dc4d71d05"
+		"id": "46e90e33-2dbc-4161-9bce-576dc4d71d05",
+		"hash": "XRSEntfy"
 	},
 	{
 		"objectType": "Feat",
@@ -294,7 +320,8 @@
 		"benefits": "You deftly step out of the way of an attack, letting the blow continue to the creature next to you.",
 		"source": "PZO2101",
 		"aonId": 576,
-		"id": "3ff2ed53-aa4b-4819-86c2-60f5eeb0c722"
+		"id": "3ff2ed53-aa4b-4819-86c2-60f5eeb0c722",
+		"hash": "FhYjsBhV"
 	},
 	{
 		"objectType": "Feat",
@@ -316,7 +343,8 @@
 		"benefits": "You carefully aim and gracefully deliver your debilitations.",
 		"source": "PZO2101",
 		"aonId": 578,
-		"id": "fef73b42-e80c-4c34-bf96-f0b360b5d16d"
+		"id": "fef73b42-e80c-4c34-bf96-f0b360b5d16d",
+		"hash": "cCsngQAQ"
 	},
 	{
 		"objectType": "Feat",
@@ -327,7 +355,8 @@
 		"benefits": "It is almost impossible to spot you without taking effort to look.",
 		"source": "PZO2101",
 		"aonId": 579,
-		"id": "045ea16d-a097-4e8f-b6c6-bc602e9ce555"
+		"id": "045ea16d-a097-4e8f-b6c6-bc602e9ce555",
+		"hash": "YRvQZbqx"
 	},
 	{
 		"objectType": "Feat",
@@ -338,7 +367,8 @@
 		"benefits": "You learn new debilitations that grant you tactical advantages against your foes.",
 		"source": "PZO2101",
 		"aonId": 580,
-		"id": "93eebb6b-dcce-41e0-aa0b-c50b90069533"
+		"id": "93eebb6b-dcce-41e0-aa0b-c50b90069533",
+		"hash": "lPFgRppS"
 	},
 	{
 		"objectType": "Feat",
@@ -349,7 +379,8 @@
 		"benefits": "The debilitations you dish out seriously impair your foes.",
 		"source": "PZO2101",
 		"aonId": 581,
-		"id": "9e9cdf77-ae67-43ec-85f3-884b3d7126e6"
+		"id": "9e9cdf77-ae67-43ec-85f3-884b3d7126e6",
+		"hash": "wYWqtpfp"
 	},
 	{
 		"objectType": "Feat",
@@ -360,7 +391,8 @@
 		"benefits": "Your debilitations are especially effective on your most powerful attacks.",
 		"source": "PZO2101",
 		"aonId": 582,
-		"id": "70942ef8-1bd0-4923-8f1e-d9acb360024f"
+		"id": "70942ef8-1bd0-4923-8f1e-d9acb360024f",
+		"hash": "kbbVgnkR"
 	},
 	{
 		"objectType": "Feat",
@@ -371,7 +403,8 @@
 		"benefits": "Your poisons are devastatingly potent.",
 		"source": "PZO2101",
 		"aonId": 1151,
-		"id": "61691928-0810-4d91-8303-31e4a0a30e6c"
+		"id": "61691928-0810-4d91-8303-31e4a0a30e6c",
+		"hash": "vZQwVxGC"
 	},
 	{
 		"objectType": "Feat",
@@ -382,7 +415,8 @@
 		"benefits": "You launch yourself through the air at a foe.",
 		"source": "PZO2101",
 		"aonId": 583,
-		"id": "8a2aaa19-6505-4365-83b3-991ffcf036df"
+		"id": "8a2aaa19-6505-4365-83b3-991ffcf036df",
+		"hash": "BYxAUvLc"
 	},
 	{
 		"objectType": "Feat",
@@ -393,7 +427,8 @@
 		"benefits": "Your ranged attacks can shoot an unprepared foe right out of the air.",
 		"source": "PZO2101",
 		"aonId": 584,
-		"id": "b3e46272-c9b2-4e1e-9aa9-a8979c17aea9"
+		"id": "b3e46272-c9b2-4e1e-9aa9-a8979c17aea9",
+		"hash": "yLmVDrnq"
 	},
 	{
 		"objectType": "Feat",
@@ -404,7 +439,8 @@
 		"benefits": "You reflexively foil an enemy's response.",
 		"source": "PZO2101",
 		"aonId": 585,
-		"id": "71ca828a-8082-4d7a-9a89-55a244356d91"
+		"id": "71ca828a-8082-4d7a-9a89-55a244356d91",
+		"hash": "gRCwEDKF"
 	},
 	{
 		"objectType": "Feat",
@@ -415,7 +451,8 @@
 		"benefits": "Leaping out from hiding, you assail your target when they least expect it.",
 		"source": "PZO2101",
 		"aonId": 586,
-		"id": "363b4711-3744-41de-bb2e-41319693f3ff"
+		"id": "363b4711-3744-41de-bb2e-41319693f3ff",
+		"hash": "vwRqbKyZ"
 	},
 	{
 		"objectType": "Feat",
@@ -426,7 +463,8 @@
 		"benefits": "Dropping into a roll to disperse the force of the blow, you can partially evade a lethal attack and stay conscious.",
 		"source": "PZO2101",
 		"aonId": 587,
-		"id": "bb4dfe6c-c30e-4589-89da-d3553629dd09"
+		"id": "bb4dfe6c-c30e-4589-89da-d3553629dd09",
+		"hash": "chqrCjFl"
 	},
 	{
 		"objectType": "Feat",
@@ -437,7 +475,8 @@
 		"benefits": "You distract your opponent with a few choice words or a rude gesture.",
 		"source": "PZO2101",
 		"aonId": 588,
-		"id": "0de62dd3-7705-40bf-82a5-4b44c1f06990"
+		"id": "0de62dd3-7705-40bf-82a5-4b44c1f06990",
+		"hash": "JMBvcxMN"
 	},
 	{
 		"objectType": "Feat",
@@ -448,7 +487,8 @@
 		"benefits": "When you hit hard enough, you leave an opening so your ally can jump in on the action.",
 		"source": "PZO2101",
 		"aonId": 589,
-		"id": "40ab5e56-a888-4346-a1a6-8793ef952555"
+		"id": "40ab5e56-a888-4346-a1a6-8793ef952555",
+		"hash": "AMjxEQJT"
 	},
 	{
 		"objectType": "Feat",
@@ -459,7 +499,8 @@
 		"benefits": "When you look for foes, you can catch even the slightest cues.",
 		"source": "PZO2101",
 		"aonId": 530,
-		"id": "d252bae4-913e-46a3-8da2-78388f96ac8b"
+		"id": "d252bae4-913e-46a3-8da2-78388f96ac8b",
+		"hash": "EgtZBEXq"
 	},
 	{
 		"objectType": "Feat",
@@ -470,7 +511,8 @@
 		"benefits": "Your deceptions confound even the most powerful mortal divinations.",
 		"source": "PZO2101",
 		"aonId": 591,
-		"id": "2d8f0e6b-5ede-4410-8507-e554cf1b27f1"
+		"id": "2d8f0e6b-5ede-4410-8507-e554cf1b27f1",
+		"hash": "zpxgrlZQ"
 	},
 	{
 		"objectType": "Feat",
@@ -481,7 +523,8 @@
 		"benefits": "Using fantastic acrobatic skill, you can walk for brief stretches across insubstantial surfaces.",
 		"source": "PZO2101",
 		"aonId": 592,
-		"id": "4f89f452-9266-4881-91d0-a02210e104b7"
+		"id": "4f89f452-9266-4881-91d0-a02210e104b7",
+		"hash": "LnpwpFfh"
 	},
 	{
 		"objectType": "Feat",
@@ -492,7 +535,8 @@
 		"benefits": "You can find a loophole in a mental effect to temporarily overcome it.",
 		"source": "PZO2101",
 		"aonId": 593,
-		"id": "cdae1820-37bc-4126-8cf2-ef9c15501a6c"
+		"id": "cdae1820-37bc-4126-8cf2-ef9c15501a6c",
+		"hash": "SjWCpAZq"
 	},
 	{
 		"objectType": "Feat",
@@ -503,7 +547,8 @@
 		"benefits": "Your sneak attack slices through the threads binding magic to a target.",
 		"source": "PZO2101",
 		"aonId": 594,
-		"id": "1abb0d8c-0030-4160-97c2-5d4f41a52509"
+		"id": "1abb0d8c-0030-4160-97c2-5d4f41a52509",
+		"hash": "DYRvcXjw"
 	},
 	{
 		"objectType": "Feat",
@@ -514,7 +559,8 @@
 		"benefits": "You use clever tactics to mislead your foes as you sneak away. You Sneak while leaving a decoy behind.",
 		"source": "PZO2101",
 		"aonId": 595,
-		"id": "b6b3e41d-aab9-48eb-bf78-b677d84f578f"
+		"id": "b6b3e41d-aab9-48eb-bf78-b677d84f578f",
+		"hash": "jrCEFywk"
 	},
 	{
 		"objectType": "Feat",
@@ -525,7 +571,8 @@
 		"benefits": "You find tiny holes or imperfections that no one else could see and try to somehow fit yourself through them.",
 		"source": "PZO2101",
 		"aonId": 596,
-		"id": "8a80be01-ebd7-429f-9438-dd80ec06c0b5"
+		"id": "8a80be01-ebd7-429f-9438-dd80ec06c0b5",
+		"hash": "brLgJlQJ"
 	},
 	{
 		"objectType": "Feat",
@@ -536,7 +583,8 @@
 		"benefits": "You have learned to exploit your enemies' lowered defenses.",
 		"source": "PZO2101",
 		"aonId": 597,
-		"id": "40233770-4842-41d0-8afd-4669afb911e9"
+		"id": "40233770-4842-41d0-8afd-4669afb911e9",
+		"hash": "bCPFWLDn"
 	},
 	{
 		"objectType": "Feat",
@@ -547,7 +595,8 @@
 		"benefits": "You have a contingency in your back pocket for desperate situations.",
 		"source": "PZO2101",
 		"aonId": 598,
-		"id": "a8453b90-3922-4836-b5ec-7c4e66ff4107"
+		"id": "a8453b90-3922-4836-b5ec-7c4e66ff4107",
+		"hash": "NWndzXgg"
 	},
 	{
 		"objectType": "Feat",
@@ -558,7 +607,8 @@
 		"benefits": "Your debilitations last for 1 minute.",
 		"source": "PZO2101",
 		"aonId": 1165,
-		"id": "7b367794-deb0-4345-a54f-101687bbd5f0"
+		"id": "7b367794-deb0-4345-a54f-101687bbd5f0",
+		"hash": "vcxvZJpx"
 	},
 	{
 		"objectType": "Feat",
@@ -569,7 +619,8 @@
 		"benefits": "When you put your mind to slipping out of sight, you disappear completely.",
 		"source": "PZO2101",
 		"aonId": 599,
-		"id": "fe939405-9f30-4dd2-a553-e55ac2fb88d0"
+		"id": "fe939405-9f30-4dd2-a553-e55ac2fb88d0",
+		"hash": "wCtpbrBB"
 	},
 	{
 		"objectType": "Feat",
@@ -580,7 +631,8 @@
 		"benefits": "Your attacks are swift and deadly beyond explanation.",
 		"source": "PZO2101",
 		"aonId": 600,
-		"id": "bcaf5c2b-e0cd-46c3-90ce-f8379c4e0760"
+		"id": "bcaf5c2b-e0cd-46c3-90ce-f8379c4e0760",
+		"hash": "pvvFbgQr"
 	},
 	{
 		"objectType": "Feat",
@@ -591,6 +643,7 @@
 		"benefits": "You reactively switch with your decoy to foil your foe.",
 		"source": "PZO2101",
 		"aonId": 601,
-		"id": "161cf8b0-6a08-4a2c-8d2d-bcb38d0feadf"
+		"id": "161cf8b0-6a08-4a2c-8d2d-bcb38d0feadf",
+		"hash": "QpLJfOHO"
 	}
 ]

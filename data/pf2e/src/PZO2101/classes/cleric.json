@@ -34,7 +34,8 @@
 		"source": "PZO2101",
 		"aonId": 5,
 		"aonTraitId": 26,
-		"id": "294caa84-2792-4955-b9bf-b499e55f124e"
+		"id": "294caa84-2792-4955-b9bf-b499e55f124e",
+		"hash": "lxrDrKgT"
 	},
 	{ "objectType": "ClassPath", "name": "Cloistered Cleric", "class": "Cleric", "source": "PZO2101", "id": "e0f2c8ec-a131-4fe7-9a17-2157ac6e24fd", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Warpriest", "class": "Cleric", "source": "PZO2101", "id": "91616bf0-2a07-4783-b527-d4e4115d5c5e", "aonId": 3 }

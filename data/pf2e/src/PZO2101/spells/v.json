@@ -21,7 +21,8 @@
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Death", "Necromancy", "Negative" ],
 		"focus": false,
-		"id": "f6b28a46-aa99-4381-bd99-b46492a72c05"
+		"id": "f6b28a46-aa99-4381-bd99-b46492a72c05",
+		"hash": "ZfRpEThb"
 	},
 	{
 		"aonId": 354,
@@ -45,7 +46,8 @@
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Death", "Necromancy", "Negative" ],
 		"focus": false,
-		"id": "7d0b6992-8fdb-4a56-89a4-a952ceb6781e"
+		"id": "7d0b6992-8fdb-4a56-89a4-a952ceb6781e",
+		"hash": "XWkHSgOZ"
 	},
 	{
 		"aonId": 355,
@@ -74,7 +76,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
-		"id": "8fabfbfc-a29c-4106-8c0f-651a0b32c580"
+		"id": "8fabfbfc-a29c-4106-8c0f-651a0b32c580",
+		"hash": "FtOtxPRV"
 	},
 	{
 		"aonId": 356,
@@ -99,7 +102,8 @@
 		"traditions": [ "arcane", "divine", "occult", "primal" ],
 		"traits": [ "Auditory", "Illusion" ],
 		"focus": false,
-		"id": "575a8dda-5b13-42b1-ae5e-417fac9ffd40"
+		"id": "575a8dda-5b13-42b1-ae5e-417fac9ffd40",
+		"hash": "gKIsExnO"
 	},
 	{
 		"aonId": 357,
@@ -133,7 +137,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Illusion", "Incapacitation", "Visual" ],
 		"focus": false,
-		"id": "eb42cb9c-b6a6-470e-ad6c-9d1d68da1001"
+		"id": "eb42cb9c-b6a6-470e-ad6c-9d1d68da1001",
+		"hash": "ggMtAtxt"
 	},
 	{
 		"aonId": 358,
@@ -158,7 +163,8 @@
 		"traditions": [ "occult" ],
 		"traits": [ "Auditory", "Illusion", "Visual" ],
 		"focus": false,
-		"id": "24583bc3-783d-4a0d-830c-cbfd9de9f60f"
+		"id": "24583bc3-783d-4a0d-830c-cbfd9de9f60f",
+		"hash": "tzFfZtIY"
 	},
 	{
 		"aonId": 359,
@@ -180,7 +186,8 @@
 		"traditions": [ "divine", "primal" ],
 		"traits": [ "Healing", "Necromancy", "Positive" ],
 		"focus": false,
-		"id": "1831eee0-7bb4-4ac7-b2f6-74948361c1ca"
+		"id": "1831eee0-7bb4-4ac7-b2f6-74948361c1ca",
+		"hash": "zOLvPPBZ"
 	},
 	{
 		"aonId": 360,
@@ -219,6 +226,7 @@
 		"traditions": [ "primal" ],
 		"traits": [ "Evocation", "Fire" ],
 		"focus": false,
-		"id": "f2398847-4905-4fb0-ab6f-247ffadded5f"
+		"id": "f2398847-4905-4fb0-ab6f-247ffadded5f",
+		"hash": "rztkFTkt"
 	}
 ]

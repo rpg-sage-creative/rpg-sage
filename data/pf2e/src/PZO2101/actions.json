@@ -14,7 +14,8 @@
 		"page": 304,
 		"source": "PZO2101",
 		"aonId": 73,
-		"id": "cac93dd7-5576-49e4-bdd2-b97b2dd21069"
+		"id": "cac93dd7-5576-49e4-bdd2-b97b2dd21069",
+		"hash": "GXbVggSS"
 	},
 	{
 		"objectType": "Action",
@@ -27,6 +28,7 @@
 		"pages": [ 305, 534 ],
 		"source": "PZO2101",
 		"aonId": 74,
-		"id": "91a64eba-b449-41ef-bf38-2b24a5e4d1aa"
+		"id": "91a64eba-b449-41ef-bf38-2b24a5e4d1aa",
+		"hash": "XqAgHXrt"
 	}
 ]

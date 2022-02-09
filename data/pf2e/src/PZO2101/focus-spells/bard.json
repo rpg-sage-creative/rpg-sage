@@ -36,7 +36,8 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Bard", "Composition", "Enchantment", "Fortune", "Mental" ],
 		"trigger": "You or an ally within 60 feet rolls a saving throw against an auditory or visual effect.",
-		"id": "2606c28f-3058-4453-a6d1-d3d3ce056c30"
+		"id": "2606c28f-3058-4453-a6d1-d3d3ce056c30",
+		"hash": "XxhDwmkR"
 	},
 	{
 		"aonId": 382,
@@ -77,7 +78,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Bard", "Composition", "Death", "Emotion", "Enchantment", "Mental" ],
-		"id": "70bcdcc1-e2e3-4b51-9fda-3675e9e2416d"
+		"id": "70bcdcc1-e2e3-4b51-9fda-3675e9e2416d",
+		"hash": "QhzwgVcg"
 	},
 	{
 		"aonId": 384,
@@ -183,7 +185,8 @@
 		"page": 387,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Bard", "Enchantment" ],
-		"id": "fa742092-f322-454d-a955-83cba0db25f9"
+		"id": "fa742092-f322-454d-a955-83cba0db25f9",
+		"hash": "APRhPxgS"
 	},
 	{
 		"aonId": 389,
@@ -211,7 +214,8 @@
 		"page": 387,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Bard", "Enchantment" ],
-		"id": "14015b82-0c0f-43d9-bc28-2486fffa34b4"
+		"id": "14015b82-0c0f-43d9-bc28-2486fffa34b4",
+		"hash": "tEgAxqRb"
 	},
 	{
 		"aonId": 390,
@@ -231,7 +235,8 @@
 		"targets": "you or the triggering ally",
 		"traits": [ "Uncommon", "Bard", "Divination", "Fortune" ],
 		"trigger": "You or an ally within range attempts a skill check to Recall Knowledge",
-		"id": "60a72992-4901-4e7a-97ac-e6ca5952b40b"
+		"id": "60a72992-4901-4e7a-97ac-e6ca5952b40b",
+		"hash": "NYlQpdbq"
 	},
 	{
 		"aonId": 391,
@@ -253,7 +258,8 @@
 		"source": "PZO2101",
 		"targets": "you and up to 9 allies",
 		"traits": [ "Uncommon", "Bard", "Composition", "Emotion", "Enchantment", "Healing", "Mental" ],
-		"id": "d93ca834-b1a2-4dd1-86dd-c083475f27a1"
+		"id": "d93ca834-b1a2-4dd1-86dd-c083475f27a1",
+		"hash": "yBZLnHkv"
 	},
 	{
 		"aonId": 392,

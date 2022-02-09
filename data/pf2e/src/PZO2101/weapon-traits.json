@@ -8,7 +8,8 @@
 		"page": 282,
 		"source": "PZO2101",
 		"id": "522be564-0ad7-450a-9f02-e91cc9d99925",
-		"aonId": 170
+		"aonId": 170,
+		"hash": "kHljVxwf"
 	},
 	{
 		"objectType": "Trait",
@@ -19,7 +20,8 @@
 		"page": 282,
 		"source": "PZO2101",
 		"id": "65c519aa-7b0a-4263-be9b-ff333db04d67",
-		"aonId": 171
+		"aonId": 171,
+		"hash": "rgMrBZzx"
 	},
 	{
 		"objectType": "Trait",
@@ -30,7 +32,8 @@
 		"page": 282,
 		"source": "PZO2101",
 		"id": "11a7f0b4-62dd-48b6-a825-e920f2f2b03b",
-		"aonId": 172
+		"aonId": 172,
+		"hash": "cQzQXOKk"
 	},
 	{
 		"objectType": "Trait",
@@ -41,7 +44,8 @@
 		"page": 282,
 		"source": "PZO2101",
 		"id": "97c626f0-6f17-4b48-b2af-384d8a827eea",
-		"aonId": 173
+		"aonId": 173,
+		"hash": "qQvVDwtt"
 	},
 	{
 		"objectType": "Trait",
@@ -52,7 +56,8 @@
 		"page": 282,
 		"source": "PZO2101",
 		"id": "3ced788b-cba8-4125-9f41-5b460815a450",
-		"aonId": 174
+		"aonId": 174,
+		"hash": "ZzRXERtj"
 	},
 	{
 		"objectType": "Trait",
@@ -63,10 +68,11 @@
 		"page": 282,
 		"source": "PZO2101",
 		"id": "11dbdb90-15d6-43a5-8094-331d1936e64f",
-		"aonId": 175
+		"aonId": 175,
+		"hash": "OPjlbTVc"
 	},
-	{ "objectType": "Trait", "name": "Dwarf", "details": [ "Dwarves craft and use these weapons." ], "page": 282, "source": "PZO2101", "id": "ddca559e-dac1-46fb-aee2-2ad8dbc3f1fd", "aonId": 54 },
-	{ "objectType": "Trait", "name": "Elf", "details": [ "Elves craft and use these weapons." ], "page": 282, "source": "PZO2101", "id": "b1368634-107f-4d9e-8f3e-2330c9d4e316", "aonId": 58 },
+	{ "objectType": "Trait", "name": "Dwarf", "details": [ "Dwarves craft and use these weapons." ], "page": 282, "source": "PZO2101", "id": "ddca559e-dac1-46fb-aee2-2ad8dbc3f1fd", "aonId": 54, "hash": "FNgOZrpr" },
+	{ "objectType": "Trait", "name": "Elf", "details": [ "Elves craft and use these weapons." ], "page": 282, "source": "PZO2101", "id": "b1368634-107f-4d9e-8f3e-2330c9d4e316", "aonId": 58, "hash": "QBfXrYEc" },
 	{
 		"objectType": "Trait",
 		"name": "Fatal",
@@ -76,7 +82,8 @@
 		"page": 282,
 		"source": "PZO2101",
 		"id": "bb161f4e-13bb-4972-a058-b85de466f89e",
-		"aonId": 178
+		"aonId": 178,
+		"hash": "zFtgGxOB"
 	},
 	{
 		"objectType": "Trait",
@@ -87,7 +94,8 @@
 		"page": 282,
 		"source": "PZO2101",
 		"id": "a04ecc42-6041-4d49-a325-94f5701df37e",
-		"aonId": 179
+		"aonId": 179,
+		"hash": "tvpnbjbL"
 	},
 	{
 		"objectType": "Trait",
@@ -98,7 +106,8 @@
 		"page": 282,
 		"source": "PZO2101",
 		"id": "685bdf0b-a7e9-46fd-9f05-a554c17970e2",
-		"aonId": 180
+		"aonId": 180,
+		"hash": "zLnSFycx"
 	},
 	{
 		"objectType": "Trait",
@@ -109,10 +118,11 @@
 		"page": 282,
 		"source": "PZO2101",
 		"id": "ae826f49-f59d-42c3-a080-5421bdcc5d06",
-		"aonId": 181
+		"aonId": 181,
+		"hash": "ZWtBlrSU"
 	},
-	{ "objectType": "Trait", "name": "Gnome", "details": [ "Gnomes craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "c8020c7d-ce00-49fe-8250-d22214bce4e6", "aonId": 80 },
-	{ "objectType": "Trait", "name": "Goblin", "details": [ "Goblins craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "7fc8c6e7-00b8-4036-953c-69a3fe6c9283", "aonId": 81 },
+	{ "objectType": "Trait", "name": "Gnome", "details": [ "Gnomes craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "c8020c7d-ce00-49fe-8250-d22214bce4e6", "aonId": 80, "hash": "lnvqymEr" },
+	{ "objectType": "Trait", "name": "Goblin", "details": [ "Goblins craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "7fc8c6e7-00b8-4036-953c-69a3fe6c9283", "aonId": 81, "hash": "SlPPQLYX" },
 	{
 		"objectType": "Trait",
 		"name": "Grapple",
@@ -122,9 +132,10 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "0df397af-58e0-40d9-a58c-afc39bf34b04",
-		"aonId": 184
+		"aonId": 184,
+		"hash": "RkGtYGqN"
 	},
-	{ "objectType": "Trait", "name": "Halfling", "details": [ "Halflings craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "da0a9ef4-4a42-4ab7-b7a3-cccfb1b1c943", "aonId": 87 },
+	{ "objectType": "Trait", "name": "Halfling", "details": [ "Halflings craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "da0a9ef4-4a42-4ab7-b7a3-cccfb1b1c943", "aonId": 87, "hash": "RYvIQxlz" },
 	{
 		"objectType": "Trait",
 		"name": "Jousting",
@@ -134,9 +145,10 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "ac9edf1b-b12d-485b-962a-2f8063ab8bae",
-		"aonId": 186
+		"aonId": 186,
+		"hash": "NrqsbZtJ"
 	},
-	{ "objectType": "Trait", "name": "Monk", "details": [ "Many monks learn to use these weapons." ], "page": 283, "source": "PZO2101", "id": "0dd72226-ca9b-4c35-9e24-69f308fab54e", "aonId": 112 },
+	{ "objectType": "Trait", "name": "Monk", "details": [ "Many monks learn to use these weapons." ], "page": 283, "source": "PZO2101", "id": "0dd72226-ca9b-4c35-9e24-69f308fab54e", "aonId": 112, "hash": "RqYKyqpX" },
 	{
 		"objectType": "Trait",
 		"name": "Nonlethal",
@@ -146,9 +158,10 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "c9b25323-f5ec-4f4c-a758-54f6222f983a",
-		"aonId": 188
+		"aonId": 188,
+		"hash": "ZQQhMPEB"
 	},
-	{ "objectType": "Trait", "name": "Orc", "details": [ "Orcs craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "ed94937d-2c71-4166-95a5-918e7960e45e", "aonId": 124 },
+	{ "objectType": "Trait", "name": "Orc", "details": [ "Orcs craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "ed94937d-2c71-4166-95a5-918e7960e45e", "aonId": 124, "hash": "XJLWpWRq" },
 	{
 		"objectType": "Trait",
 		"name": "Parry",
@@ -158,7 +171,8 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "83b48650-8e31-421c-8598-f2daa6ef0fca",
-		"aonId": 190
+		"aonId": 190,
+		"hash": "WQfktzrX"
 	},
 	{
 		"objectType": "Trait",
@@ -169,7 +183,8 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "ccc5a27f-45fa-4257-97ba-8f9765380571",
-		"aonId": 191
+		"aonId": 191,
+		"hash": "xmvsRqAb"
 	},
 	{
 		"objectType": "Trait",
@@ -180,7 +195,8 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "aa12e125-c8d0-49b5-a1a9-dba1d801ede1",
-		"aonId": 192
+		"aonId": 192,
+		"hash": "JWNkzkAq"
 	},
 	{
 		"objectType": "Trait",
@@ -191,7 +207,8 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "63474828-bb1f-4364-8e8e-b2d8423cc6fd",
-		"aonId": 193
+		"aonId": 193,
+		"hash": "xXxbBXFg"
 	},
 	{
 		"objectType": "Trait",
@@ -202,7 +219,8 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "f8ccbcf2-7cf8-4c55-9da8-13a0430c87ab",
-		"aonId": 194
+		"aonId": 194,
+		"hash": "ZQqRhNgG"
 	},
 	{
 		"objectType": "Trait",
@@ -213,7 +231,8 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "53ab4577-beed-4316-8ebe-bf41cced7be4",
-		"aonId": 195
+		"aonId": 195,
+		"hash": "tJFqtgbM"
 	},
 	{
 		"objectType": "Trait",
@@ -224,7 +243,8 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "126ab7f0-14e9-4f2a-9049-9028423771f6",
-		"aonId": 196
+		"aonId": 196,
+		"hash": "BCkfWsBO"
 	},
 	{
 		"objectType": "Trait",
@@ -235,7 +255,8 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "771acea4-fcc6-4567-a2ea-4f4ca505f3c6",
-		"aonId": 197
+		"aonId": 197,
+		"hash": "HCzppVEW"
 	},
 	{
 		"objectType": "Trait",
@@ -246,7 +267,8 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "978cf3e2-c1f6-4877-908c-59c029182994",
-		"aonId": 198
+		"aonId": 198,
+		"hash": "TXNTGdWs"
 	},
 	{
 		"objectType": "Trait",
@@ -257,7 +279,8 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "c9da1eee-05da-4989-a240-e090acab8eb9",
-		"aonId": 199
+		"aonId": 199,
+		"hash": "jgHrxpnG"
 	},
 	{
 		"objectType": "Trait",
@@ -268,7 +291,8 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "5e8db2e1-dd0a-485c-8b30-a2f48b2ccaf8",
-		"aonId": 200
+		"aonId": 200,
+		"hash": "WYbWWwXb"
 	},
 	{
 		"objectType": "Trait",
@@ -279,6 +303,7 @@
 		"page": 283,
 		"source": "PZO2101",
 		"id": "a0969b11-43a3-4dff-a33d-879bc07dacce",
-		"aonId": 201
+		"aonId": 201,
+		"hash": "NFsxxyUc"
 	}
 ]

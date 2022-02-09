@@ -28,7 +28,8 @@
 		"source": "PZO2101",
 		"aonId": 4,
 		"aonTraitId": 24,
-		"id": "d343a117-41a2-471c-bdca-67cbaa84176d"
+		"id": "d343a117-41a2-471c-bdca-67cbaa84176d",
+		"hash": "OHKPWdKb"
 	},
 	{ "objectType": "ClassPath", "name": "Paladin", "class": "Champion", "source": "PZO2101", "id": "aeb6c211-0dc3-44de-a17b-d1071528dfd2", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Redeemer", "class": "Champion", "source": "PZO2101", "id": "df5fe60e-39b0-4c93-a867-0526fc07ce49", "aonId": 2 },

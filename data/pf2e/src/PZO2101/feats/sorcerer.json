@@ -8,7 +8,8 @@
 		"benefits": "Your deity's blessings manifest in your blood-borne power",
 		"source": "PZO2101",
 		"aonId": 1177,
-		"id": "37da1682-e94f-49b4-900a-70c2ee717c90"
+		"id": "37da1682-e94f-49b4-900a-70c2ee717c90",
+		"hash": "QMjjqbwg"
 	},
 	{
 		"objectType": "Feat",
@@ -19,7 +20,8 @@
 		"benefits": "When a foe casts a spell, you can try to use your own magic to disrupt it.",
 		"source": "PZO2101",
 		"aonId": 602,
-		"id": "e99fd14d-1614-4629-ae0e-f92a5a9a3354"
+		"id": "e99fd14d-1614-4629-ae0e-f92a5a9a3354",
+		"hash": "szskrXBk"
 	},
 	{
 		"objectType": "Feat",
@@ -30,7 +32,8 @@
 		"benefits": "Your legacy grants you great destructive power.",
 		"source": "PZO2101",
 		"aonId": 603,
-		"id": "a42d26f0-fdd2-478e-aa83-8d2787efaf12"
+		"id": "a42d26f0-fdd2-478e-aa83-8d2787efaf12",
+		"hash": "HWzMMZZN"
 	},
 	{
 		"objectType": "Feat",
@@ -41,7 +44,8 @@
 		"benefits": "An animal serves you and assists your spellcasting.",
 		"source": "PZO2101",
 		"aonId": 604,
-		"id": "a5ca5ce6-5fec-4029-a384-5d8a20ef477f"
+		"id": "a5ca5ce6-5fec-4029-a384-5d8a20ef477f",
+		"hash": "BfztEZtI"
 	},
 	{
 		"objectType": "Feat",
@@ -52,7 +56,8 @@
 		"benefits": "You can extend your spells' range.",
 		"source": "PZO2101",
 		"aonId": 181,
-		"id": "84dcee55-db41-4797-b07b-3ac21f164dd7"
+		"id": "84dcee55-db41-4797-b07b-3ac21f164dd7",
+		"hash": "btbZtxqX"
 	},
 	{
 		"objectType": "Feat",
@@ -63,7 +68,8 @@
 		"benefits": "You manipulate the energy of your spell, causing it to spread out and affect a wider area.",
 		"source": "PZO2101",
 		"aonId": 315,
-		"id": "5e873847-69b2-494d-9136-2e3130dba8c2"
+		"id": "5e873847-69b2-494d-9136-2e3130dba8c2",
+		"hash": "bUWAkEbP"
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +80,8 @@
 		"benefits": "Study broadens your range of simple spells.",
 		"source": "PZO2101",
 		"aonId": 183,
-		"id": "9b16a2ba-db79-4805-a332-ede9a11d4037"
+		"id": "9b16a2ba-db79-4805-a332-ede9a11d4037",
+		"hash": "rVVSbwxU"
 	},
 	{
 		"objectType": "Feat",
@@ -85,7 +92,8 @@
 		"benefits": "You infuse your familiar with additional primal energy, increasing its abilities.",
 		"source": "PZO2101",
 		"aonId": 318,
-		"id": "244b024f-73fc-4de8-86db-97fb0c0f82b6"
+		"id": "244b024f-73fc-4de8-86db-97fb0c0f82b6",
+		"hash": "YlWtKpFZ"
 	},
 	{
 		"objectType": "Feat",
@@ -96,7 +104,8 @@
 		"benefits": "Your arcane legacy grants you an exceptional aptitude for intellectual and academic pursuits.",
 		"source": "PZO2101",
 		"aonId": 609,
-		"id": "849a979f-910f-4479-9bca-2003521a6a5d"
+		"id": "849a979f-910f-4479-9bca-2003521a6a5d",
+		"hash": "htvDIYvr"
 	},
 	{
 		"objectType": "Feat",
@@ -107,7 +116,8 @@
 		"benefits": "You siphon the residual energy from the last spell you cast into one weapon you're wielding.",
 		"source": "PZO2101",
 		"aonId": 610,
-		"id": "5021a348-5757-4c3d-9da0-642d3326e412"
+		"id": "5021a348-5757-4c3d-9da0-642d3326e412",
+		"hash": "BLcptxJb"
 	},
 	{
 		"objectType": "Feat",
@@ -118,7 +128,8 @@
 		"benefits": "The divine might provided by your bloodline flows through you.",
 		"source": "PZO2101",
 		"aonId": 611,
-		"id": "ab73c19c-0385-4700-bcb0-b2b98b4728b9"
+		"id": "ab73c19c-0385-4700-bcb0-b2b98b4728b9",
+		"hash": "dWxRExZk"
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +140,8 @@
 		"benefits": "Glimpses of the obscure secrets of the universe loan you power.",
 		"source": "PZO2101",
 		"aonId": 612,
-		"id": "18547f11-5a18-4ee5-a100-55fe14707da8"
+		"id": "18547f11-5a18-4ee5-a100-55fe14707da8",
+		"hash": "DxWDWnkw"
 	},
 	{
 		"objectType": "Feat",
@@ -140,7 +152,8 @@
 		"benefits": "You can call upon the creatures of the wild for aid.",
 		"source": "PZO2101",
 		"aonId": 613,
-		"id": "8cce0615-31d9-42b2-ad9f-c8e7473c3f15"
+		"id": "8cce0615-31d9-42b2-ad9f-c8e7473c3f15",
+		"hash": "XrwtKtGb"
 	},
 	{
 		"objectType": "Feat",
@@ -151,7 +164,8 @@
 		"benefits": "You have studied your bloodline to learn the secrets of its magic.",
 		"source": "PZO2101",
 		"aonId": 614,
-		"id": "4b3f89fe-4e1d-49f6-98c9-ed8d8882990a"
+		"id": "4b3f89fe-4e1d-49f6-98c9-ed8d8882990a",
+		"hash": "MvrAWYSF"
 	},
 	{
 		"objectType": "Feat",
@@ -162,7 +176,8 @@
 		"benefits": "You don't lose spells easily.",
 		"source": "PZO2101",
 		"aonId": 194,
-		"id": "646d2dbb-a7a7-4261-8621-290bd7cb8958"
+		"id": "646d2dbb-a7a7-4261-8621-290bd7cb8958",
+		"hash": "YRUhhBTm"
 	},
 	{
 		"objectType": "Feat",
@@ -173,7 +188,8 @@
 		"benefits": "Your magical blood makes you more resistant to magic.",
 		"source": "PZO2101",
 		"aonId": 616,
-		"id": "ee18640b-96f6-482a-83bd-7c5a3579d774"
+		"id": "ee18640b-96f6-482a-83bd-7c5a3579d774",
+		"hash": "ZplqTJZN"
 	},
 	{
 		"objectType": "Feat",
@@ -184,7 +200,8 @@
 		"benefits": "Odd interactions in your bloodline provide you with unexpected spells.",
 		"source": "PZO2101",
 		"aonId": 617,
-		"id": "07c09eeb-d4d7-4a40-8080-b6a858d8c537"
+		"id": "07c09eeb-d4d7-4a40-8080-b6a858d8c537",
+		"hash": "RrWEWbhX"
 	},
 	{
 		"objectType": "Feat",
@@ -195,7 +212,8 @@
 		"benefits": "Further communion with the legacy of your bloodline has uncovered greater secrets.",
 		"source": "PZO2101",
 		"aonId": 618,
-		"id": "6df38b66-d213-430a-bb96-c937209f68f9"
+		"id": "6df38b66-d213-430a-bb96-c937209f68f9",
+		"hash": "UGnZvzWk"
 	},
 	{
 		"objectType": "Feat",
@@ -206,7 +224,8 @@
 		"benefits": "You alter your spells to overcome resistances.",
 		"source": "PZO2101",
 		"aonId": 337,
-		"id": "a5793923-45a8-4df6-a75a-811f20065db8"
+		"id": "a5793923-45a8-4df6-a75a-811f20065db8",
+		"hash": "pTXWxMyg"
 	},
 	{
 		"objectType": "Feat",
@@ -217,7 +236,8 @@
 		"benefits": "You are able to quickly cast a spell.",
 		"source": "PZO2101",
 		"aonId": 199,
-		"id": "52339868-8629-4482-bd9e-6385a0a6858b"
+		"id": "52339868-8629-4482-bd9e-6385a0a6858b",
+		"hash": "TNpOYEbD"
 	},
 	{
 		"objectType": "Feat",
@@ -228,7 +248,8 @@
 		"benefits": "Your bloodline cause you to recover focus faster.",
 		"source": "PZO2101",
 		"aonId": 621,
-		"id": "6eb856e1-f4aa-4041-94a2-7f43616fa16f"
+		"id": "6eb856e1-f4aa-4041-94a2-7f43616fa16f",
+		"hash": "QDpWvXWw"
 	},
 	{
 		"objectType": "Feat",
@@ -239,7 +260,8 @@
 		"benefits": "You have a literal sixth sense for magic.",
 		"source": "PZO2101",
 		"aonId": 622,
-		"id": "d0b41b81-1907-482f-bb2f-40e1b7e58eed"
+		"id": "d0b41b81-1907-482f-bb2f-40e1b7e58eed",
+		"hash": "QQzqjXwI"
 	},
 	{
 		"objectType": "Feat",
@@ -250,7 +272,8 @@
 		"benefits": "You weave dispelling energy into a spell, sending both effects at a foe.",
 		"source": "PZO2101",
 		"aonId": 623,
-		"id": "baecd1ff-f54b-42d5-ad16-2ce9851924e6"
+		"id": "baecd1ff-f54b-42d5-ad16-2ce9851924e6",
+		"hash": "PTfIvqzW"
 	},
 	{
 		"objectType": "Feat",
@@ -261,7 +284,8 @@
 		"benefits": "You cause a spell to fire back at its caster.",
 		"source": "PZO2101",
 		"aonId": 624,
-		"id": "09425b04-76d6-48cc-a6b1-ae99a73d9882"
+		"id": "09425b04-76d6-48cc-a6b1-ae99a73d9882",
+		"hash": "HCTNKKJx"
 	},
 	{
 		"objectType": "Feat",
@@ -272,7 +296,8 @@
 		"benefits": "You can maintain a spell with hardly a thought.",
 		"source": "PZO2101",
 		"aonId": 206,
-		"id": "2b45d04a-649d-4279-875e-87b4c80e02de"
+		"id": "2b45d04a-649d-4279-875e-87b4c80e02de",
+		"hash": "CVsqkNEk"
 	},
 	{
 		"objectType": "Feat",
@@ -283,7 +308,8 @@
 		"benefits": "Your bloodline's deep connection to mental essence greatly enhances your spell repertoire.",
 		"source": "PZO2101",
 		"aonId": 626,
-		"id": "c728f865-a703-4597-8da2-216532b3dd72"
+		"id": "c728f865-a703-4597-8da2-216532b3dd72",
+		"hash": "qqAYXEkH"
 	},
 	{
 		"objectType": "Feat",
@@ -294,7 +320,8 @@
 		"benefits": "Vital power surges through you like a font of energy.",
 		"source": "PZO2101",
 		"aonId": 627,
-		"id": "93e20b35-678a-4b9d-b9d9-4f147154914b"
+		"id": "93e20b35-678a-4b9d-b9d9-4f147154914b",
+		"hash": "UIwKkZCh"
 	},
 	{
 		"objectType": "Feat",
@@ -305,7 +332,8 @@
 		"benefits": "Your blood's power replenishes your focus.",
 		"source": "PZO2101",
 		"aonId": 628,
-		"id": "cff9f7f1-a983-4c43-86da-0ec81b6a381c"
+		"id": "cff9f7f1-a983-4c43-86da-0ec81b6a381c",
+		"hash": "KpXRgqQv"
 	},
 	{
 		"objectType": "Feat",
@@ -316,7 +344,8 @@
 		"benefits": "Your bloodline is extraordinarily complex.",
 		"source": "PZO2101",
 		"aonId": 629,
-		"id": "05b11431-0cd9-48e6-9050-6e832d42679a"
+		"id": "05b11431-0cd9-48e6-9050-6e832d42679a",
+		"hash": "GFbZMvWP"
 	},
 	{
 		"objectType": "Feat",
@@ -327,7 +356,8 @@
 		"benefits": "Your inborn magical nature lets you redirect ambient energies to fuel your spells.",
 		"source": "PZO2101",
 		"aonId": 630,
-		"id": "913fa40b-8f6e-40b6-94e9-6fb883d117cc"
+		"id": "913fa40b-8f6e-40b6-94e9-6fb883d117cc",
+		"hash": "TOgqbzwM"
 	},
 	{
 		"objectType": "Feat",
@@ -338,7 +368,8 @@
 		"benefits": "Swap out spells from your repertoire more easily.",
 		"source": "PZO2101",
 		"aonId": 1162,
-		"id": "5f4ea516-43f2-4877-852b-7d3ddc25efd2"
+		"id": "5f4ea516-43f2-4877-852b-7d3ddc25efd2",
+		"hash": "QKjOkqhd"
 	},
 	{
 		"objectType": "Feat",
@@ -349,7 +380,8 @@
 		"benefits": "You command the ultimate powers of your bloodline and tradition.",
 		"source": "PZO2101",
 		"aonId": 631,
-		"id": "c393c453-0af5-4487-bda2-a09f37bf0994"
+		"id": "c393c453-0af5-4487-bda2-a09f37bf0994",
+		"hash": "nyXtCgTS"
 	},
 	{
 		"objectType": "Feat",
@@ -360,6 +392,7 @@
 		"benefits": "Altering your spells doesn't take any longer than casting them normally.",
 		"source": "PZO2101",
 		"aonId": 632,
-		"id": "5a83f97f-0c05-4b8b-bbfe-c745dd94a73f"
+		"id": "5a83f97f-0c05-4b8b-bbfe-c745dd94a73f",
+		"hash": "JKKFXcgS"
 	}
 ]

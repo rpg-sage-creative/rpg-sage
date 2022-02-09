@@ -8,7 +8,8 @@
 		"benefits": "Your sense improve when you are raging.",
 		"source": "PZO2101",
 		"aonId": 130,
-		"id": "08fa5c9a-b6dd-4ad1-9346-3d42e78151dd"
+		"id": "08fa5c9a-b6dd-4ad1-9346-3d42e78151dd",
+		"hash": "kxNprXlQ"
 	},
 	{
 		"objectType": "Feat",
@@ -19,7 +20,8 @@
 		"benefits": "You push back your rage for a moment in order to think clearly.",
 		"source": "PZO2101",
 		"aonId": 131,
-		"id": "296a0aae-ccc8-438f-ab1d-8abc069c7817"
+		"id": "296a0aae-ccc8-438f-ab1d-8abc069c7817",
+		"hash": "xhDvUvbF"
 	},
 	{
 		"objectType": "Feat",
@@ -30,7 +32,8 @@
 		"benefits": "Your fury fills your foes with fear.",
 		"source": "PZO2101",
 		"aonId": 132,
-		"id": "bd78954e-e239-4229-8435-f963578bc5a0"
+		"id": "bd78954e-e239-4229-8435-f963578bc5a0",
+		"hash": "xZkkPJxq"
 	},
 	{
 		"objectType": "Feat",
@@ -41,7 +44,8 @@
 		"benefits": "Thrown weapons become especially deadly in your fury.",
 		"source": "PZO2101",
 		"aonId": 133,
-		"id": "58ebe7dd-f205-40e3-a136-6aec1951f3c6"
+		"id": "58ebe7dd-f205-40e3-a136-6aec1951f3c6",
+		"hash": "QznAJXKf"
 	},
 	{
 		"objectType": "Feat",
@@ -52,7 +56,8 @@
 		"benefits": "With a quick sprint, you dash up to your foe and swing.",
 		"source": "PZO2101",
 		"aonId": 134,
-		"id": "15810924-1a93-4339-b2d9-75f95b18cc5d"
+		"id": "15810924-1a93-4339-b2d9-75f95b18cc5d",
+		"hash": "SbODXTXR"
 	},
 	{
 		"objectType": "Feat",
@@ -63,7 +68,8 @@
 		"benefits": "When you Rage, your sense of smell improves.",
 		"source": "PZO2101",
 		"aonId": 135,
-		"id": "3935f02d-2650-40ec-b695-406c645ff5bc"
+		"id": "3935f02d-2650-40ec-b695-406c645ff5bc",
+		"hash": "yLTBIpcP"
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +80,8 @@
 		"benefits": "Desperate to finish the fight, you pour all your rage into one final blow.",
 		"source": "PZO2101",
 		"aonId": 136,
-		"id": "41bd1fd7-45d9-4878-a36b-d8272ea5413d"
+		"id": "41bd1fd7-45d9-4878-a36b-d8272ea5413d",
+		"hash": "vrlngUAm"
 	},
 	{
 		"objectType": "Feat",
@@ -85,7 +92,8 @@
 		"benefits": "You keep pace with a retreating foe.",
 		"source": "PZO2101",
 		"aonId": 137,
-		"id": "93ac0793-e198-470d-93ca-4d05cf24f9f2"
+		"id": "93ac0793-e198-470d-93ca-4d05cf24f9f2",
+		"hash": "vAmrtkAL"
 	},
 	{
 		"objectType": "Feat",
@@ -96,7 +104,8 @@
 		"benefits": "You can enter a second rage, but afterward you need to catch your breath.",
 		"source": "PZO2101",
 		"aonId": 138,
-		"id": "7ec87dc1-d8ae-4339-b435-da665ef3a1bf"
+		"id": "7ec87dc1-d8ae-4339-b435-da665ef3a1bf",
+		"hash": "gISTHdSV"
 	},
 	{
 		"objectType": "Feat",
@@ -107,7 +116,8 @@
 		"benefits": "You concentrate on your rage, overcoming fear and fighting back sickness.",
 		"source": "PZO2101",
 		"aonId": 139,
-		"id": "c4280315-cb13-43d4-98d2-b86587414a80"
+		"id": "c4280315-cb13-43d4-98d2-b86587414a80",
+		"hash": "XwzfpVzy"
 	},
 	{
 		"objectType": "Feat",
@@ -118,7 +128,8 @@
 		"benefits": "Your rage is a frenzy of rapid movements.",
 		"source": "PZO2101",
 		"aonId": 140,
-		"id": "1fa30b8a-56ac-402a-a1c0-b4ec61fb20a2"
+		"id": "1fa30b8a-56ac-402a-a1c0-b4ec61fb20a2",
+		"hash": "yttckwOK"
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +140,8 @@
 		"benefits": "Physical obstacles can't hold back your fury.",
 		"source": "PZO2101",
 		"aonId": 141,
-		"id": "1b7dc03e-b940-4b4b-8367-48a29635a428"
+		"id": "1b7dc03e-b940-4b4b-8367-48a29635a428",
+		"hash": "OUAvjcUQ"
 	},
 	{
 		"objectType": "Feat",
@@ -140,7 +152,8 @@
 		"benefits": "You make a wide, arcing swing.",
 		"source": "PZO2101",
 		"aonId": 142,
-		"id": "e3064d00-b54e-4bba-aecd-2de44c930b3b"
+		"id": "e3064d00-b54e-4bba-aecd-2de44c930b3b",
+		"hash": "ZzFgxsck"
 	},
 	{
 		"objectType": "Feat",
@@ -151,7 +164,8 @@
 		"benefits": "You roar in pain, awakening the rage within you.",
 		"source": "PZO2101",
 		"aonId": 143,
-		"id": "1f44c687-76de-42ef-a4ff-8362ca745e71"
+		"id": "1f44c687-76de-42ef-a4ff-8362ca745e71",
+		"hash": "OHbqjQYz"
 	},
 	{
 		"objectType": "Feat",
@@ -162,7 +176,8 @@
 		"benefits": "Your proficiency in unarmored defense increases to expert.",
 		"source": "PZO2101",
 		"aonId": 144,
-		"id": "5900ceae-a829-4ed4-a254-da21c9231649"
+		"id": "5900ceae-a829-4ed4-a254-da21c9231649",
+		"hash": "zShRvQQZ"
 	},
 	{
 		"objectType": "Feat",
@@ -184,7 +199,8 @@
 		"benefits": "You push your foes around and leave bruises.",
 		"source": "PZO2101",
 		"aonId": 146,
-		"id": "b5b844d3-3c3a-49e0-ab03-f70f3a76230d"
+		"id": "b5b844d3-3c3a-49e0-ab03-f70f3a76230d",
+		"hash": "WGmQOVvx"
 	},
 	{
 		"objectType": "Feat",
@@ -195,7 +211,8 @@
 		"benefits": "You swing clear through one foe and into another.",
 		"source": "PZO2101",
 		"aonId": 147,
-		"id": "da0014a3-1dfe-4188-8d5c-caa3f200d792"
+		"id": "da0014a3-1dfe-4188-8d5c-caa3f200d792",
+		"hash": "wNqmFrOp"
 	},
 	{
 		"objectType": "Feat",
@@ -206,7 +223,8 @@
 		"benefits": "You exhale powerful draconic energy.",
 		"source": "PZO2101",
 		"aonId": 148,
-		"id": "3900aa1f-356b-482f-9a48-8660584aa32d"
+		"id": "3900aa1f-356b-482f-9a48-8660584aa32d",
+		"hash": "BLkHnRgS"
 	},
 	{
 		"objectType": "Feat",
@@ -217,7 +235,8 @@
 		"benefits": "You grow to incredible size.",
 		"source": "PZO2101",
 		"aonId": 149,
-		"id": "5eb61064-a307-4be7-b300-b49057249c32"
+		"id": "5eb61064-a307-4be7-b300-b49057249c32",
+		"hash": "AyKnIVZG"
 	},
 	{
 		"objectType": "Feat",
@@ -228,7 +247,8 @@
 		"benefits": "You call forth protective spirits to ward off ranged attacks.",
 		"source": "PZO2101",
 		"aonId": 150,
-		"id": "5beb9631-14b4-42a6-aff4-c5688ef6e395"
+		"id": "5beb9631-14b4-42a6-aff4-c5688ef6e395",
+		"hash": "QkxLlttQ"
 	},
 	{
 		"objectType": "Feat",
@@ -239,7 +259,8 @@
 		"benefits": "You transform into your animal.",
 		"source": "PZO2101",
 		"aonId": 151,
-		"id": "cbec287a-b9e9-49a4-836e-daf273667b1c"
+		"id": "cbec287a-b9e9-49a4-836e-daf273667b1c",
+		"hash": "plqlRgwA"
 	},
 	{
 		"objectType": "Feat",
@@ -250,7 +271,8 @@
 		"benefits": "You bully foes across the battlefield.",
 		"source": "PZO2101",
 		"aonId": 152,
-		"id": "63bc6f69-5f22-434a-97d1-3a85e7222e08"
+		"id": "63bc6f69-5f22-434a-97d1-3a85e7222e08",
+		"hash": "BVnTTVzZ"
 	},
 	{
 		"objectType": "Feat",
@@ -261,7 +283,8 @@
 		"benefits": "You pause to recover your raging vigor.",
 		"source": "PZO2101",
 		"aonId": 153,
-		"id": "f2c5d16f-b1f0-4a63-8a9a-25d239fd3414"
+		"id": "f2c5d16f-b1f0-4a63-8a9a-25d239fd3414",
+		"hash": "zXcyzFkV"
 	},
 	{
 		"objectType": "Feat",
@@ -272,7 +295,8 @@
 		"benefits": "You stoke an ally's fury.",
 		"source": "PZO2101",
 		"aonId": 154,
-		"id": "a644ed8f-281c-4a11-ba4a-d12d2c61d259"
+		"id": "a644ed8f-281c-4a11-ba4a-d12d2c61d259",
+		"hash": "GVxRZkxb"
 	},
 	{
 		"objectType": "Feat",
@@ -283,7 +307,8 @@
 		"benefits": "You swing at a foe while mid-leap.",
 		"source": "PZO2101",
 		"aonId": 155,
-		"id": "43d43b23-6372-4718-b300-f33df473d068"
+		"id": "43d43b23-6372-4718-b300-f33df473d068",
+		"hash": "BwvTqXyv"
 	},
 	{
 		"objectType": "Feat",
@@ -294,7 +319,8 @@
 		"benefits": "You thrash the grabbed foe around.",
 		"source": "PZO2101",
 		"aonId": 156,
-		"id": "2beb8d1b-614e-4b0b-8e2e-eeeca5b392c8"
+		"id": "2beb8d1b-614e-4b0b-8e2e-eeeca5b392c8",
+		"hash": "XYvTCXRU"
 	},
 	{
 		"objectType": "Feat",
@@ -305,7 +331,8 @@
 		"benefits": "You open yourself to attacks so you can respond in turn.",
 		"source": "PZO2101",
 		"aonId": 157,
-		"id": "a6bef275-61a7-400c-83c4-20d3c2b3aabd"
+		"id": "a6bef275-61a7-400c-83c4-20d3c2b3aabd",
+		"hash": "ZvZxbrbh"
 	},
 	{
 		"objectType": "Feat",
@@ -316,7 +343,8 @@
 		"benefits": "You rush forward.",
 		"source": "PZO2101",
 		"aonId": 158,
-		"id": "73ff167c-97e3-47fa-bd18-2803525b5e55"
+		"id": "73ff167c-97e3-47fa-bd18-2803525b5e55",
+		"hash": "pZNvBZNH"
 	},
 	{
 		"objectType": "Feat",
@@ -327,7 +355,8 @@
 		"benefits": "Your fury carries your weapon through multiple foes.",
 		"source": "PZO2101",
 		"aonId": 159,
-		"id": "60e9093f-6516-466f-ba40-e44730437940"
+		"id": "60e9093f-6516-466f-ba40-e44730437940",
+		"hash": "nbYCkcAM"
 	},
 	{
 		"objectType": "Feat",
@@ -338,7 +367,8 @@
 		"benefits": "The weight of your swing drives your enemy back.",
 		"source": "PZO2101",
 		"aonId": 160,
-		"id": "30585ae2-962e-4919-9635-a588d94e75a6"
+		"id": "30585ae2-962e-4919-9635-a588d94e75a6",
+		"hash": "kTkQvXFQ"
 	},
 	{
 		"objectType": "Feat",
@@ -349,7 +379,8 @@
 		"benefits": "You unleash a terrifying howl.",
 		"source": "PZO2101",
 		"aonId": 161,
-		"id": "8bc79aa7-1812-4dae-a7b5-f4d2ccef26b6"
+		"id": "8bc79aa7-1812-4dae-a7b5-f4d2ccef26b6",
+		"hash": "XQRZWdrx"
 	},
 	{
 		"objectType": "Feat",
@@ -360,7 +391,8 @@
 		"benefits": "You sprout dragon wings from your back.",
 		"source": "PZO2101",
 		"aonId": 162,
-		"id": "908712e0-0bbb-4e0b-98fe-89a671280bc3"
+		"id": "908712e0-0bbb-4e0b-98fe-89a671280bc3",
+		"hash": "hQXUhAzU"
 	},
 	{
 		"objectType": "Feat",
@@ -371,7 +403,8 @@
 		"benefits": "You grab your foe while it's distracted by your attack.",
 		"source": "PZO2101",
 		"aonId": 163,
-		"id": "4eb6c943-c977-404a-a5c7-00adedb54872"
+		"id": "4eb6c943-c977-404a-a5c7-00adedb54872",
+		"hash": "XZXZkjGk"
 	},
 	{
 		"objectType": "Feat",
@@ -382,7 +415,8 @@
 		"benefits": "You close the distance to your prey in a blur.",
 		"source": "PZO2101",
 		"aonId": 164,
-		"id": "79583a91-ef1a-4b49-ab71-29113aaa7a4b"
+		"id": "79583a91-ef1a-4b49-ab71-29113aaa7a4b",
+		"hash": "WAqARFgM"
 	},
 	{
 		"objectType": "Feat",
@@ -393,7 +427,8 @@
 		"benefits": "You call forth an ephemeral apparition.",
 		"source": "PZO2101",
 		"aonId": 165,
-		"id": "a58ada2a-74bd-4588-bb39-0bfeb348d421"
+		"id": "a58ada2a-74bd-4588-bb39-0bfeb348d421",
+		"hash": "LHpLEkzB"
 	},
 	{
 		"objectType": "Feat",
@@ -407,7 +442,8 @@
 		"benefits": "You grow to even greater size.",
 		"source": "PZO2101",
 		"aonId": 166,
-		"id": "08dd26c1-28b7-4db8-862d-fab1794daeca"
+		"id": "08dd26c1-28b7-4db8-862d-fab1794daeca",
+		"hash": "JgXJbVSR"
 	},
 	{
 		"objectType": "Feat",
@@ -418,7 +454,8 @@
 		"benefits": "Your attacks are so powerful, they can flatten your opponents.",
 		"source": "PZO2101",
 		"aonId": 167,
-		"id": "2be46a42-0919-4ec9-bcb0-20a6b96cb1fe"
+		"id": "2be46a42-0919-4ec9-bcb0-20a6b96cb1fe",
+		"hash": "xZzjGpOY"
 	},
 	{
 		"objectType": "Feat",
@@ -429,7 +466,8 @@
 		"benefits": "You extend your body and prepare to attack foes outside your normal reach.",
 		"source": "PZO2101",
 		"aonId": 168,
-		"id": "1250b11b-d819-4471-ac59-baf063e25287"
+		"id": "1250b11b-d819-4471-ac59-baf063e25287",
+		"hash": "XYcTwgch"
 	},
 	{
 		"objectType": "Feat",
@@ -440,7 +478,8 @@
 		"benefits": "When struck by an enemy, you respond in turn.",
 		"source": "PZO2101",
 		"aonId": 169,
-		"id": "17f44714-adf5-4608-a025-117d6c78df00"
+		"id": "17f44714-adf5-4608-a025-117d6c78df00",
+		"hash": "sbOTQQqr"
 	},
 	{
 		"objectType": "Feat",
@@ -451,7 +490,8 @@
 		"benefits": "You attack all nearby adversaries.",
 		"source": "PZO2101",
 		"aonId": 170,
-		"id": "d5b33ca0-23ec-45e7-8729-b1a946ec3baa"
+		"id": "d5b33ca0-23ec-45e7-8729-b1a946ec3baa",
+		"hash": "qxqltJLC"
 	},
 	{
 		"objectType": "Feat",
@@ -462,7 +502,8 @@
 		"benefits": "When you Thrash a grabbed foe, you smack that foe into another nearby.",
 		"source": "PZO2101",
 		"aonId": 171,
-		"id": "74ecede2-570e-4865-a861-534c33581f41"
+		"id": "74ecede2-570e-4865-a861-534c33581f41",
+		"hash": "vCIZqMrv"
 	},
 	{
 		"objectType": "Feat",
@@ -476,7 +517,8 @@
 		"benefits": "You transform into a ferocious large dragon.",
 		"source": "PZO2101",
 		"aonId": 172,
-		"id": "4ab579f4-069c-4066-920c-d0a233c1da12"
+		"id": "4ab579f4-069c-4066-920c-d0a233c1da12",
+		"hash": "HZOFCGGt"
 	},
 	{
 		"objectType": "Feat",
@@ -487,7 +529,8 @@
 		"benefits": "Your blood boils when you take a beating, and you throw caution to the wind to finish the fight.",
 		"source": "PZO2101",
 		"aonId": 173,
-		"id": "adcea957-e1ce-43b8-b449-7414a09e21e7"
+		"id": "adcea957-e1ce-43b8-b449-7414a09e21e7",
+		"hash": "hILXgbSY"
 	},
 	{
 		"objectType": "Feat",
@@ -498,7 +541,8 @@
 		"benefits": "Your critical hits are particularly devastating.",
 		"source": "PZO2101",
 		"aonId": 174,
-		"id": "b8ffc49e-42e1-44e5-9fc1-4aa135287978"
+		"id": "b8ffc49e-42e1-44e5-9fc1-4aa135287978",
+		"hash": "DRjzZbhf"
 	},
 	{
 		"objectType": "Feat",
@@ -509,7 +553,8 @@
 		"benefits": "You burn out all of your rage to ensure that your attack lands and your mind remains free.",
 		"source": "PZO2101",
 		"aonId": 175,
-		"id": "ab420751-6dad-45a8-b16d-c70375596887"
+		"id": "ab420751-6dad-45a8-b16d-c70375596887",
+		"hash": "xgAnSqAj"
 	},
 	{
 		"objectType": "Feat",
@@ -520,7 +565,8 @@
 		"benefits": "You make a vicious attack that maims your enemy.",
 		"source": "PZO2101",
 		"aonId": 176,
-		"id": "429e7a2c-48ce-4825-9832-856594c02257"
+		"id": "429e7a2c-48ce-4825-9832-856594c02257",
+		"hash": "RZBbIPSJ"
 	},
 	{
 		"objectType": "Feat",
@@ -531,7 +577,8 @@
 		"benefits": "You can drive your allies into a frenzy, granting them incredible benefits.",
 		"source": "PZO2101",
 		"aonId": 177,
-		"id": "6669accb-e744-40a4-81b6-f0c000b6b966"
+		"id": "6669accb-e744-40a4-81b6-f0c000b6b966",
+		"hash": "xSgPwfDz"
 	},
 	{
 		"objectType": "Feat",
@@ -553,6 +600,7 @@
 		"benefits": "You stomp the ground with such force that it creates a minor earthquake.",
 		"source": "PZO2101",
 		"aonId": 178,
-		"id": "ac2b5cf0-b717-4b2e-8dd7-146ca5ab5bbc"
+		"id": "ac2b5cf0-b717-4b2e-8dd7-146ca5ab5bbc",
+		"hash": "RXRQJRnb"
 	}
 ]

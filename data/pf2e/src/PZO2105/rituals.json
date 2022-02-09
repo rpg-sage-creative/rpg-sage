@@ -36,7 +36,8 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 29,
-		"id": "51d01125-0a4c-4cf1-8697-61d1c266a6ca"
+		"id": "51d01125-0a4c-4cf1-8697-61d1c266a6ca",
+		"hash": "nFEdbZxk"
 	},
 	{
 		"name": "Clone",
@@ -72,7 +73,8 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 30,
-		"id": "540983dd-e2ab-452d-8308-930a8cdf6bb5"
+		"id": "540983dd-e2ab-452d-8308-930a8cdf6bb5",
+		"hash": "bzgGMsxg"
 	},
 	{
 		"name": "Create Demiplane",
@@ -112,7 +114,8 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 31,
-		"id": "72d5ccb1-8596-40f8-a431-991b20baed9f"
+		"id": "72d5ccb1-8596-40f8-a431-991b20baed9f",
+		"hash": "rbLcvXvv"
 	},
 	{
 		"name": "Fantastic Facade",
@@ -153,7 +156,8 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 32,
-		"id": "595496ae-4578-4f93-80d1-4306720a327e"
+		"id": "595496ae-4578-4f93-80d1-4306720a327e",
+		"hash": "xYcRnpzp"
 	},
 	{
 		"name": "Heartbond",
@@ -191,7 +195,8 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 33,
-		"id": "2081f295-7ab1-4086-bc4a-2ddaf1cf4088"
+		"id": "2081f295-7ab1-4086-bc4a-2ddaf1cf4088",
+		"hash": "qtQVnTEQ"
 	},
 	{
 		"name": "Heroes' Feast",
@@ -228,7 +233,8 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 34,
-		"id": "f458a719-b04a-4f5d-8841-f6d41a0f9280"
+		"id": "f458a719-b04a-4f5d-8841-f6d41a0f9280",
+		"hash": "ZWxRlLNG"
 	},
 	{
 		"name": "Reincarnate",
@@ -272,7 +278,8 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 35,
-		"id": "918c17b3-a9a3-4827-a436-71ae481f2d6d"
+		"id": "918c17b3-a9a3-4827-a436-71ae481f2d6d",
+		"hash": "dklmGgZz"
 	},
 	{
 		"name": "Rest Eternal",
@@ -307,7 +314,8 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 36,
-		"id": "a45168e0-2093-4e27-b906-ebd718145fb6"
+		"id": "a45168e0-2093-4e27-b906-ebd718145fb6",
+		"hash": "jQPXbBXE"
 	},
 	{
 		"name": "Simulacrum",
@@ -342,7 +350,8 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 37,
-		"id": "6617190a-db16-41b5-a844-e6b3435e0f78"
+		"id": "6617190a-db16-41b5-a844-e6b3435e0f78",
+		"hash": "PwzbFkYF"
 	},
 	{
 		"name": "Teleportation Circle",
@@ -384,7 +393,8 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 38,
-		"id": "2921de3b-5ab6-4390-b0d0-4dadf6801a5a"
+		"id": "2921de3b-5ab6-4390-b0d0-4dadf6801a5a",
+		"hash": "kchzlFWY"
 	},
 	{
 		"name": "Unseen Custodians",
@@ -422,7 +432,8 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 39,
-		"id": "0308bbfc-b16b-4e3d-9f8f-c5f6877395d4"
+		"id": "0308bbfc-b16b-4e3d-9f8f-c5f6877395d4",
+		"hash": "bnymvNrq"
 	},
 	{
 		"name": "Ward Domain",
@@ -462,7 +473,8 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 40,
-		"id": "49ec1cfc-fe4b-44c2-bf42-ed02b6837442"
+		"id": "49ec1cfc-fe4b-44c2-bf42-ed02b6837442",
+		"hash": "YBrWCYhp"
 	},
 	{
 		"name": "Word of Recall",
@@ -498,6 +510,7 @@
 		"source": "PZO2105",
 		"focus": false,
 		"aonId": 41,
-		"id": "cc92758b-5c6b-4128-87fb-94067b1d8daa"
+		"id": "cc92758b-5c6b-4128-87fb-94067b1d8daa",
+		"hash": "FrkGwJPc"
 	}
 ]

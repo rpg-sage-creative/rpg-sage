@@ -16,7 +16,8 @@
 		"objectType": "FocusSpell",
 		"page": 95,
 		"traits": [ "Uncommon", "Morph", "Transmutation" ],
-		"id": "ad7b6889-8303-437a-962f-df2f9e2a5439"
+		"id": "ad7b6889-8303-437a-962f-df2f9e2a5439",
+		"hash": "ISkzAlhq"
 	},
 	{
 		"aonId": 548,
@@ -35,7 +36,8 @@
 		"objectType": "FocusSpell",
 		"page": 95,
 		"traits": [ "Uncommon", "Polymorph", "Transmutation" ],
-		"id": "43c29515-49f4-4785-951d-fe248d336b3d"
+		"id": "43c29515-49f4-4785-951d-fe248d336b3d",
+		"hash": "ROQpFsVw"
 	},
 	{
 		"aonId": 541,
@@ -54,7 +56,8 @@
 		"objectType": "FocusSpell",
 		"page": 71,
 		"traits": [ "Uncommon", "Polymorph", "Transmutation" ],
-		"id": "83e34596-fec1-4188-b1eb-14cc345895f8"
+		"id": "83e34596-fec1-4188-b1eb-14cc345895f8",
+		"hash": "OpDxZGQK"
 	},
 	{
 		"aonId": 542,
@@ -73,7 +76,8 @@
 		"page": 83,
 		"traits": [ "Uncommon", "Divination", "Fortune" ],
 		"trigger": "You miss a Strike with an unarmed attack.",
-		"id": "4bcadf0b-d3aa-4b60-bd9d-7c45300c9d0a"
+		"id": "4bcadf0b-d3aa-4b60-bd9d-7c45300c9d0a",
+		"hash": "drCNqpjq"
 	},
 	{
 		"aonId": 543,
@@ -94,7 +98,8 @@
 		"requirements": "Your previous action was a successful unarmed Strike.",
 		"targets": "the creature you hit",
 		"traits": [ "Uncommon", "Abjuration" ],
-		"id": "c32e0435-7585-40e4-a016-e966032c4096"
+		"id": "c32e0435-7585-40e4-a016-e966032c4096",
+		"hash": "nSqExQNQ"
 	},
 	{
 		"aonId": 544,
@@ -118,7 +123,8 @@
 		"page": 83,
 		"savingThrow": "Fortitude",
 		"traits": [ "Uncommon", "Evocation", "Water" ],
-		"id": "3fa3435d-30df-49d9-a19e-2323ba6b02f8"
+		"id": "3fa3435d-30df-49d9-a19e-2323ba6b02f8",
+		"hash": "gJbGxdZg"
 	},
 	{
 		"aonId": 545,
@@ -139,7 +145,8 @@
 		"objectType": "FocusSpell",
 		"page": 83,
 		"traits": [ "Uncommon", "Evocation" ],
-		"id": "95524f21-d7a0-4637-92ce-b8b75a0cff37"
+		"id": "95524f21-d7a0-4637-92ce-b8b75a0cff37",
+		"hash": "XSrIZhHf"
 	},
 	{
 		"aonId": 546,
@@ -160,6 +167,7 @@
 		"objectType": "FocusSpell",
 		"page": 83,
 		"traits": [ "Uncommon", "Abjuration" ],
-		"id": "0974297e-fb4c-4267-a674-cfe1cf79141a"
+		"id": "0974297e-fb4c-4267-a674-cfe1cf79141a",
+		"hash": "lcptHmjg"
 	}
 ]

@@ -67,7 +67,8 @@
 					"Goblins often have the acrobat, criminal, entertainer, gladiator, hunter, and street urchin backgrounds. Consider playing an alchemist, since many goblins love fire, or a bard, since many goblins love songs. As scrappy survivors, goblins are often rogues who dart about the shadows, though their inherently charismatic nature also draws them to the pursuit of magical classes such as sorcerer."
 				]
 			}
-		}
+		},
+		"hash": "kvMSpgbp"
 	},
 	{
 		"objectType": "Heritage",
@@ -78,7 +79,8 @@
 		],
 		"source": "PZO2101",
 		"id": "e8894446-abbf-4783-a5cd-e8d2f2501da9",
-		"aonId": 16
+		"aonId": 16,
+		"hash": "REJxZVvv"
 	},
 	{
 		"objectType": "Heritage",
@@ -89,7 +91,8 @@
 		],
 		"source": "PZO2101",
 		"id": "f3bbbfb3-e04c-41cd-9d09-7c73927cc3ea",
-		"aonId": 17
+		"aonId": 17,
+		"hash": "LUVWjxkI"
 	},
 	{
 		"objectType": "Heritage",
@@ -100,7 +103,8 @@
 		],
 		"source": "PZO2101",
 		"id": "88809f97-1318-47fa-8972-8ece23503376",
-		"aonId": 18
+		"aonId": 18,
+		"hash": "rWbWkCJF"
 	},
 	{
 		"objectType": "Heritage",
@@ -111,7 +115,8 @@
 		],
 		"source": "PZO2101",
 		"id": "2849f5b8-26a6-4165-a321-d78ff63dfe17",
-		"aonId": 19
+		"aonId": 19,
+		"hash": "ClYcFvmR"
 	},
 	{
 		"objectType": "Heritage",
@@ -122,7 +127,8 @@
 		],
 		"source": "PZO2101",
 		"id": "36089f76-dead-4e4f-bf7f-4045ee7ca48e",
-		"aonId": 20
+		"aonId": 20,
+		"hash": "UHDLkqrC"
 	},
 	{
 		"objectType": "Feat",
@@ -135,7 +141,8 @@
 		"page": 48,
 		"source": "PZO2101",
 		"id": "702a2d97-e5f6-4185-b45a-d11e1a51d6fd",
-		"aonId": 38
+		"aonId": 38,
+		"hash": "THzErGpp"
 	},
 	{
 		"objectType": "Feat",
@@ -150,7 +157,8 @@
 		"page": 48,
 		"source": "PZO2101",
 		"id": "50dbaf14-57d9-417d-baa6-fbcec29473e4",
-		"aonId": 39
+		"aonId": 39,
+		"hash": "TgEUvLAq"
 	},
 	{
 		"objectType": "Feat",
@@ -163,7 +171,8 @@
 		"page": 48,
 		"source": "PZO2101",
 		"id": "9b7242c0-aee8-4530-bfb8-05224d539bdc",
-		"aonId": 40
+		"aonId": 40,
+		"hash": "vLhbtUrq"
 	},
 	{
 		"objectType": "Feat",
@@ -178,7 +187,8 @@
 		"page": 48,
 		"source": "PZO2101",
 		"id": "49a50d05-1aa8-477b-af1e-eec09c9a6b73",
-		"aonId": 41
+		"aonId": 41,
+		"hash": "pDsLDqWF"
 	},
 	{
 		"objectType": "Feat",
@@ -204,7 +214,8 @@
 		"page": 48,
 		"source": "PZO2101",
 		"id": "e5338733-e26c-4e56-b0f6-b75a20f86fe3",
-		"aonId": 42
+		"aonId": 42,
+		"hash": "gjXtZWvJ"
 	},
 	{
 		"objectType": "Feat",
@@ -218,7 +229,8 @@
 		"page": 48,
 		"source": "PZO2101",
 		"id": "d29dd9a2-1a6c-49f5-9216-9822dd1eaa22",
-		"aonId": 43
+		"aonId": 43,
+		"hash": "zQRCgFbt"
 	},
 	{
 		"objectType": "Feat",
@@ -232,7 +244,8 @@
 		"page": 48,
 		"source": "PZO2101",
 		"id": "5e36f830-c8e0-4eed-8327-b0ea81fe214c",
-		"aonId": 44
+		"aonId": 44,
+		"hash": "gDMsfjqX"
 	},
 	{
 		"objectType": "Feat",
@@ -245,7 +258,8 @@
 		"page": 48,
 		"source": "PZO2101",
 		"id": "6b9ac5c8-4398-47dd-8761-84efdb781eb2",
-		"aonId": 45
+		"aonId": 45,
+		"hash": "DlZLxRkp"
 	},
 	{
 		"objectType": "Feat",
@@ -259,7 +273,8 @@
 		"page": 49,
 		"source": "PZO2101",
 		"id": "9aa6043b-0055-4dd6-a62e-e5da69294b4e",
-		"aonId": 46
+		"aonId": 46,
+		"hash": "sXXZLYMR"
 	},
 	{
 		"objectType": "Feat",
@@ -273,7 +288,8 @@
 		"page": 49,
 		"source": "PZO2101",
 		"id": "8daeea64-1d7d-43d2-b59c-e9a6c621a614",
-		"aonId": 47
+		"aonId": 47,
+		"hash": "PzOQRzGy"
 	},
 	{
 		"objectType": "Feat",
@@ -286,7 +302,8 @@
 		"page": 49,
 		"source": "PZO2101",
 		"id": "82abe850-b35a-43e3-b1e2-e351518be8ff",
-		"aonId": 48
+		"aonId": 48,
+		"hash": "pwvHTyWE"
 	},
 	{
 		"objectType": "Feat",
@@ -300,7 +317,8 @@
 		"page": 49,
 		"source": "PZO2101",
 		"id": "b2791588-8b96-4696-979e-2dff66e4a411",
-		"aonId": 49
+		"aonId": 49,
+		"hash": "tZIGwVXk"
 	},
 	{
 		"objectType": "Feat",
@@ -314,7 +332,8 @@
 		"page": 49,
 		"source": "PZO2101",
 		"id": "189dbfcf-e6a7-4832-a815-2e91b00b0e09",
-		"aonId": 50
+		"aonId": 50,
+		"hash": "nnKZXtQc"
 	},
 	{
 		"objectType": "Feat",
@@ -328,6 +347,7 @@
 		"page": 49,
 		"source": "PZO2101",
 		"id": "c313784b-8a49-4026-9b2a-b72d2dc976d9",
-		"aonId": 51
+		"aonId": 51,
+		"hash": "zvKyUUUn"
 	}
 ]

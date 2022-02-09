@@ -19,7 +19,8 @@
 		"benefits": "You can use clever workarounds to replicate the arcane essence of certain materials.",
 		"source": "PZO2101",
 		"aonId": 634,
-		"id": "67618a11-147e-45c6-a35e-7c49718a6157"
+		"id": "67618a11-147e-45c6-a35e-7c49718a6157",
+		"hash": "bcPgQqgG"
 	},
 	{
 		"objectType": "Feat",
@@ -30,7 +31,8 @@
 		"benefits": "An animal serves you and assists your spellcasting.",
 		"source": "PZO2101",
 		"aonId": 604,
-		"id": "a6b01a91-ee1b-4a1e-9f16-4a9336d83cd3"
+		"id": "a6b01a91-ee1b-4a1e-9f16-4a9336d83cd3",
+		"hash": "BfztEZtI"
 	},
 	{
 		"objectType": "Feat",
@@ -41,7 +43,8 @@
 		"benefits": "You can magically hurl your weapon at your foe.",
 		"source": "PZO2101",
 		"aonId": 636,
-		"id": "87638d5e-982e-4c64-b0b2-bbd1b60e6bb9"
+		"id": "87638d5e-982e-4c64-b0b2-bbd1b60e6bb9",
+		"hash": "WlyJSPIj"
 	},
 	{
 		"objectType": "Feat",
@@ -52,7 +55,8 @@
 		"benefits": "You can extend your spells' range.",
 		"source": "PZO2101",
 		"aonId": 181,
-		"id": "df3ce009-087f-41e7-aef0-7b4939e5c3c7"
+		"id": "df3ce009-087f-41e7-aef0-7b4939e5c3c7",
+		"hash": "btbZtxqX"
 	},
 	{
 		"objectType": "Feat",
@@ -63,7 +67,8 @@
 		"benefits": "You manipulate the energy of your spell, causing it to spread out and affect a wider area.",
 		"source": "PZO2101",
 		"aonId": 315,
-		"id": "59990618-0aac-49a2-925b-4d5746ffa5a7"
+		"id": "59990618-0aac-49a2-925b-4d5746ffa5a7",
+		"hash": "bUWAkEbP"
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +79,8 @@
 		"benefits": "Study broadens your range of simple spells.",
 		"source": "PZO2101",
 		"aonId": 183,
-		"id": "0dfa4470-6b5f-47ba-b31d-518b166b016f"
+		"id": "0dfa4470-6b5f-47ba-b31d-518b166b016f",
+		"hash": "rVVSbwxU"
 	},
 	{
 		"objectType": "Feat",
@@ -85,7 +91,8 @@
 		"benefits": "Hiding your gestures and incantations within other speech and movement, you attempt to conceal the fact that you are casting a spell.",
 		"source": "PZO2101",
 		"aonId": 640,
-		"id": "8fc3b44c-ddae-4c89-9010-f97428de87d7"
+		"id": "8fc3b44c-ddae-4c89-9010-f97428de87d7",
+		"hash": "DwcbbzVR"
 	},
 	{
 		"objectType": "Feat",
@@ -96,7 +103,8 @@
 		"benefits": "You infuse your familiar with additional primal energy, increasing its abilities.",
 		"source": "PZO2101",
 		"aonId": 318,
-		"id": "20d24828-7e53-4bf7-bdb4-494c6a507c11"
+		"id": "20d24828-7e53-4bf7-bdb4-494c6a507c11",
+		"hash": "YlWtKpFZ"
 	},
 	{
 		"objectType": "Feat",
@@ -107,7 +115,8 @@
 		"benefits": "You siphon the residual energy from the last spell you cast into one weapon you're wielding.",
 		"source": "PZO2101",
 		"aonId": 610,
-		"id": "65118b2d-97e8-4ba5-a3fd-d96cb05685c0"
+		"id": "65118b2d-97e8-4ba5-a3fd-d96cb05685c0",
+		"hash": "BLcptxJb"
 	},
 	{
 		"objectType": "Feat",
@@ -118,7 +127,8 @@
 		"benefits": "You have linked your bonded item to the well of energy that powers your school spells.",
 		"source": "PZO2101",
 		"aonId": 643,
-		"id": "a88a92de-e897-4633-8996-44ab1de6ba86"
+		"id": "a88a92de-e897-4633-8996-44ab1de6ba86",
+		"hash": "MZpSsrWX"
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +139,8 @@
 		"benefits": "You've learned how to cast many of your spells without speaking the words of power you would normally need to provide.",
 		"source": "PZO2101",
 		"aonId": 644,
-		"id": "a9910202-5469-414b-95e8-35e855b6d907"
+		"id": "a9910202-5469-414b-95e8-35e855b6d907",
+		"hash": "UcRRlxgp"
 	},
 	{
 		"objectType": "Feat",
@@ -140,7 +151,8 @@
 		"benefits": "You've studied ways of overcoming the innate magical resistance that certain powerful creatures have.",
 		"source": "PZO2101",
 		"aonId": 645,
-		"id": "fde75aa6-e589-4139-8539-f785ca41e40c"
+		"id": "fde75aa6-e589-4139-8539-f785ca41e40c",
+		"hash": "MFzSRssf"
 	},
 	{
 		"objectType": "Feat",
@@ -151,7 +163,8 @@
 		"benefits": "You don't lose spells easily.",
 		"source": "PZO2101",
 		"aonId": 194,
-		"id": "5e0da120-7797-4823-ba62-783920ed2431"
+		"id": "5e0da120-7797-4823-ba62-783920ed2431",
+		"hash": "YRUhhBTm"
 	},
 	{
 		"objectType": "Feat",
@@ -162,7 +175,8 @@
 		"benefits": "You gain access to a powerful new school spell depending on your arcane school.",
 		"source": "PZO2101",
 		"aonId": 647,
-		"id": "ee71c198-ed9f-43ec-a132-7a22584858e0"
+		"id": "ee71c198-ed9f-43ec-a132-7a22584858e0",
+		"hash": "IvQzFrhQ"
 	},
 	{
 		"objectType": "Feat",
@@ -173,7 +187,8 @@
 		"benefits": "By carefully manipulating the arcane energies stored in your bonded item as you drain it, you can conserve just enough power to cast another, slightly weaker spell.",
 		"source": "PZO2101",
 		"aonId": 648,
-		"id": "56b371ca-b1e5-4b14-89d7-a2f21dfa4d4f"
+		"id": "56b371ca-b1e5-4b14-89d7-a2f21dfa4d4f",
+		"hash": "kSqSOPsZ"
 	},
 	{
 		"objectType": "Feat",
@@ -184,7 +199,8 @@
 		"benefits": "You can access the fundamental abilities of any school of magic.",
 		"source": "PZO2101",
 		"aonId": 649,
-		"id": "b50a0260-689b-4cb3-8b13-d33f4cba6e3a"
+		"id": "b50a0260-689b-4cb3-8b13-d33f4cba6e3a",
+		"hash": "AAvYmzRz"
 	},
 	{
 		"objectType": "Feat",
@@ -195,7 +211,8 @@
 		"benefits": "You alter your spells to overcome resistances.",
 		"source": "PZO2101",
 		"aonId": 337,
-		"id": "4655c7fc-1148-48f3-99b2-f07f5a38351d"
+		"id": "4655c7fc-1148-48f3-99b2-f07f5a38351d",
+		"hash": "pTXWxMyg"
 	},
 	{
 		"objectType": "Feat",
@@ -206,7 +223,8 @@
 		"benefits": "You are able to quickly cast a spell.",
 		"source": "PZO2101",
 		"aonId": 199,
-		"id": "2ed812e7-c479-4859-a5e3-bc84ac4ec2ee"
+		"id": "2ed812e7-c479-4859-a5e3-bc84ac4ec2ee",
+		"hash": "TNpOYEbD"
 	},
 	{
 		"objectType": "Feat",
@@ -217,7 +235,8 @@
 		"benefits": "During your daily preparations, you can create two temporary scrolls containing arcane spells from your spellbook.",
 		"source": "PZO2101",
 		"aonId": 652,
-		"id": "27cbfaf2-8dec-49d2-a725-8f1a3125b49b"
+		"id": "27cbfaf2-8dec-49d2-a725-8f1a3125b49b",
+		"hash": "qsTKblXr"
 	},
 	{
 		"objectType": "Feat",
@@ -228,7 +247,8 @@
 		"benefits": "You creatively apply your prepared spells to counterspell a much wider variety of your opponents' magic.",
 		"source": "PZO2101",
 		"aonId": 653,
-		"id": "113589c7-babf-4007-97c2-a59860d60bb7"
+		"id": "113589c7-babf-4007-97c2-a59860d60bb7",
+		"hash": "lRlXtRDQ"
 	},
 	{
 		"objectType": "Feat",
@@ -239,7 +259,8 @@
 		"benefits": "You have a literal sixth sense for magic.",
 		"source": "PZO2101",
 		"aonId": 622,
-		"id": "0e2c719b-a86f-4d21-bad0-4bb4016b242e"
+		"id": "0e2c719b-a86f-4d21-bad0-4bb4016b242e",
+		"hash": "QQzqjXwI"
 	},
 	{
 		"objectType": "Feat",
@@ -250,7 +271,8 @@
 		"benefits": "Your connection to your bonded item increases your focus pool.",
 		"source": "PZO2101",
 		"aonId": 655,
-		"id": "2aaa2e68-de8c-4229-99ce-c8b5977eceac"
+		"id": "2aaa2e68-de8c-4229-99ce-c8b5977eceac",
+		"hash": "jSwZgkNw"
 	},
 	{
 		"objectType": "Feat",
@@ -261,7 +283,8 @@
 		"benefits": "You cause a spell to fire back at its caster.",
 		"source": "PZO2101",
 		"aonId": 624,
-		"id": "9b95f524-8d1f-45ec-9ba0-8eca1b2f50f8"
+		"id": "9b95f524-8d1f-45ec-9ba0-8eca1b2f50f8",
+		"hash": "HCTNKKJx"
 	},
 	{
 		"objectType": "Feat",
@@ -272,7 +295,8 @@
 		"benefits": "When you draw upon your bonded item, you can leave a bit of energy within it for later use.",
 		"source": "PZO2101",
 		"aonId": 657,
-		"id": "f53f426f-72e5-4106-b465-da623e40e5a7"
+		"id": "f53f426f-72e5-4106-b465-da623e40e5a7",
+		"hash": "GKSGLFzz"
 	},
 	{
 		"objectType": "Feat",
@@ -283,7 +307,8 @@
 		"benefits": "You can maintain a spell with hardly a thought.",
 		"source": "PZO2101",
 		"aonId": 206,
-		"id": "d140b744-a82c-423d-8ae1-caa3b27614c7"
+		"id": "d140b744-a82c-423d-8ae1-caa3b27614c7",
+		"hash": "CVsqkNEk"
 	},
 	{
 		"objectType": "Feat",
@@ -294,7 +319,8 @@
 		"benefits": "You've learned to alter choices you make when casting spells on yourself.",
 		"source": "PZO2101",
 		"aonId": 659,
-		"id": "174a5488-c074-4524-b557-301568b78481"
+		"id": "174a5488-c074-4524-b557-301568b78481",
+		"hash": "XGKqzVLB"
 	},
 	{
 		"objectType": "Feat",
@@ -305,7 +331,8 @@
 		"benefits": "You've found a way to prepare a spell slot that exists in your mind as many different possibilities at once.",
 		"source": "PZO2101",
 		"aonId": 660,
-		"id": "ce6c757d-ded0-4504-9fc7-4909d1d7a4b1"
+		"id": "ce6c757d-ded0-4504-9fc7-4909d1d7a4b1",
+		"hash": "xGshgNQF"
 	},
 	{
 		"objectType": "Feat",
@@ -316,7 +343,8 @@
 		"benefits": "You've discovered how to reuse some of your spell slots over and over.",
 		"source": "PZO2101",
 		"aonId": 661,
-		"id": "2898bb4e-29e6-4471-899c-490b67ff7896"
+		"id": "2898bb4e-29e6-4471-899c-490b67ff7896",
+		"hash": "SQOpYrtW"
 	},
 	{
 		"objectType": "Feat",
@@ -329,7 +357,8 @@
 		"benefits": "You have mastered the greatest secrets of arcane magic.",
 		"source": "PZO2101",
 		"aonId": 662,
-		"id": "d1852b49-58f5-4434-8015-e8d8aca0339f"
+		"id": "d1852b49-58f5-4434-8015-e8d8aca0339f",
+		"hash": "HbptTHmO"
 	},
 	{
 		"objectType": "Feat",
@@ -340,7 +369,8 @@
 		"benefits": "Altering your spells doesn't take any longer than casting them normally.",
 		"source": "PZO2101",
 		"aonId": 632,
-		"id": "1b226fc7-0717-4ef6-b952-6fce19d9e826"
+		"id": "1b226fc7-0717-4ef6-b952-6fce19d9e826",
+		"hash": "JKKFXcgS"
 	},
 	{
 		"objectType": "Feat",
@@ -351,7 +381,8 @@
 		"benefits": "You can merge spells, producing multiple ef ects with a single casting.",
 		"source": "PZO2101",
 		"aonId": 664,
-		"id": "6d564bdc-feac-468f-bdba-29bc9d475016"
+		"id": "6d564bdc-feac-468f-bdba-29bc9d475016",
+		"hash": "bRQvgbQU"
 	},
 	{
 		"objectType": "Feat",
@@ -361,7 +392,8 @@
 		"prerequisites": [ "-" ],
 		"benefits": "Master 4 spells.",
 		"source": "PZO2101",
-		"aonId": 1169,
-		"id": "0df92912-73e2-4679-88ae-3d88f4eee3f0"
+		"aonId": 1843,
+		"id": "0df92912-73e2-4679-88ae-3d88f4eee3f0",
+		"hash": "RsHVzndc"
 	}
 ]

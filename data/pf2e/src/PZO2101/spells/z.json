@@ -21,7 +21,8 @@
 		"traditions": [ "divine", "occult" ],
 		"traits": [ "Enchantment" ],
 		"focus": false,
-		"id": "730e7da1-9e7d-4764-806e-28900feefe44"
+		"id": "730e7da1-9e7d-4764-806e-28900feefe44",
+		"hash": "WkEIKJlP"
 	},
 	{
 		"aonId": 379,
@@ -57,6 +58,7 @@
 		"traditions": [ "divine", "occult" ],
 		"traits": [ "Uncommon", "Enchantment", "Mental" ],
 		"focus": false,
-		"id": "3d8fd72e-aebc-4b5d-90b4-068362b0533b"
+		"id": "3d8fd72e-aebc-4b5d-90b4-068362b0533b",
+		"hash": "lfVbhgAj"
 	}
 ]

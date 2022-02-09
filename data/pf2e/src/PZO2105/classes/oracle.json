@@ -32,7 +32,8 @@
 		"classPath": "Mystery",
 		"aonId": 14,
 		"source": "PZO2105",
-		"id": "0c7d1a8b-1829-4fe0-8861-bcab3ffa6c03"
+		"id": "0c7d1a8b-1829-4fe0-8861-bcab3ffa6c03",
+		"hash": "YrHPjbwR"
 	},
 	{ "objectType": "ClassPath", "name": "Ancestors", "class": "Oracle", "source": "PZO2105", "id": "720edbd6-883d-4057-af88-c8068bf7fb1c", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Battle", "class": "Oracle", "source": "PZO2105", "id": "f200187a-e915-4c7e-aef8-c9d1d35ef62d", "aonId": 2 },

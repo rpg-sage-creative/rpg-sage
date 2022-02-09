@@ -9,7 +9,8 @@
 			"You're trained in the Intimidation skill and a Lore skill related to the terrain you worked in (such as Desert Lore or Plains Lore). You gain the Group Coercion skill feat."
 		],
 		"source": "PZO2105",
-		"id": "3e093dd2-add5-4522-82a5-9fbbedbf01e6"
+		"id": "3e093dd2-add5-4522-82a5-9fbbedbf01e6",
+		"hash": "xFjNqBHk"
 	},
 	{
 		"aonId": 166,
@@ -21,7 +22,8 @@
 			"You're trained in the Medicine skill and the Surgery Lore skill. You gain the Risky Surgery skill feat."
 		],
 		"source": "PZO2105",
-		"id": "edfe7b52-7524-4fac-adf7-93a187ee1482"
+		"id": "edfe7b52-7524-4fac-adf7-93a187ee1482",
+		"hash": "tgIUZPxd"
 	},
 	{
 		"aonId": 167,
@@ -33,7 +35,8 @@
 			"You're trained in the Society skill and the Accounting Lore skill. You gain the Eye for Numbers skill feat."
 		],
 		"source": "PZO2105",
-		"id": "40e0eacc-da57-40e4-8286-29757682bdfd"
+		"id": "40e0eacc-da57-40e4-8286-29757682bdfd",
+		"hash": "XEkzWKxl"
 	},
 	{
 		"aonId": 168,
@@ -45,7 +48,8 @@
 			"You're trained in the Survival skill and the Cooking Lore skill. You gain the Seasoned skill feat."
 		],
 		"source": "PZO2105",
-		"id": "5eb97688-ef5e-4596-bf05-2313aa9d6d40"
+		"id": "5eb97688-ef5e-4596-bf05-2313aa9d6d40",
+		"hash": "pYWISpvF"
 	},
 	{
 		"aonId": 169,
@@ -57,7 +61,8 @@
 			"You're trained in the Society skill and the Lore skill for the city in which you were raised. You gain the Glean Contents skill feat."
 		],
 		"source": "PZO2105",
-		"id": "162e8522-52b7-4c52-86cf-626920eeecbc"
+		"id": "162e8522-52b7-4c52-86cf-626920eeecbc",
+		"hash": "WXzEZpZn"
 	},
 	{
 		"aonId": 170,
@@ -69,7 +74,8 @@
 			"You're trained in the Occultism skill and the Lore skill related to your deity or cult. You gain the Schooled in Secrets skill feat."
 		],
 		"source": "PZO2105",
-		"id": "c2d3237e-f69d-4204-81e1-e804278f038c"
+		"id": "c2d3237e-f69d-4204-81e1-e804278f038c",
+		"hash": "LpqkdgkY"
 	},
 	{
 		"aonId": 171,
@@ -81,7 +87,8 @@
 			"You're trained in the Deception skill and the Warfare Lore skill. You gain the Lengthy Diversion skill feat."
 		],
 		"source": "PZO2105",
-		"id": "264c9a1e-be70-47a4-8ccb-1727e5741c56"
+		"id": "264c9a1e-be70-47a4-8ccb-1727e5741c56",
+		"hash": "wzBArSqk"
 	},
 	{
 		"aonId": 172,
@@ -93,7 +100,8 @@
 			"You're trained in the Nature skill and the Plains Lore skill. You gain the Express Rider skill feat."
 		],
 		"source": "PZO2105",
-		"id": "eaef200b-8753-4ee7-9b9f-4b1a67ad25e4"
+		"id": "eaef200b-8753-4ee7-9b9f-4b1a67ad25e4",
+		"hash": "GxObEXVr"
 	},
 	{
 		"aonId": 173,
@@ -105,7 +113,8 @@
 			"You're trained in the Religion skill and the Lore skill for your patron deity. You gain the Pilgrim's Token skill feat."
 		],
 		"source": "PZO2105",
-		"id": "a76638bd-3495-4768-85d8-bb7cc8bdee85"
+		"id": "a76638bd-3495-4768-85d8-bb7cc8bdee85",
+		"hash": "APIqpnrb"
 	},
 	{
 		"aonId": 174,
@@ -117,7 +126,8 @@
 			"You're trained in the Society skill and a Lore skill related to the settlement you came from. You gain the Streetwise skill feat."
 		],
 		"source": "PZO2105",
-		"id": "e17c6e55-ef4a-44a4-9c4d-861943a3db35"
+		"id": "e17c6e55-ef4a-44a4-9c4d-861943a3db35",
+		"hash": "FBRPnQXv"
 	},
 	{
 		"aonId": 175,
@@ -129,7 +139,8 @@
 			"You're trained in the Occultism skill and the Herbalism Lore skill. You gain the Root Magic skill feat."
 		],
 		"source": "PZO2105",
-		"id": "e994de77-0182-44bf-b135-cb9699051bf1"
+		"id": "e994de77-0182-44bf-b135-cb9699051bf1",
+		"hash": "GXJvhzxR"
 	},
 	{
 		"aonId": 176,
@@ -141,7 +152,8 @@
 			"You're trained in the Survival skill and the Lore skill for the settlement you grew up scavenging in. You gain the Forager skill feat."
 		],
 		"source": "PZO2105",
-		"id": "bbfad1b7-bd44-413c-978c-68125a7cdbe8"
+		"id": "bbfad1b7-bd44-413c-978c-68125a7cdbe8",
+		"hash": "CvNtBjDW"
 	},
 	{
 		"aonId": 177,
@@ -153,7 +165,8 @@
 			"You're trained in the Society skill and the Labor Lore skill. You gain the Read Lips skill feat."
 		],
 		"source": "PZO2105",
-		"id": "741c880e-2eac-4631-805b-324eb99e5345"
+		"id": "741c880e-2eac-4631-805b-324eb99e5345",
+		"hash": "ptrNXQtX"
 	},
 	{
 		"aonId": 178,
@@ -165,7 +178,8 @@
 			"You're trained in the Athletics skill and your choice of the Heraldry Lore or Warfare Lore skill. You gain the Armor Assist skill feat."
 		],
 		"source": "PZO2105",
-		"id": "210aa2a1-a2d2-464f-a347-b408d24494ab"
+		"id": "210aa2a1-a2d2-464f-a347-b408d24494ab",
+		"hash": "PvmVDKSD"
 	},
 	{
 		"aonId": 179,
@@ -177,7 +191,8 @@
 			"You're trained in the Intimidation skill and the Lore skill for the settlement that employed you. You gain the Quick Coercion skill feat."
 		],
 		"source": "PZO2105",
-		"id": "a5d12f19-d82b-469c-bb7d-371ce85ce5c1"
+		"id": "a5d12f19-d82b-469c-bb7d-371ce85ce5c1",
+		"hash": "LxqrpCtF"
 	},
 	{
 		"aonId": 180,
@@ -189,7 +204,8 @@
 			"You're trained in your choice of the Performance or Society skills, along with the Academia Lore skill. You gain the Experienced Professional skill feat."
 		],
 		"source": "PZO2105",
-		"id": "5e8d0905-c4ff-4d1a-9409-c992a04bfb16"
+		"id": "5e8d0905-c4ff-4d1a-9409-c992a04bfb16",
+		"hash": "xQQLxsnk"
 	},
 	{
 		"aonId": 181,
@@ -201,7 +217,8 @@
 			"You're trained in the Performance skill and the Genealogy Lore skill. You gain the Fascinating Performance skill feat."
 		],
 		"source": "PZO2105",
-		"id": "2cd058db-86d0-4ece-9b85-96c79f027275"
+		"id": "2cd058db-86d0-4ece-9b85-96c79f027275",
+		"hash": "pqPbJyZr"
 	},
 	{
 		"aonId": 182,
@@ -213,7 +230,8 @@
 			"You gain three free ability boosts. You choose two, and the GM chooses the third based on their first inklings of your character's possible history."
 		],
 		"source": "PZO2105",
-		"id": "266198da-6b4e-45bd-be3d-42323f015900"
+		"id": "266198da-6b4e-45bd-be3d-42323f015900",
+		"hash": "bttALWMQ"
 	},
 	{
 		"aonId": 183,
@@ -226,7 +244,8 @@
 			"You are trained in a Lore skill associated with the deity who blessed you (such as Shelyn Lore) if you know their identity, or else in a Lore skill of the GM's choice if you don't. Either you can cast guidance as a divine innate spell at will, or you gain a similar blessing determined by the GM."
 		],
 		"source": "PZO2105",
-		"id": "71bf2e26-7713-4486-bc3a-8d9424e69fce"
+		"id": "71bf2e26-7713-4486-bc3a-8d9424e69fce",
+		"hash": "PjPQAxDX"
 	},
 	{
 		"aonId": 184,
@@ -240,7 +259,8 @@
 			"<b>Warding Sign</b> [R] (concentrate) <b>Frequency</b> once per minute; <b>Trigger</b> You attempt a saving throw against a magical effect, but you haven't rolled yet; <b>Effect</b> You call on the power of a personal, eldritch sign of protection, which flares brightly before slowly fading. You gain a +2 circumstance bonus to the triggering saving throw, or a +3 circumstance bonus if 3 the effect is a curse."
 		],
 		"source": "PZO2105",
-		"id": "b524c630-625b-4118-939b-a1bd5532f9aa"
+		"id": "b524c630-625b-4118-939b-a1bd5532f9aa",
+		"hash": "HkvdTlbr"
 	},
 	{
 		"aonId": 185,
@@ -253,7 +273,8 @@
 			"You are trained in Nature and Survival. You gain low-light vision (or darkvision if you already had low-light vision), imprecise scent with a range of 30 feet, and the Forager skill feat."
 		],
 		"source": "PZO2105",
-		"id": "8073702f-6aeb-4bd6-b7d7-ba23e9a11f85"
+		"id": "8073702f-6aeb-4bd6-b7d7-ba23e9a11f85",
+		"hash": "ZNqnXvzx"
 	},
 	{
 		"aonId": 186,
@@ -267,7 +288,8 @@
 			"<b>Fey's Fortune</b> [F] (concentrate, fortune) <b>Frequency</b> once per day; <b>Trigger</b> You attempt a skill check and haven't yet rolled; <b>Effect</b> Roll the skill check twice and use the better result."
 		],
 		"source": "PZO2105",
-		"id": "76b039f3-1450-44a8-80a5-11e014f08b51"
+		"id": "76b039f3-1450-44a8-80a5-11e014f08b51",
+		"hash": "IqPFbFvR"
 	},
 	{
 		"aonId": 187,
@@ -280,7 +302,8 @@
 			"You are trained in Occultism and an additional skill in which the haunting entity is well-versed, determined by the GM. Any time you attempt a skill check for the entity's skill, the GM can offer you a +1 circumstance bonus to the check, as though the entity were Aiding you. If you accept but fail the check, you are frightened 2 (frightened 4 on a critical failure). The initial frightened value can't be reduced by effects that would reduce or prevent the condition (such as a fighter's bravery)."
 		],
 		"source": "PZO2105",
-		"id": "d265aadb-6c28-4440-8d16-bd8ef4fa2432"
+		"id": "d265aadb-6c28-4440-8d16-bd8ef4fa2432",
+		"hash": "NfJrLQJy"
 	},
 	{
 		"aonId": 188,
@@ -293,7 +316,8 @@
 			"You gain the Diehard feat and the Additional Lore feat for Boneyard Lore."
 		],
 		"source": "PZO2105",
-		"id": "fb216ecf-c48a-4c7e-ad83-1e37df99215d"
+		"id": "fb216ecf-c48a-4c7e-ad83-1e37df99215d",
+		"hash": "VREnsOZI"
 	},
 	{
 		"aonId": 189,
@@ -306,6 +330,7 @@
 			"You are trained in Society. You gain the Courtly Graces skill feat and can influence commoners in your family's territory, as well as nobility anywhere. If you later gain the Connections skill feat, you automatically have common and noble connections within any community in your royal family's territory and have noble connections in large communities outside your territory."
 		],
 		"source": "PZO2105",
-		"id": "3724a4ef-0d37-4658-ad1c-59399378d894"
+		"id": "3724a4ef-0d37-4658-ad1c-59399378d894",
+		"hash": "REKvTGmY"
 	}
 ]

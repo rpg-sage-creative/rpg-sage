@@ -8,7 +8,8 @@
 		"benefits": "You have used alchemy to create life, a simple creature formed from alchemical materials, reagents, and a bit of your own blood.",
 		"source": "PZO2101",
 		"aonId": 92,
-		"id": "9203b0c0-d11d-47eb-8a33-7dcc38dccfaa"
+		"id": "9203b0c0-d11d-47eb-8a33-7dcc38dccfaa",
+		"hash": "CQNKvxQv"
 	},
 	{
 		"objectType": "Feat",
@@ -19,7 +20,8 @@
 		"benefits": "You can identify alchemical items quickly.",
 		"source": "PZO2101",
 		"aonId": 93,
-		"id": "6a24cd98-dfd7-41bb-8408-fd9fcf7dc1a3"
+		"id": "6a24cd98-dfd7-41bb-8408-fd9fcf7dc1a3",
+		"hash": "WQCqYtxq"
 	},
 	{
 		"objectType": "Feat",
@@ -30,7 +32,8 @@
 		"benefits": "You've learned how to throw a longer distance.",
 		"source": "PZO2101",
 		"aonId": 94,
-		"id": "bbd3c057-7037-44fc-af02-501b4da69852"
+		"id": "bbd3c057-7037-44fc-af02-501b4da69852",
+		"hash": "jMxxcQHc"
 	},
 	{
 		"objectType": "Feat",
@@ -41,7 +44,8 @@
 		"benefits": "You keep your bombs in easy-to-reach pouches from which you draw without thinking.",
 		"source": "PZO2101",
 		"aonId": 95,
-		"id": "98bb04dc-157b-4732-9813-ccbd97a53423"
+		"id": "98bb04dc-157b-4732-9813-ccbd97a53423",
+		"hash": "ZIzRxhgs"
 	},
 	{
 		"objectType": "Feat",
@@ -52,7 +56,8 @@
 		"benefits": "Repeated exposure to toxic reagents has fortified your body against poisons of all kinds.",
 		"source": "PZO2101",
 		"aonId": 96,
-		"id": "7af9b120-4d51-4adf-819d-cae6bb3f7612"
+		"id": "7af9b120-4d51-4adf-819d-cae6bb3f7612",
+		"hash": "PXQqlEDb"
 	},
 	{
 		"objectType": "Feat",
@@ -63,7 +68,8 @@
 		"benefits": "While under the effect of a mutagen, you can metabolize that mutagen's power to heal yourself.",
 		"source": "PZO2101",
 		"aonId": 97,
-		"id": "68f20e3a-d3ea-4d68-b4eb-f424a18a8bad"
+		"id": "68f20e3a-d3ea-4d68-b4eb-f424a18a8bad",
+		"hash": "pNWNWzMb"
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +80,8 @@
 		"benefits": "You cause the bomb to create a cloud of thick smoke, in addition to its normal effects.",
 		"source": "PZO2101",
 		"aonId": 98,
-		"id": "bb1c00c8-0971-4ace-9186-86abae86da93"
+		"id": "bb1c00c8-0971-4ace-9186-86abae86da93",
+		"hash": "fpzxZHLk"
 	},
 	{
 		"objectType": "Feat",
@@ -85,7 +92,8 @@
 		"benefits": "You have calculated all the angles to maximize a bomb's splash.",
 		"source": "PZO2101",
 		"aonId": 99,
-		"id": "d2c7f8f2-cd44-454b-bbe1-2bdbbf4f9a9f"
+		"id": "d2c7f8f2-cd44-454b-bbe1-2bdbbf4f9a9f",
+		"hash": "JNZkwtRR"
 	},
 	{
 		"objectType": "Feat",
@@ -96,7 +104,8 @@
 		"benefits": "Thanks to the time you've spent studying and experimenting, you know how to scale your formulas into larger batches that don't require any additional attention.",
 		"source": "PZO2101",
 		"aonId": 100,
-		"id": "9006f50f-cecf-4377-98cf-1b8a5d28b83e"
+		"id": "9006f50f-cecf-4377-98cf-1b8a5d28b83e",
+		"hash": "xRJYtbhW"
 	},
 	{
 		"objectType": "Feat",
@@ -107,7 +116,8 @@
 		"benefits": "You've learned how to make your personal energy last just a little bit longer when quickly brewing ad hoc concoctions.",
 		"source": "PZO2101",
 		"aonId": 101,
-		"id": "431b8437-7402-4cff-85be-02b7a0ab2a93"
+		"id": "431b8437-7402-4cff-85be-02b7a0ab2a93",
+		"hash": "bqgSxYQf"
 	},
 	{
 		"objectType": "Feat",
@@ -118,7 +128,8 @@
 		"benefits": "You've discovered how to mix two elixirs into a single hybrid concoction.",
 		"source": "PZO2101",
 		"aonId": 102,
-		"id": "65520aa3-b681-4043-988d-db30471bd5db"
+		"id": "65520aa3-b681-4043-988d-db30471bd5db",
+		"hash": "tIIzEImW"
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +140,8 @@
 		"benefits": "Your bombs impose additional effects on your enemies.",
 		"source": "PZO2101",
 		"aonId": 103,
-		"id": "cf829f11-379a-454d-a5af-b6a5fa26386c"
+		"id": "cf829f11-379a-454d-a5af-b6a5fa26386c",
+		"hash": "tbpvtVqW"
 	},
 	{
 		"objectType": "Feat",
@@ -140,7 +152,8 @@
 		"benefits": "You can lob bombs with great force and a precise trajectory to angle the splash in a cone spraying in a single direction.",
 		"source": "PZO2101",
 		"aonId": 104,
-		"id": "6205ce8e-19ae-4555-a2a7-83ce7538d744"
+		"id": "6205ce8e-19ae-4555-a2a7-83ce7538d744",
+		"hash": "tDjNnXks"
 	},
 	{
 		"objectType": "Feat",
@@ -151,7 +164,8 @@
 		"benefits": "Your bestial mutagen brings out the beast lurking within you.",
 		"source": "PZO2101",
 		"aonId": 105,
-		"id": "481216bf-d566-4442-8e3a-20349a8b4d53"
+		"id": "481216bf-d566-4442-8e3a-20349a8b4d53",
+		"hash": "wtIRwLrI"
 	},
 	{
 		"objectType": "Feat",
@@ -162,7 +176,8 @@
 		"benefits": "Alchemical items you create on the fly are particularly potent.",
 		"source": "PZO2101",
 		"aonId": 106,
-		"id": "1a09b3e3-2a67-454d-b9a5-fc11a4588aae"
+		"id": "1a09b3e3-2a67-454d-b9a5-fc11a4588aae",
+		"hash": "Txdxxrnz"
 	},
 	{
 		"objectType": "Feat",
@@ -173,7 +188,8 @@
 		"benefits": "You mix in an additive to make your bomb's contents adhere to the target and continue to deal damage.",
 		"source": "PZO2101",
 		"aonId": 107,
-		"id": "b0e027bc-2e05-4664-bd7f-adc52dea2efb"
+		"id": "b0e027bc-2e05-4664-bd7f-adc52dea2efb",
+		"hash": "yPFRHtbr"
 	},
 	{
 		"objectType": "Feat",
@@ -184,7 +200,8 @@
 		"benefits": "You can cause your body to twist and flow like the quicksilver within your mutagens.",
 		"source": "PZO2101",
 		"aonId": 108,
-		"id": "8f86a087-f0dd-4c53-8ac8-5248d2ef85e3"
+		"id": "8f86a087-f0dd-4c53-8ac8-5248d2ef85e3",
+		"hash": "gAPGOKKn"
 	},
 	{
 		"objectType": "Feat",
@@ -195,7 +212,8 @@
 		"benefits": "The particularly volatile compounds that you brew into your bombs result in them creating especially large and powerful explosions.",
 		"source": "PZO2101",
 		"aonId": 109,
-		"id": "071b21c5-3712-43b6-8194-1f6b6e2c963f"
+		"id": "071b21c5-3712-43b6-8194-1f6b6e2c963f",
+		"hash": "ppRNXxCH"
 	},
 	{
 		"objectType": "Feat",
@@ -206,7 +224,8 @@
 		"benefits": "You have learned enhanced techniques and alchemical secrets that allow you to expand the range of effects you can impose with your bombs.",
 		"source": "PZO2101",
 		"aonId": 110,
-		"id": "7a31306a-e449-40c0-9cf3-6d4d12896d14"
+		"id": "7a31306a-e449-40c0-9cf3-6d4d12896d14",
+		"hash": "JDUROvDW"
 	},
 	{
 		"objectType": "Feat",
@@ -217,7 +236,8 @@
 		"benefits": "You mix a special additive into your elixir that calms the drinker's body and mind.",
 		"source": "PZO2101",
 		"aonId": 111,
-		"id": "04900657-bf08-4270-88d5-d12d1185fe74"
+		"id": "04900657-bf08-4270-88d5-d12d1185fe74",
+		"hash": "WXtQwmXj"
 	},
 	{
 		"objectType": "Feat",
@@ -228,7 +248,8 @@
 		"benefits": "By concentrating your poisons' toxic components, you make them harder for victims to resist.",
 		"source": "PZO2101",
 		"aonId": 112,
-		"id": "63bd7bce-4667-4425-88d4-9b9df40bb645"
+		"id": "63bd7bce-4667-4425-88d4-9b9df40bb645",
+		"hash": "ZrIMWNAU"
 	},
 	{
 		"objectType": "Feat",
@@ -239,7 +260,8 @@
 		"benefits": "Integrating your own personal energy into the elixirs you create causes them to affect you for longer.",
 		"source": "PZO2101",
 		"aonId": 113,
-		"id": "ba9c3d4a-6281-4be4-bdbf-2f192025e6d1"
+		"id": "ba9c3d4a-6281-4be4-bdbf-2f192025e6d1",
+		"hash": "RgJOArLW"
 	},
 	{
 		"objectType": "Feat",
@@ -250,7 +272,8 @@
 		"benefits": "The fortifying additives you brew into your mutagens make your juggernaut form impervious.",
 		"source": "PZO2101",
 		"aonId": 114,
-		"id": "b457f8f9-84e3-46f2-a2ae-f34e27f9a4ac"
+		"id": "b457f8f9-84e3-46f2-a2ae-f34e27f9a4ac",
+		"hash": "PEmBDgzR"
 	},
 	{
 		"objectType": "Feat",
@@ -261,7 +284,8 @@
 		"benefits": "Through a combination of careful manipulation and precise breath control, you can deploy inhaled toxins precisely.",
 		"source": "PZO2101",
 		"aonId": 1153,
-		"id": "4187a2a9-bdf4-4366-a57d-267eaa509a1e"
+		"id": "4187a2a9-bdf4-4366-a57d-267eaa509a1e",
+		"hash": "bmrzxXtP"
 	},
 	{
 		"objectType": "Feat",
@@ -272,7 +296,8 @@
 		"benefits": "You lob bombs unerringly, despite obstructions or distance.",
 		"source": "PZO2101",
 		"aonId": 115,
-		"id": "25f06eb4-b2c1-48b9-9299-3f8dada52128"
+		"id": "25f06eb4-b2c1-48b9-9299-3f8dada52128",
+		"hash": "QDcBwyOD"
 	},
 	{
 		"objectType": "Feat",
@@ -283,7 +308,8 @@
 		"benefits": "Your silvertongue mutagen transcends languages and plausibility.",
 		"source": "PZO2101",
 		"aonId": 116,
-		"id": "b518050e-4e63-404c-9dfa-cfab46e45405"
+		"id": "b518050e-4e63-404c-9dfa-cfab46e45405",
+		"hash": "GFIpRrNM"
 	},
 	{
 		"objectType": "Feat",
@@ -294,7 +320,8 @@
 		"benefits": "Your additives contain panaceas that can remedy a plethora of maladies.",
 		"source": "PZO2101",
 		"aonId": 117,
-		"id": "847a8d0a-88d9-4c4b-8a96-faa170fcf725"
+		"id": "847a8d0a-88d9-4c4b-8a96-faa170fcf725",
+		"hash": "HXxjtzvg"
 	},
 	{
 		"objectType": "Feat",
@@ -305,7 +332,8 @@
 		"benefits": "Ever inventive, you have discovered increasingly devastating ways for your bombs to impede and hamper your foes.",
 		"source": "PZO2101",
 		"aonId": 118,
-		"id": "ec5d0613-3016-4535-8bab-375bb2971893"
+		"id": "ec5d0613-3016-4535-8bab-375bb2971893",
+		"hash": "vhMdhbkk"
 	},
 	{
 		"objectType": "Feat",
@@ -316,7 +344,8 @@
 		"benefits": "Your body readily accepts and retains minor changes.",
 		"source": "PZO2101",
 		"aonId": 119,
-		"id": "6d2324d8-74ba-4bfe-b2ae-595a5628a1dd"
+		"id": "6d2324d8-74ba-4bfe-b2ae-595a5628a1dd",
+		"hash": "HFZZxWbj"
 	},
 	{
 		"objectType": "Feat",
@@ -327,7 +356,8 @@
 		"benefits": "You mix a substance into the bomb to foil resistances.",
 		"source": "PZO2101",
 		"aonId": 120,
-		"id": "d7ad627b-2838-4e68-9e1c-85115bf7ea61"
+		"id": "d7ad627b-2838-4e68-9e1c-85115bf7ea61",
+		"hash": "bpZEnLgD"
 	},
 	{
 		"objectType": "Feat",
@@ -338,7 +368,8 @@
 		"benefits": "Specialized tweaks to your formula that supplements your genius considerably broaden the benefits you gain from cognitive mutagens.",
 		"source": "PZO2101",
 		"aonId": 121,
-		"id": "d41bf432-2243-4bd9-84d5-7acda2919cae"
+		"id": "d41bf432-2243-4bd9-84d5-7acda2919cae",
+		"hash": "bzWpxQvz"
 	},
 	{
 		"objectType": "Feat",
@@ -349,7 +380,8 @@
 		"benefits": "You've trained your physical form to remain stable within the a given altered state.",
 		"source": "PZO2101",
 		"aonId": 122,
-		"id": "ad1199b3-23ed-4684-9854-989bf95d46b6"
+		"id": "ad1199b3-23ed-4684-9854-989bf95d46b6",
+		"hash": "mEYNycnT"
 	},
 	{
 		"objectType": "Feat",
@@ -360,7 +392,8 @@
 		"benefits": "Your mastery of alchemical secrets enables you to replicate effects most believe can be achieved only via magic.",
 		"source": "PZO2101",
 		"aonId": 123,
-		"id": "3d123951-da98-47b8-9cf5-f5732aff0dc3"
+		"id": "3d123951-da98-47b8-9cf5-f5732aff0dc3",
+		"hash": "BVKzNMHJ"
 	},
 	{
 		"objectType": "Feat",
@@ -371,7 +404,8 @@
 		"benefits": "With a minor adjustment of ratios in the formula for your serene mutagen, you gain mental protections.",
 		"source": "PZO2101",
 		"aonId": 124,
-		"id": "29c621cd-3efc-4041-9727-d2d657198915"
+		"id": "29c621cd-3efc-4041-9727-d2d657198915",
+		"hash": "DFfQBgvt"
 	},
 	{
 		"objectType": "Feat",
@@ -382,7 +416,8 @@
 		"benefits": "Your alchemical mastery can resuscitate the recently slain.",
 		"source": "PZO2101",
 		"aonId": 125,
-		"id": "f0ac4b17-a0ad-4776-b741-c8eec81c2b75"
+		"id": "f0ac4b17-a0ad-4776-b741-c8eec81c2b75",
+		"hash": "EwqpkMXA"
 	},
 	{
 		"objectType": "Feat",
@@ -393,7 +428,8 @@
 		"benefits": "You have perfected the formulas for bombs that impede your enemies.",
 		"source": "PZO2101",
 		"aonId": 126,
-		"id": "99bbc2b2-f1fa-4c14-ad2b-70c1a4c49eff"
+		"id": "99bbc2b2-f1fa-4c14-ad2b-70c1a4c49eff",
+		"hash": "qQZbrskt"
 	},
 	{
 		"objectType": "Feat",
@@ -404,7 +440,8 @@
 		"benefits": "Your research has paid off, culminating in the legendary philosopher's stone.",
 		"source": "PZO2101",
 		"aonId": 127,
-		"id": "a16ffbe1-a2ec-4f32-8aea-e9a47f7ab24a"
+		"id": "a16ffbe1-a2ec-4f32-8aea-e9a47f7ab24a",
+		"hash": "PtREMgjr"
 	},
 	{
 		"objectType": "Feat",
@@ -415,7 +452,8 @@
 		"benefits": "Prepare more alchemical items from your infused reagents.",
 		"source": "PZO2101",
 		"aonId": 1163,
-		"id": "48a95617-3e0c-4233-9887-f64cecb9efd4"
+		"id": "48a95617-3e0c-4233-9887-f64cecb9efd4",
+		"hash": "kXBrqtgQ"
 	},
 	{
 		"objectType": "Feat",
@@ -426,7 +464,8 @@
 		"benefits": "You add an incredibly powerful additive to a held bomb to create a mega bomb.",
 		"source": "PZO2101",
 		"aonId": 128,
-		"id": "57db478a-4218-42ee-b343-6d4d40d15139"
+		"id": "57db478a-4218-42ee-b343-6d4d40d15139",
+		"hash": "cqGTzmjF"
 	},
 	{
 		"objectType": "Feat",
@@ -437,6 +476,7 @@
 		"benefits": "You have enhanced the formulas for your mutagens, aligning them perfectly to your physiology.",
 		"source": "PZO2101",
 		"aonId": 129,
-		"id": "219e5391-3b8b-4e87-87cc-f5328c895139"
+		"id": "219e5391-3b8b-4e87-87cc-f5328c895139",
+		"hash": "xzQJnlxK"
 	}
 ]

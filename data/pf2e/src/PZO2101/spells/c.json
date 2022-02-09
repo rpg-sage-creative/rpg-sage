@@ -33,7 +33,8 @@
 		"traditions": [ "divine", "occult" ],
 		"traits": [ "Emotion", "Enchantment", "Incapacitation", "Mental" ],
 		"focus": false,
-		"id": "0bf5d7e5-4a9a-4d5c-8cdb-4895fb707f21"
+		"id": "0bf5d7e5-4a9a-4d5c-8cdb-4895fb707f21",
+		"hash": "LtypytmZ"
 	},
 	{
 		"aonId": 32,
@@ -54,7 +55,8 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Acid", "Air", "Cold", "Earth", "Electricity", "Evocation", "Fire", "Water" ],
 		"focus": false,
-		"id": "aa479d5d-8667-4612-88cd-5bc653d672b2"
+		"id": "aa479d5d-8667-4612-88cd-5bc653d672b2",
+		"hash": "xLNgWWYK"
 	},
 	{
 		"aonId": 33,
@@ -78,7 +80,8 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Electricity", "Evocation" ],
 		"focus": false,
-		"id": "8dc195c3-9c33-4277-afde-556b4c7ae9f4"
+		"id": "8dc195c3-9c33-4277-afde-556b4c7ae9f4",
+		"hash": "pUrxrDQt"
 	},
 	{
 		"aonId": 34,
@@ -119,7 +122,8 @@
 		"traditions": [ "arcane", "occult", "primal" ],
 		"traits": [ "Emotion", "Enchantment", "Incapacitation", "Mental" ],
 		"focus": false,
-		"id": "412a5456-6d2f-443d-9487-d04a53d365cf"
+		"id": "412a5456-6d2f-443d-9487-d04a53d365cf",
+		"hash": "Xqzczgvh"
 	},
 	{
 		"aonId": 35,
@@ -168,7 +172,8 @@
 		"traditions": [ "divine" ],
 		"traits": [ "Attack", "Cold", "Darkness", "Evil", "Evocation" ],
 		"focus": false,
-		"id": "a2bba791-b9e8-4f11-98ae-3d434c378032"
+		"id": "a2bba791-b9e8-4f11-98ae-3d434c378032",
+		"hash": "wzFQMYzW"
 	},
 	{
 		"aonId": 37,
@@ -195,7 +200,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Abjuration" ],
 		"focus": false,
-		"id": "2b4e1b71-e4ea-4da2-be8d-a529d816ba79"
+		"id": "2b4e1b71-e4ea-4da2-be8d-a529d816ba79",
+		"hash": "gZtNUnpk"
 	},
 	{
 		"aonId": 38,
@@ -219,7 +225,8 @@
 		"traditions": [ "divine", "occult" ],
 		"traits": [ "Uncommon", "Abjuration" ],
 		"focus": false,
-		"id": "7c809231-eb29-4665-8d7b-014eca3983e4"
+		"id": "7c809231-eb29-4665-8d7b-014eca3983e4",
+		"hash": "CtjLgbXI"
 	},
 	{
 		"aonId": 39,
@@ -239,7 +246,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Divination", "Scrying" ],
 		"focus": false,
-		"id": "946b9e5e-4bf4-4851-96a8-d099268eaddd"
+		"id": "946b9e5e-4bf4-4851-96a8-d099268eaddd",
+		"hash": "MlOsvWHk"
 	},
 	{
 		"aonId": 40,
@@ -259,7 +267,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Divination", "Scrying" ],
 		"focus": false,
-		"id": "e654eb19-4051-4f1f-847a-7ec5d2cf0a28"
+		"id": "e654eb19-4051-4f1f-847a-7ec5d2cf0a28",
+		"hash": "qvTGzcSr"
 	},
 	{
 		"aonId": 41,
@@ -282,7 +291,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
-		"id": "bb20240f-3028-4318-956f-bdedd9db9bb5"
+		"id": "bb20240f-3028-4318-956f-bdedd9db9bb5",
+		"hash": "gxvzTsPz"
 	},
 	{
 		"aonId": 42,
@@ -307,7 +317,8 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Death", "Necromancy", "Poison" ],
 		"focus": false,
-		"id": "f415c90c-8108-4d8c-a3a2-d4bc637ac308"
+		"id": "f415c90c-8108-4d8c-a3a2-d4bc637ac308",
+		"hash": "bhRxPPqE"
 	},
 	{
 		"aonId": 43,
@@ -341,7 +352,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Conjuration", "Teleportation" ],
 		"focus": false,
-		"id": "7f8fd0f7-f1a0-474c-b79f-ae604d1c1307"
+		"id": "7f8fd0f7-f1a0-474c-b79f-ae604d1c1307",
+		"hash": "PqKTqjLV"
 	},
 	{
 		"aonId": 44,
@@ -376,7 +388,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Illusion", "Incapacitation", "Visual" ],
 		"focus": false,
-		"id": "3de1aa99-dff9-4e2c-a98d-62c207a5be16"
+		"id": "3de1aa99-dff9-4e2c-a98d-62c207a5be16",
+		"hash": "ptgqSdtg"
 	},
 	{
 		"aonId": 45,
@@ -412,7 +425,8 @@
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Auditory", "Enchantment", "Linguistic", "Mental" ],
 		"focus": false,
-		"id": "218cff6f-b76d-4ec7-b4f7-3b9a8791d9e0"
+		"id": "218cff6f-b76d-4ec7-b4f7-3b9a8791d9e0",
+		"hash": "mJwwDYrj"
 	},
 	{
 		"aonId": 46,
@@ -437,7 +451,8 @@
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Divination" ],
 		"focus": false,
-		"id": "a29a4e1d-5e7f-446a-a7ac-2f52e1520b4b"
+		"id": "a29a4e1d-5e7f-446a-a7ac-2f52e1520b4b",
+		"hash": "ZpSgcBgX"
 	},
 	{
 		"aonId": 47,
@@ -460,7 +475,8 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Cold", "Evocation" ],
 		"focus": false,
-		"id": "2b07a33a-cb28-43f9-8eb3-8f28e92a77b7"
+		"id": "2b07a33a-cb28-43f9-8eb3-8f28e92a77b7",
+		"hash": "mpQAnCTZ"
 	},
 	{
 		"aonId": 48,
@@ -499,7 +515,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Emotion", "Enchantment", "Mental" ],
 		"focus": false,
-		"id": "59bba615-0b15-4b0d-9658-65f680a19cbd"
+		"id": "59bba615-0b15-4b0d-9658-65f680a19cbd",
+		"hash": "cQgpWxjd"
 	},
 	{
 		"aonId": 49,
@@ -523,7 +540,8 @@
 		"traditions": [ "arcane" ],
 		"traits": [ "Abjuration" ],
 		"focus": false,
-		"id": "ae170ff9-837c-4f1e-9cd6-a05fa859ff79"
+		"id": "ae170ff9-837c-4f1e-9cd6-a05fa859ff79",
+		"hash": "IxmRmRRx"
 	},
 	{
 		"aonId": 50,
@@ -548,7 +566,8 @@
 		"traditions": [ "arcane", "divine", "occult", "primal" ],
 		"traits": [ "Evocation", "Light" ],
 		"focus": false,
-		"id": "f3e374c2-b07a-42d7-84ce-34fe674f0375"
+		"id": "f3e374c2-b07a-42d7-84ce-34fe674f0375",
+		"hash": "JqszAUVw"
 	},
 	{
 		"aonId": 51,
@@ -568,7 +587,8 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Evocation", "Water" ],
 		"focus": false,
-		"id": "9e24f91f-e4b5-4be3-880c-6ec5e9461d0e"
+		"id": "9e24f91f-e4b5-4be3-880c-6ec5e9461d0e",
+		"hash": "yzlpdSZq"
 	},
 	{
 		"aonId": 52,
@@ -592,7 +612,8 @@
 		"traditions": [ "arcane", "divine", "primal" ],
 		"traits": [ "Conjuration" ],
 		"focus": false,
-		"id": "21ad143b-3576-440d-a278-f7e727ea569f"
+		"id": "21ad143b-3576-440d-a278-f7e727ea569f",
+		"hash": "wkXrMYgE"
 	},
 	{
 		"aonId": 53,
@@ -611,7 +632,8 @@
 		"traditions": [ "arcane", "divine", "primal" ],
 		"traits": [ "Conjuration", "Water" ],
 		"focus": false,
-		"id": "57b68bb2-5467-4525-a626-908acb5dc323"
+		"id": "57b68bb2-5467-4525-a626-908acb5dc323",
+		"hash": "kpxdmRmd"
 	},
 	{
 		"aonId": 54,
@@ -634,7 +656,8 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Conjuration" ],
 		"focus": false,
-		"id": "1ced7985-7a34-4e79-a0e6-30133ba90faa"
+		"id": "1ced7985-7a34-4e79-a0e6-30133ba90faa",
+		"hash": "qbFZUdSt"
 	},
 	{
 		"aonId": 55,
@@ -673,7 +696,8 @@
 		"traditions": [ "divine" ],
 		"traits": [ "Enchantment", "Mental" ],
 		"focus": false,
-		"id": "31debbfb-5aa7-4a4d-9740-74423f4994a6"
+		"id": "31debbfb-5aa7-4a4d-9740-74423f4994a6",
+		"hash": "gkPZdmlz"
 	},
 	{
 		"aonId": 56,
@@ -698,7 +722,8 @@
 		"traditions": [ "divine" ],
 		"traits": [ "Uncommon", "Enchantment", "Linguistic", "Mental" ],
 		"focus": false,
-		"id": "5386c385-6987-4e34-8529-da3a4528ac39"
+		"id": "5386c385-6987-4e34-8529-da3a4528ac39",
+		"hash": "LqJZzbKs"
 	},
 	{
 		"aonId": 57,
@@ -736,6 +761,7 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Emotion", "Enchantment", "Mental" ],
 		"focus": false,
-		"id": "cc0b8156-cbb9-40db-b05d-3706d41b392e"
+		"id": "cc0b8156-cbb9-40db-b05d-3706d41b392e",
+		"hash": "GTqvXtFf"
 	}
 ]

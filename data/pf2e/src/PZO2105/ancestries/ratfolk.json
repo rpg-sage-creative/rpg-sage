@@ -14,11 +14,12 @@
 		],
 		"aonId": 20,
 		"source": "PZO2105",
-		"id": "1a2458e8-774a-467f-9260-2ed1e7b48c1b"
+		"id": "1a2458e8-774a-467f-9260-2ed1e7b48c1b",
+		"hash": "VzgszAYs"
 	},
-	{ "objectType": "Heritage", "name": "Deep Rat", "ancestry": "Ratfolk", "source": "PZO2105", "id": "5e02cc43-b7c7-4705-876f-364aba30c191", "aonId": 72 },
-	{ "objectType": "Heritage", "name": "Desert Rat", "ancestry": "Ratfolk", "source": "PZO2105", "id": "97e5de6a-6791-4483-bc5f-f0ac56a297b1", "aonId": 73 },
-	{ "objectType": "Heritage", "name": "Longsnout Rat", "ancestry": "Ratfolk", "source": "PZO2105", "id": "1521a114-9d6c-4710-b436-b63f07ecf2b7", "aonId": 74 },
-	{ "objectType": "Heritage", "name": "Sewer Rat", "ancestry": "Ratfolk", "source": "PZO2105", "id": "38e0a080-5374-4a30-852e-bac7296ce5c5", "aonId": 75 },
-	{ "objectType": "Heritage", "name": "Shadow Rat", "ancestry": "Ratfolk", "source": "PZO2105", "id": "b07e855e-69c5-4ec9-b915-0b7c72c425e9", "aonId": 76 }
+	{ "objectType": "Heritage", "name": "Deep Rat", "ancestry": "Ratfolk", "source": "PZO2105", "id": "5e02cc43-b7c7-4705-876f-364aba30c191", "aonId": 72, "hash": "rrkOjCNR" },
+	{ "objectType": "Heritage", "name": "Desert Rat", "ancestry": "Ratfolk", "source": "PZO2105", "id": "97e5de6a-6791-4483-bc5f-f0ac56a297b1", "aonId": 73, "hash": "bclPzGQR" },
+	{ "objectType": "Heritage", "name": "Longsnout Rat", "ancestry": "Ratfolk", "source": "PZO2105", "id": "1521a114-9d6c-4710-b436-b63f07ecf2b7", "aonId": 74, "hash": "XxpQRQzd" },
+	{ "objectType": "Heritage", "name": "Sewer Rat", "ancestry": "Ratfolk", "source": "PZO2105", "id": "38e0a080-5374-4a30-852e-bac7296ce5c5", "aonId": 75, "hash": "qhpfYHjV" },
+	{ "objectType": "Heritage", "name": "Shadow Rat", "ancestry": "Ratfolk", "source": "PZO2105", "id": "b07e855e-69c5-4ec9-b915-0b7c72c425e9", "aonId": 76, "hash": "RJrErJQr" }
 ]

@@ -35,7 +35,8 @@
 		"source": "PZO9306",
 		"focus": true,
 		"aonId": 811,
-		"id": "7d1ab5e1-3eeb-4be9-ae93-6b2e6ab5e427"
+		"id": "7d1ab5e1-3eeb-4be9-ae93-6b2e6ab5e427",
+		"hash": "IPOxyLTX"
 	},
 	{
 		"name": "Achaekek's Clutch",
@@ -68,7 +69,8 @@
 		"source": "PZO9306",
 		"focus": true,
 		"aonId": 814,
-		"id": "34b23435-cb3b-4a8d-9063-383501e88d97"
+		"id": "34b23435-cb3b-4a8d-9063-383501e88d97",
+		"hash": "IQgJKUIr"
 	},
 	{
 		"name": "Shall Not Falter, Shall Not Rout",
@@ -85,7 +87,8 @@
 		"source": "PZO9306",
 		"focus": true,
 		"aonId": 817,
-		"id": "a4a8cf8e-4998-40aa-9923-b040046d5cd9"
+		"id": "a4a8cf8e-4998-40aa-9923-b040046d5cd9",
+		"hash": "jpxNUzEq"
 	},
 	{
 		"name": "Sun's Fury",
@@ -104,6 +107,7 @@
 		"source": "PZO9306",
 		"focus": true,
 		"aonId": 818,
-		"id": "b8b6e8b1-cb5b-4757-bc89-971a6096b993"
+		"id": "b8b6e8b1-cb5b-4757-bc89-971a6096b993",
+		"hash": "RXWppkQs"
 	}
 ]

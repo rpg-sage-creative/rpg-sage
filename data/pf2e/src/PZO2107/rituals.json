@@ -27,7 +27,8 @@
 		"source": "PZO2107",
 		"focus": false,
 		"aonId": 46,
-		"id": "c40ae8ab-2ef2-4d7c-bbb1-94432958079d"
+		"id": "c40ae8ab-2ef2-4d7c-bbb1-94432958079d",
+		"hash": "XHrBXkkD"
 	},
 	{
 		"name": "Owb Pact",
@@ -58,7 +59,8 @@
 		"source": "PZO2107",
 		"focus": false,
 		"aonId": 45,
-		"id": "0ea9eb14-7cfd-4ae2-81df-a333bfd21ca4"
+		"id": "0ea9eb14-7cfd-4ae2-81df-a333bfd21ca4",
+		"hash": "AxZXgZMz"
 	},
 	{
 		"name": "Abyssal Pact",
@@ -87,8 +89,9 @@
 		"page": 310,
 		"source": "PZO2107",
 		"focus": false,
-		"aonId": 46,
-		"id": "bd89472e-4d9e-4b6b-9970-43dbbe641eca"
+		"aonId": 21,
+		"id": "bd89472e-4d9e-4b6b-9970-43dbbe641eca",
+		"hash": "vYXmvWAM"
 	},
 	{
 		"name": "Infernal Pact",
@@ -117,7 +120,8 @@
 		"page": 311,
 		"source": "PZO2107",
 		"focus": false,
-		"aonId": 46,
-		"id": "f408e6b8-5bfd-4958-ae18-51c99f0267af"
+		"aonId": 23,
+		"id": "f408e6b8-5bfd-4958-ae18-51c99f0267af",
+		"hash": "zMXryEdx"
 	}
 ]

@@ -20,7 +20,8 @@
 		"source": "PZO90158",
 		"focus": false,
 		"aonId": 820,
-		"id": "0a21defb-d6cd-4a34-99d2-dab48b6d9ae0"
+		"id": "0a21defb-d6cd-4a34-99d2-dab48b6d9ae0",
+		"hash": "yxTAVVPv"
 	},
 	{
 		"name": "Magical Fetters",
@@ -55,7 +56,8 @@
 		"source": "PZO90158",
 		"focus": false,
 		"aonId": 821,
-		"id": "25dc4e69-30a2-4547-a794-7da97bbfa0b4"
+		"id": "25dc4e69-30a2-4547-a794-7da97bbfa0b4",
+		"hash": "YZzTbYlX"
 	},
 	{
 		"name": "Maze of Locked Doors",
@@ -90,7 +92,8 @@
 		"source": "PZO90158",
 		"focus": false,
 		"aonId": 822,
-		"id": "efe08dea-5465-4e1a-830d-586d764cb62e"
+		"id": "efe08dea-5465-4e1a-830d-586d764cb62e",
+		"hash": "jXHzFSEX"
 	},
 	{
 		"name": "Putrefy Food and Drink",
@@ -113,6 +116,7 @@
 		"source": "PZO90158",
 		"focus": false,
 		"aonId": 823,
-		"id": "5e60c1a9-4cbc-425a-aad1-beaa6672c84d"
+		"id": "5e60c1a9-4cbc-425a-aad1-beaa6672c84d",
+		"hash": "rFCJJfYM"
 	}
 ]

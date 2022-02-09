@@ -14,11 +14,12 @@
 		],
 		"aonId": 43,
 		"source": "PZO9309",
-		"id": "f2ea3c26-1999-4c46-b0f0-ec2259be262f"
+		"id": "f2ea3c26-1999-4c46-b0f0-ec2259be262f",
+		"hash": "gzcZgyUO"
 	},
-	{ "objectType": "Heritage", "name": "Rite of Invocation", "ancestry": "Conrasu", "source": "PZO9309", "id": "978a4ee2-3241-4ffc-9356-18785f2ca692", "aonId": 165 },
-	{ "objectType": "Heritage", "name": "Rite of Knowing", "ancestry": "Conrasu", "source": "PZO9309", "id": "ffd0c2b9-e448-44bb-8c5f-28c59d4af05b", "aonId": 161 },
-	{ "objectType": "Heritage", "name": "Rite of Light", "ancestry": "Conrasu", "source": "PZO9309", "id": "284cbcaa-6b57-4e17-9abf-3b7a4ae54bfe", "aonId": 162 },
-	{ "objectType": "Heritage", "name": "Rite of Passage", "ancestry": "Conrasu", "source": "PZO9309", "id": "f49e9ee6-e33b-462f-858b-a0cb4ed0dcc3", "aonId": 163 },
-	{ "objectType": "Heritage", "name": "Rite of Reinforcement", "ancestry": "Conrasu", "source": "PZO9309", "id": "162190d9-cd5b-4c8d-b197-0bec46fa9140", "aonId": 164 }
+	{ "objectType": "Heritage", "name": "Rite of Invocation", "ancestry": "Conrasu", "source": "PZO9309", "id": "978a4ee2-3241-4ffc-9356-18785f2ca692", "aonId": 165, "hash": "lNQxbYYk" },
+	{ "objectType": "Heritage", "name": "Rite of Knowing", "ancestry": "Conrasu", "source": "PZO9309", "id": "ffd0c2b9-e448-44bb-8c5f-28c59d4af05b", "aonId": 161, "hash": "bgwpxflW" },
+	{ "objectType": "Heritage", "name": "Rite of Light", "ancestry": "Conrasu", "source": "PZO9309", "id": "284cbcaa-6b57-4e17-9abf-3b7a4ae54bfe", "aonId": 162, "hash": "jXtpklht" },
+	{ "objectType": "Heritage", "name": "Rite of Passage", "ancestry": "Conrasu", "source": "PZO9309", "id": "f49e9ee6-e33b-462f-858b-a0cb4ed0dcc3", "aonId": 163, "hash": "jWbNZEXq" },
+	{ "objectType": "Heritage", "name": "Rite of Reinforcement", "ancestry": "Conrasu", "source": "PZO9309", "id": "162190d9-cd5b-4c8d-b197-0bec46fa9140", "aonId": 164, "hash": "RkvvEsZw" }
 ]

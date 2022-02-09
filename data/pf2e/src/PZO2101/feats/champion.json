@@ -8,7 +8,8 @@
 		"benefits": "You embody an aspect of your deity.",
 		"source": "PZO2101",
 		"aonId": 214,
-		"id": "c5b775aa-3750-485d-8114-605451019efe"
+		"id": "c5b775aa-3750-485d-8114-605451019efe",
+		"hash": "Xpfnwgrz"
 	},
 	{
 		"objectType": "Feat",
@@ -19,7 +20,8 @@
 		"benefits": "You brace your shield with both hands, enhancing its potential for both offense and defense.",
 		"source": "PZO2101",
 		"aonId": 1087,
-		"id": "0f8537c9-21b4-44ea-a023-f12887c3fba0"
+		"id": "0f8537c9-21b4-44ea-a023-f12887c3fba0",
+		"hash": "XCvJwqss"
 	},
 	{
 		"objectType": "Feat",
@@ -30,7 +32,8 @@
 		"benefits": "You can use Retributive Strike with a ranged weapon.",
 		"source": "PZO2101",
 		"aonId": 215,
-		"id": "dbc8f27e-0da5-451f-b611-58b575a09850"
+		"id": "dbc8f27e-0da5-451f-b611-58b575a09850",
+		"hash": "RhGIOPfc"
 	},
 	{
 		"objectType": "Feat",
@@ -41,7 +44,8 @@
 		"benefits": "Your faith in your deity is represented in an extremely unusual way that some might call heretical",
 		"source": "PZO2101",
 		"aonId": 1173,
-		"id": "1f29a682-0f70-4f77-a647-0bbc946ac2b2"
+		"id": "1f29a682-0f70-4f77-a647-0bbc946ac2b2",
+		"hash": "pZFpZLcj"
 	},
 	{
 		"objectType": "Feat",
@@ -52,7 +56,8 @@
 		"benefits": "With a burst of divine liberation, your spur your ally's movement.",
 		"source": "PZO2101",
 		"aonId": 216,
-		"id": "afce29d1-551e-4b23-b926-eb68ce94b3af"
+		"id": "afce29d1-551e-4b23-b926-eb68ce94b3af",
+		"hash": "fRwApzrg"
 	},
 	{
 		"objectType": "Feat",
@@ -63,7 +68,8 @@
 		"benefits": "Guilt clouds the minds of those who ignore your Glimpse of Redemption.",
 		"source": "PZO2101",
 		"aonId": 217,
-		"id": "633fb3ba-6ea1-49db-b345-84819dee388d"
+		"id": "633fb3ba-6ea1-49db-b345-84819dee388d",
+		"hash": "phWKbEFT"
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +80,8 @@
 		"benefits": "You call upon your deity's grace.",
 		"source": "PZO2101",
 		"aonId": 218,
-		"id": "c9542aa6-0f1a-4202-93a7-a2303c2dee38"
+		"id": "c9542aa6-0f1a-4202-93a7-a2303c2dee38",
+		"hash": "BEXtRDbB"
 	},
 	{
 		"objectType": "Feat",
@@ -85,7 +92,8 @@
 		"benefits": "You've sworn to slay evil dragons.",
 		"source": "PZO2101",
 		"aonId": 219,
-		"id": "828879b4-11f1-417c-ad36-f2a392c94677"
+		"id": "828879b4-11f1-417c-ad36-f2a392c94677",
+		"hash": "LEJxtBVW"
 	},
 	{
 		"objectType": "Feat",
@@ -96,7 +104,8 @@
 		"benefits": "You've sworn an oath to banish the corruption of fiends to the dark planes they call home.",
 		"source": "PZO2101",
 		"aonId": 220,
-		"id": "dbdf4f80-dea3-46e7-b3f7-737e9a6b91e3"
+		"id": "dbdf4f80-dea3-46e7-b3f7-737e9a6b91e3",
+		"hash": "PPXzSWVL"
 	},
 	{
 		"objectType": "Feat",
@@ -107,7 +116,8 @@
 		"benefits": "You've sworn an oath to put the undead to rest.",
 		"source": "PZO2101",
 		"aonId": 221,
-		"id": "d4139f86-cf78-46e3-aea2-e00ca92f71e2"
+		"id": "d4139f86-cf78-46e3-aea2-e00ca92f71e2",
+		"hash": "RgktqDGg"
 	},
 	{
 		"objectType": "Feat",
@@ -118,7 +128,8 @@
 		"benefits": "You've sworn an oath to hunt down wicked evildoers and bring them to judgment.",
 		"source": "PZO2101",
 		"aonId": 222,
-		"id": "6288322a-f9ee-4e39-8b22-8ee8dbafcc19"
+		"id": "6288322a-f9ee-4e39-8b22-8ee8dbafcc19",
+		"hash": "ZlmQAqpn"
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +140,8 @@
 		"benefits": "You stand strong in the face of danger and inspire your allies to do the same.",
 		"source": "PZO2101",
 		"aonId": 223,
-		"id": "a7cccd98-dedc-4625-bfad-86ac398ef7ca"
+		"id": "a7cccd98-dedc-4625-bfad-86ac398ef7ca",
+		"hash": "VAqBZKXO"
 	},
 	{
 		"objectType": "Feat",
@@ -140,7 +152,8 @@
 		"benefits": "Your faith makes you resistant to disease.",
 		"source": "PZO2101",
 		"aonId": 224,
-		"id": "d1cc0aff-b8c6-406c-be05-e77c74238b90"
+		"id": "d1cc0aff-b8c6-406c-be05-e77c74238b90",
+		"hash": "ZZXjsHYR"
 	},
 	{
 		"objectType": "Feat",
@@ -151,7 +164,8 @@
 		"benefits": "Your follow-up blow leaves you an opening to set your shield.",
 		"source": "PZO2101",
 		"aonId": 1088,
-		"id": "ce8dbf2f-5620-41d0-916c-9037711940bf"
+		"id": "ce8dbf2f-5620-41d0-916c-9037711940bf",
+		"hash": "zvCQvgMC"
 	},
 	{
 		"objectType": "Feat",
@@ -162,7 +176,8 @@
 		"benefits": "You've learned to call upon light to reveal what is hidden.",
 		"source": "PZO2101",
 		"aonId": 1089,
-		"id": "52ccd822-8fe8-42f0-b64c-8c26e8b29570"
+		"id": "52ccd822-8fe8-42f0-b64c-8c26e8b29570",
+		"hash": "tUDggDXQ"
 	},
 	{
 		"objectType": "Feat",
@@ -173,7 +188,8 @@
 		"benefits": "Your touch relieves fear and restores movement.",
 		"source": "PZO2101",
 		"aonId": 225,
-		"id": "3a18d332-6a63-4076-a0f1-9eb657dc81a1"
+		"id": "3a18d332-6a63-4076-a0f1-9eb657dc81a1",
+		"hash": "tZcXtNnf"
 	},
 	{
 		"objectType": "Feat",
@@ -184,7 +200,8 @@
 		"benefits": "You can unleash burning sunlight from your sword or spear.",
 		"source": "PZO2101",
 		"aonId": 1090,
-		"id": "6b57a535-e01d-45dd-85c2-a84925dc68c7"
+		"id": "6b57a535-e01d-45dd-85c2-a84925dc68c7",
+		"hash": "kBMsMDNq"
 	},
 	{
 		"objectType": "Feat",
@@ -206,7 +223,8 @@
 		"benefits": "You excoriate a foe for its wrath against goodly creatures.",
 		"source": "PZO2101",
 		"aonId": 227,
-		"id": "93a77f2a-13c2-4a36-852a-ead86b8d41f8"
+		"id": "93a77f2a-13c2-4a36-852a-ead86b8d41f8",
+		"hash": "vZkkORRf"
 	},
 	{
 		"objectType": "Feat",
@@ -219,7 +237,8 @@
 		"benefits": "You and your mount have grown closer, and your loyalty to each other is unbreakable.",
 		"source": "PZO2101",
 		"aonId": 228,
-		"id": "a0b57763-58b4-4884-b2f8-a51f6bb27fe8"
+		"id": "a0b57763-58b4-4884-b2f8-a51f6bb27fe8",
+		"hash": "YzsSpxRZ"
 	},
 	{
 		"objectType": "Feat",
@@ -233,7 +252,8 @@
 		"benefits": "You use your shield to protect your allies as well as yourself.",
 		"source": "PZO2101",
 		"aonId": 229,
-		"id": "c3acaee2-c2cd-4d86-acad-d5dec0b25cb7"
+		"id": "c3acaee2-c2cd-4d86-acad-d5dec0b25cb7",
+		"hash": "sVhMhZSU"
 	},
 	{
 		"objectType": "Feat",
@@ -246,7 +266,8 @@
 		"benefits": "Your blade ally becomes an even more powerful tool against evildoers.",
 		"source": "PZO2101",
 		"aonId": 230,
-		"id": "45032056-79a5-4b02-9c2f-316f013ac4a5"
+		"id": "45032056-79a5-4b02-9c2f-316f013ac4a5",
+		"hash": "tDSgjYWg"
 	},
 	{
 		"objectType": "Feat",
@@ -259,7 +280,8 @@
 		"benefits": "Through your conviction, you have glimpsed the deeper secrets of your deity's domain.",
 		"source": "PZO2101",
 		"aonId": 231,
-		"id": "5ae08cf0-85f9-4731-855d-0055411800b7"
+		"id": "5ae08cf0-85f9-4731-855d-0055411800b7",
+		"hash": "bqQPpyvj"
 	},
 	{
 		"objectType": "Feat",
@@ -270,7 +292,8 @@
 		"benefits": "Your faith enhances your ability to remove conditions.",
 		"source": "PZO2101",
 		"aonId": 232,
-		"id": "1608c771-a52d-4ad2-8206-27022ad6ab87"
+		"id": "1608c771-a52d-4ad2-8206-27022ad6ab87",
+		"hash": "cfncpfZB"
 	},
 	{
 		"objectType": "Feat",
@@ -283,7 +306,8 @@
 		"benefits": "Your devotion to your mount manifests as a surge of positive energy.",
 		"source": "PZO2101",
 		"aonId": 233,
-		"id": "49e13868-97af-44fd-946f-0d7549a87018"
+		"id": "49e13868-97af-44fd-946f-0d7549a87018",
+		"hash": "PzpvqJMB"
 	},
 	{
 		"objectType": "Feat",
@@ -294,7 +318,8 @@
 		"benefits": "You refuse to let foes past your guard.",
 		"source": "PZO2101",
 		"aonId": 1091,
-		"id": "c92bc26b-20cf-4d6e-ae80-64a8cbebef65"
+		"id": "c92bc26b-20cf-4d6e-ae80-64a8cbebef65",
+		"hash": "gxvnZRLU"
 	},
 	{
 		"objectType": "Feat",
@@ -305,7 +330,8 @@
 		"benefits": "You can block with your shield instinctively.",
 		"source": "PZO2101",
 		"aonId": 234,
-		"id": "c60cb410-9580-4e60-a9cd-834e9b801635"
+		"id": "c60cb410-9580-4e60-a9cd-834e9b801635",
+		"hash": "rvvNjWAw"
 	},
 	{
 		"objectType": "Feat",
@@ -316,7 +342,8 @@
 		"benefits": "Your inner grace attracts the attention of a second protective spirit.",
 		"source": "PZO2101",
 		"aonId": 235,
-		"id": "cf914353-9b67-4cf1-8bd7-62f87a2c2d9c"
+		"id": "cf914353-9b67-4cf1-8bd7-62f87a2c2d9c",
+		"hash": "pnrJZKkS"
 	},
 	{
 		"objectType": "Feat",
@@ -327,7 +354,8 @@
 		"benefits": "You sense evil as a queasy or foreboding feeling.",
 		"source": "PZO2101",
 		"aonId": 236,
-		"id": "5754b615-86b3-46d5-b8b9-6eb68b8219dd"
+		"id": "5754b615-86b3-46d5-b8b9-6eb68b8219dd",
+		"hash": "rZllSAFZ"
 	},
 	{
 		"objectType": "Feat",
@@ -338,7 +366,8 @@
 		"benefits": "Your devotion is strong enough to increase your focus to incredible heights.",
 		"source": "PZO2101",
 		"aonId": 237,
-		"id": "4a5ad3fd-208b-4533-8824-9e5c6a641aae"
+		"id": "4a5ad3fd-208b-4533-8824-9e5c6a641aae",
+		"hash": "YCAVHrfQ"
 	},
 	{
 		"objectType": "Feat",
@@ -352,7 +381,8 @@
 		"benefits": "Under your care, your mount has realized its innate potential.",
 		"source": "PZO2101",
 		"aonId": 238,
-		"id": "5cd83ab9-7a15-4bf4-9244-aa2e9c0fcc0f"
+		"id": "5cd83ab9-7a15-4bf4-9244-aa2e9c0fcc0f",
+		"hash": "hpBbdxFp"
 	},
 	{
 		"objectType": "Feat",
@@ -363,7 +393,8 @@
 		"benefits": "You rail against the sin of sloth, turning a foe's laziness against it.",
 		"source": "PZO2101",
 		"aonId": 239,
-		"id": "093a8e4e-c1ed-495e-9291-a6001cc58081"
+		"id": "093a8e4e-c1ed-495e-9291-a6001cc58081",
+		"hash": "XhkKsIFI"
 	},
 	{
 		"objectType": "Feat",
@@ -376,7 +407,8 @@
 		"benefits": "Your divine ally radiates power, enhancing your chosen weapon.",
 		"source": "PZO2101",
 		"aonId": 240,
-		"id": "25a18307-178e-4a57-8a75-ba6db779a140"
+		"id": "25a18307-178e-4a57-8a75-ba6db779a140",
+		"hash": "TTckkGvV"
 	},
 	{
 		"objectType": "Feat",
@@ -392,7 +424,8 @@
 		"benefits": "When you shield your ally against an attack, you call upon your power to protect your ally further.",
 		"source": "PZO2101",
 		"aonId": 241,
-		"id": "51521ae3-95e8-4deb-b0b8-b6947e5ce19c"
+		"id": "51521ae3-95e8-4deb-b0b8-b6947e5ce19c",
+		"hash": "KtpRBMbR"
 	},
 	{
 		"objectType": "Feat",
@@ -403,7 +436,8 @@
 		"benefits": "The divine grace that flows through you grants reprieve from an affliction.",
 		"source": "PZO2101",
 		"aonId": 242,
-		"id": "09917d87-a0ac-40a7-b737-df3b6b762812"
+		"id": "09917d87-a0ac-40a7-b737-df3b6b762812",
+		"hash": "gPNVEwsN"
 	},
 	{
 		"objectType": "Feat",
@@ -414,7 +448,8 @@
 		"benefits": "You radiate an aura of pure belief that imbues your attacks and those of nearby allies with holy power.",
 		"source": "PZO2101",
 		"aonId": 243,
-		"id": "792d5914-3afb-42fe-87ba-a72673f805b5"
+		"id": "792d5914-3afb-42fe-87ba-a72673f805b5",
+		"hash": "fTDjhQKV"
 	},
 	{
 		"objectType": "Feat",
@@ -425,7 +460,8 @@
 		"benefits": "You call upon divine power and make a weapon or unarmed Strike against a foe you have witnessed harming an ally or innocent.",
 		"source": "PZO2101",
 		"aonId": 244,
-		"id": "4b0c8fee-65a0-4c0d-a9df-6664c367cbf4"
+		"id": "4b0c8fee-65a0-4c0d-a9df-6664c367cbf4",
+		"hash": "jgxgsMvx"
 	},
 	{
 		"objectType": "Feat",
@@ -436,7 +472,8 @@
 		"benefits": "You can suffer so that others might live.",
 		"source": "PZO2101",
 		"aonId": 245,
-		"id": "1f6bbeda-1f2c-4c2c-86a4-3918c1f0dccd"
+		"id": "1f6bbeda-1f2c-4c2c-86a4-3918c1f0dccd",
+		"hash": "OpCGxTxc"
 	},
 	{
 		"objectType": "Feat",
@@ -449,7 +486,8 @@
 		"benefits": "You use your shield to harry your enemies, preventing them from stepping away from or around you.",
 		"source": "PZO2101",
 		"aonId": 246,
-		"id": "46b487fd-ce29-4113-96f7-d7dd82f2d3be"
+		"id": "46b487fd-ce29-4113-96f7-d7dd82f2d3be",
+		"hash": "YMsvGAZg"
 	},
 	{
 		"objectType": "Feat",
@@ -460,7 +498,8 @@
 		"benefits": "When you cast doubt upon your foes, the effect lasts longer than usual.",
 		"source": "PZO2101",
 		"aonId": 247,
-		"id": "eef1f26b-3686-4e5e-89ee-4bf9e5a75c9d"
+		"id": "eef1f26b-3686-4e5e-89ee-4bf9e5a75c9d",
+		"hash": "DgWgHrkI"
 	},
 	{
 		"objectType": "Feat",
@@ -471,7 +510,8 @@
 		"benefits": "Your allies can move farther when you release them from harm.",
 		"source": "PZO2101",
 		"aonId": 248,
-		"id": "eed7c0ac-bb60-4b84-8675-7d366d56745c"
+		"id": "eed7c0ac-bb60-4b84-8675-7d366d56745c",
+		"hash": "PxDRYtZK"
 	},
 	{
 		"objectType": "Feat",
@@ -482,7 +522,8 @@
 		"benefits": "Your aura hampers fiends' teleportation.",
 		"source": "PZO2101",
 		"aonId": 249,
-		"id": "db56f439-2821-4d45-ad1b-c3a41fb039f8"
+		"id": "db56f439-2821-4d45-ad1b-c3a41fb039f8",
+		"hash": "kAOUlrcv"
 	},
 	{
 		"objectType": "Feat",
@@ -493,7 +534,8 @@
 		"benefits": "Your aura protects against necromantic effects.",
 		"source": "PZO2101",
 		"aonId": 250,
-		"id": "eabe4f55-77ad-416d-8fce-afc5504daf00"
+		"id": "eabe4f55-77ad-416d-8fce-afc5504daf00",
+		"hash": "hDdPbgQz"
 	},
 	{
 		"objectType": "Feat",
@@ -504,7 +546,8 @@
 		"benefits": "Your righteous aura dampens evil's might.",
 		"source": "PZO2101",
 		"aonId": 251,
-		"id": "70a07a38-c473-46ef-900b-a36d5269a6de"
+		"id": "70a07a38-c473-46ef-900b-a36d5269a6de",
+		"hash": "qrkVjRCW"
 	},
 	{
 		"objectType": "Feat",
@@ -515,7 +558,8 @@
 		"benefits": "When you call upon others to take retribution, you also guide their aim.",
 		"source": "PZO2101",
 		"aonId": 252,
-		"id": "f0356752-0fc5-4665-b768-4a96cac79980"
+		"id": "f0356752-0fc5-4665-b768-4a96cac79980",
+		"hash": "vZxbqMgz"
 	},
 	{
 		"objectType": "Feat",
@@ -526,7 +570,8 @@
 		"benefits": "You can use your champion's reaction more.",
 		"source": "PZO2101",
 		"aonId": 253,
-		"id": "629649f8-64a8-4c27-9fea-6fb9f0f9da71"
+		"id": "629649f8-64a8-4c27-9fea-6fb9f0f9da71",
+		"hash": "tnIZgWTE"
 	},
 	{
 		"objectType": "Feat",
@@ -537,7 +582,8 @@
 		"benefits": "You call upon righteousness to expose an evil foe's weakness.",
 		"source": "PZO2101",
 		"aonId": 254,
-		"id": "b952d8c7-948c-47e0-896c-aeacaadff75d"
+		"id": "b952d8c7-948c-47e0-896c-aeacaadff75d",
+		"hash": "APxbZROG"
 	},
 	{
 		"objectType": "Feat",
@@ -548,7 +594,8 @@
 		"benefits": "Your aura protects against destructive energies and dragons' breath.",
 		"source": "PZO2101",
 		"aonId": 255,
-		"id": "5281350e-e2e5-465c-bbeb-19c627b4c219"
+		"id": "5281350e-e2e5-465c-bbeb-19c627b4c219",
+		"hash": "LbqBbzFW"
 	},
 	{
 		"objectType": "Feat",
@@ -562,7 +609,8 @@
 		"benefits": "Guided by your ongoing care, your steed has developed incredible intelligence and skill.",
 		"source": "PZO2101",
 		"aonId": 256,
-		"id": "69011299-d78f-4336-a99c-fb1a7e78df47"
+		"id": "69011299-d78f-4336-a99c-fb1a7e78df47",
+		"hash": "ptInZXjs"
 	},
 	{
 		"objectType": "Feat",
@@ -576,7 +624,8 @@
 		"benefits": "Divine energy fills your weapon.",
 		"source": "PZO2101",
 		"aonId": 257,
-		"id": "2985f3b2-a688-42bc-be1b-7afb8db6a737"
+		"id": "2985f3b2-a688-42bc-be1b-7afb8db6a737",
+		"hash": "IJSOCVyZ"
 	},
 	{
 		"objectType": "Feat",
@@ -587,7 +636,8 @@
 		"benefits": "You protect an ally with both your shield and your body.",
 		"source": "PZO2101",
 		"aonId": 258,
-		"id": "25f275a8-8667-4bf8-ba60-589a6fdacd4c"
+		"id": "25f275a8-8667-4bf8-ba60-589a6fdacd4c",
+		"hash": "fUAlVghB"
 	},
 	{
 		"objectType": "Feat",
@@ -598,7 +648,8 @@
 		"benefits": "You take on a celestial countenance, appearing like a type of celestial who serves your deity.",
 		"source": "PZO2101",
 		"aonId": 259,
-		"id": "d4913e8d-33fc-4e75-ad3f-19ed858588b1"
+		"id": "d4913e8d-33fc-4e75-ad3f-19ed858588b1",
+		"hash": "lztbwkZv"
 	},
 	{
 		"objectType": "Feat",
@@ -609,7 +660,8 @@
 		"benefits": "Your mercy transcends the bounds of life and death.",
 		"source": "PZO2101",
 		"aonId": 260,
-		"id": "5ff50f76-354d-4aed-a8e2-0f2030e75865"
+		"id": "5ff50f76-354d-4aed-a8e2-0f2030e75865",
+		"hash": "FxRgZAEw"
 	},
 	{
 		"objectType": "Feat",
@@ -620,7 +672,8 @@
 		"benefits": "Overwhelm evil creatures with your aura.",
 		"source": "PZO2101",
 		"aonId": 1161,
-		"id": "65bd3aaa-127f-46ec-9416-a3647d8c9a66"
+		"id": "65bd3aaa-127f-46ec-9416-a3647d8c9a66",
+		"hash": "vkpgFshP"
 	},
 	{
 		"objectType": "Feat",
@@ -634,7 +687,8 @@
 		"benefits": "Your steed gains incredible celestial powers granted by your deity.",
 		"source": "PZO2101",
 		"aonId": 261,
-		"id": "c2232999-ea92-437d-9363-2a76406578ec"
+		"id": "c2232999-ea92-437d-9363-2a76406578ec",
+		"hash": "xrtghrQd"
 	},
 	{
 		"objectType": "Feat",
@@ -648,7 +702,8 @@
 		"benefits": "Your divine ally turns your chosen weapon into a paragon of its type.",
 		"source": "PZO2101",
 		"aonId": 262,
-		"id": "48149903-6a4a-46dd-ae79-d83b7376e4be"
+		"id": "48149903-6a4a-46dd-ae79-d83b7376e4be",
+		"hash": "VVLtTHXt"
 	},
 	{
 		"objectType": "Feat",
@@ -661,6 +716,7 @@
 		"benefits": "Your shield is a vessel of divine protection.",
 		"source": "PZO2101",
 		"aonId": 263,
-		"id": "befe4519-37aa-434a-87fb-9c8a85af5d55"
+		"id": "befe4519-37aa-434a-87fb-9c8a85af5d55",
+		"hash": "UMfQNDwj"
 	}
 ]

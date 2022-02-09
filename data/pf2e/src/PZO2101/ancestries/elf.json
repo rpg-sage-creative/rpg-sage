@@ -72,7 +72,8 @@
 					]
 				}
 			]
-		}
+		},
+		"hash": "ZXbSGYxP"
 	},
 	{
 		"objectType": "Heritage",
@@ -83,7 +84,8 @@
 		],
 		"source": "PZO2101",
 		"id": "7da9ccbb-5886-494e-acd8-1b6218a2308b",
-		"aonId": 6
+		"aonId": 6,
+		"hash": "PYtLVqDb"
 	},
 	{
 		"objectType": "Heritage",
@@ -94,7 +96,8 @@
 		],
 		"source": "PZO2101",
 		"id": "bd9cc042-aeed-4053-bc38-6eea2474b375",
-		"aonId": 7
+		"aonId": 7,
+		"hash": "WstQwqfK"
 	},
 	{
 		"objectType": "Heritage",
@@ -105,7 +108,8 @@
 		],
 		"source": "PZO2101",
 		"id": "7509373b-d91f-46f9-afc5-5e18148d8521",
-		"aonId": 8
+		"aonId": 8,
+		"hash": "xTQpRUrD"
 	},
 	{
 		"objectType": "Heritage",
@@ -116,7 +120,8 @@
 		],
 		"source": "PZO2101",
 		"id": "1504f374-0b27-41d4-a452-1cf738cbbad1",
-		"aonId": 9
+		"aonId": 9,
+		"hash": "mxmQxXRQ"
 	},
 	{
 		"objectType": "Heritage",
@@ -127,7 +132,8 @@
 		],
 		"source": "PZO2101",
 		"id": "b16b3b72-8ba0-49d9-a0f5-cad2e21a23ba",
-		"aonId": 10
+		"aonId": 10,
+		"hash": "WVbZZOqD"
 	},
 	{
 		"objectType": "Feat",
@@ -141,7 +147,8 @@
 		"page": 40,
 		"source": "PZO2101",
 		"id": "99fed39f-e3a9-4538-8cd7-e33d16b38fc5",
-		"aonId": 12
+		"aonId": 12,
+		"hash": "hpXngFSg"
 	},
 	{
 		"objectType": "Feat",
@@ -154,7 +161,8 @@
 		"page": 40,
 		"source": "PZO2101",
 		"id": "d9c106ad-e57b-47d5-beda-78e751245ac7",
-		"aonId": 13
+		"aonId": 13,
+		"hash": "mFRHxDqE"
 	},
 	{
 		"objectType": "Feat",
@@ -168,7 +176,8 @@
 		"page": 40,
 		"source": "PZO2101",
 		"id": "1a645711-42fc-4446-954f-f27abf8bf2a6",
-		"aonId": 14
+		"aonId": 14,
+		"hash": "NAqpUQUC"
 	},
 	{
 		"objectType": "Feat",
@@ -181,7 +190,8 @@
 		"page": 40,
 		"source": "PZO2101",
 		"id": "df185f9c-781f-4287-aaed-a7c73557b0ff",
-		"aonId": 15
+		"aonId": 15,
+		"hash": "hIbJKvqt"
 	},
 	{
 		"objectType": "Feat",
@@ -194,7 +204,8 @@
 		"page": 40,
 		"source": "PZO2101",
 		"id": "3ed0a8f1-b5e9-498d-b422-1f735feea7c2",
-		"aonId": 16
+		"aonId": 16,
+		"hash": "FRBcbPwx"
 	},
 	{
 		"objectType": "Feat",
@@ -221,7 +232,8 @@
 		"page": 40,
 		"source": "PZO2101",
 		"id": "5b138a42-81ed-4751-86cc-3ba41d2fd869",
-		"aonId": 18
+		"aonId": 18,
+		"hash": "CgBSrGqz"
 	},
 	{
 		"objectType": "Feat",
@@ -235,7 +247,8 @@
 		"page": 40,
 		"source": "PZO2101",
 		"id": "6e7f8ee3-a2f8-424e-a46d-b25e98975634",
-		"aonId": 19
+		"aonId": 19,
+		"hash": "DbqmbfUt"
 	},
 	{
 		"objectType": "Feat",
@@ -249,7 +262,8 @@
 		"page": 41,
 		"source": "PZO2101",
 		"id": "c4504a32-7e6a-4f7d-a330-a71439da80ba",
-		"aonId": 20
+		"aonId": 20,
+		"hash": "xzCRdsJE"
 	},
 	{
 		"objectType": "Feat",
@@ -263,7 +277,8 @@
 		"page": 41,
 		"source": "PZO2101",
 		"id": "1516a8c6-c970-4ac5-b7c9-98a13f56c4b4",
-		"aonId": 21
+		"aonId": 21,
+		"hash": "lkZTrwtJ"
 	},
 	{
 		"objectType": "Feat",
@@ -278,7 +293,8 @@
 		"page": 41,
 		"source": "PZO2101",
 		"id": "9c9869ef-0963-409c-a215-40b4843fff4f",
-		"aonId": 22
+		"aonId": 22,
+		"hash": "LSkHxgVL"
 	},
 	{
 		"objectType": "Feat",
@@ -294,7 +310,8 @@
 		"page": 41,
 		"source": "PZO2101",
 		"id": "d878411d-eb11-44e9-ab83-843665fc15e4",
-		"aonId": 23
+		"aonId": 23,
+		"hash": "WUgblZWG"
 	},
 	{
 		"objectType": "Feat",
@@ -308,6 +325,7 @@
 		"page": 41,
 		"source": "PZO2101",
 		"id": "d464eca8-ae4a-4eec-99c4-e3b6678b14ae",
-		"aonId": 24
+		"aonId": 24,
+		"hash": "pgWrhpTn"
 	}
 ]

@@ -35,7 +35,8 @@
 		"source": "PZO2101",
 		"aonId": 6,
 		"aonTraitId": 52,
-		"id": "c53938f8-0f20-4205-a436-390d8aa31e59"
+		"id": "c53938f8-0f20-4205-a436-390d8aa31e59",
+		"hash": "hyzUgElx"
 	},
 	{ "objectType": "ClassPath", "name": "Animal", "class": "Druid", "source": "PZO2101", "id": "234a44c5-6846-44fa-9d70-bd455f976436", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Leaf", "class": "Druid", "source": "PZO2101", "id": "f6023e37-81c1-4b69-b352-6af25734813a", "aonId": 2 },

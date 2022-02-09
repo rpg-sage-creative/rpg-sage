@@ -10,7 +10,8 @@
 		"benefits": "You gain the service of a young animal companion that travels with you.",
 		"source": "PZO2101",
 		"aonId": 311,
-		"id": "55c2ef74-3dd8-464c-9b07-d1e685c005e2"
+		"id": "55c2ef74-3dd8-464c-9b07-d1e685c005e2",
+		"hash": "ZvZWpzWx"
 	},
 	{
 		"objectType": "Feat",
@@ -21,7 +22,8 @@
 		"benefits": "You have a deep understanding of the crossbow.",
 		"source": "PZO2101",
 		"aonId": 491,
-		"id": "33e4e1f6-9243-4e55-8357-e438046afab6"
+		"id": "33e4e1f6-9243-4e55-8357-e438046afab6",
+		"hash": "ZWzqhlbs"
 	},
 	{
 		"objectType": "Feat",
@@ -32,7 +34,8 @@
 		"benefits": "You take two quick shots against the one you hunt.",
 		"source": "PZO2101",
 		"aonId": 492,
-		"id": "a090b4d2-ec8b-443f-a65b-322495d289a1"
+		"id": "a090b4d2-ec8b-443f-a65b-322495d289a1",
+		"hash": "UMvzppHC"
 	},
 	{
 		"objectType": "Feat",
@@ -43,7 +46,8 @@
 		"benefits": "You swiftly assess your prey and apply what you know.",
 		"source": "PZO2101",
 		"aonId": 493,
-		"id": "63d730c3-970b-4994-a782-c754548d322e"
+		"id": "63d730c3-970b-4994-a782-c754548d322e",
+		"hash": "gmXZZRHv"
 	},
 	{
 		"objectType": "Feat",
@@ -54,7 +58,8 @@
 		"benefits": "You swiftly attack your hunted prey with both weapons.",
 		"source": "PZO2101",
 		"aonId": 494,
-		"id": "2961f07f-fd9d-4264-a039-118b8803c649"
+		"id": "2961f07f-fd9d-4264-a039-118b8803c649",
+		"hash": "Xvmpspxc"
 	},
 	{
 		"objectType": "Feat",
@@ -65,7 +70,8 @@
 		"benefits": "You have studied a specific terrain to overcome its challenges.",
 		"source": "PZO2101",
 		"aonId": 495,
-		"id": "e96b51af-4494-4af2-8e43-6926e5723090"
+		"id": "e96b51af-4494-4af2-8e43-6926e5723090",
+		"hash": "ZXbQvEAj"
 	},
 	{
 		"objectType": "Feat",
@@ -76,7 +82,8 @@
 		"benefits": "When you focus on aiming, your attack becomes particularly accurate.",
 		"source": "PZO2101",
 		"aonId": 496,
-		"id": "0b960308-eb46-48c7-9727-5a4b85119415"
+		"id": "0b960308-eb46-48c7-9727-5a4b85119415",
+		"hash": "rpdrjSlR"
 	},
 	{
 		"objectType": "Feat",
@@ -87,7 +94,8 @@
 		"benefits": "You understand how to defend yourself and others against your prey.",
 		"source": "PZO2101",
 		"aonId": 497,
-		"id": "39cb19a1-5bc2-4793-a7f0-43ea40b8fcb3"
+		"id": "39cb19a1-5bc2-4793-a7f0-43ea40b8fcb3",
+		"hash": "LydjbqDH"
 	},
 	{
 		"objectType": "Feat",
@@ -98,7 +106,8 @@
 		"benefits": "You draw your weapon and attack with the same motion.",
 		"source": "PZO2101",
 		"aonId": 498,
-		"id": "e11e275c-92e5-41f5-880c-acce78de554b"
+		"id": "e11e275c-92e5-41f5-880c-acce78de554b",
+		"hash": "mQHvmAny"
 	},
 	{
 		"objectType": "Feat",
@@ -109,7 +118,8 @@
 		"benefits": "Stay adjacent to your prey when they attempt to move away.",
 		"source": "PZO2101",
 		"aonId": 867,
-		"id": "060822da-be42-4aa9-8631-4a26328ba7b3"
+		"id": "060822da-be42-4aa9-8631-4a26328ba7b3",
+		"hash": "nrQxqNpk"
 	},
 	{
 		"objectType": "Feat",
@@ -120,7 +130,8 @@
 		"benefits": "You have a connection to the creatures of the natural world.",
 		"source": "PZO2101",
 		"aonId": 499,
-		"id": "3b98bb49-85d0-4279-a911-0da988e77b11"
+		"id": "3b98bb49-85d0-4279-a911-0da988e77b11",
+		"hash": "SSjxgFsZ"
 	},
 	{
 		"objectType": "Feat",
@@ -131,7 +142,8 @@
 		"benefits": "You can urge your companion to do its utmost.",
 		"source": "PZO2101",
 		"aonId": 500,
-		"id": "60ee0840-edc6-4366-9ac8-0cc9e7a8266a"
+		"id": "60ee0840-edc6-4366-9ac8-0cc9e7a8266a",
+		"hash": "DyDWRLdb"
 	},
 	{
 		"objectType": "Feat",
@@ -142,7 +154,8 @@
 		"benefits": "Make a melee Strike against your prey.",
 		"source": "PZO2101",
 		"aonId": 501,
-		"id": "9814a7fb-5cba-4908-9023-f03cd660df4b"
+		"id": "9814a7fb-5cba-4908-9023-f03cd660df4b",
+		"hash": "kSLtHQTt"
 	},
 	{
 		"objectType": "Feat",
@@ -153,7 +166,8 @@
 		"benefits": "Your experience in the field has taught you how to focus your aim at a distance.",
 		"source": "PZO2101",
 		"aonId": 502,
-		"id": "c1d7dac6-5543-45f4-80d4-3cfcefa03a2c"
+		"id": "c1d7dac6-5543-45f4-80d4-3cfcefa03a2c",
+		"hash": "VRmzYsdt"
 	},
 	{
 		"objectType": "Feat",
@@ -164,7 +178,8 @@
 		"benefits": "You have studied a specific type of wild creature and can hunt it more easily.",
 		"source": "PZO2101",
 		"aonId": 503,
-		"id": "e839afe2-0a11-4607-851e-652aa846635f"
+		"id": "e839afe2-0a11-4607-851e-652aa846635f",
+		"hash": "CRlmcpTS"
 	},
 	{
 		"objectType": "Feat",
@@ -175,7 +190,8 @@
 		"benefits": "You can reload your weapon on the move.",
 		"source": "PZO2101",
 		"aonId": 504,
-		"id": "95f7dbc9-9ec6-4fee-aa11-4793fda81481"
+		"id": "95f7dbc9-9ec6-4fee-aa11-4793fda81481",
+		"hash": "lHqzWVEm"
 	},
 	{
 		"objectType": "Feat",
@@ -186,7 +202,8 @@
 		"benefits": "You visually or audibly warn your allies of danger.",
 		"source": "PZO2101",
 		"aonId": 505,
-		"id": "996ed501-915e-4bba-a272-5516f2414a3b"
+		"id": "996ed501-915e-4bba-a272-5516f2414a3b",
+		"hash": "rgQtHpZf"
 	},
 	{
 		"objectType": "Feat",
@@ -197,7 +214,8 @@
 		"benefits": "You specialize in creating quick traps to obstruct your enemies on the battlefield.",
 		"source": "PZO2101",
 		"aonId": 506,
-		"id": "2d9a5652-79c4-48f5-8ab4-d940544b9615"
+		"id": "2d9a5652-79c4-48f5-8ab4-d940544b9615",
+		"hash": "LtzmRqxt"
 	},
 	{
 		"objectType": "Feat",
@@ -208,7 +226,8 @@
 		"benefits": "You use your two weapons to parry attacks.",
 		"source": "PZO2101",
 		"aonId": 377,
-		"id": "2940bfb3-d893-49cd-9752-2cfc9b866602"
+		"id": "2940bfb3-d893-49cd-9752-2cfc9b866602",
+		"hash": "ZdSZOYpQ"
 	},
 	{
 		"objectType": "Feat",
@@ -219,7 +238,8 @@
 		"benefits": "Your animal companion grows up, gaining additional capabilities.",
 		"source": "PZO2101",
 		"aonId": 508,
-		"id": "42d2dbd5-641d-4f79-8361-68677621ee4c"
+		"id": "42d2dbd5-641d-4f79-8361-68677621ee4c",
+		"hash": "qEMLknBr"
 	},
 	{
 		"objectType": "Feat",
@@ -230,7 +250,8 @@
 		"benefits": "You can rig a snare in only moments.",
 		"source": "PZO2101",
 		"aonId": 509,
-		"id": "0b6f1ff1-f5be-4010-8c02-e433153b1b11"
+		"id": "0b6f1ff1-f5be-4010-8c02-e433153b1b11",
+		"hash": "zWlVdcqR"
 	},
 	{
 		"objectType": "Feat",
@@ -241,7 +262,8 @@
 		"benefits": "Your feet and weapon move in tandem.",
 		"source": "PZO2101",
 		"aonId": 510,
-		"id": "8e1fd9e8-4ee3-441c-b3b5-14926de04b04"
+		"id": "8e1fd9e8-4ee3-441c-b3b5-14926de04b04",
+		"hash": "YIspURhV"
 	},
 	{
 		"objectType": "Feat",
@@ -252,7 +274,8 @@
 		"benefits": "You've learned to react with ranged weapons when a creature is in close quarters.",
 		"source": "PZO2101",
 		"aonId": 511,
-		"id": "24eac0e2-39e7-433c-a84b-630ebb9e9a97"
+		"id": "24eac0e2-39e7-433c-a84b-630ebb9e9a97",
+		"hash": "QkgqkcRz"
 	},
 	{
 		"objectType": "Feat",
@@ -263,7 +286,8 @@
 		"benefits": "Your keen eyes catch signs of passage even when you're moving.",
 		"source": "PZO2101",
 		"aonId": 512,
-		"id": "b57da109-7025-42b5-80b2-8e199d2fe435"
+		"id": "b57da109-7025-42b5-80b2-8e199d2fe435",
+		"hash": "hKQVgBRx"
 	},
 	{
 		"objectType": "Feat",
@@ -274,7 +298,8 @@
 		"benefits": "Your battle instincts make you more aware of concealed and invisible opponents.",
 		"source": "PZO2101",
 		"aonId": 388,
-		"id": "d579d878-89a7-4afd-8906-aaf84c9340d8"
+		"id": "d579d878-89a7-4afd-8906-aaf84c9340d8",
+		"hash": "WYVqkZdO"
 	},
 	{
 		"objectType": "Feat",
@@ -285,7 +310,8 @@
 		"benefits": "You aim for your prey's weak spots, making your shot more challenging but dealing more damage if you hit.",
 		"source": "PZO2101",
 		"aonId": 514,
-		"id": "2dba7a66-c9b4-4314-98fb-6105475ba5a0"
+		"id": "2dba7a66-c9b4-4314-98fb-6105475ba5a0",
+		"hash": "rrgQpTIw"
 	},
 	{
 		"objectType": "Feat",
@@ -296,7 +322,8 @@
 		"benefits": "You have an intuitive ability to sense hazards.",
 		"source": "PZO2101",
 		"aonId": 515,
-		"id": "24451674-1308-445b-8312-adf506201d9e"
+		"id": "24451674-1308-445b-8312-adf506201d9e",
+		"hash": "KXcWqtgE"
 	},
 	{
 		"objectType": "Feat",
@@ -307,7 +334,8 @@
 		"benefits": "Your snares are particularly dif cult for enemies to avoid.",
 		"source": "PZO2101",
 		"aonId": 516,
-		"id": "6ca291b4-e9a0-46e2-91c9-36c0c67b2969"
+		"id": "6ca291b4-e9a0-46e2-91c9-36c0c67b2969",
+		"hash": "REjKUrds"
 	},
 	{
 		"objectType": "Feat",
@@ -318,7 +346,8 @@
 		"benefits": "You adapt to your surroundings in any natural terrain.",
 		"source": "PZO2101",
 		"aonId": 517,
-		"id": "e64badf9-711a-41ee-a1d8-6ffee80d2e9c"
+		"id": "e64badf9-711a-41ee-a1d8-6ffee80d2e9c",
+		"hash": "RSGRzAER"
 	},
 	{
 		"objectType": "Feat",
@@ -329,7 +358,8 @@
 		"benefits": "By pointing out vulnerabilities, you grant an ally benefits from your hunting abilities.",
 		"source": "PZO2101",
 		"aonId": 518,
-		"id": "93c4f877-d565-4cf0-8478-335f637a5f45"
+		"id": "93c4f877-d565-4cf0-8478-335f637a5f45",
+		"hash": "srCZfZkb"
 	},
 	{
 		"objectType": "Feat",
@@ -340,7 +370,8 @@
 		"benefits": "You alter your appearance to blend in to the wilderness.",
 		"source": "PZO2101",
 		"aonId": 519,
-		"id": "7e2d7480-ae15-4591-a63d-8c8cab594d4c"
+		"id": "7e2d7480-ae15-4591-a63d-8c8cab594d4c",
+		"hash": "tnPJkpAq"
 	},
 	{
 		"objectType": "Feat",
@@ -351,7 +382,8 @@
 		"benefits": "Your animal companion continues to grow and develop.",
 		"source": "PZO2101",
 		"aonId": 520,
-		"id": "9ae77b64-0be1-4eb2-9557-caf5ade2f461"
+		"id": "9ae77b64-0be1-4eb2-9557-caf5ade2f461",
+		"hash": "zszfxWOr"
 	},
 	{
 		"objectType": "Feat",
@@ -362,7 +394,8 @@
 		"benefits": "You have a nearly encyclopedic knowledge of all creatures of the world.",
 		"source": "PZO2101",
 		"aonId": 521,
-		"id": "66a9cb26-fd2c-4b75-858a-6c5a94a77877"
+		"id": "66a9cb26-fd2c-4b75-858a-6c5a94a77877",
+		"hash": "pqtjvcZU"
 	},
 	{
 		"objectType": "Feat",
@@ -373,7 +406,8 @@
 		"benefits": "You shoot clear through an intervening creature to hit your prey.",
 		"source": "PZO2101",
 		"aonId": 522,
-		"id": "5ddd4a77-6b78-405a-bddb-76e9f17ed718"
+		"id": "5ddd4a77-6b78-405a-bddb-76e9f17ed718",
+		"hash": "lMZBWXxw"
 	},
 	{
 		"objectType": "Feat",
@@ -384,7 +418,8 @@
 		"benefits": "A clever parry with one weapon leaves your opponent open to an attack with the other weapon.",
 		"source": "PZO2101",
 		"aonId": 523,
-		"id": "4a98f6f6-1f5e-4731-bf3d-4ef44f3cc39c"
+		"id": "4a98f6f6-1f5e-4731-bf3d-4ef44f3cc39c",
+		"hash": "NGqTgyZv"
 	},
 	{
 		"objectType": "Feat",
@@ -395,7 +430,8 @@
 		"benefits": "You can guide your allies to move quietly through the wilderness.",
 		"source": "PZO2101",
 		"aonId": 524,
-		"id": "f740a221-9a69-487b-ac7d-d3ae827c29de"
+		"id": "f740a221-9a69-487b-ac7d-d3ae827c29de",
+		"hash": "fAwRxhOb"
 	},
 	{
 		"objectType": "Feat",
@@ -406,7 +442,8 @@
 		"benefits": "The sheer power of your attacks, or the overwhelming number of them, leaves an enemy flustered.",
 		"source": "PZO2101",
 		"aonId": 525,
-		"id": "9e09d690-76c2-4b0b-99c1-c17276b5eeb0"
+		"id": "9e09d690-76c2-4b0b-99c1-c17276b5eeb0",
+		"hash": "ZVxpqbrK"
 	},
 	{
 		"objectType": "Feat",
@@ -417,7 +454,8 @@
 		"benefits": "You can focus on two foes at once, hunting both of them down.",
 		"source": "PZO2101",
 		"aonId": 526,
-		"id": "bb1fd579-ce25-4d08-9b83-ff08d8de57fe"
+		"id": "bb1fd579-ce25-4d08-9b83-ff08d8de57fe",
+		"hash": "bXCrQJZK"
 	},
 	{
 		"objectType": "Feat",
@@ -428,7 +466,8 @@
 		"benefits": "You can rig a trap with incredible speed.",
 		"source": "PZO2101",
 		"aonId": 527,
-		"id": "bf194d41-eebb-4f97-8b33-994ccc667dcb"
+		"id": "bf194d41-eebb-4f97-8b33-994ccc667dcb",
+		"hash": "kbCpZnvh"
 	},
 	{
 		"objectType": "Feat",
@@ -439,7 +478,8 @@
 		"benefits": "You read your prey's movements and transform them into openings, so failures with one weapon set up glancing blows with the other.",
 		"source": "PZO2101",
 		"aonId": 528,
-		"id": "71701517-2c2c-4ea5-aefc-b2eff3e75250"
+		"id": "71701517-2c2c-4ea5-aefc-b2eff3e75250",
+		"hash": "FXspGQEz"
 	},
 	{
 		"objectType": "Feat",
@@ -450,7 +490,8 @@
 		"benefits": "You and your animal companion fight in tandem, distracting your foes and keeping them of balance.",
 		"source": "PZO2101",
 		"aonId": 529,
-		"id": "d559e608-44e9-406b-b6c1-2515410dd352"
+		"id": "d559e608-44e9-406b-b6c1-2515410dd352",
+		"hash": "IxvPNHwd"
 	},
 	{
 		"objectType": "Feat",
@@ -461,7 +502,8 @@
 		"benefits": "When you look for foes, you can catch even the slightest cues.",
 		"source": "PZO2101",
 		"aonId": 530,
-		"id": "755ce57e-c8ff-4186-84c4-6bad385c000b"
+		"id": "755ce57e-c8ff-4186-84c4-6bad385c000b",
+		"hash": "EgtZBEXq"
 	},
 	{
 		"objectType": "Feat",
@@ -475,7 +517,8 @@
 		"benefits": "Hunting as a duo, you and your ally both single out your prey.",
 		"source": "PZO2101",
 		"aonId": 531,
-		"id": "0666428f-94a3-4fd4-bdd7-c856c68077f4"
+		"id": "0666428f-94a3-4fd4-bdd7-c856c68077f4",
+		"hash": "MMrqvmpN"
 	},
 	{
 		"objectType": "Feat",
@@ -486,7 +529,8 @@
 		"benefits": "You've trained your animal companion to blend in to its surroundings.",
 		"source": "PZO2101",
 		"aonId": 532,
-		"id": "6083b587-7b63-4ff8-acf6-7ed003890120"
+		"id": "6083b587-7b63-4ff8-acf6-7ed003890120",
+		"hash": "VrcqMCpW"
 	},
 	{
 		"objectType": "Feat",
@@ -499,7 +543,8 @@
 		"benefits": "You carefully track your prey's position and defenses.",
 		"source": "PZO2101",
 		"aonId": 533,
-		"id": "38350ac3-b95d-4e42-8ce3-3fc167a5ff65"
+		"id": "38350ac3-b95d-4e42-8ce3-3fc167a5ff65",
+		"hash": "VAZpVlNG"
 	},
 	{
 		"objectType": "Feat",
@@ -510,7 +555,8 @@
 		"benefits": "You can convey your prey's location to your allies, no matter how well hidden it is.",
 		"source": "PZO2101",
 		"aonId": 534,
-		"id": "739b0af7-bdf3-4121-9434-f3a7bb08d6a3"
+		"id": "739b0af7-bdf3-4121-9434-f3a7bb08d6a3",
+		"hash": "ShKOZzFY"
 	},
 	{
 		"objectType": "Feat",
@@ -521,7 +567,8 @@
 		"benefits": "Even a single missile can throw of your enemy's balance, and more powerful attacks leave it flustered for longer.",
 		"source": "PZO2101",
 		"aonId": 535,
-		"id": "fc7a6ca2-85c8-4764-916e-004133d472b0"
+		"id": "fc7a6ca2-85c8-4764-916e-004133d472b0",
+		"hash": "lNrlWqRX"
 	},
 	{
 		"objectType": "Feat",
@@ -532,7 +579,8 @@
 		"benefits": "You are able to riposte an additional time per turn.",
 		"source": "PZO2101",
 		"aonId": 536,
-		"id": "997eae43-c12a-455d-ae55-ec7eaae348e3"
+		"id": "997eae43-c12a-455d-ae55-ec7eaae348e3",
+		"hash": "mMqMpvSx"
 	},
 	{
 		"objectType": "Feat",
@@ -543,7 +591,8 @@
 		"benefits": "Your knowledge of monsters is so incredible that it reveals glaring flaws in your prey.",
 		"source": "PZO2101",
 		"aonId": 537,
-		"id": "73f66934-ab3f-4a58-8c28-b0fe52a2b5b5"
+		"id": "73f66934-ab3f-4a58-8c28-b0fe52a2b5b5",
+		"hash": "VVqhgQPj"
 	},
 	{
 		"objectType": "Feat",
@@ -554,7 +603,8 @@
 		"benefits": "Your animal companion has become cunning enough to become specialized.",
 		"source": "PZO2101",
 		"aonId": 538,
-		"id": "d68e2aa5-bcc1-49cb-a83f-6f30d440ed12"
+		"id": "d68e2aa5-bcc1-49cb-a83f-6f30d440ed12",
+		"hash": "rtthRtjN"
 	},
 	{
 		"objectType": "Feat",
@@ -565,7 +615,8 @@
 		"benefits": "You can prepare a seemingly impossible number of snares in advance, and you're ready to spring them on unsuspecting foes.",
 		"source": "PZO2101",
 		"aonId": 539,
-		"id": "a8197f06-ecf1-4ae0-8a32-fc7584b628be"
+		"id": "a8197f06-ecf1-4ae0-8a32-fc7584b628be",
+		"hash": "pOLXDvBI"
 	},
 	{
 		"objectType": "Feat",
@@ -576,7 +627,8 @@
 		"benefits": "You forgo precision to attack at an impossible speed.",
 		"source": "PZO2101",
 		"aonId": 540,
-		"id": "aae05fcf-22d1-44c4-903c-40b753f47500"
+		"id": "aae05fcf-22d1-44c4-903c-40b753f47500",
+		"hash": "dtvbYTNv"
 	},
 	{
 		"objectType": "Feat",
@@ -587,7 +639,8 @@
 		"benefits": "You fire a volley at all foes in an area.",
 		"source": "PZO2101",
 		"aonId": 426,
-		"id": "2370d3c2-a0a5-475a-ab27-524604191cf8"
+		"id": "2370d3c2-a0a5-475a-ab27-524604191cf8",
+		"hash": "QcXPUmzP"
 	},
 	{
 		"objectType": "Feat",
@@ -601,7 +654,8 @@
 		"benefits": "You've learned every possible edge to use against your foes.",
 		"source": "PZO2101",
 		"aonId": 542,
-		"id": "75745353-602f-4dc6-9b4d-8a2a3e61af88"
+		"id": "75745353-602f-4dc6-9b4d-8a2a3e61af88",
+		"hash": "MfGkkRZU"
 	},
 	{
 		"objectType": "Feat",
@@ -612,7 +666,8 @@
 		"benefits": "Your animal companion shares your incredible hunting skills, allowing it to take down your shared prey with ease.",
 		"source": "PZO2101",
 		"aonId": 543,
-		"id": "58dc66cc-0d4d-4467-89dd-fbb639be7526"
+		"id": "58dc66cc-0d4d-4467-89dd-fbb639be7526",
+		"hash": "zcWkdzhr"
 	},
 	{
 		"objectType": "Feat",
@@ -623,7 +678,8 @@
 		"benefits": "After watching the motions of combat with incredible intensity and precision, you fire at your prey at the perfect moment to deliver maximum pain.",
 		"source": "PZO2101",
 		"aonId": 544,
-		"id": "2cd044cb-bd0f-49ff-ad7c-30f0ef80fc54"
+		"id": "2cd044cb-bd0f-49ff-ad7c-30f0ef80fc54",
+		"hash": "WCbzrzLp"
 	},
 	{
 		"objectType": "Feat",
@@ -634,7 +690,8 @@
 		"benefits": "You blend in to your surroundings so well that others have trouble telling you apart from the terrain.",
 		"source": "PZO2101",
 		"aonId": 545,
-		"id": "59a98c7c-8fb1-417e-8f96-9ba8f675e879"
+		"id": "59a98c7c-8fb1-417e-8f96-9ba8f675e879",
+		"hash": "kkhQVHqm"
 	},
 	{
 		"objectType": "Feat",
@@ -645,7 +702,8 @@
 		"benefits": "You focus on your hunted prey, perceiving angles, air resistance, and every variable that would af ect your ranged attack.",
 		"source": "PZO2101",
 		"aonId": 546,
-		"id": "a87c7646-d23b-4d0f-a44b-f3b2e090cd7a"
+		"id": "a87c7646-d23b-4d0f-a44b-f3b2e090cd7a",
+		"hash": "IfAgZzrQ"
 	},
 	{
 		"objectType": "Feat",
@@ -656,7 +714,8 @@
 		"benefits": "Increase your visual acuity.",
 		"source": "PZO2101",
 		"aonId": 1170,
-		"id": "d97378d2-4cf4-401b-b823-6da2553e08b5"
+		"id": "d97378d2-4cf4-401b-b823-6da2553e08b5",
+		"hash": "tpUkRrNR"
 	},
 	{
 		"objectType": "Feat",
@@ -667,7 +726,8 @@
 		"benefits": "Your ability to track your prey has surpassed explanation, allowing you to trace your prey's movements and predict its location with ease.",
 		"source": "PZO2101",
 		"aonId": 547,
-		"id": "f148723f-2a3a-4d2c-9a78-858c42668e29"
+		"id": "f148723f-2a3a-4d2c-9a78-858c42668e29",
+		"hash": "IQEqRTrj"
 	},
 	{
 		"objectType": "Feat",
@@ -678,7 +738,8 @@
 		"benefits": "You can divide your attention three ways when hunting.",
 		"source": "PZO2101",
 		"aonId": 548,
-		"id": "425bc2c8-41ce-4448-8a25-c481c19f1660"
+		"id": "425bc2c8-41ce-4448-8a25-c481c19f1660",
+		"hash": "dyfWmJOl"
 	},
 	{
 		"objectType": "Feat",
@@ -689,6 +750,7 @@
 		"benefits": "You are so skilled at navigating the wild, your movement is completely unaffected by terrain.",
 		"source": "PZO2101",
 		"aonId": 549,
-		"id": "0f364015-33c3-451a-b6b8-6297817c6c00"
+		"id": "0f364015-33c3-451a-b6b8-6297817c6c00",
+		"hash": "cANcRGOm"
 	}
 ]

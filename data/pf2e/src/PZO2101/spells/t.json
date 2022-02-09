@@ -33,7 +33,8 @@
 		"traditions": [ "divine", "occult" ],
 		"traits": [ "Uncommon", "Necromancy" ],
 		"focus": false,
-		"id": "c6971ce0-cebc-4f8a-a1f2-c08336d13644"
+		"id": "c6971ce0-cebc-4f8a-a1f2-c08336d13644",
+		"hash": "RkRgBvLw"
 	},
 	{
 		"aonId": 330,
@@ -89,7 +90,8 @@
 		"traditions": [ "primal" ],
 		"traits": [ "Conjuration", "Plant" ],
 		"focus": false,
-		"id": "4b010ee3-8a5b-4376-a002-a303a16eb7a4"
+		"id": "4b010ee3-8a5b-4376-a002-a303a16eb7a4",
+		"hash": "qLAVbRhX"
 	},
 	{
 		"aonId": 332,
@@ -110,7 +112,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Evocation" ],
 		"focus": false,
-		"id": "f32ea986-b61d-4b9e-9131-95076d75f60f"
+		"id": "f32ea986-b61d-4b9e-9131-95076d75f60f",
+		"hash": "ftbNwpcd"
 	},
 	{
 		"aonId": 333,
@@ -130,7 +133,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Attack", "Evocation", "Force" ],
 		"focus": false,
-		"id": "e34051c4-9897-4cf8-b978-e68f9acc1f7c"
+		"id": "e34051c4-9897-4cf8-b978-e68f9acc1f7c",
+		"hash": "MMfpUvpw"
 	},
 	{
 		"aonId": 334,
@@ -175,7 +179,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Uncommon", "Divination", "Mental" ],
 		"focus": false,
-		"id": "5421369d-0368-4cba-a0f8-89558d0faff4"
+		"id": "5421369d-0368-4cba-a0f8-89558d0faff4",
+		"hash": "USMQwUxv"
 	},
 	{
 		"aonId": 336,
@@ -197,7 +202,8 @@
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Enchantment", "Incapacitation", "Linguistic", "Mental" ],
 		"focus": false,
-		"id": "da895ec9-59b4-40bb-be68-acf59d04da6b"
+		"id": "da895ec9-59b4-40bb-be68-acf59d04da6b",
+		"hash": "HWARkHTK"
 	},
 	{
 		"aonId": 337,
@@ -219,7 +225,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Divination", "Linguistic", "Mental" ],
 		"focus": false,
-		"id": "366fc270-e317-4c83-a0cc-5d044109f4be"
+		"id": "366fc270-e317-4c83-a0cc-5d044109f4be",
+		"hash": "pFsAmTJq"
 	},
 	{
 		"aonId": 338,
@@ -248,7 +255,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Uncommon", "Conjuration", "Teleportation" ],
 		"focus": false,
-		"id": "95a38061-f6d0-4bb8-b996-89e0569d354f"
+		"id": "95a38061-f6d0-4bb8-b996-89e0569d354f",
+		"hash": "PRXfRXwQ"
 	},
 	{
 		"aonId": 339,
@@ -266,7 +274,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Transmutation" ],
 		"focus": false,
-		"id": "de8d15e3-07d2-4a76-b3ea-4ab40f5fc488"
+		"id": "de8d15e3-07d2-4a76-b3ea-4ab40f5fc488",
+		"hash": "UZPXXCfz"
 	},
 	{
 		"aonId": 340,
@@ -290,7 +299,8 @@
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Uncommon", "Divination" ],
 		"focus": false,
-		"id": "c72a54b3-b517-4ec4-be9d-45472fd89ee2"
+		"id": "c72a54b3-b517-4ec4-be9d-45472fd89ee2",
+		"hash": "gRgBszct"
 	},
 	{
 		"aonId": 341,
@@ -313,7 +323,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Enchantment", "Mental" ],
 		"focus": false,
-		"id": "2998bbcf-be58-4bd0-886c-8015f713042e"
+		"id": "2998bbcf-be58-4bd0-886c-8015f713042e",
+		"hash": "ptILUlvg"
 	},
 	{
 		"aonId": 342,
@@ -332,7 +343,8 @@
 		"traditions": [ "primal" ],
 		"traits": [ "Plant", "Polymorph", "Transmutation" ],
 		"focus": false,
-		"id": "c70fe811-7b31-43b6-ae41-61d219a84893"
+		"id": "c70fe811-7b31-43b6-ae41-61d219a84893",
+		"hash": "WqQRZdjl"
 	},
 	{
 		"aonId": 343,
@@ -355,7 +367,8 @@
 		"traditions": [ "primal" ],
 		"traits": [ "Uncommon", "Conjuration", "Plant", "Teleportation" ],
 		"focus": false,
-		"id": "15d662e3-c93a-4456-a364-c9ed5e0f501b"
+		"id": "15d662e3-c93a-4456-a364-c9ed5e0f501b",
+		"hash": "SFVEWEfp"
 	},
 	{
 		"aonId": 344,
@@ -374,7 +387,8 @@
 		"traditions": [ "arcane", "divine", "occult", "primal" ],
 		"traits": [ "Divination", "Revelation" ],
 		"focus": false,
-		"id": "e1c9af79-adaf-4023-8d94-0dac15d7332f"
+		"id": "e1c9af79-adaf-4023-8d94-0dac15d7332f",
+		"hash": "WWdCvfQO"
 	},
 	{
 		"aonId": 345,
@@ -393,7 +407,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Divination", "Fortune" ],
 		"focus": false,
-		"id": "6a61a63c-0f77-4059-9992-91a331ce029a"
+		"id": "6a61a63c-0f77-4059-9992-91a331ce029a",
+		"hash": "fgZkbSYz"
 	},
 	{
 		"aonId": 346,
@@ -414,6 +429,7 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Divination", "Fortune", "Prediction" ],
 		"focus": false,
-		"id": "60c15541-84bd-4e1f-83c6-df42d7887d14"
+		"id": "60c15541-84bd-4e1f-83c6-df42d7887d14",
+		"hash": "ZnrXzQAg"
 	}
 ]

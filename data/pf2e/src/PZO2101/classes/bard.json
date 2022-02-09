@@ -31,7 +31,8 @@
 		"source": "PZO2101",
 		"aonId": 3,
 		"aonTraitId": 19,
-		"id": "8550ca17-5868-4053-aec4-11bd41f83226"
+		"id": "8550ca17-5868-4053-aec4-11bd41f83226",
+		"hash": "VgtlqQQh"
 	},
 	{ "objectType": "ClassPath", "name": "Enigma", "class": "Bard", "source": "PZO2101", "id": "775fc704-c4c7-4626-8f37-5c78c8389e16", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Maestro", "class": "Bard", "source": "PZO2101", "id": "5deb6c36-c1ea-4585-82b3-9d32e8f8c398", "aonId": 2 },

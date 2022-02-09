@@ -14,11 +14,12 @@
 		],
 		"aonId": 45,
 		"source": "PZO9309",
-		"id": "aa8f327f-6510-499a-a717-d596345889d6"
+		"id": "aa8f327f-6510-499a-a717-d596345889d6",
+		"hash": "yQzXWgZY"
 	},
-	{ "objectType": "Heritage", "name": "Farsight Goloma", "ancestry": "Goloma", "source": "PZO9309", "id": "4cecc784-6789-4acc-90c1-d7a7a017c0d5", "aonId": 170 },
-	{ "objectType": "Heritage", "name": "Frightful Goloma", "ancestry": "Goloma", "source": "PZO9309", "id": "dd841271-863f-43a8-993c-c959332059c1", "aonId": 171 },
-	{ "objectType": "Heritage", "name": "Insightful Goloma", "ancestry": "Goloma", "source": "PZO9309", "id": "e7728fe3-e70c-4a55-8d7b-c525ae5762e4", "aonId": 172 },
-	{ "objectType": "Heritage", "name": "Vicious Goloma", "ancestry": "Goloma", "source": "PZO9309", "id": "645ec2b0-7732-405b-b4d1-652bf666ccb4", "aonId": 173 },
-	{ "objectType": "Heritage", "name": "Vigilant Goloma", "ancestry": "Goloma", "source": "PZO9309", "id": "42c607da-8a8e-4c27-a97a-c10ea04ecbcc", "aonId": 174 }
+	{ "objectType": "Heritage", "name": "Farsight Goloma", "ancestry": "Goloma", "source": "PZO9309", "id": "4cecc784-6789-4acc-90c1-d7a7a017c0d5", "aonId": 170, "hash": "XFmmPMRZ" },
+	{ "objectType": "Heritage", "name": "Frightful Goloma", "ancestry": "Goloma", "source": "PZO9309", "id": "dd841271-863f-43a8-993c-c959332059c1", "aonId": 171, "hash": "zIpQmFsE" },
+	{ "objectType": "Heritage", "name": "Insightful Goloma", "ancestry": "Goloma", "source": "PZO9309", "id": "e7728fe3-e70c-4a55-8d7b-c525ae5762e4", "aonId": 172, "hash": "CBtMyWQk" },
+	{ "objectType": "Heritage", "name": "Vicious Goloma", "ancestry": "Goloma", "source": "PZO9309", "id": "645ec2b0-7732-405b-b4d1-652bf666ccb4", "aonId": 173, "hash": "TcsqkFrd" },
+	{ "objectType": "Heritage", "name": "Vigilant Goloma", "ancestry": "Goloma", "source": "PZO9309", "id": "42c607da-8a8e-4c27-a97a-c10ea04ecbcc", "aonId": 174, "hash": "tfqCbtyL" }
 ]

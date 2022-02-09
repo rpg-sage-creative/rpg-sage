@@ -12,7 +12,8 @@
 		"traits": [ "Agile", "Finesse", "Nonlethal", "Unarmed" ],
 		"source": "PZO2101",
 		"id": "8a7307d4-ebd8-45ee-97dd-13c8ce5b7a41",
-		"aonId": 1
+		"aonId": 1,
+		"hash": "ZArhJBBd"
 	},
 	{
 		"objectType": "Weapon",
@@ -32,7 +33,8 @@
 		],
 		"source": "PZO2101",
 		"id": "a90fb38f-e770-40f8-b777-511f77e62211",
-		"aonId": 2
+		"aonId": 2,
+		"hash": "rNkrkOQh"
 	},
 	{
 		"objectType": "Weapon",
@@ -55,7 +57,8 @@
 		],
 		"source": "PZO2101",
 		"id": "553884b1-3dd1-4559-921a-f841c5663b78",
-		"aonId": 3
+		"aonId": 3,
+		"hash": "yXUNmKwf"
 	},
 	{
 		"objectType": "Weapon",
@@ -73,7 +76,8 @@
 		],
 		"source": "PZO2101",
 		"id": "9a92c104-d70c-4587-a8ec-1e0754ecde33",
-		"aonId": 4
+		"aonId": 4,
+		"hash": "PxyFZwgS"
 	},
 	{
 		"objectType": "Weapon",
@@ -91,7 +95,8 @@
 		],
 		"source": "PZO2101",
 		"id": "ad52f4e2-f29e-477e-a6f4-c29b53dd7b8c",
-		"aonId": 5
+		"aonId": 5,
+		"hash": "QtkQhkGv"
 	},
 	{
 		"objectType": "Weapon",
@@ -109,7 +114,8 @@
 		],
 		"source": "PZO2101",
 		"id": "527970c2-e32e-44ac-93f3-f506bfc844fe",
-		"aonId": 6
+		"aonId": 6,
+		"hash": "PLJMzTkC"
 	},
 	{
 		"objectType": "Weapon",
@@ -127,7 +133,8 @@
 		],
 		"source": "PZO2101",
 		"id": "d3153880-5110-4ddf-a093-9d6a2008f640",
-		"aonId": 7
+		"aonId": 7,
+		"hash": "cvbjSRhH"
 	},
 	{
 		"objectType": "Weapon",
@@ -145,7 +152,8 @@
 		],
 		"source": "PZO2101",
 		"id": "0df0f49f-6061-40ae-a53d-97f41fe75b40",
-		"aonId": 8
+		"aonId": 8,
+		"hash": "zMWpZHpg"
 	},
 	{
 		"objectType": "Weapon",
@@ -163,7 +171,8 @@
 		],
 		"source": "PZO2101",
 		"id": "e7f4f21b-0e6f-4489-9c01-00d5ea1e3fc7",
-		"aonId": 9
+		"aonId": 9,
+		"hash": "wFgULYjp"
 	},
 	{
 		"objectType": "Weapon",
@@ -183,7 +192,8 @@
 		],
 		"source": "PZO2101",
 		"id": "cc0695a3-66da-4227-b343-2cc52bd52d24",
-		"aonId": 10
+		"aonId": 10,
+		"hash": "xKgJQEKJ"
 	},
 	{
 		"objectType": "Weapon",
@@ -201,7 +211,8 @@
 		],
 		"source": "PZO2101",
 		"id": "669f5af9-7705-4195-be23-be34c92bca3e",
-		"aonId": 11
+		"aonId": 11,
+		"hash": "nPKgxJgr"
 	},
 	{
 		"objectType": "Weapon",
@@ -219,7 +230,8 @@
 		],
 		"source": "PZO2101",
 		"id": "6f2ea1a1-b732-4841-917f-52b3ce8df7a3",
-		"aonId": 12
+		"aonId": 12,
+		"hash": "DSKKENrL"
 	},
 	{
 		"objectType": "Weapon",
@@ -238,7 +250,8 @@
 		],
 		"source": "PZO2101",
 		"id": "29e4d4e6-5ce2-461a-81c4-5efa8b7d6830",
-		"aonId": 13
+		"aonId": 13,
+		"hash": "xDZmLklZ"
 	},
 	{
 		"objectType": "Weapon",
@@ -257,7 +270,8 @@
 		],
 		"source": "PZO2101",
 		"id": "b7371f80-2b72-443c-abfd-68f07765cf4b",
-		"aonId": 14
+		"aonId": 14,
+		"hash": "tktvrRvR"
 	},
 	{
 		"objectType": "Weapon",
@@ -275,7 +289,8 @@
 		],
 		"source": "PZO2101",
 		"id": "a1db868c-28d0-4f64-9ea3-1f16e449b8f5",
-		"aonId": 15
+		"aonId": 15,
+		"hash": "lXBExrRI"
 	},
 	{
 		"objectType": "Weapon",
@@ -293,7 +308,8 @@
 		],
 		"source": "PZO2101",
 		"id": "f039d065-0d90-450a-8742-f75f122006ca",
-		"aonId": 16
+		"aonId": 16,
+		"hash": "dkbgHgqN"
 	},
 	{
 		"objectType": "Weapon",
@@ -311,7 +327,8 @@
 		],
 		"source": "PZO2101",
 		"id": "7e186332-8c1d-4de2-b9ef-84e79e338292",
-		"aonId": 17
+		"aonId": 17,
+		"hash": "tAbOvItJ"
 	},
 	{
 		"objectType": "Weapon",
@@ -329,7 +346,8 @@
 		],
 		"source": "PZO2101",
 		"id": "b74c7e0d-6da6-4be4-b219-52b08356d3ac",
-		"aonId": 18
+		"aonId": 18,
+		"hash": "kXkHbbSM"
 	},
 	{
 		"objectType": "Weapon",
@@ -347,7 +365,8 @@
 		],
 		"source": "PZO2101",
 		"id": "8347ed88-aa14-488f-9eb1-462a5f0d0062",
-		"aonId": 19
+		"aonId": 19,
+		"hash": "RtkxSGWA"
 	},
 	{
 		"objectType": "Weapon",
@@ -365,7 +384,8 @@
 		],
 		"source": "PZO2101",
 		"id": "6a5b93d1-3408-496b-8575-61930e117ba1",
-		"aonId": 20
+		"aonId": 20,
+		"hash": "JXmrzGkC"
 	},
 	{
 		"objectType": "Weapon",
@@ -383,7 +403,8 @@
 		],
 		"source": "PZO2101",
 		"id": "57c9b8a7-47c6-4a54-8cc7-57aae0455486",
-		"aonId": 21
+		"aonId": 21,
+		"hash": "lUpwMvIt"
 	},
 	{
 		"objectType": "Weapon",
@@ -401,7 +422,8 @@
 		],
 		"source": "PZO2101",
 		"id": "6d1bf32f-0163-42ce-aa4a-118210d6f173",
-		"aonId": 22
+		"aonId": 22,
+		"hash": "EylYlGRx"
 	},
 	{
 		"objectType": "Weapon",
@@ -419,7 +441,8 @@
 		],
 		"source": "PZO2101",
 		"id": "d3561193-4502-4d43-878f-28bd4708b23d",
-		"aonId": 23
+		"aonId": 23,
+		"hash": "sfZLhJWx"
 	},
 	{
 		"objectType": "Weapon",
@@ -437,7 +460,8 @@
 		],
 		"source": "PZO2101",
 		"id": "ef5420fa-848d-4b01-ab95-2540682f39c1",
-		"aonId": 24
+		"aonId": 24,
+		"hash": "zWXqzffL"
 	},
 	{
 		"objectType": "Weapon",
@@ -455,7 +479,8 @@
 		],
 		"source": "PZO2101",
 		"id": "6ba5547a-1fb2-4a1c-8a3e-5cb6dd71d8b5",
-		"aonId": 25
+		"aonId": 25,
+		"hash": "PTtEdCGl"
 	},
 	{
 		"objectType": "Weapon",
@@ -473,7 +498,8 @@
 		],
 		"source": "PZO2101",
 		"id": "67df71ab-27a5-447a-ae56-3062a579061c",
-		"aonId": 26
+		"aonId": 26,
+		"hash": "rkgTLUKZ"
 	},
 	{
 		"objectType": "Weapon",
@@ -495,7 +521,8 @@
 		],
 		"source": "PZO2101",
 		"id": "8c17525c-0968-4d64-8821-224bc2c52093",
-		"aonId": 27
+		"aonId": 27,
+		"hash": "tZgQlJMP"
 	},
 	{
 		"objectType": "Weapon",
@@ -513,7 +540,8 @@
 		],
 		"source": "PZO2101",
 		"id": "0bac87de-c1c1-4675-b79d-20abd2314dd5",
-		"aonId": 28
+		"aonId": 28,
+		"hash": "JRtfYrxL"
 	},
 	{
 		"objectType": "Weapon",
@@ -534,7 +562,8 @@
 		],
 		"source": "PZO2101",
 		"id": "78dc24f7-3536-4db5-b165-a562f328c40d",
-		"aonId": 29
+		"aonId": 29,
+		"hash": "tzKbRpUl"
 	},
 	{
 		"objectType": "Weapon",
@@ -552,7 +581,8 @@
 		],
 		"source": "PZO2101",
 		"id": "0cd0a8c3-360a-4724-9deb-a080bf2b8232",
-		"aonId": 30
+		"aonId": 30,
+		"hash": "JNWVXKKv"
 	},
 	{
 		"objectType": "Weapon",
@@ -570,7 +600,8 @@
 		],
 		"source": "PZO2101",
 		"id": "7e8b6b35-0b08-4010-9f03-c11a454a49d1",
-		"aonId": 31
+		"aonId": 31,
+		"hash": "gPhqkhpk"
 	},
 	{
 		"objectType": "Weapon",
@@ -588,7 +619,8 @@
 		],
 		"source": "PZO2101",
 		"id": "66f75db3-510c-4ddf-bb6b-5159f4cd4319",
-		"aonId": 32
+		"aonId": 32,
+		"hash": "BqtJfXzn"
 	},
 	{
 		"objectType": "Weapon",
@@ -606,7 +638,8 @@
 		],
 		"source": "PZO2101",
 		"id": "91edab29-a93e-4317-a0a7-95ce2dce1113",
-		"aonId": 33
+		"aonId": 33,
+		"hash": "CgERlkdp"
 	},
 	{
 		"objectType": "Weapon",
@@ -624,7 +657,8 @@
 		],
 		"source": "PZO2101",
 		"id": "fe0f7bd2-ae4f-46ac-b6c4-759dbf69ae80",
-		"aonId": 34
+		"aonId": 34,
+		"hash": "PCjttKNh"
 	},
 	{
 		"objectType": "Weapon",
@@ -642,7 +676,8 @@
 		],
 		"source": "PZO2101",
 		"id": "5fdbc46d-3afe-45cd-a62e-59c1587779d4",
-		"aonId": 35
+		"aonId": 35,
+		"hash": "CcgHbzpy"
 	},
 	{
 		"objectType": "Weapon",
@@ -660,7 +695,8 @@
 		],
 		"source": "PZO2101",
 		"id": "0a0dcbee-a849-4b12-8a5d-b9c748959df6",
-		"aonId": 36
+		"aonId": 36,
+		"hash": "znMZgHvt"
 	},
 	{
 		"objectType": "Weapon",
@@ -678,7 +714,8 @@
 		],
 		"source": "PZO2101",
 		"id": "fd69c54f-8b10-4e0e-88e9-4962cc7a7fd0",
-		"aonId": 37
+		"aonId": 37,
+		"hash": "xpQbtQmx"
 	},
 	{
 		"objectType": "Weapon",
@@ -696,7 +733,8 @@
 		],
 		"source": "PZO2101",
 		"id": "74da547b-ff28-4c79-b7f0-cf05a3fa316c",
-		"aonId": 38
+		"aonId": 38,
+		"hash": "xnJQFhZI"
 	},
 	{
 		"objectType": "Weapon",
@@ -714,7 +752,8 @@
 		],
 		"source": "PZO2101",
 		"id": "73cb8d14-2fc5-4412-8843-b299b4cc7da8",
-		"aonId": 39
+		"aonId": 39,
+		"hash": "XxnrUstW"
 	},
 	{
 		"objectType": "Weapon",
@@ -732,7 +771,8 @@
 		],
 		"source": "PZO2101",
 		"id": "2d34e70d-b9c6-4a81-98c5-74890c2b3119",
-		"aonId": 40
+		"aonId": 40,
+		"hash": "lROPwXqX"
 	},
 	{
 		"objectType": "Weapon",
@@ -750,7 +790,8 @@
 		],
 		"source": "PZO2101",
 		"id": "812eeee5-90df-4ea7-b6ad-2353edaee6c1",
-		"aonId": 41
+		"aonId": 41,
+		"hash": "LZBdlWps"
 	},
 	{
 		"objectType": "Weapon",
@@ -768,7 +809,8 @@
 		],
 		"source": "PZO2101",
 		"id": "375ccba7-0ff6-4a63-bb89-346cd0a7a3c3",
-		"aonId": 42
+		"aonId": 42,
+		"hash": "CwwNKtQq"
 	},
 	{
 		"objectType": "Weapon",
@@ -786,7 +828,8 @@
 		],
 		"source": "PZO2101",
 		"id": "8bd3ed3b-60f1-4cca-88f6-7c6ffd1ec3aa",
-		"aonId": 43
+		"aonId": 43,
+		"hash": "ZXrNMpQw"
 	},
 	{
 		"objectType": "Weapon",
@@ -810,7 +853,8 @@
 		],
 		"source": "PZO2101",
 		"id": "7a5803f9-7e94-47e2-8ef1-c5ac0fbd577b",
-		"aonId": 44
+		"aonId": 44,
+		"hash": "rXQybZOb"
 	},
 	{
 		"objectType": "Weapon",
@@ -830,7 +874,8 @@
 		],
 		"source": "PZO2101",
 		"id": "cc8bfa9d-0960-4550-baa4-0852706922b3",
-		"aonId": 45
+		"aonId": 45,
+		"hash": "gbbPRYgm"
 	},
 	{
 		"objectType": "Weapon",
@@ -848,7 +893,8 @@
 		],
 		"source": "PZO2101",
 		"id": "21fd184c-ee21-4c34-af58-d1573c1231eb",
-		"aonId": 46
+		"aonId": 46,
+		"hash": "htsVbKWW"
 	},
 	{
 		"objectType": "Weapon",
@@ -866,7 +912,8 @@
 		],
 		"source": "PZO2101",
 		"id": "0f2895cc-33e2-4309-9583-34d9e15094d9",
-		"aonId": 47
+		"aonId": 47,
+		"hash": "DypbRrnr"
 	},
 	{
 		"objectType": "Weapon",
@@ -884,7 +931,8 @@
 		],
 		"source": "PZO2101",
 		"id": "7b109399-bf6e-4c4a-a813-a3e05673801c",
-		"aonId": 48
+		"aonId": 48,
+		"hash": "WhSfWIGs"
 	},
 	{
 		"objectType": "Weapon",
@@ -903,7 +951,8 @@
 		],
 		"source": "PZO2101",
 		"id": "8f59d344-b9c2-4fbf-8d2b-ddfc86977908",
-		"aonId": 49
+		"aonId": 49,
+		"hash": "qvCKFnzw"
 	},
 	{
 		"objectType": "Weapon",
@@ -922,7 +971,8 @@
 		],
 		"source": "PZO2101",
 		"id": "69a44286-55b8-458d-a7fc-d9148da02b51",
-		"aonId": 50
+		"aonId": 50,
+		"hash": "gMsvQGUh"
 	},
 	{
 		"objectType": "Weapon",
@@ -948,7 +998,8 @@
 		],
 		"source": "PZO2101",
 		"id": "d536997a-b99f-400d-80ab-4070c3cefb44",
-		"aonId": 51
+		"aonId": 51,
+		"hash": "sQzZQWty"
 	},
 	{
 		"objectType": "Weapon",
@@ -967,7 +1018,8 @@
 		],
 		"source": "PZO2101",
 		"id": "6bac7c9b-b12d-4281-8e28-982e8c1e5d8f",
-		"aonId": 52
+		"aonId": 52,
+		"hash": "ISQkZLvt"
 	},
 	{
 		"objectType": "Weapon",
@@ -986,7 +1038,8 @@
 		],
 		"source": "PZO2101",
 		"id": "dfaf11ea-ca51-4ae3-9b72-e972439247f7",
-		"aonId": 53
+		"aonId": 53,
+		"hash": "qDtWxrKU"
 	},
 	{
 		"objectType": "Weapon",
@@ -1005,7 +1058,8 @@
 		],
 		"source": "PZO2101",
 		"id": "aae7cf3b-fb5c-4dcc-b39a-a9d1af0952de",
-		"aonId": 54
+		"aonId": 54,
+		"hash": "XvWzhjJW"
 	},
 	{
 		"objectType": "Weapon",
@@ -1024,7 +1078,8 @@
 		],
 		"source": "PZO2101",
 		"id": "4d9b6896-90a2-4ee2-bee2-881d0aea8b0d",
-		"aonId": 55
+		"aonId": 55,
+		"hash": "RWRdnqDF"
 	},
 	{
 		"objectType": "Weapon",
@@ -1043,7 +1098,8 @@
 		],
 		"source": "PZO2101",
 		"id": "2bafcfd9-a443-46b3-8a37-dacb6e08821b",
-		"aonId": 56
+		"aonId": 56,
+		"hash": "gzGGvPtg"
 	},
 	{
 		"objectType": "Weapon",
@@ -1062,7 +1118,8 @@
 		],
 		"source": "PZO2101",
 		"id": "5029d8f8-6c27-4c19-b85c-88e2f1e77b7d",
-		"aonId": 57
+		"aonId": 57,
+		"hash": "JAcgCglN"
 	},
 	{
 		"objectType": "Weapon",
@@ -1081,7 +1138,8 @@
 		],
 		"source": "PZO2101",
 		"id": "490cdc73-7474-4492-9de4-c22f2bd6ac4c",
-		"aonId": 58
+		"aonId": 58,
+		"hash": "WGfkkzPZ"
 	},
 	{
 		"objectType": "Weapon",
@@ -1100,7 +1158,8 @@
 		],
 		"source": "PZO2101",
 		"id": "3a26ad70-0fb7-4c6a-9663-cf07c0cb1fd4",
-		"aonId": 59
+		"aonId": 59,
+		"hash": "vqrRfgXP"
 	},
 	{
 		"objectType": "Weapon",
@@ -1119,7 +1178,8 @@
 		],
 		"source": "PZO2101",
 		"id": "d29aacdf-7877-4140-9ca3-957047152600",
-		"aonId": 60
+		"aonId": 60,
+		"hash": "zAgzGTOK"
 	},
 	{
 		"objectType": "Weapon",
@@ -1138,7 +1198,8 @@
 		],
 		"source": "PZO2101",
 		"id": "339c096f-aadc-463f-848d-73aee975a2a2",
-		"aonId": 61
+		"aonId": 61,
+		"hash": "XJWNXDmE"
 	},
 	{
 		"objectType": "Weapon",
@@ -1175,7 +1236,8 @@
 		],
 		"source": "PZO2101",
 		"id": "d4bf19a4-bfaa-47eb-a497-c2abe8d891dc",
-		"aonId": 63
+		"aonId": 63,
+		"hash": "WPjmkBcl"
 	},
 	{
 		"objectType": "Weapon",
@@ -1194,7 +1256,8 @@
 		],
 		"source": "PZO2101",
 		"id": "1098a8bf-9812-4b35-9859-6cccd11034e9",
-		"aonId": 64
+		"aonId": 64,
+		"hash": "sdJtchbZ"
 	},
 	{
 		"objectType": "Weapon",
@@ -1213,7 +1276,8 @@
 		],
 		"source": "PZO2101",
 		"id": "70495c55-c5a4-4216-a49d-1b7ac8dc5b2b",
-		"aonId": 65
+		"aonId": 65,
+		"hash": "dWrZHzbv"
 	},
 	{
 		"objectType": "Weapon",
@@ -1234,7 +1298,8 @@
 		],
 		"source": "PZO2101",
 		"id": "a85cea60-3f0f-49ae-88df-37e46ab78015",
-		"aonId": 66
+		"aonId": 66,
+		"hash": "RRpbYbqb"
 	},
 	{
 		"objectType": "Weapon",
@@ -1255,7 +1320,8 @@
 		],
 		"source": "PZO2101",
 		"id": "dfc72bb6-0cf6-4c96-95f0-de3e5412f57c",
-		"aonId": 67
+		"aonId": 67,
+		"hash": "xpWgvdXK"
 	},
 	{
 		"objectType": "Weapon",
@@ -1275,7 +1341,8 @@
 		],
 		"source": "PZO2101",
 		"id": "dfbfb472-d1b0-4d91-86c8-85327c4b02ce",
-		"aonId": 68
+		"aonId": 68,
+		"hash": "btqmzUkr"
 	},
 	{
 		"objectType": "Weapon",
@@ -1296,7 +1363,8 @@
 		],
 		"source": "PZO2101",
 		"id": "d1369d91-0266-4fc0-98fa-bb7a88d8d5eb",
-		"aonId": 69
+		"aonId": 69,
+		"hash": "CvRpJVvy"
 	},
 	{
 		"objectType": "Weapon",
@@ -1317,7 +1385,8 @@
 		],
 		"source": "PZO2101",
 		"id": "089d2c90-0281-47d9-9992-51084f4c8159",
-		"aonId": 70
+		"aonId": 70,
+		"hash": "ZgbBqFGC"
 	},
 	{
 		"objectType": "Weapon",
@@ -1337,7 +1406,8 @@
 		],
 		"source": "PZO2101",
 		"id": "24e57cb2-0b56-4297-847b-a52abb9c265e",
-		"aonId": 71
+		"aonId": 71,
+		"hash": "gyLEHPlq"
 	},
 	{
 		"objectType": "Weapon",
@@ -1358,7 +1428,8 @@
 		],
 		"source": "PZO2101",
 		"id": "ab74a3af-983d-4716-a6aa-c387bde43a14",
-		"aonId": 72
+		"aonId": 72,
+		"hash": "kQzLrWqx"
 	},
 	{
 		"objectType": "Weapon",
@@ -1378,7 +1449,8 @@
 		],
 		"source": "PZO2101",
 		"id": "ae37d5c6-1ffa-476a-a4e6-2768a56e3ad8",
-		"aonId": 73
+		"aonId": 73,
+		"hash": "zhEcgmGv"
 	},
 	{
 		"objectType": "Weapon",
@@ -1403,7 +1475,8 @@
 		],
 		"source": "PZO2101",
 		"id": "ba64af6e-e3ee-4344-bff3-5965689a9e22",
-		"aonId": 74
+		"aonId": 74,
+		"hash": "dZTHpkrw"
 	},
 	{
 		"objectType": "Weapon",
@@ -1424,7 +1497,8 @@
 		],
 		"source": "PZO2101",
 		"id": "35abd271-6eab-4586-9fa0-f6545423c42e",
-		"aonId": 75
+		"aonId": 75,
+		"hash": "RtdBvEDw"
 	},
 	{
 		"objectType": "Weapon",
@@ -1448,7 +1522,8 @@
 		],
 		"source": "PZO2101",
 		"id": "8153a57f-5c95-45d7-8c85-8c24b38756df",
-		"aonId": 76
+		"aonId": 76,
+		"hash": "mNxfTQHO"
 	},
 	{
 		"objectType": "Weapon",
@@ -1469,7 +1544,8 @@
 		],
 		"source": "PZO2101",
 		"id": "655af6d9-afd3-4f44-8252-da54e0ae686b",
-		"aonId": 77
+		"aonId": 77,
+		"hash": "xUBybOkc"
 	},
 	{
 		"objectType": "Weapon",
@@ -1490,7 +1566,8 @@
 		],
 		"source": "PZO2101",
 		"id": "5cef39f3-d746-4c32-b964-aeb0f3ea87a1",
-		"aonId": 78
+		"aonId": 78,
+		"hash": "XzZsIWMn"
 	},
 	{
 		"objectType": "Weapon",
@@ -1512,6 +1589,7 @@
 		],
 		"source": "PZO2101",
 		"id": "1dab2d5d-b7c1-46dc-b10f-d1a45d69b90e",
-		"aonId": 79
+		"aonId": 79,
+		"hash": "hTyrVbkR"
 	}
 ]

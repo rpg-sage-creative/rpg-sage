@@ -16,7 +16,8 @@
 		"source": "PZO2101",
 		"page": 277,
 		"id": "d999ddba-54c3-4dfb-a45e-f7d528e020ff",
-		"aonId": 1
+		"aonId": 1,
+		"hash": "SVEtzzVf"
 	},
 	{
 		"objectType": "Shield",
@@ -35,7 +36,8 @@
 		"source": "PZO2101",
 		"page": 277,
 		"id": "2275ad03-751d-4788-adc1-87fe2215e6c2",
-		"aonId": 2
+		"aonId": 2,
+		"hash": "KkmPZLyg"
 	},
 	{
 		"objectType": "Shield",
@@ -54,7 +56,8 @@
 		"source": "PZO2101",
 		"page": 277,
 		"id": "07150e2f-138a-4511-922b-4ade1be39cf1",
-		"aonId": 3
+		"aonId": 3,
+		"hash": "nZDWvAvL"
 	},
 	{
 		"objectType": "Shield",
@@ -74,6 +77,7 @@
 		"source": "PZO2101",
 		"page": 277,
 		"id": "5cc7a75d-430a-44bd-8a21-530a2c24a6b0",
-		"aonId": 4
+		"aonId": 4,
+		"hash": "xYLnpWTP"
 	}
 ]

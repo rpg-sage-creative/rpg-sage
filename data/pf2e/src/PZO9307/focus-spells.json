@@ -13,7 +13,8 @@
 		"source": "PZO9307",
 		"focus": true,
 		"aonId": 831,
-		"id": "ae65eb7e-527e-451f-9db1-0ca27b7f1d37"
+		"id": "ae65eb7e-527e-451f-9db1-0ca27b7f1d37",
+		"hash": "QmgDANZX"
 	},
 	{
 		"name": "Familiar Form",
@@ -35,7 +36,8 @@
 		"source": "PZO9307",
 		"focus": true,
 		"aonId": 832,
-		"id": "5f137a0d-d816-4906-a469-a2a87632827d"
+		"id": "5f137a0d-d816-4906-a469-a2a87632827d",
+		"hash": "CkQqLZqZ"
 	},
 	{
 		"name": "Spellmaster's Ward",
@@ -54,6 +56,7 @@
 		"source": "PZO9307",
 		"focus": true,
 		"aonId": 833,
-		"id": "d23dd2db-a5b4-42d0-a6b8-603841b179f0"
+		"id": "d23dd2db-a5b4-42d0-a6b8-603841b179f0",
+		"hash": "HytdGlrm"
 	}
 ]

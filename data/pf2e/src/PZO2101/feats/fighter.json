@@ -8,7 +8,8 @@
 		"benefits": "You lash out at your foe with both weapons.",
 		"source": "PZO2101",
 		"aonId": 356,
-		"id": "cc83f862-6f5c-42d2-9ce3-60aa4c48a8b2"
+		"id": "cc83f862-6f5c-42d2-9ce3-60aa4c48a8b2",
+		"hash": "UQmmdrrC"
 	},
 	{
 		"objectType": "Feat",
@@ -19,7 +20,8 @@
 		"benefits": "You brace your shield with both hands, enhancing its potential for both offense and defense.",
 		"source": "PZO2101",
 		"aonId": 1087,
-		"id": "56d97e28-8138-4f82-99da-f37b21374c8a"
+		"id": "56d97e28-8138-4f82-99da-f37b21374c8a",
+		"hash": "XCvJwqss"
 	},
 	{
 		"objectType": "Feat",
@@ -30,7 +32,8 @@
 		"benefits": "You make a controlled attack, fully accounting for your momentum.",
 		"source": "PZO2101",
 		"aonId": 357,
-		"id": "8bc3b5cc-0ddd-4613-b027-7f00c2e27f49"
+		"id": "8bc3b5cc-0ddd-4613-b027-7f00c2e27f49",
+		"hash": "AhgvEdCP"
 	},
 	{
 		"objectType": "Feat",
@@ -41,7 +44,8 @@
 		"benefits": "You take aim to pick off nearby enemies quickly.",
 		"source": "PZO2101",
 		"aonId": 358,
-		"id": "f9170f8d-49fb-48d8-835a-4279fc0a3653"
+		"id": "f9170f8d-49fb-48d8-835a-4279fc0a3653",
+		"hash": "hgFXXdLt"
 	},
 	{
 		"objectType": "Feat",
@@ -52,7 +56,8 @@
 		"benefits": "You unleash a particularly powerful attack that clobbers your foe but leaves you a bit unsteady.",
 		"source": "PZO2101",
 		"aonId": 359,
-		"id": "1a7bf31c-52c0-448d-849f-07fbbef2d740"
+		"id": "1a7bf31c-52c0-448d-849f-07fbbef2d740",
+		"hash": "qWklEMKl"
 	},
 	{
 		"objectType": "Feat",
@@ -63,7 +68,8 @@
 		"benefits": "You can snap your shield into place just as you would take a blow, avoiding the hit at the last second.",
 		"source": "PZO2101",
 		"aonId": 360,
-		"id": "6a4ee0f3-6928-4a1e-92b6-30eaabca4b74"
+		"id": "6a4ee0f3-6928-4a1e-92b6-30eaabca4b74",
+		"hash": "ChvvzfPw"
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +80,8 @@
 		"benefits": "You combine an attack with quick grappling moves to throw an enemy off balance as long as it stays in your reach.",
 		"source": "PZO2101",
 		"aonId": 361,
-		"id": "4e3c4846-1b32-40fa-9664-6239420cee91"
+		"id": "4e3c4846-1b32-40fa-9664-6239420cee91",
+		"hash": "AVgbWFIb"
 	},
 	{
 		"objectType": "Feat",
@@ -85,7 +92,8 @@
 		"benefits": "With a quick sprint, you dash up to your foe and swing.",
 		"source": "PZO2101",
 		"aonId": 134,
-		"id": "ec5650a3-9748-4ea6-9aef-dcfb01a00d56"
+		"id": "ec5650a3-9748-4ea6-9aef-dcfb01a00d56",
+		"hash": "SbODXTXR"
 	},
 	{
 		"objectType": "Feat",
@@ -96,7 +104,8 @@
 		"benefits": "You push back as you block the attack, knocking your foe away or off balance.",
 		"source": "PZO2101",
 		"aonId": 363,
-		"id": "f1a26e90-8951-4363-9daa-94d8715cf905"
+		"id": "f1a26e90-8951-4363-9daa-94d8715cf905",
+		"hash": "QYxxHPJx"
 	},
 	{
 		"objectType": "Feat",
@@ -107,7 +116,8 @@
 		"benefits": "With a quick shot, you interfere with a foe in combat.",
 		"source": "PZO2101",
 		"aonId": 364,
-		"id": "e9cc7ef5-d43b-4b9b-8f71-0e704b74a9da"
+		"id": "e9cc7ef5-d43b-4b9b-8f71-0e704b74a9da",
+		"hash": "XHkWAJGI"
 	},
 	{
 		"objectType": "Feat",
@@ -118,7 +128,8 @@
 		"benefits": "Throwing your weight behind your attack, you hit you opponent hard enough to make it stumble back.",
 		"source": "PZO2101",
 		"aonId": 365,
-		"id": "18f8b9d8-a7a2-4372-a562-78bc2fc2aba2"
+		"id": "18f8b9d8-a7a2-4372-a562-78bc2fc2aba2",
+		"hash": "vVLYEZfQ"
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +140,8 @@
 		"benefits": "You swipe at your opponent and grab at them.",
 		"source": "PZO2101",
 		"aonId": 366,
-		"id": "cd7dcc17-b6d2-437f-94bf-38e8f3e3fb30"
+		"id": "cd7dcc17-b6d2-437f-94bf-38e8f3e3fb30",
+		"hash": "cxYRLGqg"
 	},
 	{
 		"objectType": "Feat",
@@ -151,7 +163,8 @@
 		"benefits": "Your blow not only wounds creatures but also shatters their confidence.",
 		"source": "PZO2101",
 		"aonId": 368,
-		"id": "3f6198fd-1b6c-4c42-a003-48796144d630"
+		"id": "3f6198fd-1b6c-4c42-a003-48796144d630",
+		"hash": "bXDBpPUD"
 	},
 	{
 		"objectType": "Feat",
@@ -162,7 +175,8 @@
 		"benefits": "Extending your body to its limits, you attack an enemy that would normally be beyond your reach.",
 		"source": "PZO2101",
 		"aonId": 369,
-		"id": "38c3f10e-9dd5-4829-983d-d4782a212764"
+		"id": "38c3f10e-9dd5-4829-983d-d4782a212764",
+		"hash": "cyppMnOP"
 	},
 	{
 		"objectType": "Feat",
@@ -173,7 +187,8 @@
 		"benefits": "You shoot twice in blindingly fast succession.",
 		"source": "PZO2101",
 		"aonId": 370,
-		"id": "928e5ee9-8c61-4deb-bcee-97786a8fcbe1"
+		"id": "928e5ee9-8c61-4deb-bcee-97786a8fcbe1",
+		"hash": "kzkpcgts"
 	},
 	{
 		"objectType": "Feat",
@@ -184,7 +199,8 @@
 		"benefits": "You snap your free hand over to grip your weapon just long enough to add momentum and deliver a more powerful blow to your opponent.",
 		"source": "PZO2101",
 		"aonId": 371,
-		"id": "80c99ef4-96d0-4499-ba54-09af8f5c1240"
+		"id": "80c99ef4-96d0-4499-ba54-09af8f5c1240",
+		"hash": "vgUcxKzY"
 	},
 	{
 		"objectType": "Feat",
@@ -195,7 +211,8 @@
 		"benefits": "Your follow-up blow leaves you an opening to set your shield.",
 		"source": "PZO2101",
 		"aonId": 1088,
-		"id": "a6250f7a-5f65-4255-85b3-ecad2b1fb7aa"
+		"id": "a6250f7a-5f65-4255-85b3-ecad2b1fb7aa",
+		"hash": "zvCQvgMC"
 	},
 	{
 		"objectType": "Feat",
@@ -206,7 +223,8 @@
 		"benefits": "You make an attack to knock a foe off balance, then follow up immediately with a sweep to topple them.",
 		"source": "PZO2101",
 		"aonId": 372,
-		"id": "8c5cca8a-281e-45de-ac21-32acb09117bf"
+		"id": "8c5cca8a-281e-45de-ac21-32acb09117bf",
+		"hash": "DzmBHKhh"
 	},
 	{
 		"objectType": "Feat",
@@ -217,7 +235,8 @@
 		"benefits": "You can push larger foes around with your attack.",
 		"source": "PZO2101",
 		"aonId": 373,
-		"id": "d021ade4-5978-4b24-876b-b69d3aa9ff16"
+		"id": "d021ade4-5978-4b24-876b-b69d3aa9ff16",
+		"hash": "sRrglfxF"
 	},
 	{
 		"objectType": "Feat",
@@ -228,7 +247,8 @@
 		"benefits": "You turn your foes' flanking against them with a quick reverse.",
 		"source": "PZO2101",
 		"aonId": 374,
-		"id": "159e8265-b9cf-440e-bfc3-c777f3051ef3"
+		"id": "159e8265-b9cf-440e-bfc3-c777f3051ef3",
+		"hash": "ElWUjTqF"
 	},
 	{
 		"objectType": "Feat",
@@ -239,7 +259,8 @@
 		"benefits": "When your shield is up, your enemies' blows can't touch you.",
 		"source": "PZO2101",
 		"aonId": 375,
-		"id": "d74ff8a9-a49e-4796-aa60-be3af9621adc"
+		"id": "d74ff8a9-a49e-4796-aa60-be3af9621adc",
+		"hash": "kzJUASqw"
 	},
 	{
 		"objectType": "Feat",
@@ -250,7 +271,8 @@
 		"benefits": "You make a wide, arcing swing.",
 		"source": "PZO2101",
 		"aonId": 142,
-		"id": "6c13ea43-0edd-41f7-98c7-7401b53ebb70"
+		"id": "6c13ea43-0edd-41f7-98c7-7401b53ebb70",
+		"hash": "ZzFgxsck"
 	},
 	{
 		"objectType": "Feat",
@@ -261,7 +283,8 @@
 		"benefits": "You use your two weapons to parry attacks.",
 		"source": "PZO2101",
 		"aonId": 377,
-		"id": "502353b3-406b-4b38-b7da-56247e644bae"
+		"id": "502353b3-406b-4b38-b7da-56247e644bae",
+		"hash": "ZdSZOYpQ"
 	},
 	{
 		"objectType": "Feat",
@@ -272,7 +295,8 @@
 		"benefits": "You've studied the art of wielding an advanced weapon.",
 		"source": "PZO2101",
 		"aonId": 378,
-		"id": "dab128c8-3f34-47c4-8758-29f3ea5614db"
+		"id": "dab128c8-3f34-47c4-8758-29f3ea5614db",
+		"hash": "ITIWfAyQ"
 	},
 	{
 		"objectType": "Feat",
@@ -283,7 +307,8 @@
 		"benefits": "When an enemy's movement is compromised, you deliver a more deadly blow.",
 		"source": "PZO2101",
 		"aonId": 379,
-		"id": "c71ce305-c472-49ab-a95e-17b6014f74b7"
+		"id": "c71ce305-c472-49ab-a95e-17b6014f74b7",
+		"hash": "zIEAtzIz"
 	},
 	{
 		"objectType": "Feat",
@@ -294,7 +319,8 @@
 		"benefits": "You adopt a fencing stance that improves your control over your weapon.",
 		"source": "PZO2101",
 		"aonId": 380,
-		"id": "7a2e48af-d62f-461c-91a7-6dfb95c76e02"
+		"id": "7a2e48af-d62f-461c-91a7-6dfb95c76e02",
+		"hash": "YQpvxQPp"
 	},
 	{
 		"objectType": "Feat",
@@ -305,7 +331,8 @@
 		"benefits": "You've learned to maintain your balance even when swinging furiously.",
 		"source": "PZO2101",
 		"aonId": 381,
-		"id": "9665c357-36fb-4111-ab3c-861bc0da7523"
+		"id": "9665c357-36fb-4111-ab3c-861bc0da7523",
+		"hash": "vVKnBvTO"
 	},
 	{
 		"objectType": "Feat",
@@ -327,7 +354,8 @@
 		"benefits": "You can use your shield to fend off the worst of area effects and other damage.",
 		"source": "PZO2101",
 		"aonId": 383,
-		"id": "284a07d1-a6de-4f42-8f0d-11902f24fe72"
+		"id": "284a07d1-a6de-4f42-8f0d-11902f24fe72",
+		"hash": "wpbHSEjD"
 	},
 	{
 		"objectType": "Feat",
@@ -338,7 +366,8 @@
 		"benefits": "You drive your piercing weapon into an imperceptible foe, revealing its location to your allies.",
 		"source": "PZO2101",
 		"aonId": 384,
-		"id": "03698bb5-6fb9-4235-9f8a-f1e295520051"
+		"id": "03698bb5-6fb9-4235-9f8a-f1e295520051",
+		"hash": "Hytcbrqq"
 	},
 	{
 		"objectType": "Feat",
@@ -349,7 +378,8 @@
 		"benefits": "Your offense exploits your enemy's fear. Make a melee Strike against a frightened creature.",
 		"source": "PZO2101",
 		"aonId": 385,
-		"id": "6ea2e891-781b-4401-99a5-1a6f885c301c"
+		"id": "6ea2e891-781b-4401-99a5-1a6f885c301c",
+		"hash": "wGxtCAUz"
 	},
 	{
 		"objectType": "Feat",
@@ -363,7 +393,8 @@
 		"benefits": "You use your shield to protect your allies as well as yourself.",
 		"source": "PZO2101",
 		"aonId": 229,
-		"id": "00e73085-f42b-448b-992b-3001f6ea3462"
+		"id": "00e73085-f42b-448b-992b-3001f6ea3462",
+		"hash": "sVhMhZSU"
 	},
 	{
 		"objectType": "Feat",
@@ -374,7 +405,8 @@
 		"benefits": "You can quickly fire multiple shots with greater control.",
 		"source": "PZO2101",
 		"aonId": 387,
-		"id": "0de336fc-b405-44e1-aa92-d79c1f7870c9"
+		"id": "0de336fc-b405-44e1-aa92-d79c1f7870c9",
+		"hash": "lMLcQJRQ"
 	},
 	{
 		"objectType": "Feat",
@@ -385,7 +417,8 @@
 		"benefits": "Your battle instincts make you more aware of concealed and invisible opponents.",
 		"source": "PZO2101",
 		"aonId": 388,
-		"id": "80a4ff8f-79ef-436e-99a4-dd7e8680a216"
+		"id": "80a4ff8f-79ef-436e-99a4-dd7e8680a216",
+		"hash": "WYVqkZdO"
 	},
 	{
 		"objectType": "Feat",
@@ -396,7 +429,8 @@
 		"benefits": "You riposte against your flailing enemy.",
 		"source": "PZO2101",
 		"aonId": 389,
-		"id": "7263a718-a6dd-4ea0-862c-e8e039b0a49b"
+		"id": "7263a718-a6dd-4ea0-862c-e8e039b0a49b",
+		"hash": "EYrUQtZv"
 	},
 	{
 		"objectType": "Feat",
@@ -407,7 +441,8 @@
 		"benefits": "Your attack can ground an airborne foe.",
 		"source": "PZO2101",
 		"aonId": 390,
-		"id": "9a4892f8-644a-4fa0-9a6b-e26945727100"
+		"id": "9a4892f8-644a-4fa0-9a6b-e26945727100",
+		"hash": "vCppVqHt"
 	},
 	{
 		"objectType": "Feat",
@@ -418,7 +453,8 @@
 		"benefits": "You refuse to let foes past your guard.",
 		"source": "PZO2101",
 		"aonId": 1091,
-		"id": "e3ca3358-6f0c-4462-ae5b-cce62132be57"
+		"id": "e3ca3358-6f0c-4462-ae5b-cce62132be57",
+		"hash": "gxvnZRLU"
 	},
 	{
 		"objectType": "Feat",
@@ -429,7 +465,8 @@
 		"benefits": "By spending a moment to focus, you can ensure your attack strikes true.",
 		"source": "PZO2101",
 		"aonId": 391,
-		"id": "58d6d735-bf8e-4663-9d8b-bbc3ca970a02"
+		"id": "58d6d735-bf8e-4663-9d8b-bbc3ca970a02",
+		"hash": "IrnqVJvR"
 	},
 	{
 		"objectType": "Feat",
@@ -440,7 +477,8 @@
 		"benefits": "Your shots become nimble and deadly.",
 		"source": "PZO2101",
 		"aonId": 392,
-		"id": "52b81271-3add-4974-9fbc-5605083e4829"
+		"id": "52b81271-3add-4974-9fbc-5605083e4829",
+		"hash": "dCnDxlFW"
 	},
 	{
 		"objectType": "Feat",
@@ -451,7 +489,8 @@
 		"benefits": "With punishing blows, you force your opponent into position.",
 		"source": "PZO2101",
 		"aonId": 393,
-		"id": "4ac888cb-5b09-4e8d-9535-e4268b1d7902"
+		"id": "4ac888cb-5b09-4e8d-9535-e4268b1d7902",
+		"hash": "kkzxnYKn"
 	},
 	{
 		"objectType": "Feat",
@@ -462,7 +501,8 @@
 		"benefits": "You can bring your shield into place with hardly a thought.",
 		"source": "PZO2101",
 		"aonId": 394,
-		"id": "17b0c82a-13ae-4a2c-ba35-401a503503fc"
+		"id": "17b0c82a-13ae-4a2c-ba35-401a503503fc",
+		"hash": "mENzyxFN"
 	},
 	{
 		"objectType": "Feat",
@@ -473,7 +513,8 @@
 		"benefits": "You swing at a foe while mid-leap.",
 		"source": "PZO2101",
 		"aonId": 155,
-		"id": "f0e70b52-ea82-46a4-b540-ebc4cf60dd39"
+		"id": "f0e70b52-ea82-46a4-b540-ebc4cf60dd39",
+		"hash": "BwvTqXyv"
 	},
 	{
 		"objectType": "Feat",
@@ -484,7 +525,8 @@
 		"benefits": "Your graceful moves with agile weapons are beyond compare.",
 		"source": "PZO2101",
 		"aonId": 396,
-		"id": "50bbb70f-0582-49a3-94c1-e044ceab8da9"
+		"id": "50bbb70f-0582-49a3-94c1-e044ceab8da9",
+		"hash": "IIbxRLzp"
 	},
 	{
 		"objectType": "Feat",
@@ -495,7 +537,8 @@
 		"benefits": "Even when you don't hit squarely, you can still score a glancing blow.",
 		"source": "PZO2101",
 		"aonId": 397,
-		"id": "7fd4220e-63ed-49c7-9619-fdf7bb3069f1"
+		"id": "7fd4220e-63ed-49c7-9619-fdf7bb3069f1",
+		"hash": "DNrRZHjl"
 	},
 	{
 		"objectType": "Feat",
@@ -506,7 +549,8 @@
 		"benefits": "You are particularly swift at punishing foes who leave you openings.",
 		"source": "PZO2101",
 		"aonId": 398,
-		"id": "0f3d6dec-98cf-4cde-aca9-3bf659e767f3"
+		"id": "0f3d6dec-98cf-4cde-aca9-3bf659e767f3",
+		"hash": "UdqQnVzh"
 	},
 	{
 		"objectType": "Feat",
@@ -517,7 +561,8 @@
 		"benefits": "Aiming for a weak point, you impede your foe with a precise shot.",
 		"source": "PZO2101",
 		"aonId": 399,
-		"id": "be7c70ed-a964-49b8-94be-318a9bb61c20"
+		"id": "be7c70ed-a964-49b8-94be-318a9bb61c20",
+		"hash": "AWMkGfqt"
 	},
 	{
 		"objectType": "Feat",
@@ -528,7 +573,8 @@
 		"benefits": "After your initial attack redirects your foe's defenses, your follow-up wrests their weapon from their grasp.",
 		"source": "PZO2101",
 		"aonId": 400,
-		"id": "f8d1851e-5980-4273-a031-cc4edae394d1"
+		"id": "f8d1851e-5980-4273-a031-cc4edae394d1",
+		"hash": "AqHZXCGF"
 	},
 	{
 		"objectType": "Feat",
@@ -539,7 +585,8 @@
 		"benefits": "The slightest distraction can provoke your wrath, and you're prepared to foil enemies' actions.",
 		"source": "PZO2101",
 		"aonId": 401,
-		"id": "71ce98e2-129d-4504-8783-014d2824be59"
+		"id": "71ce98e2-129d-4504-8783-014d2824be59",
+		"hash": "IknCKsRR"
 	},
 	{
 		"objectType": "Feat",
@@ -550,7 +597,8 @@
 		"benefits": "Fear makes your foes weak and more vulnerable to your attacks.",
 		"source": "PZO2101",
 		"aonId": 402,
-		"id": "23a3e75f-9bdd-4659-8850-b8d714d78999"
+		"id": "23a3e75f-9bdd-4659-8850-b8d714d78999",
+		"hash": "KLtktBHh"
 	},
 	{
 		"objectType": "Feat",
@@ -561,7 +609,8 @@
 		"benefits": "You can dash your foe to the ground with a single blow.",
 		"source": "PZO2101",
 		"aonId": 403,
-		"id": "af2d265d-cea8-42cf-9db5-2ab1417bb9c0"
+		"id": "af2d265d-cea8-42cf-9db5-2ab1417bb9c0",
+		"hash": "ZIZpMLLA"
 	},
 	{
 		"objectType": "Feat",
@@ -572,7 +621,8 @@
 		"benefits": "You reflect the spell back against the triggering opponent.",
 		"source": "PZO2101",
 		"aonId": 404,
-		"id": "d22f3ded-306c-4af5-b382-f72e1ec13174"
+		"id": "d22f3ded-306c-4af5-b382-f72e1ec13174",
+		"hash": "qrjkNJGJ"
 	},
 	{
 		"objectType": "Feat",
@@ -583,7 +633,8 @@
 		"benefits": "A clever parry with one weapon leaves your opponent open to an attack with the other weapon.",
 		"source": "PZO2101",
 		"aonId": 523,
-		"id": "ce905550-521d-4809-9d6d-ac9ff73d11f3"
+		"id": "ce905550-521d-4809-9d6d-ac9ff73d11f3",
+		"hash": "NGqTgyZv"
 	},
 	{
 		"objectType": "Feat",
@@ -594,7 +645,8 @@
 		"benefits": "Your final blow can make an impact even if it rebounds off a foe's defenses.",
 		"source": "PZO2101",
 		"aonId": 406,
-		"id": "48f64648-173b-493a-9454-ce7565247139"
+		"id": "48f64648-173b-493a-9454-ce7565247139",
+		"hash": "PxkrQJbh"
 	},
 	{
 		"objectType": "Feat",
@@ -616,7 +668,8 @@
 		"benefits": "Your opponets go even farther when push them around.",
 		"source": "PZO2101",
 		"aonId": 408,
-		"id": "78c815ad-688b-4400-a52f-157e83518e49"
+		"id": "78c815ad-688b-4400-a52f-157e83518e49",
+		"hash": "EkTErmIQ"
 	},
 	{
 		"objectType": "Feat",
@@ -627,7 +680,8 @@
 		"benefits": "Your weapon whirls and darts, striking foes whenever the opportunity presents itself.",
 		"source": "PZO2101",
 		"aonId": 409,
-		"id": "85411da6-abf2-43a9-8050-dfdbae5cf62b"
+		"id": "85411da6-abf2-43a9-8050-dfdbae5cf62b",
+		"hash": "HtUOtrZH"
 	},
 	{
 		"objectType": "Feat",
@@ -638,7 +692,8 @@
 		"benefits": "After your first shot singles out your opponent's position, you direct another that ricochets around obstacles and strikes unerringly.",
 		"source": "PZO2101",
 		"aonId": 410,
-		"id": "7d41a427-a875-4868-8d83-19da9c7b40ac"
+		"id": "7d41a427-a875-4868-8d83-19da9c7b40ac",
+		"hash": "gOpbScCT"
 	},
 	{
 		"objectType": "Feat",
@@ -649,7 +704,8 @@
 		"benefits": "Your body coiled to strike, you can lash out at distant enemies.",
 		"source": "PZO2101",
 		"aonId": 411,
-		"id": "358eae0e-7964-44e5-a74f-82bca604c997"
+		"id": "358eae0e-7964-44e5-a74f-82bca604c997",
+		"hash": "hAvqYRCM"
 	},
 	{
 		"objectType": "Feat",
@@ -660,7 +716,8 @@
 		"benefits": "Once you've had a moment to set your stance, you always have your shield ready without a thought.",
 		"source": "PZO2101",
 		"aonId": 412,
-		"id": "b2e43746-a1d5-4d2d-87a0-8153cb10f90d"
+		"id": "b2e43746-a1d5-4d2d-87a0-8153cb10f90d",
+		"hash": "MFkQfMHH"
 	},
 	{
 		"objectType": "Feat",
@@ -671,7 +728,8 @@
 		"benefits": "Springing away from one foe, you Strike at another.",
 		"source": "PZO2101",
 		"aonId": 413,
-		"id": "b0bb0914-cd2a-4f87-8f07-4d8192bd0686"
+		"id": "b0bb0914-cd2a-4f87-8f07-4d8192bd0686",
+		"hash": "yzTkDUXg"
 	},
 	{
 		"objectType": "Feat",
@@ -682,7 +740,8 @@
 		"benefits": "You throw everything into one last press.",
 		"source": "PZO2101",
 		"aonId": 414,
-		"id": "e9603606-c753-4a12-9e2e-2f717453e5db"
+		"id": "e9603606-c753-4a12-9e2e-2f717453e5db",
+		"hash": "nXqQktEx"
 	},
 	{
 		"objectType": "Feat",
@@ -693,7 +752,8 @@
 		"benefits": "Your training allows you to shrug off your foes' spells and conditions when the need is dire.",
 		"source": "PZO2101",
 		"aonId": 415,
-		"id": "b8c7781b-86f0-438c-bdd9-d2c52cf6ade0"
+		"id": "b8c7781b-86f0-438c-bdd9-d2c52cf6ade0",
+		"hash": "vFKczWJf"
 	},
 	{
 		"objectType": "Feat",
@@ -704,7 +764,8 @@
 		"benefits": "Using your weapon as a lever, you force your opponent to end up right where you want them.",
 		"source": "PZO2101",
 		"aonId": 416,
-		"id": "44d29ac6-5486-4c57-8cd3-0e3baf42e8d4"
+		"id": "44d29ac6-5486-4c57-8cd3-0e3baf42e8d4",
+		"hash": "vYFIcFHI"
 	},
 	{
 		"objectType": "Feat",
@@ -715,7 +776,8 @@
 		"benefits": "By shifting your weight and angling your weapon, you guide your opponent to a more favorable position.",
 		"source": "PZO2101",
 		"aonId": 417,
-		"id": "3d06af0f-9d5b-446c-90a4-71a9f54ebd71"
+		"id": "3d06af0f-9d5b-446c-90a4-71a9f54ebd71",
+		"hash": "TgEQIfRk"
 	},
 	{
 		"objectType": "Feat",
@@ -726,7 +788,8 @@
 		"benefits": "Your weapons are a blur, blocking and biting at your foes.",
 		"source": "PZO2101",
 		"aonId": 418,
-		"id": "a87b907a-46cd-4113-b4fb-64f3f6f18bc7"
+		"id": "a87b907a-46cd-4113-b4fb-64f3f6f18bc7",
+		"hash": "vvfvmgjz"
 	},
 	{
 		"objectType": "Feat",
@@ -737,7 +800,8 @@
 		"benefits": "When there's imminent danger, you drop into a stance with a mere thought.",
 		"source": "PZO2101",
 		"aonId": 419,
-		"id": "ee220a55-3e6f-44ce-a031-b188a1583abb"
+		"id": "ee220a55-3e6f-44ce-a031-b188a1583abb",
+		"hash": "rrItqyrn"
 	},
 	{
 		"objectType": "Feat",
@@ -748,7 +812,8 @@
 		"benefits": "You lash out with both your weapons in a sudden frenzy.",
 		"source": "PZO2101",
 		"aonId": 420,
-		"id": "7e8b231e-2522-4ecd-932b-efdea1bea474"
+		"id": "7e8b231e-2522-4ecd-932b-efdea1bea474",
+		"hash": "ZxqWvNpJ"
 	},
 	{
 		"objectType": "Feat",
@@ -759,7 +824,8 @@
 		"benefits": "You attack all nearby adversaries.",
 		"source": "PZO2101",
 		"aonId": 170,
-		"id": "ab475941-c4e7-479f-91ab-740d7b24e5fd"
+		"id": "ab475941-c4e7-479f-91ab-740d7b24e5fd",
+		"hash": "qxqltJLC"
 	},
 	{
 		"objectType": "Feat",
@@ -770,7 +836,8 @@
 		"benefits": "With the right positioning, your off-hand weapon can strike like a scorpion's stinger.",
 		"source": "PZO2101",
 		"aonId": 422,
-		"id": "adf47161-07dc-44d7-8022-78e06e1f16f6"
+		"id": "adf47161-07dc-44d7-8022-78e06e1f16f6",
+		"hash": "JkFqIbkO"
 	},
 	{
 		"objectType": "Feat",
@@ -781,7 +848,8 @@
 		"benefits": "Your shield can help save nearby allies.",
 		"source": "PZO2101",
 		"aonId": 423,
-		"id": "e06bb7f5-c850-4402-b366-1f8de2510324"
+		"id": "e06bb7f5-c850-4402-b366-1f8de2510324",
+		"hash": "wQLYzNWQ"
 	},
 	{
 		"objectType": "Feat",
@@ -792,7 +860,8 @@
 		"benefits": "You lock yourself in a stable position so you can fire swiftly and accurately.",
 		"source": "PZO2101",
 		"aonId": 424,
-		"id": "66dffb82-6665-48d3-93d7-1a9ccde894c7"
+		"id": "66dffb82-6665-48d3-93d7-1a9ccde894c7",
+		"hash": "VxCVRRhT"
 	},
 	{
 		"objectType": "Feat",
@@ -814,7 +883,8 @@
 		"benefits": "You fire a volley at all foes in an area.",
 		"source": "PZO2101",
 		"aonId": 426,
-		"id": "18380cd9-4990-4ec4-a1a7-d4fb4f8adc29"
+		"id": "18380cd9-4990-4ec4-a1a7-d4fb4f8adc29",
+		"hash": "QcXPUmzP"
 	},
 	{
 		"objectType": "Feat",
@@ -825,7 +895,8 @@
 		"benefits": "The wounds you inflict are grievous.",
 		"source": "PZO2101",
 		"aonId": 427,
-		"id": "9711c556-c9e5-460b-a2f8-de4965715773"
+		"id": "9711c556-c9e5-460b-a2f8-de4965715773",
+		"hash": "ybQyAxNS"
 	},
 	{
 		"objectType": "Feat",
@@ -836,7 +907,8 @@
 		"benefits": "With a sixth sense for the flow of combat, you can quickly react to any situation as required.",
 		"source": "PZO2101",
 		"aonId": 428,
-		"id": "ba8c36b5-7888-4cde-a4db-c745bfe50819"
+		"id": "ba8c36b5-7888-4cde-a4db-c745bfe50819",
+		"hash": "cDHWDFUM"
 	},
 	{
 		"objectType": "Feat",
@@ -846,8 +918,9 @@
 		"prerequisites": [ "-" ],
 		"benefits": "Gain more feats through combat flexibility.",
 		"source": "PZO2101",
-		"aonId": 1171,
-		"id": "d8239ef6-47d2-4d0a-88dd-28b5f1fd4d31"
+		"aonId": 1732,
+		"id": "d8239ef6-47d2-4d0a-88dd-28b5f1fd4d31",
+		"hash": "WkAZSwYY"
 	},
 	{
 		"objectType": "Feat",
@@ -858,6 +931,7 @@
 		"benefits": "Your skill with weapons lets you attack swiftly at all times.",
 		"source": "PZO2101",
 		"aonId": 429,
-		"id": "3ef1aaf0-7f01-4f4f-8c71-d7a54f5d5233"
+		"id": "3ef1aaf0-7f01-4f4f-8c71-d7a54f5d5233",
+		"hash": "pzfkPXRB"
 	}
 ]

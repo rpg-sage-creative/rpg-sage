@@ -32,7 +32,8 @@
 		"source": "PZO90169",
 		"focus": false,
 		"aonId": 50,
-		"id": "82f7f906-2dca-4411-b440-59bf451c999b"
+		"id": "82f7f906-2dca-4411-b440-59bf451c999b",
+		"hash": "zIQXggRM"
 	},
 	{
 		"name": "Arcane Weaving",
@@ -62,7 +63,8 @@
 		"source": "PZO90169",
 		"focus": false,
 		"aonId": 49,
-		"id": "6962aaa3-d80b-4265-9051-5e12994caa30"
+		"id": "6962aaa3-d80b-4265-9051-5e12994caa30",
+		"hash": "HzUbXIRS"
 	},
 	{
 		"name": "Tattoo Whispers",
@@ -97,6 +99,7 @@
 		"source": "PZO90169",
 		"focus": false,
 		"aonId": 51,
-		"id": "7f5cc149-2ae5-482c-af78-c52518bb31a3"
+		"id": "7f5cc149-2ae5-482c-af78-c52518bb31a3",
+		"hash": "nqPyZxtx"
 	}
 ]

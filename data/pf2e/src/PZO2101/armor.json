@@ -41,7 +41,8 @@
 		"page": 276,
 		"source": "PZO2101",
 		"id": "80a8dd34-bfb7-441e-ac31-0539e183b489",
-		"aonId": 2
+		"aonId": 2,
+		"hash": "vUrRWwLX"
 	},
 	{
 		"objectType": "Armor",
@@ -65,7 +66,8 @@
 		"page": 276,
 		"source": "PZO2101",
 		"id": "560bcf33-13d1-4095-b7bb-bcafa07c7c7a",
-		"aonId": 3
+		"aonId": 3,
+		"hash": "bsxgTWLF"
 	},
 	{
 		"objectType": "Armor",
@@ -135,7 +137,8 @@
 		"page": 275,
 		"source": "PZO2101",
 		"id": "8b742b83-b188-466d-a6ab-18650f01ef8a",
-		"aonId": 6
+		"aonId": 6,
+		"hash": "BBrwUEmM"
 	},
 	{
 		"objectType": "Armor",
@@ -182,7 +185,8 @@
 		"page": 276,
 		"source": "PZO2101",
 		"id": "c2b4aa0a-c35d-4145-931a-14a8d57c91e1",
-		"aonId": 8
+		"aonId": 8,
+		"hash": "xXgwvEXh"
 	},
 	{
 		"objectType": "Armor",
@@ -206,7 +210,8 @@
 		"page": 275,
 		"source": "PZO2101",
 		"id": "be746c44-9edc-4d70-a9d5-3e2eb8ca9913",
-		"aonId": 9
+		"aonId": 9,
+		"hash": "bCUAtcZI"
 	},
 	{
 		"objectType": "Armor",
@@ -230,7 +235,8 @@
 		"page": 275,
 		"source": "PZO2101",
 		"id": "fcf61561-a5e1-4dbd-b9fe-bde65d0fd9f1",
-		"aonId": 10
+		"aonId": 10,
+		"hash": "bZQQbZHw"
 	},
 	{
 		"objectType": "Armor",

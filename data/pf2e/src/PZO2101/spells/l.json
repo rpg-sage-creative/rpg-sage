@@ -18,7 +18,8 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Evocation" ],
 		"focus": false,
-		"id": "6a631da2-1093-4865-b526-4f2b4fe2df1f"
+		"id": "6a631da2-1093-4865-b526-4f2b4fe2df1f",
+		"hash": "nllxqhjN"
 	},
 	{
 		"aonId": 171,
@@ -65,7 +66,8 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Electricity", "Evocation" ],
 		"focus": false,
-		"id": "74ba4132-4911-4e57-9baa-53751bae2f28"
+		"id": "74ba4132-4911-4e57-9baa-53751bae2f28",
+		"hash": "PgwcbqpY"
 	},
 	{
 		"aonId": 173,
@@ -89,7 +91,8 @@
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Uncommon", "Detection", "Divination" ],
 		"focus": false,
-		"id": "059f1cef-1a2a-4f88-8968-843dfebc2d24"
+		"id": "059f1cef-1a2a-4f88-8968-843dfebc2d24",
+		"hash": "bEtwhSRB"
 	},
 	{
 		"aonId": 174,
@@ -114,7 +117,8 @@
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Abjuration" ],
 		"focus": false,
-		"id": "0fbc59bb-d486-4ad2-92ed-9fb28fb625f9"
+		"id": "0fbc59bb-d486-4ad2-92ed-9fb28fb625f9",
+		"hash": "DIQwOWkx"
 	},
 	{
 		"aonId": 175,
@@ -136,6 +140,7 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Transmutation" ],
 		"focus": false,
-		"id": "d8a1c3e3-1f48-4807-b68e-dc9b9ef9c936"
+		"id": "d8a1c3e3-1f48-4807-b68e-dc9b9ef9c936",
+		"hash": "WRhmkTLl"
 	}
 ]

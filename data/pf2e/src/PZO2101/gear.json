@@ -27,7 +27,8 @@
 		],
 		"source": "PZO2101",
 		"id": "a7186046-7ddf-4e78-9a32-15876e69565b",
-		"aonId": 1
+		"aonId": 1,
+		"hash": "zNPXqjXn"
 	},
 	{
 		"objectType": "Gear",
@@ -59,7 +60,8 @@
 		"version": 1,
 		"id": "f3789ef0-fff7-4ca1-a16e-cca47eb2bd3a",
 		"previousId": "A7186046-7DDF-4E78-9A32-15876E69565B",
-		"aonId": 1
+		"aonId": 1,
+		"hash": "zNPXqjXn"
 	},
 	{
 		"objectType": "Gear",
@@ -72,7 +74,8 @@
 		],
 		"source": "PZO2101",
 		"id": "acfff3a0-d7b2-4b03-85d3-96cf7cd747ca",
-		"aonId": 2
+		"aonId": 2,
+		"hash": "RSXzPQxW"
 	},
 	{
 		"objectType": "Gear",
@@ -98,7 +101,8 @@
 		"source": "PZO2101",
 		"version": 1,
 		"id": "1846c786-f6f3-4011-8287-cef74e94ae72",
-		"aonId": 543
+		"aonId": 543,
+		"hash": "OBnMkQGB"
 	},
 	{
 		"objectType": "Gear",
@@ -126,7 +130,8 @@
 		"version": 1,
 		"id": "a27e70d6-0ce1-40e3-8e6a-f1fce9135420",
 		"previousId": "ACFFF3A0-D7B2-4B03-85D3-96CF7CD747CA",
-		"aonId": 2
+		"aonId": 2,
+		"hash": "RSXzPQxW"
 	},
 	{ "objectType": "Gear", "name": "Expanded Alchemist's Tools", "source": "PZO2101", "version": -1, "id": "8bc14e12-4041-43f4-aebd-59c338f94a92", "previousId": "034BC687-E9C6-411A-9ED0-A827A223FAE7" },
 	{
@@ -140,7 +145,8 @@
 		],
 		"source": "PZO2101",
 		"id": "8fe58358-f016-41f4-830f-d9ac027c386e",
-		"aonId": 3
+		"aonId": 3,
+		"hash": "XmERqlGS"
 	},
 	{ "objectType": "Gear", "name": "Sterling Artisan's Tools", "parent": "Artisan's Tools", "level": 3, "price": "50 gp", "bulk": "2", "hands": "2", "details": [], "source": "PZO2101", "id": "8d87d407-5e04-42eb-8acc-3422898343a5" },
 	{
@@ -156,7 +162,8 @@
 		],
 		"source": "PZO2101",
 		"id": "3feb818b-16c1-4e69-9c6f-8a239e412743",
-		"aonId": 4
+		"aonId": 4,
+		"hash": "lwAfzlGm"
 	},
 	{
 		"objectType": "Gear",
@@ -171,7 +178,8 @@
 		],
 		"source": "PZO2101",
 		"id": "3f085dee-e497-443d-b6ac-e22ee36045c6",
-		"aonId": 5
+		"aonId": 5,
+		"hash": "KqfRxqmA"
 	},
 	{
 		"objectType": "Gear",
@@ -184,9 +192,10 @@
 		],
 		"source": "PZO2101",
 		"id": "af711939-861e-48cc-8fb0-001bfb84fd14",
-		"aonId": 6
+		"aonId": 6,
+		"hash": "XkxIWLTd"
 	},
-	{ "objectType": "Gear", "name": "Bedroll", "price": "1 cp", "bulk": "L", "hands": "-", "details": [ "" ], "source": "PZO2101", "id": "769a9d16-4f05-4f57-8116-2619051abb1b", "aonId": 7 },
+	{ "objectType": "Gear", "name": "Bedroll", "price": "1 cp", "bulk": "L", "hands": "-", "details": [ "" ], "source": "PZO2101", "id": "769a9d16-4f05-4f57-8116-2619051abb1b", "aonId": 7, "hash": "DVltQTbl" },
 	{
 		"objectType": "Gear",
 		"name": "Belt Pouch",
@@ -199,7 +208,8 @@
 		],
 		"source": "PZO2101",
 		"id": "e6e5decd-f67f-4928-993d-f2637b8af4f1",
-		"aonId": 8
+		"aonId": 8,
+		"hash": "gfdOkLTJ"
 	},
 	{
 		"objectType": "Gear",
@@ -213,7 +223,8 @@
 		],
 		"source": "PZO2101",
 		"id": "35269c5e-41fb-4eb4-a85d-5e378199b75a",
-		"aonId": 9
+		"aonId": 9,
+		"hash": "VUQpBJXx"
 	},
 	{
 		"objectType": "Gear",
@@ -227,10 +238,11 @@
 		],
 		"source": "PZO2101",
 		"id": "bee462b1-755a-4009-a60d-b53e279fc7b4",
-		"aonId": 10
+		"aonId": 10,
+		"hash": "trUpSkyB"
 	},
 	{ "objectType": "Gear", "name": "Chain (10 feet)", "price": "4 gp", "bulk": "1", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "476f52b9-f019-4ec2-ac0e-c28e6316eff6" },
-	{ "objectType": "Gear", "name": "Chalk", "quantity": 10, "price": "1 cp", "bulk": "-", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "724bcff5-cb68-4d53-98fe-252f3e0f0803", "aonId": 12 },
+	{ "objectType": "Gear", "name": "Chalk", "quantity": 10, "price": "1 cp", "bulk": "-", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "724bcff5-cb68-4d53-98fe-252f3e0f0803", "aonId": 12, "hash": "jvLqdqQW" },
 	{
 		"objectType": "Gear",
 		"name": "Chest",
@@ -243,7 +255,8 @@
 		],
 		"source": "PZO2101",
 		"id": "16b118f3-fe11-4809-a208-77991811c493",
-		"aonId": 13
+		"aonId": 13,
+		"hash": "mqnlmgGO"
 	},
 	{
 		"objectType": "Gear",
@@ -256,7 +269,8 @@
 		],
 		"source": "PZO2101",
 		"id": "d787c647-4077-4fe5-9116-d0c11dc45f67",
-		"aonId": 14
+		"aonId": 14,
+		"hash": "YWXzkGch"
 	},
 	{ "objectType": "Gear", "name": "Extreme Climbing Kit", "parent": "Climbing Kit", "level": 3, "price": "40 gp", "bulk": "1", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "bde8cf6c-c748-4577-915a-b8cc20f3dd2f" },
 	{ "objectType": "GearCategory", "name": "Clothing", "details": [], "source": "PZO2101", "id": "aea09a29-08b1-4abe-9cef-4a51455352da" },
@@ -341,10 +355,11 @@
 		],
 		"source": "PZO2101",
 		"id": "02ce1077-4095-4691-a52e-09c8668c502d",
-		"aonId": 16
+		"aonId": 16,
+		"hash": "FrzlDBgv"
 	},
 	{ "objectType": "Gear", "name": "Lensatic Compass", "parent": "Compass", "level": 3, "price": "20 gp", "bulk": "-", "hands": "1", "details": [], "source": "PZO2101", "id": "c7b3acff-df0d-4b3a-b08d-411a9f51e54c" },
-	{ "objectType": "Gear", "name": "Cookware", "price": "1 gp", "bulk": "2", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "ae3ebad5-d26b-4be1-bd56-88f3872e8218", "aonId": 17 },
+	{ "objectType": "Gear", "name": "Cookware", "price": "1 gp", "bulk": "2", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "ae3ebad5-d26b-4be1-bd56-88f3872e8218", "aonId": 17, "hash": "XghEwKbk" },
 	{
 		"objectType": "Gear",
 		"name": "Crowbar",
@@ -356,7 +371,8 @@
 		],
 		"source": "PZO2101",
 		"id": "b7c52308-238c-43aa-872d-fc74c2429700",
-		"aonId": 18
+		"aonId": 18,
+		"hash": "mdChZIpA"
 	},
 	{ "objectType": "Gear", "name": "Levered Crowbar", "parent": "Crowbar", "level": 3, "price": "20 gp", "bulk": "L", "hands": "2", "details": [], "source": "PZO2101", "id": "9a03e4fc-dddb-47f9-a62a-c750392f076a" },
 	{
@@ -370,7 +386,8 @@
 		],
 		"source": "PZO2101",
 		"id": "789b6a20-e70b-4332-b144-dd772e66c0b6",
-		"aonId": 19
+		"aonId": 19,
+		"hash": "VLjPXmYI"
 	},
 	{ "objectType": "Gear", "name": "Replacement Cosmetics", "parent": "Disguise Kit", "price": "1 sp", "bulk": "-", "hands": "-", "details": [], "source": "PZO2101", "id": "436581dd-28b5-46e7-9140-fce449884a7a" },
 	{ "objectType": "Gear", "name": "Elite Disguise Kit", "parent": "Disguise Kit", "level": 3, "price": "40 gp", "bulk": "L", "hands": "2", "details": [], "source": "PZO2101", "id": "d08cdbb1-7800-42c5-9e34-167926ef5223" },
@@ -386,7 +403,8 @@
 		],
 		"source": "PZO2101",
 		"id": "c0d6ac1b-b97a-4a1b-b438-07ca9d8acebd",
-		"aonId": 20
+		"aonId": 20,
+		"hash": "HRFAlktf"
 	},
 	{
 		"objectType": "Gear",
@@ -411,7 +429,8 @@
 		],
 		"source": "PZO2101",
 		"id": "9d03654b-5a90-425b-b74f-123e2af1bd07",
-		"aonId": 21
+		"aonId": 21,
+		"hash": "rtOTZQtm"
 	},
 	{
 		"objectType": "Gear",
@@ -424,7 +443,8 @@
 		],
 		"source": "PZO2101",
 		"id": "d4bcd153-0d43-4950-90b5-f2e7391dad2d",
-		"aonId": 22
+		"aonId": 22,
+		"hash": "ExXvZjCg"
 	},
 	{
 		"objectType": "Gear",
@@ -439,7 +459,8 @@
 		"version": 1,
 		"id": "0aba5c66-7cd1-4053-8d36-ebf203d28685",
 		"previousId": "D4BCD153-0D43-4950-90B5-F2E7391DAD2D",
-		"aonId": 22
+		"aonId": 22,
+		"hash": "ExXvZjCg"
 	},
 	{
 		"objectType": "Gear",
@@ -452,9 +473,10 @@
 		],
 		"source": "PZO2101",
 		"id": "d2ceb7ff-0de3-427d-b9ee-678f5b2437a8",
-		"aonId": 23
+		"aonId": 23,
+		"hash": "dJkRXVYl"
 	},
-	{ "objectType": "Gear", "name": "Hammer", "price": "1 sp", "bulk": "L", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "40f30f23-d07d-49dd-a14c-05a29e7bb5ea", "aonId": 24 },
+	{ "objectType": "Gear", "name": "Hammer", "price": "1 sp", "bulk": "L", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "40f30f23-d07d-49dd-a14c-05a29e7bb5ea", "aonId": 24, "hash": "QkvxMPnB" },
 	{
 		"objectType": "Gear",
 		"name": "Healer's Tools",
@@ -466,7 +488,8 @@
 		],
 		"source": "PZO2101",
 		"id": "387aebda-b925-4455-8d06-0159b73ef42c",
-		"aonId": 25
+		"aonId": 25,
+		"hash": "BjFRkxkM"
 	},
 	{ "objectType": "Gear", "name": "Expanded Healer's Tools", "parent": "Healer's Tools", "level": 3, "price": "50 gp", "bulk": "1", "hands": "2", "details": [], "source": "PZO2101", "id": "a562c18a-b65d-4039-b04f-16296990cf53" },
 	{
@@ -480,9 +503,10 @@
 		],
 		"source": "PZO2101",
 		"id": "a79b5ee1-fbce-4d59-8aee-37761c12b3e2",
-		"aonId": 26
+		"aonId": 26,
+		"hash": "EJNtvHmj"
 	},
-	{ "objectType": "Gear", "name": "Hourglass", "price": "3 gp", "bulk": "L", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "2097ed28-dbe1-4f4e-8bdf-501bf0d807bf", "aonId": 27 },
+	{ "objectType": "Gear", "name": "Hourglass", "price": "3 gp", "bulk": "L", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "2097ed28-dbe1-4f4e-8bdf-501bf0d807bf", "aonId": 27, "hash": "ZMWrQJzS" },
 	{ "objectType": "Gear", "name": "Ladder (10-foot)", "price": "3 cp", "bulk": "3", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "5f338b68-ea55-4b11-8747-e1a26a7cc1b8" },
 	{ "objectType": "GearCategory", "name": "Lantern", "details": [], "source": "PZO2101", "id": "cf08cede-d01a-4172-9f47-5385bfffcbed" },
 	{
@@ -585,7 +609,8 @@
 		],
 		"source": "PZO2101",
 		"id": "0073b9f8-aa59-4ea2-90b3-1c6314bbda25",
-		"aonId": 31
+		"aonId": 31,
+		"hash": "syqsvqcM"
 	},
 	{
 		"objectType": "GearCategory",
@@ -660,11 +685,12 @@
 		],
 		"source": "PZO2101",
 		"id": "dd8b665f-3005-4c36-8d8e-308654f99cc0",
-		"aonId": 33
+		"aonId": 33,
+		"hash": "HRkZWmIZ"
 	},
-	{ "objectType": "Gear", "name": "Merchant's Scale", "price": "2 sp", "bulk": "L", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "accd986b-cc50-45d6-803b-b8a7014f9288", "aonId": 34 },
-	{ "objectType": "Gear", "name": "Mirror", "price": "1 gp", "bulk": "-", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "69be90d6-9dc2-4079-a6bb-222809d4c11e", "aonId": 35 },
-	{ "objectType": "Gear", "name": "Mug", "price": "1 cp", "bulk": "-", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "85676b72-b98f-4ed8-9273-5b7896ceb90f", "aonId": 36 },
+	{ "objectType": "Gear", "name": "Merchant's Scale", "price": "2 sp", "bulk": "L", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "accd986b-cc50-45d6-803b-b8a7014f9288", "aonId": 34, "hash": "xVRWOpWx" },
+	{ "objectType": "Gear", "name": "Mirror", "price": "1 gp", "bulk": "-", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "69be90d6-9dc2-4079-a6bb-222809d4c11e", "aonId": 35, "hash": "hrRfNkCh" },
+	{ "objectType": "Gear", "name": "Mug", "price": "1 cp", "bulk": "-", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "85676b72-b98f-4ed8-9273-5b7896ceb90f", "aonId": 36, "hash": "znAvVbjU" },
 	{
 		"objectType": "GearCategory",
 		"name": "Musical Instrument",
@@ -702,7 +728,8 @@
 		],
 		"source": "PZO2101",
 		"id": "0c1863af-3971-4438-b7ff-ed6180462a37",
-		"aonId": 39
+		"aonId": 39,
+		"hash": "jXgzWQZk"
 	},
 	{ "objectType": "Gear", "name": "Rations (1 week)", "price": "4 sp", "bulk": "L", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "e6de58f8-d503-4004-ae16-7e49b08408d8" },
 	{
@@ -727,7 +754,8 @@
 		],
 		"source": "PZO2101",
 		"id": "1ab2ca12-f147-4c92-9972-4dcef044782d",
-		"aonId": 42
+		"aonId": 42,
+		"hash": "DHKVIccS"
 	},
 	{
 		"objectType": "Gear",
@@ -740,10 +768,11 @@
 		],
 		"source": "PZO2101",
 		"id": "d32bee4c-7d19-4f4b-bb24-6ae4785b8e9e",
-		"aonId": 43
+		"aonId": 43,
+		"hash": "QRVktCtt"
 	},
 	{ "objectType": "Gear", "name": "Superb Repair Kit", "parent": "Repair Kit", "level": 3, "price": "25 gp", "bulk": "1", "hands": "2", "details": [], "source": "PZO2101", "id": "af9319e5-ff08-44f0-a144-ac7c91fe0dc8" },
-	{ "objectType": "Gear", "name": "Rope", "price": "5 sp", "bulk": "L", "hands": "2", "details": [], "source": "PZO2101", "id": "0e755da5-67c5-4df4-9779-b675799770fb", "aonId": 44 },
+	{ "objectType": "Gear", "name": "Rope", "price": "5 sp", "bulk": "L", "hands": "2", "details": [], "source": "PZO2101", "id": "0e755da5-67c5-4df4-9779-b675799770fb", "aonId": 44, "hash": "YgIbQZVQ" },
 	{
 		"objectType": "Gear",
 		"name": "Sack",
@@ -757,7 +786,8 @@
 		],
 		"source": "PZO2101",
 		"id": "41f28862-de4c-47dd-a929-1604dac0eca2",
-		"aonId": 45
+		"aonId": 45,
+		"hash": "sMpKPWbr"
 	},
 	{
 		"objectType": "Gear",
@@ -773,7 +803,8 @@
 		],
 		"source": "PZO2101",
 		"id": "878c378f-4be4-43b6-8269-874d3bc91af7",
-		"aonId": 46
+		"aonId": 46,
+		"hash": "grSZrzKN"
 	},
 	{
 		"objectType": "Gear",
@@ -788,7 +819,8 @@
 		],
 		"source": "PZO2101",
 		"id": "030b935f-14fe-48f8-a592-28dd0ae581fc",
-		"aonId": 47
+		"aonId": 47,
+		"hash": "PORkHpRA"
 	},
 	{
 		"objectType": "Gear",
@@ -801,7 +833,8 @@
 		],
 		"source": "PZO2101",
 		"id": "c44fdaaa-2998-45b5-ba32-4947946b2f54",
-		"aonId": 48
+		"aonId": 48,
+		"hash": "EEVJWwpz"
 	},
 	{
 		"objectType": "Gear",
@@ -814,7 +847,8 @@
 		],
 		"source": "PZO2101",
 		"id": "cb046050-87ca-4e2e-96c0-415aee48ed48",
-		"aonId": 49
+		"aonId": 49,
+		"hash": "rwLqrdwN"
 	},
 	{
 		"objectType": "Gear",
@@ -827,7 +861,8 @@
 		],
 		"source": "PZO2101",
 		"id": "78bbecc8-77eb-427b-a81d-040a827a8106",
-		"aonId": 50
+		"aonId": 50,
+		"hash": "XOzRJIgW"
 	},
 	{
 		"objectType": "Gear",
@@ -840,10 +875,11 @@
 		],
 		"source": "PZO2101",
 		"id": "04402fa9-60bd-46ce-9c4f-bbf824fb2c28",
-		"aonId": 51
+		"aonId": 51,
+		"hash": "UzbqvtXz"
 	},
 	{ "objectType": "Gear", "name": "Specialist Snare Kit", "parent": "Snare Kit", "level": 3, "price": "55 gp", "bulk": "2", "hands": "2", "details": [], "source": "PZO2101", "id": "c83dc2ef-d681-44ec-bf8f-1d42fe4feee5" },
-	{ "objectType": "Gear", "name": "Soap", "price": "2 cp", "bulk": "-", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "e91e4098-c302-4390-ac31-6a161d964fd4", "aonId": 52 },
+	{ "objectType": "Gear", "name": "Soap", "price": "2 cp", "bulk": "-", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "e91e4098-c302-4390-ac31-6a161d964fd4", "aonId": 52, "hash": "tGHfGsQb" },
 	{
 		"objectType": "Gear",
 		"name": "Spellbook (blank)",
@@ -855,7 +891,8 @@
 		],
 		"source": "PZO2101",
 		"id": "45ffaff4-b47c-428e-8570-65d9eb31adc1",
-		"aonId": 53
+		"aonId": 53,
+		"hash": "zdRQqFQl"
 	},
 	{
 		"objectType": "Gear",
@@ -870,7 +907,8 @@
 		"version": 1,
 		"id": "17141f8c-a86b-418e-b1c2-f66ee9b1245a",
 		"previousId": "45FFAFF4-B47C-428E-8570-65D9EB31ADC1",
-		"aonId": 53
+		"aonId": 53,
+		"hash": "zdRQqFQl"
 	},
 	{
 		"objectType": "Gear",
@@ -883,7 +921,8 @@
 		],
 		"source": "PZO2101",
 		"id": "471fd690-5466-4f19-991d-005262d993f1",
-		"aonId": 54
+		"aonId": 54,
+		"hash": "mklGrwxG"
 	},
 	{ "objectType": "Gear", "name": "Fine Spyglass", "parent": "", "level": 4, "price": "80 gp", "bulk": "L", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "5cac451c-4618-407f-9291-eab030f6e492" },
 	{
@@ -898,7 +937,8 @@
 		],
 		"source": "PZO2101",
 		"id": "d36d69cd-734a-4463-a414-fd4ca0278499",
-		"aonId": 55
+		"aonId": 55,
+		"hash": "ZkvnXgXl"
 	},
 	{
 		"objectType": "Gear",
@@ -911,7 +951,8 @@
 		],
 		"source": "PZO2101",
 		"id": "51e5f10c-c466-4b9a-834f-7bf4a77c7d72",
-		"aonId": 56
+		"aonId": 56,
+		"hash": "tVnhzxRZ"
 	},
 	{ "objectType": "Gear", "category": "Tent", "name": "Pup", "price": "8 sp", "bulk": "L", "hands": "2", "details": [], "source": "PZO2101", "id": "507cf150-5c7c-4457-a464-b5c2f4406052" },
 	{ "objectType": "Gear", "category": "Tent", "name": "Four-Person", "price": "5 gp", "bulk": "1", "hands": "2", "details": [], "source": "PZO2101", "id": "ce90bceb-d4fb-481e-8aa9-43165db4011b" },
@@ -925,7 +966,19 @@
 		"source": "PZO2101",
 		"id": "a0d0bf82-913b-41c5-8c5b-d96705328216"
 	},
-	{ "objectType": "Gear", "category": "Thieves' Tools", "name": "Thieves' Tools", "price": "3 gp", "bulk": "L", "hands": "2", "details": [], "source": "PZO2101", "id": "272e0d75-f968-47d5-832b-d0ec6311ce1b", "aonId": 58 },
+	{
+		"objectType": "Gear",
+		"category": "Thieves' Tools",
+		"name": "Thieves' Tools",
+		"price": "3 gp",
+		"bulk": "L",
+		"hands": "2",
+		"details": [],
+		"source": "PZO2101",
+		"id": "272e0d75-f968-47d5-832b-d0ec6311ce1b",
+		"aonId": 58,
+		"hash": "OpqhHqjS"
+	},
 	{ "objectType": "Gear", "category": "Thieves' Tools", "name": "Replacement Picks", "price": "3 sp", "bulk": "-", "hands": "-", "details": [], "source": "PZO2101", "id": "5ba2cba1-2cb8-4cd5-b5ee-0cf6f191a95b" },
 	{
 		"objectType": "Gear",
@@ -975,7 +1028,8 @@
 		],
 		"source": "PZO2101",
 		"id": "c5839e1b-89e9-4d84-a624-a71ef892bb67",
-		"aonId": 60
+		"aonId": 60,
+		"hash": "vmSMSQdM"
 	},
 	{
 		"objectType": "Gear",
@@ -988,7 +1042,8 @@
 		],
 		"source": "PZO2101",
 		"id": "b7d6bd21-76da-46c4-8f4c-b8f872a66b01",
-		"aonId": 61
+		"aonId": 61,
+		"hash": "WpNfQPWb"
 	},
 	{
 		"objectType": "Gear",
@@ -1001,7 +1056,8 @@
 		],
 		"source": "PZO2101",
 		"id": "228cb835-cfa5-4429-a525-1ab9f03518a8",
-		"aonId": 62
+		"aonId": 62,
+		"hash": "VxWyRTtW"
 	},
 	{
 		"objectType": "Gear",
@@ -1016,7 +1072,8 @@
 		"version": 1,
 		"id": "65dd15ba-5d69-4992-bcb4-b2a13367755e",
 		"previousId": "228CB835-CFA5-4429-A525-1AB9F03518A8",
-		"aonId": 62
+		"aonId": 62,
+		"hash": "VxWyRTtW"
 	},
 	{
 		"objectType": "Gear",
@@ -1029,7 +1086,8 @@
 		],
 		"source": "PZO2101",
 		"id": "31834b39-4154-4700-bb07-71c795151245",
-		"aonId": 63
+		"aonId": 63,
+		"hash": "lkwOlbSC"
 	},
 	{ "objectType": "Gear", "name": "Extra Ink and Paper", "parent": "Writing Set", "price": "1 sp", "bulk": "-", "hands": "-", "details": [ "" ], "source": "PZO2101", "id": "52453129-8f65-40c6-a7c3-7abfd163b728" },
 	{
@@ -1045,7 +1103,8 @@
 		"rarity": "Uncommon",
 		"source": "PZO2101",
 		"id": "00720f3e-f3d1-409e-b0ee-1c6cc133cc00",
-		"aonId": 64
+		"aonId": 64,
+		"hash": "frSEQyrM"
 	},
 	{
 		"objectType": "Gear",
@@ -1073,7 +1132,8 @@
 		"rarity": "Uncommon",
 		"source": "PZO2101",
 		"id": "d66ea374-4625-4dd5-88d6-d28d4989bbd5",
-		"aonId": 65
+		"aonId": 65,
+		"hash": "FGzqQkly"
 	},
 	{
 		"objectType": "Gear",

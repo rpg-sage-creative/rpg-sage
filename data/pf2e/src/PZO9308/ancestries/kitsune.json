@@ -14,11 +14,12 @@
 		],
 		"aonId": 38,
 		"source": "PZO9308",
-		"id": "c15dfd04-f23f-4dc0-9d59-5da1e1bb9d57"
+		"id": "c15dfd04-f23f-4dc0-9d59-5da1e1bb9d57",
+		"hash": "RmgBZgkP"
 	},
-	{ "objectType": "Heritage", "name": "Celestial Envoy Kitsune", "ancestry": "Kitsune", "source": "PZO9308", "id": "2d67431f-d5cc-41bd-acd5-38cf1c6bab3c", "aonId": 135 },
-	{ "objectType": "Heritage", "name": "Dark Fields Kitsune", "ancestry": "Kitsune", "source": "PZO9308", "id": "25b3c852-654b-4a1b-b012-2aa1d1873b62", "aonId": 136 },
-	{ "objectType": "Heritage", "name": "Earthly Wilds Kitsune", "ancestry": "Kitsune", "source": "PZO9308", "id": "bc6910e7-b3c0-442c-adad-51ddfdcc8dc7", "aonId": 137 },
-	{ "objectType": "Heritage", "name": "Empty Sky Kitsune", "ancestry": "Kitsune", "source": "PZO9308", "id": "70d06da6-5db0-44e8-b77a-f1148661b89f", "aonId": 138 },
-	{ "objectType": "Heritage", "name": "Frozen Wind Kitsune", "ancestry": "Kitsune", "source": "PZO9308", "id": "07bde829-3e17-4780-91ab-c41bcbd4253a", "aonId": 139 }
+	{ "objectType": "Heritage", "name": "Celestial Envoy Kitsune", "ancestry": "Kitsune", "source": "PZO9308", "id": "2d67431f-d5cc-41bd-acd5-38cf1c6bab3c", "aonId": 135, "hash": "OgZtpYqb" },
+	{ "objectType": "Heritage", "name": "Dark Fields Kitsune", "ancestry": "Kitsune", "source": "PZO9308", "id": "25b3c852-654b-4a1b-b012-2aa1d1873b62", "aonId": 136, "hash": "mvgLqyjt" },
+	{ "objectType": "Heritage", "name": "Earthly Wilds Kitsune", "ancestry": "Kitsune", "source": "PZO9308", "id": "bc6910e7-b3c0-442c-adad-51ddfdcc8dc7", "aonId": 137, "hash": "ZcdEwHbq" },
+	{ "objectType": "Heritage", "name": "Empty Sky Kitsune", "ancestry": "Kitsune", "source": "PZO9308", "id": "70d06da6-5db0-44e8-b77a-f1148661b89f", "aonId": 138, "hash": "jvvcJZhQ" },
+	{ "objectType": "Heritage", "name": "Frozen Wind Kitsune", "ancestry": "Kitsune", "source": "PZO9308", "id": "07bde829-3e17-4780-91ab-c41bcbd4253a", "aonId": 139, "hash": "YqbpxWvQ" }
 ]

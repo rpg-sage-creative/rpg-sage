@@ -16,7 +16,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature you summoned",
 		"traits": [ "Uncommon", "Conjuration", "Wizard" ],
-		"id": "56adc856-70cd-46ee-9134-2c733e6af23e"
+		"id": "56adc856-70cd-46ee-9134-2c733e6af23e",
+		"hash": "bEMqqnSp"
 	},
 	{
 		"aonId": 522,
@@ -36,7 +37,8 @@
 		"source": "PZO2101",
 		"targets": "1 living creature",
 		"traits": [ "Uncommon", "Arcane", "Attack", "Necromancy", "Wizard" ],
-		"id": "a1560dc9-291d-4dea-a9d6-0a06ce1c4c5a"
+		"id": "a1560dc9-291d-4dea-a9d6-0a06ce1c4c5a",
+		"hash": "NXpHEttk"
 	},
 	{
 		"aonId": 523,
@@ -71,7 +73,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Auditory", "Enchantment", "Incapacitation", "Linguistic", "Mental", "Wizard" ],
-		"id": "92602869-9767-4169-bc56-75c5dc018535"
+		"id": "92602869-9767-4169-bc56-75c5dc018535",
+		"hash": "dqSxLpzY"
 	},
 	{
 		"aonId": 524,
@@ -92,7 +95,8 @@
 		"range": "20 feet",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Conjuration", "Teleportation", "Wizard" ],
-		"id": "f2a01904-2e30-4d02-aa48-91442a459ad5"
+		"id": "f2a01904-2e30-4d02-aa48-91442a459ad5",
+		"hash": "wZFNEqxg"
 	},
 	{
 		"aonId": 525,
@@ -112,7 +116,8 @@
 		"source": "PZO2101",
 		"targets": "1 willing living craeture",
 		"traits": [ "Uncommon", "Concentrate", "Divination", "Fortune", "Wizard" ],
-		"id": "a714bd98-744a-4d03-8284-b13bf42200d3"
+		"id": "a714bd98-744a-4d03-8284-b13bf42200d3",
+		"hash": "mvhhNmHN"
 	},
 	{
 		"aonId": 526,
@@ -131,7 +136,8 @@
 		"page": 406,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Emotion", "Enchantment", "Fear", "Mental", "Wizard" ],
-		"id": "fb71f2e9-5629-4823-a7e4-1b49dc3f93e3"
+		"id": "fb71f2e9-5629-4823-a7e4-1b49dc3f93e3",
+		"hash": "bvFGwtwW"
 	},
 	{
 		"aonId": 527,
@@ -148,7 +154,8 @@
 		"page": 406,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Evocation", "Metamagic", "Wizard" ],
-		"id": "415f8e8d-b328-4d42-a916-9832f017b095"
+		"id": "415f8e8d-b328-4d42-a916-9832f017b095",
+		"hash": "IRZmbTLt"
 	},
 	{
 		"aonId": 528,
@@ -169,7 +176,8 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Abjuration", "Wizard" ],
 		"trigger": "An effect would deal acid, cold, electricity, or fire damage to you.",
-		"id": "0ca34925-45e6-4e2f-b546-31c76d9f08b7"
+		"id": "0ca34925-45e6-4e2f-b546-31c76d9f08b7",
+		"hash": "UYtjsLcI"
 	},
 	{
 		"aonId": 529,
@@ -191,7 +199,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature or object",
 		"traits": [ "Uncommon", "Evocation", "Force", "Wizard" ],
-		"id": "d7a77847-ccec-4be2-9248-9ef8b26cd6fb"
+		"id": "d7a77847-ccec-4be2-9248-9ef8b26cd6fb",
+		"hash": "zgOjSnNC"
 	},
 	{
 		"aonId": 530,
@@ -210,7 +219,8 @@
 		"source": "PZO2101",
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Attack", "Evocation", "Wizard" ],
-		"id": "3b60b9f6-4cad-47c7-a791-cdbe8ac80631"
+		"id": "3b60b9f6-4cad-47c7-a791-cdbe8ac80631",
+		"hash": "MdJxNkZZ"
 	},
 	{
 		"aonId": 531,
@@ -232,7 +242,8 @@
 		"page": 407,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Illusion", "Wizard" ],
-		"id": "88594273-4809-41e4-82f4-c86503e57d18"
+		"id": "88594273-4809-41e4-82f4-c86503e57d18",
+		"hash": "sRbXqDgL"
 	},
 	{
 		"aonId": 532,
@@ -250,7 +261,8 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Healing", "Necromancy", "Wizard" ],
 		"trigger": "You expend one of your wizard spell slots to cast a wizard spell of the necromancy school.",
-		"id": "6d17f32a-610d-49a7-a994-119e9d86ef6f"
+		"id": "6d17f32a-610d-49a7-a994-119e9d86ef6f",
+		"hash": "HCYHYyqQ"
 	},
 	{
 		"aonId": 533,
@@ -270,7 +282,8 @@
 		"source": "PZO2101",
 		"targets": "1 living creature",
 		"traits": [ "Uncommon", "Transmutation", "Wizard" ],
-		"id": "fdcd00f7-a1a5-4d8c-9577-40f75dfc17da"
+		"id": "fdcd00f7-a1a5-4d8c-9577-40f75dfc17da",
+		"hash": "xfsvgzFn"
 	},
 	{
 		"aonId": 534,
@@ -289,7 +302,8 @@
 		"page": 407,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Abjuration", "Wizard" ],
-		"id": "0ef95fbe-ee10-4de7-83a3-bbd488af6ebd"
+		"id": "0ef95fbe-ee10-4de7-83a3-bbd488af6ebd",
+		"hash": "yTzcpZwb"
 	},
 	{
 		"aonId": 535,
@@ -307,7 +321,8 @@
 		"page": 407,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Morph", "Transmutation", "Wizard" ],
-		"id": "86520bf7-a9aa-48e3-8705-0344cc6d6b5f"
+		"id": "86520bf7-a9aa-48e3-8705-0344cc6d6b5f",
+		"hash": "pjBITRYY"
 	},
 	{
 		"aonId": 536,
@@ -327,7 +342,8 @@
 		"range": "500 feet",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Divination", "Wizard" ],
-		"id": "2c32f1f3-4cbb-40e7-833d-e466fc8947b9"
+		"id": "2c32f1f3-4cbb-40e7-833d-e466fc8947b9",
+		"hash": "qRvWXIqM"
 	},
 	{
 		"aonId": 537,
@@ -350,6 +366,7 @@
 		"range": "60 feet",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Illusion", "Visual", "Wizard" ],
-		"id": "a7d2f694-38e0-4605-b296-95f1a007caf3"
+		"id": "a7d2f694-38e0-4605-b296-95f1a007caf3",
+		"hash": "YxgkWArK"
 	}
 ]

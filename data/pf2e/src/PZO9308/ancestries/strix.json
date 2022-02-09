@@ -14,11 +14,12 @@
 		],
 		"aonId": 40,
 		"source": "PZO9308",
-		"id": "5af3c2b8-bfa5-4370-96ce-5ced4bcc5398"
+		"id": "5af3c2b8-bfa5-4370-96ce-5ced4bcc5398",
+		"hash": "YSJXYppI"
 	},
-	{ "objectType": "Heritage", "name": "Nightglider Strix", "ancestry": "Strix", "source": "PZO9308", "id": "ff17ded4-ef9c-4f35-89c2-03f14e54ffb3", "aonId": 146 },
-	{ "objectType": "Heritage", "name": "Predator Strix", "ancestry": "Strix", "source": "PZO9308", "id": "2cf334be-0fcc-4ea8-a733-4d08690237cd", "aonId": 147 },
-	{ "objectType": "Heritage", "name": "Scavenger Strix", "ancestry": "Strix", "source": "PZO9308", "id": "266132fa-bc1b-42e0-aa02-6379621c9779", "aonId": 148 },
-	{ "objectType": "Heritage", "name": "Shoreline Strix", "ancestry": "Strix", "source": "PZO9308", "id": "42b30067-79d0-4427-b89a-561a976b1a6c", "aonId": 149 },
-	{ "objectType": "Heritage", "name": "Songbird Strix", "ancestry": "Strix", "source": "PZO9308", "id": "217d994e-9648-497a-b263-1753c361fb46", "aonId": 150 }
+	{ "objectType": "Heritage", "name": "Nightglider Strix", "ancestry": "Strix", "source": "PZO9308", "id": "ff17ded4-ef9c-4f35-89c2-03f14e54ffb3", "aonId": 146, "hash": "RwDWbZUR" },
+	{ "objectType": "Heritage", "name": "Predator Strix", "ancestry": "Strix", "source": "PZO9308", "id": "2cf334be-0fcc-4ea8-a733-4d08690237cd", "aonId": 147, "hash": "gAcppUGy" },
+	{ "objectType": "Heritage", "name": "Scavenger Strix", "ancestry": "Strix", "source": "PZO9308", "id": "266132fa-bc1b-42e0-aa02-6379621c9779", "aonId": 148, "hash": "xMWljMdk" },
+	{ "objectType": "Heritage", "name": "Shoreline Strix", "ancestry": "Strix", "source": "PZO9308", "id": "42b30067-79d0-4427-b89a-561a976b1a6c", "aonId": 149, "hash": "WVVxlZlz" },
+	{ "objectType": "Heritage", "name": "Songbird Strix", "ancestry": "Strix", "source": "PZO9308", "id": "217d994e-9648-497a-b263-1753c361fb46", "aonId": 150, "hash": "WszADRgr" }
 ]
