@@ -100,7 +100,6 @@ function updatePreviousId(core: TCore) {
 	return false;
 }
 function processData(filePathAndName: string) {
-console.log(filePathAndName, fs.existsSync(filePathAndName))
 	const coreList = utils.FsUtils.readJsonFileSync(filePathAndName) as TCore[];
 
 	//#region invalid file/data
@@ -191,6 +190,7 @@ console.log(filePathAndName, fs.existsSync(filePathAndName))
 			if (aonId) {
 				core.aonId = aonId;
 				_aoned++;
+				updateFile = true;
 			}
 		}
 		validateAbbreviation(core);

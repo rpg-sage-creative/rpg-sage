@@ -1,4 +1,4 @@
-import type { IComparable, IRenderable, ISearchable, TSortResult } from "../../sage-utils";
+import type { IComparable, IRenderable, ISearchable, TSortResult, UUID } from "../../sage-utils";
 import utils from "../../sage-utils";
 import { Repository } from "..";
 import { COMMON, RARITIES, TRarity } from "../common";
@@ -12,6 +12,8 @@ const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
 const allCores: Pf2ToolsDataCore[] = [];
 
 export type Pf2ToolsDataCore = {
+	/** The id of Sage's version of this object. */
+	id: UUID;
 	name: string;
 	level: number;
 	pfs: "standard" | "limited";

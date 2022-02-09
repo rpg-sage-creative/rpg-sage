@@ -70,11 +70,10 @@ function parseHeightened(lines: string[]): TSpellHeighten[] | undefined {
 			if (plus) {
 				return { bump:plus[1], change:plus[2] };
 			}
-			const level = line.match(/^\*\*Heightened\s*\(\+(\d+)(?:st|nd|rd|th)\)\*\*\s*(.*?)$/);
+			const level = line.match(/^\*\*Heightened\s*\((\d+)(?:st|nd|rd|th)\)\*\*\s*(.*?)$/);
 			if (level) {
 				return { level:+level[1], change:level[2] };
 			}
-			console.log(line);
 			// const as = line.match(/^\*\*Heightened\s*\(\+(\d+)(?:st|nd|rd|th)\)\*\*\s*(.*?)$/);
 			return undefined;
 		});

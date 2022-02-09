@@ -1,5 +1,5 @@
 import { Pf2Tools } from "../../sage-pf2e";
-import { BaseCore, Repository, TDetail, THasSuccessOrFailure, type Source } from "../../sage-pf2e";
+import { BaseCore, Source, SourceCore, TDetail, THasSuccessOrFailure } from "../../sage-pf2e";
 import utils, { OrNull } from "../../sage-utils";
 import { allCores, compareNames, info, warn } from "../common.mjs";
 import type { TCore } from "../types.mjs";
@@ -13,6 +13,28 @@ export function splitAndCapitalize<T extends string = string>(values?: string): 
 }
 
 type TSource = { name:string; source?:Source; page:number; version?:string; };
+function matchNames(a: string, b: string): boolean {
+	return a === b
+		|| a.replace(/-/g, " ") === b.replace(/-/g, " ")
+		|| a.replace(/Shadows$/, "Shadow") === b.replace(/Shadows$/, "Shadow")
+		|| a.replace(/Pathfinder Society Guide/, "PFS Guide") === b.replace(/Pathfinder Society Guide/, "PFS Guide");
+}
+function matchSourceByName(cores: SourceCore[], name: string): SourceCore | undefined {
+	return cores.find(core => core.objectType === "Source" && matchNames(core.name, name));
+}
+function matchSourceByApName(cores: SourceCore[], name: string): SourceCore | undefined {
+	return cores.find(core => core.objectType === "Source" && matchNames(`${core.apNumber} ${core.name}`, name));
+}
+function matchSourceByProductLineName(cores: SourceCore[], name: string): SourceCore | undefined {
+	return cores.find(core => core.objectType === "Source" && matchNames(core.name, `${core.productLine}: ${name}`));
+}
+function matchSource(name: string): Source | undefined {
+	const cores = allCores.filter(core => core.objectType === "Source") as unknown as SourceCore[];
+	const core = matchSourceByName(cores, name)
+		?? matchSourceByProductLineName(cores, name)
+		?? matchSourceByApName(cores, name);
+	return core ? new Source(core) : undefined;
+}
 export function parseSource(value?: string): TSource | null {
 	// "source": "Core Rulebook pg. 283 2.0",
 	const parts = value?.match(/^(.*?) pg. (\d+)(?: \d+\.\d+)?$/);
@@ -24,7 +46,7 @@ export function parseSource(value?: string): TSource | null {
 	const page = +parts[2];
 	const version = parts[3];
 
-	const source = Repository.find("Source", src => src.name === name || console.log(`"${src.name}" === ${name}`) as any);
+	const source = matchSource(name);
 	if (!source) {
 		console.log(`Unknown Source: ${name}`);
 	}
