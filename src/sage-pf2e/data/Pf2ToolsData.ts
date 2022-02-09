@@ -294,16 +294,7 @@ export default class Pf2ToolsData
 			return clss?.classPath?.replace(/\s+/, "").toLowerCase()
 				?? sageCore.objectType.toLowerCase();
 		}
-		if (sageCore.objectType === "Faith") {
-			return "deity";
-		}
-		if (sageCore.objectType === "FocusSpell") {
-			return "focus";
-		}
-		if (sageCore.objectType === "Gear") {
-			return "item";
-		}
-		return sageCore.objectType.toLowerCase();
+		return toPf2Type(sageCore.objectType);
 	}
 
 	//#endregion
@@ -328,20 +319,34 @@ export default class Pf2ToolsData
 	//#endregion
 
 	//#region search
+
 	public static search
 			<T extends ISearchable = ISearchable, U extends SearchScore<T> = SearchScore<T>>
-			(searchInfo: utils.SearchUtils.SearchInfo): U[] {
+			(searchInfo: utils.SearchUtils.SearchInfo, objectTypes: string[]): U[] {
 		const searchScores: U[] = [];
+		const types = objectTypes.map(toPf2Type);
 		allCores.forEach(core => {
-			const pf2tData = new Pf2ToolsData(core);
-			const results = pf2tData.searchRecursive(searchInfo);
-			const filtered = results.filter(result => result.bool);
-			searchScores.push(...filtered as unknown as U[]);
+			if (types.includes(core.type)) {
+				const pf2tData = new Pf2ToolsData(core);
+				const results = pf2tData.searchRecursive(searchInfo);
+				const filtered = results.filter(result => result.bool);
+				searchScores.push(...filtered as unknown as U[]);
+			}
 		});
 		return searchScores;
 	}
 
 	//#endregion
+}
+
+function toPf2Type(value: string): string {
+	value = value.toLowerCase();
+	switch (value) {
+		case "faith": return "deity";
+		case "focusspell": return "focus";
+		case "gear": return "item";
+		default: return value;
+	}
 }
 
 type SearchScore<T extends ISearchable> = utils.SearchUtils.SearchScore<T>;

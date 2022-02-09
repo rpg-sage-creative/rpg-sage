@@ -2,7 +2,7 @@ import utils, { Core, UUID } from "../../sage-utils";
 import type { TMagicComponent, TMagicTradition } from '../common';
 import { ABILITIES, NEWLINE, toModifier } from '../common';
 import RenderableContent from '../data/RenderableContent';
-import { findByValue, first } from '../data/Repository';
+import { findByValue } from '../data/Repository';
 import type ArcaneSchool from './ArcaneSchool';
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from './base/HasSource';
@@ -164,7 +164,13 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 	private _arcaneSchool?: ArcaneSchool | null;
 	public get arcaneSchool(): ArcaneSchool | undefined {
 		if (this._arcaneSchool === undefined) {
-			this._arcaneSchool = first("ArcaneSchool", this.traits) ?? null;
+			for (const trait of this.traits) {
+				const arcaneSchool = findByValue("ArcaneSchool", trait);
+				if (arcaneSchool) {
+					this._arcaneSchool = arcaneSchool;
+					break;
+				}
+			}
 		}
 		return this._arcaneSchool ?? undefined;
 	}

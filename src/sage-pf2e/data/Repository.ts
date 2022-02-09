@@ -87,9 +87,9 @@ export function find<T extends Base>(objectType: string, predicate: BaseFilterCa
 export function find<T extends HasSource>(objectType: string, source: OrUndefined<string>, predicate: BaseFilterCallbackFn<T>): OrUndefined<T>;
 export function find<T extends Base | HasSource>(objectType: string, sourceOrPredicate: string | BaseFilterCallbackFn<T> | undefined, predicate?: BaseFilterCallbackFn<T>): OrUndefined<T> {
 	if (predicate) {
-		return <T>all<HasSource>(objectType, <string>sourceOrPredicate).find(<BaseFilterCallbackFn<HasSource>>predicate);
+		return all<HasSource>(objectType, <string>sourceOrPredicate).find(<BaseFilterCallbackFn<HasSource>>predicate) as T;
 	}
-	return <T>_all(objectType).find(<BaseFilterCallbackFn<Base>>sourceOrPredicate);
+	return _all(objectType).find(<BaseFilterCallbackFn<Base>>sourceOrPredicate) as T;
 }
 
 function _findById<T extends string, U extends TEntity<T> = TEntity<T>>(objectType: T, uuidMatcher: TUuidMatcher): OrUndefined<U> {
@@ -98,12 +98,8 @@ function _findById<T extends string, U extends TEntity<T> = TEntity<T>>(objectTy
 
 /** Finds the object for the given UUID. */
 export function findById<T extends Base>(id: OrUndefined<UUID>): OrUndefined<T> {
-	if (!id) {
-		return undefined;
-	}
-
-	const uuidMatcher = utils.UuidUtils.UuidMatcher.from(id);
-	if (uuidMatcher.isValid) {
+	const uuidMatcher = id ? utils.UuidUtils.UuidMatcher.from(id) : null;
+	if (uuidMatcher?.isValid) {
 		for (const objectType of getObjectTypes()) {
 			const found = _findById(objectType, uuidMatcher);
 			if (found) {
@@ -111,8 +107,7 @@ export function findById<T extends Base>(id: OrUndefined<UUID>): OrUndefined<T> 
 			}
 		}
 	}
-
-	console.info(`findById(${uuidMatcher.value}) not found!`);
+	console.info(`findById(${uuidMatcher?.value ?? id}) not found!`);
 	return undefined;
 }
 
@@ -138,28 +133,6 @@ export function findByValue<T extends Base<any>>(objectType: string, value: Opti
 	return _all<T>(objectType).find(base => base.matches(stringMatcher));
 }
 
-/** Returns the first object found from the given list. */
-export function first<T extends Base>(objectIds: string[]): OrUndefined<T>;
-export function first<T extends string>(objectType: T, objectNames: string[]): OrUndefined<TEntity<T>>;
-export function first<T extends Base>(objectIdsOrType: string | string[], objectNames?: string[]): OrUndefined<T> {
-	if (Array.isArray(objectNames)) {
-		for (const objectName of objectNames) {
-			const found = findByValue(<string>objectIdsOrType, objectName);
-			if (found) {
-				return found as T;
-			}
-		}
-	}else if (Array.isArray(objectIdsOrType)) {
-		for (const objectId of objectIdsOrType) {
-			const found = findById(objectId);
-			if (found) {
-				return found as T;
-			}
-		}
-	}
-	return undefined;
-}
-
 /** Returns a random object for the given objectType. If a predicate is given, the objects are filtered before selection. */
 export function random<T extends string>(objectType: T): TEntity<T>;
 export function random<T extends Base>(objectType: string, predicate: BaseFilterCallbackFn<T>): T;
@@ -167,30 +140,25 @@ export function random<T extends Base>(objectType: string, predicate?: BaseFilte
 	const objects: T[] = all(objectType);
 	return utils.RandomUtils.randomItem(predicate ? objects.filter(predicate) : objects)!;
 }
+
 function objectTypeToSearchResultCategory(objectType: string): string {
 	const meta = repoMap.get(objectType),
 		objects = meta?.objects,
 		firstObject = objects?.[0];
 	return firstObject?.searchResultCategory ?? objectType;
 }
-export function search<T extends Base>(searchInfo: utils.SearchUtils.SearchInfo, ...searchCategories: string[]): SearchResults<T> {
-	const validObjectTypes = searchCategories.map(searchCategory => parseObjectType(searchCategory)?.objectType).filter(isDefined),
-		objectTypesToSearch = validObjectTypes.length ? validObjectTypes : getObjectTypes(),
-		searchResultCategory = objectTypesToSearch.length === 1 ? objectTypeToSearchResultCategory(objectTypesToSearch[0]) : undefined,
-		searchResults = new SearchResults<T>(searchInfo, searchResultCategory);
+
+type TSearchHandler<T extends Base> = (objectTypesToSearch: string[], searchResults: SearchResults<T>) => void;
+function _search<T extends Base>(searchInfo: utils.SearchUtils.SearchInfo, searchCategories: string[], handler: TSearchHandler<T>): SearchResults<T> {
+	const validObjectTypes = searchCategories.map(searchCategory => parseObjectType(searchCategory)?.objectType).filter(isDefined);
+	const objectTypesToSearch = validObjectTypes.length ? validObjectTypes : getObjectTypes();
+	const searchResultCategory = objectTypesToSearch.length === 1 ? objectTypeToSearchResultCategory(objectTypesToSearch[0]) : undefined;
+	const searchResults = new SearchResults<T>(searchInfo, searchResultCategory);
 	if (!validObjectTypes.length && !searchInfo.globalFlag) {
 		searchInfo.keyTerm = searchCategories.join(" ");
 	}
-	objectTypesToSearch.forEach(objectType => {
-		_all<T>(objectType).forEach(object => {
-			//TODO: Figure out why errata isn't being removed from the main lists; once tagged they shouldn't be searchable!
-			if (!(<HasSource><any>object).hasErrata) {
-				searchResults.add(...object.searchRecursive(searchInfo).filter(objectScore => objectScore.bool));
-			}
-		});
-	});
 
-	searchResults.add(...Pf2ToolsData.search<T>(searchInfo));
+	handler(objectTypesToSearch, searchResults);
 
 	// #region perfect match resort
 	const stringMatcher = utils.StringUtils.StringMatcher.from(searchInfo.searchText);
@@ -202,30 +170,27 @@ export function search<T extends Base>(searchInfo: utils.SearchUtils.SearchInfo,
 
 	return searchResults;
 }
+export function search<T extends Base>(searchInfo: utils.SearchUtils.SearchInfo, ...searchCategories: string[]): SearchResults<T> {
+	return _search(searchInfo, searchCategories, (objectTypesToSearch, searchResults) => {
+		objectTypesToSearch.forEach(objectType => {
+			_all<T>(objectType).forEach(object => {
+				//TODO: Figure out why errata isn't being removed from the main lists; once tagged they shouldn't be searchable!
+				if (!(<HasSource><any>object).hasErrata) {
+					searchResults.add(...object.searchRecursive(searchInfo).filter(objectScore => objectScore.bool));
+				}
+			});
+		});
+		searchResults.add(...Pf2ToolsData.search<T>(searchInfo, objectTypesToSearch));
+	});
+}
 export function searchComparison<T extends Base>(searchInfo: utils.SearchUtils.SearchInfo, ...searchCategories: string[]): SearchResults<T> {
-	const validObjectTypes = searchCategories.map(parseObjectType).filter(isDefined)
-		.map(searchCategory => searchCategory.objectType);
-	const objectTypesToSearch = validObjectTypes.length ? validObjectTypes : getObjectTypes();
-	const searchResultCategory = objectTypesToSearch.length === 1 ? objectTypeToSearchResultCategory(objectTypesToSearch[0]) : undefined;
-	const searchResults = new SearchResults<T>(searchInfo, searchResultCategory);
-	if (!validObjectTypes.length && !searchInfo.globalFlag) {
-		searchInfo.keyTerm = searchCategories.join(" ");
-	}
-	const options = { toString: (item: Base) => item.name, includeThreshold: 0.1, excludeThreshold: 0.2, ignoreCase: true };
-	const _allObjects: T[] = [];
-	objectTypesToSearch.forEach(objectType => _allObjects.push(...all<T>(objectType)));
-	const items = utils.StringUtils.Comparison.rank(_allObjects, searchInfo.searchText, options);
-	searchResults.add(...items.map(item => new utils.SearchUtils.SearchScore(item.item, item.jar)));
-
-	// #region perfect match resort
-	const stringMatcher = utils.StringUtils.StringMatcher.from(searchInfo.searchText);
-	const nameMatches = searchResults.scores.filter(score => score.searchable.matches(stringMatcher));
-	if (nameMatches.length) {
-		searchResults.scores = nameMatches.concat(searchResults.scores.filter(score => !nameMatches.includes(score)));
-	}
-	// #endregion
-
-	return searchResults;
+	return _search(searchInfo, searchCategories, (objectTypesToSearch, searchResults) => {
+		const options = { toString: (item: Base) => item.name, includeThreshold: 0.1, excludeThreshold: 0.2, ignoreCase: true };
+		const _allObjects: T[] = [];
+		objectTypesToSearch.forEach(objectType => _allObjects.push(...all<T>(objectType)));
+		const items = utils.StringUtils.Comparison.rank(_allObjects, searchInfo.searchText, options);
+		searchResults.add(...items.map(item => new utils.SearchUtils.SearchScore(item.item, item.jar)));
+	});
 }
 
 //#region load data
