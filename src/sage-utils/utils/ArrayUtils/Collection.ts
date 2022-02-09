@@ -1,6 +1,8 @@
 import { isDefined } from "../..";
 import { sortDescending } from "./Sort";
 
+type ValueOf<T, U extends keyof T = keyof T> = T[U];
+
 export class Collection<T> extends Array<T> {
 
 	//#region instance methods
@@ -47,6 +49,10 @@ export class Collection<T> extends Array<T> {
 	/** Partitions the values into nested Collections based on the partitionfn */
 	public partition(partitionfn: (value: T, index: number, collection: Collection<T>) => number, thisArg?: any): Collection<Collection<T>> {
 		return Collection.partition(this, partitionfn, thisArg);
+	}
+
+	public pluck<U extends keyof T = keyof T, V extends ValueOf<T, U> = ValueOf<T, U>>(key: U): V[] {
+		return this.map(value => value[key] as V);
 	}
 
 	/** Removes the values that return a truthy value, returning values that are't undefined. */
