@@ -4,7 +4,7 @@ import type { TCore } from "./types.mjs";
 export const SrcDataPath = "../data/pf2e/src";
 export const DistDataPath = "../data/pf2e/dist";
 
-const VERBOSE = true;
+const VERBOSE = false;
 const DEBUGGING = false;
 export function info(...args: any[]) {
 	console.info(...args);
@@ -28,7 +28,7 @@ export function debug(...args: any[]) {
 	}
 }
 
-export const allCores: TCore[] = [];
+export const allCores = new utils.ArrayUtils.Collection<TCore>();
 
 const cleanNames = new Map<string, string>();
 type TData = { id?:string; hash?:string; name?:string; };
