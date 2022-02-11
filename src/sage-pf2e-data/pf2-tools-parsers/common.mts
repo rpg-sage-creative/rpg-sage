@@ -1,6 +1,6 @@
 import { BaseCore, Pf2ToolsData, Source, SourceCore, TDetail, THasSuccessOrFailure, type Pf2ToolsDataCore } from "../../sage-pf2e";
 import utils, { OrNull } from "../../sage-utils";
-import { allCores, compareNames, info, warn } from "../common.mjs";
+import { allCores, compareNames, debug, warn } from "../common.mjs";
 import type { TCore } from "../types.mjs";
 import { parseSpell } from "./Spell.mjs";
 
@@ -111,24 +111,6 @@ export function parseBody<T extends BaseCore>(body: string): Partial<T> {
 
 //#region pf2tools
 
-// const pf2ToolsData: Pf2ToolsDataCore[] = [];
-const PF2_TOOLS_PATH = "../data/pf2e/pf2-tools.json";
-const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
-
-export async function loadPf2ToolsData(): Promise<Pf2ToolsDataCore[]> {
-	let cores = await Pf2ToolsData.load("../data/pf2e");
-	if (!cores.length) {
-		info(`Fetching new data from pf2 tools ...`);
-		const fetched = await utils.HttpsUtils.getJson(PF2_TOOLS_URL).catch(() => null);
-		await utils.FsUtils.writeFile(PF2_TOOLS_PATH, fetched, true, true);
-		cores.push(...fetched);
-	}
-	return cores;
-}
-export function updatePf2ToolsData(): Promise<boolean> {
-	return utils.FsUtils.writeFile(PF2_TOOLS_PATH, Pf2ToolsData.getAll(), true, true);
-}
-
 // function objectTypeToPf2Type(sageCore: TCore) {
 // 	if (sageCore.objectType === "ClassPath") {
 // 		const clss = allCores.find(core => core.objectType === "Class" && core.name === sageCore.class);
@@ -162,20 +144,49 @@ function testPf2Name(pf2: Pf2ToolsDataCore, sage: TCore) {
 export function checkPf2ToolsForAonAndHash(core: TCore): [number | undefined, string | undefined] {
 	if (["Rule"].includes(core.objectType)) return [undefined, undefined];
 	const pf2Type = Pf2ToolsData.objectTypeToPf2Type(core);
-	const filtered = Pf2ToolsData.getAll().filter(o => o.type === pf2Type);
-	if (!filtered.length) {
-		warn(`\tMissing aonId for ${core.objectType}:${core.name} >> CANNOT MAP TO PF2-TOOLS`);
-	}else {
-		const found = filtered.find(o => testPf2Name(o, core));
-		if (found && found.aon) {
-			warn(`\tMissing aonId for ${core.objectType}:${core.name} >> PF2-TOOLS(${found.aon})`);
-			const match = found.aon.match(/(\D+)(\d+)/i);
-			if (match) return [+match[2], found.hash];
+	const filtered = Pf2ToolsData.getAll().filter(o => o.type === pf2Type && testPf2Name(o, core));
+	// if (filtered.length > 1) {
+	// 	console.log(`Too many matches! ${core.objectType}:${core.name}`, filtered);
+	// }
+	const found = filtered[0];
+	const cannotFind: string[] = [];
+	const retVal: [number | undefined, string | undefined] = [undefined, undefined];
+	if (found) {
+		if (found.id !== core.id) {
+			debug(`Setting PF2Tools id for "${found.type}:${found.name}" from "${found.id}" to "${core.objectType}:${core.name}" "${core.id}"`);
+			found.id = core.id;
+		}
+		if (found.hash) {
+			if (core.hash !== found.hash) {
+				retVal[1] = found.hash;
+				warn(`\tMissing hash for ${core.objectType}:${core.name} >> PF2-TOOLS(${found.hash})`);
+			}
 		}else {
-			warn(`\tMissing aonId for ${core.objectType}:${core.name} >> CANNOT FIND IT IN PF2-TOOLS`);
+			cannotFind.push("hash");
+		}
+		if (found.aon) {
+			const match = found.aon.match(/(\D+)(\d+)/i) ?? [];
+			const aonId = +match[2];
+			if (aonId && core.aonId !== aonId) {
+				retVal[0] = aonId;
+				warn(`\tMissing aonId for ${core.objectType}:${core.name} >> PF2-TOOLS(${found.aon})`);
+			}
+		}else {
+			cannotFind.push("aonId");
+		}
+	}else {
+		if (!core.aonId) {
+			cannotFind.push("aonId");
+		}
+		if (!core.hash) {
+			cannotFind.push("hash");
 		}
 	}
-	return [undefined, undefined];
+	if (cannotFind.length) {
+		const unique = cannotFind.filter((s,i,a )=> a.indexOf(s) === i).sort();
+		warn(`\tMissing ${unique.join(", ")} for ${core.objectType}:${core.name} >> CANNOT FIND IT IN PF2-TOOLS`);
+	}
+	return retVal;
 }
 
 //#endregion

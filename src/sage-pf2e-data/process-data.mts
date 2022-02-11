@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { Pf2ToolsData, THasSuccessOrFailure } from "../sage-pf2e";
 import utils, { type UUID } from "../sage-utils";
 import { allCores, compareNames, debug, DistDataPath, error, info, log, SrcDataPath, warn } from "./common.mjs";
-import { checkPf2ToolsForAonAndHash, loadPf2ToolsData, parsePf2Data, updatePf2ToolsData } from "./pf2-tools-parsers/common.mjs";
+import { checkPf2ToolsForAonAndHash, parsePf2Data } from "./pf2-tools-parsers/common.mjs";
 import { processAbcData } from "./process-abc.mjs";
 import type { TCore } from "./types.mjs";
 
@@ -57,13 +57,14 @@ function processSources() {
 	info(`\nProcessing source-list.json ...`);
 	const sources = processData(`${SrcDataPath}/source-list.json`) as TCore[];
 	sources.forEach(source => getFullPathOfAllJsonFilesIn(getPathForSource(source)).forEach(processData));
-	const nonSources = getNonSourcePaths();
+	const nonSources = getNonSourcePaths()
+		.filter(path => !path.includes("LG_LKSE"));
 	if (nonSources.length) {
 		debug("===============\nThe Following Sources are not in source-list.json");
 		nonSources.forEach(path => getFullPathOfAllJsonFilesIn(path).forEach(processData));
 		debug("===============");
 	}
-	info(`Processing source-list.json ... ${total} items; u${unique} IDs; +${created} IDs; ♻️${recreated} IDs; ~${normalized} IDs; +${aoned} aonIDs`);
+	info(`Processing source-list.json ... ${total} items; u${unique} IDs; +${created} IDs; ♻️${recreated} IDs; ~${normalized} IDs; +${aoned} aonIDs; +${hashed} hashes`);
 }
 
 /** Returns TRUE if the source is valid and is missing aonId */
@@ -151,7 +152,7 @@ function processData(filePathAndName: string) {
 		if (updatePreviousId(core)) {
 			updateFile = true;
 		}
-		if (core.objectType === "Class" && !core.classPath) {
+		if (core.objectType === "Class" && !core.classPath && !["Fighter","Monk"].includes(core.name)) {
 			warn(`\tMissing ClassPath for ${core.name}`);
 		}
 		if (Pf2ToolsData.checkForName(core)) {
@@ -168,24 +169,11 @@ function processData(filePathAndName: string) {
 			core.details = [core.details];
 			updateFile = true;
 		}
-		if (core.criticalSuccess || core.success || core.failure || core.criticalFailure || core.followUp) {
-			const successFailure = { } as THasSuccessOrFailure;
-			if (core.criticalSuccess?.length) successFailure.criticalSuccess = core.criticalSuccess;
-			if (core.success?.length) successFailure.success = core.success;
-			if (core.failure?.length) successFailure.failure = core.failure;
-			if (core.criticalFailure?.length) successFailure.criticalFailure = core.criticalFailure;
-			if (!core.details) core.details = [];
-			if (Object.keys(successFailure).length) core.details.push(successFailure);
-			if (core.followUp) core.details.push(...core.followUp);
-			delete core.criticalSuccess;
-			delete core.success;
-			delete core.failure;
-			delete core.criticalFailure;
-			delete core.followUp;
+		if (fixHasSuccessOrFailure(core)) {
 			updateFile = true;
 		}
 		const sourceMissingAonId = validateSource(filePathAndName, core);
-		if (!sourceMissingAonId && (!core.aonId || !core.hash) && !["Table"].includes(core.objectType) && !(core.objectType === "Skill" && core.name.endsWith(" Lore"))) {
+		if (!sourceMissingAonId && (!core.aonId || !core.hash || true) && !["Table"].includes(core.objectType) && !(core.objectType === "Skill" && core.name.endsWith(" Lore"))) {
 			const [aonId, hash] = checkPf2ToolsForAonAndHash(core);
 			if (aonId && core.aonId !== aonId) {
 				core.aonId = aonId;
@@ -207,10 +195,30 @@ function processData(filePathAndName: string) {
 	aoned += _aoned;
 	hashed += _hashed;
 	if (_created || _recreated || _normalized || _aoned || _hashed || updateFile) {
-		info(`\tSaving ${_created} IDs created, ${_recreated} IDs recreated, ${_normalized} IDs normalized, and ${_aoned} aonIDs set`);
+		info(`\tSaving ${_created} IDs created, ${_recreated} IDs recreated, ${_normalized} IDs normalized, ${_aoned} aonIDs set, and ${_hashed} hashes set`);
 		utils.FsUtils.writeFileSync(filePathAndName, coreList, false, true);
 	}
 	return coreList;
+}
+
+function fixHasSuccessOrFailure(core: TCore): boolean {
+	if (core.criticalSuccess || core.success || core.failure || core.criticalFailure || core.followUp) {
+		const successFailure = { } as THasSuccessOrFailure;
+		if (core.criticalSuccess?.length) successFailure.criticalSuccess = core.criticalSuccess;
+		if (core.success?.length) successFailure.success = core.success;
+		if (core.failure?.length) successFailure.failure = core.failure;
+		if (core.criticalFailure?.length) successFailure.criticalFailure = core.criticalFailure;
+		if (!core.details) core.details = [];
+		if (Object.keys(successFailure).length) core.details.push(successFailure);
+		if (core.followUp) core.details.push(...core.followUp);
+		delete core.criticalSuccess;
+		delete core.success;
+		delete core.failure;
+		delete core.criticalFailure;
+		delete core.followUp;
+		return true;
+	}
+	return false;
 }
 
 function processMissingSpells() {
@@ -250,18 +258,59 @@ function processLore() {
 //#endregion
 
 export default async function process(): Promise<void> {
-	await loadPf2ToolsData();
+	await Pf2ToolsData.loadOrFetchAndSave(DistDataPath);
 
 	processSources();
-	processAbcData();
-	processMissingSpells();
-	processLore();
-
-	if (hashed) {
-		await updatePf2ToolsData();
+	if (false) {
+		processAbcData();
+		processMissingSpells();
+		processLore();
 	}
 
-	parsePf2Data();
+	allCores.forEach(sCore => sCore.pf2t = []);
+	const objectTypes = allCores.pluck("objectType", true);
+	const classPaths = allCores.pluck("classPath", true).filter(s => s) as string[];
+	const sageTypes = objectTypes.concat(classPaths).map(toPf2Type);
+
+	function toPf2Type<T extends string | undefined>(value?: T): T {
+		value = value?.replace(/[\s']/g, "").toLowerCase() as T;
+		switch (value) {
+			case "faith": return "deity" as T;
+			case "focusspell": return "focus" as T;
+			case "gear": return "item" as T;
+			default: return value as T;
+		}
+	}
+	function toSageType(value: string): string {
+		return value.toLowerCase().replace(/^cantrip$/, "spell");
+	}
+
+	const pf2tCores = Pf2ToolsData.getAll();
+	const pf2tTypes = pf2tCores.pluck("type", true).map(toSageType);
+	const missing = pf2tTypes.filter(type => !sageTypes.includes(type));
+	console.log({missing});
+
+	pf2tCores.forEach(pCore => {
+		const sCores = allCores.filter(sCore => toPf2Type(sCore.objectType) === toSageType(pCore.type));
+		if (sCores.length) {
+			const matches = sCores.filter(sCore => sCore.name === pCore.name || pCore.name === `${sCore.category}, ${sCore.name}`);
+			if (matches.length>0) {
+				// const subType = pCore.subtype ? ` (${pCore.subtype})` : ``;
+				// console.log(`${pCore.type}${subType}: ${pCore.name} (${matches.length}) - ${pCore.source}`);
+				matches.forEach(sCore => {
+					const link = sCore.pf2t ?? (sCore.pf2t = []);
+					link.push(pCore);
+				});
+			}
+		}
+	});
+	console.log(`none (${allCores.filter(sCore=>!sCore.pf2t?.length).length}); 1 (${allCores.filter(sCore=>sCore.pf2t?.length===1).length}); more (${allCores.filter(sCore=>sCore.pf2t!.length>1).length})`)
+
+	// if (hashed) {
+	// 	await Pf2ToolsData.save(DistDataPath);
+	// }
+
+	if (false) parsePf2Data();
 
 	info(""); // spacer for bash script
 }
