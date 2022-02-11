@@ -1,4 +1,5 @@
 import { isDefined } from "../..";
+import { unique } from "./Filters";
 import { sortDescending } from "./Sort";
 
 type ValueOf<T, U extends keyof T = keyof T> = T[U];
@@ -51,8 +52,16 @@ export class Collection<T> extends Array<T> {
 		return Collection.partition(this, partitionfn, thisArg);
 	}
 
-	public pluck<U extends keyof T = keyof T, V extends ValueOf<T, U> = ValueOf<T, U>>(key: U): V[] {
-		return this.map(value => value[key] as V);
+	/** Convenience for .map(item => item.key); */
+	public pluck<U extends keyof T = keyof T, V extends ValueOf<T, U> = ValueOf<T, U>>(key: U): V[];
+	/** When onlyUnique is true: Convenience for .map(item => item.key).filter(unique); */
+	public pluck<U extends keyof T = keyof T, V extends ValueOf<T, U> = ValueOf<T, U>>(key: U, onlyUnique: boolean): V[];
+	public pluck<U extends keyof T = keyof T, V extends ValueOf<T, U> = ValueOf<T, U>>(key: U, onlyUnique?: boolean): V[] {
+		const values = this.map(value => value[key] as V);
+		if (onlyUnique) {
+			return values.filter(unique);
+		}
+		return values;
 	}
 
 	/** Removes the values that return a truthy value, returning values that are't undefined. */
