@@ -34,7 +34,7 @@ export function processAbcData() {
 				abcData.push(...classPaths.filter(cp => cp.class === c.name));
 			});
 			abcData.push(...archetypes);
-			abcData.push(...dedications.filter(isDefined));
+			abcData.push(...dedications.filter(isDefined) as TCore[]);
 		}
 	});
 	utils.FsUtils.writeFileSync("./data/abc-data.json", abcData, false, true);
