@@ -195,7 +195,7 @@
 		"aonId": 6,
 		"hash": "XkxIWLTd"
 	},
-	{ "objectType": "Gear", "name": "Bedroll", "price": "1 cp", "bulk": "L", "hands": "-", "details": [ "" ], "source": "PZO2101", "id": "769a9d16-4f05-4f57-8116-2619051abb1b", "aonId": 7, "hash": "DVltQTbl" },
+	{ "objectType": "Gear", "name": "Bedroll", "price": "1 cp", "bulk": "L", "hands": "-", "details": [], "source": "PZO2101", "id": "769a9d16-4f05-4f57-8116-2619051abb1b", "aonId": 7, "hash": "DVltQTbl" },
 	{
 		"objectType": "Gear",
 		"name": "Belt Pouch",
@@ -414,7 +414,7 @@
 		"price": "20 gp",
 		"bulk": "1",
 		"hands": "2",
-		"details": [ "" ],
+		"details": [],
 		"source": "PZO2101",
 		"id": "c6d7ebf6-add5-4159-8684-0ab6511ea909"
 	},
