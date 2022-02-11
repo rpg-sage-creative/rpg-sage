@@ -7,7 +7,8 @@ import type Class from "../model/Class";
 import RenderableContent from "./RenderableContent";
 import { find } from "./Repository";
 
-const allCores: Pf2ToolsDataCore[] = [];
+const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
+const allCores = new utils.ArrayUtils.Collection<Pf2ToolsDataCore>();
 
 export type Pf2ToolsDataCore = {
 	/** The id of Sage's version of this object. */
@@ -253,20 +254,48 @@ export default class Pf2ToolsData
 
 	//#region all cores
 
-	public static async load(distPath: string): Promise<Pf2ToolsDataCore[]> {
+	public static async load(distPath: string): Promise<boolean> {
+		allCores.empty();
 		const path = `${distPath}/pf2-tools.json`;
-		const pf2ToolsCores = await utils.FsUtils.readJsonFile<Pf2ToolsDataCore[]>(path)
-			.catch(utils.ConsoleUtils.Catchers.warnReturnNull);
+		const pf2ToolsCores = await utils.FsUtils.readJsonFile<Pf2ToolsDataCore[]>(path).catch(() => null);
 		if (pf2ToolsCores?.length) {
 			allCores.push(...pf2ToolsCores);
 			console.info(`\t\t${pf2ToolsCores.length} Total PF2 Tools Cores loaded`);
 		}else {
-			console.warn(`\t\tUnable to load PF2 Tools Cores.`);
+			console.warn(`\t\tUnable to load PF2 Tools Cores: ${path}`);
 		}
-		return pf2ToolsCores ?? [];
+		return !allCores.isEmpty;
 	}
 
-	public static getAll(): Pf2ToolsDataCore[] {
+	public static async fetch(): Promise<boolean> {
+		allCores.empty();
+		console.info(`Fetching new data from pf2 tools ...`);
+		const cores = await utils.HttpsUtils.getJson<Pf2ToolsDataCore[]>(PF2_TOOLS_URL).catch(() => null);
+		if (Array.isArray(cores)) {
+			allCores.push(...cores);
+		}
+		return !allCores.isEmpty;
+	}
+
+	public static async save(distPath: string): Promise<boolean> {
+		const path = `${distPath}/pf2-tools.json`;
+		console.info(`Saving PF2 Tools Cores: ${path}`);
+		return utils.FsUtils.writeFile(path, allCores, true, true);
+	}
+
+	public static async loadOrFetchAndSave(distPath: string): Promise<boolean> {
+		const loaded = await this.load(distPath);
+		if (!loaded) {
+			const fetched = await this.fetch();
+			if (fetched) {
+				return this.save(distPath);
+			}
+			return fetched;
+		}
+		return loaded;
+	}
+
+	public static getAll(): utils.ArrayUtils.Collection<Pf2ToolsDataCore> {
 		return allCores;
 	}
 
