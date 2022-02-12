@@ -331,7 +331,10 @@ export default async function process(): Promise<void> {
 	const missing = pf2tTypes.filter(type => !sageTypes.includes(type));
 	info({missing});
 
-	const leftovers = pf2tCores.filter(pf2t => !allCores.find(core => core.pf2t === pf2t));
+	const pf2tJSON = pf2tCores.map(core => JSON.stringify(core));
+	const sageJSON = allCores.map(core => JSON.stringify(core.pf2t));
+
+	const leftovers = pf2tJSON.filter(pf2t => !sageJSON.find(sage => pf2t === sage));
 	console.log({leftovers:leftovers.length});
 
 	// if (hashed) {

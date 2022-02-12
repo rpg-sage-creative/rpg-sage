@@ -42,6 +42,7 @@ function matchSource(name: string): Source | undefined {
 	return core ? new Source(core) : undefined;
 }
 
+const missingSources: string[] = [];
 export function parseSource(value?: string): TSource | null {
 	// "source": "Core Rulebook pg. 283 2.0",
 	const parts = value?.match(/^(.*?) pg. (\d+)(?: \d+\.\d+)?$/);
@@ -54,7 +55,8 @@ export function parseSource(value?: string): TSource | null {
 	const version = parts[3];
 
 	const source = matchSource(name);
-	if (!source) {
+	if (!source && !missingSources.includes(name)) {
+		missingSources.push(name);
 		console.log(`Unknown Source: ${name}`);
 	}
 
