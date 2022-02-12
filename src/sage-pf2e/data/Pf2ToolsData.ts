@@ -1,4 +1,4 @@
-import type { IComparable, IRenderable, ISearchable, TSortResult, UUID } from "../../sage-utils";
+import type { IComparable, IRenderable, ISearchable, TSortResult } from "../../sage-utils";
 import utils from "../../sage-utils";
 import { Repository } from "..";
 import { COMMON, RARITIES, TRarity } from "../common";
@@ -11,8 +11,7 @@ const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
 const allCores = new utils.ArrayUtils.Collection<Pf2ToolsDataCore>();
 
 export type Pf2ToolsDataCore = {
-	/** The id of Sage's version of this object. */
-	id: UUID;
+	/** The id(s) of Sage's version(s) of this object. */
 	name: string;
 	level: number;
 	pfs: "standard" | "limited";
@@ -102,6 +101,7 @@ export default class Pf2ToolsData
 			list.push(core.type);
 		});
 	}
+
 	public objectType = utils.StringUtils.capitalize(this.core.type);
 	public toString(): string { return this.core.name; }
 
@@ -213,10 +213,11 @@ export default class Pf2ToolsData
 	// #region utils.ArrayUtils.Sort.IComparable
 
 	public compareTo(other: Pf2ToolsData): TSortResult {
-		return utils.ArrayUtils.Sort.sortAscending(this.objectType, other.objectType)
-			|| utils.ArrayUtils.Sort.sortAscending(this.nameClean, other.nameClean)
-			|| utils.ArrayUtils.Sort.sortAscending(this.nameLower, other.nameLower)
-			|| utils.ArrayUtils.Sort.sortAscending(this.name, other.name);
+		const sortAscending = utils.ArrayUtils.Sort.sortAscending;
+		return sortAscending(this.objectType, other.objectType)
+			|| sortAscending(this.nameClean, other.nameClean)
+			|| sortAscending(this.nameLower, other.nameLower)
+			|| sortAscending(this.name, other.name);
 	}
 
 	// #endregion utils.ArrayUtils.Sort.IComparable
@@ -306,29 +307,11 @@ export default class Pf2ToolsData
 	public static objectTypeToPf2Type(sageCore: TSageCore): string {
 		if (sageCore.objectType === "ClassPath") {
 			const clss = find<Class>("Class", klass => klass.name === sageCore.class);
-			return clss?.classPath?.replace(/\s+/, "").toLowerCase()
-				?? sageCore.objectType.toLowerCase();
+			if (clss?.classPath) {
+				return toPf2Type(clss.classPath);
+			}
 		}
 		return toPf2Type(sageCore.objectType);
-	}
-
-	//#endregion
-
-	//#region name lookup
-
-	public static checkForName(core: TSageCore): Pf2ToolsDataCore | undefined {
-		if (["Rule"].includes(core.objectType)) {
-			return undefined;
-		}
-
-		const pf2Type = Pf2ToolsData.objectTypeToPf2Type(core);
-		const filtered = Pf2ToolsData.getAll().filter(o => o.type === pf2Type);
-		return filtered.find(pf2 => nameGotFixed(pf2, core));
-
-		function nameGotFixed(pf2: Pf2ToolsDataCore, sage: TSageCore) {
-			return pf2?.name === "MONKEY TOWN" && sage?.name === "HOT STUFF";
-			/*// if (sage.objectType === "Domain" && pf2.name === `${sage.name} Domain`) return sage.name = `${sage.name} Domain`;*/
-		}
 	}
 
 	//#endregion
@@ -359,8 +342,9 @@ export default class Pf2ToolsData
 }
 
 function toPf2Type(value: string): string {
-	value = value.toLowerCase();
+	value = value.replace(/[\s']/g, "").toLowerCase();
 	switch (value) {
+		// "classpath" would need to get the name of the classpath, such as "racket"
 		case "faith": return "deity";
 		case "focusspell": return "focus";
 		case "gear": return "item";

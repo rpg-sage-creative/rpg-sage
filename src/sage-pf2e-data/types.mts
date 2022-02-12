@@ -20,7 +20,6 @@ export type TCore = {
 	aon?:string; aonId?:number;
 
 	/** PF2 Tools linkage */
-	hash?: string;
-	pf2t?: Pf2ToolsDataCore[];
+	pf2t?: Pf2ToolsDataCore;
 
 } & THasSuccessOrFailure;

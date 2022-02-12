@@ -1,5 +1,5 @@
 import utils, { isDefined } from "../sage-utils";
-import { allCores, debug, info } from "./common.mjs";
+import { allCores, debug, info, warn } from "./common.mjs";
 import type { TCore } from "./types.mjs";
 
 export function processAbcData() {
@@ -19,7 +19,7 @@ export function processAbcData() {
 		const classPaths = bySource.filter(core => core.objectType === "ClassPath");
 		const archetypes = bySource.filter(core => core.objectType === "Archetype");
 		const dedications = archetypes.map(archetype => bySource.find(core => core.objectType === "DedicationFeat" && [archetype.name, `${archetype.name} Dedication`].includes(core.name)));
-		dedications.forEach((d, i) => { if (!d) console.warn(`Archetype "${archetypes[i].name}" missing Dedication!`); });
+		dedications.forEach((d, i) => { if (!d) warn(`Archetype "${archetypes[i].name}" missing Dedication!`); });
 		if (ancestries.length || heritages.length || versatileHeritages.length || backgrounds.length || classes.length || classPaths.length || archetypes.length) {
 			debug(`\tAdding ${src.name} to abc-data.json`);
 			abcData.push(src);
