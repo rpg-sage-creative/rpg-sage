@@ -20,7 +20,22 @@
 		"traits": [ "Transmutation" ],
 		"focus": false,
 		"id": "29065b67-a709-43e6-ab97-1b3be8b169ee",
-		"hash": "NxvqNvpq"
+		"pf2t": {
+			"name": "Knock",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "transmutation",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 347 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=168",
+			"aon": "spells168",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** 1 door, lock, or container\n\n- - -\n\nYou make the target easier to open. Knock grants a +4 status bonus to any creature that tries to open the target door, lock, or container with an Athletics or a Thievery check. You can attempt a Thievery check to open the target as part of casting knock, and you add your level even if you're untrained.\n\nKnock counteracts lock.",
+			"hash": "NxvqNvpq"
+		}
 	},
 	{
 		"aonId": 169,

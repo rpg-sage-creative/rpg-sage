@@ -15,11 +15,106 @@
 		"aonId": 41,
 		"source": "AAWS",
 		"id": "67e11695-5d37-4192-bad1-8328a99f49cc",
-		"hash": "ZySfVhyI"
+		"pf2t": {
+			"name": "Azarketi",
+			"pfs": "limited",
+			"traits": "uncommon,amphibious,azarketi,humanoid",
+			"source": "Azarketi Ancestry Web Supplement pg. 3",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=41",
+			"aon": "ancestries41",
+			"type": "ancestry",
+			"body": "Azarketis, inheritors of a shattered empire's legacy, hold their proud traditions close but still surface to interact with the rest of the world.\n\nThe aquatic humanoids of the Inner Sea share a somber and burdened history. Most refer to these aquatic peoples as gillmen or sometimes Low Azlanti, though they typically refer to themselves as azarketi, an Azlanti word that translates roughly to \"people of the seas.\" After Earthfall, these proud humans were mutated into aquatic servants by their alghollthu foes. Feeling like they don't fully belong with their human brethren nor with the sea that binds them, many azarketis struggle for a sense of identity and purpose. Though they remain distrusted by the surface dwellers, azarketis celebrate their unique lineage and their descent from the venerated Azlanti culture.",
+			"hash": "ZySfVhyI"
+		}
 	},
-	{ "objectType": "Heritage", "name": "Ancient Scale Azarketi", "ancestry": "Azarketi", "source": "AAWS", "id": "fa039c61-89ee-45b6-bd8d-5a4b0b32a60a", "aonId": 151, "hash": "glkBVgWZ" },
-	{ "objectType": "Heritage", "name": "Benthic Azarketi", "ancestry": "Azarketi", "source": "AAWS", "id": "45a7a5b2-6cd2-4a95-bbdf-03bd7e6b8c1d", "aonId": 152, "hash": "RZnHkxDR" },
-	{ "objectType": "Heritage", "name": "Mistbreath Azarketi", "ancestry": "Azarketi", "source": "AAWS", "id": "3596b422-8b1e-4e5e-ab7b-3f5c1b98a8fe", "aonId": 153, "hash": "VGkGTpxN" },
-	{ "objectType": "Heritage", "name": "River Azarketi", "ancestry": "Azarketi", "source": "AAWS", "id": "f207555e-fe3f-446b-8103-3557a1205dca", "aonId": 154, "hash": "hfZHpczQ" },
-	{ "objectType": "Heritage", "name": "Thalassic Azarketi", "ancestry": "Azarketi", "source": "AAWS", "id": "c3cd61f4-18b5-48e0-a3e5-3997e0372d79", "aonId": 155, "hash": "EOphZXWb" }
+	{
+		"objectType": "Heritage",
+		"name": "Ancient Scale Azarketi",
+		"ancestry": "Azarketi",
+		"source": "AAWS",
+		"id": "fa039c61-89ee-45b6-bd8d-5a4b0b32a60a",
+		"aonId": 151,
+		"pf2t": {
+			"name": "Ancient Scale Azarketi",
+			"pfs": "standard",
+			"source": "Azarketi Ancestry Web Supplement pg. 3",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=151",
+			"aon": "heritages151",
+			"type": "heritage",
+			"body": "Your lineage stems from azarketis who remain dedicated to their deep-sea roots. Divorced from land society, you're a foreigner to any world above a thousand fathoms deep. You gain darkvision. Your body is dotted with phosphorescent spots that emit a guiding light and help you communicate. The spots-located primarily on your face, arms, and hands-illuminate a 10-foot radius around you with dim light. You can activate, deactivate, or change the arrangement of lights as an action, which has the concentration trait.",
+			"hash": "glkBVgWZ"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Benthic Azarketi",
+		"ancestry": "Azarketi",
+		"source": "AAWS",
+		"id": "45a7a5b2-6cd2-4a95-bbdf-03bd7e6b8c1d",
+		"aonId": 152,
+		"pf2t": {
+			"name": "Benthic Azarketi",
+			"pfs": "standard",
+			"source": "Azarketi Ancestry Web Supplement pg. 3",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=152",
+			"aon": "heritages152",
+			"type": "heritage",
+			"body": "Your heritage traces to azarketis living deep beneath the sea, and you can handle the chilling depths more easily than most. You gain resistance to cold equal to half your level, and you don't treat environmental cold as one degree more severe when you are wet. You adapt to pressure changes from being deep underwater automatically without ill effect.",
+			"hash": "RZnHkxDR"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Mistbreath Azarketi",
+		"ancestry": "Azarketi",
+		"source": "AAWS",
+		"id": "3596b422-8b1e-4e5e-ab7b-3f5c1b98a8fe",
+		"aonId": 153,
+		"pf2t": {
+			"name": "Mistbreath Azarketi",
+			"pfs": "standard",
+			"source": "Azarketi Ancestry Web Supplement pg. 3",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=153",
+			"aon": "heritages153",
+			"type": "heritage",
+			"body": "You descend from azarketis who migrated to land environments that could support their need for water. Over time, your people adapted to life on land culturally and physically, even resulting in azarketis born with human hair like their Azlanti ancestors. You no longer need to be immersed in water every 24 hours to maintain your skin and can instead mist or wipe your skin with water to live comfortably. Your land Speed is 25 feet, but your swim Speed is only 15 feet.",
+			"hash": "VGkGTpxN"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "River Azarketi",
+		"ancestry": "Azarketi",
+		"source": "AAWS",
+		"id": "f207555e-fe3f-446b-8103-3557a1205dca",
+		"aonId": 154,
+		"pf2t": {
+			"name": "River Azarketi",
+			"pfs": "standard",
+			"source": "Azarketi Ancestry Web Supplement pg. 3",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=154",
+			"aon": "heritages154",
+			"type": "heritage",
+			"body": "You come from azarketis who abandoned the oceans for the fresh water of inland life. The varied geography of rivers required you to develop advanced physical skills to swim against rapids, leap through cascading waters, and deftly navigate shallow and narrow channels. When you succeed at an Athletics check to Swim, you get a critical success instead.",
+			"hash": "hfZHpczQ"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Thalassic Azarketi",
+		"ancestry": "Azarketi",
+		"source": "AAWS",
+		"id": "c3cd61f4-18b5-48e0-a3e5-3997e0372d79",
+		"aonId": 155,
+		"pf2t": {
+			"name": "Thalassic Azarketi",
+			"pfs": "standard",
+			"source": "Azarketi Ancestry Web Supplement pg. 4",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=155",
+			"aon": "heritages155",
+			"type": "heritage",
+			"body": "You trace your lineage from azarketis who lived their lives among the great oceans and seas of the world. You know how to use the currents and the primal magic of water to guide your attacks. You gain the Underwater Marauder skill feat, and your piercing ranged attacks don't have their range increments halved when fighting underwater targets.",
+			"hash": "EOphZXWb"
+		}
+	}
 ]

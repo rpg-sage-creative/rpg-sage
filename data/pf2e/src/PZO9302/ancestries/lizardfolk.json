@@ -15,11 +15,106 @@
 		"aonId": 15,
 		"source": "PZO9302",
 		"id": "a52a2e9d-b9d7-46c1-8edc-2728f9374402",
-		"hash": "pYFLWqFx"
+		"pf2t": {
+			"name": "Lizardfolk",
+			"pfs": "standard",
+			"traits": "uncommon,humanoid,lizardfolk",
+			"source": "Character Guide pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=15",
+			"aon": "ancestries15",
+			"type": "ancestry",
+			"body": "Lizardfolk are consummate survivors, heirs to empires considered ancient even by the elves.\n\nLizardfolk move through the societies of other humanoids with the steely reserve of born predators. They have a well-deserved reputation as outstanding rangers and unsentimental fighters. Though lizardfolk have adapted to many different environments, many of them still prefer to remain near bodies of water, using their ability to hold their breath to their advantage. As a result, lizardfolk usually prefer equipment that is not easily damaged by moisture, eschewing leather and metal for gear made of stone, ivory, glass, and bone.\n\n#### You Might...\n+ Demonstrate extreme patience, even when pressured to act. \n+ Hold your people's history in high regard and look to the past for solutions to present problems. \n+ Strive to adapt perfectly to your environment while also keeping your culture and traditions intact.\n\n#### Others Probably...\n+ Assume you are beholden to tradition and have ancient knowledge. \n+ See you as cold-blooded and callous due to your subdued physical reactions. \n+ Respect your impressive strength and your knowledge of natural areas.\n\n#### Physical Description\nLizardfolk vary depending on their environment, but share toothy snouts and long and powerful tails. Those from temperate or desert regions tend toward gray, green, or brown scales that aid in camouflage, while those from tropical climes are brightly colored. Many sport dorsal spikes or garish neck frills that hint at their clan lineage. Lizardfolk reach physical adulthood at age 15 and live up to 120 years. The average lizardfolk stands 6 to 7 feet tall, but grows throughout their lifetime, gaining strength and size with age.\n\n#### Society\nKnown among themselves as iruxi, lizardfolk are raised communally from the moment they break from their shells. They have an oral tradition stretching back thousands of years, brought to life through epic poems, evocative carvings, and ancestral rites performed among fields of fossilized bone. Lizardfolk are passionate astrologers with one eye on the future. If they seem slow to act, it is because their long history has taught them the value of patience.\n\nThe simple villages most outsiders associate with iruxi are the homes of migrants in outlying regions. True iruxi settlements are often overlooked, as they are partially or mostly submerged in water. These glass and stone complexes bear the mark of every generation of lizardfolk that lived within them, and lizardfolk bones often adorn the walls, as many lizardfolk believe these remains can be animated by ancestral spirits when the residents are in danger.\n\n#### Alignment and Religion\nMost iruxi are unconcerned with heavy questions of morality and are therefore usually neutral in alignment. Adventuring iruxi who leave their people to travel might have any number of reasons for doing so and can be of any alignment. Iruxi religion plays a large role in their culture, but it is heavily practical, blending animism and ancestor worship with druidic rites. Of the gods, only Gozreh is commonly revered, but lizardfolk may call upon other powers devoted to ancient wyrms, astrology, nature, rivers, and might of arms, from kindly Desna to cruel Hanspur and certain demon lords.\n\n#### Adventurers\nSome background options are particularly suitable for lizardfolk. Wilderness or martial backgrounds like the animal whisperer, hunter, scout, or warrior are ideal. Living at the margins of human civilization means an iruxi might have grown up as a hardy street urchin, traveled as a nomad or sailor, or found work as a laborer or gladiator. Lizardfolk's ties to the wilderness make them excellent rangers or druids. Their outstanding strength serves them well if they select the barbarian, fighter, or monk classes, though they can also strike from stealth as a rogue. Iruxi also have a strong oral tradition kept alive by lizardfolk bards and sorcerers.\n\n#### Names\nLizardfolk names come from their ancient language and tend to be traditional. Names are typically chosen by the clan's astrologer in accordance to omens and which star signs are ascendant when an iruxi egg hatches, though occasionally an iruxi's parents may name a hatchling for an ancestor or a beloved historical hero.\n\n#### Sample Names\nArasheg, Barashk, Essaru, Enshuk, Gishkim, Hazi, Inishish, Kutak, Nasha, Shulkuru, Tizkar, Utakish, Zelkekek\n\n#### Other Information\n\n\n#### Droon\nLong before the birth of Azlant, iruxi realms girdled Golarion. Today, only one nation recalls the splendor of that bygone era: Droon, a vast empire on the coast of southern Garund. Here, lizardfolk rule astride dinosaurs. Iruxi nobles settle feuds via ceratosaur duels. Sauropod caravan trains haul goods across seemingly impossible distances. Wizards breed spell-laced rhamphorhynchus familiars, and no thief worth their salt pulls a job without a whistling velociraptor lookout.\n\n#### Iruxi\nWhile most lizardfolk permit humans and others to refer to them by that moniker, they call themselves iruxi. This ancient word arose from the Draconic tongue, though its exact etymology is unclear. In Droon, iruxi astronomers point to the jagged constellation of the Maw and the starry figure who stands against it. Today, while this constellation is called the Lone Mother and features in fables about environmental conservation, she once had another name in dragon lore: Erux, meaning \"defiance.\"\n\n#### Iruxi Ancestors\nAncestor worship is central to iruxi spiritual life. Lizardfolk keep their elders' physical remains close, incorporating them into the architecture of their settlements. The bones of deceased iruxi shore up protective walls and fill great vaulting ossuaries. Preserved and suffused with ritual veneration, these bones become magical reservoirs of power. It's rumored that in times of great need, iruxi ancestors will reanimate their bones and fight for their descendants.\n\n#### Lizardfolk Mechanics\n\n\n#### Hit Points\n8\n\n#### Size\nMedium\n\n#### Speed\n25 feet\n\n#### Ability Boosts\nStrength\nWisdom\nFree\n\n#### Ability Flaw(s)\nIntelligence\n\n#### Languages\nCommon\nIruxi\nAdditional languages equal to your Intelligence modifier (if it's positive). Choose from Amurrun, Aquan, Boggard, Draconic, Elven, Jotun, Sylvan, and any other languages to which you have access (such as the languages prevalent in your region).\n\n#### Aquatic Adaptation\nYour reptilian biology allows you to hold your breath for a long time. You gain the Breath Control general feat as a bonus feat.\n\n#### Claws\nYour sharp claws offer an alternative to the fists other humanoids bring to a fight. You have a claw unarmed attack that deals 1d4 slashing damage and has the agile and finesse traits.",
+			"hash": "pYFLWqFx"
+		}
 	},
-	{ "objectType": "Heritage", "name": "Cliffscale Lizardfolk", "ancestry": "Lizardfolk", "source": "PZO9302", "id": "81604d42-039a-445b-933e-c9cdf63762a2", "aonId": 49, "hash": "yrDqlNSx" },
-	{ "objectType": "Heritage", "name": "Frilled Lizardfolk", "ancestry": "Lizardfolk", "source": "PZO9302", "id": "5257cc0e-7299-4de9-8dbb-d9e7e7f3f0a6", "aonId": 50, "hash": "jQLFHyzt" },
-	{ "objectType": "Heritage", "name": "Sandstrider Lizardfolk", "ancestry": "Lizardfolk", "source": "PZO9302", "id": "74440a89-8624-459a-94ce-a104ad55d7c4", "aonId": 51, "hash": "JxvqRDQv" },
-	{ "objectType": "Heritage", "name": "Unseen Lizardfolk", "ancestry": "Lizardfolk", "source": "PZO9302", "id": "130a50ea-2abf-4476-8b31-f8fa70451497", "aonId": 52, "hash": "LrSQkgOy" },
-	{ "objectType": "Heritage", "name": "Wetlander Lizardfolk", "ancestry": "Lizardfolk", "source": "PZO9302", "id": "034ac0d3-d7b3-4172-9ad4-1491d5af40c7", "aonId": 53, "hash": "OUXAzsXX" }
+	{
+		"objectType": "Heritage",
+		"name": "Cliffscale Lizardfolk",
+		"ancestry": "Lizardfolk",
+		"source": "PZO9302",
+		"id": "81604d42-039a-445b-933e-c9cdf63762a2",
+		"aonId": 49,
+		"pf2t": {
+			"name": "Cliffscale Lizardfolk",
+			"pfs": "standard",
+			"source": "Character Guide pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=49",
+			"aon": "heritages49",
+			"type": "heritage",
+			"body": "Your toes are adapted for gripping and climbing. You gain the Combat Climber feat as a bonus feat, and as long as you aren't wearing footwear, you can use the sticky pads on your feet to climb, leaving your hands free. Additionally, if you roll a success on an Athletics check to climb, you get a critical success instead.",
+			"hash": "yrDqlNSx"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Frilled Lizardfolk",
+		"ancestry": "Lizardfolk",
+		"source": "PZO9302",
+		"id": "5257cc0e-7299-4de9-8dbb-d9e7e7f3f0a6",
+		"aonId": 50,
+		"pf2t": {
+			"name": "Frilled Lizardfolk",
+			"pfs": "standard",
+			"source": "Character Guide pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=50",
+			"aon": "heritages50",
+			"type": "heritage",
+			"body": "You can flare your neck frill and flex your dorsal spines, Demoralizing your foes. When you do, Demoralize loses the auditory trait and gains the visual trait, and you don't take a penalty when you attempt to Demoralize a creature that doesn't understand your language. You also gain the Threatening Approach action.",
+			"hash": "jQLFHyzt"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Sandstrider Lizardfolk",
+		"ancestry": "Lizardfolk",
+		"source": "PZO9302",
+		"id": "74440a89-8624-459a-94ce-a104ad55d7c4",
+		"aonId": 51,
+		"pf2t": {
+			"name": "Sandstrider Lizardfolk",
+			"pfs": "standard",
+			"source": "Character Guide pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=51",
+			"aon": "heritages51",
+			"type": "heritage",
+			"body": "Your thick scales help you retain water and combat the sun's glare. You gain fire resistance equal to half your level (minimum 1). Environmental heat effects are one step less extreme for you, and you can go 10 times as long as normal before you are affected by starvation or thirst. However, unless you wear protective gear or take shelter, environmental cold effects are one step more extreme for you.",
+			"hash": "JxvqRDQv"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Unseen Lizardfolk",
+		"ancestry": "Lizardfolk",
+		"source": "PZO9302",
+		"id": "130a50ea-2abf-4476-8b31-f8fa70451497",
+		"aonId": 52,
+		"pf2t": {
+			"name": "Unseen Lizardfolk",
+			"pfs": "standard",
+			"source": "Character Guide pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=52",
+			"aon": "heritages52",
+			"type": "heritage",
+			"body": "You can change your skin color to blend in with your surroundings, making minor shifts with a single action and dramatic changes over the course of an hour. When you're in an area where your coloration is roughly similar to the environment (for instance, forest green in a forest), you can use the minor, single action application of this ability to make localized changes that help you blend into your surroundings, gaining a +2 circumstance bonus to Stealth checks until your surroundings change in coloration or pattern.",
+			"hash": "LrSQkgOy"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Wetlander Lizardfolk",
+		"ancestry": "Lizardfolk",
+		"source": "PZO9302",
+		"id": "034ac0d3-d7b3-4172-9ad4-1491d5af40c7",
+		"aonId": 53,
+		"pf2t": {
+			"name": "Wetlander Lizardfolk",
+			"pfs": "standard",
+			"source": "Character Guide pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=53",
+			"aon": "heritages53",
+			"type": "heritage",
+			"body": "Your family is descended from the most common lizardfolk heritage, and you are accustomed to aquatic environments. You gain a 15-foot swim Speed.",
+			"hash": "OUXAzsXX"
+		}
+	}
 ]

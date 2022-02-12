@@ -14,7 +14,16 @@
 		"page": 136,
 		"source": "PZO2109",
 		"id": "fcf1c218-1558-4c1b-b625-13027935918d",
-		"aonId": 0
+		"aonId": 120,
+		"pf2t": {
+			"name": "Pistol Phenom",
+			"source": "Guns & Gears pg. 136",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=120",
+			"aon": "archetypes120",
+			"type": "archetype",
+			"body": "You treat combat as an art and your pistol as an extension of your performance. You might wield a single pistol, a pair of pistols, or a pistol paired with a melee weapon to pull off showy maneuvers. However you slice it, though, the use of pistols or other one-handed firearms is crucial to your technique and style.\n\nTo you, everything is a show, and you use your gun as a prop and instrument, not just to kill opponents but to trick, mislead, hinder, and even bully them into doing what you want them to do. While others tend to focus on delivering as much devastation downrange as possible, your style is all about control. By controlling a foe's attention and actions, you can bolster your own attacks and mitigate the foe's potential for mayhem. You control the tempo of the battle much as you would a staged performance, carefully ensuring your foe's actions don't fall outside of your intended script. You're both the director and the star of this show, and your enemies dance to the tune you play with your pistol... sometimes quite literally!",
+			"hash": "QxzgHzKQ"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -70,7 +79,20 @@
 		"page": 137,
 		"source": "PZO2109",
 		"id": "4deceea1-57dc-4e6f-ae94-b894eb4ab504",
-		"aonId": 0
+		"aonId": 3253,
+		"pf2t": {
+			"name": "Dazzling Bullet",
+			"level": 6,
+			"traits": "archetype,flourish",
+			"actions": 1,
+			"archetype": "Pistol Phenom",
+			"source": "Guns & Gears pg. 136",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3253",
+			"aon": "feats3253",
+			"type": "feat",
+			"body": "**Archetype** Pistol Phenom\n**Prerequisites** Pistol Phenom Dedication\n\n- - -\n\nYour tricks discombobulate your opponent, leaving spots in their vision from the bright flash of your gunshot reflected straight into their eyes (or other visual organs). Attempt a Performance check against the target creature's Will DC and make a ranged firearm Strike against that target. If the Strike deals damage to the target creature and you succeed at the Performance check, the creature is dazzled for 1 round.",
+			"hash": "FqbWlCkP"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -94,7 +116,20 @@
 		"page": 137,
 		"source": "PZO2109",
 		"id": "6bdf80f5-97f2-4c1d-ac09-c031f310035a",
-		"aonId": 0
+		"aonId": 3254,
+		"pf2t": {
+			"name": "Hot Foot",
+			"level": 8,
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Pistol Phenom",
+			"source": "Guns & Gears pg. 136",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3254",
+			"aon": "feats3254",
+			"type": "feat",
+			"body": "**Archetype** Pistol Phenom\n**Prerequisites** Pistol Phenom Dedication\n**Requirements** You're wielding a loaded firearm.\n\n- - -\n\nUsing a carefully aimed shot, you make a creature \"dance.\" You shoot at the ground near a target's feet, causing them to react involuntarily; even mindless creatures have unconscious responses to dodge an attack, and you can capitalize off those uncontrollable reflexes to achieve your aim. As they dance to the sweet tune of your pistol's retort, you ensure your foe can't use whatever nasty surprise they had planned in store for you and your allies. Make an attack roll against the Reflex DC of a target creature within your firearm's first range increment.\n\n**Critical Success** The creature can't use reactions, is flat-footed, and takes a -2 circumstance penalty to Reflex saves. These effects last until the start of its next turn.\n**Success** The creature can't use reactions until the start of its next turn.",
+			"hash": "dXBMgLcU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -108,7 +143,19 @@
 		"page": 137,
 		"source": "PZO2109",
 		"id": "dd8724d3-7d4b-41a5-aa96-106fb5e51451",
-		"aonId": 0
+		"aonId": 3255,
+		"pf2t": {
+			"name": "Phenom's Verve",
+			"level": 10,
+			"traits": "archetype",
+			"archetype": "Pistol Phenom",
+			"source": "Guns & Gears pg. 136",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3255",
+			"aon": "feats3255",
+			"type": "feat",
+			"body": "**Archetype** Pistol Phenom\n**Prerequisites** Pistol Phenom Dedication\n\n- - -\n\nYou're possessed with an incredibly vivacious spark that separates you not only from ordinary gun users and gunslingers, but even from other phenoms. Using that distinctive verve, when you perform impeccably and control the scene with your abilities, you also manage to set up your foes for disaster and ensure they remain in your sights for any follow-up attacks you want to make against them. If you critically succeed at a Performance check for Pistol Twirl or a pistol phenom archetype feat, you gain a +1 status bonus to your attack rolls with one-handed firearms and one-handed melee weapons until the end of your turn.",
+			"hash": "ZXTgFvhJ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -124,7 +171,20 @@
 		"page": 137,
 		"source": "PZO2109",
 		"id": "e8b9b464-a3c4-41f3-a4bd-a5282777d486",
-		"aonId": 0
+		"aonId": 3256,
+		"pf2t": {
+			"name": "Reach for the Sky",
+			"level": 12,
+			"traits": "archetype,auditory,visual",
+			"actions": 2,
+			"archetype": "Pistol Phenom",
+			"source": "Guns & Gears pg. 136",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3256",
+			"aon": "feats3256",
+			"type": "feat",
+			"body": "**Archetype** Pistol Phenom\n**Prerequisites** Pistol Phenom Dedication\n**Requirements** You're wielding a loaded firearm.\n\n- - -\n\nYou command the room, firing a gun into the air and ordering everyone to surrender and put their hands in the air. You fire your firearm and then attempt a single Intimidation check to Demoralize each enemy within 30 feet. Creatures who become frightened instinctively put their hands in the air. If they had Raised a Shield, they lose the benefits, as they raise the shield above their head where it's of little use to block attacks. With their hands in the air, each of these frightened creatures can't use reactions or free actions that require their hands, or items held in their hands, until the beginning of their next turn. Regardless of the result, each creature is then temporarily immune to Reach for the Sky for 1 minute.",
+			"hash": "HkrxlnLz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -152,6 +212,19 @@
 		"page": 137,
 		"source": "PZO2109",
 		"id": "79ba3266-f28e-470f-80d9-e3ac1041d224",
-		"aonId": 0
+		"aonId": 3257,
+		"pf2t": {
+			"name": "Whirling Knockdown",
+			"level": 14,
+			"traits": "archetype",
+			"actions": 2,
+			"archetype": "Pistol Phenom",
+			"source": "Guns & Gears pg. 136",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3257",
+			"aon": "feats3257",
+			"type": "feat",
+			"body": "**Archetype** Pistol Phenom\n**Prerequisites** Pistol Phenom Dedication\n**Requirements** You're wielding a loaded one-handed firearm and a one-handed melee weapon.\n\n- - -\n\nYou fire your gun while throwing off a target's balance with your melee weapon. Then, you topple your foe to the ground with the quick orchestrated combination. You don't need to use brute force to do so, or even necessarily to hit with your gunshot; the effect is all about performing perfectly and eliminating your target's movements and options, leaving them no choice but to fall.\n\nMake a ranged firearm Strike against a creature within the reach of your melee weapon and then attempt a Performance check against the creature's Reflex DC. If the Strike critically succeeds, the target takes a -2 circumstance penalty to its Reflex DC against this check. The Performance check has the following effects.\n\n**Critical Success** The target falls and lands prone. It takes 2d6 bludgeoning damage from the fall.\n**Success** The target falls and lands prone.\n**Critical Failure** Your plans backfired on you, and you're forced to drop your melee weapon in your space.",
+			"hash": "FrJDLZRK"
+		}
 	}
 ]

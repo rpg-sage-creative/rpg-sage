@@ -8,7 +8,16 @@
 		"page": 55,
 		"source": "PZO2109",
 		"id": "4eebef2d-e095-4b4e-b4de-97bb8be36bc1",
-		"aonId": 0
+		"aonId": 112,
+		"pf2t": {
+			"name": "Trick Driver",
+			"source": "Guns & Gears pg. 55",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=112",
+			"aon": "archetypes112",
+			"type": "archetype",
+			"body": "While cavaliers follow an old and tired tradition of mounted combat, you take a more modern road. Through aggressive use of vehicles, you roll across the battlefield, taking down your opponents. You go beyond simply operating a vehicle, pushing it to perform stunts that its builders never intended, transforming the vehicle into something much greater than a mere conveyance.",
+			"hash": "RJjtNrZb"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -38,7 +47,20 @@
 		"page": 55,
 		"source": "PZO2109",
 		"id": "824d9eb9-c8d8-4345-937c-96a03e996fb0",
-		"aonId": 0
+		"aonId": 3141,
+		"pf2t": {
+			"name": "Express Driver",
+			"level": 2,
+			"traits": "archetype,exploration,skill",
+			"archetype": "Trick Driver",
+			"source": "Guns & Gears pg. 55",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3141",
+			"aon": "feats3141",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Trick Driver\n**Prerequisites** Trick Driver Dedication\n\n- - -\n\nYou can optimize your vehicle's performance, coaxing extra speed and choosing paths to avoid slowdowns. When calculating your travel speed for the day while piloting a vehicle, you can attempt a Driving Lore check to increase your vehicle's travel speed. The DC is determined by the GM but is typically based on the vehicle's piloting DC or a difficulty based on the environment, whichever is harder. On a success, increase your vehicle's travel speed by half. This has no effect on your vehicle's movement in encounters.",
+			"hash": "SMbNTGqr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -54,7 +76,20 @@
 		"page": 55,
 		"source": "PZO2109",
 		"id": "c6db4179-0866-4a7d-b152-036aec0f00dd",
-		"aonId": 0
+		"aonId": 3142,
+		"pf2t": {
+			"name": "Take the Wheel",
+			"level": 4,
+			"traits": "archetype,flourish",
+			"actions": 1,
+			"archetype": "Trick Driver",
+			"source": "Guns & Gears pg. 55",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3142",
+			"aon": "feats3142",
+			"type": "feat",
+			"body": "**Archetype** Trick Driver\n**Prerequisites** Trick Driver Dedication; expert in Driving Lore\n**Requirements** You are adjacent to a vehicle's point of entry.\n\n- - -\n\nDiving into a moving vehicle and seizing the controls is nothing new for you. You Board and Take Control of the adjacent vehicle.",
+			"hash": "JPHKrYPz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -84,7 +119,20 @@
 		"page": 55,
 		"source": "PZO2109",
 		"id": "7cd272b8-6b1c-4267-8ae6-66bf9b744d57",
-		"aonId": 0
+		"aonId": 3144,
+		"pf2t": {
+			"name": "Push it",
+			"level": 7,
+			"traits": "archetype,skill",
+			"archetype": "Trick Driver",
+			"source": "Guns & Gears pg. 55",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3144",
+			"aon": "feats3144",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Trick Driver\n**Prerequisites** Trick Driver Dedication; master in Driving Lore\n\n- - -\n\nYou can push your vehicle's performance beyond the limits envisioned by its makers. Whenever you succeed at a piloting check, the vehicle you are piloting gains a +5-foot circumstance bonus to all its Speeds until the end of your turn. If you critically succeed, this bonus increases to +10 feet.",
+			"hash": "DpqdLvRA"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -99,7 +147,19 @@
 		"page": 55,
 		"source": "PZO2109",
 		"id": "3745771d-32b5-4bbd-8e5d-a0341c8a4614",
-		"aonId": 0
+		"aonId": 3145,
+		"pf2t": {
+			"name": "Roadkill",
+			"level": 10,
+			"traits": "archetype",
+			"archetype": "Trick Driver",
+			"source": "Guns & Gears pg. 55",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3145",
+			"aon": "feats3145",
+			"type": "feat",
+			"body": "**Archetype** Trick Driver\n**Prerequisites** Trick Driver Dedication\n**Requirements** You are piloting a vehicle.\n\n- - -\n\nIn your hands, any vehicle is a weapon. When you use Run Over, you can use your class DC in place of the vehicle's collision DC. Your vehicle can Run Over any number of creatures up to one Size smaller than the vehicle or ram any one target creature or object in your path up to the size of your vehicle.",
+			"hash": "JpgmpkRx"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -1,4 +1,38 @@
 [
-	{ "objectType": "Heritage", "name": "Shortshanks Hobgoblin", "ancestry": "Hobgoblin", "source": "PZO9308", "id": "fe60d923-4924-4e18-a764-72c27d3f63ef", "aonId": 95, "hash": "MXjJOxmF" },
-	{ "objectType": "Heritage", "name": "Steelskin Hobgoblin", "ancestry": "Hobgoblin", "source": "PZO9308", "id": "eab97b5b-0ed8-4679-9ada-d1405e608be6", "aonId": 96, "hash": "kgWzdpqp" }
+	{
+		"objectType": "Heritage",
+		"name": "Shortshanks Hobgoblin",
+		"ancestry": "Hobgoblin",
+		"source": "PZO9308",
+		"id": "fe60d923-4924-4e18-a764-72c27d3f63ef",
+		"aonId": 95,
+		"pf2t": {
+			"name": "Shortshanks Hobgoblin",
+			"pfs": "standard",
+			"source": "Ancestry Guide pg. 33",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=95",
+			"aon": "heritages95",
+			"type": "heritage",
+			"body": "You have a longer torso and broader shoulders than most hobgoblins, making your legs seem short by comparison. This gives you a strong, muscular core and lowers your center of gravity-features that assist you in riding and climbing-and you've trained at riding in a saddle from an extremely early age. You gain the Ride feat. Additionally, you are not flat-footed while you Climb.",
+			"hash": "MXjJOxmF"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Steelskin Hobgoblin",
+		"ancestry": "Hobgoblin",
+		"source": "PZO9308",
+		"id": "eab97b5b-0ed8-4679-9ada-d1405e608be6",
+		"aonId": 96,
+		"pf2t": {
+			"name": "Steelskin Hobgoblin",
+			"pfs": "standard",
+			"source": "Ancestry Guide pg. 33",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=96",
+			"aon": "heritages96",
+			"type": "heritage",
+			"body": "When you are cut or burned, your body responds by forming tough but flexible callouses over the site of the injury. Over time, this makes the most vulnerable sections of your body harder and more resistant to damage. Many steelskin hobgoblins intentionally use blades and flame to scar themselves in intricate patterns, though this isn't universal. Your flat check to recover from persistent physical (including bleed), energy, or poison damage is DC 13 (rather than DC 15), or DC 8 when provided particularly effective assistance.",
+			"hash": "kgWzdpqp"
+		}
+	}
 ]

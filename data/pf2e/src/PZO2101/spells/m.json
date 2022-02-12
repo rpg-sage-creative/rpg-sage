@@ -23,7 +23,21 @@
 		"traits": [ "Abjuration" ],
 		"focus": false,
 		"id": "90acd35e-11f0-4477-8014-e0499e90c8e7",
-		"hash": "vNsTMAcF"
+		"pf2t": {
+			"name": "Mage Armor",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "abjuration",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 348 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=176",
+			"aon": "spells176",
+			"type": "spell",
+			"body": "**Duration** until the next time you make your daily preparations\n\n- - -\n\nYou ward yourself with shimmering magical energy, gaining a +1 item bonus to AC and a maximum Dexterity modifier of +5. While wearing mage armor, you use your unarmored proficiency to calculate your AC.\n- - -\n**Heightened (4th)** You gain a +1 item bonus to saving throws.\n**Heightened (6th)** The item bonus to AC increases to +2, and you gain a +1 item bonus to saving throws.\n**Heightened (8th)** The item bonus to AC increases to +2, and you gain a +2 item bonus to saving throws.\n**Heightened (10th)** The item bonus to AC increases to +3, and you gain a +3 item bonus to saving throws.",
+			"hash": "vNsTMAcF"
+		}
 	},
 	{
 		"aonId": 177,
@@ -75,7 +89,22 @@
 		"traits": [ "Uncommon", "Illusion" ],
 		"focus": false,
 		"id": "876ec41a-ffba-4d87-a59f-eb18705c55b0",
-		"hash": "kmBTtyKq"
+		"pf2t": {
+			"name": "Magic Aura",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,illusion",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": "touch",
+			"source": "Core Rulebook pg. 349 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=178",
+			"aon": "spells178",
+			"type": "spell",
+			"body": "**Duration** until the next time you make your daily preparations\n**Targets** 1 object of 3 bulk or less\n\n- - -\n\nYou alter the appearance of an item's magic aura. You can choose to have the target's aura appear as that of a common magic item of twice magic aura's level or lower, or to have it register as being under the effects of a spell of your choice of magic aura's level or lower. If the target is magical, you can instead choose to have it appear as entirely non-magical.\n\nA caster using detect magic or read aura of an equal or higher spell level can attempt to disbelieve the illusion from magic aura. Magic aura doesn't mask the aura of spells that are 9th level or higher or of items that are 19th level or higher.\n- - -\n**Heightened (3rd)** You can target a creature instead of an object. When you do, you can either conceal the auras of all magic items it has or have that creature's aura appear as if it were under the effect of a spell you know.",
+			"hash": "kmBTtyKq"
+		}
 	},
 	{
 		"aonId": 179,
@@ -97,7 +126,22 @@
 		"traits": [ "Transmutation" ],
 		"focus": false,
 		"id": "527d3427-4f78-4786-9c61-768f99ff0680",
-		"hash": "zLYCxYyg"
+		"pf2t": {
+			"name": "Magic Fang",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "transmutation",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 349 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=179",
+			"aon": "spells179",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** 1 willing creature\n\n- - -\n\nChoose one of the target's unarmed attacks. You cause that unarmed attack to shine with primal energy. The unarmed attack becomes a +1 striking unarmed attack, gaining a +1 item bonus to attack rolls and increasing the number of damage dice to two if it had only one.",
+			"hash": "zLYCxYyg"
+		}
 	},
 	{
 		"aonId": 180,
@@ -121,7 +165,23 @@
 		"traits": [ "Evocation", "Force" ],
 		"focus": false,
 		"id": "eb8828d7-daea-48df-bf97-46084320b489",
-		"hash": "vkdWMQxW"
+		"pf2t": {
+			"name": "Magic Missile",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "evocation,force",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 1,
+			"max": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 349 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=180",
+			"aon": "spells180",
+			"type": "spell",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou send a dart of force streaking toward a creature that you can see. It automatically hits and deals 1d4+1 force damage. For each additional action you use when Casting the Spell, increase the number of missiles you shoot by one, to a maximum of three missiles for 3 actions. You choose the target for each missile individually. If you shoot more than one missile at the same target, combine the damage before applying bonuses or penalties to damage, resistances, weaknesses, and so forth.\n- - -\n**Heightened (+2)** You shoot one additional missile with each action you spend.",
+			"hash": "vkdWMQxW"
+		}
 	},
 	{
 		"aonId": 181,
@@ -143,7 +203,22 @@
 		"traits": [ "Auditory", "Illusion", "Visual" ],
 		"focus": false,
 		"id": "49dd17a4-33fe-4aa2-bf13-75b8d9c0fafa",
-		"hash": "WrzLcQxW"
+		"pf2t": {
+			"name": "Magic Mouth",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "auditory,illusion,visual",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 349 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=181",
+			"aon": "spells181",
+			"type": "spell",
+			"body": "**Duration** unlimited\n**Targets** 1 creature or object\n\n- - -\n\nYou specify a trigger and a message up to 25 words long. When the specified trigger occurs within 30 feet of the target, an illusory mouth appears on the target and speaks the message, and the magic mouth spell ends.",
+			"hash": "WrzLcQxW"
+		}
 	},
 	{
 		"aonId": 182,
@@ -165,7 +240,22 @@
 		"traits": [ "Transmutation" ],
 		"focus": false,
 		"id": "b3f6926b-185f-482d-8732-b2edd01aefd7",
-		"hash": "XEExnTED"
+		"pf2t": {
+			"name": "Magic Weapon",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "transmutation",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 349 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=182",
+			"aon": "spells182",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** 1 weapon that is unattended or wielded by you or a willing ally\n\n- - -\n\nThe weapon glimmers with magic and energy. The target becomes a +1 striking weapon, gaining a +1 item bonus to attack rolls and increasing the number of weapon damage dice to two.",
+			"hash": "XEExnTED"
+		}
 	},
 	{
 		"aonId": 183,
@@ -188,7 +278,22 @@
 		"traits": [ "Uncommon", "Conjuration", "Extradimensional" ],
 		"focus": false,
 		"id": "9d85a339-161a-4ffd-b646-1dece2f5364e",
-		"hash": "tbqXvLCn"
+		"pf2t": {
+			"name": "Magnificent Mansion",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,extradimensional",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": 30,
+			"source": "Core Rulebook pg. 349 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=183",
+			"aon": "spells183",
+			"type": "spell",
+			"body": "**Duration** 24 hours\n\n- - -\n\nYou conjure an extradimensional demiplane consisting of a spacious dwelling with a single entrance. The entrance connects to the plane where you Cast the Spell, appearing anywhere within the spell's range as a faint, shimmering, vertical rectangle 5 feet wide and 10 feet high. You designate who can enter when you cast the spell. Once inside, you can shut the entrance, making it invisible. You and the creatures you designated can reopen the door at will, just like opening a physical door.\n\nInside, the demiplane appears to be a mansion featuring a magnificent foyer and numerous opulent chambers. The mansion can have any floor plan you imagine as you Cast the Spell, provided it fits within a space 40 feet wide, 40 feet deep, and 30 feet tall. While the entrance to the mansion is closed, effects from outside the mansion fail to penetrate it, and vice versa, except for plane shift, which can be used to enter the mansion. You can use scrying magic and similar effects to observe the outside only if they're capable of crossing planes.\n\nA staff of up to 24 servants attends to anyone within the mansion. These are like the servant created by the unseen servant spell, though they're visible, with an appearance you determine during casting. The mansion is stocked with enough food to serve a nine-course banquet to 150 people.",
+			"hash": "tbqXvLCn"
+		}
 	},
 	{
 		"aonId": 184,
@@ -224,7 +329,23 @@
 		"traits": [ "Curse", "Necromancy" ],
 		"focus": false,
 		"id": "e08cd59f-4d3c-4f8a-8ad2-67268adba8f2",
-		"hash": "YZdhzwvQ"
+		"pf2t": {
+			"name": "Mariner's Curse",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "curse,necromancy",
+			"traditions": "arcane,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 350 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=184",
+			"aon": "spells184",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou afflict the target with the curse of the roiling, unforgiving sea. The target must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target becomes sickened 1. Reducing its sickened condition to 0 ends the curse.\n**Failure** The target becomes sickened 1 and can't reduce its sickened condition below 1 while the curse remains. The curse can be lifted by remove curse or similar magic. Whenever the target is sickened and on the water at least a mile from shore, it is also slowed 1.\n**Critical Failure** As failure, but the target becomes sickened 2.",
+			"hash": "YZdhzwvQ"
+		}
 	},
 	{
 		"aonId": 185,
@@ -261,7 +382,22 @@
 		"traits": [ "Emotion", "Fear", "Illusion", "Mental", "Visual" ],
 		"focus": false,
 		"id": "1cb86e2e-493c-4c00-b235-ea1df09f6a35",
-		"hash": "cTqWhbpB"
+		"pf2t": {
+			"name": "Mask of Terror",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "emotion,fear,illusion,mental,visual",
+			"traditions": "arcane,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 350 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=185",
+			"aon": "spells185",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nThe target appears to be a gruesome and terrifying creature. The effect is unique to each observer, so a human viewing the target might see a demon with bloody fangs, but a demon observing the target might see a glowing angelic visage.\n\nWhen any creature attempts a hostile action against the target, the creature must attempt a Will save. It is then temporarily immune until the end of its next turn.\n\n**Success** The creature is unaffected.\n**Failure** The creature becomes frightened 2 before using its action.\n**Critical Failure** The creature becomes frightened 2, and its action fails and is wasted.\n- - -\n**Heightened (8th)** You can target up to 5 creatures. If a creature uses a hostile action or reaction that affects multiple targets simultaneously, it needs to attempt only one save against mask of terror.",
+			"hash": "cTqWhbpB"
+		}
 	},
 	{
 		"aonId": 186,
@@ -299,7 +435,22 @@
 		"traits": [ "Death", "Necromancy", "Negative" ],
 		"focus": false,
 		"id": "4fd860f0-b9c2-404b-88e8-7ae721f526e9",
-		"hash": "bEtpVwjq"
+		"pf2t": {
+			"name": "Massacre",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "death,necromancy,negative",
+			"traditions": "arcane,divine,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 350 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=186",
+			"aon": "spells186",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"body": "**Area** 60-foot line\n\n- - -\n\nYou unleash a wave of necromantic energy to snuff out the life force of those in its path. Each living creature of 17th level or lower in the line must attempt a Fortitude save. If the damage from massacre reduces a creature to 0 Hit Points, that creature dies instantly. If massacre doesn't kill even a single creature, the negative energy violently explodes back toward you, dealing an additional 30 negative damage to every living creature in the line (even those above 17th level) and 30 negative damage to you.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes 9d6 negative damage.\n**Failure** The creature takes 100 negative damage.\n**Critical Failure** The creature dies.\n- - -\n**Heightened (10th)** The spell can affect creatures up to 19th level. Increase the damage to 10d6 on a success, and to 115 on a failure.",
+			"hash": "bEtpVwjq"
+		}
 	},
 	{
 		"aonId": 187,
@@ -336,7 +487,22 @@
 		"traits": [ "Conjuration", "Extradimensional", "Teleportation" ],
 		"focus": false,
 		"id": "36af0cb6-fe20-4602-af92-e0414b547165",
-		"hash": "WGbwvXSL"
+		"pf2t": {
+			"name": "Maze",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "conjuration,extradimensional,teleportation",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 350 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=187",
+			"aon": "spells187",
+			"type": "spell",
+			"body": "**Duration** sustained\n**Targets** 1 creature\n\n- - -\n\nYou transport the target into an extradimensional maze of eldritch origin and trap it there. Once each turn, the target can spend 1 action to attempt a Survival check or Perception check against your spell DC to escape the maze. The possible outcomes are as follows.\n**Critical Success** The target escapes and the spell ends.\n**Success** The target is on the right path to the exit. If the target was already on the right path, it escapes the maze and the spell ends.\n**Failure** The target makes no progress toward escape.\n**Critical Failure** The target makes no progress toward escape, and if it was on the right path, it no longer is.Teleportation magic doesn't help the creature escape unless the magic can transport across planes, such as plane shift. When the spell ends, either because the target escaped or the duration ran out, the target returns to the space it occupied when it was banished, or to the nearest space if the original is now filled.",
+			"hash": "WGbwvXSL"
+		}
 	},
 	{
 		"aonId": 188,
@@ -357,7 +523,21 @@
 		"traits": [ "Earth", "Transmutation" ],
 		"focus": false,
 		"id": "c0d93db4-32a5-4beb-b227-4514bf18c807",
-		"hash": "WftcHNEz"
+		"pf2t": {
+			"name": "Meld into Stone",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "earth,transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 350 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=188",
+			"aon": "spells188",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou merge with an adjacent block of stone with enough volume to fit you and your worn and held possessions. You must touch the stone when you Cast the Spell. You can hear, but not see, what's going on outside the stone, and you can cast spells while in the stone as long as they don't require line of effect beyond the stone.\n\nSignificant physical damage to the stone while you are inside it expels you and deals 10d6 damage to you. Passwall expels you without dealing damage and ends meld into stone. You can Dismiss this spell.",
+			"hash": "WftcHNEz"
+		}
 	},
 	{
 		"aonId": 189,
@@ -382,7 +562,22 @@
 		"traits": [ "Transmutation" ],
 		"focus": false,
 		"id": "724963ca-7a77-42c6-8ec8-cd9956be24f6",
-		"hash": "gkhJFVtN"
+		"pf2t": {
+			"name": "Mending",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "transmutation",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "s,v",
+			"actions": "10 minutes",
+			"range": "touch",
+			"source": "Core Rulebook pg. 351 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=189",
+			"aon": "spells189",
+			"type": "spell",
+			"body": "**Targets** non-magical object of light Bulk or less\n\n- - -\n\nYou repair the target item. You restore 5 Hit Points per spell level to the target, potentially removing the broken condition if this repairs it past the item's Broken Threshold. You can't replace lost pieces or repair an object that's been completely destroyed.\n- - -\n**Heightened (2nd)** You can target a non-magical object of 1 Bulk or less.\n**Heightened (3rd)** You can target a non-magical object of 2 Bulk or less, or a magical object of 1 Bulk or less.",
+			"hash": "gkhJFVtN"
+		}
 	},
 	{
 		"aonId": 190,
@@ -431,7 +626,24 @@
 		"traits": [ "Evocation", "Fire" ],
 		"focus": false,
 		"id": "9928371b-9bad-4954-8083-dce2768be35c",
-		"hash": "qbWZgDBW"
+		"pf2t": {
+			"name": "Meteor Swarm",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "evocation,fire",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "Core Rulebook pg. 351 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=191",
+			"aon": "spells191",
+			"type": "spell",
+			"savingthrow": "Reflex",
+			"basic": 1,
+			"body": "**Area** 4 40-foot bursts\n\n- - -\n\nYou call down four meteors that explode in a fiery blast. Each meteor deals 6d10 bludgeoning damage to any creatures in the 10-foot burst at the center of its area of effect before exploding, dealing 14d6 fire damage to any creatures in its 40-foot burst. The meteors' central 10-foot bursts can't overlap, and a creature takes the same amount of fire damage no matter how many overlapping explosions it's caught in. The saving throw applies to both the bludgeoning and the fire damage.\n- - -\n**Heightened (+1)** The bludgeoning damage increases by 1d10, and the fire damage increases by 2d6.",
+			"hash": "qbWZgDBW"
+		}
 	},
 	{
 		"aonId": 192,
@@ -453,7 +665,22 @@
 		"traits": [ "Uncommon", "Abjuration" ],
 		"focus": false,
 		"id": "86cc6cdb-102f-4799-9b81-355d77e8cdad",
-		"hash": "frGpkqZF"
+		"pf2t": {
+			"name": "Mind Blank",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 351 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=192",
+			"aon": "spells192",
+			"type": "spell",
+			"body": "**Duration** until the next time you make your daily preparations\n**Targets** 1 creature\n\n- - -\n\nPowerful wards hide a creature from divination magic. The target gains a +4 status bonus to saves against mental effects. Mind blank attempts to counteract any detection, revelation, and scrying effects as if its spell level were 1 higher than its actual level. On a success, the divination effect functions normally except that it detects nothing about the target and its possessions. For instance, detect magic would still detect other magic in the area, but not any magic on the target.",
+			"hash": "frGpkqZF"
+		}
 	},
 	{
 		"aonId": 193,
@@ -487,7 +714,23 @@
 		"traits": [ "Uncommon", "Divination", "Linguistic", "Mental" ],
 		"focus": false,
 		"id": "629bb399-90f2-4269-aa28-6021614554c4",
-		"hash": "BpyCRqpv"
+		"pf2t": {
+			"name": "Mind Probe",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,divination,linguistic,mental",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": 30,
+			"source": "Core Rulebook pg. 351 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=193",
+			"aon": "spells193",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou cast your thoughts through a creature's mind, sifting for information. You access the target's memories and knowledge unless it fends you off with a Will save.\n\n**Success** The target is unaffected.\n**Failure** Each round of the spell's duration, you can Sustain the Spell to ask a different question and attempt to uncover the answer. For each question, the target can attempt a Deception check against your spell DC; if the target succeeds, you don't learn the answer, and on a critical success, the target gives you a false answer that you believe is truthful Once you've asked the target a given question, asking it again, even with a separate casting of mind probe, produces the same result.\n**Critical Failure** As failure, and the target takes a -4 circumstance penalty to Deception checks against your questions.",
+			"hash": "BpyCRqpv"
+		}
 	},
 	{
 		"aonId": 194,
@@ -524,7 +767,23 @@
 		"traits": [ "Uncommon", "Detection", "Divination", "Mental" ],
 		"focus": false,
 		"id": "0c03cc55-e360-4105-b5c2-8217a9de392c",
-		"hash": "bQRZQvzz"
+		"pf2t": {
+			"name": "Mind Reading",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,detection,divination,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 351 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=194",
+			"aon": "spells194",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 round or sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nWith a cursory mental touch, you attempt to read the target's mind. It must attempt a Will save. The target then becomes temporarily immune to your mind reading for 1 hour.\n\n**Critical Success** The target perceives vague surface thoughts from you when you Cast the Spell.\n**Success** You find out whether the target's Intelligence modifier is higher than, equal to, or lower than yours.\n**Failure** You perceive vague surface thoughts from the target when you Cast the Spell, and you find out whether its Intelligence modifier is higher than, equal to, or lower than yours.\n**Critical Failure** As failure, and for the duration of the spell, you can Sustain the Spell to detect the target's surface thoughts again. The target doesn't receive any additional saves.",
+			"hash": "bQRZQvzz"
+		}
 	},
 	{
 		"aonId": 195,
@@ -545,7 +804,22 @@
 		"traits": [ "Divination", "Mental" ],
 		"focus": false,
 		"id": "b12fc9e1-6ad1-4c68-86d2-55f1d6001d97",
-		"hash": "cdCqZVKJ"
+		"pf2t": {
+			"name": "Mindlink",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "divination,mental",
+			"traditions": "occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 352 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=195",
+			"aon": "spells195",
+			"type": "spell",
+			"body": "**Targets** 1 willing creature\n\n- - -\n\nYou link your mind to the target's mind and mentally impart to that target an amount of information in an instant that could otherwise be communicated in 10 minutes.",
+			"hash": "cdCqZVKJ"
+		}
 	},
 	{
 		"aonId": 196,
@@ -565,7 +839,21 @@
 		"traits": [ "Divination" ],
 		"focus": false,
 		"id": "b0268613-308b-4c40-858b-b023b93e136d",
-		"hash": "wlfhqfRQ"
+		"pf2t": {
+			"name": "Miracle",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "divination",
+			"traditions": "divine",
+			"cast": "m,s,v",
+			"actions": 3,
+			"source": "Core Rulebook pg. 352 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=196",
+			"aon": "spells196",
+			"type": "spell",
+			"body": "You request aid directly from your divine source. Your divine source always refuses a request out of line with its nature, and it might grant a different request (potentially more powerful or better fitting its nature) than the one you asked for. A casting of miracle can do any of the following things. \n\n+ Duplicate any divine spell of 9th level or lower. \n+ Duplicate any non-divine spell of 7th level or lower. \n+ Produce any effect whose power level is in line with the above effects. \n+ Reverse certain effects that refer to the wish spell.\nThe GM might allow you to try using miracle to produce greater effects than these, but doing so may be dangerous, or the spell may have only a partial effect.",
+			"hash": "wlfhqfRQ"
+		}
 	},
 	{
 		"aonId": 197,
@@ -586,7 +874,21 @@
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
 		"id": "994fa2f3-b316-49e6-9443-10bf5216844c",
-		"hash": "yWZhqZRW"
+		"pf2t": {
+			"name": "Mirror Image",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "illusion,visual",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 352 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=197",
+			"aon": "spells197",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nThree illusory images of you swirl about your space, potentially causing those who attack you to hit one of the images instead of you. Any attack that would hit you has a random chance of hitting one of your images instead of you. If all three images remain, there is a 1 in 4 chance of hitting you (1 on 1d4). With two images remaining, there is a 1 in 3 chance of hitting you (1-2 on 1d6). With only one image, the chances are 1 in 2 (1-3 on 1d6).\n\nOnce an image is hit, it is destroyed. If an attack roll fails to hit your AC but doesn't critically fail, it destroys an image but has no additional effect (even if the attack would normally have an effect on a failure). If an attack roll is a critical success and would hit one of the images, one of the images is destroyed and the attack roll becomes a success against you. Once all the images are destroyed, the spell ends.",
+			"hash": "yWZhqZRW"
+		}
 	},
 	{
 		"aonId": 198,
@@ -608,7 +910,22 @@
 		"traits": [ "Illusion" ],
 		"focus": false,
 		"id": "6b040c11-09cb-4306-8b6e-93620ceda88a",
-		"hash": "NUqypKYv"
+		"pf2t": {
+			"name": "Misdirection",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "illusion",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": "1 minute",
+			"range": 30,
+			"source": "Core Rulebook pg. 352 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=198",
+			"aon": "spells198",
+			"type": "spell",
+			"body": "**Duration** until the next time you make your daily preparations\n**Targets** 2 creatures or objects\n\n- - -\n\nYou reshape the magic aura of one creature or object to resemble that of another. You designate one target as the primary target and the other as the secondary target. Effects that would detect auras on the primary target instead detect the same types of auras from the secondary target. A creature reading the aura can attempt to disbelieve the illusion. You can Dismiss the spell from up to a mile away.",
+			"hash": "NUqypKYv"
+		}
 	},
 	{
 		"aonId": 199,
@@ -629,7 +946,21 @@
 		"traits": [ "Illusion" ],
 		"focus": false,
 		"id": "93a5bac6-9680-4f82-90e5-c2711d848bcb",
-		"hash": "WzZFXmgk"
+		"pf2t": {
+			"name": "Mislead",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "illusion",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 352 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=199",
+			"aon": "spells199",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou turn yourself invisible and create an illusory duplicate of yourself. When you Sustain the Spell, you can mentally dictate a course of action for your duplicate to follow that round. Your duplicate acts as though it had your full number of actions, though it can't actually affect anything in the environment. Both the duplicate and your invisibility persist for the spell's duration. Performing a hostile action doesn't end mislead's invisibility, just like a 4th-level invisibility spell. A creature that determines the duplicate is an illusion doesn't necessarily know you're invisible, and one that can see your invisible form doesn't necessarily know your duplicate is an illusion.\n\nIf you Cast a Spell, attack, or otherwise interact with another creature, as a part of that action you can attempt a Deception check against observers' Perception DCs to convince them your duplicate used that action. This doesn't fool anyone who's aware your duplicate is an illusion, nor does it work if the attack obviously couldn't have come from the duplicate. For instance, if you fired a ray, you could make it look like it came from the duplicate as long as the duplicate was positioned appropriately, but if you attacked with a sword and your duplicate was across the room from the target, your Deception check would automatically fail.",
+			"hash": "WzZFXmgk"
+		}
 	},
 	{
 		"aonId": 200,
@@ -667,7 +998,23 @@
 		"traits": [ "Uncommon", "Divination", "Mental" ],
 		"focus": false,
 		"id": "2f03b0b0-376f-4ef3-a12a-81b2167ba0c5",
-		"hash": "ZGPcDlZX"
+		"pf2t": {
+			"name": "Modify Memory",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,divination,mental",
+			"traditions": "occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 352 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=200",
+			"aon": "spells200",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** unlimited\n**Targets** 1 creature\n\n- - -\n\nYou alter the target's memories, either erasing a memory, enhancing a memory's clarity, altering a memory, or adding a false memory. The target can attempt a Will save to resist the spell.\n\n**Critical Success** The target is unaffected and realizes you tried to alter its memory.\n**Success** The target is unaffected but thinks your spell was something harmless instead of modify memory, unless it identifies the spell.\n**Failure** During the first 5 minutes of the spell's duration, you can Sustain the Spell to modify a memory once each round. When you do, you imagine up to 6 seconds of memory to modify, to a maximum of 5 continuous minutes of memory.\n\nAny memories you've altered remain changed as long as the spell is active. If the target moves out of range before the 5 minutes is up, you can't alter any further memories.\n- - -\n**Heightened (6th)** You can cast the spell on a willing target to suppress all memory of a particular topic, detailed in 50 words or fewer. The effect is permanent, and it patches these omissions with an indistinct haze.",
+			"hash": "ZGPcDlZX"
+		}
 	},
 	{
 		"aonId": 201,
@@ -688,7 +1035,22 @@
 		"traits": [ "Healing", "Necromancy" ],
 		"focus": false,
 		"id": "ec4183bc-2c47-496b-a5cc-f6fff4b1dd18",
-		"hash": "gSvpKknl"
+		"pf2t": {
+			"name": "Moment of Renewal",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "healing,necromancy",
+			"traditions": "divine,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 353 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=201",
+			"aon": "spells201",
+			"type": "spell",
+			"body": "**Targets** up to 6 creatures\n\n- - -\n\nThe targets experience a day's worth of recovery in an instant. Any detrimental effects that would be gone after 24 hours end, though this doesn't shorten the duration of any active spells affecting the targets. The targets regain Hit Points and recover from conditions as if they had taken 24 hours of rest, but they do not make their daily preparations again or gain any benefits of rest other than healing. The targets are then temporarily immune for 1 day.",
+			"hash": "gSvpKknl"
+		}
 	},
 	{
 		"aonId": 202,
@@ -712,7 +1074,21 @@
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "0baef60a-61e6-4052-a678-673cd1f421ed",
-		"hash": "fYOSYlBp"
+		"pf2t": {
+			"name": "Monstrosity Form",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "polymorph,transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 353 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=202",
+			"aon": "spells202",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou transform into the shape of a legendary monster, assuming a Huge battle form. You must have enough space to expand into or the spell is lost. When you cast this spell, choose phoenix, purple worm, or sea serpent. While in this form, you gain the beast trait (for phoenix) or the animal trait (for purple worm or sea serpent). You can Dismiss the spell. \n\nYou gain the following statistics and abilities regardless of which battle form you choose: \n\n+ AC = 20 + your level. Ignore your armor's check penalty and Speed reduction. \n+ 20 temporary Hit Points. \n+ Darkvision. \n+ One or more unarmed melee attacks specific to the battle form you choose, which are the only attacks you can use. You're trained with them. Your attack modifier is +28, and you use the listed damage. These attacks are Strength based (for the purpose of the enfeebled condition, for example). If your unarmed attack modifier is higher, you can use it instead. \n+ Athletics modifier of +30, unless your own modifier is higher.\nYou also gain specific abilities based on the type of monster you choose:\n\n+ **Phoenix** Speed 30 feet, fly Speed 90 feet; **Melee** :a: beak (reach 15 feet), **Melee** :a: talon (agile, reach 15 feet), **Shroud of Flame** (aura, evocation, fire, primal) 20 feet. You gain an aura of fire that extends out from you. A creature that enters or ends its turn within the aura takes 2d6 fire damage. A creature can take this damage only once per turn. You can use a single action, which has the concentrate trait, to activate or deactivate this aura.\n+ **Purple Worm** Speed 40 feet, burrow Speed 30 feet, swim Speed 20 feet; **Melee** :a: jaws (reach 10 feet), **Melee** :a: stinger (agile, reach 10 feet), **Melee** :a: body (reach 10 feet) **Inexorable** You automatically recover from the paralyzed, slowed, and stunned conditions at the end of each of your turns. You're also immune to being immobilized and ignore difficult terrain and greater difficult terrain.\n+ **Sea Serpent** Speed 20 feet, swim Speed 90 feet; **Melee** :a: jaws (reach 15 feet), **Melee** :a: tail (reach 25 feet), **Spine Rake** :aa: (move) You extend your spines and Swim or Stride. Each creature you're adjacent to at any point during your movement takes 4d8+10 slashing damage (basic Reflex against your spell DC).\n- - -\n**Heightened (9th)** You instead gain AC = 22 + your level, 25 temporary HP, attack modifier +31, increase damage by one damage die, and Athletics +33.",
+			"hash": "fYOSYlBp"
+		}
 	},
 	{
 		"aonId": 203,
@@ -740,6 +1116,21 @@
 		"traits": [ "Morph", "Transmutation" ],
 		"focus": false,
 		"id": "7168979a-3c3f-470d-83ad-2dad05aaf1ca",
-		"hash": "pUFnQmnm"
+		"pf2t": {
+			"name": "Moon Frenzy",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "morph,transmutation",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 353 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=203",
+			"aon": "spells203",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** up to 5 willing creatures\n\n- - -\n\nA feral aspect overcomes the targets, making them tough and savage. Targets gain 5 temporary Hit Points, a +10-foot status bonus to their Speeds, and weakness 5 to silver. They also grow vicious fangs and claws, which are unarmed attacks. The fangs deal 2d8 piercing damage; the claws deal 2d6 slashing damage and have the agile and finesse traits. The targets use their highest weapon or unarmed attack proficiency with these attacks, and if they have weapon specialization or greater weapon specialization, they add this damage as well. On a critical hit with one of these unarmed attacks, the creature struck takes 1d4 persistent bleed damage.\n\nThe targets can't use concentrate actions unless those actions also have the rage trait, with the exception of Seek. A creature can attempt to end the spell's effect on itself by using a single action, which has the rage trait, to attempt a Will save against your spell DC; on a success, it ends the spell's effect on itself.\n\nIf a target is in the light of a full moon, it also grows by one size if it were Medium or smaller. This increases the reach of a Medium or Tiny creature by 5 feet.\n- - -\n**Heightened (6th)** The temporary Hit Points increase to 10, the silver weakness to 10, and the damage dealt by the attacks to three dice.\n**Heightened (10th)** The temporary Hit Points increase to 20, the silver weakness to 20, and the damage dealt by the attacks to four dice.",
+			"hash": "pUFnQmnm"
+		}
 	}
 ]

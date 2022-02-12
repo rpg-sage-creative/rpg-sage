@@ -9,7 +9,18 @@
 		"source": "PZO9557",
 		"id": "b2019622-12eb-46d5-b073-cc6b910f77ca",
 		"aonId": 84,
-		"hash": "mttfqfpE"
+		"pf2t": {
+			"name": "Oozemorph",
+			"pfs": "limited",
+			"traits": "archetype",
+			"archetype": "Oozemorph",
+			"source": "The Slithering pg. 59",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=84",
+			"aon": "archetypes84",
+			"type": "archetype",
+			"body": "**Archetype** Oozemorph\n**Prerequisites** Oozemorph Dedication\n\n- - -\n\nYour internal organs and blood vessels have shifted and changed, and even you don't know precisely where in your body they are. You gain resistance to precision damage equal to 2 + your number of class feats from the oozemorph archetype. The DC of your flat checks to recover from persistent bleed damage is 13, rather than 15.",
+			"hash": "mttfqfpE"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -41,7 +52,18 @@
 		"source": "PZO9557",
 		"id": "21c9853b-0724-4e2d-a0e3-6c4127a11551",
 		"aonId": 2186,
-		"hash": "kIrjBnbn"
+		"pf2t": {
+			"name": "Disturbing Defense",
+			"level": 4,
+			"traits": "archetype",
+			"archetype": "Oozemorph",
+			"source": "The Slithering pg. 59",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2186",
+			"aon": "feats2186",
+			"type": "feat",
+			"body": "**Archetype** Oozemorph\n**Prerequisites** Oozemorph Dedication\n\n- - -\n\nYour internal organs and blood vessels have shifted and changed, and even you don't know precisely where in your body they are. You gain resistance to precision damage equal to 2 + your number of class feats from the oozemorph archetype. The DC of your flat checks to recover from persistent bleed damage is 13, rather than 15.\n\n#### Disturbing Defense Leads To...\nPeculiar Anatomy, Rubbery Skin",
+			"hash": "kIrjBnbn"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -56,7 +78,19 @@
 		"source": "PZO9557",
 		"id": "d23dffdc-87d3-40ce-bd4a-0e5f4d3cb4cf",
 		"aonId": 2187,
-		"hash": "ZFLzjsVd"
+		"pf2t": {
+			"name": "Hideous Ululation",
+			"level": 4,
+			"traits": "archetype,skill",
+			"archetype": "Oozemorph",
+			"source": "The Slithering pg. 59",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2187",
+			"aon": "feats2187",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Oozemorph\n**Prerequisites** Oozemorph Dedication; trained in Performance\n\n- - -\n\nYour throat has multiple separate chambers that can give your voice an eerie echo. You can be clearly heard at distances of up to 300 feet regardless of ambient sound, although your voice doesn't penetrate a magical silence effect.",
+			"hash": "ZFLzjsVd"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -73,7 +107,19 @@
 		"source": "PZO9557",
 		"id": "47b34029-67df-4fd7-9a97-7c720fd81fc2",
 		"aonId": 2188,
-		"hash": "XBXndlVx"
+		"pf2t": {
+			"name": "Vacate Vision",
+			"level": 6,
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Oozemorph",
+			"source": "The Slithering pg. 59",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2188",
+			"aon": "feats2188",
+			"type": "feat",
+			"body": "**Archetype** Oozemorph\n**Prerequisites** Oozemorph Dedication\n**Trigger** You fail (but don't critically fail) a saving throw against an effect with the visual trait.\n\n- - -\n\nYou cause your eyes to liquefy and run out of your eye sockets, leaving them empty. You get a success on the save against the triggering effect, but you are blinded for the duration the effect would have had on a failure. At that time, your eyes regrow and your normal vision returns.",
+			"hash": "XBXndlVx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -88,7 +134,18 @@
 		"source": "PZO9557",
 		"id": "68fa4fde-7526-4e49-bf66-0f573919dd67",
 		"aonId": 2189,
-		"hash": "twJCKXvw"
+		"pf2t": {
+			"name": "Ooze Empathy",
+			"level": 8,
+			"traits": "archetype",
+			"archetype": "Oozemorph",
+			"source": "The Slithering pg. 59",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2189",
+			"aon": "feats2189",
+			"type": "feat",
+			"body": "**Archetype** Oozemorph\n**Prerequisites** Oozemorph Dedication; at least two other class feats from the oozemorph archetype\n\n- - -\n\nYou can connect with oozes (and other amorphous aberrations, at the GM's discretion) on a rudimentary level. You can use Diplomacy to Make an Impression on oozes and to make very simple Requests of them. In most instances, oozes will give you time to make your case.",
+			"hash": "twJCKXvw"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -103,7 +160,18 @@
 		"source": "PZO9557",
 		"id": "f936d500-99dd-42dd-82f1-f8b05e6c2e58",
 		"aonId": 2190,
-		"hash": "pXDbxnVD"
+		"pf2t": {
+			"name": "Rubbery Skin",
+			"level": 10,
+			"traits": "archetype",
+			"archetype": "Oozemorph",
+			"source": "The Slithering pg. 59",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2190",
+			"aon": "feats2190",
+			"type": "feat",
+			"body": "**Archetype** Oozemorph\n**Prerequisites** Disturbing Defense\n\n- - -\n\nYour skin develops a malleable, rubbery quality. You gain resistance to bludgeoning damage equal to 2 + your number of class feats from the oozemorph archetype. You also gain resistance equal to twice that amount to extra damage from critical hits; if the resistance is greater than the extra damage, it reduces the extra damage to 0 but doesn't reduce the attack's normal damage.",
+			"hash": "pXDbxnVD"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -118,7 +186,18 @@
 		"source": "PZO9557",
 		"id": "8f775206-5325-4873-8799-c6cbbaabd9e0",
 		"aonId": 2191,
-		"hash": "pDVCPZhb"
+		"pf2t": {
+			"name": "Uncanny Suction",
+			"level": 12,
+			"traits": "archetype",
+			"archetype": "Oozemorph",
+			"source": "The Slithering pg. 60",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2191",
+			"aon": "feats2191",
+			"type": "feat",
+			"body": "**Archetype** Oozemorph\n**Prerequisites** Oozemorph Dedication\n\n- - -\n\nYour limbs produce strange, sucker-like growths that allow you to adhere to walls, objects, and most other surfaces. You gain a climb Speed equal to your half your land Speed (minimum 5 feet). If you have the Quick Climber feat, your climb Speed is equal to your land Speed. In addition, you gain a +2 circumstance bonus to your Reflex DC to avoid being Disarmed.",
+			"hash": "pDVCPZhb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -134,6 +213,17 @@
 		"source": "PZO9557",
 		"id": "650f57ec-8d43-460c-b906-353cc4261c16",
 		"aonId": 2192,
-		"hash": "kkWxAxft"
+		"pf2t": {
+			"name": "Peculiar Anatomy",
+			"level": 14,
+			"traits": "archetype",
+			"archetype": "Oozemorph",
+			"source": "The Slithering pg. 60",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2192",
+			"aon": "feats2192",
+			"type": "feat",
+			"body": "**Archetype** Oozemorph\n**Prerequisites** Disturbing Defense\n\n- - -\n\nYour circulatory system contains viscous protoplasmic fluid instead of ordinary blood. You gain a +2 circumstance bonus to saving throws against disease and poison, and resistance to poison damage equal to half your level.\n\nIn addition, your resistance to precision damage from Disturbing Defense increases to an amount equal to 7 + your number of class feats from the oozemorph archetype, and the DC of your flat checks to recover from persistent bleed damage is 8 rather than 13.",
+			"hash": "kkWxAxft"
+		}
 	}
 ]

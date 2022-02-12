@@ -12,7 +12,16 @@
 		"page": 138,
 		"source": "PZO2109",
 		"id": "4bc76ef7-03b7-40a3-a7a8-c339d57bcc7c",
-		"aonId": 0
+		"aonId": 121,
+		"pf2t": {
+			"name": "Sniping Duo",
+			"source": "Guns & Gears pg. 138",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=121",
+			"aon": "archetypes121",
+			"type": "archetype",
+			"body": "Skilled shooters who don't let their egos get in the way of their efficacy are likely to say that sniping is a two-person job. Taking down a target without giving away your position or giving the opponent a window for reprisal is difficult work that requires teamwork and coordination, as well as a tight-knit bond and shared perspective. Sniping duos live and die by the credo \"two heads are better than one,\" focusing their skills and strategies toward deadly efficiency. Whether your spotter and partner is a fellow ranged combatant or a melee enthusiast, you've learned how to use the openings they provide to devastating effect.",
+			"hash": "DkmzIzbz"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -44,7 +53,19 @@
 		"page": 138,
 		"source": "PZO2109",
 		"id": "c9e26ad6-aeb1-42f6-931e-57ae0c200a36",
-		"aonId": 0
+		"aonId": 3259,
+		"pf2t": {
+			"name": "Triangulate",
+			"level": 4,
+			"traits": "archetype,auditory,visual",
+			"archetype": "Sniping Duo",
+			"source": "Guns & Gears pg. 137",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3259",
+			"aon": "feats3259",
+			"type": "feat",
+			"body": "**Archetype** Sniping Duo\n**Prerequisites** Sniping Duo Dedication\n\n- - -\n\nYour spotter's quick signals help you make even difficult shots seem simple. As long as both you and your spotter can see the target of your attacks, you don't take a penalty for attacking within your weapon's second range increment. The penalty you take for firing into further range increments is -3 for the third range increment, with an additional -2 penalty for each additional increment beyond the third (-5 for the fourth range increment, -7 for the fifth, and -9 for the sixth).",
+			"hash": "pplEWKkR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -60,7 +81,20 @@
 		"page": 138,
 		"source": "PZO2109",
 		"id": "eaf425f1-c0e7-41ec-90e6-787588fbbeca",
-		"aonId": 0
+		"aonId": 3260,
+		"pf2t": {
+			"name": "Exploit Opening",
+			"level": 6,
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Sniping Duo",
+			"source": "Guns & Gears pg. 137",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3260",
+			"aon": "feats3260",
+			"type": "feat",
+			"body": "**Archetype** Sniping Duo\n**Prerequisites** Sniping Duo Dedication\n**Trigger** Your spotter critically succeeds at a Strike against a creature, and that creature is within your ranged weapon's first range increment.\n\n- - -\n\nYou take advantage of your spotter's devastating attack to unleash your own follow-up attack. Make a ranged Strike with a -2 penalty against the target of the triggering attack. This Strike doesn't count toward your multiple attack penalty and your multiple attack penalty doesn't apply to the Strike.",
+			"hash": "pVgvCGvz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -75,7 +109,20 @@
 		"page": 138,
 		"source": "PZO2109",
 		"id": "e0d362c4-6394-47be-a2b4-6003c1c95ad8",
-		"aonId": 0
+		"aonId": 3261,
+		"pf2t": {
+			"name": "Targeted Redirection",
+			"level": 6,
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Sniping Duo",
+			"source": "Guns & Gears pg. 137",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3261",
+			"aon": "feats3261",
+			"type": "feat",
+			"body": "**Archetype** Sniping Duo\n**Prerequisites** Sniping Duo Dedication\n\n- - -\n\nYou aim a shot at your spotter, intending for your spotter to redirect that shot off their own weapon or shield to hit your foe from a better angle, and avoid your foe's cover. If your next action is to make a ranged Strike, you treat your spotter's position as your own for the purposes of determining cover and range. Your spotter must be within your weapon's first range increment and they must use a reaction to redirect your shot.",
+			"hash": "WQKgpXjN"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -90,7 +137,20 @@
 		"page": 139,
 		"source": "PZO2109",
 		"id": "7f0ed903-e83e-4dc2-9bdb-a2871df50408",
-		"aonId": 0
+		"aonId": 3262,
+		"pf2t": {
+			"name": "Duo's Aim",
+			"level": 8,
+			"traits": "archetype,concentrate",
+			"actions": 2,
+			"archetype": "Sniping Duo",
+			"source": "Guns & Gears pg. 139",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3262",
+			"aon": "feats3262",
+			"type": "feat",
+			"body": "**Archetype** Sniping Duo\n**Prerequisites** Sniping Duo Dedication\n\n- - -\n\nWith assistance from your spotter, you aim for an especially accurate attack. Make a ranged weapon Strike against a foe either within your spotter's melee reach or the first range increment of a ranged weapon your spotter is wielding. On this Strike, you gain a +2 circumstance bonus to the attack roll and ignore the target's concealment. If you're using a firearm with the kickback trait, you don't take the normal circumstance penalty to this Strike for not having the required Strength score or firing without using a tripod.",
+			"hash": "rQUFdzcI"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -104,7 +164,19 @@
 		"page": 139,
 		"source": "PZO2109",
 		"id": "0149844a-3bd3-4dd5-b8a6-772521c2a84b",
-		"aonId": 0
+		"aonId": 3263,
+		"pf2t": {
+			"name": "Vantage Shot",
+			"level": 8,
+			"traits": "archetype",
+			"archetype": "Sniping Duo",
+			"source": "Guns & Gears pg. 139",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3263",
+			"aon": "feats3263",
+			"type": "feat",
+			"body": "**Archetype** Sniping Duo\n**Prerequisites** Sniping Duo Dedication\n\n- - -\n\nYou and your spotter take advantage of each other's attacks to momentarily hide and throw your foes off-balance against your follow-up attack. When you successfully make a ranged Strike against a foe, your spotter can use a reaction to attempt a Stealth check against the foe's Perception DC. On a success, the foe is flat-footed against the spotter's next attack before the end of your spotter's next turn. Similarly, when your spotter successfully makes a ranged Strike against a foe, you can use a reaction to attempt a Stealth check against the foe's Perception DC. On a success, the foe is flat-footed against your next attack against them before the end of your next turn.",
+			"hash": "nXYZtkrt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -120,7 +192,20 @@
 		"page": 139,
 		"source": "PZO2109",
 		"id": "5908fbf4-3a86-47fe-bd0c-5204f2c4937f",
-		"aonId": 0
+		"aonId": 3264,
+		"pf2t": {
+			"name": "Tag Team",
+			"level": 10,
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Sniping Duo",
+			"source": "Guns & Gears pg. 139",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3264",
+			"aon": "feats3264",
+			"type": "feat",
+			"body": "**Archetype** Sniping Duo\n**Prerequisites** Sniping Duo Dedication\n**Trigger** You or your spotter misses with a Strike against a creature, and the creature is within the other's melee reach or first range increment.\n\n- - -\n\nYour skilled teamwork with your spotter enables you both to assist one another when you falter, using either other's failures as opportunities to strike. If you used Tag Team after your spotter missed the triggering Strike, make a ranged Strike against the same target with a -2 penalty. If you used this reaction after you missed the triggering Strike, your spotter can use their reaction to make a melee or ranged Strike against the same target. Strikes granted by this feat don't count toward your or your spotter's multiple attack penalty and your or your spotter's multiple attack penalty doesn't apply to the granted Strike.",
+			"hash": "vQKtRJbP"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -134,7 +219,19 @@
 		"page": 139,
 		"source": "PZO2109",
 		"id": "b4f0aeb3-7ce5-4641-b69c-144ce2ed4113",
-		"aonId": 0
+		"aonId": 3265,
+		"pf2t": {
+			"name": "Eagle Eyes",
+			"level": 12,
+			"traits": "archetype,auditory,visual",
+			"archetype": "Sniping Duo",
+			"source": "Guns & Gears pg. 139",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3265",
+			"aon": "feats3265",
+			"type": "feat",
+			"body": "**Archetype** Sniping Duo\n**Prerequisites** Sniping Duo Dedication\n\n- - -\n\nYou and your spotter are adept at watching out for one another. As long as you can see or hear each other, neither of you is flat-footed to hidden, undetected, or flanking creatures of your level or lower, or to creatures of your level or lower using a surprise attack. However, they can still help their allies flank.",
+			"hash": "bZzrHWvQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -148,6 +245,18 @@
 		"page": 139,
 		"source": "PZO2109",
 		"id": "732740b1-d3a7-43cd-aed1-111c40c3cac7",
-		"aonId": 0
+		"aonId": 3266,
+		"pf2t": {
+			"name": "Concentrated Assault",
+			"level": 14,
+			"traits": "archetype",
+			"archetype": "Sniping Duo",
+			"source": "Guns & Gears pg. 139",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3266",
+			"aon": "feats3266",
+			"type": "feat",
+			"body": "**Archetype** Sniping Duo\n**Prerequisites** Sniping Duo Dedication\n\n- - -\n\nYou and your spotter combine your efforts to bring down your target. If you and your spotter both use the Ready activity to make a Strike against the same opponent and choose the same trigger for the readied action, resolve your attacks at the same time. Each of you can use the higher of the two attack rolls for your Strikes, each using your own modifier; this is a fortune effect. If both attacks are successful, total the damage for both attacks for the purpose of resistances and weaknesses.",
+			"hash": "gQcrQdsx"
+		}
 	}
 ]

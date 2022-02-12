@@ -13,7 +13,22 @@
 		"source": "PZO2101",
 		"id": "8a7307d4-ebd8-45ee-97dd-13c8ce5b7a41",
 		"aonId": 1,
-		"hash": "ZArhJBBd"
+		"pf2t": {
+			"name": "Fist",
+			"pfs": "standard",
+			"traits": "agile,finesse,nonlethal,unarmed",
+			"damagedie": "d4",
+			"damagetype": "b",
+			"group": "brawling",
+			"category": "unarmed",
+			"hands": 1,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=1",
+			"aon": "weapons1",
+			"type": "weapon",
+			"body": "**Favored Weapon** Angazhan, Irori, Korada, Monad",
+			"hash": "ZArhJBBd"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -34,7 +49,23 @@
 		"source": "PZO2101",
 		"id": "a90fb38f-e770-40f8-b777-511f77e62211",
 		"aonId": 2,
-		"hash": "rNkrkOQh"
+		"pf2t": {
+			"name": "Club",
+			"pfs": "standard",
+			"traits": "thrown 10 ft.",
+			"damagedie": "d6",
+			"damagetype": "b",
+			"group": "club",
+			"category": "simple",
+			"hands": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=2",
+			"aon": "weapons2",
+			"type": "weapon",
+			"body": "This is a piece of stout wood shaped or repurposed to bludgeon an enemy. Clubs can be intricately carved pieces of martial art or as simple as a tree branch or piece of wood.",
+			"hash": "rNkrkOQh"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -58,7 +89,25 @@
 		"source": "PZO2101",
 		"id": "553884b1-3dd1-4559-921a-f841c5663b78",
 		"aonId": 3,
-		"hash": "yXUNmKwf"
+		"pf2t": {
+			"name": "Dagger",
+			"pfs": "standard",
+			"traits": "agile,finesse,thrown 10 ft.,versatile s",
+			"damagedie": "d4",
+			"damagetype": "p",
+			"group": "knife",
+			"category": "simple",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 2,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=3",
+			"aon": "weapons3",
+			"type": "weapon",
+			"body": "This small, bladed weapon is held in one hand and used to stab a creature in close combat. It can also be thrown.",
+			"hash": "yXUNmKwf"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -77,7 +126,25 @@
 		"source": "PZO2101",
 		"id": "9a92c104-d70c-4587-a8ec-1e0754ecde33",
 		"aonId": 4,
-		"hash": "PxyFZwgS"
+		"pf2t": {
+			"name": "Gauntlet",
+			"pfs": "standard",
+			"traits": "agile,free-hand",
+			"damagedie": "d4",
+			"damagetype": "b",
+			"group": "brawling",
+			"category": "simple",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 2,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=4",
+			"aon": "weapons4",
+			"type": "weapon",
+			"body": "A pair of these metal gloves comes with full plate, half plate, and splint armor; they can also be purchased separately and worn with other types of armor. They not only protect your hands but also transform your hands into lethal weapons.",
+			"hash": "PxyFZwgS"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -96,7 +163,25 @@
 		"source": "PZO2101",
 		"id": "ad52f4e2-f29e-477e-a6f4-c29b53dd7b8c",
 		"aonId": 5,
-		"hash": "QtkQhkGv"
+		"pf2t": {
+			"name": "Light Mace",
+			"pfs": "standard",
+			"traits": "agile,finesse,shove",
+			"damagedie": "d4",
+			"damagetype": "b",
+			"group": "club",
+			"category": "simple",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 4,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=5",
+			"aon": "weapons5",
+			"type": "weapon",
+			"body": "A light mace has a short wooden or metal shaft ending with a dense metal head. Used much like a club, it delivers heavy bludgeoning blows, but with extra power derived from the head's metal ridges or spikes.",
+			"hash": "QtkQhkGv"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -115,7 +200,25 @@
 		"source": "PZO2101",
 		"id": "527970c2-e32e-44ac-93f3-f506bfc844fe",
 		"aonId": 6,
-		"hash": "PLJMzTkC"
+		"pf2t": {
+			"name": "Longspear",
+			"pfs": "standard",
+			"traits": "reach",
+			"damagedie": "d8",
+			"damagetype": "p",
+			"group": "spear",
+			"category": "simple",
+			"hands": 2,
+			"priceunit": "sp",
+			"price": 5,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=6",
+			"aon": "weapons6",
+			"type": "weapon",
+			"body": "This very long spear, sometimes called a pike, is purely for thrusting rather than throwing. Used by many soldiers and city watch for crowd control and defense against charging enemies, it must be wielded with two hands.",
+			"hash": "PLJMzTkC"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -134,7 +237,25 @@
 		"source": "PZO2101",
 		"id": "d3153880-5110-4ddf-a093-9d6a2008f640",
 		"aonId": 7,
-		"hash": "cvbjSRhH"
+		"pf2t": {
+			"name": "Mace",
+			"pfs": "standard",
+			"traits": "shove",
+			"damagedie": "d6",
+			"damagetype": "b",
+			"group": "club",
+			"category": "simple",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=7",
+			"aon": "weapons7",
+			"type": "weapon",
+			"body": "With a stout haft and a heavy metal head, a mace is sturdy and allows its wielder to deliver powerful blows and dent armor.",
+			"hash": "cvbjSRhH"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -153,7 +274,25 @@
 		"source": "PZO2101",
 		"id": "0df0f49f-6061-40ae-a53d-97f41fe75b40",
 		"aonId": 8,
-		"hash": "zMWpZHpg"
+		"pf2t": {
+			"name": "Morningstar",
+			"pfs": "standard",
+			"traits": "versatile p",
+			"damagedie": "d6",
+			"damagetype": "b",
+			"group": "club",
+			"category": "simple",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=8",
+			"aon": "weapons8",
+			"type": "weapon",
+			"body": "This weapon has a short shaft ending in a metal ball studded with spikes.",
+			"hash": "zMWpZHpg"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -172,7 +311,25 @@
 		"source": "PZO2101",
 		"id": "e7f4f21b-0e6f-4489-9c01-00d5ea1e3fc7",
 		"aonId": 9,
-		"hash": "wFgULYjp"
+		"pf2t": {
+			"name": "Sickle",
+			"pfs": "standard",
+			"traits": "agile,finesse,trip",
+			"damagedie": "d4",
+			"damagetype": "s",
+			"group": "knife",
+			"category": "simple",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 2,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=9",
+			"aon": "weapons9",
+			"type": "weapon",
+			"body": "Originally a farming tool used for reaping grain, this one-handed weapon has a short wooden handle ending in a curved blade, sometimes sharpened on both sides.",
+			"hash": "wFgULYjp"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -193,7 +350,25 @@
 		"source": "PZO2101",
 		"id": "cc0695a3-66da-4227-b343-2cc52bd52d24",
 		"aonId": 10,
-		"hash": "xKgJQEKJ"
+		"pf2t": {
+			"name": "Spear",
+			"pfs": "standard",
+			"traits": "thrown 20 ft.",
+			"damagedie": "d6",
+			"damagetype": "p",
+			"group": "spear",
+			"category": "simple",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=10",
+			"aon": "weapons10",
+			"type": "weapon",
+			"body": "A long metal shaft ending with a metal spike, a spear can be used one-handed as a melee weapon and can be thrown.",
+			"hash": "xKgJQEKJ"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -212,7 +387,25 @@
 		"source": "PZO2101",
 		"id": "669f5af9-7705-4195-be23-be34c92bca3e",
 		"aonId": 11,
-		"hash": "nPKgxJgr"
+		"pf2t": {
+			"name": "Spiked Gauntlet",
+			"pfs": "standard",
+			"traits": "agile,free-hand",
+			"damagedie": "d4",
+			"damagetype": "p",
+			"group": "brawling",
+			"category": "simple",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 3,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=11",
+			"aon": "weapons11",
+			"type": "weapon",
+			"body": "Providing the same defensive function as a standard gauntlet, this version has a group of spikes protruding from the knuckles to deliver piercing damage with a punch.",
+			"hash": "nPKgxJgr"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -231,7 +424,23 @@
 		"source": "PZO2101",
 		"id": "6f2ea1a1-b732-4841-917f-52b3ce8df7a3",
 		"aonId": 12,
-		"hash": "DSKKENrL"
+		"pf2t": {
+			"name": "Staff",
+			"pfs": "standard",
+			"traits": "two-hand 1d8",
+			"damagedie": "d4",
+			"damagetype": "b",
+			"group": "club",
+			"category": "simple",
+			"hands": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=12",
+			"aon": "weapons12",
+			"type": "weapon",
+			"body": "This long piece of wood can aid in walking and deliver a mighty blow.",
+			"hash": "DSKKENrL"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -251,7 +460,25 @@
 		"source": "PZO2101",
 		"id": "29e4d4e6-5ce2-461a-81c4-5efa8b7d6830",
 		"aonId": 13,
-		"hash": "xDZmLklZ"
+		"pf2t": {
+			"name": "Clan Dagger",
+			"pfs": "standard",
+			"traits": "agile,dwarf,parry,uncommon,versatile b",
+			"damagedie": "d4",
+			"damagetype": "p",
+			"group": "knife",
+			"category": "simple",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=13",
+			"aon": "weapons13",
+			"type": "weapon",
+			"body": "This broad dagger is carried by dwarves as a weapon, tool, and designation of clan. Losing or having to surrender a clan dagger is considered a mark of embarrassment to most dwarves.",
+			"hash": "xDZmLklZ"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -271,7 +498,25 @@
 		"source": "PZO2101",
 		"id": "b7371f80-2b72-443c-abfd-68f07765cf4b",
 		"aonId": 14,
-		"hash": "tktvrRvR"
+		"pf2t": {
+			"name": "Katar",
+			"pfs": "standard",
+			"traits": "agile,deadly d6,monk,uncommon",
+			"damagedie": "d4",
+			"damagetype": "p",
+			"group": "knife",
+			"category": "simple",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 3,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=14",
+			"aon": "weapons14",
+			"type": "weapon",
+			"body": "Also known as punching daggers, katars are characterized by their H-shaped hand grip that allows the blade to jut out from the knuckles.",
+			"hash": "tktvrRvR"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -290,7 +535,25 @@
 		"source": "PZO2101",
 		"id": "a1db868c-28d0-4f64-9ea3-1f16e449b8f5",
 		"aonId": 15,
-		"hash": "lXBExrRI"
+		"pf2t": {
+			"name": "Bastard Sword",
+			"pfs": "standard",
+			"traits": "two-hand 1d12",
+			"damagedie": "d8",
+			"damagetype": "s",
+			"group": "sword",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 4,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=15",
+			"aon": "weapons15",
+			"type": "weapon",
+			"body": "This broad-bladed sword, sometimes called the handandahalf sword, has a longer grip so it can be held in one hand or used with two hands to provide extra piercing or slashing power.",
+			"hash": "lXBExrRI"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -309,7 +572,25 @@
 		"source": "PZO2101",
 		"id": "f039d065-0d90-450a-8742-f75f122006ca",
 		"aonId": 16,
-		"hash": "dkbgHgqN"
+		"pf2t": {
+			"name": "Battle Axe",
+			"pfs": "standard",
+			"traits": "sweep",
+			"damagedie": "d8",
+			"damagetype": "s",
+			"group": "axe",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=16",
+			"aon": "weapons16",
+			"type": "weapon",
+			"body": "These axes are designed explicitly as weapons, rather than tools. They typically weigh less, with a shaft reinforced with metal bands or bolts, and have a sharper blade, making them ideal for chopping limbs rather than wood.",
+			"hash": "dkbgHgqN"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -328,7 +609,25 @@
 		"source": "PZO2101",
 		"id": "7e186332-8c1d-4de2-b9ef-84e79e338292",
 		"aonId": 17,
-		"hash": "tAbOvItJ"
+		"pf2t": {
+			"name": "Bo Staff",
+			"pfs": "standard",
+			"traits": "monk,parry,reach,trip",
+			"damagedie": "d8",
+			"damagetype": "b",
+			"group": "club",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "sp",
+			"price": 2,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=17",
+			"aon": "weapons17",
+			"type": "weapon",
+			"body": "This strong but slender staff is tapered at the ends and well balanced. It's designed to be an offensive and defensive weapon.",
+			"hash": "tAbOvItJ"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -347,7 +646,25 @@
 		"source": "PZO2101",
 		"id": "b74c7e0d-6da6-4be4-b219-52b08356d3ac",
 		"aonId": 18,
-		"hash": "kXkHbbSM"
+		"pf2t": {
+			"name": "Falchion",
+			"pfs": "standard",
+			"traits": "forceful,sweep",
+			"damagedie": "d10",
+			"damagetype": "s",
+			"group": "sword",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 3,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=18",
+			"aon": "weapons18",
+			"type": "weapon",
+			"body": "This weapon is a heavier, two-handed version of the curved-bladed scimitar. It is weighted toward the blade's end, making it a powerful slashing weapon.",
+			"hash": "kXkHbbSM"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -366,7 +683,25 @@
 		"source": "PZO2101",
 		"id": "8347ed88-aa14-488f-9eb1-462a5f0d0062",
 		"aonId": 19,
-		"hash": "RtkxSGWA"
+		"pf2t": {
+			"name": "Flail",
+			"pfs": "standard",
+			"traits": "disarm,sweep,trip",
+			"damagedie": "d6",
+			"damagetype": "b",
+			"group": "flail",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=19",
+			"aon": "weapons19",
+			"type": "weapon",
+			"body": "This weapon consists of a wooden handle attached to a spiked ball or cylinder by a chain, rope, or strap of leather.",
+			"hash": "RtkxSGWA"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -385,7 +720,25 @@
 		"source": "PZO2101",
 		"id": "6a5b93d1-3408-496b-8575-61930e117ba1",
 		"aonId": 20,
-		"hash": "JXmrzGkC"
+		"pf2t": {
+			"name": "Glaive",
+			"pfs": "standard",
+			"traits": "deadly d8,forceful,reach",
+			"damagedie": "d8",
+			"damagetype": "s",
+			"group": "polearm",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=20",
+			"aon": "weapons20",
+			"type": "weapon",
+			"body": "This polearm consists of a long, single-edged blade on the end of a 7-foot pole. It is extremely effective at delivering lethal cuts at a distance.",
+			"hash": "JXmrzGkC"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -404,7 +757,25 @@
 		"source": "PZO2101",
 		"id": "57c9b8a7-47c6-4a54-8cc7-57aae0455486",
 		"aonId": 21,
-		"hash": "lUpwMvIt"
+		"pf2t": {
+			"name": "Greataxe",
+			"pfs": "standard",
+			"traits": "sweep",
+			"damagedie": "d12",
+			"damagetype": "s",
+			"group": "axe",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=21",
+			"aon": "weapons21",
+			"type": "weapon",
+			"body": "This large battle axe is too heavy to wield with only one hand. Many greataxes incorporate two blades, and they are often \"bearded,\" having a hook at the bottom to increase the strength of their chopping power.",
+			"hash": "lUpwMvIt"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -423,7 +794,25 @@
 		"source": "PZO2101",
 		"id": "6d1bf32f-0163-42ce-aa4a-118210d6f173",
 		"aonId": 22,
-		"hash": "EylYlGRx"
+		"pf2t": {
+			"name": "Greatclub",
+			"pfs": "standard",
+			"traits": "backswing,shove",
+			"damagedie": "d10",
+			"damagetype": "b",
+			"group": "club",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=22",
+			"aon": "weapons22",
+			"type": "weapon",
+			"body": "While many greatclubs are intricately carved, others are little more than a sturdy tree branch. These massive clubs are too heavy to wield with only one hand.",
+			"hash": "EylYlGRx"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -442,7 +831,25 @@
 		"source": "PZO2101",
 		"id": "d3561193-4502-4d43-878f-28bd4708b23d",
 		"aonId": 23,
-		"hash": "sfZLhJWx"
+		"pf2t": {
+			"name": "Greatpick",
+			"pfs": "standard",
+			"traits": "fatal 1d12",
+			"damagedie": "d10",
+			"damagetype": "p",
+			"group": "pick",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=23",
+			"aon": "weapons23",
+			"type": "weapon",
+			"body": "This pick has a longer handle and broader head than a regular pick. It is too heavy to wield in one hand.",
+			"hash": "sfZLhJWx"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -461,7 +868,25 @@
 		"source": "PZO2101",
 		"id": "ef5420fa-848d-4b01-ab95-2540682f39c1",
 		"aonId": 24,
-		"hash": "zWXqzffL"
+		"pf2t": {
+			"name": "Greatsword",
+			"pfs": "standard",
+			"traits": "versatile p",
+			"damagedie": "d12",
+			"damagetype": "s",
+			"group": "sword",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=24",
+			"aon": "weapons24",
+			"type": "weapon",
+			"body": "This immense two-handed sword is nearly as tall as its wielder. Its lower blade is often somewhat dulled to allow it to be gripped for extra leverage in close-quarter fights.",
+			"hash": "zWXqzffL"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -480,7 +905,25 @@
 		"source": "PZO2101",
 		"id": "6ba5547a-1fb2-4a1c-8a3e-5cb6dd71d8b5",
 		"aonId": 25,
-		"hash": "PTtEdCGl"
+		"pf2t": {
+			"name": "Guisarme",
+			"pfs": "standard",
+			"traits": "reach,trip",
+			"damagedie": "d10",
+			"damagetype": "s",
+			"group": "polearm",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=25",
+			"aon": "weapons25",
+			"type": "weapon",
+			"body": "This polearm bears a long, often onesided, curved blade with a hook protruding from the blunt side of the blade, which can allow its wielder to trip opponents at a distance. Its shaft is usually 8 feet long.",
+			"hash": "PTtEdCGl"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -499,7 +942,25 @@
 		"source": "PZO2101",
 		"id": "67df71ab-27a5-447a-ae56-3062a579061c",
 		"aonId": 26,
-		"hash": "rkgTLUKZ"
+		"pf2t": {
+			"name": "Halberd",
+			"pfs": "standard",
+			"traits": "reach,versatile s",
+			"damagedie": "d10",
+			"damagetype": "p",
+			"group": "polearm",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=26",
+			"aon": "weapons26",
+			"type": "weapon",
+			"body": "This polearm has a relatively short, 5-foot shaft. The business end is a long spike with an axe blade attached.",
+			"hash": "rkgTLUKZ"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -522,7 +983,25 @@
 		"source": "PZO2101",
 		"id": "8c17525c-0968-4d64-8821-224bc2c52093",
 		"aonId": 27,
-		"hash": "tZgQlJMP"
+		"pf2t": {
+			"name": "Hatchet",
+			"pfs": "standard",
+			"traits": "agile,sweep,thrown 10 ft.",
+			"damagedie": "d6",
+			"damagetype": "s",
+			"group": "axe",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 4,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=27",
+			"aon": "weapons27",
+			"type": "weapon",
+			"body": "This small axe can be used in close combat or thrown.",
+			"hash": "tZgQlJMP"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -541,7 +1020,25 @@
 		"source": "PZO2101",
 		"id": "0bac87de-c1c1-4675-b79d-20abd2314dd5",
 		"aonId": 28,
-		"hash": "JRtfYrxL"
+		"pf2t": {
+			"name": "Lance",
+			"pfs": "standard",
+			"traits": "deadly d8,jousting 1d6,reach",
+			"damagedie": "d8",
+			"damagetype": "p",
+			"group": "spear",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 280 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=28",
+			"aon": "weapons28",
+			"type": "weapon",
+			"body": "This spear-like weapon is used by a mounted creature to deal a great deal of damage.",
+			"hash": "JRtfYrxL"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -563,7 +1060,25 @@
 		"source": "PZO2101",
 		"id": "78dc24f7-3536-4db5-b165-a562f328c40d",
 		"aonId": 29,
-		"hash": "tzKbRpUl"
+		"pf2t": {
+			"name": "Light Hammer",
+			"pfs": "standard",
+			"traits": "agile,thrown 20 ft.",
+			"damagedie": "d6",
+			"damagetype": "b",
+			"group": "hammer",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 3,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=29",
+			"aon": "weapons29",
+			"type": "weapon",
+			"body": "This smaller version of the warhammer has a wooden or metal shaft ending in a metal head. Unlike its heavier cousin, it is light enough to throw.",
+			"hash": "tzKbRpUl"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -582,7 +1097,25 @@
 		"source": "PZO2101",
 		"id": "0cd0a8c3-360a-4724-9deb-a080bf2b8232",
 		"aonId": 30,
-		"hash": "JNWVXKKv"
+		"pf2t": {
+			"name": "Light Pick",
+			"pfs": "standard",
+			"traits": "agile,fatal 1d8",
+			"damagedie": "d4",
+			"damagetype": "p",
+			"group": "pick",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 4,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=30",
+			"aon": "weapons30",
+			"type": "weapon",
+			"body": "A light pick is a modified mining implement with a wooden shaft ending in a pick head crafted more to pierce armor and flesh than chip rocks.",
+			"hash": "JNWVXKKv"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -601,7 +1134,25 @@
 		"source": "PZO2101",
 		"id": "7e8b6b35-0b08-4010-9f03-c11a454a49d1",
 		"aonId": 31,
-		"hash": "gPhqkhpk"
+		"pf2t": {
+			"name": "Longsword",
+			"pfs": "standard",
+			"traits": "versatile p",
+			"damagedie": "d8",
+			"damagetype": "s",
+			"group": "sword",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=31",
+			"aon": "weapons31",
+			"type": "weapon",
+			"body": "Longswords can be one-edged or twoedged swords. Their blades are heavy and they're between 3 and 4 feet in length.",
+			"hash": "gPhqkhpk"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -620,7 +1171,25 @@
 		"source": "PZO2101",
 		"id": "66f75db3-510c-4ddf-bb6b-5159f4cd4319",
 		"aonId": 32,
-		"hash": "BqtJfXzn"
+		"pf2t": {
+			"name": "Main-gauche",
+			"pfs": "standard",
+			"traits": "agile,disarm,finesse,parry,versatile s",
+			"damagedie": "d4",
+			"damagetype": "p",
+			"group": "knife",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 5,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=32",
+			"aon": "weapons32",
+			"type": "weapon",
+			"body": "This parrying dagger features a robust guard to protect the wielder's hand.",
+			"hash": "BqtJfXzn"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -639,7 +1208,25 @@
 		"source": "PZO2101",
 		"id": "91edab29-a93e-4317-a0a7-95ce2dce1113",
 		"aonId": 33,
-		"hash": "CgERlkdp"
+		"pf2t": {
+			"name": "Maul",
+			"pfs": "standard",
+			"traits": "shove",
+			"damagedie": "d12",
+			"damagetype": "b",
+			"group": "hammer",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 3,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=33",
+			"aon": "weapons33",
+			"type": "weapon",
+			"body": "Mauls are massive warhammers that must be swung with two hands.",
+			"hash": "CgERlkdp"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -658,7 +1245,25 @@
 		"source": "PZO2101",
 		"id": "fe0f7bd2-ae4f-46ac-b6c4-759dbf69ae80",
 		"aonId": 34,
-		"hash": "PCjttKNh"
+		"pf2t": {
+			"name": "Pick",
+			"pfs": "standard",
+			"traits": "fatal 1d10",
+			"damagedie": "d6",
+			"damagetype": "p",
+			"group": "pick",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 7,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=34",
+			"aon": "weapons34",
+			"type": "weapon",
+			"body": "A pick designed solely for combat has a sturdy wooden shaft and a heavy, pointed head to deliver devastating blows.",
+			"hash": "PCjttKNh"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -677,7 +1282,25 @@
 		"source": "PZO2101",
 		"id": "5fdbc46d-3afe-45cd-a62e-59c1587779d4",
 		"aonId": 35,
-		"hash": "CcgHbzpy"
+		"pf2t": {
+			"name": "Ranseur",
+			"pfs": "standard",
+			"traits": "disarm,reach",
+			"damagedie": "d10",
+			"damagetype": "p",
+			"group": "polearm",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=35",
+			"aon": "weapons35",
+			"type": "weapon",
+			"body": "This polearm is a long trident with a central prong that's longer than the other two.",
+			"hash": "CcgHbzpy"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -696,7 +1319,25 @@
 		"source": "PZO2101",
 		"id": "0a0dcbee-a849-4b12-8a5d-b9c748959df6",
 		"aonId": 36,
-		"hash": "znMZgHvt"
+		"pf2t": {
+			"name": "Rapier",
+			"pfs": "standard",
+			"traits": "deadly d8,disarm,finesse",
+			"damagedie": "d6",
+			"damagetype": "p",
+			"group": "sword",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=36",
+			"aon": "weapons36",
+			"type": "weapon",
+			"body": "The rapier is a long and thin piercing blade with a basket hilt. It is prized among many as a dueling weapon.",
+			"hash": "znMZgHvt"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -715,7 +1356,25 @@
 		"source": "PZO2101",
 		"id": "fd69c54f-8b10-4e0e-88e9-4962cc7a7fd0",
 		"aonId": 37,
-		"hash": "xpQbtQmx"
+		"pf2t": {
+			"name": "Sap",
+			"pfs": "standard",
+			"traits": "agile,nonlethal",
+			"damagedie": "d6",
+			"damagetype": "b",
+			"group": "club",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=37",
+			"aon": "weapons37",
+			"type": "weapon",
+			"body": "A sap has a soft wrapping around a dense core, typically a leather sheath around a lead rod. Its head is wider than its grip to disperse the force of a blow, as the weapon's purpose is to knock out its victim rather than to draw blood.",
+			"hash": "xpQbtQmx"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -734,7 +1393,25 @@
 		"source": "PZO2101",
 		"id": "74da547b-ff28-4c79-b7f0-cf05a3fa316c",
 		"aonId": 38,
-		"hash": "xnJQFhZI"
+		"pf2t": {
+			"name": "Scimitar",
+			"pfs": "standard",
+			"traits": "forceful,sweep",
+			"damagedie": "d6",
+			"damagetype": "s",
+			"group": "sword",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=38",
+			"aon": "weapons38",
+			"type": "weapon",
+			"body": "This one-handed curved blade is sharp on one side.",
+			"hash": "xnJQFhZI"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -753,7 +1430,25 @@
 		"source": "PZO2101",
 		"id": "73cb8d14-2fc5-4412-8843-b299b4cc7da8",
 		"aonId": 39,
-		"hash": "XxnrUstW"
+		"pf2t": {
+			"name": "Scythe",
+			"pfs": "standard",
+			"traits": "deadly d10,trip",
+			"damagedie": "d10",
+			"damagetype": "s",
+			"group": "polearm",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=39",
+			"aon": "weapons39",
+			"type": "weapon",
+			"body": "Derived from a farming tool used to mow down long grains and cereals, this weapon has a long wooden shaft with protruding handles, capped with a curved blade set at a right angle.",
+			"hash": "XxnrUstW"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -772,7 +1467,21 @@
 		"source": "PZO2101",
 		"id": "2d34e70d-b9c6-4a81-98c5-74890c2b3119",
 		"aonId": 40,
-		"hash": "lROPwXqX"
+		"pf2t": {
+			"name": "Shield Bash",
+			"pfs": "standard",
+			"damagedie": "d4",
+			"damagetype": "b",
+			"group": "shield",
+			"category": "martial",
+			"hands": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=40",
+			"aon": "weapons40",
+			"type": "weapon",
+			"body": "A shield bash is not actually a weapon, but a maneuver in which you thrust or swing your shield to hit your foe with an impromptu attack.\n\n#### Critical Specialization Effects\nCertain feats, class features, weapon runes, and other effects can grant you additional benefits when you make a Strike with certain weapons and get a critical success. This is called a critical specialization effect. The exact effect depends on which weapon group your weapon belongs to, as listed below. You can always decide not to add the critical specialization effect of your weapon.\n\n**Shield**: You knock the target back from you 5 feet. This is forced movement.",
+			"hash": "lROPwXqX"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -791,7 +1500,24 @@
 		"source": "PZO2101",
 		"id": "812eeee5-90df-4ea7-b6ad-2353edaee6c1",
 		"aonId": 41,
-		"hash": "LZBdlWps"
+		"pf2t": {
+			"name": "Shield Boss",
+			"pfs": "standard",
+			"traits": "attached to shield",
+			"damagedie": "d6",
+			"damagetype": "b",
+			"group": "shield",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 5,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=41",
+			"aon": "weapons41",
+			"type": "weapon",
+			"body": "Typically a round, convex, or conical piece of thick metal attached to the center of a shield, a shield boss increases the bludgeoning damage of a shield bash.",
+			"hash": "LZBdlWps"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -810,7 +1536,24 @@
 		"source": "PZO2101",
 		"id": "375ccba7-0ff6-4a63-bb89-346cd0a7a3c3",
 		"aonId": 42,
-		"hash": "CwwNKtQq"
+		"pf2t": {
+			"name": "Shield Spikes",
+			"pfs": "standard",
+			"traits": "attached to shield",
+			"damagedie": "d6",
+			"damagetype": "p",
+			"group": "shield",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 5,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=42",
+			"aon": "weapons42",
+			"type": "weapon",
+			"body": "These metal spikes are strategically placed on the defensive side of the shield to deal piercing damage with a shield bash.",
+			"hash": "CwwNKtQq"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -829,7 +1572,25 @@
 		"source": "PZO2101",
 		"id": "8bd3ed3b-60f1-4cca-88f6-7c6ffd1ec3aa",
 		"aonId": 43,
-		"hash": "ZXrNMpQw"
+		"pf2t": {
+			"name": "Shortsword",
+			"pfs": "standard",
+			"traits": "agile,finesse,versatile s",
+			"damagedie": "d6",
+			"damagetype": "p",
+			"group": "sword",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 9,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=43",
+			"aon": "weapons43",
+			"type": "weapon",
+			"body": "These blades come in a variety of shapes and styles, but they are typically 2 feet long.",
+			"hash": "ZXrNMpQw"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -854,7 +1615,25 @@
 		"source": "PZO2101",
 		"id": "7a5803f9-7e94-47e2-8ef1-c5ac0fbd577b",
 		"aonId": 44,
-		"hash": "rXQybZOb"
+		"pf2t": {
+			"name": "Starknife",
+			"pfs": "standard",
+			"traits": "agile,deadly d6,finesse,thrown 20 ft.,versatile s",
+			"damagedie": "d4",
+			"damagetype": "p",
+			"group": "knife",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=44",
+			"aon": "weapons44",
+			"type": "weapon",
+			"body": "From a central metal ring, four tapering metal blades extend like points on a compass rose. When gripping a starknife from the center, the wielder can use it as a melee weapon. It can also be thrown short distances.",
+			"hash": "rXQybZOb"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -875,7 +1654,25 @@
 		"source": "PZO2101",
 		"id": "cc8bfa9d-0960-4550-baa4-0852706922b3",
 		"aonId": 45,
-		"hash": "gbbPRYgm"
+		"pf2t": {
+			"name": "Trident",
+			"pfs": "standard",
+			"traits": "thrown 20 ft.",
+			"damagedie": "d8",
+			"damagetype": "p",
+			"group": "spear",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=45",
+			"aon": "weapons45",
+			"type": "weapon",
+			"body": "This three-pronged, spear-like weapon typically has a 4-foot shaft. Like a spear, it can be wielded with one hand or thrown.",
+			"hash": "gbbPRYgm"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -894,7 +1691,25 @@
 		"source": "PZO2101",
 		"id": "21fd184c-ee21-4c34-af58-d1573c1231eb",
 		"aonId": 46,
-		"hash": "htsVbKWW"
+		"pf2t": {
+			"name": "War Flail",
+			"pfs": "standard",
+			"traits": "disarm,sweep,trip",
+			"damagedie": "d10",
+			"damagetype": "b",
+			"group": "flail",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=46",
+			"aon": "weapons46",
+			"type": "weapon",
+			"body": "This large flail has a long shaft connected to a shorter piece of stout wood or metal that's sometimes inlaid with spikes.",
+			"hash": "htsVbKWW"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -913,7 +1728,25 @@
 		"source": "PZO2101",
 		"id": "0f2895cc-33e2-4309-9583-34d9e15094d9",
 		"aonId": 47,
-		"hash": "DypbRrnr"
+		"pf2t": {
+			"name": "Warhammer",
+			"pfs": "standard",
+			"traits": "shove",
+			"damagedie": "d8",
+			"damagetype": "b",
+			"group": "hammer",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=47",
+			"aon": "weapons47",
+			"type": "weapon",
+			"body": "This weapon has a wooden shaft ending in a large, heavy metal head. The head of the hammer might be single-sided or double-sided, but it's always capable of delivering powerful bludgeoning blows.",
+			"hash": "DypbRrnr"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -932,7 +1765,25 @@
 		"source": "PZO2101",
 		"id": "7b109399-bf6e-4c4a-a813-a3e05673801c",
 		"aonId": 48,
-		"hash": "WhSfWIGs"
+		"pf2t": {
+			"name": "Whip",
+			"pfs": "standard",
+			"traits": "disarm,finesse,nonlethal,reach,trip",
+			"damagedie": "d4",
+			"damagetype": "s",
+			"group": "flail",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=48",
+			"aon": "weapons48",
+			"type": "weapon",
+			"body": "This long strand of thick leather, often braided, delivers a painful but nonlethal slash at a distance, usually accompanied by a distinctive cracking sound.",
+			"hash": "WhSfWIGs"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -952,7 +1803,25 @@
 		"source": "PZO2101",
 		"id": "8f59d344-b9c2-4fbf-8d2b-ddfc86977908",
 		"aonId": 49,
-		"hash": "qvCKFnzw"
+		"pf2t": {
+			"name": "Dogslicer",
+			"pfs": "standard",
+			"traits": "agile,backstabber,finesse,goblin,uncommon",
+			"damagedie": "d6",
+			"damagetype": "s",
+			"group": "sword",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=49",
+			"aon": "weapons49",
+			"type": "weapon",
+			"body": "This short, curved, and crude makeshift blade often has holes drilled into it to reduce its weight. It's a favored weapon of goblins.",
+			"hash": "qvCKFnzw"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -972,7 +1841,25 @@
 		"source": "PZO2101",
 		"id": "69a44286-55b8-458d-a7fc-d9148da02b51",
 		"aonId": 50,
-		"hash": "gMsvQGUh"
+		"pf2t": {
+			"name": "Elven Curve Blade",
+			"pfs": "standard",
+			"traits": "elf,finesse,forceful,uncommon",
+			"damagedie": "d8",
+			"damagetype": "s",
+			"group": "sword",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 4,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=50",
+			"aon": "weapons50",
+			"type": "weapon",
+			"body": "Essentially a longer version of the scimitar, this traditional elven weapon has a thinner blade than its cousin.",
+			"hash": "gMsvQGUh"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -999,7 +1886,25 @@
 		"source": "PZO2101",
 		"id": "d536997a-b99f-400d-80ab-4070c3cefb44",
 		"aonId": 51,
-		"hash": "sQzZQWty"
+		"pf2t": {
+			"name": "Filcher's Fork",
+			"pfs": "standard",
+			"traits": "agile,backstabber,deadly d6,finesse,halfling,thrown 20 ft.,uncommon",
+			"damagedie": "d4",
+			"damagetype": "p",
+			"group": "spear",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=51",
+			"aon": "weapons51",
+			"type": "weapon",
+			"body": "This halfling weapon looks like a long, two-pronged fork and is used as both a weapon and a cooking implement.",
+			"hash": "sQzZQWty"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1019,7 +1924,25 @@
 		"source": "PZO2101",
 		"id": "6bac7c9b-b12d-4281-8e28-982e8c1e5d8f",
 		"aonId": 52,
-		"hash": "ISQkZLvt"
+		"pf2t": {
+			"name": "Gnome Hooked Hammer",
+			"pfs": "standard",
+			"traits": "gnome,trip,two-hand 1d10,uncommon,versatile p",
+			"damagedie": "d6",
+			"damagetype": "b",
+			"group": "hammer",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=52",
+			"aon": "weapons52",
+			"type": "weapon",
+			"body": "This gnome tool and weapon features a hammer at one end and a curved pick on the other. It's such a strange and awkward weapon that others think the gnomes are slightly erratic for using it.",
+			"hash": "ISQkZLvt"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1039,7 +1962,25 @@
 		"source": "PZO2101",
 		"id": "dfaf11ea-ca51-4ae3-9b72-e972439247f7",
 		"aonId": 53,
-		"hash": "qDtWxrKU"
+		"pf2t": {
+			"name": "Horsechopper",
+			"pfs": "standard",
+			"traits": "goblin,reach,trip,uncommon,versatile p",
+			"damagedie": "d8",
+			"damagetype": "s",
+			"group": "polearm",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "sp",
+			"price": 9,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=53",
+			"aon": "weapons53",
+			"type": "weapon",
+			"body": "Created by goblins to battle horses, this weapon is essentially a long shaft ending in a blade with a large hook.",
+			"hash": "qDtWxrKU"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1059,7 +2000,25 @@
 		"source": "PZO2101",
 		"id": "aae7cf3b-fb5c-4dcc-b39a-a9d1af0952de",
 		"aonId": 54,
-		"hash": "XvWzhjJW"
+		"pf2t": {
+			"name": "Kama",
+			"pfs": "standard",
+			"traits": "agile,monk,trip,uncommon",
+			"damagedie": "d6",
+			"damagetype": "s",
+			"group": "knife",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=54",
+			"aon": "weapons54",
+			"type": "weapon",
+			"body": "Similar to a sickle and used in some regions to reap grain, a kama has a short, slightly curved blade and a wooden handle.",
+			"hash": "XvWzhjJW"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1079,7 +2038,25 @@
 		"source": "PZO2101",
 		"id": "4d9b6896-90a2-4ee2-bee2-881d0aea8b0d",
 		"aonId": 55,
-		"hash": "RWRdnqDF"
+		"pf2t": {
+			"name": "Katana",
+			"pfs": "standard",
+			"traits": "deadly d8,two-hand 1d10,uncommon,versatile p",
+			"damagedie": "d6",
+			"damagetype": "s",
+			"group": "sword",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=55",
+			"aon": "weapons55",
+			"type": "weapon",
+			"body": "A katana is a curved, single-edged sword known for its wickedly sharped blade.",
+			"hash": "RWRdnqDF"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1099,7 +2076,25 @@
 		"source": "PZO2101",
 		"id": "2bafcfd9-a443-46b3-8a37-dacb6e08821b",
 		"aonId": 56,
-		"hash": "gzGGvPtg"
+		"pf2t": {
+			"name": "Kukri",
+			"pfs": "standard",
+			"traits": "agile,finesse,trip,uncommon",
+			"damagedie": "d6",
+			"damagetype": "s",
+			"group": "knife",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 6,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=56",
+			"aon": "weapons56",
+			"type": "weapon",
+			"body": "The blade of this foot-long knife curves inward and lacks a cross guard at the hilt.",
+			"hash": "gzGGvPtg"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1119,7 +2114,25 @@
 		"source": "PZO2101",
 		"id": "5029d8f8-6c27-4c19-b85c-88e2f1e77b7d",
 		"aonId": 57,
-		"hash": "JAcgCglN"
+		"pf2t": {
+			"name": "Nunchaku",
+			"pfs": "standard",
+			"traits": "backswing,disarm,finesse,monk,uncommon",
+			"damagedie": "d6",
+			"damagetype": "b",
+			"group": "club",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 2,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=57",
+			"aon": "weapons57",
+			"type": "weapon",
+			"body": "The nunchaku is constructed of two wooden or metal bars connected by a short length of rope or chain.",
+			"hash": "JAcgCglN"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1139,7 +2152,25 @@
 		"source": "PZO2101",
 		"id": "490cdc73-7474-4492-9de4-c22f2bd6ac4c",
 		"aonId": 58,
-		"hash": "WGfkkzPZ"
+		"pf2t": {
+			"name": "Orc Knuckle Dagger",
+			"pfs": "standard",
+			"traits": "agile,disarm,orc,uncommon",
+			"damagedie": "d6",
+			"damagetype": "p",
+			"group": "knife",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 7,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=58",
+			"aon": "weapons58",
+			"type": "weapon",
+			"body": "This stout, metal blade of orc design has a horizontal basket hilt with blades jutting from each end, or sometimes one blade like that of a katar.",
+			"hash": "WGfkkzPZ"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1159,7 +2190,25 @@
 		"source": "PZO2101",
 		"id": "3a26ad70-0fb7-4c6a-9663-cf07c0cb1fd4",
 		"aonId": 59,
-		"hash": "vqrRfgXP"
+		"pf2t": {
+			"name": "Sai",
+			"pfs": "standard",
+			"traits": "agile,disarm,finesse,monk,uncommon,versatile b",
+			"damagedie": "d4",
+			"damagetype": "p",
+			"group": "knife",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 6,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=59",
+			"aon": "weapons59",
+			"type": "weapon",
+			"body": "This piercing dagger is a metal spike flanked by a pair of prongs that can be used to trap an enemy'sweapon.",
+			"hash": "vqrRfgXP"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1179,7 +2228,25 @@
 		"source": "PZO2101",
 		"id": "d29aacdf-7877-4140-9ca3-957047152600",
 		"aonId": 60,
-		"hash": "zAgzGTOK"
+		"pf2t": {
+			"name": "Spiked Chain",
+			"pfs": "standard",
+			"traits": "disarm,finesse,trip,uncommon",
+			"damagedie": "d8",
+			"damagetype": "s",
+			"group": "flail",
+			"category": "martial",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 3,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=60",
+			"aon": "weapons60",
+			"type": "weapon",
+			"body": "This 4footlong length of chain is covered with barbs and has spikes on one or both ends. Some feature metal hoops used as handgrips.",
+			"hash": "zAgzGTOK"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1199,7 +2266,25 @@
 		"source": "PZO2101",
 		"id": "339c096f-aadc-463f-848d-73aee975a2a2",
 		"aonId": 61,
-		"hash": "XJWNXDmE"
+		"pf2t": {
+			"name": "Temple Sword",
+			"pfs": "standard",
+			"traits": "monk,trip,uncommon",
+			"damagedie": "d8",
+			"damagetype": "s",
+			"group": "sword",
+			"category": "martial",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=61",
+			"aon": "weapons61",
+			"type": "weapon",
+			"body": "This heavy blade is favored by guardians of religious sites. It has a distinctive, crescent-shaped blade that seems to be a mix of a sickle and sword. It often has holes drilled into the blade or the pommel so that bells or other holy trinkets can be affixed to the weapon as an aid for prayer or mediation.",
+			"hash": "XJWNXDmE"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1237,7 +2322,25 @@
 		"source": "PZO2101",
 		"id": "d4bf19a4-bfaa-47eb-a497-c2abe8d891dc",
 		"aonId": 63,
-		"hash": "WPjmkBcl"
+		"pf2t": {
+			"name": "Gnome Flickmace",
+			"pfs": "standard",
+			"traits": "gnome,reach,uncommon",
+			"damagedie": "d8",
+			"damagetype": "b",
+			"group": "flail",
+			"category": "advanced",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 3,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=63",
+			"aon": "weapons63",
+			"type": "weapon",
+			"body": "More a flail than a mace, this weapon has a short handle attached to a length of chain with a ball at the end. The ball is propelled to its reach with the flick of the wrist, the momentum of which brings the ball back to the wielder after the strike.",
+			"hash": "WPjmkBcl"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1257,7 +2360,25 @@
 		"source": "PZO2101",
 		"id": "1098a8bf-9812-4b35-9859-6cccd11034e9",
 		"aonId": 64,
-		"hash": "sdJtchbZ"
+		"pf2t": {
+			"name": "Orc Necksplitter",
+			"pfs": "standard",
+			"traits": "forceful,orc,sweep,uncommon",
+			"damagedie": "d8",
+			"damagetype": "s",
+			"group": "axe",
+			"category": "advanced",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=64",
+			"aon": "weapons64",
+			"type": "weapon",
+			"body": "This single-bladed bearded axe has a jagged blade that's perfect for separating bone from tendon and cartilage.",
+			"hash": "sdJtchbZ"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1277,7 +2398,25 @@
 		"source": "PZO2101",
 		"id": "70495c55-c5a4-4216-a49d-1b7ac8dc5b2b",
 		"aonId": 65,
-		"hash": "dWrZHzbv"
+		"pf2t": {
+			"name": "Sawtooth Saber",
+			"pfs": "standard",
+			"traits": "agile,finesse,twin,uncommon",
+			"damagedie": "d6",
+			"damagetype": "s",
+			"group": "sword",
+			"category": "advanced",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 5,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=65",
+			"aon": "weapons65",
+			"type": "weapon",
+			"body": "The signature weapon of the Red Mantis assassins, this curved blade is serrated like a saw, hence the name.",
+			"hash": "dWrZHzbv"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1299,7 +2438,25 @@
 		"source": "PZO2101",
 		"id": "a85cea60-3f0f-49ae-88df-37e46ab78015",
 		"aonId": 66,
-		"hash": "RRpbYbqb"
+		"pf2t": {
+			"name": "Blowgun",
+			"pfs": "standard",
+			"traits": "agile,nonlethal",
+			"group": "dart",
+			"category": "simple",
+			"hands": 1,
+			"range": 20,
+			"priceunit": "sp",
+			"price": 1,
+			"bulk": "L",
+			"reload": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=66",
+			"aon": "weapons66",
+			"type": "weapon",
+			"body": "**Reload** 1\n\n- - -\n\nThis long, narrow tube is used for shooting blowgun darts, using only the power of a forcefully exhaled breath.",
+			"hash": "RRpbYbqb"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1321,7 +2478,26 @@
 		"source": "PZO2101",
 		"id": "dfc72bb6-0cf6-4c96-95f0-de3e5412f57c",
 		"aonId": 67,
-		"hash": "xpWgvdXK"
+		"pf2t": {
+			"name": "Crossbow",
+			"pfs": "standard",
+			"damagedie": "d8",
+			"damagetype": "p",
+			"group": "bow",
+			"category": "simple",
+			"hands": 2,
+			"range": 120,
+			"priceunit": "gp",
+			"price": 3,
+			"bulk": 1,
+			"reload": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=67",
+			"aon": "weapons67",
+			"type": "weapon",
+			"body": "**Reload** 1\n\n- - -\n\nThis ranged weapon has a bow-like assembly mounted on a handled frame called a tiller. The tiller has a mechanism to lock the bowstring in place, attached to a trigger mechanism that releases the tension and launches a bolt.\n\n#### Critical Specialization Effects\nCertain feats, class features, weapon runes, and other effects can grant you additional benefits when you make a Strike with certain weapons and get a critical success. This is called a critical specialization effect. The exact effect depends on which weapon group your weapon belongs to, as listed below. You can always decide not to add the critical specialization effect of your weapon.\n\n**Bow**: If the target of the critical hit is adjacent to a surface, it gets stuck to that surface by the missile. The target is immobilized and must spend an Interact action to attempt a DC 10 Athletics check to pull the missile free; it can't move from its space until it succeeds. The creature doesn't become stuck if it is incorporeal, is liquid (like a water elemental or some oozes), or could otherwise escape without effort.",
+			"hash": "xpWgvdXK"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1342,7 +2518,26 @@
 		"source": "PZO2101",
 		"id": "dfbfb472-d1b0-4d91-86c8-85327c4b02ce",
 		"aonId": 68,
-		"hash": "btqmzUkr"
+		"pf2t": {
+			"name": "Dart",
+			"pfs": "standard",
+			"traits": "agile,thrown",
+			"damagedie": "d4",
+			"damagetype": "p",
+			"group": "dart",
+			"category": "simple",
+			"hands": 1,
+			"range": 20,
+			"priceunit": "cp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=68",
+			"aon": "weapons68",
+			"type": "weapon",
+			"body": "This thrown weapon is larger than an arrow but shorter than a javelin. It typically has a short shaft of wood ending in a metal tip and is sometimes stabilized by feathers or fur.",
+			"hash": "btqmzUkr"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1364,7 +2559,26 @@
 		"source": "PZO2101",
 		"id": "d1369d91-0266-4fc0-98fa-bb7a88d8d5eb",
 		"aonId": 69,
-		"hash": "CvRpJVvy"
+		"pf2t": {
+			"name": "Hand Crossbow",
+			"pfs": "standard",
+			"damagedie": "d6",
+			"damagetype": "p",
+			"group": "bow",
+			"category": "simple",
+			"hands": 1,
+			"range": 60,
+			"priceunit": "gp",
+			"price": 3,
+			"bulk": "L",
+			"reload": 1,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=69",
+			"aon": "weapons69",
+			"type": "weapon",
+			"body": "**Reload** 1\n\n- - -\n\nSometimes referred to as an alley bow by rogues or ruffians, this small crossbow fires small bolts that are sometimes used to deliver poison to the target. It's small enough to be shot one-handed, but it still requires two hands to load.\n\n#### Critical Specialization Effects\nCertain feats, class features, weapon runes, and other effects can grant you additional benefits when you make a Strike with certain weapons and get a critical success. This is called a critical specialization effect. The exact effect depends on which weapon group your weapon belongs to, as listed below. You can always decide not to add the critical specialization effect of your weapon.\n\n**Bow**: If the target of the critical hit is adjacent to a surface, it gets stuck to that surface by the missile. The target is immobilized and must spend an Interact action to attempt a DC 10 Athletics check to pull the missile free; it can't move from its space until it succeeds. The creature doesn't become stuck if it is incorporeal, is liquid (like a water elemental or some oozes), or could otherwise escape without effort.",
+			"hash": "CvRpJVvy"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1386,7 +2600,26 @@
 		"source": "PZO2101",
 		"id": "089d2c90-0281-47d9-9992-51084f4c8159",
 		"aonId": 70,
-		"hash": "ZgbBqFGC"
+		"pf2t": {
+			"name": "Heavy Crossbow",
+			"pfs": "standard",
+			"damagedie": "d10",
+			"damagetype": "p",
+			"group": "bow",
+			"category": "simple",
+			"hands": 2,
+			"range": 120,
+			"priceunit": "gp",
+			"price": 4,
+			"bulk": 2,
+			"reload": 2,
+			"source": "Core Rulebook pg. 281 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=70",
+			"aon": "weapons70",
+			"type": "weapon",
+			"body": "**Reload** 2\n\n- - -\n\nThis large crossbow is harder to load and more substantial than a regular crossbow, but it packs a greater punch.\n\n#### Critical Specialization Effects\nCertain feats, class features, weapon runes, and other effects can grant you additional benefits when you make a Strike with certain weapons and get a critical success. This is called a critical specialization effect. The exact effect depends on which weapon group your weapon belongs to, as listed below. You can always decide not to add the critical specialization effect of your weapon.\n\n**Bow**: If the target of the critical hit is adjacent to a surface, it gets stuck to that surface by the missile. The target is immobilized and must spend an Interact action to attempt a DC 10 Athletics check to pull the missile free; it can't move from its space until it succeeds. The creature doesn't become stuck if it is incorporeal, is liquid (like a water elemental or some oozes), or could otherwise escape without effort.",
+			"hash": "ZgbBqFGC"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1407,7 +2640,26 @@
 		"source": "PZO2101",
 		"id": "24e57cb2-0b56-4297-847b-a52abb9c265e",
 		"aonId": 71,
-		"hash": "gyLEHPlq"
+		"pf2t": {
+			"name": "Javelin",
+			"pfs": "standard",
+			"traits": "thrown",
+			"damagedie": "d6",
+			"damagetype": "p",
+			"group": "dart",
+			"category": "simple",
+			"hands": 1,
+			"range": 30,
+			"priceunit": "sp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=71",
+			"aon": "weapons71",
+			"type": "weapon",
+			"body": "This thin spear is well balanced for throwing but is not designed for melee use.",
+			"hash": "gyLEHPlq"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1429,7 +2681,25 @@
 		"source": "PZO2101",
 		"id": "ab74a3af-983d-4716-a6aa-c387bde43a14",
 		"aonId": 72,
-		"hash": "kQzLrWqx"
+		"pf2t": {
+			"name": "Sling",
+			"pfs": "standard",
+			"traits": "propulsive",
+			"damagedie": "d6",
+			"damagetype": "b",
+			"group": "sling",
+			"category": "simple",
+			"hands": 1,
+			"range": 50,
+			"bulk": "L",
+			"reload": 1,
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=72",
+			"aon": "weapons72",
+			"type": "weapon",
+			"body": "**Reload** 1\n\n- - -\n\nLittle more than a leather cup attached to a pair of straps, a sling can be used to fling smooth stones or sling bullets at a range.",
+			"hash": "kQzLrWqx"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1450,7 +2720,23 @@
 		"source": "PZO2101",
 		"id": "ae37d5c6-1ffa-476a-a4e6-2768a56e3ad8",
 		"aonId": 73,
-		"hash": "zhEcgmGv"
+		"pf2t": {
+			"name": "Alchemical Bomb",
+			"pfs": "standard",
+			"traits": "varies",
+			"group": "bomb",
+			"category": "martial",
+			"hands": 1,
+			"range": 20,
+			"price": "(Varies)",
+			"bulk": "L",
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=73",
+			"aon": "weapons73",
+			"type": "weapon",
+			"body": "These bombs come in a variety of types and levels of power, but no matter the variety, you throw the bomb at the target and it explodes, unleashing its alchemical blast.\n\n#### Critical Specialization Effects\nCertain feats, class features, weapon runes, and other effects can grant you additional benefits when you make a Strike with certain weapons and get a critical success. This is called a critical specialization effect. The exact effect depends on which weapon group your weapon belongs to, as listed below. You can always decide not to add the critical specialization effect of your weapon.\n\n**Bomb**: Increase the radius of the bomb's splash damage (if any) to 10 feet.",
+			"hash": "zhEcgmGv"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1476,7 +2762,26 @@
 		"source": "PZO2101",
 		"id": "ba64af6e-e3ee-4344-bff3-5965689a9e22",
 		"aonId": 74,
-		"hash": "dZTHpkrw"
+		"pf2t": {
+			"name": "Composite Longbow",
+			"pfs": "standard",
+			"traits": "deadly d10,propulsive,volley 30 ft.",
+			"damagedie": "d8",
+			"damagetype": "p",
+			"group": "bow",
+			"category": "martial",
+			"hands": 1,
+			"range": 100,
+			"priceunit": "gp",
+			"price": 20,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=74",
+			"aon": "weapons74",
+			"type": "weapon",
+			"body": "This projectile weapon is made from horn, wood, and sinew laminated together to increase the power of its pull and the force of its projectile. Like all longbows, its great size also increases the bow's range and power. You must use two hands to fire it, and it cannot be used while mounted. Any time an ability is specifically restricted to a longbow, such as Erastil's favored weapon, it also applies to composite longbows unless otherwise stated.",
+			"hash": "dZTHpkrw"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1498,7 +2803,26 @@
 		"source": "PZO2101",
 		"id": "35abd271-6eab-4586-9fa0-f6545423c42e",
 		"aonId": 75,
-		"hash": "RtdBvEDw"
+		"pf2t": {
+			"name": "Composite Shortbow",
+			"pfs": "standard",
+			"traits": "deadly d10,propulsive",
+			"damagedie": "d6",
+			"damagetype": "p",
+			"group": "bow",
+			"category": "martial",
+			"hands": 1,
+			"range": 60,
+			"priceunit": "gp",
+			"price": 14,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=75",
+			"aon": "weapons75",
+			"type": "weapon",
+			"body": "This shortbow is made from horn, wood, and sinew laminated together to increase the power of its pull and the force of its projectile. Its compact size and power make it a favorite of mounted archers. Any time an ability is specifically restricted to a shortbow, it also applies to composite shortbows unless otherwise stated.",
+			"hash": "RtdBvEDw"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1523,7 +2847,26 @@
 		"source": "PZO2101",
 		"id": "8153a57f-5c95-45d7-8c85-8c24b38756df",
 		"aonId": 76,
-		"hash": "mNxfTQHO"
+		"pf2t": {
+			"name": "Longbow",
+			"pfs": "standard",
+			"traits": "deadly d10,volley 30 ft.",
+			"damagedie": "d8",
+			"damagetype": "p",
+			"group": "bow",
+			"category": "martial",
+			"hands": 1,
+			"range": 100,
+			"priceunit": "gp",
+			"price": 6,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=76",
+			"aon": "weapons76",
+			"type": "weapon",
+			"body": "This 5-foot-tall bow, usually made of a single piece of elm, hickory, or yew, has a powerful draw and is excellent at propelling arrows with great force and at an extreme distance. You must use two hands to fire a longbow, and it can't be used whilemounted.",
+			"hash": "mNxfTQHO"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1545,7 +2888,26 @@
 		"source": "PZO2101",
 		"id": "655af6d9-afd3-4f44-8252-da54e0ae686b",
 		"aonId": 77,
-		"hash": "xUBybOkc"
+		"pf2t": {
+			"name": "Shortbow",
+			"pfs": "standard",
+			"traits": "deadly d10",
+			"damagedie": "d6",
+			"damagetype": "p",
+			"group": "bow",
+			"category": "martial",
+			"hands": 1,
+			"range": 60,
+			"priceunit": "gp",
+			"price": 3,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=77",
+			"aon": "weapons77",
+			"type": "weapon",
+			"body": "This smaller bow is made of a single piece of wood and favored by skirmishers and cavalry.",
+			"hash": "xUBybOkc"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1567,7 +2929,27 @@
 		"source": "PZO2101",
 		"id": "5cef39f3-d746-4c32-b964-aeb0f3ea87a1",
 		"aonId": 78,
-		"hash": "XzZsIWMn"
+		"pf2t": {
+			"name": "Halfling Sling Staff",
+			"pfs": "standard",
+			"traits": "halfling,propulsive,uncommon",
+			"damagedie": "d10",
+			"damagetype": "b",
+			"group": "sling",
+			"category": "martial",
+			"hands": 2,
+			"range": 80,
+			"priceunit": "gp",
+			"price": 5,
+			"bulk": 1,
+			"reload": 1,
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=78",
+			"aon": "weapons78",
+			"type": "weapon",
+			"body": "**Reload** 1\n\n- - -\n\nThis staff ends in a Y-shaped split that cradles a sling. The length of the staff provides excellent leverage when used twohanded to fling rocks or bullets from thesling.",
+			"hash": "XzZsIWMn"
+		}
 	},
 	{
 		"objectType": "Weapon",
@@ -1590,6 +2972,24 @@
 		"source": "PZO2101",
 		"id": "1dab2d5d-b7c1-46dc-b10f-d1a45d69b90e",
 		"aonId": 79,
-		"hash": "hTyrVbkR"
+		"pf2t": {
+			"name": "Shuriken",
+			"pfs": "standard",
+			"traits": "agile,monk,thrown,uncommon",
+			"damagedie": "d4",
+			"damagetype": "p",
+			"group": "dart",
+			"category": "martial",
+			"hands": 1,
+			"range": 20,
+			"priceunit": "cp",
+			"price": 1,
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Weapons.aspx?ID=79",
+			"aon": "weapons79",
+			"type": "weapon",
+			"body": "This \"throwing star\" is a small piece of flat metal with sharp edges, designed to be flung with a flick of the wrist.",
+			"hash": "hTyrVbkR"
+		}
 	}
 ]

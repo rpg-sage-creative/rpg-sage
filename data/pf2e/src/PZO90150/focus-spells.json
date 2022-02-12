@@ -17,7 +17,21 @@
 		"focus": true,
 		"aonId": 562,
 		"id": "a39373cd-175f-4bb9-ab53-b27ee78808b7",
-		"hash": "rUqLfktJ"
+		"pf2t": {
+			"name": "Apex Companion",
+			"level": 10,
+			"pfs": "limited",
+			"traits": "uncommon,druid,polymorph,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "150 Broken Promises pg. 77",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=562",
+			"aon": "spells562",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n**Targets** 1 animal companion in your service\n\n- - -\n\nYou focus on the energies of all members of your animal companion's species, transforming your animal companion into its apex battle form. Your animal companion gains the following statistics and abilities while in its apex form. \n\n+ Your animal companion becomes Huge and its attacks have 15-foot reach. It must have enough space to expand into or the spell is lost. \n+ 30 temporary Hit Points. \n+ Darkvision. \n+ Your animal companion's attack's damage dice increase by one step, and its attack gains the deadly d12 trait. \n+ +10-foot status bonus to its Speeds. \n+ Ignores difficult terrain and greater difficult terrain.",
+			"hash": "rUqLfktJ"
+		}
 	},
 	{
 		"name": "Song of the Fallen",
@@ -53,6 +67,20 @@
 		"focus": true,
 		"aonId": 563,
 		"id": "978bf74c-0372-4d55-9ed2-93b65310e340",
-		"hash": "CWQAvrFp"
+		"pf2t": {
+			"name": "Song of the Fallen",
+			"level": 10,
+			"pfs": "limited",
+			"traits": "uncommon,bard,composition,necromancy",
+			"cast": "v",
+			"actions": 2,
+			"range": 30,
+			"source": "150 Broken Promises pg. 77",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=563",
+			"aon": "spells563",
+			"type": "focus",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** up to 4 dead creatures or up to 4 undead creatures\n\n- - -\n\nYou chant a dirge or an elegy that either rouses the dead to action or reminds undead that they should lay to rest.\n\nIf you target dead creatures, the bodies animate and can continue acting as if they were alive. A creature animated in this way has 60 temporary Hit Points. The animated creatures are slowed 1 but can otherwise act normally. Creatures animated with this spell die again once the spell ends.\n\nIf you target undead creatures, each undead must attempt a basic Will save.\n\n**Critical Success** The undead takes 5d6 positive damage.\n**Success** The undead takes 10d6 positive damage and is slowed 1 for 1 round.\n**Failure** The undead takes 100 positive damage and is slowed 1 for 1 minute.\n**Critical Failure** The undead is destroyed.",
+			"hash": "CWQAvrFp"
+		}
 	}
 ]

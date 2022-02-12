@@ -59,7 +59,17 @@
 				}
 			]
 		},
-		"hash": "dyYnqpps"
+		"pf2t": {
+			"name": "Human",
+			"pfs": "standard",
+			"traits": "human,humanoid",
+			"source": "Core Rulebook pg. 55 2.0",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=6",
+			"aon": "ancestries6",
+			"type": "ancestry",
+			"body": "As unpredictable and varied as any of Golarion's peoples, humans have exceptional drive and the capacity to endure and expand. Though many civilizations thrived before humanity rose to prominence, humans have built some of the greatest and the most terrible societies throughout the course of history, and today they are the most populous people in the realms around the Inner Sea.\n\nHumans' ambition, versatility, and exceptional potential have led to their status as the world's predominant ancestry. Their empires and nations are vast, sprawling things, and their citizens carve names for themselves with the strength of their sword arms and the power of their spells. Humanity is diverse and tumultuous, running the gamut from nomadic to imperial, sinister to saintly. Many of them venture forth to explore, to map the expanse of the multiverse, to search for long-lost treasure, or to lead mighty armies to conquer their neighbors-for no better reason than because they can.\n\nIf you want a character who can be just about anything, you should play a human.\n\n#### You Might...\n+ Strive to achieve greatness, either in your own right or on behalf of a cause. \n+ Seek to understand your purpose in the world. \n+ Cherish your relationships with family and friends.\n\n#### Others Probably...\n+ Respect your flexibility, your adaptability, and-in most cases- your openmindedness. \n+ Distrust your intentions, fearing you seek only power or wealth. \n+ Aren't sure what to expect from you and are hesitant to assume your intentions.\n\n#### Physical Description\nHumans' physical characteristics are as varied as the world's climes. Humans have a wide variety of skin and hair colors, body types, and facial features. Generally speaking, their skin has a darker hue the closer to the equator they or their ancestors lived.\n\nHumans reach physical adulthood around the age of 15, though mental maturity occurs a few years later. A typical human can live to be around 90 years old. Humans often intermarry with people of other ancestries, giving rise to children who bear the traits of both parents. The most notable half-humans are half-elves and half-orcs.\n\n#### Society\nHuman variety also manifests in terms of their governments, attitudes, and social norms. Though the oldest of human cultures can trace their shared histories thousands of years into the past, when compared to the societies of the elves or dwarves, human civilizations seem in a state of constant flux as empires fragment and new kingdoms subsume the old.\n\n#### Alignment and Religion\nHumanity is perhaps the most heterogeneous of all the ancestries, with a capacity for great evil and boundless good. Some humans assemble into vast raging hordes, while others build sprawling cities. Considered as a whole, most humans are neutral, yet they tend to congregate into nations or communities of a shared alignment, or at least a shared tendency toward an alignment. Humans also worship a wide range of gods and practice many different religions, tending to seek favor from any divine being they encounter.\n\n#### Names\nUnlike many ancestral cultures, which generally cleave to specific traditions and shared histories, humanity's diversity has resulted in a near-infinite set of names. The humans of northern tribes have different names than those dwelling in southern nation-states. Humans throughout much of the world speak Common (though some continents on Golarion have their own regional common languages), yet their names are as varied as their beliefs and appearances.\n\n#### Sample Names\nA variety of human ethnic groups-many of which have origins on distant lands- populates the continents bordering Golarion's Inner Sea. Human characters can be any of these ethnicities, regardless of what lands they call home.\n\nCharacters of human ethnicities in the Inner Sea region speak Common (also known as Taldane), and some ethnicities grant access to an uncommon language.\n\n#### Human Mechanics\n\n\n#### Hit Points\n8\n\n#### Size\nMedium\n\n#### Speed\n25 feet\n\n#### Ability Boosts\nTwo free ability boosts\n\n#### Languages\nCommon\nAdditional languages equal to 1 + your Intelligence modifier (if it's positive). Choose from the list of common languages and any other languages to which you have access (such as the languages prevalent in your region).",
+			"hash": "dyYnqpps"
+		}
 	},
 	{
 		"objectType": "Heritage",
@@ -71,7 +81,16 @@
 		"source": "PZO2101",
 		"id": "d1dda580-94b1-42cd-8cf9-201d1dde37e8",
 		"aonId": 28,
-		"hash": "vJxRKFws"
+		"pf2t": {
+			"name": "Skilled Heritage",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 56 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=28",
+			"aon": "heritages28",
+			"type": "heritage",
+			"body": "Your ingenuity allows you to train in a wide variety of skills. You become trained in one skill of your choice. At 5th level, you become an expert in the chosen skill.",
+			"hash": "vJxRKFws"
+		}
 	},
 	{
 		"objectType": "Heritage",
@@ -83,7 +102,16 @@
 		"source": "PZO2101",
 		"id": "ae3692c7-5334-4b8f-947b-2afd3356f8f6",
 		"aonId": 29,
-		"hash": "kFxhgvzK"
+		"pf2t": {
+			"name": "Versatile Heritage",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 56 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=29",
+			"aon": "heritages29",
+			"type": "heritage",
+			"body": "Humanity's versatility and ambition have fueled its ascendance to be the most common ancestry in most nations throughout the world. Select a general feat of your choice for which you meet the prerequisites (as with your ancestry feat, you can select this general feat at any point during character creation).",
+			"hash": "kFxhgvzK"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -99,7 +127,19 @@
 		"source": "PZO2101",
 		"id": "0666787d-f94a-43eb-96cc-2a3be7f0b3f9",
 		"aonId": 66,
-		"hash": "ncvCxTtN"
+		"pf2t": {
+			"name": "Adapted Cantrip",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "human",
+			"source": "Core Rulebook pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=66",
+			"aon": "feats66",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** spellcasting class feature\n\n- - -\n\nThrough study of multiple magical traditions, you've altered a spell to suit your spellcasting style. Choose one cantrip from a magical tradition other than your own. If you have a spell repertoire or a spellbook, replace one of the cantrips you know or have in your spellbook with the chosen spell. If you prepare spells without a spellbook (if you're a cleric or druid, for example), one of your cantrips must always be the chosen spell, and you prepare the rest normally. You can cast this cantrip as a spell of your class's tradition.\n\nIf you swap or retrain this cantrip later, you can choose its replacement from the same alternate tradition or a different one.\n\n#### Adapted Cantrip Leads To...\nAdaptive Adept",
+			"hash": "ncvCxTtN"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -113,7 +153,19 @@
 		"source": "PZO2101",
 		"id": "6e104ac2-99c0-459d-a95b-e9b4d5951e76",
 		"aonId": 67,
-		"hash": "xbKrkPRM"
+		"pf2t": {
+			"name": "Cooperative Nature",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "human",
+			"source": "Core Rulebook pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=67",
+			"aon": "feats67",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "The short human life span lends perspective and has taught you from a young age to set aside differences and work with others to achieve greatness. You gain a +4 circumstance bonus on checks to Aid.\n\n#### Cooperative Nature Leads To...\nCooperative Soul",
+			"hash": "xbKrkPRM"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -128,7 +180,19 @@
 		"source": "PZO2101",
 		"id": "9fc1119f-ef05-4197-9629-27867eeabad6",
 		"aonId": 68,
-		"hash": "xrgRzBZr"
+		"pf2t": {
+			"name": "General Training",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "human",
+			"source": "Core Rulebook pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=68",
+			"aon": "feats68",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "Your adaptability manifests in your mastery of a range of useful abilities. You gain a 1st-level general feat. You must meet the feat's prerequisites, but if you select this feat during character creation, you can select the feat later in the process in order to determine which prerequisites you meet.",
+			"hash": "xrgRzBZr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -142,7 +206,19 @@
 		"source": "PZO2101",
 		"id": "bce7e2ff-a71b-4cfe-9391-b2a294905d95",
 		"aonId": 69,
-		"hash": "XBsFYObO"
+		"pf2t": {
+			"name": "Haughty Obstinacy",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "human",
+			"source": "Core Rulebook pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=69",
+			"aon": "feats69",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "Your powerful ego makes it harder for others to order you around. If you roll a success on a saving throw against a mental effect that attempts to directly control your actions, you critically succeed instead. If a creature rolls a failure on a check to Coerce you using Intimidation, it gets a critical failure instead (so it can't try to Coerce you again for 1 week).",
+			"hash": "XBsFYObO"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -156,7 +232,19 @@
 		"source": "PZO2101",
 		"id": "10de60f9-9bf2-40da-99b9-e2729ff81049",
 		"aonId": 70,
-		"hash": "GkjWFTMx"
+		"pf2t": {
+			"name": "Natural Ambition",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "human",
+			"source": "Core Rulebook pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=70",
+			"aon": "feats70",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "You were raised to be ambitious and always reach for the stars, leading you to progress quickly in your chosen field. You gain a 1st-level class feat for your class. You must meet the prerequisites, but you can select the feat later in the character creation process in order to determine which prerequisites you meet.",
+			"hash": "GkjWFTMx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -170,7 +258,19 @@
 		"source": "PZO2101",
 		"id": "9617505c-f4e7-46a8-96ec-81a059aab7a7",
 		"aonId": 71,
-		"hash": "FUGlqtWJ"
+		"pf2t": {
+			"name": "Natural Skill",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "human",
+			"source": "Core Rulebook pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=71",
+			"aon": "feats71",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "Your ingenuity allows you to learn a wide variety of skills. You gain the trained proficiency rank in two skills of your choice.",
+			"hash": "FUGlqtWJ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -185,7 +285,19 @@
 		"source": "PZO2101",
 		"id": "b46e5f3f-3d6c-40b0-b5eb-10817816848c",
 		"aonId": 72,
-		"hash": "gFCqkQtd"
+		"pf2t": {
+			"name": "Unconventional Weaponry",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "human",
+			"source": "Core Rulebook pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=72",
+			"aon": "feats72",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "You've familiarized yourself with a particular weapon, potentially from another ancestry or culture. Choose an uncommon simple or martial weapon with a trait corresponding to an ancestry (such as dwarf, goblin, or orc) or that is common in another culture. You gain access to that weapon, and for the purpose of determining your proficiency, that weapon is a simple weapon.\n\nIf you are trained in all martial weapons, you can choose an uncommon advanced weapon with such a trait. You gain access to that weapon, and for the purpose of determining your proficiency, that weapon is a martial weapon.\n\n#### Unconventional Weaponry Leads To...\nUnconventional Expertise",
+			"hash": "gFCqkQtd"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -200,7 +312,19 @@
 		"source": "PZO2101",
 		"id": "77b1cf77-6acd-4880-9c5d-d7c72b4e4ec3",
 		"aonId": 73,
-		"hash": "JIOgxhnN"
+		"pf2t": {
+			"name": "Adaptive Adept",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "human",
+			"source": "Core Rulebook pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=73",
+			"aon": "feats73",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** Adapted Cantrip; can cast 3rd-level spells\n\n- - -\n\nYou've continued adapting your magic to blend your class's tradition with your adapted tradition. Choose a cantrip or 1st-level spell from the same magical tradition as your cantrip from Adapted Cantrip. You gain that spell, adding it to your spell repertoire, spellbook, or prepared spells just like the cantrip from Adapted Cantrip. You can cast this spell as a spell of your class's magical tradition. If you choose a 1st-level spell, you don't gain access to the heightened versions of that spell, meaning you can't prepare them if you prepare spells and you can't learn them or select the spell as a signature spell if you have a spell repertoire.",
+			"hash": "JIOgxhnN"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -214,7 +338,19 @@
 		"source": "PZO2101",
 		"id": "c0c66452-4c7a-4cef-8573-d9a5c2fff22e",
 		"aonId": 74,
-		"hash": "lztLrWOX"
+		"pf2t": {
+			"name": "Clever Improviser",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "human",
+			"source": "Core Rulebook pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=74",
+			"aon": "feats74",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "You've learned how to handle situations when you're out of your depth. You gain the Untrained Improvisation general feat. In addition, you can attempt skill actions that normally require you to be trained, even if you are untrained.\n\n#### Clever Improviser Leads To...\nIncredible Improvisation",
+			"hash": "lztLrWOX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -229,7 +365,19 @@
 		"source": "PZO2101",
 		"id": "e90a648e-95c2-4b26-a675-7ba2c32548f1",
 		"aonId": 75,
-		"hash": "OjqYdzdt"
+		"pf2t": {
+			"name": "Cooperative Soul",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "human",
+			"source": "Core Rulebook pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=75",
+			"aon": "feats75",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** Cooperative Nature\n\n- - -\n\nYou have developed a soul-deep bond with your comrades and maintain an even greater degree of cooperation with them. If you are at least an expert in the skill you are Aiding, you get a success on any outcome rolled to Aid other than a critical success.",
+			"hash": "OjqYdzdt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -247,7 +395,20 @@
 		"source": "PZO2101",
 		"id": "eef99ac1-4f4e-4bee-824b-bc86da01569d",
 		"aonId": 76,
-		"hash": "PyQjGtvk"
+		"pf2t": {
+			"name": "Incredible Improvisation",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "human",
+			"actions": 0,
+			"source": "Core Rulebook pg. 57 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=76",
+			"aon": "feats76",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** Clever Improviser\n**Trigger** You attempt a check using a skill you're untrained in.\n\n- - -\n\nA stroke of brilliance gives you a major advantage with a skill despite your inexperience. Gain a +4 circumstance bonus to the triggering skill check.",
+			"hash": "PyQjGtvk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -262,7 +423,19 @@
 		"source": "PZO2101",
 		"id": "e0551829-f388-43f1-ace6-cfbecb02c81f",
 		"aonId": 77,
-		"hash": "kVmXdYRk"
+		"pf2t": {
+			"name": "Multitalented",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "human",
+			"source": "Core Rulebook pg. 58 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=77",
+			"aon": "feats77",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "You've learned to split your focus between multiple classes with ease. You gain a 2nd-level multiclass dedication feat, even if you normally couldn't take another dedication feat until you take more feats from your current archetype.\n\nIf you're a half-elf, you don't need to meet the feat's ability score prerequisites.",
+			"hash": "kVmXdYRk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -277,6 +450,18 @@
 		"source": "PZO2101",
 		"id": "60542f0e-9f70-4e5f-8797-4970d43407f9",
 		"aonId": 78,
-		"hash": "rnyzRQlY"
+		"pf2t": {
+			"name": "Unconventional Expertise",
+			"level": 13,
+			"pfs": "standard",
+			"traits": "human",
+			"source": "Core Rulebook pg. 58 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=78",
+			"aon": "feats78",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** Unconventional Weaponry; trained in the weapon you chose for Unconventional Weaponry\n\n- - -\n\nYou've continued to advance your powers using your unconventional weapon. Whenever you gain a class feature that grants you expert or greater proficiency in certain weapons, you also gain that proficiency in the weapon you chose for Unconventional Weaponry.",
+			"hash": "rnyzRQlY"
+		}
 	}
 ]

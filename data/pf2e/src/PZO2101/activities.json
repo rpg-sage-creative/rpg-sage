@@ -22,7 +22,16 @@
 		"page": 479,
 		"source": "PZO2101",
 		"id": "afaa7107-a799-4a4b-9433-5290226f2692",
-		"hash": "XVgzbxmg"
+		"pf2t": {
+			"name": "Defend",
+			"traits": "exploration",
+			"source": "Core Rulebook pg. 479 2.0",
+			"src": "https://2e.aonprd.com/Activities.aspx?ID=2",
+			"aon": "activities2",
+			"type": "activity",
+			"body": "You move at half your travel speed with your shield raised. If combat breaks out, you gain the benefits of Raising a Shield before your first turn begins.",
+			"hash": "XVgzbxmg"
+		}
 	},
 	{
 		"aonId": 3,
@@ -59,7 +68,16 @@
 		"page": 480,
 		"source": "PZO2101",
 		"id": "3f85ffce-eb3b-4f13-a407-72ed24c06864",
-		"hash": "zrCgGBnt"
+		"pf2t": {
+			"name": "Hustle",
+			"traits": "exploration,move",
+			"source": "Core Rulebook pg. 480 2.0",
+			"src": "https://2e.aonprd.com/Activities.aspx?ID=5",
+			"aon": "activities5",
+			"type": "activity",
+			"body": "You strain yourself to move at double your travel speed. You can Hustle only for a number of minutes equal to your Constitution modifier  10 (minimum 10 minutes). If you are in a group that is Hustling, use the lowest Constitution modifier among everyone to determine how fast the group can Hustle together.",
+			"hash": "zrCgGBnt"
+		}
 	},
 	{
 		"aonId": 6,
@@ -295,7 +313,17 @@
 		"page": 238,
 		"source": "PZO2101",
 		"id": "66261d3c-9727-4d67-a286-c032c3b21c4e",
-		"hash": "rmDpKqtZ"
+		"pf2t": {
+			"name": "Recall Knowledge",
+			"traits": "concentrate,secret",
+			"actions": 1,
+			"source": "Core Rulebook pg. 239 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=26",
+			"aon": "actions26",
+			"type": "action",
+			"body": "You attempt a skill check to try to remember a bit of knowledge regarding a topic related to that skill. The GM determines the DCs for such checks and which skills apply.\n**Critical Success** You recall the knowledge accurately and gain additional information or context.\n**Success** You recall the knowledge accurately or gain a useful clue about your current situation.\n**Critical Failure** You recall incorrect information or gain an erroneous or misleading clue. \n\nThe following skills can be used to Recall Knowledge, getting information about the listed topics. In some cases, you can get the GM's permission to use a different but related skill, usually against a higher DC than normal. Some topics might appear on multiple lists, but the skills could give different information. For example, Arcana might tell you about the magical defenses of a golem, whereas Crafting could tell you about its sturdy resistance to physical attacks. \n\n+ **Arcana**: Arcane theories, magical traditions, creatures of arcane significance, and arcane planes. \n+ **Crafting**: Alchemical reactions and creatures, item value, engineering, unusual materials, and constructs. \n+ **Lore**: The subject of the Lore skill's subcategory. \n+ **Medicine**: Diseases, poisons, wounds, and forensics. \n+ **Nature**: The environment, flora, geography, weather, creatures of natural origin, and natural planes. \n+ **Occultism**: Ancient mysteries, obscure philosophy, creatures of occult significance, and esoteric planes. \n+ **Religion**: Divine agents, divine planes, theology, obscure myths, and creatures of religious significance. \n+ **Society**: Local history, key personalities, legal institutions, societal structure, and humanoid culture.\nThe GM might allow checks to Recall Knowledge using other skills. For example, you might assess the skill of an acrobat using Acrobatics. If you're using a physical skill (like in this example), the GM will most likely have you use a mental ability score-typically Intelligence-instead of the skill's normal physical ability score.\n\n#### Sample Recall Knowledge Tasks\nThese examples use Society or Religion.\n**Untrained** name of a ruler, key noble, or major deity\n**Trained** line of succession for a major noble family, core doctrines of a major deity\n**Expert** genealogy of a minor noble, teachings of an ancient priest\n**Master** hierarchy of a genie noble court, major extraplanar temples of a deity\n**Legendary** existence of a long-lost noble heir, secret doctrines of a religion",
+			"hash": "rmDpKqtZ"
+		}
 	},
 	{
 		"aonId": 32,
@@ -407,7 +435,17 @@
 		"page": 240,
 		"source": "PZO2101",
 		"id": "d5e955b4-fd6e-4f84-bc54-332b002b9f1c",
-		"hash": "ryQvqbXl"
+		"pf2t": {
+			"name": "Balance",
+			"traits": "move",
+			"actions": 1,
+			"source": "Core Rulebook pg. 240 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=28",
+			"aon": "actions28",
+			"type": "action",
+			"body": "**Requirements** You are in a square that contains a narrow surface, uneven ground, or another similar feature.\n\n- - -\n\nYou move across a narrow surface or uneven ground, attempting an Acrobatics check against its Balance DC. You are flat-footed while on a narrow surface or uneven ground.\n\n**Critical Success** You move up to your Speed.\n**Success** You move up to your Speed, treating it as difficult terrain (every 5 feet costs 10 feet of movement).\n**Failure** You must remain stationary to keep your balance (wasting the action) or you fall. If you fall, your turn ends.\n**Critical Failure** You fall and your turn ends.\n\n#### Sample Balance Tasks\n**Untrained** tangled roots, uneven cobblestones\n**Trained** wooden beam\n**Expert** deep, loose gravel\n**Master** tightrope, smooth sheet of ice\n**Legendary** razor's edge, chunks of floor falling in midair",
+			"hash": "ryQvqbXl"
+		}
 	},
 	{
 		"aonId": 29,
@@ -431,7 +469,17 @@
 		"page": 240,
 		"source": "PZO2101",
 		"id": "89c48ea2-0476-4818-99c2-8c0efa006614",
-		"hash": "VxdQRXAs"
+		"pf2t": {
+			"name": "Tumble Through",
+			"traits": "move",
+			"actions": 1,
+			"source": "Core Rulebook pg. 240 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=29",
+			"aon": "actions29",
+			"type": "action",
+			"body": "You Stride up to your Speed. During this movement, you can try to move through the space of one enemy. Attempt an Acrobatics check against the enemy's Reflex DC as soon as you try to enter its space. You can Tumble Through using Climb, Fly, Swim, or another action instead of Stride in the appropriate environment.\n\n**Success** You move through the enemy's space, treating the squares in its space as difficult terrain (every 5 feet costs 10 feet of movement). If you don't have enough Speed to move all the way through its space, you get the same effect as a failure.\n**Failure** Your movement ends, and you trigger reactions as if you had moved out of the square you started in.",
+			"hash": "VxdQRXAs"
+		}
 	},
 	{
 		"aonId": 30,
@@ -461,7 +509,17 @@
 		"page": 240,
 		"source": "PZO2101",
 		"id": "820347ea-7ef0-4cb1-9fbd-311570a1d712",
-		"hash": "bUhXrrkr"
+		"pf2t": {
+			"name": "Maneuver in Flight",
+			"traits": "move",
+			"actions": 1,
+			"source": "Core Rulebook pg. 240 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=30",
+			"aon": "actions30",
+			"type": "action",
+			"body": "**Requirements** You have a fly Speed.\n\n- - -\n\nYou try a difficult maneuver while flying. Attempt an Acrobatics check. The GM determines what maneuvers are possible, but they rarely allow you to move farther than your fly Speed.\n\n**Success** You succeed at the maneuver.\n**Failure** Your maneuver fails. The GM chooses if you simply can't move or if some other detrimental effect happens. The outcome should be appropriate for the maneuver you attempted (for instance, being blown off course if you were trying to fly against a strong wind).\n**Critical Failure** As failure, but the consequence is more dire.\n\n#### Sample Maneuver in Flight Tasks\n**Trained** steep ascent or descent\n**Expert** fly against the wind, hover midair\n**Master** reverse direction\n**Legendary** fly through gale force winds",
+			"hash": "bUhXrrkr"
+		}
 	},
 	{
 		"aonId": 0,
@@ -538,7 +596,17 @@
 		"page": 241,
 		"source": "PZO2101",
 		"id": "af98b14c-d010-4b9a-a34a-068384b691e7",
-		"hash": "RwgzOZKk"
+		"pf2t": {
+			"name": "Climb",
+			"traits": "move",
+			"actions": 1,
+			"source": "Core Rulebook pg. 241 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=33",
+			"aon": "actions33",
+			"type": "action",
+			"body": "**Requirements** You have both hands free.\n\n- - -\n\nYou move up, down, or across an incline. Unless it's particularly easy, you must attempt an Athletics check. The GM determines the DC based on the nature of the incline and environmental circumstances. You're flat-footed unless you have a climb Speed.\n\n**Critical Success** You move up, across, or safely down the incline for 5 feet plus 5 feet per 20 feet of your land Speed (a total of 10 feet for most PCs).\n**Success** You move up, across, or safely down the incline for 5 feet per 20 feet of your land Speed (a total of 5 feet for most PCs, minimum 5 feet if your Speed is below 20 feet).\n**Critical Failure** You fall. If you began the climb on stable ground, you fall and land prone.\n\n#### Sample Climb Tasks\n**Untrained** ladder, steep slope, low-branched tree\n**Trained** rigging, rope, typical tree\n**Expert** wall with small handholds and footholds\n**Master** ceiling with handholds and footholds, rock wall\n**Legendary** smooth surface",
+			"hash": "RwgzOZKk"
+		}
 	},
 	{
 		"aonId": 34,
@@ -565,7 +633,17 @@
 		"page": 242,
 		"source": "PZO2101",
 		"id": "1718c909-aa94-4642-881e-262afa906df0",
-		"hash": "qDJrtvXU"
+		"pf2t": {
+			"name": "Force Open",
+			"traits": "attack",
+			"actions": 1,
+			"source": "Core Rulebook pg. 242 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=34",
+			"aon": "actions34",
+			"type": "action",
+			"body": "Using your body, a lever, or some other tool, you attempt to forcefully open a door, window, container or heavy gate. With a high enough result, you can even smash through walls. Without a crowbar, prying something open takes a -2 item penalty to the Athletics check to Force Open. \n\n**Critical Success** You open the door, window, container, or gate and can avoid damaging it in the process.\n**Success** You break the door, window, container, or gate open, and the door, window, container, or gate gains the broken condition. If it's especially sturdy, the GM might have it take damage but not be broken.\n**Critical Failure** Your attempt jams the door, window, container, or gate shut, imposing a -2 circumstance penalty on future attempts to Force it Open.\n\n#### Sample Force Open Tasks\n**Untrained** fabric, flimsy glass\n**Trained** ice, sturdy glass\n**Expert** flimsy wooden door, wooden portcullis\n**Master** sturdy wooden door, iron portcullis, metal bar\n**Legendary** stone or iron door",
+			"hash": "qDJrtvXU"
+		}
 	},
 	{
 		"aonId": 35,
@@ -598,7 +676,17 @@
 		"page": 242,
 		"source": "PZO2101",
 		"id": "54f55d2a-56e7-4331-b2da-8340994dc5fa",
-		"hash": "qgpbxvQB"
+		"pf2t": {
+			"name": "Grapple",
+			"traits": "attack",
+			"actions": 1,
+			"source": "Core Rulebook pg. 242 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=35",
+			"aon": "actions35",
+			"type": "action",
+			"body": "**Requirements** You have at least one free hand or have your target grappled or restrained. Your target isn't more than one size larger than you.\n\n- - -\n\nYou attempt to grab a creature or object with your free hand. Attempt an Athletics check against the target's Fortitude DC. You can Grapple a target you already have grabbed or restrained without having a hand free.\n\n\n**Critical Success** Your target is restrained until the end of your next turn unless you move or your target Escapes.\n**Success** Your target is grabbed until the end of your next turn unless you move or your target Escapes.\n**Failure** You fail to grab your target. If you already had the target grabbed or restrained using a Grapple, those conditions on that creature or object end.\n**Critical Failure** If you already had the target grabbed or restrained, it breaks free. Your target can either grab you, as if it succeeded at using the Grapple action against you, or force you to fall and land prone.",
+			"hash": "qgpbxvQB"
+		}
 	},
 	{
 		"aonId": 36,
@@ -633,7 +721,16 @@
 		"page": 242,
 		"source": "PZO2101",
 		"id": "7fb8c7fb-ec35-4621-9a38-889f87c4dcc9",
-		"hash": "dZtTHcIR"
+		"pf2t": {
+			"name": "High Jump",
+			"actions": 2,
+			"source": "Core Rulebook pg. 242 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=36",
+			"aon": "actions36",
+			"type": "action",
+			"body": "You Stride, then make a vertical Leap and attempt a DC 30 Athletics check to increase the height of your jump. If you didn't Stride at least 10 feet, you automatically fail your check. This DC might be increased or decreased due to the situation, as determined by the GM.\n\n**Critical Success** Increase the maximum vertical distance to 8 feet, or increase the maximum vertical distance to 5 feet and maximum horizontal distance to 10 feet.\n**Success** Increase the maximum vertical distance to 5 feet.\n**Failure** You Leap normally.\n**Critical Failure** You don't Leap at all, and instead you fall prone in your space.",
+			"hash": "dZtTHcIR"
+		}
 	},
 	{
 		"aonId": 37,
@@ -656,7 +753,16 @@
 		"page": 242,
 		"source": "PZO2101",
 		"id": "a077a805-12fd-45fa-86c6-0b003fa31c8e",
-		"hash": "yFTWbcPY"
+		"pf2t": {
+			"name": "Long Jump",
+			"actions": 2,
+			"source": "Core Rulebook pg. 242 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=37",
+			"aon": "actions37",
+			"type": "action",
+			"body": "You Stride, then make a horizontal Leap and attempt an Athletics check to increase the length of your jump. The DC of the Athletics check is equal to the total distance in feet you're attempting to move during your Leap (so you'd need to succeed at a DC 20 check to Leap 20 feet). You can't Leap farther than your Speed.\n\nIf you didn't Stride at least 10 feet, or if you attempt to jump in a different direction than your Stride, you automatically fail your check. This DC might be increased or decreased due to the situation, as determined by the GM.\n\n**Success** Increase the maximum horizontal distance you Leap to the desired distance.\n**Failure** You Leap normally.\n**Critical Failure** You Leap normally, but then fall and land prone.",
+			"hash": "yFTWbcPY"
+		}
 	},
 	{
 		"aonId": 38,
@@ -692,7 +798,17 @@
 		"page": 243,
 		"source": "PZO2101",
 		"id": "95eeefcf-d985-45ea-97ff-059208e4596f",
-		"hash": "zpNcHzIV"
+		"pf2t": {
+			"name": "Shove",
+			"traits": "attack",
+			"actions": 1,
+			"source": "Core Rulebook pg. 243 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=38",
+			"aon": "actions38",
+			"type": "action",
+			"body": "**Requirements** You have at least one hand free. The target can't be more than one size larger than you.\n\n- - -\n\nYou push a creature away from you. Attempt an Athletics check against your target's Fortitude DC.\n\n**Critical Success** You push your target up to 10 feet away from you. You can Stride after it, but you must move the same distance and in the same direction.\n**Success** You push your target back 5 feet. You can Stride after it, but you must move the same distance and in the same direction.\n**Critical Failure** You lose your balance, fall, and land prone.",
+			"hash": "zpNcHzIV"
+		}
 	},
 	{
 		"aonId": 39,
@@ -720,7 +836,17 @@
 		"page": 243,
 		"source": "PZO2101",
 		"id": "209f521a-1270-4f0e-9956-1d303b5f5f18",
-		"hash": "kbmNzxng"
+		"pf2t": {
+			"name": "Swim",
+			"traits": "move",
+			"actions": 1,
+			"source": "Core Rulebook pg. 243 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=39",
+			"aon": "actions39",
+			"type": "action",
+			"body": "You propel yourself through water. In most calm water, you succeed at the action without needing to attempt a check. If you must breathe air and you're submerged in water, you must hold your breath each round. If you fail to hold your breath, you begin to drown. If the water you are swimming in is turbulent or otherwise dangerous, you might have to attempt an Athletics check to Swim.\n\nIf you end your turn in water and haven't succeeded at a Swim action that turn, you sink 10 feet or get moved by the current, as determined by the GM. However, if your last action on your turn was to enter the water, you don't sink or move with the current that turn.\n\n**Critical Success** You move through the water 10 feet, plus 5 feet per 20 feet of your land Speed (a total of 15 feet for most PCs).\n**Success** You move through the water 5 feet, plus 5 feet per 20 feet of your land Speed (a total of 10 feet for most PCs).\n**Critical Failure** You make no progress, and if you're holding your breath, you lose 1 round of air.\n\n#### Sample Swim Tasks\n**Untrained** lake or other still water\n**Trained** flowing water, like a river\n**Expert** swiftly flowing river\n**Master** stormy sea\n**Legendary** maelstrom, waterfall",
+			"hash": "kbmNzxng"
+		}
 	},
 	{
 		"aonId": 40,
@@ -756,7 +882,17 @@
 		"page": 243,
 		"source": "PZO2101",
 		"id": "64872979-0395-40e1-872f-a4d4011e2c87",
-		"hash": "VxqQTGxq"
+		"pf2t": {
+			"name": "Trip",
+			"traits": "attack",
+			"actions": 1,
+			"source": "Core Rulebook pg. 243 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=40",
+			"aon": "actions40",
+			"type": "action",
+			"body": "**Requirements** You have at least one hand free. Your target can't be more than one size larger than you.\n\n- - -\n\nYou try to knock a creature to the ground. Attempt an Athletics check against the target's Reflex DC. \n\n**Critical Success** The target falls and lands prone and takes 1d6 bludgeoning damage.\n**Success** The target falls and lands prone.\n**Critical Failure** You lose your balance and fall and land prone.",
+			"hash": "VxqQTGxq"
+		}
 	},
 	{
 		"aonId": 41,
@@ -786,7 +922,17 @@
 		"page": 243,
 		"source": "PZO2101",
 		"id": "ab606431-fa79-470c-8236-dc44b921e0ce",
-		"hash": "UGkDXxRE"
+		"pf2t": {
+			"name": "Disarm",
+			"traits": "attack",
+			"actions": 1,
+			"source": "Core Rulebook pg. 243 2.0",
+			"src": "https://2e.aonprd.com/Actions.aspx?ID=41",
+			"aon": "actions41",
+			"type": "action",
+			"body": "**Requirements** You have at least one hand free. The target can't be more than one size larger than you.\n\n- - -\n\nYou try to knock something out of a creature's grasp. Attempt an Athletics check against the target's Reflex DC.\n\n**Critical Success** You knock the item out of the target's grasp. It falls to the ground in the target's space.\n\n**Success** You weaken your target's grasp on the item. Until the start of that creature's turn, attempts to Disarm the target of that item gain a +2 circumstance bonus, and the target takes a -2 circumstance penalty to attacks with the item or other checks requiring a firm grasp on the item.\n**Critical Failure** You lose your balance and become flat-footed until the start of your next turn",
+			"hash": "UGkDXxRE"
+		}
 	},
 	{
 		"aonId": 0,

@@ -9,7 +9,16 @@
 		"source": "PZO2105",
 		"id": "54707614-3ac0-4210-8050-a785e75b64a6",
 		"aonId": 79,
-		"hash": "WSfhgAgq"
+		"pf2t": {
+			"name": "Talisman Dabbler",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 195",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=79",
+			"aon": "archetypes79",
+			"type": "archetype",
+			"body": "The classic idea of magic is that of a hoary wizard, poring over a crumbling book of spells. But magic is so much more than that-it is thought, will, and action, and with the right talismans, you can make even the cut of a sword a deeply magical act. This all hinges on the small magical talismans you affix to your gear. You know how to make and use the perfect talismans for any job.",
+			"hash": "WSfhgAgq"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -43,7 +52,19 @@
 		"source": "PZO2105",
 		"id": "e6d80d5a-7f75-41a3-9903-e2e74c0b6897",
 		"aonId": 2080,
-		"hash": "WzYkNzEY"
+		"pf2t": {
+			"name": "Quick Fix",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Talisman Dabbler",
+			"source": "Advanced Player's Guide pg. 195",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2080",
+			"aon": "feats2080",
+			"type": "feat",
+			"body": "**Archetype** Talisman Dabbler\n**Prerequisites** Talisman Dabbler Dedication\n\n- - -\n\nYou can attach a talisman using only a bit of glue and some string. You gain the Rapid Affixture skill feat, even if you don't meet the prerequisites. When you use it, you can affix or remove up to four talismans in 1 minute instead of just one. \n\nYou gain the ability to Affix a Talisman as a 3-action activity from that feat at 12th level, regardless of your Crafting proficiency.",
+			"hash": "WzYkNzEY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -61,7 +82,19 @@
 		"source": "PZO2105",
 		"id": "fc1fcb9e-07a0-4dad-bb75-01b0a31f2cef",
 		"aonId": 2081,
-		"hash": "qqrFHJUH"
+		"pf2t": {
+			"name": "Deeper Dabbler",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Talisman Dabbler",
+			"source": "Advanced Player's Guide pg. 195",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2081",
+			"aon": "feats2081",
+			"type": "feat",
+			"body": "**Archetype** Talisman Dabbler\n**Prerequisites** Talisman Dabbler Dedication\n\n- - -\n\nWith some streamlining to your process and a deeper collection of talisman materials, you make a greater number of talismans every day. You can create two additional talismans during your daily preparations.",
+			"hash": "qqrFHJUH"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -76,6 +109,18 @@
 		"source": "PZO2105",
 		"id": "aec1e927-bd62-435b-a7a9-3d8aaa98acf0",
 		"aonId": 2082,
-		"hash": "PYdKclzA"
+		"pf2t": {
+			"name": "Talismanic Sage",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Talisman Dabbler",
+			"source": "Advanced Player's Guide pg. 195",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2082",
+			"aon": "feats2082",
+			"type": "feat",
+			"body": "**Archetype** Talisman Dabbler\n**Prerequisites** Talisman Dabbler Dedication\n\n- - -\n\nYou have forgotten more about talismans than lesser warriors have ever known. Normally, affixing more than one talisman to an item causes the talismans to be suppressed, but when you Affix a Talisman, you can specially treat one item you're working on, allowing it to have two active talismans at once. This special treatment ends if you use Affix a Talisman to treat a new item for this ability.",
+			"hash": "PYdKclzA"
+		}
 	}
 ]

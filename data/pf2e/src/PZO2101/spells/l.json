@@ -19,7 +19,22 @@
 		"traits": [ "Evocation" ],
 		"focus": false,
 		"id": "6a631da2-1093-4865-b526-4f2b4fe2df1f",
-		"hash": "nllxqhjN"
+		"pf2t": {
+			"name": "Levitate",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "evocation",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 348 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=170",
+			"aon": "spells170",
+			"type": "spell",
+			"body": "**Duration** 5 minutes\n**Targets** 1 unattended object or willing creature\n\n- - -\n\nYou defy gravity and levitate the target 5 feet off the ground. For the duration of the spell, you can move the target up or down 10 feet with a single action, which has the concentrate trait. A creature floating in the air from levitate takes a -2 circumstance penalty to attack rolls. A floating creature can spend an Interact action to stabilize itself and negate this penalty for the remainder of its turn. If the target is adjacent to a fixed object or terrain of suitable stability, it can move across the surface by climbing (if the surface is vertical, like a wall) or crawling (if the surface is horizontal, such as a ceiling). The GM determines which surfaces can be climbed or crawled across.",
+			"hash": "nllxqhjN"
+		}
 	},
 	{
 		"aonId": 171,
@@ -67,7 +82,23 @@
 		"traits": [ "Electricity", "Evocation" ],
 		"focus": false,
 		"id": "74ba4132-4911-4e57-9baa-53751bae2f28",
-		"hash": "PgwcbqpY"
+		"pf2t": {
+			"name": "Lightning Bolt",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "electricity,evocation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 348 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=172",
+			"aon": "spells172",
+			"type": "spell",
+			"savingthrow": "Reflex",
+			"basic": 1,
+			"body": "**Area** 120-foot line\n\n- - -\n\nA bolt of lightning strikes outward from your hand, dealing 4d12 electricity damage.\n- - -\n**Heightened (+1)** The damage increases by 1d12.",
+			"hash": "PgwcbqpY"
+		}
 	},
 	{
 		"aonId": 173,
@@ -92,7 +123,22 @@
 		"traits": [ "Uncommon", "Detection", "Divination" ],
 		"focus": false,
 		"id": "059f1cef-1a2a-4f88-8968-843dfebc2d24",
-		"hash": "bEtwhSRB"
+		"pf2t": {
+			"name": "Locate",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,detection,divination",
+			"traditions": "arcane,divine,occult",
+			"cast": "m,s,v",
+			"actions": "10 minutes",
+			"range": 500,
+			"source": "Core Rulebook pg. 348 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=173",
+			"aon": "spells173",
+			"type": "spell",
+			"body": "**Duration** sustained\n**Targets** 1 specific object or type of object\n\n- - -\n\nYou learn the direction to the target (if you picked a specific object, such as \"my mother's sword\") or the nearest target (if you picked a type of object, such as \"swords\"). If the target is a specific object, you must have observed it directly with your own senses. If it's a type of object, you still need to have an accurate mental image of the type of object. If there's lead or running water between you and the target, this spell can't locate the object. This means you might find a type of object farther away if the nearest one is behind lead or running water.\n- - -\n**Heightened (5th)** You can target a specific creature or ancestry instead of an object, but you must have met or seen up close the creature or ancestry you want to target.",
+			"hash": "bEtwhSRB"
+		}
 	},
 	{
 		"aonId": 174,
@@ -118,7 +164,22 @@
 		"traits": [ "Abjuration" ],
 		"focus": false,
 		"id": "0fbc59bb-d486-4ad2-92ed-9fb28fb625f9",
-		"hash": "DIQwOWkx"
+		"pf2t": {
+			"name": "Lock",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "abjuration",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 348 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=174",
+			"aon": "spells174",
+			"type": "spell",
+			"body": "**Duration** 1 day\n**Targets** 1 lock, or a door or container with a latch\n\n- - -\n\nThe target's latch mechanism clinks shut, held fast by unseen magical restraints. When you magically lock a target, you set an Athletics and Thievery DC to open it equal to your spell DC or the base lock DC with a +4 status bonus, whichever is higher. Any key or combination that once opened a lock affected by this spell does not do so for the duration of the spell, though the key or combination does grant a +4 circumstance bonus to checks to open the door.\n\nIf the target is opened, the spell ends. Assuming the target is not barred or locked in some additional way, you can unlock and open it with an Interact action during which you touch the target. This does not end the spell. You can Dismiss this spell at any time and from any distance.\n- - -\n**Heightened (2nd)** The duration increases to unlimited, but you must expend 6 gp worth of gold dust as an additional cost.",
+			"hash": "DIQwOWkx"
+		}
 	},
 	{
 		"aonId": 175,
@@ -141,6 +202,20 @@
 		"traits": [ "Transmutation" ],
 		"focus": false,
 		"id": "d8a1c3e3-1f48-4807-b68e-dc9b9ef9c936",
-		"hash": "WRhmkTLl"
+		"pf2t": {
+			"name": "Longstrider",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 348 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=175",
+			"aon": "spells175",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n\n- - -\n\nYou lengthen your stride beyond what should be possible. You gain a +10-foot status bonus to your Speed.\n- - -\n**Heightened (2nd)** The duration increases to 8 hours.",
+			"hash": "WRhmkTLl"
+		}
 	}
 ]

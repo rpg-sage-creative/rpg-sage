@@ -32,8 +32,7 @@
 		"source": "PZO90160",
 		"focus": false,
 		"aonId": 826,
-		"id": "79c305b6-6c37-4787-acad-f64952f1e02c",
-		"hash": "CrRvtCnP"
+		"id": "79c305b6-6c37-4787-acad-f64952f1e02c"
 	},
 	{
 		"name": "Leng Sting",
@@ -68,8 +67,7 @@
 		"source": "PZO90160",
 		"focus": false,
 		"aonId": 827,
-		"id": "3bffd35d-72ea-458c-ad7a-9891ffa63681",
-		"hash": "BtWkCZqr"
+		"id": "3bffd35d-72ea-458c-ad7a-9891ffa63681"
 	},
 	{
 		"name": "Linnorm Sting",
@@ -104,8 +102,7 @@
 		"source": "PZO90160",
 		"focus": false,
 		"aonId": 828,
-		"id": "aa0e5ce1-c3a5-454e-99db-4e8ca75343f4",
-		"hash": "GvmZWKAt"
+		"id": "aa0e5ce1-c3a5-454e-99db-4e8ca75343f4"
 	},
 	{
 		"name": "Swarming Wasp Stings",
@@ -141,7 +138,21 @@
 		"focus": false,
 		"aonId": 829,
 		"id": "e56a6caf-aa5f-4621-ac47-c11f30971775",
-		"hash": "VSBCmknq"
+		"pf2t": {
+			"name": "Swarming Wasp Stings",
+			"level": 4,
+			"traits": "uncommon,necromancy,poison",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "160 Assault on Hunting Lodge Seven pg. 81",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=829",
+			"aon": "spells829",
+			"type": "spell",
+			"body": "**Area** 10-foot burst\n\n- - -\n\nYou manifest a swarm of disembodied wasp stingers that stab creatures in the area, possibly poisoning them. Creatures in the affected area take 1d6 piercing damage. Each creature that takes piercing damage must attempt a Fortitude save.\n**Critical Success** The target is unaffected.\n**Success** The target takes 2d6 poison damage.\n**Failure** The target is afflicted with swarming wasp venom at stage 1.\n**Critical Failure** The target is afflicted with swarming wasp venom at stage 2.\n\n**Swarming Wasp Venom** (poison)Fortitude; **Stage 1** 2d6 poison damage and clumsy 1 (1 round); **Stage 2** 3d6 poison damage and clumsy 2 (1 round)",
+			"hash": "VSBCmknq"
+		}
 	},
 	{
 		"name": "Wyvern Sting",
@@ -176,7 +187,6 @@
 		"source": "PZO90160",
 		"focus": false,
 		"aonId": 830,
-		"id": "bf62ecfc-37aa-43ea-a913-80190ed1c4ed",
-		"hash": "kzXPtwZS"
+		"id": "bf62ecfc-37aa-43ea-a913-80190ed1c4ed"
 	}
 ]

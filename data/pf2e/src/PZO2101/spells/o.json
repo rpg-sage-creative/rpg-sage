@@ -19,7 +19,22 @@
 		"traits": [ "Conjuration", "Water" ],
 		"focus": false,
 		"id": "9039bd92-3455-40e2-90ea-970b085a2360",
-		"hash": "ZWxZAXTg"
+		"pf2t": {
+			"name": "Obscuring Mist",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "conjuration,water",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 355 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=210",
+			"aon": "spells210",
+			"type": "spell",
+			"body": "**Area** 20-foot burst\n**Duration** 1 minute\n\n- - -\n\nYou call forth a cloud of mist. All creatures within the mist become concealed, and all creatures outside the mist become concealed to creatures within it. You can Dismiss the cloud.",
+			"hash": "ZWxZAXTg"
+		}
 	},
 	{
 		"aonId": 211,
@@ -55,7 +70,23 @@
 		"traits": [ "Curse", "Enchantment", "Mental", "Misfortune" ],
 		"focus": false,
 		"id": "ce3b2184-a0c4-4ccb-8c8c-b717df1e814e",
-		"hash": "wbKhtylX"
+		"pf2t": {
+			"name": "Outcast's Curse",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "curse,enchantment,mental,misfortune",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 355 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=211",
+			"aon": "spells211",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou afflict the target with a curse that makes its presence abrasive and off -putting. The target must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** For 10 minutes, the target must roll twice and use the worse result whenever attempting a Deception, Diplomacy, Intimidation, or Performance check, and creatures they encounter have an initial attitude toward them of one step worse (for instance, unfriendly instead of indifferent).\n**Failure** As success, but the effect is permanent.\n**Critical Failure** As failure, and creatures that the target encounters have an initial attitude toward them of two steps worse.",
+			"hash": "wbKhtylX"
+		}
 	},
 	{
 		"aonId": 212,
@@ -93,6 +124,21 @@
 		"traits": [ "Auditory", "Enchantment", "Incapacitation", "Mental", "Visual" ],
 		"focus": false,
 		"id": "a8fe2b5e-e969-4663-a84a-8cee45dcf2a5",
-		"hash": "UYqxPJcs"
+		"pf2t": {
+			"name": "Overwhelming Presence",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "auditory,enchantment,incapacitation,mental,visual",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 356 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=212",
+			"aon": "spells212",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Area** 40-foot burst\n**Duration** until full tribute is paid\n**Targets** any number of creatures\n\n- - -\n\nYou surround yourself with supernatural splendor, appearing to be a god or similarly majestic being. You choose the aspects of your new majestic appearance. This causes the targets to pay tribute to you by bowing or using some other action in keeping with your appearance. The number of times a target must do this depends on the result of their Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target must pay tribute twice.\n**Failure** The target must pay tribute six times.\n**Critical Failure** As failure, and the target must spend all its actions paying tribute if possible. \n\nPaying tribute is a manipulate action or move action, as chosen by the creature paying tribute. A creature under this effect must pay tribute to you at least once on each of its turns if possible. While affected by this spell, a creature is fascinated by you and can't use hostile actions against you. The target is then temporarily immune for 1 minute.",
+			"hash": "UYqxPJcs"
+		}
 	}
 ]

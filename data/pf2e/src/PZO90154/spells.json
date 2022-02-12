@@ -21,8 +21,7 @@
 		"source": "PZO90154",
 		"focus": false,
 		"aonId": 648,
-		"id": "70c6a04f-563a-42c5-afe8-bbf8288a1c1a",
-		"hash": "dUQRDIZD"
+		"id": "70c6a04f-563a-42c5-afe8-bbf8288a1c1a"
 	},
 	{
 		"name": "Entrancing Eyes",
@@ -60,7 +59,21 @@
 		"focus": false,
 		"aonId": 649,
 		"id": "aba40354-7ed6-46e5-8fad-5e156d492b2a",
-		"hash": "ZvWHbqgG"
+		"pf2t": {
+			"name": "Entrancing Eyes",
+			"level": 7,
+			"pfs": "limited",
+			"traits": "uncommon,enchantment,mental,visual",
+			"traditions": "arcane",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "154 Siege of the Dinosaurs pg. 74",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=649",
+			"aon": "spells649",
+			"type": "spell",
+			"body": "**Area** 30-foot emanation centered on you\n**Duration** sustained up to 1 minute\n\n- - -\n\nYour eyes glow with an entrancing radiance that captivates those who meet your gaze. Any creature that ends its turn within the emanation must attempt a Will save.\n\n**Critical Success** The target is unaffected and becomes immune to this particular casting of the spell.\n**Success** The target is unaffected.\n**Failure** Until the end of its next turn, the target is stupefied 2 and fascinated.\n**Critical Failure** Until the end of its next turn, the target is stupefied 4, fascinated, and can't take reactions. In addition, all creatures and objects other than you are concealed from the target.\n\nDuring any round you Sustain the Spell, you can use a single action, which has the manipulate trait, to focus your entrancing eyes on a single creature you can see within 30 feet. This creature must immediately make a Will save against the spell as if it were ending its turn in the emanation. If the creature was already fascinated by your entrancing eyes before its save, a failed save causes it to be paralyzed for 1 round. You can't use this action to focus on the same creature more than once per round.",
+			"hash": "ZvWHbqgG"
+		}
 	},
 	{
 		"name": "Necrotic Radiation",
@@ -98,6 +111,20 @@
 		"focus": false,
 		"aonId": 650,
 		"id": "321bfa4c-d6d8-424b-838f-4088fb1e262e",
-		"hash": "nzrNDgWv"
+		"pf2t": {
+			"name": "Necrotic Radiation",
+			"level": 4,
+			"traits": "uncommon,necromancy,negative",
+			"traditions": "arcane,divine,occult",
+			"cast": "m,s",
+			"actions": 2,
+			"range": "touch",
+			"source": "154 Siege of the Dinosaurs pg. 75",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=650",
+			"aon": "spells650",
+			"type": "spell",
+			"body": "**Duration** 24 hours\n**Targets** one object or one 10-foot-square area\n\n- - -\n\nYou imbue the touched object or space with slow-acting necrotic radiation. If you cast the spell on an object, any creature ending its turn holding or carrying the object takes 2d6 negative damage. If you cast the spell on an area, any creature ending its turn in the area takes 2d6 negative damage. You can attempt to use this spell on an attended object by touching the object. If you do, the creature attempts a Reflex save to reduce the effect.\n\n**Critical Success** The object is unaffected.\n**Success** The creature pulls the object away quickly. The spell only lasts 1 minute.\n**Failure** The creature manages to slightly protect the object. The spell lasts 10 minutes.\n**Critical Failure** The spell lasts the full 24 hours.\n- - -\n**Heightened (+2)** Increase the radiation's negative damage by 1d6",
+			"hash": "nzrNDgWv"
+		}
 	}
 ]

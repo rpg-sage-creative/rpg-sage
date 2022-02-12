@@ -9,7 +9,16 @@
 		"source": "PZO9302",
 		"id": "0c8ed942-c8c8-4d26-872c-4482bce15024",
 		"aonId": 24,
-		"hash": "DIKIPnSX"
+		"pf2t": {
+			"name": "Firebrand Braggart",
+			"pfs": "standard",
+			"source": "Character Guide pg. 74 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=24",
+			"aon": "archetypes24",
+			"type": "archetype",
+			"body": "The following archetype is available to prominent members of the Firebrands. \n\nMany Firebrands travel the Inner Sea region drawing attention to themselves, making great shows of their exploits, and proclaiming their great deeds.",
+			"hash": "DIKIPnSX"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -44,7 +53,20 @@
 		"source": "PZO9302",
 		"id": "9d48aea0-3130-4e79-96b3-40fd1d4368f3",
 		"aonId": 1068,
-		"hash": "QYwQYBSx"
+		"pf2t": {
+			"name": "Boaster's Challenge",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype,mental",
+			"actions": 1,
+			"archetype": "Firebrand Braggart",
+			"source": "Character Guide pg. 74 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1068",
+			"aon": "feats1068",
+			"type": "feat",
+			"body": "**Archetype** Firebrand Braggart\n**Prerequisites** Firebrand Braggart Dedication; expert in Deception, Diplomacy, or Intimidation\n\n- - -\n\nYou call out a foe, causing them to become flustered and easier to defeat. Select one creature you can see and declare a challenge. For your challenge, attempt a Deception, Diplomacy, or Intimidation check against that creature's Will DC. Your challenge must include a linguistic, auditory, or visual component and gains the corresponding trait. If you succeed, you gain a +2 status bonus to damage rolls with your weapon or unarmed Strikes against that foe until the end of your next turn; if you have master proficiency in the skill you used, you gain a +4 status bonus instead, and if you're legendary, you gain a +6 status bonus. On a critical success, the status bonus lasts for 3 rounds instead. Whether you succeed or fail, creatures who witnessed your challenge gain a +4 circumstance bonus to their Will DCs against your attempts to challenge for 1 minute.\n\n#### Boaster's Challenge Leads To...\nDemanding Challenge",
+			"hash": "QYwQYBSx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -63,7 +85,20 @@
 		"source": "PZO9302",
 		"id": "be171161-c1a1-460f-8107-0b8067023b3d",
 		"aonId": 1069,
-		"hash": "MzpFyqyr"
+		"pf2t": {
+			"name": "Daring Act",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 2,
+			"archetype": "Firebrand Braggart",
+			"source": "Character Guide pg. 74 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1069",
+			"aon": "feats1069",
+			"type": "feat",
+			"body": "**Archetype** Firebrand Braggart\n**Prerequisites** Firebrand Braggart Dedication; trained in Acrobatics or Athletics\n\n- - -\n\nYou attempt a death-defying maneuver to distract your enemies. Select one foe within reach and attempt either an Acrobatics or Athletics check against your target's Reflex DC. If you succeed, you can Stride up to half your Speed (or up to your full Speed if you critically succeed) without triggering reactions from the target due to your movement, and the target is flat-footed against the next melee attack you attempt against it before the end of your turn.\n\n#### Daring Act Leads To...\nDaredevil's Gambit, Daring Flourish",
+			"hash": "MzpFyqyr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -81,7 +116,20 @@
 		"source": "PZO9302",
 		"id": "e554a802-ab13-4062-b3eb-7f02404d8593",
 		"aonId": 1070,
-		"hash": "UnNnnVLY"
+		"pf2t": {
+			"name": "Bravo's Determination",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Firebrand Braggart",
+			"source": "Character Guide pg. 75 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1070",
+			"aon": "feats1070",
+			"type": "feat",
+			"body": "**Archetype** Firebrand Braggart\n**Prerequisites** Firebrand Braggart Dedication; expert in Deception\n**Trigger** A foe's Strike reduces you to 0 Hit Points; you were not at 1 Hit Point and you would not be killed.\n\n- - -\n\nYour confidence borders on self-delusion, but it keeps you going against overwhelming odds. Attempt a Deception check against the attack DC of the triggering Strike. You take a penalty to this check equal to twice your wounded value, if any. If the triggering attack was a critical hit, use the result one degree of success worse than what you rolled.\n\n**Critical Success** You avoid being knocked out and remain at 1 Hit Point.\n**Success** You avoid being knocked out and remain at 1 Hit Point, but you increase your wounded value by 1.",
+			"hash": "UnNnnVLY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -96,7 +144,19 @@
 		"source": "PZO9302",
 		"id": "99e9049b-217c-4003-a8e7-153035e1af59",
 		"aonId": 1071,
-		"hash": "AgvpbEpt"
+		"pf2t": {
+			"name": "Great Boaster",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Firebrand Braggart",
+			"source": "Character Guide pg. 75 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1071",
+			"aon": "feats1071",
+			"type": "feat",
+			"body": "**Archetype** Firebrand Braggart\n**Prerequisites** Firebrand Braggart Dedication; Charisma 16\n\n- - -\n\nYour bragging is particularly effective. If you succeed at a boast, you can attempt a great boast about that same skill by using your Firebrand Braggart Dedication action about the same action during the duration of your original boast's circumstance bonus; this is an exception to the rule that you can't make another boast about the same action until your next daily preparations. A great boast uses the Firebrand Braggart Dedication action, except that if you succeed, your circumstance bonus increases to +2 and remains for 1 hour. If you fail the great boast, you take a -2 circumstance penalty to attempt the same action for 4 hours. Once you declare a great boast about a particular action, you can't declare a great boast about the same action until the next time you make daily preparations, regardless of whether you succeed or fail at the check. The minimum challenging task for a great boast is one with at least a hard DC for your level.",
+			"hash": "AgvpbEpt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -111,7 +171,19 @@
 		"source": "PZO9302",
 		"id": "69f675a4-46f3-4291-890a-08e97911f680",
 		"aonId": 1072,
-		"hash": "SYNQUNQf"
+		"pf2t": {
+			"name": "Daring Flourish",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Firebrand Braggart",
+			"source": "Character Guide pg. 75 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1072",
+			"aon": "feats1072",
+			"type": "feat",
+			"body": "**Archetype** Firebrand Braggart\n**Prerequisites** Daring Act\n\n- - -\n\nYou make quick use of an opening from your daring stunts. At the end of a successful Daring Act, you can make a melee Strike against the target or attempt to Disarm the target. The target is flat-footed against the Strike you make during Daring Act as well as the next melee attack you attempt against it before the end of your turn.",
+			"hash": "SYNQUNQf"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -128,7 +200,19 @@
 		"source": "PZO9302",
 		"id": "8f9d6060-58b0-403a-9668-5a7af2acfa48",
 		"aonId": 1073,
-		"hash": "pLltRXYF"
+		"pf2t": {
+			"name": "Demanding Challenge",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Firebrand Braggart",
+			"source": "Character Guide pg. 75 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1073",
+			"aon": "feats1073",
+			"type": "feat",
+			"body": "**Archetype** Firebrand Braggart\n**Prerequisites** Boaster's Challenge\n\n- - -\n\nIf your skill check to challenge a foe is a success, the target of your challenge takes a -1 circumstance penalty to attack rolls (or -2 if you critically succeed) until the end of your next turn.",
+			"hash": "pLltRXYF"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -143,6 +227,18 @@
 		"source": "PZO9302",
 		"id": "f2b2e5f5-4d86-4897-9cd3-8d04088935a9",
 		"aonId": 1074,
-		"hash": "FXpxCBGb"
+		"pf2t": {
+			"name": "Daredevil's Gambit",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Firebrand Braggart",
+			"source": "Character Guide pg. 75 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1074",
+			"aon": "feats1074",
+			"type": "feat",
+			"body": "**Archetype** Firebrand Braggart\n**Prerequisites** Daring Act\n\n- - -\n\nIf you critically succeed at your Daring Act, you can enter the target's space and remain there until the beginning of your next turn or until the target moves, whichever comes first. You gain a +2 circumstance bonus to AC, and your target is flat-footed against your attacks while you are sharing its space in this way. If any creature other than your target hits you with an attack roll while you are sharing your target's space, attempt a DC 15 flat check. On a success, resolve the attack against the target instead of you, using the same attack roll result that hit you.",
+			"hash": "FXpxCBGb"
+		}
 	}
 ]

@@ -34,7 +34,23 @@
 		"traits": [ "Emotion", "Enchantment", "Incapacitation", "Mental" ],
 		"focus": false,
 		"id": "0bf5d7e5-4a9a-4d5c-8cdb-4895fb707f21",
-		"hash": "LtypytmZ"
+		"pf2t": {
+			"name": "Calm Emotions",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "emotion,enchantment,incapacitation,mental",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 322 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=31",
+			"aon": "spells31",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Area** 10-foot burst\n**Duration** sustained up to 1 minute\n\n- - -\n\nYou forcibly calm creatures in the area, soothing them into a nonviolent state; each creature must attempt a Will save.\n\n**Critical Success** The creature is unaffected.\n**Success** Calming urges impose a -1 status penalty to the creature's attack rolls.\n**Failure** Any emotion effects that would affect the creature are suppressed and the creature can't use hostile actions. If the target is subject to hostility from any other creature, it ceases to be affected by calm emotions.\n**Critical Failure** As failure, but hostility doesn't end the effect.",
+			"hash": "LtypytmZ"
+		}
 	},
 	{
 		"aonId": 32,
@@ -56,7 +72,24 @@
 		"traits": [ "Acid", "Air", "Cold", "Earth", "Electricity", "Evocation", "Fire", "Water" ],
 		"focus": false,
 		"id": "aa479d5d-8667-4612-88cd-5bc653d672b2",
-		"hash": "xLNgWWYK"
+		"pf2t": {
+			"name": "Cataclysm",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "acid,air,cold,earth,electricity,evocation,fire,water",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 1,
+			"source": "Core Rulebook pg. 322 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=32",
+			"aon": "spells32",
+			"type": "spell",
+			"savingthrow": "Reflex",
+			"basic": 1,
+			"body": "**Area** 60-foot burst\n\n- - -\n\nYou call upon the unimaginable power of world-ending cataclysms, ripping a small piece of each cataclysm and combining them together into one horrifically powerful attack. The following effects come down upon all creatures in the area. Treat the resistances of creatures in the area as if they were 10 lower for the purpose of determining the cataclysm's damage. Each creature attempts one basic Reflex save that applies to all five types of damage. \n\n+ Flesh-dissolving acid rain deals 3d10 acid damage. \n+ A roaring earthquake shakes and bludgeons creatures on the ground, dealing 3d10 bludgeoning damage. \n+ A blast of freezing wind deals 3d10 cold damage. \n+ Incredible lightning lashes the area, dealing 3d10 electricity damage. \n+ Beating winds churn across the sky, dealing 3d10 bludgeoning damage to creatures flying in the area. \n+ An instant tsunami sweeps over creatures in the area, dealing 3d10 bludgeoning damage with the water trait (doubled for creatures swimming in the area). \n+ A massive wildfire burns in a sudden inferno, dealing 3d10 fire damage.",
+			"hash": "xLNgWWYK"
+		}
 	},
 	{
 		"aonId": 33,
@@ -81,7 +114,23 @@
 		"traits": [ "Electricity", "Evocation" ],
 		"focus": false,
 		"id": "8dc195c3-9c33-4277-afde-556b4c7ae9f4",
-		"hash": "pUrxrDQt"
+		"pf2t": {
+			"name": "Chain Lightning",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "electricity,evocation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "Core Rulebook pg. 322 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=33",
+			"aon": "spells33",
+			"type": "spell",
+			"savingthrow": "Reflex",
+			"body": "**Targets** 1 creature, plus any number of additional creatures\n\n- - -\n\nYou discharge a powerful bolt of lightning at the target, dealing 8d12 electricity damage. The target must attempt a basic Reflex save. The electricity arcs to another creature within 30 feet of the first target, jumps to another creature within 30 feet of that target, and so on. You can end the chain at any point. You can't target the same creature more than once, and you must have line of effect to all targets. Roll the damage only once, and apply it to each target (halving or doubling as appropriate for its saving throw outcome). The chain ends if any one of the targets critically succeeds at its save.\n- - -\n**Heightened (+1)** The damage increases by 1d12.",
+			"hash": "pUrxrDQt"
+		}
 	},
 	{
 		"aonId": 34,
@@ -123,7 +172,23 @@
 		"traits": [ "Emotion", "Enchantment", "Incapacitation", "Mental" ],
 		"focus": false,
 		"id": "412a5456-6d2f-443d-9487-d04a53d365cf",
-		"hash": "Xqzczgvh"
+		"pf2t": {
+			"name": "Charm",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "emotion,enchantment,incapacitation,mental",
+			"traditions": "arcane,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 322 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=34",
+			"aon": "spells34",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 hour\n**Targets** 1 creature\n\n- - -\n\nTo the target, your words are honey and your visage seems bathed in a dreamy haze. It must attempt a Will save, with a +4 circumstance bonus if you or your allies recently threatened it or used hostile actions against it.\n\nYou can Dismiss the spell. If you use hostile actions against the target, the spell ends. When the spell ends, the target doesn't necessarily realize it was charmed unless its friendship with you or the actions you convinced it to take clash with its expectations, meaning you could potentially convince the target to continue being your friend via mundane means.\n\n**Critical Success** The target is unaffected and aware you tried to charm it.\n**Success** The target is unaffected but thinks your spell was something harmless instead of charm, unless it identifies the spell (see Identifying Spells).\n**Failure** The target's attitude becomes friendly toward you. If it was friendly, it becomes helpful. It can't use hostile actions against you.\n**Critical Failure** The target's attitude becomes helpful toward you, and it can't use hostile actions against you.\n- - -\n**Heightened (4th)** The duration lasts until the next time you make your daily preparations.\n**Heightened (8th)** The duration lasts until the next time you make your daily preparations, and you can target up to 10 creatures.",
+			"hash": "Xqzczgvh"
+		}
 	},
 	{
 		"aonId": 35,
@@ -173,7 +238,22 @@
 		"traits": [ "Attack", "Cold", "Darkness", "Evil", "Evocation" ],
 		"focus": false,
 		"id": "a2bba791-b9e8-4f11-98ae-3d434c378032",
-		"hash": "wzFQMYzW"
+		"pf2t": {
+			"name": "Chilling Darkness",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "attack,cold,darkness,evil,evocation",
+			"traditions": "divine",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 323 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=36",
+			"aon": "spells36",
+			"type": "spell",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou shoot an utterly cold ray of darkness tinged with unholy energy. Make a ranged spell attack against the target. You deal 5d6 cold damage, plus 5d6 evil damage if the target is a celestial.\n\nIf the ray passes through an area of magical light or targets a creature affected by magical light, chilling darkness attempts to counteract the light. If you need to determine whether the ray passes through an area of light, draw a line between yourself and the spell's target.\n\n**Critical Success** The target takes double damage.\n**Success** The target takes full damage.\n- - -\n**Heightened (+1)** The cold damage increases by 2d6, and the evil damage against celestials increases by 2d6.",
+			"hash": "wzFQMYzW"
+		}
 	},
 	{
 		"aonId": 37,
@@ -201,7 +281,22 @@
 		"traits": [ "Abjuration" ],
 		"focus": false,
 		"id": "2b4e1b71-e4ea-4da2-be8d-a529d816ba79",
-		"hash": "gZtNUnpk"
+		"pf2t": {
+			"name": "Chromatic Wall",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "abjuration",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 323 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=37",
+			"aon": "spells37",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou create an opaque wall of light in a single vibrant color. The wall is straight and vertical, stretching 60 feet long and 30 feet high. If the wall would pass through a creature, the spell is lost. The wall sheds bright light for 20 feet on each side, and dim light for the next 20 feet. You can ignore the wall's effects.\n\nRoll 1d4 to determine the color of the wall. Each color has a particular effect on items, effects, or creatures that attempt to pass through. Chromatic wall can't be counteracted normally; rather, each color is automatically counteracted when targeted by a specific spell, even if that spell's level is lower than that of chromatic wall. \n+ **Red** The wall destroys ranged weapon ammunition (such as arrows and crossbow bolts) that would pass through, and it deals 20 fire damage to anyone passing through, with a basic Reflex save. Cone of cold can counteract a red chromatic wall. \n+ **Orange** The wall destroys thrown weapons that would pass through, and it deals 25 acid damage to anyone passing through, with a basic Reflex save. Gust of wind can counteract an orange chromatic wall. \n+ **Yellow** The wall stops acid, cold, electricity, fire, force, negative, positive, and sonic effects from passing through, and it deals 30 electricity damage to anyone passing through, with a basic Reflex save. Disintegrate can counteract a yellow chromatic wall. \n+ **Green** The wall stops toxins, gases, and breath weapons from passing through. It deals 10 poison damage to anyone passing through and makes them enfeebled 1 for 1 minute. A basic Fortitude save reduces the damage and negates the enfeebled condition on a success. Passwall can counteract a green chromatic wall.\n\n- - -\n\n\n+ **Blue** The wall stops auditory, petrification, and visual effects from passing through, and creatures passing through are subject to the effects of flesh to stone. Magic missile can counteract a blue chromatic wall. \n+ **Indigo** The wall stops divination and mental effects from passing through, and those passing through are subject to the effects of warp mind. Searing light can counteract an indigo chromatic wall. \n+ **Violet** The wall prevents spells from targeting the other side (area effects still cross as normal). Creatures passing through must succeed at a Will save or they are slowed 1 for 1 minute; on a critical failure, the creature is instead sent to another plane, with the effect of plane shift . Dispel magic can counteract a violet chromatic wall. \n+ Reroll, and creatures that pass through the wall take a -2 circumstance penalty to their saves.\n- - -\n**Heightened (7th)** The spell's duration increases to 1 hour. Roll 1d8 to determine the wall's color; the results for 5-8 are below. A red, orange, yellow, or green wall deals an extra 10 damage. <ol type=\"1\" start=\"5\">",
+			"hash": "gZtNUnpk"
+		}
 	},
 	{
 		"aonId": 38,
@@ -226,7 +321,22 @@
 		"traits": [ "Uncommon", "Abjuration" ],
 		"focus": false,
 		"id": "7c809231-eb29-4665-8d7b-014eca3983e4",
-		"hash": "CtjLgbXI"
+		"pf2t": {
+			"name": "Circle of Protection",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration",
+			"traditions": "divine,occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": "touch",
+			"source": "Core Rulebook pg. 324 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=38",
+			"aon": "spells38",
+			"type": "spell",
+			"body": "**Area** 10-foot emanation centered on the touched creature\n**Duration** 1 minute\n\n- - -\n\nYou ward a creature and those nearby against a specified alignment. Choose chaotic, evil, good, or lawful; this spell gains the opposing trait. Creatures in the area gain a +1 status bonus to AC against attacks by creatures of the chosen alignment and to saves against effects from such creatures. This bonus increases to +3 against effects from such creatures that directly control the target and attacks made by summoned creatures of the chosen alignment. Summoned creatures of the chosen alignment can't willingly enter the area without succeeding at a Will save; repeated attempts use the first save result.\n- - -\n**Heightened (4th)** The duration increases to 1 hour.",
+			"hash": "CtjLgbXI"
+		}
 	},
 	{
 		"aonId": 39,
@@ -247,7 +357,22 @@
 		"traits": [ "Divination", "Scrying" ],
 		"focus": false,
 		"id": "946b9e5e-4bf4-4851-96a8-d099268eaddd",
-		"hash": "MlOsvWHk"
+		"pf2t": {
+			"name": "Clairaudience",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "divination,scrying",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": 500,
+			"source": "Core Rulebook pg. 324 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=39",
+			"aon": "spells39",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou create an invisible floating ear at a location within range (even if it's outside your line of sight or line of effect). It can't move, but you can hear through the ear as if using your normal auditory senses.",
+			"hash": "MlOsvWHk"
+		}
 	},
 	{
 		"aonId": 40,
@@ -268,7 +393,22 @@
 		"traits": [ "Divination", "Scrying" ],
 		"focus": false,
 		"id": "e654eb19-4051-4f1f-847a-7ec5d2cf0a28",
-		"hash": "qvTGzcSr"
+		"pf2t": {
+			"name": "Clairvoyance",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "divination,scrying",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": 500,
+			"source": "Core Rulebook pg. 324 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=40",
+			"aon": "spells40",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou create an invisible floating eye at a location within range (even if it's outside your line of sight or line of effect). The eye can't move, but you can see in all directions from that point as if using your normal visual senses.",
+			"hash": "qvTGzcSr"
+		}
 	},
 	{
 		"aonId": 41,
@@ -292,7 +432,22 @@
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
 		"id": "bb20240f-3028-4318-956f-bdedd9db9bb5",
-		"hash": "gxvzTsPz"
+		"pf2t": {
+			"name": "Cloak of Colors",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "illusion,visual",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 324 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=41",
+			"aon": "spells41",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nA cloak of swirling colors shrouds the target. Creatures are dazzled while adjacent to it, and attacking the target causes a brilliant flash of light. A creature that hits the target with a melee attack must attempt a Will save.\n**Success** The attacker is unaffected.\n**Failure** The attacker is blinded for 1 round.\n**Critical Failure** The attacker is stunned for 1 round.\n\nThe creature is temporarily immune until the end of its turn; this effect has the incapacitation trait.",
+			"hash": "gxvzTsPz"
+		}
 	},
 	{
 		"aonId": 42,
@@ -318,7 +473,24 @@
 		"traits": [ "Death", "Necromancy", "Poison" ],
 		"focus": false,
 		"id": "f415c90c-8108-4d8c-a3a2-d4bc637ac308",
-		"hash": "bhRxPPqE"
+		"pf2t": {
+			"name": "Cloudkill",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "death,necromancy,poison",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 324 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=42",
+			"aon": "spells42",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"basic": 1,
+			"body": "**Area** 20-foot burst\n**Duration** 1 minute\n\n- - -\n\nYou conjure a poisonous fog. This functions as obscuring mist, except the area moves 10 feet away from you each round. You deal 6d8 poison damage to each breathing creature that starts its turn in the spell's area. You can Dismiss the spell.\n- - -\n**Heightened (+1)** The damage increases by 1d8.",
+			"hash": "bhRxPPqE"
+		}
 	},
 	{
 		"aonId": 43,
@@ -353,7 +525,21 @@
 		"traits": [ "Conjuration", "Teleportation" ],
 		"focus": false,
 		"id": "7f8fd0f7-f1a0-474c-b79f-ae604d1c1307",
-		"hash": "PqKTqjLV"
+		"pf2t": {
+			"name": "Collective Transposition",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "conjuration,teleportation",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 324 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=43",
+			"aon": "spells43",
+			"type": "spell",
+			"body": "**Area** 30-foot emanation\n**Targets** up to 2 creatures\n\n- - -\n\nYou teleport the targets to new positions within the area. The creatures must each be able to fit in their new space, and their positions must be unoccupied, entirely within the area, and in your line of sight. Unwilling creatures can attempt a Will save.\n\n**Critical Success** The target can teleport if it wants, but it chooses the destination within range.\n**Success** The target is unaffected.\n**Failure** You teleport the target and choose its destination.\n- - -\n**Heightened (+1)** The number of targets increases by 1.",
+			"hash": "PqKTqjLV"
+		}
 	},
 	{
 		"aonId": 44,
@@ -389,7 +575,22 @@
 		"traits": [ "Illusion", "Incapacitation", "Visual" ],
 		"focus": false,
 		"id": "3de1aa99-dff9-4e2c-a98d-62c207a5be16",
-		"hash": "ptgqSdtg"
+		"pf2t": {
+			"name": "Color Spray",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "illusion,incapacitation,visual",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 324 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=44",
+			"aon": "spells44",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Area** 15-foot cone\n**Duration** 1 or more rounds (see below)\n\n- - -\n\nSwirling colors affect viewers based on their Will saves.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature is dazzled for 1 round.\n**Failure** The creature is stunned 1, blinded for 1 round, and dazzled for 1 minute.\n**Critical Failure** The creature is stunned for 1 round and blinded for 1 minute.",
+			"hash": "ptgqSdtg"
+		}
 	},
 	{
 		"aonId": 45,
@@ -426,7 +627,23 @@
 		"traits": [ "Auditory", "Enchantment", "Linguistic", "Mental" ],
 		"focus": false,
 		"id": "218cff6f-b76d-4ec7-b4f7-3b9a8791d9e0",
-		"hash": "mJwwDYrj"
+		"pf2t": {
+			"name": "Command",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "auditory,enchantment,linguistic,mental",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 325 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=45",
+			"aon": "spells45",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** until the end of the target's next turn\n**Targets** 1 creature\n\n- - -\n\nYou shout a command that's hard to ignore. You can command the target to approach you, run away (as if it had the fleeing condition), release what it's holding, drop prone, or stand in place. It can't Delay or take any reactions until it has obeyed your command. The effects depend on the target's Will save.\n\n**Success** The creature is unaffected.\n**Failure** For the first action on its next turn, the creature must use a single action to do as you command.\n**Critical Failure** The target must use all its actions on its next turn to obey your command.\n- - -\n**Heightened (5th)** You can target up to 10 creatures.",
+			"hash": "mJwwDYrj"
+		}
 	},
 	{
 		"aonId": 46,
@@ -452,7 +669,22 @@
 		"traits": [ "Divination" ],
 		"focus": false,
 		"id": "a29a4e1d-5e7f-446a-a7ac-2f52e1520b4b",
-		"hash": "ZpSgcBgX"
+		"pf2t": {
+			"name": "Comprehend Language",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "divination",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 325 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=46",
+			"aon": "spells46",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n**Targets** 1 creature\n\n- - -\n\nThe target can understand the meaning of a single language it is hearing or reading when you cast the spell. This doesn't let it understand codes, language couched in metaphor, and the like (subject to GM discretion). If the target can hear multiple languages and knows that, it can choose which language to understand; otherwise, choose one of the languages randomly.\n- - -\n**Heightened (3rd)** The target can also speak the language.\n**Heightened (4th)** You can target up to 10 creatures, and targets can also speak the language.",
+			"hash": "ZpSgcBgX"
+		}
 	},
 	{
 		"aonId": 47,
@@ -476,7 +708,23 @@
 		"traits": [ "Cold", "Evocation" ],
 		"focus": false,
 		"id": "2b07a33a-cb28-43f9-8eb3-8f28e92a77b7",
-		"hash": "mpQAnCTZ"
+		"pf2t": {
+			"name": "Cone of Cold",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "cold,evocation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 325 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=47",
+			"aon": "spells47",
+			"type": "spell",
+			"savingthrow": "Reflex",
+			"basic": 1,
+			"body": "**Area** 60-foot cone\n\n- - -\n\nIcy cold rushes forth from your hands. You deal 12d6 cold damage to creatures in the area.\n- - -\n**Heightened (+1)** The damage increases by 2d6.",
+			"hash": "mpQAnCTZ"
+		}
 	},
 	{
 		"aonId": 48,
@@ -516,7 +764,23 @@
 		"traits": [ "Emotion", "Enchantment", "Mental" ],
 		"focus": false,
 		"id": "59bba615-0b15-4b0d-9658-65f680a19cbd",
-		"hash": "cQgpWxjd"
+		"pf2t": {
+			"name": "Confusion",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "emotion,enchantment,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 325 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=48",
+			"aon": "spells48",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou befuddle your target with strange impulses, causing it to act randomly. The effects are determined by the target's Will save. You can Dismiss the spell.\n\n**Critical Success** The target is unaffected.\n**Success** The target babbles incoherently and is stunned 1.\n**Failure** The target is confused for 1 minute. It can attempt a new save at the end of each of its turns to end the confusion.\n**Critical Failure** The target is confused for 1 minute, with no save to end early.\n- - -\n**Heightened (8th)** You can target up to 10 creatures.",
+			"hash": "cQgpWxjd"
+		}
 	},
 	{
 		"aonId": 49,
@@ -541,7 +805,21 @@
 		"traits": [ "Abjuration" ],
 		"focus": false,
 		"id": "ae170ff9-837c-4f1e-9cd6-a05fa859ff79",
-		"hash": "IxmRmRRx"
+		"pf2t": {
+			"name": "Contingency",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "abjuration",
+			"traditions": "arcane",
+			"cast": "m,s,v",
+			"actions": "10 minutes",
+			"source": "Core Rulebook pg. 326 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=49",
+			"aon": "spells49",
+			"type": "spell",
+			"body": "**Duration** 24 hours\n\n- - -\n\nYou prepare a spell that will trigger later. While casting contingency, you also cast another spell of 4th level or lower with a casting time of no more than 3 actions. This companion spell must be one that can affect you. You must make any decisions for the spell when you cast contingency, such as choosing a damage type for resist energy. During the casting, choose a trigger under which the spell will be cast, using the same restrictions as for the trigger of a Ready action. Once contingency is cast, you can cause the companion spell to come into effect as a reaction with that trigger. It affects only you, even if it would affect more creatures. If you define complicated conditions, as determined by the GM, the trigger might fail. If you cast contingency again, the newer casting supersedes the older.\n- - -\n**Heightened (8th)** You can choose a spell of 5th level or lower.\n**Heightened (9th)** You can choose a spell of 6th level or lower.\n**Heightened (10th)** You can choose a spell of 7th level or lower.",
+			"hash": "IxmRmRRx"
+		}
 	},
 	{
 		"aonId": 50,
@@ -567,7 +845,22 @@
 		"traits": [ "Evocation", "Light" ],
 		"focus": false,
 		"id": "f3e374c2-b07a-42d7-84ce-34fe674f0375",
-		"hash": "JqszAUVw"
+		"pf2t": {
+			"name": "Continual Flame",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "evocation,light",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": "touch",
+			"source": "Core Rulebook pg. 326 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=50",
+			"aon": "spells50",
+			"type": "spell",
+			"body": "**Duration** unlimited\n**Targets** 1 object\n\n- - -\n\nA magical flame springs up from the object, as bright as a torch. It doesn't need oxygen, react to water, or generate heat.\n- - -\n**Heightened (+1)** The cost increases as follows: 16 gp for 3rd level; 30 gp for 4th, 60 gp for 5th, 120 gp for 6th; 270 gp for 7th, 540 gp for 8th, 1,350 gp for 9th, and 3,350 gp for 10th.",
+			"hash": "JqszAUVw"
+		}
 	},
 	{
 		"aonId": 51,
@@ -588,7 +881,22 @@
 		"traits": [ "Evocation", "Water" ],
 		"focus": false,
 		"id": "9e24f91f-e4b5-4be3-880c-6ec5e9461d0e",
-		"hash": "yzlpdSZq"
+		"pf2t": {
+			"name": "Control Water",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "evocation,water",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "Core Rulebook pg. 326 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=51",
+			"aon": "spells51",
+			"type": "spell",
+			"body": "**Area** 50 feet long by 50 feet wide\n\n- - -\n\nBy imposing your will upon the water, you can raise or lower the level of water in the chosen area by 10 feet. Water creatures in the area are subjected to the effects of slow.",
+			"hash": "yzlpdSZq"
+		}
 	},
 	{
 		"aonId": 52,
@@ -613,7 +921,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "21ad143b-3576-440d-a278-f7e727ea569f",
-		"hash": "wkXrMYgE"
+		"pf2t": {
+			"name": "Create Food",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "arcane,divine,primal",
+			"cast": "s,v",
+			"actions": "1 hour",
+			"range": 30,
+			"source": "Core Rulebook pg. 326 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=52",
+			"aon": "spells52",
+			"type": "spell",
+			"body": "You create enough food to feed six Medium creatures for a day. This food is bland and unappealing, but it is nourishing. After 1 day, if no one has eaten the food, it decays and becomes inedible. Most Small creatures eat one-quarter as much as a Medium creature (one-sixteenth as much for most Tiny creatures), and most Large creatures eat 10 times as much (100 times as much for Huge creatures and so on).\n- - -\n**Heightened (4th)** You can feed 12 Medium creatures.\n**Heightened (6th)** You can feed 50 Medium creatures.\n**Heightened (8th)** You can feed 200 Medium creatures.",
+			"hash": "wkXrMYgE"
+		}
 	},
 	{
 		"aonId": 53,
@@ -633,7 +956,21 @@
 		"traits": [ "Conjuration", "Water" ],
 		"focus": false,
 		"id": "57b68bb2-5467-4525-a626-908acb5dc323",
-		"hash": "kpxdmRmd"
+		"pf2t": {
+			"name": "Create Water",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "conjuration,water",
+			"traditions": "arcane,divine,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 326 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=53",
+			"aon": "spells53",
+			"type": "spell",
+			"body": "As you cup your hands, water begins to flow forth from them. You create 2 gallons of water. If no one drinks it, it evaporates after 1 day.",
+			"hash": "kpxdmRmd"
+		}
 	},
 	{
 		"aonId": 54,
@@ -657,7 +994,21 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "1ced7985-7a34-4e79-a0e6-30133ba90faa",
-		"hash": "qbFZUdSt"
+		"pf2t": {
+			"name": "Creation",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"source": "Core Rulebook pg. 326 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=54",
+			"aon": "spells54",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n\n- - -\n\nYou conjure a temporary object from eldritch energy. It must be of vegetable matter (such as wood or paper) and 5 cubic feet or smaller. It can't rely on intricate artistry or complex moving parts, never fulfills a cost or the like, and can't be made of precious materials or materials with a rarity of uncommon or higher. It is obviously temporarily conjured, and thus can't be sold or passed off as a genuine item.\n- - -\n**Heightened (5th)** The item is metal and can include common minerals, like feldspar or quartz.",
+			"hash": "qbFZUdSt"
+		}
 	},
 	{
 		"aonId": 55,
@@ -697,7 +1048,23 @@
 		"traits": [ "Enchantment", "Mental" ],
 		"focus": false,
 		"id": "31debbfb-5aa7-4a4d-9740-74423f4994a6",
-		"hash": "gkPZdmlz"
+		"pf2t": {
+			"name": "Crisis of Faith",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "enchantment,mental",
+			"traditions": "divine",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 326 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=55",
+			"aon": "spells55",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou assault the target's faith, riddling the creature with doubt and mental turmoil that deal 6d6 mental damage, or 6d8 mental damage if it can cast divine spells. The effects are determined by its Will save.\n**Critical Success** The target is unaffected.\n**Success** The target takes half damage.\n**Failure** The target takes full damage; if the target can cast divine spells, it's stupefied 1 for 1 round.\n**Critical Failure** The target takes double damage, is stupefied 1 for 1 round, and can't cast divine spells for 1 round.\n\nTo many deities, casting this spell on a follower of your own deity without significant cause is anathema.\n- - -\n**Heightened (+1)** The damage increases by 2d6 (or by 2d8 if the target is a divine spellcaster).",
+			"hash": "gkPZdmlz"
+		}
 	},
 	{
 		"aonId": 56,
@@ -723,7 +1090,22 @@
 		"traits": [ "Uncommon", "Enchantment", "Linguistic", "Mental" ],
 		"focus": false,
 		"id": "5386c385-6987-4e34-8529-da3a4528ac39",
-		"hash": "LqJZzbKs"
+		"pf2t": {
+			"name": "Crusade",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "uncommon,enchantment,linguistic,mental",
+			"traditions": "divine",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Core Rulebook pg. 327 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=56",
+			"aon": "spells56",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n**Targets** up to 4 creatures\n\n- - -\n\nYou issue a divine mandate or proclaim a cause to the targets. It can be to attain an item, claim a patch of land, slay a creature, war with a group, or be entirely peaceful. Your cause can't force the targets to harm one another or themselves. The targets become completely dedicated to that cause, depending on their levels. They choose their own actions, but they favor direct action over inaction or indirect action. \n\n+ **13th or Lower** The target is so dedicated to the cause that it pursues the cause to the death (unless you say otherwise).\n+ **14th** The target is dedicated to the cause, but the spell ends for the target if it's reduced to half its maximum Hit Points or fewer.\n+ **15th** As 14th, plus the target can attempt a Will save at the end of each of its turns to end the spell for itself.\nThe spell ends for all creatures if you or one of your allies uses a hostile action against a target, or when the cause is completed. The GM might determine this spell has alignment traits befitting the cause.\n- - -\n**Heightened (10th)** The level for each category increases by 2.",
+			"hash": "LqJZzbKs"
+		}
 	},
 	{
 		"aonId": 57,
@@ -762,6 +1144,21 @@
 		"traits": [ "Emotion", "Enchantment", "Mental" ],
 		"focus": false,
 		"id": "cc0b8156-cbb9-40db-b05d-3706d41b392e",
-		"hash": "GTqvXtFf"
+		"pf2t": {
+			"name": "Crushing Despair",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "emotion,enchantment,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 327 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=57",
+			"aon": "spells57",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Area** 30-foot cone\n**Duration** 1 or more rounds\n\n- - -\n\nYou inflict despair on creatures in the area. The effects for each creature are determined by its Will save.\n\n**Critical Success** The creature is unaffected.\n**Success** For 1 round, the creature can't use reactions and must attempt another save at the start of its turn; on a failure, it is slowed 1 for that turn as it sobs uncontrollably.\n**Failure** As success, but the duration is 1 minute.\n**Critical Failure** As failure, and the creature is automatically slowed 1 for 1 minute.\n- - -\n**Heightened (7th)** The area increases to a 60-foot cone.",
+			"hash": "GTqvXtFf"
+		}
 	}
 ]

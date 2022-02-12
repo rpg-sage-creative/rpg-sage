@@ -9,7 +9,16 @@
 		"source": "PZO9301",
 		"id": "15d42c4c-7c5e-4ff1-8040-7928fa30ab9e",
 		"aonId": 19,
-		"hash": "wWxzncXU"
+		"pf2t": {
+			"name": "Magic Warrior",
+			"pfs": "standard",
+			"source": "World Guide pg. 95 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=19",
+			"aon": "archetypes19",
+			"type": "archetype",
+			"body": "You mix magic and martial prowess, following in the tradition of the Ten Magic Warriors of Old-Mage Jatembe.",
+			"hash": "wWxzncXU"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -44,7 +53,19 @@
 		"source": "PZO9301",
 		"id": "1e70f893-523c-4eee-8095-09d0239941bd",
 		"aonId": 904,
-		"hash": "BvHXPTOV"
+		"pf2t": {
+			"name": "Magic Warrior Aspect",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Magic Warrior",
+			"source": "World Guide pg. 95 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=904",
+			"aon": "feats904",
+			"type": "feat",
+			"body": "**Archetype** Magic Warrior\n**Prerequisites** Magic Warrior Dedication\n\n- - -\n\nYou can alter your form to gain an aspect of the animal your mask represents. You gain the magic warrior aspect focus spell.",
+			"hash": "BvHXPTOV"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -59,7 +80,19 @@
 		"source": "PZO9301",
 		"id": "51864e27-e634-409a-9fbf-1c3d75532476",
 		"aonId": 905,
-		"hash": "dJjbvPzV"
+		"pf2t": {
+			"name": "Magic Warrior Transformation",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Magic Warrior",
+			"source": "World Guide pg. 95 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=905",
+			"aon": "feats905",
+			"type": "feat",
+			"body": "**Archetype** Magic Warrior\n**Prerequisites** Magic Warrior Dedication\n\n- - -\n\nYou can transform fully into the animal your mask represents. You gain the magic warrior transformation focus spell.",
+			"hash": "dJjbvPzV"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -74,6 +107,18 @@
 		"source": "PZO9301",
 		"id": "7da42ec7-5647-4b20-9ab6-3298de002a54",
 		"aonId": 906,
-		"hash": "CJJROIfq"
+		"pf2t": {
+			"name": "Nameless Anonymity",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Magic Warrior",
+			"source": "World Guide pg. 95 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=906",
+			"aon": "feats906",
+			"type": "feat",
+			"body": "**Archetype** Magic Warrior\n**Prerequisites** Magic Warrior Dedication\n\n- - -\n\nYour mask protects you further from divination. Once per day, you can cast nondetection on yourself, heightened to the highest level of spell you can cast; the spell ends immediately if your mask is removed for even a moment. The spell is of the same tradition as your focus spells.",
+			"hash": "CJJROIfq"
+		}
 	}
 ]

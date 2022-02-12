@@ -30,7 +30,16 @@
 		],
 		"source": "PZO9301",
 		"id": "8e0e97d0-2848-4103-9c32-1d8b088e5eeb",
-		"hash": "MlSvcnWb"
+		"pf2t": {
+			"name": "Child of the Puddles",
+			"pfs": "standard",
+			"source": "World Guide pg. 22 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=54",
+			"aon": "backgrounds54",
+			"type": "background",
+			"body": "**Region** Absalom and Starstone Isle\nYou grew up in the soggy, squalid quarter of Absalom known as the Puddles. You're at home in tightly packed urban environments.\n\nChoose two ability boosts. One must be to **Dexterity** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Acrobatics skill, and the Absalom Lore skill. You gain the Steady Balance skill feat.",
+			"hash": "MlSvcnWb"
+		}
 	},
 	{
 		"aonId": 58,
@@ -63,7 +72,16 @@
 		],
 		"source": "PZO9301",
 		"id": "4e00a91b-d1a2-4c8b-80e8-225654ebf48f",
-		"hash": "mRWFbkZp"
+		"pf2t": {
+			"name": "Diobel Pearl Diver",
+			"pfs": "standard",
+			"source": "World Guide pg. 22 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=58",
+			"aon": "backgrounds58",
+			"type": "background",
+			"body": "**Region** Absalom and Starstone Isle\nYou spent a portion of your youth diving and gathering precious pearls under the attentive eyes of Kortos Consortium merchants.\n\nChoose two ability boosts. One must be to **Constitution** or **Dexterity**, and one is a free ability boost.\n\nYou're trained in the Athletics skill, and the Ocean Lore skill. You gain the Underwater Marauder skill feat.",
+			"hash": "mRWFbkZp"
+		}
 	},
 	{
 		"aonId": 55,
@@ -96,7 +114,16 @@
 		],
 		"source": "PZO9301",
 		"id": "19bad73f-b606-4802-b768-25e0f3050106",
-		"hash": "qWWQqIkW"
+		"pf2t": {
+			"name": "Freed Slave of Absalom",
+			"pfs": "standard",
+			"source": "World Guide pg. 22 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=55",
+			"aon": "backgrounds55",
+			"type": "background",
+			"body": "**Region** Absalom and Starstone Isle\nAs a recently freed slave in Absalom, you belong to a new, close-knit social class at the heart of the city's most important trades.\n\nChoose two ability boosts. One must be to **Constitution** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Society skill, and the Absalom Lore skill. You gain the Streetwise skill feat.",
+			"hash": "qWWQqIkW"
+		}
 	},
 	{
 		"aonId": 53,
@@ -129,7 +156,16 @@
 		],
 		"source": "PZO9301",
 		"id": "ba07e1ba-f2f2-4a53-8421-0b816b903a19",
-		"hash": "mdjRUJSZ"
+		"pf2t": {
+			"name": "Grand Council Bureaucrat",
+			"pfs": "standard",
+			"source": "World Guide pg. 22 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=53",
+			"aon": "backgrounds53",
+			"type": "background",
+			"body": "**Region** Absalom and Starstone Isle\nYou spent years working as a clerk to a functionary in Absalom's government. Your service taught you a thing or two about rousing speeches and manipulating the city's bureaucracy.\n\nChoose two ability boosts. One must be to **Charisma** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Diplomacy skill, and the Government Lore skill. You gain the Group Impression skill feat.",
+			"hash": "mdjRUJSZ"
+		}
 	},
 	{
 		"aonId": 56,
@@ -162,7 +198,16 @@
 		],
 		"source": "PZO9301",
 		"id": "e8154b37-d73d-4ab7-8441-c68119e3acc2",
-		"hash": "cOFRHsqQ"
+		"pf2t": {
+			"name": "Inlander",
+			"pfs": "standard",
+			"source": "World Guide pg. 22 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=56",
+			"aon": "backgrounds56",
+			"type": "background",
+			"body": "**Region** Absalom and Starstone Isle\nYou grew up in an untamed region of the Isle of Kortos, and you know how to survive in the wild.\n\nChoose two ability boosts. One must be to **Constitution** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Survival skill, and a Lore skill  related to the terrain type associated with your home region (such as Hills Lore or Mountains Lore) You gain the Survey Wildlife skill feat.",
+			"hash": "cOFRHsqQ"
+		}
 	},
 	{
 		"aonId": 57,
@@ -195,7 +240,16 @@
 		],
 		"source": "PZO9301",
 		"id": "45d78d92-3cdd-451d-b616-61d51824dcdc",
-		"hash": "kCZhlBWy"
+		"pf2t": {
+			"name": "Menagerie Dung Sweeper",
+			"pfs": "standard",
+			"source": "World Guide pg. 22 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=57",
+			"aon": "backgrounds57",
+			"type": "background",
+			"body": "**Region** Absalom and Starstone Isle\nWhether you washed warrior beasts below the Irorium's arena floor or tended to the mutated animals of a Puddle sideshow, you are experienced with all manner of weird wildlife.\n\nChoose two ability boosts. One must be to **Constitution** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Nature skill, and the Animal Lore skill. You gain the Train Animal skill feat.",
+			"hash": "kCZhlBWy"
+		}
 	},
 	{
 		"aonId": 51,
@@ -228,7 +282,16 @@
 		],
 		"source": "PZO9301",
 		"id": "797490a7-a51e-4b1a-bba5-98d37d5c04ad",
-		"hash": "AzRJPDQw"
+		"pf2t": {
+			"name": "Pathfinder Hopeful",
+			"pfs": "standard",
+			"source": "World Guide pg. 22 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=51",
+			"aon": "backgrounds51",
+			"type": "background",
+			"body": "**Region** Absalom and Starstone Isle\nYou've long wanted to join the adventurous Pathfinder Society. You have taken up the dangerous life of an adventurer in hopes of earning a spot among the Pathfinders.\n\nChoose two ability boosts. One must be to **Constitution** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Society skill, and the Pathfinder Society Lore skill. You gain the Additional Lore skill feat.",
+			"hash": "AzRJPDQw"
+		}
 	},
 	{
 		"aonId": 52,
@@ -293,7 +356,16 @@
 		],
 		"source": "PZO9301",
 		"id": "9edf846d-7ed6-4ae7-9c15-b87684bc8684",
-		"hash": "WWqLqbdA"
+		"pf2t": {
+			"name": "Aspiring River Monarch",
+			"pfs": "standard",
+			"source": "World Guide pg. 34 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=59",
+			"aon": "backgrounds59",
+			"type": "background",
+			"body": "**Region** Broken Lands\nNew realms rise constantly in the River Kingdoms, and you intend to lead one of them. Making your reign last, however, will require both strength and grace.\n\nChoose two ability boosts. One must be to **Wisdom** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Society skill, and the Politics Lore skill. You gain the Courtly Graces skill feat.",
+			"hash": "WWqLqbdA"
+		}
 	},
 	{
 		"aonId": 64,
@@ -326,7 +398,16 @@
 		],
 		"source": "PZO9301",
 		"id": "91b64ffa-f1af-4e88-9698-11ffd186abd0",
-		"hash": "YZpAczrz"
+		"pf2t": {
+			"name": "Issian Partisan",
+			"pfs": "standard",
+			"source": "World Guide pg. 34 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=64",
+			"aon": "backgrounds64",
+			"type": "background",
+			"body": "**Region** Broken Lands\nYou grew up among the northern houses of Brevoy in old Issia. Steeped in the cultural legacy of pirates and smugglers, you rely on your cleverness and charm as you make your way throughout the world.\n\nChoose two ability boosts. One must be to **Intelligence** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Deception skill, and the Underworld Lore skill. You gain the Charming Liar skill feat.",
+			"hash": "YZpAczrz"
+		}
 	},
 	{
 		"aonId": 60,
@@ -359,7 +440,16 @@
 		],
 		"source": "PZO9301",
 		"id": "c655ba16-4d81-495a-87ea-14e2b229d184",
-		"hash": "hAkZNrzg"
+		"pf2t": {
+			"name": "Razmiran Faithful",
+			"pfs": "standard",
+			"source": "World Guide pg. 34 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=60",
+			"aon": "backgrounds60",
+			"type": "background",
+			"body": "**Region** Broken Lands\nYou serve a living god who rules upon the face of Golarion, and this gives your actions a divine mandate not to be trifled with.\n\nChoose two ability boosts. One must be to **Charisma**, and one is a free ability boost.\n\nYou're trained in the Intimidation skill, and the Razmir Lore skill. You gain the Group Coercion skill feat.",
+			"hash": "hAkZNrzg"
+		}
 	},
 	{
 		"aonId": 62,
@@ -392,7 +482,16 @@
 		],
 		"source": "PZO9301",
 		"id": "4236e545-94ef-4bd2-adb7-a59d0753d0a5",
-		"hash": "vkGzXUYF"
+		"pf2t": {
+			"name": "Rostland Partisan",
+			"pfs": "standard",
+			"source": "World Guide pg. 34 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=62",
+			"aon": "backgrounds62",
+			"type": "background",
+			"body": "**Region** Broken Lands\nYou grew up among the southern houses of Brevoy in old Rostland. You're accustomed to arguing from a position of underappreciated worth.\n\nChoose two ability boosts. One must be to **Constitution** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Diplomacy skill, and the Politics Lore skill. You gain the Group Impression skill feat.",
+			"hash": "vkGzXUYF"
+		}
 	},
 	{
 		"aonId": 61,
@@ -425,7 +524,16 @@
 		],
 		"source": "PZO9301",
 		"id": "e9a87559-7374-4f21-8830-abbb85e6783e",
-		"hash": "tKhjZngq"
+		"pf2t": {
+			"name": "Sarkorian Reclaimer",
+			"pfs": "standard",
+			"source": "World Guide pg. 34 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=61",
+			"aon": "backgrounds61",
+			"type": "background",
+			"body": "**Region** Broken Lands\nWhether you trace your heritage to lost Sarkoris or are a crusader trying to atone for past fanatics' wrongs, you seek to liberate the Sarkorian homeland from the demons who have defiled it.\n\nChoose two ability boosts. One must be to **Constitution** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Medicine skill, and the Abyssal Lore skill. You gain the Battle Medicine skill feat.",
+			"hash": "tKhjZngq"
+		}
 	},
 	{
 		"aonId": 73,
@@ -458,7 +566,16 @@
 		],
 		"source": "PZO9301",
 		"id": "aead2efa-ef6b-47c3-b7b7-f287907c1291",
-		"hash": "ZGRkENxX"
+		"pf2t": {
+			"name": "Sarkorian Survivor",
+			"pfs": "standard",
+			"source": "World Guide pg. 34 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=73",
+			"aon": "backgrounds73",
+			"type": "background",
+			"body": "**Region** Broken Lands\nThe devastation and carnage of the Worldwound were nearly complete, but you somehow managed to survive it.\n\nChoose two ability boosts. One must be to **Constitution** or \n\nYou're trained in the Survival skill, and the Sarkorian History Lore skill. You gain the Forager skill feat.",
+			"hash": "ZGRkENxX"
+		}
 	},
 	{
 		"aonId": 63,
@@ -491,7 +608,16 @@
 		],
 		"source": "PZO9301",
 		"id": "1e5a7d01-6c7b-48a7-a093-acbb9b323db9",
-		"hash": "BbRpEkFQ"
+		"pf2t": {
+			"name": "Wonder Taster",
+			"pfs": "standard",
+			"source": "World Guide pg. 34 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=63",
+			"aon": "backgrounds63",
+			"type": "background",
+			"body": "**Region** Broken Lands\nHaving once sampled Numerian fluids, you've tasted knowledge beyond comprehension. You are driven to recapture that astounding experience.\n\nChoose two ability boosts. One must be to **Intelligence** or **Constitution**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and the Alchemical Lore skill. You gain the Alchemical Crafting skill feat.",
+			"hash": "BbRpEkFQ"
+		}
 	},
 	{
 		"aonId": 65,
@@ -524,7 +650,16 @@
 		],
 		"source": "PZO9301",
 		"id": "d424bc8b-f712-46f0-bb03-f6e69341d686",
-		"hash": "vzYZVKkv"
+		"pf2t": {
+			"name": "Belkzen Slayer",
+			"pfs": "standard",
+			"source": "World Guide pg. 46 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=65",
+			"aon": "backgrounds65",
+			"type": "background",
+			"body": "**Region** Eye of Dread\nYou are a fearsome warrior from the Hold of Belkzen, and your clan counts on you for support, counsel, and defense. With the rising threat of the Whispering Tyrant threatening the safety of your home, you must not let your people down.\n\nChoose two ability boosts. One must be to **Charisma**, and one is a free ability boost.\n\nYou're trained in the Intimidation skill, and the Orc Lore skill. You gain the Intimidating Glare skill feat.",
+			"hash": "vzYZVKkv"
+		}
 	},
 	{
 		"aonId": 70,
@@ -557,7 +692,16 @@
 		],
 		"source": "PZO9301",
 		"id": "469a3132-3557-4bfc-a3d3-f422ba8c6d13",
-		"hash": "ZYkWTwtz"
+		"pf2t": {
+			"name": "Cursed Family",
+			"pfs": "standard",
+			"source": "World Guide pg. 46 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=70",
+			"aon": "backgrounds70",
+			"type": "background",
+			"body": "**Region** Eye of Dread\nRumors abound that your family is cursed. While that would explain several unfortunate events in your family history, you may or may not believe it. Regardless, odd coincidences plague your lineage, and perhaps even appear in your own life, and you have become used to spotting strangeness around you.\n\nChoose two ability boosts. One must be to **Intelligence** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Occultism skill, and the Curse Lore skill. You gain the Oddity Identification skill feat.",
+			"hash": "ZYkWTwtz"
+		}
 	},
 	{
 		"aonId": 68,
@@ -590,7 +734,16 @@
 		],
 		"source": "PZO9301",
 		"id": "5021029a-1086-4d2b-afda-4fb34682b393",
-		"hash": "bhkpfgRb"
+		"pf2t": {
+			"name": "Lastwall Survivor",
+			"pfs": "standard",
+			"source": "World Guide pg. 46 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=68",
+			"aon": "backgrounds68",
+			"type": "background",
+			"body": "**Region** Eye of Dread\nYou managed to escape the devastation that the Whispering Tyrant brought to your nation, but you lost everything to the lich-king's minions, including your home and many friends and family.\n\nChoose two ability boosts. One must be to **Constitution** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Medicine skill, and the Undead Lore skill. You gain the Battle Medicine skill feat.",
+			"hash": "bhkpfgRb"
+		}
 	},
 	{
 		"aonId": 69,
@@ -623,7 +776,16 @@
 		],
 		"source": "PZO9301",
 		"id": "f419244e-56a5-45a0-81a4-766996471a7a",
-		"hash": "pbtMyZKt"
+		"pf2t": {
+			"name": "Molthuni Mercenary",
+			"pfs": "standard",
+			"source": "World Guide pg. 46 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=69",
+			"aon": "backgrounds69",
+			"type": "background",
+			"body": "**Region** Eye of Dread\nWhether you sought citizenship or simply needed a steady paycheck, you spent some of your time as a paid mercenary in the armed forces of Molthune, where you fought against Molthune's enemies such as Nirmathas or the Ironfang Legion. Alternatively, you might have worked at sea, protecting Molthune's military and trading ships against pirates on Lake Encarthan.\n\nChoose two ability boosts. One must be to **Constitution** or \n\nYou're trained in the Athletics skill, and the Mercenary Lore skill. You gain the Experienced Professional skill feat.",
+			"hash": "pbtMyZKt"
+		}
 	},
 	{
 		"aonId": 66,
@@ -688,7 +850,16 @@
 		],
 		"source": "PZO9301",
 		"id": "2fc52aa9-dc04-4558-b08d-4b58bfa74070",
-		"hash": "gZKWXUGh"
+		"pf2t": {
+			"name": "Onyx Trader",
+			"pfs": "standard",
+			"source": "World Guide pg. 46 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=67",
+			"aon": "backgrounds67",
+			"type": "background",
+			"body": "**Region** Eye of Dread\nOprak doesn't share the secrets of the Onyx Vault with many, but you are one of the lucky few to be permitted into the heart of the nation. You have traveled the extradimensional paths of the Stone Roads and traded goods across a wide variety of lands. You've learned to step lively in foreign markets of all types.\n\nChoose two ability boosts. One must be to **Dexterity** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Society skill, and the Mercantile Lore skill. You gain the Multilingual skill feat.",
+			"hash": "gZKWXUGh"
+		}
 	},
 	{
 		"aonId": 71,
@@ -721,7 +892,16 @@
 		],
 		"source": "PZO9301",
 		"id": "8dd4bdf4-b592-49a8-a427-a575b09240b2",
-		"hash": "LgWzpgPU"
+		"pf2t": {
+			"name": "Ustalavic Academic",
+			"pfs": "standard",
+			"source": "World Guide pg. 46 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=71",
+			"aon": "backgrounds71",
+			"type": "background",
+			"body": "**Region** Eye of Dread\nYou were educated at a famed Ustalavic academy, such as the University of Lepidstadt or the Sincomakti School of Sciences, and received quality instruction in advanced concepts of mathematics, science, and engineering.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and the Academia Lore skill. You gain the Skill Training skill feat.",
+			"hash": "LgWzpgPU"
+		}
 	},
 	{
 		"aonId": 72,
@@ -754,7 +934,16 @@
 		],
 		"source": "PZO9301",
 		"id": "9380d02c-2ae0-4b23-96ac-dfbc45b1d763",
-		"hash": "gfvUrTFQ"
+		"pf2t": {
+			"name": "Whispering Way Scion",
+			"pfs": "standard",
+			"source": "World Guide pg. 46 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=72",
+			"aon": "backgrounds72",
+			"type": "background",
+			"body": "**Region** Eye of Dread\nYour  family  has  long  been associated with the enigmatic death cult known as the Whispering Way, which was recently responsible for the terrible devastation in the nation of Lastwall. Whether or not you have followed in their footsteps, you know many of the philosophy's secrets.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Religion skill, and the Undead Lore skill. You gain the Student of the Canon skill feat.",
+			"hash": "gfvUrTFQ"
+		}
 	},
 	{
 		"aonId": 74,
@@ -787,7 +976,16 @@
 		],
 		"source": "PZO9301",
 		"id": "7acd3a95-9b80-4a6d-9669-33df48d0db5e",
-		"hash": "gcLzRUnX"
+		"pf2t": {
+			"name": "Black Market Smuggler",
+			"pfs": "standard",
+			"source": "World Guide pg. 58 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=74",
+			"aon": "backgrounds74",
+			"type": "background",
+			"body": "**Region** Golden Road\nYou know how to work the less-than-legal side of the region's markets and know how to slip contraband past the authorities.\n\nChoose two ability boosts. One must be to **Wisdom** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Stealth skill, and the Underworld Lore skill. You gain the Experienced Smuggler skill feat.",
+			"hash": "gcLzRUnX"
+		}
 	},
 	{
 		"aonId": 75,
@@ -820,7 +1018,16 @@
 		],
 		"source": "PZO9301",
 		"id": "6cbfddb8-9e0b-4b0e-9a50-92ac71a2d9dc",
-		"hash": "GggSRFAX"
+		"pf2t": {
+			"name": "Desert Tracker",
+			"pfs": "standard",
+			"source": "World Guide pg. 58 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=75",
+			"aon": "backgrounds75",
+			"type": "background",
+			"body": "**Region** Golden Road\nYou're at home blazing trails in the burning sands, and you made a living guiding or following creatures in the desert. You might be a native nomad, an experienced desert guide, a naturalist, a bandit driven into the dunes by the law-or all of the above.\n\nChoose two ability boosts. One must be to **Constitution** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Survival skill, and the Desert Lore skill. You gain the Experienced Tracker skill feat.",
+			"hash": "GggSRFAX"
+		}
 	},
 	{
 		"aonId": 76,
@@ -853,7 +1060,16 @@
 		],
 		"source": "PZO9301",
 		"id": "974ba085-1261-4ea3-8499-4b3ca8b8b6ee",
-		"hash": "qkOttQfT"
+		"pf2t": {
+			"name": "Merabite Prodigy",
+			"pfs": "standard",
+			"source": "World Guide pg. 58 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=76",
+			"aon": "backgrounds76",
+			"type": "background",
+			"body": "**Region** Golden Road\nEven in a city renowned for its alchemy, you were able to rise above the competition.\n\nChoose two ability boosts. One must be to **Dexterity** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and the Alchemical Lore skill. You gain the Specialty Crafting skill feat with alchemy.",
+			"hash": "qkOttQfT"
+		}
 	},
 	{
 		"aonId": 77,
@@ -886,7 +1102,16 @@
 		],
 		"source": "PZO9301",
 		"id": "b5843eeb-5501-40a3-a7fd-3fbdc02e9965",
-		"hash": "rItpHIcW"
+		"pf2t": {
+			"name": "Osirionologist",
+			"pfs": "standard",
+			"source": "World Guide pg. 58 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=77",
+			"aon": "backgrounds77",
+			"type": "background",
+			"body": "**Region** Golden Road\nWhether you're a fascinated outsider or a local proud of your nation's storied past, you're a devoted student of Osirion's history. You might be a traveling professor, a member of a society like the Pathfinders or the Esoteric Order of the Palatine Eye, or even a simple tomb robber cashing in on the glories of the past.\n\nChoose two ability boosts. One must be to **Constitution** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Occultism skill, and the Ancient Osirion Lore skill. You gain the Oddity Identification skill feat.",
+			"hash": "rItpHIcW"
+		}
 	},
 	{
 		"aonId": 78,
@@ -919,7 +1144,16 @@
 		],
 		"source": "PZO9301",
 		"id": "d33c3f52-a8f9-47e8-a8e1-431f0c535f10",
-		"hash": "mkTOZNrs"
+		"pf2t": {
+			"name": "Purveyor of the Bizarre",
+			"pfs": "standard",
+			"source": "World Guide pg. 58 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=78",
+			"aon": "backgrounds78",
+			"type": "background",
+			"body": "**Region** Golden Road\nWhether in Katapesh or one of the bustling markets along the Path of Salt, you've spent enough time buying and selling ancient or unusual items to give you an instinctive ability to quickly sort valuable trinkets from worthless baubles.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Arcana skill, and the Mercantile Lore skill. You gain the Quick Identification skill feat.",
+			"hash": "mkTOZNrs"
+		}
 	},
 	{
 		"aonId": 79,
@@ -952,7 +1186,16 @@
 		],
 		"source": "PZO9301",
 		"id": "a6b41205-8c2f-474b-ace9-613d605ea769",
-		"hash": "spnrmvBK"
+		"pf2t": {
+			"name": "Secular Medic",
+			"pfs": "standard",
+			"source": "World Guide pg. 58 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=79",
+			"aon": "backgrounds79",
+			"type": "background",
+			"body": "**Region** Golden Road\nYou're from Rahadoum, where the Laws of Mortality taught you to reject the gods, yet you've seen firsthand how dangerous it can be to go without healing magic. As a result, you've thrown yourself into the study of medicine, so you can save lives without saving souls.\n\nChoose two ability boosts. One must be to **Wisdom** or **Dexterity**, and one is a free ability boost.\n\nYou're trained in the Medicine skill, and the Anatomy Lore skill. You gain the Battle Medicine skill feat.",
+			"hash": "spnrmvBK"
+		}
 	},
 	{
 		"aonId": 80,
@@ -985,7 +1228,16 @@
 		],
 		"source": "PZO9301",
 		"id": "5a6c7d9a-d477-4a59-bc81-90ba01c90c06",
-		"hash": "IWFwFgPz"
+		"pf2t": {
+			"name": "Thuvian Unifier",
+			"pfs": "standard",
+			"source": "World Guide pg. 58 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=80",
+			"aon": "backgrounds80",
+			"type": "background",
+			"body": "**Region** Golden Road\nYou believe the city-states of Thuvia should be united into one nation under the rule of your home city (most commonly Aspenthar), and you're willing to do whatever it takes to make it happen.\n\nChoose two ability boosts. One must be to **Charisma**, and one is a free ability boost.\n\nYou're trained in the Intimidation skill, and the Politics Lore skill. You gain the Quick Coercion skill feat.",
+			"hash": "IWFwFgPz"
+		}
 	},
 	{
 		"aonId": 81,
@@ -1018,7 +1270,16 @@
 		],
 		"source": "PZO9301",
 		"id": "ad48479e-0e1a-4d2e-84fe-aa00ef98e57f",
-		"hash": "YYRfxXLR"
+		"pf2t": {
+			"name": "Aspiring Free Captain",
+			"pfs": "standard",
+			"source": "World Guide pg. 70 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=81",
+			"aon": "backgrounds81",
+			"type": "background",
+			"body": "**Region** High Seas\nYou seek to join the Free Captains of the Shackles and have learned everything you need to know about sailing and bossing people around. Now you just need a crew and a ship.\n\n\nChoose two ability boosts. One must be to **Wisdom** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Intimidation skill, and the Sailing Lore skill. You gain the Group Coercion skill feat.",
+			"hash": "YYRfxXLR"
+		}
 	},
 	{
 		"aonId": 82,
@@ -1051,7 +1312,16 @@
 		],
 		"source": "PZO9301",
 		"id": "9b914221-de15-4d28-bdab-56934e4f864d",
-		"hash": "RxWgwPCc"
+		"pf2t": {
+			"name": "Hermean Expatriate",
+			"pfs": "standard",
+			"source": "World Guide pg. 70 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=82",
+			"aon": "backgrounds82",
+			"type": "background",
+			"body": "**Region** High Seas\nYou have been exiled from Hermea, perhaps of your own accord or perhaps because you didn't measure up. However, you take with you some of the benefits of the excellent education afforded to its citizenry.\n\n\nChoose two ability boosts. One must be to **Intelligence** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Society skill, and the Dragon Lore skill. You gain the Skill Training skill feat.",
+			"hash": "RxWgwPCc"
+		}
 	},
 	{
 		"aonId": 83,
@@ -1084,7 +1354,16 @@
 		],
 		"source": "PZO9301",
 		"id": "946c33c6-df4c-4022-9671-6508c2231ad1",
-		"hash": "TmYKnmDx"
+		"pf2t": {
+			"name": "Mantis Scion",
+			"pfs": "standard",
+			"source": "World Guide pg. 70 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=83",
+			"aon": "backgrounds83",
+			"type": "background",
+			"body": "**Region** High Seas\nAt least one of your parents is a member of the notorious Red Mantis assassins, merciless killers for hire who rarely fail to claim their marks. Whether on purpose or by simple exposure, you were trained from a young age in the art of stalking and killing people.\n\nChoose two ability boosts. One must be to **Dexterity** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Stealth skill, and the Assassin Lore skill. You gain the Assurance skill feat with Stealth.",
+			"hash": "TmYKnmDx"
+		}
 	},
 	{
 		"aonId": 84,
@@ -1149,7 +1428,16 @@
 		],
 		"source": "PZO9301",
 		"id": "3c426bf0-dfb3-4ff1-bc93-0434035a68f1",
-		"hash": "POqjqbLX"
+		"pf2t": {
+			"name": "Scholar of the Ancients",
+			"pfs": "standard",
+			"source": "World Guide pg. 70 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=85",
+			"aon": "backgrounds85",
+			"type": "background",
+			"body": "**Region** High Seas\nYou're fascinated by the lost Azlanti Empire and have dedicated yourself to seeking out and studying every broken artifact or scrap of knowledge that remains, whether as an academic pursuit or simply for the joy of treasure hunting.\n\nChoose two ability boosts. One must be to **Intelligence** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Arcana skill, and the Azlant Lore skill. You gain the Quick Identification skill feat.",
+			"hash": "POqjqbLX"
+		}
 	},
 	{
 		"aonId": 86,
@@ -1182,7 +1470,16 @@
 		],
 		"source": "PZO9301",
 		"id": "fb9d1efd-d071-4a8f-9bb9-46990ed40968",
-		"hash": "kyRxrXcW"
+		"pf2t": {
+			"name": "Storm Survivor",
+			"pfs": "standard",
+			"source": "World Guide pg. 70 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=86",
+			"aon": "backgrounds86",
+			"type": "background",
+			"body": "**Region** High Seas\nThrough luck or through skill, you managed to survive a catastrophic maritime disaster, such as a shipwreck or being thrown overboard. You have a keen sense for weather or situations that are similar to the one you escaped.\n\nChoose two ability boosts. One must be to **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Survival skill, and the Weather Lore skill. You gain the Forager skill feat.",
+			"hash": "kyRxrXcW"
+		}
 	},
 	{
 		"aonId": 87,
@@ -1215,7 +1512,16 @@
 		],
 		"source": "PZO9301",
 		"id": "ec3e29b7-8ec3-4e59-a000-ca918529b3b0",
-		"hash": "hCAgLYJn"
+		"pf2t": {
+			"name": "Undersea Enthusiast",
+			"pfs": "standard",
+			"source": "World Guide pg. 70 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=87",
+			"aon": "backgrounds87",
+			"type": "background",
+			"body": "**Region** High Seas\nYou love diving and exploring the world beneath the waves, and long periods of swimming have trained you to move easily through the water. You're also fascinated by undersea creatures and cultures-and may even have a trace of one of them in your own lineage.\n\nChoose two ability boosts. One must be to **Constitution**, and one is a free ability boost.\n\nYou're trained in the Athletics skill, and the Ocean Lore skill. You gain the Underwater Marauder skill feat.",
+			"hash": "hCAgLYJn"
+		}
 	},
 	{
 		"aonId": 88,
@@ -1248,7 +1554,16 @@
 		],
 		"source": "PZO9301",
 		"id": "0a07e250-d753-441d-9829-70f7b63eaaca",
-		"hash": "KGpfZNwO"
+		"pf2t": {
+			"name": "Alkenstar Tinker",
+			"pfs": "standard",
+			"source": "World Guide pg. 82 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=88",
+			"aon": "backgrounds88",
+			"type": "background",
+			"body": "**Region** Impossible Lands\nYour dedication to the scientific inquiry of your native Alkenstar provides great insight into mechanical and chemical innovation.\n\nChoose two ability boosts. One must be to **Dexterity** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and the Engineering Lore skill. You gain the Alchemical Crafting skill feat.",
+			"hash": "KGpfZNwO"
+		}
 	},
 	{
 		"aonId": 89,
@@ -1281,7 +1596,16 @@
 		],
 		"source": "PZO9301",
 		"id": "20575e8e-ea8c-42c4-bca1-0fd3331d0635",
-		"hash": "WjyLHtrq"
+		"pf2t": {
+			"name": "Geb Crusader",
+			"pfs": "standard",
+			"source": "World Guide pg. 82 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=89",
+			"aon": "backgrounds89",
+			"type": "background",
+			"body": "**Region** Impossible Lands\nYou grew up considering the existence of the undead nation of Geb an atrocity and trained to one day take part in destroying it and putting its vile inhabitants to their final rest. Key to your preparations is a thorough study of Pharasma, Urgathoa, and other undead-related deities and their philosophies.\n\nChoose two ability boosts. One must be to **Constitution** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Religion skill, and the Undead Lore skill. You gain the Student of the Canon skill feat.",
+			"hash": "WjyLHtrq"
+		}
 	},
 	{
 		"aonId": 90,
@@ -1314,7 +1638,16 @@
 		],
 		"source": "PZO9301",
 		"id": "94187605-8ab5-45db-a2c0-4c476e917726",
-		"hash": "jwAzrXjd"
+		"pf2t": {
+			"name": "Mana Wastes Refugee",
+			"pfs": "standard",
+			"source": "World Guide pg. 82 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=90",
+			"aon": "backgrounds90",
+			"type": "background",
+			"body": "**Region** Impossible Lands\nExposure to the corrupting influence of the Mana Wastes' strange energies has warped your inner essence, resulting in unpredictable interactions with magic items and more than a little know-how about surviving under bizarre and adverse natural conditions.\n\nChoose two ability boosts. One must be to **Constitution** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Arcana skill, and the Wilderness Lore skill. You gain the Trick Magic Item skill feat.",
+			"hash": "jwAzrXjd"
+		}
 	},
 	{
 		"aonId": 91,
@@ -1347,7 +1680,16 @@
 		],
 		"source": "PZO9301",
 		"id": "d046dd53-9fdf-49b3-9bdf-0e89634423b3",
-		"hash": "kZyrstPg"
+		"pf2t": {
+			"name": "Nexian Mystic",
+			"pfs": "standard",
+			"source": "World Guide pg. 82 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=91",
+			"aon": "backgrounds91",
+			"type": "background",
+			"body": "**Region** Impossible Lands\nYour initiations into the Nexian mysteries and the philosophies of the Arclords of Nex grant you a preternatural comprehension of the arcane underpinnings of existence.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Arcana skill, and a Lore skill related to one plane of your choice (other than the material plane). You gain the Arcane Sense skill feat.",
+			"hash": "kZyrstPg"
+		}
 	},
 	{
 		"aonId": 92,
@@ -1380,7 +1722,16 @@
 		],
 		"source": "PZO9301",
 		"id": "20d62fd9-87ef-492a-a43b-99d305b0ba53",
-		"hash": "tLInXQRv"
+		"pf2t": {
+			"name": "Oenopion Ooze-Tender",
+			"pfs": "standard",
+			"source": "World Guide pg. 82 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=92",
+			"aon": "backgrounds92",
+			"type": "background",
+			"body": "**Region** Impossible Lands\nYour apprenticeship in one of Oenopion's unorthodox arcane and alchemical academies instilled in you a deep reservoir of mostly reliable esoteric knowledge, not to mention a deep resentment born of countless hours spent mucking ooze pens and feeding helpless creatures to ravenous, belching jellies and gelatinous puddings.\n\nChoose two ability boosts. One must be to **Constitution** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and the Ooze Lore skill. You gain the Dubious Knowledge skill feat.",
+			"hash": "tLInXQRv"
+		}
 	},
 	{
 		"aonId": 93,
@@ -1413,7 +1764,16 @@
 		],
 		"source": "PZO9301",
 		"id": "f847bb48-0e60-42dc-af86-2a91d3c6d310",
-		"hash": "hYzIGUzU"
+		"pf2t": {
+			"name": "Perfection Seeker",
+			"pfs": "standard",
+			"source": "World Guide pg. 82 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=93",
+			"aon": "backgrounds93",
+			"type": "background",
+			"body": "**Region** Impossible Lands\nYou aspire to perfect your body and mind in the tradition of Jalmeray's Houses of Perfection, honing your acrobatic skills and mental faculties in preparation for a lifetime pushing the edge of what most consider possible.\n\nChoose two ability boosts. One must be to **Dexterity** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Acrobatics skill, and the Warfare Lore skill. You gain the Cat Fall skill feat.",
+			"hash": "hYzIGUzU"
+		}
 	},
 	{
 		"aonId": 94,
@@ -1446,7 +1806,16 @@
 		],
 		"source": "PZO9301",
 		"id": "b14a3d07-44e5-4c5a-b039-164b46797796",
-		"hash": "zZyRZkbW"
+		"pf2t": {
+			"name": "Quick",
+			"pfs": "standard",
+			"source": "World Guide pg. 82 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=94",
+			"aon": "backgrounds94",
+			"type": "background",
+			"body": "**Region** Impossible Lands\nStaying alive among the scheming, ravenous undead of Geb required a deep knowledge of their motivations, capabilities, and weaknesses. More often than not, it also required the ability to weave alibis and life-preserving half-truths capable of swaying a stilled heart.\n\nChoose two ability boosts. One must be to **Charisma** or **Constitution**, and one is a free ability boost.\n\nYou're trained in the Deception skill, and the Undead Lore skill. You gain the Charming Liar skill feat.",
+			"hash": "zZyRZkbW"
+		}
 	},
 	{
 		"aonId": 95,
@@ -1479,7 +1848,16 @@
 		],
 		"source": "PZO9301",
 		"id": "430a9e07-6c81-4f16-a648-96179a626a1f",
-		"hash": "pVARMOPV"
+		"pf2t": {
+			"name": "Bekyar Restorer",
+			"pfs": "standard",
+			"source": "World Guide pg. 94 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=95",
+			"aon": "backgrounds95",
+			"type": "background",
+			"body": "**Region** Mwangi Expanse\nThough many Bekyars worship demons, you seek to pave a different path for yourself and your kindred, while also attempting to change other Mwangi's treatment of your culture.\n\nChoose two ability boosts. One must be to **Wisdom** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Diplomacy skill, and the Abyss Lore skill. You gain the Group Impression skill feat.",
+			"hash": "pVARMOPV"
+		}
 	},
 	{
 		"aonId": 96,
@@ -1512,7 +1890,16 @@
 		],
 		"source": "PZO9301",
 		"id": "a3abb90b-e545-4cc4-a92e-1d4ba87edda4",
-		"hash": "vbgFRbOR"
+		"pf2t": {
+			"name": "Bonuwat Wavetouched",
+			"pfs": "standard",
+			"source": "World Guide pg. 94 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=96",
+			"aon": "backgrounds96",
+			"type": "background",
+			"body": "**Region** Mwangi Expanse\nYou are a child of the Bonuwat people, and the sea's salt flows through your veins. You've taken to sailing and swimming gracefully and with ease, earning you the honorific \"wavetouched.\"\n\nChoose two ability boosts. One must be to **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Athletics skill, and the Ocean Lore skill. You gain the Underwater Marauder skill feat.",
+			"hash": "vbgFRbOR"
+		}
 	},
 	{
 		"aonId": 97,
@@ -1545,7 +1932,16 @@
 		],
 		"source": "PZO9301",
 		"id": "61465666-6bf3-4100-a4be-dd2ef749b41a",
-		"hash": "rNYEwzjc"
+		"pf2t": {
+			"name": "Bright Lion",
+			"pfs": "standard",
+			"source": "World Guide pg. 94 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=97",
+			"aon": "backgrounds97",
+			"type": "background",
+			"body": "**Region** Mwangi Expanse\nYou are a member of the Bright Lions and seek to overthrow the tyrannical reign of Walkena and free Mzali from his cruel whims. You're experienced operating undercover and have had to be cautious of what you say and who you trust, lest you fall afoul of the god-king's terrible punishments.\n\nChoose two ability boosts. One must be to **Charisma**, and one is a free ability boost.\n\nYou're trained in the Deception skill, and the Mzali Lore skill. You gain the Lie to Me skill feat.",
+			"hash": "rNYEwzjc"
+		}
 	},
 	{
 		"aonId": 98,
@@ -1578,7 +1974,16 @@
 		],
 		"source": "PZO9301",
 		"id": "beb8e2aa-7257-4ee4-89c8-1466897011e0",
-		"hash": "txyHNHVX"
+		"pf2t": {
+			"name": "Magaambya Academic",
+			"pfs": "standard",
+			"source": "World Guide pg. 94 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=98",
+			"aon": "backgrounds98",
+			"type": "background",
+			"body": "**Region** Mwangi Expanse\nYou studied magic at the prestigious Magaambya academy in Nantambu, learning magical traditions dating back to Old-Mage Jatembe and earning a pedigree respected by magical scholars almost everywhere.\n\nChoose two ability boosts. One must be to **Intelligence** or **Charisma**, and one is a free ability boost.\n\nYou're trained in your choice of either the Arcana or Nature skill, as well as the Academia Lore skill. You gain the Recognize Spell skill feat.",
+			"hash": "txyHNHVX"
+		}
 	},
 	{
 		"aonId": 99,
@@ -1611,7 +2016,16 @@
 		],
 		"source": "PZO9301",
 		"id": "fe85bdcc-81fb-450a-adc3-0fddb15126e4",
-		"hash": "vnrKSbzc"
+		"pf2t": {
+			"name": "Senghor Sailor",
+			"pfs": "standard",
+			"source": "World Guide pg. 94 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=99",
+			"aon": "backgrounds99",
+			"type": "background",
+			"body": "**Region** Mwangi Expanse\nAs an experienced sailor from Senghor, you know that the only thing saving you from disaster on the high seas is a properly maintained ship. You know boat-building inside and out and you can quickly cobble together a solution in the event that something breaks.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and the Sailing Lore skill. You gain the Quick Repair skill feat.",
+			"hash": "vnrKSbzc"
+		}
 	},
 	{
 		"aonId": 100,
@@ -1644,7 +2058,16 @@
 		],
 		"source": "PZO9301",
 		"id": "6651c34d-076a-415b-b876-1d2d4ba1f12d",
-		"hash": "FMqRQYxv"
+		"pf2t": {
+			"name": "Shory Seeker",
+			"pfs": "standard",
+			"source": "World Guide pg. 94 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=100",
+			"aon": "backgrounds100",
+			"type": "background",
+			"body": "**Region** Mwangi Expanse\nYou've dedicated your life to unraveling the secrets of the ancient Shory Empire, either through meticulous research or by traveling into dangerous and distant ruins to track down long- lost artifacts.\n\nChoose two ability boosts. One must be to **Dexterity** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and the Shory Lore skill. You gain the Specialty Crafting skill feat.",
+			"hash": "FMqRQYxv"
+		}
 	},
 	{
 		"aonId": 101,
@@ -1677,7 +2100,16 @@
 		],
 		"source": "PZO9301",
 		"id": "c30894dd-7201-4400-9c14-a7fd2e0f7d42",
-		"hash": "NZLDIbSb"
+		"pf2t": {
+			"name": "Sodden Scavenger",
+			"pfs": "standard",
+			"source": "World Guide pg. 94 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=101",
+			"aon": "backgrounds101",
+			"type": "background",
+			"body": "**Region** Mwangi Expanse\nYou've managed to eke out an existence in the storm-wracked Sodden Lands and have become an expert at scavenging food and tools.\n\nChoose two ability boosts. One must be to **Constitution** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Survival skill, and the Swamp Lore skill. You gain the Forager skill feat.",
+			"hash": "NZLDIbSb"
+		}
 	},
 	{
 		"aonId": 102,
@@ -1710,7 +2142,16 @@
 		],
 		"source": "PZO9301",
 		"id": "3583d031-2385-46b2-8fbc-f2ca623b3bd1",
-		"hash": "ZbYMXZWq"
+		"pf2t": {
+			"name": "Vidrian Reformer",
+			"pfs": "standard",
+			"source": "World Guide pg. 94 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=102",
+			"aon": "backgrounds102",
+			"type": "background",
+			"body": "**Region** Mwangi Expanse\nYou know that the only way your homeland of Vidrian can remain free from outside conquerors is by forging a strong and unified government. As such, you seek to bind your fellow citizens together through careful diplomacy and force of personality-or, if necessary, subterfuge and intrigue.\n\nChoose two ability boosts. One must be to **Dexterity** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Diplomacy skill, and the Politics Lore skill. You gain the Hobnobber skill feat.",
+			"hash": "ZbYMXZWq"
+		}
 	},
 	{
 		"aonId": 103,
@@ -1743,7 +2184,16 @@
 		],
 		"source": "PZO9301",
 		"id": "529ae369-a132-443c-a53a-87dec0cdfe46",
-		"hash": "xDCZEddp"
+		"pf2t": {
+			"name": "Atteran Rancher",
+			"pfs": "standard",
+			"source": "World Guide pg. 106 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=103",
+			"aon": "backgrounds103",
+			"type": "background",
+			"body": "**Region** Old Cheliax\nYou grew up breeding and training the famous horses of the Atteran Ranches in northern Nidal. You may even be sympathetic to the Desnan dissidents who hide there from the Umbral Court.\n\nChoose two ability boosts. One must be to **Dexterity**, and one is a free ability boost.\n\nYou're trained in the Nature skill, and the Animal Lore skill. You gain the Train Animal skill feat.",
+			"hash": "xDCZEddp"
+		}
 	},
 	{
 		"aonId": 104,
@@ -1776,7 +2226,16 @@
 		],
 		"source": "PZO9301",
 		"id": "3282abad-4fdb-410a-abf2-24268512898d",
-		"hash": "MTbHymcj"
+		"pf2t": {
+			"name": "Bellflower Agent",
+			"pfs": "standard",
+			"source": "World Guide pg. 106 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=104",
+			"aon": "backgrounds104",
+			"type": "background",
+			"body": "**Region** Old Cheliax\nYou joined a secret society dedicated to freeing halfling slaves, most likely from the cruelty of Chelish reign. You know how to smuggle people in and out of countries.\n\nChoose two ability boosts. One must be to **Dexterity** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Stealth skill, and the Underworld Lore skill. You gain the Experienced Smuggler skill feat.",
+			"hash": "MTbHymcj"
+		}
 	},
 	{
 		"aonId": 105,
@@ -1809,7 +2268,16 @@
 		],
 		"source": "PZO9301",
 		"id": "8fc91b00-2d3d-43c0-b775-2fe1d6709a22",
-		"hash": "VZbMRRHn"
+		"pf2t": {
+			"name": "Chelish Rebel",
+			"pfs": "standard",
+			"source": "World Guide pg. 106 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=105",
+			"aon": "backgrounds105",
+			"type": "background",
+			"body": "**Region** Old Cheliax\nYou joined the fight against House Thrune. You may have helped liberate the nation of Ravounel, or you might be involved in another rebellion, such as Pezzack's, that studied Ravounel's successes.\n\nChoose two ability boosts. One must be to **Dexterity** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Society skill, and the Kintargo Lore skill. You gain the Streetwise skill feat.",
+			"hash": "VZbMRRHn"
+		}
 	},
 	{
 		"aonId": 106,
@@ -1842,7 +2310,16 @@
 		],
 		"source": "PZO9301",
 		"id": "ea765a3c-3924-454b-b522-ffc3d7cfa21e",
-		"hash": "XtkqXtDF"
+		"pf2t": {
+			"name": "Child of Westcrown",
+			"pfs": "standard",
+			"source": "World Guide pg. 106 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=106",
+			"aon": "backgrounds106",
+			"type": "background",
+			"body": "**Region** Old Cheliax\nWhether you come from Westcrown or elsewhere, you hold the values of pre-Thrune Cheliax dear. You disdain the infernal government, but you are proud of your country and do not consider yourself a rebel.\n\nChoose two ability boosts. One must be to **Charisma**, and one is a free ability boost.\n\nYou're trained in the Diplomacy skill, and the Westcrown Lore skill. You gain the Group Impression skill feat.",
+			"hash": "XtkqXtDF"
+		}
 	},
 	{
 		"aonId": 107,
@@ -1875,7 +2352,16 @@
 		],
 		"source": "PZO9301",
 		"id": "4cad2ab1-2da7-4f1e-a18c-20242b510dac",
-		"hash": "tkvFgXyl"
+		"pf2t": {
+			"name": "Goblinblood Orphan",
+			"pfs": "standard",
+			"source": "World Guide pg. 106 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=107",
+			"aon": "backgrounds107",
+			"type": "background",
+			"body": "**Region** Old Cheliax\nYour family, whether goblin, hobgoblin, or human, died in the Goblinblood Wars. Though you were marked by these losses, you managed to survive through your own resilience and resourcefulness.\n\nChoose two ability boosts. One must be to **Dexterity** or **Constitution**, and one is a free ability boost.\n\nYou're trained in the Survival skill, and the Goblin Lore skill. You gain the Assurance skill feat with Survival.",
+			"hash": "tkvFgXyl"
+		}
 	},
 	{
 		"aonId": 108,
@@ -1908,7 +2394,16 @@
 		],
 		"source": "PZO9301",
 		"id": "dd983360-9dc7-4024-9a9a-a47df247307f",
-		"hash": "BgvIfYxm"
+		"pf2t": {
+			"name": "Shadow Haunted",
+			"pfs": "standard",
+			"source": "World Guide pg. 106 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=108",
+			"aon": "backgrounds108",
+			"type": "background",
+			"body": "**Region** Old Cheliax\nYou are from Nidal, and regardless of your personal values, Zon-Kuthon has a claim on your soul due to an ancient pact. The Midnight Lord's unsettling influence is bred deep into your bones.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Intimidation skill, and the Shadow Plane Lore skill. You gain the Quick Coercion skill feat.",
+			"hash": "BgvIfYxm"
+		}
 	},
 	{
 		"aonId": 109,
@@ -1941,7 +2436,16 @@
 		],
 		"source": "PZO9301",
 		"id": "f052fac1-103b-4105-ab8c-e3627f1be562",
-		"hash": "RzCRpRpt"
+		"pf2t": {
+			"name": "Thrune Loyalist",
+			"pfs": "standard",
+			"source": "World Guide pg. 106 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=109",
+			"aon": "backgrounds109",
+			"type": "background",
+			"body": "**Region** Old Cheliax\nDespite the setbacks Cheliax has suffered recently, your loyalties lie with the devil-backed House Thrune. You consider the current queen to be the rightful ruler of your homeland, and you are willing to act against her enemies.\n\nChoose two ability boosts. One must be to **Intelligence** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Religion skill, and the Hell Lore skill. You gain the Student of the Canon skill feat.",
+			"hash": "RzCRpRpt"
+		}
 	},
 	{
 		"aonId": 110,
@@ -1974,7 +2478,16 @@
 		],
 		"source": "PZO9301",
 		"id": "d96654b2-7d51-47d8-916f-e63de1004227",
-		"hash": "mwZqFXIp"
+		"pf2t": {
+			"name": "Mammoth Speaker",
+			"pfs": "standard",
+			"source": "World Guide pg. 118 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=110",
+			"aon": "backgrounds110",
+			"type": "background",
+			"body": "**Region** Saga Lands\nYou have learned the secrets of taming the mighty mammoths and other megafauna of the far north. Perhaps these talents are a part of your people's traditional customs, or perhaps you sought out these massive animals of your own accord.\n\nChoose two ability boosts. One must be to **Constitution** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Nature skill, and the Animal Lore skill. You gain the Train Animal skill feat.",
+			"hash": "mwZqFXIp"
+		}
 	},
 	{
 		"aonId": 111,
@@ -2007,7 +2520,16 @@
 		],
 		"source": "PZO9301",
 		"id": "eab8ae9c-c2db-43dd-8fb3-b71f152b3dc5",
-		"hash": "WUjNHkmt"
+		"pf2t": {
+			"name": "Shoanti Name-Bearer",
+			"pfs": "standard",
+			"source": "World Guide pg. 118 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=111",
+			"aon": "backgrounds111",
+			"type": "background",
+			"body": "**Region** Saga Lands\nYou are a member of a Shoanti quah and have gone through its coming of age ceremony, gaining the traditional tattoo of your quah and earning your adult name.\n\nChoose two ability boosts. One must be to **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Athletics skill, and the Quah Lore skill. You gain the Combat Climber skill feat.",
+			"hash": "WUjNHkmt"
+		}
 	},
 	{
 		"aonId": 112,
@@ -2040,7 +2562,16 @@
 		],
 		"source": "PZO9301",
 		"id": "e49e966b-ec49-481c-8a64-d23c55b18b61",
-		"hash": "XHnngdqE"
+		"pf2t": {
+			"name": "Thassilonian Traveler",
+			"pfs": "standard",
+			"source": "World Guide pg. 118 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=112",
+			"aon": "backgrounds112",
+			"type": "background",
+			"body": "**Region** Saga Lands\nYou come from ancient Thassilon, one of the citizens that appeared out of time alongside the city of Xin-Edasseril. You know many things that have been long forgotten... along with many things that are no longer correct.\n\nChoose two ability boosts. One must be to **Constitution** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Arcana skill, and the Thassilon Lore skill. You gain the Dubious Knowledge skill feat.",
+			"hash": "XHnngdqE"
+		}
 	},
 	{
 		"aonId": 113,
@@ -2073,7 +2604,16 @@
 		],
 		"source": "PZO9301",
 		"id": "3f13af11-36f8-4990-af6e-1b6dbb589832",
-		"hash": "YvttPbRk"
+		"pf2t": {
+			"name": "Ulfen Raider",
+			"pfs": "standard",
+			"source": "World Guide pg. 118 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=113",
+			"aon": "backgrounds113",
+			"type": "background",
+			"body": "**Region** Saga Lands\nYou are an Ulfen warrior, feared among Avistan for the merciless and devastating raids your people once conducted along the shores. Though the days of these Ulfen raids are largely past, you have been trained to strike terror into the hearts of those who face you.\n\nChoose two ability boosts. One must be to **Charisma**, and one is a free ability boost.\n\nYou're trained in the Intimidation skill, and the Sailing Lore skill. You gain the Intimidating Glare skill feat.",
+			"hash": "YvttPbRk"
+		}
 	},
 	{
 		"aonId": 114,
@@ -2106,7 +2646,16 @@
 		],
 		"source": "PZO9301",
 		"id": "3c214f7c-da6d-466b-9ed6-9747a28fd80b",
-		"hash": "qVFFcUYV"
+		"pf2t": {
+			"name": "Varisian Wanderer",
+			"pfs": "standard",
+			"source": "World Guide pg. 118 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=114",
+			"aon": "backgrounds114",
+			"type": "background",
+			"body": "**Region** Saga Lands\nYou have spent your youth wandering the lands of Varisia and beyond among the brightly painted wagons of a Varisian caravan. You have heard endless tales of your people's history and lore, and have learned many songs and stories from the disparate people you have met.\n\nChoose two ability boosts. One must be to **Dexterity** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Performance skill, and the Circus Lore skill. You gain the Fascinating Performance skill feat.",
+			"hash": "qVFFcUYV"
+		}
 	},
 	{
 		"aonId": 115,
@@ -2139,7 +2688,16 @@
 		],
 		"source": "PZO9301",
 		"id": "23eaecf4-24e3-4830-bc1a-2e3e69c164ca",
-		"hash": "QYsmtAVt"
+		"pf2t": {
+			"name": "Winter's Child",
+			"pfs": "standard",
+			"source": "World Guide pg. 118 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=115",
+			"aon": "backgrounds115",
+			"type": "background",
+			"body": "**Region** Saga Lands\nYour or one of your ancestors hails from Irrisen, and some spark of the icy region's magic has manifested itself within your bones. The blood of Baba Yaga's legacy runs in your veins, and you are at one with the mysteries and dangers of the frozenland.\n\nChoose two ability boosts. One must be to **Constitution** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Arcana skill, and the Weather Lore skill. You gain the Arcane Sense skill feat.",
+			"hash": "QYsmtAVt"
+		}
 	},
 	{
 		"aonId": 116,
@@ -2172,7 +2730,16 @@
 		],
 		"source": "PZO9301",
 		"id": "8a2ddff5-b6d8-4e45-8171-e55c2fded7ca",
-		"hash": "SqRcvYVz"
+		"pf2t": {
+			"name": "Witch Wary",
+			"pfs": "standard",
+			"source": "World Guide pg. 118 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=116",
+			"aon": "backgrounds116",
+			"type": "background",
+			"body": "**Region** Saga Lands\nYou have little love or trust for spellcraft and those who practice it, and have developed a paranoid knack for recognizing such tricks. You are constantly on guard for the magic of witches and have been trained to spot the signs of those with minds affected by magic.\n\nChoose two ability boosts. One must be to **Dexterity** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Occultism skill, and the Curse Lore skill. You gain the Oddity Identification skill feat.",
+			"hash": "SqRcvYVz"
+		}
 	},
 	{
 		"aonId": 117,
@@ -2205,7 +2772,16 @@
 		],
 		"source": "PZO9301",
 		"id": "907fa294-7223-49b1-af72-8642e3e82d4b",
-		"hash": "tCtqvSgT"
+		"pf2t": {
+			"name": "Final Blade Survivor",
+			"pfs": "standard",
+			"source": "World Guide pg. 130 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=117",
+			"aon": "backgrounds117",
+			"type": "background",
+			"body": "**Region** Shining Kingdoms\nYou fell prey to the whims of the Galtan mob and were scheduled for execution by final blade, but through skill-or sheer luck-you managed to talk your way out of it.\n\nChoose two ability boosts. One must be to **Charisma** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Deception skill, and the Revolution Lore skill. You gain the Charming Liar skill feat.",
+			"hash": "tCtqvSgT"
+		}
 	},
 	{
 		"aonId": 118,
@@ -2238,7 +2814,16 @@
 		],
 		"source": "PZO9301",
 		"id": "f3d2d520-8501-41e8-be80-d259e07a1e8f",
-		"hash": "XZDhpgqI"
+		"pf2t": {
+			"name": "Kalistrade Follower",
+			"pfs": "standard",
+			"source": "World Guide pg. 130 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=118",
+			"aon": "backgrounds118",
+			"type": "background",
+			"body": "**Region** Shining Kingdoms\nYou follow the philosophy of the Prophecies of Kalistrade, seeking to build up your wealth in this life so that you might meet the next world on your own terms.\n\nChoose two ability boosts. One must be to **Constitution** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Diplomacy skill, and the Kalistrade Lore skill. You gain the Bargain Hunter skill feat.",
+			"hash": "XZDhpgqI"
+		}
 	},
 	{
 		"aonId": 119,
@@ -2271,7 +2856,16 @@
 		],
 		"source": "PZO9301",
 		"id": "08783972-75d7-4160-9cc4-b97f4762f9ba",
-		"hash": "VgcTRFzO"
+		"pf2t": {
+			"name": "Kyonin Emissary",
+			"pfs": "standard",
+			"source": "World Guide pg. 130 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=119",
+			"aon": "backgrounds119",
+			"type": "background",
+			"body": "**Region** Shining Kingdoms\nYou were trained to be an ambassador of the elven land of Kyonin, and you have now been sent out into the wider world to build alliances between Kyonin and the neighboring kingdoms.\n\nChoose two ability boosts. One must be to **Charisma** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Society skill, and the Politics Lore skill. You gain the Multilingual skill feat.",
+			"hash": "VgcTRFzO"
+		}
 	},
 	{
 		"aonId": 120,
@@ -2304,7 +2898,16 @@
 		],
 		"source": "PZO9301",
 		"id": "d855f0c3-52d0-4388-958e-63e2aedff038",
-		"hash": "jnkzbwVW"
+		"pf2t": {
+			"name": "Lumber Consortium Laborer",
+			"pfs": "standard",
+			"source": "World Guide pg. 130 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=120",
+			"aon": "backgrounds120",
+			"type": "background",
+			"body": "**Region** Shining Kingdoms\nYou have suffered as a worker for the unscrupulous Lumber Consortium, laboring under harsh conditions in dangerous wooded regions of Andoran.\n\nChoose two ability boosts. One must be to **Dexterity**, and one is a free ability boost.\n\nYou're trained in the Athletics skill, and the Forest Lore skill. You gain the Assurance skill feat with Athletics.",
+			"hash": "jnkzbwVW"
+		}
 	},
 	{
 		"aonId": 121,
@@ -2337,7 +2940,16 @@
 		],
 		"source": "PZO9301",
 		"id": "81ad14e2-44fd-4f05-8a68-23b866db2e54",
-		"hash": "rZMOQqgX"
+		"pf2t": {
+			"name": "Rivethun Adherent",
+			"pfs": "standard",
+			"source": "World Guide pg. 130 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=121",
+			"aon": "backgrounds121",
+			"type": "background",
+			"body": "**Region** Shining Kingdoms\nYou have spent time learning the practices and traditions of the ancient Rivethun dwarven shamans and can recognize all sorts of magic. You may have chosen your own road since then, or you may remain an adherent of the philosophy.\n\nChoose two ability boosts. One must be to **Constitution** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Occultism skill, and the Spirit Lore skill. You gain the Recognize Spell skill feat.",
+			"hash": "rZMOQqgX"
+		}
 	},
 	{
 		"aonId": 122,
@@ -2370,7 +2982,16 @@
 		],
 		"source": "PZO9301",
 		"id": "445b7e03-7935-4f2c-8eda-ed4f8a7e07fd",
-		"hash": "dryMbYml"
+		"pf2t": {
+			"name": "Taldan Schemer",
+			"pfs": "standard",
+			"source": "World Guide pg. 130 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=122",
+			"aon": "backgrounds122",
+			"type": "background",
+			"body": "**Region** Shining Kingdoms\nWhether willing or unwilling, you have been involved in the many cutthroat political intrigues within Taldor. You might have been born into it as a member of the aristocracy, or you might have taken an active role in the recent events of the War for the Crown.\n\nChoose two ability boosts. One must be to **Charisma** or **Constitution**, and one is a free ability boost.\n\nYou're trained in the Diplomacy skill, and the Politics Lore skill. You gain the Hobnobber skill feat.",
+			"hash": "dryMbYml"
+		}
 	},
 	{
 		"aonId": 123,
@@ -2403,6 +3024,15 @@
 		],
 		"source": "PZO9301",
 		"id": "aee35d9e-3717-4980-9f61-a22afcafb908",
-		"hash": "GGRrJPRZ"
+		"pf2t": {
+			"name": "Wildwood Local",
+			"pfs": "standard",
+			"source": "World Guide pg. 130 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=123",
+			"aon": "backgrounds123",
+			"type": "background",
+			"body": "**Region** Shining Kingdoms\nYou might have been born and raised among the druids of the Verduran Forest, or you may have spent time among them as an adult and come to know their ways.\n\nChoose two ability boosts. One must be to **Dexterity** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Nature skill, and the Forest Lore skill. You gain the Natural Medicine skill feat.",
+			"hash": "GGRrJPRZ"
+		}
 	}
 ]

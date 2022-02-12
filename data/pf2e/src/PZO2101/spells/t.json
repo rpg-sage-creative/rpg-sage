@@ -34,7 +34,23 @@
 		"traits": [ "Uncommon", "Necromancy" ],
 		"focus": false,
 		"id": "c6971ce0-cebc-4f8a-a1f2-c08336d13644",
-		"hash": "RkRgBvLw"
+		"pf2t": {
+			"name": "Talking Corpse",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,necromancy",
+			"traditions": "divine,occult",
+			"cast": "m,s,v",
+			"actions": "10 minutes",
+			"range": "touch",
+			"source": "Core Rulebook pg. 376 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=329",
+			"aon": "spells329",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** 10 minutes\n**Targets** 1 corpse\n\n- - -\n\nYou grant the target corpse a semblance of life, which it uses to speak the answers to three questions posed to it. This spell calls on the physical body's latent memories rather than summoning back the deceased's spirit, so the corpse must be mostly intact for the spell to function. The more damage the corpse has taken, the more inaccurate or patchwork its answers are, and it must have a throat and mouth to speak at all. If anyone has previously cast this spell on the corpse in the last week, the spell automatically fails. The corpse can attempt a Will save to resist answering the questions using the statistics of the original creature at its time of death, with the following effects.\n\n**Critical Success** The target can lie or refuse to answer your questions, and the target's spirit haunts you for 24 hours, bothering you and causing you to be unable to gain any rest for that time.\n**Success** The target can provide false information or refuse to answer your questions.\n**Failure** The target must answer truthfully, but its answers can be brief, cryptic, and repetitive. It can still mislead you or attempt to stall so that the spell's duration runs out before you can ask all your questions.\n**Critical Failure** As failure, but the target's answers are more direct and less repetitive, though still cryptic. It takes a -2 status penalty to Deception checks to deceive or mislead you.",
+			"hash": "RkRgBvLw"
+		}
 	},
 	{
 		"aonId": 330,
@@ -91,7 +107,22 @@
 		"traits": [ "Conjuration", "Plant" ],
 		"focus": false,
 		"id": "4b010ee3-8a5b-4376-a002-a303a16eb7a4",
-		"hash": "qLAVbRhX"
+		"pf2t": {
+			"name": "Tangling Creepers",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "conjuration,plant",
+			"traditions": "primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 500,
+			"source": "Core Rulebook pg. 377 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=331",
+			"aon": "spells331",
+			"type": "spell",
+			"body": "**Area** 40-foot burst\n**Duration** 10 minutes\n\n- - -\n\nDense, twitching creepers sprout from every surface and fill any bodies of water in the area. Any creature moving on the land, or Climbing or Swimming within the creepers, takes a -10-foot circumstance penalty to its Speeds while in the area. Once per round, you can make a vine lash out from any square within the expanse of creepers by using a single action, which has the concentrate trait. This vine has a 15-foot reach. Make a melee spell attack roll against the target; on a success, the vine pulls the target into the creepers and makes it immobilized for 1 round or until the creature Escapes (against your spell DC), whichever comes first.",
+			"hash": "qLAVbRhX"
+		}
 	},
 	{
 		"aonId": 332,
@@ -113,7 +144,22 @@
 		"traits": [ "Evocation" ],
 		"focus": false,
 		"id": "f32ea986-b61d-4b9e-9131-95076d75f60f",
-		"hash": "ftbNwpcd"
+		"pf2t": {
+			"name": "Telekinetic Haul",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "evocation",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 377 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=332",
+			"aon": "spells332",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 unattended object of up to 80 Bulk with no dimension longer than 20 feet\n\n- - -\n\nYou move the target up to 20 feet, potentially suspending it in midair. When you Sustain the Spell, you can do so again, or you can choose a different eligible target to move.",
+			"hash": "ftbNwpcd"
+		}
 	},
 	{
 		"aonId": 333,
@@ -134,7 +180,22 @@
 		"traits": [ "Attack", "Evocation", "Force" ],
 		"focus": false,
 		"id": "e34051c4-9897-4cf8-b978-e68f9acc1f7c",
-		"hash": "MMfpUvpw"
+		"pf2t": {
+			"name": "Telekinetic Maneuver",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "attack,evocation,force",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Core Rulebook pg. 377 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=333",
+			"aon": "spells333",
+			"type": "spell",
+			"body": "**Targets** 1 creature\n\n- - -\n\nWith a rush of telekinetic power, you move a foe or something they carry. You can attempt to Disarm, Shove, or Trip the target using a spell attack roll instead of an Athletics check.",
+			"hash": "MMfpUvpw"
+		}
 	},
 	{
 		"aonId": 334,
@@ -180,7 +241,22 @@
 		"traits": [ "Uncommon", "Divination", "Mental" ],
 		"focus": false,
 		"id": "5421369d-0368-4cba-a0f8-89558d0faff4",
-		"hash": "USMQwUxv"
+		"pf2t": {
+			"name": "Telepathic Bond",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,divination,mental",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": "touch",
+			"source": "Core Rulebook pg. 377 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=335",
+			"aon": "spells335",
+			"type": "spell",
+			"body": "**Duration** 8 hours\n**Targets** you and up to 4 willing creatures touched\n\n- - -\n\nThe targets can communicate telepathically with any or all of the other targets from any point on the same planet.",
+			"hash": "USMQwUxv"
+		}
 	},
 	{
 		"aonId": 336,
@@ -203,7 +279,23 @@
 		"traits": [ "Enchantment", "Incapacitation", "Linguistic", "Mental" ],
 		"focus": false,
 		"id": "da895ec9-59b4-40bb-be68-acf59d04da6b",
-		"hash": "HWARkHTK"
+		"pf2t": {
+			"name": "Telepathic Demand",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "enchantment,incapacitation,linguistic,mental",
+			"traditions": "arcane,divine,occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": "planetary",
+			"source": "Core Rulebook pg. 377 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=336",
+			"aon": "spells336",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature you've telepathically contacted before\n\n- - -\n\nYou send the target a message of 25 words or fewer, and it can respond immediately with its own message of 25 words or fewer. Your message is insidious and has the effect of suggestion, with the message substituting for the spoken suggestion. On a successful save, the target is temporarily immune for 1 day, and on a critical success, the target is temporarily immune for 1 month. You can target a creature only if you have previously been in telepathic contact with it before, such as via the telepathy spell.",
+			"hash": "HWARkHTK"
+		}
 	},
 	{
 		"aonId": 337,
@@ -226,7 +318,21 @@
 		"traits": [ "Divination", "Linguistic", "Mental" ],
 		"focus": false,
 		"id": "366fc270-e317-4c83-a0cc-5d044109f4be",
-		"hash": "pFsAmTJq"
+		"pf2t": {
+			"name": "Telepathy",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "divination,linguistic,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 377 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=337",
+			"aon": "spells337",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou can communicate telepathically with creatures within 30 feet. Once you establish a connection by communicating with a creature, the communication is two-way. You can communicate only with creatures that share a language with you.\n- - -\n**Heightened (6th)** Telepathy loses the linguistic trait. You can communicate telepathically with creatures using shared mental imagery even if you don't share a language.",
+			"hash": "pFsAmTJq"
+		}
 	},
 	{
 		"aonId": 338,
@@ -256,7 +362,22 @@
 		"traits": [ "Uncommon", "Conjuration", "Teleportation" ],
 		"focus": false,
 		"id": "95a38061-f6d0-4bb8-b996-89e0569d354f",
-		"hash": "PRXfRXwQ"
+		"pf2t": {
+			"name": "Teleport",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,teleportation",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": "10 minutes",
+			"range": 100,
+			"source": "Core Rulebook pg. 378 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=338",
+			"aon": "spells338",
+			"type": "spell",
+			"body": "**Targets** you and up to 4 targets touched, either willing creatures or objects roughly the size of a creature.\n\n- - -\n\nYou and the targets are instantly transported to any location within range, as long as you can identify the location precisely both by its position relative to your starting position and by its appearance (or other identifying features). Incorrect knowledge of the location's appearance usually causes the spell to fail, but it could instead lead to teleporting to an unwanted location or some other unusual mishap determined by the GM. Teleport is not precise over great distances. The targets appear at a distance from the intended destination equal to roughly 1 percent of the total distance traveled, in a direction determined by the GM. For short journeys, this lack of precision is irrelevant, but for long distances this could be up to 1 mile.\n- - -\n**Heightened (7th)** You and the other targets can travel to any location within 1,000 miles.\n**Heightened (8th)** You and the other targets can travel to any location on the same planet. If you travel more than 1,000 miles, you arrive only 10 miles off target.\n**Heightened (9th)** You and the other targets can travel to any location on another planet within the same solar system. Assuming you have accurate knowledge of the location's position and appearance, you arrive on the new planet 100 miles off target.\n**Heightened (10th)** As the 9th-level version, but you and the other targets can travel to any planet within the same galaxy.",
+			"hash": "PRXfRXwQ"
+		}
 	},
 	{
 		"aonId": 339,
@@ -275,7 +396,21 @@
 		"traits": [ "Transmutation" ],
 		"focus": false,
 		"id": "de8d15e3-07d2-4a76-b3ea-4ab40f5fc488",
-		"hash": "UZPXXCfz"
+		"pf2t": {
+			"name": "Time Stop",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "transmutation",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"source": "Core Rulebook pg. 378 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=339",
+			"aon": "spells339",
+			"type": "spell",
+			"body": "You temporarily stop time for everything but yourself, allowing you to use several actions in what appears to others to be no time at all. Immediately after casting time stop, you can use up to 9 actions in 3 sets of up to 3 actions each. After each set of actions, 1 round passes, but only for you, effects specifically targeting or affecting you, and effects you create during the stoppage. All other creatures and objects are invulnerable to your attacks, and you can't target or affect them with anything. Once you have finished your actions, time begins to flow again for the rest of the world. If you created an effect with a duration that extends beyond the time stop's duration, such as wall of fire, it immediately affects others again, but it doesn't have any of the effects that happen only when you first cast the spell.",
+			"hash": "UZPXXCfz"
+		}
 	},
 	{
 		"aonId": 340,
@@ -300,7 +435,22 @@
 		"traits": [ "Uncommon", "Divination" ],
 		"focus": false,
 		"id": "c72a54b3-b517-4ec4-be9d-45472fd89ee2",
-		"hash": "gRgBszct"
+		"pf2t": {
+			"name": "Tongues",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,divination",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 378 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=340",
+			"aon": "spells340",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n**Targets** 1 creature\n\n- - -\n\nThe target can understand all words regardless of language and also speak the languages of other creatures. When in a mixed group of creatures, each time the target speaks, it can choose a creature and speak in a language that creature understands, even if the target doesn't know what language that is.\n- - -\n**Heightened (7th)** The duration is 8 hours.",
+			"hash": "gRgBszct"
+		}
 	},
 	{
 		"aonId": 341,
@@ -324,7 +474,23 @@
 		"traits": [ "Enchantment", "Mental" ],
 		"focus": false,
 		"id": "2998bbcf-be58-4bd0-886c-8015f713042e",
-		"hash": "ptILUlvg"
+		"pf2t": {
+			"name": "Touch of Idiocy",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "enchantment,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 378 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=341",
+			"aon": "spells341",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 minute\n**Targets** 1 living creature\n\n- - -\n\nYou dull the target's mind; the target must attempt a Will save.\n\n**Success** The target is unaffected.\n**Failure** The target is stupefied 2.\n**Critical Failure** The target is stupefied 4.",
+			"hash": "ptILUlvg"
+		}
 	},
 	{
 		"aonId": 342,
@@ -344,7 +510,21 @@
 		"traits": [ "Plant", "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "c70fe811-7b31-43b6-ae41-61d219a84893",
-		"hash": "WqQRZdjl"
+		"pf2t": {
+			"name": "Tree Shape",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "plant,polymorph,transmutation",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 378 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=342",
+			"aon": "spells342",
+			"type": "spell",
+			"body": "**Duration** 8 hours\n\n- - -\n\nYou transform into a Large tree. Perception checks don't reveal your true nature, but a successful Nature or Survival check against your spell DC reveals that you appear to be a tree that is strangely new to the area. While in tree form, you can observe everything around you, but you can't act other than to end the spell, and your turn, by using a single action, which has the concentrate trait. As a tree, your AC is 20, and only status bonuses, status penalties, circumstance bonuses, and circumstance penalties affect you. Any successes and critical successes you roll on Reflex saves are failures.",
+			"hash": "WqQRZdjl"
+		}
 	},
 	{
 		"aonId": 343,
@@ -368,7 +548,21 @@
 		"traits": [ "Uncommon", "Conjuration", "Plant", "Teleportation" ],
 		"focus": false,
 		"id": "15d662e3-c93a-4456-a364-c9ed5e0f501b",
-		"hash": "SFVEWEfp"
+		"pf2t": {
+			"name": "Tree Stride",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,plant,teleportation",
+			"traditions": "primal",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"source": "Core Rulebook pg. 378 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=343",
+			"aon": "spells343",
+			"type": "spell",
+			"body": "You step into a living tree with a trunk big enough for you to fit inside it and instantly teleport to any tree of the same species within 5 miles that also has a sufficiently large trunk. Once you enter the first tree, you instantly know the rough locations of other sufficiently large trees of the same species within range and can exit from the original tree, if you prefer. You can't carry extradimensional spaces with you; if you attempt to do so, the spell fails.\n- - -\n**Heightened (6th)** The tree you exit can be up to 50 miles away.\n**Heightened (8th)** The tree you exit can be up to 500 miles away.\n**Heightened (9th)** The tree you exit can be anywhere on the same planet.",
+			"hash": "SFVEWEfp"
+		}
 	},
 	{
 		"aonId": 344,
@@ -388,7 +582,21 @@
 		"traits": [ "Divination", "Revelation" ],
 		"focus": false,
 		"id": "e1c9af79-adaf-4023-8d94-0dac15d7332f",
-		"hash": "WWdCvfQO"
+		"pf2t": {
+			"name": "True Seeing",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "divination,revelation",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 378 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=344",
+			"aon": "spells344",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou see things within 60 feet as they actually are. The GM rolls a secret counteract check against any illusion or transmutation in the area, but only for the purpose of determining whether you see through it (for instance, if the check succeeds against a polymorph spell, you can see the creature's true form, but you don't end the polymorph spell).",
+			"hash": "WWdCvfQO"
+		}
 	},
 	{
 		"aonId": 345,
@@ -408,7 +616,21 @@
 		"traits": [ "Divination", "Fortune" ],
 		"focus": false,
 		"id": "6a61a63c-0f77-4059-9992-91a331ce029a",
-		"hash": "fgZkbSYz"
+		"pf2t": {
+			"name": "True Strike",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "divination,fortune",
+			"traditions": "arcane,occult",
+			"cast": "v",
+			"actions": 1,
+			"source": "Core Rulebook pg. 379 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=345",
+			"aon": "spells345",
+			"type": "spell",
+			"body": "**Duration** until the end of your turn\n\n- - -\n\nA glimpse into the future ensures your next blow strikes true. The next time you make an attack roll before the end of your turn, roll the attack twice and use the better result. The attack ignores circumstance penalties to the attack roll and any flat check required due to the target being concealed or hidden.",
+			"hash": "fgZkbSYz"
+		}
 	},
 	{
 		"aonId": 346,
@@ -430,6 +652,21 @@
 		"traits": [ "Divination", "Fortune", "Prediction" ],
 		"focus": false,
 		"id": "60c15541-84bd-4e1f-83c6-df42d7887d14",
-		"hash": "ZnrXzQAg"
+		"pf2t": {
+			"name": "True Target",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "divination,fortune,prediction",
+			"traditions": "arcane,occult",
+			"cast": "v",
+			"actions": 1,
+			"range": 60,
+			"source": "Core Rulebook pg. 379 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=346",
+			"aon": "spells346",
+			"type": "spell",
+			"body": "**Duration** until the start of your next turn\n**Targets** 4 creatures\n\n- - -\n\nYou delve into the possible futures of the next few seconds to understand all the ways your foe might avoid harm, then cast out a vision of that future to those around you. Designate a creature. The first time each target makes an attack roll against that creature during true target's duration, the attacker rolls twice and uses the better result. The attacker also ignores circumstance penalties to the attack roll and any flat check required due to the designated creature being concealed or hidden.",
+			"hash": "ZnrXzQAg"
+		}
 	}
 ]

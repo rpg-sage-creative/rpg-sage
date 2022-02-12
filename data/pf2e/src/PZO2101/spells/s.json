@@ -19,7 +19,21 @@
 		"traits": [ "Abjuration", "Consecration" ],
 		"focus": false,
 		"id": "c914bc26-4b86-4cf2-9264-f5278d50fcc2",
-		"hash": "FkRRpwvE"
+		"pf2t": {
+			"name": "Sanctified Ground",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "abjuration,consecration",
+			"traditions": "divine",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"source": "Core Rulebook pg. 366 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=265",
+			"aon": "spells265",
+			"type": "spell",
+			"body": "**Area** 30-foot burst centered on you\n**Duration** 24 hours\n\n- - -\n\nYou sanctify the area, sprinkling it with holy water and warding it against your foes. Choose aberrations, celestials, dragons, fiends, monitors, or undead. All creatures in the area gain a +1 status bonus to AC, attack rolls, damage rolls, and saving throws against the chosen creatures.",
+			"hash": "FkRRpwvE"
+		}
 	},
 	{
 		"aonId": 266,
@@ -55,7 +69,22 @@
 		"traits": [ "Abjuration" ],
 		"focus": false,
 		"id": "5bef3869-c095-4111-ba5a-8f3af3e47836",
-		"hash": "dEgvCyrA"
+		"pf2t": {
+			"name": "Sanctuary",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "abjuration",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 366 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=266",
+			"aon": "spells266",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou ward a creature with protective energy that deters enemy attacks. Creatures attempting to attack the target must attempt a Will save each time. If the target uses a hostile action, the spell ends.\n\n**Critical Success** Sanctuary ends.\n**Success** The creature can attempt its attack and any other attacks against the target this turn.\n**Failure** The creature can't attack the target and wastes the action. It can't attempt further attacks against the target this turn.\n**Critical Failure** The creature wastes the action and can't attempt to attack the target for the rest of sanctuary's duration.",
+			"hash": "dEgvCyrA"
+		}
 	},
 	{
 		"aonId": 267,
@@ -89,7 +118,23 @@
 		"traits": [ "Illusion", "Incapacitation", "Visual" ],
 		"focus": false,
 		"id": "6f3b7162-7faf-4ffd-a6e8-067bee1d68c6",
-		"hash": "RXfRvpCQ"
+		"pf2t": {
+			"name": "Scintillating Pattern",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "illusion,incapacitation,visual",
+			"traditions": "arcane,occult",
+			"cast": "m,s",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 367 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=267",
+			"aon": "spells267",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Area** 20-foot burst\n**Duration** sustained up to 1 minute\n\n- - -\n\nA field of cascading, ever-changing colors manifests in the air. Creatures are dazzled while inside the pattern, as are those within 20 feet of the pattern's area. A creature must attempt a Will save if it is inside the pattern when you cast it, enters the pattern, ends its turn within the pattern, or uses a Seek or Interact action on the pattern. A creature currently affected by the pattern doesn't need to attempt new saves.\n\n**Success** The creature is unaffected.\n**Failure** The creature is confused for 1d4 rounds.\n**Critical Failure** The creature is stunned for 1d4 rounds. After the stunned condition ends, the creature is confused for the remaining duration of the spell.",
+			"hash": "RXfRvpCQ"
+		}
 	},
 	{
 		"aonId": 268,
@@ -127,7 +172,23 @@
 		"traits": [ "Uncommon", "Divination", "Scrying" ],
 		"focus": false,
 		"id": "34934648-561d-4ecf-9ba6-7ac5dd442955",
-		"hash": "vQXWRqnZ"
+		"pf2t": {
+			"name": "Scrying",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,divination,scrying",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": "10 minutes",
+			"range": "planetary",
+			"source": "Core Rulebook pg. 367 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=268",
+			"aon": "spells268",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** sustained up to 10 minutes\n**Targets** 1 creature\n\n- - -\n\nYou magically spy on a creature of your choice. Scrying works like clairvoyance, except that the image you receive is less precise, insufficient for teleport and similar spells. Instead of creating an eye in a set location within 500 feet, you instead create an eye that manifests just above the target. You can choose a target either by name or by touching one of its possessions or a piece of its body. If you haven't met the target in person, scrying's DC is 2 lower, and if you are unaware of the target's identity (perhaps because you found an unknown creature's fang at a crime scene), the DC is instead 10 lower.\n\nThe effect of scrying depends on the target's Will save.\n\n**Critical Success** The spell fails and the target is temporarily immune for 1 week. The target also gains a glimpse of you and learns its rough distance and direction from you.\n**Success** The spell fails and the target is temporarily immune for 1 day.\n**Failure** The spell succeeds.\n**Critical Failure** The spell succeeds, and the eye follows the target if it moves, traveling up to 60 feet per round.",
+			"hash": "vQXWRqnZ"
+		}
 	},
 	{
 		"aonId": 269,
@@ -153,7 +214,22 @@
 		"traits": [ "Attack", "Evocation", "Fire", "Good", "Light" ],
 		"focus": false,
 		"id": "333407be-5fea-4aa2-a719-25ab4f2cd733",
-		"hash": "SFYRPRxk"
+		"pf2t": {
+			"name": "Searing Light",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "attack,evocation,fire,good,light",
+			"traditions": "divine,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 367 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=269",
+			"aon": "spells269",
+			"type": "spell",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou shoot a blazing ray of light tinged with holy energy. Make a ranged spell attack. The ray deals 5d6 fire damage. If the target is a fiend or undead, you deal an extra 5d6 good damage.\n\n**Critical Success** The target takes double fire damage, as well as double good damage if a fiend or undead.\n**Success** The target takes full damage.\n\nIf the light passes through an area of magical darkness or targets a creature affected by magical darkness, searing light attempts to counteract the darkness. If you need to determine whether the light passes through an area of darkness, draw a line between yourself and the spell's target.\n- - -\n**Heightened (+1)** The fire damage increases by 2d6, and the good damage against fiends and undead increases by 2d6.",
+			"hash": "SFYRPRxk"
+		}
 	},
 	{
 		"aonId": 270,
@@ -175,7 +251,22 @@
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
 		"id": "8e1d0229-1582-495d-a4d1-d5efef3198b0",
-		"hash": "xRbyRCpg"
+		"pf2t": {
+			"name": "Secret Page",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "illusion,visual",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": "touch",
+			"source": "Core Rulebook pg. 367 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=270",
+			"aon": "spells270",
+			"type": "spell",
+			"body": "**Duration** unlimited\n**Targets** 1 page up to 3 square feet in size\n\n- - -\n\nYou change the target's text to different text entirely. If the text is a spellbook or a scroll, you can change it to show a spell you know of secret page's level or lower. The replacement spell cannot be cast or used to prepare a spell. You can also transform the text into some other text you have written or have access to. You can specify a password that allows a creature touching the page to change the text back and forth. You must choose the replacement text and the password, if any, when you Cast the Spell.",
+			"hash": "xRbyRCpg"
+		}
 	},
 	{
 		"aonId": 271,
@@ -198,7 +289,21 @@
 		"traits": [ "Divination", "Revelation" ],
 		"focus": false,
 		"id": "94fc7580-010f-4888-96e3-c1be98cf82a4",
-		"hash": "WbCcERKt"
+		"pf2t": {
+			"name": "See Invisibility",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "divination,revelation",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 367 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=271",
+			"aon": "spells271",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou can see invisible creatures and objects. They appear to you as translucent shapes, and they are concealed to you.\n- - -\n**Heightened (5th)** The spell has a duration of 8 hours.",
+			"hash": "WbCcERKt"
+		}
 	},
 	{
 		"aonId": 272,
@@ -219,7 +324,22 @@
 		"traits": [ "Divination", "Mental" ],
 		"focus": false,
 		"id": "18951cec-ae0e-4dc7-aebe-7ce6ee628361",
-		"hash": "ZQWLdIkQ"
+		"pf2t": {
+			"name": "Sending",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "divination,mental",
+			"traditions": "arcane,divine,occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": "planetary",
+			"source": "Core Rulebook pg. 367 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=272",
+			"aon": "spells272",
+			"type": "spell",
+			"body": "**Targets** 1 creature with whom you are familiar\n\n- - -\n\nYou send the creature a mental message of 25 words or fewer, and it can respond immediately with its own message of 25 words or fewer.",
+			"hash": "ZQWLdIkQ"
+		}
 	},
 	{
 		"aonId": 273,
@@ -244,7 +364,24 @@
 		"traits": [ "Evocation", "Shadow" ],
 		"focus": false,
 		"id": "a9ae236c-08dd-4dd2-83b7-e0bbe8655f62",
-		"hash": "BmvyhlWm"
+		"pf2t": {
+			"name": "Shadow Blast",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "evocation,shadow",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "varies",
+			"source": "Core Rulebook pg. 367 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=273",
+			"aon": "spells273",
+			"type": "spell",
+			"savingthrow": "Reflex or Will (target's choice)",
+			"basic": 1,
+			"body": "**Area** varies\n\n- - -\n\nYou shape the quasi-real substance of the Shadow Plane into a blast. Choose acid, bludgeoning, cold, electricity, fire, force, piercing, slashing, or sonic damage, and choose a 30-foot cone, a 15-foot burst within 120 feet, or a 50-foot line. The blast deals 5d8 damage of the type you chose to each creature in the area.\n- - -\n**Heightened (+1)** The damage increases by 1d8.",
+			"hash": "BmvyhlWm"
+		}
 	},
 	{
 		"aonId": 274,
@@ -266,7 +403,22 @@
 		"trigger": "A spell or magical effect deals damage",
 		"focus": false,
 		"id": "e39421ca-12e4-408f-90d7-c411c79d3a72",
-		"hash": "mTZmDKrh"
+		"pf2t": {
+			"name": "Shadow Siphon",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "illusion,shadow",
+			"traditions": "arcane,occult",
+			"cast": "v",
+			"actions": "r",
+			"range": 60,
+			"source": "Core Rulebook pg. 368 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=274",
+			"aon": "spells274",
+			"type": "spell",
+			"body": "**Trigger** A spell or magical effect deals damage\n**Targets** the triggering spell\n\n- - -\n\nExchanging material energy with that of the Shadow Plane, you transform the triggering spell into a partially illusory version of itself. Attempt to counteract the target spell. If the attempt is successful, any creatures that would be damaged by the spell instead take only half as much damage, but the spell otherwise works as normal. Treat shadow siphon's counteract level as 2 higher for this attempt.",
+			"hash": "mTZmDKrh"
+		}
 	},
 	{
 		"aonId": 275,
@@ -288,7 +440,22 @@
 		"traits": [ "Uncommon", "Conjuration", "Shadow", "Teleportation" ],
 		"focus": false,
 		"id": "7d46b338-7057-465d-a105-16697e1d5ecf",
-		"hash": "RVEtkRRP"
+		"pf2t": {
+			"name": "Shadow Walk",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,shadow,teleportation",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": "touch",
+			"source": "Core Rulebook pg. 368 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=275",
+			"aon": "spells275",
+			"type": "spell",
+			"body": "**Duration** 8 hours\n**Targets** you and up to 9 willing creatures touched\n\n- - -\n\nYou access the Shadow Plane, using its warped nature to spread your travels. The targets enter the edge of the Shadow Plane where it borders the Material Plane. Targets can't see the Material Plane while on the Shadow Plane (although elements of that plane can sometimes be a hazy reflection of the Material Plane). While on the Shadow Plane, the targets are exposed to potential encounters with that plane's denizens. The shadows on the border between the planes bend space, speeding up your movement with respect to the Material Plane. Every 3 minutes the targets travel along this border, they move as far as they would through the Material Plane in 1 hour. At any point, a target can Dismiss the spell's effects, although this affects only that target. The shadow bending is inexact, so when the spell ends, the targets appear roughly 1 mile from their intended location on the Material Plane (though those who are traveling together and Dismiss the spell at the same point on the Plane of Shadow appear together).",
+			"hash": "RVEtkRRP"
+		}
 	},
 	{
 		"aonId": 276,
@@ -310,7 +477,22 @@
 		"traits": [ "Earth", "Transmutation" ],
 		"focus": false,
 		"id": "ee653b78-4451-46bb-92a7-587ad257fa3f",
-		"hash": "QOXxMbrX"
+		"pf2t": {
+			"name": "Shape Stone",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "earth,transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 368 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=276",
+			"aon": "spells276",
+			"type": "spell",
+			"body": "**Targets** cube of stone 10 feet across or smaller\n\n- - -\n\nYou shape the stone into a rough shape of your choice. The shaping process is too crude to produce intricate parts, fine details, moving pieces, or the like. Any creatures standing atop the stone when you reshape it must each attempt a Reflex save or Acrobatics check.\n\n**Success** The creature is unaffected.\n**Failure** The creature falls prone atop the stone.\n**Critical Failure** The creature falls off the stone (if applicable) and lands prone.",
+			"hash": "QOXxMbrX"
+		}
 	},
 	{
 		"aonId": 277,
@@ -331,7 +513,22 @@
 		"traits": [ "Plant", "Transmutation" ],
 		"focus": false,
 		"id": "03f36be5-09ee-4c7a-b1eb-9eb7b0287f56",
-		"hash": "FZzMtxLr"
+		"pf2t": {
+			"name": "Shape Wood",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "plant,transmutation",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 368 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=277",
+			"aon": "spells277",
+			"type": "spell",
+			"body": "**Targets** an unworked piece of wood up to 20 cubic feet in volume\n\n- - -\n\nYou shape the wood into a rough shape of your choice. The shaping power is too crude to produce with intricate parts, fine details, moving pieces, or the like. You cannot use this spell to enhance the value of the wooden object you are shaping.",
+			"hash": "FZzMtxLr"
+		}
 	},
 	{
 		"aonId": 278,
@@ -351,7 +548,21 @@
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "1092692d-e65e-44e0-88d4-0d5115352296",
-		"hash": "XKWwqvIp"
+		"pf2t": {
+			"name": "Shapechange",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "polymorph,transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 368 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=278",
+			"aon": "spells278",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nHarnessing your mastery of transformative magic, you take on a mutable form. You transform yourself into any form you could choose with a polymorph spell in your spell repertoire or that you could prepare of 8th level or lower (including any 8th-level or lower heightened versions of spells you know). You choose the type of creature as you Cast the Spell rather than when you prepare it. You can change your form to any other form you could choose with this spell by using a single action, which has the concentrate trait. You can Dismiss this spell.",
+			"hash": "XKWwqvIp"
+		}
 	},
 	{
 		"aonId": 279,
@@ -375,7 +586,22 @@
 		"traits": [ "Evocation", "Sonic" ],
 		"focus": false,
 		"id": "93d09743-cb59-4931-a896-8c5c23ff97d3",
-		"hash": "bUhFIfIg"
+		"pf2t": {
+			"name": "Shatter",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "evocation,sonic",
+			"traditions": "occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 368 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=279",
+			"aon": "spells279",
+			"type": "spell",
+			"body": "**Targets** 1 unattended object\n\n- - -\n\nA high-frequency sonic attack shatters a nearby object. You deal 2d10 sonic damage to the object, ignoring the object's Hardness if it is 4 or lower.\n- - -\n**Heightened (+1)** The damage increases by 1d10, and the Hardness the spell ignores increases by 2.",
+			"hash": "bUhFIfIg"
+		}
 	},
 	{
 		"aonId": 280,
@@ -424,7 +650,22 @@
 		"traits": [ "Necromancy" ],
 		"focus": false,
 		"id": "5ce60a8e-5da7-4c3b-bf22-f790a7c68ea8",
-		"hash": "IfUQqlgq"
+		"pf2t": {
+			"name": "Shield Other",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "necromancy",
+			"traditions": "divine",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 369 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=281",
+			"aon": "spells281",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n**Targets** 1 creature\n\n- - -\n\nYou forge a temporary link between the target's life essence and your own. The target takes half damage from all effects that deal Hit Point damage, and you take the remainder of the damage. When you take damage through this link, you don't apply any resistances, weaknesses, or other abilities you have to that damage; you simply take that amount of damage. The spell ends if the target is ever more than 30 feet away from you. If either you or the target is reduced to 0 Hit Points, any damage from this spell is resolved and then the spell ends.",
+			"hash": "IfUQqlgq"
+		}
 	},
 	{
 		"aonId": 282,
@@ -446,7 +687,22 @@
 		"traits": [ "Plant", "Transmutation" ],
 		"focus": false,
 		"id": "70696a86-9d86-4ad1-8120-e00b2c9bf2fc",
-		"hash": "EtRtzOIZ"
+		"pf2t": {
+			"name": "Shillelagh",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "plant,transmutation",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 369 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=282",
+			"aon": "spells282",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** 1 non-magical club or staff you hold\n\n- - -\n\nThe target grows vines and leaves, brimming with primal energy. The target becomes a +1 striking weapon while in your hands, gaining a +1 item bonus to attack rolls and increasing the number of weapon damage dice to two. Additionally, as long as you are on your home plane, attacks you make with the target against aberrations, extraplanar creatures, and undead increase the number of weapon damage dice to three.",
+			"hash": "EtRtzOIZ"
+		}
 	},
 	{
 		"aonId": 283,
@@ -470,7 +726,22 @@
 		"traits": [ "Attack", "Electricity", "Evocation" ],
 		"focus": false,
 		"id": "fc499cea-65d6-41f4-bd23-6d2b015b4c21",
-		"hash": "DsIQVbXl"
+		"pf2t": {
+			"name": "Shocking Grasp",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "attack,electricity,evocation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 369 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=283",
+			"aon": "spells283",
+			"type": "spell",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou shroud your hands in a crackling field of lightning. Make a melee spell attack roll. On a hit, the target takes 2d12 electricity damage. If the target is wearing metal armor or is made of metal, you gain a +1 circumstance bonus to your attack roll with shocking grasp, and the target also takes 1d4 persistent electricity damage on a hit. On a critical hit, double the initial damage, but not the persistent damage.\n- - -\n**Heightened (+1)** The damage increases by 1d12, and the persistent electricity damage increases by 1.",
+			"hash": "DsIQVbXl"
+		}
 	},
 	{
 		"aonId": 284,
@@ -495,7 +766,22 @@
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "019053d0-7151-46b7-823b-f1af99f57e28",
-		"hash": "CRpQJkgt"
+		"pf2t": {
+			"name": "Shrink",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "polymorph,transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 369 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=284",
+			"aon": "spells284",
+			"type": "spell",
+			"body": "**Duration** 5 minutes\n**Targets** 1 willing creature\n\n- - -\n\nYou warp space to make a creature smaller. The target shrinks to become Tiny in size. Its equipment shrinks with it but returns to its original size if removed. The creature's reach changes to 0 feet. This spell has no effect on a Tiny creature.\n- - -\n**Heightened (6th)** The spell can target up to 10 creatures.",
+			"hash": "CRpQJkgt"
+		}
 	},
 	{
 		"aonId": 285,
@@ -517,7 +803,22 @@
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "ddede6e3-300f-4aea-b8fd-2348329df302",
-		"hash": "HVbcvxQH"
+		"pf2t": {
+			"name": "Shrink Item",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "polymorph,transmutation",
+			"traditions": "arcane",
+			"cast": "s,v",
+			"actions": "10 minutes",
+			"range": "touch",
+			"source": "Core Rulebook pg. 369 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=285",
+			"aon": "spells285",
+			"type": "spell",
+			"body": "**Duration** 1 day\n**Targets** 1 non-magical object up to 20 cubic feet in volume and up to 80 Bulk\n\n- - -\n\nYou shrink the target to roughly the size of a coin. This reduces it to negligible Bulk. You can Dismiss the spell, and the spell ends if you toss the object onto a solid surface. The object can't be used to attack or cause damage during the process of it returning to normal size. If there isn't room for the object to return to normal size when the spell ends, the spell's duration continues until the object is in a location large enough to accommodate its normal size.",
+			"hash": "HVbcvxQH"
+		}
 	},
 	{
 		"aonId": 286,
@@ -571,7 +872,22 @@
 		"traits": [ "Illusion" ],
 		"focus": false,
 		"id": "db46c12f-8c12-44f6-a052-14396e2416d8",
-		"hash": "UppNbfQz"
+		"pf2t": {
+			"name": "Silence",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "illusion",
+			"traditions": "divine,occult",
+			"cast": "m,s",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 369 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=287",
+			"aon": "spells287",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** 1 willing creature\n\n- - -\n\nThe target makes no sound, preventing creatures from noticing it using hearing or other senses alone. The target can't use sonic attacks, nor can it use actions with the auditory trait. This prevents it from casting spells that include verbal components.\n- - -\n**Heightened (4th)** The spell effect emanates from the touched creature, silencing all sound in or passing through a 10- foot radius and preventing any auditory and sonic effects in the affected area. While within the radius, creatures are subject to the same effects as the target. Depending upon the position of the effect, a creature might notice the lack of sound reaching it (blocking off the noise coming from a party, for example).",
+			"hash": "UppNbfQz"
+		}
 	},
 	{
 		"aonId": 288,
@@ -613,7 +929,23 @@
 		"traits": [ "Enchantment", "Incapacitation", "Mental", "Sleep" ],
 		"focus": false,
 		"id": "a3546aca-f552-481f-b6ef-5a62e1468140",
-		"hash": "vLQBIzcn"
+		"pf2t": {
+			"name": "Sleep",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "enchantment,incapacitation,mental,sleep",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 370 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=288",
+			"aon": "spells288",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Area** 5-foot burst\n\n- - -\n\nEach creature in the area becomes drowsy and might fall asleep. A creature that falls unconscious from this spell doesn't fall prone or release what it's holding. This spell doesn't prevent creatures from waking up due to a successful Perception check, limiting its utility in combat.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes a -1 status penalty to Perception checks for 1 round.\n**Failure** The creature falls unconscious. If it's still unconscious after 1 minute, it wakes up automatically.\n**Critical Failure** The creature falls unconscious. If it's still unconscious after 1 hour, it wakes up automatically.\n- - -\n**Heightened (4th)** The creatures fall unconscious for 1 round on a failure or 1 minute on a critical failure. They fall prone and release what they're holding, and they can't attempt Perception checks to wake up. When the duration ends, the creature is sleeping normally instead of automatically waking up.",
+			"hash": "vLQBIzcn"
+		}
 	},
 	{
 		"aonId": 289,
@@ -653,7 +985,23 @@
 		"traits": [ "Transmutation" ],
 		"focus": false,
 		"id": "620ae1d2-5af0-40fe-9775-4138596a09e1",
-		"hash": "cTyNKXQl"
+		"pf2t": {
+			"name": "Slow",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "transmutation",
+			"traditions": "arcane,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 370 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=289",
+			"aon": "spells289",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou dilate the flow of time around the target, slowing its actions.\n\n**Critical Success** The target is unaffected.\n**Success** The target is slowed 1 for 1 round.\n**Failure** The target is slowed 1 for 1 minute.\n**Critical Failure** The target is slowed 2 for 1 minute.\n- - -\n**Heightened (6th)** You can target up to 10 creatures.",
+			"hash": "cTyNKXQl"
+		}
 	},
 	{
 		"aonId": 290,
@@ -675,7 +1023,22 @@
 		"traits": [ "Conjuration", "Water" ],
 		"focus": false,
 		"id": "961ede92-8f07-43f0-ad18-d5d5718c8cdd",
-		"hash": "QbwkqWHI"
+		"pf2t": {
+			"name": "Solid Fog",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "conjuration,water",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 370 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=290",
+			"aon": "spells290",
+			"type": "spell",
+			"body": "**Area** 20-foot burst\n**Duration** 1 minute\n\n- - -\n\nYou conjure a bank of fog so thick it impedes movement as well as sight. This functions as obscuring mist, except that the area is also difficult terrain. You can Dismiss the spell.",
+			"hash": "QbwkqWHI"
+		}
 	},
 	{
 		"aonId": 291,
@@ -700,7 +1063,22 @@
 		"traits": [ "Emotion", "Enchantment", "Healing", "Mental" ],
 		"focus": false,
 		"id": "43b0b1fd-06b3-47b8-b22e-36d65ac8ea69",
-		"hash": "zcdBrPfb"
+		"pf2t": {
+			"name": "Soothe",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "emotion,enchantment,healing,mental",
+			"traditions": "occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 370 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=291",
+			"aon": "spells291",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** 1 willing living creature\n\n- - -\n\nYou grace the target's mind, boosting its mental defenses and healing its wounds. The target regains 1d10+4 Hit Points when you Cast the Spell and gains a +2 status bonus to saves against mental effects for the duration.\n- - -\n**Heightened (+1)** The amount of healing increases by 1d10+4.",
+			"hash": "zcdBrPfb"
+		}
 	},
 	{
 		"aonId": 292,
@@ -739,7 +1117,23 @@
 		"traits": [ "Evocation", "Sonic" ],
 		"focus": false,
 		"id": "6ceef508-e636-49a9-950d-71e4aa0346e0",
-		"hash": "WnvGtPkb"
+		"pf2t": {
+			"name": "Sound Burst",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "evocation,sonic",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 370 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=292",
+			"aon": "spells292",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"body": "**Area** 10-foot burst\n\n- - -\n\nA cacophonous noise blasts out, dealing 2d10 sonic damage. Each creature must attempt a Fortitude save.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes half damage.\n**Failure** The creature takes full damage and is deafened for 1 round.\n**Critical Failure** The creature takes double damage and is deafened for 1 minute, and stunned 1.\n- - -\n**Heightened (+1)** The damage increases by 1d10.",
+			"hash": "WnvGtPkb"
+		}
 	},
 	{
 		"aonId": 293,
@@ -759,7 +1153,21 @@
 		"traits": [ "Divination" ],
 		"focus": false,
 		"id": "9bdea0e9-c6f8-4693-8e29-db6a6cd76785",
-		"hash": "YxRQBtWY"
+		"pf2t": {
+			"name": "Speak with Animals",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "divination",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 370 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=293",
+			"aon": "spells293",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou can ask questions of, receive answers from, and use the Diplomacy skill with animals. The spell doesn't make them more friendly than normal. Cunning animals are likely to be terse and evasive, while less intelligent ones often make inane comments.",
+			"hash": "YxRQBtWY"
+		}
 	},
 	{
 		"aonId": 294,
@@ -779,7 +1187,21 @@
 		"traits": [ "Divination", "Plant" ],
 		"focus": false,
 		"id": "89174e91-0535-4372-8bb4-b59cb792b70b",
-		"hash": "WmTcBFvd"
+		"pf2t": {
+			"name": "Speak with Plants",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "divination,plant",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 370 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=294",
+			"aon": "spells294",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou can ask questions of and receive answers from plants, but the spell doesn't make them more friendly or intelligent than normal. Most normal plants have a distinctive view of the world around them, so they don't recognize details about creatures or know anything about the world beyond their immediate vicinity. Cunning plant monsters are likely to be terse and evasive, while less intelligent ones often make inane comments.",
+			"hash": "WmTcBFvd"
+		}
 	},
 	{
 		"aonId": 295,
@@ -800,7 +1222,22 @@
 		"traits": [ "Necromancy" ],
 		"focus": false,
 		"id": "52797c4e-d5f4-4b8b-9fd7-d34eddbff808",
-		"hash": "jnpWzfXJ"
+		"pf2t": {
+			"name": "Spectral Hand",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "necromancy",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 370 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=295",
+			"aon": "spells295",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou create a semicorporeal hand out of your essence that delivers touch spells for you. Whenever you Cast a Spell with a range of touch, you can have the hand crawl to a target within range along the ground, touch it, and then crawl back to you. When making a melee spell attack with the hand, you use your normal bonuses. The hand can move as far as it needs to within range. The hand has your AC and saves, but any damage to the hand destroys it and causes you to take 1d6 damage.",
+			"hash": "jnpWzfXJ"
+		}
 	},
 	{
 		"aonId": 296,
@@ -822,7 +1259,22 @@
 		"traits": [ "Abjuration" ],
 		"focus": false,
 		"id": "b1abdb3c-8634-47dd-81ce-ce51d0b1ff54",
-		"hash": "rYkbUswQ"
+		"pf2t": {
+			"name": "Spell Immunity",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "abjuration",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 371 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=296",
+			"aon": "spells296",
+			"type": "spell",
+			"body": "**Duration** 24 hours\n**Targets** 1 creature\n\n- - -\n\nYou ward a creature against the effects of a single spell. Choose a spell and name it aloud as part of the verbal component. Spell immunity attempts to counteract that spell whenever spell immunity's target is the target of the named spell or in that spell's area. Successfully counteracting a spell that targets an area or multiple targets with spell immunity negates the effects only for the target affected by spell immunity.",
+			"hash": "rYkbUswQ"
+		}
 	},
 	{
 		"aonId": 297,
@@ -843,7 +1295,21 @@
 		"traits": [ "Uncommon", "Abjuration" ],
 		"focus": false,
 		"id": "c46df47c-bff3-4251-be67-6a947c6843e8",
-		"hash": "NRkyXbgL"
+		"pf2t": {
+			"name": "Spell Turning",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration",
+			"traditions": "arcane",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 371 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=297",
+			"aon": "spells297",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n\n- - -\n\nThis abjuration reflects spells cast at you back at their caster. When a spell targets you, you can spend a reaction to attempt to reflect it. This uses the rules for counteracting the spell, but if the spell is successfully counteracted, the effect is turned back on the caster. Whether or not the counteract attempt is successful, spell turning then ends. Spell turning can't affect spells that aren't targeted (such as area spells).\n\nIf spell turning reflects a spell back at a caster who is also under the effect of spell turning, their spell turning can attempt to reflect their own spell back at you again; if they do so, their counteract attempt automatically succeeds.",
+			"hash": "NRkyXbgL"
+		}
 	},
 	{
 		"aonId": 298,
@@ -879,7 +1345,23 @@
 		"traits": [ "Abjuration", "Curse", "Force" ],
 		"focus": false,
 		"id": "d02a7e6b-8556-4c0e-afb0-fa09f4153a75",
-		"hash": "PcfYRmSA"
+		"pf2t": {
+			"name": "Spellwrack",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "abjuration,curse,force",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 371 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=298",
+			"aon": "spells298",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou cause any spells cast on the target to spill out their energy in harmful surges. The target must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** Whenever the target becomes affected by a spell with a duration, the target takes 2d12 persistent force damage. Each time it takes persistent force damage from spellwrack, it reduces the remaining duration of spells affecting it by 1 round. Only a successful Arcana check against your spell DC can help the target recover from the persistent damage; the curse and the persistent damage end after 1 minute.\n**Failure** As success, but the curse and persistent damage do not end on their own.\n**Critical Failure** As failure, but the persistent force damage is 4d12.",
+			"hash": "PcfYRmSA"
+		}
 	},
 	{
 		"aonId": 299,
@@ -904,7 +1386,22 @@
 		"traits": [ "Transmutation" ],
 		"focus": false,
 		"id": "5b6a8afc-3d2a-46c3-9e83-f2c1f73f3250",
-		"hash": "rXByhrvJ"
+		"pf2t": {
+			"name": "Spider Climb",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 371 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=299",
+			"aon": "spells299",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n**Targets** 1 creature\n\n- - -\n\nTiny clinging hairs sprout across the creature's hands and feet, offering purchase on nearly any surface. The target gains a climb Speed equal to its Speed.\n- - -\n**Heightened (5th)** The duration increases to 1 hour.",
+			"hash": "rXByhrvJ"
+		}
 	},
 	{
 		"aonId": 300,
@@ -950,7 +1447,22 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Necromancy", "Poison" ],
 		"id": "33df6928-63ff-4d97-b088-e6c8f239a803",
-		"hash": "BRDFbqBs"
+		"pf2t": {
+			"name": "Spider Sting",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "necromancy,poison",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 371 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=300",
+			"aon": "spells300",
+			"type": "spell",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou magically duplicate a spider's venomous sting. You deal 1d4 piercing damage to the touched creature and afflict it with spider venom. The target must attempt a Fortitude save.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes 1d4 poison damage.\n**Failure** The target is afflicted with spider venom at stage 1.\n**Critical Failure** The target is afflicted with spider venom at stage 2.\n\n**Spider Venom** (poison)Fortitude; **Stage 1** 1d4 poison damage and enfeebled 1 (1 round); **Stage 2** 1d4 poison damage and enfeebled 2 (1 round).",
+			"hash": "BRDFbqBs"
+		}
 	},
 	{
 		"aonId": 301,
@@ -975,7 +1487,24 @@
 		"traits": [ "Force", "Necromancy" ],
 		"focus": false,
 		"id": "b02c69d3-8cb2-4e0e-bd3b-7e0a4970fdd6",
-		"hash": "bAbMNpZd"
+		"pf2t": {
+			"name": "Spirit Blast",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "force,necromancy",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 371 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=301",
+			"aon": "spells301",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"basic": 1,
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou concentrate ethereal energy and attack a creature's spirit, dealing 16d6 force damage. Because spirit blast affects the creature's spirit, it can damage a target projecting its consciousness (such as via project image) or possessing another creature even if the target's body is elsewhere. The possessed creature isn't harmed by the blast. The blast doesn't harm creatures that have no spirit, such as constructs.\n- - -\n**Heightened (+1)** The damage increases by 2d6.",
+			"hash": "bAbMNpZd"
+		}
 	},
 	{
 		"aonId": 302,
@@ -1001,7 +1530,22 @@
 		"traits": [ "Healing", "Necromancy" ],
 		"focus": false,
 		"id": "0a1578a2-c7d7-4446-8732-4c58fa2fbac5",
-		"hash": "NwhNCWnW"
+		"pf2t": {
+			"name": "Spirit Link",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "healing,necromancy",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 371 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=302",
+			"aon": "spells302",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n**Targets** 1 willing creature\n\n- - -\n\nYou form a spiritual link with another creature, allowing you to take in its pain. When you Cast this Spell and at the start of each of your turns, if the target is below maximum Hit Points, it regains 2 Hit Points (or the difference between its current and maximum Hit Points, if that's lower). You lose as many Hit Points as the target regained.\n\nThis is a spiritual transfer, so no effects apply that would increase the Hit Points the target regains or decrease the Hit Points you lose. This transfer also ignores any temporary Hit Points you or the target have. Since this effect doesn't involve positive or negative energy, spirit link works even if you or the target is undead. While the duration persists, you gain no benefit from regeneration or fast healing. You can Dismiss this spell, and if you're ever at 0 Hit Points, spirit link ends automatically.\n- - -\n**Heightened (+1)** The number of Hit Points transferred each time increases by 2.",
+			"hash": "NwhNCWnW"
+		}
 	},
 	{
 		"aonId": 303,
@@ -1025,7 +1569,23 @@
 		"traits": [ "Force", "Necromancy" ],
 		"focus": false,
 		"id": "466fe02d-95e7-4842-8c8d-bfcccee43e18",
-		"hash": "UxJZKRnz"
+		"pf2t": {
+			"name": "Spirit Song",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "force,necromancy",
+			"traditions": "occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 372 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=303",
+			"aon": "spells303",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"basic": 1,
+			"body": "**Area** 60-foot cone\n\n- - -\n\nYour eldritch song sends pulsing waves of ethereal energy to attack creatures' spirits in the area, dealing 18d6 force damage. Because spirit song affects creatures' spirits, it can damage a target projecting its consciousness (such as via project image) or possessing another creature even if the target's body is elsewhere. The vibrating waves of spiritual song penetrate into, but not through, solid barriers, damaging incorporeal creatures hiding in solid objects in the area but not passing onward to damage creatures in other rooms. Possessed creatures aren't harmed by the song. The song doesn't harm creatures that have no spirit, such as constructs.\n- - -\n**Heightened (+1)** The damage increases by 2d6.",
+			"hash": "UxJZKRnz"
+		}
 	},
 	{
 		"aonId": 304,
@@ -1062,7 +1622,23 @@
 		"traits": [ "Curse", "Necromancy" ],
 		"focus": false,
 		"id": "5731fc05-8554-4733-a21e-b9849ef7ecf4",
-		"hash": "xEOzBsgc"
+		"pf2t": {
+			"name": "Spiritual Epidemic",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "curse,necromancy",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 372 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=304",
+			"aon": "spells304",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou curse the target, sapping its spirit and leaving a contagious trap in its essence. The target must attempt a Will save. Any creature that casts a divine or occult spell on the target while it's affected is targeted by spiritual epidemic and must also attempt a Will save. The curse continues to spread in this way.\n\n**Critical Success** The target is unaffected.\n**Success** The target is enfeebled 2 and stupefied 2 for 1 round.\n**Failure** The target is enfeebled 2 and stupefied 2 for 1 minute and enfeebled 1 and stupefied 1 permanently.\n**Critical Failure** The target is enfeebled 3 and stupefied 3 for 1 minute and enfeebled 2 and stupefied 2 permanently.",
+			"hash": "xEOzBsgc"
+		}
 	},
 	{
 		"aonId": 305,
@@ -1090,7 +1666,22 @@
 		"traits": [ "Abjuration", "Attack", "Force" ],
 		"focus": false,
 		"id": "287a90d0-279b-4f96-98a9-15d7a2ba3541",
-		"hash": "vXXPbbWR"
+		"pf2t": {
+			"name": "Spiritual Guardian",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "abjuration,force",
+			"traditions": "divine",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 373 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=305",
+			"aon": "spells305",
+			"type": "spell",
+			"body": "**Requirements** You have a deity.\n**Duration** sustained up to 1 minute\n\n- - -\n\nA Medium guardian made of magical force appears and attacks foes you designate within range. The spiritual guardian is translucent and appears to be holding your deity's favored weapon.\n\nWhen you Cast the Spell, the spiritual guardian appears in an unoccupied space next to a foe of your choice within range and makes a Strike against it. Each time you Sustain the Spell, you can move the spiritual guardian to an unoccupied space next to a target within range (if necessary) and make a Strike with it. The guardian uses and contributes to your multiple attack penalty. Alternatively, when you Sustain the Spell, you can have the guardian move adjacent to an ally and protect that ally. If you do, each time the ally would take damage, the guardian takes the first 10 damage instead of your ally. It continues to do so until you move the guardian to attack an enemy or defend a different ally, or until the guardian is destroyed (it has 50 Hit Points and can't recover Hit Points by any means). The guardian can't usually take damage except when protecting an ally, though disintegrate automatically destroys it if it hits the spiritual guardian's AC of 25.\n\nThe guardian's Strikes are melee spell attacks. Regardless of the appearance of the guardian's weapon, the guardian deals force damage equal to 2d8 plus your spellcasting ability modifier, but you can deal damage of the type normally dealt by the weapon it holds instead of force damage. No other traits or statistics of the weapon apply, and even a ranged weapon attacks adjacent creatures only. Despite making a spell attack, the spiritual guardian's weapon is a weapon for the purposes of triggers, resistances, and so forth.\n\nThe guardian takes up space and allies can use it when flanking, but it doesn't have any other attributes a creature would normally have aside from Hit Points, and creatures can move through its space without hindrance. The guardian can't make any attack other than its Strike, and feats or spells that affect weapons or enhance allies do not apply to the guardian.\n- - -\n**Heightened (+2)** The guardian's damage increases by 1d8, and its Hit Points increase by 20.",
+			"hash": "vXXPbbWR"
+		}
 	},
 	{
 		"aonId": 306,
@@ -1118,7 +1709,22 @@
 		"traits": [ "Attack", "Evocation", "Force" ],
 		"focus": false,
 		"id": "2ba25922-2810-4065-9dc4-8eb5db94a29e",
-		"hash": "WEUKsXvj"
+		"pf2t": {
+			"name": "Spiritual Weapon",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "evocation,force",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 373 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=306",
+			"aon": "spells306",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nA weapon made of pure magical force materializes and attacks foes you designate within range. This weapon has a ghostly appearance and manifests as a club, a dagger, or your deity's favored weapon.\n\nWhen you cast the spell, the weapon appears next to a foe you choose within range and makes a Strike against it. Each time you Sustain the Spell, you can move the weapon to a new target within range (if needed) and Strike with it. The spiritual weapon uses and contributes to your multiple attack penalty.\n\nThe weapon's Strikes are melee spell attacks. Regardless of its appearance, the weapon deals force damage equal to 1d8 plus your spellcasting ability modifier. You can deal damage of the type normally dealt by the weapon instead of force damage (or any of the available damage types for a versatile weapon). No other statistics or traits of the weapon apply, and even a ranged weapon attacks adjacent creatures only. Despite making a spell attack, the spiritual weapon is a weapon for purposes of triggers, resistances, and so forth.\n\nThe weapon doesn't take up space, grant flanking, or have any other attributes a creature would. The weapon can't make any attack other than its Strike, and feats or spells that affect weapons do not apply to it.\n- - -\n**Heightened (+2)** The weapon's damage increases by 1d8.",
+			"hash": "WEUKsXvj"
+		}
 	},
 	{
 		"aonId": 307,
@@ -1163,7 +1769,22 @@
 		"traits": [ "Detection", "Divination" ],
 		"focus": false,
 		"id": "decf7666-f435-4cc9-88de-37fc483208a9",
-		"hash": "hWkdXQKT"
+		"pf2t": {
+			"name": "Status",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "detection,divination",
+			"traditions": "divine,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 373 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=308",
+			"aon": "spells308",
+			"type": "spell",
+			"body": "**Duration** 1 day\n**Targets** 1 willing living creature\n\n- - -\n\nAs long as you and the target are on the same plane of existence and both alive, you remain aware of its present state. You know the target's direction from you, distance from you, and any conditions affecting it.\n- - -\n**Heightened (4th)** The spell's range increases to 30 feet, and you can target up to 10 creatures.",
+			"hash": "hWkdXQKT"
+		}
 	},
 	{
 		"aonId": 309,
@@ -1200,7 +1821,23 @@
 		"traits": [ "Conjuration", "Poison" ],
 		"focus": false,
 		"id": "84480397-9cd8-482d-a15a-86e1946097ee",
-		"hash": "pGCnwSCf"
+		"pf2t": {
+			"name": "Stinking Cloud",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "conjuration,poison",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 373 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=309",
+			"aon": "spells309",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"body": "**Area** 20-foot burst\n**Duration** 1 minute\n\n- - -\n\nYou create a cloud of putrid mist in the area. The cloud functions as obscuring mist except it sickens creatures that end their turns within the cloud. (The concealed condition is not a poison effect.)\n\n**Critical Success** The creature is unaffected.\n**Success** The creature is sickened 1.\n**Failure** The creature is sickened 1 and slowed 1 while in the cloud.\n**Critical Failure** The creature is sickened 2 and slowed 1 until it leaves the cloud.",
+			"hash": "pGCnwSCf"
+		}
 	},
 	{
 		"aonId": 310,
@@ -1220,7 +1857,21 @@
 		"traits": [ "Uncommon", "Earth", "Evocation" ],
 		"focus": false,
 		"id": "8d5dcc82-5a98-4170-befa-f22d4bc1b248",
-		"hash": "rjcbZgxZ"
+		"pf2t": {
+			"name": "Stone Tell",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,earth,evocation",
+			"traditions": "divine,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 374 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=310",
+			"aon": "spells310",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou can ask questions of and receive answers from natural or worked stone. While stone is not intelligent, you speak with the natural spirits of the stone, which have a personality colored by the type of stone, as well as by the type of structure the stone is part of, for worked stone. A stone's perspective, perception, and knowledge give it a worldview different enough from a human's that it doesn't consider the same details important. Stones can mostly answer questions about creatures that touched them in the past and what is concealed beneath or behind them.",
+			"hash": "rjcbZgxZ"
+		}
 	},
 	{
 		"aonId": 311,
@@ -1241,7 +1892,22 @@
 		"traits": [ "Earth", "Transmutation" ],
 		"focus": false,
 		"id": "48f2f905-cf2d-4a56-89a9-ba88abac496b",
-		"hash": "yPbmFjgx"
+		"pf2t": {
+			"name": "Stone to Flesh",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "earth,transmutation",
+			"traditions": "divine,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 374 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=311",
+			"aon": "spells311",
+			"type": "spell",
+			"body": "**Targets** petrified creature or human-size stone object\n\n- - -\n\nManipulating the fundamental particles of matter, you convert stone into flesh and blood. You restore a petrified creature to its normal state or transform a stone object into a mass of inert flesh (without stone's Hardness) in roughly the same shape.",
+			"hash": "yPbmFjgx"
+		}
 	},
 	{
 		"aonId": 312,
@@ -1268,7 +1934,22 @@
 		"traits": [ "Abjuration", "Earth" ],
 		"focus": false,
 		"id": "59f20359-468a-414a-b15f-de2202f1fda2",
-		"hash": "FQNtyrGB"
+		"pf2t": {
+			"name": "Stoneskin",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "abjuration,earth",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 374 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=312",
+			"aon": "spells312",
+			"type": "spell",
+			"body": "**Duration** 20 minutes\n**Targets** 1 creature\n\n- - -\n\nThe target's skin hardens like stone. It gains resistance 5 to physical damage, except adamantine. Each time the target is hit by a bludgeoning, piercing, or slashing attack, stoneskin's duration decreases by 1 minute.\n- - -\n**Heightened (6th)** The resistance increases to 10.\n**Heightened (8th)** The resistance increases to 15.\n**Heightened (10th)** The resistance increases to 20.",
+			"hash": "FQNtyrGB"
+		}
 	},
 	{
 		"aonId": 313,
@@ -1293,7 +1974,22 @@
 		"traits": [ "Air", "Electricity", "Evocation" ],
 		"focus": false,
 		"id": "ea4200fd-dbde-4c64-bbd5-305c90a3bf18",
-		"hash": "ZOqZxKDk"
+		"pf2t": {
+			"name": "Storm of Vengeance",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "air,electricity,evocation",
+			"traditions": "primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 800,
+			"source": "Core Rulebook pg. 374 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=313",
+			"aon": "spells313",
+			"type": "spell",
+			"body": "**Area** 360-foot burst\n**Duration** sustained up to 1 minute\n\n- - -\n\nA massive storm cloud forms in the air in a 360-foot burst. Beneath it, rain begins to fall, and gales impose a -4 circumstance penalty to physical ranged attacks and weapon ranged attacks, and the air in the area becomes greater difficult terrain for flying creatures. When you Cast this Spell and the first time each round you Sustain the Spell, you can choose one of the following storm effects. You can't choose the same effect twice in a row. \n\n+ **Acid Rain** Each creature in the storm takes 4d8 acid damage with no saving throw. \n+ **Hail** The storm deals 4d10 bludgeoning damage to creatures beneath it (basic Fortitude save). \n+ **Lightning** Up to 10 bolts of lightning strike down, targeting creatures of your choice in the storm. No more than one bolt can target any one creature. Each bolt deals 7d6 electricity damage (basic Reflex save). \n+ **Rain and Wind** Heavy rain and whipping wind reduce visibility and mobility, making the area under the storm cloud difficult terrain and making everything seen within or through the area concealed. \n+ **Thunderclap** Each creature in the storm must succeed at a Fortitude save or be deafened for 10 minutes. A creature that succeeds is temporarily immune to thunderclaps from storm of vengeance for 1 hour.\n- - -\n**Heightened (10th)** The range increases to 2,200 feet, and the cloud is a 1,000-foot burst.",
+			"hash": "ZOqZxKDk"
+		}
 	},
 	{
 		"aonId": 314,
@@ -1333,7 +2029,23 @@
 		"traits": [ "Enchantment", "Incapacitation", "Linguistic", "Mental" ],
 		"focus": false,
 		"id": "84a21f6d-7780-4ef4-9239-aeb9f016474c",
-		"hash": "RpqtgtGB"
+		"pf2t": {
+			"name": "Subconscious Suggestion",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "enchantment,incapacitation,linguistic,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 374 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=314",
+			"aon": "spells314",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou implant a subconscious suggestion deep within the target's mind for them to follow when a trigger you specify occurs. You suggest a course of action to the target. Your directive must be phrased in such a way as to seem like a logical course of action to the target, and it can't be self-destructive or obviously against the target's self-interest. The target must attempt a Will save.\n\n**Critical Success** The target is unaffected and knows you tried to control it.\n**Success** The target is unaffected and thinks you were talking to them normally, not casting a spell on them.\n**Failure** The suggestion remains in the target's subconscious until the next time you prepare. If the trigger occurs before then, the target immediately follows your suggestion. The effect has a duration of 1 minute, or until the target has completed a finite suggestion or the suggestion becomes self-destructive or has other obvious negative effects.\n**Critical Failure** As failure, but the duration is 1 hour.\n- - -\n**Heightened (9th)** You can target up to 10 creatures.",
+			"hash": "RpqtgtGB"
+		}
 	},
 	{
 		"aonId": 315,
@@ -1373,7 +2085,23 @@
 		"traits": [ "Enchantment", "Incapacitation", "Linguistic", "Mental" ],
 		"focus": false,
 		"id": "4bc9c849-088d-4013-bea2-c42eb7753a63",
-		"hash": "ztRgOwTd"
+		"pf2t": {
+			"name": "Suggestion",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "enchantment,incapacitation,linguistic,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 374 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=315",
+			"aon": "spells315",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYour honeyed words are difficult for creatures to resist. You suggest a course of action to the target, which must be phrased in such a way as to seem like a logical course of action to the target and can't be self-destructive or obviously against the target's self-interest. The target must attempt a Will save.\n\n**Critical Success** The target is unaffected and knows you tried to control it.\n**Success** The target is unaffected and thinks you were talking to them normally, not casting a spell on them.\n**Failure** The target immediately follows your suggestion. The spell has a duration of 1 minute, or until the target has completed a finite suggestion or the suggestion becomes self-destructive or has other obvious negative effects.\n**Critical Failure** As failure, but the base duration is 1 hour.\n- - -\n**Heightened (8th)** You can target up to 10 creatures.",
+			"hash": "ztRgOwTd"
+		}
 	},
 	{
 		"aonId": 316,
@@ -1405,7 +2133,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "c8763167-6193-40f8-8651-30fb9f6fd7a1",
-		"hash": "zJxxGgxn"
+		"pf2t": {
+			"name": "Summon Animal",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 375 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=316",
+			"aon": "spells316",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou conjure an animal to fight for you. You summon a common creature that has the animal trait and whose level is -1, such as those below. Heightening the spell increases the maximum level of creature you can summon.\n- - -\n**Heightened (2nd)** Level 1.\n**Heightened (3rd)** Level 2.\n**Heightened (4th)** Level 3.\n**Heightened (5th)** Level 5.\n**Heightened (6th)** Level 7.\n**Heightened (7th)** Level 9.\n**Heightened (8th)** Level 11.\n**Heightened (9th)** Level 13.\n**Heightened (10th)** Level 15.",
+			"hash": "zJxxGgxn"
+		}
 	},
 	{
 		"aonId": 317,
@@ -1434,7 +2177,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "04f2a0e3-ff4b-4a51-9bf7-7b14248e0f3a",
-		"hash": "QErEExRw"
+		"pf2t": {
+			"name": "Summon Celestial",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "divine",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 375 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=317",
+			"aon": "spells317",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou conjure a celestial to fight on your behalf. This works like summon animal, except you summon a common creature that has the celestial trait and whose level is 5 or lower, such as those below. You can't summon a creature unless its alignment is one of your deity's preferred alignments (or, if you don't have a deity, is within one step of your alignment). At the GM's discretion, some deities might restrict specific types of celestials, even if their alignments match.\n- - -\n**Heightened (6th)** Level 7.\n**Heightened (7th)** Level 9.\n**Heightened (8th)** Level 11.\n**Heightened (9th)** Level 13.\n**Heightened (10th)** Level 15.",
+			"hash": "QErEExRw"
+		}
 	},
 	{
 		"aonId": 318,
@@ -1467,7 +2225,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "740d57bd-b24a-41f1-b57d-da7c0eae11b0",
-		"hash": "JFvshKCg"
+		"pf2t": {
+			"name": "Summon Construct",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "arcane",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 375 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=318",
+			"aon": "spells318",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou conjure a construct to fight for you. This works like summon animal, except you summon a common creature that has the construct trait and whose level is -1, such as those below.\n- - -\n**Heightened (2nd)** Level 1.\n**Heightened (3rd)** Level 2.\n**Heightened (4th)** Level 3.\n**Heightened (5th)** Level 5.\n**Heightened (6th)** Level 7.\n**Heightened (7th)** Level 9.\n**Heightened (8th)** Level 11.\n**Heightened (9th)** Level 13.\n**Heightened (10th)** Level 15.",
+			"hash": "JFvshKCg"
+		}
 	},
 	{
 		"aonId": 319,
@@ -1496,7 +2269,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "4dcb8347-d29e-4db6-ba0c-a35ef26c4ba7",
-		"hash": "IqrqqQXW"
+		"pf2t": {
+			"name": "Summon Dragon",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "arcane",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 375 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=319",
+			"aon": "spells319",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou conjure a dragon to fight for you. This works like summon animal, except you summon a common creature that has the dragon trait and whose level is 5 or lower, such as those below.\n- - -\n**Heightened (6th)** Level 7.\n**Heightened (7th)** Level 9.\n**Heightened (8th)** Level 11.\n**Heightened (9th)** Level 13.\n**Heightened (10th)** Level 15.",
+			"hash": "IqrqqQXW"
+		}
 	},
 	{
 		"aonId": 320,
@@ -1528,7 +2316,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "a1ffba22-e304-4703-87c4-0380efa13bbb",
-		"hash": "xhpqbrwx"
+		"pf2t": {
+			"name": "Summon Elemental",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 375 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=320",
+			"aon": "spells320",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou conjure an elemental to fight for you. This works like summon animal, except you summon a common creature that has the elemental trait and whose level is 1 or lower, such as those below.\n- - -\n**Heightened (3rd)** Level 2.\n**Heightened (4th)** Level 3.\n**Heightened (5th)** Level 5.\n**Heightened (6th)** Level 7.\n**Heightened (7th)** Level 9.\n**Heightened (8th)** Level 11.\n**Heightened (9th)** Level 13.\n**Heightened (10th)** Level 15.",
+			"hash": "xhpqbrwx"
+		}
 	},
 	{
 		"aonId": 321,
@@ -1557,7 +2360,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "8eb5f900-eab0-4249-be55-394553151af0",
-		"hash": "YDGrDkfC"
+		"pf2t": {
+			"name": "Summon Entity",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 375 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=321",
+			"aon": "spells321",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou conjure an aberration to fight for you. This works like summon animal, except you summon a common creature that has the aberration trait and whose level is 5 or lower, such as those below.\n- - -\n**Heightened (6th)** Level 7.\n**Heightened (7th)** Level 9.\n**Heightened (8th)** Level 11.\n**Heightened (9th)** Level 13.\n**Heightened (10th)** Level 15.",
+			"hash": "YDGrDkfC"
+		}
 	},
 	{
 		"aonId": 322,
@@ -1590,7 +2408,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "9bff3cbf-bbd2-4c66-a3db-4f7db85572b9",
-		"hash": "qbElGvQg"
+		"pf2t": {
+			"name": "Summon Fey",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "occult,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 375 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=322",
+			"aon": "spells322",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou conjure a fey to fight for you. This works like summon animal, except you summon a common creature that has the fey trait and whose level is -1, such as those below.\n- - -\n**Heightened (2nd)** Level 1.\n**Heightened (3rd)** Level 2.\n**Heightened (4th)** Level 3.\n**Heightened (5th)** Level 5.\n**Heightened (6th)** Level 7.\n**Heightened (7th)** Level 9.\n**Heightened (8th)** Level 11.\n**Heightened (9th)** Level 13.\n**Heightened (10th)** Level 15.",
+			"hash": "qbElGvQg"
+		}
 	},
 	{
 		"aonId": 323,
@@ -1619,7 +2452,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "45fcc9ca-6e8a-4e16-8579-d3842c971dfe",
-		"hash": "frngkOqj"
+		"pf2t": {
+			"name": "Summon Fiend",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "divine",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 375 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=323",
+			"aon": "spells323",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou conjure a fiend to fight on your behalf. This works like summon animal, except you summon a common creature that has the fiend trait and whose level is 5 or lower, such as those below. You can't summon a creature unless its alignment is one of your deity's preferred alignments (or, if you don't have a deity, is within one step of your alignment). At the GM's discretion, some deities might restrict specific types of fiends, even if their alignments match.\n- - -\n**Heightened (6th)** Level 7.\n**Heightened (7th)** Level 9.\n**Heightened (8th)** Level 11.\n**Heightened (9th)** Level 13.\n**Heightened (10th)** Level 15.",
+			"hash": "frngkOqj"
+		}
 	},
 	{
 		"aonId": 324,
@@ -1648,7 +2496,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "2b12012b-40b2-4f95-be31-935ede5a137d",
-		"hash": "vVSZBgrG"
+		"pf2t": {
+			"name": "Summon Giant",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 376 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=324",
+			"aon": "spells324",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou conjure a giant to fight for you. This works like summon animal, except you summon a common creature that has the giant trait and whose level is 5 or lower, such as those below.\n- - -\n**Heightened (6th)** Level 7.\n**Heightened (7th)** Level 9.\n**Heightened (8th)** Level 11.\n**Heightened (9th)** Level 13.\n**Heightened (10th)** Level 15.",
+			"hash": "vVSZBgrG"
+		}
 	},
 	{
 		"aonId": 325,
@@ -1681,7 +2544,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "d1abc679-d96a-4e4e-a269-a91fe081c4a8",
-		"hash": "bQQwsUlR"
+		"pf2t": {
+			"name": "Summon Plant or Fungus",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 376 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=325",
+			"aon": "spells325",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou conjure a plant or fungus to fight for you. This works like summon animal, except you summon a common creature that has the plant or fungus trait and whose level is -1, such as those below.\n- - -\n**Heightened (2nd)** Level 1.\n**Heightened (3rd)** Level 2.\n**Heightened (4th)** Level 3.\n**Heightened (5th)** Level 5.\n**Heightened (6th)** Level 7.\n**Heightened (7th)** Level 9.\n**Heightened (8th)** Level 11.\n**Heightened (9th)** Level 13.\n**Heightened (10th)** Level 15.",
+			"hash": "bQQwsUlR"
+		}
 	},
 	{
 		"aonId": 326,
@@ -1721,7 +2599,23 @@
 		"traits": [ "Evocation", "Fire", "Light", "Positive" ],
 		"focus": false,
 		"id": "9d7441a6-a007-4ece-afac-f6424aff7341",
-		"hash": "jKnbEpkc"
+		"pf2t": {
+			"name": "Sunburst",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "evocation,fire,light,positive",
+			"traditions": "divine,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "Core Rulebook pg. 376 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=326",
+			"aon": "spells326",
+			"type": "spell",
+			"savingthrow": "Reflex",
+			"body": "**Area** 60-foot burst\n\n- - -\n\nA powerful globe of searing sunlight explodes in the area, dealing 8d10 fire damage to all creatures in the area, plus 8d10 additional positive damage to undead creatures. Each creature in the area must attempt a Reflex save.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes half damage.\n**Failure** The creature takes full damage.\n**Critical Failure** The creature takes full damage and becomes blinded permanently.\n\nIf the globe overlaps with an area of magical darkness, sunburst attempts to counteract the darkness effect.\n- - -\n**Heightened (+1)** The fire damage increases by 1d10, and the positive damage against undead increases by 1d10.",
+			"hash": "jKnbEpkc"
+		}
 	},
 	{
 		"aonId": 327,
@@ -1758,7 +2652,23 @@
 		"traits": [ "Enchantment", "Incapacitation", "Mental" ],
 		"focus": false,
 		"id": "e3af0eba-d581-4db1-af6b-75622870bc9b",
-		"hash": "SWFtbgvg"
+		"pf2t": {
+			"name": "Synaptic Pulse",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "enchantment,incapacitation,mental",
+			"traditions": "occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 376 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=327",
+			"aon": "spells327",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Area** 30-foot emanation\n**Duration** 1 round\n\n- - -\n\nYou emit a pulsating mental blast that penetrates the minds of all enemies in the area. Each creature in the area must attempt a Will save.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature is stunned 1.\n**Failure** The creature is stunned 2.\n**Critical Failure** The creature is stunned for 1 round.",
+			"hash": "SWFtbgvg"
+		}
 	},
 	{
 		"aonId": 328,
@@ -1798,6 +2708,22 @@
 			{ "change": "You can target up to five creatures.", "level": 9 }
 		],
 		"id": "ac828e26-2287-4d1d-b699-0a83b5e5a5f3",
-		"hash": "GBZnxrgS"
+		"pf2t": {
+			"name": "Synesthesia",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "divination,mental",
+			"traditions": "occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 376 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=328",
+			"aon": "spells328",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nThe target's senses are suddenly rewired in unexpected ways, causing them to process noises as bursts of color, smells as sounds, and so on. This has three effects, and the target must attempt a Will save. \n\n+ Due to the distraction, the target must succeed at a DC 5 flat check each time it uses a concentrate action, or the action fails and is wasted. \n+ The target's difficulty processing visual input makes all creatures and objects concealed from it. \n+ The creature has trouble moving, making it clumsy 3 and giving it a -10-foot status penalty to its Speeds.\n\n\n**Critical Success** The target is unaffected.\n**Success** The target is affected for 1 round.\n**Failure** The target is affected for 1 minute.\n**Critical Failure** As failure, and the target is stunned 2 as it attempts to process the sensory shifts.\n- - -\n**Heightened (9th)** You can target up to five creatures.",
+			"hash": "GBZnxrgS"
+		}
 	}
 ]

@@ -9,7 +9,16 @@
 		"source": "PZO2105",
 		"id": "7b28d0c1-359a-458f-b88c-1252b4456007",
 		"aonId": 54,
-		"hash": "yWjPKrWr"
+		"pf2t": {
+			"name": "Celebrity",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 166",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=54",
+			"aon": "archetypes54",
+			"type": "archetype",
+			"body": "You're a special personality... and you know it. You're not merely comfortable in the spotlight, you crave it. While the traditional celebrity is a musician or another type of performer, you could be known for any occupation.",
+			"hash": "yWjPKrWr"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -52,7 +61,20 @@
 		"source": "PZO2105",
 		"id": "22fcee8b-1948-4778-90e9-f8bbec50c73e",
 		"aonId": 1932,
-		"hash": "zwywXSVC"
+		"pf2t": {
+			"name": "Never Tire",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Celebrity",
+			"source": "Advanced Player's Guide pg. 166",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1932",
+			"aon": "feats1932",
+			"type": "feat",
+			"body": "**Archetype** Celebrity\n**Prerequisites** Celebrity Dedication\n**Requirements** You are observed by at least three creatures who aren't foes.\n**Trigger** You would gain the fatigued condition.\n\n- - -\n\nAs long as you have an audience, you can continue to perform. Indeed, you must-you have an obligation to your fans! You delay the effects of the fatigued condition for 1 minute or until you are no longer observed by the required creatures, whichever comes first. If the fatigued condition has a duration, the duration begins to elapse only after the delay. You can't further delay or prevent the fatigued condition after this ability ends.",
+			"hash": "zwywXSVC"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -69,7 +91,20 @@
 		"source": "PZO2105",
 		"id": "478b3ba7-6010-4705-b1b7-6d63f586a4a6",
 		"aonId": 1933,
-		"hash": "AscrHQDP"
+		"pf2t": {
+			"name": "Mesmerizing Gaze",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype,emotion,enchantment,mental,visual",
+			"actions": 2,
+			"archetype": "Celebrity",
+			"source": "Advanced Player's Guide pg. 166",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1933",
+			"aon": "feats1933",
+			"type": "feat",
+			"body": "**Archetype** Celebrity\n**Prerequisites** Celebrity Dedication\n\n- - -\n\nWhen you meet someone's gaze, they are unable to look away. Choose one target creature. That creature must succeed at a Will save or be fascinated until the end of your next turn; the DC for this save is equal to your class DC or spell DC, whichever is higher. If the creature succeeds at its save or its fascination ends due to a hostile action, it becomes temporarily immune to your Mesmerizing Gaze for 1 day.\n\nWhen you select this feat, it gains either the arcane or occult trait; once you make this choice, you can't change it.",
+			"hash": "AscrHQDP"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -85,6 +120,19 @@
 		"source": "PZO2105",
 		"id": "dc12fbff-5017-4590-9a25-091e9f0af13e",
 		"aonId": 1934,
-		"hash": "PPXGQMnE"
+		"pf2t": {
+			"name": "Command Attention",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype,auditory,emotion,enchantment,mental,visual",
+			"actions": 1,
+			"archetype": "Celebrity",
+			"source": "Advanced Player's Guide pg. 166",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1934",
+			"aon": "feats1934",
+			"type": "feat",
+			"body": "**Archetype** Celebrity\n**Prerequisites** Celebrity Dedication\n\n- - -\n\nYou command the attention of all around you with style, ensuring their gaze falls only upon you until the end of your next turn. When creatures within 30 feet of you attempt saving throws against other visual effects, they use the outcome for one degree of success better than the result they rolled. An enemy within the area attempting to use a visual effect that involves focusing its attention on a particular creature (such as a medusa's Focus Gaze) must succeed at a Will save against your class DC or spell DC, whichever is higher, in order to target any creature except you. Allies in the area can attempt to Hide even if they don't have cover, as you are continually providing a distraction.",
+			"hash": "PPXGQMnE"
+		}
 	}
 ]

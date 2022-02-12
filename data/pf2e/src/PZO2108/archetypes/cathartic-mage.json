@@ -8,7 +8,17 @@
 		"page": 194,
 		"source": "PZO2108",
 		"id": "16cd751b-52a0-46bf-9165-69dd8fbf13da",
-		"aonId": 0
+		"aonId": 97,
+		"pf2t": {
+			"name": "Cathartic Mage",
+			"pfs": "limited",
+			"source": "Secrets of Magic pg. 194",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=97",
+			"aon": "archetypes97",
+			"type": "archetype",
+			"body": "Emotions are powerful, and you can tap into that power to enhance your magic for a time. You learn to harness a particular emotional state under the right conditions, but be warned: emotions are volatile and destructive if left unchecked. The experience often leaves you reeling from the unhindered emotion, requiring a rest or distraction before tapping into it again.\n\nClick here for more rules on using this archetype.",
+			"hash": "COSrLtRc"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -44,7 +54,20 @@
 		"page": 195,
 		"source": "PZO2108",
 		"id": "0134f322-0c7c-4602-ac56-0bc195ac633d",
-		"aonId": 0
+		"aonId": 2964,
+		"pf2t": {
+			"name": "Basic Cathartic Spellcasting",
+			"level": 4,
+			"pfs": "limited",
+			"traits": "archetype",
+			"archetype": "Cathartic Mage",
+			"source": "Secrets of Magic pg. 195",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2964",
+			"aon": "feats2964",
+			"type": "feat",
+			"body": "**Archetype** Cathartic Mage\n**Prerequisites** Cathartic Mage Dedication\n\n- - -\n\nYou gain the basic spellcasting benefits. Each time you gain a spell slot of a new level from this archetype, add a spell of that spell level from your chosen tradition to your repertoire-either a common spell or another spell you've learned or discovered.\n\n#### Basic Cathartic Spellcasting Leads To...\nExpert Cathartic Spellcasting",
+			"hash": "wvRAkOvv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -58,7 +81,20 @@
 		"page": 195,
 		"source": "PZO2108",
 		"id": "34c743e9-2dc1-4e3c-a23f-206ae8402d0b",
-		"aonId": 0
+		"aonId": 2965,
+		"pf2t": {
+			"name": "Cathartic Focus Spell",
+			"level": 4,
+			"pfs": "limited",
+			"traits": "archetype",
+			"archetype": "Cathartic Mage",
+			"source": "Secrets of Magic pg. 195",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2965",
+			"aon": "feats2965",
+			"type": "feat",
+			"body": "**Archetype** Cathartic Mage\n**Prerequisites** Cathartic Mage Dedication\n\n- - -\n\nYou learn the focus spell listed under your emotion's entry. You can cast it only while in emotional fervor. If you don't already have one, you gain a focus pool of 1 Focus Point, which you can Refocus while you use Settle Emotions.",
+			"hash": "YqQRGxbg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +110,21 @@
 		"page": 195,
 		"source": "PZO2108",
 		"id": "1a52adc3-d59c-416f-96af-b2a77ec84ffe",
-		"aonId": 0
+		"aonId": 2966,
+		"pf2t": {
+			"name": "Work Yourself Up",
+			"level": 8,
+			"pfs": "limited",
+			"traits": "archetype,concentrate",
+			"actions": 2,
+			"archetype": "Cathartic Mage",
+			"source": "Secrets of Magic pg. 195",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2966",
+			"aon": "feats2966",
+			"type": "feat",
+			"body": "**Archetype** Cathartic Mage\n**Prerequisites** Cathartic Mage Dedication\n**Requirements** You have a reaction available and aren't prevented from using Catharsis.\n\n- - -\n\nYou concentrate on your mental state, tapping into that raw emotional energy. Take your Catharsis reaction, causing the catharsis activation and entering your emotional fervor as normal. The fervor lasts only until the end of your turn. At the end of your emotional fervor, you experience the effects of your emotional fallout, as normal.",
+			"hash": "sRVrVvXj"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -88,7 +138,20 @@
 		"page": 195,
 		"source": "PZO2108",
 		"id": "1b711284-51c3-4c07-8633-70e20591cd4d",
-		"aonId": 0
+		"aonId": 2967,
+		"pf2t": {
+			"name": "Expert Cathartic Spellcasting",
+			"level": 12,
+			"pfs": "limited",
+			"traits": "archetype",
+			"archetype": "Cathartic Mage",
+			"source": "Secrets of Magic pg. 195",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2967",
+			"aon": "feats2967",
+			"type": "feat",
+			"body": "**Archetype** Cathartic Mage\n**Prerequisites** Basic Cathartic Spellcasting\n\n- - -\n\nYou gain the expert spellcasting benefits.\n\n#### Expert Cathartic Spellcasting Leads To...\nMaster Cathartic Spellcasting",
+			"hash": "WsqXrFxk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -102,7 +165,20 @@
 		"page": 195,
 		"source": "PZO2108",
 		"id": "4db53240-8283-4011-a8e8-dda8e6cb07c6",
-		"aonId": 0
+		"aonId": 2968,
+		"pf2t": {
+			"name": "Infectious Emotions",
+			"level": 12,
+			"pfs": "limited",
+			"traits": "archetype",
+			"archetype": "Cathartic Mage",
+			"source": "Secrets of Magic pg. 195",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2968",
+			"aon": "feats2968",
+			"type": "feat",
+			"body": "**Archetype** Cathartic Mage\n**Prerequisites** Cathartic Mage Dedication\n\n- - -\n\nWhen you use Catharsis, one ally within 30 feet gains the catharsis activation benefits in addition to you. If these benefits require an emotional focus, they use your emotional focus as they're experiencing an empathic imprint of your emotions. Depending on the activation benefit, it might be impossible to grant it to an ally; for instance, pride could only have an effect for an ally if both you and the ally critically failed the same saving throw against the same effect.",
+			"hash": "RDWmXMyY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -119,6 +195,19 @@
 		"page": 195,
 		"source": "PZO2108",
 		"id": "dc566203-d9d8-4195-86ac-35a016182236",
-		"aonId": 0
+		"aonId": 2969,
+		"pf2t": {
+			"name": "Master Cathartic Spellcasting",
+			"level": 18,
+			"pfs": "limited",
+			"traits": "archetype",
+			"archetype": "Cathartic Mage",
+			"source": "Secrets of Magic pg. 195",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2969",
+			"aon": "feats2969",
+			"type": "feat",
+			"body": "**Archetype** Cathartic Mage\n**Prerequisites** Expert Cathartic Spellcasting\n\n- - -\n\nYou gain the master spellcasting benefits.",
+			"hash": "tprHfEXk"
+		}
 	}
 ]

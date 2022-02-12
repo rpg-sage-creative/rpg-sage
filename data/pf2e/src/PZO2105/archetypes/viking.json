@@ -14,7 +14,16 @@
 		"source": "PZO2105",
 		"id": "9474dcb1-d4a1-480b-a126-2f44ff1e6d64",
 		"aonId": 81,
-		"hash": "XOtvDkjH"
+		"pf2t": {
+			"name": "Viking",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 198",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=81",
+			"aon": "archetypes81",
+			"type": "archetype",
+			"body": "To go \"a-viking\" is to raid by sea, and thus vikings have spread far and wide. Some have even settled in the very communities they once raided. Vikings traditionally travel in longboats; a score of these warriors might live aboard their ship for days at a time, sailing the seas (or, as they call it, the \"whale-road\") to ambush coastal communities. Once they arrive at a settlement, they charge ashore, plundering all they can find and slaying anyone foolish enough to get in their way. The ferocity of viking raids is legendary.",
+			"hash": "XOtvDkjH"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -47,7 +56,20 @@
 		"source": "PZO2105",
 		"id": "870e6ba7-3fc6-4535-a3f8-488f60d77f05",
 		"aonId": 2095,
-		"hash": "KzvdqgsZ"
+		"pf2t": {
+			"name": "Hurling Charge",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 2,
+			"archetype": "Viking",
+			"source": "Advanced Player's Guide pg. 198",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2095",
+			"aon": "feats2095",
+			"type": "feat",
+			"body": "**Archetype** Viking\n**Prerequisites** Viking Dedication\n\n- - -\n\nYou make a ranged Strike with a thrown weapon you already have in your hand, Stride, and then Interact to draw another weapon. If you are raging, you can add the additional damage with melee weapons you receive from raging to your damage with the thrown weapon.",
+			"hash": "KzvdqgsZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -62,7 +84,19 @@
 		"source": "PZO2105",
 		"id": "271eb0c0-0224-4e0b-b3c5-08dd0092c303",
 		"aonId": 2096,
-		"hash": "ryRDDmlb"
+		"pf2t": {
+			"name": "Viking Weapon Familiarity",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Viking",
+			"source": "Advanced Player's Guide pg. 198",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2096",
+			"aon": "feats2096",
+			"type": "feat",
+			"body": "**Archetype** Viking\n**Prerequisites** Viking Dedication\n\n- - -\n\nFrom childhood, you have been exposed to traditional viking weapons, and you soon learned to handle them in battle. Now, you can raid proudly alongside your fellows. You are trained with the battle axe, hatchet, longsword, and shortsword. In addition, you gain the Shield Block reaction.\n\n#### Viking Weapon Familiarity Leads To...\nViking Weapon Specialist",
+			"hash": "ryRDDmlb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -77,7 +111,19 @@
 		"source": "PZO2105",
 		"id": "a591586c-4ca9-4cbb-aac0-93b9f78f7b61",
 		"aonId": 2097,
-		"hash": "BFkvDAbR"
+		"pf2t": {
+			"name": "Viking Weapon Specialist",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Viking",
+			"source": "Advanced Player's Guide pg. 198",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2097",
+			"aon": "feats2097",
+			"type": "feat",
+			"body": "**Archetype** Viking\n**Prerequisites** Viking Weapon Familiarity\n\n- - -\n\nYou are even more skilled in the weapons of your people. You gain the critical specialization effects of the battle axe, hatchet, longsword, and shortsword. Whenever you gain a class feature that grants you expert or greater proficiency in certain weapons, you also gain that proficiency rank in the above four weapons.",
+			"hash": "BFkvDAbR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -94,6 +140,19 @@
 		"source": "PZO2105",
 		"id": "aa3ee7cc-a8ab-4b77-93c5-c9f16c65eba8",
 		"aonId": 2098,
-		"hash": "ZRhlbQsp"
+		"pf2t": {
+			"name": "Second Shield",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 0,
+			"archetype": "Viking",
+			"source": "Advanced Player's Guide pg. 198",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2098",
+			"aon": "feats2098",
+			"type": "feat",
+			"body": "**Archetype** Viking\n**Prerequisites** Viking Dedication\n**Trigger** Your Shield Block causes your shield to break or be destroyed.\n\n- - -\n\nYou're used to your shield breaking in the middle of battle, and you're prepared to use a backup or any convenient nearby object to defend yourself. You can Interact to draw a shield on your person or an unattended shield within your reach. If there is an object within your reach that could serve as an improvised shield-for example, a table or chair- you can Interact to draw it with this feat. The GM determines if something can be used as an improvised shield. Your new shield isn't raised until you use the Raise a Shield action, as normal.",
+			"hash": "ZRhlbQsp"
+		}
 	}
 ]

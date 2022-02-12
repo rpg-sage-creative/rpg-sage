@@ -21,7 +21,16 @@
 		"source": "PZO2105",
 		"id": "f94d5f7b-3ebb-4ebe-b34b-667a029577c0",
 		"aonId": 50,
-		"hash": "TFFFGGcZ"
+		"pf2t": {
+			"name": "Beastmaster",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 160",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=50",
+			"aon": "archetypes50",
+			"type": "archetype",
+			"body": "You attract the loyalty of animals, and as your powers increase you can command more of them, briefly inhabit their body to perceive what they perceive, and even communicate with them over vast distances. Your animals may see you as a beloved parent, teacher, and mentor, or they may consider you a poor, defenseless cub that needs protection. Regardless, they will fight for you and alongside you, even sacrificing their lives for you if necessary.",
+			"hash": "TFFFGGcZ"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -65,7 +74,19 @@
 		"source": "PZO2105",
 		"id": "29b7b01c-becb-4dc3-87eb-5907621cabe7",
 		"aonId": 1901,
-		"hash": "ZqHGZhvG"
+		"pf2t": {
+			"name": "Additional Companion",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Beastmaster",
+			"source": "Advanced Player's Guide pg. 160",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1901",
+			"aon": "feats1901",
+			"type": "feat",
+			"body": "**Archetype** Beastmaster\n**Prerequisites** Beastmaster Dedication\n\n- - -\n\nAnother animal joins you in your travels. It is a young animal companion that has the minion trait. See Beastmaster Animal Companions for rules on how having multiple animal companions works.",
+			"hash": "ZqHGZhvG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -80,7 +101,19 @@
 		"source": "PZO2105",
 		"id": "bef8fdc7-b037-470d-81a9-66f4fe87faf3",
 		"aonId": 1902,
-		"hash": "JtJjDALE"
+		"pf2t": {
+			"name": "Heal Animal",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Beastmaster",
+			"source": "Advanced Player's Guide pg. 160",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1902",
+			"aon": "feats1902",
+			"type": "feat",
+			"body": "**Archetype** Beastmaster\n**Prerequisites** Beastmaster Dedication\n\n- - -\n\nYou can heal your animal companion's wounds. You can cast heal animal as a beastmaster focus spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "JtJjDALE"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -95,7 +128,19 @@
 		"source": "PZO2105",
 		"id": "27c0ea73-878f-48a5-a815-e4ed8bf02161",
 		"aonId": 1903,
-		"hash": "FRItwAxA"
+		"pf2t": {
+			"name": "Mature Beastmaster Companion",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Beastmaster",
+			"source": "Advanced Player's Guide pg. 160",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1903",
+			"aon": "feats1903",
+			"type": "feat",
+			"body": "**Archetype** Beastmaster\n**Prerequisites** Beastmaster Dedication\n\n- - -\n\nAll of your animal companions grow up, becoming mature animal companions and gaining additional capabilities. During an encounter, even if you don't use the Command an Animal action, your animal companion can still use 1 action on your turn to either Stride or Strike.\n\n#### Mature Beastmaster Companion Leads To...\nIncredible Beastmaster's Companion, Lead the Pack",
+			"hash": "FRItwAxA"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -110,7 +155,19 @@
 		"source": "PZO2105",
 		"id": "e10bae39-b9de-4fc7-988a-06e6c11a8fc1",
 		"aonId": 1904,
-		"hash": "yjLkZyWN"
+		"pf2t": {
+			"name": "Beastmaster's Trance",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Beastmaster",
+			"source": "Advanced Player's Guide pg. 160",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1904",
+			"aon": "feats1904",
+			"type": "feat",
+			"body": "**Archetype** Beastmaster\n**Prerequisites** Beastmaster Dedication\n\n- - -\n\nYou can enter a trance that allows you to briefly inhabit the body of one of your animal companions and share its senses. You gain the focus spell beastmaster trance. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "yjLkZyWN"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -139,7 +196,19 @@
 		"source": "PZO2105",
 		"id": "6c5c1531-29d5-44d5-b65b-0211d89fad43",
 		"aonId": 1906,
-		"hash": "gYXtzNmL"
+		"pf2t": {
+			"name": "Beastmaster Bond",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype,divination,mental,primal",
+			"archetype": "Beastmaster",
+			"source": "Advanced Player's Guide pg. 160",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1906",
+			"aon": "feats1906",
+			"type": "feat",
+			"body": "**Archetype** Beastmaster\n**Prerequisites** Beastmaster Dedication\n\n- - -\n\nYou can communicate telepathically with your animal companions within 100 feet. If you're legendary in Nature, you can communicate telepathically with your animal companions anywhere on the planet.",
+			"hash": "gYXtzNmL"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -156,7 +225,20 @@
 		"source": "PZO2105",
 		"id": "f91e12b4-2235-46fe-abed-a48f831c7680",
 		"aonId": 1907,
-		"hash": "HqLHWXVs"
+		"pf2t": {
+			"name": "Beastmaster's Call",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype,auditory,concentrate,primal",
+			"actions": 1,
+			"archetype": "Beastmaster",
+			"source": "Advanced Player's Guide pg. 161",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1907",
+			"aon": "feats1907",
+			"type": "feat",
+			"body": "**Archetype** Beastmaster\n**Prerequisites** Beastmaster Dedication; Call Companion\n\n- - -\n\nYou quickly call in a primal projection of a non-active companion to provide the companion's support benefit. The projection arrives in an unoccupied square of your choice within 30 feet of you, grants you its support benefit, and then disappears on your next turn. The projection has the same AC and saving throw modifiers as the real companion, and if it would take any damage before your next turn, it disappears and the support benefit ends immediately.",
+			"hash": "HqLHWXVs"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -174,7 +256,19 @@
 		"source": "PZO2105",
 		"id": "6561909b-5ed1-4018-857d-c69e05579e78",
 		"aonId": 1908,
-		"hash": "MRtvlGsy"
+		"pf2t": {
+			"name": "Specialized Beastmaster Companion",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Beastmaster",
+			"source": "Advanced Player's Guide pg. 161",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1908",
+			"aon": "feats1908",
+			"type": "feat",
+			"body": "**Archetype** Beastmaster\n**Prerequisites** Incredible Beastmaster's Companion\n\n- - -\n\nYour nimble and savage animal companions become cunning enough to become specialized. Each companion gains one specialization of your choice (choose separately).",
+			"hash": "MRtvlGsy"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -189,6 +283,18 @@
 		"source": "PZO2105",
 		"id": "c555705c-b792-4c87-aefd-9385667a196e",
 		"aonId": 1909,
-		"hash": "QyTOcxDZ"
+		"pf2t": {
+			"name": "Lead the Pack",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "uncommon,archetype",
+			"archetype": "Beastmaster",
+			"source": "Advanced Player's Guide pg. 161",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1909",
+			"aon": "feats1909",
+			"type": "feat",
+			"body": "**Archetype** Beastmaster\n**Prerequisites** Mature Beastmaster Companion; you have multiple animal companions\n\n- - -\n\nYou can have up to two animal companions active at once. However, when you do, it's slightly more difficult to Command them. If you don't Command either of your companions, one of the two (your choice) can still use 1 action on your turn to Stride or Strike, as per Mature Beastmaster Companion, but not both. When you Command an Animal, either choose one of the companions to take 2 actions, as normal, or else both companions can take 1 action to Stride or Strike. Either way, you can't Command an Animal to make either companion act again until your next turn.",
+			"hash": "QyTOcxDZ"
+		}
 	}
 ]

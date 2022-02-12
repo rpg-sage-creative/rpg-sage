@@ -70,7 +70,17 @@
 				}
 			]
 		},
-		"hash": "ppvJbYVk"
+		"pf2t": {
+			"name": "Gnome",
+			"pfs": "standard",
+			"traits": "gnome,humanoid",
+			"source": "Core Rulebook pg. 43 2.0",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=3",
+			"aon": "ancestries3",
+			"type": "ancestry",
+			"body": "Long ago, early gnome ancestors emigrated from the First World, realm of the fey. While it's unclear why the first gnomes wandered to Golarion, this lineage manifests in modern gnomes as bizarre reasoning, eccentricity, obsessive tendencies, and what some see as naivete. These qualities are further reflected in their physical characteristics, such as spindly limbs, brightly colored hair, and childlike and extremely expressive facial features that further reflect their otherworldly origins.\n\nAlways hungry for new experiences, gnomes constantly wander both mentally and physically, attempting to stave off a terrible ailment that threatens all of their people. This affliction-the Bleaching-strikes gnomes who fail to dream, innovate, and take in new experiences, in the gnomes' absence of crucial magical essence from the First World. Gnomes latch onto a source of localized magic where they live, typically primal magic, as befits their fey lineage, but this isn't enough to avoid the Bleaching unless they supplement this magic with new experiences. The Bleaching slowly drains the color-literally-from gnomes, and it plunges those affected into states of deep depression that eventually claim their lives. Very few gnomes survive this scourge, becoming deeply morose and wise survivors known as bleachlings.\n\nIf you want a character with boundless enthusiasm and an alien, fey outlook on morality and life, you should play a gnome.\n\n#### You Might...\n+ Embrace learning and hop from one area of study to another without warning. \n+ Rush into action before fully taking stock of the entire situation. \n+ Speak, think, and move quickly, and lose patience with those who can't keep up.\n\n#### Others Probably...\n+ Appreciate your enthusiasm and the energy with which you approach new situations. \n+ Struggle to understand your motivations or adapt to your rapid changes of direction. \n+ See you as unpredictable, flighty, unreliable, or even reckless.\n\n#### Physical Description\nMost gnomes stand just over 3 feet in height and weigh little more than a human child. They exhibit a wide range of natural skin, hair, and eye colors. For gnomes that haven't begun the Bleaching, nearly any hair and eye color other than white is possible, with vibrant colors most frequent, while skin tones span a slightly narrower spectrum and tend toward earthy tones and pinkish hues, though occasionally green, black, or pale blue. Gnomes' large eyes and dense facial muscles allow them to be particularly expressive in their emotions. Gnomes typically reach physical maturity at the age of 18, though many gnomes maintain a childlike curiosity about the world even into adulthood. A gnome can theoretically live to any age if she can stave off the Bleaching indefinitely, but in practice gnomes rarely live longer than around 400 years.\n\n#### Society\nWhile most gnomes adopt some of the cultural practices of the region in which they live, they tend to pick and choose, adjusting their communities to fit their own fey logic. This often leads to majority gnome communities eventually consisting almost entirely of gnomes, as other people, bewildered by gnomish political decisions, choose to move elsewhere. Gnomes have little culture that they would consider entirely their own. No gnome kingdoms or nations exist on the surface of Golarion, and gnomes wouldn't know what to do with such a state if they had one.\n\nBy necessity, few gnomes marry for life, instead allowing relationships to run their course before amicably moving on, the better to stave off the Bleaching with new experiences. Though gnome families tend to be small, many gnome communities raise children communally, with fluid family boundaries. As adults depart the settlement, unrelated adolescents sometimes tag along, creating adopted families to journey together.\n\n#### Alignment and Religion\nThough gnomes are impulsive tricksters with inscrutable motives and confusing methods, many at least attempt to make the world a better place. They are prone to fits of powerful emotion, and they are often good but rarely lawful. Gnomes most commonly worship deities that value individuality and nature, such as Cayden Cailean, Desna, Gozreh, and Shelyn.\n\n#### Adventurers\nAdventure is not so much a choice as a necessity for most gnomes. Adventuring gnomes often claim mementos, allowing them to remember and relive their most exciting stories.\n\nGnomes often consider the entertainer, merchant, or nomad backgrounds. In addition, the animal whisperer, barkeep, gambler, and tinker backgrounds are particularly appropriate.\n\nGnomes' connection to magic makes spellcasting classes particularly thematic for you, especially classes that match the tradition of your primal innate spells, such as druid or primal sorcerer, though wellspring gnomes might choose others.\n\n#### Names\nGnome names can get quite complex and polysyllabic. They have little interest in familial names, and most children receive their names purely on a parent's whim. Gnomes rarely concern themselves with how easy their names are to pronounce, and they often go by shorter nicknames. Some even collect and chronicle these nicknames. Among gnomes, the shorter the name, the more feminine it's considered to be.\n\n#### Sample Names\nAbroshtor, Bastargre, Besh, Fijit, Halungalom, Krolmnite, Neji, Majet, Pai, Poshment, Queck, Trig, Zarzuket, Zatqualmie\n\n#### Gnome Mechanics\n\n\n#### Hit Points\n8\n\n#### Size\nSmall\n\n#### Speed\n25 feet\n\n#### Ability Boosts\nConstitution\nCharisma\nFree\n\n#### Ability Flaw(s)\nStrength\n\n#### Languages\nCommon\nGnomish\nSylvan\nAdditional languages equal to your Intelligence modifier (if it's positive). Choose from Draconic, Dwarven, Elven, Goblin, Jotun, Orcish, and any other languages to which you have access (such as the languages prevalent in your region).\n\n#### Low-Light Vision\nYou can see in dim light as though it were bright light, so you ignore the concealed condition due to dim light.",
+			"hash": "ppvJbYVk"
+		}
 	},
 	{
 		"objectType": "Heritage",
@@ -82,7 +92,16 @@
 		"source": "PZO2101",
 		"id": "afa3bd0f-c5a4-4f34-b9fc-cc98c2a64ac6",
 		"aonId": 11,
-		"hash": "kObFxRQV"
+		"pf2t": {
+			"name": "Chameleon Gnome",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 43 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=11",
+			"aon": "heritages11",
+			"type": "heritage",
+			"body": "The color of your hair and skin is mutable, possibly due to latent magic. You can slowly change the vibrancy and the exact color, and the coloration can be different across your body, allowing you to create patterns or other colorful designs. It takes a single action for minor localized shifts and up to an hour for dramatic shifts throughout your body. While you're asleep, the colors shift on their own in tune with your dreams, giving you an unusual coloration each morning. When you're in an area where your coloration is roughly similar to the environment (for instance, forest green in a forest), you can use the single action to make minor localized shifts designed to help you blend into your surroundings. This grants you a +2 circumstance bonus to Stealth checks until your surroundings shift in coloration or pattern.",
+			"hash": "kObFxRQV"
+		}
 	},
 	{
 		"objectType": "Heritage",
@@ -94,7 +113,16 @@
 		"source": "PZO2101",
 		"id": "46286236-73de-417e-856e-6e5f434d0b02",
 		"aonId": 12,
-		"hash": "FCQmtYOQ"
+		"pf2t": {
+			"name": "Fey-Touched Gnome",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 43 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=12",
+			"aon": "heritages12",
+			"type": "heritage",
+			"body": "The blood of the fey is so strong within you that you're truly one of them. You gain the fey trait, in addition to the gnome and humanoid traits. Choose one cantrip from the primal spell list. You can cast this spell as a primal innate spell at will. A cantrip is heightened to a spell level equal to half your level rounded up. You can change this cantrip to a different one from the same list once per day by meditating to realign yourself with the First World; this is a 10-minute activity that has the concentrate trait.",
+			"hash": "FCQmtYOQ"
+		}
 	},
 	{
 		"objectType": "Heritage",
@@ -106,7 +134,16 @@
 		"source": "PZO2101",
 		"id": "badcafb0-fb30-4fd3-8791-358eb7b6be89",
 		"aonId": 13,
-		"hash": "rxQWXtbE"
+		"pf2t": {
+			"name": "Sensate Gnome",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 44 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=13",
+			"aon": "heritages13",
+			"type": "heritage",
+			"body": "You see all colors as brighter, hear all sounds as richer, and especially smell all scents with incredible detail. You gain a special sense: imprecise scent with a range of 30 feet. This means you can use your sense of smell to determine the exact location of a creature. The GM will usually double the range if you're downwind from the creature or halve the range if you're upwind.\n\nIn addition, you gain a +2 circumstance bonus to Perception checks whenever you're trying to locate an undetected creature that is within the range of your scent.",
+			"hash": "rxQWXtbE"
+		}
 	},
 	{
 		"objectType": "Heritage",
@@ -118,7 +155,16 @@
 		"source": "PZO2101",
 		"id": "7b859e21-16d8-45c3-a2c5-e8d5dc5f29cf",
 		"aonId": 15,
-		"hash": "LZJvWjOZ"
+		"pf2t": {
+			"name": "Wellspring Gnome",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 44 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=15",
+			"aon": "heritages15",
+			"type": "heritage",
+			"body": "Some other source of magic has a greater hold on you than the primal magic of your fey lineage does. This connection might come from an occult plane or an ancient occult song; a deity, celestial, or fiend; magical effluent left behind by a mage war; or ancient rune magic.\n\nChoose arcane, divine, or occult. You gain one cantrip from that magical tradition's spell list. You can cast this spell as an innate spell at will, as a spell of your chosen tradition. A cantrip is heightened to a spell level equal to half your level rounded up. Whenever you gain a primal innate spell from a gnome ancestry feat, change its tradition from primal to your chosen tradition.",
+			"hash": "LZJvWjOZ"
+		}
 	},
 	{
 		"objectType": "Heritage",
@@ -130,7 +176,16 @@
 		"source": "PZO2101",
 		"id": "04a84581-9ab8-4b89-8414-16ba19f98100",
 		"aonId": 14,
-		"hash": "hmthrDKl"
+		"pf2t": {
+			"name": "Umbral Gnome",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 44 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=14",
+			"aon": "heritages14",
+			"type": "heritage",
+			"body": "Whether from a connection to dark or shadowy fey, from the underground deep gnomes also known as svirfneblin, or another source, you can see in complete darkness. You gain darkvision.",
+			"hash": "hmthrDKl"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -144,7 +199,19 @@
 		"source": "PZO2101",
 		"id": "d6593101-1088-4f3d-b093-812b646bda9f",
 		"aonId": 25,
-		"hash": "kvbgYctV"
+		"pf2t": {
+			"name": "Animal Accomplice",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "gnome",
+			"source": "Core Rulebook pg. 44 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=25",
+			"aon": "feats25",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "You build a rapport with an animal, which becomes magically bonded to you. You gain a familiar. The type of animal is up to you, but most gnomes choose animals with a burrow Speed.",
+			"hash": "kvbgYctV"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -158,7 +225,19 @@
 		"source": "PZO2101",
 		"id": "e6239283-44ce-478d-b8a9-79915fc32f31",
 		"aonId": 26,
-		"hash": "XMIgVHdw"
+		"pf2t": {
+			"name": "Burrow Elocutionist",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "gnome",
+			"source": "Core Rulebook pg. 44 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=26",
+			"aon": "feats26",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "You recognize the chittering of ground creatures as its own peculiar language. You can ask questions of, receive answers from, and use the Diplomacy skill with animals that have a burrow Speed, such as badgers, ground squirrels, moles, and prairie dogs. The GM determines which animals count for this ability.\n\n#### Burrow Elocutionist Leads To...\nAnimal Elocutionist",
+			"hash": "XMIgVHdw"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -174,7 +253,19 @@
 		"source": "PZO2101",
 		"id": "00bd6a0a-41e4-4178-8b71-388fe1217ee8",
 		"aonId": 27,
-		"hash": "qPXfBQHb"
+		"pf2t": {
+			"name": "Fey Fellowship",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "gnome",
+			"source": "Core Rulebook pg. 44 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=27",
+			"aon": "feats27",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "Your enhanced fey connection affords you a warmer reception from creatures of the First World as well as tools to foil their tricks. You gain a +2 circumstance bonus to both Perception checks and saving throws against fey.\n\nIn addition, whenever you meet a fey creature in a social situation, you can immediately attempt a Diplomacy check to Make an Impression on that creature rather than needing to converse for 1 minute. You take a -5 penalty to the check. If you fail, you can engage in 1 minute of conversation and attempt a new check at the end of that time rather than accepting the failure or critical failure result.",
+			"hash": "qPXfBQHb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -188,7 +279,19 @@
 		"source": "PZO2101",
 		"id": "2fc7be95-3994-422c-a0b3-421ff3b20d75",
 		"aonId": 28,
-		"hash": "NQQkRgzy"
+		"pf2t": {
+			"name": "First World Magic",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "gnome",
+			"source": "Core Rulebook pg. 44 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=28",
+			"aon": "feats28",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "Your connection to the First World grants you a primal innate spell, much like those of the fey. Choose one cantrip from the primal spell list. You can cast this spell as a primal innate spell at will. A cantrip is heightened to a spell level equal to half your level rounded up.",
+			"hash": "NQQkRgzy"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -202,7 +305,19 @@
 		"source": "PZO2101",
 		"id": "ebd4a71d-4e34-4cc5-ae80-bd7a2b31797f",
 		"aonId": 29,
-		"hash": "gvpcmqZX"
+		"pf2t": {
+			"name": "Gnome Obsession",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "gnome",
+			"source": "Core Rulebook pg. 44 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=29",
+			"aon": "feats29",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "You might have a flighty nature, but when a topic captures your attention, you dive into it headfirst. Pick a Lore skill. You gain the trained proficiency rank in that skill. At 2nd level, you gain expert proficiency in the chosen Lore as well as the Lore granted by your background, if any. At 7th level you gain master proficiency in these Lore skills, and at 15th level you gain legendary proficiency in them.\n\n#### Gnome Obsession Leads To...\nEclectic Obsession",
+			"hash": "gvpcmqZX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -217,7 +332,19 @@
 		"source": "PZO2101",
 		"id": "41cbf16f-bf72-49ab-8f66-837c71b6e8ad",
 		"aonId": 30,
-		"hash": "tMRZbpQQ"
+		"pf2t": {
+			"name": "Gnome Weapon Familiarity",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "gnome",
+			"source": "Core Rulebook pg. 44 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=30",
+			"aon": "feats30",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "You favor unusual weapons tied to your people, such as blades with curved and peculiar shapes. You are trained with the glaive and kukri.\n\nIn addition, you gain access to kukris and all uncommon gnome weapons. For the purpose of determining your proficiency, martial gnome weapons are simple weapons and advanced gnome weapons are martial weapons.\n\n#### Gnome Weapon Familiarity Leads To...\nGnome Weapon Expertise, Gnome Weapon Innovator",
+			"hash": "tMRZbpQQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -232,7 +359,19 @@
 		"source": "PZO2101",
 		"id": "248e583d-4db4-45c3-93f4-780c5d436060",
 		"aonId": 31,
-		"hash": "tVkgUGjI"
+		"pf2t": {
+			"name": "Illusion Sense",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "gnome",
+			"source": "Core Rulebook pg. 44 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=31",
+			"aon": "feats31",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "Your ancestors spent their days cloaked and cradled in illusions, and as a result, sensing illusion magic is second nature to you. You gain a +1 circumstance bonus to both Perception checks and Will saves against illusions. When you come within 10 feet of an illusion that can be disbelieved, the GM rolls a secret check for you to disbelieve it, even if you didn't spend an action to Interact with the illusion.\n\n#### Illusion Sense Leads To...\nIntuitive Illusions, Natural Illusionist",
+			"hash": "tVkgUGjI"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -247,7 +386,19 @@
 		"source": "PZO2101",
 		"id": "9776a53f-3244-4d4f-a142-8dda9440e983",
 		"aonId": 32,
-		"hash": "ZhOQpksp"
+		"pf2t": {
+			"name": "Animal Elocutionist",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "gnome",
+			"source": "Core Rulebook pg. 45 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=32",
+			"aon": "feats32",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** Burrow Elocutionist\n\n- - -\n\nYou hear animal sounds as conversations instead of unintelligent noise, and can respond in turn. You can speak to all animals, not just animals with a burrow Speed. You gain a +1 circumstance bonus to Make an Impression on animals (which usually uses the Diplomacy skill).",
+			"hash": "ZhOQpksp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -264,7 +415,20 @@
 		"source": "PZO2101",
 		"id": "84d8a9ea-ec2b-492e-a6d1-6b85d05671a6",
 		"aonId": 33,
-		"hash": "rggKZOdY"
+		"pf2t": {
+			"name": "Energized Font",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "gnome",
+			"actions": 1,
+			"source": "Core Rulebook pg. 45 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=33",
+			"aon": "feats33",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** focus pool, at least one innate spell from a gnome heritage or ancestry feat that shares a tradition with at least one of your focus spells\n\n- - -\n\nThe magic within you provides increased energy you can use to focus. You regain 1 Focus Point, up to your usual maximum.",
+			"hash": "rggKZOdY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -279,7 +443,19 @@
 		"source": "PZO2101",
 		"id": "12086f43-ee97-405f-81a0-6561fe45759a",
 		"aonId": 34,
-		"hash": "pqKlLVKG"
+		"pf2t": {
+			"name": "Gnome Weapon Innovator",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "gnome",
+			"source": "Core Rulebook pg. 45 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=34",
+			"aon": "feats34",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** Gnome Weapon Familiarity\n\n- - -\n\nYou produce outstanding results when wielding unusual weapons. Whenever you critically hit using a glaive, kukri, or gnome weapon, you apply the weapon's critical specialization effect.",
+			"hash": "pqKlLVKG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -294,7 +470,19 @@
 		"source": "PZO2101",
 		"id": "ac06bdd2-7ec1-4496-9ae5-91da4e2b74d5",
 		"aonId": 35,
-		"hash": "XVxvQFrN"
+		"pf2t": {
+			"name": "First World Adept",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "gnome",
+			"source": "Core Rulebook pg. 45 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=35",
+			"aon": "feats35",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** at least one primal innate spell\n\n- - -\n\nOver time your fey magic has grown stronger. You gain faerie fire and invisibility as 2nd-level primal innate spells. You can cast each of these primal innate spells once per day.",
+			"hash": "XVxvQFrN"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -308,7 +496,19 @@
 		"source": "PZO2101",
 		"id": "33152174-1efe-404a-a07f-08fda6c029ef",
 		"aonId": 36,
-		"hash": "Ycptcxxt"
+		"pf2t": {
+			"name": "Vivacious Conduit",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "gnome",
+			"source": "Core Rulebook pg. 45 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=36",
+			"aon": "feats36",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "Your connection to the First World has grown, and its positive energy flows into you rapidly. If you rest for 10 minutes, you gain Hit Points equal to your Constitution modifier  half your level. This is cumulative with any healing you receive from Treat Wounds.",
+			"hash": "Ycptcxxt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -323,6 +523,18 @@
 		"source": "PZO2101",
 		"id": "3ee85c63-816c-4afd-9c93-85c46949b734",
 		"aonId": 37,
-		"hash": "HXfvlAWZ"
+		"pf2t": {
+			"name": "Gnome Weapon Expertise",
+			"level": 13,
+			"pfs": "standard",
+			"traits": "gnome",
+			"source": "Core Rulebook pg. 45 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=37",
+			"aon": "feats37",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** Gnome Weapon Familiarity\n\n- - -\n\nYour gnome affinity blends with your class training, granting you great skill with gnome weapons. Whenever you gain a class feature that grants you expert or greater proficiency in a given weapon or weapons, you also gain that proficiency in the glaive, kukri, and all gnome weapons in which you are trained.",
+			"hash": "HXfvlAWZ"
+		}
 	}
 ]

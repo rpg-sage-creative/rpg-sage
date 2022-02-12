@@ -1,3 +1,21 @@
 [
-	{ "objectType": "Heritage", "name": "Jinxed Halfling", "ancestry": "Halfling", "source": "PZO2105", "id": "b7a37c84-d3fa-4eb9-8eb1-0e9ef44954f7", "aonId": 87, "hash": "LcMqWgtD" }
+	{
+		"objectType": "Heritage",
+		"name": "Jinxed Halfling",
+		"ancestry": "Halfling",
+		"source": "PZO2105",
+		"id": "b7a37c84-d3fa-4eb9-8eb1-0e9ef44954f7",
+		"aonId": 87,
+		"pf2t": {
+			"name": "Jinxed Halfling",
+			"pfs": "standard",
+			"traits": "uncommon",
+			"source": "Advanced Player's Guide pg. 46",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=87",
+			"aon": "heritages87",
+			"type": "heritage",
+			"body": "You were born with a strange blessing: bereft of the typical halfling luck, you can instead manipulate the fortunes of others. You can never take the Halfling Luck feat, and you gain the Jinx action.",
+			"hash": "LcMqWgtD"
+		}
+	}
 ]

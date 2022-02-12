@@ -27,8 +27,7 @@
 		"source": "PZO2104",
 		"focus": false,
 		"aonId": 21,
-		"id": "fc0a4641-8bb7-4f55-a926-e363da12b3b6",
-		"hash": "vYXmvWAM"
+		"id": "fc0a4641-8bb7-4f55-a926-e363da12b3b6"
 	},
 	{
 		"name": "Angelic Messenger",
@@ -58,8 +57,7 @@
 		"source": "PZO2104",
 		"focus": false,
 		"aonId": 22,
-		"id": "c93cf4cc-d8f6-4351-a89d-6fe394f13a14",
-		"hash": "qCrsvQxs"
+		"id": "c93cf4cc-d8f6-4351-a89d-6fe394f13a14"
 	},
 	{
 		"name": "Infernal Pact",
@@ -89,8 +87,7 @@
 		"source": "PZO2104",
 		"focus": false,
 		"aonId": 23,
-		"id": "dc041ff5-a514-4f70-b7be-440222f6f9ba",
-		"hash": "zMXryEdx"
+		"id": "dc041ff5-a514-4f70-b7be-440222f6f9ba"
 	},
 	{
 		"name": "Daemonic Pact",
@@ -121,7 +118,17 @@
 		"focus": false,
 		"aonId": 25,
 		"id": "4df22316-e935-4422-801c-b18cfa74f9d5",
-		"hash": "TQENTXGR"
+		"pf2t": {
+			"name": "Daemonic Pact",
+			"level": 1,
+			"traits": "uncommon,conjuration",
+			"source": "Bestiary 2 pg. 311 2.0",
+			"src": "https://2e.aonprd.com/Rituals.aspx?ID=25",
+			"aon": "rituals25",
+			"type": "ritual",
+			"body": "You call upon the powers of Abaddon to grant you the assistance of a daemon. You call upon a daemon whose level can be no more than double daemonic pact's spell level, two daemons whose levels are each at least 2 less than double the spell level, or three daemons whose levels are each at least 3 less than double the spell level.\n\n**Critical Success** You conjure the daemon or daemons, and they require nothing in return for their service.\n**Success** You conjure the daemon or daemons, who serve you willingly, but require a sacrifice in the form of spilled blood (either another creature's or your own).\n**Failure** You don't conjure any daemons.\n**Critical Failure** You don't conjure any daemons, and the self-sacrifice required to perform the ritual leaves you drained 1 (or drained 2 if the spell level is 5 or higher).",
+			"hash": "TQENTXGR"
+		}
 	},
 	{
 		"name": "Ravenous Reanimation",
@@ -154,6 +161,16 @@
 		"focus": false,
 		"aonId": 26,
 		"id": "4f94b7a0-1c39-4ecd-9e76-c68e602b6aa1",
-		"hash": "TMvgfJtv"
+		"pf2t": {
+			"name": "Ravenous Reanimation",
+			"level": 7,
+			"traits": "rare,evil,necromancy",
+			"source": "Bestiary 2 pg. 223 2.0",
+			"src": "https://2e.aonprd.com/Rituals.aspx?ID=26",
+			"aon": "rituals26",
+			"type": "ritual",
+			"body": "**Requirements** You must be an evil dragon.\n\n- - -\n\nYou destroy the gathered treasures with your breath weapon or other powerful magic, then invoke necromantic energies before you feed upon the charred and melted remains. As you do so, negative energy courses through your flesh, automatically killing you. Each individual ravener's ravenous reanimation requires three to five unique additional components. Whether or not you return as a ravener depends on the success of the ritual.\n\n**Critical Success** You immediately transform into a ravener upon finishing the ritual; your soul ward starts at full Hit Points (equal to 5  your level).\n**Success** You rise as a ravener 24 hours after completing the ritual, as long as your body remains relatively intact. When you rise as a ravener, your soul ward starts at 1 Hit Point.\n**Failure** You rise as a ravener husk 24 hours after completing the ritual.\n**Critical Failure** You die.",
+			"hash": "TMvgfJtv"
+		}
 	}
 ]

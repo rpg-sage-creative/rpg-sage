@@ -9,7 +9,16 @@
 		"source": "PZO2101",
 		"id": "a41ac1cf-95a4-419d-bc4e-5d33384453de",
 		"aonId": 7,
-		"hash": "tCHbWZWs"
+		"pf2t": {
+			"name": "Fighter",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 226 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=7",
+			"aon": "archetypes7",
+			"type": "archetype",
+			"body": "You have spent time learning the art of warfare, increasing your skill with martial arms and at wearing armor. With further training, you can become a true combat specialist.",
+			"hash": "tCHbWZWs"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -41,7 +50,19 @@
 		"source": "PZO2101",
 		"id": "fa08f3b1-a77a-499b-9ba7-4ce251ffa257",
 		"aonId": 710,
-		"hash": "IwRFgWQU"
+		"pf2t": {
+			"name": "Basic Maneuver",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Fighter",
+			"source": "Core Rulebook pg. 226 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=710",
+			"aon": "feats710",
+			"type": "feat",
+			"body": "**Archetype** Fighter\n**Prerequisites** Fighter Dedication\n\n- - -\n\nYou gain a 1st- or 2nd-level fighter feat.\n\n#### Basic Maneuver Leads To...\nAdvanced Maneuver",
+			"hash": "IwRFgWQU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -59,7 +80,19 @@
 		"source": "PZO2101",
 		"id": "c0d6969a-d797-4d7c-9cc7-6216e98037e5",
 		"aonId": 711,
-		"hash": "jTcngtlX"
+		"pf2t": {
+			"name": "Fighter Resiliency",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Fighter",
+			"source": "Core Rulebook pg. 226 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=711",
+			"aon": "feats711",
+			"type": "feat",
+			"body": "**Archetype** Fighter\n**Prerequisites** Fighter Dedication; class granting no more Hit Points per level than 8 + your Constitution modifier\n\n- - -\n\nYou gain 3 additional Hit Points for each fighter archetype class feat you have. As you continue selecting fighter archetype class feats, you continue to gain additional Hit Points in this way.",
+			"hash": "jTcngtlX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +107,19 @@
 		"source": "PZO2101",
 		"id": "c0cce893-2bf7-4902-b6c7-5f8a9f4e6df0",
 		"aonId": 712,
-		"hash": "mhOWpglp"
+		"pf2t": {
+			"name": "Opportunist",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Fighter",
+			"source": "Core Rulebook pg. 226 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=712",
+			"aon": "feats712",
+			"type": "feat",
+			"body": "**Archetype** Fighter\n**Prerequisites** Fighter Dedication\n\n- - -\n\nYou gain the Attack of Opportunity reaction.\n\n#### Attack of Opportunity\nYou lash out at a foe that leaves an opening. Make a melee Strike against the triggering creature. If your attack is a critical hit and the trigger was a manipulate action, you disrupt that action. This Strike doesn't count toward your multiple attack penalty, and your multiple attack penalty doesn't apply to this Strike.",
+			"hash": "mhOWpglp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -92,7 +137,19 @@
 		"source": "PZO2101",
 		"id": "de76472e-7844-4c19-a290-1d2acc256472",
 		"aonId": 713,
-		"hash": "rVUUqZNS"
+		"pf2t": {
+			"name": "Advanced Maneuver",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Fighter",
+			"source": "Core Rulebook pg. 226 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=713",
+			"aon": "feats713",
+			"type": "feat",
+			"body": "**Archetype** Fighter\n**Prerequisites** Basic Maneuver\n\n- - -\n\nYou gain a fighter feat. For the purpose of meeting its prerequisites, your fighter level is equal to half your character level.",
+			"hash": "rVUUqZNS"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -107,6 +164,18 @@
 		"source": "PZO2101",
 		"id": "29edd954-3782-4f1d-aa3f-3b1794801399",
 		"aonId": 714,
-		"hash": "CCzsFbrt"
+		"pf2t": {
+			"name": "Diverse Weapon Expert",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Fighter",
+			"source": "Core Rulebook pg. 226 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=714",
+			"aon": "feats714",
+			"type": "feat",
+			"body": "**Archetype** Fighter\n**Prerequisites** Fighter Dedication; expert in any kind of weapon or unarmed attack\n\n- - -\n\nYour proficiency ranks for simple weapons and martial weapons increase to expert, and your proficiency rank for advanced weapons increases to trained.",
+			"hash": "CCzsFbrt"
+		}
 	}
 ]

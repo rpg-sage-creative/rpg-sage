@@ -11,7 +11,15 @@
 		"source": "PZO9000-28E",
 		"page": 4,
 		"id": "b5c96cb6-732e-4e52-b670-1b3486b651cb",
-		"hash": "NxyZMvSr"
+		"pf2t": {
+			"name": "Bibliophile",
+			"source": "Abomination Vaults Player's Guide pg. 4",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=210",
+			"aon": "backgrounds210",
+			"type": "background",
+			"body": "You love few things more than a good book, and as a result, Odd Stories is your favorite shop in Otari. The bookseller Morlibint supplies you with fiction, anthologies, and other delightful reads, and he's always eager to discuss his latest finds with you. You know that imagination is the greatest magic, but a working knowledge of actual magic helps, too.\n\nChoose two ability boosts. One must be to **Intelligence** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Arcana skill, and the Library Lore skill. You gain the Arcane Sense skill feat.",
+			"hash": "NxyZMvSr"
+		}
 	},
 	{
 		"aonId": 211,
@@ -25,7 +33,15 @@
 		"source": "PZO9000-28E",
 		"page": 4,
 		"id": "c42becbb-6119-4906-97e4-11ce9d7ba689",
-		"hash": "RQMtANzx"
+		"pf2t": {
+			"name": "Eldritch Anatomist",
+			"source": "Abomination Vaults Player's Guide pg. 4",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=211",
+			"aon": "backgrounds211",
+			"type": "background",
+			"body": "You're a trained physician who can ably tend wounds of many kinds. But more than a practitioner, you're a scholar. Some cultures shape flesh to extreme degrees, creating aberrations from humanoid forms. The fleshforges of distant Nex practice this fleshwarping, as do certain subterranean societies you hope to one day study- preferably from a safe and clinical distance.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Medicine skill, and the Fleshwarp Lore skill. You gain the Assurance skill feat with Medicine",
+			"hash": "RQMtANzx"
+		}
 	},
 	{
 		"aonId": 212,
@@ -39,7 +55,15 @@
 		"source": "PZO9000-28E",
 		"page": 4,
 		"id": "4df57fad-1d22-402f-8a46-8f309f09ad63",
-		"hash": "OVWsxggT"
+		"pf2t": {
+			"name": "Fogfen Tale-Teller",
+			"source": "Abomination Vaults Player's Guide pg. 4",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=212",
+			"aon": "backgrounds212",
+			"type": "background",
+			"body": "You know there are monstrous things out in the swamp known as Fogfen; you've seen these things through the mist, gliding through the murky water and heaving themselves over sodden bits of land. No one in Otari believes your tales of swamp monsters from the depths, even when you embellish the creatures of your stories with fangs, wings, or tentacles. You'll just have to prove to them that there are truly monsters out there, and that they were wrong to doubt you.\n\nChoose two ability boosts. One must be to **Charisma**, and one is a free ability boost.\n\nYou're trained in the Athletics skill, and the Swamp Lore skill. You gain the Titan Wrestler skill feat.",
+			"hash": "OVWsxggT"
+		}
 	},
 	{
 		"aonId": 213,
@@ -53,7 +77,15 @@
 		"source": "PZO9000-28E",
 		"page": 4,
 		"id": "2acc161a-c3c6-4ed2-8676-f61a29989329",
-		"hash": "rSjvLBKq"
+		"pf2t": {
+			"name": "Market Runner",
+			"source": "Abomination Vaults Player's Guide pg. 4",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=213",
+			"aon": "backgrounds213",
+			"type": "background",
+			"body": "Keeleno Lathenar, the proprietor of Otari Market, is a grim and bitter man. A werewolf named Jaul Mezmin mauled his wife, Ayla, to death 30 years ago. Keeleno has never forgotten nor forgiven this attack, and he believes against all odds that Jaul has evaded justice and is alive and well. Running errands for Keeleno around town, you've gotten to know him almost as well as you know Otari. Keeleno's suspicions have rubbed off on you a bit, so you keep a wary eye on other people- particularly around the full moon.\n\nChoose two ability boosts. One must be to **Constitution** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Diplomacy skill, and the Otari Lore skill. You gain the Hobnobber skill feat.",
+			"hash": "rSjvLBKq"
+		}
 	},
 	{
 		"aonId": 214,
@@ -67,7 +99,15 @@
 		"source": "PZO9000-28E",
 		"page": 4,
 		"id": "32bd2ad7-59ed-461d-a081-d5632cfc1f99",
-		"hash": "pPqqUDQt"
+		"pf2t": {
+			"name": "Ruin Delver",
+			"source": "Abomination Vaults Player's Guide pg. 4",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=214",
+			"aon": "backgrounds214",
+			"type": "background",
+			"body": "You've looked through some of the smaller ruins in the Otari hinterlands but have never quite built up the courage to check out the creepy lighthouse called Gauntlight. You've heard that these ruins are pretty well picked over, and mostly collapsed, but you always planned to some day explore them and perhaps find some bauble left behind from the centuries-old battle where the Roseguard slew an evil sorcerer. You know that the crumbled stone of old ruins has a tendency to shift, so you'd better step lightly if you get the chance to explore Gauntlight.\n\nChoose two ability boosts. One must be to **Dexterity** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Acrobatics skill, and the Roseguard Lore skill. You gain the Cat Fall skill feat.",
+			"hash": "pPqqUDQt"
+		}
 	},
 	{
 		"aonId": 215,
@@ -81,7 +121,15 @@
 		"source": "PZO9000-28E",
 		"page": 4,
 		"id": "df21928b-96f3-47d6-a3cf-54c622d1a84e",
-		"hash": "QFvZbnsz"
+		"pf2t": {
+			"name": "Starwatcher",
+			"source": "Abomination Vaults Player's Guide pg. 4",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=215",
+			"aon": "backgrounds215",
+			"type": "background",
+			"body": "You're one of Wrin Sivinxi's closest confidantes. You've spent many long nights with her under the stars, learning the tales associated with the Cosmic Caravan and how the heavens can predict the future. You know that Wrin has paralyzing claustrophobia; she sees menace in angles and danger in confined spaces, which is why her shop is an all domed canvas that opens to the sky. If Wrin thinks there's trouble, you'll be the first to offer to help.\n\nChoose two ability boosts. One must be to **Constitution** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Occultism skill, and the Astrology Lore skill. You gain the Dubious Knowledge skill feat.",
+			"hash": "QFvZbnsz"
+		}
 	},
 	{
 		"aonId": 216,
@@ -95,6 +143,14 @@
 		"source": "PZO9000-28E",
 		"page": 5,
 		"id": "3840e7aa-81b9-4096-85f2-e046cc869343",
-		"hash": "ZYOPxsnv"
+		"pf2t": {
+			"name": "Witchlight Follower",
+			"source": "Abomination Vaults Player's Guide pg. 5",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=216",
+			"aon": "backgrounds216",
+			"type": "background",
+			"body": "While in a dismal forest or remote swamp, you caught sight of a string of lights bobbing through the trees. You stepped forward for a closer look, and then still further when the lights retreated a few paces. Then you remembered the rumors. Will-o'-wisps, rushlights, corpse lanterns-whatever they're called-such evil creatures lead people to their doom. With a supreme effort of will, you broke free from the alluring enchantment, and you've resolved to never let the strange lights of remote wildernesses claim you again.\n\nChoose two ability boosts. One must be to **Dexterity** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Survival skill, and the Wisp Lore skill. You gain the Terrain Expertise skill feat with both swamp terrain and subterranean bodies of water.",
+			"hash": "ZYOPxsnv"
+		}
 	}
 ]

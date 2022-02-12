@@ -9,7 +9,16 @@
 		"source": "PZO2105",
 		"id": "63153ea9-edc7-4415-b2e1-9805499258a5",
 		"aonId": 72,
-		"hash": "OfgsQSUN"
+		"pf2t": {
+			"name": "Ritualist",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 187",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=72",
+			"aon": "archetypes72",
+			"type": "archetype",
+			"body": "While some learn the art of ritual casting through rigorous study, other gifted individuals may find that a combination of natural talent and luck gives them surprising skill at performing rituals, whether they want that power or not.",
+			"hash": "OfgsQSUN"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -41,7 +50,19 @@
 		"source": "PZO2105",
 		"id": "eabc39f7-522a-4f36-a0c4-73e02b5e83b4",
 		"aonId": 2042,
-		"hash": "pZjpvgIA"
+		"pf2t": {
+			"name": "Flexible Ritualist",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Ritualist",
+			"source": "Advanced Player's Guide pg. 187",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2042",
+			"aon": "feats2042",
+			"type": "feat",
+			"body": "**Archetype** Ritualist\n**Prerequisites** Ritualist Dedication\n\n- - -\n\nYou can perform two aspects of a ritual yourself. When you cast a ritual, you can reduce the number of secondary casters by 1. When you do, you must fulfill any requirements for the secondary caster, and you attempt the secondary check normally performed by that secondary caster. You can't replace a secondary caster who is the target of the spell (as in the atone ritual).\n\n#### Flexible Ritualist Leads To...\nAssured Ritualist",
+			"hash": "pZjpvgIA"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -56,7 +77,20 @@
 		"source": "PZO2105",
 		"id": "0bb4b6b8-bd98-4f71-ac2d-2edf016f20b2",
 		"aonId": 2043,
-		"hash": "CRROfSzc"
+		"pf2t": {
+			"name": "Resourceful Ritualist",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"archetype": "Ritualist",
+			"source": "Advanced Player's Guide pg. 187",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2043",
+			"aon": "feats2043",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Ritualist\n**Prerequisites** Ritualist Dedication\n\n- - -\n\nYou can cast difficult rituals that might otherwise be just beyond your skill. You can attempt checks to cast a ritual that requires expert proficiency if you are trained, master proficiency if you are an expert, or legendary proficiency if you are a master.",
+			"hash": "CRROfSzc"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -71,7 +105,19 @@
 		"source": "PZO2105",
 		"id": "6a410d83-c979-463b-9ae4-f4a03768daa4",
 		"aonId": 2044,
-		"hash": "NbpAFbVz"
+		"pf2t": {
+			"name": "Efficient Rituals",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Ritualist",
+			"source": "Advanced Player's Guide pg. 187",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2044",
+			"aon": "feats2044",
+			"type": "feat",
+			"body": "**Archetype** Ritualist\n**Prerequisites** Ritualist Dedication\n\n- - -\n\nYou can perform some rituals in less time. If the ritual normally requires 1 day to cast, you can cast it in 4 hours. If it takes longer than 1 day, you cast it in half the number of days, rounded up.\n\n#### Efficient Rituals Leads To...\nSpeedy Rituals",
+			"hash": "NbpAFbVz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -86,7 +132,19 @@
 		"source": "PZO2105",
 		"id": "f20d733e-b695-4b03-bbac-a9caebed121e",
 		"aonId": 2045,
-		"hash": "QvqBTETt"
+		"pf2t": {
+			"name": "Assured Ritualist",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Ritualist",
+			"source": "Advanced Player's Guide pg. 187",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2045",
+			"aon": "feats2045",
+			"type": "feat",
+			"body": "**Archetype** Ritualist\n**Prerequisites** Flexible Ritualist\n\n- - -\n\nYou can cover for a secondary caster's error. If you are the primary caster, after rolling all the secondary checks, choose one check on which the secondary caster rolled a failure or critical failure, and treat the result as one degree of success better.",
+			"hash": "QvqBTETt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -101,6 +159,18 @@
 		"source": "PZO2105",
 		"id": "35d96ffe-9762-437f-a73e-11304c852a01",
 		"aonId": 2046,
-		"hash": "XxwbfClK"
+		"pf2t": {
+			"name": "Speedy Rituals",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Ritualist",
+			"source": "Advanced Player's Guide pg. 187",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2046",
+			"aon": "feats2046",
+			"type": "feat",
+			"body": "**Archetype** Ritualist\n**Prerequisites** Efficient Rituals\n\n- - -\n\nYou can perform rituals in only a fraction of the usual time. If a ritual has a casting time measured in days, you can cast it in an equal number of hours. If this results in a ritual longer than 8 hours, you split the ritual between multiple days, as normal for a ritual.",
+			"hash": "XxwbfClK"
+		}
 	}
 ]

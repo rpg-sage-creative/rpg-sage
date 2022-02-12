@@ -17,7 +17,20 @@
 		"focus": true,
 		"aonId": 559,
 		"id": "3c189972-363a-4d50-99a7-a5dca64b3774",
-		"hash": "ErEkvvtM"
+		"pf2t": {
+			"name": "Practice Makes Perfect",
+			"level": 1,
+			"traits": "uncommon,cleric,divination",
+			"cast": "s",
+			"actions": "r",
+			"range": 30,
+			"source": "148 Fires of the Haunted City pg. 65",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=559",
+			"aon": "spells559",
+			"type": "focus",
+			"body": "**Trigger** You or an ally within range fails a skill check for a skill in which you or they are trained.\n\n- - -\n\nThe target gains a +2 status bonus to the triggering check, or a +3 bonus if the target has master or better proficiency in the skill. This bonus can change the outcome of the target's check.",
+			"hash": "ErEkvvtM"
+		}
 	},
 	{
 		"name": "Tireless Worker",
@@ -38,7 +51,20 @@
 		"focus": true,
 		"aonId": 560,
 		"id": "4fac5986-f1c6-4b29-8ad8-c57d073e82ee",
-		"hash": "NIQbzpRE"
+		"pf2t": {
+			"name": "Tireless Worker",
+			"level": 4,
+			"traits": "healing,necromancy",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "148 Fires of the Haunted City pg. 65",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=560",
+			"aon": "spells560",
+			"type": "focus",
+			"body": "**Duration** sustained for up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou suppress your choice of one of the following conditions that's affecting the target: clumsy, encumbered, enfeebled, or fatigued. If you don't remove the effect that caused the condition, the condition returns after the spell's duration expires.",
+			"hash": "NIQbzpRE"
+		}
 	},
 	{
 		"name": "Electrified Crystal Ward",
@@ -60,6 +86,20 @@
 		"focus": true,
 		"aonId": 561,
 		"id": "85cbc57d-4dc6-49ff-95e4-a300248b2527",
-		"hash": "rztERbHr"
+		"pf2t": {
+			"name": "Electrified Crystal Ward",
+			"level": 3,
+			"pfs": "limited",
+			"traits": "rare,electricity,evocation",
+			"cast": "s",
+			"actions": 2,
+			"range": "touch",
+			"source": "148 Fires of the Haunted City pg. 75",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=561",
+			"aon": "spells561",
+			"type": "focus",
+			"body": "**Targets** 1 hinge or latch\n\n- - -\n\nYou create an electric latch rune hazard on the target, creating a special crystalline lock on the object. You can also substitute your spell DC for any of the hazard's listed DCs. You can have only one such hazard active at a time, and if you cast this spell while a previous electric latch rune is active, the older hazard discharges harmlessly.\n- - -\n**Heightened (+2)** The hazard's damage increases by 1d12.",
+			"hash": "rztERbHr"
+		}
 	}
 ]

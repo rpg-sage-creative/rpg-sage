@@ -1,6 +1,6 @@
 [
 	{
-		"aonId": 0,
+		"aonId": 249,
 		"objectType": "Background",
 		"name": "Anti-Tech Activist",
 		"details": [
@@ -9,10 +9,19 @@
 			"You're trained in the Intimidation skill and the Guild Lore skill. You gain the Group Coercion skill feat."
 		],
 		"source": "PZO2109",
-		"id": "3a15bb6b-f114-420a-bab1-954fabebddb1"
+		"id": "3a15bb6b-f114-420a-bab1-954fabebddb1",
+		"pf2t": {
+			"name": "Anti-Tech Activist",
+			"source": "Guns & Gears pg. 44",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=249",
+			"aon": "backgrounds249",
+			"type": "background",
+			"body": "You've seen the sorts of things that technology brings- polluted environments, workers put out of their jobs or horribly injured, and the slow erosion of society-and you've vowed to inform the larger world of these ills. You do so with long, impassioned speeches on street corners and village squares and by talking personally with the heads of various guilds. Adventuring into the wider world could help spread your message even farther.\n\nChoose two ability boosts. One must be to **Constitution** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Intimidation skill, and the Guild Lore skill. You gain the Group Coercion skill feat.",
+			"hash": "XBXZNgrw"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 250,
 		"objectType": "Background",
 		"name": "Clockfighter",
 		"details": [
@@ -21,10 +30,19 @@
 			"You're trained in the Crafting skill and the Gladiatorial Lore skill. You gain the Experienced Professional skill feat."
 		],
 		"source": "PZO2109",
-		"id": "51a9062d-c02b-49c2-afcc-ce56eef5a900"
+		"id": "51a9062d-c02b-49c2-afcc-ce56eef5a900",
+		"pf2t": {
+			"name": "Clockfighter",
+			"source": "Guns & Gears pg. 44",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=250",
+			"aon": "backgrounds250",
+			"type": "background",
+			"body": "While others choose to use their engineering ability to heal the injured or make brilliant innovations, you've used your skill to repair and modify clockwork constructs that battle in gladiatorial combat. You know how to get a crowd electrified for your clockwork gladiator, win or lose, and you know how to repair it when it gets damaged. These skills serve you well as an adventurer.\n\nChoose two ability boosts. One must be to **Intelligence** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and the Gladiatorial Lore skill. You gain the Experienced Professional skill feat.",
+			"hash": "HpBhzCRx"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 251,
 		"objectType": "Background",
 		"name": "Clockwork Researcher",
 		"details": [
@@ -33,10 +51,19 @@
 			"You're trained in the Society skill and the Engineering Lore skill. You gain the Eye for Numbers (<i>Advanced Player's Guide</i> 206) skill feat."
 		],
 		"source": "PZO2109",
-		"id": "0333e797-8700-4621-8ae7-aa2d8da4197f"
+		"id": "0333e797-8700-4621-8ae7-aa2d8da4197f",
+		"pf2t": {
+			"name": "Clockwork Researcher",
+			"source": "Guns & Gears pg. 44",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=251",
+			"aon": "backgrounds251",
+			"type": "background",
+			"body": "New forms of clockwork technology are incredibly interesting to you, and you've been studying examples of them to see where else they might be best put to use. You might eventually develop a new prototype machine or find a way to make related technologies practical enough for everyone to benefit. Though before you do, you must continue your research!\n\nChoose two ability boosts. One must be to **Dexterity** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Society skill, and the Engineering Lore skill. You gain the Eye for Numbers skill feat.",
+			"hash": "fnqEvckn"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 252,
 		"objectType": "Background",
 		"name": "Codebreaker",
 		"details": [
@@ -45,10 +72,19 @@
 			"You're trained in the Society skill and the Cryptography Lore skill. You gain the Glean Contents (<i>Advanced Player's Guide</i> 206) skill feat."
 		],
 		"source": "PZO2109",
-		"id": "4e501f41-5daa-4ab4-abaa-043265c3d11d"
+		"id": "4e501f41-5daa-4ab4-abaa-043265c3d11d",
+		"pf2t": {
+			"name": "Codebreaker",
+			"source": "Guns & Gears pg. 44",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=252",
+			"aon": "backgrounds252",
+			"type": "background",
+			"body": "Whether you're employed by a military organization to decipher coded messages sent by enemy factions or work independently to crack an enigma created by a past civilization, you have a head for patterns and linguistics. You might even use new clockwork devices to aid you in your efforts.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Society skill, and the Cryptography Lore skill. You gain the Glean Contents skill feat.",
+			"hash": "qzNSxJbX"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 253,
 		"objectType": "Background",
 		"name": "Disciple of the Gear",
 		"details": [
@@ -57,10 +93,19 @@
 			"You're trained in the Crafting skill and the Lore skill for the deity you worship. You gain the Quick Repair skill feat."
 		],
 		"source": "PZO2109",
-		"id": "ad43c24d-34d3-41af-a7da-851e179fe893"
+		"id": "ad43c24d-34d3-41af-a7da-851e179fe893",
+		"pf2t": {
+			"name": "Disciple of the Gear",
+			"source": "Guns & Gears pg. 45",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=253",
+			"aon": "backgrounds253",
+			"type": "background",
+			"body": "While many regard science and faith as incompatible, you believe scientific advancement is your deity's will. Perhaps you're a follower of Brigh, Casandalee, or some other god of technology, or perhaps you see the furnaces and sparks of modernity as the latest manifestation of Sarenrae's flame or Gozreh's lightning-whatever the case, you're always willing to spread the word of your deity, and you've learned some basic tinkering to show how your deity's focus can increase the common standard of living.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and a Lore skill for the deity you worship.  You gain the Quick Repair skill feat.",
+			"hash": "MqDsZrSR"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 254,
 		"objectType": "Background",
 		"name": "Driver",
 		"details": [
@@ -69,10 +114,19 @@
 			"You're trained in the Acrobatics skill and the Piloting Lore skill. You gain the Assurance skill feat with Piloting Lore."
 		],
 		"source": "PZO2109",
-		"id": "44128101-0f05-437b-b2cf-c0c072a483d4"
+		"id": "44128101-0f05-437b-b2cf-c0c072a483d4",
+		"pf2t": {
+			"name": "Driver",
+			"source": "Guns & Gears pg. 45",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=254",
+			"aon": "backgrounds254",
+			"type": "background",
+			"body": "You practically live behind the controls of a vehicle, and can handle just about anything the road, waves, and sky can throw at you. You likely adventure to test your skills in unusual environments and new and interesting vehicles.\n\nChoose two ability boosts. One must be to **Dexterity**, and one is a free ability boost.\n\nYou're trained in the Acrobatics skill, and the Piloting Lore skill. You gain the Assurance skill feat with Piloting Lore.",
+			"hash": "UpCrjJZr"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 255,
 		"objectType": "Background",
 		"name": "Hounded Thief",
 		"details": [
@@ -81,10 +135,19 @@
 			"You're trained in the Thievery skill and the Underworld Lore skill. You gain the Pickpocket skill feat."
 		],
 		"source": "PZO2109",
-		"id": "e1dfe5e3-3a2e-4d8f-a1b6-e989a6289e8e"
+		"id": "e1dfe5e3-3a2e-4d8f-a1b6-e989a6289e8e",
+		"pf2t": {
+			"name": "Hounded Thief",
+			"source": "Guns & Gears pg. 45",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=255",
+			"aon": "backgrounds255",
+			"type": "background",
+			"body": "Some time ago, you stole a unique item from a strange individual. It might have been a piece of clockwork from a far-off land or some other bit of strange technology. You might still have it or you might have sold it, but either way, you can't shake the feeling that you're being followed and watched, likely by forces who want to retrieve what you took. Luckily, a life of adventure keeps you on the move.\n\nChoose two ability boosts. One must be to **Dexterity** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Thievery skill, and the Underworld Lore skill. You gain the Pickpocket skill feat.",
+			"hash": "SpcNWEsL"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 256,
 		"objectType": "Background",
 		"name": "Junker",
 		"details": [
@@ -93,10 +156,19 @@
 			"You're trained in the Athletics skill and the Lore skill of the terrain in which you scavenge. You gain the Hefty Hauler skill feat."
 		],
 		"source": "PZO2109",
-		"id": "0eac47b4-3838-416c-98c3-1d8023d0b4df"
+		"id": "0eac47b4-3838-416c-98c3-1d8023d0b4df",
+		"pf2t": {
+			"name": "Junker",
+			"source": "Guns & Gears pg. 45",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=256",
+			"aon": "backgrounds256",
+			"type": "background",
+			"body": "You live on the outskirts of civilization, combing through the detritus left behind for interesting trinkets to sell or use in your own crafting. Though you have a preferred terrain to search, you know that the greatest treasures occur where people make greater use of technology.\n\nChoose two ability boosts. One must be to **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Athletics skill, and a Lore skill of the terrain in which you scavenge. You gain the Hefty Hauler skill feat.",
+			"hash": "rLRrpXJT"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 257,
 		"objectType": "Background",
 		"name": "Mechanic",
 		"details": [
@@ -105,10 +177,19 @@
 			"You're trained in the Crafting skill and the Engineering Lore skill. You gain the Quick Repair skill feat."
 		],
 		"source": "PZO2109",
-		"id": "e95c4bcb-1d84-42d2-a9e2-6c42032af3ac"
+		"id": "e95c4bcb-1d84-42d2-a9e2-6c42032af3ac",
+		"pf2t": {
+			"name": "Mechanic",
+			"source": "Guns & Gears pg. 45",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=257",
+			"aon": "backgrounds257",
+			"type": "background",
+			"body": "The intricate inner workings of machines are no stranger to you. Whether they are mundane devices or complex clockworks, you know what makes them tick and how to maintain them. An adventuring group might keep you around to repair their equipment, or you might travel around to offer your rare services to those in need-for a price, of course!\n\nChoose two ability boosts. One must be to **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and the Engineering Lore skill. You gain the Quick Repair skill feat.",
+			"hash": "VkfrJVFW"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 258,
 		"objectType": "Background",
 		"name": "Medicinal Clocksmith",
 		"details": [
@@ -117,10 +198,19 @@
 			"You're trained in the Medicine skill and the Engineering Lore skill. You gain the Risky Surgery skill feat."
 		],
 		"source": "PZO2109",
-		"id": "c66e331b-2186-4d0a-a80e-dac485b5143d"
+		"id": "c66e331b-2186-4d0a-a80e-dac485b5143d",
+		"pf2t": {
+			"name": "Medicinal Clocksmith",
+			"source": "Guns & Gears pg. 45",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=258",
+			"aon": "backgrounds258",
+			"type": "background",
+			"body": "While others might have looked to clockwork as a mechanical innovation, you see the potential in the technology to improve the health of patients. You might be an experienced field medic who reached for a scrapped construct to help a wounded soldier, or a vanguard surgeon who's found replacing organs with clockwork more effective than repairing them. Perhaps you've also worked to \"optimize\" organic bodies with fine machinery, with or without the permission of your patients.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Medicine skill, and the Engineering Lore skill. You gain the Risky Surgery skill feat.",
+			"hash": "dDIzvGQG"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 259,
 		"objectType": "Background",
 		"name": "Printer",
 		"details": [
@@ -129,10 +219,19 @@
 			"You're trained in the Society skill and the Scribing Lore skill. You gain the Multilingual skill feat."
 		],
 		"source": "PZO2109",
-		"id": "a387be7f-9d53-4b1f-830f-e0eae5278b05"
+		"id": "a387be7f-9d53-4b1f-830f-e0eae5278b05",
+		"pf2t": {
+			"name": "Printer",
+			"source": "Guns & Gears pg. 45",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=259",
+			"aon": "backgrounds259",
+			"type": "background",
+			"body": "Keeping your finger on the pulse of the city, you write a small news broadsheet to sell on street corners. You rent the use of a printing press to achieve this goal, so you're familiar with such machines. However, people and their stories are your main focus, and you adventure to chase the latest scoop.\n\nChoose two ability boosts. One must be to **Intelligence** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Society skill, and the Scribing Lore skill. You gain the Multilingual skill feat.",
+			"hash": "rnbIkLMf"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 260,
 		"objectType": "Background",
 		"name": "Saboteur",
 		"details": [
@@ -141,10 +240,19 @@
 			"You're trained in the Thievery skill and the Engineering Lore skill. You gain the Concealing Legerdemain (<i>Advanced Player's Guide</i> 204) skill feat."
 		],
 		"source": "PZO2109",
-		"id": "88a438f9-1506-4c12-a1b4-8e059d247286"
+		"id": "88a438f9-1506-4c12-a1b4-8e059d247286",
+		"pf2t": {
+			"name": "Saboteur",
+			"source": "Guns & Gears pg. 45",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=260",
+			"aon": "backgrounds260",
+			"type": "background",
+			"body": "Whether you do it for personal enjoyment or at the behest of a mercenary company or military organization, you have a knack for destroying things. You have a sense for an object or structure's weak spots and know where to deliver a hammer strike or alchemical bomb. You adventure to hone your skills or complete a particular mission.\n\nChoose two ability boosts. One must be to **Dexterity**, and one is a free ability boost.\n\nYou're trained in the Thievery skill, and the Engineering Lore skill. You gain the Concealing Legerdemain skill feat.",
+			"hash": "VRUvjqMN"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 261,
 		"objectType": "Background",
 		"name": "Toymaker",
 		"details": [
@@ -153,10 +261,19 @@
 			"You're trained in the Crafting skill and the Mercantile Lore skill. You gain the Specialty Crafting skill feat, choosing artistry, blacksmithing, glassmaking, leatherworking, tailoring, or woodworking as your specialty."
 		],
 		"source": "PZO2109",
-		"id": "ef348d89-6d64-4211-8ffc-75de1f500f67"
+		"id": "ef348d89-6d64-4211-8ffc-75de1f500f67",
+		"pf2t": {
+			"name": "Toymaker",
+			"source": "Guns & Gears pg. 45",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=261",
+			"aon": "backgrounds261",
+			"type": "background",
+			"body": "You delight in making little trinkets for children of all ages, and seeing their faces light up thanks to one of your creations brings joy to your heart. Perhaps you sell your wares from a particular shop or from the back of a wagon as you travel from town to town.\n\nChoose two ability boosts. One must be to **Intelligence** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and the Mercantile Lore skill. You gain the Specialty Crafting skill feat, choosing artistry, blacksmithing, glassmaking, leatherworking, tailoring, or woodworking as your specialty.",
+			"hash": "WklsvrkW"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 262,
 		"objectType": "Background",
 		"name": "Discarded Duplicate",
 		"traits": [ "Rare" ],
@@ -166,10 +283,20 @@
 			"You gain three free ability boosts. You choose two, and the GM chooses one based on the attributes of the character you were built to duplicate."
 		],
 		"source": "PZO2109",
-		"id": "08b7cc14-b9e1-4e80-8d6f-6d8cebc3cff0"
+		"id": "08b7cc14-b9e1-4e80-8d6f-6d8cebc3cff0",
+		"pf2t": {
+			"name": "Discarded Duplicate",
+			"traits": "rare",
+			"source": "Guns & Gears pg. 46",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=262",
+			"aon": "backgrounds262",
+			"type": "background",
+			"body": "Someone created you for a specific purpose. Some important person, be they a storied royal, a contentious politician, or a stark military leader, needed a body double for their most dangerous appearances. Using a mixture of fringe science and magic, you were commissioned and trained to emulate this person in every way, and have stood in for them in countless deadly circumstances. You may or may not know the reason behind your decommissioning, but whoever discarded you didn't finish you off. Now, the world is yours to explore-but \"you\" may have a bold or brutish reputation, or the individual you were duplicating may be long dead. Regardless of the fate of this individual, your way of life has changed drastically.\n\nYou and the GM can work out how to incorporate your previous life into your story. The GM can keep this knowledge hidden even from you, or you or another character know what happened. You and the GM can also leave the information unspecified and fill it in later.\n\nYou gain three free ability boosts. You choose two, and the GM chooses one based on the attributes of the character you were built to duplicate.",
+			"hash": "BsLVRRbx"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 263,
 		"objectType": "Background",
 		"name": "Mechanical Symbiosis",
 		"traits": [ "Rare" ],
@@ -180,10 +307,20 @@
 			"You're trained in the Arcana skill and an additional skill in which the clockwork entity is well-versed, determined by the GM. Any time you attempt a skill check for the entity's skill, the GM can offer you a +1 circumstance bonus to the check, as though the entity were Aiding you. If you accept but fail the check, the entity clenches up and you are stunned 1 (stunned 2 on a critical failure)."
 		],
 		"source": "PZO2109",
-		"id": "a6284f58-3f67-45e5-8422-b9340b05e9a5"
+		"id": "a6284f58-3f67-45e5-8422-b9340b05e9a5",
+		"pf2t": {
+			"name": "Mechanical Symbiosis",
+			"traits": "rare",
+			"source": "Guns & Gears pg. 46",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=263",
+			"aon": "backgrounds263",
+			"type": "background",
+			"body": "Whether you purposefully took it on or had it thrust upon you, a bronze, clockwork object latched onto some part of your body. It may have sunk its needles into you or locked its spidery legs around your neck, torso, or upper arm. Some entity or spirit lives in this collection of gears and wires-whether or not other people hear its whispers is up to you. The entity may be an ancient, terrible being that has razed villages with its hosts, or it may be a brilliant, starry-eyed child who barely understands you're not part of its own body.\n\nYou have studied and searched for information on these rare, crab-like machines, leaving you an expert in the binding of elemental spirits or mortal souls to mechanical objects. Though you have several theories on what the symbiotic entity might be, you have no definitive answers-this may be why you're adventuring in the first place, or perhaps you've made a deal with someone to get it removed. The entity might talk to you periodically, or it might only speak when it wants you to do something in particular or finds the two of you in danger. You and the GM should decide on the entity's motivations, or if the motivations should be a secret known only to the GM.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Arcana skill and an additional skill in which the clockwork entity is well-versed, determined by the GM. Any time you attempt a skill check for the entity's skill, the GM can offer you a +1 circumstance bonus to the check, as though the entity were Aiding you. If you accept but fail the check, the entity clenches up and you are stunned 1 (stunned 2 on a critical failure).",
+			"hash": "PMXIQkFV"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 264,
 		"objectType": "Background",
 		"name": "Saved by Clockwork",
 		"traits": [ "Rare" ],
@@ -193,10 +330,20 @@
 			"You're trained in the Crafting skill. Every day you must perform 10 minutes of maintenance and wind up your clockwork parts, or you risk failure of the components, with consequences depending on what you replaced (determined by you and the GM). Your clockwork components allow you to react to danger with alacrity. You gain a +2 circumstance bonus to initiative rolls."
 		],
 		"source": "PZO2109",
-		"id": "07ae35ce-6e1d-4cf9-9596-392326548dea"
+		"id": "07ae35ce-6e1d-4cf9-9596-392326548dea",
+		"pf2t": {
+			"name": "Saved by Clockwork",
+			"traits": "rare",
+			"source": "Guns & Gears pg. 47",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=264",
+			"aon": "backgrounds264",
+			"type": "background",
+			"body": "Through bloody combat, a terrible accident, or purposeful sacrifice, you've lost some piece of your body that has been replaced with a clockwork mechanism. Whether your arm is now a whirring series of pumps, steel coils, and iron gears; your heart a intricate crystal clock that requires winding every day; or your lower leg a sculpted metal tube powered by adamantine springs and steam, part of you needs regular maintenance and repair. You might have received instructions from the brilliant inventor who saved you, or you might have woken up on a battlefield with no memory of the procedure or the individuals involved. Regardless, you possess the knowledge to take care of yourself-even if it's how to wind a key in your own heart or reconstruct a mechanical foot.\n\nChoose two ability boosts. One must be to **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Crafting skill. Every day you must perform 10 minutes of maintenance and wind up your clockwork parts, or you risk failure of the components, with consequences depending on what you replaced (determined by you and the GM). Your clockwork components allow you to react to danger with alacrity. You gain a +2 circumstance bonus to initiative rolls.",
+			"hash": "PXGLAgBW"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 265,
 		"objectType": "Background",
 		"name": "Tech-Reliant",
 		"traits": [ "Rare" ],
@@ -206,10 +353,20 @@
 			"You're trained in the Crafting skill and the Medicine skill. You gain the Battle Medicine skill feat, and a +1 circumstance bonus to saving throws against spells. Healing spells, healing magic items, and magical effects with the healing trait have no effect on you."
 		],
 		"source": "PZO2109",
-		"id": "d3ed6681-6cee-439a-a7a5-f059c2415dda"
+		"id": "d3ed6681-6cee-439a-a7a5-f059c2415dda",
+		"pf2t": {
+			"name": "Tech-Reliant",
+			"traits": "rare",
+			"source": "Guns & Gears pg. 47",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=265",
+			"aon": "backgrounds265",
+			"type": "background",
+			"body": "Some event, be it an accident, attack, or disaster, has left you horribly scarred by magic. Your body no longer tolerates magical healing, and you can't use magic, forcing you to rely on gadgets and ingenuity where others trust in spells and magical items. You might have been well-versed in magic before, or barely familiar with its use. This event may have injured your body in visible ways, but no matter the extent of your injuries, your body no longer interacts with healing magic in any capacity.\n\nChoose two ability boosts. One must be to **Constitution** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Crafting skill and the Medicine skill. You gain the Battle Medicine skill feat, and a +1 circumstance bonus to saving throws against spells. Healing spells, healing magic items, and magical effects with the healing trait have no effect on you.",
+			"hash": "OWbtsTxC"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 266,
 		"objectType": "Background",
 		"name": "Wished Alive",
 		"traits": [ "Rare" ],
@@ -219,10 +376,20 @@
 			"You're trained in the Diplomacy skill. Once per day, you can fervently wish for something you could work towards achieving as a single action which has the concentrate trait. If you do, you gain a +2 circumstance bonus on the first skill check you attempt before the end of your turn to fulfill that wish."
 		],
 		"source": "PZO2109",
-		"id": "dbd80e1a-7913-44aa-b487-b8dbe90f3664"
+		"id": "dbd80e1a-7913-44aa-b487-b8dbe90f3664",
+		"pf2t": {
+			"name": "Wished Alive",
+			"traits": "rare",
+			"source": "Guns & Gears pg. 47",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=266",
+			"aon": "backgrounds266",
+			"type": "background",
+			"body": "Once you were a simple construct or inanimate doll, but due to a deeply felt wish, either yours or another's, you came to life, and so you're now a living, breathing creature.\n\nChoose two ability boosts. One must be to **Constitution** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Diplomacy skill. Once per day, you can fervently wish for something you could work towards achieving as a single action which has the concentrate trait. If you do, you gain a +2 circumstance bonus on the first skill check you attempt before the end of your turn to fulfill that wish.",
+			"hash": "FtrTWUvJ"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 267,
 		"objectType": "Background",
 		"name": "Back-Alley Doctor",
 		"details": [
@@ -231,10 +398,19 @@
 			"You're trained in the Medicine skill and the Underworld Lore skill. You gain the Risky Surgery (<i>Advanced Player's Guide</i> 208) skill feat."
 		],
 		"source": "PZO2109",
-		"id": "9906f567-c696-424c-b401-7480eb99f87e"
+		"id": "9906f567-c696-424c-b401-7480eb99f87e",
+		"pf2t": {
+			"name": "Back-Alley Doctor",
+			"source": "Guns & Gears pg. 122",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=267",
+			"aon": "backgrounds267",
+			"type": "background",
+			"body": "You're the medic many turn to when a more official clinic or healer might not be available. You may specialize in stitching up bullet wounds or have a standing, confidential deal with a criminal syndicate to provide your services any time of day or night. In either case, you've perhaps turned to the adventuring life because a former client is unhappy with your work or members of the local constabulary have been asking too many questions.\n\nChoose two ability boosts. One must be to **Constitution** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Medicine skill, and the Underworld Lore skill. You gain the Risky Surgery skill feat.",
+			"hash": "XXlksmXk"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 268,
 		"objectType": "Background",
 		"name": "Cannoneer",
 		"details": [
@@ -243,10 +419,19 @@
 			"You're trained in the Athletics skill and the Warfare Lore skill. You gain the Hefty Hauler skill feat."
 		],
 		"source": "PZO2109",
-		"id": "bdb2b1a2-9806-4d22-bf6e-fafaa7e36b78"
+		"id": "bdb2b1a2-9806-4d22-bf6e-fafaa7e36b78",
+		"pf2t": {
+			"name": "Cannoneer",
+			"source": "Guns & Gears pg. 122",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=268",
+			"aon": "backgrounds268",
+			"type": "background",
+			"body": "You served as a crewmate aboard a military vessel or pirate ship and were responsible for the use and maintenance of the ship's cannons. A strong back and quick reflexes were equally important to you in your duties, and you know your way around explosives and the dangers that lie therein. These skills serve you well in your new life as an adventurer, as compared to the weight of a cannon, a gear load that makes your allies blanche just makes you laugh instead.\n\nChoose two ability boosts. One must be to **Dexterity**, and one is a free ability boost.\n\nYou're trained in the Athletics skill, and the Warfare Lore skill. You gain the Hefty Hauler skill feat.",
+			"hash": "ZDsATRjW"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 269,
 		"objectType": "Background",
 		"name": "Deputy",
 		"details": [
@@ -255,10 +440,19 @@
 			"You're trained in the Survival skill and the Hunting Lore skill. You gain the Experienced Tracker skill feat."
 		],
 		"source": "PZO2109",
-		"id": "b78d34c5-f229-4366-b668-174f9deec686"
+		"id": "b78d34c5-f229-4366-b668-174f9deec686",
+		"pf2t": {
+			"name": "Deputy",
+			"source": "Guns & Gears pg. 122",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=269",
+			"aon": "backgrounds269",
+			"type": "background",
+			"body": "While your life may have taken some twists and turns in the intervening years, you were once deputized as the lawful protector of a community. While the role was temporary and you've since turned in your badge, that responsibility shaped you. Whenever a community is in trouble, and the sheriff is nowhere to be found, residents call on you to capture a criminal, rescue the mayor's offspring from bandits, or go toe to toe with outlaws.\n\nChoose two ability boosts. One must be to **Dexterity** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Survival skill, and the Hunting Lore skill. You gain the Experienced Tracker skill feat.",
+			"hash": "trPBvZWP"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 270,
 		"objectType": "Background",
 		"name": "Fireworks Performer",
 		"details": [
@@ -267,10 +461,19 @@
 			"You're trained in the Performance skill and the Engineering Lore skill. You gain the Fascinating Performance skill feat."
 		],
 		"source": "PZO2109",
-		"id": "b4876fb0-0a86-4607-9d80-890ac52afd7a"
+		"id": "b4876fb0-0a86-4607-9d80-890ac52afd7a",
+		"pf2t": {
+			"name": "Fireworks Performer",
+			"source": "Guns & Gears pg. 122",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=270",
+			"aon": "backgrounds270",
+			"type": "background",
+			"body": "Few celebrations in Tian-Xia are complete without a show of fireworks, and your job is to make sure they go off without a hitch. You load the fireworks, set the fuses, and choreograph the performance, bringing the show together in a finale of lights and explosions. Then it's time to pack up your gear and move on to the next civic holiday or religious festival. Of course, someone who travels the roads with a pack full of high explosives is bound to run into an adventure or two along the way, and so over time, your fireworks have been spent in support of that life.\n\nChoose two ability boosts. One must be to **Intelligence** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Performance skill, and the Engineering Lore skill. You gain the Fascinating Performance skill feat.",
+			"hash": "xFmXfWwC"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 271,
 		"objectType": "Background",
 		"name": "Gunsmith",
 		"details": [
@@ -279,10 +482,19 @@
 			"You're trained in the Crafting skill and the Engineering Lore skill. You gain the Quick Repair skill feat."
 		],
 		"source": "PZO2109",
-		"id": "a62133a6-85f8-48c5-ab12-9808fce9818e"
+		"id": "a62133a6-85f8-48c5-ab12-9808fce9818e",
+		"pf2t": {
+			"name": "Gunsmith",
+			"source": "Guns & Gears pg. 122",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=271",
+			"aon": "backgrounds271",
+			"type": "background",
+			"body": "From a young age, you apprenticed to an experienced gunsmith and over time your skill and knowledge rose to match that of your master. Today, you can easily repair, modify, or improve nearly any firearm you've seen before, and even if you haven't seen it, you'll break it down to learn about what makes it tick in no time. You've taken those skills on the road, using them to assist yourself and your allies as an adventurer when it comes to maintaining their weapons, shields, armor, and more.\n\nChoose two ability boosts. One must be to **Dexterity** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and the Engineering Lore skill. You gain the Quick Repair skill feat.",
+			"hash": "RwSFVAMb"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 272,
 		"objectType": "Background",
 		"name": "Hired Killer",
 		"details": [
@@ -291,10 +503,19 @@
 			"You're trained in the Stealth skill and the Underworld Lore skill. You gain the Terrain Stalker skill feat, choosing a terrain appropriate for where you make your kills."
 		],
 		"source": "PZO2109",
-		"id": "80651709-b7a9-40ba-aace-8e4e2c91292c"
+		"id": "80651709-b7a9-40ba-aace-8e4e2c91292c",
+		"pf2t": {
+			"name": "Hired Killer",
+			"source": "Guns & Gears pg. 122",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=272",
+			"aon": "backgrounds272",
+			"type": "background",
+			"body": "Your life truly began after your first kill. Maybe you killed in self-defense, maybe it was a crime of passion, or maybe it was just an accident and you were a kid in the wrong place at the wrong time. In the end, the why doesn't matter. You got away with it. And then you found that maybe it didn't bother you as much as it should have. And maybe, just maybe, you had a talent you could use to forge a life for yourself. A blood-soaked talent and a blood-soaked life, sure. But it's yours.\n\nChoose two ability boosts. One must be to **Dexterity**, and one is a free ability boost.\n\nYou're trained in the Stealth skill, and the Underworld Lore skill. You gain the Terrain Stalker skill feat, choosing a terrain appropriate for where you make your kills.",
+			"hash": "dEpAWqcA"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 273,
 		"objectType": "Background",
 		"name": "Farmsteader",
 		"details": [
@@ -303,10 +524,19 @@
 			"You're trained in the Survival skill and the Farming Lore skill. You gain the Forager skill feat."
 		],
 		"source": "PZO2109",
-		"id": "3ba47960-51a6-4928-97f3-5c79dd19f7dc"
+		"id": "3ba47960-51a6-4928-97f3-5c79dd19f7dc",
+		"pf2t": {
+			"name": "Farmsteader",
+			"source": "Guns & Gears pg. 123",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=273",
+			"aon": "backgrounds273",
+			"type": "background",
+			"body": "You built your house using wood from the trees surrounding it. Raised it up from the dirt and called it home. You thought that it would be where you would grow old and die. But despite your best efforts, you were wrong. The land that once gave you food fell fallow, and dust took to the air and choked the livestock. Now you wander the world as an adventurer. Are you in search of a new place to settle down and try again, or have you become disillusioned by your old dreams, leading you to seek out a new purpose?\n\nChoose two ability boosts. One must be to **Constitution** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Survival skill, and the Farming Lore skill. You gain the Forager skill feat.",
+			"hash": "XZDYzzVw"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 274,
 		"objectType": "Background",
 		"name": "Junk Collector",
 		"details": [
@@ -315,10 +545,19 @@
 			"You're trained in the Crafting skill and your choice of either the Engineering Lore or Mining Lore skill. You gain the Crafter's Appraisal skill feat (<i>Advanced Player's Guide</i> 204)."
 		],
 		"source": "PZO2109",
-		"id": "1d48c54c-fba4-49a7-a4fe-08110d5136ca"
+		"id": "1d48c54c-fba4-49a7-a4fe-08110d5136ca",
+		"pf2t": {
+			"name": "Junk Collector",
+			"source": "Guns & Gears pg. 123",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=274",
+			"aon": "backgrounds274",
+			"type": "background",
+			"body": "You live by the adage that one person's trash is another's treasure. Whether by sifting through scrap heaps or digging up old battlefields, you remain on the lookout for lost or discarded objects that you might be able to turn into something useful. More often than not, what you find is just junk... but you're convinced that one of these days, you're going to hit the jackpot. You've even taken up adventuring as a means to supercharge your access to all sorts of junk, gear, and loot.\n\nChoose two ability boosts. One must be to **Dexterity** or **Intelligence**, and one is a free ability boost.\n\nYou're trained in the Crafting skill, and the Engineering Lore skill or Mining Lore skill. You gain the Crafter's Appraisal skill feat.",
+			"hash": "QTrgBWvh"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 275,
 		"objectType": "Background",
 		"name": "Saloon Entertainer",
 		"details": [
@@ -327,10 +566,19 @@
 			"You're trained in the Performance skill and a lore skill of your choice. You gain the Virtuosic Performer skill feat."
 		],
 		"source": "PZO2109",
-		"id": "651d6f22-71a4-4f9e-8fdf-1c8e0dfe347f"
+		"id": "651d6f22-71a4-4f9e-8fdf-1c8e0dfe347f",
+		"pf2t": {
+			"name": "Saloon Entertainer",
+			"source": "Guns & Gears pg. 123",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=275",
+			"aon": "backgrounds275",
+			"type": "background",
+			"body": "All you want to do is entertain the people, but sure enough, bad news seems to follow you. Gunfights, brawls, robberies, and more befall establishments you play at, and word is quick to spread. Keep one town ahead of the gossip, and you just might be able to play a gig, command a stage, or run a table again.\n\nChoose two ability boosts. One must be to **Dexterity** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Performance skill, and a Lore skill of your choice. You gain the Virtuosic Performer skill feat.",
+			"hash": "yMjZzrRS"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 276,
 		"objectType": "Background",
 		"name": "Spotter",
 		"details": [
@@ -339,10 +587,19 @@
 			"You're trained in the Stealth skill and the Scouting Lore skill. You gain the Terrain Stalker skill feat."
 		],
 		"source": "PZO2109",
-		"id": "99e76d5c-d5ec-4f99-bce1-f3a35bae0a1e"
+		"id": "99e76d5c-d5ec-4f99-bce1-f3a35bae0a1e",
+		"pf2t": {
+			"name": "Spotter",
+			"source": "Guns & Gears pg. 123",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=276",
+			"aon": "backgrounds276",
+			"type": "background",
+			"body": "An eye for detail, a sense for the wind, and a strong trust in your gut feelings. These qualities have set you apart from others when it comes to assisting a sharpshooter with setting up the perfect shot against their target. Elevation, velocity, and concealment-these are all vital factors that need to be considered to pull off a feat of true marksmanship, and no sniper would be able to function without an experienced spotter. Since your younger days, you've put your skills as a spotter to work as an adventurer. Whether you're taking your own shots now or spotting for others, your talents grant you an edge in an adventuring career.\n\nChoose two ability boosts. One must be to **Dexterity** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Stealth skill, and the Scouting Lore skill. You gain the Terrain Stalker skill feat.",
+			"hash": "LyrRdzUh"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 277,
 		"objectType": "Background",
 		"name": "Undertaker",
 		"details": [
@@ -351,10 +608,19 @@
 			"You're trained in the Medicine skill and a Lore skill specializing in one local type of undead. You gain the Forensic Acumen skill feat (<i>Advanced Player's Guide</i> 206)."
 		],
 		"source": "PZO2109",
-		"id": "9e3db639-60b2-4daf-951c-7cfd34351826"
+		"id": "9e3db639-60b2-4daf-951c-7cfd34351826",
+		"pf2t": {
+			"name": "Undertaker",
+			"source": "Guns & Gears pg. 123",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=277",
+			"aon": "backgrounds277",
+			"type": "background",
+			"body": "People die. This is the unfortunate fact of life on which you've founded your business, because wherever people die, there is a demand for mortuary services. You might be a Pharasmin priest or a secular professional, but your job is seeing to the body, comforting the bereaved, and making sure that the deceased goes to their ultimate reward with all due dignity. Of course, someone in your position sees a lot of strange deaths, and chances are one of them set you on the road to adventure.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Medicine skill, and a Lore skill specializing in one local type of undead. You gain the Forensic Acumen skill feat.",
+			"hash": "zRTpklrX"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 278,
 		"objectType": "Background",
 		"name": "Wandering Preacher",
 		"details": [
@@ -363,10 +629,19 @@
 			"You're trained in the Religion skill and a Lore skill associated with the deity you preach for (such as Pharasmin Lore). You gain the Pilgrim's Token skill feat (<i>Advanced Player's Guide</i> 208)."
 		],
 		"source": "PZO2109",
-		"id": "6ebe850d-45bd-4f17-9220-7317e658f6c5"
+		"id": "6ebe850d-45bd-4f17-9220-7317e658f6c5",
+		"pf2t": {
+			"name": "Wandering Preacher",
+			"source": "Guns & Gears pg. 123",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=278",
+			"aon": "backgrounds278",
+			"type": "background",
+			"body": "While you once spoke to a small congregation in a ramshackle church, those days are behind you now. Your church was destroyed, your congregants scattered, and now you meander the lands holding a worn copy of your religious text in one hand, and a fiery conviction in the other.\n\nChoose two ability boosts. One must be to **Constitution** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Religion skill, and a Lore skill associated with the deity you preach for (such as Pharasmin Lore). You gain the Pilgrim's Token skill feat.",
+			"hash": "IHTCrbTv"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 279,
 		"objectType": "Background",
 		"name": "Waste Walker",
 		"details": [
@@ -375,10 +650,19 @@
 			"You're trained in the Survival skill, and Mana Wastes Lore (or another similar Lore skill associated with the wastes where you grew up). You gain the Forager skill feat."
 		],
 		"source": "PZO2109",
-		"id": "bf3002c0-583a-470d-9b09-5b9a50c75f0f"
+		"id": "bf3002c0-583a-470d-9b09-5b9a50c75f0f",
+		"pf2t": {
+			"name": "Waste Walker",
+			"source": "Guns & Gears pg. 123",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=279",
+			"aon": "backgrounds279",
+			"type": "background",
+			"body": "Whether you grew up in the Mana Wastes or another similarly desolate place, you quickly learned that only the strong survive. You and your family were forced to evade monsters, mutants, wild magic, and worse, as each new day heralded the possibility of a danger or threat you'd never seen before. You learned to adapt to the worst possible conditions and how to forage and survive in a place few others would dare to live.\n\nChoose two ability boosts. One must be to **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Survival skill, and the Mana Wastes Lore skill (or another similar Lore skill associated with the wastes where you grew up). You gain the Forager skill feat.",
+			"hash": "lyLZHlbX"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 280,
 		"objectType": "Background",
 		"name": "Alkenstar Outlaw",
 		"traits": [ "Uncommon" ],
@@ -388,10 +672,20 @@
 			"You're trained in Thievery and Underworld Lore. You gain the Subtle Theft skill feat."
 		],
 		"source": "PZO2109",
-		"id": "df8432c4-1006-414f-8c2d-67d8dfad1967"
+		"id": "df8432c4-1006-414f-8c2d-67d8dfad1967",
+		"pf2t": {
+			"name": "Alkenstar Outlaw",
+			"traits": "uncommon",
+			"source": "Guns & Gears pg. 124",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=280",
+			"aon": "backgrounds280",
+			"type": "background",
+			"body": "You're an outlaw whose first crime was stealing the guns from Alkenstar's Gunworks which allowed you to commence a crime spree of epic proportions. You don't know where your road ends, but it's probably going to be a bloody affair. The life of an adventurer might even be a relief compared to a life forever on the run from Alkenstar authorities and their allies.\n\nChoose two ability boosts. One must be to **Dexterity** or **Constitution**, and one is a free ability boost.\n\nYou're trained in the Thievery skill, and the Underworld Lore skill. You gain the Subtle Theft skill feat.",
+			"hash": "XzwtTxcs"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 281,
 		"objectType": "Background",
 		"name": "Alkenstar Sojourner",
 		"traits": [ "Uncommon" ],
@@ -401,10 +695,20 @@
 			"You're trained in Society and Engineering Lore. You gain the Streetwise skill feat."
 		],
 		"source": "PZO2109",
-		"id": "6f7fea0f-1b23-47e7-8871-66bde11551eb"
+		"id": "6f7fea0f-1b23-47e7-8871-66bde11551eb",
+		"pf2t": {
+			"name": "Alkenstar Sojourner",
+			"traits": "uncommon",
+			"source": "Guns & Gears pg. 124",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=281",
+			"aon": "backgrounds281",
+			"type": "background",
+			"body": "You came to Alkenstar because you heard they had guns, but you stayed because of the atmosphere. Or the guns. Either way, journalism and scientific curiosity opened the door to a life of adventure. Now you continue to adventure in the Alkenstar area, using your skills to deal with whatever situations present themselves.\n\nChoose two ability boosts. One must be to **Intelligence** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Society skill, and the Engineering Lore skill. You gain the Streetwise skill feat.",
+			"hash": "rBkXWwwg"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 282,
 		"objectType": "Background",
 		"name": "Circuit Judge",
 		"traits": [ "Uncommon" ],
@@ -414,10 +718,20 @@
 			"You're trained in Deception and Legal Lore. You gain the Lie to Me skill feat."
 		],
 		"source": "PZO2109",
-		"id": "e2fe3ff2-5d5b-4dc9-8ff1-a5d62e1a55b5"
+		"id": "e2fe3ff2-5d5b-4dc9-8ff1-a5d62e1a55b5",
+		"pf2t": {
+			"name": "Circuit Judge",
+			"traits": "uncommon",
+			"source": "Guns & Gears pg. 124",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=282",
+			"aon": "backgrounds282",
+			"type": "background",
+			"body": "You're a circuit judge, a courtroom on horseback who serves a group of communities out in the Mana Wastes or a similar backwoods region. You show up every couple of months, hear the cases that have piled up since your last visit, give verdicts, and then it's on to the next town in your itinerary. It's not the easiest life in the world, but it's an interesting one, and you hear some mighty strange cases. Chances are, it was one of those cases that set you on the road to adventure.\n\nChoose two ability boosts. One must be to **Intelligence** or **Wisdom**, and one is a free ability boost.\n\nYou're trained in the Deception skill, and the Legal Lore skill. You gain the Lie to Me skill feat.",
+			"hash": "nxxrRmTz"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 283,
 		"objectType": "Background",
 		"name": "Goldhand Arms Dealer",
 		"traits": [ "Uncommon" ],
@@ -427,7 +741,17 @@
 			"You're trained in Diplomacy and Mercantile Lore. You gain the Group Impression skill feat."
 		],
 		"source": "PZO2109",
-		"id": "576f3c70-bb9e-4cd7-aa25-99f02d870b9d"
+		"id": "576f3c70-bb9e-4cd7-aa25-99f02d870b9d",
+		"pf2t": {
+			"name": "Goldhand Arms Dealer",
+			"traits": "uncommon",
+			"source": "Guns & Gears pg. 124",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=283",
+			"aon": "backgrounds283",
+			"type": "background",
+			"body": "You're a dwarven agent of the Goldhand Lodge, a collection of dwarven merchants based out of Dongun Hold who seeks to sell guns far and wide. High King Anong Arunak hasn't expressed approval for such a method of distribution yet, but in the meantime you're still out and about, talking up your wares and occasionally providing visceral demonstrations of the overwhelming stopping power of your firearms. These demonstrations and sales have given you a taste for adventure, and the constant threat of piracy has convinced you of the importance of adventuring with a group.\n\nChoose two ability boosts. One must be to **Dexterity** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Diplomacy skill, and the Mercantile Lore skill. You gain the Group Impression skill feat.",
+			"hash": "fqlxTthH"
+		}
 	},
 	{
 		"aonId": 0,
@@ -443,7 +767,7 @@
 		"id": "7c8236b9-2cb4-4c40-9020-ad22b448bfc5"
 	},
 	{
-		"aonId": 0,
+		"aonId": 285,
 		"objectType": "Background",
 		"name": "Sheriff",
 		"traits": [ "Uncommon" ],
@@ -453,10 +777,20 @@
 			"You're trained in the Intimidation skill and the Hunting Lore skill. You gain the Group Coercion skill feat."
 		],
 		"source": "PZO2109",
-		"id": "4f76f2d8-c99e-4995-a052-ddd27519e56d"
+		"id": "4f76f2d8-c99e-4995-a052-ddd27519e56d",
+		"pf2t": {
+			"name": "Sheriff",
+			"traits": "uncommon",
+			"source": "Guns & Gears pg. 124",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=285",
+			"aon": "backgrounds285",
+			"type": "background",
+			"body": "You hold an official title of sheriff or deputy in a small community. Those that would do harm to others flee your gaze, for they know it brings the promise of castigation. You protect your town, watch over those who have placed their trust in you, and make sure those that would do others harm are brought to justice.\n\nChoose two ability boosts. One must be to **Dexterity** or **Charisma**, and one is a free ability boost.\n\nYou're trained in the Intimidation skill, and the Hunting Lore skill. You gain the Group Coercion skill feat.",
+			"hash": "bSvkplhk"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 286,
 		"objectType": "Background",
 		"name": "Otherworldly Mission",
 		"traits": [ "Rare" ],
@@ -467,10 +801,20 @@
 			"You're trained in Religion. Once per adventure, you can ask the voice you believe to be a deity for orders and get some kind of instruction-you never get any kind of explanation, simply a command to go somewhere or do something. Following those commands isn't always safe, but it's usually interesting."
 		],
 		"source": "PZO2109",
-		"id": "5e3fd4ba-cc59-4533-981e-8bf6dd83b2ee"
+		"id": "5e3fd4ba-cc59-4533-981e-8bf6dd83b2ee",
+		"pf2t": {
+			"name": "Otherworldly Mission",
+			"traits": "rare",
+			"source": "Guns & Gears pg. 125",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=286",
+			"aon": "backgrounds286",
+			"type": "background",
+			"body": "You're called to serve a specific purpose-your deity told you so, and so it must be true. Maybe you grew up knowing all along, or maybe it came to you one day in a vision, clear as a bell and twice as loud. You have some task that only you can accomplish. You mission might be as dangerous as killing a deadly tyrant or as simple as opening a particular door on a particular day.\n\nYou should work with your GM on how to handle the truth of your character's backstory or leave it to the GM to decide in secret. Is this call to action a message from the character's own mind, are they being manipulated by some manner of supernatural entity, or are they actually getting marching orders from one of the deities of the setting?\n\nChoose two ability boosts. One must be to **Wisdom** or **Charisma**, and one is a free ability boost.\n\nYou're trained in Religion. Once per adventure, you can ask the voice you believe to be a deity for orders and get some kind of instruction-you never get any kind of explanation, simply a command to go somewhere or do something. Following those commands isn't always safe, but it's usually interesting.",
+			"hash": "nZmdGWgS"
+		}
 	},
 	{
-		"aonId": 0,
+		"aonId": 287,
 		"objectType": "Background",
 		"name": "Revenant",
 		"traits": [ "Rare" ],
@@ -480,7 +824,17 @@
 			"You're trained in Religion and Boneyard Lore. You're still alive, not undead, but you have the negative healing ability, which means you're harmed by positive damage and healed by negative effects as if you were undead."
 		],
 		"source": "PZO2109",
-		"id": "8dc39829-6e51-4498-a32d-296fd21bcc9f"
+		"id": "8dc39829-6e51-4498-a32d-296fd21bcc9f",
+		"pf2t": {
+			"name": "Revenant",
+			"traits": "rare",
+			"source": "Guns & Gears pg. 125",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=287",
+			"aon": "backgrounds287",
+			"type": "background",
+			"body": "You died. No real doubt about that. Bullet to the brain or knife to the throat, you were dead as dead can be. Then you got back up again. Maybe you had some unfinished business, or maybe you were just so tough and so mean that Hell itself spat you out. Either way, you came back for a reason.\n\nChoose two ability boosts. One must be to **Constitution** or **Charisma**, and one is a free ability boost.\n\nYou're trained in Religion and Boneyard Lore. You're still alive, not undead, but you have the negative healing ability, which means you're harmed by positive damage and healed by negative effects as if you were undead.",
+			"hash": "JqnFhfBn"
+		}
 	},
 	{
 		"aonId": 0,

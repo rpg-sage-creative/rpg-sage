@@ -20,7 +20,19 @@
 		"source": "PZO2101",
 		"aonId": 634,
 		"id": "67618a11-147e-45c6-a35e-7c49718a6157",
-		"hash": "bcPgQqgG"
+		"pf2t": {
+			"name": "Eschew Materials",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 209 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=634",
+			"aon": "feats634",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You can use clever workarounds to replicate the arcane essence of certain materials. When Casting a Spell that requires material components, you can provide these material components without a material component pouch by drawing intricate replacement sigils in the air. Unlike when providing somatic components, you still must have a hand completely free. This doesn't remove the need for any materials listed in the spell's cost entry.",
+			"hash": "bcPgQqgG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -31,8 +43,7 @@
 		"benefits": "An animal serves you and assists your spellcasting.",
 		"source": "PZO2101",
 		"aonId": 604,
-		"id": "a6b01a91-ee1b-4a1e-9f16-4a9336d83cd3",
-		"hash": "BfztEZtI"
+		"id": "a6b01a91-ee1b-4a1e-9f16-4a9336d83cd3"
 	},
 	{
 		"objectType": "Feat",
@@ -44,7 +55,19 @@
 		"source": "PZO2101",
 		"aonId": 636,
 		"id": "87638d5e-982e-4c64-b0b2-bbd1b60e6bb9",
-		"hash": "WlyJSPIj"
+		"pf2t": {
+			"name": "Hand of the Apprentice",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 209 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=636",
+			"aon": "feats636",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** universalist wizard\n\n- - -\n\nYou can magically hurl your weapon at your foe. You gain the hand of the apprentice universalist spell. Universalist spells are a type of focus spell, much like school spells. You start with a focus pool of 1 Focus Point. See here for more information about focus spells.\n\n#### Hand of the Apprentice Leads To...\nUniversal Versatility",
+			"hash": "WlyJSPIj"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -55,8 +78,7 @@
 		"benefits": "You can extend your spells' range.",
 		"source": "PZO2101",
 		"aonId": 181,
-		"id": "df3ce009-087f-41e7-aef0-7b4939e5c3c7",
-		"hash": "btbZtxqX"
+		"id": "df3ce009-087f-41e7-aef0-7b4939e5c3c7"
 	},
 	{
 		"objectType": "Feat",
@@ -67,8 +89,7 @@
 		"benefits": "You manipulate the energy of your spell, causing it to spread out and affect a wider area.",
 		"source": "PZO2101",
 		"aonId": 315,
-		"id": "59990618-0aac-49a2-925b-4d5746ffa5a7",
-		"hash": "bUWAkEbP"
+		"id": "59990618-0aac-49a2-925b-4d5746ffa5a7"
 	},
 	{
 		"objectType": "Feat",
@@ -79,8 +100,7 @@
 		"benefits": "Study broadens your range of simple spells.",
 		"source": "PZO2101",
 		"aonId": 183,
-		"id": "0dfa4470-6b5f-47ba-b31d-518b166b016f",
-		"hash": "rVVSbwxU"
+		"id": "0dfa4470-6b5f-47ba-b31d-518b166b016f"
 	},
 	{
 		"objectType": "Feat",
@@ -91,8 +111,7 @@
 		"benefits": "Hiding your gestures and incantations within other speech and movement, you attempt to conceal the fact that you are casting a spell.",
 		"source": "PZO2101",
 		"aonId": 640,
-		"id": "8fc3b44c-ddae-4c89-9010-f97428de87d7",
-		"hash": "DwcbbzVR"
+		"id": "8fc3b44c-ddae-4c89-9010-f97428de87d7"
 	},
 	{
 		"objectType": "Feat",
@@ -103,8 +122,7 @@
 		"benefits": "You infuse your familiar with additional primal energy, increasing its abilities.",
 		"source": "PZO2101",
 		"aonId": 318,
-		"id": "20d24828-7e53-4bf7-bdb4-494c6a507c11",
-		"hash": "YlWtKpFZ"
+		"id": "20d24828-7e53-4bf7-bdb4-494c6a507c11"
 	},
 	{
 		"objectType": "Feat",
@@ -115,8 +133,7 @@
 		"benefits": "You siphon the residual energy from the last spell you cast into one weapon you're wielding.",
 		"source": "PZO2101",
 		"aonId": 610,
-		"id": "65118b2d-97e8-4ba5-a3fd-d96cb05685c0",
-		"hash": "BLcptxJb"
+		"id": "65118b2d-97e8-4ba5-a3fd-d96cb05685c0"
 	},
 	{
 		"objectType": "Feat",
@@ -128,7 +145,19 @@
 		"source": "PZO2101",
 		"aonId": 643,
 		"id": "a88a92de-e897-4633-8996-44ab1de6ba86",
-		"hash": "MZpSsrWX"
+		"pf2t": {
+			"name": "Linked Focus",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 210 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=643",
+			"aon": "feats643",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** arcane bond; arcane school\n\n- - -\n\nYou have linked your bonded item to the well of energy that powers your school spells. When you Drain your Bonded Item to cast a spell of your arcane school, you also regain 1 Focus Point.",
+			"hash": "MZpSsrWX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -140,7 +169,20 @@
 		"source": "PZO2101",
 		"aonId": 644,
 		"id": "a9910202-5469-414b-95e8-35e855b6d907",
-		"hash": "UcRRlxgp"
+		"pf2t": {
+			"name": "Silent Spell",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "concentrate,metamagic,wizard",
+			"actions": 1,
+			"source": "Core Rulebook pg. 210 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=644",
+			"aon": "feats644",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Conceal Spell\n\n- - -\n\nYou've learned how to cast many of your spells without speaking the words of power you would normally need to provide. If the next action you use is Casting a Spell that has a verbal component and at least one other component, you can remove the verbal component. This makes the spell quieter and allows you to cast it in areas where sound can't carry. However, the spell still has visual manifestations, so this doesn't make the spell any less obvious to someone who sees you casting it. When you use Silent Spell, you can choose to gain the benefits of Conceal Spell, and you don't need to attempt a Deception check because the spell has no verbal components.",
+			"hash": "UcRRlxgp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -152,7 +194,19 @@
 		"source": "PZO2101",
 		"aonId": 645,
 		"id": "fde75aa6-e589-4139-8539-f785ca41e40c",
-		"hash": "MFzSRssf"
+		"pf2t": {
+			"name": "Spell Penetration",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 210 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=645",
+			"aon": "feats645",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You've studied ways of overcoming the innate magical resistance that dragons, otherworldly beings, and certain other powerful creatures have. Any creature that has a status bonus to saving throws against magic reduces that bonus by 1 against your spells.",
+			"hash": "MFzSRssf"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -163,8 +217,7 @@
 		"benefits": "You don't lose spells easily.",
 		"source": "PZO2101",
 		"aonId": 194,
-		"id": "5e0da120-7797-4823-ba62-783920ed2431",
-		"hash": "YRUhhBTm"
+		"id": "5e0da120-7797-4823-ba62-783920ed2431"
 	},
 	{
 		"objectType": "Feat",
@@ -176,7 +229,19 @@
 		"source": "PZO2101",
 		"aonId": 647,
 		"id": "ee71c198-ed9f-43ec-a132-7a22584858e0",
-		"hash": "IvQzFrhQ"
+		"pf2t": {
+			"name": "Advanced School Spell",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 211 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=647",
+			"aon": "feats647",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** arcane school\n\n- - -\n\nYou gain access to a powerful new school spell depending on your arcane school. If you're an abjurer, you gain energy absorption; if you're a conjurer, you gain dimensional steps; if you're a diviner, you gain vigilant eye; if you're an enchanter, you gain dread aura; if you're an evoker, you gain elemental tempest; if you're an illusionist, you gain invisibility cloak; if you're a necromancer, you gain life siphon; and if you're a transmuter, you gain shifting form. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "IvQzFrhQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -188,7 +253,20 @@
 		"source": "PZO2101",
 		"aonId": 648,
 		"id": "56b371ca-b1e5-4b14-89d7-a2f21dfa4d4f",
-		"hash": "kSqSOPsZ"
+		"pf2t": {
+			"name": "Bond Conservation",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "manipulate,metamagic,wizard",
+			"actions": 1,
+			"source": "Core Rulebook pg. 211 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=648",
+			"aon": "feats648",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** arcane bond\n**Requirements** The last action you used was Drain Bonded Item.\n\n- - -\n\nBy carefully manipulating the arcane energies stored in your bonded item as you drain it, you can conserve just enough power to cast another, slightly weaker spell. If the next action you use is to Cast a Spell using the energy from Drain Bonded Item, you gain an extra use of Drain Bonded Item. You must use this extra use of Drain Bonded Item before the end of your next turn or you lose it, and you can use this additional use only to cast a spell 2 or more levels lower than the first spell cast with Drain Bonded Item.",
+			"hash": "kSqSOPsZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -200,7 +278,19 @@
 		"source": "PZO2101",
 		"aonId": 649,
 		"id": "b50a0260-689b-4cb3-8b13-d33f4cba6e3a",
-		"hash": "AAvYmzRz"
+		"pf2t": {
+			"name": "Universal Versatility",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 211 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=649",
+			"aon": "feats649",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** universalist wizard; Hand of the Apprentice\n\n- - -\n\nYou can access the fundamental abilities of any school of magic. During your daily preparations, choose one of the eight school spells gained by 1st-level specialist wizards. You can use that school spell until your next daily preparations. When you Refocus, you can choose a different school spell from among those eight school spells, replacing the previous one. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "AAvYmzRz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -212,7 +302,20 @@
 		"source": "PZO2101",
 		"aonId": 337,
 		"id": "4655c7fc-1148-48f3-99b2-f07f5a38351d",
-		"hash": "pTXWxMyg"
+		"pf2t": {
+			"name": "Overwhelming Energy",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "druid,manipulate,metamagic,sorcerer,wizard",
+			"actions": 1,
+			"source": "Core Rulebook pg. 200 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=337",
+			"aon": "feats337",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You alter your spells to overcome resistances. If the next action you use is to Cast a Spell, the spell ignores an amount of the target's resistance to acid, cold, electricity, fire, or sonic damage equal to your level. This applies to all damage the spell deals, including persistent damage and damage caused by an ongoing effect of the spell, such as the wall created by wall of fire. A creature's immunities are unaffected.",
+			"hash": "pTXWxMyg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -223,8 +326,7 @@
 		"benefits": "You are able to quickly cast a spell.",
 		"source": "PZO2101",
 		"aonId": 199,
-		"id": "2ed812e7-c479-4859-a5e3-bc84ac4ec2ee",
-		"hash": "TNpOYEbD"
+		"id": "2ed812e7-c479-4859-a5e3-bc84ac4ec2ee"
 	},
 	{
 		"objectType": "Feat",
@@ -236,7 +338,19 @@
 		"source": "PZO2101",
 		"aonId": 652,
 		"id": "27cbfaf2-8dec-49d2-a725-8f1a3125b49b",
-		"hash": "qsTKblXr"
+		"pf2t": {
+			"name": "Scroll Savant",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 212 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=652",
+			"aon": "feats652",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** expert in Crafting\n\n- - -\n\nDuring your daily preparations, you can create two temporary scrolls containing arcane spells from your spellbook. These scrolls follow the normal rules for scrolls, with some additional restrictions. Each scroll must be of a different spell level, and both spell levels must be 2 or more levels lower than your highest-level spell. Any scrolls you create this way become non-magical the next time you make your daily preparations. A temporary scroll has no value.\n\nIf you have master proficiency in arcane spell DCs, you can create three temporary scrolls during your daily preparations, and if you have legendary proficiency, you can create four temporary scrolls.",
+			"hash": "qsTKblXr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -248,7 +362,19 @@
 		"source": "PZO2101",
 		"aonId": 653,
 		"id": "113589c7-babf-4007-97c2-a59860d60bb7",
-		"hash": "lRlXtRDQ"
+		"pf2t": {
+			"name": "Clever Counterspell",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 212 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=653",
+			"aon": "feats653",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Counterspell; Quick Recognition\n\n- - -\n\nYou creatively apply your prepared spells to Counterspell a much wider variety of your opponents' magic. Instead of being able to counter a foe's spell with Counterspell only if you have that same spell prepared, you can use Counterspell as long as you have the spell the foe is casting in your spellbook. When you use Counterspell in this way, the prepared spell you expend must share a trait other than its tradition with the triggering spell. At the GM's discretion, you can instead use a spell that has an opposing trait or that otherwise logically would counter the triggering spell (such as using a cold or water spell to counter fireball or using remove fear to counter a fear spell). Regardless of what spell you expend, you take a -2 penalty to your counteract check, though the GM can waive this penalty if the expended spell is especially appropriate.",
+			"hash": "lRlXtRDQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -259,8 +385,7 @@
 		"benefits": "You have a literal sixth sense for magic.",
 		"source": "PZO2101",
 		"aonId": 622,
-		"id": "0e2c719b-a86f-4d21-bad0-4bb4016b242e",
-		"hash": "QQzqjXwI"
+		"id": "0e2c719b-a86f-4d21-bad0-4bb4016b242e"
 	},
 	{
 		"objectType": "Feat",
@@ -272,7 +397,19 @@
 		"source": "PZO2101",
 		"aonId": 655,
 		"id": "2aaa2e68-de8c-4229-99ce-c8b5977eceac",
-		"hash": "jSwZgkNw"
+		"pf2t": {
+			"name": "Bonded Focus",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 211 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=655",
+			"aon": "feats655",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** arcane bond\n\n- - -\n\nYour connection to your bonded item increases your focus pool. If you have spent at least 2 Focus Points since the last time you Refocused and your bonded item is in your possession, you recover 2 Focus Points when you Refocus instead of 1.",
+			"hash": "jSwZgkNw"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -283,8 +420,7 @@
 		"benefits": "You cause a spell to fire back at its caster.",
 		"source": "PZO2101",
 		"aonId": 624,
-		"id": "9b95f524-8d1f-45ec-9ba0-8eca1b2f50f8",
-		"hash": "HCTNKKJx"
+		"id": "9b95f524-8d1f-45ec-9ba0-8eca1b2f50f8"
 	},
 	{
 		"objectType": "Feat",
@@ -296,7 +432,19 @@
 		"source": "PZO2101",
 		"aonId": 657,
 		"id": "f53f426f-72e5-4106-b465-da623e40e5a7",
-		"hash": "GKSGLFzz"
+		"pf2t": {
+			"name": "Superior Bond",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 213 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=657",
+			"aon": "feats657",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** arcane bond\n\n- - -\n\nWhen you draw upon your bonded item, you can leave a bit of energy within it for later use. You can use Drain Bonded Item one additional time per day, but only to cast a spell 2 or more levels lower than your highest-level wizard spell slot.",
+			"hash": "GKSGLFzz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -307,8 +455,7 @@
 		"benefits": "You can maintain a spell with hardly a thought.",
 		"source": "PZO2101",
 		"aonId": 206,
-		"id": "d140b744-a82c-423d-8ae1-caa3b27614c7",
-		"hash": "CVsqkNEk"
+		"id": "d140b744-a82c-423d-8ae1-caa3b27614c7"
 	},
 	{
 		"objectType": "Feat",
@@ -320,7 +467,20 @@
 		"source": "PZO2101",
 		"aonId": 659,
 		"id": "174a5488-c074-4524-b557-301568b78481",
-		"hash": "XGKqzVLB"
+		"pf2t": {
+			"name": "Spell Tinker",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "concentrate,wizard",
+			"actions": 2,
+			"source": "Core Rulebook pg. 213 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=659",
+			"aon": "feats659",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You've learned to alter choices you make when casting spells on yourself. After casting a spell on only yourself that offers several choices of effect (such as resist energy, spell immunity, or a polymorph spell that offers several potential forms), you can alter the choice you made when Casting the Spell (for instance, choosing a different type of damage for resist energy). However, your tinkering weakens the spell's integrity, reducing its remaining duration by half.\n\nYou can't use this feat if the benefits of the spell have already been used up or if the effects of the first choice would persist in any way after switching (for instance, if one of the choices was to create a consumable item you already used, or to heal you), or if the feat would create an effect more powerful than that offered by the base spell. The GM is the final arbiter of what Spell Tinker can be applied to.",
+			"hash": "XGKqzVLB"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -332,7 +492,19 @@
 		"source": "PZO2101",
 		"aonId": 660,
 		"id": "ce6c757d-ded0-4504-9fc7-4909d1d7a4b1",
-		"hash": "xGshgNQF"
+		"pf2t": {
+			"name": "Infinite Possibilities",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 213 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=660",
+			"aon": "feats660",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You've found a way to prepare a spell slot that exists in your mind as many different possibilities at once. Once during your daily preparations, you can use a spell slot to hold that infinite potential, rather than using it to prepare a spell. You can use this spell slot to cast any spell from your spellbook that's at least 2 levels lower than the slot you designate; the spell acts in all ways as a spell of 2 levels lower. You don't have any particular spell prepared in that slot until you cast it.",
+			"hash": "xGshgNQF"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -344,7 +516,19 @@
 		"source": "PZO2101",
 		"aonId": 661,
 		"id": "2898bb4e-29e6-4471-899c-490b67ff7896",
-		"hash": "SQOpYrtW"
+		"pf2t": {
+			"name": "Reprepare Spell",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 213 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=661",
+			"aon": "feats661",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You've discovered how to reuse some of your spell slots over and over. You can spend 10 minutes to prepare a spell that you already cast today, regaining access to that spell slot. The spell must be of 4th level or lower and one that does not have a duration. You can reprepare a spell in this way even if you've already reprepared that spell previously in the same day. If you have the spell substitution arcane thesis, you can instead prepare a different spell in an expended slot, as long as the new spell doesn't have a duration. Once you've reprepared a spell in that slot even once, you can use your arcane thesis to substitute only spells without durations into that spell slot.\n\n#### Reprepare Spell Leads To...\nReclaim Spell",
+			"hash": "SQOpYrtW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -358,7 +542,19 @@
 		"source": "PZO2101",
 		"aonId": 662,
 		"id": "d1852b49-58f5-4434-8015-e8d8aca0339f",
-		"hash": "HbptTHmO"
+		"pf2t": {
+			"name": "Archwizard's Might",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 213 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=662",
+			"aon": "feats662",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** archwizard's spellcraft\n\n- - -\n\nYou have mastered the greatest secrets of arcane magic. You gain an additional 10th-level spell slot.",
+			"hash": "HbptTHmO"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -370,7 +566,19 @@
 		"source": "PZO2101",
 		"aonId": 632,
 		"id": "1b226fc7-0717-4ef6-b952-6fce19d9e826",
-		"hash": "JKKFXcgS"
+		"pf2t": {
+			"name": "Metamagic Mastery",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "sorcerer,wizard",
+			"source": "Core Rulebook pg. 201 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=632",
+			"aon": "feats632",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Altering your spells doesn't take any longer than casting them normally. You can use metamagic single actions as free actions.",
+			"hash": "JKKFXcgS"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -382,7 +590,19 @@
 		"source": "PZO2101",
 		"aonId": 664,
 		"id": "6d564bdc-feac-468f-bdba-29bc9d475016",
-		"hash": "bRQvgbQU"
+		"pf2t": {
+			"name": "Spell Combination",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "wizard",
+			"source": "Core Rulebook pg. 213 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=664",
+			"aon": "feats664",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You can merge spells, producing multiple effects with a single casting. One slot of each level of spell you can cast, except 2nd level and 1st level, becomes a spell combination slot (this doesn't apply to cantrips). When you prepare your spells, you can fill a combination slot with a combination of two spells. Each spell in the combination must be 2 or more spell levels below the slot's level, and both must target only one creature or object or have the option to target only one creature or object. Each spell in the combination must also have the same means of determining whether it has an effect-both spells must require a ranged spell attack roll, require the same type of saving throw, or automatically affect the target.\n\nWhen you cast a combined spell, it affects only one target, even if the component spells normally affect more than one. If any spell in the combination has further restrictions (such as targeting only living creatures), you must abide by all restrictions. The combined spell uses the shorter of the component spells' ranges. Resolve a combined spell as if were a single spell, but apply the effects of both component spells. For example, if the spell's target succeeded at the save against a combined spell, it would apply the success effect of each spell, and if it critically failed, it would apply the critical failure effect of both spells.",
+			"hash": "bRQvgbQU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -393,7 +613,6 @@
 		"benefits": "Master 4 spells.",
 		"source": "PZO2101",
 		"aonId": 1843,
-		"id": "0df92912-73e2-4679-88ae-3d88f4eee3f0",
-		"hash": "RsHVzndc"
+		"id": "0df92912-73e2-4679-88ae-3d88f4eee3f0"
 	}
 ]

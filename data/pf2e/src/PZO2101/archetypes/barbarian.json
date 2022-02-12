@@ -9,7 +9,16 @@
 		"source": "PZO2101",
 		"id": "6b026633-045e-471f-b8a8-59643ba20daa",
 		"aonId": 2,
-		"hash": "XIGfBwOX"
+		"pf2t": {
+			"name": "Barbarian",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 221 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=2",
+			"aon": "archetypes2",
+			"type": "archetype",
+			"body": "There's a rage deep inside you that sometimes breaks loose, granting you some of the might of a barbarian in addition to your other abilities.",
+			"hash": "XIGfBwOX"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -46,7 +55,19 @@
 		"source": "PZO2101",
 		"id": "c770190c-3a00-4dd0-9f18-eaf3e6734f6c",
 		"aonId": 672,
-		"hash": "IDOFZxtt"
+		"pf2t": {
+			"name": "Barbarian Resiliency",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Barbarian",
+			"source": "Core Rulebook pg. 221 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=672",
+			"aon": "feats672",
+			"type": "feat",
+			"body": "**Archetype** Barbarian\n**Prerequisites** Barbarian Dedication; class granting no more Hit Points per level than 10 + your Constitution modifier\n\n- - -\n\nYou gain 3 additional Hit Points for each barbarian archetype class feat you have. As you continue selecting barbarian archetype class feats, you continue to gain additional Hit Points in this way.",
+			"hash": "IDOFZxtt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -61,7 +82,19 @@
 		"source": "PZO2101",
 		"id": "7872b0de-9d58-4709-987e-22792c26c04c",
 		"aonId": 673,
-		"hash": "IXNGtyQp"
+		"pf2t": {
+			"name": "Basic Fury",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Barbarian",
+			"source": "Core Rulebook pg. 221 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=673",
+			"aon": "feats673",
+			"type": "feat",
+			"body": "**Archetype** Barbarian\n**Prerequisites** Barbarian Dedication\n\n- - -\n\nYou gain a 1st- or 2nd-level barbarian feat.\n\n#### Basic Fury Leads To...\nAdvanced Fury",
+			"hash": "IXNGtyQp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -79,7 +112,19 @@
 		"source": "PZO2101",
 		"id": "503c5697-1ddd-431d-86c3-89cda60346db",
 		"aonId": 674,
-		"hash": "wCsDgbqI"
+		"pf2t": {
+			"name": "Advanced Fury",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Barbarian",
+			"source": "Core Rulebook pg. 221 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=674",
+			"aon": "feats674",
+			"type": "feat",
+			"body": "**Archetype** Barbarian\n**Prerequisites** Basic Fury\n\n- - -\n\nYou gain one barbarian feat. For the purpose of meeting its prerequisites, your barbarian level is equal to half your character level.",
+			"hash": "wCsDgbqI"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -94,7 +139,19 @@
 		"source": "PZO2101",
 		"id": "156ec5fe-e692-40e6-97f6-d190141abd42",
 		"aonId": 675,
-		"hash": "HwcvQAWq"
+		"pf2t": {
+			"name": "Instinct Ability",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Barbarian",
+			"source": "Core Rulebook pg. 221 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=675",
+			"aon": "feats675",
+			"type": "feat",
+			"body": "**Archetype** Barbarian\n**Prerequisites** Barbarian Dedication\n\n- - -\n\nYou gain the instinct ability for the instinct you chose for Barbarian Dedication.",
+			"hash": "HwcvQAWq"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -109,6 +166,18 @@
 		"source": "PZO2101",
 		"id": "38d10626-74b2-4740-8838-e0c4398a4402",
 		"aonId": 676,
-		"hash": "fgHkmhCJ"
+		"pf2t": {
+			"name": "Juggernaut's Fortitude",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Barbarian",
+			"source": "Core Rulebook pg. 221 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=676",
+			"aon": "feats676",
+			"type": "feat",
+			"body": "**Archetype** Barbarian\n**Prerequisites** Barbarian Dedication; expert in Fortitude Saves\n\n- - -\n\nYour proficiency rank in Fortitude saves increases to master.",
+			"hash": "fgHkmhCJ"
+		}
 	}
 ]

@@ -7,7 +7,16 @@
 		"source": "PZO9303",
 		"aonId": 40,
 		"id": "5e214331-41a4-4dc6-80bc-fd2608487290",
-		"hash": "bSqmCvgC"
+		"pf2t": {
+			"name": "Change Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 112 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=40",
+			"aon": "domains40",
+			"type": "domain",
+			"body": "You can restructure the physical and metaphysical.",
+			"hash": "bSqmCvgC"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -17,7 +26,16 @@
 		"source": "PZO9303",
 		"aonId": 41,
 		"id": "63d54bb8-bc3d-4d50-9824-c4a04fea35ea",
-		"hash": "OBjREbvJ"
+		"pf2t": {
+			"name": "Cold Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 112 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=41",
+			"aon": "domains41",
+			"type": "domain",
+			"body": "You control ice, snow, and freezing temperatures.",
+			"hash": "OBjREbvJ"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -27,7 +45,16 @@
 		"source": "PZO9303",
 		"aonId": 42,
 		"id": "a24bb660-7510-41b4-b775-efc8c5a4bf5a",
-		"hash": "cSZNtpXc"
+		"pf2t": {
+			"name": "Decay Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 112 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=42",
+			"aon": "domains42",
+			"type": "domain",
+			"body": "You have the power to spoil and deteriorate matter.",
+			"hash": "cSZNtpXc"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -37,7 +64,16 @@
 		"source": "PZO9303",
 		"aonId": 43,
 		"id": "6d428bd2-1b21-450d-a644-db1ad799f45b",
-		"hash": "UkJrxgrq"
+		"pf2t": {
+			"name": "Delirium Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=43",
+			"aon": "domains43",
+			"type": "domain",
+			"body": "You can bring about hallucinations and restlessness.",
+			"hash": "UkJrxgrq"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -47,7 +83,16 @@
 		"source": "PZO9303",
 		"aonId": 44,
 		"id": "b89fe422-43df-4e6f-b950-9ba2fe1d9aa4",
-		"hash": "lyAOmWSE"
+		"pf2t": {
+			"name": "Dust Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 114 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=44",
+			"aon": "domains44",
+			"type": "domain",
+			"body": "You have the power to dry and crumble what opposes you.",
+			"hash": "lyAOmWSE"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -60,7 +105,16 @@
 		"source": "PZO9303",
 		"aonId": 45,
 		"id": "ad177c0c-c715-49fd-aced-5ef466e9e4c1",
-		"hash": "rYzbttJZ"
+		"pf2t": {
+			"name": "Duty Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 114 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=45",
+			"aon": "domains45",
+			"type": "domain",
+			"body": "You defend oaths and carry out your divine missions with great dedication.",
+			"hash": "rYzbttJZ"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -70,7 +124,16 @@
 		"source": "PZO9303",
 		"aonId": 46,
 		"id": "c1659a0d-993a-47d1-a40b-1e3473303731",
-		"hash": "IAxCMGQE"
+		"pf2t": {
+			"name": "Glyph Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 114 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=46",
+			"aon": "domains46",
+			"type": "domain",
+			"body": "You wield power over written words and symbols.",
+			"hash": "IAxCMGQE"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -80,7 +143,16 @@
 		"source": "PZO9303",
 		"aonId": 47,
 		"id": "50fad601-2d9f-4702-89cf-76fb686477e7",
-		"hash": "KBZmzZhz"
+		"pf2t": {
+			"name": "Lightning Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=47",
+			"aon": "domains47",
+			"type": "domain",
+			"body": "You control electricity, thunder, and storms.",
+			"hash": "KBZmzZhz"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -90,7 +162,16 @@
 		"source": "PZO9303",
 		"aonId": 48,
 		"id": "2266c7f2-611a-41d0-8f46-f561291b9c40",
-		"hash": "zkCNqFpW"
+		"pf2t": {
+			"name": "Plague Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=48",
+			"aon": "domains48",
+			"type": "domain",
+			"body": "You wield disease and pestilence like a weapon.",
+			"hash": "zkCNqFpW"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -100,7 +181,16 @@
 		"source": "PZO9303",
 		"aonId": 49,
 		"id": "2ee30d53-708c-4036-9335-2482aa7ef1b4",
-		"hash": "PxnOCbMb"
+		"pf2t": {
+			"name": "Repose Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 116 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=49",
+			"aon": "domains49",
+			"type": "domain",
+			"body": "You ease mental burdens.",
+			"hash": "PxnOCbMb"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -110,7 +200,16 @@
 		"source": "PZO9303",
 		"aonId": 50,
 		"id": "50df50c9-13b3-475a-924e-2c12bc9d2412",
-		"hash": "rSpCyClk"
+		"pf2t": {
+			"name": "Sorrow Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 116 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=50",
+			"aon": "domains50",
+			"type": "domain",
+			"body": "You have a painful connection to melancholy and sadness.",
+			"hash": "rSpCyClk"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -120,7 +219,16 @@
 		"source": "PZO9303",
 		"aonId": 51,
 		"id": "a44da126-6c1e-4e3f-a1a7-be196e8f0ca4",
-		"hash": "wUlABgCx"
+		"pf2t": {
+			"name": "Soul Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 117 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=51",
+			"aon": "domains51",
+			"type": "domain",
+			"body": "You wield power over the spiritual.",
+			"hash": "wUlABgCx"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -130,7 +238,16 @@
 		"source": "PZO9303",
 		"aonId": 52,
 		"id": "49420741-e5f0-4100-8cf4-2c504b8e17e0",
-		"hash": "fQrzMttB"
+		"pf2t": {
+			"name": "Star Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 117 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=52",
+			"aon": "domains52",
+			"type": "domain",
+			"body": "You command the power of the stars.",
+			"hash": "fQrzMttB"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -140,7 +257,16 @@
 		"source": "PZO9303",
 		"aonId": 53,
 		"id": "a204d15d-6064-43bc-8f48-7c7faef771a9",
-		"hash": "QdlwMclw"
+		"pf2t": {
+			"name": "Swarm Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 117 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=53",
+			"aon": "domains53",
+			"type": "domain",
+			"body": "You exert control over masses of creatures.",
+			"hash": "QdlwMclw"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -150,7 +276,16 @@
 		"source": "PZO9303",
 		"aonId": 54,
 		"id": "cd0c2b78-c2b0-4d82-a3a9-42f8da0ad2e5",
-		"hash": "fpyfWwhR"
+		"pf2t": {
+			"name": "Time Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 118 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=54",
+			"aon": "domains54",
+			"type": "domain",
+			"body": "You reign over the flow of time.",
+			"hash": "fpyfWwhR"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -160,7 +295,16 @@
 		"source": "PZO9303",
 		"aonId": 55,
 		"id": "36b90b15-0212-4c42-b7c4-05ae93a85f52",
-		"hash": "cvKxRXxK"
+		"pf2t": {
+			"name": "Vigil Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 118 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=55",
+			"aon": "domains55",
+			"type": "domain",
+			"body": "You watch over those long passed and guard their secrets.",
+			"hash": "cvKxRXxK"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -170,7 +314,16 @@
 		"source": "PZO9303",
 		"aonId": 56,
 		"id": "d86cb05b-beff-433e-91c8-f17d23d05fd0",
-		"hash": "nQczWCvk"
+		"pf2t": {
+			"name": "Void Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 119 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=56",
+			"aon": "domains56",
+			"type": "domain",
+			"body": "You draw power from emptiness.",
+			"hash": "nQczWCvk"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -180,6 +333,15 @@
 		"source": "PZO9303",
 		"aonId": 57,
 		"id": "9c180561-5682-43f3-9cc3-85c4cf0acbca",
-		"hash": "yZLWWYcg"
+		"pf2t": {
+			"name": "Wyrmkin Domain",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 119 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=57",
+			"aon": "domains57",
+			"type": "domain",
+			"body": "You draw on the power of dragons, linnorms, and other powerful reptilian creatures.",
+			"hash": "yZLWWYcg"
+		}
 	}
 ]

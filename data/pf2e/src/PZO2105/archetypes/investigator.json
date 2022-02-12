@@ -9,7 +9,16 @@
 		"source": "PZO2105",
 		"id": "e0831f99-576b-49f1-8e0c-06bc7ae8cecd",
 		"aonId": 41,
-		"hash": "ZkyOQXjp"
+		"pf2t": {
+			"name": "Investigator",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 151",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=41",
+			"aon": "archetypes41",
+			"type": "archetype",
+			"body": "The investigator archetype is a good choice for a character that wants deeper investigations or to plan out their turns in advance; it's a particularly good match for Intelligence-based characters like alchemists, witches, and wizards.",
+			"hash": "ZkyOQXjp"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -41,7 +50,19 @@
 		"source": "PZO2105",
 		"id": "d7ac0828-6b34-4170-8fa6-380677554704",
 		"aonId": 1845,
-		"hash": "lIwEzWRq"
+		"pf2t": {
+			"name": "Basic Deduction",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Investigator",
+			"source": "Advanced Player's Guide pg. 151",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1845",
+			"aon": "feats1845",
+			"type": "feat",
+			"body": "**Archetype** Investigator\n**Prerequisites** Investigator Dedication\n\n- - -\n\nYou gain a 1st- or 2nd-level investigator feat of your choice.\n\n#### Basic Deduction Leads To...\nAdvanced Deduction",
+			"hash": "lIwEzWRq"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -56,7 +77,19 @@
 		"source": "PZO2105",
 		"id": "c7fa0999-5e3d-42a1-9680-d535132f45a6",
 		"aonId": 1846,
-		"hash": "MYXIjAWO"
+		"pf2t": {
+			"name": "Investigator's Stratagem",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Investigator",
+			"source": "Advanced Player's Guide pg. 151",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1846",
+			"aon": "feats1846",
+			"type": "feat",
+			"body": "**Archetype** Investigator\n**Prerequisites** Investigator Dedication\n\n- - -\n\nYou play out battles in your head, allowing you to strike when the time is right. You gain the Devise a Stratagem action; however, when you substitute its result for your attack roll, you can't use your Intelligence modifier in place of your Strength or Dexterity modifier. You also can't use your Intelligence modifier on other rolls from abilities that expand Devise a Stratagem, such as the Athletic Strategist feat.\n\n#### Devise a Stratagem\nYou assess a foe's weaknesses in combat and use them to formulate a plan of attack against your enemy. Choose a creature you can see and roll a d20. If you Strike the chosen creature later this round, you must use the result of the roll you made to Devise a Stratagem for your Strike's attack roll instead of rolling. You make this substitution only for the first Strike you make against the creature this round, not any subsequent attacks.\n\nWhen you make this substitution, you can also add your Intelligence modifier to your attack roll instead of your Strength or Dexterity modifier, provided your Strike uses an agile or finesse melee weapon, an agile or finesse unarmed attack, a ranged weapon (which must be agile or finesse if it's a melee weapon with the thrown trait), or a sap. \n\nIf you're aware that the creature you choose is the subject of a lead you're pursuing, you can use this ability as a free action.",
+			"hash": "MYXIjAWO"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +107,19 @@
 		"source": "PZO2105",
 		"id": "884732ac-cf9a-41c1-bcae-83187c765a5a",
 		"aonId": 1847,
-		"hash": "rRgRNSZs"
+		"pf2t": {
+			"name": "Advanced Deduction",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Investigator",
+			"source": "Advanced Player's Guide pg. 151",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1847",
+			"aon": "feats1847",
+			"type": "feat",
+			"body": "**Archetype** Investigator\n**Prerequisites** Basic Deduction\n\n- - -\n\nYou gain one investigator feat. For the purpose of meeting its prerequisites, your investigator level is equal to half your character level.",
+			"hash": "rRgRNSZs"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -89,7 +134,19 @@
 		"source": "PZO2105",
 		"id": "ed43c8ed-118f-4bc0-8b1a-40764c53c795",
 		"aonId": 1848,
-		"hash": "bWTHnwIz"
+		"pf2t": {
+			"name": "Keen Recollection",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Investigator",
+			"source": "Advanced Player's Guide pg. 151",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1848",
+			"aon": "feats1848",
+			"type": "feat",
+			"body": "**Archetype** Investigator\n**Prerequisites** Investigator Dedication\n\n- - -\n\nYou can recall all sorts of information. You gain the keen recollection class feature.",
+			"hash": "bWTHnwIz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -120,7 +177,6 @@
 		"page": 151,
 		"source": "PZO2105",
 		"id": "27560368-cfdb-41c8-9350-001b976cb2eb",
-		"aonId": 3124,
-		"hash": "yBxXXptj"
+		"aonId": 3124
 	}
 ]

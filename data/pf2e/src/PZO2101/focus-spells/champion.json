@@ -18,7 +18,21 @@
 		"traits": [ "Uncommon", "Abjuration", "Champion" ],
 		"trigger": "An ally is hit by a Strike, or an ally fails a saving throw against an effect that doesn't affect you.",
 		"id": "2360b32d-5c2b-445a-b61f-6b3bc9317051",
-		"hash": "yQSsZWrk"
+		"pf2t": {
+			"name": "Champion's Sacrifice",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,champion",
+			"cast": "s",
+			"actions": "r",
+			"range": 30,
+			"source": "Core Rulebook pg. 387 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=393",
+			"aon": "spells393",
+			"type": "focus",
+			"body": "**Trigger** An ally is hit by a Strike, or an ally fails a saving throw against an effect that doesn't affect you.\n**Targets** 1 ally\n\n- - -\n\nYou form a link with an ally, allowing you to take harm in their stead. All the effects of the hit or failed save are applied to you instead of the ally. For example, if the target critically fails a saving throw against a fireball, you would take double damage. These effects ignore any resistances, immunities, or other abilities you have that might mitigate them in any way, although those of the target apply before you take the effect.",
+			"hash": "yQSsZWrk"
+		}
 	},
 	{
 		"aonId": 394,
@@ -37,7 +51,20 @@
 		"traits": [ "Uncommon", "Champion", "Healing", "Necromancy", "Positive" ],
 		"trigger": "An attack would bring you to 0 Hit Points.",
 		"id": "ed574355-181b-479f-ab70-a482eea78851",
-		"hash": "KLrLnYIc"
+		"pf2t": {
+			"name": "Hero's Defiance",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "uncommon,champion,healing,necromancy,positive",
+			"cast": "v",
+			"actions": 0,
+			"source": "Core Rulebook pg. 387 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=394",
+			"aon": "spells394",
+			"type": "focus",
+			"body": "**Trigger** An attack would bring you to 0 Hit Points.\n\n- - -\n\nYou shout in defiance, filling you with a sudden burst of healing. Just before applying the attack's damage, you recover 10d4+20 Hit Points. If this is enough to prevent the attack from bringing you to 0 Hit Points, you don't become unconscious or dying. Either way, cheating death is difficult, and you can't use hero's defiance again until you Refocus or the next time you prepare. Hero's defiance cannot be used against effects with the death trait or that would leave no remains, such as disintegrate.",
+			"hash": "KLrLnYIc"
+		}
 	},
 	{
 		"aonId": 395,
@@ -60,7 +87,21 @@
 		"targets": "1 willing living creature or 1 undead creature",
 		"traits": [ "Uncommon", "Champion", "Healing", "Necromancy", "Positive" ],
 		"id": "4aee74fc-021f-474b-aa7c-7a2a42fa1a8e",
-		"hash": "UbCwRDSZ"
+		"pf2t": {
+			"name": "Lay on Hands",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,champion,healing,necromancy,positive",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Core Rulebook pg. 387 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=395",
+			"aon": "spells395",
+			"type": "focus",
+			"body": "**Targets** 1 willing living creature or 1 undead creature\n\n- - -\n\nYour hands become infused with positive energy, healing a living creature or damaging an undead creature with a touch. If you use lay on hands on a willing living target, you restore 6 Hit Points; if the target is one of your allies, they also gain a +2 status bonus to AC for 1 round. Against an undead target, you deal 1d6 damage and it must attempt a basic Fortitude save; if it fails, it also takes a -2 status penalty to AC for 1 round.\n- - -\n**Heightened (+1)** The amount of healing increases by 6, and the damage to an undead target increases by 1d6.",
+			"hash": "UbCwRDSZ"
+		}
 	},
 	{
 		"aonId": 396,
@@ -96,7 +137,22 @@
 		"targets": "1 evil creature",
 		"traits": [ "Uncommon", "Champion", "Evocation", "Good", "Litany" ],
 		"id": "90c2d18e-e3d7-48cd-94cb-b36615423863",
-		"hash": "pzJYwcJZ"
+		"pf2t": {
+			"name": "Litany against Sloth",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,champion,evocation,good,litany",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 388 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=396",
+			"aon": "spells396",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 round\n**Targets** 1 evil creature\n\n- - -\n\nYour litany rails against the sin of sloth, interfering with the target's ability to react. The target must attempt a Will save. A particularly slothful creature, such as a sloth demon, uses the outcome one degree of success worse than the result of its saving throw. The target becomes temporarily immune to all of your litanies for 1 minute.\n\n**Critical Success** The target is unaffected.\n**Success** The target can't use reactions.\n**Failure** The target can't use reactions and is slowed 1.\n**Critical Failure** The target can't use reactions and is slowed 2.",
+			"hash": "pzJYwcJZ"
+		}
 	},
 	{
 		"aonId": 397,
@@ -135,7 +191,22 @@
 		"targets": "1 evil creature",
 		"traits": [ "Uncommon", "Champion", "Evocation", "Good", "Litany" ],
 		"id": "ce936b5d-0bab-4cb2-8fc5-1b35139a0306",
-		"hash": "AttvPpzl"
+		"pf2t": {
+			"name": "Litany Against Wrath",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,champion,evocation,good,litany",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 388 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=397",
+			"aon": "spells397",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 round\n**Targets** 1 evil creature\n\n- - -\n\nYour litany rails against the sin of wrath, punishing the target for attacking good creatures. The target must attempt a Will save. A particularly wrathful creature, such as a wrath demon, uses the outcome one degree of success worse than the result of its saving throw. The target then becomes temporarily immune to all of your litanies for 1 minute.\n\n**Critical Success** The target is unaffected.\n**Success** The first time the target uses an action that deals damage to at least one good creature, the target takes 3d6 good damage.\n**Failure** Each time the target uses an action that deals damage to at least one good creature, the target takes 3d6 good damage.\n**Critical Failure** The target is enfeebled 2. Each time it uses an action that deals damage to at least one good creature, the target takes 3d6 good damage.\n- - -\n**Heightened (+1)** The damage increases by 1d6.",
+			"hash": "AttvPpzl"
+		}
 	},
 	{
 		"aonId": 398,
@@ -159,6 +230,20 @@
 		"targets": "1 evil creature",
 		"traits": [ "Uncommon", "Champion", "Evocation", "Good", "Litany" ],
 		"id": "c8b6b5cb-d0b6-44bc-987e-71bbfe7154a1",
-		"hash": "jAkbADQb"
+		"pf2t": {
+			"name": "Litany of Righteousness",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "uncommon,champion,evocation,good,litany",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 388 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=398",
+			"aon": "spells398",
+			"type": "focus",
+			"body": "**Duration** 1 round\n**Targets** 1 evil creature\n\n- - -\n\nYour litany denounces an evildoer, rendering it susceptible to the powers of good. The target gains weakness 7 to good. The target then becomes temporarily immune to all of your litanies for 1 minute.\n- - -\n**Heightened (+1)** The weakness increases by 1.",
+			"hash": "jAkbADQb"
+		}
 	}
 ]

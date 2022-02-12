@@ -9,7 +9,21 @@
 		"source": "PZO2101",
 		"aonId": 430,
 		"id": "07a5bb64-c35c-4583-bd9f-699248f74320",
-		"hash": "ZqwVWYfQ"
+		"pf2t": {
+			"name": "Crane Stance",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "monk,stance",
+			"actions": 1,
+			"archetype": "Martial Artist",
+			"source": "Core Rulebook pg. 158 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=430",
+			"aon": "feats430",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Martial Artist\n**Requirements** You are unarmored.\n\n- - -\n\nYou enter the stance of a crane, holding your arms in an imitation of a crane's wings and using flowing, defensive motions. You gain a +1 circumstance bonus to AC, but the only Strikes you can make are crane wing attacks. These deal 1d6 bludgeoning damage; are in the brawling group; and have the agile, finesse, nonlethal, and unarmed traits.\n\nWhile in Crane Stance, reduce the DC for High Jump and Long Jump by 5, and when you Leap, you can move an additional 5 feet horizontally or 2 feet vertically.",
+			"hash": "ZqwVWYfQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -21,7 +35,21 @@
 		"source": "PZO2101",
 		"aonId": 431,
 		"id": "65430cff-642f-4fb7-9148-83808ad4eb3c",
-		"hash": "GVgvzRHq"
+		"pf2t": {
+			"name": "Dragon Stance",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "monk,stance",
+			"actions": 1,
+			"archetype": "Martial Artist",
+			"source": "Core Rulebook pg. 158 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=431",
+			"aon": "feats431",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Martial Artist\n**Requirements** You are unarmored.\n\n- - -\n\nYou enter the stance of a dragon and make powerful leg strikes like a lashing dragon's tail. You can make dragon tail attacks that deal 1d10 bludgeoning damage. They are in the brawling group and have the backswing, nonlethal, and unarmed traits.\n\nWhile in Dragon Stance, you can ignore the first square of difficult terrain while Striding.",
+			"hash": "GVgvzRHq"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -33,7 +61,19 @@
 		"source": "PZO2101",
 		"aonId": 432,
 		"id": "bf1a6eeb-0aab-46af-b7c5-19c05b8efeec",
-		"hash": "rCROkqyP"
+		"pf2t": {
+			"name": "Ki Rush",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 158 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=432",
+			"aon": "feats432",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You can use ki to move with extraordinary speed and make yourself harder to hit. You gain the ki rush ki spell and a focus pool of 1 Focus Point. The rules for ki spells are summarized in the Key Terms section on the monk class page, and the full rules for focus spells appear here.",
+			"hash": "rCROkqyP"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -45,7 +85,19 @@
 		"source": "PZO2101",
 		"aonId": 433,
 		"id": "d2fbfb9f-5175-4fb0-887e-397907ef902e",
-		"hash": "Vbptdxww"
+		"pf2t": {
+			"name": "Ki Strike",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 158 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=433",
+			"aon": "feats433",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Your study of the flow of mystical energy allows you to harness it into your physical strikes. You gain the ki strike ki spell and a focus pool of 1 Focus Point. The rules for ki spells are summarized in the Key Terms section on the monk class page, and the full rules for focus spells appear here.\n\n#### Ki Strike Leads To...\nElemental Fist, Sacred Ki",
+			"hash": "Vbptdxww"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -57,7 +109,19 @@
 		"source": "PZO2101",
 		"aonId": 434,
 		"id": "312b45ba-f023-43ed-9ee9-103ca89a9491",
-		"hash": "sxUzGSBN"
+		"pf2t": {
+			"name": "Monastic Weaponry",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 158 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=434",
+			"aon": "feats434",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You have trained with the traditional weaponry of your monastery or school. You gain access to uncommon weapons that have the monk trait and become trained in simple and martial monk weapons. When your proficiency rank for unarmed attacks increases to expert or master, your proficiency rank for these weapons increases to expert or master as well.\n\nYou can use melee monk weapons with any of your monk feats or monk abilities that normally require unarmed attacks, though not if the feat or ability requires you to use a single specific type of attack, such as Crane Stance.\n\n#### Monastic Weaponry Leads To...\nAncestral Weaponry, Peafowl Stance, Shooting Stars Stance, Whirling Blade Stance",
+			"hash": "sxUzGSBN"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -69,7 +133,21 @@
 		"source": "PZO2101",
 		"aonId": 435,
 		"id": "f0cc960f-65e4-42ab-b7f4-f94286c93219",
-		"hash": "prTMRvKt"
+		"pf2t": {
+			"name": "Mountain Stance",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "monk,stance",
+			"actions": 1,
+			"archetype": "Martial Artist",
+			"source": "Core Rulebook pg. 159 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=435",
+			"aon": "feats435",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Martial Artist\n**Requirements** You are unarmored and touching the ground.\n\n- - -\n\nYou enter the stance of an implacable mountain-a technique first discovered by dwarven monks-allowing you to strike with the weight of an avalanche. The only Strikes you can make are falling stone unarmed attacks. These deal 1d8 bludgeoning damage; are in the brawling group; and have the forceful, nonlethal, and unarmed traits.\n\nWhile in Mountain Stance, you gain a +4 item bonus to AC and a +2 circumstance bonus to any defenses against being Shoved or Tripped. However, you have a Dexterity modifier cap to your AC of +0, meaning you don't add your Dexterity to your AC, and your Speeds are all reduced by 5 feet. The item bonus to AC from Mountain Stance is cumulative with armor potency runes on your explorer's clothing, mage armor, and bracers of armor.",
+			"hash": "prTMRvKt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -80,8 +158,7 @@
 		"benefits": "You enter the stance of an enraged phoenix.",
 		"source": "PZO2101",
 		"aonId": 2269,
-		"id": "bce7fa5c-0af0-403e-9349-2d895d763f1c",
-		"hash": "sQnUkMvK"
+		"id": "bce7fa5c-0af0-403e-9349-2d895d763f1c"
 	},
 	{
 		"objectType": "Feat",
@@ -93,7 +170,21 @@
 		"source": "PZO2101",
 		"aonId": 436,
 		"id": "de87cac6-b3e8-46f1-9ab3-892f858996dc",
-		"hash": "kqdABXzl"
+		"pf2t": {
+			"name": "Tiger Stance",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "monk,stance",
+			"actions": 1,
+			"archetype": "Martial Artist",
+			"source": "Core Rulebook pg. 159 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=436",
+			"aon": "feats436",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Martial Artist\n**Requirements** You are unarmored.\n\n- - -\n\nYou enter the stance of a tiger and can make tiger claw attacks. These deal 1d8 slashing damage; are in the brawling group; and have the agile, finesse, nonlethal, and unarmed traits. On a critical success with your tiger claws, if you deal damage, the target takes 1d4 persistent bleed damage.\n\nAs long as your Speed is at least 20 feet while in Tiger Stance, you can Step 10 feet.",
+			"hash": "kqdABXzl"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -105,7 +196,21 @@
 		"source": "PZO2101",
 		"aonId": 437,
 		"id": "848d14f3-ce31-435c-86e8-d5495eee10b4",
-		"hash": "gnCzXJQp"
+		"pf2t": {
+			"name": "Wolf Stance",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "monk,stance",
+			"actions": 1,
+			"archetype": "Martial Artist",
+			"source": "Core Rulebook pg. 159 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=437",
+			"aon": "feats437",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Martial Artist\n**Requirements** You are unarmored.\n\n- - -\n\nYou enter the stance of a wolf, low to the ground with your hands held like fanged teeth. You can make wolf jaw unarmed attacks. These deal 1d8 piercing damage; are in the brawling group; and have the agile, backstabber, finesse, nonlethal, and unarmed traits.\n\nIf you're flanking a target while in Wolf Stance, your wolf jaw unarmed attacks also gain the trip trait.",
+			"hash": "gnCzXJQp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -117,7 +222,19 @@
 		"source": "PZO2101",
 		"aonId": 438,
 		"id": "b7549821-9fed-4d5c-9446-6412b07a9a66",
-		"hash": "yxlFArfZ"
+		"pf2t": {
+			"name": "Brawling Focus",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 160 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=438",
+			"aon": "feats438",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You know how to make the most of your attacks when fighting hand-to-hand. You gain access to the critical specialization effects of unarmed strikes in the brawling group and weapons in the brawling group. If you have Monastic Weaponry, you also gain the critical specialization effects of all monk weapons in which you are trained.",
+			"hash": "yxlFArfZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +246,20 @@
 		"source": "PZO2101",
 		"aonId": 439,
 		"id": "9c3c1837-d419-445f-9b70-1c7a52ff515f",
-		"hash": "UpzmNlIQ"
+		"pf2t": {
+			"name": "Crushing Grab",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "monk",
+			"archetype": "Wrestler",
+			"source": "Core Rulebook pg. 160 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=439",
+			"aon": "feats439",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Wrestler\n\n- - -\n\nLike a powerful constrictor, you crush targets in your unyielding grasp. When you successfully Grapple a creature, you can deal bludgeoning damage to that creature equal to your Strength modifier. You can make this attack nonlethal with no penalty.",
+			"hash": "UpzmNlIQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -141,7 +271,19 @@
 		"source": "PZO2101",
 		"aonId": 440,
 		"id": "1b5a432f-313e-4459-b68c-e2c2b89b430f",
-		"hash": "clBLOtSf"
+		"pf2t": {
+			"name": "Dancing Leaf",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 160 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=440",
+			"aon": "feats440",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You are as light as a leaf whirling in the breeze. When you Leap or succeed at a High Jump or Long Jump, increase the distance you jump by 5 feet. When calculating the damage you take from falling, don't count any distance fallen while you are adjacent to a wall.",
+			"hash": "clBLOtSf"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -153,7 +295,19 @@
 		"source": "PZO2101",
 		"aonId": 441,
 		"id": "9e673abe-c1bf-4aaf-acf9-5efc054909c7",
-		"hash": "TBLJJtzp"
+		"pf2t": {
+			"name": "Elemental Fist",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 160 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=441",
+			"aon": "feats441",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Ki Strike\n\n- - -\n\nYou call upon the power of the elements, infusing your ki with elemental energy and allowing your attacks to deal energy damage. When you cast ki strike, in addition to the damage types normally available, you can deliver the extra damage in the form of a gust of storm-tossed wind (dealing electricity damage and gaining the air trait), a chunk of stone (dealing bludgeoning damage and gaining the earth trait), a flickering flame (dealing fire damage), or a crashing wave of frigid water (dealing cold damage and gaining the water trait).",
+			"hash": "TBLJJtzp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -165,7 +319,19 @@
 		"source": "PZO2101",
 		"aonId": 442,
 		"id": "ed96d2f9-4459-4642-aaf9-4e4652ba16ec",
-		"hash": "OzXZZAWH"
+		"pf2t": {
+			"name": "Stunning Fist",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 160 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=442",
+			"aon": "feats442",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Flurry of Blows\n\n- - -\n\nThe focused power of your flurry threatens to overwhelm your opponent. When you target the same creature with two Strikes from your Flurry of Blows, you can try to stun the creature. If either Strike hits and deals damage, the target must succeed at a Fortitude save against your class DC or be stunned 1 (or stunned 3 on a critical failure). This is an incapacitation effect.\n\n#### Stunning Fist Leads To...\nTriangle Shot",
+			"hash": "OzXZZAWH"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -188,7 +354,19 @@
 		"source": "PZO2101",
 		"aonId": 444,
 		"id": "9044874f-9a5b-436d-aaa9-3114830a65ff",
-		"hash": "YNUhvROq"
+		"pf2t": {
+			"name": "Flurry of Maneuvers",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 160 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=444",
+			"aon": "feats444",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** expert in Athletics\n\n- - -\n\nYou flurry is a combination of maneuvers. You can replace one or both of your attacks during a Flurry of Blows with Grapples, Shoves, or Trips.",
+			"hash": "YNUhvROq"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -200,7 +378,20 @@
 		"source": "PZO2101",
 		"aonId": 445,
 		"id": "d279e1eb-229b-43ad-93ae-47bff47b2d56",
-		"hash": "IKHWPWpC"
+		"pf2t": {
+			"name": "Flying Kick",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 2,
+			"source": "Core Rulebook pg. 160 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=445",
+			"aon": "feats445",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You launch yourself at a foe. Make a Leap or attempt a High Jump or Long Jump. At the end of the jump, if you're adjacent to a foe, you can immediately Strike that foe with an unarmed attack, even if the foe is in mid-air. You fall to the ground after the Strike. If the distance you fall is no more than the height of your jump, you land upright and take no damage.",
+			"hash": "IKHWPWpC"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -212,7 +403,19 @@
 		"source": "PZO2101",
 		"aonId": 446,
 		"id": "042a50b4-d2f6-4acf-b040-85a31ecfbbb1",
-		"hash": "vQcLNpUg"
+		"pf2t": {
+			"name": "Guarded Movement",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 160 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=446",
+			"aon": "feats446",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Your guard is up, even while moving. You gain a +4 circumstance bonus to AC against reactions triggered by your movement.",
+			"hash": "vQcLNpUg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -223,8 +426,7 @@
 		"benefits": "The power of your faith suffuses your ki",
 		"source": "PZO2101",
 		"aonId": 1184,
-		"id": "e49b408f-9ab6-4da6-b064-93a9ab990047",
-		"hash": "hrOWZgAE"
+		"id": "e49b408f-9ab6-4da6-b064-93a9ab990047"
 	},
 	{
 		"objectType": "Feat",
@@ -236,7 +438,20 @@
 		"source": "PZO2101",
 		"aonId": 447,
 		"id": "5eca1a90-73d7-46ee-8d76-4fd6be01e562",
-		"hash": "OKWKwXEz"
+		"pf2t": {
+			"name": "Stand Still",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": "r",
+			"source": "Core Rulebook pg. 160 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=447",
+			"aon": "feats447",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Trigger** A creature within your reach uses a move action or leaves a square during a move action it's using.\n\n- - -\n\nYou strike out when your foe tries to flee. Make a melee Strike against the triggering creature. If the attack is a critical hit and the trigger was a move action, you disrupt that action.",
+			"hash": "OKWKwXEz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -248,7 +463,19 @@
 		"source": "PZO2101",
 		"aonId": 448,
 		"id": "e3175771-790d-481c-ac99-c13b9d773d04",
-		"hash": "hZdNZPpG"
+		"pf2t": {
+			"name": "Wholeness of Body",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 160 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=448",
+			"aon": "feats448",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** ki spells\n\n- - -\n\nYou can restore your health by tapping into your ki. You gain the wholeness of body ki spell. Increase the number of Focus Points in your focus pool by 1.\n\n#### Wholeness of Body Leads To...\nEndurance of the Rooted Tree",
+			"hash": "hZdNZPpG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -260,7 +487,19 @@
 		"source": "PZO2101",
 		"aonId": 449,
 		"id": "f4402a23-7bec-40a3-8a01-6cd5f353ae2f",
-		"hash": "OHMrcCbr"
+		"pf2t": {
+			"name": "Abundant Step",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 160 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=449",
+			"aon": "feats449",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** incredible movement; ki spells\n\n- - -\n\nYou can teleport yourself a short distance. You gain the abundant step ki spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "OHMrcCbr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -272,7 +511,21 @@
 		"source": "PZO2101",
 		"aonId": 450,
 		"id": "da29bdec-0995-49cb-8399-16a04641ee18",
-		"hash": "MSxWbjyB"
+		"pf2t": {
+			"name": "Crane Flutter",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": "r",
+			"archetype": "Martial Artist",
+			"source": "Core Rulebook pg. 161 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=450",
+			"aon": "feats450",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Martial Artist\n**Prerequisites** Crane Stance\n**Requirements** You are in Crane Stance\n**Trigger** You are targeted with a melee attack by an attacker you can see.\n\n- - -\n\nYou interpose your arm between yourself and your opponent. Your circumstance bonus to AC from Crane Stance increases to +3 against the triggering attack. If the attack misses you, you can immediately make a crane wing Strike against the attacker at a -2 penalty, even if the attacker isn't within your reach.",
+			"hash": "MSxWbjyB"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -284,7 +537,21 @@
 		"source": "PZO2101",
 		"aonId": 451,
 		"id": "ee9a6a02-7072-421d-8f14-fdd7b8548929",
-		"hash": "dgcEnHFs"
+		"pf2t": {
+			"name": "Dragon Roar",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "auditory,emotion,fear,mental,monk",
+			"actions": 1,
+			"archetype": "Martial Artist",
+			"source": "Core Rulebook pg. 161 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=451",
+			"aon": "feats451",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Martial Artist\n**Prerequisites** Dragon Stance\n**Requirements** You are in Dragon Stance.\n\n- - -\n\nYou bellow, instilling fear in your enemies. Enemies within a 15-foot emanation must succeed at a Will save against your Intimidation DC or be frightened 1 (frightened 2 on a critical failure). When a creature frightened by the roar begins its turn adjacent to you, it can't reduce its frightened value below 1 on that turn. Your first attack that hits a frightened creature after you roar and before the end of your next turn gains a +4 circumstance bonus to damage.\n\nAfter you use Dragon Roar, you can't use it again for 1d4 rounds. Its effects end immediately if you leave Dragon Stance. Creatures in the area of your roar are then temporarily immune for 1 minute.",
+			"hash": "dgcEnHFs"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -296,7 +563,19 @@
 		"source": "PZO2101",
 		"aonId": 452,
 		"id": "782d07f2-b19d-4c64-ba75-f42290863f4f",
-		"hash": "NksKXpzX"
+		"pf2t": {
+			"name": "Ki Blast",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 161 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=452",
+			"aon": "feats452",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** ki spells\n\n- - -\n\nYou can unleash an impactful cone of force by channeling your ki. You gain the ki blast ki spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "NksKXpzX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -308,7 +587,21 @@
 		"source": "PZO2101",
 		"aonId": 453,
 		"id": "97ff5052-ac25-4946-bab5-98266cfd7371",
-		"hash": "NMXSYkWK"
+		"pf2t": {
+			"name": "Mountain Stronghold",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 1,
+			"archetype": "Martial Artist",
+			"source": "Core Rulebook pg. 161 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=453",
+			"aon": "feats453",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Martial Artist\n**Prerequisites** Mountain Stance\n**Requirements** You are in Mountain Stance.\n\n- - -\n\nYou focus on your connection to the earth and call upon the mountain to block attacks against you. You gain a +2 circumstance bonus to AC until the beginning of your next turn.",
+			"hash": "NMXSYkWK"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -320,7 +613,21 @@
 		"source": "PZO2101",
 		"aonId": 454,
 		"id": "6d62f12f-dde9-4cc8-b040-589b3355e737",
-		"hash": "XtPOXqQv"
+		"pf2t": {
+			"name": "Tiger Slash",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 2,
+			"archetype": "Martial Artist",
+			"source": "Core Rulebook pg. 161 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=454",
+			"aon": "feats454",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Martial Artist\n**Prerequisites** Tiger Stance\n**Requirements** You are in Tiger Stance.\n\n- - -\n\nYou make a fierce swipe with both hands. Make a tiger claw Strike. It deals two extra weapon damage dice (three extra dice if you're 14th level or higher), and you can push the target 5 feet away as if you had successfully Shoved them. If the attack is a critical success and deals damage, add your Strength modifier to the persistent bleed damage from your tiger claw.",
+			"hash": "XtPOXqQv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -332,7 +639,20 @@
 		"source": "PZO2101",
 		"aonId": 455,
 		"id": "f74f5a8f-1d37-4aa7-b5d6-2d84101bd23c",
-		"hash": "rxMQyksX"
+		"pf2t": {
+			"name": "Water Step",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "monk",
+			"archetype": "Elementalist",
+			"source": "Core Rulebook pg. 162 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=455",
+			"aon": "feats455",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Elementalist\n\n- - -\n\nYou can Stride across liquid and surfaces that don't support your weight. This benefit lasts only during your movement. If you end your movement on a surface that can't support you, you fall in or it collapses as normal.",
+			"hash": "rxMQyksX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -344,7 +664,21 @@
 		"source": "PZO2101",
 		"aonId": 456,
 		"id": "7fd401a0-48a8-4575-965a-b846c1fcf036",
-		"hash": "qmDSCEXp"
+		"pf2t": {
+			"name": "Whirling Throw",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 1,
+			"archetype": "Wrestler",
+			"source": "Core Rulebook pg. 162 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=456",
+			"aon": "feats456",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Wrestler\n**Requirements** You have a creature grabbed or restrained.\n\n- - -\n\nYou propel your grabbed or restrained foe a great distance. You can throw the creature any distance up to 10 feet, plus 5 feet  your Strength modifier. If you successfully throw the creature, it takes bludgeoning damage equal to your Strength modifier plus 1d6 per 10 feet you threw it.\n\nAttempt an Athletics check against the foe's Fortitude DC. You take a -2 circumstance penalty to your check if the target is one size larger than you and a -4 circumstance penalty if it's larger than that. You gain a +2 circumstance bonus to your check if the target is one size smaller than you and a +4 circumstance bonus if it's smaller than that.\n\n**Critical Success** You throw the creature the desired distance and it lands prone.\n**Success** You throw the creature the desired distance.\n**Failure** You don't throw the creature.\n**Critical Failure** You don't throw the creature, and it's no longer grabbed or restrained by you.",
+			"hash": "qmDSCEXp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -356,7 +690,21 @@
 		"source": "PZO2101",
 		"aonId": 457,
 		"id": "7f677859-e425-490a-863d-06e8cad5f46b",
-		"hash": "XLJMArBJ"
+		"pf2t": {
+			"name": "Wolf Drag",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 2,
+			"archetype": "Martial Artist",
+			"source": "Core Rulebook pg. 162 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=457",
+			"aon": "feats457",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Martial Artist\n**Prerequisites** Wolf Stance\n**Requirements** You are in Wolf Stance.\n\n- - -\n\nYou rip your enemy off their feet. Make a wolf jaw Strike. Your wolf jaw gains the fatal d12 trait for this Strike, and if the attack succeeds, you knock the target prone.",
+			"hash": "XLJMArBJ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -368,7 +716,19 @@
 		"source": "PZO2101",
 		"aonId": 458,
 		"id": "7f3d0ebd-2111-458a-b265-c0b0b19bb9fe",
-		"hash": "kqEhJHsj"
+		"pf2t": {
+			"name": "Arrow Snatching",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 162 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=458",
+			"aon": "feats458",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Deflect Arrow\n\n- - -\n\nYou pluck missiles from the air and hurl them back at their source. When you successfully deflect an attack with Deflect Arrow, as part of that reaction, you can immediately make a ranged Strike against the attacker using the projectile you deflected. This is a thrown weapon with the same range increment and effect on a hit as the triggering attack.",
+			"hash": "kqEhJHsj"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -380,7 +740,20 @@
 		"source": "PZO2101",
 		"aonId": 459,
 		"id": "8eab1624-d2c0-4aed-b4d3-96acdaf646cd",
-		"hash": "ztzZVTXt"
+		"pf2t": {
+			"name": "Ironblood Stance",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "monk,stance",
+			"actions": 1,
+			"source": "Core Rulebook pg. 163 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=459",
+			"aon": "feats459",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Requirements** You are unarmored.\n\n- - -\n\nYou enter the stance of impenetrable iron, refusing to yield to any blow. You can make iron sweep unarmed attacks. These deal 1d8 bludgeoning damage; are in the brawling group; and have the nonlethal, parry, sweep, and unarmed traits.\n\nWhile in Ironblood Stance, you gain resistance 2 to all damage. The resistance increases to 3 at 12th level, to 4 at 16th level, and to 5 at 20th level.\n\n#### Ironblood Stance Leads To...\nIronblood Surge",
+			"hash": "ztzZVTXt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -392,7 +765,20 @@
 		"source": "PZO2101",
 		"aonId": 460,
 		"id": "c4d0c6a0-01e4-478a-8273-39e0a8e36666",
-		"hash": "HVfMRnxU"
+		"pf2t": {
+			"name": "Mixed Maneuver",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 2,
+			"source": "Core Rulebook pg. 163 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=460",
+			"aon": "feats460",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** master in Athletics\n\n- - -\n\nYou combine two different maneuvers together into a single flowing whole. Choose any two of Grapple, Shove, and Trip. Attempt both of the attacks you chose against the same or different creatures, but don't apply the multiple attack penalty until after resolving both attacks.",
+			"hash": "HVfMRnxU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -404,7 +790,20 @@
 		"source": "PZO2101",
 		"aonId": 461,
 		"id": "9808e0d9-754e-4bf5-b7ab-bacdab5f8b1c",
-		"hash": "FCrXtnNv"
+		"pf2t": {
+			"name": "Tangled Forest Stance",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "monk,stance",
+			"actions": 1,
+			"source": "Core Rulebook pg. 163 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=461",
+			"aon": "feats461",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Requirements** You are unarmored.\n\n- - -\n\nYou extend your arms like gnarled branches to interfere with your foes' movements. You can make lashing branch unarmed attacks. These deal 1d8 slashing damage; are in the brawling group; and have the agile, finesse, nonlethal, and unarmed traits.\n\nWhile you're in Tangled Forest Stance and can act, every enemy in your reach that tries to move away from you must succeed at a Reflex save, Acrobatics check, or Athletics check against your class DC or be immobilized for that action. If you prefer, you can allow the enemy to move.\n\n#### Tangled Forest Stance Leads To...\nTangled Forest Rake",
+			"hash": "FCrXtnNv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -416,7 +815,20 @@
 		"source": "PZO2101",
 		"aonId": 462,
 		"id": "6fa3f574-e136-4437-84b3-329d602d0e1e",
-		"hash": "zkskSTYd"
+		"pf2t": {
+			"name": "Wall Run",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 1,
+			"source": "Core Rulebook pg. 163 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=462",
+			"aon": "feats462",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You defy gravity, traversing vertical planes as easily as the ground. Stride up to your Speed. You must start your movement on a horizontal surface. During this movement, you can run up vertical surfaces, like walls, at your full Speed. If you end the Stride off the ground, you fall after taking your next action or when your turn ends, whichever comes first (though you can Grab an Edge, if applicable). If you have Water Step or a similar ability, Wall Run lets you run along flimsy vertical surfaces, as well as vertical liquids, such as a waterfall.",
+			"hash": "zkskSTYd"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -428,7 +840,19 @@
 		"source": "PZO2101",
 		"aonId": 463,
 		"id": "b52904a3-ef2f-4b58-ab04-49d875fefd36",
-		"hash": "jLpUhRvg"
+		"pf2t": {
+			"name": "Wild Winds Initiate",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 163 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=463",
+			"aon": "feats463",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** ki spells\n\n- - -\n\nYou learn a mystical stance that lets you attack from a distance. You gain the wild winds stance ki spell. Increase the number of Focus Points in your focus pool by 1. While entering the stance is a ki spell, the wind crash Strikes the stance grants are not, so you can use them as often as you like while in the stance.\n\n#### Wild Winds Initiate Leads To...\nElectric Counter, Wild Winds Gust",
+			"hash": "jLpUhRvg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -440,7 +864,20 @@
 		"source": "PZO2101",
 		"aonId": 464,
 		"id": "b8524b54-94e7-4d6e-9a5a-ddea97019ba5",
-		"hash": "FzrzrTGI"
+		"pf2t": {
+			"name": "Knockback Strike",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "concentrate,monk",
+			"actions": 2,
+			"source": "Core Rulebook pg. 163 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=464",
+			"aon": "feats464",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You focus your strength into a blow powerful enough to push an enemy away from you. Make an unarmed Strike. If you hit, attempt an Athletics check to Shove the target. This attack uses the same multiple attack penalty as your Strike, and doesn't count toward your multiple attack penalty.",
+			"hash": "FzrzrTGI"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -452,7 +889,20 @@
 		"source": "PZO2101",
 		"aonId": 465,
 		"id": "606560e0-84d4-4ce9-a27e-23674958645f",
-		"hash": "UGqWDZZD"
+		"pf2t": {
+			"name": "Sleeper Hold",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "incapacitation,monk",
+			"actions": 1,
+			"source": "Core Rulebook pg. 163 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=465",
+			"aon": "feats465",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Requirements** You have a creature grabbed or restrained.\n\n- - -\n\nYou pinch crucial points of your target's nervous system, impeding its ability to function. Attempt an Athletics check to Grapple the creature, with the following success and critical success effects instead of the usual effects.\n\n**Critical Success** The target falls unconscious for 1 minute, though it remains standing and doesn't drop what it holds.\n**Success** The target is clumsy 1 until the end of its next turn.",
+			"hash": "UGqWDZZD"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -464,7 +914,19 @@
 		"source": "PZO2101",
 		"aonId": 466,
 		"id": "82270abf-770d-4b35-92b9-a00853aea0f9",
-		"hash": "dyqMBARl"
+		"pf2t": {
+			"name": "Wind Jump",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 163 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=466",
+			"aon": "feats466",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** ki spells\n\n- - -\n\nYou gather the wind beneath you, allowing you to soar as you jump. You gain the wind jump ki spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "dyqMBARl"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -476,7 +938,20 @@
 		"source": "PZO2101",
 		"aonId": 467,
 		"id": "79f8ba32-d065-403c-ab85-d4091606c4d1",
-		"hash": "IsTpLYYE"
+		"pf2t": {
+			"name": "Winding Flow",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 1,
+			"source": "Core Rulebook pg. 163 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=467",
+			"aon": "feats467",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Any journey consists of more than simply reaching your destination. You use two of the following actions in any order: Stand, Step, and Stride. You can't use the same action twice.",
+			"hash": "IsTpLYYE"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -488,7 +963,19 @@
 		"source": "PZO2101",
 		"aonId": 468,
 		"id": "a0df4bd7-c83e-423b-8b98-1fc5a7b3b6c1",
-		"hash": "xkXKGXhX"
+		"pf2t": {
+			"name": "Diamond Soul",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 163 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=468",
+			"aon": "feats468",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You have fortified your body and mind against eldritch effects. You gain a +1 status bonus to saving throws against magic.",
+			"hash": "xkXKGXhX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -500,7 +987,20 @@
 		"source": "PZO2101",
 		"aonId": 469,
 		"id": "04a693a4-b30b-4b17-9cc6-f8af42542d6a",
-		"hash": "rBhqsIpQ"
+		"pf2t": {
+			"name": "Disrupt Ki",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "monk,negative",
+			"actions": 2,
+			"source": "Core Rulebook pg. 163 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=469",
+			"aon": "feats469",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Make an unarmed Strike. If it deals damage to a living creature, you block that creature's inner life force. The creature takes 2d6 persistent negative damage and is enfeebled 1 until the persistent damage ends. If you're 18th level or higher, this deals 3d6 persistent negative damage instead.",
+			"hash": "rBhqsIpQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -512,7 +1012,19 @@
 		"source": "PZO2101",
 		"aonId": 470,
 		"id": "23354d69-f774-44b9-8c15-45e3d5e56bbc",
-		"hash": "vvxfQBQb"
+		"pf2t": {
+			"name": "Improved Knockback",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 163 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=470",
+			"aon": "feats470",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** master in Athletics\n\n- - -\n\nWhen you successfully Shove a creature, increase both the distance you can push the creature and the distance you can move to follow along with the target by 5 feet on a success or 10 feet on a critical success. If you push the target into an obstacle, it takes bludgeoning damage equal to 6 plus your Strength modifier, or 8 plus your Strength modifier if you have legendary proficiency in Athletics.",
+			"hash": "vvxfQBQb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -524,7 +1036,19 @@
 		"source": "PZO2101",
 		"aonId": 471,
 		"id": "c5e82d5c-740f-4ec0-9f66-cb279be51fd9",
-		"hash": "ZclfNJDK"
+		"pf2t": {
+			"name": "Meditative Focus",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 164 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=471",
+			"aon": "feats471",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** ki spells\n\n- - -\n\nYour meditation is so effective that you can achieve a deep focus. If you have spent at least 2 Focus Points since the last time you Refocused, you recover 2 Focus Points when you Refocus instead of 1.\n\n#### Meditative Focus Leads To...\nMeditative Wellspring",
+			"hash": "ZclfNJDK"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -536,7 +1060,20 @@
 		"source": "PZO2101",
 		"aonId": 472,
 		"id": "8cb8d0a2-bbc0-4e85-9f56-b30b285a5932",
-		"hash": "QzmSkqbx"
+		"pf2t": {
+			"name": "Stance Savant (Monk)",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 0,
+			"source": "Core Rulebook pg. 164 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=472",
+			"aon": "feats472",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Trigger** You roll initiative.\n\n- - -\n\nYou enter a stance without a thought. Use an action that has the stance trait.\n\n#### Stance Savant (Monk) Leads To...\nMaster of Many Styles",
+			"hash": "QzmSkqbx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -548,7 +1085,20 @@
 		"source": "PZO2101",
 		"aonId": 473,
 		"id": "f2c23aa4-7b33-472c-929f-e204e6c3292f",
-		"hash": "NzCxYnzl"
+		"pf2t": {
+			"name": "Ironblood Surge",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 1,
+			"source": "Core Rulebook pg. 164 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=473",
+			"aon": "feats473",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Ironblood Stance\n**Requirements** You are in Ironblood Stance.\n\n- - -\n\nYou steel yourself, preparing to resist oncoming attacks and using your muscles to absorb the impact. You gain the benefits of your iron sweep's parry trait (a +1 circumstance bonus to AC until the start of your next turn) and your resistance from Ironblood Stance increases to your Strength modifier (if it's higher) for the same duration.",
+			"hash": "NzCxYnzl"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -560,7 +1110,21 @@
 		"source": "PZO2101",
 		"aonId": 474,
 		"id": "6c6a6bdd-b4ec-46a2-8dee-0d8fe6ebc0b8",
-		"hash": "ZQdwdtPj"
+		"pf2t": {
+			"name": "Mountain Quake",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 1,
+			"archetype": "Martial Artist",
+			"source": "Core Rulebook pg. 164 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=474",
+			"aon": "feats474",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Martial Artist\n**Prerequisites** Mountain Stronghold\n**Requirements** You are in Mountain Stance.\n\n- - -\n\nYou stomp, shaking the earth beneath you. Creatures on the ground within a 20-foot emanation take damage equal to your Strength modifier (minimum 0), which they can resist with a basic Fortitude save. On a failure, they also fall prone. After you use this action, you can't use it again for 1d4 rounds.",
+			"hash": "ZQdwdtPj"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -572,7 +1136,20 @@
 		"source": "PZO2101",
 		"aonId": 475,
 		"id": "6a30c136-cfb9-4c44-94b7-3109dff350af",
-		"hash": "ZlpPrcEQ"
+		"pf2t": {
+			"name": "Tangled Forest Rake",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 1,
+			"source": "Core Rulebook pg. 164 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=475",
+			"aon": "feats475",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Tangled Forest Stance\n**Requirements** You are in Tangled Forest Stance.\n\n- - -\n\nYou reposition foes with raking attacks. Make a lashing branch Strike. If you hit and deal damage, you force the target to move 5 feet into a space within your reach. This follows the forced movement rules.",
+			"hash": "ZlpPrcEQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -584,7 +1161,19 @@
 		"source": "PZO2101",
 		"aonId": 476,
 		"id": "89cd990d-4181-4769-a4c2-32e8b7df0060",
-		"hash": "qXjvGdvZ"
+		"pf2t": {
+			"name": "Timeless Body",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 164 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=476",
+			"aon": "feats476",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You cease aging. In addition, you gain a +2 status bonus to saving throws against poisons and diseases, and you gain resistance to poison damage equal to half your level.",
+			"hash": "qXjvGdvZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -596,7 +1185,19 @@
 		"source": "PZO2101",
 		"aonId": 477,
 		"id": "b7248549-3be7-4dc6-aaa3-dcc8a0647bd7",
-		"hash": "szqbAyyN"
+		"pf2t": {
+			"name": "Tongue of the Sun and Moon",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 165 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=477",
+			"aon": "feats477",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You have transcended the barriers between words and meaning. You can speak and understand all spoken languages.",
+			"hash": "szqbAyyN"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -608,7 +1209,19 @@
 		"source": "PZO2101",
 		"aonId": 479,
 		"id": "0a5311dc-6fc1-477a-a7cd-6217e6d1d246",
-		"hash": "xgzQIkhM"
+		"pf2t": {
+			"name": "Enlightened Presence",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "emotion,mental,monk",
+			"source": "Core Rulebook pg. 165 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=479",
+			"aon": "feats479",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You exude an aura of resolve. You and allies within 15 feet of you gain a +2 status bonus to Will saving throws against mental effects.",
+			"hash": "xgzQIkhM"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -620,7 +1233,20 @@
 		"source": "PZO2101",
 		"aonId": 480,
 		"id": "5245d8f7-ebf6-4064-a706-d2a3a0e31a3b",
-		"hash": "DJAdcPtp"
+		"pf2t": {
+			"name": "Master of Many Styles",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 0,
+			"source": "Core Rulebook pg. 165 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=480",
+			"aon": "feats480",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Stance Savant (Monk)\n**Trigger** Your turn begins\n\n- - -\n\nYou move between stances in an unceasing dance. You use an action with the stance trait.\n\n#### Master of Many Styles Leads To...\nKi Center",
+			"hash": "DJAdcPtp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -632,7 +1258,19 @@
 		"source": "PZO2101",
 		"aonId": 481,
 		"id": "f6171791-56a8-49b7-bcdf-f3554c7cb5f9",
-		"hash": "QPERqrVY"
+		"pf2t": {
+			"name": "Quivering Palm",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 165 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=481",
+			"aon": "feats481",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** ki spells\n\n- - -\n\nYour strikes can kill foes. You gain the quivering palm ki spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "QPERqrVY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -655,7 +1293,20 @@
 		"source": "PZO2101",
 		"aonId": 478,
 		"id": "bb8a7917-37df-4af9-82d9-689e7ac5e13c",
-		"hash": "vszfUTsZ"
+		"pf2t": {
+			"name": "Wild Winds Gust",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "air,concentrate,evocation,manipulate,monk",
+			"actions": 2,
+			"source": "Core Rulebook pg. 165 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=478",
+			"aon": "feats478",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Wild Winds Initiate\n**Requirements** You are in Wild Winds Stance.\n\n- - -\n\nYou store up energy and release it in an enormous gust of rushing wind. Make a wind crash Strike against each creature in your choice of a 30-foot cone or a 60 foot line. These attacks all count toward your multiple attack penalty, but the penalty doesn't increase until after you make all the attacks.",
+			"hash": "vszfUTsZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -667,7 +1318,19 @@
 		"source": "PZO2101",
 		"aonId": 483,
 		"id": "0631136e-2e41-4751-a792-898d463ae5c6",
-		"hash": "YQgsPvmX"
+		"pf2t": {
+			"name": "Diamond Fists",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 165 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=483",
+			"aon": "feats483",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Your body hardens as you combine your attacks, making your finishing blows more damaging. Your unarmed attacks gain the forceful trait. Any that already had this trait instead increase their weapon damage dice by one step.",
+			"hash": "YQgsPvmX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -679,7 +1342,19 @@
 		"source": "PZO2101",
 		"aonId": 484,
 		"id": "9f43830b-a100-4243-9f65-819ffb9a4682",
-		"hash": "QZUWEJEh"
+		"pf2t": {
+			"name": "Empty Body",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 165 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=484",
+			"aon": "feats484",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** ki spells\n\n- - -\n\nYou transmute your body into an ethereal form. You gain the empty body ki spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "QZUWEJEh"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -691,7 +1366,19 @@
 		"source": "PZO2101",
 		"aonId": 485,
 		"id": "dfd5b0fc-01bc-42e3-9e36-1deb6441ce97",
-		"hash": "thQHIJFZ"
+		"pf2t": {
+			"name": "Meditative Wellspring",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 165 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=485",
+			"aon": "feats485",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Meditative Focus\n\n- - -\n\nWhen you clear your mind, your focus comes flowing back in a powerful rush. If you have spent at least 3 Focus Points since the last time you Refocused, you recover 3 Focus Points when you Refocus instead of 1.",
+			"hash": "thQHIJFZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -703,7 +1390,20 @@
 		"source": "PZO2101",
 		"aonId": 486,
 		"id": "e14a000a-5e26-4b58-a3e7-2a949adc67cc",
-		"hash": "pGRxXRGv"
+		"pf2t": {
+			"name": "Swift River",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "monk",
+			"actions": 0,
+			"source": "Core Rulebook pg. 165 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=486",
+			"aon": "feats486",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Trigger** Your turn ends and you have a status penalty to your Speed or are immobilized or slowed.\n\n- - -\n\nYou flow like water, avoiding all restraints. End one status penalty to your speed, or end one immobilized or slowed condition affecting you.",
+			"hash": "pGRxXRGv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -715,7 +1415,19 @@
 		"source": "PZO2101",
 		"aonId": 487,
 		"id": "cb68493c-8fe4-48ff-a4ab-7e87fc99dec5",
-		"hash": "BzxWLpqT"
+		"pf2t": {
+			"name": "Enduring Quickness",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 165 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=487",
+			"aon": "feats487",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You move as fast and as high as the wind itself. You're permanently quickened. You can use your extra action to Stride or Leap, or to provide one of the actions needed for a High Jump or Long Jump.",
+			"hash": "BzxWLpqT"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -727,7 +1439,19 @@
 		"source": "PZO2101",
 		"aonId": 488,
 		"id": "dac1e79b-d685-4433-838a-58064805f2a7",
-		"hash": "trUAWnXt"
+		"pf2t": {
+			"name": "Fuse Stance",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "monk",
+			"source": "Core Rulebook pg. 165 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=488",
+			"aon": "feats488",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** at least two stances\n\n- - -\n\nYou have combined two stances into a single stance all your own. When you take this feat, choose two stances you know and combine them into a single fused stance. Give your new fused stance a unique name. When you enter your fused stance, you gain all the effects of both stances, including the requirements and restrictions.\n\nYou can't fuse stances with fundamentally incompatible requirements or restrictions (such as Mountain Stance and Crane Stance, which both require using only one type of Strike).",
+			"hash": "trUAWnXt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -738,8 +1462,7 @@
 		"benefits": "Strike harder and heal more rapidly.",
 		"source": "PZO2101",
 		"aonId": 1166,
-		"id": "73b3197f-803f-440e-9a02-0543c58b331a",
-		"hash": "tmgjRCWR"
+		"id": "73b3197f-803f-440e-9a02-0543c58b331a"
 	},
 	{
 		"objectType": "Feat",
@@ -751,6 +1474,19 @@
 		"source": "PZO2101",
 		"aonId": 489,
 		"id": "f6a159a4-a6fe-49fa-996a-9474f8b3e3da",
-		"hash": "gRzpgWXJ"
+		"pf2t": {
+			"name": "Impossible Technique",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "fortune,monk",
+			"actions": "r",
+			"source": "Core Rulebook pg. 165 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=489",
+			"aon": "feats489",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Requirements** You are not armored or fatigued.\n**Trigger** An enemy's attack hits you or you fail a saving throw against an enemy's ability.\n\n- - -\n\nYou execute a maneuver that defies possibility. If the triggering effect was an enemy's attack hitting you, the enemy rerolls the attack roll and uses the lower result. If the triggering effect was you failing a saving throw, you reroll the saving throw and use the higher result.",
+			"hash": "gRzpgWXJ"
+		}
 	}
 ]

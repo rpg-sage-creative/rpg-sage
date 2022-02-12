@@ -13,7 +13,19 @@
 		"source": "PZO90147",
 		"page": 73,
 		"id": "16d6aafa-38dd-49c5-8a68-ddec2fcc3ea6",
-		"hash": "MZftpZkC"
+		"pf2t": {
+			"name": "Different Worlds",
+			"level": 1,
+			"pfs": "limited",
+			"traits": "uncommon,general",
+			"source": "147 Tomorrow Must Burn pg. 73",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=923",
+			"aon": "feats923",
+			"type": "feat",
+			"subtype": "general",
+			"body": "**Prerequisites** ability to select ancestry feats from multiple ancestries\n\n- - -\n\nYour separate experiences in different societies have evolved into entirely separate lives. Create a second identity for yourself with a different name, history, and background. This identity must correspond to one of the ancestries whose ancestry feats you can select. You gain the trained proficiency rank in the Lore skill from the second background you chose (but you don't gain any of the background's other benefits), and you gain a +4 circumstance bonus to Deception checks when making a statement that would be true of your second identity or when disguising yourself as your second identity.",
+			"hash": "MZftpZkC"
+		}
 	},
 	{
 		"aonId": 924,
@@ -34,7 +46,20 @@
 		"source": "PZO90147",
 		"page": 73,
 		"id": "5c4b1599-0238-4bdc-bf81-f0c92fc36d9a",
-		"hash": "RgNYcQsU"
+		"pf2t": {
+			"name": "Reveal Machinations",
+			"level": 15,
+			"pfs": "limited",
+			"traits": "rare,general,skill",
+			"actions": 1,
+			"source": "147 Tomorrow Must Burn pg. 73",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=924",
+			"aon": "feats924",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Prerequisites** legendary in Deception\n\n- - -\n\nYou reveal that you played a minor but recurring role in another humanoid's life-or at least convince them that's the case. Attempt a Deception check against the target's Will DC. On a success, the revelation makes them frightened 2, and on a critical success they are frightened 3. In addition, you gain information about the subject as though you had attempted to Recall Knowledge about them using an appropriate skill and received the same result on your roll. You can't use this ability against the same humanoid again until 1 day has passed and you've also successfully disguised yourself as a different person.",
+			"hash": "RgNYcQsU"
+		}
 	},
 	{
 		"aonId": 925,
@@ -54,7 +79,18 @@
 		"source": "PZO90147",
 		"page": 73,
 		"id": "af252630-80d6-487e-ad9d-fefec52501c2",
-		"hash": "nHZzMSCx"
+		"pf2t": {
+			"name": "Secret Speech",
+			"level": 1,
+			"traits": "uncommon,general,skill",
+			"source": "147 Tomorrow Must Burn pg. 73",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=925",
+			"aon": "feats925",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Prerequisites** trained in Deception\n\n- - -\n\nChoose a secret society (such as the Lacunafex or the Bellflower Network). You've learned that society's secret cant or jargon, enabling you to share hidden messages when signing or speaking with others who've also learned it. If an observer succeeds at a Perception check against your Deception DC when you do this, they realize you are passing a message but fail to discern its content, unless they subsequently succeed at a Society check against your Deception DC. On a critical success, they learn not only the message, but also who you're passing the message to.",
+			"hash": "nHZzMSCx"
+		}
 	},
 	{
 		"aonId": 927,
@@ -71,6 +107,18 @@
 		"source": "PZO90147",
 		"page": 73,
 		"id": "8335a74b-1e0c-41a6-af15-13b6e894fbef",
-		"hash": "FRKrgfWU"
+		"pf2t": {
+			"name": "Tweak Appearances",
+			"level": 2,
+			"pfs": "limited",
+			"traits": "uncommon,general,skill",
+			"source": "147 Tomorrow Must Burn pg. 73",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=927",
+			"aon": "feats927",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Prerequisites** expert in Crafting\n\n- - -\n\nYou spend 1 minute making quick adjustments to someone's clothing and appearance, causing their words to carry more weight with an audience of your choice. While speaking to that audience, the target gains a +1 item bonus to Diplomacy and Performance checks. If you have master proficiency in Crafting, the bonus increases to +2; if you have legendary proficiency in Crafting, the bonus increases to +3. This bonus lasts until this ability is used on the target again, the situation they were prepared for ends, or they next change their outfit.",
+			"hash": "FRKrgfWU"
+		}
 	}
 ]

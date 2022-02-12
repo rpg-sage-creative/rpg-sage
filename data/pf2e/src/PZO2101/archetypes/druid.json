@@ -9,7 +9,16 @@
 		"source": "PZO2101",
 		"id": "54e576ba-5c5d-4b50-8be9-7500fd3f783b",
 		"aonId": 6,
-		"hash": "rryGskZJ"
+		"pf2t": {
+			"name": "Druid",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 225 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=6",
+			"aon": "archetypes6",
+			"type": "archetype",
+			"body": "You have entered a druidic circle and learned a few of the order's secrets, granting you primal power.",
+			"hash": "rryGskZJ"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -43,7 +52,19 @@
 		"source": "PZO2101",
 		"id": "25c16ca8-56b8-448f-8c8e-3bc23a253bfb",
 		"aonId": 702,
-		"hash": "psXptMkG"
+		"pf2t": {
+			"name": "Basic Druid Spellcasting",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Druid",
+			"source": "Core Rulebook pg. 225 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=702",
+			"aon": "feats702",
+			"type": "feat",
+			"body": "**Archetype** Druid\n**Prerequisites** Druid Dedication\n\n- - -\n\nYou gain the basic spellcasting benefits.\n\n#### Basic Druid Spellcasting Leads To...\nExpert Druid Spellcasting, Primal Breadth",
+			"hash": "psXptMkG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -58,7 +79,19 @@
 		"source": "PZO2101",
 		"id": "ab7417af-2e7f-41b7-8bc6-624fa9f5cd6f",
 		"aonId": 703,
-		"hash": "nJrPKhcU"
+		"pf2t": {
+			"name": "Basic Wilding",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Druid",
+			"source": "Core Rulebook pg. 225 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=703",
+			"aon": "feats703",
+			"type": "feat",
+			"body": "**Archetype** Druid\n**Prerequisites** Druid Dedication\n\n- - -\n\nYou gain a 1st- or 2nd-level druid feat.\n\n#### Basic Wilding Leads To...\nAdvanced Wilding",
+			"hash": "nJrPKhcU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -90,7 +123,19 @@
 		"source": "PZO2101",
 		"id": "16768a89-9526-4ecc-9b73-87f4d1cdf69b",
 		"aonId": 705,
-		"hash": "xcvESMmG"
+		"pf2t": {
+			"name": "Advanced Wilding",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Druid",
+			"source": "Core Rulebook pg. 225 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=705",
+			"aon": "feats705",
+			"type": "feat",
+			"body": "**Archetype** Druid\n**Prerequisites** Basic Wilding\n\n- - -\n\nYou gain one druid feat. For the purpose of meeting its prerequisites, your druid level is equal to half your character level.",
+			"hash": "xcvESMmG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -105,7 +150,19 @@
 		"source": "PZO2101",
 		"id": "f85651a2-a575-40e2-ad4c-53cb2c1aae06",
 		"aonId": 706,
-		"hash": "wAlpvgYq"
+		"pf2t": {
+			"name": "Primal Breadth",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Druid",
+			"source": "Core Rulebook pg. 225 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=706",
+			"aon": "feats706",
+			"type": "feat",
+			"body": "**Archetype** Druid\n**Prerequisites** Basic Druid Spellcasting\n\n- - -\n\nIncrease the spell slots you gain from druid archetype feats by 1 for each spell level other than your two highest druid spell slots.",
+			"hash": "wAlpvgYq"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -120,7 +177,19 @@
 		"source": "PZO2101",
 		"id": "d99ac2ba-a4cc-4d9e-9887-93c39684e187",
 		"aonId": 707,
-		"hash": "yUpQdrQy"
+		"pf2t": {
+			"name": "Expert Druid Spellcasting",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Druid",
+			"source": "Core Rulebook pg. 225 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=707",
+			"aon": "feats707",
+			"type": "feat",
+			"body": "**Archetype** Druid\n**Prerequisites** Basic Druid Spellcasting; master in Nature\n\n- - -\n\nYou gain the expert spellcasting benefits.\n\n#### Expert Druid Spellcasting Leads To...\nMaster Druid Spellcasting",
+			"hash": "yUpQdrQy"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -135,6 +204,18 @@
 		"source": "PZO2101",
 		"id": "91758bd3-7ef7-4fa2-ab8b-bdc108d8adc8",
 		"aonId": 708,
-		"hash": "GgHzczgw"
+		"pf2t": {
+			"name": "Master Druid Spellcasting",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Druid",
+			"source": "Core Rulebook pg. 225 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=708",
+			"aon": "feats708",
+			"type": "feat",
+			"body": "**Archetype** Druid\n**Prerequisites** Expert Druid Spellcasting; legendary in Nature\n\n- - -\n\nYou gain the master spellcasting benefits.",
+			"hash": "GgHzczgw"
+		}
 	}
 ]

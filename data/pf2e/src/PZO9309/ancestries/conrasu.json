@@ -15,11 +15,101 @@
 		"aonId": 43,
 		"source": "PZO9309",
 		"id": "f2ea3c26-1999-4c46-b0f0-ec2259be262f",
-		"hash": "gzcZgyUO"
+		"pf2t": {
+			"name": "Conrasu",
+			"pfs": "standard",
+			"traits": "rare,aeon,conrasu,plant",
+			"source": "The Mwangi Expanse pg. 107 2.0",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=43",
+			"aon": "ancestries43",
+			"type": "ancestry",
+			"body": "Conrasus are shards of cosmic force given consciousness who construct intricate exoskeletons to interface with the mortal world. Both an integral part of the underlying processes of the universe and strangely set apart, conrasus look to aeons to understand their existence.\n\nConrasus aren't entirely clear on their own origins. Some historians think them a failed experiment of a wizardly cabal-possibly a splinter of artificers from the ancient Jitska Imperium-who desperately hoped to bind a pleroma to bolster their army but who accidentally conjured shattered scraps of the aeon instead. Others believe conrasus were built by their ancestors using an accelerated, iterative evolution process as natural as one designed by those who build portions of their own bodies could ever hope to achieve. Most likely, it is a mix of the two.\n\n#### You Might...\n+ Do your best to determine and act upon the will of your guiding aeon.\n+ Use rituals and repetitive actions as a means to meditate and reflect on your purpose.\n+ Have difficulty applying your cosmic instincts and senses to a physical existence.\n\n#### Others Probably...\n+ View you as part of a hivemind at best or lacking in free will at worst.\n+ Have trouble understanding your perspective or attempts at communication.\n+ Look to you as the expert on any matters involving aeons or related beings.\n\n#### Physical Description\nThe true form of a conrasu is an abstract chunk of spiritual essence. While their being exists beyond the truth of humanoid senses, to the mortal eye, their body usually resembles a globe of light, darkness, or space. Floating, internal pinpricks of illumination sit inside the ball, slightly obscured as if peeking through a gelatinous substance. These \"cores\" surround themselves with bodies made out of still-living wood, creating the form that most people recognize as a conrasu. Conrasus themselves are called to a path and, once they find it, shape frames to create a suitable form, leading to a wide variety of appearances.\n\nAs a conrasu ages, the supple green wood of their body hardens, causing their limbs to lose mobility. Conrasus must constantly grow new arms and roots for their living exoskeleton, leaving their frozen limbs as immobile effigies along their shell.\n\nConrasus can't maintain their integrity without their wooden exoskeletons. A conrasu that loses its exoskeleton dissipates and dies, though they can be returned to life with magic like other beings.\n\n#### Society\nThere are three distinct types of conrasus. Maintainers tend and care for others, believing they must cultivate a proper balance between various forces. Shapers build and direct those around them, and feel that balance is maintained by those who strive to preserve the world's equilibrium. Lastly, correctors fix problems of all sorts, often acting as stalwart bastions of law who  perceive the world in absolutes, with few to no shades of gray. True balance can be achieved only in cases where pressure and force have been applied to make necessary changes.\n\nOn rare occasions, a conrasu may hear and heed the call of another form of extraplanar being. One might serve a psychopomp, another an archon, and yet another might become a witch and adopt an unknown figure as a patron.\n\n#### Alignment and Religion\nMany conrasus consider themselves bound to a specific aeon, following them like a deity and doing what they believe to be the aeon's bidding. As a result, almost all conrasus are lawful neutral in alignment.\n\n#### Adventurers\nMaintainers who become adventurers are often wizards, bards, or clerics who offer their magic and knowledge to the group and subtly nudge the party as needed. Correctors tend to become champions, clerics, and fighters, forming heavy and hard living wood armor around themselves to keep them safe from harm. The rare shaper might travel with a group as a druid or even a bard, usually to accomplish a goal they believe lies outside of the enclaves.\n\nNo matter the path a conrasu finds themselves on, they tend to come from similar backgrounds. Field medic and herbalist tend to fit those who find themselves comfortable in their homes and with those of their nursery while conrasus of nomad or emissary backgrounds tend to enjoy roaming from place to place.\n\n#### Names\nConrasus have little in the way of consciousness as others understand it before they self-actualize and leave the nursery-towns where they sprouted. That includes a name, a concept of gender, and even the passage of time beyond their little bubbles-these are picked up in the wider world. As a result, a conrasu might have nearly any appellation.\n\n#### Sample Names\nAutoma, Azubu, Dumi, Emeka, Ganizadi, Locu, Incanes, Radi, Shell, Weave\n\n#### Conrasu Mechanics\n\n\n#### Hit Points\n10\n\n#### Size\nMedium\n\n#### Speed\n25 feet\n\n#### Ability Boosts\nConstitution\nWisdom\nFree\n\n#### Ability Flaw(s)\nCharisma\n\n#### Languages\nMwangi\nRasu\nAdditional languages equal to your Intelligence modifier (if it is positive). Choose from Celestial, Elven, Iruxi, Sylvan, Terran, Utopian, and any other languages to which you have access (such as the languages prevalent to your region).\n\n#### Sunlight Healing\nA conrasu can enter a meditative, healing state as a 10-minute activity when exposed to direct sunlight, in which case they recover 1d8 Hit Points. At 3rd level, and every 2 levels thereafter, this healing increases by 1d8. Once a conrasu has recovered Hit Points in this way, they are temporarily immune to further uses of Sunlight Healing for 1 day",
+			"hash": "gzcZgyUO"
+		}
 	},
-	{ "objectType": "Heritage", "name": "Rite of Invocation", "ancestry": "Conrasu", "source": "PZO9309", "id": "978a4ee2-3241-4ffc-9356-18785f2ca692", "aonId": 165, "hash": "lNQxbYYk" },
-	{ "objectType": "Heritage", "name": "Rite of Knowing", "ancestry": "Conrasu", "source": "PZO9309", "id": "ffd0c2b9-e448-44bb-8c5f-28c59d4af05b", "aonId": 161, "hash": "bgwpxflW" },
-	{ "objectType": "Heritage", "name": "Rite of Light", "ancestry": "Conrasu", "source": "PZO9309", "id": "284cbcaa-6b57-4e17-9abf-3b7a4ae54bfe", "aonId": 162, "hash": "jXtpklht" },
-	{ "objectType": "Heritage", "name": "Rite of Passage", "ancestry": "Conrasu", "source": "PZO9309", "id": "f49e9ee6-e33b-462f-858b-a0cb4ed0dcc3", "aonId": 163, "hash": "jWbNZEXq" },
-	{ "objectType": "Heritage", "name": "Rite of Reinforcement", "ancestry": "Conrasu", "source": "PZO9309", "id": "162190d9-cd5b-4c8d-b197-0bec46fa9140", "aonId": 164, "hash": "RkvvEsZw" }
+	{
+		"objectType": "Heritage",
+		"name": "Rite of Invocation",
+		"ancestry": "Conrasu",
+		"source": "PZO9309",
+		"id": "978a4ee2-3241-4ffc-9356-18785f2ca692",
+		"aonId": 165,
+		"pf2t": {
+			"name": "Rite of Invocation",
+			"source": "The Mwangi Expanse pg. 108 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=165",
+			"aon": "heritages165",
+			"type": "heritage",
+			"body": "You augmented your exoskeleton with magic. You gain one cantrip from the arcane or occult spell list. You can cast this spell as an innate spell at will. A cantrip is heightened to a spell level equal to half your level rounded up.",
+			"hash": "lNQxbYYk"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Rite of Knowing",
+		"ancestry": "Conrasu",
+		"source": "PZO9309",
+		"id": "ffd0c2b9-e448-44bb-8c5f-28c59d4af05b",
+		"aonId": 161,
+		"pf2t": {
+			"name": "Rite of Knowing",
+			"source": "The Mwangi Expanse pg. 107 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=161",
+			"aon": "heritages161",
+			"type": "heritage",
+			"body": "You enhanced your exoskeleton with a connection to Axis, allowing you to tap into the infinite knowledge of the plane. You gain the Call to Axis action.",
+			"hash": "bgwpxflW"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Rite of Light",
+		"ancestry": "Conrasu",
+		"source": "PZO9309",
+		"id": "284cbcaa-6b57-4e17-9abf-3b7a4ae54bfe",
+		"aonId": 162,
+		"pf2t": {
+			"name": "Rite of Light",
+			"source": "The Mwangi Expanse pg. 107 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=162",
+			"aon": "heritages162",
+			"type": "heritage",
+			"body": "Your exoskeleton bears small shoots that can share life. When using your Sunlight Healing, you can restore the Hit Points of an adjacent ally instead of yourself. That ally becomes temporarily immune to all uses of Sunlight Healing for 1 day.",
+			"hash": "jXtpklht"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Rite of Passage",
+		"ancestry": "Conrasu",
+		"source": "PZO9309",
+		"id": "f49e9ee6-e33b-462f-858b-a0cb4ed0dcc3",
+		"aonId": 163,
+		"pf2t": {
+			"name": "Rite of Passage",
+			"source": "The Mwangi Expanse pg. 107 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=163",
+			"aon": "heritages163",
+			"type": "heritage",
+			"body": "Your exoskeleton remains connected with the plants that created it. You can ignore difficult terrain and uneven ground caused by undergrowth. In addition, when you use the Acrobatics skill to Balance on narrow surfaces or uneven ground within forests, you aren't flat-footed. When you roll a success attempting one of these Acrobatics checks, you get a critical success instead.",
+			"hash": "jWbNZEXq"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Rite of Reinforcement",
+		"ancestry": "Conrasu",
+		"source": "PZO9309",
+		"id": "162190d9-cd5b-4c8d-b197-0bec46fa9140",
+		"aonId": 164,
+		"pf2t": {
+			"name": "Rite of Reinforcement",
+			"source": "The Mwangi Expanse pg. 107 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=164",
+			"aon": "heritages164",
+			"type": "heritage",
+			"body": "Your woven exoskeleton rivals the hardest armors that can be found. Your exoskeleton is medium armor in the plate armor group that grants a +4 item bonus to AC, a Dex cap of +1, a check penalty of -2, a speed penalty of -5 feet, and a Strength value of 16, and has the comfort trait. You can never wear other armor or remove your exoskeleton. You can etch armor runes onto your exoskeleton as normal.",
+			"hash": "RkvvEsZw"
+		}
+	}
 ]

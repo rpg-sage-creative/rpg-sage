@@ -9,7 +9,17 @@
 		"page": 212,
 		"source": "PZO2108",
 		"id": "98bc595a-d44b-4e80-9cdf-7cb1256093b0",
-		"aonId": 0
+		"aonId": 100,
+		"pf2t": {
+			"name": "Geomancer",
+			"pfs": "standard",
+			"source": "Secrets of Magic pg. 212",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=100",
+			"aon": "archetypes100",
+			"type": "archetype",
+			"body": "You know how to draw power from the land around you, no matter the terrain, by attuning your magic to match its mystical properties.\n\nYou might be a druid with an elemental focus (such as the flame, stone, or wave orders) or a naturalist with a touch of magic at your disposal. You could concentrate on a single type of terrain to wring every last drop of power from it or choose to wander the land to experience every type of terrain possible.\n\nClick here for more rules on using this archetype.",
+			"hash": "RXXMWNbp"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -45,7 +55,21 @@
 		"page": 212,
 		"source": "PZO2108",
 		"id": "3b8b85e8-e1fb-40a9-9b2d-16e61298fdcd",
-		"aonId": 0
+		"aonId": 2996,
+		"pf2t": {
+			"name": "Attunement Shift",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 0,
+			"archetype": "Geomancer",
+			"source": "Secrets of Magic pg. 212",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2996",
+			"aon": "feats2996",
+			"type": "feat",
+			"body": "**Archetype** Geomancer\n**Prerequisites** Geomancer Dedication\n**Requirements** Your previous action was to cast a spell with the air, cold, earth, fire, plant, or water trait.\n\n- - -\n\nThe magic of your spell floods into you, overriding your connection to the land around you. You alter your terrain attunement to a terrain that matches a trait of the spell you just cast. You thereby gain your terrain attunement benefit when you cast further spells with the same descriptor, instead of using the terrain you're actually in. For instance, if you cast tanglefoot, your terrain attunement switches to your choice of forest or swamp, and your terrain attunement applies when you cast another plant spell.\n\nYour terrain attunement reverts to that of the terrain you're in 1 minute after you use Attunement Shift.",
+			"hash": "kWgrlrSZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -76,7 +100,21 @@
 		"page": 212,
 		"source": "PZO2108",
 		"id": "952f51cc-77b1-432c-953c-36ad90ad32d7",
-		"aonId": 0
+		"aonId": 2998,
+		"pf2t": {
+			"name": "Rough Terrain Stance",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype,stance",
+			"actions": 1,
+			"archetype": "Geomancer",
+			"source": "Secrets of Magic pg. 212",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2998",
+			"aon": "feats2998",
+			"type": "feat",
+			"body": "**Archetype** Geomancer\n**Prerequisites** Geomancer Dedication; expert in Nature\n**Requirements** You gained a terrain attunement benefit this turn.\n\n- - -\n\nYou enter a stance that makes it difficult to move around you. Each square adjacent to you becomes difficult terrain that matches the terrain attunement you gained (rime forms in an arctic terrain, momentary undergrowth shoots up in a forest terrain, and so on). You ignore this difficult terrain.\n\nThis stance ends if you move into a different type of terrain.\n\n#### Rough Terrain Stance Leads To...\nShifting Terrain",
+			"hash": "njCfbbkm"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -90,7 +128,20 @@
 		"page": 213,
 		"source": "PZO2108",
 		"id": "28ed89b6-466d-4715-82bd-45668c7033ad",
-		"aonId": 0
+		"aonId": 2999,
+		"pf2t": {
+			"name": "Attuned Stride",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Geomancer",
+			"source": "Secrets of Magic pg. 213",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2999",
+			"aon": "feats2999",
+			"type": "feat",
+			"body": "**Archetype** Geomancer\n**Prerequisites** Geomancer Dedication; expert in Nature\n\n- - -\n\nYou can move freely through terrain you're attuned to. When you gain a terrain attunement benefit, you ignore difficult terrain in the corresponding type of terrain until the end of your next turn.",
+			"hash": "IZKBCHTq"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -106,7 +157,21 @@
 		"page": 213,
 		"source": "PZO2108",
 		"id": "9e499bbd-3e35-4f95-aba9-4d5eebc4a58d",
-		"aonId": 0
+		"aonId": 3000,
+		"pf2t": {
+			"name": "Draw from the Land",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Geomancer",
+			"source": "Secrets of Magic pg. 213",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3000",
+			"aon": "feats3000",
+			"type": "feat",
+			"body": "**Archetype** Geomancer\n**Prerequisites** Geomancer Dedication; expert in Nature\n**Requirements** You gained a terrain attunement benefit this turn, and it matched the terrain you're in.\n\n- - -\n\nYou pull strength from the surrounding terrain. You gain temporary Hit Points equal to your level. They last for 1 round. If you previously gained the plains terrain attunement effect this turn, combine the temporary Hit Points together.",
+			"hash": "TyrzEQBz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -120,7 +185,20 @@
 		"page": 213,
 		"source": "PZO2108",
 		"id": "16f99117-8110-465b-9b18-4d65e7faa9d1",
-		"aonId": 0
+		"aonId": 3001,
+		"pf2t": {
+			"name": "Read the Land",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "uncommon,archetype",
+			"archetype": "Geomancer",
+			"source": "Secrets of Magic pg. 213",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3001",
+			"aon": "feats3001",
+			"type": "feat",
+			"body": "**Archetype** Geomancer\n**Prerequisites** Geomancer Dedication; master in Nature\n\n- - -\n\nYou've learned how to commune with the land to learn information. You learn the commune with nature ritual if you didn't know it already. You can perform this ritual with a casting time of 1 hour instead of 1 day and without a secondary caster.",
+			"hash": "gPXkQbpL"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -140,7 +218,20 @@
 		"page": 213,
 		"source": "PZO2108",
 		"id": "3c4d125b-b6c0-4233-a431-ba9acb2c4e8d",
-		"aonId": 0
+		"aonId": 3002,
+		"pf2t": {
+			"name": "Terrain Shield",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Geomancer",
+			"source": "Secrets of Magic pg. 213",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3002",
+			"aon": "feats3002",
+			"type": "feat",
+			"body": "**Archetype** Geomancer\n**Prerequisites** Geomancer Dedication; master in Nature\n**Requirements** You gained a terrain attunement benefit since the start of your most recent turn and that attunement matches the terrain you're in.\n**Trigger** A Strike would damage you.\n\n- - -\n\nYou're so attuned to the land that it rises up to protect you from a potentially fatal blow in a seeming coincidence. For instance, a branch suddenly falls from a nearby tree to take the brunt of a sword swing or a surprising change of current disrupts an enemy's attack. You gain resistance to physical damage equal to double your level against the triggering Strike.",
+			"hash": "LzrtRAAm"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -170,7 +261,21 @@
 		"page": 213,
 		"source": "PZO2108",
 		"id": "54ee19ba-8bef-4356-9a3b-b3b5f1a11cf1",
-		"aonId": 0
+		"aonId": 3003,
+		"pf2t": {
+			"name": "Shifting Terrain",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Geomancer",
+			"source": "Secrets of Magic pg. 213",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3003",
+			"aon": "feats3003",
+			"type": "feat",
+			"body": "**Archetype** Geomancer\n**Prerequisites** Rough Terrain Stance; master in Nature\n**Requirements** Your terrain attunement matches the terrain you're in and you're in Rough Terrain Stance.\n\n- - -\n\nYou slam your fist into the ground or twirl your arms about to cause the terrain around you to shift and ripple, potentially throwing others off balance. Each creature within your area of difficult terrain from Rough Terrain Stance must attempt a Reflex saving throw against your spell DC with the following effects. After you use this action, you can't use it again for 1d4 rounds.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature is clumsy 1 for 1 round.\n**Failure** The creature is clumsy 2 for 1 round.\n**Critical Failure** The creature is clumsy 2 for 1 round and falls prone.",
+			"hash": "OttMMkIy"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -190,6 +295,20 @@
 		"page": 213,
 		"source": "PZO2108",
 		"id": "e1420ed7-81c9-4e70-b8c9-3af60742bb76",
-		"aonId": 0
+		"aonId": 3004,
+		"pf2t": {
+			"name": "Quickened Attunement",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "archetype,concentrate,metamagic",
+			"actions": 0,
+			"archetype": "Geomancer",
+			"source": "Secrets of Magic pg. 213",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3004",
+			"aon": "feats3004",
+			"type": "feat",
+			"body": "**Archetype** Geomancer\n**Prerequisites** Geomancer Dedication; legendary in Nature\n**Requirements** Your previous action was Attunement Shift.\n\n- - -\n\nIf your next action is to cast a spell that would grant your terrain attunement bonus, reduce the number of actions to cast it by 1 (to a minimum of 1 action).",
+			"hash": "fyHxdmZv"
+		}
 	}
 ]

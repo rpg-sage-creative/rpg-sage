@@ -33,6 +33,17 @@
 		"focus": false,
 		"aonId": 27,
 		"id": "4d1de5f9-6e56-43db-9c39-544f8d8a9fa9",
-		"hash": "fpRzyfCO"
+		"pf2t": {
+			"name": "Terminate Bloodline",
+			"level": 6,
+			"traits": "uncommon,necromancy",
+			"range": 10,
+			"source": "155 Lord of the Black Sands pg. 74",
+			"src": "https://2e.aonprd.com/Rituals.aspx?ID=27",
+			"aon": "rituals27",
+			"type": "ritual",
+			"body": "Mighty drow noble houses, including House Shraen, use this ritual to stamp out fledgling noble houses before they rise to power. At the ritual's completion, you place a contagious wasting disease upon the target creature with the intention of ending their familial bloodline.\n\nThe ritual is easiest to cast on a subdued target, typically a low-ranking member of the targeted family bloodline who is kidnapped and has their memory wiped. If the target is conscious when the ritual is cast, the target attempts a Fortitude save against the ritual's DC; on a success, the ritual fails. Otherwise, the target is automatically affected by the dying bloodline disease.\n\n**Dying Bloodline** (curse, disease) Failing or critically failing this disease's Fortitude save causes the disease to progress to the next stage as normal; however, succeeding or critically succeeding at the save has no effect. The disease can be removed only by first successfully counteracting the curse and then counteracting the disease; \n\nEvery member of an infected creature's immediate family (blood relationship or parent or child) that comes into physical contact with that infected creature must attempt a Fortitude save or contract the disease.\n\n\n**Critical Success** The creature does not contract the disease and does not need to attempt further saves when coming into physical contact with that particular creature (the creature is not immune to the disease, however, and must attempt a save as normal if it comes into physical contact with a different infected family member).\n\n**Success** The creature is not affected but must attempt another save the next time they come into physical contact with that particular infected creature.\n\n**Failure** The creature contracts the disease and can spread it in the same way as the original target.**Stage 1** carrier with no effect (1 month); **Stage 2** fatigued (1 week); **Stage 3** fatigued and drained 1 (1 day); Stage 4 fatigued and drained 3 (1 day); Stage 5 death",
+			"hash": "fpRzyfCO"
+		}
 	}
 ]

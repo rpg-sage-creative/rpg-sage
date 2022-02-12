@@ -16,7 +16,16 @@
 		"source": "PZO2105",
 		"id": "253c9eab-06d7-4eda-aea6-32f8abc2b08a",
 		"aonId": 49,
-		"hash": "RhdBWRlG"
+		"pf2t": {
+			"name": "Bastion",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 159",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=49",
+			"aon": "archetypes49",
+			"type": "archetype",
+			"body": "Some say that a good offense is the best defense, but you find such boasting smacks of overconfidence. In your experience, the best defense is a good, solid shield between you and your enemies. You've focused your training on how best to use a shield to protect yourself and those around you.",
+			"hash": "RhdBWRlG"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -50,7 +59,20 @@
 		"source": "PZO2105",
 		"id": "95d95a3f-661b-4781-b82d-3739f028fc29",
 		"aonId": 1896,
-		"hash": "IDZWFJmY"
+		"pf2t": {
+			"name": "Disarming Block",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 0,
+			"archetype": "Bastion",
+			"source": "Advanced Player's Guide pg. 159",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1896",
+			"aon": "feats1896",
+			"type": "feat",
+			"body": "**Archetype** Bastion\n**Prerequisites** Bastion Dedication; trained in Athletics\n**Trigger** You Shield Block a melee Strike made with a held weapon.\n\n- - -\n\nYou attempt to Disarm the creature whose attack you blocked of the weapon they attacked you with. You can do so even if you don't have a hand free.",
+			"hash": "IDZWFJmY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -65,7 +87,19 @@
 		"source": "PZO2105",
 		"id": "4974beae-f8a1-4b00-ada6-39bb07e8ae05",
 		"aonId": 1897,
-		"hash": "KUYzxWOW"
+		"pf2t": {
+			"name": "Nimble Shield Hand",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Bastion",
+			"source": "Advanced Player's Guide pg. 159",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1897",
+			"aon": "feats1897",
+			"type": "feat",
+			"body": "**Archetype** Bastion\n**Prerequisites** Bastion Dedication\n\n- - -\n\nYou are so used to wielding a shield that you can do so even while using the hand that's holding it for other purposes. The hand you use to wield a shield counts as a free hand for the purposes of the Interact action. You can also hold another object in this hand (but you still can't use it to wield a weapon). This benefit doesn't apply to tower shields, which are still too cumbersome.",
+			"hash": "KUYzxWOW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -80,7 +114,19 @@
 		"source": "PZO2105",
 		"id": "f131e2fb-6802-4399-9d1c-de7a72b9580e",
 		"aonId": 1898,
-		"hash": "TbtMUjtv"
+		"pf2t": {
+			"name": "Destructive Block",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Bastion",
+			"source": "Advanced Player's Guide pg. 159",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1898",
+			"aon": "feats1898",
+			"type": "feat",
+			"body": "**Archetype** Bastion\n**Prerequisites** Bastion Dedication\n\n- - -\n\nYou can protect yourself more effectively, at the expense of your shield. When you Shield Block, you can reduce the damage to yourself by double the shield's Hardness, but if you do, the shield takes double the normal amount of damage it would have taken (before applying its Hardness). You can't use Destructive Block if your shield can't be broken or destroyed, such as if you're using an indestructible shield.",
+			"hash": "TbtMUjtv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -95,6 +141,18 @@
 		"source": "PZO2105",
 		"id": "7d6851a2-1c8b-4c78-a381-616e53ab5ada",
 		"aonId": 1899,
-		"hash": "RbRGtPQn"
+		"pf2t": {
+			"name": "Shield Salvation",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Bastion",
+			"source": "Advanced Player's Guide pg. 159",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1899",
+			"aon": "feats1899",
+			"type": "feat",
+			"body": "**Archetype** Bastion\n**Prerequisites** Bastion Dedication\n\n- - -\n\nYou can save your shield from total destruction, even after a devastating attack. If a shield would be destroyed due to damage taken during your Shield Block, the shield remains intact at 1 Hit Point instead. Its construction is weakened until you take the time to repair it, preventing you from using Shield Salvation to save the same shield until your next preparations.",
+			"hash": "RbRGtPQn"
+		}
 	}
 ]

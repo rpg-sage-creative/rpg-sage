@@ -19,7 +19,20 @@
 		"source": "PZO9301",
 		"page": 81,
 		"id": "c05dabde-b39e-4f03-b98c-8c39766fc982",
-		"hash": "pQpqUxfI"
+		"pf2t": {
+			"name": "Eye of the Arclords",
+			"level": 2,
+			"pfs": "limited",
+			"traits": "uncommon,general,skill",
+			"actions": 1,
+			"source": "World Guide pg. 81 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=870",
+			"aon": "feats870",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Prerequisites** Arcane Sense; expert in Arcana\n\n- - -\n\nYou open an incandescent third eye upon your forehead. The eye can remain open for 1 minute, and you can close it before then with a single action with the concentrate trait. It can remain open for 2 minutes if you're a master in Arcana, or 5 minutes if you're legendary. While the eye is open, you gain the following benefits: you gain the effects of the detect magic arcane innate spell from your Arcane Sense at the start of each of your turns without needing to cast the spell; you gain darkvision; you gain a +2 status bonus to Perception checks to Seek undetected and hidden creatures and to your Perception DC against Hide and Sneak. After your third eye closes, you are dazzled for an amount of time equal to how long you had it open.",
+			"hash": "pQpqUxfI"
+		}
 	},
 	{
 		"aonId": 869,
@@ -38,6 +51,18 @@
 		"source": "PZO9301",
 		"page": 56,
 		"id": "971213a3-290f-41c6-992c-fae2771bfa18",
-		"hash": "JxrVbBhq"
+		"pf2t": {
+			"name": "Godless Healing",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "general,skill",
+			"source": "World Guide pg. 56 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=869",
+			"aon": "feats869",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Prerequisites** Battle Medicine; can't have a patron deity\n\n- - -\n\nYou recover an additional 5 Hit Points from a successful attempt to Treat your Wounds or use Battle Medicine on you. After you or an ally use Battle Medicine on you, you become temporarily immune to that Battle Medicine for only 1 hour, instead of 1 day.\n\n#### Godless Healing Leads To...\nMortal Healing",
+			"hash": "JxrVbBhq"
+		}
 	}
 ]

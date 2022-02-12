@@ -1,12 +1,182 @@
 [
-	{ "objectType": "Heritage", "name": "Anvil Dwarf", "ancestry": "Dwarf", "source": "PZO9302", "id": "f43f2e98-c546-4e0a-a7ce-a0c522344856", "aonId": 31, "hash": "IKBxwqkq" },
-	{ "objectType": "Heritage", "name": "Elemental Heart Dwarf", "ancestry": "Dwarf", "source": "PZO9302", "id": "e7787753-5026-4959-a776-3f5f6781ef1f", "aonId": 32, "hash": "qpVMtZnf" },
-	{ "objectType": "Heritage", "name": "Oathkeeper Dwarf", "ancestry": "Dwarf", "source": "PZO9302", "id": "f0278e8c-ddf6-4fa2-84c7-05df366e84ad", "aonId": 33, "hash": "qEBvAgOy" },
-	{ "objectType": "Heritage", "name": "Ancient Elf", "ancestry": "Elf", "source": "PZO9302", "id": "6ba12c9d-2890-4201-abed-73dc683dfb8f", "aonId": 34, "hash": "dgErRCKS" },
-	{ "objectType": "Heritage", "name": "Desert Elf", "ancestry": "Elf", "source": "PZO9302", "id": "1a3e84f0-18bf-4734-8039-6fb1c7c10f32", "aonId": 35, "hash": "pMdSERCg" },
-	{ "objectType": "Heritage", "name": "Vivacious Gnome", "ancestry": "Gnome", "source": "PZO9302", "id": "e2aa60b0-4590-4a15-b76c-dfbf2d1fbe34", "aonId": 36, "hash": "ptxZOUEJ" },
-	{ "objectType": "Heritage", "name": "Tailed Goblin", "ancestry": "Goblin", "source": "PZO9302", "id": "28f3a598-a83c-4d78-8f11-fff53b8c9994", "aonId": 37, "hash": "SAqAltVS" },
-	{ "objectType": "Heritage", "name": "Treedweller Goblin", "ancestry": "Goblin", "source": "PZO9302", "id": "651f83f5-4ba2-4f36-bd40-5874d02d9457", "aonId": 38, "hash": "ZAntbYxx" },
-	{ "objectType": "Heritage", "name": "Observant Halfling", "ancestry": "Halfling", "source": "PZO9302", "id": "6402ce1e-bfa9-4e2e-bb3f-b29ba1c918da", "aonId": 39, "hash": "MplqIHOt" },
-	{ "objectType": "Heritage", "name": "Wintertouched Human", "ancestry": "Human", "source": "PZO9302", "id": "d22e1271-20d0-4ac9-ab43-e355a9386b20", "aonId": 30, "hash": "WtWcpXkV" }
+	{
+		"objectType": "Heritage",
+		"name": "Anvil Dwarf",
+		"ancestry": "Dwarf",
+		"source": "PZO9302",
+		"id": "f43f2e98-c546-4e0a-a7ce-a0c522344856",
+		"aonId": 31,
+		"pf2t": {
+			"name": "Anvil Dwarf",
+			"pfs": "standard",
+			"source": "Character Guide pg. 19 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=31",
+			"aon": "heritages31",
+			"type": "heritage",
+			"body": "You are a descendant of a famed crafter and have your own amazing talent. Other dwarves might consider this a blessing from your ancestors or from the Forgefather himself, depending on where you grew up. You become trained in Crafting (or another skill if you were already trained in Crafting) and gain the Specialty Crafting skill feat, but you can pick two different specialties instead of one.",
+			"hash": "IKBxwqkq"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Elemental Heart Dwarf",
+		"ancestry": "Dwarf",
+		"source": "PZO9302",
+		"id": "e7787753-5026-4959-a776-3f5f6781ef1f",
+		"aonId": 32,
+		"pf2t": {
+			"name": "Elemental Heart Dwarf",
+			"pfs": "standard",
+			"source": "Character Guide pg. 19 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=32",
+			"aon": "heritages32",
+			"type": "heritage",
+			"body": "Whether through a connection to Torag's forge, the azers of the Plane of Fire, or another source, you can exude a burst of energy. Mbe'ke and Taralu dwarves of the Mwangi Expanse believe this heritage is a gift from dragons or elemental spirits. Choose one of the following damage types: acid, cold, electricity, or fire. Once chosen, this can't be changed. You gain the Energy Emanation activity.",
+			"hash": "qpVMtZnf"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Oathkeeper Dwarf",
+		"ancestry": "Dwarf",
+		"source": "PZO9302",
+		"id": "f0278e8c-ddf6-4fa2-84c7-05df366e84ad",
+		"aonId": 33,
+		"pf2t": {
+			"name": "Oathkeeper Dwarf",
+			"pfs": "standard",
+			"source": "Character Guide pg. 19 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=33",
+			"aon": "heritages33",
+			"type": "heritage",
+			"body": "Growing up, you never tried to lie to get what you wanted, and even when necessary, lying makes you uncomfortable. The especially faithful might even have thought that you were blessed by the dwarven god of duty, Kols. You gain a +1 circumstance bonus to Perception checks to Sense Motive and to Perception DCs against attempts to Lie to you. Furthermore, you gain a +2 circumstance bonus to Diplomacy checks to convince others you speak the truth when you are telling the truth, and you take a -4 circumstance penalty to Lie and to your Deception DC against Sense Motive.",
+			"hash": "qEBvAgOy"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Ancient Elf",
+		"ancestry": "Elf",
+		"source": "PZO9302",
+		"id": "6ba12c9d-2890-4201-abed-73dc683dfb8f",
+		"aonId": 34,
+		"pf2t": {
+			"name": "Ancient Elf",
+			"pfs": "standard",
+			"source": "Character Guide pg. 25 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=34",
+			"aon": "heritages34",
+			"type": "heritage",
+			"body": "In your long life, you've dabbled in many paths and many styles. A typical ancient elf is at least 100 years old, though you might be younger at the GM's discretion. Choose a class other than your own. You gain the multiclass dedication feat for that class, even though you don't meet its level prerequisite. You must still meet its other prerequisites to gain the feat.",
+			"hash": "dgErRCKS"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Desert Elf",
+		"ancestry": "Elf",
+		"source": "PZO9302",
+		"id": "1a3e84f0-18bf-4734-8039-6fb1c7c10f32",
+		"aonId": 35,
+		"pf2t": {
+			"name": "Desert Elf",
+			"pfs": "standard",
+			"source": "Character Guide pg. 25 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=35",
+			"aon": "heritages35",
+			"type": "heritage",
+			"body": "You live under the desert's blazing heat, gaining incredible resilience to warm environments. You gain fire resistance equal to half your level (minimum 1), and environmental heat effects are one step less extreme for you (incredible heat becomes extreme, extreme heat becomes severe, and so on).",
+			"hash": "pMdSERCg"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Vivacious Gnome",
+		"ancestry": "Gnome",
+		"source": "PZO9302",
+		"id": "e2aa60b0-4590-4a15-b76c-dfbf2d1fbe34",
+		"aonId": 36,
+		"pf2t": {
+			"name": "Vivacious Gnome",
+			"pfs": "standard",
+			"source": "Character Guide pg. 31 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=36",
+			"aon": "heritages36",
+			"type": "heritage",
+			"body": "You have an incredibly strong connection to the positive energy that flows through the First World, making it harder to attack your life force with negative energy. You gain negative resistance equal to half your level (minimum 1). When you have the doomed condition, the condition affects you as if its value was 1 lower than it actually is (doomed 1 has no effect, doomed 2 causes you to die at dying 3, and so on).",
+			"hash": "ptxZOUEJ"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Tailed Goblin",
+		"ancestry": "Goblin",
+		"source": "PZO9302",
+		"id": "28f3a598-a83c-4d78-8f11-fff53b8c9994",
+		"aonId": 37,
+		"pf2t": {
+			"name": "Tailed Goblin",
+			"pfs": "standard",
+			"source": "Character Guide pg. 37 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=37",
+			"aon": "heritages37",
+			"type": "heritage",
+			"body": "You have a powerful tail, likely because you descend from a community of monkey goblins. You gain a +2 circumstance bonus to Athletics checks to Climb, you gain Combat Climber as a bonus feat, and you reduce the number of free hands required to Climb or Trip by one.",
+			"hash": "SAqAltVS"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Treedweller Goblin",
+		"ancestry": "Goblin",
+		"source": "PZO9302",
+		"id": "651f83f5-4ba2-4f36-bd40-5874d02d9457",
+		"aonId": 38,
+		"pf2t": {
+			"name": "Treedweller Goblin",
+			"pfs": "standard",
+			"source": "Character Guide pg. 37 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=38",
+			"aon": "heritages38",
+			"type": "heritage",
+			"body": "You have adapted particularly well to living in forested environments. As long as you are in a forest or jungle, you gain a +2 circumstance bonus to Stealth checks to Hide and Sneak, Survival checks to Subsist, and your Survival DC to Cover Tracks.",
+			"hash": "ZAntbYxx"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Observant Halfling",
+		"ancestry": "Halfling",
+		"source": "PZO9302",
+		"id": "6402ce1e-bfa9-4e2e-bb3f-b29ba1c918da",
+		"aonId": 39,
+		"pf2t": {
+			"name": "Observant Halfling",
+			"pfs": "standard",
+			"source": "Character Guide pg. 43 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=39",
+			"aon": "heritages39",
+			"type": "heritage",
+			"body": "Your finely honed senses quickly clue you in to danger or trickery. You gain a +1 circumstance bonus to your Perception DC, though not to your Perception checks.",
+			"hash": "MplqIHOt"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Wintertouched Human",
+		"ancestry": "Human",
+		"source": "PZO9302",
+		"id": "d22e1271-20d0-4ac9-ab43-e355a9386b20",
+		"aonId": 30,
+		"pf2t": {
+			"name": "Wintertouched Human",
+			"pfs": "standard",
+			"source": "Character Guide pg. 11 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=30",
+			"aon": "heritages30",
+			"type": "heritage",
+			"body": "The power of winter flows through you. This heritage is most common among the Jadwiga of Irrisen, due to their descent from Baba Yaga, and certain Erutaki touched by the spirits. You gain cold resistance equal to half your level (minimum 1), and you treat environmental cold effects as if they were one step less extreme (incredible cold becomes extreme, extreme cold becomes severe, and so on).",
+			"hash": "WtWcpXkV"
+		}
+	}
 ]

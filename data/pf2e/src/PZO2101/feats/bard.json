@@ -9,7 +9,19 @@
 		"source": "PZO2101",
 		"aonId": 179,
 		"id": "dd7356ec-e045-4742-8e90-5b17029850a0",
-		"hash": "MqHLbSBY"
+		"pf2t": {
+			"name": "Bardic Lore",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 99 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=179",
+			"aon": "feats179",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** enigma muse\n\n- - -\n\nYour studies make you informed on every subject. You are trained in Bardic Lore, a special Lore skill that can be used only to Recall Knowledge, but on any topic. If you have legendary proficiency in Occultism, you gain expert proficiency in Bardic Lore, but you can't increase your proficiency rank in Bardic Lore by any other means.",
+			"hash": "MqHLbSBY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -21,7 +33,19 @@
 		"source": "PZO2101",
 		"aonId": 180,
 		"id": "4ca214fc-1780-4c14-9ef5-031d4352c2cd",
-		"hash": "pLhyMmsE"
+		"pf2t": {
+			"name": "Lingering Composition",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 99 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=180",
+			"aon": "feats180",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** maestro muse\n\n- - -\n\nBy adding a flourish, you make your compositions last longer. You learn the lingering composition focus spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "pLhyMmsE"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -32,8 +56,7 @@
 		"benefits": "You can extend your spells' range.",
 		"source": "PZO2101",
 		"aonId": 181,
-		"id": "e989df5b-c362-4e4d-b118-149d23049a55",
-		"hash": "btbZtxqX"
+		"id": "e989df5b-c362-4e4d-b118-149d23049a55"
 	},
 	{
 		"objectType": "Feat",
@@ -45,7 +68,19 @@
 		"source": "PZO2101",
 		"aonId": 182,
 		"id": "b245da19-2833-428a-9dae-33fe4967d598",
-		"hash": "wQjZtWOC"
+		"pf2t": {
+			"name": "Versatile Performance",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 100 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=182",
+			"aon": "feats182",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** polymath muse\n\n- - -\n\nYou can rely on the grandeur of your performances rather than ordinary social skills. You can use Performance instead of Diplomacy to Make an Impression and instead of Intimidation to Demoralize. You can also use an acting Performance instead of Deception to Impersonate. You can use your proficiency rank in Performance to meet the requirements of skill feats that require a particular rank in Deception, Diplomacy, or Intimidation.",
+			"hash": "wQjZtWOC"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -56,8 +91,7 @@
 		"benefits": "Study broadens your range of simple spells.",
 		"source": "PZO2101",
 		"aonId": 183,
-		"id": "fc979a4b-9fe1-462c-9acc-cb5184674124",
-		"hash": "rVVSbwxU"
+		"id": "fc979a4b-9fe1-462c-9acc-cb5184674124"
 	},
 	{
 		"objectType": "Feat",
@@ -69,7 +103,19 @@
 		"source": "PZO2101",
 		"aonId": 184,
 		"id": "41e165a4-c7d1-448a-8906-6e1f668ec84f",
-		"hash": "rwrgXhWg"
+		"pf2t": {
+			"name": "Esoteric Polymath",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 100 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=184",
+			"aon": "feats184",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** polymath muse\n\n- - -\n\nYou keep a book of occult spells, similar to a wizard's spellbook, and can use its spells to supplement your spell repertoire. Add all the spells in your repertoire to this book for free. You can use the Occultism skill to Learn Spells and add them to your spellbook by paying the appropriate cost, similar to a wizard.\n\nDuring your daily preparations, choose any one spell from your book of occult spells. If that spell is already in your spell repertoire, you can treat it as an additional signature spell that day. If it isn't in your repertoire, treat it as though it were until your next daily preparations.\n\n#### Esoteric Polymath Leads To...\nEclectic Polymath, Impossible Polymath",
+			"hash": "rwrgXhWg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -81,7 +127,19 @@
 		"source": "PZO2101",
 		"aonId": 185,
 		"id": "d44c2585-1838-42d6-bff2-922eeb329683",
-		"hash": "DXHvhvbx"
+		"pf2t": {
+			"name": "Inspire Competence",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 100 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=185",
+			"aon": "feats185",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** maestro muse\n\n- - -\n\nYou learn the inspire competence composition cantrip, which aids your allies' skills.",
+			"hash": "DXHvhvbx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -93,7 +151,20 @@
 		"source": "PZO2101",
 		"aonId": 186,
 		"id": "568bd8fe-f0aa-49e3-9aee-6e4f9bb20b54",
-		"hash": "FWrZzQLG"
+		"pf2t": {
+			"name": "Loremaster's Etude",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "bard,fortune",
+			"archetype": "Loremaster",
+			"source": "Core Rulebook pg. 100 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=186",
+			"aon": "feats186",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Loremaster\n**Prerequisites** enigma muse\n\n- - -\n\nYou magically unlock memories, making them easier to recall. You learn the loremaster's etude composition spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "FWrZzQLG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -105,7 +176,19 @@
 		"source": "PZO2101",
 		"aonId": 187,
 		"id": "2286759a-56b5-4416-80fa-9406cecf8dde",
-		"hash": "LRRZJIyb"
+		"pf2t": {
+			"name": "Multifarious Muse",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 100 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=187",
+			"aon": "feats187",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Your muse doesn't fall into a single label. Choose a type of muse other than that of your own. You gain a 1st-level feat that requires that muse, and your muse is now also a muse of that type, allowing you to take feats with the other muse as a prerequisite. You don't gain any of the other effects of the muse you chose.",
+			"hash": "LRRZJIyb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -117,7 +200,19 @@
 		"source": "PZO2101",
 		"aonId": 188,
 		"id": "17b1260f-7de9-40ed-9f25-ef8b3b102e75",
-		"hash": "RAlyjcMy"
+		"pf2t": {
+			"name": "Inspire Defense",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 100 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=188",
+			"aon": "feats188",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** maestro muse\n\n- - -\n\nYou learn the inspire defense composition cantrip, which protects you and allies.\n\n#### Inspire Defense Leads To...\nDefensive Coordination",
+			"hash": "RAlyjcMy"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +224,20 @@
 		"source": "PZO2101",
 		"aonId": 189,
 		"id": "cbdd99fa-3559-42b6-8757-1dd5702dad43",
-		"hash": "WmQZbxkh"
+		"pf2t": {
+			"name": "Melodious Spell",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "bard,concentrate,manipulate,metamagic",
+			"actions": 1,
+			"source": "Core Rulebook pg. 101 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=189",
+			"aon": "feats189",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You subtly weave your spellcasting into your performance. If the next action you take is to Cast a Spell, attempt a Performance check against all observers' Perception DCs. If your Performance check is successful against an observer's Perception DC, that observer doesn't notice that you are Casting a Spell, even though normally spells have sensory manifestations that would make spellcasting obvious to those around you, and verbal, somatic, and material components are extremely overt. You hide all of these as part of an ordinary performance.\n\nThis hides only the spell's spellcasting actions and manifestations, not its effects, so an observer might still see a ray streak out from you or see you vanish.",
+			"hash": "WmQZbxkh"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -141,7 +249,19 @@
 		"source": "PZO2101",
 		"aonId": 190,
 		"id": "08ff2bde-ce84-492e-a698-62cef663f5ac",
-		"hash": "OVqXtHrW"
+		"pf2t": {
+			"name": "Triple Time",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 101 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=190",
+			"aon": "feats190",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You learn the triple time composition cantrip, which speeds up you and your allies for a round.",
+			"hash": "OVqXtHrW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -153,7 +273,19 @@
 		"source": "PZO2101",
 		"aonId": 191,
 		"id": "1bd28eb5-1fa2-4866-a0eb-714aa78cee56",
-		"hash": "vXmVkUwg"
+		"pf2t": {
+			"name": "Versatile Signature",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 101 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=191",
+			"aon": "feats191",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** polymath muse\n\n- - -\n\nWhile most bards are known for certain signature performances and spells, you're always tweaking your available repertoire. When you make your daily preparations, you can change one of your signature spells to a different spell of that level from your repertoire.",
+			"hash": "vXmVkUwg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -165,7 +297,19 @@
 		"source": "PZO2101",
 		"aonId": 192,
 		"id": "0b0694c5-4f42-4a95-a126-f0cfd20008ba",
-		"hash": "LxHrCLqU"
+		"pf2t": {
+			"name": "Dirge of Doom",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 101 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=192",
+			"aon": "feats192",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You learn the dirge of doom composition cantrip, which frightens your enemies.",
+			"hash": "LxHrCLqU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -177,7 +321,20 @@
 		"source": "PZO2101",
 		"aonId": 193,
 		"id": "7b180ee9-f63b-487a-841e-a2e8d8fba9ca",
-		"hash": "nykgxkkQ"
+		"pf2t": {
+			"name": "Harmonize",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "bard,concentrate,manipulate,metamagic",
+			"actions": 1,
+			"source": "Core Rulebook pg. 101 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=193",
+			"aon": "feats193",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** maestro muse\n\n- - -\n\nYou can perform multiple compositions simultaneously. If your next action is to cast a composition, it becomes a harmonized composition. Unlike a normal composition, a harmonized composition doesn't end if you cast another composition, and you can cast another composition on the same turn as a harmonized one. Casting another harmonized composition ends any harmonized composition you have in effect.\n\n#### Harmonize Leads To...\nSymphony of the Muses",
+			"hash": "nykgxkkQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -188,8 +345,7 @@
 		"benefits": "You don't lose spells easily.",
 		"source": "PZO2101",
 		"aonId": 194,
-		"id": "2ee1f54d-fa89-4685-91cf-85ae23387eb2",
-		"hash": "YRUhhBTm"
+		"id": "2ee1f54d-fa89-4685-91cf-85ae23387eb2"
 	},
 	{
 		"objectType": "Feat",
@@ -201,7 +357,19 @@
 		"source": "PZO2101",
 		"aonId": 195,
 		"id": "e030fdef-c8b7-485f-991a-b6d482864e66",
-		"hash": "rbyWFZSF"
+		"pf2t": {
+			"name": "Eclectic Skill",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 101 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=195",
+			"aon": "feats195",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** polymath muse; master in Occultism\n\n- - -\n\nYour broad experiences translate to a range of skills. Your proficiency bonus to untrained skill checks is equal to your level. You can attempt any skill check that normally requires you to be trained, even if you are untrained. If you have legendary proficiency in Occultism, you can attempt any skill check that normally requires you to have expert proficiency, even if untrained or trained.",
+			"hash": "rbyWFZSF"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -213,7 +381,19 @@
 		"source": "PZO2101",
 		"aonId": 196,
 		"id": "bf266065-58d7-4ada-8166-ac96fdf8f334",
-		"hash": "qgVyDFZm"
+		"pf2t": {
+			"name": "Inspire Heroics",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 102 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=196",
+			"aon": "feats196",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** maestro muse\n\n- - -\n\nYour performances inspire even greater deeds in your allies. You learn the inspire heroics metamagic focus spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "qgVyDFZm"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -225,7 +405,19 @@
 		"source": "PZO2101",
 		"aonId": 197,
 		"id": "e75f4617-2e94-4394-a02d-7a989be478cd",
-		"hash": "TpYcHIkr"
+		"pf2t": {
+			"name": "Know-It-All",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 102 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=197",
+			"aon": "feats197",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** enigma muse\n\n- - -\n\nWhen you succeed at a Knowledge check, you gain additional information or context. When you critically succeed at a Knowledge check, at the GM's discretion you might gain even more additional information or context than normal.",
+			"hash": "TpYcHIkr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -237,7 +429,19 @@
 		"source": "PZO2101",
 		"aonId": 198,
 		"id": "0017242d-b423-47b5-a79a-527fd5f95acc",
-		"hash": "kvOvJsBJ"
+		"pf2t": {
+			"name": "House of Imaginary Walls",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 102 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=198",
+			"aon": "feats198",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You erect an imaginary barrier others believe to be real. You learn the house of imaginary walls composition cantrip.",
+			"hash": "kvOvJsBJ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -248,8 +452,7 @@
 		"benefits": "You are able to quickly cast a spell.",
 		"source": "PZO2101",
 		"aonId": 199,
-		"id": "408cfbf4-3b1c-4a9d-a35f-a9d5d31b353f",
-		"hash": "TNpOYEbD"
+		"id": "408cfbf4-3b1c-4a9d-a35f-a9d5d31b353f"
 	},
 	{
 		"objectType": "Feat",
@@ -261,7 +464,20 @@
 		"source": "PZO2101",
 		"aonId": 200,
 		"id": "d4687620-0df4-46a6-bc38-70a6c9e41f0e",
-		"hash": "rMhTNkMY"
+		"pf2t": {
+			"name": "Unusual Composition",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "bard,concentrate,manipulate,metamagic",
+			"actions": 1,
+			"source": "Core Rulebook pg. 102 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=200",
+			"aon": "feats200",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** polymath muse\n\n- - -\n\nYou can translate the emotion and power of a composition to other mediums. If your next action is to cast a composition spell, you can use a different kind of performance than usual for the composition to change any of its somatic components to verbal components or vice versa. As usual for composition spells, this changes whether the composition is auditory or visual.",
+			"hash": "rMhTNkMY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -273,7 +489,19 @@
 		"source": "PZO2101",
 		"aonId": 201,
 		"id": "86495c63-4f77-48d9-91e5-e672ac9b72be",
-		"hash": "nrbZWQQy"
+		"pf2t": {
+			"name": "Eclectic Polymath",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 102 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=201",
+			"aon": "feats201",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Esoteric Polymath\n\n- - -\n\nYour flexible mind can quickly shift spells. If you add a spell to your repertoire during your daily preparations using Esoteric Polymath, when you prepare again, you can choose to keep the new spell from Esoteric Polymath in your repertoire and instead lose access to another spell of the same level in your repertoire.",
+			"hash": "nrbZWQQy"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -285,7 +513,19 @@
 		"source": "PZO2101",
 		"aonId": 202,
 		"id": "f93d5c96-80ed-485d-aeff-ca4774297999",
-		"hash": "snRbVdMd"
+		"pf2t": {
+			"name": "Inspirational Focus",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 103 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=202",
+			"aon": "feats202",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Your connection to your muse has granted you unusual focus. If you have spent at least 2 Focus Points since the last time you Refocused, you recover 2 Focus Points when you Refocus instead of 1.",
+			"hash": "snRbVdMd"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -296,8 +536,7 @@
 		"benefits": "Learn the silver's refrain composition cantrip.",
 		"source": "PZO2101",
 		"aonId": 926,
-		"id": "bc85d4db-1d20-446c-9e4d-d7f070fc2428",
-		"hash": "vIULpvbg"
+		"id": "bc85d4db-1d20-446c-9e4d-d7f070fc2428"
 	},
 	{
 		"objectType": "Feat",
@@ -309,7 +548,19 @@
 		"source": "PZO2101",
 		"aonId": 203,
 		"id": "5adbc160-22d0-448f-b539-e77731b14d0e",
-		"hash": "VpSdpGcr"
+		"pf2t": {
+			"name": "Allegro",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 103 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=203",
+			"aon": "feats203",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You can quicken your allies with a fast-paced performance. You learn the allegro composition cantrip.",
+			"hash": "VpSdpGcr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -321,7 +572,19 @@
 		"source": "PZO2101",
 		"aonId": 204,
 		"id": "b10848eb-c218-4caa-ba42-811efd8175c4",
-		"hash": "dqqxhRbv"
+		"pf2t": {
+			"name": "Soothing Ballad",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 103 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=204",
+			"aon": "feats204",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You soothe your allies' wounds with the power of your performance. You learn the soothing ballad composition spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "dqqxhRbv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -333,7 +596,21 @@
 		"source": "PZO2101",
 		"aonId": 205,
 		"id": "d68790fa-38ec-4192-9861-4fff07b24782",
-		"hash": "ZKCGCZvZ"
+		"pf2t": {
+			"name": "True Hypercognition",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "bard",
+			"actions": 1,
+			"archetype": "Loremaster",
+			"source": "Core Rulebook pg. 103 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=205",
+			"aon": "feats205",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Loremaster\n**Prerequisites** enigma muse\n\n- - -\n\nYour mind works at an incredible pace. You instantly use up to five Recall Knowledge actions. If you have any special abilities or free actions that would normally be triggered when you Recall Knowledge, you can't use them for these actions.",
+			"hash": "ZKCGCZvZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -344,8 +621,7 @@
 		"benefits": "You can maintain a spell with hardly a thought.",
 		"source": "PZO2101",
 		"aonId": 206,
-		"id": "7410173a-e019-4bc1-ad64-9a61d62b235a",
-		"hash": "CVsqkNEk"
+		"id": "7410173a-e019-4bc1-ad64-9a61d62b235a"
 	},
 	{
 		"objectType": "Feat",
@@ -357,7 +633,19 @@
 		"source": "PZO2101",
 		"aonId": 207,
 		"id": "b31b516d-ff1f-49e5-a52d-f60892d2083d",
-		"hash": "CpGpWpJs"
+		"pf2t": {
+			"name": "Studious Capacity",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 103 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=207",
+			"aon": "feats207",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** enigma muse; legendary in Occultism\n\n- - -\n\nYour continued study of occult magic has increased your magical capacity, allowing you to cast spells even when it seems impossible. You can cast one spell each day even after you've run out of spell slots of the appropriate spell level, but you can't use this ability to cast a spell of your highest spell level.",
+			"hash": "CpGpWpJs"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -369,7 +657,19 @@
 		"source": "PZO2101",
 		"aonId": 208,
 		"id": "673f6790-57d9-4970-aade-934da83e50be",
-		"hash": "qdxbqjwz"
+		"pf2t": {
+			"name": "Deep Lore",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 103 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=208",
+			"aon": "feats208",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** enigma muse; legendary in Occultism\n\n- - -\n\nYour repertoire is vast, containing far more spells than usual. Add one spell to your repertoire of each level you can cast.",
+			"hash": "qdxbqjwz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -381,7 +681,19 @@
 		"source": "PZO2101",
 		"aonId": 209,
 		"id": "d39a10c3-4de1-4072-882c-6a8a91011084",
-		"hash": "KrbwWjSS"
+		"pf2t": {
+			"name": "Eternal Composition",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 103 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=209",
+			"aon": "feats209",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** maestro muse\n\n- - -\n\nThe world is a stage upon which you are always playing. You are permanently quickened; you can use your extra action only to cast a composition cantrip that requires 1 action to cast. While in exploration mode, you can declare that you are performing an eligible composition cantrip while using any exploration tactic. Even before your first turn in a combat encounter, that cantrip is active as if you had cast it on your previous turn.",
+			"hash": "KrbwWjSS"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -393,7 +705,19 @@
 		"source": "PZO2101",
 		"aonId": 210,
 		"id": "5b4869b5-b76e-4b55-8f64-84c1db3c6742",
-		"hash": "nyhVAQRc"
+		"pf2t": {
+			"name": "Impossible Polymath",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 103 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=210",
+			"aon": "feats210",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Esoteric Polymath; trained in Arcana, Occultism, or Religion\n\n- - -\n\nYour esoteric formulas are so unusual that they allow you to dabble in magic from diverse traditions that other bards don't understand. As long as you're trained in Arcana, you can add arcane spells to your book from Esoteric Polymath; as long as you're trained in Nature, you can add primal spells to your book; and as long as you are trained in Religion, you can add divine spells to your book.\n\nLike your other spells in your book, you can add one of these spells from another tradition to your repertoire as an occult spell each day using Esoteric Polymath, but you can't retain any spells from another tradition when you prepare again, even if you have Eclectic Polymath.",
+			"hash": "nyhVAQRc"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -405,7 +729,19 @@
 		"source": "PZO2101",
 		"aonId": 211,
 		"id": "6b890fa6-a4e2-42ca-92eb-7e13ff15bde3",
-		"hash": "rCcDJkMn"
+		"pf2t": {
+			"name": "Fatal Aria",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 103 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=211",
+			"aon": "feats211",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Your songs overwhelm the target with unbearable emotion, potentially striking them dead on the spot. You learn the fatal aria composition spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "rCcDJkMn"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -417,7 +753,19 @@
 		"source": "PZO2101",
 		"aonId": 212,
 		"id": "b32b50bd-3681-4249-9e41-02bbb36d1a11",
-		"hash": "XKzKHGrg"
+		"pf2t": {
+			"name": "Perfect Encore",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 103 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=212",
+			"aon": "feats212",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** magnum opus\n\n- - -\n\nYou develop another incredible creation. You gain an additional 10th-level spell slot.",
+			"hash": "XKzKHGrg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -428,8 +776,7 @@
 		"benefits": "Gain the song of the fallen focus spell.",
 		"source": "PZO2101",
 		"aonId": 1168,
-		"id": "19a98d35-d611-4d6c-a69d-6248577638c6",
-		"hash": "QAcTMRfY"
+		"id": "19a98d35-d611-4d6c-a69d-6248577638c6"
 	},
 	{
 		"objectType": "Feat",
@@ -441,6 +788,18 @@
 		"source": "PZO2101",
 		"aonId": 213,
 		"id": "e3d4bd24-6992-4df5-90c0-a5efa275aecf",
-		"hash": "rRxROtvg"
+		"pf2t": {
+			"name": "Symphony of the Muses",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "bard",
+			"source": "Core Rulebook pg. 103 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=213",
+			"aon": "feats213",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Harmonize\n\n- - -\n\nYou are able to weave countless performances together into a solo symphony. You are no longer limited to a single composition each turn or a single composition at a time; when you use a new composition, all previous compositions' effects continue for their remaining duration.",
+			"hash": "rRxROtvg"
+		}
 	}
 ]

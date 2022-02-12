@@ -10,7 +10,15 @@
 		"source": "PZO90159",
 		"id": "3af89e15-1c72-4de1-8b1d-2ced57ed5b87",
 		"aonId": 87,
-		"hash": "pqqScMrP"
+		"pf2t": {
+			"name": "Provocator",
+			"source": "159 All or Nothing pg. 79",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=87",
+			"aon": "archetypes87",
+			"type": "archetype",
+			"body": "The provocator is a gladiator who mixes brilliant performance with mastery of weapons.",
+			"hash": "pqqScMrP"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -46,7 +54,19 @@
 		"source": "PZO90159",
 		"id": "c7efd5f8-9eb2-45a6-b716-d2c5d736dc88",
 		"aonId": 2212,
-		"hash": "dXdUQxUR"
+		"pf2t": {
+			"name": "Flourishing Finish",
+			"level": 12,
+			"traits": "archetype,concentrate,emotion,mental",
+			"actions": 1,
+			"archetype": "Provocator",
+			"source": "159 All or Nothing pg. 79",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2212",
+			"aon": "feats2212",
+			"type": "feat",
+			"body": "**Archetype** Provocator\n**Prerequisites** Provocator Dedication\n**Requirements** Your last action was a Strike that dropped an opponent to 0 Hit Points.\n\n- - -\n\nAttempt a Performance check, comparing the result to the Will DC of each foe within 30 feet who can see you. Regardless of the result, each target is immune to your Flourishing Finish for 10 minutes.\n\n**Critical Success** The target is frightened 2.\n**Success** The target is frightened 1.",
+			"hash": "dXdUQxUR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -64,7 +84,19 @@
 		"source": "PZO90159",
 		"id": "c1276452-86e8-42b6-86cd-39bed89a5dab",
 		"aonId": 2213,
-		"hash": "xGzMcZVc"
+		"pf2t": {
+			"name": "Cartwheel Dodge",
+			"level": 12,
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Provocator",
+			"source": "159 All or Nothing pg. 79",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2213",
+			"aon": "feats2213",
+			"type": "feat",
+			"body": "**Archetype** Provocator\n**Prerequisites** Provocator Dedication\n**Requirements** You aren't encumbered or overburdened.\n**Trigger** You succeed or critically succeed at a Reflex saving throw.\n\n- - -\n\nYou Step up to 10 feet.",
+			"hash": "xGzMcZVc"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -80,7 +112,19 @@
 		"source": "PZO90159",
 		"id": "47e0ce85-257d-4d34-a68d-9aafec64fc50",
 		"aonId": 2214,
-		"hash": "HlxnAKRr"
+		"pf2t": {
+			"name": "Murderer's Circle",
+			"level": 14,
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Provocator",
+			"source": "159 All or Nothing pg. 79",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2214",
+			"aon": "feats2214",
+			"type": "feat",
+			"body": "**Archetype** Provocator\n**Prerequisites** Provocator Dedication\n\n- - -\n\nYou Strike a target within reach and then Step to any other open space adjacent to that target. Your target is then flat-footed against your next Strike this turn.",
+			"hash": "HlxnAKRr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -96,7 +140,19 @@
 		"source": "PZO90159",
 		"id": "2486d7d2-8356-44fc-822a-fcc49c9a340f",
 		"aonId": 2215,
-		"hash": "pEgAVXwE"
+		"pf2t": {
+			"name": "Pin to the Spot",
+			"level": 14,
+			"traits": "archetype",
+			"actions": 2,
+			"archetype": "Provocator",
+			"source": "159 All or Nothing pg. 79",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2215",
+			"aon": "feats2215",
+			"type": "feat",
+			"body": "**Archetype** Provocator\n**Prerequisites** Provocator Dedication\n\n- - -\n\nYou Strike a target within reach. If you hit and deal damage, the target is also restrained as if you had critically succeeded at an Athletics check to Grapple.",
+			"hash": "pEgAVXwE"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -111,6 +167,17 @@
 		"source": "PZO90159",
 		"id": "a28bdffa-4301-4156-afb7-cff0553fb8c5",
 		"aonId": 2216,
-		"hash": "LKZcWlqr"
+		"pf2t": {
+			"name": "Performance Weapon Expert",
+			"level": 16,
+			"traits": "archetype",
+			"archetype": "Provocator",
+			"source": "159 All or Nothing pg. 79",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2216",
+			"aon": "feats2216",
+			"type": "feat",
+			"body": "**Archetype** Provocator\n**Prerequisites** Provocator Dedication; expert in any kind of weapon or unarmed attack\n\n- - -\n\nYour experience has made you better with a wide variety of weapons. Your proficiency ranks for simple weapons and martial weapons increase to expert, as does your proficiency rank for your chosen advanced weapon.",
+			"hash": "LKZcWlqr"
+		}
 	}
 ]

@@ -44,7 +44,22 @@
 		"traditions": [ "Divine", "Occult" ],
 		"traits": [ "Chaotic", "Disease", "Evil", "Necromancy" ],
 		"id": "f972b233-e6aa-4690-ac63-0cf1abaea43e",
-		"hash": "RcCrNXTE"
+		"pf2t": {
+			"name": "Abyssal Plague",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "chaotic,disease,evil,necromancy",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 316 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=1",
+			"aon": "spells1",
+			"type": "spell",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYour touch afflicts the target with Abyssal plague, which siphons fragments of their soul away to empower the Abyss. The effect is based on the target's Fortitude save.\n\n**Abyssal Plague** (disease); \n\n**Critical Success** The target is unaffected.\n**Success** The target takes 2 evil damage per spell level, and takes a -2 status penalty to saves against Abyssal plague for 1 day or until the target contracts it, whichever comes first.\n**Failure** The target is afflicted with Abyssal plague at stage 1.\n**Critical Failure** The target is afflicted with Abyssal plague at stage 2.Fortitude; **Stage 1** drained 1 (1 day); **Stage 2** drained increases by 2 (1 day).",
+			"hash": "RcCrNXTE"
+		}
 	},
 	{
 		"aonId": 2,
@@ -68,7 +83,22 @@
 		"traits": [ "Acid", "Attack", "Evocation" ],
 		"focus": false,
 		"id": "6735953e-7bec-4ce0-8400-79e026c9f3a9",
-		"hash": "gKYbyYvp"
+		"pf2t": {
+			"name": "Acid Arrow",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "acid,attack,evocation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 316 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=2",
+			"aon": "spells2",
+			"type": "spell",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou conjure an arrow of acid that continues corroding the target after it hits. Make a spell attack against the target. On a hit, you deal 3d8 acid damage plus 1d6 persistent acid damage. On a critical hit, double the initial damage, but not the persistent damage.\n- - -\n**Heightened (+2)** The initial damage increases by 2d8, and the persistent acid damage increases by 1d6.",
+			"hash": "gKYbyYvp"
+		}
 	},
 	{
 		"aonId": 3,
@@ -126,7 +156,21 @@
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "b66a0987-a5c9-45f3-ba7e-f54f691ff2b4",
-		"hash": "ZzfKQRQF"
+		"pf2t": {
+			"name": "Aerial Form",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "polymorph,transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 316 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=4",
+			"aon": "spells4",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou harness your mastery of primal forces to reshape your body into a Medium flying animal battle form. When you cast this spell, choose bat, bird, pterosaur, or wasp. You can decide the specific type of animal (such as an owl or eagle for bird), but this has no effect on the form's Size or statistics. While in this form, you gain the animal trait. You can Dismiss the spell.\n\nYou gain the following statistics and abilities regardless of which battle form you choose: \n\n+ AC = 18 + your level. Ignore your armor's check penalty and Speed reduction. \n+ 5 temporary Hit Points. \n+ Low-light vision. \n+ One or more unarmed melee attacks specific to the battle form you choose, which are the only attacks you can use. You're trained with them. Your attack modifier is +16, and your damage bonus is +5. These attacks are Dexterity based (for the purpose of the clumsy condition, for example). If your attack modifier for Dexterity-based unarmed attacks is higher, you can use it instead. \n+ Acrobatics modifier of +16, unless your own modifier is higher.\nYou also gain specific abilities based on the form you choose:\n\n+ **Bat** Speed 20 feet, fly Speed 30 feet; precise echolocation 40 feet; **Melee** :a: fangs, **Melee** :a: wing (agile), \n+ **Bird** Speed 10 feet, fly Speed 50 feet; **Melee** :a: beak, **Melee** :a: talon (agile), \n+ **Pterosaur** Speed 10 feet, fly Speed 40 feet; imprecise scent 30 feet; **Melee** :a: beak, \n+ **Wasp** Speed 20 feet, fly Speed 40 feet; **Melee** :a: stinger,\n- - -\n**Heightened (5th)** Your battle form is Large and your fly Speed gains a +10-foot status bonus. You must have enough space to expand into or the spell is lost. You instead gain 10 temporary HP, attack modifier +18, damage bonus +8, and Acrobatics +20.\n**Heightened (6th)** Your battle form is Huge, your fly Speed gains a +15-foot status bonus, and your attacks have 10-foot reach. You must have enough space to expand into or the spell is lost. You instead gain AC = 21 + your level, 15 temporary HP, attack modifier +21, damage bonus +4 and double damage dice (including persistent damage), and Acrobatics +23.",
+			"hash": "ZzfKQRQF"
+		}
 	},
 	{
 		"aonId": 5,
@@ -149,7 +193,22 @@
 		"duration": "1 minute",
 		"focus": false,
 		"id": "c39ea576-2fe5-4f1a-8731-18522b52fcc9",
-		"hash": "vIvprYxx"
+		"pf2t": {
+			"name": "Air Bubble",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "air,conjuration",
+			"traditions": "arcane,divine,primal",
+			"cast": "v",
+			"actions": "r",
+			"range": 60,
+			"source": "Core Rulebook pg. 316 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=5",
+			"aon": "spells5",
+			"type": "spell",
+			"body": "**Trigger** A creature within range enters an environment where it can't breathe.\n**Duration** 1 minute\n**Targets** the triggering creature\n\n- - -\n\nA bubble of pure air appears around the target's head, allowing it to breathe normally. The effect ends as soon as the target returns to an environment where it can breathe normally.",
+			"hash": "vIvprYxx"
+		}
 	},
 	{
 		"aonId": 6,
@@ -171,7 +230,22 @@
 		"traits": [ "Air", "Transmutation" ],
 		"focus": false,
 		"id": "68f4cef2-ec68-4a69-834c-d9ddb6b12d57",
-		"hash": "FltNvZst"
+		"pf2t": {
+			"name": "Air Walk",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "air,transmutation",
+			"traditions": "divine,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 317 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=6",
+			"aon": "spells6",
+			"type": "spell",
+			"body": "**Duration** 5 minutes\n**Targets** 1 creature\n\n- - -\n\nThe target can walk on air as if it were solid ground. It can ascend and descend in this way at a maximum of a 45-degree angle.",
+			"hash": "FltNvZst"
+		}
 	},
 	{
 		"aonId": 7,
@@ -197,7 +271,22 @@
 		"traits": [ "Abjuration" ],
 		"focus": false,
 		"id": "32ea9865-53d8-4d0a-a37b-e557d2eb80f0",
-		"hash": "gjGOKBgm"
+		"pf2t": {
+			"name": "Alarm",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "abjuration",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "m,s,v",
+			"actions": "10 minutes",
+			"range": "touch",
+			"source": "Core Rulebook pg. 317 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=7",
+			"aon": "spells7",
+			"type": "spell",
+			"body": "**Requirements** 3 gp silver bell focus\n**Area** 20-foot burst\n**Duration** 8 hours\n\n- - -\n\nYou ward an area to alert you when creatures enter without your permission. When you cast alarm, select a password. Whenever a Small or larger corporeal creature enters the spell's area without speaking the password, alarm sends your choice of a mental alert (in which case the spell gains the mental trait) or an audible alarm with the sound and volume of a hand bell (in which case the spell gains the auditory trait). Either option automatically awakens you, and the bell allows each creature in the area to attempt a DC 15 Perception check to wake up. A creature aware of the alarm must succeed at a Stealth check against the spell's DC or trigger the spell when moving into the area.\n- - -\n**Heightened (3rd)** You can specify criteria for which creatures sound the alarm spell-for instance, orcs or masked people.",
+			"hash": "gjGOKBgm"
+		}
 	},
 	{
 		"aonId": 8,
@@ -217,7 +306,21 @@
 		"traits": [ "Divination" ],
 		"focus": false,
 		"id": "2e5c6d58-8b94-494e-96b1-f7bc0fbd50ae",
-		"hash": "SsSBYqAI"
+		"pf2t": {
+			"name": "Alter Reality",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "divination",
+			"traditions": "occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"source": "Core Rulebook pg. 317 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=8",
+			"aon": "spells8",
+			"type": "spell",
+			"body": "You use your occult lore and the power of your mind to manipulate the spiritual multiverse, resulting in any of the following effects: \n\n+ Duplicate any occult spell of 9th level or lower. \n+ Duplicate any non-occult spell of 7th level or lower. \n+ Produce any effect whose power is equivalent to any occult spell 9th level or lower, or non-occult spell 7th level or lower. \n+ Reverse certain effects that refer to the wish spell\nAt the GM's discretion, you can try to produce greater effects, but this is dangerous and the spell may have only a partial effect.",
+			"hash": "SsSBYqAI"
+		}
 	},
 	{
 		"aonId": 9,
@@ -245,7 +348,23 @@
 		"trigger": "A creature performs an act anathema to your deity.",
 		"focus": false,
 		"id": "1ef86347-704c-4f89-acf3-d3df0cf7816b",
-		"hash": "bbqDgpFG"
+		"pf2t": {
+			"name": "Anathematic Reprisal",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "enchantment,mental",
+			"traditions": "divine",
+			"cast": "s,v",
+			"actions": "r",
+			"range": 30,
+			"source": "Core Rulebook pg. 317 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=9",
+			"aon": "spells9",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Trigger** A creature performs an act anathema to your deity.\n**Targets** the triggering creature\n\n- - -\n\nYou punish a creature that transgresses against your deity, drawing upon the anguish you feel upon seeing one of your deity's anathema committed.\n\nYou can cast this spell only when a creature actively commits a unique act of anathema. For example, if creating undead were anathema to your deity, you could use anathematic reprisal on a necromancer who had just created undead in front of you, but not on an undead creature just for existing.\n\nYou deal 4d6 mental damage to the target, but a basic Will save can reduce this damage. If it fails, it is also stupefied 1 for 1 round. The creature is then temporarily immune for 1 minute.\n- - -\n**Heightened (+1)** The damage increases by 1d6.",
+			"hash": "bbqDgpFG"
+		}
 	},
 	{
 		"aonId": 10,
@@ -278,7 +397,21 @@
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "fdddd726-202d-4096-820b-b3128f5a40b5",
-		"hash": "kSZHvMCq"
+		"pf2t": {
+			"name": "Animal Form",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "polymorph,transmutation",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 317 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=10",
+			"aon": "spells10",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou call upon primal energy to transform yourself into a Medium animal battle form. When you first cast this spell, choose ape, bear, bull, canine, cat, deer, frog, shark, or snake. You can decide the specific type of animal (such as lion or snow leopard for cat), but this has no effect on the form's Size or statistics. While in this form, you gain the animal trait. You can Dismiss the spell.\n\nYou gain the following statistics and abilities regardless of which battle form you choose: \n\n+ AC = 16 + your level. Ignore your armor's check penalty and Speed reduction. \n+ 5 temporary Hit Points. \n+ Low-light vision and imprecise scent 30 feet. \n+ One or more unarmed melee attacks specific to the battle form you choose, which are the only attacks you can use. You're trained with them. Your attack modifier is +9, and your damage bonus is +1. These attacks are Strength based (for the purpose of the enfeebled condition, for example). If your unarmed attack bonus is higher, you can use it instead. \n+ Athletics modifier of +9, unless your own modifier is higher.\nYou also gain specific abilities based on the type of animal you choose:\n\n+ **Ape** Speed 25 feet, climb Speed 20 feet; **Melee** :a: fist, \n+ **Bear** Speed 30 feet; **Melee** :a: jaws, **Melee** :a: claw (agile), \n+ **Bull** Speed 30 feet; **Melee** :a: horn, \n+ **Canine** Speed 40 feet; **Melee** :a: jaws, \n+ **Cat** Speed 40 feet; **Melee** :a: jaws, **Melee** :a: claw (agile), \n+ **Deer** Speed 50 feet; **Melee** :a: antler, \n+ **Frog** Speed 25 feet, swim Speed 25 feet; **Melee** :a: jaws, **Melee** :a: tongue (reach 15 feet), \n+ **Shark** swim Speed 35 feet; **Melee** :a: jaws, \n+ **Snake** Speed 20 feet, climb Speed 20 feet, swim Speed 20 feet; **Melee** :a: fangs,\n- - -\n**Heightened (3rd)** You instead gain 10 temporary HP, AC = 17 + your level, attack modifier +14, damage bonus +5, and Athletics +14.\n**Heightened (4th)** Your battle form is Large and your attacks have 10-foot reach. You must have enough space to expand into or the spell is lost. You instead gain 15 temporary HP, AC = 18 + your level, attack modifier +16, damage bonus +9, and Athletics +16.\n**Heightened (5th)** Your battle form is Huge and your attacks have 15-foot reach. You must have enough space to expand into or the spell is lost. You instead gain 20 temporary HP, AC = 18 + your level, attack modifier +18, damage bonus +7 and double the number of damage dice, and Athletics +20.",
+			"hash": "kSZHvMCq"
+		}
 	},
 	{
 		"aonId": 11,
@@ -300,7 +433,22 @@
 		"traits": [ "Enchantment", "Mental" ],
 		"focus": false,
 		"id": "7abc4582-0266-4f0c-a0f7-bdb01b234963",
-		"hash": "ZqgOOULP"
+		"pf2t": {
+			"name": "Animal Messenger",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "enchantment,mental",
+			"traditions": "primal",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": 120,
+			"source": "Core Rulebook pg. 318 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=11",
+			"aon": "spells11",
+			"type": "spell",
+			"body": "**Duration** see text\n\n- - -\n\nYou offer a gift of food, and an ordinary Tiny wild animal within range approaches to eat it. You imprint the image, direction, and distance of an obvious place or landmark well known to you within the animal. Optionally, you can attach a small object or note up to light Bulk to it. The animal does its best to reach the destination; if it makes it there, it waits nearby until the duration expires, allowing other nonhostile creatures to approach it and remove the attached object. The spell ends after 24 hours or when a creature removes the attached object, whichever happens first.\n\nIf there are no Tiny wild animals in range, the spell is lost.",
+			"hash": "ZqgOOULP"
+		}
 	},
 	{
 		"aonId": 12,
@@ -322,7 +470,22 @@
 		"traits": [ "Divination", "Mental" ],
 		"focus": false,
 		"id": "30aacfc0-73df-4e02-a244-8f070ea34edf",
-		"hash": "fdICpgbF"
+		"pf2t": {
+			"name": "Animal Vision",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "divination,mental",
+			"traditions": "primal",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": 120,
+			"source": "Core Rulebook pg. 318 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=12",
+			"aon": "spells12",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n**Targets** 1 animal\n\n- - -\n\nYou tap into the target's senses, allowing you to see, hear, and otherwise sense whatever it senses for the spell's duration. If the target wishes to prevent you from doing so, it can attempt a Will save, negating the spell on a success, but most animals don't bother to do so. While tapping into the target's senses, you can't use your own body's senses, but you can change back and forth from your body's senses to the target's senses using a single action, which has the concentrate trait.",
+			"hash": "fdICpgbF"
+		}
 	},
 	{
 		"aonId": 13,
@@ -344,7 +507,22 @@
 		"traits": [ "Transmutation" ],
 		"focus": false,
 		"id": "8f12b56b-7ad9-4d29-8352-7ba1e690f6df",
-		"hash": "IWgdPkpN"
+		"pf2t": {
+			"name": "Ant Haul",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 318 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=13",
+			"aon": "spells13",
+			"type": "spell",
+			"body": "**Duration** 8 hours\n**Targets** 1 creature\n\n- - -\n\nYou reinforce the target's musculoskeletal system to bear more weight. The target can carry 3 more Bulk than normal before becoming encumbered and up to a maximum of 6 more Bulk.",
+			"hash": "IWgdPkpN"
+		}
 	},
 	{
 		"aonId": 14,
@@ -366,7 +544,21 @@
 		"traits": [ "Rare", "Abjuration" ],
 		"focus": false,
 		"id": "bd2a7148-69e5-4c97-8d6d-3c1c12e68d1f",
-		"hash": "ytNBttRj"
+		"pf2t": {
+			"name": "Antimagic Field",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "rare,abjuration",
+			"traditions": "arcane,divine,occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"source": "Core Rulebook pg. 318 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=14",
+			"aon": "spells14",
+			"type": "spell",
+			"body": "**Area** 10-foot emanation, which affects you\n**Duration** sustained up to 1 minute\n\n- - -\n\nYou repel all magic from the target area, preventing spells and other magic from functioning. Spells can't penetrate the area, magic items cease to function within it, and no one inside can cast spells or use magic abilities. Likewise, spells- such as dispel magic-can't affect the field itself unless they are of a higher level. Magic effects resume the moment they pass outside the field. For example, a ray fired from one side of the field could target a creature on the other side (as long as caster and target are both outside the field). A summoned creature winks out of existence but reappears if the field moves or ends. Invested magic items cease to function, but they remain invested and resume functioning when they exit the field; the ability boost from an apex item isn't suppressed within the field. Spells of a higher level than the antimagic field overcome its effects, and can even be cast by a creature within the field.\n\nThe field disrupts only magic, so a +3 longsword still functions as a longsword. Magically created creatures (such as golems) function normally within an antimagic field.",
+			"hash": "ytNBttRj"
+		}
 	},
 	{
 		"aonId": 15,
@@ -386,7 +578,21 @@
 		"traits": [ "Divination", "Prediction" ],
 		"focus": false,
 		"id": "7bdb04aa-e260-4525-b4f4-a14f17407ba4",
-		"hash": "CkpWODfw"
+		"pf2t": {
+			"name": "Augury",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "divination,prediction",
+			"traditions": "divine,occult",
+			"cast": "m,s,v",
+			"actions": "10 minutes",
+			"source": "Core Rulebook pg. 318 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=15",
+			"aon": "spells15",
+			"type": "spell",
+			"body": "You gain a vague glimpse of the future. During the casting of this spell, ask about the results of a particular course of action. The spell can predict results up to 30 minutes into the future and reveals the GM's best guess among the following outcomes: \n\n+ **Weal** The results will be good. \n+ **Woe** The results will be bad. \n+ **Weal and Woe** The results will be a mix of good and bad. \n+ **Nothing** There won't be particularly good or bad results.\nThe GM rolls a secret DC 6 flat check. On a failure, the result is always \"nothing.\" This makes it impossible to tell whether a \"nothing\" result is accurate. If anyone asks about the same topic as the first casting of augury during an additional casting, the GM uses the secret roll result from the first casting. If circumstances change, though, it's possible to get a different result.",
+			"hash": "CkpWODfw"
+		}
 	},
 	{
 		"aonId": 16,
@@ -408,6 +614,20 @@
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "d2f9d5a9-f199-4073-904d-88a9271964c0",
-		"hash": "qFByBpXS"
+		"pf2t": {
+			"name": "Avatar",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "polymorph,transmutation",
+			"traditions": "divine",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 318 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=16",
+			"aon": "spells16",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou transform into an avatar of your deity, assuming a Huge battle form. You must have space to expand or the spell is lost. You have hands in this battle form and can take manipulate actions. You can Dismiss this spell.\n\nYou gain the following statistics and abilities regardless of which deity's battle form you assume: \n\n+ AC = 25 + your level. Ignore your armor's check penalty and Speed reduction. \n+ 30 temporary Hit Points. \n+ Darkvision. \n+ One or more attacks specific to your deity's battle form, which are the only attacks you can use. You're trained with them. Your attack modifier is +33, and you use the listed damage. Melee attacks are Strength based (for the purposes of the enfeebled condition, for example) unless they have the finesse trait, and all ranged attacks are Dexterity based. Attacks that deal positive or negative damage don't heal creatures. \n+ Athletics modifier of +35, unless your own is higher.\nYou also gain the specific abilities listed for your deity below:\n\n#### Core Rulebook\n+ **Abadar** Speed 50 feet, burrow Speed 30 feet, immune to immobilized; **Ranged** :a: crossbow (range increment 120 feet, reload 1), \n+ **Asmodeus** Speed 70 feet, air walk; **Melee** :a: mace (reach 15 feet), **Ranged** :a: hell fire (range 120 feet), \n+ **Calistria** Speed 30 feet, fly Speed 70 feet; **Melee** :a: whip (disarm, finesse, nonlethal, reach 20 feet), **Ranged** :a: savored sting (range 60 feet), \n+ **Cayden Cailean** Speed 70 feet, air walk, ignore difficult terrain and greater difficult terrain; **Melee** :a: rapier (deadly, reach 15 feet), **Ranged** :a: ale splash (range 120 feet), \n+ **Desna** Speed 30 feet, fly Speed 70 feet; **Melee** :a: starknife (agile, deadly, finesse, reach 15 feet, silver, thrown 60 feet), **Ranged** :a: moonbeam (range 120 feet, silver), \n+ **Erastil** Speed 70 feet, air walk, ignore difficult terrain and greater difficult terrain; **Ranged**:a: longbow (deadly d8, range increment 150 feet), \n+ **Gorum** Speed 70 feet, immune to immobilized; **Melee** :a: greatsword (versatile P, reach 15 feet), \n+ **Gozreh** no land Speed, fly Speed 70 feet, swim Speed 70 feet, ignore difficult terrain and greater difficult terrain; **Melee** :a: waves (bull rush, reach 15 feet, thrown 20 feet), **Ranged** :a: wind (versatile electricity, range 120 feet), \n+ **Iomedae** Speed 70 feet, air walk; shield (15 Hardness, can't be damaged); **Melee** :a: longsword (versatile P, reach 15 feet), \n+ **Irori** Speed 80 feet, air walk; **Melee** :a: unfettered strike (agile, versatile P or S, finesse, reach 15 feet), **Ranged** :a: wind strike (range 60 feet), \n+ **Lamashtu** Speed 30 feet, fly Speed 70 feet; **Melee** :a: falchion (forceful, reach 15 feet), **Ranged** :a: waters of Lamashtu (range 120 feet), \n+ **Nethys** Speed 70 feet, air walk; **Ranged** :a: raw magic (range 120 feet; versatile cold, electricity, or fire), \n+ **Norgorber** Speed 70 feet, air walk, ignore difficult terrain and greater difficult terrain; **Melee** :a: shortsword (agile, finesse, versatile S, reach 15 feet), **Ranged** :a: blackfinger toss (range 120 feet), \n+ **Pharasma** Speed 70 feet, air walk; **Melee** :a: dagger (agile, finesse, reach 15 feet, thrown 40 feet), **Ranged** :a: spiral blast (range 120 feet, damages only undead), \n+ **Rovagug** Speed 50 feet, burrow Speed 30 feet, immune to immobilized; **Melee**:a: jaws (reach 15 feet), **Melee**:a: leg (agile, versatile P, reach 15 feet), \n+ **Sarenrae** Speed 30 feet, fly Speed 70 feet; **Melee** :a: scimitar (forceful, nonlethal, reach 15 feet), **Ranged** :a: everflame (nonlethal, range 120 feet), \n+ **Shelyn** Speed 70 feet, air walk, ignore difficult terrain and greater difficult terrain; **Melee** :a: glaive (deadly d8, nonlethal, reach 20 feet), **Ranged** :a: melody of inner beauty, (nonlethal, range 120 feet), \n+ **Torag** Speed 50 feet, burrow Speed 30 feet, immune to immobilized; shield (15 Hardness, can't be damaged); **Melee** :a: warhammer (bull rush, reach 15 feet), \n+ **Urgathoa** Speed 70 feet, air walk; **Melee**:a: scythe (deadly d10, trip, reach 15 feet), **Ranged** :a: pallid plague (range 120 feet), \n+ **Zon-Kuthon** Speed 70 feet, air walk, ignore difficult terrain and greater difficult terrain; **Melee** :a: spiked chain (disarm, trip, reach 15 feet), **Ranged** :a: midnight pain (mental, nonlethal, range 120 feet),\n\n#### Gods & Magic\n+ **Achaekek** Speed 70 feet, climb Speed 50 feet, ignore difficult terrain and greater difficult terrain; **Melee** :a: mantis claw (agile, backswing, finesse, reach 15 feet, versatile P), **Ranged** :a: spine volley (range 60 feet), \n+ **Alseta** Speed 40 feet, dimensional Speed 60 feet; **Melee** :a: dagger (agile, finesse, reach 15 feet, thrown 40 feet, versatile P), **Ranged** :a: portal toss (range 60 feet), \n+ **Arazni** Speed 70 feet, air walk, immune to immobilized; **Melee** :a: rapier (deadly 3d8, reach 15 feet), **Ranged** :a: call blood (range 120 feet), \n+ **Besmara** Speed 40 feet, swim Speed 70 feet, immune to immobilized; **Melee** :a: rapier (deadly 3d8, disarm, finesse, reach 15 feet), **Ranged** :a: ship's cannon (range 120 feet), \n+ **Brigh** Speed 60 feet, immune to immobilized, air walk; **Melee** :a: light hammer (agile, reach 15 feet, thrown 40 feet), **Ranged** :a: bolt of molten bronze (range 120 feet), \n+ **Casandalee** Speed 70 feet, air walk, ignore difficult terrain and greater difficult terrain; **Melee** :a: polytool (reach 15 feet), **Ranged** :a: logic blast (range 120 feet), \n+ **Chaldira** Speed 70 feet, air walk, immune to immobilized; **Melee** :a: shortsword (agile, finesse, reach 15 feet, versatile S), **Ranged** :a: fistful of buttons (nonlethal, range 120 feet), \n+ **Ghlaunder** Speed 30 feet, fly Speed 70 feet; **Melee** :a: proboscis (agile, reach 20 feet), \n+ **Grandmother Spider** Speed 70 feet, climb Speed 70 feet, immune to immobilized; **Melee** :a: leg (deadly 3d8, finesse, reach 15 feet, versatile P), **Ranged** :a: venom web (range 120 feet), \n+ **Groetus** Speed 70 feet, air walk, ignore difficult terrain and greater difficult terrain; **Melee** :a: war flail (disarm, reach 15 feet, sweep, trip), **Ranged** :a: dreadful thought (range 120 feet), \n+ **Gruhastha** Speed 50 feet, fly Speed 70 feet; **Melee** :a: fist (agile, finesse, nonlethal, reach 15 feet), **Ranged** :a: arrow of enlightenment (deadly 3d10, range increment 120 feet), \n+ **Hei Feng** Speed 70 feet, air walk, ignore difficult terrain and greater difficult terrain; **Melee** :a: drunken sword (forceful, reach 15 feet), **Ranged** :a: storm surge (range 120 feet, air, water), \n+ **Kazutal** Speed 60 feet, ignore difficult terrain; **Melee** :a: machete (agile, reach 15 feet), **Ranged** :a: jaguar pounce (range 60 feet); Damage 5d6+3 piercing plus 1d6 persistent bleed.\n+ **Kurgess** Speed 70 feet, climb Speed 50 feet, swim Speed 50 feet, immune to immobilized; **Melee** :a: lashing chain (disarm, reach 20 feet, trip), **Ranged** :a: javelin (range increment 60 feet, thrown), \n+ **Milani** Speed 50 feet, fly Speed 70 feet; shield (15 Hardness, can't be damaged); **Melee** :a: morningstar (versatile P, reach 15 feet), \n+ **Nivi Rhombodazzle** Speed 50 feet, burrow Speed 30 feet, immune to immobilized; **Melee** :a: returning light hammer (agile, thrown 40 feet), \n+ **Nocticula** Speed 70 feet, fly Speed 70 feet; **Melee** :a: tail stinger (agile, finesse, reach 15 feet, trip), **Ranged** :a: magnanimous smile (nonlethal, range 120 feet, visual), \n+ **Shizuru** Speed 70 feet, air walk, ignore difficult terrain and greater difficult terrain; **Melee** :a: katana (deadly 3d8, two-hand d10, reach 15 feet, versatile P), **Ranged** :a: sunbolt arrow (range 120 feet), \n+ **Sivanah** Speed 70 feet, air walk, ignore difficult terrain and greater difficult terrain; **Melee** :a: bladed scarf (disarm, finesse, reach 15 feet, trip), **Ranged** :a: illusory assault (range 120 feet), \n+ **Tsukiyo** Speed 70 feet, air walk, ignore difficult terrain and greater difficult terrain; **Melee** :a: longspear (reach 20 feet), **Ranged** :a: moonbeam (nonlethal, range 120 feet, silver),\n\n#### The Mwangi Expanse\n+ **Adanye** Speed 70 feet, climb speed 70 feet, immune to immobilized; **Melee** :a: claw (agile, finesse, reach 15 feet), **Ranged** :a: hearth ember (range 120 feet), \n+ **Angazhan** Speed 60 feet, climb speed 60 feet; **Melee** :a: fist (agile, reach 15 feet), **Ranged** :a: Bellowing Roar (range increment 100 feet), \n+ **Balumbdar** Speed 70 feet, climb 50 feet, immune to immobilized; **Melee** :a: slam (reach 15 feet), **Ranged** :a: overbearing pressure (range 120 feet), \n+ **Chohar** Speed 70 feet, air walk; **Melee** :a: jaws (agile, reach 15 feet), **Ranged** :a: sunbeam (range 120 feet), \n+ **Kalekot** Speed 70 feet, ignore difficult terrain; **Melee** :a: ivory fangs (fatal d10, reach 10 feet), **Ranged** :a: whisper of unmaking (range 120 feet), \n+ **Lubaiko** Speed 30 feet, fly speed 70 feet; **Melee** :a: longspear (reach 20 feet), **Ranged** :a: flaming lightning (versatile fire, range 120 feet), \n+ **Luhar** Speed 70 feet, ignore difficult terrain and greater difficult terrain; **Melee** :a: spiked chain (disarm, finesse, trip, reach 15 feet), **Ranged** :a: touch of mercy (range increment 120 feet), \n+ **Mazludeh** Speed 70 feet, climb 50 feet, shield (15 hardness, can't be damaged); **Melee** :a: viper strike (reach 15 feet), **Ranged** :a: stone rain (range 120 feet), \n+ **Tlehar** Speed 50 feet, fly speed 70 feet, cannot be immobilized; **Melee** :a: morningstar (versatile piercing, reach 15 feet), **Ranged** :a: morning light (range increment 120 feet), \n+ **Uvuko** Speed 30 feet, fly speed 70 feet, immune to immobilized; **Melee** :a: maul (shove, reach 15 feet), **Ranged** :a: breath of lightning (range increment 120 feet), \n+ **Walkena** Speed 60 feet, air walk; **Melee** :a: holy spear (reach 20 feet; versatile fire), **Ranged** :a: sunfire (range increment 120 feet),",
+			"hash": "qFByBpXS"
+		}
 	}
 ]

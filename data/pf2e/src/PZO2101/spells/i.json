@@ -25,7 +25,22 @@
 		"traits": [ "Auditory", "Illusion", "Visual" ],
 		"focus": false,
 		"id": "cf71a1fa-7fc7-4e5f-9b87-00979fd14dd4",
-		"hash": "rDHxSJpV"
+		"pf2t": {
+			"name": "Illusory Creature",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "auditory,illusion,olfactory,visual",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "Core Rulebook pg. 345 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=158",
+			"aon": "spells158",
+			"type": "spell",
+			"body": "**Duration** sustained\n\n- - -\n\nYou create an illusory image of a Large or smaller creature. It generates the appropriate sounds, smells, and feels believable to the touch. If you and the image are ever farther than 500 feet apart, the spell ends.\n\nThe image can't speak, but you can use your actions to speak through the creature, with the spell disguising your voice as appropriate. You might need to attempt a Deception or Performance check to mimic the creature, as determined by the GM. This is especially likely if you're trying to imitate a specific person and engage with someone that person knows.\n\nIn combat, the illusion can use 2 actions per turn, which it uses when you Sustain the Spell. It uses your spell attack roll for attack rolls and your spell DC for its AC. Its saving throw modifiers are equal to your spell DC - 10. It is substantial enough that it can flank other creatures. If the image is hit by an attack or fails a save, the spell ends.\n\nThe illusion can cause damage by making the target believe the illusion's attacks are real, but it cannot otherwise directly affect the physical world. If the illusory creature hits with a Strike, the target takes mental damage equal to 1d4 plus your spellcasting ability modifier. This is a mental effect. The illusion's Strikes are nonlethal. If the damage doesn't correspond to the image of the monster-for example, if an illusory Large dragon deals only 5 damage-the GM might allow the target to attempt an immediate Perception check to disbelieve the spell. Any relevant resistances and weaknesses apply if the target thinks they do, as judged by the GM. For example, if the illusion wields a warhammer and attacks a creature resistant to bludgeoning damage, the creature would take less mental damage. However, illusory damage does not deactivate regeneration or trigger other effects that require a certain damage type. The GM should track illusory damage dealt by the illusion.\n\nAny creature that touches the image or uses the Seek action to examine it can attempt to disbelieve your illusion. When a creature disbelieves the illusion, it recovers from half the damage it had taken from it (if any) and doesn't take any further damage from it.\n- - -\n**Heightened (+1)** The damage of the image's Strikes increases by 1d4, and the maximum size of creature you can create increases by one (to a maximum of Gargantuan).",
+			"hash": "rDHxSJpV"
+		}
 	},
 	{
 		"aonId": 159,
@@ -53,7 +68,21 @@
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
 		"id": "dd59d79e-3446-4010-9e20-6c57dc243641",
-		"hash": "MgGtSMzt"
+		"pf2t": {
+			"name": "Illusory Disguise",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "illusion,visual",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 345 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=159",
+			"aon": "spells159",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n\n- - -\n\nYou create an illusion that causes you to appear as another creature of the same body shape, and with roughly similar height (within 6 inches) and weight (within 50 pounds), as yourself. The disguise is typically good enough to hide your identity, but not to impersonate a specific individual. The spell doesn't change your voice, scent, or mannerisms. You can change the appearance of your clothing and worn items, such as making your armor look like a dress. Held items are unaffected, and any worn item you remove returns to its true appearance.\n\nCasting illusory disguise counts as setting up a disguise for the Impersonate use of Deception; it ignores any circumstance penalties you might take for disguising yourself as a dissimilar creature, it gives you a +4 status bonus to Deception checks to prevent others from seeing through your disguise, and you add your level even if you're untrained. You can Dismiss this spell.\n- - -\n**Heightened (2nd)** The spell also disguises your voice and scent, and it gains the auditory and olfactory traits.\n**Heightened (3rd)** You can appear as any creature of the same size, even a specific individual. You must have seen an individual to take on their appearance. The spell also disguises your voice and scent, and it gains the auditory trait.",
+			"hash": "MgGtSMzt"
+		}
 	},
 	{
 		"aonId": 160,
@@ -80,7 +109,22 @@
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
 		"id": "6877feb5-0270-4ffb-9c23-1e96d1f79cd8",
-		"hash": "qgRgcXAq"
+		"pf2t": {
+			"name": "Illusory Object",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "illusion,visual",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "Core Rulebook pg. 345 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=160",
+			"aon": "spells160",
+			"type": "spell",
+			"body": "**Area** 20-foot burst\n**Duration** 10 minutes\n\n- - -\n\nYou create an illusory visual image of a stationary object. The entire image must fit within the spell's area. The object appears to animate naturally, but it doesn't make sounds or generate smells. For example, water would appear to pour down an illusory waterfall, but it would be silent.\n\nAny creature that touches the image or uses the Seek action to examine it can attempt to disbelieve your illusion.\n- - -\n**Heightened (2nd)** Your image makes appropriate sounds, generates normal smells, and feels right to the touch. The spell gains the auditory and olfactory traits. The duration increases to 1 hour.\n**Heightened (5th)** As the 2nd-level version, but the duration is unlimited.",
+			"hash": "qgRgcXAq"
+		}
 	},
 	{
 		"aonId": 161,
@@ -108,7 +152,22 @@
 		"traits": [ "Auditory", "Illusion", "Visual" ],
 		"focus": false,
 		"id": "36245924-6978-4567-aab3-55087df493d8",
-		"hash": "dSfXvvsA"
+		"pf2t": {
+			"name": "Illusory Scene",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "auditory,illusion,olfactory,visual",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": "10 minutes",
+			"range": 500,
+			"source": "Core Rulebook pg. 345 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=161",
+			"aon": "spells161",
+			"type": "spell",
+			"body": "**Area** 30-foot burst\n**Duration** 1 hour\n\n- - -\n\nYou form an imaginary scene that includes up to 10 discrete creatures or objects of various sizes, all of which must be within the spell's area. These elements generate appropriate sounds and smells, and they feel right to the touch. Elements of an illusory scene are incapable of speech. Unlike with the illusory creature spell, creatures in your scene lack combat abilities and statistics. Your scene doesn't include changes to the environment around it, though you can place your scene within the illusory environment of a hallucinatory terrain spell.\n\nWhen you create the scene, you can choose to have it be static or follow a program. Though a static scene is stationary, it includes basic natural movement. For example, wind blowing on an illusory piece of paper would rustle it. A program can be up to 1 minute long and repeats when finished. For instance, you could create a scene of two orcs fighting each other, and the fight would go the same way for each repetition. If you create a loop, the two fighters end up in the same place at the start of the scene and at the end of it, but you can smooth the program so it's hard to tell when the loop ends and begins. Anyone observing the scene for more than a few minutes almost always notices it looping. You're unable to alter the program after you create the illusion.\n\nAny creature that touches any part of the image or uses the Seek action to examine it can attempt to disbelieve your illusion. If they interact with a portion of the illusion, they disbelieve only that portion. They disbelieve the entire scene only on a critical success.\n- - -\n**Heightened (6th)** Creatures or objects in your scene can speak. You must speak the specific lines for each actor when creating your program. The spell disguises your voice for each actor.\n**Heightened (8th)** As the 6th-level version, and the duration is unlimited.",
+			"hash": "dSfXvvsA"
+		}
 	},
 	{
 		"aonId": 162,
@@ -134,7 +193,24 @@
 		"traits": [ "Evocation" ],
 		"focus": false,
 		"id": "fc51e04e-ef78-4576-ba4f-bb8151101cc9",
-		"hash": "BRZUcqKX"
+		"pf2t": {
+			"name": "Implosion",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "evocation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 346 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=162",
+			"aon": "spells162",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"basic": 1,
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 corporeal creature\n\n- - -\n\nYou crush the target by causing it to collapse in on itself, dealing 75 damage. The first time each round you Sustain the Spell, you must choose a new target to be subject to the same effect; the same creature can never be targeted more than once with a single casting of this spell. You also can't affect more than one creature per turn with implosion. You can't target a creature that's incorporeal, gaseous, or liquid, or otherwise lacking a solid form.\n- - -\n**Heightened (+1)** The damage increases by 10.",
+			"hash": "BRZUcqKX"
+		}
 	},
 	{
 		"aonId": 163,
@@ -166,7 +242,21 @@
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "87c6927e-0e81-4b30-a7d2-0fc11f264b35",
-		"hash": "DDqjMDfZ"
+		"pf2t": {
+			"name": "Insect Form",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "polymorph,transmutation",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 346 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=163",
+			"aon": "spells163",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou envision a simple bug and transform into a Medium animal battle form. When you cast this spell, choose ant, beetle, centipede, mantis, scorpion, or spider. You can decide the specific type of animal (such as such as a ladybug or scarab for beetle), but this has no effect on the form's Size or statistics. While in this form, you gain the animal trait. You can Dismiss this spell.\n\nYou gain the following statistics and abilities regardless of which battle form you choose: \n\n+ AC = 18 + your level. Ignore your armor's check penalty and Speed reduction. \n+ 10 temporary Hit Points. \n+ Low-light vision. \n+ One or more attacks specific to the battle form you choose, which are the only attacks you can use. You're trained with them. Your attack modifier is +13, and your damage bonus is +2. These attacks are Strength based (for the purpose of the enfeebled condition). If your unarmed attack modifier is higher, you can use it instead. \n+ Athletics modifier of +13, unless your own is higher.\nYou also gain specific abilities based on the form you choose:\n\n+ **Ant** Speed 30 feet, climb Speed 30 feet; **Melee** :a: mandibles, \n+ **Beetle** Speed 25 feet; **Melee** :a: mandibles , \n+ **Centipede** Speed 25 feet, climb Speed 25 feet; darkvision; **Melee** :a: mandibles, \n+ **Mantis** Speed 40 feet; imprecise scent 30 feet; **Melee** :a: foreleg , \n+ **Scorpion** Speed 40 feet; darkvision, imprecise tremorsense 60 feet; **Melee** :a: stinger, **Melee** :a: pincer (agile), \n+ **Spider** Speed 25 feet, climb Speed 25 feet; darkvision; **Melee** :a: fangs, **Ranged** :a: web (range increment 20 feet),\n- - -\n**Heightened (4th)** Your battle form is Large, and your attacks have 10-foot reach. You must have enough space to expand into or the spell is lost. You instead gain 15 temporary HP, attack modifier +16, damage bonus +6, and Athletics +16.\n**Heightened (5th)** Your battle form is Huge, and your attacks have 15-foot reach. You must have enough space to expand into or the spell is lost. You instead gain 20 temporary HP, attack modifier +18, damage bonus +2 and double damage dice (including persistent damage), and Athletics +20.",
+			"hash": "DDqjMDfZ"
+		}
 	},
 	{
 		"aonId": 164,
@@ -191,7 +281,22 @@
 		"traits": [ "Illusion" ],
 		"focus": false,
 		"id": "3134e6b6-50f2-4c72-bc43-67ffd446f42d",
-		"hash": "NmtAxqZY"
+		"pf2t": {
+			"name": "Invisibility",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "illusion",
+			"traditions": "arcane,occult",
+			"cast": "m,s",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 347 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=164",
+			"aon": "spells164",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n**Targets** 1 creature\n\n- - -\n\nCloaked in illusion, the target becomes invisible. This makes it undetected to all creatures, though the creatures can attempt to find the target, making it hidden to them instead. If the target uses a hostile action, the spell ends after that hostile action is completed.\n- - -\n**Heightened (4th)** The spell lasts 1 minute, but it doesn't end if the target uses a hostile action.",
+			"hash": "NmtAxqZY"
+		}
 	},
 	{
 		"aonId": 165,
@@ -217,7 +322,21 @@
 		"traits": [ "Illusion" ],
 		"focus": false,
 		"id": "bcf2e35b-5068-4bd7-a605-0e58c13dae54",
-		"hash": "WbZdzOBQ"
+		"pf2t": {
+			"name": "Invisibility Sphere",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "illusion",
+			"traditions": "arcane,occult",
+			"cast": "m,s",
+			"actions": 2,
+			"source": "Core Rulebook pg. 347 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=165",
+			"aon": "spells165",
+			"type": "spell",
+			"body": "**Area** 10-foot emanation\n**Duration** 10 minutes\n**Targets** you and any number of creatures in range\n\n- - -\n\nYou and all targets are invisible except to each other as long as you remain within the spell's area. If a creature made invisible by this spell leaves the spell's area, it becomes visible and remains so even if it returns to the spell's area. If any creature made invisible by this spell uses a hostile action, the spell ends after the hostile action is completed.\n\nWhile exploring, it's easy to move together slowly and remain invisible. This is untenable in a battle, however. Once an encounter begins, creatures remain invisible until at most the end of the first round, at which point the spell ends.\n- - -\n**Heightened (5th)** The duration increases to 1 hour.",
+			"hash": "WbZdzOBQ"
+		}
 	},
 	{
 		"aonId": 166,
@@ -243,6 +362,21 @@
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
 		"id": "30d5efce-9f21-4bb0-9255-382d9bc16e74",
-		"hash": "xhqtnfsv"
+		"pf2t": {
+			"name": "Item Facade",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "illusion,visual",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 347 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=166",
+			"aon": "spells166",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n**Targets** 1 object no more than 10 feet by 10 feet by 10 feet\n\n- - -\n\nYou make the target object look and feel as though it were in much better or worse physical condition. When you cast this spell, decide whether you want to make the object look decrepit or perfect. An item made to look decrepit appears broken and shoddy. An intact item made to look better appears as though it's brand new and highly polished or well maintained. A broken item appears to be intact and functional. Destroyed items can't be affected by this spell. A creature that Interacts with the item can attempt to disbelieve the illusion.\n- - -\n**Heightened (2nd)** The duration is 24 hours.\n**Heightened (3rd)** The duration is unlimited.",
+			"hash": "xhqtnfsv"
+		}
 	}
 ]

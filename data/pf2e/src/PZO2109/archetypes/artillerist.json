@@ -9,7 +9,16 @@
 		"page": 128,
 		"source": "PZO2109",
 		"id": "38739cb0-4574-4372-91b9-be105716da5a",
-		"aonId": 0
+		"aonId": 115,
+		"pf2t": {
+			"name": "Artillerist",
+			"source": "Guns & Gears pg. 128",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=115",
+			"aon": "archetypes115",
+			"type": "archetype",
+			"body": "The artillerist's maxim holds that while fights might be won with swords, battles are won with cannons. Or in a pinch, with trebuchets, siege towers, catapults, hwachas, and all other lethal miscellanea of a combat engineers' corp. As a true artillerist, you leave the penny-ante pistols and knives to those who only need to operate on a small scale. You're a consummate professional in the art of big guns, a maestro at merging mathematics and manpower to transform whatever castle wall, infantry battalion, or rampaging dragon offends you into a smoking crater in the ground.\n\nYou're not just some daredevil demolitionist, though. You're part of a team, accustomed to coordinating with your unit to maximize your time and effectiveness. Whether jumping in to help your crew load the next round, quickly calculating the trajectory of the engine's next shot, or taking the shot yourself, your presence on the team ensures their chances of success are maximized, creating a whole that is greater than the sum of its parts.",
+			"hash": "QtEQGMcx"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -42,7 +51,20 @@
 		"page": 128,
 		"source": "PZO2109",
 		"id": "400e7117-dcfe-4fab-bf2f-a472a4453d0e",
-		"aonId": 0
+		"aonId": 3223,
+		"pf2t": {
+			"name": "Named Artillery",
+			"level": 4,
+			"traits": "archetype,skill",
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 128",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3223",
+			"aon": "feats3223",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Artillerist\n**Prerequisites** trained in Crafting\n\n- - -\n\nIt is a tradition among artillerists to name the siege weapon most important to them and closest to their heart-much as a sailor on a ship, the weapon is their livelihood. You've gone a step further, and you always make sure that your named artillery has the best possible maintenance and upkeep. You can spend a full day adjusting and working on a single siege weapon to designate it as your named artillery. The siege weapon you designated as your named artillery gains a +2 circumstance bonus to AC, Fortitude saves, and Reflex saves as well as additional Hit Points equal to twice your level.\n\nDuring your daily preparations, you must spend at least one hour on maintenance to service your named artillery. If you fail to do so, or if you spend a full day designating a new piece of named artillery, the previous named artillery loses any benefits from this feat. Only one artillerist can designate a particular siege weapon as their named artillery, even if several artillerists are serving on the same siege weapon's crew (though it's typically more efficient for a group with several artillerists to divide them up, assigning one to each siege weapon).",
+			"hash": "OkrtKNbK"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -60,7 +82,20 @@
 		"id": "4e6386bf-4fc3-4aea-9a30-b0f0dde1784e",
 		"version": 999,
 		"previousId": "400e7117-dcfe-4fab-bf2f-a472a4453d0e",
-		"aonId": 0
+		"aonId": 3223,
+		"pf2t": {
+			"name": "Named Artillery",
+			"level": 4,
+			"traits": "archetype,skill",
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 128",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3223",
+			"aon": "feats3223",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Artillerist\n**Prerequisites** trained in Crafting\n\n- - -\n\nIt is a tradition among artillerists to name the siege weapon most important to them and closest to their heart-much as a sailor on a ship, the weapon is their livelihood. You've gone a step further, and you always make sure that your named artillery has the best possible maintenance and upkeep. You can spend a full day adjusting and working on a single siege weapon to designate it as your named artillery. The siege weapon you designated as your named artillery gains a +2 circumstance bonus to AC, Fortitude saves, and Reflex saves as well as additional Hit Points equal to twice your level.\n\nDuring your daily preparations, you must spend at least one hour on maintenance to service your named artillery. If you fail to do so, or if you spend a full day designating a new piece of named artillery, the previous named artillery loses any benefits from this feat. Only one artillerist can designate a particular siege weapon as their named artillery, even if several artillerists are serving on the same siege weapon's crew (though it's typically more efficient for a group with several artillerists to divide them up, assigning one to each siege weapon).",
+			"hash": "OkrtKNbK"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +109,19 @@
 		"page": 129,
 		"source": "PZO2109",
 		"id": "2c42f11d-d4fb-4398-a86c-4e62d9baa77a",
-		"aonId": 0
+		"aonId": 3224,
+		"pf2t": {
+			"name": "Shorthanded",
+			"level": 4,
+			"traits": "archetype",
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 129",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3224",
+			"aon": "feats3224",
+			"type": "feat",
+			"body": "**Archetype** Artillerist\n\n- - -\n\nTypically, a siege weapon is meant to be run by a crew with a very specific minimum number of members designed to ensure that your crew can account for every possible variable and necessity in loading, aiming, and firing the weapon. In a pinch, however, you can operate it with fewer people, provided you know what you're doing. You can operate a siege weapon with fewer than the minimum number of crew, at an increasing penalty. You and your crew take a -2 penalty to checks to Load, Aim, Launch, move, or Repair the weapon for each person below the minimum crew. The maximum number of missing minimum crew members you can handle with this feat is 5. For example, if a siege weapon had a minimum crew size of 8, you would still need a crew of 3, and you would take a -10 penalty when doing so.",
+			"hash": "FLtjyXQg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -91,7 +138,19 @@
 		"id": "b8f314d5-78b4-4ad8-86ee-4ffec94f7022",
 		"version": 999,
 		"previousId": "2c42f11d-d4fb-4398-a86c-4e62d9baa77a",
-		"aonId": 0
+		"aonId": 3224,
+		"pf2t": {
+			"name": "Shorthanded",
+			"level": 4,
+			"traits": "archetype",
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 129",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3224",
+			"aon": "feats3224",
+			"type": "feat",
+			"body": "**Archetype** Artillerist\n\n- - -\n\nTypically, a siege weapon is meant to be run by a crew with a very specific minimum number of members designed to ensure that your crew can account for every possible variable and necessity in loading, aiming, and firing the weapon. In a pinch, however, you can operate it with fewer people, provided you know what you're doing. You can operate a siege weapon with fewer than the minimum number of crew, at an increasing penalty. You and your crew take a -2 penalty to checks to Load, Aim, Launch, move, or Repair the weapon for each person below the minimum crew. The maximum number of missing minimum crew members you can handle with this feat is 5. For example, if a siege weapon had a minimum crew size of 8, you would still need a crew of 3, and you would take a -10 penalty when doing so.",
+			"hash": "FLtjyXQg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -105,7 +164,19 @@
 		"page": 129,
 		"source": "PZO2109",
 		"id": "5190d462-ef00-4217-8ef4-8bdba2e7675d",
-		"aonId": 0
+		"aonId": 3225,
+		"pf2t": {
+			"name": "Cannon Corner Shot",
+			"level": 6,
+			"traits": "archetype",
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 129",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3225",
+			"aon": "feats3225",
+			"type": "feat",
+			"body": "**Archetype** Artillerist\n\n- - -\n\nBy loading special ammunition in a particular way, you can make your siege weapons do all manner of tricks that other siege engineers can barely even imagine. If you personally contribute an additional Load action to the siege weapon's loading, above the minimum, you can change a burst into a line twice as long as the size of the burst, or vice versa (so a 10-foot burst turns into a 20-foot line, or a 20-foot line turns into a 10-foot burst).",
+			"hash": "jCfvDmFz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -122,7 +193,19 @@
 		"id": "6a9c044e-aa3d-4345-b00e-87cfa2baf7a4",
 		"version": 999,
 		"previousId": "5190d462-ef00-4217-8ef4-8bdba2e7675d",
-		"aonId": 0
+		"aonId": 3225,
+		"pf2t": {
+			"name": "Cannon Corner Shot",
+			"level": 6,
+			"traits": "archetype",
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 129",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3225",
+			"aon": "feats3225",
+			"type": "feat",
+			"body": "**Archetype** Artillerist\n\n- - -\n\nBy loading special ammunition in a particular way, you can make your siege weapons do all manner of tricks that other siege engineers can barely even imagine. If you personally contribute an additional Load action to the siege weapon's loading, above the minimum, you can change a burst into a line twice as long as the size of the burst, or vice versa (so a 10-foot burst turns into a 20-foot line, or a 20-foot line turns into a 10-foot burst).",
+			"hash": "jCfvDmFz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -138,7 +221,20 @@
 		"page": 129,
 		"source": "PZO2109",
 		"id": "7975a604-630e-4660-b3ed-b0719adee8e4",
-		"aonId": 0
+		"aonId": 3226,
+		"pf2t": {
+			"name": "Field Artillery",
+			"level": 6,
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 129",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3226",
+			"aon": "feats3226",
+			"type": "feat",
+			"body": "**Archetype** Artillerist\n**Prerequisites** expert in Crafting\n\n- - -\n\nWhile castles are generally obliging enough to stay in one place, out in the field positioning is of paramount importance-a gun in the wrong place is worse than useless. You can Interact with an adjacent mounted siege weapon to increase its Speed by 10 feet for one round.",
+			"hash": "zAJrZVrf"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -156,7 +252,20 @@
 		"id": "80e7bc77-5943-40eb-a732-2427fda163d9",
 		"version": 999,
 		"previousId": "7975a604-630e-4660-b3ed-b0719adee8e4",
-		"aonId": 0
+		"aonId": 3226,
+		"pf2t": {
+			"name": "Field Artillery",
+			"level": 6,
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 129",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3226",
+			"aon": "feats3226",
+			"type": "feat",
+			"body": "**Archetype** Artillerist\n**Prerequisites** expert in Crafting\n\n- - -\n\nWhile castles are generally obliging enough to stay in one place, out in the field positioning is of paramount importance-a gun in the wrong place is worse than useless. You can Interact with an adjacent mounted siege weapon to increase its Speed by 10 feet for one round.",
+			"hash": "zAJrZVrf"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -170,7 +279,19 @@
 		"page": 129,
 		"source": "PZO2109",
 		"id": "f90d83bf-08e9-424e-990f-e70628f376ed",
-		"aonId": 0
+		"aonId": 3227,
+		"pf2t": {
+			"name": "Live Ammunition",
+			"level": 8,
+			"traits": "archetype",
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 129",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3227",
+			"aon": "feats3227",
+			"type": "feat",
+			"body": "**Archetype** Artillerist\n\n- - -\n\nThere are generally few things as ill-advised as being shot out of a cannon or launched by a trebuchet, but people use the tactic every so often in a desperate situation. While it's more humane to use this strategy with mindless constructs or undead, occasionally an exceedingly foolhardy adventurer demands the opportunity to try it. Loading a creature requires two additional Load actions, which you must conduct personally. The creature must be willing, unconscious, or restrained throughout the process, and the siege weapon must be physically capable of firing the creature in question, based on their size and shape. Typically, that means ballistas don't qualify, for example-nor do auto-catapults which require specifically-sized balls-but normal catapults and onagers work just fine. When you Launch the weapon, if the weapon usually targets an area, you target a single 5-foot square instead. The siege weapon deals its normal damage to its target, or to the modified area, and to the creature fired.",
+			"hash": "ptthEAHh"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -187,7 +308,19 @@
 		"id": "ec524b5f-562f-4cf7-8c1e-cbdbbbfce81b",
 		"version": 999,
 		"previousId": "f90d83bf-08e9-424e-990f-e70628f376ed",
-		"aonId": 0
+		"aonId": 3227,
+		"pf2t": {
+			"name": "Live Ammunition",
+			"level": 8,
+			"traits": "archetype",
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 129",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3227",
+			"aon": "feats3227",
+			"type": "feat",
+			"body": "**Archetype** Artillerist\n\n- - -\n\nThere are generally few things as ill-advised as being shot out of a cannon or launched by a trebuchet, but people use the tactic every so often in a desperate situation. While it's more humane to use this strategy with mindless constructs or undead, occasionally an exceedingly foolhardy adventurer demands the opportunity to try it. Loading a creature requires two additional Load actions, which you must conduct personally. The creature must be willing, unconscious, or restrained throughout the process, and the siege weapon must be physically capable of firing the creature in question, based on their size and shape. Typically, that means ballistas don't qualify, for example-nor do auto-catapults which require specifically-sized balls-but normal catapults and onagers work just fine. When you Launch the weapon, if the weapon usually targets an area, you target a single 5-foot square instead. The siege weapon deals its normal damage to its target, or to the modified area, and to the creature fired.",
+			"hash": "ptthEAHh"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -201,7 +334,19 @@
 		"page": 129,
 		"source": "PZO2109",
 		"id": "8fc3534b-d137-4646-b0f8-cf0565c6cdfa",
-		"aonId": 0
+		"aonId": 3228,
+		"pf2t": {
+			"name": "Master Siege Engineer",
+			"level": 16,
+			"traits": "archetype",
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 129",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3228",
+			"aon": "feats3228",
+			"type": "feat",
+			"body": "**Archetype** Artillerist\n\n- - -\n\nWhat you don't know about artillery isn't worth knowing and your mastery allows you to perform an impossible number of actions as part of a siege weapon's crew. You're permanently quickened. You can only use the extra action to Aim or Launch a siege weapon.",
+			"hash": "llCBCIzK"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -218,6 +363,18 @@
 		"id": "e97ce176-f3f4-42b2-a285-e1301611d807",
 		"version": 999,
 		"previousId": "8fc3534b-d137-4646-b0f8-cf0565c6cdfa",
-		"aonId": 0
+		"aonId": 3228,
+		"pf2t": {
+			"name": "Master Siege Engineer",
+			"level": 16,
+			"traits": "archetype",
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 129",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3228",
+			"aon": "feats3228",
+			"type": "feat",
+			"body": "**Archetype** Artillerist\n\n- - -\n\nWhat you don't know about artillery isn't worth knowing and your mastery allows you to perform an impossible number of actions as part of a siege weapon's crew. You're permanently quickened. You can only use the extra action to Aim or Launch a siege weapon.",
+			"hash": "llCBCIzK"
+		}
 	}
 ]

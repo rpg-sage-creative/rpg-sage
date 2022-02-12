@@ -15,10 +15,88 @@
 		"aonId": 14,
 		"source": "PZO9302",
 		"id": "bd1cf813-ac9d-4fed-83ff-cfa4fcff1048",
-		"hash": "kOlpnBpX"
+		"pf2t": {
+			"name": "Leshy",
+			"pfs": "standard",
+			"traits": "uncommon,leshy,plant",
+			"source": "Character Guide pg. 53 2.0",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=14",
+			"aon": "ancestries14",
+			"type": "ancestry",
+			"body": "Guardians and emissaries of the environment, leshies are immortal spirits of nature temporarily granted a physical form.\n\nLeshies are \"born\" when a skilled druid or other master of primal magic conducts a ritual to create a suitable vessel, and then a spirit chooses that vessel to be their temporary home. Leshies are self-sufficient from the moment the ritual ends, and so they do not depend upon these druids for care, though it is not uncommon for leshies to maintain lifelong bonds with their creators.\n\nNot all leshies have a strong enough spirit to strike off completely on their own, however. Weaker nature spirits can form only tenuous bonds that are just strong enough to animate Tiny bodies. These spirits become leshy familiars, acting as companions to their druid creators. Independent leshies are often protective of such leshy familiars, advocating for them to be treated with dignity and respect.\n\n#### You Might...\n+ Act as a traveling agent for natural guardians who are unable to leave their territories. \n+ Encourage civilizations you encounter to cooperate with nature and build their cities in ecologically friendly ways. \n+ Become attached to new friends you make on your journeys.\n\n#### Others Probably...\n+ Think of you as a curiosity due to your spiritual origins. \n+ Judge you by your looks, treating you sweetly if you are cute or reacting with horror if you are frightening. \n+ Assume you know only about nature and are unfamiliar with civilization and society.\n\n#### Physical Description\nLeshies are as varied as the material used to create their vessels, usually appearing as a bizarre mishmash of various plants or fungi. Their bodies are vaguely humanoid in shape, with numerous characteristics of the plant or fungus from which they were made. A typical leshy is about 3 feet tall. Due to the nature of the ritual used to create a leshy, leshies begin their lives as adults. As spirits, they do not age, and a leshy could potentially remain in the same vessel forever-though leshies rarely consider this outcome to be desirable.\n\n#### Society\nThough guardian leshies often congregate, traveling leshies are not naturally drawn to others of their own kind. To most leshies, the concept of family is not a matter of birth, but rather determined by bonds of loyalty and friendship. Leshies are dedicated allies, but they have little tolerance for those who would despoil nature. As much as they are happy to accept someone who earns their trust into their family, they expect family members to look out for them and their natural wards in return. A betrayed leshy might not directly attack those who slight them, but they might withdraw support at a critical moment or leave their betrayers to get lost in the wilderness.\n\nLeshies are grouped into categories akin to ethnicities, but these are not connected to physical features; rather, they represent broad categories of characteristics of their spirits. Certain spirits are more likely to gravitate toward particular physical bodies, though those familiar with leshies know that this predisposition is far from absolute. Leshies often take pride in their own appearances and appreciate beauty of all kinds in others, but they rarely form judgments based on physical appearance. Leshies' genders are determined by the spirits that inhabit their bodies. Leshies tend to gravitate toward plant bodies that match their genders. Some leshies are exclusively male or female, while many consider themselves both. Others, particularly fungus leshies, tend toward far more complex expressions of gender, or eschew the concept entirely.\n\n#### Alignment and Religion\nA leshy can be of any alignment, depending on what spirit inhabits their body, but their outlook often includes a neutral element. Religion is not particularly significant to most leshies. Those with a philosophical bent lean toward the Green Faith, and Gozreh is the most popular deity among faithful leshies. Some leshies also venerate green men, powerful spirits of nature that act as regional guardians.\n\n#### Adventurers\nSome backgrounds are particularly suitable for adventuring leshies, especially those backgrounds with a tie to the natural world, such as hunter, nomad, or scout. Nature-themed classes such as druid and ranger are popular choices for leshies. As druids, leshies gravitate toward the leaf order. Bard is also a good fit for leshies with a love of storytelling; such leshies often inhabit vine leshy bodies.\n\n#### Names\nLeshies choose and change their names multiple times throughout their lives. These names often represent a facet of their personalities or values, though another common naming convention is to use descriptions of a natural feature they admire. Some leshies even use a cycle of names that changes to align with natural phenomena, such as names based upon the season or the time of day.\n\n#### Sample Names\nScarlet in Summer, Verdant Taleweaver, Lurking Hunter, Masterful Sun Drinker, Noon Sky Evening Song, Snowy Pine Branch, Cascading Rapids\n\n#### Other Information\n\n\n#### Green Men\nThe first beings to create leshys were green men, sometimes referred to as leshy kings. These legendary guardians emerge when countless spirits of nature merge and rise to divinity. Many green men discovered how to draw upon the connection they held with other spirits of nature, coaxing them into physical forms. These early leshys worked alongside green men to defend their verdant homes. Though modern leshys have far more varied motivations, many still respect and revere the gods that first gave them a chance at mortal life.\n\nWhile green men were indifferent to most non-plant creatures, they didn't scorn the assistance of druids. In time, some green men taught trusted allies a version of the ritual to create leshys.\n\n#### Leshy Resurrection\nLeshys who lose their physical form incorporate the changes they experienced in life into their spirit. Even though a leshy's spirit isn't the same as the soul of many ancestries, resurrection magic can still restore it to their most recent body. Should the ritual fail, it's usually because a leshy has shed too many of their memories and attachments, rather than due to Pharasma's judgment.\n\n#### Life without Form\nLeshy spirits are beings of pure vital essence without any of the otherworldly quintessence known as spiritual essence. Existing without physical form allows them closer contact with memories from their distant past, but this broader perspective gradually erodes memories of their experiences in their most recent body.\n\n#### Leshy Mechanics\n\n\n#### Hit Points\n8\n\n#### Size\nSmall\n\n#### Speed\n25 feet\n\n#### Ability Boosts\nConstitution\nWisdom\nFree\n\n#### Ability Flaw(s)\nIntelligence\n\n#### Languages\nCommon\nSylvan\nAdditional languages equal to your Intelligence modifier (if it's positive). Choose from Draconic, Elven, Gnomish, Goblin, Halfling, Undercommon, and any other languages to which you have access (such as the languages prevalent in your region).\n\n#### Low-Light Vision\nYou can see in dim light as though it were bright light, so you ignore the concealed condition due to dim light.\n\n#### Plant Nourishment\nYou gain nourishment in the same way that the plants or fungi that match your body type normally do, through some combination of photosynthesis, absorbing minerals with your roots, or scavenging decaying matter. You typically do not need to pay for food. If you normally rely on photosynthesis and go without sunlight for 1 week, you begin to starve. You can derive nourishment from specially formulated bottles of sunlight instead of natural sunlight, but these bottles cost 10 times as much as standard rations (or 40 sp).",
+			"hash": "kOlpnBpX"
+		}
 	},
-	{ "objectType": "Heritage", "name": "Fungus Leshy", "ancestry": "Leshy", "source": "PZO9302", "id": "52af63be-00a4-44d8-84d9-3316e13a0fbf", "aonId": 45, "hash": "JsSWpxUR" },
-	{ "objectType": "Heritage", "name": "Gourd Leshy", "ancestry": "Leshy", "source": "PZO9302", "id": "c2289393-178e-447a-9164-c9faf3a1edb6", "aonId": 46, "hash": "qvXtnRqO" },
-	{ "objectType": "Heritage", "name": "Leaf Leshy", "ancestry": "Leshy", "source": "PZO9302", "id": "e0414ab2-9db5-451b-a655-6fc07b7c47c0", "aonId": 47, "hash": "RXZIjtNV" },
-	{ "objectType": "Heritage", "name": "Vine Leshy", "ancestry": "Leshy", "source": "PZO9302", "id": "b7f08bc7-8711-4ed2-8a69-3000de965230", "aonId": 48, "hash": "wSNLqKMM" }
+	{
+		"objectType": "Heritage",
+		"name": "Fungus Leshy",
+		"ancestry": "Leshy",
+		"source": "PZO9302",
+		"id": "52af63be-00a4-44d8-84d9-3316e13a0fbf",
+		"aonId": 45,
+		"pf2t": {
+			"name": "Fungus Leshy",
+			"pfs": "standard",
+			"source": "Character Guide pg. 53 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=45",
+			"aon": "heritages45",
+			"type": "heritage",
+			"body": "Your body was made from fungi that grows in the shade of caves and trees, and you are at home in dark caverns and warrens. You gain darkvision. You lose the plant trait and gain the fungus trait.",
+			"hash": "JsSWpxUR"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Gourd Leshy",
+		"ancestry": "Leshy",
+		"source": "PZO9302",
+		"id": "c2289393-178e-447a-9164-c9faf3a1edb6",
+		"aonId": 46,
+		"pf2t": {
+			"name": "Gourd Leshy",
+			"pfs": "standard",
+			"source": "Character Guide pg. 53 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=46",
+			"aon": "heritages46",
+			"type": "heritage",
+			"body": "You have a large gourd for a skull. Your knowledge comes from within your spirit, rather than a physical brain, and you have found a handier use for the space inside your head. You can store a collection of up to 1 Bulk of objects within your head. The DC of checks to Steal objects from inside your head increases by 4. Additionally, if you store only one object within your head, you can draw it effortlessly into your hand as part of another action to use the object. Drawing the item grants this other action the manipulate trait.",
+			"hash": "qvXtnRqO"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Leaf Leshy",
+		"ancestry": "Leshy",
+		"source": "PZO9302",
+		"id": "e0414ab2-9db5-451b-a655-6fc07b7c47c0",
+		"aonId": 47,
+		"pf2t": {
+			"name": "Leaf Leshy",
+			"pfs": "standard",
+			"source": "Character Guide pg. 53 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=47",
+			"aon": "heritages47",
+			"type": "heritage",
+			"body": "Your body is made mostly from natural foliage, and like a leaf tumbling from a tree, you land from falls with particular grace. You take no damage from falling, regardless of the distance you fall.",
+			"hash": "RXZIjtNV"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Vine Leshy",
+		"ancestry": "Leshy",
+		"source": "PZO9302",
+		"id": "b7f08bc7-8711-4ed2-8a69-3000de965230",
+		"aonId": 48,
+		"pf2t": {
+			"name": "Vine Leshy",
+			"pfs": "standard",
+			"source": "Character Guide pg. 53 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=48",
+			"aon": "heritages48",
+			"type": "heritage",
+			"body": "The prehensile vines woven into your body grant you unmatched skill at climbing. You do not need to have any hands free to Climb. Additionally, if you roll a success on an Athletics check to Climb, you get a critical success instead.",
+			"hash": "wSNLqKMM"
+		}
+	}
 ]

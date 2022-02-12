@@ -22,7 +22,16 @@
 		"source": "PZO2105",
 		"id": "e09a97c5-764c-4517-915e-f92230ebce03",
 		"aonId": 77,
-		"hash": "XqqyPCRr"
+		"pf2t": {
+			"name": "Shadowdancer",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 192",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=77",
+			"aon": "archetypes77",
+			"type": "archetype",
+			"body": "Shadow has always been the cousin of fear. Within the darkness, monsters dwell, plans are hatched, and enemies strike with fang and dagger and dark magic. But some embrace the shadow, gain power from it, and dance within its shifting dark.\n\nA true shadowdancer is a creature who flits on the edge of light and darkness. Moving amid the inky blackness, shadowdancers are spies, assassins, infiltrators, and emissaries. Some shadowdancers use their relationship with the dark for good, while others embrace the primordial night, its terror, and its betrayal.\n\nRegardless of the reason why someone embraces the shadows, the shadows embrace that person in turn, gradually transforming them into something inky, nebulous, and mysterious.",
+			"hash": "XqqyPCRr"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -54,7 +63,19 @@
 		"source": "PZO2105",
 		"id": "44644cdd-5d04-4221-b0e4-b17feb0058cb",
 		"aonId": 2068,
-		"hash": "CRZktHFH"
+		"pf2t": {
+			"name": "Shadow Sneak Attack",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Shadowdancer",
+			"source": "Advanced Player's Guide pg. 192",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2068",
+			"aon": "feats2068",
+			"type": "feat",
+			"body": "**Archetype** Shadowdancer\n**Prerequisites** Shadowdancer Dedication\n\n- - -\n\nYou gain the sneak attack class feature, except you deal 1d6 precision damage regardless of your level. Sneak attack from multiple sources isn't cumulative. If you have sneak attack from more than one source, use only the highest number of dice when you sneak attack rather than adding the amounts together.",
+			"hash": "CRZktHFH"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -70,7 +91,18 @@
 		"source": "PZO2105",
 		"id": "7a7fac5e-0554-4b57-aee7-b37fa8cc2efd",
 		"aonId": 2069,
-		"hash": "mfHtrrzG"
+		"pf2t": {
+			"name": "Shadow Magic",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"source": "Advanced Player's Guide pg. 192",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2069",
+			"aon": "feats2069",
+			"type": "feat",
+			"body": "**Prerequisites** Shadowdancer Dedication\n\n- - -\n\nYou gain the ability to fuse and play with shadows by using focus spells specific to shadowdancers. You learn a shadowdancer focus spell of your choice: dance of darkness or shadow jump. If you don't already have one, you gain a focus pool of 1 Focus Point, which you can Refocus by meditating within an area of dim light or darkness. The rules for focus spells appear here.\n\nShadowdancer focus spells are occult spells. You become trained in occult spell attack rolls and spell DCs, and your spellcasting ability for these spells is Charisma.\n\n#### Shadow Magic Leads To...\nAdditional Shadow Magic, Shadow Illusion, Shadow Power",
+			"hash": "mfHtrrzG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -85,7 +117,18 @@
 		"source": "PZO2105",
 		"id": "c9f07694-369e-437b-8e88-72f08e661c0b",
 		"aonId": 2070,
-		"hash": "fbtptnkX"
+		"pf2t": {
+			"name": "Additional Shadow Magic",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"source": "Advanced Player's Guide pg. 192",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2070",
+			"aon": "feats2070",
+			"type": "feat",
+			"body": "**Prerequisites** Shadow Magic\n\n- - -\n\nChoose an additional shadowdancer focus spell you haven't already selected from Shadow Magic. Increase the number of Focus Points in your pool by 1.",
+			"hash": "fbtptnkX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -100,7 +143,18 @@
 		"source": "PZO2105",
 		"id": "51963109-33cc-4359-b696-5c31d18dd65d",
 		"aonId": 2071,
-		"hash": "RvpJnCWM"
+		"pf2t": {
+			"name": "Shadow Illusion",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"source": "Advanced Player's Guide pg. 192",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2071",
+			"aon": "feats2071",
+			"type": "feat",
+			"body": "**Prerequisites** Shadow Magic\n\n- - -\n\nWith an artful eye, you shape shadows into illusory forms. You gain the shadow illusion focus spell. Increase the number of Focus Points in your pool by 1. You become an expert in occult spell attack rolls and DCs.",
+			"hash": "RvpJnCWM"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -115,7 +169,18 @@
 		"source": "PZO2105",
 		"id": "da38511b-022c-45a7-9b11-1d7f75423f71",
 		"aonId": 2072,
-		"hash": "NcmJKANz"
+		"pf2t": {
+			"name": "Shadow Power",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype",
+			"source": "Advanced Player's Guide pg. 192",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2072",
+			"aon": "feats2072",
+			"type": "feat",
+			"body": "**Prerequisites** Shadow Magic\n\n- - -\n\nYou can focus the shadows into a powerful blast. You can cast shadow blast as an innate occult spell once per day. Its level is always 1 level lower than the level of your shadowdancer focus spells. You become an expert in occult spell attack rolls and DCs.",
+			"hash": "NcmJKANz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -130,6 +195,18 @@
 		"source": "PZO2105",
 		"id": "c650b6c7-7089-4100-a1b4-9607e7e26b5a",
 		"aonId": 2073,
-		"hash": "wkMPdjKU"
+		"pf2t": {
+			"name": "Shadow Master",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Shadowdancer",
+			"source": "Advanced Player's Guide pg. 192",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2073",
+			"aon": "feats2073",
+			"type": "feat",
+			"body": "**Archetype** Shadowdancer\n**Prerequisites** Shadowdancer Dedication\n\n- - -\n\nThe shadows protect you better than any armor can, and they give you power to plunge others into darkness. Whenever you are in an area of dim light or darkness, you gain resistance 5 to all damage except force and damage from Strikes with the ghost touch property rune. When you attempt a Reflex saving throw in an area of dim light or darkness, you can roll twice and take the higher result; this is a fortune effect.",
+			"hash": "wkMPdjKU"
+		}
 	}
 ]

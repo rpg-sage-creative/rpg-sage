@@ -25,7 +25,21 @@
 		"targets": "1 ripe berry",
 		"traits": [ "Uncommon", "Druid", "Healing", "Necromancy" ],
 		"id": "4d98ed5d-bcd3-4f46-8173-458839025cd2",
-		"hash": "hqzbrhRx"
+		"pf2t": {
+			"name": "Goodberry",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,druid,healing,necromancy",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 399 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=473",
+			"aon": "spells473",
+			"type": "focus",
+			"body": "**Duration** 10 minutes\n**Targets** 1 ripe berry\n\n- - -\n\nYou imbue the target berry with the bounty of nature, turning it into a goodberry that can heal and sustain far beyond its normal capacity. A creature can eat the goodberry with an Interact action to regain 1d6+4 Hit Points. A berry not consumed during the duration withers away. Every six goodberries consumed gives as much nourishment as one square meal for a typical human.\n- - -\n**Heightened (+1)** You can target an additional berry. A creature can consume any number of goodberries from the same casting with a single Interact action.",
+			"hash": "hqzbrhRx"
+		}
 	},
 	{
 		"aonId": 474,
@@ -48,7 +62,22 @@
 		"targets": "1 willing living animal creature",
 		"traits": [ "Uncommon", "Druid", "Healing", "Necromancy", "Positive" ],
 		"id": "9850b9e6-01db-4e7f-9437-f0e9a404928a",
-		"hash": "BhPSJrrN"
+		"pf2t": {
+			"name": "Heal Animal",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,druid,healing,necromancy,positive",
+			"cast": "s",
+			"actions": 1,
+			"max": 2,
+			"range": "touch or 30",
+			"source": "Core Rulebook pg. 399 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=474",
+			"aon": "spells474",
+			"type": "focus",
+			"body": "**Targets** 1 willing living animal creature\n\n- - -\n\nYou heal an animal's wounds, restoring 1d8 Hit Points to the target. The number of actions spent Casting this Spell determines its effect. \n\n+  :a: **somatic** The spell has a range of touch. \n+ :aa: **somatic, verbal** The spell has a range of 30 feet and restores an additional 8 Hit Points to the target.\n- - -\n**Heightened (+1)** The amount of healing increases by 1d8, and the additional healing for the 2-action version increases by 8.",
+			"hash": "BhPSJrrN"
+		}
 	},
 	{
 		"aonId": 475,
@@ -69,7 +98,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Conjuration", "Druid", "Plant" ],
 		"id": "dce7e1d7-97ba-4d04-9eee-6fcde87eaf1a",
-		"hash": "GAvyRWCx"
+		"pf2t": {
+			"name": "Impaling Briars",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,druid,plant",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 400 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=475",
+			"aon": "spells475",
+			"type": "focus",
+			"body": "**Area** ground within a 100-foot emanation\n**Duration** sustained up to 1 minute\n\n- - -\n\nThe ground within the area transforms into a mass of dangerous briars that assault and impede your foes. The first time each round you Sustain the Spell, you can select one of the following effects to occur in the area.\n\n+ **Ensnare** The briars clump around your foes, attempting to hold them in place. A foe within the area (or flying at most 20 feet above the area) must attempt a Reflex save. On a failure, it takes a -10-foot circumstance penalty to all Speeds for 1 round, and on a critical failure, it is immobilized for 1 round unless it Escapes. \n+ **Impede** The briars twist and writhe, making the entire area difficult terrain. \n+ **Wall** A wall of thorns appears in the area, lasting for 1 round. The wall is greater difficult terrain instead of difficult terrain.\nIn addition, once per round you can direct the briars to impale any target in the area (or flying up to 20 feet above the area) that you can see by using a single action, which has the concentrate and manipulate traits. Make a spell attack roll. On a success, the target takes 10d6 piercing damage and takes a -10-foot circumstance penalty to all Speeds for 1 round; on a critical success, the target is immobilized for 1 round unless it Escapes.",
+			"hash": "GAvyRWCx"
+		}
 	},
 	{
 		"aonId": 476,
@@ -87,7 +129,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Conjuration", "Druid" ],
 		"id": "9adc885a-a26a-40ad-9ebd-18ed2ebfa640",
-		"hash": "VmzpSbQX"
+		"pf2t": {
+			"name": "Primal Summons",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,druid",
+			"cast": "v",
+			"actions": 0,
+			"source": "Core Rulebook pg. 400 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=476",
+			"aon": "spells476",
+			"type": "focus",
+			"body": "You enhance a summoned creature with the power of the elements. If your next action is to cast either summon animal or summon plant or fungus, choose air, earth, fire, or water, and the creature you summon gains the corresponding abilities. \n\n+ **Air** The creature gains a fly Speed of 60 feet. \n+ **Earth** The creature gains a burrow Speed of 20 feet, reduces its land Speed by 10 feet (minimum 5 feet), and gains resistance 5 to physical damage. \n+ **Fire** The creature's attacks deal 1d6 extra fire damage, and it gains resistance 10 to fire and weakness 5 to cold and water. \n+ **Water** The creature gains a swim Speed of 60 feet, can spend 1 action after a melee attack to attempt a Shove (ignoring multiple attack penalty), and gains resistance 5 to fire.",
+			"hash": "VmzpSbQX"
+		}
 	},
 	{
 		"aonId": 477,
@@ -109,7 +164,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Air", "Druid", "Electricity", "Evocation" ],
 		"id": "0a5c17b0-a26c-4f75-83ca-c6e910eb369a",
-		"hash": "NRmPUPHP"
+		"pf2t": {
+			"name": "Storm Lord",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "uncommon,air,druid,electricity,evocation",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 400 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=477",
+			"aon": "spells477",
+			"type": "focus",
+			"body": "**Requirements** You are outdoors and aboveground.\n**Area** 100-foot emanation, which affects you\n**Duration** sustained up to 1 minute\n\n- - -\n\nThe sky above you darkens in a matter of moments, swirling with ominous clouds punctuated by flashes of lighting. The first time each round you Sustain the Spell, you can select one of the following effects to occur in the area.\n\n+ **Calm** No additional effect.\n+ **Fog** Heavy fog rolls in, concealing the area with the effects of obscuring mist.\n+ **Rain** Torrential rain falls from the sky, dousing ordinary flames. Creatures in the area take a -2 circumstance penalty to Acrobatics and Perception checks. \n+ **Wind** Powerful winds buffet the area in all directions. Ranged attacks take a -4 circumstance penalty, and all flying is against the wind and counts as moving through difficult terrain.\nIn addition, once per round you can use a single action, which has the concentrate and manipulate traits, to call down a bolt of lightning, striking any target in range that you can see. You deal 10d6 electricity damage to the target; it must attempt a basic Reflex save. On a failure, it is also deafened for 1 round.",
+			"hash": "NRmPUPHP"
+		}
 	},
 	{
 		"aonId": 478,
@@ -131,7 +199,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Air", "Druid", "Transmutation" ],
 		"id": "ee9c5d27-cef0-4d15-aedf-834e95b1263a",
-		"hash": "xAMgdgnQ"
+		"pf2t": {
+			"name": "Stormwind Flight",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,air,druid,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 400 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=478",
+			"aon": "spells478",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nPowerful winds carry you smoothly through the air, giving you a fly Speed equal to your Speed. When this spell's duration would end, if you're still flying, you float to the ground, as feather fall.\n- - -\n**Heightened (6th)** When you fly using stormwind flight, you don't count flying against the wind as difficult terrain.",
+			"hash": "xAMgdgnQ"
+		}
 	},
 	{
 		"aonId": 479,
@@ -155,7 +236,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Air", "Druid", "Electricity", "Evocation" ],
 		"id": "3e793407-58a2-442e-857b-8f72bbf70fc0",
-		"hash": "WRVNwrNQ"
+		"pf2t": {
+			"name": "Tempest Surge",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,air,druid,electricity,evocation",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 400 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=479",
+			"aon": "spells479",
+			"type": "focus",
+			"savingthrow": "Reflex",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou surround a foe in a swirling storm of violent winds, roiling clouds, and crackling lightning. The storm deals 1d12 electricity damage. The target must attempt a basic Reflex save. On a failure, the target also is clumsy 2 for 1 round and takes 1 persistent electricity damage.\n- - -\n**Heightened (+1)** The initial damage increases by 1d12, and the persistent electricity damage on a failure increases by 1.",
+			"hash": "WRVNwrNQ"
+		}
 	},
 	{
 		"aonId": 480,
@@ -181,7 +277,21 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Druid", "Morph", "Transmutation" ],
 		"id": "c8160e80-4a60-4a30-9fd1-6dbfb7e28b1a",
-		"hash": "vLTDkvEt"
+		"pf2t": {
+			"name": "Wild Morph",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,druid,morph,transmutation",
+			"cast": "s,v",
+			"actions": 1,
+			"max": 2,
+			"source": "Core Rulebook pg. 400 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=480",
+			"aon": "spells480",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou morph your body based on your training, choosing one of the following effects based on your wild order feats. \n\n+ If you have Wild Shape, you can morph your hands into wild claws. Your hands transform into incredibly sharp claws. These claws are an unarmed attack you're trained in and deal 1d6 slashing damage each (agile, finesse). You can still hold and use items with your hands while they're transformed by this spell, but you cannot hold an item while attacking. If you have Insect Shape, you can instead transform your mouth into wild jaws, an unarmed attack you're trained in that deals 1d8 piercing damage. \n+ If you have Elemental Shape, you can morph your body to be partially composed of elemental matter, granting you resistance 5 to critical hits and precision damage. \n+ If you have Plant Shape, you can morph your arms into long vines, increasing your reach to 10 feet (or 15 feet with a reach weapon). \n+ If you have Soaring Shape, you can cast the spell as a two-action activity (:aa: somatic, verbal) to grow wings from your back. These wings allow you to fly with a fly Speed of 30 feet.\n- - -\n**Heightened (6th)** You can choose up to two of the effects from the list. Wild claws leave terrible, ragged wounds that also deal 2d6 persistent bleed damage on a hit, and wild jaws are envenomed, also dealing 2d6 persistent poison damage on a hit.\n**Heightened (10th)** You can choose up to three of the effects from the list. Wild claws deal 4d6 persistent bleed damage on a hit, and wild jaws deal 4d6 persistent poison damage on a hit.",
+			"hash": "vLTDkvEt"
+		}
 	},
 	{
 		"aonId": 481,
@@ -203,6 +313,19 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Druid", "Polymorph", "Transmutation" ],
 		"id": "2aca2226-af33-4dc7-acc5-3c043342e80f",
-		"hash": "dqEPtVzv"
+		"pf2t": {
+			"name": "Wild Shape",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,druid,polymorph,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 401 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=481",
+			"aon": "spells481",
+			"type": "focus",
+			"body": "**Duration** 1 minute (or longer)\n\n- - -\n\nYou infuse yourself with primal essence and transform yourself into another form. You can polymorph into any form listed in pest form, which lasts 10 minutes. All other wild shape forms last 1 minute. You can add more forms to your wild shape list with druid feats; your feat might grant you some or all of the forms from a given polymorph spell. When you transform into a form granted by a spell, you gain all the effects of the form you chose from a version of the spell heightened to wild shape's level. Wild shape allows you to use your own shapeshifting training more easily than most polymorph spells. When you choose to use your own attack modifier while polymorphed instead of the form's default attack modifier, you gain a +2 status bonus to your attack rolls.\n- - -\n**Heightened (2nd)** You can also wild shape into the forms listed in animal form.",
+			"hash": "dqEPtVzv"
+		}
 	}
 ]

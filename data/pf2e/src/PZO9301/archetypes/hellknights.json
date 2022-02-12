@@ -9,7 +9,16 @@
 		"source": "PZO9301",
 		"id": "ff27e948-2bf3-48f4-975b-f3c51c51aef4",
 		"aonId": 20,
-		"hash": "YvqbbYOR"
+		"pf2t": {
+			"name": "Hellknight Armiger",
+			"pfs": "standard",
+			"source": "World Guide pg. 107 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=20",
+			"aon": "archetypes20",
+			"type": "archetype",
+			"body": "You have presented yourself to a Hellknight citadel as a candidate to become a fearsome Hellknight. You believe that all who live must be forced to obey law, and you adventure as a test of your loyalty, discipline, and courage. Someday you will take the Hellknight test and battle a devil in single combat to prove your strength and join the Hellknight ranks.",
+			"hash": "YvqbbYOR"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -45,7 +54,19 @@
 		"source": "PZO9301",
 		"id": "ecdd4d0e-141c-42f0-a5ac-809e353464f4",
 		"aonId": 908,
-		"hash": "gbrsqRSR"
+		"pf2t": {
+			"name": "Ardent Armiger",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Hellknight Armiger",
+			"source": "World Guide pg. 107 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=908",
+			"aon": "feats908",
+			"type": "feat",
+			"body": "**Archetype** Hellknight Armiger\n**Prerequisites** Hellknight Armiger Dedication\n\n- - -\n\nYou have been trained to resist the manipulations of fiends, and your Hellknight discipline makes you difficult to influence. You gain a +1 circumstance bonus to saves against mental effects that specifically improve your attitude and to your Will DC against someone Coercing you, Demoralizing you, Making an Impression on you, or Making a Request of you.\n\nIf a mental effect would compel you to act in a way that violates your Hellknight order's tenets (as determined by the GM), you can attempt to break free from the effect as a reaction triggered by receiving the violating order, and you gain a new Will save against the effect. You can attempt this new save only once for a given effect, even if you are compelled to violate your order's tenets multiple times.",
+			"hash": "gbrsqRSR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -62,7 +83,21 @@
 		"source": "PZO9301",
 		"id": "9c59f3a5-4e38-46a8-a070-d44480c8225b",
 		"aonId": 909,
-		"hash": "dxvzZXCx"
+		"pf2t": {
+			"name": "Diabolic Certitude",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"actions": 0,
+			"archetype": "Hellknight Armiger",
+			"source": "World Guide pg. 107 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=909",
+			"aon": "feats909",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Hellknight Armiger\n**Prerequisites** Hellknight Armiger Dedication\n**Trigger** Your turn begins and you can observe a devil.\n\n- - -\n\nYour Hellknight training drilled details of Hell's denizens deep into your mind. Make an attempt to Recall Knowledge about a devil you're observing. If you roll a critical failure on this check, you get a failure instead.",
+			"hash": "dxvzZXCx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -77,7 +112,19 @@
 		"source": "PZO9301",
 		"id": "c28ad0d2-419e-4911-8c44-59cac0a806e5",
 		"aonId": 910,
-		"hash": "ZdvQZRxv"
+		"pf2t": {
+			"name": "Mortification",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Hellknight Armiger",
+			"source": "World Guide pg. 107 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=910",
+			"aon": "feats910",
+			"type": "feat",
+			"body": "**Archetype** Hellknight Armiger\n**Prerequisites** Hellknight Armiger Dedication\n\n- - -\n\nYour reckonings have prepared your body for physical punishment. Choose bludgeoning, piercing, or slashing damage, based on the nature of your physical reckonings. You gain resistance to the chosen damage type equal to your number of class feats from the Hellknight Armiger archetype and other Hellknight archetypes.",
+			"hash": "ZdvQZRxv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -92,6 +139,18 @@
 		"source": "PZO9301",
 		"id": "6fa8d46c-2445-46fd-bc9b-00838b34b45a",
 		"aonId": 911,
-		"hash": "gzJcZPSZ"
+		"pf2t": {
+			"name": "Armiger's Mobility",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Hellknight Armiger",
+			"source": "World Guide pg. 107 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=911",
+			"aon": "feats911",
+			"type": "feat",
+			"body": "**Archetype** Hellknight Armiger\n**Prerequisites** expert in heavy armor; Hellknight Armiger Dedication\n\n- - -\n\nYou've learned how best to move in heavy armor. When wearing heavy armor, if you meet the Strength requirement, instead of reducing the movement penalty by 5 feet, you reduce the penalty by 10 feet (typically reducing the penalty to 0). If you are a dwarf with the Unburdened Iron feat, increase your Speed by 5 feet.",
+			"hash": "gzJcZPSZ"
+		}
 	}
 ]

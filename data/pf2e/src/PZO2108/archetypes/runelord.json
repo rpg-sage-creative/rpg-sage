@@ -12,7 +12,17 @@
 		"page": 240,
 		"source": "PZO2108",
 		"id": "fe4ad726-1a9b-422c-bbc5-7cd3bb729350",
-		"aonId": 0
+		"aonId": 103,
+		"pf2t": {
+			"name": "Runelord",
+			"pfs": "standard",
+			"source": "Secrets of Magic pg. 240",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=103",
+			"aon": "archetypes103",
+			"type": "archetype",
+			"body": "You've learned arcane magic following the path of the runelords. You unlock secrets of a chosen school of magic while forsaking lesser schools. You learn the secrets of runic magic, the building blocks of magic. But be warned: you might succumb to sin in your pursuit of power.\n\nYou also learn to use polearms, the signature weapons of the runelords, and can acquire the secrets of the mighty, ancient magic items called aeon stones, embedding them into your skin.",
+			"hash": "bGkWWgjq"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -44,7 +54,21 @@
 		"page": 240,
 		"source": "PZO2108",
 		"id": "4e2ed49f-ceff-4524-a6de-4909447998b6",
-		"aonId": 0
+		"aonId": 3021,
+		"pf2t": {
+			"name": "Embed Aeon Stone",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,downtime,skill",
+			"archetype": "Runelord",
+			"source": "Secrets of Magic pg. 240",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3021",
+			"aon": "feats3021",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Runelord\n**Prerequisites** Runelord Dedication; trained in Crafting\n\n- - -\n\nYou discover the secrets to embedding aeon stones into your flesh. You spend 1 day attuning to an aeon stone and physically embedding it in your skin. While the stone is embedded this way, you gain the benefits of the aeon stone as if it were orbiting above your head, but it protects the stone from being noticed or stolen as easily. Aeon stones in your flesh must be invested to function, as usual.\n\nYou can also use this activity to safely remove an embedded aeon stone in 1 day. Someone without this feat can attempt to surgically remove it safely by spending 1 day and succeeding at a DC 30 Medicine check, or hastily by simply ripping it from a corpse.\n\n#### Embed Aeon Stone Leads To...\nAeon Resonance",
+			"hash": "XtpIAxsK"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -61,7 +85,20 @@
 		"page": 240,
 		"source": "PZO2108",
 		"id": "b78b8599-b844-4d78-aa13-2ab1b49e2b9f",
-		"aonId": 0
+		"aonId": 3022,
+		"pf2t": {
+			"name": "Aeon Resonance",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Runelord",
+			"source": "Secrets of Magic pg. 240",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3022",
+			"aon": "feats3022",
+			"type": "feat",
+			"body": "**Archetype** Runelord\n**Prerequisites** Embed Aeon Stone\n\n- - -\n\nYou gain the resonant power of one embedded aeon stone as if it were placed in a wayfinder. While you can embed multiple aeon stones in your flesh, you can gain the resonance power from only one embedded stone at a time, selected each day when you make your daily preparations.",
+			"hash": "PgvpWFrC"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -75,7 +112,20 @@
 		"page": 240,
 		"source": "PZO2108",
 		"id": "b52e538d-5d7d-48a2-acd4-7a29faf1c1be",
-		"aonId": 0
+		"aonId": 3023,
+		"pf2t": {
+			"name": "Polearm Tricks",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Runelord",
+			"source": "Secrets of Magic pg. 240",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3023",
+			"aon": "feats3023",
+			"type": "feat",
+			"body": "**Archetype** Runelord\n**Prerequisites** Runelord Dedication\n\n- - -\n\nYour connection to rune magic has revealed tricks to make polearms deadlier in your hands. You gain the critical specialization effects of polearms.",
+			"hash": "nKRxUqzR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -89,7 +139,20 @@
 		"page": 240,
 		"source": "PZO2108",
 		"id": "fe546d4e-1350-46e9-9bbb-f5f605750c6c",
-		"aonId": 0
+		"aonId": 3024,
+		"pf2t": {
+			"name": "Sin Reservoir",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Runelord",
+			"source": "Secrets of Magic pg. 240",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3024",
+			"aon": "feats3024",
+			"type": "feat",
+			"body": "**Archetype** Runelord\n**Prerequisites** Runelord Dedication\n\n- - -\n\nDuring daily preparations, you can indulge in your associated sin. When you do, you gain one additional spell slot of any spell level up to two levels below the highest-level wizard spell you can cast. You can prepare only a spell of your specialized school in this slot. As with any other act, indulging in your sin might change your alignment if your behavior harms someone else.",
+			"hash": "kpsVYLSC"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -105,7 +168,20 @@
 		"page": 241,
 		"source": "PZO2108",
 		"id": "fc71ad9b-9caa-4c44-92d2-e9388137b653",
-		"aonId": 0
+		"aonId": 3025,
+		"pf2t": {
+			"name": "Fused Polearm",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Runelord",
+			"source": "Secrets of Magic pg. 241",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3025",
+			"aon": "feats3025",
+			"type": "feat",
+			"body": "**Archetype** Runelord\n**Prerequisites** Runelord Dedication\n**Requirements** Your arcane bonded item is a polearm.\n\n- - -\n\nDuring your daily preparations, you can magically fuse your arcane bonded weapon and a magical staff together into one item, with the staff making up the haft of the weapon. You prepare the staff at the same time you do this, and you can do this only with a staff you're able to prepare. This fusion lasts until the next time you make your daily preparations. \n\nWhile the two are fused, the weapon's haft takes on aesthetic aspects of the staff.",
+			"hash": "zHkRXfbF"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -119,7 +195,20 @@
 		"page": 241,
 		"source": "PZO2108",
 		"id": "6c7e92be-ca5e-46c0-9fc7-462badd21966",
-		"aonId": 0
+		"aonId": 3026,
+		"pf2t": {
+			"name": "School Counterspell",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Runelord",
+			"source": "Secrets of Magic pg. 241",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3026",
+			"aon": "feats3026",
+			"type": "feat",
+			"body": "**Archetype** Runelord\n**Prerequisites** Counterspell; Runelord Dedication\n\n- - -\n\nYour intricate knowledge of your school lets you easily negate spells from that school. Instead of being able to counter a foe's spell with Counterspell only if you have the same spell prepared, if the foe casts a spell from the school matching your specialization, you can Counterspell it with any other spell of the same school.",
+			"hash": "zVxJxPmw"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -133,6 +222,19 @@
 		"page": 241,
 		"source": "PZO2108",
 		"id": "cc5c1eef-777b-4fb5-ae55-07bb6a49e7d4",
-		"aonId": 0
+		"aonId": 3027,
+		"pf2t": {
+			"name": "School Spell Redirection",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Runelord",
+			"source": "Secrets of Magic pg. 241",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3027",
+			"aon": "feats3027",
+			"type": "feat",
+			"body": "**Archetype** Runelord\n**Prerequisites** Counterspell; Runelord Dedication\n\n- - -\n\nWhen you Counterspell a spell with a school matching your specialization, if you critically succeed at your counteract check, or if you succeed while using a spell of a higher level than the spell you countered, you can redirect the spell you countered. You choose the target, area, and other aspects of the spell and use your own spell DC, spell attack roll, or other statistics as appropriate to determine the effects.",
+			"hash": "TQgFKxCN"
+		}
 	}
 ]

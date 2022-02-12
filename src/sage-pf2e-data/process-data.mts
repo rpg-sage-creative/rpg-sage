@@ -336,6 +336,7 @@ export default async function process(): Promise<void> {
 
 	const leftovers = pf2tJSON.filter(pf2t => !sageJSON.find(sage => pf2t === sage));
 	console.log({leftovers:leftovers.length});
+	utils.FsUtils.writeFileSync(`${DistDataPath}/pf2t-leftovers.json`, `[${leftovers.join(",")}]`, true, false);
 
 	// if (hashed) {
 	// 	await Pf2ToolsData.save(DistDataPath);

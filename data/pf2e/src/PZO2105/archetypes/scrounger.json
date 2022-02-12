@@ -9,7 +9,16 @@
 		"source": "PZO2105",
 		"id": "a64e967c-9d40-4a6d-b4bd-415a59f21906",
 		"aonId": 75,
-		"hash": "ZtfOAtjU"
+		"pf2t": {
+			"name": "Scrounger",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 190",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=75",
+			"aon": "archetypes75",
+			"type": "archetype",
+			"body": "You have spent countless hours disassembling and rebuilding complex items to learn how they work, giving you the skill to create just about anything from the most unlikely materials. While your improvised items don't last long, they tend to be just what you need in a pinch, and your enemies find that while they might be able to disarm you, the real challenge is keeping you that way. Locked rooms, diabolical traps, and desperate situations are each their own sort of puzzle to you, and the mundane objects around you are the pieces you use to improvise your own solution.",
+			"hash": "ZtfOAtjU"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -43,7 +52,20 @@
 		"source": "PZO2105",
 		"id": "622d59c7-6074-4553-90a8-53f85a25f14c",
 		"aonId": 2059,
-		"hash": "mSRXZptz"
+		"pf2t": {
+			"name": "Reverse Engineering",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"archetype": "Scrounger",
+			"source": "Advanced Player's Guide pg. 190",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2059",
+			"aon": "feats2059",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Scrounger\n**Prerequisites** Scrounger Dedication; expert in Crafting\n\n- - -\n\nYou are able to reverse engineer items into formulas more effectively than most. You gain a +2 circumstance bonus to Crafting checks to reverse engineer a formula from an item. Additionally, if you get a critical success on your Crafting check, you can opt to not only create the formula but also reassemble the original item at the same time, leaving you with the formula and the item instead of the formula and raw materials equal to half the item's value.",
+			"hash": "mSRXZptz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -58,7 +80,19 @@
 		"source": "PZO2105",
 		"id": "cff6ed6f-d66f-4238-b791-4e2c8837d522",
 		"aonId": 2060,
-		"hash": "lNpvIRYr"
+		"pf2t": {
+			"name": "High-Quality Scrounger",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Scrounger",
+			"source": "Advanced Player's Guide pg. 190",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2060",
+			"aon": "feats2060",
+			"type": "feat",
+			"body": "**Archetype** Scrounger\n**Prerequisites** Scrounger Dedication\n\n- - -\n\nWhen you Craft a temporary item using Scrounger Dedication, it can be an item of up to 3rd level (though the item must still be a weapon, armor, or a nonconsumable piece of adventuring gear). You can instead Craft it for someone else's use, allowing them to avoid taking the penalty for using a shoddy item when using it, but causing you to take the penalty if you use it.",
+			"hash": "lNpvIRYr"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -34,7 +34,23 @@
 		"traits": [ "Incapacitation", "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "75760a1b-a4e2-4087-b355-48f981ad489d",
-		"hash": "lqIPnCWp"
+		"pf2t": {
+			"name": "Baleful Polymorph",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "incapacitation,polymorph,transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 320 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=17",
+			"aon": "spells17",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou transform the target creature into a harmless animal appropriate to the area, with effects based on its Fortitude save.\n\n**Critical Success** The target is unaffected.\n**Success** The target's body gains minor features of the harmless animal. Its insides churn as they partially transform, causing it to be sickened 1. When it recovers from the sickened condition, its features revert to normal.\n**Failure** The target transforms for 1 minute but keeps its mind. If it spends all its actions on its turn concentrating on its original form, it can attempt a Will save to end the effect immediately.\n**Critical Failure** The target is transformed into the chosen harmless animal, body and mind, for an unlimited duration.",
+			"hash": "lqIPnCWp"
+		}
 	},
 	{
 		"aonId": 18,
@@ -57,7 +73,22 @@
 		"traits": [ "Enchantment", "Mental" ],
 		"focus": false,
 		"id": "45391fba-8f36-4c4f-b3d7-34170e9d5cc2",
-		"hash": "fszItgQR"
+		"pf2t": {
+			"name": "Bane",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "enchantment,mental",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 320 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=18",
+			"aon": "spells18",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Area** 5-foot emanation\n**Duration** 1 minute\n\n- - -\n\nYou fill the minds of your enemies with doubt. Enemies in the area must succeed at a Will save or take a -1 status penalty to attack rolls as long as they are in the area. Once per turn, starting the turn after you cast bane, you can use a single action, which has the concentrate trait, to increase the emanation's radius by 5 feet and force enemies in the area that weren't yet affected to attempt another saving throw. Bane can counteract bless.",
+			"hash": "fszItgQR"
+		}
 	},
 	{
 		"aonId": 19,
@@ -96,7 +127,23 @@
 		"traits": [ "Abjuration", "Incapacitation" ],
 		"focus": false,
 		"id": "2c0d62ba-b93e-44f7-8102-608050b3ad1f",
-		"hash": "GJqHMSBX"
+		"pf2t": {
+			"name": "Banishment",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "abjuration,incapacitation",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 320 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=19",
+			"aon": "spells19",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Targets** 1 creature that isn't on its home plane\n\n- - -\n\nYou send the target back to its home plane. The target must attempt a Will save. You can spend an extra action while Casting this Spell and add a material component to give the creature a -2 circumstance penalty to its save. The component must be a specially gathered object that is anathema to the creature, and not from a material component pouch. This spell fails if you aren't on your home plane when you cast it.\n\n**Critical Success** The target resists being banished and you are stunned 1.\n**Success** The target resists being banished.\n**Failure** The target is banished.\n**Critical Failure** The target is banished and can't return by any means to the plane it's banished from for 1 week.\n- - -\n**Heightened (9th)** You can target up to 10 creatures. The extra material component affects targets to which it is anathema.",
+			"hash": "GJqHMSBX"
+		}
 	},
 	{
 		"aonId": 20,
@@ -121,7 +168,22 @@
 		"traits": [ "Abjuration", "Plant" ],
 		"focus": false,
 		"id": "3c21cfeb-73cf-47eb-b6f3-84758649f290",
-		"hash": "TBVHlthW"
+		"pf2t": {
+			"name": "Barkskin",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "abjuration,plant",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 320 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=20",
+			"aon": "spells20",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n**Targets** 1 willing creature\n\n- - -\n\nThe target's skin becomes covered in bark. The target gains resistance 2 to bludgeoning and piercing damage and weakness 3 to fire. After the target takes fire damage, it can Dismiss the spell as a free action triggered by taking the damage; doing so doesn't reduce the fire damage the target was dealt.\n- - -\n**Heightened (+2)** The resistances increase by 2, and the weakness increases by 3.",
+			"hash": "TBVHlthW"
+		}
 	},
 	{
 		"aonId": 21,
@@ -145,7 +207,22 @@
 		"traits": [ "Uncommon", "Evil", "Necromancy" ],
 		"focus": false,
 		"id": "2abcf75b-96a1-47fe-828c-7fab573c2e52",
-		"hash": "rjgtKSQr"
+		"pf2t": {
+			"name": "Bind Soul",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "uncommon,evil,necromancy",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 320 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=21",
+			"aon": "spells21",
+			"type": "spell",
+			"body": "**Requirements** black sapphire with a gp value of at least the target's level  100\n**Duration** unlimited\n**Targets** 1 creature that died within the last minute\n\n- - -\n\nYou wrench the target's soul away before it can pass on to the afterlife and imprison it in a black sapphire.\n\nWhile the soul is in the gem, the target can't be returned to life through any means, even powerful magic such as wish. If the gem is destroyed or bind soul is counteracted on the gem, the soul is freed. The gem has AC 16 and Hardness 10. A gem can't hold more than one soul, and any attempt wastes the spell.",
+			"hash": "rjgtKSQr"
+		}
 	},
 	{
 		"aonId": 22,
@@ -167,7 +244,22 @@
 		"traits": [ "Necromancy" ],
 		"focus": false,
 		"id": "5e6301ef-11ae-4319-8bd3-e9f7bd872357",
-		"hash": "TQbcZUMt"
+		"pf2t": {
+			"name": "Bind Undead",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "necromancy",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 321 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=22",
+			"aon": "spells22",
+			"type": "spell",
+			"body": "**Duration** 1 day\n**Targets** 1 mindless undead creature with a level no greater than bind undead's spell level\n\n- - -\n\nWith a word of necromantic power, you seize control of the target. It gains the minion trait. If you or an ally uses any hostile actions against the target, the spell ends.",
+			"hash": "TQbcZUMt"
+		}
 	},
 	{
 		"aonId": 23,
@@ -190,7 +282,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "16a8f139-3173-45d7-ad77-a103ceff0cda",
-		"hash": "hVYRbmPp"
+		"pf2t": {
+			"name": "Black Tentacles",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 321 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=23",
+			"aon": "spells23",
+			"type": "spell",
+			"body": "**Area** 20-foot burst adjacent to a flat surface\n**Duration** 1 minute\n\n- - -\n\nOily black tentacles rise up and attempt to capture creatures in the area. Make spell attack rolls against the Fortitude DC of each creature in the area. Any creature you succeed against is grabbed by a tentacle and takes 3d6 bludgeoning damage. Whenever a creature ends its turn in the area, the tentacles attempt to grab that creature if they haven't already, and they deal 1d6 bludgeoning damage to any creature already grabbed.\n\nThe tentacles' Escape DC is equal to your spell DC. A creature can attack a tentacle in an attempt to release its grip. Its AC is equal to your spell DC, and it is destroyed if it takes 12 or more damage. Even if destroyed, additional tentacles continue to grow in the area until the duration ends. You can Dismiss the spell.",
+			"hash": "hVYRbmPp"
+		}
 	},
 	{
 		"aonId": 24,
@@ -214,7 +321,22 @@
 		"traits": [ "Evocation", "Force" ],
 		"focus": false,
 		"id": "b0c9e3a5-8424-4ec4-b367-1b8ecdc3a22a",
-		"hash": "XEFGWqEq"
+		"pf2t": {
+			"name": "Blade Barrier",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "evocation,force",
+			"traditions": "divine",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 321 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=24",
+			"aon": "spells24",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nBlades of force form a churning wall. The wall is a straight line 20 feet high, 120 feet long, and 2 inches thick, and it provides cover. The wall deals 7d8 force damage to each creature that's in the wall's space when it is created, that attempts to pass through the wall, or that ends its turn inside the wall. A basic Reflex save reduces the damage. A  creature that succeeds at this save when the wall is created is pushed to the nearest space on the side of its choice. Creatures trying to move through the wall fail to do so if they critically fail the save, ending their movement adjacent to the wall.\n- - -\n**Heightened (+1)** The damage increases by 1d8.",
+			"hash": "XEFGWqEq"
+		}
 	},
 	{
 		"aonId": 25,
@@ -236,7 +358,21 @@
 		"traits": [ "Enchantment", "Mental" ],
 		"focus": false,
 		"id": "039cb03b-9940-42bf-87bb-5d13709c5312",
-		"hash": "LHGkybrG"
+		"pf2t": {
+			"name": "Bless",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "enchantment,mental",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 321 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=25",
+			"aon": "spells25",
+			"type": "spell",
+			"body": "**Area** 5-foot emanation\n**Duration** 1 minute\n\n- - -\n\nBlessings from beyond help your companions strike true. You and your allies gain a +1 status bonus to attack rolls while within the emanation. Once per turn, starting the turn after you cast bless, you can use a single action, which has the concentrate trait, to increase the emanation's radius by 5 feet. Bless can counteract bane.",
+			"hash": "LHGkybrG"
+		}
 	},
 	{
 		"aonId": 26,
@@ -272,7 +408,23 @@
 		"traits": [ "Incapacitation", "Necromancy" ],
 		"focus": false,
 		"id": "c319b3dc-2feb-4e05-9a47-b6ef2f0edfec",
-		"hash": "IrbvZxrS"
+		"pf2t": {
+			"name": "Blindness",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "incapacitation,necromancy",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 321 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=26",
+			"aon": "spells26",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou blind the target. The effect is determined by the target's Fortitude save. The target then becomes temporarily immune for 1 minute.\n\n**Critical Success** The target is unaffected.\n**Success** The target is blinded until its next turn begins.\n**Failure** The target is blinded for 1 minute.\n**Critical Failure** The target is blinded permanently.",
+			"hash": "IrbvZxrS"
+		}
 	},
 	{
 		"aonId": 27,
@@ -295,7 +447,21 @@
 		"traits": [ "Conjuration", "Teleportation" ],
 		"focus": false,
 		"id": "73f4c4e8-5127-4a96-813e-da1b9164ca24",
-		"hash": "KEFEIwdV"
+		"pf2t": {
+			"name": "Blink",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "conjuration,teleportation",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 321 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=27",
+			"aon": "spells27",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou blink quickly between the Material Plane and the Ethereal Plane. You gain resistance 5 to all damage (except force). You can Sustain the Spell to vanish and reappear 10 feet away in a random direction determined by the GM; the movement doesn't trigger reactions. At the end of your turn, you vanish and reappear as above.\n- - -\n**Heightened (+2)** The resistance increases by 3.",
+			"hash": "KEFEIwdV"
+		}
 	},
 	{
 		"aonId": 28,
@@ -317,7 +483,22 @@
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
 		"id": "d5856cfd-0176-4851-a4bf-29ac80689c2c",
-		"hash": "djzYzPrC"
+		"pf2t": {
+			"name": "Blur",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "illusion,visual",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 321 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=28",
+			"aon": "spells28",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nThe target's form appears blurry. It becomes concealed. As the nature of this effect still leaves the target's location obvious, the target can't use this concealment to Hide or Sneak.",
+			"hash": "djzYzPrC"
+		}
 	},
 	{
 		"aonId": 29,
@@ -339,7 +520,22 @@
 		"trigger": "A living creature within range would die.",
 		"focus": false,
 		"id": "eed97bc8-348f-42bc-ab2f-816e0ecc44b5",
-		"hash": "RwrqRHTv"
+		"pf2t": {
+			"name": "Breath of Life",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "healing,necromancy,positive",
+			"traditions": "divine",
+			"cast": "v",
+			"actions": "r",
+			"range": 60,
+			"source": "Core Rulebook pg. 322 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=29",
+			"aon": "spells29",
+			"type": "spell",
+			"body": "**Trigger** A living creature within range would die.\n**Targets** the triggering creature\n\n- - -\n\nYour blessing revives a creature at the moment of its death. You prevent the target from dying and restore Hit Points to the target equal to 4d8 plus your spellcasting ability modifier. You can't use breath of life if the triggering effect was disintegrate or a death effect.",
+			"hash": "RwrqRHTv"
+		}
 	},
 	{
 		"aonId": 30,
@@ -363,6 +559,22 @@
 		"traits": [ "Evocation", "Fire" ],
 		"focus": false,
 		"id": "a862f108-ae7b-4790-815e-d5a20a60c385",
-		"hash": "hBfXTWXq"
+		"pf2t": {
+			"name": "Burning Hands",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "evocation,fire",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 322 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=30",
+			"aon": "spells30",
+			"type": "spell",
+			"savingthrow": "Reflex",
+			"basic": 1,
+			"body": "**Area** 15-foot cone\n\n- - -\n\nGouts of flame rush from your hands. You deal 2d6 fire damage to creatures in the area.\n- - -\n**Heightened (+1)** The damage increases by 2d6.",
+			"hash": "hBfXTWXq"
+		}
 	}
 ]

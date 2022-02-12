@@ -33,7 +33,22 @@
 		"traits": [ "Auditory", "Death", "Necromancy", "Negative" ],
 		"focus": false,
 		"id": "de43e7e9-0bd4-49d8-b0a6-c532c10ea9f5",
-		"hash": "ZxcBPykR"
+		"pf2t": {
+			"name": "Wail of the Banshee",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "auditory,death,necromancy,negative",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 382 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=361",
+			"aon": "spells361",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"body": "**Area** 40-foot emanation\n\n- - -\n\nYour scream chills the souls of enemies that hear it. Each living enemy in the area takes 8d10 negative damage and must attempt a Fortitude save.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes full damage.\n**Failure** The creature takes full damage and is drained 1d4.\n**Critical Failure** The creature takes double damage and is drained 4.",
+			"hash": "ZxcBPykR"
+		}
 	},
 	{
 		"aonId": 362,
@@ -57,7 +72,22 @@
 		"traits": [ "Evocation", "Fire" ],
 		"focus": false,
 		"id": "ee7a9b72-0f2f-4a67-882d-56e842b89472",
-		"hash": "sYtRWVUk"
+		"pf2t": {
+			"name": "Wall of Fire",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "evocation,fire",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 382 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=362",
+			"aon": "spells362",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou raise a blazing wall that burns creatures passing through it. You create either a 5-foot-thick wall of flame in a straight line up to 60 feet long and 10 feet high, or a 5-foot-thick, 10-foot-radius ring of flame with the same height. The wall stands vertically in either form; if you wish, the wall can be of a shorter length or height. Everything on each side of the wall is concealed from creatures on the opposite side. Any creature that crosses the wall or is occupying the wall's area at the start of its turn takes 4d6 fire damage.\n- - -\n**Heightened (+1)** The fire damage increases by 1d6.",
+			"hash": "sYtRWVUk"
+		}
 	},
 	{
 		"aonId": 363,
@@ -82,7 +112,22 @@
 		"traits": [ "Evocation", "Force" ],
 		"focus": false,
 		"id": "1f330d2e-15bd-4b9a-9164-42c52ffb4f93",
-		"hash": "dlnGzGFZ"
+		"pf2t": {
+			"name": "Wall of Force",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "evocation,force",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 382 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=363",
+			"aon": "spells363",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou form an invisible wall of pure magical force up to 50 feet long and up to 20 feet high. The wall has no discernible thickness. You must create the wall in an unbroken open space so its edges don't pass through any creatures or objects, or the spell is lost. The wall has AC 10, Hardness 30, and 60 Hit Points, and it's immune to critical hits and precision damage. The wall blocks physical effects from passing through it, and because it's made of force, it blocks incorporeal and ethereal creatures as well. Teleportation effects can pass through the barrier, as can visual effects (since the wall is invisible).\n\nWall of force is immune to counteracting effects of its level or lower, but the wall is automatically destroyed by a disintegrate spell of any level or by contact with a rod of cancellation or sphere of annihilation.\n- - -\n**Heightened (+2)** The Hit Points of the wall increases by 20.",
+			"hash": "dlnGzGFZ"
+		}
 	},
 	{
 		"aonId": 364,
@@ -107,7 +152,22 @@
 		"traits": [ "Cold", "Evocation", "Water" ],
 		"focus": false,
 		"id": "308d0833-cd71-4e74-a656-ae02ce9b82a1",
-		"hash": "gnUtlrtl"
+		"pf2t": {
+			"name": "Wall of Ice",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "cold,evocation,water",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 382 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=364",
+			"aon": "spells364",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou sculpt a barrier of ice that blocks sight and, once shattered, freezes foes. You create either a 1-foot-thick wall of ice in a straight line up to 60 feet long and 10 feet high (the wall doesn't have to be vertical, but it must be anchored on both sides to a solid surface) or a 1-foot-thick, 10-foot radius hemisphere of ice. The ice that makes up the wall is opaque. If you wish, the wall can be of a smaller length, height, or radius. You must create the wall in an unbroken open space so its edges don't pass through any creatures or objects, or the spell is lost.\n\nEach 10-foot-by-10-foot section of the wall has AC 10, Hardness 10, and 40 Hit Points, and it's immune to critical hits, cold damage, and precision damage. A section also has weakness to fire 15; a section of the wall destroyed by fire melts, evaporating into water and steam. A section destroyed by means other than fire leaves behind a chilling mass of ice that is difficult terrain and deals 2d6 cold damage to any creature passing through it.\n- - -\n**Heightened (+2)** The Hit Points of each section of the wall increase by 10, and the cold damage dealt to creatures crossing a destroyed section increases by 1d6.",
+			"hash": "gnUtlrtl"
+		}
 	},
 	{
 		"aonId": 365,
@@ -131,7 +191,22 @@
 		"traits": [ "Conjuration", "Earth" ],
 		"focus": false,
 		"id": "8f23dc8f-3959-42c3-b861-88bbad301d21",
-		"hash": "WCLSfVbL"
+		"pf2t": {
+			"name": "Wall of Stone",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "conjuration,earth",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 383 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=365",
+			"aon": "spells365",
+			"type": "spell",
+			"body": "You shape a wall of solid stone. You create a 1-inch-thick wall of stone up to 120 feet long, and 20 feet high. You can shape the wall's path, placing each 5 feet of the wall on the border between squares. The wall doesn't need to stand vertically, so you can use it to form a bridge or set of stairs, for example. You must conjure the wall in an unbroken open space so its edges don't pass through any creatures or objects, or the spell is lost.\n\nEach 5-foot-by-5-foot section of the wall has AC 10, Hardness 14, and 50 Hit Points, and it's immune to critical hits and precision damage. A destroyed section of the wall can be moved through, but the rubble created from it is difficult terrain.\n- - -\n**Heightened (+2)** The Hit Points of each section of the wall increase by 15.",
+			"hash": "WCLSfVbL"
+		}
 	},
 	{
 		"aonId": 366,
@@ -156,7 +231,22 @@
 		"traits": [ "Conjuration", "Plant" ],
 		"focus": false,
 		"id": "0f625838-0f26-4dcd-948b-16a596a41e05",
-		"hash": "nPRRqqtL"
+		"pf2t": {
+			"name": "Wall of Thorns",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "conjuration,plant",
+			"traditions": "primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 60,
+			"source": "Core Rulebook pg. 383 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=366",
+			"aon": "spells366",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nOver the course of a minute, you cause a thick wall of thorny brambles to grow from the ground. You create a 5-foot-thick wall of brambles and thorns in a straight line up to 60 feet long and 10 feet high. You must create the wall in an unbroken open space so its edges don't pass through any creatures or objects, or the spell is lost. The wall stands vertically. If you wish, the wall can be of a shorter length or height. Everything on each side of the wall has cover from creatures on the opposite side, and the wall's spaces are difficult terrain. For every move action a creature uses to enter at least one of the wall's spaces, that creature takes 3d4 piercing damage.\n\nEach 5-foot-by-5-foot section of the wall has AC 10, Hardness 10, and 20 Hit Points. It's immune to critical hits and precision damage. A destroyed section can be moved through freely.\n- - -\n**Heightened (+1)** The Hit Points of each section of the wall increase by 5, and the piercing damage increases by 1d4.",
+			"hash": "nPRRqqtL"
+		}
 	},
 	{
 		"aonId": 367,
@@ -191,7 +281,22 @@
 		"traits": [ "Air", "Evocation" ],
 		"focus": false,
 		"id": "83f0b8dd-fdb6-4898-8409-edc72c5e4f83",
-		"hash": "gzUEbjvg"
+		"pf2t": {
+			"name": "Wall of Wind",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "air,evocation",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 383 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=367",
+			"aon": "spells367",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou create a barrier of gusting winds that hinders anything moving through it. The wall of swirling winds is 5 feet thick, 60 feet long, and 30 feet high. The wall stands vertically, but you can shape its path. Though the wall of wind distorts the air, it does not hamper sight. The wall has the following effects. \n\n+ Ammunition from physical ranged attacks-such as arrows, bolts, sling bullets, and other objects of similar size-can't pass through the wall. Attacks with bigger ranged weapons, such as javelins, take a -2 circumstance penalty to their attack rolls if their paths pass through the wall. Massive ranged weapons and spell effects that don't create physical objects pass through the wall with no penalty. \n+ The wall is difficult terrain to creatures attempting to move overland through it. Gases, including creatures in gaseous form, can't pass through the wall. \n+ A creature that attempts to fly through the wall using a move action must attempt a Fortitude save.\n\n\n**Critical Success** The creature can move through the wall normally this turn.\n**Success** The flying creature can move through the wall this turn, but the wall is difficult terrain.\n**Failure** The wall stops the movement of the flying creature, and any remaining movement from its current action is wasted.\n**Critical Failure** As failure, and the creature is pushed 10 feet away from the wall.",
+			"hash": "gzUEbjvg"
+		}
 	},
 	{
 		"aonId": 368,
@@ -211,7 +316,21 @@
 		"traits": [ "Divination" ],
 		"focus": false,
 		"id": "ed25f52b-199c-47d6-9479-1b77fadcdc68",
-		"hash": "DKLBbApv"
+		"pf2t": {
+			"name": "Wanderer's Guide",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "divination",
+			"traditions": "divine,occult",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"source": "Core Rulebook pg. 383 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=368",
+			"aon": "spells368",
+			"type": "spell",
+			"body": "**Duration** until your next daily preparations\n\n- - -\n\nYou call upon the beyond to guide your route. When you Cast this Spell, choose a destination; you receive an inspired route to that destination, allowing you and allies who travel overland with you to reduce the movement penalty from difficult terrain by half for the duration, as long as you don't deviate from the inspired route. This doesn't have any effect on movement during encounters. If you use this ability again before the duration is over, this effect ends and is replaced by that of the new route.",
+			"hash": "DKLBbApv"
+		}
 	},
 	{
 		"aonId": 369,
@@ -247,7 +366,23 @@
 		"traits": [ "Emotion", "Enchantment", "Incapacitation", "Mental" ],
 		"focus": false,
 		"id": "20dabc49-7936-4676-ad3b-a052b43d5002",
-		"hash": "CfOMbRjK"
+		"pf2t": {
+			"name": "Warp Mind",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "emotion,enchantment,incapacitation,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 383 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=369",
+			"aon": "spells369",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou scramble a creature's mental faculties and sensory input. The target must attempt a Will saving throw. Regardless of the result of that save, the target is then temporarily immune for 10 minutes. Warp mind's effects happen instantly, so dispel magic and other effects that counteract spells can't counteract them. However, alter reality, miracle, primal phenomenon, restoration, or wish can still counteract the effects.\n\n**Critical Success** The target is unaffected.\n**Success** The target spends the first action on its next turn with the confused condition.\n**Failure** The target is confused for 1 minute.\n**Critical Failure** The target is confused permanently.",
+			"hash": "CfOMbRjK"
+		}
 	},
 	{
 		"aonId": 370,
@@ -273,7 +408,22 @@
 		"traits": [ "Transmutation" ],
 		"focus": false,
 		"id": "1bebbb3f-548c-4ae6-8d42-dcac53130b93",
-		"hash": "bsCbngrU"
+		"pf2t": {
+			"name": "Water Breathing",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "transmutation",
+			"traditions": "arcane,divine,primal",
+			"cast": "s,v",
+			"actions": "1 minute",
+			"range": 30,
+			"source": "Core Rulebook pg. 384 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=370",
+			"aon": "spells370",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n**Targets** up to 5 creatures\n\n- - -\n\nThe targets can breathe underwater.\n- - -\n**Heightened (3rd)** The duration increases to 8 hours.\n**Heightened (4th)** The duration increases to until your next daily preparations.",
+			"hash": "bsCbngrU"
+		}
 	},
 	{
 		"aonId": 371,
@@ -298,7 +448,22 @@
 		"traits": [ "Transmutation" ],
 		"focus": false,
 		"id": "b61c7aa1-aa87-4c34-9dad-e955c830e23b",
-		"hash": "YXnKYRpX"
+		"pf2t": {
+			"name": "Water Walk",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "transmutation",
+			"traditions": "arcane,divine,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 384 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=371",
+			"aon": "spells371",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n**Targets** 1 creature\n\n- - -\n\nThe target can walk on the surface of water and other liquids without falling through. It can go underwater if it wishes, but in that case it must Swim normally. This spell doesn't grant the ability to breathe underwater.\n- - -\n**Heightened (4th)** The spell's range increases to 30 feet, the duration increases to 1 hour, and you can target up to 10 creatures.",
+			"hash": "YXnKYRpX"
+		}
 	},
 	{
 		"aonId": 373,
@@ -336,7 +501,22 @@
 		"traits": [ "Evocation" ],
 		"focus": false,
 		"id": "81169cdb-a735-4580-8d4d-ddfbbe549bbb",
-		"hash": "gQQWPKOb"
+		"pf2t": {
+			"name": "Weapon Storm",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "evocation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 384 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=373",
+			"aon": "spells373",
+			"type": "spell",
+			"savingthrow": "Reflex",
+			"body": "**Area** 30-foot cone or 10-foot emanation\n\n- - -\n\nYou swing a weapon you're holding, and the weapon magically multiplies into duplicates that swipe at all creatures in either a cone or an emanation. This flurry deals four dice of damage to creatures in the area. This damage has the same type as the weapon and uses the same die size. Determine the die size as if you were attacking with the weapon; for instance, if you were wielding a two-hand weapon in both hands, you'd use its two-hand damage die.\n\n**Critical Success** The creature is unaffected.\n**Success** The target takes half damage.\n**Failure** The target takes full damage.\n**Critical Failure** The target takes double damage and is subject to the weapon's critical specialization effect.\n- - -\n**Heightened (+1)** Add another damage die.",
+			"hash": "gQQWPKOb"
+		}
 	},
 	{
 		"aonId": 372,
@@ -367,7 +547,22 @@
 		"traits": [ "Evocation", "Force" ],
 		"focus": false,
 		"id": "9dbf7b1b-f868-4fe4-a338-3fefac394a45",
-		"hash": "VNpWpkMz"
+		"pf2t": {
+			"name": "Weapon of Judgment",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "evocation,force",
+			"traditions": "divine",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 100,
+			"source": "Core Rulebook pg. 384 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=372",
+			"aon": "spells372",
+			"type": "spell",
+			"body": "**Requirements** You have a deity.\n**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nAn immense weapon of force appears, hovering in the air above the target. The weapon has the ghostly visual appearance of your deity's favored weapon. Name war or peace when you cast this spell.\n\nIf you name \"war,\" mentally choose one creature. This must be a creature both you and the target can see. The target instinctively knows which creature this is. At the end of each of the target's turns, if the target did not use a hostile action against the creature you chose during that turn, the weapon Strikes the target.\n\nIf you name \"peace,\" mentally choose up to five allies. The target instinctively knows who those allies are. The weapon Strikes the target each time the target uses a hostile action against you or one of your allies. The weapon Strikes only once per action, even if the action targets multiple allies (such as for a fireball or a Whirlwind Strike).\n\nStrikes with the weapon are melee weapon attacks, but they use your spell attack modifier. Regardless of its appearance, the weapon deals force damage equal to 3d10 plus your spellcasting ability modifier. The weapon takes a multiple attack penalty, which increases throughout the target's turn, but its penalty is separate from yours.\n\nWhen the weapon Strikes, you can deal damage of the normal damage type of the weapon instead of force damage (or any of the available damage types, for a versatile weapon). No other statistics or attributes of the weapon apply, and even a ranged weapon attacks adjacent creatures only. A weapon of judgment is a weapon for the purposes of triggers, resistances, and so forth.\n\nThe weapon doesn't take up space, grant flanking, or have any other attributes a creature would. The weapon can't make any attack other than its Strike, and feats or spells that affect weapons do not apply to this weapon.\n- - -\n**Heightened (10th)** The force damage increases by 1d10.",
+			"hash": "VNpWpkMz"
+		}
 	},
 	{
 		"aonId": 374,
@@ -407,7 +602,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "6b6a5d32-f43e-4829-abf1-6f295a2f7118",
-		"hash": "FNkywLIK"
+		"pf2t": {
+			"name": "Web",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 384 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=374",
+			"aon": "spells374",
+			"type": "spell",
+			"body": "**Area** 10-foot burst\n**Duration** 1 minute\n\n- - -\n\nYou create a sticky web in the area that impedes creatures' movement each time they try to move through it. Squares filled with the web are difficult terrain. Each square can be cleared of the web by a single attack or effect that deals at least 5 slashing damage or 1 fire damage. A square has AC 5, and it automatically fails its saving throws.\n\nEach time a creature in the web begins to use a move action or enters the web during a move action, it must attempt an Athletics check or Reflex save against your spell DC to avoid taking a circumstance penalty to its Speeds or becoming immobilized. A creature that gets out of the web ceases to take a circumstance penalty to its Speed from the web.\n\n**Critical Success** The creature is unaffected, and it doesn't need to attempt further Athletics checks or saving throws against the web this turn. If it used an Athletics check, it clears the web from every square it leaves after leaving the square.\n**Success** The creature is unaffected during its action. If it used an Athletics check, it clears the web from every square it leaves after leaving the square.\n**Failure** The creature takes a -10-foot circumstance penalty to its Speeds until the start of its next turn.\n**Critical Failure** The creature is immobilized until the start of its next turn, after which it takes a -10-foot circumstance penalty to its Speeds for 1 round. It can attempt to Escape to remove its immobilized condition.\n- - -\n**Heightened (4th)** The spell's area increases to a 20-foot burst, and its range increases to 60 feet.",
+			"hash": "FNkywLIK"
+		}
 	},
 	{
 		"aonId": 375,
@@ -443,7 +653,23 @@
 		"traits": [ "Death", "Emotion", "Fear", "Illusion", "Mental" ],
 		"focus": false,
 		"id": "6657413f-db82-4e0d-9933-cfb39d444e21",
-		"hash": "cvTNltUR"
+		"pf2t": {
+			"name": "Weird",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "death,emotion,fear,illusion,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 385 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=375",
+			"aon": "spells375",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Targets** any number of creatures\n\n- - -\n\nYou fill the targets' minds with terrifying images of fearsome creatures, each drawn from the targets' worst fears. Only the targets can see their assailants. Each target takes 16d6 mental damage and must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes half damage and is frightened 1.\n**Failure** The target takes full damage and is frightened 2.\n**Critical Failure** The target is so afraid, it might instantly die. It must attempt a Fortitude saving throw. If the target succeeds, it takes double damage and is frightened 2, and it's also fleeing until the end of its next turn unless it critically succeeded. If it fails, it is reduced to 0 Hit Points and dies.",
+			"hash": "cvTNltUR"
+		}
 	},
 	{
 		"aonId": 376,
@@ -465,7 +691,22 @@
 		"traits": [ "Air", "Transmutation" ],
 		"focus": false,
 		"id": "9498bb4e-0378-4f0d-af68-1933e0caa067",
-		"hash": "zfBTfAAm"
+		"pf2t": {
+			"name": "Wind Walk",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "air,transmutation",
+			"traditions": "primal",
+			"cast": "m,s,v",
+			"actions": "10 minutes",
+			"range": "touch",
+			"source": "Core Rulebook pg. 385 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=376",
+			"aon": "spells376",
+			"type": "spell",
+			"body": "**Duration** 8 hours\n**Targets** you and up to five creatures touched\n\n- - -\n\nWhen you cast this spell, each target transforms into a vaguely cloud-like form and is picked up by a wind moving in the direction of your choice. You can change the wind's direction by using a single action, which has the concentrate trait. The wind carries the targets at a Speed of 20 miles per hour, but if any of the targets make an attack, Cast a Spell, come under attack, or otherwise enter encounter mode, the spell ends for all targets just after they roll initiative, and they drift gently to the ground.",
+			"hash": "zfBTfAAm"
+		}
 	},
 	{
 		"aonId": 377,
@@ -485,6 +726,20 @@
 		"traits": [ "Divination" ],
 		"focus": false,
 		"id": "5ab965ef-892d-4d96-ac5c-cd5091489299",
-		"hash": "XGdkjSUr"
+		"pf2t": {
+			"name": "Wish",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "divination",
+			"traditions": "arcane",
+			"cast": "m,s,v",
+			"actions": 3,
+			"source": "Core Rulebook pg. 385 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=377",
+			"aon": "spells377",
+			"type": "spell",
+			"body": "You state a wish, making your greatest desire come true. A wish spell can produce any one of the following effects. \n\n+ Duplicate any arcane spell of 9th level or lower. \n+ Duplicate any non-arcane spell of 7th level or lower. \n+ Produce any effect whose power level is in line with the above effects. \n+ Reverse certain effects that refer to the wish spell.\nThe GM might allow you to try using wish to produce greater effects than these, but doing so might be dangerous or the spell might have only a partial effect.",
+			"hash": "XGdkjSUr"
+		}
 	}
 ]

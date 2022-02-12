@@ -9,7 +9,16 @@
 		"source": "PZO9301",
 		"id": "763ce930-ea65-4c37-bb3b-55839c58919e",
 		"aonId": 15,
-		"hash": "AgDfIxVZ"
+		"pf2t": {
+			"name": "Lastwall Sentry",
+			"pfs": "standard",
+			"source": "World Guide pg. 47 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=15",
+			"aon": "archetypes15",
+			"type": "archetype",
+			"body": "While the nation of Lastwall is gone, leaving only the horror of the Gravelands behind, you refuse to give up and renounce your oaths. You've renewed your vows, swearing to combat the influence of the Whispering Tyrant wherever it might strike across Golarion.",
+			"hash": "AgDfIxVZ"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -42,7 +51,19 @@
 		"source": "PZO9301",
 		"id": "742aa376-b2b7-45b5-a04b-25dbd93b6717",
 		"aonId": 883,
-		"hash": "vQrLVgqz"
+		"pf2t": {
+			"name": "Eye of Ozem",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Lastwall Sentry",
+			"source": "World Guide pg. 47 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=883",
+			"aon": "feats883",
+			"type": "feat",
+			"body": "**Archetype** Lastwall Sentry\n**Prerequisites** Lastwall Sentry Dedication; expert in Perception\n\n- - -\n\nYou've learned how to spot danger at a distance, allowing you to serve as a sentry with ease. You gain a +2 circumstance bonus to initiative rolls when using Perception, and when you're Scouting, you grant your allies a +2 circumstance bonus instead of +1.",
+			"hash": "vQrLVgqz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -57,7 +78,19 @@
 		"source": "PZO9301",
 		"id": "56826da8-0215-45a4-8f4e-4078c3515654",
 		"aonId": 884,
-		"hash": "SWzqQXWt"
+		"pf2t": {
+			"name": "Necromantic Resistance",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Lastwall Sentry",
+			"source": "World Guide pg. 47 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=884",
+			"aon": "feats884",
+			"type": "feat",
+			"body": "**Archetype** Lastwall Sentry\n**Prerequisites** Lastwall Sentry Dedication\n\n- - -\n\nAs part of your training, you've inured yourself against necromancy through repeated exposure. You gain a +1 circumstance bonus to saves against necromancy effects and gain resistance to negative damage equal to half your level.\n\n#### Necromantic Resistance Leads To...\nNecromantic Tenacity",
+			"hash": "SWzqQXWt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -72,7 +105,19 @@
 		"source": "PZO9301",
 		"id": "cb346aab-1e5c-4268-a6d3-2930f822b7c8",
 		"aonId": 885,
-		"hash": "bQgFXpvE"
+		"pf2t": {
+			"name": "Grave Sense",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Lastwall Sentry",
+			"source": "World Guide pg. 47 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=885",
+			"aon": "feats885",
+			"type": "feat",
+			"body": "**Archetype** Lastwall Sentry\n**Prerequisites** Lastwall Sentry Dedication\n\n- - -\n\nYour time spent hunting the undead allows you to sense them. You sense undead as a vague sense similar to a human's sense of smell, an uncomfortable sensation akin to smelling something cloying and rotting. When in proximity to the undead, you eventually sense their presence, though you might not do so instantly, and you can't pinpoint their location. An undead using a disguise or otherwise trying to hide its presence must attempt a Deception check against your Perception DC to hide its presence from you. If the creature succeeds at its Deception check, it is then temporarily immune to your Grave Sense for 1 day.",
+			"hash": "bQgFXpvE"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -87,7 +132,19 @@
 		"source": "PZO9301",
 		"id": "79ba0147-f27c-4af9-ae7e-b597d1700bd8",
 		"aonId": 886,
-		"hash": "JffbzLxM"
+		"pf2t": {
+			"name": "Necromantic Tenacity",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Lastwall Sentry",
+			"source": "World Guide pg. 47 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=886",
+			"aon": "feats886",
+			"type": "feat",
+			"body": "**Archetype** Lastwall Sentry\n**Prerequisites** Necromantic Resistance\n\n- - -\n\nYour training against necromantic effects allows you to escape the worst of their touch. If you roll a success on a saving throw against a necromancy effect, you get a critical success instead; if you roll a critical failure on such a save, you get a failure instead.",
+			"hash": "JffbzLxM"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -103,6 +160,18 @@
 		"source": "PZO9301",
 		"id": "c1e9caa7-16ad-43b3-8571-d4b60632f769",
 		"aonId": 887,
-		"hash": "pxMKNwMW"
+		"pf2t": {
+			"name": "Lastwall Warden",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Lastwall Sentry",
+			"source": "World Guide pg. 47 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=887",
+			"aon": "feats887",
+			"type": "feat",
+			"body": "**Archetype** Lastwall Sentry\n**Prerequisites** Lastwall Sentry Dedication\n\n- - -\n\nYou use your shield to protect your allies, not just yourself, especially against the undead. When you have a shield raised, you can use your Shield Block reaction when an attack is made against an ally adjacent to you, in addition to its usual trigger. If you do, the shield prevents that ally from taking damage instead of you, following the normal rules for a Shield Block.\n\nIf an undead makes an attack against an ally within 10 feet, you can Step to become adjacent to your ally and then use Shield Block as part of the same reaction.",
+			"hash": "pxMKNwMW"
+		}
 	}
 ]

@@ -49,7 +49,19 @@
 		"page": 135,
 		"source": "PZO2109",
 		"id": "b12c3323-0d78-41e5-a957-6618ba670e5d",
-		"aonId": 0
+		"aonId": 3246,
+		"pf2t": {
+			"name": "Coughing Dragon Display",
+			"level": 4,
+			"traits": "archetype",
+			"archetype": "Fireworks Technician",
+			"source": "Guns & Gears pg. 134",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3246",
+			"aon": "feats3246",
+			"type": "feat",
+			"body": "**Archetype** Fireworks Technician\n**Prerequisites** Firework Technician Dedication\n\n- - -\n\nThis display emits a cascade of loud bangs or glittering trails. While you initially designed the display to captivate your audience's attention, it turns out to have a surprisingly effective use in combat, suppressing auditory or visual effects behind your magnificent display. You gain the Coughing Dragon fireworks display.\n\n**Coughing Dragon** :aa: **Cost** 2 batches of infused reagents; **Effect** Choose either auditory or visual effects. The display gains that trait, and you attempt to counteract one or more effects within 60 feet that have this trait. On a success, the effect is suppressed until the start of your next turn, rather than ending entirely. Use your Fireworks Lore modifier as your counteract modifier, and your counteract level is equal to half your advanced alchemy level (rounded up). A coughing dragon costs 2 batches of infused reagents rather than 1, but you can increase the cost to 3 batches and spend an additional action to create an even bigger coughing dragon display that attempts to counteract both auditory and visual effects at the same time.",
+			"hash": "qkrTPWYW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -63,7 +75,19 @@
 		"page": 135,
 		"source": "PZO2109",
 		"id": "4399efb3-e4e3-4463-904e-0c0c2f61882d",
-		"aonId": 0
+		"aonId": 3247,
+		"pf2t": {
+			"name": "Expert Fireworks Crafter",
+			"level": 6,
+			"traits": "archetype",
+			"archetype": "Fireworks Technician",
+			"source": "Guns & Gears pg. 134",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3247",
+			"aon": "feats3247",
+			"type": "feat",
+			"body": "**Archetype** Fireworks Technician\n**Prerequisites** Firework Technician Dedication; expert in Crafting\n\n- - -\n\nYou're particularly adept at crafting fireworks, allowing you to create much more powerful fireworks than you otherwise could. Your advanced alchemy level for fireworks increases to your level - 3.",
+			"hash": "dSzybTzr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -78,7 +102,19 @@
 		"page": 135,
 		"source": "PZO2109",
 		"id": "dc608161-76ad-4850-a03b-028f0a08a38d",
-		"aonId": 0
+		"aonId": 3248,
+		"pf2t": {
+			"name": "Jumping Jenny Display",
+			"level": 8,
+			"traits": "archetype",
+			"archetype": "Fireworks Technician",
+			"source": "Guns & Gears pg. 134",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3248",
+			"aon": "feats3248",
+			"type": "feat",
+			"body": "**Archetype** Fireworks Technician\n**Prerequisites** Firework Technician Dedication\n\n- - -\n\nThis multi-sequence rocket blasts confetti at a series of altitudes. While the design is intended to delight children of all ages, you've found it has an unexpected side effect of confounding enemy fliers. You gain the Jumping Jenny fireworks display.\n\n**Jumping Jenny** :a: **Cost** 2 batches of infused reagents; **Effect** Target a flying creature within 60 feet. Until the start of your next turn, each time that creature attempts to Fly, they must succeed at an Acrobatics check to Maneuver in Flight against the DC of your fireworks display, or the Fly action is disrupted. If all the creature's attempts to Fly are disrupted, at the end of its turn, it falls harmlessly to the ground below. A jumping jenny costs 2 batches of infused reagents, rather than 1.",
+			"hash": "bZzTjhzX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -107,7 +143,19 @@
 		"page": 135,
 		"source": "PZO2109",
 		"id": "17a3bf09-1fe6-4e84-84c0-2480f2c5ba4b",
-		"aonId": 0
+		"aonId": 3249,
+		"pf2t": {
+			"name": "Goblin Jubilee Display",
+			"level": 10,
+			"traits": "archetype",
+			"archetype": "Fireworks Technician",
+			"source": "Guns & Gears pg. 134",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3249",
+			"aon": "feats3249",
+			"type": "feat",
+			"body": "**Archetype** Fireworks Technician\n**Prerequisites** Firework Technician Dedication\n\n- - -\n\nFlames and explosions sear the air in a riot of color and devastation that rivals that wrought by even the wildest goblin party. The display is both so beautiful and chaotic that, while mesmerizing, it poses a significant risk to the physical health, sight, and hearing of anyone who gets too close. You gain the Goblin Jubilee fireworks display.\n\n**Goblin Jubilee** :aaa: (fire, sonic, visual) **Cost** 3 batches of infused reagents; **Effect** Chaos fills a 20-foot burst within 120 feet. All creatures in the area takes 3d6 fire damage and 3d6 sonic damage and must attempt a Fortitude save. A goblin jubilee display costs 3 batches of infused reagents, rather than 1.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature is dazzled and deafened until the end of its next turn and takes half damage.\n**Failure** The creature is dazzled and deafened for 1 minute and takes full damage.\n**Critical Failure** The creature is blinded for 1 round, dazzled and deafened for 1 minute, and takes double damage.",
+			"hash": "LtObXQvR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -133,6 +181,18 @@
 		"page": 135,
 		"source": "PZO2109",
 		"id": "344f307e-011a-4c1a-b144-d45cc214eb25",
-		"aonId": 0
+		"aonId": 3250,
+		"pf2t": {
+			"name": "Banshee Cry Display",
+			"level": 12,
+			"traits": "archetype",
+			"archetype": "Fireworks Technician",
+			"source": "Guns & Gears pg. 134",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3250",
+			"aon": "feats3250",
+			"type": "feat",
+			"body": "**Archetype** Fireworks Technician\n**Prerequisites** Firework Technician Dedication\n**Trigger** A creature within 30 feet Casts a Spell that has a verbal component or Activates an Item using a command Activation\n\n- - -\n\nYou've learned how to pull off a sudden noisemaker at just the right moment in your display, a technique that can disrupt precise wording. You gain the Banshee Cry fireworks display.\n\n**Banshee Cry** :r: **Effect** You set off a firework to explode with a loud screech near the creature. The creature must attempt a Will save.\n\n**Success** The creature is unaffected.\n**Failure** The creature must use an additional action on the triggering action or activity, or it's disrupted.\n**Critical Failure** The triggering action is disrupted.",
+			"hash": "vPTpMLkt"
+		}
 	}
 ]

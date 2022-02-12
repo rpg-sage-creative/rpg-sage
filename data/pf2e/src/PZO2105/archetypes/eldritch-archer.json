@@ -17,7 +17,16 @@
 		"source": "PZO2105",
 		"id": "ad06455c-4d9c-46c1-a3df-baa2f9eeedb0",
 		"aonId": 59,
-		"hash": "rBxOHzUp"
+		"pf2t": {
+			"name": "Eldritch Archer",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 172",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=59",
+			"aon": "archetypes59",
+			"type": "archetype",
+			"body": "While many archers see their craft as an art form as much as a means of battle, a small number of archers seek to perfect their skills through magic, and you are among their number. Bolstering your athletic and martial abilities with mystical talents, you achieve rare heights with the bow or crossbow-transforming arrows or bolts into eldritch ammunition, sending arrows zig-zagging nearly unerringly to their target, and manifesting arrows that can deliver spells or even instant death.\n\nWhile having some spellcasting ability increases your potential flexibility and power as an eldritch archer, you might learn the secrets of these arts without being independently skilled in spellcasting, instead learning the magic of the bow for its own sake.",
+			"hash": "rBxOHzUp"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -53,7 +62,19 @@
 		"source": "PZO2105",
 		"id": "32f8dc62-59f3-4acc-8d58-14ead3694076",
 		"aonId": 1961,
-		"hash": "pMUUWWBD"
+		"pf2t": {
+			"name": "Basic Eldritch Archer Spellcasting",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Eldritch Archer",
+			"source": "Advanced Player's Guide pg. 172",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1961",
+			"aon": "feats1961",
+			"type": "feat",
+			"body": "**Archetype** Eldritch Archer\n**Prerequisites** Eldritch Archer Dedication\n\n- - -\n\nYou gain the basic spellcasting benefits. Each time you gain a spell slot of a new level from this archetype, add a spell of the appropriate spell level to your repertoire, either a common spell of your chosen tradition or another spell of that tradition you have learned or discovered.\n\n#### Basic Eldritch Archer Spellcasting Leads To...\nExpert Eldritch Archer Spellcasting",
+			"hash": "pMUUWWBD"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -69,7 +90,20 @@
 		"source": "PZO2105",
 		"id": "3e42a2dc-bac0-4f7d-8015-02b6aae40f1b",
 		"aonId": 1962,
-		"hash": "RHzMpmrQ"
+		"pf2t": {
+			"name": "Enchanting Arrow",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype,emotion,enchantment,magical,mental",
+			"actions": 2,
+			"archetype": "Eldritch Archer",
+			"source": "Advanced Player's Guide pg. 173",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1962",
+			"aon": "feats1962",
+			"type": "feat",
+			"body": "**Archetype** Eldritch Archer\n**Prerequisites** Eldritch Archer Dedication\n\n- - -\n\nWith a single whisper carried on the wind, you enchant your ammunition to make a foe more vulnerable to your attacks. Make a bow Strike. On a hit, the target takes an additional 2d6 mental damage. On a critical hit, the target also becomes stunned 1. The mental damage increases to 3d6 if your bow has a greater striking rune, or to 4d6 if your bow has a major striking rune.",
+			"hash": "RHzMpmrQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -90,7 +124,20 @@
 		"source": "PZO2105",
 		"id": "f33756a7-e35a-4ef1-88cf-387e5592ddd5",
 		"aonId": 1963,
-		"hash": "QxCOZUzU"
+		"pf2t": {
+			"name": "Magic Arrow",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype,magical,transmutation",
+			"actions": 0,
+			"archetype": "Eldritch Archer",
+			"source": "Advanced Player's Guide pg. 173",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1963",
+			"aon": "feats1963",
+			"type": "feat",
+			"body": "**Archetype** Eldritch Archer\n**Prerequisites** Eldritch Archer Dedication\n\n- - -\n\nYou imbue your ammunition with eldritch power. When you select this feat, choose three types of common magical ammunition of 4th level or lower from the Core Rulebook or this book. Your GM might allow you to choose from other types of magical ammunition, such as uncommon ammunition, or ammunition from other books.\n\nWhen using Magic Arrow, you transform a non-magical arrow or bolt into a piece of ammunition of one type you chose. You must shoot the ammunition before the end of your turn or the magic dissipates. If the ammunition has an Activate entry, you still need to spend the required actions to activate the ammunition before shooting it. When you use Magic Arrow, you can choose a type of magical ammunition that is typically not available to the type of ammunition you're using-for example, you can use climbing bolt on an arrow, even though that magical ammunition is normally only found on bolts.",
+			"hash": "QxCOZUzU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -106,7 +153,20 @@
 		"source": "PZO2105",
 		"id": "29d1e2a0-1bd0-4a33-8a54-b7f611a2cbe5",
 		"aonId": 1964,
-		"hash": "GbpZpZnd"
+		"pf2t": {
+			"name": "Precious Arrow",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype,magical,transmutation",
+			"actions": 1,
+			"archetype": "Eldritch Archer",
+			"source": "Advanced Player's Guide pg. 173",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1964",
+			"aon": "feats1964",
+			"type": "feat",
+			"body": "**Archetype** Eldritch Archer\n**Prerequisites** Eldritch Archer Dedication\n\n- - -\n\nYou enchant a piece of ammunition with the magical essence of a precious material, allowing you to leverage certain creatures' weaknesses. Choose cold iron or silver; if you shoot the arrow before the end of your turn, it counts as that material. At 14th level, add adamantine to the list of materials you can choose from.",
+			"hash": "GbpZpZnd"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -121,7 +181,19 @@
 		"source": "PZO2105",
 		"id": "bacf7a52-b9bc-4368-a154-96b36536144b",
 		"aonId": 1965,
-		"hash": "fbIgZfvA"
+		"pf2t": {
+			"name": "Expert Eldritch Archer Spellcasting",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Eldritch Archer",
+			"source": "Advanced Player's Guide pg. 173",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1965",
+			"aon": "feats1965",
+			"type": "feat",
+			"body": "**Archetype** Eldritch Archer\n**Prerequisites** Basic Eldritch Archer Spellcasting\n\n- - -\n\nYou gain the expert spellcasting benefits.\n\n#### Expert Eldritch Archer Spellcasting Leads To...\nMaster Eldritch Archer Spellcasting",
+			"hash": "fbIgZfvA"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -137,7 +209,20 @@
 		"source": "PZO2105",
 		"id": "5074d324-4a72-44f5-a5a5-1fab940f3335",
 		"aonId": 1966,
-		"hash": "GfjUqDrT"
+		"pf2t": {
+			"name": "Seeker Arrow",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype,divination,magical",
+			"actions": 1,
+			"archetype": "Eldritch Archer",
+			"source": "Advanced Player's Guide pg. 173",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1966",
+			"aon": "feats1966",
+			"type": "feat",
+			"body": "**Archetype** Eldritch Archer\n**Prerequisites** Eldritch Archer Dedication\n\n- - -\n\nYour shots zip around corners and fly at impossible angles to reach your target. Make a bow Strike against a foe you can see; the ammunition travels to your target, even around corners. You ignore the target's concealed condition and all cover.",
+			"hash": "GfjUqDrT"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -154,7 +239,20 @@
 		"source": "PZO2105",
 		"id": "b746e803-3199-4050-9616-222adfb6032b",
 		"aonId": 1967,
-		"hash": "jhIjQGMW"
+		"pf2t": {
+			"name": "Phase Arrow",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "archetype,conjuration,magical",
+			"actions": 1,
+			"archetype": "Eldritch Archer",
+			"source": "Advanced Player's Guide pg. 173",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1967",
+			"aon": "feats1967",
+			"type": "feat",
+			"body": "**Archetype** Eldritch Archer\n**Prerequisites** Eldritch Archer Dedication\n\n- - -\n\nYou can concentrate an immense amount of magic to create a piece of ammunition that phases through everything but your target. Make a bow Strike against a foe who is observed or hidden to you (but not undetected). The ammunition travels to your target in a straight line, passing through any non-magical barriers or walls in its way, though magical barriers stop the arrow. The shot ignores all cover, the concealed condition, the hidden condition, and circumstance bonuses to AC from shields. It has a +4 status bonus to hit creatures wearing any type of armor. The Strike's damage can't be reduced with a Shield Block reaction using a non-magical shield.",
+			"hash": "jhIjQGMW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -171,7 +269,20 @@
 		"source": "PZO2105",
 		"id": "8624203f-54b1-45aa-9c4d-aea058c730ee",
 		"aonId": 1968,
-		"hash": "AtjgGySG"
+		"pf2t": {
+			"name": "Arrow of Death",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "archetype,magical,necromancy",
+			"actions": 3,
+			"archetype": "Eldritch Archer",
+			"source": "Advanced Player's Guide pg. 173",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1968",
+			"aon": "feats1968",
+			"type": "feat",
+			"body": "**Archetype** Eldritch Archer\n**Prerequisites** Eldritch Archer Dedication\n\n- - -\n\nYou modify an arrow or bolt to bring death to your target in a single potent hit. Make a bow Strike. On a hit, you deal an additional 10d10 precision damage. On a critical hit, the target must also succeed at a Fortitude saving throw against your class DC or spell DC, whichever is higher, or be immediately slain; this save has the death and incapacitation traits.",
+			"hash": "AtjgGySG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -186,6 +297,18 @@
 		"source": "PZO2105",
 		"id": "ca976d54-fbf6-4822-95c6-97a813ca35e2",
 		"aonId": 1969,
-		"hash": "xZmQrLqN"
+		"pf2t": {
+			"name": "Master Eldritch Archer Spellcasting",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Eldritch Archer",
+			"source": "Advanced Player's Guide pg. 173",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1969",
+			"aon": "feats1969",
+			"type": "feat",
+			"body": "**Archetype** Eldritch Archer\n**Prerequisites** Expert Eldritch Archer Spellcasting\n\n- - -\n\nYou gain the master spellcasting benefits.",
+			"hash": "xZmQrLqN"
+		}
 	}
 ]

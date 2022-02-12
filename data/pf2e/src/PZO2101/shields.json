@@ -17,7 +17,20 @@
 		"page": 277,
 		"id": "d999ddba-54c3-4dfb-a45e-f7d528e020ff",
 		"aonId": 1,
-		"hash": "SVEtzzVf"
+		"pf2t": {
+			"name": "Buckler",
+			"pfs": "standard",
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": "L",
+			"acbonus": 1,
+			"source": "Core Rulebook pg. 277 2.0",
+			"src": "https://2e.aonprd.com/Shields.aspx?ID=1",
+			"aon": "shields1",
+			"type": "shield",
+			"body": "This very small shield is a favorite of duelists and quick, lightly armored warriors. It's typically made of steel and strapped to your forearm. You can Raise a Shield with your buckler as long as you have that hand free or are holding a light object that's not a weapon in that hand.",
+			"hash": "SVEtzzVf"
+		}
 	},
 	{
 		"objectType": "Shield",
@@ -37,7 +50,20 @@
 		"page": 277,
 		"id": "2275ad03-751d-4788-adc1-87fe2215e6c2",
 		"aonId": 2,
-		"hash": "KkmPZLyg"
+		"pf2t": {
+			"name": "Wooden Shield",
+			"pfs": "standard",
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 1,
+			"acbonus": 2,
+			"source": "Core Rulebook pg. 277 2.0",
+			"src": "https://2e.aonprd.com/Shields.aspx?ID=2",
+			"aon": "shields2",
+			"type": "shield",
+			"body": "Though they come in a variety of shapes and sizes, the protection offered by wooden shields comes from the stoutness of their materials. While wooden shields are less expensive than steel shields, they break more easily.",
+			"hash": "KkmPZLyg"
+		}
 	},
 	{
 		"objectType": "Shield",
@@ -57,7 +83,20 @@
 		"page": 277,
 		"id": "07150e2f-138a-4511-922b-4ade1be39cf1",
 		"aonId": 3,
-		"hash": "nZDWvAvL"
+		"pf2t": {
+			"name": "Steel Shield",
+			"pfs": "standard",
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 1,
+			"acbonus": 2,
+			"source": "Core Rulebook pg. 277 2.0",
+			"src": "https://2e.aonprd.com/Shields.aspx?ID=3",
+			"aon": "shields3",
+			"type": "shield",
+			"body": "Like wooden shields, steel shields come in a variety of shapes and sizes. Though more expensive than wooden shields, they are much more durable.",
+			"hash": "nZDWvAvL"
+		}
 	},
 	{
 		"objectType": "Shield",
@@ -78,6 +117,20 @@
 		"page": 277,
 		"id": "5cc7a75d-430a-44bd-8a21-530a2c24a6b0",
 		"aonId": 4,
-		"hash": "xYLnpWTP"
+		"pf2t": {
+			"name": "Tower Shield",
+			"pfs": "standard",
+			"priceunit": "gp",
+			"price": 10,
+			"bulk": 4,
+			"acbonus": 2,
+			"speedpenalty": 5,
+			"source": "Core Rulebook pg. 277 2.0",
+			"src": "https://2e.aonprd.com/Shields.aspx?ID=4",
+			"aon": "shields4",
+			"type": "shield",
+			"body": "These massive shields can be used to provide cover to nearly the entire body. Due to their size, they are typically made of wood reinforced with metal.\n\n2 Getting the higher bonus for a tower shield requires using the Take Cover action while the shield is raised.",
+			"hash": "xYLnpWTP"
+		}
 	}
 ]

@@ -7,7 +7,16 @@
 		"source": "PZO2101",
 		"aonId": 2,
 		"id": "50100f91-dd2a-46db-96af-b91d5a245884",
-		"hash": "NlDbGbEf"
+		"pf2t": {
+			"name": "Air Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=2",
+			"aon": "domains2",
+			"type": "domain",
+			"body": "You can control winds and the weather.",
+			"hash": "NlDbGbEf"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -17,7 +26,16 @@
 		"source": "PZO2101",
 		"aonId": 1,
 		"id": "151c74fd-e30e-4d25-a9b4-106db875cce8",
-		"hash": "dIOMsmIW"
+		"pf2t": {
+			"name": "Ambition Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=1",
+			"aon": "domains1",
+			"type": "domain",
+			"body": "You strive to keep up with and outpace the competition.",
+			"hash": "dIOMsmIW"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -27,7 +45,16 @@
 		"source": "PZO2101",
 		"aonId": 3,
 		"id": "a2b9d5ef-ec11-4a72-9a1f-4c73a58031ce",
-		"hash": "BqpARDZB"
+		"pf2t": {
+			"name": "Cities Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=3",
+			"aon": "domains3",
+			"type": "domain",
+			"body": "You have powers over urban environments and denizens.",
+			"hash": "BqpARDZB"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -37,7 +64,16 @@
 		"source": "PZO2101",
 		"aonId": 4,
 		"id": "edf1a885-f10a-4ca5-9256-841dfe79d2ec",
-		"hash": "JFxqWTkf"
+		"pf2t": {
+			"name": "Confidence Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=4",
+			"aon": "domains4",
+			"type": "domain",
+			"body": "You overcome your fear and project pride.",
+			"hash": "JFxqWTkf"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -47,7 +83,16 @@
 		"source": "PZO2101",
 		"aonId": 5,
 		"id": "682f7043-c9ea-4753-82ea-fa7a81f61dab",
-		"hash": "WPQFJGkI"
+		"pf2t": {
+			"name": "Creation Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=5",
+			"aon": "domains5",
+			"type": "domain",
+			"body": "You have divine abilities related to crafting and art.",
+			"hash": "WPQFJGkI"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -57,7 +102,16 @@
 		"source": "PZO2101",
 		"aonId": 6,
 		"id": "21cfef9a-0542-4186-8345-2a62818c367e",
-		"hash": "TQymjXvy"
+		"pf2t": {
+			"name": "Darkness Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=6",
+			"aon": "domains6",
+			"type": "domain",
+			"body": "You operate in the darkness and take away the light.",
+			"hash": "TQymjXvy"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -70,7 +124,16 @@
 		"source": "PZO2101",
 		"aonId": 7,
 		"id": "121ccc96-ccd1-41dd-80d4-d9bdbcc6d556",
-		"hash": "mrBvYVpn"
+		"pf2t": {
+			"name": "Death Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=7",
+			"aon": "domains7",
+			"type": "domain",
+			"body": "You have the power to end lives and destroy undead.",
+			"hash": "mrBvYVpn"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -80,7 +143,16 @@
 		"source": "PZO2101",
 		"aonId": 8,
 		"id": "978588a3-8cc2-4d32-9c40-d16fa72a5651",
-		"hash": "xIMfXbRJ"
+		"pf2t": {
+			"name": "Destruction Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=8",
+			"aon": "domains8",
+			"type": "domain",
+			"body": "You are a conduit for divine devastation.",
+			"hash": "xIMfXbRJ"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -93,7 +165,16 @@
 		"source": "PZO2101",
 		"aonId": 9,
 		"id": "6826631b-587e-4a94-ae53-bba7171a68a5",
-		"hash": "kAkbZbzb"
+		"pf2t": {
+			"name": "Dreams Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=9",
+			"aon": "domains9",
+			"type": "domain",
+			"body": "You have the power to enter and manipulate dreams.",
+			"hash": "kAkbZbzb"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -103,7 +184,16 @@
 		"source": "PZO2101",
 		"aonId": 10,
 		"id": "8dcb7626-c8a4-4839-9537-d06d35585f12",
-		"hash": "IFFRqcfA"
+		"pf2t": {
+			"name": "Earth Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=10",
+			"aon": "domains10",
+			"type": "domain",
+			"body": "You control soil and stone.",
+			"hash": "IFFRqcfA"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -113,7 +203,16 @@
 		"source": "PZO2101",
 		"aonId": 11,
 		"id": "ee997d1d-3e49-4c75-a694-93fd564960a2",
-		"hash": "zTqGgxXv"
+		"pf2t": {
+			"name": "Family Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=11",
+			"aon": "domains11",
+			"type": "domain",
+			"body": "You aid and protect your family and community more effectively.",
+			"hash": "zTqGgxXv"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -123,9 +222,27 @@
 		"source": "PZO2101",
 		"aonId": 12,
 		"id": "7f72a020-5a27-4b25-be4a-4dd8501a660d",
-		"hash": "BXAwkzMq"
+		"pf2t": {
+			"name": "Fate Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=12",
+			"aon": "domains12",
+			"type": "domain",
+			"body": "You see and understand hidden inevitabilities.",
+			"hash": "BXAwkzMq"
+		}
 	},
-	{ "objectType": "Domain", "name": "Fire", "description": "You control flame.", "spells": [ "Fire Ray", "Flame Barrier" ], "source": "PZO2101", "aonId": 13, "id": "65a591fa-9714-43cb-a199-81c6b4df4a51", "hash": "cXKstRWI" },
+	{
+		"objectType": "Domain",
+		"name": "Fire",
+		"description": "You control flame.",
+		"spells": [ "Fire Ray", "Flame Barrier" ],
+		"source": "PZO2101",
+		"aonId": 13,
+		"id": "65a591fa-9714-43cb-a199-81c6b4df4a51",
+		"pf2t": { "name": "Fire Domain", "pfs": "standard", "source": "Core Rulebook pg. 441 2.0", "src": "https://2e.aonprd.com/Domains.aspx?ID=13", "aon": "domains13", "type": "domain", "body": "You control flame.", "hash": "cXKstRWI" }
+	},
 	{
 		"objectType": "Domain",
 		"name": "Freedom",
@@ -134,7 +251,16 @@
 		"source": "PZO2101",
 		"aonId": 14,
 		"id": "0c027844-b229-4de4-b15c-af99387a1fcf",
-		"hash": "nCFHSQmX"
+		"pf2t": {
+			"name": "Freedom Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=14",
+			"aon": "domains14",
+			"type": "domain",
+			"body": "You liberate yourself and others from shackles and constraints.",
+			"hash": "nCFHSQmX"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -147,7 +273,16 @@
 		"source": "PZO2101",
 		"aonId": 15,
 		"id": "c900ab77-61ea-460b-b224-02d1a09ef276",
-		"hash": "CdMcvQXc"
+		"pf2t": {
+			"name": "Healing Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=15",
+			"aon": "domains15",
+			"type": "domain",
+			"body": "Your healing magic is particularly potent.",
+			"hash": "CdMcvQXc"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -157,7 +292,16 @@
 		"source": "PZO2101",
 		"aonId": 16,
 		"id": "be5e253e-e748-4b36-baae-a995ec8fa589",
-		"hash": "QNtHYRQs"
+		"pf2t": {
+			"name": "Indulgence Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=16",
+			"aon": "domains16",
+			"type": "domain",
+			"body": "You feast mightily and can shake off the effects of overindulging.",
+			"hash": "QNtHYRQs"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -167,7 +311,16 @@
 		"source": "PZO2101",
 		"aonId": 17,
 		"id": "272a8103-6c8e-457a-b783-7757ac58c4c0",
-		"hash": "qRtNBHIp"
+		"pf2t": {
+			"name": "Knowledge Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=17",
+			"aon": "domains17",
+			"type": "domain",
+			"body": "You receive divine insights.",
+			"hash": "qRtNBHIp"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -177,7 +330,16 @@
 		"source": "PZO2101",
 		"aonId": 18,
 		"id": "0620a83a-3550-4f08-867c-707fe713d450",
-		"hash": "pYQJUVXj"
+		"pf2t": {
+			"name": "Luck Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=18",
+			"aon": "domains18",
+			"type": "domain",
+			"body": "You're unnaturally lucky and keep out of harm's way.",
+			"hash": "pYQJUVXj"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -190,7 +352,16 @@
 		"source": "PZO2101",
 		"aonId": 19,
 		"id": "975258f4-ee88-4528-99f0-a9b5c0263ded",
-		"hash": "SztVZPGf"
+		"pf2t": {
+			"name": "Magic Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=19",
+			"aon": "domains19",
+			"type": "domain",
+			"body": "You perform the unexpected and inexplicable.",
+			"hash": "SztVZPGf"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -200,7 +371,16 @@
 		"source": "PZO2101",
 		"aonId": 20,
 		"id": "5b39aabd-e31f-43ae-87b4-df58d0641a06",
-		"hash": "NgAgRqpt"
+		"pf2t": {
+			"name": "Might Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=20",
+			"aon": "domains20",
+			"type": "domain",
+			"body": "Your physical power is bolstered by divine strength.",
+			"hash": "NgAgRqpt"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -210,7 +390,16 @@
 		"source": "PZO2101",
 		"aonId": 21,
 		"id": "0e3e1b98-29be-47d9-9461-63a93fda14ab",
-		"hash": "VhQJnlYv"
+		"pf2t": {
+			"name": "Moon Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=21",
+			"aon": "domains21",
+			"type": "domain",
+			"body": "You command powers associated with the moon.",
+			"hash": "VhQJnlYv"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -223,7 +412,16 @@
 		"source": "PZO2101",
 		"aonId": 22,
 		"id": "c0b4c36f-d794-4a75-b745-5031918f8660",
-		"hash": "kNQQgqps"
+		"pf2t": {
+			"name": "Nature Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=22",
+			"aon": "domains22",
+			"type": "domain",
+			"body": "You hold power over animals and plants.",
+			"hash": "kNQQgqps"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -233,7 +431,16 @@
 		"source": "PZO2101",
 		"aonId": 23,
 		"id": "89017fc4-713e-45ef-972b-d3bac78376bc",
-		"hash": "VTrDQVFw"
+		"pf2t": {
+			"name": "Nightmares Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=23",
+			"aon": "domains23",
+			"type": "domain",
+			"body": "You fill minds with horror and dread.",
+			"hash": "VTrDQVFw"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -243,7 +450,16 @@
 		"source": "PZO2101",
 		"aonId": 24,
 		"id": "c2adc308-55ed-4f0e-bb96-745cc5795c8c",
-		"hash": "GpDvWpYW"
+		"pf2t": {
+			"name": "Pain Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=24",
+			"aon": "domains24",
+			"type": "domain",
+			"body": "You punish those who displease you with the sharp sting of pain.",
+			"hash": "GpDvWpYW"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -253,7 +469,16 @@
 		"source": "PZO2101",
 		"aonId": 25,
 		"id": "fa1072b4-6a31-4c2e-9a7a-86ce59e21a08",
-		"hash": "htxwqOQJ"
+		"pf2t": {
+			"name": "Passion Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=25",
+			"aon": "domains25",
+			"type": "domain",
+			"body": "You evoke passion, whether as love or lust.",
+			"hash": "htxwqOQJ"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -263,7 +488,16 @@
 		"source": "PZO2101",
 		"aonId": 26,
 		"id": "3236833a-c689-4f27-b16a-26ecff112090",
-		"hash": "tKrCtPBA"
+		"pf2t": {
+			"name": "Perfection Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=26",
+			"aon": "domains26",
+			"type": "domain",
+			"body": "You strive to perfect your mind, body, and spirit.",
+			"hash": "tKrCtPBA"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -276,7 +510,16 @@
 		"source": "PZO2101",
 		"aonId": 27,
 		"id": "294ed01a-1be0-4008-989f-e12b3196ea97",
-		"hash": "JJcQEHSA"
+		"pf2t": {
+			"name": "Protection Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=27",
+			"aon": "domains27",
+			"type": "domain",
+			"body": "You ward yourself and others.",
+			"hash": "JJcQEHSA"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -286,7 +529,16 @@
 		"source": "PZO2101",
 		"aonId": 28,
 		"id": "f4836e49-a80d-4f9e-8b05-572b752620eb",
-		"hash": "YxvvFttF"
+		"pf2t": {
+			"name": "Secrecy Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=28",
+			"aon": "domains28",
+			"type": "domain",
+			"body": "You protect secrets and keep them hidden.",
+			"hash": "YxvvFttF"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -296,7 +548,16 @@
 		"source": "PZO2101",
 		"aonId": 29,
 		"id": "7d7e9479-49f4-4255-9d5a-5d38e7a9a17b",
-		"hash": "FWCNzZtQ"
+		"pf2t": {
+			"name": "Sun Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=29",
+			"aon": "domains29",
+			"type": "domain",
+			"body": "You harness the power of the sun and other light sources, and punish undead.",
+			"hash": "FWCNzZtQ"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -309,7 +570,16 @@
 		"source": "PZO2101",
 		"aonId": 30,
 		"id": "8bdfb774-9d0a-4872-9a52-193b4f388ea8",
-		"hash": "spqRVyxV"
+		"pf2t": {
+			"name": "Travel Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=30",
+			"aon": "domains30",
+			"type": "domain",
+			"body": "You have power over movement and journeys.",
+			"hash": "spqRVyxV"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -322,7 +592,16 @@
 		"source": "PZO2101",
 		"aonId": 31,
 		"id": "978fdbbb-f520-4616-974a-cbf3a0a25c51",
-		"hash": "TVklzOWb"
+		"pf2t": {
+			"name": "Trickery Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=31",
+			"aon": "domains31",
+			"type": "domain",
+			"body": "You deceive others and cause mischief.",
+			"hash": "TVklzOWb"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -332,7 +611,16 @@
 		"source": "PZO2101",
 		"aonId": 32,
 		"id": "bffb6647-6ccd-442e-9031-c8c329f61ed3",
-		"hash": "MqrZtxpm"
+		"pf2t": {
+			"name": "Truth Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=32",
+			"aon": "domains32",
+			"type": "domain",
+			"body": "You pierce lies and discover the truth.",
+			"hash": "MqrZtxpm"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -342,7 +630,16 @@
 		"source": "PZO2101",
 		"aonId": 33,
 		"id": "7c62938c-cf64-4c67-b448-d266da0c9bc9",
-		"hash": "Nmsdjnrq"
+		"pf2t": {
+			"name": "Tyranny Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=33",
+			"aon": "domains33",
+			"type": "domain",
+			"body": "You wield power to rule and enslave others.",
+			"hash": "Nmsdjnrq"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -352,7 +649,16 @@
 		"source": "PZO2101",
 		"aonId": 34,
 		"id": "cb7bb153-9624-4e72-af3f-9b78ba850b2c",
-		"hash": "IqrNfZWg"
+		"pf2t": {
+			"name": "Undeath Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=34",
+			"aon": "domains34",
+			"type": "domain",
+			"body": "Your magic carries close ties to the undead.",
+			"hash": "IqrNfZWg"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -362,7 +668,16 @@
 		"source": "PZO2101",
 		"aonId": 35,
 		"id": "fbf2c0c0-7276-4f70-ade5-d6fec0c15f37",
-		"hash": "vTpBUWgM"
+		"pf2t": {
+			"name": "Water Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=35",
+			"aon": "domains35",
+			"type": "domain",
+			"body": "You control water and bodies of water.",
+			"hash": "vTpBUWgM"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -372,7 +687,16 @@
 		"source": "PZO2101",
 		"aonId": 36,
 		"id": "5fe54d54-c6b7-491f-ae11-fb8265644a8e",
-		"hash": "qQFKJqGO"
+		"pf2t": {
+			"name": "Wealth Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=36",
+			"aon": "domains36",
+			"type": "domain",
+			"body": "You hold power over wealth, trade, and treasure.",
+			"hash": "qQFKJqGO"
+		}
 	},
 	{
 		"objectType": "Domain",
@@ -382,6 +706,15 @@
 		"source": "PZO2101",
 		"aonId": 37,
 		"id": "4c9089bc-30d7-4aa2-8278-86317292e0e2",
-		"hash": "pGvOdCNd"
+		"pf2t": {
+			"name": "Zeal Domain",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 441 2.0",
+			"src": "https://2e.aonprd.com/Domains.aspx?ID=37",
+			"aon": "domains37",
+			"type": "domain",
+			"body": "Your inner fire increases your combat prowess.",
+			"hash": "pGvOdCNd"
+		}
 	}
 ]

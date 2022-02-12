@@ -14,7 +14,16 @@
 		"source": "PZO2105",
 		"id": "a23bbd75-d13b-46e4-808b-51240a4f915a",
 		"aonId": 63,
-		"hash": "PpGsJZXF"
+		"pf2t": {
+			"name": "Horizon Walker",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 177",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=63",
+			"aon": "archetypes63",
+			"type": "archetype",
+			"body": "Many long for the open road, but you prefer the trackless wild. You can find safe passage through the most inhospitable terrain in the world-icecaps, deserts, and similar environs are where you're comfortable. Your talents open untrod paths for you and help guide others through the wilderness.",
+			"hash": "PpGsJZXF"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -46,7 +55,19 @@
 		"source": "PZO2105",
 		"id": "8f1a9cc6-392b-464e-b09f-a4a46c035d31",
 		"aonId": 1988,
-		"hash": "OYbPGXGd"
+		"pf2t": {
+			"name": "Acclimatization",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Horizon Walker",
+			"source": "Advanced Player's Guide pg. 177",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1988",
+			"aon": "feats1988",
+			"type": "feat",
+			"body": "**Archetype** Horizon Walker\n**Prerequisites** Horizon Walker Dedication\n\n- - -\n\nYour time spent in the hostile parts of the world has inured you to extreme climates. In your favored terrain, you gain resistance equal to half your level to all environmental damage and are affected by temperature effects as though they were one step less severe (incredible heat or cold becomes extreme, extreme heat or cold becomes severe, and so on). When other creatures Follow the Expert with you as a guide in your favored terrain, they too treat temperature effects as one step less severe.",
+			"hash": "OYbPGXGd"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -61,7 +82,20 @@
 		"source": "PZO2105",
 		"id": "cec66c55-2f41-4726-bfad-8070390ee983",
 		"aonId": 1989,
-		"hash": "fSpWxRZT"
+		"pf2t": {
+			"name": "Sure Foot",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"archetype": "Horizon Walker",
+			"source": "Advanced Player's Guide pg. 177",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1989",
+			"aon": "feats1989",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Horizon Walker\n**Prerequisites** Horizon Walker Dedication; expert in Acrobatics and Athletics\n\n- - -\n\nYou know the secrets of moving in your favored terrain. You gain a +2 circumstance bonus to skill checks to move within your favored terrain, such as Acrobatics checks to Balance on ice, Athletics checks to Swim in rough water, Acrobatics checks to Fly in windy conditions, and so forth.",
+			"hash": "fSpWxRZT"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -76,7 +110,19 @@
 		"source": "PZO2105",
 		"id": "f9297485-71fd-4b8e-a203-185d1bc7408b",
 		"aonId": 1990,
-		"hash": "wHBZcQZq"
+		"pf2t": {
+			"name": "Perpetual Scout",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Horizon Walker",
+			"source": "Advanced Player's Guide pg. 177",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1990",
+			"aon": "feats1990",
+			"type": "feat",
+			"body": "**Archetype** Horizon Walker\n**Prerequisites** Horizon Walker Dedication\n\n- - -\n\nYou spot anything out of place in the areas you know best. While in your favored terrain, you always gain the benefits of the Scout exploration activity, even if you are performing another exploration activity. If you're legendary in Survival, you gain these benefits in any terrain.",
+			"hash": "wHBZcQZq"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -105,6 +151,18 @@
 		"source": "PZO2105",
 		"id": "e1152b2d-e801-4223-b843-c9ff2ce181ea",
 		"aonId": 1992,
-		"hash": "PXgzSxXI"
+		"pf2t": {
+			"name": "Wild Strider",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Horizon Walker",
+			"source": "Advanced Player's Guide pg. 177",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1992",
+			"aon": "feats1992",
+			"type": "feat",
+			"body": "**Archetype** Horizon Walker\n**Prerequisites** Horizon Walker Dedication\n\n- - -\n\nNatural obstacles pose no obstacle to you. You gain the ranger's wild stride class feature. This allows you to ignore the effects of all non-magical difficult terrain, treat greater difficult terrain as merely difficult terrain, and gives you an additional benefit from Favored Terrain based on the terrain.",
+			"hash": "PXgzSxXI"
+		}
 	}
 ]

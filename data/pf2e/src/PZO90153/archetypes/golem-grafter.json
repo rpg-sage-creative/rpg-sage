@@ -9,7 +9,16 @@
 		"source": "PZO90153",
 		"id": "bab7a2a3-d312-4e4f-acdf-670f35ce0ffa",
 		"aonId": 39,
-		"hash": "IvLZSZqv"
+		"pf2t": {
+			"name": "Golem Grafter",
+			"pfs": "limited",
+			"source": "153 Life's Long Shadow pg. 74",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=39",
+			"aon": "archetypes39",
+			"type": "archetype",
+			"body": "You have replaced a portion of your body with artifice of the kind used to create golems, fortifying your flesh with the unyielding might of magical constructs.",
+			"hash": "IvLZSZqv"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -44,7 +53,19 @@
 		"source": "PZO90153",
 		"id": "d43d2fae-086d-4278-93fa-97976a4b534c",
 		"aonId": 1228,
-		"hash": "RrmAWpWA"
+		"pf2t": {
+			"name": "Accursed Clay Fist",
+			"level": 10,
+			"pfs": "limited",
+			"traits": "archetype,curse",
+			"archetype": "Golem Grafter",
+			"source": "153 Life's Long Shadow pg. 74",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1228",
+			"aon": "feats1228",
+			"type": "feat",
+			"body": "**Archetype** Golem Grafter\n**Prerequisites** Golem Grafter Dedication; expert in unarmed attacks\n\n- - -\n\nYou have replaced one of your forearms with one made of clay and infused with cursed arcane magic. When you make an unarmed Strike with your clay fist and hit, your target takes a -2 status penalty to saving throws against curse effects for 1 hour.",
+			"hash": "RrmAWpWA"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -61,7 +82,20 @@
 		"source": "PZO90153",
 		"id": "5394212d-1e6e-46d3-967b-2d2b42f244cf",
 		"aonId": 1229,
-		"hash": "kvAWFLEX"
+		"pf2t": {
+			"name": "Quicken Heartbeat",
+			"level": 10,
+			"pfs": "limited",
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Golem Grafter",
+			"source": "153 Life's Long Shadow pg. 74",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1229",
+			"aon": "feats1229",
+			"type": "feat",
+			"body": "**Archetype** Golem Grafter\n**Prerequisites** Golem Grafter Dedication\n\n- - -\n\nYou've replaced your heart with one made of animated quicksilver and living adamantine. You reduce your slowed condition by 1. Alternatively, if you are not slowed, you are quickened 1 during your next turn, and can use your extra action to Stride or Strike.",
+			"hash": "kvAWFLEX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -76,7 +110,19 @@
 		"source": "PZO90153",
 		"id": "e5dcfcf1-7bb7-4bb4-9aa2-484993fd5649",
 		"aonId": 1230,
-		"hash": "vtltlAQU"
+		"pf2t": {
+			"name": "Legs of Stone",
+			"level": 12,
+			"pfs": "limited",
+			"traits": "archetype",
+			"archetype": "Golem Grafter",
+			"source": "153 Life's Long Shadow pg. 74",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1230",
+			"aon": "feats1230",
+			"type": "feat",
+			"body": "**Archetype** Golem Grafter\n**Prerequisites** Golem Grafter Dedication\n\n- - -\n\nYou gain a +2 status bonus to your Fortitude and Reflex DCs against attempts to Shove or Trip you. You can Shove creatures even if you don't have a hand free. When you successfully Shove a foe, you can Stride away from your opponent (instead of toward it), but you must move the same distance in the opposite direction from where you Shoved it.",
+			"hash": "vtltlAQU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -92,6 +138,18 @@
 		"source": "PZO90153",
 		"id": "bc447834-3126-4897-9f6d-e75db3c25d54",
 		"aonId": 1231,
-		"hash": "VcIGxpZJ"
+		"pf2t": {
+			"name": "Iron Lung",
+			"level": 14,
+			"pfs": "limited",
+			"traits": "archetype",
+			"archetype": "Golem Grafter",
+			"source": "153 Life's Long Shadow pg. 74",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1231",
+			"aon": "feats1231",
+			"type": "feat",
+			"body": "**Archetype** Golem Grafter\n**Prerequisites** Golem Grafter Dedication\n\n- - -\n\nYour lungs are infused with the resilience of iron. Treat the result of your save against an inhaled poison as one degree of success better than you rolled. Additionally, you gain the following ability.\n\n#### Exhale Poison\nYou sharply exhale the poison that previously surrounded you in a 15-foot cone. Creatures in the area are affected by the poison; the poison's DC and effects are unchanged.",
+			"hash": "VcIGxpZJ"
+		}
 	}
 ]

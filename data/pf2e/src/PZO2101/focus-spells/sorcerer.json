@@ -24,7 +24,22 @@
 		"traditions": [],
 		"traits": [ "Uncommon", "Auditory", "Enchantment", "Mental", "Sorcerer" ],
 		"id": "ea768328-eecc-4a15-9926-dfd873a290f2",
-		"hash": "JxLvkQgY"
+		"pf2t": {
+			"name": "Aberrant Whispers",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,auditory,enchantment,mental,sorcerer",
+			"cast": "v",
+			"actions": 1,
+			"max": 3,
+			"source": "Core Rulebook pg. 402 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=491",
+			"aon": "spells491",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Area** 5-foot emanation or more\n**Duration** 1 round\n**Targets** each foe in the area\n\n- - -\n\nYou utter phrases in an unknown tongue, assaulting the minds of those nearby. Each target must attempt a Will save. Regardless of the result of its save, each target is then temporarily immune for 1 minute. You can increase the number of actions it takes to Cast the Spell (to a maximum of 3 actions total). For each additional action, increase the emanation's radius by 5 feet, to a maximum of 10 extra feet for 3 actions.\n\n**Success** The target is unaffected.\n**Failure** The target is stupefied 2.\n**Critical Failure** The target is confused.\n- - -\n**Heightened (+3)** The initial radius increases by 5 feet.",
+			"hash": "JxLvkQgY"
+		}
 	},
 	{
 		"aonId": 492,
@@ -48,7 +63,22 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Evocation", "Sorcerer" ],
 		"id": "2bac041e-6966-4f19-b89c-e56d9ad19c7e",
-		"hash": "qZpkBXvF"
+		"pf2t": {
+			"name": "Abyssal Wrath",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,evocation,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 402 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=492",
+			"aon": "spells492",
+			"type": "focus",
+			"savingthrow": "Reflex",
+			"basic": 1,
+			"body": "**Area** 60-foot cone\n\n- - -\n\nYou evoke the energy of an Abyssal realm. The damage types of the spell (one energy and one physical) are based on the result of rolling on the table below. \n\n**Abyssal Wrath**\n\n**1d4** | **Realm** | **Manifestation** | **Damage Type**\n--- | --- | --- | ---\n1 | Skies | Bolts and lightning and flying debris | Bludgeoning and electricity\n2 | Depths | Acid and demonic shells | Acid and slashing\n3 | Frozen | Frigid air and ice | Bludgeoning and cold\n4 | Volcanic | Jagged volcanic rocks and magma | Fire and piercing\n\nYou deal 4d6 damage of each of the corresponding damage types to each creature in the cone (8d6 total damage).\n- - -\n**Heightened (+1)** The damage for each type increases by 1d6.",
+			"hash": "qZpkBXvF"
+		}
 	},
 	{
 		"aonId": 493,
@@ -70,7 +100,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Divination", "Sorcerer" ],
 		"id": "017a7057-042f-4893-9119-f4073407afb2",
-		"hash": "TsJXnsQM"
+		"pf2t": {
+			"name": "Ancestral Memories",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,divination,sorcerer",
+			"cast": "v",
+			"actions": 1,
+			"source": "Core Rulebook pg. 402 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=493",
+			"aon": "spells493",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nThe memories of long-dead spellcasters grant you knowledge in a specific skill. Choose any non-Lore skill, or a Lore skill related to the ancient empire from which your bloodline sprang. You temporarily become trained in that skill and might gain other memories associated with an ancestor who was trained in that skill. If you attempt a task or activity that lasts beyond this spell's duration, use the lower proficiency modifier.\n- - -\n**Heightened (6th)** You temporarily become an expert in the skill you choose.",
+			"hash": "TsJXnsQM"
+		}
 	},
 	{
 		"aonId": 494,
@@ -93,7 +136,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Abjuration", "Good", "Sorcerer" ],
 		"id": "3b028b2f-8e72-48f5-bfec-a8797efa730a",
-		"hash": "RklsfWHb"
+		"pf2t": {
+			"name": "Angelic Halo",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,good,sorcerer",
+			"cast": "v",
+			"actions": 1,
+			"source": "Core Rulebook pg. 402 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=494",
+			"aon": "spells494",
+			"type": "focus",
+			"body": "**Area** 15-foot emanation\n**Duration** 1 minute\n\n- - -\n\nYou gain an angelic halo with an aura that increases allies' healing from the heal spell. Allies in your halo's emanation who are healed by a heal spell gain a status bonus to Hit Points regained equal to double the heal spell's level.",
+			"hash": "RklsfWHb"
+		}
 	},
 	{
 		"aonId": 495,
@@ -115,7 +171,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Evocation", "Light", "Sorcerer" ],
 		"id": "98e6181c-d3fe-4c41-85e1-af70137fb01b",
-		"hash": "OfsRXSsp"
+		"pf2t": {
+			"name": "Angelic Wings",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,evocation,light,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 403 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=495",
+			"aon": "spells495",
+			"type": "focus",
+			"body": "**Duration** 3 rounds\n\n- - -\n\nWings of pure light spread out from your back, granting you a fly Speed equal to your Speed. Your wings cast bright light in a 30-foot radius. When this spell's duration would end, if you're still flying, you float to the ground, as feather fall.\n- - -\n**Heightened (5th)** The duration increases to 1 minute.",
+			"hash": "OfsRXSsp"
+		}
 	},
 	{
 		"aonId": 496,
@@ -137,7 +206,21 @@
 		"traits": [ "Uncommon", "Abjuration", "Sorcerer" ],
 		"trigger": "A creature within range that you can see Casts a Spell.",
 		"id": "d048b180-f367-417c-8040-0be77865bfff",
-		"hash": "vzcwqKqV"
+		"pf2t": {
+			"name": "Arcane Countermeasure",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,sorcerer",
+			"cast": "s",
+			"actions": "r",
+			"range": 120,
+			"source": "Core Rulebook pg. 403 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=496",
+			"aon": "spells496",
+			"type": "focus",
+			"body": "**Trigger** A creature within range that you can see Casts a Spell.\n**Targets** the spell cast by the triggering creature\n\n- - -\n\nYou undermine the target spell, making it easier to defend against. You reduce the spell's level by 1, and targets of the spell gain a +2 status bonus to any saving throws, skill checks, AC, or DC against it.\n\nYou can't reduce the spell's level below its minimum. For example, a 5th-level cone of cold would remain 5th-level, but a 5th-level fireball would become 4th-level. Targets still gain all the other benefits, even if you don't reduce the spell's level.",
+			"hash": "vzcwqKqV"
+		}
 	},
 	{
 		"aonId": 497,
@@ -161,7 +244,21 @@
 		"targets": "1 evil creaeture",
 		"traits": [ "Uncommon", "Curse", "Necromancy", "Sorcerer" ],
 		"id": "de2447b7-4192-4c67-af71-0fcd9c4a0641",
-		"hash": "qtPQEYLm"
+		"pf2t": {
+			"name": "Celestial Brand",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,curse,necromancy,sorcerer",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 403 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=497",
+			"aon": "spells497",
+			"type": "focus",
+			"body": "**Duration** 1 round\n**Targets** 1 evil creature\n\n- - -\n\nA blazing symbol appears on the target, cursing it to face divine justice. You and your allies receive a +1 status bonus to your attack rolls and skill checks against it. Anytime a good creature damages it, the good creature deals an additional 1d4 good damage. The target is then temporarily immune for 1 minute.\n- - -\n**Heightened (+2)** The good damage increases by 1.",
+			"hash": "qtPQEYLm"
+		}
 	},
 	{
 		"aonId": 498,
@@ -182,7 +279,21 @@
 		"targets": "1 willing living creature",
 		"traits": [ "Uncommon", "Enchantment", "Sorcerer" ],
 		"id": "d966b42d-48fe-47ee-bbd0-0f03a338fd2d",
-		"hash": "tWTPsRgd"
+		"pf2t": {
+			"name": "Diabolic Edict",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,enchantment,sorcerer",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 403 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=498",
+			"aon": "spells498",
+			"type": "focus",
+			"body": "**Duration** 1 round\n**Targets** 1 willing living creature\n\n- - -\n\nYou issue a diabolic edict, demanding the target perform a particular task and offering rewards for its fulfillment. It gains a +1 status bonus to attack rolls and skill checks related to performing the task. If it refuses to perform the task you proclaimed, it instead takes a -1 status penalty to all its attack rolls and skill checks.",
+			"hash": "tWTPsRgd"
+		}
 	},
 	{
 		"aonId": 499,
@@ -205,8 +316,7 @@
 		"savingThrow": "basic Reflex or Fortitude",
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Evocation", "Sorcerer" ],
-		"id": "b48da103-cdb8-4aee-90fa-f9428beaf597",
-		"hash": "lJIFEPXX"
+		"id": "b48da103-cdb8-4aee-90fa-f9428beaf597"
 	},
 	{
 		"aonId": 500,
@@ -228,8 +338,7 @@
 		"page": 403,
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Morph", "Sorcerer", "Transmutation" ],
-		"id": "a27d28d7-038b-4a49-8e7e-4a8e19614be5",
-		"hash": "ASJSXgOU"
+		"id": "a27d28d7-038b-4a49-8e7e-4a8e19614be5"
 	},
 	{
 		"aonId": 501,
@@ -251,7 +360,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Morph", "Sorcerer", "Transmutation" ],
 		"id": "91eec090-3c81-4737-bcde-e76fd4c0fb95",
-		"hash": "hfEgDzgk"
+		"pf2t": {
+			"name": "Dragon Wings",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,morph,sorcerer,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 403 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=501",
+			"aon": "spells501",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nLeathery wings sprout from your back, giving you a fly Speed of 60 feet or your Speed, whichever is faster. When this spell's duration would end, if you're still flying, you float to the ground, as feather fall. You can increase the Focus Point cost by 1 to gain the effects of dragon claws as long as the wings last.\n- - -\n**Heightened (8th)** The duration increases to 10 minutes.",
+			"hash": "hfEgDzgk"
+		}
 	},
 	{
 		"aonId": 502,
@@ -275,7 +397,23 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Necromancy", "Negative", "Sorcerer" ],
 		"id": "5abad112-72cf-431f-b659-ea636bd01f3c",
-		"hash": "LqItDzCp"
+		"pf2t": {
+			"name": "Drain Life",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,necromancy,negative,sorcerer",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 403 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=502",
+			"aon": "spells502",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"basic": 1,
+			"body": "**Targets** 1 living creature\n\n- - -\n\nYou close your hand and pull life energy from another creature into yourself. This deals 3d4 negative damage; the target must attempt a basic Fortitude save. You gain temporary Hit Points equal to the damage the target takes, after resolving its save and applying your blood magic if applicable. If the target's Hit Points were lower than the damage you dealt, you gain temporary Hit Points equal to their remaining Hit Points instead. The temporary Hit Points last for 1 minute.\n- - -\n**Heightened (+1)** The damage increases by 1d4.",
+			"hash": "LqItDzCp"
+		}
 	},
 	{
 		"aonId": 503,
@@ -299,7 +437,23 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Evocation", "Sorcerer" ],
 		"id": "d19471ca-55e4-431d-a4d4-75f82186c6c2",
-		"hash": "AtRqQWmH"
+		"pf2t": {
+			"name": "Elemental Blast",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,evocation,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 404 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=503",
+			"aon": "spells503",
+			"type": "focus",
+			"savingthrow": "Reflex",
+			"basic": 1,
+			"body": "**Area** 10-foot-radius burst, 30-foot cone, or 60-foot line\n\n- - -\n\nYou gather elemental energy and blast your foes in one of the various listed shapes of your choosing, dealing 8d6 bludgeoning damage (or fire damage if your element is fire). This spell has your element's trait.\n- - -\n**Heightened (+1)** The damage increases by 2d6.",
+			"hash": "AtRqQWmH"
+		}
 	},
 	{
 		"aonId": 504,
@@ -322,7 +476,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Evocation", "Sorcerer" ],
 		"id": "aeb57c18-7058-40a0-b86c-a15fc08351f3",
-		"hash": "fZvCUBUX"
+		"pf2t": {
+			"name": "Elemental Motion",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,evocation,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 404 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=504",
+			"aon": "spells504",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou call upon your element to propel you, improving your Speed depending on your element. This spell has your element's trait. \n\n+ **Air** You gain a fly Speed equal to your Speed. \n+ **Earth** You gain a burrow Speed of 10 feet. \n+ **Fire** You gain a fly Speed equal to your Speed. \n+ **Water** You gain a swim Speed equal to your Speed and can breathe underwater.\n- - -\n**Heightened (6th)** You also gain a +10-foot status bonus to your Speeds.\n**Heightened (9th)** The status bonus increases to +20 feet.",
+			"hash": "fZvCUBUX"
+		}
 	},
 	{
 		"aonId": 505,
@@ -345,7 +512,21 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Attack", "Evocation", "Sorcerer" ],
 		"id": "bd2af149-ef0e-4b82-9e9b-ac3630aab1d0",
-		"hash": "bMZMxRJt"
+		"pf2t": {
+			"name": "Elemental Toss",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,attack,evocation,sorcerer",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 404 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=505",
+			"aon": "spells505",
+			"type": "focus",
+			"body": "**Targets** 1 creature\n\n- - -\n\nWith a flick of your wrist, you fling a chunk of your elemental matter at your foe. Make a spell attack roll, dealing 1d8 bludgeoning damage (or fire damage if your element is fire) on a success, and double damage on a critical success. This spell has your element's trait.\n- - -\n**Heightened (+1)** The damage increases by 1d8.",
+			"hash": "bMZMxRJt"
+		}
 	},
 	{
 		"aonId": 506,
@@ -367,7 +548,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Evil", "Morph", "Sorcerer", "Transmutation" ],
 		"id": "d4bf693c-e3d4-454d-9464-4d3090a16e57",
-		"hash": "mgLIzXXJ"
+		"pf2t": {
+			"name": "Embrace the Pit",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,evil,morph,sorcerer,transmutation",
+			"cast": "v",
+			"actions": 1,
+			"source": "Core Rulebook pg. 404 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=506",
+			"aon": "spells506",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nDevil horns grow from your skull, and your skin takes on features of the devil responsible for your diabolic bloodline. You gain resistance 5 to evil, fire, and poison, and resistance 1 to physical damage (except silver). You can take good damage, even if you aren't evil, and you gain weakness 5 to good damage.\n- - -\n**Heightened (+2)** The resistance to evil, fire, and poison increases by 5, the resistance to physical damage (except silver) by 2, and the weakness to good damage by 5.",
+			"hash": "mgLIzXXJ"
+		}
 	},
 	{
 		"aonId": 507,
@@ -385,7 +579,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Divination", "Metamagic", "Sorcerer" ],
 		"id": "0b079b28-6457-41d7-8245-0d1b613a42ae",
-		"hash": "NgBlkxXG"
+		"pf2t": {
+			"name": "Extend Spell",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,divination,metamagic,sorcerer",
+			"cast": "v",
+			"actions": 1,
+			"source": "Core Rulebook pg. 404 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=507",
+			"aon": "spells507",
+			"type": "focus",
+			"body": "You call upon your blood's knowledge of the ancients to extend your magic. If your next action is to Cast a Spell with a duration of 1 minute and a single target, the spell instead lasts 10 minutes. You can extend a spell only if you cast it from a spell slot lower than your highest spell slot, and you can have only one active spell at a time extended in this way.",
+			"hash": "NgBlkxXG"
+		}
 	},
 	{
 		"aonId": 508,
@@ -421,7 +628,22 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Enchantment", "Mental", "Sorcerer" ],
 		"id": "73694ac8-4c4f-40a5-af73-8c157d5f87ab",
-		"hash": "PvWyrArx"
+		"pf2t": {
+			"name": "Faerie Dust",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,enchantment,mental,sorcerer",
+			"cast": "s,v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 404 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=508",
+			"aon": "spells508",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Area** 5-foot burst or more\n**Duration** 1 round\n\n- - -\n\nYou sprinkle magical dust in the spell's area, making those within easier to trick. Each creature in the area must attempt a Will save. For each additional action you use Casting the Spell, the burst's radius increases by 5 feet.\n\n**Success** The creature is unaffected.\n**Failure** The creature can't use reactions and takes a -2 status penalty to Perception checks and Will saves.\n**Critical Failure** As failure, and the creature also takes a -1 status penalty to Perception checks and Will saves for 1 minute.\n- - -\n**Heightened (+3)** The initial radius increases by 5 feet.",
+			"hash": "PvWyrArx"
+		}
 	},
 	{
 		"aonId": 509,
@@ -443,7 +665,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Enchantment", "Sorcerer" ],
 		"id": "c72544e1-7edb-4c4e-b84a-07fa80a52f1d",
-		"hash": "cZWHWtqz"
+		"pf2t": {
+			"name": "Fey Disappearance",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,enchantment,sorcerer",
+			"cast": "s",
+			"actions": 1,
+			"source": "Core Rulebook pg. 404 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=509",
+			"aon": "spells509",
+			"type": "focus",
+			"body": "**Duration** until the end of your next turn\n\n- - -\n\nYou become invisible and ignore natural difficult terrain (such as underbrush). Any hostile action you use ends this invisibility, but you still ignore natural difficult terrain.\n- - -\n**Heightened (5th)** If you use a hostile action, the invisibility doesn't end.",
+			"hash": "cZWHWtqz"
+		}
 	},
 	{
 		"aonId": 510,
@@ -465,7 +700,21 @@
 		"targets": "up to 10 creatures",
 		"traits": [ "Uncommon", "Illusion", "Sorcerer" ],
 		"id": "5e87d0ca-ad26-437e-a031-0687e27533e2",
-		"hash": "JzPYkFxD"
+		"pf2t": {
+			"name": "Fey Glamour",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,illusion,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 404 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=510",
+			"aon": "spells510",
+			"type": "focus",
+			"body": "**Area** 30-foot burst or\n**Duration** 10 minutes\n**Targets** up to 10 creatures\n\n- - -\n\nYou call upon fey glamours to cloak an area or the targets in illusion. This has the effect of either illusory scene on the area or veil on the creatures, as if heightened to a level 1 level lower than fey glamour, using fey glamour's range and duration.",
+			"hash": "JzPYkFxD"
+		}
 	},
 	{
 		"aonId": 511,
@@ -487,7 +736,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Morph", "Necromancy", "Sorcerer" ],
 		"id": "4d20910e-7b28-4ab0-accc-6b0a9bbb6f72",
-		"hash": "zEzIONQV"
+		"pf2t": {
+			"name": "Glutton's Jaw",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,morph,necromancy,sorcerer",
+			"cast": "s,v",
+			"actions": 1,
+			"source": "Core Rulebook pg. 404 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=511",
+			"aon": "spells511",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYour mouth transforms into a shadowy maw bristling with pointed teeth. These jaws are an unarmed attack with the forceful trait dealing 1d8 piercing damage. If you hit with your jaws and deal damage, you gain 1d6 temporary Hit Points.\n- - -\n**Heightened (+2)** The temporary Hit Points increase by 1d6.",
+			"hash": "zEzIONQV"
+		}
 	},
 	{
 		"aonId": 512,
@@ -525,7 +787,22 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Necromancy", "Sorcerer" ],
 		"id": "3014aa48-dc47-4827-94dc-48e44e361598",
-		"hash": "vEtsjfDx"
+		"pf2t": {
+			"name": "Grasping Grave",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,necromancy,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Core Rulebook pg. 404 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=512",
+			"aon": "spells512",
+			"type": "focus",
+			"savingthrow": "Reflex",
+			"body": "**Area** 20-foot radius on the ground\n\n- - -\n\nHundreds of skeletal arms erupt from the ground in the area, clawing at creatures within and attempting to hold them in place. The skeletal arms deal 6d6 slashing damage. Each creature in the area must attempt a Reflex save.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes half damage.\n**Failure** The creature takes full damage and a -10-foot circumstance penalty to its Speeds for 1 round.\n**Critical Failure** The creature takes double damage and is immobilized for 1 round or until it Escapes.\n- - -\n**Heightened (+1)** The damage increases by 2d6.",
+			"hash": "vEtsjfDx"
+		}
 	},
 	{
 		"aonId": 513,
@@ -549,7 +826,23 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Evil", "Evocation", "Fire", "Sorcerer" ],
 		"id": "09d6f849-cece-442f-8584-ec2294c420c4",
-		"hash": "NjjMGlSS"
+		"pf2t": {
+			"name": "Hellfire Plume",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,evil,evocation,fire,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Core Rulebook pg. 405 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=513",
+			"aon": "spells513",
+			"type": "focus",
+			"savingthrow": "Reflex",
+			"basic": 1,
+			"body": "**Area** 10-foot radius, 60-foot-tall cylinder\n\n- - -\n\nYou call forth a plume of hellfire that erupts from below, dealing 4d6 fire damage and 4d6 evil damage.\n- - -\n**Heightened (+1)** The fire damage increases by 1d6, and the evil damage increases by 1d6.",
+			"hash": "NjjMGlSS"
+		}
 	},
 	{
 		"aonId": 514,
@@ -573,7 +866,21 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Emotion", "Fear", "Illusion", "Mental", "Sorcerer", "Visual" ],
 		"id": "bff37971-a2b2-4c5f-8f59-d34663644cbc",
-		"hash": "NDfEztDr"
+		"pf2t": {
+			"name": "Horrific Visage",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,emotion,fear,illusion,mental,sorcerer,visual",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 405 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=514",
+			"aon": "spells514",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Area** 30-foot-radius emanation centered on you\n\n- - -\n\nYou briefly transform your features into the horrific visage of a hag, striking fear into your enemies. Foes in the area must attempt a Will save.\n\n**Success** The foe is unaffected.\n**Failure** The foe is frightened 1.\n**Critical Failure** The foe is frightened 2.\n- - -\n**Heightened (5th)** Foes in the area are frightened 1 on a success, frightened 2 on a failure, and frightened 3 and fleeing for 1 round on a critical failure. They are still unaffected on a critical success.",
+			"hash": "NDfEztDr"
+		}
 	},
 	{
 		"aonId": 515,
@@ -597,7 +904,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Curse", "Necromancy", "Sorcerer" ],
 		"id": "a869a2e8-017d-4291-8c5e-2e27a050b080",
-		"hash": "ZzzJwWZT"
+		"pf2t": {
+			"name": "Jealous Hex",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,curse,necromancy,sorcerer",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 405 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=515",
+			"aon": "spells515",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou draw forth a hag's innate jealousy to deny a target its greatest attribute. The target is cursed with an adverse condition depending on its highest ability modifier: Strength (enfeebled); Dexterity (clumsy); Constitution (drained); or Intelligence, Wisdom, or Charisma (stupefied). On a tie, the creature decides which of the conditions associated with the tied ability modifiers to take. The target must attempt a Will save.\n**Success** The target is unaffected.\n**Failure** The condition's value is 1.\n**Critical Failure** The condition's value is 2.\n\nAt the start of each of your turns, the target can attempt another Will save, ending the effect on a success.",
+			"hash": "ZzzJwWZT"
+		}
 	},
 	{
 		"aonId": 516,
@@ -622,7 +944,24 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Conjuration", "Sorcerer" ],
 		"id": "7f0d827f-9292-4dd2-98f3-842c411bcadd",
-		"hash": "mjpqkIHW"
+		"pf2t": {
+			"name": "Swamp of Sloth",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,olfactory,sorcerer",
+			"cast": "s,v",
+			"actions": 1,
+			"max": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 405 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=516",
+			"aon": "spells516",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"basic": 1,
+			"body": "**Area** 5-foot burst or more\n**Duration** 1 minute\n\n- - -\n\nGround in the area turns swampy and fetid. The area is difficult terrain. The sludge at the bottom of the morass animates into diminutive sludge beasts that have a demonic appearance. These don't function as normal creatures, but they swarm over creatures in the swamp and exude a noxious stench. The swamp deals 1d6 poison damage; creatures that end their turn in the area must attempt a basic Fortitude save. You can increase the number of actions it takes to Cast the Spell. For each additional action, increase the burst's radius by 5 feet.\n- - -\n**Heightened (+2)** The damage increases by 1d6, and the initial radius increases by 5 feet.",
+			"hash": "mjpqkIHW"
+		}
 	},
 	{
 		"aonId": 517,
@@ -644,7 +983,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Morph", "Sorcerer", "Transmutation" ],
 		"id": "ae597d03-1f77-456e-87b4-f09d754346bb",
-		"hash": "NPzqpkST"
+		"pf2t": {
+			"name": "Tentacular Limbs",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,morph,sorcerer,transmutation",
+			"cast": "s",
+			"actions": 1,
+			"source": "Core Rulebook pg. 405 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=517",
+			"aon": "spells517",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYour arms turn into long, pliable tentacles, increasing your reach when you're delivering touch range spells and making unarmed Strikes with your arms (such as fist and claw Strikes) to 10 feet. This doesn't change the reach of your melee weapon attacks. During the duration, whenever you Cast a Spell, you can add an additional action to that spell's casting to temporarily extend your reach to 20 feet to deliver that spell.\n- - -\n**Heightened (+2)** When you add an additional action to a spell to temporarily extend your reach, your reach increases by an additional 10 feet to deliver that spell.",
+			"hash": "NPzqpkST"
+		}
 	},
 	{
 		"aonId": 461,
@@ -681,7 +1033,22 @@
 		"targets": "1 living creature touched",
 		"traits": [ "Uncommon", "Necromancy", "Negative", "Sorcerer" ],
 		"id": "7567c047-5c68-493e-8266-86041a31eff3",
-		"hash": "xTzVSzmp"
+		"pf2t": {
+			"name": "Touch of Undeath",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,necromancy,negative",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Core Rulebook pg. 398 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=461",
+			"aon": "spells461",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Targets** 1 living creature\n\n- - -\n\nYou attack the target's life force with undeath, dealing 1d6 negative damage. The target must attempt a Fortitude save.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes half damage.\n**Failure** The target takes full damage, and positive effects heal it only half as much as normal for 1 round.\n**Critical Failure** The target takes double damage, and positive effects heal it only half as much as normal for 1 minute.\n- - -\n**Heightened (+1)** The damage increases by 1d6.",
+			"hash": "xTzVSzmp"
+		}
 	},
 	{
 		"aonId": 519,
@@ -703,7 +1070,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Polymorph", "Sorcerer", "Transmutation" ],
 		"id": "4b000d57-076a-4212-b764-05e29084a760",
-		"hash": "kmWWFtWM"
+		"pf2t": {
+			"name": "Unusual Anatomy",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,polymorph,sorcerer,transmutation",
+			"cast": "s",
+			"actions": 1,
+			"source": "Core Rulebook pg. 405 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=519",
+			"aon": "spells519",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou transform your flesh and organs into a bizarre amalgam of glistening skin, rough scales, tufts of hair, and tumorous protuberances. This has three effects: \n\n+ You gain resistance 10 to precision damage and resistance 10 to extra damage from critical hits. If the resistance is greater than the extra damage, it reduces the extra damage to 0 but doesn't reduce the attack's normal damage. \n+ You gain darkvision. \n+ Acid oozes from your skin. Any creature that hits you with an unarmed attack or with a non-reach melee weapon takes 2d6 acid damage.\n- - -\n**Heightened (+2)** The resistances increase by 5, and the acid damage increases by 1d6.",
+			"hash": "kmWWFtWM"
+		}
 	},
 	{
 		"aonId": 520,
@@ -745,6 +1125,21 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Emotion", "Enchantment", "Incapacitation", "Mental", "Sorcerer" ],
 		"id": "0aa87723-3051-4abe-8bc6-d4b73d184a89",
-		"hash": "XMbQFykO"
+		"pf2t": {
+			"name": "You're Mine",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,emotion,enchantment,incapacitation,mental,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 406 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=520",
+			"aon": "spells520",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 round\n**Targets** 1 creature\n\n- - -\n\nYou manipulate the target's emotions, potentially allowing you to control it for a brief instant. The target must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target is stunned 1.\n**Failure** On the target's next turn, it's stunned 1 and you partially control it, causing it to take a single action of your choice. If it has actions left, it can act normally.\n**Critical Failure** The target is controlled for 1 round.\n- - -\n**Heightened (7th)** On a failure, the target is controlled for 1 round. On a critical failure, the target is controlled for up to 1 minute; it receives a new Will save at the end of each of its turns, and on a success, the spell ends.",
+			"hash": "XMbQFykO"
+		}
 	}
 ]

@@ -11,6 +11,14 @@
 		"source": "PZO90148",
 		"page": 63,
 		"id": "055d229b-49f5-492e-97bc-b6d5f32fecaf",
-		"hash": "ykdpQRRW"
+		"pf2t": {
+			"name": "Droskari Disciple",
+			"source": "148 Fires of the Haunted City pg. 65",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=126",
+			"aon": "backgrounds126",
+			"type": "background",
+			"body": "You grew up in the church of the Dark Smith, where you learned the value of hard work and achieving vocational mastery.\n\nChoose two ability boosts. One must be to **Constitution** or **Intelligence**, and one is a free ability boost.\n\nYou gain the Skill Training skill feat, and you're trained in the Droskar Lore skill.",
+			"hash": "ykdpQRRW"
+		}
 	}
 ]

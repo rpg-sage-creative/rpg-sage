@@ -13,7 +13,16 @@
 		"source": "PZO2105",
 		"id": "dfb32da6-5bdc-4891-97f4-a0b1006cef98",
 		"aonId": 46,
-		"hash": "LQpzlQtT"
+		"pf2t": {
+			"name": "Archaeologist",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 156",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=46",
+			"aon": "archetypes46",
+			"type": "archetype",
+			"body": "Adventurers raid tombs for material gain, but true archaeologists treasure the knowledge gained from such sites. You might accomplish your goals with scholarly learning, by training to overcome the tricks and traps set by ancient peoples and rivals, through magical training, or even with a bit of inexplicable luck.",
+			"hash": "LQpzlQtT"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -45,7 +54,19 @@
 		"source": "PZO2105",
 		"id": "d586e646-63a1-44b4-b82e-da3b36565427",
 		"aonId": 1880,
-		"hash": "XNbvItrA"
+		"pf2t": {
+			"name": "Magical Scholastics",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Archaeologist",
+			"source": "Advanced Player's Guide pg. 156",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1880",
+			"aon": "feats1880",
+			"type": "feat",
+			"body": "**Archetype** Archaeologist\n**Prerequisites** Archaeologist Dedication\n\n- - -\n\nWhile study is key to your success, a bit of magic is a helpful tool in discovering the secrets of the past. You gain detect magic, guidance, and read aura as occult innate cantrips.\n\n#### Magical Scholastics Leads To...\nGreater Magical Scholastics",
+			"hash": "XNbvItrA"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -63,7 +84,20 @@
 		"source": "PZO2105",
 		"id": "8420eaea-ae2c-4d7a-a72c-c343706317b8",
 		"aonId": 1881,
-		"hash": "ZSyZMdZg"
+		"pf2t": {
+			"name": "Settlement Scholastics",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"archetype": "Archaeologist",
+			"source": "Advanced Player's Guide pg. 156",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1881",
+			"aon": "feats1881",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Archaeologist\n**Prerequisites** Archaeologist Dedication\n\n- - -\n\nYour studies open up new horizons. You become an expert in a Lore skill about a specific settlement; if you were already trained in that Lore skill, you also become trained in the Lore skill for a different settlement of your choice. Choose a single common or uncommon language prevalent in that settlement. You learn that language.",
+			"hash": "ZSyZMdZg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -78,7 +112,20 @@
 		"source": "PZO2105",
 		"id": "bf6340fe-c280-457e-a422-198960a75599",
 		"aonId": 1882,
-		"hash": "ErYlzZVx"
+		"pf2t": {
+			"name": "Scholastic Identification",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"archetype": "Archaeologist",
+			"source": "Advanced Player's Guide pg. 156",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1882",
+			"aon": "feats1882",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Archaeologist\n**Prerequisites** Archaeologist Dedication; master in Society\n\n- - -\n\nYou have the knowledge needed to understand ancient texts and cultural artifacts. You can use Society when Deciphering Writing, no matter the type of writing you are examining. You can also use Society to Identify Magic when examining a magic item or location with cultural significance.",
+			"hash": "ErYlzZVx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -95,7 +142,19 @@
 		"source": "PZO2105",
 		"id": "a08bdef3-6c00-42df-8c0e-e3f654123437",
 		"aonId": 1883,
-		"hash": "cpvbAxyG"
+		"pf2t": {
+			"name": "Archaeologist's Luck",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype,fortune",
+			"archetype": "Archaeologist",
+			"source": "Advanced Player's Guide pg. 156",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1883",
+			"aon": "feats1883",
+			"type": "feat",
+			"body": "**Archetype** Archaeologist\n**Prerequisites** Archaeologist Dedication\n**Trigger** You fail a check against a trap, such as a Thievery check to Disable the trap or a Reflex save to avoid its effects.\n\n- - -\n\nYou are more than just skillful; your drive to find the secrets of the past manifests as a strange kind of luck. Reroll the failed check and use the new result.",
+			"hash": "cpvbAxyG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -110,6 +169,18 @@
 		"source": "PZO2105",
 		"id": "68182c94-1671-434d-8f52-2e95f9069ef6",
 		"aonId": 1884,
-		"hash": "xRzAXUMg"
+		"pf2t": {
+			"name": "Greater Magical Scholastics",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Archaeologist",
+			"source": "Advanced Player's Guide pg. 156",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1884",
+			"aon": "feats1884",
+			"type": "feat",
+			"body": "**Archetype** Archaeologist\n**Prerequisites** Archaeologist Dedication; Magical Scholastics\n\n- - -\n\nYou broaden your magical studies, allowing you to find the right path, detect objects, and conceal those objects from unscrupulous rivals. You can cast augury, locate, and nondetection as occult innate spells, each once per day. You can cast this nondetection spell only on an object, and it is automatically heightened to the same spell level as your cantrips from Magical Scholastics.",
+			"hash": "xRzAXUMg"
+		}
 	}
 ]

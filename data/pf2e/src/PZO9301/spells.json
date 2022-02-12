@@ -32,6 +32,21 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Attack", "Cold", "Evocation", "Water" ],
 		"id": "e8afdd28-b1bd-49da-95a2-4b7a1ed80a77",
-		"hash": "LfqdQPvg"
+		"pf2t": {
+			"name": "Snowball",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "attack,cold,evocation,water",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "World Guide pg. 112 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=540",
+			"aon": "spells540",
+			"type": "spell",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou throw a magically propelled and chilled ball of dense snow. The target takes 2d4 cold damage and potentially other effects, depending on the result of your spell attack roll.\n\n**Critical Success** The target takes double damage and a -10-foot status penalty to its Speeds for 1 round.\n**Success**  The target takes full damage and a -5-foot status penalty to its Speeds for 1round.\n**Failure** No effect.\n- - -\n**Heightened (+1)** The damage increases by 2d4.",
+			"hash": "LfqdQPvg"
+		}
 	}
 ]

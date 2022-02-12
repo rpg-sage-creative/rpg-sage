@@ -20,7 +20,16 @@
 		"source": "PZO2105",
 		"id": "bfdb3286-4bb9-4806-bf90-b60dd003b2b4",
 		"aonId": 51,
-		"hash": "Cmspgxbr"
+		"pf2t": {
+			"name": "Blessed One",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 162",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=51",
+			"aon": "archetypes51",
+			"type": "archetype",
+			"body": "Through luck or deed, heritage or heroics, you carry the blessing of a deity. This blessing manifests as the ability to heal wounds and remove harmful conditions, and exists independent of worship. You might offer thanks daily to the deity whose power you wield, or you might carry these blessings reluctantly, seeking to avoid responsibility or even acting to defy the deity's influence on you. You might wear the robes of the deity's order, or you might give little thought and even less reverence to the source of your powers. However you feel about these gifts, there can be no doubt that you wield a special power. Good-aligned deities are most likely to empower a blessed one. However, deities of any alignment can grant such a blessing, as long as they are capable of granting a positive divine font to their clerics. This means such deities as Lamashtu might grant a foul version of the blessed one's powers.",
+			"hash": "Cmspgxbr"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -51,7 +60,19 @@
 		"source": "PZO2105",
 		"id": "859e026a-4152-4c2b-b7d4-7392841e2151",
 		"aonId": 1911,
-		"hash": "rOwWwQzI"
+		"pf2t": {
+			"name": "Blessed Sacrifice",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Blessed One",
+			"source": "Advanced Player's Guide pg. 162",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1911",
+			"aon": "feats1911",
+			"type": "feat",
+			"body": "**Archetype** Blessed One\n**Prerequisites** Blessed One Dedication\n\n- - -\n\nYou gain the protector's sacrifice domain spell as a devotion spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "rOwWwQzI"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -67,7 +88,20 @@
 		"source": "PZO2105",
 		"id": "57c7deed-1407-4b19-983a-445efa14d7a1",
 		"aonId": 1912,
-		"hash": "zpktkxWt"
+		"pf2t": {
+			"name": "Blessed Spell",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype,concentrate,metamagic",
+			"actions": 1,
+			"archetype": "Blessed One",
+			"source": "Advanced Player's Guide pg. 162",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1912",
+			"aon": "feats1912",
+			"type": "feat",
+			"body": "**Archetype** Blessed One\n**Prerequisites** Blessed One Dedication; ability to cast spells from spell slots; Mercy\n\n- - -\n\nWhen you focus your magic on an ally, you can remove harmful conditions. If your next action is to Cast a Spell from a spell slot, and that spell targets only a single ally, you can also attempt to remove a harmful condition from that ally. The condition must be one that could be removed by your Mercy feat, including those granted by later feats such as Greater Mercy. Attempt a counteract check based on the spell's DC and level. This effect is in addition to the normal effects of your spell.",
+			"hash": "zpktkxWt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -84,6 +118,19 @@
 		"source": "PZO2105",
 		"id": "8138629f-0070-439f-86fa-30e649996dc6",
 		"aonId": 1913,
-		"hash": "jEFxtcGp"
+		"pf2t": {
+			"name": "Blessed Denial",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Blessed One",
+			"source": "Advanced Player's Guide pg. 162",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1913",
+			"aon": "feats1913",
+			"type": "feat",
+			"body": "**Archetype** Blessed One\n**Prerequisites** Blessed One Dedication\n**Trigger** An ally within 30 feet would become frightened, drained, enfeebled, sickened, or stupefied.\n\n- - -\n\nYou exude peace and protection, lessening a harmful condition as it falls upon an ally. Reduce the value of the condition your ally would take by 1 (to a minimum of 0). If the ally takes more than one condition at the same time, choose one to reduce.",
+			"hash": "jEFxtcGp"
+		}
 	}
 ]

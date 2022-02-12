@@ -42,7 +42,23 @@
 		"source": "PZO2101",
 		"id": "80a8dd34-bfb7-441e-ac31-0539e183b489",
 		"aonId": 2,
-		"hash": "vUrRWwLX"
+		"pf2t": {
+			"name": "Explorer's Clothing",
+			"pfs": "standard",
+			"traits": "comfort",
+			"group": "cloth",
+			"priceunit": "sp",
+			"price": 1,
+			"bulk": "L",
+			"dexcap": 5,
+			"acbonus": 0,
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Armor.aspx?ID=2",
+			"aon": "armor2",
+			"type": "armor",
+			"body": "Adventurers who don't wear armor travel in durable clothing. Though it's not armor and uses your unarmored defense proficiency, it still has a Dex Cap and can grant an item bonus to AC if etched with potency runes.",
+			"hash": "vUrRWwLX"
+		}
 	},
 	{
 		"objectType": "Armor",
@@ -67,7 +83,25 @@
 		"source": "PZO2101",
 		"id": "560bcf33-13d1-4095-b7bb-bcafa07c7c7a",
 		"aonId": 3,
-		"hash": "bsxgTWLF"
+		"pf2t": {
+			"name": "Padded Armor",
+			"pfs": "standard",
+			"traits": "comfort",
+			"group": "cloth",
+			"category": "light",
+			"priceunit": "sp",
+			"price": 2,
+			"bulk": "L",
+			"strength": 10,
+			"dexcap": 3,
+			"acbonus": 1,
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Armor.aspx?ID=3",
+			"aon": "armor3",
+			"type": "armor",
+			"body": "This armor is simply a layer of heavy, quilted cloth, but it is sometimes used because it's so inexpensive. Padded armor is easier to damage and destroy than other types of armor. Heavy armor comes with a padded armor undercoat included in its Price, though it loses the comfort trait when worn under heavy armor. You can wear just that padded armor undercoat to sleep in, if your heavy armor is destroyed, or when otherwise not wearing the full heavy armor. This allows you to keep the armor invested and benefit from the power of any runes on the associated heavy armor, but no one else can wear your heavy armor without the padded undercoat.",
+			"hash": "bsxgTWLF"
+		}
 	},
 	{
 		"objectType": "Armor",
@@ -138,7 +172,26 @@
 		"source": "PZO2101",
 		"id": "8b742b83-b188-466d-a6ab-18650f01ef8a",
 		"aonId": 6,
-		"hash": "BBrwUEmM"
+		"pf2t": {
+			"name": "Chain Shirt",
+			"pfs": "standard",
+			"traits": "flexible,noisy",
+			"group": "chain",
+			"category": "light",
+			"priceunit": "gp",
+			"price": 5,
+			"bulk": 1,
+			"strength": 12,
+			"dexcap": 3,
+			"acbonus": 2,
+			"checkpenalty": 1,
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Armor.aspx?ID=6",
+			"aon": "armor6",
+			"type": "armor",
+			"body": "Sometimes called a hauberk, this is a long shirt constructed of the same metal rings as chainmail. However, it is much lighter than chainmail and protects only the torso, upper arms, and upper legs of its wearer.",
+			"hash": "BBrwUEmM"
+		}
 	},
 	{
 		"objectType": "Armor",
@@ -186,7 +239,26 @@
 		"source": "PZO2101",
 		"id": "c2b4aa0a-c35d-4145-931a-14a8d57c91e1",
 		"aonId": 8,
-		"hash": "xXgwvEXh"
+		"pf2t": {
+			"name": "Scale Mail",
+			"pfs": "standard",
+			"group": "composite",
+			"category": "medium",
+			"priceunit": "gp",
+			"price": 4,
+			"bulk": 2,
+			"strength": 14,
+			"dexcap": 2,
+			"acbonus": 3,
+			"checkpenalty": 2,
+			"speedpenalty": 5,
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Armor.aspx?ID=8",
+			"aon": "armor8",
+			"type": "armor",
+			"body": "Scale mail consists of many metal scales sewn onto a reinforced leather backing, often in the form of a long shirt that protects the torso, arms, and legs.\n\n#### Armor Specialization Effects\nCertain class features can grant you additional benefits with certain armors. This is called an armor specialization effect. The exact effect depends on which armor group your armor belongs to, as listed below. Only medium and heavy armors have armor specialization effects.\n\n**Composite**: The numerous overlapping pieces of this armor protect you from piercing attacks. You gain resistance to piercing damage equal to 1 + the value of the armor's potency rune for medium armor, or 2 + the value of the armor's potency rune for heavy armor.",
+			"hash": "xXgwvEXh"
+		}
 	},
 	{
 		"objectType": "Armor",
@@ -211,7 +283,27 @@
 		"source": "PZO2101",
 		"id": "be746c44-9edc-4d70-a9d5-3e2eb8ca9913",
 		"aonId": 9,
-		"hash": "bCUAtcZI"
+		"pf2t": {
+			"name": "Chain Mail",
+			"pfs": "standard",
+			"traits": "flexible,noisy",
+			"group": "chain",
+			"category": "medium",
+			"priceunit": "gp",
+			"price": 6,
+			"bulk": 2,
+			"strength": 16,
+			"dexcap": 1,
+			"acbonus": 4,
+			"checkpenalty": 2,
+			"speedpenalty": 5,
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Armor.aspx?ID=9",
+			"aon": "armor9",
+			"type": "armor",
+			"body": "A suit of chain mail consists of several pieces of armor composed of small metal rings linked together in a protective mesh. It typically includes a chain shirt, leggings, a pair of arms, and a coif, collectively protecting most of the body.",
+			"hash": "bCUAtcZI"
+		}
 	},
 	{
 		"objectType": "Armor",
@@ -236,7 +328,26 @@
 		"source": "PZO2101",
 		"id": "fcf61561-a5e1-4dbd-b9fe-bde65d0fd9f1",
 		"aonId": 10,
-		"hash": "bZQQbZHw"
+		"pf2t": {
+			"name": "Breastplate",
+			"pfs": "standard",
+			"group": "plate",
+			"category": "medium",
+			"priceunit": "gp",
+			"price": 8,
+			"bulk": 2,
+			"strength": 16,
+			"dexcap": 1,
+			"acbonus": 4,
+			"checkpenalty": 2,
+			"speedpenalty": 5,
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Armor.aspx?ID=10",
+			"aon": "armor10",
+			"type": "armor",
+			"body": "Though referred to as a breastplate, this type of armor consists of several pieces of plate or half-plate armor that protect the torso, chest, neck, and sometimes the hips and lower legs. It strategically grants some of the protection of plate while allowing greater flexibility and speed.\n\n#### Armor Specialization Effects\nCertain class features can grant you additional benefits with certain armors. This is called an armor specialization effect. The exact effect depends on which armor group your armor belongs to, as listed below. Only medium and heavy armors have armor specialization effects.\n\n**Plate**: The sturdy plate provides no purchase for a cutting edge. You gain resistance to slashing damage equal to 1 + the value of the armor's potency rune for medium armor, or 2 + the value of the armor's potency rune for heavy armor.",
+			"hash": "bZQQbZHw"
+		}
 	},
 	{
 		"objectType": "Armor",

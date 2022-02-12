@@ -101,7 +101,16 @@
 		"source": "PZO2101",
 		"id": "dc99514f-69d3-4e1b-a1eb-a072d4ac8bfc",
 		"aonId": 26,
-		"hash": "tXdMXpxg"
+		"pf2t": {
+			"name": "Half-Elf",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 56 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=26",
+			"aon": "heritages26",
+			"type": "heritage",
+			"body": "**Ancestry Page** Half-Elf\nEither one of your parents was an elf, or one or both were half-elves. You have pointed ears and other telltale signs of elf heritage. You gain the elf trait, the half-elf trait, and low-light vision. In addition, you can select elf, half-elf, and human feats whenever you gain an ancestry feat.",
+			"hash": "tXdMXpxg"
+		}
 	},
 	{
 		"objectType": "Heritage",
@@ -113,7 +122,16 @@
 		"source": "PZO2101",
 		"id": "3fd69a99-fc3f-417a-960b-267432d35aea",
 		"aonId": 27,
-		"hash": "CbczLJbx"
+		"pf2t": {
+			"name": "Half-Orc",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 56 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=27",
+			"aon": "heritages27",
+			"type": "heritage",
+			"body": "**Ancestry Page** Half-Orc\nOne of your parents was an orc, or one or both were half-orcs. You have a green tinge to your skin and other indicators of orc heritage. You gain the orc trait, the half-orc trait, and low-light vision. In addition, you can select orc, half-orc, and human feats whenever you gain an ancestry feat.",
+			"hash": "CbczLJbx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -128,7 +146,19 @@
 		"source": "PZO2101",
 		"id": "4760c942-0d4f-42c2-ae07-0bb48872ad21",
 		"aonId": 79,
-		"hash": "jxTYHVGk"
+		"pf2t": {
+			"name": "Elf Atavism",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "half-elf",
+			"source": "Core Rulebook pg. 58 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=79",
+			"aon": "feats79",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "Your elven blood runs particularly strong, granting you features far more elven than those of a typical half-elf. You may also have been raised among elves, steeped in your elven ancestors' heritage. You gain the benefits of the elf heritage of your elven parent or ancestors. You typically can't select a heritage that depends on or improves an elven feature you don't have. For example, you couldn't gain the cavern elf's darkvision ability if you didn't have low-light vision. In these cases, at the GM's discretion, you might gain a different benefit.",
+			"hash": "jxTYHVGk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -142,7 +172,19 @@
 		"source": "PZO2101",
 		"id": "6674fb6f-35f7-46eb-b2f0-919ae777b84f",
 		"aonId": 80,
-		"hash": "ZcFfpdzS"
+		"pf2t": {
+			"name": "Inspire Imitation",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "half-elf",
+			"source": "Core Rulebook pg. 58 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=80",
+			"aon": "feats80",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "Your own actions inspire your allies to great achievements. Whenever you critically succeed at a skill check, you automatically qualify to use the Aid reaction when attempting to help an ally using the same skill, even without spending an action to prepare to do so.",
+			"hash": "ZcFfpdzS"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -156,7 +198,19 @@
 		"source": "PZO2101",
 		"id": "dee0e450-a9ad-47a0-ac67-af6253942bac",
 		"aonId": 81,
-		"hash": "xtBLpZPX"
+		"pf2t": {
+			"name": "Supernatural Charm",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "half-elf",
+			"source": "Core Rulebook pg. 58 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=81",
+			"aon": "feats81",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "The elven magic in your blood manifests as a force you can use to become more appealing or alluring. You can cast 1st-level charm as an arcane innate spell once per day.",
+			"hash": "xtBLpZPX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -170,7 +224,19 @@
 		"source": "PZO2101",
 		"id": "9bf81bf9-da7c-4e41-9bd3-1fa98005a273",
 		"aonId": 82,
-		"hash": "gHcAXYHW"
+		"pf2t": {
+			"name": "Monstrous Peacemaker",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "half-orc",
+			"source": "Core Rulebook pg. 59 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=82",
+			"aon": "feats82",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "Your dual human and orc nature has given you a unique perspective, allowing you to bridge the gap between humans and the many intelligent creatures in the world that humans consider monsters. You gain a +1 circumstance bonus to Diplomacy checks against non-humanoid intelligent creatures and against humanoids that are marginalized in human society (at the GM's discretion, but typically at least including giants, goblins, kobolds, and orcs). You also gain this bonus on Perception checks to Sense the Motives of such creatures.",
+			"hash": "gHcAXYHW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -187,7 +253,20 @@
 		"source": "PZO2101",
 		"id": "7669ef63-b1e1-47fc-8009-f1d588b0d16d",
 		"aonId": 83,
-		"hash": "cmvWLjQW"
+		"pf2t": {
+			"name": "Orc Ferocity",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "orc",
+			"actions": "r",
+			"source": "Core Rulebook pg. 59 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=83",
+			"aon": "feats83",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Trigger** You would be reduced to 0 Hit Points but not immediately killed.\n\n- - -\n\nFierceness in battle runs through your blood, and you refuse to fall from your injuries. You avoid being knocked out and remain at 1 Hit Point, and your wounded condition increases by 1.\n\n#### Orc Ferocity Leads To...\nDefy Death, Ferocious Beasts, Incredible Ferocity, Rampaging Ferocity, Undying Ferocity",
+			"hash": "cmvWLjQW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -203,7 +282,19 @@
 		"source": "PZO2101",
 		"id": "044f3195-0d97-4fe2-90ab-36956b1cce09",
 		"aonId": 84,
-		"hash": "sfZqqqZb"
+		"pf2t": {
+			"name": "Orc Sight",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "half-orc",
+			"source": "Core Rulebook pg. 59 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=84",
+			"aon": "feats84",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** low-light vision\n\n- - -\n\nYour orc blood is strong enough to grant you the keen vision of your orc forebears. You gain darkvision, allowing you to see in darkness and dim light just as well as you can in bright light. However, in darkness, you see in black and white only.",
+			"hash": "sfZqqqZb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -219,7 +310,20 @@
 		"source": "PZO2101",
 		"id": "64740152-19d6-4d98-9d05-16d8a543aae8",
 		"aonId": 85,
-		"hash": "UpgZQJhk"
+		"pf2t": {
+			"name": "Orc Superstition",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "concentrate,orc",
+			"actions": "r",
+			"source": "Core Rulebook pg. 59 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=85",
+			"aon": "feats85",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Trigger** You attempt a saving throw against a spell or magical effect, before rolling.\n\n- - -\n\nYou defend yourself against magic by relying on techniques derived from orc cultural superstitions. You gain a +1 circumstance bonus to your saving throw against the triggering spell or magical effect.\n\n#### Orc Superstition Leads To...\nPervasive Superstition",
+			"hash": "UpgZQJhk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -233,7 +337,19 @@
 		"source": "PZO2101",
 		"id": "a83c6cac-23e6-49b4-9687-9bdf9e42553d",
 		"aonId": 86,
-		"hash": "lSIOxZwr"
+		"pf2t": {
+			"name": "Orc Weapon Familiarity",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "orc",
+			"source": "Core Rulebook pg. 59 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=86",
+			"aon": "feats86",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "In combat, you favor the brutal weapons that are traditional for your orc ancestors. You are trained with the falchion and greataxe. In addition, you gain access to all uncommon orc weapons. For the purpose of determining your proficiency, martial orc weapons are simple weapons and advanced orc weapons are martial weapons.\n\n#### Orc Weapon Familiarity Leads To...\nOrc Weapon Carnage, Orc Weapon Expertise",
+			"hash": "lSIOxZwr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -248,7 +364,19 @@
 		"source": "PZO2101",
 		"id": "8e301334-706e-4315-ac13-5065c4486a2a",
 		"aonId": 87,
-		"hash": "EUUSHKMh"
+		"pf2t": {
+			"name": "Orc Weapon Carnage",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "orc",
+			"source": "Core Rulebook pg. 59 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=87",
+			"aon": "feats87",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** Orc Weapon Familiarity\n\n- - -\n\nYou are brutally efficient with the weapons of your orc ancestors. Whenever you critically hit using a falchion, a greataxe, or an orc weapon, you apply the weapon's critical specialization effect.",
+			"hash": "EUUSHKMh"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -264,7 +392,20 @@
 		"source": "PZO2101",
 		"id": "779348cb-f041-4dce-899c-fe30352cea4d",
 		"aonId": 88,
-		"hash": "RxWYPDcI"
+		"pf2t": {
+			"name": "Victorious Vigor",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "orc",
+			"actions": "r",
+			"source": "Core Rulebook pg. 59 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=88",
+			"aon": "feats88",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Trigger** You bring a foe to 0 Hit Points.\n\n- - -\n\nYour victories in battle fill you with pride and imbue you with the energy to fight a bit longer despite your wounds. You gain temporary Hit Points equal to your Constitution modifier until the end of your next turn.",
+			"hash": "RxWYPDcI"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -279,7 +420,19 @@
 		"source": "PZO2101",
 		"id": "18756ecf-6b96-4066-ade7-8033f8e007cd",
 		"aonId": 89,
-		"hash": "qqlOdQZT"
+		"pf2t": {
+			"name": "Pervasive Superstition",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "orc",
+			"source": "Core Rulebook pg. 59 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=89",
+			"aon": "feats89",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** Orc Superstition\n\n- - -\n\nYou steep yourself in superstition and practice ancient orc mental exercises for shrugging off the effects of magic. You gain a +1 circumstance bonus to saving throws against spells and magical effects at all times.\n\n#### Pervasive Superstition Leads To...\nSpell Devourer",
+			"hash": "qqlOdQZT"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -294,7 +447,19 @@
 		"source": "PZO2101",
 		"id": "51b5a911-8a79-456c-9eb3-a236e932c0a0",
 		"aonId": 90,
-		"hash": "UMmpsDTU"
+		"pf2t": {
+			"name": "Incredible Ferocity",
+			"level": 13,
+			"pfs": "standard",
+			"traits": "orc",
+			"source": "Core Rulebook pg. 59 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=90",
+			"aon": "feats90",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** Orc Ferocity\n\n- - -\n\nGiven time to collect yourself after a near-death scrape, you can rebuild your ferocity and withstand additional finishing blows. You can use Orc Ferocity with a frequency of once per hour, rather than once per day.",
+			"hash": "UMmpsDTU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -309,6 +474,18 @@
 		"source": "PZO2101",
 		"id": "93e90868-e859-40cc-817a-eb22bddce3c1",
 		"aonId": 91,
-		"hash": "LlbtFGnZ"
+		"pf2t": {
+			"name": "Orc Weapon Expertise",
+			"level": 13,
+			"pfs": "standard",
+			"traits": "orc",
+			"source": "Core Rulebook pg. 59 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=91",
+			"aon": "feats91",
+			"type": "feat",
+			"subtype": "ancestry",
+			"body": "**Prerequisites** Orc Weapon Familiarity\n\n- - -\n\nYour orc affinity blends with your class training, granting you great skill with orc weapons. Whenever you gain a class feature that grants you expert or greater proficiency in a given weapon or weapons, you also gain that proficiency in the falchion, the greataxe, and all orc weapons in which you are trained.",
+			"hash": "LlbtFGnZ"
+		}
 	}
 ]

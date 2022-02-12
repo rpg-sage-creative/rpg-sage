@@ -8,7 +8,17 @@
 		"page": 76,
 		"source": "PZO2108",
 		"id": "ff5df6b2-6cc0-4b25-bb82-ea45ec74c200",
-		"aonId": 0
+		"aonId": 96,
+		"pf2t": {
+			"name": "Summoner",
+			"pfs": "standard",
+			"source": "Secrets of Magic pg. 76",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=96",
+			"aon": "archetypes96",
+			"type": "archetype",
+			"body": "You have a tenuous connection to an eidolon, a bodiless being that shares your life force, and with effort you can manifest the eidolon into the world.",
+			"hash": "XvnSQxPn"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -41,7 +51,20 @@
 		"page": 76,
 		"source": "PZO2108",
 		"id": "369bf0a2-4fed-4336-99eb-02772e563c82",
-		"aonId": 0
+		"aonId": 2954,
+		"pf2t": {
+			"name": "Basic Synergy",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Summoner",
+			"source": "Secrets of Magic pg. 76",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2954",
+			"aon": "feats2954",
+			"type": "feat",
+			"body": "**Archetype** Summoner\n**Prerequisites** Summoner Dedication\n\n- - -\n\nYou gain a 1st- or 2nd-level summoner feat of your choice.\n\n#### Basic Synergy Leads To...\nAdvanced Synergy",
+			"hash": "vMXcXmKk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -55,7 +78,20 @@
 		"page": 77,
 		"source": "PZO2108",
 		"id": "a59ca12e-8c1c-4b07-8294-c69d8b81b109",
-		"aonId": 0
+		"aonId": 2955,
+		"pf2t": {
+			"name": "Initial Eidolon Ability",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Summoner",
+			"source": "Secrets of Magic pg. 77",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2955",
+			"aon": "feats2955",
+			"type": "feat",
+			"body": "**Archetype** Summoner\n**Prerequisites** Summoner Dedication\n\n- - -\n\nYour link to your eidolon becomes stronger, granting it a new ability. Your eidolon gains the initial ability for an eidolon of its type.",
+			"hash": "kjqmtHPv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -72,7 +108,20 @@
 		"page": 77,
 		"source": "PZO2108",
 		"id": "65d30700-c155-4c4d-bc27-23e2af33592c",
-		"aonId": 0
+		"aonId": 2956,
+		"pf2t": {
+			"name": "Advanced Synergy",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Summoner",
+			"source": "Secrets of Magic pg. 77",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2956",
+			"aon": "feats2956",
+			"type": "feat",
+			"body": "**Archetype** Summoner\n**Prerequisites** Basic Synergy\n\n- - -\n\nYou gain one summoner feat. For the purpose of meeting its prerequisites, your summoner level is equal to half your character level.\n\n#### Advanced Synergy Leads To...\nSignature Synergy",
+			"hash": "ASRstRkq"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -86,7 +135,20 @@
 		"page": 77,
 		"source": "PZO2108",
 		"id": "2433e92f-1ffa-48c6-85f4-e37c290ed8b8",
-		"aonId": 0
+		"aonId": 2957,
+		"pf2t": {
+			"name": "Basic Summoner Spellcasting",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Summoner",
+			"source": "Secrets of Magic pg. 77",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2957",
+			"aon": "feats2957",
+			"type": "feat",
+			"body": "**Archetype** Summoner\n**Prerequisites** Summoner Dedication\n\n- - -\n\nYou gain the basic bounded spellcasting benefits. You gain the Cast a Spell activity. Your key spellcasting ability for summoner archetype spells is Charisma, and they are summoner spells of your eidolon's tradition. You become trained in spell attack rolls and spell DCs of that tradition. You gain a spell repertoire and two cantrips. Each time you gain a spell slot of a new level from the summoner archetype, add a spell of that level or lower to your repertoire. Each time you lose spell slots of a particular level, remove those spells from your repertoire.\n\n#### Basic Summoner Spellcasting Leads To...\nExpert Summoner Spellcasting",
+			"hash": "vfEtAQGq"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -100,7 +162,20 @@
 		"page": 77,
 		"source": "PZO2108",
 		"id": "dbbd4766-b39f-4dc1-9fce-6477e8fd6fa4",
-		"aonId": 0
+		"aonId": 2958,
+		"pf2t": {
+			"name": "Expert Combat Eidolon",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Summoner",
+			"source": "Secrets of Magic pg. 77",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2958",
+			"aon": "feats2958",
+			"type": "feat",
+			"body": "**Archetype** Summoner\n**Prerequisites** Summoner Dedication\n\n- - -\n\nYour eidolon advances its capabilities in combat. Your eidolon becomes an expert in unarmed attacks. If you are an expert in unarmored defense, your eidolon also becomes an expert in unarmored defense. If you have weapon specialization, your eidolon also gains weapon specialization.",
+			"hash": "kSbtkRSH"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -117,7 +192,20 @@
 		"page": 77,
 		"source": "PZO2108",
 		"id": "3d48d842-ef67-474e-b450-e4f46319114c",
-		"aonId": 0
+		"aonId": 2959,
+		"pf2t": {
+			"name": "Expert Summoner Spellcasting",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Summoner",
+			"source": "Secrets of Magic pg. 77",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2959",
+			"aon": "feats2959",
+			"type": "feat",
+			"body": "**Archetype** Summoner\n**Prerequisites** Basic Summoner Spellcasting; master in the skill associated with your eidolon's tradition\n\n- - -\n\nYou gain the expert bounded spellcasting benefits.\n\n#### Expert Summoner Spellcasting Leads To...\nMaster Summoner Spellcasting",
+			"hash": "PUgZgqhb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -131,7 +219,20 @@
 		"page": 77,
 		"source": "PZO2108",
 		"id": "ce1c319e-2790-4f6b-be8b-306af5a76643",
-		"aonId": 0
+		"aonId": 2960,
+		"pf2t": {
+			"name": "Signature Synergy",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Summoner",
+			"source": "Secrets of Magic pg. 77",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2960",
+			"aon": "feats2960",
+			"type": "feat",
+			"body": "**Archetype** Summoner\n**Prerequisites** Advanced Synergy\n\n- - -\n\nYour eidolon gains an evolution integral to its form, and it comes more easily than your other synergies. You gain one evolution feat from the following list: Airborne Form, Burrowing Form, Ever-Vigilant Senses, or Hulking Size. For the purpose of meeting its prerequisites, your summoner level is equal to your character level - 4.",
+			"hash": "zrWXZvcO"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -148,6 +249,19 @@
 		"page": 77,
 		"source": "PZO2108",
 		"id": "f14d647d-6745-472e-bc2d-cd76d33ef2d2",
-		"aonId": 0
+		"aonId": 2961,
+		"pf2t": {
+			"name": "Master Summoner Spellcasting",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Summoner",
+			"source": "Secrets of Magic pg. 77",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2961",
+			"aon": "feats2961",
+			"type": "feat",
+			"body": "**Archetype** Summoner\n**Prerequisites** Expert Summoner Spellcasting; legendary in the skill associated with your eidolon's tradition\n\n- - -\n\nYou gain the master bounded spellcasting benefits.",
+			"hash": "ORrMmnyT"
+		}
 	}
 ]

@@ -34,7 +34,23 @@
 		"traits": [ "Enchantment", "Incapacitation", "Mental" ],
 		"focus": false,
 		"id": "5a2514c3-83ec-4d41-b83b-66006db1be96",
-		"hash": "qkPBzhhA"
+		"pf2t": {
+			"name": "Uncontrollable Dance",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "enchantment,incapacitation,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 379 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=347",
+			"aon": "spells347",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nThe target is overcome with an all-consuming urge to dance. For the duration of the spell, the target is flat-footed and can't use reactions. While affected, the creature can't use actions with the move trait except to dance, using the Stride action to move up to half its Speed.\n\n**Critical Success** The target is unaffected.\n**Success** The spell's duration is 3 rounds, and the target must spend at least 1 action each turn dancing.\n**Failure** The spell's duration is 1 minute, and the target must spend at least 2 actions each turn dancing.\n**Critical Failure** The spell's duration is 1 minute, and the target must spend all its actions each turn dancing.",
+			"hash": "qkPBzhhA"
+		}
 	},
 	{
 		"aonId": 348,
@@ -56,7 +72,22 @@
 		"traits": [ "Uncommon", "Abjuration" ],
 		"focus": false,
 		"id": "a86171fb-9fa4-431b-adac-ce8d06a983da",
-		"hash": "tWZdRtTU"
+		"pf2t": {
+			"name": "Undetectable Alignment",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration",
+			"traditions": "divine,occult",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": "touch",
+			"source": "Core Rulebook pg. 379 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=348",
+			"aon": "spells348",
+			"type": "spell",
+			"body": "**Duration** until the next time you make your daily preparations\n**Targets** 1 creature or object\n\n- - -\n\nYou shroud a creature or object in wards that hide its alignment. The target appears to be neutral to all effects that would detect its alignment.",
+			"hash": "tWZdRtTU"
+		}
 	},
 	{
 		"aonId": 349,
@@ -94,7 +125,23 @@
 		"traits": [ "Auditory", "Emotion", "Enchantment", "Fear", "Incapacitation", "Mental" ],
 		"focus": false,
 		"id": "92b65bee-cffe-415c-9f29-8438ce9c966e",
-		"hash": "kAQDtjRK"
+		"pf2t": {
+			"name": "Unfathomable Song",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "auditory,emotion,enchantment,fear,incapacitation,mental",
+			"traditions": "occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 379 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=349",
+			"aon": "spells349",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** up to 5 creatures\n\n- - -\n\nFleeting notes of a strange and unnatural song fill the air, overtaking the mind. Each target must attempt a Will save when you cast the spell, and again the first time you Sustain the Spell each round. A creature needs to attempt only one save against the song each round, and you have to keep the same targets when you Sustain the Spell.\n\n**Critical Success** The target is unaffected, can't be affected on subsequent rounds, and is temporarily immune for 1 minute.\n**Success** The target is unaffected this round, but it can be affected on subsequent rounds.\n**Failure** Roll 1d4 on the table below.\n**Critical Failure** Roll 1d4+1 on the table below.\n\n**Unfathomable Song**\n\n**Result** | **Effect**\n--- | ---\n1 | The target is frightened 2.\n2 | The target is confused for 1 round.\n3 | The target is stupefied 4 for 1 round.\n4 | The target is blinded for 1 round.\n5 | The target is stunned for 1 round and stupefied 1 for an unlimited duration.",
+			"hash": "kAQDtjRK"
+		}
 	},
 	{
 		"aonId": 350,
@@ -119,7 +166,22 @@
 		"traits": [ "Abjuration" ],
 		"focus": false,
 		"id": "2a2d1ae5-4108-43be-837a-2a13ed1821f1",
-		"hash": "ZgExnwlP"
+		"pf2t": {
+			"name": "Unfettered Pack",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "abjuration",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 379 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=350",
+			"aon": "spells350",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n**Targets** up to 10 creatures\n\n- - -\n\nYou free those who travel alongside you from environmental hindrances. Targets don't take circumstance penalties to Speed from vegetation, rubble, winds, or other properties of the environment, whether or not the environment is magical, and they ignore difficult terrain from such environmental properties.\n- - -\n**Heightened (9th)** The targets also ignore greater difficult terrain from environmental properties.",
+			"hash": "ZgExnwlP"
+		}
 	},
 	{
 		"aonId": 351,
@@ -145,7 +207,22 @@
 		"traits": [ "Divination", "Scrying" ],
 		"focus": false,
 		"id": "9fc1cb7b-a6da-47ff-b991-b2b9943a3346",
-		"hash": "ZKFrOIvT"
+		"pf2t": {
+			"name": "Unrelenting Observation",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "divination,scrying",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 100,
+			"source": "Core Rulebook pg. 379 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=351",
+			"aon": "spells351",
+			"type": "spell",
+			"body": "**Area** 20-foot burst\n**Duration** varies\n**Targets** 1 creature or object tracked and up to 5 other willing creatures\n\n- - -\n\nThis spell grants perfect sight based on scrying, allowing several willing targets to track the exact movements or position of one creature or object. Choose one target creature or object in the area to be tracked. It becomes the sensor for the spell. Up to five willing creatures of your choice in the area can see a ghostly image of this creature or object when it's out of their sight. They can perceive the creature or object perfectly, allowing them to ignore the concealed or invisible condition, though physical barriers still provide cover.\n\nThe tracking creatures can see the tracked creature or object through all barriers other than lead or running water, which block their vision. Distance doesn't matter, though the creature or object might move so far away it becomes too small to perceive. The tracking creatures don't see any of the environment around the target, though they do see any gear a creature is wearing or holding, and they can tell if it removes objects from its person.\n\nIf the target to be tracked is willing, the duration is 1 hour. If you try to track an unwilling creature, the target must attempt a Will save.\n\n**Critical Success** The creature or object is unaffected.\n**Success** As described, and the duration is 1 minute.\n**Failure** As described, and the duration is 1 hour.",
+			"hash": "ZKFrOIvT"
+		}
 	},
 	{
 		"aonId": 352,
@@ -199,6 +276,21 @@
 		"focus": false,
 		"heightened": [],
 		"id": "1f127182-6738-4049-8b47-6892a1117f68",
-		"hash": "vpwqcbpX"
+		"pf2t": {
+			"name": "Unseen Servant",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 60,
+			"source": "Core Rulebook pg. 380 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=352",
+			"aon": "spells352",
+			"type": "spell",
+			"body": "**Duration** sustained\n\n- - -\n\nYou summon an unseen servant, which you can command as part of Sustaining the Spell. It serves you until its Hit Points are reduced to 0, at which point the spell ends, or until you stop Sustaining the Spell. The unseen servant gains the summoned trait.",
+			"hash": "vpwqcbpX"
+		}
 	}
 ]

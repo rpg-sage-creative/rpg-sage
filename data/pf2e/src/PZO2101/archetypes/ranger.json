@@ -9,7 +9,16 @@
 		"source": "PZO2101",
 		"id": "f32f2efc-701f-4209-903b-6ecb3563ca60",
 		"aonId": 9,
-		"hash": "tVXDzhNI"
+		"pf2t": {
+			"name": "Ranger",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 228 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=9",
+			"aon": "archetypes9",
+			"type": "archetype",
+			"body": "You have studied hunting, tracking, and wilderness survival, adding a ranger's tools to your skill set.",
+			"hash": "tVXDzhNI"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -42,7 +51,19 @@
 		"source": "PZO2101",
 		"id": "106bb857-16d6-4518-9ea6-9ac71d88dedc",
 		"aonId": 723,
-		"hash": "AEOlQznY"
+		"pf2t": {
+			"name": "Basic Hunter's Trick",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Ranger",
+			"source": "Core Rulebook pg. 228 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=723",
+			"aon": "feats723",
+			"type": "feat",
+			"body": "**Archetype** Ranger\n**Prerequisites** Ranger Dedication\n\n- - -\n\nYou gain a 1st- or 2nd-level ranger feat.\n\n#### Basic Hunter's Trick Leads To...\nAdvanced Hunter's Trick",
+			"hash": "AEOlQznY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -60,7 +81,19 @@
 		"source": "PZO2101",
 		"id": "ba599ef8-792d-4cc7-9d65-6e0fb88b3330",
 		"aonId": 724,
-		"hash": "KxQXpykR"
+		"pf2t": {
+			"name": "Ranger Resiliency",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Ranger",
+			"source": "Core Rulebook pg. 228 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=724",
+			"aon": "feats724",
+			"type": "feat",
+			"body": "**Archetype** Ranger\n**Prerequisites** Ranger Dedication; class granting no more Hit Points per level than 8 + your Constitution modifier\n\n- - -\n\nYou gain 3 additional Hit Points for each ranger archetype class feat you have. As you continue selecting ranger archetype class feats, you continue to gain additional Hit Points in this way.",
+			"hash": "KxQXpykR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -80,7 +113,19 @@
 		"source": "PZO2101",
 		"id": "120a747a-f2db-4a15-b3d0-0d2f56f95fda",
 		"aonId": 725,
-		"hash": "EcvNYxzR"
+		"pf2t": {
+			"name": "Advanced Hunter's Trick",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Ranger",
+			"source": "Core Rulebook pg. 228 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=725",
+			"aon": "feats725",
+			"type": "feat",
+			"body": "**Archetype** Ranger\n**Prerequisites** Basic Hunter's Trick\n\n- - -\n\nYou gain one ranger feat. For the purpose of meeting its prerequisites, your ranger level is equal to half your character level.",
+			"hash": "EcvNYxzR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -94,7 +139,6 @@
 		"page": 228,
 		"source": "PZO2101",
 		"id": "2cc6fb72-9a2d-4c24-bc55-079ffe259596",
-		"aonId": 3124,
-		"hash": "yBxXXptj"
+		"aonId": 3124
 	}
 ]

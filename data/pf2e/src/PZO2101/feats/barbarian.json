@@ -9,7 +9,19 @@
 		"source": "PZO2101",
 		"aonId": 130,
 		"id": "08fa5c9a-b6dd-4ad1-9346-3d42e78151dd",
-		"hash": "kxNprXlQ"
+		"pf2t": {
+			"name": "Acute Vision",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "barbarian",
+			"source": "Core Rulebook pg. 88 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=130",
+			"aon": "feats130",
+			"type": "feat",
+			"subtype": "class",
+			"body": "When you are raging, your visual senses improve, granting you darkvision.\n\n#### Acute Vision Leads To...\nAcute Scent",
+			"hash": "kxNprXlQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -21,7 +33,20 @@
 		"source": "PZO2101",
 		"aonId": 131,
 		"id": "296a0aae-ccc8-438f-ab1d-8abc069c7817",
-		"hash": "xhDvUvbF"
+		"pf2t": {
+			"name": "Moment of Clarity",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "barbarian,concentrate,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 88 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=131",
+			"aon": "feats131",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You push back your rage for a moment in order to think clearly. Until the end of this turn, you can use actions with the concentrate trait even if those actions don't have the rage trait.",
+			"hash": "xhDvUvbF"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -33,7 +58,19 @@
 		"source": "PZO2101",
 		"aonId": 132,
 		"id": "bd78954e-e239-4229-8435-f963578bc5a0",
-		"hash": "xZkkPJxq"
+		"pf2t": {
+			"name": "Raging Intimidation",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "barbarian",
+			"source": "Core Rulebook pg. 88 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=132",
+			"aon": "feats132",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Your fury fills your foes with fear. While you are raging, your Demoralize and Scare to Death actions (from the Intimidation skill and an Intimidation skill feat, respectively) gain the rage trait, allowing you to use them while raging. As soon as you meet the prerequisites for the skill feats Intimidating Glare and Scare to Death, you gain these feats.",
+			"hash": "xZkkPJxq"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -45,7 +82,19 @@
 		"source": "PZO2101",
 		"aonId": 133,
 		"id": "58ebe7dd-f205-40e3-a136-6aec1951f3c6",
-		"hash": "QznAJXKf"
+		"pf2t": {
+			"name": "Raging Thrower",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "barbarian",
+			"source": "Core Rulebook pg. 88 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=133",
+			"aon": "feats133",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Thrown weapons become especially deadly in your fury. You apply the additional damage from Rage to your thrown weapon attacks. If you have the Brutal Critical feat or the devastator class feature, apply their benefits to thrown weapon attacks.",
+			"hash": "QznAJXKf"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -57,7 +106,20 @@
 		"source": "PZO2101",
 		"aonId": 134,
 		"id": "15810924-1a93-4339-b2d9-75f95b18cc5d",
-		"hash": "SbODXTXR"
+		"pf2t": {
+			"name": "Sudden Charge",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "barbarian,fighter,flourish,open",
+			"actions": 2,
+			"source": "Core Rulebook pg. 88 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=134",
+			"aon": "feats134",
+			"type": "feat",
+			"subtype": "class",
+			"body": "With a quick sprint, you dash up to your foe and swing. Stride twice. If you end your movement within melee reach of at least one enemy, you can make a melee Strike against that enemy. You can use Sudden Charge while Burrowing, Climbing, Flying, or Swimming instead of Striding if you have the corresponding movement type.",
+			"hash": "SbODXTXR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -69,7 +131,19 @@
 		"source": "PZO2101",
 		"aonId": 135,
 		"id": "3935f02d-2650-40ec-b695-406c645ff5bc",
-		"hash": "yLTBIpcP"
+		"pf2t": {
+			"name": "Acute Scent",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "barbarian",
+			"source": "Core Rulebook pg. 88 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=135",
+			"aon": "feats135",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Acute Vision or darkvision\n\n- - -\n\nWhen you Rage, your sense of smell improves. You gain imprecise scent with a range of 30 feet.\n\n#### Acute Scent Leads To...\nInstinctive Strike, Nocturnal Sense, Supernatural Senses",
+			"hash": "yLTBIpcP"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -81,7 +155,20 @@
 		"source": "PZO2101",
 		"aonId": 136,
 		"id": "41bd1fd7-45d9-4878-a36b-d8272ea5413d",
-		"hash": "vrlngUAm"
+		"pf2t": {
+			"name": "Furious Finish",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "barbarian,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 89 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=136",
+			"aon": "feats136",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Desperate to finish the fight, you pour all your rage into one final blow. Make a Strike. If it hits, you gain a circumstance bonus to damage equal to the number of rounds remaining in your Rage (maximum 10). After this Strike, your Rage immediately ends, and you are fatigued until you rest for at least 10 minutes.",
+			"hash": "vrlngUAm"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -93,7 +180,20 @@
 		"source": "PZO2101",
 		"aonId": 137,
 		"id": "93ac0793-e198-470d-93ca-4d05cf24f9f2",
-		"hash": "vAmrtkAL"
+		"pf2t": {
+			"name": "No Escape",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "barbarian,rage",
+			"actions": "r",
+			"source": "Core Rulebook pg. 89 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=137",
+			"aon": "feats137",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Trigger** A foe within reach attempts to move away from you.\n\n- - -\n\nYou keep pace with a retreating foe. Stride up to your Speed, following the foe and keeping it in reach throughout its movement until it stops moving or you've moved your full Speed. You can use No Escape to Burrow, Climb, Fly, or Swim instead of Stride if you have the corresponding movement type.",
+			"hash": "vAmrtkAL"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -105,7 +205,19 @@
 		"source": "PZO2101",
 		"aonId": 138,
 		"id": "7ec87dc1-d8ae-4339-b435-da665ef3a1bf",
-		"hash": "gISTHdSV"
+		"pf2t": {
+			"name": "Second Wind",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "barbarian",
+			"source": "Core Rulebook pg. 89 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=138",
+			"aon": "feats138",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You can enter a second rage, but afterward you need to catch your breath. You can Rage without waiting for 1 minute after the previous Rage (or 1 round, with quick rage), but when you end this second Rage, you're fatigued until you rest for 10 minutes.",
+			"hash": "gISTHdSV"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -117,7 +229,20 @@
 		"source": "PZO2101",
 		"aonId": 139,
 		"id": "c4280315-cb13-43d4-98d2-b86587414a80",
-		"hash": "XwzfpVzy"
+		"pf2t": {
+			"name": "Shake it Off",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "barbarian,concentrate,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 89 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=139",
+			"aon": "feats139",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You concentrate on your rage, overcoming fear and fighting back sickness. Reduce your frightened condition value by 1, and attempt a Fortitude save to recover from the sickened condition as if you had spent an action retching; you reduce your sickened condition value by 1 on a failure (but not on a critical failure), by 2 on a success, or by 3 on a critical success.",
+			"hash": "XwzfpVzy"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +254,19 @@
 		"source": "PZO2101",
 		"aonId": 140,
 		"id": "1fa30b8a-56ac-402a-a1c0-b4ec61fb20a2",
-		"hash": "yttckwOK"
+		"pf2t": {
+			"name": "Fast Movement",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "barbarian",
+			"source": "Core Rulebook pg. 89 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=140",
+			"aon": "feats140",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Your rage is a frenzy of rapid movements. While you are raging, you gain a +10-foot status bonus to your Speed.",
+			"hash": "yttckwOK"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -141,7 +278,19 @@
 		"source": "PZO2101",
 		"aonId": 141,
 		"id": "1b7dc03e-b940-4b4b-8367-48a29635a428",
-		"hash": "OUAvjcUQ"
+		"pf2t": {
+			"name": "Raging Athlete",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "barbarian",
+			"source": "Core Rulebook pg. 89 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=141",
+			"aon": "feats141",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** expert in Athletics\n\n- - -\n\nPhysical obstacles can't hold back your fury. While you are raging, you gain a climb Speed and swim Speed equal to your land Speed and the DC of High Jumps and Long Jumps decreases by 10. Your distance for a vertical Leap increases to 5 feet vertically, and your distance for a horizontal Leap increases to 15 feet if your Speed is at least 15 feet and to 20 feet if your Speed is at least 30 feet.",
+			"hash": "OUAvjcUQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -153,7 +302,20 @@
 		"source": "PZO2101",
 		"aonId": 142,
 		"id": "e3064d00-b54e-4bba-aecd-2de44c930b3b",
-		"hash": "ZzFgxsck"
+		"pf2t": {
+			"name": "Swipe",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "barbarian,fighter,flourish",
+			"actions": 2,
+			"source": "Core Rulebook pg. 89 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=142",
+			"aon": "feats142",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You make a wide, arcing swing. Make a single melee Strike and compare the attack roll result to the ACs of up to two foes, each of whom must be within your melee reach and adjacent to the other. Roll damage only once and apply it to each creature you hit. A Swipe counts as two attacks for your multiple attack penalty. If you're using a weapon with the sweep trait, its modifier applies to all your Swipe attacks.",
+			"hash": "ZzFgxsck"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -165,7 +327,20 @@
 		"source": "PZO2101",
 		"aonId": 143,
 		"id": "1f44c687-76de-42ef-a4ff-8362ca745e71",
-		"hash": "OHbqjQYz"
+		"pf2t": {
+			"name": "Wounded Rage",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "barbarian",
+			"actions": "r",
+			"source": "Core Rulebook pg. 90 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=143",
+			"aon": "feats143",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Trigger** You take damage and are capable of entering a rage.\n\n- - -\n\nYou roar in pain, awakening the rage within you. You Rage.",
+			"hash": "OHbqjQYz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -177,7 +352,19 @@
 		"source": "PZO2101",
 		"aonId": 144,
 		"id": "5900ceae-a829-4ed4-a254-da21c9231649",
-		"hash": "zShRvQQZ"
+		"pf2t": {
+			"name": "Animal Skin",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "barbarian,instinct,morph,primal,transmutation",
+			"source": "Core Rulebook pg. 90 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=144",
+			"aon": "feats144",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** animal instinct\n\n- - -\n\nYour proficiency in unarmored defense increases to expert. When you are raging and unarmored, your skin transforms into a thick hide. You gain a +2 item bonus to AC (+3 if you have the greater juggernaut class feature). The thickness of your hide gives you a Dexterity modifier cap to your AC of +3. This item bonus to AC is cumulative with armor potency runes on your explorer's clothing, mage armor, and bracers of armor.",
+			"hash": "zShRvQQZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -200,7 +387,19 @@
 		"source": "PZO2101",
 		"aonId": 146,
 		"id": "b5b844d3-3c3a-49e0-ab03-f70f3a76230d",
-		"hash": "WGmQOVvx"
+		"pf2t": {
+			"name": "Brutal Bully",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "barbarian",
+			"source": "Core Rulebook pg. 90 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=146",
+			"aon": "feats146",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** expert in Athletics\n\n- - -\n\nYou push your foes around and leave bruises. While raging, when you successfully Disarm, Grapple, Shove, or Trip a foe, you deal that foe bludgeoning damage equal to your Strength modifier; add this to the damage from a critical success to Trip.",
+			"hash": "WGmQOVvx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -212,7 +411,20 @@
 		"source": "PZO2101",
 		"aonId": 147,
 		"id": "da0014a3-1dfe-4188-8d5c-caa3f200d792",
-		"hash": "wNqmFrOp"
+		"pf2t": {
+			"name": "Cleave",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "barbarian,rage",
+			"actions": "r",
+			"source": "Core Rulebook pg. 90 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=147",
+			"aon": "feats147",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Trigger** Your melee Strike kills a creature or knocks it unconscious, and another foe is adjacent to that creature.\n\n- - -\n\nYou swing clear through one foe and into another. Make a melee Strike against the second foe.\n\n#### Cleave Leads To...\nGreat Cleave",
+			"hash": "wNqmFrOp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -224,7 +436,20 @@
 		"source": "PZO2101",
 		"aonId": 148,
 		"id": "3900aa1f-356b-482f-9a48-8660584aa32d",
-		"hash": "BLkHnRgS"
+		"pf2t": {
+			"name": "Dragon's Rage Breath",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "arcane,barbarian,concentrate,evocation,instinct,rage",
+			"actions": 2,
+			"source": "Core Rulebook pg. 90 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=148",
+			"aon": "feats148",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** dragon instinct\n**Requirements** You haven't used this ability since you last Raged.\n\n- - -\n\nYou breathe deeply and exhale powerful energy in a 30-foot cone or 60-foot line, dealing 1d6 damage per level. The area and damage type match those of your dragon (see Table 3-4. If you used this ability in the last hour, the area and the damage are halved (15-foot cone or 30-foot line; 1d6 damage for every 2 levels). Each creature in the area must attempt a basic Reflex save.\n\n**Table 3-4: Dragon Instincts**\n\n**Dragon Type** | **Breath Weapon**\n--- | --- | ---\nBlack | Chromatic | Line of acid\nBlue | Chromatic | Line of electricity\nGreen | Chromatic | Cone of poison\nRed | Chromatic | Cone of fire\nWhite | Chromatic | Cone of cold\nBrass | Metallic | Line of fire\nBronze | Metallic | Line of electricity\nCopper | Metallic | Line of acid\nGold | Metallic | Cone of fire\nSilver | Metallic | Cone of cold",
+			"hash": "BLkHnRgS"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -236,7 +461,20 @@
 		"source": "PZO2101",
 		"aonId": 149,
 		"id": "5eb61064-a307-4be7-b300-b49057249c32",
-		"hash": "AyKnIVZG"
+		"pf2t": {
+			"name": "Giant's Stature",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "barbarian,instinct,polymorph,primal,rage,transmutation",
+			"actions": 1,
+			"source": "Core Rulebook pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=149",
+			"aon": "feats149",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** giant instinct\n**Requirements** You are Medium or smaller.\n\n- - -\n\nYou grow to incredible size. You become Large, increasing your reach by 5 feet and gaining the clumsy 1 condition until you stop raging. Your equipment grows with you.\n\n#### Giant's Stature Leads To...\nTitan's Stature",
+			"hash": "AyKnIVZG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -248,7 +486,20 @@
 		"source": "PZO2101",
 		"aonId": 150,
 		"id": "5beb9631-14b4-42a6-aff4-c5688ef6e395",
-		"hash": "QkxLlttQ"
+		"pf2t": {
+			"name": "Spirits' Interference",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "barbarian,divine,instinct,necromancy,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=150",
+			"aon": "feats150",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** spirit instinct\n\n- - -\n\nYou call forth protective spirits to ward off ranged attacks. Until your rage ends, anyone making a ranged attack against you must succeed at a DC 5 flat check or the attack misses with no effect.",
+			"hash": "QkxLlttQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -260,7 +511,20 @@
 		"source": "PZO2101",
 		"aonId": 151,
 		"id": "cbec287a-b9e9-49a4-836e-daf273667b1c",
-		"hash": "plqlRgwA"
+		"pf2t": {
+			"name": "Animal Rage",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "barbarian,concentrate,instinct,polymorph,primal,rage,transmutation",
+			"actions": 1,
+			"source": "Core Rulebook pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=151",
+			"aon": "feats151",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** animal instinct\n\n- - -\n\nYou transform into your animal. You gain the effects of the 3rd-level animal form spell except you use your own statistics, temporary Hit Points, and unarmed attacks instead of those granted by animal form. You also retain the constant abilities of your gear. If your animal is a frog, your tongue's reach increases to 15 feet. Dismissing the transformation gains the rage trait.",
+			"hash": "plqlRgwA"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -272,7 +536,19 @@
 		"source": "PZO2101",
 		"aonId": 152,
 		"id": "63bc6f69-5f22-434a-97d1-3a85e7222e08",
-		"hash": "BVnTTVzZ"
+		"pf2t": {
+			"name": "Furious Bully",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "barbarian",
+			"source": "Core Rulebook pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=152",
+			"aon": "feats152",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** master in Athletics\n\n- - -\n\nYou bully foes across the battlefield. While raging, you gain a +2 circumstance bonus to Athletics checks for attack actions.",
+			"hash": "BVnTTVzZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -284,7 +560,20 @@
 		"source": "PZO2101",
 		"aonId": 153,
 		"id": "f2c5d16f-b1f0-4a63-8a9a-25d239fd3414",
-		"hash": "zXcyzFkV"
+		"pf2t": {
+			"name": "Renewed Vigor",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "barbarian,concentrate,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=153",
+			"aon": "feats153",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You pause to recover your raging vigor. You gain temporary Hit Points equal to half your level plus your Constitution modifier.",
+			"hash": "zXcyzFkV"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -296,7 +585,20 @@
 		"source": "PZO2101",
 		"aonId": 154,
 		"id": "a644ed8f-281c-4a11-ba4a-d12d2c61d259",
-		"hash": "GVxRZkxb"
+		"pf2t": {
+			"name": "Share Rage",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "auditory,barbarian,rage,visual",
+			"actions": 1,
+			"source": "Core Rulebook pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=154",
+			"aon": "feats154",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Requirements** You haven't used this ability since you last Raged.\n\n- - -\n\nYou stoke an ally's fury. While you are raging, one willing creature within 30 feet gains the effects of the Rage action, except it can still use concentrate actions.\n\n#### Share Rage Leads To...\nContagious Rage",
+			"hash": "GVxRZkxb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -308,7 +610,20 @@
 		"source": "PZO2101",
 		"aonId": 155,
 		"id": "43d43b23-6372-4718-b300-f33df473d068",
-		"hash": "BwvTqXyv"
+		"pf2t": {
+			"name": "Sudden Leap",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "barbarian,fighter",
+			"actions": 2,
+			"source": "Core Rulebook pg. 149 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=155",
+			"aon": "feats155",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You make an impressive leap and swing while you soar. Make a Leap, High Jump, or Long Jump and attempt one melee Strike at any point during your jump. Immediately after the Strike, you fall to the ground if you're in the air, even if you haven't reached the maximum distance of your jump. If the distance you fall is no more than the height of your jump, you take no damage and land upright.\n\nWhen attempting a High Jump or Long Jump during a Sudden Leap, determine the DC using the Long Jump DCs, and increase your maximum distance to double your Speed.",
+			"hash": "BwvTqXyv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -320,7 +635,20 @@
 		"source": "PZO2101",
 		"aonId": 156,
 		"id": "2beb8d1b-614e-4b0b-8e2e-eeeca5b392c8",
-		"hash": "XYvTCXRU"
+		"pf2t": {
+			"name": "Thrash",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "barbarian,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=156",
+			"aon": "feats156",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Requirements** You have a foe grabbed.\n\n- - -\n\nYou thrash the grabbed foe around. It takes bludgeoning damage equal to your Strength modifier plus your weapon specialization damage plus your Rage damage. The foe must attempt a basic Fortitude save against your class DC.\n\n#### Thrash Leads To...\nCollateral Thrash",
+			"hash": "XYvTCXRU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -332,7 +660,20 @@
 		"source": "PZO2101",
 		"aonId": 157,
 		"id": "a6bef275-61a7-400c-83c4-20d3c2b3aabd",
-		"hash": "ZvZxbrbh"
+		"pf2t": {
+			"name": "Come and Get Me",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "barbarian,concentrate,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=157",
+			"aon": "feats157",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You open yourself to attacks so you can respond in turn. Until your rage ends, you are flat-footed, and damage rolls against you gain a +2 circumstance bonus. If a creature hits you, that creature is flat-footed to you until the end of your next turn. If you hit it before the end of your next turn, you gain temporary Hit Points equal to your Constitution modifier, or double that on a critical hit. These temporary Hit Points last until the end of your rage.\n\n#### Come and Get Me Leads To...\nVengeful Strike",
+			"hash": "ZvZxbrbh"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -344,7 +685,20 @@
 		"source": "PZO2101",
 		"aonId": 158,
 		"id": "73ff167c-97e3-47fa-bd18-2803525b5e55",
-		"hash": "pZNvBZNH"
+		"pf2t": {
+			"name": "Furious Sprint",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "barbarian,rage",
+			"actions": 2,
+			"source": "Core Rulebook pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=158",
+			"aon": "feats158",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You rush forward. Stride up to five times your Speed in a straight line. You can increase the number of actions this activity takes to 3 to Stride up to eight times your Speed in a straight line instead.",
+			"hash": "pZNvBZNH"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -356,7 +710,19 @@
 		"source": "PZO2101",
 		"aonId": 159,
 		"id": "60e9093f-6516-466f-ba40-e44730437940",
-		"hash": "nbYCkcAM"
+		"pf2t": {
+			"name": "Great Cleave",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "barbarian,rage",
+			"source": "Core Rulebook pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=159",
+			"aon": "feats159",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Cleave\n\n- - -\n\nYour fury carries your weapon through multiple foes. When you Cleave, if your Strike also kills or knocks the target unconscious, you can continue to make melee Strikes until you make a Strike that doesn't kill or knock a creature unconscious, or until there are no creatures adjacent to the most recent creature you attacked while Cleaving, whichever comes first.",
+			"hash": "nbYCkcAM"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -368,7 +734,20 @@
 		"source": "PZO2101",
 		"aonId": 160,
 		"id": "30585ae2-962e-4919-9635-a588d94e75a6",
-		"hash": "kTkQvXFQ"
+		"pf2t": {
+			"name": "Knockback",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "barbarian,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=160",
+			"aon": "feats160",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Requirements** Your last action was a successful Strike.\n\n- - -\n\nThe weight of your swing drives your enemy back. You push the foe back 5 feet, with the effects of a successful Shove. You can follow the foe as normal for a successful Shove.\n\n#### Knockback Leads To...\nAwesome Blow",
+			"hash": "kTkQvXFQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -380,7 +759,20 @@
 		"source": "PZO2101",
 		"aonId": 161,
 		"id": "8bc79aa7-1812-4dae-a7b5-f4d2ccef26b6",
-		"hash": "XQRZWdrx"
+		"pf2t": {
+			"name": "Terrifying Howl",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "auditory,barbarian,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=161",
+			"aon": "feats161",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Intimidating Glare\n\n- - -\n\nYou unleash a terrifying howl. Attempt Intimidate checks to Demoralize each enemy within 30 feet. Regardless of the results of your checks, each creature is then temporarily immune to Terrifying Howl for 1 minute.",
+			"hash": "XQRZWdrx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -392,7 +784,20 @@
 		"source": "PZO2101",
 		"aonId": 162,
 		"id": "908712e0-0bbb-4e0b-98fe-89a671280bc3",
-		"hash": "hQXUhAzU"
+		"pf2t": {
+			"name": "Dragon's Rage Wings",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "barbarian,instinct,morph,primal,rage,transmutation",
+			"actions": 1,
+			"source": "Core Rulebook pg. 92 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=162",
+			"aon": "feats162",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** dragon instinct\n\n- - -\n\nYou sprout dragon wings from your back of the same color as your chosen dragon. While you are raging, you gain a fly Speed equal to your land Speed. If you are flying when your rage ends, you start to fall but the transformation only completes at the last moment, so you take no damage from the fall and land standing up.\n\n#### Dragon's Rage Wings Leads To...\nDragon Transformation",
+			"hash": "hQXUhAzU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -404,7 +809,20 @@
 		"source": "PZO2101",
 		"aonId": 163,
 		"id": "4eb6c943-c977-404a-a5c7-00adedb54872",
-		"hash": "XZXZkjGk"
+		"pf2t": {
+			"name": "Furious Grab",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "barbarian,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 92 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=163",
+			"aon": "feats163",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Requirements** Your last action was a successful Strike, and either you have a hand free or your Strike used a grapple weapon.\n\n- - -\n\nYou grab your foe while it's distracted by your attack. The foe you hit becomes grabbed, as if you had succeeded at an Athletics check to Grapple the foe.",
+			"hash": "XZXZkjGk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -416,7 +834,20 @@
 		"source": "PZO2101",
 		"aonId": 164,
 		"id": "79583a91-ef1a-4b49-ab71-29113aaa7a4b",
-		"hash": "WAqARFgM"
+		"pf2t": {
+			"name": "Predator's Pounce",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "barbarian,flourish,instinct,open,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 92 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=164",
+			"aon": "feats164",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** animal instinct\n**Requirements** You are unarmored or wearing light armor.\n\n- - -\n\nYou close the distance to your prey in a blur, pouncing on the creature before it can react. You Stride up to your Speed and make a Strike at the end of your movement.",
+			"hash": "WAqARFgM"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -428,7 +859,20 @@
 		"source": "PZO2101",
 		"aonId": 165,
 		"id": "a58ada2a-74bd-4588-bb39-0bfeb348d421",
-		"hash": "LHpLEkzB"
+		"pf2t": {
+			"name": "Spirit's Wrath",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "attack,barbarian,concentrate,instinct,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 92 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=165",
+			"aon": "feats165",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** spirit instinct\n\n- - -\n\nYou call forth an ephemeral apparition, typically the ghost of an ancestor or a nature spirit, which takes the form of a wisp. The spirit wisp makes a melee wisp rush unarmed attack against an enemy within 120 feet of you. The wisp's attack modifier is equal to your proficiency bonus for martial weapons plus your Strength modifier plus a +2 item bonus, and it applies the same circumstance and status bonuses and penalties that you have. On a hit, the wisp deals damage equal to 4d8 plus your Constitution modifier. The damage is your choice of negative or positive damage; don't apply your Rage damage or your weapon specialization damage, but circumstance and status bonuses and penalties that would also affect the wisp's damage apply. If your wisp's Strike is a critical hit, the target becomes frightened 1. This attack uses and counts toward your multiple attack penalty as if you were the one attacking.",
+			"hash": "LHpLEkzB"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -443,7 +887,19 @@
 		"source": "PZO2101",
 		"aonId": 166,
 		"id": "08dd26c1-28b7-4db8-862d-fab1794daeca",
-		"hash": "JgXJbVSR"
+		"pf2t": {
+			"name": "Titan's Stature",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "barbarian,instinct,polymorph,transmutation",
+			"source": "Core Rulebook pg. 92 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=166",
+			"aon": "feats166",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** giant instinct; Giant's Stature\n\n- - -\n\nYou grow to even greater size. When using Giant's Stature, you can instead become Huge (increasing your reach by 10 feet if you were Medium or smaller) while you are raging. You have the clumsy 1 condition as long as you are Huge.",
+			"hash": "JgXJbVSR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -455,7 +911,19 @@
 		"source": "PZO2101",
 		"aonId": 167,
 		"id": "2be46a42-0919-4ec9-bcb0-20a6b96cb1fe",
-		"hash": "xZzjGpOY"
+		"pf2t": {
+			"name": "Awesome Blow",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "barbarian,concentrate,rage",
+			"source": "Core Rulebook pg. 93 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=167",
+			"aon": "feats167",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Knockback\n\n- - -\n\nYour attacks are so powerful, they can flatten your opponents. When you use Knockback, you can attempt an Athletics check against your target's Fortitude DC.\n\n**Critical Success** You gain the critical success effect of a Shove, then the critical success effect of a Trip against the target.\n**Success** You gain the success effect of a Shove, then the success effect of a Trip against the target.\n**Failure** You gain the normal effect of Knockback.",
+			"hash": "xZzjGpOY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -467,7 +935,20 @@
 		"source": "PZO2101",
 		"aonId": 168,
 		"id": "1250b11b-d819-4471-ac59-baf063e25287",
-		"hash": "XYcTwgch"
+		"pf2t": {
+			"name": "Giant's Lunge",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "barbarian,concentrate,instinct,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 93 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=168",
+			"aon": "feats168",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** giant instinct\n\n- - -\n\nYou extend your body and prepare to attack foes outside your normal reach. Until your rage ends, all your melee weapons and unarmed attacks gain reach 10. This doesn't increase the reach of any weapon or unarmed attack that already has the reach trait, but it does combine with abilities that increase your reach due to increased size, such as Giant's Stature.",
+			"hash": "XYcTwgch"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -479,7 +960,20 @@
 		"source": "PZO2101",
 		"aonId": 169,
 		"id": "17f44714-adf5-4608-a025-117d6c78df00",
-		"hash": "sbOTQQqr"
+		"pf2t": {
+			"name": "Vengeful Strike",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "barbarian,rage",
+			"actions": "r",
+			"source": "Core Rulebook pg. 93 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=169",
+			"aon": "feats169",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Come and Get Me\n**Requirements** You're under the effect of Come and Get Me.\n**Trigger** A creature within your reach succeeds or critically succeeds at an attack against you.\n\n- - -\n\nWhen struck by an enemy, you respond in turn. Make a melee Strike against the triggering creature. This Strike doesn't count toward your multiple attack penalty, and your multiple attack penalty doesn't apply to this Strike.",
+			"hash": "sbOTQQqr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -491,7 +985,20 @@
 		"source": "PZO2101",
 		"aonId": 170,
 		"id": "d5b33ca0-23ec-45e7-8729-b1a946ec3baa",
-		"hash": "qxqltJLC"
+		"pf2t": {
+			"name": "Whirlwind Strike",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "barbarian,fighter,flourish,open",
+			"actions": 3,
+			"source": "Core Rulebook pg. 93 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=170",
+			"aon": "feats170",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You attack all nearby adversaries. Make a melee Strike against each enemy within your melee reach. Each attack counts toward your multiple attack penalty, but do not increase your penalty until you have made all your attacks.",
+			"hash": "qxqltJLC"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -503,7 +1010,19 @@
 		"source": "PZO2101",
 		"aonId": 171,
 		"id": "74ecede2-570e-4865-a861-534c33581f41",
-		"hash": "vCIZqMrv"
+		"pf2t": {
+			"name": "Collateral Thrash",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "barbarian,rage",
+			"source": "Core Rulebook pg. 93 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=171",
+			"aon": "feats171",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Thrash\n\n- - -\n\nWhen you Thrash a grabbed foe, you smack that foe into another nearby. Another foe adjacent to the grabbed foe also takes your Thrash damage, with a basic Reflex save against your class DC.\n\n#### Collateral Thrash Leads To...\nWhirlwind Toss",
+			"hash": "vCIZqMrv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -518,7 +1037,20 @@
 		"source": "PZO2101",
 		"aonId": 172,
 		"id": "4ab579f4-069c-4066-920c-d0a233c1da12",
-		"hash": "HZOFCGGt"
+		"pf2t": {
+			"name": "Dragon Transformation",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "barbarian,concentrate,instinct,polymorph,primal,rage,transmutation",
+			"actions": 1,
+			"source": "Core Rulebook pg. 93 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=172",
+			"aon": "feats172",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** dragon instinct; Dragon's Rage Wings\n\n- - -\n\nYou transform into a ferocious Large dragon, gaining the effects of 6th-level dragon form except that you use your own AC and attack modifier, you apply your extra damage from Rage, and the Breath Weapon uses your class DC. The action to Dismiss the transformation gains the rage trait.\n\nAt 18th level, you gain a +20-foot status bonus to your fly Speed, your damage bonus with dragon Strikes increases to +12, and you gain a +14 status bonus to your breath weapon damage.",
+			"hash": "HZOFCGGt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -530,7 +1062,20 @@
 		"source": "PZO2101",
 		"aonId": 173,
 		"id": "adcea957-e1ce-43b8-b449-7414a09e21e7",
-		"hash": "hILXgbSY"
+		"pf2t": {
+			"name": "Reckless Abandon",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "barbarian,rage",
+			"actions": 0,
+			"source": "Core Rulebook pg. 93 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=173",
+			"aon": "feats173",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Trigger** Your turn begins, and you are at half or fewer Hit Points.\n\n- - -\n\nYour blood boils when you take a beating, and you throw caution to the wind to finish the fight. You gain a +2 circumstance bonus to attack rolls, a -2 penalty to AC, and a -1 penalty to saves. These bonuses and penalties last until your Rage ends or until you are above half Hit Points, whichever comes first.",
+			"hash": "hILXgbSY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -542,7 +1087,19 @@
 		"source": "PZO2101",
 		"aonId": 174,
 		"id": "b8ffc49e-42e1-44e5-9fc1-4aa135287978",
-		"hash": "DRjzZbhf"
+		"pf2t": {
+			"name": "Brutal Critical",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "barbarian",
+			"source": "Core Rulebook pg. 93 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=174",
+			"aon": "feats174",
+			"type": "feat",
+			"subtype": "class",
+			"body": "Your critical hits are particularly devastating. On a critical hit with a melee Strike, add one extra damage die. This is in addition to any extra dice you gain if the weapon is deadly or fatal. The target also takes persistent bleed damage equal to two damage dice.",
+			"hash": "DRjzZbhf"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -554,7 +1111,20 @@
 		"source": "PZO2101",
 		"aonId": 175,
 		"id": "ab420751-6dad-45a8-b16d-c70375596887",
-		"hash": "xgAnSqAj"
+		"pf2t": {
+			"name": "Perfect Clarity",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "barbarian,concentrate,fortune,rage",
+			"actions": "r",
+			"source": "Core Rulebook pg. 93 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=175",
+			"aon": "feats175",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Trigger** You fail or critically fail an attack roll or Will save.\n\n- - -\n\nYou burn out all of your rage to ensure that your attack lands and your mind remains free. Reroll the triggering attack roll or Will save with a +2 circumstance bonus, use the better result, and resolve the effect. You then immediately stop raging.",
+			"hash": "xgAnSqAj"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -566,7 +1136,20 @@
 		"source": "PZO2101",
 		"aonId": 176,
 		"id": "429e7a2c-48ce-4825-9832-856594c02257",
-		"hash": "RZBbIPSJ"
+		"pf2t": {
+			"name": "Vicious Evisceration",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "barbarian,rage",
+			"actions": 2,
+			"source": "Core Rulebook pg. 93 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=176",
+			"aon": "feats176",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You make a vicious attack that maims your enemy. Make a melee Strike. If the Strike hits and deals damage, the target is drained 1, or drained 2 on a critical success.",
+			"hash": "RZBbIPSJ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -578,7 +1161,19 @@
 		"source": "PZO2101",
 		"aonId": 177,
 		"id": "6669accb-e744-40a4-81b6-f0c000b6b966",
-		"hash": "xSgPwfDz"
+		"pf2t": {
+			"name": "Contagious Rage",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "auditory,barbarian,rage,visual",
+			"source": "Core Rulebook pg. 93 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=177",
+			"aon": "feats177",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Share Rage\n\n- - -\n\nYou can drive your allies into a frenzy, granting them incredible benefits. You can ignore the requirements on Share Rage, using it multiple times in a Rage. Allies affected by Share Rage who accept your anathema for the duration of the Rage gain your instinct ability and the specialization ability it gains from weapon specialization, but not greater weapon specialization.",
+			"hash": "xSgPwfDz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -601,6 +1196,19 @@
 		"source": "PZO2101",
 		"aonId": 178,
 		"id": "ac2b5cf0-b717-4b2e-8dd7-146ca5ab5bbc",
-		"hash": "RXRQJRnb"
+		"pf2t": {
+			"name": "Quaking Stomp",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "barbarian,manipulate,rage",
+			"actions": 1,
+			"source": "Core Rulebook pg. 93 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=178",
+			"aon": "feats178",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You stomp the ground with such force that it creates a minor earthquake, with the effects of the earthquake spell.",
+			"hash": "RXRQJRnb"
+		}
 	}
 ]

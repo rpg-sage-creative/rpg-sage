@@ -20,7 +20,21 @@
 		"focus": true,
 		"aonId": 728,
 		"id": "178f3ef9-5682-4a67-8f14-0ead67d8a156",
-		"hash": "qSbqtJEE"
+		"pf2t": {
+			"name": "Hymn of Healing",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,bard,composition,healing,necromancy,positive",
+			"cast": "v",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 228",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=728",
+			"aon": "spells728",
+			"type": "focus",
+			"body": "**Duration** sustained up to 4 rounds\n**Targets** you or 1 ally\n\n- - -\n\nYour divine singing mends wounds and provides a temporary respite from harm. The target gains fast healing 2. When you Cast the Spell and each time you Sustain the Spell, the target gains 2 temporary Hit Points, which last for 1 round.\n- - -\n**Heightened (+1)** The fast healing and temporary Hit Points each increase by 2.",
+			"hash": "qSbqtJEE"
+		}
 	},
 	{
 		"name": "Ode to Ouroboros",
@@ -40,7 +54,21 @@
 		"focus": true,
 		"aonId": 729,
 		"id": "67c9332e-e121-4bd2-983b-e918f0704840",
-		"hash": "wgSbqCcX"
+		"pf2t": {
+			"name": "Ode to Ouroboros",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,bard,composition,necromancy",
+			"cast": "v",
+			"actions": "r",
+			"range": 60,
+			"source": "Advanced Player's Guide pg. 228",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=729",
+			"aon": "spells729",
+			"type": "focus",
+			"body": "**Trigger** a creature's dying value would reach the value at which they would die.\n**Targets** the triggering creature\n\n- - -\n\nYour ode temporarily staves off death. The target's dying condition remains 1 below the value at which it dies. This doesn't help prevent death from effects that kill the target without increasing its dying condition, such as disintegrate and death effects.",
+			"hash": "wgSbqCcX"
+		}
 	},
 	{
 		"name": "Pied Piping",
@@ -74,7 +102,21 @@
 		"focus": true,
 		"aonId": 730,
 		"id": "b8afa967-2165-4c25-a65e-7a88bef45cad",
-		"hash": "dqpWxbxW"
+		"pf2t": {
+			"name": "Pied Piping",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "uncommon,bard,composition,enchantment,incapacitation,mental,sonic",
+			"cast": "v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 228",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=730",
+			"aon": "spells730",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Area** 5-foot emanation\n**Duration** 1 minute\n\n- - -\n\nYour performance enraptures those who hear it, compelling them to follow you about in admiration. Each creature within the emanation must attempt a Will save when you Cast the Spell or the first time they enter the area, after which they become temporarily immune for 1 day. Once per turn, you can spend a single action, which has the concentrate trait, to increase the emanation's radius by 5 feet. You can Dismiss the spell.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature is fascinated with you.\n**Failure** The creature uses all its actions to move toward you and compliment your performance. This effect ends if a hostile action is used against the affected creature.\n**Critical Failure** The target gains the minion trait and is controlled by you. This effect ends if a hostile action is used against the affected creature, or if you direct the creature to use any action that causes it harm.",
+			"hash": "dqpWxbxW"
+		}
 	},
 	{
 		"name": "Song of Marching",
@@ -137,7 +179,21 @@
 		"focus": true,
 		"aonId": 733,
 		"id": "732e357c-0ba6-4387-a68b-99d0a7a19e11",
-		"hash": "PtbvkfNj"
+		"pf2t": {
+			"name": "Symphony of the Unfettered Heart",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,bard,composition",
+			"cast": "v,s",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 228",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=733",
+			"aon": "spells733",
+			"type": "focus",
+			"body": "**Targets** you or 1 ally\n\n- - -\n\nYour symphony lifts listeners from their worldly concerns. Attempt a Performance check to counteract one of the following conditions affecting the target: grabbed, immobilized, paralyzed, restrained, slowed, or stunned. If you fail, you can't target that effect on the target for 1 day. Use the condition's source to determine the counteract DC (for example, the Escape DC for grabbed).\n- - -\n**Heightened (9th)** You can target up to four creatures.",
+			"hash": "PtbvkfNj"
+		}
 	},
 	{
 		"name": "Litany of Depravity",
@@ -160,7 +216,21 @@
 		"focus": true,
 		"aonId": 734,
 		"id": "3de09318-f58d-499e-a55e-a574646e5021",
-		"hash": "jzrxrAMq"
+		"pf2t": {
+			"name": "Litany of Depravity",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "uncommon,champion,evil,evocation,litany",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 228",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=734",
+			"aon": "spells734",
+			"type": "focus",
+			"body": "**Duration** 1 round\n**Targets** 1 good creature\n\n- - -\n\nYour litany calls into question the morals your foe claims to hold dear. The target gains weakness 7 to evil, then becomes temporarily immune to all your litanies for 1 minute.\n- - -\n**Heightened (+1)** The weakness increases by 1.",
+			"hash": "jzrxrAMq"
+		}
 	},
 	{
 		"name": "Litany of Self-Interest",
@@ -192,7 +262,22 @@
 		"focus": true,
 		"aonId": 735,
 		"id": "58b26cd3-71a8-402c-af93-ff84e5f667e9",
-		"hash": "LNmlrMXN"
+		"pf2t": {
+			"name": "Litany of Self-Interest",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,champion,enchantment,evil,litany,mental",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 229",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=735",
+			"aon": "spells735",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 round\n**Targets** 1 creature\n\n- - -\n\nYou give a speech that fills your target with a drive to improve themself to the exclusion of assisting others. A creature that wants to gain the benefit of this spell and doesn't care about its limitations can voluntarily fail the save. The target then becomes temporarily immune to all your litanies for 1 minute.\n\n**Success** The target is unaffected.\n**Failure** The target gains a +2 status bonus to attack rolls, Perception checks, saving throws, and skill checks. The target can't Aid other creatures, consider any creature an ally, or use spells or abilities that directly benefit another creature (as determined by the GM), even if they also benefit the target. Other creatures allied with the spell's target can still consider the target an ally and affect it accordingly.\n- - -\n**Heightened (8th)** The status bonus increases to +3.",
+			"hash": "LNmlrMXN"
+		}
 	},
 	{
 		"name": "Touch of Corruption",
@@ -215,7 +300,21 @@
 		"focus": true,
 		"aonId": 819,
 		"id": "2fb7b4cb-9eae-4c09-b5d0-6a3a038ef961",
-		"hash": "zhEkRJSy"
+		"pf2t": {
+			"name": "Touch of Corruption",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,champion,necromancy,negative",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Advanced Player's Guide pg. 229",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=819",
+			"aon": "spells819",
+			"type": "focus",
+			"body": "**Targets** 1 willing undead creature or 1 living creature\n\n- - -\n\nYou infuse the target with negative energy. If the target is living, this deals 1d6 negative damage (basic Fortitude save); on a failed save, the target also takes a -2 status penalty to AC for 1 round.\n\nIf the target is a willing undead creature, the target instead regains 6 Hit Points, and if you are the undead target, you also gain a +2 status bonus to damage rolls for 1 round.\n- - -\n**Heightened (+1)** Increase the damage dealt to a living creature by 1d6 or increase the Hit Points regained by undead by 6.",
+			"hash": "zhEkRJSy"
+		}
 	},
 	{
 		"name": "Clinging Shadows Stance",
@@ -234,7 +333,20 @@
 		"focus": true,
 		"aonId": 737,
 		"id": "61d67393-7c8f-4d48-9db2-57f604da8fd0",
-		"hash": "bLRYrLRU"
+		"pf2t": {
+			"name": "Clinging Shadows Stance",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,evocation,monk,shadow,stance",
+			"cast": "s",
+			"actions": 1,
+			"source": "Advanced Player's Guide pg. 229",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=737",
+			"aon": "spells737",
+			"type": "focus",
+			"body": "**Duration** until you leave the stance\n\n- - -\n\nYou adopt the stance of clinging shadows. You can make shadow grasp Strikes. These deal 1d4 negative damage; are in the brawling group; and have the agile, grapple, reach, and unarmed traits. \n\nWhile in clinging shadows stance, you gain a +2 circumstance bonus to Athletics checks to Grapple, and to the DC for creatures to Escape from you.",
+			"hash": "bLRYrLRU"
+		}
 	},
 	{
 		"name": "Ki Form",
@@ -253,7 +365,20 @@
 		"focus": true,
 		"aonId": 738,
 		"id": "8dac4a5b-564a-4c86-a7a9-8a05eaed5e46",
-		"hash": "rzXNHnpH"
+		"pf2t": {
+			"name": "Ki Form",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "uncommon,monk,polymorph",
+			"cast": "v",
+			"actions": 1,
+			"source": "Advanced Player's Guide pg. 229",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=738",
+			"aon": "spells738",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nDrawing from deep wells of spiritual power, you take on a special ki form. In your ki form, your hair, feathers, skin, or scales change color and begin to glow. In this form you gain a fly Speed equal to your land Speed. Choose force, lawful (only if you are lawful), negative, or positive damage. All your Strikes deal 1d6 additional damage of the chosen type. Your entire body is also surrounded by a glowing corona of the same color as your inner ki; this is a light effect. Your corona is a 5-foot emanation that deals 2d6 damage of the chosen type to creatures who start their turn within the emanation. If the emanation overlaps with a darkness effect, the corona's glow attempts to counteract the darkness effect. Regardless of the outcome, the corona can't attempt to counteract that effect again for 1 day. As a single action, which has the concentrate trait, you can flare your corona out to become a 30-foot emanation.\n\nIn your ki form, your emotions surge to the forefront and it's difficult to moderate your attacks. Your weapons and unarmed attacks lose the nonlethal trait. You take a -2 status penalty to saves against emotion effects but gain a +2 status bonus to saves against all other mental effects.",
+			"hash": "rzXNHnpH"
+		}
 	},
 	{
 		"name": "Medusa's Wrath",
@@ -278,7 +403,20 @@
 		"focus": true,
 		"aonId": 739,
 		"id": "243d825d-a9af-4ea2-81fe-1ae2d7d2abe7",
-		"hash": "QAHVEqIZ"
+		"pf2t": {
+			"name": "Medusa's Wrath",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "uncommon,monk,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 229",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=739",
+			"aon": "spells739",
+			"type": "focus",
+			"body": "You make an attack filled with a medusa's petrifying power. Make an unarmed Strike with the following additional effects.\n\n**Critical Success** The target is slowed 2 and must attempt a Fortitude save at the end of each of its turns; this ongoing save has the incapacitation trait. On a failed save, the slowed condition increases by 1 (2 on a critical failure). A successful save reduces the slowed condition by 1. When a creature is unable to act due to the slowed condition from medusa's wrath, it is petrified permanently. The spell ends if the creature is petrified or the slowed condition is removed.\n**Success** As critical success, but the target is initially slowed 1.",
+			"hash": "QAHVEqIZ"
+		}
 	},
 	{
 		"name": "Shadow's Web",
@@ -314,7 +452,21 @@
 		"focus": true,
 		"aonId": 740,
 		"id": "34916ddb-4296-4e2b-b067-96d71985f7a4",
-		"hash": "gjtZprps"
+		"pf2t": {
+			"name": "Shadow's Web",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "uncommon,evocation,monk",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 229",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=740",
+			"aon": "spells740",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Area** 30-foot burst\n\n- - -\n\nGrasping darkness surges from you, dealing 14d4 negative damage. Each creature in the area must attempt a Fortitude save.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes half damage and is enfeebled 1 for 1 round.\n**Failure** The creature takes full damage and is enfeebled 2 for 1 round.\n**Critical Failure** The creature takes double damage and is stunned 1, enfeebled 2 for 1 round, and immobilized for 1 round or until it Escapes, whichever comes first.\n- - -\n**Heightened (+1)** The negative damage increases by 2d4.",
+			"hash": "gjtZprps"
+		}
 	},
 	{
 		"name": "Access Lore",
@@ -333,7 +485,20 @@
 		"focus": true,
 		"aonId": 741,
 		"id": "3056d216-bb21-4c33-b380-499cebacde2e",
-		"hash": "jQOIgNpy"
+		"pf2t": {
+			"name": "Access Lore",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,divination,fortune,oracle",
+			"cast": "s",
+			"actions": 1,
+			"source": "Advanced Player's Guide pg. 229",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=741",
+			"aon": "spells741",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou sift through the multiverse's divine knowledge, seeking out tidbits related to a particular subject. Choose one Lore skill. You temporarily gain the same proficiency rank in that Lore skill as your proficiency rank for your oracle spellcasting.",
+			"hash": "jQOIgNpy"
+		}
 	},
 	{
 		"name": "Ancestral Defense",
@@ -352,7 +517,20 @@
 		"focus": true,
 		"aonId": 742,
 		"id": "f83008e4-0d44-4882-aa9b-b99420c63559",
-		"hash": "OVXkHfrl"
+		"pf2t": {
+			"name": "Ancestral Defense",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cursebound,fortune,mental,oracle",
+			"cast": "s",
+			"actions": "r",
+			"source": "Advanced Player's Guide pg. 230",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=742",
+			"aon": "spells742",
+			"type": "focus",
+			"body": "**Trigger** You are about to attempt a Will save.\n\n- - -\n\nYour ancestor protects you against those who would bend your will. You roll the triggering save twice and use the better result. If you're in an encounter when you cast this spell, you immediately roll to change your predominant ancestor.",
+			"hash": "OVXkHfrl"
+		}
 	},
 	{
 		"name": "Ancestral Form",
@@ -374,7 +552,20 @@
 		"focus": true,
 		"aonId": 743,
 		"id": "feeae798-b57e-4428-85e7-4dbcdd98bd0e",
-		"hash": "rsWnTKyr"
+		"pf2t": {
+			"name": "Ancestral Form",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,oracle,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 230",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=743",
+			"aon": "spells743",
+			"type": "focus",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou take the form of your ancestral spirits, becoming invisible and quasi-corporeal. You gain resistance 10 to all damage (except force and damage from Strikes with the ghost touch property rune), and this resistance is doubled against non-magical and precision damage. You gain a fly Speed equal to your land Speed; when Flying, moving upward isn't difficult terrain for you. You can't move through solid objects, but you can float through tiny gaps. You can't Cast Spells (but you can Sustain a Spell), activate items, or use actions that have the attack or manipulate trait.\n- - -\n**Heightened (+2)** The resistance increases by 5.",
+			"hash": "rsWnTKyr"
+		}
 	},
 	{
 		"name": "Ancestral Touch",
@@ -412,7 +603,22 @@
 		"focus": true,
 		"aonId": 744,
 		"id": "57d4640d-75dd-4e4c-8c43-b058beb05a75",
-		"hash": "MbjsbGXG"
+		"pf2t": {
+			"name": "Ancestral Touch",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,emotion,enchantment,fear,mental,oracle",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Advanced Player's Guide pg. 230",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=744",
+			"aon": "spells744",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Targets** 1 living creature\n\n- - -\n\nYou touch a creature and force them to see and feel the ancestors surrounding you. The target takes 1d4 mental damage, with results depending on a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes half damage.\n**Failure** The target is frightened 1 and takes full damage.\n**Critical Failure** The target is frightened 2 and takes double damage.\n- - -\n**Heightened (+1)** The mental damage increases by 1d4.",
+			"hash": "MbjsbGXG"
+		}
 	},
 	{
 		"name": "Armor of Bones",
@@ -434,7 +640,20 @@
 		"focus": true,
 		"aonId": 745,
 		"id": "b8f8c998-26b8-49c5-bd8a-bec6f5f38ff4",
-		"hash": "wpNbgxZR"
+		"pf2t": {
+			"name": "Armor of Bones",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,necromancy,oracle",
+			"cast": "s",
+			"actions": 1,
+			"source": "Advanced Player's Guide pg. 230",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=745",
+			"aon": "spells745",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou ossify your physical form, mimicking the durability of bone. You gain resistance 3 to cold, electricity, fire, piercing, and slashing damage.\n- - -\n**Heightened (+1)** Increase the resistance by 1.",
+			"hash": "wpNbgxZR"
+		}
 	},
 	{
 		"name": "Battlefield Persistence",
@@ -453,7 +672,20 @@
 		"focus": true,
 		"aonId": 746,
 		"id": "d64098ee-eb56-4de4-8918-e06ae69aa7e1",
-		"hash": "jATbUUcX"
+		"pf2t": {
+			"name": "Battlefield Persistence",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,divination,divine,oracle",
+			"cast": "v",
+			"actions": "r",
+			"source": "Advanced Player's Guide pg. 230",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=746",
+			"aon": "spells746",
+			"type": "focus",
+			"body": "**Trigger** You are about to attempt a saving throw, but haven't rolled yet.\n\n- - -\n\nYou're difficult to remove from battle. You gain a +2 status bonus to the triggering save, and if the triggering save is against an incapacitation effect, it treats you as if you were 2 levels higher.",
+			"hash": "jATbUUcX"
+		}
 	},
 	{
 		"name": "Brain Drain",
@@ -477,7 +709,22 @@
 		"focus": true,
 		"aonId": 747,
 		"id": "a3a72411-5035-4293-bdfd-e9731d72ac28",
-		"hash": "rYUPFtbb"
+		"pf2t": {
+			"name": "Brain Drain",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,enchantment,mental,oracle",
+			"cast": "m,s",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 230",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=747",
+			"aon": "spells747",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou probe the target's mind to glean knowledge. This deals 1d8 mental damage with a basic Will save. If the target fails the save, you sort through the stolen memories to attempt a single check to Recall Knowledge. Choose a skill that has the Recall Knowledge action, and use the target's skill modifier for the check.\n- - -\n**Heightened (+1)** The mental damage increases by 1d8.",
+			"hash": "rYUPFtbb"
+		}
 	},
 	{
 		"name": "Call to Arms",
@@ -502,7 +749,20 @@
 		"focus": true,
 		"aonId": 748,
 		"id": "62c9ff8a-e00a-4564-bd86-a1d1e1c9e6c7",
-		"hash": "FnrUjttv"
+		"pf2t": {
+			"name": "Call to Arms",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,auditory,cursebound,emotion,enchantment,mental,oracle",
+			"cast": "v",
+			"actions": "r",
+			"source": "Advanced Player's Guide pg. 230",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=748",
+			"aon": "spells748",
+			"type": "focus",
+			"body": "**Trigger** You are about to roll for initiative.\n**Area** 20-foot emanation\n**Duration** 1 minute\n\n- - -\n\nYou cry out a call to arms, inspiring your allies to enter the fray. Each ally in the area gains a +2 status bonus to their initiative roll and gains temporary Hit Points equal to the spell's level; these temporary Hit Points last for the spell's duration.\n- - -\n**Heightened (6th)** The bonus increases to +3.\n**Heightened (9th)** The bonus increases to +4.",
+			"hash": "FnrUjttv"
+		}
 	},
 	{
 		"name": "Claim Undead",
@@ -538,7 +798,22 @@
 		"focus": true,
 		"aonId": 749,
 		"id": "d155a1ac-2731-4cc9-8fe2-1d7bde3fc51d",
-		"hash": "UgXtxTSj"
+		"pf2t": {
+			"name": "Claim Undead",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,incapacitation,necromancy,oracle",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 230",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=749",
+			"aon": "spells749",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** 10 minutes\n**Targets** 1 undead creature\n\n- - -\n\nYou attempt to wrest control of a target undead or force it to recognize you as its master. If the target is controlled by another creature, that controller attempts a Will saving throw to retain control; otherwise, the target must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target is stunned 1 as it fights off your commands.\n**Failure** The target becomes controlled by you and follows your orders. It (or the creature previously controlling it) can attempt a new Will save at the end of each of its turns, and the spell ends on a success. If you issue an obviously self-destructive order, the target doesn't act until you issue a new order.\n**Critical Failure** As failure, but the target (or the creature previously controlling it) receives a new save only if you give it a new order that is against its nature.",
+			"hash": "UgXtxTSj"
+		}
 	},
 	{
 		"name": "Debilitating Dichotomy",
@@ -561,7 +836,22 @@
 		"focus": true,
 		"aonId": 750,
 		"id": "c519b493-1fbe-433f-81e7-af2b7daed697",
-		"hash": "xZwNQGfv"
+		"pf2t": {
+			"name": "Debilitating Dichotomy",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,evocation,mental,oracle",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 231",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=750",
+			"aon": "spells750",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Targets** 1 creature other than you\n\n- - -\n\nYou reveal a glimpse of the impossible conflicts between the divine anathema behind your curse, forcing you to reckon with another's conflicts as well. You and the target each take 9d6 mental damage with a basic Will save, and the target is stunned 1 if it critically fails its save. You get a degree of success one better than you rolled for your saving throw.\n- - -\n**Heightened (+1)** The damage increases by 3d6.",
+			"hash": "xZwNQGfv"
+		}
 	},
 	{
 		"name": "Delay Affliction",
@@ -584,7 +874,21 @@
 		"focus": true,
 		"aonId": 751,
 		"id": "1cea7dbe-70a3-4c71-9c3f-0a2116dd4a9d",
-		"hash": "RxJxQQNO"
+		"pf2t": {
+			"name": "Delay Affliction",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,healing,necromancy,oracle,positive",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 231",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=751",
+			"aon": "spells751",
+			"type": "focus",
+			"body": "**Targets** 1 creature\n\n- - -\n\nWith a surge of healing energy, you push back against an affliction threatening the target and grant a small amount of healing. The target recovers 3d8 Hit Points. You attempt to counteract any one affliction you are aware the target has, suspending its effects for 1 hour on a success rather than removing it. The target is then temporarily immune to delay affliction for 1 day. You don't need to have identified the name of the specific affliction, but you do need to be aware of it; for instance, you couldn't delay an ingested poison during its onset period unless you were aware of the poison.\n- - -\n**Heightened (+1)** The target recovers an additional 1d8 Hit Points and you can attempt to suspend an additional affliction.",
+			"hash": "RxJxQQNO"
+		}
 	},
 	{
 		"name": "Dread Secret",
@@ -620,7 +924,22 @@
 		"focus": true,
 		"aonId": 752,
 		"id": "30a66d54-4772-4e0d-945a-de3e8e86c263",
-		"hash": "YZZOQWHB"
+		"pf2t": {
+			"name": "Dread Secret",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,divination,emotion,fear,mental,oracle",
+			"cast": "m,s",
+			"actions": 2,
+			"range": 60,
+			"source": "Advanced Player's Guide pg. 231",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=752",
+			"aon": "spells752",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** until the start of your next turn\n**Targets** up to 6 creatures\n\n- - -\n\nYou utter a powerful secret at odds with the fundamental nature of the target creatures. Choose a specific resistance or weakness that you believe one or more of the targets have due to Recall Knowledge or previous experience with the targets, such as resistance to fire or weakness to silver. If the information is incorrect for a given target, the spell has no effect on that target. Affected targets must attempt a Will saving throw.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes 1 damage of the type of weakness you chose (thus triggering the creature's weakness), or loses its resistance until the end of your next turn if you chose a resistance.\n**Failure** As success, and the creature becomes frightened 1 from the revelation of its dread secret.\n**Critical Failure** As failure, except the creature is frightened 3.",
+			"hash": "YZZOQWHB"
+		}
 	},
 	{
 		"name": "Flaming Fusillade",
@@ -642,7 +961,20 @@
 		"focus": true,
 		"aonId": 753,
 		"id": "1b2b0cd8-6124-45c3-9237-33f1ec9fa4ff",
-		"hash": "JKpVpEhp"
+		"pf2t": {
+			"name": "Flaming Fusillade",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,evocation,fire,oracle",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 232",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=753",
+			"aon": "spells753",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou call upon an endless barrage of flames, producing miniature fireballs in your hands to hurl at foes. You cast produce flame as part of casting flaming fusillade. For the duration of flaming fusillade, produce flame's casting time is reduced from 2 actions to 1.\n- - -\n**Heightened (9th)** For the duration, you also gain a status bonus to the damage dealt by produce flame equal to flaming fusillade's spell level.",
+			"hash": "JKpVpEhp"
+		}
 	},
 	{
 		"name": "Heroic Feat",
@@ -660,7 +992,20 @@
 		"focus": true,
 		"aonId": 754,
 		"id": "0f0d76a3-43aa-4fb6-a5d1-55d1a6d87908",
-		"hash": "HExMZPZf"
+		"pf2t": {
+			"name": "Heroic Feat",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,divination,mental,oracle",
+			"cast": "s,v",
+			"actions": 3,
+			"source": "Advanced Player's Guide pg. 232",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=754",
+			"aon": "spells754",
+			"type": "focus",
+			"body": "You gain the ability to perform a specialized combat technique from the vast wealth of martial knowledge your mystery provides. When you Cast this Spell, you use the action granted by one common fighter feat from the Core Rulebook or the Advanced Player's Guide (your GM might add feats to this list). If you Cast this Spell using 2 actions, the granted action must be a single action, and if you Cast this Spell using 3 actions, you can instead choose a feat that grants a 2-action activity. The chosen feat's level can be no higher than heroic feat's spell level. The feat can't have a Frequency entry, and you must meet its prerequisites and requirements in order to select it.",
+			"hash": "HExMZPZf"
+		}
 	},
 	{
 		"name": "Incendiary Aura",
@@ -682,7 +1027,20 @@
 		"focus": true,
 		"aonId": 755,
 		"id": "f430edc8-c412-48a7-be7a-3fb3fb380677",
-		"hash": "qvhBEvlr"
+		"pf2t": {
+			"name": "Incendiary Aura",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,evocation,fire,oracle",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 232",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=755",
+			"aon": "spells755",
+			"type": "focus",
+			"body": "**Area** 10-foot emanation\n**Duration** 1 minute\n\n- - -\n\nYou surround yourself with a combustible aura. Each time a creature within the emanation takes fire damage, it catches on fire, taking 2d4 persistent fire damage.\n- - -\n**Heightened (+2)** Increase the persistent damage by 1d4 and the radius of the emanation by 5 feet.",
+			"hash": "qvhBEvlr"
+		}
 	},
 	{
 		"name": "Interstellar Void",
@@ -707,7 +1065,22 @@
 		"focus": true,
 		"aonId": 756,
 		"id": "6f8f671b-04be-491d-923a-4b1b6e1bffef",
-		"hash": "lbjdzQQW"
+		"pf2t": {
+			"name": "Interstellar Void",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,cold,cursebound,evocation,oracle",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 232",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=756",
+			"aon": "spells756",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou call upon the frigid depths of outer space to bring a terrible chill to your enemy. The target is cloaked in the freezing void, which deals 3d6 cold damage immediately and when you Sustain the Spell on future turns, with a basic Fortitude save. The target is fatigued for as long as the effect persists.\n- - -\n**Heightened (+1)** The cold damage increases by 1d6.",
+			"hash": "lbjdzQQW"
+		}
 	},
 	{
 		"name": "Life-Giving Form",
@@ -731,7 +1104,20 @@
 		"focus": true,
 		"aonId": 757,
 		"id": "92df70a1-8b8a-4eee-b219-eb1790c93822",
-		"hash": "PRpxDyZs"
+		"pf2t": {
+			"name": "Life-Giving Form",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,healing,light,necromancy,oracle,positive",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 232",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=757",
+			"aon": "spells757",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou transcend your physical form, becoming a beacon of healing energy. Your body exudes bright light like a torch. You gain resistance 5 to precision damage and weakness 5 to negative damage, and your unarmed Strikes deal an extra 1d4 positive damage.\n\nYou can touch a living creature with an Interact action to restore 6d8 Hit Points to it, and when a creature touches you with an Interact action you can allow it to gain the same healing; either way, the creature becomes temporarily immune to life-giving form's healing for 1 minute. This is a positive healing effect. You can't heal yourself with life-giving form. A creature harmed by positive damage (such as an undead) that touches you or damages you with an unarmed attack or non-reach melee weapon instead takes 3d4 positive damage, and it doesn't become temporarily immune.\n\nYou can Dismiss this spell.\n- - -\n**Heightened (+1)** Increase the Hit Points restored with an Interact action by 1d8, the positive damage by 1, and the resistance and weakness by 1.",
+			"hash": "PRpxDyZs"
+		}
 	},
 	{
 		"name": "Life Link",
@@ -758,7 +1144,21 @@
 		"focus": true,
 		"aonId": 758,
 		"id": "be6ff86a-a711-4c12-b040-05da90ca4ba9",
-		"hash": "JnIqSQGq"
+		"pf2t": {
+			"name": "Life Link",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,healing,necromancy,oracle,positive",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 232",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=758",
+			"aon": "spells758",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature other than you\n\n- - -\n\nYou forge a connection of life energy between you and your target, distributing harm between both of you. When you first Cast the Spell, the target recovers 1d4 Hit Points. The first time each round that the target takes damage, reduce the damage it takes by 3 (to a minimum of 0 damage). You lose 3 Hit Points each time, or the total damage dealt, if less than 3; this damage ignores any immunities or resistances you have and can't otherwise be mitigated in any way.\n\nThe spell ends immediately if you fall unconscious. You can Dismiss the spell.\n- - -\n**Heightened (3rd)** You can target 2 creatures other than you. Increase the initial healing to 3d4 and the maximum damage reduced and Hit Points lost to 5.\n**Heightened (6th)** You can target 3 creatures other than you. Increase the initial healing to 6d4 and the maximum damage reduced and Hit Points lost to 10.\n**Heightened (9th)** You can target 4 creatures other than you. Increase the initial healing to 9d4 and the maximum damage reduced and Hit Points lost to 15.",
+			"hash": "JnIqSQGq"
+		}
 	},
 	{
 		"name": "Moonlight Bridge",
@@ -781,7 +1181,21 @@
 		"focus": true,
 		"aonId": 759,
 		"id": "ae3eb159-99f6-41b2-9f1c-f215dd59016f",
-		"hash": "vwRmRTHf"
+		"pf2t": {
+			"name": "Moonlight Bridge",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,cursebound,light,oracle",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 233",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=759",
+			"aon": "spells759",
+			"type": "focus",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou summon a bridge of radiant, shimmering moonlight. The 10-foot-wide span must start at the ground on a point within range, and it extends as a horizontal plane, either in a straight line or at any angle up to 45 degrees upward or downward, for up to 120 feet. This bridge has AC 10, Hardness 30, and 60 Hit Points, and it's immune to critical hits and precision damage. You and your allies can cross the bridge normally, but other creatures simply pass through it if they try to do so. The bridge blocks physical, ethereal, and incorporeal attacks from crossing, whether from above or below. You can Dismiss the spell.\n- - -\n**Heightened (+1)** The length of the bridge increases by 20 feet, and its Hit Points increase by 20.",
+			"hash": "vwRmRTHf"
+		}
 	},
 	{
 		"name": "Soul Siphon",
@@ -819,7 +1233,22 @@
 		"focus": true,
 		"aonId": 760,
 		"id": "50c36cec-788d-419a-a8a2-cba51bd5b394",
-		"hash": "drxsfgKv"
+		"pf2t": {
+			"name": "Soul Siphon",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,necromancy,negative,oracle",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 233",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=760",
+			"aon": "spells760",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Targets** 1 living creature\n\n- - -\n\nYou siphon off a portion of the target's soul to bolster your own vitality. The target must attempt a Fortitude save or take 1d4 negative damage. You gain temporary Hit Points equal to the total amount of HP the target loses, including the HP lost from becoming drained.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes half damage.\n**Failure** The creature takes full damage and becomes drained 1.\n**Critical Failure** The creature takes double damage and becomes drained 2.\n- - -\n**Heightened (+1)** Increase the damage by 1d4.",
+			"hash": "drxsfgKv"
+		}
 	},
 	{
 		"name": "Spray of Stars",
@@ -856,7 +1285,21 @@
 		"focus": true,
 		"aonId": 761,
 		"id": "b353fe98-5343-4e6c-96f3-3fa5ad35f609",
-		"hash": "RzWtRsDf"
+		"pf2t": {
+			"name": "Spray of Stars",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,evocation,fire,light,oracle",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 233",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=761",
+			"aon": "spells761",
+			"type": "focus",
+			"savingthrow": "Reflex",
+			"body": "**Area** 15-foot cone\n\n- - -\n\nYou fling a spray of tiny shooting stars, dealing 1d4 fire damage. Each creature in the area must attempt a Reflex save.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes half damage and is dazzled for 1 round.\n**Failure** The creature takes full damage and is dazzled for 3 rounds.\n**Critical Failure** The creature takes double damage and is dazzled for 1 minute.\n- - -\n**Heightened (+1)** Increase the damage by 1d4.",
+			"hash": "RzWtRsDf"
+		}
 	},
 	{
 		"name": "Tempest Form",
@@ -878,7 +1321,20 @@
 		"focus": true,
 		"aonId": 762,
 		"id": "ecdeb9b0-0e5f-4b47-8105-91a6faefd2c2",
-		"hash": "vjRIMhWA"
+		"pf2t": {
+			"name": "Tempest Form",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,oracle,polymorph,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 233",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=762",
+			"aon": "spells762",
+			"type": "focus",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYour body becomes fluid to better suit your surroundings. When you Cast this Spell, choose whether to become air, water, or mist. The spell gains the air trait if you choose air or mist, and the water trait if you choose water or mist. You become amorphous, as does your armor. You lose any item bonus to AC and use your proficiency bonus for unarmored defense to determine your AC. You also gain resistance 10 to physical damage and become immune to precision damage. You can slip through tiny cracks and don't need to breathe. You can't cast spells, activate items, or use actions that have the attack or manipulate trait. You also gain the following effects based on your form.\n\n+ **Air** You gain a fly Speed of 20 feet and become invisible while you are in the air. You can create the effects of a gust of wind from your space as a 2-action activity, which has the manipulate trait.\n\n+ **Mist** You gain a fly Speed of 20 feet, and it becomes hard to see through you. Any creature on one side of your space who is targeted by a creature on the opposite side is concealed to the targeting creature.\n+ **Water** You gain a swim Speed of 20 feet and become invisible while you are in the water. You can electrically charge yourself by taking a single action, which has the manipulate trait. If you do, you are no longer invisible in the water due to electricity indicating your location, but any creature that makes a melee attack against you takes 1d6 electricity damage; if it touches you, this is cumulative with the damage from your major curse.\n- - -\n**Heightened (+2)** Increase the resistance by 5 and the electricity damage from the charged water form by 1.",
+			"hash": "vjRIMhWA"
+		}
 	},
 	{
 		"name": "Tempest Touch",
@@ -916,7 +1372,22 @@
 		"focus": true,
 		"aonId": 763,
 		"id": "e86e9a7b-5f83-4a44-8505-b772ad7f28e9",
-		"hash": "cVxZNOkA"
+		"pf2t": {
+			"name": "Tempest Touch",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cold,cursebound,evocation,oracle,water",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Advanced Player's Guide pg. 233",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=763",
+			"aon": "spells763",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYour touch calls forth a churning mass of icy water that clings to your target, dealing 1d4 bludgeoning damage and 1d4 cold damage. The target must attempt a Fortitude save.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes half damage and a -5-foot circumstance penalty to its Speeds until the end of your next turn.\n**Failure** The target takes full damage and a -10-foot circumstance penalty to its Speeds until the end of your next turn.\n**Critical Failure** As failure, but the target takes double damage.\n- - -\n**Heightened (+1)** The bludgeoning and cold damage each increase by 1d4.",
+			"hash": "cVxZNOkA"
+		}
 	},
 	{
 		"name": "Thunderburst",
@@ -954,7 +1425,22 @@
 		"focus": true,
 		"aonId": 764,
 		"id": "71b96cfb-5417-462a-9d05-aeae4f49d2ee",
-		"hash": "bbwEUbRx"
+		"pf2t": {
+			"name": "Thunderburst",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,air,cursebound,evocation,oracle,sonic",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 100,
+			"source": "Advanced Player's Guide pg. 234",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=764",
+			"aon": "spells764",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Area** 20-foot burst\n\n- - -\n\nYou create a powerful blast of air and a loud peal of thunder, dealing 2d6 bludgeoning damage and 2d6 sonic damage. Each creature in the area must attempt a Fortitude save.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes half damage.\n**Failure** The creature takes full damage and is deafened for 1 minute.\n**Critical Failure** The creature takes double damage and is deafened for 1 hour.\n- - -\n**Heightened (+2)** Increase each type of damage by 2d6 and the area by 5 feet.",
+			"hash": "bbwEUbRx"
+		}
 	},
 	{
 		"name": "Vision of Weakness",
@@ -972,7 +1458,20 @@
 		"focus": true,
 		"aonId": 765,
 		"id": "0169c9d5-c9f4-4d0e-ae39-bc687e2c875f",
-		"hash": "fUEDkUXI"
+		"pf2t": {
+			"name": "Vision of Weakness",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,divination,oracle",
+			"cast": "s",
+			"actions": 1,
+			"source": "Advanced Player's Guide pg. 234",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=765",
+			"aon": "spells765",
+			"type": "focus",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou focus your gaze on a creature and gain a flash of divine insight into its nature. If the creature has any weaknesses, you learn them, as well as which of its three saving throw modifiers is lowest. You also learn an inherent understanding of its movements and gain a +2 status bonus to your next attack roll (or skill check made as part of an attack action) against that foe before the end of your turn. The target is then temporarily immune to vision of weakness for 1 day.",
+			"hash": "fUEDkUXI"
+		}
 	},
 	{
 		"name": "Whirling Flames",
@@ -996,7 +1495,23 @@
 		"focus": true,
 		"aonId": 766,
 		"id": "5c6f1efa-c118-48e8-bcdd-276386f85c25",
-		"hash": "mYOYHtlc"
+		"pf2t": {
+			"name": "Whirling Flames",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,cursebound,evocation,fire,oracle",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 234",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=766",
+			"aon": "spells766",
+			"type": "focus",
+			"savingthrow": "Reflex",
+			"basic": 1,
+			"body": "**Area** up to two 5-foot bursts that don't overlap\n\n- - -\n\nYou call forth a storm of whirling flames, engulfing all creatures in that area and dealing 5d6 fire damage with a basic Reflex save.\n- - -\n**Heightened (+2)** The damage increases by 3d6, and you can add another nonoverlapping 5-foot burst to the area.",
+			"hash": "mYOYHtlc"
+		}
 	},
 	{
 		"name": "Animal Feature",
@@ -1015,7 +1530,20 @@
 		"focus": true,
 		"aonId": 767,
 		"id": "cbb5584a-980e-46a3-8ea8-d436b0ea0e9c",
-		"hash": "GzHzxypR"
+		"pf2t": {
+			"name": "Animal Feature",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,morph,ranger,transmutation",
+			"cast": "s,v",
+			"actions": 1,
+			"source": "Advanced Player's Guide pg. 234",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=767",
+			"aon": "spells767",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nWithout fully transforming your body, you gain one animalistic feature, which you select from the list below each time you Cast the Spell.\n\n+ **Cat Eyes** You gain low-light vision.\n+ **Claws** You gain a claw attack that deals 1d6 slashing damage and has the agile, finesse, and unarmed traits.\n+ **Jaws** You gain a jaws attack that deals 1d8 piercing damage and has the unarmed trait.\n\n- - -\n\n\n+ **Fish Tail** You gain a swim Speed equal to your land Speed.\n+ **Owl Eyes** You gain darkvision.\n+ **Wings** You gain a fly Speed equal to your land Speed.\n- - -\n**Heightened (4th)** Add the following options to the list you can choose from.",
+			"hash": "GzHzxypR"
+		}
 	},
 	{
 		"name": "Enlarge Companion",
@@ -1035,7 +1563,21 @@
 		"focus": true,
 		"aonId": 768,
 		"id": "5419c0ff-6023-4d8e-b192-fca795eb618f",
-		"hash": "Spfzzmgz"
+		"pf2t": {
+			"name": "Enlarge Companion",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,polymorph,ranger,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 234",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=768",
+			"aon": "spells768",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n**Targets** your animal companion\n\n- - -\n\nYour animal companion grows much larger, towering over its foes in battle. Your animal companion becomes Huge, gaining the effects of a 4th-level enlarge spell.",
+			"hash": "Spfzzmgz"
+		}
 	},
 	{
 		"name": "Ephemeral Tracking",
@@ -1053,7 +1595,20 @@
 		"focus": true,
 		"aonId": 769,
 		"id": "b2b90815-a455-4f30-bf83-ef7cc4266e11",
-		"hash": "XmYdftPy"
+		"pf2t": {
+			"name": "Ephemeral Tracking",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,divination,ranger",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 234",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=769",
+			"aon": "spells769",
+			"type": "focus",
+			"body": "**Duration** 1 hour\n\n- - -\n\nYou can look at currents in the air and water and see tracks that you can follow just as you would on land. You can use Survival to Track through both air and water, noticing aerial or aquatic \"tracks\" of all creatures who passed nearby in the last hour. It's more difficult to Track in this way: the DC to Track through air or water is always at least 30, or higher after precipitation or wind (in the air) or heavy tides or currents (in the water). It's possible to Cover Tracks against this spell, but creatures might not realize they need to do so.",
+			"hash": "XmYdftPy"
+		}
 	},
 	{
 		"name": "Gravity Weapon",
@@ -1071,7 +1626,20 @@
 		"focus": true,
 		"aonId": 770,
 		"id": "01eb6544-4f90-48c8-82b0-ca7765cad1fe",
-		"hash": "OMcCGXgr"
+		"pf2t": {
+			"name": "Gravity Weapon",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,evocation,ranger",
+			"cast": "s",
+			"actions": 1,
+			"source": "Advanced Player's Guide pg. 234",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=770",
+			"aon": "spells770",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou build up gravitational force and funnel it into your blows, leading to more powerful attacks with blade and bow alike. On your first weapon Strike each round, you gain a status bonus to damage equal to twice the number of weapon damage dice.",
+			"hash": "OMcCGXgr"
+		}
 	},
 	{
 		"name": "Heal Companion",
@@ -1094,7 +1662,20 @@
 		"focus": true,
 		"aonId": 771,
 		"id": "a94b9478-806f-48bb-8344-0df186076c5c",
-		"hash": "KZXyQzNS"
+		"pf2t": {
+			"name": "Heal Companion",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,healing,necromancy,positive,ranger",
+			"actions": 2,
+			"range": "touch or 30",
+			"source": "Advanced Player's Guide pg. 234",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=771",
+			"aon": "spells771",
+			"type": "focus",
+			"body": "**Targets** your animal companion\n\n- - -\n\nYou harness positive energy to heal your animal companion's wounds. You restore 1d10 Hit Points to your animal companion. The number of actions you spend Casting this Spell determines range and other parameters.\n:a: (somatic) The spell has a range of touch.\n:aa: (verbal) The spell has a range of 30 feet and restores an additional 8 Hit Points to the target.\n- - -\n**Heightened (+1)** The amount of healing increases by 1d10, and the additional healing for the 2-action version increases by 8.",
+			"hash": "KZXyQzNS"
+		}
 	},
 	{
 		"name": "Hunter's Luck",
@@ -1112,7 +1693,20 @@
 		"focus": true,
 		"aonId": 772,
 		"id": "e27f0098-4287-4efc-934c-9322cc02df07",
-		"hash": "BXdONTms"
+		"pf2t": {
+			"name": "Hunter's Luck",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,divination,fortune,ranger",
+			"cast": "v",
+			"actions": 0,
+			"source": "Advanced Player's Guide pg. 235",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=772",
+			"aon": "spells772",
+			"type": "focus",
+			"body": "**Trigger** You attempt a check to Recall Knowledge about a creature, but you haven't rolled yet.\n\n- - -\n\nYou have a preternatural ability to remember details about your foes. Roll the triggering check twice and use the better result.",
+			"hash": "BXdONTms"
+		}
 	},
 	{
 		"name": "Hunter's Vision",
@@ -1132,7 +1726,21 @@
 		"focus": true,
 		"aonId": 773,
 		"id": "981964d2-485b-48a3-9a4e-a43fbc931563",
-		"hash": "grvsHnFp"
+		"pf2t": {
+			"name": "Hunter's Vision",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,divination,ranger",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 235",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=773",
+			"aon": "spells773",
+			"type": "focus",
+			"body": "**Duration** 10 minutes\n**Targets** 1 hunted prey\n\n- - -\n\nYour target glows with a magical aura visible only to you and those who follow your lead. Your target is visible to you and others sharing your Hunt Prey benefits even if it wouldn't normally be due to lighting or the concealed or invisible conditions, though cover from opaque objects still blocks your sight. You ignore the flat check against the target due to the concealed condition, and the target isn't automatically hidden from you due to darkness or being invisible.",
+			"hash": "grvsHnFp"
+		}
 	},
 	{
 		"name": "Magic Hide",
@@ -1152,7 +1760,21 @@
 		"focus": true,
 		"aonId": 774,
 		"id": "eb99d483-baf0-4e9b-9d0c-42bf68e03d1c",
-		"hash": "RFtxAyZx"
+		"pf2t": {
+			"name": "Magic Hide",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,ranger",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 235",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=774",
+			"aon": "spells774",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n**Targets** your animal companion\n\n- - -\n\nYour animal companion grows a thicker hide, matted fur, or a harder shell, granting it a +1 status bonus to AC.",
+			"hash": "RFtxAyZx"
+		}
 	},
 	{
 		"name": "Ranger's Bramble",
@@ -1175,7 +1797,21 @@
 		"focus": true,
 		"aonId": 775,
 		"id": "a450b6b9-b4f1-4908-9660-dbdd58109c95",
-		"hash": "tqCglcPJ"
+		"pf2t": {
+			"name": "Ranger's Bramble",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,plant,ranger,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 100,
+			"source": "Advanced Player's Guide pg. 235",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=775",
+			"aon": "spells775",
+			"type": "focus",
+			"body": "**Area** all squares that contain plants in a 5-foot burst\n**Duration** 1 minute\n\n- - -\n\nYou cause plants in the area to entangle your foes, with the effects of entangle. A creature that critically fails the save takes 2d4 persistent bleed damage in addition to being immobilized. Escaping your bramble doesn't end the bleed damage.\n- - -\n**Heightened (+1)** The bleed damage on a critical failure increases by 1d4.",
+			"hash": "tqCglcPJ"
+		}
 	},
 	{
 		"name": "Snare Hopping",
@@ -1197,7 +1833,21 @@
 		"focus": true,
 		"aonId": 776,
 		"id": "189a4ed3-f290-492d-b258-9f3e3a84a1ed",
-		"hash": "sQVXLAUY"
+		"pf2t": {
+			"name": "Snare Hopping",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,ranger,teleportation",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 10,
+			"source": "Advanced Player's Guide pg. 235",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=776",
+			"aon": "spells776",
+			"type": "focus",
+			"body": "**Targets** one snare you built\n\n- - -\n\nYou may not have placed your snare in the right place, but you can magically move it there. You teleport the target snare to another unoccupied location in range.\n- - -\n**Heightened (+1)** The range of the spell increases by 10 feet.",
+			"hash": "sQVXLAUY"
+		}
 	},
 	{
 		"name": "Soothing Mist",
@@ -1219,7 +1869,21 @@
 		"focus": true,
 		"aonId": 777,
 		"id": "a086509f-9515-4ada-8346-f7991e7b0385",
-		"hash": "yrgstMXC"
+		"pf2t": {
+			"name": "Soothing Mist",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,healing,necromancy,positive,ranger",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 235",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=777",
+			"aon": "spells777",
+			"type": "focus",
+			"body": "**Targets** 1 willing living creature or 1 undead creature\n\n- - -\n\nYou call forth a magical mist of positive energy that envelops a creature. The mist restores 2d8 Hit Points to a target living creature and ends one source of persistent acid, bleed, fire, negative, or poison damage affecting it. If the creature is taking persistent damage from multiple sources, you select which one is removed. Against an undead target, you deal 2d8 positive damage (basic Fortitude save); if it fails the save, it also takes 2 persistent positive damage.\n- - -\n**Heightened (+1)** The amount of healing (or damage to an undead target) increases by 1d8, and the persistent positive damage to an undead creature increases by 1.",
+			"hash": "yrgstMXC"
+		}
 	},
 	{
 		"name": "Terrain Transposition",
@@ -1237,7 +1901,21 @@
 		"focus": true,
 		"aonId": 778,
 		"id": "734c76a0-aa21-4acd-82fe-6448e751b41c",
-		"hash": "MVfzgGCK"
+		"pf2t": {
+			"name": "Terrain Transposition",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,ranger,teleportation",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 90,
+			"source": "Advanced Player's Guide pg. 235",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=778",
+			"aon": "spells778",
+			"type": "focus",
+			"body": "You mystically transpose your current location with another. While in a wilderness environment, you transport yourself and items you're holding to a clear space you can see within range. If you have Favored Terrain and both your starting and ending position are in your favored terrain, the range increases to 180 feet. If you have an animal companion and it is adjacent to you, you can transport it along with you to an adjacent open space, but if this spell would bring any other creature with you, even in an extradimensional container, the spell is lost.",
+			"hash": "MVfzgGCK"
+		}
 	},
 	{
 		"name": "Blinding Beauty",
@@ -1270,7 +1948,21 @@
 		"focus": true,
 		"aonId": 779,
 		"id": "81fa876a-9079-4ecf-8fc1-d6a444bd95d7",
-		"hash": "rZhZJxCR"
+		"pf2t": {
+			"name": "Blinding Beauty",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,emotion,enchantment,incapacitation,sorcerer,visual",
+			"cast": "s",
+			"actions": 1,
+			"source": "Advanced Player's Guide pg. 235",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=779",
+			"aon": "spells779",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Area** 30-foot cone\n\n- - -\n\nYou channel the allure of your nymph bloodline into a terribly beautiful glance. Each enemy in the area must attempt a Will saving throw.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature is dazzled until the start of its next turn.\n**Failure** The creature is blinded until the start of its next turn.\n**Critical Failure** The creature is blinded for 1 minute.",
+			"hash": "rZhZJxCR"
+		}
 	},
 	{
 		"name": "Consuming Darkness",
@@ -1308,7 +2000,21 @@
 		"focus": true,
 		"aonId": 780,
 		"id": "433c568a-7fa1-4b73-93ef-71a8c450b159",
-		"hash": "pYSGRQBl"
+		"pf2t": {
+			"name": "Consuming Darkness",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,evocation,shadow,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 235",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=780",
+			"aon": "spells780",
+			"type": "focus",
+			"savingthrow": "Reflex",
+			"body": "**Area** 10-foot emanation\n**Duration** sustained up to 1 minute\n**Targets** enemies in the area\n\n- - -\n\nYour shadow wriggles before spreading out from you, forming a gateway of clinging, consuming shadow through which the horrors of another plane can barely be seen. The first time each turn you Sustain the Spell, the radius increases by 5 feet. Each enemy that enters the area or begins its turn in the area takes 2d6 negative damage and must attempt a Reflex save.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature sinks partially into the shadow, taking half damage and a -5-foot circumstance penalty to its Speeds for as long it remains in the area.\n**Failure** As success, but the creature takes full damage and a -10-foot circumstance penalty.\n**Critical Failure** The creature is absorbed into the shadows, where it can be seen below the surface; it takes double damage and is immobilized for 1 round or until it Escapes.\n- - -\n**Heightened (+1)** The damage increases by 1d6.",
+			"hash": "pYSGRQBl"
+		}
 	},
 	{
 		"name": "Dim the Light",
@@ -1326,7 +2032,20 @@
 		"focus": true,
 		"aonId": 781,
 		"id": "beecd410-5f76-4feb-8e5b-aa4cc9c2b42b",
-		"hash": "FxyxSRMH"
+		"pf2t": {
+			"name": "Dim the Light",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,darkness,evocation,sorcerer",
+			"cast": "s",
+			"actions": "r",
+			"source": "Advanced Player's Guide pg. 236",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=781",
+			"aon": "spells781",
+			"type": "focus",
+			"body": "**Trigger** You cast a darkness or shadow spell.\n\n- - -\n\nYou magnify the darkness from the triggering effect, causing the ambient light level to flicker briefly so you can slip from sight. You can immediately attempt a Stealth check to Hide, and you can become hidden to a creature even if you don't have cover and aren't otherwise concealed from that creature. You cease being hidden at the end of your turn unless you move into cover or become concealed before then.",
+			"hash": "FxyxSRMH"
+		}
 	},
 	{
 		"name": "Establish Ward",
@@ -1349,7 +2068,20 @@
 		"focus": true,
 		"aonId": 782,
 		"id": "562c85ec-4c85-4993-89d9-1f4ffa18ed92",
-		"hash": "SkgcrJEt"
+		"pf2t": {
+			"name": "Establish Ward",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 236",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=782",
+			"aon": "spells782",
+			"type": "focus",
+			"body": "**Area** 30-foot burst\n**Duration** 1 minute\n\n- - -\n\nYou bind a part of your essence to your surroundings, creating a warded area that grants you power within it, but drains you outside of it. While within the area, you can make nature's wrath Strikes by commanding plants, wind, rocks, and other natural features to attack enemies. These are melee Strikes that use your spell attack modifier, can target any creature within the ward, and deal bludgeoning, piercing, or slashing damage equal to 2d8 plus your spellcasting ability modifier.\n\nUpon Casting the Spell, you can immediately make a single nature's wrath Strike. You are quickened while inside the ward, and can use the additional action only to make nature's wrath Strikes. You are slowed 1 while outside the area.\n- - -\n**Heightened (+2)** The area increases by 5 feet, and the Strikes deal an additional 1d8 damage.",
+			"hash": "SkgcrJEt"
+		}
 	},
 	{
 		"name": "Genie's Veil",
@@ -1369,7 +2101,21 @@
 		"focus": true,
 		"aonId": 783,
 		"id": "8a059f06-4b1e-4a7a-86da-243faa4c4cab",
-		"hash": "fQkZrZEW"
+		"pf2t": {
+			"name": "Genie's Veil",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,sorcerer",
+			"cast": "s",
+			"actions": "r",
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 236",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=783",
+			"aon": "spells783",
+			"type": "focus",
+			"body": "**Trigger** A creature within range is attacked.\n**Targets** 1 willing creature\n\n- - -\n\nWith a flourish, you fulfill a creature's wish for protection, bending reality to keep them from harm. The target vanishes in a burst of brightly colored smoke and sparkles, reappearing an instant later. They become concealed against the triggering attack and until the end of the current creature's turn.",
+			"hash": "fQkZrZEW"
+		}
 	},
 	{
 		"name": "Heart's Desire",
@@ -1407,7 +2153,22 @@
 		"focus": true,
 		"aonId": 784,
 		"id": "7998c62f-0275-4ea6-91b6-67a3b62face6",
-		"hash": "DlWYItLK"
+		"pf2t": {
+			"name": "Heart's Desire",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,emotion,illusion,mental,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Advanced Player's Guide pg. 236",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=784",
+			"aon": "spells784",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou surround your target with wondrous illusions of their greatest desires, which distract them from reality. The target must attempt a Will save.\n\n**Critical Success** The target disbelieves the illusion and is unaffected.\n**Success** For 1 round, the target is stupefied 2 and takes a -2 status penalty to any checks it makes to determine the effects of reactions.\n**Failure** For 1 minute, the target is stupefied 2 and can't use reactions.\n**Critical Failure** As failure, and all spaces are difficult terrain for the target.\n- - -\n**Heightened (+2)** You can target one additional creature.",
+			"hash": "DlWYItLK"
+		}
 	},
 	{
 		"name": "Nymph's Token",
@@ -1428,7 +2189,20 @@
 		"focus": true,
 		"aonId": 785,
 		"id": "a8e08670-25fb-40a5-b669-ee6c0eff339c",
-		"hash": "MtDgFyLf"
+		"pf2t": {
+			"name": "Nymph's Token",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,enchantment,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 236",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=785",
+			"aon": "spells785",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou grant an ally a token of favor. You create a token, such as a lock of your hair or a flower, that persists for the spell's duration; as part of Casting the Spell, you can Interact to pass the token to an ally within your reach. As long as the ally has the token on their person, they gain a +1 status bonus to Performance checks and Will saves. You can Dismiss the spell as a free action.\n- - -\n**Heightened (4th)** As long as the ally has the token on their person, you can cast spells that have a range of touch on them at a range of 30 feet.",
+			"hash": "MtDgFyLf"
+		}
 	},
 	{
 		"name": "Sepulchral Mask",
@@ -1466,7 +2240,21 @@
 		"focus": true,
 		"aonId": 786,
 		"id": "a016dd14-05c2-4321-be26-5b52fef0cd26",
-		"hash": "TVkPbIQW"
+		"pf2t": {
+			"name": "Sepulchral Mask",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,divination,emotion,mental,sorcerer,visual",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 236",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=786",
+			"aon": "spells786",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Area** 5-foot emanation\n**Duration** 1 minute\n**Targets** enemies in the area\n\n- - -\n\nYou manifest a supernatural funerary mask, granting you a +1 status bonus to Will saving throws against emotion effects for 1 minute. Its somber countenance forces your foes to confront their regrets and sins. Each enemy in the area when you Cast the Spell or that starts its turn in the area takes 1d4 mental damage and must attempt a Will save.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes half damage.\n**Failure** The creature takes full damage and takes a -1 status penalty to Will saves against emotion effects for 1 round.\n**Critical Failure** The creature takes double damage and a -1 status penalty to Will saves against emotion effects for 1 minute.\n- - -\n**Heightened (+2)** Increase the mental damage by 2d4 and the emanation's radius by 5 feet.",
+			"hash": "TVkPbIQW"
+		}
 	},
 	{
 		"name": "Shepherd of Souls",
@@ -1489,7 +2277,21 @@
 		"focus": true,
 		"aonId": 787,
 		"id": "8222e6d2-326e-4da8-9286-f0616099261f",
-		"hash": "msgWMpdI"
+		"pf2t": {
+			"name": "Shepherd of Souls",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,healing,necromancy,sorcerer",
+			"cast": "v",
+			"actions": "r",
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 236",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=787",
+			"aon": "spells787",
+			"type": "focus",
+			"body": "**Trigger** A living creature within 30 feet takes damage.\n**Area** 1 creature\n\n- - -\n\nYou stay the hand of fate for one not yet destined to die, sacrificing some of your own vitality to heal them. You lose up to 15 Hit Points as a sacrifice, and the target reduces the damage by twice the number of Hit Points sacrificed. If this reduction exceeds the amount of damage, the target recovers Hit Points equal to the excess amount.\n- - -\n**Heightened (+2)** The maximum number of Hit Points you can sacrifice increases by 5.",
+			"hash": "msgWMpdI"
+		}
 	},
 	{
 		"name": "Spirit Veil",
@@ -1510,7 +2312,20 @@
 		"focus": true,
 		"aonId": 788,
 		"id": "dfa78d37-d09a-405c-a804-d6e8bfe928a8",
-		"hash": "XkRxwxvb"
+		"pf2t": {
+			"name": "Spirit Veil",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,illusion,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 237",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=788",
+			"aon": "spells788",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou draw an occluding veil of spirits around yourself, blocking yourself especially well from undead eyes. You become concealed to all creatures, and you are hidden from undead creatures regardless of what precise senses they have; this grants the effects of invisibility, but against all the undead creature's precise senses. If you physically interact with an undead creature or use a hostile action, the spell ends.\n- - -\n**Heightened (+1)** You can target one additional willing creature within 30 feet. The spell ends if any target physically interacts with an undead creature or uses a hostile action",
+			"hash": "XkRxwxvb"
+		}
 	},
 	{
 		"name": "Steal Shadow",
@@ -1548,7 +2363,22 @@
 		"focus": true,
 		"aonId": 789,
 		"id": "2649f945-e016-46f2-82d0-cccfc01e0f14",
-		"hash": "JROxDWZM"
+		"pf2t": {
+			"name": "Steal Shadow",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,necromancy,shadow,sorcerer",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Advanced Player's Guide pg. 237",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=789",
+			"aon": "spells789",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou steal a creature's shadow, leaving it weakened and vulnerable. The target must attempt a Fortitude save.\n\n**Critical Success** The target is unaffected.\n**Success** The target is enfeebled 1 for 1 round.\n**Failure** The target takes 3d4 negative damage and is enfeebled 1 for the spell's duration as you tear its shadow away, collecting it in your hand. On subsequent rounds, when you Sustain the Spell, you can throttle the shadow to deal 3d4 negative damage to the target (basic Fortitude save). Until the spell ends, the target doesn't cast a shadow.\n**Critical Failure** As failure, but the target is enfeebled 2.\n- - -\n**Heightened (+1)** The damage when the spell is cast and when it is sustained increases by 1d4.",
+			"hash": "JROxDWZM"
+		}
 	},
 	{
 		"name": "Wish-Twisted Form",
@@ -1586,7 +2416,22 @@
 		"focus": true,
 		"aonId": 790,
 		"id": "560feb62-11a6-4987-a746-95b57d65daf3",
-		"hash": "GwwvDQVQ"
+		"pf2t": {
+			"name": "Wish-Twisted Form",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,sorcerer,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Advanced Player's Guide pg. 237",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=790",
+			"aon": "spells790",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou focus your magic upon an enemy, wishing for their defenses to fail and turning their strengths into weaknesses. The target must attempt one Will saving throw for all of the following effects. \n\n+ The target gains weakness 5 to one energy type of your choice.\n+ The target's resistances are reduced by 5.\n+ The target takes a -10-foot status penalty to all its Speeds.\n+ The target takes a -1 status penalty to its saving throws.\n\n\n**Critical Success** The target is unaffected.\n**Success** The target takes the penalties for 1 round.\n**Failure** The target takes the penalties for 1 minute.\n**Critical Failure** As failure, and the target takes a -1 status penalty to AC for the duration.\n- - -\n**Heightened (+1)** Increase the weakness and the reduction to resistances by 1.",
+			"hash": "GwwvDQVQ"
+		}
 	},
 	{
 		"name": "Blood Ward",
@@ -1609,7 +2454,21 @@
 		"focus": true,
 		"aonId": 791,
 		"id": "75ec8bb1-cb96-4be3-9c82-f239da79186a",
-		"hash": "tXpvfFxZ"
+		"pf2t": {
+			"name": "Blood Ward",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,hex,witch",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 237",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=791",
+			"aon": "spells791",
+			"type": "focus",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou consolidate warding energies with a gesture, guarding a creature against attacks from a certain type of foe. Designate one of the following creature traits: aberration, animal, beast, celestial, construct, dragon, elemental, fey, fiend, fungus, monitor, ooze, plant, or undead. The target gains a +1 status bonus to its saving throws and AC against creatures with that trait. The target is temporarily immune for 10 minutes.\n- - -\n**Heightened (5th)** The status bonus increases to +2.",
+			"hash": "tXpvfFxZ"
+		}
 	},
 	{
 		"name": "Cackle",
@@ -1626,7 +2485,20 @@
 		"focus": true,
 		"aonId": 792,
 		"id": "53f844cc-5d27-4547-8ff5-666de80d7e5d",
-		"hash": "RGszTtKj"
+		"pf2t": {
+			"name": "Cackle",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,enchantment,hex,witch",
+			"cast": "v",
+			"actions": 0,
+			"source": "Advanced Player's Guide pg. 237",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=792",
+			"aon": "spells792",
+			"type": "focus",
+			"body": "With a quick burst of laughter, you prolong a magical effect you created. You Sustain a Spell.",
+			"hash": "RGszTtKj"
+		}
 	},
 	{
 		"name": "Clinging Ice",
@@ -1704,7 +2576,21 @@
 		"focus": true,
 		"aonId": 794,
 		"id": "743ef358-e26a-4763-b1b0-f3daaca43301",
-		"hash": "IWzhjrzL"
+		"pf2t": {
+			"name": "Curse of Death",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,curse,death,hex,necromancy,witch",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 237",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=794",
+			"aon": "spells794",
+			"type": "focus",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou focus your malevolent gaze on a target, causing their heart to seize in dread. The target must attempt a Fortitude saving throw. Regardless of the result, the target is temporarily immune to further castings of curse of death for 1 day.\n**Critical Success** The target is unaffected.\n**Success** The target is afflicted with the curse of death at stage 1, and the stage of the curse can't increase beyond stage 1.\n**Failure** The target is afflicted with the curse of death at stage 1.\n**Critical Failure** The target is afflicted with the curse of death at stage 2.\n\n**Curse of Death** (curse) This curse ends immediately when the spell endsFortitude; **Stage 1** 4d6 negative damage and fatigued (1 round); **Stage 2** 8d6 negative damage and fatigued (1 round); **Stage 3** 12d6 negative damage and fatigued (1 round); **Stage 4** death\n- - -\n**Heightened (+1)** Increase the negative damage taken on a success and during the first three stages of the curse by 1d6.",
+			"hash": "IWzhjrzL"
+		}
 	},
 	{
 		"name": "Deceiver's Cloak",
@@ -1725,7 +2611,20 @@
 		"focus": true,
 		"aonId": 795,
 		"id": "4950208f-b089-49d0-b5c6-663f90bdcb0b",
-		"hash": "vZkkKRkv"
+		"pf2t": {
+			"name": "Deceiver's Cloak",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,hex,illusion,witch",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 238",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=795",
+			"aon": "spells795",
+			"type": "focus",
+			"body": "**Duration** sustained\n\n- - -\n\nYou wrap yourself in a cloak of illusion, appearing as another creature of the same body shape with roughly similar height and weight as yourself. This has the effects of a 3rd-level illusory disguise.\n- - -\n**Heightened (6th)** You can appear as any creature of the same size, even with a completely different body shape.",
+			"hash": "vZkkKRkv"
+		}
 	},
 	{
 		"name": "Discern Secrets",
@@ -1770,7 +2669,21 @@
 		"focus": true,
 		"aonId": 797,
 		"id": "889014d5-a1fa-4199-8f74-631434b142d2",
-		"hash": "qxCSrIGp"
+		"pf2t": {
+			"name": "Elemental Betrayal",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,evocation,hex,witch",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 238",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=797",
+			"aon": "spells797",
+			"type": "focus",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou call upon the elements to undermine your foe. When you Cast this Spell, choose air, earth, fire, or water. Each time the target takes damage from a spell or effect with the chosen trait, it takes an additional 2 damage of one damage type dealt by the spell or effect. If you chose fire or water, the target also takes this additional damage when taking fire or cold damage, respectively, from effects or spells without the chosen trait.\n- - -\n**Heightened (+2)** Increase the additional damage by 1.",
+			"hash": "qxCSrIGp"
+		}
 	},
 	{
 		"name": "Evil Eye",
@@ -1811,7 +2724,21 @@
 		"focus": true,
 		"aonId": 799,
 		"id": "5518e0e5-0c25-4361-b1f7-d541f803af79",
-		"hash": "hRRtbzqO"
+		"pf2t": {
+			"name": "Life Boost",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,healing,hex,necromancy,witch",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 238",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=799",
+			"aon": "spells799",
+			"type": "focus",
+			"body": "**Duration** 4 rounds\n**Targets** 1 creature\n\n- - -\n\nYou temporarily bolster the target's vitality. The target gains fast healing equal to double the spell's level.",
+			"hash": "hRRtbzqO"
+		}
 	},
 	{
 		"name": "Malicious Shadow",
@@ -1836,7 +2763,21 @@
 		"focus": true,
 		"aonId": 800,
 		"id": "675fc34a-c330-4153-907e-412445c86d2d",
-		"hash": "RUDCqWYm"
+		"pf2t": {
+			"name": "Malicious Shadow",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,evocation,hex,shadow,witch",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 238",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=800",
+			"aon": "spells800",
+			"type": "focus",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou reshape the target's shadow into a deadly form, such as strangling hands, a dangerous weapon, harrying runes, or the like, and command it to attack the target. When you Cast the Spell, and each time you Sustain the Spell, the shadow makes a Strike against the target. The shadow moves along with the foe, always remaining within reach. If you Sustain the Spell multiple times in a round, you gain this effect each time. The shadow uses and contributes to your multiple attack penalty.\n\nThe shadow's Strikes are melee spell attacks. Regardless of its shape, the shadow's Strikes deal damage equal to 1d10 plus your spellcasting ability modifier. You choose the type of damage when you Cast the Spell, choosing from bludgeoning, piercing, or slashing damage. The shadow doesn't take up space, grant flanking, or have any other attributes a creature would. The shadow can't make any attacks other than its Strike.\n\nThe shadow vanishes if the target moves into an area of complete darkness or enters an area with light from all directions such that the target doesn't cast a shadow. If another effect is controlling the target's shadow when you cast malicious shadow, you can attempt to counteract that effect to temporarily take control of the shadow, but the original effect resumes when malicious shadow ends.\n- - -\n**Heightened (+2)** The Strike damage increases by 1d10.",
+			"hash": "RUDCqWYm"
+		}
 	},
 	{
 		"name": "Needle of Vengeance",
@@ -1860,7 +2801,23 @@
 		"focus": true,
 		"aonId": 801,
 		"id": "2cbfebe5-3b54-4abe-873d-dbfa78c0f282",
-		"hash": "EpxJmlQK"
+		"pf2t": {
+			"name": "Needle of Vengeance",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,enchantment,hex,mental,witch",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 238",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=801",
+			"aon": "spells801",
+			"type": "focus",
+			"savingthrow": "Will",
+			"basic": 1,
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 enemy\n\n- - -\n\nA long, jagged needle jabs into the target foe's psyche whenever it tries to attack a specifically forbidden creature. Name yourself or one of your allies. The target takes 2 mental damage any time it uses a hostile action against the named creature.\n- - -\n**Heightened (+1)** Increase the damage by 2.",
+			"hash": "EpxJmlQK"
+		}
 	},
 	{
 		"name": "Nudge Fate",
@@ -1919,7 +2876,22 @@
 		"focus": true,
 		"aonId": 803,
 		"id": "724e1c36-dbe9-4051-83b0-5171ea2441cd",
-		"hash": "BIXbmZqF"
+		"pf2t": {
+			"name": "Personal Blizzard",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,hex,witch",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 239",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=803",
+			"aon": "spells803",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou summon an isolated blizzard of obscuring, scouring ice to follow your target. The target attempts a Fortitude save.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes 1d6 cold damage, and the spell ends.\n**Failure** The target takes 1d6 cold damage and 1d6 persistent cold damage. (The persistent damage automatically ends when the spell ends.) It is concealed to other creatures, and other creatures are concealed to it.\n**Critical Failure** As failure, but both the cold damage and the persistent cold damage increase to 2d6.\n- - -\n**Heightened (+1)** The cold damage and persistent cold damage increase by 1 (2 on a critical failure).",
+			"hash": "BIXbmZqF"
+		}
 	},
 	{
 		"name": "Phase Familiar",
@@ -1942,7 +2914,21 @@
 		"focus": true,
 		"aonId": 804,
 		"id": "bed9340f-2d71-4a55-887d-793d10531c31",
-		"hash": "wQnAzbqP"
+		"pf2t": {
+			"name": "Phase Familiar",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,hex,witch",
+			"cast": "s",
+			"actions": "r",
+			"range": 60,
+			"source": "Advanced Player's Guide pg. 239",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=804",
+			"aon": "spells804",
+			"type": "focus",
+			"body": "**Trigger** Your familiar would take damage.\n**Targets** your familiar\n\n- - -\n\nYou draw upon your patron's power to momentarily shift your familiar from its solid, physical form into an ephemeral version of itself shaped of mist. Your familiar gains resistance 5 to all damage and is immune to precision damage. These apply only against the triggering damage.\n- - -\n**Heightened (+1)** Increase the resistance by 2.",
+			"hash": "wQnAzbqP"
+		}
 	},
 	{
 		"name": "Restorative Moment",
@@ -1961,7 +2947,21 @@
 		"focus": true,
 		"aonId": 805,
 		"id": "e2a9c07c-9ccc-4688-b114-debfe80d5390",
-		"hash": "ZHjrdQts"
+		"pf2t": {
+			"name": "Restorative Moment",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,hex,necromancy,witch",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 239",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=805",
+			"aon": "spells805",
+			"type": "focus",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou manipulate the threads of time around the target, giving them some of the benefits of a day's passage. The target decreases the values of any doomed and drained conditions it has by 1 and can immediately attempt one saving throw against each affliction it has with a stage length of 1 day or less. The target is then temporarily immune for 1 day.",
+			"hash": "ZHjrdQts"
+		}
 	},
 	{
 		"name": "Shroud of Night",
@@ -2036,7 +3036,22 @@
 		"focus": true,
 		"aonId": 808,
 		"id": "5803bbd5-2574-458f-8478-7de38f1281a6",
-		"hash": "xLkfOBNQ"
+		"pf2t": {
+			"name": "Veil of Dreams",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,enchantment,hex,mental,witch",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 239",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=808",
+			"aon": "spells808",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou draw the target into a drowsy state, causing daydreams and sluggishness. The target must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes a -1 status penalty to Perception, attack rolls, and Will saves. This penalty increases to -2 for Will saves against sleep effects.\n**Failure** As success, and any time the target uses a concentrate action, it must succeed at a DC 5 flat check or the action is disrupted.",
+			"hash": "xLkfOBNQ"
+		}
 	},
 	{
 		"name": "Wilding Word",
@@ -2089,7 +3104,20 @@
 		"focus": true,
 		"aonId": 662,
 		"id": "76c6ab83-e89c-4c0f-b74a-60648e2562b5",
-		"hash": "QWdHqYqh"
+		"pf2t": {
+			"name": "Dance of Darkness",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "darkness,evocation",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Advanced Player's Guide pg. 193",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=662",
+			"aon": "spells662",
+			"type": "focus",
+			"body": "**Duration** varies\n\n- - -\n\nYou dance, Striding up to half your Speed. At either the start or end of your Stride, you create an area of magical darkness in a 10-foot burst centered on your location. This area is filled with magical darkness that works the same way as that created by a darkness spell of the same level. When you create the darkness, attempt a Performance check to dance, with a standard DC for your level, to determine the duration of the darkness.\n\n**Critical Success** 1 minute\n**Success** 2 rounds\n**Failure** 1 round",
+			"hash": "QWdHqYqh"
+		}
 	},
 	{
 		"name": "Shadow Illusion",
@@ -2113,7 +3141,21 @@
 		"focus": true,
 		"aonId": 663,
 		"id": "b544bced-90b6-4b31-8762-61cacf134052",
-		"hash": "pxBEbHSZ"
+		"pf2t": {
+			"name": "Shadow Illusion",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "auditory,illusion,shadow,visual",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "Advanced Player's Guide pg. 193",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=663",
+			"aon": "spells663",
+			"type": "focus",
+			"body": "**Duration** sustained\n\n- - -\n\nYou create a shadowy illusion of a creature or a stationary object, but the illusion can exist only in an area of dim light or darkness. The spell ends if the illusion is ever out of an area of dim light or darkness. If the illusion is an object, it must fit within a 20-foot burst, and the creature can be of any size up to Gargantuan, filling a 20-foot-by-20-foot space.\n\nThe object or creature appears to animate naturally; it even generates the appropriate sounds and smells, and feels believable to the touch, though its coloring is always muted. \n\nIf the illusion is a creature, shadow illusion has the effects of an illusory creature spell of the same level, except it deals 2d8 damage plus your spellcasting ability modifier, instead of the amount listed in illusory creature.\n- - -\n**Heightened (+2)** The area that an illusory object can fit in increases by 10 feet. The damage of the illusory creature's Strike increases by 1d8.",
+			"hash": "pxBEbHSZ"
+		}
 	},
 	{
 		"name": "Shadow Jump",
@@ -2138,7 +3180,21 @@
 		"focus": true,
 		"aonId": 664,
 		"id": "ed9352b9-ac0d-46ca-b388-ac85cb01932d",
-		"hash": "MxLDUptW"
+		"pf2t": {
+			"name": "Shadow Jump",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "conjuration,shadow,teleportation",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Advanced Player's Guide pg. 193",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=664",
+			"aon": "spells664",
+			"type": "focus",
+			"body": "**Requirements** You are in dim light or darkness\n\n- - -\n\nYou instantly transport yourself from one shadow to another. Teleport yourself and any items you're wearing and holding from your current space to a clear space you can see that's in dim light or darkness and within range. You can transport your familiar with this spell, but if shadow jump would bring any other creature with you-even if you're carrying the creature in an extradimensional container-the spell is disrupted.\n- - -\n**Heightened (8th)** When you arrive at your destination, you can become invisible until the end of your next turn or until you are no longer in an area of dim light or darkness, whichever comes first. The invisibility is an illusion effect.",
+			"hash": "MxLDUptW"
+		}
 	},
 	{
 		"name": "Beastmaster Trance",
@@ -2163,6 +3219,20 @@
 		"focus": true,
 		"aonId": 661,
 		"id": "661872d0-bdfb-4881-9399-c9620d70940b",
-		"hash": "OlQRIOxP"
+		"pf2t": {
+			"name": "Beastmaster Trance",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "archetype,concentrate,divination,mental",
+			"cast": "s,v",
+			"actions": 3,
+			"range": 1,
+			"source": "Advanced Player's Guide pg. 161",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=661",
+			"aon": "spells661",
+			"type": "focus",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** one of your animal companions you can precieve\n\n- - -\n\nYou enter a magical trance that allows you to perceive through the senses of the target companion. You attempt Perception checks using your own Perception, but you have any special senses the target has, such as low-light vision or darkvision. This spell grants no special method of communication with the chosen animal, so it follows any instructions you gave it before you entered the trance and, failing that, it does as it wishes.\n\nFor the duration of the trance, your own senses are muted, though you can still communicate. This lack of awareness makes you flat-footed. You can't take actions with the attack or move traits.\n- - -\n**Heightened (6th)** Increase the range to 100 miles and the duration to sustained up to 10 minutes. The target can hear you through the spell, allowing you to Command the Animal or use other actions that have the auditory trait.\n**Heightened (8th)** Increase the range to planetary and the duration to sustained up to 1 hour. You can communicate telepathically with the target for the duration of the trance.",
+			"hash": "OlQRIOxP"
+		}
 	}
 ]

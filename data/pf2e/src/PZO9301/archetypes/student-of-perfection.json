@@ -9,7 +9,16 @@
 		"source": "PZO9301",
 		"id": "570ecfaf-b7a4-47fb-b746-e2ca5f8b44f4",
 		"aonId": 18,
-		"hash": "wlgRWMWq"
+		"pf2t": {
+			"name": "Student of Perfection",
+			"pfs": "standard",
+			"source": "World Guide pg. 83 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=18",
+			"aon": "archetypes18",
+			"type": "archetype",
+			"body": "You studied martial arts at Jalmeray's Houses of Perfection.",
+			"hash": "wlgRWMWq"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -42,7 +51,19 @@
 		"source": "PZO9301",
 		"id": "a7ac8c18-4b1c-4392-aa74-81b68adc286b",
 		"aonId": 901,
-		"hash": "GcbyzIbA"
+		"pf2t": {
+			"name": "Perfect Strike",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Student of Perfection",
+			"source": "World Guide pg. 83 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=901",
+			"aon": "feats901",
+			"type": "feat",
+			"body": "**Archetype** Student of Perfection\n**Prerequisites** Student of Perfection Dedication\n\n- - -\n\nYou gain the perfect strike ki spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "GcbyzIbA"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -57,6 +78,18 @@
 		"source": "PZO9301",
 		"id": "37403da1-aaaa-4912-8e40-90488ecf871f",
 		"aonId": 902,
-		"hash": "bbWAXkbH"
+		"pf2t": {
+			"name": "Perfect Ki Adept",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Student of Perfection",
+			"source": "World Guide pg. 83 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=902",
+			"aon": "feats902",
+			"type": "feat",
+			"body": "**Archetype** Student of Perfection\n**Prerequisites** Student of Perfection Dedication\n\n- - -\n\nYou gain the appropriate ki spell for your School of Perfection: unblinking flame revelation for Unblinking Flame, unbreaking wave advance for Unbreaking Waves, unfolding wind rush for Unfolding Wind, or untwisting iron buffer for Untwisting Iron. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "bbWAXkbH"
+		}
 	}
 ]

@@ -9,7 +9,18 @@
 		"source": "PZO90153",
 		"id": "a6de85fe-84bc-4b5c-8c7a-690594e5a444",
 		"aonId": 40,
-		"hash": "vffUQtZY"
+		"pf2t": {
+			"name": "Turpin Rowe Lumberjack",
+			"pfs": "limited",
+			"traits": "archetype",
+			"archetype": "Turpin Rowe Lumberjack",
+			"source": "153 Life's Long Shadow pg. 75",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=40",
+			"aon": "archetypes40",
+			"type": "archetype",
+			"body": "**Archetype** Turpin Rowe Lumberjack\n**Prerequisites** Turpin Rowe Lumberjack Dedication\n\n- - -\n\nWhen you are climbing a wooden surface and have a hatchet or battle axe in each hand, you have a climb Speed equal to half your normal Speed. You must still have both legs available to climb and can't use either of the axes in combat while climbing. This feat can also be used to climb a surface of ice if you have a light pick in each hand.",
+			"hash": "vffUQtZY"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -42,7 +53,19 @@
 		"source": "PZO90153",
 		"id": "eafcc9c7-2b25-4fb1-a97d-a7ed361845d6",
 		"aonId": 1233,
-		"hash": "YvxbsEEg"
+		"pf2t": {
+			"name": "Axe Climber",
+			"level": 4,
+			"pfs": "limited",
+			"traits": "archetype",
+			"archetype": "Turpin Rowe Lumberjack",
+			"source": "153 Life's Long Shadow pg. 75",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1233",
+			"aon": "feats1233",
+			"type": "feat",
+			"body": "**Archetype** Turpin Rowe Lumberjack\n**Prerequisites** Turpin Rowe Lumberjack Dedication\n\n- - -\n\nWhen you are climbing a wooden surface and have a hatchet or battle axe in each hand, you have a climb Speed equal to half your normal Speed. You must still have both legs available to climb and can't use either of the axes in combat while climbing. This feat can also be used to climb a surface of ice if you have a light pick in each hand.",
+			"hash": "YvxbsEEg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -59,7 +82,20 @@
 		"source": "PZO90153",
 		"id": "9b805b6f-db48-44e9-84c7-125324a061dd",
 		"aonId": 1234,
-		"hash": "ptgErmfp"
+		"pf2t": {
+			"name": "Log Roll",
+			"level": 4,
+			"pfs": "limited",
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Turpin Rowe Lumberjack",
+			"source": "153 Life's Long Shadow pg. 75",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1234",
+			"aon": "feats1234",
+			"type": "feat",
+			"body": "**Archetype** Turpin Rowe Lumberjack\n**Prerequisites** Turpin Rowe Lumberjack Dedication\n**Requirements** You and an adjacent creature are both on a narrow surface or uneven ground and the other creature is flat-footed.\n\n- - -\n\nYou shuffle your feet to dislodge the surface beneath you or otherwise cause your opponent to become unsteady. Attempt an Acrobatics check against the adjacent creature's Reflex saving throw DC. On a success, the creature falls. On a critical failure, you fall.",
+			"hash": "ptgErmfp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -74,7 +110,19 @@
 		"source": "PZO90153",
 		"id": "ee2595e2-87bb-454e-bb08-32970cfc2610",
 		"aonId": 1235,
-		"hash": "KkKLJsHc"
+		"pf2t": {
+			"name": "Axe Thrower",
+			"level": 6,
+			"pfs": "limited",
+			"traits": "archetype",
+			"archetype": "Turpin Rowe Lumberjack",
+			"source": "153 Life's Long Shadow pg. 75",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1235",
+			"aon": "feats1235",
+			"type": "feat",
+			"body": "**Archetype** Turpin Rowe Lumberjack\n**Prerequisites** Turpin Rowe Lumberjack Dedication\n\n- - -\n\nYou have mastered the weight and balance of a variety of axes and can lob them with ease. Any one-handed axe weapon you wield has the thrown trait with a range of 10 feet. For axes that already have the thrown trait, the range increases by 10 feet. When you critically succeed at an attack roll with a thrown axe weapon, you apply the axe's critical specialization effect.",
+			"hash": "KkKLJsHc"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -89,6 +137,18 @@
 		"source": "PZO90153",
 		"id": "49f9a6b3-3fb4-4560-a43c-158091a44191",
 		"aonId": 1236,
-		"hash": "MpFxZLxD"
+		"pf2t": {
+			"name": "Widen the Gap",
+			"level": 10,
+			"pfs": "limited",
+			"traits": "archetype",
+			"archetype": "Turpin Rowe Lumberjack",
+			"source": "153 Life's Long Shadow pg. 75",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1236",
+			"aon": "feats1236",
+			"type": "feat",
+			"body": "**Archetype** Turpin Rowe Lumberjack\n\n- - -\n\nOnce you have penetrated a foe's defenses, you can home in on the same spot to exploit your opponent's wound and deal some serious damage. The second time you hit and deal damage with a melee axe Strike to the same opponent or object during your turn, you ignore half of the opponent's or object's Hardness, if any. If you hit and deal damage with a melee axe Strike to the same opponent or object a third or fourth time during your turn, you ignore all of its Hardness, if any.",
+			"hash": "MpFxZLxD"
+		}
 	}
 ]

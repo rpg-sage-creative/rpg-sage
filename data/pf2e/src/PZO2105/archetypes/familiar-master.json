@@ -12,7 +12,16 @@
 		"source": "PZO2105",
 		"id": "a6ddac27-f5d6-4a67-9efa-ffa1ca80c8be",
 		"aonId": 60,
-		"hash": "FqNZrECk"
+		"pf2t": {
+			"name": "Familiar Master",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 174",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=60",
+			"aon": "archetypes60",
+			"type": "archetype",
+			"body": "From the wise owl perched on the wizard's shoulder to the crafty gremlin that serves the witch for their own reasons, the ghastly homunculus in the alchemist's lab to the clever monkey that picks the lock of the thief's cell, familiars have always served. Whether through rigorous training or a preternatural connection, yours serves better than most.",
+			"hash": "FqNZrECk"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -43,7 +52,19 @@
 		"source": "PZO2105",
 		"id": "7a07e5fa-4858-4eb1-be12-93182945ce35",
 		"aonId": 1971,
-		"hash": "FkXbAlvP"
+		"pf2t": {
+			"name": "Familiar Mascot",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Familiar Master",
+			"source": "Advanced Player's Guide pg. 174",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1971",
+			"aon": "feats1971",
+			"type": "feat",
+			"body": "**Archetype** Familiar Master\n**Prerequisites** Familiar Master Dedication\n\n- - -\n\nYour familiar is the heart and soul of your adventuring team. When selecting master abilities, you can choose an ally to benefit from any specific master ability. Each master ability can benefit only a single character, and you can select a specific master ability only once unless the ability says otherwise.",
+			"hash": "FkXbAlvP"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -60,7 +81,20 @@
 		"source": "PZO2105",
 		"id": "e091a930-4833-4e67-a84a-bdcdb9026e5a",
 		"aonId": 1972,
-		"hash": "AFHPwzDK"
+		"pf2t": {
+			"name": "Familiar Conduit",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,conjuration,metamagic",
+			"actions": 1,
+			"archetype": "Familiar Master",
+			"source": "Advanced Player's Guide pg. 174",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1972",
+			"aon": "feats1972",
+			"type": "feat",
+			"body": "**Archetype** Familiar Master\n**Prerequisites** Familiar Master Dedication; able to cast spells\n**Requirements** You have line of effect to your familiar.\n\n- - -\n\nUnder your tutelage, your familiar has grown attuned to the hidden currents of the world and can serve as a conduit for your magic. If the next action you use is to Cast a Spell that has a range, the spell uses the familiar as its origin point.",
+			"hash": "AFHPwzDK"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -89,7 +123,19 @@
 		"source": "PZO2105",
 		"id": "d2ab79f6-0693-4aa1-bff0-1ac99695e92b",
 		"aonId": 1974,
-		"hash": "gxrvfKGy"
+		"pf2t": {
+			"name": "Mutable Familiar",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Familiar Master",
+			"source": "Advanced Player's Guide pg. 174",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1974",
+			"aon": "feats1974",
+			"type": "feat",
+			"body": "**Archetype** Familiar Master\n**Prerequisites** Familiar Master Dedication\n\n- - -\n\nYour familiar's supernatural spirit has outgrown its corporeal body. You can conduct a special 10-minute activity to reselect certain familiar abilities, switching one or more of the following abilities for other abilities on this list: amphibious, burrower, climber, darkvision, fast movement, manual dexterity, resistance, and scent. You can reselect only familiar abilities you would normally be able to reselect each day, not required familiar abilities for your familiar. You can't remove an ability that is required for another ability your familiar has (for instance, you can't remove manual dexterity if the familiar has lab assistant).",
+			"hash": "gxrvfKGy"
+		}
 	},
 	{
 		"objectType": "Feat",

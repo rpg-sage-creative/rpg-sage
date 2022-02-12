@@ -38,7 +38,22 @@
 		"traits": [ "Illusion", "Incapacitation", "Mental" ],
 		"focus": false,
 		"id": "1f82deb7-fd64-43e3-8bac-abc3ad2f2297",
-		"hash": "DnGbHXxh"
+		"pf2t": {
+			"name": "Hallucination",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "illusion,incapacitation,mental",
+			"traditions": "arcane,occult",
+			"cast": "m,s",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 342 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=144",
+			"aon": "spells144",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n**Targets** 1 creature\n\n- - -\n\nThe target consistently detects one thing as another, can't detect something that's there, or detects something that's not there, though it doesn't alter their beliefs. You choose which of these effects applies, and you determine the specifics of the hallucination. For example, you could make the target see all elves as humans, be unable to detect the presence of their brother, see their beloved pocket watch on their person even when it isn't, or see a tower in the center of town.\n\nThe target can attempt an initial Will save, with effects below. They also receive a Will save to disbelieve the hallucination every time they Seek or directly interact with the hallucination. For example, the target could attempt to disbelieve the hallucination each time they interacted with an elf, bumped into their brother accidentally, tried to check their pocket watch, or studied the tower. The target can attempt to disbelieve with a large circumstance bonus in situations determined by the GM, such as if the target attempted to climb the nonexistent tower.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature perceives what you chose until it disbelieves, but it knows what the hallucination is.\n**Failure** The creature perceives what you chose until it disbelieves.\n**Critical Failure** The creature perceives what you chose until it disbelieves, and it trusts its false senses, taking a -4 circumstance penalty to saves to disbelieve.\n- - -\n**Heightened (6th)** Choose to either target up to 10 creatures or change the spell's duration to until the next time you make your daily preparations.\n**Heightened (8th)** Choose to either target any number of creatures or change the spell's duration to unlimited.",
+			"hash": "DnGbHXxh"
+		}
 	},
 	{
 		"aonId": 145,
@@ -64,7 +79,22 @@
 		"traits": [ "Uncommon", "Illusion" ],
 		"focus": false,
 		"id": "817cf794-63e8-45da-9589-ecfb07f4d63c",
-		"hash": "xYTTqmwD"
+		"pf2t": {
+			"name": "Hallucinatory Terrain",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,illusion",
+			"traditions": "arcane,occult,primal",
+			"cast": "m,s,v",
+			"actions": "10 minutes",
+			"range": 500,
+			"source": "Core Rulebook pg. 343 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=145",
+			"aon": "spells145",
+			"type": "spell",
+			"body": "**Area** 50-foot burst\n**Duration** until the next time you make your daily preparations\n\n- - -\n\nYou create an illusion that causes natural terrain to look, sound, feel, and smell like a different kind of terrain. This doesn't disguise any structures or creatures in the area.\n\nAny creature that touches the illusion or uses the Seek action to examine it can attempt to disbelieve your illusion.\n- - -\n**Heightened (5th)** Your image can also disguise structures or create illusory structures (but still doesn't disguise creatures).",
+			"hash": "xYTTqmwD"
+		}
 	},
 	{
 		"aonId": 146,
@@ -91,7 +121,22 @@
 		"traits": [ "Necromancy", "Negative" ],
 		"focus": false,
 		"id": "4e133076-7afc-4c3c-9c98-061149e6f2fe",
-		"hash": "xZSAzkgW"
+		"pf2t": {
+			"name": "Harm",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "necromancy,negative",
+			"traditions": "divine",
+			"actions": 1,
+			"max": 3,
+			"range": "varies",
+			"source": "Core Rulebook pg. 343 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=146",
+			"aon": "spells146",
+			"type": "spell",
+			"body": "**Targets** 1 living creature or 1 willing undead creature\n\n- - -\n\nYou channel negative energy to harm the living or heal the undead. If the target is a living creature, you deal 1d8 negative damage to it, and it gets a basic Fortitude save. If the target is a willing undead creature, you restore that amount of Hit Points. The number of actions you spend when Casting this Spell determines its targets, range, area, and other parameters.\n\n:a: **(somatic)** The spell has a range of touch.\n:aa: **(somatic, verbal)** The spell has a range of 30 feet. If you're healing an undead creature, increase the Hit Points restored by 8.\n:aaa: **(material, somatic, verbal)** You disperse negative energy in a 30-foot emanation. This targets all living and undead creatures in the area.\n- - -\n**Heightened (+1)** The amount of healing or damage increases by 1d8, and the extra healing for the 2-action version increases by 8.",
+			"hash": "xZSAzkgW"
+		}
 	},
 	{
 		"aonId": 147,
@@ -116,7 +161,22 @@
 		"traits": [ "Transmutation" ],
 		"focus": false,
 		"id": "b2941441-c403-47e1-8531-8871eb6d7afc",
-		"hash": "LVFKzvjk"
+		"pf2t": {
+			"name": "Haste",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "transmutation",
+			"traditions": "arcane,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 343 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=147",
+			"aon": "spells147",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nMagic empowers the target to act faster. It gains the quickened condition and can use the extra action each round only for Strike and Stride actions.\n- - -\n**Heightened (7th)** You can target up to 6 creatures.",
+			"hash": "LVFKzvjk"
+		}
 	},
 	{
 		"aonId": 148,
@@ -143,7 +203,22 @@
 		"traits": [ "Healing", "Necromancy", "Positive" ],
 		"focus": false,
 		"id": "ba5a4d8e-f7b6-412c-bbb8-24102b988013",
-		"hash": "XWfZJtpt"
+		"pf2t": {
+			"name": "Heal",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "healing,necromancy,positive",
+			"traditions": "divine,primal",
+			"actions": 1,
+			"max": 3,
+			"range": "varies",
+			"source": "Core Rulebook pg. 343 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=148",
+			"aon": "spells148",
+			"type": "spell",
+			"body": "**Targets** 1 willing living creature or 1 undead\n\n- - -\n\nYou channel positive energy to heal the living or damage the undead. If the target is a willing living creature, you restore 1d8 Hit Points. If the target is undead, you deal that amount of positive damage to it, and it gets a basic Fortitude save. The number of actions you spend when Casting this Spell determines its targets, range, area, and other parameters.\n\n:a: **(somatic)** The spell has a range of touch.\n:aa: **(somatic, verbal)** The spell has a range of 30 feet. If you're healing a living creature, increase the Hit Points restored by 8.\n:aaa: **(material, somatic, verbal)** You disperse positive energy in a 30-foot emanation. This targets all living and undead creatures in the burst.\n- - -\n**Heightened (+1)** The amount of healing or damage increases by 1d8, and the extra healing for the 2-action version increases by 8.",
+			"hash": "XWfZJtpt"
+		}
 	},
 	{
 		"aonId": 149,
@@ -169,7 +244,22 @@
 		"traits": [ "Enchantment", "Mental" ],
 		"focus": false,
 		"id": "cd8cb476-ce4e-4561-b70b-49bdfc7765e8",
-		"hash": "MINRxSpk"
+		"pf2t": {
+			"name": "Heroism",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "enchantment,mental",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 343 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=149",
+			"aon": "spells149",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n**Targets** 1 creature\n\n- - -\n\nYou tap into the target's inner heroism, granting it a +1 status bonus to attack rolls, Perception checks, saving throws, and skill checks.\n- - -\n**Heightened (6th)** The status bonus increases to +2.\n**Heightened (9th)** The status bonus increases to +3.",
+			"hash": "MINRxSpk"
+		}
 	},
 	{
 		"aonId": 150,
@@ -206,7 +296,23 @@
 		"traits": [ "Emotion", "Enchantment", "Mental" ],
 		"focus": false,
 		"id": "814e46f7-94e9-4519-9d31-b108f31403d0",
-		"hash": "QOrgrfnh"
+		"pf2t": {
+			"name": "Hideous Laughter",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "emotion,enchantment,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 343 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=150",
+			"aon": "spells150",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** sustained\n**Targets** 1 living creature\n\n- - -\n\nThe target is overtaken with uncontrollable laughter. It must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target is plagued with uncontrollable laugher. It can't use reactions.\n**Failure** The target is slowed 1 and can't use reactions.\n**Critical Failure** The target falls prone and can't use actions or reactions for 1 round. It then suffers the failure effects.",
+			"hash": "QOrgrfnh"
+		}
 	},
 	{
 		"aonId": 151,
@@ -232,7 +338,24 @@
 		"traits": [ "Evocation", "Good", "Positive", "Water" ],
 		"focus": false,
 		"id": "a2f0ca07-f09c-4897-b36b-044d6dc6e4b7",
-		"hash": "WIzQHBZf"
+		"pf2t": {
+			"name": "Holy Cascade",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "evocation,good,positive,water",
+			"traditions": "divine",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "Core Rulebook pg. 344 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=151",
+			"aon": "spells151",
+			"type": "spell",
+			"savingthrow": "Reflex",
+			"basic": 1,
+			"body": "**Area** 20-foot burst\n\n- - -\n\nYou call upon sacred energy to amplify a vial of holy water, tossing it an incredible distance. It explodes in an enormous burst that deals 3d6 bludgeoning damage to creatures in the area from the cascade of water. The water deals an additional 6d6 positive damage to undead and 6d6 good damage to fiends.\n- - -\n**Heightened (+1)** The bludgeoning damage increases by 1d6, and the additional positive and good damage each increase by 2d6.",
+			"hash": "WIzQHBZf"
+		}
 	},
 	{
 		"aonId": 152,
@@ -257,7 +380,24 @@
 		"traits": [ "Necromancy", "Negative" ],
 		"focus": false,
 		"id": "43980442-d79e-47fd-9702-3c86f43a522e",
-		"hash": "xXpXUryK"
+		"pf2t": {
+			"name": "Horrid Wilting",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "necromancy,negative",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "Core Rulebook pg. 344 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=152",
+			"aon": "spells152",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"basic": 1,
+			"body": "**Targets** any number of living creatures\n\n- - -\n\nYou pull the moisture from the targets' bodies, dealing 10d10 negative damage. Creatures made of water (such as water elementals) and plant creatures use the outcome for one degree of success worse than the result of their saving throw. Creatures whose bodies contain no significant moisture (such as earth elementals) are immune to horrid wilting.\n- - -\n**Heightened (+1)** The damage increases by 1d10.",
+			"hash": "xXpXUryK"
+		}
 	},
 	{
 		"aonId": 153,
@@ -282,7 +422,21 @@
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "5098e09e-1120-4895-a3b6-8c3303c819c3",
-		"hash": "wggWWtxW"
+		"pf2t": {
+			"name": "Humanoid Form",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "polymorph,transmutation",
+			"traditions": "arcane,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 344 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=153",
+			"aon": "spells153",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou transform your appearance to that of a Small or Medium humanoid, such as a dwarf, elf, goblin, halfling, human, orc, or lizardfolk. You gain the humanoid trait in addition to your other traits while in this form, as well as any trait related to the creature's kind (such as goblin or human). If this transformation reduces your size, it reduces your reach accordingly (as the shrink spell). This transformation doesn't change your statistics in any way, and you don't gain any special abilities of the humanoid form you assume. You can still wear and use your gear, which changes size (if necessary) to match your new form. If items leave your person, they return to their usual size.\n\nHumanoid form grants you a +4 status bonus to Deception checks to pass as a generic member of the chosen ancestry, and you add your level even if you're untrained, but you can't make yourself look like a specific person. If you want to Impersonate an individual, you still need to create a disguise, though the GM won't factor in the difference in ancestry when determining the DC of your Deception check. You can Dismiss this spell.\n- - -\n**Heightened (3rd)** You gain darkvision or low-light vision if the form you assume has that ability.\n**Heightened (5th)** You can take on the appearance of a Large humanoid. If this increases your size, you gain the effects of the enlarge spell.",
+			"hash": "wggWWtxW"
+		}
 	},
 	{
 		"aonId": 154,
@@ -307,7 +461,22 @@
 		"traits": [ "Attack", "Evocation", "Water" ],
 		"focus": false,
 		"id": "4ee17a70-d289-4617-afe3-3a73cabad929",
-		"hash": "rJmxEOgG"
+		"pf2t": {
+			"name": "Hydraulic Push",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "attack,evocation,water",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Core Rulebook pg. 344 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=154",
+			"aon": "spells154",
+			"type": "spell",
+			"body": "**Targets** 1 creature or unattended object\n\n- - -\n\nYou call forth a powerful blast of pressurized water that bludgeons the target and knocks it back. Make a ranged spell attack roll.\n\n**Critical Success** The target takes 6d6 bludgeoning damage and is knocked back 10 feet.\n**Success** The target takes 3d6 bludgeoning damage and is knocked back 5 feet.\n- - -\n**Heightened (+1)** The damage increases by 2d6.",
+			"hash": "rJmxEOgG"
+		}
 	},
 	{
 		"aonId": 155,
@@ -331,7 +500,22 @@
 		"traits": [ "Evocation", "Water" ],
 		"focus": false,
 		"id": "d1afd110-3e90-4206-8842-ce5df848abfb",
-		"hash": "rgrmDxpW"
+		"pf2t": {
+			"name": "Hydraulic Torrent",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "evocation,water",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 344 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=155",
+			"aon": "spells155",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"body": "**Area** 60-foot line\n\n- - -\n\nA swirling torrent of water manifests along a straight line, battering creatures and unattended objects in its path and possibly pushing them away from you. The torrent deals 8d6 bludgeoning damage. Each creature in the area must attempt a basic Fortitude save; unattended objects automatically fail. Creatures and objects that fail the save are also knocked back 5 feet (10 feet on a critical failure).\n- - -\n**Heightened (+1)** The damage increases by 2d6.",
+			"hash": "rgrmDxpW"
+		}
 	},
 	{
 		"aonId": 156,
@@ -350,7 +534,21 @@
 		"traits": [ "Divination" ],
 		"focus": false,
 		"id": "44ecd3c6-a24c-4061-9327-14732802f7fe",
-		"hash": "WtqZHrDW"
+		"pf2t": {
+			"name": "Hypercognition",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "divination",
+			"traditions": "occult",
+			"cast": "v",
+			"actions": 1,
+			"source": "Core Rulebook pg. 344 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=156",
+			"aon": "spells156",
+			"type": "spell",
+			"body": "You rapidly catalog and collate information relevant to your current situation. You can instantly use up to 6 Recall Knowledge actions as part of Casting this Spell. For these actions, you can't use any special abilities, reactions, or free actions that trigger when you Recall Knowledge.",
+			"hash": "WtqZHrDW"
+		}
 	},
 	{
 		"aonId": 157,
@@ -384,6 +582,22 @@
 		"traits": [ "Illusion", "Visual" ],
 		"focus": false,
 		"id": "d9ec5a4d-7bfc-47c1-9c85-ca0a062b0841",
-		"hash": "UpfrBxWv"
+		"pf2t": {
+			"name": "Hypnotic Pattern",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "illusion,visual",
+			"traditions": "arcane,occult",
+			"cast": "m,s",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 344 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=157",
+			"aon": "spells157",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Area** 10-foot burst\n**Duration** sustained up to 1 minute\n\n- - -\n\nYou create a pattern of shifting colors that hovers in the air in a geometric cloud. Creatures are dazzled while inside the pattern. In addition, a creature must attempt a Will saving throw if it is inside the pattern when you cast it, when it enters the pattern, when it ends its turn within the pattern, or if it uses a Seek or Interact action on the pattern. A creature currently fascinated by the pattern doesn't attempt new saves.\n\n**Success** The target is unaffected.\n**Failure** The target is fascinated by the pattern.\n**Critical Failure** The target is fascinated by the pattern. While it remains fascinated, it can't use reactions.",
+			"hash": "UpfrBxWv"
+		}
 	}
 ]

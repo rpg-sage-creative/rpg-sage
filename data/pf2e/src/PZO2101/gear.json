@@ -28,7 +28,19 @@
 		"source": "PZO2101",
 		"id": "a7186046-7ddf-4e78-9a32-15876e69565b",
 		"aonId": 1,
-		"hash": "zNPXqjXn"
+		"pf2t": {
+			"name": "Adventurer's Pack",
+			"pfs": "standard",
+			"priceunit": "gp, 5 sp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 289 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=1",
+			"aon": "equipment1",
+			"type": "item",
+			"body": "This item is the starter kit for an adventurer, containing the essential items for exploration and survival. The Bulk value is for the entire pack together, but see the descriptions of individual items as necessary.\n\nThe pack contains the following items: backpack (containing the other goods), bedroll, 10 pieces of chalk, flint and steel, 50 feet of rope, 2 weeks' rations, soap, 5 torches, and a waterskin.",
+			"hash": "zNPXqjXn"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -61,7 +73,19 @@
 		"id": "f3789ef0-fff7-4ca1-a16e-cca47eb2bd3a",
 		"previousId": "A7186046-7DDF-4E78-9A32-15876E69565B",
 		"aonId": 1,
-		"hash": "zNPXqjXn"
+		"pf2t": {
+			"name": "Adventurer's Pack",
+			"pfs": "standard",
+			"priceunit": "gp, 5 sp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 289 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=1",
+			"aon": "equipment1",
+			"type": "item",
+			"body": "This item is the starter kit for an adventurer, containing the essential items for exploration and survival. The Bulk value is for the entire pack together, but see the descriptions of individual items as necessary.\n\nThe pack contains the following items: backpack (containing the other goods), bedroll, 10 pieces of chalk, flint and steel, 50 feet of rope, 2 weeks' rations, soap, 5 torches, and a waterskin.",
+			"hash": "zNPXqjXn"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -75,7 +99,20 @@
 		"source": "PZO2101",
 		"id": "acfff3a0-d7b2-4b03-85d3-96cf7cd747ca",
 		"aonId": 2,
-		"hash": "RSXzPQxW"
+		"pf2t": {
+			"name": "Alchemist's Tools",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 3,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 289 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=2",
+			"aon": "equipment2",
+			"type": "item",
+			"body": "This mobile collection of vials and chemicals can be used for simple alchemical tasks. If you wear your alchemist's tools, you can draw and replace them as part of the action that uses them.",
+			"hash": "RSXzPQxW"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -102,7 +139,20 @@
 		"version": 1,
 		"id": "1846c786-f6f3-4011-8287-cef74e94ae72",
 		"aonId": 543,
-		"hash": "OBnMkQGB"
+		"pf2t": {
+			"name": "Alchemist's Lab",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 5,
+			"bulk": 6,
+			"source": "Core Rulebook pg. 287 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=543",
+			"aon": "equipment543:1",
+			"type": "item",
+			"body": "You need an alchemist's lab to Craft alchemical items during downtime.",
+			"hash": "OBnMkQGB"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -131,7 +181,20 @@
 		"id": "a27e70d6-0ce1-40e3-8e6a-f1fce9135420",
 		"previousId": "ACFFF3A0-D7B2-4B03-85D3-96CF7CD747CA",
 		"aonId": 2,
-		"hash": "RSXzPQxW"
+		"pf2t": {
+			"name": "Alchemist's Tools",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 3,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 289 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=2",
+			"aon": "equipment2",
+			"type": "item",
+			"body": "This mobile collection of vials and chemicals can be used for simple alchemical tasks. If you wear your alchemist's tools, you can draw and replace them as part of the action that uses them.",
+			"hash": "RSXzPQxW"
+		}
 	},
 	{ "objectType": "Gear", "name": "Expanded Alchemist's Tools", "source": "PZO2101", "version": -1, "id": "8bc14e12-4041-43f4-aebd-59c338f94a92", "previousId": "034BC687-E9C6-411A-9ED0-A827A223FAE7" },
 	{
@@ -146,7 +209,20 @@
 		"source": "PZO2101",
 		"id": "8fe58358-f016-41f4-830f-d9ac027c386e",
 		"aonId": 3,
-		"hash": "XmERqlGS"
+		"pf2t": {
+			"name": "Artisan's Tools",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 4,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 287 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=3",
+			"aon": "equipment3:1",
+			"type": "item",
+			"body": "You need these tools to create items from raw materials with the Craft skill. Different sets are needed for different work, as determined by the GM; for example, blacksmith's tools differ from woodworker's tools. If you wear your artisan's tools, you can draw and replace them as part of the action that uses them.",
+			"hash": "XmERqlGS"
+		}
 	},
 	{ "objectType": "Gear", "name": "Sterling Artisan's Tools", "parent": "Artisan's Tools", "level": 3, "price": "50 gp", "bulk": "2", "hands": "2", "details": [], "source": "PZO2101", "id": "8d87d407-5e04-42eb-8acc-3422898343a5" },
 	{
@@ -163,7 +239,18 @@
 		"source": "PZO2101",
 		"id": "3feb818b-16c1-4e69-9c6f-8a239e412743",
 		"aonId": 4,
-		"hash": "lwAfzlGm"
+		"pf2t": {
+			"name": "Backpack",
+			"pfs": "standard",
+			"priceunit": "sp",
+			"price": 1,
+			"source": "Core Rulebook pg. 289 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=4",
+			"aon": "equipment4",
+			"type": "item",
+			"body": "A backpack holds up to 4 Bulk of items. and the first 2 Bulk of these items don't count against your Bulk limits. If you're carrying or stowing the pack rather than wearing it on your back, its Bulk is light instead of negligible.",
+			"hash": "lwAfzlGm"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -179,7 +266,18 @@
 		"source": "PZO2101",
 		"id": "3f085dee-e497-443d-b6ac-e22ee36045c6",
 		"aonId": 5,
-		"hash": "KqfRxqmA"
+		"pf2t": {
+			"name": "Bandolier",
+			"pfs": "standard",
+			"priceunit": "sp",
+			"price": 1,
+			"source": "Core Rulebook pg. 289 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=5",
+			"aon": "equipment5",
+			"type": "item",
+			"body": "A bandolier holds up to eight items of light Bulk within easy reach and is usually used for alchemical items or potions. If you are carrying or stowing a bandolier rather than wearing it around your chest, it has light Bulk instead of negligible. A bandolier can be dedicated to a full set of tools, such as healer's tools, allowing you to draw the tools as part of the action that requires them.",
+			"hash": "KqfRxqmA"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -193,9 +291,44 @@
 		"source": "PZO2101",
 		"id": "af711939-861e-48cc-8fb0-001bfb84fd14",
 		"aonId": 6,
-		"hash": "XkxIWLTd"
+		"pf2t": {
+			"name": "Basic Crafter's Book",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "sp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 289 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=6",
+			"aon": "equipment6",
+			"type": "item",
+			"body": "This book contains formulas for Crafting common items from Chapter 6 of the Core Rulebook \n\n**Nethys Note**: This includes forumas for common adventuring gear, armor, shields, and weapons from the Core Rulebook. It also includes the lesser acid flask, lesser alchemist's fire, lesser bottled lightning, lesser frost vial, lesser tanglefoot bag, lesser thunderstone, lesser antidote, lesser antiplague, minor elixir of life, lesser smokestick, sunrod, tindertwig, holy water, unholy water, minor healing potion, scroll of a common 1st-level spell, potency crystal formulas - though from other categories, these entries were included in Chapter 6 of the Core Rulebook.",
+			"hash": "XkxIWLTd"
+		}
 	},
-	{ "objectType": "Gear", "name": "Bedroll", "price": "1 cp", "bulk": "L", "hands": "-", "details": [], "source": "PZO2101", "id": "769a9d16-4f05-4f57-8116-2619051abb1b", "aonId": 7, "hash": "DVltQTbl" },
+	{
+		"objectType": "Gear",
+		"name": "Bedroll",
+		"price": "1 cp",
+		"bulk": "L",
+		"hands": "-",
+		"details": [],
+		"source": "PZO2101",
+		"id": "769a9d16-4f05-4f57-8116-2619051abb1b",
+		"aonId": 7,
+		"pf2t": {
+			"name": "Bedroll",
+			"pfs": "standard",
+			"priceunit": "cp",
+			"price": 2,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 288 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=7",
+			"aon": "equipment7",
+			"type": "item",
+			"hash": "DVltQTbl"
+		}
+	},
 	{
 		"objectType": "Gear",
 		"name": "Belt Pouch",
@@ -209,7 +342,18 @@
 		"source": "PZO2101",
 		"id": "e6e5decd-f67f-4928-993d-f2637b8af4f1",
 		"aonId": 8,
-		"hash": "gfdOkLTJ"
+		"pf2t": {
+			"name": "Belt Pouch",
+			"pfs": "standard",
+			"priceunit": "cp",
+			"price": 4,
+			"source": "Core Rulebook pg. 289 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=8",
+			"aon": "equipment8",
+			"type": "item",
+			"body": "A belt pouch holds up to four items of lightBulk.",
+			"hash": "gfdOkLTJ"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -224,7 +368,20 @@
 		"source": "PZO2101",
 		"id": "35269c5e-41fb-4eb4-a85d-5e378199b75a",
 		"aonId": 9,
-		"hash": "VUQpBJXx"
+		"pf2t": {
+			"name": "Caltrops",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 3,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 289 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=9",
+			"aon": "equipment9",
+			"type": "item",
+			"body": "These four-pronged metal spikes can cause damage to a creature's feet. You can scatter caltrops in an empty square adjacent to you with an Interact action. The first creature that moves into that square must succeed at a DC 14 Acrobatics check or take 1d4 piercing damage and 1 persistent bleed damage. A creature taking persistent bleed damage from caltrops takes a -5-foot penalty to its Speed. Spending an Interact action to pluck the caltrops free reduces the DC to stop the bleeding. Once a creature takes damage from caltrops, enough caltrops are ruined that other creatures moving into the square are safe.\n\nDeployed caltrops can be salvaged and reused if no creatures took damage from them. Otherwise, enough caltrops are ruined that they can't be salvaged.",
+			"hash": "VUQpBJXx"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -239,10 +396,45 @@
 		"source": "PZO2101",
 		"id": "bee462b1-755a-4009-a60d-b53e279fc7b4",
 		"aonId": 10,
-		"hash": "trUpSkyB"
+		"pf2t": {
+			"name": "Candle",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "cp",
+			"price": 1,
+			"source": "Core Rulebook pg. 289 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=10",
+			"aon": "equipment10",
+			"type": "item",
+			"body": "A lit candle sheds dim light in a 10-foot radius for 8 hours.",
+			"hash": "trUpSkyB"
+		}
 	},
 	{ "objectType": "Gear", "name": "Chain (10 feet)", "price": "4 gp", "bulk": "1", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "476f52b9-f019-4ec2-ac0e-c28e6316eff6" },
-	{ "objectType": "Gear", "name": "Chalk", "quantity": 10, "price": "1 cp", "bulk": "-", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "724bcff5-cb68-4d53-98fe-252f3e0f0803", "aonId": 12, "hash": "jvLqdqQW" },
+	{
+		"objectType": "Gear",
+		"name": "Chalk",
+		"quantity": 10,
+		"price": "1 cp",
+		"bulk": "-",
+		"hands": "1",
+		"details": [ "" ],
+		"source": "PZO2101",
+		"id": "724bcff5-cb68-4d53-98fe-252f3e0f0803",
+		"aonId": 12,
+		"pf2t": {
+			"name": "Chalk",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "cp",
+			"price": 1,
+			"source": "Core Rulebook pg. 288 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=12",
+			"aon": "equipment12",
+			"type": "item",
+			"hash": "jvLqdqQW"
+		}
+	},
 	{
 		"objectType": "Gear",
 		"name": "Chest",
@@ -256,7 +448,20 @@
 		"source": "PZO2101",
 		"id": "16b118f3-fe11-4809-a208-77991811c493",
 		"aonId": 13,
-		"hash": "mqnlmgGO"
+		"pf2t": {
+			"name": "Chest",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "sp",
+			"price": 6,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 289 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=13",
+			"aon": "equipment13",
+			"type": "item",
+			"body": "A wooden chest can hold up to 8 Bulk of items.",
+			"hash": "mqnlmgGO"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -270,7 +475,20 @@
 		"source": "PZO2101",
 		"id": "d787c647-4077-4fe5-9116-d0c11dc45f67",
 		"aonId": 14,
-		"hash": "YWXzkGch"
+		"pf2t": {
+			"name": "Climbing Kit",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "sp",
+			"price": 5,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 287 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=14",
+			"aon": "equipment14:1",
+			"type": "item",
+			"body": "This satchel includes 50 feet of rope, pulleys, a dozen pitons, a hammer, a grappling hook, and one set of crampons. Climbing kits allow you to attach yourself to the wall you're Climbing, moving half as quickly as usual (minimum 5 feet) but letting you attempt a DC 5 flat check whenever you critically fail to prevent a fall. A single kit has only enough materials for one climber; each climber needs their own kit. If you wear your climbing kit, you can access it as part of a Climb action.",
+			"hash": "YWXzkGch"
+		}
 	},
 	{ "objectType": "Gear", "name": "Extreme Climbing Kit", "parent": "Climbing Kit", "level": 3, "price": "40 gp", "bulk": "1", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "bde8cf6c-c748-4577-915a-b8cc20f3dd2f" },
 	{ "objectType": "GearCategory", "name": "Clothing", "details": [], "source": "PZO2101", "id": "aea09a29-08b1-4abe-9cef-4a51455352da" },
@@ -356,10 +574,45 @@
 		"source": "PZO2101",
 		"id": "02ce1077-4095-4691-a52e-09c8668c502d",
 		"aonId": 16,
-		"hash": "FrzlDBgv"
+		"pf2t": {
+			"name": "Compass",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"source": "Core Rulebook pg. 290 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=16",
+			"aon": "equipment16:1",
+			"type": "item",
+			"body": "A compass helps you Sense Direction or navigate, provided you're ina location with uniform magnetic fields. Without a compass, you take a -2 item penalty to these checks (similar to using a shoddy item).",
+			"hash": "FrzlDBgv"
+		}
 	},
 	{ "objectType": "Gear", "name": "Lensatic Compass", "parent": "Compass", "level": 3, "price": "20 gp", "bulk": "-", "hands": "1", "details": [], "source": "PZO2101", "id": "c7b3acff-df0d-4b3a-b08d-411a9f51e54c" },
-	{ "objectType": "Gear", "name": "Cookware", "price": "1 gp", "bulk": "2", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "ae3ebad5-d26b-4be1-bd56-88f3872e8218", "aonId": 17, "hash": "XghEwKbk" },
+	{
+		"objectType": "Gear",
+		"name": "Cookware",
+		"price": "1 gp",
+		"bulk": "2",
+		"hands": "2",
+		"details": [ "" ],
+		"source": "PZO2101",
+		"id": "ae3ebad5-d26b-4be1-bd56-88f3872e8218",
+		"aonId": 17,
+		"pf2t": {
+			"name": "Cookware",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 288 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=17",
+			"aon": "equipment17",
+			"type": "item",
+			"hash": "XghEwKbk"
+		}
+	},
 	{
 		"objectType": "Gear",
 		"name": "Crowbar",
@@ -372,7 +625,20 @@
 		"source": "PZO2101",
 		"id": "b7c52308-238c-43aa-872d-fc74c2429700",
 		"aonId": 18,
-		"hash": "mdChZIpA"
+		"pf2t": {
+			"name": "Crowbar",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "sp",
+			"price": 5,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 290 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=18",
+			"aon": "equipment18:1",
+			"type": "item",
+			"body": "When Forcing Open an object that doesn't have an easy grip, a crowbar makes it easier to gain the necessary leverage. Without a crowbar, prying something open takes a -2 item penalty to the Athletics check to Force Open (similar to using a shoddy item).",
+			"hash": "mdChZIpA"
+		}
 	},
 	{ "objectType": "Gear", "name": "Levered Crowbar", "parent": "Crowbar", "level": 3, "price": "20 gp", "bulk": "L", "hands": "2", "details": [], "source": "PZO2101", "id": "9a03e4fc-dddb-47f9-a62a-c750392f076a" },
 	{
@@ -387,7 +653,20 @@
 		"source": "PZO2101",
 		"id": "789b6a20-e70b-4332-b144-dd772e66c0b6",
 		"aonId": 19,
-		"hash": "VLjPXmYI"
+		"pf2t": {
+			"name": "Disguise Kit",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 290 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=19",
+			"aon": "equipment19:1",
+			"type": "item",
+			"body": "This small wooden box contains cosmetics, false facial hair, spirit gum, and a few simple wigs. You usually need a disguise kit to set up a disguise in order to Impersonate someone using the Deception skill. If you've crafted a large number of disguises, you can replenish your cosmetics supply with replacement cosmetics suitable for the type of your disguise kit. You can draw and replace a worn disguise kit as part of the action that uses it.",
+			"hash": "VLjPXmYI"
+		}
 	},
 	{ "objectType": "Gear", "name": "Replacement Cosmetics", "parent": "Disguise Kit", "price": "1 sp", "bulk": "-", "hands": "-", "details": [], "source": "PZO2101", "id": "436581dd-28b5-46e7-9140-fce449884a7a" },
 	{ "objectType": "Gear", "name": "Elite Disguise Kit", "parent": "Disguise Kit", "level": 3, "price": "40 gp", "bulk": "L", "hands": "2", "details": [], "source": "PZO2101", "id": "d08cdbb1-7800-42c5-9e34-167926ef5223" },
@@ -404,7 +683,20 @@
 		"source": "PZO2101",
 		"id": "c0d6ac1b-b97a-4a1b-b438-07ca9d8acebd",
 		"aonId": 20,
-		"hash": "HRFAlktf"
+		"pf2t": {
+			"name": "Fishing Tackle",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "sp",
+			"price": 8,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 290 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=20",
+			"aon": "equipment20:1",
+			"type": "item",
+			"body": "This kit include a collapsible fishing pole, fishhooks, line, lures, and a fishing net.",
+			"hash": "HRFAlktf"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -430,7 +722,19 @@
 		"source": "PZO2101",
 		"id": "9d03654b-5a90-425b-b74f-123e2af1bd07",
 		"aonId": 21,
-		"hash": "rtOTZQtm"
+		"pf2t": {
+			"name": "Flint and Steel",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "cp",
+			"price": 5,
+			"source": "Core Rulebook pg. 290 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=21",
+			"aon": "equipment21",
+			"type": "item",
+			"body": "Flint and steel are useful in creating a fire if you have the time to catch a spark, though using them is typically too time-consuming to be practical during an encounter. Even in ideal conditions, using flint and steel to light a flame requires using at least 3 actions, and often significantly longer.",
+			"hash": "rtOTZQtm"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -444,7 +748,20 @@
 		"source": "PZO2101",
 		"id": "d4bcd153-0d43-4950-90b5-f2e7391dad2d",
 		"aonId": 22,
-		"hash": "ExXvZjCg"
+		"pf2t": {
+			"name": "Formula Book (Blank)",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 290 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=22",
+			"aon": "equipment22",
+			"type": "item",
+			"body": "A formula book holds the formulas necessary to make items other than the common equipment from this chapter; alchemists typically get one for free. Each formula book can hold the formulas for up to 100 different items. Formulas can also appear on parchment sheets, tablets, and almost any other medium; there's no need for you to copy them into a specific book as long as you can keep them on hand to reference them.",
+			"hash": "ExXvZjCg"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -460,7 +777,20 @@
 		"id": "0aba5c66-7cd1-4053-8d36-ebf203d28685",
 		"previousId": "D4BCD153-0D43-4950-90B5-F2E7391DAD2D",
 		"aonId": 22,
-		"hash": "ExXvZjCg"
+		"pf2t": {
+			"name": "Formula Book (Blank)",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 290 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=22",
+			"aon": "equipment22",
+			"type": "item",
+			"body": "A formula book holds the formulas necessary to make items other than the common equipment from this chapter; alchemists typically get one for free. Each formula book can hold the formulas for up to 100 different items. Formulas can also appear on parchment sheets, tablets, and almost any other medium; there's no need for you to copy them into a specific book as long as you can keep them on hand to reference them.",
+			"hash": "ExXvZjCg"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -474,9 +804,45 @@
 		"source": "PZO2101",
 		"id": "d2ceb7ff-0de3-427d-b9ee-678f5b2437a8",
 		"aonId": 23,
-		"hash": "dJkRXVYl"
+		"pf2t": {
+			"name": "Grappling Hook",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 290 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=23",
+			"aon": "equipment23",
+			"type": "item",
+			"body": "You can throw a grappling hook with a rope tied to it to make a climb easier. To anchor a grappling hook, make an attack roll with the secret trait against a DC depending on the target, typically at least DC 20. On a success, your hook has a firm hold, but on a critical failure, the hook seems like it will hold but actually falls when you're partway up.",
+			"hash": "dJkRXVYl"
+		}
 	},
-	{ "objectType": "Gear", "name": "Hammer", "price": "1 sp", "bulk": "L", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "40f30f23-d07d-49dd-a14c-05a29e7bb5ea", "aonId": 24, "hash": "QkvxMPnB" },
+	{
+		"objectType": "Gear",
+		"name": "Hammer",
+		"price": "1 sp",
+		"bulk": "L",
+		"hands": "1",
+		"details": [ "" ],
+		"source": "PZO2101",
+		"id": "40f30f23-d07d-49dd-a14c-05a29e7bb5ea",
+		"aonId": 24,
+		"pf2t": {
+			"name": "Hammer",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 288 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=24",
+			"aon": "equipment24",
+			"type": "item",
+			"hash": "QkvxMPnB"
+		}
+	},
 	{
 		"objectType": "Gear",
 		"name": "Healer's Tools",
@@ -489,7 +855,20 @@
 		"source": "PZO2101",
 		"id": "387aebda-b925-4455-8d06-0159b73ef42c",
 		"aonId": 25,
-		"hash": "BjFRkxkM"
+		"pf2t": {
+			"name": "Healer's Tools",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 5,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 290 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=25",
+			"aon": "equipment25:1",
+			"type": "item",
+			"body": "This kit of bandages, herbs, and suturing tools is necessary for Medicine checks to Administer First Aid, Treat Disease, Treat Poison, or Treat Wounds.  If you wear your healer's tools, you can draw and replace them as part of the action that uses them.",
+			"hash": "BjFRkxkM"
+		}
 	},
 	{ "objectType": "Gear", "name": "Expanded Healer's Tools", "parent": "Healer's Tools", "level": 3, "price": "50 gp", "bulk": "1", "hands": "2", "details": [], "source": "PZO2101", "id": "a562c18a-b65d-4039-b04f-16296990cf53" },
 	{
@@ -504,9 +883,42 @@
 		"source": "PZO2101",
 		"id": "a79b5ee1-fbce-4d59-8aee-37761c12b3e2",
 		"aonId": 26,
-		"hash": "EJNtvHmj"
+		"pf2t": {
+			"name": "Holly and Mistletoe",
+			"pfs": "standard",
+			"hands": 1,
+			"source": "Core Rulebook pg. 290 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=26",
+			"aon": "equipment26",
+			"type": "item",
+			"body": "Plants of supernatural significance provide a primal focus for primal spellcasters, such as druids, when using certain abilities and casting some spells. A bundle of holly and mistletoe must be held in one hand to use it. Other primal foci exist for druids focused on other aspects of nature.",
+			"hash": "EJNtvHmj"
+		}
 	},
-	{ "objectType": "Gear", "name": "Hourglass", "price": "3 gp", "bulk": "L", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "2097ed28-dbe1-4f4e-8bdf-501bf0d807bf", "aonId": 27, "hash": "ZMWrQJzS" },
+	{
+		"objectType": "Gear",
+		"name": "Hourglass",
+		"price": "3 gp",
+		"bulk": "L",
+		"hands": "1",
+		"details": [ "" ],
+		"source": "PZO2101",
+		"id": "2097ed28-dbe1-4f4e-8bdf-501bf0d807bf",
+		"aonId": 27,
+		"pf2t": {
+			"name": "Hourglass",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 3,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 288 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=27",
+			"aon": "equipment27",
+			"type": "item",
+			"hash": "ZMWrQJzS"
+		}
+	},
 	{ "objectType": "Gear", "name": "Ladder (10-foot)", "price": "3 cp", "bulk": "3", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "5f338b68-ea55-4b11-8747-e1a26a7cc1b8" },
 	{ "objectType": "GearCategory", "name": "Lantern", "details": [], "source": "PZO2101", "id": "cf08cede-d01a-4172-9f47-5385bfffcbed" },
 	{
@@ -610,7 +1022,20 @@
 		"source": "PZO2101",
 		"id": "0073b9f8-aa59-4ea2-90b3-1c6314bbda25",
 		"aonId": 31,
-		"hash": "syqsvqcM"
+		"pf2t": {
+			"name": "Magnifying Glass",
+			"level": 3,
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 40,
+			"source": "Core Rulebook pg. 290 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=31",
+			"aon": "equipment31",
+			"type": "item",
+			"body": "This quality handheld lens gives you a +1 item bonus to Perception checks to notice minute details of documents, fabric, and the like.",
+			"hash": "syqsvqcM"
+		}
 	},
 	{
 		"objectType": "GearCategory",
@@ -686,11 +1111,91 @@
 		"source": "PZO2101",
 		"id": "dd8b665f-3005-4c36-8d8e-308654f99cc0",
 		"aonId": 33,
-		"hash": "HRkZWmIZ"
+		"pf2t": {
+			"name": "Material Component Pouch",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "sp",
+			"price": 5,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 290 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=33",
+			"aon": "equipment33",
+			"type": "item",
+			"body": "This pouch contains material components for those spells that require them. Though the components are used up over time, you can refill spent components during your daily preparations.",
+			"hash": "HRkZWmIZ"
+		}
 	},
-	{ "objectType": "Gear", "name": "Merchant's Scale", "price": "2 sp", "bulk": "L", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "accd986b-cc50-45d6-803b-b8a7014f9288", "aonId": 34, "hash": "xVRWOpWx" },
-	{ "objectType": "Gear", "name": "Mirror", "price": "1 gp", "bulk": "-", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "69be90d6-9dc2-4079-a6bb-222809d4c11e", "aonId": 35, "hash": "hrRfNkCh" },
-	{ "objectType": "Gear", "name": "Mug", "price": "1 cp", "bulk": "-", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "85676b72-b98f-4ed8-9273-5b7896ceb90f", "aonId": 36, "hash": "znAvVbjU" },
+	{
+		"objectType": "Gear",
+		"name": "Merchant's Scale",
+		"price": "2 sp",
+		"bulk": "L",
+		"hands": "2",
+		"details": [ "" ],
+		"source": "PZO2101",
+		"id": "accd986b-cc50-45d6-803b-b8a7014f9288",
+		"aonId": 34,
+		"pf2t": {
+			"name": "Merchant's Scale",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "sp",
+			"price": 2,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 288 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=34",
+			"aon": "equipment34",
+			"type": "item",
+			"hash": "xVRWOpWx"
+		}
+	},
+	{
+		"objectType": "Gear",
+		"name": "Mirror",
+		"price": "1 gp",
+		"bulk": "-",
+		"hands": "1",
+		"details": [ "" ],
+		"source": "PZO2101",
+		"id": "69be90d6-9dc2-4079-a6bb-222809d4c11e",
+		"aonId": 35,
+		"pf2t": {
+			"name": "Mirror",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"source": "Core Rulebook pg. 288 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=35",
+			"aon": "equipment35",
+			"type": "item",
+			"hash": "hrRfNkCh"
+		}
+	},
+	{
+		"objectType": "Gear",
+		"name": "Mug",
+		"price": "1 cp",
+		"bulk": "-",
+		"hands": "1",
+		"details": [ "" ],
+		"source": "PZO2101",
+		"id": "85676b72-b98f-4ed8-9273-5b7896ceb90f",
+		"aonId": 36,
+		"pf2t": {
+			"name": "Mug",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "cp",
+			"price": 1,
+			"source": "Core Rulebook pg. 288 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=36",
+			"aon": "equipment36",
+			"type": "item",
+			"hash": "znAvVbjU"
+		}
+	},
 	{
 		"objectType": "GearCategory",
 		"name": "Musical Instrument",
@@ -729,7 +1234,19 @@
 		"source": "PZO2101",
 		"id": "0c1863af-3971-4438-b7ff-ed6180462a37",
 		"aonId": 39,
-		"hash": "jXgzWQZk"
+		"pf2t": {
+			"name": "Piton",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "cp",
+			"price": 1,
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=39",
+			"aon": "equipment39",
+			"type": "item",
+			"body": "These small spikes can be used as anchors to make climbing easier. To affix a piton, you must hold it in one hand and use a hammer to drive it in with your other hand. You can attach a rope to the hammered piton so that you don't fall all the way to the ground on a critical failure while Climbing.",
+			"hash": "jXgzWQZk"
+		}
 	},
 	{ "objectType": "Gear", "name": "Rations (1 week)", "price": "4 sp", "bulk": "L", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "e6de58f8-d503-4004-ae16-7e49b08408d8" },
 	{
@@ -755,7 +1272,20 @@
 		"source": "PZO2101",
 		"id": "1ab2ca12-f147-4c92-9972-4dcef044782d",
 		"aonId": 42,
-		"hash": "DHKVIccS"
+		"pf2t": {
+			"name": "Religious Text",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=42",
+			"aon": "equipment42",
+			"type": "item",
+			"body": "This manuscript contains scripture of a particular religion. Some divine spellcasters, such as clerics, can use a religious text as a divine focus to use certain abilities and cast some spells. A religious text must be held in one hand to use it.",
+			"hash": "DHKVIccS"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -769,10 +1299,46 @@
 		"source": "PZO2101",
 		"id": "d32bee4c-7d19-4f4b-bb24-6ae4785b8e9e",
 		"aonId": 43,
-		"hash": "QRVktCtt"
+		"pf2t": {
+			"name": "Repair Kit",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=43",
+			"aon": "equipment43:1",
+			"type": "item",
+			"body": "A repair kit allows you to perform simple repairs while traveling. It contains a portable anvil, tongs, woodworking tools, a whetstone, and oils for conditioning leather and wood. You can use a repair kit to Repair items using the Crafting skill. You can draw and replace a worn repair kit as part of the action that uses it.",
+			"hash": "QRVktCtt"
+		}
 	},
 	{ "objectType": "Gear", "name": "Superb Repair Kit", "parent": "Repair Kit", "level": 3, "price": "25 gp", "bulk": "1", "hands": "2", "details": [], "source": "PZO2101", "id": "af9319e5-ff08-44f0-a144-ac7c91fe0dc8" },
-	{ "objectType": "Gear", "name": "Rope", "price": "5 sp", "bulk": "L", "hands": "2", "details": [], "source": "PZO2101", "id": "0e755da5-67c5-4df4-9779-b675799770fb", "aonId": 44, "hash": "YgIbQZVQ" },
+	{
+		"objectType": "Gear",
+		"name": "Rope",
+		"price": "5 sp",
+		"bulk": "L",
+		"hands": "2",
+		"details": [],
+		"source": "PZO2101",
+		"id": "0e755da5-67c5-4df4-9779-b675799770fb",
+		"aonId": 44,
+		"pf2t": {
+			"name": "Rope",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "sp (50 ft.)",
+			"price": 5,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 288 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=44",
+			"aon": "equipment44",
+			"type": "item",
+			"hash": "YgIbQZVQ"
+		}
+	},
 	{
 		"objectType": "Gear",
 		"name": "Sack",
@@ -787,7 +1353,20 @@
 		"source": "PZO2101",
 		"id": "41f28862-de4c-47dd-a929-1604dac0eca2",
 		"aonId": 45,
-		"hash": "sMpKPWbr"
+		"pf2t": {
+			"name": "Sack",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "cp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=45",
+			"aon": "equipment45",
+			"type": "item",
+			"body": "A sack can hold up to 8 Bulk worth of items. A sack containing 2 Bulk or less can be worn on the body, usually tucked into a belt. You can carry a sack with one hand, but must use two hands to transfer items in and out.",
+			"hash": "sMpKPWbr"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -804,7 +1383,19 @@
 		"source": "PZO2101",
 		"id": "878c378f-4be4-43b6-8269-874d3bc91af7",
 		"aonId": 46,
-		"hash": "grSZrzKN"
+		"pf2t": {
+			"name": "Saddlebags",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "sp",
+			"price": 2,
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=46",
+			"aon": "equipment46",
+			"type": "item",
+			"body": "Saddlebags come in a pair. Each can hold up to 3 Bulk of items, and the first 1 Bulk of items in each doesn't count against your mount's Bulk limit. The Bulk value given is for saddlebags worn by a mount. If you are carrying or stowing saddlebags, they count as 1 Bulk instead of light Bulk.",
+			"hash": "grSZrzKN"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -820,7 +1411,19 @@
 		"source": "PZO2101",
 		"id": "030b935f-14fe-48f8-a592-28dd0ae581fc",
 		"aonId": 47,
-		"hash": "PORkHpRA"
+		"pf2t": {
+			"name": "Satchel",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "sp",
+			"price": 1,
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=47",
+			"aon": "equipment47",
+			"type": "item",
+			"body": "A satchel can hold up to 2 Bulk worth of items. If you are carrying or stowing a satchel rather than wearing it over your shoulder, it counts as light Bulk instead of negligible.",
+			"hash": "PORkHpRA"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -834,7 +1437,19 @@
 		"source": "PZO2101",
 		"id": "c44fdaaa-2998-45b5-ba32-4947946b2f54",
 		"aonId": 48,
-		"hash": "EEVJWwpz"
+		"pf2t": {
+			"name": "Scroll Case",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "sp",
+			"price": 1,
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=48",
+			"aon": "equipment48",
+			"type": "item",
+			"body": "Scrolls, maps, and other rolled documents are stored in scroll cases for safe transport.",
+			"hash": "EEVJWwpz"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -848,7 +1463,18 @@
 		"source": "PZO2101",
 		"id": "cb046050-87ca-4e2e-96c0-415aee48ed48",
 		"aonId": 49,
-		"hash": "rwLqrdwN"
+		"pf2t": {
+			"name": "Sheath",
+			"pfs": "standard",
+			"priceunit": "cp",
+			"price": 1,
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=49",
+			"aon": "equipment49",
+			"type": "item",
+			"body": "A sheath or scabbard lets you easily carry a weapon on your person.",
+			"hash": "rwLqrdwN"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -862,7 +1488,19 @@
 		"source": "PZO2101",
 		"id": "78bbecc8-77eb-427b-a81d-040a827a8106",
 		"aonId": 50,
-		"hash": "XOzRJIgW"
+		"pf2t": {
+			"name": "Signal Whistle",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "cp",
+			"price": 8,
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=50",
+			"aon": "equipment50",
+			"type": "item",
+			"body": "When sounded, a signal whistle can be heard clearly up to half a mile away across open terrain.",
+			"hash": "XOzRJIgW"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -876,10 +1514,45 @@
 		"source": "PZO2101",
 		"id": "04402fa9-60bd-46ce-9c4f-bbf824fb2c28",
 		"aonId": 51,
-		"hash": "UzbqvtXz"
+		"pf2t": {
+			"name": "Snare Kit",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 5,
+			"bulk": 2,
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=51",
+			"aon": "equipment51:1",
+			"type": "item",
+			"body": "This kit contains tools and materials for creating snares. A snare kit allows you to Craft snares using the Crafting skill. You can draw and replace a worn snare kit as part of the action to use it.",
+			"hash": "UzbqvtXz"
+		}
 	},
 	{ "objectType": "Gear", "name": "Specialist Snare Kit", "parent": "Snare Kit", "level": 3, "price": "55 gp", "bulk": "2", "hands": "2", "details": [], "source": "PZO2101", "id": "c83dc2ef-d681-44ec-bf8f-1d42fe4feee5" },
-	{ "objectType": "Gear", "name": "Soap", "price": "2 cp", "bulk": "-", "hands": "1", "details": [ "" ], "source": "PZO2101", "id": "e91e4098-c302-4390-ac31-6a161d964fd4", "aonId": 52, "hash": "tGHfGsQb" },
+	{
+		"objectType": "Gear",
+		"name": "Soap",
+		"price": "2 cp",
+		"bulk": "-",
+		"hands": "1",
+		"details": [ "" ],
+		"source": "PZO2101",
+		"id": "e91e4098-c302-4390-ac31-6a161d964fd4",
+		"aonId": 52,
+		"pf2t": {
+			"name": "Soap",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "cp",
+			"price": 2,
+			"source": "Core Rulebook pg. 288 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=52",
+			"aon": "equipment52",
+			"type": "item",
+			"hash": "tGHfGsQb"
+		}
+	},
 	{
 		"objectType": "Gear",
 		"name": "Spellbook (blank)",
@@ -892,7 +1565,20 @@
 		"source": "PZO2101",
 		"id": "45ffaff4-b47c-428e-8570-65d9eb31adc1",
 		"aonId": 53,
-		"hash": "zdRQqFQl"
+		"pf2t": {
+			"name": "Spellbook (Blank)",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=53",
+			"aon": "equipment53",
+			"type": "item",
+			"body": "A spellbook holds the written knowledge necessary to learn and prepare various spells, a necessity for wizards (who typically get one for free) and a useful luxury for other spellcasters looking to learn additional spells. Each spellbook can hold up to 100 spells. The Price listed is for a blank spellbook.",
+			"hash": "zdRQqFQl"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -908,7 +1594,20 @@
 		"id": "17141f8c-a86b-418e-b1c2-f66ee9b1245a",
 		"previousId": "45FFAFF4-B47C-428E-8570-65D9EB31ADC1",
 		"aonId": 53,
-		"hash": "zdRQqFQl"
+		"pf2t": {
+			"name": "Spellbook (Blank)",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=53",
+			"aon": "equipment53",
+			"type": "item",
+			"body": "A spellbook holds the written knowledge necessary to learn and prepare various spells, a necessity for wizards (who typically get one for free) and a useful luxury for other spellcasters looking to learn additional spells. Each spellbook can hold up to 100 spells. The Price listed is for a blank spellbook.",
+			"hash": "zdRQqFQl"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -922,7 +1621,20 @@
 		"source": "PZO2101",
 		"id": "471fd690-5466-4f19-991d-005262d993f1",
 		"aonId": 54,
-		"hash": "mklGrwxG"
+		"pf2t": {
+			"name": "Spyglass",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 20,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=54",
+			"aon": "equipment54:1",
+			"type": "item",
+			"body": "A typical spyglass lets you see eight times farther than normal. A fine spyglass adds a +1 item bonus to Perception checks to notice details at a distance.",
+			"hash": "mklGrwxG"
+		}
 	},
 	{ "objectType": "Gear", "name": "Fine Spyglass", "parent": "", "level": 4, "price": "80 gp", "bulk": "L", "hands": "2", "details": [ "" ], "source": "PZO2101", "id": "5cac451c-4618-407f-9291-eab030f6e492" },
 	{
@@ -938,7 +1650,19 @@
 		"source": "PZO2101",
 		"id": "d36d69cd-734a-4463-a414-fd4ca0278499",
 		"aonId": 55,
-		"hash": "ZkvnXgXl"
+		"pf2t": {
+			"name": "Tack",
+			"pfs": "standard",
+			"priceunit": "gp",
+			"price": 4,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=55",
+			"aon": "equipment55",
+			"type": "item",
+			"body": "Tack includes all the gear required to outfit a riding animal, including a saddle, bit and bridle, and stirrups if necessary. Especially large or oddly shaped animals might require specialty saddles. These can be more expensive or hard to find, as determined by the GM. The Bulk value given is for tack worn by a creature. If carried, the Bulk increases to 2.",
+			"hash": "ZkvnXgXl"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -952,7 +1676,20 @@
 		"source": "PZO2101",
 		"id": "51e5f10c-c466-4b9a-834f-7bf4a77c7d72",
 		"aonId": 56,
-		"hash": "tVnhzxRZ"
+		"pf2t": {
+			"name": "Ten-Foot Pole",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "cp",
+			"price": 1,
+			"bulk": 1,
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=56",
+			"aon": "equipment56",
+			"type": "item",
+			"body": "When wielding this long pole, you can use Seek to search a square up to 10 feet away. The pole is not sturdy enough to use as a weapon.",
+			"hash": "tVnhzxRZ"
+		}
 	},
 	{ "objectType": "Gear", "category": "Tent", "name": "Pup", "price": "8 sp", "bulk": "L", "hands": "2", "details": [], "source": "PZO2101", "id": "507cf150-5c7c-4457-a464-b5c2f4406052" },
 	{ "objectType": "Gear", "category": "Tent", "name": "Four-Person", "price": "5 gp", "bulk": "1", "hands": "2", "details": [], "source": "PZO2101", "id": "ce90bceb-d4fb-481e-8aa9-43165db4011b" },
@@ -977,7 +1714,20 @@
 		"source": "PZO2101",
 		"id": "272e0d75-f968-47d5-832b-d0ec6311ce1b",
 		"aonId": 58,
-		"hash": "OpqhHqjS"
+		"pf2t": {
+			"name": "Thieves' Tools",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 3,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=58",
+			"aon": "equipment58:1",
+			"type": "item",
+			"body": "You need thieves' tools to Pick Locks or Disable Devices (of some types) using the Thievery skill. If your thieves' tools are broken, you can repair them by replacing the lock picks with replacement picks appropriate to your tools; this doesn't require using the Repair action. If you wear your thieves' tools, you can draw and replace them as part of the action that uses them.",
+			"hash": "OpqhHqjS"
+		}
 	},
 	{ "objectType": "Gear", "category": "Thieves' Tools", "name": "Replacement Picks", "price": "3 sp", "bulk": "-", "hands": "-", "details": [], "source": "PZO2101", "id": "5ba2cba1-2cb8-4cd5-b5ee-0cf6f191a95b" },
 	{
@@ -1029,7 +1779,20 @@
 		"source": "PZO2101",
 		"id": "c5839e1b-89e9-4d84-a624-a71ef892bb67",
 		"aonId": 60,
-		"hash": "vmSMSQdM"
+		"pf2t": {
+			"name": "Torch",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "cp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 292 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=60",
+			"aon": "equipment60",
+			"type": "item",
+			"body": "A torch sheds bright light in a 20-foot radius (and dim light to the next 20 feet) for 1 hour. It can be used as an improvised weapon that deals 1d4 bludgeoning damage plus 1 fire damage.",
+			"hash": "vmSMSQdM"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -1043,7 +1806,19 @@
 		"source": "PZO2101",
 		"id": "b7d6bd21-76da-46c4-8f4c-b8f872a66b01",
 		"aonId": 61,
-		"hash": "WpNfQPWb"
+		"pf2t": {
+			"name": "Vial",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "cp",
+			"price": 5,
+			"source": "Core Rulebook pg. 292 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=61",
+			"aon": "equipment61",
+			"type": "item",
+			"body": "A simple glass vial holds up to 1 ounce of liquid.",
+			"hash": "WpNfQPWb"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -1057,7 +1832,20 @@
 		"source": "PZO2101",
 		"id": "228cb835-cfa5-4429-a525-1ab9f03518a8",
 		"aonId": 62,
-		"hash": "VxWyRTtW"
+		"pf2t": {
+			"name": "Waterskin",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "cp",
+			"price": 5,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 292 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=62",
+			"aon": "equipment62",
+			"type": "item",
+			"body": "When it's full, a waterskin contains roughly 1 day's worth of water for a Small or Medium creature.",
+			"hash": "VxWyRTtW"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -1073,7 +1861,20 @@
 		"id": "65dd15ba-5d69-4992-bcb4-b2a13367755e",
 		"previousId": "228CB835-CFA5-4429-A525-1AB9F03518A8",
 		"aonId": 62,
-		"hash": "VxWyRTtW"
+		"pf2t": {
+			"name": "Waterskin",
+			"pfs": "standard",
+			"hands": 1,
+			"priceunit": "cp",
+			"price": 5,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 292 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=62",
+			"aon": "equipment62",
+			"type": "item",
+			"body": "When it's full, a waterskin contains roughly 1 day's worth of water for a Small or Medium creature.",
+			"hash": "VxWyRTtW"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -1087,7 +1888,20 @@
 		"source": "PZO2101",
 		"id": "31834b39-4154-4700-bb07-71c795151245",
 		"aonId": 63,
-		"hash": "lkwOlbSC"
+		"pf2t": {
+			"name": "Writing Set",
+			"pfs": "standard",
+			"hands": 2,
+			"priceunit": "gp",
+			"price": 1,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 292 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=63",
+			"aon": "equipment63:1",
+			"type": "item",
+			"body": "Using a writing set, you can draft correspondence and scribe scrolls. A set includes stationery, including a variety of paper and parchment, as well as ink, a quill or inkpen, sealing wax, and a simple seal. If you've written a large amount, you can refill your kit with extra ink and paper.",
+			"hash": "lkwOlbSC"
+		}
 	},
 	{ "objectType": "Gear", "name": "Extra Ink and Paper", "parent": "Writing Set", "price": "1 sp", "bulk": "-", "hands": "-", "details": [ "" ], "source": "PZO2101", "id": "52453129-8f65-40c6-a7c3-7abfd163b728" },
 	{
@@ -1104,7 +1918,22 @@
 		"source": "PZO2101",
 		"id": "00720f3e-f3d1-409e-b0ee-1c6cc133cc00",
 		"aonId": 64,
-		"hash": "frSEQyrM"
+		"pf2t": {
+			"name": "Scholarly Journal",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 6,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=64",
+			"aon": "equipment64:1",
+			"type": "item",
+			"body": "Scholarly journals are uncommon. Each scholarly journal is a folio on a very specific topic, such as vampires or the history of a single town or neighborhood of a city. If you spend 1 minute referencing an academic journal before attempting a skill check to Recall Knowledge about the subject, you gain a +1 item bonus to the check. A compendium of journals costs five times as much as a single journal and requires both hands to use; each compendium contains several journals and grants its bonus on a broader topic, such as all undead or a whole city. The GM determines what scholarly journals are available in any location.",
+			"hash": "frSEQyrM"
+		}
 	},
 	{
 		"objectType": "Gear",
@@ -1133,7 +1962,22 @@
 		"source": "PZO2101",
 		"id": "d66ea374-4625-4dd5-88d6-d28d4989bbd5",
 		"aonId": 65,
-		"hash": "FGzqQkly"
+		"pf2t": {
+			"name": "Survey Map",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon",
+			"hands": 1,
+			"priceunit": "gp",
+			"price": 10,
+			"bulk": "L",
+			"source": "Core Rulebook pg. 291 2.0",
+			"src": "https://2e.aonprd.com/Equipment.aspx?ID=65",
+			"aon": "equipment65:1",
+			"type": "item",
+			"body": "Maps are uncommon. Most maps you can find are simple and functional. A survey map details a single location in excellent detail. One of these maps gives you a +1 item bonus to Survival checks and any skill checks to Recall Knowledge, provided the checks are related to the location detailed on the map. Maps sometimes come in atlases, containing a number of maps of the same quality, often on similar topics. An atlas costs five times as much as a single map and requires both hands to use. The GM determines what maps are available in any location.",
+			"hash": "FGzqQkly"
+		}
 	},
 	{
 		"objectType": "Gear",

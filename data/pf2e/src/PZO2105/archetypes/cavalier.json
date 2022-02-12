@@ -13,7 +13,16 @@
 		"source": "PZO2105",
 		"id": "6f333174-beac-48d1-ad77-23b43e78020a",
 		"aonId": 53,
-		"hash": "bhJrEXGU"
+		"pf2t": {
+			"name": "Cavalier",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 164",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=53",
+			"aon": "archetypes53",
+			"type": "archetype",
+			"body": "**Edicts:** Explore important sites, report and record your discoveries, and cooperate with fellow Pathfinders  **Anathema:** Fail to explore, report and cooperate; defy the will of a venture-captain or the Decemvirate\n\nYou are a skilled and dedicated warrior of the battlefield who specializes in fighting astride a powerful animal companion that serves as your mount. You and your mount are an unparalleled team, moving with shared intent to become a powerful force on the battlefield. You might wield a banner in the name of a greater organization, a liege, or an ideal you uphold, or you might fight solely to further enrich your own prestige, reputation, and coffers.",
+			"hash": "bhJrEXGU"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -50,7 +59,19 @@
 		"source": "PZO2105",
 		"id": "07d1bf78-dd99-4ad3-9135-1689d29e8d85",
 		"aonId": 1920,
-		"hash": "fPNbqqwD"
+		"pf2t": {
+			"name": "Cavalier's Banner",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,emotion,mental,visual",
+			"archetype": "Cavalier",
+			"source": "Advanced Player's Guide pg. 164",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1920",
+			"aon": "feats1920",
+			"type": "feat",
+			"body": "**Archetype** Cavalier\n**Prerequisites** Cavalier Dedication\n**Requirements** You have pledged your service to a specific organization or ideal (see Cavalier Pledges sidebar).\n\n- - -\n\nYou fly the banner of your pledge from your mount, raising your allies' spirits. You and all allies within 30 feet gain a +1 circumstance bonus to Will saves and DCs against fear effects. If your banner is destroyed or removed, allies within 30 feet become frightened 1.",
+			"hash": "fPNbqqwD"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -67,7 +88,20 @@
 		"source": "PZO2105",
 		"id": "7db5d9a3-2783-4d9b-8942-cd65144bdf75",
 		"aonId": 1921,
-		"hash": "UhwrrIUx"
+		"pf2t": {
+			"name": "Cavalier's Charge",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,flourish",
+			"actions": 2,
+			"archetype": "Cavalier",
+			"source": "Advanced Player's Guide pg. 164",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1921",
+			"aon": "feats1921",
+			"type": "feat",
+			"body": "**Archetype** Cavalier\n**Prerequisites** Cavalier Dedication\n**Requirements** You are riding your mount.\n\n- - -\n\nYou Command an Animal to order your mount to Stride twice. At any point during this movement, you can Strike one enemy within reach or within the first range increment of a ranged weapon. You gain a +1 circumstance bonus to your attack roll.",
+			"hash": "UhwrrIUx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -82,7 +116,19 @@
 		"source": "PZO2105",
 		"id": "0f083dc5-674e-4f66-bea9-b502c689cef3",
 		"aonId": 1922,
-		"hash": "WjWqrsIN"
+		"pf2t": {
+			"name": "Impressive Mount",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Cavalier",
+			"source": "Advanced Player's Guide pg. 164",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1922",
+			"aon": "feats1922",
+			"type": "feat",
+			"body": "**Archetype** Cavalier\n**Prerequisites** Cavalier Dedication\n\n- - -\n\nYou've trained your mount to become a powerful force on the battlefield. The mount you gained through the Cavalier Dedication feat becomes a mature animal companion, granting it additional capabilities. During an encounter, even if you don't use the Command an Animal action, your animal companion can still use 1 action on your turn to Stride or Strike.\n\n#### Impressive Mount Leads To...\nIncredible Mount",
+			"hash": "WjWqrsIN"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -101,7 +147,21 @@
 		"source": "PZO2105",
 		"id": "cebac6a9-868e-4ad4-915a-9c2680daeb92",
 		"aonId": 1923,
-		"hash": "XfIvfZcx"
+		"pf2t": {
+			"name": "Quick Mount",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"actions": 1,
+			"archetype": "Cavalier",
+			"source": "Advanced Player's Guide pg. 164",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1923",
+			"aon": "feats1923",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Cavalier\n**Prerequisites** Cavalier Dedication; expert in Nature\n**Requirements** You are adjacent to a creature that is at least one size larger than you and is willing to be your mount.\n\n- - -\n\nYou and your mount can spring into action at a moment's notice. You Mount the creature and Command an Animal to issue it an order of your choice.",
+			"hash": "XfIvfZcx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -118,7 +178,20 @@
 		"source": "PZO2105",
 		"id": "64ed6015-b769-4c8a-bc8b-bb3c9c371b64",
 		"aonId": 1924,
-		"hash": "DgqTrnCI"
+		"pf2t": {
+			"name": "Defend Mount",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Cavalier",
+			"source": "Advanced Player's Guide pg. 164",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1924",
+			"aon": "feats1924",
+			"type": "feat",
+			"body": "**Archetype** Cavalier\n**Prerequisites** Cavalier Dedication\n**Trigger** An enemy makes an attack roll against your mount while you're riding it.\n\n- - -\n\nYou interpose yourself between an attacker and your mount, defending your mount from harm. Use your own AC against the triggering attack instead your mount's AC. If the triggering attack hits, you take the effects of the attack instead of your mount.",
+			"hash": "DgqTrnCI"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -133,7 +206,19 @@
 		"source": "PZO2105",
 		"id": "56c11248-5e47-4fc2-b8b1-79954c5bd1d8",
 		"aonId": 1925,
-		"hash": "QHYpgTyT"
+		"pf2t": {
+			"name": "Mounted Shield",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Cavalier",
+			"source": "Advanced Player's Guide pg. 164",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1925",
+			"aon": "feats1925",
+			"type": "feat",
+			"body": "**Archetype** Cavalier\n**Prerequisites** Cavalier Dedication\n\n- - -\n\nYou've trained with your shield to defend both yourself and your mount. When you Raise a Shield while mounted, both you and your mount gain the shield's circumstance bonus to AC. If you have the Shield Block reaction, you can use it in response to your mount taking damage, as long as you're riding your mount. If you do, the shield prevents your mount from taking damage instead of preventing you from taking damage, following the normal rules for Shield Block.",
+			"hash": "QHYpgTyT"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -148,7 +233,19 @@
 		"source": "PZO2105",
 		"id": "0d856036-6384-4c8c-b840-227ed60b76ee",
 		"aonId": 1926,
-		"hash": "ldvycnzl"
+		"pf2t": {
+			"name": "Incredible Mount",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Cavalier",
+			"source": "Advanced Player's Guide pg. 165",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1926",
+			"aon": "feats1926",
+			"type": "feat",
+			"body": "**Archetype** Cavalier\n**Prerequisites** Impressive Mount\n\n- - -\n\nUnder your care and training, your mount has realized its innate potential. The mount you gained through the Cavalier Dedication feat becomes a nimble or savage animal companion (your choice), gaining additional capabilities determined by the type of companion.\n\n#### Incredible Mount Leads To...\nSpecialized Mount",
+			"hash": "ldvycnzl"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -165,7 +262,20 @@
 		"source": "PZO2105",
 		"id": "bd976814-36df-4408-84cd-71efe51b2f2e",
 		"aonId": 1927,
-		"hash": "CDxJjNWU"
+		"pf2t": {
+			"name": "Trampling Charge",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype,flourish",
+			"actions": 3,
+			"archetype": "Cavalier",
+			"source": "Advanced Player's Guide pg. 165",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1927",
+			"aon": "feats1927",
+			"type": "feat",
+			"body": "**Archetype** Cavalier\n**Prerequisites** Cavalier Dedication\n**Requirements** You are riding a mount that has a melee Strike using its legs (claw, talons, hoof, etc.).\n\n- - -\n\nYou urge your mount forward, trampling enemies in your path. You command your mount to Stride up to its Speed (or to Burrow, Climb, Fly, or Swim, if it has the corresponding movement type), moving through the spaces of any foes in your path up to one size smaller than your mount. Your mount deals damage equal to the melee Strike using its legs to each creature whose space you move through, subject to a basic Reflex save against your mount's Athletics DC. On a critical failure, the creature also becomes flat-footed until the end of your next turn. You can damage a given creature only once during this movement.",
+			"hash": "CDxJjNWU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -182,7 +292,20 @@
 		"source": "PZO2105",
 		"id": "80e1849c-558b-4329-94a1-5069ad0a86c2",
 		"aonId": 1928,
-		"hash": "gOpwOhUX"
+		"pf2t": {
+			"name": "Unseat",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Cavalier",
+			"source": "Advanced Player's Guide pg. 165",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1928",
+			"aon": "feats1928",
+			"type": "feat",
+			"body": "**Archetype** Cavalier\n**Prerequisites** Cavalier Dedication\n**Requirements** You are riding your mount and wielding a jousting weapon.\n\n- - -\n\nYou attempt to knock an opponent off their mount. Make a melee Strike against a mounted opponent. If your attack hits, attempt an Athletics check against the opponent's Fortitude DC. If you succeed, the foe is knocked off its mount into a space of its choice adjacent to its mount. If you critically succeed, it lands prone.",
+			"hash": "gOpwOhUX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -200,7 +323,19 @@
 		"source": "PZO2105",
 		"id": "99977409-e0a9-42f7-a751-8683c3c3a4c9",
 		"aonId": 1929,
-		"hash": "MRHyyyDk"
+		"pf2t": {
+			"name": "Specialized Mount",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Cavalier",
+			"source": "Advanced Player's Guide pg. 165",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1929",
+			"aon": "feats1929",
+			"type": "feat",
+			"body": "**Archetype** Cavalier\n**Prerequisites** Incredible Mount\n\n- - -\n\nYou've trained your mount to perform in unusual or even extreme circumstances, granting it abilities far beyond others of its kind. Your mount gains one specialization of your choice.",
+			"hash": "MRHyyyDk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -215,6 +350,18 @@
 		"source": "PZO2105",
 		"id": "f0201e17-26e3-43bc-ad77-fc147e20fc9f",
 		"aonId": 1930,
-		"hash": "XbqZzGNC"
+		"pf2t": {
+			"name": "Legendary Rider",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Cavalier",
+			"source": "Advanced Player's Guide pg. 165",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1930",
+			"aon": "feats1930",
+			"type": "feat",
+			"body": "**Archetype** Cavalier\n**Prerequisites** Cavalier Dedication\n\n- - -\n\nYou and your mount move like one being, effortlessly reading each other's signals. Whenever you are riding your mount, you are quickened; you can use the extra action only to command your mount using the Command an Animal skill action.",
+			"hash": "XbqZzGNC"
+		}
 	}
 ]

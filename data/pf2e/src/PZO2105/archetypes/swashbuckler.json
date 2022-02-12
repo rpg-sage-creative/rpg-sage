@@ -9,7 +9,16 @@
 		"source": "PZO2105",
 		"id": "3a01a330-0ed8-4e30-aeef-e51963714430",
 		"aonId": 43,
-		"hash": "jOBPGbyv"
+		"pf2t": {
+			"name": "Swashbuckler",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 153",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=43",
+			"aon": "archetypes43",
+			"type": "archetype",
+			"body": "The swashbuckler archetype is a great fit for martial characters who want to be a bit flashier or for Charisma-based spellcasters who want to add a bit of dramatic flair to their routine. Multiclass swashbucklers work especially well for characters who already wanted to perform the actions associated with gaining panache, such as a monk or barbarian with the gymnast style or a braggart, battledancer, or wit-style bard.",
+			"hash": "jOBPGbyv"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -41,7 +50,19 @@
 		"source": "PZO2105",
 		"id": "68d49c46-b24c-4ea1-a072-20f9a3b1db4c",
 		"aonId": 1860,
-		"hash": "lxBQHZtC"
+		"pf2t": {
+			"name": "Basic Flair",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swashbuckler",
+			"source": "Advanced Player's Guide pg. 153",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1860",
+			"aon": "feats1860",
+			"type": "feat",
+			"body": "**Archetype** Swashbuckler\n**Prerequisites** Swashbuckler Dedication\n\n- - -\n\nYou gain a 1st- or 2nd-level swashbuckler feat of your choice.\n\n#### Basic Flair Leads To...\nAdvanced Flair",
+			"hash": "lxBQHZtC"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -57,7 +78,19 @@
 		"source": "PZO2105",
 		"id": "92735f7e-8bff-4602-9b66-5aef86763284",
 		"aonId": 1861,
-		"hash": "TpHzPZXO"
+		"pf2t": {
+			"name": "Finishing Precision",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swashbuckler",
+			"source": "Advanced Player's Guide pg. 153",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1861",
+			"aon": "feats1861",
+			"type": "feat",
+			"body": "**Archetype** Swashbuckler\n**Prerequisites** Swashbuckler Dedication\n\n- - -\n\nYou've learned how to land daring blows when you have panache. You gain the precise strike class feature but you deal 1 addition damage on a hit and 1d6 damage on a finisher. This damage doesn't increase as you gain levels. In addition, you gain the Basic Finisher action.\n\n**Basic Finisher** :a: (Finisher, Swashbuckler) You make a graceful, deadly attack. Make a Strike; if you hit and your weapon qualifies for precise strike, you deal the full 1d6 damage from precise strike.",
+			"hash": "TpHzPZXO"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -75,7 +108,19 @@
 		"source": "PZO2105",
 		"id": "7fe05946-59c5-4149-9a89-865e524f7925",
 		"aonId": 1862,
-		"hash": "QKMfqQyL"
+		"pf2t": {
+			"name": "Advanced Flair",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swashbuckler",
+			"source": "Advanced Player's Guide pg. 153",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1862",
+			"aon": "feats1862",
+			"type": "feat",
+			"body": "**Archetype** Swashbuckler\n**Prerequisites** Basic Flair\n\n- - -\n\nYou gain one swashbuckler feat. For the purpose of meeting its prerequisites, your swashbuckler level is equal to half your character level.",
+			"hash": "QKMfqQyL"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -90,7 +135,19 @@
 		"source": "PZO2105",
 		"id": "a5e958c5-5268-4f84-ba3b-70388319b498",
 		"aonId": 1863,
-		"hash": "nbBqTSxL"
+		"pf2t": {
+			"name": "Swashbuckler's Riposte",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swashbuckler",
+			"source": "Advanced Player's Guide pg. 153",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1863",
+			"aon": "feats1863",
+			"type": "feat",
+			"body": "**Archetype** Swashbuckler\n**Prerequisites** Swashbuckler Dedication\n\n- - -\n\nYou've learned to riposte against ill-conceived attacks. You gain the Opportune Riposte reaction.\n\n#### Opportune Riposte\nYou take advantage of an opening from your enemy's fumbled attack. You either make a melee Strike against the triggering foe or attempt to Disarm it of the weapon it used for the Strike.",
+			"hash": "nbBqTSxL"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -105,7 +162,19 @@
 		"source": "PZO2105",
 		"id": "e4c58d55-f6a0-4de0-9d2f-efa4c62662de",
 		"aonId": 1864,
-		"hash": "pIbXpLBh"
+		"pf2t": {
+			"name": "Swashbuckler's Speed",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swashbuckler",
+			"source": "Advanced Player's Guide pg. 153",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1864",
+			"aon": "feats1864",
+			"type": "feat",
+			"body": "**Archetype** Swashbuckler\n**Prerequisites** Swashbuckler Dedication\n\n- - -\n\nYou move faster, with or without panache. Increase the status bonus to your Speeds when you have panache to a +10-foot status bonus; you also gain a +5-foot status bonus to your Speeds when you don't have panache.",
+			"hash": "pIbXpLBh"
+		}
 	},
 	{
 		"objectType": "Feat",

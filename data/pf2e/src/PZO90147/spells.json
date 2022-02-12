@@ -35,7 +35,23 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Uncommon", "Illusion", "Visual" ],
 		"id": "2a4b1c11-b100-4731-8af8-a3f8dfe4594b",
-		"hash": "vOzxgDZE"
+		"pf2t": {
+			"name": "Exchange Image",
+			"level": 1,
+			"pfs": "limited",
+			"traits": "uncommon,illusion,visual",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "147 Tomorrow Must Burn pg. 73",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=549",
+			"aon": "spells549",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Requirements** You have the humanoid trait.\n**Duration** varies\n**Targets** you and 1 other humanoid\n\n- - -\n\nTo mislead pursuers, the Lacunafex developed the means to swap visages. You trade appearances with the target, with the effects depending on the result of the target's Will saving throw. Willing and unconscious targets automatically critically fail this saving throw.\n\n**Critical Success** No effect.\n**Success** You take on the target's appearance, and they take yours. This has the same effects as a 1st-level illusory disguise spell, except that the target can't Dismiss the disguise. The duration is 1 minute or until Dismissed.\n**Failure** As success, but the duration is 1 hour or until Dismissed.\n**Critical Failure** As success, but the duration is 24 hours.",
+			"hash": "vOzxgDZE"
+		}
 	},
 	{
 		"aonId": 550,
@@ -60,7 +76,21 @@
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Rare", "Divination" ],
 		"id": "09623c2c-8e2d-4f39-890c-74577a1c3ddc",
-		"hash": "NfmWHwWS"
+		"pf2t": {
+			"name": "Forgotten Lines",
+			"level": 4,
+			"traits": "rare,divination",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "147 Tomorrow Must Burn pg. 73",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=550",
+			"aon": "spells550",
+			"type": "spell",
+			"body": "**Targets** 1 text or remnants thereof\n\n- - -\n\nMembers of the Lacunafex and other allies use this spell to restore material that Thrune agents have redacted from historical or otherwise valuable texts. You learn one piece of information that was removed from the target text after its creation. You can instead learn one piece of information from a text that had been destroyed, but you must have a fragment of the text, such as a piece of the cover, a page, or even a clasp or metal fittings.\n- - -\n**Heightened (6th)** The spell reconstructs all missing information regarding a specific topic of your choice.\n**Heightened (9th)** The spell also reveals information the writer self-censored and didn't commit to paper.",
+			"hash": "NfmWHwWS"
+		}
 	},
 	{
 		"aonId": 698,
@@ -80,8 +110,7 @@
 		"targets": "1 object",
 		"traditions": [ "occult" ],
 		"traits": [ "Uncommon", "Divination" ],
-		"id": "c4c6fc20-cc05-4ca1-b227-4acee4e313f3",
-		"hash": "nkSwqETg"
+		"id": "c4c6fc20-cc05-4ca1-b227-4acee4e313f3"
 	},
 	{
 		"aonId": 552,
@@ -132,8 +161,7 @@
 		"targets": "1 object",
 		"traditions": [ "occult" ],
 		"traits": [ "Uncommon", "Divination" ],
-		"id": "86e85042-a6c8-4c37-a79a-c5cec7674096",
-		"hash": "jgXWRpDm"
+		"id": "86e85042-a6c8-4c37-a79a-c5cec7674096"
 	},
 	{
 		"aonId": 554,
@@ -170,6 +198,22 @@
 		"traditions": [ "divine", "occult" ],
 		"traits": [ "Uncommon", "Mental", "Necromancy" ],
 		"id": "99f2db15-7451-4d68-baa6-3ab9f13aedad",
-		"hash": "vGPQzbQR"
+		"pf2t": {
+			"name": "Spiritual Anamnesis",
+			"level": 4,
+			"pfs": "limited",
+			"traits": "uncommon,mental,necromancy",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "147 Tomorrow Must Burn pg. 74",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=554",
+			"aon": "spells554",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nMemories of a past life that seem incredibly real (and may even be) overwhelm the target's mind. This is especially disorienting for undead and creatures that have lived a previous life (such as celestials, fiends, monitors, and many other extraplanar creatures); if such creatures roll a critical success on their save, they get a success instead, and if they roll a failure, they get a critical failure instead.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature is slowed 1 for 1 round.\n**Failure** The target is slowed 1 for 1 minute and babbles about the visions, possibly providing information about what they saw.\n**Critical Failure** As failure, but the target is also stunned 3.",
+			"hash": "vGPQzbQR"
+		}
 	}
 ]

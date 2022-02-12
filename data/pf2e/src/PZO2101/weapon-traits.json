@@ -9,7 +9,15 @@
 		"source": "PZO2101",
 		"id": "522be564-0ad7-450a-9f02-e91cc9d99925",
 		"aonId": 170,
-		"hash": "kHljVxwf"
+		"pf2t": {
+			"name": "Agile",
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=170",
+			"aon": "traits170",
+			"type": "trait",
+			"body": "The multiple attack penalty you take with this weapon on the second attack on your turn is -4 instead of -5, and -8 instead of -10 on the third and subsequent attacks in the turn.",
+			"hash": "kHljVxwf"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -21,7 +29,15 @@
 		"source": "PZO2101",
 		"id": "65c519aa-7b0a-4263-be9b-ff333db04d67",
 		"aonId": 171,
-		"hash": "rgMrBZzx"
+		"pf2t": {
+			"name": "Attached",
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=171",
+			"aon": "traits171",
+			"type": "trait",
+			"body": "An attached weapon must be combined with another piece of gear to be used. The trait lists what type of item the weapon must be attached to. You must be wielding or wearing the item the weapon is attached to in order to attack with it. For example, shield spikes are attached to a shield, allowing you to attack with the spikes instead of a shield bash, but only if you're wielding the shield. An attached weapon is usually bolted onto or built into the item it's attached to, and typically an item can have only one weapon attached to it. An attached weapon can be affixed to an item with 10 minutes of work and a successful DC 10 Crafting check; this includes the time needed to remove the weapon from a previous item, if necessary. If an item is destroyed, its attached weapon can usually be salvaged.",
+			"hash": "rgMrBZzx"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -33,7 +49,15 @@
 		"source": "PZO2101",
 		"id": "11a7f0b4-62dd-48b6-a825-e920f2f2b03b",
 		"aonId": 172,
-		"hash": "cQzQXOKk"
+		"pf2t": {
+			"name": "Backstabber",
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=172",
+			"aon": "traits172",
+			"type": "trait",
+			"body": "When you hit a flat-footed creature, this weapon deals 1 precision damage in addition to its normal damage. The precision damage increases to 2 if the weapon is a +3 weapon.",
+			"hash": "cQzQXOKk"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -45,7 +69,15 @@
 		"source": "PZO2101",
 		"id": "97c626f0-6f17-4b48-b2af-384d8a827eea",
 		"aonId": 173,
-		"hash": "qQvVDwtt"
+		"pf2t": {
+			"name": "Backswing",
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=173",
+			"aon": "traits173",
+			"type": "trait",
+			"body": "You can use the momentum from a missed attack with this weapon to lead into your next attack. After missing with this weapon on your turn, you gain a +1 circumstance bonus to your next attack with this weapon before the end of your turn.",
+			"hash": "qQvVDwtt"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -57,7 +89,15 @@
 		"source": "PZO2101",
 		"id": "3ced788b-cba8-4125-9f41-5b460815a450",
 		"aonId": 174,
-		"hash": "ZzRXERtj"
+		"pf2t": {
+			"name": "Deadly",
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=174",
+			"aon": "traits174",
+			"type": "trait",
+			"body": "On a critical hit, the weapon adds a weapon damage die of the listed size. Roll this after doubling the weapon's damage. This increases to two dice if the weapon has a greater striking rune and three dice if the weapon has a major striking rune. For instance, a rapier with a greater striking rune deals 2d8 extra piercing damage on a critical hit. An ability that changes the size of the weapon's normal damage dice doesn't change the size of its deadly die.",
+			"hash": "ZzRXERtj"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -69,10 +109,56 @@
 		"source": "PZO2101",
 		"id": "11dbdb90-15d6-43a5-8094-331d1936e64f",
 		"aonId": 175,
-		"hash": "OPjlbTVc"
+		"pf2t": {
+			"name": "Disarm",
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=175",
+			"aon": "traits175",
+			"type": "trait",
+			"body": "You can use this weapon to Disarm with the Athletics skill even if you don't have a free hand. This uses the weapon's reach (if different from your own) and adds the weapon's item bonus to attack rolls (if any) as an item bonus to the Athletics check. If you critically fail a check to Disarm using the weapon, you can drop the weapon to take the effects of a failure instead of a critical failure. On a critical success, you still need a free hand if you want to take the item.",
+			"hash": "OPjlbTVc"
+		}
 	},
-	{ "objectType": "Trait", "name": "Dwarf", "details": [ "Dwarves craft and use these weapons." ], "page": 282, "source": "PZO2101", "id": "ddca559e-dac1-46fb-aee2-2ad8dbc3f1fd", "aonId": 54, "hash": "FNgOZrpr" },
-	{ "objectType": "Trait", "name": "Elf", "details": [ "Elves craft and use these weapons." ], "page": 282, "source": "PZO2101", "id": "b1368634-107f-4d9e-8f3e-2330c9d4e316", "aonId": 58, "hash": "QBfXrYEc" },
+	{
+		"objectType": "Trait",
+		"name": "Dwarf",
+		"details": [
+			"Dwarves craft and use these weapons."
+		],
+		"page": 282,
+		"source": "PZO2101",
+		"id": "ddca559e-dac1-46fb-aee2-2ad8dbc3f1fd",
+		"aonId": 54,
+		"pf2t": {
+			"name": "Dwarf",
+			"source": "Core Rulebook pg. 631 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=54",
+			"aon": "traits54",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the dwarf ancestry. Dwarves are stout folk who often live underground and typically have darkvision. An ability with this trait can be used or selected only by dwarves. An item with this trait is created and used by dwarves.",
+			"hash": "FNgOZrpr"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Elf",
+		"details": [
+			"Elves craft and use these weapons."
+		],
+		"page": 282,
+		"source": "PZO2101",
+		"id": "b1368634-107f-4d9e-8f3e-2330c9d4e316",
+		"aonId": 58,
+		"pf2t": {
+			"name": "Elf",
+			"source": "Core Rulebook pg. 631 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=58",
+			"aon": "traits58",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the elf ancestry. Elves are mysterious people with rich traditions of magic and scholarship who typically have low-light vision. An ability with this trait can be used or selected only by elves. A weapon with this trait is created and used by elves.",
+			"hash": "QBfXrYEc"
+		}
+	},
 	{
 		"objectType": "Trait",
 		"name": "Fatal",
@@ -83,7 +169,15 @@
 		"source": "PZO2101",
 		"id": "bb161f4e-13bb-4972-a058-b85de466f89e",
 		"aonId": 178,
-		"hash": "zFtgGxOB"
+		"pf2t": {
+			"name": "Fatal",
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=178",
+			"aon": "traits178",
+			"type": "trait",
+			"body": "The fatal trait includes a die size. On a critical hit, the weapon's damage die increases to that die size instead of the normal die size, and the weapon adds one additional damage die of the listed size.",
+			"hash": "zFtgGxOB"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -95,7 +189,15 @@
 		"source": "PZO2101",
 		"id": "a04ecc42-6041-4d49-a325-94f5701df37e",
 		"aonId": 179,
-		"hash": "tvpnbjbL"
+		"pf2t": {
+			"name": "Finesse",
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=179",
+			"aon": "traits179",
+			"type": "trait",
+			"body": "You can use your Dexterity modifier instead of your Strength modifier on attack rolls using this melee weapon. You still use your Strength modifier when calculating damage.",
+			"hash": "tvpnbjbL"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -107,7 +209,15 @@
 		"source": "PZO2101",
 		"id": "685bdf0b-a7e9-46fd-9f05-a554c17970e2",
 		"aonId": 180,
-		"hash": "zLnSFycx"
+		"pf2t": {
+			"name": "Forceful",
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=180",
+			"aon": "traits180",
+			"type": "trait",
+			"body": "This weapon becomes more dangerous as you build momentum. When you attack with it more than once on your turn, the second attack gains a circumstance bonus to damage equal to the number of weapon damage dice, and each subsequent attack gains a circumstance bonus to damage equal to double the number of weapon damage dice.",
+			"hash": "zLnSFycx"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -119,10 +229,56 @@
 		"source": "PZO2101",
 		"id": "ae826f49-f59d-42c3-a080-5421bdcc5d06",
 		"aonId": 181,
-		"hash": "ZWtBlrSU"
+		"pf2t": {
+			"name": "Free-Hand",
+			"source": "Core Rulebook pg. 282 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=181",
+			"aon": "traits181",
+			"type": "trait",
+			"body": "This weapon doesn't take up your hand, usually because it is built into your armor. A free-hand weapon can't be Disarmed. You can use the hand covered by your free-hand weapon to wield other items, perform manipulate actions, and so on. You can't attack with a free-hand weapon if you're wielding anything in that hand or otherwise using that hand. When you're not wielding anything and not otherwise using the hand, you can use abilities that require you to have a hand free as well as those that require you to be wielding a weapon in that hand. Each of your hands can have only one free-hand weapon on it.",
+			"hash": "ZWtBlrSU"
+		}
 	},
-	{ "objectType": "Trait", "name": "Gnome", "details": [ "Gnomes craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "c8020c7d-ce00-49fe-8250-d22214bce4e6", "aonId": 80, "hash": "lnvqymEr" },
-	{ "objectType": "Trait", "name": "Goblin", "details": [ "Goblins craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "7fc8c6e7-00b8-4036-953c-69a3fe6c9283", "aonId": 81, "hash": "SlPPQLYX" },
+	{
+		"objectType": "Trait",
+		"name": "Gnome",
+		"details": [
+			"Gnomes craft and use these weapons."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "c8020c7d-ce00-49fe-8250-d22214bce4e6",
+		"aonId": 80,
+		"pf2t": {
+			"name": "Gnome",
+			"source": "Core Rulebook pg. 632 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=80",
+			"aon": "traits80",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the gnome ancestry. Gnomes are small people skilled at magic who seek out new experiences and usually have low-light vision. An ability with this trait can be used or selected only by gnomes. A weapon with this trait is created and used by gnomes.",
+			"hash": "lnvqymEr"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Goblin",
+		"details": [
+			"Goblins craft and use these weapons."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "7fc8c6e7-00b8-4036-953c-69a3fe6c9283",
+		"aonId": 81,
+		"pf2t": {
+			"name": "Goblin",
+			"source": "Core Rulebook pg. 632 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=81",
+			"aon": "traits81",
+			"type": "trait",
+			"body": "A creature with this trait can be one of several kinds of creature, including goblins, hobgoblins, and bugbears. Goblins tend to have darkvision. An ability with this trait can be used or chosen only by goblins. A weapon with this trait is created and used by goblins.",
+			"hash": "SlPPQLYX"
+		}
+	},
 	{
 		"objectType": "Trait",
 		"name": "Grapple",
@@ -133,9 +289,36 @@
 		"source": "PZO2101",
 		"id": "0df397af-58e0-40d9-a58c-afc39bf34b04",
 		"aonId": 184,
-		"hash": "RkGtYGqN"
+		"pf2t": {
+			"name": "Grapple",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=184",
+			"aon": "traits184",
+			"type": "trait",
+			"body": "You can use this weapon to Grapple with the Athletics skill even if you don't have a free hand. This uses the weapon's reach (if different from your own) and adds the weapon's item bonus to attack rolls as an item bonus to the Athletics check. If you critically fail a check to Grapple using the weapon, you can drop the weapon to take the effects of a failure instead of a critical failure.",
+			"hash": "RkGtYGqN"
+		}
 	},
-	{ "objectType": "Trait", "name": "Halfling", "details": [ "Halflings craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "da0a9ef4-4a42-4ab7-b7a3-cccfb1b1c943", "aonId": 87, "hash": "RYvIQxlz" },
+	{
+		"objectType": "Trait",
+		"name": "Halfling",
+		"details": [
+			"Halflings craft and use these weapons."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "da0a9ef4-4a42-4ab7-b7a3-cccfb1b1c943",
+		"aonId": 87,
+		"pf2t": {
+			"name": "Halfling",
+			"source": "Core Rulebook pg. 632 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=87",
+			"aon": "traits87",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the halfling ancestry. These small people are friendly wanderers considered to be lucky. An ability with this trait can be used or selected only by halflings. A weapon with this trait is created and used by halflings.",
+			"hash": "RYvIQxlz"
+		}
+	},
 	{
 		"objectType": "Trait",
 		"name": "Jousting",
@@ -146,9 +329,36 @@
 		"source": "PZO2101",
 		"id": "ac9edf1b-b12d-485b-962a-2f8063ab8bae",
 		"aonId": 186,
-		"hash": "NrqsbZtJ"
+		"pf2t": {
+			"name": "Jousting",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=186",
+			"aon": "traits186",
+			"type": "trait",
+			"body": "The weapon is suited for mounted combat with a harness or similar means. When mounted, if you moved at least 10 feet on the action before your attack, add a circumstance bonus to damage for that attack equal to the number of damage dice for the weapon. In addition, while mounted, you can wield the weapon in one hand, changing the damage die to the listed value.",
+			"hash": "NrqsbZtJ"
+		}
 	},
-	{ "objectType": "Trait", "name": "Monk", "details": [ "Many monks learn to use these weapons." ], "page": 283, "source": "PZO2101", "id": "0dd72226-ca9b-4c35-9e24-69f308fab54e", "aonId": 112, "hash": "RqYKyqpX" },
+	{
+		"objectType": "Trait",
+		"name": "Monk",
+		"details": [
+			"Many monks learn to use these weapons."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "0dd72226-ca9b-4c35-9e24-69f308fab54e",
+		"aonId": 112,
+		"pf2t": {
+			"name": "Monk",
+			"source": "Core Rulebook pg. 634 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=112",
+			"aon": "traits112",
+			"type": "trait",
+			"body": "Abilities with this trait are from the monk class. A weapon with this trait is primarily used by monks.",
+			"hash": "RqYKyqpX"
+		}
+	},
 	{
 		"objectType": "Trait",
 		"name": "Nonlethal",
@@ -159,9 +369,36 @@
 		"source": "PZO2101",
 		"id": "c9b25323-f5ec-4f4c-a758-54f6222f983a",
 		"aonId": 188,
-		"hash": "ZQQhMPEB"
+		"pf2t": {
+			"name": "Nonlethal",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=188",
+			"aon": "traits188",
+			"type": "trait",
+			"body": "An effect with this trait is not inherently deadly. Damage from a nonlethal effect knocks a creature out rather than killing it. You can use a nonlethal weapon to make a lethal attack with a -2 circumstance penalty.",
+			"hash": "ZQQhMPEB"
+		}
 	},
-	{ "objectType": "Trait", "name": "Orc", "details": [ "Orcs craft and use these weapons." ], "page": 283, "source": "PZO2101", "id": "ed94937d-2c71-4166-95a5-918e7960e45e", "aonId": 124, "hash": "XJLWpWRq" },
+	{
+		"objectType": "Trait",
+		"name": "Orc",
+		"details": [
+			"Orcs craft and use these weapons."
+		],
+		"page": 283,
+		"source": "PZO2101",
+		"id": "ed94937d-2c71-4166-95a5-918e7960e45e",
+		"aonId": 124,
+		"pf2t": {
+			"name": "Orc",
+			"source": "Core Rulebook pg. 634 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=124",
+			"aon": "traits124",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the orc ancestry. These green-skinned people tend to have darkvision. An ability with this trait can be used or selected only by orcs. An item with this trait is created and used by orcs.",
+			"hash": "XJLWpWRq"
+		}
+	},
 	{
 		"objectType": "Trait",
 		"name": "Parry",
@@ -172,7 +409,15 @@
 		"source": "PZO2101",
 		"id": "83b48650-8e31-421c-8598-f2daa6ef0fca",
 		"aonId": 190,
-		"hash": "WQfktzrX"
+		"pf2t": {
+			"name": "Parry",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=190",
+			"aon": "traits190",
+			"type": "trait",
+			"body": "This weapon can be used defensively to block attacks. While wielding this weapon, if your proficiency with it is trained or better, you can spend a single action to position your weapon defensively, gaining a +1 circumstance bonus to AC until the start of your next turn.",
+			"hash": "WQfktzrX"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -184,7 +429,15 @@
 		"source": "PZO2101",
 		"id": "ccc5a27f-45fa-4257-97ba-8f9765380571",
 		"aonId": 191,
-		"hash": "xmvsRqAb"
+		"pf2t": {
+			"name": "Propulsive",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=191",
+			"aon": "traits191",
+			"type": "trait",
+			"body": "You add half your Strength modifier (if positive) to damage rolls with a propulsive ranged weapon. If you have a negative Strength modifier, you add your full Strength modifier instead.",
+			"hash": "xmvsRqAb"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -196,7 +449,15 @@
 		"source": "PZO2101",
 		"id": "aa12e125-c8d0-49b5-a1a9-dba1d801ede1",
 		"aonId": 192,
-		"hash": "JWNkzkAq"
+		"pf2t": {
+			"name": "Reach",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=192",
+			"aon": "traits192",
+			"type": "trait",
+			"body": "Natural attacks with this trait can be used to attack creatures up to the listed distance away instead of only adjacent creatures. Weapons with this trait are long and can be used to attack creatures up to 10 feet away instead of only adjacent creatures. For creatures that already have reach with the limb or limbs that wield the weapon, the weapon increases their reach by 5 feet.",
+			"hash": "JWNkzkAq"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -208,7 +469,15 @@
 		"source": "PZO2101",
 		"id": "63474828-bb1f-4364-8e8e-b2d8423cc6fd",
 		"aonId": 193,
-		"hash": "xXxbBXFg"
+		"pf2t": {
+			"name": "Shove",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=193",
+			"aon": "traits193",
+			"type": "trait",
+			"body": "You can use this weapon to Shove with the Athletics skill even if you don't have a free hand. This uses the weapon's reach (if different from your own) and adds the weapon's item bonus to attack rolls as an item bonus to the Athletics check. If you critically fail a check to Shove using the weapon, you can drop the weapon to take the effects of a failure instead of a critical failure.",
+			"hash": "xXxbBXFg"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -220,7 +489,15 @@
 		"source": "PZO2101",
 		"id": "f8ccbcf2-7cf8-4c55-9da8-13a0430c87ab",
 		"aonId": 194,
-		"hash": "ZQqRhNgG"
+		"pf2t": {
+			"name": "Sweep",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=194",
+			"aon": "traits194",
+			"type": "trait",
+			"body": "This weapon makes wide sweeping or spinning attacks, making it easier to attack multiple enemies. When you attack with this weapon, you gain a +1 circumstance bonus to your attack roll if you already attempted to attack a different target this turn using this weapon.",
+			"hash": "ZQqRhNgG"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -232,7 +509,15 @@
 		"source": "PZO2101",
 		"id": "53ab4577-beed-4316-8ebe-bf41cced7be4",
 		"aonId": 195,
-		"hash": "tJFqtgbM"
+		"pf2t": {
+			"name": "Thrown",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=195",
+			"aon": "traits195",
+			"type": "trait",
+			"body": "You can throw this weapon as a ranged attack, and it is a ranged weapon when thrown. A thrown weapon adds your Strength modifier to damage just like a melee weapon does. When this trait appears on a melee weapon, it also includes the range increment. Ranged weapons with this trait use the range increment specified in the weapon's Range entry.",
+			"hash": "tJFqtgbM"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -244,7 +529,15 @@
 		"source": "PZO2101",
 		"id": "126ab7f0-14e9-4f2a-9049-9028423771f6",
 		"aonId": 196,
-		"hash": "BCkfWsBO"
+		"pf2t": {
+			"name": "Trip",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=196",
+			"aon": "traits196",
+			"type": "trait",
+			"body": "You can use this weapon to Trip with the Athletics skill even if you don't have a free hand. This uses the weapon's reach (if different from your own) and adds the weapon's item bonus to attack rolls as an item bonus to the Athletics check. If you critically fail a check to Trip using the weapon, you can drop the weapon to take the effects of a failure instead of a critical failure.",
+			"hash": "BCkfWsBO"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -256,7 +549,15 @@
 		"source": "PZO2101",
 		"id": "771acea4-fcc6-4567-a2ea-4f4ca505f3c6",
 		"aonId": 197,
-		"hash": "HCzppVEW"
+		"pf2t": {
+			"name": "Twin",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=197",
+			"aon": "traits197",
+			"type": "trait",
+			"body": "These weapons are used as a pair, complementing each other. When you attack with a twin weapon, you add a circumstance bonus to the damage roll equal to the weapon's number of damage dice if you have previously attacked with a different weapon of the same type this turn. The weapons must be of the same type to benefit from this trait, but they don't need to have the same runes.",
+			"hash": "HCzppVEW"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -268,7 +569,15 @@
 		"source": "PZO2101",
 		"id": "978cf3e2-c1f6-4877-908c-59c029182994",
 		"aonId": 198,
-		"hash": "TXNTGdWs"
+		"pf2t": {
+			"name": "Two-Hand",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=198",
+			"aon": "traits198",
+			"type": "trait",
+			"body": "This weapon can be wielded with two hands. Doing so changes its weapon damage die to the indicated value. This change applies to all the weapon's damage dice, such as those from striking runes.",
+			"hash": "TXNTGdWs"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -280,7 +589,15 @@
 		"source": "PZO2101",
 		"id": "c9da1eee-05da-4989-a240-e090acab8eb9",
 		"aonId": 199,
-		"hash": "jgHrxpnG"
+		"pf2t": {
+			"name": "Unarmed",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=199",
+			"aon": "traits199",
+			"type": "trait",
+			"body": "An unarmed attack uses your body rather than a manufactured weapon. An unarmed attack isn't a weapon, though it's categorized with weapons for weapon groups, and it might have weapon traits. Since it's part of your body, an unarmed attack can't be Disarmed. It also doesn't take up a hand, though a fist or other grasping appendage generally works like a free-hand weapon.",
+			"hash": "jgHrxpnG"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -292,7 +609,15 @@
 		"source": "PZO2101",
 		"id": "5e8db2e1-dd0a-485c-8b30-a2f48b2ccaf8",
 		"aonId": 200,
-		"hash": "WYbWWwXb"
+		"pf2t": {
+			"name": "Versatile",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=200",
+			"aon": "traits200",
+			"type": "trait",
+			"body": "A versatile weapon can be used to deal a different type of damage than that listed in the Damage entry. This trait indicates the alternate damage type. For instance, a piercing weapon that is versatile S can be used to deal piercing or slashing damage. You choose the damage type each time you make an attack.",
+			"hash": "WYbWWwXb"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -304,6 +629,14 @@
 		"source": "PZO2101",
 		"id": "a0969b11-43a3-4dff-a33d-879bc07dacce",
 		"aonId": 201,
-		"hash": "NFsxxyUc"
+		"pf2t": {
+			"name": "Volley",
+			"source": "Core Rulebook pg. 283 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=201",
+			"aon": "traits201",
+			"type": "trait",
+			"body": "This ranged weapon is less effective at close distances. Your attacks against targets that are at a distance within the range listed take a -2 penalty.",
+			"hash": "NFsxxyUc"
+		}
 	}
 ]

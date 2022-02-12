@@ -13,7 +13,21 @@
 		"source": "PZO9307",
 		"id": "a34eb195-4034-4d0a-8238-5261307e307f",
 		"aonId": 2219,
-		"hash": "fQzrzhjq"
+		"pf2t": {
+			"name": "Dead Reckoning",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,concentrate,skill",
+			"actions": 2,
+			"archetype": "Pathfinder Agent",
+			"source": "PFS Guide pg. 40",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2219",
+			"aon": "feats2219",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication; trained in Survival\n\n- - -\n\nYou've trained yourself to maintain a strong sense of direction at all times, even when you can't use a compass or see the sky above. You immediately intuit which direction is north (assuming the concept of north exists at your current location).",
+			"hash": "fQzrzhjq"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -28,7 +42,19 @@
 		"source": "PZO9307",
 		"id": "ac22d7ff-0f2b-421d-9559-9d94ad39c28c",
 		"aonId": 2220,
-		"hash": "rpZBgvMY"
+		"pf2t": {
+			"name": "Environmental Explorer",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Pathfinder Agent",
+			"source": "PFS Guide pg. 40",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2220",
+			"aon": "feats2220",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication\n\n- - -\n\nYou've traversed enough untamed wilderness to gain an intuitive understanding of the dangers that exist in such places. Your extensive familiarity means you sometimes notice perils even when you're not trying to. Even if you aren't Searching in exploration mode, you can attempt a check to find environmental hazards that normally require you to Search for them. You still need to meet any other requirements to find a particular hazard.",
+			"hash": "rpZBgvMY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -43,7 +69,19 @@
 		"source": "PZO9307",
 		"id": "4671fb59-a1e4-4366-922e-787ffeafdb45",
 		"aonId": 2221,
-		"hash": "kOUNtcvY"
+		"pf2t": {
+			"name": "Observant Explorer",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Pathfinder Agent",
+			"source": "PFS Guide pg. 40",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2221",
+			"aon": "feats2221",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication\n\n- - -\n\nThanks to the time you've spent wandering through wild and untamed environments, you've gained an intuitive sense about creatures. You sometimes notice them before they attack, or spot them nearby even if they weren't planning on attacking. You can attempt a check to notice hidden creatures attempting to Avoid Notice nearby even if you aren't actively Searching for them. You still need to meet any other requirements to notice a particular creature.",
+			"hash": "kOUNtcvY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -60,7 +98,20 @@
 		"source": "PZO9307",
 		"id": "3d34e315-991b-48d8-b40b-d79582845030",
 		"aonId": 2222,
-		"hash": "SLrDxJtg"
+		"pf2t": {
+			"name": "Remember Your Training",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Pathfinder Agent",
+			"source": "PFS Guide pg. 40",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2222",
+			"aon": "feats2222",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication\n\n- - -\n\nDuring your training to become a Pathfinder Agent you were schooled on a wide variety of creatures you might encounter, and you can think back to that training to gain crucial insight in times of need. Attempt a check to Recall Knowledge about a creature you can see, adding your level as a proficiency bonus if you are untrained (rather than 0). If you roll a failure (but not a critical failure) on this check, you get a success instead.",
+			"hash": "SLrDxJtg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -75,7 +126,19 @@
 		"source": "PZO9307",
 		"id": "8a8371d0-21b7-4973-83fa-15cce8e4fe4e",
 		"aonId": 2223,
-		"hash": "NjDdvyZp"
+		"pf2t": {
+			"name": "Spiritual Explorer",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Pathfinder Agent",
+			"source": "PFS Guide pg. 40",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2223",
+			"aon": "feats2223",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication\n\n- - -\n\nYou're familiar with the danger that lingering spirits can pose to an unwary adventurer, and you're particularly attuned to their presence. Even if you aren't Searching in exploration mode, you can attempt a check to find haunts that normally require you to Search for them. You still need to meet any other requirements to find a particular haunt.",
+			"hash": "NjDdvyZp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -92,7 +155,20 @@
 		"source": "PZO9307",
 		"id": "25bf27d4-181b-4a76-a4f8-5b19b5fa6c00",
 		"aonId": 2224,
-		"hash": "DhbNvxST"
+		"pf2t": {
+			"name": "Watch and Learn",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Pathfinder Agent",
+			"source": "PFS Guide pg. 40",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2224",
+			"aon": "feats2224",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication\n**Trigger** An ally you can see succeeds or critically succeeds at a Strength- or Dexterity-based skill check, using a skill in which you are untrained.\n\n- - -\n\nPathfinder agents serve as members of diverse teams with complementary skill sets. You are practiced at following the example of a more skilled ally to accomplish a wide variety of tasks. For the next minute you can add your level as a proficiency bonus to the observed skill check, even though you are untrained. This does not allow you to attempt trained actions using that skill unless you would otherwise be able to do so.",
+			"hash": "DhbNvxST"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -109,7 +185,20 @@
 		"source": "PZO9307",
 		"id": "399428b0-b192-4b46-aa09-c983190c692d",
 		"aonId": 2225,
-		"hash": "YIcLZvkz"
+		"pf2t": {
+			"name": "Archaeologist's Warning",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 0,
+			"archetype": "Pathfinder Agent",
+			"source": "PFS Guide pg. 40",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2225",
+			"aon": "feats2225",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication\n**Trigger** You are about to roll a Perception, Society, or Thievery check for initiative.\n\n- - -\n\nYou visually or audibly warn your companions of danger, granting them a +1 circumstance bonus to their initiative rolls. Depending on whether you use gestures or call out, this free action gains either the visual or auditory trait.",
+			"hash": "YIcLZvkz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -124,7 +213,20 @@
 		"source": "PZO9307",
 		"id": "14e5997c-1aa3-4be2-a476-a6864eb9ee38",
 		"aonId": 2226,
-		"hash": "GdTrXVhI"
+		"pf2t": {
+			"name": "Craft Facsimile",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"archetype": "Pathfinder Agent",
+			"source": "PFS Guide pg. 40",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2226",
+			"aon": "feats2226",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication; expert in Crafting\n\n- - -\n\nYou're renowned for your ability to recover important items, whether they're from a long-abandoned temple or a thieves' den, and sometimes that requires creating a stand-in. You can spend 1 minute to assemble a facsimile of an object of no more than 1 Bulk that you can see from available materials. The facsimile has the same shape and Bulk as the replaced object and can pass as the object if not examined. A creature familiar with the original who examines the object automatically realizes that it is a fake. A creature not familiar with the original can still tell it was a hastily jury-rigged stand-in of some kind, but they might not know the object was supposed to be something else.",
+			"hash": "GdTrXVhI"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -142,7 +244,21 @@
 		"source": "PZO9307",
 		"id": "4d203662-b450-48ee-ab8b-df4a0920bf65",
 		"aonId": 2227,
-		"hash": "YkxEqSdl"
+		"pf2t": {
+			"name": "Diverse Recognition",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"actions": 0,
+			"archetype": "Pathfinder Agent",
+			"source": "PFS Guide pg. 40",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2227",
+			"aon": "feats2227",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication; master in a skill used to Recall Knowledge\n**Trigger** You successfully Recall Knowledge about a creature you can see, using a skill in which you are a master.\n\n- - -\n\nYour Pathfinder training allows you to quickly size up numerous threats. Attempt to Recall Knowledge against a different kind of creature you can see using the same skill. You must still meet the requirements to attempt this check.",
+			"hash": "YkxEqSdl"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -188,7 +304,19 @@
 		"source": "PZO9307",
 		"id": "f4589392-0488-4e8a-8e0c-08ecec2587a8",
 		"aonId": 2229,
-		"hash": "XCyKHMzZ"
+		"pf2t": {
+			"name": "Wayfinder Resonance Infiltrator",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Pathfinder Agent",
+			"source": "PFS Guide pg. 41",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2229",
+			"aon": "feats2229",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication; Wayfinder Resonance Tinkerer\n\n- - -\n\nYou are adept at using the unusual resonance of your wayfinder to aid in any deceptions you might employ. Once per day you can activate your wayfinder to cast illusory disguise, heightened to 2nd level, as an arcane spell. Additionally, once per day, you can Activate your wayfinder with a single-action envision activation to transform it into a perfect replica of another similarly sized badge of membership or office, such as an Aspis Consortium badge. This transformation lasts for 1 hour.",
+			"hash": "XCyKHMzZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -204,7 +332,20 @@
 		"source": "PZO9307",
 		"id": "0d0acd2e-99f5-4e44-8d2b-87fcc1df518e",
 		"aonId": 2230,
-		"hash": "EIsmbjtw"
+		"pf2t": {
+			"name": "Eidetic Memorization",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 3,
+			"archetype": "Pathfinder Agent",
+			"source": "PFS Guide pg. 41",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2230",
+			"aon": "feats2230",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication\n\n- - -\n\nPathfinders are often asked to study the intricacies of ancient history under less than ideal conditions, and you've trained your brain to make the most of your limited time. You quickly memorize an inscription, scroll, or other piece of writing you can clearly see whose length is equivalent to no more than one page. You can then accurately recreate this writing using a writing kit, wax tablet, or other writing medium, once you have reached safety. You don't need to understand the writing or identify the language to reproduce it. Your memory lasts until the next time you make your daily preparations; if you have not written down or otherwise recreated what you saw by this point, your memory fades and any attempt to recreate what you saw is garbled and unintelligible. You can have only one piece of writing memorized at a time; any previous memorization fades the next time you use this ability.",
+			"hash": "EIsmbjtw"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -220,7 +361,19 @@
 		"source": "PZO9307",
 		"id": "82fb1b5a-858d-48c3-bb2b-8e9c6a09fb07",
 		"aonId": 2231,
-		"hash": "NmBUZZkl"
+		"pf2t": {
+			"name": "Swap Investment",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Pathfinder Agent",
+			"source": "PFS Guide pg. 41",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2231",
+			"aon": "feats2231",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication\n\n- - -\n\nYour time as a Pathfinder has taught you how to improvise, and you've learned to make use of the resources you find in the field. You Invest a magic item and remove a previously invested item. The previous item no longer counts against your limit of 10 invested items.",
+			"hash": "NmBUZZkl"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -246,7 +399,19 @@
 		"source": "PZO9307",
 		"id": "230c5fa7-9935-4f84-b774-030e71e2a3e4",
 		"aonId": 2232,
-		"hash": "rEZvpJkW"
+		"pf2t": {
+			"name": "Foolproof Instructions",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Scrollmaster",
+			"source": "PFS Guide pg. 44",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2232",
+			"aon": "feats2232",
+			"type": "feat",
+			"body": "**Archetype** Scrollmaster\n**Prerequisites** Scrollmaster Dedication\n\n- - -\n\nYou feel confident that you can explain your scrolls so well that even your allies can use them... hopefully. During your daily preparations, you can select a single scroll and instruct a single ally in its use. Until your next daily preparations, the ally can attempt to use the scroll with a single action that has the manipulate trait. The ally rolls the skill corresponding to the spellcasting tradition. The GM determines the DC based on the scroll's level, possibly adjusted for the situation. If the spell has a spell attack bonus or a spell DC, use your level as the proficiency bonus and the highest of your ally's Intelligence, Wisdom, or Charisma modifiers.\n\n**Success** For the rest of the ally's turn, they can spend actions to Cast the Spell.\n**Failure** The ally misremembers your instructions and can't use the scroll this turn.\n**Critical Failure** The ally misunderstood your instructions and can't use the scroll.",
+			"hash": "rEZvpJkW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -261,7 +426,19 @@
 		"source": "PZO9307",
 		"id": "fe2b3fd9-e79a-4930-b9b1-d11bcdc2adf1",
 		"aonId": 2233,
-		"hash": "ssQHqUbM"
+		"pf2t": {
+			"name": "Innate Magic Intuition",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Scrollmaster",
+			"source": "PFS Guide pg. 44",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2233",
+			"aon": "feats2233",
+			"type": "feat",
+			"body": "**Archetype** Scrollmaster\n**Prerequisites** Scrollmaster Dedication\n\n- - -\n\nYou've spent countless hours learning to recognize and predict a creature's innate magical abilities. The first time you successfully Recall Knowledge to identify a creature, in addition to any information you learn from your successful check, you learn the names of three of the highest-level innate spells it can cast, and you gain a +2 circumstance bonus on your next save against an innate spell cast by that creature.",
+			"hash": "ssQHqUbM"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -277,7 +454,19 @@
 		"source": "PZO9307",
 		"id": "9a43bfde-f99a-46fe-907a-244496392f1a",
 		"aonId": 2234,
-		"hash": "YtAOsLgm"
+		"pf2t": {
+			"name": "Magic Finder",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Scrollmaster",
+			"source": "PFS Guide pg. 44",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2234",
+			"aon": "feats2234",
+			"type": "feat",
+			"body": "**Archetype** Scrollmaster\n**Prerequisites** Scrollmaster Dedication\n\n- - -\n\nYou've learned a few tricks to ensure you find every last magic item and interesting magical effect during your missions. You can cast detect magic and read aura as innate spells at will. You can also cast locate as an innate spell once per day, but only to locate magic items, not specific mundane objects or types of objects. If you could already cast spells, these spells are of the same tradition. Otherwise, they're arcane spells, you use Intelligence as your spellcasting ability, and you become trained in spell attack rolls and spell DCs for arcane spells.\n\nWhen you cast detect magic or read aura from this feat on an item or creature under the effect of a magic aura spell or interact with an item under the effect of an item facade spell, you gain a +2 circumstance bonus on your check to disbelieve the illusion.",
+			"hash": "YtAOsLgm"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -292,7 +481,19 @@
 		"source": "PZO9307",
 		"id": "94a93836-2778-4d12-9e39-4782a3cf1929",
 		"aonId": 2235,
-		"hash": "xxPvHDxr"
+		"pf2t": {
+			"name": "Transcribe Moment",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Scrollmaster",
+			"source": "PFS Guide pg. 44",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2235",
+			"aon": "feats2235",
+			"type": "feat",
+			"body": "**Archetype** Scrollmaster\n**Prerequisites** Scrollmaster Dedication\n\n- - -\n\nYou gain the transcribe moment focus spell. If you don't already have one, you gain a focus pool of 1 Focus Point, which you can Refocus by spending 10 minutes to study a text or record notes on your recent experiences.",
+			"hash": "xxPvHDxr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -307,7 +508,19 @@
 		"source": "PZO9307",
 		"id": "ec501422-1421-4c6c-a16b-89891bdaf67c",
 		"aonId": 2236,
-		"hash": "kbyzxLIE"
+		"pf2t": {
+			"name": "Bestiary Scholar",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Scrollmaster",
+			"source": "PFS Guide pg. 44",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2236",
+			"aon": "feats2236",
+			"type": "feat",
+			"body": "**Archetype** Scrollmaster\n**Prerequisites** Scrollmaster Dedication; master in Arcana, Crafting, Nature, Occultism, or Religion\n\n- - -\n\nYou learn how to apply your extensive knowledge of certain creatures using the lore you know. When you gain this feat, choose one of the following skills in which you have attained master proficiency: Arcana, Crafting, Nature, Occultism, or Religion. You can use the chosen skill to Recall Knowledge to identify any creature normally identifiable by any of the above skills. In addition, when you critically succeed at identifying a creature, you gain a +1 circumstance bonus to your next attack roll or saving throw against that creature.",
+			"hash": "kbyzxLIE"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -322,7 +535,19 @@
 		"source": "PZO9307",
 		"id": "32b2e11f-0f54-4b8d-9a32-4fa14b76ab83",
 		"aonId": 2237,
-		"hash": "ZbrspxNg"
+		"pf2t": {
+			"name": "Cautious Delver",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Scrollmaster",
+			"source": "PFS Guide pg. 44",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2237",
+			"aon": "feats2237",
+			"type": "feat",
+			"body": "**Archetype** Scrollmaster\n**Prerequisites** Scrollmaster Dedication\n\n- - -\n\nYou've studied the many ways that ancient architects and spellcasters protected their possessions, such as by implementing deadly traps and curses, and learned some magic to counteract them. You can cast dispel magic, knock, and resist energy as innate spells, each once per day. If you can already cast spells, these spells are of the same tradition. Otherwise, they're arcane spells, you use Intelligence as your spellcasting ability, and you become trained in spell attack rolls and spell DCs for arcane spells.",
+			"hash": "ZbrspxNg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -337,7 +562,20 @@
 		"source": "PZO9307",
 		"id": "7774a39f-0b96-45b4-b93d-ec6e9f652c32",
 		"aonId": 2238,
-		"hash": "HKXnxnsb"
+		"pf2t": {
+			"name": "Masterful Obfuscation",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"archetype": "Scrollmaster",
+			"source": "PFS Guide pg. 44",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2238",
+			"aon": "feats2238",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Scrollmaster\n**Prerequisites** master in a skill with the Recall Knowledge action; Scrollmaster Dedication\n\n- - -\n\nYou've mastered the art of deceiving others about your area of study. When you gain this feat, choose one skill with the Recall Knowledge action in which you have attained master proficiency. You can attempt to deceive others about the truth of facts and knowledge related to that skill-such as by pretending to know something that you don't, planting false information, or the like-using the Lie action of the Deception skill. When you Lie in this way, attempt your skill check using the skill you selected when you gained this feat instead of Deception, applying all bonuses or penalties related from the selected skill to the check. While it's easier to convince someone who knows nothing about your chosen false information, on a critical success, you can even convince someone who has heard something contradictory, unless they have reason to be certain from direct experience. For instance, you might say, \"I know you may have heard to use silver weapons against vampires, but that's a misconception based on conflating them with werewolves. According to all credible scholars, cold iron will do the trick.\" Once a creature realizes you've used masterful obfuscation to Lie to them, either from a failed check or due to later discovering the falsehood, you can't use this feat against them again, as it relies on blind trust in your superior knowledge. However, you can still Lie to them normally.",
+			"hash": "HKXnxnsb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -353,7 +591,19 @@
 		"source": "PZO9307",
 		"id": "3bc7a9d4-4e74-48a7-aea9-f6abba8fe2d6",
 		"aonId": 2239,
-		"hash": "grwtRdmq"
+		"pf2t": {
+			"name": "Determined Lore Seeker",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Scrollmaster",
+			"source": "PFS Guide pg. 45",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2239",
+			"aon": "feats2239",
+			"type": "feat",
+			"body": "**Archetype** Scrollmaster\n**Prerequisites** Lore Seeker\n\n- - -\n\nYou've mastered useful spells that let you find hidden truths others might miss, and a preferred spell comes naturally to you. When you gain this feat, choose one of the innate spells granted by the Lore Seeker feat: comprehend language, restore senses, or see invisibility. You can cast this spell three times per day instead of once per day.\n\nWhen you cast any of the spells granted by Lore Seeker as innate spells, they gain additional effects. When you cast comprehend language, the spell is heightened to 4th level. When you cast restore senses, the spell is heightened to half your level, rounded up. When you cast see invisibility, for the duration of the spell you can use an action, which has the concentrate trait, to see invisible creatures normally (instead of seeing them as translucent shapes that are concealed to you) until the end of your next turn.",
+			"hash": "grwtRdmq"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -374,7 +624,20 @@
 		"source": "PZO9307",
 		"id": "66e50613-8446-4909-a7a0-37dbeaa161da",
 		"aonId": 2240,
-		"hash": "lMZWgXzA"
+		"pf2t": {
+			"name": "Ward Mind",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Scrollmaster",
+			"source": "PFS Guide pg. 45",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2240",
+			"aon": "feats2240",
+			"type": "feat",
+			"body": "**Archetype** Scrollmaster\n**Prerequisites** Scrollmaster Dedication\n**Requirements** You're currently affected by a mental effect that you gained by failing, but not critically failing, a saving throw.\n**Trigger** Your turn ends.\n\n- - -\n\nTo protect the knowledge within your mind from intrusion or erasure, you ward yourself against a mental attack, temporarily delaying its effects. Until the end of your next turn, you ignore a single mental effect that meets the requirement. You can suppress a particular effect using Ward Mind or Cognitive Loophole only once, even if you have both feats.",
+			"hash": "lMZWgXzA"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -389,7 +652,19 @@
 		"source": "PZO9307",
 		"id": "777dc44b-c634-4abf-8ed2-3c39771b1523",
 		"aonId": 2241,
-		"hash": "WkLkgZFP"
+		"pf2t": {
+			"name": "Familiar Form",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Spellmaster",
+			"source": "PFS Guide pg. 48",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2241",
+			"aon": "feats2241",
+			"type": "feat",
+			"body": "**Archetype** Spellmaster\n**Prerequisites** Spellmaster Dedication\n\n- - -\n\nYou can use your magic to transform into a small creature of a type that commonly serves as a spellcaster's familiar, potentially allowing you to safely scout for your party while retaining a degree of spellcasting ability. You gain the familiar form focus spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "WkLkgZFP"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -405,7 +680,19 @@
 		"source": "PZO9307",
 		"id": "99899287-23cf-472b-9634-1d8ffe486039",
 		"aonId": 2242,
-		"hash": "TvQbpJzr"
+		"pf2t": {
+			"name": "Glyph Expert",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Spellmaster",
+			"source": "PFS Guide pg. 48",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2242",
+			"aon": "feats2242",
+			"type": "feat",
+			"body": "**Archetype** Spellmaster\n**Prerequisites** Spellmaster Dedication\n\n- - -\n\nYou've learned to recognize the telltale writings and other signs that indicate the presence of magical traps. You gain a +2 circumstance bonus to Perception checks to find magical traps, to AC against attacks made by magical traps, to saves against magical traps, and to checks to Disable magical traps. Even if you aren't Searching, you get a check to find magical traps that normally require you to be Searching. You still need to meet any other requirements to find the trap. \n\nYou're also adept at avoiding the effects of traps that feature magical writing, such as runes, glyphs, ancient script, or other forms. When you attempt a saving throw against the effects of these traps, if you roll a success, you get a critical success instead. If you roll a critical failure, you get a failure instead.",
+			"hash": "TvQbpJzr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -422,7 +709,20 @@
 		"source": "PZO9307",
 		"id": "6e86a296-ca27-4df8-9d64-9cc151e59098",
 		"aonId": 2243,
-		"hash": "csDXLjrM"
+		"pf2t": {
+			"name": "Recover Spell",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype,concentrate,metamagic",
+			"actions": 1,
+			"archetype": "Spellmaster",
+			"source": "PFS Guide pg. 48",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2243",
+			"aon": "feats2243",
+			"type": "feat",
+			"body": "**Archetype** Spellmaster\n**Prerequisites** Spellmaster Dedication\n**Requirements** An enemy's action disrupted your attempts to Cast a Spell since the beginning of your last turn.\n\n- - -\n\nYou recover the energy of a recently disrupted spell, allowing you to cast it again as long as you do so immediately before the energy dissipates. You regain the use of a spell that was disrupted since the beginning of your last turn, but you must immediately Cast the Spell again with your next action or else you lose the spell; as normal for metamagic, this must be on the same turn that you use Recover Spell. You can change the area, targets, and other variables, including the number of actions used to Cast the Spell if the spell allows, such as when casting heal or magic missile.",
+			"hash": "csDXLjrM"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -440,7 +740,19 @@
 		"source": "PZO9307",
 		"id": "48510777-4fb6-49d1-919a-05e510d379b9",
 		"aonId": 2244,
-		"hash": "GZhyUJQh"
+		"pf2t": {
+			"name": "Spellmaster's Ward",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Spellmaster",
+			"source": "PFS Guide pg. 48",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2244",
+			"aon": "feats2244",
+			"type": "feat",
+			"body": "**Archetype** Spellmaster\n**Prerequisites** Spellmaster Dedication\n\n- - -\n\nYou can create a number of powerful shielding runes that bolster your defenses against damaging spells by absorbing the worst of the energy to keep you safe. You gain the spellmaster's ward focus spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "GZhyUJQh"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -457,7 +769,20 @@
 		"source": "PZO9307",
 		"id": "2e229ad6-1760-426b-8923-913afa93d4ea",
 		"aonId": 2245,
-		"hash": "lzUXRddt"
+		"pf2t": {
+			"name": "Communal Sustain",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Spellmaster",
+			"source": "PFS Guide pg. 48",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2245",
+			"aon": "feats2245",
+			"type": "feat",
+			"body": "**Archetype** Spellmaster\n**Prerequisites** Spellmaster Dedication\n\n- - -\n\nChoose one spell with a sustained duration that one of your allies has in effect. You must be within 30 feet of the chosen ally. The ally can Sustain the Spell once as a free action, triggered at the start of their next turn.",
+			"hash": "lzUXRddt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -477,7 +802,20 @@
 		"source": "PZO9307",
 		"id": "b60bfc3e-7f50-4543-9aab-afdf68582638",
 		"aonId": 2246,
-		"hash": "bRbgLQvz"
+		"pf2t": {
+			"name": "Spellmaster's Tenacity",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Spellmaster",
+			"source": "PFS Guide pg. 48",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2246",
+			"aon": "feats2246",
+			"type": "feat",
+			"body": "**Archetype** Spellmaster\n**Prerequisites** Spellmaster's Resilience\n**Trigger** You critically fail at a saving throw against a foe's spell, and that spell was cast or created with the tradition of magic you selected with the Spellmaster's Resilience feat.\n\n- - -\n\nYou call upon the power of your spells to protect you from the worst of the magic headed your way. You fail your saving throw instead of critically failing. For 1 minute, increase the circumstance bonus to saving throws from the Spellmaster's Resilience feat to +2, and increase the resistance to damage it grants to 10.",
+			"hash": "bRbgLQvz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -494,7 +832,20 @@
 		"source": "PZO9307",
 		"id": "6cbb0af3-5389-4da0-afee-a88f41b1de43",
 		"aonId": 2247,
-		"hash": "ZKQDjGtj"
+		"pf2t": {
+			"name": "Master's Counterspell",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "abjuration,archetype",
+			"actions": "r",
+			"archetype": "Spellmaster",
+			"source": "PFS Guide pg. 48",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2247",
+			"aon": "feats2247",
+			"type": "feat",
+			"body": "**Archetype** Spellmaster\n**Prerequisites** Spellmaster Dedication; master in spell attack rolls and spell DCs\n**Trigger** A creature Casts a Spell that you have prepared, and that spell was cast or created with a tradition of magic in which you have master proficiency in spell attack rolls and spell DCs.\n\n- - -\n\nWhen a foe Casts a Spell and you can see its manifestations, you can use your magic to disrupt it. If you're a prepared caster, you can expend a prepared spell to counter the triggering creature's casting of a spell. If you're a spontaneous caster, you can expend a spell slot. The level of the prepared spell or spell slot must be at least as high as the triggering spell's level. You lose your prepared spell or spell slot as if you had Cast the Spell. You then attempt to counteract the triggering spell, and you take a -2 penalty to your counteract check; for prepared casters, the GM might waive the penalty if the spell you're expending to counterspell is especially appropriate-such as countering with the same spell, or using a cone of cold to counteract a fireball.",
+			"hash": "ZKQDjGtj"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -514,7 +865,20 @@
 		"source": "PZO9307",
 		"id": "a60b9d5a-aafe-4805-b175-fdd6f05bc551",
 		"aonId": 2248,
-		"hash": "JOBbNRfk"
+		"pf2t": {
+			"name": "Mobile Magical Combat",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "archetype,flourish",
+			"actions": 1,
+			"archetype": "Spellmaster",
+			"source": "PFS Guide pg. 48",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2248",
+			"aon": "feats2248",
+			"type": "feat",
+			"body": "**Archetype** Spellmaster\n**Prerequisites** Spellmaster Dedication\n**Requirements** You're wielding a melee weapon and have Cast a Spell requiring at least 1 action this turn.\n\n- - -\n\nYou dart around the battlefield, casting spells while you carefully make melee attacks with your weapon. Stride once. If you end your movement within melee reach of at least one enemy, you can make a melee Strike against that enemy. You can use Mobile Magical Combat while Burrowing, Climbing, Flying, or Swimming instead of Striding if you have the corresponding movement type.",
+			"hash": "JOBbNRfk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -529,7 +893,19 @@
 		"source": "PZO9307",
 		"id": "7dd9ef6e-7aa0-4576-bec9-06892f799767",
 		"aonId": 2249,
-		"hash": "xbyVZrOk"
+		"pf2t": {
+			"name": "Retain Absorbed Spell",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Spellmaster",
+			"source": "PFS Guide pg. 49",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2249",
+			"aon": "feats2249",
+			"type": "feat",
+			"body": "**Archetype** Spellmaster\n**Prerequisites** Absorb Spell\n\n- - -\n\nWhen you absorb a spell using the Absorb Spell reaction, you utilize secret, techniques that allow you to retain the power and knowledge necessary to cast the spell repeatedly-potentially for a greater period of time. If you're a spontaneous caster, you can cast the triggering spell up to three times instead of once. If you're a prepared spellcaster, you can replace up to three of your prepared spells of the same level with the absorbed spell instead of one. Either way, you can choose to retain the absorbed spell for the next hour instead of the next 10 minutes; if you choose to extend the absorption to an hour, you can't use Absorb Spell again until one hour after the spell is absorbed.",
+			"hash": "xbyVZrOk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -544,7 +920,20 @@
 		"source": "PZO9307",
 		"id": "b7b7146a-64aa-488f-ad2a-ac009a785697",
 		"aonId": 2250,
-		"hash": "tKgtkENB"
+		"pf2t": {
+			"name": "Improvised Crafting",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype,exploration,manipulate,skill",
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 52",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2250",
+			"aon": "feats2250",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication; expert in Crafting\n\n- - -\n\nYou've learned to repair your equipment even in challenging circumstances, making use of what you have available. You can attempt to Repair an item without a repair kit, instead improvising tools out of your gear or found items. This adds 5 minutes to the time it takes to Repair the item. You can also Repair an item while on the move without needing a stable surface. This adds 10 minutes to the times it takes to Repair the item.",
+			"hash": "tKgtkENB"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -559,7 +948,19 @@
 		"source": "PZO9307",
 		"id": "8c4fd6c2-2111-46db-a755-50e0143c17a5",
 		"aonId": 2251,
-		"hash": "ZOhSCQZy"
+		"pf2t": {
+			"name": "Physical Training",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 52",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2251",
+			"aon": "feats2251",
+			"type": "feat",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication; expert in Acrobatics and Athletics\n\n- - -\n\nYou spend a lot of time focusing on your physical fitness. You increase your proficiency rank in Acrobatics and Athletics from expert to master.",
+			"hash": "ZOhSCQZy"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -575,7 +976,20 @@
 		"source": "PZO9307",
 		"id": "0b8c313b-111f-4c96-a716-2b2abdf332a4",
 		"aonId": 2252,
-		"hash": "ctdDNgGY"
+		"pf2t": {
+			"name": "Protect Ally",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 52",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2252",
+			"aon": "feats2252",
+			"type": "feat",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication\n\n- - -\n\nYou place your body between your friends and your enemies, protecting your allies against oncoming attacks. You choose one adjacent ally. That ally gains a +1 circumstance bonus to AC until the start of your next turn or until that ally is no longer adjacent to you, whichever comes first. You can only protect a single ally in this way. If you choose to Protect a different Ally, the previous ally loses the bonus to AC.",
+			"hash": "ctdDNgGY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -605,7 +1019,19 @@
 		"source": "PZO9307",
 		"id": "c44cc241-115b-4f7b-a759-ad080545870e",
 		"aonId": 2254,
-		"hash": "gltFnOgM"
+		"pf2t": {
+			"name": "Reflexive Grip",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 52",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2254",
+			"aon": "feats2254",
+			"type": "feat",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication\n\n- - -\n\nYou keep hold of your weapons even when knocked out. You gain a +2 circumstance bonus to your Reflex DC when defending against checks to Disarm you. In addition, when you fall unconscious, you don't drop any weapons that you're currently wielding, though somebody else can remove them from you.",
+			"hash": "gltFnOgM"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -620,7 +1046,19 @@
 		"source": "PZO9307",
 		"id": "7ccb75c3-002f-462f-893c-bdb8a15753d4",
 		"aonId": 2255,
-		"hash": "qOprQvbW"
+		"pf2t": {
+			"name": "Armored Rest",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 52",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2255",
+			"aon": "feats2255",
+			"type": "feat",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication; trained in light, medium, or heavy armor\n\n- - -\n\nYou've slept many nights in your armor and gotten used to it. You can sleep in armor overnight without being fatigued the next day. If you were already fatigued before sleeping, the armor doesn't prevent you from recovering from being fatigued.",
+			"hash": "qOprQvbW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -635,7 +1073,19 @@
 		"source": "PZO9307",
 		"id": "4d2725c9-48cb-4223-8e2e-f5009e0b4677",
 		"aonId": 2256,
-		"hash": "EPxpxyrp"
+		"pf2t": {
+			"name": "Martial Exercise",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 52",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2256",
+			"aon": "feats2256",
+			"type": "feat",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication\n\n- - -\n\nYou've become comfortable in using weapons that you might not have picked up before training with the Swords. Choose one weapon group, such as hammer or sword. Whenever your proficiency rank in any weapon increases to expert or beyond, you also gain that new proficiency rank with both simple and martial weapons of your chosen weapon group.",
+			"hash": "EPxpxyrp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -650,7 +1100,19 @@
 		"source": "PZO9307",
 		"id": "65763a5b-c119-4103-b670-4413a7112a63",
 		"aonId": 2257,
-		"hash": "PDvMtXQy"
+		"pf2t": {
+			"name": "Practiced Defender",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 52",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2257",
+			"aon": "feats2257",
+			"type": "feat",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication\n\n- - -\n\nAfter extensive practice with the Swords, you're comfortable enough with your shield to move at a normal pace with it raised. You may use the Defend exploration activity while traveling at your full travel speed instead of half your travel speed.",
+			"hash": "PDvMtXQy"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -667,7 +1129,21 @@
 		"source": "PZO9307",
 		"id": "60250a99-a0dc-4cc6-82bf-58a7ca85e494",
 		"aonId": 2258,
-		"hash": "HmznSWXL"
+		"pf2t": {
+			"name": "Emergency Medical Assistance",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype,manipulate,skill",
+			"actions": 2,
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 52",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2258",
+			"aon": "feats2258",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication; master in Medicine\n**Requirements** An adjacent ally is suffering persistent damage.\n\n- - -\n\nYou've learned a variety of methods for helping allies who are bleeding, burning, or otherwise suffering persistent damage, from brushing off acid to patting down fires. Your ally immediately attempts a flat check to remove all types of persistent damage, and your use of this feat automatically counts as especially effective aid, reducing the DC from 15 to 10 for all future flat checks to remove the persistent damage.",
+			"hash": "HmznSWXL"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -684,7 +1160,21 @@
 		"source": "PZO9307",
 		"id": "fc535279-5319-42ea-a468-d462102f768c",
 		"aonId": 2259,
-		"hash": "WUQxLEym"
+		"pf2t": {
+			"name": "Recollect Studies",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"actions": 1,
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 52",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2259",
+			"aon": "feats2259",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication; expert in a skill used to Recall Knowledge\n**Requirements** You're fighting a creature of your level or lower that could be identified by Recall Knowledge with a skill in which you're an expert.\n\n- - -\n\nYou paid attention during your studies and remember the right way to attack various creatures. Choose a creature that meets the requirements. You learn the resistances, immunities, or weaknesses of the creature (your choice) without needing to successfully Recall Knowledge.",
+			"hash": "WUQxLEym"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -699,7 +1189,20 @@
 		"source": "PZO9307",
 		"id": "fbb54026-d0fd-4a47-aa87-4c95574ee2e3",
 		"aonId": 2260,
-		"hash": "dSkxTgWQ"
+		"pf2t": {
+			"name": "Rugged Survivalist",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 52",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2260",
+			"aon": "feats2260",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication; master in Survival\n\n- - -\n\nYou've studied survival skills with the School of Swords experts and are comfortable spending long periods of time in the wilderness. You don't get fatigued more quickly due to precipitation during overland travel, though you can otherwise be fatigued as normal. You can go 3 days + your Constitution modifier without water before you take damage from thirst and you can go 5 days + your Constitution modifier without food before you take damage from starvation.",
+			"hash": "dSkxTgWQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -714,7 +1217,19 @@
 		"source": "PZO9307",
 		"id": "27a47ca3-eac3-4f3e-b6e2-ecfe01e5a070",
 		"aonId": 2261,
-		"hash": "QbvxdNGW"
+		"pf2t": {
+			"name": "Tense Negotiator",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 53",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2261",
+			"aon": "feats2261",
+			"type": "feat",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication; master in Diplomacy\n\n- - -\n\nYou often find that the best way to win a conflict means avoiding a fight in the first place. You're good at talking to potential opponents without making things worse. If you would critically fail at a check to Make an Impression, you instead fail. You can attempt checks to make Requests of creatures who're indifferent or unfriendly toward you.",
+			"hash": "QbvxdNGW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -729,7 +1244,19 @@
 		"source": "PZO9307",
 		"id": "85e841e2-336d-46b1-9af8-ec71d414379d",
 		"aonId": 2262,
-		"hash": "rhzRGZcs"
+		"pf2t": {
+			"name": "Armored Exercise",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 53",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2262",
+			"aon": "feats2262",
+			"type": "feat",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication; trained in light, medium, or heavy armor\n\n- - -\n\nYou've spent time training in your armor alongside other agents from the Swords. Your proficiency rank for light, medium, and heavy armor increases to expert for whichever of those you already had the trained proficiency rank in.",
+			"hash": "rhzRGZcs"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -746,7 +1273,20 @@
 		"source": "PZO9307",
 		"id": "fbce4085-c6f6-4a08-9872-42217c3faf6e",
 		"aonId": 2263,
-		"hash": "BxIKZMCR"
+		"pf2t": {
+			"name": "Forceful Shot",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype,attack,press",
+			"actions": 1,
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 53",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2263",
+			"aon": "feats2263",
+			"type": "feat",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication\n\n- - -\n\nYour ranged attacks push your foes away from your allies. Make a ranged Strike, adding the following effects in addition to the normal effects of the Strike.\n\n**Critical Success** The target is pushed 10 feet away from you.\n**Success** The target is pushed 5 feet away from you.\n**Failure** The target is flat-footed for 1 round.",
+			"hash": "BxIKZMCR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -763,7 +1303,20 @@
 		"source": "PZO9307",
 		"id": "1dbd8ae1-0294-4cc8-8a46-56c5ce73963a",
 		"aonId": 2264,
-		"hash": "XbLIpcpb"
+		"pf2t": {
+			"name": "Focus Ally",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "archetype,fortune",
+			"actions": "r",
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 53",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2264",
+			"aon": "feats2264",
+			"type": "feat",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Swordmaster Dedication\n**Trigger** An adjacent ally fails, but doesn't critically fail, a saving throw against an effect with the incapacitation trait.\n\n- - -\n\nYou're so focused on your allies that you can help them to recenter when something would take them out of the fight. Your ally rerolls the failed saving throw. That ally must take the second result.",
+			"hash": "XbLIpcpb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -778,6 +1331,18 @@
 		"source": "PZO9307",
 		"id": "57749714-5ba2-49c5-bcab-c02b850d93d6",
 		"aonId": 2265,
-		"hash": "pXbZsMHO"
+		"pf2t": {
+			"name": "Stave Off Catastrophe",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Swordmaster",
+			"source": "PFS Guide pg. 53",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2265",
+			"aon": "feats2265",
+			"type": "feat",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** Shoulder Catastrophe\n\n- - -\n\nYou fully protect your allies from the worst blows. When you use the Shoulder Catastrophe reaction, you can choose to take the full critical damage and effects from the attack, including effects that apply on a critical hit, and have your ally take no damage and avoid the attack's effects.",
+			"hash": "pXbZsMHO"
+		}
 	}
 ]

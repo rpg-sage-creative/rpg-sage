@@ -9,7 +9,16 @@
 		"source": "PZO2101",
 		"id": "9274acc2-06ff-491d-84e8-40de9b908f6f",
 		"aonId": 11,
-		"hash": "DBhJOhRQ"
+		"pf2t": {
+			"name": "Sorcerer",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 230 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=11",
+			"aon": "archetypes11",
+			"type": "archetype",
+			"body": "You coax the magic power in your blood to manifest, accessing magic others don't expect you to have.",
+			"hash": "DBhJOhRQ"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -42,7 +51,19 @@
 		"source": "PZO2101",
 		"id": "57ded014-9a91-421a-8209-8edf6274bf71",
 		"aonId": 735,
-		"hash": "fNmbGZQT"
+		"pf2t": {
+			"name": "Basic Sorcerer Spellcasting",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Sorcerer",
+			"source": "Core Rulebook pg. 230 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=735",
+			"aon": "feats735",
+			"type": "feat",
+			"body": "**Archetype** Sorcerer\n**Prerequisites** Sorcerer Dedication\n\n- - -\n\nYou gain the basic spellcasting benefits. Each time you gain a spell slot of a new level from the sorcerer archetype, add a spell of the appropriate spell level to your repertoire: a common spell of your bloodline's tradition, one of your bloodline's granted spells, or another spell you have learned or discovered.\n\n#### Basic Sorcerer Spellcasting Leads To...\nBloodline Breadth, Expert Sorcerer Spellcasting",
+			"hash": "fNmbGZQT"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -57,7 +78,19 @@
 		"source": "PZO2101",
 		"id": "c6aecbcb-eb6c-47aa-8ad1-1a1c9fc7352e",
 		"aonId": 736,
-		"hash": "JtqjIdjC"
+		"pf2t": {
+			"name": "Basic Blood Potency",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Sorcerer",
+			"source": "Core Rulebook pg. 230 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=736",
+			"aon": "feats736",
+			"type": "feat",
+			"body": "**Archetype** Sorcerer\n**Prerequisites** Sorcerer Dedication\n\n- - -\n\nYou gain a 1st- or 2nd-level sorcerer feat.\n\n#### Basic Blood Potency Leads To...\nAdvanced Blood Potency",
+			"hash": "JtqjIdjC"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -72,7 +105,19 @@
 		"source": "PZO2101",
 		"id": "b789677e-0e3c-4381-af12-7d3ece7121c0",
 		"aonId": 737,
-		"hash": "VOvZBMfR"
+		"pf2t": {
+			"name": "Basic Bloodline Spell",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Sorcerer",
+			"source": "Core Rulebook pg. 230 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=737",
+			"aon": "feats737",
+			"type": "feat",
+			"body": "**Archetype** Sorcerer\n**Prerequisites** Sorcerer Dedication\n\n- - -\n\nYou gain your bloodline's initial bloodline spell. If you don't already have one, you also gain a focus pool of 1 Focus Point, which you can Refocus without any special effort.",
+			"hash": "VOvZBMfR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -90,7 +135,19 @@
 		"source": "PZO2101",
 		"id": "f53923fc-c5cc-4b81-95e0-628857053dde",
 		"aonId": 738,
-		"hash": "FknZBXMz"
+		"pf2t": {
+			"name": "Advanced Blood Potency",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Sorcerer",
+			"source": "Core Rulebook pg. 230 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=738",
+			"aon": "feats738",
+			"type": "feat",
+			"body": "**Archetype** Sorcerer\n**Prerequisites** Basic Blood Potency\n\n- - -\n\nYou gain one sorcerer feat. For the purpose of prerequisites, your sorcerer level is half your character level.",
+			"hash": "FknZBXMz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -105,7 +162,19 @@
 		"source": "PZO2101",
 		"id": "68ebc5cc-9ec8-4d6f-b033-f4a8c9c047bc",
 		"aonId": 739,
-		"hash": "QpRhQOQM"
+		"pf2t": {
+			"name": "Bloodline Breadth",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Sorcerer",
+			"source": "Core Rulebook pg. 230 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=739",
+			"aon": "feats739",
+			"type": "feat",
+			"body": "**Archetype** Sorcerer\n**Prerequisites** Basic Sorcerer Spellcasting\n\n- - -\n\nYour repertoire expands, and you can cast more spells of your bloodline's tradition each day. Increase the number of spells in your repertoire and number of spell slots you gain from sorcerer archetype feats by 1 for each spell level other than your two highest sorcerer spell slots.",
+			"hash": "QpRhQOQM"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -120,7 +189,19 @@
 		"source": "PZO2101",
 		"id": "637a853d-eb2c-4da7-83ac-a10659589690",
 		"aonId": 740,
-		"hash": "qXWrYAPp"
+		"pf2t": {
+			"name": "Expert Sorcerer Spellcasting",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Sorcerer",
+			"source": "Core Rulebook pg. 230 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=740",
+			"aon": "feats740",
+			"type": "feat",
+			"body": "**Archetype** Sorcerer\n**Prerequisites** Basic Sorcerer Spellcasting; master in Arcana, Nature, Occultism, or Religion, depending on bloodline\n\n- - -\n\nYou gain the expert spellcasting benefits.\n\n#### Expert Sorcerer Spellcasting Leads To...\nMaster Sorcerer Spellcasting",
+			"hash": "qXWrYAPp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -135,6 +216,18 @@
 		"source": "PZO2101",
 		"id": "c64ad276-0c25-4162-be63-1a630fc757cd",
 		"aonId": 741,
-		"hash": "ffHwJTLy"
+		"pf2t": {
+			"name": "Master Sorcerer Spellcasting",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Sorcerer",
+			"source": "Core Rulebook pg. 230 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=741",
+			"aon": "feats741",
+			"type": "feat",
+			"body": "**Archetype** Sorcerer\n**Prerequisites** Expert Sorcerer Spellcasting; legendary in Arcana, Nature, Occultism, or Religion, depending on bloodline\n\n- - -\n\nYou gain the master spellcasting benefits.",
+			"hash": "ffHwJTLy"
+		}
 	}
 ]

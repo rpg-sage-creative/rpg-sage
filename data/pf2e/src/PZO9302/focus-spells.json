@@ -17,7 +17,22 @@
 		"page": 90,
 		"traits": [ "Uncommon", "Evocation" ],
 		"id": "174d6346-7b88-4059-9068-908d138aec9d",
-		"hash": "YRgKHtZx"
+		"pf2t": {
+			"name": "Invoke the Crimson Oath",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,evocation",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Character Guide pg. 90 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=556",
+			"aon": "spells556",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"basic": 1,
+			"body": "**Area** 20-foot cone\n\n- - -\n\nBrandishing your weapon and shouting the final line of the Crimson Oath, you unleash a blast of destructive ruby energy. You must be wielding a melee weapon, and you perform this spell's somatic component by swinging the weapon in a downward arc. You deal normal melee damage for your weapon, including all appropriate bonuses, penalties, modifiers, and properties, to each creature in the spell's area; they must each attempt a basic Fortitude save. A creature that critically fails this save also suffers any additional effect you would normally inflict with your weapon on a critical hit; if the creature that critically fails its save is also immune to critical hits, it merely fails the save instead.\n\nYou can convert all the physical damage from this spell into positive damage against all undead creatures in the area.",
+			"hash": "YRgKHtZx"
+		}
 	},
 	{
 		"aonId": 557,
@@ -37,7 +52,21 @@
 		"page": 91,
 		"traits": [ "Uncommon", "Divination", "Light", "Revelation" ],
 		"id": "378f8ebc-e1ad-4104-b24b-463c7b7d851e",
-		"hash": "xMIXyftN"
+		"pf2t": {
+			"name": "Light of Revelation",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,divination,light,revelation",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Character Guide pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=557",
+			"aon": "spells557",
+			"type": "focus",
+			"body": "**Duration** 5 minutes\n\n- - -\n\nYou shed a luminous aura, illuminating a 30-foot radius with bright light. You and all allies in this area gain a +1 status bonus to Perception checks to detect hidden or undetected creatures, as well as hidden objects, doors, and other features.",
+			"hash": "xMIXyftN"
+		}
 	},
 	{
 		"aonId": 558,
@@ -61,6 +90,20 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Evocation", "Fire", "Light", "Positive" ],
 		"id": "87b9d025-f092-427b-830f-caa6b801a195",
-		"hash": "kVtgzqzd"
+		"pf2t": {
+			"name": "Sun Blade",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,evocation,fire,light,positive",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Character Guide pg. 91 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=558",
+			"aon": "spells558",
+			"type": "focus",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou fire a ray of burning sunlight from your weapon. You must be wielding a sword or spear to cast sun blade, and you perform this spell's somatic component with the weapon. Make a spell attack roll. The ray deals 1d4 fire damage. If the target is evil, the ray deals an additional 1d4 good damage, and if the target is undead, the ray deals an additional 1d4 positive damage (both effects apply against creatures that are both evil and undead). If you are in an area of bright natural sunlight, increase the die size of each damage die by one step (from d4 to d6).\n\n**Critical Success** The ray deals double damage.\n**Success** The ray deals full damage.\n- - -\n**Heightened (+1)** The damage increases by 1d4 fire, 1d4 good, and 1d4 positive (or 1d6 of each type of damage in bright natural sunlight).",
+			"hash": "kVtgzqzd"
+		}
 	}
 ]

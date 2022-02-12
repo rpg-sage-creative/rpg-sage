@@ -9,7 +9,16 @@
 		"source": "PZO9301",
 		"id": "f8d872a0-c0ba-4780-b4d4-61c1cb8cd314",
 		"aonId": 13,
-		"hash": "Qzhcqbrs"
+		"pf2t": {
+			"name": "Pathfinder Agent",
+			"pfs": "standard",
+			"source": "World Guide pg. 23 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=13",
+			"aon": "archetypes13",
+			"type": "archetype",
+			"body": "You're a field agent of the globe-trotting Pathfinder Society, sworn to report, explore, and cooperate. You explore the world, gathering artifacts and antiquities, and record your adventures for posterity.",
+			"hash": "Qzhcqbrs"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -42,7 +51,19 @@
 		"source": "PZO9301",
 		"id": "4aaa2b4a-784b-46df-8449-656fb4149623",
 		"aonId": 872,
-		"hash": "LbVVItzM"
+		"pf2t": {
+			"name": "Careful Explorer",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Pathfinder Agent",
+			"source": "World Guide pg. 23 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=872",
+			"aon": "feats872",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication\n\n- - -\n\nYou've explored enough dusty tombs and hidden vaults to gain a sixth sense about traps, and you sometimes notice them even when you're not trying to. Even if you aren't Searching in exploration mode, you get a check to find traps that normally require you to Search for them. You still need to meet any other requirements to find the trap.",
+			"hash": "LbVVItzM"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -57,7 +78,19 @@
 		"source": "PZO9301",
 		"id": "adb4d0bb-44e0-4b36-9217-904361c7cbbe",
 		"aonId": 873,
-		"hash": "thCWvpXt"
+		"pf2t": {
+			"name": "Deft Cooperation",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Pathfinder Agent",
+			"source": "World Guide pg. 23 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=873",
+			"aon": "feats873",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication\n\n- - -\n\nWhen you set things up to help your allies, you also gain some of the fruits of your labors. When you successfully Aid an attack roll or AC, you gain a +1 circumstance bonus to attack rolls or AC against that enemy until the end of your next turn, whichever you granted to your ally. When you successfully Aid a skill check, if you attempt the exact same skill check (not just using the same skill, but using it for the same purpose, for instance a check to Climb the same wall) on your next turn, you gain a +1 circumstance bonus to your skill check.",
+			"hash": "thCWvpXt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -75,7 +108,20 @@
 		"source": "PZO9301",
 		"id": "c0434a5d-a1ce-43ac-a462-d04ddd5cf2c5",
 		"aonId": 874,
-		"hash": "QqxqkmUk"
+		"pf2t": {
+			"name": "Thorough Reports",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"archetype": "Pathfinder Agent",
+			"source": "World Guide pg. 23 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=874",
+			"aon": "feats874",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication\n\n- - -\n\nYour reports are thorough and informative, and putting your thoughts to paper helps you retain the information. Keep track of each type of creature you successfully identify with Recall Knowledge. When attempting Recall Knowledge checks against creatures on your list in later encounters, you gain a +2 circumstance bonus, and you learn an additional fact about such creatures on a success.\n\n#### Thorough Reports Leads To...\nDiscerning Strike",
+			"hash": "QqxqkmUk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -90,6 +136,18 @@
 		"source": "PZO9301",
 		"id": "ade012a8-363c-4144-b796-d575d99f645c",
 		"aonId": 875,
-		"hash": "TgAKrYqZ"
+		"pf2t": {
+			"name": "Wayfinder Resonance Tinkerer",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Pathfinder Agent",
+			"source": "World Guide pg. 23 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=875",
+			"aon": "feats875",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** Pathfinder Agent Dedication\n\n- - -\n\nYou can use the unusual resonance of your wayfinder to grant it additional effects. Choose one cantrip from the arcane, divine, occult, or primal list. You can activate your wayfinder to cast that cantrip at will. As normal, this cantrip is heightened to a spell level equal to half your level rounded up. Additionally, you can Activate your wayfinder with a :a: (envision) activation to transform it into a nondescript pin or brooch to hide your affiliation with the Pathfinder Society. This transformation lasts for 1 hour.\n\n#### Wayfinder Resonance Tinkerer Leads To...\nWayfinder Resonance Infiltrator, Westyr's Wayfinder Repository",
+			"hash": "TgAKrYqZ"
+		}
 	}
 ]

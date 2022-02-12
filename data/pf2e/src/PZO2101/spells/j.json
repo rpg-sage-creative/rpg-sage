@@ -19,6 +19,20 @@
 		"traits": [ "Move", "Transmutation" ],
 		"focus": false,
 		"id": "74439278-c264-467e-87eb-02894f48ce61",
-		"hash": "hGgdZrwv"
+		"pf2t": {
+			"name": "Jump",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "move,transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s",
+			"actions": 1,
+			"source": "Core Rulebook pg. 347 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=167",
+			"aon": "spells167",
+			"type": "spell",
+			"body": "Your legs surge with strength, ready to leap high and far. You jump 30 feet in any direction without touching the ground. You must land on a space of solid ground within 30 feet of you, or else you fall after using your next action.\n- - -\n**Heightened (3rd)** The range becomes touch, the target changes to one touched creature, and the duration becomes 1 minute, allowing the target to jump as described whenever it takes the Leap action.",
+			"hash": "hGgdZrwv"
+		}
 	}
 ]

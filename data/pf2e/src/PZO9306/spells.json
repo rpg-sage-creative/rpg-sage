@@ -57,7 +57,23 @@
 		"focus": false,
 		"aonId": 812,
 		"id": "907d6682-3d9a-48aa-a16d-128f7b4d56b0",
-		"hash": "rkrvgjpD"
+		"pf2t": {
+			"name": "Aromatic Lure",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "rare,emotion,enchantment,incapacitation,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Legends pg. 37",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=812",
+			"aon": "spells812",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou override a target's olfactory senses, luring them to a specific location through tantalizing false scents. Select a single square within range that is not hazardous or occupied by a creature. The target is drawn to the selected location, becoming euphoric upon arrival. The target must attempt a Will save.\n\n\n**Critical Success** The target is unaffected.\n**Success** The target is distracted by the tantalizing scents, becoming stupefied 1 for 1 round.\n**Failure** The target is stupefied 2 and moves toward the selected location via the most direct route possible for 1 round, bypassing any obvious hazards and enemies in the way.\n**Critical Failure** The target is stupefied 4 and moves to the selected location via the most direct route possible for 1 round, bypassing any obvious hazards and enemies in the way. If the creature reaches the destination, it must remain in that location for 1d4 rounds but can otherwise act normally.\n- - -\n**Heightened (+2)** You target 1 additional creature, selecting a different square within range as their destination.",
+			"hash": "rkrvgjpD"
+		}
 	},
 	{
 		"name": "Rebounding Barrier",
@@ -79,7 +95,21 @@
 		"focus": false,
 		"aonId": 813,
 		"id": "7d0b959a-3681-4756-ae32-d8b14c0167de",
-		"hash": "QWkEbQEX"
+		"pf2t": {
+			"name": "Rebounding Barrier",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "rare,abjuration",
+			"traditions": "arcane,occult",
+			"cast": "v",
+			"actions": "r",
+			"source": "Legends pg. 37",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=813",
+			"aon": "spells813",
+			"type": "spell",
+			"body": "**Trigger** You are hit by a physical Strike.\n\n- - -\n\nYou swiftly raise a reflective barrier, reducing physical damage and rebounding it onto your attacker. You gain resistance 10 against one physical damage type the triggering attack deals. Your attacker takes 5 damage of the same type.\n- - -\n**Heightened (+1)** The resistance increases by 2. Damage dealt to your attacker increases by 1.",
+			"hash": "QWkEbQEX"
+		}
 	},
 	{
 		"name": "All is One, One is All",
@@ -99,7 +129,22 @@
 		"focus": false,
 		"aonId": 815,
 		"id": "179a98dd-7181-462e-93bf-8e8f13f62df6",
-		"hash": "AcpgMxHC"
+		"pf2t": {
+			"name": "All is One, One is All",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "rare,necromancy",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 60,
+			"source": "Legends pg. 64",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=815",
+			"aon": "spells815",
+			"type": "spell",
+			"body": "**Targets** you and up to 10 willing living allies\n\n- - -\n\nYou meld the targets' matter and life force into one and then, in an instant, sift them back out into their component selves. When you separate the targets back into themselves, you can choose to switch the positions of any number of targets with the positions of other targets. Additionally, you can modulate the share of vital essence to share the burden of pain. Distribute the Hit Points of all targets however you choose, except that no target can receive fewer than 1 Hit Point or more than their maximum Hit Points.",
+			"hash": "AcpgMxHC"
+		}
 	},
 	{
 		"name": "Halcyon Infusion",
@@ -124,6 +169,21 @@
 		"focus": false,
 		"aonId": 816,
 		"id": "854e177f-b939-43be-a28a-edd09846e87d",
-		"hash": "lQWWZQvz"
+		"pf2t": {
+			"name": "Halcyon Infusion",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "rare,divination,mental",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": "10 minutes",
+			"range": "touch",
+			"source": "Legends pg. 65",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=816",
+			"aon": "spells816",
+			"type": "spell",
+			"body": "**Duration** until your next daily preparations\n**Targets** one willing creature of lower level than you\n\n- - -\n\nYou infuse magical energy into your target, opening up their mind to the pathways of magic and granting them the ability to use magic to affect the world around them. Choose a 1st-level spell you prepared today or that's in your repertoire, of the same tradition you used to cast halcyon infusion. The spell must be one that has a listed range. If the target is at least 3rd level, you can choose a 2nd-level spell instead of a 1st-level spell; and if the target is at least 5th level, you can choose a 3rd-level spell. The target can Cast the Spell once per day as an innate spell of the tradition you used to cast halcyon infusion. If they are untrained in the appropriate magical tradition, their spell attack bonus is 2 + their level + their highest mental ability modifier, and their spell DC is 12 + their level + their highest mental ability modifier. Unlike most abilities that can only be used once per day, the target refreshes their use of the granted innate spell each day only after you make your daily preparations and choose to extend halcyon infusion's duration by either refraining from preparing a spell in the slot (if you're a prepared spellcaster) or expending another spell slot (if you're a spontaneous spellcaster).\n- - -\n**Heightened (8th)** If the target is at least 7th level, you can choose a 4th-level spell.\n**Heightened (10th)** As 8th, and if the target is at least 9th level, you can choose a 5th-level spell.",
+			"hash": "lQWWZQvz"
+		}
 	}
 ]

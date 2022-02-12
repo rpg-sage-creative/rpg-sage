@@ -14,7 +14,16 @@
 		"page": 130,
 		"source": "PZO2109",
 		"id": "375788e2-24c5-48f8-ad95-881351cb0511",
-		"aonId": 0
+		"aonId": 116,
+		"pf2t": {
+			"name": "Beast Gunner",
+			"source": "Guns & Gears pg. 130",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=116",
+			"aon": "archetypes116",
+			"type": "archetype",
+			"body": "The art of creating the weapons most commonly referred to as \"beast guns\" is truly ancient, with the first iterations of the weapons created on the continent of Arcadia well over 10,000 years ago. This means that beast guns predate all other forms of firearm crafting in Arcadia, even the legendary star guns, whose secrets have been lost to the ages. The tradition of designing beast guns has persisted throughout Arcadia well into the modern era, though it has become increasingly rare as the proliferation of classic firearms and the prestige associated with star guns has allowed more people access to equivalent destructive power without the intense requirements behind crafting a beast gun. However, beast gunners remain virtually unknown outside of Arcadia.\n\nThe art of bonding to a beast gun and gaining the full magic of a beast gunner is an extended ritual with multiple steps, beginning with the hunt. A person seeking to bond to a beast gun typically does so with a brand new weapon made after they hunt down the creature themselves. This involves telling the story of the hunt, the beast, and the weapon created from the hunted creature. Finally, the weapon is carefully modified and tailored to ensure a proper bond between the beast gun and the prospective beast gunner. However, it's also possible to bond to an heirloom beast gun passed down through the generations by adding symbolic fresh components from the same kind of creature, after performing the same ritual hunt necessary to forge a new weapon with the intent of establishing a bond.\n\nTo perform the ritual the prospective beast gunner must first plan a hunt to slay the creature corresponding to the beast gun, whether they wish to bond with a brand new beast gun or establish a link to an old beast gun. Typically, these ritualized hunts can include up to five assistants plus hunting beasts like canines or birds who help corner the beast and bring it down. If the assistants are significantly more powerful than the hunted creature, or if there are so many assistants the creature never stood a chance at survival, the magic simply fails during the bonding process and the hunt and organic materials are wasted, usually much to the shame and chagrin of the hunter. The same doesn't apply if the prospective beast gunner hunts the creature alone, even if they are significantly more powerful than the creature, such that the creature never stood a chance against them in a one on one fight.\n\nYou're one of those who successfully completed the hunt and bonded with your prized weapon. Now, you seek to discover the hidden depths that others who think they know how to use beast guns can only imagine.",
+			"hash": "pEBGtRQP"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -53,7 +62,19 @@
 		"page": 131,
 		"source": "PZO2109",
 		"id": "23aac865-950c-4dd7-9a3a-920b7aff566e",
-		"aonId": 0
+		"aonId": 3230,
+		"pf2t": {
+			"name": "Basic Beast Gunner Spellcasting",
+			"level": 8,
+			"traits": "archetype",
+			"archetype": "Beast Gunner",
+			"source": "Guns & Gears pg. 131",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3230",
+			"aon": "feats3230",
+			"type": "feat",
+			"body": "**Archetype** Beast Gunner\n**Prerequisites** Beast Gunner Dedication\n\n- - -\n\nYou've unlocked the first secrets of beast guns, granting you the power of their synergistic magic.You gain the basic spellcasting benefits. Each time you gain a spell slot of a new level from this archetype, add a spell of the appropriate spell level to your repertoire, either a common spell of your chosen tradition or another spell of that tradition you've learned or discovered.\n\n#### Basic Beast Gunner Spellcasting Leads To...\nExpert Beast Gunner Spellcasting",
+			"hash": "vwfNlkUV"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -70,7 +91,20 @@
 		"page": 131,
 		"source": "PZO2109",
 		"id": "0b772526-1242-4a6f-97ac-50dd7e1fa57a",
-		"aonId": 0
+		"aonId": 3231,
+		"pf2t": {
+			"name": "Drain Vitality",
+			"level": 10,
+			"traits": "archetype,magical,necromancy",
+			"actions": 1,
+			"archetype": "Beast Gunner",
+			"source": "Guns & Gears pg. 131",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3231",
+			"aon": "feats3231",
+			"type": "feat",
+			"body": "**Archetype** Beast Gunner\n**Prerequisites** Beast Gunner Dedication\n**Requirements** You're wielding your bonded beast gun.\n\n- - -\n\nYou draw out the bestial magic energy within your bonded beast gun to fortify yourself, purge ongoing harm, and bolster your life force with a sheath of swirling life essence. You gain temporary Hit Points equal to your level and attempt a flat check against any ongoing persistent damage, using the DC appropriate for particularly effective assistance. Using this ability depletes the magic within your bonded beast gun, preventing you from using any of its activated abilities until the end of your next turn.",
+			"hash": "mNmHvXSh"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -84,7 +118,19 @@
 		"page": 131,
 		"source": "PZO2109",
 		"id": "a6e387f0-1c4f-4fea-b5e3-6fe0d11c5030",
-		"aonId": 0
+		"aonId": 3232,
+		"pf2t": {
+			"name": "Expert Beast Gunner Spellcasting",
+			"level": 12,
+			"traits": "archetype",
+			"archetype": "Beast Gunner",
+			"source": "Guns & Gears pg. 131",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3232",
+			"aon": "feats3232",
+			"type": "feat",
+			"body": "**Archetype** Beast Gunner\n**Prerequisites** Basic Beast Gunner Spellcasting\n\n- - -\n\nYou've learned the deeper secrets of beast guns, making you an expert in the magic they grant you. You gain the expert spellcasting benefits.\n\n#### Expert Beast Gunner Spellcasting Leads To...\nMaster Beast Gunner Spellcasting",
+			"hash": "YvvZbppv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -101,7 +147,20 @@
 		"page": 131,
 		"source": "PZO2109",
 		"id": "fe53d44c-09a5-41b1-83f7-bf7316aad84a",
-		"aonId": 0
+		"aonId": 3233,
+		"pf2t": {
+			"name": "Controlled Bullet",
+			"level": 16,
+			"traits": "archetype,evocation,magical",
+			"actions": 2,
+			"archetype": "Beast Gunner",
+			"source": "Guns & Gears pg. 131",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3233",
+			"aon": "feats3233",
+			"type": "feat",
+			"body": "**Archetype** Beast Gunner\n**Prerequisites** Beast Gunner Dedication\n\n- - -\n\nYou create a direct magical connection with your beast gun, allowing you to guide the beast gun's next shot by taking control of the projectile directly, steering it through the air, and swerving and veering it to continue to hit target after target. Make a beast gun Strike against a creature within the first range increment. On a hit, the shot tears through the target and continues toward another target you can see. You make a Strike against this new target. The new target must be no farther from the previous target than a distance equal to the beast gun's range increment. For example, the new target must be within 150 feet of the previous target when attacking with a drake rifle. On a hit, you can direct the bullet toward a new target.\n\nYou can continue to make Strikes against new targets in this same way until your attack misses, at which point your shot dissipates. You can't make a Strike against a target you already attacked during this use of Controlled Bullet, but you can otherwise continue to make attacks against valid targets until you miss. Each attack counts toward your multiple attack penalty, but don't increase your penalty until you've made all your attacks.",
+			"hash": "bGpAqKAk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -115,6 +174,18 @@
 		"page": 131,
 		"source": "PZO2109",
 		"id": "db86cebc-bac8-4a63-bf59-0ed400ff7e05",
-		"aonId": 0
+		"aonId": 3234,
+		"pf2t": {
+			"name": "Master Beast Gunner Spellcasting",
+			"level": 18,
+			"traits": "archetype",
+			"archetype": "Beast Gunner",
+			"source": "Guns & Gears pg. 131",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3234",
+			"aon": "feats3234",
+			"type": "feat",
+			"body": "**Archetype** Beast Gunner\n**Prerequisites** Expert Beast Gunner Spellcasting\n\n- - -\n\nYou've learned the final truth of beast guns, making you a master in the magic they grant you. You gain the master spellcasting benefits.",
+			"hash": "vmhtZdBZ"
+		}
 	}
 ]

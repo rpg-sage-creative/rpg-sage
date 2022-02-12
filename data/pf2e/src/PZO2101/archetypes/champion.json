@@ -9,7 +9,16 @@
 		"source": "PZO2101",
 		"id": "52ceea6e-beb1-4f1d-8f94-9769c454bdbd",
 		"aonId": 4,
-		"hash": "POvtKvxq"
+		"pf2t": {
+			"name": "Champion",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 223 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=4",
+			"aon": "archetypes4",
+			"type": "archetype",
+			"body": "You have sworn a solemn oath to your deity, who has granted you champion powers to aid you in your cause.",
+			"hash": "POvtKvxq"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -42,7 +51,19 @@
 		"source": "PZO2101",
 		"id": "35153264-c414-435b-a9b7-2fbda253e27c",
 		"aonId": 687,
-		"hash": "WtlBrDsf"
+		"pf2t": {
+			"name": "Basic Devotion",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Champion",
+			"source": "Core Rulebook pg. 223 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=687",
+			"aon": "feats687",
+			"type": "feat",
+			"body": "**Archetype** Champion\n**Prerequisites** Champion Dedication\n\n- - -\n\nYou gain a 1st- or 2nd-level champion feat.\n\n#### Basic Devotion Leads To...\nAdvanced Devotion",
+			"hash": "WtlBrDsf"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -60,7 +81,19 @@
 		"source": "PZO2101",
 		"id": "b327e59a-2424-40a2-9755-b26a431cd940",
 		"aonId": 688,
-		"hash": "BABUPyzb"
+		"pf2t": {
+			"name": "Champion Resiliency",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Champion",
+			"source": "Core Rulebook pg. 223 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=688",
+			"aon": "feats688",
+			"type": "feat",
+			"body": "**Archetype** Champion\n**Prerequisites** Champion Dedication; class granting no more Hit Points per level than 8 + your Constitution modifier\n\n- - -\n\nYou gain 3 additional Hit Points for each champion archetype class feat you have. As you continue selecting champion archetype class feats, you continue to gain additional Hit Points in this way.",
+			"hash": "BABUPyzb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -75,7 +108,19 @@
 		"source": "PZO2101",
 		"id": "5d4ea0d5-54fe-4db1-99a9-ac9a3f36d877",
 		"aonId": 689,
-		"hash": "fDlNSrzd"
+		"pf2t": {
+			"name": "Healing Touch",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Champion",
+			"source": "Core Rulebook pg. 223 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=689",
+			"aon": "feats689",
+			"type": "feat",
+			"body": "**Archetype** Champion\n**Prerequisites** Champion Dedication\n\n- - -\n\nYou gain the appropriate devotion spell for your cause (lay on hands for the paladin, redeemer, and liberator). If you don't already have one, you gain a focus pool of 1 Focus Point, which you can Refocus by praying or serving your deity.",
+			"hash": "fDlNSrzd"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -93,7 +138,19 @@
 		"source": "PZO2101",
 		"id": "6fc1684f-a6b7-47bd-b7fd-6c183cad3d29",
 		"aonId": 690,
-		"hash": "MvhcRwsv"
+		"pf2t": {
+			"name": "Advanced Devotion",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Champion",
+			"source": "Core Rulebook pg. 223 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=690",
+			"aon": "feats690",
+			"type": "feat",
+			"body": "**Archetype** Champion\n**Prerequisites** Basic Devotion\n\n- - -\n\nYou gain one champion feat. For the purpose of meeting its prerequisites, your champion level is equal to half your character level.",
+			"hash": "MvhcRwsv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -108,7 +165,19 @@
 		"source": "PZO2101",
 		"id": "b21211ce-63f3-41a8-b70c-5bfaeef686b4",
 		"aonId": 691,
-		"hash": "RplGbQVN"
+		"pf2t": {
+			"name": "Champion's Reaction",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Champion",
+			"source": "Core Rulebook pg. 223 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=691",
+			"aon": "feats691",
+			"type": "feat",
+			"body": "**Archetype** Champion\n**Prerequisites** Champion Dedication\n\n- - -\n\nYou can use the champion's reaction associated with your cause.",
+			"hash": "RplGbQVN"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -123,7 +192,19 @@
 		"source": "PZO2101",
 		"id": "6a3e7fa9-a712-4df8-aee3-a0801fbc534b",
 		"aonId": 692,
-		"hash": "pggSZTgX"
+		"pf2t": {
+			"name": "Divine Ally",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Champion",
+			"source": "Core Rulebook pg. 223 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=692",
+			"aon": "feats692",
+			"type": "feat",
+			"body": "**Archetype** Champion\n**Prerequisites** Champion Dedication\n\n- - -\n\nYou gain a divine ally of your choice.",
+			"hash": "pggSZTgX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -141,6 +222,18 @@
 		"source": "PZO2101",
 		"id": "8170c962-2f1c-45ce-a8e0-4c5217bcb1f0",
 		"aonId": 693,
-		"hash": "FQISOIDO"
+		"pf2t": {
+			"name": "Diverse Armor Expert",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Champion",
+			"source": "Core Rulebook pg. 223 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=693",
+			"aon": "feats693",
+			"type": "feat",
+			"body": "**Archetype** Champion\n**Prerequisites** Champion Dedication; expert in unarmored defense or one or more types of armor\n\n- - -\n\nYour proficiency ranks for light armor, medium armor, heavy armor, and unarmored defense increase to expert.",
+			"hash": "FQISOIDO"
+		}
 	}
 ]

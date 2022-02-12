@@ -9,7 +9,16 @@
 		"source": "PZO2105",
 		"id": "dfe52d41-6c58-425e-95b0-1a8be3f0220c",
 		"aonId": 64,
-		"hash": "NDfmYGWw"
+		"pf2t": {
+			"name": "Linguist",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 178",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=64",
+			"aon": "archetypes64",
+			"type": "archetype",
+			"body": "Whether you study to further your own ambitions or simply out of fascination with the intricacies of language, your way with words is unparalleled.",
+			"hash": "NDfmYGWw"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -43,7 +52,20 @@
 		"source": "PZO2105",
 		"id": "62f99bb9-5c8c-4a75-b4f7-db21dc1c0e88",
 		"aonId": 1994,
-		"hash": "vgBvwJGK"
+		"pf2t": {
+			"name": "Multilingual Cipher",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"archetype": "Linguist",
+			"source": "Advanced Player's Guide pg. 178",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1994",
+			"aon": "feats1994",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Linguist\n**Prerequisites** Linguist Dedication; expert in Society\n\n- - -\n\nYou use multiple languages to create and break codes. You gain a +1 circumstance bonus to Decipher Writing. If another creature attempts to Decipher Writing you encoded, they take a -2 circumstance penalty unless they speak all the languages you used when you created the writing.",
+			"hash": "vgBvwJGK"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -58,7 +80,20 @@
 		"source": "PZO2105",
 		"id": "53222123-63da-48a9-9e09-07f33ac9b3da",
 		"aonId": 1995,
-		"hash": "TxWbbGRy"
+		"pf2t": {
+			"name": "Phonetic Training",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"archetype": "Linguist",
+			"source": "Advanced Player's Guide pg. 178",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1995",
+			"aon": "feats1995",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Linguist\n**Prerequisites** Linguist Dedication; expert in Society\n\n- - -\n\nYou can pronounce and repeat words with near-perfect accuracy even if you don't understand their meaning, and you can write them down in a phonetic script that allows you or another creature with Phonetic Training to read it later. Even if the words are in a language with sound you can't pronounce, you can faithfully transcribe them. Memorizing long sequences of words remains just as difficult as it is normally.",
+			"hash": "TxWbbGRy"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -75,7 +110,20 @@
 		"source": "PZO2105",
 		"id": "971f3b87-e6fb-4309-b862-10eaee59b20a",
 		"aonId": 1996,
-		"hash": "bWrwTZhs"
+		"pf2t": {
+			"name": "Spot Translate",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,auditory,linguistic",
+			"actions": "r",
+			"archetype": "Linguist",
+			"source": "Advanced Player's Guide pg. 178",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1996",
+			"aon": "feats1996",
+			"type": "feat",
+			"body": "**Archetype** Linguist\n**Prerequisites** Linguist Dedication\n**Trigger** Another creature within 60 feet uses a linguistic effect in a language you understand.\n\n- - -\n\nYou interpret a creature's words, repeating their message in a different language that you know. If the triggering effect's targets speak either the original language or the one you translated into, they are affected.",
+			"hash": "bWrwTZhs"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -90,7 +138,20 @@
 		"source": "PZO2105",
 		"id": "8a714a0e-e34d-47a9-8dad-2a57b8508b65",
 		"aonId": 1997,
-		"hash": "djSdPZjz"
+		"pf2t": {
+			"name": "Analyze Idiolect",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype,skill",
+			"archetype": "Linguist",
+			"source": "Advanced Player's Guide pg. 178",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1997",
+			"aon": "feats1997",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Linguist\n**Prerequisites** Linguist Dedication; expert in Deception and Society\n\n- - -\n\nYou break down a specific individual's idiolect, memorizing their speech mannerisms and habits. If you interact with someone for at least 10 minutes, when you later attempt to Impersonate that individual, you gain a +4 circumstance bonus to your Deception checks and DCs. Due to the intense character study required, you can't remember more than one idiolect at a time.",
+			"hash": "djSdPZjz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -106,7 +167,20 @@
 		"source": "PZO2105",
 		"id": "e58337b0-63fe-44ef-a8b4-73d2601abab0",
 		"aonId": 1998,
-		"hash": "rvOqTzwp"
+		"pf2t": {
+			"name": "Read Shibboleths",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "archetype,linguistic,skill",
+			"archetype": "Linguist",
+			"source": "Advanced Player's Guide pg. 178",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1998",
+			"aon": "feats1998",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Linguist\n**Prerequisites** Linguist Dedication; master in Society\n\n- - -\n\nAll communication is filled with slight tells and signals. If you interact with someone for at least 10 minutes, their regional words, pronunciation changes, and nonverbal cues provide you with a minor fact about their social environment, such as their hometown or certain groups they might belong to. If a target of this ability is being deceptive about their social environment, such as a commoner pretending to be a noble, they must attempt a Deception, Society, or appropriate Lore check against your Society DC, providing you a false minor fact consistent with their assumed identity on a success.\n\nOnce you've gleaned one or more true minor facts about a person, you can then incorporate these mannerisms into your speech to present yourself in a way that they find familiar. This grants you a +1 circumstance bonus to your Diplomacy and Deception checks with them.",
+			"hash": "rvOqTzwp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -121,6 +195,18 @@
 		"source": "PZO2105",
 		"id": "de2564bd-251b-43d3-8f67-b1591bddebba",
 		"aonId": 1999,
-		"hash": "FgyGbQSH"
+		"pf2t": {
+			"name": "Crude Communication",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Linguist",
+			"source": "Advanced Player's Guide pg. 178",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1999",
+			"aon": "feats1999",
+			"type": "feat",
+			"body": "**Archetype** Linguist\n**Prerequisites** Linguist Dedication\n\n- - -\n\nEven if you don't speak a creature's language, you can rely on inflection, root words, and body language to infer rudimentary meaning. If you interact with a creature for at least 10 minutes and that creature can speak a language, the GM rolls a secret Society check with a DC appropriate for the language's rarity. On a success, you understand the gist of the meaning and can communicate basic concepts back to the creature; on a failure, you are mistaken or communicate incorrect concepts. If you're legendary in Society, you can communicate instantly without needing to attempt a Society check; even if you didn't know the medium of communication the creature uses (speech, sign language, and so on), you intuit this information as soon as they try to communicate.",
+			"hash": "FgyGbQSH"
+		}
 	}
 ]

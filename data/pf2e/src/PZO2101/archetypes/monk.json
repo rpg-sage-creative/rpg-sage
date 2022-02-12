@@ -9,7 +9,16 @@
 		"source": "PZO2101",
 		"id": "9a433463-8555-4721-8e12-d8bc52bf02da",
 		"aonId": 8,
-		"hash": "RzSKQIIx"
+		"pf2t": {
+			"name": "Monk",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 227 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=8",
+			"aon": "archetypes8",
+			"type": "archetype",
+			"body": "Monastic training has taught you martial arts and allowed you to hone your mind, body, and spirit to new heights.",
+			"hash": "RzSKQIIx"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -41,7 +50,19 @@
 		"source": "PZO2101",
 		"id": "a89c7a93-6144-4b2a-a8a5-83e462e05950",
 		"aonId": 716,
-		"hash": "tkPrzDRb"
+		"pf2t": {
+			"name": "Basic Kata",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Monk",
+			"source": "Core Rulebook pg. 227 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=716",
+			"aon": "feats716",
+			"type": "feat",
+			"body": "**Archetype** Monk\n**Prerequisites** Monk Dedication\n\n- - -\n\nYou gain a 1st- or 2nd-level monk feat.\n\n#### Basic Kata Leads To...\nAdvanced Kata",
+			"hash": "tkPrzDRb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -59,7 +80,19 @@
 		"source": "PZO2101",
 		"id": "0f6f355b-2e0d-4067-8a7b-55e76a8a62f2",
 		"aonId": 717,
-		"hash": "VrbkpAtx"
+		"pf2t": {
+			"name": "Monk Resiliency",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Monk",
+			"source": "Core Rulebook pg. 227 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=717",
+			"aon": "feats717",
+			"type": "feat",
+			"body": "**Archetype** Monk\n**Prerequisites** Monk Dedication; class granting no more Hit Points per level than 8 + your Constitution modifier\n\n- - -\n\nYou gain 3 additional Hit Points for each monk archetype class feat you have. As you continue selecting monk archetype class feats, you continue to gain additional Hit Points in this way.",
+			"hash": "VrbkpAtx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -77,7 +110,19 @@
 		"source": "PZO2101",
 		"id": "934315bb-024b-4d09-afa8-a04530600d29",
 		"aonId": 718,
-		"hash": "zzTjmzQC"
+		"pf2t": {
+			"name": "Advanced Kata",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Monk",
+			"source": "Core Rulebook pg. 227 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=718",
+			"aon": "feats718",
+			"type": "feat",
+			"body": "**Archetype** Monk\n**Prerequisites** Basic Kata\n\n- - -\n\nYou gain one monk feat. For the purpose of meeting its prerequisites, your monk level is equal to half your character level.",
+			"hash": "zzTjmzQC"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -92,7 +137,19 @@
 		"source": "PZO2101",
 		"id": "32545a04-09c5-40e8-814f-bfc30b3f79ef",
 		"aonId": 719,
-		"hash": "zVgLrOKC"
+		"pf2t": {
+			"name": "Monk Moves",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Monk",
+			"source": "Core Rulebook pg. 227 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=719",
+			"aon": "feats719",
+			"type": "feat",
+			"body": "**Archetype** Monk\n**Prerequisites** Monk Dedication\n\n- - -\n\nYou gain a +10-foot status bonus to your Speed when you're not wearing armor.",
+			"hash": "zVgLrOKC"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -107,7 +164,19 @@
 		"source": "PZO2101",
 		"id": "cec4fdc3-7dca-477d-8a62-8bf9d535897d",
 		"aonId": 720,
-		"hash": "TvhkxqPG"
+		"pf2t": {
+			"name": "Monk's Flurry",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Monk",
+			"source": "Core Rulebook pg. 227 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=720",
+			"aon": "feats720",
+			"type": "feat",
+			"body": "**Archetype** Monk\n**Prerequisites** Monk Dedication\n\n- - -\n\nYou gain the Flurry of Blows action.\n\n#### Flurry of Blows\nMake two unarmed Strikes. If both hit the same creature, combine their damage for the purpose of resistances and weaknesses. Apply your multiple attack penalty to the Strikes normally. As it has the flourish trait, you can use Flurry of Blows only once per turn.",
+			"hash": "TvhkxqPG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -122,6 +191,18 @@
 		"source": "PZO2101",
 		"id": "0f9f6c9b-257d-494b-a284-a8d4035eb475",
 		"aonId": 721,
-		"hash": "HMbGZgtV"
+		"pf2t": {
+			"name": "Perfection's Path",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Monk",
+			"source": "Core Rulebook pg. 227 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=721",
+			"aon": "feats721",
+			"type": "feat",
+			"body": "**Archetype** Monk\n**Prerequisites** Monk Dedication; expert in at least one saving throw\n\n- - -\n\nChoose one saving throw (Fortitude, Reflex, or Will) in which you are an expert. Your proficiency rank in the chosen saving throw increases to master.",
+			"hash": "HMbGZgtV"
+		}
 	}
 ]

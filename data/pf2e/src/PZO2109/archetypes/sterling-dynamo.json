@@ -49,7 +49,19 @@
 		"page": 53,
 		"source": "PZO2109",
 		"id": "3cbcc63b-7c65-41a5-b7d1-de5ba34d8011",
-		"aonId": 0
+		"aonId": 3128,
+		"pf2t": {
+			"name": "Modular Dynamo",
+			"level": 4,
+			"traits": "archetype",
+			"archetype": "Sterling Dynamo",
+			"source": "Guns & Gears pg. 53",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3128",
+			"aon": "feats3128",
+			"type": "feat",
+			"body": "**Archetype** Sterling Dynamo\n**Prerequisites** Sterling Dynamo Dedication\n\n- - -\n\nYour dynamo has modular configurations, allowing you to swap between various different possibilities with ease in order to adapt to various situations in combat. Your dynamo attack gains the modular trait, as well as one of the following configurations of your choice: power driver (1d6 bludgeoning damage; shove), percussive striker (1d4 bludgeoning damage; agile, finesse), rotating sickle (1d6 slashing damage; trip), or entangling barbs (1d6 piercing damage; grapple). If you have a manually controlled dynamo, these damage dice increase by 1 size, as usual, and you can also choose the extendable baton (1d4 bludgeoning damage; finesse, reach), which has the damage increase already factored in.\n\nWhen you use an Interact action to switch configurations using the modular trait, you switch between the initial configuration of dynamo you chose with the Sterling Dynamo Dedication and the new configuration you chose with Modular Dynamo.",
+			"hash": "EcryvQVh"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -64,7 +76,20 @@
 		"page": 53,
 		"source": "PZO2109",
 		"id": "c5caeb70-d011-4b3e-84fa-93d0f8eece92",
-		"aonId": 0
+		"aonId": 3129,
+		"pf2t": {
+			"name": "Piston Punch",
+			"level": 6,
+			"traits": "archetype",
+			"actions": 2,
+			"archetype": "Sterling Dynamo",
+			"source": "Guns & Gears pg. 53",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3129",
+			"aon": "feats3129",
+			"type": "feat",
+			"body": "**Archetype** Sterling Dynamo\n**Prerequisites** Sterling Dynamo Dedication\n\n- - -\n\nYou lash out with a powerful punch, extending your dynamo to a greater length in order to attack two creatures in a row. Make a single bludgeoning or piercing dynamo Strike and compare the attack roll result to the ACs of up to two foes. The first foe must be within your melee reach and the second foe must be adjacent to the first foe in a straight line away from you. Roll damage only once and apply it to each creature you hit. A Piston Punch counts as two attacks for your multiple attack penalty. Reduce the operational time of your sterling dynamo by 1 hour.",
+			"hash": "KXqqRZRd"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -79,7 +104,20 @@
 		"page": 53,
 		"source": "PZO2109",
 		"id": "40a27129-b5e5-40a7-b767-d12c28f3799f",
-		"aonId": 0
+		"aonId": 3130,
+		"pf2t": {
+			"name": "Stasian Smash",
+			"level": 8,
+			"traits": "uncommon,archetype",
+			"actions": 2,
+			"archetype": "Sterling Dynamo",
+			"source": "Guns & Gears pg. 53",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3130",
+			"aon": "feats3130",
+			"type": "feat",
+			"body": "**Archetype** Sterling Dynamo\n**Prerequisites** Sterling Dynamo Dedication\n\n- - -\n\nYou've modified your dynamo with Stasian coils, allowing you to make a powerful attack that crackles with electricity. Make a dynamo Strike. On a success, the Strike deals an additional 1d12 electricity damage to the target, as well as 1d4 electricity damage to up to two other foes within 10 feet as sparks leap across the gaps. If you critically fail your dynamo Strike, you take 1d12 electricity damage. This counts as two attacks when calculating your multiple attack penalty. At 18th level, the additional electricity damage to the target increases to 2d12, and the additional electricity damage to the other foes increases to 2d4. Reduce the operational time of your sterling dynamo by 1 hour.",
+			"hash": "PJzgYQDC"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -94,7 +132,20 @@
 		"page": 53,
 		"source": "PZO2109",
 		"id": "e9edf2f5-13df-470f-a19d-d38a018f2689",
-		"aonId": 0
+		"aonId": 3131,
+		"pf2t": {
+			"name": "Beast Dynamo Howl",
+			"level": 10,
+			"traits": "uncommon,archetype",
+			"actions": 2,
+			"archetype": "Sterling Dynamo",
+			"source": "Guns & Gears pg. 53",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3131",
+			"aon": "feats3131",
+			"type": "feat",
+			"body": "**Archetype** Sterling Dynamo\n\n- - -\n\nYou've incorporated beast tech from Arcadia into your dynamo, adding in components from various terrifying creatures to enhance your prosthesis's capabilities. The beast parts can unleash a disturbing howl as you make a powerful attack with your dynamo. Attempt a single Intimidation check to Demoralize each enemy within 30 feet; you don't take a penalty when you attempt to Demoralize a creature that doesn't understand your language. Then, make a dynamo Strike. Reduce the operational time of your sterling dynamo by 1 hour.",
+			"hash": "hZnUrkSr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -109,7 +160,19 @@
 		"page": 53,
 		"source": "PZO2109",
 		"id": "9a7049ff-2dde-40cd-a791-c9df5b1f633a",
-		"aonId": 0
+		"aonId": 3132,
+		"pf2t": {
+			"name": "Golem Dynamo",
+			"level": 12,
+			"traits": "uncommon,archetype",
+			"archetype": "Sterling Dynamo",
+			"source": "Guns & Gears pg. 53",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3132",
+			"aon": "feats3132",
+			"type": "feat",
+			"body": "**Archetype** Sterling Dynamo\n**Prerequisites** Sterling Dynamo Dedication\n\n- - -\n\nYou've learned the secrets of Jistkan golem prostheses, allowing you to incorporate golem components into your dynamo and gain a portion of their magic. You gain a +1 status bonus to saving throws against magic, and your dynamo Strikes become magical.",
+			"hash": "fgLItygI"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -123,6 +186,18 @@
 		"page": 53,
 		"source": "PZO2109",
 		"id": "648687c0-804d-47ca-bd5d-b89767bafc8e",
-		"aonId": 0
+		"aonId": 3133,
+		"pf2t": {
+			"name": "Soaring Dynamo",
+			"level": 18,
+			"traits": "archetype",
+			"archetype": "Sterling Dynamo",
+			"source": "Guns & Gears pg. 53",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3133",
+			"aon": "feats3133",
+			"type": "feat",
+			"body": "**Archetype** Sterling Dynamo\n**Prerequisites** Sterling Dynamo Dedication\n\n- - -\n\nYou've built clockwork wings or jets into your dynamo, allowing you to use your prosthesis to fly. You gain a fly Speed equal to your Speed. Each minute of flight reduces the operational time of your sterling dynamo by 1 hour, measured from the first time you use the Fly action in a given minute.",
+			"hash": "xULAjnjd"
+		}
 	}
 ]

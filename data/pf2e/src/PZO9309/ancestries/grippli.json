@@ -15,10 +15,84 @@
 		"aonId": 46,
 		"source": "PZO9309",
 		"id": "8e5c6483-ce7f-4e2f-a2c6-d203fce8f157",
-		"hash": "zXTlqWJZ"
+		"pf2t": {
+			"name": "Grippli",
+			"pfs": "standard",
+			"traits": "uncommon,grippli,humanoid",
+			"source": "The Mwangi Expanse pg. 119 2.0",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=46",
+			"aon": "ancestries46",
+			"type": "ancestry",
+			"body": "Gripplis are a shy and cautious people who generally seek to avoid being drawn into the complicated and dangerous affairs of others. Despite their outlook and small stature, gripplis often take bold and noble action when the situation demands it.\n\nReclusive and canny, gripplis are treetop survivalists who harvest their homes' bounty and defend themselves against terrible threats. Their reliance on cunning and simple tools has led to gripplis being mischaracterized as primitive, yet this overlooks their shaping of the land with hidden orchards and camouflaged causeways that allow gripplis to live in prosperous peace. Gripplis are most likely to emerge from their forest homes to trade, explore, and combat threats that would despoil the world.\n\n#### You Might...\n+ Seek out clever ways to exploit your environment when overcoming challenges.\n+ Make friends slowly, concerned by cautionary tales of exploitative strangers.\n+ Be fiercely protective of your home or community.\n\n#### Others Probably...\n+ Assume you dislike cities and people who live in them.\n+ Trust in your impartial, measured approach to understanding situations and solving problems.\n+ Give you space, fearing that touching you would prove toxic.\n\n#### Physical Description\nGripplis resemble humanoid tree frogs, with oversized eyes, wide mouths, and gangly physiques. Their slight frames and large toes afford excellent grip while climbing, while their colorful skin provides reliable camouflage that varies by their home environment- green and brown for jungle-dwelling groups, blue and orange for riparian communities, and many other colors between. A grippli grows quickly, reaching adult size of about 2 feet in height about 3 years after hatching, though they're only considered adults around age 12. Gripplis rarely live beyond 60 years, though exceptional individuals occasionally live as long as a century.\n\n#### Society\nGripplis lead a sophisticated hunter-gatherer lifestyle with which they reshape the landscape to suit their needs: building spillways to trap fish, seeding fruit-bearing trees, sowing cover-granting foliage for future hunts, and more techniques that often escape an agriculturist's eye. These strategies rely on community cooperation as well as dispersed populations, so gripplis commonly live in small villages, each part of a complex web of alliances and relationships. Reclusiveness has preserved grippli lives and lifestyles for millennia, yet they increasingly find themselves threatened by ancient evils and new explorers alike.\n\n#### Alignment and Religion\nTaught to wait, observe, and respect natural processes of life and death, many gripplis adopt neutral alignments. Those who take a more active role suppressing evils that take refuge in the jungles are often neutral good, most notably those rare fiend-keepers who absorb an evil being into their soul to contain and eventually transform its villainy through virtuous acts. Nature deities such as Gozreh or Erastil often earn gripplis' respect, yet communities often prefer less prominent, more intimate divinities such as empyreal lords, psychopomp ushers, or the fey Eldest.\n\n#### Adventurers\nFor the many gripplis who hail from remote regions, wilderness backgrounds like hunter, nomad, or scout are excellent fits. Those more accustomed to urban areas might be animal whisperers, bounty hunters, and herbalists. Hermits are common, and emissaries are critical to maintaining relationships with other peoples. Thanks to their deep cultural connections to nature, gripplis make excellent druids and rangers. Their musical traditions are a great fit for bards. Gripplis' natural agility and perceptiveness also make them capable clerics, monks, and rogues.\n\n#### Names\nGrippli names often include resonant vowels and chirped consonants that remain difficult for non-gripplis to vocalize properly. Gripplis that travel widely often adopt one or more names more easily replicated by their associates.\n\n#### Sample Names\nAalpo'ol, Bogwynne, Ctaprak, Eegru, Gpoun, Gruoksh, Hrrauti, Iopo, Iykiki, Kyrsiik, Mhruugu, Oplugo, Quaasol, Yolkuu, Ztaal\n\n#### Grippli Mechanics\n\n\n#### Hit Points\n6\n\n#### Size\nSmall\n\n#### Speed\n25 feet\n\n#### Ability Boosts\nDexterity\nWisdom\nFree\n\n#### Ability Flaw(s)\nStrength\n\n#### Languages\nCommon\nGrippli\nAdditional languages equal to your Intelligence modifier (if it's positive). Choose from Abyssal, Aquan, Boggard, Draconic, Elven, Iruxi, Sylvan, and any other languages to which you have access (such as the languages prevalent in your region).\n\n#### Low-Light Vision\nYou can see in dim light as though it were bright light, and you ignore the concealed condition due to dim light.",
+			"hash": "zXTlqWJZ"
+		}
 	},
-	{ "objectType": "Heritage", "name": "Poisonhide Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "d7597da7-d1ca-4dbb-a3b1-27e1d12db444", "aonId": 175, "hash": "tRhqkZvc" },
-	{ "objectType": "Heritage", "name": "Snaptongue Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "4031b887-592e-4a7e-9723-c4d8dd0fe1ef", "aonId": 176, "hash": "XnvNpNkz" },
-	{ "objectType": "Heritage", "name": "Stickytoe Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "cee4df08-9b32-4379-8d05-5583a0716458", "aonId": 177, "hash": "tPKArDDS" },
-	{ "objectType": "Heritage", "name": "Windweb Grippli", "ancestry": "Grippli", "source": "PZO9309", "id": "f2b30ed2-025d-4af9-b930-7d940ac53b78", "aonId": 178, "hash": "fNrMbKbt" }
+	{
+		"objectType": "Heritage",
+		"name": "Poisonhide Grippli",
+		"ancestry": "Grippli",
+		"source": "PZO9309",
+		"id": "d7597da7-d1ca-4dbb-a3b1-27e1d12db444",
+		"aonId": 175,
+		"pf2t": {
+			"name": "Poisonhide Grippli",
+			"source": "The Mwangi Expanse pg. 119 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=175",
+			"aon": "heritages175",
+			"type": "heritage",
+			"body": "You may be small, but the poison glands concealed across your body hide a deadly defense. You gain the Toxic Skin reaction.",
+			"hash": "tRhqkZvc"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Snaptongue Grippli",
+		"ancestry": "Grippli",
+		"source": "PZO9309",
+		"id": "4031b887-592e-4a7e-9723-c4d8dd0fe1ef",
+		"aonId": 176,
+		"pf2t": {
+			"name": "Snaptongue Grippli",
+			"source": "The Mwangi Expanse pg. 119 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=176",
+			"aon": "heritages176",
+			"type": "heritage",
+			"body": "Your tongue is especially long, and you can launch it with extraordinary range and precision. You can use your tongue to deliver touch-range spells and perform extremely simple Interact actions, such as opening some types of unlocked doors. Your tongue can't perform actions that require fingers or significant manual dexterity, including any action that would require a check to accomplish, and you can't use it to hold items.",
+			"hash": "XnvNpNkz"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Stickytoe Grippli",
+		"ancestry": "Grippli",
+		"source": "PZO9309",
+		"id": "cee4df08-9b32-4379-8d05-5583a0716458",
+		"aonId": 177,
+		"pf2t": {
+			"name": "Stickytoe Grippli",
+			"source": "The Mwangi Expanse pg. 119 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=177",
+			"aon": "heritages177",
+			"type": "heritage",
+			"body": "Your hands and feet exude a film that helps them adhere to surfaces. You gain a +2 circumstance bonus to your Fortitude and Reflex DC against attempts to Disarm, Shove, or Trip you. When ascending trees, vines, and other foliage, if you roll a success on the Athletics check to Climb, you get a critical success instead.",
+			"hash": "tPKArDDS"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Windweb Grippli",
+		"ancestry": "Grippli",
+		"source": "PZO9309",
+		"id": "f2b30ed2-025d-4af9-b930-7d940ac53b78",
+		"aonId": 178,
+		"pf2t": {
+			"name": "Windweb Grippli",
+			"source": "The Mwangi Expanse pg. 119 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=178",
+			"aon": "heritages178",
+			"type": "heritage",
+			"body": "Tough webbing along your hands and toes can slow any fall. As long as you have one hand free, you take no falling damage, regardless of the distance you fall.",
+			"hash": "fNrMbKbt"
+		}
+	}
 ]

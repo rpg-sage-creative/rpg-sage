@@ -17,7 +17,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Transmutation" ],
 		"id": "6ad7b7cc-f9da-4ee8-8fa3-c938e18276cf",
-		"hash": "fEDAyVXQ"
+		"pf2t": {
+			"name": "Agile Feet",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,transmutation",
+			"cast": "s",
+			"actions": 1,
+			"source": "Core Rulebook pg. 389 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=399",
+			"aon": "spells399",
+			"type": "focus",
+			"body": "**Duration** until the end of the current turn\n\n- - -\n\nThe blessings of your god make your feet faster and your movements more fluid. You gain a +5-foot status bonus to your Speed and ignore difficult terrain. As part of casting agile feet, you can Stride or Step; you can instead Burrow, Climb, Fly, or Swim if you have the appropriate Speed.",
+			"hash": "fEDAyVXQ"
+		}
 	},
 	{
 		"aonId": 400,
@@ -51,7 +64,22 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Illusion" ],
 		"id": "266fb6cb-cd35-48df-bbea-de37fe449c2b",
-		"hash": "tdyGrTjg"
+		"pf2t": {
+			"name": "Appearance of Wealth",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,illusion",
+			"cast": "m,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 389 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=400",
+			"aon": "spells400",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Area** 5-foot burst\n**Duration** sustained up to 1 minute\n\n- - -\n\nYou create a brief vision of immense wealth filling the spell's area. Each creature within 20 feet of the area that could be enticed by material wealth must attempt a Will saving throw. A creature that enters the area automatically disbelieves the illusion, and disbelieving the illusion ends any fascinated condition imposed by the spell. As long as you Sustain the Spell, other creatures react to the treasure like they would any other illusion, but they are not at risk of becoming fascinated.\n\n**Critical Success** The creature disbelieves the illusion and is unaffected by it.\n**Success** The creature is fascinated by the wealth until it has completed its first action on its next turn.\n**Failure** The creature is fascinated by the illusion.",
+			"hash": "tdyGrTjg"
+		}
 	},
 	{
 		"aonId": 401,
@@ -78,7 +106,21 @@
 		"targets": "1 item or work of art that fits entirely within the range",
 		"traits": [ "Uncommon", "Cleric", "Transmutation" ],
 		"id": "4f4de514-23a8-44ec-94b8-ac4142d51d64",
-		"hash": "sZwXPgSc"
+		"pf2t": {
+			"name": "Artistic Flourish",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,transmutation",
+			"cast": "m,s",
+			"actions": 2,
+			"range": 15,
+			"source": "Core Rulebook pg. 389 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=401",
+			"aon": "spells401",
+			"type": "focus",
+			"body": "**Duration** 10 minutes\n**Targets** 1 item or work of art that fits entirely within the range\n\n- - -\n\nYou transform the target to make it match your artisanal and artistic vision. If you have expert proficiency in Crafting, the item grants a +1 item bonus to attack rolls if it's a weapon or skill checks if it's a skill tool. The target is a beautiful and impressive piece for its new quality, but the effect is obviously temporary, so its monetary value doesn't change.\n\nWhen you cast this spell, any previous artistic flourish you had cast ends.\n- - -\n**Heightened (7th)** If you have master proficiency in Crafting, the item grants a +2 item bonus instead.\n**Heightened (10th)** If you have legendary proficiency in Crafting, the item grants a +3 item bonus instead.",
+			"hash": "sZwXPgSc"
+		}
 	},
 	{
 		"aonId": 402,
@@ -98,7 +140,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Transmutation" ],
 		"id": "b080faff-8cd3-45a4-9ff5-4f5eb6ded00b",
-		"hash": "GpxqLptJ"
+		"pf2t": {
+			"name": "Athletic Rush",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,transmutation",
+			"cast": "s",
+			"actions": 1,
+			"source": "Core Rulebook pg. 389 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=402",
+			"aon": "spells402",
+			"type": "focus",
+			"body": "**Duration** 1 round\n\n- - -\n\nYour body fills with physical power and skill. You gain a +10-foot status bonus to Speed and a +2 status bonus to Athletics checks. As a part of Casting this Spell, you can use a Stride, Leap, Climb, or Swim action. The spell's bonuses apply during that action.",
+			"hash": "GpxqLptJ"
+		}
 	},
 	{
 		"aonId": 403,
@@ -121,7 +176,21 @@
 		"targets": "1 willing creature",
 		"traits": [ "Uncommon", "Cleric", "Divination", "Fortune" ],
 		"id": "e20c7968-d138-4eb0-ba83-a40033070fbb",
-		"hash": "xqqBPKlG"
+		"pf2t": {
+			"name": "Bit of Luck",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,divination,fortune",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 389 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=403",
+			"aon": "spells403",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n**Targets** 1 willing creature\n\n- - -\n\nYou tilt the scales of luck slightly to protect a creature from disaster. When the target would attempt a saving throw, it can roll twice and use the better result. Once it does this, the spell ends.\n\nIf you cast bit of luck again, any previous bit of luck you cast that's still in effect ends. After a creature has been targeted with bit of luck, it becomes temporarily immune for 24 hours.",
+			"hash": "xqqBPKlG"
+		}
 	},
 	{
 		"aonId": 404,
@@ -158,7 +227,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Mental" ],
 		"id": "7f156f4b-85fa-49f9-85de-011113eac8c7",
-		"hash": "fdbmSRZn"
+		"pf2t": {
+			"name": "Blind Ambition",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,emotion,enchantment,mental",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Core Rulebook pg. 389 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=404",
+			"aon": "spells404",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** 10 minutes\n**Targets** 1 creature\n\n- - -\n\nYou strengthen a target's ambition, increase its resentment of allies, and make its allegiances more susceptible to change. The target must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes a -1 status penalty to its saving throws and other defenses against attempts to Coerce it, Request something of it, or use mental effects to convince it to do something (such as a suggestion spell). This penalty applies only if the target is being encouraged to advance its own ambitions.\n**Failure** As success, but the penalty is -2.\n**Critical Failure** The target is overcome with ambition, taking whatever actions would advance its own agenda over those of anyone else, even without attempts to convince it.",
+			"hash": "fdbmSRZn"
+		}
 	},
 	{
 		"aonId": 405,
@@ -198,7 +282,21 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Mental", "Visual" ],
 		"id": "66628582-b8c9-4a73-bc13-d59330684471",
-		"hash": "UNrLvfrM"
+		"pf2t": {
+			"name": "Captivating Adoration",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,emotion,enchantment,mental,visual",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 389 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=405",
+			"aon": "spells405",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Area** 15-foot emanation\n**Duration** 1 minute\n\n- - -\n\nYou become intensely entrancing, and creatures are distracted by you as long as they remain within the area. You can exclude any creatures you choose from the effects.\n\nWhen a creature enters the area for the first time, it must attempt a Will saving throw. If a creature leaves and reenters, it uses the results of its original save.\n\n**Critical Success** The creature is unaffected and temporarily immune for 1 hour.\n**Success** The creature is fascinated with you for its next action, then is temporarily immune for 1 hour.\n**Failure** The creature is fascinated with you.\n**Critical Failure** The creature is fascinated with you, and its attitude toward you improves by one step.\n- - -\n**Heightened (+1)** Increase the size of the emanation by 15 feet.",
+			"hash": "UNrLvfrM"
+		}
 	},
 	{
 		"aonId": 406,
@@ -239,7 +337,22 @@
 		"targets": "1 humanoid creature that could find you attractive",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Incapacitation", "Mental" ],
 		"id": "0774a2ee-86f4-4a63-be9d-a052ff2602c4",
-		"hash": "xcPBFQOp"
+		"pf2t": {
+			"name": "Charming Touch",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,emotion,enchantment,incapacitation,mental",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Core Rulebook pg. 390 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=406",
+			"aon": "spells406",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** 10 minutes\n**Targets** 1 creature that could find you attractive\n\n- - -\n\nYou infuse your target with attraction, causing it to act friendlier toward you. The target attempts a Will save. It gains a +4 circumstance bonus to this save if you or your allies recently threatened or were hostile to it.\n\n**Critical Success** The target is unaffected and aware you tried to charm it.\n**Success** The target is unaffected but thinks your spell was something harmless instead of charming touch, unless it identifies the spell (see Identifying Spells).\n**Failure** The target's attitude becomes friendly toward you. If it was friendly, it becomes helpful. It can't use hostile actions against you.\n**Critical Failure** The target is helpful and can't use hostile actions against you.\n\nYou can Dismiss the spell. If you use hostile actions against the target, the spell ends. After the spell ends, the target doesn't necessarily realize it was charmed unless its friendship with you or the actions you convinced it to take clash with its expectations, which could potentially allow you to convince the target to continue being your friend via mundane means.",
+			"hash": "xcPBFQOp"
+		}
 	},
 	{
 		"aonId": 407,
@@ -262,7 +375,21 @@
 		"targets": "1 willing creature",
 		"traits": [ "Uncommon", "Cleric", "Darkness", "Evocation", "Shadow" ],
 		"id": "05f47704-91fe-453e-9e9e-44916828ac18",
-		"hash": "bQvxswJv"
+		"pf2t": {
+			"name": "Cloak of Shadow",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,darkness,evocation,shadow",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Core Rulebook pg. 390 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=407",
+			"aon": "spells407",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n**Targets** 1 willing creature\n\n- - -\n\nYou drape the target in a mantle of swirling shadows that make it harder to see. The cloak reduces bright light within a 20-foot emanation to dim light. This is a form of magical darkness and can therefore overcome non-magical light or attempt to counteract magical light.\n\nThe target can use concealed condition gained from the shadows to Hide, though observant creatures can still follow the moving aura of shadow, making it difficult for the target to become completely undetected. The target can use an Interact action to remove the cloak and leave it behind as a decoy, where it remains, reducing light for the rest of the spell's duration. If anyone picks up the cloak after it's been removed by the original target, the cloak evaporates and the spell ends.",
+			"hash": "bQvxswJv"
+		}
 	},
 	{
 		"aonId": 408,
@@ -286,7 +413,22 @@
 		"targets": "A creature you dealt damage to on your most recent action.",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Incapacitation", "Mental" ],
 		"id": "e02fdb6b-982b-40a9-9f85-a3eeb8054887",
-		"hash": "vXDzfjzj"
+		"pf2t": {
+			"name": "Commanding Lash",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,enchantment,incapacitation,mental",
+			"cast": "v",
+			"actions": 1,
+			"range": 100,
+			"source": "Core Rulebook pg. 390 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=408",
+			"aon": "spells408",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Requirements** Your most recent action dealt damage to a target\n**Duration** until the end of your target's next turn\n**Targets** A creature you dealt damage to on your most recent action.\n\n- - -\n\nWith the threat of more pain, you compel a creature you've recently harmed. You issue a command to the target, with the effects of the spell command.",
+			"hash": "vXDzfjzj"
+		}
 	},
 	{
 		"aonId": 409,
@@ -309,7 +451,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Mental" ],
 		"id": "415c1d42-4b79-4ad3-86f4-5e4222325f54",
-		"hash": "ImgKQQSX"
+		"pf2t": {
+			"name": "Competitive Edge",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,emotion,enchantment,mental",
+			"cast": "v",
+			"actions": 1,
+			"source": "Core Rulebook pg. 390 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=409",
+			"aon": "spells409",
+			"type": "focus",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYour competitiveness drives you to prove yourself against the opposition. You gain a +1 status bonus to attack rolls and skill checks. If an enemy within 20 feet critically succeeds at an attack roll or skill check, your status bonus increases to +3 attack rolls or that specific skill check (whichever the foe critically succeeded at) for 1 round.\n- - -\n**Heightened (7th)** Increase the base bonus to +2 and the increased bonus after an enemy critically succeeds to +4.",
+			"hash": "ImgKQQSX"
+		}
 	},
 	{
 		"aonId": 410,
@@ -333,7 +488,22 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Evocation", "Sonic" ],
 		"id": "21ae1f4c-33b2-43a1-a08e-e208b5ce454a",
-		"hash": "GKxQVRtK"
+		"pf2t": {
+			"name": "Cry of Destruction",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,evocation,sonic",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 390 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=410",
+			"aon": "spells410",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"basic": 1,
+			"body": "**Area** 15-foot cone\n\n- - -\n\nYour voice booms, smashing what's in front of you. Each creature and unattended object in the area takes 1d8 sonic damage. If you already dealt damage to an enemy this turn with a Strike or spell, increase the damage dice from this spell to d12s.\n- - -\n**Heightened (+1)** The damage increases by 1d8.",
+			"hash": "GKxQVRtK"
+		}
 	},
 	{
 		"aonId": 411,
@@ -370,7 +540,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Darkness", "Transmutation" ],
 		"id": "a7d65529-99d6-4f40-a984-39c97dd2e1d8",
-		"hash": "GrZTqcrI"
+		"pf2t": {
+			"name": "Darkened Eyes",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,darkness,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Core Rulebook pg. 390 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=411",
+			"aon": "spells411",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou infuse a creature's vision with darkness. After attempting its save, the target becomes temporarily immune for 24 hours.\n\n**Critical Success** The target is unaffected.\n**Success** The target's darkvision or low-light vision is suppressed for 1 round.\n**Failure** As success, but the duration is 1 minute.\n**Critical Failure** As success, but the duration is 1 minute, and the target is also blinded for the duration. It can attempt a new save at the end of each of its turns. If it succeeds, it's no longer blinded, but its darkvision or low-light vision remains suppressed.",
+			"hash": "GrZTqcrI"
+		}
 	},
 	{
 		"aonId": 412,
@@ -408,7 +593,21 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Evocation", "Light", "Visual" ],
 		"id": "fb4e5670-0ac5-4d04-b706-2016f625a93e",
-		"hash": "cztMQtKA"
+		"pf2t": {
+			"name": "Dazzling Flash",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,evocation,light,visual",
+			"cast": "m,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 391 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=412",
+			"aon": "spells412",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Area** 15-foot cone\n\n- - -\n\nYou raise your religious symbol and create a blinding flash of light. Each creature in the area must attempt a Fortitude save.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature is dazzled for 1 round.\n**Failure** The creature is blinded for 1 round and dazzled for 1 minute. The creature can spend an Interact action rubbing its eyes to end the blinded condition.\n**Critical Failure** The creature is blinded for 1 round and dazzled for 1 hour.\n- - -\n**Heightened (3rd)** The area increases to a 30-foot cone.",
+			"hash": "cztMQtKA"
+		}
 	},
 	{
 		"aonId": 413,
@@ -429,7 +628,20 @@
 		"traits": [ "Uncommon", "Cleric", "Necromancy" ],
 		"trigger": "A living creature within 20 feet of you dies, or an undead creature within 20 feet of you is destroyed.",
 		"id": "85713a08-e854-4541-a825-2c3c5519f40d",
-		"hash": "rspZTKYv"
+		"pf2t": {
+			"name": "Death's Call",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,necromancy",
+			"cast": "v",
+			"actions": "r",
+			"source": "Core Rulebook pg. 391 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=413",
+			"aon": "spells413",
+			"type": "focus",
+			"body": "**Trigger** A living creature within 20 feet of you dies, or an undead creature within 20 feet of you is destroyed.\n**Duration** 1 minute\n\n- - -\n\nSeeing another pass from this world to the next invigorates you. You gain temporary Hit Points equal to the triggering creature's level plus your spellcasting ability modifier. If the triggering creature was undead, double the number of temporary Hit Points you gain. These last for the duration of the spell, and the spell ends if all the temporary Hit Points are depleted earlier.",
+			"hash": "rspZTKYv"
+		}
 	},
 	{
 		"aonId": 414,
@@ -453,7 +665,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Mental" ],
 		"id": "ba271196-2b52-4cda-a3e1-37162d80ba6c",
-		"hash": "kZgRqyPP"
+		"pf2t": {
+			"name": "Delusional Pride",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,emotion,enchantment,mental",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 391 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=414",
+			"aon": "spells414",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou make the target overconfident, leading it to ascribe failure to external factors. If the target fails at an attack roll or skill check, it takes a -1 status penalty to attack rolls and skill checks until the end of its turn (or the end of its next turn, if it attempted the roll outside its turn). If the creature fails a second time while taking this penalty, the penalty increases to -2. The duration depends on the target's Will save. After attempting its save, the creature becomes temporarily immune for 24 hours.\n\n**Critical Success** The target is unaffected.\n**Success** The duration is 1 round.\n**Failure** The duration is 10 minutes.\n**Critical Failure** The duration is 24 hours.",
+			"hash": "kZgRqyPP"
+		}
 	},
 	{
 		"aonId": 415,
@@ -477,7 +704,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Evocation" ],
 		"id": "97472abe-1d6a-4a63-bf6d-1075ac4aee47",
-		"hash": "sKmwlXcf"
+		"pf2t": {
+			"name": "Destructive Aura",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,evocation",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 391 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=415",
+			"aon": "spells415",
+			"type": "focus",
+			"body": "**Area** 15-foot emanation\n**Duration** 1 minute\n\n- - -\n\nSwirling sands of divine devastation surround you, weakening the defenses of all they touch. Reduce the resistances of yourself and creatures in the area by 2.\n- - -\n**Heightened (+2)** Reduce the resistances by an addition 2.",
+			"hash": "sKmwlXcf"
+		}
 	},
 	{
 		"aonId": 416,
@@ -497,7 +737,20 @@
 		"traits": [ "Uncommon", "Air", "Cleric", "Polymorph", "Transmutation" ],
 		"trigger": "You take damage from an enemy or a hazard.",
 		"id": "6e087b47-2076-4818-bb70-3e9259eede89",
-		"hash": "FFXrrwsg"
+		"pf2t": {
+			"name": "Disperse into Air",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,air,cleric,polymorph,transmutation",
+			"cast": "s",
+			"actions": "r",
+			"source": "Core Rulebook pg. 391 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=416",
+			"aon": "spells416",
+			"type": "focus",
+			"body": "**Trigger** You take damage from an enemy or a hazard.\n\n- - -\n\nAfter taking the triggering damage, you transform into air. Until the end of the current turn, you can't be attacked or targeted, you don't take up space, you can't act, and any auras or emanations you have are suppressed. At the end of the turn, you re-form in any space you can occupy within 15 feet of where you were when you dispersed. Any auras or emanations you had are restored as long as their duration didn't run out while you were dispersed.",
+			"hash": "FFXrrwsg"
+		}
 	},
 	{
 		"aonId": 417,
@@ -522,7 +775,21 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Evocation", "Water" ],
 		"id": "9fd16c8a-31d5-4eb2-bda8-d9cd62ad2278",
-		"hash": "WgkZQQNM"
+		"pf2t": {
+			"name": "Downpour",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,evocation,water",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 391 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=417",
+			"aon": "spells417",
+			"type": "focus",
+			"body": "**Area** 30-foot burst\n**Duration** 1 minute\n\n- - -\n\nYou call forth a torrential downpour, which extinguishes nonmagical flames. Creatures in the area are concealed and gain fire resistance 10. Creatures outside the area are concealed to those inside the area. Creatures with weakness to water that end their turns in the area take damage equal to their weakness.\n- - -\n**Heightened (+1)** The fire resistance increases by 2.",
+			"hash": "WgkZQQNM"
+		}
 	},
 	{
 		"aonId": 418,
@@ -559,7 +826,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Incapacitation", "Mental" ],
 		"id": "529631b2-6810-4f5d-87c2-bef471d49463",
-		"hash": "rsmLZwhQ"
+		"pf2t": {
+			"name": "Dreamer's Call",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,enchantment,incapacitation,mental",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 391 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=418",
+			"aon": "spells418",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** until the end of the target's next turn\n**Targets** 1 creature\n\n- - -\n\nThe target becomes distracted and suggestible, inundated by vivid daydreams.\n\n**Critical Success** The target is unaffected.\n**Success** The target's attention wavers. It becomes flat-footed and fascinated by its daydreams.\n**Failure** As success, except that you appear in the dream and give a suggestion. This can be to approach you, run away (as if it had the fleeing condition), Release what it's holding, Drop Prone, or stand in place. The creature follows this course of action as its first action after you Cast the Spell.\n**Critical Failure** As failure, but the target follows the course of action for as many actions as possible for the spell's duration, and it does nothing else.",
+			"hash": "rsmLZwhQ"
+		}
 	},
 	{
 		"aonId": 419,
@@ -582,7 +864,20 @@
 		"traits": [ "Uncommon", "Abjuration", "Cleric" ],
 		"trigger": "An attack or effect would deal damage to you.",
 		"id": "e5b139fd-d3cb-4f6f-9fce-e521f7546aa3",
-		"hash": "RXKFyNXb"
+		"pf2t": {
+			"name": "Enduring Might",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cleric",
+			"cast": "s",
+			"actions": "r",
+			"source": "Core Rulebook pg. 392 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=419",
+			"aon": "spells419",
+			"type": "focus",
+			"body": "**Trigger** An attack or effect would deal damage to you.\n\n- - -\n\nYour own might mingles with divine power to protect you. You gain resistance equal to 8 plus your Strength modifier against all damage from the triggering attack or effect.\n- - -\n**Heightened (+1)** The resistance increases by 2.",
+			"hash": "RXKFyNXb"
+		}
 	},
 	{
 		"aonId": 420,
@@ -606,7 +901,22 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Necromancy", "Positive" ],
 		"id": "5eb829f0-60d1-40b2-a7b6-577423651e25",
-		"hash": "rqpvMYlP"
+		"pf2t": {
+			"name": "Eradicate Undeath",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,necromancy,positive",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 392 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=420",
+			"aon": "spells420",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"basic": 1,
+			"body": "**Area** 30-foot cone\n\n- - -\n\nA massive deluge of life energy causes the undead to fall apart. Each undead creature in the area takes 4d12 positive damage.\n- - -\n**Heightened (+1)** The damage increases by 1d12.",
+			"hash": "rqpvMYlP"
+		}
 	},
 	{
 		"aonId": 421,
@@ -629,7 +939,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Illusion", "Visual" ],
 		"id": "b9797e63-c9b0-4c9e-aab1-82b461d280bd",
-		"hash": "nGZrYkfn"
+		"pf2t": {
+			"name": "Face in the Crowd",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,illusion,visual",
+			"cast": "s",
+			"actions": 1,
+			"source": "Core Rulebook pg. 392 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=421",
+			"aon": "spells421",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nWhile in a crowd of roughly similar creatures, your appearance becomes bland and nondescript. You gain a +2 status bonus to Deception and Stealth checks to go unnoticed among the crowd, and you ignore difficult terrain caused by the crowd.\n- - -\n**Heightened (3rd)** The spell gains a range of 10 feet and can target up to 10 creatures.",
+			"hash": "nGZrYkfn"
+		}
 	},
 	{
 		"aonId": 422,
@@ -654,7 +977,21 @@
 		"targets": "1 creature or object",
 		"traits": [ "Uncommon", "Attack", "Cleric", "Evocation", "Fire" ],
 		"id": "c84f9add-52ef-4047-9efb-4412940a4b56",
-		"hash": "JfZCwIqr"
+		"pf2t": {
+			"name": "Fire Ray",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,attack,cleric,evocation,fire",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Core Rulebook pg. 392 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=422",
+			"aon": "spells422",
+			"type": "focus",
+			"body": "**Targets** 1 creature\n\n- - -\n\nA blazing band of fire arcs through the air. Make a spell attack roll. The ray deals 2d6 fire damage.\n\n**Critical Success** The ray deals double damage and 1d4 persistent fire damage.\n**Success** The ray deals full damage.\n- - -\n**Heightened (+1)** The ray's initial damage increases by 2d6, and the persistent fire damage on a critical success increases by 1d4.",
+			"hash": "JfZCwIqr"
+		}
 	},
 	{
 		"aonId": 423,
@@ -679,7 +1016,21 @@
 		"traits": [ "Uncommon", "Abjuration", "Cleric" ],
 		"trigger": "An effect would deal fire damage to either you or an ally within range.",
 		"id": "f7fcc334-4bcc-425d-ba79-3ce4b11dc3ca",
-		"hash": "JOHJyZZT"
+		"pf2t": {
+			"name": "Flame Barrier",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cleric",
+			"cast": "v",
+			"actions": "r",
+			"range": 60,
+			"source": "Core Rulebook pg. 392 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=423",
+			"aon": "spells423",
+			"type": "focus",
+			"body": "**Trigger** An effect would deal fire damage to either you or an ally within range.\n**Targets** the creature that would take fire damage\n\n- - -\n\nYou swiftly deflect incoming flames. The target gains fire resistance 15 against the triggering effect.\n- - -\n**Heightened (+2)** The resistance increases by 5.",
+			"hash": "JOHJyZZT"
+		}
 	},
 	{
 		"aonId": 424,
@@ -703,7 +1054,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Abjuration", "Cleric" ],
 		"id": "3d955cf0-d514-43f6-b21f-d76c7a28555d",
-		"hash": "pNNNWDnR"
+		"pf2t": {
+			"name": "Forced Quiet",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cleric",
+			"cast": "m,s",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 393 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=424",
+			"aon": "spells424",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou quiet the target's voice, preventing it from giving away valuable secrets. This doesn't prevent the target from talking or providing verbal spell components, but no creature more than 10 feet away can hear its whispers without succeeding at a Perception check against your spell DC, which might interfere with auditory or linguistic effects as well as communication. The spell's duration depends on the target's Fortitude save. After attempting its save, the target becomes temporarily immune for 24 hours.\n\n**Critical Success** The target is unaffected.\n**Success** The duration is 1 round.\n**Failure** The duration is 1 minute.\n**Critical Failure** The duration is 10 minutes.",
+			"hash": "pNNNWDnR"
+		}
 	},
 	{
 		"aonId": 425,
@@ -728,7 +1094,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Divination", "Revelation" ],
 		"id": "03bbf5f8-b429-4bc5-97cf-a699bbaa91f7",
-		"hash": "xwmSAjUp"
+		"pf2t": {
+			"name": "Glimpse the Truth",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,divination,revelation",
+			"cast": "s",
+			"actions": 1,
+			"source": "Core Rulebook pg. 393 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=425",
+			"aon": "spells425",
+			"type": "focus",
+			"body": "**Area** 30-foot emanation\n**Duration** 1 round\n\n- - -\n\nDivine insight lets you see things as they truly are. The GM attempts a secret counteract check against each illusion that is at least partially within the area. Instead of counteracting the illusion, you see through it (for instance, if the check succeeds against an illusory disguise spell, you see the creature's true form but illusory disguise doesn't end).\n\nThe area moves with you for the duration of the spell, and the GM attempts a secret counteract check each time a new illusion is within the area.\n- - -\n**Heightened (7th)** You can allow everyone to see through illusions you succeed against, not just yourself.",
+			"hash": "xwmSAjUp"
+		}
 	},
 	{
 		"aonId": 426,
@@ -754,7 +1133,21 @@
 		"targets": "1 willing living creature",
 		"traits": [ "Uncommon", "Cleric", "Necromancy" ],
 		"id": "6efee96f-733c-47d4-88cb-5fd0131aca2b",
-		"hash": "gKrvYGZq"
+		"pf2t": {
+			"name": "Healer's Blessing",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,necromancy",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 393 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=426",
+			"aon": "spells426",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n**Targets** 1 willing living creature\n\n- - -\n\nYour words bless a creature with an enhanced connection to positive energy. When the target regains Hit Points from a healing spell, it regains 2 additional Hit Points.\n\nThe target regains additional Hit Points from healer's blessing only the first time it regains HP from a given healing spell, so a spell that heals the creature repeatedly over a duration would restore additional Hit Points only once.\n- - -\n**Heightened (+1)** The additional healing increases by 2 HP.",
+			"hash": "gKrvYGZq"
+		}
 	},
 	{
 		"aonId": 427,
@@ -779,7 +1172,21 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Attack", "Cleric", "Earth", "Evocation" ],
 		"id": "e7471725-52ca-46e7-8d0e-b35ed40a77ad",
-		"hash": "gNzCNllp"
+		"pf2t": {
+			"name": "Hurtling Stone",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,attack,cleric,earth,evocation",
+			"cast": "s",
+			"actions": 1,
+			"range": 60,
+			"source": "Core Rulebook pg. 393 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=427",
+			"aon": "spells427",
+			"type": "focus",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou evoke a magical stone and throw it, with your god's presence guiding your aim. Make a spell attack roll against the target. The stone deals bludgeoning damage equal to 1d6 plus your Strength modifier.\n\n**Critical Success** The stone deals double damage.\n**Success** The stone deals full damage.\n- - -\n**Heightened (+1)** The stone's damage increases by 1d6.",
+			"hash": "gNzCNllp"
+		}
 	},
 	{
 		"aonId": 428,
@@ -799,7 +1206,20 @@
 		"traits": [ "Uncommon", "Cleric", "Divination", "Fortune" ],
 		"trigger": "You roll initiative and can see a creature, you succeed at an attack roll against a creature, or a creature fails a saving throw against one of your spells.",
 		"id": "958e5bc3-51e1-421e-bdcf-5b9413881eba",
-		"hash": "OQZppZpF"
+		"pf2t": {
+			"name": "Know the Enemy",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,divination,fortune",
+			"cast": "s",
+			"actions": "r",
+			"source": "Core Rulebook pg. 393 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=428",
+			"aon": "spells428",
+			"type": "focus",
+			"body": "**Trigger** You roll initiative and can see a creature, you succeed at an attack roll against a creature, or a creature fails a saving throw against one of your spells.\n\n- - -\n\nUse a Recall Knowledge action, rolling the appropriate skill check to identify the triggering creature's abilities. You can roll your check twice and use the better result.",
+			"hash": "OQZppZpF"
+		}
 	},
 	{
 		"aonId": 429,
@@ -837,7 +1257,21 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Earth", "Transmutation" ],
 		"id": "31dd16b8-d97a-4b6e-8350-e9d545caaefb",
-		"hash": "mPHnFczJ"
+		"pf2t": {
+			"name": "Localized Quake",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,earth,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 393 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=429",
+			"aon": "spells429",
+			"type": "focus",
+			"savingthrow": "Reflex",
+			"body": "**Area** 15-foot emanation or 15-foot cone\n\n- - -\n\nYou shake the earth, toppling nearby creatures. Choose whether the spell's area is a 15-foot emanation or a 15-foot cone when you cast it. Each creature in the area standing on solid ground may take 4d6 bludgeoning damage and must attempt a Reflex saving throw.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes half damage.\n**Failure** The creature takes full damage and falls prone.\n**Critical Failure** The creature takes double damage and falls prone.\n- - -\n**Heightened (+1)** Increase the damage by 2d6.",
+			"hash": "mPHnFczJ"
+		}
 	},
 	{
 		"aonId": 430,
@@ -857,7 +1291,20 @@
 		"traits": [ "Uncommon", "Cleric", "Divination", "Fortune" ],
 		"trigger": "You fail (but don't critically fail) a saving throw.",
 		"id": "d0dd1086-e35d-4ced-be20-b5d7a9f5b33f",
-		"hash": "BtmtjzpC"
+		"pf2t": {
+			"name": "Lucky Break",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,divination,fortune",
+			"cast": "v",
+			"actions": "r",
+			"source": "Core Rulebook pg. 393 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=430",
+			"aon": "spells430",
+			"type": "focus",
+			"body": "**Trigger** You fail (but don't critically fail) a saving throw.\n\n- - -\n\nReroll the saving throw and use the better result. You then become temporarily immune for 10 minutes.",
+			"hash": "BtmtjzpC"
+		}
 	},
 	{
 		"aonId": 431,
@@ -879,7 +1326,21 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Enchantment" ],
 		"id": "2b635afd-539d-4cb6-bd7d-165c91cf892d",
-		"hash": "SYFKrRlS"
+		"pf2t": {
+			"name": "Magic's Vessel",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,enchantment",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Core Rulebook pg. 393 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=431",
+			"aon": "spells431",
+			"type": "focus",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nA creature becomes a receptacle for pure magical energy sent by your deity. The target gains a +1 status bonus to saving throws. Each time you Cast a Spell from your spell slots, you automatically Sustain this Spell and grant its target resistance to damage from spells until the start of your next turn. This resistance is equal to the level of the spell you cast.",
+			"hash": "SYFKrRlS"
+		}
 	},
 	{
 		"aonId": 432,
@@ -904,7 +1365,21 @@
 		"targets": "1 willing undead creature",
 		"traits": [ "Uncommon", "Cleric", "Necromancy", "Negative" ],
 		"id": "c997167c-acbe-483e-93b8-18a5ae3bca5b",
-		"hash": "HlwPWqOt"
+		"pf2t": {
+			"name": "Malignant Sustenance",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,necromancy,negative",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 394 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=432",
+			"aon": "spells432",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n**Targets** 1 willing undead creature\n\n- - -\n\nYou embed a seed of negative energy in an undead creature, restoring its unnatural vigor. The target gains fast healing 7. This healing comes from negative energy, so it heals the undead rather than damaging it.\n- - -\n**Heightened (+1)** The fast healing increases by 2.",
+			"hash": "HlwPWqOt"
+		}
 	},
 	{
 		"aonId": 433,
@@ -929,7 +1404,21 @@
 		"targets": "1 creature or object",
 		"traits": [ "Uncommon", "Attack", "Cleric", "Evocation", "Fire", "Light" ],
 		"id": "f60c5797-f4e6-476a-b58a-0c927b847bc6",
-		"hash": "nRMxSfEY"
+		"pf2t": {
+			"name": "Moonbeam",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,attack,cleric,evocation,fire,light",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 394 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=433",
+			"aon": "spells433",
+			"type": "focus",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou shine a ray of moonlight. Make a spell attack roll. The beam of light deals 1d6 fire damage. Moonbeam deals silver damage for the purposes of weaknesses, resistances, and the like.\n\n**Critical Success** The beam deals double damage, and the target is dazzled for 1 minute.\n**Success** The beam deals full damage, and the target is dazzled for 1 round.\n- - -\n**Heightened (+1)** The ray's damage increases by 1d6.",
+			"hash": "nRMxSfEY"
+		}
 	},
 	{
 		"aonId": 434,
@@ -951,7 +1440,21 @@
 		"targets": "1 willing creature",
 		"traits": [ "Uncommon", "Cleric", "Evocation" ],
 		"id": "a11ac120-68f7-4dfa-877d-dcc75739a827",
-		"hash": "VqbIwjkX"
+		"pf2t": {
+			"name": "Mystic Beacon",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,evocation",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 394 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=434",
+			"aon": "spells434",
+			"type": "focus",
+			"body": "**Duration** until the start of your next turn\n**Targets** 1 willing creature\n\n- - -\n\nThe next damaging or healing spell the target casts before the start of your next turn deals damage or restores Hit Points as if the spell were heightened 1 level higher than its actual level. The spell otherwise functions at its actual level. Once the target casts the spell, mystic beacon ends.",
+			"hash": "VqbIwjkX"
+		}
 	},
 	{
 		"aonId": 435,
@@ -974,7 +1477,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Conjuration", "Plant", "Positive" ],
 		"id": "498a64c7-116d-4310-8b2a-a91e38f4415b",
-		"hash": "AKWwSkyE"
+		"pf2t": {
+			"name": "Nature's Bounty",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,conjuration,plant,positive",
+			"cast": "s",
+			"actions": 1,
+			"source": "Core Rulebook pg. 394 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=435",
+			"aon": "spells435",
+			"type": "focus",
+			"body": "**Requirements** You have a free hand.\n\n- - -\n\nA palm-sized raw fruit or vegetable appears in your open hand. You choose the specific type of food. A creature can consume the food with an Interact action to regain 3d10+12 Hit Points and be nourished as if it had eaten a meal. If uneaten, the food rots and crumbles to dust after 1 minute.\n- - -\n**Heightened (+1)** The Hit Points restored increase by 6.",
+			"hash": "AKWwSkyE"
+		}
 	},
 	{
 		"aonId": 436,
@@ -1011,7 +1527,22 @@
 		"targets": "1 living creature",
 		"traits": [ "Uncommon", "Cleric", "Transmutation" ],
 		"id": "a80fa917-f7e0-44df-930f-4909ed96a1c1",
-		"hash": "OyrgbvqD"
+		"pf2t": {
+			"name": "Overstuff",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,transmutation",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 394 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=436",
+			"aon": "spells436",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Targets** 1 living creature\n\n- - -\n\nHuge amounts of food and drink fill the target. It receives a full meal's worth of nourishment and must attempt a Fortitude save.\n\n**Critical Success** The target is unaffected.\n**Success** The target is sickened 1, but if it spends an action to end the condition, it succeeds automatically.\n**Failure** The target is sickened 1.\n**Critical Failure** The target is sickened 2.\n\nA target sickened by this spell takes a -10-foot status penalty to its Speed until it's no longer sickened.",
+			"hash": "OyrgbvqD"
+		}
 	},
 	{
 		"aonId": 437,
@@ -1031,7 +1562,20 @@
 		"traits": [ "Uncommon", "Abjuration", "Cleric", "Fortune" ],
 		"trigger": "You fail a saving throw against a morph, petrification, or polymorph effect.",
 		"id": "423428a8-b0ec-488a-bbe1-db4578df661d",
-		"hash": "yIlPWrgV"
+		"pf2t": {
+			"name": "Perfected Form",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cleric,fortune",
+			"cast": "s",
+			"actions": "r",
+			"source": "Core Rulebook pg. 394 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=437",
+			"aon": "spells437",
+			"type": "focus",
+			"body": "**Trigger** You fail a saving throw against a morph, petrification, or polymorph effect.\n\n- - -\n\nReroll the saving throw and use the better result.",
+			"hash": "yIlPWrgV"
+		}
 	},
 	{
 		"aonId": 438,
@@ -1050,7 +1594,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Abjuration", "Cleric" ],
 		"id": "e18e26ef-323a-497b-938e-d97bf90b5c8e",
-		"hash": "IDlRJRcp"
+		"pf2t": {
+			"name": "Perfected Mind",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cleric",
+			"cast": "v",
+			"actions": 1,
+			"source": "Core Rulebook pg. 394 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=438",
+			"aon": "spells438",
+			"type": "focus",
+			"body": "You meditate upon perfection to remove all distractions from your mind. Attempt a new Will save against one mental effect currently affecting you that required a Will save. Use the result of this new save to determine the outcome of the mental effect, unless the new save would have a worse result than the original save, in which case nothing happens. You can use perfected mind against a given effect only once.",
+			"hash": "IDlRJRcp"
+		}
 	},
 	{
 		"aonId": 439,
@@ -1076,7 +1633,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Light", "Necromancy", "Positive" ],
 		"id": "22df7931-ec3c-4ba3-b23e-0caf6bafaa77",
-		"hash": "hmGfhplI"
+		"pf2t": {
+			"name": "Positive Luminance",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,light,necromancy,positive",
+			"cast": "s",
+			"actions": 1,
+			"source": "Core Rulebook pg. 394 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=439",
+			"aon": "spells439",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nDrawing life force into yourself, you become a beacon of positive energy. You glow with bright light in a 10-foot emanation, and you gain an internal pool of light called a luminance reservoir, which begins with a value of 4. At the start of each of your turns, you can use a free action to increase the luminance reservoir by 4. If you do, the radius of your light increases by 10 feet.\n\nIf an undead creature damages you with an attack or spell while it's within the area of your light, that creature takes positive damage equal to half your luminance reservoir value. It takes this damage only the first time it damages you in a round.\n\nYou can Dismiss this Spell. When you do, you can target a creature within your light and direct the positive energy into it. The target must be a willing living creature or an undead creature. This heals a living target or damages an undead target by an amount equal to your luminance reservoir's value.\n\nWhen you cast positive luminance, any other positive luminance spell you already had in effect ends.\n- - -\n**Heightened (+1)** Both the initial value of your luminance reservoir and the amount you gain each turn increase by 1.",
+			"hash": "hmGfhplI"
+		}
 	},
 	{
 		"aonId": 440,
@@ -1102,7 +1672,21 @@
 		"targets": "1 metal weapon, up to 10 pieces of metal or metal-tipped ammunition, 1 suit of metal armor, or up to 1 bulk of metal material (such as coins)",
 		"traits": [ "Uncommon", "Cleric", "Transmutation" ],
 		"id": "a389534e-3055-4c9b-847c-afb7cb174810",
-		"hash": "ZwIcwOgN"
+		"pf2t": {
+			"name": "Precious Metals",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,transmutation",
+			"cast": "m",
+			"actions": 1,
+			"range": "touch",
+			"source": "Core Rulebook pg. 395 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=440",
+			"aon": "spells440",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n**Targets** 1 metal weapon, up to 10 pieces of metal or metal-tipped ammunition, 1 suit of metal armor, or up to 1 bulk of metal material (such as coins)\n\n- - -\n\nYour deity blesses base metals to transform them into precious materials. The target item transforms from its normal metal into cold iron, copper, gold, iron, silver, or steel. An item transmuted in this way deals damage according to its new material. For example, a steel sword transmuted to cold iron would deal additional damage to a creature with a weakness to cold iron.\n\nThis change is clearly magical and temporary, so the item's monetary value doesn't change; you couldn't transmute copper coins to gold and use those coins to purchase something or as a cost for a spell.\n- - -\n**Heightened (8th)** Add adamantine and mithral to the list of metals you can transform the item into.",
+			"hash": "ZwIcwOgN"
+		}
 	},
 	{
 		"aonId": 441,
@@ -1127,7 +1711,21 @@
 		"traits": [ "Uncommon", "Abjuration", "Cleric" ],
 		"trigger": "An ally within 30 feet takes damage.",
 		"id": "0c888d42-3a5c-4602-858d-c739c3023a2e",
-		"hash": "sjRtAlFx"
+		"pf2t": {
+			"name": "Protector's Sacrifice",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cleric",
+			"cast": "s",
+			"actions": "r",
+			"range": 30,
+			"source": "Core Rulebook pg. 395 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=441",
+			"aon": "spells441",
+			"type": "focus",
+			"body": "**Trigger** An ally within 30 feet takes damage.\n\n- - -\n\nYou protect your ally by suffering in their stead. Reduce the damage the triggering ally would take by 3. You redirect this damage to yourself, but your immunities, weaknesses, resistances and so on do not apply.\n\nYou aren't subject to any conditions or other effects of whatever damaged your ally (such as poison from a venomous bite). Your ally is still subject to those effects even if you redirect all of the triggering damage to yourself.\n- - -\n**Heightened (+1)** The damage you redirect increases by 3.",
+			"hash": "sjRtAlFx"
+		}
 	},
 	{
 		"aonId": 442,
@@ -1151,7 +1749,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Abjuration", "Cleric" ],
 		"id": "e78c2ede-6f29-4376-861f-00c80a52b2c8",
-		"hash": "lvqqnpgK"
+		"pf2t": {
+			"name": "Protector's Sphere",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cleric",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 395 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=442",
+			"aon": "spells442",
+			"type": "focus",
+			"body": "**Area** 15-foot emanation\n**Duration** sustained up to 1 minute\n\n- - -\n\nA protective aura emanates out from you, safeguarding you and your allies. You gain resistance 3 to all damage. Your allies also gain this resistance while they are within the area.\n- - -\n**Heightened (+1)** The resistance increases by 1.",
+			"hash": "lvqqnpgK"
+		}
 	},
 	{
 		"aonId": 443,
@@ -1176,7 +1787,21 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Divination", "Scrying" ],
 		"id": "81622cb0-1e27-4eba-9230-c023fa3eac2d",
-		"hash": "sXgAxRrQ"
+		"pf2t": {
+			"name": "Pulse of the City",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,divination,scrying",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 25,
+			"source": "Core Rulebook pg. 395 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=443",
+			"aon": "spells443",
+			"type": "focus",
+			"body": "You tap into the zeitgeist of the nearest settlement in range (if any). You learn the name of the settlement, and you can utter a special word to learn a brief summary of one significant event happening in the settlement. Choose one of the following words, which indicates the type of people involved and type of event you learn about. \n\n+ **Wardens** city guards, barristers, and judges (criminal reports, busts, changes in routines, legal trials) \n+ **Titles** nobles and politicians (high society weddings, elite soirees, political rallies) \n+ **Masses** common folk and merchants (gathering mobs, major sales)\nWhen uttering your word, you can exclude events you already know about, whether you know about them from this spell or from other experiences. If you cast pulse of the city again within 24 hours, you can say \"echo\" instead of another word to get an update on the event you learned about the last time you Cast the Spell.\n\nPulse of the city reveals only publicly available or observable information. You never learn clandestine movements or other details people are specifically trying to hide. The spell is also notoriously bad at overcoming magic meant to avoid detection; it automatically fails to reveal information about events involving creatures, places, or objects affected by spells that could prevent or counteract pulse of the city (such as nondetection).\n- - -\n**Heightened (5th)** The range increases to 100 miles.",
+			"hash": "sXgAxRrQ"
+		}
 	},
 	{
 		"aonId": 444,
@@ -1212,7 +1837,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Air", "Cleric", "Conjuration" ],
 		"id": "980e4307-fa74-4d8c-8e35-b9daa74abbe9",
-		"hash": "pdcxrOJl"
+		"pf2t": {
+			"name": "Pushing Gust",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,air,cleric,conjuration",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "Core Rulebook pg. 395 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=444",
+			"aon": "spells444",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Targets** 1 creature\n\n- - -\n\nGiving the air a push, you buffet the target with a powerful gust of wind; it must attempt a Fortitude save.\n\n**Critical Success** The target is unaffected.\n**Success** The target is pushed 5 feet away from you.\n**Failure** The target is pushed 10 feet away from you.\n**Critical Failure** The target is pushed 10 feet away from you and knocked prone.",
+			"hash": "pdcxrOJl"
+		}
 	},
 	{
 		"aonId": 445,
@@ -1234,7 +1874,21 @@
 		"targets": "1 creature other than you",
 		"traits": [ "Uncommon", "Cleric", "Divination", "Prediction" ],
 		"id": "675da4fc-48f2-4dc6-816b-46b814232b83",
-		"hash": "AOMSjwOY"
+		"pf2t": {
+			"name": "Read Fate",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,divination,prediction",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": 10,
+			"source": "Core Rulebook pg. 395 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=445",
+			"aon": "spells445",
+			"type": "focus",
+			"body": "**Targets** 1 creature other than you\n\n- - -\n\nYou attempt to learn more about the target's fate in the short term, usually within the next day for most prosaic creatures, or the next hour or less for someone likely to have multiple rapid experiences, such as someone actively adventuring.\n\nYou learn a single enigmatic word connected to the creature's fate in that time frame. Fate is notoriously inscrutable, and the word isn't necessarily meant to be taken at face value, so the meaning is often clear only in hindsight. The GM rolls a secret DC 6 flat check. If the creature's fate is too uncertain, or on a failed flat check, the spell yields the word \"inconclusive.\" Either way, the creature is then temporarily immune for 24 hours.",
+			"hash": "AOMSjwOY"
+		}
 	},
 	{
 		"aonId": 446,
@@ -1258,7 +1912,21 @@
 		"targets": "1 living creature per action spent to cast this spell",
 		"traits": [ "Uncommon", "Cleric", "Healing", "Necromancy", "Positive" ],
 		"id": "ded5e346-2986-4d4e-8c54-d91578484afa",
-		"hash": "YnvyMXxK"
+		"pf2t": {
+			"name": "Rebuke Death",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,healing,necromancy,positive",
+			"cast": "s",
+			"actions": 1,
+			"max": 3,
+			"source": "Core Rulebook pg. 396 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=446",
+			"aon": "spells446",
+			"type": "focus",
+			"body": "**Area** 20-foot emanation\n**Targets** 1 living creature per action spent to cast this spell\n\n- - -\n\nYou snatch creatures from the jaws of death. You can spend 1 to 3 actions Casting this Spell, and you can target a number of creatures equal to the actions spent. Each target regains 3d6 Hit Points. If the target had the dying condition, coming back from dying due to this healing doesn't increase its wounded condition.\n- - -\n**Heightened (+1)** Increase the healing by 1d6.",
+			"hash": "YnvyMXxK"
+		}
 	},
 	{
 		"aonId": 447,
@@ -1281,7 +1949,23 @@
 		"traits": [ "Uncommon", "Abjuration", "Cleric", "Mental", "Nonlethal" ],
 		"trigger": "A creature in range damages you.",
 		"id": "801e2935-f64b-4861-8657-f4f4357067e2",
-		"hash": "krDcXdkp"
+		"pf2t": {
+			"name": "Retributive Pain",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cleric,mental,nonlethal",
+			"cast": "s",
+			"actions": "r",
+			"range": 30,
+			"source": "Core Rulebook pg. 396 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=447",
+			"aon": "spells447",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"basic": 1,
+			"body": "**Trigger** A creature in range damages you.\n**Targets** the triggering creature\n\n- - -\n\nYou vengefully reflect your pain upon your tormentor. The target takes mental damage equal to half the amount it dealt to you when it triggered the spell.",
+			"hash": "krDcXdkp"
+		}
 	},
 	{
 		"aonId": 448,
@@ -1304,7 +1988,21 @@
 		"targets": "you and any number of willing allies",
 		"traits": [ "Uncommon", "Abjuration", "Cleric", "Mental" ],
 		"id": "04177d38-3b47-462b-aa6e-637b25ffd907",
-		"hash": "SkNIvVUf"
+		"pf2t": {
+			"name": "Safeguard Secret",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cleric,mental",
+			"cast": "s,v",
+			"actions": "1 minute",
+			"range": 10,
+			"source": "Core Rulebook pg. 396 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=448",
+			"aon": "spells448",
+			"type": "focus",
+			"body": "**Duration** 1 hour\n**Targets** you and any number of willing allies\n\n- - -\n\nYou ensure a secret remains safe from prying spies. Choose one piece of information that at least some of the targets know; you can target a creature only if it remains within range for the full minute during which you Cast the Spell. The spell grants those who know the piece of knowledge you have chosen a +4 status bonus to skill checks (typically Deception checks) to conceal this knowledge and to saving throws against spells that specifically attempt to obtain this knowledge from them and effects that would force them to reveal it.\n\nIf you Cast this Spell again, any previous safeguard secret you had cast ends.",
+			"hash": "SkNIvVUf"
+		}
 	},
 	{
 		"aonId": 449,
@@ -1343,7 +2041,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Mental", "Nonlethal" ],
 		"id": "ca5cf6da-fd7f-4818-8fe4-86c011203a96",
-		"hash": "RtWSNkqQ"
+		"pf2t": {
+			"name": "Savor the Sting",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,enchantment,mental,nonlethal",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Core Rulebook pg. 396 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=449",
+			"aon": "spells449",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou inflict pain upon the target and revel in their anguish. This deals 1d4 mental damage and 1d4 persistent mental damage; the target must attempt a Will save. As long as the target is taking persistent damage from this spell, you gain a +1 status bonus to attack rolls and skill checks against the target.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes half damage and no persistent damage.\n**Failure** The target takes full initial and persistent damage.\n**Critical Failure** The target takes double initial and persistent damage.\n- - -\n**Heightened (+1)** The initial damage increases by 1d4 and the persistent damage increases by 1d4.",
+			"hash": "RtWSNkqQ"
+		}
 	},
 	{
 		"aonId": 450,
@@ -1363,7 +2076,20 @@
 		"traits": [ "Uncommon", "Cleric", "Divination", "Fortune" ],
 		"trigger": "You attempt a Perception check to Seek, or you attempt a skill check to Recall Knowledge with a skill you're trained in.",
 		"id": "b1a98383-5b21-4d44-bf12-d31a0d0e57d6",
-		"hash": "tRMnTbtE"
+		"pf2t": {
+			"name": "Scholarly Recollection",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,divination,fortune",
+			"cast": "v",
+			"actions": "r",
+			"source": "Core Rulebook pg. 396 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=450",
+			"aon": "spells450",
+			"type": "focus",
+			"body": "**Trigger** You attempt a Perception check to Seek, or you attempt a skill check to Recall Knowledge with a skill you're trained in.\n\n- - -\n\nSpeaking a short prayer as you gather your thoughts, you're blessed to find that your deity gave you just the right bit of information for your situation. Roll the triggering check twice and use the better result.",
+			"hash": "tRMnTbtE"
+		}
 	},
 	{
 		"aonId": 451,
@@ -1400,7 +2126,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Incapacitation", "Mental" ],
 		"id": "53d51609-250f-4839-9e80-061144e189fd",
-		"hash": "zbqAzWXZ"
+		"pf2t": {
+			"name": "Shared Nightmare",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,emotion,enchantment,incapacitation,mental",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 396 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=451",
+			"aon": "spells451",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nMerging minds with the target, you swap disorienting visions from one another's nightmares. One of you will become confused, but which it'll be depends on the target's Will save.\n\n**Critical Success** You are confused for 1 round.\n**Success** At the start of your next turn, you spend your first action with the confused condition, then act normally.\n**Failure** As success, but the target is affected instead of you, spending its first action each turn confused. The duration is 1 minute.\n**Critical Failure** The target is confused for 1 minute.",
+			"hash": "zbqAzWXZ"
+		}
 	},
 	{
 		"aonId": 452,
@@ -1426,7 +2167,21 @@
 		"targets": "1 ally",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Mental" ],
 		"id": "ff1aaeb9-c3c6-417a-83b0-fac8a5742917",
-		"hash": "GLBDcWLs"
+		"pf2t": {
+			"name": "Soothing Words",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,emotion,enchantment,mental",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 396 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=452",
+			"aon": "spells452",
+			"type": "focus",
+			"body": "**Duration** 1 round\n**Targets** 1 ally\n\n- - -\n\nYou attempt to calm the target by uttering soothing words in a calm and even tone. The target gains a +1 status bonus to Will saving throws. This bonus increases to +2 against emotion effects.\n\nIn addition, when you Cast this Spell, you can attempt to counteract one emotion effect on the target.\n- - -\n**Heightened (5th)** The bonus to saves increases to +2, or +3 against emotion effects.",
+			"hash": "GLBDcWLs"
+		}
 	},
 	{
 		"aonId": 453,
@@ -1449,7 +2204,22 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Illusion", "Visual" ],
 		"id": "5a79ea98-bc00-4981-8d06-da5761a5cf32",
-		"hash": "ksGtgKQE"
+		"pf2t": {
+			"name": "Splash of Art",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,illusion,visual",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 397 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=453",
+			"aon": "spells453",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Area** 5-foot burst\n**Duration** varies\n\n- - -\n\nA deluge of colorful illusory paint, tools, or other symbols of art and artisanship drift down in the area. Roll 1d4 to determine the color of the illusion. Each creature in the area must attempt a Will save. A creature is unaffected on a success. On a failure or critical failure, the creature takes the results listed on the table relevant to the color.\n\n**Splash of Art**\n\n**1d4** | **Color** | **Failure** | **Critical Failure**\n--- | --- | --- | ---\n1 | White | Dazzled 1 round | Dazzled 1 minute\n2 | Red | Enfeebled 1 for 1 round | Enfeebled 2 for 1 round\n3 | Yellow | Frightened 1 | Frightened 2\n4 | Blue | Clumsy 1 for 1 round | Clumsy 2 for 1 round",
+			"hash": "ksGtgKQE"
+		}
 	},
 	{
 		"aonId": 454,
@@ -1470,7 +2240,20 @@
 		"traits": [ "Uncommon", "Abjuration", "Cleric", "Illusion" ],
 		"trigger": "An enemy misses you with a melee attack.",
 		"id": "27113197-a731-41d5-b663-f9a8fbb17059",
-		"hash": "UZCJcrEq"
+		"pf2t": {
+			"name": "Sudden Shift",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cleric,illusion",
+			"cast": "s",
+			"actions": "r",
+			"source": "Core Rulebook pg. 397 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=454",
+			"aon": "spells454",
+			"type": "focus",
+			"body": "**Trigger** An enemy misses you with a melee attack.\n**Duration** until the end of your next turn\n\n- - -\n\nYou swiftly move from a dangerous spot and veil yourself. You Step and become concealed.",
+			"hash": "UZCJcrEq"
+		}
 	},
 	{
 		"aonId": 455,
@@ -1493,7 +2276,21 @@
 		"targets": "1 willing creature",
 		"traits": [ "Uncommon", "Auditory", "Cleric", "Enchantment", "Linguistic", "Mental", "Sleep" ],
 		"id": "374a9b80-f249-4791-b8ff-30b4c47024a8",
-		"hash": "cSKAUJFO"
+		"pf2t": {
+			"name": "Sweet Dream",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,auditory,cleric,enchantment,linguistic,mental,sleep",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 30,
+			"source": "Core Rulebook pg. 397 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=455",
+			"aon": "spells455",
+			"type": "focus",
+			"body": "**Duration** 10 minutes\n**Targets** 1 willing creature\n\n- - -\n\nWith soothing song or tales, you lull the target into an enchanting dream. When you cast the spell, the target falls unconscious if it wasn't already. While unconscious, it experiences a dream of your choice. If it sleeps for at least 1 minute, it gains the benefit of the dream for the remainder of the spell's duration. \n\n+ **Dream of Insight** +1 status bonus to Intelligence-based skill checks \n+ **Dream of Glamour** +1 status bonus to Charisma-based skill checks \n+ **Dream of Voyaging** +5-foot status bonus to Speed\nIf you Cast this Spell again, the effects of any previous sweet dream you cast end.",
+			"hash": "cSKAUJFO"
+		}
 	},
 	{
 		"aonId": 456,
@@ -1518,7 +2315,21 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Necromancy" ],
 		"id": "bda7afdf-0c3c-4428-a5b9-92e8ecb3082d",
-		"hash": "RHwknQbD"
+		"pf2t": {
+			"name": "Take its Course",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,necromancy",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 397 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=456",
+			"aon": "spells456",
+			"type": "focus",
+			"body": "**Targets** 1 creature\n\n- - -\n\nWhen someone has overindulged, you can hasten them past the worst of their affliction or intensify their misery. This spell attempts to progress a disease affliction, a poison affliction, or persistent poison damage affecting the target. If the target is affected by more than one of these, you can choose from among those you are aware of; otherwise the GM chooses randomly. An unwilling target can attempt a Will save to negate take its course.\n\nThe effect of this spell depends on whether you're attempting to end an affliction or persistent poison damage, and whether you are attempting to help or hinder the target's recovery. \n\n+ **Affliction** The target immediately attempts its next saving throw against the affliction. You can grant the creature your choice of a +2 status bonus or a -2 status penalty to its saving throw against the affliction. \n+ **Persistent Poison** You can cause the target take the persistent poison damage immediately when you Cast this Spell (in addition to taking it at the end of its next turn). Whether or not you do so, the target attempts an additional flat check against the persistent poison damage. You can set the DC of that flat check to 5 or 20 instead of the normal DC.\n- - -\n**Heightened (7th)** You can attempt to progress any number of the target's eligible afflictions and persistent poison damage.",
+			"hash": "RHwknQbD"
+		}
 	},
 	{
 		"aonId": 457,
@@ -1544,7 +2355,21 @@
 		"traits": [ "Uncommon", "Cleric", "Divination", "Fortune" ],
 		"trigger": "You or an ally within range attempts a saving throw",
 		"id": "0a19f393-8b98-4234-8018-9540d3736ffa",
-		"hash": "hEkQRbvr"
+		"pf2t": {
+			"name": "Tempt Fate",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,divination,fortune",
+			"cast": "s",
+			"actions": "r",
+			"range": 120,
+			"source": "Core Rulebook pg. 397 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=457",
+			"aon": "spells457",
+			"type": "focus",
+			"body": "**Trigger** You or an ally within range attempts a saving throw\n**Targets** the triggering creature\n\n- - -\n\nYou twist the forces of fate to make a moment dire or uneventful, with no in-between. The target gains a +1 status bonus to the triggering saving throw. If the saving throw's result is a success, it becomes a critical success. If it's a failure, it becomes a critical failure, and the critical failure can't be reduced by abilities that usually reduce critical failure, such as improved evasion.\n\nIf the triggering ability did not have both a critical success and critical failure condition, tempt fate fails, but you don't expend the Focus Point for Casting this Spell.\n- - -\n**Heightened (8th)** The bonus on the saving throw is +2.",
+			"hash": "hEkQRbvr"
+		}
 	},
 	{
 		"aonId": 458,
@@ -1574,7 +2399,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Evocation", "Water" ],
 		"id": "b56a7869-4f66-4ca5-af18-f3f37b4c767a",
-		"hash": "xXBOVqOx"
+		"pf2t": {
+			"name": "Tidal Surge",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,evocation,water",
+			"cast": "s",
+			"actions": 1,
+			"range": 60,
+			"source": "Core Rulebook pg. 397 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=458",
+			"aon": "spells458",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou call forth a tremendous wave to move the target either in a body of water or on the ground. The target must attempt a Fortitude save.\n\n**Failure** You move the target 5 feet in any direction along the ground or 10 feet in any direction through a body of water.\n**Critical Failure** You move the target up to 10 feet in any direction along the ground or 20 feet in any direction through a body of water.",
+			"hash": "xXBOVqOx"
+		}
 	},
 	{
 		"aonId": 459,
@@ -1611,7 +2451,22 @@
 		"targets": "1 living creature",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Mental" ],
 		"id": "c6b1d706-7e7b-4e15-a6dd-de369ea2c4fb",
-		"hash": "ZpGnzmYW"
+		"pf2t": {
+			"name": "Touch of Obedience",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,enchantment,mental",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Core Rulebook pg. 398 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=459",
+			"aon": "spells459",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 living creature\n\n- - -\n\nYour imperious touch erodes the target's willpower, making it easier to control. The target attempts a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target is stupefied 1 until the end of your current turn.\n**Failure** The target is stupefied 1 until the end of your next turn.\n**Critical Failure** The target is stupefied 1 for 1 minute.",
+			"hash": "ZpGnzmYW"
+		}
 	},
 	{
 		"aonId": 460,
@@ -1633,7 +2488,21 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Light" ],
 		"id": "ebeabcb8-62dd-4403-9afa-a0aa589bcdd3",
-		"hash": "hQXOpqpw"
+		"pf2t": {
+			"name": "Touch of the Moon",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,enchantment,light",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Core Rulebook pg. 398 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=460",
+			"aon": "spells460",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nWhen you touch the target, a symbol of the moon appears on its forehead, glowing with soft moonlight. The target glows with dim light in a 20-foot radius. It also gets a benefit based on a phase of the moon, starting with the new moon and changing to the next phase at the end of each of its turns. \n\n+ **New Moon** The target receives no benefit. \n+ **Waxing Moon** The target gains a +1 status bonus to attack rolls and a +4 status bonus to damage rolls. \n+ **Full Moon** The target gains a +1 status bonus to attack rolls, AC, and saving throws and a +4 status bonus to damage rolls. \n+ **Waning Moon** The target gains a +1 status bonus to AC and saving throws. After this phase, return to the new moon.",
+			"hash": "hQXOpqpw"
+		}
 	},
 	{
 		"aonId": 461,
@@ -1672,7 +2541,22 @@
 		"targets": "1 living creature",
 		"traits": [ "Uncommon", "Cleric", "Necromancy", "Negative" ],
 		"id": "a89b2b33-bcf6-41ef-83d5-1ac8bdffb92c",
-		"hash": "xTzVSzmp"
+		"pf2t": {
+			"name": "Touch of Undeath",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,necromancy,negative",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Core Rulebook pg. 398 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=461",
+			"aon": "spells461",
+			"type": "focus",
+			"savingthrow": "Fortitude",
+			"body": "**Targets** 1 living creature\n\n- - -\n\nYou attack the target's life force with undeath, dealing 1d6 negative damage. The target must attempt a Fortitude save.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes half damage.\n**Failure** The target takes full damage, and positive effects heal it only half as much as normal for 1 round.\n**Critical Failure** The target takes double damage, and positive effects heal it only half as much as normal for 1 minute.\n- - -\n**Heightened (+1)** The damage increases by 1d6.",
+			"hash": "xTzVSzmp"
+		}
 	},
 	{
 		"aonId": 462,
@@ -1695,7 +2579,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Evocation" ],
 		"id": "537a5d59-1674-4780-8b72-1ce136a7b791",
-		"hash": "Njvtzhxf"
+		"pf2t": {
+			"name": "Traveler's Transit",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,evocation",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 398 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=462",
+			"aon": "spells462",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou add power to your muscles, allowing you to swim or climb walls with ease. When you cast this spell, you gain either a climb Speed or a swim Speed. The Speed is equal to your land Speed.\n- - -\n**Heightened (5th)** You can choose to gain a fly Speed.",
+			"hash": "Njvtzhxf"
+		}
 	},
 	{
 		"aonId": 463,
@@ -1732,7 +2629,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Illusion", "Visual" ],
 		"id": "aab36d73-33ad-4afa-8418-fc69c78ce9e7",
-		"hash": "qVkdWVYb"
+		"pf2t": {
+			"name": "Trickster's Twin",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,illusion,visual",
+			"cast": "m,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 398 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=463",
+			"aon": "spells463",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou rarely settle for being in just one place. Choose a location within 100 feet of the target that the target can see. You create an illusion of yourself there that only it can see and that mimics all your actions. The target must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target believes you're in the designated location and can't see you in your actual location. The target automatically disbelieves the illusion when you use an action that doesn't make sense in the illusion's position, or if the target attacks, touches, Seeks, or otherwise engages with the illusion. If you use a hostile action against the target, the spell ends.\n**Failure** As success, but the target must succeed at a Will save to disbelieve the illusion when one of the listed events occurs.\n**Critical Failure** As success, but the target must critically succeed at a Will save to disbelieve when one of the listed events occurs.",
+			"hash": "qVkdWVYb"
+		}
 	},
 	{
 		"aonId": 464,
@@ -1751,7 +2663,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Transmutation" ],
 		"id": "3725ce77-fa64-452e-8ec3-17eb47cd780f",
-		"hash": "zgLrNAAU"
+		"pf2t": {
+			"name": "Unimpeded Stride",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,transmutation",
+			"cast": "s",
+			"actions": 1,
+			"source": "Core Rulebook pg. 398 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=464",
+			"aon": "spells464",
+			"type": "focus",
+			"body": "Nothing can hold you in place. You immediately escape from every magical effect that has you immobilized or grabbed unless the effect is of a higher level than your unimpeded stride spell. You then Stride. During this movement, you ignore difficult terrain and any circumstance or status penalties to your Speed.",
+			"hash": "zgLrNAAU"
+		}
 	},
 	{
 		"aonId": 465,
@@ -1773,7 +2698,21 @@
 		"traits": [ "Uncommon", "Abjuration", "Cleric", "Fortune" ],
 		"trigger": "You and 1 or more allies within range are targeted by a spell or ability that allows a saving throw.",
 		"id": "6830b072-5d05-46ee-8546-e504bc2689e6",
-		"hash": "KbnDmrTb"
+		"pf2t": {
+			"name": "Unity",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cleric,fortune",
+			"cast": "v",
+			"actions": "r",
+			"range": 30,
+			"source": "Core Rulebook pg. 398 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=465",
+			"aon": "spells465",
+			"type": "focus",
+			"body": "**Trigger** You and 1 or more allies within range are targeted by a spell or ability that allows a saving throw.\n**Targets** each ally targeted by the triggering spell\n\n- - -\n\nYou put up a united defense. Each ally can use your saving throw modifier instead of its own against the triggering spell. Each ally decides individually which modifier to use.",
+			"hash": "KbnDmrTb"
+		}
 	},
 	{
 		"aonId": 466,
@@ -1794,7 +2733,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Mental" ],
 		"id": "222c46d0-e6dd-41d8-ac14-734e49ebdbe3",
-		"hash": "wBLrGPbQ"
+		"pf2t": {
+			"name": "Veil of Confidence",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,enchantment,mental",
+			"cast": "v",
+			"actions": 1,
+			"source": "Core Rulebook pg. 398 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=466",
+			"aon": "spells466",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou surround yourself in a veil of confidence. You reduce your current frightened condition by 1, and whenever you would become frightened during the duration, reduce the amount by 1. If you critically fail a save against fear, veil of confidence ends immediately, and you increase any frightened condition you gain from the critical failure by 1 instead of decreasing it.",
+			"hash": "wBLrGPbQ"
+		}
 	},
 	{
 		"aonId": 467,
@@ -1817,7 +2769,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Morph", "Plant", "Transmutation" ],
 		"id": "116f4c9c-02fc-4e90-b334-668e936bd0bf",
-		"hash": "EtvGsWVF"
+		"pf2t": {
+			"name": "Vibrant Thorns",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,morph,plant,transmutation",
+			"cast": "s",
+			"actions": 1,
+			"source": "Core Rulebook pg. 399 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=467",
+			"aon": "spells467",
+			"type": "focus",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYour body sprouts a coat of brambly thorns that harm those that strike you and thrive on life magic. Adjacent creatures that hit you with a melee attack, as well as creatures that hit you with unarmed attacks, take 1 piercing damage each time they do. Anytime you cast a positive spell, the damage from your thorns increases to 1d6 until the start of your next turn.\n- - -\n**Heightened (+1)** The damage increases by 1, or 1d6 after you cast a positive spell.",
+			"hash": "EtvGsWVF"
+		}
 	},
 	{
 		"aonId": 468,
@@ -1855,7 +2820,22 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Fear", "Mental" ],
 		"id": "d4637666-d4d7-41d9-b472-bc062958feea",
-		"hash": "KFtDpRsA"
+		"pf2t": {
+			"name": "Waking Nightmare",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,emotion,enchantment,fear,mental",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 399 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=468",
+			"aon": "spells468",
+			"type": "focus",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou fill the creature's mind with a terrifying vision out of its nightmares. The target must attempt a Will save.\n\nIf the target is unconscious when you Cast this Spell on it, it immediately wakes up before attempting its save, and if it fails its save, it gains the fleeing condition for 1 round in addition to the effects noted below.\n\n**Critical Success** The target is unaffected.\n**Success** The target is frightened 1.\n**Failure** The target is frightened 2.\n**Critical Failure** The target is frightened 3.",
+			"hash": "KFtDpRsA"
+		}
 	},
 	{
 		"aonId": 469,
@@ -1877,7 +2857,21 @@
 		"targets": "1 weapon you're wielding",
 		"traits": [ "Uncommon", "Cleric", "Evocation" ],
 		"id": "f559a49b-59c3-4777-b64d-60aaf7ea05d5",
-		"hash": "SZWAcNtH"
+		"pf2t": {
+			"name": "Weapon Surge",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,evocation",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "Core Rulebook pg. 399 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=469",
+			"aon": "spells469",
+			"type": "focus",
+			"body": "**Targets** 1 weapon you're wielding\n\n- - -\n\nHolding your weapon aloft, you fill it with divine energy. On your next Strike with that weapon before the start of your next turn, you gain a +1 status bonus to the attack roll and the weapon deals an additional die of damage. If the weapon has a striking rune, this instead increases the number of dice from the striking rune by 1 (to a maximum of 3 extra weapon dice).\n\nIf the target weapon leaves your possession, weapon surge immediately ends.",
+			"hash": "SZWAcNtH"
+		}
 	},
 	{
 		"aonId": 470,
@@ -1900,7 +2894,21 @@
 		"targets": "1 creature",
 		"traits": [ "Uncommon", "Cleric", "Enchantment", "Mental" ],
 		"id": "c3192acb-02e1-437a-8669-acdfc7cebdb8",
-		"hash": "FQlFbPPQ"
+		"pf2t": {
+			"name": "Word of Freedom",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,enchantment,mental",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 399 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=470",
+			"aon": "spells470",
+			"type": "focus",
+			"body": "**Duration** 1 round\n**Targets** 1 creature\n\n- - -\n\nYou utter a liberating word of power that frees a creature. You suppress one of the following conditions of your choice: confused, frightened, grabbed, or paralyzed. The target isn't affected by the chosen condition, and if you suppress the grabbed condition, the target automatically breaks free from any grab affecting it when you Cast the Spell.\n\nIf you don't remove the effect that provided the condition, the condition returns after the spell ends. For example, if a spell was making the target confused for 1 minute, word of freedom would let the target act normally for a round, but the confused condition would return afterward.",
+			"hash": "FQlFbPPQ"
+		}
 	},
 	{
 		"aonId": 471,
@@ -1921,7 +2929,20 @@
 		"source": "PZO2101",
 		"traits": [ "Uncommon", "Cleric", "Divination" ],
 		"id": "2afbe4b8-5c49-4fd2-b26f-b568369c80c7",
-		"hash": "UQpZdhWh"
+		"pf2t": {
+			"name": "Word of Truth",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,divination",
+			"cast": "v",
+			"actions": 1,
+			"source": "Core Rulebook pg. 399 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=471",
+			"aon": "spells471",
+			"type": "focus",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou speak a statement you believe to be true and that is free of any attempt to deceive through twisting words, omission, and so on. The statement must be 25 words or fewer. A symbol of your deity glows above your head, and anyone who sees you and hears your statement knows that you believe it to be true.\n\nEach time you Sustain this Spell, you can repeat this effect.",
+			"hash": "UQpZdhWh"
+		}
 	},
 	{
 		"aonId": 472,
@@ -1943,6 +2964,20 @@
 		"traits": [ "Uncommon", "Cleric", "Emotion", "Enchantment", "Fortune", "Mental" ],
 		"trigger": "You and at least 1 ally are about to roll initiative.",
 		"id": "d607c4af-b3fd-4312-bbb1-b5a505436c61",
-		"hash": "OzdBdVhz"
+		"pf2t": {
+			"name": "Zeal for Battle",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,cleric,emotion,enchantment,fortune,mental",
+			"cast": "v",
+			"actions": "r",
+			"range": 10,
+			"source": "Core Rulebook pg. 399 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=472",
+			"aon": "spells472",
+			"type": "focus",
+			"body": "**Trigger** You and at least 1 ally are about to roll initiative.\n**Targets** you and the triggering ally\n\n- - -\n\nYou stoke the righteous anger within yourself and an ally. You and the target ally each roll a d20 and use the higher result for both your initiative rolls. You each still use your own Perception modifier or other statistic to determine your results.",
+			"hash": "OzdBdVhz"
+		}
 	}
 ]

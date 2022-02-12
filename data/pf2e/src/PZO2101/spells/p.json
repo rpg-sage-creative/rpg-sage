@@ -37,7 +37,23 @@
 		"traits": [ "Enchantment", "Incapacitation", "Mental" ],
 		"focus": false,
 		"id": "b665e69e-64bc-4b8e-ab92-42d097d45edb",
-		"hash": "YtjxCAnB"
+		"pf2t": {
+			"name": "Paralyze",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "enchantment,incapacitation,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 356 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=213",
+			"aon": "spells213",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou block the target's motor impulses before they can leave its mind, threatening to freeze the target in place. The target must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target is stunned 1.\n**Failure** The target is paralyzed for 1 round.\n**Critical Failure** The target is paralyzed for 4 rounds. At the end of each of its turns, it can attempt a new Will save to reduce the remaining duration by 1 round, or end it entirely on a critical success.\n- - -\n**Heightened (7th)** You can target up to 10 creatures.",
+			"hash": "YtjxCAnB"
+		}
 	},
 	{
 		"aonId": 214,
@@ -77,7 +93,23 @@
 		"traits": [ "Illusion", "Mental" ],
 		"focus": false,
 		"id": "c6d02fcd-a7b0-48e5-be59-1786719149b2",
-		"hash": "HRkxbFPg"
+		"pf2t": {
+			"name": "Paranoia",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "illusion,mental",
+			"traditions": "occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 356 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=214",
+			"aon": "spells214",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou cause the target to see all other creatures as dire threats. The target is stricken by intense paranoia toward all creatures around it and must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target believes everyone it sees is a potential threat. It becomes unfriendly to all creatures to which it wasn't already hostile, even those that were previously allies. It treats no one as an ally. The spell ends after 1 round.\n**Failure** As success, but the effect lasts 1 minute.\n**Critical Failure** As failure, except the target believes that everyone it sees is a mortal enemy. It uses its reactions and free actions against everyone, regardless of whether they were previously its allies, as determined by the GM. It otherwise acts as rationally as it normally does and likely prefers to attack creatures that are actively attacking or hindering it over those leaving it alone.\n- - -\n**Heightened (6th)** You can target up to 5 creatures.",
+			"hash": "HRkxbFPg"
+		}
 	},
 	{
 		"aonId": 215,
@@ -101,7 +133,21 @@
 		"traits": [ "Abjuration" ],
 		"focus": false,
 		"id": "f2e12edb-e499-4b90-8608-46d1efc549bb",
-		"hash": "SOzvcqzX"
+		"pf2t": {
+			"name": "Pass Without Trace",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "abjuration",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 356 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=215",
+			"aon": "spells215",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n\n- - -\n\nYou obscure the tracks you leave behind and make it harder for others to find you. The DC of checks to Track you gains a +4 status bonus or is equal to your spell DC, whichever results in a higher DC. You can benefit from only one pass without trace spell at a time.\n- - -\n**Heightened (2nd)** The duration increases to 8 hours.\n**Heightened (4th)** The duration increases to 8 hours. The spell has a range of 20 feet and an area of a 20-foot-emanation, affecting up to 10 creatures of your choice within that area.",
+			"hash": "SOzvcqzX"
+		}
 	},
 	{
 		"aonId": 216,
@@ -129,7 +175,22 @@
 		"traits": [ "Uncommon", "Conjuration", "Earth" ],
 		"focus": false,
 		"id": "1ce99c37-4b1f-4cc0-a276-3f8649d809cb",
-		"hash": "jkzCvFXf"
+		"pf2t": {
+			"name": "Passwall",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,earth",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 356 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=216",
+			"aon": "spells216",
+			"type": "spell",
+			"body": "**Area** 5-foot-wide, 10-foot-tall, 10-foot deep section of wooden, plaster, or stone wall\n**Duration** 1 hour\n\n- - -\n\nYou create a visible tunnel through the wall in the chosen area, replacing the area with empty space. If the wall is thicker than 10 feet, the tunnel ends 10 feet in. Even a small layer of metal in the wall prevents this spell from functioning. This spell doesn't reduce the integrity of the structure. When the spell ends, anyone inside the tunnel is shunted to the nearest exit.\n- - -\n**Heightened (7th)** The tunnel can be up to 20 feet deep. The areas of the wall that contain your tunnel's entrance appear completely normal (unless viewed with true seeing or a similar effect), despite the tunnel's existence. The tunnel's entrance functions as a solid wall, but you can specify a password or a trigger, allowing creatures to enter the tunnel freely.",
+			"hash": "jkzCvFXf"
+		}
 	},
 	{
 		"aonId": 217,
@@ -153,7 +214,21 @@
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "fb1d73ef-2b2d-4bbd-bb23-8002a5dd3d9b",
-		"hash": "yTvbTzlb"
+		"pf2t": {
+			"name": "Pest Form",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "polymorph,transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 356 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=217",
+			"aon": "spells217",
+			"type": "spell",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou transform into the battle form of a Tiny animal, such as a cat, insect, lizard, or rat. You can decide the specific type of animal (such as a rat or praying mantis), but this has no effect on the form's Size or statistics. While in this form, you gain the animal trait. You can Dismiss the spell.\n\nYou gain the following statistics and abilities: \n\n+ AC = 15 + your level. Ignore your armor's check penalty and Speed reduction. \n+ Speed 10 feet. \n+ Weakness 5 to physical damage. (If you take physical damage in this form, you take 5 additional damage.) \n+ Low-light vision and imprecise scent 30 feet. \n+ Acrobatics and Stealth modifiers of +10, unless your own modifier is higher; Athletics modifier -4.\n- - -\n**Heightened (4th)** You can turn into a flying creature, such as a bird, which grants you a fly Speed of 20 feet.",
+			"hash": "yTvbTzlb"
+		}
 	},
 	{
 		"aonId": 218,
@@ -178,7 +253,23 @@
 		"traits": [ "Illusion", "Mental" ],
 		"focus": false,
 		"id": "66aabf55-1d49-44f4-a1d3-02fd5c15ebd8",
-		"hash": "xIXLrqxE"
+		"pf2t": {
+			"name": "Phantasmal Calamity",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "illusion,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "Core Rulebook pg. 357 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=218",
+			"aon": "spells218",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Area** 30-foot burst\n\n- - -\n\nA vision of apocalyptic destruction fills the mind of each creature in the area. The vision deals 11d6 mental damage (basic Will save). On a critical failure, the creature must also succeed at a Reflex save or believe it's trapped (stuck in a fissure, adrift at sea, or some other fate in keeping with its vision). If it fails the second save, it's also stunned for 1 minute. It can attempt a new Will save at the end of each of its turns, and on a success, it disbelieves the illusion and recovers from the stunned condition.\n- - -\n**Heightened (+1)** The damage increases by 2d6.",
+			"hash": "xIXLrqxE"
+		}
 	},
 	{
 		"aonId": 219,
@@ -217,7 +308,23 @@
 		"traits": [ "Death", "Emotion", "Fear", "Illusion", "Mental" ],
 		"focus": false,
 		"id": "663dfefb-e5ce-4705-9a82-63178a291e47",
-		"hash": "LvwDkhfk"
+		"pf2t": {
+			"name": "Phantasmal Killer",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "death,emotion,fear,illusion,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 357 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=219",
+			"aon": "spells219",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Targets** 1 living creature\n\n- - -\n\nYou create a phantasmal image of the most fearsome creature imaginable to the target. Only the spell's target can see the killer, though you can see the vague shape of the illusion as it races forth to attack. The effect of the killer is based on the outcome of the target's Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes 4d6 mental damage and is frightened 1.\n**Failure** The target takes 8d6 mental damage and is frightened 2.\n**Critical Failure** The target is so afraid it might die. It must attempt a Fortitude save; if the target fails, it dies. On a successful Fortitude save, the target takes 12d6 mental damage, is fleeing until the end of its next turn, and is frightened 4. This effect has the incapacitation trait.\n- - -\n**Heightened (+1)** The damage increases by 2d6 on a failure and by 3d6 on a critical failure.",
+			"hash": "LvwDkhfk"
+		}
 	},
 	{
 		"aonId": 220,
@@ -257,7 +364,23 @@
 		"traits": [ "Illusion", "Mental", "Nonlethal" ],
 		"focus": false,
 		"id": "d2d8d982-acc1-4308-907a-6a72965ea5a4",
-		"hash": "vAFRbQVI"
+		"pf2t": {
+			"name": "Phantom Pain",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "illusion,mental,nonlethal",
+			"traditions": "occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 357 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=220",
+			"aon": "spells220",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nIllusory pain wracks the target, dealing 2d4 mental damage and 1d4 persistent mental damage. The target must attempt a Will save.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes full initial damage but no persistent damage, and the spell ends immediately.\n**Failure** The target takes full initial and persistent damage, and the target is sickened 1. If the target recovers from being sickened, the persistent damage ends and the spell ends.\n**Critical Failure** As failure, but the target is sickened 2.\n- - -\n**Heightened (+1)** The damage increases by 2d4 and the persistent damage by 1d4.",
+			"hash": "vAFRbQVI"
+		}
 	},
 	{
 		"aonId": 221,
@@ -283,7 +406,22 @@
 		"traits": [ "Conjuration" ],
 		"focus": false,
 		"id": "dcaf900a-2d75-4d5f-aae5-b36468efceff",
-		"hash": "lQgcKZWr"
+		"pf2t": {
+			"name": "Phantom Steed",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "conjuration",
+			"traditions": "arcane,occult,primal",
+			"cast": "s,v",
+			"actions": "10 minutes",
+			"range": 30,
+			"source": "Core Rulebook pg. 357 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=221",
+			"aon": "spells221",
+			"type": "spell",
+			"body": "**Duration** 8 hours\n\n- - -\n\nYou conjure a Large, magical, equine creature that only you (or another Medium or Small creature you choose) can ride. The horse is clearly phantasmal in nature, has 20 AC and 10 Hit Points, and automatically fails all saves. If it's reduced to 0 Hit Points, it disappears and the spell ends. The steed has a Speed of 40 feet and can hold its rider's body weight, plus 20 Bulk.\n- - -\n**Heightened (4th)** The steed has a Speed of 60 feet, can walk on water, and ignores areas of natural difficult terrain.\n**Heightened (5th)** The steed has a Speed of 60 feet, can walk on water, and ignores areas of natural difficult terrain. It can also air walk but must end its turn on solid ground or fall.\n**Heightened (6th)** The steed can walk or fly at a Speed of 80 feet, can walk on water, and ignores natural difficult terrain.",
+			"hash": "lQgcKZWr"
+		}
 	},
 	{
 		"aonId": 222,
@@ -305,7 +443,22 @@
 		"traits": [ "Uncommon", "Conjuration", "Teleportation" ],
 		"focus": false,
 		"id": "440c5239-4ee9-45a5-8611-f4b9fcfc7807",
-		"hash": "vxWWgFxX"
+		"pf2t": {
+			"name": "Plane Shift",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "uncommon,conjuration,teleportation",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "m,s,v",
+			"actions": "10 minutes",
+			"range": "touch",
+			"source": "Core Rulebook pg. 357 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=222",
+			"aon": "spells222",
+			"type": "spell",
+			"body": "**Targets** 1 willing creature, or up to 8 willing creatures joining hands\n\n- - -\n\nYou and your allies traverse the barriers between planes of existence. The targets move to another plane, such as the Plane of Fire, the Shadow Plane, or the Abyss. You must have specific knowledge of the destination plane and use a magic tuning fork created from material from that plane as a focus for the spell. While the tuning forks for most prominent planes are uncommon, just like the spell plane shift, more obscure planes and demiplanes often have rare tuning forks.\n\nThe spell is highly imprecise, and you appear 1d20x25 miles from the last place one of the targets (of your choice) was located the last time that target traveled to the plane. If it's the first time traveling to a particular plane for all targets, you appear at a random location on the plane. Plane shift doesn't provide a means of return travel, though casting plane shift again allows you to return to your previous plane unless there are extenuating circumstances.",
+			"hash": "vxWWgFxX"
+		}
 	},
 	{
 		"aonId": 223,
@@ -330,7 +483,21 @@
 		"traits": [ "Plant", "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "04f7e0fe-d99c-44ca-a1db-2d41973d3d27",
-		"hash": "OvzPNpJL"
+		"pf2t": {
+			"name": "Plant Form",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "plant,polymorph,transmutation",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 358 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=223",
+			"aon": "spells223",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nTaking inspiration from verdant creatures, you transform into a Large plant battle form. You must have space to expand into or the spell is lost. When you cast this spell, choose arboreal, flytrap, or shambler. You can substitute a similar specific plant to turn into (such as a pitcher plant instead of a flytrap), but this has no effect on the form's Size or statistics. While in this form, you gain the plant trait. You can Dismiss the spell.\n\nYou gain the following statistics and abilities regardless of which battle form you choose: \n\n+ AC = 19 + your level. Ignore your armor's check penalty and Speed reduction. \n+ 12 temporary Hit Points. \n+ Resistance 10 to poison. \n+ Low-light vision. \n+ One or more unarmed melee attacks specific to the battle form you choose, which are the only attacks you can use. You're trained with them. Your attack modifier is +17, and your damage bonus is +11. These attacks are Strength based (for the purpose of the enfeebled condition, for example). If your unarmed attack modifier is higher, you can use it instead. \n+ Athletics modifier of +19, unless your own modifier is higher.\nYou also gain specific abilities based on the type of plant you choose:\n\n+ **Arboreal** Speed 30 feet; **Melee** :a: branch (reach 15 feet), **Melee** :a: foot, \n+ **Flytrap** Speed 15 feet; resistance 10 to acid; **Melee** :a: leaf (reach 10 feet), \n+ **Shambler** Speed 20 feet, swim Speed 20 feet; resistance 10 to electricity; **Melee** :a: vine (reach 15 feet),\n- - -\n**Heightened (6th)** Your battle form is Huge, and the reach of your attacks increases by 5 feet. You instead gain AC = 22 + your level, 24 temporary HP, attack modifier +21, damage bonus +16, and Athletics +22.",
+			"hash": "OvzPNpJL"
+		}
 	},
 	{
 		"aonId": 224,
@@ -354,7 +521,22 @@
 		"traits": [ "Cold", "Evocation" ],
 		"focus": false,
 		"id": "04da00af-7fd2-4a44-8c56-2d4696e3b08b",
-		"hash": "IKyNjGXV"
+		"pf2t": {
+			"name": "Polar Ray",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "attack,cold,evocation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 358 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=224",
+			"aon": "spells224",
+			"type": "spell",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou fire a blue-white ray of freezing air and sleet that deals 10d8 cold damage. Make a spell attack roll against the target.\n\n**Critical Success** The target takes double damage and is drained 2.\n**Success** The target takes full damage and is drained 2.\n- - -\n**Heightened (+1)** The damage increases by 2d8.",
+			"hash": "IKyNjGXV"
+		}
 	},
 	{
 		"aonId": 225,
@@ -395,7 +577,23 @@
 		"traits": [ "Uncommon", "Incapacitation", "Mental", "Necromancy", "Possession" ],
 		"focus": false,
 		"id": "aca6dd61-5ec0-4dfd-ac04-8effe6f4623c",
-		"hash": "mtxtRpgm"
+		"pf2t": {
+			"name": "Possession",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "uncommon,incapacitation,mental,necromancy,possession",
+			"traditions": "occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 358 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=225",
+			"aon": "spells225",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 minute\n**Targets** 1 living creature\n\n- - -\n\nYou send your mind and soul into the target's body, attempting to take control. The target must attempt a Will save. You can choose to use the effects of a degree of success more favorable to the target if you prefer.\n\nWhile you're possessing a target, your own body is unconscious and can't wake up normally. You can sense everything the possessed target does. You can Dismiss this spell. If the possessed body dies, the spell ends and you must succeed at a Fortitude save against your spell DC or be paralyzed for 1 hour, or 24 hours on a critical failure. If the spell ends during an encounter, you act just before the possessed creature's initiative count.\n\n**Critical Success** The target is unaffected.\n**Success** You possess the target but can't control it. You ride along in the body while the spell lasts.\n**Failure** You possess the target and take partial control of it. You no longer have a separate turn; instead, you might control the target. At the start of each of the target's turns, it attempts another Will save. If it fails, it's controlled by you on that turn; if it succeeds, it chooses its own actions; and if it critically succeeds, it forces you out and the spell ends.\n**Critical Failure** You possess the target fully, and it can only watch as you manipulate it like a puppet. The target is controlled by you.\n- - -\n**Heightened (9th)** The duration is 10 minutes, and you can physically enter the creature's body, protecting your physical body while the spell lasts.",
+			"hash": "mtxtRpgm"
+		}
 	},
 	{
 		"aonId": 226,
@@ -423,7 +621,22 @@
 		"traits": [ "Uncommon", "Auditory", "Enchantment", "Mental" ],
 		"focus": false,
 		"id": "16e03d30-264b-4690-923b-301a8c76aaea",
-		"hash": "wvjPQsgr"
+		"pf2t": {
+			"name": "Power Word Blind",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "uncommon,auditory,enchantment,mental",
+			"traditions": "arcane",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 358 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=226",
+			"aon": "spells226",
+			"type": "spell",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou utter an arcane word of power that can make the target blinded upon hearing it. Once targeted, the target is then temporarily immune for 10 minutes. The effect of the spell depends on the target's level. \n\n**11th or Lower** The target is blinded permanently. \n**12th-13th** The target is blinded for 1d4 minutes. \n**14th or Higher** The target is dazzled for 1 minute.\n- - -\n**Heightened (+1)** The levels at which each outcome applies increase by 2.",
+			"hash": "wvjPQsgr"
+		}
 	},
 	{
 		"aonId": 227,
@@ -451,7 +664,22 @@
 		"traits": [ "Uncommon", "Auditory", "Death", "Enchantment", "Mental" ],
 		"focus": false,
 		"id": "04eda640-f1ef-4099-b663-4304647376a8",
-		"hash": "IBlRpcQI"
+		"pf2t": {
+			"name": "Power Word Kill",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "uncommon,auditory,death,enchantment,mental",
+			"traditions": "arcane",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 358 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=227",
+			"aon": "spells227",
+			"type": "spell",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou utter the most powerful arcane word of power. Once targeted, the target is then temporarily immune for 10 minutes. The effect of the spell depends on the target's level. \n\n**14th or Lower** The target dies instantly. \n**15th** If the target has 50 Hit Points or fewer, it dies instantly; otherwise, it drops to 0 Hit Points and becomes dying 1, or increases its dying condition by 1 if it's already dying. \n**16th or Higher** The target takes 50 damage; if this brings the target to 0 Hit Points, the target dies instantly.\n- - -\n**Heightened (10th)** The levels at which each outcome applies increase by 2.",
+			"hash": "IBlRpcQI"
+		}
 	},
 	{
 		"aonId": 228,
@@ -479,7 +707,22 @@
 		"traits": [ "Uncommon", "Auditory", "Enchantment", "Mental" ],
 		"focus": false,
 		"id": "17e89410-bc89-4e5d-bb81-45551bf1f419",
-		"hash": "lCVplklT"
+		"pf2t": {
+			"name": "Power Word Stun",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "uncommon,auditory,enchantment,mental",
+			"traditions": "arcane",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 359 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=228",
+			"aon": "spells228",
+			"type": "spell",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou stun the target with an arcane word of power. Once targeted, the target is then temporarily immune for 10 minutes. The effect of the spell depends on the target's level. \n\n**13th or Lower** The target is stunned for 1d6 rounds. \n**14th-15th** The target is stunned for 1 round. \n**16th or Higher** The target is stunned 1.\n- - -\n**Heightened (+1)** The levels at which each outcome applies increase by 2.",
+			"hash": "lCVplklT"
+		}
 	},
 	{
 		"aonId": 229,
@@ -523,7 +766,22 @@
 		"traits": [ "Polymorph", "Transmutation" ],
 		"focus": false,
 		"id": "7cb92baa-313e-45cc-a41d-586678c2211e",
-		"hash": "gMZUqfdr"
+		"pf2t": {
+			"name": "Primal Herd",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "polymorph,transmutation",
+			"traditions": "primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 359 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=230",
+			"aon": "spells230",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** you and up to 5 willing targets\n\n- - -\n\nSummoning the power of the natural world, you transform the targets into a herd of mammoths, and they each assume a Huge battle form. Each target must have enough space to expand into or the spell fails for that target. Each target gains the animal trait. Each target can Dismiss the spell's effects on themself. Each target gains the following while transformed: \n\n+ AC = 22 + the target's level. Ignore any armor check penalty and Speed reduction. \n+ 20 temporary Hit Points. \n+ Speed 40 feet. \n+ Low-light vision. \n+ The following unarmed melee attacks, which are the only attacks the target can use. They're trained with them. When attacking with these attacks, the target uses their attack modifier with the proficiency and item bonuses of their most favorable weapon or unarmed Strike, and the damage is listed for each attack. These attacks are Strength based (for the purpose of the enfeebled condition, for example). If the target's unarmed attack modifier is higher, they can use it instead. **Melee** :a: tusk (reach 15 feet), **Melee** :a: trunk (agile, reach 15 feet), **Melee** :a: foot (agile, reach 15 feet), \n+ Athletics modifier of +30, unless the target's own modifier is higher. \n+ Trample :aaa: You move up to twice your Speed and move through the space of Large or smaller creatures, trampling each creature whose space you enter. A trampled creature takes damage from its foot Strike based on a basic Reflex save (DC = 19 + the target's level).",
+			"hash": "gMZUqfdr"
+		}
 	},
 	{
 		"aonId": 231,
@@ -543,7 +801,21 @@
 		"traits": [ "Divination" ],
 		"focus": false,
 		"id": "62013f90-bf49-4817-aafa-a0f9b1d16f1c",
-		"hash": "HCQGrgOq"
+		"pf2t": {
+			"name": "Primal Phenomenon",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "divination",
+			"traditions": "primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"source": "Core Rulebook pg. 359 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=231",
+			"aon": "spells231",
+			"type": "spell",
+			"body": "You request a direct intercession from the natural world. Nature always refuses unnatural requests and might grant a different request (potentially more powerful or better fitting its character) than the one you asked for. A primal phenomenon spell can do any of the following things. \n\n+ Duplicate any primal spell of 9th level or lower. \n+ Duplicate any non-primal spell of 7th level or lower. \n+ Produce any effect whose power level is in line with the above effects. \n+ Reverse certain effects that refer to the wish spell.\nAt the GM's discretion, you can try to use primal phenomenon to produce greater effects than these, but doing so may be dangerous, or the spell may have only a partial effect.",
+			"hash": "HCQGrgOq"
+		}
 	},
 	{
 		"aonId": 232,
@@ -564,7 +836,22 @@
 		"traits": [ "Abjuration", "Light" ],
 		"focus": false,
 		"id": "8465cf3e-e826-47f9-9fc1-1165cae9d447",
-		"hash": "ZQsvxWQh"
+		"pf2t": {
+			"name": "Prismatic Sphere",
+			"level": 9,
+			"pfs": "standard",
+			"traits": "abjuration,light",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 10,
+			"source": "Core Rulebook pg. 359 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=232",
+			"aon": "spells232",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n\n- - -\n\nYou create a seven-layered sphere to protect an area. This multicolored sphere functions like a prismatic wall but is shaped in a 10-foot burst centered on a corner of your space. You must form the sphere in an unbroken open space so its edges don't pass through any creatures or objects, or the spell is lost.",
+			"hash": "ZQsvxWQh"
+		}
 	},
 	{
 		"aonId": 233,
@@ -584,7 +871,21 @@
 		"traits": [ "Evocation", "Light" ],
 		"focus": false,
 		"id": "082c7095-a359-418b-b92d-e5c78f67302b",
-		"hash": "zMpXNpOr"
+		"pf2t": {
+			"name": "Prismatic Spray",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "evocation,light",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 360 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=233",
+			"aon": "spells233",
+			"type": "spell",
+			"body": "**Area** 30-foot cone\n\n- - -\n\nA spray of rainbow light beams cascades from your open hand. Each creature in the area must roll 1d8 on the table below to see which beam affects it, then attempt a saving throw of the indicated type. The table notes any additional traits that apply to each type of ray. If a creature is struck by multiple beams, it uses the same d20 result for all its saving throws. For all rays, a successful saving throw negates the effect for that creature.\n\n**Prismatic Spray**\n\n**1d8** | **Color** | **Save** | **Effects (Traits)**\n--- | --- | --- | ---\n1 | Red | Reflex | 50 fire damage (fire)\n2 | Orange | Reflex | 60 acid damage (acid)\n3 | Yellow | Reflex | 70 electricity damage (electricity)\n4 | Green | Fortitude | 30 poison damage and enfeebled 1 for 1 minute (poison)\n5 | Blue | Fortitude | Affected as if by flesh to stone\n6 | Indigo | Will | Confused, as the warp mind spell (mental)\n7 | Violet | Will | Slowed for 1 minute; if a critical failure, sent to another plane, as plane shift (teleportation)\n8 | Potent beam | - | Affected by two beams - roll twice, rerolling any duplicates or results of 8",
+			"hash": "zMpXNpOr"
+		}
 	},
 	{
 		"aonId": 234,
@@ -607,7 +908,22 @@
 		"traits": [ "Abjuration", "Light" ],
 		"focus": false,
 		"id": "2784c340-71e8-4c06-be5e-f2f9ccf5407b",
-		"hash": "CdnDpksZ"
+		"pf2t": {
+			"name": "Prismatic Wall",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "abjuration,light",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 120,
+			"source": "Core Rulebook pg. 360 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=234",
+			"aon": "spells234",
+			"type": "spell",
+			"body": "**Duration** 1 hour\n\n- - -\n\nYou create an opaque wall of shimmering, multicolored light. The wall is straight and vertical, stretching 60 feet long and 30 feet high. You must form the wall in an unbroken open space so its edges don't pass through any creatures or objects, or the spell is lost. You can pass through the wall and ignore its effects. The wall sheds bright light out to 20 feet on each side (and dim light to the next 20 feet). Creatures other than you that come into the wall's light must attempt a Will save; they're dazzled for 1 round on a success, blinded for 1 round on a failure, and blinded for 1 minute on a critical failure. They are then temporarily immune to the blinding effect for 1 hour.\n\nA prismatic wall has seven different layers, each a different color. Red, orange, yellow, and green have the effect of a 5th-level chromatic wall spell of that color, and the others have the effect of a 7th-level chromatic wall spell of that color. A creature that tries to pass through the wall must attempt a saving throw against each component wall. The effects take place simultaneously, so a creature turned to stone by the blue wall is still treated as a creature for the indigo and violet walls.\n\nThe wall as a whole is immune to counteracting effects of the wall's level or lower; each color must be counteracted by its specific spell, as described in chromatic wall. This must be done in order (red, orange, yellow, green, blue, indigo, then violet). A given color can't be affected until the previous color is counteracted. Counteracting a color wall removes that color's effect from the wall, and counteracting them all ends prismatic wall. You can Dismiss the spell.",
+			"hash": "CdnDpksZ"
+		}
 	},
 	{
 		"aonId": 235,
@@ -629,7 +945,22 @@
 		"traits": [ "Uncommon", "Abjuration" ],
 		"focus": false,
 		"id": "1f36ad51-eace-43eb-bf49-ae554ec51e71",
-		"hash": "OYjzMIbp"
+		"pf2t": {
+			"name": "Private Sanctum",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": "10 minutes",
+			"range": "touch",
+			"source": "Core Rulebook pg. 360 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=235",
+			"aon": "spells235",
+			"type": "spell",
+			"body": "**Area** 100-foot burst\n**Duration** 24 hours\n\n- - -\n\nFrom outside, the area looks like a bank of impenetrable black fog. Sensory stimuli (such as sounds, smells, and light) don't pass from inside the area to outside the area. Scrying spells can't perceive any stimuli from the area, and mind-reading effects don't work in the area.",
+			"hash": "OYjzMIbp"
+		}
 	},
 	{
 		"aonId": 236,
@@ -676,7 +1007,22 @@
 		"traits": [ "Illusion", "Mental" ],
 		"focus": false,
 		"id": "61aaa9b3-768d-4fba-b990-c2d829e69d4d",
-		"hash": "WfBEUNDl"
+		"pf2t": {
+			"name": "Project Image",
+			"level": 7,
+			"pfs": "standard",
+			"traits": "illusion,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 360 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=237",
+			"aon": "spells237",
+			"type": "spell",
+			"body": "**Duration** sustained up to 1 minute\n\n- - -\n\nYou project an illusory image of yourself. You must stay within range of the image, and if at any point you can't see the image, the spell ends. Whenever you Cast a Spell other than one whose area is an emanation, you can cause the spell effect to originate from either yourself or the image. Because the image is an illusion, it can't benefit from spells, though visual manifestations of the spell appear. The image has the same AC and saves as you. If it is hit by an attack or fails a save, the spell ends.\n- - -\n**Heightened (+2)** The maximum duration you can Sustain the Spell increases to 10 minutes.",
+			"hash": "WfBEUNDl"
+		}
 	},
 	{
 		"aonId": 238,
@@ -699,7 +1045,22 @@
 		"traits": [ "Uncommon", "Abjuration" ],
 		"focus": false,
 		"id": "e12590b8-6bd9-4c89-99b1-5c0bd4da47e5",
-		"hash": "IOVpZNNK"
+		"pf2t": {
+			"name": "Protection",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 361 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=238",
+			"aon": "spells238",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou ward a creature against a specified alignment. Choose chaotic, evil, good, or lawful when you cast this spell. The target gains a +1 status bonus to Armor Class and saving throws against creatures and effects of the chosen alignment. This bonus increases to +3 against effects from such creatures that would directly control the target and against attacks made by summoned creatures of the chosen alignment.\n\nThis spell gains the trait that opposes the alignment you chose-if you choose chaos, this spell gains the lawful trait, and vice versa; if you choose evil, this spell gains the good trait, and vice versa.",
+			"hash": "IOVpZNNK"
+		}
 	},
 	{
 		"aonId": 239,
@@ -721,7 +1082,22 @@
 		"traits": [ "Divination", "Scrying" ],
 		"focus": false,
 		"id": "12d222bc-9836-45ab-af1c-8e436721fb70",
-		"hash": "XzxAyXyD"
+		"pf2t": {
+			"name": "Prying Eye",
+			"level": 5,
+			"pfs": "standard",
+			"traits": "divination,scrying",
+			"traditions": "arcane,divine,occult",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"range": "see text",
+			"source": "Core Rulebook pg. 361 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=239",
+			"aon": "spells239",
+			"type": "spell",
+			"body": "**Duration** sustained\n\n- - -\n\nYou create an invisible, floating eye, 1 inch in diameter, at a location you can see within 500 feet. It sees in all directions with your normal visual senses and continuously transmits what it sees to you.\n\nThe first time you Sustain the Spell each round, you can either move the eye up to 30 feet, seeing only things in front of the eye, or move it up to 10 feet, seeing everything in all directions around it. There is no limit to how far from you the eye can move, but the spell ends immediately if you and the eye ever cease to be on the same plane of existence. You can attempt Seek actions through the eye if you want to attempt Perception checks with it. Any damage dealt to the eye destroys it and ends the spell.",
+			"hash": "XzxAyXyD"
+		}
 	},
 	{
 		"aonId": 240,
@@ -744,7 +1120,22 @@
 		"traits": [ "Air", "Evocation" ],
 		"focus": false,
 		"id": "9f4ea884-02c2-413c-aab3-78a543a80d47",
-		"hash": "IqcUqLzk"
+		"pf2t": {
+			"name": "Punishing Winds",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "air,evocation",
+			"traditions": "primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 100,
+			"source": "Core Rulebook pg. 361 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=240",
+			"aon": "spells240",
+			"type": "spell",
+			"body": "**Area** 30-foot radius, 100-foot-cylinder\n**Duration** sustained up to 1 minute\n\n- - -\n\nViolent winds and a powerful downdraft fill the area, forming a cyclone. All flying creatures in the area descend 40 feet. The entire area is greater difficult terrain for Flying creatures, and difficult terrain for creatures on the ground or Climbing. Any creature that ends its turn Flying within the area descends 20 feet. Any creature pushed into a surface by this spell's winds takes bludgeoning damage as though it had fallen.\n\nThe squares at the outside vertical edges of the cylinder prevent creatures from leaving. These squares are greater difficult terrain, and a creature attempting to push through must succeed at an Athletics check or Acrobatics check to Maneuver in Flight against your spell DC to get through. A creature that fails ends its current action but can try again.",
+			"hash": "IqcUqLzk"
+		}
 	},
 	{
 		"aonId": 241,
@@ -765,7 +1156,22 @@
 		"traits": [ "Necromancy" ],
 		"focus": false,
 		"id": "4e5147b2-94f5-4693-9b45-a8e51391855a",
-		"hash": "XmpKtLlS"
+		"pf2t": {
+			"name": "Purify Food and Drink",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "necromancy",
+			"traditions": "divine,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 362 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=241",
+			"aon": "spells241",
+			"type": "spell",
+			"body": "**Targets** 1 cubic foot of contaminated food or water\n\n- - -\n\nYou remove toxins and contaminations from food and drink, making them safe to consume. This spell doesn't prevent future contamination, natural decay, or spoilage. One cubic foot of liquid is roughly 8 gallons.",
+			"hash": "XmpKtLlS"
+		}
 	},
 	{
 		"aonId": 242,
@@ -813,6 +1219,21 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Necromancy", "Poison" ],
 		"id": "30c9175b-a97c-44f9-a08f-c025c26cfb3c",
-		"hash": "TsDWVHgL"
+		"pf2t": {
+			"name": "Purple Worm Sting",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "necromancy,poison",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 362 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=242",
+			"aon": "spells242",
+			"type": "spell",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou replicate the attack of a deadly purple worm. You deal 3d6 piercing damage to the touched creature and afflict it with purple worm venom. The target must attempt a Fortitude save.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes 3d6 poison damage.\n**Failure** The target is afflicted with purple worm venom at stage 1.\n**Critical Failure** The target is afflicted with purple worm venom at stage 2.\n\n**Purple Worm Venom** (poison)Fortitude; **Stage 1** 3d6 poison damage and enfeebled 2 (1 round); **Stage 2** 4d6 poison damage and enfeebled 2 (1 round); **Stage 3** 6d6 poison damage and enfeebled 2 (1 round).",
+			"hash": "TsDWVHgL"
+		}
 	}
 ]

@@ -36,7 +36,22 @@
 		"focus": false,
 		"aonId": 655,
 		"id": "450cbccf-1c6c-4cc0-9149-87230f4b20c8",
-		"hash": "kEjkBSYv"
+		"pf2t": {
+			"name": "Astral Labyrinth",
+			"level": 9,
+			"pfs": "limited",
+			"traits": "uncommon,abjuration,incapacitation",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "156 The Apocalypse Prophet pg. 76",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=655",
+			"aon": "spells655",
+			"type": "spell",
+			"body": "**Area** 80-foot burst\n**Duration** 1 day\n\n- - -\n\nYou connect the entire area with an invisible maze of astral energy that interferes with dimensional and mental magic. Choose a point in the area that you can see when you cast this spell. Objects other than force effects and rare metals can't block this spell's area. Astral labyrinth attempts to counteract magical mental effects targeting or including anyone other than the caster in the area, though it has no effect on mental effects that began outside the area or before the spell was cast.\n\nIn addition, any creature that tries to depart or arrive in a location in the area by teleportation or extradimensional travel (including extradimensional spaces) must attempt a Will saving throw. Summoned creatures must attempt the save when they are summoned, but not when the summoning ends.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature is stunned 1.\n**Failure** The creature is stunned 1, you are mentally alerted that something has failed its save against this spell, and the creature arrives in the empty space closest to the point you chose instead of its intended destination.\n**Critical Failure** The creature is stunned 3, you get a mental glimpse of its appearance, and the creature arrives in the empty space closest to the point you chose instead of its intended destination.\n- - -\n**Heightened (10th)** You and creatures transported by your spells can't get a result worse than success on the saving throw to teleport into or out of the area.",
+			"hash": "kEjkBSYv"
+		}
 	},
 	{
 		"name": "Deluge",
@@ -60,7 +75,22 @@
 		"focus": false,
 		"aonId": 656,
 		"id": "46daca2e-ac7b-4319-badf-f7534f51c4d5",
-		"hash": "VIByIWJf"
+		"pf2t": {
+			"name": "Deluge",
+			"level": 8,
+			"pfs": "limited",
+			"traits": "uncommon,evocation,water",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "156 The Apocalypse Prophet pg. 76",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=656",
+			"aon": "spells656",
+			"type": "spell",
+			"body": "**Area** 40-foot burst\n\n- - -\n\nYou unleash a catastrophic downpour in the area that vanishes an instant later. All flying creatures in the area descend 50 feet or until blocked by the ground or firm surface. Each creature whose descent was blocked by the ground or firm surface takes bludgeoning damage equal to the number of feet it fell (the creature does not also take falling damage) and is knocked prone. Creatures on the ground, including flying creatures forced to the ground by the spell, must succeed at a Reflex save or be pushed 50 feet away from the center of the area.\n\nFlimsy structures in the area collapse. The GM can determine other large-scale effects that result from the deluge.\n- - -\n**Heightened (+1)** The area increases by 10 feet, and flying creatures fall an additional 10 feet.",
+			"hash": "VIByIWJf"
+		}
 	},
 	{
 		"name": "Devour Life",
@@ -84,7 +114,24 @@
 		"focus": false,
 		"aonId": 657,
 		"id": "b2639f7c-baaf-446c-b4ec-0d23f6c4586b",
-		"hash": "CbqysKyb"
+		"pf2t": {
+			"name": "Devour Life",
+			"level": 8,
+			"pfs": "limited",
+			"traits": "uncommon,death,healing,necromancy,negative",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "156 The Apocalypse Prophet pg. 76",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=657",
+			"aon": "spells657",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"basic": 1,
+			"body": "**Targets** 1 living creature\n\n- - -\n\nYou attempt to utterly consume the target's life force. The target takes 60 negative damage with a basic Fortitude save. If this damage reduces the target to 0 Hit Points, it dies immediately. You regain Hit Points equal to half the negative damage the target takes (after applying resistance and the like). Any excess healing is gained as temporary Hit Points, which you lose after 1 minute.\n- - -\n**Heightened (+1)** The damage increases by 10.",
+			"hash": "CbqysKyb"
+		}
 	},
 	{
 		"name": "Prying Survey",
@@ -108,7 +155,21 @@
 		"focus": false,
 		"aonId": 658,
 		"id": "fab49f1d-a063-4d82-ae0a-0bd016263bb2",
-		"hash": "rcljtBXU"
+		"pf2t": {
+			"name": "Prying Survey",
+			"level": 8,
+			"pfs": "limited",
+			"traits": "uncommon,divination,scrying",
+			"traditions": "arcane,occult",
+			"cast": "m,s,v",
+			"actions": "1 minute",
+			"source": "156 The Apocalypse Prophet pg. 76",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=658",
+			"aon": "spells658",
+			"type": "spell",
+			"body": "**Area** 120-foot emanation\n**Duration** 1 hour\n\n- - -\n\nYou create eight invisible, floating eyes, each about 3 inches in diameter, that scan the area around you, transmitting rough impressions of the environment. The eyes constantly examine and send you summaries of their findings. They are solid and can't move through barriers, and they don't follow routes that they fail to find while Searching. Any damage to an eye destroys it. When all eyes are destroyed, the spell ends.\n\nAs a single action, which has the concentrate trait, you can concentrate on a location within the area that an eye can reach. An eye travels to that location, and you Seek visually as if you were there. As an exploration activity, you can travel at half speed while continuing to concentrate on the eyes to gain the benefits of both the Scout and Search activities. With the eyes, you can check everything even if you are traveling faster than 300 feet per minute. The eyes use your Perception modifier. You can have only one prying survey in effect at a time.\n- - -\n**Heightened (10th)** The area increases to a 500-foot emanation.",
+			"hash": "rcljtBXU"
+		}
 	},
 	{
 		"name": "Undermine Reality",
@@ -143,7 +204,22 @@
 		"focus": false,
 		"aonId": 659,
 		"id": "3627ab6d-8f46-46cd-a792-fb5a4943d9f9",
-		"hash": "dRbvOZSN"
+		"pf2t": {
+			"name": "Undermine Reality",
+			"level": 8,
+			"pfs": "limited",
+			"traits": "uncommon,illusion,incapacitation,shadow",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "156 The Apocalypse Prophet pg. 76",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=659",
+			"aon": "spells659",
+			"type": "spell",
+			"body": "**Duration** varies\n**Targets** one creature\n\n- - -\n\nYou lash a target with tendrils of shadow that steal some of its substance, making it quasi-real. As long as it is quasi-real, its Strikes deal half damage, it can't critically succeed at any skill check, and creatures attempting saving throws against its spells and effects get a result one degree of success better than they rolled. The target must attempt a Will saving throw.\n\n**Critical Success** The target is unaffected.\n**Success** The target is quasi-real until the end of its next turn.\n**Failure** The target is quasi-real for 1 minute. At the end of each of its turns, it can attempt another Will save, ending the spell on a success.\n**Critical Failure** The target is quasi-real for an unlimited duration.",
+			"hash": "dRbvOZSN"
+		}
 	},
 	{
 		"name": "Upheaval",
@@ -178,6 +254,21 @@
 		"focus": false,
 		"aonId": 660,
 		"id": "ec7cc367-2b4e-4736-9a2e-43468b4f6d7d",
-		"hash": "LqsmRkdC"
+		"pf2t": {
+			"name": "Upheaval",
+			"level": 9,
+			"pfs": "limited",
+			"traits": "uncommon,conjuration,earth",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 500,
+			"source": "156 The Apocalypse Prophet pg. 77",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=660",
+			"aon": "spells660",
+			"type": "spell",
+			"body": "**Area** 150-foot burst\n\n- - -\n\nThe ground in the area shudders and crumbles as huge pillars of stone erupt into the air, rending the terrain around them.\n\nThe GM might add additional effects in certain areas. Cliffs might collapse, causing creatures to fall, or a river might be blocked and flood the surrounding area. \n\n+ **Stone Debris** The area becomes difficult terrain.\n+ **Rising Pillars** Pillars of smooth stone rise from your chosen number of 10-foot squares on a surface in the area, ascending up to 60 feet in height. Each pillar stops when it hits a structure or ceiling unless that structure collapses (see below). The DC to Climb or Grab an Edge on a pillar is 30. Each creature on a pillar after it rises must succeed at a Reflex saving throw or fall off the nearest edge (the creature can choose which edge, if several are equally close). A creature on a pillar that is stopped by a structure falls without attempting a save.\n+ **Structural Collapse** Structures and ceilings might collapse. The GM rolls a flat check for each (DC 14 for a sturdy structure, DC 9 for an average structure and most natural formations, all adjusted higher or lower as the GM sees fit). In general, shoddy structures automatically collapse. A collapse deals 11d6 bludgeoning damage to creatures beneath it; each creature caught in a collapse must attempt a Reflex save to avoid it. If the creature is forced to attempt a Reflex save because it was on a rising pillar, it uses the same result.\n\n\n**Critical Success** The creature takes half collapse damage.\n**Success** The creature takes half the collapse damage and falls prone.\n**Failure** The creature takes the full collapse damage and falls prone.\n**Critical Failure** The creature takes the full collapse damage and is restrained by debris until it successfully Escapes (DC equal to the spell's save DC).",
+			"hash": "LqsmRkdC"
+		}
 	}
 ]

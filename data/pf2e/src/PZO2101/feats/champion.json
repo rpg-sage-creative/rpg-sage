@@ -9,7 +9,19 @@
 		"source": "PZO2101",
 		"aonId": 214,
 		"id": "c5b775aa-3750-485d-8114-605451019efe",
-		"hash": "Xpfnwgrz"
+		"pf2t": {
+			"name": "Deity's Domain",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 109 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=214",
+			"aon": "feats214",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You embody an aspect of your deity. Choose one of your deity's domains. You gain the domain's initial domain spell as a devotion spell.\n\n#### Deity's Domain Leads To...\nAdvanced Deity's Domain",
+			"hash": "Xpfnwgrz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -20,8 +32,7 @@
 		"benefits": "You brace your shield with both hands, enhancing its potential for both offense and defense.",
 		"source": "PZO2101",
 		"aonId": 1087,
-		"id": "0f8537c9-21b4-44ea-a023-f12887c3fba0",
-		"hash": "XCvJwqss"
+		"id": "0f8537c9-21b4-44ea-a023-f12887c3fba0"
 	},
 	{
 		"objectType": "Feat",
@@ -33,7 +44,19 @@
 		"source": "PZO2101",
 		"aonId": 215,
 		"id": "dbc8f27e-0da5-451f-b611-58b575a09850",
-		"hash": "RhGIOPfc"
+		"pf2t": {
+			"name": "Ranged Reprisal",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 109 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=215",
+			"aon": "feats215",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** paladin cause\n\n- - -\n\nYou can use Retributive Strike with a ranged weapon. In addition, if the foe that triggered your reaction is within 5 feet of your reach but not in your reach, as part of your reaction you can Step to put the foe in your reach before making a melee Retributive Strike.",
+			"hash": "RhGIOPfc"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -44,8 +67,7 @@
 		"benefits": "Your faith in your deity is represented in an extremely unusual way that some might call heretical",
 		"source": "PZO2101",
 		"aonId": 1173,
-		"id": "1f29a682-0f70-4f77-a647-0bbc946ac2b2",
-		"hash": "pZFpZLcj"
+		"id": "1f29a682-0f70-4f77-a647-0bbc946ac2b2"
 	},
 	{
 		"objectType": "Feat",
@@ -57,7 +79,19 @@
 		"source": "PZO2101",
 		"aonId": 216,
 		"id": "afce29d1-551e-4b23-b926-eb68ce94b3af",
-		"hash": "fRwApzrg"
+		"pf2t": {
+			"name": "Unimpeded Step",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 109 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=216",
+			"aon": "feats216",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** liberator cause\n\n- - -\n\nWith a burst of divine liberation, your ally's movement from your Liberating Step is unaffected by difficult terrain, greater difficult terrain, narrow surfaces, and uneven ground.",
+			"hash": "fRwApzrg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -69,7 +103,19 @@
 		"source": "PZO2101",
 		"aonId": 217,
 		"id": "633fb3ba-6ea1-49db-b345-84819dee388d",
-		"hash": "phWKbEFT"
+		"pf2t": {
+			"name": "Weight of Guilt",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 110 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=217",
+			"aon": "feats217",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** redeemer cause\n\n- - -\n\nGuilt clouds the minds of those who ignore your Glimpse of Redemption. Instead of making the triggering creature enfeebled 2, you can make it stupefied 2 for the same duration.",
+			"hash": "phWKbEFT"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -81,7 +127,20 @@
 		"source": "PZO2101",
 		"aonId": 218,
 		"id": "c9542aa6-0f1a-4202-93a7-a2303c2dee38",
-		"hash": "BEXtRDbB"
+		"pf2t": {
+			"name": "Divine Grace",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "champion",
+			"actions": "r",
+			"source": "Core Rulebook pg. 110 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=218",
+			"aon": "feats218",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Trigger** You attempt a save against a spell, before you roll.\n\n- - -\n\nYou call upon your deity's grace, gaining a +2 circumstance bonus to the save.",
+			"hash": "BEXtRDbB"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -93,7 +152,19 @@
 		"source": "PZO2101",
 		"aonId": 219,
 		"id": "828879b4-11f1-417c-ad36-f2a392c94677",
-		"hash": "LEJxtBVW"
+		"pf2t": {
+			"name": "Dragonslayer Oath",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "champion,oath",
+			"source": "Core Rulebook pg. 110 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=219",
+			"aon": "feats219",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** tenets of good\n\n- - -\n\nYou've sworn to slay evil dragons. Add the following tenet to your code after the others: \"You must slay evil dragons you encounter as long as you have a reasonable chance of success.\" \n\nYour Retributive Strike gains a +4 circumstance bonus to damage against an evil dragon, or +6 if you have master proficiency with the weapon you used. Your Glimpse of Redemption's resistance against damage from an evil dragon is 7 + your level. If you use Liberating Step triggered by an evil dragon, your ally gains a +4 circumstance bonus to checks granted by your Liberating Step, and the ally can Step twice afterward.\n\nYou don't consider evil dragons to be legitimate authorities, even in nations they rule.\n\n#### Dragonslayer Oath Leads To...\nWyrmbane Aura",
+			"hash": "LEJxtBVW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -105,7 +176,19 @@
 		"source": "PZO2101",
 		"aonId": 220,
 		"id": "dbdf4f80-dea3-46e7-b3f7-737e9a6b91e3",
-		"hash": "PPXzSWVL"
+		"pf2t": {
+			"name": "Fiendsbane Oath",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "champion,oath",
+			"source": "Core Rulebook pg. 110 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=220",
+			"aon": "feats220",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** tenets of good\n\n- - -\n\nYou've sworn an oath to banish the corruption of fiends to the dark planes they call home. Add the following tenet to your champion's code after the other tenets: \"You must banish or slay fiends you come across as long as you have a reasonable chance of success; in the incredibly unlikely event you find a good fiend, you don't have to banish or kill it.\"\n\nYour Retributive Strike gains a +4 circumstance bonus to damage against a fiend, or a +6 circumstance bonus if you have master proficiency with the weapon you used. Your Glimpse of Redemption's resistance against damage from a fiend is 7 + your level. If you use Liberating Step triggered by a fiend, your ally gains a +4 circumstance bonus to checks granted by your Liberating Step, and the ally can Step twice afterward.\n\nYou don't consider fiends to be legitimate authorities, even in nations ruled by fiends.\n\n#### Fiendsbane Oath Leads To...\nAnchoring Aura, Banishing Blow",
+			"hash": "PPXzSWVL"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -117,7 +200,19 @@
 		"source": "PZO2101",
 		"aonId": 221,
 		"id": "d4139f86-cf78-46e3-aea2-e00ca92f71e2",
-		"hash": "RgktqDGg"
+		"pf2t": {
+			"name": "Shining Oath",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "champion,oath",
+			"source": "Core Rulebook pg. 110 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=221",
+			"aon": "feats221",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** tenets of good\n\n- - -\n\nYou've sworn an oath to put the undead to rest. Add the following tenet to your champion's code after the other tenets: \"You must end the existence of undead you encounter as long as you have a reasonable chance of success; in the unlikely event you find a good undead, you can try to work out a more peaceful way to help it recover from its undead state rather than destroying it in combat, such as helping it complete its unfinished business and find peace.\"\n\nYour Retributive Strike gains a +4 circumstance bonus to damage against an undead, or +6 if you have master proficiency with the weapon you used. Your Glimpse of Redemption's resistance against damage from an undead is 7 + your level. If you use Liberating Step triggered by an undead, your ally gains a +4 circumstance bonus to checks granted by your Liberating Step, and the ally can Step twice afterward.\n\nYou don't consider undead to be legitimate authorities, even in nations ruled by undead.\n\n#### Shining Oath Leads To...\nAura of Life",
+			"hash": "RgktqDGg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +224,19 @@
 		"source": "PZO2101",
 		"aonId": 222,
 		"id": "6288322a-f9ee-4e39-8b22-8ee8dbafcc19",
-		"hash": "ZlmQAqpn"
+		"pf2t": {
+			"name": "Vengeful Oath",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "champion,oath",
+			"source": "Core Rulebook pg. 111 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=222",
+			"aon": "feats222",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** paladin cause\n\n- - -\n\nYou've sworn an oath to hunt down wicked evildoers and bring them to judgment. Add the following tenet to your code after the others: \"You must hunt down and exterminate evil creatures that have committed heinous atrocities as long as you have a reasonable chance of success and aren't engaged in a mission that would prevent your doing so.\"\n\nYou can use lay on hands to damage a creature you witness harming an innocent or a good ally as if it were undead; in this case, lay on hands deals good damage instead of positive damage and gains the good trait. This good damage can affect non-evil creatures. This doesn't prevent you from healing such a creature with lay on hands; you choose whether to heal or harm.\n\n#### Vengeful Oath Leads To...\nAura of Vengeance",
+			"hash": "ZlmQAqpn"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -141,7 +248,19 @@
 		"source": "PZO2101",
 		"aonId": 223,
 		"id": "a7cccd98-dedc-4625-bfad-86ac398ef7ca",
-		"hash": "VAqBZKXO"
+		"pf2t": {
+			"name": "Aura of Courage",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 111 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=223",
+			"aon": "feats223",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** tenets of good\n\n- - -\n\nYou stand strong in the face of danger and inspire your allies to do the same. Whenever you become frightened, reduce the condition value by 1 (to a minimum of 0). At the end of your turn when you would reduce your frightened condition value by 1, you also reduce the value by 1 for all allies within 15 feet.",
+			"hash": "VAqBZKXO"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -153,7 +272,19 @@
 		"source": "PZO2101",
 		"aonId": 224,
 		"id": "d1cc0aff-b8c6-406c-be05-e77c74238b90",
-		"hash": "ZZXjsHYR"
+		"pf2t": {
+			"name": "Divine Health",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 111 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=224",
+			"aon": "feats224",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** tenets of good\n\n- - -\n\nYour faith makes you resistant to disease, protecting you as you offer succor to the ill. You gain a +1 status bonus to saves against diseases. In addition, if you roll a success on a save against a disease, you get a critical success instead.",
+			"hash": "ZZXjsHYR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -164,8 +295,7 @@
 		"benefits": "Your follow-up blow leaves you an opening to set your shield.",
 		"source": "PZO2101",
 		"aonId": 1088,
-		"id": "ce8dbf2f-5620-41d0-916c-9037711940bf",
-		"hash": "zvCQvgMC"
+		"id": "ce8dbf2f-5620-41d0-916c-9037711940bf"
 	},
 	{
 		"objectType": "Feat",
@@ -176,8 +306,7 @@
 		"benefits": "You've learned to call upon light to reveal what is hidden.",
 		"source": "PZO2101",
 		"aonId": 1089,
-		"id": "52ccd822-8fe8-42f0-b64c-8c26e8b29570",
-		"hash": "tUDggDXQ"
+		"id": "52ccd822-8fe8-42f0-b64c-8c26e8b29570"
 	},
 	{
 		"objectType": "Feat",
@@ -189,7 +318,21 @@
 		"source": "PZO2101",
 		"aonId": 225,
 		"id": "3a18d332-6a63-4076-a0f1-9eb657dc81a1",
-		"hash": "tZcXtNnf"
+		"pf2t": {
+			"name": "Mercy",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "champion,concentrate,metamagic",
+			"actions": 1,
+			"archetype": "Blessed One",
+			"source": "Core Rulebook pg. 111 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=225",
+			"aon": "feats225",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Blessed One\n\n- - -\n\nYour touch relieves fear and restores movement. If the next action you use is to cast lay on hands, you can attempt to counteract a fear effect or an effect imposing the paralyzed condition on the target, in addition to the other benefits of lay on hands.",
+			"hash": "tZcXtNnf"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -200,8 +343,7 @@
 		"benefits": "You can unleash burning sunlight from your sword or spear.",
 		"source": "PZO2101",
 		"aonId": 1090,
-		"id": "6b57a535-e01d-45dd-85c2-a84925dc68c7",
-		"hash": "kBMsMDNq"
+		"id": "6b57a535-e01d-45dd-85c2-a84925dc68c7"
 	},
 	{
 		"objectType": "Feat",
@@ -224,7 +366,19 @@
 		"source": "PZO2101",
 		"aonId": 227,
 		"id": "93a77f2a-13c2-4a36-852a-ead86b8d41f8",
-		"hash": "vZkkORRf"
+		"pf2t": {
+			"name": "Litany Against Wrath",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 112 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=227",
+			"aon": "feats227",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** devotion spells; tenets of good\n\n- - -\n\nYou excoriate a foe for its wrath against goodly creatures. You can cast the litany against wrath devotion spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "vZkkORRf"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -238,7 +392,19 @@
 		"source": "PZO2101",
 		"aonId": 228,
 		"id": "a0b57763-58b4-4884-b2f8-a51f6bb27fe8",
-		"hash": "YzsSpxRZ"
+		"pf2t": {
+			"name": "Loyal Warhorse",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 112 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=228",
+			"aon": "feats228",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** divine ally (steed)\n\n- - -\n\nYou and your mount have grown closer, and your loyalty to each other is unbreakable. The mount you gained through the divine ally class feature is now a mature animal companion. In addition, your mount never attacks you, even if it is magically compelled to do so.\n\n#### Loyal Warhorse Leads To...\nImposing Destrier",
+			"hash": "YzsSpxRZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -253,7 +419,20 @@
 		"source": "PZO2101",
 		"aonId": 229,
 		"id": "c3acaee2-c2cd-4d86-acad-d5dec0b25cb7",
-		"hash": "sVhMhZSU"
+		"pf2t": {
+			"name": "Shield Warden",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "champion,fighter",
+			"archetype": "Bastion",
+			"source": "Core Rulebook pg. 112 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=229",
+			"aon": "feats229",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Bastion\n**Prerequisites** [Champion] divine ally (shield); tenets of good; [Fighter] Shield Block\n\n- - -\n\nYou use your shield to protect your allies. When you have a shield raised, you can use your Shield Block reaction when an attack is made against an ally adjacent to you. If you do, the shield prevents that ally from taking damage instead of preventing you from taking damage, following the normal rules for Shield Block.",
+			"hash": "sVhMhZSU"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -267,7 +446,20 @@
 		"source": "PZO2101",
 		"aonId": 230,
 		"id": "45032056-79a5-4b02-9c2f-316f013ac4a5",
-		"hash": "tDSgjYWg"
+		"pf2t": {
+			"name": "Smite Evil",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "champion",
+			"actions": 1,
+			"source": "Core Rulebook pg. 112 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=230",
+			"aon": "feats230",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** divine ally (blade); tenets of good\n\n- - -\n\nYour blade ally becomes an even more powerful tool against evildoers. Select one foe you can see. Until the start of your next turn, your Strikes with the weapon your blade ally inhabits against that foe deal an extra 4 good damage, increasing to 6 if you have master proficiency with this weapon.\n\nIf the foe attacks one of your allies, the duration extends to the end of that foe's next turn. If the foe continues to attack your allies each turn, the duration continues to extend.",
+			"hash": "tDSgjYWg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -281,7 +473,19 @@
 		"source": "PZO2101",
 		"aonId": 231,
 		"id": "5ae08cf0-85f9-4731-855d-0055411800b7",
-		"hash": "bqQPpyvj"
+		"pf2t": {
+			"name": "Advanced Deity's Domain",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 112 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=231",
+			"aon": "feats231",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Deity's Domain\n\n- - -\n\nThrough your conviction, you have glimpsed the deeper secrets of your deity's domain. You gain an advanced domain spell from the domain you chose with Deity's Domain. You can cast that spell as a devotion spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "bqQPpyvj"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -293,7 +497,20 @@
 		"source": "PZO2101",
 		"aonId": 232,
 		"id": "1608c771-a52d-4ad2-8206-27022ad6ab87",
-		"hash": "cfncpfZB"
+		"pf2t": {
+			"name": "Greater Mercy",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "champion",
+			"archetype": "Blessed One",
+			"source": "Core Rulebook pg. 112 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=232",
+			"aon": "feats232",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Blessed One\n**Prerequisites** Mercy\n\n- - -\n\nYour faith enhances your ability to remove conditions. When you use Mercy, you can instead attempt to counteract the blinded, deafened, sickened, or slowed conditions.",
+			"hash": "cfncpfZB"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -307,7 +524,19 @@
 		"source": "PZO2101",
 		"aonId": 233,
 		"id": "49e13868-97af-44fd-946f-0d7549a87018",
-		"hash": "PzpvqJMB"
+		"pf2t": {
+			"name": "Heal Mount",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=233",
+			"aon": "feats233",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** divine ally (steed); devotion spell (lay on hands)\n\n- - -\n\nYour devotion to your mount manifests as a surge of positive energy. When you cast lay on hands on your mount, you can restore 10 Hit Points, plus 10 for each heightened level.",
+			"hash": "PzpvqJMB"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -318,8 +547,7 @@
 		"benefits": "You refuse to let foes past your guard.",
 		"source": "PZO2101",
 		"aonId": 1091,
-		"id": "c92bc26b-20cf-4d6e-ae80-64a8cbebef65",
-		"hash": "gxvnZRLU"
+		"id": "c92bc26b-20cf-4d6e-ae80-64a8cbebef65"
 	},
 	{
 		"objectType": "Feat",
@@ -331,7 +559,19 @@
 		"source": "PZO2101",
 		"aonId": 234,
 		"id": "c60cb410-9580-4e60-a9cd-834e9b801635",
-		"hash": "rvvNjWAw"
+		"pf2t": {
+			"name": "Quick Block",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=234",
+			"aon": "feats234",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You can block with your shield instinctively. At the start of each of your turns, you gain an additional reaction that you can use only to perform a Shield Block.",
+			"hash": "rvvNjWAw"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -343,7 +583,19 @@
 		"source": "PZO2101",
 		"aonId": 235,
 		"id": "cf914353-9b67-4cf1-8bd7-62f87a2c2d9c",
-		"hash": "pnrJZKkS"
+		"pf2t": {
+			"name": "Second Ally",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=235",
+			"aon": "feats235",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** divine ally\n\n- - -\n\nYour inner grace attracts the attention of a second protective spirit. Choose a second type of divine ally and gain its benefits.",
+			"hash": "pnrJZKkS"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -355,7 +607,19 @@
 		"source": "PZO2101",
 		"aonId": 236,
 		"id": "5754b615-86b3-46d5-b8b9-6eb68b8219dd",
-		"hash": "rZllSAFZ"
+		"pf2t": {
+			"name": "Sense Evil",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=236",
+			"aon": "feats236",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** tenets of good\n\n- - -\n\nYou sense evil as a queasy or foreboding feeling. When in the presence of an aura of evil that is powerful or overwhelming, you eventually detect the aura, though you might not do so instantly, and you can't pinpoint the location. This acts as a vague sense, similar to humans' sense of smell. An evil creature using a disguise or otherwise trying to hide its presence attempts a Deception check against your Perception DC to hide its aura from you. If the creature succeeds at its Deception check, it is then temporarily immune to your Sense Evil for 1 day.",
+			"hash": "rZllSAFZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -367,7 +631,19 @@
 		"source": "PZO2101",
 		"aonId": 237,
 		"id": "4a5ad3fd-208b-4533-8824-9e5c6a641aae",
-		"hash": "YCAVHrfQ"
+		"pf2t": {
+			"name": "Devoted Focus",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=237",
+			"aon": "feats237",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** devotion spells\n\n- - -\n\nYour devotion is strong enough to increase your focus to incredible heights. If you have spent at least 2 Focus Points since the last time you Refocused, you recover 2 Focus Points when you Refocus instead of 1.",
+			"hash": "YCAVHrfQ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -382,7 +658,19 @@
 		"source": "PZO2101",
 		"aonId": 238,
 		"id": "5cd83ab9-7a15-4bf4-9244-aa2e9c0fcc0f",
-		"hash": "hpBbdxFp"
+		"pf2t": {
+			"name": "Imposing Destrier",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=238",
+			"aon": "feats238",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** divine ally (steed); Loyal Warhorse\n\n- - -\n\nUnder your care, your mount has realized its innate potential. The mount you gained through the divine ally class feature is now a nimble or savage animal companion. During an encounter, even if you don't use the Command an Animal action, your mount can still use 1 action on your turn to Stride or Strike.\n\n#### Imposing Destrier Leads To...\nAuspicious Mount",
+			"hash": "hpBbdxFp"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -394,7 +682,19 @@
 		"source": "PZO2101",
 		"aonId": 239,
 		"id": "093a8e4e-c1ed-495e-9291-a6001cc58081",
-		"hash": "XhkKsIFI"
+		"pf2t": {
+			"name": "Litany Against Sloth",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=239",
+			"aon": "feats239",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** devotion spells; tenets of good\n\n- - -\n\nYou rail against the sin of sloth, turning a foe's laziness against it. You can cast the litany against sloth devotion spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "XhkKsIFI"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -408,7 +708,19 @@
 		"source": "PZO2101",
 		"aonId": 240,
 		"id": "25a18307-178e-4a57-8a75-ba6db779a140",
-		"hash": "TTckkGvV"
+		"pf2t": {
+			"name": "Radiant Blade Spirit",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=240",
+			"aon": "feats240",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** divine ally (blade)\n\n- - -\n\nYour divine ally radiates power, enhancing your chosen weapon. When you choose the weapon for your blade ally during your daily preparations, add the following property runes to the list of effects you can choose from: flaming and any aligned properties (anarchic, axiomatic, holy, or unholy) that match your cause's alignment.\n\n#### Radiant Blade Spirit Leads To...\nRadiant Blade Master",
+			"hash": "TTckkGvV"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -425,7 +737,20 @@
 		"source": "PZO2101",
 		"aonId": 241,
 		"id": "51521ae3-95e8-4deb-b0b8-b6947e5ce19c",
-		"hash": "KtpRBMbR"
+		"pf2t": {
+			"name": "Shield of Reckoning",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "champion,flourish",
+			"actions": "r",
+			"source": "Core Rulebook pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=241",
+			"aon": "feats241",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** champion's reaction; Shield Warden\n**Trigger** A foe's attack against an ally matches the trigger for both your Shield Block reaction and your champion's reaction.\n\n- - -\n\nWhen you shield your ally against an attack, you call upon your power to protect your ally further. You use the Shield Block reaction to prevent damage to an ally and also use your champion's reaction against the foe that attacked your ally.",
+			"hash": "KtpRBMbR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -437,7 +762,20 @@
 		"source": "PZO2101",
 		"aonId": 242,
 		"id": "09917d87-a0ac-40a7-b737-df3b6b762812",
-		"hash": "gPNVEwsN"
+		"pf2t": {
+			"name": "Affliction Mercy",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "champion",
+			"archetype": "Blessed One",
+			"source": "Core Rulebook pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=242",
+			"aon": "feats242",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Archetype** Blessed One\n**Prerequisites** Mercy\n\n- - -\n\nThe divine grace that flows through you grants reprieve from an affliction. When you use Mercy, you can instead attempt to counteract a curse, disease, or poison.",
+			"hash": "gPNVEwsN"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -449,7 +787,19 @@
 		"source": "PZO2101",
 		"aonId": 243,
 		"id": "792d5914-3afb-42fe-87ba-a72673f805b5",
-		"hash": "fTDjhQKV"
+		"pf2t": {
+			"name": "Aura of Faith",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=243",
+			"aon": "feats243",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** tenets of good\n\n- - -\n\nYou radiate an aura of pure belief that imbues your attacks and those of nearby allies with holy power. Your Strikes deal an extra 1 good damage against evil creatures. Also, each good-aligned ally within 15 feet gains this benefit on their first Strike that hits an evil creature each round.",
+			"hash": "fTDjhQKV"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -461,7 +811,20 @@
 		"source": "PZO2101",
 		"aonId": 244,
 		"id": "4b0c8fee-65a0-4c0d-a9df-6664c367cbf4",
-		"hash": "jgxgsMvx"
+		"pf2t": {
+			"name": "Blade of Justice",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "champion",
+			"actions": 2,
+			"source": "Core Rulebook pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=244",
+			"aon": "feats244",
+			"type": "feat",
+			"subtype": "class",
+			"body": "You call upon divine power and make a weapon or unarmed Strike against a foe you have witnessed harming an ally or innocent. The Strike deals two extra weapon damage dice if the target of your Strike is evil. Whether or not the target is evil, you can convert all the physical damage from the attack into good damage, and if you are a paladin, the Strike applies all effects that normally apply on a Retributive Strike (such as divine smite).",
+			"hash": "jgxgsMvx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -473,7 +836,19 @@
 		"source": "PZO2101",
 		"aonId": 245,
 		"id": "1f6bbeda-1f2c-4c2c-86a4-3918c1f0dccd",
-		"hash": "OpCGxTxc"
+		"pf2t": {
+			"name": "Champion's Sacrifice",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 114 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=245",
+			"aon": "feats245",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** tenets of good\n\n- - -\n\nYou can suffer so that others might live. You can cast the champion's sacrifice devotion spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "OpCGxTxc"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -487,7 +862,19 @@
 		"source": "PZO2101",
 		"aonId": 246,
 		"id": "46b487fd-ce29-4113-96f7-d7dd82f2d3be",
-		"hash": "YMsvGAZg"
+		"pf2t": {
+			"name": "Divine Wall",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 114 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=246",
+			"aon": "feats246",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Requirements** You are wielding a shield.\n\n- - -\n\nYou use your shield to harry your enemies, preventing them from stepping away from or around you. All spaces adjacent to you are difficult terrain for your enemies.",
+			"hash": "YMsvGAZg"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -499,7 +886,19 @@
 		"source": "PZO2101",
 		"aonId": 247,
 		"id": "eef1f26b-3686-4e5e-89ee-4bf9e5a75c9d",
-		"hash": "DgWgHrkI"
+		"pf2t": {
+			"name": "Lasting Doubt",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 114 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=247",
+			"aon": "feats247",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** redeemer cause\n\n- - -\n\nWhen you cast doubt upon your foes, the effect lasts longer than usual. After being enfeebled 2 by your Glimpse of Redemption, the foe is enfeebled 1 for 1 minute. If you have Weight of Guilt, after being stupefied 2 by your Glimpse of Redemption, the foe is stupefied 1 for 1 minute or until the flat check from stupefied causes it to lose a spell, whichever comes first.",
+			"hash": "DgWgHrkI"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -511,7 +910,19 @@
 		"source": "PZO2101",
 		"aonId": 248,
 		"id": "eed7c0ac-bb60-4b84-8675-7d366d56745c",
-		"hash": "PxDRYtZK"
+		"pf2t": {
+			"name": "Liberating Stride",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 114 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=248",
+			"aon": "feats248",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** liberator cause\n\n- - -\n\nInstead of you taking a Step at the end of your Liberating Step, the triggering ally can Stride up to half their Speed. Even if you have exalt, only the triggering ally gains this benefit.",
+			"hash": "PxDRYtZK"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -523,7 +934,19 @@
 		"source": "PZO2101",
 		"aonId": 249,
 		"id": "db56f439-2821-4d45-ad1b-c3a41fb039f8",
-		"hash": "kAOUlrcv"
+		"pf2t": {
+			"name": "Anchoring Aura",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 114 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=249",
+			"aon": "feats249",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Fiendsbane Oath\n\n- - -\n\nYour aura hampers fiends' teleportation. Your aura attempts to counteract teleportation spells cast by fiends within 15 feet, using the spell level and DC of your devotion spells.",
+			"hash": "kAOUlrcv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -535,7 +958,19 @@
 		"source": "PZO2101",
 		"aonId": 250,
 		"id": "eabe4f55-77ad-416d-8fce-afc5504daf00",
-		"hash": "hDdPbgQz"
+		"pf2t": {
+			"name": "Aura of Life",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 114 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=250",
+			"aon": "feats250",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Shining Oath\n\n- - -\n\nYour aura protects against necromantic effects. You and all allies within 15 feet gain resistance 5 to negative energy and a +1 status bonus to saves against necromancy effects.",
+			"hash": "hDdPbgQz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -547,7 +982,19 @@
 		"source": "PZO2101",
 		"aonId": 251,
 		"id": "70a07a38-c473-46ef-900b-a36d5269a6de",
-		"hash": "qrkVjRCW"
+		"pf2t": {
+			"name": "Aura of Righteousness",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 114 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=251",
+			"aon": "feats251",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** tenets of good\n\n- - -\n\nYour righteous aura dampens evil's might. You and all allies within 15 feet gain evil resistance 5.",
+			"hash": "qrkVjRCW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -559,7 +1006,19 @@
 		"source": "PZO2101",
 		"aonId": 252,
 		"id": "f0356752-0fc5-4665-b768-4a96cac79980",
-		"hash": "vZxbqMgz"
+		"pf2t": {
+			"name": "Aura of Vengeance",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 114 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=252",
+			"aon": "feats252",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** exalt; Vengeful Oath\n\n- - -\n\nWhen you call upon others to take retribution, you also guide their aim. When you use Retributive Strike, your allies who make Strikes take only a -2 penalty, instead of a -5 penalty.",
+			"hash": "vZxbqMgz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -571,7 +1030,19 @@
 		"source": "PZO2101",
 		"aonId": 253,
 		"id": "629649f8-64a8-4c27-9fea-6fb9f0f9da71",
-		"hash": "tnIZgWTE"
+		"pf2t": {
+			"name": "Divine Reflexes",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=253",
+			"aon": "feats253",
+			"type": "feat",
+			"subtype": "class",
+			"body": "At the start of each of your turns, you gain an additional reaction that you can use only for your champion's reaction.",
+			"hash": "tnIZgWTE"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -583,7 +1054,19 @@
 		"source": "PZO2101",
 		"aonId": 254,
 		"id": "b952d8c7-948c-47e0-896c-aeacaadff75d",
-		"hash": "APxbZROG"
+		"pf2t": {
+			"name": "Litany of Righteousness",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=254",
+			"aon": "feats254",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** tenets of good\n\n- - -\n\nYou call upon righteousness to expose an evil foe's weakness. You can cast the litany of righteousness devotion spell. Increase the number of Focus Points in your focus pool by 1.",
+			"hash": "APxbZROG"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -595,7 +1078,19 @@
 		"source": "PZO2101",
 		"aonId": 255,
 		"id": "5281350e-e2e5-465c-bbeb-19c627b4c219",
-		"hash": "LbqBbzFW"
+		"pf2t": {
+			"name": "Wyrmbane Aura",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=255",
+			"aon": "feats255",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Dragonslayer Oath\n\n- - -\n\nYour aura protects against destructive energies and dragons' breath. You and all allies within 15 feet gain resistance equal to your Charisma modifier to acid, cold, electricity, fire, and poison. If the source of one of these types of damage is a dragon's breath, increase the resistance to half your level.",
+			"hash": "LbqBbzFW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -610,7 +1105,19 @@
 		"source": "PZO2101",
 		"aonId": 256,
 		"id": "69011299-d78f-4336-a99c-fb1a7e78df47",
-		"hash": "ptInZXjs"
+		"pf2t": {
+			"name": "Auspicious Mount",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=256",
+			"aon": "feats256",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** divine ally (steed); Imposing Destrier\n\n- - -\n\nGuided by your ongoing care, your steed has developed incredible intelligence and skill. The mount you gained through the divine ally class feature is now a specialized animal companion. You can select one of the usual specializations or the auspice specialization.\n\nAuspice mounts gain the following benefits: Your companion is marked by your deity's religious symbol as a sacred creature of your deity. Its proficiency rank in Religion increases to expert, it can speak the language associated with your deity's servitors (Celestial for champions who follow the tenets of good), and its Intelligence modifier increases by 2 and its Wisdom modifier by 1.",
+			"hash": "ptInZXjs"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -625,7 +1132,19 @@
 		"source": "PZO2101",
 		"aonId": 257,
 		"id": "2985f3b2-a688-42bc-be1b-7afb8db6a737",
-		"hash": "IJSOCVyZ"
+		"pf2t": {
+			"name": "Instrument of Zeal",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=257",
+			"aon": "feats257",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** divine ally (blade); tenets of good\n\n- - -\n\nDivine energy fills your weapon. Whenever you critically hit a foe with Blade of Justice or a Retributive Strike, your attack adds an extra damage die, and the target is slowed 1 on its next turn.",
+			"hash": "IJSOCVyZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -637,7 +1156,19 @@
 		"source": "PZO2101",
 		"aonId": 258,
 		"id": "25f275a8-8667-4bf8-ba60-589a6fdacd4c",
-		"hash": "fUAlVghB"
+		"pf2t": {
+			"name": "Shield of Grace",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=258",
+			"aon": "feats258",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Shield Warden\n\n- - -\n\nYou protect an ally with both your shield and your body. Whenever you use the Shield Block reaction to prevent damage to an ally, you can evenly split the remaining damage after the Shield Block between the ally and yourself.",
+			"hash": "fUAlVghB"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -649,7 +1180,19 @@
 		"source": "PZO2101",
 		"aonId": 259,
 		"id": "d4913e8d-33fc-4e75-ad3f-19ed858588b1",
-		"hash": "lztbwkZv"
+		"pf2t": {
+			"name": "Celestial Form",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=259",
+			"aon": "feats259",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** tenets of good\n\n- - -\n\nYou take on a celestial countenance, appearing like a type of celestial who serves your deity; for example, as an angel, you would gain a halo and feathery wings. You gain a fly Speed equal to your Speed. You gain darkvision if you don't already have it, and you gain the celestial trait and the trait appropriate to the type of servitor you've become (archon, angel, or azata, for example).",
+			"hash": "lztbwkZv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -661,7 +1204,19 @@
 		"source": "PZO2101",
 		"aonId": 260,
 		"id": "5ff50f76-354d-4aed-a8e2-0f2030e75865",
-		"hash": "FxRgZAEw"
+		"pf2t": {
+			"name": "Ultimate Mercy",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=260",
+			"aon": "feats260",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** Mercy\n\n- - -\n\nYour mercy transcends the bounds of life and death. When you use Mercy, you can cast lay on hands on a creature that died since your last turn to return it to life. The target returns to life with 1 hit point and becomes wounded 1. You can't use Ultimate Mercy if the triggering effect was disintegrate or a death effect.",
+			"hash": "FxRgZAEw"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -672,8 +1227,7 @@
 		"benefits": "Overwhelm evil creatures with your aura.",
 		"source": "PZO2101",
 		"aonId": 1161,
-		"id": "65bd3aaa-127f-46ec-9416-a3647d8c9a66",
-		"hash": "vkpgFshP"
+		"id": "65bd3aaa-127f-46ec-9416-a3647d8c9a66"
 	},
 	{
 		"objectType": "Feat",
@@ -688,7 +1242,19 @@
 		"source": "PZO2101",
 		"aonId": 261,
 		"id": "c2232999-ea92-437d-9363-2a76406578ec",
-		"hash": "xrtghrQd"
+		"pf2t": {
+			"name": "Celestial Mount",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=261",
+			"aon": "feats261",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** divine ally (steed); tenets of good\n\n- - -\n\nYour steed gains incredible celestial powers granted by your deity. It gains darkvision, its maximum Hit Points increase by 40, and it gains weakness 10 to evil damage.\n\nAdditionally, it grows wings appropriate to a servitor of your deity (such as metallic wings for an archon), granting it a fly Speed equal to its Speed. It gains the celestial trait and the trait appropriate to the type of servitor it has become (archon, angel, or azata, for example).",
+			"hash": "xrtghrQd"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -703,7 +1269,19 @@
 		"source": "PZO2101",
 		"aonId": 262,
 		"id": "48149903-6a4a-46dd-ae79-d83b7376e4be",
-		"hash": "VVLtTHXt"
+		"pf2t": {
+			"name": "Radiant Blade Master",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=262",
+			"aon": "feats262",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** divine ally (blade); Radiant Blade Spirit\n\n- - -\n\nYour divine ally turns your chosen weapon into a paragon of its type. When you choose the weapon for your blade divine ally during your preparations, add the following property runes to the list of effects you can choose from: dancing, greater disrupting, and keen.",
+			"hash": "VVLtTHXt"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -717,6 +1295,18 @@
 		"source": "PZO2101",
 		"aonId": 263,
 		"id": "befe4519-37aa-434a-87fb-9c8a85af5d55",
-		"hash": "UMfQNDwj"
+		"pf2t": {
+			"name": "Shield Paragon",
+			"level": 20,
+			"pfs": "standard",
+			"traits": "champion",
+			"source": "Core Rulebook pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=263",
+			"aon": "feats263",
+			"type": "feat",
+			"subtype": "class",
+			"body": "**Prerequisites** divine ally (shield)\n\n- - -\n\nYour shield is a vessel of divine protection. When you're wielding your chosen shield, it is always raised, even without you using the Raise a Shield action. Your chosen shield doubles its HP and BT, rather than increasing them by half. If it would be destroyed, it vanishes to your deity's realm instead, where your divine ally repairs it. During your next daily preparations, the shield returns to you fully repaired.",
+			"hash": "UMfQNDwj"
+		}
 	}
 ]

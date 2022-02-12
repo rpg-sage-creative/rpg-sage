@@ -11,6 +11,15 @@
 		"source": "PZO9303",
 		"page": 9,
 		"id": "36816159-76c8-4414-9f1c-15f4008bc741",
-		"hash": "gcjQgHNX"
+		"pf2t": {
+			"name": "Raised by Belief",
+			"pfs": "standard",
+			"source": "Gods & Magic pg. 9 2.0",
+			"src": "https://2e.aonprd.com/Backgrounds.aspx?ID=132",
+			"aon": "backgrounds132",
+			"type": "background",
+			"body": "Whether in a monastery, a religious household, or just as part of your everyday life, your upbringing was steeped in the traditions of a faith or philosophy. You might remain committed or you may have turned from your childhood creed, but your skills are still founded in your devotion.\n\nChoose two ability boosts. One boost must be to an ability specified in the Divine Ability entry for your deity, and one is a free ability boost.\n\nYou're trained in your deity's associated skill, and you gain Assurance with that skill. You gain a Lore skill with a subcategory associated with your deity (Abadar Lore, for instance).",
+			"hash": "gcjQgHNX"
+		}
 	}
 ]

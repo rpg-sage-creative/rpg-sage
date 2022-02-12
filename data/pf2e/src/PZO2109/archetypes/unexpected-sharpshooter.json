@@ -13,7 +13,16 @@
 		"page": 142,
 		"source": "PZO2109",
 		"id": "dca270a8-8692-45bf-bf45-4dc563998025",
-		"aonId": 0
+		"aonId": 123,
+		"pf2t": {
+			"name": "Unexpected Sharpshooter",
+			"source": "Guns & Gears pg. 142",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=123",
+			"aon": "archetypes123",
+			"type": "archetype",
+			"body": "Some people say you must be the luckiest soul in all of Golarion to still be alive and kicking after all the dangers you've seen. Others say that, given the circumstances and the number of foes who you've defeated seemingly by accident, that there's no way you can really be as incompetent as you seem. These critics claim there has to be some kind of angle, some racket you're running. Either way, you sure don't look or act dangerous, except possibly to yourself.\n\nSomehow, despite your apparent clumsiness, professed confusion, and known propensity to incite calamity, you find yourself standing after every battle. The same can't often be said for your enemies. Funny how that works out, isn't it?",
+			"hash": "zJZMYLNE"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -48,7 +57,20 @@
 		"page": 142,
 		"source": "PZO2109",
 		"id": "88883af3-711b-4a97-9167-1dbf12916836",
-		"aonId": 0
+		"aonId": 3273,
+		"pf2t": {
+			"name": "Lucky Escape",
+			"level": 4,
+			"traits": "archetype,misfortune",
+			"actions": "r",
+			"archetype": "Unexpected Sharpshooter",
+			"source": "Guns & Gears pg. 142",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3273",
+			"aon": "feats3273",
+			"type": "feat",
+			"body": "**Archetype** Unexpected Sharpshooter\n**Prerequisites** Unexpected Sharpshooter Dedication\n**Trigger** A creature targets you with an attack, even if you aren't aware of it.\n\n- - -\n\nYour enemy lies in wait, lines up the perfect shot, and pulls the trigger... then at just the right moment you duck down to notice something scrawled on the cobblestone in chalk, a shiny coin, or some other coincidental distraction, creating an opportunity for the attack to miss. The attacker must roll the attack twice and use the worse result.",
+			"hash": "QqXzrxKx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -62,7 +84,19 @@
 		"page": 142,
 		"source": "PZO2109",
 		"id": "c1e70eb7-6fb0-4b8b-9d04-e59a023a9ba6",
-		"aonId": 0
+		"aonId": 3274,
+		"pf2t": {
+			"name": "No Hard Feelings",
+			"level": 6,
+			"traits": "archetype",
+			"archetype": "Unexpected Sharpshooter",
+			"source": "Guns & Gears pg. 142",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3274",
+			"aon": "feats3274",
+			"type": "feat",
+			"body": "**Archetype** Unexpected Sharpshooter\n**Prerequisites** Unexpected Sharpshooter Dedication\n\n- - -\n\nDespite the devastation your weapons tend to inflict upon their targets or the destruction you might unleash upon an area, your foes still manage to walk away at the end of a fight-at least sometimes. You can choose to add the nonlethal trait to your ranged weapons, making the choice of whether to add the trait or not just before each Strike.",
+			"hash": "LVCVxlQk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -79,7 +113,21 @@
 		"page": 142,
 		"source": "PZO2109",
 		"id": "0b316387-a146-4f8e-8469-7613522edbdf",
-		"aonId": 0
+		"aonId": 3275,
+		"pf2t": {
+			"name": "That was a Close One, Huh?",
+			"level": 7,
+			"traits": "archetype,skill",
+			"actions": 1,
+			"archetype": "Unexpected Sharpshooter",
+			"source": "Guns & Gears pg. 142",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3275",
+			"aon": "feats3275",
+			"type": "feat",
+			"subtype": "skill",
+			"body": "**Archetype** Unexpected Sharpshooter\n**Prerequisites** Unexpected Sharpshooter Dedication; master in Deception\n**Requirements** Either you used Accidental Shot and hit your opponent with the Strike this turn, or you used Lucky Escape since your last turn and the triggering attack missed you.\n\n- - -\n\nYou laugh innocently about the inexplicable luck of your last shot hitting its mark or how close the attack that just missed you came to taking your head off, causing your foes to second guess whether it's a good idea to oppose you in battle. Attempt to Demoralize either the foe you hit with Accidental Shot or the foe that missed you due to Lucky Escape. You use Deception instead of Intimidation to attempt the check to Demoralize.",
+			"hash": "yRtDNpcE"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -93,7 +141,19 @@
 		"page": 143,
 		"source": "PZO2109",
 		"id": "c6420c9b-d961-4cf5-a405-fb02d5ccbe38",
-		"aonId": 0
+		"aonId": 3276,
+		"pf2t": {
+			"name": "Unbelievable Luck",
+			"level": 8,
+			"traits": "archetype",
+			"archetype": "Unexpected Sharpshooter",
+			"source": "Guns & Gears pg. 143",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3276",
+			"aon": "feats3276",
+			"type": "feat",
+			"body": "**Archetype** Unexpected Sharpshooter\n**Prerequisites** Unexpected Sharpshooter Dedication\n\n- - -\n\nWhile no one, not even you, might appear to understand why, you demonstrate a greater ability to hit your targets regardless of the obstacles in your way. You can use the Accidental Shot activity granted to you by the Unexpected Sharpshooter Dedication once per hour instead of once per day.",
+			"hash": "VqXmprQW"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -107,7 +167,19 @@
 		"page": 143,
 		"source": "PZO2109",
 		"id": "e6a6fad5-ae82-44c1-800e-197731e637d5",
-		"aonId": 0
+		"aonId": 3277,
+		"pf2t": {
+			"name": "Unbelievable Escape",
+			"level": 10,
+			"traits": "archetype",
+			"archetype": "Unexpected Sharpshooter",
+			"source": "Guns & Gears pg. 143",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3277",
+			"aon": "feats3277",
+			"type": "feat",
+			"body": "**Archetype** Unexpected Sharpshooter\n**Prerequisites** Unexpected Sharpshooter Dedication\n\n- - -\n\nYour ability to narrowly evade danger defies all logic. You can use Lucky Escape once per hour instead of once per day.",
+			"hash": "WCtpgUUY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -124,7 +196,20 @@
 		"page": 143,
 		"source": "PZO2109",
 		"id": "4e8cb4a9-17cf-4ab3-88d1-6b7003d6c734",
-		"aonId": 0
+		"aonId": 3278,
+		"pf2t": {
+			"name": "I Meant to do That",
+			"level": 10,
+			"traits": "archetype",
+			"actions": 1,
+			"archetype": "Unexpected Sharpshooter",
+			"source": "Guns & Gears pg. 143",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3278",
+			"aon": "feats3278",
+			"type": "feat",
+			"body": "**Archetype** Unexpected Sharpshooter\n**Prerequisites** Unexpected Sharpshooter Dedication; trained in Deception\n**Requirements** Your previous action was a ranged weapon Strike that missed a foe within 60 feet.\n\n- - -\n\nSomehow your stray bullet causes an unintended reaction that creates a problem for your enemy: perhaps a ricochet knocks your foe's weapon away or they stumble over stray debris in an attempt to dodge your bullets. Roll a Deception check to attempt to Shove, Trip, or Disarm the foe you missed.",
+			"hash": "IlXxQFwv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -142,6 +227,19 @@
 		"page": 143,
 		"source": "PZO2109",
 		"id": "a8241de9-ccfd-4611-bc33-ba757352c880",
-		"aonId": 0
+		"aonId": 3279,
+		"pf2t": {
+			"name": "Chain Reaction",
+			"level": 12,
+			"traits": "archetype",
+			"actions": 3,
+			"archetype": "Unexpected Sharpshooter",
+			"source": "Guns & Gears pg. 143",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3279",
+			"aon": "feats3279",
+			"type": "feat",
+			"body": "**Archetype** Unexpected Sharpshooter\n**Prerequisites** Unexpected Sharpshooter Dedication\n\n- - -\n\nYou fire your gun once, creating a devastating and unpredictable chain of events; perhaps your bullet strikes exactly the right spot on a water tower, causing it to flood and incite a stampede of horses which knock over a lantern that sets a city on fire. Whatever the exact chain reaction, and no matter how improbable, the indiscriminate catastrophe creates significant challenges for your enemies across a wide area while leaving everyone else alone.\n\nMake a Strike with a ranged weapon, and if you hit, you can make another Strike at a target within 30 feet of the first target. If you hit the second target, attempt to Strike a third target within 30 feet of the second target, and so on, continuing until you miss a target. You can cease the chain at any point; otherwise, it ends when you first miss an attack. However, you can't target the same creature more than once; each time you move to a new target, it must be a target you haven't made a Strike against yet during this particular use of Chain Reaction.\n\nThis damage is caused by some improbable set of events that injures one target after another, rather than from actually making several shots. Perhaps you shot at a tree branch that then fell on the targets, or one target's scream caused another to accidentally set off their gun and shoot themselves in the foot. This means that only the first target suffers any special effects tied to the bullet (if it was magical ammunition, for example), but each target you hit still takes the same damage dealt by your Strike. Normally, all damage is of the same damage type as the initial bullet. However, the GM might choose to change the damage type based on their description of the chain reaction. For example, if one target was burned by fire, that target might take fire damage instead of physical damage.",
+			"hash": "pzbShXIk"
+		}
 	}
 ]

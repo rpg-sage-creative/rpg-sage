@@ -20,7 +20,17 @@
 		"page": 206,
 		"source": "PZO2108",
 		"id": "92d6d1a4-cf8e-4691-88cb-e5d17ef3b094",
-		"aonId": 0
+		"aonId": 98,
+		"pf2t": {
+			"name": "Elementalist",
+			"pfs": "standard",
+			"source": "Secrets of Magic pg. 206",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=98",
+			"aon": "archetypes98",
+			"type": "archetype",
+			"body": "You revere the four elements-air, earth, fire, and water-as the building blocks of creation and the source of all life. You believe that by balancing, mixing, and rearranging these four elements, magic is made. This belief has led you to eschew traditional magical theories and divisions, and you instead focus on harnessing, manipulating, and shaping the four elements. You cast spells drawn from multiple traditions and can use the four elements to alter and empower your spells, making them manifest and mixing them in unique ways. Most elementalists embrace the four elements equally as a mystical quaternity, and they strengthen their connection to one of these elements each day to protect themselves from harm. Others, notably sorcerer and wizard elementalists, feel a stronger connection to a singular element that they hone to great heights, utilizing the other three elements to support and augment their favored element.",
+			"hash": "LkDEbkxS"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -52,7 +62,21 @@
 		"page": 206,
 		"source": "PZO2108",
 		"id": "66c2cba6-cd8f-40c7-b1bb-10be412a4417",
-		"aonId": 0
+		"aonId": 2987,
+		"pf2t": {
+			"name": "Dousing Spell",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype,metamagic,water",
+			"actions": 1,
+			"archetype": "Elementalist",
+			"source": "Secrets of Magic pg. 206",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2987",
+			"aon": "feats2987",
+			"type": "feat",
+			"body": "**Archetype** Elementalist\n**Prerequisites** Elementalist Dedication\n\n- - -\n\nYou enhance your spell with elemental water, soaking the target. If the next action you use is to Cast a Spell targeting a single creature, you soak the target of the spell with water. If the target has persistent acid or fire damage, the DC to end those conditions is reduced to 10, and the creature can attempt a flat check to end those types of persistent damage immediately. The spell gains the water trait (causing it to deal extra damage to creatures with weakness to water).",
+			"hash": "QFxxIXQV"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -67,7 +91,20 @@
 		"page": 206,
 		"source": "PZO2108",
 		"id": "c980fa44-afb5-43e6-9a9e-7db4ee6fb846",
-		"aonId": 0
+		"aonId": 2988,
+		"pf2t": {
+			"name": "Elemental Familiar",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Elementalist",
+			"source": "Secrets of Magic pg. 206",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2988",
+			"aon": "feats2988",
+			"type": "feat",
+			"body": "**Archetype** Elementalist\n**Prerequisites** Elementalist Dedication; Familiar\n\n- - -\n\nYour familiar becomes an elemental spirit capable of taking on aspects of the four elements: air, earth, fire, or water. Other than taking the form of an elemental instead of an animal, this familiar continues to use all the same rules as other familiars.\n\nYour familiar gains one additional familiar ability each day, which must be one of the following elemental familiar abilities. While your familiar has an elemental familiar ability, your familiar is composed of the associated elemental matter and gains the matching elemental trait. You can't select more than one elemental familiar ability at a time. \n\n+ **Air** If your familiar stays completely still for 1 round, it becomes invisible until it next takes an action. Any motion, even being moved or carried by another creature, ends this effect.\n+ **Earth** Your familiar gains resistance to physical damage (except adamantine) equal to half your level.\n+ **Fire** Your familiar sheds bright light in a 20-foot radius (and dim light for the next 20 feet) and emits warmth. Creatures that remain within a 15-foot emanation don't take damage from severe environmental cold.\n+ **Water** Your familiar can move through a gap at least 2 inches wide without Squeezing and can Squeeze through a gap at least 1 inch wide.",
+			"hash": "YRYWvpZr"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -82,7 +119,21 @@
 		"page": 207,
 		"source": "PZO2108",
 		"id": "d08c0a36-e643-4640-84b1-87dcd22eacd8",
-		"aonId": 0
+		"aonId": 2989,
+		"pf2t": {
+			"name": "Burning Spell",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype,fire,metamagic",
+			"actions": 1,
+			"archetype": "Elementalist",
+			"source": "Secrets of Magic pg. 207",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2989",
+			"aon": "feats2989",
+			"type": "feat",
+			"body": "**Archetype** Elementalist\n**Prerequisites** Elementalist Dedication\n\n- - -\n\nYou enhance your spell with elemental fire, causing it to set the target on fire. If the next action you use is to Cast a non-cantrip Spell that deals damage at a single target, the spell deals additional persistent fire damage equal to the spell level, in addition to its other effects. This has no effect if the spell already deals persistent fire damage. The spell gains the fire trait.",
+			"hash": "ntYbjrGC"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -98,7 +149,21 @@
 		"page": 207,
 		"source": "PZO2108",
 		"id": "b9b6ffe7-756b-4ef8-ae6e-808c8a57a9ab",
-		"aonId": 0
+		"aonId": 2990,
+		"pf2t": {
+			"name": "Metabolize Element",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Elementalist",
+			"source": "Secrets of Magic pg. 207",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2990",
+			"aon": "feats2990",
+			"type": "feat",
+			"body": "**Archetype** Elementalist\n**Prerequisites** Elementalist Dedication\n**Trigger** You take damage from a foe's spell or magical ability with the air, earth, fire, or water trait.\n\n- - -\n\nYour rapidly metabolize the elemental particles in your opponent's spell to gain a boost of energy. You gain the quickened condition until the end of your next turn. You can use the extra action only to Step or Stride.",
+			"hash": "ETqmWVKk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -113,7 +178,21 @@
 		"page": 207,
 		"source": "PZO2108",
 		"id": "a868f6b1-a88d-4e28-b6d1-1f0bad01b22c",
-		"aonId": 0
+		"aonId": 2991,
+		"pf2t": {
+			"name": "Rockslide Spell",
+			"level": 10,
+			"pfs": "standard",
+			"traits": "archetype,earth,metamagic",
+			"actions": 1,
+			"archetype": "Elementalist",
+			"source": "Secrets of Magic pg. 207",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2991",
+			"aon": "feats2991",
+			"type": "feat",
+			"body": "**Archetype** Elementalist\n**Prerequisites** Elementalist Dedication\n\n- - -\n\nYou enhance your spell with elemental earth, causing chunks of stone to litter the ground. If the next action you use is to Cast a non-cantrip Spell that affects an area, a number of 5-foot squares in the area equal to the spell level become difficult terrain for 1 round. These squares must be on the ground, and the entire area of difficult terrain must be contiguous. The spell gains the earth trait.",
+			"hash": "zpkZsnrc"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -129,7 +208,21 @@
 		"page": 207,
 		"source": "PZO2108",
 		"id": "1fb59fe2-9b11-450d-a554-a40908503d54",
-		"aonId": 0
+		"aonId": 2992,
+		"pf2t": {
+			"name": "Redirect Elements",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": "r",
+			"archetype": "Elementalist",
+			"source": "Secrets of Magic pg. 207",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2992",
+			"aon": "feats2992",
+			"type": "feat",
+			"body": "**Archetype** Elementalist\n**Prerequisites** Elementalist Dedication\n**Trigger** The spell attack roll for a foe's spell with an elemental trait targeting you fails or critically fails.\n\n- - -\n\nYou seize the elemental essence of an incoming spell and redirect the spell to a creature of your choice within the spell's area. The attacker rerolls the spell's attack roll against the new target.",
+			"hash": "jbrrXzqf"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -144,6 +237,20 @@
 		"page": 207,
 		"source": "PZO2108",
 		"id": "a30a5543-3a82-4193-9f68-80bec8c05aad",
-		"aonId": 0
+		"aonId": 2993,
+		"pf2t": {
+			"name": "Wind-Tossed Spell",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "air,archetype,concentrate,metamagic",
+			"actions": 1,
+			"archetype": "Elementalist",
+			"source": "Secrets of Magic pg. 207",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2993",
+			"aon": "feats2993",
+			"type": "feat",
+			"body": "**Archetype** Elementalist\n**Prerequisites** Elementalist Dedication\n\n- - -\n\nYou enhance your spell with elemental air, using the wind to find your target and carry your magic around cover. If the next action you use is to Cast a Spell that requires a spell attack roll, you ignore the target's concealed condition and any cover they have from you. The spell gains the air trait.",
+			"hash": "xWEWElsz"
+		}
 	}
 ]

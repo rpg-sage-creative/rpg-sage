@@ -15,7 +15,16 @@
 		"source": "PZO2105",
 		"id": "b4dbfe58-6712-4ffc-b8e2-650931b807ef",
 		"aonId": 56,
-		"hash": "zRgGUlps"
+		"pf2t": {
+			"name": "Dragon Disciple",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 168",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=56",
+			"aon": "archetypes56",
+			"type": "archetype",
+			"body": "The rippling waves of fear, the rustling of thick scales, and the beat of immense wings signal the arrival of a great dragon. The awe-inspiring presence of these creatures makes them worthy of reverence-or even outright worship. Dragon disciples dedicate themselves to becoming like these great beasts, with each disciple striving to typify one variety of dragon. Sorcerers of draconic blood, barbarians with the dragon instinct, and many kobolds with close ties to their draconic predecessors become dragon disciples, but anyone who has encountered one of these terrifying creatures might follow this path.\n\nAs a dragon disciple, you study and learn from the example of dragons, but that doesn't necessarily mean that you admire the dragons you emulate. While most dragon disciples do indeed revere their chosen dragon, countless tales are told of dragon disciples born of great personal tragedy at the hands of boundless draconic fury. These disciples have transformed themselves into what they despise in order to gain the power to destroy their draconic tormentor and at long last earn their revenge.",
+			"hash": "zRgGUlps"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -49,7 +58,19 @@
 		"source": "PZO2105",
 		"id": "5d3a3a40-f04d-4066-bac7-a4f56e51cf8c",
 		"aonId": 1941,
-		"hash": "IFLvXNpk"
+		"pf2t": {
+			"name": "Claws of the Dragon",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Dragon Disciple",
+			"source": "Advanced Player's Guide pg. 168",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1941",
+			"aon": "feats1941",
+			"type": "feat",
+			"body": "**Archetype** Dragon Disciple\n**Prerequisites** Dragon Disciple Dedication\n\n- - -\n\nYour fingernails grow into razor-sharp claws, and scales speckle your fingers, hands, and wrists. Your claws are agile, finesse unarmed attacks that deal 1d6 slashing damage and are in the brawling weapon group.\n\nIf you're a draconic sorcerer, when you cast dragon claws, increase the spell's slashing damage die from d4 to d6 and increase the resistance to 10 at 1st level, 15 at 5th level, and 20 at 9th level.",
+			"hash": "IFLvXNpk"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -64,7 +85,19 @@
 		"source": "PZO2105",
 		"id": "9a5c99ef-e009-42a5-bfe7-2e47b5e90d7a",
 		"aonId": 1942,
-		"hash": "XkQPIrPz"
+		"pf2t": {
+			"name": "Draconic Scent",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Dragon Disciple",
+			"source": "Advanced Player's Guide pg. 168",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1942",
+			"aon": "feats1942",
+			"type": "feat",
+			"body": "**Archetype** Dragon Disciple\n**Prerequisites** Dragon Disciple Dedication\n\n- - -\n\nYour sense of smell is uncanny, much like a dragon's. You gain imprecise scent with a range of 30 feet. The GM might double the range if you're downwind from the creature or halve the range if you're upwind, at their discretion.",
+			"hash": "XkQPIrPz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -79,7 +112,19 @@
 		"source": "PZO2105",
 		"id": "5b7b0e0e-0037-4910-8cfc-5c75713e31fa",
 		"aonId": 1943,
-		"hash": "WrmjPgjY"
+		"pf2t": {
+			"name": "Dragon Arcana",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Dragon Disciple",
+			"source": "Advanced Player's Guide pg. 168",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1943",
+			"aon": "feats1943",
+			"type": "feat",
+			"body": "**Archetype** Dragon Disciple\n**Prerequisites** ability to cast spells from spell slots; Dragon Disciple Dedication\n\n- - -\n\nYou've discovered how to add the magic of dragons to your tradition. Add the draconic bloodline's granted spells to your spell list; you must still learn them or add them to your repertoire as normal. These spells are shield, true strike, resist energy, haste, spell immunity, chromatic wall, dragon form, mask of terror, prismatic wall, and overwhelming presence.",
+			"hash": "WrmjPgjY"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -94,7 +139,19 @@
 		"source": "PZO2105",
 		"id": "e19a3d11-990b-4cfa-aaed-e8b88339c151",
 		"aonId": 1944,
-		"hash": "mWPXtKXc"
+		"pf2t": {
+			"name": "Scales of the Dragon",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Dragon Disciple",
+			"source": "Advanced Player's Guide pg. 169",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1944",
+			"aon": "feats1944",
+			"type": "feat",
+			"body": "**Archetype** Dragon Disciple\n**Prerequisites** Dragon Disciple Dedication\n\n- - -\n\nScales grow across your body, protecting you against physical and magical threats. When you're unarmored, the scales give you a +2 status bonus to AC with a Dexterity cap of +2. Your resistance from Dragon Disciple Dedication increases to 3 + half your level.",
+			"hash": "mWPXtKXc"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -109,7 +166,19 @@
 		"source": "PZO2105",
 		"id": "2f2cedba-e2bf-4b43-81fe-b29742309390",
 		"aonId": 1945,
-		"hash": "QPUTAbmM"
+		"pf2t": {
+			"name": "Breath of the Dragon",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Dragon Disciple",
+			"source": "Advanced Player's Guide pg. 169",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1945",
+			"aon": "feats1945",
+			"type": "feat",
+			"body": "**Archetype** Dragon Disciple\n**Prerequisites** Dragon Disciple Dedication\n\n- - -\n\nYou can use a powerful breath weapon, much like the dragon you emulate. You gain the dragon breath sorcerer bloodline spell and a focus pool of 1 Focus Point. If you already have a focus pool, increase your number of Focus Points by 1.",
+			"hash": "QPUTAbmM"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -124,7 +193,19 @@
 		"source": "PZO2105",
 		"id": "edf1374f-8ee6-49a6-a4ca-6b75ccf45640",
 		"aonId": 1946,
-		"hash": "jbkdzRjD"
+		"pf2t": {
+			"name": "Wings of the Dragon",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Dragon Disciple",
+			"source": "Advanced Player's Guide pg. 169",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1946",
+			"aon": "feats1946",
+			"type": "feat",
+			"body": "**Archetype** Dragon Disciple\n**Prerequisites** Dragon Disciple Dedication\n\n- - -\n\nYou can manifest draconic wings to soar through the air at great speed. You gain the dragon wings sorcerer bloodline spell and a focus pool of 1 Focus Point. If you already have a focus pool, increase your number of Focus Points by 1.",
+			"hash": "jbkdzRjD"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -139,7 +220,19 @@
 		"source": "PZO2105",
 		"id": "d93fa983-d9d4-4217-a45d-90741f5c7d53",
 		"aonId": 1947,
-		"hash": "QBpZXrvZ"
+		"pf2t": {
+			"name": "Shape of the Dragon",
+			"level": 14,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Dragon Disciple",
+			"source": "Advanced Player's Guide pg. 169",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1947",
+			"aon": "feats1947",
+			"type": "feat",
+			"body": "**Archetype** Dragon Disciple\n**Prerequisites** Dragon Disciple Dedication\n\n- - -\n\nYou've discovered how to transform yourself into a dragon. Once per day, you can cast 7th-level dragon form as an innate arcane spell, transforming into your chosen type of dragon. The spell automatically heightens to 8th level if you're 16th level and 9th level if you're 18th level. Any time you score a critical hit with an unarmed Strike gained from dragon form, you recharge the spell's breath weapon immediately.\n\n#### Shape of the Dragon Leads To...\nMighty Dragon Shape",
+			"hash": "QBpZXrvZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -158,7 +251,20 @@
 		"source": "PZO2105",
 		"id": "62a459c4-145c-4445-b1ee-9a266aced082",
 		"aonId": 1948,
-		"hash": "rdxcqFqZ"
+		"pf2t": {
+			"name": "Disciple's Breath",
+			"level": 16,
+			"pfs": "standard",
+			"traits": "archetype",
+			"actions": 2,
+			"archetype": "Dragon Disciple",
+			"source": "Advanced Player's Guide pg. 169",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1948",
+			"aon": "feats1948",
+			"type": "feat",
+			"body": "**Archetype** Dragon Disciple\n**Prerequisites** Dragon Disciple Dedication; dragon breath sorcerer bloodline spell\n\n- - -\n\nYou unleash your breath weapon without spending focus. This has the effects of your dragon breath sorcerer bloodline spell, though it deals 9d6 damage instead of its usual damage, and you don't have to cast it or spend a Focus Point. You can't use Disciple's Breath again for 1d4 rounds.",
+			"hash": "rdxcqFqZ"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -173,6 +279,18 @@
 		"source": "PZO2105",
 		"id": "5648cf1f-1fd7-4adf-bd7c-8baf60fa6e51",
 		"aonId": 1949,
-		"hash": "OGFlIwOj"
+		"pf2t": {
+			"name": "Mighty Dragon Shape",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Dragon Disciple",
+			"source": "Advanced Player's Guide pg. 169",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1949",
+			"aon": "feats1949",
+			"type": "feat",
+			"body": "**Archetype** Dragon Disciple\n**Prerequisites** Shape of the Dragon\n\n- - -\n\nYou've practiced and increased your draconic might, allowing you to take your draconic form more often. You can use Shape of the Dragon once per hour instead of once per day.",
+			"hash": "OGFlIwOj"
+		}
 	}
 ]

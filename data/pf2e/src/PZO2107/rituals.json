@@ -28,7 +28,17 @@
 		"focus": false,
 		"aonId": 46,
 		"id": "c40ae8ab-2ef2-4d7c-bbb1-94432958079d",
-		"hash": "XHrBXkkD"
+		"pf2t": {
+			"name": "Div Pact",
+			"level": 1,
+			"traits": "uncommon,conjuration",
+			"source": "Bestiary 3 pg. 310",
+			"src": "https://2e.aonprd.com/Rituals.aspx?ID=46",
+			"aon": "rituals46",
+			"type": "ritual",
+			"body": "You call upon the powers of Abaddon to grant you the assistance of a div. You call upon a div whose level can be no more than double div pact's spell level, two divs whose levels are each at least 2 less than double the spell level, or three divs whose levels are each at least 3 less than double the spell level.",
+			"hash": "XHrBXkkD"
+		}
 	},
 	{
 		"name": "Owb Pact",
@@ -60,7 +70,17 @@
 		"focus": false,
 		"aonId": 45,
 		"id": "0ea9eb14-7cfd-4ae2-81df-a333bfd21ca4",
-		"hash": "AxZXgZMz"
+		"pf2t": {
+			"name": "Owb Pact",
+			"level": 3,
+			"traits": "uncommon,conjuration",
+			"source": "Bestiary 3 pg. 41",
+			"src": "https://2e.aonprd.com/Rituals.aspx?ID=45",
+			"aon": "rituals45",
+			"type": "ritual",
+			"body": "You call upon an owb to assist you in a goal. Only caligni callers can use this ritual with relative safety. If a different type of caligni attempts this ritual, they use an outcome one degree of success worse than the result of their check. If a non-caligni attempts this ritual, the result is an automatic critical failure.\n\n**Critical Success** You conjure the owb. It decides your goals closely match its own and doesn't request a favor in return.\n**Success** You conjure the owb. It isn't eager to pursue the task, so it requires a favor in return.\n**Failure** You don't conjure an owb.\n**Critical Failure** You conjure an owb, but it deems you unworthy and siphons away some of your soul energy. All casters become doomed 2.",
+			"hash": "AxZXgZMz"
+		}
 	},
 	{
 		"name": "Abyssal Pact",
@@ -90,8 +110,7 @@
 		"source": "PZO2107",
 		"focus": false,
 		"aonId": 21,
-		"id": "bd89472e-4d9e-4b6b-9970-43dbbe641eca",
-		"hash": "vYXmvWAM"
+		"id": "bd89472e-4d9e-4b6b-9970-43dbbe641eca"
 	},
 	{
 		"name": "Infernal Pact",
@@ -121,7 +140,6 @@
 		"source": "PZO2107",
 		"focus": false,
 		"aonId": 23,
-		"id": "f408e6b8-5bfd-4958-ae18-51c99f0267af",
-		"hash": "zMXryEdx"
+		"id": "f408e6b8-5bfd-4958-ae18-51c99f0267af"
 	}
 ]

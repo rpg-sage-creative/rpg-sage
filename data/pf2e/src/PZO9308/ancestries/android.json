@@ -15,11 +15,106 @@
 		"aonId": 27,
 		"source": "PZO9308",
 		"id": "e67ad92e-a799-4e76-ada4-cd8e749eef27",
-		"hash": "QcdpXBsO"
+		"pf2t": {
+			"name": "Android",
+			"pfs": "standard",
+			"traits": "rare,android,humanoid",
+			"source": "Ancestry Guide pg. 69",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=27",
+			"aon": "ancestries27",
+			"type": "ancestry",
+			"body": "Technological wonders from another world, androids have synthetic bodies and living souls. Their dual nature makes them quick-thinking and calm under pressure, but comfortable in stillness and solitude.\n\nAndroids first arrived on Golarion during the Rain of Stars, when an interstellar vessel from the far-off planet of Androffa crash-landed, scattering debris across Numeria. While some android survivors of this crash still walk Golarion today, most were created from the technological pods, known as foundries, that operate sporadically amid the starship's wreckage. Androids birthed from these mechanical wombs possess mature bodies and newborn souls, both organic and synthetic; they emerge knowing only their creators' language and the motor skills necessary for survival. They have no understanding of their surroundings, origin, or purpose. Most learn how to behave through keen observation while wandering Numeria.\n\nAndroids tend to be logical introverts, rational and contemplative. Insatiably curious, with an urge to understand themselves and the world around them, androids place great value on intellectual pursuits. They have difficulty interpreting and expressing emotions, both in themselves and in others, which makes them seem distant and uncaring. While androids can forge emotional bonds, they find it more difficult to connect with non-androids.\n\nIf you want a character that's a synthetic foreigner in a fantastic world, forced to learn the nuances of reality and society through the powers of observation and logic alone, you should play an android.\n\n#### You Might...\n+ Keep your identity a secret, assuming others want to exploit or harm you.\n+ Plan ahead, preparing multiple contingencies for even simple tasks.\n+ Calculate the repercussions of your actions, inventions, and thoughts before sharing them.\n\n#### Others Probably...\n+ Assume you understand how to operate technology and that you can capably communicate with constructs and robots.\n+ Believe you to be immortal and envy your eternal youth and vigor.\n+ Think you have no feelings and that you can't form emotional connections with others.\n\n#### Physical Description\nAndroids were created in humanity's image; thus, foundries produce androids that represent all humankind. Androids display great diversity in coloration and ethnicity, height and body shape, and gender identity. Androids breathe, eat, and sleep like a human, although they're incapable of biological procreation. Their bodies contain microscopic nanites, transported by fluid too watery to be blood, that manage their organic processes. These nanites are controlled through biological circuitry that resembles tattoos and is typically located along an android's hands, forearms, face, or neck. Many androids can harness their nanites to increase their bodies' efficiency, causing the circuitry to glow.\n\nAndroids don't grow old. Instead, their organic appearance becomes less convincing over time, causing them to look more artificial. After a century, most androids feel their time coming to an end and willingly release their souls to the Boneyard to face Pharasma's judgment. Their bodies then shut down, entering a lifeless hibernation as their nanites begin restoration protocol and reset their synthetic bodies to their original manufactured state. After a few weeks, a new soul enters the android's form, triggering reinitialization. This process, called Renewal, is an event to be celebrated, akin to bearing a child. Those that die by violence can't Renew, so androids go to great lengths to protect themselves and their brethren from harm.\n\n#### Society\nAndroids have a history of being exploited, enslaved, and destroyed by their Numerian neighbors, so they hide in order to survive. Most choose to keep their ancestry secret by integrating into human society or by adapting to a nomadic lifestyle. Some androids eschew humanity to live among their kind. Such groups often remain small by necessity; while a pair of androids can avoid danger through careful secrecy, large groups attract too much attention.\n\nAndroid communities are efficient and highly organized. Each citizen understands their role and takes pride in filling it effectively. Debates and lectures frequently occur, as androids seek to understand themselves and their world through education and inquiry. These insular and secretive enclaves relocate when discovered.\n\n#### Alignment and Religion\nMost androids are neutral. They care for their own safety and that of their companions and their kind. Androids interested in religion usually worship Casandalee or Brigh, goddesses that unite invention and life. Other popular deities include Desna, Irori, and Gozreh.\n\n#### Adventurers\nMost androids become adventurers to protect their kin from harm or to research the history of their people, typically by exploring technological ruins. Androids survive through deception, stealth, and subterfuge, which leads many down the path of the rogue. Others embrace their thirst for knowledge and understanding by becoming alchemists, monks, or wizards. Typical android backgrounds include hermit, nomad, scholar, and tinker.\n\n#### Names\nAndroids adopt the naming conventions of their surrounding societies, while those raised among their own kind instead select a single name that utilizes Androffan phonology. Occasionally, such androids add a numerical designation to their names, denoting how many generations their body has hosted life as a kind of homage to their bloodline.\n\n#### Sample Names\nAnati, Daniv, Era-4, Feralia, Gelegor, Ilgos-5, Koresh, Oris, Prime, Urdun, Verity-3, Ymry\n\n#### Other Information\n\n\n#### Android Settlements\nAndroids are primarily found in Numeria, where they hide among humans or travel as nomads. A large number live openly in Starfall under the protection of the Black Sovereign. The slopes of Silver Mount house multiple android enclaves and archaeological teams, including Enseffa, the center of Androffan society. In the town of Hajoth Hakados, the locals help androids secretly flee Numeria for lands where they face less hatred. Hidden in a series of tunnels and caverns beneath the Numerian Plains, the androids of Szamrak's Haven believe androids are a superior life-form. They hunt for foundries with the intent of liberating all androids, conquering Numeria to found an android-only nation, and eventually returning their people to their home amongst the stars.\n\n#### Casandalee and Androids\nOnce an artificial intelligence cloned from the mind of an alien android, Casandalee recently ascended as the goddess of artificial life, free thinking, and intellectual apotheosis. Despite the small size and relative obscurity of her religion, the androids of Numeria have embraced Casandalee as their own. They seek to better bridge the gap between artificial and organic lifeforms, thereby improving the lives of androids.\n\n#### Thoughts on Androids\nOther people view androids through a lens of magic and superstition. Most consider androids eccentric spellcasters, often confusing them with tattooed Thassilonian wizards. Others see an android's glowing circuitry and assume they're planar scions. In the River Kingdoms, androids are often thought to be fey that imperfectly took on human form and thus can't stand the touch of cold iron. Peoples in Ustalav frequently confuse androids for spirits, believing they can be held back by salt circles or banished through pious prayers.\n\n#### Android Mechanics\n\n\n#### Hit Points\n8\n\n#### Size\nMedium\n\n#### Speed\n25 feet\n\n#### Ability Boosts\nDexterity\nIntelligence\nFree\n\n#### Ability Flaw(s)\nCharisma\n\n#### Languages\nCommon\nAndroffan\nAdditional languages equal to your Intelligence modifier (if positive). Choose from Abyssal, Celestial, Draconic, Dwarven, Undercommon, Utopian, and any other languages to which you have access (such as the languages prevalent in your region).\n\n#### Low-Light Vision\nYou can see in dim light as though it were bright light, and you ignore the concealed condition due to dim light.\n\n#### Constructed\nYour synthetic body resists ailments better than those of purely biological organisms. You gain a +1 circumstance bonus to saving throws against diseases, poisons, and radiation.\n\n#### Emotionally Unaware\nYou find it difficult to understand and express complex emotions. You take a -1 circumstance penalty to Diplomacy and Performance checks, and on Perception checks to Sense Motive.",
+			"hash": "QcdpXBsO"
+		}
 	},
-	{ "objectType": "Heritage", "name": "Artisan Android", "ancestry": "Android", "source": "PZO9308", "id": "013f324d-0f64-4640-b43a-af574946ed40", "aonId": 113, "hash": "QkyKjnFv" },
-	{ "objectType": "Heritage", "name": "Impersonator Android", "ancestry": "Android", "source": "PZO9308", "id": "a88b25ab-80dc-4e1a-9ec9-ceb3c06777ed", "aonId": 114, "hash": "bgUWqgpx" },
-	{ "objectType": "Heritage", "name": "Laborer Android", "ancestry": "Android", "source": "PZO9308", "id": "79af1d03-794b-47ef-a90d-1f0309cb1226", "aonId": 115, "hash": "CtQKqDpw" },
-	{ "objectType": "Heritage", "name": "Polyglot Android", "ancestry": "Android", "source": "PZO9308", "id": "4c6d8aa9-eefd-409e-a7cf-69528afa7d53", "aonId": 116, "hash": "bkkAlzlg" },
-	{ "objectType": "Heritage", "name": "Warrior Android", "ancestry": "Android", "source": "PZO9308", "id": "6958f327-3e08-45d4-9d03-055f2e9fb91f", "aonId": 117, "hash": "fZZQPUTw" }
+	{
+		"objectType": "Heritage",
+		"name": "Artisan Android",
+		"ancestry": "Android",
+		"source": "PZO9308",
+		"id": "013f324d-0f64-4640-b43a-af574946ed40",
+		"aonId": 113,
+		"pf2t": {
+			"name": "Artisan Android",
+			"pfs": "standard",
+			"source": "Ancestry Guide pg. 71",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=113",
+			"aon": "heritages113",
+			"type": "heritage",
+			"body": "Your body was originally designed to create works of art, complex tools, or maintain advanced machinery. You become trained in Crafting (or another skill if you're already trained in Crafting), and you gain the Specialty Crafting skill feat in a specialty of your choice.",
+			"hash": "QkyKjnFv"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Impersonator Android",
+		"ancestry": "Android",
+		"source": "PZO9308",
+		"id": "a88b25ab-80dc-4e1a-9ec9-ceb3c06777ed",
+		"aonId": 114,
+		"pf2t": {
+			"name": "Impersonator Android",
+			"pfs": "standard",
+			"source": "Ancestry Guide pg. 71",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=114",
+			"aon": "heritages114",
+			"type": "heritage",
+			"body": "Your body was augmented with processes and an appearance intended to blend in with humans more easily. You become trained in Deception (or another skill if you're already trained in Deception). You don't require a disguise kit when attempting Deception checks to Impersonate a human. In addition, you gain a +4 circumstance bonus to Impersonate checks to pretend that you're a human version of yourself, rather than an android. This bonus doesn't apply to other checks to Impersonate humans.",
+			"hash": "bgUWqgpx"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Laborer Android",
+		"ancestry": "Android",
+		"source": "PZO9308",
+		"id": "79af1d03-794b-47ef-a90d-1f0309cb1226",
+		"aonId": 115,
+		"pf2t": {
+			"name": "Laborer Android",
+			"pfs": "standard",
+			"source": "Ancestry Guide pg. 71",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=115",
+			"aon": "heritages115",
+			"type": "heritage",
+			"body": "Your body is adapted to endure physical hardships or perform hard labor for long periods of time. You become trained in Athletics (or another skill if you're already trained in Athletics), and you gain the Hefty Hauler skill feat.",
+			"hash": "CtQKqDpw"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Polyglot Android",
+		"ancestry": "Android",
+		"source": "PZO9308",
+		"id": "4c6d8aa9-eefd-409e-a7cf-69528afa7d53",
+		"aonId": 116,
+		"pf2t": {
+			"name": "Polyglot Android",
+			"pfs": "standard",
+			"source": "Ancestry Guide pg. 71",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=116",
+			"aon": "heritages116",
+			"type": "heritage",
+			"body": "You were preprogrammed with a multitude of linguistic proficiencies, likely to act as a translator. You learn two new languages, chosen from common languages and any uncommon languages you have access to. These languages take the same form (signed or spoken) as your other languages. If you select the Multilingual feat, you learn three new languages instead of two.",
+			"hash": "bkkAlzlg"
+		}
+	},
+	{
+		"objectType": "Heritage",
+		"name": "Warrior Android",
+		"ancestry": "Android",
+		"source": "PZO9308",
+		"id": "6958f327-3e08-45d4-9d03-055f2e9fb91f",
+		"aonId": 117,
+		"pf2t": {
+			"name": "Warrior Android",
+			"pfs": "standard",
+			"source": "Ancestry Guide pg. 71",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=117",
+			"aon": "heritages117",
+			"type": "heritage",
+			"body": "Your body was originally created to function as a security officer or soldier. You're a naturally gifted warrior preprogrammed for combat. You're trained in all simple and martial weapons.",
+			"hash": "fZZQPUTw"
+		}
+	}
 ]

@@ -33,7 +33,23 @@
 		"focus": false,
 		"aonId": 642,
 		"id": "99bb2a3f-a0e2-4415-ad79-ef55992d788f",
-		"hash": "kqCtxBlQ"
+		"pf2t": {
+			"name": "Clownish Curse",
+			"level": 4,
+			"pfs": "limited",
+			"traits": "uncommon,attack,curse,enchantment,mental,misfortune",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "152 Legacy of the Lost God pg. 77",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=642",
+			"aon": "spells642",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou afflict the target with a curse that causes it to emit ridiculous noises as it moves. Furthermore, the target's hands and feet become awkward and uncoordinated, as though it were wearing oversized gloves and shoes.\n\n\n**Critical Success** The target is unaffected.\n**Success** For 1 round, the target must roll twice and use the worse result whenever attempting an Acrobatics, Stealth, or Thievery check. If the target rolls a failure at an Acrobatics, Stealth, or Thievery check, it gets a critical failure instead.\n**Failure** As success, but the effect is 1 hour.\n**Critical Failure** As success, except the effect is permanent.",
+			"hash": "kqCtxBlQ"
+		}
 	},
 	{
 		"name": "Favorable Review",
@@ -72,7 +88,23 @@
 		"focus": false,
 		"aonId": 644,
 		"id": "367a8009-4a34-4232-8a3e-2bd9bb27f5cf",
-		"hash": "XzvLQHEZ"
+		"pf2t": {
+			"name": "Favorable Review",
+			"level": 4,
+			"pfs": "limited",
+			"traits": "uncommon,enchantment,incapacitation,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "152 Legacy of the Lost God pg. 77",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=644",
+			"aon": "spells644",
+			"type": "spell",
+			"savingthrow": "Will",
+			"body": "**Duration** varies\n**Targets** 1 creature\n\n- - -\n\nYou enchant a creature to ensure they have only good things to say about your show. Identify a single creature, location, or performance, such as \"Dame Ellendia,\" \"Savories Meats,\" or \"the Theater of the Mind's latest magic show.\" The target must attempt Will save. You can Dismiss the spell.\n\n\n**Critical Success** The target is unaffected and knows you tried to trick it.\n**Success** The target is unaffected but thinks your spell was something harmless instead of favorable review, unless it identifies the spell (usually using Identify Magic).\n**Failure** The target cannot speak unfavorably about the subject for 1 week. This doesn't change the target's opinion about the subject, but the target's attempts to speak ill of the subject-whether in speech, writing, or other communication-always twist into compliments and praise instead. The target likely becomes aware of this effect quickly and can avoid speaking about the subject entirely if they choose.\n**Critical Failure** As failure, except the duration is permanent and the target genuinely holds a favorable opinion about the subject, with their attitude toward the creature (or creatures associated with the subject, such as the owner of a location or artists in a performance) becoming two degrees better (for example, helpful instead of indifferent).\n- - -\n**Heightened (8th)** The range increases to 60 feet and you can target up to 10 creatures.",
+			"hash": "XzvLQHEZ"
+		}
 	},
 	{
 		"name": "Pyrotechnics",
@@ -121,7 +153,23 @@
 		"focus": false,
 		"aonId": 645,
 		"id": "fd5f961e-afef-4fa8-b3cd-72d363f5f78a",
-		"hash": "ZmIZtbZk"
+		"pf2t": {
+			"name": "Pyrotechnics",
+			"level": 3,
+			"pfs": "limited",
+			"traits": "uncommon,fire,transmutation",
+			"traditions": "arcane,occult",
+			"cast": "m,s",
+			"actions": 2,
+			"range": 120,
+			"source": "152 Legacy of the Lost God pg. 77",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=645",
+			"aon": "spells645",
+			"type": "spell",
+			"savingthrow": "Fortitude",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 fire\n\n- - -\n\nYou turn a fire into either a burst of blinding fireworks or a thick cloud of choking smoke, chosen when you Cast the Spell. The spell targets one fire source, which is immediately extinguished if it is a non-magical fire the size of a campfire or smaller. If the fire source is a creature, the creature takes 1d6 points of cold damage and is not extinguished.\n\n\n+ **Fireworks**  The targeted fire explodes into a colorful array of flashy, fiery, glowing aerial fireworks in a 20-foot-radius burst. The first time you Sustain the Spell each round, you can cause the area of fireworks to ascend up to 20 feet, but you cannot move the area laterally. Creatures that start their turn within the area of the fireworks must attempt a Fortitude save, and are then temporarily immune for 1 minute. \n**Critical Success** The creature is unaffected\n**Success** The creature is dazzled until the end of its next turn.\n**Failure** The creature is blinded until the end of its next turn.\n**Critical Failure** The creature is blinded for 1 minute.\n+ **Smoke Cloud**  Thick smoke billows out from the fire and coalesces into a cloud that spreads to fill a 20-foot-radius burst centered on the targeted fire. Creatures within the smoke cloud take a -4 circumstance penalty to visual Perception checks, and creatures outside the smoke cloud take a -4 circumstance penalty to visual Perception checks to detect creatures or objects within it. The first time you Sustain the Spell each round, you can cause the smoke cloud to descend up to 20 feet, but you cannot move the area laterally. Creatures that start their turn within the smoke cloud must attempt a Fortitude save, and are then temporarily immune for 1 minute. \n**Success** The creature is unaffected.\n**Failure** The creature is sickened 1.\n**Critical Failure** The creature is sickened 1 and cannot recover from the sickened condition while in the area of the smoke cloud.",
+			"hash": "ZmIZtbZk"
+		}
 	},
 	{
 		"name": "Pillar of Water",
@@ -141,6 +189,21 @@
 		"focus": false,
 		"aonId": 646,
 		"id": "c50d4a71-d19b-4c63-82b5-733853eb791a",
-		"hash": "VdZzmpqk"
+		"pf2t": {
+			"name": "Pillar of Water",
+			"level": 3,
+			"pfs": "limited",
+			"traits": "uncommon,evocation,water",
+			"traditions": "arcane,primal",
+			"cast": "m,s,v",
+			"actions": 3,
+			"range": 120,
+			"source": "152 Legacy of the Lost God pg. 77",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=646",
+			"aon": "spells646",
+			"type": "spell",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou create a large, self-contained cylinder of still fresh water. The pillar has a maximum radius of 15 feet and a maximum height of 60 feet. Creatures inside the pillar can swim through the water as normal (Swim DC 10), or, if the spell was cast on solid ground, walk along the bottom (which is difficult terrain). Any creature that exits the pillar falls or lands accordingly.",
+			"hash": "VdZzmpqk"
+		}
 	}
 ]

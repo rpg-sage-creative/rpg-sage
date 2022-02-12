@@ -9,7 +9,15 @@
 		"source": "PZO2101",
 		"id": "159cca8b-6dc2-4531-8758-5635a729f571",
 		"aonId": 202,
-		"hash": "qLcbxTbS"
+		"pf2t": {
+			"name": "Bulwark",
+			"source": "Core Rulebook pg. 274 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=202",
+			"aon": "traits202",
+			"type": "trait",
+			"body": "The armor covers you so completely that it provides benefits against some damaging effects. On Reflex saves to avoid a damaging effect, such as a fireball, you add a +3 modifier instead of your Dexterity modifier.",
+			"hash": "qLcbxTbS"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -21,7 +29,15 @@
 		"source": "PZO2101",
 		"id": "0e71ed89-e621-478c-a52a-71b8a12955ae",
 		"aonId": 203,
-		"hash": "mZIRjdUW"
+		"pf2t": {
+			"name": "Comfort",
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=203",
+			"aon": "traits203",
+			"type": "trait",
+			"body": "The armor is so comfortable that you can rest normally while wearing it.",
+			"hash": "mZIRjdUW"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -33,7 +49,15 @@
 		"source": "PZO2101",
 		"id": "4fbda904-677a-4cb3-84e1-8d5eec886236",
 		"aonId": 204,
-		"hash": "DshwUVrT"
+		"pf2t": {
+			"name": "Flexible",
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=204",
+			"aon": "traits204",
+			"type": "trait",
+			"body": "The armor is flexible enough that it doesn't hinder most actions. You don't apply its check penalty to Acrobatics or Athletics checks.",
+			"hash": "DshwUVrT"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -45,7 +69,15 @@
 		"source": "PZO2101",
 		"id": "d2080921-86b0-4c7e-be45-01d894877893",
 		"aonId": 205,
-		"hash": "DdhIbpdO"
+		"pf2t": {
+			"name": "Noisy",
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=205",
+			"aon": "traits205",
+			"type": "trait",
+			"body": "This armor is loud and likely to alert others to your presence. The armor's check penalty applies to Stealth checks even if you meet the required Strength score.",
+			"hash": "DdhIbpdO"
+		}
 	},
 	{
 		"objectType": "Trait",
@@ -59,6 +91,14 @@
 		"id": "b402c4ce-9d54-451d-9ce6-0604d3b210ac",
 		"previousId": "D2080921-86B0-4C7E-BE45-01D894877893",
 		"aonId": 205,
-		"hash": "DdhIbpdO"
+		"pf2t": {
+			"name": "Noisy",
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=205",
+			"aon": "traits205",
+			"type": "trait",
+			"body": "This armor is loud and likely to alert others to your presence. The armor's check penalty applies to Stealth checks even if you meet the required Strength score.",
+			"hash": "DdhIbpdO"
+		}
 	}
 ]

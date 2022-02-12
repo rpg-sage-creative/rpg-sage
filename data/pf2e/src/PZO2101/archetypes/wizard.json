@@ -9,7 +9,16 @@
 		"source": "PZO2101",
 		"id": "ac92bf67-9dea-45ed-9652-847e8e5c93f2",
 		"aonId": 12,
-		"hash": "vkvtgWRR"
+		"pf2t": {
+			"name": "Wizard",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 231 2.0",
+			"src": "https://2e.aonprd.com/Archetypes.aspx?ID=12",
+			"aon": "archetypes12",
+			"type": "archetype",
+			"body": "You have dabbled in the arcane arts and, through discipline and academic study, learned how to cast a few spells.",
+			"hash": "vkvtgWRR"
+		}
 	},
 	{
 		"objectType": "DedicationFeat",
@@ -41,7 +50,19 @@
 		"source": "PZO2101",
 		"id": "4d18c1de-c8b1-41f7-ae3e-74f24aa0a745",
 		"aonId": 743,
-		"hash": "sMDrUJzH"
+		"pf2t": {
+			"name": "Arcane School Spell",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Wizard",
+			"source": "Core Rulebook pg. 231 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=743",
+			"aon": "feats743",
+			"type": "feat",
+			"body": "**Archetype** Wizard\n**Prerequisites** Wizard Dedication\n\n- - -\n\nSelect one arcane school of magic. You gain the school's initial school spell. If you don't already have one, you gain a focus pool of 1 Focus Point, which you can Refocus by studying.",
+			"hash": "sMDrUJzH"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -56,7 +77,19 @@
 		"source": "PZO2101",
 		"id": "66d9b317-b89b-4d49-b294-b805ec196b0f",
 		"aonId": 744,
-		"hash": "bQTbHYhv"
+		"pf2t": {
+			"name": "Basic Arcana",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Wizard",
+			"source": "Core Rulebook pg. 231 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=744",
+			"aon": "feats744",
+			"type": "feat",
+			"body": "**Archetype** Wizard\n**Prerequisites** Wizard Dedication\n\n- - -\n\nYou gain a 1st- or 2nd-level wizard feat of your choice.\n\n#### Basic Arcana Leads To...\nAdvanced Arcana",
+			"hash": "bQTbHYhv"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -71,7 +104,19 @@
 		"source": "PZO2101",
 		"id": "154f25c6-2401-45a5-9624-e14eaf2f1c3f",
 		"aonId": 745,
-		"hash": "nkJDZDqX"
+		"pf2t": {
+			"name": "Basic Wizard Spellcasting",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Wizard",
+			"source": "Core Rulebook pg. 231 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=745",
+			"aon": "feats745",
+			"type": "feat",
+			"body": "**Archetype** Wizard\n**Prerequisites** Wizard Dedication\n\n- - -\n\nYou gain the basic spellcasting benefits. Each time you gain a spell slot of a new level from the wizard archetype, add two common spells of that level to your spellbook.\n\n#### Basic Wizard Spellcasting Leads To...\nArcane Breadth, Expert Wizard Spellcasting",
+			"hash": "nkJDZDqX"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -89,7 +134,19 @@
 		"source": "PZO2101",
 		"id": "6903b72e-32ca-405f-a807-ec89667c56cf",
 		"aonId": 746,
-		"hash": "fUQZJgpz"
+		"pf2t": {
+			"name": "Advanced Arcana",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Wizard",
+			"source": "Core Rulebook pg. 231 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=746",
+			"aon": "feats746",
+			"type": "feat",
+			"body": "**Archetype** Wizard\n**Prerequisites** Basic Arcana\n\n- - -\n\nYou gain one wizard feat. For the purpose of meeting its prerequisites, your wizard level is equal to half your character level.",
+			"hash": "fUQZJgpz"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -104,7 +161,19 @@
 		"source": "PZO2101",
 		"id": "691a0be1-7f8c-469a-ab8d-bde62ab4f0e8",
 		"aonId": 747,
-		"hash": "UWKHWCkI"
+		"pf2t": {
+			"name": "Arcane Breadth",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Wizard",
+			"source": "Core Rulebook pg. 231 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=747",
+			"aon": "feats747",
+			"type": "feat",
+			"body": "**Archetype** Wizard\n**Prerequisites** Basic Wizard Spellcasting\n\n- - -\n\nYou can cast more arcane spells each day. Increase the spell slots you gain from wizard archetype feats by 1 for each spell level other than your two highest wizard spell slots.",
+			"hash": "UWKHWCkI"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -119,7 +188,19 @@
 		"source": "PZO2101",
 		"id": "5826aed5-849b-4e7a-a85c-7279c4dbe9b0",
 		"aonId": 748,
-		"hash": "SXrObZsx"
+		"pf2t": {
+			"name": "Expert Wizard Spellcasting",
+			"level": 12,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Wizard",
+			"source": "Core Rulebook pg. 231 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=748",
+			"aon": "feats748",
+			"type": "feat",
+			"body": "**Archetype** Wizard\n**Prerequisites** Basic Wizard Spellcasting; master in Arcana\n\n- - -\n\nYou gain the expert spellcasting benefits.\n\n#### Expert Wizard Spellcasting Leads To...\nMaster Wizard Spellcasting",
+			"hash": "SXrObZsx"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -134,6 +215,18 @@
 		"source": "PZO2101",
 		"id": "2d49fe13-08fc-44bc-b939-2de07758b7cf",
 		"aonId": 749,
-		"hash": "XwQWLHQg"
+		"pf2t": {
+			"name": "Master Wizard Spellcasting",
+			"level": 18,
+			"pfs": "standard",
+			"traits": "archetype",
+			"archetype": "Wizard",
+			"source": "Core Rulebook pg. 231 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=749",
+			"aon": "feats749",
+			"type": "feat",
+			"body": "**Archetype** Wizard\n**Prerequisites** Expert Wizard Spellcasting; legendary in Arcana\n\n- - -\n\nYou gain the master spellcasting benefits.",
+			"hash": "XwQWLHQg"
+		}
 	}
 ]
