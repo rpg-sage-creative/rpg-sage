@@ -1,16 +1,16 @@
 import utils, { isDefined } from "../sage-utils";
-import { allCores, debug, info, warn } from "./common.mjs";
+import { sageCores, debug, info, warn } from "./common.mjs";
 import type { TCore } from "./types.mjs";
 
 export function processAbcData() {
 	info(`\nCreating abc-data.json ...`);
 	const abcData: TCore[] = [];
-	const sources = allCores.filter(core => {
+	const sources = sageCores.filter(core => {
 		delete core.features;
 		return core.objectType === "Source";
 	});
 	sources.forEach(src => {
-		const bySource = allCores.filter(core => core.source === src.code);
+		const bySource = sageCores.filter(core => core.source === src.code);
 		const ancestries = bySource.filter(core => core.objectType === "Ancestry");
 		const heritages = bySource.filter(core => core.objectType === "Heritage");
 		const versatileHeritages = bySource.filter(core => core.objectType === "VersatileHeritage");

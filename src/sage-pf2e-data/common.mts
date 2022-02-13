@@ -1,3 +1,4 @@
+import type { Pf2ToolsDataCore } from "../sage-pf2e/data/Pf2ToolsData";
 import utils from "../sage-utils";
 import type { TCore } from "./types.mjs";
 
@@ -28,7 +29,8 @@ export function debug(...args: any[]) {
 	}
 }
 
-export const allCores = new utils.ArrayUtils.Collection<TCore>();
+export const sageCores = new utils.ArrayUtils.Collection<TCore>();
+export const pf2tCores = new utils.ArrayUtils.Collection<Pf2ToolsDataCore>();
 
 const cleanNames = new Map<string, string>();
 type TData = { id?:string; hash?:string; name?:string; };
@@ -40,6 +42,7 @@ function cleanName(data: TData): string {
 	}
 	return cleanNames.get(key)!;
 }
+
 export function compareNames(a: TData, b: TData): boolean {
 	return cleanName(a) === cleanName(b);
 }

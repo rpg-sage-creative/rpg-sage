@@ -180,7 +180,6 @@ export function search<T extends Base>(searchInfo: utils.SearchUtils.SearchInfo,
 				}
 			});
 		});
-		searchResults.add(...Pf2ToolsData.search<T>(searchInfo, objectTypesToSearch));
 	});
 }
 export function searchComparison<T extends Base>(searchInfo: utils.SearchUtils.SearchInfo, ...searchCategories: string[]): SearchResults<T> {
@@ -201,16 +200,16 @@ export function loadData(dataPath: string, includePf2ToolsData = false): Promise
 	const distPath = `${dataPath}/dist`.replace(/\/+/g, "/");
 	return loadDataFromDist(distPath).then(() => {
 		if (includePf2ToolsData) {
-			return Pf2ToolsData.load(dataPath) as unknown as Promise<void>;
+			return loadFromPF2t(distPath);
 		}
 		return Promise.resolve();
 	});
 }
 
-function handleMissingObjectType(objectType: string, fromLabel: string): void {
-	if (!missing.includes(objectType)) {
-		missing.push(objectType);
-		console.warn(`Missing parser for "${objectType}" from "${fromLabel}"`);
+function handleMissingObjectType(core: BaseCore, fromLabel: string): void {
+	if (!missing.includes(core.objectType)) {
+		missing.push(core.objectType);
+		console.warn(`Missing parser for "${core.objectType}" from "${fromLabel}" ("${core.name}")`);
 	}
 }
 
@@ -240,12 +239,12 @@ function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 	}
 	const objectType = core.objectType;
 	if (!objectType) {
-		handleMissingObjectType(objectType, fromLabel);
+		handleMissingObjectType(core, fromLabel);
 		return 0;
 	}
 	const repoItem = repoMap.get(objectType);
 	if (!repoItem) {
-		handleMissingObjectType(objectType, fromLabel);
+		handleMissingObjectType(core, fromLabel);
 		return 0;
 	}
 
@@ -297,6 +296,26 @@ async function loadDataFromDist(distPath: string): Promise<void> {
 	console.info(`\t\t${coresLoaded} Total Cores loaded`);
 
 	return Promise.resolve();
+}
+
+async function loadFromPF2t(distPath: string): Promise<void> {
+	const pathAndFile = `${distPath}/pf2t-leftovers.json`;
+	const cores = await Pf2ToolsData.load(pathAndFile);
+	cores.forEach(core => {
+		const data = new Pf2ToolsData(core);
+		if (!repoMap.has(data.objectType)) {
+			repoMap.set(data.objectType, {
+				constructor: null!,
+				objectType: data.objectType,
+				objectTypeLower: data.objectType.toLowerCase(),
+				objectTypePlural: data.objectType + "s",
+				objectTypePluralLower: data.objectType.toLowerCase() + "s",
+				objects: [],
+				erratad: []
+			});
+		}
+		repoMap.get(data.objectType)!.objects.push(data);
+	});
 }
 
 //#endregion

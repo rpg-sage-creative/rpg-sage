@@ -141,7 +141,7 @@ export function parseSpell(pf2t: Pf2ToolsDataCore): TCore<"Spell"> {
 		// success: undefined!,
 		targets: parsedBody.targets,
 		traditions: split(pf2t.traditions)!,
-		traits: splitAndCapitalize(pf2t.traits),
+		traits: splitAndCapitalize(pf2t.traits as unknown as string),
 		trigger: undefined!,
 		// url: undefined!,
 		version: undefined!

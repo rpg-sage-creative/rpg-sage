@@ -1,6 +1,6 @@
 import { BaseCore, Pf2ToolsData, Source, SourceCore, TDetail, THasSuccessOrFailure, type Pf2ToolsDataCore } from "../../sage-pf2e";
 import utils, { OrNull } from "../../sage-utils";
-import { allCores, compareNames } from "../common.mjs";
+import { compareNames, pf2tCores, sageCores } from "../common.mjs";
 import type { TCore } from "../types.mjs";
 import { parseSpell } from "./Spell.mjs";
 
@@ -35,7 +35,7 @@ function matchSourceByProductLineName(cores: SourceCore[], name: string): Source
 }
 
 function matchSource(name: string): Source | undefined {
-	const cores = allCores.filter(core => core.objectType === "Source") as unknown as SourceCore[];
+	const cores = sageCores.filter(core => core.objectType === "Source") as unknown as SourceCore[];
 	const core = matchSourceByName(cores, name)
 		?? matchSourceByProductLineName(cores, name)
 		?? matchSourceByApName(cores, name);
@@ -128,7 +128,7 @@ function namesMatch(pf2: Pf2ToolsDataCore, sage: TCore): boolean {
 
 function sourcesMatch(pf2: Pf2ToolsDataCore, sage: TCore): boolean {
 	const pf2Source = parseSource(pf2.source);
-	const sageSource = allCores.find(src => src.objectType === "Source" && src.code === sage.source);
+	const sageSource = sageCores.find(src => src.objectType === "Source" && src.code === sage.source);
 	return pf2Source?.source?.code && sageSource?.code ? pf2Source.source.code === sageSource.code : false;
 }
 
@@ -137,7 +137,7 @@ export function findPf2tCore(core: TCore): Pf2ToolsDataCore | undefined {
 		|| (core.objectType === "Skill" && core.name.endsWith(" Lore"))) {
 		return undefined;
 	}
-	return Pf2ToolsData.getAll().filter(pf2 => typesMatch(pf2, core) && namesMatch(pf2, core) && sourcesMatch(pf2, core)).first();
+	return pf2tCores.filter(pf2 => typesMatch(pf2, core) && namesMatch(pf2, core) && sourcesMatch(pf2, core)).first();
 }
 
 //#endregion
@@ -184,11 +184,11 @@ function compare<T>(a: T, b: T): boolean {
 //#region parse pf2data
 
 export function parsePf2Data() {
-	Pf2ToolsData.getAll()
+	pf2tCores
 	.filter(core => core.type === "spell")
 	.forEach(pf2tCore => {
 		const parsed: any = parseSpell(pf2tCore);
-		const existing: any = allCores.find(core => core.name === pf2tCore.name);
+		const existing: any = sageCores.find(core => core.name === pf2tCore.name);
 		if (parsed && existing) {
 			Object.keys(existing).forEach(key => {
 				if (!["id","description"].includes(key)) {

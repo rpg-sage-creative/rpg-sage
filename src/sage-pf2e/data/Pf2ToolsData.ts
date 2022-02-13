@@ -1,22 +1,22 @@
+import { Repository } from "..";
 import type { IComparable, IRenderable, ISearchable, TSortResult } from "../../sage-utils";
 import utils from "../../sage-utils";
-import { Repository } from "..";
 import { COMMON, RARITIES, TRarity } from "../common";
+import HasSource, { SourcedCore } from "../model/base/HasSource";
 import type { IHasArchives, IHasDetails, IHasLink, IHasName } from "../model/base/interfaces";
 import type Class from "../model/Class";
 import RenderableContent from "./RenderableContent";
 import { find } from "./Repository";
 
 const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
-const allCores = new utils.ArrayUtils.Collection<Pf2ToolsDataCore>();
 
-export type Pf2ToolsDataCore = {
+export interface Pf2ToolsDataCore extends SourcedCore<""> {
 	/** The id(s) of Sage's version(s) of this object. */
 	name: string;
 	level: number;
 	pfs: "standard" | "limited";
 	/** comma separated */
-	traits: string;
+	traits: string[];
 	priceunit: "gp" | "sp" | "cp";
 	price: number;
 	/** 1 or "L" or "L (or -)" or "varies by armor" */
@@ -56,7 +56,7 @@ export type Pf2ToolsDataCore = {
 	dexcap?: string;
 	checkpenalty?: string;
 	speedpenalty?: string;
-};
+}
 
 type TSageCore = { objectType:string; class?:string; name:string; };
 
@@ -77,6 +77,8 @@ function findSource(value: string) {
 }
 
 export default class Pf2ToolsData
+	extends
+		HasSource<Pf2ToolsDataCore>
 	implements
 		IHasArchives,
 		IComparable<Pf2ToolsData>,
@@ -87,6 +89,7 @@ export default class Pf2ToolsData
 		ISearchable {
 
 	public constructor(protected core: Pf2ToolsDataCore) {
+		super(core);
 		const keys = Object.keys(core);
 		const newKeys = keys.filter(key => !keys.includes(key));
 		if (newKeys.length) {
@@ -102,23 +105,24 @@ export default class Pf2ToolsData
 		});
 	}
 
-	public objectType = utils.StringUtils.capitalize(this.core.type);
+	public get id(): string { return this.core.hash; }
+	public get objectType(): string { return utils.StringUtils.capitalize(this.core.type); }
 	public toString(): string { return this.core.name; }
 
 	//#region HasSource properies
-	public hasPage = !!(this.core.source?.match(/pg\. \d+/));
-	public pages = this.hasPage ? [this.core.source.match(/pg\. (\d+)/)![1]] : [];
-	public source = findSource(this.core.source);
-	public version = this.core.source?.match(/(\d+\.\d+)$/)?.[1] ?? "1.0";
-	public sources = [{ pages:this.pages, source:this.source, version:this.version }];
-	public hasErrata = false;
-	public isErrata = false;
+	public get hasPage() { return !!(this.core.source?.match(/pg\. \d+/)); }
+	public get pages() { return this.hasPage ? [this.core.source.match(/pg\. (\d+)/)![1]] : []; }
+	public get source() { return findSource(this.core.source); }
+	public get version() { return this.core.source?.match(/(\d+\.\d+)$/)?.[1] ?? "1.0" as any; }
+	public get sources() { return [{ pages:this.pages, source:this.source, version:this.version }]; }
+	public get hasErrata() { return false; }
+	public get isErrata() { return false; }
 	//#endregion
 
 	// #region IHasArchives
 
-	public aonId = +(this.core.aon?.match(/\D+(\d+)(\:\d+)?$/)?.[1] ?? 0) || undefined;
-	public aonTraitId = undefined;
+	public get aonId() { return +(this.core.aon?.match(/\D+(\d+)(\:\d+)?$/)?.[1] ?? 0) || undefined; }
+	public get aonTraitId() { return undefined; }
 
 	public toAonLink(label = this.name): string {
 		return `<a href="${this.core.src}">View ${label} on Archives of Nethys</a>`;
@@ -128,11 +132,11 @@ export default class Pf2ToolsData
 
 	// #region IHasDetails
 
-	public description = "";
-	public details = this.core.body?.split("\n") ?? [];
-	public hasDescription = false;
-	public hasDetails = this.details.length > 0;
-	public hasSuccessOrFailure = false;
+	public get description() { return ""; }
+	public get details() { return this.core.body?.split("\n") ?? []; }
+	public get hasDescription() { return false; }
+	public get hasDetails() { return this.details.length > 0; }
+	public get hasSuccessOrFailure() { return false; }
 
 	protected appendDescriptionTo(_: RenderableContent): void {
 		// these don't have descriptions
@@ -146,32 +150,16 @@ export default class Pf2ToolsData
 
 	// #region IHasLink
 
-	public url = undefined;
+	public get url() { return undefined; }
 
 	public toLink(_?: string): string { return ""; }
 
 	// #endregion IHasLink
 
-	// #region IHasName
-
-	private _nameMatcher?: utils.StringUtils.StringMatcher;
-	private get nameMatcher(): utils.StringUtils.StringMatcher {
-		return this._nameMatcher ?? (this._nameMatcher = utils.StringUtils.StringMatcher.from(this.name));
-	}
-
-	public get name(): string { return this.core.name; }
-	public get nameClean(): string { return this.nameMatcher.clean; }
-	public get nameLower(): string { return this.nameMatcher.lower; }
-
-	public matches(other: utils.StringUtils.StringMatcher): boolean {
-		return this.nameMatcher.matches(other);
-	}
-
-	// #endregion IHasName
-
 	//#region IHasTraits
 
-	public traits = (this.core.traits ?? "").split(",").filter(s => s?.trim());
+	// we lied about the type above to be able to extend HasSource/SourcedCore
+	public traits = (this.core.traits as unknown as string ?? "").split(",").filter(s => s?.trim());
 	public hasTraits = this.traits.length > 0;
 
 	public nonRarityTraits = this.traits.filter(trait => !RARITIES.includes(trait as TRarity));
@@ -255,49 +243,27 @@ export default class Pf2ToolsData
 
 	//#region all cores
 
-	public static async load(distPath: string): Promise<boolean> {
-		allCores.empty();
-		const path = `${distPath}/pf2-tools.json`;
-		const pf2ToolsCores = await utils.FsUtils.readJsonFile<Pf2ToolsDataCore[]>(path).catch(() => null);
+	public static async load(pathAndFile: string, fetch = false): Promise<Pf2ToolsDataCore[]> {
+		const pf2ToolsCores = await utils.FsUtils.readJsonFile<Pf2ToolsDataCore[]>(pathAndFile).catch(() => null);
 		if (pf2ToolsCores?.length) {
-			allCores.push(...pf2ToolsCores);
 			console.info(`\t\t${pf2ToolsCores.length} Total PF2 Tools Cores loaded`);
+			return pf2ToolsCores;
 		}else {
-			console.warn(`\t\tUnable to load PF2 Tools Cores: ${path}`);
+			console.warn(`\t\tUnable to load PF2 Tools Cores: ${pathAndFile}`);
 		}
-		return !allCores.isEmpty;
+		if (fetch) {
+			const fetchedCores = this.fetch();
+			await utils.FsUtils.writeFile(pathAndFile, fetchedCores, true, true);
+			return fetchedCores;
+		}
+		return [];
 	}
 
-	public static async fetch(): Promise<boolean> {
-		allCores.empty();
+	public static async fetch(): Promise<Pf2ToolsDataCore[]> {
 		console.info(`Fetching new data from pf2 tools ...`);
-		const cores = await utils.HttpsUtils.getJson<Pf2ToolsDataCore[]>(PF2_TOOLS_URL).catch(() => null);
-		if (Array.isArray(cores)) {
-			allCores.push(...cores);
-		}
-		return !allCores.isEmpty;
-	}
-
-	public static async save(distPath: string): Promise<boolean> {
-		const path = `${distPath}/pf2-tools.json`;
-		console.info(`Saving PF2 Tools Cores: ${path}`);
-		return utils.FsUtils.writeFile(path, allCores, true, true);
-	}
-
-	public static async loadOrFetchAndSave(distPath: string): Promise<boolean> {
-		const loaded = await this.load(distPath);
-		if (!loaded) {
-			const fetched = await this.fetch();
-			if (fetched) {
-				return this.save(distPath);
-			}
-			return fetched;
-		}
-		return loaded;
-	}
-
-	public static getAll(): utils.ArrayUtils.Collection<Pf2ToolsDataCore> {
-		return allCores;
+		console.trace(PF2_TOOLS_URL);
+		return [];
+		// return utils.HttpsUtils.getJson<Pf2ToolsDataCore[]>(PF2_TOOLS_URL).catch(() => []);
 	}
 
 	//#endregion
@@ -312,26 +278,6 @@ export default class Pf2ToolsData
 			}
 		}
 		return toPf2Type(sageCore.objectType);
-	}
-
-	//#endregion
-
-	//#region search
-
-	public static search
-			<T extends ISearchable = ISearchable, U extends SearchScore<T> = SearchScore<T>>
-			(searchInfo: utils.SearchUtils.SearchInfo, objectTypes: string[]): U[] {
-		const searchScores: U[] = [];
-		const types = objectTypes.map(toPf2Type);
-		allCores.forEach(core => {
-			if (types.includes(core.type)) {
-				const pf2tData = new Pf2ToolsData(core);
-				const results = pf2tData.searchRecursive(searchInfo);
-				const filtered = results.filter(result => result.bool);
-				searchScores.push(...filtered as unknown as U[]);
-			}
-		});
-		return searchScores;
 	}
 
 	//#endregion
@@ -351,5 +297,3 @@ function toPf2Type(value: string): string {
 		default: return value;
 	}
 }
-
-type SearchScore<T extends ISearchable> = utils.SearchUtils.SearchScore<T>;
