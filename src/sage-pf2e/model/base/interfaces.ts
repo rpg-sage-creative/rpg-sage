@@ -50,19 +50,6 @@ export interface IHasArchives {
 
 // #endregion ArchivedCore core interface and IHasArchives class interface
 
-// #region Pf2tCore core interface and IHasPf2t class interface
-
-export interface Pf2tCore {
-	pf2tHash?: string;
-}
-
-export interface IHasPf2t {
-	pf2tHash?: string;
-	// toPf2tLink(): string;
-}
-
-//#endregion
-
 //#region Non AoN links (primarily 3PP support)
 
 export interface LinkedCore {

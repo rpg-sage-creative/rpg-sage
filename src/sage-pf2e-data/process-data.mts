@@ -1,8 +1,8 @@
 import * as fs from "fs";
-import { Pf2ToolsData, THasSuccessOrFailure } from "../sage-pf2e";
+import type { THasSuccessOrFailure } from "../sage-pf2e";
 import type { Pf2ToolsDataCore } from "../sage-pf2e/data/Pf2ToolsData";
 import utils, { type UUID } from "../sage-utils";
-import { compareNames, debug, DistDataPath, error, info, log, sageCores, SrcDataPath, warn } from "./common.mjs";
+import { compareNames, debug, DistDataPath, error, info, loadPf2tCores, log, sageCores, SrcDataPath, warn } from "./common.mjs";
 import { findPf2tCore, parsePf2Data } from "./pf2-tools-parsers/common.mjs";
 import { processAbcData } from "./process-abc.mjs";
 import { processPf2tData } from "./processPf2taData.mjs";
@@ -303,17 +303,14 @@ function processLore() {
 
 let pf2tCores: Pf2ToolsDataCore[] = [];
 export default async function process(): Promise<void> {
-	pf2tCores = utils.ArrayUtils.Collection.from(await Pf2ToolsData.load(`${SrcDataPath}/pf2t-all.json`));
 
+	await loadPf2tCores();
 	processSources();
 	await processPf2tData();
-
-	if (false) {
-		processAbcData();
-		processMissingSpells();
-		processLore();
-		parsePf2Data();
-	}
+	processAbcData();
+	processMissingSpells();
+	processLore();
+	parsePf2Data();
 
 	info(""); // spacer for bash script
 }

@@ -5,7 +5,7 @@ import type { BaseCore } from "../model/base/Base";
 import type HasSource from "../model/base/HasSource";
 import type Source from "../model/base/Source";
 import type Creature from "../model/bestiary/Creature";
-import Pf2ToolsData from "./Pf2ToolsData";
+import Pf2ToolsData, { type Pf2ToolsDataCore } from "./Pf2ToolsData";
 import SearchResults from "./SearchResults";
 
 export type TObjectTypeAndPlural = { objectType: string; objectTypePlural: string; };
@@ -300,7 +300,8 @@ async function loadDataFromDist(distPath: string): Promise<void> {
 
 async function loadFromPF2t(distPath: string): Promise<void> {
 	const pathAndFile = `${distPath}/pf2t-leftovers.json`;
-	const cores = await Pf2ToolsData.load(pathAndFile);
+	const cores = await utils.FsUtils.readJsonFile<Pf2ToolsDataCore[]>(pathAndFile).catch(() => null) ?? [];
+	console.info(`\t\t${cores.length} Total PF2 Tools Cores loaded`);
 	cores.forEach(core => {
 		const data = new Pf2ToolsData(core);
 		if (!repoMap.has(data.objectType)) {

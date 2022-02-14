@@ -1,14 +1,11 @@
 import { Repository } from "..";
 import type { IComparable, IRenderable, ISearchable, TSortResult } from "../../sage-utils";
 import utils from "../../sage-utils";
-import { COMMON, RARITIES, TRarity } from "../common";
 import HasSource, { SourcedCore } from "../model/base/HasSource";
 import type { IHasArchives, IHasDetails, IHasLink, IHasName } from "../model/base/interfaces";
 import type Class from "../model/Class";
 import RenderableContent from "./RenderableContent";
 import { find } from "./Repository";
-
-const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
 
 export interface Pf2ToolsDataCore extends SourcedCore<""> {
 	/** The id(s) of Sage's version(s) of this object. */
@@ -76,6 +73,11 @@ function findSource(value: string) {
 	return source;
 }
 
+function hackCore(core: Pf2ToolsDataCore): Pf2ToolsDataCore {
+	core.traits = (core.traits as unknown as string ?? "").split(",").map(s => s?.trim()).filter(s => s);
+	return core;
+}
+
 export default class Pf2ToolsData
 	extends
 		HasSource<Pf2ToolsDataCore>
@@ -89,7 +91,7 @@ export default class Pf2ToolsData
 		ISearchable {
 
 	public constructor(protected core: Pf2ToolsDataCore) {
-		super(core);
+		super(hackCore(core));
 		const keys = Object.keys(core);
 		const newKeys = keys.filter(key => !keys.includes(key));
 		if (newKeys.length) {
@@ -156,26 +158,6 @@ export default class Pf2ToolsData
 
 	// #endregion IHasLink
 
-	//#region IHasTraits
-
-	// we lied about the type above to be able to extend HasSource/SourcedCore
-	public traits = (this.core.traits as unknown as string ?? "").split(",").filter(s => s?.trim());
-	public hasTraits = this.traits.length > 0;
-
-	public nonRarityTraits = this.traits.filter(trait => !RARITIES.includes(trait as TRarity));
-	public hasNonRarityTraits = this.nonRarityTraits.length > 0;
-
-	public includesTrait(trait: string): boolean { return this.traits.includes(trait); }
-
-	//#endregion
-
-	//#region IHasRarity
-
-	public rarity = RARITIES.find(rarity => this.traits.includes(rarity)) ?? COMMON;
-	public isNotCommon = this.rarity !== COMMON;
-
-	//#endregion
-
 	// #region IRenderable
 
 	public toRenderableContent(): utils.RenderUtils.RenderableContent {
@@ -240,33 +222,6 @@ export default class Pf2ToolsData
 	}
 
 	// #endregion utils.SearchUtils.ISearchable
-
-	//#region all cores
-
-	public static async load(pathAndFile: string, fetch = false): Promise<Pf2ToolsDataCore[]> {
-		const pf2ToolsCores = await utils.FsUtils.readJsonFile<Pf2ToolsDataCore[]>(pathAndFile).catch(() => null);
-		if (pf2ToolsCores?.length) {
-			console.info(`\t\t${pf2ToolsCores.length} Total PF2 Tools Cores loaded`);
-			return pf2ToolsCores;
-		}else {
-			console.warn(`\t\tUnable to load PF2 Tools Cores: ${pathAndFile}`);
-		}
-		if (fetch) {
-			const fetchedCores = this.fetch();
-			await utils.FsUtils.writeFile(pathAndFile, fetchedCores, true, true);
-			return fetchedCores;
-		}
-		return [];
-	}
-
-	public static async fetch(): Promise<Pf2ToolsDataCore[]> {
-		console.info(`Fetching new data from pf2 tools ...`);
-		console.trace(PF2_TOOLS_URL);
-		return [];
-		// return utils.HttpsUtils.getJson<Pf2ToolsDataCore[]>(PF2_TOOLS_URL).catch(() => []);
-	}
-
-	//#endregion
 
 	//#region objectType conversion
 

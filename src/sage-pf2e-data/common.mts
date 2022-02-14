@@ -30,7 +30,20 @@ export function debug(...args: any[]) {
 }
 
 export const sageCores = new utils.ArrayUtils.Collection<TCore>();
+
+const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
 export const pf2tCores = new utils.ArrayUtils.Collection<Pf2ToolsDataCore>();
+export async function loadPf2tCores(): Promise<void> {
+	const path = `${SrcDataPath}/pf2t-all.json`;
+	let cores = await utils.FsUtils.readJsonFile<Pf2ToolsDataCore[]>(path).catch(() => null) ?? [];
+	if (!cores.length) {
+		info(`\t\tFetching PF2 Tools Cores ...`);
+		cores = await utils.HttpsUtils.getJson<Pf2ToolsDataCore[]>(PF2_TOOLS_URL).catch(() => []);
+		await utils.FsUtils.writeFile(path, cores, true, true);
+	}
+	info(`\t\t${cores.length} Total PF2 Tools Cores loaded`);
+	pf2tCores.push(...cores);
+}
 
 const cleanNames = new Map<string, string>();
 type TData = { id?:string; hash?:string; name?:string; };

@@ -1,5 +1,6 @@
 import utils, { IComparable, IdCore, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
 import { NEWLINE, TAB } from "../../common";
+import type { Pf2ToolsDataCore } from "../../data/Pf2ToolsData";
 import RenderableContent from "../../data/RenderableContent";
 import type {
 	ArchivedCore,
@@ -8,10 +9,8 @@ import type {
 	IHasDetails,
 	IHasLink,
 	IHasName,
-	IHasPf2t,
 	LinkedCore,
 	NamedCore,
-	Pf2tCore,
 	TDetail,
 	THasSuccessOrFailure
 } from "./interfaces";
@@ -40,7 +39,10 @@ function tabNewLineOrEmpty(index: number, wasBlock: boolean): "\t" | "\n" | "" {
 	return NEWLINE;
 }
 
-export interface BaseCore<T extends string = string> extends IdCore<T>, ArchivedCore, DetailedCore<T>, LinkedCore, NamedCore, Pf2tCore { }
+export interface BaseCore<T extends string = string> extends IdCore<T>, ArchivedCore, DetailedCore<T>, LinkedCore, NamedCore {
+	pf2t?: Pf2ToolsDataCore;
+	hash?: string;
+}
 
 type TChildCoreParser<T extends BaseCore> = (core: T) => T[];
 export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = string>
@@ -52,7 +54,6 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 		IHasDetails,
 		IHasLink,
 		IHasName,
-		IHasPf2t,
 		IRenderable,
 		ISearchable {
 
@@ -60,7 +61,7 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 
 	public constructor(protected core: T) {
 		super(core);
-		if (!core.id) {
+		if (!core.id && !core.hash) {
 			console.warn("NO ID!", core.name ?? core);
 		}
 	}
@@ -124,12 +125,6 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 	}
 
 	// #endregion IHasArchives
-
-	//#region IHasPf2t
-
-	public get pf2tHash(): string | undefined { return this.core.pf2tHash; }
-
-	//#endregion
 
 	// #region IHasLink
 

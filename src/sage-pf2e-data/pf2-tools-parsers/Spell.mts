@@ -129,7 +129,7 @@ export function parseSpell(pf2t: Pf2ToolsDataCore): TCore<"Spell"> {
 		objectType: "Spell",
 		page: source?.page,
 		// pages: undefined!,
-		pf2tHash: pf2t.hash,
+		pf2t: pf2t,
 		previousId: undefined!,
 		range: range(pf2t.range),
 		rarity: undefined!,
