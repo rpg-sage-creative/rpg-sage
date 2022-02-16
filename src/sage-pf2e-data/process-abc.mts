@@ -1,9 +1,10 @@
 import utils, { isDefined } from "../sage-utils";
-import { sageCores, debug, info, warn } from "./common.mjs";
+import { getSageCores, debug, info, warn } from "./common.mjs";
 import type { TCore } from "./types.mjs";
 
 export function processAbcData() {
 	info(`\nCreating abc-data.json ...`);
+	const sageCores = getSageCores();
 	const abcData: TCore[] = [];
 	const sources = sageCores.filter(core => {
 		delete core.features;

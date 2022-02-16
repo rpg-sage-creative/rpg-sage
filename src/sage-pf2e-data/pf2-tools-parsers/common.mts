@@ -1,8 +1,6 @@
 import { BaseCore, Pf2tBase, Pf2tBaseCore, TDetail, THasSuccessOrFailure } from "../../sage-pf2e";
-import type { SourceCore } from "../../sage-pf2e/model/base/Source";
-import type { ClassCore } from "../../sage-pf2e/model/Class";
 import utils, { OrNull } from "../../sage-utils";
-import { compareNames, pf2tCores, sageCores } from "../common.mjs";
+import { compareNames, getPf2tCores, getSageCores } from "../common.mjs";
 import type { TCore } from "../types.mjs";
 import { parseSpell } from "./Spell.mjs";
 
@@ -73,7 +71,7 @@ function objectTypeToPf2Type(sageCore: TCore | string, cleanOnly?: true): string
 		return cleanOnly === true ? cleanType(sageCore) : toPf2Type(sageCore);
 	}
 	if (sageCore.objectType === "ClassPath") {
-		const clss = getTypedCores("Class").find(klass => klass.name === sageCore.class);
+		const clss = getSageCores("Class").find(klass => klass.name === sageCore.class);
 		return toPf2Type(clss?.classPath ?? sageCore.objectType);
 	}
 	if (["Spell","FocusSpell"].includes(sageCore.objectType) && sageCore.traits?.includes("Cantrip")) {
@@ -102,12 +100,6 @@ function cleanType(value: string): string {
 
 //#endregion
 
-export function getTypedCores(objectType: "Source"): SourceCore[];
-export function getTypedCores(objectType: "Class"): ClassCore[];
-export function getTypedCores(objectType: string) {
-	return sageCores.filter(core => core.objectType === objectType) as unknown;
-}
-
 function typesMatch(pf2t: Pf2tBaseCore, sage: TCore): [boolean, string] {
 	const cleanType = objectTypeToPf2Type(sage.objectType, true);
 	if (pf2t.type === cleanType) {
@@ -133,7 +125,7 @@ const sourceMatches = new Map<string, boolean>();
 function sourcesMatch(pf2t: Pf2tBaseCore, sage: TCore): boolean {
 	const key = `${pf2t.source} === ${sage.source}`;
 	if (!sourceMatches.has(key)) {
-		const sourceCores = getTypedCores("Source");
+		const sourceCores = getSageCores("Source");
 		const pf2Source = Pf2tBase.parseSource(pf2t.source, sourceCores);
 		const sageSource = sourceCores.find(src => src.code === sage.source);
 		sourceMatches.set(key, pf2Source?.source?.code && sageSource?.code ? pf2Source.source.code === sageSource.code : false);
@@ -170,7 +162,7 @@ export function findPf2tCore(sage: TCore): Pf2tBaseCore | undefined {
 		|| (sage.objectType === "Skill" && sage.name.endsWith(" Lore"))) {
 		return undefined;
 	}
-	return pf2tCores.find(pf2t => coresMatch(pf2t, sage).all);
+	return getPf2tCores().find(pf2t => coresMatch(pf2t, sage).all);
 }
 
 //#endregion
@@ -217,11 +209,11 @@ function compare<T>(a: T, b: T): boolean {
 //#region parse pf2data
 
 export function parsePf2Data() {
-	pf2tCores
+	getPf2tCores()
 	.filter(core => core.type === "spell")
 	.forEach(pf2tCore => {
 		const parsed: any = parseSpell(pf2tCore);
-		const existing: any = sageCores.find(core => core.name === pf2tCore.name);
+		const existing: any = getSageCores().find(core => core.name === pf2tCore.name);
 		if (parsed && existing) {
 			Object.keys(existing).forEach(key => {
 				if (!["id","description"].includes(key)) {

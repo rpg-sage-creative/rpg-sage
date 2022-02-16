@@ -1,9 +1,12 @@
 import utils from "../sage-utils";
-import { DistDataPath, info, pf2tCores, sageCores } from "./common.mjs";
-import { coresMatch, getTypedCores } from "./pf2-tools-parsers/common.mjs";
+import { DistDataPath, info, getPf2tCores, getSageCores } from "./common.mjs";
+import { coresMatch } from "./pf2-tools-parsers/common.mjs";
 
 export async function processPf2tData(): Promise<void> {
 	info(`Processing processPf2tData ...`);
+
+	const sageCores = getSageCores();
+	const pf2tCores = getPf2tCores();
 
 	const objectTypes = sageCores.pluck("objectType", true);
 	const classPaths = sageCores.pluck("classPath", true).filter(s => s) as string[];
@@ -37,7 +40,7 @@ export async function processPf2tData(): Promise<void> {
 		if (p % 10 === 0) info(`Processing processPf2tData ... matching leftovers - ${p}%`);
 		return sageCores.map(sage => coresMatch(pf2t, sage)).filter(match => match.name)
 	}).filter(a => a.length);
-	const sourceCores = getTypedCores("Source");
+	const sourceCores = getSageCores("Source");
 	matchesByName.forEach(matches => {
 		matches.forEach(({ pf2t, sage, sageType, type, source }) => {
 			const sourceCore = sourceCores.find(src => src.code === sage.source);

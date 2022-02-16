@@ -1,8 +1,8 @@
 import * as fs from "fs";
-import { clearStringify, stringify } from "./common.mjs";
-import type { Pf2tBaseCore, THasSuccessOrFailure } from "../sage-pf2e";
+import { clearStringify, getPf2tCores, stringify } from "./common.mjs";
+import type { THasSuccessOrFailure } from "../sage-pf2e";
 import utils, { type UUID } from "../sage-utils";
-import { compareNames, debug, DistDataPath, error, info, loadPf2tCores, log, sageCores, SrcDataPath, warn } from "./common.mjs";
+import { compareNames, debug, DistDataPath, error, info, loadPf2tCores, log, getSageCores, SrcDataPath, warn } from "./common.mjs";
 import { findPf2tCore, parsePf2Data } from "./pf2-tools-parsers/common.mjs";
 import { processAbcData } from "./process-abc.mjs";
 import { processPf2tData } from "./processPf2taData.mjs";
@@ -75,7 +75,7 @@ function warnInvalidSource(path: string, core: TCore): void {
 		if (!core.source) {
 			warn(`\tMissing source for ${core.objectType}:${core.name}`);
 		}else {
-			const source = sageCores.find(c => c.objectType === "Source" && c.code === core.source);
+			const source = getSageCores().find(c => c.objectType === "Source" && c.code === core.source);
 			if (!source) {
 				warn(`\tInvalid source for ${core.objectType}:${core.name} (${core.source})`);
 			}else if (!path.includes(source.code!) && !path.includes(source.name)) {
@@ -85,12 +85,13 @@ function warnInvalidSource(path: string, core: TCore): void {
 	}
 }
 function validateAbbreviation(core: TCore) {
-	if (core.objectType === "Source" && core.abbreviation && sageCores.find(c => c !== core && c.objectType === "Source" && c.abbreviation === core.abbreviation)) {
+	if (core.objectType === "Source" && core.abbreviation && getSageCores().find(c => c !== core && c.objectType === "Source" && c.abbreviation === core.abbreviation)) {
 		error(`\tDuplicate source abbreviation '${core.abbreviation}' for ${core.name}`);
 	}
 }
 function pluralObjectType(objectType: string) { return `${objectType}s`.toLowerCase(); }
 function updatePreviousId(core: TCore) {
+	const sageCores = getSageCores();
 	const index = sageCores.indexOf(core);
 	const prev = sageCores[index - 1];
 	if (prev?.objectType !== core.objectType || prev?.name !== core.name) return false;
@@ -156,7 +157,7 @@ function processData(filePathAndName: string) {
 	ensureTrait(coreList);
 
 	for (const core of coreList) {
-		sageCores.push(core);
+		getSageCores().push(core);
 		if (!core.id) {
 			core.id = createUuid();
 			_created++;
@@ -210,13 +211,15 @@ function processData(filePathAndName: string) {
 }
 
 function ensureTrait(coreList: TCore[]): void {
+	const pf2tCores = getPf2tCores();
 	["Class","Ancestry","Archetype","VersatileHeritage"].forEach(objectType => {
 		const missingTraits = coreList.filter(core => core.objectType === objectType && !coreList.find(c => c.objectType === "Trait" && c.name === core.name));
-		missingTraits.forEach(core => {
-			if (objectType !== "Archetype" || !sageCores.find(sageCore => sageCore.objectType === "Class" && sageCore.name === core.name)) {
+		const hasPf2tTraits = missingTraits.filter(sage => pf2tCores.find(pf2t => pf2t.type === "trait" && sage.name === pf2t.name));
+		hasPf2tTraits.forEach(core => {
+			// if (objectType !== "Archetype" || !sageCores.find(sageCore => sageCore.objectType === "Class" && sageCore.name === core.name)) {
 				const traitCore = { objectType:"Trait", name:core.name, source:core.source, id:createUuid() } as TCore;
 				coreList.splice(coreList.indexOf(core) + 1, 0, traitCore);
-			}
+			// }
 		});
 	});
 }
@@ -285,6 +288,8 @@ function updatePf2t(core: TCore): boolean {
 
 function processMissingSpells() {
 	info(`\nChecking for missing spells ...`);
+	const sageCores = getSageCores();
+	const pf2tCores = getPf2tCores();
 	const missing = pf2tCores.filter(pf2 => !sageCores.find(core => compareNames(core, pf2)));
 	const missingSpells = missing.filter(sp => sp.type === "spell");
 	info(`Checking for missing spells ... found ${missingSpells.length}!`);
@@ -305,7 +310,7 @@ function pushLore(name: string, type?: string) {
 function processLore() {
 	info(`Creating all-lores.csv ...`);
 	const loreRegex = /([A-Z]\w+\s+)+Lore/g;
-	sageCores.forEach(core => {
+	getSageCores().forEach(core => {
 		if (["Deity","Ancestry","VersatileHeritage"].includes(core.objectType)) {
 			pushLore(`${core.name} Lore`, core.objectType);
 		}
@@ -320,13 +325,13 @@ function processLore() {
 //#endregion
 
 function findDuplicateCores(): void {
+	const sageCores = getSageCores();
 	const dupes = sageCores.map(core => sageCores.filter(dupe =>
-		core.objectType === dupe.objectType && core.name === dupe.name && core.source === dupe.source && core.id !== dupe.id
+		core.objectType !== "Feat" && core.objectType === dupe.objectType && core.name === dupe.name && core.source === dupe.source && core.id !== dupe.id
 	)).filter(dupes => dupes.length);
 	info(`Duplicate Entries (${dupes.length}): ${dupes.map(list => list.first()!.name)}`);
 }
 
-let pf2tCores: Pf2tBaseCore[] = [];
 export default async function process(): Promise<void> {
 
 	await loadPf2tCores();
@@ -335,7 +340,7 @@ export default async function process(): Promise<void> {
 	processAbcData();
 	processMissingSpells();
 	processLore();
-	findDuplicateCores();
+	if (false) findDuplicateCores();
 	parsePf2Data();
 
 	info(""); // spacer for bash script

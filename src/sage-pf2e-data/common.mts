@@ -1,4 +1,6 @@
 import type { Pf2tBaseCore } from "../sage-pf2e";
+import type { SourceCore } from "../sage-pf2e/model/base/Source";
+import type { ClassCore } from "../sage-pf2e/model/Class";
 import utils from "../sage-utils";
 import type { TCore } from "./types.mjs";
 
@@ -29,10 +31,20 @@ export function debug(...args: any[]) {
 	}
 }
 
-export const sageCores = new utils.ArrayUtils.Collection<TCore>();
+const sageCores = new utils.ArrayUtils.Collection<TCore>();
+export function getSageCores(): utils.ArrayUtils.Collection<TCore>
+export function getSageCores(objectType: "Source"): utils.ArrayUtils.Collection<SourceCore>;
+export function getSageCores(objectType: "Class"): utils.ArrayUtils.Collection<ClassCore>;
+export function getSageCores(objectType?: string): any {
+	if (objectType) {
+		return sageCores.filter(core => core.objectType === objectType);
+	}
+	return sageCores;
+}
 
 const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
-export const pf2tCores = new utils.ArrayUtils.Collection<Pf2tBaseCore>();
+const pf2tCores = new utils.ArrayUtils.Collection<Pf2tBaseCore>();
+export function getPf2tCores() { return pf2tCores; }
 export async function loadPf2tCores(): Promise<void> {
 	const path = `${SrcDataPath}/pf2t-all.json`;
 	let cores = await utils.FsUtils.readJsonFile<Pf2tBaseCore[]>(path).catch(() => null) ?? [];
