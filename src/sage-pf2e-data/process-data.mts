@@ -153,6 +153,8 @@ function processData(filePathAndName: string) {
 	debug(`Parsing (${coreList.length}): ${filePathAndName}`);
 	total += coreList.length;
 
+	ensureTrait(coreList);
+
 	for (const core of coreList) {
 		sageCores.push(core);
 		if (!core.id) {
@@ -205,6 +207,16 @@ function processData(filePathAndName: string) {
 	}
 	// info(`Processing file: ${filePathAndName} ... done`);
 	return coreList;
+}
+
+function ensureTrait(coreList: TCore[]): void {
+	["Class","Ancestry","Archetype","VersatileHeritage"].forEach(objectType => {
+		const missingTraits = coreList.filter(core => core.objectType === objectType && !coreList.find(c => c.objectType === "Trait" && c.name === core.name));
+		missingTraits.forEach(core => {
+			const traitCore = { objectType:"Trait", name:core.name, source:core.source, id:createUuid() } as TCore;
+			coreList.splice(coreList.indexOf(core), 0, traitCore);
+		});
+	});
 }
 
 function fixDetails(core: TCore): boolean {
@@ -305,17 +317,23 @@ function processLore() {
 }
 //#endregion
 
+function findDuplicateCores(): void {
+	const dupes = sageCores.map(core => sageCores.filter(dupe =>
+		core.objectType === dupe.objectType && core.name === dupe.name && core.source === dupe.source && core.id !== dupe.id
+	)).filter(dupes => dupes.length);
+	info(`Duplicate Entries (${dupes.length}): ${dupes.pluck("name" as any)}`);
+}
+
 let pf2tCores: Pf2tBaseCore[] = [];
 export default async function process(): Promise<void> {
 
 	await loadPf2tCores();
 	processSources();
 	await processPf2tData();
-	if (false) {
-		processAbcData();
-		processMissingSpells();
-		processLore();
-	}
+	processAbcData();
+	processMissingSpells();
+	processLore();
+	findDuplicateCores();
 	parsePf2Data();
 
 	info(""); // spacer for bash script
