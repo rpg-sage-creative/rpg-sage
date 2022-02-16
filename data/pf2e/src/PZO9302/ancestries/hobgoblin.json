@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Hobgoblin",
+		"source": "PZO9302",
+		"id": "4eb841bf-bc8d-4bcd-b483-c6e94a5d26f1",
+		"aonId": 268,
+		"pf2t": {
+			"name": "Hobgoblin",
+			"source": "Character Guide pg. 133 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=268",
+			"aon": "traits268",
+			"type": "trait",
+			"body": "Hobgoblins are a sturdy, clever people with a propensity for militaristic order",
+			"hash": "knFPIggY"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Elfbane Hobgoblin",
 		"ancestry": "Hobgoblin",

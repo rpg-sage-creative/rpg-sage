@@ -27,6 +27,7 @@
 			"hash": "vXlBzcRk"
 		}
 	},
+	{ "objectType": "Trait", "name": "Orc", "source": "PZO2105", "id": "40defd39-ae6f-475b-acd2-190129fa110c" },
 	{
 		"objectType": "Heritage",
 		"name": "Badlands Orc",

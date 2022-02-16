@@ -21,6 +21,14 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Druid",
+		"source": "PZO2101",
+		"id": "1205a9ee-f1f9-4975-8aba-483c5aa6f803",
+		"aonId": 52,
+		"pf2t": { "name": "Druid", "source": "Core Rulebook pg. 631 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=52", "aon": "traits52", "type": "trait", "body": "This indicates abilities from the druid class.", "hash": "xMcgpBVw" }
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Druid Dedication",
 		"level": 2,

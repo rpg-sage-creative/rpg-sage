@@ -21,6 +21,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Sorcerer",
+		"source": "PZO2101",
+		"id": "2bd8f298-ea49-4275-92a6-d1f633bfd674",
+		"aonId": 148,
+		"pf2t": {
+			"name": "Sorcerer",
+			"source": "Core Rulebook pg. 636 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=148",
+			"aon": "traits148",
+			"type": "trait",
+			"body": "This indicates abilities from the sorcerer class.",
+			"hash": "KAzEvgyx"
+		}
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Sorcerer Dedication",
 		"level": 2,

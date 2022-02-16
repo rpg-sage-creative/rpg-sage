@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Lizardfolk",
+		"source": "PZO9302",
+		"id": "9bccf5e4-fe97-4278-999c-b56ddf10b965",
+		"aonId": 226,
+		"pf2t": {
+			"name": "Lizardfolk",
+			"source": "Character Guide pg. 133 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=226",
+			"aon": "traits226",
+			"type": "trait",
+			"body": "These reptilian humanoids, also known as iruxi, are extremely adaptable and patient.",
+			"hash": "rIGEHrxX"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Cliffscale Lizardfolk",
 		"ancestry": "Lizardfolk",

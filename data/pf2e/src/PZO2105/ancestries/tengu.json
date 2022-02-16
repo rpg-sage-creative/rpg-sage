@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Tengu",
+		"source": "PZO2105",
+		"id": "f9499e12-75e9-4b00-bdf8-da44d89c7768",
+		"aonId": 240,
+		"pf2t": {
+			"name": "Tengu",
+			"source": "Advanced Player's Guide pg. 270",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=240",
+			"aon": "traits240",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the tengu ancestry. Tengus are humanoids who resemble birds. An ability with this trait can be used or selected only by tengus. An item with this trait is created and used by tengus.",
+			"hash": "QntrzVCR"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Jinxed Tengu",
 		"ancestry": "Tengu",

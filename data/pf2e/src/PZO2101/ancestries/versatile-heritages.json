@@ -46,6 +46,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Half-Elf",
+		"source": "PZO2101",
+		"id": "56b09124-3211-47a7-ab8f-2401c5116111",
+		"aonId": 85,
+		"pf2t": {
+			"name": "Half-Elf",
+			"source": "Core Rulebook pg. 632 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=85",
+			"aon": "traits85",
+			"type": "trait",
+			"body": "A creature with this trait is part human and part elf. An ability with this trait can be used or selected only by half-elves.",
+			"hash": "cXODRgXg"
+		}
+	},
+	{
 		"objectType": "VersatileHeritage",
 		"name": "Half-Orc",
 		"details": [
@@ -89,6 +105,22 @@
 					"details": "By default, half-elves and half-orcs descend from humans, but your GM might allow you to be the offspring of an elf, orc, or different ancestry. In these cases, the GM will let you select the half-elf or half-orc heritage as the heritage for this other ancestry. The most likely other parent of a half-elf are gnomes and halflings, and the most likely parents of a half-orc are goblins, halflings, and dwarves."
 				}
 			]
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Half-Orc",
+		"source": "PZO2101",
+		"id": "3ed9ac33-f51a-4234-9042-062af1ee4935",
+		"aonId": 86,
+		"pf2t": {
+			"name": "Half-Orc",
+			"source": "Core Rulebook pg. 632 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=86",
+			"aon": "traits86",
+			"type": "trait",
+			"body": "A creature with this trait is part human and part orc. An ability with this trait can be used or selected only by half-orcs.",
+			"hash": "ZZcXDQgd"
 		}
 	},
 	{

@@ -87,6 +87,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Dwarf",
+		"source": "PZO2101",
+		"id": "76a42fcb-072f-41ed-a1fa-02dacbd9a3e0",
+		"aonId": 54,
+		"pf2t": {
+			"name": "Dwarf",
+			"source": "Core Rulebook pg. 631 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=54",
+			"aon": "traits54",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the dwarf ancestry. Dwarves are stout folk who often live underground and typically have darkvision. An ability with this trait can be used or selected only by dwarves. An item with this trait is created and used by dwarves.",
+			"hash": "FNgOZrpr"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Ancient-Blooded Dwarf",
 		"ancestry": "Dwarf",

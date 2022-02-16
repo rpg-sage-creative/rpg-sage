@@ -21,6 +21,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Barbarian",
+		"source": "PZO2101",
+		"id": "f2e2700e-b3e8-41b0-a2f7-fee3e3d08208",
+		"aonId": 18,
+		"pf2t": {
+			"name": "Barbarian",
+			"source": "Core Rulebook pg. 629 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=18",
+			"aon": "traits18",
+			"type": "trait",
+			"body": "This indicates abilities from the barbarian class.",
+			"hash": "rRvXxDqO"
+		}
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Barbarian Dedication",
 		"level": 2,

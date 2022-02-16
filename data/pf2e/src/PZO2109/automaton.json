@@ -29,6 +29,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Automaton",
+		"source": "PZO2109",
+		"id": "59e61052-ebe0-48fa-a6a7-25591c502cf1",
+		"aonId": 398,
+		"pf2t": {
+			"name": "Automaton",
+			"source": "Guns & Gears pg. 230",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=398",
+			"aon": "traits398",
+			"type": "trait",
+			"body": "Automatons are living constructs sustained by a magical core.",
+			"hash": "tptURrJC"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Hunter Automaton",
 		"ancestry": "Automaton",

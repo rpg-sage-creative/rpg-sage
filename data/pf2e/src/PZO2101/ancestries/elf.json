@@ -86,6 +86,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Elf",
+		"source": "PZO2101",
+		"id": "3a12c180-fe67-4782-8371-a5ebccf72a23",
+		"aonId": 58,
+		"pf2t": {
+			"name": "Elf",
+			"source": "Core Rulebook pg. 631 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=58",
+			"aon": "traits58",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the elf ancestry. Elves are mysterious people with rich traditions of magic and scholarship who typically have low-light vision. An ability with this trait can be used or selected only by elves. A weapon with this trait is created and used by elves.",
+			"hash": "QBfXrYEc"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Arctic Elf",
 		"ancestry": "Elf",

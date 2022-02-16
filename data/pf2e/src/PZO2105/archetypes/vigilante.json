@@ -24,6 +24,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Vigilante",
+		"source": "PZO2105",
+		"id": "c87a1166-0eb6-4b07-8766-9eaa2375edae",
+		"aonId": 326,
+		"pf2t": {
+			"name": "Vigilante",
+			"source": "Advanced Player's Guide pg. 271",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=326",
+			"aon": "traits326",
+			"type": "trait",
+			"body": "Using actions and abilities with the vigilante trait while in your social identity risks exposing you as a vigilante.",
+			"hash": "hrvLXKrz"
+		}
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Vigilante Dedication",
 		"level": 2,

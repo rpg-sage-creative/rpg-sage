@@ -21,6 +21,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Summoner",
+		"source": "PZO2108",
+		"id": "a859716b-f2b4-4bca-af38-3aaa1d40a315",
+		"aonId": 392,
+		"pf2t": {
+			"name": "Summoner",
+			"source": "Secrets of Magic pg. 254",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=392",
+			"aon": "traits392",
+			"type": "trait",
+			"body": "This indicates abilities from the summoner class.",
+			"hash": "XxlRRdCV"
+		}
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Summoner Dedication",
 		"level": 2,

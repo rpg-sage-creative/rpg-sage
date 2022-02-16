@@ -26,6 +26,7 @@
 			"hash": "WOwQdMOt"
 		}
 	},
+	{ "objectType": "Trait", "name": "Sprite", "source": "PZO9308", "id": "ee355854-35ad-48b4-a371-ef0d6532ea38" },
 	{
 		"objectType": "Heritage",
 		"name": "Draxie",

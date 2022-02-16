@@ -28,6 +28,14 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Shoony",
+		"source": "PZO90153",
+		"id": "071814ce-4ea2-4bb0-b85c-9524aaaaefd6",
+		"aonId": 296,
+		"pf2t": { "name": "Shoony", "source": "153 Life's Long Shadow pg. 70", "src": "https://2e.aonprd.com/Traits.aspx?ID=296", "aon": "traits296", "type": "trait", "hash": "mKyhFBPX" }
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Bloodhound Shoony",
 		"ancestry": "Shoony",

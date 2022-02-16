@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Strix",
+		"source": "PZO9308",
+		"id": "6f24779c-b5ee-4b32-b839-6bd12b25335e",
+		"aonId": 342,
+		"pf2t": {
+			"name": "Strix",
+			"source": "Ancestry Guide pg. 142",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=342",
+			"aon": "traits342",
+			"type": "trait",
+			"body": "Winged humanoids, most of whom live in and around Cheliax.",
+			"hash": "KqrZFqwg"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Nightglider Strix",
 		"ancestry": "Strix",

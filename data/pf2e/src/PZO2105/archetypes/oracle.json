@@ -21,6 +21,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Oracle",
+		"source": "PZO2105",
+		"id": "eb4db02d-f46a-4cf1-9ecb-8488702f5645",
+		"aonId": 319,
+		"pf2t": {
+			"name": "Oracle",
+			"source": "Advanced Player's Guide pg. 269",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=319",
+			"aon": "traits319",
+			"type": "trait",
+			"body": "This trait indicates abilities from the oracle class.",
+			"hash": "BjxKgNEB"
+		}
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Oracle Dedication",
 		"level": 2,

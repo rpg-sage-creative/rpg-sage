@@ -21,6 +21,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Witch",
+		"source": "PZO2105",
+		"id": "e7d09399-ac91-4571-87cd-6862c9d311b3",
+		"aonId": 323,
+		"pf2t": {
+			"name": "Witch",
+			"source": "Advanced Player's Guide pg. 271",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=323",
+			"aon": "traits323",
+			"type": "trait",
+			"body": "This trait indicates abilities from the witch class.",
+			"hash": "zEgYCZNq"
+		}
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Witch Dedication",
 		"level": 2,

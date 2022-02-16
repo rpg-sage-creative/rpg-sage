@@ -22,6 +22,14 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Bard",
+		"source": "PZO2101",
+		"id": "75923f32-ed68-4585-a16f-3b7fd7bda407",
+		"aonId": 19,
+		"pf2t": { "name": "Bard", "source": "Core Rulebook pg. 629 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=19", "aon": "traits19", "type": "trait", "body": "This indicates abilities from the bard class.", "hash": "lxNmMrGz" }
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Bard Dedication",
 		"level": 2,

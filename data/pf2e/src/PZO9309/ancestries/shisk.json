@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Shisk",
+		"source": "PZO9309",
+		"id": "df29e173-fa9b-47a6-b307-dacfe2d8fdf6",
+		"aonId": 382,
+		"pf2t": {
+			"name": "Shisk",
+			"source": "The Mwangi Expanse pg. 310 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=382",
+			"aon": "traits382",
+			"type": "trait",
+			"body": "Secretive humanoids covered in bony plumage that reside underground.",
+			"hash": "DqlbmAYc"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Lorekeeper Shisk",
 		"ancestry": "Shisk",

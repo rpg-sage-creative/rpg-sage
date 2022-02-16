@@ -21,6 +21,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Champion",
+		"source": "PZO2101",
+		"id": "f2a55e30-25e3-4e32-9eec-f9cf1820beaf",
+		"aonId": 24,
+		"pf2t": {
+			"name": "Champion",
+			"source": "Core Rulebook pg. 629 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=24",
+			"aon": "traits24",
+			"type": "trait",
+			"body": "This indicates abilities from the champion class.",
+			"hash": "brqxblWv"
+		}
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Champion Dedication",
 		"level": 2,

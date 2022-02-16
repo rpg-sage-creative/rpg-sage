@@ -21,6 +21,14 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Fighter",
+		"source": "PZO2101",
+		"id": "d5307a82-41d0-42cc-9333-b742baf38292",
+		"aonId": 71,
+		"pf2t": { "name": "Fighter", "source": "Core Rulebook pg. 632 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=71", "aon": "traits71", "type": "trait", "body": "This indicates abilities from the fighter class.", "hash": "rcmOLOsQ" }
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Fighter Dedication",
 		"level": 2,

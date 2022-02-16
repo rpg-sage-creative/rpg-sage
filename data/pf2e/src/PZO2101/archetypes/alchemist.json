@@ -21,6 +21,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Alchemist",
+		"source": "PZO2101",
+		"id": "5809f4d1-a4e6-4b23-87fd-9a908b844e96",
+		"aonId": 7,
+		"pf2t": {
+			"name": "Alchemist",
+			"source": "Core Rulebook pg. 628 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=7",
+			"aon": "traits7",
+			"type": "trait",
+			"body": "This indicates abilities from the alchemist class.",
+			"hash": "DGRQfFkP"
+		}
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Alchemist Dedication",
 		"level": 2,

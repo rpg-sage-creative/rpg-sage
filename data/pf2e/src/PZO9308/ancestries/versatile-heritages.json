@@ -17,6 +17,22 @@
 		"id": "48c2ac57-4d0d-4705-a0d9-d40fa3ddc8b1"
 	},
 	{
+		"objectType": "Trait",
+		"name": "Aphorite",
+		"source": "PZO9308",
+		"id": "7dbdc170-6689-4f4e-a093-aecec9066bd0",
+		"aonId": 335,
+		"pf2t": {
+			"name": "Aphorite",
+			"source": "Ancestry Guide pg. 140",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=335",
+			"aon": "traits335",
+			"type": "trait",
+			"body": "A type of planar scion descended from a being from Axis, the Plane of Law.",
+			"hash": "BpffEvys"
+		}
+	},
+	{
 		"objectType": "VersatileHeritage",
 		"name": "Beastkin",
 		"youMight": [
@@ -34,6 +50,22 @@
 		"id": "62a442df-65e6-4faa-a5dd-2671b8a20846"
 	},
 	{
+		"objectType": "Trait",
+		"name": "Beastkin",
+		"source": "PZO9308",
+		"id": "908794ca-571d-45db-9f84-e48be5fee9e9",
+		"aonId": 337,
+		"pf2t": {
+			"name": "Beastkin",
+			"source": "Ancestry Guide pg. 140",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=337",
+			"aon": "traits337",
+			"type": "trait",
+			"body": "Humanoids that can partially or fully transform into animal forms.",
+			"hash": "rWVpqhkY"
+		}
+	},
+	{
 		"objectType": "VersatileHeritage",
 		"name": "Ganzi",
 		"youMight": [
@@ -49,6 +81,22 @@
 		"aonId": 32,
 		"source": "PZO9308",
 		"id": "725d1af7-685a-4a69-8316-12433ecbfe1e"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Ganzi",
+		"source": "PZO9308",
+		"id": "1abdc83f-8ae2-433a-a3e6-9ae419e45948",
+		"aonId": 339,
+		"pf2t": {
+			"name": "Ganzi",
+			"source": "Ancestry Guide pg. 141",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=339",
+			"aon": "traits339",
+			"type": "trait",
+			"body": "A planar scion descended from a chaotic being of the Maelstrom, such as a protean",
+			"hash": "vEOVRsgx"
+		}
 	},
 	{
 		"objectType": "VersatileHeritage",
@@ -78,6 +126,7 @@
 			"hash": "NRpWCPxQ"
 		}
 	},
+	{ "objectType": "Trait", "name": "Ifrit", "source": "PZO9308", "id": "f5c678da-86c8-4132-904d-64212fe8d865" },
 	{
 		"objectType": "VersatileHeritage",
 		"name": "Oread",
@@ -106,6 +155,7 @@
 			"hash": "WZxvExNk"
 		}
 	},
+	{ "objectType": "Trait", "name": "Oread", "source": "PZO9308", "id": "ea8bac1b-9167-4c8b-abc1-628114e6233b" },
 	{
 		"objectType": "VersatileHeritage",
 		"name": "Suli",
@@ -133,6 +183,7 @@
 			"hash": "FRAEcdDc"
 		}
 	},
+	{ "objectType": "Trait", "name": "Suli", "source": "PZO9308", "id": "7a35fecb-ff35-4bd7-b5f5-0e34a682d7b2" },
 	{
 		"objectType": "VersatileHeritage",
 		"name": "Sylph",
@@ -161,6 +212,7 @@
 			"hash": "wHbLSVzg"
 		}
 	},
+	{ "objectType": "Trait", "name": "Sylph", "source": "PZO9308", "id": "e19f6fbd-4e19-45db-9da8-fd91a0b39a51" },
 	{
 		"objectType": "VersatileHeritage",
 		"name": "Undine",
@@ -188,5 +240,6 @@
 			"body": "These dynamic, fluid mortals trace their ancestry to creatures from the Plane of Water, such as marids, water mephits, and brine dragons.\n\nUndines often go through life in a series of shifting phases, their interests waxing, waning, or sometimes morphing altogether as old loves are discarded for new interests. Structure provides a much-needed focus to undines' lives, and without strong goals or support from those around them, undines can find themselves stagnating in feelings of despondence. Most undines feel they personify specific aspects of water, some seeing themselves with the strength and power of the waves, the speed and tenacity of a river current, or the calm of a peaceful lake or pond. Others identify with all these aspects and more, their demeanors shifting like the tides from one situation to the next.\n\nUndines born with a connection only to a specific subtype of elemental water, such as ice, brine, or mist, might have a specific undine lineage. These are typically passed down from parent to child, as with other geniekin, but on occasion, a child is born with a lineage never seen in their family. Sometimes lineages are the result of where an undine's ancestors lived, such as rimesoul undines being born in the cold northern countries or at the tops of mountain peaks. At other times it can be related to the undine's elemental heritage, as is often the case with brinesoul undines, who usually descend from brine dragons. Mistsoul undines might have a distant but powerful connection to elemental water, or might even have a bit of elemental air mixed into their ancestry.",
 			"hash": "qqYKSWNb"
 		}
-	}
+	},
+	{ "objectType": "Trait", "name": "Undine", "source": "PZO9308", "id": "566750c4-906e-47cf-8308-ded3d312f9a3" }
 ]

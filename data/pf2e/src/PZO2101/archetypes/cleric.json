@@ -21,6 +21,14 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Cleric",
+		"source": "PZO2101",
+		"id": "ecad2936-3c3d-4062-a9bb-9d817aaf0cf8",
+		"aonId": 26,
+		"pf2t": { "name": "Cleric", "source": "Core Rulebook pg. 629 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=26", "aon": "traits26", "type": "trait", "body": "This indicates abilities from the cleric class.", "hash": "bTmQjAlY" }
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Cleric Dedication",
 		"level": 2,

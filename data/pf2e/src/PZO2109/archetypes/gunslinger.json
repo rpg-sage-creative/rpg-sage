@@ -20,6 +20,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Gunslinger",
+		"source": "PZO2109",
+		"id": "ced43d06-8bc3-4721-85ca-56fe41377b1d",
+		"aonId": 406,
+		"pf2t": {
+			"name": "Gunslinger",
+			"source": "Guns & Gears pg. 233",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=406",
+			"aon": "traits406",
+			"type": "trait",
+			"body": "This indicates abilities from the gunslinger class.",
+			"hash": "PldJASrI"
+		}
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Gunslinger Dedication",
 		"level": 2,

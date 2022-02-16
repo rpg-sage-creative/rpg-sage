@@ -21,6 +21,14 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Ranger",
+		"source": "PZO2101",
+		"id": "18a0030d-d93d-4486-b410-effb4b7b83de",
+		"aonId": 136,
+		"pf2t": { "name": "Ranger", "source": "Core Rulebook pg. 635 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=136", "aon": "traits136", "type": "trait", "body": "This indicates abilities from the ranger class.", "hash": "prSzMEHR" }
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Ranger Dedication",
 		"level": 2,

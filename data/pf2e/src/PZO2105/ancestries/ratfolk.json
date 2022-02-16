@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Ratfolk",
+		"source": "PZO2105",
+		"id": "f1c2ce7b-5716-4488-87df-82bee73a6e4d",
+		"aonId": 234,
+		"pf2t": {
+			"name": "Ratfolk",
+			"source": "Advanced Player's Guide pg. 269",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=234",
+			"aon": "traits234",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the ratfolk ancestry. Ratfolk are humanoids who resemble rats. An ability with this trait can be used or selected only by ratfolk.",
+			"hash": "CJgBZQFx"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Deep Rat",
 		"ancestry": "Ratfolk",

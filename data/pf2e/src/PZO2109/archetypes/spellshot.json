@@ -23,6 +23,14 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Spellshot",
+		"source": "PZO2109",
+		"id": "011a28ba-77d8-4476-a632-1420fca7c1ec",
+		"aonId": 414,
+		"pf2t": { "name": "Spellshot", "source": "Guns & Gears pg. 140", "src": "https://2e.aonprd.com/Traits.aspx?ID=414", "aon": "traits414", "type": "trait", "hash": "vhrQqdbE" }
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Spellshot Dedication",
 		"level": 2,

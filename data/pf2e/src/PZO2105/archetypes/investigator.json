@@ -21,6 +21,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Investigator",
+		"source": "PZO2105",
+		"id": "2e54e9ce-1d5c-4a92-bb2d-fbb47bb16c98",
+		"aonId": 318,
+		"pf2t": {
+			"name": "Investigator",
+			"source": "Advanced Player's Guide pg. 268",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=318",
+			"aon": "traits318",
+			"type": "trait",
+			"body": "This trait indicates abilities from the investigator class.",
+			"hash": "HQpnNwZR"
+		}
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Investigator Dedication",
 		"level": 2,

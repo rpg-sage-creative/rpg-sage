@@ -27,6 +27,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Kobold",
+		"source": "PZO2105",
+		"id": "7927af59-1004-4f88-93ca-0091c556469a",
+		"aonId": 224,
+		"pf2t": {
+			"name": "Kobold",
+			"source": "Advanced Player's Guide pg. 268",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=224",
+			"aon": "traits224",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the kobold ancestry. Kobolds are reptilian humanoids who are usually Small and typically have darkvision. An ability with this trait can be used or selected only by kobolds.",
+			"hash": "UbWyLgEd"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Cavern Kobold",
 		"ancestry": "Kobold",

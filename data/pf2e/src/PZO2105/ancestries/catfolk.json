@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Catfolk",
+		"source": "PZO2105",
+		"id": "5f6e9398-9c08-4d2f-b103-a69b4a04cf84",
+		"aonId": 211,
+		"pf2t": {
+			"name": "Catfolk",
+			"source": "Advanced Player's Guide pg. 266",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=211",
+			"aon": "traits211",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the catfolk ancestry. Catfolk are humanoids with feline features. An ability with this trait can be used or selected only by catfolk. An item with this trait is created and used by catfolk.",
+			"hash": "mblZTZcq"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Clawed Catfolk",
 		"ancestry": "Catfolk",

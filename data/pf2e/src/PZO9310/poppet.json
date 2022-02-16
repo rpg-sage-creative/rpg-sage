@@ -29,6 +29,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Poppet",
+		"source": "PZO9310",
+		"id": "8972860e-6ade-492d-986f-623ad07e266b",
+		"aonId": 418,
+		"pf2t": {
+			"name": "Poppet",
+			"source": "Grand Bazaar pg. 134",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=418",
+			"aon": "traits418",
+			"type": "trait",
+			"body": "Small constructs originally designed to serve as companions or servants. They occasionally gain a greater spark of life, transforming them into independent, sapient creatures.",
+			"hash": "zmlXnpJT"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Ghost Poppet",
 		"ancestry": "Poppet",

@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Kitsune",
+		"source": "PZO9308",
+		"id": "7b3472fa-d1ac-4123-a6c4-c839a061b25a",
+		"aonId": 341,
+		"pf2t": {
+			"name": "Kitsune",
+			"source": "Ancestry Guide pg. 141",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=341",
+			"aon": "traits341",
+			"type": "trait",
+			"body": "Shapeshifting humanoids whose true forms resemble foxes.",
+			"hash": "xUpcIznR"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Celestial Envoy Kitsune",
 		"ancestry": "Kitsune",

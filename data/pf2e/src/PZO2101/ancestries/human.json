@@ -72,6 +72,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Human",
+		"source": "PZO2101",
+		"id": "842e8d63-c2ff-43ff-b24c-4f4ddd876f72",
+		"aonId": 90,
+		"pf2t": {
+			"name": "Human",
+			"source": "Core Rulebook pg. 633 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=90",
+			"aon": "traits90",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the human ancestry. Humans are a diverse array of people known for their adaptability. An ability with this trait can be used or selected only by humans.",
+			"hash": "GkXUOtkn"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Skilled Heritage",
 		"ancestry": "Human",

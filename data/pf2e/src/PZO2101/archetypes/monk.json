@@ -21,6 +21,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Monk",
+		"source": "PZO2101",
+		"id": "141a4d8b-7c79-4ab0-9412-d7c2f4bb8e3b",
+		"aonId": 112,
+		"pf2t": {
+			"name": "Monk",
+			"source": "Core Rulebook pg. 634 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=112",
+			"aon": "traits112",
+			"type": "trait",
+			"body": "Abilities with this trait are from the monk class. A weapon with this trait is primarily used by monks.",
+			"hash": "RqYKyqpX"
+		}
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Monk Dedication",
 		"level": 2,

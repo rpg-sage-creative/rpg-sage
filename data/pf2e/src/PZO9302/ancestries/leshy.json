@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Leshy",
+		"source": "PZO9302",
+		"id": "bd6400ac-7345-40a1-b8c8-37f51d0203f2",
+		"aonId": 225,
+		"pf2t": {
+			"name": "Leshy",
+			"source": "Character Guide pg. 133 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=225",
+			"aon": "traits225",
+			"type": "trait",
+			"body": "Leshies are living plants animated by primal magic.",
+			"hash": "WrXrwkvc"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Fungus Leshy",
 		"ancestry": "Leshy",

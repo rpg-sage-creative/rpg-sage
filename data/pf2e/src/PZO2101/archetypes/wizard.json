@@ -21,6 +21,14 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Wizard",
+		"source": "PZO2101",
+		"id": "9ecbbb2a-97e4-4ca7-a1bc-37582a6a87c1",
+		"aonId": 166,
+		"pf2t": { "name": "Wizard", "source": "Core Rulebook pg. 638 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=166", "aon": "traits166", "type": "trait", "body": "This indicates abilities from the wizard class.", "hash": "HMtLULcT" }
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Wizard Dedication",
 		"level": 2,

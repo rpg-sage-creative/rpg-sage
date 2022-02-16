@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Android",
+		"source": "PZO9308",
+		"id": "a7104b70-e6e2-4d2f-9c34-53a13dd26967",
+		"aonId": 334,
+		"pf2t": {
+			"name": "Android",
+			"source": "Ancestry Guide pg. 140",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=334",
+			"aon": "traits334",
+			"type": "trait",
+			"body": "A synthetic humanoid ancestry created by artificial means. Most common in Numeria.",
+			"hash": "ztBYzWpt"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Artisan Android",
 		"ancestry": "Android",

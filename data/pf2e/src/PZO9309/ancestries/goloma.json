@@ -28,6 +28,14 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Goloma",
+		"source": "PZO9309",
+		"id": "3b261a75-86a0-4e85-8ad3-435367941d12",
+		"aonId": 381,
+		"pf2t": { "name": "Goloma", "source": "The Mwangi Expanse pg. 309 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=381", "aon": "traits381", "type": "trait", "body": "Insular humanoids that bear countless eyes.", "hash": "hsLvQSxG" }
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Farsight Goloma",
 		"ancestry": "Goloma",

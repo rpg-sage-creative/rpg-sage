@@ -21,6 +21,14 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Rogue",
+		"source": "PZO2101",
+		"id": "3e6959da-354e-4831-adc6-a58fe6d05cfe",
+		"aonId": 139,
+		"pf2t": { "name": "Rogue", "source": "Core Rulebook pg. 635 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=139", "aon": "traits139", "type": "trait", "body": "This indicates abilities from the rogue class.", "hash": "LpqvXNWQ" }
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Rogue Dedication",
 		"level": 2,

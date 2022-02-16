@@ -83,6 +83,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Gnome",
+		"source": "PZO2101",
+		"id": "564f0eff-5c4f-4ba8-be55-5e45945faf40",
+		"aonId": 80,
+		"pf2t": {
+			"name": "Gnome",
+			"source": "Core Rulebook pg. 632 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=80",
+			"aon": "traits80",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the gnome ancestry. Gnomes are small people skilled at magic who seek out new experiences and usually have low-light vision. An ability with this trait can be used or selected only by gnomes. A weapon with this trait is created and used by gnomes.",
+			"hash": "lnvqymEr"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Chameleon Gnome",
 		"ancestry": "Gnome",

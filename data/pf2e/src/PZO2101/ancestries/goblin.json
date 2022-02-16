@@ -81,6 +81,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Goblin",
+		"source": "PZO2101",
+		"id": "430f718c-349b-4635-bb05-88d6bd0c1f41",
+		"aonId": 81,
+		"pf2t": {
+			"name": "Goblin",
+			"source": "Core Rulebook pg. 632 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=81",
+			"aon": "traits81",
+			"type": "trait",
+			"body": "A creature with this trait can be one of several kinds of creature, including goblins, hobgoblins, and bugbears. Goblins tend to have darkvision. An ability with this trait can be used or chosen only by goblins. A weapon with this trait is created and used by goblins.",
+			"hash": "SlPPQLYX"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Charhide Goblin",
 		"ancestry": "Goblin",

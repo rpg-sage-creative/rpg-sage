@@ -27,6 +27,7 @@
 			"hash": "ppbmKgVf"
 		}
 	},
+	{ "objectType": "Trait", "name": "Gnoll", "source": "PZO9309", "id": "deb789b0-b7d6-4ed5-b5b0-3e20942ca97c" },
 	{
 		"objectType": "Heritage",
 		"name": "Ant Gnoll",

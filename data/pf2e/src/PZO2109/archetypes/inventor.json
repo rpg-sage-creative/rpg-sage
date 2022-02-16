@@ -21,6 +21,14 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Inventor",
+		"source": "PZO2109",
+		"id": "956234ee-fa4c-4e2d-af9e-9a403d69acf9",
+		"aonId": 408,
+		"pf2t": { "name": "Inventor", "source": "Guns & Gears pg. 233", "src": "https://2e.aonprd.com/Traits.aspx?ID=408", "aon": "traits408", "type": "trait", "body": "This indicates abilities from the inventor class.", "hash": "TgcgkEQk" }
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Inventor Dedication",
 		"level": 2,

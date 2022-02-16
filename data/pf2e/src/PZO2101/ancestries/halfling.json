@@ -87,6 +87,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Halfling",
+		"source": "PZO2101",
+		"id": "1f14b266-7b21-4f76-8b29-6cb800b83b4d",
+		"aonId": 87,
+		"pf2t": {
+			"name": "Halfling",
+			"source": "Core Rulebook pg. 632 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=87",
+			"aon": "traits87",
+			"type": "trait",
+			"body": "A creature with this trait is a member of the halfling ancestry. These small people are friendly wanderers considered to be lucky. An ability with this trait can be used or selected only by halflings. A weapon with this trait is created and used by halflings.",
+			"hash": "RYvIQxlz"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Gutsy Halfling",
 		"ancestry": "Halfling",

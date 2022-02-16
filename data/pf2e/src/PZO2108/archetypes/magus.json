@@ -21,6 +21,14 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Magus",
+		"source": "PZO2108",
+		"id": "639fdc2f-de9e-4898-808b-346af78b6a8c",
+		"aonId": 389,
+		"pf2t": { "name": "Magus", "source": "Secrets of Magic pg. 253", "src": "https://2e.aonprd.com/Traits.aspx?ID=389", "aon": "traits389", "type": "trait", "body": "This indicates abilities from the magus class.", "hash": "bwBHxOOw" }
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Magus Dedication",
 		"level": 2,

@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Fleshwarp",
+		"source": "PZO9308",
+		"id": "fe1c196e-eded-4a6b-93de-8202f3bb3dfa",
+		"aonId": 338,
+		"pf2t": {
+			"name": "Fleshwarp",
+			"source": "Ancestry Guide pg. 141",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=338",
+			"aon": "traits338",
+			"type": "trait",
+			"body": "A humanoid transformed so completely by outside forces that they are now a unique ancestry",
+			"hash": "mdhVEYCM"
+		}
+	},
+	{
 		"objectType": "Heritage",
 		"name": "Created Fleshwarp",
 		"ancestry": "Fleshwarp",

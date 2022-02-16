@@ -27,6 +27,7 @@
 			"hash": "CnwzCOgH"
 		}
 	},
+	{ "objectType": "Trait", "name": "Fetchling", "source": "PZO9308", "id": "79a36501-36bd-4cc4-8c5d-724b7cd88804" },
 	{
 		"objectType": "Heritage",
 		"name": "Bright Fetchling",

@@ -21,6 +21,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Swashbuckler",
+		"source": "PZO2105",
+		"id": "1f65379f-2c37-4114-af10-7b12bd9ce1ac",
+		"aonId": 321,
+		"pf2t": {
+			"name": "Swashbuckler",
+			"source": "Advanced Player's Guide pg. 270",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=321",
+			"aon": "traits321",
+			"type": "trait",
+			"body": "This trait indicates abilities from the swashbuckler class.",
+			"hash": "pRjPbLpb"
+		}
+	},
+	{
 		"objectType": "DedicationFeat",
 		"name": "Swashbuckler Dedication",
 		"level": 2,

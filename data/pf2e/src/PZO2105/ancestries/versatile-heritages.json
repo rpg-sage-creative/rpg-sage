@@ -16,6 +16,22 @@
 		"id": "695acbd2-7554-4d4c-94cb-76bb94a62dcc"
 	},
 	{
+		"objectType": "Trait",
+		"name": "Aasimar",
+		"source": "PZO2105",
+		"id": "2305ee82-4f23-4004-b1f3-e94b2bc7db04",
+		"aonId": 256,
+		"pf2t": {
+			"name": "Aasimar",
+			"source": "Advanced Player's Guide pg. 266",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=256",
+			"aon": "traits256",
+			"type": "trait",
+			"body": "A creature with this trait has the aasimar versatile heritage. Aasimars are planar scions descended from celestial beings. An ability with this trait can be used or selected only by aasimars.",
+			"hash": "xDxxtgER"
+		}
+	},
+	{
 		"objectType": "VersatileHeritage",
 		"name": "Changling",
 		"youMight": [
@@ -49,6 +65,22 @@
 		"id": "68d9c154-0e17-4f8b-b3d3-06da3caf5892"
 	},
 	{
+		"objectType": "Trait",
+		"name": "Dhampir",
+		"source": "PZO2105",
+		"id": "0dc03977-386e-4abb-9f42-cf56268638a3",
+		"aonId": 215,
+		"pf2t": {
+			"name": "Dhampir",
+			"source": "Advanced Player's Guide pg. 267",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=215",
+			"aon": "traits215",
+			"type": "trait",
+			"body": "A creature with this trait has the dhampir versatile heritage. These humanoids are the immortal offspring of vampires and members of other ancestries.",
+			"hash": "LdINrpQE"
+		}
+	},
+	{
 		"objectType": "VersatileHeritage",
 		"name": "Duskwalker",
 		"youMight": [
@@ -76,6 +108,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Duskwalker",
+		"source": "PZO2105",
+		"id": "4a7f65e6-97a6-4b80-9d85-350ebaf7f069",
+		"aonId": 257,
+		"pf2t": {
+			"name": "Duskwalker",
+			"source": "Advanced Player's Guide pg. 267",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=257",
+			"aon": "traits257",
+			"type": "trait",
+			"body": "A creature with this trait has the duskwalker versatile heritage. Duskwalkers are planar scions infused with the supernatural energy of psychopomps. An ability with this trait can be used or selected only by duskwalkers.",
+			"hash": "NYgtRsjB"
+		}
+	},
+	{
 		"objectType": "VersatileHeritage",
 		"name": "Tiefling",
 		"youMight": [
@@ -91,5 +139,21 @@
 		"aonId": 26,
 		"source": "PZO2105",
 		"id": "6651507a-23b0-4470-a25f-1b38ef74f708"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Tiefling",
+		"source": "PZO2105",
+		"id": "08eb6b5a-ef8c-4602-abe8-b932ef61e475",
+		"aonId": 258,
+		"pf2t": {
+			"name": "Tiefling",
+			"source": "Advanced Player's Guide pg. 270",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=258",
+			"aon": "traits258",
+			"type": "trait",
+			"body": "A creature with this trait has the tiefling versatile heritage. Tieflings are planar scions descended from fiends. An ability with this trait can be used or selected only by tieflings.",
+			"hash": "rOzpRMQt"
+		}
 	}
 ]
