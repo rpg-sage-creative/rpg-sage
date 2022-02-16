@@ -44,6 +44,22 @@
 			"hash": "hfEHrFOk"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Swashbuckler",
+		"source": "PZO2105",
+		"id": "14fc50e6-fae4-4781-8e61-30beea2e9728",
+		"aonId": 321,
+		"pf2t": {
+			"name": "Swashbuckler",
+			"source": "Advanced Player's Guide pg. 270",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=321",
+			"aon": "traits321",
+			"type": "trait",
+			"body": "This trait indicates abilities from the swashbuckler class.",
+			"hash": "pRjPbLpb"
+		}
+	},
 	{ "objectType": "ClassPath", "name": "Battledancer", "class": "Swashbuckler", "source": "PZO2105", "id": "e5dae38d-4f29-4138-b340-b13b167f31b0", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Braggart", "class": "Swashbuckler", "source": "PZO2105", "id": "dcb4fab3-ec82-4001-8504-ae1c7fd41e39", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Fencer", "class": "Swashbuckler", "source": "PZO2105", "id": "5584dcfb-311f-48aa-895a-446d051c3cb5", "aonId": 3 },

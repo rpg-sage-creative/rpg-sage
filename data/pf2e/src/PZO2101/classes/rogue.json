@@ -44,6 +44,14 @@
 			"hash": "GtyrzvRh"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Rogue",
+		"source": "PZO2101",
+		"id": "855e6380-8cbc-41db-800a-4757f35b93aa",
+		"aonId": 139,
+		"pf2t": { "name": "Rogue", "source": "Core Rulebook pg. 635 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=139", "aon": "traits139", "type": "trait", "body": "This indicates abilities from the rogue class.", "hash": "LpqvXNWQ" }
+	},
 	{ "objectType": "ClassPath", "name": "Ruffian", "class": "Rogue", "source": "PZO2101", "id": "68964a48-4d82-4c0d-9d30-2b0bcd85b494", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Scoundrel", "class": "Rogue", "source": "PZO2101", "id": "850826f9-7183-40a3-a506-ae36754a5270", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Thief", "class": "Rogue", "source": "PZO2101", "id": "e1d27cd1-7595-4da1-aa77-4260d1610b92", "aonId": 3 }

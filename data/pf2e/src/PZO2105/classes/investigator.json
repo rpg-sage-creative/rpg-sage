@@ -45,6 +45,22 @@
 			"hash": "QxxAFrmt"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Investigator",
+		"source": "PZO2105",
+		"id": "630c7d35-722f-4d8e-b64b-a5a43bae1292",
+		"aonId": 318,
+		"pf2t": {
+			"name": "Investigator",
+			"source": "Advanced Player's Guide pg. 268",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=318",
+			"aon": "traits318",
+			"type": "trait",
+			"body": "This trait indicates abilities from the investigator class.",
+			"hash": "HQpnNwZR"
+		}
+	},
 	{ "objectType": "ClassPath", "name": "Alchemical Sciences", "class": "Investigator", "source": "PZO2105", "id": "325cb12e-8dd1-42d3-9905-3c66d2666e42", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Empiricism", "class": "Investigator", "source": "PZO2105", "id": "b85d0a6a-2fcf-4117-8cfd-ffc079731118", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Forensic Medicine", "class": "Investigator", "source": "PZO2105", "id": "57b6f2e7-22b0-4ae6-a315-7f91c9ed3d6e", "aonId": 3 },

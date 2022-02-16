@@ -31,6 +31,7 @@
 		"source": "PZO2111",
 		"id": "8af6ea6b-4a1f-464b-93b3-8fd7baa8c093"
 	},
+	{ "objectType": "Trait", "name": "Psychic", "source": "PZO2111", "id": "2ff24271-e84a-4310-9012-9b9c0bf483c8" },
 	{
 		"objectType": "Class",
 		"name": "Thaumaturge",
@@ -61,5 +62,6 @@
 		"aonId": 0,
 		"source": "PZO2111",
 		"id": "60ad1035-fa70-41fa-a002-c36e605dced0"
-	}
+	},
+	{ "objectType": "Trait", "name": "Thaumaturge", "source": "PZO2111", "id": "cd3449d0-e792-48fc-985f-88f4fe54d126" }
 ]

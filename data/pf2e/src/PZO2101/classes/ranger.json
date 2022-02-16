@@ -43,6 +43,14 @@
 			"hash": "JfVMghXp"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Ranger",
+		"source": "PZO2101",
+		"id": "5458c6a4-439d-42a7-a35c-1eb70e170486",
+		"aonId": 136,
+		"pf2t": { "name": "Ranger", "source": "Core Rulebook pg. 635 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=136", "aon": "traits136", "type": "trait", "body": "This indicates abilities from the ranger class.", "hash": "prSzMEHR" }
+	},
 	{ "objectType": "ClassPath", "name": "Flurry", "class": "Ranger", "source": "PZO2101", "id": "2379236e-4354-4988-9583-d314d8abf356", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Outwit", "class": "Ranger", "source": "PZO2101", "id": "70c1cdbd-34f8-48d1-a044-9e5ed8e7fb69", "aonId": 3 },
 	{ "objectType": "ClassPath", "name": "Precision", "class": "Ranger", "source": "PZO2101", "id": "39eb279f-6cfe-403d-b7e3-95a531a92358", "aonId": 2 }

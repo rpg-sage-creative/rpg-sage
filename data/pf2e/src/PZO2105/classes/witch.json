@@ -42,6 +42,22 @@
 			"hash": "hCQqARON"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Witch",
+		"source": "PZO2105",
+		"id": "3b43a52c-b0f4-49f8-bf9a-61915790d84a",
+		"aonId": 323,
+		"pf2t": {
+			"name": "Witch",
+			"source": "Advanced Player's Guide pg. 271",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=323",
+			"aon": "traits323",
+			"type": "trait",
+			"body": "This trait indicates abilities from the witch class.",
+			"hash": "zEgYCZNq"
+		}
+	},
 	{ "objectType": "ClassPath", "name": "Curse", "class": "Witch", "source": "PZO2105", "id": "bd547bc2-5dac-47d9-87a4-71041763a539", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Fate", "class": "Witch", "source": "PZO2105", "id": "44a03dc9-5ad2-4be0-a397-bdb14d8a2b49", "aonId": 3 },
 	{ "objectType": "ClassPath", "name": "Fervor", "class": "Witch", "source": "PZO2105", "id": "0abb6b01-ea35-4db5-a333-2957e7d5445f", "aonId": 4 },

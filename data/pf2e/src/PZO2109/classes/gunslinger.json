@@ -43,6 +43,22 @@
 			"hash": "PMZrpBxd"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Gunslinger",
+		"source": "PZO2109",
+		"id": "ce471b58-79df-4fe3-b67c-07d297bef569",
+		"aonId": 406,
+		"pf2t": {
+			"name": "Gunslinger",
+			"source": "Guns & Gears pg. 233",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=406",
+			"aon": "traits406",
+			"type": "trait",
+			"body": "This indicates abilities from the gunslinger class.",
+			"hash": "PldJASrI"
+		}
+	},
 	{ "objectType": "ClassPath", "name": "Way of the Drifter", "class": "Gunslinger", "source": "PZO2109", "id": "4517b330-5d72-4347-8bd8-5c9e6e2459f1" },
 	{ "objectType": "ClassPath", "name": "Way of the Pistolero", "class": "Gunslinger", "source": "PZO2109", "id": "963d1829-478c-4c5d-bfc8-e18087a1e451" },
 	{ "objectType": "ClassPath", "name": "Way of the Sniper", "class": "Gunslinger", "source": "PZO2109", "id": "026bb9f2-7053-4a83-b0f5-df6a3396e7c2" },

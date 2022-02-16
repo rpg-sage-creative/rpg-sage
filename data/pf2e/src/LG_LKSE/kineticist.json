@@ -33,6 +33,7 @@
 		"source": "LG_LKSE",
 		"id": "846b4032-3cf7-4dc9-8ffe-3ee514ae2713"
 	},
+	{ "objectType": "Trait", "name": "Kineticist", "source": "LG_LKSE", "id": "dcc03359-4ae9-462d-9c8d-7184a044f155" },
 	{ "objectType": "ClassPath", "name": "Aether", "class": "Legendary Kineticist", "source": "LG_LKSE", "id": "bccedf16-e146-4fab-9e04-f0463312dcc8" },
 	{ "objectType": "ClassPath", "name": "Air", "class": "Legendary Kineticist", "source": "LG_LKSE", "id": "dee6909c-0e83-4146-8da0-12e3dea7a52c" },
 	{ "objectType": "ClassPath", "name": "Cold", "class": "Legendary Kineticist", "source": "LG_LKSE", "id": "ed981003-7667-4f30-8ec7-89a0ca5312ef" },

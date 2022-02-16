@@ -41,6 +41,22 @@
 			"hash": "tgqlXrgz"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Summoner",
+		"source": "PZO2108",
+		"id": "d14706bd-f2f9-4525-811b-a1850da55cc9",
+		"aonId": 392,
+		"pf2t": {
+			"name": "Summoner",
+			"source": "Secrets of Magic pg. 254",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=392",
+			"aon": "traits392",
+			"type": "trait",
+			"body": "This indicates abilities from the summoner class.",
+			"hash": "XxlRRdCV"
+		}
+	},
 	{ "objectType": "ClassPath", "name": "Angel", "class": "Summoner", "source": "PZO2108", "id": "98bcf5cf-74d3-4f34-9313-b6aa50900642" },
 	{ "objectType": "ClassPath", "name": "Anger Phantom", "class": "Summoner", "source": "PZO2108", "id": "40c31bd2-f8c2-49ab-8ba7-2c82a3e14d0d" },
 	{ "objectType": "ClassPath", "name": "Beast", "class": "Summoner", "source": "PZO2108", "id": "49d2c525-25fe-4305-99a5-2d1e6cde5c58" },

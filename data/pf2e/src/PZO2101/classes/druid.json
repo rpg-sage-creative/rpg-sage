@@ -47,6 +47,14 @@
 			"hash": "hyzUgElx"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Druid",
+		"source": "PZO2101",
+		"id": "dbbdd61d-3520-4c40-8e51-f0b3d0d06322",
+		"aonId": 52,
+		"pf2t": { "name": "Druid", "source": "Core Rulebook pg. 631 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=52", "aon": "traits52", "type": "trait", "body": "This indicates abilities from the druid class.", "hash": "xMcgpBVw" }
+	},
 	{ "objectType": "ClassPath", "name": "Animal", "class": "Druid", "source": "PZO2101", "id": "234a44c5-6846-44fa-9d70-bd455f976436", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Leaf", "class": "Druid", "source": "PZO2101", "id": "f6023e37-81c1-4b69-b352-6af25734813a", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Storm", "class": "Druid", "source": "PZO2101", "id": "97324ca9-4d6c-4bb2-a325-2b78ac450acf", "aonId": 3 },

@@ -44,6 +44,22 @@
 			"hash": "bvggVbFp"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Sorcerer",
+		"source": "PZO2101",
+		"id": "68c2db56-4c2d-4aac-97f9-f0ab0b9b4b77",
+		"aonId": 148,
+		"pf2t": {
+			"name": "Sorcerer",
+			"source": "Core Rulebook pg. 636 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=148",
+			"aon": "traits148",
+			"type": "trait",
+			"body": "This indicates abilities from the sorcerer class.",
+			"hash": "KAzEvgyx"
+		}
+	},
 	{ "objectType": "ClassPath", "name": "Aberrant", "class": "Sorcerer", "source": "PZO2101", "id": "0e23445b-e90b-44c5-90f4-ea5c939943a5", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Angelic", "class": "Sorcerer", "source": "PZO2101", "id": "f196548e-5386-47d1-86f3-8193413a74af", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Demonic", "class": "Sorcerer", "source": "PZO2101", "id": "5865ed25-74c1-4e09-9910-bee64ade6642", "aonId": 3 },

@@ -44,6 +44,22 @@
 			"hash": "YrHPjbwR"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Oracle",
+		"source": "PZO2105",
+		"id": "ffd37978-4198-417d-bee3-6ddc69c4afb1",
+		"aonId": 319,
+		"pf2t": {
+			"name": "Oracle",
+			"source": "Advanced Player's Guide pg. 269",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=319",
+			"aon": "traits319",
+			"type": "trait",
+			"body": "This trait indicates abilities from the oracle class.",
+			"hash": "BjxKgNEB"
+		}
+	},
 	{ "objectType": "ClassPath", "name": "Ancestors", "class": "Oracle", "source": "PZO2105", "id": "720edbd6-883d-4057-af88-c8068bf7fb1c", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Battle", "class": "Oracle", "source": "PZO2105", "id": "f200187a-e915-4c7e-aef8-c9d1d35ef62d", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Bones", "class": "Oracle", "source": "PZO2105", "id": "40843945-a4bc-4d14-8fe3-208a5220f6fd", "aonId": 3 },

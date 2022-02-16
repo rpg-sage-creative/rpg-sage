@@ -43,6 +43,14 @@
 			"hash": "VgtlqQQh"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Bard",
+		"source": "PZO2101",
+		"id": "ed6bac9a-4c2c-4a1c-bb80-2d5b9a042faf",
+		"aonId": 19,
+		"pf2t": { "name": "Bard", "source": "Core Rulebook pg. 629 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=19", "aon": "traits19", "type": "trait", "body": "This indicates abilities from the bard class.", "hash": "lxNmMrGz" }
+	},
 	{ "objectType": "ClassPath", "name": "Enigma", "class": "Bard", "source": "PZO2101", "id": "775fc704-c4c7-4626-8f37-5c78c8389e16", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Maestro", "class": "Bard", "source": "PZO2101", "id": "5deb6c36-c1ea-4585-82b3-9d32e8f8c398", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Polymath", "class": "Bard", "source": "PZO2101", "id": "65079beb-3ded-4e28-bf27-9f858525d393", "aonId": 3 }

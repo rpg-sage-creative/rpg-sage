@@ -42,6 +42,14 @@
 			"hash": "brybPBdN"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Magus",
+		"source": "PZO2108",
+		"id": "4494a0f5-2dba-44b1-a75b-4fa1e6fdf85f",
+		"aonId": 389,
+		"pf2t": { "name": "Magus", "source": "Secrets of Magic pg. 253", "src": "https://2e.aonprd.com/Traits.aspx?ID=389", "aon": "traits389", "type": "trait", "body": "This indicates abilities from the magus class.", "hash": "bwBHxOOw" }
+	},
 	{ "objectType": "ClassPath", "name": "Inexorable Iron", "class": "Magus", "source": "PZO2108", "id": "97f35bce-ec6d-475f-82dc-aed03144b08b" },
 	{ "objectType": "ClassPath", "name": "Laughing Shadow", "class": "Magus", "source": "PZO2108", "id": "96b65be4-b24d-4a38-afc7-0d1c9898a4bc" },
 	{ "objectType": "ClassPath", "name": "Sparkling Targe", "class": "Magus", "source": "PZO2108", "id": "b68cf395-3f48-45b7-b0da-f1675448a0b6" },

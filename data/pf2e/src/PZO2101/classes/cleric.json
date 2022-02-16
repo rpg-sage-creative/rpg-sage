@@ -46,6 +46,14 @@
 			"hash": "lxrDrKgT"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Cleric",
+		"source": "PZO2101",
+		"id": "5e235d1f-b724-4f5e-9e53-73f294295e57",
+		"aonId": 26,
+		"pf2t": { "name": "Cleric", "source": "Core Rulebook pg. 629 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=26", "aon": "traits26", "type": "trait", "body": "This indicates abilities from the cleric class.", "hash": "bTmQjAlY" }
+	},
 	{ "objectType": "ClassPath", "name": "Cloistered Cleric", "class": "Cleric", "source": "PZO2101", "id": "e0f2c8ec-a131-4fe7-9a17-2157ac6e24fd", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Warpriest", "class": "Cleric", "source": "PZO2101", "id": "91616bf0-2a07-4783-b527-d4e4115d5c5e", "aonId": 3 }
 ]

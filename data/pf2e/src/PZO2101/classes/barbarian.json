@@ -44,6 +44,22 @@
 		}
 	},
 	{
+		"objectType": "Trait",
+		"name": "Barbarian",
+		"source": "PZO2101",
+		"id": "22f6af41-ec82-4613-8cf9-dc4bd8280d9a",
+		"aonId": 18,
+		"pf2t": {
+			"name": "Barbarian",
+			"source": "Core Rulebook pg. 629 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=18",
+			"aon": "traits18",
+			"type": "trait",
+			"body": "This indicates abilities from the barbarian class.",
+			"hash": "rRvXxDqO"
+		}
+	},
+	{
 		"objectType": "ClassPath",
 		"name": "Animal Instinct",
 		"types": [ "ape", "bear", "bull", "cat", "deer", "frog", "shark", "snake", "wolf" ],

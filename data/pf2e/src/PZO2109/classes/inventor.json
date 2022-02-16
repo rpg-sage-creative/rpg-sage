@@ -45,6 +45,14 @@
 			"hash": "ZGbpJflE"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Inventor",
+		"source": "PZO2109",
+		"id": "d1f145c6-ab0e-434b-b0ec-165b72da1ac6",
+		"aonId": 408,
+		"pf2t": { "name": "Inventor", "source": "Guns & Gears pg. 233", "src": "https://2e.aonprd.com/Traits.aspx?ID=408", "aon": "traits408", "type": "trait", "body": "This indicates abilities from the inventor class.", "hash": "TgcgkEQk" }
+	},
 	{ "objectType": "ClassPath", "name": "Armor", "class": "Inventor", "source": "PZO2109", "id": "12f3a6dc-f877-4154-be6e-4b3c4ea57e07" },
 	{ "objectType": "ClassPath", "name": "Construct", "class": "Inventor", "source": "PZO2109", "id": "eeaf2c96-f760-47e7-8f9b-65365c1001a2" },
 	{ "objectType": "ClassPath", "name": "Weapon", "class": "Inventor", "source": "PZO2109", "id": "44044014-fd09-4677-870d-6fff3100e340" }

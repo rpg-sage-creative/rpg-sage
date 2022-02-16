@@ -41,6 +41,22 @@
 			"hash": "qqxXjAqW"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Alchemist",
+		"source": "PZO2101",
+		"id": "95621cd0-d0b3-445e-88d0-21db51b15c0a",
+		"aonId": 7,
+		"pf2t": {
+			"name": "Alchemist",
+			"source": "Core Rulebook pg. 628 2.0",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=7",
+			"aon": "traits7",
+			"type": "trait",
+			"body": "This indicates abilities from the alchemist class.",
+			"hash": "DGRQfFkP"
+		}
+	},
 	{ "objectType": "ClassPath", "name": "Bomber", "class": "Alchemist", "source": "PZO2101", "id": "b640f752-fc04-45b0-bc9b-bad88669b53e", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Chirurgeon", "class": "Alchemist", "source": "PZO2101", "id": "f0561e85-5f0b-47db-b13c-6432a275aa88", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Mutagenist", "class": "Alchemist", "source": "PZO2101", "id": "f1c25e73-fd69-4b38-bc3f-42fad26cd6a5", "aonId": 3 }

@@ -44,6 +44,14 @@
 			"hash": "vbRjXxQb"
 		}
 	},
+	{
+		"objectType": "Trait",
+		"name": "Wizard",
+		"source": "PZO2101",
+		"id": "ff687bdc-ed41-4c81-99d1-255d1ad12096",
+		"aonId": 166,
+		"pf2t": { "name": "Wizard", "source": "Core Rulebook pg. 638 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=166", "aon": "traits166", "type": "trait", "body": "This indicates abilities from the wizard class.", "hash": "HMtLULcT" }
+	},
 	{ "objectType": "ClassPath", "name": "Improved Familiar Attunement", "class": "Wizard", "source": "PZO2101", "id": "ed3df9e6-3dfb-4faf-a2e5-6e243de7ea17", "aonId": 1 },
 	{ "objectType": "ClassPath", "name": "Metamagical Experimentation", "class": "Wizard", "source": "PZO2101", "id": "62060e9e-9a95-480c-8da6-5bf972ab000a", "aonId": 2 },
 	{ "objectType": "ClassPath", "name": "Spell Blending", "class": "Wizard", "source": "PZO2101", "id": "88233bb3-4b77-420e-9bf9-7404922db089", "aonId": 3 },
