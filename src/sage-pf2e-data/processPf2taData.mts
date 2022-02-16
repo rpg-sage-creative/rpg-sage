@@ -1,6 +1,6 @@
 import utils from "../sage-utils";
 import { DistDataPath, info, getPf2tCores, getSageCores } from "./common.mjs";
-import { coresMatch } from "./pf2-tools-parsers/common.mjs";
+import { coresMatch, objectTypeToPf2Type } from "./pf2-tools-parsers/common.mjs";
 
 export async function processPf2tData(): Promise<void> {
 	info(`Processing processPf2tData ...`);
@@ -8,24 +8,23 @@ export async function processPf2tData(): Promise<void> {
 	const sageCores = getSageCores();
 	const pf2tCores = getPf2tCores();
 
-	const objectTypes = sageCores.pluck("objectType", true);
-	const classPaths = sageCores.pluck("classPath", true).filter(s => s) as string[];
-	const sageTypes = objectTypes.concat(classPaths).map(toPf2Type);
+	const sageTypes: string[] = [];
+	sageCores.pluck("objectType", true)
+			.concat(sageCores.pluck("classPath", true).filter(s => s) as string[])
+			.forEach(type => {
+		const clean = objectTypeToPf2Type(type, true);
+		if (!sageTypes.includes(clean)) sageTypes.push(clean);
+		const typed = objectTypeToPf2Type(type);
+		if (!sageTypes.includes(typed)) sageTypes.push(typed);
+	});
 
-	function toPf2Type<T extends string | undefined>(value?: T): T {
-		value = value?.replace(/[\s']/g, "").toLowerCase() as T;
-		switch (value) {
-			case "faith": return "deity" as T;
-			case "focusspell": return "focus" as T;
-			case "gear": return "item" as T;
-			default: return value as T;
-		}
-	}
-	function toSageType(value: string): string {
-		return value.toLowerCase().replace(/^cantrip$/, "spell");
-	}
+	const pf2tTypes: string[] = [];
+	pf2tCores.pluck("type", true)
+			.forEach(type => {
+		const clean = type.toLowerCase().replace(/^cantrip$/, "spell");
+		if (!pf2tTypes.includes(clean)) pf2tTypes.push(clean);
+	});
 
-	const pf2tTypes = pf2tCores.pluck("type", true).map(toSageType);
 	const missing = pf2tTypes.filter(type => !sageTypes.includes(type));
 	info({missing});
 
@@ -44,7 +43,7 @@ export async function processPf2tData(): Promise<void> {
 	matchesByName.forEach(matches => {
 		matches.forEach(({ pf2t, sage, sageType, type, source }) => {
 			const sourceCore = sourceCores.find(src => src.code === sage.source);
-			console.log(`${pf2t.name}: ${pf2t.type} ${type ? "===" : "!=="} ${sageType ?? sage.objectType} :: ${pf2t.source} ${source ? "===" : "!=="} ${sourceCore?.name ?? sage.source}`);
+			if(false)info(`${pf2t.name}: ${pf2t.type} ${type ? "===" : "!=="} ${sageType ?? sage.objectType} :: ${pf2t.source} ${source ? "===" : "!=="} ${sourceCore?.name ?? sage.source}`);
 		});
 	});
 

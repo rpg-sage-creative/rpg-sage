@@ -63,10 +63,10 @@ export function parseBody<T extends BaseCore>(body: string): Partial<T> {
 
 //#region objectType to type
 
-function objectTypeToPf2Type(sageCore: TCore): string;
-function objectTypeToPf2Type(objectType: string): string;
-function objectTypeToPf2Type(objectType: string, cleanOnly: true): string;
-function objectTypeToPf2Type(sageCore: TCore | string, cleanOnly?: true): string {
+export function objectTypeToPf2Type(sageCore: TCore): string;
+export function objectTypeToPf2Type(objectType: string): string;
+export function objectTypeToPf2Type(objectType: string, cleanOnly: true): string;
+export function objectTypeToPf2Type(sageCore: TCore | string, cleanOnly?: true): string {
 	if (typeof(sageCore) === "string") {
 		return cleanOnly === true ? cleanType(sageCore) : toPf2Type(sageCore);
 	}
