@@ -59,19 +59,44 @@ export interface Pf2tBaseCore extends SourcedCore<""> {
 	speedpenalty?: string;
 }
 
+export function objectTypeToPf2Type(objectType: string): string;
+export function objectTypeToPf2Type(objectType: string, cleanOnly: true): string;
+export function objectTypeToPf2Type(sageCore: TSageCore, cores: ClassCore[]): string;
+export function objectTypeToPf2Type(sageCore: TSageCore | string, cores?: true | ClassCore[]): string {
+	if (typeof(sageCore) === "string") {
+		return cores === true ? cleanType(sageCore) : toPf2Type(sageCore);
+	}
+	if (sageCore.objectType === "ClassPath" && Array.isArray(cores)) {
+		const clss = cores
+			? cores.find(klass => klass.objectType === "Class" && klass.name === sageCore.class)
+			: find<TClass>("Class", klass => klass.name === sageCore.class);
+		if (sageCore.name === "Ruffian") {
+			console.log(cores?.length, clss);
+		}
+		if (clss?.classPath) {
+			return toPf2Type(clss.classPath);
+		}
+	}
+	if (["Spell","FocusSpell"].includes(sageCore.objectType) && sageCore.traits?.includes("Cantrip")) {
+		return toPf2Type("Cantrip");
+	}
+	return toPf2Type(sageCore.objectType);
+}
 function toPf2Type(value: string): string {
-	value = value.replace(/[\s']/g, "").toLowerCase();
 	switch (value) {
 		// "classpath" would need to get the name of the classpath, such as "racket"
-		case "faith": return "deity";
-		case "focusspell": return "focus";
-		case "gear": return "item";
-		case "dedicationfeat": return "feat";
-		case "versatileheritage": return "ancestry";
-		default: return value;
+		case "Armor": return "item";
+		case "DedicationFeat": return "feat";
+		case "Faith": return "deity";
+		case "FocusSpell": return "focus";
+		case "Gear": return "item";
+		case "VersatileHeritage": return "ancestry";
+		default: return cleanType(value);
 	}
 }
-
+function cleanType(value: string): string {
+	return value.replace(/[\s']/g, "").toLowerCase();
+}
 //#region sources
 
 const missingSources: string[] = [];
@@ -293,25 +318,6 @@ export default class Pf2tBase
 	}
 
 	// #endregion utils.SearchUtils.ISearchable
-
-	//#region objectType conversion
-
-	public static objectTypeToPf2Type(sageCore: TSageCore, cores?: ClassCore[]): string {
-		if (sageCore.objectType === "ClassPath") {
-			const clss = cores
-				? cores.find(klass => klass.objectType === "Class" && klass.name === sageCore.class)
-				: find<TClass>("Class", klass => klass.name === sageCore.class);
-			if (clss?.classPath) {
-				return toPf2Type(clss.classPath);
-			}
-		}
-		if (["Spell","FocusSpell"].includes(sageCore.objectType) && sageCore.traits?.includes("Cantrip")) {
-			return toPf2Type("Cantrip");
-		}
-		return toPf2Type(sageCore.objectType);
-	}
-
-	//#endregion
 
 	public static parseSource(value: string, cores?: SourceCore[]): TParsedSource | null {
 		return parseSource(cores ?? Repository.all<Source>("Source"), value);

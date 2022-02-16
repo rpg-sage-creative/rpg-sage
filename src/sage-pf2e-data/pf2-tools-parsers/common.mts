@@ -1,4 +1,5 @@
 import { BaseCore, Pf2tBase, Pf2tBaseCore, TDetail, THasSuccessOrFailure } from "../../sage-pf2e";
+import { objectTypeToPf2Type } from "../../sage-pf2e/model/base/Pf2tBase";
 import type { SourceCore } from "../../sage-pf2e/model/base/Source";
 import type { ClassCore } from "../../sage-pf2e/model/Class";
 import utils, { OrNull } from "../../sage-utils";
@@ -74,10 +75,24 @@ export function getTypedCores<T>(objectType: string): T[] {
 	return typedCores.get(objectType);
 }
 
-function namesMatch(pf2: Pf2tBaseCore, sage: TCore): boolean {
-	if (compareNames(pf2, sage)) return true;
-	if (sage.objectType === "Domain") return pf2.name === `${sage.name} Domain`;
-	if (sage.objectType === "Deity") return pf2.name.split("(")[0].trim() === sage.name;
+function typesMatch(pf2t: Pf2tBaseCore, sage: TCore): [boolean, string] {
+	const cleanType = objectTypeToPf2Type(sage.objectType, true);
+	if (pf2t.type === cleanType) {
+		return [true, cleanType];
+	}
+	const simpleType = objectTypeToPf2Type(sage.objectType);
+	if (pf2t.type === simpleType) {
+		return [true, simpleType];
+	}
+	const sageType = objectTypeToPf2Type(sage, getTypedCores("Class"));
+	return [pf2t.type === sageType, sageType];
+}
+
+function namesMatch(pf2t: Pf2tBaseCore, sage: TCore): boolean {
+	if (compareNames(pf2t, sage)) return true;
+	if (sage.objectType === "Armor") return pf2t.name === `${sage.name} Armor`;
+	if (sage.objectType === "Domain") return pf2t.name === `${sage.name} Domain`;
+	if (sage.objectType === "Deity") return pf2t.name.split("(")[0].trim() === sage.name;
 	return false;
 }
 
@@ -108,8 +123,7 @@ type TCoreMatchResults = {
 
 export function coresMatch(pf2t: Pf2tBaseCore, sage: TCore): TCoreMatchResults {
 	const name = namesMatch(pf2t, sage);
-	const sageType = name ? Pf2tBase.objectTypeToPf2Type(sage, getTypedCores("Class")) : undefined;
-	const type = name ? sageType === pf2t.type : undefined;
+	const [type, sageType] = name ? typesMatch(pf2t, sage) : [false, undefined];
 	const source = name ? sourcesMatch(pf2t, sage) : undefined;
 	const none = !name && type === false && source === false;
 	const some = name || type === true || source === true;

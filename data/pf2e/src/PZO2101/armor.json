@@ -124,7 +124,27 @@
 		],
 		"page": 276,
 		"source": "PZO2101",
-		"id": "c9083e50-b8a1-4c20-b1e5-8acc646f405d"
+		"id": "c9083e50-b8a1-4c20-b1e5-8acc646f405d",
+		"aonId": 4,
+		"pf2t": {
+			"name": "Leather Armor",
+			"pfs": "standard",
+			"group": "leather",
+			"category": "light",
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 1,
+			"strength": 10,
+			"dexcap": 4,
+			"acbonus": 1,
+			"checkpenalty": 1,
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Armor.aspx?ID=4",
+			"aon": "armor4",
+			"type": "armor",
+			"body": "A mix of flexible and molded boiled leather, a suit of this type of armor provides some protection with maximum flexibility.\n\n#### Armor Specialization Effects\nCertain class features can grant you additional benefits with certain armors. This is called an armor specialization effect. The exact effect depends on which armor group your armor belongs to, as listed below. Only medium and heavy armors have armor specialization effects.\n\n**Leather**: The thick second skin of the armor disperses blunt force to reduce bludgeoning damage. You gain resistance to bludgeoning damage equal to 1 + the value of the armor's potency rune for medium armor, or 2 + the value of the armor's potency rune for heavy armor.",
+			"hash": "WOqvURJG"
+		}
 	},
 	{
 		"objectType": "Armor",
@@ -147,7 +167,27 @@
 		],
 		"page": 276,
 		"source": "PZO2101",
-		"id": "d7855c9b-3af0-4cf8-b16f-2efaa938165c"
+		"id": "d7855c9b-3af0-4cf8-b16f-2efaa938165c",
+		"aonId": 5,
+		"pf2t": {
+			"name": "Studded Leather Armor",
+			"pfs": "standard",
+			"group": "leather",
+			"category": "light",
+			"priceunit": "gp",
+			"price": 3,
+			"bulk": 1,
+			"strength": 12,
+			"dexcap": 3,
+			"acbonus": 2,
+			"checkpenalty": 1,
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Armor.aspx?ID=5",
+			"aon": "armor5",
+			"type": "armor",
+			"body": "This leather armor is reinforced with metal studs and sometimes small metal plates, providing most of the flexibility of leather armor with more robust protection.\n\n#### Armor Specialization Effects\nCertain class features can grant you additional benefits with certain armors. This is called an armor specialization effect. The exact effect depends on which armor group your armor belongs to, as listed below. Only medium and heavy armors have armor specialization effects.\n\n**Leather**: The thick second skin of the armor disperses blunt force to reduce bludgeoning damage. You gain resistance to bludgeoning damage equal to 1 + the value of the armor's potency rune for medium armor, or 2 + the value of the armor's potency rune for heavy armor.",
+			"hash": "QgvyryQp"
+		}
 	},
 	{
 		"objectType": "Armor",
@@ -214,7 +254,28 @@
 		],
 		"page": 276,
 		"source": "PZO2101",
-		"id": "da037c1a-140e-4d45-aece-770483a63a0d"
+		"id": "da037c1a-140e-4d45-aece-770483a63a0d",
+		"aonId": 7,
+		"pf2t": {
+			"name": "Hide Armor",
+			"pfs": "standard",
+			"group": "leather",
+			"category": "medium",
+			"priceunit": "gp",
+			"price": 2,
+			"bulk": 2,
+			"strength": 14,
+			"dexcap": 2,
+			"acbonus": 3,
+			"checkpenalty": 2,
+			"speedpenalty": 5,
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Armor.aspx?ID=7",
+			"aon": "armor7",
+			"type": "armor",
+			"body": "A mix of furs, sturdy hide, and sometimes molded boiled leather, this armor provides protection due to its layers of leather, though its bulkiness slows the wearer down and decreases mobility.\n\n#### Armor Specialization Effects\nCertain class features can grant you additional benefits with certain armors. This is called an armor specialization effect. The exact effect depends on which armor group your armor belongs to, as listed below. Only medium and heavy armors have armor specialization effects.\n\n**Leather**: The thick second skin of the armor disperses blunt force to reduce bludgeoning damage. You gain resistance to bludgeoning damage equal to 1 + the value of the armor's potency rune for medium armor, or 2 + the value of the armor's potency rune for heavy armor.",
+			"hash": "WIZqRBSG"
+		}
 	},
 	{
 		"objectType": "Armor",
@@ -370,7 +431,29 @@
 		],
 		"page": 276,
 		"source": "PZO2101",
-		"id": "aff411d0-2453-408c-b577-1632c1df3f01"
+		"id": "aff411d0-2453-408c-b577-1632c1df3f01",
+		"aonId": 11,
+		"pf2t": {
+			"name": "Splint Mail",
+			"level": 1,
+			"pfs": "standard",
+			"group": "composite",
+			"category": "heavy",
+			"priceunit": "gp",
+			"price": 13,
+			"bulk": 3,
+			"strength": 16,
+			"dexcap": 1,
+			"acbonus": 5,
+			"checkpenalty": 3,
+			"speedpenalty": 10,
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Armor.aspx?ID=11",
+			"aon": "armor11",
+			"type": "item",
+			"body": "This type of armor is chain mail reinforced with flexible, interlocking metal plates, typically located on the wearer's torso, upper arms, and legs. A suit of this armor comes with an undercoat of padded armor and a pair of gauntlets.\n\n#### Armor Specialization Effects\nCertain class features can grant you additional benefits with certain armors. This is called an armor specialization effect. The exact effect depends on which armor group your armor belongs to, as listed below. Only medium and heavy armors have armor specialization effects.\n\n**Composite**: The numerous overlapping pieces of this armor protect you from piercing attacks. You gain resistance to piercing damage equal to 1 + the value of the armor's potency rune for medium armor, or 2 + the value of the armor's potency rune for heavy armor.",
+			"hash": "XwcpQvIv"
+		}
 	},
 	{
 		"objectType": "Armor",
@@ -393,7 +476,29 @@
 		],
 		"page": 276,
 		"source": "PZO2101",
-		"id": "62b4c102-e1be-4fa2-9135-407108cdb808"
+		"id": "62b4c102-e1be-4fa2-9135-407108cdb808",
+		"aonId": 12,
+		"pf2t": {
+			"name": "Half Plate",
+			"level": 1,
+			"pfs": "standard",
+			"group": "plate",
+			"category": "heavy",
+			"priceunit": "gp",
+			"price": 18,
+			"bulk": 3,
+			"strength": 16,
+			"dexcap": 1,
+			"acbonus": 5,
+			"checkpenalty": 3,
+			"speedpenalty": 10,
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Armor.aspx?ID=12",
+			"aon": "armor12",
+			"type": "item",
+			"body": "Half plate consists of most of the upper body plates used in full plate, with lighter or sparser steel plate protection for the arms and legs. This provides some of the protection of full plate with greater flexibility and speed. A suit of this armor comes with an undercoat of padded armor and a pair of gauntlets.\n\n#### Armor Specialization Effects\nCertain class features can grant you additional benefits with certain armors. This is called an armor specialization effect. The exact effect depends on which armor group your armor belongs to, as listed below. Only medium and heavy armors have armor specialization effects.\n\n**Plate**: The sturdy plate provides no purchase for a cutting edge. You gain resistance to slashing damage equal to 1 + the value of the armor's potency rune for medium armor, or 2 + the value of the armor's potency rune for heavy armor.",
+			"hash": "dKUQWxvB"
+		}
 	},
 	{
 		"objectType": "Armor",
@@ -416,6 +521,29 @@
 		],
 		"page": 276,
 		"source": "PZO2101",
-		"id": "0f9a52f3-80ad-4dbf-89ab-e03d49dfc9f8"
+		"id": "0f9a52f3-80ad-4dbf-89ab-e03d49dfc9f8",
+		"aonId": 13,
+		"pf2t": {
+			"name": "Full Plate",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "bulwark",
+			"group": "plate",
+			"category": "heavy",
+			"priceunit": "gp",
+			"price": 30,
+			"bulk": 4,
+			"strength": 18,
+			"dexcap": 0,
+			"acbonus": 6,
+			"checkpenalty": 3,
+			"speedpenalty": 10,
+			"source": "Core Rulebook pg. 275 2.0",
+			"src": "https://2e.aonprd.com/Armor.aspx?ID=13",
+			"aon": "armor13",
+			"type": "item",
+			"body": "Plate mail consists of interlocking plates that encase nearly the entire body in a carapace of steel. It is costly and heavy, and the wearer often requires help to don it correctly, but it provides some of the best defense armor can supply. A suit of this armor comes with an undercoat of padded armor and a pair of gauntlets.",
+			"hash": "InVkTkYT"
+		}
 	}
 ]
