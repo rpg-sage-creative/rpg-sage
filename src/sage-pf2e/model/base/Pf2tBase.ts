@@ -305,8 +305,8 @@ export default class Pf2tBase
 				return toPf2Type(clss.classPath);
 			}
 		}
-		if (sageCore.objectType === "Spell" && sageCore.traits?.includes("Cantrip")) {
-			return "Cantrip";
+		if (["Spell","FocusSpell"].includes(sageCore.objectType) && sageCore.traits?.includes("Cantrip")) {
+			return toPf2Type("Cantrip");
 		}
 		return toPf2Type(sageCore.objectType);
 	}

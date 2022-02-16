@@ -185,7 +185,25 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Cantrip", "Electricity", "Evocation" ],
 		"focus": false,
-		"id": "8fdd3258-feeb-4f50-a60a-292dcc4052e7"
+		"id": "8fdd3258-feeb-4f50-a60a-292dcc4052e7",
+		"pf2t": {
+			"name": "Electric Arc",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,electricity,evocation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 335 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=97",
+			"aon": "spells97",
+			"type": "cantrip",
+			"savingthrow": "Reflex",
+			"basic": 1,
+			"body": "**Targets** 1 or 2 creatures\n\n- - -\n\nAn arc of lightning leaps from one target to another. You deal electricity damage equal to 1d4 plus your spellcasting ability modifier.\n- - -\n**Heightened (+1)** The damage increases by 1d4.",
+			"hash": "ypKWqtdQ"
+		}
 	},
 	{
 		"aonId": 98,

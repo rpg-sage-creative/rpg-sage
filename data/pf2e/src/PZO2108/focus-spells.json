@@ -313,8 +313,23 @@
 		"page": 144,
 		"source": "PZO2108",
 		"focus": true,
-		"aonId": 0,
-		"id": "5c55796d-5aaf-4277-b709-385bc52820ec"
+		"aonId": 1045,
+		"id": "5c55796d-5aaf-4277-b709-385bc52820ec",
+		"pf2t": {
+			"name": "Boost Eidolon",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cantrip,evocation,summoner",
+			"cast": "v",
+			"actions": 1,
+			"range": 100,
+			"source": "Secrets of Magic pg. 144",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=1045",
+			"aon": "spells1045",
+			"type": "cantrip",
+			"body": "**Duration** 1 round\n**Targets** your eidolon\n\n- - -\n\nYou focus deeply on the link between you and your eidolon and boost the power of your eidolon's attacks. Your eidolon gains a +2 status bonus to damage rolls with its unarmed attacks. If your eidolon's Strikes deal more than one weapon damage die, the status bonus increases to 2 per weapon damage die, to a maximum of +8 with four weapon damage dice.",
+			"hash": "bTxbqwvv"
+		}
 	},
 	{
 		"name": "Eidolon's Wrath",
@@ -470,8 +485,23 @@
 		"page": 145,
 		"source": "PZO2108",
 		"focus": true,
-		"aonId": 0,
-		"id": "cf0fa01b-9c30-4530-b55e-96a9abc5e4ab"
+		"aonId": 1050,
+		"id": "cf0fa01b-9c30-4530-b55e-96a9abc5e4ab",
+		"pf2t": {
+			"name": "Reinforce Eidolon",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,abjuration,cantrip,summoner",
+			"cast": "v",
+			"actions": 1,
+			"range": 100,
+			"source": "Secrets of Magic pg. 145",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=1050",
+			"aon": "spells1050",
+			"type": "cantrip",
+			"body": "**Duration** 1 round\n**Targets** your eidolon\n\n- - -\n\nYou focus deeply on the link between you and your eidolon and reinforce your eidolon's defenses. Your eidolon gains a +1 status bonus to AC and saving throws, plus resistance to all damage equal to half the spell's level. Your eidolon can benefit from either boost eidolon or reinforce eidolon, but not both; if you cast one of these spells during the other's duration, the newer spell replaces the older one.",
+			"hash": "wrnVXgUr"
+		}
 	},
 	{
 		"name": "Unfetter Eidolon",

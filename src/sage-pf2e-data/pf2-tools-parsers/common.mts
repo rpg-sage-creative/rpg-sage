@@ -74,10 +74,6 @@ export function getTypedCores<T>(objectType: string): T[] {
 	return typedCores.get(objectType);
 }
 
-function typesMatch(pf2: Pf2tBaseCore, sage: TCore): boolean {
-	return Pf2tBase.objectTypeToPf2Type(sage, getTypedCores("Class")) === pf2.type;
-}
-
 function namesMatch(pf2: Pf2tBaseCore, sage: TCore): boolean {
 	if (compareNames(pf2, sage)) return true;
 	if (sage.objectType === "Domain") return pf2.name === `${sage.name} Domain`;
@@ -100,6 +96,7 @@ function sourcesMatch(pf2t: Pf2tBaseCore, sage: TCore): boolean {
 type TCoreMatchResults = {
 	pf2t: Pf2tBaseCore;
 	sage: TCore;
+	sageType?: string;
 	name: boolean;
 	type?: boolean;
 	source?: boolean;
@@ -111,13 +108,14 @@ type TCoreMatchResults = {
 
 export function coresMatch(pf2t: Pf2tBaseCore, sage: TCore): TCoreMatchResults {
 	const name = namesMatch(pf2t, sage);
-	const type = name ? typesMatch(pf2t, sage) : undefined;
+	const sageType = name ? Pf2tBase.objectTypeToPf2Type(sage, getTypedCores("Class")) : undefined;
+	const type = name ? sageType === pf2t.type : undefined;
 	const source = name ? sourcesMatch(pf2t, sage) : undefined;
 	const none = !name && type === false && source === false;
 	const some = name || type === true || source === true;
 	const all = name && type === true && source === true;
 	const count = (name ? 1 : 0) + (type ? 1 : 0) + (source ? 1 : 0);
-	return { pf2t, sage, name, type, source, none, some, all, count };
+	return { pf2t, sage, sageType, name, type, source, none, some, all, count };
 }
 
 export function findPf2tCore(sage: TCore): Pf2tBaseCore | undefined {

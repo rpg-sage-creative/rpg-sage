@@ -39,13 +39,10 @@ export async function processPf2tData(): Promise<void> {
 	}).filter(a => a.length);
 	const sourceCores = getTypedCores("Source");
 	matchesByName.forEach(matches => {
-		const { pf2t, sage } = matches.first()!;
-		if (matches.length === 1) {
-			const source = sourceCores.find(src => src.code === sage.source);
-			console.log(`${pf2t.type}::${pf2t.name}::${pf2t.source} !== ${sage.objectType}::${sage.name}::${source?.name ?? sage.source}`);
-		}else {
-			info(`${pf2t.type}::${pf2t.name}::${pf2t.source} = ${matches.length}`);
-		}
+		matches.forEach(({ pf2t, sage, sageType, type, source }) => {
+			const sourceCore = sourceCores.find(src => src.code === sage.source);
+			console.log(`${pf2t.name}: ${pf2t.type} ${type ? "===" : "!=="} ${sageType ?? sage.objectType} :: ${pf2t.source} ${source ? "===" : "!=="} ${sourceCore?.name ?? sage.source}`);
+		});
 	});
 
 	info(`Processing processPf2tData ... done`);

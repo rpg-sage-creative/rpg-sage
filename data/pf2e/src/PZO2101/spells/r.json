@@ -118,7 +118,23 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Attack", "Cantrip", "Cold", "Evocation" ],
 		"focus": false,
-		"id": "cf68e8b5-66d4-4644-a459-4439273eceb9"
+		"id": "cf68e8b5-66d4-4644-a459-4439273eceb9",
+		"pf2t": {
+			"name": "Ray of Frost",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "attack,cantrip,cold,evocation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 362 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=245",
+			"aon": "spells245",
+			"type": "cantrip",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou blast an icy ray. Make a spell attack roll. The ray deals cold damage equal to 1d4 + your spellcasting ability modifier.\n\n**Critical Success** The target takes double damage and takes a -10-foot status penalty to its Speeds for 1 round.\n**Success** The target takes normal damage.\n- - -\n**Heightened (+1)** The damage increases by 1d4.",
+			"hash": "DWsKbbQc"
+		}
 	},
 	{
 		"aonId": 246,
@@ -143,7 +159,23 @@
 		"traditions": [ "arcane", "divine", "occult", "primal" ],
 		"traits": [ "Cantrip", "Detection", "Divination" ],
 		"focus": false,
-		"id": "ee164763-34db-495b-b5d0-e45580685cd8"
+		"id": "ee164763-34db-495b-b5d0-e45580685cd8",
+		"pf2t": {
+			"name": "Read Aura",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,detection,divination",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "s,v",
+			"actions": "1 minute",
+			"range": 30,
+			"source": "Core Rulebook pg. 362 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=246",
+			"aon": "spells246",
+			"type": "cantrip",
+			"body": "**Targets** 1 object\n\n- - -\n\nYou focus on the target object, opening your mind to perceive magical auras. When the casting is complete, you know whether that item is magical, and if it is, you learn the school of magic.\n\nIf the object is illusory, you detect this only if the effect's level is lower than the level of your read aura spell.\n- - -\n**Heightened (3rd)** You can target up to 10 objects.\n**Heightened (6th)** You can target any number of objects.",
+			"hash": "tFMcOrKb"
+		}
 	},
 	{
 		"aonId": 247,

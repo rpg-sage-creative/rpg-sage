@@ -63,7 +63,23 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Cantrip", "Evocation" ],
 		"focus": false,
-		"id": "315ab2f0-c96e-4520-b7cb-7ce6f0d22e31"
+		"id": "315ab2f0-c96e-4520-b7cb-7ce6f0d22e31",
+		"pf2t": {
+			"name": "Mage Hand",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,evocation",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 349 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=177",
+			"aon": "spells177",
+			"type": "cantrip",
+			"body": "**Duration** sustained\n**Targets** 1 unattended object of light Bulk or less\n\n- - -\n\nYou create a single magical hand, either invisible or ghostlike, that grasps the target object and moves it slowly up to 20 feet. Because you're levitating the object, you can move it in any direction. When you Sustain the Spell, you can move the object an additional 20 feet. If the object is in the air when the spell ends, the object falls.\n- - -\n**Heightened (3rd)** You can target an unattended object with a Bulk of 1 or less.\n**Heightened (5th)** The range increases to 60 feet, and you can target an unattended object with a Bulk of 1 or less.\n**Heightened (7th)** The range increases to 60 feet, and you can target an unattended object with a Bulk of 2 or less.",
+			"hash": "dBbpSbKN"
+		}
 	},
 	{
 		"aonId": 178,
@@ -601,7 +617,23 @@
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Auditory", "Cantrip", "Illusion", "Linguistic", "Mental" ],
 		"focus": false,
-		"id": "c30fa8dc-0e21-47f9-8c47-aff377bd2105"
+		"id": "c30fa8dc-0e21-47f9-8c47-aff377bd2105",
+		"pf2t": {
+			"name": "Message",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "auditory,cantrip,illusion,linguistic,mental",
+			"traditions": "arcane,divine,occult",
+			"cast": "v",
+			"actions": 1,
+			"range": 120,
+			"source": "Core Rulebook pg. 351 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=190",
+			"aon": "spells190",
+			"type": "cantrip",
+			"body": "**Duration** see below\n**Targets** 1 creature\n\n- - -\n\nYou mouth words quietly, but instead of coming out of your mouth, they're transferred directly to the ears of the target. While others can't hear your words any better than if you normally mouthed them, the target can hear your words as if they were standing next to you. The target can give a brief response as a reaction, or as a free action on their next turn if they wish, but they must be able to see you and be within range to do so. If they respond, their response is delivered directly to your ear, just like the original message.\n- - -\n**Heightened (3rd)** The spell's range increases to 500 feet.",
+			"hash": "ERRIRVEN"
+		}
 	},
 	{
 		"aonId": 191,

@@ -863,7 +863,23 @@
 		"traditions": [ "divine", "occult" ],
 		"traits": [ "Abjuration", "Cantrip" ],
 		"focus": false,
-		"id": "34fa7528-c28a-4386-ac14-009109f188ac"
+		"id": "34fa7528-c28a-4386-ac14-009109f188ac",
+		"pf2t": {
+			"name": "Forbidding Ward",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "abjuration,cantrip",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 339 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=126",
+			"aon": "spells126",
+			"type": "cantrip",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 ally and 1 enemy\n\n- - -\n\nYou ward an ally against the attacks and hostile spells from the target enemy. The target ally gains a +1 status bonus to Armor Class and saving throws against the target enemy's attacks, spells, and other effects.\n- - -\n**Heightened (6th)** The status bonus increases to +2.",
+			"hash": "YSxkNVZW"
+		}
 	},
 	{
 		"aonId": 127,

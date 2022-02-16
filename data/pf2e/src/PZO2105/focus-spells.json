@@ -137,8 +137,22 @@
 		"page": 228,
 		"source": "PZO2105",
 		"focus": true,
-		"aonId": 0,
-		"id": "16e0acc9-fda2-49ed-9900-494c32a3fb34"
+		"aonId": 731,
+		"id": "16e0acc9-fda2-49ed-9900-494c32a3fb34",
+		"pf2t": {
+			"name": "Song of Marching",
+			"level": 3,
+			"pfs": "standard",
+			"traits": "uncommon,bard,cantrip,composition,enchantment,mental",
+			"cast": "v",
+			"actions": 1,
+			"source": "Advanced Player's Guide pg. 228",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=731",
+			"aon": "spells731",
+			"type": "cantrip",
+			"body": "**Area** 60-foot emanation\n**Duration** sustained up to 1 hour\n\n- - -\n\nYou maintain a brisk performance that keeps allies on the move. You and your allies in the area can Hustle for the spell's duration, even though you are also Sustaining the Spell. You and your allies then become temporarily immune for 1 day.\n- - -\n**Heightened (6th)** You can Sustain the Spell for up to 2 hours.\n**Heightened (9th)** You can Sustain the Spell for up to 4 hours.",
+			"hash": "DZVQkZtg"
+		}
 	},
 	{
 		"name": "Song of Strength",
@@ -156,8 +170,22 @@
 		"page": 228,
 		"source": "PZO2105",
 		"focus": true,
-		"aonId": 0,
-		"id": "6f162727-3d35-4cd0-aeef-a60838003d50"
+		"aonId": 732,
+		"id": "6f162727-3d35-4cd0-aeef-a60838003d50",
+		"pf2t": {
+			"name": "Song of Strength",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,bard,cantrip,composition,emotion,enchantment,mental",
+			"cast": "v",
+			"actions": 1,
+			"source": "Advanced Player's Guide pg. 228",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=732",
+			"aon": "spells732",
+			"type": "cantrip",
+			"body": "**Area** 60-foot emanation\n**Duration** 1 round\n\n- - -\n\nYou bolster your allies' physical strength with a hearty exhortation. You and your allies gain a +1 status bonus to Athletics checks and to their DCs against Athletics skill actions such as Disarm, Shove, and Trip.",
+			"hash": "YBDkLUMD"
+		}
 	},
 	{
 		"name": "Symphony of the Unfettered Heart",
@@ -2534,8 +2562,24 @@
 		"page": 237,
 		"source": "PZO2105",
 		"focus": true,
-		"aonId": 0,
-		"id": "704744e7-5ce1-4069-a300-f8a3c8e8f7ab"
+		"aonId": 793,
+		"id": "704744e7-5ce1-4069-a300-f8a3c8e8f7ab",
+		"pf2t": {
+			"name": "Clinging Ice",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cantrip,cold,conjuration,hex,witch",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 237",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=793",
+			"aon": "spells793",
+			"type": "cantrip",
+			"savingthrow": "Reflex",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nFreezing sleet and heavy snowfall collect on the target's feet and legs, dealing 1d4 cold damage and other effects depending on its Reflex save. Once this spell ends, the target becomes temporarily immune for 1 minute.\n\n**Critical Success** The target is unaffected.\n**Success** The target takes half damage.\n**Failure** The target takes full damage, and takes a -5-foot circumstance penalty to its Speeds until the spell ends.\n**Critical Failure** The target takes double damage and a -10-foot circumstance penalty to its Speeds until the spell ends.\n- - -\n**Heightened (+1)** The damage increases by 1d4.",
+			"hash": "XTqQrpgv"
+		}
 	},
 	{
 		"name": "Curse of Death",
@@ -2645,8 +2689,23 @@
 		"page": 238,
 		"source": "PZO2105",
 		"focus": true,
-		"aonId": 0,
-		"id": "2a1286a7-4c47-4867-874f-a5c6c5e4421f"
+		"aonId": 796,
+		"id": "2a1286a7-4c47-4867-874f-a5c6c5e4421f",
+		"pf2t": {
+			"name": "Discern Secrets",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cantrip,divination,hex,witch",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 238",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=796",
+			"aon": "spells796",
+			"type": "cantrip",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou call upon your patron's power to better uncover secrets. When you Cast the Spell, the target can Recall Knowledge, Seek, or Sense Motive. The target gains a +1 status bonus to the skill or Perception used for the roll, and this bonus remains as long as you Sustain the Spell. The target is temporarily immune to discern secrets for 1 minute.\n- - -\n**Heightened (5th)** You can target two creatures instead of one.",
+			"hash": "chrERgkq"
+		}
 	},
 	{
 		"name": "Elemental Betrayal",
@@ -2703,8 +2762,24 @@
 		"page": 238,
 		"source": "PZO2105",
 		"focus": true,
-		"aonId": 0,
-		"id": "b1877150-a13a-4a49-8777-5e84bb14b8c4"
+		"aonId": 798,
+		"id": "b1877150-a13a-4a49-8777-5e84bb14b8c4",
+		"pf2t": {
+			"name": "Evil Eye",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cantrip,curse,emotion,enchantment,fear,hex,mental,witch",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 238",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=798",
+			"aon": "spells798",
+			"type": "cantrip",
+			"savingthrow": "Will",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYour fix your eye on the target, imposing a malevolent hex. The target becomes frightened based on the results of its Will save. This condition value can't be reduced below 1 while the spell is active and you can see the target. Regardless of the outcome, the target is then temporarily immune for 1 minute.\n\n**Success** The target is unaffected.\n**Failure** The target is frightened 1.\n**Critical Failure** The target is frightened 2.",
+			"hash": "fZzDlpJJ"
+		}
 	},
 	{
 		"name": "Life Boost",
@@ -2837,8 +2912,24 @@
 		"page": 239,
 		"source": "PZO2105",
 		"focus": true,
-		"aonId": 0,
-		"id": "2d26a61e-2460-4c9e-9e74-09b2e05a997b"
+		"aonId": 802,
+		"id": "2d26a61e-2460-4c9e-9e74-09b2e05a997b",
+		"pf2t": {
+			"name": "Nudge Fate",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cantrip,divination,hex,witch",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 239",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=802",
+			"aon": "spells802",
+			"type": "cantrip",
+			"savingthrow": "Will",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nYou read slightly into the future and give fate a tiny push to achieve the result you desire. Once during the duration, when the target fails an attack roll, skill check, or saving throw and a +1 status bonus would turn a critical failure into a failure, or failure into a success, you grant the target a +1 status bonus to the check retroactively, changing the outcome appropriately. The spell then ends, and the target is temporarily immune for 1 minute.\n\nIf you cast nudge fate while a previous casting of this hex is still in effect, the previous effect ends.",
+			"hash": "xZrGCqrM"
+		}
 	},
 	{
 		"name": "Personal Blizzard",
@@ -2981,8 +3072,24 @@
 		"page": 239,
 		"source": "PZO2105",
 		"focus": true,
-		"aonId": 0,
-		"id": "b8cebaeb-3f68-4889-95a7-b348dba3cbb6"
+		"aonId": 806,
+		"id": "b8cebaeb-3f68-4889-95a7-b348dba3cbb6",
+		"pf2t": {
+			"name": "Shroud of Night",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cantrip,darkness,evocation,hex,witch",
+			"cast": "s",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 239",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=806",
+			"aon": "spells806",
+			"type": "cantrip",
+			"savingthrow": "Will",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nDrawing your hand in a sweeping gesture, you shroud the target in a veil of night. The target's eyes are blanketed in darkness. If you cast this hex on a willing ally (for instance, one with light blindness), the ally can choose which result it gets without rolling. Regardless of the outcome, the target is then temporarily immune for 1 minute.\n\n**Success** The target is unaffected.\n**Failure** The target is shrouded in murky darkness. Unless the target has darkvision, other creatures are concealed to it.",
+			"hash": "FnwUWJbU"
+		}
 	},
 	{
 		"name": "Stoke the Heart",
@@ -3003,8 +3110,23 @@
 		"page": 239,
 		"source": "PZO2105",
 		"focus": true,
-		"aonId": 0,
-		"id": "a3028892-8abe-41a6-b883-9064e3bd8965"
+		"aonId": 807,
+		"id": "a3028892-8abe-41a6-b883-9064e3bd8965",
+		"pf2t": {
+			"name": "Stoke the Heart",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cantrip,emotion,enchantment,hex,witch",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 239",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=807",
+			"aon": "spells807",
+			"type": "cantrip",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 creature\n\n- - -\n\nIntense fervor fills the target creature, empowering their blows. The target gains a +2 status bonus to damage rolls. Once this spell ends, the target becomes temporarily immune for 1 minute.\n- - -\n**Heightened (+2)** The status bonus to damage increases by 1.",
+			"hash": "EPqWvUmR"
+		}
 	},
 	{
 		"name": "Veil of Dreams",
@@ -3084,8 +3206,24 @@
 		"page": 239,
 		"source": "PZO2105",
 		"focus": true,
-		"aonId": 0,
-		"id": "abea464a-7890-49ae-aa12-fec1fc4527f6"
+		"aonId": 809,
+		"id": "abea464a-7890-49ae-aa12-fec1fc4527f6",
+		"pf2t": {
+			"name": "Wilding Word",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "uncommon,cantrip,enchantment,hex,witch",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Advanced Player's Guide pg. 239",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=809",
+			"aon": "spells809",
+			"type": "cantrip",
+			"savingthrow": "Will",
+			"body": "**Duration** sustained up to 1 minute\n**Targets** 1 animal, fungus, or plant\n\n- - -\n\nWith a few words, you convince a wild creature you are a kindred spirit, making it reluctant to harm you. The target must attempt a Will save. Regardless of the outcome, the target is then temporarily immune for 1 minute.\n\n**Critical Success** The target is unaffected.\n**Success** When the target attempts an attack roll or skill check that would harm you, it takes a -2 status penalty to its roll.\n**Failure** As success, but the target also becomes sickened 1 each time it damages you.\n**Critical Failure** As success, but the target also becomes sickened 2 each time it damages you.",
+			"hash": "RYlUTZtl"
+		}
 	},
 	{
 		"name": "Dance of Darkness",

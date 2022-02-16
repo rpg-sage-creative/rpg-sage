@@ -2583,8 +2583,23 @@
 		"page": 226,
 		"source": "PZO2105",
 		"focus": false,
-		"aonId": 0,
-		"id": "32248ae7-c608-4d06-8d58-2d8266d50ba2"
+		"aonId": 721,
+		"id": "32248ae7-c608-4d06-8d58-2d8266d50ba2",
+		"pf2t": {
+			"name": "Summon Instrument",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,conjuration",
+			"traditions": "divine,occult",
+			"cast": "m,s,v",
+			"actions": 3,
+			"source": "Advanced Player's Guide pg. 226",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=721",
+			"aon": "spells721",
+			"type": "cantrip",
+			"body": "**Duration** 1 hour\n\n- - -\n\nYou materialize a handheld musical instrument in your grasp. The instrument is typical for its type, but it plays only for you. The instrument vanishes when the spell ends. If you cast summon instrument again, any instrument you previously summoned disappears.\n- - -\n**Heightened (5th)** The instrument is instead a virtuoso handheld instrument.",
+			"hash": "rGWRQOVA"
+		}
 	},
 	{
 		"name": "Thoughtful Gift",

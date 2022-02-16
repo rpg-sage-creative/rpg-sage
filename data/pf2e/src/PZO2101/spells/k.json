@@ -56,6 +56,21 @@
 		"traditions": [ "divine", "occult", "primal" ],
 		"traits": [ "Cantrip", "Detection", "Divination" ],
 		"focus": false,
-		"id": "1583e1c1-c494-40fd-be88-c96787514ef3"
+		"id": "1583e1c1-c494-40fd-be88-c96787514ef3",
+		"pf2t": {
+			"name": "Know Direction",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,detection,divination",
+			"traditions": "divine,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 348 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=169",
+			"aon": "spells169",
+			"type": "cantrip",
+			"body": "In your mind's eye, you see a path northward. You immediately know which direction is north (if it exists at your current location).\n- - -\n**Heightened (7th)** You can instead know the direction to a familiar location, such as a previous home or a favorite tavern.",
+			"hash": "HnvZTCIb"
+		}
 	}
 ]

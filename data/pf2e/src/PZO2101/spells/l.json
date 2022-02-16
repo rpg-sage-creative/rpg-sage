@@ -58,7 +58,23 @@
 		"traditions": [ "arcane", "divine", "occult", "primal" ],
 		"traits": [ "Cantrip", "Evocation", "Light" ],
 		"focus": false,
-		"id": "7da78506-6f32-4202-bf70-fab6d9d49182"
+		"id": "7da78506-6f32-4202-bf70-fab6d9d49182",
+		"pf2t": {
+			"name": "Light",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,evocation,light",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 348 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=171",
+			"aon": "spells171",
+			"type": "cantrip",
+			"body": "**Duration** until the next time you make your daily preparations\n**Targets** 1 object of 1 Bulk or less, either unattended or possessed by you or a willing ally\n\n- - -\n\nThe object glows, casting bright light in a 20-foot radius (and dim light for the next 20 feet) like a torch. If you cast this spell again on a second object, the light spell on the first object ends.\n- - -\n**Heightened (4th)** The object sheds bright light in a 60-foot radius (and dim light for the next 60 feet).",
+			"hash": "NRDDmwzg"
+		}
 	},
 	{
 		"aonId": 172,

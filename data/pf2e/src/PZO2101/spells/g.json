@@ -134,7 +134,23 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Auditory", "Cantrip", "Illusion" ],
 		"focus": false,
-		"id": "6c7f8f35-f9ab-4956-8d51-173a98c4b560"
+		"id": "6c7f8f35-f9ab-4956-8d51-173a98c4b560",
+		"pf2t": {
+			"name": "Ghost Sound",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "auditory,cantrip,illusion",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 340 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=132",
+			"aon": "spells132",
+			"type": "cantrip",
+			"body": "**Duration** sustained\n\n- - -\n\nYou create an auditory illusion of simple sounds that has a maximum volume equal to four normal humans shouting. The sounds emanate from a square you designate within range. You can't create intelligible words or other intricate sounds (such as music).\n- - -\n**Heightened (3rd)** The range increases to 60 feet.\n**Heightened (5th)** The range increases to 120 feet.",
+			"hash": "NXqZNOcg"
+		}
 	},
 	{
 		"aonId": 133,
@@ -572,7 +588,23 @@
 		"traditions": [ "divine", "occult", "primal" ],
 		"traits": [ "Cantrip", "Divination" ],
 		"focus": false,
-		"id": "f4240f58-1d58-4150-a9ef-0906419df310"
+		"id": "f4240f58-1d58-4150-a9ef-0906419df310",
+		"pf2t": {
+			"name": "Guidance",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,divination",
+			"traditions": "divine,occult,primal",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Core Rulebook pg. 342 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=142",
+			"aon": "spells142",
+			"type": "cantrip",
+			"body": "**Duration** until the start of your next turn\n**Targets** 1 creature\n\n- - -\n\nYou ask for divine guidance, granting the target a +1 status bonus to one attack roll, Perception check, saving throw, or skill check the target attempts before the duration ends. The target chooses which roll to use the bonus on before rolling. If the target uses the bonus, the spell ends. Either way, the target is then temporarily immune for 1 hour.",
+			"hash": "ghPBBQVE"
+		}
 	},
 	{
 		"aonId": 143,

@@ -134,7 +134,23 @@
 		"targets": "2 willing creatures",
 		"traditions": [ "occult" ],
 		"traits": [ "Uncommon", "Cantrip", "Divination", "Mental" ],
-		"id": "2badf152-d18b-43e3-ad58-4cc79350bd72"
+		"id": "2badf152-d18b-43e3-ad58-4cc79350bd72",
+		"pf2t": {
+			"name": "Join Pasts",
+			"level": 1,
+			"pfs": "limited",
+			"traits": "uncommon,cantrip,divination,mental",
+			"traditions": "occult",
+			"cast": "s",
+			"actions": 1,
+			"range": "touch",
+			"source": "147 Tomorrow Must Burn pg. 74",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=552",
+			"aon": "spells552",
+			"type": "cantrip",
+			"body": "**Duration** 1 round\n**Targets** 2 willing creatures\n\n- - -\n\nWith touches to the targets' foreheads, you bring them into mental communion. The targets can share thoughts and experiences, but not words. When one target attempts to Recall Knowledge, the other can Aid the first target's skill check, using any Lore skill (even if that Lore wouldn't normally apply) without having made any preparations to Aid.\n- - -\n**Heightened (+1)** You can touch one additional target to include them in the spell's effects. Multiple targets can attempt checks to Aid the target who is attempting to Recall Knowledge.",
+			"hash": "fTWrOpAq"
+		}
 	},
 	{
 		"aonId": 705,

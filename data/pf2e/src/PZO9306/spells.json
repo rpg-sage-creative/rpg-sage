@@ -17,8 +17,23 @@
 		"page": 32,
 		"source": "PZO9306",
 		"focus": false,
-		"aonId": 0,
-		"id": "119eb499-c1d0-4ab9-b316-d1a4ff3df7da"
+		"aonId": 810,
+		"id": "119eb499-c1d0-4ab9-b316-d1a4ff3df7da",
+		"pf2t": {
+			"name": "Spirit Object",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "rare,cantrip,hex,necromancy,witch",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Legends pg. 32",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=810",
+			"aon": "spells810",
+			"type": "cantrip",
+			"body": "**Targets** 1 unattended object up to 1 Bulk\n\n- - -\n\nUsing a sliver of Baba Yaga's power, you briefly bring an object to life. The object gains a means of locomotion, such as sprouting chicken legs, and Strides up to 25 feet to a space you decide within range. If you spent 2 actions Casting the Spell, the object then attacks one creature of your choice adjacent to its new space. Make a melee spell attack roll against the creature. On a success, the creature takes bludgeoning, piercing, or slashing damage (as appropriate for the object) equal to 1d4 plus your spellcasting ability modifier, and on a critical success, it takes double damage.\n- - -\n**Heightened (+1)** Increase the maximum Bulk of the target by 1 and the damage by 1d4.",
+			"hash": "dQwBDskp"
+		}
 	},
 	{
 		"name": "Aromatic Lure",

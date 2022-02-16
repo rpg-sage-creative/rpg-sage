@@ -17,6 +17,20 @@
 		"objectType": "FocusSpell",
 		"page": 74,
 		"traits": [ "Rare", "Abjuration", "Bard", "Cantrip", "Composition" ],
-		"id": "e9776fac-145a-46d0-9828-a122e79e0603"
+		"id": "e9776fac-145a-46d0-9828-a122e79e0603",
+		"pf2t": {
+			"name": "Silver's Refrain",
+			"level": 1,
+			"pfs": "limited",
+			"traits": "rare,abjuration,bard,cantrip,composition",
+			"cast": "v",
+			"actions": 1,
+			"source": "147 Tomorrow Must Burn pg. 74",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=555",
+			"aon": "spells555",
+			"type": "cantrip",
+			"body": "**Area** 60-foot emanation\n**Duration** 1 round\n\n- - -\n\nThe \"Song of Silver\" was an enchanted song used by the Silver Ravens to battle diabolic forces. You pull from select verses to temporarily replicate some of the legendary song's benefits, albeit on a much smaller scale.\n\nWeapon and unarmed attacks by allies in the area are treated as silver. In addition, this spell automatically attempts to counteract any dimension door cast by a devil within the area or cast by a devil attempting to enter the area using dimension door. If a devil attempts to enter the area using dimension door and the spell is counteracted, the devil remains where it started.",
+			"hash": "HkxWkwEv"
+		}
 	}
 ]

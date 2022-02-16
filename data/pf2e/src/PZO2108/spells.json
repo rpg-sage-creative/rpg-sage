@@ -138,8 +138,24 @@
 		"page": 90,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "e812adfd-5830-4e55-afd3-29aaf25f2b64"
+		"aonId": 864,
+		"id": "e812adfd-5830-4e55-afd3-29aaf25f2b64",
+		"pf2t": {
+			"name": "Approximate",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,detection,divination",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 10,
+			"source": "Secrets of Magic pg. 90",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=864",
+			"aon": "spells864",
+			"type": "cantrip",
+			"body": "**Area** 1 cubic foot\n\n- - -\n\nYour magic quickly flows over an area to help you count and catalog. Name a particular type of object you are looking for within the area. You gain an instant estimate of the quantity of the chosen objects that are clearly visible within the target area. The number is rounded to the largest digit. For example, you could look at a pile of 180 copper coins, and you would learn that it held about 200 coins, but you couldn't determine there were exactly 180 coins.\n\nThe type of object you name can be as specific or general as you like-\"dented copper coins\" is as viable as \"coins\"-but the distinguishing features must be obvious at a glance, and the spell is automatically fooled by objects disguised as other objects. For instance, the spell would register copper coins plated in gold as gold coins, not copper coins.",
+			"hash": "IYrNYhAq"
+		}
 	},
 	{
 		"name": "Ash Cloud",
@@ -727,8 +743,23 @@
 		"page": 93,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "34214b5e-d860-4b3f-8bff-01fb5197795e"
+		"aonId": 877,
+		"id": "34214b5e-d860-4b3f-8bff-01fb5197795e",
+		"pf2t": {
+			"name": "Bullhorn",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "auditory,cantrip,illusion",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Secrets of Magic pg. 93",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=877",
+			"aon": "spells877",
+			"type": "cantrip",
+			"body": "**Duration** 10 minutes\n\n- - -\n\nYou amplify your voice, loud enough for you to be heard easily at a great distance. For the duration, your voice can be heard loudly and clearly by all listeners within 500 feet, even if other ambient noise would otherwise block the sound. Despite the volume, this doesn't make your voice jarring or distracting. This doesn't increase the range or area of other auditory or linguistic effects, and physical barriers such as walls and doors still block or muffle your voice as normal.\n\nYour loud voice makes it easier to Coerce others, and the acoustics assist in Performing at a large venue. You gain a +1 status bonus to checks to Coerce and auditory Performance checks to Perform at a large venue.\n\nYou can Dismiss the spell.\n- - -\n**Heightened (5th)** Your voice can be heard clearly up to 1,200 feet away.\n**Heightened (7th)** Your voice can be heard clearly up to 1 mile away.",
+			"hash": "jnDXJCpc"
+		}
 	},
 	{
 		"name": "Burning Blossoms",
@@ -2383,8 +2414,24 @@
 		"page": 108,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "c534c810-92cb-4f4c-b19d-7c6fc9669394"
+		"aonId": 917,
+		"id": "c534c810-92cb-4f4c-b19d-7c6fc9669394",
+		"pf2t": {
+			"name": "Gale Blast",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "air,cantrip,evocation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Secrets of Magic pg. 108",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=917",
+			"aon": "spells917",
+			"type": "cantrip",
+			"savingthrow": "Fortitude",
+			"body": "Wind flows from your outstretched hands and whirls around you in a 5-foot emanation. Each creature in the area takes bludgeoning damage equal to your spellcasting ability modifier, with a Fortitude save.\n\n**Critical Success** The creature is unaffected.\n**Success** The creature takes half damage.\n**Failure** The creature takes full damage and is pushed 5 feet away from you.\n**Critical Failure** The creature takes double damage and is pushed 10 feet away from you.\n- - -\n**Heightened (+2)** The damage increases by 1d6.",
+			"hash": "XLcryrbJ"
+		}
 	},
 	{
 		"name": "Geyser",
@@ -2513,8 +2560,24 @@
 		"page": 109,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "6971d510-0353-4359-8ac5-8631803b801b"
+		"aonId": 920,
+		"id": "6971d510-0353-4359-8ac5-8631803b801b",
+		"pf2t": {
+			"name": "Gouging Claw",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "attack,cantrip,morph,transmutation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Secrets of Magic pg. 109",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=920",
+			"aon": "spells920",
+			"type": "cantrip",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou temporarily morph your limb into a clawed appendage. Make a melee spell attack roll against your target's AC. If you hit, you deal your choice of slashing or piercing damage equal to 1d6 plus your spellcasting ability modifier. On a critical success, you deal double damage plus 1d4 persistent bleed damage.\n- - -\n**Heightened (+1)** The damage increases by 1d6 and the persistent bleed damage on a critical increases by 1d4.",
+			"hash": "FWggnSFX"
+		}
 	},
 	{
 		"name": "Gravitational Pull",
@@ -2665,8 +2728,24 @@
 		"page": 109,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "733e0594-4cf3-4221-9f79-6cb73d3f8300"
+		"aonId": 924,
+		"id": "733e0594-4cf3-4221-9f79-6cb73d3f8300",
+		"pf2t": {
+			"name": "Haunting Hymn",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "auditory,cantrip,evocation,sonic",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Secrets of Magic pg. 109",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=924",
+			"aon": "spells924",
+			"type": "cantrip",
+			"savingthrow": "Fortitude",
+			"body": "**Area** 15-foot cone\n\n- - -\n\nYou echo a jarring hymn that only creatures in the area can hear. The hymn deals sonic damage equal to your spellcasting ability modifier, with a basic Fortitude save. If a target critically fails the save, it's also deafened for 1 minute.\n- - -\n**Heightened (+2)** The damage increases by 1d6.",
+			"hash": "TjprRskq"
+		}
 	},
 	{
 		"name": "Healing Plaster",
@@ -2689,8 +2768,24 @@
 		"page": 109,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "31d612f4-7521-44ba-9e38-cbec110b1486"
+		"aonId": 925,
+		"id": "31d612f4-7521-44ba-9e38-cbec110b1486",
+		"pf2t": {
+			"name": "Healing Plaster",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,earth,transmutation",
+			"traditions": "primal",
+			"cast": "s",
+			"actions": 1,
+			"range": 5,
+			"source": "Secrets of Magic pg. 109",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=925",
+			"aon": "spells925",
+			"type": "cantrip",
+			"body": "**Duration** 10 minutes\n**Targets** a handful of dirt or mud\n\n- - -\n\nYou purify some dirt or mud into a pliable, claylike plaster that can aid in clotting and healing. This restorative substance can be used in lieu of healer's tools for Medicine checks to Administer First Aid or Treat Wounds. If the plaster isn't used within the spell's duration, or if you Cast the Spell again before using the plaster, it reverts to being normal non-magical earth.\n- - -\n**Heightened (3rd)** The plaster grants anyone using it to Administer First Aid or Treat Wounds a +1 item bonus to the Medicine check.",
+			"hash": "hMFXzbXq"
+		}
 	},
 	{
 		"name": "Healing Well",
@@ -2997,8 +3092,23 @@
 		"page": 112,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "de731c9d-0688-4a31-804f-fae56a89de3d"
+		"aonId": 932,
+		"id": "de731c9d-0688-4a31-804f-fae56a89de3d",
+		"pf2t": {
+			"name": "Infectious Enthusiasm",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,emotion,enchantment,mental",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Secrets of Magic pg. 112",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=932",
+			"aon": "spells932",
+			"type": "cantrip",
+			"body": "**Duration** 1 round\n\n- - -\n\nWith enchanted gusto, you encourage yourself to get things done and share your motivation with your allies. You gain a +1 status bonus to your choice of attack rolls, Will saves, or Charisma-based skill checks. During the spell's duration, an ally who observed you Casting this Spell and was within 30 feet when you did so can take a single action, which has the concentrate trait, to gain the same bonus you chose until the start of its next turn.\n\nUsing this spell to influence someone in a social situation is typically considered a faux pas, negating the benefit on Charisma-based skills if the subject of the check observed you casting the spell.",
+			"hash": "wzJMMjvp"
+		}
 	},
 	{
 		"name": "Infectious Melody",
@@ -4767,8 +4877,24 @@
 		"page": 123,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "5f86a32c-2f92-406b-b0d3-d1634112a702"
+		"aonId": 975,
+		"id": "5f86a32c-2f92-406b-b0d3-d1634112a702",
+		"pf2t": {
+			"name": "Protect Companion",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "abjuration,cantrip",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Secrets of Magic pg. 123",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=975",
+			"aon": "spells975",
+			"type": "cantrip",
+			"body": "**Trigger** The spell's target would take damage\n**Duration** until the start of your next turn\n**Targets** your eidolon, or a creature with the minion trait under your control\n\n- - -\n\nYou extend your aura, as a magical shield that protects your eidolon or minion. The target gains a +1 circumstance bonus to AC until the start of your next turn. You gain the following reaction; after using the reaction, the spell ends and you can't cast protect companion again for 10 minutes.\n\n**Life Block** :r: **Effect** Reduce the triggering damage by 10, but you lose 5 Hit Points. Even if this reduces the damage to 0, the target still takes any effects that would come with the damage, such as the poison on a viper's fangs Strike.\n- - -\n**Heightened (+2)** The reaction reduces the damage by another 10, and you lose 5 more Hit Points. If you want to lose fewer Hit Points, you can choose to lower the damage reduction and HP lost to what any lower-level version of the spell could do without lowering the spell's actual level.",
+			"hash": "gSKQqxZD"
+		}
 	},
 	{
 		"name": "Protector Tree",
@@ -4845,8 +4971,25 @@
 		"page": 124,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "7ebbb1f0-41d7-49d4-a595-3b8329c52195"
+		"aonId": 977,
+		"id": "7ebbb1f0-41d7-49d4-a595-3b8329c52195",
+		"pf2t": {
+			"name": "Puff of Poison",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,evocation,inhaled,poison",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 5,
+			"source": "Secrets of Magic pg. 124",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=977",
+			"aon": "spells977",
+			"type": "cantrip",
+			"savingthrow": "Fortitude",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou exhale a shimmering cloud of toxic breath at an enemy's face. The target takes poison damage equal to your spellcasting modifier and 2 persistent poison damage, depending on its Fortitude save.\n\n**Critical Success** The creature is unaffected.\n**Success** The target takes half initial and persistent damage.\n**Failure** The target takes full initial and persistent damage.\n**Critical Failure** The target takes double initial and persistent damage.\n- - -\n**Heightened (+2)** The initial poison damage increases by 1d8 and the persistent poison damage increases by 1.",
+			"hash": "CdzqOxZl"
+		}
 	},
 	{
 		"name": "Quick Sort",
@@ -4981,8 +5124,23 @@
 		"page": 125,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "12ab199e-9646-4214-a234-1b10aa85bbc3"
+		"aonId": 981,
+		"id": "12ab199e-9646-4214-a234-1b10aa85bbc3",
+		"pf2t": {
+			"name": "Read the Air",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,divination",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Secrets of Magic pg. 125",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=981",
+			"aon": "spells981",
+			"type": "cantrip",
+			"body": "**Duration** 1 minute\n\n- - -\n\nYou take a deep breath as you survey a social situation, showing courtesy to all around you as your intuition swiftly picks up clues about social contexts and unspoken assumptions of behavior. Your body language subconsciously changes to take advantage of this information and use it in your own interactions with those creatures. \n\nAs part of Casting this Spell, you Recall Knowledge using Society to gain information about the immediate social situation. You also gain a +1 status bonus on your next Diplomacy check to Make an Impression on those creatures present when you cast this spell, as long as the check occurs during the duration of the spell. You can read the air only once in a given social situation; casting it again has no effect.",
+			"hash": "vgWxkRQR"
+		}
 	},
 	{
 		"name": "Repelling Pulse",
@@ -5365,8 +5523,26 @@
 		"page": 127,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "900df798-45aa-4f9c-a82f-e8df22aacb17"
+		"aonId": 990,
+		"id": "900df798-45aa-4f9c-a82f-e8df22aacb17",
+		"pf2t": {
+			"name": "Scatter Scree",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,earth,evocation",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Secrets of Magic pg. 127",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=990",
+			"aon": "spells990",
+			"type": "cantrip",
+			"savingthrow": "Reflex",
+			"basic": 1,
+			"body": "**Area** two contiguous 5-foot cubes\n**Duration** 1 minute\n\n- - -\n\nYou evoke a jumble of rocks in the area. The scattering rocks deal bludgeoning damage equal to 1d4 plus your spellcasting ability modifier to creatures in the area, with a basic Reflex save. The ground in the area becomes difficult terrain for the duration. A creature can Interact to clear a square of this scree.\n\nIf you cast this spell again, any previous scatter scree you have cast ends.\n- - -\n**Heightened (+1)** The damage increases by 1d4.",
+			"hash": "WQcQWIUX"
+		}
 	},
 	{
 		"name": "Schadenfreude",
@@ -5873,8 +6049,25 @@
 		"page": 130,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "45ceca0e-d396-4e5f-9f3c-c4e3d4fb604b"
+		"aonId": 1002,
+		"id": "45ceca0e-d396-4e5f-9f3c-c4e3d4fb604b",
+		"pf2t": {
+			"name": "Spout",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,evocation,water",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Secrets of Magic pg. 130",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=1002",
+			"aon": "spells1002",
+			"type": "cantrip",
+			"savingthrow": "Reflex",
+			"body": "**Area** a 5-foot cube\n\n- - -\n\nWater blasts upward, coming out of the ground, rising from a pool, or even manifesting from thin air. Any creatures in the area take bludgeoning damage equal to 1d4 plus your spellcasting ability modifier, with a basic Reflex saving throw.\n\nYou can change this spell's area to a 5-foot burst, provided you center the burst in a body of water. This body of water can be as small as a pond or creek, but not as small as a puddle or bathtub.\n- - -\n**Heightened (+1)** The damage increases by 1d4.",
+			"hash": "vkLHZqsz"
+		}
 	},
 	{
 		"name": "Sudden Recollection",
@@ -6343,8 +6536,25 @@
 		"page": 135,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "47e42e0a-c6aa-48ee-be2f-a957b3b6f35b"
+		"aonId": 1014,
+		"id": "47e42e0a-c6aa-48ee-be2f-a957b3b6f35b",
+		"pf2t": {
+			"name": "Tame",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "auditory,cantrip,enchantment,mental",
+			"traditions": "occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 10,
+			"source": "Secrets of Magic pg. 135",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=1014",
+			"aon": "spells1014",
+			"type": "cantrip",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 minute\n**Targets** 1 non-hostile domesticated animal\n\n- - -\n\nAs you make comforting sounds and gestures, you approach the target in a friendly manner combining caution and confidence. You improve the target's attitude to you by one step (unfriendly to neutral, neutral to friendly, friendly to helpful) for the duration of the spell unless it succeeds at a Will save. Afterward, the target is temporarily immune for 1 day.\n\nThis spell works on only domesticated animals; for example, you could use it on guard dogs or stray dogs, but not feral dogs or wolves. If the socialization of the animal is in question, the decision is up to the GM.\n- - -\n**Heightened (3rd)** The duration becomes 10 minutes.\n**Heightened (6th)** The duration becomes 1 hour.",
+			"hash": "XkKkPHRk"
+		}
 	},
 	{
 		"name": "Tempest of Shades",
@@ -7051,8 +7261,23 @@
 		"page": 140,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "064594f2-c712-415a-863a-f2872fef55f7"
+		"aonId": 1031,
+		"id": "064594f2-c712-415a-863a-f2872fef55f7",
+		"pf2t": {
+			"name": "Wash Your Luck",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "abjuration,cantrip,fortune",
+			"traditions": "divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Secrets of Magic pg. 140",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=1031",
+			"aon": "spells1031",
+			"type": "cantrip",
+			"body": "**Duration** 1 minute\n\n- - -\n\nSome practitioners argue this spell literally washes your fortunes of all influences, malign or benign, while others claim it simply cleanses your mind of obsessions about luck and destiny. You adjust your garments, change the posture of your chair, fidget with a religious symbol, or make some other innocuous and personally significant action to wash away bad luck.\n\nOnce during the spell's duration, before rolling a check, you can cancel out a misfortune effect on that roll, as normal when a fortune and misfortune effect apply to the same roll. After canceling out the misfortune effect, the spell ends, and you are then temporarily immune to wash your luck for 10 minutes.",
+			"hash": "vsNBIfBz"
+		}
 	},
 	{
 		"name": "Web of Eyes",
@@ -7329,7 +7554,23 @@
 		"page": 247,
 		"source": "PZO2108",
 		"focus": false,
-		"aonId": 0,
-		"id": "a43c7b88-5313-4f0a-b0d6-80dc9064f02a"
+		"aonId": 1065,
+		"id": "a43c7b88-5313-4f0a-b0d6-80dc9064f02a",
+		"pf2t": {
+			"name": "Invoke True Name",
+			"level": 1,
+			"pfs": "limited",
+			"traits": "rare,cantrip,enchantment,true name",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "v",
+			"actions": 1,
+			"range": 30,
+			"source": "Secrets of Magic pg. 247",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=1065",
+			"aon": "spells1065",
+			"type": "cantrip",
+			"body": "**Targets** 1 creature whose true name you know\n\n- - -\n\nYou speak the true name of a creature to more surely affect it with your magic. Until the end of the current turn, the target is flat-footed against your spells and takes a -2 circumstance penalty to saving throws against your spells. In addition, the first time this turn the target takes damage from one of your spells, it has weakness to that damage equal to double the level of invoke true name.",
+			"hash": "zNPxLRZC"
+		}
 	}
 ]

@@ -17,7 +17,23 @@
 		"traditions": [ "arcane", "occult", "primal" ],
 		"traits": [ "Cantrip", "Evocation", "Light" ],
 		"focus": false,
-		"id": "603ab3fc-52b8-4f4c-947d-0718a648ce8d"
+		"id": "603ab3fc-52b8-4f4c-947d-0718a648ce8d",
+		"pf2t": {
+			"name": "Dancing Lights",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,evocation,light",
+			"traditions": "arcane,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 120,
+			"source": "Core Rulebook pg. 327 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=58",
+			"aon": "spells58",
+			"type": "cantrip",
+			"body": "**Duration** sustained\n\n- - -\n\nYou create up to four floating lights, no two of which are more than 10 feet apart. Each sheds light like a torch. When you Sustain the Spell, you can move any number of lights up to 60 feet. Each light must remain within 120 feet of you and within 10 feet of all others, or it winks out.",
+			"hash": "XKVRsFLJ"
+		}
 	},
 	{
 		"aonId": 59,
@@ -120,7 +136,24 @@
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Cantrip", "Enchantment", "Mental", "Nonlethal" ],
 		"focus": false,
-		"id": "5691b5d5-8ce8-4835-8e7f-8026d9dba2a2"
+		"id": "5691b5d5-8ce8-4835-8e7f-8026d9dba2a2",
+		"pf2t": {
+			"name": "Daze",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,enchantment,mental,nonlethal",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 60,
+			"source": "Core Rulebook pg. 327 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=61",
+			"aon": "spells61",
+			"type": "cantrip",
+			"savingthrow": "Will",
+			"body": "**Duration** 1 round\n**Targets** 1 creature\n\n- - -\n\nYou cloud the target's mind and daze it with a mental jolt. The jolt deals mental damage equal to your spellcasting ability modifier; the target must attempt a basic Will save. If the target critically fails the save, it is also stunned 1.\n- - -\n**Heightened (+2)** The damage increases by 1d6.",
+			"hash": "OWjzWdzw"
+		}
 	},
 	{
 		"aonId": 62,
@@ -313,7 +346,22 @@
 		"traditions": [ "arcane", "divine", "occult", "primal" ],
 		"traits": [ "Cantrip", "Detection", "Divination" ],
 		"focus": false,
-		"id": "17daaed0-88ac-48c3-a3e2-f99abe1a45d3"
+		"id": "17daaed0-88ac-48c3-a3e2-f99abe1a45d3",
+		"pf2t": {
+			"name": "Detect Magic",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,detection,divination",
+			"traditions": "arcane,divine,occult,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"source": "Core Rulebook pg. 328 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=66",
+			"aon": "spells66",
+			"type": "cantrip",
+			"body": "**Area** 30-foot emanation\n\n- - -\n\nYou send out a pulse that registers the presence of magic. You receive no information beyond the presence or absence of magic. You can choose to ignore magic you're fully aware of, such as the magic items and ongoing spells of you and your allies.\n\nYou detect illusion magic only if that magic's effect has a lower level than the level of your detect magic spell. However, items that have an illusion aura but aren't deceptive in appearance (such as an invisibility potion) typically are detected normally.\n- - -\n**Heightened (3rd)** You learn the school of magic for the highest-level effect within range that the spell detects. If multiple effects are equally strong, the GM determines which you learn.\n**Heightened (4th)** As 3rd level, but you also pinpoint the source of the highest-level magic. Like for an imprecise sense, you don't learn the exact location, but can narrow down the source to within a 5-foot cube (or the nearest if larger than that).",
+			"hash": "qljmXAPr"
+		}
 	},
 	{
 		"aonId": 67,
@@ -813,7 +861,24 @@
 		"traditions": [ "divine", "primal" ],
 		"traits": [ "Cantrip", "Necromancy", "Positive" ],
 		"focus": false,
-		"id": "6a49690f-787b-4fe6-a48c-e4985e6f9c5f"
+		"id": "6a49690f-787b-4fe6-a48c-e4985e6f9c5f",
+		"pf2t": {
+			"name": "Disrupt Undead",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,necromancy,positive",
+			"traditions": "divine,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 331 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=79",
+			"aon": "spells79",
+			"type": "cantrip",
+			"savingthrow": "Fortitude",
+			"body": "**Targets** 1 undead creature\n\n- - -\n\nYou lance the target with energy. You deal 1d6 positive damage plus your spellcasting ability modifier. The target must attempt a basic Fortitude save. If the creature critically fails the save, it is also enfeebled 1 for 1 round.\n- - -\n**Heightened (+1)** The damage increases by 1d6.",
+			"hash": "KNqbkQBr"
+		}
 	},
 	{
 		"aonId": 80,
@@ -1008,7 +1073,23 @@
 		"traditions": [ "divine" ],
 		"traits": [ "Attack", "Cantrip", "Evocation" ],
 		"focus": false,
-		"id": "b6e1f97b-bcb4-41e3-a50c-5d54587cae06"
+		"id": "b6e1f97b-bcb4-41e3-a50c-5d54587cae06",
+		"pf2t": {
+			"name": "Divine Lance",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "attack,cantrip,evocation",
+			"traditions": "divine",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 331 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=84",
+			"aon": "spells84",
+			"type": "cantrip",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou unleash a beam of divine energy. Choose an alignment your deity has (chaotic, evil, good, or lawful). You can't cast this spell if you don't have a deity or if your deity is true neutral. Make a ranged spell attack roll against the target's AC. On a hit, the target takes damage of the chosen alignment type equal to 1d4 + your spellcasting ability modifier (double damage on a critical hit). The spell gains the trait of the alignment you chose.\n- - -\n**Heightened (+1)** The damage increases by 1d4.",
+			"hash": "gtxKwfJC"
+		}
 	},
 	{
 		"aonId": 85,

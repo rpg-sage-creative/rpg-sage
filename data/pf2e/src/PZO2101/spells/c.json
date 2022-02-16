@@ -212,7 +212,24 @@
 		"traditions": [ "arcane", "divine", "occult" ],
 		"traits": [ "Cantrip", "Necromancy", "Negative" ],
 		"focus": false,
-		"id": "7103ac35-fc6d-41b5-99b9-534a30198d0a"
+		"id": "7103ac35-fc6d-41b5-99b9-534a30198d0a",
+		"pf2t": {
+			"name": "Chill Touch",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "cantrip,necromancy,negative",
+			"traditions": "arcane,divine,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": "touch",
+			"source": "Core Rulebook pg. 323 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=35",
+			"aon": "spells35",
+			"type": "cantrip",
+			"savingthrow": "Fortitude",
+			"body": "**Targets** 1 living or undead creature\n\n- - -\n\nSiphoning negative energy into yourself, your hand radiates a pale darkness. Your touch weakens the living and disorients undead, possibly even causing them to flee. The effect depends on whether the target is living or undead. \n\n+ **Living Creature** The spell deals negative damage equal to 1d4 plus your spellcasting modifier. The target attempts a basic Fortitude save, but is also enfeebled 1 for 1 round on a critical failure. \n+ **Undead Creature** The target is flat-footed for 1 round on a failed Fortitude save. On a critical failure, the target is also fleeing for 1 round unless it succeeds at a Will save.\n- - -\n**Heightened (+1)** The negative damage to living creatures increases by 1d4.",
+			"hash": "FIBXWUrq"
+		}
 	},
 	{
 		"aonId": 36,

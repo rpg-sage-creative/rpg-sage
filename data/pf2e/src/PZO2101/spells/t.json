@@ -85,7 +85,23 @@
 		"traditions": [ "arcane", "primal" ],
 		"traits": [ "Cantrip", "Conjuration", "Plant" ],
 		"focus": false,
-		"id": "75762af7-f23d-474e-87eb-560f577495e5"
+		"id": "75762af7-f23d-474e-87eb-560f577495e5",
+		"pf2t": {
+			"name": "Tanglefoot",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "attack,cantrip,conjuration,plant",
+			"traditions": "arcane,primal",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 377 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=330",
+			"aon": "spells330",
+			"type": "cantrip",
+			"body": "**Targets** 1 creature\n\n- - -\n\nA vine covered in sticky sap appears from thin air, flicking from your hand and lashing itself to the target. Attempt a spell attack against the target.\n\n**Critical Success** The target gains the immobilized condition and takes a -10-foot circumstance penalty to its Speeds for 1 round. It can attempt to Escape against your spell DC to remove the penalty and the immobilized condition.\n**Success** The target takes a -10-foot circumstance penalty to its Speeds for 1 round. It can attempt to Escape against your spell DC to remove the penalty.\n**Failure** The target is unaffected.\n- - -\n**Heightened (2nd)** The effects last for 2 rounds.\n**Heightened (4th)** The effects last for 1 minute.",
+			"hash": "kHpCVvbF"
+		}
 	},
 	{
 		"aonId": 331,
@@ -219,7 +235,23 @@
 		"traditions": [ "arcane", "occult" ],
 		"traits": [ "Attack", "Cantrip", "Evocation" ],
 		"focus": false,
-		"id": "74155fa9-ffe8-4bfa-9bbd-3af7832692f2"
+		"id": "74155fa9-ffe8-4bfa-9bbd-3af7832692f2",
+		"pf2t": {
+			"name": "Telekinetic Projectile",
+			"level": 1,
+			"pfs": "standard",
+			"traits": "attack,cantrip,evocation",
+			"traditions": "arcane,occult",
+			"cast": "s,v",
+			"actions": 2,
+			"range": 30,
+			"source": "Core Rulebook pg. 377 2.0",
+			"src": "https://2e.aonprd.com/Spells.aspx?ID=334",
+			"aon": "spells334",
+			"type": "cantrip",
+			"body": "**Targets** 1 creature\n\n- - -\n\nYou hurl a loose, unattended object that is within range and that has 1 Bulk or less at the target. Make a spell attack roll against the target. If you hit, you deal bludgeoning, piercing, or slashing damage-as appropriate for the object you hurled-equal to 1d6 plus your spellcasting ability modifier. No specific traits or magic properties of the hurled item affect the attack or the damage.\n\n**Critical Success** You deal double damage.\n**Success** You deal full damage.\n- - -\n**Heightened (+1)** The damage increases by 1d6.",
+			"hash": "WQFzQXXj"
+		}
 	},
 	{
 		"aonId": 335,
