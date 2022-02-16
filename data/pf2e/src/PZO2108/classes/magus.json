@@ -50,9 +50,94 @@
 		"aonId": 389,
 		"pf2t": { "name": "Magus", "source": "Secrets of Magic pg. 253", "src": "https://2e.aonprd.com/Traits.aspx?ID=389", "aon": "traits389", "type": "trait", "body": "This indicates abilities from the magus class.", "hash": "bwBHxOOw" }
 	},
-	{ "objectType": "ClassPath", "name": "Inexorable Iron", "class": "Magus", "source": "PZO2108", "id": "97f35bce-ec6d-475f-82dc-aed03144b08b" },
-	{ "objectType": "ClassPath", "name": "Laughing Shadow", "class": "Magus", "source": "PZO2108", "id": "96b65be4-b24d-4a38-afc7-0d1c9898a4bc" },
-	{ "objectType": "ClassPath", "name": "Sparkling Targe", "class": "Magus", "source": "PZO2108", "id": "b68cf395-3f48-45b7-b0da-f1675448a0b6" },
-	{ "objectType": "ClassPath", "name": "Starlit Span", "class": "Magus", "source": "PZO2108", "id": "24c60a7c-a328-4a83-a1e4-e4e3023ef46c" },
-	{ "objectType": "ClassPath", "name": "Twisting Tree", "class": "Magus", "source": "PZO2108", "id": "4945771f-d5d9-4d9f-bc37-22a2705cb0ed" }
+	{
+		"objectType": "ClassPath",
+		"name": "Inexorable Iron",
+		"class": "Magus",
+		"source": "PZO2108",
+		"id": "97f35bce-ec6d-475f-82dc-aed03144b08b",
+		"aonId": 1,
+		"pf2t": {
+			"name": "Inexorable Iron",
+			"pfs": "standard",
+			"source": "Secrets of Magic pg. 39",
+			"src": "https://2e.aonprd.com/HybridStudies.aspx?ID=1",
+			"aon": "hybridstudies1",
+			"type": "hybridstudy",
+			"body": "Once you begin along a path, nothing can stop you from reaching its end. You transform the mass of a greataxe, greatsword, or polearm into an unstoppable force to augment your own striking power or keep you standing on the battlefield.\n\nWhen you enter Arcane Cascade stance and at the start of each of your turns while you're in that stance, if you're wielding a melee weapon in two hands, you gain temporary Hit Points equal to half your level (minimum 1 temporary HP).\n\n\n**Conflux Spell** Thunderous Strike\n**Studious Spell (7th)** Enlarge\n**Studious Spell (11th)** Earthbind\n**Studious Spell (13th)** Dimensional Anchor",
+			"hash": "tGWxbbRx"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Laughing Shadow",
+		"class": "Magus",
+		"source": "PZO2108",
+		"id": "96b65be4-b24d-4a38-afc7-0d1c9898a4bc",
+		"aonId": 2,
+		"pf2t": {
+			"name": "Laughing Shadow",
+			"pfs": "standard",
+			"source": "Secrets of Magic pg. 39",
+			"src": "https://2e.aonprd.com/HybridStudies.aspx?ID=2",
+			"aon": "hybridstudies2",
+			"type": "hybridstudy",
+			"body": "Magic is freeing, a means to your ends, and you can use it to go where you want, do as you please, and avoid the consequences. You are a laughing shadow of spell and blade, always one step ahead of your foes, always with a trick up your sleeve.\n\nWhile in Arcane Cascade stance, you gain a +5-foot status bonus to your Speeds, or a +10-foot bonus if you're unarmored. If you have a free hand while in the stance and are attacking a flat-footed creature, you increase the extra damage to 3, to 5 if you have weapon specialization, or to 7 if you have greater weapon specialization. You must have your other hand completely free; the extra damage doesn't apply if you have a free-hand weapon or other item in that hand, even if you would normally be able to use the hand for other things.\n\n\n**Conflux Spell** Dimensional Assault\n**Studious Spell (7th)** Mirror Image\n**Studious Spell (11th)** Shift Blame\n**Studious Spell (13th)** Dimension Door",
+			"hash": "PAVkXzKv"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Sparkling Targe",
+		"class": "Magus",
+		"source": "PZO2108",
+		"id": "b68cf395-3f48-45b7-b0da-f1675448a0b6",
+		"aonId": 3,
+		"pf2t": {
+			"name": "Sparkling Targe",
+			"pfs": "standard",
+			"source": "Secrets of Magic pg. 39",
+			"src": "https://2e.aonprd.com/HybridStudies.aspx?ID=3",
+			"aon": "hybridstudies3",
+			"type": "hybridstudy",
+			"body": "You've studied the applications of magic, training yourself to perform not just offensive maneuvers but defensive tactics as well. When magic flows through you, your shield can block impossible things, even a dragon's breath or a magic missile.\n\nYou gain the Shield Block general feat.\n\nWhen you're in Arcane Cascade stance with your shield raised, your circumstance bonus to AC from your shield also applies to your saves against spells and other magical effects. In addition, damage you take as a result of a spell or magical effect while you're in Arcane Cascade can trigger your Shield Block reaction, even if the damage isn't physical. When blocking damage in this way, increase your shield's Hardness by an amount equal to the extra damage from Arcane Cascade (typically 1, but 2 if you have weapon specialization, or 3 if you have greater weapon specialization). These benefits apply whether you're using an actual shield, the shield spell, or something else that works like a shield (such as a raised tome if you have the Raise a Tome feat).\n\n\n**Conflux Spell** Shielding Strike\n**Studious Spell (7th)** Resist Energy\n**Studious Spell (11th)** Warding Aggression\n**Studious Spell (13th)** Stoneskin",
+			"hash": "ljXvzvlL"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Starlit Span",
+		"class": "Magus",
+		"source": "PZO2108",
+		"id": "24c60a7c-a328-4a83-a1e4-e4e3023ef46c",
+		"aonId": 4,
+		"pf2t": {
+			"name": "Starlit Span",
+			"pfs": "standard",
+			"source": "Secrets of Magic pg. 39",
+			"src": "https://2e.aonprd.com/HybridStudies.aspx?ID=4",
+			"aon": "hybridstudies4",
+			"type": "hybridstudy",
+			"body": "With magic, the sky's the limit, and you can't be bound by the confines of physical proximity. Your power reaches as far as your senses can perceive, transcending the space between you and your target even with spells that normally require direct physical contact. \n\nWhen you use Spellstrike, you can make a ranged weapon or ranged unarmed Strike, as long as the target is within the first range increment of your ranged weapon or ranged unarmed attack. You can deliver the spell even if its range is shorter than the range increment of your ranged attack.\n\n\n**Conflux Spell** Shooting Star\n**Studious Spell (7th)** Darkvision\n**Studious Spell (11th)** Wall of Wind\n**Studious Spell (13th)** Freedom of Movement",
+			"hash": "bjPRSnUj"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Twisting Tree",
+		"class": "Magus",
+		"source": "PZO2108",
+		"id": "4945771f-d5d9-4d9f-bc37-22a2705cb0ed",
+		"aonId": 5,
+		"pf2t": {
+			"name": "Twisting Tree",
+			"pfs": "standard",
+			"source": "Secrets of Magic pg. 40",
+			"src": "https://2e.aonprd.com/HybridStudies.aspx?ID=5",
+			"aon": "hybridstudies5",
+			"type": "hybridstudy",
+			"body": "The staff is perhaps one of the simplest of weapons, but this simplicity belies its elegance and versatility. To you, a staff is casting implement and martial weapon alike-the foundation of a fighting style.\n\nWhile you wield a staff in one hand, the staff adjusts in shape and weight, gaining the agile trait and increasing its damage die size to 1d6. While you wield a staff in both hands, it lengthens, twists, and reshapes, gaining the parry, reach, and trip traits. While you're in Arcane Cascade stance, you can Interact or Release to change your grip on the weapon as a free action when you Strike with your staff, including Strikes made in a Spellstrike. This happens before you roll your attack roll. You can also Interact to change your grip on the staff as a free action triggered at the end of your turn.\n\n**Conflux Spell** Spinning Staff\n**Studious Spell (7th)** Magic Mouth\n**Studious Spell (11th)** Slow\n**Studious Spell (13th)** Blink",
+			"hash": "OQQGSMQk"
+		}
+	}
 ]

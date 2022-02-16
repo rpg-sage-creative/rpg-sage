@@ -52,8 +52,76 @@
 		"aonId": 166,
 		"pf2t": { "name": "Wizard", "source": "Core Rulebook pg. 638 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=166", "aon": "traits166", "type": "trait", "body": "This indicates abilities from the wizard class.", "hash": "HMtLULcT" }
 	},
-	{ "objectType": "ClassPath", "name": "Improved Familiar Attunement", "class": "Wizard", "source": "PZO2101", "id": "ed3df9e6-3dfb-4faf-a2e5-6e243de7ea17", "aonId": 1 },
-	{ "objectType": "ClassPath", "name": "Metamagical Experimentation", "class": "Wizard", "source": "PZO2101", "id": "62060e9e-9a95-480c-8da6-5bf972ab000a", "aonId": 2 },
-	{ "objectType": "ClassPath", "name": "Spell Blending", "class": "Wizard", "source": "PZO2101", "id": "88233bb3-4b77-420e-9bf9-7404922db089", "aonId": 3 },
-	{ "objectType": "ClassPath", "name": "Spell Substitution", "class": "Wizard", "source": "PZO2101", "id": "e4b8b192-de4d-4868-ba9a-b8cc493db4e6", "aonId": 4 }
+	{
+		"objectType": "ClassPath",
+		"name": "Improved Familiar Attunement",
+		"class": "Wizard",
+		"source": "PZO2101",
+		"id": "ed3df9e6-3dfb-4faf-a2e5-6e243de7ea17",
+		"aonId": 1,
+		"pf2t": {
+			"name": "Improved Familiar Attunement",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 205 2.0",
+			"src": "https://2e.aonprd.com/ArcaneThesis.aspx?ID=1",
+			"aon": "arcanethesis1",
+			"type": "arcanethesis",
+			"body": "You've long held that fine-tuning the magic that bonds wizard and familiar can improve the mystic connection, compared to the safe yet generic bond most wizards currently use. You've formed such a pact with your familiar, gaining more advantages from it than most wizards. You gain the Familiar wizard feat. Your familiar gains an extra ability, and it gains an additional extra ability when you reach 6th, 12th, and 18th levels. Your connection with your familiar alters your arcane bond class feature so that you store your magical energy in your familiar, rather than an item you own; you also gain the Drain Familiar free action instead of Drain Bonded Item. Drain Familiar can be used any time an ability would allow you to use Drain Bonded Item and functions identically, except that you draw magic from your familiar instead of an item.",
+			"hash": "gWsZbdxB"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Metamagical Experimentation",
+		"class": "Wizard",
+		"source": "PZO2101",
+		"id": "62060e9e-9a95-480c-8da6-5bf972ab000a",
+		"aonId": 2,
+		"pf2t": {
+			"name": "Metamagical Experimentation",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 205 2.0",
+			"src": "https://2e.aonprd.com/ArcaneThesis.aspx?ID=2",
+			"aon": "arcanethesis2",
+			"type": "arcanethesis",
+			"body": "You've realized that the practice known as metamagic is a holdover from a time long ago, when wizards had to work out their own spells and variations rather than rely on spells recorded by others and passed down over the years. This allows you efficient access to various metamagic effects.\n\nYou gain one 1st-level metamagic wizard feat of your choice. Starting at 4th level, during your daily preparations, you can gain a metamagic wizard feat of your choice that has a level requirement of no more than half your level, which you can use until your next daily preparations.",
+			"hash": "qmvJxwBF"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Spell Blending",
+		"class": "Wizard",
+		"source": "PZO2101",
+		"id": "88233bb3-4b77-420e-9bf9-7404922db089",
+		"aonId": 3,
+		"pf2t": {
+			"name": "Spell Blending",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 206 2.0",
+			"src": "https://2e.aonprd.com/ArcaneThesis.aspx?ID=3",
+			"aon": "arcanethesis3",
+			"type": "arcanethesis",
+			"body": "You theorize that spell slots are a shorthand for an underlying energy that powers all spellcasting, and you've found a way to tinker with the hierarchy of spell slots, combining them to fuel more powerful spells.\n\nWhen you make your daily preparations, you can trade two spell slots of the same level for a bonus spell slot of up to 2 levels higher than the traded spell slots. You can exchange as many spell slots as you have available. Bonus spell slots must be of a level you can normally cast, and each bonus spell slot must be of a different spell level. You can also trade any spell slot for two additional cantrips, though you cannot trade more than one spell slot at a time for additional cantrips in this way.",
+			"hash": "XGVgkcyC"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Spell Substitution",
+		"class": "Wizard",
+		"source": "PZO2101",
+		"id": "e4b8b192-de4d-4868-ba9a-b8cc493db4e6",
+		"aonId": 4,
+		"pf2t": {
+			"name": "Spell Substitution",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 206 2.0",
+			"src": "https://2e.aonprd.com/ArcaneThesis.aspx?ID=4",
+			"aon": "arcanethesis4",
+			"type": "arcanethesis",
+			"body": "You don't accept the fact that once spells are prepared, they can't be changed until your next daily preparation, and you have uncovered a shortcut allowing you to substitute new spells for those you originally prepared.\n\nYou can spend 10 minutes to empty one of your prepared spell slots and prepare a different spell from your spellbook in its place. If you are interrupted during such a swap, the original spell remains prepared and can still be cast. You can try again to swap out the spell later, but you must start the process over again.",
+			"hash": "UkbmANcW"
+		}
+	}
 ]

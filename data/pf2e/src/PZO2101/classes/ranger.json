@@ -51,7 +51,58 @@
 		"aonId": 136,
 		"pf2t": { "name": "Ranger", "source": "Core Rulebook pg. 635 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=136", "aon": "traits136", "type": "trait", "body": "This indicates abilities from the ranger class.", "hash": "prSzMEHR" }
 	},
-	{ "objectType": "ClassPath", "name": "Flurry", "class": "Ranger", "source": "PZO2101", "id": "2379236e-4354-4988-9583-d314d8abf356", "aonId": 1 },
-	{ "objectType": "ClassPath", "name": "Outwit", "class": "Ranger", "source": "PZO2101", "id": "70c1cdbd-34f8-48d1-a044-9e5ed8e7fb69", "aonId": 3 },
-	{ "objectType": "ClassPath", "name": "Precision", "class": "Ranger", "source": "PZO2101", "id": "39eb279f-6cfe-403d-b7e3-95a531a92358", "aonId": 2 }
+	{
+		"objectType": "ClassPath",
+		"name": "Flurry",
+		"class": "Ranger",
+		"source": "PZO2101",
+		"id": "2379236e-4354-4988-9583-d314d8abf356",
+		"aonId": 1,
+		"pf2t": {
+			"name": "Flurry",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 168 2.0",
+			"src": "https://2e.aonprd.com/HuntersEdge.aspx?ID=1",
+			"aon": "huntersedge1",
+			"type": "huntersedge",
+			"body": "You have trained to unleash a devastating flurry of attacks upon your prey. Your multiple attack penalty for attacks against your hunted prey is -3 (-2 with an agile weapon) on your second attack of the turn instead of -5, and -6 (-4 with an agile weapon) on your third or subsequent attack of the turn, instead of -10.\n\n#### Masterful Hunter Upgrade (17th)\nYou can blend your weapon mastery with skillful targeting to make a series of precise attacks. If you have master proficiency with your weapon, your multiple attack penalty for attacks against your hunted prey is -2 (-1 with an agile weapon) on your second attack of the turn, and -4 (-2 with an agile weapon) on your third and subsequent attacks of the turn.",
+			"hash": "RMCxZUpx"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Outwit",
+		"class": "Ranger",
+		"source": "PZO2101",
+		"id": "70c1cdbd-34f8-48d1-a044-9e5ed8e7fb69",
+		"aonId": 3,
+		"pf2t": {
+			"name": "Outwit",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 168 2.0",
+			"src": "https://2e.aonprd.com/HuntersEdge.aspx?ID=3",
+			"aon": "huntersedge3",
+			"type": "huntersedge",
+			"body": "You are talented at outwitting and evading your prey. You gain a +2 circumstance bonus to Deception checks, Intimidation checks, Stealth checks, and any checks to Recall Knowledge about the prey, and a +1 circumstance bonus to AC against your prey's attacks.\n\n#### Masterful Hunter Upgrade (17th)\nYour mastery of skills allows you to overwhelm your prey. If you have master proficiency in Deception, Intimidation, Stealth, or the skill you use to Recall Knowledge about your prey, increase the circumstance bonus against the prey with that skill from +2 to +4. If you have master proficiency with your armor, increase the circumstance bonus to AC against the prey from +1 to +2.",
+			"hash": "khyzgbXC"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Precision",
+		"class": "Ranger",
+		"source": "PZO2101",
+		"id": "39eb279f-6cfe-403d-b7e3-95a531a92358",
+		"aonId": 2,
+		"pf2t": {
+			"name": "Precision",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 168 2.0",
+			"src": "https://2e.aonprd.com/HuntersEdge.aspx?ID=2",
+			"aon": "huntersedge2",
+			"type": "huntersedge",
+			"body": "You have trained to aim for your prey's weak points. The first time you hit your hunted prey in a round, you also deal 1d8 additional precision damage. (Precision damage increases the damage you already deal, using the same type, but is ineffective against creatures that lack vital organs or weak points.) At 11th level, the extra damage increases to 2d8 precision damage, and at 19th level, the extra damage increases to 3d8 precision damage.\n\n#### Masterful Hunter Upgrade (17th)\nYour weapon mastery allows you to hit your prey's vital areas multiple times. The second time in a round you hit your hunted prey, you also deal 1d8 precision damage. At 19th level, your second hit in a round against your hunted prey deals 2d8 precision damage, and your third hit in a round against your hunted prey deals 1d8 precision damage.",
+			"hash": "tppXqzkr"
+		}
+	}
 ]

@@ -51,7 +51,58 @@
 		"aonId": 19,
 		"pf2t": { "name": "Bard", "source": "Core Rulebook pg. 629 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=19", "aon": "traits19", "type": "trait", "body": "This indicates abilities from the bard class.", "hash": "lxNmMrGz" }
 	},
-	{ "objectType": "ClassPath", "name": "Enigma", "class": "Bard", "source": "PZO2101", "id": "775fc704-c4c7-4626-8f37-5c78c8389e16", "aonId": 1 },
-	{ "objectType": "ClassPath", "name": "Maestro", "class": "Bard", "source": "PZO2101", "id": "5deb6c36-c1ea-4585-82b3-9d32e8f8c398", "aonId": 2 },
-	{ "objectType": "ClassPath", "name": "Polymath", "class": "Bard", "source": "PZO2101", "id": "65079beb-3ded-4e28-bf27-9f858525d393", "aonId": 3 }
+	{
+		"objectType": "ClassPath",
+		"name": "Enigma",
+		"class": "Bard",
+		"source": "PZO2101",
+		"id": "775fc704-c4c7-4626-8f37-5c78c8389e16",
+		"aonId": 1,
+		"pf2t": {
+			"name": "Enigma",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 97 2.0",
+			"src": "https://2e.aonprd.com/Muses.aspx?ID=1",
+			"aon": "muses1",
+			"type": "muse",
+			"body": "Your muse is a mystery, driving you to uncover the hidden secrets of the multiverse. If your muse is a creature, it might be a dragon or otherworldly being; if a deity, it might be Irori or Nethys. You gain the Bardic Lore feat and add true strike to your spell repertoire.",
+			"hash": "xFAxQqtb"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Maestro",
+		"class": "Bard",
+		"source": "PZO2101",
+		"id": "5deb6c36-c1ea-4585-82b3-9d32e8f8c398",
+		"aonId": 2,
+		"pf2t": {
+			"name": "Maestro",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 97 2.0",
+			"src": "https://2e.aonprd.com/Muses.aspx?ID=2",
+			"aon": "muses2",
+			"type": "muse",
+			"body": "Your muse is a virtuoso, inspiring you to greater heights. If it's a creature, it might be a performance-loving creature such as a choral angel or lillend azata; if a deity, it might be Shelyn. As a bard with a maestro muse, you are an inspiration to your allies and confident of your musical and oratorical abilities. You gain the Lingering Composition feat and add soothe to your spell repertoire.",
+			"hash": "jEJjBzbW"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Polymath",
+		"class": "Bard",
+		"source": "PZO2101",
+		"id": "65079beb-3ded-4e28-bf27-9f858525d393",
+		"aonId": 3,
+		"pf2t": {
+			"name": "Polymath",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 97 2.0",
+			"src": "https://2e.aonprd.com/Muses.aspx?ID=3",
+			"aon": "muses3",
+			"type": "muse",
+			"body": "Your muse is a jack of all trades, flitting between skills and pursuits. If it's is a creature, it might be an eclectic creature like a fey; if a deity, it might be Desna or Calistria. As a bard with a polymath muse, you are interested in a wide array of topics but rarely dedicated to any one, and you rarely make up your mind-you want to try everything. You gain the Versatile Performance feat and add unseen servant to your spell repertoire.",
+			"hash": "KRgqzxAQ"
+		}
+	}
 ]

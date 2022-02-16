@@ -58,11 +58,130 @@
 			"hash": "zEgYCZNq"
 		}
 	},
-	{ "objectType": "ClassPath", "name": "Curse", "class": "Witch", "source": "PZO2105", "id": "bd547bc2-5dac-47d9-87a4-71041763a539", "aonId": 2 },
-	{ "objectType": "ClassPath", "name": "Fate", "class": "Witch", "source": "PZO2105", "id": "44a03dc9-5ad2-4be0-a397-bdb14d8a2b49", "aonId": 3 },
-	{ "objectType": "ClassPath", "name": "Fervor", "class": "Witch", "source": "PZO2105", "id": "0abb6b01-ea35-4db5-a333-2957e7d5445f", "aonId": 4 },
-	{ "objectType": "ClassPath", "name": "Night", "class": "Witch", "source": "PZO2105", "id": "d7e226b8-f45b-49bc-be8e-be30390c85ee", "aonId": 5 },
-	{ "objectType": "ClassPath", "name": "Rune", "class": "Witch", "source": "PZO2105", "id": "dbca17ec-60cf-4278-96fc-492a9344184f", "aonId": 6 },
-	{ "objectType": "ClassPath", "name": "Wild", "class": "Witch", "source": "PZO2105", "id": "5935c770-152b-4cbd-ae27-0ed56769fd63", "aonId": 7 },
-	{ "objectType": "ClassPath", "name": "Winter", "class": "Witch", "source": "PZO2105", "id": "ece5a715-a864-4e78-b4b4-1d473fd689f3", "aonId": 8 }
+	{
+		"objectType": "ClassPath",
+		"name": "Curse",
+		"class": "Witch",
+		"source": "PZO2105",
+		"id": "bd547bc2-5dac-47d9-87a4-71041763a539",
+		"aonId": 2,
+		"pf2t": {
+			"name": "Curse",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 99",
+			"src": "https://2e.aonprd.com/Patrons.aspx?ID=2",
+			"aon": "patrons2",
+			"type": "patron",
+			"body": "Foiling foes and undermining those who stand in your way are the tools of the curse patrons.\n\n**Spell List** occult\n**Patron Skill** Occultism\n**Hex Cantrip** evil eye\n**Granted Spell** ray of enfeeblement",
+			"hash": "OvpAhvtK"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Fate",
+		"class": "Witch",
+		"source": "PZO2105",
+		"id": "44a03dc9-5ad2-4be0-a397-bdb14d8a2b49",
+		"aonId": 3,
+		"pf2t": {
+			"name": "Fate",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 99",
+			"src": "https://2e.aonprd.com/Patrons.aspx?ID=3",
+			"aon": "patrons3",
+			"type": "patron",
+			"body": "Through your patron, you gain glimpses of the future and insight into the ever-woven tapestry of time.\n\n**Spell List** occult\n**Patron Skill** Occultism\n**Hex Cantrip** nudge fate\n**Granted Spell** true strike",
+			"hash": "qGtnrNrR"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Fervor",
+		"class": "Witch",
+		"source": "PZO2105",
+		"id": "0abb6b01-ea35-4db5-a333-2957e7d5445f",
+		"aonId": 4,
+		"pf2t": {
+			"name": "Fervor",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 99",
+			"src": "https://2e.aonprd.com/Patrons.aspx?ID=4",
+			"aon": "patrons4",
+			"type": "patron",
+			"body": "Your patron represents a grand ideal or goal, granting you magic to further their mission and bring others to the cause.\n\n**Spell List** divine\n**Patron Skill** Religion\n**Hex Cantrip** stoke the heart\n**Granted Spell** command",
+			"hash": "qrkQbZQy"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Night",
+		"class": "Witch",
+		"source": "PZO2105",
+		"id": "d7e226b8-f45b-49bc-be8e-be30390c85ee",
+		"aonId": 5,
+		"pf2t": {
+			"name": "Night",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 99",
+			"src": "https://2e.aonprd.com/Patrons.aspx?ID=5",
+			"aon": "patrons5",
+			"type": "patron",
+			"body": "Your patron speaks from the shadows, granting you power over darkness and dreams.\n\n**Spell List** occult\n**Patron Skill** Occultism\n**Hex Cantrip** shroud of night\n**Granted Spell** sleep",
+			"hash": "VyHqNvzt"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Rune",
+		"class": "Witch",
+		"source": "PZO2105",
+		"id": "dbca17ec-60cf-4278-96fc-492a9344184f",
+		"aonId": 6,
+		"pf2t": {
+			"name": "Rune",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 99",
+			"src": "https://2e.aonprd.com/Patrons.aspx?ID=6",
+			"aon": "patrons6",
+			"type": "patron",
+			"body": "Your patron is one of sigils and symbols, tomes and texts, words and wisdom.\n\n**Spell List** arcane\n**Patron Skill** Arcana\n**Hex Cantrip** discern secrets\n**Granted Spell** magic weapon",
+			"hash": "qWLgpXhv"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Wild",
+		"class": "Witch",
+		"source": "PZO2105",
+		"id": "5935c770-152b-4cbd-ae27-0ed56769fd63",
+		"aonId": 7,
+		"pf2t": {
+			"name": "Wild",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 99",
+			"src": "https://2e.aonprd.com/Patrons.aspx?ID=7",
+			"aon": "patrons7",
+			"type": "patron",
+			"body": "The wild places of the world feel the touch of your patron.\n\n**Spell List** primal\n**Patron Skill** Nature\n**Hex Cantrip** wilding word\n**Granted Spell** your choice of summon animal or summon plant or fungus",
+			"hash": "kCZIlpSR"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Winter",
+		"class": "Witch",
+		"source": "PZO2105",
+		"id": "ece5a715-a864-4e78-b4b4-1d473fd689f3",
+		"aonId": 8,
+		"pf2t": {
+			"name": "Winter",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 99",
+			"src": "https://2e.aonprd.com/Patrons.aspx?ID=8",
+			"aon": "patrons8",
+			"type": "patron",
+			"body": "Your patron reflects the frozen reaches of the world, bitterly cruel to those who underestimate that power.\n\n**Spell List** primal\n**Patron Skill** Nature\n**Hex Cantrip** clinging ice\n**Granted Spell** gust of wind",
+			"hash": "EtIKtvKm"
+		}
+	}
 ]

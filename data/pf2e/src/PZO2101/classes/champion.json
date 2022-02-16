@@ -56,7 +56,58 @@
 			"hash": "brqxblWv"
 		}
 	},
-	{ "objectType": "ClassPath", "name": "Paladin", "class": "Champion", "source": "PZO2101", "id": "aeb6c211-0dc3-44de-a17b-d1071528dfd2", "aonId": 1 },
-	{ "objectType": "ClassPath", "name": "Redeemer", "class": "Champion", "source": "PZO2101", "id": "df5fe60e-39b0-4c93-a867-0526fc07ce49", "aonId": 2 },
-	{ "objectType": "ClassPath", "name": "Liberator", "class": "Champion", "source": "PZO2101", "id": "a9c18e14-d679-4de5-985f-fe928abbe4c0", "aonId": 3 }
+	{
+		"objectType": "ClassPath",
+		"name": "Paladin",
+		"class": "Champion",
+		"source": "PZO2101",
+		"id": "aeb6c211-0dc3-44de-a17b-d1071528dfd2",
+		"aonId": 1,
+		"pf2t": {
+			"name": "Paladin",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 106 2.0",
+			"src": "https://2e.aonprd.com/Causes.aspx?ID=1",
+			"aon": "causes1",
+			"type": "cause",
+			"body": "You're honorable, forthright, and committed to pushing back the forces of cruelty. You gain the Retributive Strike champion's reaction and the lay on hands devotion spell. After the tenets of good, add these tenets: \n\n+ You must act with honor, never taking advantage of others, lying, or cheating. \n+ You must respect the lawful authority of legitimate leadership wherever you go, and follow its laws.\n\n#### Champion's Reaction\n\n\n#### Retributive Strike\nYou protect your ally and strike your foe. The ally gains resistance to all damage against the triggering damage equal to 2 + your level. If the foe is within reach, make a melee Strike against it.\n\n#### Divine Smite (9th)\nYou surround evil targets in a punishing halo. If you hit with your Retributive Strike, the target takes persistent good damage equal to your Charisma modifier.\n\n#### Exalt (11th)\nWhen you use Retributive Strike, each ally within 15 feet of you with the target in their melee reach can spend a reaction to Strike the target with a -5 penalty.",
+			"hash": "XvKQKYRH"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Redeemer",
+		"class": "Champion",
+		"source": "PZO2101",
+		"id": "df5fe60e-39b0-4c93-a867-0526fc07ce49",
+		"aonId": 2,
+		"pf2t": {
+			"name": "Redeemer",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 106 2.0",
+			"src": "https://2e.aonprd.com/Causes.aspx?ID=2",
+			"aon": "causes2",
+			"type": "cause",
+			"body": "You're full of kindness and forgiveness. You gain the Glimpse of Redemption champion's reaction and the lay on hands devotion spell. After the tenets of good, add these: \n\n+ You must first try to redeem those who commit evil acts, rather than killing them or meting out punishment. If they then continue on a wicked path, you might need to take more extreme measures. \n+ You must show compassion for others, regardless of their authority or station.\n\n#### Champion's Reaction\n\n\n#### Glimpse of Redemption\nYour foe hesitates under the weight of sin as visions of redemption play in their mind's eye. The foe must choose one of the following options: \n\n+ The ally is unharmed by the triggering damage. \n+ The ally gains resistance to all damage against the triggering damage equal to 2 + your level. After the damaging effect is applied, the enemy becomes enfeebled 2 until the end of its next turn.\n\n#### Divine Smite (9th)\nA guilty conscience assails foes who spurn your Glimpse of Redemption. A foe that responds to your Glimpse of Redemption by dealing damage takes persistent good damage equal to your Charisma modifier.\n\n#### Exalt (11th)\nYou protect multiple allies. You can apply the resistance granted by Glimpse of Redemption to yourself and all allies within 15 feet of you, including the triggering ally, except the resistance is reduced by 2 for all.",
+			"hash": "zvSGTRnN"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Liberator",
+		"class": "Champion",
+		"source": "PZO2101",
+		"id": "a9c18e14-d679-4de5-985f-fe928abbe4c0",
+		"aonId": 3,
+		"pf2t": {
+			"name": "Liberator",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 107 2.0",
+			"src": "https://2e.aonprd.com/Causes.aspx?ID=3",
+			"aon": "causes3",
+			"type": "cause",
+			"body": "You're committed to defending the freedom of others. You gain the Liberating Step champion's reaction and the lay on hands devotion spell. After the tenets of good, add these tenets: \n\n+ You must respect the choices others make over their own lives, and you can't force someone to act in a particular way or threaten them if they don't. \n+ You must demand and fight for others' freedom to make their own decisions. You may never engage in or countenance slavery or tyranny.\n\n#### Champion's Reaction\n\n\n#### Liberating Step\nYou free an ally from restraint. If the trigger was an ally taking damage, the ally gains resistance to all damage against the triggering damage equal to 2 + your level. The ally can attempt to break free of effects grabbing, restraining, immobilizing, or paralyzing them. They either attempt a new save against one such effect that allows a save, or attempt to Escape from one effect as a free action. If they can move, the ally can Step as a free action, even if they didn't need to escape.\n\n#### Divine Smite (9th)\nYou punish those who ensnare your allies in bondage. If the triggering enemy was using any effects to make your ally grabbed, restrained, immobilized, or paralyzed when you used Liberating Step, that enemy takes persistent good damage equal to your Charisma modifier.\n\n#### Exalt (11th)\nYou can help your whole group get into position. When you use Liberating Step, if your ally doesn't attempt to break free of an effect, you and all allies within 15 feet can Step, in addition to the triggering ally.",
+			"hash": "vdfIryZU"
+		}
+	}
 ]

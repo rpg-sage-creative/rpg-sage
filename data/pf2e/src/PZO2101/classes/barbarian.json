@@ -66,7 +66,17 @@
 		"class": "Barbarian",
 		"source": "PZO2101",
 		"id": "8fcecd5d-24fb-487f-972f-8d0b3766ce8d",
-		"aonId": 1
+		"aonId": 1,
+		"pf2t": {
+			"name": "Animal Instinct",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 86 2.0",
+			"src": "https://2e.aonprd.com/Instincts.aspx?ID=1",
+			"aon": "instincts1",
+			"type": "instinct",
+			"body": "The fury of a wild predator fills you when you Rage, granting you ferocious unarmed attacks. Cultures that revere vicious animals (such as apes or bears) give rise to barbarians with this instinct. You might also be at war with an uncontrollable, animalistic side of your personality, or you might be a descendant of a werewolf or another werecreature. Select an animal from Table 3-3: Animal Instincts that best matches your chosen animal.\n\n**Table 3-3: Animal Instincts**\n\n**Animal** | **Attack** | **Traits**\n--- | --- | --- | ---\nApe | Fist | 1d10 B | Grapple, unarmed\nBear | Jaws | 1d10 P | Unarmed\nClaw | 1d6 S | Agile, unarmed\nBull | Horn | 1d10 P | Shove, unarmed\nCat | Jaws | 1d10 P | Unarmed\nClaw | 1d6 S | Agile, unarmed\nDeer | Antler | 1d10 P | Grapple, unarmed\nFrog | Jaws | 1d10 B | Unarmed\nTongue | 1d4 B | Agile, unarmed\nShark | Jaws | 1d10 P | Grapple, unarmed\nSnake | Fangs | 1d10 P | Grapple, unarmed\nWolf | Jaws | 1d10 P | Trip, unarmed\n\n#### Anathema\nFlagrantly disrespecting an animal of your chosen kind is anathema to your instinct, as is using weapons while raging.\n\n#### Bestial Rage (Instinct Ability)\nWhen you Rage, you gain your chosen animal's unarmed attack (or attacks). The specific attack gained, the damage it deals, and its traits are listed on Table 3-3: Animal Instincts. These attacks are in the brawling group. Your Rage action gains the morph, primal, and transmutation traits.\n\n#### Specialization Ability\nIncrease the damage die size for the unarmed attacks granted by your chosen animal by one step, and increase the additional damage from Rage from 2 to 5 for your chosen animal's unarmed attacks. The frog's tongue attack and deer's antler attack gain reach 10 feet. If you have greater weapon specialization, increase the damage from Rage from 5 to 12 for your chosen animal's unarmed attacks.\n\n#### Raging Resistance\nYou resist piercing and slashing damage.",
+			"hash": "OqBkvRWx"
+		}
 	},
 	{
 		"objectType": "ClassPath",
@@ -75,9 +85,70 @@
 		"class": "Barbarian",
 		"source": "PZO2101",
 		"id": "a717e949-9218-4183-9ecf-f39a38fffeac",
-		"aonId": 2
+		"aonId": 2,
+		"pf2t": {
+			"name": "Dragon Instinct",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 86 2.0",
+			"src": "https://2e.aonprd.com/Instincts.aspx?ID=2",
+			"aon": "instincts2",
+			"type": "instinct",
+			"body": "You summon the fury of a mighty dragon and manifest incredible abilities. Perhaps your culture reveres draconic majesty, or you gained your connection by drinking or bathing in dragon's blood or after watching a marauding wyrm burn your village. Select a type of dragon from Table 3-4: Dragon Instincts to be your instinct's dragon type. Chromatic dragons tend to be evil, and metallic dragons tend to be good.\n\n**Table 3-4: Dragon Instincts**\n\n**Dragon Type** | **Breath Weapon**\n--- | --- | ---\nBlack | Chromatic | Line of acid\nBlue | Chromatic | Line of electricity\nGreen | Chromatic | Cone of poison\nRed | Chromatic | Cone of fire\nWhite | Chromatic | Cone of cold\nBrass | Metallic | Line of fire\nBronze | Metallic | Line of electricity\nCopper | Metallic | Line of acid\nGold | Metallic | Cone of fire\nSilver | Metallic | Cone of cold\n\n#### Anathema\nLetting a personal insult against you slide is anathema to your instinct. Choose whether your character respects or abhors your dragon type. If you respect it, defying such a dragon is anathema, and if you abhor it, failing to defeat such a dragon you come across is anathema.\n\n#### Draconic Rage (Instinct Ability)\nWhile raging, you can increase the additional damage from Rage from 2 to 4 and change its damage type to match that of your dragon's breath weapon instead of the damage type for your weapon or unarmed attack. If you do this, your Rage action gains the arcane and evocation traits, as well as the trait matching the damage type.\n\n#### Specialization Ability\nWhen you use draconic rage, you increase the additional damage from Rage from 4 to 8. If you have greater weapon specialization, instead increase the damage from Rage when using draconic rage from 8 to 16.\n\n#### Raging Resistance\nYou resist piercing damage and the damage type of your dragon's breath weapon.",
+			"hash": "xkbQdmwr"
+		}
 	},
-	{ "objectType": "ClassPath", "name": "Fury Instinct", "class": "Barbarian", "source": "PZO2101", "id": "f3638bdd-5854-49f0-abd3-e588cd4c0f09", "aonId": 3 },
-	{ "objectType": "ClassPath", "name": "Giant Instinct", "class": "Barbarian", "source": "PZO2101", "id": "7badae7d-cbd3-4ade-afd9-e246f034e082", "aonId": 4 },
-	{ "objectType": "ClassPath", "name": "Spirit Instinct", "class": "Barbarian", "source": "PZO2101", "id": "8c8a9705-d7d9-4ac1-b6c2-82337e1a5eef", "aonId": 5 }
+	{
+		"objectType": "ClassPath",
+		"name": "Fury Instinct",
+		"class": "Barbarian",
+		"source": "PZO2101",
+		"id": "f3638bdd-5854-49f0-abd3-e588cd4c0f09",
+		"aonId": 3,
+		"pf2t": {
+			"name": "Fury Instinct",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 87 2.0",
+			"src": "https://2e.aonprd.com/Instincts.aspx?ID=3",
+			"aon": "instincts3",
+			"type": "instinct",
+			"body": "Your rage comes from a deep and purely personal well within you. You use your rage as you choose.\n\n#### Anathema and Instinct Ability\nYou don't have an anathema or an instinct ability. Instead, you gain an additional 1st-level barbarian feat.\n\n#### Specialization Ability\nIncrease the additional damage from Rage from 2 to 6. If you have greater weapon specialization, instead increase the additional damage from Rage to 12.\n\n#### Raging Resistance\nYou resist physical weapon damage, but not physical damage from other sources (such as unarmed attacks).",
+			"hash": "xWtNpxgR"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Giant Instinct",
+		"class": "Barbarian",
+		"source": "PZO2101",
+		"id": "7badae7d-cbd3-4ade-afd9-e246f034e082",
+		"aonId": 4,
+		"pf2t": {
+			"name": "Giant Instinct",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 87 2.0",
+			"src": "https://2e.aonprd.com/Instincts.aspx?ID=4",
+			"aon": "instincts4",
+			"type": "instinct",
+			"body": "Your rage gives you the raw power and size of a giant. This doesn't necessarily mean you revere giants-you might scoff at them or even aspire to slay them! You could instead seem like a giant to other people due to your exceptional strength or larger-than-life emotions and ego.\n\n#### Anathema\nFailing to face a personal challenge of strength is anathema.\n\n#### Titan Mauler (Instinct Ability)\nYou can use a weapon built for a Large creature if you are Small or Medium (both normally and when raging). If you're not Small or Medium, you can use a weapon built for a creature one size larger than you. You gain access to this larger weapon, which can be of any weapon type otherwise available at character creation. It has the normal Price and Bulk for a weapon of its size. When wielding such a weapon in combat, increase your additional damage from Rage from 2 to 6, but you have the clumsy 1 condition because of the weapon's unwieldy size. You can't remove this clumsy condition or ignore its penalties by any means while wielding the weapon.\n\n#### Specialization Ability\nIncrease the damage from Rage when using a larger weapon from 6 to 10; if you have greater weapon specialization, increase it from 10 to 18.\n\n#### Raging Resistance\nYou resist bludgeoning damage and your choice of cold, electricity, or fire, chosen when you gain raging resistance.",
+			"hash": "CdjInEOq"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Spirit Instinct",
+		"class": "Barbarian",
+		"source": "PZO2101",
+		"id": "8c8a9705-d7d9-4ac1-b6c2-82337e1a5eef",
+		"aonId": 5,
+		"pf2t": {
+			"name": "Spirit Instinct",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 87 2.0",
+			"src": "https://2e.aonprd.com/Instincts.aspx?ID=5",
+			"aon": "instincts5",
+			"type": "instinct",
+			"body": "Whether you are emotionally sensitive to the spirits around you; worship ancestors or apparitions; or are haunted by the specter of an ancestor, relative, friend, or foe, your rage takes the form of a spiritual possession.\n\n#### Anathema\nDisrespecting corpses or spirits is anathema to your instinct; defending yourself against undead creatures is not.\n\n#### Spirit Rage (Instinct Ability)\nWhile raging, you can increase the additional damage from Rage from 2 to 3 and change its damage type to negative or positive, instead of the damage type for your weapon or unarmed attack (choose each time you Rage). If you choose to deal negative or positive damage, your weapon or unarmed attack gains the effects of the ghost touch property rune, which makes it more effective against incorporeal creatures, and your Rage action gains the divine and necromancy traits, plus negative or positive, as appropriate.\n\n#### Specialization Ability\nWhen using spirit rage, increase the damage from Rage from 3 to 7. If you have greater weapon specialization, instead increase the damage when using spirit rage to 13.\n\n#### Raging Resistance\nYou resist negative damage, as well as damage dealt by the attacks and abilities of undead creatures, regardless of the damage type.",
+			"hash": "IHxFKpWS"
+		}
+	}
 ]

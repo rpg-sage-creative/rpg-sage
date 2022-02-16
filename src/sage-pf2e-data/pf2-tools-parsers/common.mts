@@ -1,4 +1,3 @@
-import { info } from "console";
 import { BaseCore, Pf2tBase, Pf2tBaseCore, TDetail, THasSuccessOrFailure } from "../../sage-pf2e";
 import type { SourceCore } from "../../sage-pf2e/model/base/Source";
 import type { ClassCore } from "../../sage-pf2e/model/Class";
@@ -74,11 +73,8 @@ function objectTypeToPf2Type(sageCore: TCore | string, cleanOnly?: true): string
 		return cleanOnly === true ? cleanType(sageCore) : toPf2Type(sageCore);
 	}
 	if (sageCore.objectType === "ClassPath") {
-		info(`WHAT THE FUCK!? ${sageCore.objectType}::${sageCore.class}`)
 		const clss = getTypedCores("Class").find(klass => klass.name === sageCore.class);
-		if (clss?.classPath) {
-			return toPf2Type(clss.classPath);
-		}
+		return toPf2Type(clss?.classPath ?? sageCore.objectType);
 	}
 	if (["Spell","FocusSpell"].includes(sageCore.objectType) && sageCore.traits?.includes("Cantrip")) {
 		return toPf2Type("Cantrip");
@@ -105,15 +101,10 @@ function cleanType(value: string): string {
 
 //#endregion
 
-const typedCores = new Map();
 export function getTypedCores(objectType: "Source"): SourceCore[];
 export function getTypedCores(objectType: "Class"): ClassCore[];
-export function getTypedCores<T>(objectType: string): T[] {
-	if (!typedCores.has(objectType)) {
-		const cores = sageCores.filter(core => core.objectType === objectType) as unknown as T[];
-		typedCores.set(objectType, cores);
-	}
-	return typedCores.get(objectType);
+export function getTypedCores(objectType: string) {
+	return sageCores.filter(core => core.objectType === objectType) as unknown;
 }
 
 function typesMatch(pf2t: Pf2tBaseCore, sage: TCore): [boolean, string] {

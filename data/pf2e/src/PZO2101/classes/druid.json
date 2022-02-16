@@ -55,8 +55,76 @@
 		"aonId": 52,
 		"pf2t": { "name": "Druid", "source": "Core Rulebook pg. 631 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=52", "aon": "traits52", "type": "trait", "body": "This indicates abilities from the druid class.", "hash": "xMcgpBVw" }
 	},
-	{ "objectType": "ClassPath", "name": "Animal", "class": "Druid", "source": "PZO2101", "id": "234a44c5-6846-44fa-9d70-bd455f976436", "aonId": 1 },
-	{ "objectType": "ClassPath", "name": "Leaf", "class": "Druid", "source": "PZO2101", "id": "f6023e37-81c1-4b69-b352-6af25734813a", "aonId": 2 },
-	{ "objectType": "ClassPath", "name": "Storm", "class": "Druid", "source": "PZO2101", "id": "97324ca9-4d6c-4bb2-a325-2b78ac450acf", "aonId": 3 },
-	{ "objectType": "ClassPath", "name": "Wild", "class": "Druid", "source": "PZO2101", "id": "28c1101d-aac6-4a08-8186-cb5a17b5248c", "aonId": 4 }
+	{
+		"objectType": "ClassPath",
+		"name": "Animal",
+		"class": "Druid",
+		"source": "PZO2101",
+		"id": "234a44c5-6846-44fa-9d70-bd455f976436",
+		"aonId": 1,
+		"pf2t": {
+			"name": "Animal",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 131 2.0",
+			"src": "https://2e.aonprd.com/DruidicOrders.aspx?ID=1",
+			"aon": "druidicorders1",
+			"type": "druidicorder",
+			"body": "You have a strong connection to beasts, and you are allied with a beast companion. You are trained in Athletics. You also gain the Animal Companion druid feat. You gain the heal animal order spell. Committing wanton cruelty to animals or killing animals unnecessarily is anathema to your order. (This doesn't prevent you from defending yourself against animals or killing them cleanly for food.)",
+			"hash": "EcqYzAJx"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Leaf",
+		"class": "Druid",
+		"source": "PZO2101",
+		"id": "f6023e37-81c1-4b69-b352-6af25734813a",
+		"aonId": 2,
+		"pf2t": {
+			"name": "Leaf",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 131 2.0",
+			"src": "https://2e.aonprd.com/DruidicOrders.aspx?ID=2",
+			"aon": "druidicorders2",
+			"type": "druidicorder",
+			"body": "You revere plants and the bounty of nature, acting as both a gardener and warden for the wilderness, teaching sustainable techniques to communities, and helping areas regrow after disasters or negligent humanoid expansion. You are trained in Diplomacy. You also gain the Leshy Familiar druid feat. You gain the goodberry order spell, and you increase the number of Focus Points in your focus pool by 1. Committing wanton cruelty to plants or killing plants unnecessarily is anathema to your order. (This doesn't prevent you from defending yourself against plants or harvesting them when necessary for survival.)",
+			"hash": "IcdXxqnp"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Storm",
+		"class": "Druid",
+		"source": "PZO2101",
+		"id": "97324ca9-4d6c-4bb2-a325-2b78ac450acf",
+		"aonId": 3,
+		"pf2t": {
+			"name": "Storm",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 132 2.0",
+			"src": "https://2e.aonprd.com/DruidicOrders.aspx?ID=3",
+			"aon": "druidicorders3",
+			"type": "druidicorder",
+			"body": "You carry the fury of the storm within you, channeling it to terrifying effect and riding the winds through the sky. You are trained in Acrobatics. You also gain the Storm Born druid feat. You gain the tempest surge order spell, and you increase the number of Focus Points in your focus pool by 1. Polluting the air or allowing those who cause major air pollution or climate shifts to go unpunished is anathema to your order. (This doesn't force you to take action against merely potential harm to the environment or to sacrifice yourself against an obviously superior foe.)",
+			"hash": "WFGCbNnp"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Wild",
+		"class": "Druid",
+		"source": "PZO2101",
+		"id": "28c1101d-aac6-4a08-8186-cb5a17b5248c",
+		"aonId": 4,
+		"pf2t": {
+			"name": "Wild",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 132 2.0",
+			"src": "https://2e.aonprd.com/DruidicOrders.aspx?ID=4",
+			"aon": "druidicorders4",
+			"type": "druidicorder",
+			"body": "The savage, uncontrollable call of the natural world infuses you, granting you the ability to change your shape and take on the ferocious form of a wild creature. You are trained in Intimidation. You also gain the Wild Shape druid feat. You gain the wild morph order spell. Becoming fully domesticated by the temptations of civilization is anathema to your order. (This doesn't prevent you from buying and using processed goods or staying in a city for an adventure, but you can never come to rely on these conveniences or truly call such a place your permanent home.)",
+			"hash": "JgXzvDbT"
+		}
+	}
 ]

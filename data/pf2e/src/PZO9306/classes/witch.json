@@ -1,3 +1,21 @@
 [
-	{ "objectType": "ClassPath", "name": "Baba Yaga", "class": "Witch", "source": "PZO9306", "id": "db4cb956-5210-4d03-aea3-f9e3fbdbc20c", "aonId": 9 }
+	{
+		"objectType": "ClassPath",
+		"name": "Baba Yaga",
+		"class": "Witch",
+		"source": "PZO9306",
+		"id": "db4cb956-5210-4d03-aea3-f9e3fbdbc20c",
+		"aonId": 9,
+		"pf2t": {
+			"name": "Baba Yaga",
+			"pfs": "standard",
+			"traits": "rare",
+			"source": "Legends pg. 32",
+			"src": "https://2e.aonprd.com/Patrons.aspx?ID=9",
+			"aon": "patrons9",
+			"type": "patron",
+			"body": "Baba Yaga teaches you how to transfer spirits into objects and freeze your foes. A witch with Baba Yaga as their patron can choose an inanimate object as a familiar. If they do, they still can gain master abilities and some familiar abilities that don't require movement. The object familiar has no Speeds and must select a Speed familiar ability before it can move, coming to life in a way appropriate to the chosen Speed and using the statistics of a normal familiar for that day.\n\n**Spell List** occult\n**Patron Skill** Occultism\n**Hex Cantrip** spirit object\n**Granted Spell** chilling spray",
+			"hash": "tKAgrqNW"
+		}
+	}
 ]

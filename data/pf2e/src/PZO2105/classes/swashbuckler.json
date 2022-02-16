@@ -60,9 +60,94 @@
 			"hash": "pRjPbLpb"
 		}
 	},
-	{ "objectType": "ClassPath", "name": "Battledancer", "class": "Swashbuckler", "source": "PZO2105", "id": "e5dae38d-4f29-4138-b340-b13b167f31b0", "aonId": 1 },
-	{ "objectType": "ClassPath", "name": "Braggart", "class": "Swashbuckler", "source": "PZO2105", "id": "dcb4fab3-ec82-4001-8504-ae1c7fd41e39", "aonId": 2 },
-	{ "objectType": "ClassPath", "name": "Fencer", "class": "Swashbuckler", "source": "PZO2105", "id": "5584dcfb-311f-48aa-895a-446d051c3cb5", "aonId": 3 },
-	{ "objectType": "ClassPath", "name": "Gymnast", "class": "Swashbuckler", "source": "PZO2105", "id": "6e6cd6f3-af0c-4e3a-915b-05b08a129ffa", "aonId": 4 },
-	{ "objectType": "ClassPath", "name": "Wit", "class": "Swashbuckler", "source": "PZO2105", "id": "6a09cb33-1718-4928-a582-f8d3d08d4da3", "aonId": 5 }
+	{
+		"objectType": "ClassPath",
+		"name": "Battledancer",
+		"class": "Swashbuckler",
+		"source": "PZO2105",
+		"id": "e5dae38d-4f29-4138-b340-b13b167f31b0",
+		"aonId": 1,
+		"pf2t": {
+			"name": "Battledancer",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 84",
+			"src": "https://2e.aonprd.com/Styles.aspx?ID=1",
+			"aon": "styles1",
+			"type": "style",
+			"body": "To you, a fight is a kind of performance art, and you command your foes' attention with mesmerizing motions. You are trained in Performance and gain the Fascinating Performance skill feat. You gain panache during an encounter when the result of your Performance check to Perform exceeds the Will DC of an observing foe, even if the foe isn't fascinated.\n\n#### Exemplary Finisher\nYou can Step as a free action immediately after the finisher.",
+			"hash": "TYjgmWIQ"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Braggart",
+		"class": "Swashbuckler",
+		"source": "PZO2105",
+		"id": "dcb4fab3-ec82-4001-8504-ae1c7fd41e39",
+		"aonId": 2,
+		"pf2t": {
+			"name": "Braggart",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 84",
+			"src": "https://2e.aonprd.com/Styles.aspx?ID=2",
+			"aon": "styles2",
+			"type": "style",
+			"body": "You boast, taunt, and psychologically needle your foes. You are trained in Intimidation. You gain panache during an encounter whenever you successfully Demoralize a foe.\n\n#### Exemplary Finisher\nIf the foe was temporarily immune to your Demoralize, their temporary immunity ends.",
+			"hash": "fxUBkWhr"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Fencer",
+		"class": "Swashbuckler",
+		"source": "PZO2105",
+		"id": "5584dcfb-311f-48aa-895a-446d051c3cb5",
+		"aonId": 3,
+		"pf2t": {
+			"name": "Fencer",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 84",
+			"src": "https://2e.aonprd.com/Styles.aspx?ID=3",
+			"aon": "styles3",
+			"type": "style",
+			"body": "You move carefully, feinting and creating false openings to lead your foes into inopportune attacks. You are trained in Deception. You gain panache during an encounter whenever you successfully Feint or Create a Diversion against a foe.\n\n#### Exemplary Finisher\nThe foe is flat-footed until your next turn.",
+			"hash": "sMgxbONE"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Gymnast",
+		"class": "Swashbuckler",
+		"source": "PZO2105",
+		"id": "6e6cd6f3-af0c-4e3a-915b-05b08a129ffa",
+		"aonId": 4,
+		"pf2t": {
+			"name": "Gymnast",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 84",
+			"src": "https://2e.aonprd.com/Styles.aspx?ID=4",
+			"aon": "styles4",
+			"type": "style",
+			"body": "You reposition, maneuver, and bewilder your foes with daring feats of physical prowess. You are trained in Athletics. You gain panache during an encounter whenever you successfully Grapple, Shove, or Trip a foe.\n\n#### Exemplary Finisher\nIf the foe is grabbed, restrained, or prone, you gain a circumstance bonus to the damage roll equal to twice the number of weapon damage dice.",
+			"hash": "wgBAvGZv"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Wit",
+		"class": "Swashbuckler",
+		"source": "PZO2105",
+		"id": "6a09cb33-1718-4928-a582-f8d3d08d4da3",
+		"aonId": 5,
+		"pf2t": {
+			"name": "Wit",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 85",
+			"src": "https://2e.aonprd.com/Styles.aspx?ID=5",
+			"aon": "styles5",
+			"type": "style",
+			"body": "You are friendly, clever, and full of humor, always knowing just what to say in any situation. Your witticisms leave foes unprepared for the skill and speed of your attacks. You are trained in Diplomacy and gain the Bon Mot skill feat. You gain panache during an encounter whenever you succeed at a Bon Mot against a foe.\n\n#### Exemplary Finisher\nThe foe takes a -2 circumstance penalty to attack rolls against you until the start of your next turn.",
+			"hash": "ddlrfQlR"
+		}
+	}
 ]

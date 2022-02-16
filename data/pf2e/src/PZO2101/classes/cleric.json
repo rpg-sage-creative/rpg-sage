@@ -54,6 +54,40 @@
 		"aonId": 26,
 		"pf2t": { "name": "Cleric", "source": "Core Rulebook pg. 629 2.0", "src": "https://2e.aonprd.com/Traits.aspx?ID=26", "aon": "traits26", "type": "trait", "body": "This indicates abilities from the cleric class.", "hash": "bTmQjAlY" }
 	},
-	{ "objectType": "ClassPath", "name": "Cloistered Cleric", "class": "Cleric", "source": "PZO2101", "id": "e0f2c8ec-a131-4fe7-9a17-2157ac6e24fd", "aonId": 2 },
-	{ "objectType": "ClassPath", "name": "Warpriest", "class": "Cleric", "source": "PZO2101", "id": "91616bf0-2a07-4783-b527-d4e4115d5c5e", "aonId": 3 }
+	{
+		"objectType": "ClassPath",
+		"name": "Cloistered Cleric",
+		"class": "Cleric",
+		"source": "PZO2101",
+		"id": "e0f2c8ec-a131-4fe7-9a17-2157ac6e24fd",
+		"aonId": 2,
+		"pf2t": {
+			"name": "Cloistered Cleric",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 119 2.0",
+			"src": "https://2e.aonprd.com/Doctrines.aspx?ID=2",
+			"aon": "doctrines2",
+			"type": "doctrine",
+			"body": "You are a cleric of the cloth, focusing on divine magic and your connection to your deity's domains.\n\n**First Doctrine (1st):** You gain the Domain Initiate cleric feat.\n**Second Doctrine (3rd):** Your proficiency rank for Fortitude saves increases to expert.\n**Third Doctrine (7th):** Your proficiency ranks for divine spell attack rolls and spell DCs increase to expert.\n**Fourth Doctrine (11th):** You gain expert proficiency with your deity's favored weapon. When you critically succeed at an attack roll using that weapon, you apply the weapon's critical specialization effect; use your divine spell DC if necessary.\n**Fifth Doctrine (15th):** Your proficiency ranks for divine spell attack rolls and spell DCs increase to master.\n**Final Doctrine (19th):** Your proficiency ranks for divine spell attack rolls and spell DCs increase to legendary.",
+			"hash": "GpJIvzXn"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Warpriest",
+		"class": "Cleric",
+		"source": "PZO2101",
+		"id": "91616bf0-2a07-4783-b527-d4e4115d5c5e",
+		"aonId": 3,
+		"pf2t": {
+			"name": "Warpriest",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 120 2.0",
+			"src": "https://2e.aonprd.com/Doctrines.aspx?ID=3",
+			"aon": "doctrines3",
+			"type": "doctrine",
+			"body": "You have trained in the more militant doctrine of your church, focusing on both spells and battle.\n\n**First Doctrine (1st):** You're trained in light and medium armor, and you have expert proficiency in Fortitude saves. You gain the Shield Block general feat, a reaction to reduce damage with a shield. If your deity's weapon is simple, you gain the Deadly Simplicity cleric feat. At 13th level, if you gain the divine defense class feature, you also gain expert proficiency in light and medium armor.\n**Second Doctrine (3rd):** You're trained in martial weapons.\n**Third Doctrine (7th):** You gain expert proficiency with your deity's favored weapon. When you critically succeed at an attack roll using that weapon, you apply the weapon's critical specialization effect; use your divine spell DC if necessary.\n**Fourth Doctrine (11th):** Your proficiency ranks for divine spell attack rolls and spell DCs increase to expert.\n**Fifth Doctrine (15th):** Your proficiency rank for Fortitude saves increases to master. When you roll a success at a Fortitude save, you get a critical success instead.\n**Final Doctrine (19th):** Your proficiency ranks for divine spell attack rolls and spell DCs increase to master.",
+			"hash": "wXQvrBrc"
+		}
+	}
 ]

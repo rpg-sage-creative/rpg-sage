@@ -1,4 +1,38 @@
 [
-	{ "objectType": "ClassPath", "name": "Eldritch Trickster", "class": "Rogue", "source": "PZO2105", "id": "51ef3e84-f8dd-4f56-82ec-5e6595a5a625", "aonId": 4 },
-	{ "objectType": "ClassPath", "name": "Mastermind", "class": "Rogue", "source": "PZO2105", "id": "5345cca9-0ccb-4714-b4fa-8859f781a107", "aonId": 5 }
+	{
+		"objectType": "ClassPath",
+		"name": "Eldritch Trickster",
+		"class": "Rogue",
+		"source": "PZO2105",
+		"id": "51ef3e84-f8dd-4f56-82ec-5e6595a5a625",
+		"aonId": 4,
+		"pf2t": {
+			"name": "Eldritch Trickster",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 134",
+			"src": "https://2e.aonprd.com/Rackets.aspx?ID=4",
+			"aon": "rackets4",
+			"type": "racket",
+			"body": "When it comes to a big heist, every rogue worth their salt knows that magic can throw meticulous plans into chaos, whether in the form of arcane wards or pesky divinations. You dabble in magic just enough to help handle these problems by jury-rigging spells and throwing a bit of your own magic into the mix. You might be a solitary thief, performing burglaries that can't be explained by skill alone, or a specialist called in by other rogues to deal with magical security measures. You might even be on the up-and-up, hired to test magical defenses or even build them yourself.\n\nChoose a multiclass archetype that has a basic, expert, and master spellcasting feat. You gain that archetype's dedication feat as a bonus feat even though you don't meet its level prerequisite, though you must meet its other prerequisites. For you, the Magical Trickster rogue feat has a prerequisite of 2nd level instead of 4th level. You can choose the spellcasting ability score for the multiclass archetype you chose as your key ability score.",
+			"hash": "gGpyTRJk"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Mastermind",
+		"class": "Rogue",
+		"source": "PZO2105",
+		"id": "5345cca9-0ccb-4714-b4fa-8859f781a107",
+		"aonId": 5,
+		"pf2t": {
+			"name": "Mastermind",
+			"pfs": "standard",
+			"source": "Advanced Player's Guide pg. 134",
+			"src": "https://2e.aonprd.com/Rackets.aspx?ID=5",
+			"aon": "rackets5",
+			"type": "racket",
+			"body": "Where others might use sleight of hand or a silver tongue to achieve their objectives, you rely on your intellect to craft intricate schemes. You likely view your operations as a chess game, always planning 10 steps ahead where others might plan three. You might be a detective determined to solve crimes or a spymaster in the service of a powerful family or nation. If you operate outside the law, you might be an aspiring crime lord or information broker, excellent at directing others toward suitable jobs.\n\nIf you successfully identify a creature using Recall Knowledge, that creature is flat-footed against your attacks until the start of your next turn; if you critically succeed, it's flat-footed against your attacks for 1 minute.\n\nYou're trained in Society and one of the following skills of your choice: Arcana, Nature, Occultism, or Religion. You can choose Intelligence as your key ability score.",
+			"hash": "lgbPTkYc"
+		}
+	}
 ]

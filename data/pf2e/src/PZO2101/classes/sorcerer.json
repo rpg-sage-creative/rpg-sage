@@ -60,10 +60,78 @@
 			"hash": "KAzEvgyx"
 		}
 	},
-	{ "objectType": "ClassPath", "name": "Aberrant", "class": "Sorcerer", "source": "PZO2101", "id": "0e23445b-e90b-44c5-90f4-ea5c939943a5", "aonId": 1 },
-	{ "objectType": "ClassPath", "name": "Angelic", "class": "Sorcerer", "source": "PZO2101", "id": "f196548e-5386-47d1-86f3-8193413a74af", "aonId": 2 },
-	{ "objectType": "ClassPath", "name": "Demonic", "class": "Sorcerer", "source": "PZO2101", "id": "5865ed25-74c1-4e09-9910-bee64ade6642", "aonId": 3 },
-	{ "objectType": "ClassPath", "name": "Diabolic", "class": "Sorcerer", "source": "PZO2101", "id": "2ff7b781-c1ff-4550-a61c-a7e42b456c2e", "aonId": 4 },
+	{
+		"objectType": "ClassPath",
+		"name": "Aberrant",
+		"class": "Sorcerer",
+		"source": "PZO2101",
+		"id": "0e23445b-e90b-44c5-90f4-ea5c939943a5",
+		"aonId": 1,
+		"pf2t": {
+			"name": "Aberrant",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 195 2.0",
+			"src": "https://2e.aonprd.com/Bloodlines.aspx?ID=1",
+			"aon": "bloodlines1",
+			"type": "bloodline",
+			"body": "Something speaks to you from beyond the stars or below the earth. Ancient and unknowable, this alien influence presses against your mind.\n\n**Spell List** occult\n**Bloodline Skills** Intimidation, Occultism\n**Granted Spells** cantrip: daze, 1st: spider sting, 2nd: touch of idiocy, 3rd: vampiric touch, 4th: confusion, 5th: black tentacles, 6th: feeblemind, 7th: warp mind, 8th: uncontrollable dance, 9th: unfathomable song\n**Bloodline Spells** initial: tentacular limbs, advanced: aberrant whispers, greater: unusual anatomy\n**Blood Magic** Aberrant whispers shield one target's mind or your own, granting a +2 status bonus to Will saving throws for 1 round.",
+			"hash": "prfZqExw"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Angelic",
+		"class": "Sorcerer",
+		"source": "PZO2101",
+		"id": "f196548e-5386-47d1-86f3-8193413a74af",
+		"aonId": 2,
+		"pf2t": {
+			"name": "Angelic",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 195 2.0",
+			"src": "https://2e.aonprd.com/Bloodlines.aspx?ID=2",
+			"aon": "bloodlines2",
+			"type": "bloodline",
+			"body": "One of your forebears hailed from a celestial realm, or your ancestors' devotion led to their lineage being blessed.\n\n**Spell List** divine\n**Bloodline Skills** Diplomacy, Religion\n**Granted Spells** cantrip: light, 1st: heal, 2nd: spiritual weapon, 3rd: searing light, 4th: divine wrath, 5th: flame strike, 6th: blade barrier, 7th: divine decree, 8th: divine aura, 9th: foresight\n**Bloodline Spells** initial: angelic halo, advanced: angelic wings, greater: celestial brand\n**Blood Magic** An angelic aura protects you or one target, granting a +1 status bonus to saving throws for 1 round.",
+			"hash": "zrvZAVQJ"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Demonic",
+		"class": "Sorcerer",
+		"source": "PZO2101",
+		"id": "5865ed25-74c1-4e09-9910-bee64ade6642",
+		"aonId": 3,
+		"pf2t": {
+			"name": "Demonic",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 195 2.0",
+			"src": "https://2e.aonprd.com/Bloodlines.aspx?ID=3",
+			"aon": "bloodlines3",
+			"type": "bloodline",
+			"body": "Demons debase all they touch. One of your ancestors fell victim to their corruption, and you are burdened by that sin.\n\n**Spell List** divine\n**Bloodline Skills** Intimidation, Religion\n**Granted Spells** cantrip: acid splash, 1st: fear, 2nd: enlarge, 3rd: slow, 4th: divine wrath, 5th: abyssal plague, 6th: disintegrate, 7th: divine decree, 8th: divine aura, 9th: implosion\n**Bloodline Spells** initial: glutton's jaw, advanced: swamp of sloth, greater: abyssal wrath\n**Blood Magic** The corruption of sin weakens a target's defenses or makes you more imposing. Either a target takes a -1 status penalty to AC for 1 round, or you gain a +1 status bonus to Intimidation checks for 1 round.",
+			"hash": "bsxrvrgN"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Diabolic",
+		"class": "Sorcerer",
+		"source": "PZO2101",
+		"id": "2ff7b781-c1ff-4550-a61c-a7e42b456c2e",
+		"aonId": 4,
+		"pf2t": {
+			"name": "Diabolic",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 196 2.0",
+			"src": "https://2e.aonprd.com/Bloodlines.aspx?ID=4",
+			"aon": "bloodlines4",
+			"type": "bloodline",
+			"body": "Devils are evil with a silver tongue, and one of your ancestors dallied in darkness or made an infernal pact.\n\n**Spell List** divine\n**Bloodline Skills** Deception, Religion\n**Granted Spells** cantrip: produce flame, 1st: charm, 2nd: flaming sphere, 3rd: enthrall, 4th: suggestion, 5th: crushing despair, 6th: true seeing, 7th: divine decree, 8th: divine aura, 9th: meteor swarm\n**Bloodline Spells** initial: diabolic edict, advanced: embrace the pit, greater: hellfire plume\n**Blood Magic** Hellfire scorches a target or fills your tongue with lies. Either a target takes 1 fire damage per spell level (if the spell already deals initial fire damage, combine this with the spell's initial damage before determining weaknesses and resistances), or you gain a +1 status bonus to Deception checks for 1 round.",
+			"hash": "sGqzHLXn"
+		}
+	},
 	{
 		"objectType": "ClassPath",
 		"name": "Draconic",
@@ -71,11 +139,107 @@
 		"types": [ "black", "blue", "green", "red", "white", "brass", "bronze", "copper", "gold", "silver" ],
 		"source": "PZO2101",
 		"id": "54079dfc-5931-4cc8-a1fa-857e71ec6be1",
-		"aonId": 5
+		"aonId": 5,
+		"pf2t": {
+			"name": "Draconic",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 196 2.0",
+			"src": "https://2e.aonprd.com/Bloodlines.aspx?ID=5",
+			"aon": "bloodlines5",
+			"type": "bloodline",
+			"body": "The blood of dragons flows through your veins. These beasts are both fearsome in combat and skilled at magic.\n\n**Spell List** arcane\n**Bloodline Skills** Arcana, Intimidation\n**Granted Spells** cantrip: shield, 1st: true strike, 2nd: resist energy, 3rd: haste, 4th: spell immunity, 5th: chromatic wall, 6th: dragon form, 7th: mask of terror, 8th: prismatic wall, 9th: overwhelming presence\n**Bloodline Spells** initial: dragon claws, advanced: dragon breath, greater: dragon wings\n**Blood Magic** Draconic scales grow briefly on you or one target, granting a +1 status bonus to AC for 1 round.\n\n#### Dragon Type\nAt 1st level, choose the type of dragon that influenced your bloodline. You can't change your dragon type later. This choice affects how some of your bloodline spells function. The good metallic dragons and their damage types are brass (fire), bronze (electricity), copper (acid), gold (fire), and silver (cold). The evil chromatic dragons and their damage types are black (acid), blue (electricity), green (poison), red (fire), and white (cold).\n\n#### Related Bloodlines\nBecause the wyrmblessed and draconic bloodlines have similar origins, they count the same as each other for the purposes of prerequisites and access requirements.class=\"header\"&gt;Cloud dragon bloodline\n**Dragon Type** | **Area and Damage Type** | **Saving Throw**\n--- | --- | ---\nCloud | 30-foot cone of electricity | Reflex",
+			"hash": "jWWcrQFy"
+		}
 	},
-	{ "objectType": "ClassPath", "name": "Elemental", "class": "Sorcerer", "types": [ "air", "earth", "fire", "water" ], "source": "PZO2101", "id": "88c3f03b-9266-434f-8b48-8690b1c431db", "aonId": 6 },
-	{ "objectType": "ClassPath", "name": "Fey", "class": "Sorcerer", "source": "PZO2101", "id": "64a25f25-3699-42eb-924a-052d5ec3efdd", "aonId": 7 },
-	{ "objectType": "ClassPath", "name": "Hag", "class": "Sorcerer", "source": "PZO2101", "id": "a1ac3c4a-1990-41fd-9301-b4ca5add65cf", "aonId": 8 },
-	{ "objectType": "ClassPath", "name": "Imperial", "class": "Sorcerer", "source": "PZO2101", "id": "c387105c-0ad7-4861-8d67-b5d3c474129d", "aonId": 9 },
-	{ "objectType": "ClassPath", "name": "Undead", "class": "Sorcerer", "source": "PZO2101", "id": "53ef7d60-5f68-4dd6-a311-f82a7891478e", "aonId": 10 }
+	{
+		"objectType": "ClassPath",
+		"name": "Elemental",
+		"class": "Sorcerer",
+		"types": [ "air", "earth", "fire", "water" ],
+		"source": "PZO2101",
+		"id": "88c3f03b-9266-434f-8b48-8690b1c431db",
+		"aonId": 6,
+		"pf2t": {
+			"name": "Elemental",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 196 2.0",
+			"src": "https://2e.aonprd.com/Bloodlines.aspx?ID=6",
+			"aon": "bloodlines6",
+			"type": "bloodline",
+			"body": "A genie ancestor or some other elemental influence has imbued your blood with primal fury, affecting how the bloodline spells and granted spells marked with an asterisk (*), as well as your blood magic, function.\n\n**Spell List** primal\n**Bloodline Skills** Intimidation, Nature\n**Granted Spells** cantrip: produce flame*, 1st: burning hands*, 2nd: resist energy, 3rd: fireball*, 4th: freedom of movement, 5th: elemental form, 6th: repulsion, 7th: energy aegis, 8th: prismatic wall, 9th: storm of vengeance\n**Bloodline Spells** initial: elemental toss*, advanced: elemental motion, greater: elemental blast*\n**Blood Magic** Elemental energy surrounds you or a target. Either you gain a +1 status bonus to Intimidation checks for 1 round, or a target takes 1 damage per spell level. The damage is bludgeoning or fire, according to your elemental type (see below). If the spell already deals that type of damage, combine it with the spell's initial damage before determining weaknesses and resistances.\n\n#### Elemental Type\nChoose the type of elemental that influenced your bloodline: air, earth, fire, or water. If your element is air, you buffet your foes with powerful winds; if it's earth, you toss huge chunks of rock; if it's fire, you incinerate your foes with flame; and if it's water, you inundate your foes with torrents of water. For fire, all marked spells deal fire damage. For other elements, they deal bludgeoning damage. You replace any existing elemental traits with the trait of the element you chose.",
+			"hash": "bqRRvtrt"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Fey",
+		"class": "Sorcerer",
+		"source": "PZO2101",
+		"id": "64a25f25-3699-42eb-924a-052d5ec3efdd",
+		"aonId": 7,
+		"pf2t": {
+			"name": "Fey",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 197 2.0",
+			"src": "https://2e.aonprd.com/Bloodlines.aspx?ID=7",
+			"aon": "bloodlines7",
+			"type": "bloodline",
+			"body": "Fey whimsy or a tryst in a moonlit grove put the bewitching magic of the First World into your family's bloodline.\n\n**Spell List** primal\n**Bloodline Skills** Deception, Nature\n**Granted Spells** cantrip: ghost sound, 1st: charm, 2nd: hideous laughter, 3rd: enthrall, 4th: suggestion, 5th: cloak of colors, 6th: mislead, 7th: visions of danger, 8th: uncontrollable dance, 9th: resplendent mansion\n**Bloodline Spells** initial: faerie dust, advanced: fey disappearance, greater: fey glamour\n**Blood Magic** Colorful fey glamours dance around you or one target, causing them to be concealed for 1 round. Such obvious concealment can't be used to Hide.",
+			"hash": "PPbJqBfB"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Hag",
+		"class": "Sorcerer",
+		"source": "PZO2101",
+		"id": "a1ac3c4a-1990-41fd-9301-b4ca5add65cf",
+		"aonId": 8,
+		"pf2t": {
+			"name": "Hag",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 197 2.0",
+			"src": "https://2e.aonprd.com/Bloodlines.aspx?ID=8",
+			"aon": "bloodlines8",
+			"type": "bloodline",
+			"body": "A hag long ago cursed your family, or you are a descendant of a hag or changeling, and their accursed corruption infests your blood and soul.\n\n**Spell List** occult\n**Bloodline Skills** Deception, Occultism\n**Granted Spells** cantrip: daze, 1st: illusory disguise, 2nd: touch of idiocy, 3rd: blindness, 4th: outcast's curse, 5th: mariner's curse, 6th: baleful polymorph, 7th: warp mind, 8th: spiritual epidemic, 9th: nature's enmity\n**Bloodline Spells** initial: jealous hex, advanced: horrific visage, greater: you're mine\n**Blood Magic** Spiteful curses punish your foes. The first creature that deals damage to you before the end of your next turn takes 2 mental damage per spell level and must attempt a basic Will save.",
+			"hash": "BWYPvQZm"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Imperial",
+		"class": "Sorcerer",
+		"source": "PZO2101",
+		"id": "c387105c-0ad7-4861-8d67-b5d3c474129d",
+		"aonId": 9,
+		"pf2t": {
+			"name": "Imperial",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 198 2.0",
+			"src": "https://2e.aonprd.com/Bloodlines.aspx?ID=9",
+			"aon": "bloodlines9",
+			"type": "bloodline",
+			"body": "One of your ancestors was a mortal who mastered magic. Such magical blood can remain latent for generations, but in you it manifested in full.\n\n**Spell List** arcane\n**Bloodline Skills** Arcana, Society\n**Granted Spells** cantrip: detect magic, 1st: magic missile, 2nd: dispel magic, 3rd: haste, 4th: dimension door, 5th: prying eye, 6th: disintegrate, 7th: prismatic spray, 8th: maze, 9th: prismatic sphere\n**Bloodline Spells** initial: ancestral memories, advanced: extend spell, greater: arcane countermeasure\n**Blood Magic** A surge of ancestral memories grants you or one target a +1 status bonus to skill checks for 1 round.",
+			"hash": "JzWnfmSO"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Undead",
+		"class": "Sorcerer",
+		"source": "PZO2101",
+		"id": "53ef7d60-5f68-4dd6-a311-f82a7891478e",
+		"aonId": 10,
+		"pf2t": {
+			"name": "Undead",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 198 2.0",
+			"src": "https://2e.aonprd.com/Bloodlines.aspx?ID=10",
+			"aon": "bloodlines10",
+			"type": "bloodline",
+			"body": "The touch of undeath runs through your blood. Your family tree might contain powerful undead, like a vampire, or perhaps you died and returned a bit different.\n\n**Spell List** divine\n**Bloodline Skills** Intimidation, Religion\n**Granted Spells** cantrip: chill touch, 1st: harm, 2nd: false life, 3rd: bind undead, 4th: talking corpse, 5th: cloudkill, 6th: vampiric exsanguination, 7th: finger of death, 8th: horrid wilting, 9th: wail of the banshee\n**Bloodline Spells** initial: undeath's blessing, advanced: drain life, greater: grasping grave\n**Blood Magic** Necromantic energy flows through you or one target. Either you gain temporary Hit Points equal to the spell's level for 1 round, or a target takes 1 negative damage per spell level (if the spell already deals initial negative damage, combine this with the spell's initial damage before determining weaknesses and resistances).",
+			"hash": "WEDbqsWB"
+		}
+	}
 ]
