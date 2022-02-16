@@ -1,0 +1,130 @@
+[
+	{
+		"objectType": "Language",
+		"name": "Alghollthu",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Alghollthus and their thralls" ],
+		"source": "PZO2102",
+		"id": "c4400502-4416-45ad-a295-600a192b691b",
+		"aonId": 24,
+		"pf2t": {
+			"name": "Alghollthu",
+			"source": "Bestiary pg. 348",
+			"src": "https://2e.aonprd.com/Languages.aspx?ID=24",
+			"aon": "languages24",
+			"type": "language",
+			"body": "The below entries contain speakers of Alghollthu.",
+			"hash": "IvQZbCAR"
+		}
+	},
+	{
+		"objectType": "Language",
+		"name": "Amurrun",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Catfolk" ],
+		"source": "PZO2102",
+		"id": "defa289c-f6d2-45c9-93df-f2120da047e8",
+		"aonId": 25,
+		"pf2t": { "name": "Amurrun", "source": "Bestiary pg. 348", "src": "https://2e.aonprd.com/Languages.aspx?ID=25", "aon": "languages25", "type": "language", "body": "The below entries contain speakers of Amurrun.", "hash": "IWJgPzxg" }
+	},
+	{
+		"objectType": "Language",
+		"name": "Arboreal",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Arboreals and other plant creatures" ],
+		"source": "PZO2102",
+		"id": "0b4a3ff8-0523-41e3-af7d-f76411eb765f",
+		"aonId": 26,
+		"pf2t": { "name": "Arboreal", "source": "Bestiary pg. 348", "src": "https://2e.aonprd.com/Languages.aspx?ID=26", "aon": "languages26", "type": "language", "body": "The below entries contain speakers of Arboreal.", "hash": "vBQzkWXg" }
+	},
+	{
+		"objectType": "Language",
+		"name": "Boggard",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Boggards" ],
+		"source": "PZO2102",
+		"id": "bdf5a4be-4423-405d-8af4-3b5838dc867c",
+		"aonId": 27,
+		"pf2t": { "name": "Boggard", "source": "Bestiary pg. 348", "src": "https://2e.aonprd.com/Languages.aspx?ID=27", "aon": "languages27", "type": "language", "body": "The below entries contain speakers of Boggard.", "hash": "NBZASwgW" }
+	},
+	{
+		"objectType": "Language",
+		"name": "Caligni",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Calignis" ],
+		"source": "PZO2102",
+		"id": "113d1c46-7003-4763-9a09-4d58db266953",
+		"aonId": 28,
+		"pf2t": { "name": "Caligni", "source": "Bestiary pg. 348", "src": "https://2e.aonprd.com/Languages.aspx?ID=28", "aon": "languages28", "type": "language", "body": "The below entries contain speakers of Caligni.", "hash": "VjOylvRU" }
+	},
+	{
+		"objectType": "Language",
+		"name": "Cyclops",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Cyclops" ],
+		"source": "PZO2102",
+		"id": "6ca2f243-1248-4b0b-b85e-52bcfb29cfc4",
+		"aonId": 30,
+		"pf2t": { "name": "Cyclops", "source": "Bestiary pg. 348", "src": "https://2e.aonprd.com/Languages.aspx?ID=30", "aon": "languages30", "type": "language", "body": "The below entries contain speakers of Cyclops.", "hash": "RlmBvAUR" }
+	},
+	{
+		"objectType": "Language",
+		"name": "Daemonic",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Daemons" ],
+		"source": "PZO2102",
+		"id": "74df9ac2-3b8c-4f48-8265-3cdaa18b5561",
+		"aonId": 31,
+		"pf2t": { "name": "Daemonic", "source": "Bestiary pg. 348", "src": "https://2e.aonprd.com/Languages.aspx?ID=31", "aon": "languages31", "type": "language", "body": "The below entries contain speakers of Daemonic.", "hash": "zxCtQXGk" }
+	},
+	{
+		"objectType": "Language",
+		"name": "Iruxi",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Lizardfolk" ],
+		"source": "PZO2102",
+		"id": "5462a462-3b89-4c37-aa8a-2b994169ca66",
+		"aonId": 32,
+		"pf2t": { "name": "Iruxi", "source": "Bestiary pg. 348", "src": "https://2e.aonprd.com/Languages.aspx?ID=32", "aon": "languages32", "type": "language", "body": "The below entries contain speakers of Iruxi.", "hash": "ckIHqTUy" }
+	},
+	{
+		"objectType": "Language",
+		"name": "Protean",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Proteans" ],
+		"source": "PZO2102",
+		"id": "93b7e06e-13fe-4c14-800c-35b93ce9575c",
+		"aonId": 33,
+		"pf2t": { "name": "Protean", "source": "Bestiary pg. 348", "src": "https://2e.aonprd.com/Languages.aspx?ID=33", "aon": "languages33", "type": "language", "body": "The below entries contain speakers of Protean.", "hash": "svjxPMsZ" }
+	},
+	{
+		"objectType": "Language",
+		"name": "Requian",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Psychopomps" ],
+		"source": "PZO2102",
+		"id": "e7245f1f-9093-4085-bdb2-003e05caafd7",
+		"aonId": 34,
+		"pf2t": { "name": "Requian", "source": "Bestiary pg. 348", "src": "https://2e.aonprd.com/Languages.aspx?ID=34", "aon": "languages34", "type": "language", "body": "The below entries contain speakers of Requian.", "hash": "skZBQczg" }
+	},
+	{
+		"objectType": "Language",
+		"name": "Sphinx",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Sphinxes" ],
+		"source": "PZO2102",
+		"id": "29926eec-aa13-4c08-8cc7-f1308237cfa4",
+		"aonId": 35,
+		"pf2t": { "name": "Sphinx", "source": "Bestiary pg. 348", "src": "https://2e.aonprd.com/Languages.aspx?ID=35", "aon": "languages35", "type": "language", "body": "The below entries contain speakers of Sphinx.", "hash": "qjqbEXjn" }
+	},
+	{
+		"objectType": "Language",
+		"name": "Utopian",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Axiomites and inevitables" ],
+		"source": "PZO2102",
+		"id": "67da6c47-fbdd-42a4-b598-b4dcf2ef8ce4",
+		"aonId": 36,
+		"pf2t": { "name": "Utopian", "source": "Bestiary pg. 348", "src": "https://2e.aonprd.com/Languages.aspx?ID=36", "aon": "languages36", "type": "language", "body": "The below entries contain speakers of Utopian.", "hash": "vCItWNTx" }
+	}
+]

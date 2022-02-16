@@ -1,0 +1,968 @@
+[
+	{ "objectType": "Trait", "name": "Common", "details": [ "A creature of this rarity is generally known and can be summoned with the appropriate summon spell." ], "source": "PZO2102", "id": "edfc6dec-d9d6-484e-8302-cbf94a80a09c" },
+	{
+		"objectType": "Trait",
+		"name": "Uncommon",
+		"details": [
+			"Less is known about uncommon creatures than common creatures. They typically can't be summoned. The DC of Recall Knowledge checks related to this creature is increased by 2."
+		],
+		"source": "PZO2102",
+		"id": "f9c785b0-2ef3-4944-9c13-348da40c2b1a"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Rare",
+		"details": [
+			"As the name suggests, these creatures are rare. They typically can't be summoned. The DC of Recall Knowledge checks related to this creature is increased by 5."
+		],
+		"source": "PZO2102",
+		"id": "6a23f897-3365-4a2e-9ff3-e611c636db1e"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Unique",
+		"details": [
+			"A creature with this rarity is one of a kind. The DC of Recall Knowledge checks related to this creature is increased by 10."
+		],
+		"source": "PZO2102",
+		"id": "245149c1-4675-40b1-aea6-eeef20794728"
+	},
+	{ "objectType": "Trait", "name": "CE", "details": [ "Chaotic and evil" ], "source": "PZO2102", "id": "38c7dd0a-9333-4f78-a3e7-554ce7016b64" },
+	{ "objectType": "Trait", "name": "CG", "details": [ "Chaotic and good" ], "source": "PZO2102", "id": "08a65311-ef1d-4874-854a-279b32c97942" },
+	{ "objectType": "Trait", "name": "CN", "details": [ "Chaotic and neutral" ], "source": "PZO2102", "id": "3b1bb5c8-d70b-4a28-bd86-4b3113bf1403" },
+	{ "objectType": "Trait", "name": "LG", "details": [ "Lawful and good" ], "source": "PZO2102", "id": "f8af522b-05fe-49a0-a1b1-daeea19cb913" },
+	{ "objectType": "Trait", "name": "LE", "details": [ "Lawful and evil" ], "source": "PZO2102", "id": "f4ff39ea-1564-4d72-b8d9-ab82b7714ab4" },
+	{ "objectType": "Trait", "name": "LN", "details": [ "Lawful and neutral" ], "source": "PZO2102", "id": "e0dd9324-2726-41e4-ac3e-db4cdfb175d1" },
+	{ "objectType": "Trait", "name": "N", "details": [ "Neutral" ], "source": "PZO2102", "id": "b8843b17-e146-453a-8df9-8a2f5cc67592" },
+	{ "objectType": "Trait", "name": "NE", "details": [ "Neutral and evil" ], "source": "PZO2102", "id": "ec05d729-8b3d-4faa-aae5-73eb17abd32f" },
+	{ "objectType": "Trait", "name": "NG", "details": [ "Neutral and good" ], "source": "PZO2102", "id": "69f4f64d-e01b-4321-b48a-75b36d2db974" },
+	{
+		"objectType": "Trait",
+		"name": "Gargantuan",
+		"details": [
+			"This size of creature takes up a space of at least 20 feet by 20 feet (16 squares on the grid), but can be much larger. Gargantuan creatures typically have a reach of 20 feet if they are tall, or 15 feet if they are long, but larger ones could have a much longer reach."
+		],
+		"source": "PZO2102",
+		"id": "1b527a7b-09e0-49f0-b56c-3bd661d0a26e"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Huge",
+		"details": [
+			"A Huge creature takes up a 15-foot-by-15-foot space (9 squares on the grid). It typically has a reach of 15 feet if the creature is tall or 10 feet if the creature is long."
+		],
+		"source": "PZO2102",
+		"id": "cb98c681-492c-45b7-a71e-a87781c645b8"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Large",
+		"details": [
+			"A Large creature takes up a 10-foot-by-10-foot space (4 squares on the grid). It typically has a reach of 10 feet if the creature is tall or 5 feet if the creature is long."
+		],
+		"source": "PZO2102",
+		"id": "ee4d6c00-85ed-4186-8d34-3127280443e1"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Medium",
+		"details": [
+			"A Medium creature takes up a 5-foot-by-5-foot space (1 square on the grid) and typically has a reach of 5 feet."
+		],
+		"source": "PZO2102",
+		"id": "8a657b78-6fb1-4ef4-bdc6-629cafdbdddc"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Small",
+		"details": [
+			"A Small creature takes up a 5-foot-by-5-foot space (1 square on the grid) and typically has a reach of 5 feet."
+		],
+		"source": "PZO2102",
+		"id": "bfa98a85-0f0a-41a7-be64-5c1cede84bc3"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Tiny",
+		"details": [
+			"A creature of this size takes up less than a 5-foot-by-5-foot space (1 square on the grid), and multiple Tiny creatures can occupy the same square on the grid. At least four Tiny creatures can occupy the same square, and even more can occupy the same square, at the GM's discretion. They can also occupy the same space as larger creatures, and if their reach is 0 feet, they must do so in order to attack."
+		],
+		"source": "PZO2102",
+		"id": "6adda252-adb8-40cc-a07c-9def9e23f283"
+	},
+	{ "objectType": "Trait", "name": "Aberration", "details": [ "Aberrations are creatures from beyond the planes or corruptions of the natural order." ], "source": "PZO2102", "id": "8eb943ff-aa1f-419d-913d-e1b82cc3cdb7" },
+	{ "objectType": "Trait", "name": "Acid", "details": [ "Effects with this trait deal acid damage. Creatures with this trait have a magical connection to acid." ], "source": "PZO2102", "id": "8db0172f-d09b-4dbe-acdc-d39530ccd6c2" },
+	{
+		"objectType": "Trait",
+		"name": "Aeon",
+		"details": [
+			"These monitors are the self-styled defenders of reality. Traditional aeons have dualistic natures and forms, and they hold a dichotomy of interests, though axiomites and inevitables do not. Aeons other than axiomites S-T and inevitables communicate via a strange telepathic hodgepodge of sensory sending called envisioning."
+		],
+		"source": "PZO2102",
+		"id": "34bd8d91-62e1-4345-ab5c-c0617d19fb11",
+		"aonId": 208,
+		"pf2t": {
+			"name": "Aeon",
+			"source": "Bestiary pg. 345",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=208",
+			"aon": "traits208",
+			"type": "trait",
+			"body": "These monitors are the self-styled defenders of reality. Traditional aeons have dualistic natures and forms, and they hold a dichotomy of interests, though axiomites and inevitables do not. Aeons other than axiomites and inevitables communicate via a strange telepathic hodgepodge of sensory sending called envisioning.",
+			"hash": "pgkpNmWM"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Air",
+		"details": [
+			"Effects with the air trait either manipulate or conjure air. Those that manipulate air have no effect in a vacuum or in areas without air. Creatures with this trait consist primarily of air or have a magical connection to that element."
+		],
+		"source": "PZO2102",
+		"id": "8a9a1cf5-129c-40be-a666-97440ebe12d6"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Amphibious",
+		"details": [
+			"An amphibious creature can breathe in water and in air, even outside of its preferred environment, usually indefinitely but at least for hours. These creatures often have a swim Speed. Their bludgeoning and slashing unarmed Strikes don't take the usual -2 penalty for being underwater."
+		],
+		"source": "PZO2102",
+		"id": "631d5f8a-82f1-4f6d-9246-1e3610e6d9eb",
+		"aonId": 207,
+		"pf2t": {
+			"name": "Amphibious",
+			"source": "Bestiary pg. 345",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=207",
+			"aon": "traits207",
+			"type": "trait",
+			"body": "An amphibious creature can breathe in water and in air, even outside of its preferred environment, usually indefinitely but at least for hours. These creatures often have a swim Speed. Their bludgeoning and slashing unarmed Strikes don't take the usual -2 penalty for being underwater.",
+			"hash": "hkhCGpJK"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Angel",
+		"details": [
+			"This family of celestials is native to the plane of Nirvana. Most angels are neutral good, have darkvision, and have a weakness to evil damage."
+		],
+		"source": "PZO2102",
+		"id": "fe311a0d-6c95-4e37-8aee-da19902d042e"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Animal",
+		"details": [
+			"An animal is a creature with a relatively low intelligence. It typically doesn't have an Intelligence modifier above -4, can't speak languages, and can't be trained in Intelligence-based skills."
+		],
+		"source": "PZO2102",
+		"id": "c4f008cb-1e82-49bf-8407-d63005d0eaba"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Aquatic",
+		"details": [
+			"Aquatic creatures are at home underwater. Their bludgeoning and slashing unarmed Strikes don't take the usual -2 penalty for being underwater. Aquatic creatures can breathe water but not air."
+		],
+		"source": "PZO2102",
+		"id": "0a4d7d75-2690-4800-8f4d-5a11fc3ed1ba",
+		"aonId": 168,
+		"pf2t": {
+			"name": "Aquatic",
+			"source": "Bestiary pg. 345",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=168",
+			"aon": "traits168",
+			"type": "trait",
+			"body": "Aquatic creatures are at home underwater. Their bludgeoning and slashing unarmed Strikes don't take the usual -2 penalty for being underwater. Aquatic creatures can breathe water but not air.",
+			"hash": "tXnQhfyR"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Archon",
+		"details": [
+			"Members of this family of celestials are the protectors of Heaven and are lawful good. They have darkvision and a weakness to evil damage."
+		],
+		"source": "PZO2102",
+		"id": "440fc03c-557e-426a-b6cc-1b3ed9dafa9d"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Astral",
+		"details": [
+			"Astral creatures are native of the Astral Plane. They can survive the basic environmental effects of the Astral Plane."
+		],
+		"source": "PZO2102",
+		"id": "f6854ba2-eaf9-4291-9b59-0acc32c3478f"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Azata",
+		"details": [
+			"This family of celestials is native to Elysium. They are chaotic good and have darkvision and a weakness to evil and cold iron."
+		],
+		"source": "PZO2102",
+		"id": "7c632edd-1c74-41c4-9571-9f24c3b524c9"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Beast",
+		"details": [
+			"A creature similar to an animal but with an Intelligence modifier of -3 or higher is usually a beast. Unlike an animal, a beast might be able to speak and reason."
+		],
+		"source": "PZO2102",
+		"id": "e85f052f-9b44-4672-abba-83117b916525"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Boggard",
+		"details": [
+			"Boggards are frog-like humanoids. They typically have darkvision."
+		],
+		"source": "PZO2102",
+		"id": "f2592dfe-d05d-4eb0-b668-42fc680bc64e",
+		"aonId": 209,
+		"pf2t": {
+			"name": "Boggard",
+			"source": "Bestiary pg. 345",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=209",
+			"aon": "traits209",
+			"type": "trait",
+			"body": "Boggards are frog-like humanoids. They typically have darkvision.",
+			"hash": "JKONcyPQ"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Caligni",
+		"details": [
+			"These subterranean people have darkvision, and some have powers to create darkness."
+		],
+		"source": "PZO2102",
+		"id": "31d858b7-3a07-4035-91eb-348fb4615a3e",
+		"aonId": 210,
+		"pf2t": {
+			"name": "Caligni",
+			"source": "Bestiary pg. 345",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=210",
+			"aon": "traits210",
+			"type": "trait",
+			"body": "These subterranean people have darkvision, and some have powers to create darkness.",
+			"hash": "tnrkdCjY"
+		}
+	},
+	{ "objectType": "Trait", "name": "Catfolk", "details": [ "Catfolk are humanoids with feline features." ], "source": "PZO2102", "id": "c298d5f7-2eb5-43a6-b64e-364a4b0584ad" },
+	{
+		"objectType": "Trait",
+		"name": "Celestial",
+		"details": [
+			"Creatures that hail from or have a strong connection to the good-aligned planes are called celestials. Celestials can survive the basic environmental effects of planes in the Outer Sphere."
+		],
+		"source": "PZO2102",
+		"id": "1620b3c7-8343-4426-8ba0-baaa2ebd75ca"
+	},
+	{ "objectType": "Trait", "name": "Changeling", "details": [ "These humanoids are the children of hags and members of other humanoid ancestries." ], "source": "PZO2102", "id": "499251e7-b639-435e-ad9e-e852ed5d6bd8" },
+	{ "objectType": "Trait", "name": "Cold", "details": [ "Effects with this trait deal cold damage. Creatures with this trait have a magical connection to cold." ], "source": "PZO2102", "id": "91aac26d-945e-4421-8e52-00e9be3270e4" },
+	{
+		"objectType": "Trait",
+		"name": "Construct",
+		"details": [
+			"A construct is an artificial creature empowered by a force other than necromancy. Constructs are often mindless; they are immune to bleed damage, death effects, disease, healing, necromancy, nonlethal attacks, poison, and the doomed, drained, fatigued, paralyzed, sickened, and unconscious conditions; and they may have Hardness based on the materials used to construct their bodies. Constructs are not living creatures, nor are they undead. When reduced to 0 Hit Points, a construct creature is destroyed."
+		],
+		"source": "PZO2102",
+		"id": "33cd9e7e-5684-4b6c-8d1a-4e418c3a274b"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Daemon",
+		"details": [
+			"A family of fiends spawned on the desolate plane of Abaddon, most daemons are neutral evil. They typically have darkvision and weakness to good damage."
+		],
+		"source": "PZO2102",
+		"id": "66db92c0-4d67-4af7-a2f8-c2ed984cb7a8",
+		"aonId": 213,
+		"pf2t": {
+			"name": "Daemon",
+			"source": "Bestiary pg. 346",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=213",
+			"aon": "traits213",
+			"type": "trait",
+			"body": "A family of fiends spawned on the desolate plane of Abaddon, most daemons are neutral evil. They typically have darkvision and weakness to good damage.",
+			"hash": "rPjRkqIL"
+		}
+	},
+	{ "objectType": "Trait", "name": "Demon", "details": [ "A family of fiends hailing from the Abyss, most demons are chaotic evil. Most demons have darkvision." ], "source": "PZO2102", "id": "d96e6e8f-981a-4c62-af33-62e72dbe205d" },
+	{
+		"objectType": "Trait",
+		"name": "Dero",
+		"details": [
+			"This family of humanoids are the descendants of fey creatures that fell into darkness and confusion after being abandoned in the Darklands. They are immune to confusion and vulnerable to sunlight."
+		],
+		"source": "PZO2102",
+		"id": "e9654760-22f1-433d-838b-d87509d53000",
+		"aonId": 214,
+		"pf2t": {
+			"name": "Dero",
+			"source": "Bestiary pg. 346",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=214",
+			"aon": "traits214",
+			"type": "trait",
+			"body": "This family of humanoids are the descendants of fey creatures that fell into darkness and confusion after being abandoned in the Darklands. They are immune to confusion and vulnerable to sunlight.",
+			"hash": "swrcKWqW"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Devil",
+		"details": [
+			"A family of fiends from Hell, most devils are lawful evil. They typically have greater darkvision, immunity to fire, and telepathy."
+		],
+		"source": "PZO2102",
+		"id": "c651014b-ff4a-40e5-9ef6-f84d34c2b949"
+	},
+	{ "objectType": "Trait", "name": "Dhampir", "details": [ "These humanoids are the immortal offspring of vampires and members of other ancestries." ], "source": "PZO2102", "id": "87809052-c113-4245-ba44-3b2b356f9f6a" },
+	{ "objectType": "Trait", "name": "Dinosaur", "details": [ "These reptiles have survived from prehistoric times." ], "source": "PZO2102", "id": "bf69b6cd-b6bd-4b05-a839-8d2f7d59cf37" },
+	{
+		"objectType": "Trait",
+		"name": "Dragon",
+		"details": [
+			"Dragons are reptilian creatures, often winged or with the power of flight. Most are able to use a breath weapon and are immune to sleep and the paralyzed condition."
+		],
+		"source": "PZO2102",
+		"id": "748d9cb4-d8f3-4040-ac1d-bdd6ec980f9e"
+	},
+	{ "objectType": "Trait", "name": "Drow", "details": [ "Subterranean kin of the elves, drow typically have darkvision and inborn magical abilities." ], "source": "PZO2102", "id": "46851d38-74d1-4478-b491-3180988668b9" },
+	{
+		"objectType": "Trait",
+		"name": "Duergar",
+		"details": [
+			"Subterranean kin of the dwarves, duergars typically have darkvision and immunity to poison. They are not easily fooled by illusions."
+		],
+		"source": "PZO2102",
+		"id": "b31db6f0-36df-4cca-aa3f-88e36b8734ab"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Earth",
+		"details": [
+			"Effects with the earth trait either manipulate or conjure earth. Those that manipulate earth have no effect in an area without earth. Creatures with this trait consist primarily of earth or have a magical connection to that element."
+		],
+		"source": "PZO2102",
+		"id": "56f4ff90-c9d5-49f5-986f-c37f0e2f228f"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Electricity",
+		"details": [
+			"Effects with this trait deal electricity damage. A creature with this trait has a magical connection to electricity."
+		],
+		"source": "PZO2102",
+		"id": "7fa48f89-e9f6-4d5f-8f46-cb493aea79b2"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Elemental",
+		"details": [
+			"Elementals are creatures directly tied to an element and are native to the Elemental Planes. Elementals don't need to breathe."
+		],
+		"source": "PZO2102",
+		"id": "38710d49-8303-4efa-a0a9-963feb3c7d93"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Elf",
+		"details": [
+			"A creature with this trait is a member of the elf ancestry. Elves are mysterious people with rich traditions of magic and scholarship who typically have low-light vision. An ability with this trait can be used or selected only by elves. A weapon with this trait is created and used by elves."
+		],
+		"source": "PZO2102",
+		"id": "a4c50682-f546-4458-bcac-a927b0174bac"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Ethereal",
+		"details": [
+			"Ethereal creatures are natives of the Ethereal Plane. They can survive the basic environmental effects of the Ethereal Plane."
+		],
+		"source": "PZO2102",
+		"id": "295fa0f7-cb4d-44ca-a19d-2207479625b8"
+	},
+	{ "objectType": "Trait", "name": "Fey", "details": [ "Creatures of the First World are called the fey." ], "source": "PZO2102", "id": "044d92e1-aede-4afd-89af-db1c0cfe37e5" },
+	{
+		"objectType": "Trait",
+		"name": "Fiend",
+		"details": [
+			"Creatures that hail from or have a strong connection to the evil-aligned planes are called fiends. Fiends can survive the basic environmental effects of planes in the Outer Sphere."
+		],
+		"source": "PZO2102",
+		"id": "29ac2883-78e1-4a62-ada4-c70774495750"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Fire",
+		"details": [
+			"Effects with the fire trait deal fire damage or either conjure or manipulate fire. Those that manipulate fire have no effect in an area without fire. Creatures with this trait are primarily constituted of fire or have a magical connection to that element."
+		],
+		"source": "PZO2102",
+		"id": "775141a5-e49d-4702-abea-f12d17d43127"
+	},
+	{ "objectType": "Trait", "name": "Fungus", "details": [ "Fungal creatures have the fungus trait. They are distinct from normal fungi." ], "source": "PZO2102", "id": "09f3178c-4c2c-499e-9c5e-28ccaf75a11f" },
+	{
+		"objectType": "Trait",
+		"name": "Genie",
+		"details": [
+			"The diverse families of genies hold positions of prominence on the Elemental Planes. They have powerful magical abilities."
+		],
+		"source": "PZO2102",
+		"id": "7109aa03-995d-41ed-80f9-afe9d28b5cfd",
+		"aonId": 216,
+		"pf2t": {
+			"name": "Genie",
+			"source": "Bestiary pg. 346",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=216",
+			"aon": "traits216",
+			"type": "trait",
+			"body": "The diverse families of genies hold positions of prominence on the Elemental Planes. They have powerful magical abilities.",
+			"hash": "HcwfppFD"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Ghost",
+		"details": [
+			"Lost souls that haunt the world as incorporeal undead are called ghosts."
+		],
+		"source": "PZO2102",
+		"id": "0349d51d-e5fe-4aeb-8396-3ab51523f4b7",
+		"aonId": 217,
+		"pf2t": {
+			"name": "Ghost",
+			"source": "Bestiary pg. 346",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=217",
+			"aon": "traits217",
+			"type": "trait",
+			"body": "Lost souls that haunt the world as incorporeal undead are called ghosts.",
+			"hash": "ISRYgQKI"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Ghoul",
+		"details": [
+			"Ghouls are vile undead creatures that feast on flesh."
+		],
+		"source": "PZO2102",
+		"id": "6c67c322-99a6-4b10-a3d0-6bca9652d16e",
+		"aonId": 218,
+		"pf2t": { "name": "Ghoul", "source": "Bestiary pg. 346", "src": "https://2e.aonprd.com/Traits.aspx?ID=218", "aon": "traits218", "type": "trait", "body": "Ghouls are vile undead creatures that feast on flesh.", "hash": "xMFTxwyv" }
+	},
+	{ "objectType": "Trait", "name": "Giant", "details": [ "Giants are massive humanoid creatures." ], "source": "PZO2102", "id": "9e7b2db9-29e4-44c8-bc1f-b59509ac6a35" },
+	{
+		"objectType": "Trait",
+		"name": "Gnoll",
+		"details": [
+			"Gnolls are humanoids that resemble hyenas."
+		],
+		"source": "PZO2102",
+		"id": "4433d6f1-a037-4ea9-8192-d551a9c7f176",
+		"aonId": 219,
+		"pf2t": { "name": "Gnoll", "source": "Bestiary pg. 346", "src": "https://2e.aonprd.com/Traits.aspx?ID=219", "aon": "traits219", "type": "trait", "body": "Gnolls are humanoids that resemble hyenas.", "hash": "rBSWXhRx" }
+	},
+	{
+		"objectType": "Trait",
+		"name": "Goblin",
+		"details": [
+			"A creature with this trait can come from multiple groups of creatures, including goblins, hobgoblins, and bugbears. Goblins tend to have darkvision. An ability with this trait can be used or chosen only by goblins. A weapon with this trait is created and used by goblins."
+		],
+		"source": "PZO2102",
+		"id": "c2559b37-3aa4-4829-9e28-f258133043a3"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Golem",
+		"details": [
+			"Golems are a special type of construct. Golems are immune to almost all magic, but most have a weakness to certain spells."
+		],
+		"source": "PZO2102",
+		"id": "52299cc3-9070-4b06-a923-bd1af47f4f5f",
+		"aonId": 220,
+		"pf2t": {
+			"name": "Golem",
+			"source": "Bestiary pg. 346",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=220",
+			"aon": "traits220",
+			"type": "trait",
+			"body": "Golems are a special type of construct. Golems are immune to almost all magic, but most have a weakness to certain spells.",
+			"hash": "BbqOkIAv"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Gremlin",
+		"details": [
+			"Cruel and mischievous fey, gremlins have acclimated to life on the Material Plane."
+		],
+		"source": "PZO2102",
+		"id": "35a27210-1c87-4c7c-8e5c-45e5f87555bc",
+		"aonId": 221,
+		"pf2t": {
+			"name": "Gremlin",
+			"source": "Bestiary pg. 346",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=221",
+			"aon": "traits221",
+			"type": "trait",
+			"body": "Cruel and mischievous fey, gremlins have acclimated to life on the Material Plane.",
+			"hash": "PWQYzSFg"
+		}
+	},
+	{ "objectType": "Trait", "name": "Hag", "details": [ "These creatures are malevolent spellcasters who form covens." ], "source": "PZO2102", "id": "cbb8c15e-c5b7-4522-9faa-e9583aa71c51" },
+	{
+		"objectType": "Trait",
+		"name": "Halfling",
+		"details": [
+			"A creature with this trait is a member of the halfling ancestry. These small people are friendly wanderers considered to be lucky. An ability with this trait can be used or selected only by halflings. A weapon with this trait is created and used by halflings."
+		],
+		"source": "PZO2102",
+		"id": "94b780a4-3c64-41d8-9807-ff0f8f26463b"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Human",
+		"details": [
+			"A creature with this trait is a member of the human ancestry. Humans are a diverse array of people known for their adaptability. An ability with this trait can be used or selected only by humans."
+		],
+		"source": "PZO2102",
+		"id": "452dbf97-b231-4473-b779-4d3d0371a0f9"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Humanoid",
+		"details": [
+			"Humanoid creatures reason and act much like humans. They typically stand upright and have two arms and two legs."
+		],
+		"source": "PZO2102",
+		"id": "252f7cd4-2211-4659-87b9-f493af008333"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Incorporeal",
+		"details": [
+			"An incorporeal creature or object has no physical form. It can pass through solid objects, including walls. When inside an object, an incorporeal creature can't perceive, attack, or interact with anything outside the object, and if it starts its turn in an object, it is slowed 1. Corporeal creatures can pass through an incorporeal creature, but they can't end their movement in its space.",
+			"An incorporeal creature can't attempt Strength-based checks against physical creatures or objects-only against incorporeal ones-unless those objects have the ghost touch property rune. Likewise, a corporeal creature can't attempt Strength-based checks against incorporeal creatures or objects.",
+			"Incorporeal creatures usually have immunity to effects or conditions that require a physical body, like disease, poison, and precision damage. They usually have resistance against all damage (except force damage and damage from Strikes with the ghost touch property rune), with double the resistance against non-magical damage."
+		],
+		"source": "PZO2102",
+		"id": "1d484d9f-3f14-4397-918d-7ff65a7e551d",
+		"aonId": 222,
+		"pf2t": {
+			"name": "Incorporeal",
+			"source": "Bestiary pg. 346",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=222",
+			"aon": "traits222",
+			"type": "trait",
+			"body": "An incorporeal creature or object has no physical form. It can pass through solid objects, including walls. When inside an object, an incorporeal creature can't perceive, attack, or interact with anything outside the object, and if it starts its turn in an object, it is slowed 1. Corporeal creatures can pass through an incorporeal creature, but they can't end their movement in its space.\n\nAn incorporeal creature can't attempt Strength-based checks against physical creatures or objects-only against incorporeal ones-unless those objects have the ghost touch property rune. Likewise, a corporeal creature can't attempt Strength-based checks against incorporeal creatures or objects.\n\nIncorporeal creatures usually have immunity to effects or conditions that require a physical body, like disease, poison, and precision damage. They usually have resistance against all damage (except force damage and damage from Strikes with the ghost touch property rune), with double the resistance against non-magical damage.",
+			"hash": "PIkZskQV"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Inevitable",
+		"details": [
+			"These constructed aeons were created by the axiomites. Each type of inevitable is dedicated to a specific task. Most inevitables have weakness to chaotic damage."
+		],
+		"source": "PZO2102",
+		"id": "ea707186-0cf6-4e2e-a169-8e51c31f4fb7",
+		"aonId": 223,
+		"pf2t": {
+			"name": "Inevitable",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=223",
+			"aon": "traits223",
+			"type": "trait",
+			"body": "These constructed aeons were created by the axiomites. Each type of inevitable is dedicated to a specific task. Most inevitables have weakness to chaotic damage.",
+			"hash": "FVUOlvWA"
+		}
+	},
+	{ "objectType": "Trait", "name": "Kobold", "details": [ "Kobolds are reptilian humanoids who are usually Small and typically have darkvision." ], "source": "PZO2102", "id": "d40e5232-4723-449d-81d8-e2f220e88d48" },
+	{ "objectType": "Trait", "name": "Leshy", "details": [ "Leshys are small plant creatures, roughly humanoid in form." ], "source": "PZO2102", "id": "b096b773-7cd2-4a9a-81a3-21686ef1398c" },
+	{ "objectType": "Trait", "name": "Lizardfolk", "details": [ "Lizardfolk are a family of reptilian humanoids." ], "source": "PZO2102", "id": "ee3eff82-673a-4fa4-b423-c6d83236d455" },
+	{
+		"objectType": "Trait",
+		"name": "Magical",
+		"details": [
+			"Something with the magical trait is imbued with magical energies not tied to a specific tradition of magic. A magical item radiates a magic aura infused with its dominant school of magic.",
+			"Some items or effects are closely tied to a particular tradition of magic. In these cases, the item has the arcane, divine, occult, or primal trait instead of the magical trait. Any of these traits indicate that the item is magical."
+		],
+		"source": "PZO2102",
+		"id": "9434d0f1-0e2c-4274-95b3-dfadfc05714a"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Merfolk",
+		"details": [
+			"These aquatic humanoids have an upper body similar to a human and a lower body similar to a fish."
+		],
+		"source": "PZO2102",
+		"id": "0841f9a6-249b-4f2a-af4a-905c98eb34cf",
+		"aonId": 227,
+		"pf2t": {
+			"name": "Merfolk",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=227",
+			"aon": "traits227",
+			"type": "trait",
+			"body": "These aquatic humanoids have an upper body similar to a human and a lower body similar to a fish.",
+			"hash": "PESTpREs"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Mindless",
+		"details": [
+			"A mindless creature has either programmed or rudimentary mental attributes. Most, if not all, of their mental ability modifiers are -5. They are immune to all mental effects."
+		],
+		"source": "PZO2102",
+		"id": "378233b5-0150-4c0c-89de-0dd2c8fbbccf"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Monitor",
+		"details": [
+			"Creatures that hail from or have a strong connection to the neutrally aligned planes are called monitors. Monitors can survive the basic environmental effects of planes in the Outer Sphere."
+		],
+		"source": "PZO2102",
+		"id": "6d430b34-62f5-447e-816b-dff4bdc7121c"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Mummy",
+		"details": [
+			"A mummy is an undead creature created from a preserved corpse."
+		],
+		"source": "PZO2102",
+		"id": "11109966-3879-48e3-bcd6-784348ae3149",
+		"aonId": 228,
+		"pf2t": {
+			"name": "Mummy",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=228",
+			"aon": "traits228",
+			"type": "trait",
+			"body": "A mummy is an undead creature created from a preserved corpse.",
+			"hash": "jvkJqZMy"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Mutant",
+		"details": [
+			"The monster has mutated or evolved, granting it unusual benefits, drawbacks, or both."
+		],
+		"source": "PZO2102",
+		"id": "50102259-a203-49c6-8967-59294cbf1e0d",
+		"aonId": 229,
+		"pf2t": {
+			"name": "Mutant",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=229",
+			"aon": "traits229",
+			"type": "trait",
+			"body": "The monster has mutated or evolved, granting it unusual benefits, drawbacks, or both.",
+			"hash": "gWvcGHJd"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Nymph",
+		"details": [
+			"This family of beautiful fey creatures has strong ties to natural locations."
+		],
+		"source": "PZO2102",
+		"id": "a6633bba-93bf-48dd-bdca-d30be5d51584",
+		"aonId": 230,
+		"pf2t": {
+			"name": "Nymph",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=230",
+			"aon": "traits230",
+			"type": "trait",
+			"body": "This family of beautiful fey creatures has strong ties to natural locations.",
+			"hash": "QgxUqkqX"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Ooze",
+		"details": [
+			"Oozes are creatures with simple anatomies. They tend to have low mental ability scores and immunity to mental effects and precision damage."
+		],
+		"source": "PZO2102",
+		"id": "80f10500-6fe5-4340-9f9e-3e8479533d51"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Orc",
+		"details": [
+			"A creature with this trait is a member of the orc ancestry. These green-skinned people tend to have darkvision. An ability with this trait can be used or selected only by orcs. An item with this trait is created and used by orcs."
+		],
+		"source": "PZO2102",
+		"id": "c5d7db03-7d88-440b-b086-a7334d86996d"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Plant",
+		"details": [
+			"Vegetable creatures have the plant trait. They are distinct from normal plants. Magical effects with this trait manipulate or conjure plants or plant matter in some way. Those that manipulate plants have no effect in an area with no plants."
+		],
+		"source": "PZO2102",
+		"id": "c475b9a7-7793-44c2-af54-12eb84889a42"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Protean",
+		"details": [
+			"A family of monitors spawned within the Maelstrom, these creatures are guardians of disorder and are chaotic neutral. They typically have darkvision, an amorphous anatomy, and a weakness to lawful damage."
+		],
+		"source": "PZO2102",
+		"id": "24d6d054-f710-48eb-b2a8-f6078b067a7c",
+		"aonId": 231,
+		"pf2t": {
+			"name": "Protean",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=231",
+			"aon": "traits231",
+			"type": "trait",
+			"body": "A family of monitors spawned within the Maelstrom, these creatures are guardians of disorder and are chaotic neutral. They typically have darkvision, an amorphous anatomy, and a weakness to lawful damage.",
+			"hash": "HAHBXzzE"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Psychopomp",
+		"details": [
+			"A family of monitors spawned within the Boneyard to convey souls to the Outer Planes, most psychopomps are true neutral. They typically have darkvision, lifesense, and spirit touch, and they are immune to death effects."
+		],
+		"source": "PZO2102",
+		"id": "5c254220-3c29-42a3-a847-e68a7de49fcd",
+		"aonId": 232,
+		"pf2t": {
+			"name": "Psychopomp",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=232",
+			"aon": "traits232",
+			"type": "trait",
+			"body": "A family of monitors spawned within the Boneyard to convey souls to the Outer Planes, most psychopomps are true neutral. They typically have darkvision, lifesense, and spirit touch, and they are immune to death effects.",
+			"hash": "bFmZNQGz"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Rakshasa",
+		"details": [
+			"Reincarnations of evil souls, rakshasas are fiends that live on the Material Plane."
+		],
+		"source": "PZO2102",
+		"id": "3574035f-9e38-4fe0-a7de-1c17fc3e2622",
+		"aonId": 233,
+		"pf2t": {
+			"name": "Rakshasa",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=233",
+			"aon": "traits233",
+			"type": "trait",
+			"body": "Reincarnations of evil souls, rakshasas are fiends that live on the Material Plane.",
+			"hash": "VUvQrtLQ"
+		}
+	},
+	{ "objectType": "Trait", "name": "Ratfolk", "details": [ "Ratfolk are humanoids who resemble rats." ], "source": "PZO2102", "id": "7fbd050d-0940-4070-9a4e-c387a7ff5d29" },
+	{ "objectType": "Trait", "name": "Sea", "details": [ "Devil Evil ocean-dwelling humanoids, sea devils usually have darkvision and wavesense." ], "source": "PZO2102", "id": "1d3c4173-ad35-4fae-9ae1-99996b941633" },
+	{
+		"objectType": "Trait",
+		"name": "Skeleton",
+		"details": [
+			"This undead is made by animating a dead creature's skeleton with negative energy."
+		],
+		"source": "PZO2102",
+		"id": "c34c337f-f337-4b40-a5a8-07048c87e442",
+		"aonId": 236,
+		"pf2t": {
+			"name": "Skeleton",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=236",
+			"aon": "traits236",
+			"type": "trait",
+			"body": "This undead is made by animating a dead creature's skeleton with negative energy.",
+			"hash": "pvQQWTqQ"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Soulbound",
+		"details": [
+			"These constructs are mentally augmented by a fragment of a once-living creature's soul."
+		],
+		"source": "PZO2102",
+		"id": "2d7e117c-7852-4180-a065-544dbf352d41",
+		"aonId": 237,
+		"pf2t": {
+			"name": "Soulbound",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=237",
+			"aon": "traits237",
+			"type": "trait",
+			"body": "These constructs are mentally augmented by a fragment of a once-living creature's soul.",
+			"hash": "mBnWCXGx"
+		}
+	},
+	{ "objectType": "Trait", "name": "Spirit", "details": [ "Spirits are ephemeral creatures defined by their spiritual essence. They often lack a material form." ], "source": "PZO2102", "id": "66392ec4-728d-4616-84bc-1e89f5a2e679" },
+	{
+		"objectType": "Trait",
+		"name": "Sprite",
+		"details": [
+			"A family of diminutive winged fey with a strong connection to primal magic."
+		],
+		"source": "PZO2102",
+		"id": "45ce3c5a-9b91-4b89-b5ff-a2fc250290b3",
+		"aonId": 238,
+		"pf2t": {
+			"name": "Sprite",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=238",
+			"aon": "traits238",
+			"type": "trait",
+			"body": "A family of diminutive winged fey with a strong connection to primal magic.",
+			"hash": "OjXRzqwh"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Swarm",
+		"details": [
+			"A swarm is a mass or cloud of creatures that functions as one monster. Its size entry gives the size of the entire mass, though for most swarms the individual creatures that make up that mass are Tiny. A swarm can occupy the same space as other creatures, and must do so in order to use its damaging action. A swarm typically has weakness to effects that deal damage over an area (like area spells and splash weapons)."
+		],
+		"source": "PZO2102",
+		"id": "4cb95688-1c58-4783-95e6-8668d1f8cfc0",
+		"aonId": 239,
+		"pf2t": {
+			"name": "Swarm",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=239",
+			"aon": "traits239",
+			"type": "trait",
+			"body": "A swarm is a mass or cloud of creatures that functions as one monster. Its size entry gives the size of the entire mass, though for most swarms the individual creatures that make up that mass are Tiny. A swarm can occupy the same space as other creatures, and must do so in order to use its damaging action. A swarm typically has weakness to effects that deal damage over an area (like area spells and splash weapons). Swarms are immune to the grappled, prone, and restrained conditions.",
+			"hash": "jAXnbZRC"
+		}
+	},
+	{ "objectType": "Trait", "name": "Tengu", "details": [ "Tengu are humanoids who resemble birds." ], "source": "PZO2102", "id": "2bde72af-bb0f-4dc4-8d55-ce69eca58870" },
+	{
+		"objectType": "Trait",
+		"name": "Troll",
+		"details": [
+			"Trolls are giant, brutish creatures and are well known for their ability to regenerate."
+		],
+		"source": "PZO2102",
+		"id": "842b7b72-e313-46af-b9a3-c3d1ff721842",
+		"aonId": 241,
+		"pf2t": {
+			"name": "Troll",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=241",
+			"aon": "traits241",
+			"type": "trait",
+			"body": "Trolls are giant, brutish creatures and are well known for their ability to regenerate.",
+			"hash": "WMvblWwG"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Undead",
+		"details": [
+			"Once living, these creatures were infused after death with negative energy and soul-corrupting evil magic. When reduced to 0 Hit Points, an undead creature is destroyed. Undead creatures are damaged by positive energy, are healed by negative energy, and don't benefit from healing effects."
+		],
+		"source": "PZO2102",
+		"id": "c6f815ff-ef8e-4919-8375-7de582c245d1"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Vampire",
+		"details": [
+			"Undead creatures who thirst for blood, vampires are notoriously versatile and hard to destroy."
+		],
+		"source": "PZO2102",
+		"id": "7b28270b-6b24-497f-967d-f2f522442f6a",
+		"aonId": 242,
+		"pf2t": {
+			"name": "Vampire",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=242",
+			"aon": "traits242",
+			"type": "trait",
+			"body": "Undead creatures who thirst for blood, vampires are notoriously versatile and hard to destroy.",
+			"hash": "npphRCXw"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Water",
+		"details": [
+			"Effects with the water trait either manipulate or conjure water. Those that manipulate water have no effect in an area without water. Creatures with this trait are primarily constituted of water or have a magical connection to the element."
+		],
+		"source": "PZO2102",
+		"id": "b38670b4-e9ea-4c16-a681-3865ef031551"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Werecreature",
+		"details": [
+			"These shapechanging creatures either are naturally able to shift between animal, humanoid, and hybrid forms or are afflicted with a curse that forces them to shift involuntarily."
+		],
+		"source": "PZO2102",
+		"id": "d119966c-796f-4f72-b263-c10b1032ee44",
+		"aonId": 243,
+		"pf2t": {
+			"name": "Werecreature",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=243",
+			"aon": "traits243",
+			"type": "trait",
+			"body": "These shapechanging creatures either are naturally able to shift between animal, humanoid, and hybrid forms or are afflicted with a curse that forces them to shift involuntarily.",
+			"hash": "wxBFOAZy"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Xulgath",
+		"details": [
+			"These subterranean reptilian creatures tend to have darkvision and smell awful."
+		],
+		"source": "PZO2102",
+		"id": "44e0365d-18b8-4401-9f42-c8b3e80ed57c",
+		"aonId": 244,
+		"pf2t": {
+			"name": "Xulgath",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=244",
+			"aon": "traits244",
+			"type": "trait",
+			"body": "These subterranean reptilian creatures tend to have darkvision and smell awful.",
+			"hash": "FGPZppwB"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Zombie",
+		"details": [
+			"These undead are mindless rotting corpses that hunger for living flesh."
+		],
+		"source": "PZO2102",
+		"id": "0bceef76-b051-40af-83ec-e8355f0c7089",
+		"aonId": 245,
+		"pf2t": {
+			"name": "Zombie",
+			"source": "Bestiary pg. 347",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=245",
+			"aon": "traits245",
+			"type": "trait",
+			"body": "These undead are mindless rotting corpses that hunger for living flesh.",
+			"hash": "ZJDSvzrJ"
+		}
+	}
+]
