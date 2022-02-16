@@ -37,7 +37,20 @@
 		"page": 174,
 		"source": "PZO2105",
 		"id": "199099eb-61d9-437f-b752-801a7b6dbe22",
-		"aonId": 1970
+		"aonId": 1970,
+		"pf2t": {
+			"name": "Familiar Master Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Familiar Master",
+			"source": "Advanced Player's Guide pg. 174",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1970",
+			"aon": "feats1970",
+			"type": "feat",
+			"body": "**Archetype** Familiar Master\n\n- - -\n\nYou have forged a mystical bond with a creature. This might have involved complex rituals and invocations, such as meditating under the moon until something crept out of the forest. Or maybe you just did each other a good turn, such as rescuing the beast from a trap or a foe, and then being rescued in turn. Whatever the details, you are now comrades until the end. You gain a familiar. If you already have a familiar, you gain the Enhanced Familiar feat.\n\n#### Familiar Master Dedication Leads To...\nFamiliar Conduit, Familiar Mascot, Improved Familiar (Familiar Master), Mutable Familiar",
+			"hash": "pptZJkgR"
+		}
 	},
 	{
 		"objectType": "Feat",

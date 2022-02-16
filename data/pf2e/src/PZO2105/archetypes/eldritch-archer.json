@@ -47,7 +47,20 @@
 		"page": 172,
 		"source": "PZO2105",
 		"id": "9f715e13-e18e-47a0-9e14-eb9d11abc379",
-		"aonId": 1960
+		"aonId": 1960,
+		"pf2t": {
+			"name": "Eldritch Archer Dedication",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "archetype,dedication,magical",
+			"archetype": "Eldritch Archer",
+			"source": "Advanced Player's Guide pg. 172",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1960",
+			"aon": "feats1960",
+			"type": "feat",
+			"body": "**Archetype** Eldritch Archer\n**Prerequisites** expert in at least one type of bow\n**Requirements** You are wielding a bow\n\n- - -\n\nYou blend magic with your archery, leading to powerful results.\n\nIf you don't already cast spells from spell slots, you learn to cast spontaneous spells and gain the Cast a Spell activity. You gain a spell repertoire with one cantrip of your choice, from a spell list of your choice. You choose this cantrip from the common spells on your chosen spell list or from other spells to which you have access on that list. This cantrip must require a spell attack roll. You're trained in spell attack rolls and spell DCs for that tradition. Your key spellcasting ability for these spells is Charisma.\n\nIf you already cast spells from spell slots, you learn one additional cantrip from that tradition. If you're a prepared caster, you can prepare this spell in addition to your usual cantrips per day; if you're a spontaneous caster, you add this cantrip to your spell repertoire.\n\nYou also gain Eldritch Shot.\n\n#### Eldritch Archer Dedication Leads To...\nArrow of Death, Basic Eldritch Archer Spellcasting, Enchanting Arrow, Magic Arrow, Phase Arrow, Precious Arrow, Seeker Arrow\n\n **Activate** :aaa: *Eldritch Shot* **Effect** You Cast a Spell that takes 1 or 2 actions to cast and requires a spell attack roll. The effects of the spell do not occur immediately but are imbued into the bow you're wielding. Make a Strike with that bow. Your spell flies with the ammunition, using your attack roll result to determine the effects of both the Strike and the spell. This counts as two attacks for your multiple attack penalty, but you don't apply the penalty until after you've completed both attacks.",
+			"hash": "vXgtgnpx"
+		}
 	},
 	{
 		"objectType": "Feat",

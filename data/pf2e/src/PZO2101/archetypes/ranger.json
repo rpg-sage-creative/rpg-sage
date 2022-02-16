@@ -36,7 +36,20 @@
 		"page": 228,
 		"source": "PZO2101",
 		"id": "886d5d38-e847-43a4-823a-67b73723e8e1",
-		"aonId": 722
+		"aonId": 722,
+		"pf2t": {
+			"name": "Ranger Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Ranger",
+			"source": "Core Rulebook pg. 228 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=722",
+			"aon": "feats722",
+			"type": "feat",
+			"body": "**Archetype** Ranger\n**Prerequisites** Dexterity 14\n\n- - -\n\nYou become trained in Survival; if you were already trained in Survival, you instead become trained in another skill of your choice. You become trained in ranger class DC.\n\nYou can use the Hunt Prey action.\n\n#### Hunt Prey\nYou designate a single creature as your prey and focus your attacks against that creature. You must be able to see or hear the prey, or you must be tracking the prey during exploration.\n\nYou gain a +2 circumstance bonus to Perception checks when you Seek your prey and a +2 circumstance bonus to Survival checks when you Track your prey. You also ignore the penalty for making ranged attacks within your second range increment against the prey you're hunting.\n\nYou can have only one creature designated as your prey at a time. If you use Hunt Prey against a creature when you already have a creature designated, the prior creature loses the designation and the new prey gains the designation. Your designation lasts until your next daily preparations.\n\n#### Ranger Dedication Leads To...\nBasic Hunter's Trick, Master Spotter (Ranger), Ranger Resiliency",
+			"hash": "tUhBWHnb"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -56,7 +56,20 @@
 		"page": 84,
 		"source": "PZO9302",
 		"id": "32408804-3bbd-40bd-b60f-e10975410fdf",
-		"aonId": 1078
+		"aonId": 1078,
+		"pf2t": {
+			"name": "Hellknight Dedication",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Hellknight",
+			"source": "Character Guide pg. 84 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1078",
+			"aon": "feats1078",
+			"type": "feat",
+			"body": "**Archetype** Hellknight\n**Prerequisites** Hellknight Armiger Dedication; lawful alignment; member of a Hellknight Order; passed the Hellknight Test\n\n- - -\n\nYou have forged your body to comply with the commands of your mind-orders steeped in the Measure and the Chain. You gain expert proficiency in Intimidation (or in another skill in which you're trained of your choice, if you were already an expert in Intimidation). You gain the armor specialization effects of Hellknight plate, and your resistance from that armor specialization is 1 higher than normal. In addition, you gain a +1 circumstance bonus to Intimidation checks while wearing your Hellknight plate.\n\n#### Hellknight Dedication Leads To...\nAdvanced Order Training, Blade of Law, Hellknight Order Cross-Training, Hell's Armaments, Sense Chaos",
+			"hash": "tgfKQZQP"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -156,7 +169,20 @@
 		"page": 85,
 		"source": "PZO9302",
 		"id": "ce4db813-dcdc-4bda-8950-8425208b0a7d",
-		"aonId": 0
+		"aonId": 1082,
+		"pf2t": {
+			"name": "Hellknight Signifer Dedication",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Hellknight Signifer",
+			"source": "Character Guide pg. 85 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1082",
+			"aon": "feats1082",
+			"type": "feat",
+			"body": "**Archetype** Hellknight Signifer\n**Prerequisites** spellcasting class feature; Hellknight Armiger Dedication; lawful alignment; member of a Hellknight Order; passed the Hellknight Test\n\n- - -\n\nYou have bolstered your force of will with the power of the Measure and the Chain. Upon initiation, you receive a signifer mask, often devoid of eyeholes or other decorative features. The mask doesn't obscure your vision, though it makes it impossible for others to see your eyes. While wearing your signifer's mask, you gain +1 circumstance bonus to Deception checks to Lie, Intimidation checks, and Deception DCs against Sense Motive. You gain expert proficiency in Intimidation (or in another skill in which you're trained of your choice, if you were already an expert in Intimidation) as well as in your choice of Arcana, Nature, Occultism, or Religion.\n\n#### Hellknight Signifer Dedication Leads To...\nAdvanced Order Training, Gaze of Veracity, Hellknight Order Cross-Training, Masked Casting, Signifer Armor Expertise, Signifer's Sight",
+			"hash": "vklRxtXX"
+		}
 	},
 	{
 		"objectType": "Feat",

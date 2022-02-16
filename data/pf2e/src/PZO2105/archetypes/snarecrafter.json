@@ -40,7 +40,20 @@
 		"page": 194,
 		"source": "PZO2105",
 		"id": "4c29b64c-1f5d-4737-b52b-096b6baa8e9f",
-		"aonId": 2074
+		"aonId": 2074,
+		"pf2t": {
+			"name": "Snarecrafter Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Snarecrafter",
+			"source": "Advanced Player's Guide pg. 194",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2074",
+			"aon": "feats2074",
+			"type": "feat",
+			"body": "**Archetype** Snarecrafter\n**Prerequisites** Snare Crafting; trained in Crafting\n\n- - -\n\nYou've learned to create a limited number of snares at no cost. Each day during your daily preparations, you can prepare four snares from your formula book for quick deployment; if they normally take 1 minute to Craft, you can Craft them with 3 Interact actions. The number of snares increases to six if you're a master in Crafting and eight if you're legendary. Snares prepared in this way don't cost you any resources to Craft.\n\n#### Snarecrafter Dedication Leads To...\nGiant Snare, Plentiful Snares, Remote Trigger, Surprise Snare",
+			"hash": "VAbKrlRS"
+		}
 	},
 	{
 		"objectType": "Feat",

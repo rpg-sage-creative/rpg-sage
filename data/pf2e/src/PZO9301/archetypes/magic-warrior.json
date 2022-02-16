@@ -38,7 +38,20 @@
 		"page": 95,
 		"source": "PZO9301",
 		"id": "dbe36486-a6da-4c4b-874f-10193c947eb5",
-		"aonId": 903
+		"aonId": 903,
+		"pf2t": {
+			"name": "Magic Warrior Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Magic Warrior",
+			"source": "World Guide pg. 95 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=903",
+			"aon": "feats903",
+			"type": "feat",
+			"body": "**Archetype** Magic Warrior\n**Prerequisites** ability to cast focus spells\n\n- - -\n\nYou have taken up a nameless mask and sworn the oath of the magic warriors. You become trained in your choice of Arcana or Nature and in Magic Warrior Lore; if you were already trained in the skill, you become an expert instead.\n\nYou hide your identity behind a mask representing an animal of your choice, corresponding to one of the general animal types in the animal form spell. You gain a +1 circumstance bonus to saves against divination effects, though sometimes refusing to remove your mask can cause issues in areas that don't respect or understand the magic warrior tradition.\n\nOnce you take this feat, if another creature ever learns your true face or name, you lose your abilities from this archetype. Close allies who knew of your decision to take the mask before your dedication don't break this taboo unless they tell someone else. To regain your abilities, you must discard your mask and obtain a new one of a different animal, then retrain Magic Warrior Dedication into a new Magic Warrior Dedication with your new mask. Your focus spells from the magic warrior archetype are the same tradition as your other spells (choose one if you have spells from multiple traditions).\n\n#### Magic Warrior Dedication Leads To...\nMagic Warrior Aspect, Magic Warrior Transformation, Nameless Anonymity",
+			"hash": "IpGsqRCj"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -40,7 +40,19 @@
 		"page": 136,
 		"source": "PZO2109",
 		"id": "2e25ca39-b6fa-47d0-99df-769e2a9ab43c",
-		"aonId": 0
+		"aonId": 3251,
+		"pf2t": {
+			"name": "Pistol Phenom Dedication",
+			"level": 2,
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Pistol Phenom",
+			"source": "Guns & Gears pg. 135",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3251",
+			"aon": "feats3251",
+			"type": "feat",
+			"body": "**Archetype** Pistol Phenom\n**Prerequisites** trained in at least one type of one-handed firearm; trained in Deception and Performance\n\n- - -\n\nYou catch an opponent off-guard by spinning your weapon. You gain the Pistol Twirl gunslinger feat, enabling you to Feint against creatures within your weapon's first range increment. This otherwise serves as Pistol Twirl for the purpose of meeting prerequisites, although as normal, it doesn't count as another pistol phenom feat for the purpose of meeting Pistol Phenom Dedication's special entry and taking another archetype. Whenever you Feint with a one-handed firearm, you can choose to attempt a Performance check instead of a Deception check.\n\n#### Pistol Phenom Dedication Leads To...\nDazzling Bullet, Gunpowder Gaunlet, Hot Foot, Phenom's Verve, Reach for the Sky, Whirling Knockdown",
+			"hash": "gtsgsTpF"
+		}
 	},
 	{
 		"objectType": "Feat",

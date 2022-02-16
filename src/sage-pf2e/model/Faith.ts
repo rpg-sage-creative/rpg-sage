@@ -15,7 +15,7 @@ export interface FaithCoreBase<T extends string = string> extends SourcedCore<T>
 export type FaithCore = FaithCoreBase<"Faith">;
 /*// export interface FaithCore extends FaithCoreBase<"Faith"> { }*/
 
-export default class HasFaith<T extends string = "Faith", U extends FaithCoreBase<T> = FaithCoreBase<T>> extends HasSource<U, T> {
+export default class Faith<T extends string = "Faith", U extends FaithCoreBase<T> = FaithCoreBase<T>> extends HasSource<U, T> {
 
 	/**************************************************************************************************************************/
 	// Properties

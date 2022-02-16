@@ -35,7 +35,20 @@
 		"page": 231,
 		"source": "PZO2101",
 		"id": "27b3475b-5433-45c5-8041-02e596420745",
-		"aonId": 742
+		"aonId": 742,
+		"pf2t": {
+			"name": "Wizard Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Wizard",
+			"source": "Core Rulebook pg. 231 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=742",
+			"aon": "feats742",
+			"type": "feat",
+			"body": "**Archetype** Wizard\n**Prerequisites** Intelligence 14\n\n- - -\n\nYou cast spells like a wizard, gaining a spellbook with four common arcane cantrips of your choice. You gain the Cast a Spell activity. You can prepare two cantrips each day from your spellbook. You're trained in arcane spell attack rolls and spell DCs. Your key spellcasting ability for wizard archetype spells is Int, and they are arcane wizard spells. You become trained in Arcana; if you were already trained in Arcana, you instead become trained in a skill of your choice.\n\n#### Wizard Dedication Leads To...\nArcane School Spell, Basic Arcana, Basic Wizard Spellcasting",
+			"hash": "nxxQpXTK"
+		}
 	},
 	{
 		"objectType": "Feat",

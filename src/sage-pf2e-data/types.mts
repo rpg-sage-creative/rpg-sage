@@ -1,4 +1,4 @@
-import type { Pf2ToolsDataCore, TDetail, THasSuccessOrFailure } from "../sage-pf2e";
+import type { Pf2tBaseCore, TDetail, THasSuccessOrFailure } from "../sage-pf2e";
 import type { UUID } from "../sage-utils";
 
 export type TCore = {
@@ -20,6 +20,6 @@ export type TCore = {
 	aon?:string; aonId?:number;
 
 	/** PF2 Tools linkage */
-	pf2t?: Pf2ToolsDataCore;
+	pf2t?: Pf2tBaseCore;
 
 } & THasSuccessOrFailure;

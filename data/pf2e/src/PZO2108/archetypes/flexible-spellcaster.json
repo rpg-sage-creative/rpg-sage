@@ -31,6 +31,19 @@
 		"page": 209,
 		"source": "PZO2108",
 		"id": "f6e1153e-6ea2-456d-813e-5a8466b1f03d",
-		"aonId": 0
+		"aonId": 2994,
+		"pf2t": {
+			"name": "Flexible Spellcaster Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,class,dedication",
+			"archetype": "Flexible Spellcaster",
+			"source": "Secrets of Magic pg. 209",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2994",
+			"aon": "feats2994",
+			"type": "feat",
+			"body": "**Archetype** Flexible Spellcaster\n**Prerequisites** flexible spell preparation\n\n- - -\n\nYou now have four cantrips per day instead of three. At 4th level, you have five cantrips per day instead of four.",
+			"hash": "TmCMrZbx"
+		}
 	}
 ]

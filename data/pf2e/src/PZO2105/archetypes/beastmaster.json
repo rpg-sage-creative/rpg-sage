@@ -52,7 +52,20 @@
 		"page": 160,
 		"source": "PZO2105",
 		"id": "ecdff4f3-248a-4983-8a07-a953e9336282",
-		"aonId": 1900
+		"aonId": 1900,
+		"pf2t": {
+			"name": "Beastmaster Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Beastmaster",
+			"source": "Advanced Player's Guide pg. 160",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1900",
+			"aon": "feats1900",
+			"type": "feat",
+			"body": "**Archetype** Beastmaster\n**Prerequisites** trained in Nature\n\n- - -\n\nYou gain the service of a young animal companion that travels with you and obeys your commands. The rules for animal companions appear here. Contrary to the usual rules for animal companions, this feat can grant you a second animal companion. If you ever have more than one animal companion, you gain the Call Companion action. See the Beastmaster Animal Companions sidebar for details on this action.\n\nCertain beastmaster feats give you primal focus spells. The rules for focus spells appear here. When you gain your first beastmaster focus spell, you become trained in primal spell attack rolls and spell DCs, and your spellcasting ability for these spells is Charisma. Feats that grant beastmaster focus spells tell you to increase the number of Focus Points in your pool, but if you don't already have a focus pool, you instead get a focus pool with 1 Focus Point. You can Refocus by grooming, feeding, playing with, or otherwise tending to an animal companion.\n\n#### Beastmaster Dedication Leads To...\nAdditional Companion, Beastmaster Bond, Beastmaster's Call, Beastmaster's Trance, Heal Animal, Mature Beastmaster Companion",
+			"hash": "BmcZdErF"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -35,7 +35,20 @@
 		"page": 229,
 		"source": "PZO2101",
 		"id": "8005cd42-ddcc-4e9e-806c-3ab0276ab3ad",
-		"aonId": 727
+		"aonId": 727,
+		"pf2t": {
+			"name": "Rogue Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Rogue",
+			"source": "Core Rulebook pg. 229 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=727",
+			"aon": "feats727",
+			"type": "feat",
+			"body": "**Archetype** Rogue\n**Prerequisites** Dexterity 14\n\n- - -\n\nYou gain a skill feat and the rogue's surprise attack class feature. You become trained in light armor. In addition, you become trained in Stealth or Thievery plus one skill of your choice; if you are already trained in both Stealth and Thievery, you become trained in an additional skill of your choice. You become trained in rogue class DC.\n\n#### Rogue Dedication Leads To...\nBasic Trickery, Evasiveness (Rogue), Skill Mastery (Rogue), Sneak Attacker, Uncanny Dodge",
+			"hash": "WxVKQWhs"
+		}
 	},
 	{
 		"objectType": "Feat",

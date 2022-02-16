@@ -36,7 +36,20 @@
 		"page": 195,
 		"source": "PZO2105",
 		"id": "f7175b60-640c-4aa4-a9b3-5ea3e9ad5b12",
-		"aonId": 2079
+		"aonId": 2079,
+		"pf2t": {
+			"name": "Talisman Dabbler Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Talisman Dabbler",
+			"source": "Advanced Player's Guide pg. 195",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2079",
+			"aon": "feats2079",
+			"type": "feat",
+			"body": "**Archetype** Talisman Dabbler\n\n- - -\n\nYou are trained in the use of talismans and similar magical paraphernalia. This training might have occurred in a formal classroom or been an agglomeration of folk magic picked up over time. You can craft talismans and know the formulas for all common talismans in the Core Rulebook of your level or lower. You remember talisman formulas and don't need a formula book for them.\n\nAdditionally, you carry a collection of magical baubles you can turn into temporary talismans. Each day during your daily preparations, you can make two talismans with an item level no higher than half your level. You must know each talisman's formula. A talisman created this way is a temporary item and loses its magic the next time you make your daily preparations if you haven't already used it.\n\nFinally, when you Affix a Talisman, you can (in any combination) affix or remove up to four talismans in the 10-minute span.\n\n#### Talisman Dabbler Dedication Leads To...\nDeeper Dabbler, Quick Fix, Talismanic Sage",
+			"hash": "WvnIctfT"
+		}
 	},
 	{
 		"objectType": "Feat",

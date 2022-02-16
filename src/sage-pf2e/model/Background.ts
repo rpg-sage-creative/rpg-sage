@@ -7,13 +7,13 @@ import type { FeatureCore } from "./Feature";
 import type { FeatureLevelCore } from "./Features";
 import Features from "./Features";
 
-export interface IBackground extends SourcedCore<"Background"> {
+export interface BackgroundCore extends SourcedCore<"Background"> {
 	ancestry?: string;
 	region?: string;
 	features: FeatureCore[];
 }
 
-export default class Background extends HasSource<IBackground> {
+export default class Background extends HasSource<BackgroundCore> {
 	// #region Constructor
 	// public constructor(core: IBackground) {
 	// 	super(core);

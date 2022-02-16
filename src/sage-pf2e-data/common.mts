@@ -1,4 +1,4 @@
-import type { Pf2ToolsDataCore } from "../sage-pf2e/data/Pf2ToolsData";
+import type { Pf2tBaseCore } from "../sage-pf2e";
 import utils from "../sage-utils";
 import type { TCore } from "./types.mjs";
 
@@ -32,13 +32,13 @@ export function debug(...args: any[]) {
 export const sageCores = new utils.ArrayUtils.Collection<TCore>();
 
 const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
-export const pf2tCores = new utils.ArrayUtils.Collection<Pf2ToolsDataCore>();
+export const pf2tCores = new utils.ArrayUtils.Collection<Pf2tBaseCore>();
 export async function loadPf2tCores(): Promise<void> {
 	const path = `${SrcDataPath}/pf2t-all.json`;
-	let cores = await utils.FsUtils.readJsonFile<Pf2ToolsDataCore[]>(path).catch(() => null) ?? [];
+	let cores = await utils.FsUtils.readJsonFile<Pf2tBaseCore[]>(path).catch(() => null) ?? [];
 	if (!cores.length) {
 		info(`\t\tFetching PF2 Tools Cores ...`);
-		cores = await utils.HttpsUtils.getJson<Pf2ToolsDataCore[]>(PF2_TOOLS_URL).catch(() => []);
+		cores = await utils.HttpsUtils.getJson<Pf2tBaseCore[]>(PF2_TOOLS_URL).catch(() => []);
 		await utils.FsUtils.writeFile(path, cores, true, true);
 	}
 	info(`\t\t${cores.length} Total PF2 Tools Cores loaded`);
@@ -58,4 +58,19 @@ function cleanName(data: TData): string {
 
 export function compareNames(a: TData, b: TData): boolean {
 	return cleanName(a) === cleanName(b);
+}
+
+const stringifyMap = new Map<string, string>();
+export function clearStringify(key: string): void {
+	stringifyMap.delete(key);
+}
+export function stringify(core: Pf2tBaseCore | TCore): string;
+export function stringify(core?: Pf2tBaseCore | TCore | undefined): string | undefined;
+export function stringify(core?: Pf2tBaseCore | TCore): string | undefined {
+	if (!core) return undefined;
+	const key = (core as Pf2tBaseCore).hash ?? core.id;
+	if (!stringifyMap.has(key)) {
+		stringifyMap.set(key, JSON.stringify(core));
+	}
+	return stringifyMap.get(key)!;
 }

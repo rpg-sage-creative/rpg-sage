@@ -36,7 +36,20 @@
 		"page": 167,
 		"source": "PZO2105",
 		"id": "64d50d09-6722-4150-8b28-ac2ab25eef99",
-		"aonId": 1935
+		"aonId": 1935,
+		"pf2t": {
+			"name": "Dandy Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Dandy",
+			"source": "Advanced Player's Guide pg. 167",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1935",
+			"aon": "feats1935",
+			"type": "feat",
+			"body": "**Archetype** Dandy\n**Prerequisites** trained in Diplomacy\n\n- - -\n\nYou are a consummate student of dignity, etiquette, and fashion. You can use the Diplomacy skill to perform the special downtime activity Influence Rumor, spending at least one day of downtime to manipulate the course, tone, or content of a rumor to your benefit. The difficulty of Influencing a Rumor is determined by the GM based on the size of the community, the relative perceptiveness of the inhabitants, and the agency of other rumormongers, but it typically starts with at least DC 15 for a small village and increases to at least DC 20 for a town, at least DC 30 for a city, and at least DC 40 for a metropolis.\n\nYou become trained in Deception and Society; if you were already trained, you become an expert instead.\n\n#### Dandy Dedication Leads To...\nDistracting Flattery, Fabricated Connections, Gossip Lore, Party Crasher",
+			"hash": "zbfOXtrM"
+		}
 	},
 	{
 		"objectType": "Feat",

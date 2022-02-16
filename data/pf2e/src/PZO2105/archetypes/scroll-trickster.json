@@ -35,7 +35,20 @@
 		"page": 189,
 		"source": "PZO2105",
 		"id": "d9bdf1e5-51f0-4dd6-b1c2-3c2e2ec444d7",
-		"aonId": 2053
+		"aonId": 2053,
+		"pf2t": {
+			"name": "Scroll Trickster Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Scroll Trickster",
+			"source": "Advanced Player's Guide pg. 189",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2053",
+			"aon": "feats2053",
+			"type": "feat",
+			"body": "**Archetype** Scroll Trickster\n**Prerequisites** trained in Arcana, trained in Nature, Occultism, or Religion\n\n- - -\n\nYou've studied scrolls in depth. This might have been a comprehensive education in formal setting, or the sort of education where you somehow obtain a number of scrolls and try not to explode anything you didn't mean to explode. You gain the Trick Magic Item feat, and you gain a +2 circumstance bonus to skill checks to Trick scrolls. If you roll a critical failure to Trick a Magic Item that's a scroll, you get a failure instead.\n\n#### Scroll Trickster Dedication Leads To...\nBasic Scroll Cache, Skim Scroll",
+			"hash": "cyvxzzyw"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -38,7 +38,20 @@
 		"page": 107,
 		"source": "PZO9301",
 		"id": "35471a6f-81e5-464b-ab6c-3551cee0ef08",
-		"aonId": 907
+		"aonId": 907,
+		"pf2t": {
+			"name": "Hellknight Armiger Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Hellknight Armiger",
+			"source": "World Guide pg. 107 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=907",
+			"aon": "feats907",
+			"type": "feat",
+			"body": "**Archetype** Hellknight Armiger\n**Prerequisites** member of a Hellknight Order; trained in heavy armor as well as your order's favored weapon\n\n- - -\n\nYour Hellknight training teaches you to terrorize others into compliance, but you also study the structure and hierarchy of Hell. You must survive painful tests of your body and mind called reckonings, which steady your mind against all sorts of trauma. You gain resistance to mental damage equal to 1 + your number of class feats from the Hellknight Armiger archetype and other Hellknight archetypes. You become trained in Intimidation and Hell Lore; if you were already trained, you become an expert instead.\n\n#### Hellknight Armiger Dedication Leads To...\nAdvanced Order Training, Ardent Armiger, Armiger's Mobility, Diabolic Certitude, Hellknight Dedication, Hellknight Order Cross-Training, Hellknight Signifer Dedication, Mortification, Order Training",
+			"hash": "RbZSvdRv"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -36,7 +36,20 @@
 		"page": 35,
 		"source": "PZO9301",
 		"id": "0775f63c-37d6-43a4-8bcf-42b15a368bda",
-		"aonId": 876
+		"aonId": 876,
+		"pf2t": {
+			"name": "Aldori Duelist Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Aldori Duelist",
+			"source": "World Guide pg. 35 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=876",
+			"aon": "feats876",
+			"type": "feat",
+			"body": "**Archetype** Aldori Duelist\n**Prerequisites** trained in Aldori dueling swords\n\n- - -\n\nYour Aldori duelist training teaches you martial techniques and increases your dedication to the Aldori dueling sword. You become trained in your choice of Acrobatics or Athletics and in Dueling Lore; if you were already trained, you become an expert instead. Whenever your proficiency rank in any weapon increases to expert or beyond, you also gain that new proficiency rank with Aldori dueling swords. You gain access to Aldori dueling swords.\n\n#### Aldori Duelist Dedication Leads To...\nAldori Parry, Duelist's Edge, Saving Slash, Unnerving Prowess",
+			"hash": "yJFnzZmx"
+		}
 	},
 	{
 		"objectType": "Feat",

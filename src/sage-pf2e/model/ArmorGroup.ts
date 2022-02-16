@@ -5,10 +5,10 @@ import RenderableContent from "../data/RenderableContent";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from "./base/HasSource";
 
-export interface IArmorGroup extends SourcedCore<"ArmorGroup"> {
+export interface ArmorGroupCore extends SourcedCore<"ArmorGroup"> {
 	specializationEffect: string[];
 }
-export default class ArmorGroup extends HasSource<IArmorGroup> {
+export default class ArmorGroup extends HasSource<ArmorGroupCore> {
 	public get specializationEffect(): string[] { return this.core.specializationEffect || []; }
 	public toRenderableContent(): utils.RenderUtils.RenderableContent {
 		const content = new RenderableContent(this);

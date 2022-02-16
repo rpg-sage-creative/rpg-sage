@@ -197,7 +197,20 @@
 		"page": 113,
 		"source": "PZO9302",
 		"id": "96cc2abf-9b79-4548-9cbe-127258ceef3b",
-		"aonId": 1130
+		"aonId": 1130,
+		"pf2t": {
+			"name": "Scrollmaster Dedication",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Scrollmaster",
+			"source": "Character Guide pg. 113 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1130",
+			"aon": "feats1130",
+			"type": "feat",
+			"body": "**Archetype** Scrollmaster\n**Prerequisites** expert in any Lore skill; member of the Pathfinder Society affiliated with the School of Scrolls\n\n- - -\n\nYour experience chronicling adventures and discoveries grants you heightened discernment and memory. For 24 hours after learning a prominent fact-such as the name of an NPC you have met, the details of your mission briefing, and similar information-you can recall it without attempting a check, though this doesn't allow you to automatically memorize long strings of numbers or text. You also gain a +2 circumstance bonus to checks to remember a detail that has come up before in the current adventure, even if it was more than 24 hours ago.\n\nIf you have the Thorough Reports feat and have expert proficiency in the skill you're using to Recall Knowledge, your circumstance bonus to Recall Knowledge about creatures from that feat increases to +4.\n\n#### Scrollmaster Dedication Leads To...\nBestiary Scholar, Cautious Delver, Font of Knowledge, Foolproof Instructions, Innate Magic Intuition, Lore Seeker, Magic Finder, Masterful Obfuscation, Transcribe Moment, Unravel Mysteries, Ward Mind",
+			"hash": "HxcPZIAb"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -296,7 +309,20 @@
 		"page": 114,
 		"source": "PZO9302",
 		"id": "4af1cb17-86fe-4fdd-b085-b13a209afb9c",
-		"aonId": 1134
+		"aonId": 1134,
+		"pf2t": {
+			"name": "Spellmaster Dedication",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Spellmaster",
+			"source": "Character Guide pg. 114 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1134",
+			"aon": "feats1134",
+			"type": "feat",
+			"body": "**Archetype** Spellmaster\n**Prerequisites** ability to cast focus spells; member of the Pathfinder Society affiliated with the School of Spells; Intelligence 14, Charisma 14, or Wisdom 14\n\n- - -\n\nAs a Spellmaster, you are adept at identifying magic. You gain a +2 circumstance bonus when you Identify Magic with a skill in which you are trained or better. If you have the Wayfinder Resonance Tinkerer feat, you can change the cantrip you chose for that feat each day during your daily preparations.\n\n#### Spellmaster Dedication Leads To...\nAbsorb Spell, Communal Sustain, Familiar Form, Glyph Expert, Master's Counterspell, Mobile Magical Combat, Recover Spell, Spellmaster's Resilience, Spellmaster's Ward, Surreptitious Spellcaster, Ward Casting",
+			"hash": "KXkmgODR"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -428,7 +454,20 @@
 		"page": 115,
 		"source": "PZO9302",
 		"id": "c6326a55-4ee0-46b7-b85f-44cbdd633de0",
-		"aonId": 1139
+		"aonId": 1139,
+		"pf2t": {
+			"name": "Swordmaster Dedication",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Swordmaster",
+			"source": "Character Guide pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1139",
+			"aon": "feats1139",
+			"type": "feat",
+			"body": "**Archetype** Swordmaster\n**Prerequisites** member of the Pathfinder Society affiliated with the School of Swords; Strength 14, Constitution 14, or Dexterity 14\n\n- - -\n\nYour Swords training taught you to never lose hold of your weapon. You gain a +2 circumstance bonus to your Reflex DC when foes attempt to Disarm you. If you have the Deft Cooperation feat and critically succeed on a check to Aid an ally's attack roll or skill check, you gain a +2 circumstance bonus from Deft Cooperation (instead of a +1 bonus) the first time you attempt an attack roll or attempt a skill check where the bonus would apply.\n\n#### Swordmaster Dedication Leads To...\nArmored Exercise, Armored Rest, Death's Door, Emergency Medical Assistance, Focus Ally, Forceful Shot, Harrying Strike, Improvised Crafting, Martial Exercise, Physical Training, Practiced Defender, Protect Ally, Quick Stow (Swordmaster), Recollect Studies, Reflexive Grip, Rugged Survivalist, Shoulder Catastrophe, Tense Negotiator",
+			"hash": "YEgbwznB"
+		}
 	},
 	{
 		"objectType": "Feat",

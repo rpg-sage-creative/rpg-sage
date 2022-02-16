@@ -37,7 +37,20 @@
 		"page": 221,
 		"source": "PZO2101",
 		"id": "9ed0813b-a9f1-46eb-abfa-e6ef29f9528b",
-		"aonId": 671
+		"aonId": 671,
+		"pf2t": {
+			"name": "Barbarian Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Barbarian",
+			"source": "Core Rulebook pg. 221 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=671",
+			"aon": "feats671",
+			"type": "feat",
+			"body": "**Archetype** Barbarian\n**Prerequisites** Strength 14; Constitution 14\n\n- - -\n\nYou become trained in Athletics; if you were already trained in Athletics, you instead become trained in a skill of your choice. You become trained in barbarian class DC.\n\nYou can use the Rage action.\n\nChoose an instinct as you would if you were a barbarian. You have that instinct for all purposes and become bound by its anathema, but you don't gain any of the other abilities it grants.\n\n#### Rage\nYou tap into your inner fury and begin raging. You gain a number of temporary Hit Points equal to your level plus your Constitution modifier. This frenzy lasts for 1 minute, until there are no enemies you can perceive, or until you fall unconscious, whichever comes first. You can't voluntarily stop raging. While you are raging: \n\n+ You deal 2 additional damage with melee Strikes. This additional damage is halved if your weapon or unarmed attack is agile. \n+ You take a -1 penalty to AC. \n+ You can't use actions with the concentrate trait unless they also have the rage trait. You can Seek while raging.\nAfter you stop raging, you lose any remaining temporary Hit Points from Rage, and you can't Rage again for 1 minute.\n\n#### Barbarian Dedication Leads To...\nBarbarian Resiliency, Basic Fury, Instinct Ability, Juggernaut's Fortitude",
+			"hash": "ONmOUAUh"
+		}
 	},
 	{
 		"objectType": "Feat",

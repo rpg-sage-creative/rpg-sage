@@ -35,7 +35,20 @@
 		"page": 75,
 		"source": "PZO2108",
 		"id": "ebc9ae7d-5fab-4ac4-9a79-bef2c8c9511e",
-		"aonId": 0
+		"aonId": 2945,
+		"pf2t": {
+			"name": "Magus Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Magus",
+			"source": "Secrets of Magic pg. 75",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2945",
+			"aon": "feats2945",
+			"type": "feat",
+			"body": "**Archetype** Magus\n**Prerequisites** Strength 14 or Dexterity 14; Intelligence 14\n\n- - -\n\nYou cast spells like a magus, gaining a spellbook with four common arcane cantrips of your choice. You gain the Cast a Spell activity. You can prepare two cantrips each day from your spellbook. Each time you gain a spell slot of a new level from the magus archetype, add a spell of that level or lower to your spellbook. You're trained in arcane spell attack rolls and spell DCs. Your key spellcasting ability for magus archetype spells is Intelligence, and they are arcane magus spells. You become trained in Arcana; if you were already trained in Arcana, you instead become trained in a skill of your choice. You become trained in simple weapons.\n\n#### Magus Dedication Leads To...\nBasic Magus Spellcasting, Basic Martial Magic, Hybrid Study Spell, Spellstriker",
+			"hash": "rYhCDCnm"
+		}
 	},
 	{
 		"objectType": "Feat",

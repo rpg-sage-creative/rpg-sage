@@ -37,7 +37,21 @@
 		"page": 74,
 		"source": "PZO9302",
 		"id": "f6afa82d-af3b-49ed-b66a-0b95edafe644",
-		"aonId": 1067
+		"aonId": 1067,
+		"pf2t": {
+			"name": "Firebrand Braggart Dedication",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication,misfortune",
+			"actions": 1,
+			"archetype": "Firebrand Braggart",
+			"source": "Character Guide pg. 74 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1067",
+			"aon": "feats1067",
+			"type": "feat",
+			"body": "**Archetype** Firebrand Braggart\n**Prerequisites** second mark member of the Firebrands; Charisma 14\n\n- - -\n\nYour Firebrand training has taught you that achieving something is more satisfying if you boast about it first. You declare a boast about a particular skill action, such as Balance, Demoralize, or Recall Knowledge. The first time you attempt this action within the next minute in a context the GM deems both suitably challenging and meaningful, you must roll twice and use the lower result. If you succeed at this check, you gain a +1 circumstance bonus to checks to attempt the same action for 10 minutes. If you fail this check or don't attempt the action within 1 minute, you instead take a -1 circumstance penalty on checks to attempt the same action for 1 hour.\n\nIf the chosen action can be used with multiple skills, such as Identify Magic or Recall Knowledge, you must specify which skill you are using for that particular action, such as using Arcana to Identify Magic, and your bonus or penalty after the boast applies only to checks using that skill for that action. Once you declare a boast about a particular action, you cannot declare a boast about the same action until the next time you make daily preparations, regardless of whether you succeed or fail at the check.\n\nTypically a challenging task is one with at least a standard DC for your level, though the difficulty may be higher depending on the situation. A meaningful context is one where the action's success or failure is relevant to the pursuit of your goals, rather than a boast you made simply to gain a bonus later.\n\n#### Firebrand Braggart Dedication Leads To...\nBoaster's Challenge, Bravo's Determination, Daring Act, Great Boaster",
+			"hash": "cbpVEkRp"
+		}
 	},
 	{
 		"objectType": "Feat",

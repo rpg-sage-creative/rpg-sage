@@ -42,7 +42,20 @@
 		"page": 158,
 		"source": "PZO2105",
 		"id": "232d60d8-af9c-4122-afdf-e2d7250e51ea",
-		"aonId": 1890
+		"aonId": 1890,
+		"pf2t": {
+			"name": "Assassin Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Assassin",
+			"source": "Advanced Player's Guide pg. 158",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1890",
+			"aon": "feats1890",
+			"type": "feat",
+			"body": "**Archetype** Assassin\n**Prerequisites** Alchemical Crafting; trained in Crafting, Deception, and Stealth\n**Requirements** You can see and hear the creature you intend to mark\n\n- - -\n\nYou've trained to assassinate your foes, and you do so with tenacity and precision. You gain the Mark for Death activity.\n\n#### Assassin Dedication Leads To...\nAngel of Death, Assassinate, Expert Backstabber, Surprise Attack\n\n **Activate** :aaa: *Mark for Death* **Effect** You designate a single creature as your mark. This lasts until the mark dies or you use Mark for Death again. You gain a +2 circumstance bonus to Perception checks to Seek your mark and on Deception checks to Feint against your mark. Your agile and finesse weapons and unarmed attacks gain the backstabber and deadly d6 weapon traits when you're attacking your mark. If the weapon or unarmed attack already has the deadly trait, increase the size of the deadly damage die by one step instead of giving it deadly d6.",
+			"hash": "gQHxsTRJ"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -37,7 +37,20 @@
 		"page": 76,
 		"source": "PZO2108",
 		"id": "e13cceb9-9b62-4c9c-8b66-8b264faaea68",
-		"aonId": 0
+		"aonId": 2953,
+		"pf2t": {
+			"name": "Summoner Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Summoner",
+			"source": "Secrets of Magic pg. 76",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2953",
+			"aon": "feats2953",
+			"type": "feat",
+			"body": "**Archetype** Summoner\n**Prerequisites** Charisma 14\n\n- - -\n\nYou've formed a bond with an eidolon, an entity that manifests in a physical body only through its link to your life force. Your bond may be tenuous, but that doesn't make your connection any less special. You gain an eidolon as well as the Manifest Eidolon activity. Due to your tenuous link, you can't gain or use tandem actions. Because you don't have Act Together, only you or your eidolon can perform an exploration activity at one time, so for instance you couldn't both be Searching or Investigating.\n\nYour eidolon is trained in unarmed attacks and unarmored defense, and shares your proficiency rank for Perception, saving throws, and skill checks. Choose an eidolon type. You become trained in your eidolon's listed skills. For each of those skills that you are already trained in, you become trained in a different skill of your choice. Your eidolon's initial ability scores are reduced. It starts with a 16 in any ability score listed at 18 for its eidolon array. It otherwise gains the statistics listed for an eidolon of that type.\n\nAt 5th level, the eidolon's ability score that was reduced to 16 increases to 18, before applying ability boosts. At levels 5, 10, 15, and 20, your eidolon also gets four ability boosts, which follow the same rules as yours.\n\n#### Manifest Eidolon\nYour eidolon appears in an open space adjacent to you, and can then take a single action. If your eidolon was already manifested, you unmanifest it instead.\n\nThe conduit that allows your eidolon to manifest is also a tether between you. Your eidolon must remain within 100 feet of you at all times and can't willingly go beyond that limit. If forced beyond this distance, or if you are reduced to 0 Hit Points, your eidolon's physical form dissolves: your eidolon unmanifests, and you need to use Manifest Eidolon to manifest it again.\n\n#### Summoner Dedication Leads To...\nBasic Summoner Spellcasting, Basic Synergy, Expert Combat Eidolon, Initial Eidolon Ability",
+			"hash": "sxwCSqdZ"
+		}
 	},
 	{
 		"objectType": "Feat",

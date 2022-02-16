@@ -42,7 +42,20 @@
 		"page": 179,
 		"source": "PZO2105",
 		"id": "739b6335-e6d9-411e-8e0a-423159d4e111",
-		"aonId": 2000
+		"aonId": 2000,
+		"pf2t": {
+			"name": "Loremaster Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Loremaster",
+			"source": "Advanced Player's Guide pg. 179",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2000",
+			"aon": "feats2000",
+			"type": "feat",
+			"body": "**Archetype** Loremaster\n**Prerequisites** trained in at least one skill to Decipher Writing\n\n- - -\n\nYou've compiled a vast repository of information that touches on nearly every subject. You are trained in Loremaster Lore, a special Lore skill that can be used only to Recall Knowledge, but on any topic. If you have legendary proficiency in a skill used to Decipher Writing, you gain expert proficiency in Loremaster Lore, but you can't increase your proficiency rank in Loremaster Lore by any other means. You can take feats in the loremaster's additional feats entry even if you don't meet the enigma muse prerequisite. \n\nIf you have the Bardic Lore class feat, you gain a +1 circumstance bonus to skill checks with Bardic Lore.\n\n#### Loremaster Dedication Leads To...\nMagical Edification, Orthographic Mastery, Quick Study",
+			"hash": "RkWWRPzy"
+		}
 	},
 	{
 		"objectType": "Feat",

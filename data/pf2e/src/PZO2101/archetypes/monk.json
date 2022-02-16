@@ -35,7 +35,20 @@
 		"page": 227,
 		"source": "PZO2101",
 		"id": "1004d3cc-6063-485c-a926-3acbbb6d0e35",
-		"aonId": 715
+		"aonId": 715,
+		"pf2t": {
+			"name": "Monk Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Monk",
+			"source": "Core Rulebook pg. 227 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=715",
+			"aon": "feats715",
+			"type": "feat",
+			"body": "**Archetype** Monk\n**Prerequisites** Strength 14; Dexterity 14\n\n- - -\n\nYou become trained in unarmed attacks and gain the powerful fist class feature. You become trained in your choice of Acrobatics or Athletics; if you are already trained in both of these skills, you become trained in a skill of your choice. You become trained in monk class DC.\n\n#### Monk Dedication Leads To...\nBasic Kata, Monk Moves, Monk Resiliency, Monk's Flurry, Perfection's Path",
+			"hash": "fWMZNKEL"
+		}
 	},
 	{
 		"objectType": "Feat",

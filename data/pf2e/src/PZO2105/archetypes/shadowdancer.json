@@ -48,7 +48,20 @@
 		"page": 192,
 		"source": "PZO2105",
 		"id": "c221a191-a6e2-4bbc-a957-30c3c7eb82d7",
-		"aonId": 2067
+		"aonId": 2067,
+		"pf2t": {
+			"name": "Shadowdancer Dedication",
+			"level": 8,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Shadowdancer",
+			"source": "Advanced Player's Guide pg. 192",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2067",
+			"aon": "feats2067",
+			"type": "feat",
+			"body": "**Archetype** Shadowdancer\n**Prerequisites** expert in Performance and master in Stealth\n\n- - -\n\nYou dedicate yourself to the shadows. Your coloring becomes gray and gloomy, your senses adjust to the darkness, and you can sneak through darkness with ease. You gain greater darkvision. You also gain a +2 circumstance bonus to Stealth checks when you are within dim light or darkness.\n\n#### Shadowdancer Dedication Leads To...\nShadow Magic, Shadow Master, Shadow Sneak Attack",
+			"hash": "ryfvyxFl"
+		}
 	},
 	{
 		"objectType": "Feat",

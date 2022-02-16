@@ -39,7 +39,20 @@
 		"page": 163,
 		"source": "PZO2105",
 		"id": "b80839b6-e005-41a0-93c6-ca1467604f6f",
-		"aonId": 1914
+		"aonId": 1914,
+		"pf2t": {
+			"name": "Bounty Hunter Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Bounty Hunter",
+			"source": "Advanced Player's Guide pg. 163",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1914",
+			"aon": "feats1914",
+			"type": "feat",
+			"body": "**Archetype** Bounty Hunter\n**Prerequisites** trained in Survival\n\n- - -\n\nWhen focused on finding your quarry, you're relentless. You gain the Hunt Prey action. You can use Hunt Prey to designate only a creature that you've seen, heard about, or learned about through some other means, such as a bounty board or wanted poster. In addition to the other benefits of Hunt Prey, you gain a +2 circumstance bonus to checks to Gather Information regarding your prey.\n\nIf you already have Hunt Prey, you become an expert in Survival and gain the circumstance bonus to Gather Information about your prey; you can still designate a creature you're tracking during exploration, in addition to the conditions above.\n\n#### Bounty Hunter Dedication Leads To...\nKeep Pace, Opportunistic Grapple, Posse, Tools of the Trade",
+			"hash": "XnXTUWtr"
+		}
 	},
 	{
 		"objectType": "Feat",

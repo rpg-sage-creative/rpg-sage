@@ -38,7 +38,20 @@
 		"page": 199,
 		"source": "PZO2105",
 		"id": "f5f014b7-7005-4392-bc64-20383c84779d",
-		"aonId": 2099
+		"aonId": 2099,
+		"pf2t": {
+			"name": "Weapon Improviser Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Weapon Improviser",
+			"source": "Advanced Player's Guide pg. 199",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2099",
+			"aon": "feats2099",
+			"type": "feat",
+			"body": "**Archetype** Weapon Improviser\n**Prerequisites** trained in all martial weapons\n\n- - -\n\nYou don't take the normal -2 penalty to attack rolls with improvised weapons. Additionally, whenever you gain a class feature that grants you expert or greater proficiency with any weapon, you also gain that proficiency with improvised weapons.\n\n#### Weapon Improviser Dedication Leads To...\nImprovised Critical, Improvised Pummel, Makeshift Strike, Surprise Strike",
+			"hash": "gttSTxxp"
+		}
 	},
 	{
 		"objectType": "Feat",

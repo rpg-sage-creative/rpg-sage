@@ -35,7 +35,20 @@
 		"page": 187,
 		"source": "PZO2105",
 		"id": "bc472415-9dd6-4a42-b815-2894f3f3ee38",
-		"aonId": 2041
+		"aonId": 2041,
+		"pf2t": {
+			"name": "Ritualist Dedication",
+			"level": 4,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Ritualist",
+			"source": "Advanced Player's Guide pg. 187",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2041",
+			"aon": "feats2041",
+			"type": "feat",
+			"body": "**Archetype** Ritualist\n**Prerequisites** expert in Arcana, Nature, Occultism, or Religion\n\n- - -\n\nYou have begun to master the difficult art of casting rituals. You gain a +2 circumstance bonus to all primary checks to perform a ritual. You learn two uncommon rituals with a level no higher than half your level; you must meet all prerequisites for casting the ritual to choose it. At 8th level and every 4 levels thereafter, you learn another uncommon ritual with a level no higher than half your level and for which you meet the prerequisites. You can cast these as the primary caster, but you can't teach them to anyone else or allow someone else to serve as primary caster unless they know the ritual as well.\n\n#### Ritualist Dedication Leads To...\nEfficient Rituals, Flexible Ritualist, Resourceful Ritualist",
+			"hash": "rscgsWmR"
+		}
 	},
 	{
 		"objectType": "Feat",

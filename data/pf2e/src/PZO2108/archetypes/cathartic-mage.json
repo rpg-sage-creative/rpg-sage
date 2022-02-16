@@ -40,7 +40,20 @@
 		"page": 194,
 		"source": "PZO2108",
 		"id": "4bdb0436-bb7a-4fd8-97b4-f01a17034a25",
-		"aonId": 0
+		"aonId": 2963,
+		"pf2t": {
+			"name": "Cathartic Mage Dedication",
+			"level": 2,
+			"pfs": "limited",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Cathartic Mage",
+			"source": "Secrets of Magic pg. 194",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2963",
+			"aon": "feats2963",
+			"type": "feat",
+			"body": "**Archetype** Cathartic Mage\n**Prerequisites** Charisma 14 or ability to cast spells from spell slots\n**Trigger** determined by your catharsis emotion\n\n- - -\n\nYou've learned to harness a particular emotion and mix it into your magic. Choose an emotion from the Emotional States section below to be your catharsis emotion.\n\nIf you don't already cast spells from spell slots, you learn to cast spontaneous spells and gain the Cast a Spell activity. You gain a spell repertoire with one cantrip of your choice, from a spell list of your choice. You choose this cantrip from the common spells on your chosen spell list or from other spells to which you have access on that list. You're trained in spell attack rolls and spell DCs for that tradition. Your key spellcasting ability for these spells is Charisma.\n\nIf you can already cast spells from spell slots, you learn one additional cantrip from your spellcasting tradition. If you're a prepared caster, you can prepare this spell in addition to your usual cantrips per day; if you're a spontaneous caster, you add this cantrip to your spell repertoire.\n\nYou gain the Catharsis reaction and the Settle Emotions activity.\n\n**Catharsis** :r: (concentrate, emotion, mental) **Effect** You gain the catharsis activation effects listed for your catharsis emotion. You gain that emotion's emotional fervor benefits for 3 rounds. When your emotional fervor ends, you suffer the listed emotional fallout. After using Catharsis, you can't use it again until you use the Settle Emotions activity.\n\n**Settle Emotions** (concentrate, emotion, mental) You spend 10 minutes using techniques you've developed to calm your emotions and bring them back under control. This allows you to access your Catharsis again.\n\n#### Cathartic Mage Dedication Leads To...\nBasic Cathartic Spellcasting, Cathartic Focus Spell, Infectious Emotions, Work Yourself Up",
+			"hash": "gTwZqVcp"
+		}
 	},
 	{
 		"objectType": "Feat",

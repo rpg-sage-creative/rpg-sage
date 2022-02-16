@@ -38,7 +38,20 @@
 		"page": 75,
 		"source": "PZO90153",
 		"id": "a8344bf7-d069-460b-b67b-0335a02e9453",
-		"aonId": 1232
+		"aonId": 1232,
+		"pf2t": {
+			"name": "Turpin Rowe Lumberjack Dedication",
+			"level": 2,
+			"pfs": "limited",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Turpin Rowe Lumberjack",
+			"source": "153 Life's Long Shadow pg. 75",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1232",
+			"aon": "feats1232",
+			"type": "feat",
+			"body": "**Archetype** Turpin Rowe Lumberjack\n**Prerequisites** trained in Survival\n\n- - -\n\nYour logging training has made you intimately familiar with all aspects of forestry, and you have trained extensively to reach around trees and utilize their bulk to your advantage. You become trained in Milling Lore and Forest Lore, or an expert if you were already trained. You can always Take Cover when you are within forest terrain to gain cover, even if you're not next to an obstacle you can Take Cover behind. In addition, any enemy who gains standard cover from a tree gains only lesser cover against your attacks (or only standard cover, if the enemy otherwise gains greater cover).\n\n#### Turpin Rowe Lumberjack Dedication Leads To...\nAxe Climber, Axe Thrower, Log Roll",
+			"hash": "SrqwdqCB"
+		}
 	},
 	{
 		"objectType": "Feat",

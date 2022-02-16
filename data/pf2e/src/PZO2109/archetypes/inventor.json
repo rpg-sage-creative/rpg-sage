@@ -35,7 +35,19 @@
 		"page": 49,
 		"source": "PZO2109",
 		"id": "0ad67e25-0305-4872-b9e4-ff5ff707e0c8",
-		"aonId": 0
+		"aonId": 3112,
+		"pf2t": {
+			"name": "Inventor Dedication",
+			"level": 2,
+			"traits": "uncommon,archetype,dedication,multiclass",
+			"archetype": "Inventor",
+			"source": "Guns & Gears pg. 49",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3112",
+			"aon": "feats3112",
+			"type": "feat",
+			"body": "**Archetype** Inventor\n**Prerequisites** Intelligence 14\n\n- - -\n\nYou become trained in Crafting and inventor class DC. You gain the Inventor skill feat, even if you don't meet the skill feat's requirements. Choose an innovation. You gain that innovation, though you don't gain any other abilities that modify or use that innovation, such as modifications or Explode.\n\n#### Inventor Dedication Leads To...\nBasic Breakthrough, Basic Modification, Brilliant Crafter, Explosion",
+			"hash": "JQBwWNwn"
+		}
 	},
 	{
 		"objectType": "Feat",

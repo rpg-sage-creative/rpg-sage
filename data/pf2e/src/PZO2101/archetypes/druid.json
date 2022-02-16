@@ -37,7 +37,20 @@
 		"page": 225,
 		"source": "PZO2101",
 		"id": "f7e35bd9-7255-4ad9-a359-f896aadafe2d",
-		"aonId": 701
+		"aonId": 701,
+		"pf2t": {
+			"name": "Druid Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Druid",
+			"source": "Core Rulebook pg. 225 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=701",
+			"aon": "feats701",
+			"type": "feat",
+			"body": "**Archetype** Druid\n**Prerequisites** Wisdom 14\n\n- - -\n\nYou cast spells like a druid. You gain access to the Cast a Spell activity. You can prepare two common cantrips each day from the primal spell list in this book or any other primal cantrips you learn or discover. You're trained in spell attack rolls and spell DCs for primal spells. Your key spellcasting ability for druid archetype spells is Wisdom, and they are primal druid spells.\n\nYou learn the Druidic language, and you are bound by the druid's anathema.\n\nChoose a druidic order. You become a member of that order and are also bound by its specific anathema, allowing you to take the order's feats. You become trained in Nature and your order's associated skill; for each of these skills in which you were already trained, you become trained in a skill of your choice. You don't gain any other abilities from your choice of order.\n\n#### Druid Dedication Leads To...\nBasic Druid Spellcasting, Basic Wilding, Order Spell",
+			"hash": "SZROvLJD"
+		}
 	},
 	{
 		"objectType": "Feat",

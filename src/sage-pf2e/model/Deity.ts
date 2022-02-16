@@ -4,8 +4,8 @@ import RenderableContent from '../data/RenderableContent';
 import type { TDevoteeBenefitsCore } from "./DevoteeBenefits";
 import DevoteeBenefits from "./DevoteeBenefits";
 import type Domain from "./Domain";
-import type { FaithCoreBase } from "./HasFaith";
-import HasFaith from "./HasFaith";
+import type { FaithCoreBase } from "./Faith";
+import HasFaith from "./Faith";
 
 export type TDeitySpell = {
 	level: number;

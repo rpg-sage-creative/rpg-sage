@@ -37,7 +37,20 @@
 		"page": 175,
 		"source": "PZO2105",
 		"id": "22a2cff6-dd43-4e3b-8123-db400744f06d",
-		"aonId": 1976
+		"aonId": 1976,
+		"pf2t": {
+			"name": "Gladiator Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Gladiator",
+			"source": "Advanced Player's Guide pg. 175",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1976",
+			"aon": "feats1976",
+			"type": "feat",
+			"body": "**Archetype** Gladiator\n**Prerequisites** Impressive Performance\n\n- - -\n\nYou know how to turn combat into a form of entertainment. You become trained in Gladiatorial Lore; if already trained in Gladiatorial Lore, you instead become trained in another Lore skill of your choice. \n\nAt the start of a combat encounter, if you have spectators, you gain a number of temporary HP equal to your character level for 1 minute and you can roll Performance for your initiative.\n\n#### Gladiator Dedication Leads To...\nFancy Moves, Performative Weapons Training, Play to the Crowd, Stage Fighting",
+			"hash": "YwkShzEs"
+		}
 	},
 	{
 		"objectType": "Feat",

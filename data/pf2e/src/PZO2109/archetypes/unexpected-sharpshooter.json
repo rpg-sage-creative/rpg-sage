@@ -40,7 +40,19 @@
 		"page": 142,
 		"source": "PZO2109",
 		"id": "ea3df7e7-12e5-4495-84b3-bf25664e5f05",
-		"aonId": 0
+		"aonId": 3272,
+		"pf2t": {
+			"name": "Unexpected Sharpshooter Dedication",
+			"level": 2,
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Unexpected Sharpshooter",
+			"source": "Guns & Gears pg. 142",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3272",
+			"aon": "feats3272",
+			"type": "feat",
+			"body": "**Archetype** Unexpected Sharpshooter\n\n- - -\n\nWho needs skill when you've got dumb luck? Sometimes your shots hit miraculously, regardless of the fact that you seemed to slip when you pulled the trigger or that you weren't aiming at your foe when you fired. You gain the Accidental Shot activity.\n\n**Accidental Shot** :aa: (fortune) **Frequency** once per day; **Effect** You make a Strike with a ranged weapon, rolling the attack and damage twice and using the better results for each. The attack ignores circumstance penalties to the attack roll and any flat check required due to the target being concealed or hidden.\n\n#### Unexpected Sharpshooter Dedication Leads To...\nChain Reaction, I Meant to do That, Lucky Escape, No Hard Feelings, That was a Close One, Huh?, Unbelievable Escape, Unbelievable Luck",
+			"hash": "qYDCrUCL"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -35,7 +35,20 @@
 		"page": 226,
 		"source": "PZO2101",
 		"id": "8b75334d-13ab-4323-9f65-7a28136ca334",
-		"aonId": 709
+		"aonId": 709,
+		"pf2t": {
+			"name": "Fighter Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Fighter",
+			"source": "Core Rulebook pg. 226 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=709",
+			"aon": "feats709",
+			"type": "feat",
+			"body": "**Archetype** Fighter\n**Prerequisites** Strength 14; Dexterity 14\n\n- - -\n\nYou become trained in simple weapons and martial weapons. You become trained in your choice of Acrobatics or Athletics; if you are already trained in both of these skills, you instead become trained in a skill of your choice. You become trained in fighter class DC.\n\n#### Fighter Dedication Leads To...\nBasic Maneuver, Diverse Weapon Expert, Fighter Resiliency, Opportunist",
+			"hash": "OgrhQgRH"
+		}
 	},
 	{
 		"objectType": "Feat",

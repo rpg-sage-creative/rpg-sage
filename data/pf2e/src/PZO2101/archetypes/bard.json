@@ -37,7 +37,20 @@
 		"page": 222,
 		"source": "PZO2101",
 		"id": "e255dbfb-3cdc-4429-9677-185ff883ed5e",
-		"aonId": 677
+		"aonId": 677,
+		"pf2t": {
+			"name": "Bard Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Bard",
+			"source": "Core Rulebook pg. 222 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=677",
+			"aon": "feats677",
+			"type": "feat",
+			"body": "**Archetype** Bard\n**Prerequisites** Charisma 14\n\n- - -\n\nYou cast spells like a bard and gain the Cast a Spell activity. You gain a spell repertoire with two common cantrips from the occult spell list or any other occult cantrips you learn or discover. You're trained in spell attack rolls and spell DCs for occult spells. Your key spellcasting ability for bard archetype spells is Charisma, and they are occult bard spells. You become trained in Occultism and Performance; for each of these skills in which you were already trained, you instead become trained in a skill of your choice.\n\nChoose a muse as you would if you were a bard. You have that muse for all purposes, allowing you to take that muse's feats, but you don't gain any of the other abilities it grants.\n\n#### Bard Dedication Leads To...\nBasic Bard Spellcasting, Basic Muse's Whispers, Counter Perform, Inspirational Performance",
+			"hash": "pkvdPfGx"
+		}
 	},
 	{
 		"objectType": "Feat",

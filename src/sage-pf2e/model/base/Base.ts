@@ -1,6 +1,5 @@
 import utils, { IComparable, IdCore, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
 import { NEWLINE, TAB } from "../../common";
-import type { Pf2ToolsDataCore } from "../../data/Pf2ToolsData";
 import RenderableContent from "../../data/RenderableContent";
 import type {
 	ArchivedCore,
@@ -14,6 +13,7 @@ import type {
 	TDetail,
 	THasSuccessOrFailure
 } from "./interfaces";
+import type { Pf2tBaseCore } from "./Pf2tBase";
 
 function isSuccessFailureDetail(detail: TDetail | THasSuccessOrFailure): detail is THasSuccessOrFailure {
 	return ((<THasSuccessOrFailure>detail).success?.length ?? 0) > 0
@@ -40,7 +40,7 @@ function tabNewLineOrEmpty(index: number, wasBlock: boolean): "\t" | "\n" | "" {
 }
 
 export interface BaseCore<T extends string = string> extends IdCore<T>, ArchivedCore, DetailedCore<T>, LinkedCore, NamedCore {
-	pf2t?: Pf2ToolsDataCore;
+	pf2t?: Pf2tBaseCore;
 	hash?: string;
 }
 

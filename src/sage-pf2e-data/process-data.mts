@@ -1,6 +1,6 @@
 import * as fs from "fs";
-import type { THasSuccessOrFailure } from "../sage-pf2e";
-import type { Pf2ToolsDataCore } from "../sage-pf2e/data/Pf2ToolsData";
+import { clearStringify, stringify } from "./common.mjs";
+import type { Pf2tBaseCore, THasSuccessOrFailure } from "../sage-pf2e";
 import utils, { type UUID } from "../sage-utils";
 import { compareNames, debug, DistDataPath, error, info, loadPf2tCores, log, sageCores, SrcDataPath, warn } from "./common.mjs";
 import { findPf2tCore, parsePf2Data } from "./pf2-tools-parsers/common.mjs";
@@ -55,7 +55,7 @@ function getNonSourcePaths() {
 		.filter(path => !sourcePaths.includes(path));
 }
 
-function processSources() {
+function processSources(): void {
 	info(`\nProcessing source-list.json ...`);
 	const sources = processData(`${SrcDataPath}/source-list.json`) as TCore[];
 	sources.forEach(source => getFullPathOfAllJsonFilesIn(getPathForSource(source)).forEach(processData));
@@ -119,6 +119,7 @@ function fixDedicationFeatObjectType(core: TCore): boolean {
 }
 
 function processData(filePathAndName: string) {
+	info(`Processing file: ${filePathAndName} ...`);
 	const coreList = utils.FsUtils.readJsonFileSync(filePathAndName) as TCore[];
 
 	//#region invalid file/data
@@ -201,6 +202,7 @@ function processData(filePathAndName: string) {
 		info(`\tSaving ${_created} IDs created, ${_recreated} IDs recreated, ${_normalized} IDs normalized, ${_aoned} aonIDs set, and ${_linked} links set`);
 		utils.FsUtils.writeFileSync(filePathAndName, coreList, false, true);
 	}
+	// info(`Processing file: ${filePathAndName} ... done`);
 	return coreList;
 }
 
@@ -257,8 +259,9 @@ function fixPf2tAon(core: TCore): boolean {
 function updatePf2t(core: TCore): boolean {
 	const found = findPf2tCore(core);
 	if (found) {
-		if (JSON.stringify(core.pf2t) !== JSON.stringify(found)) {
+		if (stringify(core.pf2t) !== stringify(found)) {
 			core.pf2t = found;
+			clearStringify(core.id);
 			return true;
 		}
 	}
@@ -291,7 +294,7 @@ function processLore() {
 		if (["Deity","Ancestry","VersatileHeritage"].includes(core.objectType)) {
 			pushLore(`${core.name} Lore`, core.objectType);
 		}
-		const string = JSON.stringify(core);
+		const string = stringify(core);
 		const lores = string.match(loreRegex);
 		lores?.forEach(lore => pushLore(lore));
 	});
@@ -301,15 +304,17 @@ function processLore() {
 }
 //#endregion
 
-let pf2tCores: Pf2ToolsDataCore[] = [];
+let pf2tCores: Pf2tBaseCore[] = [];
 export default async function process(): Promise<void> {
 
 	await loadPf2tCores();
 	processSources();
 	await processPf2tData();
-	processAbcData();
-	processMissingSpells();
-	processLore();
+	if (false) {
+		processAbcData();
+		processMissingSpells();
+		processLore();
+	}
 	parsePf2Data();
 
 	info(""); // spacer for bash script

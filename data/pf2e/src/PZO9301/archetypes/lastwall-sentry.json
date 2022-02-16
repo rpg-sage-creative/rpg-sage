@@ -36,7 +36,20 @@
 		"page": 47,
 		"source": "PZO9301",
 		"id": "03996e4b-ccf3-4e84-aff0-cb378ad37e60",
-		"aonId": 882
+		"aonId": 882,
+		"pf2t": {
+			"name": "Lastwall Sentry Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Lastwall Sentry",
+			"source": "World Guide pg. 47 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=882",
+			"aon": "feats882",
+			"type": "feat",
+			"body": "**Archetype** Lastwall Sentry\n**Prerequisites** member of the Knights of Lastwall; Shield Block\n\n- - -\n\nYou've sworn yourself as a sentry for the Knights of Lastwall, the first line of defense against incursions by the Whispering Tyrant throughout Golarion. You become trained in Athletics and in Undead Lore; if you were already trained, you become an expert instead. Finally, you gain the Reactive Shield fighter feat.\n\n#### Lastwall Sentry Dedication Leads To...\nEye of Ozem, Grave Sense, Lastwall Warden, Necromantic Resistance, Rescuer's Press",
+			"hash": "cTREWbfP"
+		}
 	},
 	{
 		"objectType": "Feat",

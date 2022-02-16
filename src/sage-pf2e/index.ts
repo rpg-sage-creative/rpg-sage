@@ -14,8 +14,8 @@ export { default as RenderableContent } from "./data/RenderableContent";
 export * as Repository from "./data/Repository";
 export { default as ScoredMenu, IMenuRenderable } from "./data/ScoredMenu";
 export { default as SearchResults } from "./data/SearchResults";
-export { default as Pf2ToolsData } from "./data/Pf2ToolsData";
-export { Pf2ToolsDataCore } from "./data/Pf2ToolsData";
+export { default as Pf2tBase } from "./model/base/Pf2tBase";
+export { Pf2tBaseCore } from "./model/base/Pf2tBase";
 //#endregion
 
 //#region map
@@ -78,7 +78,7 @@ export { default as FocusSpell } from "./model/FocusSpell";
 export { default as Gear } from "./model/Gear";
 export { default as GearCategory } from "./model/GearCategory";
 export { default as Glossary } from "./model/Glossary";
-export { default as HasFaith } from "./model/HasFaith";
+export { default as HasFaith } from "./model/Faith";
 export { default as Heritage } from "./model/Heritage";
 export { default as Item } from "./model/Item";
 export { default as Language } from "./model/Language";

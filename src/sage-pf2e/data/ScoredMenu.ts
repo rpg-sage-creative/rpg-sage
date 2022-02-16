@@ -3,6 +3,7 @@ import { UNICODE_ZERO_TO_TEN } from "./consts";
 import type HasSource from "../model/base/HasSource";
 import type { SourcedCore } from "../model/base/HasSource";
 import type Source from "../model/base/Source";
+import Pf2tBase from "../model/base/Pf2tBase";
 
 function setTitle(content: utils.RenderUtils.RenderableContent, scores: utils.SearchUtils.SearchScore<any>[], label: string): void {
 	if (scores[0].compScore) {
@@ -53,8 +54,12 @@ export default class ScoredMenu<T extends IRenderableSearchable> extends utils.S
 		setTitle(content, this.scores, this.label);
 
 		let unicodeIndex = 0;
+		let hasPf2tResult = false;
 		const sources = <Source[]>[];
 		this.scores.slice(0, this.getMenuLength(indexes)).forEach(score => {
+			if (score.searchable instanceof Pf2tBase) {
+				hasPf2tResult = true;
+			}
 			const source = (<HasSource<SourcedCore>><unknown>score.searchable).source;
 			let sourceSuper = ``;
 			if (source && !source.isCore) {
@@ -72,6 +77,9 @@ export default class ScoredMenu<T extends IRenderableSearchable> extends utils.S
 				content.append(`${unicodeArray[unicodeIndex++] || ""} <b>(${score.totalHits})</b> ${label}`);
 			}
 		});
+		if (hasPf2tResult) {
+			content.append(`<i>${utils.NumberUtils.toSuperscript(0)}Content from <https://character.pf2.tools></i>`);
+		}
 		sources.forEach((source, index) => content.append(`<i>${utils.NumberUtils.toSuperscript(index + 1)}${source.name}</i>`));
 		return content;
 	}

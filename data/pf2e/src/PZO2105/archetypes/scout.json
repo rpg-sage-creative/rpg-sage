@@ -38,7 +38,20 @@
 		"page": 188,
 		"source": "PZO2105",
 		"id": "678c829e-6107-444c-bd52-8a8e041a8959",
-		"aonId": 2047
+		"aonId": 2047,
+		"pf2t": {
+			"name": "Scout Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Scout",
+			"source": "Advanced Player's Guide pg. 188",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2047",
+			"aon": "feats2047",
+			"type": "feat",
+			"body": "**Archetype** Scout\n**Prerequisites** trained in Stealth and Survival\n\n- - -\n\nYou are a highly skilled scout, capable of providing your allies a timely warning of any danger. You gain the Scout's Warning ranger feat. When you're using the Scout exploration activity, you grant your allies a +2 circumstance bonus to their initiative rolls instead of a +1 circumstance bonus.\n\n#### Scout Dedication Leads To...\nFleeting Shadow, Scout's Charge, Scout's Pounce, Scout's Speed, Terrain Scout",
+			"hash": "GtmnmTtK"
+		}
 	},
 	{
 		"objectType": "Feat",

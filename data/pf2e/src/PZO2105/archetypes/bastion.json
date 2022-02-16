@@ -42,7 +42,20 @@
 		"page": 159,
 		"source": "PZO2105",
 		"id": "a4d220f2-9694-4d47-98ac-43487f97c4dd",
-		"aonId": 1895
+		"aonId": 1895,
+		"pf2t": {
+			"name": "Bastion Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Bastion",
+			"source": "Advanced Player's Guide pg. 159",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1895",
+			"aon": "feats1895",
+			"type": "feat",
+			"body": "**Archetype** Bastion\n**Prerequisites** Shield Block\n\n- - -\n\nYou are particularly skilled at using a shield in combat. You gain the Reactive Shield fighter feat. This fulfills any prerequisite requiring Reactive Shield as normal.\n\n#### Bastion Dedication Leads To...\nDestructive Block, Disarming Block, Nimble Shield Hand, Shield Salvation",
+			"hash": "nFMzQrkv"
+		}
 	},
 	{
 		"objectType": "Feat",

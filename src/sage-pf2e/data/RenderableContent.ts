@@ -2,9 +2,8 @@ import utils, { TRenderableContentSection } from "../../sage-utils";
 import { NEWLINE, TAB } from "../common";
 import type Base from "../model/base/Base";
 import type HasSource from "../model/base/HasSource";
-import type Pf2ToolsData from "./Pf2ToolsData";
 
-type TRenderable = Base | HasSource | Pf2ToolsData;
+type TRenderable = Base | HasSource;
 
 export default class RenderableContent extends utils.RenderUtils.RenderableContent {
 

@@ -35,7 +35,20 @@
 		"page": 155,
 		"source": "PZO2105",
 		"id": "03aab94b-7dba-4100-9453-bd8613246a6e",
-		"aonId": 1873
+		"aonId": 1873,
+		"pf2t": {
+			"name": "Acrobat Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Acrobat",
+			"source": "Advanced Player's Guide pg. 155",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1873",
+			"aon": "feats1873",
+			"type": "feat",
+			"body": "**Archetype** Acrobat\n**Prerequisites** trained in Acrobatics\n\n- - -\n\nYou become an expert in Acrobatics. At 7th level, you become a master in Acrobatics, and at 15th level, you become legendary in Acrobatics. Whenever you critically succeed at an Acrobatics check to Tumble Through an enemy's space, you don't treat the enemy's space as difficult terrain.\n\n#### Acrobat Dedication Leads To...\nContortionist, Dodge Away, Graceful Leaper, Tumbling Opportunist, Tumbling Strike",
+			"hash": "rJlbCqTQ"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -36,7 +36,20 @@
 		"page": 131,
 		"source": "PZO9301",
 		"id": "9c2667a7-c7d3-4461-a029-06791cf932ae",
-		"aonId": 917
+		"aonId": 917,
+		"pf2t": {
+			"name": "Lion Blade Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Lion Blade",
+			"source": "World Guide pg. 131 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=917",
+			"aon": "feats917",
+			"type": "feat",
+			"body": "**Archetype** Lion Blade\n**Prerequisites** member of the Lion Blades; trained in Performance\n\n- - -\n\nYour lion blade spy training helps you conceal yourself and your identity. You become trained in your choice of Deception or Stealth and in Espionage Lore; if you were already trained, you become an expert instead. You never take circumstance penalties for attempting to take a disguise of a different ancestry, age, and so on, as long as the disguised form is appropriate for your size.\n\n#### Lion Blade Dedication Leads To...\nExpeditious Advance, Flicker, Lost in the Crowd, Spy's Countermeasures",
+			"hash": "VrKVvwHV"
+		}
 	},
 	{
 		"objectType": "Feat",

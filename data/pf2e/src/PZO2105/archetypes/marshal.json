@@ -39,7 +39,20 @@
 		"page": 180,
 		"source": "PZO2105",
 		"id": "e2cbc86c-c0de-4269-960a-e96ef1116b04",
-		"aonId": 2005
+		"aonId": 2005,
+		"pf2t": {
+			"name": "Marshal Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Marshal",
+			"source": "Advanced Player's Guide pg. 180",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2005",
+			"aon": "feats2005",
+			"type": "feat",
+			"body": "**Archetype** Marshal\n**Prerequisites** trained in martial weapons; trained in Diplomacy or Intimidation\n\n- - -\n\nYou've combined your social skills and combat training to become a talented combat leader. Choose Diplomacy or Intimidation. You become trained in that skill or become an expert if you were already trained in it.\n\nIn addition, you're surrounded by a marshal's aura in a 10-foot emanation. Your aura has the emotion, mental, and visual traits and grants you and allies within the aura a +1 status bonus to saving throws against fear.\n\n#### Marshal Dedication Leads To...\nBack to Back, Cadence Call, Coordinated Charge, Dread Marshal Stance, Inspiring Marshal Stance, Rallying Charge, Snap Out of It! (Marshal), Steel Yourself!, Target of Opportunity, To Battle!, Topple Foe",
+			"hash": "bvChKvRx"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -35,7 +35,20 @@
 		"page": 151,
 		"source": "PZO2105",
 		"id": "e5d9b925-e3ec-454f-af99-d3e02b9409f9",
-		"aonId": 1844
+		"aonId": 1844,
+		"pf2t": {
+			"name": "Investigator Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Investigator",
+			"source": "Advanced Player's Guide pg. 151",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1844",
+			"aon": "feats1844",
+			"type": "feat",
+			"body": "**Archetype** Investigator\n**Prerequisites** Intelligence 14\n\n- - -\n\nYou gain the on the case class feature, which grants you both the Pursue a Lead activity and Clue In reaction. You become trained in Society and another skill of your choice. If you were already trained in Society, you instead become trained in an additional skill of your choice. You also become trained in investigator class DC.\n\n#### Pursue a Lead\nYou spend 1 minute examining the details of one potential clue, designating the subject related to that clue as the target of your active investigation. This subject is typically a single creature, item, or small location (such as a room or corridor), but the GM might allow a different scope for your investigation. You don't need to know the identity, purpose, or nature of the subject, but you do need to be aware of its existence. For instance, finding a footprint is enough to investigate the creature that left it, and seeing a hasty sketch of an item or location can be enough to start your investigation of that subject.\n\nWhenever you attempt a Perception or skill check to investigate a designated subject, you gain a +1 circumstance bonus to the check. The exact checks this applies to depend on the actions you use to investigate and are determined by the GM, but checks to investigate are typically Perception checks or skill checks that use Intelligence, Wisdom, or Charisma.\n\nYou can maintain two active investigations at a time. If you Pursue another Lead after that, the subject must be different from any of your current investigations (or rather, they must be different as far as you know), and you give up on a current subject of your choice. Once you've given up pursuit of a subject, you can't Pursue that Lead again until after the next time you make your daily preparations.\n\n#### Clue In\nYou share information with the triggering creature. They gain a circumstance bonus to their check equal to your circumstance bonus to checks investigating your subject from Pursue a Lead. The GM can add any relevant traits to this reaction depending on the situation, such as auditory and linguistic if you're conveying information verbally.\n\n#### Investigator Dedication Leads To...\nBasic Deduction, Investigator's Stratagem, Keen Recollection, Master Spotter (Investigator), Skill Mastery (Investigator)",
+			"hash": "rLrtyLPZ"
+		}
 	},
 	{
 		"objectType": "Feat",

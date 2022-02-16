@@ -10,6 +10,8 @@ export interface SourceCore extends BaseCore<"Source"> {
 	apVolume?: number;
 	code: string;
 	files: IFile[];
+	pfsSeason?: number;
+	pfsVolume?: number;
 	productLine: string;
 	iconUrl?: string;
 	issue?: number;
@@ -26,7 +28,10 @@ export default class Source extends Base<SourceCore, "Source"> {
 	public get apVolume(): number | undefined { return this.core.apVolume; }
 	public get code(): string { return this.core.code ?? ""; }
 	public isAp = !!this.core.apName && !!this.core.apNumber && !!this.core.apVolume;
+	public isPfs = !!this.core.pfsSeason && !!this.core.pfsVolume;
 	public get isCore(): boolean { return this.core.code === Source.CoreCode; }
+	public get pfsSeason(): number | undefined { return this.core.pfsSeason; }
+	public get pfsVolume(): number | undefined { return this.core.pfsVolume; }
 	public get productLine(): string { return this.core.productLine; }
 	public get is3PP(): boolean { return !this.code.startsWith("PZO"); }
 	public get url(): string | undefined { return this.core.url; }
@@ -36,6 +41,9 @@ export default class Source extends Base<SourceCore, "Source"> {
 	public toVerboseString(): string {
 		if (this.isAp) {
 			return `Pathfinder Adventure Path #${this.apNumber}: ${this.name} (${this.apName} ${this.apVolume} of 6)`;
+		}
+		if (this.isPfs) {
+			return `${this.productLine} #${String(this.pfsSeason).padStart(2, "0")}-${String(this.pfsVolume).padStart(2, "0")}`;
 		}
 		if (this.is3PP) {
 			if (this.issue) {
@@ -48,6 +56,9 @@ export default class Source extends Base<SourceCore, "Source"> {
 	public toString(): string {
 		if (this.isAp) {
 			return `AP #${this.apNumber}: ${this.name}`;
+		}
+		if (this.isPfs) {
+			return `${this.productLine.slice(0, 5)}#${this.pfsSeason}-${String(this.pfsVolume).padStart(2, "0")}`;
 		}
 		return this.name;
 	}

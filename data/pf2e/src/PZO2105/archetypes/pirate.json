@@ -37,7 +37,20 @@
 		"page": 185,
 		"source": "PZO2105",
 		"id": "ba0d4002-6ee5-4a7f-801c-6abbf4d9c807",
-		"aonId": 2032
+		"aonId": 2032,
+		"pf2t": {
+			"name": "Pirate Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Pirate",
+			"source": "Advanced Player's Guide pg. 185",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2032",
+			"aon": "feats2032",
+			"type": "feat",
+			"body": "**Archetype** Pirate\n**Prerequisites** trained in Intimidation\n\n- - -\n\nAs a pirate, you sail the seas in search of enemy ships to plunder. You become trained in Sailing Lore, or become an expert in it if you were already trained. You ignore the effects of difficult terrain or uneven ground caused by a ship's movement. Additionally, you gain the Boarding Assault action.\n\n**Boarding Assault** :aa: (Flourish) Either Stride twice or attempt an Acrobatics check (DC determined by the GM, but usually DC 20) to swing on a rope up to twice your Speed. If you boarded or disembarked from a boat or similar vehicle during this movement, you can make a melee Strike that deals one additional weapon damage die.\n\n#### Pirate Dedication Leads To...\nPirate Weapon Training, Rope Runner, Walk the Plank",
+			"hash": "zFFLQbjx"
+		}
 	},
 	{
 		"objectType": "Feat",

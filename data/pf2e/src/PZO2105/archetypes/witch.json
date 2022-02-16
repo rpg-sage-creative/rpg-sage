@@ -35,7 +35,20 @@
 		"page": 154,
 		"source": "PZO2105",
 		"id": "e4115879-9b20-4efa-84d3-019260525a08",
-		"aonId": 1866
+		"aonId": 1866,
+		"pf2t": {
+			"name": "Witch Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Witch",
+			"source": "Advanced Player's Guide pg. 154",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1866",
+			"aon": "feats1866",
+			"type": "feat",
+			"body": "**Archetype** Witch\n**Prerequisites** Intelligence 14\n\n- - -\n\nYou cast spells like a witch. Choose a patron; you gain a familiar with two common cantrips of your choice from your chosen patron's tradition, but aside from the tradition, you don't gain any other effects the patron would usually grant. Your familiar has one less familiar ability than normal. You gain the Cast a Spell activity. You can prepare one cantrip each day from your familiar. You're trained in spell attack rolls and spell DCs from your patron's tradition. Your key spellcasting ability for witch archetype spells is Intelligence, and they are witch spells of your patron's tradition. You become trained in the skill associated with the patron's tradition; if you were already trained in it, you instead become trained in a skill of your choice.\n\n#### Witch Dedication Leads To...\nBasic Witch Spellcasting, Basic Witchcraft",
+			"hash": "URkrdJxV"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -35,7 +35,20 @@
 		"page": 153,
 		"source": "PZO2105",
 		"id": "5c3679d7-d577-4331-96e9-2ab9af5da1d9",
-		"aonId": 1859
+		"aonId": 1859,
+		"pf2t": {
+			"name": "Swashbuckler Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Swashbuckler",
+			"source": "Advanced Player's Guide pg. 153",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1859",
+			"aon": "feats1859",
+			"type": "feat",
+			"body": "**Archetype** Swashbuckler\n**Prerequisites** Dexterity 14; Charisma 14\n\n- - -\n\nChoose a swashbuckler style. You gain the panache class feature, and you can gain panache in all the ways a swashbuckler of your style can. You become trained in Acrobatics or the skill associated with your style. If you were already trained in both skills, you instead become trained in a skill of your choice. You also become trained in swashbuckler class DC. You don't gain any other effects of your chosen style.\n\n#### Swashbuckler Dedication Leads To...\nBasic Flair, Evasiveness (Swashbuckler), Finishing Precision, Swashbuckler's Riposte, Swashbuckler's Speed",
+			"hash": "UkPZrRDZ"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -35,7 +35,19 @@
 		"page": 78,
 		"source": "PZO90158",
 		"id": "035652bc-d36f-4e0b-a729-746c5e790182",
-		"aonId": 2198
+		"aonId": 2198,
+		"pf2t": {
+			"name": "Jalmeri Heavenseeker Dedication",
+			"level": 4,
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Jalmeri Heavenseeker",
+			"source": "158 Sixty Feet Under pg. 78",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2198",
+			"aon": "feats2198",
+			"type": "feat",
+			"body": "**Archetype** Jalmeri Heavenseeker\n**Prerequisites** expert in unarmed strikes\n\n- - -\n\nYour skill and dedication have set you on a path to master the techniques of Jalmeray's greatest martial artists: victors of the Challenge of Sky and Heaven. You become trained in either Acrobatics or Occultism. You gain either the Ki Rush or Ki Strike monk feat, which grants you a ki spell and a focus pool of 1 Focus Point that you can recover using the Refocus activity as a monk does. If you already have both these feats, you can instead choose a single 1st-level monk feat.\n\n#### Jalmeri Heavenseeker Dedication Leads To...\nHeaven's Thunder, Sky and Heaven Stance, Speaking Sky, Steal the Sky",
+			"hash": "YkMgmXCA"
+		}
 	},
 	{
 		"objectType": "Feat",

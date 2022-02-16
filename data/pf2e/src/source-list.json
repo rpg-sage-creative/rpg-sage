@@ -783,5 +783,17 @@
 		"aonId": 0,
 		"paizoId": "btq029vx",
 		"id": "12781f89-6693-42a8-9814-3166674da4c5"
+	},
+
+	{
+		"objectType": "Source",
+		"name": "Escaping the Grave",
+		"pfsSeason": 1,
+		"pfsVolume": 3,
+		"productLine": "PFS Scenario",
+		"code": "PFS#S01-03",
+		"aonId": 0,
+		"paizoId": "btq01znd",
+		"id": "ccb60b4e-af3a-489c-aa6b-3f2497cf6b98"
 	}
 ]

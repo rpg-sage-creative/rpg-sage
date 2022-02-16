@@ -33,7 +33,19 @@
 		"page": 55,
 		"source": "PZO2109",
 		"id": "fbec8a9a-5d5b-4f96-bbbd-8e190940dc78",
-		"aonId": 0
+		"aonId": 3140,
+		"pf2t": {
+			"name": "Trick Driver Dedication",
+			"level": 2,
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Trick Driver",
+			"source": "Guns & Gears pg. 55",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3140",
+			"aon": "feats3140",
+			"type": "feat",
+			"body": "**Archetype** Trick Driver\n\n- - -\n\nYou are equally at home piloting any vehicle, adapting yourself instantly to varied controls, movements, and handling. Whenever piloting a vehicle requires a Piloting Lore or Sailing Lore check, you can use your Driving Lore proficiency instead. You can use Dexterity in place of Intelligence when attempting piloting checks with Driving Lore. You become an expert in Driving Lore. At 7th level, you become a master in Driving Lore, and at 15th level, you become legendary in Driving Lore.\n\n#### Trick Driver Dedication Leads To...\nDrive-By Attack, Express Driver, Power Slide, Push it, Roadkill, Take the Wheel",
+			"hash": "kkLmTvgt"
+		}
 	},
 	{
 		"objectType": "Feat",

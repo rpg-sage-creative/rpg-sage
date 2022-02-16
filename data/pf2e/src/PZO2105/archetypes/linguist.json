@@ -37,7 +37,20 @@
 		"page": 178,
 		"source": "PZO2105",
 		"id": "f1a0d1ae-40ac-486f-881e-8b8b97871499",
-		"aonId": 1993
+		"aonId": 1993,
+		"pf2t": {
+			"name": "Linguist Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Linguist",
+			"source": "Advanced Player's Guide pg. 178",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1993",
+			"aon": "feats1993",
+			"type": "feat",
+			"body": "**Archetype** Linguist\n**Prerequisites** you speak at least three languages\n\n- - -\n\nYou have studied languages and their development. You become trained in Society; if you were already trained in Society, you instead become an expert in Society. You gain the Multilingual skill feat twice.\n\n#### Linguist Dedication Leads To...\nAnalyze Idiolect, Crude Communication, Multilingual Cipher, Phonetic Training, Read Shibboleths, Spot Translate",
+			"hash": "fjIJSYYy"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -35,7 +35,19 @@
 		"page": 54,
 		"source": "PZO2109",
 		"id": "774e1f02-b187-4047-9a6c-cf6de2a6686c",
-		"aonId": 0
+		"aonId": 3134,
+		"pf2t": {
+			"name": "Trapsmith Dedication",
+			"level": 4,
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Trapsmith",
+			"source": "Guns & Gears pg. 54",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3134",
+			"aon": "feats3134",
+			"type": "feat",
+			"body": "**Archetype** Trapsmith\n**Prerequisites** Snarecrafter Dedication or Snare Specialist ranger class feat\n\n- - -\n\nYou use glimmering gears and gnashing mechanisms to manufacture snares using specialized parts. Your snares include clockwork and steam-powered cogwheels and gears, and their gush of steam can hinder those you ensnare. If you choose to construct a snare using gears and a creature fails their saving throw against the snare, all creatures are concealed to that creature for 1 round, as a burst of steam obscures its vision.\n\n#### Trapsmith Dedication Leads To...\nFinessed Features, Gear Gnash, Propeller Attachment, Recycled Cogwheel, Repurposed Parts",
+			"hash": "GBtwWVXh"
+		}
 	},
 	{
 		"objectType": "Feat",

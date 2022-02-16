@@ -44,7 +44,20 @@
 		"page": 171,
 		"source": "PZO2105",
 		"id": "430f1bd6-24fc-4ab5-a857-1b51a7c21e6a",
-		"aonId": 1956
+		"aonId": 1956,
+		"pf2t": {
+			"name": "Duelist Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Duelist",
+			"source": "Advanced Player's Guide pg. 171",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1956",
+			"aon": "feats1956",
+			"type": "feat",
+			"body": "**Archetype** Duelist\n**Prerequisites** trained in light armor and simple weapons\n\n- - -\n\nYou are always ready to draw your weapon and begin a duel, no matter the circumstances. You gain the Quick Draw ranger feat, enabling you to both draw and attack with a weapon as 1 action. This serves as Quick Draw for the purpose of meeting prerequisites.\n\n#### Duelist Dedication Leads To...\nDuelist's Challenge, Selfless Parry, Student of the Dueling Arts",
+			"hash": "ZGKLmZzR"
+		}
 	},
 	{
 		"objectType": "Feat",

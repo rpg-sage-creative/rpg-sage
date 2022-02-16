@@ -47,7 +47,20 @@
 		"page": 206,
 		"source": "PZO2108",
 		"id": "13b3b547-4d48-4efd-a4f8-f00d07cda1b2",
-		"aonId": 0
+		"aonId": 2986,
+		"pf2t": {
+			"name": "Elementalist Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,class,dedication",
+			"archetype": "Elementalist",
+			"source": "Secrets of Magic pg. 206",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2986",
+			"aon": "feats2986",
+			"type": "feat",
+			"body": "**Archetype** Elementalist\n**Prerequisites** elemental magic\n\n- - -\n\nEach day when you make your daily preparations, you can attune yourself to one element of your choice: air, earth, fire, or water. You gain resistance equal to half your level (minimum 1 resistance) against damage dealt by effects with your attuned elemental trait. This attunement lasts until you next make your daily preparations.\n\n#### Elementalist Dedication Leads To...\nBurning Spell, Dousing Spell, Elemental Familiar, Metabolize Element, Redirect Elements, Rockslide Spell, Wind-Tossed Spell",
+			"hash": "TjTFJORp"
+		}
 	},
 	{
 		"objectType": "Feat",

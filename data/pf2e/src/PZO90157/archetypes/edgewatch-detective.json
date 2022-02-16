@@ -34,7 +34,19 @@
 		"page": 79,
 		"source": "PZO90157",
 		"id": "e7acfa55-e53a-4f89-ad2b-f0ce23b78032",
-		"aonId": 2193
+		"aonId": 2193,
+		"pf2t": {
+			"name": "Edgewatch Detective Dedication",
+			"level": 2,
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Edgewatch Detective",
+			"source": "157 Devil at the Dreaming Palace pg. 79",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2193",
+			"aon": "feats2193",
+			"type": "feat",
+			"body": "**Archetype** Edgewatch Detective\n**Prerequisites** Intelligence 14 or Wisdom 14\n\n- - -\n\nYou become trained in Society or Thievery; if you are already trained in both of these skills, you instead become trained in a skill of your choice. You can use Perception instead of Survival to Track, and you gain the Experienced Tracker skill feat.\n\n#### Edgewatch Detective Dedication Leads To...\nArcane Sensitivity, Bolera's Interrogation, Sense Alignment",
+			"hash": "XdFbWcsK"
+		}
 	},
 	{
 		"objectType": "Feat",

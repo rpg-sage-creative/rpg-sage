@@ -35,7 +35,19 @@
 		"page": 127,
 		"source": "PZO2109",
 		"id": "be73d602-595d-41a3-b9ab-57be23146ef0",
-		"aonId": 0
+		"aonId": 3215,
+		"pf2t": {
+			"name": "Gunslinger Dedication",
+			"level": 2,
+			"traits": "uncommon,archetype,dedication,multiclass",
+			"archetype": "Gunslinger",
+			"source": "Guns & Gears pg. 127",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3215",
+			"aon": "feats3215",
+			"type": "feat",
+			"body": "**Archetype** Gunslinger\n**Prerequisites** Dexterity 14\n\n- - -\n\nYou become trained in simple and martial crossbows and simple and martial firearms. You become trained in gunslinger class DC.\n\nChoose a gunslinger way. You become trained in your way's associated skill; if you were already trained in this skill, you become trained in a skill of your choice. You don't gain any other abilities from your choice of way.\n\n#### Gunslinger Dedication Leads To...\nBasic Shooting, Eagle Eye, Firearm Expert, Practiced Reloads, Slinger's Readiness",
+			"hash": "gxGsIvnD"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -46,7 +46,20 @@
 		"page": 94,
 		"source": "PZO9302",
 		"id": "9a6db967-5a23-40a4-a86c-d477297af832",
-		"aonId": 1092
+		"aonId": 1092,
+		"pf2t": {
+			"name": "Knight Vigilant",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Knight Vigilant",
+			"source": "Character Guide pg. 94 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1092",
+			"aon": "feats1092",
+			"type": "feat",
+			"body": "**Archetype** Knight Vigilant\n**Prerequisites** any good alignment; member of the Knights of Lastwall of knight rank; trained in Religion\n\n- - -\n\nYou are dedicated to the cause of the Shining Sentinels. You gain expert proficiency in Religion. When you are between an ally and a foe and would provide lesser cover to your ally against the foe's attacks, you twist to become even more obtrusive, providing standard cover instead.\n\n#### Knight Vigilant Leads To...\nAegis of Arnisant, Endure Death's Touch, Knight in Shining Armor, Unshakable Idealism, Vigil's Walls Rise Anew!",
+			"hash": "DKvsFlpV"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -179,7 +192,20 @@
 		"page": 95,
 		"source": "PZO9302",
 		"id": "c8694a28-55b0-4857-a39e-8a7a04e52d7a",
-		"aonId": 1097
+		"aonId": 1097,
+		"pf2t": {
+			"name": "Knight Reclaimant Dedication",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Knight Reclaimant",
+			"source": "Character Guide pg. 95 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1097",
+			"aon": "feats1097",
+			"type": "feat",
+			"body": "**Archetype** Knight Reclaimant\n**Prerequisites** any non-evil alignment; member of the Knights of Lastwall of knight rank; trained in Stealth and Survival\n\n- - -\n\nYou have sworn the Crimson Oath and become a full member of the Crimson Reclaimers. You gain expert proficiency in Stealth and Survival. Whenever you roll a success on a saving throw against an undead's special ability, you get a critical success instead. This applies to any abilities that come from being undead, including an undead's innate spells (but not its prepared or spontaneous spells).\n\n#### Knight Reclaimant Dedication Leads To...\nBlade of the Crimson Oath, Invoke the Crimson Oath, Reaper of Repose, Shall Not Falter, Shall Not Rout, Survivor of Desolation",
+			"hash": "RHdYkwtR"
+		}
 	},
 	{
 		"objectType": "Feat",

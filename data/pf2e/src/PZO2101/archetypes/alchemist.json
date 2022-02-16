@@ -36,7 +36,20 @@
 		"page": 220,
 		"source": "PZO2101",
 		"id": "7e56acea-3ae0-4e85-acb7-4ce93fd36e87",
-		"aonId": 665
+		"aonId": 665,
+		"pf2t": {
+			"name": "Alchemist Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Alchemist",
+			"source": "Core Rulebook pg. 220 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=665",
+			"aon": "feats665",
+			"type": "feat",
+			"body": "**Archetype** Alchemist\n**Prerequisites** Intelligence 14\n\n- - -\n\nYou put your alchemical interest into practice. You become trained in alchemical bombs and Crafting; if you were already trained in Crafting, you instead become trained in a skill of your choice. You become trained in alchemist class DC.\n\nYou gain the alchemist's infused reagents class feature, gaining a number of reagents each day equal to your level. You also gain the Alchemical Crafting feat and four additional formulas for 1st-level alchemical items, as well as the ability to create free items during your daily preparations. Your advanced alchemy level is 1 and doesn't increase on its own.\n\n#### Alchemist Dedication Leads To...\nBasic Concoction, Expert Alchemy, Quick Alchemy",
+			"hash": "PQxkflyS"
+		}
 	},
 	{
 		"objectType": "Feat",

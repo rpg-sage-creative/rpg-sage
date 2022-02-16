@@ -35,7 +35,20 @@
 		"page": 224,
 		"source": "PZO2101",
 		"id": "0e94bf2e-da5a-4f59-9487-c1800a9a9a39",
-		"aonId": 694
+		"aonId": 694,
+		"pf2t": {
+			"name": "Cleric Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Cleric",
+			"source": "Core Rulebook pg. 224 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=694",
+			"aon": "feats694",
+			"type": "feat",
+			"body": "**Archetype** Cleric\n**Prerequisites** Wisdom 14\n\n- - -\n\nYou cast spells like a cleric. You gain access to the Cast a Spell activity. You can prepare two common cantrips each day from the divine spell list in this book or any other divine cantrips you learn or discover. You're trained in spell attack rolls and spell DCs for divine spells. Your key spellcasting ability for cleric archetype spells is Wisdom, and they are divine cleric spells. Choose a deity as you would if you were a cleric. You become bound by that deity's anathema. You become trained in Religion and your deity's associated skill; for each of these skills in which you were already trained, you instead become trained in a skill of your choice. You don't gain any other abilities from your choice of deity.\n\n#### Cleric Dedication Leads To...\nBasic Cleric Spellcasting, Basic Dogma",
+			"hash": "qlthPlKL"
+		}
 	},
 	{
 		"objectType": "Feat",

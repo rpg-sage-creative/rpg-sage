@@ -40,7 +40,20 @@
 		"page": 177,
 		"source": "PZO2105",
 		"id": "ab84d1fd-edc1-4554-aae7-6e87370b9e12",
-		"aonId": 1987
+		"aonId": 1987,
+		"pf2t": {
+			"name": "Horizon Walker Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Horizon Walker",
+			"source": "Advanced Player's Guide pg. 177",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1987",
+			"aon": "feats1987",
+			"type": "feat",
+			"body": "**Archetype** Horizon Walker\n**Prerequisites** trained in Survival\n\n- - -\n\nYou've mastered travel within a specific type of terrain. You gain the Favored Terrain feat. When in your favored terrain, you gain a +10-foot circumstance bonus to your travel Speed. When other creatures Follow the Expert with you as a guide in your favored terrain, they gain both the ability to ignore non-magical difficult terrain for the purpose of their travel Speed and the bonus to travel Speed.\n\n#### Horizon Walker Dedication Leads To...\nAcclimatization, Magical Adaptation, Perpetual Scout, Sure Foot, Wild Strider",
+			"hash": "IzPQkDzZ"
+		}
 	},
 	{
 		"objectType": "Feat",

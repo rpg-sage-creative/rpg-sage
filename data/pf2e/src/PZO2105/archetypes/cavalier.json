@@ -39,7 +39,20 @@
 		"page": 164,
 		"source": "PZO2105",
 		"id": "8f503562-b652-49af-9a45-5417a5403f45",
-		"aonId": 1919
+		"aonId": 1919,
+		"pf2t": {
+			"name": "Cavalier Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Cavalier",
+			"source": "Advanced Player's Guide pg. 164",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1919",
+			"aon": "feats1919",
+			"type": "feat",
+			"body": "**Archetype** Cavalier\n**Prerequisites** trained in Nature or Society\n\n- - -\n\nYou gain a young animal companion that serves as your mount. You can choose from animal companions with the mount special ability, as well as any additional options from your pledge, as determined by your GM. You must choose an animal companion that's at least one size larger than you, but if the animal usually starts as Small, you can begin with a Medium version of that animal (changing no statistics other than its size).\n\n#### Cavalier Dedication Leads To...\nCavalier's Banner, Cavalier's Charge, Defend Mount, Impressive Mount, Legendary Rider, Mounted Shield, Quick Mount, Trampling Charge, Unseat",
+			"hash": "rjGGzzbm"
+		}
 	},
 	{
 		"objectType": "Feat",

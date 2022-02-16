@@ -36,7 +36,20 @@
 		"page": 23,
 		"source": "PZO9301",
 		"id": "a56ab9f3-87c6-4eb1-87ea-f38be2e8da1c",
-		"aonId": 871
+		"aonId": 871,
+		"pf2t": {
+			"name": "Pathfinder Agent Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Pathfinder Agent",
+			"source": "World Guide pg. 23 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=871",
+			"aon": "feats871",
+			"type": "feat",
+			"body": "**Archetype** Pathfinder Agent\n**Prerequisites** member of the Pathfinder Society\n\n- - -\n\nYour Pathfinder training has broadened your horizons and made you more flexible at various skills, since you never know when you might need an obscure skill to complete your mission. You become trained in one skill of your choice, or expert in a skill of your choice in which you were trained. You also become trained in Pathfinder Lore, or an expert if you were already trained. When using a skill untrained, your proficiency bonus is equal to your level instead of 0. You gain access to wayfinders.\n\n#### Pathfinder Agent Dedication Leads To...\nArchaeologist's Warning, Careful Explorer, Craft Facsimile, Dead Reckoning, Deft Cooperation, Discerning Strike, Diverse Recognition, Educated Assessment, Eidetic Memorization, Environmental Explorer, Everyone Duck!, Forced Entry, Observant Explorer, Recognize Threat, Remember Your Training, Snap Out of It! (Pathfinder Agent), Spiritual Explorer, Swap Investment, Thorough Reports, Watch and Learn, Wayfinder Resonance Infiltrator, Wayfinder Resonance Tinkerer, Westyr's Wayfinder Repository",
+			"hash": "cwVVxQck"
+		}
 	},
 	{
 		"objectType": "Feat",

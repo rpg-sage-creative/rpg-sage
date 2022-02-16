@@ -1,6 +1,9 @@
-import type { TCore, TEntity, Pf2ToolsDataCore } from "../../sage-pf2e";
-import { findAndRemove, labelToKey, parseBody, parseSource, split, splitAndCapitalize } from "./common.mjs";
+import type { Pf2tBaseCore, TCore, TEntity } from "../../sage-pf2e";
+import { Pf2tBase } from "../../sage-pf2e";
+import type { SourceCore } from "../../sage-pf2e/model/base/Source";
 import type { TSpellHeighten } from "../../sage-pf2e/model/Spell";
+import { sageCores } from "../common.mjs";
+import { findAndRemove, labelToKey, parseBody, split, splitAndCapitalize } from "./common.mjs";
 // import utils from "sage-utils";
 
 /*
@@ -92,8 +95,9 @@ function parseCast(lines: string[]): string {
 	}
 	return undefined!;
 }
-export function parseSpell(pf2t: Pf2ToolsDataCore): TCore<"Spell"> {
-	const source = parseSource(pf2t.source);
+export function parseSpell(pf2t: Pf2tBaseCore): TCore<"Spell"> {
+	const sourceCores = sageCores.filter(src => src.objectType === "Source") as unknown as SourceCore[];
+	const source = Pf2tBase.parseSource(pf2t.source, sourceCores);
 	const parsedBody = parseBody<TEntity<"Spell">>(pf2t.body);
 	const cast = parseCast(parsedBody.details as string[]);
 	const heightened = parseHeightened(parsedBody.details as string[]);

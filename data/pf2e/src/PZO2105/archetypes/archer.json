@@ -44,7 +44,20 @@
 		"page": 157,
 		"source": "PZO2105",
 		"id": "0e1b017b-a363-4f26-ad6d-d3509ee7c7ef",
-		"aonId": 1885
+		"aonId": 1885,
+		"pf2t": {
+			"name": "Archer Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Archer",
+			"source": "Advanced Player's Guide pg. 157",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1885",
+			"aon": "feats1885",
+			"type": "feat",
+			"body": "**Archetype** Archer\n\n- - -\n\nYou become trained in all simple and martial weapons in the bow weapon group. Whenever you gain a class feature that grants you expert or greater proficiency in certain weapons, you also gain that proficiency rank in all simple and martial weapons in the bow weapon group. If you are at least an expert in the bow you are using, you gain access to the critical specialization effect with that bow.\n\n#### Archer Dedication Leads To...\nAdvanced Bow Training, Archer's Aim, Crossbow Terror, Quick Shot",
+			"hash": "dvtFNMcb"
+		}
 	},
 	{
 		"objectType": "Feat",

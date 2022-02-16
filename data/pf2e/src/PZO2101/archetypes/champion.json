@@ -36,7 +36,20 @@
 		"page": 223,
 		"source": "PZO2101",
 		"id": "17867a96-85c3-4054-8d70-20e09a636d96",
-		"aonId": 686
+		"aonId": 686,
+		"pf2t": {
+			"name": "Champion Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Champion",
+			"source": "Core Rulebook pg. 223 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=686",
+			"aon": "feats686",
+			"type": "feat",
+			"body": "**Archetype** Champion\n**Prerequisites** Strength 14; Charisma 14\n\n- - -\n\nChoose a deity and cause as you would if you were a champion. You become trained in light, medium, and heavy armor. You become trained in Religion and your deity's associated skill; for each of these skills in which you were already trained, you instead become trained in a skill of your choice. You become trained in champion class DC.\n\nYou are bound by your deity's anathema and must follow the champion's code and alignment requirements for your cause. You don't gain any other abilities from your choice of deity or cause.\n\n#### Champion Dedication Leads To...\nBasic Devotion, Champion Resiliency, Champion's Reaction, Diverse Armor Expert, Divine Ally, Healing Touch",
+			"hash": "RxWSvyQC"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -38,7 +38,20 @@
 		"page": 191,
 		"source": "PZO2105",
 		"id": "8b26cc15-ce4a-4f31-b2b3-d7bfeadd0221",
-		"aonId": 2062
+		"aonId": 2062,
+		"pf2t": {
+			"name": "Sentinel Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Sentinel",
+			"source": "Advanced Player's Guide pg. 191",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2062",
+			"aon": "feats2062",
+			"type": "feat",
+			"body": "**Archetype** Sentinel\n\n- - -\n\nYou have trained carefully to maximize the protective qualities of your armor. You become trained in light armor and medium armor. If you already were trained in light armor and medium armor, you gain training in heavy armor as well. Whenever you gain a class feature that grants you expert or greater proficiency in any type of armor (but not unarmored defense), you also gain that proficiency in the armor types granted to you by this feat. If you are at least 13th level and you have a class feature that grants you expert proficiency in unarmored defense, you also become an expert in the armor types granted to you by this feat.\n\n#### Sentinel Dedication Leads To...\nArmor Specialist, Armored Rebuff, Mighty Bulwark, Steel Skin",
+			"hash": "kvCxdHCw"
+		}
 	},
 	{
 		"objectType": "Feat",

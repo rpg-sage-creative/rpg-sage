@@ -52,7 +52,20 @@
 		"page": 182,
 		"source": "PZO2105",
 		"id": "586d7e3c-1ca3-404e-88ad-4bd6ed475c7b",
-		"aonId": 2018
+		"aonId": 2018,
+		"pf2t": {
+			"name": "Martial Artist Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Martial Artist",
+			"source": "Advanced Player's Guide pg. 182",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2018",
+			"aon": "feats2018",
+			"type": "feat",
+			"body": "**Archetype** Martial Artist\n\n- - -\n\nYou have trained to use your fists as deadly weapons. The damage die for your fist unarmed attacks becomes 1d6 instead of 1d4. You don't take the -2 circumstance penalty for making a lethal attack with your nonlethal unarmed attacks. Whenever you gain a class feature that grants you expert or greater proficiency in certain weapons, you also gain that proficiency rank in all unarmed attacks.\n\n#### Martial Artist Dedication Leads To...\nFollow-Up Strike, Grievous Blow, Path of Iron",
+			"hash": "LxlBXtZD"
+		}
 	},
 	{
 		"objectType": "Feat",

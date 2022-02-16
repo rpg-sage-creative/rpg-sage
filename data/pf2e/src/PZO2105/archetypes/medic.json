@@ -35,7 +35,20 @@
 		"page": 184,
 		"source": "PZO2105",
 		"id": "78bf380d-95a2-4361-b6e8-70dfa8bb732f",
-		"aonId": 2027
+		"aonId": 2027,
+		"pf2t": {
+			"name": "Medic Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Medic",
+			"source": "Advanced Player's Guide pg. 184",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=2027",
+			"aon": "feats2027",
+			"type": "feat",
+			"body": "**Archetype** Medic\n**Prerequisites** Battle Medicine; trained in Medicine\n\n- - -\n\nYou become an expert in Medicine. When you succeed with Battle Medicine or Treat Wounds, the target regains 5 additional HP at DC 20, 10 HP at DC 30, or 15 HP at DC 40. Once per day, you can use Battle Medicine on a creature that's temporarily immune. If you're a master in Medicine, you can do so once per hour.\n\n#### Medic Dedication Leads To...\nDoctor's Visitation, Resuscitate, Treat Condition",
+			"hash": "VkUrgKwX"
+		}
 	},
 	{
 		"objectType": "Feat",

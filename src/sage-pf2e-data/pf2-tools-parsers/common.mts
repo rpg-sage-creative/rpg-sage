@@ -1,4 +1,6 @@
-import { BaseCore, Pf2ToolsData, Source, SourceCore, TDetail, THasSuccessOrFailure, type Pf2ToolsDataCore } from "../../sage-pf2e";
+import { BaseCore, Pf2tBase, Pf2tBaseCore, TDetail, THasSuccessOrFailure } from "../../sage-pf2e";
+import type { SourceCore } from "../../sage-pf2e/model/base/Source";
+import type { ClassCore } from "../../sage-pf2e/model/Class";
 import utils, { OrNull } from "../../sage-utils";
 import { compareNames, pf2tCores, sageCores } from "../common.mjs";
 import type { TCore } from "../types.mjs";
@@ -10,60 +12,6 @@ export function split<T extends string = string>(values?: string): T[] | undefin
 export function splitAndCapitalize<T extends string = string>(values?: string): T[] | undefined {
 	return values?.split(",").map(value => utils.StringUtils.capitalize(value)) as T[];
 }
-
-//#region sources
-
-type TSource = { name:string; source?:Source; page:number; version?:string; };
-
-function matchSourceNames(a: string, b: string): boolean {
-	return a === b
-		|| a.replace(/-/g, " ") === b.replace(/-/g, " ")
-		|| a.replace(/Shadows$/, "Shadow") === b.replace(/Shadows$/, "Shadow")
-		|| a.replace(/Pathfinder Society Guide/, "PFS Guide") === b.replace(/Pathfinder Society Guide/, "PFS Guide");
-}
-
-function matchSourceByName(cores: SourceCore[], name: string): SourceCore | undefined {
-	return cores.find(core => core.objectType === "Source" && matchSourceNames(core.name, name));
-}
-
-function matchSourceByApName(cores: SourceCore[], name: string): SourceCore | undefined {
-	return cores.find(core => core.objectType === "Source" && matchSourceNames(`${core.apNumber} ${core.name}`, name));
-}
-
-function matchSourceByProductLineName(cores: SourceCore[], name: string): SourceCore | undefined {
-	return cores.find(core => core.objectType === "Source" && matchSourceNames(core.name, `${core.productLine}: ${name}`));
-}
-
-function matchSource(name: string): Source | undefined {
-	const cores = sageCores.filter(core => core.objectType === "Source") as unknown as SourceCore[];
-	const core = matchSourceByName(cores, name)
-		?? matchSourceByProductLineName(cores, name)
-		?? matchSourceByApName(cores, name);
-	return core ? new Source(core) : undefined;
-}
-
-const missingSources: string[] = [];
-export function parseSource(value?: string): TSource | null {
-	// "source": "Core Rulebook pg. 283 2.0",
-	const parts = value?.match(/^(.*?) pg. (\d+)(?: \d+\.\d+)?$/);
-	if (!parts) {
-		return null;
-	}
-
-	const name = parts[1];
-	const page = +parts[2];
-	const version = parts[3];
-
-	const source = matchSource(name);
-	if (!source && !missingSources.includes(name)) {
-		missingSources.push(name);
-		console.log(`Unknown Source: ${name}`);
-	}
-
-	return { source, name, page, version }
-}
-
-//#endregion
 
 export function findAndRemove(lines: string[], key: string): string | undefined;
 export function findAndRemove(lines: string[], key: string, count: number): string[] | undefined;
@@ -115,29 +63,69 @@ export function parseBody<T extends BaseCore>(body: string): Partial<T> {
 
 //#region pf2tools
 
-function typesMatch(pf2: Pf2ToolsDataCore, sage: TCore): boolean {
-	return Pf2ToolsData.objectTypeToPf2Type(sage) === pf2.type;
+const typedCores = new Map();
+export function getTypedCores(objectType: "Source"): SourceCore[];
+export function getTypedCores(objectType: "Class"): ClassCore[];
+export function getTypedCores<T>(objectType: string): T[] {
+	if (!typedCores.has(objectType)) {
+		const cores = sageCores.filter(core => core.objectType === objectType) as unknown as T[];
+		typedCores.set(objectType, cores);
+	}
+	return typedCores.get(objectType);
 }
 
-function namesMatch(pf2: Pf2ToolsDataCore, sage: TCore): boolean {
+function typesMatch(pf2: Pf2tBaseCore, sage: TCore): boolean {
+	return Pf2tBase.objectTypeToPf2Type(sage, getTypedCores("Class")) === pf2.type;
+}
+
+function namesMatch(pf2: Pf2tBaseCore, sage: TCore): boolean {
 	if (compareNames(pf2, sage)) return true;
 	if (sage.objectType === "Domain") return pf2.name === `${sage.name} Domain`;
 	if (sage.objectType === "Deity") return pf2.name.split("(")[0].trim() === sage.name;
 	return false;
 }
 
-function sourcesMatch(pf2: Pf2ToolsDataCore, sage: TCore): boolean {
-	const pf2Source = parseSource(pf2.source);
-	const sageSource = sageCores.find(src => src.objectType === "Source" && src.code === sage.source);
-	return pf2Source?.source?.code && sageSource?.code ? pf2Source.source.code === sageSource.code : false;
+const sourceMatches = new Map<string, boolean>();
+function sourcesMatch(pf2t: Pf2tBaseCore, sage: TCore): boolean {
+	const key = `${pf2t.source} === ${sage.source}`;
+	if (!sourceMatches.has(key)) {
+		const sourceCores = getTypedCores("Source");
+		const pf2Source = Pf2tBase.parseSource(pf2t.source, sourceCores);
+		const sageSource = sourceCores.find(src => src.code === sage.source);
+		sourceMatches.set(key, pf2Source?.source?.code && sageSource?.code ? pf2Source.source.code === sageSource.code : false);
+	}
+	return sourceMatches.get(key)!;
 }
 
-export function findPf2tCore(core: TCore): Pf2ToolsDataCore | undefined {
-	if (["Rule", "Table"].includes(core.objectType)
-		|| (core.objectType === "Skill" && core.name.endsWith(" Lore"))) {
+type TCoreMatchResults = {
+	pf2t: Pf2tBaseCore;
+	sage: TCore;
+	name: boolean;
+	type?: boolean;
+	source?: boolean;
+	none: boolean;
+	some: boolean;
+	all: boolean;
+	count: number;
+};
+
+export function coresMatch(pf2t: Pf2tBaseCore, sage: TCore): TCoreMatchResults {
+	const name = namesMatch(pf2t, sage);
+	const type = name ? typesMatch(pf2t, sage) : undefined;
+	const source = name ? sourcesMatch(pf2t, sage) : undefined;
+	const none = !name && type === false && source === false;
+	const some = name || type === true || source === true;
+	const all = name && type === true && source === true;
+	const count = (name ? 1 : 0) + (type ? 1 : 0) + (source ? 1 : 0);
+	return { pf2t, sage, name, type, source, none, some, all, count };
+}
+
+export function findPf2tCore(sage: TCore): Pf2tBaseCore | undefined {
+	if (["Rule", "Table"].includes(sage.objectType)
+		|| (sage.objectType === "Skill" && sage.name.endsWith(" Lore"))) {
 		return undefined;
 	}
-	return pf2tCores.filter(pf2 => typesMatch(pf2, core) && namesMatch(pf2, core) && sourcesMatch(pf2, core)).first();
+	return pf2tCores.find(pf2t => coresMatch(pf2t, sage).all);
 }
 
 //#endregion

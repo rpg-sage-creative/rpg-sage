@@ -41,7 +41,20 @@
 		"page": 170,
 		"source": "PZO2105",
 		"id": "0ef7a0d0-51cd-4bb3-a614-cfed56fb0ce3",
-		"aonId": 0
+		"aonId": 1950,
+		"pf2t": {
+			"name": "Dual-Weapon Warrior Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Dual-Weapon Warrior",
+			"source": "Advanced Player's Guide pg. 170",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1950",
+			"aon": "feats1950",
+			"type": "feat",
+			"body": "**Archetype** Dual-Weapon Warrior\n\n- - -\n\nYou're exceptional in your use of two weapons. You gain the Double Slice fighter feat. This serves as Double Slice for the purpose of meeting prerequisites.\n\n#### Dual-Weapon Warrior Dedication Leads To...\nDual Onslaught, Dual Thrower, Dual-Weapon Blitz, Dual-Weapon Reload, Flensing Slice",
+			"hash": "xVjhhRUA"
+		}
 	},
 	{
 		"objectType": "Feat",

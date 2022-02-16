@@ -58,7 +58,20 @@
 		"page": 101,
 		"source": "PZO9302",
 		"id": "83da5a1f-3268-412b-b21f-f15a106f3f30",
-		"aonId": 1102
+		"aonId": 1102,
+		"pf2t": {
+			"name": "Magaambyan Attendant Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Magaambyan Attendant",
+			"source": "Character Guide pg. 101 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1102",
+			"aon": "feats1102",
+			"type": "feat",
+			"body": "**Archetype** Magaambyan Attendant\n**Prerequisites** member of the Magaambya of attendant rank; trained in Arcana or Nature\n\n- - -\n\nYou devote much of your study to halcyon magic. You gain the ability to cast a single arcane or primal cantrip of your choice, (as is normal for cantrips, it is heightened to a spell level equal to half your level, rounded up). If you weren't already, you become trained in that tradition's spell DCs and spell attack rolls, with Intelligence as your spellcasting ability if you choose arcane or Wisdom as your spellcasting ability if you choose primal.\n\nRegardless of whether you choose an arcane or primal cantrip, you also either become trained in Arcana or Nature, or an expert in one of those skills in which you were already trained.\n\nWhen you gain this feat, choose to affiliate with the Cascade Bearers, Emerald Boughs, Rain-Scribes, Tempest-Sun Mages, or Uzunjati. This grants you additional feats available to only that branch.\n\n#### Magaambyan Attendant Dedication Leads To...\nCascade Bearer's Flexibility, Cascade Bearer's Spellcasting, Emerald Boughs Accustomation, Emerald Boughs Hideaway, Halcyon Speaker Dedication, Mask Familiar, Rain-Scribe Mobility, Rain-Scribe Sustenance, Tempest-Sun Redirection, Uzunjati Storytelling",
+			"hash": "fbvzxCcw"
+		}
 	},
 	{
 		"objectType": "Feat",
@@ -394,7 +407,20 @@
 		"page": 104,
 		"source": "PZO9302",
 		"id": "655735b2-5586-419a-a94a-fbda13526ea4",
-		"aonId": 1115
+		"aonId": 1115,
+		"pf2t": {
+			"name": "Halcyon Speaker Dedication",
+			"level": 6,
+			"pfs": "standard",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Halcyon Speaker",
+			"source": "Character Guide pg. 104 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1115",
+			"aon": "feats1115",
+			"type": "feat",
+			"body": "**Archetype** Halcyon Speaker\n**Prerequisites** Magaambyan Attendant Dedication; member of the Magaambya of conversant rank\n\n- - -\n\nYou devote much of your study to halcyon magic. You gain two common Halcyon cantrips and two common 1st-level halcyon spells (see Halcyon Spells). In addition to being able to cast your halcyon spells via your arcane or primal spell slots, you also gain a 1st-level halcyon spell slot. You can use your halcyon spell slots to spontaneously cast your halcyon spells.\n\n#### Halcyon Speaker Dedication Leads To...\nDualistic Synergy, Halcyon Spellcasting Initiate, Persistent Creation",
+			"hash": "GKWWcIwn"
+		}
 	},
 	{
 		"objectType": "Feat",

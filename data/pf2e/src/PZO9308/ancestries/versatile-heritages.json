@@ -65,7 +65,18 @@
 		],
 		"aonId": 33,
 		"source": "PZO9308",
-		"id": "4cc9e08e-a3de-4b4e-a9dd-f1b83f2a9f8f"
+		"id": "4cc9e08e-a3de-4b4e-a9dd-f1b83f2a9f8f",
+		"pf2t": {
+			"name": "Ifrit",
+			"pfs": "standard",
+			"traits": "uncommon",
+			"source": "Ancestry Guide pg. 100",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=33",
+			"aon": "ancestries33",
+			"type": "ancestry",
+			"body": "Ifrits descend from creatures such as efreet, salamanders, and magma dragons. Their spark of ancestral flame gives them a reputation for being passionate, if not capricious.\n\nIfrits often build up personal relationships between themselves and the idea of fire, feeling as though they embody it mentally or spiritually, in addition to physically. Some ifrits relate to fire's mutable energy, illuminating properties, or destructive nature.\n\nSome ifrits share a connection from birth to specific aspects of elemental fire, such as radiance, ash, or lava; this is called an ifrit lineage. Ifrits often have the same lineage as their parents, though sometimes ifrits are born with lineages different from their families, or to parents without one. Lineages can appear in ifrit children as a reflection of where they were born-for example, cindersoul ifrits sometimes originate from being born in areas prone to forest fires. They can also occur as a reflection of the ifrit's planar ancestry, such as a brightsoul ifrit having a fire-themed celestial ancestor like a peri. Magma ifrits with the lavasoul lineage are most often born the descendants of magma dragons or other lava-themed fire elementals.",
+			"hash": "NRpWCPxQ"
+		}
 	},
 	{
 		"objectType": "VersatileHeritage",
@@ -82,7 +93,18 @@
 		],
 		"aonId": 34,
 		"source": "PZO9308",
-		"id": "ca496aa9-4624-4c98-8db2-b84d0859e78a"
+		"id": "ca496aa9-4624-4c98-8db2-b84d0859e78a",
+		"pf2t": {
+			"name": "Oread",
+			"pfs": "standard",
+			"traits": "uncommon",
+			"source": "Ancestry Guide pg. 104",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=34",
+			"aon": "ancestries34",
+			"type": "ancestry",
+			"body": "The Plane of Earth's influence runs through an oread's family, most often from a shaitan or crystal dragon ancestor. Oreads tend to be stoic, steadfast, and dependable, but they contain depths not seen on the surface.\n\nOreads can be slow to reveal their true selves, or perhaps more accurately, have enough depth and mystery inherent to their beings that they can reveal new and unexpected facets of themselves every day. They usually feel that they personify certain aspects of earth, stone, or other sediments or minerals, such as a cliff's tenacious resilience against erosion, the generosity and nourishment of fertile soil, or the versatile utility of metal and stone.\n\nOreads born with a special connection to a specific subset of elemental earth, such as crystal, dust, or mud, might have an oread lineage. A lineage can be inherited along a family bloodline, or it can manifest spontaneously in oread children. They can be caused by where an oread's ancestors lived, frequently seen in dustsoul oreads, many of whom are born in a desert or to a family that has farmed for generations. Lineages can also be the result of specific planar heritages. Gemsoul oreads often have a crystal dragon in their lineage, and miresoul oreads descend from the more sodden creatures of elemental earth.",
+			"hash": "WZxvExNk"
+		}
 	},
 	{
 		"objectType": "VersatileHeritage",
@@ -98,7 +120,18 @@
 		],
 		"aonId": 35,
 		"source": "PZO9308",
-		"id": "5b266c1d-5321-4974-a378-a1b3b7f60399"
+		"id": "5b266c1d-5321-4974-a378-a1b3b7f60399",
+		"pf2t": {
+			"name": "Suli",
+			"pfs": "standard",
+			"traits": "uncommon",
+			"source": "Ancestry Guide pg. 108",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=35",
+			"aon": "ancestries35",
+			"type": "ancestry",
+			"body": "Sulis are geniekin who embody a mixture of elements, most commonly air, earth, fire, and water. They are typically the descendants of jann, genies of all four elements that wander the Material Plane instead of making a home on the Elemental Planes.\n\nAt birth, a suli resembles their mortal ancestry, not manifesting their otherworldly heritage until adolescence, when they awaken into their elemental power. Strong in body and will, sulis are dynamic and ever-changing, and most feel they embody either all the elements together at once or the traits of different elements at different times. Some see themselves as having multiple aspects or faces to their personalities-one for each element-that they cycle through over the course of days or weeks.",
+			"hash": "FRAEcdDc"
+		}
 	},
 	{
 		"objectType": "VersatileHeritage",
@@ -115,7 +148,18 @@
 		],
 		"aonId": 36,
 		"source": "PZO9308",
-		"id": "7028f8f6-71cb-4f30-b346-f202d83e5514"
+		"id": "7028f8f6-71cb-4f30-b346-f202d83e5514",
+		"pf2t": {
+			"name": "Sylph",
+			"pfs": "standard",
+			"traits": "uncommon",
+			"source": "Ancestry Guide pg. 112",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=36",
+			"aon": "ancestries36",
+			"type": "ancestry",
+			"body": "Sylphs are an intense and lively people, flighty and tempestuous. These planar scions have kinship to beings of elemental air such as djinni, invisible stalkers, and cloud dragons.\n\nSylphs enjoying following their own tempos, shifting between wild energy that draws all eyes to embodying the spirit of unseen breezes that slip away without note. They often build their identities around their perceived personal connection to the element of air, relating to a gentle breeze, a sudden flash of lightning, or an uncontrollable storm.\n\nSome sylphs are born with a connection to an extremely focused aspect of elemental air, such as smoke, storms, or toxic gas. While it does happen, a child is rarely born with a lineage that differs from their parents', as geniekin typically pass these unusual gifts on to their offspring. Lineages can manifest in sylph children as a result of where they're born, such as when stormsoul sylphs are birthed in regions prone to tornadoes or windstorms. A lineage can also reflect a sylph's elemental heritage like in smokesoul sylphs, who often descend from belkers. Fumesoul sylphs, on the other hand, are associated with poisonous and otherwise unbreathable gases.",
+			"hash": "wHbLSVzg"
+		}
 	},
 	{
 		"objectType": "VersatileHeritage",
@@ -132,6 +176,17 @@
 		],
 		"aonId": 37,
 		"source": "PZO9308",
-		"id": "439666e1-ec73-4675-aa8c-c684e4517463"
+		"id": "439666e1-ec73-4675-aa8c-c684e4517463",
+		"pf2t": {
+			"name": "Undine",
+			"pfs": "standard",
+			"traits": "uncommon",
+			"source": "Ancestry Guide pg. 116",
+			"src": "https://2e.aonprd.com/Ancestries.aspx?ID=37",
+			"aon": "ancestries37",
+			"type": "ancestry",
+			"body": "These dynamic, fluid mortals trace their ancestry to creatures from the Plane of Water, such as marids, water mephits, and brine dragons.\n\nUndines often go through life in a series of shifting phases, their interests waxing, waning, or sometimes morphing altogether as old loves are discarded for new interests. Structure provides a much-needed focus to undines' lives, and without strong goals or support from those around them, undines can find themselves stagnating in feelings of despondence. Most undines feel they personify specific aspects of water, some seeing themselves with the strength and power of the waves, the speed and tenacity of a river current, or the calm of a peaceful lake or pond. Others identify with all these aspects and more, their demeanors shifting like the tides from one situation to the next.\n\nUndines born with a connection only to a specific subtype of elemental water, such as ice, brine, or mist, might have a specific undine lineage. These are typically passed down from parent to child, as with other geniekin, but on occasion, a child is born with a lineage never seen in their family. Sometimes lineages are the result of where an undine's ancestors lived, such as rimesoul undines being born in the cold northern countries or at the tops of mountain peaks. At other times it can be related to the undine's elemental heritage, as is often the case with brinesoul undines, who usually descend from brine dragons. Mistsoul undines might have a distant but powerful connection to elemental water, or might even have a bit of elemental air mixed into their ancestry.",
+			"hash": "qqYKSWNb"
+		}
 	}
 ]

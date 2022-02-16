@@ -36,7 +36,20 @@
 		"page": 71,
 		"source": "PZO9301",
 		"id": "bacfccd3-3e6f-4739-89b4-0f85b2fceba9",
-		"aonId": 895
+		"aonId": 895,
+		"pf2t": {
+			"name": "Red Mantis Assassin Dedication",
+			"level": 2,
+			"pfs": "restricted",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Red Mantis Assassin",
+			"source": "World Guide pg. 71 2.0",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=895",
+			"aon": "feats895",
+			"type": "feat",
+			"body": "**Archetype** Red Mantis Assassin\n**Prerequisites** trained in sawtooth sabers; worshipper of Achaekek; lawful evil alignment; member of the Red Mantis assassins\n\n- - -\n\nYou have learned how to stalk your foes and slay them with a sawtooth sabre. You become trained in Stealth and Assassin Lore; if you were already trained, you become an expert instead. Whenever your proficiency in any weapon increases to expert or beyond, you also gain that new proficiency with sawtooth sabers.\n\n#### Red Mantis Assassin Dedication Leads To...\nBasic Red Mantis Magic, Crimson Shroud, Prayer Attack",
+			"hash": "qWpgbrZp"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -35,7 +35,19 @@
 		"page": 56,
 		"source": "PZO2109",
 		"id": "08527fc3-2124-4a52-b0b6-6669b81bc6d8",
-		"aonId": 0
+		"aonId": 3147,
+		"pf2t": {
+			"name": "Vehicle Mechanic Dedication",
+			"level": 2,
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Vehicle Mechanic",
+			"source": "Guns & Gears pg. 56",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3147",
+			"aon": "feats3147",
+			"type": "feat",
+			"body": "**Archetype** Vehicle Mechanic\n**Prerequisites** trained in Crafting; Intelligence 14\n\n- - -\n\nYou are adept at designing and maintaining mechanical vehicles, and you lavish your attention and ingenuity on one vehicle in particular. You become an expert in Crafting, and you choose one vehicle you own-or your party owns collectively-to be your signature vehicle: the vehicle you spend time customizing to grant it various advantages. You can spend 1 week of downtime with a new vehicle to designate it as your signature vehicle instead. Due to your amazing customizations and adjustments, pilots gain a +1 circumstance bonus to any piloting checks they make to control your signature vehicle. If you are a master in Crafting, this bonus increases to +2.\n\n#### Vehicle Mechanic Dedication Leads To...\nEfficient Controls, Engine Bay, Impervious Vehicle, Miraculous Flight, Patch Job, Superior Propulsion",
+			"hash": "xzRykkIk"
+		}
 	},
 	{
 		"objectType": "Feat",

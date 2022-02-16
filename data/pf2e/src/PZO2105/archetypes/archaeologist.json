@@ -39,7 +39,20 @@
 		"page": 156,
 		"source": "PZO2105",
 		"id": "53655fa9-cfab-4630-b233-7cb139b1dbe8",
-		"aonId": 1879
+		"aonId": 1879,
+		"pf2t": {
+			"name": "Archaeologist Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication",
+			"archetype": "Archaeologist",
+			"source": "Advanced Player's Guide pg. 156",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1879",
+			"aon": "feats1879",
+			"type": "feat",
+			"body": "**Archetype** Archaeologist\n**Prerequisites** trained in Perception; trained in Society and Thievery\n\n- - -\n\nYou are a student of peoples and their histories, and are in constant pursuit of knowledge and artifacts from the past. You become an expert in Society and Thievery, and you gain a +1 circumstance bonus to Recall Knowledge about ancient history, peoples, and cultures.\n\n#### Archaeologist Dedication Leads To...\nArchaeologist's Luck, Greater Magical Scholastics, Magical Scholastics, Scholastic Identification, Settlement Scholastics",
+			"hash": "tvtbzLqL"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -35,7 +35,20 @@
 		"page": 152,
 		"source": "PZO2105",
 		"id": "641768af-b70f-4dd1-9319-0a32df38b8dd",
-		"aonId": 1851
+		"aonId": 1851,
+		"pf2t": {
+			"name": "Oracle Dedication",
+			"level": 2,
+			"pfs": "standard",
+			"traits": "archetype,dedication,multiclass",
+			"archetype": "Oracle",
+			"source": "Advanced Player's Guide pg. 152",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=1851",
+			"aon": "feats1851",
+			"type": "feat",
+			"body": "**Archetype** Oracle\n**Prerequisites** Charisma 14\n\n- - -\n\nChoose a mystery. You become trained in Religion and the mystery's skill; if you were already trained, you become trained in a skill of your choice. You gain the mild, constant effects of the mystery's curse described in its first paragraph, but not other effects the mystery usually grants. You cast spells like an oracle and gain the Cast a Spell activity. You gain a spell repertoire with two cantrips, either common divine cantrips or other divine cantrips you learn or discover. You're trained in divine spell attack rolls and divine spell DCs. Your key spellcasting ability for oracle archetype spells is Charisma, and they are divine oracle spells.\n\n#### Oracle Dedication Leads To...\nBasic Mysteries, Basic Oracle Spellcasting, First Revelation",
+			"hash": "vWqgCprl"
+		}
 	},
 	{
 		"objectType": "Feat",

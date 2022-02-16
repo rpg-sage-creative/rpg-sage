@@ -35,7 +35,19 @@
 		"page": 128,
 		"source": "PZO2109",
 		"id": "c51ac390-f1e1-49ea-825c-49a9d5e0ab1a",
-		"aonId": 0
+		"aonId": 3222,
+		"pf2t": {
+			"name": "Artillerist Dedication",
+			"level": 2,
+			"traits": "archetype,dedication",
+			"archetype": "Artillerist",
+			"source": "Guns & Gears pg. 128",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3222",
+			"aon": "feats3222",
+			"type": "feat",
+			"body": "**Archetype** Artillerist\n**Prerequisites** trained in martial weapons\n\n- - -\n\nArtillery is a team sport, where every member of the crew has to rely on the other members. At best, a mistake might just waste time. At worst, a misaligned fuse or a badly set pin could cause the whole thing to explode. You've taken these lessons to heart, and so your presence on an artillery team assists the entire team at every aspect of the siege weapon's deployment and usage. If you're serving on a siege weapon crew, you and all other members gain a +2 circumstance bonus to any checks to Load, Aim, move, or Repair the weapon. When you Aim a siege weapon, you can move the weapon's aim twice as far as normal.",
+			"hash": "UrcxJQBK"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -38,7 +38,20 @@
 		"page": 236,
 		"source": "PZO2108",
 		"id": "35e361d9-1fb0-4a21-b251-682609b0dc2b",
-		"aonId": 0
+		"aonId": 3016,
+		"pf2t": {
+			"name": "Soulforger Dedication",
+			"level": 2,
+			"pfs": "limited",
+			"traits": "uncommon,archetype,dedication",
+			"archetype": "Soulforger",
+			"source": "Secrets of Magic pg. 236",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3016",
+			"aon": "feats3016",
+			"type": "feat",
+			"body": "**Archetype** Soulforger\n**Prerequisites** Wisdom 14 or ability to cast divine spells\n**Requirements** If summoning a weapon or shield, you have the hands free to wield it; if summoning armor, you aren't wearing any armor\n\n- - -\n\nYou can manifest the power of your spirit in combat to realize your motivations. You manifest an armor, shield, or weapon as a soulforged armament. Choose one essence power for the armament (below). Changing an essence power requires 1 week of retraining, and you can't retrain it while you have soulforged corruption.\n\nYou can Manifest Soulforged Armament to summon your armaments in combat.\n\n**Manifest Soulforged Armament** :a: (concentrate, conjuration, divine, extradimensional) **Effect** You immediately wield or wear the soulforged armament bound to you. The soulforged armament remains manifested until you Dismiss this effect.\n\nOnce per day when you use this ability, you can manifest the armament's essence form. You gain the armament's essence power until it's Dismissed. After 1 minute, the essence form armament is automatically Dismissed.\n\n#### Soulforger Dedication Leads To...\nRapid Manifestation, Soul Arsenal, Soul Flare",
+			"hash": "ZbCQxZYY"
+		}
 	},
 	{
 		"objectType": "Feat",

@@ -42,7 +42,20 @@
 		"page": 249,
 		"source": "PZO2108",
 		"id": "8344c752-1a26-4a39-b497-928e20f30683",
-		"aonId": 0
+		"aonId": 3029,
+		"pf2t": {
+			"name": "Wellspring Mage Dedication",
+			"level": 2,
+			"pfs": "limited",
+			"traits": "rare,archetype,class,dedication",
+			"archetype": "Wellspring Mage",
+			"source": "Secrets of Magic pg. 249",
+			"src": "https://2e.aonprd.com/Feats.aspx?ID=3029",
+			"aon": "feats3029",
+			"type": "feat",
+			"body": "**Archetype** Wellspring Mage\n**Prerequisites** wellspring magic\n\n- - -\n\nThere's no longer a limit on how many temporary spell slots you can gain per day from wellspring magic.\n\n#### Wellspring Mage Dedication Leads To...\nInterfering Surge, Urgent Upwelling, Wellspring Control",
+			"hash": "LkLOhtUf"
+		}
 	},
 	{
 		"objectType": "Feat",
