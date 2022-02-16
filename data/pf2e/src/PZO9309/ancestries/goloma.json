@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Language",
+		"name": "Goloma",
+		"source": "PZO9309",
+		"id": "0c96705a-8039-4d1a-890e-0f9328f5cd70",
+		"aonId": 83,
+		"pf2t": {
+			"name": "Goloma",
+			"source": "The Mwangi Expanse pg. 111 2.0",
+			"src": "https://2e.aonprd.com/Languages.aspx?ID=83",
+			"aon": "languages83",
+			"type": "language",
+			"body": "The below entries contain speakers of Goloma.\n\n#### Ancestries (1)\nGoloma",
+			"hash": "jCWtDXLI"
+		}
+	},
+	{
 		"objectType": "Trait",
 		"name": "Goloma",
 		"source": "PZO9309",

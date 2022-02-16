@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Language",
+		"name": "Shoony",
+		"source": "PZO90153",
+		"id": "f45fbd47-e4b0-4536-bcbf-32a860f29891",
+		"aonId": 56,
+		"pf2t": {
+			"name": "Shoony",
+			"source": "153 Life's Long Shadow pg. 72",
+			"src": "https://2e.aonprd.com/Languages.aspx?ID=56",
+			"aon": "languages56",
+			"type": "language",
+			"body": "The below entries contain speakers of Shoony.",
+			"hash": "XbyNLgQk"
+		}
+	},
+	{
 		"objectType": "Trait",
 		"name": "Shoony",
 		"source": "PZO90153",

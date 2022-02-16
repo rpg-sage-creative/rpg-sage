@@ -27,6 +27,7 @@
 			"hash": "ppbmKgVf"
 		}
 	},
+	{ "objectType": "Language", "name": "Gnoll", "source": "PZO9309", "id": "1d5891c8-58ff-4ac2-9aff-c6d8dd9e1379" },
 	{ "objectType": "Trait", "name": "Gnoll", "source": "PZO9309", "id": "deb789b0-b7d6-4ed5-b5b0-3e20942ca97c" },
 	{
 		"objectType": "Heritage",

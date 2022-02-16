@@ -28,6 +28,22 @@
 		}
 	},
 	{
+		"objectType": "Language",
+		"name": "Shisk",
+		"source": "PZO9309",
+		"id": "f07ded79-335d-48dd-bab8-a00c439d1ccd",
+		"aonId": 84,
+		"pf2t": {
+			"name": "Shisk",
+			"source": "The Mwangi Expanse pg. 115 2.0",
+			"src": "https://2e.aonprd.com/Languages.aspx?ID=84",
+			"aon": "languages84",
+			"type": "language",
+			"body": "The below entries contain speakers of Shisk.\n\n#### Ancestries (1)\nShisk",
+			"hash": "KwhpEZzJ"
+		}
+	},
+	{
 		"objectType": "Trait",
 		"name": "Shisk",
 		"source": "PZO9309",

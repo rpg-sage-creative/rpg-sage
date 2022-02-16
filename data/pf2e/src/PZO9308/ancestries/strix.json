@@ -27,6 +27,7 @@
 			"hash": "YSJXYppI"
 		}
 	},
+	{ "objectType": "Language", "name": "Strix", "source": "PZO9308", "id": "c1494eab-68bd-415f-a211-be00defbf0f1" },
 	{
 		"objectType": "Trait",
 		"name": "Strix",

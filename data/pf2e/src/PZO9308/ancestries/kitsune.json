@@ -27,6 +27,7 @@
 			"hash": "RmgBZgkP"
 		}
 	},
+	{ "objectType": "Language", "name": "Kitsune", "source": "PZO9308", "id": "fee4ee78-f833-4252-b79b-480983e78f12" },
 	{
 		"objectType": "Trait",
 		"name": "Kitsune",

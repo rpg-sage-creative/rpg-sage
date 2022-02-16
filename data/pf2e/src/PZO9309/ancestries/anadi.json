@@ -27,6 +27,7 @@
 			"hash": "JjXDwLKj"
 		}
 	},
+	{ "objectType": "Language", "name": "Anadi", "source": "PZO9309", "id": "0061bcac-29ba-4fb2-9379-303d779d427b" },
 	{ "objectType": "Trait", "name": "Anadi", "source": "PZO9309", "id": "61ee581c-faf6-479b-9d41-076cb9bd749b" },
 	{
 		"objectType": "Heritage",

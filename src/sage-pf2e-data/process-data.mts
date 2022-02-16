@@ -8,6 +8,8 @@ import { processAbcData } from "./process-abc.mjs";
 import { processPf2tData } from "./processPf2taData.mjs";
 import type { TCore } from "./types.mjs";
 
+type CoreList = utils.ArrayUtils.Collection<TCore>;
+
 let total = 0, created = 0, unique = 0, recreated = 0, normalized = 0, aoned = 0, linked = 0;
 
 //#region unique uuids
@@ -121,7 +123,7 @@ function fixDedicationFeatObjectType(core: TCore): boolean {
 
 function processData(filePathAndName: string) {
 	info(`Processing file: ${filePathAndName} ...`);
-	const coreList = utils.FsUtils.readJsonFileSync(filePathAndName) as TCore[];
+	const coreList = utils.ArrayUtils.Collection.from(utils.FsUtils.readJsonFileSync(filePathAndName) as TCore[]);
 
 	//#region invalid file/data
 	if (!coreList) {
@@ -155,6 +157,7 @@ function processData(filePathAndName: string) {
 	total += coreList.length;
 
 	ensureTrait(coreList);
+	ensureLanguage(coreList);
 
 	for (const core of coreList) {
 		getSageCores().push(core);
@@ -210,19 +213,29 @@ function processData(filePathAndName: string) {
 	return coreList;
 }
 
-function ensureTrait(coreList: TCore[]): void {
+function missingObjectType(coreList: CoreList, typesToCheck: string[], typeToFind: string, pf2tType: string = typeToFind.toLowerCase()): CoreList {
 	const pf2tCores = getPf2tCores();
-	["Class","Ancestry","Archetype","VersatileHeritage"].forEach(objectType => {
-		const missingTraits = coreList.filter(core => core.objectType === objectType && !coreList.find(c => c.objectType === "Trait" && c.name === core.name));
-		const hasPf2tTraits = missingTraits.filter(sage => pf2tCores.find(pf2t => pf2t.type === "trait" && sage.name === pf2t.name));
-		hasPf2tTraits.forEach(core => {
-			// if (objectType !== "Archetype" || !sageCores.find(sageCore => sageCore.objectType === "Class" && sageCore.name === core.name)) {
-				const traitCore = { objectType:"Trait", name:core.name, source:core.source, id:createUuid() } as TCore;
-				coreList.splice(coreList.indexOf(core) + 1, 0, traitCore);
-			// }
-		});
+	const missing = coreList.filter(sage => typesToCheck.includes(sage.objectType) && !coreList.find(core => core.objectType === typeToFind && core.name === sage.name));
+	return missing.filter(sage => pf2tCores.find(pf2t => pf2t.type === pf2tType && sage.name === pf2t.name));
+}
+function ensureTrait(coreList: CoreList): void {
+	const objectTypes = ["Class","Ancestry","Archetype","VersatileHeritage"];
+	const missingTraits = missingObjectType(coreList, objectTypes, "Trait");
+	missingTraits.forEach(sage => {
+		const core = { objectType:"Trait", name:sage.name, source:sage.source, id:createUuid() } as TCore;
+		coreList.splice(coreList.indexOf(sage) + 1, 0, core);
 	});
 }
+function ensureLanguage(coreList: CoreList): void {
+	if (coreList.first()?.source === "PZO2101") return;
+	const objectTypes = ["Ancestry", "Heritage", "VersatileHeritage"];
+	const missingLanguages = missingObjectType(coreList, objectTypes, "Language");
+	missingLanguages.forEach(sage => {
+		const core = { objectType:"Language", name:sage.name, source:sage.source, id:createUuid() } as TCore;
+		coreList.splice(coreList.indexOf(sage) + 1, 0, core);
+	});
+}
+
 
 function fixDetails(core: TCore): boolean {
 	let updated = false;

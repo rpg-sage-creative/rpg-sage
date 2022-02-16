@@ -27,6 +27,7 @@
 			"hash": "zXTlqWJZ"
 		}
 	},
+	{ "objectType": "Language", "name": "Grippli", "source": "PZO9309", "id": "b6133c14-cc0a-46e3-a5fa-9e8e3241da30" },
 	{ "objectType": "Trait", "name": "Grippli", "source": "PZO9309", "id": "c21496d8-cd23-4b1f-bb88-1cd0e15a681c" },
 	{
 		"objectType": "Heritage",
