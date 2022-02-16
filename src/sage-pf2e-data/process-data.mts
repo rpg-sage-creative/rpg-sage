@@ -213,8 +213,10 @@ function ensureTrait(coreList: TCore[]): void {
 	["Class","Ancestry","Archetype","VersatileHeritage"].forEach(objectType => {
 		const missingTraits = coreList.filter(core => core.objectType === objectType && !coreList.find(c => c.objectType === "Trait" && c.name === core.name));
 		missingTraits.forEach(core => {
-			const traitCore = { objectType:"Trait", name:core.name, source:core.source, id:createUuid() } as TCore;
-			coreList.splice(coreList.indexOf(core), 0, traitCore);
+			if (objectType !== "Archetype" || !sageCores.find(sageCore => sageCore.objectType === "Class" && sageCore.name === core.name)) {
+				const traitCore = { objectType:"Trait", name:core.name, source:core.source, id:createUuid() } as TCore;
+				coreList.splice(coreList.indexOf(core) + 1, 0, traitCore);
+			}
 		});
 	});
 }
@@ -321,7 +323,7 @@ function findDuplicateCores(): void {
 	const dupes = sageCores.map(core => sageCores.filter(dupe =>
 		core.objectType === dupe.objectType && core.name === dupe.name && core.source === dupe.source && core.id !== dupe.id
 	)).filter(dupes => dupes.length);
-	info(`Duplicate Entries (${dupes.length}): ${dupes.pluck("name" as any)}`);
+	info(`Duplicate Entries (${dupes.length}): ${dupes.map(list => list.first()!.name)}`);
 }
 
 let pf2tCores: Pf2tBaseCore[] = [];
