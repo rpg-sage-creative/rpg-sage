@@ -4,12 +4,8 @@ import utils from "../../../sage-utils";
 import HasSource, { SourcedCore } from "./HasSource";
 import type { IHasArchives, IHasDetails, IHasLink, IHasName } from "./interfaces";
 import RenderableContent from "../../data/RenderableContent";
-import { find } from "../../data/Repository";
 import Source from "./Source";
 import type { SourceCore } from "./Source";
-import type { ClassCore } from "../Class";
-
-type TClass = HasSource & { classPath:string; };
 
 export interface Pf2tBaseCore extends SourcedCore<""> {
 	/** The id(s) of Sage's version(s) of this object. */
@@ -59,44 +55,6 @@ export interface Pf2tBaseCore extends SourcedCore<""> {
 	speedpenalty?: string;
 }
 
-export function objectTypeToPf2Type(objectType: string): string;
-export function objectTypeToPf2Type(objectType: string, cleanOnly: true): string;
-export function objectTypeToPf2Type(sageCore: TSageCore, cores: ClassCore[]): string;
-export function objectTypeToPf2Type(sageCore: TSageCore | string, cores?: true | ClassCore[]): string {
-	if (typeof(sageCore) === "string") {
-		return cores === true ? cleanType(sageCore) : toPf2Type(sageCore);
-	}
-	if (sageCore.objectType === "ClassPath" && Array.isArray(cores)) {
-		const clss = cores
-			? cores.find(klass => klass.objectType === "Class" && klass.name === sageCore.class)
-			: find<TClass>("Class", klass => klass.name === sageCore.class);
-		if (sageCore.name === "Ruffian") {
-			console.log(cores?.length, clss);
-		}
-		if (clss?.classPath) {
-			return toPf2Type(clss.classPath);
-		}
-	}
-	if (["Spell","FocusSpell"].includes(sageCore.objectType) && sageCore.traits?.includes("Cantrip")) {
-		return toPf2Type("Cantrip");
-	}
-	return toPf2Type(sageCore.objectType);
-}
-function toPf2Type(value: string): string {
-	switch (value) {
-		// "classpath" would need to get the name of the classpath, such as "racket"
-		case "Armor": return "item";
-		case "DedicationFeat": return "feat";
-		case "Faith": return "deity";
-		case "FocusSpell": return "focus";
-		case "Gear": return "item";
-		case "VersatileHeritage": return "ancestry";
-		default: return cleanType(value);
-	}
-}
-function cleanType(value: string): string {
-	return value.replace(/[\s']/g, "").toLowerCase();
-}
 //#region sources
 
 const missingSources: string[] = [];
@@ -156,8 +114,6 @@ function parseSource(sources: TSourceOrCore[], value?: string): TParsedSource | 
 }
 
 //#endregion
-
-type TSageCore = { objectType:string; class?:string; name:string; traits?:string[]; };
 
 const keyMap = new Map();
 

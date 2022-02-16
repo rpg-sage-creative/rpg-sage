@@ -57,7 +57,58 @@
 			"hash": "DGRQfFkP"
 		}
 	},
-	{ "objectType": "ClassPath", "name": "Bomber", "class": "Alchemist", "source": "PZO2101", "id": "b640f752-fc04-45b0-bc9b-bad88669b53e", "aonId": 1 },
-	{ "objectType": "ClassPath", "name": "Chirurgeon", "class": "Alchemist", "source": "PZO2101", "id": "f0561e85-5f0b-47db-b13c-6432a275aa88", "aonId": 2 },
-	{ "objectType": "ClassPath", "name": "Mutagenist", "class": "Alchemist", "source": "PZO2101", "id": "f1c25e73-fd69-4b38-bc3f-42fad26cd6a5", "aonId": 3 }
+	{
+		"objectType": "ClassPath",
+		"name": "Bomber",
+		"class": "Alchemist",
+		"source": "PZO2101",
+		"id": "b640f752-fc04-45b0-bc9b-bad88669b53e",
+		"aonId": 1,
+		"pf2t": {
+			"name": "Bomber",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 73 2.0",
+			"src": "https://2e.aonprd.com/ResearchFields.aspx?ID=1",
+			"aon": "researchfields1",
+			"type": "researchfield",
+			"body": "You specialize in explosions and other violent alchemical reactions. You start with the formulas for two 1st-level alchemical bombs in your formula book, in addition to your other formulas.\n\nWhen throwing an alchemical bomb with the splash trait, you can deal splash damage to only your primary target instead of the usual splash area.\n\n#### Field Discovery (5th)\nWhen using advanced alchemy to make bombs during your daily preparations, you can use a batch of reagents to create any three bombs instead of just two of the same bomb.\n\n#### Perpetual Infusions (7th)\nChoose two of the following formulas: lesser acid flask, lesser alchemist's fire, lesser bottled lightning, lesser frost vial, lesser tanglefoot bag, lesser thunderstone.\n\n#### Perpetual Potency (11th)\nThe moderate versions of the bombs you chose for perpetual infusions.\n\n#### Greater Field Discovery (13th)\nYou can increase the splash on your bombs to damage creatures within 10 feet, or 15 feet if you have Expanded Splash.\n\n#### Perpetual Perfection (17th)\nThe greater versions of the bombs you chose for perpetual infusions.",
+			"hash": "bnqNOqzk"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Chirurgeon",
+		"class": "Alchemist",
+		"source": "PZO2101",
+		"id": "f0561e85-5f0b-47db-b13c-6432a275aa88",
+		"aonId": 2,
+		"pf2t": {
+			"name": "Chirurgeon",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 73 2.0",
+			"src": "https://2e.aonprd.com/ResearchFields.aspx?ID=2",
+			"aon": "researchfields2",
+			"type": "researchfield",
+			"body": "You concentrate on healing others with alchemy. You start with the formulas for two of the following in your formula book, in addition to your other formulas: lesser antidote, lesser antiplague, or minor elixir of life.\n\nAs long as your proficiency rank in Medicine is trained or better, you can attempt a Crafting check instead of a Medicine check for any of Medicine's untrained and trained uses.\n\n#### Field Discovery (5th)\nWhen using advanced alchemy to make elixirs of life during your daily preparations, you can create three elixirs with each batch of reagents instead of two.\n\n#### Perpetual Infusions (7th)\nLesser antidote and lesser antiplague.\n\n#### Perpetual Potency (11th)\nModerate antidote and antiplague.\n\n#### Greater Field Discovery (13th)\nWhen you use Quick Alchemy to create any type of elixir of life, the creature drinking the elixir gains the maximum Hit Points possible for that elixir, instead of rolling to determine the number of Hit Points regained.\n\n#### Perpetual Perfection (17th)\nGreater antidote and antiplague.",
+			"hash": "KTLrkpzz"
+		}
+	},
+	{
+		"objectType": "ClassPath",
+		"name": "Mutagenist",
+		"class": "Alchemist",
+		"source": "PZO2101",
+		"id": "f1c25e73-fd69-4b38-bc3f-42fad26cd6a5",
+		"aonId": 3,
+		"pf2t": {
+			"name": "Mutagenist",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 73 2.0",
+			"src": "https://2e.aonprd.com/ResearchFields.aspx?ID=3",
+			"aon": "researchfields3",
+			"type": "researchfield",
+			"body": "You focus on bizarre mutagenic transformations that sacrifice one aspect of a creature's physical or psychological being in order to strengthen another. You start with the formulas for two 1st-level mutagens in your formula book, in addition to your other formulas.\n\nYou gain the following free action.\n\n#### Mutagenic Flashback\nYou experience a brief resurgence of a mutagen. Choose one mutagen you've consumed since your last daily preparations. You gain the effects of that mutagen for 1 minute.\n\n#### Field Discovery (5th)\nWhen using advanced alchemy to make mutagens during your daily preparations, you can use a batch of reagents to create any three mutagens instead of just two of the same mutagen.\n\n#### Perpetual Infusions (7th)\nChoose two of the following formulas: lesser bestial mutagen, lesser cognitive mutagen, lesser juggernaut mutagen, lesser quicksilver mutagen, lesser serene mutagen, lesser silvertongue mutagen.\n\n#### Perpetual Potency (11th)\nThe moderate versions of the mutagens you chose for perpetual infusions.\n\n#### Greater Field Discovery (13th)\nIf you imbibe another mutagen while you are under the effects of a mutagen that you created, you can gain the benefits and the drawbacks of both mutagens at once, despite the fact that they both have the polymorph trait and would not normally function together. If you come under the effects of any further mutagens while benefiting from two mutagens, you lose the benefit of one of the former mutagens of your choice, while retaining the drawbacks of all the mutagens. If you are under the effects of two mutagens and you come under the effect of a non-mutagen polymorph effect, you lose the benefits of the mutagens while retaining the drawbacks of both.\n\n#### Perpetual Perfection (17th)\nThe greater versions of the mutagens you chose for perpetual infusions.",
+			"hash": "lpzRjfbM"
+		}
+	}
 ]

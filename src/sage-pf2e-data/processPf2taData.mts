@@ -29,7 +29,7 @@ export async function processPf2tData(): Promise<void> {
 	const sageHashes = sageCores.map(core => core.pf2t?.hash).filter(hash => hash);
 	const leftovers = pf2tCores.filter(pf2t => !sageHashes.includes(pf2t.hash));
 
-	console.log({leftovers:leftovers.length});
+	info({leftovers:leftovers.length});
 	await utils.FsUtils.writeFile(`${DistDataPath}/pf2t-leftovers.json`, leftovers, true, false);
 
 	const matchesByName = leftovers.map((pf2t, i, a) => {

@@ -1,5 +1,5 @@
+import { info } from "console";
 import { BaseCore, Pf2tBase, Pf2tBaseCore, TDetail, THasSuccessOrFailure } from "../../sage-pf2e";
-import { objectTypeToPf2Type } from "../../sage-pf2e/model/base/Pf2tBase";
 import type { SourceCore } from "../../sage-pf2e/model/base/Source";
 import type { ClassCore } from "../../sage-pf2e/model/Class";
 import utils, { OrNull } from "../../sage-utils";
@@ -64,6 +64,47 @@ export function parseBody<T extends BaseCore>(body: string): Partial<T> {
 
 //#region pf2tools
 
+//#region objectType to type
+
+function objectTypeToPf2Type(sageCore: TCore): string;
+function objectTypeToPf2Type(objectType: string): string;
+function objectTypeToPf2Type(objectType: string, cleanOnly: true): string;
+function objectTypeToPf2Type(sageCore: TCore | string, cleanOnly?: true): string {
+	if (typeof(sageCore) === "string") {
+		return cleanOnly === true ? cleanType(sageCore) : toPf2Type(sageCore);
+	}
+	if (sageCore.objectType === "ClassPath") {
+		info(`WHAT THE FUCK!? ${sageCore.objectType}::${sageCore.class}`)
+		const clss = getTypedCores("Class").find(klass => klass.name === sageCore.class);
+		if (clss?.classPath) {
+			return toPf2Type(clss.classPath);
+		}
+	}
+	if (["Spell","FocusSpell"].includes(sageCore.objectType) && sageCore.traits?.includes("Cantrip")) {
+		return toPf2Type("Cantrip");
+	}
+	return toPf2Type(sageCore.objectType);
+}
+
+function toPf2Type(value: string): string {
+	switch (value) {
+		// "classpath" would need to get the name of the classpath, such as "racket"
+		case "Armor": return "item";
+		case "DedicationFeat": return "feat";
+		case "Faith": return "deity";
+		case "FocusSpell": return "focus";
+		case "Gear": return "item";
+		case "VersatileHeritage": return "ancestry";
+		default: return cleanType(value);
+	}
+}
+
+function cleanType(value: string): string {
+	return value.replace(/[\s']/g, "").toLowerCase();
+}
+
+//#endregion
+
 const typedCores = new Map();
 export function getTypedCores(objectType: "Source"): SourceCore[];
 export function getTypedCores(objectType: "Class"): ClassCore[];
@@ -84,7 +125,7 @@ function typesMatch(pf2t: Pf2tBaseCore, sage: TCore): [boolean, string] {
 	if (pf2t.type === simpleType) {
 		return [true, simpleType];
 	}
-	const sageType = objectTypeToPf2Type(sage, getTypedCores("Class"));
+	const sageType = objectTypeToPf2Type(sage);
 	return [pf2t.type === sageType, sageType];
 }
 

@@ -193,6 +193,7 @@ function processData(filePathAndName: string) {
 		delete (core as any).hash;
 		utils.FsUtils.writeFileSync(`${DistDataPath}/${core.objectType}/${core.id}.json`, core, true, false);
 	}
+
 	created += _created;
 	recreated += _recreated;
 	normalized += _normalized;
