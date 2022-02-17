@@ -43,7 +43,8 @@ export async function processPf2tData(): Promise<void> {
 	matchesByName.forEach(matches => {
 		matches.forEach(({ pf2t, sage, sageType, type, source }) => {
 			const sourceCore = sourceCores.find(src => src.code === sage.source);
-			if(false)info(`${pf2t.name}: ${pf2t.type} ${type ? "===" : "!=="} ${sageType ?? sage.objectType} :: ${pf2t.source} ${source ? "===" : "!=="} ${sourceCore?.name ?? sage.source}`);
+			// if(false)
+			info(`${pf2t.name}: ${pf2t.type} ${type ? "===" : "!=="} ${sageType ?? sage.objectType} :: ${pf2t.source} ${source ? "===" : "!=="} ${sourceCore?.name ?? sage.source}`);
 		});
 	});
 

@@ -88,8 +88,7 @@ function toPf2Type(value: string): string {
 		case "Faith": return "deity";
 		case "FocusSpell": return "focus";
 		case "Gear": return "item";
-		case "Heritage": return "ancestry";
-		case "VersatileHeritage": return "ancestry";
+		case "VersatileHeritage": return "heritage";
 		default: return cleanType(value);
 	}
 }

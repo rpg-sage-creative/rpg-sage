@@ -18,7 +18,7 @@
 			"Dismiss your human ethnicity and culture in light of your elven heritage.",
 			"Downplay the challenges of being caught between two cultures."
 		],
-		"aonId": 7,
+		"aonId": 26,
 		"source": "PZO2101",
 		"page": 55,
 		"id": "39d4b70f-c787-404e-8692-7d4a6ed3ba21",
@@ -43,6 +43,16 @@
 					"details": "By default, half-elves and half-orcs descend from humans, but your GM might allow you to be the offspring of an elf, orc, or different ancestry. In these cases, the GM will let you select the half-elf or half-orc heritage as the heritage for this other ancestry. The most likely other parent of a half-elf are gnomes and halflings, and the most likely parents of a half-orc are goblins, halflings, and dwarves."
 				}
 			]
+		},
+		"pf2t": {
+			"name": "Half-Elf",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 56 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=26",
+			"aon": "heritages26",
+			"type": "heritage",
+			"body": "**Ancestry Page** Half-Elf\nEither one of your parents was an elf, or one or both were half-elves. You have pointed ears and other telltale signs of elf heritage. You gain the elf trait, the half-elf trait, and low-light vision. In addition, you can select elf, half-elf, and human feats whenever you gain an ancestry feat.",
+			"hash": "tXdMXpxg"
 		}
 	},
 	{
@@ -80,7 +90,7 @@
 			"Pity you for the tragic circumstances they assume were involved in your birth.",
 			"Get out of your way and back down rather than face your anger."
 		],
-		"aonId": 8,
+		"aonId": 27,
 		"source": "PZO2101",
 		"page": 55,
 		"id": "c82b2801-554d-4283-aaaa-75e9a6c3d51d",
@@ -105,6 +115,16 @@
 					"details": "By default, half-elves and half-orcs descend from humans, but your GM might allow you to be the offspring of an elf, orc, or different ancestry. In these cases, the GM will let you select the half-elf or half-orc heritage as the heritage for this other ancestry. The most likely other parent of a half-elf are gnomes and halflings, and the most likely parents of a half-orc are goblins, halflings, and dwarves."
 				}
 			]
+		},
+		"pf2t": {
+			"name": "Half-Orc",
+			"pfs": "standard",
+			"source": "Core Rulebook pg. 56 2.0",
+			"src": "https://2e.aonprd.com/Heritages.aspx?ID=27",
+			"aon": "heritages27",
+			"type": "heritage",
+			"body": "**Ancestry Page** Half-Orc\nOne of your parents was an orc, or one or both were half-orcs. You have a green tinge to your skin and other indicators of orc heritage. You gain the orc trait, the half-orc trait, and low-light vision. In addition, you can select orc, half-orc, and human feats whenever you gain an ancestry feat.",
+			"hash": "CbczLJbx"
 		}
 	},
 	{

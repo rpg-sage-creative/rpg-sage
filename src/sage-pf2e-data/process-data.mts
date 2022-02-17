@@ -353,7 +353,8 @@ export default async function process(): Promise<void> {
 	processAbcData();
 	processMissingSpells();
 	processLore();
-	if (false) findDuplicateCores();
+	if (false)
+	findDuplicateCores();
 	parsePf2Data();
 
 	info(""); // spacer for bash script
