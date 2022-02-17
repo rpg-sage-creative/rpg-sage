@@ -1,0 +1,76 @@
+[
+	{ "objectType": "Language", "name": "Alghollthu", "traits": [ "Uncommon" ], "speakers": [ "Alghollthus and some of their enemies" ], "source": "PZO2104", "id": "d230519c-edf5-44ea-b984-f006cc6799cb" },
+	{ "objectType": "Language", "name": "Arboreal", "traits": [ "Uncommon" ], "speakers": [ "Plant creatures" ], "source": "PZO2104", "id": "56bb53ed-edc3-46b7-9c54-1797814200dd" },
+	{ "objectType": "Language", "name": "Caligni", "traits": [ "Uncommon" ], "speakers": [ "Calignis" ], "source": "PZO2104", "id": "94f38ffa-0f96-47de-aad1-8116c7b445b8" },
+	{ "objectType": "Language", "name": "Cyclops", "traits": [ "Uncommon" ], "speakers": [ "Cyclopes and associated creatures" ], "source": "PZO2104", "id": "6be39c6b-a822-49ed-bb01-5e26fff98be8" },
+	{ "objectType": "Language", "name": "Daemonic", "traits": [ "Uncommon" ], "speakers": [ "Daemons and their worshippers" ], "source": "PZO2104", "id": "35eb0b32-dc95-47b9-852d-a900b5372134" },
+	{
+		"objectType": "Language",
+		"name": "Destrachan",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Destrachans" ],
+		"source": "PZO2104",
+		"id": "85156506-c897-484b-909b-c2b41322b625",
+		"aonId": 57,
+		"pf2t": {
+			"name": "Destrachan",
+			"source": "Bestiary 2 pg. 311 2.0",
+			"src": "https://2e.aonprd.com/Languages.aspx?ID=57",
+			"aon": "languages57",
+			"type": "language",
+			"body": "The below entries contain speakers of Destrachan.",
+			"hash": "UnQzdcrp"
+		}
+	},
+	{
+		"objectType": "Language",
+		"name": "D'ziriak",
+		"traits": [ "Uncommon" ],
+		"speakers": [
+			"D'ziriaks"
+		],
+		"source": "PZO2104",
+		"id": "76ade0b7-54e7-4385-a825-e7bdcd37b0af",
+		"aonId": 58,
+		"pf2t": {
+			"name": "D'ziriak",
+			"source": "Bestiary 2 pg. 311 2.0",
+			"src": "https://2e.aonprd.com/Languages.aspx?ID=58",
+			"aon": "languages58",
+			"type": "language",
+			"body": "The below entries contain speakers of D'ziriak.",
+			"hash": "RpxtNXJr"
+		}
+	},
+	{ "objectType": "Language", "name": "Grippli", "traits": [ "Uncommon" ], "speakers": [ "Gripplis" ], "source": "PZO2104", "id": "213bdeb4-5d8f-4bee-9670-35d8a78ce753" },
+	{
+		"objectType": "Language",
+		"name": "Jistkan",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Ancient constructs" ],
+		"source": "PZO2104",
+		"id": "366ae68e-8190-4718-b751-6d855f7e6893",
+		"aonId": 59,
+		"pf2t": {
+			"name": "Jistkan",
+			"source": "Bestiary 2 pg. 311 2.0",
+			"src": "https://2e.aonprd.com/Languages.aspx?ID=59",
+			"aon": "languages59",
+			"type": "language",
+			"body": "No speakers of this language can be found in the Archives.",
+			"hash": "PWZhxKtR"
+		}
+	},
+	{
+		"objectType": "Language",
+		"name": "Jyoti",
+		"traits": [ "Uncommon" ],
+		"speakers": [ "Jyotis" ],
+		"source": "PZO2104",
+		"id": "0a5dfd7a-fa44-4f47-8952-5bc6a3c44218",
+		"aonId": 60,
+		"pf2t": { "name": "Jyoti", "source": "Bestiary 2 pg. 311 2.0", "src": "https://2e.aonprd.com/Languages.aspx?ID=60", "aon": "languages60", "type": "language", "body": "The below entries contain speakers of Jyoti.", "hash": "EcAPwtFG" }
+	},
+	{ "objectType": "Language", "name": "Varisian", "traits": [ "Uncommon" ], "speakers": [ "Regional human language", "Sandpoint Devil" ], "source": "PZO2104", "id": "ec225fce-fea0-4a1f-a00b-fcf5f31c5e4d" },
+	{ "objectType": "Language", "name": "Utopian", "traits": [ "Uncommon" ], "speakers": [ "Axiomites and inevitables" ], "source": "PZO2104", "id": "f3f80e20-71cc-47ea-baed-a75750c4f457" }
+]
