@@ -1,0 +1,956 @@
+[
+	{ "objectType": "Trait", "name": "Common", "details": [ "A creature of this rarity is generally known and can be summoned with the appropriate summon spell." ], "source": "PZO2107", "id": "8be60ab6-5051-4c85-9642-6d6a94933172" },
+	{
+		"objectType": "Trait",
+		"name": "Uncommon",
+		"details": [
+			"Less is known about uncommon creatures than common creatures. They typically can't be summoned. The DC of Recall Knowledge checks related to this creature is increased by 2."
+		],
+		"source": "PZO2107",
+		"id": "a46f76cf-517a-4762-913a-56ac481e3579"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Rare",
+		"details": [
+			"As the name suggests, these creatures are rare. They typically can't be summoned. The DC of Recall Knowledge checks related to this creature is increased by 5."
+		],
+		"source": "PZO2107",
+		"id": "a29813f4-ce02-42e3-9d77-8f0bca53ff0f"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Unique",
+		"details": [
+			"A creature with this rarity is one of a kind. The DC of Recall Knowledge checks related to this creature is increased by 10."
+		],
+		"source": "PZO2107",
+		"id": "b42852ab-dd8a-4493-afea-8099a1d1ea24"
+	},
+	{ "objectType": "Trait", "name": "CE", "details": [ "Chaotic and evil" ], "source": "PZO2107", "id": "2bf1e324-5f90-4cbb-964e-c0832fb21fce" },
+	{ "objectType": "Trait", "name": "CG", "details": [ "Chaotic and good" ], "source": "PZO2107", "id": "cabb3dd8-2c7b-47d6-a633-ab886114b362" },
+	{ "objectType": "Trait", "name": "CN", "details": [ "Chaotic and neutral" ], "source": "PZO2107", "id": "22485895-3ba5-42a8-939a-2d83506d65a1" },
+	{ "objectType": "Trait", "name": "LG", "details": [ "Lawful and good" ], "source": "PZO2107", "id": "2a2b5406-70ee-4408-9017-c48691371ede" },
+	{ "objectType": "Trait", "name": "LE", "details": [ "Lawful and evil" ], "source": "PZO2107", "id": "51e38eea-9f5e-4066-b77d-53d0d18040db" },
+	{ "objectType": "Trait", "name": "LN", "details": [ "Lawful and neutral" ], "source": "PZO2107", "id": "01dbb88e-5511-4d50-9e81-e2136ce9305e" },
+	{ "objectType": "Trait", "name": "N", "details": [ "Neutral" ], "source": "PZO2107", "id": "2d676545-5446-496b-9c5f-9c91ac4e1d68" },
+	{ "objectType": "Trait", "name": "NE", "details": [ "Neutral and evil" ], "source": "PZO2107", "id": "c03187a7-f3ca-4cd2-bb3a-59a1d1109e66" },
+	{ "objectType": "Trait", "name": "NG", "details": [ "Neutral and good" ], "source": "PZO2107", "id": "b6f25516-4d4e-4b0c-a834-45dda8606ede" },
+	{
+		"objectType": "Trait",
+		"name": "Gargantuan",
+		"details": [
+			"This size of creature takes up a space of at least 20 feet by 20 feet (16 squares on the grid), but can be much larger. Gargantuan creatures typically have a reach of 20 feet if they are tall, or 15 feet if they are long, but larger ones could have a much longer reach."
+		],
+		"source": "PZO2107",
+		"id": "79fb5679-b63b-46ac-8736-4fc776ecb48d"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Huge",
+		"details": [
+			"A Huge creature takes up a 15-foot-by-15-foot space (9 squares on the grid). It typically has a reach of 15 feet if the creature is tall or 10 feet if the creature is long."
+		],
+		"source": "PZO2107",
+		"id": "5f7e5d79-ec11-45e4-9d34-b4a72e2d88e7"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Large",
+		"details": [
+			"A Large creature takes up a 10-foot-by-10-foot space (4 squares on the grid). It typically has a reach of 10 feet if the creature is tall or 5 feet if the creature is long."
+		],
+		"source": "PZO2107",
+		"id": "52daed58-d329-478b-8c97-757216365617"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Medium",
+		"details": [
+			"A Medium creature takes up a 5-foot-by-5-foot space (1 square on the grid) and typically has a reach of 5 feet."
+		],
+		"source": "PZO2107",
+		"id": "dd6be7c6-e729-4686-a8a3-18de57be6735"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Small",
+		"details": [
+			"A Small creature takes up a 5-foot-by-5-foot space (1 square on the grid) and typically has a reach of 5 feet."
+		],
+		"source": "PZO2107",
+		"id": "b4b9c264-6ffa-4c04-91d3-c65552c37427"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Tiny",
+		"details": [
+			"A creature of this size takes up less than a 5-foot-by-5-foot space (1 square on the grid), and multiple Tiny creatures can occupy the same square on the grid. At least four Tiny creatures can occupy the same square, and even more can occupy the same square, at the GM's discretion. They can also occupy the same space as larger creatures, and if their reach is 0 feet, they must do so in order to attack."
+		],
+		"source": "PZO2107",
+		"id": "1fd6868a-b5b5-4106-8e00-ba0baa94f7c2"
+	},
+	{ "objectType": "Trait", "name": "Aberration", "details": [ "Aberrations are creatures from beyond the planes or corruptions of the natural order." ], "source": "PZO2107", "id": "ea2ef5d6-d766-4974-a0b8-0112c68dfa2c" },
+	{ "objectType": "Trait", "name": "Acid", "details": [ "Creatures with this trait are primarily constituted of acid or have a magical connection to it." ], "source": "PZO2107", "id": "9af66581-4436-421a-b664-94024ec4899c" },
+	{
+		"objectType": "Trait",
+		"name": "Aesir",
+		"details": [
+			"Aesir are often-bellicose monitors of the chaotic planes, honing their skill in battle and preparing for a final confrontation at the end of the multiverse."
+		],
+		"source": "PZO2107",
+		"id": "ca1f8173-66fc-40df-9f0a-a3408504dbf3",
+		"aonId": 348,
+		"pf2t": {
+			"name": "Aesir",
+			"source": "Bestiary 3 pg. 308",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=348",
+			"aon": "traits348",
+			"type": "trait",
+			"body": "Aesir are often-bellicose monitors of the chaotic planes, honing their skill in battle and preparing for a final confrontation at the end of the multiverse.",
+			"hash": "ywkKNGRv"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Agathion",
+		"details": [
+			"This family of animal-featured celestials is native to the plane of Nirvana. Most agathions are neutral good, have darkvision, and have a weakness to evil damage."
+		],
+		"source": "PZO2107",
+		"id": "d5b6290a-f003-4d9b-85d0-9809164c3f12",
+		"aonId": 349,
+		"pf2t": {
+			"name": "Agathion",
+			"source": "Bestiary 3 pg. 308",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=349",
+			"aon": "traits349",
+			"type": "trait",
+			"body": "This family of animal-featured celestials is native to the plane of Nirvana. Most agathions are neutral good, have darkvision, and have a weakness to evil damage.",
+			"hash": "gsJOWcJA"
+		}
+	},
+	{ "objectType": "Trait", "name": "Air", "details": [ "Creatures with this trait consist primarily of air or have a magical connection to that element." ], "source": "PZO2107", "id": "828b9c44-17f8-4fe2-851a-86429a636eac" },
+	{
+		"objectType": "Trait",
+		"name": "Amphibious",
+		"details": [
+			"An amphibious creature can breathe in water and in air, even outside of its preferred environment, usually indefinitely but at least for hours. These creatures often have a swim Speed. Their bludgeoning and slashing unarmed Strikes don't take the usual -2 penalty for being underwater."
+		],
+		"source": "PZO2107",
+		"id": "41f2e372-1b31-4a95-9971-17618f9ebe44"
+	},
+	{ "objectType": "Trait", "name": "Android", "details": [ "An android is a constructed living humanoid creature with a soul." ], "source": "PZO2107", "id": "32809144-df79-4ce3-830b-8b29d21ec9c3" },
+	{
+		"objectType": "Trait",
+		"name": "Animal",
+		"details": [
+			"An animal is a creature with a relatively low intelligence. It typically doesn't have an Intelligence modifier above -4, can't speak languages, and can't be trained in Intelligence-based skills."
+		],
+		"source": "PZO2107",
+		"id": "60dc5daa-152d-4b69-8096-90e1dca0f754"
+	},
+	{ "objectType": "Trait", "name": "Aphorite", "details": [ "Aphorites are planar scions originating in the lawful planar city of Axis." ], "source": "PZO2107", "id": "d59794b7-10f7-4d58-b959-283da4e18c3d" },
+	{
+		"objectType": "Trait",
+		"name": "Aquatic",
+		"details": [
+			"Aquatic creatures are at home underwater. Their bludgeoning and slashing unarmed Strikes don't take the usual -2 penalty for being underwater. Aquatic creatures can breathe water but not air."
+		],
+		"source": "PZO2107",
+		"id": "e1276bdc-26e4-402a-99cc-7239ca5b62ea"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Arcane",
+		"details": [
+			"This magic comes from the arcane tradition, which is built on logic and rationality. Anything with this trait is magical. A creature with this trait is primarily constituted of or has a strong connection to arcane magic."
+		],
+		"source": "PZO2107",
+		"id": "c4af6aa1-44ee-4104-b6eb-49d741771a1f"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Astral",
+		"details": [
+			"Astral creatures are native of the Astral Plane. They can survive the basic environmental effects of the Astral Plane."
+		],
+		"source": "PZO2107",
+		"id": "3339ac56-86e7-4194-96bc-a54673469ca0"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Asura",
+		"details": [
+			"These lawful fiends are physical manifestations of divine accidents. Asuras typically have darkvision, immunity to curses, and a weakness to good."
+		],
+		"source": "PZO2107",
+		"id": "5971dd44-a4b0-4e48-a78a-ed4736e91467",
+		"aonId": 350,
+		"pf2t": {
+			"name": "Asura",
+			"source": "Bestiary 3 pg. 308",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=350",
+			"aon": "traits350",
+			"type": "trait",
+			"body": "These lawful fiends are physical manifestations of divine accidents. Asuras typically have darkvision, immunity to curses, and a weakness to good.",
+			"hash": "BtTZbYrk"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Azarketi",
+		"details": [
+			"Azarketi are an offshoot of humans adapted to live in aquatic communities. They have gills, webbed digits, and small fins, and they can survive in or out of water."
+		],
+		"source": "PZO2107",
+		"id": "d941a44b-59af-409d-8db2-6ff6dc669d10"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Beast",
+		"details": [
+			"A creature similar to an animal but with an Intelligence modifier of -3 or higher is usually a beast. Unlike an animal, a beast might be able to speak and reason."
+		],
+		"source": "PZO2107",
+		"id": "404c0880-ce26-48e0-818a-01644f4beaf9"
+	},
+	{ "objectType": "Trait", "name": "Caligni", "details": [ "These subterranean people have darkvision, and some have powers to create darkness." ], "source": "PZO2107", "id": "abadc624-c2f4-4e9d-a4b8-576cb96a021c" },
+	{
+		"objectType": "Trait",
+		"name": "Celestial",
+		"details": [
+			"Creatures that hail from or have a strong connection to the good-aligned planes are called celestials. Celestials can survive the basic environmental effects of planes in the Outer Sphere."
+		],
+		"source": "PZO2107",
+		"id": "0ada94fe-5536-499b-8ee8-d9f19e0513b9"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Clockwork",
+		"details": [
+			"Clockworks are intricate, complex constructs that can be programmed to perform specific functions. A clockwork creature must be wound regularly to function."
+		],
+		"source": "PZO2107",
+		"id": "743a7397-e89d-49b2-8379-1386077f2608"
+	},
+	{ "objectType": "Trait", "name": "Cold", "details": [ "Creatures with this trait have a magical connection to cold." ], "source": "PZO2107", "id": "245dbfe8-e647-4dbd-b4ad-baa1725537e7" },
+	{
+		"objectType": "Trait",
+		"name": "Construct",
+		"details": [
+			"A construct is an artificial creature empowered by a force other than necromancy. Constructs are often mindless; they are immune to bleed damage, death effects, disease, healing, necromancy, nonlethal attacks, poison, and the doomed, drained, fatigued, paralyzed, sickened, and unconscious conditions; and they may have Hardness based on the materials used to construct their bodies. Constructs are not living creatures, nor are they undead. When reduced to 0 Hit Points, a construct creature is destroyed."
+		],
+		"source": "PZO2107",
+		"id": "03ed81cb-edb4-4054-bf1f-ed44aaccf8a9"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Couatl",
+		"details": [
+			"A family of supernatural feathered serpents who serve as guardians and messengers on the Material Plane for various good-aligned divinities."
+		],
+		"source": "PZO2107",
+		"id": "dc4dddb9-3dae-412d-9b40-7c3993f22753"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Demon",
+		"details": [
+			"A family of fiends hailing from the Abyss, most demons are chaotic evil. Most demons have darkvision and weakness to good damage."
+		],
+		"source": "PZO2107",
+		"id": "f3b07fa2-18af-481c-b1de-37f852ea7729"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Devil",
+		"details": [
+			"A family of fiends from Hell, most devils are lawful evil. They typically have greater darkvision, weakness to good damage, immunity to fire, and telepathy."
+		],
+		"source": "PZO2107",
+		"id": "9291162a-460e-48cc-9cb9-fadc430fde66"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Div",
+		"details": [
+			"Divs are a family of fiends spawned from the spirits of evil genies within the desolation of Abaddon. Most divs are neutral evil. They typically have greater darkvision and weakness to cold iron and good damage."
+		],
+		"source": "PZO2107",
+		"id": "410b25bd-baf7-4bbe-bbe3-d502e82d8905",
+		"aonId": 351,
+		"pf2t": {
+			"name": "Div",
+			"source": "Bestiary 3 pg. 308",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=351",
+			"aon": "traits351",
+			"type": "trait",
+			"body": "Divs are a family of fiends spawned from the spirits of evil genies within the desolation of Abaddon. Most divs are neutral evil. They typically have greater darkvision and weakness to cold iron and good damage.",
+			"hash": "IthnZxXN"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Dragon",
+		"details": [
+			"Dragons are reptilian creatures, often winged or with the power of flight. Most are able to use a breath weapon and are immune to sleep and the paralyzed condition."
+		],
+		"source": "PZO2107",
+		"id": "f416f525-fa43-4d4d-8e10-7c05f139b054"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Dream",
+		"details": [
+			"Creatures native to the Dimension of Dreams can be any alignment and possess a diverse array of abilities, although those associated with the nightmare realm of Leng are almost always evil and immune to that realm's freezing temperatures."
+		],
+		"source": "PZO2107",
+		"id": "690e36b8-d0da-47ba-ac8b-917a29c11f4e"
+	},
+	{ "objectType": "Trait", "name": "Earth", "details": [ "Creatures with this trait consist primarily of earth or have a magical connection to that element." ], "source": "PZO2107", "id": "87ff2dae-26e6-4096-b7a9-a74f5c0e34f2" },
+	{ "objectType": "Trait", "name": "Electricity", "details": [ "Creatures with this trait have a magical connection to electricity." ], "source": "PZO2107", "id": "ede847f1-b69e-462e-95bb-c7d5903a231c" },
+	{
+		"objectType": "Trait",
+		"name": "Elemental",
+		"details": [
+			"Elementals are creatures directly tied to an element and are native to the Elemental Planes. Elementals don't need to breathe."
+		],
+		"source": "PZO2107",
+		"id": "a88c3da3-b485-4d91-9316-16aa95c386c0"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Elf",
+		"details": [
+			"A creature with this trait is a member of the elf ancestry. Elves are mysterious people with rich traditions of magic and scholarship who typically have low-light vision. An ability with this trait can be used or selected only by elves. A weapon with this trait is created and used by elves."
+		],
+		"source": "PZO2107",
+		"id": "27e6abe1-6286-43b4-8972-7a24cc9117a5"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Ethereal",
+		"details": [
+			"Ethereal creatures are natives of the Ethereal Plane. They can survive the basic environmental effects of the Ethereal Plane."
+		],
+		"source": "PZO2107",
+		"id": "93f4d93d-ae66-45c5-b86c-945e1942cac3"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Evocation",
+		"details": [
+			"Effects and magic items with this trait are associated with the evocation school of magic, typically involving energy and elemental forces. A creature with this trait is primarily constituted of or has a strong connection to evocation magic."
+		],
+		"source": "PZO2107",
+		"id": "4c07c954-7c5e-426e-b813-a58f082cd321"
+	},
+	{ "objectType": "Trait", "name": "Fey", "details": [ "Creatures of the First World are called the fey." ], "source": "PZO2107", "id": "bcf3c38a-7fce-4b86-9cf7-014619b713f9" },
+	{
+		"objectType": "Trait",
+		"name": "Fiend",
+		"details": [
+			"Creatures that hail from or have a strong connection to the evil-aligned planes are called fiends. Fiends can survive the basic environmental effects of planes in the Outer Sphere."
+		],
+		"source": "PZO2107",
+		"id": "33abf8d9-d7f7-44eb-920b-3b1f9c5631e5"
+	},
+	{ "objectType": "Trait", "name": "Fire", "details": [ "Creatures with this trait are primarily constituted of fire or have a magical connection to that element." ], "source": "PZO2107", "id": "e8a8d365-e688-498c-a48a-9508bbc4c392" },
+	{ "objectType": "Trait", "name": "Fungus", "details": [ "Fungal creatures have the fungus trait. They are distinct from normal fungi." ], "source": "PZO2107", "id": "d4c4e9b2-e387-4c05-947b-6d304986a749" },
+	{ "objectType": "Trait", "name": "Ganzi", "details": [ "Ganzi are planar scions infused with the chaos of the Maelstrom." ], "source": "PZO2107", "id": "feedc153-85f6-4282-bae1-8a474f23bd45" },
+	{
+		"objectType": "Trait",
+		"name": "Ghoran",
+		"details": [
+			"Ghorans are sapient plants grown in the shape of humanoids with floral faces."
+		],
+		"source": "PZO2107",
+		"id": "d08d8636-f884-4fea-a64b-82ddea515b64",
+		"aonId": 352,
+		"pf2t": {
+			"name": "Ghoran",
+			"source": "Bestiary 3 pg. 309",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=352",
+			"aon": "traits352",
+			"type": "trait",
+			"body": "Ghorans are sapient plants grown in the shape of humanoids with floral faces.",
+			"hash": "YEVMysmJ"
+		}
+	},
+	{ "objectType": "Trait", "name": "Ghoul", "details": [ "Ghouls are vile undead creatures that feast on flesh." ], "source": "PZO2107", "id": "bddc37e8-7115-49f6-b5b0-db4ac3e85b24" },
+	{ "objectType": "Trait", "name": "Giant", "details": [ "Giants are massive humanoid creatures." ], "source": "PZO2107", "id": "5db689fc-2eef-4c3d-8edd-3666272c380a" },
+	{
+		"objectType": "Trait",
+		"name": "Gnome",
+		"details": [
+			"A creature with this trait is a member of the gnome ancestry. Gnomes are small people skilled at magic who seek out new experiences and usually have low-light vision."
+		],
+		"source": "PZO2107",
+		"id": "cb1f4b37-18dd-402c-9ba5-7e989d339390"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Golem",
+		"details": [
+			"Golems are a special type of construct. Golems are immune to almost all magic, but most have a weakness to certain spells."
+		],
+		"source": "PZO2107",
+		"id": "1b6e78fc-4cdf-4647-a0ac-9956c42680c6"
+	},
+	{ "objectType": "Trait", "name": "Gremlin", "details": [ "Cruel and mischievous fey, gremlins have acclimated to life on the Material Plane." ], "source": "PZO2107", "id": "d8000e6e-c3d0-416d-9db9-6c7110e02e55" },
+	{
+		"objectType": "Trait",
+		"name": "Grioth",
+		"details": [
+			"A grioth is a batlike alien that wields occult powers and can exist in the dark vacuum of space. They have darkvision and echolocation."
+		],
+		"source": "PZO2107",
+		"id": "cd7f6bf6-0487-4e98-b57a-e3e4e058b046",
+		"aonId": 353,
+		"pf2t": {
+			"name": "Grioth",
+			"source": "Bestiary 3 pg. 309",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=353",
+			"aon": "traits353",
+			"type": "trait",
+			"body": "A grioth is a batlike alien that wields occult powers and can exist in the dark vacuum of space. They have darkvision and echolocation.",
+			"hash": "FTErXQRF"
+		}
+	},
+	{ "objectType": "Trait", "name": "Hag", "details": [ "These creatures are malevolent spellcasters who form covens." ], "source": "PZO2107", "id": "b0dcfa86-b7c3-42e7-ae4c-8f57058bf347" },
+	{
+		"objectType": "Trait",
+		"name": "Human",
+		"details": [
+			"A creature with this trait is a member of the human ancestry. Humans are a diverse array of people known for their adaptability. An ability with this trait can be used or selected only by humans."
+		],
+		"source": "PZO2107",
+		"id": "840b40a2-e727-46fe-971b-64afb1a18a87"
+	},
+	{ "objectType": "Trait", "name": "Humanoid", "details": [ "Humanoids reason and act much like humans. They typically stand upright and have two arms and two legs." ], "source": "PZO2107", "id": "df882c67-53e1-4f95-9939-f88eedcb15b9" },
+	{
+		"objectType": "Trait",
+		"name": "Illusion",
+		"details": [
+			"Effects and magic items with this trait are associated with the illusion school of magic, typically involving false sensory stimuli. A creature with the illusion trait is entirely illusory, though it has Hit Points and functions like a creature."
+		],
+		"source": "PZO2107",
+		"id": "78451948-9324-4483-a1bf-083d311d7681"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Incorporeal",
+		"details": [
+			"An incorporeal creature or object has no physical form. It can pass through solid objects, including walls. When inside an object, an incorporeal creature can't perceive, attack, or interact with anything outside the object, and if it starts its turn in an object, it is slowed 1. Corporeal creatures can pass through an incorporeal creature, but they can't end their movement in its space.",
+			"An incorporeal creature can't attempt Strength-based checks against physical creatures or objects-only against incorporeal ones-unless those objects have the ghost touch property rune. Likewise, a corporeal creature can't attempt Strength-based checks against incorporeal creatures or objects.",
+			"Incorporeal creatures usually have immunity to effects or conditions that require a physical body, like disease, poison, and precision damage. They usually have resistance against all damage (except force damage and damage from Strikes with the ghost touch property rune), with double the resistance against non-magical damage."
+		],
+		"source": "PZO2107",
+		"id": "778caa34-1d94-4473-b794-6eb76c6d6ad9"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Kami",
+		"details": [
+			"Kami are spirits of the Material Plane that bond with a specific object or place."
+		],
+		"source": "PZO2107",
+		"id": "aacae222-8a4a-4129-a488-5481281bde2e",
+		"aonId": 354,
+		"pf2t": {
+			"name": "Kami",
+			"source": "Bestiary 3 pg. 309",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=354",
+			"aon": "traits354",
+			"type": "trait",
+			"body": "Kami are spirits of the Material Plane that bond with a specific object or place.",
+			"hash": "wMUZIbzp"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Kitsune",
+		"details": [
+			"Kitsune are foxlike humanoids with an alternate humanoid or fox form. Curious and creative, they have a reputation as tricksters."
+		],
+		"source": "PZO2107",
+		"id": "2556fa6d-54bc-4574-8e16-66a45bba095f"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Kovintus",
+		"details": [
+			"Reclusive humanoids with an inborn talent for geomancy, kovintus have an intrinsic tie to nature and magic alike."
+		],
+		"source": "PZO2107",
+		"id": "cac7cd5a-4d61-46dd-8fa0-888df2c8efb6",
+		"aonId": 355,
+		"pf2t": {
+			"name": "Kovintus",
+			"source": "Bestiary 3 pg. 309",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=355",
+			"aon": "traits355",
+			"type": "trait",
+			"body": "Reclusive humanoids with an inborn talent for geomancy, kovintus have an intrinsic tie to nature and magic alike.",
+			"hash": "zUpzmGqQ"
+		}
+	},
+	{ "objectType": "Trait", "name": "Leshy", "details": [ "Leshys are small, roughly humanoid plant creatures." ], "source": "PZO2107", "id": "0471ea8f-2a52-42d3-9c0f-2b24d2bcdad7" },
+	{
+		"objectType": "Trait",
+		"name": "Locathah",
+		"details": [
+			"Locathahs are fishlike aquatic humanoids."
+		],
+		"source": "PZO2107",
+		"id": "1090100a-1de4-4277-96ed-2c2f87bb0032",
+		"aonId": 356,
+		"pf2t": { "name": "Locathah", "source": "Bestiary 3 pg. 309", "src": "https://2e.aonprd.com/Traits.aspx?ID=356", "aon": "traits356", "type": "trait", "body": "Locathahs are fishlike aquatic humanoids.", "hash": "EBYQcRWb" }
+	},
+	{
+		"objectType": "Trait",
+		"name": "Magical",
+		"details": [
+			"Something with the magical trait is imbued with magical energies not tied to a specific tradition of magic. A magical item radiates a magic aura infused with its dominant school of magic.",
+			"Some items or effects are closely tied to a particular tradition of magic. In these cases, the item has the arcane, divine, occult, or primal trait instead of the magical trait. Any of these traits indicate that the item is magical."
+		],
+		"source": "PZO2107",
+		"id": "57e08b74-07a6-4aae-83ca-036daaa1b51d"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Mental",
+		"details": [
+			"A mental effect can alter the target's mind. It has no effect on an object or a mindless creature. Mindless creatures and objects are entirely immune to a mental creature and can't perceive it."
+		],
+		"source": "PZO2107",
+		"id": "19d829aa-e66d-43c1-a1ba-5720fb91bf95"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Mindless",
+		"details": [
+			"A mindless creature has either programmed or rudimentary mental attributes. Most, if not all, of their mental ability modifiers are -5. They are immune to all mental effects."
+		],
+		"source": "PZO2107",
+		"id": "0a5823ba-a129-4346-a9e6-de1c633a3560"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Monitor",
+		"details": [
+			"Creatures that hail from or have a strong connection to the neutrally aligned planes are called monitors. Monitors can survive the basic environmental effects of planes in the Outer Sphere."
+		],
+		"source": "PZO2107",
+		"id": "3c8c19e8-8058-4b51-b2d5-5f60979538a4"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Mortic",
+		"details": [
+			"Mortics are living humanoids with close ties to undeath. They have darkvision, negative healing, and vulnerabilities to sacred ground, and they can become undead by holding their breath."
+		],
+		"source": "PZO2107",
+		"id": "58f63408-27aa-4c88-8c72-ee2e803dc19a",
+		"aonId": 357,
+		"pf2t": {
+			"name": "Mortic",
+			"source": "Bestiary 3 pg. 309",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=357",
+			"aon": "traits357",
+			"type": "trait",
+			"body": "Mortics are living humanoids with close ties to undeath. They have darkvision, negative healing, and vulnerabilities to sacred ground, and they can become undead by holding their breath.",
+			"hash": "ygPBpdgI"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Munavri",
+		"details": [
+			"Amicable humanoids living in the Darklands, munavris have powerful telekinetic and psychic abilities."
+		],
+		"source": "PZO2107",
+		"id": "ec2e12d4-286a-4ec7-aca5-5c63453010d3",
+		"aonId": 358,
+		"pf2t": {
+			"name": "Munavri",
+			"source": "Bestiary 3 pg. 309",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=358",
+			"aon": "traits358",
+			"type": "trait",
+			"body": "Amicable humanoids living in the Darklands, munavris have powerful telekinetic and psychic abilities.",
+			"hash": "NsLkZPVW"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Nagaji",
+		"details": [
+			"Nagaji are brawny humanoids with scaled skin and serpentine heads, many of whom serve or respect nagas."
+		],
+		"source": "PZO2107",
+		"id": "8b80bbf6-dcb8-4a9e-a207-4530ed36a15b",
+		"aonId": 359,
+		"pf2t": {
+			"name": "Nagaji",
+			"source": "Bestiary 3 pg. 309",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=359",
+			"aon": "traits359",
+			"type": "trait",
+			"body": "Nagaji are brawny humanoids with scaled skin and serpentine heads, many of whom serve or respect nagas.",
+			"hash": "IxdzOfBY"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Negative",
+		"details": [
+			"Creatures with this trait are natives of the Negative Energy Plane. They can survive the basic environmental effects of the Negative Energy Plane."
+		],
+		"source": "PZO2107",
+		"id": "a221e77f-8f59-4708-936a-a7e7f908bc63"
+	},
+	{ "objectType": "Trait", "name": "Nymph", "details": [ "This family of beautiful fey creatures has strong ties to natural locations." ], "source": "PZO2107", "id": "5035970e-cbd3-4314-acb4-17b512ecffe8" },
+	{
+		"objectType": "Trait",
+		"name": "Ooze",
+		"details": [
+			"Oozes are creatures with simple anatomies. They tend to have low mental ability scores and immunity to mental effects and precision damage."
+		],
+		"source": "PZO2107",
+		"id": "55ff01e7-6720-41db-9685-80d232718afc"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Orc",
+		"details": [
+			"A creature with this trait is a member of the orc ancestry. These green-skinned people tend to have darkvision. An ability with this trait can be used or selected only by orcs. An item with this trait is created and used by orcs."
+		],
+		"source": "PZO2107",
+		"id": "8093d054-8d9d-4aa6-af5c-84ee3e746399"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Paaridar",
+		"details": [
+			"A paaridar is a humanoid who has gained physical aspects and abilities of a powerful beast through corrupted magical rituals."
+		],
+		"source": "PZO2107",
+		"id": "d0b934b8-a9f3-42e5-b8aa-5908d1230b3a",
+		"aonId": 360,
+		"pf2t": {
+			"name": "Paaridar",
+			"source": "Bestiary 3 pg. 309",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=360",
+			"aon": "traits360",
+			"type": "trait",
+			"body": "A paaridar is a humanoid who has gained physical aspects and abilities of a powerful beast through corrupted magical rituals.",
+			"hash": "qvrXbdZb"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Phantom",
+		"details": [
+			"A phantom is soul that has diverged from the River of Souls on the Ethereal Plane before being judged. They typically retain memories of their life before death, but are not undead."
+		],
+		"source": "PZO2107",
+		"id": "ea818c4c-4b78-4a24-a35e-1f037fb39ba9",
+		"aonId": 361,
+		"pf2t": {
+			"name": "Phantom",
+			"source": "Bestiary 3 pg. 309",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=361",
+			"aon": "traits361",
+			"type": "trait",
+			"body": "A phantom is soul that has diverged from the River of Souls on the Ethereal Plane before being judged. They typically retain memories of their life before death, but are not undead.",
+			"hash": "ltppXCjR"
+		}
+	},
+	{ "objectType": "Trait", "name": "Plant", "details": [ "Vegetable creatures have the plant trait. They are distinct from normal plants." ], "source": "PZO2107", "id": "0a35d1a3-9919-4bf6-bccd-7d016f4cad0b" },
+	{
+		"objectType": "Trait",
+		"name": "Positive",
+		"details": [
+			"Creatures with this trait are natives of the Positive Energy Plane. They can survive the basic environmental effects of the Positive Energy Plane."
+		],
+		"source": "PZO2107",
+		"id": "01fb1214-938e-4cfd-9af6-b0610f27e33c"
+	},
+	{ "objectType": "Trait", "name": "Rakshasa", "details": [ "Reincarnations of evil souls, rakshasas are fiends that live on the Material Plane." ], "source": "PZO2107", "id": "58dc23d2-4b8f-46df-97a0-704f124347a7" },
+	{
+		"objectType": "Trait",
+		"name": "Sahkil",
+		"details": [
+			"Sahkils are fiends that delight in spreading fear and unease among mortal creatures. They typically have darkvision, immunity to fear, and weakness to good."
+		],
+		"source": "PZO2107",
+		"id": "f9811699-d185-4194-8e69-c25cf1c5993d"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Samsaran",
+		"details": [
+			"Samsarans are humanoids whose souls reincarnate into new bodies upon their death."
+		],
+		"source": "PZO2107",
+		"id": "f4834e3a-061c-405b-8142-7522f7b15848",
+		"aonId": 362,
+		"pf2t": {
+			"name": "Samsaran",
+			"source": "Bestiary 3 pg. 310",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=362",
+			"aon": "traits362",
+			"type": "trait",
+			"body": "Samsarans are humanoids whose souls reincarnate into new bodies upon their death.",
+			"hash": "VFRzwrCv"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Shabti",
+		"details": [
+			"A shabti is a constructed humanoid originally meant to face judgment for a living creature's sins after death."
+		],
+		"source": "PZO2107",
+		"id": "11a9d437-e516-4010-989f-5c495b56e7b0",
+		"aonId": 363,
+		"pf2t": {
+			"name": "Shabti",
+			"source": "Bestiary 3 pg. 310",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=363",
+			"aon": "traits363",
+			"type": "trait",
+			"body": "A shabti is a constructed humanoid originally meant to face judgment for a living creature's sins after death.",
+			"hash": "RyIbXFBZ"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Shadow",
+		"details": [
+			"Creatures with this trait are natives of the Shadow Plane. They can survive the basic environmental effects of the Shadow Plane."
+		],
+		"source": "PZO2107",
+		"id": "7e5f649f-fe36-424b-ad28-caf904a4dcb6"
+	},
+	{ "objectType": "Trait", "name": "Skeleton", "details": [ "This undead is made by animating a dead creature's skeleton with negative energy." ], "source": "PZO2107", "id": "64624e4d-71ce-4bdc-97c9-ec95da24e88c" },
+	{
+		"objectType": "Trait",
+		"name": "Skelm",
+		"details": [
+			"These creatures are monstrous, wrathful misanthropes who seek to control others through anger and spite."
+		],
+		"source": "PZO2107",
+		"id": "242fd33c-e345-4593-ae13-f939493269a0",
+		"aonId": 364,
+		"pf2t": {
+			"name": "Skelm",
+			"source": "Bestiary 3 pg. 310",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=364",
+			"aon": "traits364",
+			"type": "trait",
+			"body": "These creatures are monstrous, wrathful misanthropes who seek to control others through anger and spite.",
+			"hash": "hjQXXQkp"
+		}
+	},
+	{ "objectType": "Trait", "name": "Sonic", "details": [ "A creature with this trait has a magical connection to powerful sound." ], "source": "PZO2107", "id": "b0c04b1e-ffa9-4031-b642-3d3a6701e7ba" },
+	{ "objectType": "Trait", "name": "Spirit", "details": [ "Spirits are ephemeral creatures defined by their spiritual essence. They often lack a material form." ], "source": "PZO2107", "id": "3eef05ee-71da-4517-ab19-c729204067f6" },
+	{ "objectType": "Trait", "name": "Sprite", "details": [ "A family of diminutive winged fey with a strong connection to primal magic." ], "source": "PZO2107", "id": "b0468f8c-5d83-4508-a565-fc7c3e0ed598" },
+	{
+		"objectType": "Trait",
+		"name": "Stheno",
+		"details": [
+			"Stheno are humanoids related to medusas, with snakes for hair."
+		],
+		"source": "PZO2107",
+		"id": "a9344696-8e83-4d11-8cad-a04d24599f4d",
+		"aonId": 365,
+		"pf2t": {
+			"name": "Stheno",
+			"source": "Bestiary 3 pg. 310",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=365",
+			"aon": "traits365",
+			"type": "trait",
+			"body": "Stheno are humanoids related to medusas, with snakes for hair.",
+			"hash": "WZSxxAjq"
+		}
+	},
+	{ "objectType": "Trait", "name": "Strix", "details": [ "Strix are avian humanoids with dark wings and large talons. They tend to live in isolated communities." ], "source": "PZO2107", "id": "f72ed448-bf26-4a0c-8bb6-aaeb58c9b60b" },
+	{
+		"objectType": "Trait",
+		"name": "Swarm",
+		"details": [
+			"A swarm is a mass or cloud of creatures that functions as one monster. Its size entry gives the size of the entire mass, though for most swarms the individual creatures that make up that mass are Tiny. A swarm can occupy the same space as other creatures, and must do so in order to use its damaging action. A swarm typically has weakness to effects that deal damage over an area (like area spells and splash weapons). Swarms are immune to the grappled, prone, and restrained conditions."
+		],
+		"source": "PZO2107",
+		"id": "e910457b-2b6d-47eb-9be2-bdf0c901c088"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Tanggal",
+		"details": [
+			"This family of cannibalistic aberrations consists of various humanoid-shaped creatures that can separate their body into two pieces while hunting."
+		],
+		"source": "PZO2107",
+		"id": "6428d1a5-0307-451b-ba28-092f7f2b9932",
+		"aonId": 366,
+		"pf2t": {
+			"name": "Tanggal",
+			"source": "Bestiary 3 pg. 310",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=366",
+			"aon": "traits366",
+			"type": "trait",
+			"body": "This family of cannibalistic aberrations consists of various humanoid-shaped creatures that can separate their body into two pieces while hunting.",
+			"hash": "FVtFQKzx"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Time",
+		"details": [
+			"Time creatures are natives of the Dimension of Time. They do not age, and while some may be driven by supernatural hungers, they do not need to eat or drink to survive. They can survive the basic environmental effects of the Dimension of Time."
+		],
+		"source": "PZO2107",
+		"id": "caf9a056-25b5-40f8-9729-3ec98caf3ebd"
+	},
+	{ "objectType": "Trait", "name": "Titan", "details": [ "Titans are enormous, primordial creatures of near- godlike power who predate the mortal races." ], "source": "PZO2107", "id": "ac277f1d-f776-4cf4-b5d5-63ba2a1d44f0" },
+	{ "objectType": "Trait", "name": "Troll", "details": [ "Trolls are giant, brutish creatures and are well known for their ability to regenerate." ], "source": "PZO2107", "id": "ea840da5-524c-447a-8ab3-81ab7929965c" },
+	{
+		"objectType": "Trait",
+		"name": "Troop",
+		"details": [
+			"A troop is an organized collection of component creatures, typically Small or Medium in size, working as a cohesive whole. A troop is 16 squares in size and has two Hit Point thresholds in their HP entry, under which it reduces in size to 12 squares and then 8 squares. A troop has the Troop Defenses, Form Up, and Troop Movement abilities. Most troops have a weakness to area damage. Because they consist of multiple discrete creatures, they can't be summoned."
+		],
+		"source": "PZO2107",
+		"id": "fe31f720-0e6b-45ea-8f89-bb7ed095a3f1",
+		"aonId": 367,
+		"pf2t": {
+			"name": "Troop",
+			"source": "Bestiary 3 pg. 310",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=367",
+			"aon": "traits367",
+			"type": "trait",
+			"body": "A troop is an organized collection of component creatures, typically Small or Medium in size, working as a cohesive whole. A troop is 16 squares in size and has two Hit Point thresholds in their HP entry, under which it reduces in size to 12 squares and then 8 squares. A troop has the Troop Defenses, Form Up, and Troop Movement abilities. Most troops have a weakness to area damage. Because they consist of multiple discrete creatures, they can't be summoned.",
+			"hash": "tZGgrMbN"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Undead",
+		"details": [
+			"Once living, these creatures were infused after death with negative energy and soul-corrupting evil magic. When reduced to 0 Hit Points, an undead creature is destroyed. Undead creatures are damaged by positive energy, are healed by negative energy, and don't benefit from healing effects."
+		],
+		"source": "PZO2107",
+		"id": "66f46fed-446c-4fa7-b2cd-4d0dc94ae460"
+	},
+	{ "objectType": "Trait", "name": "Vampire", "details": [ "Undead creatures who thirst for blood, vampires are notoriously versatile and hard to destroy." ], "source": "PZO2107", "id": "dd33a971-1615-4b3c-8eac-021fc3b24880" },
+	{
+		"objectType": "Trait",
+		"name": "Vanara",
+		"details": [
+			"Vanaras are monkeylike humanoids who share a devotion to monastic training."
+		],
+		"source": "PZO2107",
+		"id": "1bfd2bc9-d398-44df-82fb-8272ff73a375",
+		"aonId": 368,
+		"pf2t": {
+			"name": "Vanara",
+			"source": "Bestiary 3 pg. 310",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=368",
+			"aon": "traits368",
+			"type": "trait",
+			"body": "Vanaras are monkeylike humanoids who share a devotion to monastic training.",
+			"hash": "ZcTyQIKk"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Vishkanya",
+		"details": [
+			"These faintly ophidian humanoids have venomous blood and saliva."
+		],
+		"source": "PZO2107",
+		"id": "e434efdc-99d0-4cf4-8f48-8e201efc97e0",
+		"aonId": 369,
+		"pf2t": {
+			"name": "Vishkanya",
+			"source": "Bestiary 3 pg. 310",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=369",
+			"aon": "traits369",
+			"type": "trait",
+			"body": "These faintly ophidian humanoids have venomous blood and saliva.",
+			"hash": "ImZPkdLN"
+		}
+	},
+	{ "objectType": "Trait", "name": "Water", "details": [ "Creatures with this trait are primarily constituted of water or have a magical connection to the element." ], "source": "PZO2107", "id": "cd740c3d-b171-4d87-be08-0181d32cfc1c" },
+	{
+		"objectType": "Trait",
+		"name": "Wayang",
+		"details": [
+			"Small humanoids who emigrated from the Shadow Plane long ago, wayangs still wield shadow magic."
+		],
+		"source": "PZO2107",
+		"id": "d83eafff-4bed-47b1-8ee0-88ba359960ec",
+		"aonId": 370,
+		"pf2t": {
+			"name": "Wayang",
+			"source": "Bestiary 3 pg. 310",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=370",
+			"aon": "traits370",
+			"type": "trait",
+			"body": "Small humanoids who emigrated from the Shadow Plane long ago, wayangs still wield shadow magic.",
+			"hash": "YyytxfZN"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Werecreature",
+		"details": [
+			"These shapechanging creatures either are naturally able to shift between animal, humanoid, and hybrid forms or are afflicted with a curse that forces them to shift involuntarily."
+		],
+		"source": "PZO2107",
+		"id": "3b87ffe6-4b37-434e-9f71-8e6e3e4f3136"
+	},
+	{ "objectType": "Trait", "name": "Wight", "details": [ "A wight is an undead creature that drains life and stands vigil over its burial site." ], "source": "PZO2107", "id": "68db8f9f-3b9d-4f5d-b6b9-d977e7a21105" },
+	{
+		"objectType": "Trait",
+		"name": "Wraith",
+		"details": [
+			"A wraith is an incorporeal undead creature infused with negative energy and driven by a hatred of all life."
+		],
+		"source": "PZO2107",
+		"id": "3d754b3e-997a-4c87-93bb-d86c6142187a"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Wyrwood",
+		"details": [
+			"A wyrwood is a small, sapient living construct crafted of wood and powered with an aeon stone or a similar magical stone."
+		],
+		"source": "PZO2107",
+		"id": "8791f872-d0af-4b4b-a2ec-a792c79bfdd0",
+		"aonId": 371,
+		"pf2t": {
+			"name": "Wyrwood",
+			"source": "Bestiary 3 pg. 310",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=371",
+			"aon": "traits371",
+			"type": "trait",
+			"body": "A wyrwood is a small, sapient living construct crafted of wood and powered with an aeon stone or a similar magical stone.",
+			"hash": "QJNJJtmk"
+		}
+	},
+	{ "objectType": "Trait", "name": "Zombie", "details": [ "These undead are mindless rotting corpses that hunger for living flesh." ], "source": "PZO2107", "id": "fbbbebbc-87db-4eeb-a6e5-c41103747608" },
+	{ "objectType": "Trait", "name": "Brutal", "details": [ "A ranged attack with this trait uses its Strength modifier instead of Dexterity on the attack roll." ], "source": "PZO2107", "id": "a2d49641-b9fb-4607-a163-224f79d8f59b" },
+	{
+		"objectType": "Trait",
+		"name": "Finesse",
+		"details": [
+			"This melee attack is Dexterity based. Even if a weapon normally has the finesse trait, this trait is omitted in the Strike entry if the monster is applying its Strength."
+		],
+		"source": "PZO2107",
+		"id": "f29017ba-c610-45a3-991b-9bf30aaac13b"
+	}
+]
