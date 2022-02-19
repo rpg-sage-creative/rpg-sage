@@ -186,7 +186,15 @@ export default class Pf2tBase
 	// #region IHasDetails
 
 	public get description(): string { return ""; }
-	public get details(): string[] { return this.core.body?.split("\n") ?? []; }
+	private pf2tDetails: string[] | undefined;
+	public get details(): string[] {
+		if (!this.pf2tDetails) {
+			this.pf2tDetails = (this.core.body?.split(/\r?\n\r?/) ?? [])
+				.map(line => line.match(/^[\s\-]+$/) ? "" : line.trim())
+				.filter((line, index, array) => line || (index && array[index - 1]));
+		}
+		return this.pf2tDetails;
+	}
 	public get hasDescription(): boolean { return false; }
 	public get hasDetails(): boolean { return this.details.length > 0; }
 	public get hasSuccessOrFailure(): boolean { return false; }

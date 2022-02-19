@@ -1,11 +1,21 @@
 import type { SearchScore } from ".";
 import { sortAscending } from "../ArrayUtils/Sort";
 import type { ISearchable } from "./types";
+import type { HasSource } from "../../../sage-pf2e";
 
 function sortByCompScore<T extends ISearchable>(a: SearchScore<T>, b: SearchScore<T>): number {
 	return sortAscending(b.compScore ?? 0, a.compScore ?? 0)
 		|| sortAscending(b.totalScore, a.totalScore)
 		|| sortAscending(a.searchable.name, b.searchable.name);
+}
+
+function searchableToLabel<T extends ISearchable>(score: SearchScore<T>): string {
+	const category = score.searchable.searchResultCategory,
+		source = (score.searchable as unknown as  HasSource)?.source?.code;
+	if (category) {
+		return `${score.searchable.toSearchResult()}${source} - ${category}`;
+	}
+	return `${score.searchable.toSearchResult()}${source}`;
 }
 
 export default class HasScoredSearchables<T extends ISearchable> {
@@ -35,7 +45,13 @@ export default class HasScoredSearchables<T extends ISearchable> {
 	// #region methods
 
 	public add(...scores: SearchScore<T>[]) {
-		this.scores.push(...scores);
+		const labels = this.scores.map(score => searchableToLabel(score));
+		scores.forEach(score => {
+			const label = searchableToLabel(score);
+			if (!labels.includes(label)) {
+				this.scores.push(score);
+			}
+		});
 		this.scores.sort(sortByCompScore);
 	}
 

@@ -8,6 +8,10 @@ function createLabel(searchInfo: utils.SearchUtils.SearchInfo, objectType?: stri
 	return `${prefix}Search Results for: \`${searchInfo.searchText + suffix}\``;
 }
 
+function createAonLink(term: string): string {
+	return `<a href="http://2e.aonprd.com/Search.aspx?query=${term.replace(/\s+/g, "+")}">Search Archives of Nethys</a>`;
+}
+
 export default class SearchResults<T extends Base> extends ScoredMenu<T> {
 
 	public constructor(public searchInfo: utils.SearchUtils.SearchInfo, public objectType?: string) {
@@ -33,7 +37,7 @@ export default class SearchResults<T extends Base> extends ScoredMenu<T> {
 	public toMenuRenderableContent(indexes: number[]): utils.RenderUtils.RenderableContent {
 		const content = super.toMenuRenderableContent(indexes);
 		if (indexes.length === 0 && !this.theOne) {
-			content.appendSection(`<a href="http://2e.aonprd.com/Search.aspx?query=${this.term.replace(/\s+/g, "+")}">Search Archives of Nethys</a>`);
+			content.appendSection(createAonLink(this.term));
 		}
 		return content;
 	}
@@ -45,7 +49,7 @@ export default class SearchResults<T extends Base> extends ScoredMenu<T> {
 	public toRenderableContent(): utils.RenderUtils.RenderableContent {
 		const content = super.toRenderableContent();
 		if (this.isEmpty) {
-			content.appendSection(`<a href="http://2e.aonprd.com/Search.aspx?query=${this.term.replace(/\s+/g, "+")}">Search Archives of Nethys</a>`);
+			content.appendSection(createAonLink(this.term));
 		}
 		return content;
 	}

@@ -58,7 +58,7 @@ export default class ScoredMenu<T extends IRenderableSearchable> extends utils.S
 		const sources = <Source[]>[];
 		this.scores.slice(0, this.getMenuLength(indexes)).forEach(score => {
 			if (score.searchable instanceof Pf2tBase) {
-				hasPf2tResult = true;
+				hasPf2tResult = true && false;
 			}
 			const source = (<HasSource<SourcedCore>><unknown>score.searchable).source;
 			let sourceSuper = ``;
@@ -67,6 +67,8 @@ export default class ScoredMenu<T extends IRenderableSearchable> extends utils.S
 					sources.push(source);
 				}
 				sourceSuper = utils.NumberUtils.toSuperscript(sources.indexOf(source) + 1);
+			}else if (hasPf2tResult) {
+				sourceSuper = utils.NumberUtils.toSuperscript(0);
 			}
 
 			const category = score.searchable.searchResultCategory,
