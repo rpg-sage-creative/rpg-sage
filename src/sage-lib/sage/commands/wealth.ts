@@ -13,7 +13,7 @@ async function spUtils(sageMessage: SageMessage): Promise<void> {
 
 	const data = sageMessage.args.shift()!;
 
-	console.info("spUtils", data);
+	// console.info("spUtils", data);
 	const values = data.match(/\s*[\-\+]?\s*\d+(?:,\d{3})*\s*(?:cp|sp|gp|pp)/gi)!,
 		signedAndSorted = values.map(s => ("+" + s).replace(/\s+/g, "").replace(/\+([\-\+])/, "$1").toLowerCase()).sort(),
 		coins = new Coins();
@@ -103,7 +103,7 @@ async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, 
 }
 
 export default function register(): void {
-	registerCommandRegex(/^((?:\s*(?:\-|\+)?\s*\d+(?:,\d{3})*\s*(?:cp|sp|gp|pp))+)$/i, spUtils);
+	registerCommandRegex(/^((?:\s*[\-\+]?\s*\d+(?:,\d{3})*\s*[csgp]p)+)$/i, spUtils);
 	registerCommandHelp("Wealth", "Coin Counter", `{1pp} {2gp} {3sp} {4cp}\n{1pp} {-2gp} {+3sp} {-4cp}\n<b>[permission-patreon] Patron Feature (Friend+)</b>`);
 
 	registerCommandRegex(/^\s*(?:starting|character)\s*wealth\s*(\d+(?:st|nd|rd|th)?)?\s*$/i, startingWealth);
