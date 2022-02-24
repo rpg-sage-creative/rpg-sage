@@ -2,12 +2,11 @@ import type * as Discord from "discord.js";
 import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e";
 import type { UUID } from "../../../sage-utils";
 import * as _XRegExp from "xregexp";
-import { DiscordKey } from "../../discord";
+import { DiscordKey, NilSnowflake } from "../../discord";
 import CharacterManager from "./CharacterManager";
 import type { IHasSave } from "./NamedCollection";
 import NoteManager, { type TNote } from "./NoteManager";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
-
 
 export type TDialogMessage = {
 	channelDid: Discord.Snowflake;
@@ -49,6 +48,29 @@ export interface GameCharacterCore {
 // 												| "Profile" | "ProfileBloody" | "ProfileDying"
 // 												| "Full" | "FullBloody" | "FullDying";
 
+/** Determine if the snowflakes are different. */
+function diff(a?: Discord.Snowflake, b?: Discord.Snowflake) {
+	return (a ?? NilSnowflake) !== (b ?? NilSnowflake);
+}
+
+/** Temp convenience function to get a DiscordKey from varying input */
+export function toDiscordKey(channelDidOrDiscordKey: DiscordKey | Discord.Snowflake, threadDid?: Discord.Snowflake): DiscordKey {
+	if (channelDidOrDiscordKey instanceof DiscordKey) {
+		return channelDidOrDiscordKey;
+	}
+	return new DiscordKey(null, channelDidOrDiscordKey, threadDid);
+}
+function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage): boolean {
+	const hasThread = (dialogMessage.threadDid ?? NilSnowflake) !== NilSnowflake;
+	if (hasThread) {
+		return dialogMessage.channelDid === discordKey.channel
+			&& dialogMessage.threadDid === discordKey.thread;
+	}
+	if (discordKey.hasThread) {
+		return dialogMessage.channelDid === discordKey.thread;
+	}
+	return dialogMessage.channelDid === discordKey.channel;
+}
 
 //#region Core Updates
 
@@ -110,7 +132,9 @@ export default class GameCharacter implements IHasSave {
 	public isPCorCompanion: boolean;// = this.isPC || this.isCompanion;
 
 	/** A list of the character's last messages by channel. */
-	public get lastMessages(): TDialogMessage[] { return this.core.lastMessages ?? (this.core.lastMessages = []); }
+	public get lastMessages(): TDialogMessage[] {
+		return this.core.lastMessages ?? (this.core.lastMessages = []);
+	}
 
 	/** The character's name */
 	public get name(): string { return this.core.name; }
@@ -188,46 +212,43 @@ export default class GameCharacter implements IHasSave {
 
 	//#region LastMessage(s)
 
-	public getLastMessage(discordKey: DiscordKey): TDialogMessage | undefined;
-	public getLastMessage(channelDid: Discord.Snowflake, threadDid?: Discord.Snowflake): TDialogMessage | undefined;
-	public getLastMessage(didOrKey: DiscordKey | Discord.Snowflake, threadDid?: Discord.Snowflake): TDialogMessage | undefined {
-		let channelDid: Discord.Snowflake;
-		if (didOrKey instanceof DiscordKey) {
-			channelDid = didOrKey.channel;
-			threadDid = didOrKey.thread;
-		}else {
-			channelDid = didOrKey;
-		}
-		if (threadDid) {
-			return this.lastMessages.find(lastMessage => lastMessage.threadDid === threadDid);
-		}
-		return this.lastMessages.find(lastMessage => lastMessage.threadDid === channelDid || lastMessage.channelDid === channelDid);
+	public getLastMessage(discordKey: DiscordKey): TDialogMessage | undefined {
+		return this.lastMessages.find(dm => keyMatchesMessage(discordKey, dm));
 	}
 
-	public getLastMessages(discordKey: DiscordKey): TDialogMessage[];
-	public getLastMessages(channelDid: Discord.Snowflake, threadDid?: Discord.Snowflake): TDialogMessage[];
-	public getLastMessages(didOrKey: DiscordKey | Discord.Snowflake, threadDid?: Discord.Snowflake): TDialogMessage[] {
+	public getLastMessages(discordKey: DiscordKey): TDialogMessage[] {
 		const dialogMessages: TDialogMessage[] = [];
-		const lastMessage = this.getLastMessage(didOrKey as Discord.Snowflake, threadDid!);
+		const lastMessage = this.getLastMessage(discordKey);
 		if (lastMessage) {
 			dialogMessages.push(lastMessage);
 		}
 		this.companions.forEach(companion => {
-			dialogMessages.push(...companion.getLastMessages(didOrKey as Discord.Snowflake, threadDid!));
+			dialogMessages.push(...companion.getLastMessages(discordKey));
 		});
 		// lastMessages.sort((a, b) => a.timestamp - b.timestamp);
 		return dialogMessages;
 	}
 
 	public setLastMessage(dialogMessage: TDialogMessage): void {
+		const newHasThread = diff(dialogMessage.threadDid);
 		const lastMessages = this.lastMessages;
+		const filtered = lastMessages.filter(dMessage => {
+			if (diff(dMessage.serverDid, dialogMessage.serverDid)) {
+				return true;
+			}
+			const thisHasThread = diff(dMessage.threadDid);
+			if (newHasThread && thisHasThread) {
+				return diff(dialogMessage.threadDid, dMessage.threadDid);
+			}else if (thisHasThread) {
+				return true;
+			}else if (newHasThread) {
+				return diff(dialogMessage.threadDid, dMessage.channelDid);
+			}
+			return diff(dialogMessage.channelDid, dMessage.channelDid);
+		});
 
-		const lastMessage = this.getLastMessage(dialogMessage.channelDid, dialogMessage.threadDid);
-		if (lastMessage) {
-			const index = lastMessages.indexOf(lastMessage);
-			lastMessages.splice(index, 1);
-		}
-
+		lastMessages.length = 0;
+		lastMessages.push(...filtered);
 		lastMessages.push(dialogMessage);
 	}
 

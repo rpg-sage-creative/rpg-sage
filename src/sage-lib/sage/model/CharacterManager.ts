@@ -138,19 +138,15 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	//#endregion
 
 	/** Returns the newest dialog message from all characters and companions. (Helpful for NPCs) */
-	public getLastMessage(discordKey: DiscordKey): TDialogMessage | undefined;
-	public getLastMessage(channelDid: Discord.Snowflake, threadDid?: Discord.Snowflake): TDialogMessage | undefined;
-	public getLastMessage(didOrKey: DiscordKey | Discord.Snowflake, threadDid?: Discord.Snowflake): TDialogMessage | undefined {
-		return this.getLastMessages(didOrKey as Discord.Snowflake, threadDid).pop();
+	public getLastMessage(discordKey: DiscordKey): TDialogMessage | undefined {
+		return this.getLastMessages(discordKey).pop();
 	}
 
 	/** Returns all the dialog messages for all characters/companions, sorted oldest to newest. (.pop() gets the newest) */
-	public getLastMessages(channelKey: DiscordKey): TDialogMessage[];
-	public getLastMessages(channelDid: Discord.Snowflake, threadDid?: Discord.Snowflake): TDialogMessage[];
-	public getLastMessages(didOrKey: DiscordKey | Discord.Snowflake, threadDid?: Discord.Snowflake): TDialogMessage[] {
+	public getLastMessages(discordKey: DiscordKey): TDialogMessage[] {
 		const lastMessages: TDialogMessage[] = [];
 		this.forEach(character => {
-			lastMessages.push(...character.getLastMessages(didOrKey as Discord.Snowflake, threadDid));
+			lastMessages.push(...character.getLastMessages(discordKey));
 		});
 		/*
 		// lastMessages.sort((a, b) => a.timestamp - b.timestamp);

@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 import type { TDiceOutput } from "../../../sage-dice";
 import utils, { OrUndefined, TParsers, type Optional } from "../../../sage-utils";
 import * as _XRegExp from "xregexp";
-import type { TCommand, TCommandAndArgsAndData } from "../../discord";
+import { NilSnowflake, TCommand, TCommandAndArgsAndData } from "../../discord";
 import { DiscordId, DiscordKey, MessageType, ReactionType } from "../../discord";
 import { isAuthorBotOrWebhook, registerMessageListener, registerReactionListener } from "../../discord/handlers";
 import { replace, replaceWebhook, SageDialogWebhookName, send, sendWebhook } from "../../discord/messages";
@@ -490,7 +490,7 @@ function dialogMessageToDiscordKey(dialogMessage: TDialogMessage): DiscordKey {
 	return new DiscordKey(dialogMessage.serverDid, dialogMessage.channelDid, dialogMessage.threadDid, dialogMessage.messageDid);
 }
 async function findLastMessage(sageMessage: SageMessage, messageDid: Optional<Discord.Snowflake>): Promise<TDialogMessage | null> {
-	if (DiscordId.isValidId(messageDid)) {
+	if (DiscordId.isValidId(messageDid) && messageDid !== NilSnowflake) {
 		const messageKey = new DiscordKey(sageMessage.server?.did, null, null, messageDid);
 		return DialogMessageRepository.read(messageKey);
 	}
@@ -516,14 +516,9 @@ function getDialogArgNotDid(arg: Optional<string>): string | null {
 
 async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
 	const messageDid = dialogContent.name,
-		// THIS ISN'T RIGHT; I NEED THE LAST MESSAGE POSTED IN THAT CHANNEL
 		dialogMessage = await findLastMessage(sageMessage, messageDid).catch(utils.ConsoleUtils.Catchers.errorReturnNull),
 		discordKey = dialogMessage ? dialogMessageToDiscordKey(dialogMessage) : null,
 		message = discordKey ? await sageMessage.discord.fetchMessage(discordKey) : null;
-console.log(JSON.stringify(sageMessage.discordKey));
-console.log(dialogMessage);
-console.log({id:message?.id,content:message?.content});
-console.log(JSON.stringify(discordKey));
 	if (!message) {
 		return sageMessage.reactWarn();
 	}
@@ -536,7 +531,7 @@ console.log(JSON.stringify(discordKey));
 	if (sageMessage.dialogType === "Webhook") {
 		const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, SageDialogWebhookName);
 		if (webhook) {
-			webhook.editMessage(message, { embeds:[updatedEmbed] }).then(() => sageMessage.message.delete(), console.error);
+			await webhook.editMessage(message.id, { embeds:[updatedEmbed], threadId:sageMessage.threadDid }).then(() => sageMessage.message.delete(), console.error);
 		}else {
 			return sageMessage.reactWarn();
 		}
