@@ -55,9 +55,10 @@ echoAndDo "rm -rf $deployDirLocal; mkdir $deployDirLocal"
 
 # build a tmp deploy folder to remove sym links before zipping
 echoAndDo "mkdir $deployDirLocal/tmp; cd $deployDirLocal/tmp"
-echoAndDo "cp -r $sageBotDir/node_modules $deployDirLocal/tmp"
-echoAndDo "cp $sageRootDir/dist/sage* $deployDirLocal/tmp"
+echoAndDo "cp -r $sageRootDir/node_modules $deployDirLocal/tmp"
+echoAndDo "cp -r $sageRootDir/dist/sage* $deployDirLocal/tmp"
 echoAndDo "cp $sageRootDir/dist/*.mjs $deployDirLocal/tmp"
+echoAndDo "cp $sageRootDir/package.json $deployDirLocal/tmp"
 echoAndDo "zip -rq9 $deployDirLocal/bot *"
 
 # stage files in remote deploy folder

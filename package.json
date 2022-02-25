@@ -19,9 +19,9 @@
   "author": "Randal T Meyer <randal.t.meyer@gmail.com> (https://rpgsage.io)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/randaltmeyer/sage-bot/issues"
+    "url": "https://github.com/randaltmeyer/rpg-sage/issues"
   },
-  "homepage": "https://github.com/randaltmeyer/sage-bot#readme",
+  "homepage": "https://github.com/randaltmeyer/rpg-sage#readme",
   "dependencies": {
     "discord.js": "^13.6.0",
     "fs": "^0.0.1-security",
