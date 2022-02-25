@@ -613,9 +613,9 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 			});
 
 		}
-		return html.join();
+		return html.join("");
 		function push(value?: string) {
-			html.push(`${html.length ? "" : "<br/>"}${value ?? "---"}`);
+			html.push(`${html.length ? "<br/>" : ""}${value ?? "---"}`);
 		}
 	}
 
