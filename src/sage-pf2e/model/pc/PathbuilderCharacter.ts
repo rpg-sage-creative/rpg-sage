@@ -267,8 +267,8 @@ function abilitiesToHtml(char: PathbuilderCharacter): string {
 	}).join(", ");
 }
 function itemsToHtml(weapons: TPathbuilderCharacterWeapon[], armors: TPathbuilderCharacterArmor[]): string {
-	const weaponNames = weapons.map(weapon => weapon.display);
-	const armorNames = armors.map(armor => armor.display);
+	const weaponNames = weapons.map(weapon => weapon.display ?? weapon.name);
+	const armorNames = armors.map(armor => armor.display ?? armor.name);
 	return weaponNames.concat(armorNames).join(", ");
 }
 function equipmentToHtml(equipment: TPathbuilderCharacterEquipment[]): string {
