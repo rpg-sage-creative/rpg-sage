@@ -355,6 +355,7 @@ export default async function process(): Promise<void> {
 	processLore();
 	if (false)
 	findDuplicateCores();
+	if (false)
 	parsePf2Data();
 
 	info(""); // spacer for bash script

@@ -50,7 +50,7 @@ import { findAndRemove, labelToKey, parseBody, split, splitAndCapitalize } from 
 */
 
 type TSpellComponent = "focus" | "material" | "somatic" | "verbal";
-function components(value?: string): TSpellComponent[] | undefined {
+function parseComponents(value?: string): TSpellComponent[] | undefined {
 	return value?.split(",").map(c =>
 		c === "s" ? "somatic"
 		: c === "v" ? "verbal"
@@ -85,12 +85,17 @@ function parseHeightened(lines: string[]): TSpellHeighten[] | undefined {
 	}
 	return undefined;
 }
-function parseCast(lines: string[]): string {
+function parseCast(lines: string[], components: TSpellComponent[] | undefined): string {
 	const value = findAndRemove(lines, "Cast");
 	if (value !== undefined) {
 		const actions = +value;
 		const array = new Array(actions);
 		array.fill("[A]", 0, actions);
+		return array.join("");
+	}
+	if (components?.length) {
+		const array = new Array(components.length);
+		array.fill("[A]", 0, components.length);
 		return array.join("");
 	}
 	return undefined!;
@@ -99,7 +104,8 @@ export function parseSpell(pf2t: Pf2tBaseCore): TCore<"Spell"> {
 	const sourceCores = getSageCores().filter(src => src.objectType === "Source") as unknown as SourceCore[];
 	const source = Pf2tBase.parseSource(pf2t.source, sourceCores);
 	const parsedBody = parseBody<TEntity<"Spell">>(pf2t.body);
-	const cast = parseCast(parsedBody.details as string[]);
+	const components = parseComponents(pf2t.cast);
+	const cast = parseCast(parsedBody.details as string[], components);
 	const heightened = parseHeightened(parsedBody.details as string[]);
 	["Area", "Duration", "Targets"].forEach(label => {
 		const value = findAndRemove(parsedBody.details as string[], label);
@@ -112,7 +118,7 @@ export function parseSpell(pf2t: Pf2tBaseCore): TCore<"Spell"> {
 		archetype: pf2t.archetype,
 		area: parsedBody.area,
 		cast: cast,
-		components: components(pf2t.cast),
+		components: components,
 		cost: undefined!,
 		creature: undefined!,
 		// criticalFailure: undefined!,

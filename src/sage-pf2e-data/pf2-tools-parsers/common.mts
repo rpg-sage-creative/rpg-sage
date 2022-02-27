@@ -201,9 +201,9 @@ function compare<T>(a: T, b: T): boolean {
 	return a === b;
 }
 //#endregion
-// function logToString<T>(object: T): string {
-// 	return isObject(object) ? JSON.stringify(object) : String(object);
-// }
+function logToString<T>(object: T): string {
+	return isObject(object) ? JSON.stringify(object) : String(object);
+}
 
 //#region parse pf2data
 
@@ -217,7 +217,7 @@ export function parsePf2Data() {
 			Object.keys(existing).forEach(key => {
 				if (!["id","description"].includes(key)) {
 					if (!compare(existing[key],parsed[key])) {
-						// console.log(`"${existing.name}"${key}: "${logToString(existing[key])}" vs "${logToString(parsed[key])}"`);
+						console.log(`"${existing.name}"${key}: "${logToString(existing[key])}" vs "${logToString(parsed[key])}"`);
 					}
 				}
 			});
