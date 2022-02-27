@@ -26,7 +26,8 @@ export enum ColorType {
 export interface IColor {
 	type: ColorType;
 	hex: string;
-	label?: string; // used for dev purposes
+	/** only used for dev purposes */
+	label?: string;
 }
 export interface IHasColors {
 	colors: IColor[];

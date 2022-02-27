@@ -1,4 +1,4 @@
-import type Emoji from "./Emoji"
+import type Emoji from "./Emoji";
 
 export enum EmojiType {
 
@@ -65,7 +65,7 @@ export type IEmoji = {
 	type: EmojiType;
 	matches: string[];
 	replacement: string;
-}
+};
 
 export interface IHasEmoji {
 	emoji?: IEmoji[];

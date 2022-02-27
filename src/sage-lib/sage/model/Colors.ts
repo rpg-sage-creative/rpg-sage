@@ -25,7 +25,8 @@ export default class Colors {
 		}
 		let found = this.findColor(colorAndType.type);
 		if (!found) {
-			this.colors.push(found = { type: colorAndType.type, hex: undefined! });
+			found = { type: colorAndType.type, hex: undefined! };
+			this.colors.push(found);
 		}
 		found.hex = colorAndType.color.toDiscordColor();
 		return true;
@@ -51,7 +52,7 @@ export default class Colors {
 	}
 
 	public toArray(): IColor[] {
-		return this.colors.map(color => ({ type: color.type, hex: color.hex }));
+		return this.colors.map(({ type, hex }) => ({ type, hex }));
 	}
 
 	public toDiscordColor(colorType: ColorType): string | null {

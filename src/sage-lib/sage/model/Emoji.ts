@@ -1,9 +1,9 @@
-import * as _XRegExp from "xregexp";const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
+import * as _XRegExp from "xregexp";
 import utils from "../../../sage-utils";
-import type { IEmoji } from "./HasEmojiCore";
-import type { EmojiType } from "./HasEmojiCore";
+import type { EmojiType, IEmoji } from "./HasEmojiCore";
+const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
-export type TEmojiAndType = { type: EmojiType; replacement: string; }
+export type TEmojiAndType = { type: EmojiType; replacement: string; };
 
 const actionMatches = ["A", "AA", "AAA", "R", "F"];
 function emojify(text: string, matches: string[], replacement: string): string {
@@ -62,10 +62,11 @@ export default class Emoji {
 
 		let found = this.findEmoji(type);
 		if (!found) {
-			this.emoji.push(found = { type: type, matches: [], replacement: undefined! });
+			found = { type: type, matches: [], replacement: undefined! };
+			this.emoji.push(found);
 		}
 
-		found!.replacement = replacement;
+		found.replacement = replacement;
 		return true;
 	}
 
@@ -90,7 +91,7 @@ export default class Emoji {
 	}
 
 	public toArray(): IEmoji[] {
-		return this.emoji.map(emoji => { return { type: emoji.type, matches: emoji.matches.slice(), replacement: emoji.replacement }; });
+		return this.emoji.map(({ type, matches, replacement }) => ({ type, matches: matches.slice(), replacement }));
 	}
 
 	public emojify(text: string): string {
