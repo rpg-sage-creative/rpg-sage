@@ -1,9 +1,9 @@
 import type * as Discord from "discord.js";
 import utils, { Optional } from "../../../sage-utils";
-import { CritMethodType, DiceOutputType, GameType, parseCritMethodType, parseDiceOutputType, parseGameType } from "../../../sage-dice";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType, parseCritMethodType, parseDiceOutputType, parseGameType } from "../../../sage-dice";
 import ArgsManager from "../../discord/ArgsManager";
 import DiscordId from "../../discord/DiscordId";
-import { DicePostType, DiceSecretMethodType } from "../commands/dice";
+import { DicePostType } from "../commands/dice";
 import { PermissionType, type IChannel, type IChannelOptions, type TPermissionType } from "../repo/base/IdRepository";
 import type { TColorAndType } from "./Colors";
 import type { GameCharacterCore } from "./GameCharacter";
@@ -107,14 +107,17 @@ function removeAndReturnDicePostType(args: string[]): Optional<DicePostType> {
 
 /** /^(dicesecret)=(GAMEMASTER|GM|HIDE|IGNORE|UNSET)?$/i; returns null to unset */
 function removeAndReturnDiceSecretMethodType(args: string[]): Optional<DiceSecretMethodType> {
-	const regex = /^(dicesecret)=(GAMEMASTER|GM|HIDE|IGNORE|UNSET)?$/i;
+	const regex = /^(dicesecret)=(GAMEMASTER|GM|DM|GMDM|DMGM|HIDE|IGNORE|UNSET)?$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match) {
 			args.splice(args.indexOf(arg), 1);
 			const diceSecretMethodType = (match[2] || "").toUpperCase();
-			if (diceSecretMethodType === "GAMEMASTER" || diceSecretMethodType === "GM") {
-				return DiceSecretMethodType.GameMaster;
+			if (["DM","DMGM","GMDM"].includes(diceSecretMethodType)) {
+				return DiceSecretMethodType.GameMasterDirect;
+			}
+			if (["GM","GAMEMASTER"].includes(diceSecretMethodType)) {
+				return DiceSecretMethodType.GameMasterChannel;
 			}
 			if (diceSecretMethodType === "HIDE") {
 				return DiceSecretMethodType.Hide;

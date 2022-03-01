@@ -1,8 +1,8 @@
 import type * as Discord from "discord.js";
-import type { CritMethodType, DiceOutputType, GameType } from "../../../sage-dice";
+import type { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../sage-dice";
 import utils, { IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
 import { DiscordKey } from "../../discord";
-import type { DicePostType, DiceSecretMethodType } from "../commands/dice";
+import type { DicePostType } from "../commands/dice";
 import type { IChannel } from "../repo/base/IdRepository";
 import { HasIdCoreAndSageCache, PermissionType, updateChannel } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";

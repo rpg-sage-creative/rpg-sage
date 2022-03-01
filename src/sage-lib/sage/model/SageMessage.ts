@@ -1,9 +1,9 @@
 import type * as Discord from "discord.js";
-import { CritMethodType, DiceOutputType, GameType } from "../../../sage-dice";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../sage-dice";
 import utils, { Optional } from "../../../sage-utils";
 import { DiscordCache, DiscordKey, DMessage, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
 import { send } from "../../discord/messages";
-import { DicePostType, DiceSecretMethodType } from "../commands/dice";
+import { DicePostType } from "../commands/dice";
 import type Bot from "../model/Bot";
 import type Game from "../model/Game";
 import Server from "../model/Server";

@@ -1,7 +1,7 @@
 import type * as Discord from "discord.js";
-import type { CritMethodType, DiceOutputType, GameType } from "../../../../sage-dice";
+import type { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../../sage-dice";
 import utils, { IdCore, Optional, OrNull, UUID } from "../../../../sage-utils";
-import type { DicePostType, DiceSecretMethodType } from "../../commands/dice";
+import type { DicePostType } from "../../commands/dice";
 import type SageCache from "../../model/SageCache";
 
 export type TPermissionType = keyof typeof PermissionType;

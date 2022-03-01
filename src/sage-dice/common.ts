@@ -2,7 +2,7 @@ import utils, { IdCore, TToken } from "../sage-utils";
 
 //#region rpg.common.ts
 
-export enum DiceSecretMethodType { Ignore = 0, Hide = 1, GameMaster = 2 }
+export enum DiceSecretMethodType { Ignore = 0, Hide = 1, GameMasterChannel = 2, GameMasterDirect = 3 }
 
 //#region GameType
 
@@ -123,7 +123,7 @@ export function sumDropKeep(values: number[], dropKeep?: TDropKeepData): number 
 	if (!dropKeep) {
 		return sum(values);
 	}
-	const sorted = values.slice().sort(utils.ArrayUtils.Sort.number);
+	const sorted = values.slice().sort(utils.ArrayUtils.Sort.sortAscending);
 	switch (dropKeep.type) {
 		case DropKeepType.DropHighest:
 			return sum(sorted.slice(0, -dropKeep.value));

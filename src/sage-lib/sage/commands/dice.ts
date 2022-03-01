@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
 import utils, { Optional } from "../../../sage-utils";
-import { DiceOutputType, TDiceOutput, type GameType } from "../../../sage-dice";
+import { DiceOutputType, DiceSecretMethodType, TDiceOutput, type GameType } from "../../../sage-dice";
 import { DiscordDice } from "../../../sage-dice"
 import type { DUser, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { DiscordId, MessageType } from "../../discord";
@@ -23,7 +23,7 @@ type TGmChannel = Optional<TChannel | DUser>;
 // };
 
 export enum DicePostType { SinglePost = 0, SingleEmbed = 1, MultiplePosts = 2, MultipleEmbeds = 3 }
-export enum DiceSecretMethodType { Ignore = 0, Hide = 1, GameMaster = 2 }
+// export enum DiceSecretMethodType { Ignore = 0, Hide = 1, GameMasterChannel = 2, GameMasterDirect = 3 }
 type TFormattedDiceOutput = {
 	hasSecret: boolean;
 	postContent?: string;
@@ -376,12 +376,14 @@ async function ensureTargetChannel(sageMessage: SageMessage): Promise<TChannel> 
 }
 
 async function ensureGmTargetChannel(sageMessage: SageMessage, hasSecret: boolean): Promise<TGmChannel> {
-	if (!hasSecret || sageMessage.diceSecretMethodType !== DiceSecretMethodType.GameMaster) {
+	if (!hasSecret || (sageMessage.diceSecretMethodType !== DiceSecretMethodType.GameMasterChannel && sageMessage.diceSecretMethodType !== DiceSecretMethodType.GameMasterDirect)) {
 		return null;
 	}
-	const channel = await sageMessage.game?.gmGuildChannel();
-	if (channel) {
-		return channel as TChannel;
+	if (sageMessage.diceSecretMethodType === DiceSecretMethodType.GameMasterChannel) {
+		const channel = await sageMessage.game?.gmGuildChannel();
+		if (channel) {
+			return channel as TChannel;
+		}
 	}
 	const member = await sageMessage.game?.gmGuildMember();
 	return member?.user ?? null;
