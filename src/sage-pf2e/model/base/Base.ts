@@ -60,7 +60,7 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 
 	public constructor(protected core: T) {
 		super(core);
-		if (!core.id) {
+		if (!core.id && !((core as any).hash)) {
 			console.warn("NO ID!", core.name ?? core);
 		}
 	}
