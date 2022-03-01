@@ -1,4 +1,5 @@
-import { BaseCore, Pf2tBase, Pf2tBaseCore, TDetail, THasSuccessOrFailure } from "../../sage-pf2e";
+import type { BaseCore, Pf2tBaseCore, TDetail, THasSuccessOrFailure } from "../../sage-pf2e";
+import { parseSource } from "../../sage-pf2e/data/Repository";
 import utils, { OrNull } from "../../sage-utils";
 import { compareNames, getPf2tCores, getSageCores } from "../common.mjs";
 import type { TCore } from "../types.mjs";
@@ -125,7 +126,7 @@ function sourcesMatch(pf2t: Pf2tBaseCore, sage: TCore): boolean {
 	const key = `${pf2t.source} === ${sage.source}`;
 	if (!sourceMatches.has(key)) {
 		const sourceCores = getSageCores("Source");
-		const pf2Source = Pf2tBase.parseSource(pf2t.source, sourceCores);
+		const pf2Source = parseSource(pf2t.source, sourceCores);
 		const sageSource = sourceCores.find(src => src.code === sage.source);
 		sourceMatches.set(key, pf2Source?.source?.code && sageSource?.code ? pf2Source.source.code === sageSource.code : false);
 	}

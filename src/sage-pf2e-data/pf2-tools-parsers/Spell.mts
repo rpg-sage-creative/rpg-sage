@@ -1,5 +1,5 @@
 import type { Pf2tBaseCore, TCore, TEntity } from "../../sage-pf2e";
-import { Pf2tBase } from "../../sage-pf2e";
+import { parseSource } from "../../sage-pf2e/data/Repository";
 import type { SourceCore } from "../../sage-pf2e/model/base/Source";
 import type { TSpellHeighten } from "../../sage-pf2e/model/Spell";
 import { getSageCores } from "../common.mjs";
@@ -102,7 +102,7 @@ function parseCast(lines: string[], components: TSpellComponent[] | undefined): 
 }
 export function parseSpell(pf2t: Pf2tBaseCore): TCore<"Spell"> {
 	const sourceCores = getSageCores().filter(src => src.objectType === "Source") as unknown as SourceCore[];
-	const source = Pf2tBase.parseSource(pf2t.source, sourceCores);
+	const source = parseSource(pf2t.source, sourceCores);
 	const parsedBody = parseBody<TEntity<"Spell">>(pf2t.body);
 	const components = parseComponents(pf2t.cast);
 	const cast = parseCast(parsedBody.details as string[], components);
