@@ -75,6 +75,7 @@ echoAndDo "cd $sageRootDir"
 # execute the deploy script on the remote
 sshCommands=(
 	"pm2 delete sage-$WHICH"
+	"cp -r $runDir $runDir-backup"
 	"rm -rf $runDir && mkdir $runDir"
 	"ln -s $dataDir $runDir/data"
 	"unzip -q $deployDir/bot -d $runDir"
