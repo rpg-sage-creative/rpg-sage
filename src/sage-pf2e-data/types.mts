@@ -15,6 +15,10 @@ export type TCore = {
 	features?: any[];
 	ancestry?: string;
 	category?: string;
+	/** Domain spell names */
+	spells: string[];
+	/** FocusSpell domain name */
+	domain: string;
 
 	/** Archives linkage */
 	aon?:string; aonId?:number;

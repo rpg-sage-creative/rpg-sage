@@ -321,7 +321,7 @@ function pushLore(name: string, type?: string) {
 	}
 }
 function processLore() {
-	info(`Creating all-lores.csv ...`);
+	info(`\nCreating all-lores.csv ...`);
 	const loreRegex = /([A-Z]\w+\s+)+Lore/g;
 	getSageCores().forEach(core => {
 		if (["Deity","Ancestry","VersatileHeritage"].includes(core.objectType)) {
@@ -345,6 +345,29 @@ function findDuplicateCores(): void {
 	info(`Duplicate Entries (${dupes.length}): ${dupes.map(list => list.first()!.name)}`);
 }
 
+function processDomainSpells(): void {
+	info(`\nChecking domain spells ...`);
+	const sageCores = getSageCores();
+	const domains = sageCores.filter(core => core.objectType === "Domain");
+	const focusSpells = sageCores.filter(core => core.objectType === "FocusSpell");
+	let missingSpells = 0;
+	domains.forEach(domain => {
+		const missing = domain.spells?.filter(spellName => !focusSpells.find(spell => spell.name.toLowerCase() === spellName.toLowerCase() && spell.domain?.toLowerCase() === domain.name.toLowerCase()));
+		if (missing?.length) {
+			missingSpells += missing.length;
+			info(`\tDomain (${domain.name}) spells missing: ${missing.join(", ")}`);
+		}
+	});
+	let missingDomains = 0;
+	focusSpells.forEach(spell => {
+		if (spell.domain && !domains.find(domain => domain.name.toLowerCase() === spell.domain?.toLowerCase() && domain.spells?.map(s => s.toLowerCase()).includes(spell.name.toLowerCase()))) {
+			missingDomains++;
+			info(`\tFocusSpell (${spell.name}) domain missing: ${spell.domain}`);
+		}
+	});
+	info(`Checking domain spells ... ${missingSpells} missing spells; ${missingDomains} missing domains`);
+}
+
 export default async function process(): Promise<void> {
 
 	await loadPf2tCores();
@@ -352,6 +375,7 @@ export default async function process(): Promise<void> {
 	await processPf2tData();
 	processAbcData();
 	processMissingSpells();
+	processDomainSpells();
 	processLore();
 	if (false)
 	findDuplicateCores();
