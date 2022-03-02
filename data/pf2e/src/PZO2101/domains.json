@@ -427,7 +427,7 @@
 		"objectType": "Domain",
 		"name": "Nightmares",
 		"description": "You fill minds with horror and dread.",
-		"spells": [ "Walking Nightmare", "Shared Nightmare" ],
+		"spells": [ "Waking Nightmare", "Shared Nightmare" ],
 		"source": "PZO2101",
 		"aonId": 23,
 		"id": "89017fc4-713e-45ef-972b-d3bac78376bc",
