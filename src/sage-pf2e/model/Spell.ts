@@ -2,7 +2,7 @@ import utils, { Core, UUID } from "../../sage-utils";
 import type { TMagicComponent, TMagicTradition } from '../common';
 import { ABILITIES, NEWLINE, toModifier } from '../common';
 import RenderableContent from '../data/RenderableContent';
-import { findByValue } from '../data/Repository';
+import { find, findByValue } from '../data/Repository';
 import type ArcaneSchool from './ArcaneSchool';
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from './base/HasSource';
@@ -183,10 +183,13 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 	private _domain?: Domain | null;
 	public get domain(): Domain | undefined {
 		if (this._domain === undefined) {
-			this._domain = findByValue("Domain", this.core.domain) ?? null;
+			this._domain = (this.core.domain ? findByValue("Domain", this.core.domain) : null)
+				?? find("Domain", (domain: Domain) => domain.toJSON().spells.includes(this.name))
+				?? null;
 		}
 		return this._domain ?? undefined;
 	}
+	public get domainName(): string | undefined { return this.core.domain; }
 	public get duration(): string | undefined { return this.core.duration; }
 	// public heightened: HeightenedSpell[];
 	public get isCantrip(): boolean { return this.traits.includes("Cantrip"); }

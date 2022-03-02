@@ -52,6 +52,7 @@ From https://elasticsearch.galdiuz.com/aon/_search
 
 export interface AonBaseCore extends SourcedCore<""> {
 	category: string;
+	level: number;
 	/** Core Rulebook pg. 565 2.0 */
 	source_raw: string;
 	/** raw text */
@@ -82,9 +83,6 @@ export default class AonBase
 	}
 
 	public matchesBase(sageData: Base): boolean {
-		// if (this.name === "Magic Missile" && sageData.name === "Magic Missile") {
-		// 	console.log(`"${sageData.toAonLink()}".includes("${this.core.url}") === ${sageData.toAonLink().includes(this.core.url)}`);
-		// }
 		return sageData.toAonLink().includes(this.core.url);
 	}
 
@@ -150,7 +148,9 @@ export default class AonBase
 	// #region utils.SearchUtils.ISearchable
 
 	public get searchResultCategory(): string {
-		return this.objectType as unknown as string;
+		return this.core.level
+			? `${this.objectType} ${this.core.level}`
+			: this.objectType;
 	}
 
 	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {

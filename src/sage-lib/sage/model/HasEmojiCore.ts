@@ -21,6 +21,7 @@ export enum EmojiType {
 	ActionsReaction = 34,
 	ActionsFree = 35,
 
+	// Dice
 	Die = 4,
 	DieCriticalSuccess = 41,
 	DieSuccess = 42,
@@ -58,7 +59,10 @@ export enum EmojiType {
 	PromptChecked = 701,
 	PromptUnchecked = 702,
 	PromptYes = 71,
-	PromptNo = 711
+	PromptNo = 711,
+
+	// Other = 9
+	AoN = 90
 }
 
 export type IEmoji = {

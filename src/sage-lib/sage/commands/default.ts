@@ -1,10 +1,9 @@
-import { Armor, HasSource, IHasTraits, RARITIES, Repository, Skill, Source, SourceNotationMap, type TRarity } from "../../../sage-pf2e";
+import { HasSource, RARITIES, Repository, Skill, Source, SourceNotationMap, type TRarity } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
 import ArgsManager from "../../discord/ArgsManager";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerMessageListener } from "../../discord/handlers";
-import { send } from "../../discord/messages";
-import type { TChannel, TCommandAndArgs } from "../../discord/types";
+import type { TCommandAndArgs } from "../../discord/types";
 import type SageMessage from "../model/SageMessage";
 import { aonHandler } from "./aon";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
@@ -178,30 +177,7 @@ function searchTester(sageMessage: SageMessage): TCommandAndArgs | null {
 }
 
 async function searchHandler(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowSearch) {
-		return sageMessage.reactBlock();
-	}
-
-	const aon = sageMessage.args.first() === "aon";
-	if (aon || true) {
-		return aonHandler(sageMessage, false);
-	}
-
-	const parsedSearchInfo = parseSearchInfo(sageMessage.args);
-	const searchInfo = new utils.SearchUtils.SearchInfo(parsedSearchInfo.searchText, "g");
-	const searchResults = Repository.search(searchInfo, ...parsedSearchInfo.objectTypes);
-	if (parsedSearchInfo.rarities.length && searchResults.scores.length) {
-		searchResults.scores = searchResults.scores.filter(score => {
-			// TODO: Properly implement IHasTraits so that I can use .hasTraits and .includesTrait
-			const hasTraits = (<IHasTraits><any>score.searchable);
-			if (hasTraits.traits?.length) {
-				return parsedSearchInfo.rarities.find(rarity => hasTraits.traits.includes(rarity)) !== undefined;
-			}
-			return true;
-		});
-	}
-
-	await send(sageMessage.caches, sageMessage.message.channel as TChannel, searchResults.theOne ?? searchResults, sageMessage.message.author);
+	return aonHandler(sageMessage, false);
 }
 
 /** Checks searchText to see if the entire string is an object type, or an object type followed by "by source"; if so it lists all items of the given objectType */
@@ -248,33 +224,12 @@ async function findHandler(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const aon = sageMessage.args.first() === "aon";
-	if (aon || true) {
-		return aonHandler(sageMessage, true);
-	}
-
 	const parsedSearchInfo = parseSearchInfo(sageMessage.args);
 	// if (await repositoryFind_listObjectType(sageMessage, parsedSearchInfo)) return;
 	if (await repositoryFindRenderTable(sageMessage, parsedSearchInfo)) {
 		return;
 	}
-
-	const searchInfo = new utils.SearchUtils.SearchInfo(parsedSearchInfo.searchText);
-
-	let searchResults = Repository.search(searchInfo, ...parsedSearchInfo.objectTypes);
-	if (searchResults.isEmpty) {
-		searchResults = Repository.searchComparison(searchInfo, ...parsedSearchInfo.objectTypes);
-	}
-
-	/** If no results and searchText ends in "armor" remove trailing "armor" and search again; example: Studded Leather Armor */
-	if (searchResults.isEmpty && searchInfo.searchText.match(/\s*armou?r\s*$/)) {
-		const armorSearchResults = Repository.search<Armor>(new utils.SearchUtils.SearchInfo(searchInfo.searchText.replace(/\s*armou?r\s*$/, "")), "Armor");
-		if (!armorSearchResults.isEmpty) {
-			searchResults = armorSearchResults;
-		}
-	}
-
-	await send(sageMessage.caches, sageMessage.message.channel as TChannel, searchResults.theOne ?? searchResults.theMatch ?? searchResults, sageMessage.message.author);
+	return aonHandler(sageMessage, true);
 }
 
 // #endregion

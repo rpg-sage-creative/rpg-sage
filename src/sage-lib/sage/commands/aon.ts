@@ -1,13 +1,12 @@
 import AonBase from "../../../sage-pf2e/model/base/AonBase";
 import type { AonBaseCore } from "../../../sage-pf2e/model/base/AonBase";
 import utils from "../../../sage-utils";
-import { Base, SearchResults } from "../../../sage-pf2e";
+import { SearchResults } from "../../../sage-pf2e";
 import type { SearchInfo } from "../../../sage-utils/utils/SearchUtils";
 import type SageMessage from "../model/SageMessage";
 import { send } from "../../discord/messages";
 import type { TChannel } from "../../discord";
 import { parseSearchInfo } from "./default";
-import { findByAonBase } from "../../../sage-pf2e/data/Repository";
 
 //#region PostData
 
@@ -163,8 +162,8 @@ type THit = {
 
 //#endregion
 
-export async function searchAon<T extends Base>(searchInfo: SearchInfo, filterTypes: string[], excludeTypes: string[]): Promise<SearchResults<T>> {
-	const searchResults = new SearchResults<AonBase>(searchInfo);
+export async function searchAon(searchInfo: SearchInfo, filterTypes: string[], excludeTypes: string[]): Promise<SearchResults> {
+	const searchResults = new SearchResults(searchInfo);
 	const postData = buildPostData(searchInfo.terms.map(term => term.term), filterTypes, excludeTypes);
 	const url = `https://elasticsearch.galdiuz.com/aon/_search`;
 	const response = await utils.HttpsUtils.getJson<TResponseData>(url, postData).catch(e => console.error(e)! || null);
@@ -194,7 +193,7 @@ export async function searchAon<T extends Base>(searchInfo: SearchInfo, filterTy
 
 	// #endregion
 
-	return searchResults as unknown as SearchResults<T>;
+	return searchResults;
 }
 
 export async function aonHandler(sageMessage: SageMessage, nameOnly = false): Promise<void> {
@@ -206,16 +205,9 @@ export async function aonHandler(sageMessage: SageMessage, nameOnly = false): Pr
 	const promise = send(sageMessage.caches, sageMessage.message.channel as TChannel, `> Searching Archives of Nethys, please wait ...`, sageMessage.message.author);
 
 	// Parse the query and start the search ...
-	const terms =
-		// sageMessage.args.first() === "aon" ? sageMessage.args.slice(1) :
-		sageMessage.args;
-	const parsedSearchInfo = parseSearchInfo(terms);
+	const parsedSearchInfo = parseSearchInfo(sageMessage.args);
 	const searchInfo = new utils.SearchUtils.SearchInfo(parsedSearchInfo.searchText, nameOnly ? "" : "g");
 	const searchResults = await searchAon(searchInfo, undefined!, undefined!);
-	searchResults.scores.forEach(score => {
-		const found = findByAonBase(score.searchable as AonBase);
-		score.searchable = found?.hasDetails ? found : score.searchable;
-	});
 
 	const renderableToSend = nameOnly
 		? (searchResults.theOne ?? searchResults.theMatch ?? searchResults)
