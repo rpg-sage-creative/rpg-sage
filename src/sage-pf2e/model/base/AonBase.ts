@@ -83,7 +83,8 @@ export default class AonBase
 	}
 
 	public matchesBase(sageData: Base): boolean {
-		return sageData.toAonLink().includes(this.core.url);
+		return sageData.toAonLink().includes(this.core.url)
+			?? sageData.toJSON().pf2t?.src?.includes(this.core.url);
 	}
 
 	public get objectType(): string { return utils.StringUtils.capitalize(this.core.type); }

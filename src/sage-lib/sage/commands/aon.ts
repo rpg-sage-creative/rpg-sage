@@ -164,7 +164,7 @@ type THit = {
 
 export async function searchAon(searchInfo: SearchInfo, filterTypes: string[], excludeTypes: string[]): Promise<SearchResults> {
 	const searchResults = new SearchResults(searchInfo);
-	const postData = buildPostData(searchInfo.terms.map(term => term.term), filterTypes, excludeTypes);
+	const postData = buildPostData(searchInfo.terms.map(term => utils.LangUtils.oneToUS(term.term)), filterTypes, excludeTypes);
 	const url = `https://elasticsearch.galdiuz.com/aon/_search`;
 	const response = await utils.HttpsUtils.getJson<TResponseData>(url, postData).catch(e => console.error(e)! || null);
 	response?.hits?.hits?.forEach(hit => searchResults.add(...AonBase.searchRecursive(hit._source, searchInfo)));
