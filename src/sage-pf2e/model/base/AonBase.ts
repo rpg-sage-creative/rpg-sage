@@ -1,7 +1,8 @@
 import type { IComparable, ISearchable, TSortResult } from "../../../sage-utils";
 import utils from "../../../sage-utils";
-import { parseSource, TParsedSource } from "../../data/Repository";
-import type { SourcedCore } from "./HasSource";
+import { parseSources, TParsedSource } from "../../data/Repository";
+import type Base from "./Base";
+import type { SourcedCore, TSourceInfo } from "./HasSource";
 import HasSource from "./HasSource";
 import type { IHasArchives, IHasLink, IHasName } from "./interfaces";
 import type Source from "./Source";
@@ -52,7 +53,7 @@ From https://elasticsearch.galdiuz.com/aon/_search
 export interface AonBaseCore extends SourcedCore<""> {
 	category: string;
 	/** Core Rulebook pg. 565 2.0 */
-	source: string;
+	source_raw: string;
 	/** raw text */
 	text: string;
 	type: string;
@@ -80,22 +81,32 @@ export default class AonBase
 		super(hackCore(core));
 	}
 
+	public matchesBase(sageData: Base): boolean {
+		// if (this.name === "Magic Missile" && sageData.name === "Magic Missile") {
+		// 	console.log(`"${sageData.toAonLink()}".includes("${this.core.url}") === ${sageData.toAonLink().includes(this.core.url)}`);
+		// }
+		return sageData.toAonLink().includes(this.core.url);
+	}
+
 	public get objectType(): string { return utils.StringUtils.capitalize(this.core.type); }
 	public toString(): string { return this.core.name; }
 
 	//#region HasSource properies
-	private _parsedSource: TParsedSource | undefined | null;
-	private get parsedSource(): TParsedSource | undefined {
-		if (this._parsedSource === undefined) {
-			this._parsedSource = parseSource(this.core.source);
+	private _parsedSources: TParsedSource[] | undefined;
+	private get parsedSources(): TParsedSource[] {
+		if (!this._parsedSources) {
+			this._parsedSources = parseSources(this.core.source_raw);
 		}
-		return this._parsedSource ?? undefined;
+		return this._parsedSources ?? undefined;
+	}
+	private get parsedSource(): TParsedSource | undefined {
+		return this.parsedSources[0];
 	}
 	public get hasPage(): boolean { return !isNaN(this.parsedSource?.page ?? NaN); }
 	public get pages(): string[] { return this.hasPage ? [String(this.parsedSource?.page)] : []; }
 	public get source(): Source { return this.parsedSource?.source!; }
 	public get version(): number { return this.parsedSource?.version ?? "1.0" as any; }
-	public get sources() { return [{ pages:this.pages, source:this.source, version:this.version }]; }
+	public get sources(): TSourceInfo[] { return this.parsedSources.map(src => ({ pages:[String(src.page)], source:src.source!, version:this.version })); }
 	public get hasErrata(): boolean { return false; }
 	public get isErrata(): boolean { return false; }
 	//#endregion
@@ -104,7 +115,13 @@ export default class AonBase
 
 	public get aonTraitId(): number | undefined { return undefined; }
 
-	public toAonLink(label = this.name): string {
+	public toAonLink(): string;
+	public toAonLink(label: string): string;
+	public toAonLink(searchResult: true): string;
+	public toAonLink(label?: boolean | string): string {
+		if (label === true) {
+			return `<a href="https://2e.aonprd.com/${this.core.url}">(link)</a>`;
+		}
 		return `<a href="https://2e.aonprd.com/${this.core.url}">View ${label} on Archives of Nethys</a>`;
 	}
 

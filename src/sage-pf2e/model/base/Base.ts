@@ -79,7 +79,7 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 
 	/** Represents the objectType in Archives of Nethys */
 	public static get aon(): string {
-		return this.singular;
+		return this.plural;
 	}
 
 	/** Represents the type in PF2 Tools */
@@ -112,13 +112,19 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 	public get aonId(): number | undefined { return this.core.aonId; }
 	public get aonTraitId(): number | undefined { return this.core.aonTraitId; }
 
-	public toAonLink(label = this.name): string {
+	public toAonLink(): string;
+	public toAonLink(label: string): string;
+	public toAonLink(searchResult: true): string;
+	public toAonLink(label: boolean | string = this.name): string {
 		const objectType = (this.constructor as typeof Base).aon ?? (this.constructor as typeof Base).plural,
 			aonId = this.aonId;
 		if (objectType && aonId) {
+			if (label === true) {
+				return `<a href="https://2e.aonprd.com/${objectType}.aspx?ID=${aonId}">(link)</a>`;
+			}
 			return `<a href="https://2e.aonprd.com/${objectType}.aspx?ID=${aonId}">View ${label} on Archives of Nethys</a>`;
 		} else if (!this.url) {
-			return `<a href="http://2e.aonprd.com/Search.aspx?query=${label.replace(/\s+/g, "+")}">Search ${label} on Archives of Nethys</a>`;
+			return `<a href="http://2e.aonprd.com/Search.aspx?query=${(label as string).replace(/\s+/g, "+")}">Search ${label} on Archives of Nethys</a>`;
 		}
 		return "";
 	}

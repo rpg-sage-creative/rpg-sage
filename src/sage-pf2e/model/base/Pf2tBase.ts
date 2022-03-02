@@ -116,7 +116,7 @@ export default class Pf2tBase
 	public get aonId(): number | undefined { return +(this.core.aon?.match(/\D+(\d+)(\:\d+)?$/)?.[1] ?? 0) || undefined; }
 	public get aonTraitId(): number | undefined { return undefined; }
 
-	public toAonLink(label = this.name): string {
+	public toAonLink(label: boolean | string = this.name): string {
 		return `<a href="${this.core.src}">View ${label} on Archives of Nethys</a>`;
 	}
 
@@ -173,7 +173,6 @@ export default class Pf2tBase
 			renderable.appendSection(`<i>${this.description}</i>`);
 		}
 		this.appendDetailsTo(renderable);
-		renderable.append(`<i>Content from <https://character.pf2.tools></i>`);
 		return renderable;
 	}
 

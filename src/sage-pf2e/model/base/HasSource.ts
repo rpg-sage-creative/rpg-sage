@@ -26,6 +26,7 @@ export type TSourceInfo = {
 export interface SourcedCore<T extends string = string> extends BaseCore<T>, TraitsCore, RarityCore {
 	page?: number;
 	pages?: string[];
+	/** Paizo code: PZO2101 */
 	source: string;
 	sources?: TSourceInfoRaw[];
 	version?: number;
@@ -111,8 +112,8 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 
 	// #region IHasArchives
 
-	public toAonLink(label = this.name): string {
-		return this.source?.is3PP ? "" : super.toAonLink(label);
+	public toAonLink(label?: boolean | string): string {
+		return this.source?.is3PP ? "" : super.toAonLink(label as string);
 	}
 
 	// #endregion IHasArchives

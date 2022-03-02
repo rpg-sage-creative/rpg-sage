@@ -19,6 +19,7 @@ const args = process.argv.slice(2),
 // 	return String(fs.readFileSync(`${appName}.ver`));
 // });
 
-activate(pf2DataPath, botCodeName, "rpg-sage\n0.0.0", true);
+const includePf2ToolsData = false;
+activate(pf2DataPath, botCodeName, "rpg-sage\n0.0.0", includePf2ToolsData);
 
 // node --experimental-modules --es-module-specifier-resolution=node app.mjs

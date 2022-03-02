@@ -8,9 +8,10 @@ import type ArgsManager from "./ArgsManager";
 export type TRenderableContentResolvable = string | IRenderable | utils.RenderUtils.RenderableContent;
 
 export interface IMenuRenderable extends IRenderable {
-	getMenuLength(indexes: number[]): number;
-	getMenuUnicodeArray(indexes: number[]): string[];
-	toMenuRenderableContent(indexes: number[]): utils.RenderUtils.RenderableContent;
+	getMenuLength(): number;
+	getMenuUnicodeArray(): string[];
+	toMenuRenderableContent(): utils.RenderUtils.RenderableContent;
+	toMenuRenderableContent(index: number): utils.RenderUtils.RenderableContent;
 }
 
 /** Discord Message or Partial Message */

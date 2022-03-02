@@ -1,6 +1,5 @@
 import * as activeBot from "./ActiveBot";
 import * as bot from "./Bot";
-import * as categorizedMenu from "./CategorizedMenu";
 import * as characterManager from "./CharacterManager";
 import * as charactersMatch from "./CharactersMatch";
 import * as colors from "./Colors";
@@ -21,7 +20,6 @@ import * as user from "./User";
 export default {
 	activeBot,
 	bot,
-	categorizedMenu,
 	characterManager,
 	charactersMatch,
 	colors,

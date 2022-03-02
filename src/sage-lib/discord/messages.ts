@@ -129,7 +129,7 @@ export async function replace(caches: SageCache, originalMessage: DMessage, rend
 export async function send(caches: SageCache, targetChannel: TChannel, renderableContent: TRenderableContentResolvable, originalAuthor: Discord.User | null): Promise<Discord.Message[]> {
 	try {
 		const menuRenderable = (<IMenuRenderable>renderableContent).toMenuRenderableContent && <IMenuRenderable>renderableContent || null,
-			menuItemCount = menuRenderable && menuRenderable.getMenuLength([]) || 0;
+			menuItemCount = menuRenderable?.getMenuLength() ?? 0;
 		if (!menuItemCount) {
 			const resolvedRenderableContent = utils.RenderUtils.RenderableContent.resolve(renderableContent);
 			if (resolvedRenderableContent) {
@@ -178,17 +178,13 @@ async function sendMessageEmbeds(target: Discord.User | TChannel, embeds: Discor
 }
 
 function sendMenuRenderableContent(caches: SageCache, menuRenderable: IMenuRenderable, targetChannel: TChannel, originalAuthor: Discord.User | null): void {
-	const menuLength = menuRenderable.getMenuLength([]);
+	const menuLength = menuRenderable.getMenuLength();
 	if (menuLength > 1) {
-		sendAndAwaitReactions(caches, menuRenderable, targetChannel, originalAuthor, []).then(categoryIndex => {
-			sendAndAwaitReactions(caches, menuRenderable, targetChannel, originalAuthor, [categoryIndex]).then(alphaIndex => {
-				sendAndAwaitReactions(caches, menuRenderable, targetChannel, originalAuthor, [categoryIndex, alphaIndex]).then(itemIndex => {
-					send(caches, targetChannel, menuRenderable.toMenuRenderableContent([categoryIndex, alphaIndex, itemIndex]), originalAuthor);
-				}, itemReason => logIfNotTimeout("itemReason", itemReason));
-			}, alphaReason => logIfNotTimeout("alphaReason", alphaReason));
-		}, categoryReason => logIfNotTimeout("categoryReason", categoryReason));
+		sendAndAwaitReactions(caches, menuRenderable, targetChannel, originalAuthor).then(index => {
+			send(caches, targetChannel, menuRenderable.toMenuRenderableContent(index), originalAuthor);
+		}, reason => logIfNotTimeout("reason", reason));
 	}else {
-		const renderable = menuRenderable.toMenuRenderableContent([]);
+		const renderable = menuRenderable.toMenuRenderableContent();
 		if (renderable) {
 			send(caches, targetChannel, renderable, originalAuthor);
 		}else {
@@ -199,9 +195,9 @@ function sendMenuRenderableContent(caches: SageCache, menuRenderable: IMenuRende
 
 const TIMEOUT = "TIMEOUT";
 const TIMEOUT_MILLI = 60 * 1000;
-function sendAndAwaitReactions(caches: SageCache, menuRenderable: IMenuRenderable, targetChannel: TChannel, originalAuthor: Discord.User | null, indexes: number[]): Promise<number> {
+function sendAndAwaitReactions(caches: SageCache, menuRenderable: IMenuRenderable, targetChannel: TChannel, originalAuthor: Discord.User | null): Promise<number> {
 	return new Promise<number>(async (resolve, reject) => {
-		const menuLength = menuRenderable.getMenuLength(indexes);
+		const menuLength = menuRenderable.getMenuLength();
 		if (menuLength < 1) {
 			reject(`menuLength === ${menuLength}`);
 			return;
@@ -212,14 +208,14 @@ function sendAndAwaitReactions(caches: SageCache, menuRenderable: IMenuRenderabl
 			return;
 		}
 
-		const sentMessages = await sendRenderableContent(caches, menuRenderable.toMenuRenderableContent(indexes), targetChannel, originalAuthor),
+		const sentMessages = await sendRenderableContent(caches, menuRenderable.toMenuRenderableContent(), targetChannel, originalAuthor),
 			lastMessage = sentMessages[sentMessages.length - 1];
 		if (!lastMessage) {
 			reject(`No message sent!`);
 			return;
 		}
 
-		const unicodeArray = menuRenderable.getMenuUnicodeArray(indexes),
+		const unicodeArray = menuRenderable.getMenuUnicodeArray(),
 			reactions: Discord.MessageReaction[] = [];
 		let reacting = true,
 			deleted = false;

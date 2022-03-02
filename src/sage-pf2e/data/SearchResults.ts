@@ -34,9 +34,11 @@ export default class SearchResults<T extends Base> extends ScoredMenu<T> {
 
 	// #region DiscordUtils.IMenuRenderable
 
-	public toMenuRenderableContent(indexes: number[]): utils.RenderUtils.RenderableContent {
-		const content = super.toMenuRenderableContent(indexes);
-		if (indexes.length === 0 && !this.theOne) {
+	public toMenuRenderableContent(): utils.RenderUtils.RenderableContent;
+	public toMenuRenderableContent(index: number): utils.RenderUtils.RenderableContent;
+	public toMenuRenderableContent(index = -1): utils.RenderUtils.RenderableContent {
+		const content = super.toMenuRenderableContent(index);
+		if (index === -1 && !this.theOne) {
 			content.appendSection(createAonLink(this.term));
 		}
 		return content;

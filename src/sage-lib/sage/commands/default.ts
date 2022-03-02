@@ -6,7 +6,7 @@ import { registerMessageListener } from "../../discord/handlers";
 import { send } from "../../discord/messages";
 import type { TChannel, TCommandAndArgs } from "../../discord/types";
 import type SageMessage from "../model/SageMessage";
-import type SageMessageArgsManager from "../model/SageMessageArgsManager";
+import { aonHandler } from "./aon";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp, registerFindHelp, registerSearchHelp } from "./help";
 
@@ -148,8 +148,8 @@ async function objectsBy(sageMessage: SageMessage): Promise<void> {
 // #region Search / Find / Default listeners
 
 type TParsedSearchInfo = { searchText: string; searchTerms: string[]; objectTypes: string[]; rarities: TRarity[] };
-function parseSearchInfo(sageMessageArgs: SageMessageArgsManager): TParsedSearchInfo {
-	const searchTerm = sageMessageArgs.join(" ");
+export function parseSearchInfo(terms: string[]): TParsedSearchInfo {
+	const searchTerm = terms?.join(" ") ?? [];
 	const matches = Array.from(searchTerm.match(/\s+[\-\\/][a-z]+/g) || []).filter(match => match.trim() !== "-r");
 
 	const lowerRarities = RARITIES.map(rarity => rarity.toLowerCase());
@@ -182,18 +182,25 @@ async function searchHandler(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const searchInfo = parseSearchInfo(sageMessage.args);
-	const searchResults = Repository.search(new utils.SearchUtils.SearchInfo(searchInfo.searchText, "g"), ...searchInfo.objectTypes);
-	if (searchInfo.rarities.length && searchResults.scores.length) {
+	const aon = sageMessage.args.first() === "aon";
+	if (aon || true) {
+		return aonHandler(sageMessage, false);
+	}
+
+	const parsedSearchInfo = parseSearchInfo(sageMessage.args);
+	const searchInfo = new utils.SearchUtils.SearchInfo(parsedSearchInfo.searchText, "g");
+	const searchResults = Repository.search(searchInfo, ...parsedSearchInfo.objectTypes);
+	if (parsedSearchInfo.rarities.length && searchResults.scores.length) {
 		searchResults.scores = searchResults.scores.filter(score => {
 			// TODO: Properly implement IHasTraits so that I can use .hasTraits and .includesTrait
 			const hasTraits = (<IHasTraits><any>score.searchable);
 			if (hasTraits.traits?.length) {
-				return searchInfo.rarities.find(rarity => hasTraits.traits.includes(rarity)) !== undefined;
+				return parsedSearchInfo.rarities.find(rarity => hasTraits.traits.includes(rarity)) !== undefined;
 			}
 			return true;
 		});
 	}
+
 	await send(sageMessage.caches, sageMessage.message.channel as TChannel, searchResults.theOne ?? searchResults, sageMessage.message.author);
 }
 
@@ -241,18 +248,22 @@ async function findHandler(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const message = sageMessage.message;
-	const searchInfo = parseSearchInfo(sageMessage.args);
+	const aon = sageMessage.args.first() === "aon";
+	if (aon || true) {
+		return aonHandler(sageMessage, true);
+	}
 
-	// if (await repositoryFind_listObjectType(sageMessage, searchInfo)) return;
-
-	if (await repositoryFindRenderTable(sageMessage, searchInfo)) {
+	const parsedSearchInfo = parseSearchInfo(sageMessage.args);
+	// if (await repositoryFind_listObjectType(sageMessage, parsedSearchInfo)) return;
+	if (await repositoryFindRenderTable(sageMessage, parsedSearchInfo)) {
 		return;
 	}
 
-	let searchResults = Repository.search(new utils.SearchUtils.SearchInfo(searchInfo.searchText), ...searchInfo.objectTypes);
+	const searchInfo = new utils.SearchUtils.SearchInfo(parsedSearchInfo.searchText);
+
+	let searchResults = Repository.search(searchInfo, ...parsedSearchInfo.objectTypes);
 	if (searchResults.isEmpty) {
-		searchResults = Repository.searchComparison(new utils.SearchUtils.SearchInfo(searchInfo.searchText), ...searchInfo.objectTypes);
+		searchResults = Repository.searchComparison(searchInfo, ...parsedSearchInfo.objectTypes);
 	}
 
 	/** If no results and searchText ends in "armor" remove trailing "armor" and search again; example: Studded Leather Armor */
@@ -262,7 +273,8 @@ async function findHandler(sageMessage: SageMessage): Promise<void> {
 			searchResults = armorSearchResults;
 		}
 	}
-	await send(sageMessage.caches, message.channel as TChannel, searchResults.theOne ?? searchResults.theMatch ?? searchResults, message.author);
+
+	await send(sageMessage.caches, sageMessage.message.channel as TChannel, searchResults.theOne ?? searchResults.theMatch ?? searchResults, sageMessage.message.author);
 }
 
 // #endregion
@@ -300,7 +312,7 @@ export default function register(): void {
 					try {
 						// console.log(`\t\t${objectType}::${object.id}::${object.name}`);
 						const renderable = object.toRenderableContent();
-console.log((renderable as any)?.prototype?.constructor?.name ?? Object.prototype.toString.call(object));
+// console.log((renderable as any)?.prototype?.constructor?.name ?? Object.prototype.toString.call(object));
 						const embeds = resolveToEmbeds(sageMessage.caches, renderable);
 						maxEmbeds = Math.max(maxEmbeds, embeds.length);
 						const string = renderable.toString();

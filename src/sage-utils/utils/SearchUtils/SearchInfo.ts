@@ -11,7 +11,7 @@ function createRegex(value: string, flags = "gi"): RegExp {
 }
 
 type TSearchableContent = string | string[] | undefined;
-type TFlag = "g" | "r";
+type TFlag = "g" | "r" | "";
 
 function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean) {
 	return reduceNoise(term.split(/\s+/)).map(_term => {

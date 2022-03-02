@@ -8,6 +8,7 @@ import type Creature from "../model/bestiary/Creature";
 import Pf2tBase, { type Pf2tBaseCore } from "../model/base/Pf2tBase";
 import SearchResults from "./SearchResults";
 import type { SourceCore } from "../model/base/Source";
+import type AonBase from "../model/base/AonBase";
 
 export type TObjectTypeAndPlural = { objectType: string; objectTypePlural: string; };
 
@@ -95,6 +96,17 @@ export function find<T extends Base | HasSource>(objectType: string, sourceOrPre
 
 function _findById<T extends string, U extends TEntity<T> = TEntity<T>>(objectType: T, uuidMatcher: TUuidMatcher): OrUndefined<U> {
 	return _all<U>(objectType).find(base => base.equals(uuidMatcher));
+}
+
+export function findByAonBase<T extends Base | HasSource>(aonBase: AonBase): OrUndefined<T> {
+	const objectTypes = getObjectTypes();
+	for (const objectType of objectTypes) {
+		const found = find(objectType, base => aonBase.matchesBase(base));
+		if (found) {
+			return found as T;
+		}
+	}
+	return undefined;
 }
 
 /** Finds the object for the given UUID. */
@@ -363,6 +375,7 @@ export function parseSource(value?: string, sources?: TSourceOrCore[]): TParsedS
 	// "source": "Core Rulebook pg. 283 2.0",
 	const parts = value?.match(/^(.*?) pg. (\d+)(?: \d+\.\d+)?$/);
 	if (!parts) {
+		// console.log(value, sources?.map(src => src.name));
 		return null;
 	}
 
@@ -382,6 +395,12 @@ export function parseSource(value?: string, sources?: TSourceOrCore[]): TParsedS
 	}
 
 	return { source, name, page, version };
+}
+export function parseSources(value?: string, sources?: TSourceOrCore[]): TParsedSource[] {
+	const values = value?.split(/\s*,\s*/) ?? [];
+	return values
+		.map(value => parseSource(value, sources))
+		.filter(isDefined);
 }
 
 //#endregion

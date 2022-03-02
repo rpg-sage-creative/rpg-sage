@@ -1,9 +1,10 @@
 import utils, { IRenderable, ISearchable } from "../../sage-utils";
 import { UNICODE_ZERO_TO_TEN } from "./consts";
 import type HasSource from "../model/base/HasSource";
-import type { SourcedCore } from "../model/base/HasSource";
 import type Source from "../model/base/Source";
-import Pf2tBase from "../model/base/Pf2tBase";
+import AonBase from "../model/base/AonBase";
+import { findByAonBase } from "./Repository";
+import type { IMenuRenderable } from "../../sage-lib/discord";
 
 function setTitle(content: utils.RenderUtils.RenderableContent, scores: utils.SearchUtils.SearchScore<any>[], label: string): void {
 	if (scores[0].compScore) {
@@ -13,13 +14,22 @@ function setTitle(content: utils.RenderUtils.RenderableContent, scores: utils.Se
 		content.setTitle(`<b>${label}</b>`);
 		content.append(`<b>Top Matches</b> (of ${scores.length})`);
 	}
-	content.append(`[spacer]<i><b>(#)</b> represents number of search term hits.</i>`);
+	content.append(`[spacer] <i><b>(#)</b> represents number of search term hits.</i>`);
 }
 
-export interface IMenuRenderable extends IRenderable {
-	getMenuLength(indexes: number[]): number;
-	getMenuUnicodeArray(indexes: number[]): string[];
-	toMenuRenderableContent(indexes: number[]): utils.RenderUtils.RenderableContent;
+function toAonLink(searchable: any): string {
+	return searchable instanceof AonBase ? searchable.toAonLink(true) : "";
+}
+
+function lookupSearchable<T extends ISearchable>(searchable: T): [HasSource, AonBase | null] {
+	const aonBase = searchable instanceof AonBase ? searchable : null;
+	if (aonBase) {
+		const found = findByAonBase(aonBase as AonBase);
+		if (found) {
+			return [found as HasSource, aonBase];
+		}
+	}
+	return [searchable as unknown as HasSource, aonBase];
 }
 
 interface IRenderableSearchable extends ISearchable, IRenderable { }
@@ -29,60 +39,57 @@ export default class ScoredMenu<T extends IRenderableSearchable> extends utils.S
 
 	// #region utils.DiscordUtils.IMenuRenderable
 
-	public getMenuLength(indexes: number[]): number {
-		if (indexes.length) {
-			return 1;
-		}
+	public getMenuLength(): number {
 		return Math.min(this.count, UNICODE_ZERO_TO_TEN.length);
 	}
-	public getMenuUnicodeArray(indexes: number[]): string[] {
-		return UNICODE_ZERO_TO_TEN.slice(0, this.getMenuLength(indexes));
+	public getMenuUnicodeArray(): string[] {
+		const actionable = this.searchables.filter(s => !(s instanceof AonBase)).length;
+		return UNICODE_ZERO_TO_TEN.slice(0, actionable);
 	}
-	public toMenuRenderableContent(indexes: number[]): utils.RenderUtils.RenderableContent {
+	public toMenuRenderableContent(): utils.RenderUtils.RenderableContent;
+	public toMenuRenderableContent(index: number): utils.RenderUtils.RenderableContent;
+	public toMenuRenderableContent(index = -1): utils.RenderUtils.RenderableContent {
+		if (index > 0) {
+			return this.searchables[index].toRenderableContent();
+		}
+
 		if (this.theOne) {
 			return this.theOne.toRenderableContent();
 		}
 
-		if (indexes.length > 0) {
-			return this.searchables[indexes[0]].toRenderableContent();
-		}
-
 		const content = new utils.RenderUtils.RenderableContent();
-		const unicodeArray = this.getMenuUnicodeArray(indexes);
+		const unicodeArray = this.getMenuUnicodeArray();
 		const hasCompScore = !!this.scores[0].compScore;
 
 		setTitle(content, this.scores, this.label);
 
 		let unicodeIndex = 0;
-		let hasPf2tResult = false;
 		const sources = <Source[]>[];
-		this.scores.slice(0, this.getMenuLength(indexes)).forEach(score => {
-			if (score.searchable instanceof Pf2tBase) {
-				hasPf2tResult = true && false;
-			}
-			const source = (<HasSource<SourcedCore>><unknown>score.searchable).source;
+		this.scores.slice(0, this.getMenuLength()).forEach(score => {
+			const [searchable, aonBase] = lookupSearchable(score.searchable);
+			const source = searchable.source;
 			let sourceSuper = ``;
 			if (source && !source.isCore) {
 				if (!sources.includes(source)) {
 					sources.push(source);
 				}
 				sourceSuper = utils.NumberUtils.toSuperscript(sources.indexOf(source) + 1);
-			}else if (hasPf2tResult) {
-				sourceSuper = utils.NumberUtils.toSuperscript(0);
+			// }else if (!source) {
+				// console.log((score.searchable as any).source ?? (score.searchable as any).core.source);
 			}
 
-			const category = score.searchable.searchResultCategory,
-				label = category ? `${score.searchable.toSearchResult()}${sourceSuper} - ${category}` : `${score.searchable.toSearchResult()}${sourceSuper}`;
+			const searchResultCategory = score.searchable.searchResultCategory,
+				category = searchResultCategory ? ` - ${searchResultCategory}` : ``,
+				label = `${score.searchable.toSearchResult()}${sourceSuper}${category}`,
+				aonLink = toAonLink(aonBase ?? searchable),
+				emoji = aonBase === searchable ? "<:AoN:948328874712920095>" : unicodeArray[unicodeIndex++];
 			if (hasCompScore) {
-				content.append(`${unicodeArray[unicodeIndex++] || ""} ${label} `);
+				content.append(`${emoji} ${label} ${aonLink}`);
 			} else {
-				content.append(`${unicodeArray[unicodeIndex++] || ""} <b>(${score.totalHits})</b> ${label}`);
+				content.append(`${emoji} <b>(${score.totalHits})</b> ${label} ${aonLink}`);
 			}
 		});
-		if (hasPf2tResult) {
-			content.append(`<i>${utils.NumberUtils.toSuperscript(0)}Content from <https://character.pf2.tools></i>`);
-		}
-		sources.forEach((source, index) => content.append(`<i>${utils.NumberUtils.toSuperscript(index + 1)}${source.name}</i>`));
+		sources.forEach((source, sourceIndex) => content.append(`<i>${utils.NumberUtils.toSuperscript(sourceIndex + 1)}${source.name}</i>`));
 		return content;
 	}
 	// #endregion
