@@ -1,7 +1,7 @@
 import AonBase from "../../../sage-pf2e/model/base/AonBase";
 import type { AonBaseCore } from "../../../sage-pf2e/model/base/AonBase";
 import utils from "../../../sage-utils";
-import { SearchResults } from "../../../sage-pf2e";
+import { Base, SearchResults } from "../../../sage-pf2e";
 import type { SearchInfo } from "../../../sage-utils/utils/SearchUtils";
 import type SageMessage from "../model/SageMessage";
 import { send } from "../../discord/messages";
@@ -196,6 +196,16 @@ export async function searchAon(searchInfo: SearchInfo, filterTypes: string[], e
 	return searchResults;
 }
 
+function theOneOrMatchToSage(searchResults: SearchResults, match = false): Base | AonBase | null {
+	const aon = searchResults.theOne ?? (match ? searchResults.theMatch : null);
+	if (aon) {
+		const searchables = searchResults.searchables,
+			index = searchables.indexOf(aon),
+			sage = searchResults.sageSearchables[index];
+		return sage ?? aon;
+	}
+	return null;
+}
 export async function aonHandler(sageMessage: SageMessage, nameOnly = false): Promise<void> {
 	if (!sageMessage.allowSearch) {
 		return sageMessage.reactBlock();
@@ -208,10 +218,7 @@ export async function aonHandler(sageMessage: SageMessage, nameOnly = false): Pr
 	const parsedSearchInfo = parseSearchInfo(sageMessage.args);
 	const searchInfo = new utils.SearchUtils.SearchInfo(parsedSearchInfo.searchText, nameOnly ? "" : "g");
 	const searchResults = await searchAon(searchInfo, undefined!, undefined!);
-
-	const renderableToSend = nameOnly
-		? (searchResults.theOne ?? searchResults.theMatch ?? searchResults)
-		: (searchResults.theOne ?? searchResults);
+	const renderableToSend = theOneOrMatchToSage(searchResults, nameOnly) ?? searchResults;
 
 	// delete the "please wait" message(s)
 	const messages = await promise;
