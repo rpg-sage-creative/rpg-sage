@@ -1,5 +1,4 @@
 import type { Optional } from "../..";
-import CoreCache from "./CoreCache";
 import SuperClass from "./SuperClass";
 import type { Core } from "./types";
 
@@ -9,10 +8,6 @@ export function toJSON<T extends Core<U>, U extends string = string, V extends H
 
 /** Abstract Class with properties and methods related to the Core or objectType */
 export default abstract class HasCore<T extends Core<U>, U extends string = string> extends SuperClass {
-
-	/** Provides a caching mechanism for all HasCore classes. */
-	protected get cache(): CoreCache { return this._cache ?? (this._cache = new CoreCache()); }
-	private _cache: CoreCache | undefined;
 
 	/** Must have a core. */
 	public constructor(protected core: T) {

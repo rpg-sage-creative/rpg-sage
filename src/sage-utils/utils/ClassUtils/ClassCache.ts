@@ -4,15 +4,15 @@ import { generate } from "../UuidUtils";
 type TMap = Map<string, any>;
 const CACHE_MAP: Map<UUID, TMap> = new Map();
 
-export default class CoreCache {
+export default class ClassCache {
 	//#region instance
 
-	/** Construct a new CoreCache for the given UUID. */
+	/** Construct a new ClassCache for the given UUID. */
 	public constructor(public key: UUID = generate()) { }
 
 	/** Get the map for this cache instance. */
 	private get map(): TMap {
-		return CoreCache.get(this.key);
+		return ClassCache.get(this.key);
 	}
 
 	/** Removes all values from this cache instance. Returns true if data was removed, false otherwise. */

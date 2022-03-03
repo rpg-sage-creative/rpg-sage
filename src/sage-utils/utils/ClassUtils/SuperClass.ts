@@ -1,8 +1,17 @@
+import ClassCache from "./ClassCache";
+
 /**
  * NOTE: For SuperClass.instanceOf to work correctly, ensure that classes relying on it have unique names.
  */
 export default abstract class SuperClass {
-	/** Causes all HasCore descendents to have a default toString() result of '[object ClassName]' */
+
+    /** Provides a caching mechanism for all SuperClass classes. */
+    private _cache: ClassCache | undefined;
+    protected get cache(): ClassCache {
+        return this._cache ?? (this._cache = new ClassCache());
+    }
+
+    /** Causes all HasCore descendents to have a default toString() result of '[object ClassName]' */
 	public get [Symbol.toStringTag]() {
         return (this.constructor as typeof SuperClass).toStringTag;
     }
@@ -33,4 +42,5 @@ export default abstract class SuperClass {
         }
         return false;
     }
+
 }
