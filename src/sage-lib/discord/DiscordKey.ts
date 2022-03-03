@@ -1,7 +1,7 @@
 import type * as Discord from "discord.js";
 import type { Optional } from "../../sage-utils";
 import { NilSnowflake } from "./consts";
-import type { DMessage, TChannel } from "./types";
+import type { DInteraction, DMessage, TChannel } from "./types";
 
 interface IHasSnowflakeId { id:Discord.Snowflake; }
 type TSnowflakeResolvable = string | IHasSnowflakeId;
@@ -67,6 +67,16 @@ export default class DiscordKey {
 			return new DiscordKey(guildId, channelDid, threadDid);
 		}
 		return new DiscordKey(guildId, channel.id);
+	}
+
+	public static fromInteraction(interaction: DInteraction): DiscordKey {
+		const channel = interaction.channel;
+		if (channel?.isThread()) {
+			const threadDid = channel.id;
+			const channelDid = channel.parent?.id;
+			return new DiscordKey(interaction.guildId, channelDid, threadDid);
+		}
+		return new DiscordKey(interaction.guildId, interaction.channelId);
 	}
 
 	public static fromMessage(message: DMessage): DiscordKey {

@@ -1,6 +1,7 @@
 import type * as Discord from "discord.js";
 import type utils from "../../sage-utils";
 import type { Awaitable, IRenderable } from "../../sage-utils";
+import type SageInteraction from "../sage/model/SageInteraction";
 import type SageMessage from "../sage/model/SageMessage";
 import type SageReaction from "../sage/model/SageReaction";
 import type ArgsManager from "./ArgsManager";
@@ -14,8 +15,12 @@ export interface IMenuRenderable extends IRenderable {
 	toMenuRenderableContent(index: number): utils.RenderUtils.RenderableContent;
 }
 
+export type DInteraction = Discord.Interaction;
+
 /** Discord Message or Partial Message */
 export type DMessage = Discord.Message | Discord.PartialMessage;
+
+export type DReaction = Discord.MessageReaction | Discord.PartialMessageReaction;
 
 /** Discord User or Partial User */
 export type DUser = Discord.User | Discord.PartialUser;
@@ -31,6 +36,16 @@ export type TChannelResolvable = TChannel | Discord.Snowflake;
 
 export type THandlerOutput = { tested: number; handled: number; };
 
+
+//#region interaction type
+
+// export type TCommandAndArgs = { command?: string; args?: ArgsManager; };
+// export type TCommandAndArgsAndData<T> = TCommandAndArgs & { data: T; };
+
+export type TInteractionTester<T = any> = (sageInteraction: SageInteraction) => Awaitable<T | null>;
+export type TInteractionHandler<T = any> = (sageInteraction: SageInteraction, data?: T) => Awaitable<void>;
+
+//#endregion
 
 //#region message type
 

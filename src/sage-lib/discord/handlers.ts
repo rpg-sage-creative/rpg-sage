@@ -1,14 +1,11 @@
 import * as Discord from "discord.js";
 import { isDefined, isNullOrUndefined, Optional } from "../../sage-utils";
+import SageInteraction from "../sage/model/SageInteraction";
 import SageMessage from "../sage/model/SageMessage";
 import SageReaction from "../sage/model/SageReaction";
 import { MessageType, ReactionType } from "./enums";
 import { authorToMention } from "./messages";
-import type { TChannel, TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
-
-type DUser = Discord.User | Discord.PartialUser;
-type DMessage = Discord.Message | Discord.PartialMessage;
-type DReaction = Discord.MessageReaction | Discord.PartialMessageReaction;
+import type { DInteraction, DMessage, DReaction, DUser, TChannel, TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
 
 //#region helpers
 
@@ -72,6 +69,14 @@ type TListener = {
 	priorityIndex?: number;
 };
 
+type TInteractionType = undefined;
+type TInteractionListener = TListener & {
+	tester: TInteractionTester;
+	handler: TInteractionHandler;
+	type?: TInteractionType;
+};
+const interactionListeners: TInteractionListener[] = [];
+
 type TMessageListener = TListener & {
 	tester: TMessageTester;
 	handler: TMessageHandler;
@@ -86,21 +91,36 @@ type TReactionListener = TListener & {
 };
 const reactionListeners: TReactionListener[] = [];
 
-function registerListener(which: "MessageListener" | "ReactionListener", listener: TMessageListener | TReactionListener): void {
+type TListenerType = TInteractionListener | TMessageListener | TReactionListener;
+function getListeners<T extends TListenerType>(which: TListenerTypeName): T[] {
+	switch(which) {
+		case "InteractionListener": return interactionListeners as T[];
+		case "MessageListener": return messageListeners as T[];
+		case "ReactionListener": return reactionListeners as T[];
+		default: return [];
+	}
+}
+
+type TListenerTypeName = "InteractionListener" | "MessageListener" | "ReactionListener";
+function registerListener<T extends TListenerType>(which: TListenerTypeName, listener: T): void {
 	if (!botMeta.activeBotId) {
 		console.error(`Please call setBotMeta({ activeBodId:"", testBotId?:"", dialogWebhookName:"" })`);
 	}
-	const listeners: TMessageListener[] = which === "MessageListener" ? messageListeners : <any>reactionListeners;
+	const listeners: T[] = getListeners(which);
 	if (isNullOrUndefined(listener.priorityIndex)) {
 		console.info(`Registering ${which} #${listeners.length + 1}: ${listener.command ?? listener.tester.name}`);
-		listeners.push(<TMessageListener>listener);
+		listeners.push(listener);
 	} else {
 		console.info(`Registering ${which} #${listeners.length + 1} at priorityIndex ${listener.priorityIndex}: ${listener.command ?? listener.tester.name}`);
 		if (listeners.find(l => l.priorityIndex === listener.priorityIndex)) {
 			console.warn(`${which} at priorityIndex ${listener.priorityIndex} already exists!`);
 		}
-		listeners.splice(listener.priorityIndex, 0, <TMessageListener>listener);
+		listeners.splice(listener.priorityIndex, 0, listener);
 	}
+}
+
+export function registerInteractionListener(tester: TInteractionTester, handler: TInteractionHandler, type?: TInteractionType, intents: Discord.IntentsString[] = [], permissions: Discord.PermissionString[] = [], priorityIndex?: number): void {
+	registerListener("InteractionListener", { tester, handler, type, intents, permissions, priorityIndex });
 }
 
 export function registerMessageListener(tester: TMessageTester, handler: TMessageHandler, type = MessageType.Post, intents: Discord.IntentsString[] = [], permissions: Discord.PermissionString[] = [], priorityIndex?: number): void {
@@ -132,6 +152,40 @@ export function registeredIntents(): Discord.Intents {
 		"GUILD_WEBHOOKS"
 	]);
 	return intents;
+}
+
+//#endregion
+
+//#region interactions
+
+export async function handleInteraction(interaction: DInteraction): Promise<THandlerOutput> {
+	const output = { tested: 0, handled: 0 };
+	try {
+		const isCommand = interaction.isCommand();
+		if (isCommand) {
+			const sageInteraction: SageInteraction = await SageInteraction.fromInteraction(interaction);
+			await handleInteractions(sageInteraction, output);
+		}
+	}catch(ex) {
+		console.error(authorToMention(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
+	}
+	return output;
+}
+
+async function handleInteractions(sageInteraction: SageInteraction, output: THandlerOutput): Promise<void> {
+	for (const listener of interactionListeners) {
+		// if (isActionableType) {
+		const clonedInteraction = sageInteraction.clone();
+		const data = await listener.tester(clonedInteraction);
+		output.tested++;
+		if (isActionableObject(data)) {
+			// clonedInteraction.set
+			await listener.handler(clonedInteraction, data);
+			output.handled++;
+			break;
+		}
+	}
+
 }
 
 //#endregion
@@ -173,7 +227,7 @@ export async function handleMessage(message: DMessage, originalMessage: Optional
 			await handleMessages(sageMessage, messageType, output);
 		}
 	} catch (ex) {
-		console.error(message.author ? authorToMention(message.author) : "Unknown User", `\`${message.content}\``, ex);
+		console.error(authorToMention(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
 	}
 	return output;
 }

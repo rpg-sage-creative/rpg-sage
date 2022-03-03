@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
 import utils from "../../../sage-utils";
-import { DiscordCache, DiscordKey, NilSnowflake, TChannel } from "../../discord";
+import { DInteraction, DiscordCache, DiscordKey, DMessage, DReaction, DUser, NilSnowflake, TChannel } from "../../discord";
 import ActiveBot from "../model/ActiveBot";
 import BotRepo from "../repo/BotRepo";
 import GameRepo from "../repo/GameRepo";
@@ -10,10 +10,6 @@ import type Bot from "./Bot";
 import type Game from "./Game";
 import type Server from "./Server";
 import type User from "./User";
-
-type DUser = Discord.User | Discord.PartialUser;
-type DMessage = Discord.Message | Discord.PartialMessage;
-type DReaction = Discord.MessageReaction | Discord.PartialMessageReaction;
 
 export type TSageCacheCore = {
 	discord: DiscordCache;
@@ -31,11 +27,11 @@ export type TSageCacheCore = {
 	game?: Game;
 	user: User;
 
-}
+};
 
 function createCoreAndCache(): [TSageCacheCore, SageCache] {
 	const core: TSageCacheCore = <TSageCacheCore><Partial<TSageCacheCore>>{ },
-		sageCache = new SageCache(<TSageCacheCore>core);
+		sageCache = new SageCache(core);
 	core.bots = new BotRepo(sageCache);
 	core.servers = new ServerRepo(sageCache);
 	core.games = new GameRepo(sageCache);
@@ -225,6 +221,18 @@ export default class SageCache {
 	}
 	public static async fromMessageReaction(messageReaction: DReaction, user: DUser): Promise<SageCache> {
 		return SageCache.fromMessage(messageReaction.message, user.id);
+	}
+	public static async fromInteraction(interaction: DInteraction): Promise<SageCache> {
+		const [core, sageCache] = createCoreAndCache();
+		core.discord = DiscordCache.fromInteraction(interaction);
+		core.discordKey = DiscordKey.fromInteraction(interaction);
+		core.bot = ActiveBot.active;
+		core.home = await core.servers.getHome();
+		if (interaction.guild) {
+			core.server = await core.servers.getOrCreateByGuild(interaction.guild);
+			core.game = await core.games.findActiveByDiscordKey(core.discordKey);
+		}
+		return sageCache;
 	}
 
 }

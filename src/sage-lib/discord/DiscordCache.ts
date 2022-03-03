@@ -282,5 +282,8 @@ export default class DiscordCache {
 	public static fromMessageReaction(messageReaction: Discord.MessageReaction): DiscordCache {
 		return DiscordCache.fromMessage(messageReaction.message);
 	}
+	public static fromInteraction(interaction: Discord.Interaction): DiscordCache {
+		return new DiscordCache(interaction.client, interaction.guild);
+	}
 
 }

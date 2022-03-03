@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
 import utils, { LogLevel, Optional } from "../../../sage-utils";
 import { MessageType, ReactionType } from "../../discord";
-import { handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
+import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
 import BotRepo from "../repo/BotRepo";
 import type { IBotCore } from "./Bot";
 import Bot, { TBotCodeName } from "./Bot";
@@ -92,8 +92,12 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		this.client.login(this.token);
 	}
 
-	onInteractionCreate(_: Discord.Interaction): void {
-		/*// console.trace(interaction);*/
+	onInteractionCreate(interaction: Discord.Interaction): void {
+		handleInteraction(interaction).then(data => {
+			if (data.handled > 0) {
+				console.info(`Discord.Client.on("interactionCreate", "${interaction.id}") => ${data.tested}.${data.handled}`);
+			}
+		});
 	}
 
 	onClientReady(): void {
