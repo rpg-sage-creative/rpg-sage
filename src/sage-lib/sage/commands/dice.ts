@@ -103,16 +103,20 @@ function parseMatch(sageMessage: SageMessage, match: string): TDiceOutput[] {
 	const noBraces = debrace(match);
 	const macro = parseDiscordMacro(sageMessage, noBraces);
 	if (macro) {
+		// console.log("macro", match);
 		return macro.roll().toStrings(sageMessage.diceOutputType);
 	}
 	const dice = parseDiscordDice(sageMessage, `[${noBraces}]`);
 	if (dice) {
+		// console.log("dice", match);
 		return dice.roll().toStrings(sageMessage.diceOutputType);
 	}
 	if (match.match(RANDOM_REGEX)) {
+		// console.log("simple", match);
 		return doSimple(sageMessage, noBraces);
 	}
 	if (match.match(MATH_REGEX)) {
+		// console.log("math", match);
 		return doMath(sageMessage, noBraces);
 	}
 	return [];
@@ -146,7 +150,7 @@ async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommand
 	}
 	const matches = await parseDiceMatches(sageMessage, sageMessage.slicedContent);
 	if (matches.length > 0) {
-		const output = matches.reduce((out, match) => { out.push(...match.output); return out; }, <TDiceOutput[]>[])
+		const output = matches.reduce((out, match) => { out.push(...match.output); return out; }, <TDiceOutput[]>[]);
 		return { command: "unified-dice", data: output };
 	}
 	return null;
@@ -283,7 +287,7 @@ function doMath(_: SageMessage, input: string): TDiceOutput[] {
 }
 
 function doSimple(_: SageMessage, input: string): TDiceOutput[] {
-	const match = input.match(/^(\d*)\s*([usgm]*)\s*#?(.*?)$/i) ?? [];
+	const match = input.match(/^(?:(\d*)([ usgm]*)#)?(.*?)$/i) ?? [];
 	const count = +match[1] || 1;
 	const unique = !!(match[2] ?? "").match(/u/i);
 	const sort = !!(match[2] ?? "").match(/s/i);
