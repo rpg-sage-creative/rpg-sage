@@ -83,11 +83,14 @@ export default class AonBase
 	}
 
 	public matchesBase(sageData: Base): boolean {
-		return sageData.toAonLink().includes(this.core.url)
-			?? sageData.toJSON().pf2t?.src?.includes(this.core.url);
+		return sageData.toAonLink().includes(this.core.url + '"')
+			?? sageData.toJSON().pf2t?.src?.endsWith(this.core.url);
 	}
 
-	public get objectType(): string { return utils.StringUtils.capitalize(this.core.type); }
+	private _objectType = utils.StringUtils.capitalize(this.core.type);
+	public get objectType(): string { return this._objectType; }
+	public objectTypeLower = this.objectType.toLowerCase();
+	public rarityLower = this.rarity.toLowerCase();
 	public toString(): string { return this.core.name; }
 
 	//#region HasSource properies

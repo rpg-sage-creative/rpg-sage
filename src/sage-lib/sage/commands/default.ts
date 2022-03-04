@@ -1,4 +1,4 @@
-import { HasSource, RARITIES, Repository, Skill, Source, SourceNotationMap, type TRarity } from "../../../sage-pf2e";
+import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
 import ArgsManager from "../../discord/ArgsManager";
 import { resolveToEmbeds } from "../../discord/embeds";
@@ -146,25 +146,6 @@ async function objectsBy(sageMessage: SageMessage): Promise<void> {
 
 // #region Search / Find / Default listeners
 
-type TParsedSearchInfo = { searchText: string; searchTerms: string[]; objectTypes: string[]; rarities: TRarity[] };
-export function parseSearchInfo(terms: string[]): TParsedSearchInfo {
-	const searchTerm = terms?.join(" ") ?? [];
-	const matches = Array.from(searchTerm.match(/\s+[\-\\/][a-z]+/g) || []).filter(match => match.trim() !== "-r");
-
-	const lowerRarities = RARITIES.map(rarity => rarity.toLowerCase());
-	const rarities = matches.filter(match => lowerRarities.includes(match.trim().slice(1).toLowerCase()));
-	const objectTypes = matches.filter(match => !rarities.includes(match));
-
-	const cleaned = matches.reduce((_cleaned, match) => _cleaned.replace(match, ""), searchTerm);
-	const searchText = utils.StringUtils.cleanWhitespace(cleaned);
-	return {
-		searchText: searchText,
-		searchTerms: searchText.split(/\s+/),
-		objectTypes: objectTypes.map(objectType => objectType.trim().slice(1)),
-		rarities: RARITIES.filter(rarity => rarities.find(r => r.trim().slice(1).toLowerCase() === rarity.toLowerCase()))
-	};
-}
-
 function searchTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	const slicedContent = sageMessage.slicedContent;
 	if (sageMessage.hasPrefix && slicedContent.match(/^\?[^!].+$/)) {
@@ -199,8 +180,8 @@ async function searchHandler(sageMessage: SageMessage): Promise<void> {
 // 	return false;
 // }
 /** Checks searchText for the word table, then checks to see if the rest of the text is a table name; if so, renders table */
-async function repositoryFindRenderTable(sageMessage: SageMessage, searchInfo: TParsedSearchInfo): Promise<boolean> {
-	const searchText = searchInfo.searchText;
+async function repositoryFindRenderTable(sageMessage: SageMessage): Promise<boolean> {
+	const searchText = sageMessage.args.join(" ");
 	const tableName = searchText.match(/\btable\b/i) && searchText.replace(/\btable\b/i, "") || "";
 	const table = Repository.findByValue("Table", tableName);
 	if (table) {
@@ -224,10 +205,9 @@ async function findHandler(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const parsedSearchInfo = parseSearchInfo(sageMessage.args);
 	// if (await repositoryFind_listObjectType(sageMessage, parsedSearchInfo)) return;
-	if (await repositoryFindRenderTable(sageMessage, parsedSearchInfo)) {
-		return;
+	if (await repositoryFindRenderTable(sageMessage)) {
+		return Promise.resolve();
 	}
 	return aonHandler(sageMessage, true);
 }
