@@ -82,14 +82,11 @@ class PbcSavingThrows extends SavingThrows {
 		check.level = this.pbc.level;
 		check.setAbility(ability);
 		check.addProficiency(savingThrow);
+		if (this.pbc.resilientBonus) {
+			const desc = ["","Resilient", "Greater Resilient", "Major Resilient"][this.pbc.resilientBonus];
+			check.addItemModifier(desc, this.pbc.resilientBonus);
+		}
 		return check;
-		/*
-		// const level = this.pbc.level;
-		// const savingThrowKey = SavingThrows.getAbilityForSavingThrow(savingThrow).toLowerCase();
-		// const prof = this.pbc.getProficiencyMod(savingThrowKey);
-		// const abil = this.pbc.abilities.getAbilityScoreModifier(ability);
-		// return new Check(this.pbc, savingThrow, level + prof + abil);
-		*/
 	}
 
 }

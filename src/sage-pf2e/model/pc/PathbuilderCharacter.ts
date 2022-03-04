@@ -49,10 +49,14 @@ type TPathbuilderCharacterArmorClassTotal = {
 type TPathbuilderCharacterArmor = {
 	name: string;
 	qty: number;
-	prof: string; // "light"
-	pot: number; // potency?
-	res: string; // ?
-	mat: null; // material?
+	/** "light" */
+	prof: string;
+	/** potency: +1 */
+	pot: number;
+	/** Resilient, Greater Resilient, Major Resilient */
+	res: "resilient" | "greater resilient" | "major resilient";
+	/** material */
+	mat: null;
 	display: string;
 	worn: boolean;
 	runes: string[];
@@ -67,17 +71,18 @@ type TPathbuilderCharacterAttributes = {
 	speedBonus: number;
 };
 
-// [ [name, null, type, level] ]
+/** [ [name, null, type, level] ] */
 type TPathbuilderCharacterFeat = [string, null, string, number];
 
-// [ [name, profMod] ]
+/** [ [name, profMod] ] */
 type TPathbuilderCharacterLore = [string, number];
 
-// [ [name, count] ]
+/** [ [name, count] ] */
 type TPathbuilderCharacterEquipment = [string, number];
 
 type TPathbuilderCharacterFormula = {
-	type: string; // "other"
+	/** "other" */
+	type: string;
 	known: string[];
 };
 
@@ -166,11 +171,16 @@ type TPathbuilderCharacterTraditionKey = "arcane" | "divine" | "focus" | "occult
 type TPathbuilderCharacterWeapon = {
 	name: string;
 	qty: number;
-	prof: string; // "martial"
-	die: string; // "d6"
-	pot: number; // potency?
-	str: string; // ?
-	mat: null; // material?
+	/* proficiency: "martial" */
+	prof: string;
+	/* "d6" */
+	die: string;
+	/* potency: +1 */
+	pot: number;
+	/* Striking, Greater Striking, Major Striking */
+	str: "striking" | "greater striking" | "major striking";
+	/* material */
+	mat: null;
 	display: string;
 	runes: string[];
 };
@@ -179,24 +189,27 @@ type TPathbuilderCharacterFamiliar = {
 	type: "Familiar";
 	/** type === "Familiar" && specific === "Faerie Dragon"  >>  Faerie Dragon (name) */
 	name: string;
+	/** "Faerie Dragon" */
 	specific: string;
 	abilities: string[];
 };
+
 type TPathbuilderCharacterAnimalCompanion = {
 	type: "Animal Companion";
-	// Badger
+	/** "Badger" */
 	animal: string;
-	// Young Badger
+	/** "Young Badger" */
 	name: string;
 	mature: boolean;
 	incredible: boolean;
-	// Nimble
+	/** "Nimble" */
 	incredibleType: string;
 	specializations: [];
-	// Unarmored
+	/** "Unarmored" */
 	armor: string;
 	equipment: [];
 };
+
 type TPathbuilderCharacterPet = TPathbuilderCharacterFamiliar
 	| TPathbuilderCharacterAnimalCompanion
 	| { name:string; type:"Other"; };
@@ -251,13 +264,12 @@ function mapFeat(feat: TPathbuilderCharacterFeat): string {
 	return feat[1] ? `${feat[0]} (${feat[1]})` : feat[0];
 }
 
-
 function toHtmlPerception(char: PathbuilderCharacter): string {
 	const modifier = toModifier(char.perceptionMod);
 	const specials = char.perceptionSpecials.length ? `; ${char.perceptionSpecials.map(s => s.toLowerCase()).join(", ")}` : ``;
-	return `${modifier}${specials}`;
+	const incredibleInit = char.hasFeat("Incredible Initiative") ? `; incredible initiative (+2)` : ``;
+	return `${modifier}${specials}${incredibleInit}`;
 }
-
 
 function abilitiesToHtml(char: PathbuilderCharacter): string {
 	const core = char.toJSON();
@@ -419,6 +431,7 @@ function doEquipmentMoney(char: PathbuilderCharacter) {
 }
 
 //#region weapons
+
 function weaponToAttackStatMod(weapon: Weapon, strMod: number, dexMod: number): number {
 	if (weapon.type === "Ranged") {
 		return dexMod;
@@ -430,6 +443,7 @@ function weaponToAttackStatMod(weapon: Weapon, strMod: number, dexMod: number): 
 		return strMod;
 	}
 }
+
 function weaponToDamageStrMod(weapon: Weapon, strMod: number): number {
 	if (weapon.type === "Ranged") {
 		if (weapon.traits.includes("Propulsive")) {
@@ -443,6 +457,7 @@ function weaponToDamageStrMod(weapon: Weapon, strMod: number): number {
 	// Melee | Unarmed
 	return strMod;
 }
+
 function strikingToDiceCount(text: string): number {
 	const lower = text.toLowerCase();
 	if (lower === "greater striking") {
@@ -452,13 +467,17 @@ function strikingToDiceCount(text: string): number {
 	}
 	return 1;
 }
-function weaponToDamage(weapon: Weapon, strMod: number, pbStr: string): string {
-	const modNumber = weaponToDamageStrMod(weapon, strMod);
+
+function weaponToDamage(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon, weaponItem: Weapon): string {
+	const modNumber =
+		weaponToDamageStrMod(weaponItem, char.abilities.strMod)
+		+ getWeaponSpecMod(char, weapon);
 	const modString = modNumber ? toModifier(modNumber) : "";
-	return weapon.damage?.replace(/1d/, `${strikingToDiceCount(pbStr)}d`)
+	return weaponItem.damage?.replace(/1d/, `${strikingToDiceCount(weapon.str)}d`)
 		.replace(/d\d+/, match => `${match}${modString}`)
 		?? "";
 }
+
 function findWeaponIn(value: string): OrUndefined<Weapon> {
 	const lower = value?.toLowerCase();
 	if (lower) {
@@ -471,9 +490,23 @@ function findWeaponIn(value: string): OrUndefined<Weapon> {
 	}
 	return undefined;
 }
+
 function findWeapon(weapon: TPathbuilderCharacterWeapon): OrUndefined<Weapon> {
 	return repoFind("Weapon", weapon.name) ?? findWeaponIn(weapon.display) ?? findWeaponIn(weapon.name);
 }
+
+function getWeaponSpecMod(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): number {
+	if (char.hasSpecial("Weapon Specialization")) {
+		const prof = char.getProficiency(weapon.prof as TPathbuilderCharacterProficienciesKey, weapon.name);
+		switch(prof) {
+			case "Expert": return 2;
+			case "Master": return 3;
+			case "Legendary": return 4;
+		}
+	}
+	return 0;
+}
+
 function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): string {
 	const wpnItem = findWeapon(weapon);
 	if (wpnItem) {
@@ -481,7 +514,7 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 			+ weaponToAttackStatMod(wpnItem, char.abilities.strMod, char.abilities.dexMod)
 			+ char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey, weapon.name)
 			+ weapon.pot;
-		const dmg = weaponToDamage(wpnItem, char.abilities.strMod, weapon.str);
+		const dmg = weaponToDamage(char, weapon, wpnItem);
 		return `<b>${wpnItem.type}</b> ${weapon.display} ${toModifier(mod)} <b>Damage</b> ${dmg}`;
 	}else {
 		// Figure out if type is melee/ranged
@@ -490,19 +523,53 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 			+ char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey)
 			+ weapon.pot;
 		const dmg = `${strikingToDiceCount(weapon.str)}${weapon.die}`;
-		return `<b>${type}</b> ${weapon.display} ${toModifier(mod)} <b>Damage</b> ${dmg}; <i>Dex/Str mods not included</i>`;
+		return `<b>${type}</b> ${weapon.display} ${toModifier(mod)} <b>Damage</b> ${dmg}; <i>Dex/Str/Spec mods not included</i>`;
 	}
 }
+
 //#endregion
 
 //#endregion
+
+function eq(a: string, b: string, matcher = false): boolean {
+	if (matcher) {
+		return utils.StringUtils.StringMatcher.matches(a, b);
+	}
+	return a.toLowerCase() === b.toLowerCase();
+}
 
 export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+
 	public constructor(private core: TPathbuilderCharacter) {
 		super();
 	}
+	public toJSON(): TPathbuilderCharacter { return this.core; }
 
 	public get name(): string { return this.core.name; }
+
+	//#region flags/has
+	public hasFeat(value: string): boolean {
+		return utils.StringUtils.StringMatcher.matchesAny(value, this.core.feats.map(feat => feat[0]));
+	}
+	public hasSpecial(value: string): boolean {
+		return utils.StringUtils.StringMatcher.matchesAny(value, this.core.specials);
+	}
+	private _resilientBonus: number | undefined;
+	public get resilientBonus(): number {
+		if (this._resilientBonus === undefined) {
+			if (this.core.armor.find(armor => eq(armor.res, "Major Resilient"))) {
+				this._resilientBonus = 3;
+			}else if (this.core.armor.find(armor => eq(armor.res, "Greater Resilient"))) {
+				this._resilientBonus = 2;
+			}else if (this.core.armor.find(armor => eq(armor.res, "Resilient"))) {
+				this._resilientBonus = 1;
+			}else {
+				this._resilientBonus = 0;
+			}
+		}
+		return this._resilientBonus;
+	}
+	//#endregion
 
 	/** Implements IHasAbilities */
 	public abilities = Abilities.for(this);
@@ -564,6 +631,8 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 			+ (attributes.classhp + attributes.bonushpPerLevel + this.abilities.conMod) * this.core.level;
 	}
 
+	//#region toHtml
+
 	private toHtmlName(): string {
 		const name = this.core.name;
 		const klass = this.core.class;
@@ -571,13 +640,14 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		const level = this.core.level;
 		return `${name} - ${klass}${dualClass} ${level}`;
 	}
+
 	public toHtml(): string {
 		const html: string[] = [];
 		push(`<b><u>${this.toHtmlName()}</u></b>`);
 		push(`${bracketTraits(this.core.alignment, PathbuilderCharacterSizeType[this.core.size], this.core.ancestry, this.core.heritage)}`);
 		push(`<b>Perception</b> ${toHtmlPerception(this)}`);
 		push(`<b>Languages</b> ${this.core.languages.join(", ")}`);
-		push(`<b>Skills</b> ${skillsToHtml(this)}; <b>Lore</b> ${loreToHtml(this)}`);
+		push(`<b>Skills</b> ${skillsToHtml(this)}; <b>Lore</b> ${loreToHtml(this)}; <i>mods from gear excluded</i>`);
 		push(`${abilitiesToHtml(this)}`);
 		if (this.core.weapons.length || this.core.armor.length) {
 			push(`<b>Items</b> ${itemsToHtml(this.core.weapons, this.core.armor)}`);
@@ -619,12 +689,15 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		}
 	}
 
-	public toJSON(): TPathbuilderCharacter { return this.core; }
+	//#endregion
+
+	//#region fetch
 
 	public static fetch(id: number): Promise<PathbuilderCharacter | null> {
 		return this.fetchCore(id)
 			.then(core => new PathbuilderCharacter(core), () => null);
 	}
+
 	public static fetchCore(id: number): Promise<TPathbuilderCharacter> {
 		return new Promise<TPathbuilderCharacter>(async (resolve, reject) => {
 			try {
@@ -640,4 +713,6 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 			}
 		});
 	}
+
+	//#endregion
 }
