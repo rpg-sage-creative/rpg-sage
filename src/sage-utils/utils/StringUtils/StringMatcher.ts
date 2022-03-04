@@ -22,6 +22,13 @@ export default class StringMatcher implements TStringMatcher {
 	public matches(other: TStringMatcherResolvable): boolean {
 		return other === null || other === undefined ? false : ((other as TStringMatcher).clean ?? StringMatcher.clean(other as string)) === this.clean;
 	}
+
+	/** Compares the clean values until it finds a match. */
+	public matchesAny(others: TStringMatcherResolvable[]): boolean {
+		return others.find(other => this.matches(other)) !== undefined;
+	}
+
+	/** Returns the original value. */
 	public toString(): Optional<string> {
 		return this.value;
 	}
@@ -34,8 +41,18 @@ export default class StringMatcher implements TStringMatcher {
 		return cleanWhitespace(normalizeAscii(removeAccents(String(value ?? "")))).toLowerCase();
 	}
 
+	/** Convenience for StringMatcher.from(value).matches(other) */
+	public static matches(value: TStringMatcherResolvable, other: TStringMatcherResolvable): boolean {
+		return StringMatcher.from(value).matches(other);
+	}
+
+	/** Convenience for StringMatcher.from(value).matchesAny(others) */
+	public static matchesAny(value: TStringMatcherResolvable, others: TStringMatcherResolvable[]): boolean {
+		return StringMatcher.from(value).matchesAny(others);
+	}
+
 	/** Convenience for new StringMatcher(value) */
-	public static from(value: Optional<string>): StringMatcher {
-		return new StringMatcher(value);
+	public static from(value: Optional<TStringMatcherResolvable>): StringMatcher {
+		return new StringMatcher(value instanceof StringMatcher ? value.value : value as string);
 	}
 }
