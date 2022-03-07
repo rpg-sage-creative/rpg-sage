@@ -32,6 +32,12 @@ export default class SageInteraction extends SuperClass {
 		return this.interaction.isCommand();
 	}
 
+	public getString(name: string): string | null;
+	public getString(name: string, required: true): string;
+	public getString(name: string, required = false): string | null {
+		return this.interaction.options.getString(name, required);
+	}
+
 	/** Returns the message */
 	public get interaction(): DInteraction {
 		return this.core.interaction;

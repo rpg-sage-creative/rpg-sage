@@ -267,11 +267,8 @@ async function renderHelpHandler(sageMessage: SageMessage): Promise<void> {
 
 //#region help slash commands
 
-function helpSlashTester(sageInteraction: SageInteraction): boolean | null {
-	if (sageInteraction.interaction.commandName === "help") {
-		return true;
-	}
-	return null;
+function helpSlashTester(sageInteraction: SageInteraction): boolean {
+	return sageInteraction.interaction.commandName === "help";
 }
 
 async function helpSlashHandler(sageInteraction: SageInteraction): Promise<void> {

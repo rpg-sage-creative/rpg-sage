@@ -3,6 +3,7 @@ import { Routes } from "discord-api-types/v9";
 import type { IBotCore } from "./sage-lib/sage/model/Bot";
 import utils from "./sage-utils";
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder, SlashCommandStringOption } from "@discordjs/builders";
+import { weatherCommand } from "./sage-lib/sage/commands/weather";
 
 type TBot = "dev" | "beta" | "stable";
 
@@ -25,7 +26,7 @@ if (!botJson) {
 
 //#region /help
 
-function helpCommands(): TCommand {
+function helpCommands(): TSlashCommand {
 	return {
 		name: "help",
 		description: "Get basic Help for RPG Sage.",
@@ -70,28 +71,12 @@ function helpCommands(): TCommand {
 
 //#endregion
 
-//#region /weather
-
-function weatherCommands(): TCommand {
-	return {
-		name: "weather",
-		description: "Create random weather reports.",
-		options: [
-			{ name:"climate", description:"", choices:["Cold", "Temperate", "Tropical"] },
-			{ name:"elevation", description:"", choices:["SeaLevel", "Lowland", "Highland"] },
-			{ name:"season", description:"", choices:["Spring", "Summer", "Fall", "Winter", "Wet", "Dry"] },
-		]
-	};
-}
-
-//#endregion
-
 //#region command builders
 
 type TChoice = string | [string, string] | { name:string; value?:string; };
 type TNameDescription = { name:string; description:string; };
 type TOption = TNameDescription & { choices?:TChoice[]; }
-type TCommand = TNameDescription & { children?:TCommand[]; options?:TOption[]; }
+export type TSlashCommand = TNameDescription & { children?:TSlashCommand[]; options?:TOption[]; }
 
 /** Makes sure no matter how i give/set the choice it converts to what the API needs. */
 function toChoice(choice: TChoice): [string, string] {
@@ -122,7 +107,7 @@ function addOptions<T extends SlashCommandBuilder | SlashCommandSubcommandBuilde
 }
 
 /** shortcut for setting subcommands where they are allowed */
-function addSubcommands<T extends SlashCommandBuilder | SlashCommandSubcommandGroupBuilder>(builder: T, commands?: TCommand[]): T {
+function addSubcommands<T extends SlashCommandBuilder | SlashCommandSubcommandGroupBuilder>(builder: T, commands?: TSlashCommand[]): T {
 	commands?.forEach(command =>
 		builder.addSubcommand(sub =>
 			addOptions(setName(sub, command), command.options)
@@ -131,7 +116,7 @@ function addSubcommands<T extends SlashCommandBuilder | SlashCommandSubcommandGr
 	return builder;
 }
 
-function buildCommand(raw: TCommand): SlashCommandBuilder {
+function buildCommand(raw: TSlashCommand): SlashCommandBuilder {
 	const cmd = new SlashCommandBuilder()
 		.setName(raw.name)
 		.setDescription(raw.description);
@@ -153,7 +138,7 @@ function buildCommand(raw: TCommand): SlashCommandBuilder {
 function buildCommands(): SlashCommandBuilder[] {
 	const commands = [] as SlashCommandBuilder[];
 	commands.push(buildCommand(helpCommands()));
-	commands.push(buildCommand(weatherCommands()));
+	commands.push(buildCommand(weatherCommand()));
 	return commands;
 }
 
