@@ -15,7 +15,7 @@ export interface IMenuRenderable extends IRenderable {
 	toMenuRenderableContent(index: number): utils.RenderUtils.RenderableContent;
 }
 
-export type DInteraction = Discord.Interaction;
+export type DInteraction = Discord.CommandInteraction;
 
 /** Discord Message or Partial Message */
 export type DMessage = Discord.Message | Discord.PartialMessage;

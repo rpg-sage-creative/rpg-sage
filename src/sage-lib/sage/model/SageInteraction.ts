@@ -1,6 +1,7 @@
 import type * as Discord from "discord.js";
 import { SuperClass } from "../../../sage-utils/utils/ClassUtils";
-import { DInteraction, DiscordCache, DiscordKey, DUser, InteractionType } from "../../discord";
+import { DInteraction, DiscordCache, DiscordKey, DUser, InteractionType, TRenderableContentResolvable } from "../../discord";
+import { resolveToEmbeds } from "../../discord/embeds";
 import type Bot from "./Bot";
 import type Game from "./Game";
 import SageCache from "./SageCache";
@@ -108,6 +109,11 @@ export default class SageInteraction extends SuperClass {
 	/** Is the author SuperUser */
 	public get isSuperUser(): boolean {
 		return this.cache.get("isSuperUser", () => User.isSuperUser(this.core.interaction.user.id));
+	}
+
+	public async reply(renderable: TRenderableContentResolvable, ephemeral?: boolean): Promise<void> {
+		const embeds = resolveToEmbeds(this.caches, renderable);
+		return this.interaction.reply({ embeds:embeds, ephemeral:ephemeral ?? true });
 	}
 
 }

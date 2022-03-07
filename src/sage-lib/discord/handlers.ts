@@ -5,7 +5,7 @@ import SageMessage from "../sage/model/SageMessage";
 import SageReaction from "../sage/model/SageReaction";
 import { MessageType, ReactionType } from "./enums";
 import { authorToMention } from "./messages";
-import type { DInteraction, DMessage, DReaction, DUser, TChannel, TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
+import type { DMessage, DReaction, DUser, TChannel, TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
 
 //#region helpers
 
@@ -158,7 +158,7 @@ export function registeredIntents(): Discord.Intents {
 
 //#region interactions
 
-export async function handleInteraction(interaction: DInteraction): Promise<THandlerOutput> {
+export async function handleInteraction(interaction: Discord.Interaction): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
 		const isCommand = interaction.isCommand();
