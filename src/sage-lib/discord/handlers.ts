@@ -174,12 +174,11 @@ export async function handleInteraction(interaction: Discord.Interaction): Promi
 
 async function handleInteractions(sageInteraction: SageInteraction, output: THandlerOutput): Promise<void> {
 	for (const listener of interactionListeners) {
-		// if (isActionableType) {
+		// check if isActionableType here?
 		const clonedInteraction = sageInteraction.clone();
 		const data = await listener.tester(clonedInteraction);
 		output.tested++;
 		if (isActionableObject(data)) {
-			// clonedInteraction.set
 			await listener.handler(clonedInteraction, data);
 			output.handled++;
 			break;
@@ -221,7 +220,6 @@ export async function handleMessage(message: DMessage, originalMessage: Optional
 		const isBot = message.author?.bot && !isTesterBot(message.author.id);
 		const isWebhook = !!message.webhookId;
 		const canIgnore = isEditWeCanIgnore(message, originalMessage);
-		// console.debug({ isBot, isWebhook, canIgnore });
 		if (!isBot && !isWebhook && !canIgnore) {
 			const sageMessage: SageMessage = await SageMessage.fromMessage(message, originalMessage);
 			await handleMessages(sageMessage, messageType, output);

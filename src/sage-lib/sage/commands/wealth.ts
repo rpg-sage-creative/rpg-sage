@@ -1,19 +1,13 @@
 import utils from "../../../sage-utils";
 import { PROFICIENCIES, TProficiency, Coins, Table } from "../../../sage-pf2e";
 import type SageMessage from "../model/SageMessage";
-import { PatronTierType } from "../model/User";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
 
 // #region rpg.SpUtils
 async function spUtils(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canUseFeature(PatronTierType.Friend)) {
-		return sageMessage.reactPatreon();
-	}
-
 	const data = sageMessage.args.shift()!;
 
-	// console.info("spUtils", data);
 	const values = data.match(/\s*[\-\+]?\s*\d+(?:,\d{3})*\s*(?:cp|sp|gp|pp)/gi)!,
 		signedAndSorted = values.map(s => ("+" + s).replace(/\s+/g, "").replace(/\+([\-\+])/, "$1").toLowerCase()).sort(),
 		coins = new Coins();
