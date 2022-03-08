@@ -1,9 +1,11 @@
+import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "@discordjs/builders";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
+import { helpCommand } from "./sage-lib/sage/commands/help";
+import { weatherCommand } from "./sage-lib/sage/commands/weather";
 import type { IBotCore } from "./sage-lib/sage/model/Bot";
 import utils from "./sage-utils";
-import { SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder, SlashCommandStringOption } from "@discordjs/builders";
-import { weatherCommand } from "./sage-lib/sage/commands/weather";
+import type { TNameDescription, TSlashCommand, TSlashCommandChoice, TSlashCommandOption } from "./types";
 
 type TBot = "dev" | "beta" | "stable";
 
@@ -24,62 +26,10 @@ if (!botJson) {
 	}
 }
 
-//#region /help
-
-function helpCommands(): TSlashCommand {
-	return {
-		name: "help",
-		description: "Get basic Help for RPG Sage.",
-		children: [
-			{ name:"admin", description:"Admin Commands", options:[
-				{ name:"subcategory", description:"Which subcategory?", choices:[
-					{ name:"RPG Sage Admin", value:"admin", description:"Learn how to manage RPG Sage admins." },
-					{ name:"Channel Management", value:"channel", description:"Learn how to manage RPG Sage channel settings." },
-					{ name:"color", description:"Learn how to manage RPG Sage colors." },
-					{ name:"companion", description:"Learn how to manage RPG Sage companions." },
-					{ name:"emoji", description:"Learn how to manage RPG Sage emoji." },
-					{ name:"game", description:"Learn how to manage RPG Sage games." },
-					{ name:"gm", description:"Learn how to manage RPG Sage game masters." },
-					{ name:"npc", description:"Learn how to manage RPG Sage non-player characters." },
-					{ name:"pc", description:"Learn how to manage RPG Sage player characters." },
-					{ name:"player", description:"Learn how to manage RPG Sage players." },
-					{ name:"prefix", description:"Learn how to manage RPG Sage's command prefix" },
-					{ name:"server", description:"Learn how to manage RPG Sage server wide settings." },
-					{ name:"stats", description:"Learn how to manage RPG Sage character stats." },
-					// { name:"superuser", description:"superuser" }
-				] }
-			] },
-			{ name:"command", description:"Basic Commands" },
-			{ name:"dialog", description:"Dialog Commands" },
-			{ name:"dice", description:"Dice Commands", children:[
-				{ name:"basic", description:"Basic Dice Options" },
-				{ name:"pf2e", description:"Pathfinder 2e Specific Dice Options" }
-			] },
-			{ name:"lists", description:"How to list things ..." },
-			{ name:"macro", description:"Macro Management" },
-			{ name:"pfs", description:"PFS Tools" },
-			{ name:"search", description:"PF2e Find/Search Tools" },
-			{ name:"spells", description:"PF2e Spell Lists & Tools" },
-			{ name:"wealth", description:"PF2e Wealth Lists & Tools", children:[
-				{ name:"coin counter", description: "Learn how to count your coins." },
-				{ name:"income earned", description: "Check how much income you should earn per encounter." },
-				{ name:"starting wealth", description: "Check starting wealth per character level." },
-			] }
-		]
-	};
-}
-
-//#endregion
-
 //#region command builders
 
-type TChoice = string | [string, string] | { name:string; value?:string; };
-type TNameDescription = { name:string; description:string; };
-type TOption = TNameDescription & { choices?:TChoice[]; }
-export type TSlashCommand = TNameDescription & { children?:TSlashCommand[]; options?:TOption[]; }
-
 /** Makes sure no matter how i give/set the choice it converts to what the API needs. */
-function toChoice(choice: TChoice): [string, string] {
+function toChoice(choice: TSlashCommandChoice): [string, string] {
 	if (Array.isArray(choice)) {
 		return choice;
 	}
@@ -97,7 +47,7 @@ function setName<T extends SlashCommandBuilder | SlashCommandSubcommandBuilder |
 }
 
 /** shortcut for setting options all things that allow options */
-function addOptions<T extends SlashCommandBuilder | SlashCommandSubcommandBuilder>(builder: T, options?: TOption[]): T {
+function addOptions<T extends SlashCommandBuilder | SlashCommandSubcommandBuilder>(builder: T, options?: TSlashCommandOption[]): T {
 	options?.forEach(option =>
 		builder.addStringOption(opt =>
 			setName(opt, option).addChoices(option.choices?.map(toChoice) ?? [])
@@ -137,7 +87,7 @@ function buildCommand(raw: TSlashCommand): SlashCommandBuilder {
 
 function buildCommands(): SlashCommandBuilder[] {
 	const commands = [] as SlashCommandBuilder[];
-	commands.push(buildCommand(helpCommands()));
+	commands.push(buildCommand(helpCommand()));
 	commands.push(buildCommand(weatherCommand()));
 	return commands;
 }

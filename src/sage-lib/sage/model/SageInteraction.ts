@@ -1,3 +1,4 @@
+import { isDefined } from "../../../sage-utils";
 import { DInteraction, DUser, InteractionType, TRenderableContentResolvable } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
@@ -27,7 +28,22 @@ export default class SageInteraction
 		return this.interaction.commandName === name;
 	}
 
+	public get commandCategories(): string[] {
+		return [
+			this.interaction.options.getSubcommandGroup(false),
+			this.interaction.options.getSubcommand(false)
+		].filter(isDefined);
+	}
+	public get commandCategory(): string | undefined {
+		return this.commandCategories[0];
+	}
+	public get commandSubCategory(): string | undefined {
+		return this.commandCategories[1];
+	}
+
+	/** Gets the named option as a string or null */
 	public getString(name: string): string | null;
+	/** Gets the named option as a string */
 	public getString(name: string, required: true): string;
 	public getString(name: string, required = false): string | null {
 		return this.interaction.options.getString(name, required);
