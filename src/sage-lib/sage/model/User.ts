@@ -75,6 +75,7 @@ export default class User extends HasDidCore<UserCore> {
 	public isInformant = this.core.patronTier === PatronTierType.Informant;
 	public isTrusted = this.core.patronTier === PatronTierType.Trusted;
 	public isPatron = this.isFriend || this.isInformant || this.isTrusted;
+	public get isSuperUser(): boolean { return User.isSuperUser(this.did); }
 
 	public getAutoCharacterForChannel(did: Optional<Discord.Snowflake>): GameCharacter | undefined {
 		if (did) {

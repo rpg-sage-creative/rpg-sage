@@ -15,19 +15,19 @@ function testNpcTarget(sageMessage: SageMessage, dialogContent: TDialogContent):
 			? sageMessage.game.nonPlayerCharacters.findByName(dialogContent.name) !== undefined
 			: false;
 	}
-	return sageMessage.user.nonPlayerCharacters.findByName(dialogContent.name) !== undefined;
+	return sageMessage.sageUser.nonPlayerCharacters.findByName(dialogContent.name) !== undefined;
 }
 function testPcTarget(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
 	if (sageMessage.game) {
 		return !!sageMessage.playerCharacter && !dialogContent.name;// && !dialogContent.displayName;
 	}
-	return sageMessage.user.playerCharacters.findByName(dialogContent.name) !== undefined;
+	return sageMessage.sageUser.playerCharacters.findByName(dialogContent.name) !== undefined;
 }
 function testCompanionTarget(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
 	if (sageMessage.game) {
 		return sageMessage.playerCharacter?.companions.findByName(dialogContent.name) !== undefined;
 	}
-	return !sageMessage.user.playerCharacters.findCompanionByName(dialogContent.name) !== undefined;
+	return !sageMessage.sageUser.playerCharacters.findCompanionByName(dialogContent.name) !== undefined;
 }
 
 function dialogContentToTarget(dialogContent: TDialogContent, separator = "::"): string {
@@ -49,7 +49,7 @@ async function aliasList(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const aliases = sageMessage.user.aliases;
+	const aliases = sageMessage.sageUser.aliases;
 	if (aliases.length) {
 		const renderableContent = createAdminRenderableContent(sageMessage.game || sageMessage.server, `<b>alias-list</b>`);
 		aliases.forEach(alias => {
@@ -84,13 +84,13 @@ async function aliasSet(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const alias = sageMessage.args.shift()!;
-	const dialogContent = parseDialogContent(sageMessage.args.join(" "), sageMessage.user?.allowDynamicDialogSeparator);
+	const dialogContent = parseDialogContent(sageMessage.args.join(" "), sageMessage.sageUser?.allowDynamicDialogSeparator);
 	if (!dialogContent || !aliasTest(sageMessage, dialogContent)) {
 		return sageMessage.reactFailure();
 	}
 
 	const target = dialogContentToTarget(dialogContent);
-	const saved = await sageMessage.user.aliases.pushAndSave({ name: alias, target: target });
+	const saved = await sageMessage.sageUser.aliases.pushAndSave({ name: alias, target: target });
 	if (saved) {
 		const renderableContent = createAdminRenderableContent(sageMessage.game || sageMessage.server, `<b>alias-set</b>`);
 		renderableContent.append(`\`${alias.toLowerCase()}::\`\nis now an alias for\n\`${target}\``);
@@ -105,7 +105,7 @@ async function aliasDelete(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const alias = sageMessage.args.shift()!;
-	const saved = await sageMessage.user.aliases.removeByName(alias);
+	const saved = await sageMessage.sageUser.aliases.removeByName(alias);
 	return sageMessage.reactSuccessOrFailure(saved);
 }
 
@@ -116,9 +116,9 @@ async function aliasDelete(sageMessage: SageMessage): Promise<void> {
 // 	discordPromptYesNo(sageMessage, "Do you want to allow dynamic dialog separators?")
 // 		.then(async yesNoOrNull => {
 // 			if (typeof (yesNoOrNull) === "boolean") {
-// 				if (yesNoOrNull !== sageMessage.user.allowDynamicDialogSeparator) {
-// 					sageMessage.user.allowDynamicDialogSeparator = yesNoOrNull;
-// 					const saved = await sageMessage.user.save();
+// 				if (yesNoOrNull !== sageMessage.sageUser.allowDynamicDialogSeparator) {
+// 					sageMessage.sageUser.allowDynamicDialogSeparator = yesNoOrNull;
+// 					const saved = await sageMessage.sageUser.save();
 // 					return sageMessage.reactSuccessOrFailure(saved);
 // 				}
 // 			}

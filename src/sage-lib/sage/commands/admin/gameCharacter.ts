@@ -122,21 +122,21 @@ function getAutoGameCharacter(sageMessage: SageMessage): OrUndefined<GameCharact
 		if (sageMessage.isGameMaster) {
 			return sageMessage.game.nonPlayerCharacters.findByName(sageMessage.game.gmCharacterName ?? GameCharacter.defaultGmCharacterName);
 		}
-		return sageMessage.game.playerCharacters.findByUser(sageMessage.user.did);
+		return sageMessage.game.playerCharacters.findByUser(sageMessage.sageUser.did);
 	}
 	return undefined;
 }
 async function removeAuto(sageMessage: SageMessage, ...channelDids: Discord.Snowflake[]): Promise<void> {
 	const gameCharacter = getAutoGameCharacter(sageMessage);
 	for (const channelDid of channelDids) {
-		const char = gameCharacter ?? sageMessage.user.getAutoCharacterForChannel(channelDid);
+		const char = gameCharacter ?? sageMessage.sageUser.getAutoCharacterForChannel(channelDid);
 		await char?.removeAutoChannel(channelDid);
 	}
 }
 
 /** Reusable code to get GameCharacter for the commands. */
 async function getCharacter(sageMessage: SageMessage, characterTypeMeta: TCharacterTypeMeta, userDid: Discord.Snowflake, names: TNames): Promise<GameCharacter | undefined> {
-	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.user;
+	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
 	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
 		characterManager = characterManager?.findByUserAndName(userDid, names.charName!)?.companions;
@@ -229,7 +229,7 @@ async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterM
 // async function getCharacter(sageMessage: SageMessage): Promise<GameCharacter> {
 // 	const characterTypeMeta = getCharacterTypeMeta(sageMessage),
 // 		userDid = await getUserDid(sageMessage),
-// 		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.user,
+// 		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser,
 // 		characterManager = characterTypeMeta.isNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
 // 		names = sageMessage.args.removeAndReturnNames("charName", "name");
 
@@ -246,7 +246,7 @@ async function gameCharacterList(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.user;
+	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
 
 	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
@@ -280,7 +280,7 @@ async function gameCharacterDetails(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const userDid = await getUserDid(sageMessage),
-		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.user,
+		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser,
 		characterManager = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
 		names = characterTypeMeta.isGm ? <TNames>{ name: sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName } : sageMessage.args.removeAndReturnNames(true);
 
@@ -306,7 +306,7 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 		core.name = urlToName(core.tokenUrl) ?? urlToName(core.avatarUrl)!;
 	}
 
-	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.user;
+	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
 
 	let characterManager = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
@@ -412,7 +412,7 @@ async function characterDelete(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const userDid = await getUserDid(sageMessage),
-		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.user,
+		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser,
 		characterManager = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
 		names = sageMessage.args.removeAndReturnNames(true);
 
@@ -439,7 +439,7 @@ async function characterAutoOn(sageMessage: SageMessage): Promise<void> {
 		: sageMessage.args.removeAndReturnName(true);
 	const character = sageMessage.isGameMaster
 		? sageMessage.game?.nonPlayerCharacters.findByName(name)
-		: (sageMessage.playerCharacter ?? sageMessage.user.playerCharacters.findByName(name));
+		: (sageMessage.playerCharacter ?? sageMessage.sageUser.playerCharacters.findByName(name));
 
 	if (character) {
 		const channelLinks = channelDids.map(channelDid => DiscordId.toChannelReference(channelDid));
@@ -469,7 +469,7 @@ async function characterAutoOff(sageMessage: SageMessage): Promise<void> {
 		: sageMessage.args.removeAndReturnName(true);
 	const character = sageMessage.isGameMaster
 		? sageMessage.game?.nonPlayerCharacters.findByName(name)
-		: (sageMessage.playerCharacter ?? sageMessage.user.playerCharacters.findByName(name));
+		: (sageMessage.playerCharacter ?? sageMessage.sageUser.playerCharacters.findByName(name));
 
 	if (character) {
 		const channelLinks = channelDids.map(channelDid => DiscordId.toChannelReference(channelDid));

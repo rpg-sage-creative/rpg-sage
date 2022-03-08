@@ -15,10 +15,10 @@ function findMacro(sageMessage: SageMessage, name?: string, category?: string): 
 
 	const categoryMatcher = utils.StringUtils.StringMatcher.from(category);
 	if (categoryMatcher.isBlank) {
-		return sageMessage.user.macros.find(macro => nameMatcher.matches(macro.name));
+		return sageMessage.sageUser.macros.find(macro => nameMatcher.matches(macro.name));
 	}
 
-	return sageMessage.user.macros.find(macro => nameMatcher.matches(macro.name) && macro.category && categoryMatcher.matches(macro.category));
+	return sageMessage.sageUser.macros.find(macro => nameMatcher.matches(macro.name) && macro.category && categoryMatcher.matches(macro.category));
 }
 
 async function noMacrosFound(sageMessage: SageMessage): Promise<void> {
@@ -37,7 +37,7 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const macros = sageMessage.user.macros;
+	const macros = sageMessage.sageUser.macros;
 	if (!macros.length) {
 		return noMacrosFound(sageMessage);
 	}
@@ -100,7 +100,7 @@ async function macroCreate(sageMessage: SageMessage, macro: TMacro): Promise<boo
 
 	const bool = await discordPromptYesNo(sageMessage, promptRenderable);
 	if (bool === true) {
-		return sageMessage.user.macros.pushAndSave(macro);
+		return sageMessage.sageUser.macros.pushAndSave(macro);
 	}
 	return false;
 }
@@ -115,7 +115,7 @@ async function macroUpdate(sageMessage: SageMessage, existing: TMacro, updated: 
 	if (bool === true) {
 		existing.category = updated.category ?? existing.category;
 		existing.dice = updated.dice;
-		return sageMessage.user.save();
+		return sageMessage.sageUser.save();
 	}
 	return false;
 }
@@ -175,7 +175,7 @@ async function macroMove(sageMessage: SageMessage): Promise<void> {
 		const bool = await discordPromptYesNo(sageMessage, promptRenderable);
 		if (bool === true) {
 			existing.category = categoryPair.value ?? existing.category;
-			saved = await sageMessage.user.save();
+			saved = await sageMessage.sageUser.save();
 		}
 	}
 	return sageMessage.reactSuccessOrFailure(saved);
@@ -200,7 +200,7 @@ async function macroDetails(sageMessage: SageMessage): Promise<void> {
 
 async function deleteCategory(sageMessage: SageMessage, category: string): Promise<void> {
 	const cleanCategory = utils.StringUtils.StringMatcher.clean(category);
-	const byCategory = sageMessage.user.macros.filter(macro => cleanCategory === utils.StringUtils.StringMatcher.clean(macro.category ?? UNCATEGORIZED));
+	const byCategory = sageMessage.sageUser.macros.filter(macro => cleanCategory === utils.StringUtils.StringMatcher.clean(macro.category ?? UNCATEGORIZED));
 	if (!byCategory.length) {
 		return <any>sageMessage.send(createAdminRenderableContent(sageMessage.getHasColors(), `Macro Category Not Found!`));
 	}
@@ -210,7 +210,7 @@ async function deleteCategory(sageMessage: SageMessage, category: string): Promi
 
 	const yes = await discordPromptYesNo(sageMessage, renderableContent);
 	if (yes === true) {
-		const saved = await sageMessage.user.macros.removeAndSave(...byCategory);
+		const saved = await sageMessage.sageUser.macros.removeAndSave(...byCategory);
 		return sageMessage.reactSuccessOrFailure(saved);
 	}
 
@@ -233,11 +233,11 @@ async function macroDeleteAll(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const count = sageMessage.user.macros.length;
+	const count = sageMessage.sageUser.macros.length;
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Delete All ${count} Macros?`);
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable);
 	if (yes === true) {
-		const saved = await sageMessage.user.macros.emptyAndSave();
+		const saved = await sageMessage.sageUser.macros.emptyAndSave();
 		return sageMessage.reactSuccessOrFailure(saved);
 	}
 	return Promise.resolve();
@@ -253,7 +253,7 @@ async function deleteMacro(sageMessage: SageMessage, macro: Optional<TMacro>): P
 	promptRenderable.append(macroPrompt);
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable);
 	if (yes === true) {
-		const saved = await sageMessage.user.macros.removeAndSave(macro);
+		const saved = await sageMessage.sageUser.macros.removeAndSave(macro);
 		return sageMessage.reactSuccessOrFailure(saved);
 	}
 	return Promise.resolve();
@@ -272,7 +272,7 @@ async function macroDelete(sageMessage: SageMessage): Promise<void> {
 		const macro = findMacro(sageMessage, macroName, macroCategory);
 		return deleteMacro(sageMessage, macro);
 	} else if (macroName) {
-		const macro = sageMessage.user.macros.findByName(macroName);
+		const macro = sageMessage.sageUser.macros.findByName(macroName);
 		return deleteMacro(sageMessage, macro);
 	}
 	return sageMessage.reactFailure();

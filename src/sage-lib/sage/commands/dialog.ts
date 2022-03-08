@@ -140,9 +140,9 @@ function findPc(sageMessage: SageMessage, pcNameOrIndex: Optional<string>): Game
 		return sageMessage.playerCharacter;
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
 		if (utils.StringUtils.isBlank(pcNameOrIndex)) {
-			return sageMessage.user.playerCharacters.first();
+			return sageMessage.sageUser.playerCharacters.first();
 		}
-		return sageMessage.user.playerCharacters.findByNameOrIndex(pcNameOrIndex);
+		return sageMessage.sageUser.playerCharacters.findByNameOrIndex(pcNameOrIndex);
 	}
 	return undefined;
 }
@@ -153,7 +153,7 @@ function findCompanion(sageMessage: SageMessage, companionNameOrIndex: Optional<
 		companions = sageMessage.playerCharacter?.companions;
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
 		// Currently only allow a single PC per server outside of games
-		companions = sageMessage.user.playerCharacters.first()?.companions;
+		companions = sageMessage.sageUser.playerCharacters.first()?.companions;
 	}
 	if (companions) {
 		if (utils.StringUtils.isBlank(companionNameOrIndex)) {
@@ -168,7 +168,7 @@ function findNpc(sageMessage: SageMessage, npcName: string): GameCharacter | und
 	if (sageMessage.gameChannel) {
 		return sageMessage.isGameMaster ? sageMessage.game!.nonPlayerCharacters.findByName(npcName) : undefined;
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
-		return sageMessage.user.nonPlayerCharacters.findByName(npcName);
+		return sageMessage.sageUser.nonPlayerCharacters.findByName(npcName);
 	}
 	return undefined;
 }
@@ -343,15 +343,15 @@ export function parseDialogContent(content: string, allowDynamicDialogSeparator:
 
 export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogContent | null {
 	const content = sageMessage.message.content ?? ""; //TODO: was message.edits[0].content
-	const dialogContent = parseDialogContent(content, sageMessage.user?.allowDynamicDialogSeparator);
+	const dialogContent = parseDialogContent(content, sageMessage.sageUser?.allowDynamicDialogSeparator);
 	if (dialogContent) {
 		return dialogContent;
 	}
 	if (!sageMessage.hasCommandOrQueryOrSlicedContent) {
-		const autoCharacter = sageMessage.game?.getAutoCharacterForChannel(sageMessage.user.did, sageMessage.threadDid)
-			?? sageMessage.game?.getAutoCharacterForChannel(sageMessage.user.did, sageMessage.channelDid)
-			?? sageMessage.user.getAutoCharacterForChannel(sageMessage.threadDid)
-			?? sageMessage.user.getAutoCharacterForChannel(sageMessage.channelDid);
+		const autoCharacter = sageMessage.game?.getAutoCharacterForChannel(sageMessage.sageUser.did, sageMessage.threadDid)
+			?? sageMessage.game?.getAutoCharacterForChannel(sageMessage.sageUser.did, sageMessage.channelDid)
+			?? sageMessage.sageUser.getAutoCharacterForChannel(sageMessage.threadDid)
+			?? sageMessage.sageUser.getAutoCharacterForChannel(sageMessage.channelDid);
 		if (autoCharacter) {
 			return {
 				type: autoCharacter.isGM ? "gm" : "pc",
@@ -503,8 +503,8 @@ async function findLastMessage(sageMessage: SageMessage, messageDid: Optional<Di
 			lastMessages.push(...sageMessage.game.nonPlayerCharacters.getLastMessages(sageMessage.discordKey));
 		}
 	} else {
-		lastMessages.push(...sageMessage.user.playerCharacters.getLastMessages(sageMessage.discordKey));
-		lastMessages.push(...sageMessage.user.nonPlayerCharacters.getLastMessages(sageMessage.discordKey));
+		lastMessages.push(...sageMessage.sageUser.playerCharacters.getLastMessages(sageMessage.discordKey));
+		lastMessages.push(...sageMessage.sageUser.nonPlayerCharacters.getLastMessages(sageMessage.discordKey));
 	}
 	lastMessages.sort((a, b) => a.timestamp - b.timestamp);
 	return lastMessages.pop() ?? null;
@@ -546,12 +546,12 @@ async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent)
 // #region Alias Dialog
 
 function updateAliasDialogArgsAndReturnType(sageMessage: SageMessage, dialogContent: TDialogContent): TDialogContent | null {
-	const aliasFound = sageMessage.user.aliases.findByName(dialogContent.type, true);
+	const aliasFound = sageMessage.sageUser.aliases.findByName(dialogContent.type, true);
 	if (!aliasFound) {
 		return null;
 	}
 
-	const aliasContent = parseDialogContent(aliasFound.target, sageMessage.user?.allowDynamicDialogSeparator)!;
+	const aliasContent = parseDialogContent(aliasFound.target, sageMessage.sageUser?.allowDynamicDialogSeparator)!;
 	return {
 		type: aliasContent.type,
 		name: aliasContent.name,

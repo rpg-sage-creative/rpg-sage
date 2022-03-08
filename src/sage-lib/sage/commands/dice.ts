@@ -80,9 +80,9 @@ function parseDiscordMacro(sageMessage: SageMessage, macroString: string): Disco
 	let diceString = macroString;
 	const macroNames = <string[]>[];
 	let macroAndOutput: TMacroAndOutput | null;
-	while (macroAndOutput = macroToDice(sageMessage.user.macros, debrace(diceString))) {
+	while (macroAndOutput = macroToDice(sageMessage.sageUser.macros, debrace(diceString))) {
 		if (macroNames.includes(macroAndOutput.macro.name)) {
-			console.error(`MACRO RECURSION: User(${sageMessage.user.id}) ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}`)
+			console.error(`MACRO RECURSION: User(${sageMessage.sageUser.id}) ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}`)
 			return parseDiscordDice(sageMessage, `[1d1 MACRO RECURSION: ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}]`);
 		}
 		macroNames.push(macroAndOutput.macro.name);

@@ -66,7 +66,7 @@ async function pathbuilder2e(sageMessage: SageMessage): Promise<void> {
 					id: utils.UuidUtils.generate(),
 					pathbuilder: pathbuilderChar.toJSON(),
 					name: pathbuilderChar.name,
-					userDid: sageMessage.user.did
+					userDid: sageMessage.sageUser.did
 				});
 				await sageMessage.reactSuccessOrFailure(added !== null);
 			}

@@ -232,6 +232,7 @@ export default class SageCache {
 			core.server = await core.servers.getOrCreateByGuild(interaction.guild);
 			core.game = await core.games.findActiveByDiscordKey(core.discordKey);
 		}
+		core.user = await core.users.getOrCreateByDid(interaction.user.id);
 		return sageCache;
 	}
 

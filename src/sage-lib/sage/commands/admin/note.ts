@@ -48,13 +48,13 @@ function getPcForStats(sageMessage: SageMessage): GameCharacter | undefined {
 	}
 	const chars = sageMessage.game
 		? sageMessage.game.playerCharacters
-		: sageMessage.user.playerCharacters;
+		: sageMessage.sageUser.playerCharacters;
 	return sageMessage.args.findArgAndRemoveAndMap(arg => chars.findByName(arg)) ?? undefined;
 }
 function getNpcForStats(sageMessage: SageMessage): GameCharacter | undefined {
 	const chars = sageMessage.game
 		? sageMessage.game.nonPlayerCharacters
-		: sageMessage.user.nonPlayerCharacters;
+		: sageMessage.sageUser.nonPlayerCharacters;
 	return sageMessage.args.findArgAndRemoveAndMap(arg => chars.findByName(arg)) ?? undefined;
 }
 async function statsSet(sageMessage: SageMessage): Promise<void> {

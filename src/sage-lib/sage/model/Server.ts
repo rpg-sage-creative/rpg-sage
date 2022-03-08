@@ -61,6 +61,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 
 	//TODO: sort out server active state/status
 	public get isActive(): boolean { return true; }
+	public get isHome(): boolean { return Server.isHome(this.did); }
 	// #endregion
 
 	// #region Game actions
@@ -365,7 +366,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 			objectType: "Server",
 			commandPrefix: activeBot.commandPrefix,
 			roles: []
-		}
+		};
 	}
 
 	public static HomeServerDid: Discord.Snowflake = "480488957889609733";
