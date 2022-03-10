@@ -1,4 +1,4 @@
-import utils, { OrUndefined } from "../../../sage-utils";
+import utils, { Optional, OrUndefined } from "../../../sage-utils";
 import type { TProficiency } from "../../common";
 import { toModifier } from "../../common";
 import { findByValue as repoFind, filter as repoFilter } from "../../data/Repository";
@@ -537,11 +537,11 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 
 //#endregion
 
-function eq(a: string, b: string, matcher = false): boolean {
+function eq(a: Optional<string>, b: Optional<string>, matcher = false): boolean {
 	if (matcher) {
 		return utils.StringUtils.StringMatcher.matches(a, b);
 	}
-	return a.toLowerCase() === b.toLowerCase();
+	return a?.toLowerCase() === b?.toLowerCase();
 }
 
 export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
