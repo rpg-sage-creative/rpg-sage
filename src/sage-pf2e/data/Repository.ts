@@ -233,7 +233,7 @@ function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 }
 
 async function loadDataFromDist(distPath: string): Promise<void> {
-	const files: string[] = await utils.FsUtils.filterFiles(distPath, file => file.endsWith(".json"), true)
+	const files: string[] = await utils.FsUtils.filterFiles(distPath, file => file.endsWith(".json") && !file.includes("pf2t-leftovers"), true)
 		.catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 	if (!files.length) {
 		console.warn(`No files in "${distPath}" ...`);
@@ -347,7 +347,7 @@ export function parseSource(value?: string, sources?: TSourceOrCore[]): TParsedS
 export function parseSources(value?: string, sources?: TSourceOrCore[]): TParsedSource[] {
 	const values = value?.split(/\s*,\s*/) ?? [];
 	return values
-		.map(value => parseSource(value, sources))
+		.map(val => parseSource(val, sources))
 		.filter(isDefined);
 }
 

@@ -264,13 +264,13 @@ export async function searchAon(parsedSearchInfo: TParsedSearchInfo, nameOnly = 
 	return searchResults;
 }
 
-function theOneOrMatchToSage(searchResults: SearchResults, match = false): Base | AonBase | null {
+function theOneOrMatchToSage(searchResults: SearchResults, match = false): Base | null {
 	const aon = searchResults.theOne ?? (match ? searchResults.theMatch : null);
 	if (aon) {
 		const searchables = searchResults.searchables,
 			index = searchables.indexOf(aon),
 			sage = searchResults.sageSearchables[index];
-		return sage ?? aon;
+		return sage ?? null;
 	}
 	return null;
 }
