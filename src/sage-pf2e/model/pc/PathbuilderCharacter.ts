@@ -541,7 +541,7 @@ function eq(a: string, b: string, matcher = false): boolean {
 	if (matcher) {
 		return utils.StringUtils.StringMatcher.matches(a, b);
 	}
-	return a.toLowerCase() === b.toLowerCase();
+	return a?.toLowerCase() === b?.toLowerCase();
 }
 
 export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
