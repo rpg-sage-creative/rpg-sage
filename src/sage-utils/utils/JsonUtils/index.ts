@@ -93,7 +93,7 @@ function inlineCurlyBraces(value: string): string {
 }
 
 function inlineSquareBrackets(value: string): string {
-	return value.replace(/\[[\w",\s-]*?\]/g, cleanWhitespaceIfShort);
+	return value.replace(/\[[\w",\s-\.]*?\]/g, cleanWhitespaceIfShort);
 }
 
 /** Formats JSON as readable, while trying to keep {} or [] on a single line where <= 250 characters. */
