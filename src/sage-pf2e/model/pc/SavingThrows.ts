@@ -79,7 +79,7 @@ class PbcSavingThrows extends SavingThrows {
 
 	public getSavingThrow(savingThrow: TSavingThrow, ability: TAbility): Check {
 		const check = new Check(this.pbc, savingThrow);
-		check.level = this.pbc.level;
+		check.level = this.pbc.levelProficiencyMod;
 		check.setAbility(ability);
 		check.addProficiency(savingThrow);
 		if (this.pbc.resilientBonus) {

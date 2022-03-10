@@ -10,6 +10,8 @@ import ActiveBot from "../model/ActiveBot";
 import type SageMessage from "../model/SageMessage";
 import type SageReaction from "../model/SageReaction";
 import { registerAdminCommand } from "./cmd";
+import { resolveToEmbeds } from "../../discord/embeds";
+import type { TPathbuilderCharacterCustomFlags } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 
 /** THIS IS COPY/PASTED; PROPERLY REUSE IT */
 function updateEmbed(originalEmbed: Discord.MessageEmbed, title: Optional<string>, imageUrl: Optional<string>, content: string): Discord.MessageEmbed {
@@ -35,10 +37,26 @@ async function pathbuilder2e(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const pathbuilderId = +idArg.split("=")[1];
-	const pathbuilderChar = await PathbuilderCharacter.fetch(pathbuilderId);
+	const flags: TPathbuilderCharacterCustomFlags = { };
+	if (false) {
+		flags._proficiencyWithoutLevel = true;
+		flags._untrainedPenalty = true;
+	}
+	const pathbuilderChar = await PathbuilderCharacter.fetch(pathbuilderId, flags);
 	if (!pathbuilderChar) {
 		console.log(`Failed to fetch Pathbuilder character ${pathbuilderId}!`);
 		return sageMessage.reactWarn();
+	}
+
+	if (sageMessage.args.includes("attach")) {
+		const raw = resolveToEmbeds(sageMessage.caches, pathbuilderChar.toHtml()).map(e=>e.description).join("");
+		const buffer = Buffer.from(raw, "utf-8");
+		const attachment = new Discord.MessageAttachment(buffer, `pathbuilder2e-${pathbuilderId}.txt`);
+		await sageMessage.message.channel.send({
+			content: `Attaching Pathbuilder2e Character: ${pathbuilderChar.name} (${pathbuilderId})`,
+			files:[attachment]
+		});
+		return Promise.resolve();
 	}
 
 	const messages = await sageMessage.send(`*Pathbuilder2e:${pathbuilderId}*\n` + pathbuilderChar.toHtml());

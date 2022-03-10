@@ -13,6 +13,7 @@ import { ABILITIES } from "../..";
 //#region types
 
 enum PathbuilderCharacterProficiencyType {
+	PenalizedUntrained = -2,
 	Untrained = 0,
 	Trained = 2,
 	Expert = 4,
@@ -214,7 +215,12 @@ type TPathbuilderCharacterPet = TPathbuilderCharacterFamiliar
 	| TPathbuilderCharacterAnimalCompanion
 	| { name:string; type:"Other"; };
 
-export type TPathbuilderCharacter = {
+export type TPathbuilderCharacterCustomFlags = {
+	_proficiencyWithoutLevel?: boolean;
+	_untrainedPenalty?: boolean;
+};
+type TPathbuilderCharacterCustomFlag = keyof TPathbuilderCharacterCustomFlags;
+export type TPathbuilderCharacter = TPathbuilderCharacterCustomFlags & {
 	name: string;
 	class: string;
 	dualClass?: string;
@@ -289,7 +295,7 @@ function equipmentToHtml(equipment: TPathbuilderCharacterEquipment[]): string {
 }
 function loreToHtml(char: PathbuilderCharacter): string {
 	const NAME = 0, PROFMOD = 1, core = char.toJSON();
-	return core.lores.map(l => `${l[NAME]} ${toModifier(core.level + l[PROFMOD] + char.abilities.intMod)}`).join(", ");
+	return core.lores.map(l => `${l[NAME]} ${toModifier(char.levelProficiencyMod + l[PROFMOD] + char.abilities.intMod)}`).join(", ");
 }
 function moneyToHtml(money: TPathbuilderCharacterMoney): string {
 	const coins = <string[]>[];
@@ -313,10 +319,10 @@ function skillsToHtml(char: PathbuilderCharacter): string {
 	return "Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery"
 		.split(",").map((skill, index) => {
 			const profMod = char.getProficiencyMod(skill as TPathbuilderCharacterProficienciesKey);
-			if (!profMod) {
+			if (profMod <= 0) {
 				return "";
 			}
-			const levelMod = core.level;
+			const levelMod = char.levelProficiencyMod;
 			const statMod = Abilities.scoreToMod(core.abilities[statKeys[index]]);
 			return `${skill} ${toModifier(levelMod + profMod + statMod)}`;
 		}).filter(s => s).join(", ");
@@ -361,7 +367,7 @@ function spellsListToHtml(spells: string[]): string {
 
 function spellCasterToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilderCharacterSpellCaster): string {
 	const label = spellCasterToLabel(spellCaster);
-	const mod = char.level
+	const mod = char.levelProficiencyMod
 		+ char.abilities.getAbilityScoreModifier(ABILITIES.find(abil => abil.toLowerCase().startsWith(spellCaster.ability))!)
 		+ spellCaster.proficiency;
 	const isFocus = spellCaster.focusPoints > 0;
@@ -510,7 +516,7 @@ function getWeaponSpecMod(char: PathbuilderCharacter, weapon: TPathbuilderCharac
 function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): string {
 	const wpnItem = findWeapon(weapon);
 	if (wpnItem) {
-		const mod = char.level
+		const mod = char.levelProficiencyMod
 			+ weaponToAttackStatMod(wpnItem, char.abilities.strMod, char.abilities.dexMod)
 			+ char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey, weapon.name)
 			+ weapon.pot;
@@ -519,7 +525,7 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 	}else {
 		// Figure out if type is melee/ranged
 		const type = "Custom";
-		const mod = char.level
+		const mod = char.levelProficiencyMod
 			+ char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey)
 			+ weapon.pot;
 		const dmg = `${strikingToDiceCount(weapon.str)}${weapon.die}`;
@@ -540,8 +546,11 @@ function eq(a: string, b: string, matcher = false): boolean {
 
 export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
 
-	public constructor(private core: TPathbuilderCharacter) {
+	public constructor(private core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
 		super();
+		Object.keys(flags).forEach(key => {
+			core[key as TPathbuilderCharacterCustomFlag] = flags[key as TPathbuilderCharacterCustomFlag];
+		});
 	}
 	public toJSON(): TPathbuilderCharacter { return this.core; }
 
@@ -580,10 +589,20 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		return this.core.level;
 	}
 
+	public get levelProficiencyMod(): number {
+		return this.core._proficiencyWithoutLevel === true ? 0 : this.level;
+	}
+	public get untrainedProficiencyMod(): number {
+		return this.core._untrainedPenalty === true ? -1 : 0;
+	}
+
 	//#region IHasProficiencies
 
 	public getProficiency(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): TProficiency {
-		return <TProficiency>PathbuilderCharacterProficiencyType[this.getProficiencyMod(key, specificKey)];
+		const profMod = this.getProficiencyMod(key, specificKey);
+		return profMod === -2
+			? "Untrained"
+			: <TProficiency>PathbuilderCharacterProficiencyType[profMod];
 	}
 
 	public getProficiencyMod(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): PathbuilderCharacterProficiencyType {
@@ -592,7 +611,8 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		const found = keys.find(k => k.toLowerCase() === lower);
 		const keyMod = found ? this.core.proficiencies[found] ?? 0 : 0;
 		const specificMod = specificKey ? this.getSpecificProficiencyMod(specificKey) : 0;
-		return Math.max(keyMod, specificMod);
+		const profMod = Math.max(keyMod, specificMod);
+		return profMod === 0 && this.core._untrainedPenalty === true ? -2 : profMod;
 	}
 	private getSpecificProficiencyMod(key: string): PathbuilderCharacterProficiencyType {
 		if (this.core?.specificProficiencies?.legendary?.includes(key)) {
@@ -613,7 +633,7 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 	//#endregion
 
 	public get perceptionMod(): number {
-		return this.core.level + this.core.proficiencies.perception + this.abilities.wisMod;
+		return this.levelProficiencyMod + this.getProficiencyMod("perception") + this.abilities.wisMod;
 	}
 	public get perceptionSpecials(): string[] {
 		return this.core.specials
@@ -628,7 +648,7 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 	public get maxHp(): number {
 		const attributes = this.core.attributes;
 		return attributes.ancestryhp + attributes.bonushp
-			+ (attributes.classhp + attributes.bonushpPerLevel + this.abilities.conMod) * this.core.level;
+			+ (attributes.classhp + attributes.bonushpPerLevel + this.abilities.conMod) * this.level;
 	}
 
 	//#region toHtml
@@ -637,7 +657,7 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		const name = this.core.name;
 		const klass = this.core.class;
 		const dualClass = this.core.dualClass ? `/${this.core.dualClass}` : ``;
-		const level = this.core.level;
+		const level = this.level;
 		return `${name} - ${klass}${dualClass} ${level}`;
 	}
 
@@ -693,9 +713,9 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 
 	//#region fetch
 
-	public static fetch(id: number): Promise<PathbuilderCharacter | null> {
+	public static fetch(id: number, flags?: TPathbuilderCharacterCustomFlags): Promise<PathbuilderCharacter | null> {
 		return this.fetchCore(id)
-			.then(core => new PathbuilderCharacter(core), () => null);
+			.then(core => new PathbuilderCharacter(core, flags), () => null);
 	}
 
 	public static fetchCore(id: number): Promise<TPathbuilderCharacter> {
@@ -703,6 +723,7 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 			try {
 				const url = `https://pathbuilder2e.com/json.php?id=${id}`;
 				const json = await utils.HttpsUtils.getJson<TPathbuilderCharacterResponse>(url).catch(reject);
+// utils.FsUtils.writeFileSync(`pathfbuilder2e-${id}.json`, json);
 				if (json?.success) {
 					resolve(json.build);
 				}else {
