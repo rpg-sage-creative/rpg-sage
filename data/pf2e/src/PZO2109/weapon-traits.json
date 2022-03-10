@@ -1,0 +1,183 @@
+[
+	{
+		"objectType": "Trait",
+		"name": "Injection",
+		"details": [
+			"This weapon can be filled with an injury poison. Immediately after a successful attack with the weapon, you can inject the target with the loaded poison with a single Interact action. Refilling the weapon with a new substance requires three Interact actions and uses both hands."
+		],
+		"page": 62,
+		"source": "PZO2109",
+		"id": "3457377d-9972-4189-adc8-c76af4d3f79a",
+		"aonId": 407,
+		"pf2t": {
+			"name": "Injection",
+			"source": "Guns & Gears pg. 233",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=407",
+			"aon": "traits407",
+			"type": "trait",
+			"body": "This weapon can be filled with an injury poison. Immediately after a successful attack with the weapon, you can inject the target with the loaded poison with a single Interact action. Refilling the weapon with a new substance requires three Interact actions, and uses both hands.",
+			"hash": "MFLspXpY"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Repeating",
+		"details": [
+			"These weapons can't be loaded with individual bolts or bullets like other crossbows and firearms; instead, they require a magazine of specialized ammunition to be loaded into a special slot. Once that magazine is in place, the ammunition loads automatically each time the weapon is cocked to fire, reducing its reload to the value in its reload entry (typically 0). When the ammunition runs out, a new magazine must be loaded, which requires a free hand and 3 Interact actions (to remove the old magazine, retrieve the new magazine, and slot the new magazine in place). These actions don't need to be consecutive."
+		],
+		"page": 62,
+		"source": "PZO2109",
+		"id": "898ed365-b60d-420d-88c3-2b10818ee0cd"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Capacity",
+		"details": [
+			"Weapons that have the capacity trait typically have multiple barrels or chambers capable of containing a round of ammunition. Capacity is always accompanied by a number indicating the number of barrels or chambers. After a capacity weapon is fired, you can select the next loaded barrel or chamber as an Interact action that doesn't require a free hand. Each barrel or chamber can be reloaded after it's fired as a separate Interact action."
+		],
+		"page": 150,
+		"source": "PZO2109",
+		"id": "1ae129cf-c588-48a6-95fe-67ceb43ddd1d",
+		"aonId": 399,
+		"pf2t": {
+			"name": "Capacity",
+			"source": "Guns & Gears pg. 230",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=399",
+			"aon": "traits399",
+			"type": "trait",
+			"body": "Weapons that have the capacity trait typically have multiple barrels or chambers capable of containing a round of ammunition. Capacity is always accompanied by a number indicating the number of barrels or chambers. After a capacity weapon is fired, you can select the next loaded barrel or chamber as an Interact action that doesn't require a free hand. Each barrel or chamber can be reloaded after it's fired as a separate Interact action.",
+			"hash": "UkWbLWdO"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Concealable",
+		"details": [
+			"This weapon is designed to be inconspicuous or easily concealed. You gain a +2 circumstance bonus to Stealth checks and DCs to hide or conceal a weapon with this trait."
+		],
+		"page": 150,
+		"source": "PZO2109",
+		"id": "b53d9fd4-a9f5-430e-9d54-a21225f9424f"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Concussive",
+		"details": [
+			"These weapons smash as much as puncture. When determining a creature's resistance or immunity to damage from this weapon, use the weaker of the target's resistance or immunity to piercing or bludgeoning. For instance, if the creature were immune to piercing and had no resistance or immunity to bludgeoning damage, it would take full damage from a concussive weapon. Resistance or immunity to all physical damage, or all damage, applies as normal."
+		],
+		"page": 150,
+		"source": "PZO2109",
+		"id": "fbf3d977-2f20-4def-bc32-a96917478960",
+		"aonId": 401,
+		"pf2t": {
+			"name": "Concussive",
+			"source": "Guns & Gears pg. 231",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=401",
+			"aon": "traits401",
+			"type": "trait",
+			"body": "These weapons smash as much as puncture. When determining a creature's resistance or immunity to damage from this weapon, use the weaker of the target's resistance or immunity to piercing or to bludgeoning. For instance, if the creature were immune to piercing and had no resistance or immunity to bludgeoning damage, it would take full damage from a concussive weapon. Resistance or immunity to all physical damage, or all damage, applies as normal.",
+			"hash": "FMWrXfrC"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Double Barrel",
+		"details": [
+			"This weapon has two barrels that are each loaded separately. You can fire both barrels of a double barrel weapon in a single Strike to increase the size of the weapon damage die by one step. If the weapon has the fatal trait, this increases the size of the fatal die by one step as well."
+		],
+		"page": 150,
+		"source": "PZO2109",
+		"id": "660509a5-4265-4ad8-8d59-fd9b57dbcade",
+		"aonId": 403,
+		"pf2t": {
+			"name": "Double Barrel",
+			"source": "Guns & Gears pg. 232",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=403",
+			"aon": "traits403",
+			"type": "trait",
+			"body": "This weapon has two barrels that are each loaded separately. You can fire both barrels of a double barrel weapon in a single Strike to increase the weapon damage die by one step. If the weapon has the fatal trait, this increases the fatal die by one step.",
+			"hash": "YwpvKtkr"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Fatal Aim",
+		"details": [
+			"It's possible to hold the stock of this weapon under one arm so you can fire it with a single hand as long as the other hand isn't holding a weapon, shield, or anything else you would need to move and position, to ensure the weapon doesn't slip out from under your arm. However, if you use both hands, the weapon can make fatal attacks. When you wield the weapon in two hands, it gains the fatal trait with the listed damage die. Holding the weapon underarm stably enough to fire is significantly more complicated than just releasing one hand from the weapon, so to switch between the two grips, you must do so with an Interact action rather than Releasing or as part of reloading."
+		],
+		"page": 150,
+		"source": "PZO2109",
+		"id": "c936277f-1642-43c5-a45c-04473a337d1c",
+		"aonId": 404,
+		"pf2t": {
+			"name": "Fatal Aim",
+			"source": "Guns & Gears pg. 232",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=404",
+			"aon": "traits404",
+			"type": "trait",
+			"body": "It's possible to hold the stock of this weapon under one arm so you can fire it with a single hand, but if you use both hands, the weapon can make fatal attacks. When you wield the weapon in two hands, it gains the fatal trait with the listed damage die. Holding the weapon underarm stably enough to fire is significantly more complicated than just releasing one hand from the weapon, so switching between the two grips requires its own Interact action, not via Releasing or as part of reloading.",
+			"hash": "pGmhAvGS"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Kickback",
+		"details": [
+			"A kickback weapon is extra powerful and difficult to use. A kickback weapon deals 1 additional damage with all attacks. Firing a kickback weapon gives a -2 circumstance penalty to the attack roll, but characters with 14 or more Strength ignore the penalty. Attaching a kickback weapon to stabilizers can lower or negate this penalty (page 182)."
+		],
+		"page": 150,
+		"source": "PZO2109",
+		"id": "51aa67ff-b1cb-44b0-b183-44fa0239f2a5",
+		"aonId": 409,
+		"pf2t": {
+			"name": "Kickback",
+			"source": "Guns & Gears pg. 234",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=409",
+			"aon": "traits409",
+			"type": "trait",
+			"body": "A kickback weapon is extra powerful and difficult to use due to its high recoil. A kickback weapon deals 1 additional damage with all attacks. Firing a kickback weapon gives a -2 circumstance penalty to the attack roll, but characters with 14 or more Strength ignore the penalty. Attaching a kickback weapon to a deployed bipod, tripod, or other stabilizer can lower or negate this penalty.",
+			"hash": "rxpmqExR"
+		}
+	},
+	{
+		"objectType": "Trait",
+		"name": "Modular",
+		"details": [
+			"The weapon has multiple configurations that you can switch between using an Interact action. Typically, switching between configurations of a modular weapon allows it to deal different types of damage (listed in the trait, such as \"modular B, P, or S\"), though it's possible for a modular weapon's description to list more complicated configurations."
+		],
+		"page": 150,
+		"source": "PZO2109",
+		"id": "a5919d73-4417-4bb8-a9e1-5d60190abacf"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Repeating",
+		"details": [
+			"Repeating weapons can't be loaded with individual bolts or bullets like other crossbows and firearms can; instead, they require a magazine of specialized ammunition to be loaded into a special slot. Once the magazine is in place, the ammunition is automatically loaded each time the weapon is cocked to fire, reducing its reload to the value in its reload entry (typically 0).",
+			"When the ammunition runs out, a new magazine must be loaded, which requires a free hand and three Interact actions (to remove the old magazine, retrieve the new magazine, and slot the new magazine in place). As with other types of reloading that take multiple actions, these actions don't need to be consecutive."
+		],
+		"page": 150,
+		"source": "PZO2109",
+		"id": "0caeb6c3-0dbd-418b-9ada-9cf81502d2b9"
+	},
+	{
+		"objectType": "Trait",
+		"name": "Scatter",
+		"details": [
+			"This weapon fires a cluster of pellets in a wide spray. Scatter always has an area listed with it, indicating the radius of the spray. On a hit, the primary target of an attack with a scatter weapon takes the listed damage, and the target and all other creatures within the listed radius around it take 1 splash damage per weapon damage die."
+		],
+		"page": 151,
+		"source": "PZO2109",
+		"id": "71af9369-cbd9-4cec-924d-59029eff4a91",
+		"aonId": 413,
+		"pf2t": {
+			"name": "Scatter",
+			"source": "Guns & Gears pg. 235",
+			"src": "https://2e.aonprd.com/Traits.aspx?ID=413",
+			"aon": "traits413",
+			"type": "trait",
+			"body": "This weapon fires a cluster of pellets in a wide spray. Scatter always has an area listed with it, indicating the radius of the spray. On a hit, the primary target of attacks with a scatter weapon take the listed damage, and the target and all other creatures within the listed radius around it take 1 point of splash damage per weapon damage die.",
+			"hash": "cCFkhqBy"
+		}
+	}
+]
