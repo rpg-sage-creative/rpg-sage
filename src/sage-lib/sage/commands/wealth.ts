@@ -98,7 +98,7 @@ async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, 
 
 export default function register(): void {
 	registerCommandRegex(/^((?:\s*[\-\+]?\s*\d+(?:,\d{3})*\s*[csgp]p)+)$/i, spUtils);
-	registerCommandHelp("Wealth", "Coin Counter", `{1pp} {2gp} {3sp} {4cp}\n{1pp} {-2gp} {+3sp} {-4cp}\n<b>[permission-patreon] Patron Feature (Friend+)</b>`);
+	registerCommandHelp("Wealth", "Coin Counter", `{1pp} {2gp} {3sp} {4cp}\n{1pp} {-2gp} {+3sp} {-4cp}`);
 
 	registerCommandRegex(/^\s*(?:starting|character)\s*wealth\s*(\d+(?:st|nd|rd|th)?)?\s*$/i, startingWealth);
 	const CHARACTER_WEALTH = "Starting Wealth";
