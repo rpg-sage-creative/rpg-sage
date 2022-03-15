@@ -22,8 +22,18 @@ if (!botJson) {
 	if (isUpdate) {
 		updateSlashCommands(botJson!);
 	}else {
-		console.log(utils.JsonUtils.formattedStringify(buildCommands()));
+		try {
+			const built = buildCommands();
+			// console.log(built);
+			console.log(utils.JsonUtils.formattedStringify(built));
+		}catch(ex) {
+			console.error(ex);
+		}
 	}
+}
+
+function clean(value: string): string {
+	return value?.replace(/\W/g, "-") ?? "WTF";
 }
 
 //#region command builders
@@ -31,27 +41,35 @@ if (!botJson) {
 /** Makes sure no matter how i give/set the choice it converts to what the API needs. */
 function toChoice(choice: TSlashCommandChoice): [string, string] {
 	if (Array.isArray(choice)) {
-		return choice;
+		return [clean(choice[0]), clean(choice[1])];
 	}
 	if (typeof(choice) === "string") {
-		return [choice, choice];
+		return [clean(choice), clean(choice)];
 	}
-	return [choice.name, choice.value ?? choice.name];
+	return [clean(choice.name), clean(choice.value ?? choice.name)];
 }
 
 /** shortcut for setting name/desc on all objects, also cleans the name for the API */
 function setName<T extends SlashCommandBuilder | SlashCommandSubcommandBuilder | SlashCommandSubcommandGroupBuilder | SlashCommandStringOption>(builder: T, hasName: TNameDescription): T {
-	return builder
-		.setName(hasName.name.replace(/\W/g, "-"))
-		.setDescription(hasName.description) as T;
+	try {
+		builder.setName(clean(hasName.name));
+		builder.setDescription(clean(hasName.description) ?? builder.name);
+	}catch(ex) {
+		console.error(hasName, ex);
+	}
+	return builder;
 }
 
 /** shortcut for setting options all things that allow options */
 function addOptions<T extends SlashCommandBuilder | SlashCommandSubcommandBuilder>(builder: T, options?: TSlashCommandOption[]): T {
 	options?.forEach(option =>
-		builder.addStringOption(opt =>
-			setName(opt, option).addChoices(option.choices?.map(toChoice) ?? [])
-		)
+		builder.addStringOption(opt => {
+			setName(opt, option);
+			option.choices?.forEach(choice => {
+				opt.addChoice(...toChoice(choice));
+			});
+			return opt;
+		})
 	);
 	return builder;
 }
@@ -67,17 +85,15 @@ function addSubcommands<T extends SlashCommandBuilder | SlashCommandSubcommandGr
 }
 
 function buildCommand(raw: TSlashCommand): SlashCommandBuilder {
-	const cmd = new SlashCommandBuilder()
-		.setName(raw.name)
-		.setDescription(raw.description);
+	const cmd = setName(new SlashCommandBuilder(), raw);
 	raw.children?.forEach(child => {
 		if (child.children?.length) {
 			cmd.addSubcommandGroup(grp =>
-				addSubcommands(grp.setName(child.name).setDescription(child.description), child.children)
+				addSubcommands(setName(grp, child), child.children)
 			);
 		}else {
 			cmd.addSubcommand(sub =>
-				addOptions(sub.setName(child.name).setDescription(child.description), child.options)
+				addOptions(setName(sub, child), child.options)
 			);
 		}
 	});
@@ -86,10 +102,15 @@ function buildCommand(raw: TSlashCommand): SlashCommandBuilder {
 }
 
 function buildCommands(): SlashCommandBuilder[] {
-	const commands = [] as SlashCommandBuilder[];
-	commands.push(buildCommand(helpCommand()));
-	commands.push(buildCommand(weatherCommand()));
-	return commands;
+	const children = [] as TSlashCommand[];
+	if (false) children.push(helpCommand());
+	children.push(weatherCommand());
+	const command = { name:"Sage", description:"RPG Sage's Commands", children:children };
+	return [buildCommand(command)];
+	// const commands = [] as SlashCommandBuilder[];
+	// commands.push(buildCommand(helpCommand()));
+	// commands.push(buildCommand(weatherCommand()));
+	// return commands;
 }
 
 //#endregion
