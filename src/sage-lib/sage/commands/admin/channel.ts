@@ -28,7 +28,7 @@ async function channelAdd(sageMessage: SageMessage): Promise<void> {
 
 	// Grab channels from mentions, filter out those in active games
 	let channelDids: Discord.Snowflake[] = sageMessage.message.mentions.channels.map(channel => channel.id);
-	channelDids = await utils.ArrayUtils.Async.filter(channelDids, async channelDid => !(await server.findActiveGameByChannelDid(channelDid)));
+	channelDids = await utils.ArrayUtils.Collection.filterAsync(channelDids, async channelDid => !(await server.findActiveGameByChannelDid(channelDid)));
 	if (!channelDids.length) {
 		return sageMessage.reactFailure();
 	}
@@ -180,7 +180,7 @@ export async function channelDetails(sageMessage: SageMessage, channel?: IChanne
 //#region list
 
 async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: IChannel[]): Promise<Discord.GuildChannel[]> {
-	const guildChannels = await utils.ArrayUtils.Async.map(channels, async channel => sageMessage.discord.fetchChannel(channel.did));
+	const guildChannels = await utils.ArrayUtils.Collection.mapAsync(channels, async channel => sageMessage.discord.fetchChannel(channel.did));
 	const existing = guildChannels.filter(utils.ArrayUtils.Filters.exists) as Discord.GuildChannel[];
 
 	const filter = sageMessage.args.join(" ").trim();

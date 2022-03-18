@@ -19,7 +19,7 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminSage) {
 		return sageMessage.reactBlock();
 	}
-	let users: TAdminUser[] = <TAdminUser[]>await utils.ArrayUtils.Async.map(sageMessage.server.admins, async admin => {
+	let users: TAdminUser[] = <TAdminUser[]>await utils.ArrayUtils.Collection.mapAsync(sageMessage.server.admins, async admin => {
 		return {
 			discordUser: await sageMessage.discord.fetchUser(admin.did),
 			...admin
@@ -35,7 +35,7 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 		const renderableContent = createAdminRenderableContent(sageMessage.server);
 		renderableContent.setTitle(`<b>admin-list</b>`);
 		if (users.length) {
-			await utils.ArrayUtils.Async.forEach(users, async user => renderUser(renderableContent, user));
+			await utils.ArrayUtils.Collection.forEachAsync(users, async user => renderUser(renderableContent, user));
 		} else {
 			renderableContent.append(`<blockquote>No Admins Found!</blockquote>`);
 		}

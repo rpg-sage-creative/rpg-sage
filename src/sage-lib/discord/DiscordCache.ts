@@ -260,7 +260,7 @@ export default class DiscordCache {
 		if (!filter) {
 			return array;
 		}
-		return utils.ArrayUtils.Async.filter(array, filter);
+		return utils.ArrayUtils.Collection.filterAsync(array, filter);
 	}
 
 	public static fromSageMessage(sageMessage: SageMessage): DiscordCache {

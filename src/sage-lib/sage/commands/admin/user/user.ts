@@ -29,7 +29,7 @@ async function userList(sageMessage: SageMessage): Promise<void> {
 		const filter = sageMessage.args.join(" ");
 		if (filter && users.length) {
 			const lower = filter.toLowerCase();
-			users = await utils.ArrayUtils.Async.filter(users, async user => {
+			users = await utils.ArrayUtils.Collection.filterAsync(users, async user => {
 				const discordUser = await sageMessage.discord.fetchUser(user.did);
 				return discordUser?.username?.toLowerCase().includes(lower) ?? false;
 			});
@@ -38,7 +38,7 @@ async function userList(sageMessage: SageMessage): Promise<void> {
 		const renderableContent = createAdminRenderableContent(sageMessage.bot);
 		renderableContent.setTitle(`<b>user-list</b>`);
 		if (users.length) {
-			await utils.ArrayUtils.Async.forEach(users, async user => renderUser(renderableContent, user, await sageMessage.discord.fetchUser(user.did)));
+			await utils.ArrayUtils.Collection.forEachAsync(users, async user => renderUser(renderableContent, user, await sageMessage.discord.fetchUser(user.did)));
 		} else {
 			renderableContent.append(`<blockquote>No Users Found!</blockquote>`);
 		}

@@ -80,7 +80,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const roles = <TRole[]>await utils.ArrayUtils.Async.map(server.roles, async role => {
+	const roles = <TRole[]>await utils.ArrayUtils.Collection.mapAsync(server.roles, async role => {
 		return {
 			role: role,
 			discordRole: await sageMessage.discord.fetchGuildRole(role.did)
