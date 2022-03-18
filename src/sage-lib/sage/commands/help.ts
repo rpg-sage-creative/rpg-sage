@@ -325,7 +325,7 @@ export function helpCommand(): TSlashCommand {
 				// Wealth
 				{ name:"Wealth", value:"wealth", description:"Coin Counter, Income Earned, Starting Income" }
 			] }
-		],
+		]
 	};
 }
 
