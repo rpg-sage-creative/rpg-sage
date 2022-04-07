@@ -8,6 +8,11 @@ import type { TChannel, TChannelResolvable, TGuildResolvable } from "./types";
 
 //#region Helpers
 
+function isDiscordApiErrorMissingPermissionsFetchWebhook(reason: any): boolean {
+	const stringValue = Object.prototype.toString.call(reason);
+	return stringValue.includes("DiscordAPIError: Missing Permissions")
+		&& stringValue.includes("TextChannel.fetchWebhooks");
+}
 function isDiscordApiError(reason: any): boolean {
 	return reason?.name === "DiscordAPIError";
 }
@@ -18,8 +23,12 @@ function isUnknownMember(reason: any): boolean {
 	return reason?.message === "Unknown Member";
 }
 function warnUnknownElseErrorReturnNull(reason: any): null {
-	const logger = isDiscordApiError(reason) && (isUnknownMember(reason) || isUnknownGuild(reason)) ? console.warn : console.error;
-	logger(reason);
+	if (isDiscordApiErrorMissingPermissionsFetchWebhook(reason)) {
+		console.warn(`DiscordAPIError: Missing Permissions (TextChannel.fetchWebhooks)`);
+	}else {
+		const logger = isDiscordApiError(reason) && (isUnknownMember(reason) || isUnknownGuild(reason)) ? console.warn : console.error;
+		logger(reason);
+	}
 	return null;
 }
 
@@ -176,7 +185,7 @@ export default class DiscordCache {
 
 		const key = createWebhookKey(channel, name);
 		if (!this.webhookMap.has(key)) {
-			const webhooksCollection = await channel.fetchWebhooks().catch(utils.ConsoleUtils.Catchers.errorReturnNull),
+			const webhooksCollection = await channel.fetchWebhooks().catch(warnUnknownElseErrorReturnNull),
 				webhook = webhooksCollection?.find(w => w.name === name);
 			this.webhookMap.set(key, webhook ?? null);
 		}
