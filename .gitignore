@@ -1,17 +1,16 @@
-data/pf2e/abc-data.json
-data/pf2e/all-lores.csv
-data/pf2e/schema.json
-data/pf2e/dist/
-data/pf2e/pf2-tools/
 dist/
 node_modules/
 types/
 **/.DS_Store
-abc-data.json
 all-lores.csv
-pf2-tools.json
+localstack/
 
 # ignore scripts (to ignore the root level links)
 *.sh
 # negate ignore scripts folder scripts
 !scripts/*.sh
+
+# ignore data folder
+data/
+# negate ignoring src subfolders in data folder
+!data/**/src/
