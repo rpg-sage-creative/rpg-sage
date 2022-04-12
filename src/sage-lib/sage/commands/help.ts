@@ -268,7 +268,7 @@ async function renderHelpHandler(sageMessage: SageMessage): Promise<void> {
 //#region help slash commands
 
 function helpSlashTester(sageInteraction: SageInteraction): boolean {
-	return sageInteraction.interaction.commandName === "help";
+	return sageInteraction.isCommand("help");
 }
 
 async function helpSlashHandler(sageInteraction: SageInteraction): Promise<void> {
@@ -279,7 +279,7 @@ async function helpSlashHandler(sageInteraction: SageInteraction): Promise<void>
 
 export function helpCommand(): TSlashCommand {
 	return {
-		name: "help",
+		name: "Help",
 		description: "Get basic Help for RPG Sage.",
 		options: [
 			{ name:"category", description:"What do you need help with?", choices:[

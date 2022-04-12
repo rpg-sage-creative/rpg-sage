@@ -60,7 +60,7 @@ function createWeatherRenderable({ climateType, elevationType, seasonType }: TWe
 //#region slash command
 
 function slashTester(sageInteraction: SageInteraction): boolean {
-	return sageInteraction.interaction.commandName === "weather";
+	return sageInteraction.isCommand("weather");
 }
 
 async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
@@ -74,7 +74,7 @@ async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
 
 export function weatherCommand(): TSlashCommand {
 	return {
-		name: "weather",
+		name: "Weather",
 		description: "Create random weather reports.",
 		options: [
 			{ name:"climate", description:"Cold, Temperate, Tropical", choices:["Cold", "Temperate", "Tropical"] },
