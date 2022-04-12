@@ -25,9 +25,13 @@ export default class SageInteraction
 	//#endregion
 
 	public isCommand(name: string): boolean {
-		return this.interaction.commandName === name;
+		return this.command === name
+			|| (this.command === "sage" && this.commandCategory === name);
 	}
 
+	public get command(): string {
+		return this.interaction.commandName;
+	}
 	public get commandCategories(): string[] {
 		return [
 			this.interaction.options.getSubcommandGroup(false),
