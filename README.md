@@ -1,4 +1,4 @@
-# sage-bot
+# rpg-sage
 RPG Sage - A TTRPG Play by Discord bot (primarily PF2e)
 
 This code represents the RPG Sage, a Discord Bot designed for Play by Discord usage.
