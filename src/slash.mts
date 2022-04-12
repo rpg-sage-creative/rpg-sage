@@ -128,13 +128,13 @@ function buildCommands(): SlashCommandBuilder[] {
 async function updateSlashCommands(bot: IBotCore): Promise<void> {
 	const rest = new REST({version: '9'}).setToken(bot.token);
 	try {
-		console.log('Started refreshing application (/) commands.');
+		console.log(`Started refreshing application (/) commands for: ${botCodeName}`);
 
 		await rest.put(Routes.applicationCommands(bot.did), {
 			body: buildCommands()
 		});
 
-		console.log('Successfully reloaded application (/) commands.');
+		console.log(`Successfully reloaded application (/) commands for: ${botCodeName}.`);
 	} catch (error) {
 		console.error(Object.keys(error as any));
 	}
