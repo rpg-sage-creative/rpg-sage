@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "@discordjs/builders";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
+import { calCommands } from "./sage-lib/sage/commands/cal";
 import { helpCommand } from "./sage-lib/sage/commands/help";
 import { weatherCommand } from "./sage-lib/sage/commands/weather";
 import type { IBotCore } from "./sage-lib/sage/model/Bot";
@@ -105,6 +106,7 @@ function buildCommand(raw: TSlashCommand): SlashCommandBuilder {
 function collectCommands(): TSlashCommand[] {
 	const commands = [] as TSlashCommand[];
 	commands.push(helpCommand());
+	commands.push(...calCommands());
 	commands.push(weatherCommand());
 	return commands;
 }
