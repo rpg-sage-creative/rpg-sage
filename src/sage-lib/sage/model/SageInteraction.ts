@@ -25,8 +25,11 @@ export default class SageInteraction
 	//#endregion
 
 	public isCommand(name: string): boolean {
-		return this.command === name
-			|| (this.command === "sage" && this.commandCategory === name);
+		const lower = name.toLowerCase();
+		const thisCommandLower = this.command.toLowerCase();
+		const thisCategoryLower = this.commandCategory?.toLowerCase();
+		return thisCommandLower === lower
+			|| (thisCommandLower === "sage" && thisCategoryLower === lower);
 	}
 
 	public get command(): string {
