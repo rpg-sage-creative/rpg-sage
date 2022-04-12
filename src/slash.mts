@@ -13,7 +13,10 @@ type TBot = "dev" | "beta" | "stable";
 
 const args = process.argv.slice(2),
 	botCodeName = ["dev","beta","stable"].find(s => args.includes(s)) as TBot ?? "dev",
-	isUpdate = args.includes("update");
+	isUpdate = args.includes("update"),
+	isWipe = args.includes("wipe");
+
+let characterCount = 0;
 
 const botJson = utils.FsUtils.listFilesSync("./data/sage/bots")
 	.map(file => utils.FsUtils.readJsonFileSync<IBotCore>(`./data/sage/bots/${file}`))
@@ -23,11 +26,13 @@ if (!botJson) {
 }else {
 	if (isUpdate) {
 		updateSlashCommands(botJson);
+	}else if (isWipe) {
+		wipeSlashCommands(botJson);
 	}else {
 		try {
 			const built = buildCommands();
-			// console.log(built);
-			console.log(utils.JsonUtils.formattedStringify(built));
+			utils.FsUtils.writeFileSync(`../data/slash/${botCodeName}.json`, built, true, true);
+			console.log(`Slash Commands built for ${botCodeName}: ${built.length} commands; ${characterCount} characters`);
 		}catch(ex) {
 			console.error(ex);
 		}
@@ -57,6 +62,7 @@ function setName<T extends TBuilderOrOption>(builder: T, hasName: TNameDescripti
 	try {
 		builder.setName(isRootOrSubBuilder(builder) ? hasName.name.toLowerCase() : hasName.name);
 		builder.setDescription(hasName.description ?? builder.name);
+		characterCount += builder.name.length + builder.description.length;
 	}catch(ex) {
 		console.error(`${hasName.name}: ${hasName.description}`);
 	}
@@ -69,7 +75,9 @@ function addOptions<T extends TBuilderOrSub>(builder: T, options?: TSlashCommand
 		builder.addStringOption(opt => {
 			setName(opt, option);
 			option.choices?.forEach(choice => {
-				opt.addChoice(...toChoice(choice));
+				const [name, value] = toChoice(choice);
+				characterCount += name.length + value.length;
+				opt.addChoice(name, value);
 			});
 			return opt;
 		})
@@ -135,6 +143,20 @@ async function updateSlashCommands(bot: IBotCore): Promise<void> {
 		});
 
 		console.log(`Successfully reloaded application (/) commands for: ${botCodeName}.`);
+	} catch (error) {
+		console.error(Object.keys(error as any));
+	}
+}
+async function wipeSlashCommands(bot: IBotCore): Promise<void> {
+	const rest = new REST({version: '9'}).setToken(bot.token);
+	try {
+		console.log(`Started wiping application (/) commands for: ${botCodeName}`);
+
+		await rest.put(Routes.applicationCommands(bot.did), {
+			body: []
+		});
+
+		console.log(`Successfully wiped application (/) commands for: ${botCodeName}.`);
 	} catch (error) {
 		console.error(Object.keys(error as any));
 	}
