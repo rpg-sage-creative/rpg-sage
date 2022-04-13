@@ -5,7 +5,6 @@ import type { IBotCore } from "./sage-lib/sage/model/Bot";
 import utils, { Optional } from "./sage-utils";
 import { registerSlashCommands } from "./sage-lib/sage/commands";
 import type { TNameDescription, TSlashCommand, TSlashCommandChoice, TSlashCommandOption } from "./types";
-import type { TGameType } from "./sage-dice";
 
 type TBot = "dev" | "beta" | "stable";
 
@@ -23,6 +22,8 @@ const botJson = utils.FsUtils.listFilesSync("./data/sage/bots")
 //#region Register Slash Commands
 
 const allSlashCommands = [] as TSlashCommand[];
+
+type TGameType = "PF1E" | "PF2E" | "SF" | "X-Finder";
 
 /** Allows a SlashCommand to be registered so that it can be built */
 export function registerSlashCommand(...slashCommands: TSlashCommand[]): void;
@@ -90,9 +91,11 @@ function isValidNumber<T extends number>(value: Optional<T>): value is T {
 }
 function setMinMaxValues<T extends SlashCommandNumberOption>(opt: T, option: TSlashCommandOption): T {
 	if (isValidNumber(option.minValue)) {
+		characterCount += String(option.minValue).length;
 		opt.setMinValue(option.minValue);
 	}
 	if (isValidNumber(option.maxValue)) {
+		characterCount += String(option.maxValue).length;
 		opt.setMaxValue(option.maxValue);
 	}
 	return opt;

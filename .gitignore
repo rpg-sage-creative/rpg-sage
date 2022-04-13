@@ -11,6 +11,7 @@ localstack/
 !scripts/*.sh
 
 # ignore data folder
-data/
-# negate ignoring src subfolders in data folder
-!data/**/src/
+data/pf2e/aon/
+data/pf2e/dist/
+# data/pf2e/src/
+data/slash/
