@@ -1,11 +1,11 @@
-import type * as Discord from "discord.js";
+import * as Discord from "discord.js";
 import utils, { Awaitable, Optional } from "../../sage-utils";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageMessage from "../sage/model/SageMessage";
 import type SageReaction from "../sage/model/SageReaction";
 import { NilSnowflake } from "./consts";
 import DiscordId from "./DiscordId";
-import { resolveToTexts } from "./embeds";
+import { resolveToEmbeds, resolveToTexts } from "./embeds";
 import { registerReactionListener } from "./handlers";
 import type { TCommand, TRenderableContentResolvable } from "./types";
 
@@ -111,7 +111,28 @@ function clearHandler(promptMessage: Discord.Message | Discord.PartialMessage, t
 	});
 }
 
+function messageComponentYesNo(sageMessage: SageMessage, resolvable: TRenderableContentResolvable): Promise<boolean | null> {
+	const noButton = new Discord.MessageButton();
+	noButton.setCustomId("no-button");
+	noButton.setLabel("No");
+	noButton.setStyle("SECONDARY");
+
+	const yesButton = new Discord.MessageButton();
+	yesButton.setCustomId("yes-button");
+	yesButton.setLabel("Yes");
+	yesButton.setStyle("SUCCESS");
+
+	const buttonRow = new Discord.MessageActionRow();
+	buttonRow.setComponents(yesButton, noButton);
+
+	const embeds = resolveToEmbeds(sageMessage.caches, resolvable);
+	const components = [buttonRow];
+	sageMessage.message.channel.send({ embeds, components });
+	return Promise.resolve(null);
+}
+
 export async function discordPromptYesNo(sageMessage: SageMessage, resolvable: TRenderableContentResolvable): Promise<boolean | null> {
+	await messageComponentYesNo(sageMessage, resolvable);
 	const yes = sageMessage.caches.emojify("[yes]");
 	const no = sageMessage.caches.emojify("[no]");
 
