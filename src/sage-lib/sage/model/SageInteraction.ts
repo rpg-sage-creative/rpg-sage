@@ -48,6 +48,12 @@ export default class SageInteraction
 		return this.commandCategories[1];
 	}
 
+	/** Gets the named option and returns true if "yes" or "true", false otherwise */
+	public getBoolean(name: string): boolean {
+		const stringValue = this.getString(name);
+		return stringValue === "yes" || stringValue === "true";
+	}
+
 	/** Gets the named option as a string or null */
 	public getString(name: string): string | null;
 	/** Gets the named option as a string */
@@ -56,11 +62,12 @@ export default class SageInteraction
 		return this.interaction.options.getString(name, required);
 	}
 
-	/** Returns the message */
+	/** Returns the interaction */
 	public get interaction(): DInteraction {
 		return this.core.interaction;
 	}
 
+	/** Returns the user */
 	public get user(): DUser {
 		return this.core.interaction.user;
 	}
@@ -69,16 +76,17 @@ export default class SageInteraction
 
 	private deferred = false;
 
-	public async defer(ephemeral?: boolean): Promise<void> {
+	/** Defers the interaction so that a reply can be sent later. */
+	public async defer(ephemeral: boolean): Promise<void> {
 		this.deferred = true;
 		return this.interaction.deferReply({ ephemeral:ephemeral ?? true });
 	}
 
-	/** Assumes ephemeral unless given a false value. */
-	public async reply(renderable: TRenderableContentResolvable, ephemeral?: boolean): Promise<void> {
+	/** Replies to the given interaction. */
+	public async reply(renderable: TRenderableContentResolvable, ephemeral: boolean): Promise<void> {
 		const embeds = resolveToEmbeds(this.caches, renderable);
 		if (this.deferred) {
-			this.interaction.editReply({ embeds:embeds });
+			return this.interaction.editReply({ embeds:embeds }) as Promise<any>;
 		}
 		return this.interaction.reply({ embeds:embeds, ephemeral:ephemeral ?? true });
 	}
