@@ -1,4 +1,5 @@
 import type * as Discord from "discord.js";
+import type { TGameType } from "../../../sage-dice";
 import utils, { isDefined } from "../../../sage-utils";
 import { DInteraction, DiscordKey, DUser, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
@@ -26,12 +27,28 @@ export default class SageInteraction
 
 	//#endregion
 
-	public isCommand(name: string): boolean {
-		const lower = name.toLowerCase();
-		const thisCommandLower = this.command.toLowerCase();
-		const thisCategoryLower = this.commandCategory?.toLowerCase();
-		return thisCommandLower === lower
-			|| (thisCommandLower === "sage" && thisCategoryLower === lower);
+	//#region command / category / sub
+
+	public isCommand(command: string): boolean;
+	public isCommand(gameType: TGameType, command: string): boolean;
+	public isCommand(...args: string[]): boolean {
+		const command = args.pop()!;
+		const commandLower = command.toLowerCase();
+
+		const game = args[0] as TGameType;
+		const gameLower = game?.toLowerCase();
+
+		const commandValues = [this.command].concat(this.commandCategories).map(s => s.toLowerCase());
+		if (commandValues[0] === "sage") {
+			commandValues.shift();
+		}
+
+		if (game) {
+			return commandValues[0] === gameLower
+				&& commandValues[1] === commandLower;
+		}
+
+		return commandValues[0] === commandLower;
 	}
 
 	public get command(): string {
@@ -50,12 +67,30 @@ export default class SageInteraction
 		return this.commandCategories[1];
 	}
 
+	//#endregion
+
 	/** Gets the named option as a boolean or null */
 	public getBoolean(name: string): boolean | null;
 	/** Gets the named option as a boolean */
 	public getBoolean(name: string, required: true): boolean;
 	public getBoolean(name: string, required = false): boolean | null {
 		return this.interaction.options.getBoolean(name, required);
+	}
+	/** Returns true if the argument was given a value. */
+	public hasBoolean(name: string): boolean {
+		return this.interaction.options.getBoolean(name) !== null;
+	}
+
+	/** Gets the named option as a number or null */
+	public getNumber(name: string): number | null;
+	/** Gets the named option as a number */
+	public getNumber(name: string, required: true): number;
+	public getNumber(name: string, required = false): number | null {
+		return this.interaction.options.getNumber(name, required);
+	}
+	/** Returns true if the argument was given a value. */
+	public hasNumber(name: string): boolean {
+		return this.interaction.options.getNumber(name) !== null;
 	}
 
 	/** Gets the named option as a string or null */
@@ -64,6 +99,10 @@ export default class SageInteraction
 	public getString(name: string, required: true): string;
 	public getString(name: string, required = false): string | null {
 		return this.interaction.options.getString(name, required);
+	}
+	/** Returns true if the argument was given a value. */
+	public hasString(name: string): boolean {
+		return this.interaction.options.getString(name) !== null;
 	}
 
 	/** Returns the interaction */

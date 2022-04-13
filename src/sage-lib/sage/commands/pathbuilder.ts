@@ -155,11 +155,18 @@ async function doPathbuilder2eRefresh(sageReaction: SageReaction): Promise<void>
 //#region slash command
 //118142
 function slashTester(sageInteraction: SageInteraction): boolean {
-	return sageInteraction.isCommand("Pathbuilder2e");
+	return sageInteraction.isCommand("import");
 }
 
 async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
-	const pathbuilderId = +(sageInteraction.getString("id") ?? "");
+	if (sageInteraction.hasNumber("pathbuilder2e-id")) {
+		return slashHandlerPathbuilder2e(sageInteraction);
+	}
+	return sageInteraction.reply(`Sorry, unable to import your character at this time.`, true);
+}
+
+async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction): Promise<void> {
+	const pathbuilderId = sageInteraction.getNumber("pathbuilder2e-id", true);
 	await sageInteraction.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, true);
 
 	const pathbuilderChar = await PathbuilderCharacter.fetch(pathbuilderId, { });
@@ -182,14 +189,14 @@ async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
 	return sageInteraction.deleteReply();
 }
 
-function pathbuilder2eCommand(): TSlashCommand {
+function importCommand(): TSlashCommand {
 	return {
-		name: "Pathbuilder2e",
-		description: "Import a character from Pathbuilder 2e",
+		name: "Import",
+		description: "Import a character to Sage",
 		options: [
-			{ name:"id", description:"The 'Pathbuilder 2e JSON ID' when you Export JSON", isRequired:true },
-			{ name:"attach", description:"Attach the character as a Markdown formatted text document.", isBoolean:true },
-			{ name:"pin", description:"Pin this character in the channel.", isBoolean:true }
+			{ name:"pathbuilder2e-id", description:"Import from Pathbuilder 2e using 'Export to JSON'", isNumber:true },
+			{ name:"attach", description:"Attach as a Markdown formatted .txt", isBoolean:true },
+			{ name:"pin", description:"Pin character", isBoolean:true }
 		]
 	};
 }
@@ -204,5 +211,5 @@ export function registerCommandHandlers(): void {
 }
 
 export function registerSlashCommands(): void {
-	registerSlashCommand(pathbuilder2eCommand());
+	registerSlashCommand(importCommand());
 }

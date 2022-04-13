@@ -1,3 +1,5 @@
+import type { TGameType } from "./sage-dice";
+
 export type TSlashCommandChoice = string | [string, string] | { name:string; description?:string; value?:string; };
 export type TNameDescription = { name:string; description:string; };
 export type TSlashCommandOption = TNameDescription & {
@@ -14,4 +16,11 @@ export type TSlashCommandOption = TNameDescription & {
 	/** Value for setMaxValue if number type */
 	maxValue?: number;
 };
-export type TSlashCommand = TNameDescription & { children?:TSlashCommand[]; options?:TSlashCommandOption[]; };
+export type TSlashCommand = TNameDescription & {
+	/** Subcommands for this command group */
+	children?: TSlashCommand[];
+	/** Options for this command */
+	options?: TSlashCommandOption[];
+	/** Game engine for this command */
+	game?: TGameType;
+};

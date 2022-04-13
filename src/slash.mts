@@ -5,13 +5,14 @@ import type { IBotCore } from "./sage-lib/sage/model/Bot";
 import utils, { Optional } from "./sage-utils";
 import { registerSlashCommands } from "./sage-lib/sage/commands";
 import type { TNameDescription, TSlashCommand, TSlashCommandChoice, TSlashCommandOption } from "./types";
+import type { TGameType } from "./sage-dice";
 
 type TBot = "dev" | "beta" | "stable";
 
-const args = process.argv.slice(2),
-	botCodeName = ["dev","beta","stable"].find(s => args.includes(s)) as TBot ?? "dev",
-	isUpdate = args.includes("update"),
-	isWipe = args.includes("wipe");
+const nodeArgs = process.argv.slice(2),
+	botCodeName = ["dev","beta","stable"].find(s => nodeArgs.includes(s)) as TBot ?? "dev",
+	isUpdate = nodeArgs.includes("update"),
+	isWipe = nodeArgs.includes("wipe");
 
 let characterCount = 0;
 
@@ -24,8 +25,21 @@ const botJson = utils.FsUtils.listFilesSync("./data/sage/bots")
 const allSlashCommands = [] as TSlashCommand[];
 
 /** Allows a SlashCommand to be registered so that it can be built */
-export function registerSlashCommand(...slashCommands: TSlashCommand[]): void {
-	allSlashCommands.push(...slashCommands);
+export function registerSlashCommand(...slashCommands: TSlashCommand[]): void;
+export function registerSlashCommand(gameType: TGameType, ...slashCommands: TSlashCommand[]): void;
+export function registerSlashCommand(...args: (TGameType | TSlashCommand)[]): void {
+	const gameType = args.find(arg => typeof(arg) === "string");
+	const slashCommands = args.filter(arg => typeof(arg) !== "string") as TSlashCommand[];
+	if (gameType) {
+		let gameGroup = allSlashCommands.find(cmd => cmd.game === gameType);
+		if (!gameGroup) {
+			gameGroup = { name:gameType as string, description:`Commands specific to ${gameType}`, children:[] };
+			allSlashCommands.push(gameGroup);
+		}
+		gameGroup.children!.push(...slashCommands);
+	}else {
+		allSlashCommands.push(...slashCommands);
+	}
 }
 
 // registers SlashCommands
@@ -47,15 +61,18 @@ function toChoice(choice: TSlashCommandChoice): [string, string] {
 }
 
 /** shortcut for setting name/desc on all objects, also cleans the name for the API */
-type TBuilderOrSub = SlashCommandBuilder | SlashCommandSubcommandBuilder;
+type TBuilder = SlashCommandBuilder | SlashCommandSubcommandBuilder | SlashCommandSubcommandGroupBuilder;
+type TBuilderCommand = SlashCommandBuilder | SlashCommandSubcommandBuilder;
 type TBuilderOption = SlashCommandStringOption | SlashCommandBooleanOption | SlashCommandNumberOption;
-type TBuilderOrOption = TBuilderOrSub | SlashCommandSubcommandGroupBuilder | TBuilderOption;
-function isRootOrSubBuilder<T extends TBuilderOrOption>(builder: T): boolean {
-	return builder instanceof SlashCommandBuilder || builder instanceof SlashCommandSubcommandBuilder;
+type TBuilderOrOption = TBuilder | TBuilderOption;
+function isBuilder<T extends TBuilderOrOption>(builder: T): boolean {
+	return builder instanceof SlashCommandBuilder
+		|| builder instanceof SlashCommandSubcommandBuilder
+		|| builder instanceof SlashCommandSubcommandGroupBuilder;
 }
 function setName<T extends TBuilderOrOption>(builder: T, hasName: TNameDescription): T {
 	try {
-		builder.setName(isRootOrSubBuilder(builder) ? hasName.name.toLowerCase() : hasName.name);
+		builder.setName(isBuilder(builder) ? hasName.name.toLowerCase() : hasName.name);
 		builder.setDescription(hasName.description ?? builder.name);
 		characterCount += builder.name.length + builder.description.length;
 	}catch(ex) {
@@ -82,7 +99,7 @@ function setMinMaxValues<T extends SlashCommandNumberOption>(opt: T, option: TSl
 }
 
 /** shortcut for setting options all things that allow options */
-function addOptions<T extends TBuilderOrSub>(builder: T, options?: TSlashCommandOption[]): T {
+function addOptions<T extends TBuilderCommand>(builder: T, options?: TSlashCommandOption[]): T {
 	options?.forEach(option => {
 		if (option.isBoolean) {
 			builder.addBooleanOption(opt => setNameAndRequired(opt, option));
