@@ -1,5 +1,6 @@
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
+import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import ArgsManager from "../../discord/ArgsManager";
 import { resolveToEmbeds } from "../../discord/embeds";
@@ -236,7 +237,7 @@ async function dmSlashHandler(sageInteraction: SageInteraction): Promise<void> {
 		return sageInteraction.reply(`Sorry, there was a problem!`, true);
 	}
 }
-export function dmCommand(): TSlashCommand {
+function dmCommand(): TSlashCommand {
 	return {
 		"name": "DM",
 		"description": "Establish direct message channel with RPG Sage."
@@ -245,7 +246,7 @@ export function dmCommand(): TSlashCommand {
 
 //#endregion
 
-export default function register(): void {
+export function registerCommandHandlers(): void {
 	registerCommandRegex(/^\s*list\s*(weapons|armou?r|spells)\s*by\s*(trait)?\s*(\w+)$/i, objectsBy);
 	registerCommandHelp("Lists", `list weapons by trait TRAIT`);
 	registerCommandHelp("Lists", `list armor by trait TRAIT`);
@@ -301,4 +302,8 @@ export default function register(): void {
 	});
 
 	registerInteractionListener(dmSlashTester, dmSlashHandler);
+}
+
+export function registerSlashCommands(): void {
+	registerSlashCommand(dmCommand());
 }

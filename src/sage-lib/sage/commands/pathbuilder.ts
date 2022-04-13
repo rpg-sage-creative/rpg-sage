@@ -2,8 +2,8 @@ import * as Discord from "discord.js";
 import { PathbuilderCharacter } from "../../../sage-pf2e";
 import type { Optional } from "../../../sage-utils";
 import utils from "../../../sage-utils";
-import type { TCommand } from "../../discord";
-import { isAuthorBotOrWebhook, registerReactionListener } from "../../discord/handlers";
+import type { DUser, TChannel, TCommand } from "../../discord";
+import { isAuthorBotOrWebhook, registerInteractionListener, registerReactionListener } from "../../discord/handlers";
 import { SageDialogWebhookName } from "../../discord/messages";
 import { discordPromptYesNo } from "../../discord/prompts";
 import ActiveBot from "../model/ActiveBot";
@@ -12,6 +12,10 @@ import type SageReaction from "../model/SageReaction";
 import { registerAdminCommand } from "./cmd";
 import { resolveToEmbeds } from "../../discord/embeds";
 import type { TPathbuilderCharacterCustomFlags } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
+import type SageInteraction from "../model/SageInteraction";
+import type { TSlashCommand } from "../../../types";
+import type SageCache from "../model/SageCache";
+import { registerSlashCommand } from "../../../slash.mjs";
 
 /** THIS IS COPY/PASTED; PROPERLY REUSE IT */
 function updateEmbed(originalEmbed: Discord.MessageEmbed, title: Optional<string>, imageUrl: Optional<string>, content: string): Discord.MessageEmbed {
@@ -29,7 +33,7 @@ async function pathbuilder2e(sageMessage: SageMessage): Promise<void> {
 	}
 
 	// const showAction = sageMessage.args.find(arg => arg.toLowerCase() === "show");
-	const pinAction = sageMessage.args.find(arg => arg.toLowerCase() === "pin");
+	const pinAction = !!sageMessage.args.find(arg => arg.toLowerCase() === "pin");
 
 	const idArg = sageMessage.args.find(arg => arg.match(/^id=\d+$/i));
 	if (!idArg) {
@@ -49,14 +53,7 @@ async function pathbuilder2e(sageMessage: SageMessage): Promise<void> {
 	}
 
 	if (sageMessage.args.includes("attach")) {
-		const raw = resolveToEmbeds(sageMessage.caches, pathbuilderChar.toHtml()).map(e=>e.description).join("");
-		const buffer = Buffer.from(raw, "utf-8");
-		const attachment = new Discord.MessageAttachment(buffer, `pathbuilder2e-${pathbuilderId}.txt`);
-		await sageMessage.message.channel.send({
-			content: `Attaching Pathbuilder2e Character: ${pathbuilderChar.name} (${pathbuilderId})`,
-			files:[attachment]
-		});
-		return Promise.resolve();
+		return attachCharacter(sageMessage.caches, sageMessage.message.channel as TChannel, pathbuilderId, pathbuilderChar, pinAction);
 	}
 
 	const messages = await sageMessage.send(`*Pathbuilder2e:${pathbuilderId}*\n` + pathbuilderChar.toHtml());
@@ -91,6 +88,22 @@ async function pathbuilder2e(sageMessage: SageMessage): Promise<void> {
 		}
 	}
 }
+
+async function attachCharacter(sageCache: SageCache, channel: TChannel | DUser, pathbuilderId: number, pathbuilderChar: PathbuilderCharacter, pin: boolean): Promise<void> {
+	const raw = resolveToEmbeds(sageCache, pathbuilderChar.toHtml()).map(e => e.description).join("");
+	const buffer = Buffer.from(raw, "utf-8");
+	const attachment = new Discord.MessageAttachment(buffer, `pathbuilder2e-${pathbuilderId}.txt`);
+	const message = await channel.send({
+		content: `Attaching Pathbuilder2e Character: ${pathbuilderChar.name} (${pathbuilderId})`,
+		files:[attachment]
+	}).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+	if (pin && message?.pinnable) {
+		await message.pin();
+	}
+	return Promise.resolve();
+}
+
+//#region refresh
 
 async function isPathbuilder2eRefresh(sageReaction: SageReaction): Promise<TCommand | null> {
 	const isBot = await isAuthorBotOrWebhook(sageReaction);
@@ -137,7 +150,59 @@ async function doPathbuilder2eRefresh(sageReaction: SageReaction): Promise<void>
 
 }
 
-export default function register(): void {
+//#endregion
+
+//#region slash command
+//118142
+function slashTester(sageInteraction: SageInteraction): boolean {
+	return sageInteraction.isCommand("Pathbuilder2e");
+}
+
+async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
+	const pathbuilderId = +(sageInteraction.getString("id") ?? "");
+	await sageInteraction.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, true);
+
+	const pathbuilderChar = await PathbuilderCharacter.fetch(pathbuilderId, { });
+	if (!pathbuilderChar) {
+		return sageInteraction.reply(`Failed to fetch Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}!`, true);
+	}
+
+	const channel = sageInteraction.interaction.channel as TChannel ?? sageInteraction.user;
+
+	const pin = sageInteraction.getBoolean("pin") ?? false;
+	const attach = sageInteraction.getBoolean("attach") ?? false;
+	if (attach) {
+		await attachCharacter(sageInteraction.caches, channel, pathbuilderId, pathbuilderChar, pin);
+	}else {
+		const messages = await sageInteraction.send(`*Pathbuilder2e:${pathbuilderId}*\n` + pathbuilderChar.toHtml());
+		if (pin && messages[0]?.pinnable) {
+			await messages[0].pin();
+		}
+	}
+	return sageInteraction.deleteReply();
+}
+
+function pathbuilder2eCommand(): TSlashCommand {
+	return {
+		name: "Pathbuilder2e",
+		description: "Import a character from Pathbuilder 2e",
+		options: [
+			{ name:"id", description:"The 'Pathbuilder 2e JSON ID' when you Export JSON", isRequired:true },
+			{ name:"attach", description:"Attach the character as a Markdown formatted text document.", isBoolean:true },
+			{ name:"pin", description:"Pin this character in the channel.", isBoolean:true }
+		]
+	};
+}
+
+
+//#endregion
+
+export function registerCommandHandlers(): void {
 	registerAdminCommand(pathbuilder2e, "pathbuilder2e");
-	registerReactionListener(isPathbuilder2eRefresh, doPathbuilder2eRefresh);
+	if (false) registerReactionListener(isPathbuilder2eRefresh, doPathbuilder2eRefresh);
+	registerInteractionListener(slashTester, slashHandler);
+}
+
+export function registerSlashCommands(): void {
+	registerSlashCommand(pathbuilder2eCommand());
 }

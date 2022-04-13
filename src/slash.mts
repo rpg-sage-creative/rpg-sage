@@ -1,12 +1,9 @@
-import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandNumberOption, SlashCommandBooleanOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "@discordjs/builders";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
-import { calCommands } from "./sage-lib/sage/commands/cal";
-import { dmCommand } from "./sage-lib/sage/commands/default";
-import { helpCommand } from "./sage-lib/sage/commands/help";
-import { weatherCommand } from "./sage-lib/sage/commands/weather";
 import type { IBotCore } from "./sage-lib/sage/model/Bot";
-import utils from "./sage-utils";
+import utils, { Optional } from "./sage-utils";
+import { registerSlashCommands } from "./sage-lib/sage/commands";
 import type { TNameDescription, TSlashCommand, TSlashCommandChoice, TSlashCommandOption } from "./types";
 
 type TBot = "dev" | "beta" | "stable";
@@ -21,23 +18,20 @@ let characterCount = 0;
 const botJson = utils.FsUtils.listFilesSync("./data/sage/bots")
 	.map(file => utils.FsUtils.readJsonFileSync<IBotCore>(`./data/sage/bots/${file}`))
 	.find(json => json?.codeName === botCodeName);
-if (!botJson) {
-	console.error(`Unable to find Bot: ${botCodeName}`);
-}else {
-	if (isUpdate) {
-		updateSlashCommands(botJson);
-	}else if (isWipe) {
-		wipeSlashCommands(botJson);
-	}else {
-		try {
-			const built = buildCommands();
-			utils.FsUtils.writeFileSync(`../data/slash/${botCodeName}.json`, built, true, true);
-			console.log(`Slash Commands built for ${botCodeName}: ${built.length} commands; ${characterCount} characters`);
-		}catch(ex) {
-			console.error(ex);
-		}
-	}
+
+//#region Register Slash Commands
+
+const allSlashCommands = [] as TSlashCommand[];
+
+/** Allows a SlashCommand to be registered so that it can be built */
+export function registerSlashCommand(...slashCommands: TSlashCommand[]): void {
+	allSlashCommands.push(...slashCommands);
 }
+
+// registers SlashCommands
+registerSlashCommands();
+
+//#endregion
 
 //#region command builders
 
@@ -54,7 +48,8 @@ function toChoice(choice: TSlashCommandChoice): [string, string] {
 
 /** shortcut for setting name/desc on all objects, also cleans the name for the API */
 type TBuilderOrSub = SlashCommandBuilder | SlashCommandSubcommandBuilder;
-type TBuilderOrOption = SlashCommandBuilder | SlashCommandSubcommandBuilder | SlashCommandSubcommandGroupBuilder | SlashCommandStringOption;
+type TBuilderOption = SlashCommandStringOption | SlashCommandBooleanOption | SlashCommandNumberOption;
+type TBuilderOrOption = TBuilderOrSub | SlashCommandSubcommandGroupBuilder | TBuilderOption;
 function isRootOrSubBuilder<T extends TBuilderOrOption>(builder: T): boolean {
 	return builder instanceof SlashCommandBuilder || builder instanceof SlashCommandSubcommandBuilder;
 }
@@ -68,19 +63,48 @@ function setName<T extends TBuilderOrOption>(builder: T, hasName: TNameDescripti
 	}
 	return builder;
 }
+function setNameAndRequired<T extends TBuilderOption>(opt: T, option: TSlashCommandOption): T {
+	setName(opt, option);
+	opt.setRequired(option.isRequired === true);
+	return opt;
+}
+function isValidNumber<T extends number>(value: Optional<T>): value is T {
+	return typeof(value) === "number" && !isNaN(value);
+}
+function setMinMaxValues<T extends SlashCommandNumberOption>(opt: T, option: TSlashCommandOption): T {
+	if (isValidNumber(option.minValue)) {
+		opt.setMinValue(option.minValue);
+	}
+	if (isValidNumber(option.maxValue)) {
+		opt.setMaxValue(option.maxValue);
+	}
+	return opt;
+}
 
 /** shortcut for setting options all things that allow options */
 function addOptions<T extends TBuilderOrSub>(builder: T, options?: TSlashCommandOption[]): T {
-	options?.forEach(option =>
-		builder.addStringOption(opt => {
-			setName(opt, option);
-			option.choices?.forEach(choice => {
-				const [name, value] = toChoice(choice);
-				characterCount += name.length + value.length;
-				opt.addChoice(name, value);
+	options?.forEach(option => {
+		if (option.isBoolean) {
+			builder.addBooleanOption(opt => setNameAndRequired(opt, option));
+		}else if (option.isNumber) {
+			builder.addNumberOption(opt => {
+				setNameAndRequired(opt, option);
+				setMinMaxValues(opt, option);
+				return opt;
 			});
-			return opt;
-		})
+		}else {
+			builder.addStringOption(opt => {
+				setNameAndRequired(opt, option);
+				option.choices?.forEach(choice => {
+					const [name, value] = toChoice(choice);
+					characterCount += name.length + value.length;
+					opt.addChoice(name, value);
+				});
+				return opt;
+			});
+		}
+		return builder;
+	}
 	);
 	return builder;
 }
@@ -112,20 +136,12 @@ function buildCommand(raw: TSlashCommand): SlashCommandBuilder {
 	return cmd;
 }
 
-function collectCommands(): TSlashCommand[] {
-	const commands = [] as TSlashCommand[];
-	commands.push(helpCommand());
-	commands.push(dmCommand());
-	commands.push(...calCommands());
-	commands.push(weatherCommand());
-	return commands;
-}
 function buildUnifiedCommand(): SlashCommandBuilder[] {
-	const command = { name:"Sage", description:"RPG Sage Commands", children:collectCommands() };
+	const command = { name:"Sage", description:"RPG Sage Commands", children:allSlashCommands };
 	return [buildCommand(command)];
 }
 function buildIndividualCommands(): SlashCommandBuilder[] {
-	return collectCommands().map(buildCommand);
+	return allSlashCommands.map(buildCommand);
 }
 function buildCommands(): SlashCommandBuilder[] {
 	return true ? buildUnifiedCommand() : buildIndividualCommands();
@@ -161,5 +177,25 @@ async function wipeSlashCommands(bot: IBotCore): Promise<void> {
 		console.error(Object.keys(error as any));
 	}
 }
+
+//#region EXECUTE THE LOGIC HERE: error out w/o bot, or run desired logic of: build, update, wipe
+if (!botJson) {
+	console.error(`Unable to find Bot: ${botCodeName}`);
+}else {
+	if (isUpdate) {
+		updateSlashCommands(botJson);
+	}else if (isWipe) {
+		wipeSlashCommands(botJson);
+	}else {
+		try {
+			const built = buildCommands();
+			utils.FsUtils.writeFileSync(`../data/slash/${botCodeName}.json`, built, true, true);
+			console.log(`Slash Commands built for ${botCodeName}: ${built.length} commands; ${characterCount} characters`);
+		}catch(ex) {
+			console.error(ex);
+		}
+	}
+}
+//#endregion
 
 // node --experimental-modules --es-module-specifier-resolution=node slash.mjs

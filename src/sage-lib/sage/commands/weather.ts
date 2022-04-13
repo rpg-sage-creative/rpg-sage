@@ -1,5 +1,6 @@
 import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType } from "../../../sage-pf2e";
 import utils, { Optional, SeasonType, TemperateSeasonType, TropicalSeasonType } from "../../../sage-utils";
+import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import { registerInteractionListener } from "../../discord/handlers";
 import type SageInteraction from "../model/SageInteraction";
@@ -72,7 +73,7 @@ async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
 	return sageInteraction.reply(renderable, false);
 }
 
-export function weatherCommand(): TSlashCommand {
+function weatherCommand(): TSlashCommand {
 	return {
 		name: "Weather",
 		description: "Create random weather reports.",
@@ -86,8 +87,12 @@ export function weatherCommand(): TSlashCommand {
 
 //#endregion
 
-export default function register(): void {
+export function registerCommandHandlers(): void {
 	registerCommandRegex(/^\s*weather(?:\s+(\w+))?(?:\s+(\w+))?(?:\s+(\w+))?/i, weatherRandom);
 	registerCommandHelp("Command", "Weather", `weather {climate} {elevation} {season}\n - Climate Options: Cold | Temperate | Tropical\n - Elevation Options: SeaLevel | Lowland | Highland\n - Season Options: Spring | Summer | Fall | Winter`);
 	registerInteractionListener(slashTester, slashHandler);
+}
+
+export function registerSlashCommands(): void {
+	registerSlashCommand(weatherCommand());
 }

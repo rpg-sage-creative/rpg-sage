@@ -1,5 +1,6 @@
 import type * as Discord from "discord.js";
 import utils, { Optional } from "../../../sage-utils";
+import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import type { TChannel, TCommandAndArgs } from "../../discord";
 import ArgsManager from "../../discord/ArgsManager";
@@ -277,7 +278,7 @@ async function helpSlashHandler(sageInteraction: SageInteraction): Promise<void>
 	return sageInteraction.reply(renderableContent, true);
 }
 
-export function helpCommand(): TSlashCommand {
+function helpCommand(): TSlashCommand {
 	return {
 		name: "Help",
 		description: "Get basic Help for RPG Sage.",
@@ -331,7 +332,11 @@ export function helpCommand(): TSlashCommand {
 
 //#endregion
 
-export default function register(): void {
+export function registerCommandHandlers(): void {
 	registerMessageListener(renderHelpTester, renderHelpHandler);
 	registerInteractionListener(helpSlashTester, helpSlashHandler);
+}
+
+export function registerSlashCommands(): void {
+	registerSlashCommand(helpCommand());
 }

@@ -1,6 +1,7 @@
 import { Days, Months, DaysPerMonth, GDate } from "../../../sage-pf2e";
 import type { Optional } from "../../../sage-utils";
 import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import { registerInteractionListener } from "../../discord/handlers";
 import type SageInteraction from "../model/SageInteraction";
@@ -91,7 +92,7 @@ function monthsCommand(): TSlashCommand {
 		description: "Months of the year for X-finder Games"
 	};
 }
-export function calCommands(): TSlashCommand[] {
+function calCommands(): TSlashCommand[] {
 	return [
 		dateCommand(),
 		daysCommand(),
@@ -101,7 +102,7 @@ export function calCommands(): TSlashCommand[] {
 
 //#endregion
 
-export default function register(): void {
+export function registerCommandHandlers(): void {
 	registerCommandRegex(/^\s*(?:date|today)\s*(\d{4}\D\d{2}\D\d{2})?\s*$/i, calDate);
 	registerCommandHelp("Command", "Golarion", "today");
 	registerCommandHelp("Command", "Golarion", "date YYYY-MM-DD");
@@ -113,4 +114,8 @@ export default function register(): void {
 	registerCommandHelp("Command", "Golarion", "months");
 
 	registerInteractionListener(slashTester, slashHandler);
+}
+
+export function registerSlashCommands(): void {
+	registerSlashCommand(...calCommands());
 }
