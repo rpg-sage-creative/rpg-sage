@@ -61,13 +61,13 @@ function slashTester(sageInteraction: SageInteraction): boolean {
 
 async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
 	if (sageInteraction.isCommand("months")) {
-		return sageInteraction.reply(_calMonths());
+		return sageInteraction.reply(_calMonths(), false);
 	}
 	if (sageInteraction.isCommand("days")) {
-		return sageInteraction.reply(_calDays());
+		return sageInteraction.reply(_calDays(), false);
 	}
 	const date = sageInteraction.getString("date");
-	return sageInteraction.reply(_calDate(date));
+	return sageInteraction.reply(_calDate(date), false);
 }
 
 function dateCommand(): TSlashCommand {
