@@ -60,7 +60,7 @@ function createWeatherRenderable({ climateType, elevationType, seasonType }: TWe
 //#region slash command
 
 function slashTester(sageInteraction: SageInteraction): boolean {
-	return sageInteraction.isCommand("weather");
+	return sageInteraction.isCommand("Weather");
 }
 
 async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
