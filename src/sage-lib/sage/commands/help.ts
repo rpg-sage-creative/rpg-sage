@@ -274,7 +274,7 @@ function helpSlashTester(sageInteraction: SageInteraction): boolean {
 async function helpSlashHandler(sageInteraction: SageInteraction): Promise<void> {
 	const categories = sageInteraction.getString("category")?.split(",") ?? [];
 	const renderableContent = await createHelpRenderable(sageInteraction.caches, categories);
-	return sageInteraction.reply(renderableContent);
+	return sageInteraction.reply(renderableContent, true);
 }
 
 export function helpCommand(): TSlashCommand {
