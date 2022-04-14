@@ -1,6 +1,8 @@
 import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "@discordjs/builders";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
+import { calCommands } from "./sage-lib/sage/commands/cal";
+import { dmCommand } from "./sage-lib/sage/commands/default";
 import { helpCommand } from "./sage-lib/sage/commands/help";
 import { weatherCommand } from "./sage-lib/sage/commands/weather";
 import type { IBotCore } from "./sage-lib/sage/model/Bot";
@@ -11,7 +13,10 @@ type TBot = "dev" | "beta" | "stable";
 
 const args = process.argv.slice(2),
 	botCodeName = ["dev","beta","stable"].find(s => args.includes(s)) as TBot ?? "dev",
-	isUpdate = args.includes("update");
+	isUpdate = args.includes("update"),
+	isWipe = args.includes("wipe");
+
+let characterCount = 0;
 
 const botJson = utils.FsUtils.listFilesSync("./data/sage/bots")
 	.map(file => utils.FsUtils.readJsonFileSync<IBotCore>(`./data/sage/bots/${file}`))
@@ -20,20 +25,18 @@ if (!botJson) {
 	console.error(`Unable to find Bot: ${botCodeName}`);
 }else {
 	if (isUpdate) {
-		updateSlashCommands(botJson!);
+		updateSlashCommands(botJson);
+	}else if (isWipe) {
+		wipeSlashCommands(botJson);
 	}else {
 		try {
 			const built = buildCommands();
-			// console.log(built);
-			console.log(utils.JsonUtils.formattedStringify(built));
+			utils.FsUtils.writeFileSync(`../data/slash/${botCodeName}.json`, built, true, true);
+			console.log(`Slash Commands built for ${botCodeName}: ${built.length} commands; ${characterCount} characters`);
 		}catch(ex) {
 			console.error(ex);
 		}
 	}
-}
-
-function clean(value: string): string {
-	return value?.replace(/\W/g, "-") ?? "WTF";
 }
 
 //#region command builders
@@ -41,32 +44,40 @@ function clean(value: string): string {
 /** Makes sure no matter how i give/set the choice it converts to what the API needs. */
 function toChoice(choice: TSlashCommandChoice): [string, string] {
 	if (Array.isArray(choice)) {
-		return [clean(choice[0]), clean(choice[1])];
+		return [choice[0], choice[1]];
 	}
 	if (typeof(choice) === "string") {
-		return [clean(choice), clean(choice)];
+		return [choice, choice];
 	}
-	return [clean(choice.name), clean(choice.value ?? choice.name)];
+	return [choice.name, choice.value ?? choice.name];
 }
 
 /** shortcut for setting name/desc on all objects, also cleans the name for the API */
-function setName<T extends SlashCommandBuilder | SlashCommandSubcommandBuilder | SlashCommandSubcommandGroupBuilder | SlashCommandStringOption>(builder: T, hasName: TNameDescription): T {
+type TBuilderOrSub = SlashCommandBuilder | SlashCommandSubcommandBuilder;
+type TBuilderOrOption = SlashCommandBuilder | SlashCommandSubcommandBuilder | SlashCommandSubcommandGroupBuilder | SlashCommandStringOption;
+function isRootOrSubBuilder<T extends TBuilderOrOption>(builder: T): boolean {
+	return builder instanceof SlashCommandBuilder || builder instanceof SlashCommandSubcommandBuilder;
+}
+function setName<T extends TBuilderOrOption>(builder: T, hasName: TNameDescription): T {
 	try {
-		builder.setName(clean(hasName.name));
-		builder.setDescription(clean(hasName.description) ?? builder.name);
+		builder.setName(isRootOrSubBuilder(builder) ? hasName.name.toLowerCase() : hasName.name);
+		builder.setDescription(hasName.description ?? builder.name);
+		characterCount += builder.name.length + builder.description.length;
 	}catch(ex) {
-		console.error(hasName, ex);
+		console.error(`${hasName.name}: ${hasName.description}`);
 	}
 	return builder;
 }
 
 /** shortcut for setting options all things that allow options */
-function addOptions<T extends SlashCommandBuilder | SlashCommandSubcommandBuilder>(builder: T, options?: TSlashCommandOption[]): T {
+function addOptions<T extends TBuilderOrSub>(builder: T, options?: TSlashCommandOption[]): T {
 	options?.forEach(option =>
 		builder.addStringOption(opt => {
 			setName(opt, option);
 			option.choices?.forEach(choice => {
-				opt.addChoice(...toChoice(choice));
+				const [name, value] = toChoice(choice);
+				characterCount += name.length + value.length;
+				opt.addChoice(name, value);
 			});
 			return opt;
 		})
@@ -101,37 +112,54 @@ function buildCommand(raw: TSlashCommand): SlashCommandBuilder {
 	return cmd;
 }
 
-function buildCommands(): SlashCommandBuilder[] {
-	const children = [] as TSlashCommand[];
-	if (false) children.push(helpCommand());
-	children.push(weatherCommand());
-	const command = { name:"Sage", description:"RPG Sage's Commands", children:children };
+function collectCommands(): TSlashCommand[] {
+	const commands = [] as TSlashCommand[];
+	commands.push(helpCommand());
+	commands.push(dmCommand());
+	commands.push(...calCommands());
+	commands.push(weatherCommand());
+	return commands;
+}
+function buildUnifiedCommand(): SlashCommandBuilder[] {
+	const command = { name:"Sage", description:"RPG Sage Commands", children:collectCommands() };
 	return [buildCommand(command)];
-	// const commands = [] as SlashCommandBuilder[];
-	// commands.push(buildCommand(helpCommand()));
-	// commands.push(buildCommand(weatherCommand()));
-	// return commands;
+}
+function buildIndividualCommands(): SlashCommandBuilder[] {
+	return collectCommands().map(buildCommand);
+}
+function buildCommands(): SlashCommandBuilder[] {
+	return true ? buildUnifiedCommand() : buildIndividualCommands();
 }
 
 //#endregion
 
 async function updateSlashCommands(bot: IBotCore): Promise<void> {
-	const commands = buildCommands();
-
 	const rest = new REST({version: '9'}).setToken(bot.token);
-
 	try {
-		console.log('Started refreshing application (/) commands.');
+		console.log(`Started refreshing application (/) commands for: ${botCodeName}`);
 
 		await rest.put(Routes.applicationCommands(bot.did), {
-			body: commands,
+			body: buildCommands()
 		});
 
-		console.log('Successfully reloaded application (/) commands.');
+		console.log(`Successfully reloaded application (/) commands for: ${botCodeName}.`);
 	} catch (error) {
-		console.error(error);
+		console.error(Object.keys(error as any));
 	}
+}
+async function wipeSlashCommands(bot: IBotCore): Promise<void> {
+	const rest = new REST({version: '9'}).setToken(bot.token);
+	try {
+		console.log(`Started wiping application (/) commands for: ${botCodeName}`);
 
+		await rest.put(Routes.applicationCommands(bot.did), {
+			body: []
+		});
+
+		console.log(`Successfully wiped application (/) commands for: ${botCodeName}.`);
+	} catch (error) {
+		console.error(Object.keys(error as any));
+	}
 }
 
 // node --experimental-modules --es-module-specifier-resolution=node slash.mjs

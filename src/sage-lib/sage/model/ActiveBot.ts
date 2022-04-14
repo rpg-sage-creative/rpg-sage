@@ -94,8 +94,9 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 
 	onInteractionCreate(interaction: Discord.Interaction): void {
 		handleInteraction(interaction).then(data => {
-			if (data.handled > 0) {
-				console.info(`Discord.Client.on("interactionCreate", "${interaction.id}") => ${data.tested}.${data.handled}`);
+			if (data.handled > 0 || data.tested > 0) {
+				const commandName = interaction.isCommand() ? interaction.commandName : "";
+				console.info(`Discord.Client.on("interactionCreate", "${interaction.id}", "${commandName}") => ${data.tested}.${data.handled}`);
 			}
 		});
 	}

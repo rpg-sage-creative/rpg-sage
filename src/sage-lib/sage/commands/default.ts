@@ -1,9 +1,11 @@
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
+import type { TSlashCommand } from "../../../types";
 import ArgsManager from "../../discord/ArgsManager";
 import { resolveToEmbeds } from "../../discord/embeds";
-import { registerMessageListener } from "../../discord/handlers";
+import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs } from "../../discord/types";
+import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
 import { aonHandler } from "./aon";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
@@ -214,6 +216,23 @@ async function findHandler(sageMessage: SageMessage): Promise<void> {
 
 // #endregion
 
+//#region dm slash command
+
+function dmSlashTester(sageInteraction: SageInteraction): boolean {
+	return sageInteraction.isCommand("DM");
+}
+function dmSlashHandler(sageInteraction: SageInteraction): Promise<void> {
+	return sageInteraction.user.send(`Hello!\nRPG Sage will now reply to your Direct Messages.\n*Note: Anytime RPG Sage is disconnected from Discord's server/api, you will need to reestablish this channel.*`) as Promise<any>;
+}
+export function dmCommand(): TSlashCommand {
+	return {
+		"name": "DM",
+		"description": "Establish direct message channel with RPG Sage."
+	};
+}
+
+//#endregion
+
 export default function register(): void {
 	registerCommandRegex(/^\s*list\s*(weapons|armou?r|spells)\s*by\s*(trait)?\s*(\w+)$/i, objectsBy);
 	registerCommandHelp("Lists", `list weapons by trait TRAIT`);
@@ -268,4 +287,6 @@ export default function register(): void {
 			console.log(`debug-log-all-items: end`);
 		}
 	});
+
+	registerInteractionListener(dmSlashTester, dmSlashHandler);
 }

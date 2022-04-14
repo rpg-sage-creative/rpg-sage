@@ -25,9 +25,19 @@ export default class SageInteraction<T extends DInteraction = any>
 	//#endregion
 
 	public isCommand(name: string): boolean {
-		return this.interaction.isCommand() && this.interaction.commandName === name;
+    if (!this.interaction.isCommand()) {
+      return false;
+    }
+		const lower = name.toLowerCase();
+		const thisCommandLower = this.command.toLowerCase();
+		const thisCategoryLower = this.commandCategory?.toLowerCase();
+		return thisCommandLower === lower
+			|| (thisCommandLower === "sage" && thisCategoryLower === lower);
 	}
 
+	public get command(): string {
+		return this.interaction.commandName;
+	}
 	public get commandCategories(): string[] {
 		if (!this.interaction.isCommand()) {
 			return [];
