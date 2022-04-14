@@ -9,8 +9,8 @@ interface SageInteractionCore extends HasSageCacheCore {
 	type: InteractionType;
 }
 
-export default class SageInteraction
-	extends HasSageCache<SageInteractionCore, SageInteraction> {
+export default class SageInteraction<T extends DInteraction = any>
+	extends HasSageCache<SageInteractionCore, SageInteraction<any>> {
 
 	public constructor(protected core: SageInteractionCore) {
 		super(core);
@@ -18,17 +18,20 @@ export default class SageInteraction
 
 	//#region HasSageCache
 
-	public clone(): SageInteraction {
+	public clone(): SageInteraction<T> {
 		return new SageInteraction(this.core);
 	}
 
 	//#endregion
 
 	public isCommand(name: string): boolean {
-		return this.interaction.commandName === name;
+		return this.interaction.isCommand() && this.interaction.commandName === name;
 	}
 
 	public get commandCategories(): string[] {
+		if (!this.interaction.isCommand()) {
+			return [];
+		}
 		return [
 			this.interaction.options.getSubcommandGroup(false),
 			this.interaction.options.getSubcommand(false)
@@ -46,12 +49,12 @@ export default class SageInteraction
 	/** Gets the named option as a string */
 	public getString(name: string, required: true): string;
 	public getString(name: string, required = false): string | null {
-		return this.interaction.options.getString(name, required);
+		return this.interaction.isCommand() ? this.interaction.options.getString(name, required) : null;
 	}
 
 	/** Returns the message */
-	public get interaction(): DInteraction {
-		return this.core.interaction;
+	public get interaction(): T {
+		return this.core.interaction as T;
 	}
 
 	public get user(): DUser {
@@ -78,7 +81,7 @@ export default class SageInteraction
 
 	//#endregion
 
-	public static async fromInteraction(interaction: DInteraction): Promise<SageInteraction> {
+	public static async fromInteraction<T extends DInteraction>(interaction: T): Promise<SageInteraction<T>> {
 		const caches = await SageCache.fromInteraction(interaction);
 		const type = InteractionType.Unknown;
 		return new SageInteraction({

@@ -1,194 +1,73 @@
 import * as Discord from "discord.js";
-import utils, { Awaitable, Optional } from "../../sage-utils";
+import utils from "../../sage-utils";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageMessage from "../sage/model/SageMessage";
-import type SageReaction from "../sage/model/SageReaction";
-import { NilSnowflake } from "./consts";
-import DiscordId from "./DiscordId";
-import { resolveToEmbeds, resolveToTexts } from "./embeds";
-import { registerReactionListener } from "./handlers";
-import type { TCommand, TRenderableContentResolvable } from "./types";
+import { resolveToEmbeds } from "./embeds";
+import type { TRenderableContentResolvable } from "./types";
 
 const TIMEOUT_MILLI = 60 * 1000;
-type TPromptResponseMap = Map<string, string>;
-type TReactionHandler = (reaction: string) => Promise<TRenderableContentResolvable | null>;
-type TResolveHandler = (response: Awaitable<Optional<string>>) => void;
-type TRejectHandler = () => void;
-type TPromptMapItem = {
-	authorDid: Discord.Snowflake;
-	sageMessage: SageMessage;
-	responseMap: TPromptResponseMap;
-	reactionsSetter: Promise<void>;
-	reactionHandler?: TReactionHandler;
-	resolveHandler: TResolveHandler;
-	rejectHandler: TRejectHandler;
-	timeout: NodeJS.Timeout;
-};
 
-const messageToPromptMessageMap: Map<Discord.Snowflake, Discord.Message> = new Map();
-const promptMap: Map<Discord.Snowflake, TPromptMapItem> = new Map();
+export type TPromptButton = { label:string; style:Discord.MessageButtonStyle; };
 
-async function canHandlePromptReaction(sageReaction: SageReaction): Promise<TCommand | null> {
-	const messageReaction = sageReaction.messageReaction;
-
-	const promptMessageDid = messageReaction.message.id;
-	if (!promptMap.has(promptMessageDid)) {
-		return null;
-	}
-
-	const promptMapItem = promptMap.get(promptMessageDid)!;
-	if (sageReaction.user.id !== promptMapItem.authorDid) {
-		/*
-		// await reaction.remove();
-		*/
-		return null;
-	}
-
-	const responseMap = promptMapItem.responseMap;
-	const emoji = responseMap.get(messageReaction.emoji.name!) ?? responseMap.get(messageReaction.emoji.id!) ?? null;
-	if (!emoji) {
-		/*
-		// await reaction.remove();
-		*/
-		return null;
-	}
-
-	return { command: "prompt-answer" };
-}
-
-async function handlePromptReaction(sageReaction: SageReaction): Promise<void> {
-	const messageReaction = sageReaction.messageReaction;
-	const promptMapItem = promptMap.get(messageReaction.message.id)!;
-	const responseMap = promptMapItem.responseMap;
-	const emoji = responseMap.get(messageReaction.emoji.name!) ?? responseMap.get(messageReaction.emoji.id!) ?? null;
-	const update = emoji && promptMapItem.reactionHandler ? await promptMapItem.reactionHandler(emoji) : null;
-	const renderableContent = update ? utils.RenderUtils.RenderableContent.resolve(update) : null;
-	if (update && renderableContent) {
-		const formattedText = resolveToTexts(promptMapItem.sageMessage.caches, renderableContent);
-		await promptMapItem.sageMessage.message.edit(formattedText.join(""));
-		/*
-		// await reaction.remove();
-		*/
-		return promptMapItem.reactionsSetter.then(() => {
-			clearTimeout(promptMapItem.timeout);
-			promptMapItem.timeout = setTimeout(clearHandler, TIMEOUT_MILLI, promptMapItem.sageMessage.message, true);
-		});
-	} else {
-		return promptMapItem.reactionsSetter.then(() => {
-			promptMapItem.resolveHandler(emoji);
-			clearHandler(messageReaction.message);
-		});
-	}
-}
-
-export default function register(): void {
-	registerReactionListener(canHandlePromptReaction, handlePromptReaction);
-}
-
-/**
- * Resolves a prompt's promise, removes it from the map, and removes bot's reactions.
- * Resolved value is NULL if timed out, undefined otherwise.
- */
-function clearHandler(promptMessage: Discord.Message | Discord.PartialMessage, timeout?: boolean): void {
-	const promptMessageDid = promptMessage.id;
-	if (promptMap.has(promptMessageDid)) {
-		promptMap.get(promptMessageDid)!.resolveHandler(timeout ? null : undefined);
-	}
-	promptMap.delete(promptMessage.id);
-
-	messageToPromptMessageMap.forEach((value, key) => {
-		if (value.id === promptMessageDid) {
-			messageToPromptMessageMap.delete(key);
-		}
+function createButtons(buttons: TPromptButton[]): Discord.MessageButton[] {
+	return buttons.map(button => {
+		const messageButton = new Discord.MessageButton();
+		messageButton.setCustomId(utils.UuidUtils.generate());
+		messageButton.setLabel(button.label);
+		messageButton.setStyle(button.style);
+		return messageButton;
 	});
-
-	/*
-	// promptMessage.reactions.removeAll();
-	*/
-	const activeBotDid = ActiveBot.active.did;
-	promptMessage.reactions.valueOf().forEach((messageReaction/*, map*/) => {
-		messageReaction.users.remove(activeBotDid);
-	});
-}
-
-function messageComponentYesNo(sageMessage: SageMessage, resolvable: TRenderableContentResolvable): Promise<boolean | null> {
-	const noButton = new Discord.MessageButton();
-	noButton.setCustomId("no-button");
-	noButton.setLabel("No");
-	noButton.setStyle("SECONDARY");
-
-	const yesButton = new Discord.MessageButton();
-	yesButton.setCustomId("yes-button");
-	yesButton.setLabel("Yes");
-	yesButton.setStyle("SUCCESS");
-
-	const buttonRow = new Discord.MessageActionRow();
-	buttonRow.setComponents(yesButton, noButton);
-
-	const embeds = resolveToEmbeds(sageMessage.caches, resolvable);
-	const components = [buttonRow];
-	sageMessage.message.channel.send({ embeds, components });
-	return Promise.resolve(null);
 }
 
 export async function discordPromptYesNo(sageMessage: SageMessage, resolvable: TRenderableContentResolvable): Promise<boolean | null> {
-	await messageComponentYesNo(sageMessage, resolvable);
-	const yes = sageMessage.caches.emojify("[yes]");
-	const no = sageMessage.caches.emojify("[no]");
-
-	const responseMap = new Map<string, string>();
-	responseMap.set(yes, yes);
-	responseMap.set(no, no);
-
-	const response = await discordPrompt(sageMessage, resolvable, responseMap).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
-	switch(response) {
-		case yes: return true;
-		case no: return false;
-		default: return null;
+	const yesNo: TPromptButton[] = [{ label:"Yes", style:"SUCCESS"}, { label:"No", style:"SECONDARY" }];
+	const result = await prompt(sageMessage, resolvable, yesNo);
+	if (result) {
+		return result === "Yes";
 	}
+	return null;
 }
 
-async function setReactions(promptMessage: Discord.Message, responseMap: TPromptResponseMap): Promise<void> {
-	for (const key of responseMap.keys()) {
-		try {
-			if (DiscordId.isCustomEmoji(key)) {
-				const emojiDid = DiscordId.parseId(key);
-				responseMap.set(emojiDid, responseMap.get(key)!);
-				await promptMessage.react(emojiDid);
-			} else {
-				await promptMessage.react(key);
+export async function prompt(sageMessage: SageMessage, resolvable: TRenderableContentResolvable, buttons: TPromptButton[]): Promise<string | null> {
+	return new Promise<string | null>(async resolve => {
+		const buttonRow = new Discord.MessageActionRow();
+		const messageButtons = createButtons(buttons);
+		buttonRow.setComponents(...messageButtons);
+
+		// send the message
+		const embeds = resolveToEmbeds(sageMessage.caches, resolvable);
+		const components = [buttonRow];
+		const message = sageMessage.message.channel.send({ embeds, components });
+
+		// create timeout and handler variables to ensure access in the following functions
+		let timeout: NodeJS.Timeout;
+		let handler: (interaction: Discord.Interaction) => void;
+
+		// create shared resolve function
+		const _resolve = (value: string | null) => {
+			resolve(value);
+			messageButtons.forEach(btn => btn.setDisabled(true));
+			message.then(msg => msg.edit({ embeds, components }));
+			ActiveBot.active.client.off("interactionCreate", handler);
+			clearTimeout(timeout);
+		};
+
+		// set timeout to remove this unique handler and resolve to null
+		timeout = setTimeout(() => {
+			_resolve(null);
+		}, TIMEOUT_MILLI);
+
+		// create unique handler and listen to it
+		handler = (interaction: Discord.Interaction) => {
+			if (interaction.isButton()) {
+				const btn = messageButtons.find(_btn => interaction.customId === _btn.customId);
+				if (btn) {
+					interaction.deferUpdate();
+					_resolve(btn.label);
+				}
 			}
-		} catch (ex) {
-			console.error(ex);
-		}
-	}
-}
-
-export function discordPrompt(sageMessage: SageMessage, resolvable: TRenderableContentResolvable, responseMap: TPromptResponseMap, reactionHandler?: TReactionHandler): Promise<Optional<string>> {
-	return new Promise<Optional<string>>(async (resolve: TResolveHandler, reject: TRejectHandler) => {
-		/*
-		// if (!handlingPrompts) {
-		// 	handlingPrompts = true;
-		// 	client.on("messageReactionAdd", handlePromptReaction);
-		// 	client.on("messageReactionRemove", handlePromptReaction);
-		// }
-
-		// const renderableContent = utils.RenderUtils.RenderableContent.resolve(resolvable);
-		// const formattedText = await resolveToTexts(sageMessage.sageCache, renderableContent);
-		*/
-		const promptMessage = (await sageMessage.send(resolvable)).slice(-1)[0];
-
-		messageToPromptMessageMap.set(sageMessage.message.id, promptMessage);
-
-		promptMap.set(promptMessage.id, {
-			authorDid: sageMessage.message.author?.id ?? NilSnowflake,
-			sageMessage: sageMessage,
-			responseMap: responseMap,
-			reactionsSetter: setReactions(promptMessage, responseMap),
-			reactionHandler: reactionHandler,
-			resolveHandler: resolve,
-			rejectHandler: reject,
-			timeout: setTimeout(clearHandler, TIMEOUT_MILLI, promptMessage, true)
-		});
-	});
+		};
+		ActiveBot.active.client.on("interactionCreate", handler);
+	})
+	.catch(utils.ConsoleUtils.Catchers.errorReturnNull);
 }

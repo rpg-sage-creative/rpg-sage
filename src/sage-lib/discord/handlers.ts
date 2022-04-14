@@ -162,8 +162,9 @@ export async function handleInteraction(interaction: Discord.Interaction): Promi
 	const output = { tested: 0, handled: 0 };
 	try {
 		const isCommand = interaction.isCommand();
-		if (isCommand) {
-			const sageInteraction: SageInteraction = await SageInteraction.fromInteraction(interaction);
+		const isButton = interaction.isButton();
+		if (isCommand || isButton) {
+			const sageInteraction = await SageInteraction.fromInteraction(interaction);
 			await handleInteractions(sageInteraction, output);
 		}
 	}catch(ex) {
@@ -172,7 +173,7 @@ export async function handleInteraction(interaction: Discord.Interaction): Promi
 	return output;
 }
 
-async function handleInteractions(sageInteraction: SageInteraction, output: THandlerOutput): Promise<void> {
+async function handleInteractions(sageInteraction: SageInteraction<any>, output: THandlerOutput): Promise<void> {
 	for (const listener of interactionListeners) {
 		// check if isActionableType here?
 		const clonedInteraction = sageInteraction.clone();

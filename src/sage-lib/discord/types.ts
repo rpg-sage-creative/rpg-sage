@@ -15,7 +15,7 @@ export interface IMenuRenderable extends IRenderable {
 	toMenuRenderableContent(index: number): utils.RenderUtils.RenderableContent;
 }
 
-export type DInteraction = Discord.CommandInteraction;
+export type DInteraction = Discord.CommandInteraction | Discord.ButtonInteraction;
 
 /** Discord Message or Partial Message */
 export type DMessage = Discord.Message | Discord.PartialMessage;
@@ -42,8 +42,8 @@ export type THandlerOutput = { tested: number; handled: number; };
 // export type TCommandAndArgs = { command?: string; args?: ArgsManager; };
 // export type TCommandAndArgsAndData<T> = TCommandAndArgs & { data: T; };
 
-export type TInteractionTester<T = any> = (sageInteraction: SageInteraction) => Awaitable<T | null>;
-export type TInteractionHandler<T = any> = (sageInteraction: SageInteraction, data?: T) => Awaitable<void>;
+export type TInteractionTester<T = any> = (sageInteraction: SageInteraction<any>) => Awaitable<T | null>;
+export type TInteractionHandler<T = any> = (sageInteraction: SageInteraction<any>, data?: T) => Awaitable<void>;
 
 //#endregion
 
