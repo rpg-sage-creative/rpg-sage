@@ -54,7 +54,7 @@ export interface AonBaseCore extends SourcedCore<""> {
 	category: string;
 	level: number;
 	/** Core Rulebook pg. 565 2.0 */
-	source_raw: string;
+	source_raw: string | string[];
 	/** raw text */
 	text: string;
 	type: string;
@@ -99,7 +99,7 @@ export default class AonBase
 		if (!this._parsedSources) {
 			this._parsedSources = parseSources(this.core.source_raw);
 		}
-		return this._parsedSources ?? undefined;
+		return this._parsedSources;
 	}
 	private get parsedSource(): TParsedSource | undefined {
 		return this.parsedSources[0];

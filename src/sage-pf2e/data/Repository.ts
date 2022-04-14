@@ -344,8 +344,10 @@ export function parseSource(value?: string, sources?: TSourceOrCore[]): TParsedS
 
 	return { source, name, page, version };
 }
-export function parseSources(value?: string, sources?: TSourceOrCore[]): TParsedSource[] {
-	const values = value?.split(/\s*,\s*/) ?? [];
+export function parseSources(value?: string | string[], sources?: TSourceOrCore[]): TParsedSource[] {
+	const values = Array.isArray(value)
+		? value
+		: value?.split(/\s*,\s*/) ?? [];
 	return values
 		.map(val => parseSource(val, sources))
 		.filter(isDefined);

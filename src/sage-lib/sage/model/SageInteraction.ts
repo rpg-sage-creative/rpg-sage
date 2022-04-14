@@ -12,8 +12,8 @@ interface SageInteractionCore extends HasSageCacheCore {
 	type: InteractionType;
 }
 
-export default class SageInteraction
-	extends HasSageCache<SageInteractionCore, SageInteraction> {
+export default class SageInteraction<T extends DInteraction = any>
+	extends HasSageCache<SageInteractionCore, SageInteraction<any>> {
 
 	public constructor(protected core: SageInteractionCore) {
 		super(core);
@@ -21,7 +21,7 @@ export default class SageInteraction
 
 	//#region HasSageCache
 
-	public clone(): SageInteraction {
+	public clone(): SageInteraction<T> {
 		return new SageInteraction(this.core);
 	}
 
@@ -32,13 +32,17 @@ export default class SageInteraction
 	public isCommand(command: string): boolean;
 	public isCommand(gameType: TGameType, command: string): boolean;
 	public isCommand(...args: string[]): boolean {
+		if (!this.interaction.isCommand()) {
+			return false;
+		}
+
 		const command = args.pop()!;
 		const commandLower = command.toLowerCase();
 
 		const game = args[0] as TGameType;
 		const gameLower = game?.toLowerCase();
 
-		const commandValues = [this.command].concat(this.commandCategories).map(s => s.toLowerCase());
+		const commandValues = this.commandValues.map(s => s.toLowerCase());
 		if (commandValues[0] === "sage") {
 			commandValues.shift();
 		}
@@ -51,20 +55,15 @@ export default class SageInteraction
 		return commandValues[0] === commandLower;
 	}
 
-	public get command(): string {
-		return this.interaction.commandName;
-	}
-	public get commandCategories(): string[] {
+	public get commandValues(): string[] {
+		if (!this.interaction.isCommand()) {
+			return [];
+		}
 		return [
+			this.interaction.commandName,
 			this.interaction.options.getSubcommandGroup(false),
 			this.interaction.options.getSubcommand(false)
 		].filter(isDefined);
-	}
-	public get commandCategory(): string | undefined {
-		return this.commandCategories[0];
-	}
-	public get commandSubCategory(): string | undefined {
-		return this.commandCategories[1];
 	}
 
 	//#endregion
@@ -74,11 +73,11 @@ export default class SageInteraction
 	/** Gets the named option as a boolean */
 	public getBoolean(name: string, required: true): boolean;
 	public getBoolean(name: string, required = false): boolean | null {
-		return this.interaction.options.getBoolean(name, required);
+		return this.interaction.isCommand() ? this.interaction.options.getBoolean(name, required) : null;
 	}
 	/** Returns true if the argument was given a value. */
 	public hasBoolean(name: string): boolean {
-		return this.interaction.options.getBoolean(name) !== null;
+		return this.getBoolean(name) !== null;
 	}
 
 	/** Gets the named option as a number or null */
@@ -86,11 +85,11 @@ export default class SageInteraction
 	/** Gets the named option as a number */
 	public getNumber(name: string, required: true): number;
 	public getNumber(name: string, required = false): number | null {
-		return this.interaction.options.getNumber(name, required);
+		return this.interaction.isCommand() ? this.interaction.options.getNumber(name, required) : null;
 	}
 	/** Returns true if the argument was given a value. */
 	public hasNumber(name: string): boolean {
-		return this.interaction.options.getNumber(name) !== null;
+		return this.getNumber(name) !== null;
 	}
 
 	/** Gets the named option as a string or null */
@@ -98,16 +97,16 @@ export default class SageInteraction
 	/** Gets the named option as a string */
 	public getString(name: string, required: true): string;
 	public getString(name: string, required = false): string | null {
-		return this.interaction.options.getString(name, required);
+		return this.interaction.isCommand() ? this.interaction.options.getString(name, required) : null;
 	}
 	/** Returns true if the argument was given a value. */
 	public hasString(name: string): boolean {
-		return this.interaction.options.getString(name) !== null;
+		return this.getString(name) !== null;
 	}
 
 	/** Returns the interaction */
-	public get interaction(): DInteraction {
-		return this.core.interaction;
+	public get interaction(): T {
+		return this.core.interaction as T;
 	}
 
 	/** Returns the user */
@@ -177,7 +176,7 @@ export default class SageInteraction
 
 	//#endregion
 
-	public static async fromInteraction(interaction: DInteraction): Promise<SageInteraction> {
+	public static async fromInteraction<T extends DInteraction>(interaction: T): Promise<SageInteraction<T>> {
 		const caches = await SageCache.fromInteraction(interaction);
 		const type = InteractionType.Unknown;
 		return new SageInteraction({

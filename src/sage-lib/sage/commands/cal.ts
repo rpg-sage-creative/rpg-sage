@@ -1,13 +1,15 @@
-import { Days, Months, DaysPerMonth, GDate } from "../../../sage-pf2e";
+import SDate from "../../../sage-cal/sf1e/SDate";
+import { Days as GDays, Months, DaysPerMonth, GDate } from "../../../sage-pf2e";
+import { Days as SDays } from "../../../sage-cal/sf1e/cal";
 import type { Optional } from "../../../sage-utils";
 import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import { registerInteractionListener } from "../../discord/handlers";
 import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
+import { registerSlashCommand } from "../../../slash.mjs";
 
 function getGDateOrToday(arg: Optional<string>): GDate {
 	if (arg) {
@@ -18,14 +20,24 @@ function getGDateOrToday(arg: Optional<string>): GDate {
 	}
 	return new GDate();
 }
+function getSDateOrToday(arg: Optional<string>): SDate {
+	if (arg) {
+		const parts = arg.split(/\D/);
+		if (arg.length === 10 && parts.length === 3) {
+			return new SDate(+parts[0], +parts[1] - 1, +parts[2]);
+		}
+	}
+	return new SDate();
+}
 
 function _calDate(value?: Optional<string>): RenderableContent {
 	const gDate = getGDateOrToday(value);
+	const sDate = getSDateOrToday(value);
 	const content = createCommandRenderableContent();
-	content.appendTitledSection(`<b>Today's Date (Golarion)</b>`, gDate.toLongString());
 	content.appendTitledSection(`<b>Today's Date (Earth)</b>`, gDate.toLongEarthString());
-	content.appendTitledSection(`<b>Temperate Season (Northern Hemisphere)</b>`, gDate.temperateSeason);
-	content.appendTitledSection(`<b>Tropical Season (Northern Hemisphere)</b>`, gDate.tropicalSeason);
+	content.appendTitledSection(`<b>Today's Date (Golarion)</b>`, gDate.toLongString());
+	content.appendTitledSection(`<b>Today's Date (Absalom Station)</b>`, sDate.toLongString());
+	content.appendTitledSection(`<b>Terrestrial Season (Northern Hemisphere)</b>`, `<b>Temperate</b> ${gDate.temperateSeason}`, `<b>Tropical</b> ${gDate.tropicalSeason}`);
 	return content;
 }
 async function calDate(sageMessage: SageMessage): Promise<void> {
@@ -34,8 +46,10 @@ async function calDate(sageMessage: SageMessage): Promise<void> {
 
 function _calDays(): RenderableContent {
 	const content = createCommandRenderableContent();
-	content.setTitle(`<b>Golarion's Days of the Week</b>`);
-	content.append(Days.join(", "));
+	content.appendTitledSection(`<b>Golarion's Days of the Week</b>`);
+	content.append(GDays.join(", "));
+	content.appendTitledSection(`<b>Absalom Station's Days of the Week</b>`);
+	content.append(SDays.join(", "));
 	return content;
 }
 function calDays(sageMessage: SageMessage): Promise<void> {
@@ -46,6 +60,7 @@ function _calMonths(): RenderableContent {
 	const content = createCommandRenderableContent();
 	content.setTitle(`<b>Golarion's Months (# of Days)</b>`);
 	content.append(Months.map((m, i) => `${String(i + 1)}. ${m} (${DaysPerMonth[i]})`).join(`, `));
+	content.append(`<i>Absalom Station still uses these months.</i>`);
 	return content;
 }
 function calMonths(sageMessage: SageMessage): Promise<void> {
