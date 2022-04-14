@@ -59,7 +59,7 @@ export async function prompt(sageMessage: SageMessage, resolvable: TRenderableCo
 
 		// create unique handler and listen to it
 		handler = (interaction: Discord.Interaction) => {
-			if (interaction.isButton()) {
+			if (interaction.isButton() && interaction.user.id === sageMessage.sageUser.did) {
 				const btn = messageButtons.find(_btn => interaction.customId === _btn.customId);
 				if (btn) {
 					interaction.deferUpdate();
