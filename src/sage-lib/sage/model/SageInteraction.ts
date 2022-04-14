@@ -29,14 +29,14 @@ export default class SageInteraction<T extends DInteraction = any>
       return false;
     }
 		const lower = name.toLowerCase();
-		const thisCommandLower = this.command.toLowerCase();
+		const thisCommandLower = this.command?.toLowerCase();
 		const thisCategoryLower = this.commandCategory?.toLowerCase();
 		return thisCommandLower === lower
 			|| (thisCommandLower === "sage" && thisCategoryLower === lower);
 	}
 
-	public get command(): string {
-		return this.interaction.commandName;
+	public get command(): string | undefined {
+		return this.interaction.isCommand() ? this.interaction.commandName : undefined;
 	}
 	public get commandCategories(): string[] {
 		if (!this.interaction.isCommand()) {
