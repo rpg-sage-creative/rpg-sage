@@ -279,7 +279,7 @@ async function helpSlashHandler(sageInteraction: SageInteraction): Promise<void>
 }
 
 function helpCommand(): TSlashCommand {
-	return {
+	const command = {
 		name: "Help",
 		description: "Get basic Help for RPG Sage.",
 		options: [
@@ -328,6 +328,9 @@ function helpCommand(): TSlashCommand {
 			] }
 		]
 	};
+	// command.options[0].choices.forEach(choice => delete choice.description);
+	command.options[0].choices.sort((a, b) => utils.ArrayUtils.Sort.stringIgnoreCase(a.name, b.name));
+	return command;
 }
 
 //#endregion
