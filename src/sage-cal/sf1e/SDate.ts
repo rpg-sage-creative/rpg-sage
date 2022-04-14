@@ -23,6 +23,7 @@ export default class SDate implements IDate {
 	public constructor();
 	public constructor(date: Date);
 	public constructor(month: number, date: number);
+	/** Expects Earth year. */
 	public constructor(year: number, month: number, date: number);
 	public constructor(dateOrYearOrMonth?: Date | number, monthOrDate?: number, date?: number) {
 		if (!dateOrYearOrMonth) {
@@ -31,10 +32,7 @@ export default class SDate implements IDate {
 			this._ = dateOrYearOrMonth;
 		} else {
 			this._ = new Date();
-			let year = dateOrYearOrMonth;
-			if (year > SDate.YearDelta) {
-				year -= SDate.YearDelta;
-			}
+			const year = dateOrYearOrMonth;
 			if (date) {
 				this._.setFullYear(year, monthOrDate, date);
 			} else {

@@ -23,24 +23,27 @@ const botJson = utils.FsUtils.listFilesSync("./data/sage/bots")
 
 const allSlashCommands = [] as TSlashCommand[];
 
-type TGameType = "PF1E" | "PF2E" | "SF" | "X-Finder";
+export type TGameType = "PF1E" | "PF2E" | "SF" | "Finder";
 
 /** Allows a SlashCommand to be registered so that it can be built */
 export function registerSlashCommand(...slashCommands: TSlashCommand[]): void;
 export function registerSlashCommand(gameType: TGameType, ...slashCommands: TSlashCommand[]): void;
 export function registerSlashCommand(...args: (TGameType | TSlashCommand)[]): void {
-	const gameType = args.find(arg => typeof(arg) === "string");
+	const defaultGameType = args.find(arg => typeof(arg) === "string") as TGameType;
 	const slashCommands = args.filter(arg => typeof(arg) !== "string") as TSlashCommand[];
-	if (gameType) {
-		let gameGroup = allSlashCommands.find(cmd => cmd.game === gameType);
-		if (!gameGroup) {
-			gameGroup = { name:gameType as string, description:`Commands specific to ${gameType}`, children:[] };
-			allSlashCommands.push(gameGroup);
+	slashCommands.forEach(slashCommand => {
+		const gameType = defaultGameType ?? slashCommand.game;
+		if (gameType) {
+			let gameGroup = allSlashCommands.find(cmd => cmd.game === gameType || cmd.name === gameType);
+			if (!gameGroup) {
+				gameGroup = { game:gameType, name:gameType as string, children:[] };
+				allSlashCommands.push(gameGroup);
+			}
+			gameGroup.children!.push(slashCommand);
+		}else {
+			allSlashCommands.push(slashCommand);
 		}
-		gameGroup.children!.push(...slashCommands);
-	}else {
-		allSlashCommands.push(...slashCommands);
-	}
+	});
 }
 
 // registers SlashCommands
@@ -66,15 +69,10 @@ type TBuilder = SlashCommandBuilder | SlashCommandSubcommandBuilder | SlashComma
 type TBuilderCommand = SlashCommandBuilder | SlashCommandSubcommandBuilder;
 type TBuilderOption = SlashCommandStringOption | SlashCommandBooleanOption | SlashCommandNumberOption;
 type TBuilderOrOption = TBuilder | TBuilderOption;
-function isBuilder<T extends TBuilderOrOption>(builder: T): boolean {
-	return builder instanceof SlashCommandBuilder
-		|| builder instanceof SlashCommandSubcommandBuilder
-		|| builder instanceof SlashCommandSubcommandGroupBuilder;
-}
 function setName<T extends TBuilderOrOption>(builder: T, hasName: TNameDescription): T {
 	try {
-		builder.setName(isBuilder(builder) ? hasName.name.toLowerCase() : hasName.name);
-		builder.setDescription(hasName.description ?? builder.name);
+		builder.setName(hasName.name.toLowerCase());
+		builder.setDescription(hasName.description ?? hasName.name);
 		characterCount += builder.name.length + builder.description.length;
 	}catch(ex) {
 		console.error(`${hasName.name}: ${hasName.description}`);
@@ -179,8 +177,10 @@ async function updateSlashCommands(bot: IBotCore): Promise<void> {
 		});
 
 		console.log(`Successfully reloaded application (/) commands for: ${botCodeName}.`);
-	} catch (error) {
-		console.error(Object.keys(error as any));
+	} catch (error: any) {
+		// console.info(Object.keys(error as any)); // [ 'rawError', 'code', 'status', 'method', 'url', 'requestBody' ]
+		// console.error(`${error.code} (${error.rawError}): ${error.status}`); // undefined (undefined): undefined
+		console.error(error);
 	}
 }
 async function wipeSlashCommands(bot: IBotCore): Promise<void> {

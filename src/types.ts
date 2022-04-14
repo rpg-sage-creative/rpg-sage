@@ -1,7 +1,7 @@
-import type { TGameType } from "./sage-dice";
+import type { TGameType } from "./slash.mjs";
 
 export type TSlashCommandChoice = string | [string, string] | { name:string; description?:string; value?:string; };
-export type TNameDescription = { name:string; description:string; };
+export type TNameDescription = { name:string; description?:string; };
 export type TSlashCommandOption = TNameDescription & {
 	/** Selectable choices for an option. */
 	choices?: TSlashCommandChoice[];

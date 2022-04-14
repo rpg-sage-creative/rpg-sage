@@ -1,7 +1,7 @@
 import registerAdmin from "./admin";
 import { registerCommandHandlers as registerCal, registerSlashCommands as registerCalSlashCommands } from "./cal";
 import registerCmd from "./cmd";
-import registerDcs from "./dcs";
+import { registerCommandHandlers as registerDcs, registerSlashCommands as registerDcsSlashCommands } from "./dcs";
 import { registerCommandHandlers as registerDefault, registerSlashCommands as registerDefaultSlashCommands } from "./default";
 import registerDialog from "./dialog";
 import registerDice from "./dice";
@@ -30,6 +30,7 @@ export function registerCommandHandlers(): void {
 
 export function registerSlashCommands(): void {
 	registerCalSlashCommands();
+	registerDcsSlashCommands();
 	registerDefaultSlashCommands();
 	registerHelpSlashCommands();
 	registerPathbuilderSlashCommands();

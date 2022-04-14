@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
-import type { TGameType } from "../../../sage-dice";
 import utils, { isDefined } from "../../../sage-utils";
+import type { TGameType } from "../../../slash.mjs";
 import { DInteraction, DiscordKey, DUser, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { send } from "../../discord/messages";
@@ -93,9 +93,9 @@ export default class SageInteraction<T extends DInteraction = any>
 	}
 
 	/** Gets the named option as a string or null */
-	public getString(name: string): string | null;
+	public getString<U extends string = string>(name: string): U | null;
 	/** Gets the named option as a string */
-	public getString(name: string, required: true): string;
+	public getString<U extends string = string>(name: string, required: true): U;
 	public getString(name: string, required = false): string | null {
 		return this.interaction.isCommand() ? this.interaction.options.getString(name, required) : null;
 	}
