@@ -1,4 +1,5 @@
 import type * as Discord from "discord.js";
+import type { IHasChannels, IHasGame } from ".";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../sage-dice";
 import utils, { Optional } from "../../../sage-utils";
 import { DiscordKey, DMessage, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
@@ -22,7 +23,8 @@ interface SageMessageCore extends HasSageCacheCore {
 }
 
 export default class SageMessage
-	extends HasSageCache<SageMessageCore, SageMessage> {
+	extends HasSageCache<SageMessageCore, SageMessage>
+	implements IHasGame, IHasChannels {
 
 	public constructor(protected core: SageMessageCore) {
 		super(core);
@@ -113,7 +115,7 @@ export default class SageMessage
 
 	//#endregion
 
-	// #region Channel flags
+	// #region IHasChannels
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
 	public get channel(): IChannel | undefined {
@@ -184,21 +186,6 @@ export default class SageMessage
 		return this.cache.get("isGameAdmin", () => (this.authorDid && this.server?.hasGameAdmin(this.authorDid)) === true);
 	}
 
-	/** Is there a game and is the author a GameMaster */
-	public get isGameMaster(): boolean {
-		return this.cache.get("isGameMaster", () => (this.authorDid && this.game?.hasGameMaster(this.authorDid)) === true);
-	}
-
-	/** Is there a game and is the author a Player */
-	public get isPlayer(): boolean {
-		return this.cache.get("isPlayer", () => (this.authorDid && this.game?.hasPlayer(this.authorDid)) === true);
-	}
-
-	/** Get the PlayerCharacter if there a game and the author is a Player */
-	public get playerCharacter(): GameCharacter | undefined {
-		return this.cache.get("playerCharacter", () => this.authorDid && this.isPlayer ? this.game?.playerCharacters.findByUser(this.authorDid) ?? undefined : undefined);
-	}
-
 	// #endregion
 
 	// #region Permission Flags
@@ -253,10 +240,25 @@ export default class SageMessage
 
 	// #endregion
 
-	//#region Type flags
+	//#region IHasGame
 
 	public get gameType(): GameType {
 		return this.cache.get("gameType", () => this.game?.gameType ?? this.serverChannel?.defaultGameType ?? this.server?.defaultGameType ?? GameType.None);
+	}
+
+	/** Is there a game and is the author a GameMaster */
+	public get isGameMaster(): boolean {
+		return this.cache.get("isGameMaster", () => (this.authorDid && this.game?.hasGameMaster(this.authorDid)) === true);
+	}
+
+	/** Is there a game and is the author a Player */
+	public get isPlayer(): boolean {
+		return this.cache.get("isPlayer", () => (this.authorDid && this.game?.hasPlayer(this.authorDid)) === true);
+	}
+
+	/** Get the PlayerCharacter if there a game and the author is a Player */
+	public get playerCharacter(): GameCharacter | undefined {
+		return this.cache.get("playerCharacter", () => this.authorDid && this.isPlayer ? this.game?.playerCharacters.findByUser(this.authorDid) ?? undefined : undefined);
 	}
 
 	public get critMethodType(): CritMethodType {

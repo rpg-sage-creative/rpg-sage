@@ -1,3 +1,7 @@
+import type * as Discord from "discord.js";
+import type { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../sage-dice";
+import type { DicePostType } from "../commands/dice";
+import type { IChannel } from "../repo/base/IdRepository";
 import * as activeBot from "./ActiveBot";
 import * as bot from "./Bot";
 import * as characterManager from "./CharacterManager";
@@ -5,7 +9,7 @@ import * as charactersMatch from "./CharactersMatch";
 import * as colors from "./Colors";
 import * as emoji from "./Emoji";
 import * as game from "./Game";
-import * as gameCharacter from "./GameCharacter";
+import GameCharacter, * as gameCharacter from "./GameCharacter";
 import * as hasColorsCore from "./HasColorsCore";
 import * as hasEmojiCore from "./HasEmojiCore";
 import * as namedCollection from "./NamedCollection";
@@ -16,6 +20,27 @@ import * as sageMessageArgsManager from "./SageMessageArgsManager";
 import * as sageReaction from "./SageReaction";
 import * as server from "./Server";
 import * as user from "./User";
+
+export interface IHasGame {
+	gameType: GameType;
+	isGameMaster: boolean;
+	isPlayer: boolean;
+	playerCharacter: GameCharacter | undefined;
+
+	critMethodType: CritMethodType;
+	dicePostType: DicePostType;
+	diceOutputType: DiceOutputType;
+	diceSecretMethodType: DiceSecretMethodType;
+}
+
+export interface IHasChannels {
+	channel: IChannel | undefined;
+	channelDid: Discord.Snowflake | undefined;
+	gameChannel: IChannel | undefined;
+	serverChannel: IChannel | undefined;
+	threadDid: Discord.Snowflake | undefined;
+	threadOrChannelDid: Discord.Snowflake;
+}
 
 export default {
 	activeBot,

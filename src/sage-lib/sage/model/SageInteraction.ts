@@ -1,9 +1,15 @@
 import type * as Discord from "discord.js";
-import utils, { isDefined } from "../../../sage-utils";
+import type { IHasChannels, IHasGame } from ".";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../sage-dice";
+import utils, { isDefined, Optional } from "../../../sage-utils";
 import type { TGameType } from "../../../slash.mjs";
 import { DInteraction, DiscordKey, DUser, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { send } from "../../discord/messages";
+import { DicePostType } from "../commands/dice";
+import type { IChannel } from "../repo/base/IdRepository";
+import type GameCharacter from "./GameCharacter";
+import type { ColorType, IHasColorsCore } from "./HasColorsCore";
 import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
 import SageCache from "./SageCache";
 
@@ -13,7 +19,8 @@ interface SageInteractionCore extends HasSageCacheCore {
 }
 
 export default class SageInteraction<T extends DInteraction = any>
-	extends HasSageCache<SageInteractionCore, SageInteraction<any>> {
+	extends HasSageCache<SageInteractionCore, SageInteraction<any>>
+	implements IHasGame, IHasChannels {
 
 	public constructor(protected core: SageInteractionCore) {
 		super(core);
@@ -175,6 +182,111 @@ export default class SageInteraction<T extends DInteraction = any>
 	}
 
 	//#endregion
+
+	// #region IHasChannels
+
+	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
+	public get channel(): IChannel | undefined {
+		return this.cache.get("channel", () => this.gameChannel ?? this.serverChannel);
+	}
+
+	/** Returns the channelDid this message (or its thread) is in. */
+	public get channelDid(): Discord.Snowflake | undefined {
+		return this.cache.get("channelDid", () => {
+			if (this.interaction.channel?.isThread()) {
+				return this.interaction.channel.parentId ?? undefined;
+			}
+			return this.interaction.channelId;
+		});
+	}
+
+	/** Returns the gameChannel meta for the message, checking the thread before checking its channel. */
+	public get gameChannel(): IChannel | undefined {
+		return this.cache.get("gameChannel", () => this.game?.getChannel(this.discordKey));
+	}
+
+	/** Returns the serverChannel meta for the message, checking the thread before checking its channel. */
+	public get serverChannel(): IChannel | undefined {
+		return this.cache.get("serverChannel", () => this.server?.getChannel(this.discordKey));
+	}
+
+	/** Returns the threadDid this message is in. */
+	public get threadDid(): Discord.Snowflake | undefined {
+		return this.cache.get("threadDid", () => {
+			if (this.interaction.channel?.isThread()) {
+				return this.interaction.channelId;
+			}
+			return undefined;
+		});
+	}
+
+	/** Returns either the message's threadDid or channelDid if there is no thread. */
+	public get threadOrChannelDid(): Discord.Snowflake {
+		return this.cache.get("channelDid", () => this.threadDid ?? this.channelDid ?? this.interaction.channelId);
+	}
+
+	// #endregion
+
+	//#region IHasGame
+
+	public get gameType(): GameType {
+		return this.cache.get("gameType", () => this.game?.gameType ?? this.serverChannel?.defaultGameType ?? this.server?.defaultGameType ?? GameType.None);
+	}
+
+	/** Is there a game and is the author a GameMaster */
+	public get isGameMaster(): boolean {
+		return this.cache.get("isGameMaster", () => (this.user.id && this.game?.hasGameMaster(this.user.id)) === true);
+	}
+
+	/** Is there a game and is the author a Player */
+	public get isPlayer(): boolean {
+		return this.cache.get("isPlayer", () => (this.user.id && this.game?.hasPlayer(this.user.id)) === true);
+	}
+
+	/** Get the PlayerCharacter if there a game and the author is a Player */
+	public get playerCharacter(): GameCharacter | undefined {
+		return this.cache.get("playerCharacter", () => this.user.id && this.isPlayer ? this.game?.playerCharacters.findByUser(this.user.id) ?? undefined : undefined);
+	}
+
+	public get critMethodType(): CritMethodType {
+		return this.cache.get("critMethodType", () => this.gameChannel?.defaultCritMethodType ?? this.game?.defaultCritMethodType ?? this.serverChannel?.defaultCritMethodType ?? this.server?.defaultCritMethodType ?? CritMethodType.Unknown);
+	}
+
+	public get dicePostType(): DicePostType {
+		return this.cache.get("dicePostType", () => this.gameChannel?.defaultDicePostType ?? this.game?.defaultDicePostType ?? this.serverChannel?.defaultDicePostType ?? this.server?.defaultDicePostType ?? DicePostType.SinglePost);
+	}
+
+	public get diceOutputType(): DiceOutputType {
+		return this.cache.get("diceOutputType", () => this.gameChannel?.defaultDiceOutputType ?? this.game?.defaultDiceOutputType ?? this.serverChannel?.defaultDiceOutputType ?? this.server?.defaultDiceOutputType ?? DiceOutputType.M);
+	}
+
+	public get diceSecretMethodType(): DiceSecretMethodType {
+		return this.cache.get("diceSecretMethodType", () => this.gameChannel?.defaultDiceSecretMethodType ?? this.game?.defaultDiceSecretMethodType ?? this.serverChannel?.defaultDiceSecretMethodType ?? this.server?.defaultDiceSecretMethodType ?? DiceSecretMethodType.Ignore);
+	}
+
+	//#endregion
+
+	// #region IHasColorsCore
+
+	public getHasColors(): IHasColorsCore {
+		return this.game || this.server || this.bot;
+	}
+
+	// public colors = this.game?.colors ?? this.server?.colors ?? this.bot.colors;
+	public toDiscordColor(colorType: Optional<ColorType>): string | null {
+		if (!colorType) {
+			return null;
+		}
+		if (this.game) {
+			return this.game.toDiscordColor(colorType);
+		}
+		if (this.server) {
+			return this.server.toDiscordColor(colorType);
+		}
+		return this.bot.toDiscordColor(colorType);
+	}
+
+	// #endregion
 
 	public static async fromInteraction<T extends DInteraction>(interaction: T): Promise<SageInteraction<T>> {
 		const caches = await SageCache.fromInteraction(interaction);
