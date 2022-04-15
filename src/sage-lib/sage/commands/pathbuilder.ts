@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import type { TDiceOutput } from "../../../sage-dice";
-import { PathbuilderCharacter } from "../../../sage-pf2e";
+import { PathbuilderCharacter, toModifier } from "../../../sage-pf2e";
 import type { TPathbuilderCharacter, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterOutputType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import utils, { UUID } from "../../../sage-utils";
 import { registerSlashCommand } from "../../../slash.mjs";
@@ -91,20 +91,27 @@ async function attachCharacter(sageCache: SageCache, channel: TChannel | DUser, 
 	return Promise.resolve();
 }
 
+function saveCharacter(character: PathbuilderCharacter): Promise<boolean> {
+	return utils.FsUtils.writeFile(getPath(character.id), character.toJSON(), true).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
+}
+async function loadCharacter(characterId: UUID): Promise<PathbuilderCharacter | null> {
+	const core = await utils.FsUtils.readJsonFile<TPathbuilderCharacter>(getPath(characterId)).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+	return core ? new PathbuilderCharacter(core) : null;
+}
 function getPath(pathbuilderCharId: string): string {
 	return `./data/sage/pb2e/${pathbuilderCharId}.json`;
 }
 
-async function postCharacter(sageCache: SageCache, channel: TChannel, pathbuilderChar: PathbuilderCharacter, pin: boolean): Promise<void> {
-	const saved = await utils.FsUtils.writeFile(getPath(pathbuilderChar.id), pathbuilderChar.toJSON(), true).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+async function postCharacter(sageCache: SageCache, channel: TChannel, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+	const saved = await saveCharacter(character);
 	if (saved) {
-		const output = prepareOutput(sageCache, pathbuilderChar, "Combat");
+		const output = prepareOutput(sageCache, character);
 		const message = await channel.send(output).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
 		if (pin && message?.pinnable) {
 			await message.pin();
 		}
 	}else {
-		const output = { embeds:resolveToEmbeds(sageCache, pathbuilderChar.toHtml()) };
+		const output = { embeds:resolveToEmbeds(sageCache, character.toHtml()) };
 		const message = await channel.send(output).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
 		if (pin && message?.pinnable) {
 			await message.pin();
@@ -112,82 +119,170 @@ async function postCharacter(sageCache: SageCache, channel: TChannel, pathbuilde
 	}
 }
 
-function createButton(pathbuilderCharId: UUID, label: string, activeButton: TPathbuilderCharacterOutputType): Discord.MessageButton {
-	const button = new Discord.MessageButton();
-	button.setCustomId(`${pathbuilderCharId}|${label}`);
-	button.setDisabled(label === activeButton);
-	button.setLabel(label);
-	button.setStyle("SECONDARY");
-	return button;
+async function updateSheet(sageInteraction: SageInteraction, character: PathbuilderCharacter) {
+	const output = prepareOutput(sageInteraction.caches, character);
+	const message = sageInteraction.interaction.message as Discord.Message;
+	await message.edit(output);
 }
-function createButtonRows(pathbuilderChar: PathbuilderCharacter, activeButton: TPathbuilderCharacterOutputType): Discord.MessageActionRow[] {
-	const actionRows: Discord.MessageActionRow[] = [];
-	let actionRow: Discord.MessageActionRow;
-	const buttonLabels = pathbuilderChar.getValidOutputTypes();
-	buttonLabels.forEach(label => {
-		if (!actionRow || actionRow.components.length === 5) {
-			actionRow = new Discord.MessageActionRow();
-			actionRows.push(actionRow);
-		}
-		const button = createButton(pathbuilderChar.id, label, activeButton);
-		actionRow.addComponents(button);
+
+function createViewSelectRow(character: PathbuilderCharacter): Discord.MessageActionRow {
+	const selectMenu = new Discord.MessageSelectMenu();
+	selectMenu.setCustomId(`${character.id}|View`);
+	selectMenu.setPlaceholder("Select Character View");
+
+	const activeView = character.getSheetValue("activeView");
+	const validOutputTypes = character.getValidOutputTypes();
+	validOutputTypes.forEach((outputType, index) =>
+		selectMenu.addOptions({
+			label: `Character View: ${outputType}`,
+			value: outputType,
+			default: outputType === activeView || (!activeView && !index)
+		})
+	);
+
+	return new Discord.MessageActionRow().addComponents(selectMenu);
+}
+
+const skills = "Perception,Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery".split(",");
+
+function createExplorationSelectRow(character: PathbuilderCharacter): Discord.MessageActionRow {
+	const selectMenu = new Discord.MessageSelectMenu();
+	selectMenu.setCustomId(`${character.id}|Exploration`);
+	selectMenu.setPlaceholder("Select Exploration Mode");
+
+	const activeExploration = character.getSheetValue("activeExploration");
+	const explorationModes = ["Avoid Notice", "Defend", "Detect Magic", "Follow the Expert", "Hustle", "Investigate", "Repeat a Spell", "Scout", "Search", "Other"];
+	explorationModes.forEach(mode => {
+		selectMenu.addOptions({
+			label: `Exploration Mode: ${mode}`,
+			value: mode,
+			default: mode === activeExploration
+		});
 	});
 
-	const perceptionButton = new Discord.MessageButton();
-	perceptionButton.setCustomId(`${pathbuilderChar.id}|Perception`);
-	perceptionButton.setLabel("Roll Perception");
-	perceptionButton.setStyle("PRIMARY");
+	return new Discord.MessageActionRow().addComponents(selectMenu);
+}
 
-	actionRow = new Discord.MessageActionRow();
-	actionRow.addComponents(perceptionButton);
-	actionRows.push(actionRow);
+function createSkillSelectRow(character: PathbuilderCharacter): Discord.MessageActionRow {
+	const selectMenu = new Discord.MessageSelectMenu();
+	selectMenu.setCustomId(`${character.id}|Skill`);
+	selectMenu.setPlaceholder("Select a Skill to Roll");
 
-	return actionRows;
+	const activeSkill = character.getSheetValue("activeSkill");
+	const lores = character.lores.map(lore => lore[0]);
+	const skillsAndLores = skills.concat(lores);
+	skillsAndLores.forEach(skill => {
+		const skillAndMod = character.getProficiencyAndMod(skill);
+		selectMenu.addOptions({
+			label: `Skill Roll: ${skill}${lores.includes(skill) ? " Lore" : ""} ${toModifier(skillAndMod[1])} (${skillAndMod[0]})`,
+			value: skill,
+			default: skill === activeSkill || (!activeSkill && skill === "Perception")
+		});
+	});
+
+	return new Discord.MessageActionRow().addComponents(selectMenu);
+}
+
+function createButton(customId: string, label: string, style: Discord.MessageButtonStyleResolvable): Discord.MessageButton {
+	const button = new Discord.MessageButton();
+	button.setCustomId(customId);
+	button.setLabel(label);
+	button.setStyle(style);
+	return button;
+}
+
+function createRollButtonRow(character: PathbuilderCharacter): Discord.MessageActionRow {
+	// const activeSkill = character.getSheetValue<string>("activeSkill") ?? "Perception";
+	// const lores = character.lores.map(lore => lore[0]);
+	// const skill = lores.includes(activeSkill) ? `${activeSkill} Lore` : activeSkill;
+
+	const rollButton = createButton(`${character.id}|Roll`, `Roll Check`, "PRIMARY");
+	const rollSecretButton = createButton(`${character.id}|Secret`, `Roll Secret Check`, "PRIMARY");
+	const rollInitButton = createButton(`${character.id}|Init`, `Roll Initiative`, "PRIMARY");
+	return new Discord.MessageActionRow().addComponents(rollButton, rollSecretButton, rollInitButton);
+}
+
+function createComponents(character: PathbuilderCharacter): Discord.MessageActionRow[] {
+	return [
+		createViewSelectRow(character),
+		createExplorationSelectRow(character),
+		createSkillSelectRow(character),
+		createRollButtonRow(character)
+	];
 }
 
 type TOutput = { embeds:Discord.MessageEmbed[], components:Discord.MessageActionRow[] };
-function prepareOutput(sageCache: SageCache, pathbuilderChar: PathbuilderCharacter, outputType: TPathbuilderCharacterOutputType): TOutput {
-	const embeds = resolveToEmbeds(sageCache, pathbuilderChar.toHtml(outputType));
-	const components = createButtonRows(pathbuilderChar, outputType);
+function prepareOutput(sageCache: SageCache, character: PathbuilderCharacter): TOutput {
+	const activeView = character.getSheetValue<TPathbuilderCharacterOutputType>("activeView");
+	const defaultView = character.getValidOutputTypes()[0];
+	const outputType = activeView ?? defaultView;
+	const embeds = resolveToEmbeds(sageCache, character.toHtml(outputType));
+	const components = createComponents(character);
 	return { embeds, components };
 }
 
 //#region button command
 
-const uuidActionRegex = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:All|Combat|Equipment|Feats|Formulas|Pets|Spells|Perception)$/i;
+const uuidActionRegex = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Exploration|Skill|Roll|Secret|Init)$/i;
 
-function buttonTester(sageInteraction: SageInteraction<Discord.ButtonInteraction>): boolean {
-	return sageInteraction.interaction.isButton()
-		&& uuidActionRegex.test(sageInteraction.interaction.customId);
+function sheetTester(sageInteraction: SageInteraction): boolean {
+	return uuidActionRegex.test(sageInteraction.interaction.customId);
 }
 
-// function toggleButtons(actionRow: Discord.MessageActionRow, activeButton: TPathbuilderCharacterOutputType): void {
-// 	actionRow.components.forEach(button => {
-// 		if (button instanceof Discord.MessageButton) {
-// 			button.setDisabled(button.label === activeButton);
-// 		}
-// 	});
-// }
-
-async function buttonHandler(sageInteraction: SageInteraction<Discord.ButtonInteraction>): Promise<void> {
+async function viewHandler(sageInteraction: SageInteraction, character: PathbuilderCharacter): Promise<void> {
+	const activeView = (sageInteraction.interaction as Discord.SelectMenuInteraction).values[0];
+	character.setSheetValue("activeView", activeView);
+	await saveCharacter(character);
+	return updateSheet(sageInteraction, character);
+}
+async function explorationHandler(sageInteraction: SageInteraction, character: PathbuilderCharacter): Promise<void> {
+	const activeExploration = (sageInteraction.interaction as Discord.SelectMenuInteraction).values[0];
+	character.setSheetValue("activeExploration", activeExploration);
+	await saveCharacter(character);
+	return updateSheet(sageInteraction, character);
+}
+async function skillHandler(sageInteraction: SageInteraction, character: PathbuilderCharacter): Promise<void> {
+	const activeSkill = (sageInteraction.interaction as Discord.SelectMenuInteraction).values[0];
+	character.setSheetValue("activeSkill", activeSkill);
+	await saveCharacter(character);
+	return updateSheet(sageInteraction, character);
+}
+function getInitSkill(character: PathbuilderCharacter): string {
+	const activeExploration = character.getSheetValue("activeExploration");
+	switch(activeExploration) {
+		case "Avoid Notice": return "Stealth";
+		case "Other": return character.getSheetValue("activeSkill") ?? "Perception";
+		default: return "Perception";
+	}
+}
+async function rollHandler(sageInteraction: SageInteraction, character: PathbuilderCharacter, secret = false, init = false): Promise<void> {
+	const skill = init ? getInitSkill(character) : character.getSheetValue<string>("activeSkill") ?? "Perception";
+	const skillMod = character.getProficiencyAndMod(skill)[1];
+	const incredibleMod = character.hasFeat("Incredible Initiative") ? 2 : 0;
+	const scoutMod = character.getSheetValue("activeExploration") === "Scout" ? 1 : 0;
+	const initMod = init ? Math.max(incredibleMod, scoutMod) : 0;
+	const dice = `[1d20+${skillMod+initMod} ${character.name}${secret ? " Secret" : ""} ${skill}${init ? " (Initiative)" : ""}]`;
+	const matches = parseDiceMatches(sageInteraction, dice);
+	const output = matches.reduce((out, match) => { out.push(...match.output); return out; }, <TDiceOutput[]>[]);
+	await sendDice(sageInteraction, output);
+}
+async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 	await sageInteraction.interaction.deferUpdate();
 	const actionParts = sageInteraction.interaction.customId.split("|");
-	const pathbuilderCharId = actionParts[0] as UUID;
-	const core = await utils.FsUtils.readJsonFile<TPathbuilderCharacter>(getPath(pathbuilderCharId));
-	if (core) {
-		const pathbuilderChar = new PathbuilderCharacter(core);
-		if (actionParts[1] === "Perception") {
-			const dice = `[1d20+${pathbuilderChar.perceptionMod} ${pathbuilderChar.name} Perception]`;
-			const matches = parseDiceMatches(sageInteraction, dice);
-			const output = matches.reduce((out, match) => { out.push(...match.output); return out; }, <TDiceOutput[]>[]);
-			sendDice(sageInteraction, output);
-		}else {
-			const outputType = actionParts[1] as TPathbuilderCharacterOutputType;
-			const output = prepareOutput(sageInteraction.caches, pathbuilderChar, outputType);
-			const message = sageInteraction.interaction.message as Discord.Message;
-			await message.edit(output);
+	const characterId = actionParts[0] as UUID;
+	const character = await loadCharacter(characterId);
+	if (character) {
+		const command = actionParts[1] as "View" | "Exploration" | "Skill" | "Roll" | "Secret" | "Init";
+		switch(command) {
+			case "View": return viewHandler(sageInteraction, character);
+			case "Exploration": return explorationHandler(sageInteraction, character);
+			case "Skill": return skillHandler(sageInteraction, character);
+			case "Roll": return rollHandler(sageInteraction, character, false);
+			case "Secret": return rollHandler(sageInteraction, character, true);
+			case "Init": return rollHandler(sageInteraction, character, false, true);
 		}
 	}
+	return Promise.resolve();
 }
 
 //#endregion
@@ -244,7 +339,7 @@ function importCommand(): TSlashCommand {
 export function registerCommandHandlers(): void {
 	registerAdminCommand(pathbuilder2e, "pathbuilder2e");
 	registerInteractionListener(slashTester, slashHandler);
-	registerInteractionListener(buttonTester, buttonHandler);
+	registerInteractionListener(sheetTester, sheetHandler);
 }
 
 export function registerSlashCommands(): void {
