@@ -1,4 +1,5 @@
 import * as Discord from "discord.js";
+import type { TDiceOutput } from "../../../sage-dice";
 import { PathbuilderCharacter } from "../../../sage-pf2e";
 import type { TPathbuilderCharacter, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterOutputType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import utils, { UUID } from "../../../sage-utils";
@@ -12,6 +13,7 @@ import type SageCache from "../model/SageCache";
 import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
 import { registerAdminCommand } from "./cmd";
+import { parseDiceMatches, sendDice } from "./dice";
 
 async function pathbuilder2e(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin) {
@@ -115,7 +117,7 @@ function createButton(pathbuilderCharId: UUID, label: string, activeButton: TPat
 	button.setCustomId(`${pathbuilderCharId}|${label}`);
 	button.setDisabled(label === activeButton);
 	button.setLabel(label);
-	button.setStyle("PRIMARY");
+	button.setStyle("SECONDARY");
 	return button;
 }
 function createButtonRows(pathbuilderChar: PathbuilderCharacter, activeButton: TPathbuilderCharacterOutputType): Discord.MessageActionRow[] {
@@ -130,6 +132,16 @@ function createButtonRows(pathbuilderChar: PathbuilderCharacter, activeButton: T
 		const button = createButton(pathbuilderChar.id, label, activeButton);
 		actionRow.addComponents(button);
 	});
+
+	const perceptionButton = new Discord.MessageButton();
+	perceptionButton.setCustomId(`${pathbuilderChar.id}|Perception`);
+	perceptionButton.setLabel("Roll Perception");
+	perceptionButton.setStyle("PRIMARY");
+
+	actionRow = new Discord.MessageActionRow();
+	actionRow.addComponents(perceptionButton);
+	actionRows.push(actionRow);
+
 	return actionRows;
 }
 
@@ -142,7 +154,7 @@ function prepareOutput(sageCache: SageCache, pathbuilderChar: PathbuilderCharact
 
 //#region button command
 
-const uuidActionRegex = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:All|Combat|Equipment|Feats|Formulas|Pets|Spells)$/i;
+const uuidActionRegex = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:All|Combat|Equipment|Feats|Formulas|Pets|Spells|Perception)$/i;
 
 function buttonTester(sageInteraction: SageInteraction<Discord.ButtonInteraction>): boolean {
 	return sageInteraction.interaction.isButton()
@@ -161,13 +173,20 @@ async function buttonHandler(sageInteraction: SageInteraction<Discord.ButtonInte
 	await sageInteraction.interaction.deferUpdate();
 	const actionParts = sageInteraction.interaction.customId.split("|");
 	const pathbuilderCharId = actionParts[0] as UUID;
-	const outputType = actionParts[1] as TPathbuilderCharacterOutputType;
 	const core = await utils.FsUtils.readJsonFile<TPathbuilderCharacter>(getPath(pathbuilderCharId));
 	if (core) {
 		const pathbuilderChar = new PathbuilderCharacter(core);
-		const output = prepareOutput(sageInteraction.caches, pathbuilderChar, outputType);
-		const message = sageInteraction.interaction.message as Discord.Message;
-		message.edit(output);
+		if (actionParts[1] === "Perception") {
+			const dice = `[1d20+${pathbuilderChar.perceptionMod} ${pathbuilderChar.name} Perception]`;
+			const matches = parseDiceMatches(sageInteraction, dice);
+			const output = matches.reduce((out, match) => { out.push(...match.output); return out; }, <TDiceOutput[]>[]);
+			sendDice(sageInteraction, output);
+		}else {
+			const outputType = actionParts[1] as TPathbuilderCharacterOutputType;
+			const output = prepareOutput(sageInteraction.caches, pathbuilderChar, outputType);
+			const message = sageInteraction.interaction.message as Discord.Message;
+			await message.edit(output);
+		}
 	}
 }
 
