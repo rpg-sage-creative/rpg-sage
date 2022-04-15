@@ -721,12 +721,12 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		if (this.core.weapons.length || this.core.armor.length) {
 			push(`<b>Items</b> ${itemsToHtml(this.core.weapons, this.core.armor)}`);
 		}
-		push();
-		push(`<b>AC</b> ${this.core.acTotal.acTotal}; ${this.savingThrows.toHtml()}`);
-		push(`<b>HP</b> ${this.maxHp}`);
-		push();
-		push(`<b>Speed</b> ${calculateSpeed(this)} feet`);
 		if (["All", "Combat"].includes(outputType) && this.core.weapons.length) {
+			push();
+			push(`<b>AC</b> ${this.core.acTotal.acTotal}; ${this.savingThrows.toHtml()}`);
+			push(`<b>HP</b> ${this.maxHp}`);
+			push();
+			push(`<b>Speed</b> ${calculateSpeed(this)} feet`);
 			push();
 			this.core.weapons.map(weapon => weaponToHtml(this, weapon)).forEach(push);
 		}
