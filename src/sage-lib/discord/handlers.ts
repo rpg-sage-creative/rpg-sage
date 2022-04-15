@@ -163,7 +163,8 @@ export async function handleInteraction(interaction: Discord.Interaction): Promi
 	try {
 		const isCommand = interaction.isCommand();
 		const isButton = interaction.isButton();
-		if (isCommand || isButton) {
+		const isSelectMenu = interaction.isSelectMenu();
+		if (isCommand || isButton || isSelectMenu) {
 			const sageInteraction = await SageInteraction.fromInteraction(interaction);
 			await handleInteractions(sageInteraction, output);
 		}

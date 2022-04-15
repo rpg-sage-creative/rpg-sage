@@ -10,6 +10,10 @@ import type { IHasSavingThrows } from "./SavingThrows";
 import SavingThrows from "./SavingThrows";
 import { ABILITIES } from "../..";
 
+
+const statKeys: TPathbuilderCharacterAbilityKey[] = ["dex", "int", "str", "int", "cha", "cha", "cha", "wis", "wis", "int", "cha", "wis", "int", "dex", "wis", "dex"];
+const skillNames = "Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery".split(",");
+
 //#region types
 
 enum PathbuilderCharacterProficiencyType {
@@ -223,6 +227,8 @@ type TPathbuilderCharacterCustomFlag = keyof TPathbuilderCharacterCustomFlags;
 export type TPathbuilderCharacter = TPathbuilderCharacterCustomFlags & {
 	/** Should be UUID */
 	id: string;
+	/** Clean this up! */
+	sheet: TSimpleMap;
 	name: string;
 	class: string;
 	dualClass?: string;
@@ -296,8 +302,8 @@ function equipmentToHtml(equipment: TPathbuilderCharacterEquipment[]): string {
 	return equipment.map(o => o[COUNT] > 1 ? `${o[NAME]} x${o[COUNT]}` : o[NAME]).join(", ");
 }
 function loreToHtml(char: PathbuilderCharacter): string {
-	const NAME = 0, PROFMOD = 1, core = char.toJSON();
-	return core.lores.map(l => `${l[NAME]} ${toModifier(char.levelProficiencyMod + l[PROFMOD] + char.abilities.intMod)}`).join(", ");
+	const NAME = 0, PROFMOD = 1;
+	return char.lores.map(l => `${l[NAME]} ${toModifier(char.levelProficiencyMod + l[PROFMOD] + char.abilities.intMod)}`).join(", ");
 }
 function moneyToHtml(money: TPathbuilderCharacterMoney): string {
 	const coins = <string[]>[];
@@ -316,18 +322,13 @@ function moneyToHtml(money: TPathbuilderCharacterMoney): string {
 	return coins.join(", ");
 }
 function skillsToHtml(char: PathbuilderCharacter): string {
-	const core = char.toJSON();
-	const statKeys: TPathbuilderCharacterAbilityKey[] = ["dex", "int", "str", "int", "cha", "cha", "cha", "wis", "wis", "int", "cha", "wis", "int", "dex", "wis", "dex"];
-	return "Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery"
-		.split(",").map((skill, index) => {
-			const profMod = char.getProficiencyMod(skill as TPathbuilderCharacterProficienciesKey);
-			if (profMod <= 0) {
-				return "";
-			}
-			const levelMod = char.levelProficiencyMod;
-			const statMod = Abilities.scoreToMod(core.abilities[statKeys[index]]);
-			return `${skill} ${toModifier(levelMod + profMod + statMod)}`;
-		}).filter(s => s).join(", ");
+	return skillNames.map(skill => {
+		const profMod = char.getProficiencyMod(skill as TPathbuilderCharacterProficienciesKey);
+		if (profMod <= 0) {
+			return "";
+		}
+		return `${skill} ${toModifier(char.getSkillMod(skill))}`;
+	}).filter(s => s).join(", ");
 }
 function calculateSpeed(char: PathbuilderCharacter): number {
 	const core = char.toJSON();
@@ -546,8 +547,14 @@ function eq<T, U>(a: T, b: U, matcher = false): boolean {
 }
 
 export type TPathbuilderCharacterOutputType = "All" | "Combat" | "Equipment" | "Feats" | "Formulas" | "Pets" | "Spells";
-
+type TSimpleMap = { [key:string]:any; };
 export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+
+	//#region interactive char sheet
+	private get sheet(): TSimpleMap { return this.core.sheet ?? (this.core.sheet = {}); }
+	public getSheetValue<T extends any = string>(key: string): T | undefined { return this.sheet[key]; }
+	public setSheetValue<T>(key: string, value: T): void { this.sheet[key] = value; }
+	//#endregion
 
 	public constructor(private core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
 		super();
@@ -638,6 +645,41 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 	}
 
 	//#endregion
+
+	public get lores(): TPathbuilderCharacterLore[] {
+		return this.core.lores ?? [];
+	}
+	public hasLore(loreName: string): boolean { return this.getLore(loreName) !== undefined; }
+	private getLore(loreName: string): TPathbuilderCharacterLore | undefined { return this.lores.find(lore => lore[0] === loreName); }
+	public getLoreMod(loreName: string): number {
+		const lore = this.getLore(loreName);
+		return lore
+			? lore[1] + this.levelProficiencyMod + this.abilities.intMod
+			: this.levelProficiencyMod + this.untrainedProficiencyMod;
+	}
+
+	public getSkillMod(skillName: string): number {
+		const skillIndex = skillNames.indexOf(skillName);
+		const profMod = this.getProficiencyMod(skillName as TPathbuilderCharacterProficienciesKey);
+		const levelMod = this.levelProficiencyMod;
+		const statMod = Abilities.scoreToMod(this.abilities[statKeys[skillIndex]]);
+		return levelMod + profMod + statMod;
+	}
+
+	public getProficiencyAndMod(key: string): [TProficiency, number] {
+		if (key === "Perception") {
+			return [this.getProficiency(key as TPathbuilderCharacterProficienciesKey), this.perceptionMod];
+		}
+		if (skillNames.includes(key)) {
+			return [this.getProficiency(key as TPathbuilderCharacterProficienciesKey), this.getSkillMod(key)];
+		}
+		if (this.hasLore(key)) {
+			const lore = this.getLore(key)!;
+			return [PathbuilderCharacterProficiencyType[lore[1]] as TProficiency, this.getLoreMod(key)];
+		}
+		// Check other stuff?
+		return ["Untrained", this.untrainedProficiencyMod];
+	}
 
 	public get perceptionMod(): number {
 		return this.levelProficiencyMod + this.getProficiencyMod("perception") + this.abilities.wisMod;
