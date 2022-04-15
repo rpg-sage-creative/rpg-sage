@@ -221,6 +221,8 @@ export type TPathbuilderCharacterCustomFlags = {
 };
 type TPathbuilderCharacterCustomFlag = keyof TPathbuilderCharacterCustomFlags;
 export type TPathbuilderCharacter = TPathbuilderCharacterCustomFlags & {
+	/** Should be UUID */
+	id: string;
 	name: string;
 	class: string;
 	dualClass?: string;
@@ -425,7 +427,6 @@ function doEquipmentMoney(char: PathbuilderCharacter) {
 	const hasEquipment = core.equipment.length > 0;
 	const hasMoney = Object.keys(core.money).find(key => core.money[key as keyof TPathbuilderCharacterMoney]);
 	if (hasEquipment || hasMoney) {
-		out.push();
 		if (hasEquipment) {
 			out.push(`<b>Equipment</b> ${equipmentToHtml(core.equipment)}`);
 		}
@@ -544,16 +545,22 @@ function eq<T, U>(a: T, b: U, matcher = false): boolean {
 	return String(a).toLowerCase() === String(b).toLowerCase();
 }
 
+export type TPathbuilderCharacterOutputType = "All" | "Combat" | "Equipment" | "Feats" | "Formulas" | "Pets" | "Spells";
+
 export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
 
 	public constructor(private core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
 		super();
+		if (!core.id) {
+			core.id = utils.UuidUtils.generate();
+		}
 		Object.keys(flags).forEach(key => {
 			core[key as TPathbuilderCharacterCustomFlag] = flags[key as TPathbuilderCharacterCustomFlag];
 		});
 	}
 	public toJSON(): TPathbuilderCharacter { return this.core; }
 
+	public get id(): string { return this.core.id; }
 	public get name(): string { return this.core.name; }
 
 	//#region flags/has
@@ -661,7 +668,7 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		return `${name} - ${klass}${dualClass} ${level}`;
 	}
 
-	public toHtml(): string {
+	public toHtml(outputType: TPathbuilderCharacterOutputType = "All"): string {
 		const html: string[] = [];
 		push(`<b><u>${this.toHtmlName()}</u></b>`);
 		push(`${bracketTraits(this.core.alignment, PathbuilderCharacterSizeType[this.core.size], this.core.ancestry, this.core.heritage)}`);
@@ -677,36 +684,75 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		push(`<b>HP</b> ${this.maxHp}`);
 		push();
 		push(`<b>Speed</b> ${calculateSpeed(this)} feet`);
-		if (this.core.weapons.length) {
+		if (["All", "Combat"].includes(outputType) && this.core.weapons.length) {
 			push();
 			this.core.weapons.map(weapon => weaponToHtml(this, weapon)).forEach(push);
 		}
-		if (this.core.spellCasters?.length) {
+		if (["All", "Spells"].includes(outputType) && this.core.spellCasters?.length) {
 			push();
 			this.core.spellCasters.map(spellCaster => spellCasterToHtml(this, spellCaster)).forEach(push);
 		}
-		if (this.core.pets?.length) {
+		if (["All", "Pets"].includes(outputType) && this.core.pets?.length) {
 			push();
 			doPets(this).forEach(push);
 		}
-		doEquipmentMoney(this).forEach(push);
-		if (this.feats.length) {
+		if (["All", "Equipment"].includes(outputType)) {
+			const lines = doEquipmentMoney(this);
+			if (lines.length) {
+				push();
+				lines.forEach(push);
+			}
+		}
+		if (["All", "Feats"].includes(outputType) && this.feats.length) {
 			push();
 			push(`<b>Feats</b> ${this.feats.map(mapFeat).join(", ")}`);
 		}
-		if (this.core.formula?.length) {
+		if (["All", "Formulas"].includes(outputType) && this.core.formula?.length) {
 			push();
 			const one = this.core.formula.length === 1;
 			this.core.formula.forEach(formulaType => {
 				const type = formulaType.type !== "other" || one ? ` (${formulaType.type})` : ``;
 				push(`<b>Formula Book${type}</b> ${formulaType.known.join(", ")}`);
 			});
-
 		}
 		return html.join("");
+
 		function push(value?: string) {
 			html.push(`${html.length ? "<br/>" : ""}${value ?? "---"}`);
 		}
+	}
+	public getValidOutputTypes(): TPathbuilderCharacterOutputType[] {
+		const outputTypes: TPathbuilderCharacterOutputType[] = [];
+
+		if (this.core.weapons?.length) {
+			outputTypes.push("Combat");
+		}
+
+		if (this.core.spellCasters?.length) {
+			outputTypes.push("Spells");
+		}
+
+		if (this.core.pets?.length) {
+			outputTypes.push("Pets");
+		}
+
+		//#region Equipment
+		const hasEquipment = this.core.equipment.length > 0;
+		const hasMoney = Object.keys(this.core.money).find(key => this.core.money[key as keyof TPathbuilderCharacterMoney]);
+		if (hasEquipment || hasMoney) {
+			outputTypes.push("Equipment");
+		}
+		//#endregion
+
+		if (this.core.feats?.length) {
+			outputTypes.push("Feats");
+		}
+
+		if (this.core.formula?.length) {
+			outputTypes.push("Formulas");
+		}
+
+		return outputTypes;
 	}
 
 	//#endregion

@@ -1,31 +1,17 @@
 import * as Discord from "discord.js";
 import { PathbuilderCharacter } from "../../../sage-pf2e";
-import type { Optional } from "../../../sage-utils";
-import utils from "../../../sage-utils";
-import type { DUser, TChannel, TCommand } from "../../discord";
-import { isAuthorBotOrWebhook, registerInteractionListener, registerReactionListener } from "../../discord/handlers";
-import { SageDialogWebhookName } from "../../discord/messages";
-import { discordPromptYesNo } from "../../discord/prompts";
-import ActiveBot from "../model/ActiveBot";
-import type SageMessage from "../model/SageMessage";
-import type SageReaction from "../model/SageReaction";
-import { registerAdminCommand } from "./cmd";
-import { resolveToEmbeds } from "../../discord/embeds";
-import type { TPathbuilderCharacterCustomFlags } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
-import type SageInteraction from "../model/SageInteraction";
-import type { TSlashCommand } from "../../../types";
-import type SageCache from "../model/SageCache";
+import type { TPathbuilderCharacter, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterOutputType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
+import utils, { UUID } from "../../../sage-utils";
 import { registerSlashCommand } from "../../../slash.mjs";
-
-/** THIS IS COPY/PASTED; PROPERLY REUSE IT */
-function updateEmbed(originalEmbed: Discord.MessageEmbed, title: Optional<string>, imageUrl: Optional<string>, content: string): Discord.MessageEmbed {
-	const updatedEmbed = new Discord.MessageEmbed();
-	updatedEmbed.setTitle(title ?? originalEmbed.title ?? "");
-	updatedEmbed.setDescription(content);
-	updatedEmbed.setThumbnail(imageUrl ?? originalEmbed.thumbnail?.url ?? "");
-	updatedEmbed.setColor(originalEmbed.color!);
-	return updatedEmbed;
-}
+import type { TSlashCommand } from "../../../types";
+import type { DUser, TChannel } from "../../discord";
+import { resolveToEmbeds } from "../../discord/embeds";
+import { registerInteractionListener } from "../../discord/handlers";
+import { discordPromptYesNo } from "../../discord/prompts";
+import type SageCache from "../model/SageCache";
+import type SageInteraction from "../model/SageInteraction";
+import type SageMessage from "../model/SageMessage";
+import { registerAdminCommand } from "./cmd";
 
 async function pathbuilder2e(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin) {
@@ -103,51 +89,86 @@ async function attachCharacter(sageCache: SageCache, channel: TChannel | DUser, 
 	return Promise.resolve();
 }
 
-//#region refresh
-
-async function isPathbuilder2eRefresh(sageReaction: SageReaction): Promise<TCommand | null> {
-	const isBot = await isAuthorBotOrWebhook(sageReaction);
-	if (!isBot) {
-		return null;
-	}
-
-	const messageReaction = sageReaction.messageReaction;
-
-	// const game = botTesterReaction.sageCache.game;
-	// const server = botTesterReaction.sageCache.server;
-	// const bot = botTesterReaction.sageCache.bot;
-	const refreshEmoji = "♻️"; // (game ?? server ?? bot).getEmoji(EmojiType.CommandDelete);
-	if (messageReaction.emoji.name !== refreshEmoji) {
-		return null;
-	}
-
-	const message = messageReaction.message;
-	const embed = message.embeds[0];
-	if (!embed) {
-		return null;
-	}
-
-	return embed.description?.match(/^\*Pathbuilder2e:\d+\*\n/)
-		? { command: "pathbuilder-refresh" }
-		: null;
+function getPath(pathbuilderCharId: string): string {
+	return `./data/sage/pb2e/${pathbuilderCharId}.json`;
 }
 
-async function doPathbuilder2eRefresh(sageReaction: SageReaction): Promise<void> {
-	const message = sageReaction.messageReaction.message;
-	const embed = message.embeds[0];
-	const pathbuilderId = +(embed.description?.match(/^\*Pathbuilder2e:(\d+)\*\n/) ?? [])[1];
-	const pathbuilderChar = await PathbuilderCharacter.fetch(pathbuilderId);
-
-	const caches = sageReaction.caches;
-	const formattedCharacter = caches.format(`*Pathbuilder2e:${pathbuilderId}*\n` + pathbuilderChar?.toHtml());
-	const updatedEmbed = updateEmbed(embed, null, null, formattedCharacter);
-	if (ActiveBot.isActiveBot(message.author?.id)) {
-		message.edit({ embeds:[updatedEmbed] }).then(() => sageReaction.messageReaction.remove(), console.error);
-	} else {
-		const webhook = await caches.discord.fetchWebhook(caches.server.did, caches.discordKey.channel, SageDialogWebhookName);
-		webhook?.editMessage(<Discord.Message>message, { embeds:[updatedEmbed] }).then(() => sageReaction.messageReaction.remove(), console.error);
+async function postCharacter(sageCache: SageCache, channel: TChannel, pathbuilderChar: PathbuilderCharacter, pin: boolean): Promise<void> {
+	const saved = await utils.FsUtils.writeFile(getPath(pathbuilderChar.id), pathbuilderChar.toJSON(), true).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+	if (saved) {
+		const output = prepareOutput(sageCache, pathbuilderChar, "Combat");
+		const message = await channel.send(output).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+		if (pin && message?.pinnable) {
+			await message.pin();
+		}
+	}else {
+		const output = { embeds:resolveToEmbeds(sageCache, pathbuilderChar.toHtml()) };
+		const message = await channel.send(output).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+		if (pin && message?.pinnable) {
+			await message.pin();
+		}
 	}
+}
 
+function createButton(pathbuilderCharId: UUID, label: string, activeButton: TPathbuilderCharacterOutputType): Discord.MessageButton {
+	const button = new Discord.MessageButton();
+	button.setCustomId(`${pathbuilderCharId}|${label}`);
+	button.setDisabled(label === activeButton);
+	button.setLabel(label);
+	button.setStyle("PRIMARY");
+	return button;
+}
+function createButtonRows(pathbuilderChar: PathbuilderCharacter, activeButton: TPathbuilderCharacterOutputType): Discord.MessageActionRow[] {
+	const actionRows: Discord.MessageActionRow[] = [];
+	let actionRow: Discord.MessageActionRow;
+	const buttonLabels = pathbuilderChar.getValidOutputTypes();
+	buttonLabels.forEach(label => {
+		if (!actionRow || actionRow.components.length === 5) {
+			actionRow = new Discord.MessageActionRow();
+			actionRows.push(actionRow);
+		}
+		const button = createButton(pathbuilderChar.id, label, activeButton);
+		actionRow.addComponents(button);
+	});
+	return actionRows;
+}
+
+type TOutput = { embeds:Discord.MessageEmbed[], components:Discord.MessageActionRow[] };
+function prepareOutput(sageCache: SageCache, pathbuilderChar: PathbuilderCharacter, outputType: TPathbuilderCharacterOutputType): TOutput {
+	const embeds = resolveToEmbeds(sageCache, pathbuilderChar.toHtml(outputType));
+	const components = createButtonRows(pathbuilderChar, outputType);
+	return { embeds, components };
+}
+
+//#region button command
+
+const uuidActionRegex = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:All|Combat|Equipment|Feats|Formulas|Pets|Spells)$/i;
+
+function buttonTester(sageInteraction: SageInteraction<Discord.ButtonInteraction>): boolean {
+	return sageInteraction.interaction.isButton()
+		&& uuidActionRegex.test(sageInteraction.interaction.customId);
+}
+
+// function toggleButtons(actionRow: Discord.MessageActionRow, activeButton: TPathbuilderCharacterOutputType): void {
+// 	actionRow.components.forEach(button => {
+// 		if (button instanceof Discord.MessageButton) {
+// 			button.setDisabled(button.label === activeButton);
+// 		}
+// 	});
+// }
+
+async function buttonHandler(sageInteraction: SageInteraction<Discord.ButtonInteraction>): Promise<void> {
+	await sageInteraction.interaction.deferUpdate();
+	const actionParts = sageInteraction.interaction.customId.split("|");
+	const pathbuilderCharId = actionParts[0] as UUID;
+	const outputType = actionParts[1] as TPathbuilderCharacterOutputType;
+	const core = await utils.FsUtils.readJsonFile<TPathbuilderCharacter>(getPath(pathbuilderCharId));
+	if (core) {
+		const pathbuilderChar = new PathbuilderCharacter(core);
+		const output = prepareOutput(sageInteraction.caches, pathbuilderChar, outputType);
+		const message = sageInteraction.interaction.message as Discord.Message;
+		message.edit(output);
+	}
 }
 
 //#endregion
@@ -181,10 +202,7 @@ async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction): Prom
 	if (attach) {
 		await attachCharacter(sageInteraction.caches, channel, pathbuilderId, pathbuilderChar, pin);
 	}else {
-		const messages = await sageInteraction.send(`*Pathbuilder2e:${pathbuilderId}*\n` + pathbuilderChar.toHtml());
-		if (pin && messages[0]?.pinnable) {
-			await messages[0].pin();
-		}
+		await postCharacter(sageInteraction.caches, channel, pathbuilderChar, pin);
 	}
 	return sageInteraction.deleteReply();
 }
@@ -206,8 +224,8 @@ function importCommand(): TSlashCommand {
 
 export function registerCommandHandlers(): void {
 	registerAdminCommand(pathbuilder2e, "pathbuilder2e");
-	if (false) registerReactionListener(isPathbuilder2eRefresh, doPathbuilder2eRefresh);
 	registerInteractionListener(slashTester, slashHandler);
+	registerInteractionListener(buttonTester, buttonHandler);
 }
 
 export function registerSlashCommands(): void {
