@@ -154,15 +154,16 @@ function buildCommand(raw: TSlashCommand): SlashCommandBuilder {
 	return cmd;
 }
 
-function buildUnifiedCommand(): SlashCommandBuilder[] {
-	const command = { name:"Sage", description:"RPG Sage Commands", children:allSlashCommands };
+function buildUnifiedCommand(which: TBot): SlashCommandBuilder[] {
+	const command = { name:`Sage${which === "stable" ? "" : `-${which}`}`, description:`RPG Sage${which === "stable" ? "" : ` (${which})`} Commands`, children:allSlashCommands };
 	return [buildCommand(command)];
 }
-function buildIndividualCommands(): SlashCommandBuilder[] {
+function buildIndividualCommands(which: TBot): SlashCommandBuilder[] {
+	which;
 	return allSlashCommands.map(buildCommand);
 }
-function buildCommands(): SlashCommandBuilder[] {
-	return true ? buildUnifiedCommand() : buildIndividualCommands();
+function buildCommands(which: TBot): SlashCommandBuilder[] {
+	return true ? buildUnifiedCommand(which) : buildIndividualCommands(which);
 }
 
 //#endregion
@@ -173,7 +174,7 @@ async function updateSlashCommands(bot: IBotCore): Promise<void> {
 		console.log(`Started refreshing application (/) commands for: ${botCodeName}`);
 
 		await rest.put(Routes.applicationCommands(bot.did), {
-			body: buildCommands()
+			body: buildCommands(bot.codeName)
 		});
 
 		console.log(`Successfully reloaded application (/) commands for: ${botCodeName}.`);
@@ -208,7 +209,7 @@ if (!botJson) {
 		wipeSlashCommands(botJson);
 	}else {
 		try {
-			const built = buildCommands();
+			const built = buildCommands(botCodeName);
 			utils.FsUtils.writeFileSync(`../data/slash/${botCodeName}.json`, built, true, true);
 			console.log(`Slash Commands built for ${botCodeName}: ${built.length} commands; ${characterCount} characters`);
 		}catch(ex) {

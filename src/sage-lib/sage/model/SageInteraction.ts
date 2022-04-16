@@ -50,7 +50,7 @@ export default class SageInteraction<T extends DInteraction = any>
 		const gameLower = game?.toLowerCase();
 
 		const commandValues = this.commandValues.map(s => s.toLowerCase());
-		if (commandValues[0] === "sage") {
+		if (["sage", "sage-stable", "sage-beta", "sage-dev"].includes(commandValues[0])) {
 			commandValues.shift();
 		}
 
