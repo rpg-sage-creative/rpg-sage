@@ -1,5 +1,6 @@
 import type * as Discord from "discord.js";
 import utils, { Optional } from "../../../sage-utils";
+import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import type { TChannel, TCommandAndArgs } from "../../discord";
 import ArgsManager from "../../discord/ArgsManager";
@@ -274,11 +275,11 @@ function helpSlashTester(sageInteraction: SageInteraction): boolean {
 async function helpSlashHandler(sageInteraction: SageInteraction): Promise<void> {
 	const categories = sageInteraction.getString("category")?.split(",") ?? [];
 	const renderableContent = await createHelpRenderable(sageInteraction.caches, categories);
-	return sageInteraction.reply(renderableContent);
+	return sageInteraction.reply(renderableContent, true);
 }
 
-export function helpCommand(): TSlashCommand {
-	return {
+function helpCommand(): TSlashCommand {
+	const command = {
 		name: "Help",
 		description: "Get basic Help for RPG Sage.",
 		options: [
@@ -327,11 +328,18 @@ export function helpCommand(): TSlashCommand {
 			] }
 		]
 	};
+	// command.options[0].choices.forEach(choice => delete choice.description);
+	command.options[0].choices.sort((a, b) => utils.ArrayUtils.Sort.stringIgnoreCase(a.name, b.name));
+	return command;
 }
 
 //#endregion
 
-export default function register(): void {
+export function registerCommandHandlers(): void {
 	registerMessageListener(renderHelpTester, renderHelpHandler);
 	registerInteractionListener(helpSlashTester, helpSlashHandler);
+}
+
+export function registerSlashCommands(): void {
+	registerSlashCommand(helpCommand());
 }

@@ -1,18 +1,18 @@
 import registerAdmin from "./admin";
-import registerCal from "./cal";
+import { registerCommandHandlers as registerCal, registerSlashCommands as registerCalSlashCommands } from "./cal";
 import registerCmd from "./cmd";
-import registerDcs from "./dcs";
-import registerDefault from "./default";
+import { registerCommandHandlers as registerDcs, registerSlashCommands as registerDcsSlashCommands } from "./dcs";
+import { registerCommandHandlers as registerDefault, registerSlashCommands as registerDefaultSlashCommands } from "./default";
 import registerDialog from "./dialog";
 import registerDice from "./dice";
-import registerHelp from "./help";
-import registerPathbuilder from "./pathbuilder";
+import { registerCommandHandlers as registerHelp, registerSlashCommands as registerHelpSlashCommands } from "./help";
+import { registerCommandHandlers as registerPathbuilder, registerSlashCommands as registerPathbuilderSlashCommands } from "./pathbuilder";
 import registerPfs from "./pfs";
-import registerSpells from "./spells"
+import registerSpells from "./spells";
 import registerWealth from "./wealth";
-import registerWeather from "./weather";
+import { registerCommandHandlers as registerWeather, registerSlashCommands as registerWeatherSlashCommands } from "./weather";
 
-export default function register(): void {
+export function registerCommandHandlers(): void {
 	registerAdmin();
 	registerCal();
 	registerCmd();
@@ -26,4 +26,13 @@ export default function register(): void {
 	registerSpells();
 	registerWealth();
 	registerWeather();
+}
+
+export function registerSlashCommands(): void {
+	registerCalSlashCommands();
+	registerDcsSlashCommands();
+	registerDefaultSlashCommands();
+	registerHelpSlashCommands();
+	registerPathbuilderSlashCommands();
+	registerWeatherSlashCommands();
 }

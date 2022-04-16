@@ -10,6 +10,10 @@ import type { IHasSavingThrows } from "./SavingThrows";
 import SavingThrows from "./SavingThrows";
 import { ABILITIES } from "../..";
 
+
+const statKeys: TPathbuilderCharacterAbilityKey[] = ["dex", "int", "str", "int", "cha", "cha", "cha", "wis", "wis", "int", "cha", "wis", "int", "dex", "wis", "dex"];
+const skillNames = "Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery".split(",");
+
 //#region types
 
 enum PathbuilderCharacterProficiencyType {
@@ -221,6 +225,10 @@ export type TPathbuilderCharacterCustomFlags = {
 };
 type TPathbuilderCharacterCustomFlag = keyof TPathbuilderCharacterCustomFlags;
 export type TPathbuilderCharacter = TPathbuilderCharacterCustomFlags & {
+	/** Should be UUID */
+	id: string;
+	/** Clean this up! */
+	sheet: TSimpleMap;
 	name: string;
 	class: string;
 	dualClass?: string;
@@ -294,8 +302,8 @@ function equipmentToHtml(equipment: TPathbuilderCharacterEquipment[]): string {
 	return equipment.map(o => o[COUNT] > 1 ? `${o[NAME]} x${o[COUNT]}` : o[NAME]).join(", ");
 }
 function loreToHtml(char: PathbuilderCharacter): string {
-	const NAME = 0, PROFMOD = 1, core = char.toJSON();
-	return core.lores.map(l => `${l[NAME]} ${toModifier(char.levelProficiencyMod + l[PROFMOD] + char.abilities.intMod)}`).join(", ");
+	const NAME = 0, PROFMOD = 1;
+	return char.lores.map(l => `${l[NAME]} ${toModifier(char.levelProficiencyMod + l[PROFMOD] + char.abilities.intMod)}`).join(", ");
 }
 function moneyToHtml(money: TPathbuilderCharacterMoney): string {
 	const coins = <string[]>[];
@@ -314,18 +322,13 @@ function moneyToHtml(money: TPathbuilderCharacterMoney): string {
 	return coins.join(", ");
 }
 function skillsToHtml(char: PathbuilderCharacter): string {
-	const core = char.toJSON();
-	const statKeys: TPathbuilderCharacterAbilityKey[] = ["dex", "int", "str", "int", "cha", "cha", "cha", "wis", "wis", "int", "cha", "wis", "int", "dex", "wis", "dex"];
-	return "Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery"
-		.split(",").map((skill, index) => {
-			const profMod = char.getProficiencyMod(skill as TPathbuilderCharacterProficienciesKey);
-			if (profMod <= 0) {
-				return "";
-			}
-			const levelMod = char.levelProficiencyMod;
-			const statMod = Abilities.scoreToMod(core.abilities[statKeys[index]]);
-			return `${skill} ${toModifier(levelMod + profMod + statMod)}`;
-		}).filter(s => s).join(", ");
+	return skillNames.map(skill => {
+		const profMod = char.getProficiencyMod(skill as TPathbuilderCharacterProficienciesKey);
+		if (profMod <= 0) {
+			return "";
+		}
+		return `${skill} ${toModifier(char.getSkillMod(skill))}`;
+	}).filter(s => s).join(", ");
 }
 function calculateSpeed(char: PathbuilderCharacter): number {
 	const core = char.toJSON();
@@ -425,7 +428,6 @@ function doEquipmentMoney(char: PathbuilderCharacter) {
 	const hasEquipment = core.equipment.length > 0;
 	const hasMoney = Object.keys(core.money).find(key => core.money[key as keyof TPathbuilderCharacterMoney]);
 	if (hasEquipment || hasMoney) {
-		out.push();
 		if (hasEquipment) {
 			out.push(`<b>Equipment</b> ${equipmentToHtml(core.equipment)}`);
 		}
@@ -544,16 +546,28 @@ function eq<T, U>(a: T, b: U, matcher = false): boolean {
 	return String(a).toLowerCase() === String(b).toLowerCase();
 }
 
+export type TPathbuilderCharacterOutputType = "All" | "Combat" | "Equipment" | "Feats" | "Formulas" | "Pets" | "Spells";
+type TSimpleMap = { [key:string]:any; };
 export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+
+	//#region interactive char sheet
+	private get sheet(): TSimpleMap { return this.core.sheet ?? (this.core.sheet = {}); }
+	public getSheetValue<T extends any = string>(key: string): T | undefined { return this.sheet[key]; }
+	public setSheetValue<T>(key: string, value: T): void { this.sheet[key] = value; }
+	//#endregion
 
 	public constructor(private core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
 		super();
+		if (!core.id) {
+			core.id = utils.UuidUtils.generate();
+		}
 		Object.keys(flags).forEach(key => {
 			core[key as TPathbuilderCharacterCustomFlag] = flags[key as TPathbuilderCharacterCustomFlag];
 		});
 	}
 	public toJSON(): TPathbuilderCharacter { return this.core; }
 
+	public get id(): string { return this.core.id; }
 	public get name(): string { return this.core.name; }
 
 	//#region flags/has
@@ -632,6 +646,41 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 
 	//#endregion
 
+	public get lores(): TPathbuilderCharacterLore[] {
+		return this.core.lores ?? [];
+	}
+	public hasLore(loreName: string): boolean { return this.getLore(loreName) !== undefined; }
+	private getLore(loreName: string): TPathbuilderCharacterLore | undefined { return this.lores.find(lore => lore[0] === loreName); }
+	public getLoreMod(loreName: string): number {
+		const lore = this.getLore(loreName);
+		return lore
+			? lore[1] + this.levelProficiencyMod + this.abilities.intMod
+			: this.levelProficiencyMod + this.untrainedProficiencyMod;
+	}
+
+	public getSkillMod(skillName: string): number {
+		const skillIndex = skillNames.indexOf(skillName);
+		const profMod = this.getProficiencyMod(skillName as TPathbuilderCharacterProficienciesKey);
+		const levelMod = this.levelProficiencyMod;
+		const statMod = Abilities.scoreToMod(this.abilities[statKeys[skillIndex]]);
+		return levelMod + profMod + statMod;
+	}
+
+	public getProficiencyAndMod(key: string): [TProficiency, number] {
+		if (key === "Perception") {
+			return [this.getProficiency(key as TPathbuilderCharacterProficienciesKey), this.perceptionMod];
+		}
+		if (skillNames.includes(key)) {
+			return [this.getProficiency(key as TPathbuilderCharacterProficienciesKey), this.getSkillMod(key)];
+		}
+		if (this.hasLore(key)) {
+			const lore = this.getLore(key)!;
+			return [PathbuilderCharacterProficiencyType[lore[1]] as TProficiency, this.getLoreMod(key)];
+		}
+		// Check other stuff?
+		return ["Untrained", this.untrainedProficiencyMod];
+	}
+
 	public get perceptionMod(): number {
 		return this.levelProficiencyMod + this.getProficiencyMod("perception") + this.abilities.wisMod;
 	}
@@ -661,7 +710,7 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		return `${name} - ${klass}${dualClass} ${level}`;
 	}
 
-	public toHtml(): string {
+	public toHtml(outputType: TPathbuilderCharacterOutputType = "All"): string {
 		const html: string[] = [];
 		push(`<b><u>${this.toHtmlName()}</u></b>`);
 		push(`${bracketTraits(this.core.alignment, PathbuilderCharacterSizeType[this.core.size], this.core.ancestry, this.core.heritage)}`);
@@ -672,41 +721,80 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		if (this.core.weapons.length || this.core.armor.length) {
 			push(`<b>Items</b> ${itemsToHtml(this.core.weapons, this.core.armor)}`);
 		}
-		push();
-		push(`<b>AC</b> ${this.core.acTotal.acTotal}; ${this.savingThrows.toHtml()}`);
-		push(`<b>HP</b> ${this.maxHp}`);
-		push();
-		push(`<b>Speed</b> ${calculateSpeed(this)} feet`);
-		if (this.core.weapons.length) {
+		if (["All", "Combat"].includes(outputType) && this.core.weapons.length) {
+			push();
+			push(`<b>AC</b> ${this.core.acTotal.acTotal}; ${this.savingThrows.toHtml()}`);
+			push(`<b>HP</b> ${this.maxHp}`);
+			push();
+			push(`<b>Speed</b> ${calculateSpeed(this)} feet`);
 			push();
 			this.core.weapons.map(weapon => weaponToHtml(this, weapon)).forEach(push);
 		}
-		if (this.core.spellCasters?.length) {
+		if (["All", "Spells"].includes(outputType) && this.core.spellCasters?.length) {
 			push();
 			this.core.spellCasters.map(spellCaster => spellCasterToHtml(this, spellCaster)).forEach(push);
 		}
-		if (this.core.pets?.length) {
+		if (["All", "Pets"].includes(outputType) && this.core.pets?.length) {
 			push();
 			doPets(this).forEach(push);
 		}
-		doEquipmentMoney(this).forEach(push);
-		if (this.feats.length) {
+		if (["All", "Equipment"].includes(outputType)) {
+			const lines = doEquipmentMoney(this);
+			if (lines.length) {
+				push();
+				lines.forEach(push);
+			}
+		}
+		if (["All", "Feats"].includes(outputType) && this.feats.length) {
 			push();
 			push(`<b>Feats</b> ${this.feats.map(mapFeat).join(", ")}`);
 		}
-		if (this.core.formula?.length) {
+		if (["All", "Formulas"].includes(outputType) && this.core.formula?.length) {
 			push();
 			const one = this.core.formula.length === 1;
 			this.core.formula.forEach(formulaType => {
 				const type = formulaType.type !== "other" || one ? ` (${formulaType.type})` : ``;
 				push(`<b>Formula Book${type}</b> ${formulaType.known.join(", ")}`);
 			});
-
 		}
 		return html.join("");
+
 		function push(value?: string) {
 			html.push(`${html.length ? "<br/>" : ""}${value ?? "---"}`);
 		}
+	}
+	public getValidOutputTypes(): TPathbuilderCharacterOutputType[] {
+		const outputTypes: TPathbuilderCharacterOutputType[] = [];
+
+		if (this.core.weapons?.length) {
+			outputTypes.push("Combat");
+		}
+
+		if (this.core.spellCasters?.length) {
+			outputTypes.push("Spells");
+		}
+
+		if (this.core.pets?.length) {
+			outputTypes.push("Pets");
+		}
+
+		//#region Equipment
+		const hasEquipment = this.core.equipment.length > 0;
+		const hasMoney = Object.keys(this.core.money).find(key => this.core.money[key as keyof TPathbuilderCharacterMoney]);
+		if (hasEquipment || hasMoney) {
+			outputTypes.push("Equipment");
+		}
+		//#endregion
+
+		if (this.core.feats?.length) {
+			outputTypes.push("Feats");
+		}
+
+		if (this.core.formula?.length) {
+			outputTypes.push("Formulas");
+		}
+
+		return outputTypes;
 	}
 
 	//#endregion

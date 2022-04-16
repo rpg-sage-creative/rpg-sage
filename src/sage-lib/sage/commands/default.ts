@@ -1,5 +1,6 @@
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
+import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import ArgsManager from "../../discord/ArgsManager";
 import { resolveToEmbeds } from "../../discord/embeds";
@@ -221,10 +222,22 @@ async function findHandler(sageMessage: SageMessage): Promise<void> {
 function dmSlashTester(sageInteraction: SageInteraction): boolean {
 	return sageInteraction.isCommand("DM");
 }
-function dmSlashHandler(sageInteraction: SageInteraction): Promise<void> {
-	return sageInteraction.user.send(`Hello!\nRPG Sage will now reply to your Direct Messages.\n*Note: Anytime RPG Sage is disconnected from Discord's server/api, you will need to reestablish this channel.*`) as Promise<any>;
+async function dmSlashHandler(sageInteraction: SageInteraction): Promise<void> {
+	return sageInteraction.defer(true).then(deferred, failure);
+
+	function deferred(): Promise<void> {
+		const dmContent = `Hello!\nRPG Sage will now reply to your Direct Messages.\n*Note: Anytime RPG Sage is disconnected from Discord, you will need to reestablish this channel. I apologize for the inconvenience.*`;
+		return sageInteraction.user.send(dmContent).then(success, failure);
+	}
+	function success(): Promise<void> {
+		return sageInteraction.reply(`Please check your DMs!`, true);
+	}
+	function failure(reason: any): Promise<void> {
+		console.error(reason);
+		return sageInteraction.reply(`Sorry, there was a problem!`, true);
+	}
 }
-export function dmCommand(): TSlashCommand {
+function dmCommand(): TSlashCommand {
 	return {
 		"name": "DM",
 		"description": "Establish direct message channel with RPG Sage."
@@ -233,7 +246,7 @@ export function dmCommand(): TSlashCommand {
 
 //#endregion
 
-export default function register(): void {
+export function registerCommandHandlers(): void {
 	registerCommandRegex(/^\s*list\s*(weapons|armou?r|spells)\s*by\s*(trait)?\s*(\w+)$/i, objectsBy);
 	registerCommandHelp("Lists", `list weapons by trait TRAIT`);
 	registerCommandHelp("Lists", `list armor by trait TRAIT`);
@@ -289,4 +302,8 @@ export default function register(): void {
 	});
 
 	registerInteractionListener(dmSlashTester, dmSlashHandler);
+}
+
+export function registerSlashCommands(): void {
+	registerSlashCommand(dmCommand());
 }

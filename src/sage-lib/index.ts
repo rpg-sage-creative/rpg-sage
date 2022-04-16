@@ -3,7 +3,7 @@ import registerPrompts from "./discord";
 import { setBotMeta } from "./discord/handlers";
 import { SageDialogWebhookName } from "./discord/messages";
 import { registerAndLoad } from "../sage-pf2e";
-import registerCommands from "./sage/commands";
+import { registerCommandHandlers } from "./sage/commands";
 import ActiveBot from "./sage/model/ActiveBot";
 import type { TBotCodeName } from "./sage/model/Bot";
 import BotRepo from "./sage/repo/BotRepo";
@@ -23,7 +23,7 @@ export default function activate(pf2DataPath: string, botCodeName: TBotCodeName,
 		// configureCommands(bot);
 		*/
 
-		registerCommands();
+		registerCommandHandlers();
 		registerPrompts();
 
 		registerAndLoad(pf2DataPath, includePf2ToolsData).then(() => ActiveBot.activate(botCodeName, ver));
