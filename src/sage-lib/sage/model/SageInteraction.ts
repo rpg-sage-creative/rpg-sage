@@ -18,7 +18,7 @@ interface SageInteractionCore extends HasSageCacheCore {
 	type: InteractionType;
 }
 
-export default class SageInteraction<T extends DInteraction = any>
+export default class SageInteraction<T extends DInteraction = Discord.MessageComponentInteraction>
 	extends HasSageCache<SageInteractionCore, SageInteraction<any>>
 	implements IHasGame, IHasChannels {
 
@@ -37,6 +37,7 @@ export default class SageInteraction<T extends DInteraction = any>
 	//#region command / category / sub
 
 	public isCommand(command: string): boolean;
+	public isCommand(sub: string, command: string): boolean;
 	public isCommand(gameType: TGameType, command: string): boolean;
 	public isCommand(...args: string[]): boolean {
 		if (!this.interaction.isCommand()) {
@@ -46,16 +47,16 @@ export default class SageInteraction<T extends DInteraction = any>
 		const command = args.pop()!;
 		const commandLower = command.toLowerCase();
 
-		const game = args[0] as TGameType;
-		const gameLower = game?.toLowerCase();
+		const subCommand = args[0] as TGameType;
+		const subCommandLower = subCommand?.toLowerCase();
 
 		const commandValues = this.commandValues.map(s => s.toLowerCase());
 		if (["sage", "sage-stable", "sage-beta", "sage-dev"].includes(commandValues[0])) {
 			commandValues.shift();
 		}
 
-		if (game) {
-			return commandValues[0] === gameLower
+		if (subCommand) {
+			return commandValues[0] === subCommandLower
 				&& commandValues[1] === commandLower;
 		}
 

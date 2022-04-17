@@ -8,6 +8,7 @@ export * as DateUtils from "./DateUtils";
 export * as EnumUtils from "./EnumUtils";
 export * as FsUtils from "./FsUtils";
 export * as HttpsUtils from "./HttpsUtils";
+export * as ImageUtils from "./ImageUtils";
 export * as JsonUtils from "./JsonUtils";
 export * as LangUtils from "./LangUtils";
 export * as MathUtils from "./MathUtils";

@@ -1,6 +1,10 @@
 import * as http from "http";
 import * as https from "https";
 
+export function getProtocol(url: string): typeof http | typeof https {
+	return url.match(/^http:\/\//i) ? http : https;
+}
+
 /**
  * You can pass in a fully formed url or leave off the protocol and allow it to prepend "https://".
  * If you pass in a url with "http://" it will downgrade to use http protocol instead of https.
@@ -19,7 +23,7 @@ export function getText<T = any>(url: string, postData?: T): Promise<string> {
 	if (!url.match(/^https?:\/\//i)) {
 		url = "https://" + url;
 	}
-	const protocol = url.match(/^http:\/\//i) ? http : https;
+	const protocol = getProtocol(url);
 	const method = postData ? "request" : "get";
 	const payload = postData ? JSON.stringify(postData) : null;
 	return new Promise((resolve, reject) => {
