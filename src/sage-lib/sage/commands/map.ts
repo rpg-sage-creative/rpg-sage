@@ -8,11 +8,13 @@ import { registerInteractionListener } from "../../discord/handlers";
 import type SageInteraction from "../model/SageInteraction";
 
 type TMapToken = {
+	active: boolean;
 	cols: number;
 	id: VALID_UUID;
 	name: string;
 	rows: number;
-	user?: Discord.Snowflake;
+	url: string;
+	user: Discord.Snowflake;
 	x: number;
 	y: number;
 };
@@ -23,10 +25,11 @@ type TMapCore = {
 	name: string;
 	rows: number;
 	tokens: TMapToken[];
+	url: string;
 };
 
 type TMapAction = "MapUpLeft"   | "MapUp"     | "MapUpRight"
-	             | "MapLeft"     | "MapCenter" | "MapRight"
+	             | "MapLeft"     | "MapConfig" | "MapRight"
 	             | "MapDownLeft" | "MapDown"   | "MapDownRight";
 
 function createButton(customId: string, label: string, style: Discord.MessageButtonStyleResolvable): Discord.MessageButton {
@@ -50,13 +53,13 @@ function createButtonRow(mapId: UUID, ...labels: TMapAction[]): Discord.MessageA
 function createMapButtons(mapId: UUID): Discord.MessageActionRow[] {
 	return [
 		createButtonRow(mapId, "MapUpLeft", "MapUp", "MapUpRight"),
-		createButtonRow(mapId, "MapLeft", "MapCenter", "MapRight"),
+		createButtonRow(mapId, "MapLeft", "MapConfig", "MapRight"),
 		createButtonRow(mapId, "MapDownLeft", "MapDown", "MapDownRight")
 	];
 }
 
-const MapActions = "MapUpLeft,MapUp,MapUpRight,MapLeft,MapCenter,MapRight,MapDownLeft,MapDown,MapDownRight".split(",");
-const MapActionEmojis = "↖️,⬆️,↗️,⬅️,⏺️,➡️,↙️,⬇️,↘️".split(",");
+const MapActions = "MapUpLeft,MapUp,MapUpRight,MapLeft,MapConfig,MapRight,MapDownLeft,MapDown,MapDownRight".split(",");
+const MapActionEmojis = "↖️,⬆️,↗️,⬅️,⚙️,➡️,↙️,⬇️,↘️".split(",");
 
 function isTokenUser(mapCore: Optional<TMapCore>, userDid: Discord.Snowflake): mapCore is TMapCore {
 	return mapCore?.tokens?.find(token => token.user === userDid) !== undefined;
@@ -108,61 +111,142 @@ async function actionTester(sageInteration: SageInteraction): Promise<TActionDat
 	return false;
 }
 
-function up(token: TMapToken, min = 0): void {
-	token.y = Math.max((token.y ?? min) - 1);
+function up(token: TMapToken, min = 0): boolean {
+	if (token.y === min) {
+		return false;
+	}
+	token.y--;
+	return true;
 }
-function down(token: TMapToken, max: number): void {
-	token.y = Math.min((token.y ?? max) + 1);
+function down(token: TMapToken, max: number): boolean {
+	if (token.y === max) {
+		return false;
+	}
+	token.y++;
+	return true;
 }
-function left(token: TMapToken, min = 0): void {
-	token.x = Math.max((token.x ?? min) - 1);
+function left(token: TMapToken, min = 0): boolean {
+	if (token.x === min) {
+		return false;
+	}
+	token.x--;
+	return true;
 }
-function right(token: TMapToken, max: number): void {
-	token.x = Math.min((token.x ?? max) + 1);
+function right(token: TMapToken, max: number): boolean {
+	if (token.x === max) {
+		return false;
+	}
+	token.x++;
+	return true;
+}
+/** convenience method so i can call two functions in a single line and return the /or/ of the results */
+function or(a: boolean, b: boolean): boolean {
+	return a || b;
 }
 type TCoord = { x:number, y:number; };
-function moveToken(token: TMapToken, action: TMapAction, maxValues: TCoord): void {
+function moveToken(token: TMapToken, action: TMapAction, maxValues: TCoord): boolean {
 	switch(action) {
-		case "MapUpLeft": up(token); left(token); break;
-		case "MapUp": up(token); break;
-		case "MapUpRight": up(token); right(token, maxValues.x); break;
-		case "MapLeft": left(token); break;
-		case "MapCenter": break;
-		case "MapRight": right(token, maxValues.x); break;
-		case "MapDownLeft": down(token, maxValues.y); left(token); break;
-		case "MapDown": down(token, maxValues.y); break;
-		case "MapDownRight": down(token, maxValues.y); right(token, maxValues.x); break;
+		case "MapUpLeft": return or(up(token), left(token));
+		case "MapUp": return up(token);
+		case "MapUpRight": return or(up(token), right(token, maxValues.x));
+		case "MapLeft": return left(token);
+		case "MapRight": return right(token, maxValues.x);
+		case "MapDownLeft": return or(down(token, maxValues.y), left(token));
+		case "MapDown": return down(token, maxValues.y);
+		case "MapDownRight": return or(down(token, maxValues.y), right(token, maxValues.x));
+		default: return false;
 	}
 }
 
+function getActiveToken(mapCore: TMapCore, userDid: Discord.Snowflake): TMapToken | undefined {
+	const userTokens = mapCore.tokens.filter(token => token.user === userDid);
+	return userTokens.find(token => token.active) ?? userTokens[0];
+}
+
+function shuffleToken(mapCore: TMapCore, userDid: Discord.Snowflake, where: "top" | "bottom" | "up" | "down"): boolean {
+	const token = getActiveToken(mapCore, userDid);
+	if (!token) {
+		return false;
+	}
+	const index = mapCore.tokens.indexOf(token);
+	switch(where) {
+		case "top":
+			mapCore.tokens = mapCore.tokens.filter(t => t !== token).concat([token]);
+			break;
+		case "bottom":
+			mapCore.tokens = [token].concat(mapCore.tokens.filter(t => t !== token));
+			break;
+		case "up":
+			if (mapCore.tokens.slice().pop() !== token) {
+				const newIndex = index + 1;
+				mapCore.tokens = mapCore.tokens.filter(t => t !== token);
+				mapCore.tokens.splice(newIndex, 0, token);
+			}
+			break;
+		case "down":
+			if (mapCore.tokens[0] === token) {
+				const newIndex = index - 1;
+				mapCore.tokens = mapCore.tokens.filter(t => t !== token);
+				mapCore.tokens.splice(newIndex, 0, token);
+			}
+			break;
+	}
+	return index !== mapCore.tokens.indexOf(token);
+}
+
+function toggleToken(mapCore: TMapCore, userDid: Discord.Snowflake): boolean {
+	const userTokens = mapCore.tokens.filter(token => token.user === userDid);
+	if (userTokens.length < 2) {
+		return false;
+	}
+	const prev = getActiveToken(mapCore, userDid)!;
+	const index = userTokens.indexOf(prev);
+	const next = userTokens[index + 1] ?? userTokens[0]!;
+	prev.active = false;
+	next.active = true;
+	return true;
+}
 async function actionHandler(sageInteraction: SageInteraction, actionData: TActionData): Promise<void> {
 	const mapCore = actionData.mapCore;
-	const token = mapCore.tokens.find(t => t.user === sageInteraction.user.id);
+	const userDid = sageInteraction.user.id;
+	const activeToken = getActiveToken(mapCore, userDid);
 	const mapAction = actionData.mapAction;
-	if (token) {
-		moveToken(token, mapAction, { x:mapCore.cols - 1, y:mapCore.rows - 1});
-		await utils.FsUtils.writeFile(getMapFilePath(mapCore.id, "core"), mapCore);
+	let updated = false;
+	if (mapAction === "MapConfig") {
+		updated = or(toggleToken(mapCore, userDid), shuffleToken(mapCore, userDid, "top"))
+			&& await utils.FsUtils.writeFile(getMapFilePath(mapCore.id, "core"), mapCore)
+			&& await updateMap(sageInteraction.interaction.message as Discord.Message, mapCore);
+		if (updated) {
+			return sageInteraction.reply(`Your Active Token is: ${getActiveToken(mapCore, userDid)?.name ?? "Unknown"}`, true);
+		}
+	}else if (activeToken) {
+		shuffleToken(mapCore, userDid, "top");
+		updated = moveToken(activeToken, mapAction, { x:mapCore.cols - 1, y:mapCore.rows - 1})
+			&& await utils.FsUtils.writeFile(getMapFilePath(mapCore.id, "core"), mapCore)
+			&& await updateMap(sageInteraction.interaction.message as Discord.Message, mapCore);
+		if (updated) {
+			return sageInteraction.reply(`Doing it!`, false).then(() => sageInteraction.deleteReply());
+		}
 	}
-	updateMap(sageInteraction.interaction.message as Discord.Message, mapCore);
-	sageInteraction.reply(`Not Yet!\n${mapCore.name}`, true);
+	return sageInteraction.reply(`Nothing Changed.`, true);
 }
 
 export function registerCommandHandlers(): void {
 	registerInteractionListener(actionTester, actionHandler);
-	registerInteractionListener(mapSetTester, mapSetHandler);
-	registerInteractionListener(tokenSetTester, tokenSetHandler);
+	registerInteractionListener(mapCreateTester, mapCreateHandler);
+	registerInteractionListener(mapTokenTester, mapTokenHandler);
 }
 
-function mapSetTester(sageInteraction: SageInteraction): boolean {
+function mapCreateTester(sageInteraction: SageInteraction): boolean {
 	return !!sageInteraction.interaction.channel
-		&& sageInteraction.isCommand("map", "set");
+		&& sageInteraction.isCommand("map", "create");
 }
-function tokenSetTester(sageInteraction: SageInteraction): boolean {
+function mapTokenTester(sageInteraction: SageInteraction): boolean {
 	return !!sageInteraction.interaction.channel
 		&& sageInteraction.isCommand("map", "token");
 }
 
-async function mapSetHandler(sageInteraction: SageInteraction): Promise<void> {
+async function mapCreateHandler(sageInteraction: SageInteraction): Promise<void> {
 	await sageInteraction.defer(true);
 	const imageUrl = sageInteraction.getString("url", true);
 	let mapCore: TMapCore | null = null;
@@ -181,7 +265,8 @@ async function mapSetHandler(sageInteraction: SageInteraction): Promise<void> {
 				id: mapId,
 				name: mapName,
 				rows: mapRows,
-				tokens: []
+				tokens: [],
+				url: imageUrl
 			};
 			const coreSaved = await utils.FsUtils.writeFile(getMapFilePath(mapId, "core"), mapCore, true).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
 			if (!coreSaved) {
@@ -198,7 +283,7 @@ async function mapSetHandler(sageInteraction: SageInteraction): Promise<void> {
 	return sageInteraction.reply(`Sorry, something went wrong.`, true);
 }
 
-async function tokenSetHandler(sageInteraction: SageInteraction): Promise<void> {
+async function mapTokenHandler(sageInteraction: SageInteraction): Promise<void> {
 	const mapId = sageInteraction.getString("map", true);
 	if (!isValidMap(mapId)) {
 		return sageInteraction.reply("Invalid MapId!", true);
@@ -208,31 +293,34 @@ async function tokenSetHandler(sageInteraction: SageInteraction): Promise<void> 
 	const mapCore = await getMapCore(mapId) as TMapCore;
 
 	const token: TMapToken = {
+		active: true,
 		cols: sageInteraction.getNumber("cols") ?? 1,
 		id: utils.UuidUtils.generate(),
 		name: sageInteraction.getString("name", true),
 		rows: sageInteraction.getNumber("rows") ?? 1,
+		url: sageInteraction.getString("url", true),
 		user: sageInteraction.user.id,
 		x: 1,
 		y: 1
 	};
 
-	const imageUrl = sageInteraction.getString("url", true);
 	const imagePath = getTokenFilePath(mapId, token.id);
 	let imageSaved = false;
-	if (isValidToken(mapId, imageUrl)) {
-		const imageBuffer = await utils.FsUtils.readFile(getTokenFilePath(mapId, imageUrl));
+	if (isValidToken(mapId, token.url)) {
+		const imageBuffer = await utils.FsUtils.readFile(getTokenFilePath(mapId, token.url));
 		imageSaved = await utils.FsUtils.writeFile(imagePath, imageBuffer);
 	}else {
-		imageSaved = await downloadImage(imageUrl, imagePath).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
+		imageSaved = await downloadImage(token.url, imagePath).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
 	}
 	if (imageSaved) {
-		mapCore.tokens = mapCore.tokens.filter(_token => _token.user !== token.user).concat([token]);
+		// mark other tokens for this user inactive before pushing new active token
+		mapCore.tokens.forEach(_token => _token.active =_token.user === token.user ? false : _token.active);
+		mapCore.tokens.push(token);
 		const updated = await utils.FsUtils.writeFile(getMapFilePath(mapId, "core"), mapCore);
 		if (updated) {
 			const rendered = await renderMap(sageInteraction.interaction.channel as TChannel, mapCore).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
 			if (rendered) {
-				sageInteraction.reply(`Doing it!`, true).then(() => sageInteraction.deleteReply());
+				return sageInteraction.reply(`Doing it!`, true).then(() => sageInteraction.deleteReply());
 			}
 		}
 	}
@@ -272,8 +360,8 @@ async function renderMap(channel: TChannel, mapCore: TMapCore): Promise<boolean>
 	return false;
 }
 async function updateMap(message: Discord.Message, mapCore: TMapCore): Promise<boolean> {
-	const image64 = await buildMap(mapCore);
-	if (image64) {
+	const built = await buildMap(mapCore);
+	if (built) {
 		const fileBuffer = await utils.FsUtils.readFile(getMapFilePath(mapCore.id, "render"));
 		const components = createMapButtons(mapCore.id);
 		const updated = await message.edit({ files:[fileBuffer], components:components }).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
@@ -288,7 +376,7 @@ function mapCommand(): TSlashCommand {
 		description: "Map Commands",
 		children: [
 			{
-				name: "Set",
+				name: "Create",
 				description: "Sets the map for this channel.",
 				options: [
 					{ name:"url", description:"Url to the map image.", isRequired:true },

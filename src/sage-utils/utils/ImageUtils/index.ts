@@ -29,8 +29,9 @@ export function downloadImage(url: string, filePath: string): Promise<boolean> {
 export type TMapMeta = { filePath:string; cols:number; rows:number; };
 export type TTokenMeta = { filePath:string; cols:number; rows:number; x:number; y:number; };
 
+type mimeType = "image/png" | "image/jpeg";
 /** returns an image/png Buffer */
-export async function renderMap(map: TMapMeta, tokens: TTokenMeta[], fileType = "image/png"): Promise<Buffer | null> {
+export async function renderMap(map: TMapMeta, tokens: TTokenMeta[], fileType: mimeType): Promise<Buffer | null> {
 	const mapImage = await canvas.loadImage(map.filePath).catch(errorReturnNull);
 	if (!mapImage) {
 		return null;
