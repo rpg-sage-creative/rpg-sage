@@ -9,14 +9,14 @@ export function getProtocol(url: string): typeof http | typeof https {
  * You can pass in a fully formed url or leave off the protocol and allow it to prepend "https://".
  * If you pass in a url with "http://" it will downgrade to use http protocol instead of https.
 */
-export function getText(url: string): Promise<string>;
+export function getBuffer(url: string): Promise<Buffer>;
 /**
  * You can pass in a fully formed url or leave off the protocol and allow it to prepend "https://".
  * If you pass in a url with "http://" it will downgrade to use http protocol instead of https.
  * Sending postData will JSON.stringify the value and then do a POST instead of a GET.
 */
-export function getText<T = any>(url: string, postData: T): Promise<string>;
-export function getText<T = any>(url: string, postData?: T): Promise<string> {
+export function getBuffer<T = any>(url: string, postData: T): Promise<Buffer>;
+export function getBuffer<T = any>(url: string, postData?: T): Promise<Buffer> {
 	if (typeof(url) !== "string") {
 		return Promise.reject("Invalid Url");
 	}
@@ -36,13 +36,13 @@ export function getText<T = any>(url: string, postData?: T): Promise<string> {
 			} : { };
 			const req = protocol[method](url, options, response => {
 				try {
-					const chunks: string[] = [];
-					response.on("data", chunk =>
-						chunks.push(Buffer.isBuffer(chunk) ? chunk.toString("utf8") : chunk)
+					const chunks: Buffer[] = [];
+					response.on("data", (chunk: Buffer) =>
+						chunks.push(chunk)
 					);
 					response.once("close", reject);
 					response.once("end", () =>
-						resolve(chunks.join(""))
+						resolve(Buffer.concat(chunks))
 					);
 					response.once("error", reject);
 				}catch(ex) {
@@ -59,6 +59,29 @@ export function getText<T = any>(url: string, postData?: T): Promise<string> {
 		}catch(ex) {
 			reject(ex);
 		}
+	});
+}
+
+/**
+ * You can pass in a fully formed url or leave off the protocol and allow it to prepend "https://".
+ * If you pass in a url with "http://" it will downgrade to use http protocol instead of https.
+*/
+export function getText(url: string): Promise<string>;
+/**
+ * You can pass in a fully formed url or leave off the protocol and allow it to prepend "https://".
+ * If you pass in a url with "http://" it will downgrade to use http protocol instead of https.
+ * Sending postData will JSON.stringify the value and then do a POST instead of a GET.
+*/
+export function getText<T = any>(url: string, postData: T): Promise<string>;
+export function getText<T = any>(url: string, postData?: T): Promise<string> {
+	return new Promise((resolve, reject) => {
+		getBuffer(url, postData).then(buffer => {
+			try {
+				resolve(buffer.toString("utf8"));
+			}catch(ex) {
+				reject(ex);
+			}
+		}, reject);
 	});
 }
 
