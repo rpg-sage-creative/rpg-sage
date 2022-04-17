@@ -26,13 +26,13 @@ export function downloadImage(url: string, filePath: string): Promise<boolean> {
 	});
 }
 
-export type TMapMeta = { filePath:string; cols:number; rows:number; };
-export type TTokenMeta = { filePath:string; cols:number; rows:number; x:number; y:number; };
+export type TMapMeta = { cols:number; rows:number; tokens:TTokenMeta[]; url:string; };
+export type TTokenMeta = { cols:number; rows:number; x:number; y:number; url:string; };
 
 type mimeType = "image/png" | "image/jpeg";
 /** returns an image/png Buffer */
-export async function renderMap(map: TMapMeta, tokens: TTokenMeta[], fileType: mimeType): Promise<Buffer | null> {
-	const mapImage = await canvas.loadImage(map.filePath).catch(errorReturnNull);
+export async function mapToBuffer(map: TMapMeta, fileType: mimeType = "image/jpeg"): Promise<Buffer | null> {
+	const mapImage = await canvas.loadImage(map.url).catch(errorReturnNull);
 	if (!mapImage) {
 		return null;
 	}
@@ -48,13 +48,13 @@ export async function renderMap(map: TMapMeta, tokens: TTokenMeta[], fileType: m
 		return null;
 	}
 
-	for (const token of tokens) {
-		const tokenImage = await canvas.loadImage(token.filePath).catch(errorReturnNull);
+	for (const token of map.tokens) {
+		const tokenImage = await canvas.loadImage(token.url).catch(errorReturnNull);
 		if (tokenImage) {
-			const tokenWidth = token.cols * pxPerCol;
-			const tokenHeight = token.rows * pxPerRow;
-			const tokenX = token.x * pxPerCol;
-			const tokenY = token.y * pxPerRow;
+			const tokenWidth = (token.cols ?? 1) * pxPerCol;
+			const tokenHeight = (token.rows ?? 1) * pxPerRow;
+			const tokenX = (token.x ?? 0) * pxPerCol;
+			const tokenY = (token.y ?? 0) * pxPerRow;
 			try {
 				context.drawImage(tokenImage, tokenX, tokenY, tokenWidth, tokenHeight);
 			}catch(ex) {
