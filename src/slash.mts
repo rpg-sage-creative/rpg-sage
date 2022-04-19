@@ -1,4 +1,12 @@
-import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandNumberOption, SlashCommandBooleanOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "@discordjs/builders";
+import {
+	SlashCommandBuilder,
+	SlashCommandStringOption,
+	SlashCommandNumberOption,
+	SlashCommandBooleanOption,
+	SlashCommandSubcommandBuilder,
+	SlashCommandSubcommandGroupBuilder,
+	ContextMenuCommandBuilder
+} from "@discordjs/builders";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import type { IBotCore } from "./sage-lib/sage/model/Bot";
@@ -154,15 +162,27 @@ function buildCommand(raw: TSlashCommand): SlashCommandBuilder {
 	return cmd;
 }
 
-function buildUnifiedCommand(which: TBot): SlashCommandBuilder[] {
-	const command = { name:`Sage${which === "stable" ? "" : `-${which}`}`, description:`RPG Sage${which === "stable" ? "" : ` (${which})`} Commands`, children:allSlashCommands };
-	return [buildCommand(command)];
+const ContextMenuCommandTypeMessage = 3;
+function buildMapContextMenuCommandBuilder(): ContextMenuCommandBuilder {
+	return new ContextMenuCommandBuilder()
+		.setName("Add Image")
+		.setType(ContextMenuCommandTypeMessage)
+		;
+}
+
+function buildUnifiedCommand(which: TBot): (SlashCommandBuilder | ContextMenuCommandBuilder)[] {
+	const slashCommand = { name:`Sage${which === "stable" ? "" : `-${which}`}`, description:`RPG Sage${which === "stable" ? "" : ` (${which})`} Commands`, children:allSlashCommands };
+	const commands = [buildCommand(slashCommand)] as (SlashCommandBuilder | ContextMenuCommandBuilder)[];
+	if (botCodeName === "dev") {
+		commands.push(buildMapContextMenuCommandBuilder());
+	}
+	return commands;
 }
 function buildIndividualCommands(which: TBot): SlashCommandBuilder[] {
 	which;
 	return allSlashCommands.map(buildCommand);
 }
-function buildCommands(which: TBot): SlashCommandBuilder[] {
+function buildCommands(which: TBot): (SlashCommandBuilder | ContextMenuCommandBuilder)[] {
 	return true ? buildUnifiedCommand(which) : buildIndividualCommands(which);
 }
 
