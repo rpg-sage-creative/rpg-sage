@@ -173,7 +173,7 @@ function buildMapContextMenuCommandBuilder(): ContextMenuCommandBuilder {
 function buildUnifiedCommand(which: TBot): (SlashCommandBuilder | ContextMenuCommandBuilder)[] {
 	const slashCommand = { name:`Sage${which === "stable" ? "" : `-${which}`}`, description:`RPG Sage${which === "stable" ? "" : ` (${which})`} Commands`, children:allSlashCommands };
 	const commands = [buildCommand(slashCommand)] as (SlashCommandBuilder | ContextMenuCommandBuilder)[];
-	if (botCodeName === "dev") {
+	if (botCodeName === "dev" && false) {
 		commands.push(buildMapContextMenuCommandBuilder());
 	}
 	return commands;
