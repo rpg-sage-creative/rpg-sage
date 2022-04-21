@@ -20,6 +20,8 @@ export type THasOffset = {
 };
 
 export type TImageMeta = {
+	/** opacity of image, from 0 to 1 */
+	opacity?: number;
 	/** url to the image */
 	url: string;
 };
@@ -85,13 +87,21 @@ export async function mapToBuffer(map: IMap, fileType: mimeType = "image/jpeg"):
 	return mapCanvas.toBuffer(fileType as "image/png");
 }
 
+/** Incoming map meta assumes grid origin of 1,1 not 0,0 */
+function gridOffsetToZeroZero(offset?: [number, number]): [number, number] {
+	const col = offset && offset[0] ? Math.max(offset[0] - 1, 0) : 0;
+	const row = offset && offset[1] ? Math.max(offset[1] - 1, 0) : 0;
+	return [col, row];
+}
+
 type TMapMeta = { pxPerCol:number; pxPerRow:number; };
 async function drawMapLayer(context: _canvas.CanvasRenderingContext2D, mapMeta: TMapMeta, mapLayer: IMapLayer): Promise<void> {
 	const images: TMapLayerImage[] = await Promise.resolve(mapLayer.getImages()).catch(errorReturnEmptyArray);
 	if (images.length) {
 		const layerOffset = await Promise.resolve(mapLayer.getOffset()).catch(errorReturnNull),
-			layerOffsetX = layerOffset?.pixelOffset?.[0] ?? (layerOffset?.gridOffset?.[0] ?? 0) * mapMeta.pxPerCol,
-			layerOffsetY = layerOffset?.pixelOffset?.[1] ?? (layerOffset?.gridOffset?.[1] ?? 0) * mapMeta.pxPerRow;
+			gridOffset = gridOffsetToZeroZero(layerOffset?.gridOffset),
+			layerOffsetX = layerOffset?.pixelOffset?.[0] ?? (gridOffset[0] * mapMeta.pxPerCol),
+			layerOffsetY = layerOffset?.pixelOffset?.[1] ?? (gridOffset[1] * mapMeta.pxPerRow);
 
 		for (const imgMeta of images) {
 			await drawMapImage(context, { layerOffsetX, layerOffsetY, ...mapMeta }, imgMeta);
@@ -103,15 +113,18 @@ type TMapLayerMeta = TMapMeta & { layerOffsetX:number; layerOffsetY:number; };
 async function drawMapImage(context: _canvas.CanvasRenderingContext2D, mapLayerMeta: TMapLayerMeta, mapLayerImage: TMapLayerImage): Promise<void> {
 	const imgImage = await canvas.loadImage(mapLayerImage.url).catch(errorReturnNull);
 	if (imgImage) {
-		const imgClipX = mapLayerImage.clipX ?? 0,
+		const gridOffset = gridOffsetToZeroZero(mapLayerImage.gridOffset),
+			imgClipX = mapLayerImage.clipX ?? 0,
 			imgClipWidth = Math.min(mapLayerImage.clipWidth ?? imgImage.naturalWidth, imgImage.naturalWidth - imgClipX),
-			imgOffsetX = mapLayerImage.pixelOffset?.[0] ?? (mapLayerImage.gridOffset?.[0] ?? 0) * mapLayerMeta.pxPerCol,
+			imgOffsetX = mapLayerImage.pixelOffset?.[0] ?? (gridOffset[0] * mapLayerMeta.pxPerCol),
 			imgWidth = (mapLayerImage.size[0] ?? 1) * mapLayerMeta.pxPerCol,
 			imgClipY = mapLayerImage.clipY ?? 0,
 			imgClipHeight = Math.min(mapLayerImage.clipHeight ?? imgImage.naturalHeight, imgImage.naturalHeight - imgClipY),
-			imgOffsetY = mapLayerImage.pixelOffset?.[1] ?? (mapLayerImage.gridOffset?.[1] ?? 0) * mapLayerMeta.pxPerRow,
-			imgHeight = (mapLayerImage.size[1] ?? 1) * mapLayerMeta.pxPerRow;
+			imgOffsetY = mapLayerImage.pixelOffset?.[1] ?? (gridOffset[1] * mapLayerMeta.pxPerRow),
+			imgHeight = (mapLayerImage.size[1] ?? 1) * mapLayerMeta.pxPerRow,
+			opacity = mapLayerImage.opacity ?? 1;
 		try {
+			context.globalAlpha = opacity;
 			context.drawImage(imgImage, imgClipX, imgClipY, imgClipWidth, imgClipHeight, mapLayerMeta.layerOffsetX + imgOffsetX, mapLayerMeta.layerOffsetY + imgOffsetY, imgWidth, imgHeight);
 		}catch(ex) {
 			console.error(ex);
