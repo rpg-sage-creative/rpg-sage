@@ -7,7 +7,7 @@ import type { TSlashCommand } from "../../../types";
 import { DiscordId, TChannel } from "../../discord";
 import { registerInteractionListener } from "../../discord/handlers";
 import type SageInteraction from "../model/SageInteraction";
-import GameMap from "./map/GameMap";
+import GameMap, { TMoveDirection } from "./map/GameMap";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, TGameMapTerrain, TGameMapToken } from "./map/GameMapBase";
 
 //#region buttons
@@ -49,54 +49,9 @@ function createMapComponents(gameMap: GameMap): Discord.MessageActionRow[] {
 
 //#region token movement
 
-function up(image: TGameMapImage, min = 0): boolean {
-	if (image.pos[1] === min) {
-		return false;
-	}
-	image.pos[1]--;
-	image.auras?.forEach(aura => aura.pos[1]--);
-	return true;
-}
-function down(image: TGameMapImage, max: number): boolean {
-	if (image.pos[1] === max) {
-		return false;
-	}
-	image.pos[1]++;
-	image.auras?.forEach(aura => aura.pos[1]++);
-	return true;
-}
-function left(image: TGameMapImage, min = 0): boolean {
-	if (image.pos[0] === min) {
-		return false;
-	}
-	image.pos[0]--;
-	image.auras?.forEach(aura => aura.pos[0]--);
-	return true;
-}
-function right(image: TGameMapImage, max: number): boolean {
-	if (image.pos[0] === max) {
-		return false;
-	}
-	image.pos[0]++;
-	image.auras?.forEach(aura => aura.pos[0]++);
-	return true;
-}
 /** convenience method so i can call functions in a single line and return the /or/ of the results */
 function or(...bools: boolean[]): boolean {
 	return bools.indexOf(true) > -1;
-}
-function mapMove(token: TGameMapImage, action: TMapAction, maxValues: [number, number]): boolean {
-	switch(action) {
-		case "MapUpLeft": return or(up(token), left(token));
-		case "MapUp": return up(token);
-		case "MapUpRight": return or(up(token), right(token, maxValues[0]));
-		case "MapLeft": return left(token);
-		case "MapRight": return right(token, maxValues[0]);
-		case "MapDownLeft": return or(down(token, maxValues[1]), left(token));
-		case "MapDown": return down(token, maxValues[1]);
-		case "MapDownRight": return or(down(token, maxValues[1]), right(token, maxValues[0]));
-		default: return false;
-	}
 }
 
 /** get text for human readable direction */
@@ -227,7 +182,7 @@ async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData
 	const mapAction = actionData.mapAction;
 	if (activeImage) {
 		sageInteraction.reply(`Moving ${activeImage.name} ${toDirection(mapAction)} ...`, false);
-		const moved = mapMove(activeImage, mapAction, [gameMap.grid[0] - 1, gameMap.grid[1] - 1]);
+		const moved = gameMap.moveActiveToken(mapAction.slice(3).toLowerCase() as TMoveDirection);
 		const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
 		updated = or(moved, shuffled)
 			&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);

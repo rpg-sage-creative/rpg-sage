@@ -1,15 +1,15 @@
 import type * as Discord from "discord.js";
-import GameMapBase, { LayerMapType, LayerType, TGameMapCore, TGameMapImage } from "./GameMapBase";
+import GameMapBase, { COL, LayerMapType, LayerType, ROW, TGameMapCore, TGameMapImage } from "./GameMapBase";
 
 /** shuffles an image on a layer */
 export type TShuffleDirection = "top" | "bottom" | "up" | "down";
-function shuffleImage(images: TGameMapImage[], imageId: Discord.Snowflake, where: TShuffleDirection): boolean {
+function shuffleImage(images: TGameMapImage[], imageId: Discord.Snowflake, direction: TShuffleDirection): boolean {
 	const image = images.find(img => img.id === imageId);
 	if (!image) {
 		return false;
 	}
 	const index = images.indexOf(image);
-	switch(where) {
+	switch(direction) {
 		case "top":
 			images = images.filter(t => t !== image).concat([image]);
 			break;
@@ -32,6 +32,31 @@ function shuffleImage(images: TGameMapImage[], imageId: Discord.Snowflake, where
 			break;
 	}
 	return index !== images.indexOf(image);
+}
+
+const UP = -1;
+const DOWN = 1;
+const LEFT = -1;
+const RIGHT = 1;
+
+export type TMoveDirection = "upleft" | "up" | "upright" | "left" | "right" | "downleft" | "down" | "downright";
+function moveImage(image: TGameMapImage, direction: TMoveDirection): boolean {
+	switch(direction) {
+		case "upleft": return move(image, ROW, UP) && move(image, COL, LEFT);
+		case "up": return move(image, ROW, UP);
+		case "upright": return move(image, ROW, UP) && move(image, COL, RIGHT);
+		case "left": return move(image, COL, LEFT);
+		case "right": return move(image, COL, RIGHT);
+		case "downleft": return move(image, ROW, DOWN) && move(image, COL, LEFT);
+		case "down": return move(image, ROW, DOWN);
+		case "downright": return move(image, ROW, DOWN) && move(image, COL, RIGHT);
+		default: return false;
+	}
+}
+function move(image: TGameMapImage, posIndex: 0 | 1, direction: -1 | 1): boolean {
+	image.pos[posIndex] += direction;
+	image.auras?.forEach(aura => aura.pos[posIndex] += direction);
+	return true;
 }
 
 export default class GameMap extends GameMapBase {
@@ -173,22 +198,30 @@ export default class GameMap extends GameMapBase {
 		return true;
 	}
 
+	public moveActiveToken(direction: TMoveDirection): boolean {
+		const activeImage = this.activeImage;
+		if (!activeImage) {
+			return false;
+		}
+		return moveImage(activeImage, direction);
+	}
+
 	/** shuffles the user's active terrain */
-	public shuffleActiveTerrain(where: "top" | "bottom" | "up" | "down"): boolean {
+	public shuffleActiveTerrain(direction: TShuffleDirection): boolean {
 		const terrain = this.activeTerrain;
 		if (!terrain) {
 			return false;
 		}
-		return shuffleImage(this.terrain, terrain.id, where);
+		return shuffleImage(this.terrain, terrain.id, direction);
 	}
 
 	/** shuffles the user's active token */
-	public shuffleActiveToken(where: "top" | "bottom" | "up" | "down"): boolean {
+	public shuffleActiveToken(direction: TShuffleDirection): boolean {
 		const token = this.activeToken;
 		if (!token) {
 			return false;
 		}
-		return shuffleImage(this.tokens, token.id, where);
+		return shuffleImage(this.tokens, token.id, direction);
 	}
 
 	//#endregion
