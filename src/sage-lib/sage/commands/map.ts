@@ -109,6 +109,7 @@ function ensurePlayerCharacter(sageInteraction: SageInteraction, gameMap: GameMa
 	});
 	return updated;
 }
+
 async function actionHandlerMapTerrain(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	const toggled = gameMap.cycleActiveTerrain();
 	const activeTerrain = gameMap.activeTerrain;
@@ -118,6 +119,7 @@ async function actionHandlerMapTerrain(sageInteraction: SageInteraction, gameMap
 	}
 	return sageInteraction.deleteReply();
 }
+
 async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	const activeToken = gameMap.activeToken;
 	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
@@ -131,6 +133,7 @@ async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: G
 	}
 	return sageInteraction.deleteReply();
 }
+
 async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
 	const toggled = gameMap.cycleActiveToken();
@@ -143,32 +146,67 @@ async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: 
 	}
 	return sageInteraction.deleteReply();
 }
+
 async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	if (!gameMap.isOwner) {
 		return sageInteraction.reply(`You can't edit somebody else's map!`, true);
 	}
-	const activeTerrain = gameMap.activeTerrain;
-	const updated = activeTerrain
-		&& gameMap.shuffleActiveTerrain("up")
-		&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+	let updated = false;
+	let output = "";
+	switch(gameMap.activeLayer) {
+		case LayerType.Aura:
+			updated = gameMap.shiftOpacity("up");
+			output = `Aura Opacity Increased: ${gameMap.activeAura?.name ?? "Unknown"}`;
+			break;
+		case LayerType.Terrain:
+			updated = gameMap.shuffleActiveTerrain("up");
+			output = `Terrain Raised: ${gameMap.activeTerrain?.name ?? "Unknown"}`;
+			break;
+		case LayerType.Token:
+		default:
+			updated = gameMap.shuffleActiveToken("up");
+			output = `Token Raised: ${gameMap.activeToken?.name ?? "Unknown"}`;
+			break;
+	}
 	if (updated) {
-		return sageInteraction.reply(`Terrain Raised: ${activeTerrain?.name ?? "Unknown"}`, true);
+		updated = await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+	}
+	if (updated) {
+		return sageInteraction.reply(output, true);
 	}
 	return sageInteraction.deleteReply();
 }
+
 async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	if (!gameMap.isOwner) {
 		return sageInteraction.reply(`You can't edit somebody else's map!`, true);
 	}
-	const activeTerrain = gameMap.activeTerrain;
-	const updated = activeTerrain
-		&& gameMap.shuffleActiveTerrain("down")
-		&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+	let updated = false;
+	let output = "";
+	switch(gameMap.activeLayer) {
+		case LayerType.Aura:
+			updated = gameMap.shiftOpacity("down");
+			output = `Aura Opacity Decreased: ${gameMap.activeAura?.name ?? "Unknown"}`;
+			break;
+		case LayerType.Terrain:
+			updated = gameMap.shuffleActiveTerrain("down");
+			output = `Terrain Lowered: ${gameMap.activeTerrain?.name ?? "Unknown"}`;
+			break;
+		case LayerType.Token:
+		default:
+			updated = gameMap.shuffleActiveToken("down");
+			output = `Token Lowered: ${gameMap.activeToken?.name ?? "Unknown"}`;
+			break;
+	}
 	if (updated) {
-		return sageInteraction.reply(`Terrain Lowered: ${activeTerrain?.name ?? "Unknown"}`, true);
+		updated = await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+	}
+	if (updated) {
+		return sageInteraction.reply(output, true);
 	}
 	return sageInteraction.deleteReply();
 }
+
 async function actionHandlerMapConfig(sageInteraction: SageInteraction, _: GameMap): Promise<void> {
 	return sageInteraction.reply(`Coming Soon ...`, false);
 }

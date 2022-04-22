@@ -10,8 +10,8 @@ export const ROW = 1;
 export const X = 0;
 export const Y = 1;
 
-export enum LayerMapType { Layer = 0, Terrain = 1, Aura = 2, Token = 3 }
 export enum LayerType { Terrain = 1, Aura = 2, Token = 3 }
+export enum UserLayerType { Layer = 0, Terrain = 1, Aura = 2, Token = 3, PreviousLayer = 4 }
 
 export type TGameMapImage = {
 	/** the active aura for this image */
@@ -56,7 +56,9 @@ export type TActiveLayerMapValues = [
 	/** Active Aura */
 	Discord.Snowflake | undefined,
 	/** Active Token */
-	Discord.Snowflake | undefined
+	Discord.Snowflake | undefined,
+	/** Previous Layer */
+	LayerType
 ];
 
 export type TActiveLayerMap = {
@@ -114,7 +116,7 @@ export default abstract class GameMapBase {
 	/** returns the id of the message this map is posted in */
 	public get messageId() { return this.core.messageId; }
 	/** sets the id of the message this map is posted in */
-	public set messageId(messageId: Discord.Snowflake) { this.core.messageId = messageId; }
+	public set messageId(messageId) { this.core.messageId = messageId; }
 
 	/** returns the name of the map */
 	public get name() { return this.core.name; }

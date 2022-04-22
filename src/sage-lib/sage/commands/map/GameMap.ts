@@ -1,7 +1,8 @@
 import type * as Discord from "discord.js";
-import GameMapBase, { COL, LayerMapType, LayerType, ROW, TGameMapCore, TGameMapImage } from "./GameMapBase";
+import GameMapBase, { COL, LayerType, ROW, TGameMapCore, TGameMapImage, UserLayerType } from "./GameMapBase";
 
 /** shuffles an image on a layer */
+export type TShuffleUpDown = "up" | "down";
 export type TShuffleDirection = "top" | "bottom" | "up" | "down";
 function shuffleImage(images: TGameMapImage[], imageId: Discord.Snowflake, direction: TShuffleDirection): boolean {
 	const image = images.find(img => img.id === imageId);
@@ -42,20 +43,26 @@ const RIGHT = 1;
 export type TMoveDirection = "upleft" | "up" | "upright" | "left" | "right" | "downleft" | "down" | "downright";
 function moveImage(image: TGameMapImage, direction: TMoveDirection): boolean {
 	switch(direction) {
-		case "upleft": return move(image, ROW, UP) && move(image, COL, LEFT);
-		case "up": return move(image, ROW, UP);
-		case "upright": return move(image, ROW, UP) && move(image, COL, RIGHT);
-		case "left": return move(image, COL, LEFT);
-		case "right": return move(image, COL, RIGHT);
-		case "downleft": return move(image, ROW, DOWN) && move(image, COL, LEFT);
-		case "down": return move(image, ROW, DOWN);
-		case "downright": return move(image, ROW, DOWN) && move(image, COL, RIGHT);
+		case "upleft": return move(image, [ROW, UP], [COL, LEFT]);
+		case "up": return move(image, [ROW, UP]);
+		case "upright": return move(image, [ROW, UP], [COL, RIGHT]);
+		case "left": return move(image, [COL, LEFT]);
+		case "right": return move(image, [COL, RIGHT]);
+		case "downleft": return move(image, [ROW, DOWN], [COL, LEFT]);
+		case "down": return move(image, [ROW, DOWN]);
+		case "downright": return move(image, [ROW, DOWN], [COL, RIGHT]);
 		default: return false;
 	}
 }
-function move(image: TGameMapImage, posIndex: 0 | 1, direction: -1 | 1): boolean {
-	image.pos[posIndex] += direction;
-	image.auras?.forEach(aura => aura.pos[posIndex] += direction);
+
+const POS = 0;
+const DIR = 1;
+
+function move(image: TGameMapImage, ...posDirs: [0 | 1, -1 | 1][]): boolean {
+	posDirs.forEach(posDir => {
+		image.pos[posDir[POS]] += posDir[DIR];
+		image.auras?.forEach(aura => aura.pos[posDir[POS]] += posDir[DIR]);
+	});
 	return true;
 }
 
@@ -86,10 +93,11 @@ export default class GameMap extends GameMapBase {
 			?? this.core.auras.find(image => image.id === imageId)
 			?? this.core.tokens.map(token => token.auras).flat().find(image => image.id === imageId);
 	}
+
 	/** sets the user's currently active layer and image */
 	public set activeImage(activeImage: TGameMapImage | undefined) {
 		const values = this.activeLayerValues;
-		values[LayerMapType.Layer] = activeImage!.layer ?? LayerType.Token;
+		values[UserLayerType.Layer] = activeImage!.layer ?? LayerType.Token;
 		values[activeImage!.layer] = activeImage!.id;
 	}
 
@@ -97,12 +105,18 @@ export default class GameMap extends GameMapBase {
 	public get activeImageId() { return this.activeLayerValues[this.activeLayer]; }
 
 	/** returns the user's currently active layer */
-	public get activeLayer() { return this.activeLayerValues[LayerMapType.Layer]; }
+	public get activeLayer() { return this.activeLayerValues[UserLayerType.Layer]; }
+	public set activeLayer(activeLayer) {
+		if (this.activeLayer !== LayerType.Aura) {
+			this.activeLayerValues[UserLayerType.PreviousLayer] = this.activeLayer;
+		}
+		this.activeLayerValues[UserLayerType.Layer] = activeLayer;
+	}
 
 	/** returns the user's active layer values */
 	public get activeLayerValues() {
 		return this.activeLayerMap[this.userId]
-			?? (this.activeLayerMap[this.userId] = [LayerType.Token, undefined, undefined, undefined]);
+			?? (this.activeLayerMap[this.userId] = [LayerType.Token, undefined, undefined, undefined, LayerType.Token]);
 	}
 
 	/** returns the user's currently active terrain */
@@ -127,6 +141,9 @@ export default class GameMap extends GameMapBase {
 	/** indicates the user is the owner of the map */
 	public get isOwner() { return this.userId === this.ownerId; }
 
+	/** returns the user's previously active layer */
+	public get previousLayer() { return this.activeLayerValues[UserLayerType.PreviousLayer] ?? LayerType.Token; }
+
 	/** retuns all the auras on the map this user can access */
 	public get userAuras() { return this.isOwner ? this.auras : this.auras.filter(aura => aura.userId === this.userId); }
 
@@ -142,7 +159,11 @@ export default class GameMap extends GameMapBase {
 
 	/** cycles to the next active aura */
 	public cycleActiveAura() {
-		if (this.activeLayer === LayerType.Terrain) {
+		if (this.activeLayer !== LayerType.Aura) {
+			this.activeLayer = LayerType.Aura;
+			return true;
+		}
+		if (this.previousLayer === LayerType.Terrain) {
 			const auras = this.userAuras;
 			if (auras.length < 2) {
 				return false;
@@ -167,7 +188,7 @@ export default class GameMap extends GameMapBase {
 	/** sets the active layer to Terrain and cycles to the next active terrain */
 	public cycleActiveTerrain() {
 		if (this.activeLayer !== LayerType.Terrain) {
-			this.activeLayerValues[LayerMapType.Layer] = LayerType.Terrain;
+			this.activeLayer = LayerType.Terrain;
 			return true;
 		}
 		const terrain = this.userTerrain;
@@ -184,7 +205,7 @@ export default class GameMap extends GameMapBase {
 	/** sets the active layer to Token and cycles to the next active token */
 	public cycleActiveToken() {
 		if (this.activeLayer !== LayerType.Token) {
-			this.activeLayerValues[LayerMapType.Layer] = LayerType.Token;
+			this.activeLayer = LayerType.Token;
 			return true;
 		}
 		const tokens = this.userTokens;
@@ -198,12 +219,35 @@ export default class GameMap extends GameMapBase {
 		return true;
 	}
 
+	/** move the active token in the given direction */
 	public moveActiveToken(direction: TMoveDirection): boolean {
 		const activeImage = this.activeImage;
 		if (!activeImage) {
 			return false;
 		}
 		return moveImage(activeImage, direction);
+	}
+
+	/** change the active aura's opacity */
+	public shiftOpacity(direction: TShuffleUpDown): boolean {
+		const activeAura = this.activeAura;
+		if (activeAura) {
+			switch(direction) {
+				case "up":
+					if ((activeAura.opacity ?? 0.5) < 1) {
+						activeAura.opacity = (activeAura.opacity ?? 0.5) + 0.1;
+						return true;
+					}
+					break;
+				case "down":
+					if ((activeAura.opacity ?? 0.5) > 0) {
+						activeAura.opacity = (activeAura.opacity ?? 0.5) - 0.1;
+						return true;
+					}
+					break;
+			}
+		}
+		return false;
 	}
 
 	/** shuffles the user's active terrain */
