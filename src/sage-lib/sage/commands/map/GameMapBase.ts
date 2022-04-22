@@ -31,7 +31,7 @@ export type TGameMapImage = {
 	/** url to the image */
 	url: string;
 	/** the owner of the image */
-	userId: Discord.Snowflake;
+	userId?: Discord.Snowflake;
 };
 
 export type TGameMapAura = TGameMapImage & {
@@ -94,6 +94,7 @@ export type TGameMapCore = {
 
 //#endregion
 
+/** returns path to the json file */
 function getMapFilePath(messageId: Discord.Snowflake): string {
 	return `./data/sage/maps/${messageId}.json`;
 }
@@ -172,6 +173,10 @@ export default abstract class GameMapBase {
 
 	public static readCore(messageId: Discord.Snowflake) {
 		return readJsonFile<TGameMapCore>(getMapFilePath(messageId)).catch(errorReturnNull);
+	}
+
+	public static toRenderable(mapCore: TGameMapCore): RenderableGameMap {
+		return new RenderableGameMap(mapCore);
 	}
 
 	//#endregion

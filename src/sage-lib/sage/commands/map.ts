@@ -1,14 +1,19 @@
 import * as Discord from "discord.js";
 import type { Optional } from "../../../sage-utils";
 import { errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { getText } from "../../../sage-utils/utils/HttpsUtils";
 import { capitalize, StringMatcher } from "../../../sage-utils/utils/StringUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
-import { DiscordId, TChannel } from "../../discord";
-import { registerInteractionListener } from "../../discord/handlers";
+import { DiscordId, TChannel, TCommandAndArgsAndData } from "../../discord";
+import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
+import { discordPromptYesNo } from "../../discord/prompts";
+import ActiveBot from "../model/ActiveBot";
 import type SageInteraction from "../model/SageInteraction";
+import type SageMessage from "../model/SageMessage";
 import GameMap, { TMoveDirection } from "./map/GameMap";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, TGameMapTerrain, TGameMapToken } from "./map/GameMapBase";
+import gameMapImporter, { TParsedGameMapCore } from "./map/gameMapImporter";
 
 //#region buttons
 
@@ -48,11 +53,6 @@ function createMapComponents(gameMap: GameMap): Discord.MessageActionRow[] {
 //#endregion
 
 //#region token movement
-
-/** convenience method so i can call functions in a single line and return the /or/ of the results */
-function or(...bools: boolean[]): boolean {
-	return bools.indexOf(true) > -1;
-}
 
 /** get text for human readable direction */
 function toDirection(action: TMapAction): string {
@@ -139,7 +139,8 @@ async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: 
 	const toggled = gameMap.cycleActiveToken();
 	const activeToken = gameMap.activeToken;
 	sageInteraction.reply(`Setting ${activeToken?.name} as active ...`, true);
-	updated = or(updated, toggled, gameMap.shuffleActiveToken("top"))
+	const shuffled = gameMap.shuffleActiveToken("top");
+	updated = (shuffled || updated || toggled)
 		&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
 	if (updated) {
 		return sageInteraction.reply(`Your active token is: ${activeToken?.name ?? "Unknown"}`, true);
@@ -245,12 +246,63 @@ async function actionHandler(sageInteraction: SageInteraction, actionData: TActi
 	}
 }
 
+//#region map import handler
+
+async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TParsedGameMapCore> | null> {
+	const attachments = sageMessage.message.attachments;
+	if (attachments.size) {
+		const client = ActiveBot.active.client;
+		for (const att of attachments) {
+			const url = att[1].attachment.toString();
+			const raw = await getText(url);
+			const parsedCore = gameMapImporter(raw, client);
+			if (parsedCore) {
+				return {
+					data: parsedCore
+				};
+			}
+		}
+	}
+	return null;
+}
+async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore): Promise<void> {
+	const channel = sageMessage.message.channel;
+	const boolImport = await discordPromptYesNo(sageMessage, `Try to import map: ${mapCore.name}?`);
+	if (boolImport) {
+		const buffer = await GameMap.toRenderable(mapCore).render();
+		if (buffer) {
+			const preview = await channel.send({files:[buffer]});
+			const boolConfirm = await discordPromptYesNo(sageMessage, `Does this look right?`);
+			if (boolConfirm) {
+				if (!mapCore.userId) {
+					mapCore.userId = sageMessage.sageUser.did;
+				}
+				const success = await renderMap(channel as TChannel, new GameMap(mapCore, mapCore.userId));
+				if (success) {
+					await channel.send(`Import Successful!`);
+				}else {
+					await channel.send(`Sorry, something went wrong posting image.`);
+				}
+			}else {
+				await channel.send(`Ok, no confirmation.`);
+			}
+		}else {
+			await channel.send(`Sorry, something went wrong generating image.`);
+		}
+	}else {
+		await channel.send(`Ok, no import.`);
+	}
+}
+
+//#endregion
+
 export function registerCommandHandlers(): void {
 	registerInteractionListener(actionTester, actionHandler);
 	registerInteractionListener(mapCreateTester, mapCreateHandler);
 	registerInteractionListener(mapAuraTester, mapAuraHandler);
 	registerInteractionListener(mapTerrainTester, mapTerrainHandler);
 	registerInteractionListener(mapTokenTester, mapTokenHandler);
+	registerMessageListener(mapImportTester, mapImportHandler);
 }
 
 //#region interaction listener testers
