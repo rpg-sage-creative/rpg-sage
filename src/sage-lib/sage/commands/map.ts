@@ -184,7 +184,7 @@ async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData
 		sageInteraction.reply(`Moving ${activeImage.name} ${toDirection(mapAction)} ...`, false);
 		const moved = gameMap.moveActiveToken(mapAction.slice(3).toLowerCase() as TMoveDirection);
 		const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
-		updated = or(moved, shuffled)
+		updated = (moved || shuffled)
 			&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
 		if (updated) {
 			return sageInteraction.deleteReply();
