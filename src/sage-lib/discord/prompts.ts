@@ -1,9 +1,10 @@
 import * as Discord from "discord.js";
 import utils from "../../sage-utils";
 import ActiveBot from "../sage/model/ActiveBot";
+import type SageCache from "../sage/model/SageCache";
 import type SageMessage from "../sage/model/SageMessage";
 import { resolveToEmbeds } from "./embeds";
-import type { TRenderableContentResolvable } from "./types";
+import type { DUser, TChannel, TRenderableContentResolvable } from "./types";
 
 const TIMEOUT_MILLI = 60 * 1000;
 
@@ -28,16 +29,30 @@ export async function discordPromptYesNo(sageMessage: SageMessage, resolvable: T
 	return null;
 }
 
+export async function discordPromptYesNoDeletable(sageMessage: SageMessage, resolvable: TRenderableContentResolvable): Promise<[boolean | null, Discord.Message | null]> {
+	const yesNo: TPromptButton[] = [{ label:"Yes", style:"SUCCESS"}, { label:"No", style:"SECONDARY" }];
+	const [result, message] = await _prompt(sageMessage.caches, resolvable, yesNo, sageMessage.message.channel as TChannel);
+	if (result) {
+		return [result === "Yes", message];
+	}
+	return [null, message];
+}
+
 export async function prompt(sageMessage: SageMessage, resolvable: TRenderableContentResolvable, buttons: TPromptButton[]): Promise<string | null> {
-	return new Promise<string | null>(async resolve => {
+	const [value] = await _prompt(sageMessage.caches, resolvable, buttons, sageMessage.message.channel as TChannel);
+	return value;
+}
+
+export async function _prompt(sageCache: SageCache, resolvable: TRenderableContentResolvable, buttons: TPromptButton[], targetChannel: TChannel | DUser): Promise<[string | null, Discord.Message | null]> {
+	return new Promise<[string | null, Discord.Message | null]>(async resolve => {
 		const buttonRow = new Discord.MessageActionRow();
 		const messageButtons = createButtons(buttons);
 		buttonRow.setComponents(...messageButtons);
 
 		// send the message
-		const embeds = resolveToEmbeds(sageMessage.caches, resolvable);
+		const embeds = resolveToEmbeds(sageCache, resolvable);
 		const components = [buttonRow];
-		const message = sageMessage.message.channel.send({ embeds, components });
+		const message = await targetChannel.send({ embeds, components });
 
 		// create timeout and handler variables to ensure access in the following functions
 		let timeout: NodeJS.Timeout;
@@ -45,9 +60,9 @@ export async function prompt(sageMessage: SageMessage, resolvable: TRenderableCo
 
 		// create shared resolve function
 		const _resolve = (value: string | null) => {
-			resolve(value);
+			resolve([value, message]);
 			messageButtons.forEach(btn => btn.setDisabled(true));
-			message.then(msg => msg.edit({ embeds, components }));
+			message.edit({ embeds, components });
 			ActiveBot.active.client.off("interactionCreate", handler);
 			clearTimeout(timeout);
 		};
@@ -59,7 +74,7 @@ export async function prompt(sageMessage: SageMessage, resolvable: TRenderableCo
 
 		// create unique handler and listen to it
 		handler = (interaction: Discord.Interaction) => {
-			if (interaction.isButton() && interaction.user.id === sageMessage.sageUser.did) {
+			if (interaction.isButton() && interaction.user.id === sageCache.userDid) {
 				const btn = messageButtons.find(_btn => interaction.customId === _btn.customId);
 				if (btn) {
 					interaction.deferUpdate();
@@ -69,5 +84,8 @@ export async function prompt(sageMessage: SageMessage, resolvable: TRenderableCo
 		};
 		ActiveBot.active.client.on("interactionCreate", handler);
 	})
-	.catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+	.catch(reason => {
+		console.error(reason);
+		return [null, null];
+	});
 }
