@@ -134,7 +134,8 @@ export default class SageCache {
 
 	public get discord(): DiscordCache { return this.core.discord; }
 	public get discordKey(): DiscordKey { return this.core.discordKey; }
-	public get userDid(): Discord.Snowflake { return this.core.discordUser?.id ?? NilSnowflake; }
+	/** @deprecated start setting this.core.discordUser or remove it! */
+	public get userDid(): Discord.Snowflake { return this.core.discordUser?.id ?? this.core.user?.did ?? NilSnowflake; }
 
 	public meta: TMeta[] = [];
 
