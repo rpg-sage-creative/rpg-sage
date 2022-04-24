@@ -87,11 +87,13 @@ export default class GameMap extends GameMapBase {
 
 	/** returns the currently active image */
 	public get activeImage() {
-		const imageId = this.activeLayerValues[this.activeLayer];
-		return this.core.tokens.find(image => image.id === imageId)
-			?? this.core.terrain.find(image => image.id === imageId)
-			?? this.core.auras.find(image => image.id === imageId)
-			?? this.core.tokens.map(token => token.auras).flat().find(image => image.id === imageId);
+		switch(this.activeLayer) {
+			case LayerType.Aura: return this.activeAura;
+			case LayerType.Terrain: return this.activeTerrain;
+			case LayerType.Token:
+			default:
+				return this.activeToken;
+		}
 	}
 
 	/** sets the user's currently active layer and image */
