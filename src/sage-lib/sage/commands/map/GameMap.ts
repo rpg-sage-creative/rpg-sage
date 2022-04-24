@@ -1,5 +1,5 @@
 import type * as Discord from "discord.js";
-import GameMapBase, { COL, LayerType, ROW, TGameMapCore, TGameMapImage, UserLayerType } from "./GameMapBase";
+import GameMapBase, { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, UserLayerType } from "./GameMapBase";
 
 /** shuffles an image on a layer */
 export type TShuffleUpDown = "up" | "down";
@@ -219,6 +219,25 @@ export default class GameMap extends GameMapBase {
 		const next = tokens[index + 1] ?? tokens[0];
 		this.activeImage = next;
 		return true;
+	}
+
+	public deleteImage(image: TGameMapImage): boolean {
+		if (image.layer === LayerType.Terrain) {
+			return this.core.terrain.splice(this.core.terrain.findIndex(terrain => terrain.id === image.id), 1).length === 1;
+		}else if (image.layer === LayerType.Token) {
+			return this.core.tokens.splice(this.core.tokens.findIndex(token => token.id === image.id), 1).length === 1;
+		}else {
+			if ((image as TGameMapAura).anchorId) {
+				const anchor = this.tokens.find(token => token.auras.find(aura => aura.id === image.id))
+					?? this.terrain.find(terrain => terrain.auras.find(aura => aura.id === image.id));
+				if (anchor?.auraId === image.id) {
+					delete anchor.auraId;
+				}
+				return anchor?.auras.splice(anchor.auras.findIndex(aura => aura.id === image.id), 1).length === 1;
+			}else {
+				return this.core.auras.splice(this.core.auras.findIndex(aura => aura.id === image.id), 1).length === 1;
+			}
+		}
 	}
 
 	/** move the active token in the given direction */

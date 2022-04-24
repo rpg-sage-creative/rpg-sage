@@ -2,7 +2,8 @@ import * as Discord from "discord.js";
 import utils from "../../sage-utils";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageCache from "../sage/model/SageCache";
-import type SageMessage from "../sage/model/SageMessage";
+import type SageInteraction from "../sage/model/SageInteraction";
+import SageMessage from "../sage/model/SageMessage";
 import { resolveToEmbeds } from "./embeds";
 import type { DUser, TChannel, TRenderableContentResolvable } from "./types";
 
@@ -29,9 +30,10 @@ export async function discordPromptYesNo(sageMessage: SageMessage, resolvable: T
 	return null;
 }
 
-export async function discordPromptYesNoDeletable(sageMessage: SageMessage, resolvable: TRenderableContentResolvable): Promise<[boolean | null, Discord.Message | null]> {
+export async function discordPromptYesNoDeletable(hasSageCache: SageMessage | SageInteraction, resolvable: TRenderableContentResolvable): Promise<[boolean | null, Discord.Message | null]> {
 	const yesNo: TPromptButton[] = [{ label:"Yes", style:"SUCCESS"}, { label:"No", style:"SECONDARY" }];
-	const [result, message] = await _prompt(sageMessage.caches, resolvable, yesNo, sageMessage.message.channel as TChannel);
+	const channel = hasSageCache instanceof SageMessage ? hasSageCache.message.channel : hasSageCache.interaction.channel;
+	const [result, message] = await _prompt(hasSageCache.caches, resolvable, yesNo, channel as TChannel);
 	if (result) {
 		return [result === "Yes", message];
 	}

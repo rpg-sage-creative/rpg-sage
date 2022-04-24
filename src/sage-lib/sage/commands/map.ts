@@ -218,9 +218,29 @@ async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: 
 async function actionHandlerMapConfig(sageInteraction: SageInteraction, _: GameMap): Promise<void> {
 	return sageInteraction.reply(`Coming Soon ...`, false);
 }
-async function actionHandlerMapDelete(sageInteraction: SageInteraction, _: GameMap): Promise<void> {
-	return sageInteraction.reply(`Coming Soon ...`, false);
+
+async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+	const activeImage = gameMap.activeImage;
+	if (activeImage) {
+		const [boolConfirm, msgConfirm] = await discordPromptYesNoDeletable(sageInteraction, `Delete image: ${activeImage.name}?`);
+		if (boolConfirm) {
+			sageInteraction.reply(`Deleting image: ${activeImage.name} ...`, true);
+			del(msgConfirm);
+			const deleted = gameMap.deleteImage(activeImage);
+			const updated = deleted
+				&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+			if (updated) {
+				return sageInteraction.deleteReply();
+			}
+			return sageInteraction.reply(`Error deleting image ...`, false);
+		}
+		del(msgConfirm);
+		return sageInteraction.deleteReply();
+	}else {
+		return sageInteraction.reply(`You have no image to delete ...`, true);
+	}
 }
+
 async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData: TActionData): Promise<void> {
 	const gameMap = actionData.gameMap;
 	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
@@ -235,9 +255,9 @@ async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData
 		if (updated) {
 			return sageInteraction.deleteReply();
 		}
-		return sageInteraction.reply(`Error moving token ...`, false);
+		return sageInteraction.reply(`Error moving image ...`, false);
 	}
-	return sageInteraction.reply(`You have no token to move ...`, true);
+	return sageInteraction.reply(`You have no image to move ...`, true);
 }
 async function actionHandler(sageInteraction: SageInteraction, actionData: TActionData): Promise<void> {
 	const gameMap = actionData.gameMap;
