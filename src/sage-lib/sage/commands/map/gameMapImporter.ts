@@ -71,7 +71,11 @@ function parseUser(client: Discord.Client, userValue?: string): Discord.Snowflak
 	if (DiscordId.isValidId(userValue)) {
 		return userValue;
 	}
-	return client.users.resolve(userValue)?.id;
+	const user = client.users.cache.find(_user => {
+		const name = `${_user.username}#${_user.discriminator}`;
+		return userValue === name || userValue === `@${name}`;
+	});
+	return user?.id;
 }
 
 /** returns a GameMapCore that contains the imported settings */
@@ -162,6 +166,8 @@ function matchAnchor(mapCore: TParsedGameMapCore, aura: TGameMapAura | null): vo
 		if (tokenAnchor) {
 			tokenAnchor.auras.push(aura);
 			tokenAnchor.auraId = aura.id;
+			aura.pos[COL] += tokenAnchor.pos[COL];
+			aura.pos[ROW] += tokenAnchor.pos[ROW];
 			return;
 		}
 
@@ -169,6 +175,9 @@ function matchAnchor(mapCore: TParsedGameMapCore, aura: TGameMapAura | null): vo
 		if (terrainAnchor) {
 			terrainAnchor.auras.push(aura);
 			terrainAnchor.auraId = aura.id;
+			aura.pos[COL] += terrainAnchor.pos[COL];
+			aura.pos[ROW] += terrainAnchor.pos[ROW];
+			return;
 		}
 	}
 }
@@ -219,7 +228,7 @@ export default function gameMapImporter(raw: string, client: Discord.Client): TP
 		}
 		return _aura;
 	}).filter(exists);
-	parsedCore.auras.push(...auras);
+	parsedCore.auras.push(...auras.filter(aura => !aura.anchorId));
 	//#endregion
 
 	return parsedCore;
