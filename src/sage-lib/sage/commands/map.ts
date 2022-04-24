@@ -7,7 +7,7 @@ import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import { DiscordId, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
-import { discordPromptYesNo } from "../../discord/prompts";
+import { discordPromptYesNoDeletable } from "../../discord/prompts";
 import ActiveBot from "../model/ActiveBot";
 import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
@@ -73,9 +73,6 @@ function toDirection(action: TMapAction): string {
 
 /** If the user is a player in a game, this will ensure their tokens (pc/companions) are on the map */
 function ensurePlayerCharacter(sageInteraction: SageInteraction, gameMap: GameMap): boolean {
-	if (!sageInteraction.isPlayer) {
-		return false;
-	}
 	const pc = sageInteraction.playerCharacter;
 	if (!pc) {
 		return false;
@@ -114,8 +111,9 @@ async function actionHandlerMapTerrain(sageInteraction: SageInteraction, gameMap
 	const toggled = gameMap.cycleActiveTerrain();
 	const activeTerrain = gameMap.activeTerrain;
 	sageInteraction.reply(`Setting ${activeTerrain?.name} as active ...`, true);
-	if (toggled) {
-		return sageInteraction.reply(`Your active token is: ${activeTerrain?.name ?? "Unknown"}`, true);
+	const updated = toggled && await gameMap.save();
+	if (updated) {
+		return sageInteraction.reply(`Your active terrain is: ${activeTerrain?.name ?? "Unknown"}`, true);
 	}
 	return sageInteraction.deleteReply();
 }
@@ -135,13 +133,16 @@ async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: G
 }
 
 async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
-	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
+	const added = ensurePlayerCharacter(sageInteraction, gameMap);
 	const toggled = gameMap.cycleActiveToken();
 	const activeToken = gameMap.activeToken;
 	sageInteraction.reply(`Setting ${activeToken?.name} as active ...`, true);
-	const shuffled = gameMap.shuffleActiveToken("top");
-	updated = (shuffled || updated || toggled)
-		&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+	let updated = false;
+	if (added) {
+		updated = await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+	}else {
+		updated = toggled && await gameMap.save();
+	}
 	if (updated) {
 		return sageInteraction.reply(`Your active token is: ${activeToken?.name ?? "Unknown"}`, true);
 	}
@@ -157,15 +158,18 @@ async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: 
 	switch(gameMap.activeLayer) {
 		case LayerType.Aura:
 			updated = gameMap.shiftOpacity("up");
+			sageInteraction.reply(`Increasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"}`, true);
 			output = `Aura Opacity Increased: ${gameMap.activeAura?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Terrain:
 			updated = gameMap.shuffleActiveTerrain("up");
+			sageInteraction.reply(`Raising Terrain: ${gameMap.activeTerrain?.name ?? "Unknown"}`, true);
 			output = `Terrain Raised: ${gameMap.activeTerrain?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Token:
 		default:
 			updated = gameMap.shuffleActiveToken("up");
+			sageInteraction.reply(`Raising Token: ${gameMap.activeToken?.name ?? "Unknown"}`, true);
 			output = `Token Raised: ${gameMap.activeToken?.name ?? "Unknown"}`;
 			break;
 	}
@@ -187,15 +191,18 @@ async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: 
 	switch(gameMap.activeLayer) {
 		case LayerType.Aura:
 			updated = gameMap.shiftOpacity("down");
+			sageInteraction.reply(`Decreasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"}`, true);
 			output = `Aura Opacity Decreased: ${gameMap.activeAura?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Terrain:
 			updated = gameMap.shuffleActiveTerrain("down");
+			sageInteraction.reply(`Lowering Terain: ${gameMap.activeTerrain?.name ?? "Unknown"}`, true);
 			output = `Terrain Lowered: ${gameMap.activeTerrain?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Token:
 		default:
 			updated = gameMap.shuffleActiveToken("down");
+			sageInteraction.reply(`Lowering Token: ${gameMap.activeToken?.name ?? "Unknown"}`, true);
 			output = `Token Lowered: ${gameMap.activeToken?.name ?? "Unknown"}`;
 			break;
 	}
@@ -250,10 +257,13 @@ async function actionHandler(sageInteraction: SageInteraction, actionData: TActi
 
 async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TParsedGameMapCore> | null> {
 	const attachments = sageMessage.message.attachments;
-	if (attachments.size) {
-		const client = ActiveBot.active.client;
-		for (const att of attachments) {
-			const url = att[1].attachment.toString();
+	if (!attachments.size) {
+		return null;
+	}
+	const client = ActiveBot.active.client;
+	for (const att of attachments) {
+		const url = att[1].attachment.toString();
+		if (url.match(/map\.txt$/i)) {
 			const raw = await getText(url);
 			const parsedCore = gameMapImporter(raw, client);
 			if (parsedCore) {
@@ -265,33 +275,25 @@ async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArg
 	}
 	return null;
 }
+async function del(msg?: Discord.Message | null): Promise<Discord.Message | null> {
+	return msg?.deletable ? msg.delete() : msg ?? null;
+}
 async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore): Promise<void> {
 	const channel = sageMessage.message.channel;
-	const boolImport = await discordPromptYesNo(sageMessage, `Try to import map: ${mapCore.name}?`);
+	const [boolImport, msgImport] = await discordPromptYesNoDeletable(sageMessage, `Try to import map: ${mapCore.name}?`);
 	if (boolImport) {
-		const buffer = await GameMap.toRenderable(mapCore).render();
-		if (buffer) {
-			const preview = await channel.send({files:[buffer]});
-			const boolConfirm = await discordPromptYesNo(sageMessage, `Does this look right?`);
-			if (boolConfirm) {
-				if (!mapCore.userId) {
-					mapCore.userId = sageMessage.sageUser.did;
-				}
-				const success = await renderMap(channel as TChannel, new GameMap(mapCore, mapCore.userId));
-				if (success) {
-					await channel.send(`Import Successful!`);
-				}else {
-					await channel.send(`Sorry, something went wrong posting image.`);
-				}
-			}else {
-				await channel.send(`Ok, no confirmation.`);
-			}
-		}else {
-			await channel.send(`Sorry, something went wrong generating image.`);
+		const pwConfiguring = await channel.send(`Importing and configuring: ${mapCore.name} ...`);
+		del(msgImport);
+		if (!mapCore.userId) {
+			mapCore.userId = sageMessage.sageUser.did;
 		}
-	}else {
-		await channel.send(`Ok, no import.`);
+		const success = await renderMap(channel as TChannel, new GameMap(mapCore, mapCore.userId));
+		if (!success) {
+			await channel.send(`Sorry, something went wrong importing the map.`);
+		}
+		del(pwConfiguring);
 	}
+	del(msgImport);
 }
 
 //#endregion
@@ -311,9 +313,11 @@ type TActionData = { gameMap:GameMap; mapAction:TMapAction; };
 
 /** Returns action data (mapCore and mapAction) or undefined */
 async function actionTester(sageInteration: SageInteraction): Promise<TActionData | undefined> {
-	const [mapId, mapAction] = (sageInteration.interaction.customId ?? "").split("|") as [Discord.Snowflake, TMapAction];
-	if (MapActions.includes(mapAction) && GameMap.exists(mapId)) {
-		const gameMap = await GameMap.forUser(mapId, sageInteration.user.id, true);
+	// const [mapId, mapAction] = (sageInteration.interaction.customId ?? "").split("|") as [Discord.Snowflake, TMapAction];
+	const mapAction = (sageInteration.interaction.customId ?? "").split("|")[1] as TMapAction;
+	const messageId = sageInteration.interaction.message.id;
+	if (MapActions.includes(mapAction) && GameMap.exists(messageId)) {
+		const gameMap = await GameMap.forUser(messageId, sageInteration.user.id, true);
 		if (gameMap) {
 			return { gameMap, mapAction };
 		}
