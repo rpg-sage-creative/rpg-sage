@@ -18,7 +18,7 @@ interface SageInteractionCore extends HasSageCacheCore {
 	type: InteractionType;
 }
 
-export default class SageInteraction<T extends DInteraction = any>
+export default class SageInteraction<T extends DInteraction = Discord.MessageComponentInteraction>
 	extends HasSageCache<SageInteractionCore, SageInteraction<any>>
 	implements IHasGame, IHasChannels {
 
@@ -37,6 +37,7 @@ export default class SageInteraction<T extends DInteraction = any>
 	//#region command / category / sub
 
 	public isCommand(command: string): boolean;
+	public isCommand(sub: string, command: string): boolean;
 	public isCommand(gameType: TGameType, command: string): boolean;
 	public isCommand(...args: string[]): boolean {
 		if (!this.interaction.isCommand()) {
@@ -46,16 +47,16 @@ export default class SageInteraction<T extends DInteraction = any>
 		const command = args.pop()!;
 		const commandLower = command.toLowerCase();
 
-		const game = args[0] as TGameType;
-		const gameLower = game?.toLowerCase();
+		const subCommand = args[0] as TGameType;
+		const subCommandLower = subCommand?.toLowerCase();
 
 		const commandValues = this.commandValues.map(s => s.toLowerCase());
 		if (["sage", "sage-stable", "sage-beta", "sage-dev"].includes(commandValues[0])) {
 			commandValues.shift();
 		}
 
-		if (game) {
-			return commandValues[0] === gameLower
+		if (subCommand) {
+			return commandValues[0] === subCommandLower
 				&& commandValues[1] === commandLower;
 		}
 
@@ -127,38 +128,50 @@ export default class SageInteraction<T extends DInteraction = any>
 	private updates: Discord.Message<boolean>[] = [];
 
 	/** Defers the interaction so that a reply can be sent later. */
-	public async defer(ephemeral: boolean): Promise<void> {
-		return this.interaction.deferReply({ ephemeral:ephemeral ?? true });
+	public defer(ephemeral: boolean): Promise<void> {
+		return this.pushToReplyStack(() => this.interaction.deferReply({ ephemeral:ephemeral ?? true }));
 	}
 
 	/** Deletes the reply and any updates (ONLY IF NOT EPHEMERAL) */
 	public async deleteReply(): Promise<void> {
-		if (this.interaction.replied && !this.interaction.ephemeral) {
-			if (this.updates.length) {
-				await Promise.all(this.updates.map(update => update.deletable ? update.delete() : Promise.resolve()));
+		return this.pushToReplyStack(async () => {
+			if (this.interaction.replied && !this.interaction.ephemeral) {
+				if (this.updates.length) {
+					await Promise.all(this.updates.map(update => update.deletable ? update.delete() : Promise.resolve()));
+				}
+				await this.interaction.deleteReply();
 			}
-			await this.interaction.deleteReply();
-		}
+		});
+	}
+
+	private replyStack: Promise<any> = Promise.resolve();
+	private pushToReplyStack(fn: () => Promise<any>): Promise<any> {
+		this.replyStack = this.replyStack.then(fn);
+		return this.replyStack;
 	}
 
 	/** Uses reply() it not replied to yet or editReply() to edit the previous reply. */
 	public async reply(renderable: TRenderableContentResolvable, ephemeral: boolean): Promise<void> {
-		const embeds = resolveToEmbeds(this.caches, renderable);
-		if (this.interaction.deferred || this.interaction.replied) {
-			await this.interaction.editReply({ embeds:embeds });
-		}else {
-			await this.interaction.reply({ embeds:embeds, ephemeral:ephemeral ?? true });
-		}
+		return this.pushToReplyStack(() => {
+			const embeds = resolveToEmbeds(this.caches, renderable);
+			if (this.interaction.deferred || this.interaction.replied) {
+				return this.interaction.editReply({ embeds:embeds });
+			}else {
+				return this.interaction.reply({ embeds:embeds, ephemeral:ephemeral ?? true });
+			}
+		});
 	}
 
 	/** Uses followUp() if a reply was given, otherwise uses reply()  */
 	public async update(renderable: TRenderableContentResolvable, ephemeral: boolean): Promise<void> {
-		if (this.interaction.replied) {
-			const embeds = resolveToEmbeds(this.caches, renderable);
-			this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Discord.Message<boolean>);
-		}else {
-			await this.reply(renderable, ephemeral);
-		}
+		return this.pushToReplyStack(async () => {
+			if (this.interaction.replied) {
+				const embeds = resolveToEmbeds(this.caches, renderable);
+				this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Discord.Message<boolean>);
+			}else {
+				await this.reply(renderable, ephemeral);
+			}
+		});
 	}
 
 	/** Sends a full message to the channel or user the interaction originated in. */

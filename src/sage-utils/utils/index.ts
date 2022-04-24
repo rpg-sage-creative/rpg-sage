@@ -10,6 +10,7 @@ export * as FsUtils from "./FsUtils";
 export * as HttpsUtils from "./HttpsUtils";
 export * as JsonUtils from "./JsonUtils";
 export * as LangUtils from "./LangUtils";
+export * as MapUtils from "./MapUtils";
 export * as MathUtils from "./MathUtils";
 export * as NumberUtils from "./NumberUtils";
 export * as RandomUtils from "./RandomUtils";
