@@ -332,12 +332,13 @@ export function registerCommandHandlers(): void {
 type TActionData = { gameMap:GameMap; mapAction:TMapAction; };
 
 /** Returns action data (mapCore and mapAction) or undefined */
-async function actionTester(sageInteration: SageInteraction): Promise<TActionData | undefined> {
+async function actionTester(sageInteraction: SageInteraction): Promise<TActionData | undefined> {
 	// const [mapId, mapAction] = (sageInteration.interaction.customId ?? "").split("|") as [Discord.Snowflake, TMapAction];
-	const mapAction = (sageInteration.interaction.customId ?? "").split("|")[1] as TMapAction;
-	const messageId = sageInteration.interaction.message.id;
-	if (MapActions.includes(mapAction) && GameMap.exists(messageId)) {
-		const gameMap = await GameMap.forUser(messageId, sageInteration.user.id, true);
+	const mapAction = (sageInteraction.interaction.customId ?? "").split("|")[1] as TMapAction;
+	const messageId = sageInteraction.interaction.message?.id;
+	if (MapActions.includes(mapAction) && messageId && GameMap.exists(messageId)) {
+		const userDid = sageInteraction.user?.id;
+		const gameMap = userDid ? await GameMap.forUser(messageId, sageInteraction.user.id, true) : null;
 		if (gameMap) {
 			return { gameMap, mapAction };
 		}
