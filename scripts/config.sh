@@ -2,19 +2,15 @@
 
 NODE_TYPES_VER="17.0.16"
 DISCORD_VER="13.6.0"
-FS_VER="0.0.1-security"
 XREGEXP_VER="5.1.0"
-WEBPACK_VER="5.65.0"
-WEBPACK_CLI_VER="4.9.1"
+CANVAS_VER="2.9.1"
 
 #region npm lib names/versions
 
 NODE_TYPES_NPM="@types/node@$NODE_TYPES_VER"
 DISCORD_NPM="discord.js@$DISCORD_VER"
-FS_NPM="fs@$FS_VER"
 XREGEXP_NPM="xregexp@$XREGEXP_VER"
-WEBPACK_NPM="webpack@$WEBPACK_VER"
-WEBPACK_CLI_NPM="webpack-cli@$WEBPACK_CLI_VER"
+CANVAS_NPM="canvas@$CANVAS_VER"
 
 #endregion
 

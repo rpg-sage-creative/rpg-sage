@@ -67,7 +67,7 @@ if [ "$WHICH" = "data" ]; then
 	# stage files in remote deploy folder
 	echoAndDo "scp $deployDirLocal/data.zip $sshHost:$deployDir/"
 else
-	echoAndDo "cp -r $sageRootDir/node_modules $deployDirLocal/tmp"
+	# echoAndDo "cp -r $sageRootDir/node_modules $deployDirLocal/tmp"
 	echoAndDo "cp -r $sageRootDir/dist/sage* $deployDirLocal/tmp"
 	echoAndDo "cp $sageRootDir/dist/*.mjs $deployDirLocal/tmp"
 	echoAndDo "cp $sageRootDir/package.json $deployDirLocal/tmp"
@@ -106,6 +106,10 @@ else
 		"unzip -q $deployDir/bot -d $runDir"
 		"rm -f $deployDir/bot.zip"
 		"cd $runDir"
+		"mkdir node_modules"
+		"npm install $CANVAS_NPM"
+		"npm install $DISCORD_NPM"
+		"npm install $XREGEXP_NPM"
 		"pm2 start app.mjs --name sage-$WHICH --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $WHICH dist"
 	)
 fi
