@@ -12,7 +12,7 @@ import BotRepo from "./sage/repo/BotRepo";
 // import Server from "./sage/model/Server";
 */
 
-export default function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: string, includePf2ToolsData = false): void {
+export function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: string, includePf2ToolsData = false): void {
 	const logLevel = botCodeName === "dev" ? LogLevel.Info : LogLevel.Warn;
 	utils.ConsoleUtils.startHandling(logLevel);
 

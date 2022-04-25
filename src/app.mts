@@ -1,5 +1,5 @@
 // import * as fs from "fs";
-import activate from "./sage-lib";
+import { activate } from "./sage-lib";
 
 type TBot = "dev" | "beta" | "stable";
 
