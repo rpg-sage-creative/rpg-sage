@@ -1,5 +1,6 @@
 import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { IMap, IMapLayer, mapToBuffer, THasOffset, TMapBackgroundImage, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils";
+import type { IMap, IMapLayer, THasOffset, TMapBackgroundImage, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils/types";
+import { mapToBuffer } from "../../../../sage-utils/utils/MapUtils";
 import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
 
 class RenderableGameMapLayer implements IMapLayer {
