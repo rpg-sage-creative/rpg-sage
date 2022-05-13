@@ -67,7 +67,7 @@ export default class DiscordId {
 		return isDefined(value?.match(/^\d{18}$/));
 	}
 	public static isUserMention(value: string): boolean {
-		return isDefined(value?.match(/^<@\!\d{18}>$/));
+		return isDefined(value?.match(/^<@\!?\d{18}>$/));
 	}
 
 	public static isMentionOrReference(value: string): boolean {
