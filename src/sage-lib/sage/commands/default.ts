@@ -114,10 +114,12 @@ async function objectsBy(sageMessage: SageMessage): Promise<void> {
 		trait = traitOr === "trait" && Repository.findByValue("Trait", searchTerm),
 		domain = traitOr === "domain" && Repository.findByValue("Domain", searchTerm);
 	// source = traitOr === "source",
+
 	content.setTitle(`<b>${objectType.objectTypePlural} by ${utils.StringUtils.capitalize(traitOr)} (${searchTerm})</b>`);
 	if (trait) {
-		// TODO: This uses weapon for all to expose traits ... create a HasTraits interface and properly implement
-		const items = Repository.filter(objectType.objectType as "Weapon", weapon => weapon.Traits.includes(trait));
+		const capped = utils.StringUtils.capitalize(searchTerm);
+		/** @todo This uses weapon for all to expose traits ... create a HasTraits interface and properly implement */
+		const items = Repository.filter(objectType.objectType as "Weapon", weapon => weapon.Traits?.includes(trait) || weapon.traits.includes(capped));
 		if (items.length) {
 			SourceNotationMap.appendNotatedItems(content, items);
 		} else {
