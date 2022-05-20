@@ -127,21 +127,19 @@ function parseMatch(sageMessage: TInteraction, match: string): TDiceOutput[] {
 }
 
 export function parseDiceMatches(sageMessage: TInteraction, content: string): TDiceMatch[] {
-	const output: TDiceMatch[] = [];
+	const diceMatches: TDiceMatch[] = [];
 	const withoutCodeBlocks = utils.StringUtils.redactCodeBlocks(content);
-	let match: RegExpExecArray | null;
-	while (match = BASE_REGEX.exec(withoutCodeBlocks)) {
-		const matchString = match[0];
-		const matchIndex = match.index;
-		const isInline = matchString.match(/^\[{2}/) && matchString.match(/\]{2}$/) ? true : false;
-		output.push({
-			match: matchString,
-			index: matchIndex,
-			inline: isInline,
-			output: parseMatch(sageMessage, content.substr(matchIndex, matchString.length))
-		});
+	let execArray: RegExpExecArray | null;
+	while (execArray = BASE_REGEX.exec(withoutCodeBlocks)) {
+		const match = execArray[0];
+		const index = execArray.index;
+		const inline = match.match(/^\[{2}/) && match.match(/\]{2}$/) ? true : false;
+		const output = parseMatch(sageMessage, content.slice(index, index + match.length));
+		if (output.length) {
+			diceMatches.push({ match, index, inline, output });
+		}
 	}
-	return output;
+	return diceMatches;
 }
 
 //#endregion
@@ -152,9 +150,9 @@ async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommand
 	if (!sageMessage.allowDice || sageMessage.slicedContent.match(/^\!*\s*((add|set)[ \-]?macro|macro[ \-]?(add|set))/i)) {
 		return null;
 	}
-	const matches = await parseDiceMatches(sageMessage, sageMessage.slicedContent);
+	const matches = parseDiceMatches(sageMessage, sageMessage.slicedContent);
 	if (matches.length > 0) {
-		const output = matches.reduce((out, match) => { out.push(...match.output); return out; }, <TDiceOutput[]>[]);
+		const output = matches.map(m => m.output).flat();
 		return { command: "unified-dice", data: output };
 	}
 	return null;

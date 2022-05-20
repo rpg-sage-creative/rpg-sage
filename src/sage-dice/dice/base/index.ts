@@ -40,12 +40,26 @@ import type {
 
 //#endregion
 
+//#region html formatting
+
+function bold(value: string): string {
+	return `<b>${value}</b>`;
+}
+function italics(value: string): string {
+	return `<i>${value}</i>`;
+}
+function strike(value: string): string {
+	return `<s>${value}</s>`;
+}
+
+//#endregion
+
 //#region Tokenizer
 
 /** Returns a new object with the default dice parsers for use with Tokenizer */
 export function getParsers(): TParsers {
 	return {
-		dice: /([\-\+\*\/])?\s*(\d*)\s*d\s*(\d+)/i,
+		dice: /([\-\+\*\/])?(?:\s*(\d+)\s*|\b)d\s*(\d+)/i,
 		dropKeep: /(dl|dh|kl|kh)\s*(\d+)?/i,
 		noSort: /(ns)/i,
 		mod: /([\-\+\*\/])\s*(\d+)(?!d\d)/i,
@@ -166,10 +180,10 @@ type TRollAndIndex = {
 function mapRollAndIndex(sides: number, roll: number, index: number): TRollAndIndex {
 	let output = String(roll);
 	if (roll === sides) {
-		output = output.bold();
+		output = bold(output);
 	}
 	if (roll === 1) {
-		output = output.italics();
+		output = italics(output);
 	}
 	return { roll:roll, index:index, output:output };
 }
@@ -203,14 +217,14 @@ function strikeDroppedRolls(dropKeep: Optional<TDropKeepData>, sortedRolls: TRol
 		const rollCount = sortedRolls.length;
 		sortedRolls.forEach((rollAndIndex, sortedIndex) => {
 			if (shouldStrikeRoll(dropKeep, rollCount, sortedIndex)) {
-				rollAndIndex.output = rollAndIndex.output.strike();
+				rollAndIndex.output = strike(rollAndIndex.output);
 			}
 		});
 	}
 }
 
 function diceTotalToString(value: number): string {
-	return String(value).bold().italics();
+	return italics(bold(String(value)));
 }
 
 function dicePartRollToString(dicePartRoll: TDicePartRoll): string {
