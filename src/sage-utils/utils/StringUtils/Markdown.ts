@@ -73,7 +73,7 @@ class Formatter {
 		return this;
 	}
 	public formatItalics(): Formatter {
-		this.text = nodeToMarkdown(this.text, "i", "*");
+		this.text = nodeToMarkdown(this.text, "i|em", "*");
 		return this;
 	}
 	public formatLinks(): Formatter {
