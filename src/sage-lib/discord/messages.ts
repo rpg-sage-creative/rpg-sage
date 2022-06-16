@@ -34,7 +34,7 @@ export function guildToInviteUrl(guild: Optional<Discord.Guild>): OrNull<string>
 function targetToName(target: Discord.User | TChannel): string {
 	return target instanceof Discord.User ? authorToMention(target) : channelToName(target as Discord.TextChannel);
 }
-function channelToName(channel: Discord.TextChannel): string {
+export function channelToName(channel: Discord.TextChannel): string {
 	return `${channel.guild.name}#${channel.name}`;
 }
 function messageToChannelName(message: DMessage): string {
