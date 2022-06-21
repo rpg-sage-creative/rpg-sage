@@ -1,11 +1,10 @@
 import * as Discord from "discord.js";
-import type { TDiceOutput } from "../../../sage-dice";
 import { PathbuilderCharacter, toModifier } from "../../../sage-pf2e";
 import type { TPathbuilderCharacter, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterOutputType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import utils, { UUID } from "../../../sage-utils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
-import type { DUser, TChannel } from "../../discord";
+import { DiscordId, DUser, TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
 import { discordPromptYesNo } from "../../discord/prompts";
@@ -255,7 +254,7 @@ function getInitSkill(character: PathbuilderCharacter): string {
 		default: return "Perception";
 	}
 }
-async function rollHandler(sageInteraction: SageInteraction, character: PathbuilderCharacter, secret = false, init = false): Promise<void> {
+async function rollHandler(sageInteraction: SageInteraction<Discord.ButtonInteraction>, character: PathbuilderCharacter, secret = false, init = false): Promise<void> {
 	const skill = init ? getInitSkill(character) : character.getSheetValue<string>("activeSkill") ?? "Perception";
 	const skillMod = character.getProficiencyAndMod(skill)[1];
 	const incredibleMod = character.hasFeat("Incredible Initiative") ? 2 : 0;
@@ -263,8 +262,11 @@ async function rollHandler(sageInteraction: SageInteraction, character: Pathbuil
 	const initMod = init ? Math.max(incredibleMod, scoutMod) : 0;
 	const dice = `[1d20+${skillMod+initMod} ${character.name}${secret ? " Secret" : ""} ${skill}${init ? " (Initiative)" : ""}]`;
 	const matches = parseDiceMatches(sageInteraction, dice);
-	const output = matches.reduce((out, match) => { out.push(...match.output); return out; }, <TDiceOutput[]>[]);
-	await sendDice(sageInteraction, output);
+	const output = matches.map(match => match.output).flat();
+	const sendResults = await sendDice(sageInteraction, output);
+	if (sendResults.allSecret && sendResults.hasGmChannel) {
+		await sageInteraction.interaction.channel?.send(`${DiscordId.toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`);
+	}
 }
 async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 	await sageInteraction.interaction.deferUpdate();
