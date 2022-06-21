@@ -1,6 +1,7 @@
-import * as Discord from "discord.js";
+import type * as Discord from "discord.js";
 import utils, { Optional, OrNull } from "../../sage-utils";
 import type SageCache from "../sage/model/SageCache";
+import DiscordKey from "./DiscordKey";
 import { createMessageEmbed, resolveToEmbeds } from "./embeds";
 import type { DMessage, DUser, IMenuRenderable, TChannel, TRenderableContentResolvable } from "./types";
 
@@ -31,16 +32,19 @@ export function guildToInviteUrl(guild: Optional<Discord.Guild>): OrNull<string>
 	return null;
 }
 
-function targetToName(target: Discord.User | TChannel): string {
-	return target instanceof Discord.User ? authorToMention(target) : channelToName(target as Discord.TextChannel);
+function targetToName(target: DUser | TChannel): string {
+	return "createDM" in target ? authorToMention(target) : channelToName(target);
 }
-export function channelToName(channel: Discord.TextChannel): string {
-	return `${channel.guild.name}#${channel.name}`;
+export function channelToName(channel: Discord.GuildTextBasedChannel |  Discord.TextBasedChannel): string {
+	if ("guild" in channel) {
+		return `${channel.guild?.name ?? "MissingGuild"}#${channel.name ?? channel.id}`;
+	}
+	return `${"DMChannel"}#${channel.id}`;
 }
 function messageToChannelName(message: DMessage): string {
 	const author = authorToMention(message.author) ?? "@NoAuthor";
 	if (message.guild) {
-		return `${channelToName(message.channel as Discord.TextChannel)}${author}`;
+		return `${channelToName(message.channel)}${author}`;
 	}else {
 		return `dm${author}`;
 	}
@@ -145,31 +149,56 @@ export async function send(caches: SageCache, targetChannel: TChannel, renderabl
 	return [];
 }
 
-async function sendRenderableContent(caches: SageCache, renderableContent: TRenderableContentResolvable, targetChannel: TChannel, originalAuthor: Discord.User | null): Promise<Discord.Message[]> {
+async function sendRenderableContent(sageCache: SageCache, renderableContent: TRenderableContentResolvable, targetChannel: TChannel, originalAuthor: Discord.User | null): Promise<Discord.Message[]> {
 	const messages: Discord.Message[] = [],
-		embeds = resolveToEmbeds(caches.cloneForChannel(targetChannel), renderableContent);
+		embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel), renderableContent);
 	if (embeds.length > 2) {
 		if (targetChannel.type !== "DM") {
 			const embed = createMessageEmbed(undefined, "*Long reply sent via direct message!*");
-			targetChannel.send({ embeds:[embed] }).catch(err => console.error("Notifying of DM", err));
+			await sendTo({ sageCache, target:targetChannel, embeds:[embed], errMsg:"Notifying of DM" });
 		}
 		if (originalAuthor) {
-			const sent = await sendMessageEmbeds(originalAuthor, embeds);
+			const sent = await sendMessageEmbeds({ sageCache, embeds, target:originalAuthor });
 			messages.push(...sent);
 		}
 	}else {
-		const sent = await sendMessageEmbeds(targetChannel, embeds);
+		const sent = await sendMessageEmbeds({ sageCache, embeds, target:targetChannel });
 		messages.push(...sent);
 	}
 	return messages;
 }
 
-async function sendMessageEmbeds(target: Discord.User | TChannel, embeds: Discord.MessageEmbed[]): Promise<Discord.Message[]> {
+type TSendToArgs = {
+	sageCache: SageCache;
+	target: TChannel | DUser;
+	content?: string;
+	embeds?: Discord.MessageEmbed[];
+	errMsg?: string;
+};
+/**
+ * @todo PLEASE MOVE THIS TO A SHARED LOCATION
+ * Returns a Discord.Message upon success, null upon error, and undefined if Sage doesn't have permissions to send to this channel/thread.
+ */
+ export async function sendTo({ sageCache, target, content, embeds, errMsg }: TSendToArgs): Promise<Discord.Message | null | undefined> {
+	const canTest = "permissionsFor" in target;
+	const canSend = canTest ? await sageCache.canSendMessageTo(DiscordKey.fromChannel(target)) : true;
+	if (canTest && !canSend) {
+		return Promise.resolve(undefined);
+	}
+	return target.send({ content, embeds }).catch(error => {
+		let msg = `Trying to send w/o permissions (${targetToName(target)})`;
+		if (errMsg) {
+			msg += `: ${errMsg}`;
+		}
+		console.error(msg, error);
+		return null;
+	});
+}
+
+async function sendMessageEmbeds({ sageCache, target, embeds }: { sageCache: SageCache; target: DUser | TChannel; embeds: Discord.MessageEmbed[] }): Promise<Discord.Message[]> {
 	const messages: Discord.Message[] = [];
 	for (const embed of embeds) {
-		const message = await target.send({ embeds:[embed] }).catch(error => {
-			console.error(`Trying to send w/o permissions: ${targetToName(target)}`, error);
-		});
+		const message = await sendTo({ sageCache, target, embeds:[embed] });
 		if (message) {
 			messages.push(message);
 		}

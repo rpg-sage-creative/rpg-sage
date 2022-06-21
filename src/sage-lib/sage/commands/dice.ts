@@ -1,11 +1,14 @@
 import type * as Discord from "discord.js";
 import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput, type GameType } from "../../../sage-dice";
 import { NEWLINE } from "../../../sage-pf2e";
-import utils, { Optional } from "../../../sage-utils";
+import type { Optional } from "../../../sage-utils";
+import { randomItem } from "../../../sage-utils/utils/RandomUtils";
+import { dequote, isNotBlank, redactCodeBlocks, Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import type { DUser, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { DiscordId, MessageType } from "../../discord";
 import { createMessageEmbed } from "../../discord/embeds";
 import { registerMessageListener } from "../../discord/handlers";
+import { sendTo } from "../../discord/messages";
 import { ColorType } from "../model/HasColorsCore";
 import type NamedCollection from "../model/NamedCollection";
 import SageInteraction from "../model/SageInteraction";
@@ -128,7 +131,7 @@ function parseMatch(sageMessage: TInteraction, match: string): TDiceOutput[] {
 
 export function parseDiceMatches(sageMessage: TInteraction, content: string): TDiceMatch[] {
 	const diceMatches: TDiceMatch[] = [];
-	const withoutCodeBlocks = utils.StringUtils.redactCodeBlocks(content);
+	const withoutCodeBlocks = redactCodeBlocks(content);
 	let execArray: RegExpExecArray | null;
 	while (execArray = BASE_REGEX.exec(withoutCodeBlocks)) {
 		const match = execArray[0];
@@ -161,7 +164,8 @@ async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommand
 async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: TChannel, gmTargetChannel: TGmChannel): Promise<void> {
 	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0,
 		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
-		mentionLine = createMentionLine(sageMessage);
+		mentionLine = createMentionLine(sageMessage),
+		sageCache = sageMessage.caches;
 
 	let doGmMention = hasSecret && !!gmTargetChannel;
 	let doMention = !allSecret;
@@ -174,19 +178,19 @@ async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: T
 			// prepend the mention if we haven't done so yet; stop us from doing it again; send the message
 			const gmPostContent = doGmMention ? `${mentionLine}\n${formattedOutput.postContent}` : formattedOutput.postContent!;
 			doGmMention = false;
-			await gmTargetChannel.send({ content:gmPostContent.trim(), embeds:embeds });
+			await sendTo({ target: gmTargetChannel, content: gmPostContent.trim(), embeds, sageCache });
 
 			if (!allSecret) {
 				// prepend the mention if we haven't done so yet; stop use from doing it again; send the message
 				const notificationContent = doMention ? `${mentionLine}\n${formattedOutput.notificationContent}` : formattedOutput.notificationContent;
-				doMention = false
-				await targetChannel.send(notificationContent.trim());
+				doMention = false;
+				await sendTo({ target: targetChannel, content: notificationContent.trim(), sageCache });
 			}
 		} else {
 			// prepend the mention if we haven't done so yet; stop use from doing it again; send the message
 			const postContent = doMention ? `${mentionLine}\n${formattedOutput.postContent}` : formattedOutput.postContent!;
-			doMention = false
-			await targetChannel.send({ content:postContent.trim(), embeds:embeds });
+			doMention = false;
+			await sendTo({ target: targetChannel, content: postContent.trim(), embeds, sageCache });
 		}
 	}
 	if (allSecret && sageMessage instanceof SageMessage) {
@@ -197,7 +201,8 @@ async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: T
 async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: TChannel, gmTargetChannel: TGmChannel): Promise<void> {
 	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0,
 		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
-		mentionLine = createMentionLine(sageMessage);
+		mentionLine = createMentionLine(sageMessage),
+		sageCache = sageMessage.caches;
 
 	const gmPostContents: Optional<string>[] = [];
 	const gmEmbedContents: Optional<string>[] = [];
@@ -206,11 +211,9 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 
 	if (hasSecret && gmTargetChannel) {
 		gmPostContents.push(mentionLine);
-		// await gmTargetChannel.send(mentionLine);
 	}
 	if (!allSecret) {
 		mainPostContents.push(mentionLine);
-		// await targetChannel.send(mentionLine);
 	}
 
 	for (const formattedOutput of formattedOutputs) {
@@ -218,37 +221,34 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 		if (formattedOutput.hasSecret && gmTargetChannel) {
 			gmPostContents.push(formattedOutput.postContent);
 			gmEmbedContents.push(formattedOutput.embedContent);
-			// await gmTargetChannel.send(formattedOutput.postContent, createEmbedOrNull(sageMessage, formattedOutput.embedContent));
 			if (!allSecret) {
 				mainPostContents.push(formattedOutput.notificationContent);
-				// await targetChannel.send(formattedOutput.notificationContent);
 			}
 		} else {
 			mainPostContents.push(formattedOutput.postContent);
 			mainEmbedContents.push(formattedOutput.embedContent);
-			// await targetChannel.send(formattedOutput.postContent, createEmbedOrNull(sageMessage, formattedOutput.embedContent));
 		}
 	}
 
-	const gmPostContent = gmPostContents.filter(utils.StringUtils.isNotBlank).join(NEWLINE);
-	const gmEmbedContent = gmEmbedContents.filter(utils.StringUtils.isNotBlank).join(NEWLINE);
+	const gmPostContent = gmPostContents.filter(isNotBlank).join(NEWLINE);
+	const gmEmbedContent = gmEmbedContents.filter(isNotBlank).join(NEWLINE);
 	if (gmPostContent || gmEmbedContent) {
 		if (gmTargetChannel) {
 			const embed = createEmbedOrNull(sageMessage, gmEmbedContent);
 			const embeds = embed ? [embed] : [];
-			await gmTargetChannel.send({ content:gmPostContent, embeds:embeds });
+			await sendTo({ target: gmTargetChannel, content: gmPostContent, embeds, sageCache });
 		}else {
 			console.log("no gmTargetChannel!");
 		}
 	}
 
-	const mainPostContent = mainPostContents.filter(utils.StringUtils.isNotBlank).join(NEWLINE);
-	const mainEmbedContent = mainEmbedContents.filter(utils.StringUtils.isNotBlank).join(NEWLINE);
+	const mainPostContent = mainPostContents.filter(isNotBlank).join(NEWLINE);
+	const mainEmbedContent = mainEmbedContents.filter(isNotBlank).join(NEWLINE);
 	if (mainPostContent || mainEmbedContent) {
 		if (!targetChannel) console.log("no targetChannel!");
 		const embed = createEmbedOrNull(sageMessage, mainEmbedContent);
 		const embeds = embed ? [embed] : [];
-		await targetChannel.send({ content:mainPostContent, embeds:embeds });
+		await sendTo({ target: targetChannel, content: mainPostContent, embeds, sageCache });
 	}
 
 	if (allSecret && sageMessage instanceof SageMessage) {
@@ -268,17 +268,19 @@ export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]
 }
 
 function doMath(_: TInteraction, input: string): TDiceOutput[] {
-	let result: string;
+	let result = "INVALID!";
 	try {
-		const equation = input
-			.replace(/ /g, "")
-			.replace(/(\d+)\(([^)]+)\)/g, "($1*($2))")
-			.replace(/(\d)\(/g, "$1*(")
-			.replace(/\^/g, "**")
-			;
-		result = eval(equation);
+		if (input.match(/^[\s\(\)\d\*\/\+\-\^]+$/i)) {
+			const equation = input
+				.replace(/ /g, "")
+				.replace(/(\d+)\(([^)]+)\)/g, "($1*($2))")
+				.replace(/(\d)\(/g, "$1*(")
+				.replace(/\^/g, "**")
+				;
+			result = eval(equation);
+		}
 	} catch (ex) {
-		result = "INVALID!";
+		/* ignore */
 	}
 	return [{
 		hasSecret: false,
@@ -298,7 +300,7 @@ function doSimple(_: TInteraction, input: string): TDiceOutput[] {
 	const selections: string[] = [];
 	const total = (unique ? Math.min(options.length, count) : count);
 	do {
-		const random = utils.RandomUtils.randomItem(options)!;
+		const random = randomItem(options)!;
 		if (!unique || !selections.includes(random)) {
 			selections.push(random);
 		}
@@ -421,10 +423,10 @@ function findMacro(userMacros: NamedCollection<TMacro>, input: string): TMacro |
 }
 
 function parseMacroArgs(argString: string): string[] {
-	return utils.StringUtils.Tokenizer
+	return Tokenizer
 		.tokenize(argString.trim(), { spaces: /\s+/, quotes: /"[^"]*"/ })
 		.filter(token => token.type !== "spaces")
-		.map(token => utils.StringUtils.dequote(token.token).trim());
+		.map(token => dequote(token.token).trim());
 }
 
 type TMacroAndArgs = { macro?: TMacro, args: string[] };
