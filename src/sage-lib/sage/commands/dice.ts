@@ -8,7 +8,7 @@ import type { DUser, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { DiscordId, MessageType } from "../../discord";
 import { createMessageEmbed } from "../../discord/embeds";
 import { registerMessageListener } from "../../discord/handlers";
-import { sendTo } from "../../discord/messages";
+import { authorToMention, sendTo } from "../../discord/messages";
 import { ColorType } from "../model/HasColorsCore";
 import type NamedCollection from "../model/NamedCollection";
 import SageInteraction from "../model/SageInteraction";
@@ -164,7 +164,8 @@ async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommand
 async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: TChannel, gmTargetChannel: TGmChannel): Promise<void> {
 	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0,
 		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
-		mentionLine = createMentionLine(sageMessage),
+		publicMentionLine = await createMentionLine(sageMessage),
+		secretMentionLine = await createMentionLine(sageMessage, true),
 		sageCache = sageMessage.caches;
 
 	let doGmMention = hasSecret && !!gmTargetChannel;
@@ -176,19 +177,19 @@ async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: T
 		// figure out where to send results and info about secret rolls
 		if (formattedOutput.hasSecret && gmTargetChannel) {
 			// prepend the mention if we haven't done so yet; stop us from doing it again; send the message
-			const gmPostContent = doGmMention ? `${mentionLine}\n${formattedOutput.postContent}` : formattedOutput.postContent!;
+			const gmPostContent = doGmMention ? `${secretMentionLine}\n${formattedOutput.postContent}` : formattedOutput.postContent!;
 			doGmMention = false;
 			await sendTo({ target: gmTargetChannel, content: gmPostContent.trim(), embeds, sageCache });
 
 			if (!allSecret) {
 				// prepend the mention if we haven't done so yet; stop use from doing it again; send the message
-				const notificationContent = doMention ? `${mentionLine}\n${formattedOutput.notificationContent}` : formattedOutput.notificationContent;
+				const notificationContent = doMention ? `${publicMentionLine}\n${formattedOutput.notificationContent}` : formattedOutput.notificationContent;
 				doMention = false;
 				await sendTo({ target: targetChannel, content: notificationContent.trim(), sageCache });
 			}
 		} else {
 			// prepend the mention if we haven't done so yet; stop use from doing it again; send the message
-			const postContent = doMention ? `${mentionLine}\n${formattedOutput.postContent}` : formattedOutput.postContent!;
+			const postContent = doMention ? `${publicMentionLine}\n${formattedOutput.postContent}` : formattedOutput.postContent!;
 			doMention = false;
 			await sendTo({ target: targetChannel, content: postContent.trim(), embeds, sageCache });
 		}
@@ -201,7 +202,8 @@ async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: T
 async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: TChannel, gmTargetChannel: TGmChannel): Promise<void> {
 	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0,
 		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
-		mentionLine = createMentionLine(sageMessage),
+		publicMentionLine = await createMentionLine(sageMessage),
+		secretMentionLine = await createMentionLine(sageMessage, true),
 		sageCache = sageMessage.caches;
 
 	const gmPostContents: Optional<string>[] = [];
@@ -210,10 +212,10 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 	const mainEmbedContents: Optional<string>[] = [];
 
 	if (hasSecret && gmTargetChannel) {
-		gmPostContents.push(mentionLine);
+		gmPostContents.push(secretMentionLine);
 	}
 	if (!allSecret) {
-		mainPostContents.push(mentionLine);
+		mainPostContents.push(publicMentionLine);
 	}
 
 	for (const formattedOutput of formattedOutputs) {
@@ -256,15 +258,29 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 	}
 }
 
-export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]): Promise<void> {
-	const hasSecret = outputs.filter(diceRollString => diceRollString.hasSecret).length > 0,
+type TSendDiceResults = {
+	allSecret: boolean;
+	count: number;
+	countPublic: number;
+	countSecret: number;
+	hasGmChannel: boolean;
+	hasSecret: boolean;
+};
+export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]): Promise<TSendDiceResults> {
+	const count = outputs.length,
+		countSecret = outputs.filter(diceRollString => diceRollString.hasSecret).length,
+		countPublic = count - countSecret,
+		hasSecret = countSecret > 0,
+		allSecret = countSecret === count,
 		targetChannel = await ensureTargetChannel(sageMessage),
 		gmTargetChannel = await ensureGmTargetChannel(sageMessage, hasSecret),
+		hasGmChannel = !!gmTargetChannel,
 		formattedOutputs = outputs.map(diceRoll => formatDiceOutput(sageMessage, diceRoll, !gmTargetChannel));
 	if (sageMessage.dicePostType === DicePostType.MultipleEmbeds || sageMessage.dicePostType === DicePostType.MultiplePosts) {
-		return sendDiceToMultiple(sageMessage, formattedOutputs, targetChannel, gmTargetChannel);
+		await sendDiceToMultiple(sageMessage, formattedOutputs, targetChannel, gmTargetChannel);
 	}
-	return sendDiceToSingle(sageMessage, formattedOutputs, targetChannel, gmTargetChannel);
+	await sendDiceToSingle(sageMessage, formattedOutputs, targetChannel, gmTargetChannel);
+	return { allSecret, count, countPublic, countSecret, hasGmChannel, hasSecret };
 }
 
 function doMath(_: TInteraction, input: string): TDiceOutput[] {
@@ -351,21 +367,25 @@ function createGmMention(sageMessage: TInteraction): string {
 		?? ``;
 }
 
-function createAuthorMention(sageMessage: TInteraction): string | null {
+async function createAuthorMention(sageMessage: TInteraction, isSecretMention = false): Promise<string | null> {
 	const userDid = sageMessage instanceof SageMessage ? sageMessage.authorDid : sageMessage.user.id;
-	const authorReference = DiscordId.toUserMention(userDid);
+	let authorReference = DiscordId.toUserMention(userDid);
+	if (isSecretMention) {
+		const user = await sageMessage.discord.fetchUser(userDid);
+		authorReference = authorToMention(user);
+	}
 	if (sageMessage.playerCharacter) {
 		return `${authorReference} (${sageMessage.playerCharacter.name})`;
 	}
 	return authorReference;
 }
 
-function createMentionLine(sageMessage: TInteraction/*, hasSecret:boolean, isTargetChannel: boolean, isGmChannel: boolean, isGmUser: boolean*/): string | null {
+async function createMentionLine(sageMessage: TInteraction, isSecretMention = false/*, hasSecret:boolean, isTargetChannel: boolean, isGmChannel: boolean, isGmUser: boolean*/): Promise<string | null> {
 	const gmMention = createGmMention(sageMessage);
 	if (gmMention && sageMessage.isGameMaster) {
 		return gmMention;
 	}
-	const authorMention = createAuthorMention(sageMessage);
+	const authorMention = await createAuthorMention(sageMessage, isSecretMention);
 	if (gmMention) {
 		return `${gmMention}, ${authorMention}`;
 	}
@@ -471,7 +491,7 @@ function macroToDice(userMacros: NamedCollection<TMacro>, input: string): TMacro
 //#endregion
 
 export default function register(): void {
-	registerMessageListener(hasUnifiedDiceCommand, sendDice, MessageType.Post, undefined, undefined, 1);
+	registerMessageListener(hasUnifiedDiceCommand, sendDice as any, MessageType.Post, undefined, undefined, 1);
 
 	registerInlineHelp("Dice", "Basic",
 		`[1d20]`
