@@ -278,8 +278,9 @@ export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]
 		formattedOutputs = outputs.map(diceRoll => formatDiceOutput(sageMessage, diceRoll, !gmTargetChannel));
 	if (sageMessage.dicePostType === DicePostType.MultipleEmbeds || sageMessage.dicePostType === DicePostType.MultiplePosts) {
 		await sendDiceToMultiple(sageMessage, formattedOutputs, targetChannel, gmTargetChannel);
+	}else {
+		await sendDiceToSingle(sageMessage, formattedOutputs, targetChannel, gmTargetChannel);
 	}
-	await sendDiceToSingle(sageMessage, formattedOutputs, targetChannel, gmTargetChannel);
 	return { allSecret, count, countPublic, countSecret, hasGmChannel, hasSecret };
 }
 
