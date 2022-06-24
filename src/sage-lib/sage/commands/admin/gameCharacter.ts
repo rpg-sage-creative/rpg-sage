@@ -320,7 +320,7 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 
 	let characterManager = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
-		const character = characterManager.findByUserAndName(userDid, names.charName!)!;
+		const character = characterManager.findByUserAndName(userDid, names.charName) ?? characterManager.findByUser(userDid!)!;
 		core.userDid = character.userDid;
 		characterManager = character.companions;
 	}
