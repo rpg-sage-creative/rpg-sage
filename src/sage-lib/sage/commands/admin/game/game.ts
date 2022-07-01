@@ -358,6 +358,21 @@ async function gameArchive(sageMessage: SageMessage): Promise<void> {
 	return Promise.resolve();
 }
 
+async function gameToggleDicePing(sageMessage: SageMessage): Promise<void> {
+	const gameChannel = sageMessage.gameChannel;
+	if (gameChannel?.admin && (sageMessage.isGameMaster || sageMessage.isPlayer)) {
+		const message = sageMessage.isGameMaster
+			? "Do you want to get a ping when dice are rolled in this game?"
+			: "Do you want to get a ping when you roll dice in this game?";
+		const yesNo = await discordPromptYesNo(sageMessage, message);
+		if (yesNo === true || yesNo === false) {
+			const updated = await sageMessage.game?.updateDicePing(sageMessage.authorDid, yesNo);
+			sageMessage.reactSuccessOrFailure(updated === true);
+		}
+	}
+	return Promise.resolve();
+}
+
 export default function register(): void {
 	registerAdminCommand(gameCount, "game-count");
 	registerAdminCommandHelp("Admin", "Game", "game count");
@@ -383,6 +398,8 @@ export default function register(): void {
 	registerAdminCommandHelp("Admin", "Game", `game update name="{New Name}"`);
 	registerAdminCommandHelp("Admin", "Game", "game update game={PF2E|NONE}");
 	registerAdminCommandHelp("Admin", "Game", "game update diceoutput={XXS|XS|S|M|L|XL|XXL|UNSET}");
+
+	registerAdminCommand(gameToggleDicePing, "game-toggle-dice-ping");
 
 	registerAdminCommand(gameArchive, "game-archive");
 	registerAdminCommandHelp("Admin", "Game", "game archive");

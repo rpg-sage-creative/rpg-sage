@@ -32,10 +32,11 @@ export function getRoleTypes(roleType: GameRoleType): GameRoleType[] {
 export interface IGameRole {
 	did: Discord.Snowflake;
 	type: GameRoleType;
+	dicePing: boolean;
 }
 
 export enum GameUserType { Unknown = 0, Player = 1, GameMaster = 2 }
-export interface IGameUser { did: Discord.Snowflake; type: GameUserType; }
+export interface IGameUser { did: Discord.Snowflake; type: GameUserType; dicePing: boolean; }
 
 export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
 	objectType: "Game";
@@ -245,7 +246,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		if (found) {
 			return false;
 		}
-		const role = { did: roleDid, type: roleType };
+		const role = { did: roleDid, type: roleType, dicePing: true };
 		(this.core.roles || (this.core.roles = [])).push(role);
 		/*
 		// const saved = await this.save();
@@ -432,6 +433,23 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		this.updateDicePostType(dicePostType);
 		this.updateDiceSecretMethodType(diceSecretMethodType);
 		return this.save();
+	}
+
+	public async updateDicePing(userOrRoleDid: Discord.Snowflake, dicePing: boolean): Promise<boolean> {
+		const gameUser = this.getUser(userOrRoleDid);
+		if (gameUser) {
+			if (gameUser.dicePing !== dicePing) {
+				gameUser.dicePing = dicePing;
+				return this.save();
+			}
+			return false;
+		}
+		const gameRole = this.roles.find(role => role.did === userOrRoleDid);
+		if (gameRole && gameRole.dicePing !== dicePing) {
+			gameRole.dicePing = dicePing;
+			return this.save();
+		}
+		return false;
 	}
 
 	public updateGmCharacterName(gmCharacterName: string): void { this.core.gmCharacterName = gmCharacterName; }
