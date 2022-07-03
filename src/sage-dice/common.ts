@@ -44,7 +44,7 @@ export function parseGameType(gameType: string, defaultGameType?: GameType): Gam
 
 export type TDiceOutputType = keyof typeof DiceOutputType;
 
-export enum DiceOutputType { XXS = -3, XS = -2, S = -1, M = 0, L = 1, XL = 2, XXL = 3 }
+export enum DiceOutputType { XXS = -3, XS = -2, S = -1, M = 0, L = 1, XL = 2, XXL = 3, ROLLEM = 5 }
 
 export function parseDiceOutputType(outputType: string, defaultOutputType?: DiceOutputType): DiceOutputType | undefined {
 	return DiceOutputType[<TDiceOutputType>String(outputType).toUpperCase()] ?? defaultOutputType;
@@ -59,6 +59,7 @@ export enum CritMethodType { Unknown = 0, TimesTwo = 1, RollTwice = 2, AddMax = 
 type TTypedMap<T> = { [key: string]: T; };
 
 const CritMethodTypeMap: TTypedMap<TTypedMap<CritMethodType>> = {
+	"DND5E":{ "TIMESTWO":CritMethodType.TimesTwo, "ROLLTWICE":CritMethodType.RollTwice, "ADDMAX":CritMethodType.AddMax },
 	"PF2E":{ "TIMESTWO":CritMethodType.TimesTwo, "ROLLTWICE":CritMethodType.RollTwice, "ADDMAX":CritMethodType.AddMax }
 };
 
@@ -71,7 +72,7 @@ export function parseCritMethodType(gameType: GameType | undefined, critMethod: 
 }
 
 export function getCritMethodRegex(gameType: GameType | undefined): RegExp | null {
-	if (gameType === GameType.PF2e) {
+	if ([GameType.DnD5e, GameType.PF2e].includes(gameType!)) {
 		return /^(timestwo|rolltwice|addmax)?/i;
 	}
 	return null;

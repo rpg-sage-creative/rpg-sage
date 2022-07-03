@@ -256,10 +256,10 @@ function mapDicePartRollToString(dicePartRoll: TDicePartRoll, includeSign: boole
 	return dicePartRollOutput.replace(/ +/g, " ").trim();
 }
 
-type TDicePartRollToString = (dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean) => string;
+type TDicePartRollToString = (dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean) => string;
 
-function mapDicePartRollToStringWithDice(dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean): string {
-	return mapDicePartRollToString(dicePartRoll, index > 0 || (dicePartRoll.sign !== undefined && dicePartRoll.sign !== "+"), true, true, dpr => {
+function mapDicePartRollToStringWithDice(dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean): string {
+	return mapDicePartRollToString(dicePartRoll, index > 0 || (dicePartRoll.sign !== undefined && dicePartRoll.sign !== "+"), !rollem, true, dpr => {
 		if (hideRolls && dpr.dice.hasDie) {
 			return ` ||${dicePartRollToString(dpr)}||${dpr.dice.count}d${dpr.dice.sides} `;
 		}
@@ -574,14 +574,22 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		return this._rolls;
 	}
 	//#region toString
-	protected _toString(renderer: TDicePartRollToString, hideRolls: boolean): string {
+	protected _toString(renderer: TDicePartRollToString, hideRolls: boolean, rollem = false): string {
 		const xxs = this.toStringXXS(hideRolls);
 		const desc = this.dice.diceParts.find(dp => dp.hasDescription)?.description;
-		const description = this.rolls.map((roll, index) => renderer(roll, index, hideRolls)).join(" ");
-		const output = desc
-			? `${xxs} \`${desc}\` ${UNICODE_LEFT_ARROW} ${description.replace(desc, "")}`
-			: `${xxs} ${UNICODE_LEFT_ARROW} ${description}`;
-		return utils.StringUtils.cleanWhitespace(output);
+		const description = this.rolls.map((roll, index) => renderer(roll, index, hideRolls, rollem)).join(" ");
+		if (rollem) {
+			const stripped = xxs.replace(/<\/?(b|em|i|strong)>/ig, "");
+			const output = desc
+				? `'${desc}', \` ${stripped} \` ${UNICODE_LEFT_ARROW} ${description.replace(desc, "")}`
+				: `\` ${stripped} \` ${UNICODE_LEFT_ARROW} ${description}`;
+			return utils.StringUtils.cleanWhitespace(output);
+		}else {
+			const output = desc
+				? `${xxs} \`${desc}\` ${UNICODE_LEFT_ARROW} ${description.replace(desc, "")}`
+				: `${xxs} ${UNICODE_LEFT_ARROW} ${description}`;
+			return utils.StringUtils.cleanWhitespace(output);
+		}
 	}
 	protected toStringXS(hideRolls: boolean): string {
 		const xxs = this.toStringXXS(hideRolls);
@@ -606,6 +614,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		const hideRolls = <boolean>args.find(arg => arg === true || arg === false) ?? false;
 		const outputType = <DiceOutputType>args.find(arg => !!(DiceOutputType[<DiceOutputType>arg] ?? false)) ?? DiceOutputType.M;
 		switch (outputType) {
+			case DiceOutputType.ROLLEM: return this._toString(mapDicePartRollToStringWithDice, hideRolls, true);
 			case DiceOutputType.XXL: return this._toString(mapDicePartRollToStringWithDice, hideRolls);
 			case DiceOutputType.XL: return this._toString(mapDicePartRollToStringWithDice, hideRolls);
 			case DiceOutputType.L: return this._toString(mapDicePartRollToStringWithoutDice, hideRolls);

@@ -74,7 +74,7 @@ function removeAndReturnCritMethodType(args: string[]): Optional<CritMethodType>
 
 /** /^(diceoutput)=(XXS|XS|S|M|XXL|XL|L|UNSET)?$/i; returns null to unset */
 function removeAndReturnDiceOutputType(args: string[]): Optional<DiceOutputType> {
-	const regex = /^(diceoutput)=(XXS|XS|S|M|XXL|XL|L|UNSET)?$/i;
+	const regex = /^(diceoutput)=(XXS|XS|S|M|XXL|XL|L|ROLLEM|UNSET)?$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match) {
