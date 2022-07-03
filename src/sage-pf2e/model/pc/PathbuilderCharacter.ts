@@ -303,7 +303,10 @@ function equipmentToHtml(equipment: TPathbuilderCharacterEquipment[]): string {
 }
 function loreToHtml(char: PathbuilderCharacter): string {
 	const NAME = 0, PROFMOD = 1;
-	return char.lores.map(l => `${l[NAME]} ${toModifier(char.levelProficiencyMod + l[PROFMOD] + char.abilities.intMod)}`).join(", ");
+	return char.lores.map(l => {
+		const profMod = l[PROFMOD];
+		return `${l[NAME]} ${toModifier(char.getLevelMod(profMod) + profMod + char.abilities.intMod)}`;
+	}).join(", ");
 }
 function moneyToHtml(money: TPathbuilderCharacterMoney): string {
 	const coins = <string[]>[];
@@ -370,7 +373,7 @@ function spellsListToHtml(spells: string[]): string {
 
 function spellCasterToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilderCharacterSpellCaster): string {
 	const label = spellCasterToLabel(spellCaster);
-	const mod = char.levelProficiencyMod
+	const mod = char.getLevelMod(spellCaster.proficiency)
 		+ char.abilities.getAbilityScoreModifier(ABILITIES.find(abil => abil.toLowerCase().startsWith(spellCaster.ability))!)
 		+ spellCaster.proficiency;
 	const isFocus = spellCaster.focusPoints > 0;
@@ -518,7 +521,9 @@ function getWeaponSpecMod(char: PathbuilderCharacter, weapon: TPathbuilderCharac
 function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): string {
 	const wpnItem = findWeapon(weapon);
 	if (wpnItem) {
-		const mod = char.levelProficiencyMod
+		const profMod = char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey, weapon.name);
+		const levelMod = char.getLevelMod(profMod);
+		const mod = levelMod
 			+ weaponToAttackStatMod(wpnItem, char.abilities.strMod, char.abilities.dexMod)
 			+ char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey, weapon.name)
 			+ weapon.pot;
@@ -527,8 +532,10 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 	}else {
 		// Figure out if type is melee/ranged
 		const type = "Custom";
-		const mod = char.levelProficiencyMod
-			+ char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey)
+		const profMod = char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey);
+		const levelMod = char.getLevelMod(profMod);
+		const mod = levelMod
+			+ profMod
 			+ weapon.pot;
 		const dmg = `${strikingToDiceCount(weapon.str)}${weapon.die}`;
 		return `<b>${type}</b> ${weapon.display} ${toModifier(mod)} <b>Damage</b> ${dmg}; <i>Dex/Str/Spec mods not included</i>`;
@@ -603,11 +610,17 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		return this.core.level;
 	}
 
-	public get levelProficiencyMod(): number {
-		return this.core._proficiencyWithoutLevel === true ? 0 : this.level;
-	}
-	public get untrainedProficiencyMod(): number {
+	private get untrainedProficiencyMod(): number {
 		return this.core._untrainedPenalty === true ? -1 : 0;
+	}
+	public getLevelMod(profMod: number): number;
+	public getLevelMod(trained: boolean): number;
+	public getLevelMod(arg: boolean | number): number {
+		const trained = typeof(arg) === "boolean" ? arg : arg > 0;
+		if (trained) {
+			return this.core._proficiencyWithoutLevel === true ? 0 : this.level;
+		}
+		return this.untrainedProficiencyMod;
 	}
 
 	//#region IHasProficiencies
@@ -653,15 +666,15 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 	private getLore(loreName: string): TPathbuilderCharacterLore | undefined { return this.lores.find(lore => lore[0] === loreName); }
 	public getLoreMod(loreName: string): number {
 		const lore = this.getLore(loreName);
-		return lore
-			? lore[1] + this.levelProficiencyMod + this.abilities.intMod
-			: this.levelProficiencyMod + this.untrainedProficiencyMod;
+		const loreMod = lore?.[1] ?? 0;
+		const levelMod = this.getLevelMod(loreMod);
+		return levelMod + loreMod + this.abilities.intMod;
 	}
 
 	public getSkillMod(skillName: string): number {
 		const skillIndex = skillNames.indexOf(skillName);
 		const profMod = this.getProficiencyMod(skillName as TPathbuilderCharacterProficienciesKey);
-		const levelMod = this.levelProficiencyMod;
+		const levelMod = this.getLevelMod(profMod);
 		const statMod = Abilities.scoreToMod(this.abilities[statKeys[skillIndex]]);
 		return levelMod + profMod + statMod;
 	}
@@ -682,7 +695,9 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 	}
 
 	public get perceptionMod(): number {
-		return this.levelProficiencyMod + this.getProficiencyMod("perception") + this.abilities.wisMod;
+		const profMod = this.getProficiencyMod("perception");
+		const levelMod = this.getLevelMod(profMod);
+		return levelMod + profMod + this.abilities.wisMod;
 	}
 	public get perceptionSpecials(): string[] {
 		return this.core.specials
