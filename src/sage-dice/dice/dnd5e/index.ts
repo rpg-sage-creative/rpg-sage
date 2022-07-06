@@ -130,6 +130,8 @@ function diceGroupRollToString(diceGroupRoll: DiceGroupRoll, outputType: DiceOut
 
 			diceGroupRoll.otherRolls.forEach(diceRoll => rollOutputs.push(diceRoll.toString(outputType)));
 		}
+	}else {
+		diceGroupRoll.rolls.forEach(diceRoll => rollOutputs.push(diceRoll.toString(outputType)));
 	}
 	return rollOutputs.join(joiner);
 }
