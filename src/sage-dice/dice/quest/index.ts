@@ -36,8 +36,8 @@ function getParsers(): TParsers {
 }
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken): T {
 	if (token.type === "dice") {
-		core.sides = 1;
-		core.count = 20;
+		core.count = 1;
+		core.sides = 20;
 	}else if (token.type === "target") {
 		core.target = { type:TargetType.VS, value:+(token.matches || [])[1] || 0 };
 	}else {
