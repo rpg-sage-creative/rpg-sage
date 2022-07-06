@@ -1,7 +1,6 @@
 //#region imports
 
 import type { OrNull, OrUndefined, TParsers, TToken } from "../../../sage-utils";
-import utils from "../../../sage-utils";
 import type {
 	TDiceLiteral,
 	TSign,
@@ -30,6 +29,10 @@ import {
 	reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
 	TReduceSignToDropKeep
 } from "../base";
+import { generate } from "../../../sage-utils/utils/UuidUtils";
+import { toJSON } from "../../../sage-utils/utils/ClassUtils";
+import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 
 //#endregion
 
@@ -66,8 +69,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 	const reduceSignToDropKeepData: TReduceSignToDropKeep[] = [];
 	if (token.type === "dice") {
 		reduceSignToDropKeepData.push(
-			{ sign:"+" as TSign, type:DropKeepType.KeepHighest, value:1, alias:FORTUNE },
-			{ sign:"-" as TSign, type:DropKeepType.KeepLowest, value:1, alias:MISFORTUNE }
+			{ sign:"+" as TSign, type:DropKeepType.KeepHighest, value:1, alias:FORTUNE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "+" },
+			{ sign:"-" as TSign, type:DropKeepType.KeepLowest, value:1, alias:MISFORTUNE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "-" }
 		);
 	}
 	return baseReduceTokenToDicePartCore(core, token, index, tokens, reduceSignToDropKeepData);
@@ -324,7 +327,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.PF2e,
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 
 			count: count ?? 0,
 			description: cleanDescription(description),
@@ -357,7 +360,7 @@ export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 		return new DicePartRoll({
 			objectType: "DicePartRoll",
 			gameType: GameType.PF2e,
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 			dice: dicePart.toJSON(),
 			rolls: rollDice(dicePart.count, dicePart.sides)
 		});
@@ -423,8 +426,8 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.PF2e,
-			id: utils.UuidUtils.generate(),
-			diceParts: diceParts.map<DicePartCore>(utils.ClassUtils.toJSON)
+			id: generate(),
+			diceParts: diceParts.map<DicePartCore>(toJSON)
 		});
 	}
 	public static fromCore(core: DiceCore): Dice {
@@ -474,7 +477,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		return new DiceRoll({
 			objectType: "DiceRoll",
 			gameType: GameType.PF2e,
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
 		});
@@ -549,7 +552,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		const nonOtherDice = SpecialTestAliases
 			.map(testAlias => this.getDiceByTestAlias(testAlias))
 			.concat([this.attackDice, this.damageDice])
-			.filter(utils.ArrayUtils.Filters.exists);
+			.filter(exists);
 		return this.dice.filter(_dice => !nonOtherDice.includes(_dice));
 	}
 	//#endregion
@@ -558,7 +561,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		const sortedDice = SpecialTestAliases.map(testAlias => this.getDiceByTestAlias(testAlias))
 			.concat([this.attackDice, this.damageDice])
 			.concat(this.otherDice)
-			.filter(utils.ArrayUtils.Filters.exists);
+			.filter(exists);
 		return `[${sortedDice.map(_dice => _dice.toString(outputType)).join("; ")}]`;
 	}
 
@@ -567,9 +570,9 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.PF2e,
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 			critMethodType: critMethodType,
-			dice: _dice.map<DiceCore>(utils.ClassUtils.toJSON),
+			dice: _dice.map<DiceCore>(toJSON),
 			diceOutputType: diceOutputType,
 			diceSecretMethodType: diceSecretMethodType
 		});
@@ -620,7 +623,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return DiceGroup.create(_dice, diceOutputType, diceSecretMethodType, critMethodType);
 	}
 	public static parse(diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): DiceGroup {
-		const tokens = utils.StringUtils.Tokenizer.tokenize(diceString, getParsers(), "desc");
+		const tokens = Tokenizer.tokenize(diceString, getParsers(), "desc");
 		return DiceGroup.fromTokens(tokens, diceOutputType, diceSecretMethodType, critMethodType);
 	}
 	public static Part = <typeof baseDice>Dice;
@@ -634,7 +637,7 @@ function createDiceGroupRoll(diceGroup: DiceGroup): DiceGroupRoll {
 	const core: DiceGroupRollCore = {
 		objectType: "DiceGroupRoll",
 		gameType: GameType.PF2e,
-		id: utils.UuidUtils.generate(),
+		id: generate(),
 		diceGroup: diceGroup.toJSON(),
 		rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
 	};
@@ -744,7 +747,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		const nonOtherRolls = SpecialTestAliases
 			.map(testAlias => this.getRollByTestAlias(testAlias))
 			.concat([this.attackRoll, this.damageRoll])
-			.filter(utils.ArrayUtils.Filters.exists);
+			.filter(exists);
 		return this.core.rolls.filter(rollCore => !nonOtherRolls.find(roll => roll.is(rollCore))).map(DiceRoll.fromCore);
 	}
 
