@@ -4,6 +4,7 @@ import type { OrNull, OrUndefined, TParsers, TToken } from "../../../sage-utils"
 import utils from "../../../sage-utils";
 import type {
 	TDiceLiteral,
+	TSign,
 	TTestData
 } from "../../common";
 import {
@@ -26,7 +27,8 @@ import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
 	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers,
-	reduceTokenToDicePartCore as baseReduceTokenToDicePartCore
+	reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
+	TReduceSignToDropKeep
 } from "../base";
 
 //#endregion
@@ -56,28 +58,19 @@ function getParsers(): TParsers {
 }
 const FORTUNE = "Fortune";
 const MISFORTUNE = "Misfortune";
-function reducePlusMinusToDropKeep<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[]): T {
-	core = baseReduceTokenToDicePartCore(core, token, index, tokens);
-	if (core.sides === 20 && core.count === 2 && ["+", "-"].includes(core.sign!)) {
-		if (core.sign === "+") {
-			core.dropKeep = { type:DropKeepType.KeepHighest, value:1, alias:FORTUNE };
-		}else if (core.sign === "-") {
-			core.dropKeep = { type:DropKeepType.KeepLowest, value:1, alias:MISFORTUNE };
-		}
-		delete core.sign;
-	}
-	return core;
-}
-function reduceTargetToken<T extends DicePartCore>(core: T, token: TToken): T {
-	core.target = parseTargetData(token);
-	return core;
-}
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[]): T {
-	switch (token.type) {
-		case "dice": return reducePlusMinusToDropKeep(core, token, index, tokens);
-		case "target": return reduceTargetToken(core, token);
-		default: return baseReduceTokenToDicePartCore(core, token, index, tokens);
+	if (token.type === "target") {
+		core.target = parseTargetData(token);
+		return core;
 	}
+	const reduceSignToDropKeepData: TReduceSignToDropKeep[] = [];
+	if (token.type === "dice") {
+		reduceSignToDropKeepData.push(
+			{ sign:"+" as TSign, type:DropKeepType.KeepHighest, value:1, alias:FORTUNE },
+			{ sign:"-" as TSign, type:DropKeepType.KeepLowest, value:1, alias:MISFORTUNE }
+		);
+	}
+	return baseReduceTokenToDicePartCore(core, token, index, tokens, reduceSignToDropKeepData);
 }
 //#endregion
 
@@ -319,10 +312,10 @@ type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region flags
 	public get hasFortune(): boolean {
-		return this.hasDropKeep && this.dropKeep!.alias === FORTUNE;
+		return this.dropKeep?.alias === FORTUNE;
 	}
 	public get hasMisfortune(): boolean {
-		return this.hasDropKeep && this.dropKeep!.alias === MISFORTUNE;
+		return this.dropKeep?.alias === MISFORTUNE;
 	}
 	//#endregion
 
@@ -393,9 +386,6 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 	//#endregion
 
 	//#region flags
-	public get isD20(): boolean {
-		return this.baseDicePart?.sides === 20;
-	}
 	public get isDeadly(): boolean {
 		return this.deadlyDie !== null;
 	}
@@ -544,7 +534,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		const attackDice = this.attackDice;
 		if (attackDice) {
 			const testDice = SpecialTestAliases.map(testAlias => this.getDiceByTestAlias(testAlias));
-			testDice.push(this.attackDice);
+			testDice.push(attackDice);
 			return this.dice.find(_dice => !_dice.isD20 && !_dice.test && !testDice.includes(_dice)) ?? null;
 		}
 		return null;
