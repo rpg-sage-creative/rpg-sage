@@ -76,9 +76,17 @@ function reduceDescriptionToken<T extends DicePartCore>(core: T, token: TToken):
 	return core;
 }
 
-/** Sets the core's .sign, .count, and .sides values from the tokens .matches */
-function reduceDiceToken<T extends DicePartCore>(core: T, token: TToken): T {
-	//TODO: consider imnplementing pf2e.reducePlusMinusToDropKeep for all dice
+export type TReduceSignToDropKeep = {
+	sign: TSign;
+	type: DropKeepType;
+	value: number;
+	alias: string;
+};
+/**
+ * Sets the core's .sign, .count, and .sides values from the tokens .matches
+ * If reducePlusMinusToDropKeepData provided, a +2d20/-2d20 roll will be converted to 2d20kh1/2d20kl1 (Fortune/Misfortune; Advantage/Disadvantage)
+ * */
+function reduceDiceToken<T extends DicePartCore>(core: T, token: TToken, reduceSignToDropKeepData?: TReduceSignToDropKeep[]): T {
 	if (token.matches) {
 		core.sign = <TSign>token.matches[0];
 		core.count = +token.matches[1] || 0;
@@ -86,6 +94,10 @@ function reduceDiceToken<T extends DicePartCore>(core: T, token: TToken): T {
 		if (!core.count && core.sides) {
 			core.count = 1;
 		}
+	}
+	if (reduceSignToDropKeepData?.length && core.sign && core.sides === 20 && core.count === 2) {
+		core.dropKeep = reduceSignToDropKeepData.find(data => data.sign === core.sign);
+		delete core.sign;
 	}
 	return core;
 }
@@ -121,9 +133,9 @@ function reduceTestToken<T extends DicePartCore>(core: T, token: TToken): T {
 
 //#endregion
 
-export function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[]): T {
+export function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[], reduceSignToDropKeepData?: TReduceSignToDropKeep[]): T {
 	switch (token.type) {
-		case "dice": return reduceDiceToken(core, token);
+		case "dice": return reduceDiceToken(core, token, reduceSignToDropKeepData);
 		case "dropKeep": return reduceDropKeepToken(core, token, tokens[index - 1]);
 		case "noSort": return reduceNoSortToken(core, token, tokens[index - 1]);
 		case "mod": return reduceModToken(core, token);
@@ -470,6 +482,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 
 	//#region flags
 	public get hasTest(): boolean { return  this.test !== undefined; }
+	public get isD20(): boolean { return this.baseDicePart?.sides === 20; }
 	public get isEmpty(): boolean { return this.diceParts.length === 0 || this.diceParts.filter(dicePart => !dicePart.isEmpty).length === 0; }
 	//#endregion
 
