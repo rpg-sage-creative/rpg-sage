@@ -8,7 +8,7 @@ import {
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
-	GameType, gradeToEmoji, isGradeSuccess,
+	GameType, isGradeSuccess,
 	parseTestType,
 	rollDice, TDiceLiteral, TestType, TSign,
 	TTestData
@@ -117,11 +117,9 @@ function diceGroupRollToString(diceGroupRoll: DiceGroupRoll, outputType: DiceOut
 	const rollOutputs: string[] = [],
 		attackRoll = diceGroupRoll.attackRoll;
 	if (attackRoll) {
+		rollOutputs.push(attackRoll.toString(outputType));
+
 		const attackGrade = attackRoll?.grade ?? DieRollGrade.Unknown;
-
-		const atkEmoji = gradeToEmoji(attackGrade) ?? "";
-		rollOutputs.push(`${atkEmoji}${attackRoll.toString(outputType)}`);
-
 		const showRolls = !attackGrade || isGradeSuccess(attackGrade);
 		if (showRolls) {
 			const damageRoll = diceGroupRoll.damageRoll;
