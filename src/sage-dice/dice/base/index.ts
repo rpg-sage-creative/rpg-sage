@@ -429,8 +429,17 @@ export class DicePartRoll<T extends DicePartRollCore, U extends TDicePart> exten
 	public get hasSecret(): boolean {
 		return this.dice.hasSecret;
 	}
+	/** The raw rolls. */
 	public get rolls(): number[] {
 		return this.core.rolls.slice();
+	}
+	/** How many dice rolled 1. */
+	public get minCount(): number {
+		return this.core.rolls.filter(roll => roll === 1).length;
+	}
+	/** How many dice rolled max (value equal to .dice.sides). */
+	public get maxCount(): number {
+		return this.core.rolls.filter(roll => roll === this.dice.sides).length;
 	}
 	//#endregion
 

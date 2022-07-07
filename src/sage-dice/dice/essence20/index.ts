@@ -32,8 +32,8 @@ function getParsers(): TParsers {
 	parsers["target"] = /\b(vs\s*dif|dif|vs)\s*(\d+)/i;
 	return parsers;
 }
-const ADVANTAGE = "Advantage";
-const DISADVANTAGE = "Disadvantage";
+const EDGE = "Edge";
+const SNAG = "Snag";
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[]): T {
 	if (token.type === "bang") {
 		const prevToken = tokens[index - 1];
@@ -49,8 +49,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 	const reduceSignToDropKeepData: TReduceSignToDropKeep[] = [];
 	if (token.type === "dice") {
 		reduceSignToDropKeepData.push(
-			{ sign:"+" as TSign, type:DropKeepType.KeepHighest, value:1, alias:ADVANTAGE, test:_core => _core.sign === "+" },
-			{ sign:"-" as TSign, type:DropKeepType.KeepLowest, value:1, alias:DISADVANTAGE, test:_core => _core.sign === "-" }
+			{ sign:"+" as TSign, type:DropKeepType.KeepHighest, value:1, alias:EDGE, test:_core => _core.sign === "+" },
+			{ sign:"-" as TSign, type:DropKeepType.KeepLowest, value:1, alias:SNAG, test:_core => _core.sign === "-" }
 		);
 	}
 	return baseReduceTokenToDicePartCore(core, token, index, tokens, reduceSignToDropKeepData);
@@ -282,7 +282,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		const baseRoll: DiceRoll | undefined = this.rolls[1];
 		const slicedRolls = this.rolls.slice(1);
 		const highestRoll: DiceRoll | undefined = slicedRolls.reduce((highest, roll) => !highest || roll.total > highest.total ? roll : highest, undefined as DiceRoll | undefined);
-		const maxRoll = slicedRolls.find(roll => (roll.dice.baseDicePart?.sides ?? 0) > 2 && roll.isMax);
+		const maxRoll = slicedRolls.find(roll => (roll.dice.baseDicePart?.sides ?? 0) > 2 && roll.rolls.find(dpRoll => dpRoll.maxCount));
 
 		const description = baseRoll?.dice.baseDicePart?.description ?? d20Roll.dice.baseDicePart?.description;
 		const total = d20Roll.total + (highestRoll?.total ?? 0);

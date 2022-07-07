@@ -217,6 +217,10 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false): Promise
 
 	const guildChannels = (await game.guildChannels()).map(guildChannel => guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`);
 	renderableContent.append(`<b>Channels</b> ${guildChannels.length}; ${guildChannels.join(", ")}`);
+	const orphanChannels = (await game.orphanChannels()).map(channel => channel ? `#${channel.did}` : `<i>unavailable</i>`);
+	if (orphanChannels.length) {
+		renderableContent.append(`<b>Orphan Channels</b> ${orphanChannels.length}; ${orphanChannels.join(", ")}`);
+	}
 
 	const guildRoles = await game.guildRoles();
 	const roles = guildRoles.map(guildRole => guildRole ? `@${guildRole.name} (${GameRoleType[game.roles.find(role => role.did === guildRole.id)?.type!]})` : `<i>unavailable</i>`);
