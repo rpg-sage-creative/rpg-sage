@@ -280,18 +280,17 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		const description = slicedRolls[0].dice.baseDicePart?.description;
 		const total = d20Roll.total + highestRoll.total;
 
-		const isCritMax = maxRoll && d20Roll.isMax;
 		const test = baseRoll.dice.test ?? d20Roll.dice.test;
 		let dif = "";
 		let emoji = "";
 		if (test) {
 			if (total >= test.value) {
-				emoji = isCritMax ? "[critical-success]" : "[success]";
+				emoji = maxRoll ? "[critical-success]" : "[success]";
 			}else {
 				emoji = d20Roll.isMin ? "[critical-failure]" : "[failure]";
 			}
 			dif = `DIF ${test.value}`;
-		}else if (isCritMax) {
+		}else if (maxRoll) {
 			emoji = "[critical-success]";
 		}else if (d20Roll.isMin) {
 			emoji = "[critical-failure]";
