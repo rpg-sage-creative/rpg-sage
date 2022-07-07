@@ -7,9 +7,7 @@ import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
 	cleanDescription,
 	createValueTestData, DiceOutputType,
-	DiceSecretMethodType,
-	DieRollGrade, DropKeepType, GameType, gradeToEmoji,
-	rollDice, TDiceLiteral, TestType, TSign,
+	DiceSecretMethodType, DropKeepType, GameType, rollDice, TDiceLiteral, TestType, TSign,
 	TTestData
 } from "../../common";
 import {
