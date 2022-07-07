@@ -564,11 +564,17 @@ function macroToDice(userMacros: NamedCollection<TMacro>, input: string): TMacro
 		// named args
 		.replace(/\{(\w+)(\:[^\}]+)?\}/ig, match => {
 			const [argName, defaultValue] = splitKeyValueFromBraces(match);
-			const namedArg = named.find(arg => arg.name === argName);
+			const argNameLower = argName.toLowerCase();
+			const namedArg = named.find(arg => arg.name.toLowerCase() === argNameLower);
 			return namedArgValueOrDefaultValue(namedArg, defaultValue);
 		})
 		// remaining args
-		.replace(/\{\.\.\.\}/g, indexed.slice(maxIndex + 1).join(" "));
+		.replace(/\{\.\.\.\}/g, indexed.slice(maxIndex + 1).join(" "))
+		// fix adjacent plus/minus
+		.replace(/\-\s*\+/g, "-")
+		.replace(/\+\s*\-/g, "-")
+		.replace(/\+\s*\+/g, "+")
+		;
 
 	if (prefix.keep) {
 		dice = dice.replace("1d20", `${prefix.keepRolls ?? 1}d20${prefix.keep}${prefix.keepCount ?? 1}`);
