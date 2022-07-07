@@ -239,7 +239,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 
 		const dice = [d20Dice, skillDice];
 		const sides = skillDicePart.sides;
-		const diceSides = [2,4,6,8,10,12,20];
+		const diceSides = [2,4,6,8,10,12];
 		if (skillDicePart.hasSpecialiation && sides > 2 && diceSides.includes(sides)) {
 			for (let index = diceSides.indexOf(sides); index--;) {
 				dice.push(Dice.create([new DicePart({
