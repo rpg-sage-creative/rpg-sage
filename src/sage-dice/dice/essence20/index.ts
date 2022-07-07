@@ -218,26 +218,33 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public static fromTokens(tokens: TToken[], diceOutputType?: DiceOutputType): DiceGroup {
 		const skillDicePart = DicePart.fromTokens(tokens);
 		const skillDice = Dice.create([skillDicePart]);
+		const dice = [skillDice];
 
-		const d20DicePartCore: DicePartCore = {
-			objectType: "DicePart",
-			gameType: GameType.E20,
-			id: generate(),
-			count: 1,
-			sides: 20,
-			description: "",
-			modifier: 0,
-			noSort: false
-		};
-		if (skillDicePart.hasDropKeep) {
-			d20DicePartCore.count = 2;
-			d20DicePartCore.dropKeep = skillDicePart.dropKeep;
-			delete skillDicePart.toJSON().dropKeep;
+		if (skillDicePart.sides !== 20) {
+			const d20DicePartCore: DicePartCore = {
+				objectType: "DicePart",
+				gameType: GameType.E20,
+				id: generate(),
+				count: 1,
+				sides: 20,
+				description: "",
+				modifier: 0,
+				noSort: false
+			};
+			if (skillDicePart.hasDropKeep) {
+				d20DicePartCore.count = 2;
+				d20DicePartCore.dropKeep = skillDicePart.dropKeep;
+				delete skillDicePart.toJSON().dropKeep;
+			}
+			const d20DicePart = new DicePart(d20DicePartCore);
+			const d20Dice = Dice.create([d20DicePart]);
+			dice.unshift(d20Dice);
+		}else {
+			if (skillDicePart.hasDropKeep) {
+				skillDicePart.toJSON().count = 2;
+			}
 		}
-		const d20DicePart = new DicePart(d20DicePartCore);
-		const d20Dice = Dice.create([d20DicePart]);
 
-		const dice = [d20Dice, skillDice];
 		const sides = skillDicePart.sides;
 		const diceSides = [2,4,6,8,10,12];
 		if (skillDicePart.hasSpecialiation && sides > 2 && diceSides.includes(sides)) {
@@ -272,15 +279,15 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 	public toString(outputType: DiceOutputType): string;
 	public toString(): string {
 		const d20Roll = this.rolls[0];
-		const baseRoll = this.rolls[1];
+		const baseRoll: DiceRoll | undefined = this.rolls[1];
 		const slicedRolls = this.rolls.slice(1);
-		const highestRoll = slicedRolls.reduce((highest, roll) => !highest || roll.total > highest.total ? roll : highest, null! as DiceRoll);
+		const highestRoll: DiceRoll | undefined = slicedRolls.reduce((highest, roll) => !highest || roll.total > highest.total ? roll : highest, undefined as DiceRoll | undefined);
 		const maxRoll = slicedRolls.find(roll => (roll.dice.baseDicePart?.sides ?? 0) > 2 && roll.isMax);
 
-		const description = slicedRolls[0].dice.baseDicePart?.description;
-		const total = d20Roll.total + highestRoll.total;
+		const description = baseRoll?.dice.baseDicePart?.description ?? d20Roll.dice.baseDicePart?.description;
+		const total = d20Roll.total + (highestRoll?.total ?? 0);
 
-		const test = baseRoll.dice.test ?? d20Roll.dice.test;
+		const test = baseRoll?.dice.test ?? d20Roll.dice.test;
 		let dif = "";
 		let emoji = "";
 		if (test) {
