@@ -268,16 +268,16 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 
 	const hasGameOptions = channelOptions.gameMaster || channelOptions.nonPlayer || channelOptions.player;
 
-	if (hasGameOptions) {
-		const saved = await game!.addOrUpdateChannels({ did: targetChannelDid, ...channelOptions });
+	if (game && hasGameOptions) {
+		const saved = await game.addOrUpdateChannels({ did: targetChannelDid, ...channelOptions });
 		if (saved) {
 			await sageMessage.server.removeChannels(targetChannelDid);
-			return channelDetails(sageMessage, game!.getChannel(new DiscordKey(sageMessage.server.did, targetChannelDid)));
+			return channelDetails(sageMessage, game.getChannel(new DiscordKey(sageMessage.server.did, targetChannelDid)));
 		}
 		return sageMessage.reactFailure();
 	}
 
-	const which = sageMessage.game || sageMessage.server,
+	const which = game ?? sageMessage.server,
 		updated = await which.addOrUpdateChannels({ did: targetChannelDid, ...channelOptions });
 	if (updated) {
 		return channelDetails(sageMessage, which.getChannel(targetChannelDid));
