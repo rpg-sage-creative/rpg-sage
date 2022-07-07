@@ -276,13 +276,11 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		const slicedRolls = this.rolls.slice(1);
 		const highestRoll = slicedRolls.reduce((highest, roll) => !highest || roll.total > highest.total ? roll : highest, null! as DiceRoll);
 		const maxRoll = slicedRolls.find(roll => (roll.dice.baseDicePart?.sides ?? 0) > 2 && roll.isMax);
-		// const minRoll = slicedRolls.find(roll => (roll.dice.baseDicePart?.sides ?? 0) > 2 && roll.isMin);
 
 		const description = slicedRolls[0].dice.baseDicePart?.description;
 		const total = d20Roll.total + highestRoll.total;
 
 		const isCritMax = maxRoll && d20Roll.isMax;
-		const isCritMin = !this.rolls.find(roll => !roll.isMin);
 		const test = baseRoll.dice.test ?? d20Roll.dice.test;
 		let dif = "";
 		let emoji = "";
@@ -290,12 +288,12 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 			if (total >= test.value) {
 				emoji = isCritMax ? "[critical-success]" : "[success]";
 			}else {
-				emoji = isCritMin ? "[critical-failure]" : "[failure]";
+				emoji = d20Roll.isMin ? "[critical-failure]" : "[failure]";
 			}
 			dif = `DIF ${test.value}`;
 		}else if (isCritMax) {
 			emoji = "[critical-success]";
-		}else if (isCritMin) {
+		}else if (d20Roll.isMin) {
 			emoji = "[critical-failure]";
 		}
 
