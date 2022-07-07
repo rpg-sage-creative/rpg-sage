@@ -1,7 +1,6 @@
 //#region imports
 
 import type { IdCore, OrNull, OrUndefined } from "../../../sage-utils";
-import utils from "../../../sage-utils";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -24,6 +23,14 @@ import {
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart
 } from "../base";
 import {
+	DiceGroup as dnd5eDiceGroup,
+	DiceGroupRoll as dnd5eDiceGroupRoll
+} from "../dnd5e";
+import {
+	DiceGroup as e20DiceGroup,
+	DiceGroupRoll as e20DiceGroupRoll
+} from "../essence20";
+import {
 	DiceGroup as pf2eDiceGroup,
 	DiceGroupRoll as pf2eDiceGroupRoll
 } from "../pf2e";
@@ -31,29 +38,37 @@ import {
 	DiceGroup as questDiceGroup,
 	DiceGroupRoll as questDiceGroupRoll
 } from "../quest";
+import { generate } from "../../../sage-utils/utils/UuidUtils";
+import { HasCore, toJSON } from "../../../sage-utils/utils/ClassUtils";
 
 //#endregion
 
 const DICE_REGEX = /\[[^\]]*d\d+[^\]]*\]/ig;
-const GAME_CHECK = /^(dnd5e|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest)?/i;
+const GAME_CHECK = /^(dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest)?/i;
 const DICE_OUTPUT_CHECK = /^(xxs|xs|s|m|xxl|xl|l)?/i;
 const COUNT_CHECK = /^(\d+)(map\-\d+)?\#/i;
 
 function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {
 	switch (gameType) {
-		case GameType.Quest: return <typeof baseDiceGroup>questDiceGroup;
+		case GameType.DnD5e: return <typeof baseDiceGroup>dnd5eDiceGroup;
+		case GameType.E20: return <typeof baseDiceGroup>e20DiceGroup;
 		case GameType.PF2e: return <typeof baseDiceGroup>pf2eDiceGroup;
+		case GameType.Quest: return <typeof baseDiceGroup>questDiceGroup;
 		default: return baseDiceGroup;
 	}
 }
 
 function parseDice(diceString: string, gameType?: GameType, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): baseTDiceGroup {
 	switch (gameType) {
-		case GameType.Quest:
-			return questDiceGroup.parse(diceString, diceOutputType);
+		case GameType.DnD5e:
+			return dnd5eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
+		case GameType.E20:
+			return e20DiceGroup.parse(diceString, diceOutputType);
 		case GameType.PF2e:
 			return pf2eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
-		default:
+		case GameType.Quest:
+			return questDiceGroup.parse(diceString, diceOutputType);
+			default:
 			return baseDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType);
 	}
 }
@@ -64,7 +79,7 @@ function cloneDicePart<T extends baseDicePartCore, U extends baseTDicePart>(clss
 		description: core.description,
 		dropKeep: core.dropKeep ? { ...core.dropKeep } : undefined,
 		gameType: core.gameType,
-		id: utils.UuidUtils.generate(),
+		id: generate(),
 		modifier: core.modifier,
 		noSort: core.noSort,
 		objectType: core.objectType,
@@ -84,7 +99,7 @@ function cloneDice<T extends baseDiceCore, U extends baseTDice>(clss: typeof bas
 			description: "<i>(MAP)</i>",
 			dropKeep: undefined,
 			gameType: gameType,
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 			modifier: Math.abs(map),
 			noSort: false,
 			objectType: "DicePart",
@@ -106,7 +121,7 @@ function cloneDice<T extends baseDiceCore, U extends baseTDice>(clss: typeof bas
 				diceParts.splice(diceParts.indexOf(testCore), 0, mapCore);
 			}else {
 				// split dice/mod from test
-				// const newTestCore = <baseDicePartCore>{ count:0, description:"", dropKeep:null, gameType:gameType, id:utils.UuidUtils.generate(), modifier:0, noSort:false, objectType:"DicePart", sides:0, sign:"+", test:testCore.test };
+				// const newTestCore = <baseDicePartCore>{ count:0, description:"", dropKeep:null, gameType:gameType, id:generate(), modifier:0, noSort:false, objectType:"DicePart", sides:0, sign:"+", test:testCore.test };
 				mapCore.test = testCore.test;
 				delete testCore.test;
 				//put mapCore and newTestCore after testCore //, newTestCore); <-- after splice
@@ -117,7 +132,7 @@ function cloneDice<T extends baseDiceCore, U extends baseTDice>(clss: typeof bas
 	return <U>clss.fromCore({
 		diceParts: diceParts,
 		gameType: core.gameType,
-		id: utils.UuidUtils.generate(),
+		id: generate(),
 		objectType: <"Dice">core.objectType
 	});
 }
@@ -129,7 +144,7 @@ function cloneDiceGroup<T extends baseDiceGroupCore, U extends baseTDiceGroup>(c
 		diceOutputType: core.diceOutputType,
 		diceSecretMethodType: core.diceSecretMethodType,
 		gameType: core.gameType,
-		id: utils.UuidUtils.generate(),
+		id: generate(),
 		objectType: <"DiceGroup">core.objectType
 	});
 }
@@ -138,16 +153,20 @@ interface DiscordDiceCore extends IdCore<"DiscordDice"> {
 	diceGroups: baseDiceGroupCore[];
 }
 
-export class DiscordDice extends utils.ClassUtils.HasCore<DiscordDiceCore, "DiscordDice"> {
+export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 	private _diceGroups?: baseTDiceGroup[];
 	public get diceGroups(): baseTDiceGroup[] {
 		if (!this._diceGroups) {
 			this._diceGroups = this.core.diceGroups.map(core => {
 				switch (core.gameType) {
-					case GameType.Quest:
-						return questDiceGroup.fromCore(core);
+					case GameType.DnD5e:
+						return dnd5eDiceGroup.fromCore(core);
+					case GameType.E20:
+						return e20DiceGroup.fromCore(core);
 					case GameType.PF2e:
 						return pf2eDiceGroup.fromCore(core);
+					case GameType.Quest:
+						return questDiceGroup.fromCore(core);
 					default:
 						return baseDiceGroup.fromCore(core);
 				}
@@ -169,8 +188,8 @@ export class DiscordDice extends utils.ClassUtils.HasCore<DiscordDiceCore, "Disc
 	public static create(diceGroups: baseTDiceGroup[]): DiscordDice {
 		const core: DiscordDiceCore = {
 			objectType: "DiscordDice",
-			id: utils.UuidUtils.generate(),
-			diceGroups: diceGroups.map<baseDiceGroupCore>(utils.ClassUtils.toJSON)
+			id: generate(),
+			diceGroups: diceGroups.map<baseDiceGroupCore>(toJSON)
 		};
 		return new DiscordDice(core);
 	}
@@ -286,7 +305,7 @@ interface DiscordDiceRollCore extends IdCore<"DiscordDiceRoll"> {
 	rolls: baseDiceGroupRollCore[];
 }
 
-export class DiscordDiceRoll extends utils.ClassUtils.HasCore<DiscordDiceRollCore> {
+export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 	private _discordDice?: DiscordDice;
 	public get discordDice(): DiscordDice {
 		if (!this._discordDice) {
@@ -300,10 +319,14 @@ export class DiscordDiceRoll extends utils.ClassUtils.HasCore<DiscordDiceRollCor
 		if (!this._rolls) {
 			this._rolls = this.core.rolls.map(core => {
 				switch (core.gameType) {
-					case GameType.Quest:
-						return questDiceGroupRoll.fromCore(core);
+					case GameType.DnD5e:
+						return dnd5eDiceGroupRoll.fromCore(core);
+					case GameType.E20:
+						return e20DiceGroupRoll.fromCore(core);
 					case GameType.PF2e:
 						return pf2eDiceGroupRoll.fromCore(core);
+					case GameType.Quest:
+						return questDiceGroupRoll.fromCore(core);
 					default:
 						return baseDiceGroupRoll.fromCore(core);
 				}
@@ -342,7 +365,7 @@ export class DiscordDiceRoll extends utils.ClassUtils.HasCore<DiscordDiceRollCor
 	public static create(discordDice: DiscordDice): DiscordDiceRoll {
 		const core: DiscordDiceRollCore = {
 			objectType: "DiscordDiceRoll",
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 			discordDice: discordDice.toJSON(),
 			rolls: discordDice.diceGroups.map(diceGroup => diceGroup.roll().toJSON())
 		};

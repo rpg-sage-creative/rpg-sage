@@ -102,6 +102,13 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 	}
 
 	onClientReady(): void {
+		this.client.user?.setPresence({
+			status: "online",
+			activities: [
+				{ name:"/sage help", type:"PLAYING", url:"rpgsage.io" }
+			]
+		});
+
 		SageCache.fromClient(this.client).then(sageCache => {
 			this.sageCache = sageCache;
 			ActiveBot.active = this;

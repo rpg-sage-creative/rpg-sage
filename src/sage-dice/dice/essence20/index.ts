@@ -1,113 +1,106 @@
 //#region imports
 
-import type { OrNull, TParsers, TToken } from "../../../sage-utils";
-import type {
-	TDiceLiteral,
-	TTestData
-} from "../../common";
+import type { OrNull, OrUndefined, TParsers, TToken } from "../../../sage-utils";
+import { toJSON } from "../../../sage-utils/utils/ClassUtils";
+import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
+import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
 	cleanDescription,
 	createValueTestData, DiceOutputType,
 	DiceSecretMethodType,
-	DieRollGrade,
-	GameType, gradeToEmoji,
-	rollDice, TestType
+	DieRollGrade, DropKeepType, GameType, gradeToEmoji,
+	rollDice, TDiceLiteral, TestType, TSign,
+	TTestData
 } from "../../common";
+import {
+	Dice as baseDice, DiceGroup as baseDiceGroup,
+	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
+	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers,
+	reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
+	TReduceSignToDropKeep
+} from "../base";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
 } from "../base/types";
-import {
-	Dice as baseDice, DiceGroup as baseDiceGroup,
-	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll
-} from "../base";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
-import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 
 //#endregion
 
 //#region Tokenizer
 function getParsers(): TParsers {
-	return {
-		dice: /\s*(1)?\s*d\s*(20)/i,
-		target: /(vs)\s*(\d+)/i
-	};
+	const parsers = baseGetParsers();
+	parsers["bang"] = /\!/;
+	parsers["target"] = /\b(vs\s*dif|dif|vs)\s*(\d+)/i;
+	return parsers;
 }
-function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken): T {
-	if (token.type === "dice") {
-		core.count = 1;
-		core.sides = 20;
-	}else if (token.type === "target") {
-		core.target = { type:TargetType.VS, value:+(token.matches || [])[1] || 0 };
-	}else {
-		core.description = (core.description || "") + token.token;
+const ADVANTAGE = "Advantage";
+const DISADVANTAGE = "Disadvantage";
+function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[]): T {
+	if (token.type === "bang") {
+		const prevToken = tokens[index - 1];
+		if (prevToken?.type === "dice") {
+			core.specialization = true;
+			return core;
+		}
 	}
-	return core;
+	if (token.type === "target") {
+		core.target = parseTargetData(token);
+		return core;
+	}
+	const reduceSignToDropKeepData: TReduceSignToDropKeep[] = [];
+	if (token.type === "dice") {
+		reduceSignToDropKeepData.push(
+			{ sign:"+" as TSign, type:DropKeepType.KeepHighest, value:1, alias:ADVANTAGE, test:_core => _core.sign === "+" },
+			{ sign:"-" as TSign, type:DropKeepType.KeepLowest, value:1, alias:DISADVANTAGE, test:_core => _core.sign === "-" }
+		);
+	}
+	return baseReduceTokenToDicePartCore(core, token, index, tokens, reduceSignToDropKeepData);
 }
 //#endregion
 
 //#region Targets/Tests
-enum TargetType { None = 0, VS = 1 }
-type TTargetData = { type:TargetType; value:number; };
+enum TargetType { None = 0, DIF = 1 }
+type TTargetData = { type:TargetType; value:number; raw:string; };
+function parseTargetData(token: TToken): OrUndefined<TTargetData> {
+	if (token.matches) {
+		const type = TargetType.DIF,
+			value = +token.matches[1] || 0;
+		return { type:type, value:value, raw:token.token };
+	}
+	return undefined;
+}
 function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	return !targetData ? null : createValueTestData(TestType.GreaterThan, targetData.value, "vs");
-}
-//#endregion
-
-//#region Grades
-function gradeResults(roll: DiceRoll): DieRollGrade {
-	const test = roll.dice.test;
-	if (test) {
-		return roll.total > test.value ? DieRollGrade.Success : DieRollGrade.Failure;
-	}
-	if (roll.total === 20) {
-		return DieRollGrade.CriticalSuccess;
-	}else if (roll.total > 10) {
-		return DieRollGrade.Success;
-	}else if (roll.total > 5) {
-		return DieRollGrade.Failure;
-	}else if (roll.total > 1) {
-		return DieRollGrade.CriticalFailure;
-	}else {
-		return DieRollGrade.Unknown;
-	}
-}
-//#endregion
-
-//#region diceGroupRollToString
-function _gradeEmoji(grade: DieRollGrade, vs: boolean): string {
-	if (vs) {
-		return gradeToEmoji(grade) || `:question:`;
-	}
-	return gradeToEmoji(grade) || `:bangbang:`;
+	return !targetData ? null : createValueTestData(TestType.GreaterThanOrEqual, targetData.value, "dif");
 }
 //#endregion
 
 //#region DicePart
 interface DicePartCore extends baseDicePartCore {
+	specialization?: boolean;
 	target?: TTargetData;
 }
 type TDicePartCoreArgs = baseTDicePartCoreArgs & {
+	specialization?: boolean;
 	testOrTarget?: TTestData | TTargetData;
 };
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
+	public get hasSpecialiation(): boolean { return this.core.specialization === true; }
 	//#region static
-	public static create({ description, testOrTarget }: TDicePartCoreArgs = {}): DicePart {
+	public static create({ count, description, dropKeep, sides, specialization, testOrTarget }: TDicePartCoreArgs = {}): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
-			gameType: GameType.Quest,
+			gameType: GameType.E20,
 			id: generate(),
 
-			count: 1,
+			count: count ?? 1,
 			description: cleanDescription(description),
-			dropKeep: undefined,
+			dropKeep: dropKeep ?? undefined,
 			modifier: 0,
 			noSort: false,
-			sides: 20,
+			sides: sides ?? 0,
 			sign: undefined,
+			specialization,
 			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget ?? null,
 			target: <TTargetData>testOrTarget ?? null
 		});
@@ -117,6 +110,10 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	}
 	public static fromTokens(tokens: TToken[]): DicePart {
 		const core = tokens.reduce(reduceTokenToDicePartCore, <DicePartCore>{ description:"" });
+		if (core.sides !== 20 && core.description.startsWith("!")) {
+			core.specialization = true;
+			core.description = core.description.slice(1);
+		}
 		const args = <TDicePartCoreArgs>{ testOrTarget:core.target ?? core.test, ...core };
 		return DicePart.create(args);
 	}
@@ -131,7 +128,7 @@ export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 	public static create(dicePart: DicePart): DicePartRoll {
 		return new DicePartRoll({
 			objectType: "DicePartRoll",
-			gameType: GameType.Quest,
+			gameType: GameType.E20,
 			id: generate(),
 			dice: dicePart.toJSON(),
 			rolls: rollDice(dicePart.count, dicePart.sides)
@@ -153,7 +150,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 	public static create(diceParts: DicePart[]): Dice {
 		return new Dice({
 			objectType: "Dice",
-			gameType: GameType.Quest,
+			gameType: GameType.E20,
 			id: generate(),
 			diceParts: diceParts.map<DicePartCore>(toJSON)
 		});
@@ -183,12 +180,11 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 //#region DiceRoll
 type DiceRollCore = baseDiceRollCore;
 export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
-	public toString(): string { return `${this.total} ${_gradeEmoji(gradeResults(this), this.dice.hasTest)}`; }
 	//#region static
 	public static create(_dice: Dice): DiceRoll {
 		return new DiceRoll({
 			objectType: "DiceRoll",
-			gameType: GameType.Quest,
+			gameType: GameType.E20,
 			id: generate(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
@@ -210,7 +206,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public static create(_dice: Dice[], diceOutputType?: DiceOutputType): DiceGroup {
 		return new DiceGroup({
 			objectType: "DiceGroup",
-			gameType: GameType.Quest,
+			gameType: GameType.E20,
 			id: generate(),
 			critMethodType: undefined,
 			dice: _dice.map<DiceCore>(toJSON),
@@ -222,7 +218,45 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup(core);
 	}
 	public static fromTokens(tokens: TToken[], diceOutputType?: DiceOutputType): DiceGroup {
-		return DiceGroup.create([Dice.create([DicePart.fromTokens(tokens)])], diceOutputType);
+		const skillDicePart = DicePart.fromTokens(tokens);
+		const skillDice = Dice.create([skillDicePart]);
+
+		const d20DicePartCore: DicePartCore = {
+			objectType: "DicePart",
+			gameType: GameType.E20,
+			id: generate(),
+			count: 1,
+			sides: 20,
+			description: "",
+			modifier: 0,
+			noSort: false
+		};
+		if (skillDicePart.hasDropKeep) {
+			d20DicePartCore.count = 2;
+			d20DicePartCore.dropKeep = skillDicePart.dropKeep;
+			delete skillDicePart.toJSON().dropKeep;
+		}
+		const d20DicePart = new DicePart(d20DicePartCore);
+		const d20Dice = Dice.create([d20DicePart]);
+
+		const dice = [d20Dice, skillDice];
+		const sides = skillDicePart.sides;
+		const diceSides = [2,4,6,8,10,12,20];
+		if (skillDicePart.hasSpecialiation && sides > 2 && diceSides.includes(sides)) {
+			for (let index = diceSides.indexOf(sides); index--;) {
+				dice.push(Dice.create([new DicePart({
+					objectType: "DicePart",
+					gameType: GameType.E20,
+					id: generate(),
+					count: 1,
+					sides: diceSides[index],
+					description: "",
+					modifier: 0,
+					noSort: false
+				})]));
+			}
+		}
+		return DiceGroup.create(dice, diceOutputType);
 	}
 	public static parse(diceString: string, diceOutputType?: DiceOutputType): DiceGroup {
 		const tokens = Tokenizer.tokenize(diceString, getParsers(), "desc");
@@ -239,12 +273,49 @@ type DiceGroupRollCore = baseDiceGroupRollCore;
 export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGroup, DiceRoll> {
 	public toString(outputType: DiceOutputType): string;
 	public toString(): string {
-		return this.rolls[0].toString();
+		const d20Roll = this.rolls[0];
+		const baseRoll = this.rolls[1];
+		const slicedRolls = this.rolls.slice(1);
+		const highestRoll = slicedRolls.reduce((highest, roll) => !highest || roll.total > highest.total ? roll : highest, null! as DiceRoll);
+		const maxRoll = slicedRolls.find(roll => (roll.dice.baseDicePart?.sides ?? 0) > 2 && roll.isMax);
+		// const minRoll = slicedRolls.find(roll => (roll.dice.baseDicePart?.sides ?? 0) > 2 && roll.isMin);
+
+		const description = slicedRolls[0].dice.baseDicePart?.description;
+		const total = d20Roll.total + highestRoll.total;
+
+		const isCritMax = maxRoll && d20Roll.isMax;
+		const isCritMin = !this.rolls.find(roll => !roll.isMin);
+		const test = baseRoll.dice.test ?? d20Roll.dice.test;
+		let dif = "";
+		let emoji = "";
+		if (test) {
+			if (total >= test.value) {
+				emoji = isCritMax ? "[critical-success]" : "[success]";
+			}else {
+				emoji = isCritMin ? "[critical-failure]" : "[failure]";
+			}
+			dif = `DIF ${test.value}`;
+		}else if (isCritMax) {
+			emoji = "[critical-success]";
+		}else if (isCritMin) {
+			emoji = "[critical-failure]";
+		}
+
+		const parts = this.rolls.map((roll, index) => {
+			const out = roll.toString(DiceOutputType.M).split(/⟵/)[1].split(/\bdif\b/)[0].trim();
+			if (index && roll !== highestRoll) {
+				return `<s>${out}</s>`;
+			}
+			return out;
+		});
+
+		const desc = description ? `\`${description}\`` : "";
+		return `${emoji} <b>${total}</b> ${dif} ${desc} ⟵ ${parts.join("; ")}`.replace(/\s+/g, " ");
 	}
 	public static create(diceGroup: DiceGroup): DiceGroupRoll {
 		return new DiceGroupRoll({
 			objectType: "DiceGroupRoll",
-			gameType: GameType.Quest,
+			gameType: GameType.E20,
 			id: generate(),
 			diceGroup: diceGroup.toJSON(),
 			rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())

@@ -133,13 +133,15 @@ function channelDetailsAppendGame(renderableContent: utils.RenderUtils.Renderabl
 		renderableContent.append(`[spacer][spacer]<b>Player</b> ${PermissionType[channel.player || 0]}`);
 		renderableContent.append(`[spacer][spacer]<b>NonPlayer</b> ${PermissionType[channel.nonPlayer || 0]}`);
 	} else {
-		renderableContent.appendTitledSection(`<b>Default Game Type</b> ${GameType[channel.defaultGameType || 0]}`);
+		renderableContent.append(`<b>Default Game Type</b> ${GameType[channel.defaultGameType || 0]}`);
 	}
 }
 
 async function getChannelNameAndActiveGame(sageCache: SageCache, channelDid: Discord.Snowflake): Promise<[string, Game | undefined]> {
 	const channel = await sageCache.discord.fetchChannel(channelDid);
-	if (!channel || channel.type === "DM") return ["DM", undefined];
+	if (!channel || channel.type === "DM") {
+		return ["DM", undefined];
+	}
 	const discordKey = DiscordKey.fromChannel(channel);
 	return [channel.name, await sageCache.games.findActiveByDiscordKey(discordKey)];
 }
@@ -232,7 +234,7 @@ async function channelRemove(sageMessage: SageMessage): Promise<void> {
 		.map(channel => channel.id)
 		.filter(channelDid => game.hasChannel(channelDid));
 	if (!channelDids.length && sageMessage.game) {
-		const channelDid = <Discord.Snowflake>await sageMessage.args.removeAndReturnChannelDid(true);
+		const channelDid = await sageMessage.args.removeAndReturnChannelDid(true);
 		channelDids.push(channelDid);
 	}
 	if (!channelDids.length) {
@@ -248,7 +250,7 @@ async function channelRemove(sageMessage: SageMessage): Promise<void> {
 //#region set
 
 async function channelSet(sageMessage: SageMessage): Promise<void> {
-	const targetChannelDid = <Discord.Snowflake>await sageMessage.args.removeAndReturnChannelDid(true);
+	const targetChannelDid = await sageMessage.args.removeAndReturnChannelDid(true);
 	if (!sageMessage.testChannelAdmin(targetChannelDid)) {
 		return sageMessage.reactBlock();
 	}
