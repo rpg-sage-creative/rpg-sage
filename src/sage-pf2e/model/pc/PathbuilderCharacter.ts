@@ -1,7 +1,7 @@
 import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/User";
 import utils, { Optional, OrUndefined } from "../../../sage-utils";
-import type { TProficiency } from "../../common";
+import type { TProficiency, TSavingThrow } from "../../common";
 import { toModifier } from "../../common";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository";
 import type Weapon from "../Weapon";
@@ -11,8 +11,10 @@ import type { IHasProficiencies } from "./PlayerCharacter";
 import type { IHasSavingThrows } from "./SavingThrows";
 import SavingThrows from "./SavingThrows";
 
-const statKeys: TPathbuilderCharacterAbilityKey[] = ["dex", "int", "str", "int", "cha", "cha", "cha", "wis", "wis", "int", "cha", "wis", "int", "dex", "wis", "dex"];
 const skillNames = "Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery".split(",");
+const skillStatKeys: TPathbuilderCharacterAbilityKey[] = ["dex", "int", "str", "int", "cha", "cha", "cha", "wis", "wis", "int", "cha", "wis", "int", "dex", "wis", "dex"];
+const saveNames = ["Fortitude", "Reflex", "Will"];
+// const saveStatKeys: TPathbuilderCharacterAbilityKey[] = ["con", "dex", "wis"];
 
 //#region types
 
@@ -754,7 +756,7 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		const skillIndex = skillNames.indexOf(skillName);
 		const profMod = this.getProficiencyMod(skillName as TPathbuilderCharacterProficienciesKey);
 		const levelMod = this.getLevelMod(profMod);
-		const statMod = Abilities.scoreToMod(this.abilities[statKeys[skillIndex]]);
+		const statMod = Abilities.scoreToMod(this.abilities[skillStatKeys[skillIndex]]);
 		return levelMod + profMod + statMod;
 	}
 
@@ -768,6 +770,11 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		if (this.hasLore(key)) {
 			const lore = this.getLore(key)!;
 			return [PathbuilderCharacterProficiencyType[lore[1]] as TProficiency, this.getLoreMod(key)];
+		}
+		if (saveNames.includes(key)) {
+			const ability = SavingThrows.getAbilityForSavingThrow(key as TSavingThrow);
+			const check = this.savingThrows.getSavingThrow(key as TSavingThrow, ability ?? "Constitution");
+			return [this.getProficiency(key as TPathbuilderCharacterProficienciesKey), check.modifier];
 		}
 		// Check other stuff?
 		return ["Untrained", this.untrainedProficiencyMod];
