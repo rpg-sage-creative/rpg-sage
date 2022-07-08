@@ -128,6 +128,7 @@ function createViewSelectRow(character: PathbuilderCharacter): Discord.MessageAc
 }
 
 const skills = "Perception,Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery".split(",");
+const saves = ["Fortitude", "Reflex", "Will"];
 
 function createExplorationSelectRow(character: PathbuilderCharacter): Discord.MessageActionRow {
 	const selectMenu = new Discord.MessageSelectMenu();
@@ -154,11 +155,12 @@ function createSkillSelectRow(character: PathbuilderCharacter): Discord.MessageA
 
 	const activeSkill = character.getSheetValue("activeSkill");
 	const lores = character.lores.map(lore => lore[0]);
-	const skillsAndLores = skills.concat(lores);
-	skillsAndLores.forEach(skill => {
+	const savesSkillsAndLores = saves.concat(skills, lores);
+	savesSkillsAndLores.forEach(skill => {
+		const labelPrefix = saves.includes(skill) ? "Save" : "Skill";
 		const skillAndMod = character.getProficiencyAndMod(skill);
 		selectMenu.addOptions({
-			label: `Skill Roll: ${skill}${lores.includes(skill) ? " Lore" : ""} ${toModifier(skillAndMod[1])} (${skillAndMod[0]})`,
+			label: `${labelPrefix} Roll: ${skill}${lores.includes(skill) ? " Lore" : ""} ${toModifier(skillAndMod[1])} (${skillAndMod[0]})`,
 			value: skill,
 			default: skill === activeSkill || (!activeSkill && skill === "Perception")
 		});
