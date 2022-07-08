@@ -1,15 +1,15 @@
-import utils, { OrUndefined } from "../../../sage-utils";
+import { ABILITIES } from "../..";
+import type { TMacro } from "../../../sage-lib/sage/model/User";
+import utils, { Optional, OrUndefined } from "../../../sage-utils";
 import type { TProficiency } from "../../common";
 import { toModifier } from "../../common";
-import { findByValue as repoFind, filter as repoFilter } from "../../data/Repository";
+import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository";
 import type Weapon from "../Weapon";
 import type { IHasAbilities } from "./Abilities";
 import Abilities from "./Abilities";
 import type { IHasProficiencies } from "./PlayerCharacter";
 import type { IHasSavingThrows } from "./SavingThrows";
 import SavingThrows from "./SavingThrows";
-import { ABILITIES } from "../..";
-
 
 const statKeys: TPathbuilderCharacterAbilityKey[] = ["dex", "int", "str", "int", "cha", "cha", "cha", "wis", "wis", "int", "cha", "wis", "int", "dex", "wis", "dex"];
 const skillNames = "Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery".split(",");
@@ -408,22 +408,55 @@ function spellCasterLevelToHtml(char: PathbuilderCharacter, spellCaster: TPathbu
 
 //#endregion
 
+//#region pets
+
+function getFamiliarName(pet: TPathbuilderCharacterFamiliar): string {
+	return pet.name.includes(pet.specific) ? pet.name : `${pet.name} (${pet.specific})`;
+}
+
+function getAnimalCompanionName(pet: TPathbuilderCharacterAnimalCompanion): string {
+	const animalParts: string[] = [];
+	if (!pet.mature) {
+		animalParts.push("Young");
+	}
+	if (pet.incredible) {
+		animalParts.push(pet.incredibleType);
+	}
+	animalParts.push(pet.animal);
+	const animal = animalParts.join(" ");
+
+	if (pet.name.endsWith(` - ${animal}`)) {
+		const name = pet.name.slice(0, -1 * (animal.length + 3));
+		return `${name} (${animal})`;
+	}
+	if (pet.name.includes(animal)) {
+		return pet.name;
+	}
+	if (pet.name.includes(pet.animal)) {
+		return pet.name;
+	}
+	return `${pet.name} (${pet.animal})`;
+}
+
 function doPets(char: PathbuilderCharacter): string[] {
 	return char.toJSON().pets.map(pet => {
 		if (pet.type === "Familiar") {
-			const name = pet.name.includes(pet.specific) ? pet.name : `${pet.name} (${pet.specific})`;
+			const name = getFamiliarName(pet);
 			return `<b>${pet.type}</b> ${name}; ${pet.abilities.join(", ")}`;
 		}else if (pet.type === "Animal Companion") {
-			const name = pet.name.includes(pet.animal) ? pet.name : `${pet.name} (${pet.animal})`;
+			const name = getAnimalCompanionName(pet);
 			const specializations = pet.specializations.length ? `; ${pet.specializations.join(", ")}` : ``;
+			const armor = pet.armor ? `; ${pet.armor}` : ``;
 			const equipment = pet.equipment.length ? `; ${equipmentToHtml(pet.equipment)}` : ``;
-			return `<b>${pet.type}</b> ${name}${specializations}${equipment}`;
+			return `<b>${pet.type}</b> ${name}${specializations}${armor}${equipment}`;
 		}else {
 			console.log(JSON.stringify(pet));
 			return pet.name;
 		}
 	});
 }
+
+//#endregion
 
 function doEquipmentMoney(char: PathbuilderCharacter) {
 	const out = [];
@@ -530,7 +563,7 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 		const dmg = weaponToDamage(char, weapon, wpnItem);
 		return `<b>${wpnItem.type}</b> ${weapon.display} ${toModifier(mod)} <b>Damage</b> ${dmg}`;
 	}else {
-		// Figure out if type is melee/ranged
+		/** @todo Figure out if type is melee/ranged */
 		const type = "Custom";
 		const profMod = char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey);
 		const levelMod = char.getLevelMod(profMod);
@@ -539,6 +572,28 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 			+ weapon.pot;
 		const dmg = `${strikingToDiceCount(weapon.str)}${weapon.die}`;
 		return `<b>${type}</b> ${weapon.display} ${toModifier(mod)} <b>Damage</b> ${dmg}; <i>Dex/Str/Spec mods not included</i>`;
+	}
+}
+
+function weaponToMacro(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): TMacro {
+	const wpnItem = findWeapon(weapon);
+	if (wpnItem) {
+		const profMod = char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey, weapon.name);
+		const levelMod = char.getLevelMod(profMod);
+		const mod = levelMod
+			+ weaponToAttackStatMod(wpnItem, char.abilities.strMod, char.abilities.dexMod)
+			+ profMod
+			+ weapon.pot;
+		const dmg = weaponToDamage(char, weapon, wpnItem);
+		return { name:weapon.display, dice:`[1d20${mod ? toModifier(mod) : ""} "${weapon.display}"; ${dmg}]` };
+	}else {
+		const profMod = char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey);
+		const levelMod = char.getLevelMod(profMod);
+		const mod = levelMod
+			+ profMod
+			+ weapon.pot;
+		const dmg = `${strikingToDiceCount(weapon.str)}${weapon.die}`;
+		return { name:weapon.display, dice:`[1d20${mod ? toModifier(mod) : ""} "${weapon.display}"; ${dmg} <i>Dex/Str/Spec mods not included</i>]` };
 	}
 }
 
@@ -553,14 +608,37 @@ function eq<T, U>(a: T, b: U, matcher = false): boolean {
 	return String(a).toLowerCase() === String(b).toLowerCase();
 }
 
-export type TPathbuilderCharacterOutputType = "All" | "Combat" | "Equipment" | "Feats" | "Formulas" | "Pets" | "Spells";
+export type TCharacterSectionType = "All" | "Armor" | "Attacks" | "Equipment" | "Feats" | "Formulas" | "Languages" | "Perception" | "Pets" | "Skills" | "Speed" | "Spells" | "Stats" | "Traits" | "Weapons";
+export const CharacterSectionTypes: TCharacterSectionType[] = ["All", "Armor", "Attacks", "Equipment", "Feats", "Formulas", "Languages", "Perception", "Pets", "Skills", "Speed", "Spells", "Stats", "Traits", "Weapons"];
+export function getCharacterSections(view: Optional<TCharacterViewType>): TCharacterSectionType[] | null {
+	switch(view) {
+		case "All": return ["All"];
+		case "Combat": return ["Traits", "Perception", "Languages", "Skills", "Weapons", "Armor", "Stats", "Speed", "Attacks"];
+		case "Equipment": return ["Traits", "Perception", "Languages", "Skills", "Weapons", "Armor", "Equipment"];
+		case "Feats": return ["Traits", "Perception", "Languages", "Skills", "Feats"];
+		case "Formulas": return ["Traits", "Perception", "Languages", "Skills", "Formulas"];
+		case "Pets": return ["Traits", "Perception", "Languages", "Skills", "Pets"];
+		case "Spells": return ["Traits", "Perception", "Languages", "Skills", "Spells"];
+	}
+	return null;
+}
+
+export type TCharacterViewType = "All" | "Combat" | "Equipment" | "Feats" | "Formulas" | "Pets" | "Spells";
+export const CharacterViewTypes: TCharacterViewType[] = ["All", "Combat", "Equipment", "Feats", "Formulas", "Pets", "Spells"];
+
 type TSimpleMap = { [key:string]:any; };
 export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
 
 	//#region interactive char sheet
 	private get sheet(): TSimpleMap { return this.core.sheet ?? (this.core.sheet = {}); }
 	public getSheetValue<T extends any = string>(key: string): T | undefined { return this.sheet[key]; }
-	public setSheetValue<T>(key: string, value: T): void { this.sheet[key] = value; }
+	public setSheetValue<T>(key: string, value: T): void {
+		if (value === undefined) {
+			delete this.sheet[key];
+		}else {
+			this.sheet[key] = value;
+		}
+	}
 	//#endregion
 
 	public constructor(private core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
@@ -576,6 +654,7 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 
 	public get id(): string { return this.core.id; }
 	public get name(): string { return this.core.name; }
+	public getAttackMacros(): TMacro[] { return this.core.weapons?.map(weapon => weaponToMacro(this, weapon)) ?? []; }
 
 	//#region flags/has
 	public hasFeat(value: string): boolean {
@@ -725,46 +804,75 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 		return `${name} - ${klass}${dualClass} ${level}`;
 	}
 
-	public toHtml(outputType: TPathbuilderCharacterOutputType = "All"): string {
+	public toHtml(outputTypes: TCharacterSectionType[] = ["All"]): string {
 		const html: string[] = [];
+
 		push(`<b><u>${this.toHtmlName()}</u></b>`);
-		push(`${bracketTraits(this.core.alignment, PathbuilderCharacterSizeType[this.core.size], this.core.ancestry, this.core.heritage)}`);
-		push(`<b>Perception</b> ${toHtmlPerception(this)}`);
-		push(`<b>Languages</b> ${this.core.languages.join(", ")}`);
-		push(`<b>Skills</b> ${skillsToHtml(this)}; <b>Lore</b> ${loreToHtml(this)}; <i>mods from gear excluded</i>`);
-		push(`${abilitiesToHtml(this)}`);
-		if (this.core.weapons.length || this.core.armor.length) {
-			push(`<b>Items</b> ${itemsToHtml(this.core.weapons, this.core.armor)}`);
+
+		if (includes(["All", "Traits"])) {
+			push(`${bracketTraits(this.core.alignment, PathbuilderCharacterSizeType[this.core.size], this.core.ancestry, this.core.heritage)}`);
 		}
-		if (["All", "Combat"].includes(outputType) && this.core.weapons.length) {
+
+		if (includes(["All", "Perception"])) {
+			push(`<b>Perception</b> ${toHtmlPerception(this)}`);
+		}
+
+		if (includes(["All", "Languages"]) && this.core.languages.length) {
+			push(`<b>Languages</b> ${this.core.languages.join(", ")}`);
+		}
+
+		if (includes(["All", "Skills"])) {
+			push(`<b>Skills</b> ${skillsToHtml(this)}; <b>Lore</b> ${loreToHtml(this)}; <i>mods from gear excluded</i>`);
+		}
+
+		const weapons = includes(["All", "Weapons"]) && this.core.weapons.length;
+		const armor = includes(["All", "Armor"]) && this.core.armor.length;
+		if (weapons || armor) {
+			push(`<b>Items</b> ${itemsToHtml(weapons ? this.core.weapons : [], armor ? this.core.armor : [])}`);
+		}
+
+		if (includes(["All", "Stats"]) && this.core.weapons.length) {
 			push();
+			push(`${abilitiesToHtml(this)}`);
 			push(`<b>AC</b> ${this.core.acTotal.acTotal}; ${this.savingThrows.toHtml()}`);
 			push(`<b>HP</b> ${this.maxHp}`);
+		}
+
+		if (includes(["All", "Speed"]) && this.core.weapons.length) {
 			push();
 			push(`<b>Speed</b> ${calculateSpeed(this)} feet`);
+		}
+
+		if (includes(["All", "Attacks"]) && this.core.weapons.length) {
 			push();
 			this.core.weapons.map(weapon => weaponToHtml(this, weapon)).forEach(push);
 		}
-		if (["All", "Spells"].includes(outputType) && this.core.spellCasters?.length) {
+
+		if (includes(["All", "Spells"]) && this.core.spellCasters?.length) {
 			push();
 			this.core.spellCasters.map(spellCaster => spellCasterToHtml(this, spellCaster)).forEach(push);
 		}
-		if (["All", "Pets"].includes(outputType) && this.core.pets?.length) {
+
+		if (includes(["All", "Pets"]) && this.core.pets?.length) {
 			push();
 			doPets(this).forEach(push);
 		}
-		if (["All", "Equipment"].includes(outputType)) {
+
+		if (includes(["All", "Equipment"])) {
 			const lines = doEquipmentMoney(this);
 			if (lines.length) {
 				push();
 				lines.forEach(push);
 			}
 		}
-		if (["All", "Feats"].includes(outputType) && this.feats.length) {
+
+		if (includes(["All", "Feats"]) && this.feats.length) {
 			push();
 			push(`<b>Feats</b> ${this.feats.map(mapFeat).join(", ")}`);
 		}
-		if (["All", "Formulas"].includes(outputType) && this.core.formula?.length) {
+
+		//#region formulas
+		if (includes(["All", "Formulas"]) && this.core.formula?.length) {
 			push();
 			const one = this.core.formula.length === 1;
 			this.core.formula.forEach(formulaType => {
@@ -772,25 +880,76 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 				push(`<b>Formula Book${type}</b> ${formulaType.known.join(", ")}`);
 			});
 		}
+		//#endregion
+
 		return html.join("");
 
+		function includes(types: TCharacterSectionType[]): boolean {
+			return types.find(type => outputTypes.includes(type)) !== undefined;
+		}
 		function push(value?: string) {
-			html.push(`${html.length ? "<br/>" : ""}${value ?? "---"}`);
+			if (value || html.length > 1) {
+				html.push(`${html.length ? "<br/>" : ""}${value ?? "---"}`);
+			}
 		}
 	}
-	public getValidOutputTypes(): TPathbuilderCharacterOutputType[] {
-		const outputTypes: TPathbuilderCharacterOutputType[] = [];
+	public getValidSectionsTypes(): TCharacterSectionType[] {
+		const outputTypes: TCharacterSectionType[] = [
+			"Traits",
+			"Perception"
+		];
 
-		if (this.core.weapons?.length) {
-			outputTypes.push("Combat");
+		if (this.core.languages.length) {
+			outputTypes.push("Languages");
 		}
 
-		if (this.core.spellCasters?.length) {
+		outputTypes.push("Skills");
+
+		if (this.core.weapons.length) {
+			outputTypes.push("Weapons");
+		}
+
+		if (this.core.armor.length) {
+			outputTypes.push("Armor");
+		}
+
+		outputTypes.push("Stats", "Speed");
+
+		if (this.core.weapons.length) {
+			outputTypes.push("Attacks");
+		}
+
+		if (this.core.spellCasters.length) {
 			outputTypes.push("Spells");
 		}
 
-		if (this.core.pets?.length) {
+		if (this.core.pets.length) {
 			outputTypes.push("Pets");
+		}
+
+		//#region Equipment
+		const hasEquipment = this.core.equipment.length > 0;
+		const hasMoney = Object.keys(this.core.money).find(key => this.core.money[key as keyof TPathbuilderCharacterMoney]);
+		if (hasEquipment || hasMoney) {
+			outputTypes.push("Equipment");
+		}
+		//#endregion
+
+		if (this.core.feats.length) {
+			outputTypes.push("Feats");
+		}
+
+		if (this.core.formula.length) {
+			outputTypes.push("Formulas");
+		}
+
+		return outputTypes;
+	}
+	public getValidViewTypes(): TCharacterViewType[] {
+		const outputTypes: TCharacterViewType[] = [];
+
+		if (this.core.weapons?.length) {
+			outputTypes.push("Combat");
 		}
 
 		//#region Equipment
@@ -807,6 +966,14 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 
 		if (this.core.formula?.length) {
 			outputTypes.push("Formulas");
+		}
+
+		if (this.core.pets?.length) {
+			outputTypes.push("Pets");
+		}
+
+		if (this.core.spellCasters?.length) {
+			outputTypes.push("Spells");
 		}
 
 		return outputTypes;
