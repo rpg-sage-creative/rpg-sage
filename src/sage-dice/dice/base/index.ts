@@ -265,11 +265,12 @@ function mapDicePartRollToString(dicePartRoll: TDicePartRoll, includeSign: boole
 type TDicePartRollToString = (dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean) => string;
 
 function mapDicePartRollToStringWithDice(dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean): string {
-	return mapDicePartRollToString(dicePartRoll, index > 0 || (dicePartRoll.sign !== undefined && dicePartRoll.sign !== "+"), !rollem, true, dpr => {
+	return mapDicePartRollToString(dicePartRoll, index > 0 || (dicePartRoll.sign !== undefined && dicePartRoll.sign !== "+"), true, true, dpr => {
+		const rollemSpacer = rollem ? " " : "";
 		if (hideRolls && dpr.dice.hasDie) {
-			return ` ||${dicePartRollToString(dpr)}||${dpr.dice.count}d${dpr.dice.sides} `;
+			return ` ||${dicePartRollToString(dpr)}||${rollemSpacer}${dpr.dice.count}d${dpr.dice.sides} `;
 		}
-		return dpr.dice.hasDie ? ` ${dicePartRollToString(dpr)}${dpr.dice.count}d${dpr.dice.sides} ` : ``;
+		return dpr.dice.hasDie ? ` ${dicePartRollToString(dpr)}${rollemSpacer}${dpr.dice.count}d${dpr.dice.sides} ` : ``;
 	});
 }
 
