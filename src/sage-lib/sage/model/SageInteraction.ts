@@ -18,7 +18,7 @@ interface SageInteractionCore extends HasSageCacheCore {
 	type: InteractionType;
 }
 
-export default class SageInteraction<T extends DInteraction = Discord.MessageComponentInteraction>
+export default class SageInteraction<T extends DInteraction = any>
 	extends HasSageCache<SageInteractionCore, SageInteraction<any>>
 	implements IHasGame, IHasChannels {
 

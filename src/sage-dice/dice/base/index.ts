@@ -3,7 +3,7 @@
 import type { Optional, OrNull, OrUndefined, TParsers, TSortResult, TToken } from "../../../sage-utils";
 import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { cleanWhitespace, Tokenizer } from "../../../sage-utils/utils/StringUtils";
+import { cleanWhitespace, dequote, Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import { generate } from "../../../sage-utils/utils/UuidUtils";
 import type {
 	IDiceBase,
@@ -600,12 +600,12 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		if (rollem) {
 			const stripped = xxs.replace(/<\/?(b|em|i|strong)>/ig, "");
 			const output = desc
-				? `'${desc}', \` ${stripped} \` ${UNICODE_LEFT_ARROW} ${description.replace(desc, "")}`
+				? `'${dequote(desc)}', \` ${stripped} \` ${UNICODE_LEFT_ARROW} ${description.replace(desc, "")}`
 				: `\` ${stripped} \` ${UNICODE_LEFT_ARROW} ${description}`;
 			return cleanWhitespace(output);
 		}else {
 			const output = desc
-				? `${xxs} \`${desc}\` ${UNICODE_LEFT_ARROW} ${description.replace(desc, "")}`
+				? `${xxs} \`${dequote(desc)}\` ${UNICODE_LEFT_ARROW} ${description.replace(desc, "")}`
 				: `${xxs} ${UNICODE_LEFT_ARROW} ${description}`;
 			return cleanWhitespace(output);
 		}

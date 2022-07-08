@@ -480,7 +480,7 @@ async function mapTokenHandler(sageInteraction: SageInteraction): Promise<void> 
 //#endregion
 
 /** reads the interaction's channel's messages to find the map */
-async function findGameMap(sageInteraction: SageInteraction): Promise<GameMap | null> {
+async function findGameMap(sageInteraction: SageInteraction<Discord.ButtonInteraction>): Promise<GameMap | null> {
 	const mapValue = sageInteraction.getString("map", true);
 	if (DiscordId.isValidId(mapValue)) {
 		return GameMap.forUser(mapValue, sageInteraction.user.id);
