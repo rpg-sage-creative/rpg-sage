@@ -531,8 +531,41 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		return this.getUser(userDid)?.type === GameUserType.Player;
 	}
 
-	public hasUser(userDid: Optional<Discord.Snowflake>): boolean {
-		return this.getUser(userDid) !== undefined;
+	/** Returns true if the game has the given User. */
+	public async hasUser(userDid: Optional<Discord.Snowflake>): Promise<boolean>;
+	/** Returns true if the game has the given User for the given RoleType. */
+	public async hasUser(userDid: Optional<Discord.Snowflake>, roleType: GameRoleType): Promise<boolean>;
+	public async hasUser(userDid: Optional<Discord.Snowflake>, roleType?: GameRoleType): Promise<boolean> {
+		if (!userDid) {
+			return false;
+		}
+		if (roleType === undefined) {
+			if (this.getUser(userDid) !== undefined) {
+				return true;
+			}
+			for (const role of this.roles) {
+				const bool = await hasRole(this.sageCache, userDid, role.did);
+				if (bool) {
+					return true;
+				}
+			}
+			return false;
+		}
+		const userType = GameUserType[GameRoleType[roleType] as keyof typeof GameUserType];
+		if (userType !== undefined && this.getUser(userDid)?.type === userType) {
+			return true;
+		}
+		const roleDid = this.getRole(roleType)?.did;
+		if (roleDid) {
+			return hasRole(this.sageCache, userDid, roleDid);
+		}
+		return false;
+
+		async function hasRole(sageCache: SageCache, _userDid: Discord.Snowflake, _roleDid: Discord.Snowflake): Promise<boolean> {
+			const guildMember = await sageCache.discord.fetchGuildMember(_userDid);
+			const roleDids = Array.from(guildMember?.roles.cache.values() ?? []).map(role => role.id);
+			return roleDids.includes(_roleDid);
+		}
 	}
 
 	// #endregion

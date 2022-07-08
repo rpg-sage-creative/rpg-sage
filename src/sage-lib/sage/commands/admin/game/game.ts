@@ -1,5 +1,5 @@
-import utils, { Optional } from "../../../../../sage-utils";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../../../sage-dice";
+import utils, { Optional } from "../../../../../sage-utils";
 import { DiscordId } from "../../../../discord";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import Game, { GameRoleType } from "../../../model/Game";
@@ -43,16 +43,16 @@ async function myGameList(sageMessage: SageMessage): Promise<void> {
 	const allGames = await sageMessage.caches.games.getAll();
 
 	let gameCount = 0;
-	const serverGameMap = allGames.reduce((map, game) => {
-		if (!game.isArchived && game.hasUser(myDid)) {
-			if (!map.has(game.server)) {
-				map.set(game.server, []);
+	const serverGameMap = new Map<Server, Game[]>();
+	for (const game of allGames) {
+		if (!game.isArchived && (await game.hasUser(myDid))) {
+			if (!serverGameMap.has(game.server)) {
+				serverGameMap.set(game.server, []);
 			}
-			map.get(game.server)!.push(game);
+			serverGameMap.get(game.server)!.push(game);
 			gameCount++;
 		}
-		return map;
-	}, new Map<Server, Game[]>());
+	}
 
 	const renderableContent = createAdminRenderableContent(sageMessage.bot);
 	renderableContent.setTitle(`<b>my-games</b>`);

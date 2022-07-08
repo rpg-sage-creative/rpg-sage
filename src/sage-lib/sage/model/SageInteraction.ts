@@ -8,6 +8,7 @@ import { resolveToEmbeds } from "../../discord/embeds";
 import { send } from "../../discord/messages";
 import { DicePostType } from "../commands/dice";
 import type { IChannel } from "../repo/base/IdRepository";
+import { GameRoleType } from "./Game";
 import type GameCharacter from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";
 import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
@@ -16,6 +17,8 @@ import SageCache from "./SageCache";
 interface SageInteractionCore extends HasSageCacheCore {
 	interaction: DInteraction;
 	type: InteractionType;
+	isGameMaster?: boolean;
+	isPlayer?: boolean;
 }
 
 export default class SageInteraction<T extends DInteraction = any>
@@ -246,19 +249,14 @@ export default class SageInteraction<T extends DInteraction = any>
 		return this.cache.get("gameType", () => this.game?.gameType ?? this.serverChannel?.defaultGameType ?? this.server?.defaultGameType ?? GameType.None);
 	}
 
-	/** Is there a game and is the author a GameMaster */
-	public get isGameMaster(): boolean {
-		return this.cache.get("isGameMaster", () => (this.user.id && this.game?.hasGameMaster(this.user.id)) === true);
-	}
+	public get isGameMaster() { return this.core.isGameMaster === true; }
+	public set isGameMaster(bool: boolean) { this.core.isGameMaster = bool === true; }
+	public get isPlayer() { return this.core.isPlayer === true; }
+	public set isPlayer(bool: boolean) { this.core.isPlayer = bool === true; }
 
-	/** Is there a game and is the author a Player */
-	public get isPlayer(): boolean {
-		return this.cache.get("isPlayer", () => (this.user.id && this.game?.hasPlayer(this.user.id)) === true);
-	}
-
-	/** Get the PlayerCharacter if there a game and the author is a Player */
+	/** Get the PlayerCharacter if there a game and the actor has a PlayerCharacter OR the actor has a PlayerCharacter set to use this channel with AutoChannel */
 	public get playerCharacter(): GameCharacter | undefined {
-		return this.cache.get("playerCharacter", () => this.user.id && this.isPlayer ? this.game?.playerCharacters.findByUser(this.user.id) ?? undefined : undefined);
+		return this.cache.get("playerCharacter", () => this.game?.playerCharacters.findByUser(this.sageUser.did) ?? this.sageUser.playerCharacters.find(pc => pc.hasAutoChannel(this.channel?.did!)) ?? undefined);
 	}
 
 	public get critMethodType(): CritMethodType {
@@ -304,11 +302,14 @@ export default class SageInteraction<T extends DInteraction = any>
 	public static async fromInteraction<T extends DInteraction>(interaction: T): Promise<SageInteraction<T>> {
 		const caches = await SageCache.fromInteraction(interaction);
 		const type = InteractionType.Unknown;
-		return new SageInteraction({
+		const sageInteraction = new SageInteraction({
 			caches,
 			interaction,
 			type
 		});
+		sageInteraction.isGameMaster = await sageInteraction.game?.hasUser(interaction.user.id, GameRoleType.GameMaster) ?? false;
+		sageInteraction.isPlayer = await sageInteraction.game?.hasUser(interaction.user.id, GameRoleType.Player) ?? false;
+		return sageInteraction;
 	}
 
 }
