@@ -1,5 +1,5 @@
-import utils, { Optional } from "../../../../../sage-utils";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../../../sage-dice";
+import utils, { Optional } from "../../../../../sage-utils";
 import { DiscordId } from "../../../../discord";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import Game, { GameRoleType } from "../../../model/Game";
@@ -43,16 +43,16 @@ async function myGameList(sageMessage: SageMessage): Promise<void> {
 	const allGames = await sageMessage.caches.games.getAll();
 
 	let gameCount = 0;
-	const serverGameMap = allGames.reduce((map, game) => {
-		if (!game.isArchived && game.hasUser(myDid)) {
-			if (!map.has(game.server)) {
-				map.set(game.server, []);
+	const serverGameMap = new Map<Server, Game[]>();
+	for (const game of allGames) {
+		if (!game.isArchived && (await game.hasUser(myDid))) {
+			if (!serverGameMap.has(game.server)) {
+				serverGameMap.set(game.server, []);
 			}
-			map.get(game.server)!.push(game);
+			serverGameMap.get(game.server)!.push(game);
 			gameCount++;
 		}
-		return map;
-	}, new Map<Server, Game[]>());
+	}
 
 	const renderableContent = createAdminRenderableContent(sageMessage.bot);
 	renderableContent.setTitle(`<b>my-games</b>`);
@@ -217,6 +217,10 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false): Promise
 
 	const guildChannels = (await game.guildChannels()).map(guildChannel => guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`);
 	renderableContent.append(`<b>Channels</b> ${guildChannels.length}; ${guildChannels.join(", ")}`);
+	const orphanChannels = (await game.orphanChannels()).map(channel => channel ? `#${channel.did}` : `<i>unavailable</i>`);
+	if (orphanChannels.length) {
+		renderableContent.append(`<b>Orphan Channels</b> ${orphanChannels.length}; ${orphanChannels.join(", ")}`);
+	}
 
 	const guildRoles = await game.guildRoles();
 	const roles = guildRoles.map(guildRole => guildRole ? `@${guildRole.name} (${GameRoleType[game.roles.find(role => role.did === guildRole.id)?.type!]})` : `<i>unavailable</i>`);
@@ -358,6 +362,21 @@ async function gameArchive(sageMessage: SageMessage): Promise<void> {
 	return Promise.resolve();
 }
 
+async function gameToggleDicePing(sageMessage: SageMessage): Promise<void> {
+	const gameChannel = sageMessage.gameChannel;
+	if (gameChannel?.admin && (sageMessage.isGameMaster || sageMessage.isPlayer)) {
+		const message = sageMessage.isGameMaster
+			? "Do you want to get a ping when dice are rolled in this game?"
+			: "Do you want to get a ping when you roll dice in this game?";
+		const yesNo = await discordPromptYesNo(sageMessage, message);
+		if (yesNo === true || yesNo === false) {
+			const updated = await sageMessage.game?.updateDicePing(sageMessage.authorDid, yesNo);
+			sageMessage.reactSuccessOrFailure(updated === true);
+		}
+	}
+	return Promise.resolve();
+}
+
 export default function register(): void {
 	registerAdminCommand(gameCount, "game-count");
 	registerAdminCommandHelp("Admin", "Game", "game count");
@@ -377,12 +396,15 @@ export default function register(): void {
 	// registerAdminCommandHelp("Admin", "Game", "game create {Game Name} {#OptionalChannelReferences}");
 	// registerAdminCommandHelp("Admin", "Game", "game create {Game Name} {@GameMasterReference} {@OptionalPlayerReferences}");
 	registerAdminCommandHelp("Admin", "Game", `game create name="{Game Name}"`);
-	registerAdminCommandHelp("Admin", "Game", `game create name="{Game Name}" game={PF2E|NONE}`);
+	registerAdminCommandHelp("Admin", "Game", `game create name="{Game Name}" game={DND5E|E20|PF2E|Quest|NONE}`);
 
 	registerAdminCommand(gameUpdate, "game-update", "game-set");
 	registerAdminCommandHelp("Admin", "Game", `game update name="{New Name}"`);
-	registerAdminCommandHelp("Admin", "Game", "game update game={PF2E|NONE}");
-	registerAdminCommandHelp("Admin", "Game", "game update diceoutput={XXS|XS|S|M|L|XL|XXL|UNSET}");
+	registerAdminCommandHelp("Admin", "Game", "game update game={DND5E|E20|PF2E|Quest|NONE}");
+	registerAdminCommandHelp("Admin", "Game", "game update diceoutput={XXS|XS|S|M|L|XL|XXL|ROLLEM|UNSET}");
+
+	registerAdminCommand(gameToggleDicePing, "game-toggle-dice-ping");
+	registerAdminCommandHelp("Admin", "Game", `game toggle dice ping`);
 
 	registerAdminCommand(gameArchive, "game-archive");
 	registerAdminCommandHelp("Admin", "Game", "game archive");

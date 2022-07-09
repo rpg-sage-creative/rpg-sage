@@ -603,7 +603,7 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 	}
 
 	const userDid = sageReaction.user.id;
-	if (game && !game.hasUser(userDid)) {
+	if (game && !(await game.hasUser(userDid))) {
 		return null;
 	}
 
@@ -646,13 +646,13 @@ async function isPin(sageReaction: SageReaction): Promise<TCommand | null> {
 	}
 
 	const game = sageReaction.caches.game;
-	if (!game?.hasUser(sageReaction.user.id)) {
+	if (!(await game?.hasUser(sageReaction.user.id))) {
 		return null;
 	}
 
 	const isBotOrWebhook = await isAuthorBotOrWebhook(sageReaction);
 	const messageAuthorDid = message.author?.id;
-	if (!isBotOrWebhook && !game.hasUser(messageAuthorDid)) {
+	if (!isBotOrWebhook && !(await game?.hasUser(messageAuthorDid))) {
 		return null;
 	}
 

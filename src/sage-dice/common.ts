@@ -10,28 +10,31 @@ export type TGameType = "NONE" | "PF" | "PF1" | "PF1E" | "PF2" | "PF2E" | "SF" |
 
 export enum GameType {
 	None = 0,
-	/* Pathfinder 1e */
+	/** Pathfinder 1e */
 	PF1e = 11,
-	/* Pathfinder 2e */
+	/** Pathfinder 2e */
 	PF2e = 12,
-	/* Starfinder */
+	/** Starfinder */
 	SF1e = 21,
-	/* Coyote & Crow */
+	/** Coyote & Crow */
 	CnC = 31,
-	/* Dungeons and Dragons 5e */
+	/** Dungeons and Dragons 5e */
 	DnD5e = 55,
-	/* Quest */
+	/** Essence 20 */
+	E20 = 41,
+	/** Quest */
 	Quest = 71
 }
 
 const GameTypeMap = {
 	"NONE":GameType.None,
-	"5E":GameType.DnD5e, "DND5E":GameType.DnD5e,
 	"PF":GameType.PF1e, "PF1":GameType.PF1e, "PF1E":GameType.PF1e,
 	"PF2":GameType.PF2e, "PF2E":GameType.PF2e,
 	"SF":GameType.SF1e, "SF1":GameType.SF1e, "SF1E":GameType.SF1e,
-	"QUEST":GameType.Quest,
-	"CNC":GameType.CnC
+	"CNC":GameType.CnC,
+	"5E":GameType.DnD5e, "DND5E":GameType.DnD5e,
+	"E20":GameType.E20, "ESS20":GameType.E20, "ESSENCE20":GameType.E20,
+	"QUEST":GameType.Quest
 };
 
 export function parseGameType(gameType: string, defaultGameType?: GameType): GameType | undefined {
@@ -44,7 +47,7 @@ export function parseGameType(gameType: string, defaultGameType?: GameType): Gam
 
 export type TDiceOutputType = keyof typeof DiceOutputType;
 
-export enum DiceOutputType { XXS = -3, XS = -2, S = -1, M = 0, L = 1, XL = 2, XXL = 3 }
+export enum DiceOutputType { XXS = -3, XS = -2, S = -1, M = 0, L = 1, XL = 2, XXL = 3, ROLLEM = 5 }
 
 export function parseDiceOutputType(outputType: string, defaultOutputType?: DiceOutputType): DiceOutputType | undefined {
 	return DiceOutputType[<TDiceOutputType>String(outputType).toUpperCase()] ?? defaultOutputType;
@@ -59,6 +62,7 @@ export enum CritMethodType { Unknown = 0, TimesTwo = 1, RollTwice = 2, AddMax = 
 type TTypedMap<T> = { [key: string]: T; };
 
 const CritMethodTypeMap: TTypedMap<TTypedMap<CritMethodType>> = {
+	"DND5E":{ "TIMESTWO":CritMethodType.TimesTwo, "ROLLTWICE":CritMethodType.RollTwice, "ADDMAX":CritMethodType.AddMax },
 	"PF2E":{ "TIMESTWO":CritMethodType.TimesTwo, "ROLLTWICE":CritMethodType.RollTwice, "ADDMAX":CritMethodType.AddMax }
 };
 
@@ -71,7 +75,7 @@ export function parseCritMethodType(gameType: GameType | undefined, critMethod: 
 }
 
 export function getCritMethodRegex(gameType: GameType | undefined): RegExp | null {
-	if (gameType === GameType.PF2e) {
+	if ([GameType.DnD5e, GameType.PF2e].includes(gameType!)) {
 		return /^(timestwo|rolltwice|addmax)?/i;
 	}
 	return null;

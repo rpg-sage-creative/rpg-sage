@@ -1,7 +1,6 @@
 //#region imports
 
 import type { OrNull, TParsers, TToken } from "../../../sage-utils";
-import utils from "../../../sage-utils";
 import type {
 	TDiceLiteral,
 	TTestData
@@ -24,6 +23,9 @@ import {
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
 	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll
 } from "../base";
+import { generate } from "../../../sage-utils/utils/UuidUtils";
+import { toJSON } from "../../../sage-utils/utils/ClassUtils";
+import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 
 //#endregion
 
@@ -130,7 +132,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.CnC,
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 
 			count: 1,
 			description: cleanDescription(description),
@@ -166,7 +168,7 @@ export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 		return new DicePartRoll({
 			objectType: "DicePartRoll",
 			gameType: GameType.CnC,
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 			dice: dicePart.toJSON(),
 			rolls: rollDice(dicePart.count, dicePart.sides)
 		});
@@ -192,8 +194,8 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.CnC,
-			id: utils.UuidUtils.generate(),
-			diceParts: diceParts.map<DicePartCore>(utils.ClassUtils.toJSON)
+			id: generate(),
+			diceParts: diceParts.map<DicePartCore>(toJSON)
 		});
 	}
 	public static fromCore(core: DiceCore): Dice {
@@ -230,7 +232,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		return new DiceRoll({
 			objectType: "DiceRoll",
 			gameType: GameType.CnC,
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
 		});
@@ -256,9 +258,9 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.CnC,
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 			critMethodType: undefined,
-			dice: _dice.map<DiceCore>(utils.ClassUtils.toJSON),
+			dice: _dice.map<DiceCore>(toJSON),
 			diceOutputType: diceOutputType,
 			diceSecretMethodType: DiceSecretMethodType.Ignore
 		});
@@ -270,7 +272,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return DiceGroup.create([Dice.create([DicePart.fromTokens(tokens)])], diceOutputType);
 	}
 	public static parse(diceString: string, diceOutputType?: DiceOutputType): DiceGroup {
-		const tokens = utils.StringUtils.Tokenizer.tokenize(diceString, getParsers(), "desc");
+		const tokens = Tokenizer.tokenize(diceString, getParsers(), "desc");
 		return DiceGroup.fromTokens(tokens, diceOutputType);
 	}
 	public static Part = <typeof baseDice>Dice;
@@ -293,7 +295,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		return new DiceGroupRoll({
 			objectType: "DiceGroupRoll",
 			gameType: GameType.CnC,
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 			diceGroup: diceGroup.toJSON(),
 			rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
 		});

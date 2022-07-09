@@ -9,6 +9,7 @@ import { DiscordId, MessageType } from "../../discord";
 import { createMessageEmbed } from "../../discord/embeds";
 import { registerMessageListener } from "../../discord/handlers";
 import { authorToMention, sendTo } from "../../discord/messages";
+import { GameUserType } from "../model/Game";
 import { ColorType } from "../model/HasColorsCore";
 import type NamedCollection from "../model/NamedCollection";
 import SageInteraction from "../model/SageInteraction";
@@ -87,7 +88,7 @@ function parseDiscordMacro(sageMessage: SageMessage, macroString: string): Disco
 	let macroAndOutput: TMacroAndOutput | null;
 	while (macroAndOutput = macroToDice(sageMessage.sageUser.macros, debrace(diceString))) {
 		if (macroNames.includes(macroAndOutput.macro.name)) {
-			console.error(`MACRO RECURSION: User(${sageMessage.sageUser.id}) ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}`)
+			console.error(`MACRO RECURSION: User(${sageMessage.sageUser.id}) ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}`);
 			return parseDiscordDice(sageMessage, `[1d1 MACRO RECURSION: ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}]`);
 		}
 		macroNames.push(macroAndOutput.macro.name);
@@ -153,6 +154,10 @@ async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommand
 	if (!sageMessage.allowDice || sageMessage.slicedContent.match(/^\!*\s*((add|set)[ \-]?macro|macro[ \-]?(add|set))/i)) {
 		return null;
 	}
+	if (sageMessage.game && !(sageMessage.isGameMaster || sageMessage.isPlayer)) {
+		return null;
+	}
+
 	const matches = parseDiceMatches(sageMessage, sageMessage.slicedContent);
 	if (matches.length > 0) {
 		const output = matches.map(m => m.output).flat();
@@ -363,27 +368,43 @@ function createEmbedOrNull(sageMessage: TInteraction, embedContent?: string): Di
 //#region Mentions
 
 function createGmMention(sageMessage: TInteraction): string {
-	return DiscordId.toRoleMention(sageMessage.game?.gmRoleDid)
-		?? DiscordId.toUserMention(sageMessage.game?.gameMasters[0])
-		?? ``;
+	const game = sageMessage.game;
+	if (!game) {
+		return "";
+	}
+
+	const gmRole = game.gmRole;
+	if (gmRole) {
+		return gmRole.dicePing ? DiscordId.toRoleMention(gmRole.did) ?? "" : "";
+	}
+
+	const gameUser = game.users.find(user => user.type === GameUserType.GameMaster && user.dicePing !== false);
+	return DiscordId.toUserMention(gameUser?.did) ?? "";
 }
 
 async function createAuthorMention(sageMessage: TInteraction, isSecretMention = false): Promise<string | null> {
 	const userDid = sageMessage instanceof SageMessage ? sageMessage.authorDid : sageMessage.user.id;
-	let authorReference = DiscordId.toUserMention(userDid);
-	if (isSecretMention) {
+	const gameUser = sageMessage.game?.getUser(userDid);
+	if (!gameUser) {
+		return DiscordId.toUserMention(userDid);
+	}
+
+	let authorReference = DiscordId.toUserMention(gameUser.did);
+	if (isSecretMention || gameUser.dicePing === false) {
 		const user = await sageMessage.discord.fetchUser(userDid);
 		authorReference = authorToMention(user);
 	}
 	if (sageMessage.playerCharacter) {
-		return `${authorReference} (${sageMessage.playerCharacter.name})`;
+		authorReference = authorReference
+			? `${authorReference} (${sageMessage.playerCharacter.name})`
+			: sageMessage.playerCharacter.name;
 	}
 	return authorReference;
 }
 
 async function createMentionLine(sageMessage: TInteraction, isSecretMention = false/*, hasSecret:boolean, isTargetChannel: boolean, isGmChannel: boolean, isGmUser: boolean*/): Promise<string | null> {
 	const gmMention = createGmMention(sageMessage);
-	if (gmMention && sageMessage.isGameMaster) {
+	if (sageMessage.isGameMaster) {
 		return gmMention;
 	}
 	const authorMention = await createAuthorMention(sageMessage, isSecretMention);
@@ -436,57 +457,140 @@ function reduceToLongestMacroName(longestMacro: TMacro | null, currentMacro: TMa
 	return longestMacro;
 }
 
-function findMacro(userMacros: NamedCollection<TMacro>, input: string): TMacro | null {
-	const match = input.match(/^(?:\d+#)?(.*?)$/)!;
-	const cleanMacro = match[1].trim().toLowerCase();
-	const matchingMacros = userMacros.filter(macro => cleanMacro.startsWith(macro.name.toLowerCase()));
-	return matchingMacros.reduce(reduceToLongestMacroName, null);
+type TPrefix = {
+	count: number;
+	keepRolls?: string;
+	/** "kh" | "kl" */
+	keep?: string;
+	keepCount?: string;
+	/** "-" | "+"; */
+	fortune?: string;
+};
+function parsePrefix(prefix: string): TPrefix {
+	const [_, count, keep, fortune] = prefix.match(/^(?:(?:(\d+)#)|(?:(\d*(?:(?:kh)|(?:kl))\d*)#)|([+-]))/i) ?? ["1"];
+	if (keep) {
+		const [keepRolls, keepCount] = keep.split(/\w+/);
+		return { count:1, keepRolls, keep, keepCount };
+	}else if (fortune) {
+		return {count:1, fortune };
+	}
+	return { count:+count };
 }
 
-function parseMacroArgs(argString: string): string[] {
-	return Tokenizer
-		.tokenize(argString.trim(), { spaces: /\s+/, quotes: /"[^"]*"/ })
-		.filter(token => token.type !== "spaces")
+function findPrefixAndMacro(userMacros: NamedCollection<TMacro>, input: string): [string, TMacro | null] {
+	const [_, prefix, macro] = input.match(/^((?:\d+#)|(?:\d*(?:kh|kl)\d*#)|(?:[\+\-]))?(.*?)$/i) ?? [];
+	const cleanPrefix = (prefix ?? "").trim().toLowerCase();
+	const cleanMacro = (macro ?? "").trim().toLowerCase();
+	const matchingMacros = userMacros.filter(userMacro => cleanMacro.startsWith(userMacro.name.toLowerCase()));
+	return [cleanPrefix, matchingMacros.reduce(reduceToLongestMacroName, null)];
+}
+
+type TNamedArg = { name:string; value:string; };
+function parseNamedArg(input: string): TNamedArg {
+	const index = input.indexOf("=");
+	const name = input.slice(0, index).toLowerCase();
+	const value = dequote(input.slice(index + 1)).trim();
+	return { name, value };
+}
+
+type TArgs = { indexed:string[]; named:TNamedArg[] };
+function parseMacroArgs(argString: string): TArgs {
+	const parsers = { spaces: /\s+/, named: /(\w+)=(("[^"]*")|\S+)/, quotes: /"[^"]*"/ };
+	const tokens = Tokenizer.tokenize(argString.trim(), parsers);
+	const named = tokens
+		.filter(token => token.type === "named")
+		.map(token => parseNamedArg(token.token));
+	const indexed = tokens
+		.filter(token => !["spaces", "named"].includes(token.type))
 		.map(token => dequote(token.token).trim());
+	return { indexed, named };
 }
 
-type TMacroAndArgs = { macro?: TMacro, args: string[] };
+type TMacroAndArgs = TArgs & { macro?: TMacro; prefix: TPrefix; };
 function parseMacroAndArgs(userMacros: NamedCollection<TMacro>, input: string): TMacroAndArgs {
-	const userMacro = findMacro(userMacros, input);
+	const [prefix, userMacro] = findPrefixAndMacro(userMacros, input);
+	const macroArgs = userMacro ? parseMacroArgs(input.slice(prefix.length + userMacro.name.length)) : null;
 	return {
+		indexed: macroArgs?.indexed ?? [],
 		macro: userMacro ?? undefined,
-		args: userMacro ? parseMacroArgs(input.slice(userMacro.name.length)) : []
+		named: macroArgs?.named ?? [],
+		prefix: parsePrefix(prefix)
 	};
 }
 
-function nonEmptyStringOrDefaultValue(arg: string, def: string): string {
+function nonEmptyStringOrDefaultValue(arg: Optional<string>, def: Optional<string>): string {
 	const argOrEmptyString = arg ?? "";
 	const defOrEmptyString = def ?? "";
 	return argOrEmptyString !== "" ? argOrEmptyString : defOrEmptyString;
 }
 
-type TMacroAndOutput = { macro: TMacro; output: string; }
+function namedArgValueOrDefaultValue(arg: Optional<TNamedArg>, def: Optional<string>): string {
+	if (arg) {
+		const value = nonEmptyStringOrDefaultValue(arg.value, def);
+		if (arg.name.match(/^(ac|dc|vs)$/i) && value) {
+			return arg.name + value;
+		}
+		return value;
+	}
+	return def ?? "";
+}
+
+function splitKeyValueFromBraces(input: string): [string, string] {
+	const debraced = input.slice(1, -1);
+	const sliceIndex = debraced.indexOf(":");
+	if (sliceIndex < 0) {
+		return [debraced, ""];
+	}
+	const key = debraced.slice(0, sliceIndex);
+	const value = debraced.slice(sliceIndex + 1);
+	return [key, value];
+}
+
+type TMacroAndOutput = { macro: TMacro; output: string; };
 function macroToDice(userMacros: NamedCollection<TMacro>, input: string): TMacroAndOutput | null {
-	const { macro, args } = parseMacroAndArgs(userMacros, input);
+	const { prefix, macro, indexed, named } = parseMacroAndArgs(userMacros, input);
 	if (!macro) {
 		return null;
 	}
 
 	let maxIndex = -1;
-	const dice = macro.dice
+	let dice = macro.dice
+		// indexed args
 		.replace(/\{(\d+)(\:([-+]?\d+))?\}/g, match => {
-			const [argIndex, defaultValue] = match.slice(1, -1).split(":");
+			const [argIndex, defaultValue] = splitKeyValueFromBraces(match);
 			maxIndex = Math.max(maxIndex, +argIndex);
-			return nonEmptyStringOrDefaultValue(args[+argIndex], defaultValue);
+			return nonEmptyStringOrDefaultValue(indexed[+argIndex], defaultValue);
 		})
-		.replace(/\{...\}/g, args.slice(maxIndex + 1).join(" "));
+		// named args
+		.replace(/\{(\w+)(\:[^\}]+)?\}/ig, match => {
+			const [argName, defaultValue] = splitKeyValueFromBraces(match);
+			const argNameLower = argName.toLowerCase();
+			const namedArg = named.find(arg => arg.name.toLowerCase() === argNameLower);
+			return namedArgValueOrDefaultValue(namedArg, defaultValue);
+		})
+		// remaining args
+		.replace(/\{\.\.\.\}/g, indexed.slice(maxIndex + 1).join(" "))
+		// fix adjacent plus/minus
+		.replace(/\-\s*\+/g, "-")
+		.replace(/\+\s*\-/g, "-")
+		.replace(/\+\s*\+/g, "+")
+		;
+
+	if (prefix.keep) {
+		dice = dice.replace("1d20", `${prefix.keepRolls ?? 1}d20${prefix.keep}${prefix.keepCount ?? 1}`);
+	}else if (prefix.fortune) {
+		dice = dice.replace("1d20", `${prefix.fortune}2d20`);
+	}
 
 	const output = [dice];
-	const count = +(input.match(/^(\d+)#/) ?? [])[1] || 1;
-	while (output.length < count) {
+	while (output.length < prefix.count) {
 		output.push(dice);
 	}
-	return { macro: macro, output: output.join("") };
+
+	return {
+		macro: macro,
+		output: output.join("")
+	};
 }
 
 //#endregion
