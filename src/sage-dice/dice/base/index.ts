@@ -598,10 +598,13 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		const desc = this.dice.diceParts.find(dp => dp.hasDescription)?.description;
 		const description = this.rolls.map((roll, index) => renderer(roll, index, hideRolls, rollem)).join(" ");
 		if (rollem) {
-			const stripped = xxs.replace(/<\/?(b|em|i|strong)>/ig, "");
+			const stripped = xxs.replace(/<\/?(b|em|i|strong)>/ig, "").trim();
+			const [_, emoji, total] = stripped.match(/^(?:(.*?)\s+)(\d+)$/) ?? ["","",stripped];
+			const escapedTotal = `\` ${total} \``;
+
 			const output = desc
-				? `'${dequote(desc)}', \` ${stripped} \` ${UNICODE_LEFT_ARROW} ${description.replace(desc, "")}`
-				: `\` ${stripped} \` ${UNICODE_LEFT_ARROW} ${description}`;
+				? `${emoji} '${dequote(desc)}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${description.replace(desc, "")}`
+				: `${emoji} ${escapedTotal} ${UNICODE_LEFT_ARROW} ${description}`;
 			return cleanWhitespace(output);
 		}else {
 			const output = desc
@@ -806,11 +809,8 @@ export class DiceGroupRoll<T extends DiceGroupRollCore, U extends TDiceGroup, V 
 		return this._rolls;
 	}
 
-	public toString(outputType?: DiceOutputType, inline = false): string {
-		let _outputType = this.dice.diceOutputType ?? outputType ?? DiceOutputType.M;
-		if (inline) {
-			_outputType = <DiceOutputType>Math.min(_outputType, DiceOutputType.M);
-		}
+	public toString(outputType?: DiceOutputType): string {
+		const _outputType = this.dice.diceOutputType ?? outputType ?? DiceOutputType.M;
 		const joiner = _outputType < DiceOutputType.L ? "; " : "\n";
 		const output: string[] = [];
 		for (const roll of this.rolls) {

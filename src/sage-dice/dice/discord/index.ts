@@ -45,7 +45,7 @@ import { HasCore, toJSON } from "../../../sage-utils/utils/ClassUtils";
 
 const DICE_REGEX = /\[[^\]]*d\d+[^\]]*\]/ig;
 const GAME_CHECK = /^(dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest)?/i;
-const DICE_OUTPUT_CHECK = /^(xxs|xs|s|m|xxl|xl|l)?/i;
+const DICE_OUTPUT_CHECK = /^(xxs|xs|s|m|xxl|xl|l|rollem)?/i;
 const COUNT_CHECK = /^(\d+)(map\-\d+)?\#/i;
 
 function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {
@@ -68,7 +68,7 @@ function parseDice(diceString: string, gameType?: GameType, diceOutputType?: Dic
 			return pf2eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
 		case GameType.Quest:
 			return questDiceGroup.parse(diceString, diceOutputType);
-			default:
+		default:
 			return baseDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType);
 	}
 }
@@ -355,7 +355,7 @@ export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 				: roll.toString(outputType);
 			return {
 				hasSecret: roll.hasSecret,
-				inlineOutput: roll.toString(outputType, true),
+				inlineOutput: roll.toString(outputType),
 				input: roll.dice.toString(),
 				output: output
 			};
