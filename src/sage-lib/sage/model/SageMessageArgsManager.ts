@@ -74,7 +74,7 @@ function removeAndReturnCritMethodType(args: string[]): Optional<CritMethodType>
 
 /** /^(diceoutput)=(XXS|XS|S|M|XXL|XL|L|UNSET)?$/i; returns null to unset */
 function removeAndReturnDiceOutputType(args: string[]): Optional<DiceOutputType> {
-	const regex = /^(diceoutput)=(XXS|XS|S|M|XXL|XL|L|UNSET)?$/i;
+	const regex = /^(diceoutput)=(XXS|XS|S|M|XXL|XL|L|ROLLEM|UNSET)?$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match) {
@@ -133,7 +133,7 @@ function removeAndReturnDiceSecretMethodType(args: string[]): Optional<DiceSecre
 
 /** /^(game)=(PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE)?$/i */
 function removeAndReturnGameType(args: string[]): GameType | undefined {
-	const regex = /^(game)=(PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE)?$/i;
+	const regex = /^(game)=(ESSENCE20|ESS20|E20|PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE)?$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match) {

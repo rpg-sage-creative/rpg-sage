@@ -217,7 +217,13 @@ async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterM
 		renderableContent.append(`<blockquote>${characters.length} ${entityNamePlural} Found!</blockquote>`);
 		await sageMessage.send(renderableContent);
 
+		let nameIndex = 0;
 		for (const character of characters) {
+			if (!character.name) {
+				character.name = nameIndex ? `Unnamed Character ${nameIndex}` : `Unnamed Character`;
+				nameIndex++;
+				await character.save();
+			}
 			await sendGameCharacter(sageMessage, character);
 		}
 	} else {
@@ -305,12 +311,16 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 	if (!core.name) {
 		core.name = urlToName(core.tokenUrl) ?? urlToName(core.avatarUrl)!;
 	}
+	if (!core.name) {
+		await sageMessage.send("Cannot create a character without a name!");
+		return sageMessage.reactFailure();
+	}
 
 	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
 
 	let characterManager = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
-		const character = characterManager.findByUserAndName(userDid, names.charName!)!;
+		const character = characterManager.findByUserAndName(userDid, names.charName) ?? characterManager.findByUser(userDid!)!;
 		core.userDid = character.userDid;
 		characterManager = character.companions;
 	}
