@@ -1,6 +1,10 @@
 import * as fs from "fs";
 import { formattedStringify } from "../JsonUtils";
 
+export function fileExistsSync(path: string): boolean {
+	return fs.existsSync(path);
+}
+
 export function listFiles(path: string): Promise<string[]> {
 	return new Promise((resolve, reject) => {
 		fs.readdir(path, (error: NodeJS.ErrnoException | null, files: string[]) => {
@@ -137,7 +141,10 @@ export function readJsonFileSync<T>(path: string): T | null {
 function toFilePath(filePathAndName: string): string {
 	return filePathAndName?.split(/\//).slice(0, -1).join("/");
 }
-function contentToFileOutput<T>(content: T, formatted = false): string {
+function contentToFileOutput<T>(content: T, formatted = false): string | Buffer {
+	if (Buffer.isBuffer(content)) {
+		return content;
+	}
 	if (typeof(content) === "string") {
 		return content;
 	}
