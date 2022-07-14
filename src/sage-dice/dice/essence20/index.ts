@@ -245,16 +245,17 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 			}
 		}
 
-		const sides = skillDicePart.sides;
-		const diceSides = [2,4,6,8,10,12];
-		if (skillDicePart.hasSpecialiation && sides > 2 && diceSides.includes(sides)) {
-			for (let index = diceSides.indexOf(sides); index--;) {
+		const step = `${skillDicePart.count}d${skillDicePart.sides}`;
+		const ladder = ["1d2","1d4","1d6","1d8","1d10","1d12","2d8","3d6"];
+		if (skillDicePart.hasSpecialiation && ladder.indexOf(step) > 0) {
+			for (let index = ladder.indexOf(step); index--;) {
+				const [count, sides] = ladder[index].split("d");
 				dice.push(Dice.create([new DicePart({
 					objectType: "DicePart",
 					gameType: GameType.E20,
 					id: generate(),
-					count: 1,
-					sides: diceSides[index],
+					count: +count,
+					sides: +sides,
 					description: "",
 					modifier: 0,
 					noSort: false
