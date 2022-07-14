@@ -17,7 +17,7 @@ export function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: st
 	utils.ConsoleUtils.startHandling(logLevel);
 
 	BotRepo.getByCodeName(botCodeName).then(bot => {
-		setBotMeta({ activeBotId:bot.id, dialogWebhookName:SageDialogWebhookName, testBotId:undefined });
+		setBotMeta({ activeBotDid:bot.did, dialogWebhookName:SageDialogWebhookName, testBotDid:undefined });
 
 		/*
 		// configureCommands(bot);

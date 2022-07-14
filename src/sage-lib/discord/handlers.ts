@@ -43,21 +43,21 @@ export async function isAuthorBotOrWebhook(messageOrReaction: SageMessage | Sage
 
 //#endregion
 
-type TBotMeta = { activeBotId?: Discord.Snowflake; testBotId?: Discord.Snowflake; dialogWebhookName?: string; };
+type TBotMeta = { activeBotDid?: Discord.Snowflake; testBotDid?: Discord.Snowflake; dialogWebhookName?: string; };
 const botMeta: TBotMeta = {};
 export function setBotMeta(meta: TBotMeta): void {
-	botMeta.activeBotId = meta.activeBotId;
+	botMeta.activeBotDid = meta.activeBotDid;
 	botMeta.dialogWebhookName = meta.dialogWebhookName;
-	botMeta.testBotId = meta.testBotId;
+	botMeta.testBotDid = meta.testBotDid;
 }
 // export function getActiveBotId(): Discord.Snowflake {
 // 	return botMeta.activeBotId!;
 // }
-function isActiveBot(did?: Discord.Snowflake): boolean {
-	return did === botMeta.activeBotId;
+function isActiveBot(did: Optional<Discord.Snowflake>): boolean {
+	return did && botMeta.activeBotDid ? did === botMeta.activeBotDid : false;
 }
-function isTesterBot(did: Discord.Snowflake): boolean {
-	return did === botMeta.testBotId;
+function isTesterBot(did: Optional<Discord.Snowflake>): boolean {
+	return did && botMeta.testBotDid ? did === botMeta.testBotDid : false;
 }
 
 //#region listeners
@@ -103,8 +103,8 @@ function getListeners<T extends TListenerType>(which: TListenerTypeName): T[] {
 
 type TListenerTypeName = "InteractionListener" | "MessageListener" | "ReactionListener";
 function registerListener<T extends TListenerType>(which: TListenerTypeName, listener: T): void {
-	if (!botMeta.activeBotId) {
-		console.error(`Please call setBotMeta({ activeBodId:"", testBotId?:"", dialogWebhookName:"" })`);
+	if (!botMeta.activeBotDid) {
+		console.error(`Please call setBotMeta({ activeBotDid:"", testBotDid?:"", dialogWebhookName:"" })`);
 	}
 	const listeners: T[] = getListeners(which);
 	if (isNullOrUndefined(listener.priorityIndex)) {

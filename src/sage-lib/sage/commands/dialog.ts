@@ -1,12 +1,10 @@
 import * as Discord from "discord.js";
+import * as _XRegExp from "xregexp";
 import type { TDiceOutput } from "../../../sage-dice";
 import utils, { OrUndefined, TParsers, type Optional } from "../../../sage-utils";
-import * as _XRegExp from "xregexp";
-import { NilSnowflake, TCommand, TCommandAndArgsAndData } from "../../discord";
-import { DiscordId, DiscordKey, MessageType, ReactionType } from "../../discord";
+import { DiscordId, DiscordKey, MessageType, NilSnowflake, ReactionType, TCommand, TCommandAndArgsAndData } from "../../discord";
 import { isAuthorBotOrWebhook, registerMessageListener, registerReactionListener } from "../../discord/handlers";
 import { replace, replaceWebhook, SageDialogWebhookName, send, sendWebhook } from "../../discord/messages";
-import ActiveBot from "../model/ActiveBot";
 import type CharacterManager from "../model/CharacterManager";
 import GameCharacter, { type GameCharacterCore, type TDialogMessage } from "../model/GameCharacter";
 import { ColorType } from "../model/HasColorsCore";
@@ -586,33 +584,62 @@ async function aliasChat(sageMessage: SageMessage, dialogContent: TDialogContent
 
 // #region Delete Dialog
 
-async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
-	sageReaction.discord
-	const messageReaction = sageReaction.messageReaction;
-	const message = messageReaction.message;
-	if (!message.deletable || !ActiveBot.isActiveBot(message.author?.id)) {
-		return null;
+function isValidDeleteAction(sageReaction: SageReaction): boolean {
+	const message = sageReaction.messageReaction.message;
+	// check deletable
+	if (!message.deletable) {
+		return false;
+	}
+	// check we are adding the emoji
+	if (sageReaction.isRemove) {
+		return false;
 	}
 
-	const game = sageReaction.caches.game;
-	const server = sageReaction.caches.server;
-	const bot = sageReaction.caches.bot;
+	// check the appropriate delete emoji
+	const { game, server, bot } = sageReaction;
 	const deleteEmoji = (game ?? server ?? bot).getEmoji(EmojiType.CommandDelete);
-	if (messageReaction.emoji.name !== deleteEmoji) {
+	const emoji = sageReaction.messageReaction.emoji;
+	if (emoji.name !== deleteEmoji) {
+		return false;
+	}
+
+	return true;
+}
+
+async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
+	if (!isValidDeleteAction(sageReaction)) {
 		return null;
 	}
 
 	const userDid = sageReaction.user.id;
-	if (game && !(await game.hasUser(userDid))) {
-		return null;
+	const dialogMessage = await DialogMessageRepository.read(sageReaction.discordKey, () => null);
+	if (dialogMessage?.userDid === userDid) {
+		// This covers PCs inside a game *AND* outside a game
+		return { command: "dialog-delete" };
 	}
 
-	const dialogMessage = await DialogMessageRepository.read(sageReaction.discordKey);
-	const isDelete = dialogMessage && (
-		dialogMessage.userDid === userDid
-		|| (game && game.nonPlayerCharacters.findById(dialogMessage.characterId) && game.hasGameMaster(userDid))
-	);
-	return isDelete ? { command: "dialog-delete" } : null;
+	const { game } = sageReaction;
+	if (game) {
+		const actorIsGameUser = await game?.hasUser(sageReaction.user.id);
+		if (!actorIsGameUser) {
+			return null;
+		}
+
+		const isBotOrWebhook = await isAuthorBotOrWebhook(sageReaction);
+		const authorIsGameUser = await game?.hasUser(sageReaction.message.author?.id);
+		if (!isBotOrWebhook && !authorIsGameUser) {
+			return null;
+		}
+
+		const isGm = game.hasGameMaster(userDid);
+		if (!isGm) {
+			return null;
+		}
+
+		return { command: "dialog-delete" };
+	}
+
+	return null;
 }
 
 async function doDelete(sageReaction: SageReaction): Promise<void> {
@@ -625,19 +652,37 @@ async function doDelete(sageReaction: SageReaction): Promise<void> {
 
 function isValidPinAction(sageReaction: SageReaction): boolean {
 	const message = sageReaction.messageReaction.message;
+	// check pinnable
 	if (!message.pinnable) {
 		return false;
 	}
+	// check it isn't already pinned AND we are adding emoji
 	if (message.pinned && sageReaction.isAdd) {
 		return false;
 	}
+	// check it is already pinned AND we are removing emoji
 	if (!message.pinned && sageReaction.isRemove) {
 		return false;
 	}
+
+	// check the appropriate pin emoji
+	const { game, server, bot } = sageReaction;
+	const pinEmoji = (game ?? server ?? bot).getEmoji(EmojiType.CommandPin);
+	const emoji = sageReaction.messageReaction.emoji;
+	if (emoji.name !== pinEmoji) {
+		return false;
+	}
+
 	return true;
 }
 
 async function isPin(sageReaction: SageReaction): Promise<TCommand | null> {
+	// no Game, no pins!
+	const game = sageReaction.game;
+	if (!game) {
+		return null;
+	}
+
 	const messageReaction = sageReaction.messageReaction;
 	const message = messageReaction.message;
 
@@ -645,26 +690,19 @@ async function isPin(sageReaction: SageReaction): Promise<TCommand | null> {
 		return null;
 	}
 
-	const game = sageReaction.caches.game;
-	if (!(await game?.hasUser(sageReaction.user.id))) {
+	const actorIsGameUser = await game.hasUser(sageReaction.user.id);
+	if (!actorIsGameUser) {
 		return null;
 	}
 
 	const isBotOrWebhook = await isAuthorBotOrWebhook(sageReaction);
-	const messageAuthorDid = message.author?.id;
-	if (!isBotOrWebhook && !(await game?.hasUser(messageAuthorDid))) {
+	const authorIsGameUser = await game.hasUser(message.author?.id);
+	if (!isBotOrWebhook && !authorIsGameUser) {
 		return null;
 	}
 
-	const gamePinEmoji = game && game.getEmoji(EmojiType.CommandPin);
-	const emoji = sageReaction.messageReaction.emoji;
-	if (emoji.name !== gamePinEmoji) {
-		return null;
-	}
-
-	return !sageReaction.isRemove || messageReaction.count === 0
-		? { command: "dialog-pin" }
-		: null;
+	const canDoPin = !sageReaction.isRemove || messageReaction.count === 0;
+	return canDoPin ? { command: "dialog-pin" } : null;
 }
 
 async function doPin(sageReaction: SageReaction): Promise<void> {

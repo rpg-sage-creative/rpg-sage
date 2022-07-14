@@ -1,4 +1,5 @@
-import utils from "../../../sage-utils";
+import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import type { DiscordKey } from "../../discord";
 import type { TDialogMessage } from "../model/GameCharacter";
 import IdRepository from "./base/IdRepository";
@@ -8,14 +9,12 @@ function toPath(discordKey: DiscordKey): string {
 }
 
 export default class DialogMessageRepository {
-	public static async read(discordKey: DiscordKey): Promise<TDialogMessage | null> {
+	public static async read(discordKey: DiscordKey, catcher = errorReturnNull): Promise<TDialogMessage | null> {
 		const path = toPath(discordKey);
-		return utils.FsUtils.readJsonFile<TDialogMessage>(path)
-			.catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+		return readJsonFile<TDialogMessage>(path).catch(catcher);
 	}
 	public static async write(discordKey: DiscordKey, dialogMessage: TDialogMessage): Promise<boolean> {
 		const path = toPath(discordKey);
-		return utils.FsUtils.writeFile(path, dialogMessage)
-			.catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
+		return writeFile(path, dialogMessage).catch(errorReturnFalse);
 	}
 }
