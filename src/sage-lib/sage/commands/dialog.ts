@@ -104,7 +104,7 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 		.catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 	if (messages.length) {
 		//#region dice
-		const diceOutputs = otherDiceMatches.reduce((out, match) => { out.push(...match.output); return out }, <TDiceOutput[]>[]);
+		const diceOutputs = otherDiceMatches.map(match => match.output).flat();
 		if (diceOutputs.length) {
 			await sendDice(sageMessage, diceOutputs);
 		}
@@ -119,7 +119,7 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 			serverDid: last.guild?.id,
 			threadDid: last.channel.isThread() ? last.channel.id : undefined,
 			timestamp: last.createdTimestamp,
-			userDid: character.userDid
+			userDid: character.userDid ?? sageMessage.sageUser.did
 		};
 		await DialogMessageRepository.write(DiscordKey.fromMessage(last), dialogMessage as TDialogMessage);
 
