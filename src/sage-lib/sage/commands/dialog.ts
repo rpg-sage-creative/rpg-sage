@@ -1,6 +1,5 @@
 import * as Discord from "discord.js";
 import * as _XRegExp from "xregexp";
-import type { TDiceOutput } from "../../../sage-dice";
 import utils, { OrUndefined, TParsers, type Optional } from "../../../sage-utils";
 import { DiscordId, DiscordKey, MessageType, NilSnowflake, ReactionType, TCommand, TCommandAndArgsAndData } from "../../discord";
 import { isAuthorBotOrWebhook, registerMessageListener, registerReactionListener } from "../../discord/handlers";
