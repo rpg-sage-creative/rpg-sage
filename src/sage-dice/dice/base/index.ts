@@ -44,6 +44,16 @@ function strike(value: string): string {
 	return `<s>${value}</s>`;
 }
 
+/** Removes the first instance of desc from description while ensuring it doesn't break HTML (ex: Removing "b" from "<b>8</b> b") */
+function removeDesc(description: string, desc: string): string {
+	const tokens = Tokenizer.tokenize(description, { html:/<[^>]+>/, desc:new RegExp(desc) });
+	const firstDesc = tokens.find(token => token.type === "desc");
+	return tokens
+		.filter(token => token !== firstDesc)
+		.map(token => token.token)
+		.join("");
+}
+
 //#endregion
 
 //#region Tokenizer
@@ -603,12 +613,12 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			const escapedTotal = `\` ${total} \``;
 
 			const output = desc
-				? `${emoji} '${dequote(desc)}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${description.replace(desc, "")}`
+				? `${emoji} '${dequote(desc)}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
 				: `${emoji} ${escapedTotal} ${UNICODE_LEFT_ARROW} ${description}`;
 			return cleanWhitespace(output);
 		}else {
 			const output = desc
-				? `${xxs} \`${dequote(desc)}\` ${UNICODE_LEFT_ARROW} ${description.replace(desc, "")}`
+				? `${xxs} \`${dequote(desc)}\` ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
 				: `${xxs} ${UNICODE_LEFT_ARROW} ${description}`;
 			return cleanWhitespace(output);
 		}
