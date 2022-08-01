@@ -1,6 +1,7 @@
 import * as Discord from "discord.js";
 import type { Optional, OrUndefined } from "../../sage-utils";
 import { isDefined } from "../../sage-utils";
+import { NilSnowflake } from "./consts";
 import { SnowflakeType } from "./enums";
 
 type THasSnowflakeId = { id:Discord.Snowflake; };
@@ -36,7 +37,8 @@ export default class DiscordId {
 			return new DiscordId(SnowflakeType.ChannelReference, DiscordId.parseId(value));
 		}
 		if (DiscordId.isCustomEmoji(value)) {
-			return new DiscordId(SnowflakeType.CustomEmoji, DiscordId.parseId(value), value.slice(2, -20));
+			const [_, name, did] = value.match(/<:(\w+):(\d+)>/) ?? [];
+			return new DiscordId(SnowflakeType.CustomEmoji, did, name);
 		}
 		if (DiscordId.isRoleMention(value)) {
 			return new DiscordId(SnowflakeType.RoleMention, DiscordId.parseId(value));
@@ -51,23 +53,23 @@ export default class DiscordId {
 	}
 
 	public static parseId(value: string): Discord.Snowflake {
-		return value && value.slice(-19, -1);
+		return (value?.match(/\d{16,}/) ?? [])[0] ?? NilSnowflake;
 	}
 
 	public static isChannelReference(value: string): boolean {
-		return isDefined(value?.match(/^<#\d{18}>$/));
+		return isDefined(value?.match(/^<#\d{16,}>$/));
 	}
 	public static isCustomEmoji(value: string): boolean {
-		return isDefined(value?.match(/^<:\w{2,}:\d{18}>$/));
+		return isDefined(value?.match(/^<:\w{2,}:\d{16,}>$/));
 	}
 	public static isRoleMention(value: string): boolean {
-		return isDefined(value?.match(/^<@&\d{18}>$/));
+		return isDefined(value?.match(/^<@&\d{16,}>$/));
 	}
 	public static isValidId(value: Optional<Discord.Snowflake>): boolean {
-		return isDefined(value?.match(/^\d{18}$/));
+		return isDefined(value?.match(/^\d{16,}$/));
 	}
 	public static isUserMention(value: string): boolean {
-		return isDefined(value?.match(/^<@\!?\d{18}>$/));
+		return isDefined(value?.match(/^<@\!?\d{16,}>$/));
 	}
 
 	public static isMentionOrReference(value: string): boolean {
@@ -81,7 +83,7 @@ export default class DiscordId {
 	}
 	public static toCustomEmoji(name: Optional<string>, did: Optional<Discord.Snowflake>): string | null {
 		// TODO: should I create my own formatter? --> return did ? Discord.Formatters.formatEmoji(did) : null;
-		return name && did ? `<#:${name}:${did}>` : null;
+		return name && did ? `<:${name}:${did}>` : null;
 	}
 	public static toRoleMention(did: Optional<Discord.Snowflake>): string | null {
 		return did ? Discord.Formatters.roleMention(did) : null;

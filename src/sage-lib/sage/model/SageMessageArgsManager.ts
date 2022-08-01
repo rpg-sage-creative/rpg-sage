@@ -44,10 +44,10 @@ function removeAndReturnBooleanFlag(args: string[], key: TValidBooleanFlags): bo
 
 type TValidTargetChannelFlags = "admin" | "command" | "commands" | "dialog" | "dice" | "search";
 
-/** /^(admin|commands?|dialog|dice|search)(?:to)?=\s*(\d{18}|<#\d{18}>)$/i */
+/** /^(admin|commands?|dialog|dice|search)(?:to)?=(\d{16,}|<#\d{16,}>)$/i */
 function removeAndReturnChannelSnowflake(args: string[], key: TValidTargetChannelFlags): Discord.Snowflake | undefined {
 	const lower = key.toLowerCase().replace("commands", "command");
-	const regex = /^(admin|commands?|dialog|dice|search)(?:to)?=(\d{18}|<#\d{18}>)$/i;
+	const regex = /^(admin|commands?|dialog|dice|search)(?:to)?=(\d{16,}|<#\d{16,}>)$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match && match[1].toLowerCase().replace("commands", "command") === lower) {
