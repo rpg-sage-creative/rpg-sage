@@ -29,6 +29,8 @@ import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
 	DicePartCore, DicePartRollCore, DiceRollCore, TDice, TDiceGroup, TDiceGroupRoll, TDicePart, TDicePartCoreArgs, TDicePartRoll, TDiceRoll
 } from "./types";
+import * as _XRegExp from "xregexp";
+const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 //#endregion
 
@@ -46,7 +48,8 @@ function strike(value: string): string {
 
 /** Removes the first instance of desc from description while ensuring it doesn't break HTML (ex: Removing "b" from "<b>8</b> b") */
 function removeDesc(description: string, desc: string): string {
-	const tokens = Tokenizer.tokenize(description, { html:/<[^>]+>/, desc:new RegExp(desc) });
+	const escapedDesc = XRegExp.escape(desc);
+	const tokens = Tokenizer.tokenize(description, { html:/<[^>]+>/, desc:new RegExp(escapedDesc) });
 	const firstDesc = tokens.find(token => token.type === "desc");
 	return tokens
 		.filter(token => token !== firstDesc)

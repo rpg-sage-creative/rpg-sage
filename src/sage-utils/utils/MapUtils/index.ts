@@ -45,7 +45,7 @@ function calcClip(clip: Partial<THasClip>, natural: THasNatural): TCalcClip {
 	//#region width
 	const clipWidth = clip.clipWidth ?? 0;
 	// calculate clipWidth
-	const cW = clipWidth < 0 ? natural.naturalWidth + clipWidth - x : clipWidth ?? natural.naturalWidth;
+	const cW = clipWidth < 0 ? natural.naturalWidth + clipWidth - x : clipWidth || natural.naturalWidth;
 	// check the boundaries
 	const w = Math.min(Math.max(cW, 0), natural.naturalWidth - x);
 	//#endregion
@@ -61,7 +61,7 @@ function calcClip(clip: Partial<THasClip>, natural: THasNatural): TCalcClip {
 	//#region height
 	const clipHeight = clip.clipHeight ?? 0;
 	// calculate clipHeight
-	const cH = clipHeight < 0 ? natural.naturalHeight + clipHeight - y : clipHeight ?? natural.naturalHeight;
+	const cH = clipHeight < 0 ? natural.naturalHeight + clipHeight - y : clipHeight || natural.naturalHeight;
 	// check the boundaries
 	const h = Math.min(Math.max(cH, 0), natural.naturalHeight - y);
 	//#endregion
@@ -93,6 +93,7 @@ export async function mapToBuffer(map: IMap, fileType: mimeType = "image/jpeg"):
 	if (!bgImage) {
 		return null;
 	}
+	mapArgs.bgImage = bgImage;
 	//#endregion
 
 	const [bgClipX, bgClipY, bgWidth, bgHeight] = calcClip(bgMeta, bgImage);

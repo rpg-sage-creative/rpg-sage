@@ -700,13 +700,15 @@ function critByAddingMax(diceGroupRoll: DiceGroupRoll): void {
 function manipulateCriticalDamage(diceGroupRoll: DiceGroupRoll): void {
 	if (diceGroupRoll.hasAttackCriticalSuccess) {
 		const damageDice = diceGroupRoll.dice.damageDice!,
-			damageRollCores = diceGroupRoll.damageRoll!.toJSON().rolls;
-		if (diceGroupRoll.hasFatal) {
-			const baseDamage = damageDice.baseDicePart!,
-				fatalDicePart = DicePart.create({ count: baseDamage.count + 1, sides: diceGroupRoll.fatalDie || increaseDieSize(baseDamage.sides), description: cleanDescription(`${baseDamage.description} <i>(fatal)</i>`) }),
+			damageRollCores = diceGroupRoll.damageRoll!.toJSON().rolls,
+			hasFatal = diceGroupRoll.hasFatal,
+			baseDamage = hasFatal ? damageDice.baseDicePart : null,
+			fatalSides = hasFatal && baseDamage ? diceGroupRoll.fatalDie || increaseDieSize(baseDamage.sides) : null;
+		if (hasFatal && baseDamage && fatalSides) {
+			const fatalBaseDicePart = DicePart.create({ count: baseDamage.count, sides: fatalSides, description: cleanDescription(`${baseDamage.description} <i>(fatal)</i>`) }),
 				baseDamageIndex = damageDice.diceParts.indexOf(baseDamage);
-			damageDice.diceParts.splice(baseDamageIndex, 1, fatalDicePart);
-			damageRollCores.splice(baseDamageIndex, 1, fatalDicePart.roll().toJSON());
+			damageDice.diceParts.splice(baseDamageIndex, 1, fatalBaseDicePart);
+			damageRollCores.splice(baseDamageIndex, 1, fatalBaseDicePart.roll().toJSON());
 		}
 
 		const critMethodType = diceGroupRoll.dice.critMethodType;
@@ -722,6 +724,11 @@ function manipulateCriticalDamage(diceGroupRoll: DiceGroupRoll): void {
 			const deadlyDieCount = strikingTypeToDeadlyDieCount(diceGroupRoll.strikingType),
 				deadlyDicePart = DicePart.create({ count: deadlyDieCount, sides: diceGroupRoll.deadlyDie!, description: "<i>(deadly)</i>" });
 			damageRollCores.push(deadlyDicePart.roll().toJSON());
+		}
+
+		if (hasFatal && fatalSides) {
+			const fatalBonusDicePart = DicePart.create({ count: 1, sides: fatalSides, description: `<i>(fatal)</i>` });
+			damageRollCores.push(fatalBonusDicePart.roll().toJSON());
 		}
 	}
 }
