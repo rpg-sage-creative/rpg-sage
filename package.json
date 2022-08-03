@@ -30,6 +30,7 @@
     "xregexp": "^5.1.0"
   },
   "devDependencies": {
-    "@types/node": "^17.0.16"
+    "@types/node": "^17.0.16",
+    "pdf2json": "^2.0.1"
   }
 }

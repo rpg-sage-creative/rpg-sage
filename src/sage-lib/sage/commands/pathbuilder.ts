@@ -5,8 +5,6 @@ import { isDefined, Optional, UUID } from "../../../sage-utils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
-import { registerSlashCommand } from "../../../slash.mjs";
-import type { TSlashCommand } from "../../../types";
 import { DiscordId, DUser, TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
@@ -344,21 +342,10 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 //#endregion
 
 //#region slash command
-//118142
-function slashTester(sageInteraction: SageInteraction): boolean {
-	return sageInteraction.isCommand("import");
-}
 
-const pb2eId = "pathbuilder2e-id";
+export const pb2eId = "pathbuilder2e-id";
 
-async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
-	if (sageInteraction.hasNumber(pb2eId)) {
-		return slashHandlerPathbuilder2e(sageInteraction);
-	}
-	return sageInteraction.reply(`Sorry, unable to import your character at this time.`, true);
-}
-
-async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction): Promise<void> {
+export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction): Promise<void> {
 	const pathbuilderId = sageInteraction.getNumber(pb2eId, true);
 	await sageInteraction.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, true);
 
@@ -379,26 +366,9 @@ async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction): Prom
 	return sageInteraction.deleteReply();
 }
 
-function importCommand(): TSlashCommand {
-	return {
-		name: "Import",
-		description: "Import a character to Sage",
-		options: [
-			{ name:pb2eId, description:"Import from Pathbuilder 2e using 'Export to JSON'", isNumber:true },
-			{ name:"attach", description:"Attach as a Markdown formatted .txt", isBoolean:true },
-			{ name:"pin", description:"Pin character", isBoolean:true }
-		]
-	};
-}
-
-
 //#endregion
 
 export function registerCommandHandlers(): void {
-	registerInteractionListener(slashTester, slashHandler);
 	registerInteractionListener(sheetTester, sheetHandler);
 }
 
-export function registerSlashCommands(): void {
-	registerSlashCommand(importCommand());
-}

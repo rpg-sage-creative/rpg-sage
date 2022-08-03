@@ -5,12 +5,14 @@ export type TNameDescription = { name:string; description?:string; };
 export type TSlashCommandOption = TNameDescription & {
 	/** Selectable choices for an option. */
 	choices?: TSlashCommandChoice[];
-	/** Flag for setRequired */
-	isRequired?: boolean;
+	/** Flag for attachment */
+	isAttachment?: boolean;
 	/** Flag for boolean type */
 	isBoolean?: boolean;
 	/** Flag for number type */
 	isNumber?: boolean;
+	/** Flag for setRequired */
+	isRequired?: boolean;
 	/** Value for setMinValue if number type */
 	minValue?: number;
 	/** Value for setMaxValue if number type */

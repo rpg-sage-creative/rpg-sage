@@ -79,6 +79,27 @@ export default class SageInteraction<T extends DInteraction = any>
 
 	//#endregion
 
+	public getAttachment(name: string): Discord.MessageAttachment | null;
+	public getAttachment(name: string, required: true): Discord.MessageAttachment;
+	public getAttachment(name: string, required = false): Discord.MessageAttachment | null {
+		return this.interaction.isCommand() ? this.interaction.options.getAttachment(name, required) : null;
+	}
+
+	public hasAttachment(name: string): boolean {
+		return this.getAttachment(name) !== null;
+	}
+
+	public getAttachmentPdf(name: string): Discord.MessageAttachment | null;
+	public getAttachmentPdf(name: string, required: true): Discord.MessageAttachment;
+	public getAttachmentPdf(name: string, required = false): Discord.MessageAttachment | null {
+		const attachment = this.interaction.isCommand() ? this.interaction.options.getAttachment(name, required) : null;
+		return attachment?.contentType === "application/pdf" ? attachment : null;
+	}
+
+	public hasAttachmentPdf(name: string): boolean {
+		return this.getAttachmentPdf(name) !== null;
+	}
+
 	/** Gets the named option as a boolean or null */
 	public getBoolean(name: string): boolean | null;
 	/** Gets the named option as a boolean */
