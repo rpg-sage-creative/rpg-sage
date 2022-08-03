@@ -20,5 +20,7 @@ export interface PlayerCharacterCoreJoe extends PlayerCharacterCoreE20 {
 }
 
 export default class PlayerCharacterJoe extends PlayerCharacterE20<PlayerCharacterCoreJoe> {
+	public getValidSectionsTypes<T extends string>(): T[] { return []; }
+	public getValidViewTypes<T extends string>(): T[] { return []; }
 	public toHtml(): string { return ""; }
 }

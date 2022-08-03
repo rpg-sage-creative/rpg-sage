@@ -1,6 +1,7 @@
 import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/User";
 import utils, { Optional, OrUndefined } from "../../../sage-utils";
+import CharacterBase, { CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
 import type { TProficiency, TSavingThrow } from "../../common";
 import { toModifier } from "../../common";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository";
@@ -226,12 +227,8 @@ export type TPathbuilderCharacterCustomFlags = {
 	_untrainedPenalty?: boolean;
 };
 type TPathbuilderCharacterCustomFlag = keyof TPathbuilderCharacterCustomFlags;
-export type TPathbuilderCharacter = TPathbuilderCharacterCustomFlags & {
-	/** Should be UUID */
-	id: string;
+export type TPathbuilderCharacter = CharacterBaseCore<"PathbuilderCharacter"> & TPathbuilderCharacterCustomFlags & {
 	/** Clean this up! */
-	sheet: TSimpleMap;
-	name: string;
 	class: string;
 	dualClass?: string;
 	level: number;
@@ -628,23 +625,10 @@ export function getCharacterSections(view: Optional<TCharacterViewType>): TChara
 export type TCharacterViewType = "All" | "Combat" | "Equipment" | "Feats" | "Formulas" | "Pets" | "Spells";
 export const CharacterViewTypes: TCharacterViewType[] = ["All", "Combat", "Equipment", "Feats", "Formulas", "Pets", "Spells"];
 
-type TSimpleMap = { [key:string]:any; };
-export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+export default class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
 
-	//#region interactive char sheet
-	private get sheet(): TSimpleMap { return this.core.sheet ?? (this.core.sheet = {}); }
-	public getSheetValue<T extends any = string>(key: string): T | undefined { return this.sheet[key]; }
-	public setSheetValue<T>(key: string, value: T): void {
-		if (value === undefined) {
-			delete this.sheet[key];
-		}else {
-			this.sheet[key] = value;
-		}
-	}
-	//#endregion
-
-	public constructor(private core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
-		super();
+	public constructor(core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
+		super(core);
 		if (!core.id) {
 			core.id = utils.UuidUtils.generate();
 		}
@@ -652,10 +636,7 @@ export default class PathbuilderCharacter extends utils.ClassUtils.SuperClass im
 			core[key as TPathbuilderCharacterCustomFlag] = flags[key as TPathbuilderCharacterCustomFlag];
 		});
 	}
-	public toJSON(): TPathbuilderCharacter { return this.core; }
 
-	public get id(): string { return this.core.id; }
-	public get name(): string { return this.core.name; }
 	public getAttackMacros(): TMacro[] { return this.core.weapons?.map(weapon => weaponToMacro(this, weapon)) ?? []; }
 
 	//#region flags/has

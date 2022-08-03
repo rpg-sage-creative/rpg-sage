@@ -1,4 +1,4 @@
-import { DidCore, HasDidCore } from "../../sage-lib/sage/repo/base/DidRepository";
+import CharacterBase, { CharacterBaseCore } from "../../sage-utils/utils/CharacterUtils/CharacterBase";
 
 export type TArmorE20 = {
 	name?: string;
@@ -53,10 +53,9 @@ export type TWeaponJoe = TWeaponE20 & {
 	upgrades?: string;
 };
 
-export interface PlayerCharacterCoreE20 extends DidCore<"PlayerCharacter"> {
+export interface PlayerCharacterCoreE20 extends CharacterBaseCore<"PlayerCharacter"> {
 	diceEngine: "E20";
 	gameType: string;
-	userDid?: string;
 
 	abilities: TStatE20[];
 	armor: TArmorE20[];
@@ -79,7 +78,11 @@ export interface PlayerCharacterCoreE20 extends DidCore<"PlayerCharacter"> {
 	weapons: TWeaponE20[];
 }
 
-export default abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> extends HasDidCore<T> {
+export default abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> extends CharacterBase<T> {
 
+	public get abilities(): TStatE20[] { return this.core.abilities ?? []; }
+
+	abstract getValidSectionsTypes<U extends string>(): U[];
+	abstract getValidViewTypes<U extends string>(): U[];
 	abstract toHtml(): string;
 }

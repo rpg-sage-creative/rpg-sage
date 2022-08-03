@@ -1,4 +1,5 @@
 import { toMod } from "../../sage-dice";
+import type { Optional } from "../../sage-utils";
 import type { PlayerCharacterCoreE20, TStatE20 } from "../common/PlayerCharacterE20";
 import PlayerCharacterE20 from "../common/PlayerCharacterE20";
 
@@ -38,6 +39,8 @@ export type TZord = {
 	skillNotes?: string;
 };
 
+export type TCharacterViewType = "All" | "Combat";
+
 export type TCharacterSectionType = "All" | "Abilities" | "Armor" | "Attacks"
 	| "BackgroundBonds" | "Description"
 	| "HangUps" | "Health"
@@ -51,6 +54,14 @@ export type TCharacterSectionType = "All" | "Abilities" | "Armor" | "Attacks"
 	| "Weapons"
 	| "Zord"
 	;
+
+export function getCharacterSections(view: Optional<TCharacterViewType>): TCharacterSectionType[] | null {
+	switch(view) {
+		case "All": return ["All"];
+		case "Combat": return ["Abilities", "Armor", "Attacks", "Health", "Movement", "Weapons"];
+	}
+	return null;
+}
 
 export interface PlayerCharacterCorePR extends PlayerCharacterCoreE20 {
 	gameType: "E20 - Power Rangers";
@@ -320,7 +331,7 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 		}
 	}
 
-	public getValidSectionsTypes(): TCharacterSectionType[] {
+	public getValidSectionsTypes<T extends string = TCharacterSectionType>(): T[] {
 		const outputTypes: TCharacterSectionType[] = [];
 		if (this.core.origin) outputTypes.push("Origin");
 		if (this.core.description) outputTypes.push("Description");
@@ -341,6 +352,9 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 		if (this.core.zord) outputTypes.push("Zord");
 		if (this.core.inventory) outputTypes.push("Inventory");
 		if (this.core.notes) outputTypes.push("Notes");
-		return outputTypes;
+		return outputTypes as T[];
+	}
+	public getValidViewTypes<T extends string = TCharacterViewType>(): T[] {
+		return ["All", "Combat"] as T[];
 	}
 }

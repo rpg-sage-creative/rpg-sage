@@ -1,4 +1,3 @@
-import { SnowflakeUtil } from "discord.js";
 import { isBlank } from "../../sage-utils/utils/StringUtils";
 import { generate } from "../../sage-utils/utils/UuidUtils";
 import { PdfJsonFields, TRawJson } from "./pdf";
@@ -86,7 +85,6 @@ export class PdfJsonParserE20 extends PdfJsonFields {
 			diceEngine: "E20",
 			gameType: undefined!,
 			id: generate(),
-			did: SnowflakeUtil.generate(),
 
 			abilities: [
 				this.parseStat("Strength", "Toughness", "Str"),
