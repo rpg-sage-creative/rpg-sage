@@ -45,9 +45,9 @@ type TFieldJson = { id?:{ Id:string; }; T?:{ Name:string; }; V?:string; };
 type TBoxsetJson = { boxes:{ id?:{ Id:string; }; T?:{ Name:string; }; checked?:boolean; }[]; };
 type TPageJson = { Fields:TFieldJson[]; Boxsets:TBoxsetJson[]; Texts:{ R?:{ T:string; }[]; }[]; };
 export type TRawJson = { Pages:TPageJson[]; Meta?:{ Title?:string; }; };
-function collectFields(json: TRawJson): TField[] {
+function collectFields(json: Optional<TRawJson>): TField[] {
 	const fields: TField[] = [];
-	const pages = json.Pages ?? [];
+	const pages = json?.Pages ?? [];
 	pages.forEach(page => {
 		fields.push(...collectTextFields(page));
 		fields.push(...collectCheckFields(page));

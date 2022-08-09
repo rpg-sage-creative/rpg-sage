@@ -11,7 +11,7 @@ import { pb2eId, slashHandlerPathbuilder2e } from "./pathbuilder.js";
 function slashTester(sageInteraction: SageInteraction): boolean {
 	if (sageInteraction.isCommand("import")) {
 		return sageInteraction.hasNumber(pb2eId)
-			|| sageInteraction.hasAttachment(e20Pdf);
+			|| sageInteraction.hasString(e20Pdf);
 	}
 	return false;
 }
@@ -20,7 +20,7 @@ async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
 	if (sageInteraction.hasNumber(pb2eId)) {
 		return slashHandlerPathbuilder2e(sageInteraction);
 	}
-	if (sageInteraction.hasAttachmentPdf(e20Pdf)) {
+	if (sageInteraction.hasString(e20Pdf)) {
 		return slashHandlerEssence20(sageInteraction);
 	}
 	return sageInteraction.reply(`Sorry, unable to import your character at this time.`, true);
@@ -32,7 +32,7 @@ function importCommand(): TSlashCommand {
 		name: "Import",
 		description: "Import a character to Sage",
 		options: [
-			{ name:e20Pdf, description:"Import an Essence20 character from PDF", isAttachment:true },
+			{ name:e20Pdf, description:"Import an Essence20 character from PDF" },
 			{ name:pb2eId, description:"Import from Pathbuilder 2e using 'Export to JSON'", isNumber:true },
 			{ name:"attach", description:"Attach as a Markdown formatted .txt", isBoolean:true },
 			{ name:"pin", description:"Pin character", isBoolean:true }

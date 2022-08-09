@@ -63,6 +63,10 @@ export function getCharacterSections(view: Optional<TCharacterViewType>): TChara
 	return null;
 }
 
+function orQ(value: Optional<string>): string {
+	return (value ?? "").trim() || "?";
+}
+
 export interface PlayerCharacterCorePR extends PlayerCharacterCoreE20 {
 	gameType: "E20 - Power Rangers";
 
@@ -74,6 +78,8 @@ export interface PlayerCharacterCorePR extends PlayerCharacterCoreE20 {
 }
 
 export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacterCorePR> {
+	public get zord(): TZord { return this.core.zord ?? { }; }
+
 	public toHtmlName(): string {
 		const name = this.core.name ?? "Unnamed Character";
 		const pronouns = this.core.pronouns ? ` (${this.core.pronouns})` : "";
@@ -87,20 +93,26 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 
 		const zord = this.core.zord;
 
-		push(`<b><u>${zord.name}</u></b>`);
+		push(`<b><u>${zord.name ?? "Unnamed Zord"}</u></b>`);
 
 		//#region abilities / skills
 		if (zord.abilities?.length) {
-			push(`<b>Abilities</b>`);
 			zord.abilities?.forEach(ability => {
-				const baseValues = `<b>${ability.abilityName}</b> (${ability.ability}), <b>${ability.defenseName}</b> (${ability.defense})`;
-				push(baseValues);
+				if (ability.abilityName !== "Other") {
+					push(`<b>${ability.abilityName}</b> (${orQ(ability.ability)}), <b>${ability.defenseName}</b> (${orQ(ability.defense)})`);
+				}else if (ability.skills?.find(skill => skill.name && skill.die)) {
+					push(`<b>Other</b>`);
+				}
 
-				const skillValues = (ability.skills ?? []).map(skill =>
-					skill.bonus || skill.die ? `${skill.name} (${skill.bonus ? toMod(skill.bonus) : skill.die})` : null
-				).filter(s => s);
+				const skillValues = (ability.skills ?? []).map(skill => {
+					if (skill.bonus || skill.die) {
+						const modOrDie = skill.bonus ? toMod(skill.bonus) : skill.die;
+						return `${skill.name} (${modOrDie})`;
+					}
+					return null;
+				}).filter(s => s);
 				if (skillValues.length) {
-					push(`${ability.abilityName}: ${skillValues.join(", ")}`);
+					push(`[spacer]${skillValues.join(", ")}`);
 				}
 			});
 		}
@@ -116,7 +128,7 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 				const name = atk.name;
 				const range = atk.range ? `; Range: ${atk.range} ` : "";
 				const effects = atk.effects ? `; Effects: ${atk.effects} ` : "";
-				push(`${name}${range}${effects}`);
+				push(`[spacer]${name}${range}${effects}`);
 			});
 		}
 		//#endregion
@@ -141,9 +153,7 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 		return html;
 
 		function push(value?: string) {
-			if (value || html.length > 1) {
-				html.push(`${html.length ? "<br/>" : ""}${value ?? "---"}`);
-			}
+			html.push(value ?? "---");
 		}
 	}
 
@@ -191,7 +201,7 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 				parts.push(`<b>Personal Power</b> ${this.core.personalPower}`);
 			}
 			if (hasMovement) {
-				parts.push(`<b>PMovement</b> ${this.core.movement}`);
+				parts.push(`<b>Movement</b> ${this.core.movement}`);
 			}
 			push(parts.join("; "));
 		}
@@ -206,6 +216,7 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 
 		//#region attacks
 		if (includes("All", "Attacks") && this.core.attacks?.length) {
+			push();
 			push(`<b>Attacks</b>`);
 			this.core.attacks?.forEach(atk => {
 				const name = atk.name;
@@ -213,42 +224,40 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 				const attack = atk.attack ? `; Attack: ${atk.attack} ` : "";
 				const effects = atk.effects ? `; Effects: ${atk.effects} ` : "";
 				const notes = atk.notes ? `; Notes: ${atk.notes} ` : "";
-				return `${name}${range}${attack}${effects}${notes}`;
+				push(`[spacer]${name}${range}${attack}${effects}${notes}`);
 			});
 		}
 		//#endregion
 
 		//#region abilities
-		if (includes("All", "Abilities") && this.core.abilities.length) {
-			push(`<b>Abilities</b>`);
+		const hasAbilities = includes("All", "Abilities") && this.core.abilities.length;
+		const hasStats = hasAbilities; // includes("All", "Stats") && this.core.abilities.length;
+		const hasSkills = includes("All", "Skills") && this.core.abilities?.find(ability => ability.skills?.length);
+		if (hasAbilities || hasStats || hasSkills) {
+			push();
 			this.core.abilities?.forEach(ability => {
-				const baseValues = `<b>${ability.abilityName}</b> (${ability.ability}), <b>${ability.defenseName}</b> (${ability.defense})`;
-				const essence = +(ability.essence ?? 0);
-				const perks = +(ability.perks ?? 0);
-				const armor = +(ability.armor ?? 0);
-				const morphed = ability.morphed ?? (10 + essence + perks + armor);
-				const mathValues = `${morphed} (morphed) = 10 + ${essence} (essence) + ${perks} (perks) + ${armor} (armor)`;
+				push(`<b>${ability.abilityName}</b> (${orQ(ability.ability)}), <b>${ability.defenseName}</b> (${orQ(ability.defense)})`);
 
-				push(baseValues);
-				push(mathValues);
-			});
-		}
-		//#endregion
+				if (hasStats) {
+					const essence = +(ability.essence ?? 0);
+					const perks = +(ability.perks ?? 0);
+					const armor = +(ability.armor ?? 0);
+					const morphed = ability.morphed ?? (10 + essence + perks + armor);
+					push(`[spacer]${morphed} (morphed) = 10 + ${essence} (essence) + ${perks} (perks) + ${armor} (armor)`);
+				}
 
-		//#region skills
-		if (includes("All", "Skills") && this.core.abilities?.find(ability => ability.skills?.length)) {
-			push(`<b>Skills</b>`);
-			this.core.abilities.forEach(ability => {
-				const skillValues = ability.skills?.map(skill => {
-					const skillValue = `${skill.name} (${skill.bonus ? toMod(skill.bonus) : skill.die})`;
-					const specValues = skill.specializations?.map(spec => `${spec.name}${spec.checked?" ✅":""}`) ?? [];
-					if (specValues.length) {
-						return `${skillValue} (${specValues.join(", ")})`;
+				if (hasSkills) {
+					const skillValues = ability.skills?.filter(skill => skill.bonus || skill.die || skill.specializations?.length).map(skill => {
+						const skillValue = `${skill.name} [${skill.bonus ? toMod(skill.bonus) : skill.die}]`;
+						const specValues = skill.specializations?.map(spec => `${spec.name}!`) ?? [];
+						if (specValues.length) {
+							return `${skillValue} (${specValues.join(", ")})`;
+						}
+						return `${skillValue}`;
+					}) ?? [];
+					if (skillValues.length) {
+						push(`[spacer]${skillValues.join(", ")}`);
 					}
-					return `${skillValue}`;
-				}) ?? [];
-				if (skillValues.length) {
-					push(`${ability.abilityName}: ${skillValues.join(", ")}`);
 				}
 			});
 		}
@@ -256,12 +265,14 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 
 		//#region armor
 		if (includes("All", "Armor") && this.core.armor?.length) {
+			push();
+			push(`<b>Armor</b>`);
 			this.core.armor.forEach(armor => {
 				const name = armor.name;
 				const desc = armor.description ? ` (${armor.description})` : "";
 				const effect = armor.effect ? `; Effect: ${armor.effect} ` : "";
 				const traits = armor.traits ? `; Traits: ${armor.traits} ` : "";
-				return `${name}${desc}${effect}${traits}`;
+				push(`[spacer]${name}${desc}${effect}${traits}`);
 			});
 		}
 		//#endregion
@@ -286,6 +297,7 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 
 		//#region weapons
 		if (includes("All", "Weapons") && this.core.weapons?.length) {
+			push();
 			push(`<b>Weapons</b>`);
 			this.core.weapons?.forEach(wpn => {
 				const name = wpn.name;
@@ -295,15 +307,8 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 				const attack = wpn.attack ? `; Attack: ${wpn.attack} ` : "";
 				const effects = wpn.effects ? `; Effects: ${wpn.effects} ` : "";
 				const altEffects = wpn.altEffects ? `; Alt Effects: ${wpn.altEffects} ` : "";
-				return `${name}${range}${hands}${traits}${attack}${effects}${altEffects}`;
+				push(`[spacer]${name}${range}${hands}${traits}${attack}${effects}${altEffects}`);
 			});
-		}
-		//#endregion
-
-		//#region Zord
-		if (includes("All", "Zord") && this.core.zord) {
-			push();
-			this.toZordHtml().forEach(push);
 		}
 		//#endregion
 
@@ -316,6 +321,13 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 		//#region notes
 		if (includes("All", "Notes") && this.core.notes) {
 			push("<b>Notes</b> " + this.core.notes);
+		}
+		//#endregion
+
+		//#region Zord
+		if (includes("All", "Zord") && this.core.zord) {
+			push();
+			this.toZordHtml().forEach(push);
 		}
 		//#endregion
 
@@ -354,6 +366,7 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 		if (this.core.notes) outputTypes.push("Notes");
 		return outputTypes as T[];
 	}
+
 	public getValidViewTypes<T extends string = TCharacterViewType>(): T[] {
 		return ["All", "Combat"] as T[];
 	}

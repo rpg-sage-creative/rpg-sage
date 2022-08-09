@@ -40,7 +40,7 @@ function resolveColumnedSection(renderableContent: utils.RenderUtils.RenderableC
 			embed = createMessageEmbed(undefined, undefined, renderableContent.color);
 			embeds.push(embed);
 		}
-		embed.addField(formattedTitle, formattedContent, true);
+		embed.addFields({ name:formattedTitle, value:formattedContent, inline:true });
 	});
 }
 
@@ -62,7 +62,7 @@ function resolveTitledSection(renderableContent: utils.RenderUtils.RenderableCon
 				embed = createMessageEmbed(undefined, undefined, renderableContent.color);
 				embeds.push(embed);
 			}
-			embed.addField(formattedTitle, chunk);
+			embed.addFields({ name:formattedTitle, value:chunk });
 		}else {
 			// Subsequent chunks don't need a title so we can just create a new embed
 			embed = createMessageEmbed(undefined, chunk, renderableContent.color);

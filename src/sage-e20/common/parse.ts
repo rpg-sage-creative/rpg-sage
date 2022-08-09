@@ -150,10 +150,12 @@ export class PdfJsonParserE20 extends PdfJsonFields {
 			}
 
 			if (i <= 3 && !["Conditioning","Initiative"].includes(name)) {
-				skill.specializations = [];
 				const specName = this.findValue(`${prefix}_Sp_${i}`);
 				const specChecked = this.findChecked(`${prefixLower}_spec_${i}`);
 				if (specName) {
+					if (!skill.specializations) {
+						skill.specializations = [];
+					}
 					skill.specializations.push({ name:specName, checked:specChecked });
 				}
 			}
