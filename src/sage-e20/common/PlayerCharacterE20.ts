@@ -85,4 +85,12 @@ export default abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE2
 	abstract getValidSectionsTypes<U extends string>(): U[];
 	abstract getValidViewTypes<U extends string>(): U[];
 	abstract toHtml(): string;
+
+	protected toSkillHtml(skill: TSkillE20): string {
+		const name = skill.name;
+		const specializations = skill.specializations?.length ? ` (${skill.specializations.map(spec => spec.name).join(", ")})` : "";
+		const bonus = skill.bonus ? ` x${skill.bonus}` : "";
+		const die = skill.die ? ` +${skill.die}` : "";
+		return `${name}${specializations}${bonus}${die}`;
+	}
 }

@@ -171,7 +171,7 @@ export class PdfJsonParserE20 extends PdfJsonFields {
 		return {
 			ability: this.findValue(ability),
 			abilityName: ability,
-			armor: prefix === "Str" ? this.findValue(`${prefix}_Arm`) : undefined,
+			armor: prefix === "Str" ? this.findValue(`${prefix}_Arm`) ?? this.findValue(`${prefix}_Armor`) : undefined,
 			bonus: prefix !== "Str" ? this.findValue(`${prefix}_Bon`) : undefined,
 			defense: this.findValue(defense),
 			defenseName: defense,

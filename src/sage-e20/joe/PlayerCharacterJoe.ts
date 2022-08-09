@@ -1,4 +1,3 @@
-import { toMod } from "../../sage-dice";
 import type { Optional } from "../../sage-utils";
 import type { PlayerCharacterCoreE20, TArmorE20, TWeaponE20 } from "../common/PlayerCharacterE20";
 import PlayerCharacterE20 from "../common/PlayerCharacterE20";
@@ -136,21 +135,16 @@ export default class PlayerCharacterJoe extends PlayerCharacterE20<PlayerCharact
 				push(`<b>${ability.abilityName}</b> (${orQ(ability.ability)}), <b>${ability.defenseName}</b> (${orQ(ability.defense)})`);
 
 				if (hasStats) {
-					const essence = +(ability.essence ?? 0);
-					const perks = +(ability.perks ?? 0);
-					const armor = +(ability.armor ?? 0);
-					push(`[spacer]10 + ${essence} (essence) + ${perks} (perks) + ${armor} (armor)`);
+					const essence = `${+(ability.essence ?? 0)} (essence)`;
+					const perks = `${+(ability.perks ?? 0)} (perks)`;
+					const armorOrBonus = ability.abilityName === "Strength" ? `${+(ability.armor ?? 0)} (armor)` : `${+(ability.bonus ?? 0)} (bonus)`;
+					push(`[spacer]10 + ${essence} + ${perks} + ${armorOrBonus}`);
 				}
 
 				if (hasSkills) {
-					const skillValues = ability.skills?.filter(skill => skill.bonus || skill.die || skill.specializations?.length).map(skill => {
-						const skillValue = `${skill.name} [${skill.bonus ? toMod(skill.bonus) : skill.die}]`;
-						const specValues = skill.specializations?.map(spec => `${spec.name}!`) ?? [];
-						if (specValues.length) {
-							return `${skillValue} (${specValues.join(", ")})`;
-						}
-						return `${skillValue}`;
-					}) ?? [];
+					const skillValues = (ability.skills ?? [])
+						.filter(skill => skill.bonus || skill.die || skill.specializations?.length)
+						.map(skill => this.toSkillHtml(skill));
 					if (skillValues.length) {
 						push(`[spacer]${skillValues.join(", ")}`);
 					}
