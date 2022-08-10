@@ -1,5 +1,5 @@
 import type { Optional } from "../../sage-utils";
-import type { PlayerCharacterCoreE20, TAbilityName, TStatE20 } from "../common/PlayerCharacterE20";
+import { orQ, PlayerCharacterCoreE20, TAbilityName, TStatE20 } from "../common/PlayerCharacterE20";
 import PlayerCharacterE20 from "../common/PlayerCharacterE20";
 
 export type TStatPR = TStatE20 & {
@@ -18,7 +18,7 @@ export type TStatZord = {
 	defense?: string;
 	defenseName?: string;
 	skills?: TSkillZord[];
-}
+};
 
 export type TSkillZord = {
 	name?: string;
@@ -38,7 +38,7 @@ export type TZord = {
 	skillNotes?: string;
 };
 
-export type TCharacterViewType = "All" | "Combat";
+export type TCharacterViewType = "All" | "Combat" | "Skills";
 
 export type TCharacterSectionType = "All" | "Abilities" | "AbilityMath" | "Armor" | "Attacks"
 	| "BackgroundBonds" | "Description"
@@ -58,12 +58,9 @@ export function getCharacterSections(view: Optional<TCharacterViewType>): TChara
 	switch(view) {
 		case "All": return ["All"];
 		case "Combat": return ["Abilities", "Armor", "Attacks", "Health", "Movement", "Weapons"];
+		case "Skills": return ["Abilities", "AbilityMath", "Skills", "Languages"];
 	}
 	return null;
-}
-
-function orQ(value: Optional<string>): string {
-	return (value ?? "").trim() || "?";
 }
 
 export interface PlayerCharacterCorePR extends PlayerCharacterCoreE20 {
@@ -178,12 +175,6 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 		}
 		//#endregion
 
-		//#region languages
-		if (includes("All", "Languages") && this.core.languages) {
-			push("<b>Languages</b> " + this.core.languages);
-		}
-		//#endregion
-
 		//#region influences
 		if (includes("All", "Influences") && this.core.influences) {
 			push("<b>Influences</b> " + this.core.influences);
@@ -219,49 +210,27 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 		//#endregion
 
 		//#region attacks
-		if (includes("All", "Attacks") && this.core.attacks?.length) {
-			push();
-			push(`<b>Attacks</b>`);
-			this.core.attacks?.forEach(atk => {
-				const name = atk.name;
-				const range = atk.range ? `; Range: ${atk.range} ` : "";
-				const attack = atk.attack ? `; Attack: ${atk.attack} ` : "";
-				const effects = atk.effects ? `; Effects: ${atk.effects} ` : "";
-				const notes = atk.notes ? `; Notes: ${atk.notes} ` : "";
-				push(`[spacer]${name}${range}${attack}${effects}${notes}`);
-			});
+		if (includes("All", "Attacks")) {
+			this.toAttackSectionHtml().forEach(push);
 		}
 		//#endregion
 
 		//#region abilities
-		const hasAbilities = includes("All", "Abilities") && this.core.abilities.length;
-		const hasAbilityMath = includes("All", "AbilityMath") && this.core.abilities.length;
-		const hasSkills = includes("All", "Skills") && this.core.abilities?.find(ability => ability.skills.find(skill => skill.bonus || skill.die || skill.specializations?.length));
-		if (hasAbilities || hasAbilityMath || hasSkills) {
-			push();
-			this.core.abilities?.forEach(ability => {
-				push(`<b>${ability.abilityName}</b> (${orQ(ability.ability)}), <b>${ability.defenseName}</b> (${orQ(ability.defense)})`);
-				if (hasAbilityMath) {
-					push(this.toAbilityMathHtml(ability.abilityName as TAbilityName));
-				}
-				if (hasSkills) {
-					push(this.toSkillsHtml(ability.abilityName as TAbilityName));
-				}
-			});
+		const showAbilities = includes("All", "Abilities");
+		const showAbilityMath = includes("All", "AbilityMath");
+		const showSkills = includes("All", "Skills");
+		this.toAbilitySectionHtml({ showAbilities, showAbilityMath, showSkills }).forEach(push);
+		//#endregion
+
+		//#region languages
+		if (includes("All", "Languages") && this.core.languages) {
+			push("<b>Languages</b> " + this.core.languages);
 		}
 		//#endregion
 
 		//#region armor
-		if (includes("All", "Armor") && this.core.armor?.length) {
-			push();
-			push(`<b>Armor</b>`);
-			this.core.armor.forEach(armor => {
-				const name = armor.name;
-				const desc = armor.description ? ` (${armor.description})` : "";
-				const effect = armor.effect ? `; Effect: ${armor.effect} ` : "";
-				const traits = armor.traits ? `; Traits: ${armor.traits} ` : "";
-				push(`[spacer]${name}${desc}${effect}${traits}`);
-			});
+		if (includes("All", "Armor")) {
+			this.toArmorSectionHtml().forEach(push);
 		}
 		//#endregion
 
@@ -284,19 +253,8 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 		//#endregion
 
 		//#region weapons
-		if (includes("All", "Weapons") && this.core.weapons?.length) {
-			push();
-			push(`<b>Weapons</b>`);
-			this.core.weapons?.forEach(wpn => {
-				const name = wpn.name;
-				const range = wpn.range ? `; Range: ${wpn.range} ` : "";
-				const hands = wpn.hands ? `; Hands: ${wpn.hands} ` : "";
-				const traits = wpn.traits ? `; Traits: ${wpn.traits} ` : "";
-				const attack = wpn.attack ? `; Attack: ${wpn.attack} ` : "";
-				const effects = wpn.effects ? `; Effects: ${wpn.effects} ` : "";
-				const altEffects = wpn.altEffects ? `; Alt Effects: ${wpn.altEffects} ` : "";
-				push(`[spacer]${name}${range}${hands}${traits}${attack}${effects}${altEffects}`);
-			});
+		if (includes("All", "Weapons")) {
+			this.toWeaponSectionHtml().forEach(push);
 		}
 		//#endregion
 
@@ -324,7 +282,7 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 		function includes(...types: TCharacterSectionType[]): boolean {
 			return types.find(type => outputTypes.includes(type)) !== undefined;
 		}
-		function push(value?: string) {
+		function push(value?: Optional<string>) {
 			if (value || html.length > 1) {
 				html.push(`${html.length ? "<br/>" : ""}${value ?? "---"}`);
 			}
@@ -332,31 +290,20 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 	}
 
 	public getValidSectionsTypes<T extends string = TCharacterSectionType>(): T[] {
-		const outputTypes: TCharacterSectionType[] = [];
-		if (this.core.origin) outputTypes.push("Origin");
-		if (this.core.description) outputTypes.push("Description");
-		if (this.core.languages) outputTypes.push("Languages");
-		if (this.core.influences) outputTypes.push("Influences");
-		if (this.core.hangUps) outputTypes.push("HangUps");
-		if (this.core.personalPower) outputTypes.push("PersonalPower");
-		if (this.core.movement) outputTypes.push("Movement");
-		if (this.core.health) outputTypes.push("Health");
-		if (this.core.attacks?.length) outputTypes.push("Attacks");
-		outputTypes.push("Abilities");
-		outputTypes.push("AbilityMath");
-		outputTypes.push("Skills");
-		if (this.core.armor?.length) outputTypes.push("Armor");
-		if (this.core.powers) outputTypes.push("Powers");
-		if (this.core.perks) outputTypes.push("Perks");
-		if (this.core.backgroundBonds) outputTypes.push("BackgroundBonds");
-		if (this.core.weapons?.length) outputTypes.push("Weapons");
-		if (this.core.zord) outputTypes.push("Zord");
-		if (this.core.inventory) outputTypes.push("Inventory");
-		if (this.core.notes) outputTypes.push("Notes");
+		const outputTypes: TCharacterSectionType[] = super.getValidSectionsTypes();
+		if (this.core.inventory) {
+			outputTypes.push("Inventory");
+		}
+		if (this.core.personalPower) {
+			outputTypes.push("PersonalPower");
+		}
+		if (this.core.powers) {
+			outputTypes.push("Powers");
+		}
+		if (this.core.zord) {
+			outputTypes.push("Zord");
+		}
 		return outputTypes as T[];
 	}
 
-	public getValidViewTypes<T extends string = TCharacterViewType>(): T[] {
-		return ["All", "Combat"] as T[];
-	}
 }
