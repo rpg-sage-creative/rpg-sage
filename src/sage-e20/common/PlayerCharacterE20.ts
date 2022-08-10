@@ -78,6 +78,9 @@ export interface PlayerCharacterCoreE20 extends CharacterBaseCore<"PlayerCharact
 	weapons: TWeaponE20[];
 }
 
+export const Abilities: TAbilityName[] = ["Strength", "Speed", "Smarts", "Social"];
+export type TAbilityName = "Strength" | "Speed" | "Smarts" | "Social";
+
 export default abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> extends CharacterBase<T> {
 
 	public get abilities(): TStatE20[] { return this.core.abilities ?? []; }
@@ -86,11 +89,27 @@ export default abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE2
 	abstract getValidViewTypes<U extends string>(): U[];
 	abstract toHtml(): string;
 
+	protected toAbilityMathHtml(abilityName: TAbilityName): string {
+		const ability = this.abilities.find(abil => abil.abilityName === abilityName);
+		const essence = `${+(ability?.essence ?? 0)} (essence)`;
+		const perks = `${+(ability?.perks ?? 0)} (perks)`;
+		const armorOrBonus = abilityName === "Strength" ? `${+(ability?.armor ?? 0)} (armor)` : `${+(ability?.bonus ?? 0)} (bonus)`;
+		return `[spacer]10 + ${essence} + ${perks} + ${armorOrBonus}`;
+	}
+
 	protected toSkillHtml(skill: TSkillE20): string {
 		const name = skill.name;
 		const specializations = skill.specializations?.length ? ` (${skill.specializations.map(spec => spec.name).join(", ")})` : "";
 		const bonus = skill.bonus ? ` x${skill.bonus}` : "";
 		const die = skill.die ? ` +${skill.die}` : "";
 		return `${name}${specializations}${bonus}${die}`;
+	}
+
+	protected toSkillsHtml(abilityName: TAbilityName): string {
+		const ability = this.abilities.find(abil => abil.abilityName === abilityName);
+		const skillValues = (ability?.skills ?? [])
+			.filter(skill => skill.bonus || skill.die || skill.specializations?.length)
+			.map(skill => this.toSkillHtml(skill));
+		return `[spacer]${skillValues.join(", ")}`;
 	}
 }

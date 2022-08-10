@@ -1,5 +1,5 @@
 import type { Optional } from "../../sage-utils";
-import type { PlayerCharacterCoreE20, TArmorE20, TWeaponE20 } from "../common/PlayerCharacterE20";
+import type { PlayerCharacterCoreE20, TAbilityName, TArmorE20, TWeaponE20 } from "../common/PlayerCharacterE20";
 import PlayerCharacterE20 from "../common/PlayerCharacterE20";
 
 export type TArmorJoe = TArmorE20 & {
@@ -12,7 +12,7 @@ export type TWeaponJoe = TWeaponE20 & {
 
 export type TCharacterViewType = "All" | "Combat";
 
-export type TCharacterSectionType = "All" | "Abilities" | "Armor" | "Attacks"
+export type TCharacterSectionType = "All" | "Abilities" | "AbilityMath" | "Armor" | "Attacks"
 	| "BackgroundBonds" | "Description"
 	| "Focus" | "Gear"
 	| "HangUps" | "Health"
@@ -127,27 +127,17 @@ export default class PlayerCharacterJoe extends PlayerCharacterE20<PlayerCharact
 
 		//#region abilities
 		const hasAbilities = includes("All", "Abilities") && this.core.abilities.length;
-		const hasStats = hasAbilities; // includes("All", "Stats") && this.core.abilities.length;
-		const hasSkills = includes("All", "Skills") && this.core.abilities?.find(ability => ability.skills?.length);
-		if (hasAbilities || hasStats || hasSkills) {
+		const hasAbilityMath = includes("All", "AbilityMath") && this.core.abilities.length;
+		const hasSkills = includes("All", "Skills") && this.core.abilities?.find(ability => ability.skills.find(skill => skill.bonus || skill.die || skill.specializations?.length));
+		if (hasAbilities || hasAbilityMath || hasSkills) {
 			push();
 			this.core.abilities?.forEach(ability => {
 				push(`<b>${ability.abilityName}</b> (${orQ(ability.ability)}), <b>${ability.defenseName}</b> (${orQ(ability.defense)})`);
-
-				if (hasStats) {
-					const essence = `${+(ability.essence ?? 0)} (essence)`;
-					const perks = `${+(ability.perks ?? 0)} (perks)`;
-					const armorOrBonus = ability.abilityName === "Strength" ? `${+(ability.armor ?? 0)} (armor)` : `${+(ability.bonus ?? 0)} (bonus)`;
-					push(`[spacer]10 + ${essence} + ${perks} + ${armorOrBonus}`);
+				if (hasAbilityMath) {
+					push(this.toAbilityMathHtml(ability.abilityName as TAbilityName));
 				}
-
 				if (hasSkills) {
-					const skillValues = (ability.skills ?? [])
-						.filter(skill => skill.bonus || skill.die || skill.specializations?.length)
-						.map(skill => this.toSkillHtml(skill));
-					if (skillValues.length) {
-						push(`[spacer]${skillValues.join(", ")}`);
-					}
+					push(this.toSkillsHtml(ability.abilityName as TAbilityName));
 				}
 			});
 		}
@@ -247,6 +237,7 @@ export default class PlayerCharacterJoe extends PlayerCharacterE20<PlayerCharact
 		if (this.core.health) outputTypes.push("Health");
 		if (this.core.attacks?.length) outputTypes.push("Attacks");
 		outputTypes.push("Abilities");
+		outputTypes.push("AbilityMath");
 		outputTypes.push("Skills");
 		if (this.core.armor?.length) outputTypes.push("Armor");
 		if (this.core.training) outputTypes.push("Training");

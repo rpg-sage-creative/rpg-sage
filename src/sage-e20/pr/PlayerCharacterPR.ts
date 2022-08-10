@@ -1,5 +1,5 @@
 import type { Optional } from "../../sage-utils";
-import type { PlayerCharacterCoreE20, TStatE20 } from "../common/PlayerCharacterE20";
+import type { PlayerCharacterCoreE20, TAbilityName, TStatE20 } from "../common/PlayerCharacterE20";
 import PlayerCharacterE20 from "../common/PlayerCharacterE20";
 
 export type TStatPR = TStatE20 & {
@@ -40,7 +40,7 @@ export type TZord = {
 
 export type TCharacterViewType = "All" | "Combat";
 
-export type TCharacterSectionType = "All" | "Abilities" | "Armor" | "Attacks"
+export type TCharacterSectionType = "All" | "Abilities" | "AbilityMath" | "Armor" | "Attacks"
 	| "BackgroundBonds" | "Description"
 	| "HangUps" | "Health"
 	| "Influences" | "Inventory"
@@ -152,6 +152,15 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 		}
 	}
 
+	protected toAbilityMathHtml(abilityName: TAbilityName): string {
+		const ability = this.abilities.find(abil => abil.abilityName === abilityName) as TStatPR;
+		const essence = +(ability?.essence ?? 0);
+		const perks = +(ability?.perks ?? 0);
+		const [armorOrBonus, armorOrBonusLabel] = abilityName === "Strength" ? [+(ability?.armor ?? 0), "armor"] : [+(ability?.bonus ?? 0), "bonus"];
+		const morphed = ability?.morphed ?? (10 + essence + perks + armorOrBonus);
+		return `[spacer]${morphed} (morphed) = 10 + ${essence} (essence) + ${perks} (perks) + ${armorOrBonus} (${armorOrBonusLabel})`;
+	}
+
 	public toHtml(outputTypes: TCharacterSectionType[] = ["All"]): string {
 		const html: string[] = [];
 
@@ -226,28 +235,17 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 
 		//#region abilities
 		const hasAbilities = includes("All", "Abilities") && this.core.abilities.length;
-		const hasStats = hasAbilities; // includes("All", "Stats") && this.core.abilities.length;
-		const hasSkills = includes("All", "Skills") && this.core.abilities?.find(ability => ability.skills?.length);
-		if (hasAbilities || hasStats || hasSkills) {
+		const hasAbilityMath = includes("All", "AbilityMath") && this.core.abilities.length;
+		const hasSkills = includes("All", "Skills") && this.core.abilities?.find(ability => ability.skills.find(skill => skill.bonus || skill.die || skill.specializations?.length));
+		if (hasAbilities || hasAbilityMath || hasSkills) {
 			push();
 			this.core.abilities?.forEach(ability => {
 				push(`<b>${ability.abilityName}</b> (${orQ(ability.ability)}), <b>${ability.defenseName}</b> (${orQ(ability.defense)})`);
-
-				if (hasStats) {
-					const essence = +(ability.essence ?? 0);
-					const perks = +(ability.perks ?? 0);
-					const [armorOrBonus, armorOrBonusLabel] = ability.abilityName === "Strength" ? [+(ability.armor ?? 0), "armor"] : [+(ability.bonus ?? 0), "bonus"];
-					const morphed = ability.morphed ?? (10 + essence + perks + armorOrBonus);
-					push(`[spacer]${morphed} (morphed) = 10 + ${essence} (essence) + ${perks} (perks) + ${armorOrBonus} (${armorOrBonusLabel})`);
+				if (hasAbilityMath) {
+					push(this.toAbilityMathHtml(ability.abilityName as TAbilityName));
 				}
-
 				if (hasSkills) {
-					const skillValues = (ability.skills ?? [])
-						.filter(skill => skill.bonus || skill.die || skill.specializations?.length)
-						.map(skill => this.toSkillHtml(skill));
-					if (skillValues.length) {
-						push(`[spacer]${skillValues.join(", ")}`);
-					}
+					push(this.toSkillsHtml(ability.abilityName as TAbilityName));
 				}
 			});
 		}
@@ -345,6 +343,7 @@ export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacte
 		if (this.core.health) outputTypes.push("Health");
 		if (this.core.attacks?.length) outputTypes.push("Attacks");
 		outputTypes.push("Abilities");
+		outputTypes.push("AbilityMath");
 		outputTypes.push("Skills");
 		if (this.core.armor?.length) outputTypes.push("Armor");
 		if (this.core.powers) outputTypes.push("Powers");
