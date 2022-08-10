@@ -7,15 +7,13 @@ import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
 	cleanDescription,
 	createValueTestData, DiceOutputType,
-	DiceSecretMethodType, DropKeepType, GameType, rollDice, TDiceLiteral, TestType, TSign,
-	TTestData
+	DiceSecretMethodType, DropKeepType, GameType, rollDice, TDiceLiteral, TestType, TTestData
 } from "../../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
 	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers,
-	reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
-	TReduceSignToDropKeep
+	reduceTokenToDicePartCore as baseReduceTokenToDicePartCore
 } from "../base";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
@@ -28,17 +26,25 @@ import type {
 //#region Tokenizer
 function getParsers(): TParsers {
 	const parsers = baseGetParsers();
-	parsers["bang"] = /\!/;
+	parsers["suffix"] = /[\*se]+/i;
 	parsers["target"] = /\b(vs\s*dif|dif|vs)\s*(\d+)/i;
 	return parsers;
 }
-const EDGE = "Edge";
-const SNAG = "Snag";
+
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[]): T {
-	if (token.type === "bang") {
+	if (token.type === "suffix") {
 		const prevToken = tokens[index - 1];
 		if (prevToken?.type === "dice") {
-			core.specialization = true;
+			if (token.token.includes("*")) {
+				core.sign = "+";
+				core.specialization = true;
+			}
+			if (token.token.match(/e/i)) {
+				core.dropKeep = { type:DropKeepType.KeepHighest, value:1 };
+			}
+			if (token.token.match(/s/i)) {
+				core.dropKeep = { type:DropKeepType.KeepLowest, value:1 };
+			}
 			return core;
 		}
 	}
@@ -46,14 +52,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 		core.target = parseTargetData(token);
 		return core;
 	}
-	const reduceSignToDropKeepData: TReduceSignToDropKeep[] = [];
-	if (token.type === "dice") {
-		reduceSignToDropKeepData.push(
-			{ sign:"+" as TSign, type:DropKeepType.KeepHighest, value:1, alias:EDGE, test:_core => _core.sign === "+" },
-			{ sign:"-" as TSign, type:DropKeepType.KeepLowest, value:1, alias:SNAG, test:_core => _core.sign === "-" }
-		);
-	}
-	return baseReduceTokenToDicePartCore(core, token, index, tokens, reduceSignToDropKeepData);
+	return baseReduceTokenToDicePartCore(core, token, index, tokens);
 }
 //#endregion
 
@@ -83,9 +82,9 @@ type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 	testOrTarget?: TTestData | TTargetData;
 };
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
-	public get hasSpecialiation(): boolean { return this.core.specialization === true; }
+	public get hasSpecialization(): boolean { return this.core.specialization === true; }
 	//#region static
-	public static create({ count, description, dropKeep, sides, specialization, testOrTarget }: TDicePartCoreArgs = {}): DicePart {
+	public static create({ count, description, dropKeep, sides, sign, specialization, testOrTarget }: TDicePartCoreArgs = {}): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.E20,
@@ -97,7 +96,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			modifier: 0,
 			noSort: false,
 			sides: sides ?? 0,
-			sign: undefined,
+			sign: sign,
 			specialization,
 			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget ?? null,
 			target: <TTargetData>testOrTarget ?? null
@@ -108,9 +107,20 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	}
 	public static fromTokens(tokens: TToken[]): DicePart {
 		const core = tokens.reduce(reduceTokenToDicePartCore, <DicePartCore>{ description:"" });
-		if (core.sides !== 20 && core.description.startsWith("!")) {
-			core.specialization = true;
-			core.description = core.description.slice(1);
+		if (core.sides !== 20 && core.description.match(/^[es\*]+/i)) {
+			while (core.description.match(/^[es\*]+/i)) {
+				if (core.description.match(/^e/i)) {
+					core.dropKeep = { type:DropKeepType.KeepHighest, value:1 };
+				}
+				if (core.description.match(/^s/i)) {
+					core.dropKeep = { type:DropKeepType.KeepLowest, value:1 };
+				}
+				if (core.description.match(/^\*/i)) {
+					core.sign = "+";
+					core.specialization = true;
+				}
+				core.description = core.description.slice(1);
+			}
 		}
 		const args = <TDicePartCoreArgs>{ testOrTarget:core.target ?? core.test, ...core };
 		return DicePart.create(args);
@@ -219,8 +229,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		const skillDicePart = DicePart.fromTokens(tokens);
 		const skillDice = Dice.create([skillDicePart]);
 		const dice = [skillDice];
-
-		if (skillDicePart.sides !== 20) {
+		if (skillDicePart.sides !== 20 && skillDicePart.sign === "+") {
 			const d20DicePartCore: DicePartCore = {
 				objectType: "DicePart",
 				gameType: GameType.E20,
@@ -231,11 +240,11 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 				modifier: 0,
 				noSort: false
 			};
-			if (skillDicePart.hasDropKeep) {
-				d20DicePartCore.count = 2;
-				d20DicePartCore.dropKeep = skillDicePart.dropKeep;
-				delete skillDicePart.toJSON().dropKeep;
-			}
+			// if (skillDicePart.hasDropKeep) {
+			// 	d20DicePartCore.count = 2;
+			// 	d20DicePartCore.dropKeep = skillDicePart.dropKeep;
+			// 	delete skillDicePart.toJSON().dropKeep;
+			// }
 			const d20DicePart = new DicePart(d20DicePartCore);
 			const d20Dice = Dice.create([d20DicePart]);
 			dice.unshift(d20Dice);
@@ -247,7 +256,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 
 		const step = `${skillDicePart.count}d${skillDicePart.sides}`;
 		const ladder = ["1d2","1d4","1d6","1d8","1d10","1d12","2d8","3d6"];
-		if (skillDicePart.hasSpecialiation && ladder.indexOf(step) > 0) {
+		if (skillDicePart.hasSpecialization && ladder.indexOf(step) > 0) {
 			for (let index = ladder.indexOf(step); index--;) {
 				const [count, sides] = ladder[index].split("d");
 				dice.push(Dice.create([new DicePart({
