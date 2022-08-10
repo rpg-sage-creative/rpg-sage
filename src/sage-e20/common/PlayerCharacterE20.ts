@@ -215,7 +215,8 @@ export default abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE2
 		const specializations = skill.specializations?.length ? ` (${skill.specializations.map(spec => spec.name).join(", ")})` : "";
 		const bonus = skill.bonus ? ` x${skill.bonus}` : "";
 		const die = skill.die ? ` +${skill.die}` : "";
-		return `${name}${specializations}${bonus}${die}`;
+		const specializationsNote = skill.specializations?.length ? `\\*` : "";
+		return `${name}${specializations}${bonus}${die}${specializationsNote}`;
 	}
 
 	protected toSkillsHtml(abilityName: TAbilityName): string {
