@@ -188,10 +188,11 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 			});
 			if (includeSpecs) {
 				skill.specializations?.forEach(spec => {
+					const specValue = `${skill.name}-${spec.name}`;
 					selectMenu.addOptions({
-						label: `Specialization Roll: ${spec.name} +${skill.die}*`,
-						value: spec.name,
-						default: isDefault(spec.name)
+						label: `Specialization Roll: ${skill.name} (${spec.name}) +${skill.die}*`,
+						value: specValue,
+						default: isDefault(specValue)
 					});
 				});
 			}
@@ -232,10 +233,11 @@ function createSkillSpecializationSelectRow(character: TPlayerCharacter): Messag
 				return;
 			}
 			skill.specializations?.forEach(spec => {
+				const specValue = `${skill.name}-${spec.name}`;
 				selectMenu.addOptions({
-					label: `Specialization Roll: ${spec.name} +${skill.die}*`,
-					value: spec.name,
-					default: spec.name === activeSkill
+					label: `Specialization Roll: ${skill.name} (${spec.name}) +${skill.die}*`,
+					value: specValue,
+					default: specValue === activeSkill
 				});
 			});
 		});
@@ -331,16 +333,19 @@ function testEdgeSnag<T>(value: Optional<TEdgeSnag>, values: { edge: T, snag: T,
 async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, character: TPlayerCharacter, secret = false, init = false, untrained = false): Promise<void> {
 	let dice = "";
 	if (untrained) {
-		dice = `[-d20 ${character.name} Untrained]`;
+		dice = `[d20s ${character.name} Untrained]`;
 	}else {
-		const skillName = init ? "Initiative" : character.getSheetValue<string>("activeSkill") ?? "Initiative";
-		const ability = character.abilities.find(abil => abil.skills.find(sk => sk.name === skillName || sk.specializations?.find(spec => spec.name === skillName)));
-		const skill = ability?.skills.find(sk => sk.name === skillName || sk.specializations?.find(spec => spec.name === skillName));
-		const specialization = skill?.specializations?.find(spec => spec.name === skillName);
-		const plusMinus = testEdgeSnag(character.getSheetValue<TEdgeSnag>("activeEdgeSnag"), { edge:"+", snag:"-", none:"" });
+		const activeSkill = init ? "Initiative" : character.getSheetValue<string>("activeSkill") ?? "Initiative";
+		const [skillName, specName] = activeSkill.split("-");
+		const ability = character.abilities.find(abil => abil.skills.find(sk => sk.name === skillName && (!specName || sk.specializations?.find(spec => spec.name === specName))));
+		const skill = ability?.skills.find(sk => sk.name === skillName && (!specName || sk.specializations?.find(spec => spec.name === specName)));
+		const specialization = specName ? skill?.specializations?.find(spec => spec.name === specName) : undefined;
 		const skillDie = skill?.die ?? "d20";
-		const specBang = specialization ? "!" : "";
-		dice = `[${plusMinus}${skillDie}${specBang} ${character.name}${secret ? " Secret" : ""} ${skillName}]`;
+		const specStar = specialization ? "*" : "";
+		const edgeSnag = testEdgeSnag(character.getSheetValue<TEdgeSnag>("activeEdgeSnag"), { edge:"e", snag:"s", none:"" });
+		const specNameRider = specName ? ` (${specName})` : "";
+		dice = `[+${skillDie}${specStar}${edgeSnag} ${character.name}${secret ? " Secret" : ""} ${skillName}${specNameRider}]`;
+		console.log(dice);
 	}
 	const matches = parseDiceMatches(sageInteraction, dice);
 	const output = matches.map(match => match.output).flat();
