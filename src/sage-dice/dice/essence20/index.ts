@@ -240,11 +240,11 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 				modifier: 0,
 				noSort: false
 			};
-			// if (skillDicePart.hasDropKeep) {
-			// 	d20DicePartCore.count = 2;
-			// 	d20DicePartCore.dropKeep = skillDicePart.dropKeep;
-			// 	delete skillDicePart.toJSON().dropKeep;
-			// }
+			if (skillDicePart.hasDropKeep) {
+				d20DicePartCore.count = 2;
+				d20DicePartCore.dropKeep = skillDicePart.dropKeep;
+				delete skillDicePart.toJSON().dropKeep;
+			}
 			const d20DicePart = new DicePart(d20DicePartCore);
 			const d20Dice = Dice.create([d20DicePart]);
 			dice.unshift(d20Dice);
