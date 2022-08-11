@@ -23,7 +23,7 @@ export type TSkillE20 = {
 	specializations?: TSkillSpecialization[];
 };
 
-type TSkillSpecialization = {
+export type TSkillSpecialization = {
 	name: string;
 	checked: boolean;
 };

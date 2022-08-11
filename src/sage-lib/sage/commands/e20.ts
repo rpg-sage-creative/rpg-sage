@@ -1,9 +1,10 @@
 import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
 import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf";
+import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20";
 import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse";
 import PlayerCharacterJoe, { PlayerCharacterCoreJoe } from "../../../sage-e20/joe/PlayerCharacterJoe";
 import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
-import PlayerCharacterPR, { getCharacterSections, PlayerCharacterCorePR, TCharacterSectionType, TCharacterViewType } from "../../../sage-e20/pr/PlayerCharacterPR";
+import PlayerCharacterPR, { getCharacterSections, PlayerCharacterCorePR, TCharacterSectionType, TCharacterViewType, TSkillZord, TStatZord } from "../../../sage-e20/pr/PlayerCharacterPR";
 import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
 import PlayerCharacterTransformer, { PlayerCharacterCoreTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
 import type { Optional, UUID } from "../../../sage-utils";
@@ -197,8 +198,8 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 				default: isDefault(skill.name)
 			});
 			if (includeSpecs) {
-				skill.specializations?.forEach(spec => {
-					const specValue = `${skill.name}-${spec.name}`;
+				skill.specializations?.forEach((spec, index) => {
+					const specValue = `${skill.name}-${index}-${spec.name}`;
 					selectMenu.addOptions({
 						label: `Specialization Roll: ${skill.name} (${spec.name}) +${skill.die}*`,
 						value: specValue,
@@ -242,8 +243,8 @@ function createSkillSpecializationSelectRow(character: TPlayerCharacter): Messag
 			if (!skill.die) {
 				return;
 			}
-			skill.specializations?.forEach(spec => {
-				const specValue = `${skill.name}-${spec.name}`;
+			skill.specializations?.forEach((spec, index) => {
+				const specValue = `${skill.name}-${index}-${spec.name}`;
 				selectMenu.addOptions({
 					label: `Specialization Roll: ${skill.name} (${spec.name}) +${skill.die}*`,
 					value: specValue,
@@ -351,21 +352,40 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 		dice = `[d20s ${character.name} Untrained]`;
 	}else {
 		const activeSkill = init ? "Initiative" : character.getSheetValue<string>("activeSkill") ?? "Initiative";
-		const [skillName, specName] = activeSkill.split("-");
-		const ability = character.abilities.find(abil => abil.skills.find(sk => sk.name === skillName && (!specName || sk.specializations?.find(spec => spec.name === specName))));
-		const skill = ability?.skills.find(sk => sk.name === skillName && (!specName || sk.specializations?.find(spec => spec.name === specName)));
-		const specialization = specName ? skill?.specializations?.find(spec => spec.name === specName) : undefined;
+		const isZord = activeSkill.startsWith("Zord ") && "zord" in character;
+		let ability: TStatE20 | TStatZord | undefined;
+		let skill: TSkillE20 | TSkillZord | undefined;
+		let specialization: TSkillSpecialization | undefined;
+		if (isZord) {
+			ability = character.zord.abilities?.find(abil => abil.skills?.find(sk => activeSkill === `Zord ${sk.name}`));
+			skill = ability?.skills?.find(sk => activeSkill === `Zord ${sk.name}`);
+		}else {
+			ability = character.abilities.find(abil => findSkill(abil, activeSkill));
+			skill = findSkill(ability as TStatE20, activeSkill);
+			specialization = findSpec(skill as TSkillE20, activeSkill);
+		}
+		const plus = "+";
 		const skillDie = skill?.die ?? "d20";
 		const specStar = specialization ? "*" : "";
 		const edgeSnag = testEdgeSnag(character.getSheetValue<TEdgeSnag>("activeEdgeSnag"), { edge:"e", snag:"s", none:"" });
-		const specNameRider = specName ? ` (${specName})` : "";
-		dice = `[+${skillDie}${specStar}${edgeSnag} ${character.name}${secret ? " Secret" : ""} ${skillName}${specNameRider}]`;
+		const charName = character.name;
+		const secretText = secret ? " Secret" : "";
+		const skillName = isZord ? activeSkill : skill?.name;
+		const specName = specialization ? ` (${specialization.name})` : "";
+		dice = `[${plus}${skillDie}${specStar}${edgeSnag} ${charName}${secretText} ${skillName}${specName}]`;
 	}
 	const matches = parseDiceMatches(sageInteraction, dice);
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
 		await sageInteraction.interaction.channel?.send(`${DiscordId.toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`);
+	}
+
+	function findSkill(ability: Optional<TStatE20>, value: string): TSkillE20 | undefined {
+		return ability?.skills.find(skill => skill.name === value || findSpec(skill, value));
+	}
+	function findSpec(skill: Optional<TSkillE20>, value: string): TSkillSpecialization | undefined {
+		return skill?.specializations?.find((spec, index) => `${skill.name}-${index}-${spec.name}` === value);
 	}
 }
 
