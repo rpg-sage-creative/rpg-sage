@@ -377,6 +377,8 @@ export function registerCommandHandlers(): void {
 export const e20Pdf = "e20-pdf";
 
 export async function slashHandlerEssence20(sageInteraction: SageInteraction): Promise<void> {
+	await sageInteraction.update(`Attempting to import character ...`, false);
+
 	const value = sageInteraction.getString(e20Pdf, true);
 	const isPdfUrl = value.match(/^http.*?\.pdf$/) !== null;
 	const isMessageUrl = value.startsWith("https://discord.com/channels/");
