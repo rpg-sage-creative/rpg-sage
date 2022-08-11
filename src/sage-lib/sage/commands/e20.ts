@@ -8,7 +8,7 @@ import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
 import PlayerCharacterTransformer, { PlayerCharacterCoreTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
 import type { Optional, UUID } from "../../../sage-utils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
+import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import { PdfCacher } from "../../../sage-utils/utils/PdfUtils";
 import { DiscordId, DiscordKey, DUser, NilSnowflake, TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
@@ -19,6 +19,13 @@ import { parseDiceMatches, sendDice } from "./dice";
 
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
 type TPlayerCharacterCore = PlayerCharacterCoreJoe | PlayerCharacterCorePR | PlayerCharacterCoreTransformer;
+
+function createSelectMenuRow(selectMenu: MessageSelectMenu): MessageActionRow {
+	if (selectMenu.options.length > 25) {
+		selectMenu.options.length = 25;
+	}
+	return new MessageActionRow().addComponents(selectMenu);
+}
 
 async function attachCharacter(sageCache: SageCache, channel: TChannel | DUser, attachmentName: string, character: TPlayerCharacter, pin: boolean): Promise<void> {
 	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.description).join("");
@@ -67,6 +74,9 @@ async function loadCharacter(characterId: UUID): Promise<TPlayerCharacter | null
 	}
 	return null;
 }
+function charFileExists(characterId: string): boolean {
+	return fileExistsSync(getPath(characterId));
+}
 function getPath(characterId: string): string {
 	return `./data/sage/e20/${characterId}.json`;
 }
@@ -102,7 +112,7 @@ function getActiveSections(character: TPlayerCharacter): TCharacterSectionType[]
 
 function createViewSelectRow(character: TPlayerCharacter): MessageActionRow {
 	const selectMenu = new MessageSelectMenu();
-	selectMenu.setCustomId(`${character.id}|View`);
+	selectMenu.setCustomId(`E20|${character.id}|View`);
 	selectMenu.setPlaceholder("Character Sheet Sections");
 	selectMenu.setMinValues(1);
 
@@ -130,12 +140,12 @@ function createViewSelectRow(character: TPlayerCharacter): MessageActionRow {
 		});
 	});
 
-	return new MessageActionRow().addComponents(selectMenu);
+	return createSelectMenuRow(selectMenu);
 }
 
 function createEdgeSnagRow(character: TPlayerCharacter): MessageActionRow {
 	const selectMenu = new MessageSelectMenu();
-	selectMenu.setCustomId(`${character.id}|EdgeSnag`);
+	selectMenu.setCustomId(`E20|${character.id}|EdgeSnag`);
 	selectMenu.setPlaceholder("Do you have an Edge or a Snag?");
 
 	const activeEdgeSnag = character.getSheetValue("activeEdgeSnag")!;
@@ -146,7 +156,7 @@ function createEdgeSnagRow(character: TPlayerCharacter): MessageActionRow {
 		{ label: `Edge / Snag: Snag`, value: `Snag`, default: activeEdgeSnag === "Snag" }
 	);
 
-	return new MessageActionRow().addComponents(selectMenu);
+	return createSelectMenuRow(selectMenu);
 }
 
 function countTrainedAndSpecs(character: TPlayerCharacter): number {
@@ -171,7 +181,7 @@ function countTrainedAndSpecs(character: TPlayerCharacter): number {
 }
 function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean): MessageActionRow {
 	const selectMenu = new MessageSelectMenu();
-	selectMenu.setCustomId(`${character.id}|Skill`);
+	selectMenu.setCustomId(`E20|${character.id}|Skill`);
 	selectMenu.setPlaceholder("Select a Skill to Roll");
 
 	const activeSkill = character.getSheetValue("activeSkill");
@@ -215,7 +225,7 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 		});
 	}
 
-	return new MessageActionRow().addComponents(selectMenu);
+	return createSelectMenuRow(selectMenu);
 
 	function isDefault(name: string): boolean {
 		return name === activeSkill || (!activeSkill && name === "Initiative");
@@ -223,7 +233,7 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 }
 function createSkillSpecializationSelectRow(character: TPlayerCharacter): MessageActionRow {
 	const selectMenu = new MessageSelectMenu();
-	selectMenu.setCustomId(`${character.id}|Spec`);
+	selectMenu.setCustomId(`E20|${character.id}|Spec`);
 	selectMenu.setPlaceholder("Select a Specialization to Roll");
 
 	const activeSkill = character.getSheetValue("activeSkill");
@@ -243,7 +253,7 @@ function createSkillSpecializationSelectRow(character: TPlayerCharacter): Messag
 		});
 	});
 
-	return new MessageActionRow().addComponents(selectMenu);
+	return createSelectMenuRow(selectMenu);
 }
 
 function createButton(customId: string, label: string, style: MessageButtonStyleResolvable): MessageButton {
@@ -259,10 +269,10 @@ function createRollButtonRow(character: TPlayerCharacter): MessageActionRow {
 	const activeEdgeSnag = character.getSheetValue<TEdgeSnag>("activeEdgeSnag");
 	const testColor = testEdgeSnag(activeEdgeSnag, { edge:"SUCCESS", snag:"DANGER", none:"PRIMARY" }) as MessageButtonStyleResolvable;
 	const untrainedColor = testEdgeSnag(activeEdgeSnag, { edge:"PRIMARY", snag:"DANGER", none:"DANGER" }) as MessageButtonStyleResolvable;
-	const rollButton = createButton(`${character.id}|Roll`, `Roll Test`, testColor);
-	const rollSecretButton = createButton(`${character.id}|Secret`, `Roll Secret Test`, testColor);
-	const rollInitButton = createButton(`${character.id}|Init`, `Roll Initiative`, testColor);
-	const rollUntrainedButton = createButton(`${character.id}|Untrained`, `Roll Untrained`, untrainedColor);
+	const rollButton = createButton(`E20|${character.id}|Roll`, `Roll Test`, testColor);
+	const rollSecretButton = createButton(`E20|${character.id}|Secret`, `Roll Secret Test`, testColor);
+	const rollInitButton = createButton(`E20|${character.id}|Init`, `Roll Initiative`, testColor);
+	const rollUntrainedButton = createButton(`E20|${character.id}|Untrained`, `Roll Untrained`, untrainedColor);
 	return new MessageActionRow().addComponents(rollButton, rollSecretButton, rollInitButton, rollUntrainedButton);
 }
 
@@ -285,10 +295,15 @@ function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): TOutp
 	return { embeds, components };
 }
 
-const uuidActionRegex = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Skill|Spec|EdgeSnag|Roll|Secret|Init|Untrained)$/i;
+const uuidActionRegex = /^E20\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Skill|Spec|EdgeSnag|Roll|Secret|Init|Untrained)$/i;
 
 function sheetTester(sageInteraction: SageInteraction): boolean {
-	return uuidActionRegex.test(sageInteraction.interaction.customId);
+	const customId = sageInteraction.interaction.customId;
+	if (!uuidActionRegex.test(customId)) {
+		return false;
+	}
+	const [_e20, characterId] = customId.split("|");
+	return _e20 === "E20" && charFileExists(characterId);
 }
 
 async function viewHandler(sageInteraction: SageInteraction<SelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
@@ -345,7 +360,6 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 		const edgeSnag = testEdgeSnag(character.getSheetValue<TEdgeSnag>("activeEdgeSnag"), { edge:"e", snag:"s", none:"" });
 		const specNameRider = specName ? ` (${specName})` : "";
 		dice = `[+${skillDie}${specStar}${edgeSnag} ${character.name}${secret ? " Secret" : ""} ${skillName}${specNameRider}]`;
-		console.log(dice);
 	}
 	const matches = parseDiceMatches(sageInteraction, dice);
 	const output = matches.map(match => match.output).flat();
@@ -357,12 +371,10 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 
 async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 	await sageInteraction.interaction.deferUpdate();
-	const actionParts = sageInteraction.interaction.customId.split("|");
-	const characterId = actionParts[0] as UUID;
+	const [_E20, characterId, command] = sageInteraction.interaction.customId.split("|");
 	const character = await loadCharacter(characterId);
 	if (character) {
-		const command = actionParts[1] as "View" | "Skill" | "Spec" | "EdgeSnag" | "Roll" | "Secret" | "Init" | "Untrained";
-		switch(command) {
+		switch(command as "View" | "Skill" | "Spec" | "EdgeSnag" | "Roll" | "Secret" | "Init" | "Untrained") {
 			case "View": return viewHandler(sageInteraction, character);
 			case "Skill": case "Spec": return skillHandler(sageInteraction, character);
 			case "EdgeSnag": return edgeSnagHandler(sageInteraction, character);
@@ -382,7 +394,7 @@ export function registerCommandHandlers(): void {
 export const e20Pdf = "e20-pdf";
 
 export async function slashHandlerEssence20(sageInteraction: SageInteraction): Promise<void> {
-	await sageInteraction.update(`Attempting to import character ...`, false);
+	await sageInteraction.reply(`Attempting to import character ...`, false);
 
 	const value = sageInteraction.getString(e20Pdf, true);
 	const isPdfUrl = value.match(/^http.*?\.pdf$/) !== null;
@@ -392,6 +404,7 @@ export async function slashHandlerEssence20(sageInteraction: SageInteraction): P
 	let rawJson: TRawJson | undefined;
 	if (isPdfUrl) {
 		fileName = value.split("/").pop();
+		await sageInteraction.reply(`Attempting to read character from ${fileName} ...`, false);
 		rawJson = await PdfCacher.read<TRawJson>(value);
 	}else if (isMessageUrl) {
 		const [serverDid, channelDid, messageDid] = value.split("/").slice(-3);
@@ -400,19 +413,20 @@ export async function slashHandlerEssence20(sageInteraction: SageInteraction): P
 		const attachment = message?.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
 		if (attachment) {
 			fileName = attachment.name ?? undefined;
+			await sageInteraction.reply(`Attempting to read character from ${fileName} ...`, false);
 			rawJson = await PdfCacher.read<TRawJson>(attachment?.url);
 		}
 	}
 	if (!rawJson) {
-		return sageInteraction.update(`Failed to find pdf!`, true);
+		return sageInteraction.reply(`Failed to find pdf!`, false);
 	}
 
 	const character = jsonToCharacter(rawJson);
 	if (!character) {
-		return sageInteraction.update(`Failed to import character from: ${fileName}!`, true);
+		return sageInteraction.reply(`Failed to import character from: ${fileName}!`, false);
 	}
 
-	await sageInteraction.update(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
+	await sageInteraction.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
 
 	const channel = sageInteraction.interaction.channel ?? sageInteraction.user;
 

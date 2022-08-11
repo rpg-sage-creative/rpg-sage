@@ -183,7 +183,7 @@ export default class PlayerCharacterJoe extends PlayerCharacterE20<PlayerCharact
 	protected toArmorHtml(armor: TArmorJoe): string {
 		const name = armor.name ?? "<i>Unnamed Armor</i>";
 		const desc = armor.description ? ` (${armor.description})` : "";
-		const upgrades = armor.upgrades ? `; Upgrades: ${armor.upgrades} ` : ""
+		const upgrades = armor.upgrades ? `; Upgrades: ${armor.upgrades} ` : "";
 		const effect = armor.effect ? `; Effect: ${armor.effect} ` : "";
 		const traits = armor.traits ? `; Traits: ${armor.traits} ` : "";
 		return `[spacer]${name}${desc}${upgrades}${effect}${traits}`;

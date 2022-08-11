@@ -1,6 +1,5 @@
 import type { Optional } from "../../sage-utils";
-import { orQ, PlayerCharacterCoreE20, TAbilityName, TStatE20 } from "../common/PlayerCharacterE20";
-import PlayerCharacterE20 from "../common/PlayerCharacterE20";
+import PlayerCharacterE20, { orQ, PlayerCharacterCoreE20, TAbilityName, TStatE20 } from "../common/PlayerCharacterE20";
 
 export type TStatPR = TStatE20 & {
 	morphed?: string;
