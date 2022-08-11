@@ -397,15 +397,15 @@ export async function slashHandlerEssence20(sageInteraction: SageInteraction): P
 		}
 	}
 	if (!rawJson) {
-		return sageInteraction.reply(`Failed to find pdf!`, true);
+		return sageInteraction.update(`Failed to find pdf!`, true);
 	}
 
 	const character = jsonToCharacter(rawJson);
 	if (!character) {
-		return sageInteraction.reply(`Failed to import character from: ${fileName}!`, true);
+		return sageInteraction.update(`Failed to import character from: ${fileName}!`, true);
 	}
 
-	await sageInteraction.defer(false);
+	await sageInteraction.update(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
 
 	const channel = sageInteraction.interaction.channel ?? sageInteraction.user;
 
