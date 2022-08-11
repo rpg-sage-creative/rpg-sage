@@ -138,7 +138,7 @@ export default abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE2
 	}
 
 	public getValidViewTypes<U extends string>(): U[] {
-		return ["All", "Combat", "Skills"] as U[];
+		return ["Combat", "Skills"] as U[];
 	}
 
 	abstract toHtml(): string;
