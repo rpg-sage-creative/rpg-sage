@@ -23,24 +23,34 @@ function createSelectMenuRow(selectMenu: Discord.MessageSelectMenu): Discord.Mes
 
 type TLabeledMacro = TMacro & { prefix:string; };
 function getMacros(character: PathbuilderCharacter, macroUser: Optional<User>): TLabeledMacro[] {
-	const macros = character.getAttackMacros()
+	// create attack rolls
+	const attackMacros = character.getAttackMacros()
 		.map(macro => ({ prefix:"Attack Roll", ...macro }));
 
+	// Grab User's macros
+	let userMacros: TLabeledMacro[] = [];
 	if (macroUser) {
 		const matcher = new StringMatcher(character.name);
-		const userMacros = macroUser.macros
+		userMacros = macroUser.macros
 			.filter(macro => matcher.matches(macro.category))
 			.map(macro => ({ prefix:"Macro Roll", ...macro }));
-		macros.push(...userMacros);
 	}
 
-	if (macros.length > 24) {
-		const sliced = macros.slice(24);
-		macros.length = 24;
-		character.setSheetValue("slicedMacros", sliced.map(macro => macro.name));
+	// Remove attacks first
+	while (attackMacros.length && tooMany(attackMacros, userMacros)) {
+		attackMacros.pop();
 	}
 
-	return macros;
+	// Remove their macros last
+	while (tooMany(attackMacros, userMacros)) {
+		userMacros.pop();
+	}
+
+	return attackMacros.concat(userMacros);
+
+	function tooMany(arrOne: TLabeledMacro[], arrTwo: TLabeledMacro[]): boolean {
+		return arrOne.length + arrTwo.length > 24;
+	}
 }
 function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
 	if (getMacros(character, macroUser).length > 0) {
