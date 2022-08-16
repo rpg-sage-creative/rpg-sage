@@ -1,6 +1,7 @@
 import {
 	SlashCommandBuilder,
 	SlashCommandStringOption,
+	SlashCommandAttachmentOption,
 	SlashCommandNumberOption,
 	SlashCommandBooleanOption,
 	SlashCommandSubcommandBuilder,
@@ -75,7 +76,7 @@ function toChoice(choice: TSlashCommandChoice): [string, string] {
 /** shortcut for setting name/desc on all objects, also cleans the name for the API */
 type TBuilder = SlashCommandBuilder | SlashCommandSubcommandBuilder | SlashCommandSubcommandGroupBuilder;
 type TBuilderCommand = SlashCommandBuilder | SlashCommandSubcommandBuilder;
-type TBuilderOption = SlashCommandStringOption | SlashCommandBooleanOption | SlashCommandNumberOption;
+type TBuilderOption = SlashCommandAttachmentOption | SlashCommandBooleanOption | SlashCommandNumberOption | SlashCommandStringOption;
 type TBuilderOrOption = TBuilder | TBuilderOption;
 function setName<T extends TBuilderOrOption>(builder: T, hasName: TNameDescription): T {
 	try {
@@ -118,13 +119,18 @@ function addOptions<T extends TBuilderCommand>(builder: T, options?: TSlashComma
 				setMinMaxValues(opt, option);
 				return opt;
 			});
+		}else if (option.isAttachment) {
+			builder.addAttachmentOption(opt => {
+				setNameAndRequired(opt, option);
+				return opt;
+			});
 		}else {
 			builder.addStringOption(opt => {
 				setNameAndRequired(opt, option);
 				option.choices?.forEach(choice => {
 					const [name, value] = toChoice(choice);
 					characterCount += name.length + value.length;
-					opt.addChoice(name, value);
+					opt.addChoices({ name, value });
 				});
 				return opt;
 			});
@@ -171,15 +177,16 @@ function buildMapContextMenuCommandBuilder(): ContextMenuCommandBuilder {
 }
 
 function buildUnifiedCommand(which: TBot): (SlashCommandBuilder | ContextMenuCommandBuilder)[] {
-	const slashCommand = { name:`Sage${which === "stable" ? "" : `-${which}`}`, description:`RPG Sage${which === "stable" ? "" : ` (${which})`} Commands`, children:allSlashCommands };
+	const dashWhich = `-${which}`;
+	const parenWhich = ` (${which})`;
+	const slashCommand = { name:`Sage${which === "stable" ? "" : dashWhich}`, description:`RPG Sage${which === "stable" ? "" : parenWhich} Commands`, children:allSlashCommands };
 	const commands = [buildCommand(slashCommand)] as (SlashCommandBuilder | ContextMenuCommandBuilder)[];
 	if (botCodeName === "dev" && false) {
 		commands.push(buildMapContextMenuCommandBuilder());
 	}
 	return commands;
 }
-function buildIndividualCommands(which: TBot): SlashCommandBuilder[] {
-	which;
+function buildIndividualCommands(_which: TBot): SlashCommandBuilder[] {
 	return allSlashCommands.map(buildCommand);
 }
 function buildCommands(which: TBot): (SlashCommandBuilder | ContextMenuCommandBuilder)[] {

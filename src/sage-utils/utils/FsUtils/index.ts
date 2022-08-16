@@ -1,14 +1,40 @@
 import * as fs from "fs";
 import { formattedStringify } from "../JsonUtils";
+import { isNotBlank } from "../StringUtils";
 
 export function fileExistsSync(path: string): boolean {
 	return fs.existsSync(path);
 }
 
-export function listFiles(path: string): Promise<string[]> {
+/**
+ * Returns true if the file existed *and* was deleted.
+ * Returns false if the file didn't exist or wasn't deleted.
+ */
+export function deleteFileSync(path: string): boolean {
+	const before = fileExistsSync(path);
+	if (before) {
+		fs.rmSync(path);
+		const after = fileExistsSync(path);
+		return before !== after;
+	}
+	return false;
+}
+
+export function listFiles(path: string): Promise<string[]>;
+export function listFiles(path: string, ext: string): Promise<string[]>;
+export function listFiles(path: string, ext?: string): Promise<string[]> {
 	return new Promise((resolve, reject) => {
 		fs.readdir(path, (error: NodeJS.ErrnoException | null, files: string[]) => {
-			error ? reject(error) : resolve(files);
+			if (error) {
+				reject(error);
+			}else {
+				if (ext) {
+					const fileExt = `.${ext}`;
+					resolve(files.filter(file => file.endsWith(fileExt)));
+				}else {
+					resolve(files);
+				}
+			}
 		});
 	});
 }
@@ -22,15 +48,16 @@ export function listFilesSync(path: string): string[] {
 	return [];
 }
 
-type TFileFilter = (file: string) => boolean;
+type TFileFilter = (fileName: string, filePath: string) => boolean;
 export async function filterFiles(path: string, filter: TFileFilter, recursive = false): Promise<string[]> {
 	const output: string[] = [];
 	const files = await listFiles(path).catch(() => []);
-	for (const file of files) {
-		if (filter(file)) {
-			output.push(`${path}/${file}`);
+	for (const fileName of files) {
+		const filePath = `${path}/${fileName}`;
+		if (filter(fileName, filePath)) {
+			output.push(filePath);
 		}else if (recursive) {
-			output.push(...(await filterFiles(`${path}/${file}`, filter, true)));
+			output.push(...(await filterFiles(filePath, filter, true)));
 		}
 	}
 	return output;
@@ -39,11 +66,12 @@ export async function filterFiles(path: string, filter: TFileFilter, recursive =
 export function filterFilesSync(path: string, filter: TFileFilter, recursive = false): string[] {
 	const output: string[] = [];
 	const files = listFilesSync(path);
-	for (const file of files) {
-		if (filter(file)) {
-			output.push(`${path}/${file}`);
+	for (const fileName of files) {
+		const filePath = `${path}/${fileName}`;
+		if (filter(fileName, filePath)) {
+			output.push(filePath);
 		}else if (recursive) {
-			output.push(...(filterFilesSync(`${path}/${file}`, filter, true)));
+			output.push(...(filterFilesSync(filePath, filter, true)));
 		}
 	}
 	return output;
@@ -119,6 +147,30 @@ export function readJsonFile<T>(path: string): Promise<T | null> {
 				reject("Unable to parse!");
 			}
 		}, reject);
+	});
+}
+
+/**
+ * Designed for reading a Foundry .db file that is a list of json items on each line, but not an array.
+ */
+export function readJsonFileDb<T>(path: string): Promise<T[]> {
+	return new Promise((resolve, reject) => {
+		readTextFile(path).then(raw => {
+			const objects: T[] = [];
+			const lines = raw.split(/\r?\n\r?/).filter(isNotBlank);
+			lines.forEach((line, index) => {
+				try {
+					objects.push(JSON.parse(line));
+				}catch(ex) {
+					console.error({ index, ex });
+				}
+				if (objects.length) {
+					resolve(objects);
+				}else {
+					reject(`Unable to read "${path}"`);
+				}
+			}, reject);
+		});
 	});
 }
 

@@ -110,6 +110,8 @@ else
 		"npm install $CANVAS_NPM"
 		"npm install $DISCORD_NPM"
 		"npm install $XREGEXP_NPM"
+		"npm install $PDF2JSON_NPM"
+		#"echo \"declare module 'pdf2json';\" > ./node_modules/pdf2json/pdfparser.d.ts"
 		"pm2 start app.mjs --name sage-$WHICH --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $WHICH dist"
 	)
 fi

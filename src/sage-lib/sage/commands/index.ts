@@ -5,9 +5,11 @@ import { registerCommandHandlers as registerDcs, registerSlashCommands as regist
 import { registerCommandHandlers as registerDefault, registerSlashCommands as registerDefaultSlashCommands } from "./default";
 import registerDialog from "./dialog";
 import registerDice from "./dice";
+import { registerCommandHandlers as registerE20 } from "./e20";
 import { registerCommandHandlers as registerHelp, registerSlashCommands as registerHelpSlashCommands } from "./help";
+import { registerCommandHandlers as registerImport, registerSlashCommands as registerImportSlashCommands } from "./import";
 import { registerCommandHandlers as registerMap, registerSlashCommands as registerMapSlashCommands } from "./map";
-import { registerCommandHandlers as registerPathbuilder, registerSlashCommands as registerPathbuilderSlashCommands } from "./pathbuilder";
+import { registerCommandHandlers as registerPathbuilder } from "./pathbuilder";
 import registerPfs from "./pfs";
 import registerSpells from "./spells";
 import registerWealth from "./wealth";
@@ -21,7 +23,9 @@ export function registerCommandHandlers(): void {
 	registerDefault();
 	registerDialog();
 	registerDice();
+	registerE20();
 	registerHelp();
+	registerImport();
 	registerMap();
 	registerPathbuilder();
 	registerPfs();
@@ -35,7 +39,7 @@ export function registerSlashCommands(): void {
 	registerDcsSlashCommands();
 	registerDefaultSlashCommands();
 	registerHelpSlashCommands();
+	registerImportSlashCommands();
 	registerMapSlashCommands();
-	registerPathbuilderSlashCommands();
 	registerWeatherSlashCommands();
 }
