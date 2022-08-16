@@ -189,7 +189,12 @@ export default class SageInteraction<T extends DInteraction = any>
 		// return this.pushToReplyStack(() => {
 			const embeds = resolveToEmbeds(this.caches, renderable);
 			if (this.interaction.deferred || this.interaction.replied) {
-				return this.interaction.editReply({ embeds:embeds }) as any;
+				if (ephemeral || this.interaction.ephemeral) {
+					this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Discord.Message<boolean>);
+					return Promise.resolve();
+				}else {
+					return this.interaction.editReply({ embeds:embeds }) as any;
+				}
 			}else {
 				return this.interaction.reply({ embeds:embeds, ephemeral:this.caches.server ? (ephemeral ?? true) : false });
 			}
