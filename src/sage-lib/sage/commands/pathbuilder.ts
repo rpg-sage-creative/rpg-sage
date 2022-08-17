@@ -39,16 +39,19 @@ function getMacros(character: PathbuilderCharacter, macroUser: Optional<User>): 
 	// create attack rolls
 	const attackMacros = getAttackMacros(character);
 	const userMacros = getUserMacros(character, macroUser);
+	const slicedMacros: TLabeledMacro[] = [];
 
 	// Remove attacks first
 	while (attackMacros.length && tooMany(attackMacros, userMacros)) {
-		attackMacros.pop();
+		slicedMacros.push(attackMacros.pop()!);
 	}
 
 	// Remove their macros last
 	while (tooMany(attackMacros, userMacros)) {
-		userMacros.pop();
+		slicedMacros.push(userMacros.pop()!);
 	}
+
+	character.setSheetValue("slicedMacros", slicedMacros.map(macro => macro.name));
 
 	return attackMacros.concat(userMacros);
 
