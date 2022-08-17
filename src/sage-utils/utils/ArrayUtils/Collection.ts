@@ -13,6 +13,23 @@ export class Collection<T> extends Array<T> {
 		return this.length === 0;
 	}
 
+	/** Returns the first value found by the predicate. If one isn't found, it returns the first value found by the second predicate. Uses only one loop/iteration. */
+	// public findOrElse(predicate: (value: T, index: number, obj: Collection<T>) => unknown, orElsePredicate: (value: T, index: number, obj: Collection<T>) => unknown, thisArg?: any): T | undefined {
+	// 	let orElse: T | undefined;
+	// 	for (let index = 0, len = this.length; index < len; index++) {
+	// 		const value = this[index];
+	// 		if (predicate.call(thisArg, value, index, this)) {
+	// 			return value;
+	// 		}else if (!value && orElsePredicate.call(thisArg, value, index, this)) {
+	// 			orElse = value;
+	// 		}
+	// 	}
+	// 	return orElse;
+
+	// 	// return this.find(predicate as (value: T, index: number, array: T[]) => unknown, thisArg)
+	// 	// 	?? this.find(orElsePredicate as (value: T, index: number, array: T[]) => unknown, thisArg);
+	// }
+
 	/** Returns the value and its index ([value, index]), or [undefined, -1] if the value is not found. */
 	public findWithIndex(predicate: (value: T, index: number, obj: Collection<T>) => unknown, thisArg?: any): [T | undefined, number] {
 		const index = this.findIndex(predicate as (value: T, index: number, array: T[]) => unknown, thisArg);
