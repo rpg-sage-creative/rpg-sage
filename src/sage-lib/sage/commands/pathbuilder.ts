@@ -21,20 +21,24 @@ function createSelectMenuRow(selectMenu: Discord.MessageSelectMenu): Discord.Mes
 	return new Discord.MessageActionRow().addComponents(selectMenu);
 }
 
-type TLabeledMacro = TMacro & { prefix:string; };
-function getMacros(character: PathbuilderCharacter, macroUser: Optional<User>): TLabeledMacro[] {
-	// create attack rolls
-	const attackMacros = character.getAttackMacros()
-		.map(macro => ({ prefix:"Attack Roll", ...macro }));
-
-	// Grab User's macros
-	let userMacros: TLabeledMacro[] = [];
+type TLabeledMacro = TMacro & { id:string; prefix:string; };
+function getAttackMacros(character: PathbuilderCharacter): TLabeledMacro[] {
+	return character.getAttackMacros()
+		.map((macro, index) => ({ id:`atk-${index}`, prefix:"Attack Roll", ...macro }));
+}
+function getUserMacros(character: PathbuilderCharacter, macroUser: Optional<User>): TLabeledMacro[] {
 	if (macroUser) {
 		const matcher = new StringMatcher(character.name);
-		userMacros = macroUser.macros
+		return macroUser.macros
 			.filter(macro => matcher.matches(macro.category))
-			.map(macro => ({ prefix:"Macro Roll", ...macro }));
+			.map((macro, index) => ({ id:`usr-${index}`, prefix:"Macro Roll", ...macro }));
 	}
+	return [];
+}
+function getMacros(character: PathbuilderCharacter, macroUser: Optional<User>): TLabeledMacro[] {
+	// create attack rolls
+	const attackMacros = getAttackMacros(character);
+	const userMacros = getUserMacros(character, macroUser);
 
 	// Remove attacks first
 	while (attackMacros.length && tooMany(attackMacros, userMacros)) {
@@ -53,7 +57,7 @@ function getMacros(character: PathbuilderCharacter, macroUser: Optional<User>): 
 	}
 }
 function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
-	if (getMacros(character, macroUser).length > 0) {
+	if (getUserMacros(character, macroUser).length > 0) {
 		character.setSheetValue("macroUserId", macroUser.id);
 	}else {
 		character.setSheetValue("macroUserId", null);
@@ -214,8 +218,8 @@ function createMacroSelectRow(character: PathbuilderCharacter, macros: TLabeledM
 	macros.forEach(macro => {
 		selectMenu.addOptions({
 			label: `${macro.prefix}: ${macro.name}`,
-			value: macro.name,
-			default: macro.name === activeMacro
+			value: macro.id,
+			default: macro.id === activeMacro
 		});
 	});
 	selectMenu.addOptions({
@@ -343,19 +347,19 @@ async function rollHandler(sageInteraction: SageInteraction<Discord.ButtonIntera
 
 async function macroRollHandler(sageInteraction: SageInteraction, character: PathbuilderCharacter): Promise<void> {
 	const macroUser = await sageInteraction.caches.users.getById(character.getSheetValue("macroUserId"));
+	const activeMacro = character.getSheetValue("activeMacro");
 	const macros = getMacros(character, macroUser);
-	if (!macros.length) {
+	// check by id first (proper) then by name second (fallback to old renders)
+	const macro = macros.find(m => m.id === activeMacro) ?? macros.find(m => m.name === activeMacro);
+	if (macro) {
+		const matches = parseDiceMatches(sageInteraction, macro.dice.replace(/\{.*?\}/g, match => match.slice(1,-1).split(":")[1] ?? ""));
+		const output = matches.map(match => match.output).flat();
+		await sendDice(sageInteraction, output);
+	}else {
 		setMacroUser(character, sageInteraction.sageUser);
 		await saveCharacter(character);
 		await updateSheet(sageInteraction, character);
-	}else {
-		const activeMacro = character.getSheetValue("activeMacro");
-		const macro = macros.find(m => m.name === activeMacro);
-		if (macro) {
-			const matches = parseDiceMatches(sageInteraction, macro.dice.replace(/\{.*?\}/g, match => match.slice(1,-1).split(":")[1] ?? ""));
-			const output = matches.map(match => match.output).flat();
-			await sendDice(sageInteraction, output);
-		}else {
+		if (macros.length) {
 			sageInteraction.send("Invalid Macro!");
 		}
 	}
