@@ -144,18 +144,26 @@ function createViewSelectRow(character: TPlayerCharacter): MessageActionRow {
 	return createSelectMenuRow(selectMenu);
 }
 
-function createEdgeSnagRow(character: TPlayerCharacter): MessageActionRow {
+function createEdgeSnagShiftRow(character: TPlayerCharacter): MessageActionRow {
 	const selectMenu = new MessageSelectMenu();
-	selectMenu.setCustomId(`E20|${character.id}|EdgeSnag`);
-	selectMenu.setPlaceholder("Do you have an Edge or a Snag?");
+	selectMenu.setCustomId(`E20|${character.id}|EdgeSnagShift`);
+	selectMenu.setPlaceholder("Edge, Snag, Upshift, Downshift");
+	selectMenu.setMinValues(1);
 
-	const activeEdgeSnag = character.getSheetValue("activeEdgeSnag")!;
+	const activeValues = getActiveEdgeSnagShiftValues<string>(character);
+	if (activeValues.includes("Nothing")) {
+		activeValues.length = 0;
+	}
 
-	selectMenu.addOptions(
-		{ label: `Edge / Snag: Edge`, value: `Edge`, default: activeEdgeSnag === "Edge" },
-		{ label: `Edge / Snag: None`, value: `None`, default: !["Edge", "Snag"].includes(activeEdgeSnag) },
-		{ label: `Edge / Snag: Snag`, value: `Snag`, default: activeEdgeSnag === "Snag" }
-	);
+	selectMenu.addOptions({ label: "No Changes", value: "Nothing", default: false });
+	["Edge","Snag"].forEach(val => selectMenu.addOptions(
+		{ label: val, value: val, default: activeValues.includes(val) }
+	));
+	[["Upshift", "+"], ["Downshift", "-"]].forEach(([label, sign]) => {
+		[1,2,3].forEach(num => selectMenu.addOptions(
+			{ label: `${label} ${num}`, value: `${sign}${num}`, default: activeValues.includes(`${sign}${num}`) }
+		));
+	});
 
 	return createSelectMenuRow(selectMenu);
 }
@@ -186,14 +194,19 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 	selectMenu.setPlaceholder("Select a Skill to Roll");
 
 	const activeSkill = character.getSheetValue("activeSkill");
+	const activeEdgeSnagShift = getActiveEdgeSnagShiftValues(character);
 
 	character.abilities.forEach(ability => {
 		ability.skills?.forEach(skill => {
-			if (!skill.die) {
+			const skillDie = skill.die;
+			if (!skillDie) {
 				return;
 			}
+			const shiftedDie = shiftDie(skillDie, activeEdgeSnagShift);
+			const arrow = shiftArrow(skillDie, shiftedDie);
+			const plus = shiftedDie === "d20" ? "" : "+";
 			selectMenu.addOptions({
-				label: `Skill Roll: ${skill.name} +${skill.die}`,
+				label: `Skill Roll: ${skill.name} ${plus}${shiftedDie}${arrow}`,
 				value: skill.name,
 				default: isDefault(skill.name)
 			});
@@ -201,7 +214,7 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 				skill.specializations?.forEach((spec, index) => {
 					const specValue = `${skill.name}-${index}-${spec.name}`;
 					selectMenu.addOptions({
-						label: `Specialization Roll: ${skill.name} (${spec.name}) +${skill.die}*`,
+						label: `Specialization Roll: ${skill.name} (${spec.name}) ${plus}${shiftedDie}${arrow}*`,
 						value: specValue,
 						default: isDefault(specValue)
 					});
@@ -213,12 +226,16 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 	if ("zord" in character) {
 		character.zord.abilities?.forEach(ability => {
 			ability.skills?.forEach(skill => {
-				if (!skill.die) {
+				const skillDie = skill.die;
+				if (!skillDie) {
 					return;
 				}
+				const shiftedDie = shiftDie(skillDie, activeEdgeSnagShift);
+				const arrow = shiftArrow(skillDie, shiftedDie);
+				const plus = shiftedDie === "d20" ? "" : "+";
 				const skillName = `Zord ${skill.name}`;
 				selectMenu.addOptions({
-					label: `Zord Skill Roll: ${skill.name ?? "Unlabeled"} ${skill.die}`,
+					label: `Zord Skill Roll: ${skill.name ?? "Unlabeled"} ${plus}${shiftedDie}${arrow}`,
 					value: skillName,
 					default: isDefault(skillName)
 				});
@@ -238,15 +255,21 @@ function createSkillSpecializationSelectRow(character: TPlayerCharacter): Messag
 	selectMenu.setPlaceholder("Select a Specialization to Roll");
 
 	const activeSkill = character.getSheetValue("activeSkill");
+	const activeEdgeSnagShift = getActiveEdgeSnagShiftValues(character);
+
 	character.abilities.forEach(ability => {
 		ability.skills?.forEach(skill => {
-			if (!skill.die) {
+			const skillDie = skill.die;
+			if (!skillDie) {
 				return;
 			}
+			const shiftedDie = shiftDie(skillDie, activeEdgeSnagShift);
+			const arrow = shiftArrow(skillDie, shiftedDie);
+			const plus = shiftedDie === "d20" ? "" : "+";
 			skill.specializations?.forEach((spec, index) => {
 				const specValue = `${skill.name}-${index}-${spec.name}`;
 				selectMenu.addOptions({
-					label: `Specialization Roll: ${skill.name} (${spec.name}) +${skill.die}*`,
+					label: `Specialization Roll: ${skill.name} (${spec.name}) ${plus}${shiftedDie}${arrow}*`,
 					value: specValue,
 					default: specValue === activeSkill
 				});
@@ -266,10 +289,19 @@ function createButton(customId: string, label: string, style: MessageButtonStyle
 }
 
 type TEdgeSnag = "Edge" | "Snag";
+type TShift = "+1" | "+2" | "+3" | "-1" | "-2" | "-3";
+type TEdgeSnagShift = TEdgeSnag | TShift;
+function getActiveEdgeSnagShiftValues<T extends TEdgeSnag | TShift | TEdgeSnagShift | string = TEdgeSnagShift>(character: TPlayerCharacter): T[] {
+	const activeValue = character.getSheetValue("activeEdgeSnagShift")
+		?? character.getSheetValue("activeEdgeSnag")
+		?? "";
+	return activeValue.split(",").filter(s => s) as T[];
+}
+
 function createRollButtonRow(character: TPlayerCharacter): MessageActionRow {
-	const activeEdgeSnag = character.getSheetValue<TEdgeSnag>("activeEdgeSnag");
-	const testColor = testEdgeSnag(activeEdgeSnag, { edge:"SUCCESS", snag:"DANGER", none:"PRIMARY" }) as MessageButtonStyleResolvable;
-	const untrainedColor = testEdgeSnag(activeEdgeSnag, { edge:"PRIMARY", snag:"DANGER", none:"DANGER" }) as MessageButtonStyleResolvable;
+	const activeEdgeSnagShift = getActiveEdgeSnagShiftValues(character);
+	const testColor = testEdgeSnag(activeEdgeSnagShift, { edge:"SUCCESS", snag:"DANGER", none:"PRIMARY" }) as MessageButtonStyleResolvable;
+	const untrainedColor = testEdgeSnag(activeEdgeSnagShift, { edge:"PRIMARY", snag:"DANGER", none:"DANGER" }) as MessageButtonStyleResolvable;
 	const rollButton = createButton(`E20|${character.id}|Roll`, `Roll Test`, testColor);
 	const rollSecretButton = createButton(`E20|${character.id}|Secret`, `Roll Secret Test`, testColor);
 	const rollInitButton = createButton(`E20|${character.id}|Init`, `Roll Initiative`, testColor);
@@ -282,9 +314,9 @@ function createComponents(character: TPlayerCharacter): MessageActionRow[] {
 	const includeSpecs = countSkillOptions < 25;
 	return [
 		createViewSelectRow(character),
+		createEdgeSnagShiftRow(character),
 		createSkillSelectRow(character, includeSpecs),
 		!includeSpecs ? createSkillSpecializationSelectRow(character) : null!,
-		createEdgeSnagRow(character),
 		createRollButtonRow(character)
 	].filter(row => row);
 }
@@ -296,7 +328,7 @@ function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): TOutp
 	return { embeds, components };
 }
 
-const uuidActionRegex = /^E20\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Skill|Spec|EdgeSnag|Roll|Secret|Init|Untrained)$/i;
+const uuidActionRegex = /^E20\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Skill|Spec|EdgeSnag|EdgeSnagShift|Roll|Secret|Init|Untrained)$/i;
 
 function sheetTester(sageInteraction: SageInteraction): boolean {
 	const customId = sageInteraction.interaction.customId;
@@ -333,18 +365,45 @@ async function skillHandler(sageInteraction: SageInteraction<SelectMenuInteracti
 	return updateSheet(sageInteraction, character);
 }
 
-async function edgeSnagHandler(sageInteraction: SageInteraction, character: TPlayerCharacter): Promise<void> {
-	const activeEdgeSnag = testEdgeSnag(sageInteraction.interaction.values[0], { edge:"Edge", snag:"Snag", none:undefined });
-	character.setSheetValue("activeEdgeSnag", activeEdgeSnag);
+async function edgeSnagShiftHandler(sageInteraction: SageInteraction, character: TPlayerCharacter): Promise<void> {
+	const values = sageInteraction.interaction.values;
+	if (values.includes("Nothing")) {
+		values.length = 0;
+	}
+	character.setSheetValue("activeEdgeSnagShift", values.join(","));
 	await saveCharacter(character);
 	return updateSheet(sageInteraction, character);
 }
-function testEdgeSnag<T>(value: Optional<TEdgeSnag>, values: { edge: T, snag: T, none: T }): T {
-	switch(value) {
-		case "Edge": return values.edge;
-		case "Snag": return values.snag;
-		default: return values.none;
+function testEdgeSnag<T>(testValues: TEdgeSnagShift[], outValues: { edge: T, snag: T, none: T }): T {
+	const hasEdge = testValues.includes("Edge");
+	const hasSnag = testValues.includes("Snag");
+	if (hasEdge && !hasSnag) {
+		return outValues.edge;
+	}else if (!hasEdge && hasSnag) {
+		return outValues.snag;
+	}else {
+		return outValues.none;
 	}
+}
+function shiftDie<T extends string>(skillDie: T, testValues: TEdgeSnagShift[]): T {
+	const ladder = ["d20","d2","d4","d6","d8","d10","d12","2d8","3d6"];
+	const minIndex = 0, maxIndex = ladder.length - 1;
+	let index = ladder.indexOf(skillDie);
+	[1, 2, 3].forEach(val => {
+		if (testValues.includes(`+${val}` as TShift)) { index += val; }
+		if (testValues.includes(`-${val}` as TShift)) { index -= val; }
+	});
+	index = Math.min(Math.max(index, minIndex), maxIndex);
+	return ladder[index] as T;
+}
+function shiftArrow(skillDie: string, shiftedDie: string): "" | "↑" | "↓" {
+	if (skillDie === shiftedDie) {
+		return "";
+	}
+	const ladder = ["d20","d2","d4","d6","d8","d10","d12","2d8","3d6"];
+	return ladder.indexOf(skillDie) < ladder.indexOf(shiftedDie)
+		? "↑"
+		: "↓";
 }
 async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, character: TPlayerCharacter, secret = false, init = false, untrained = false): Promise<void> {
 	let dice = "";
@@ -364,15 +423,18 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 			skill = findSkill(ability as TStatE20, activeSkill);
 			specialization = findSpec(skill as TSkillE20, activeSkill);
 		}
-		const plus = "+";
+		const activeEdgeSnagShift = getActiveEdgeSnagShiftValues(character);
 		const skillDie = skill?.die ?? "d20";
+		const shiftedDie = shiftDie(skillDie, activeEdgeSnagShift);
+		const arrow = shiftArrow(skillDie, shiftedDie);
+		const plus = shiftedDie === "d20" ? "" : "+";
 		const specStar = specialization ? "*" : "";
-		const edgeSnag = testEdgeSnag(character.getSheetValue<TEdgeSnag>("activeEdgeSnag"), { edge:"e", snag:"s", none:"" });
+		const edgeSnag = testEdgeSnag(activeEdgeSnagShift, { edge:"e", snag:"s", none:"" });
 		const charName = character.name;
 		const secretText = secret ? " Secret" : "";
 		const skillName = isZord ? activeSkill : skill?.name;
 		const specName = specialization ? ` (${specialization.name})` : "";
-		dice = `[${plus}${skillDie}${specStar}${edgeSnag} ${charName}${secretText} ${skillName}${specName}]`;
+		dice = `[${plus}${shiftedDie}${specStar}${edgeSnag} ${charName}${secretText} ${skillName}${specName}${arrow}]`;
 	}
 	const matches = parseDiceMatches(sageInteraction, dice);
 	const output = matches.map(match => match.output).flat();
@@ -394,10 +456,10 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 	const [_E20, characterId, command] = sageInteraction.interaction.customId.split("|");
 	const character = await loadCharacter(characterId);
 	if (character) {
-		switch(command as "View" | "Skill" | "Spec" | "EdgeSnag" | "Roll" | "Secret" | "Init" | "Untrained") {
+		switch(command as "View" | "Skill" | "Spec" | "EdgeSnag" | "EdgeSnagShift" | "Roll" | "Secret" | "Init" | "Untrained") {
 			case "View": return viewHandler(sageInteraction, character);
 			case "Skill": case "Spec": return skillHandler(sageInteraction, character);
-			case "EdgeSnag": return edgeSnagHandler(sageInteraction, character);
+			case "EdgeSnag": case "EdgeSnagShift": return edgeSnagShiftHandler(sageInteraction, character);
 			case "Roll": return rollHandler(sageInteraction, character, false);
 			case "Secret": return rollHandler(sageInteraction, character, true);
 			case "Init": return rollHandler(sageInteraction, character, false, true);

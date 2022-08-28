@@ -31,21 +31,29 @@ function getParsers(): TParsers {
 	return parsers;
 }
 
+function applyEdgeSnagSpec<T extends DicePartCore>({ core, hasEdge, hasSnag, hasSpecialization }: { core: T, hasEdge: boolean, hasSnag: boolean, hasSpecialization: boolean }): T {
+	if (hasEdge && !hasSnag) {
+		core.dropKeep = { type:DropKeepType.KeepHighest, value:1 };
+	}else if (!hasEdge && hasSnag) {
+		core.dropKeep = { type:DropKeepType.KeepLowest, value:1 };
+	}
+	if (hasSpecialization) {
+		core.sign = "+";
+		core.specialization = true;
+	}
+	return core;
+}
+
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[]): T {
 	if (token.type === "suffix") {
 		const prevToken = tokens[index - 1];
 		if (prevToken?.type === "dice") {
-			if (token.token.includes("*")) {
-				core.sign = "+";
-				core.specialization = true;
-			}
-			if (token.token.match(/e/i)) {
-				core.dropKeep = { type:DropKeepType.KeepHighest, value:1 };
-			}
-			if (token.token.match(/s/i)) {
-				core.dropKeep = { type:DropKeepType.KeepLowest, value:1 };
-			}
-			return core;
+			return applyEdgeSnagSpec({
+				core,
+				hasEdge: token.token.match(/e/i) !== null,
+				hasSnag: token.token.match(/s/i) !== null,
+				hasSpecialization: token.token.includes("*")
+			});
 		}
 	}
 	if (token.type === "target") {
@@ -108,19 +116,22 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	public static fromTokens(tokens: TToken[]): DicePart {
 		const core = tokens.reduce(reduceTokenToDicePartCore, <DicePartCore>{ description:"" });
 		if (core.sides !== 20 && core.description.match(/^[es\*]+/i)) {
+			let hasEdge = false, hasSnag = false, hasSpecialization = false;
+			//#region collect the flags
 			while (core.description.match(/^[es\*]+/i)) {
 				if (core.description.match(/^e/i)) {
-					core.dropKeep = { type:DropKeepType.KeepHighest, value:1 };
+					hasEdge = true;
 				}
 				if (core.description.match(/^s/i)) {
-					core.dropKeep = { type:DropKeepType.KeepLowest, value:1 };
+					hasSnag = true;
 				}
 				if (core.description.match(/^\*/i)) {
-					core.sign = "+";
-					core.specialization = true;
+					hasSpecialization = true;
 				}
 				core.description = core.description.slice(1);
 			}
+			//#endregion
+			applyEdgeSnagSpec({ core, hasEdge, hasSnag, hasSpecialization });
 		}
 		const args = <TDicePartCoreArgs>{ testOrTarget:core.target ?? core.test, ...core };
 		return DicePart.create(args);
