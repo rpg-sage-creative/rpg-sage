@@ -3,7 +3,7 @@ import { PathbuilderCharacter, toModifier } from "../../../sage-pf2e";
 import { getCharacterSections, TCharacterSectionType, TCharacterViewType, TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import { isDefined, Optional, UUID } from "../../../sage-utils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { fileExistsSync, fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
+import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
 import { DiscordId, DUser, TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
@@ -54,10 +54,6 @@ function getMacros(character: PathbuilderCharacter, macroUser: Optional<User>): 
 	character.setSheetValue("slicedMacros", slicedMacros.map(macro => macro.name));
 
 	return attackMacros.concat(userMacros);
-
-	function tooMany(arrOne: TLabeledMacro[], arrTwo: TLabeledMacro[]): boolean {
-		return arrOne.length + arrTwo.length > 24;
-	}
 
 	function tooMany(arrOne: TLabeledMacro[], arrTwo: TLabeledMacro[]): boolean {
 		return arrOne.length + arrTwo.length > 24;
@@ -384,16 +380,6 @@ function parseCustomId(customId: string): [string, UUID, "View" | "Exploration" 
 	return actionParts as ["PB2E", UUID, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll"];
 }
 
-function parseCustomId(customId: string): [string, UUID, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll"] {
-	const actionParts = customId.split("|");
-	if (actionParts.length === 2) {
-		actionParts.unshift("PB2E");
-	}else if (actionParts[0] !== "PB2E") {
-		actionParts[0] = "PB2E";
-	}
-	return actionParts as ["PB2E", UUID, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll"];
-}
-
 async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 	await sageInteraction.interaction.deferUpdate();
 	const [_PB2E, characterId, command] = parseCustomId(sageInteraction.interaction.customId);
@@ -419,7 +405,7 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 
 export const pb2eId = "pathbuilder2e-id";
 
-export export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction): Promise<void> {
+export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction): Promise<void> {
 	const pathbuilderId = sageInteraction.getNumber(pb2eId, true);
 	await sageInteraction.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, false);
 
