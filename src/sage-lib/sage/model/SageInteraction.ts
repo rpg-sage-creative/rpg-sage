@@ -153,7 +153,7 @@ export default class SageInteraction<T extends DInteraction = any>
 
 	/** Defers the interaction so that a reply can be sent later. */
 	public defer(ephemeral: boolean): Promise<void> {
-		// return this.pushToReplyStack(() => {
+		return this.pushToReplyStack(() => {
 			if (this.interaction.deferred) {
 				return Promise.resolve();
 			}
@@ -163,30 +163,30 @@ export default class SageInteraction<T extends DInteraction = any>
 			return this.interaction.deferReply({
 				ephemeral:this.caches.server ? (ephemeral ?? true) : false
 			});
-		// });
+		});
 	}
 
 	/** Deletes the reply and any updates (ONLY IF NOT EPHEMERAL) */
 	public async deleteReply(): Promise<void> {
-		// return this.pushToReplyStack(async () => {
-			if (this.interaction.replied && !this.interaction.ephemeral) {
+		return this.pushToReplyStack(async () => {
+			if (this.interaction.replied) {
 				if (this.updates.length) {
 					await Promise.all(this.updates.map(update => update.deletable ? update.delete() : Promise.resolve()));
 				}
 				await this.interaction.deleteReply();
 			}
-		// });
+		});
 	}
 
-	// private replyStack: Promise<any> = Promise.resolve();
-	// private pushToReplyStack(fn: () => Promise<any>): Promise<any> {
-	// 	this.replyStack = this.replyStack.then(fn);
-	// 	return this.replyStack;
-	// }
+	private replyStack: Promise<any> = Promise.resolve();
+	private pushToReplyStack(fn: () => Promise<any>): Promise<any> {
+		this.replyStack = this.replyStack.then(fn);
+		return this.replyStack;
+	}
 
 	/** Uses reply() it not replied to yet or editReply() to edit the previous reply. */
 	public async reply(renderable: TRenderableContentResolvable, ephemeral: boolean): Promise<void> {
-		// return this.pushToReplyStack(() => {
+		return this.pushToReplyStack(async () => {
 			const embeds = resolveToEmbeds(this.caches, renderable);
 			if (this.interaction.deferred || this.interaction.replied) {
 				if (ephemeral || this.interaction.ephemeral) {
@@ -198,19 +198,19 @@ export default class SageInteraction<T extends DInteraction = any>
 			}else {
 				return this.interaction.reply({ embeds:embeds, ephemeral:this.caches.server ? (ephemeral ?? true) : false });
 			}
-		// });
+		});
 	}
 
 	/** Uses followUp() if a reply was given, otherwise uses reply()  */
 	public async update(renderable: TRenderableContentResolvable, ephemeral: boolean): Promise<void> {
-		// return this.pushToReplyStack(async () => {
+		return this.pushToReplyStack(async () => {
 			if (this.interaction.replied) {
 				const embeds = resolveToEmbeds(this.caches, renderable);
 				this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Discord.Message<boolean>);
 			}else {
 				await this.reply(renderable, ephemeral);
 			}
-		// });
+		});
 	}
 
 	/** Sends a full message to the channel or user the interaction originated in. */
