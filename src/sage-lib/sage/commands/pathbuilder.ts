@@ -141,7 +141,7 @@ function getActiveSections(character: PathbuilderCharacter): TCharacterSectionTy
 }
 function createViewSelectRow(character: PathbuilderCharacter): Discord.MessageActionRow {
 	const selectMenu = new Discord.MessageSelectMenu();
-	selectMenu.setCustomId(`PB2E|PB2E|${character.id}|View`);
+	selectMenu.setCustomId(`PB2E|${character.id}|View`);
 	selectMenu.setPlaceholder("Character Sheet Sections");
 	selectMenu.setMinValues(1);
 
@@ -177,7 +177,7 @@ const saves = ["Fortitude", "Reflex", "Will"];
 
 function createExplorationSelectRow(character: PathbuilderCharacter): Discord.MessageActionRow {
 	const selectMenu = new Discord.MessageSelectMenu();
-	selectMenu.setCustomId(`PB2E|PB2E|${character.id}|Exploration`);
+	selectMenu.setCustomId(`PB2E|${character.id}|Exploration`);
 	selectMenu.setPlaceholder("Select Exploration Mode");
 
 	const activeExploration = character.getSheetValue("activeExploration");
@@ -195,7 +195,7 @@ function createExplorationSelectRow(character: PathbuilderCharacter): Discord.Me
 
 function createSkillSelectRow(character: PathbuilderCharacter): Discord.MessageActionRow {
 	const selectMenu = new Discord.MessageSelectMenu();
-	selectMenu.setCustomId(`PB2E|PB2E|${character.id}|Skill`);
+	selectMenu.setCustomId(`PB2E|${character.id}|Skill`);
 	selectMenu.setPlaceholder("Select a Skill to Roll");
 
 	const activeSkill = character.getSheetValue("activeSkill");
@@ -216,7 +216,7 @@ function createSkillSelectRow(character: PathbuilderCharacter): Discord.MessageA
 
 function createMacroSelectRow(character: PathbuilderCharacter, macros: TLabeledMacro[]): Discord.MessageActionRow {
 	const selectMenu = new Discord.MessageSelectMenu();
-	selectMenu.setCustomId(`PB2E|PB2E|${character.id}|Macro`);
+	selectMenu.setCustomId(`PB2E|${character.id}|Macro`);
 	selectMenu.setPlaceholder("Select a Macro to Roll");
 
 	const activeMacro = character.getSheetValue("activeMacro");
@@ -245,10 +245,10 @@ function createButton(customId: string, label: string, style: Discord.MessageBut
 }
 
 function createRollButtonRow(character: PathbuilderCharacter, macros: TMacro[]): Discord.MessageActionRow {
-	const rollButton = createButton(`PB2E|PB2E|${character.id}|Roll`, `Roll Check`, "PRIMARY");
-	const rollSecretButton = createButton(`PB2E|PB2E|${character.id}|Secret`, `Roll Secret Check`, "PRIMARY");
-	const rollInitButton = createButton(`PB2E|PB2E|${character.id}|Init`, `Roll Initiative`, "PRIMARY");
-	const macroButton = createButton(`PB2E|PB2E|${character.id}|MacroRoll`, macros.length > 0 ? `Roll Macro` : `Load Macros`, "PRIMARY");
+	const rollButton = createButton(`PB2E|${character.id}|Roll`, `Roll Check`, "PRIMARY");
+	const rollSecretButton = createButton(`PB2E|${character.id}|Secret`, `Roll Secret Check`, "PRIMARY");
+	const rollInitButton = createButton(`PB2E|${character.id}|Init`, `Roll Initiative`, "PRIMARY");
+	const macroButton = createButton(`PB2E|${character.id}|MacroRoll`, macros.length > 0 ? `Roll Macro` : `Load Macros`, "PRIMARY");
 	return new Discord.MessageActionRow().addComponents(rollButton, rollSecretButton, rollInitButton, macroButton);
 }
 
@@ -272,15 +272,43 @@ function prepareOutput(sageCache: SageCache, character: PathbuilderCharacter, ma
 
 //#region button command
 
-const uuidActionRegex = /^(PB2E\|)?(PB2E\|)?(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll)$/i;
+type TActionIdType = ["PB2E", UUID, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll"];
+
+const _uuidActionRegex = /^(?:PB2E\|)*(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll)$/i;
+function matchesOldActionRegex(customId: string): boolean {
+	return _uuidActionRegex.test(customId);
+}
+
+const uuidActionRegex = /^(?:PB2E)\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll)$/i;
+function matchesActionRegex(customId: string): boolean {
+	return uuidActionRegex.test(customId);
+}
+
+function parseCustomId(customId: string): TActionIdType {
+	const parts = customId.split("|");
+	while (parts[0] === "PB2E") {
+		parts.shift();
+	}
+	parts.unshift("PB2E");
+	return parts as TActionIdType;
+}
 
 function sheetTester(sageInteraction: SageInteraction): boolean {
 	const customId = sageInteraction.interaction.customId;
-	if (!uuidActionRegex.test(customId)) {
-		return false;
+	// old regex didn't include PB2E, which was added when E20 importer was made
+	const matches = matchesActionRegex(customId) || matchesOldActionRegex(customId);
+	if (matches) {
+		/*
+		house of cards!
+		parseCustomId allows for old and new regex by stripping PB2E off and adding it back on
+		there might be a stray character sheet that is E20
+		so we check that the file exists in the PB2E folder
+		TODO: figure out when this can go away!
+		*/
+		const [_pb2e, characterId] = parseCustomId(customId);
+		return _pb2e === "PB2E" && charFileExists(characterId);
 	}
-	const [_pb2e, characterId] = parseCustomId(customId);
-	return _pb2e === "PB2E" && charFileExists(characterId);
+	return false;
 }
 
 async function viewHandler(sageInteraction: SageInteraction<Discord.SelectMenuInteraction>, character: PathbuilderCharacter): Promise<void> {
@@ -370,21 +398,18 @@ async function macroRollHandler(sageInteraction: SageInteraction, character: Pat
 	}
 }
 
-function parseCustomId(customId: string): [string, UUID, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll"] {
-	const actionParts = customId.split("|");
-	if (actionParts.length === 2) {
-		actionParts.unshift("PB2E");
-	}else if (actionParts[0] !== "PB2E") {
-		actionParts[0] = "PB2E";
-	}
-	return actionParts as ["PB2E", UUID, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll"];
-}
-
 async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 	await sageInteraction.interaction.deferUpdate();
-	const [_PB2E, characterId, command] = parseCustomId(sageInteraction.interaction.customId);
+	const customId = sageInteraction.interaction.customId;
+	const [_PB2E, characterId, command] = parseCustomId(customId);
 	const character = await loadCharacter(characterId);
 	if (character) {
+
+		// if we matched the old regex, force the sheet to update
+		if (!matchesActionRegex(customId)) {
+			await updateSheet(sageInteraction, character);
+		}
+
 		switch(command) {
 			case "View": return viewHandler(sageInteraction, character);
 			case "Exploration": return explorationHandler(sageInteraction, character);
