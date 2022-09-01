@@ -512,7 +512,7 @@ function getDialogArgNotDid(arg: Optional<string>): string | null {
 }
 
 async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
-	const messageDid = dialogContent.name,
+	const messageDid = dialogContent.name ?? sageMessage.message.reference?.messageId,
 		dialogMessage = await findLastMessage(sageMessage, messageDid).catch(utils.ConsoleUtils.Catchers.errorReturnNull),
 		discordKey = dialogMessage ? dialogMessageToDiscordKey(dialogMessage) : null,
 		message = discordKey ? await sageMessage.discord.fetchMessage(discordKey) : null;

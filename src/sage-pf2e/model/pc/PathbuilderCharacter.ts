@@ -378,11 +378,11 @@ function spellCasterToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilder
 	const isFocus = spellCaster.focusPoints > 0;
 	const focusPoints = isFocus ? ` ${spellCaster.focusPoints} Focus Points;` : ``;
 	const dcAttackLabel = spellCaster.name === "Caster Arcane Sense" ? `` : ` DC ${10+mod}, attack +${mod};`;
-	const spellLevels = spellCaster.spells.map((spells, level, a) => {
+	const spellLevels = spellCaster.spells.map((spells, level) => {
 		if (!isFocus && spellCaster.perDay[level] === 0) {
 			return null;
 		}
-		const levelLabel = `<b>${spellCasterLevelToHtml(char, spellCaster, spells, isFocus ? Math.floor(char.level / 2) : a.length - 1)}</b>`;
+		const levelLabel = `<b>${spellCasterLevelToHtml(char, spellCaster, spells, Math.ceil(char.level / 2))}</b>`;
 		const slots = !isFocus && spellCaster.spellcastingType === "spontaneous" && level ? ` (${spellCaster.perDay[level]} slots)` : ``;
 		const list = spellsListToHtml(spells.list);
 		return `${levelLabel}${slots} ${list}`;
@@ -390,7 +390,7 @@ function spellCasterToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilder
 	return `<b>${label}</b>${dcAttackLabel}${focusPoints} ${spellLevels.join("; ")}`;
 }
 
-function spellCasterLevelToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilderCharacterSpellCaster, spells: TPathbuilderCharacterSpellCasterSpells, maxLevel: number): string {
+function spellCasterLevelToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilderCharacterSpellCaster, spells: TPathbuilderCharacterSpellCasterSpells, cantripLevel: number): string {
 	if (spellCaster.name === "Caster Arcane Sense") {
 		const arcana = char.getProficiency("arcana");
 		switch (arcana) {
@@ -402,7 +402,7 @@ function spellCasterLevelToHtml(char: PathbuilderCharacter, spellCaster: TPathbu
 	if (spells.spellLevel) {
 		return utils.NumberUtils.nth(spells.spellLevel);
 	}
-	return `Cantrips (${utils.NumberUtils.nth(Math.max(maxLevel, 1))})`;
+	return `Cantrips (${utils.NumberUtils.nth(Math.max(cantripLevel, 1))})`;
 }
 
 //#endregion
@@ -819,14 +819,14 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 			push(`<b>Items</b> ${itemsToHtml(weapons ? this.core.weapons : [], armor ? this.core.armor : [])}`);
 		}
 
-		if (includes(["All", "Stats"]) && this.core.weapons.length) {
+		if (includes(["All", "Stats"])) {
 			push();
 			push(`${abilitiesToHtml(this)}`);
 			push(`<b>AC</b> ${this.core.acTotal.acTotal}; ${this.savingThrows.toHtml()}`);
 			push(`<b>HP</b> ${this.maxHp}`);
 		}
 
-		if (includes(["All", "Speed"]) && this.core.weapons.length) {
+		if (includes(["All", "Speed"])) {
 			push();
 			push(`<b>Speed</b> ${calculateSpeed(this)} feet`);
 		}

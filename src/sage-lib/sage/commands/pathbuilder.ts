@@ -115,7 +115,6 @@ async function postCharacter(sageCache: SageCache, channel: TChannel, character:
 			await message.pin();
 		}
 		await notifyOfSlicedMacros(sageCache, character);
-		await notifyOfSlicedMacros(sageCache, character);
 	}else {
 		const output = { embeds:resolveToEmbeds(sageCache, character.toHtml()) };
 		const message = await channel.send(output).catch(errorReturnNull);
@@ -130,7 +129,6 @@ async function updateSheet(sageInteraction: SageInteraction, character: Pathbuil
 	const output = prepareOutput(sageInteraction.caches, character, macroUser);
 	const message = sageInteraction.interaction.message as Discord.Message;
 	await message.edit(output);
-	await notifyOfSlicedMacros(sageInteraction.caches, character);
 	await notifyOfSlicedMacros(sageInteraction.caches, character);
 }
 
