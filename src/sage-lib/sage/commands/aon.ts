@@ -6,7 +6,8 @@ import type SageMessage from "../model/SageMessage";
 import { send } from "../../discord/messages";
 import type { TChannel } from "../../discord";
 
-const PF2E_SEARCH_URL = `https://elasticsearch.galdiuz.com/aon/_search`;
+// const PF2E_SEARCH_URL = `https://elasticsearch.galdiuz.com/aon/_search`;
+const PF2E_SEARCH_URL = `https://2e.aonprd.com:9200/aon/_search`;
 
 type TScore = utils.SearchUtils.SearchScore<AonBase>;
 
