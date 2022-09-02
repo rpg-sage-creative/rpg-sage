@@ -7,9 +7,14 @@ export enum PrecipitationIntensityType { Light, Medium, Heavy, Torrential }
 export enum CloudCoverType { None, Light, Medium, Overcast }
 export enum WindType { Light, Moderate, Strong, Severe, Windstorm }
 
+/** [SeaLevel, Lowland, Highland] */
 export const ElevationTypes = [ElevationType.SeaLevel, ElevationType.Lowland, ElevationType.Highland];
+/** [Cold, Temperate, Tropical] */
 export const ClimateTypes = [ClimateType.Cold, ClimateType.Temperate, ClimateType.Tropical];
-export const BaselineTemps = [[30, 30, 40, 20], [60, 60, 80, 30], [75, 75, 95, 50]];
+/** [Winter, Spring, Summer, Fall] */
+export const SeasonTypes = [SeasonType.Winter, SeasonType.Spring, SeasonType.Summer, SeasonType.Fall];
+/** usage: BaselineTemps[ClimateTypes.indexOf(climateType)][SeasonTypes.indexOf(seasonType)] */
+export const BaselineTemps = [[20, 30, 40, 30], [30, 60, 80, 60], [50, 75, 95, 75]];
 
 export function getBasePrecipitationFrequency(climate: ClimateType, season: SeasonType, elevation: ElevationType): PrecipitationFrequencyType {
 	let frequency: PrecipitationFrequencyType = 0;
@@ -63,14 +68,16 @@ export function getBasePrecipitationIntensity(climate: ClimateType, _: SeasonTyp
 }
 
 export function getBaseTemp(climate: ClimateType, season: SeasonType, elevation: ElevationType): number {
-	let temp = BaselineTemps[climate][season];
+	const climateIndex = ClimateTypes.indexOf(climate);
+	const seasonIndex = SeasonTypes.indexOf(season);
+	let temp = BaselineTemps[climateIndex][seasonIndex];
 	if (elevation === ElevationType.SeaLevel) {
 		temp += 10;
 	}else if (elevation === ElevationType.Highland) {
 		temp -= 10;
 	}
-	// 0 - 250 miles of poles, -10
-	// 251 - 500 miles of poles, -20
+	// 0 - 250 miles of poles, -20
+	// 251 - 500 miles of poles, -10
 	return temp;
 }
 
