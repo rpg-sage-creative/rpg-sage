@@ -98,21 +98,26 @@ if [ "$WHICH" = "data" ]; then
 		"pm2 restart sage-stable"
 	)
 else
+	runDirTmp="$runDir-Temp"
+	runDirOld="$runDir-$NOW"
 	sshCommands=(
-		"pm2 delete sage-$WHICH"
-		"cp -r $runDir $runDir-$NOW"
-		"rm -rf $runDir && mkdir $runDir"
-		"ln -s $dataDir $runDir/data"
-		"unzip -q $deployDir/bot -d $runDir"
+		"mkdir $runDirTmp"
+		"ln -s $dataDir $runDirTmp/data"
+		"unzip -q $deployDir/bot -d $runDirTmp"
 		"rm -f $deployDir/bot.zip"
-		"cd $runDir"
+		"cd $runDirTmp"
 		"mkdir node_modules"
 		"npm install $CANVAS_NPM"
 		"npm install $DISCORD_NPM"
 		"npm install $XREGEXP_NPM"
 		"npm install $PDF2JSON_NPM"
 		#"echo \"declare module 'pdf2json';\" > ./node_modules/pdf2json/pdfparser.d.ts"
+		"pm2 delete sage-$WHICH"
+		"mv $runDir $runDirOld"
+		"mv $runDirTmp $runDir"
+		"cd $runDir"
 		"pm2 start app.mjs --name sage-$WHICH --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $WHICH dist"
+		"pm2 save"
 	)
 fi
 /bin/bash "$sageRootDir/scripts/ssh.sh" "$sshHost" "${sshCommands[@]}"
