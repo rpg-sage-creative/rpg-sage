@@ -467,22 +467,35 @@ type TPrefix = {
 	fortune?: string;
 };
 function parsePrefix(prefix: string): TPrefix {
-	const [_, count, keep, fortune] = prefix.match(/^(?:(?:(\d+)#)|(?:(\d*(?:(?:kh)|(?:kl))\d*)#)|([+-]))/i) ?? ["1"];
-	if (keep) {
-		const [keepRolls, keepCount] = keep.split(/\w+/);
-		return { count:1, keepRolls, keep, keepCount };
+	const [_, count, keepDirty, fortune] = prefix.match(/^(?:(?:(\d*)#)|(?:(\d*k[hl]\d*)#)|([\+\-]))/i) ?? ["1"];
+	if (keepDirty) {
+		const [__, keepRolls, keep, keepCount] = keepDirty.match(/^(\d*)(k[hl])(\d*)$/)!;
+		return {
+			count: 1,
+			keepRolls: keepRolls ? keepRolls : undefined,
+			keep,
+			keepCount: keepCount ? keepCount : undefined
+		};
 	}else if (fortune) {
-		return {count:1, fortune };
+		return { count: 1, fortune };
+	}else if (count) {
+		return { count: +count };
 	}
-	return { count:+count };
+	return { count:1 };
 }
 
-function findPrefixAndMacro(userMacros: NamedCollection<TMacro>, input: string): [string, TMacro | null] {
-	const [_, prefix, macro] = input.match(/^((?:\d+#)|(?:\d*(?:kh|kl)\d*#)|(?:[\+\-]))?(.*?)$/i) ?? [];
-	const cleanPrefix = (prefix ?? "").trim().toLowerCase();
-	const cleanMacro = (macro ?? "").trim().toLowerCase();
+/** returns [cleanPrefix, TMacro, slicedArgs] */
+function findPrefixMacroArgs(userMacros: NamedCollection<TMacro>, input: string): [string, TMacro | null, string] {
+	const [_, dirtyPrefix, dirtyMacro] = input.toLowerCase().match(/^((?:\d*#)|(?:\d*k[hl]\d*#)|(?:[\+\-]))?(.*?)$/) ?? [];
+	const cleanPrefix = (dirtyPrefix ?? "").trim();
+	const cleanMacro = (dirtyMacro ?? "").trim();
 	const matchingMacros = userMacros.filter(userMacro => cleanMacro.startsWith(userMacro.name.toLowerCase()));
-	return [cleanPrefix, matchingMacros.reduce(reduceToLongestMacroName, null)];
+	const macro = matchingMacros.reduce(reduceToLongestMacroName, null);
+	let sliceIndex = (dirtyPrefix ?? "").length;
+	if (macro) {
+		sliceIndex = input.indexOf(macro.name.toLowerCase()) + macro.name.length;
+	}
+	return [cleanPrefix, macro, input.slice(sliceIndex)];
 }
 
 type TArgs = { indexed:string[]; named:TKeyValueArg[] };
@@ -504,8 +517,8 @@ function parseMacroArgs(argString: string): TArgs {
 
 type TMacroAndArgs = TArgs & { macro?: TMacro; prefix: TPrefix; };
 function parseMacroAndArgs(userMacros: NamedCollection<TMacro>, input: string): TMacroAndArgs {
-	const [prefix, userMacro] = findPrefixAndMacro(userMacros, input);
-	const macroArgs = userMacro ? parseMacroArgs(input.slice(prefix.length + userMacro.name.length)) : null;
+	const [prefix, userMacro, slicedArgs] = findPrefixMacroArgs(userMacros, input);
+	const macroArgs = userMacro ? parseMacroArgs(slicedArgs) : null;
 	return {
 		indexed: macroArgs?.indexed ?? [],
 		macro: userMacro ?? undefined,
@@ -573,7 +586,9 @@ function macroToDice(userMacros: NamedCollection<TMacro>, input: string): TMacro
 		;
 
 	if (prefix.keep) {
-		dice = dice.replace("1d20", `${prefix.keepRolls ?? 1}d20${prefix.keep}${prefix.keepCount ?? 1}`);
+		dice = dice.replace(/(\d*)([dD]\d+)/, (_, dCount, dSize) =>
+			`${prefix.keepRolls ?? dCount}${dSize}${prefix.keep}${prefix.keepCount ?? ""}`
+		);
 	}else if (prefix.fortune) {
 		dice = dice.replace("1d20", `${prefix.fortune}2d20`);
 	}
