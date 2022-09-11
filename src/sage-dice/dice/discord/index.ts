@@ -44,8 +44,8 @@ import { HasCore, toJSON } from "../../../sage-utils/utils/ClassUtils";
 //#endregion
 
 const DICE_REGEX = /\[[^\]]*d\d+[^\]]*\]/ig;
-const GAME_CHECK = /^(dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest)?/i;
-const DICE_OUTPUT_CHECK = /^(xxs|xs|s|m|xxl|xl|l|rollem)?/i;
+const GAME_CHECK = /^(?:(dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest)\b)?/i;
+const DICE_OUTPUT_CHECK = /^(?:(xxs|xs|s|m|xxl|xl|l|rollem)\b)?/i;
 const COUNT_CHECK = /^(\d+)(map\-\d+)?\#/i;
 
 function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {

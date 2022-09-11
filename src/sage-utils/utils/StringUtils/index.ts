@@ -1,4 +1,6 @@
-import type { Optional } from "../..";
+import * as _XRegExp from "xregexp";
+import type { Optional, TKeyValueArg } from "../..";
+const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 export * as Comparison from "./Comparison";
 export * as Markdown from "./Markdown";
@@ -212,12 +214,8 @@ export function cleanWhitespace(value: string): string {
 }
 
 /** Removes first and last character if they are both quotes. */
-export function dequote(value: string, strict?: boolean): string {
-	const regex = strict
-		? /^(\u201C[^\u201D]*\u201D|\u201E[^\u201C]*\u201C|\u201E[^\u201D]*\u201D|\u0022[^\u0022]*\u0022)$/ //DEQUOTE_REGEX_STRICT
-		: /^([\u0022\u201C\u201E][^\u0022\u201C\u201D\u201E]*[\u0022\u201C\u201D])$/ //DEQUOTE_REGEX
-		;
-	return value.match(regex) ? value.slice(1, -1).trim() : value;
+export function dequote(value: string): string {
+	return isQuoted(value) ? value.slice(1, -1).trim() : value;
 }
 
 //#region .format
@@ -327,3 +325,61 @@ export function redactCodeBlocks(content: string): string {
 export function removeAccents(value: string): string {
 	return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
+
+/** Returns the string source of our word character regex. */
+function getWordCharSource(s: "*" | "+" | ""): string {
+	return `[\\w\\pL\\pN]${s}`;
+}
+
+/** Returns the string source of our quoted value regex. */
+function getQuotedSource(s: "*" | "+"): string {
+	return `(?:“[^”]${s}”|„[^“]${s}“|„[^”]${s}”|"[^"]${s}")`;
+}
+
+/** Returns the string source of our key/value regex. */
+function getKeyValueArgSource(): string {
+	const key = getWordCharSource("+");
+	const value = `(?:${getQuotedSource("*")}|\\S+)`;
+	return `${key}\\s*=+\\s*${value}`;
+}
+
+/** Convenience for creating/sharing quoted value regex in case we change it later. */
+export function createQuotedRegex(allowEmpty: boolean): RegExp {
+	return XRegExp(getQuotedSource(allowEmpty ? "*" : "+"));
+}
+
+/** Convenience for creating/sharing key=value regex in case we change it later. */
+export function createKeyValueArgRegex(): RegExp {
+	return XRegExp(getKeyValueArgSource());
+}
+
+/** Convenience for creating/sharing whitespace regex in case we change it later. */
+export function createWhitespaceRegex(): RegExp {
+	return /\s+/;
+}
+
+/** Returns true if the value is key=value or key="value" or key="", false otherwise. */
+export function isKeyValueArg(value: string): boolean {
+	const regex = XRegExp(`^${getKeyValueArgSource()}$`);
+	return value.match(regex) !== null;
+}
+
+/** Returns true if the value begins and ends in quotes, false otherwise. */
+export function isQuoted(value: string): boolean {
+	const regex = XRegExp(`^${getQuotedSource("*")}$`);
+	return value.match(regex) !== null;
+}
+
+/** Returns [key, value, key=value] if the input is a valid key/value pairing, null otherwise */
+export function parseKeyValueArg(input: string): TKeyValueArg | null {
+	if (isKeyValueArg(input)) {
+		const index = input.indexOf("=");
+		const key = input.slice(0, index);
+		const keyLower = key.toLowerCase();
+		const value = dequote(input.slice(index + 1).trim());
+		const clean = `${keyLower}=${value}`;
+		return { key, keyLower, value, clean };
+	}
+	return null;
+}
+

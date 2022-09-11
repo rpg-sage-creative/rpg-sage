@@ -1,9 +1,9 @@
 import type * as Discord from "discord.js";
 import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput, type GameType } from "../../../sage-dice";
 import { NEWLINE } from "../../../sage-pf2e";
-import type { Optional } from "../../../sage-utils";
+import type { Optional, TKeyValueArg } from "../../../sage-utils";
 import { randomItem } from "../../../sage-utils/utils/RandomUtils";
-import { dequote, isNotBlank, redactCodeBlocks, Tokenizer } from "../../../sage-utils/utils/StringUtils";
+import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import type { DUser, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { DiscordId, MessageType } from "../../discord";
 import { createMessageEmbed } from "../../discord/embeds";
@@ -485,21 +485,17 @@ function findPrefixAndMacro(userMacros: NamedCollection<TMacro>, input: string):
 	return [cleanPrefix, matchingMacros.reduce(reduceToLongestMacroName, null)];
 }
 
-type TNamedArg = { name:string; value:string; };
-function parseNamedArg(input: string): TNamedArg {
-	const index = input.indexOf("=");
-	const name = input.slice(0, index).toLowerCase();
-	const value = dequote(input.slice(index + 1)).trim();
-	return { name, value };
-}
-
-type TArgs = { indexed:string[]; named:TNamedArg[] };
+type TArgs = { indexed:string[]; named:TKeyValueArg[] };
 function parseMacroArgs(argString: string): TArgs {
-	const parsers = { spaces: /\s+/, named: /(\w+)=(("[^"]*")|\S+)/, quotes: /"[^"]*"/ };
+	const parsers = {
+		spaces: createWhitespaceRegex(),
+		named: createKeyValueArgRegex(),
+		quotes: createQuotedRegex(true)
+	};
 	const tokens = Tokenizer.tokenize(argString.trim(), parsers);
 	const named = tokens
 		.filter(token => token.type === "named")
-		.map(token => parseNamedArg(token.token));
+		.map(token => parseKeyValueArg(token.token)!);
 	const indexed = tokens
 		.filter(token => !["spaces", "named"].includes(token.type))
 		.map(token => dequote(token.token).trim());
@@ -524,11 +520,11 @@ function nonEmptyStringOrDefaultValue(arg: Optional<string>, def: Optional<strin
 	return argOrEmptyString !== "" ? argOrEmptyString : defOrEmptyString;
 }
 
-function namedArgValueOrDefaultValue(arg: Optional<TNamedArg>, def: Optional<string>): string {
+function namedArgValueOrDefaultValue(arg: Optional<TKeyValueArg>, def: Optional<string>): string {
 	if (arg) {
 		const value = nonEmptyStringOrDefaultValue(arg.value, def);
-		if (arg.name.match(/^(ac|dc|vs)$/i) && value) {
-			return arg.name + value;
+		if (arg.keyLower.match(/^(ac|dc|vs)$/) && value) {
+			return arg.key + value;
 		}
 		return value;
 	}
@@ -565,7 +561,7 @@ function macroToDice(userMacros: NamedCollection<TMacro>, input: string): TMacro
 		.replace(/\{(\w+)(\:[^\}]+)?\}/ig, match => {
 			const [argName, defaultValue] = splitKeyValueFromBraces(match);
 			const argNameLower = argName.toLowerCase();
-			const namedArg = named.find(arg => arg.name.toLowerCase() === argNameLower);
+			const namedArg = named.find(arg => arg.keyLower === argNameLower);
 			return namedArgValueOrDefaultValue(namedArg, defaultValue);
 		})
 		// remaining args

@@ -38,3 +38,10 @@ export type TToken = {
 };
 
 //#endregion
+
+export type TKeyValueArg = {
+	key: string;
+	keyLower: string;
+	value: string;
+	clean: string;
+};

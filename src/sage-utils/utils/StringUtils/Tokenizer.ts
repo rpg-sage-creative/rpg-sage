@@ -16,16 +16,15 @@ import type { TParsers, TToken } from "./types";
 export function tokenize(input: string, parsers: TParsers, deftok = "unknown"): TToken[] {
 	const tokens: TToken[] = [];
 	let matchIndex: number,
-		regExpMatchArray: RegExpMatchArray,
 		token: TToken | null;
 	while (input) {
 		token = null;
 		matchIndex = input.length;
 		for (const key in parsers) {
-			regExpMatchArray = parsers[key].exec(input)!;
+			const regExpMatchArray = parsers[key].exec(input);
 			// try to choose the best match if there are several
 			// where "best" is the closest to the current starting point
-			if (regExpMatchArray !== null && regExpMatchArray.index !== undefined && regExpMatchArray.index < matchIndex) {
+			if (regExpMatchArray?.index !== undefined && regExpMatchArray.index < matchIndex) {
 				token = {
 					token: regExpMatchArray[0],
 					type: key,
@@ -38,7 +37,7 @@ export function tokenize(input: string, parsers: TParsers, deftok = "unknown"): 
 			// there is text between last token and currently
 			// matched token - push that out as default or "unknown"
 			tokens.push({
-				token: input.substr(0, matchIndex),
+				token: input.slice(0, matchIndex),
 				type: deftok,
 				matches: []
 			});
@@ -47,7 +46,7 @@ export function tokenize(input: string, parsers: TParsers, deftok = "unknown"): 
 			// push current token onto sequence
 			tokens.push(token);
 		}
-		input = input.substr(matchIndex + (token ? token.token.length : 0));
+		input = input.slice(matchIndex + (token?.token.length ?? 0));
 	}
 	return tokens;
 }

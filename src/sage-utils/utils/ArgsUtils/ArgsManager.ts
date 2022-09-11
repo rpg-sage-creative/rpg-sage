@@ -4,6 +4,7 @@ import type { Optional, OrNull, OrUndefined, UUID } from "../..";
 import { Collection } from "../ArrayUtils";
 import { sortDescending } from "../ArrayUtils/Sort";
 import { Color } from "../ColorUtils";
+import { parseKeyValueArg } from "../StringUtils";
 import { isValid as isValidUuid } from "../UuidUtils";
 
 type TArgIndexRet<T> = {
@@ -29,11 +30,10 @@ type TKeyValueIndex<T extends string = string> = TKeyValuePair<T> & {
 
 /** Parses the input/index to a key/value pair with the given index. */
 function parseKeyValuePair<T extends string = string>(input: string, index: number): OrNull<TKeyValueIndex<T>> {
-	const regex = XRegExp(`^([\\w\\pL\\pN]+)=(.*?)$`, "i");
-	const match = input.match(regex);
-	if (match) {
-		const key = match[1];
-		const value = match[2] === "" ? null : <T>match[2] ?? null;
+	const keyValueArg = parseKeyValueArg(input);
+	if (keyValueArg) {
+		const key = keyValueArg.key;
+		const value = keyValueArg.value === "" ? null : <T>keyValueArg.value ?? null;
 		return { key, value, index };
 	}
 	return null;
