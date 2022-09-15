@@ -68,7 +68,7 @@ export function getParsers(): TParsers {
 		dropKeep: /(dl|dh|kl|kh)\s*(\d+)?/i,
 		noSort: /(ns)/i,
 		mod: /([\-\+\*\/])\s*(\d+)(?!d\d)/i,
-		quotes: /`[^`]+`|"[^"]+"/,
+		quotes: /`[^`]+`|“[^”]+”|„[^“]+“|„[^”]+”|"[^"]+"/,
 		test: /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+)/i
 	};
 }

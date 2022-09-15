@@ -276,9 +276,14 @@ export default class SageMessageArgsManager extends ArgsManager {
 	public removeAndReturnDiscordColor(argKey?: string): Optional<string> {
 		if (argKey) {
 			const color = this.removeByKey(argKey);
-			return color && utils.ColorUtils.Color.isValid(color)
+			// return appropriate null or undefined
+			if (typeof(color) !== "string") {
+				return color;
+			}
+			// return valid color or null
+			return utils.ColorUtils.Color.isValid(color)
 				? utils.ColorUtils.Color.from(color).toDiscordColor()
-				: color;
+				: null;
 		}
 		return this.removeAndReturnColor()?.toDiscordColor();
 	}

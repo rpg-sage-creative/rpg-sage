@@ -88,28 +88,38 @@ function ensurePlayerCharacter(sageInteraction: SageInteraction, gameMap: GameMa
 	}
 	let updated = false;
 	[pc].concat(pc.companions).forEach(char => {
-		const imageUrl = char.tokenUrl ?? char.avatarUrl;
-		if (imageUrl) {
-			const found = gameMap.tokens.find(token => token.id === char.id);
+		const charUrl = char.tokenUrl ?? char.avatarUrl;
+		if (charUrl) {
+			const charName = char.name;
+			const found = gameMap.tokens.find(token => token.characterId === char.id)
+				?? gameMap.tokens.find(token => token.name === charName)
+				?? gameMap.tokens.find(token => token.url === charUrl);
 			if (!found) {
-				sageInteraction.reply(`Adding token for ${char.name} ...`, false);
+				sageInteraction.reply(`Adding token for ${charName} ...`, false);
 				gameMap.tokens.push({
 					auras: [],
 					characterId: char.id,
 					id: Discord.SnowflakeUtil.generate(),
 					layer: LayerType.Token,
-					name: char.name,
+					name: charName,
 					pos: gameMap.spawn ?? [1,1],
 					size: [1,1],
-					url: pc.tokenUrl ?? pc.avatarUrl!,
+					url: charUrl,
 					userId: sageInteraction.user.id
 				});
 				updated = true;
-			}else if (found.name !== char.name || found.url !== imageUrl) {
-				sageInteraction.reply(`Updating token for ${char.name} ...`, false);
-				found.name = char.name;
-				found.url = imageUrl;
-				updated = true;
+			}else {
+				if (found.name !== charName || found.url !== charUrl) {
+					sageInteraction.reply(`Updating token for ${charName} ...`, false);
+					found.name = charName;
+					found.url = charUrl;
+					updated = true;
+				}
+				if (found.characterId !== char.id) {
+					// link id to pc/companion
+					found.characterId = char.id;
+					updated = true;
+				}
 			}
 		}
 	});
