@@ -486,16 +486,18 @@ function parsePrefix(prefix: string): TPrefix {
 
 /** returns [cleanPrefix, TMacro, slicedArgs] */
 function findPrefixMacroArgs(userMacros: NamedCollection<TMacro>, input: string): [string, TMacro | null, string] {
-	const [_, dirtyPrefix, dirtyMacro] = input.toLowerCase().match(/^((?:\d*#)|(?:\d*k[hl]\d*#)|(?:[\+\-]))?(.*?)$/) ?? [];
+	const lower = input.toLowerCase();
+	const [_, dirtyPrefix, dirtyMacro] = lower.match(/^((?:\d*#)|(?:\d*k[hl]\d*#)|(?:[\+\-]))?(.*?)$/) ?? [];
 	const cleanPrefix = (dirtyPrefix ?? "").trim();
 	const cleanMacro = (dirtyMacro ?? "").trim();
 	const matchingMacros = userMacros.filter(userMacro => cleanMacro.startsWith(userMacro.name.toLowerCase()));
 	const macro = matchingMacros.reduce(reduceToLongestMacroName, null);
 	let sliceIndex = (dirtyPrefix ?? "").length;
 	if (macro) {
-		sliceIndex = input.indexOf(macro.name.toLowerCase()) + macro.name.length;
+		sliceIndex = lower.indexOf(macro.name.toLowerCase()) + macro.name.length;
 	}
-	return [cleanPrefix, macro, input.slice(sliceIndex)];
+	const slicedArgs = input.slice(sliceIndex);
+	return [cleanPrefix, macro, slicedArgs];
 }
 
 type TArgs = { indexed:string[]; named:TKeyValueArg[] };

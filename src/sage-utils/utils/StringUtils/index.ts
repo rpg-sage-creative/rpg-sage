@@ -377,9 +377,26 @@ export function parseKeyValueArg(input: string): TKeyValueArg | null {
 		const key = input.slice(0, index);
 		const keyLower = key.toLowerCase();
 		const value = dequote(input.slice(index + 1).trim());
-		const clean = `${keyLower}=${value}`;
+		const quoted = quoteValue(value);
+		const clean = `${keyLower}=${quoted}`;
 		return { key, keyLower, value, clean };
 	}
 	return null;
 }
 
+/** Puts quotes around a value; if the value has quotes in it, it will try various fancy quotes until it won't break. */
+function quoteValue(value: string): string {
+	if (value.includes(`"`)) {
+		//“[^”]${s}”|„[^“]${s}“|„[^”]${s}”|"[^"]${s}"
+		if (!value.match(/[“”]/)) {
+			return `“${value}”`;
+		}
+		if (!value.match(/[„“]/)) {
+			return `„${value}“`;
+		}
+		if (!value.match(/[„”]/)) {
+			return `„${value}”`;
+		}
+	}
+	return `"${value}"`;
+}
