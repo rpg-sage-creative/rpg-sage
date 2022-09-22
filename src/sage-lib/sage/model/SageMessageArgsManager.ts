@@ -30,7 +30,7 @@ type TValidBooleanFlags = "admin" | "command" | "commands" | "dialog" | "dice" |
 /** /^(admin|commands?|dialog|dice|search)=(0|1|f|t|false|true)$/i */
 function removeAndReturnBooleanFlag(args: string[], key: TValidBooleanFlags): boolean | undefined {
 	const lower = key.toLowerCase().replace("commands", "command");
-	const regex = /^(admin|commands?|dialog|dice|search)=(0|1|f|t|false|true)$/i;
+	const regex = /^(admin|commands?|dialog|dice|search)="(0|1|f|t|false|true)"$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match && match[1].toLowerCase().replace("commands", "command") === lower) {
@@ -47,7 +47,7 @@ type TValidTargetChannelFlags = "admin" | "command" | "commands" | "dialog" | "d
 /** /^(admin|commands?|dialog|dice|search)(?:to)?=(\d{16,}|<#\d{16,}>)$/i */
 function removeAndReturnChannelSnowflake(args: string[], key: TValidTargetChannelFlags): Discord.Snowflake | undefined {
 	const lower = key.toLowerCase().replace("commands", "command");
-	const regex = /^(admin|commands?|dialog|dice|search)(?:to)?=(\d{16,}|<#\d{16,}>)$/i;
+	const regex = /^(admin|commands?|dialog|dice|search)(?:to)?="(\d{16,}|<#\d{16,}>)"$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match && match[1].toLowerCase().replace("commands", "command") === lower) {
@@ -61,7 +61,7 @@ function removeAndReturnChannelSnowflake(args: string[], key: TValidTargetChanne
 
 /** /^(crit)=(TIMESTWO|ROLLTWICE|ADDMAX|UNSET)?$/i; returns null to unset */
 function removeAndReturnCritMethodType(args: string[]): Optional<CritMethodType> {
-	const regex = /^(crit)=(TIMESTWO|ROLLTWICE|ADDMAX|UNSET)?$/i;
+	const regex = /^(crit)="(TIMESTWO|ROLLTWICE|ADDMAX|UNSET)?"$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match) {
@@ -74,7 +74,7 @@ function removeAndReturnCritMethodType(args: string[]): Optional<CritMethodType>
 
 /** /^(diceoutput)=(XXS|XS|S|M|XXL|XL|L|UNSET)?$/i; returns null to unset */
 function removeAndReturnDiceOutputType(args: string[]): Optional<DiceOutputType> {
-	const regex = /^(diceoutput)=(XXS|XS|S|M|XXL|XL|L|ROLLEM|UNSET)?$/i;
+	const regex = /^(diceoutput)="(XXS|XS|S|M|XXL|XL|L|ROLLEM|UNSET)?"$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match) {
@@ -87,7 +87,7 @@ function removeAndReturnDiceOutputType(args: string[]): Optional<DiceOutputType>
 
 /** /^(dicepost)=(POST|SINGLEPOST|MULTI(PLE)?POSTS?|EMBED|SINGLEE?MBED|MULTI(PLE)?E?MBEDS?|UNSET)?$/i; returns null to unset */
 function removeAndReturnDicePostType(args: string[]): Optional<DicePostType> {
-	const regex = /^(dicepost)=(POST|SINGLEPOST|MULTI(PLE)?POSTS?|EMBED|SINGLEE?MBED|MULTI(PLE)?E?MBEDS?|UNSET)?$/i;
+	const regex = /^(dicepost)="(POST|SINGLEPOST|MULTI(PLE)?POSTS?|EMBED|SINGLEE?MBED|MULTI(PLE)?E?MBEDS?|UNSET)?"$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match) {
@@ -107,7 +107,7 @@ function removeAndReturnDicePostType(args: string[]): Optional<DicePostType> {
 
 /** /^(dicesecret)=(GAMEMASTER|GM|HIDE|IGNORE|UNSET)?$/i; returns null to unset */
 function removeAndReturnDiceSecretMethodType(args: string[]): Optional<DiceSecretMethodType> {
-	const regex = /^(dicesecret)=(GAMEMASTER|GM|DM|GMDM|DMGM|HIDE|IGNORE|UNSET)?$/i;
+	const regex = /^(dicesecret)="(GAMEMASTER|GM|DM|GMDM|DMGM|HIDE|IGNORE|UNSET)?"$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match) {
@@ -133,7 +133,7 @@ function removeAndReturnDiceSecretMethodType(args: string[]): Optional<DiceSecre
 
 /** /^(game)=(PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE)?$/i */
 function removeAndReturnGameType(args: string[]): GameType | undefined {
-	const regex = /^(game)=(ESSENCE20|ESS20|E20|PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE)?$/i;
+	const regex = /^(game)="(ESSENCE20|ESS20|E20|PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE)?"$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match) {
@@ -145,7 +145,7 @@ function removeAndReturnGameType(args: string[]): GameType | undefined {
 }
 
 function removeAndReturnPermissionType(args: string[], key: "gamemaster" | "nonplayer" | "player"): PermissionType | undefined {
-	const regex = /^(gm|gamemaster|player|nonplayer)s?=(?:(0|1|2|3)|(none|read|react|write))$/i;
+	const regex = /^(gm|gamemaster|player|nonplayer)s?="(?:(0|1|2|3)|(none|read|react|write))"$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match && match[1].toLowerCase().replace(/^gm$/, "gamemaster") === key) {
