@@ -1,10 +1,10 @@
 import * as _XRegExp from "xregexp";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
-import type { Optional, OrNull, OrUndefined, UUID } from "../..";
+import type { Optional, OrNull, OrUndefined, TKeyValueArg, UUID } from "../..";
 import { Collection } from "../ArrayUtils";
 import { sortDescending } from "../ArrayUtils/Sort";
 import { Color } from "../ColorUtils";
-import { parseKeyValueArg } from "../StringUtils";
+import { isKeyValueArg, parseKeyValueArg } from "../StringUtils";
 import { isValid as isValidUuid } from "../UuidUtils";
 
 type TArgIndexRet<T> = {
@@ -111,18 +111,17 @@ export default class ArgsManager<T extends string> extends Collection<T> {
 
 	//#region Key Args (anything with key=value)
 
-	/** .ret is either null or RegExpMatchArray where the value of the arg is .ret[1]; can have an empty string as a value */
-	protected findArgIndexRegex(key: string): OrUndefined<TArgIndexRet<RegExpMatchArray>> {
-		const regex = new RegExp(`^${key}=(.*?)$`, "i");
-		return this.findArgIndexRet(arg => arg.match(regex));
+	/**  */
+	protected findKeyValueArgIndex(key: string): OrUndefined<TArgIndexRet<TKeyValueArg>> {
+		return this.findArgIndexRet(arg => parseKeyValueArg(arg, key));
 	}
 
 	/** Returns the string value, null if the string is empty, or undefined if the key is not found. */
 	protected removeByKey(key: string): Optional<string> {
-		const withIndex = this.findArgIndexRegex(key);
+		const withIndex = this.findKeyValueArgIndex(key);
 		if (withIndex) {
 			this.removeByArgAndIndex(withIndex);
-			const value = withIndex.ret ? withIndex.ret[1] : undefined;
+			const value = withIndex.ret?.value;
 			return value?.length ? value : null;
 		}
 		return undefined;
@@ -134,10 +133,9 @@ export default class ArgsManager<T extends string> extends Collection<T> {
 
 	/** Returns all value/index pairs that are not key/value "arg" pairs. */
 	protected findArgIndexNonArgs(): TArgIndexRet<string>[] {
-		const regex = /^\w+=[^$]*$/i;
 		return this
 			.map((arg, index) => { return { arg:arg, index:index, ret:null }; })
-			.filter(withIndex => !regex.test(withIndex.arg));
+			.filter(withIndex => !isKeyValueArg(withIndex.arg));
 	}
 
 	/** Removes and returns all args that are not key/value "arg" pairs. */

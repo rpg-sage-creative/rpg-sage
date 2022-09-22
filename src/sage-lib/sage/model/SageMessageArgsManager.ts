@@ -316,7 +316,7 @@ export default class SageMessageArgsManager extends ArgsManager {
 			return keyValue.value ?? undefined;
 		}
 
-		const notKeyValue = this.findArgIndexRet(arg => !arg.match(/^\w+=.*?$/i) && arg.match(/\s/));
+		const notKeyValue = this.findArgIndexNonArgs().shift();
 		if (notKeyValue) {
 			this.removeAt(notKeyValue.index);
 			return notKeyValue.arg;
@@ -414,11 +414,11 @@ export default class SageMessageArgsManager extends ArgsManager {
 		const userRepo = this.sageMessage.caches.users;
 
 		let userDid: Optional<Discord.Snowflake>;
-		if (argKey && this.findArgIndexRegex(argKey)) {
+		if (argKey && this.findKeyValueArgIndex(argKey)) {
 			userDid = await argToSnowflake(this.removeByKey(argKey)!);
 		}
 		if (!userDid && defaultIfNoArg) {
-			userDid = await this.asyncFindArgAndRemoveAndMap<Discord.Snowflake | undefined>(async arg => await argToSnowflake(arg));
+			userDid = await this.asyncFindArgAndRemoveAndMap<Discord.Snowflake | undefined>(async arg => argToSnowflake(arg));
 		}
 		return userDid ?? null;
 

@@ -337,8 +337,7 @@ function getQuotedSource(s: "*" | "+"): string {
 }
 
 /** Returns the string source of our key/value regex. */
-function getKeyValueArgSource(): string {
-	const key = getWordCharSource("+");
+function getKeyValueArgSource(key: string = getWordCharSource("+")): string {
 	const value = `(?:${getQuotedSource("*")}|\\S+)`;
 	return `${key}\\s*=+\\s*${value}`;
 }
@@ -348,9 +347,9 @@ export function createQuotedRegex(allowEmpty: boolean): RegExp {
 	return XRegExp(getQuotedSource(allowEmpty ? "*" : "+"));
 }
 
-/** Convenience for creating/sharing key=value regex in case we change it later. */
-export function createKeyValueArgRegex(): RegExp {
-	return XRegExp(getKeyValueArgSource());
+/** Convenience for creating/sharing key=value regex in case we change it later. Passing in a key will make sure they keys match. */
+export function createKeyValueArgRegex(key?: string): RegExp {
+	return XRegExp(getKeyValueArgSource(key), "i");
 }
 
 /** Convenience for creating/sharing whitespace regex in case we change it later. */
@@ -358,9 +357,9 @@ export function createWhitespaceRegex(): RegExp {
 	return /\s+/;
 }
 
-/** Returns true if the value is key=value or key="value" or key="", false otherwise. */
-export function isKeyValueArg(value: string): boolean {
-	const regex = XRegExp(`^${getKeyValueArgSource()}$`);
+/** Returns true if the value is key=value or key="value" or key="", false otherwise. Passing in a key will make sure they keys match. */
+export function isKeyValueArg(value: string, key?: string): boolean {
+	const regex = XRegExp(`^${getKeyValueArgSource(key)}$`, "i");
 	return value.match(regex) !== null;
 }
 
@@ -371,8 +370,8 @@ export function isQuoted(value: string): boolean {
 }
 
 /** Returns [key, value, key=value] if the input is a valid key/value pairing, null otherwise */
-export function parseKeyValueArg(input: string): TKeyValueArg | null {
-	if (isKeyValueArg(input)) {
+export function parseKeyValueArg(input: string, key?: string): TKeyValueArg | null {
+	if (isKeyValueArg(input, key)) {
 		const index = input.indexOf("=");
 		const key = input.slice(0, index);
 		const keyLower = key.toLowerCase();
