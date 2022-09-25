@@ -4,7 +4,7 @@ import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType, parseCr
 import ArgsManager from "../../discord/ArgsManager";
 import DiscordId from "../../discord/DiscordId";
 import { DicePostType } from "../commands/dice";
-import { PermissionType, type IChannel, type IChannelOptions, type TPermissionType } from "../repo/base/IdRepository";
+import { DialogType, PermissionType, type IChannel, type IChannelOptions, type TPermissionType } from "../repo/base/IdRepository";
 import type { TColorAndType } from "./Colors";
 import type { GameCharacterCore } from "./GameCharacter";
 import { ColorType } from "./HasColorsCore";
@@ -98,6 +98,69 @@ function removeAndReturnDicePostType(args: string[]): Optional<DicePostType> {
 			}
 			if (dicePostTypeString.match(/EMBEDS?$/)) {
 				return dicePostTypeString.startsWith("MULTI") ? DicePostType.MultipleEmbeds : DicePostType.SingleEmbed;
+			}
+			return null;
+		}
+	}
+	return undefined;
+}
+
+type TChannelType = "IC" | "OOC" | "GM" | "MISC";
+function removeAndReturnChannelType(args: string[]): Optional<TChannelType> {
+	const regex = /^((?:channel)?type)="(IC|OOC|GM|MISC|UNSET)?"$/i;
+	for (const arg of args) {
+		const match = arg.match(regex);
+		if (match) {
+			args.splice(args.indexOf(arg), 1);
+			return match[2]?.toUpperCase() as TChannelType ?? null;
+		}
+	}
+	return undefined;
+}
+function trueFalseUndefined(channelType: Optional<TChannelType>, trueList: TChannelType[], falseList: TChannelType[]): boolean | undefined {
+	if (trueList.includes(channelType!)) {
+		return true;
+	}
+	if (falseList.includes(channelType!)) {
+		return false;
+	}
+	return undefined;
+}
+function writeNoneUndefined(channelType: Optional<TChannelType>, writeList: TChannelType[], noneList: TChannelType[]): PermissionType | undefined {
+	if (writeList.includes(channelType!)) {
+		return PermissionType.Write;
+	}
+	if (noneList.includes(channelType!)) {
+		return PermissionType.None;
+	}
+	return undefined;
+}
+function channelTypeToChannelOptions(channelType: Optional<TChannelType>): IChannelOptions {
+	return {
+		admin: trueFalseUndefined(channelType, ["OOC", "GM", "MISC"], ["IC"]),
+		commands: trueFalseUndefined(channelType, ["OOC", "GM", "MISC"], ["IC"]),
+		dialog: trueFalseUndefined(channelType,["IC", "OOC", "GM", "MISC"], []),
+		dice: trueFalseUndefined(channelType, ["IC", "OOC", "GM", "MISC"], []),
+		search: trueFalseUndefined(channelType, ["OOC", "GM", "MISC"], ["IC"]),
+
+		gameMaster: writeNoneUndefined(channelType, ["IC", "OOC", "GM", "MISC"], []),
+		nonPlayer: writeNoneUndefined(channelType, [], ["IC", "OOC", "GM", "MISC"]),
+		player: writeNoneUndefined(channelType, ["IC", "OOC", "MISC"], ["GM"])
+	};
+}
+
+function removeAndReturnDialogType(args: string[]): Optional<DialogType> {
+	const regex = /^(dialogtype)="(EMBED|POST|UNSET)?"$/i;
+	for (const arg of args) {
+		const match = arg.match(regex);
+		if (match) {
+			args.splice(args.indexOf(arg), 1);
+			const dialogTypeString = (match[2] ?? "").toUpperCase();
+			if (dialogTypeString === "EMBED") {
+				return DialogType.Embed;
+			}
+			if (dialogTypeString === "POST") {
+				return DialogType.Post;
 			}
 			return null;
 		}
@@ -199,20 +262,23 @@ export default class SageMessageArgsManager extends ArgsManager {
 	}
 
 	public removeAndReturnChannelOptions(): IChannelOptions | null {
+		const channelType = removeAndReturnChannelType(this);
+		const channelTypeOptions = channelTypeToChannelOptions(channelType);
 		const channelOptions: IChannelOptions = {
-			admin: removeAndReturnBooleanFlag(this, "admin"),
-			commands: removeAndReturnBooleanFlag(this, "commands"),
+			admin: channelTypeOptions.admin ?? removeAndReturnBooleanFlag(this, "admin"),
+			commands: channelTypeOptions.commands ?? removeAndReturnBooleanFlag(this, "commands"),
+			defaultDialogType: removeAndReturnDialogType(this)!,
 			defaultCritMethodType: removeAndReturnCritMethodType(this)!,
 			defaultDiceOutputType: removeAndReturnDiceOutputType(this)!,
 			defaultDicePostType: removeAndReturnDicePostType(this)!,
 			defaultDiceSecretMethodType: removeAndReturnDiceSecretMethodType(this)!,
 			defaultGameType: removeAndReturnGameType(this),
-			dialog: removeAndReturnBooleanFlag(this, "dialog"),
-			dice: removeAndReturnBooleanFlag(this, "dice"),
-			gameMaster: removeAndReturnPermissionType(this, "gamemaster"),
-			nonPlayer: removeAndReturnPermissionType(this, "nonplayer"),
-			player: removeAndReturnPermissionType(this, "player"),
-			search: removeAndReturnBooleanFlag(this, "search"),
+			dialog: channelTypeOptions.dialog ?? removeAndReturnBooleanFlag(this, "dialog"),
+			dice: channelTypeOptions.dice ?? removeAndReturnBooleanFlag(this, "dice"),
+			gameMaster: channelTypeOptions.gameMaster ?? removeAndReturnPermissionType(this, "gamemaster"),
+			nonPlayer: channelTypeOptions.nonPlayer ?? removeAndReturnPermissionType(this, "nonplayer"),
+			player: channelTypeOptions.player ?? removeAndReturnPermissionType(this, "player"),
+			search: channelTypeOptions.search ?? removeAndReturnBooleanFlag(this, "search"),
 			sendCommandTo: removeAndReturnChannelSnowflake(this, "command"),
 			sendDialogTo: removeAndReturnChannelSnowflake(this, "dialog"),
 			sendDiceTo: removeAndReturnChannelSnowflake(this, "dice"),
@@ -259,6 +325,10 @@ export default class SageMessageArgsManager extends ArgsManager {
 
 	public removeAndReturnCritMethodType(): Optional<CritMethodType> {
 		return removeAndReturnCritMethodType(this);
+	}
+
+	public removeAndReturnDialogType(): Optional<DialogType> {
+		return removeAndReturnDialogType(this);
 	}
 
 	public removeAndReturnDiceOutputType(): Optional<DiceOutputType> {

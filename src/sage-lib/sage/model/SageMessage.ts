@@ -7,7 +7,7 @@ import { send } from "../../discord/messages";
 import { DicePostType } from "../commands/dice";
 import type Game from "../model/Game";
 import { GameRoleType } from "../model/Game";
-import type { IChannel } from "../repo/base/IdRepository";
+import { DialogType, IChannel } from "../repo/base/IdRepository";
 import type GameCharacter from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";
 import { EmojiType } from "./HasEmojiCore";
@@ -240,8 +240,8 @@ export default class SageMessage
 		return this.cache.get("allowSearch", () => !this.channel || this.channel.search === true);
 	}
 
-	public get dialogType(): "Post" | "Webhook" {
-		return "Webhook";
+	public get dialogType(): DialogType {
+		return this.cache.get("dialogType", () => this.channel?.defaultDialogType ?? this.game?.defaultDialogType ?? this.server.defaultDialogType ?? DialogType.Embed);
 	}
 
 	// #endregion

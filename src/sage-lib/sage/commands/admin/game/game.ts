@@ -310,6 +310,7 @@ async function gameCreate(sageMessage: SageMessage): Promise<void> {
 
 	const gameType = sageMessage.args.removeAndReturnGameType();
 	const critMethodType = sageMessage.args.removeAndReturnCritMethodType();
+	const dialogType = sageMessage.args.removeAndReturnDialogType();
 	const diceOutputType = sageMessage.args.removeAndReturnDiceOutputType();
 	const dicePostType = sageMessage.args.removeAndReturnDicePostType();
 	const diceSecretMethodType = sageMessage.args.removeAndReturnDiceSecretMethodType();
@@ -319,7 +320,7 @@ async function gameCreate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const added = await sageMessage.server.addGame(sageMessage.channelDid, name, gameType, critMethodType, diceOutputType, dicePostType, diceSecretMethodType);
+	const added = await sageMessage.server.addGame(sageMessage.channelDid, name, gameType, dialogType, critMethodType, diceOutputType, dicePostType, diceSecretMethodType);
 	return sageMessage.reactSuccessOrFailure(added);
 }
 
@@ -332,17 +333,18 @@ async function gameUpdate(sageMessage: SageMessage): Promise<void> {
 
 	const gameType = sageMessage.args.removeAndReturnGameType();
 	const critMethodType = sageMessage.args.removeAndReturnCritMethodType();
+	const dialogType = sageMessage.args.removeAndReturnDialogType();
 	const diceOutputType = sageMessage.args.removeAndReturnDiceOutputType();
 	const dicePostType = sageMessage.args.removeAndReturnDicePostType();
 	const diceSecretMethodType = sageMessage.args.removeAndReturnDiceSecretMethodType();
 	const names = sageMessage.args.removeAndReturnNames();
 	const name = names.newName ?? names.name ?? null;
 
-	if (!name && gameType === undefined && critMethodType === undefined && diceOutputType === undefined && dicePostType === undefined && diceSecretMethodType === undefined) {
+	if (!name && gameType === undefined && dialogType === undefined && critMethodType === undefined && diceOutputType === undefined && dicePostType === undefined && diceSecretMethodType === undefined) {
 		return sageMessage.reactFailure();
 	}
 
-	const updated = await sageMessage.game!.update(name, gameType, critMethodType, diceOutputType, dicePostType, diceSecretMethodType);
+	const updated = await sageMessage.game!.update(name, gameType, dialogType, critMethodType, diceOutputType, dicePostType, diceSecretMethodType);
 	return sageMessage.reactSuccessOrFailure(updated);
 }
 

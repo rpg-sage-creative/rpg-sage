@@ -126,15 +126,16 @@ async function serverSet(sageMessage: SageMessage): Promise<void> {
 
 	const gameType = sageMessage.args.removeAndReturnGameType();
 	const critMethodType = sageMessage.args.removeAndReturnCritMethodType();
+	const dialogType = sageMessage.args.removeAndReturnDialogType();
 	const diceOutputType = sageMessage.args.removeAndReturnDiceOutputType();
 	const dicePostType = sageMessage.args.removeAndReturnDicePostType();
 	const diceSecretMethodType = sageMessage.args.removeAndReturnDiceSecretMethodType();
 
-	if (gameType === undefined && critMethodType === undefined && diceOutputType === undefined && dicePostType === undefined && diceSecretMethodType === undefined) {
+	if (gameType === undefined && dialogType === undefined && critMethodType === undefined && diceOutputType === undefined && dicePostType === undefined && diceSecretMethodType === undefined) {
 		return sageMessage.reactFailure();
 	}
 
-	const updated = await sageMessage.server.update(gameType, critMethodType, diceOutputType, dicePostType, diceSecretMethodType);
+	const updated = await sageMessage.server.update(gameType, dialogType, critMethodType, diceOutputType, dicePostType, diceSecretMethodType);
 	return sageMessage.reactSuccessOrFailure(updated);
 }
 

@@ -6,6 +6,8 @@ import type SageCache from "../../model/SageCache";
 
 export type TPermissionType = keyof typeof PermissionType;
 export enum PermissionType { None = 0, Read = 1, React = 2, Write = 3 }
+export type TDialogType = keyof typeof DialogType;
+export enum DialogType { Embed = 0, Post = 1 }
 export interface IChannelOptions {
 	// Features
 	admin?: boolean;
@@ -20,6 +22,7 @@ export interface IChannelOptions {
 	nonPlayer?: PermissionType;
 
 	//Defaults
+	defaultDialogType?: DialogType;
 	defaultCritMethodType?: CritMethodType;
 	defaultDicePostType?: DicePostType;
 	defaultDiceOutputType?: DiceOutputType;

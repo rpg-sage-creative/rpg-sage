@@ -97,7 +97,7 @@ export async function sendWebhook(caches: SageCache, targetChannel: TChannel, re
 	const threadId = targetChannel.isThread() ? targetChannel.id : undefined;
 	const embeds = resolveToEmbeds(caches.cloneForChannel(targetChannel), renderableContent);
 	const messages = await sendWebhookAndReturnMessages(webhook, { embeds:embeds, threadId:threadId, ...authorOptions });
-	caches.meta.push({ messagesSent:messages.slice() });
+	// caches.meta.push({ messagesSent:messages.slice() });
 	return messages;
 }
 
@@ -116,7 +116,7 @@ export async function replaceWebhook(caches: SageCache, originalMessage: DMessag
 	const threadId = originalMessage.channel.isThread() ? originalMessage.channel.id : undefined;
 	const embeds = resolveToEmbeds(caches.cloneForChannel(originalMessage.channel as TChannel), renderableContent);
 	const messages = await sendWebhookAndReturnMessages(webhook, { embeds:embeds, threadId:threadId, ...authorOptions });
-	caches.meta.push({ messagesDeleted:[deleted], messagesSent:messages.slice() });
+	// caches.meta.push({ messagesDeleted:[deleted], messagesSent:messages.slice() });
 	return messages;
 }
 

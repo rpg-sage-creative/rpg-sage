@@ -3,7 +3,7 @@ import type { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } f
 import utils, { IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
 import { DiscordKey } from "../../discord";
 import type { DicePostType } from "../commands/dice";
-import type { IChannel } from "../repo/base/IdRepository";
+import type { DialogType, IChannel } from "../repo/base/IdRepository";
 import { HasIdCoreAndSageCache, PermissionType, updateChannel } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";
 import Colors from "./Colors";
@@ -46,6 +46,7 @@ export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
 	name: string;
 	gameType?: GameType;
 
+	defaultDialogType?: DialogType;
 	defaultCritMethodType?: CritMethodType;
 	defaultDiceOutputType?: DiceOutputType;
 	defaultDicePostType?: DicePostType;
@@ -117,6 +118,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	public get name(): string { return this.core.name; }
 	public get gameType(): GameType | undefined { return this.core.gameType; }
 	public get defaultCritMethodType(): CritMethodType | undefined { return this.core.defaultCritMethodType; }
+	public get defaultDialogType(): DialogType | undefined { return this.core.defaultDialogType; }
 	public get defaultDiceOutputType(): DiceOutputType | undefined { return this.core.defaultDiceOutputType; }
 	public get defaultDicePostType(): DicePostType | undefined { return this.core.defaultDicePostType; }
 	public get defaultDiceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.defaultDiceSecretMethodType; }
@@ -187,7 +189,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	}
 	public async guildChannels(): Promise<Discord.GuildChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
-		return all.filter(utils.ArrayUtils.Filters.exists) as Discord.GuildChannel[];
+		return all.filter(exists) as Discord.GuildChannel[];
 	}
 	public async orphanChannels(): Promise<IChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
@@ -432,13 +434,15 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	private updateName(name: Optional<string>): void { this.core.name = name ?? this.core.name ?? ""; }
 	private updateGameType(gameType: Optional<GameType>): void { this.core.gameType = gameType === null ? undefined : gameType ?? this.core.gameType; }
 	private updateCritMethodType(critMethodType: Optional<CritMethodType>): void { this.core.defaultCritMethodType = critMethodType === null ? undefined : critMethodType ?? this.core.defaultCritMethodType; }
+	private updateDialogType(dialogType: Optional<DialogType>): void { this.core.defaultDialogType = dialogType === null ? undefined : dialogType ?? this.core.defaultDialogType; }
 	private updateDiceOutputType(diceOutputType: Optional<DiceOutputType>): void { this.core.defaultDiceOutputType = diceOutputType === null ? undefined : diceOutputType ?? this.core.defaultDiceOutputType; }
 	private updateDicePostType(dicePostType: Optional<DicePostType>): void { this.core.defaultDicePostType = dicePostType === null ? undefined : dicePostType ?? this.core.defaultDicePostType; }
 	private updateDiceSecretMethodType(diceSecretMethodType: Optional<DiceSecretMethodType>): void { this.core.defaultDiceSecretMethodType = diceSecretMethodType === null ? undefined : diceSecretMethodType ?? this.core.defaultDiceSecretMethodType; }
-	public async update(name: Optional<string>, gameType: Optional<GameType>, critMethodType: Optional<CritMethodType>, diceOutputType: Optional<DiceOutputType>, dicePostType: Optional<DicePostType>, diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
+	public async update(name: Optional<string>, gameType: Optional<GameType>, dialogType: Optional<DialogType>, critMethodType: Optional<CritMethodType>, diceOutputType: Optional<DiceOutputType>, dicePostType: Optional<DicePostType>, diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
 		this.updateName(name);
 		this.updateGameType(gameType);
 		this.updateCritMethodType(critMethodType);
+		this.updateDialogType(dialogType);
 		this.updateDiceOutputType(diceOutputType);
 		this.updateDicePostType(dicePostType);
 		this.updateDiceSecretMethodType(diceSecretMethodType);
