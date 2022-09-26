@@ -318,7 +318,7 @@ function doSimple(_: TInteraction, input: string): TDiceOutput[] {
 	const unique = !!(match[2] ?? "").match(/u/i);
 	const sort = !!(match[2] ?? "").match(/s/i);
 	const hasSecret = !!(match[2] ?? "").match(/gm/i);
-	const options = match[3].split(",").map(s => s.trim());
+	const options = (match[3] ?? "").split(",").map(s => s.trim());
 	const selections: string[] = [];
 	const total = (unique ? Math.min(options.length, count) : count);
 	do {
