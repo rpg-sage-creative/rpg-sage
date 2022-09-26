@@ -65,25 +65,56 @@ export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
 	gmCharacterName?: string;
 }
 
-export type TMappedGameChannel = {
-	did: Discord.Snowflake,
-	sChannel: IChannel,
-	gChannel: Discord.GuildChannel | undefined,
-	nameTags: { ic: boolean, ooc: boolean, gm: boolean }
+export type TMappedChannelNameTags = {
+	ic: boolean;
+	ooc: boolean;
+	gm: boolean;
+	misc: boolean;
 };
+export type TMappedGameChannel = {
+	did: Discord.Snowflake;
+	sChannel: IChannel;
+	gChannel: Discord.GuildChannel | undefined;
+	nameTags: TMappedChannelNameTags;
+};
+
+/** Reads IChannel properties to determine channel type: IC, GM, OOC, MISC */
+export function mapSageChannelNameTags(channel: IChannel): TMappedChannelNameTags {
+	const gmWrite = channel.gameMaster === PermissionType.Write;
+	const pcWrite = channel.player === PermissionType.Write;
+	const bothWrite = gmWrite && pcWrite;
+
+	const dialog = channel.dialog === true;
+	const commands = channel.commands === true;
+	const search = channel.search === true;
+
+	const gm = gmWrite && !pcWrite;
+	const ooc = bothWrite && (!dialog || commands || search);
+	const ic = bothWrite && !ooc && dialog;
+	const misc = !ic && !ooc && !gm;
+
+	return { ic, gm, ooc, misc };
+}
+
+/** Reads GuildChannel.name to determine channel type: IC, GM, OOC, MISC */
+function mapGuildChannelNameTags(channel: Discord.GuildChannel): TMappedChannelNameTags {
+	const ic = channel.name.match(/\bic\b/i) !== null;
+	const gm = !ic && channel.name.match(/\bgms?\b/i) !== null;
+	const ooc = !ic && !gm && channel.name.match(/\booc\b/i) !== null;
+	const misc = !ic && !ooc && !gm;
+	return { ic, ooc, gm, misc };
+}
+
 /** Returns [guildChannels.concat(sageChannels), guildChannels, sageChannels] */
 async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<[TMappedGameChannel[], TMappedGameChannel[], TMappedGameChannel[]]> {
 	const sChannels: TMappedGameChannel[] = [];
 	const gChannels: TMappedGameChannel[] = [];
 	for (const sChannel of channels) {
-		const ic = sChannel.gameMaster === PermissionType.Write && sChannel.player === PermissionType.Write && sChannel.dialog === true;
-		const gm = sChannel.gameMaster === PermissionType.Write && !sChannel.player;
-		const ooc = !ic && !gm && sChannel.gameMaster === PermissionType.Write && sChannel.player === PermissionType.Write;
 		sChannels.push({
 			did: sChannel.did,
 			sChannel: sChannel,
 			gChannel: undefined,
-			nameTags: { ic, gm, ooc }
+			nameTags: mapSageChannelNameTags(sChannel)
 		});
 
 		const gChannel = await sageCache.discord.fetchChannel(sChannel.did) as Discord.GuildChannel;
@@ -92,11 +123,7 @@ async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<
 				did: sChannel.did,
 				sChannel: sChannel,
 				gChannel: gChannel,
-				nameTags: {
-					ic: gChannel.name.match(/\bic\b/i) !== null,
-					ooc: gChannel.name.match(/\booc\b/i) !== null,
-					gm: gChannel.name.match(/\bgms?\b/i) !== null
-				}
+				nameTags: mapGuildChannelNameTags(gChannel)
 			});
 		}
 	}

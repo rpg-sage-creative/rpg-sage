@@ -10,6 +10,7 @@ import { DialogType, PermissionType, type IChannel } from "../../repo/base/IdRep
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";
+import { mapSageChannelNameTags, TMappedChannelNameTags } from "../../model/Game";
 
 //#region add
 
@@ -131,13 +132,35 @@ async function channelDetailsAppendSearch(renderableContent: utils.RenderUtils.R
 	}
 }
 
+function nameTagsToType(nameTags: TMappedChannelNameTags): string {
+	if (nameTags.gm) {
+		return "GM <i>(Game Master)</i>";
+	}
+	if (nameTags.ic) {
+		return "IC <i>(In Character)</i>";
+	}
+	if (nameTags.ooc) {
+		return "OOC <i>(Out of Character)</i>";
+	}
+	if (nameTags.misc) {
+		return "Misc";
+	}
+	return "<i>None</i>";
+}
 function channelDetailsAppendGame(renderableContent: utils.RenderUtils.RenderableContent, game: Optional<Game>, channel: IChannel): void {
 	if (game) {
 		renderableContent.appendTitledSection(`<b>${GameType[game.gameType!]} Game</b> ${game.name}`);
-		renderableContent.append(`[spacer]<b>Permissions</b>`);
-		renderableContent.append(`[spacer][spacer]<b>GameMaster</b> ${PermissionType[channel.gameMaster || 0]}`);
-		renderableContent.append(`[spacer][spacer]<b>Player</b> ${PermissionType[channel.player || 0]}`);
-		renderableContent.append(`[spacer][spacer]<b>NonPlayer</b> ${PermissionType[channel.nonPlayer || 0]}`);
+
+		const nameTags = mapSageChannelNameTags(channel);
+		const channelType = nameTagsToType(nameTags);
+		renderableContent.append(`<b>Channel Type</b> ${channelType}`);
+
+		if (nameTags.misc) {
+			renderableContent.append(`[spacer]<b>Permissions</b>`);
+			renderableContent.append(`[spacer][spacer]<b>GameMaster</b> ${PermissionType[channel.gameMaster || 0]}`);
+			renderableContent.append(`[spacer][spacer]<b>Player</b> ${PermissionType[channel.player || 0]}`);
+			// renderableContent.append(`[spacer][spacer]<b>NonPlayer</b> ${PermissionType[channel.nonPlayer || 0]}`);
+		}
 	} else {
 		renderableContent.append(`<b>Default Game Type</b> ${GameType[channel.defaultGameType || 0]}`);
 	}
@@ -172,13 +195,13 @@ export async function channelDetails(sageMessage: SageMessage, channel?: IChanne
 	const renderableContent = createAdminRenderableContent(server);
 	renderableContent.appendTitledSection(`<b>#${guildChannelName}</b>`, `<b>Channel Id</b> ${channelDid}`);
 
+	channelDetailsAppendGame(renderableContent, game, channel);
 	channelDetailsAppendActions(renderableContent, channel);
 	await channelDetailsAppendAdmin(renderableContent, server, channel);
 	await channelDetailsAppendCommand(renderableContent, server, channel);
 	await channelDetailsAppendDialog(renderableContent, server, game, channel);
 	await channelDetailsAppendDice(renderableContent, server, game, channel);
 	await channelDetailsAppendSearch(renderableContent, server, channel);
-	channelDetailsAppendGame(renderableContent, game, channel);
 
 	return <any>sageMessage.send(renderableContent);
 }

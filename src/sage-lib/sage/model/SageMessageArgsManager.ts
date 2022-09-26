@@ -137,7 +137,7 @@ function writeNoneUndefined(channelType: Optional<TChannelType>, writeList: TCha
 }
 function channelTypeToChannelOptions(channelType: Optional<TChannelType>): IChannelOptions {
 	return {
-		admin: trueFalseUndefined(channelType, ["OOC", "GM", "MISC"], ["IC"]),
+		admin: trueFalseUndefined(channelType, ["IC", "OOC", "GM", "MISC"], []),
 		commands: trueFalseUndefined(channelType, ["OOC", "GM", "MISC"], ["IC"]),
 		dialog: trueFalseUndefined(channelType,["IC", "OOC", "GM", "MISC"], []),
 		dice: trueFalseUndefined(channelType, ["IC", "OOC", "GM", "MISC"], []),
