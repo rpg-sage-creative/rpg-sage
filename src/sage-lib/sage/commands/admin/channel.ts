@@ -6,7 +6,7 @@ import type Game from "../../model/Game";
 import type SageCache from "../../model/SageCache";
 import type SageMessage from "../../model/SageMessage";
 import type Server from "../../model/Server";
-import { PermissionType, type IChannel } from "../../repo/base/IdRepository";
+import { DialogType, PermissionType, type IChannel } from "../../repo/base/IdRepository";
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";
@@ -78,12 +78,18 @@ async function channelDetailsAppendCommand(renderableContent: utils.RenderUtils.
 	}
 }
 
-async function channelDetailsAppendDialog(renderableContent: utils.RenderUtils.RenderableContent, server: Server, channel: IChannel): Promise<void> {
-	if (channel.dialog && channel.sendDialogTo) {
+async function channelDetailsAppendDialog(renderableContent: utils.RenderUtils.RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): Promise<void> {
+	if (channel.dialog) {
 		renderableContent.append(`<b>Dialog Options</b>`);
 
-		const sendToName = await fetchGuildChannelName(server.discord, channel.sendDialogTo);
-		renderableContent.append(`[spacer]<b>Send Dialog To</b> #${sendToName} (${channel.sendDialogTo})`);
+		const dialogType = DialogType[channel.defaultDialogType!];
+		const inheritedDialogType = DialogType[game?.defaultDialogType ?? server.defaultDialogType ?? DialogType.Embed];
+		renderableContent.append(`[spacer]<b>Dialog Type</b> ${dialogType ?? `<i>inherited (${inheritedDialogType})</i>`}`);
+
+		if (channel.sendDialogTo) {
+			const sendToName = await fetchGuildChannelName(server.discord, channel.sendDialogTo);
+			renderableContent.append(`[spacer]<b>Send Dialog To</b> #${sendToName} (${channel.sendDialogTo})`);
+		}
 	}
 }
 
@@ -169,7 +175,7 @@ export async function channelDetails(sageMessage: SageMessage, channel?: IChanne
 	channelDetailsAppendActions(renderableContent, channel);
 	await channelDetailsAppendAdmin(renderableContent, server, channel);
 	await channelDetailsAppendCommand(renderableContent, server, channel);
-	await channelDetailsAppendDialog(renderableContent, server, channel);
+	await channelDetailsAppendDialog(renderableContent, server, game, channel);
 	await channelDetailsAppendDice(renderableContent, server, game, channel);
 	await channelDetailsAppendSearch(renderableContent, server, channel);
 	channelDetailsAppendGame(renderableContent, game, channel);

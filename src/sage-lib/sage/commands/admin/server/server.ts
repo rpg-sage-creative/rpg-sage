@@ -7,6 +7,7 @@ import { AdminRoleType, IAdminRole } from "../../../model/Server";
 import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
+import { DialogType } from "../../../repo/base/IdRepository";
 
 async function serverCount(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
@@ -59,6 +60,7 @@ async function serverInit(sageMessage: SageMessage): Promise<void> {
 }
 
 function serverDetailsDefaultTypes(renderableContent: utils.RenderUtils.RenderableContent, server: Server): void {
+	renderableContent.append(`<b>Default Dialog Type</b> ${DialogType[server.defaultDialogType!] ?? "<i>unset (Embed)</i>"}`);
 	renderableContent.append(`<b>Default Game Type</b> ${GameType[server.defaultGameType!] ?? "<i>unset (None)</i>"}`);
 	if (server.defaultGameType === GameType.PF2e) {
 		renderableContent.append(`<b>Default Crit Method Type</b> ${CritMethodType[server.defaultCritMethodType!] ?? "<i>unset (x2)</i>"}`);

@@ -56,11 +56,11 @@ export async function canSendMessageTo(channel: DMessageChannel): Promise<boolea
 	return true;
 }
 
-type TMeta = {
-	diceSent?: [];
-	messagesDeleted?: Discord.Message[];
-	messagesSent?: Discord.Message[];
-};
+// type TMeta = {
+// 	diceSent?: [];
+// 	messagesDeleted?: Discord.Message[];
+// 	messagesSent?: Discord.Message[];
+// };
 
 export default class SageCache {
 	constructor(protected core: TSageCacheCore) { }

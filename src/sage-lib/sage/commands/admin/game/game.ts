@@ -6,7 +6,7 @@ import Game, { GameRoleType } from "../../../model/Game";
 import GameCharacter from "../../../model/GameCharacter";
 import type SageMessage from "../../../model/SageMessage";
 import type Server from "../../../model/Server";
-import type { IChannel } from "../../../repo/base/IdRepository";
+import { DialogType, IChannel } from "../../../repo/base/IdRepository";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
@@ -153,13 +153,17 @@ async function showGameGetGame(sageMessage: SageMessage): Promise<Game | null> {
 	}
 	return game ?? null;
 }
-function showGameGetInheritedGameType(game: Game): GameType {
-	return game.gameType ?? game.server.defaultGameType ?? GameType.None;
-}
 
 function showGameRenderGameType(renderableContent: utils.RenderUtils.RenderableContent, game: Game): void {
-	const gameType = GameType[game.gameType!] ?? `<i>inherited (${GameType[showGameGetInheritedGameType(game)]})</i>`;
+	const inheritedGameType = game.gameType ?? game.server.defaultGameType ?? GameType.None;
+	const gameType = GameType[game.gameType!] ?? `<i>inherited (${GameType[inheritedGameType]})</i>`;
 	renderableContent.append(`<b>GameType</b> ${gameType}`);
+}
+
+function showGameRenderDialogType(renderableContent: utils.RenderUtils.RenderableContent, game: Game): void {
+	const inheritedDialogType = game.defaultDialogType ?? game.server.defaultDialogType ?? DialogType.Embed;
+	const dialogType = DialogType[game.defaultDialogType!] ?? `<i>inherited (${DialogType[inheritedDialogType]})</i>`;
+	renderableContent.append(`<b>DialogType</b> ${dialogType}`);
 }
 
 function gameDetailsAppendDice(renderableContent: utils.RenderUtils.RenderableContent, game: Game): void {
@@ -246,6 +250,7 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false): Promise
 		orphanPCs.forEach(pc => renderableContent.append(`[spacer]${pc.name}`));
 	}
 
+	showGameRenderDialogType(renderableContent, game);
 	gameDetailsAppendDice(renderableContent, game);
 	await showGameRenderServer(renderableContent, sageMessage, game);
 	await sageMessage.send(renderableContent);
