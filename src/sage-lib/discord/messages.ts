@@ -3,7 +3,7 @@ import utils, { Optional, OrNull } from "../../sage-utils";
 import type SageCache from "../sage/model/SageCache";
 import { DialogType } from "../sage/repo/base/IdRepository";
 import DiscordKey from "./DiscordKey";
-import { createMessageEmbed, resolveToEmbeds, resolveToTexts } from "./embeds";
+import { createMessageEmbed, embedsToTexts, resolveToEmbeds, resolveToTexts } from "./embeds";
 import type { DMessage, DUser, IMenuRenderable, TChannel, TRenderableContentResolvable } from "./types";
 
 //#region helpers
@@ -188,6 +188,10 @@ type TSendToArgs = {
 	const canSend = canTest ? await sageCache.canSendMessageTo(DiscordKey.fromChannel(target)) : true;
 	if (canTest && !canSend) {
 		return Promise.resolve(undefined);
+	}
+	if (sageCache.user.defaultSagePostType === DialogType.Post && embeds?.length) {
+		content = (content ? `${content}\n------------------\n` : "") + embedsToTexts(embeds).join("\n");
+		embeds = [];
 	}
 	return target.send({ content, embeds }).catch(error => {
 		let msg = `Trying to send w/o permissions (${targetToName(target)})`;

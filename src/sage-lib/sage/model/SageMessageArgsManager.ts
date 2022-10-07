@@ -167,6 +167,24 @@ function removeAndReturnDialogType(args: string[]): Optional<DialogType> {
 	}
 	return undefined;
 }
+function removeAndReturnSagePostType(args: string[]): Optional<DialogType> {
+	const regex = /^(sageposttype)="(EMBED|POST|UNSET)?"$/i;
+	for (const arg of args) {
+		const match = arg.match(regex);
+		if (match) {
+			args.splice(args.indexOf(arg), 1);
+			const dialogTypeString = (match[2] ?? "").toUpperCase();
+			if (dialogTypeString === "EMBED") {
+				return DialogType.Embed;
+			}
+			if (dialogTypeString === "POST") {
+				return DialogType.Post;
+			}
+			return null;
+		}
+	}
+	return undefined;
+}
 
 /** /^(dicesecret)=(GAMEMASTER|GM|HIDE|IGNORE|UNSET)?$/i; returns null to unset */
 function removeAndReturnDiceSecretMethodType(args: string[]): Optional<DiceSecretMethodType> {
@@ -196,7 +214,7 @@ function removeAndReturnDiceSecretMethodType(args: string[]): Optional<DiceSecre
 
 /** /^(game)=(PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE)?$/i */
 function removeAndReturnGameType(args: string[]): GameType | undefined {
-	const regex = /^(game)="(ESSENCE20|ESS20|E20|PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE)?"$/i;
+	const regex = /^(game|type)="(ESSENCE20|ESS20|E20|PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE)?"$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match) {
@@ -329,6 +347,10 @@ export default class SageMessageArgsManager extends ArgsManager {
 
 	public removeAndReturnDialogType(): Optional<DialogType> {
 		return removeAndReturnDialogType(this);
+	}
+
+	public removeAndReturnSagePostType(): Optional<DialogType> {
+		return removeAndReturnSagePostType(this);
 	}
 
 	public removeAndReturnDiceOutputType(): Optional<DiceOutputType> {

@@ -147,9 +147,11 @@ function nameTagsToType(nameTags: TMappedChannelNameTags): string {
 	}
 	return "<i>None</i>";
 }
-function channelDetailsAppendGame(renderableContent: utils.RenderUtils.RenderableContent, game: Optional<Game>, channel: IChannel): void {
+function channelDetailsAppendGame(renderableContent: utils.RenderUtils.RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): void {
 	if (game) {
-		renderableContent.appendTitledSection(`<b>${GameType[game.gameType!]} Game</b> ${game.name}`);
+		const gameType = GameType[game.gameType!] ?? "None";
+		const gameTypeText = gameType === "None" ? "" : `<i>(${gameType})</i>`;
+		renderableContent.appendTitledSection(`<b>Game:</b> ${game.name} ${gameTypeText}`);
 
 		const nameTags = mapSageChannelNameTags(channel);
 		const channelType = nameTagsToType(nameTags);
@@ -162,7 +164,9 @@ function channelDetailsAppendGame(renderableContent: utils.RenderUtils.Renderabl
 			// renderableContent.append(`[spacer][spacer]<b>NonPlayer</b> ${PermissionType[channel.nonPlayer || 0]}`);
 		}
 	} else {
-		renderableContent.append(`<b>Default Game Type</b> ${GameType[channel.defaultGameType || 0]}`);
+		const defaultGameType = GameType[channel.defaultGameType!];
+		const inheritedGameType = GameType[server.defaultGameType ?? GameType.None];
+		renderableContent.append(`<b>Default Game Type</b> ${defaultGameType ?? `<i>${inheritedGameType}</i>`}`);
 	}
 }
 
@@ -195,7 +199,7 @@ export async function channelDetails(sageMessage: SageMessage, channel?: IChanne
 	const renderableContent = createAdminRenderableContent(server);
 	renderableContent.appendTitledSection(`<b>#${guildChannelName}</b>`, `<b>Channel Id</b> ${channelDid}`);
 
-	channelDetailsAppendGame(renderableContent, game, channel);
+	channelDetailsAppendGame(renderableContent, server, game, channel);
 	channelDetailsAppendActions(renderableContent, channel);
 	await channelDetailsAppendAdmin(renderableContent, server, channel);
 	await channelDetailsAppendCommand(renderableContent, server, channel);

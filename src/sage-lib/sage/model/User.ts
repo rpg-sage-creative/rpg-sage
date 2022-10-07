@@ -1,6 +1,7 @@
 import type * as Discord from "discord.js";
 import type { Optional } from "../../../sage-utils";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
+import type { DialogType } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";
 import type GameCharacter from "./GameCharacter";
 import type { GameCharacterCore } from "./GameCharacter";
@@ -23,6 +24,8 @@ export const PatronTierSnowflakes: Discord.Snowflake[] = [undefined!, "730147338
 export interface UserCore extends DidCore<"User"> {
 	aliases?: TAlias[];
 	allowDynamicDialogSeparator?: boolean;
+	defaultDialogType?: DialogType;
+	defaultSagePostType?: DialogType;
 	macros?: TMacro[];
 	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
 	notes?: TNote[];
@@ -64,6 +67,8 @@ export default class User extends HasDidCore<UserCore> {
 	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
 	public get allowDynamicDialogSeparator(): boolean { return this.core.allowDynamicDialogSeparator === true; }
 	public set allowDynamicDialogSeparator(allowDynamicDialogSeparator: boolean) { this.core.allowDynamicDialogSeparator = allowDynamicDialogSeparator === true; }
+	public get defaultDialogType(): DialogType | undefined { return this.core.defaultDialogType; }
+	public get defaultSagePostType(): DialogType | undefined { return this.core.defaultSagePostType; }
 	public get macros(): NamedCollection<TMacro> { return this.core.macros as NamedCollection<TMacro>; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public notes: NoteManager;
@@ -83,6 +88,14 @@ export default class User extends HasDidCore<UserCore> {
 				?? this.nonPlayerCharacters.find(char => char.hasAutoChannel(did));
 		}
 		return undefined;
+	}
+
+	private updateDialogType(dialogType: Optional<DialogType>): void { this.core.defaultDialogType = dialogType === null ? undefined : dialogType ?? this.core.defaultDialogType; }
+	private updateSagePostType(sagePostType: Optional<DialogType>): void { this.core.defaultSagePostType = sagePostType === null ? undefined : sagePostType ?? this.core.defaultSagePostType; }
+	public update({ dialogType, sagePostType }: { dialogType?: Optional<DialogType>, sagePostType?: Optional<DialogType> }): Promise<boolean> {
+		this.updateDialogType(dialogType);
+		this.updateSagePostType(sagePostType);
+		return this.save();
 	}
 
 	public async save(): Promise<boolean> {

@@ -2,6 +2,7 @@ import type * as Discord from "discord.js";
 import utils, { Optional } from "../../../../../sage-utils";
 import type SageMessage from "../../../model/SageMessage";
 import type User from "../../../model/User";
+import { DialogType } from "../../../repo/base/IdRepository";
 import { renderCount, registerAdminCommand, createAdminRenderableContent } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
@@ -47,28 +48,42 @@ async function userList(sageMessage: SageMessage): Promise<void> {
 	return Promise.resolve();
 }
 
-async function userDetails(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
+async function userUpdate(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.allowAdmin) {
 		return sageMessage.reactBlock();
 	}
+	const dialogType = sageMessage.args.removeAndReturnDialogType();
+	const sagePostType = sageMessage.args.removeAndReturnSagePostType();
+	const updated = await sageMessage.sageUser.update({ dialogType, sagePostType });
+	if (updated) {
+		return userDetails(sageMessage);
+	}
+	return sageMessage.reactSuccessOrFailure(updated);
+}
 
-	const userDid = await sageMessage.args.removeAndReturnUserDid();
-	let user = await sageMessage.caches.users.getByDid(userDid);
-	if (!user) {
-		const userId = sageMessage.args.removeAndReturnUuid();
-		user = await sageMessage.caches.users.getById(userId);
+async function userDetails(sageMessage: SageMessage): Promise<void> {
+	let user: User | null = sageMessage.sageUser;
+	if (sageMessage.isSuperUser) {
+		const userDid = await sageMessage.args.removeAndReturnUserDid();
+		if (userDid) {
+			user = await sageMessage.caches.users.getByDid(userDid);
+		}
+		if (!user) {
+			const userId = sageMessage.args.removeAndReturnUuid();
+			user = await sageMessage.caches.users.getById(userId);
+		}
+		if (!user) {
+			user = sageMessage.sageUser;
+		}
 	}
 
 	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>user-details</b>`);
 	if (user) {
-		renderableContent.append(user.id);
-
 		const discordUser = await sageMessage.discord.fetchUser(user.did);
 		if (discordUser) {
-			renderableContent.setTitle(`<b>${discordUser.username}</b>`);
+			renderableContent.setTitle(`<b>@${discordUser.tag}</b>`);
+			renderableContent.append(`<b>Discord Id</b> ${discordUser.id}`);
 			renderableContent.setThumbnailUrl(discordUser.displayAvatarURL());
-			renderableContent.append(`<b>Username</b> ${discordUser.tag}`);
-			renderableContent.append(`<b>User Id</b> ${discordUser.id}`);
 			//TODO: sort out presence
 			// renderableContent.append(`<b>Status</b> ${discordUser.presence.status}`);
 			// const lastMessage = discordUser.lastMessage;
@@ -77,11 +92,21 @@ async function userDetails(sageMessage: SageMessage): Promise<void> {
 			// 	renderableContent.append(`<b>Last Message Date</b> ${lastMessage.createdAt.toUTCString()}`);
 			// }
 		} else {
-			renderableContent.setTitle(`<b>Unknown User</b>`);
-			renderableContent.append(`<b>Username</b> ${"<i>UNKNOWN</i>"}`);
-			renderableContent.append(`<b>User Id</b> ${user.did || "<i>NOT SET</i>"}`);
+			// renderableContent.setTitle(`<b>Unknown User</b>`);
+			// renderableContent.append(`<b>Username</b> ${"<i>UNKNOWN</i>"}`);
+			renderableContent.append(`<b>Discord Id</b> ${user.did || "<i>NOT SET</i>"}`);
 			renderableContent.append(`<b>Status</b> ${"<i>NOT FOUND</i>"}`);
 		}
+
+		renderableContent.append("");
+		renderableContent.append(`<b>RPG Sage Id</b> ${user.id}`);
+
+		const dialogType = DialogType[user.defaultDialogType!] ?? `<i>unset (Embed)</i>`;
+		renderableContent.append(`<b>Preferred Dialog Type</b> ${dialogType}`);
+
+		const sagePostType = DialogType[user.defaultSagePostType!] ?? `<i>unset (Embed)</i>`;
+		renderableContent.append(`<b>Preferred Sage Post Type</b> ${sagePostType}`);
+
 		// TODO: List any games, gameRoles, servers, serverRoles!
 	} else {
 		renderableContent.append(`<blockquote>User Not Found!</blockquote>`);
@@ -100,4 +125,6 @@ export default function register(): void {
 	registerAdminCommand(userDetails, "user-details");
 	registerAdminCommandHelp("Admin", "SuperUser", "User", "user details {@UserMention}");
 	registerAdminCommandHelp("Admin", "SuperUser", "User", "user details {UserId}");
+
+	registerAdminCommand(userUpdate, "user-set", "user-update");
 }

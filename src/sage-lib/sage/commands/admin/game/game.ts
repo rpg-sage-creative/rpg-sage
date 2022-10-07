@@ -160,10 +160,25 @@ function showGameRenderGameType(renderableContent: utils.RenderUtils.RenderableC
 	renderableContent.append(`<b>GameType</b> ${gameType}`);
 }
 
-function showGameRenderDialogType(renderableContent: utils.RenderUtils.RenderableContent, game: Game): void {
+async function showGameRenderDialogType(renderableContent: utils.RenderUtils.RenderableContent, sageMessage: SageMessage, game: Game): Promise<void> {
 	const inheritedDialogType = game.defaultDialogType ?? game.server.defaultDialogType ?? DialogType.Embed;
 	const dialogType = DialogType[game.defaultDialogType!] ?? `<i>inherited (${DialogType[inheritedDialogType]})</i>`;
 	renderableContent.append(`<b>DialogType</b> ${dialogType}`);
+
+	// Check for users with .Post as their default
+	if (inheritedDialogType !== DialogType.Post) {
+		let showAlert = false;
+		for (const gameUser of game.users) {
+			const user = await sageMessage.caches.users.getByDid(gameUser.did);
+			if (user?.defaultDialogType === DialogType.Post) {
+				showAlert = true;
+				break;
+			}
+		}
+		if (showAlert) {
+			renderableContent.append(`[command-warn] <u>At least 1 user prefers Dialog via Post vs. Embed!</u> [command-warn]`);
+		}
+	}
 }
 
 function gameDetailsAppendDice(renderableContent: utils.RenderUtils.RenderableContent, game: Game): void {
@@ -204,8 +219,8 @@ async function showGameRenderServer(renderableContent: utils.RenderUtils.Rendera
 	}
 }
 
-async function gameDetails(sageMessage: SageMessage, skipPrune = false): Promise<void> {
-	const game = await showGameGetGame(sageMessage);
+async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: Game): Promise<void> {
+	const game = _game ?? await showGameGetGame(sageMessage);
 	if (!game) {
 		return Promise.resolve();
 	}
@@ -217,7 +232,9 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false): Promise
 	showGameRenderGameType(renderableContent, game);
 
 	renderableContent.append(`<b>Created</b> ${formatDateTime(game.createdDate)}`);
-	if (game.archivedDate) renderableContent.append(`[spacer]<b>Archived</b> ${formatDateTime(game.archivedDate) ?? "<i>Active</i>"}`);
+	if (game.archivedDate) {
+		renderableContent.append(`[spacer]<b>Archived</b> ${formatDateTime(game.archivedDate) ?? "<i>Active</i>"}`);
+	}
 
 	const guildChannels = (await game.guildChannels()).map(guildChannel => guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`);
 	renderableContent.append(`<b>Channels</b> ${guildChannels.length}; ${guildChannels.join(", ")}`);
@@ -250,7 +267,7 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false): Promise
 		orphanPCs.forEach(pc => renderableContent.append(`[spacer]${pc.name}`));
 	}
 
-	showGameRenderDialogType(renderableContent, game);
+	await showGameRenderDialogType(renderableContent, sageMessage, game);
 	gameDetailsAppendDice(renderableContent, game);
 	await showGameRenderServer(renderableContent, sageMessage, game);
 	await sageMessage.send(renderableContent);
@@ -350,6 +367,9 @@ async function gameUpdate(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const updated = await sageMessage.game!.update(name, gameType, dialogType, critMethodType, diceOutputType, dicePostType, diceSecretMethodType);
+	if (updated) {
+		return gameDetails(sageMessage, true, sageMessage.game);
+	}
 	return sageMessage.reactSuccessOrFailure(updated);
 }
 
