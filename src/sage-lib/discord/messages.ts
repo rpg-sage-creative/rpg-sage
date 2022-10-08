@@ -184,7 +184,7 @@ type TSendToArgs = {
  * Returns a Discord.Message upon success, null upon error, and undefined if Sage doesn't have permissions to send to this channel/thread.
  */
  export async function sendTo({ sageCache, target, content, embeds, errMsg }: TSendToArgs): Promise<Discord.Message | null | undefined> {
-	const canTest = "permissionsFor" in target;
+	const canTest = target && ("permissionsFor" in target);
 	const canSend = canTest ? await sageCache.canSendMessageTo(DiscordKey.fromChannel(target)) : true;
 	if (canTest && !canSend) {
 		return Promise.resolve(undefined);
