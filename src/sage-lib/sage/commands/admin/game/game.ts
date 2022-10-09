@@ -1,8 +1,9 @@
+import type { TextChannel } from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../../../sage-dice";
 import utils, { Optional } from "../../../../../sage-utils";
 import { DiscordId } from "../../../../discord";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import Game, { GameRoleType, GameUserType, IGameUser } from "../../../model/Game";
+import Game, { GameRoleType, GameUserType, IGameUser, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game";
 import GameCharacter from "../../../model/GameCharacter";
 import type SageMessage from "../../../model/SageMessage";
 import type Server from "../../../model/Server";
@@ -219,6 +220,30 @@ async function showGameRenderServer(renderableContent: utils.RenderUtils.Rendera
 	}
 }
 
+async function showGameRenderChannels(renderableContent: utils.RenderUtils.RenderableContent, sageMessage: SageMessage, game: Game): Promise<void> {
+	renderableContent.append(`<b>Channels</b> ${game.channels.length}`);
+
+	const tags = ["ic", "ooc", "gm", "misc"];
+	for (const tag of tags) {
+		const metas = game.channels
+			.map(sageChannel => ({ sageChannel, nameTags:mapSageChannelNameTags(sageChannel) }))
+			.filter(ch => ch.nameTags[tag as "ic"]);
+		if (metas.length) {
+			renderableContent.append(`[spacer]<b>${nameTagsToType(metas[0].nameTags)}</b>`);
+			for (const meta of metas) {
+				const guildChannel = await sageMessage.discord.fetchChannel<TextChannel>(meta.sageChannel.did);
+				const guildChannelName = guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`;
+				renderableContent.append(`[spacer][spacer]${guildChannelName}`);
+			}
+		}
+	}
+
+	const orphanChannels = (await game.orphanChannels()).map(channel => channel ? `#${channel.did}` : `<i>unavailable</i>`);
+	if (orphanChannels.length) {
+		renderableContent.append(`<b>Orphan Channels</b> ${orphanChannels.length}; ${orphanChannels.join(", ")}`);
+	}
+}
+
 async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: Game): Promise<void> {
 	const game = _game ?? await showGameGetGame(sageMessage);
 	if (!game) {
@@ -229,19 +254,15 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 
 	renderableContent.setTitle(`<b>${game.name}</b>`);
 	renderableContent.append(game.id);
-	showGameRenderGameType(renderableContent, game);
 
 	renderableContent.append(`<b>Created</b> ${formatDateTime(game.createdDate)}`);
 	if (game.archivedDate) {
 		renderableContent.append(`[spacer]<b>Archived</b> ${formatDateTime(game.archivedDate) ?? "<i>Active</i>"}`);
 	}
 
-	const guildChannels = (await game.guildChannels()).map(guildChannel => guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`);
-	renderableContent.append(`<b>Channels</b> ${guildChannels.length}; ${guildChannels.join(", ")}`);
-	const orphanChannels = (await game.orphanChannels()).map(channel => channel ? `#${channel.did}` : `<i>unavailable</i>`);
-	if (orphanChannels.length) {
-		renderableContent.append(`<b>Orphan Channels</b> ${orphanChannels.length}; ${orphanChannels.join(", ")}`);
-	}
+	showGameRenderGameType(renderableContent, game);
+
+	await showGameRenderChannels(renderableContent, sageMessage, game);
 
 	const guildRoles = await game.guildRoles();
 	const roles = guildRoles.map(guildRole => guildRole ? `@${guildRole.name} (${GameRoleType[game.roles.find(role => role.did === guildRole.id)?.type!]})` : `<i>unavailable</i>`);
@@ -249,7 +270,7 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 
 	const gmGuildMembers = await game.gmGuildMembers();
 	const gameMasters = gmGuildMembers.map((gmGuildMember, index) => gmGuildMember ? `@${gmGuildMember.user?.tag ?? gmGuildMember.displayName}` : `<i>${game.gameMasters[index]}</i>`);
-	renderableContent.append(`<b>Game Master Name</b> ${game.gmCharacterName ?? `<i>inherited (${game.server.defaultGmCharacterName ?? GameCharacter.defaultGmCharacterName})</i>`}`);
+	renderableContent.append(`<b>Game Master Name</b>`, `[spacer]${game.gmCharacterName ?? `<i>inherited (${game.server.defaultGmCharacterName ?? GameCharacter.defaultGmCharacterName})</i>`}`);
 	renderableContent.append(`<b>Game Masters</b> ${gameMasters.length}`);
 	gameMasters.forEach(gm => renderableContent.append(`[spacer]${gm}`));
 

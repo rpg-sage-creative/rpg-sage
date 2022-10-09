@@ -1,8 +1,9 @@
 import type * as Discord from "discord.js";
-import utils, { Optional } from "../../../../sage-utils";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../../sage-dice";
-import { DiscordKey, DiscordCache } from "../../../discord";
+import utils, { Optional } from "../../../../sage-utils";
+import { DiscordCache, DiscordKey } from "../../../discord";
 import type Game from "../../model/Game";
+import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game";
 import type SageCache from "../../model/SageCache";
 import type SageMessage from "../../model/SageMessage";
 import type Server from "../../model/Server";
@@ -10,7 +11,6 @@ import { DialogType, PermissionType, type IChannel } from "../../repo/base/IdRep
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";
-import { mapSageChannelNameTags, TMappedChannelNameTags } from "../../model/Game";
 
 //#region add
 
@@ -132,21 +132,6 @@ async function channelDetailsAppendSearch(renderableContent: utils.RenderUtils.R
 	}
 }
 
-function nameTagsToType(nameTags: TMappedChannelNameTags): string {
-	if (nameTags.gm) {
-		return "GM <i>(Game Master)</i>";
-	}
-	if (nameTags.ic) {
-		return "IC <i>(In Character)</i>";
-	}
-	if (nameTags.ooc) {
-		return "OOC <i>(Out of Character)</i>";
-	}
-	if (nameTags.misc) {
-		return "Misc";
-	}
-	return "<i>None</i>";
-}
 function channelDetailsAppendGame(renderableContent: utils.RenderUtils.RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): void {
 	if (game) {
 		const gameType = GameType[game.gameType!] ?? "None";

@@ -95,6 +95,21 @@ export function mapSageChannelNameTags(channel: IChannel): TMappedChannelNameTag
 
 	return { ic, gm, ooc, misc };
 }
+export function nameTagsToType(nameTags: TMappedChannelNameTags): string {
+	if (nameTags.gm) {
+		return "GM <i>(Game Master)</i>";
+	}
+	if (nameTags.ic) {
+		return "IC <i>(In Character)</i>";
+	}
+	if (nameTags.ooc) {
+		return "OOC <i>(Out of Character)</i>";
+	}
+	if (nameTags.misc) {
+		return "Misc";
+	}
+	return "<i>None</i>";
+}
 
 /** Reads GuildChannel.name to determine channel type: IC, GM, OOC, MISC */
 function mapGuildChannelNameTags(channel: Discord.GuildChannel): TMappedChannelNameTags {
