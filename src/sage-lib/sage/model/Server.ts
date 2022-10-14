@@ -5,7 +5,7 @@ import { DiscordKey } from "../../discord";
 import { DicePostType } from "../commands/dice";
 import ActiveBot from "../model/ActiveBot";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
-import { IChannel, updateChannel } from "../repo/base/IdRepository";
+import { DialogType, IChannel, updateChannel } from "../repo/base/IdRepository";
 import Colors from "./Colors";
 import Emoji from "./Emoji";
 import Game from "./Game";
@@ -22,6 +22,7 @@ export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji {
 	channels: IChannel[];
 	commandPrefix?: string;
 	defaultCritMethodType?: CritMethodType;
+	defaultDialogType?: DialogType;
 	defaultDiceOutputType?: DiceOutputType;
 	defaultDicePostType?: DicePostType;
 	defaultDiceSecretMethodType?: DiceSecretMethodType;
@@ -43,6 +44,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	public get channels(): IChannel[] { return this.core.channels ?? []; }
 	public get commandPrefix(): string | undefined { return this.core.commandPrefix; }
 	public get defaultCritMethodType(): CritMethodType | undefined { return this.core.defaultCritMethodType; }
+	public get defaultDialogType(): DialogType | undefined { return this.core.defaultDialogType; }
 	public get defaultDiceOutputType(): DiceOutputType | undefined { return this.core.defaultDiceOutputType; }
 	public get defaultDicePostType(): DicePostType | undefined { return this.core.defaultDicePostType; }
 	public get defaultDiceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.defaultDiceSecretMethodType; }
@@ -68,13 +70,14 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	public async findActiveGameByChannelDid(channelDid: Discord.Snowflake): Promise<Game | undefined> {
 		return this.sageCache.games.findActiveByDiscordKey(new DiscordKey(this.did, channelDid));
 	}
-	public async addGame(channelDid: Discord.Snowflake, name: string, _gameType: Optional<GameType>, _critMethodType: Optional<CritMethodType>, _diceOutputType: Optional<DiceOutputType>, _dicePostType: Optional<DicePostType>, _diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
-		const found = await this.sageCache.games.findActiveByDiscordKey(new DiscordKey(this.did, channelDid));
+	public async addGame(channelDid: Discord.Snowflake, name: string, _gameType: Optional<GameType>, _dialogType: Optional<DialogType>, _critMethodType: Optional<CritMethodType>, _diceOutputType: Optional<DiceOutputType>, _dicePostType: Optional<DicePostType>, _diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
+		const found = await this.findActiveGameByChannelDid(channelDid);
 		if (found) {
 			return false;
 		}
 		const gameType = _gameType ?? this.defaultGameType;
 		const critMethodType = _critMethodType ?? this.defaultCritMethodType;
+		const dialogType = _dialogType ?? this.defaultDialogType;
 		const diceOutputType = _diceOutputType ?? this.defaultDiceOutputType;
 		const dicePostType = _dicePostType ?? this.defaultDicePostType;
 		const diceSecretMethodType = _diceSecretMethodType ?? this.defaultDiceSecretMethodType;
@@ -87,6 +90,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 			name: name,
 			gameType: gameType,
 			defaultCritMethodType: critMethodType,
+			defaultDialogType: dialogType,
 			defaultDiceOutputType: diceOutputType,
 			defaultDicePostType: dicePostType,
 			defaultDiceSecretMethodType: diceSecretMethodType,
@@ -314,8 +318,9 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	// #endregion
 
 	//#region update (defaultGame, defaultDiceOutput)
-	public async update(gameType: Optional<GameType>, critMethodType: Optional<CritMethodType>, diceOutputType: Optional<DiceOutputType>, dicePostType: Optional<DicePostType>, diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
+	public async update(gameType: Optional<GameType>, dialogType: Optional<DialogType>, critMethodType: Optional<CritMethodType>, diceOutputType: Optional<DiceOutputType>, dicePostType: Optional<DicePostType>, diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
 		this.core.defaultCritMethodType = critMethodType === null ? undefined : critMethodType ?? this.core.defaultCritMethodType;
+		this.core.defaultDialogType = dialogType === null ? undefined : dialogType ?? this.core.defaultDialogType;
 		this.core.defaultDiceOutputType = diceOutputType === null ? undefined : diceOutputType ?? this.core.defaultDiceOutputType;
 		this.core.defaultDicePostType = dicePostType === null ? undefined : dicePostType ?? this.core.defaultDicePostType;
 		this.core.defaultDiceSecretMethodType = diceSecretMethodType === null ? undefined : diceSecretMethodType ?? this.core.defaultDiceSecretMethodType;
@@ -355,6 +360,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 			did: guild.id,
 			emoji: [],
 			defaultCritMethodType: 0,
+			defaultDialogType: DialogType.Embed,
 			defaultDiceOutputType: DiceOutputType.M,
 			defaultDicePostType: DicePostType.SinglePost,
 			defaultDiceSecretMethodType: DiceSecretMethodType.Ignore,

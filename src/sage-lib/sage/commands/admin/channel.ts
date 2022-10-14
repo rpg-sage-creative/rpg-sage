@@ -1,12 +1,13 @@
 import type * as Discord from "discord.js";
-import utils, { Optional } from "../../../../sage-utils";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../../sage-dice";
-import { DiscordKey, DiscordCache } from "../../../discord";
+import utils, { Optional } from "../../../../sage-utils";
+import { DiscordCache, DiscordKey } from "../../../discord";
 import type Game from "../../model/Game";
+import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game";
 import type SageCache from "../../model/SageCache";
 import type SageMessage from "../../model/SageMessage";
 import type Server from "../../model/Server";
-import { PermissionType, type IChannel } from "../../repo/base/IdRepository";
+import { DialogType, PermissionType, type IChannel } from "../../repo/base/IdRepository";
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";
@@ -78,12 +79,18 @@ async function channelDetailsAppendCommand(renderableContent: utils.RenderUtils.
 	}
 }
 
-async function channelDetailsAppendDialog(renderableContent: utils.RenderUtils.RenderableContent, server: Server, channel: IChannel): Promise<void> {
-	if (channel.dialog && channel.sendDialogTo) {
+async function channelDetailsAppendDialog(renderableContent: utils.RenderUtils.RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): Promise<void> {
+	if (channel.dialog) {
 		renderableContent.append(`<b>Dialog Options</b>`);
 
-		const sendToName = await fetchGuildChannelName(server.discord, channel.sendDialogTo);
-		renderableContent.append(`[spacer]<b>Send Dialog To</b> #${sendToName} (${channel.sendDialogTo})`);
+		const dialogType = DialogType[channel.defaultDialogType!];
+		const inheritedDialogType = DialogType[game?.defaultDialogType ?? server.defaultDialogType ?? DialogType.Embed];
+		renderableContent.append(`[spacer]<b>Dialog Type</b> ${dialogType ?? `<i>inherited (${inheritedDialogType})</i>`}`);
+
+		if (channel.sendDialogTo) {
+			const sendToName = await fetchGuildChannelName(server.discord, channel.sendDialogTo);
+			renderableContent.append(`[spacer]<b>Send Dialog To</b> #${sendToName} (${channel.sendDialogTo})`);
+		}
 	}
 }
 
@@ -125,15 +132,26 @@ async function channelDetailsAppendSearch(renderableContent: utils.RenderUtils.R
 	}
 }
 
-function channelDetailsAppendGame(renderableContent: utils.RenderUtils.RenderableContent, game: Optional<Game>, channel: IChannel): void {
+function channelDetailsAppendGame(renderableContent: utils.RenderUtils.RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): void {
 	if (game) {
-		renderableContent.appendTitledSection(`<b>${GameType[game.gameType!]} Game</b> ${game.name}`);
-		renderableContent.append(`[spacer]<b>Permissions</b>`);
-		renderableContent.append(`[spacer][spacer]<b>GameMaster</b> ${PermissionType[channel.gameMaster || 0]}`);
-		renderableContent.append(`[spacer][spacer]<b>Player</b> ${PermissionType[channel.player || 0]}`);
-		renderableContent.append(`[spacer][spacer]<b>NonPlayer</b> ${PermissionType[channel.nonPlayer || 0]}`);
+		const gameType = GameType[game.gameType!] ?? "None";
+		const gameTypeText = gameType === "None" ? "" : `<i>(${gameType})</i>`;
+		renderableContent.appendTitledSection(`<b>Game:</b> ${game.name} ${gameTypeText}`);
+
+		const nameTags = mapSageChannelNameTags(channel);
+		const channelType = nameTagsToType(nameTags);
+		renderableContent.append(`<b>Channel Type</b> ${channelType}`);
+
+		if (nameTags.misc) {
+			renderableContent.append(`[spacer]<b>Permissions</b>`);
+			renderableContent.append(`[spacer][spacer]<b>GameMaster</b> ${PermissionType[channel.gameMaster || 0]}`);
+			renderableContent.append(`[spacer][spacer]<b>Player</b> ${PermissionType[channel.player || 0]}`);
+			// renderableContent.append(`[spacer][spacer]<b>NonPlayer</b> ${PermissionType[channel.nonPlayer || 0]}`);
+		}
 	} else {
-		renderableContent.append(`<b>Default Game Type</b> ${GameType[channel.defaultGameType || 0]}`);
+		const defaultGameType = GameType[channel.defaultGameType!];
+		const inheritedGameType = GameType[server.defaultGameType ?? GameType.None];
+		renderableContent.append(`<b>Default Game Type</b> ${defaultGameType ?? `<i>${inheritedGameType}</i>`}`);
 	}
 }
 
@@ -166,13 +184,13 @@ export async function channelDetails(sageMessage: SageMessage, channel?: IChanne
 	const renderableContent = createAdminRenderableContent(server);
 	renderableContent.appendTitledSection(`<b>#${guildChannelName}</b>`, `<b>Channel Id</b> ${channelDid}`);
 
+	channelDetailsAppendGame(renderableContent, server, game, channel);
 	channelDetailsAppendActions(renderableContent, channel);
 	await channelDetailsAppendAdmin(renderableContent, server, channel);
 	await channelDetailsAppendCommand(renderableContent, server, channel);
-	await channelDetailsAppendDialog(renderableContent, server, channel);
+	await channelDetailsAppendDialog(renderableContent, server, game, channel);
 	await channelDetailsAppendDice(renderableContent, server, game, channel);
 	await channelDetailsAppendSearch(renderableContent, server, channel);
-	channelDetailsAppendGame(renderableContent, game, channel);
 
 	return <any>sageMessage.send(renderableContent);
 }

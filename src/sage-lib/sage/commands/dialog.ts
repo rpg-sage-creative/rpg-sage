@@ -2,14 +2,16 @@ import * as Discord from "discord.js";
 import * as _XRegExp from "xregexp";
 import utils, { OrUndefined, TParsers, type Optional } from "../../../sage-utils";
 import { DiscordId, DiscordKey, MessageType, NilSnowflake, ReactionType, TCommand, TCommandAndArgsAndData } from "../../discord";
+import { embedsToTexts } from "../../discord/embeds";
 import { isAuthorBotOrWebhook, registerMessageListener, registerReactionListener } from "../../discord/handlers";
-import { replace, replaceWebhook, SageDialogWebhookName, send, sendWebhook } from "../../discord/messages";
+import { replaceWebhook, SageDialogWebhookName, sendWebhook } from "../../discord/messages";
 import type CharacterManager from "../model/CharacterManager";
 import GameCharacter, { type GameCharacterCore, type TDialogMessage } from "../model/GameCharacter";
 import { ColorType } from "../model/HasColorsCore";
 import { EmojiType } from "../model/HasEmojiCore";
 import type SageMessage from "../model/SageMessage";
 import type SageReaction from "../model/SageReaction";
+import { DialogType } from "../repo/base/IdRepository";
 import DialogMessageRepository from "../repo/DialogMessageRepository";
 import { parseDiceMatches, sendDice } from "./dice";
 import { registerInlineHelp } from "./help";
@@ -32,9 +34,10 @@ type TDialogPostData = {
 async function sendDialogRenderable(sageMessage: SageMessage, renderableContent: utils.RenderUtils.RenderableContent, authorOptions: Discord.WebhookMessageOptions): Promise<Discord.Message[]> {
 	const targetChannel = await sageMessage.discord.fetchChannel(sageMessage.channel?.sendDialogTo);
 	if (targetChannel) {
-		const sent = sageMessage.dialogType === "Webhook"
-			? await sendWebhook(sageMessage.caches, targetChannel, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
-			: await send(sageMessage.caches, targetChannel, renderableContent, sageMessage.message.author).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		// const sent = sageMessage.dialogType === "Webhook"
+		// 	? await sendWebhook(sageMessage.caches, targetChannel, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
+		// 	: await send(sageMessage.caches, targetChannel, renderableContent, sageMessage.message.author).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		const sent = await sendWebhook(sageMessage.caches, targetChannel, renderableContent, authorOptions, sageMessage.dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 		if (sent.length) {
 			// sageMessage._.set("Dialog", sent[sent.length - 1]);
 			// if (sageMessage.message.deletable) {
@@ -43,9 +46,10 @@ async function sendDialogRenderable(sageMessage: SageMessage, renderableContent:
 		}
 		return sent;
 	} else {
-		const replaced = sageMessage.dialogType === "Webhook"
-			? await replaceWebhook(sageMessage.caches, sageMessage.message, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
-			: await replace(sageMessage.caches, sageMessage.message, renderableContent).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		// const replaced = sageMessage.dialogType === "Webhook"
+		// 	? await replaceWebhook(sageMessage.caches, sageMessage.message, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
+		// 	: await replace(sageMessage.caches, sageMessage.message, renderableContent).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		const replaced = await replaceWebhook(sageMessage.caches, sageMessage.message, renderableContent, authorOptions, sageMessage.dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 		if (replaced.length) {
 			// sageMessage._.set("Dialog", replaced[replaced.length - 1]);
 			// if (sageMessage._.has("Dice")) {
@@ -62,7 +66,7 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 		return Promise.reject("Invalid TDialogPostData");
 	}
 
-	const webhook = sageMessage.dialogType === "Webhook";
+	const webhook = true; //sageMessage.dialogType === "Webhook";
 	const renderableContent = new utils.RenderUtils.RenderableContent();
 
 	const authorName = postData.authorName || character.name;
@@ -492,7 +496,7 @@ async function findLastMessage(sageMessage: SageMessage, messageDid: Optional<Di
 		return DialogMessageRepository.read(messageKey);
 	}
 
-	let lastMessages: TDialogMessage[] = [];
+	const lastMessages: TDialogMessage[] = [];
 	if (sageMessage.game) {
 		if (sageMessage.isPlayer) {
 			lastMessages.push(...(sageMessage.playerCharacter?.getLastMessages(sageMessage.discordKey) ?? []));
@@ -525,15 +529,14 @@ async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent)
 		updatedImageUrl = dialogContent.imageUrl,
 		updatedContent = sageMessage.caches.format(dialogContent.content),
 		updatedEmbed = updateEmbed(embed, updatedTitle, updatedImageUrl, updatedContent);
-	if (sageMessage.dialogType === "Webhook") {
-		const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, SageDialogWebhookName);
-		if (webhook) {
-			await webhook.editMessage(message.id, { embeds:[updatedEmbed], threadId:sageMessage.threadDid }).then(() => sageMessage.message.delete(), console.error);
-		}else {
-			return sageMessage.reactWarn();
-		}
-	} else {
-		message.edit({ embeds:[updatedEmbed] }).then(() => sageMessage.message.delete(), console.error);
+	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, SageDialogWebhookName);
+	if (webhook) {
+		const threadId = sageMessage.threadDid;
+		const content = sageMessage.dialogType === DialogType.Post ? embedsToTexts([updatedEmbed]).join("\n") : undefined;
+		const embeds = sageMessage.dialogType === DialogType.Embed ? [updatedEmbed] : [];
+			await webhook.editMessage(message.id, { content, embeds, threadId }).then(() => sageMessage.message.delete(), console.error);
+	}else {
+		return sageMessage.reactWarn();
 	}
 	return Promise.resolve();
 }

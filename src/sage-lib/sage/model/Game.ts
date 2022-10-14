@@ -3,7 +3,7 @@ import type { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } f
 import utils, { IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
 import { DiscordKey } from "../../discord";
 import type { DicePostType } from "../commands/dice";
-import type { IChannel } from "../repo/base/IdRepository";
+import type { DialogType, IChannel } from "../repo/base/IdRepository";
 import { HasIdCoreAndSageCache, PermissionType, updateChannel } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";
 import Colors from "./Colors";
@@ -46,6 +46,7 @@ export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
 	name: string;
 	gameType?: GameType;
 
+	defaultDialogType?: DialogType;
 	defaultCritMethodType?: CritMethodType;
 	defaultDiceOutputType?: DiceOutputType;
 	defaultDicePostType?: DicePostType;
@@ -64,25 +65,71 @@ export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
 	gmCharacterName?: string;
 }
 
-export type TMappedGameChannel = {
-	did: Discord.Snowflake,
-	sChannel: IChannel,
-	gChannel: Discord.GuildChannel | undefined,
-	nameTags: { ic: boolean, ooc: boolean, gm: boolean }
+export type TMappedChannelNameTags = {
+	ic: boolean;
+	ooc: boolean;
+	gm: boolean;
+	misc: boolean;
 };
+export type TMappedGameChannel = {
+	did: Discord.Snowflake;
+	sChannel: IChannel;
+	gChannel: Discord.GuildChannel | undefined;
+	nameTags: TMappedChannelNameTags;
+};
+
+/** Reads IChannel properties to determine channel type: IC, GM, OOC, MISC */
+export function mapSageChannelNameTags(channel: IChannel): TMappedChannelNameTags {
+	const gmWrite = channel.gameMaster === PermissionType.Write;
+	const pcWrite = channel.player === PermissionType.Write;
+	const bothWrite = gmWrite && pcWrite;
+
+	const dialog = channel.dialog === true;
+	const commands = channel.commands === true;
+	const search = channel.search === true;
+
+	const gm = gmWrite && !pcWrite;
+	const ooc = bothWrite && (!dialog || commands || search);
+	const ic = bothWrite && !ooc && dialog;
+	const misc = !ic && !ooc && !gm;
+
+	return { ic, gm, ooc, misc };
+}
+export function nameTagsToType(nameTags: TMappedChannelNameTags): string {
+	if (nameTags.gm) {
+		return "GM <i>(Game Master)</i>";
+	}
+	if (nameTags.ic) {
+		return "IC <i>(In Character)</i>";
+	}
+	if (nameTags.ooc) {
+		return "OOC <i>(Out of Character)</i>";
+	}
+	if (nameTags.misc) {
+		return "Misc";
+	}
+	return "<i>None</i>";
+}
+
+/** Reads GuildChannel.name to determine channel type: IC, GM, OOC, MISC */
+function mapGuildChannelNameTags(channel: Discord.GuildChannel): TMappedChannelNameTags {
+	const ic = channel.name.match(/\bic\b/i) !== null;
+	const gm = !ic && channel.name.match(/\bgms?\b/i) !== null;
+	const ooc = !ic && !gm && channel.name.match(/\booc\b/i) !== null;
+	const misc = !ic && !ooc && !gm;
+	return { ic, ooc, gm, misc };
+}
+
 /** Returns [guildChannels.concat(sageChannels), guildChannels, sageChannels] */
 async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<[TMappedGameChannel[], TMappedGameChannel[], TMappedGameChannel[]]> {
 	const sChannels: TMappedGameChannel[] = [];
 	const gChannels: TMappedGameChannel[] = [];
 	for (const sChannel of channels) {
-		const ic = sChannel.gameMaster === PermissionType.Write && sChannel.player === PermissionType.Write && sChannel.dialog === true;
-		const gm = sChannel.gameMaster === PermissionType.Write && !sChannel.player;
-		const ooc = !ic && !gm && sChannel.gameMaster === PermissionType.Write && sChannel.player === PermissionType.Write;
 		sChannels.push({
 			did: sChannel.did,
 			sChannel: sChannel,
 			gChannel: undefined,
-			nameTags: { ic, gm, ooc }
+			nameTags: mapSageChannelNameTags(sChannel)
 		});
 
 		const gChannel = await sageCache.discord.fetchChannel(sChannel.did) as Discord.GuildChannel;
@@ -91,11 +138,7 @@ async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<
 				did: sChannel.did,
 				sChannel: sChannel,
 				gChannel: gChannel,
-				nameTags: {
-					ic: gChannel.name.match(/\bic\b/i) !== null,
-					ooc: gChannel.name.match(/\booc\b/i) !== null,
-					gm: gChannel.name.match(/\bgms?\b/i) !== null
-				}
+				nameTags: mapGuildChannelNameTags(gChannel)
 			});
 		}
 	}
@@ -117,6 +160,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	public get name(): string { return this.core.name; }
 	public get gameType(): GameType | undefined { return this.core.gameType; }
 	public get defaultCritMethodType(): CritMethodType | undefined { return this.core.defaultCritMethodType; }
+	public get defaultDialogType(): DialogType | undefined { return this.core.defaultDialogType; }
 	public get defaultDiceOutputType(): DiceOutputType | undefined { return this.core.defaultDiceOutputType; }
 	public get defaultDicePostType(): DicePostType | undefined { return this.core.defaultDicePostType; }
 	public get defaultDiceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.defaultDiceSecretMethodType; }
@@ -187,7 +231,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	}
 	public async guildChannels(): Promise<Discord.GuildChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
-		return all.filter(utils.ArrayUtils.Filters.exists) as Discord.GuildChannel[];
+		return all.filter(exists) as Discord.GuildChannel[];
 	}
 	public async orphanChannels(): Promise<IChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
@@ -432,13 +476,15 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	private updateName(name: Optional<string>): void { this.core.name = name ?? this.core.name ?? ""; }
 	private updateGameType(gameType: Optional<GameType>): void { this.core.gameType = gameType === null ? undefined : gameType ?? this.core.gameType; }
 	private updateCritMethodType(critMethodType: Optional<CritMethodType>): void { this.core.defaultCritMethodType = critMethodType === null ? undefined : critMethodType ?? this.core.defaultCritMethodType; }
+	private updateDialogType(dialogType: Optional<DialogType>): void { this.core.defaultDialogType = dialogType === null ? undefined : dialogType ?? this.core.defaultDialogType; }
 	private updateDiceOutputType(diceOutputType: Optional<DiceOutputType>): void { this.core.defaultDiceOutputType = diceOutputType === null ? undefined : diceOutputType ?? this.core.defaultDiceOutputType; }
 	private updateDicePostType(dicePostType: Optional<DicePostType>): void { this.core.defaultDicePostType = dicePostType === null ? undefined : dicePostType ?? this.core.defaultDicePostType; }
 	private updateDiceSecretMethodType(diceSecretMethodType: Optional<DiceSecretMethodType>): void { this.core.defaultDiceSecretMethodType = diceSecretMethodType === null ? undefined : diceSecretMethodType ?? this.core.defaultDiceSecretMethodType; }
-	public async update(name: Optional<string>, gameType: Optional<GameType>, critMethodType: Optional<CritMethodType>, diceOutputType: Optional<DiceOutputType>, dicePostType: Optional<DicePostType>, diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
+	public async update(name: Optional<string>, gameType: Optional<GameType>, dialogType: Optional<DialogType>, critMethodType: Optional<CritMethodType>, diceOutputType: Optional<DiceOutputType>, dicePostType: Optional<DicePostType>, diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
 		this.updateName(name);
 		this.updateGameType(gameType);
 		this.updateCritMethodType(critMethodType);
+		this.updateDialogType(dialogType);
 		this.updateDiceOutputType(diceOutputType);
 		this.updateDicePostType(dicePostType);
 		this.updateDiceSecretMethodType(diceSecretMethodType);

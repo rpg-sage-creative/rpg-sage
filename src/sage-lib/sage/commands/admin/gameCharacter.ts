@@ -186,7 +186,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 
 	const targetChannel = (await sageMessage.caches.discord.fetchChannel(sageMessage.channel?.sendCommandTo)) ?? sageMessage.message.channel as TChannel;
 	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
-	return sendWebhook(sageMessage.caches, targetChannel, renderableContent, { avatarURL: avatarUrl, username: character.name });
+	return sendWebhook(sageMessage.caches, targetChannel, renderableContent, { avatarURL: avatarUrl, username: character.name }, sageMessage.dialogType);
 }
 
 function sendNotFound(sageMessage: SageMessage, command: string, entityNamePlural: string, nameFilter?: string): Promise<void> {

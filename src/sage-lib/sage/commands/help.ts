@@ -234,34 +234,18 @@ function renderHelpTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	}
 
 	const match = sageMessage.slicedContent.match(/^\!{1,2}\s*help\s*([^$]*)$/i);
-	if (!match) {
-		return null;
-	}
-
-	const categories = (match[1] || "").split(/\s+/);
-	if (match[0].startsWith("!!")) {
-		categories.unshift("Admin");
-	}
-
-	if (!categories.length) {
+	if (match) {
 		return {
 			command: "help",
 			args: undefined
 		};
 	}
-
-	const categoryKey = toHelpCategoryKey(categories);
-	const args = getHelpTexts(categoryKey).length
-		|| getHelpSubCategories(categoryKey, categories.length).length
-		? categories
-		: [];
-	return {
-		command: "help",
-		args: new ArgsManager(args)
-	};
+	return null;
 }
 async function renderHelpHandler(sageMessage: SageMessage): Promise<void> {
-	const renderableContent = await createHelpRenderable(sageMessage.caches, sageMessage.args);
+	const renderableContent = createCommandRenderableContent(`<b>RPG Sage Help</b>`);
+	renderableContent.appendTitledSection("Slash Command", `/sage help`);
+	renderableContent.appendTitledSection("Guides", `<a href="https://rpgsage.io">Command Guide</a>`, `<a href="https://rpgsage.io/quick.html">Quick Start Guide</a>`);
 	await send(sageMessage.caches, sageMessage.message.channel as TChannel, renderableContent, sageMessage.message.author);
 }
 // #endregion

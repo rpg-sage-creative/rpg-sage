@@ -109,9 +109,7 @@ export function resolveToEmbeds(caches: SageCache, renderableContentResolvable: 
 	return embeds;
 }
 
-/** Converts RenderableContent to embeds and then to lines of simple text with markup. */
-export function resolveToTexts(caches: SageCache, renderableContent: TRenderableContentResolvable): string[] {
-	const embeds = resolveToEmbeds(caches, renderableContent);
+export function embedsToTexts(embeds: Discord.MessageEmbed[]): string[] {
 	return embeds.map(embed => {
 		let text = "";
 		text += getValueToAppend(embed.title, !!text);
@@ -124,6 +122,12 @@ export function resolveToTexts(caches: SageCache, renderableContent: TRenderable
 		}
 		return text;
 	});
+}
+
+/** Converts RenderableContent to embeds and then to lines of simple text with markup. */
+export function resolveToTexts(caches: SageCache, renderableContent: TRenderableContentResolvable): string[] {
+	const embeds = resolveToEmbeds(caches, renderableContent);
+	return embedsToTexts(embeds);
 }
 
 /** Creates a new MessageEmbed, setting the title, description, and color if given. */

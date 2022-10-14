@@ -56,11 +56,11 @@ export async function canSendMessageTo(channel: DMessageChannel): Promise<boolea
 	return true;
 }
 
-type TMeta = {
-	diceSent?: [];
-	messagesDeleted?: Discord.Message[];
-	messagesSent?: Discord.Message[];
-};
+// type TMeta = {
+// 	diceSent?: [];
+// 	messagesDeleted?: Discord.Message[];
+// 	messagesSent?: Discord.Message[];
+// };
 
 export default class SageCache {
 	constructor(protected core: TSageCacheCore) { }
@@ -137,7 +137,7 @@ export default class SageCache {
 	/** @deprecated start setting this.core.discordUser or remove it! */
 	public get userDid(): Discord.Snowflake { return this.core.discordUser?.id ?? this.core.user?.did ?? NilSnowflake; }
 
-	public meta: TMeta[] = [];
+	// public meta: TMeta[] = [];
 
 	public get bots(): BotRepo { return this.core.bots; }
 	public get servers(): ServerRepo { return this.core.servers; }

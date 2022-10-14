@@ -1,12 +1,13 @@
+import type { TextChannel } from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../../../sage-dice";
 import utils, { Optional } from "../../../../../sage-utils";
 import { DiscordId } from "../../../../discord";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import Game, { GameRoleType } from "../../../model/Game";
+import Game, { GameRoleType, GameUserType, IGameUser, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game";
 import GameCharacter from "../../../model/GameCharacter";
 import type SageMessage from "../../../model/SageMessage";
 import type Server from "../../../model/Server";
-import type { IChannel } from "../../../repo/base/IdRepository";
+import { DialogType, IChannel, PermissionType } from "../../../repo/base/IdRepository";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
@@ -153,13 +154,32 @@ async function showGameGetGame(sageMessage: SageMessage): Promise<Game | null> {
 	}
 	return game ?? null;
 }
-function showGameGetInheritedGameType(game: Game): GameType {
-	return game.gameType ?? game.server.defaultGameType ?? GameType.None;
-}
 
 function showGameRenderGameType(renderableContent: utils.RenderUtils.RenderableContent, game: Game): void {
-	const gameType = GameType[game.gameType!] ?? `<i>inherited (${GameType[showGameGetInheritedGameType(game)]})</i>`;
+	const inheritedGameType = game.gameType ?? game.server.defaultGameType ?? GameType.None;
+	const gameType = GameType[game.gameType!] ?? `<i>inherited (${GameType[inheritedGameType]})</i>`;
 	renderableContent.append(`<b>GameType</b> ${gameType}`);
+}
+
+async function showGameRenderDialogType(renderableContent: utils.RenderUtils.RenderableContent, sageMessage: SageMessage, game: Game): Promise<void> {
+	const inheritedDialogType = game.defaultDialogType ?? game.server.defaultDialogType ?? DialogType.Embed;
+	const dialogType = DialogType[game.defaultDialogType!] ?? `<i>inherited (${DialogType[inheritedDialogType]})</i>`;
+	renderableContent.append(`<b>DialogType</b> ${dialogType}`);
+
+	// Check for users with .Post as their default
+	if (inheritedDialogType !== DialogType.Post) {
+		let showAlert = false;
+		for (const gameUser of game.users) {
+			const user = await sageMessage.caches.users.getByDid(gameUser.did);
+			if (user?.defaultDialogType === DialogType.Post) {
+				showAlert = true;
+				break;
+			}
+		}
+		if (showAlert) {
+			renderableContent.append(`[command-warn] <u>At least 1 user prefers Dialog via Post vs. Embed!</u> [command-warn]`);
+		}
+	}
 }
 
 function gameDetailsAppendDice(renderableContent: utils.RenderUtils.RenderableContent, game: Game): void {
@@ -188,7 +208,7 @@ function gameDetailsAppendDice(renderableContent: utils.RenderUtils.RenderableCo
 }
 
 async function showGameRenderServer(renderableContent: utils.RenderUtils.RenderableContent, sageMessage: SageMessage, game: Game): Promise<void> {
-	if (game !== sageMessage.game && sageMessage.isSuperUser) {
+	if (sageMessage.game && game !== sageMessage.game && sageMessage.isSuperUser) {
 		renderableContent.appendTitledSection("<b>Server</b>", game.serverDid, game.serverId);
 		const guild = await sageMessage.discord.fetchGuild(game.serverDid);
 		if (guild) {
@@ -200,8 +220,32 @@ async function showGameRenderServer(renderableContent: utils.RenderUtils.Rendera
 	}
 }
 
-async function gameDetails(sageMessage: SageMessage, skipPrune = false): Promise<void> {
-	const game = await showGameGetGame(sageMessage);
+async function showGameRenderChannels(renderableContent: utils.RenderUtils.RenderableContent, sageMessage: SageMessage, game: Game): Promise<void> {
+	renderableContent.append(`<b>Channels</b> ${game.channels.length}`);
+
+	const tags = ["ic", "ooc", "gm", "misc"];
+	for (const tag of tags) {
+		const metas = game.channels
+			.map(sageChannel => ({ sageChannel, nameTags:mapSageChannelNameTags(sageChannel) }))
+			.filter(ch => ch.nameTags[tag as "ic"]);
+		if (metas.length) {
+			renderableContent.append(`[spacer]<b>${nameTagsToType(metas[0].nameTags)}</b>`);
+			for (const meta of metas) {
+				const guildChannel = await sageMessage.discord.fetchChannel<TextChannel>(meta.sageChannel.did);
+				const guildChannelName = guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`;
+				renderableContent.append(`[spacer][spacer]${guildChannelName}`);
+			}
+		}
+	}
+
+	const orphanChannels = (await game.orphanChannels()).map(channel => channel ? `#${channel.did}` : `<i>unavailable</i>`);
+	if (orphanChannels.length) {
+		renderableContent.append(`<b>Orphan Channels</b> ${orphanChannels.length}; ${orphanChannels.join(", ")}`);
+	}
+}
+
+async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: Game): Promise<void> {
+	const game = _game ?? await showGameGetGame(sageMessage);
 	if (!game) {
 		return Promise.resolve();
 	}
@@ -210,17 +254,15 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false): Promise
 
 	renderableContent.setTitle(`<b>${game.name}</b>`);
 	renderableContent.append(game.id);
-	showGameRenderGameType(renderableContent, game);
 
 	renderableContent.append(`<b>Created</b> ${formatDateTime(game.createdDate)}`);
-	if (game.archivedDate) renderableContent.append(`[spacer]<b>Archived</b> ${formatDateTime(game.archivedDate) ?? "<i>Active</i>"}`);
-
-	const guildChannels = (await game.guildChannels()).map(guildChannel => guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`);
-	renderableContent.append(`<b>Channels</b> ${guildChannels.length}; ${guildChannels.join(", ")}`);
-	const orphanChannels = (await game.orphanChannels()).map(channel => channel ? `#${channel.did}` : `<i>unavailable</i>`);
-	if (orphanChannels.length) {
-		renderableContent.append(`<b>Orphan Channels</b> ${orphanChannels.length}; ${orphanChannels.join(", ")}`);
+	if (game.archivedDate) {
+		renderableContent.append(`[spacer]<b>Archived</b> ${formatDateTime(game.archivedDate) ?? "<i>Active</i>"}`);
 	}
+
+	showGameRenderGameType(renderableContent, game);
+
+	await showGameRenderChannels(renderableContent, sageMessage, game);
 
 	const guildRoles = await game.guildRoles();
 	const roles = guildRoles.map(guildRole => guildRole ? `@${guildRole.name} (${GameRoleType[game.roles.find(role => role.did === guildRole.id)?.type!]})` : `<i>unavailable</i>`);
@@ -228,7 +270,7 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false): Promise
 
 	const gmGuildMembers = await game.gmGuildMembers();
 	const gameMasters = gmGuildMembers.map((gmGuildMember, index) => gmGuildMember ? `@${gmGuildMember.user?.tag ?? gmGuildMember.displayName}` : `<i>${game.gameMasters[index]}</i>`);
-	renderableContent.append(`<b>Game Master Name</b> ${game.gmCharacterName ?? `<i>inherited (${game.server.defaultGmCharacterName ?? GameCharacter.defaultGmCharacterName})</i>`}`);
+	renderableContent.append(`<b>Game Master Name</b>`, `[spacer]${game.gmCharacterName ?? `<i>inherited (${game.server.defaultGmCharacterName ?? GameCharacter.defaultGmCharacterName})</i>`}`);
 	renderableContent.append(`<b>Game Masters</b> ${gameMasters.length}`);
 	gameMasters.forEach(gm => renderableContent.append(`[spacer]${gm}`));
 
@@ -246,6 +288,7 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false): Promise
 		orphanPCs.forEach(pc => renderableContent.append(`[spacer]${pc.name}`));
 	}
 
+	await showGameRenderDialogType(renderableContent, sageMessage, game);
 	gameDetailsAppendDice(renderableContent, game);
 	await showGameRenderServer(renderableContent, sageMessage, game);
 	await sageMessage.send(renderableContent);
@@ -299,6 +342,97 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false): Promise
 	}
 }
 
+type TGameDefaults = {
+	gameType?: GameType;
+	defaultCritMethodType?: CritMethodType;
+	defaultDialogType?: DialogType;
+	defaultDiceOutputType?: DiceOutputType;
+	defaultDicePostType?: DicePostType;
+	defaultDiceSecretMethodType?: DiceSecretMethodType;
+};
+function getServerValues(server: Server): TGameDefaults {
+	const { defaultGameType, defaultCritMethodType, defaultDialogType, defaultDiceOutputType, defaultDicePostType, defaultDiceSecretMethodType } = server;
+	return { gameType: defaultGameType, defaultCritMethodType, defaultDialogType, defaultDiceOutputType, defaultDicePostType, defaultDiceSecretMethodType };
+}
+function getArgValues(sageMessage: SageMessage): TGameDefaults {
+	const gameType = sageMessage.args.removeAndReturnGameType() ?? undefined;
+	const defaultCritMethodType = sageMessage.args.removeAndReturnCritMethodType() ?? undefined;
+	const defaultDialogType = sageMessage.args.removeAndReturnDialogType() ?? undefined;
+	const defaultDiceOutputType = sageMessage.args.removeAndReturnDiceOutputType() ?? undefined;
+	const defaultDicePostType = sageMessage.args.removeAndReturnDicePostType() ?? undefined;
+	const defaultDiceSecretMethodType = sageMessage.args.removeAndReturnDiceSecretMethodType() ?? undefined;
+	return { gameType, defaultCritMethodType, defaultDialogType, defaultDiceOutputType, defaultDicePostType, defaultDiceSecretMethodType };
+}
+function getGameValues(sageMessage: SageMessage): TGameDefaults {
+	const def = getServerValues(sageMessage.server);
+	const arg = getArgValues(sageMessage);
+
+	const gameType = arg.gameType ?? def.gameType;
+	const defaultCritMethodType = arg.defaultCritMethodType ?? def.defaultCritMethodType;
+	const defaultDialogType = arg.defaultDialogType ?? def.defaultDialogType;
+	const defaultDiceOutputType = arg.defaultDiceOutputType ?? def.defaultDiceOutputType;
+	const defaultDicePostType = arg.defaultDicePostType ?? def.defaultDicePostType;
+	const defaultDiceSecretMethodType = arg.defaultDiceSecretMethodType ?? def.defaultDiceSecretMethodType;
+
+	return { gameType, defaultCritMethodType, defaultDialogType, defaultDiceOutputType, defaultDicePostType, defaultDiceSecretMethodType };
+}
+function getGameChannels(sageMessage: SageMessage): IChannel[] {
+	const channels: IChannel[] = [];
+
+	const ic = sageMessage.args.removeKeyValuePair("ic")?.value;
+	if (ic && DiscordId.isChannelReference(ic)) {
+		channels.push({ did:DiscordId.parseId(ic), admin:true, dialog:true, dice:true, gameMaster:PermissionType.Write, player:PermissionType.Write });
+	}
+
+	const ooc = sageMessage.args.removeKeyValuePair("ooc")?.value;
+	if (ooc && DiscordId.isChannelReference(ooc)) {
+		channels.push({ did:DiscordId.parseId(ooc), admin:true, commands:true, dialog:true, dice:true, search:true, gameMaster:PermissionType.Write, player:PermissionType.Write });
+	}
+
+	if (!channels.length) {
+		channels.push({ did:sageMessage.channelDid!, admin:true, commands:true, dialog:true, dice:true, search:true, gameMaster:PermissionType.Write, player:PermissionType.Write });
+	}
+
+	return channels;
+}
+async function getGameUsers(sageMessage: SageMessage): Promise<IGameUser[]> {
+	const users: IGameUser[] = [];
+
+	const gm = sageMessage.args.removeKeyValuePair("gm")?.value;
+	if (gm && DiscordId.isUserMention(gm)) {
+		users.push({ did:DiscordId.parseId(gm), type:GameUserType.GameMaster, dicePing:true });
+	}
+
+	const role = sageMessage.args.removeKeyValuePair(/(players|table|role)/i)?.value;
+	if (role && DiscordId.isRoleMention(role)) {
+		const roleDid = DiscordId.parseId(role);
+		const guildRole = await sageMessage.discord.fetchGuildRole(roleDid);
+		if (guildRole) {
+			guildRole.members.forEach(guildMember => {
+				if (!users.find(user => user.did === guildMember.id)) {
+					users.push({ did:guildMember.id, type:GameUserType.Player, dicePing:true });
+				}
+			});
+		}
+	}
+
+	return users;
+}
+function createGame(sageMessage: SageMessage, name: string, gameValues: TGameDefaults, channels: IChannel[], users: IGameUser[]): Game {
+	return new Game({
+		objectType: "Game",
+		id: utils.UuidUtils.generate(),
+		serverDid: sageMessage.server.did,
+		serverId: sageMessage.server.id,
+		createdTs: new Date().getTime(),
+		name: name,
+		channels: channels,
+		colors: sageMessage.server.colors.toArray(),
+		users,
+		...gameValues,
+	}, sageMessage.server, sageMessage.caches);
+}
+
 async function gameCreate(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminGames || !sageMessage.channelDid) {
 		return sageMessage.reactBlock();
@@ -308,19 +442,31 @@ async function gameCreate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const gameType = sageMessage.args.removeAndReturnGameType();
-	const critMethodType = sageMessage.args.removeAndReturnCritMethodType();
-	const diceOutputType = sageMessage.args.removeAndReturnDiceOutputType();
-	const dicePostType = sageMessage.args.removeAndReturnDicePostType();
-	const diceSecretMethodType = sageMessage.args.removeAndReturnDiceSecretMethodType();
-
 	const name = sageMessage.args.removeAndReturnName();
-	if (!name) {
+	const gameValues = getGameValues(sageMessage);
+	const gameChannels = getGameChannels(sageMessage);
+	const gameUsers = await getGameUsers(sageMessage);
+
+	const hasName = !!name;
+	const hasValues = !!Object.keys(gameValues).find(key => (gameValues as any)[key] !== undefined);
+	const hasChannel = !!gameChannels.length;
+	if (!hasName || !hasValues || !hasChannel) {
+		await sageMessage.message.reply({ content:"Please try:\n`sage!!game create name=\"GAME NAME\" type=\"PF2E\" ic=\"#IN_CHARACTER_CHANNEL\" ooc=\"OUT_OF_CHARACTER_CHANNEL\" gm=\"@GM_MENTION\" players=\"@PLAYER_ROLE_MENTION\"`" });
 		return sageMessage.reactFailure();
 	}
 
-	const added = await sageMessage.server.addGame(sageMessage.channelDid, name, gameType, critMethodType, diceOutputType, dicePostType, diceSecretMethodType);
-	return sageMessage.reactSuccessOrFailure(added);
+	const game = createGame(sageMessage, name, gameValues, gameChannels, gameUsers);
+	await gameDetails(sageMessage, true, game);
+	const create = await discordPromptYesNo(sageMessage, `Create Game?`);
+
+	if (create) {
+		const gameSaved = game ? await game.save() : false;
+		const serverSaved = gameSaved ? await sageMessage.server.save() : false;
+
+		const added = gameSaved && serverSaved;
+		await sageMessage.message.channel.send({ content:added ? "Game Created." : "Unknown Error; Game NOT Created!" });
+		return sageMessage.reactSuccessOrFailure(added);
+	}
 }
 
 async function gameUpdate(sageMessage: SageMessage): Promise<void> {
@@ -332,17 +478,21 @@ async function gameUpdate(sageMessage: SageMessage): Promise<void> {
 
 	const gameType = sageMessage.args.removeAndReturnGameType();
 	const critMethodType = sageMessage.args.removeAndReturnCritMethodType();
+	const dialogType = sageMessage.args.removeAndReturnDialogType();
 	const diceOutputType = sageMessage.args.removeAndReturnDiceOutputType();
 	const dicePostType = sageMessage.args.removeAndReturnDicePostType();
 	const diceSecretMethodType = sageMessage.args.removeAndReturnDiceSecretMethodType();
 	const names = sageMessage.args.removeAndReturnNames();
 	const name = names.newName ?? names.name ?? null;
 
-	if (!name && gameType === undefined && critMethodType === undefined && diceOutputType === undefined && dicePostType === undefined && diceSecretMethodType === undefined) {
+	if (!name && gameType === undefined && dialogType === undefined && critMethodType === undefined && diceOutputType === undefined && dicePostType === undefined && diceSecretMethodType === undefined) {
 		return sageMessage.reactFailure();
 	}
 
-	const updated = await sageMessage.game!.update(name, gameType, critMethodType, diceOutputType, dicePostType, diceSecretMethodType);
+	const updated = await sageMessage.game!.update(name, gameType, dialogType, critMethodType, diceOutputType, dicePostType, diceSecretMethodType);
+	if (updated) {
+		return gameDetails(sageMessage, true, sageMessage.game);
+	}
 	return sageMessage.reactSuccessOrFailure(updated);
 }
 
