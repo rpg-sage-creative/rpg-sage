@@ -1,6 +1,6 @@
 import { Canvas, createCanvas, Image, loadImage, SKRSContext2D } from "@napi-rs/canvas";
 import { errorReturnEmptyArray, errorReturnNull } from "../ConsoleUtils/Catchers";
-import type { IMap, IMapLayer, THasClip, THasNatural, TImageMeta, TMapBackgroundImage, TMapLayerImage } from "./types";
+import { IMap, IMapLayer, RenderableMap, THasClip, THasNatural, TImageMeta, TMap, TMapBackgroundImage, TMapLayerImage } from "./types";
 
 type mimeType = "image/png" | "image/jpeg";
 
@@ -69,7 +69,9 @@ function calcClip(clip: Partial<THasClip>, natural: THasNatural): TCalcClip {
 }
 
 /** returns an image/png Buffer */
-export async function mapToBuffer(map: IMap, fileType: mimeType = "image/jpeg"): Promise<Buffer | null> {
+export async function mapToBuffer(_map: IMap | TMap, fileType: mimeType = "image/jpeg"): Promise<Buffer | null> {
+	const map = RenderableMap.from(_map);
+
 	const mapArgs: TMapArgs = {
 		bgImage: undefined!,
 		bgMeta: undefined!,

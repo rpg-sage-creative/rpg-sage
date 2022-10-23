@@ -53,3 +53,43 @@ export interface IMap {
 	getGrid(): TOrPromiseT<[number, number]>;
 	getLayers(): TOrPromiseT<IMapLayer[]>;
 }
+
+export type TMapLayer = {
+	images: TMapLayerImage[];
+	offset: Partial<THasOffset>;
+}
+
+export type TMap = {
+	background: TMapBackgroundImage;
+	grid: [number, number];
+	layers: TMapLayer[];
+}
+
+export class RenderableMap implements IMap {
+	public constructor(private map: TMap) { }
+	public getBackground(): TOrPromiseT<TMapBackgroundImage> {
+		return this.map.background;
+	}
+	public getGrid(): TOrPromiseT<[number, number]> {
+		return this.map.grid;
+	}
+	public getLayers(): TOrPromiseT<IMapLayer[]> {
+		return this.map.layers.map(RenderableMapLayer.from);
+	}
+	public static from(map: IMap | TMap): IMap {
+		return "getBackground" in map ? map : new RenderableMap(map);
+	}
+}
+
+export class RenderableMapLayer implements IMapLayer {
+	public constructor(private mapLayer: TMapLayer) { }
+	public getImages(): TOrPromiseT<TMapLayerImage[]> {
+		return this.mapLayer.images;
+	}
+	public getOffset(): TOrPromiseT<Partial<THasOffset>> {
+		return this.mapLayer.offset;
+	}
+	public static from(mapLayer: IMapLayer | TMapLayer) {
+		return "getImages" in mapLayer ? mapLayer : new RenderableMapLayer(mapLayer);
+	}
+}
