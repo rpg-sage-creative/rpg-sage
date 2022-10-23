@@ -1,5 +1,4 @@
-import * as _canvas from "canvas";
-const canvas: typeof _canvas = (_canvas as any).default;
+import { Canvas, createCanvas, Image, loadImage, SKRSContext2D } from "@napi-rs/canvas";
 import { errorReturnEmptyArray, errorReturnNull } from "../ConsoleUtils/Catchers";
 import type { IMap, IMapLayer, THasClip, THasNatural, TImageMeta, TMapBackgroundImage, TMapLayerImage } from "./types";
 
@@ -8,17 +7,17 @@ type mimeType = "image/png" | "image/jpeg";
 type TMapMeta = { pxPerCol:number; pxPerRow:number; };
 
 type TMapArgs = {
-	bgImage: _canvas.Image,
+	bgImage: Image,
 	bgMeta: TMapBackgroundImage,
-	canvas: _canvas.Canvas,
-	context: _canvas.CanvasRenderingContext2D,
-	images: Map<string, _canvas.Image | null>,
+	canvas: Canvas,
+	context: SKRSContext2D,
+	images: Map<string, Image | null>,
 	mapMeta: TMapMeta
 };
 
-async function loadImage(mapArgs: TMapArgs, imgMeta: TImageMeta): Promise<_canvas.Image | null> {
+async function _loadImage(mapArgs: TMapArgs, imgMeta: TImageMeta): Promise<Image | null> {
 	if (!mapArgs.images.has(imgMeta.url)) {
-		mapArgs.images.set(imgMeta.url, await canvas.loadImage(imgMeta.url).catch(errorReturnNull));
+		mapArgs.images.set(imgMeta.url, await loadImage(imgMeta.url).catch(errorReturnNull));
 	}
 	return mapArgs.images.get(imgMeta.url) ?? null;
 }
@@ -89,7 +88,7 @@ export async function mapToBuffer(map: IMap, fileType: mimeType = "image/jpeg"):
 	//#endregion
 
 	//#region load background image or return null
-	const bgImage = await loadImage(mapArgs, bgMeta);
+	const bgImage = await _loadImage(mapArgs, bgMeta);
 	if (!bgImage) {
 		return null;
 	}
@@ -97,7 +96,7 @@ export async function mapToBuffer(map: IMap, fileType: mimeType = "image/jpeg"):
 	//#endregion
 
 	const [bgClipX, bgClipY, bgWidth, bgHeight] = calcClip(bgMeta, bgImage);
-	mapArgs.canvas = canvas.createCanvas(bgWidth, bgHeight);
+	mapArgs.canvas = createCanvas(bgWidth, bgHeight);
 	mapArgs.context = mapArgs.canvas.getContext("2d");
 
 	try {
@@ -149,7 +148,7 @@ async function drawMapLayer(mapArgs: TMapArgs, mapLayer: IMapLayer): Promise<voi
 
 type TMapLayerMeta = TMapMeta & { layerOffsetX:number; layerOffsetY:number; };
 async function drawMapImage(mapArgs: TMapArgs, mapLayerMeta: TMapLayerMeta, mapLayerImage: TMapLayerImage): Promise<void> {
-	const imgImage = await loadImage(mapArgs, mapLayerImage);
+	const imgImage = await _loadImage(mapArgs, mapLayerImage);
 	if (imgImage) {
 		const [imgClipX, imgClipY, imgClipWidth, imgClipHeight] = calcClip(mapLayerImage, imgImage),
 			gridOffset = gridOffsetToZeroZero(mapLayerImage.gridOffset),
