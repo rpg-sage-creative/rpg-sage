@@ -1,18 +1,6 @@
 import * as http from "http";
-import { mapToBuffer } from "./sage-utils/utils/MapUtils";
-import type { IMap } from "./sage-utils/utils/MapUtils/types";
-
-/*
-					const chunks: Buffer[] = [];
-					response.on("data", (chunk: Buffer) =>
-						chunks.push(chunk)
-					);
-					response.once("close", reject);
-					response.once("end", () =>
-						resolve(Buffer.concat(chunks))
-					);
-					response.once("error", reject);
-*/
+import { tMapToBuffer } from "./sage-utils/utils/MapUtils";
+import type { TMap } from "./sage-utils/utils/MapUtils/types";
 
 http.createServer(async function (req, res) {
 	if (req.method === "POST") {
@@ -21,8 +9,8 @@ http.createServer(async function (req, res) {
 			chunks.push(chunk);
 		});
 		req.once("end", async () => {
-			const mapJSON = JSON.parse(Buffer.concat(chunks).toString()) as IMap;
-			const buffer = await mapToBuffer(mapJSON);
+			const mapJSON = JSON.parse(Buffer.concat(chunks).toString()) as TMap;
+			const buffer = await tMapToBuffer(mapJSON);
 			if (buffer) {
 				res.writeHead(200, { 'Content-type':'image/png' });
 				res.end(buffer);

@@ -1,6 +1,7 @@
 import { Canvas, createCanvas, Image, loadImage, SKRSContext2D } from "@napi-rs/canvas";
-import { errorReturnEmptyArray, errorReturnNull } from "../ConsoleUtils/Catchers";
-import { IMap, IMapLayer, RenderableMap, THasClip, THasNatural, TImageMeta, TMap, TMapBackgroundImage, TMapLayerImage } from "./types";
+import { errorReturnNull } from "../ConsoleUtils/Catchers";
+import { getBuffer } from "../HttpsUtils";
+import type { IMap, IMapLayer, THasClip, THasNatural, TImageMeta, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage, TOrPromiseT } from "./types";
 
 type mimeType = "image/png" | "image/jpeg";
 
@@ -68,10 +69,27 @@ function calcClip(clip: Partial<THasClip>, natural: THasNatural): TCalcClip {
 	return [x, y, w, h];
 }
 
-/** returns an image/png Buffer */
-export async function mapToBuffer(_map: IMap | TMap, fileType: mimeType = "image/jpeg"): Promise<Buffer | null> {
-	const map = RenderableMap.from(_map);
+function catchBufferFetch(err: any): null {
+	if (String(err).includes("ECONNREFUSED")) {
+		console.warn(`MapServer down, creating internally.`);
+	}else {
+		console.error(err);
+	}
+	return null;
+}
 
+/** fetches and returns an image Buffer */
+export async function iMapToBuffer(iMap: IMap, fileType?: mimeType): Promise<Buffer | null> {
+	const tMap = await Promise.resolve(iMap.toJSON()).catch(errorReturnNull);
+	if (tMap) {
+		const buffer = await getBuffer("http://localhost:3000", tMap).catch(catchBufferFetch);
+		return buffer ?? tMapToBuffer(tMap, fileType);
+	}
+	return null;
+}
+
+/** creates and returns an image Buffer */
+export async function tMapToBuffer(map: TMap, fileType: mimeType = "image/jpeg"): Promise<Buffer | null> {
 	const mapArgs: TMapArgs = {
 		bgImage: undefined!,
 		bgMeta: undefined!,
@@ -82,22 +100,21 @@ export async function mapToBuffer(_map: IMap | TMap, fileType: mimeType = "image
 	};
 
 	//#region get background meta or return null
-	const bgMeta = await Promise.resolve(map.getBackground()).catch(errorReturnNull);
-	if (!bgMeta) {
+	if (!map.background) {
 		return null;
 	}
-	mapArgs.bgMeta = bgMeta;
+	mapArgs.bgMeta = map.background;
 	//#endregion
 
 	//#region load background image or return null
-	const bgImage = await _loadImage(mapArgs, bgMeta);
+	const bgImage = await _loadImage(mapArgs, map.background);
 	if (!bgImage) {
 		return null;
 	}
 	mapArgs.bgImage = bgImage;
 	//#endregion
 
-	const [bgClipX, bgClipY, bgWidth, bgHeight] = calcClip(bgMeta, bgImage);
+	const [bgClipX, bgClipY, bgWidth, bgHeight] = calcClip(map.background, bgImage);
 	mapArgs.canvas = createCanvas(bgWidth, bgHeight);
 	mapArgs.context = mapArgs.canvas.getContext("2d");
 
@@ -109,7 +126,7 @@ export async function mapToBuffer(_map: IMap | TMap, fileType: mimeType = "image
 	}
 
 	//#region grid math
-	const grid = await Promise.resolve(map.getGrid()).catch(errorReturnNull),
+	const grid = map.grid,
 		cols = grid?.[0] ?? 1,
 		pxPerCol = Math.floor(bgWidth / cols),
 		rows = grid?.[1] ?? 1,
@@ -118,7 +135,7 @@ export async function mapToBuffer(_map: IMap | TMap, fileType: mimeType = "image
 	//#endregion
 
 	//#region render layers
-	const layers: IMapLayer[] = await Promise.resolve(map.getLayers()).catch(errorReturnEmptyArray);
+	const layers = map.layers;
 	for (const layer of layers) {
 		await drawMapLayer(mapArgs, layer);
 	}
@@ -134,10 +151,10 @@ function gridOffsetToZeroZero(offset?: [number, number]): [number, number] {
 	return [col, row];
 }
 
-async function drawMapLayer(mapArgs: TMapArgs, mapLayer: IMapLayer): Promise<void> {
-	const images: TMapLayerImage[] = await Promise.resolve(mapLayer.getImages()).catch(errorReturnEmptyArray);
+async function drawMapLayer(mapArgs: TMapArgs, mapLayer: TMapLayer): Promise<void> {
+	const images = mapLayer.images;
 	if (images.length) {
-		const layerOffset = await Promise.resolve(mapLayer.getOffset()).catch(errorReturnNull),
+		const layerOffset = mapLayer.offset,
 			gridOffset = gridOffsetToZeroZero(layerOffset?.gridOffset),
 			layerOffsetX = layerOffset?.pixelOffset?.[0] ?? (gridOffset[0] * mapArgs.mapMeta.pxPerCol),
 			layerOffsetY = layerOffset?.pixelOffset?.[1] ?? (gridOffset[1] * mapArgs.mapMeta.pxPerRow);
@@ -166,4 +183,14 @@ async function drawMapImage(mapArgs: TMapArgs, mapLayerMeta: TMapLayerMeta, mapL
 			console.error(ex);
 		}
 	}
+}
+
+export abstract class RenderableMap implements IMap {
+	abstract getBackground(): TOrPromiseT<TMapBackgroundImage>;
+	abstract getGrid(): TOrPromiseT<[number, number]>;
+	abstract getLayers(): TOrPromiseT<IMapLayer[]>;
+	public render(): Promise<Buffer | null> {
+		return iMapToBuffer(this).catch(errorReturnNull);
+	}
+	abstract toJSON(): TOrPromiseT<TMap>;
 }

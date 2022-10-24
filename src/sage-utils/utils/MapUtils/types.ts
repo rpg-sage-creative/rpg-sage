@@ -41,7 +41,7 @@ export type TMapBackgroundImage = TImageMeta & Partial<THasClip>;
 
 export type TMapLayerImage = TImageMeta & THasOffset & Partial<THasClip> & { size:[number, number]; };
 
-type TOrPromiseT<T> = T | PromiseLike<T>;
+export type TOrPromiseT<T> = T | PromiseLike<T>;
 
 export interface IMapLayer {
 	getImages(): TOrPromiseT<TMapLayerImage[]>;
@@ -52,44 +52,16 @@ export interface IMap {
 	getBackground(): TOrPromiseT<TMapBackgroundImage>;
 	getGrid(): TOrPromiseT<[number, number]>;
 	getLayers(): TOrPromiseT<IMapLayer[]>;
+	toJSON(): TOrPromiseT<TMap>;
 }
 
 export type TMapLayer = {
 	images: TMapLayerImage[];
-	offset: Partial<THasOffset>;
-}
+	offset: Partial<THasOffset> | null;
+};
 
 export type TMap = {
-	background: TMapBackgroundImage;
-	grid: [number, number];
+	background: TMapBackgroundImage | null;
+	grid: [number, number] | null;
 	layers: TMapLayer[];
-}
-
-export class RenderableMap implements IMap {
-	public constructor(private map: TMap) { }
-	public getBackground(): TOrPromiseT<TMapBackgroundImage> {
-		return this.map.background;
-	}
-	public getGrid(): TOrPromiseT<[number, number]> {
-		return this.map.grid;
-	}
-	public getLayers(): TOrPromiseT<IMapLayer[]> {
-		return this.map.layers.map(RenderableMapLayer.from);
-	}
-	public static from(map: IMap | TMap): IMap {
-		return "getBackground" in map ? map : new RenderableMap(map);
-	}
-}
-
-export class RenderableMapLayer implements IMapLayer {
-	public constructor(private mapLayer: TMapLayer) { }
-	public getImages(): TOrPromiseT<TMapLayerImage[]> {
-		return this.mapLayer.images;
-	}
-	public getOffset(): TOrPromiseT<Partial<THasOffset>> {
-		return this.mapLayer.offset;
-	}
-	public static from(mapLayer: IMapLayer | TMapLayer) {
-		return "getImages" in mapLayer ? mapLayer : new RenderableMapLayer(mapLayer);
-	}
-}
+};
