@@ -32,7 +32,8 @@ export function getBuffer<T = any>(url: string, postData?: T): Promise<Buffer> {
 				headers: {
 					'Content-Type': 'application/json',
 					'Content-Length': payload.length,
-				}
+				},
+				method: "POST"
 			} : { };
 			const req = protocol[method](url, options, response => {
 				try {

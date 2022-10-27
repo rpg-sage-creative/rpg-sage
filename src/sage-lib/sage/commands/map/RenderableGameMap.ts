@@ -1,6 +1,5 @@
-import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
-import type { IMap, IMapLayer, THasOffset, TMapBackgroundImage, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils/types";
-import { mapToBuffer } from "../../../../sage-utils/utils/MapUtils";
+import { RenderableMap } from "../../../../sage-utils/utils/MapUtils";
+import type { IMapLayer, THasOffset, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils/types";
 import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
 
 class RenderableGameMapLayer implements IMapLayer {
@@ -20,10 +19,19 @@ class RenderableGameMapLayer implements IMapLayer {
 	public getOffset(): Partial<THasOffset> {
 		return { };
 	}
+
+	public toJSON(): TMapLayer {
+		return {
+			images: this.getImages(),
+			offset: this.getOffset()
+		};
+	}
 }
 
-export default class RenderableGameMap implements IMap {
-	public constructor (protected core: TGameMapCore) { }
+export default class RenderableGameMap extends RenderableMap {
+	public constructor (protected core: TGameMapCore) {
+		super();
+	}
 
 	public getBackground(): TMapBackgroundImage {
 		return {
@@ -45,7 +53,11 @@ export default class RenderableGameMap implements IMap {
 		];
 	}
 
-	public render(): Promise<Buffer | null> {
-		return mapToBuffer(this).catch(errorReturnNull);
+	public toJSON(): TMap {
+		return {
+			background: this.getBackground(),
+			grid: this.getGrid(),
+			layers: this.getLayers().map(layer => layer.toJSON())
+		};
 	}
 }

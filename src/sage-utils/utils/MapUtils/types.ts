@@ -41,7 +41,7 @@ export type TMapBackgroundImage = TImageMeta & Partial<THasClip>;
 
 export type TMapLayerImage = TImageMeta & THasOffset & Partial<THasClip> & { size:[number, number]; };
 
-type TOrPromiseT<T> = T | PromiseLike<T>;
+export type TOrPromiseT<T> = T | PromiseLike<T>;
 
 export interface IMapLayer {
 	getImages(): TOrPromiseT<TMapLayerImage[]>;
@@ -52,4 +52,16 @@ export interface IMap {
 	getBackground(): TOrPromiseT<TMapBackgroundImage>;
 	getGrid(): TOrPromiseT<[number, number]>;
 	getLayers(): TOrPromiseT<IMapLayer[]>;
+	toJSON(): TOrPromiseT<TMap>;
 }
+
+export type TMapLayer = {
+	images: TMapLayerImage[];
+	offset: Partial<THasOffset> | null;
+};
+
+export type TMap = {
+	background: TMapBackgroundImage | null;
+	grid: [number, number] | null;
+	layers: TMapLayer[];
+};

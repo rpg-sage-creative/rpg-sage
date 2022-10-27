@@ -3,7 +3,7 @@
 NODE_TYPES_VER="17.0.16"
 DISCORD_VER="13.10.2"
 XREGEXP_VER="5.1.0"
-CANVAS_VER="2.9.1"
+CANVAS_VER="0.1.30"
 PDF2JSON_VER="2.0.1"
 
 #region npm lib names/versions
@@ -11,7 +11,7 @@ PDF2JSON_VER="2.0.1"
 NODE_TYPES_NPM="@types/node@$NODE_TYPES_VER"
 DISCORD_NPM="discord.js@$DISCORD_VER"
 XREGEXP_NPM="xregexp@$XREGEXP_VER"
-CANVAS_NPM="canvas@$CANVAS_VER"
+CANVAS_NPM="@napi-rs/canvas@$CANVAS_VER"
 PDF2JSON_NPM="pdf2json@$PDF2JSON_VER"
 
 #endregion
