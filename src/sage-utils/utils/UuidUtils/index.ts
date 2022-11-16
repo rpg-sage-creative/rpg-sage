@@ -1,6 +1,7 @@
+import { randomUUID } from "crypto";
 import type { Optional } from "../..";
 import { NilUuid } from "./consts";
-import type { UUID, NIL_UUID, VALID_UUID, NORMALIZED_UUID } from "./types";
+import type { NIL_UUID, NORMALIZED_UUID, UUID, VALID_UUID } from "./types";
 
 export { default as UuidMatcher } from "./UuidMatcher";
 
@@ -12,29 +13,9 @@ export function isNil(uuid: Optional<UUID>): uuid is NIL_UUID {
 	return uuid === NilUuid;
 }
 
-const CHARS = '0123456789abcdef'.split('');
-
 /** Quickly generates a v4 UUID. */
 export function generate(): VALID_UUID {
-	const uuid: string[] = [];
-	let i: number,
-		r: number,
-		c: number;
-
-	// rfc4122 requires these characters
-	uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
-	uuid[14] = '4';
-
-	// Fill in random data.  At i==19 set the high bits of clock sequence as per rfc4122, sec. 4.1.5
-	for (i = 0; i < 36; i++) {
-		if (!uuid[i]) {
-			r = 0 | Math.random() * 16;
-			c = (i === 19) ? (r & 0x3) | 0x8 : r;
-			uuid[i] = CHARS[c];
-		}
-	}
-
-	return uuid.join('') as VALID_UUID;
+	return randomUUID() as VALID_UUID;
 }
 
 const uuidRegex = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
