@@ -1,35 +1,31 @@
 //#region imports
 
+import * as _XRegExp from "xregexp";
 import type { Optional, OrNull, OrUndefined, TParsers, TSortResult, TToken } from "../../../sage-utils";
 import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import { cleanWhitespace, dequote, Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import { generate } from "../../../sage-utils/utils/UuidUtils";
-import type {
-	IDiceBase,
-	IRollBase,
-	TDiceLiteral,
-	TDropKeepData,
-	TSign,
-	TTestData
-} from "../../common";
 import {
 	cleanDescription, CritMethodType,
 	DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade, dropKeepToString, DropKeepType,
-	GameType, gradeToEmoji, HasDieCore, mapRollToJson,
+	GameType, gradeRoll, gradeToEmoji, HasDieCore, IDiceBase,
+	IRollBase, mapRollToJson,
 	parseValueDropKeepData,
 	parseValueTestData,
 	rollDice, SECRET_REGEX, sum,
 	sumDicePartRolls,
-	sumDropKeep, TestType, UNICODE_LEFT_ARROW
+	sumDropKeep, TDiceLiteral,
+	TDropKeepData,
+	TSign,
+	TTestData, UNICODE_LEFT_ARROW
 } from "../../common";
 import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
 	DicePartCore, DicePartRollCore, DiceRollCore, TDice, TDiceGroup, TDiceGroupRoll, TDicePart, TDicePartCoreArgs, TDicePartRoll, TDiceRoll
 } from "./types";
-import * as _XRegExp from "xregexp";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 //#endregion
@@ -150,36 +146,6 @@ export function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token
 
 		//TODO: after doing a test, this needs to become another dicepart
 		default: return reduceDescriptionToken(core, token);
-	}
-}
-
-//#endregion
-
-//#region Grades
-
-function booleanToGrade(value: boolean): DieRollGrade {
-	return value ? DieRollGrade.Success : DieRollGrade.Failure;
-}
-
-function gradeResults(roll: TDiceRoll): DieRollGrade {
-	if (!roll.dice.hasTest) {
-		return DieRollGrade.Unknown;
-	}
-	const test = roll.dice.test!;
-	switch (test.type) {
-		case TestType.Equal:
-			return booleanToGrade(roll.total === test.value);
-		case TestType.GreaterThan:
-			return booleanToGrade(roll.total > test.value);
-		case TestType.GreaterThanOrEqual:
-			return booleanToGrade(roll.total >= test.value);
-		case TestType.LessThan:
-			return booleanToGrade(roll.total < test.value);
-		case TestType.LessThanOrEqual:
-			return booleanToGrade(roll.total <= test.value);
-		default:
-			console.warn(`dice.gradeResults(): invalid dice.test.type = ${test.type} (${test.alias})`);
-			return DieRollGrade.Unknown;
 	}
 }
 
@@ -576,7 +542,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 
 export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePartRoll> extends HasDieCore<T> implements IRollBase<U, V> {
 	//#region calculated
-	public get grade(): DieRollGrade { return gradeResults(this); }
+	public get grade(): DieRollGrade { return gradeRoll(this); }
 	public get total(): number { return sumDicePartRolls(this.rolls); }
 	//#endregion
 

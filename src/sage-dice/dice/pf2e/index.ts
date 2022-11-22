@@ -1,38 +1,33 @@
 //#region imports
 
 import type { OrNull, OrUndefined, TParsers, TToken } from "../../../sage-utils";
-import type {
-	TDiceLiteral,
-	TSign,
-	TTestData
-} from "../../common";
+import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import { toJSON } from "../../../sage-utils/utils/ClassUtils";
+import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
+import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
 	cleanDescription,
 	createValueTestData, CritMethodType, decreaseGrade, DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
-	GameType, increaseGrade,
+	GameType, gradeRoll, increaseGrade,
 	isGradeSuccess,
 	parseTestType,
-	rollDice, TestType
+	rollDice, TDiceLiteral, TestType, TSign,
+	TTestData
 } from "../../common";
+import {
+	Dice as baseDice, DiceGroup as baseDiceGroup,
+	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
+	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
+	TReduceSignToDropKeep
+} from "../base";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
 } from "../base/types";
-import {
-	Dice as baseDice, DiceGroup as baseDiceGroup,
-	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers,
-	reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
-	TReduceSignToDropKeep
-} from "../base";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
-import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
-import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 
 //#endregion
 
@@ -162,17 +157,16 @@ function gradeValue(value: number, target: number): DieRollGrade {
 
 function gradeResults(roll: DiceRoll): DieRollGrade {
 	const test = roll.dice.test;
-	if (!test) {
-		return DieRollGrade.Unknown;
+	if (test?.alias?.match(/ac|dc|vs/i)) {
+		const grade = gradeValue(roll.total, test.value);
+		if (roll.isMax) {
+			return increaseGrade(grade);
+		}else if (roll.isMin) {
+			return decreaseGrade(grade);
+		}
+		return grade;
 	}
-
-	const grade = gradeValue(roll.total, test.value);
-	if (roll.isMax) {
-		return increaseGrade(grade);
-	}else if (roll.isMin) {
-		return decreaseGrade(grade);
-	}
-	return grade;
+	return gradeRoll(roll);
 }
 
 //#endregion

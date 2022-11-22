@@ -1,4 +1,5 @@
 import utils, { IdCore, TToken } from "../sage-utils";
+import type { TDiceRoll } from "./dice/base/types";
 
 //#region rpg.common.ts
 
@@ -226,10 +227,13 @@ export function parseTestType(testType: string): TestType {
 }
 
 const TestTypeAliases = [undefined, "=", ">", ">=", "<", "<=" ];
+
 export type TTestData = { type:TestType; value:number; alias?:string; };
+
 export function createValueTestData(type: TestType, value: number, alias = TestTypeAliases[type]): TTestData {
-	return { type:type, value:value, alias:alias };
+	return { type, value, alias };
 }
+
 export function parseValueTestData(token: TToken): TTestData | undefined {
 	if (token.matches) {
 		const type = parseTestType(token.matches[0]);
@@ -238,6 +242,28 @@ export function parseValueTestData(token: TToken): TTestData | undefined {
 	}
 	return undefined;
 }
+
+export function testRoll(roll: TDiceRoll): boolean | undefined {
+	const test = roll.dice.test;
+	if (test) {
+		switch (test.type) {
+			case TestType.Equal:
+				return roll.total === test.value;
+			case TestType.GreaterThan:
+				return roll.total > test.value;
+			case TestType.GreaterThanOrEqual:
+				return roll.total >= test.value;
+			case TestType.LessThan:
+				return roll.total < test.value;
+			case TestType.LessThanOrEqual:
+				return roll.total <= test.value;
+			default:
+				console.warn(`testRoll(): invalid roll.dice.test.type = ${test.type} (${test.alias})`);
+		}
+	}
+	return undefined;
+}
+
 //#endregion
 
 //#region Grades
@@ -270,6 +296,18 @@ function ensureGrade(grade: DieRollGrade, defaultGrade: DieRollGrade): DieRollGr
 
 export function gradeToEmoji(grade: DieRollGrade): TDieRollGradeEmoji {
 	return grade ? DieRollGradeEmojis[grade] : undefined;
+}
+
+function booleanToGrade(value: boolean | undefined): DieRollGrade {
+	switch(value) {
+		case true: return DieRollGrade.Success;
+		case false: return DieRollGrade.Failure;
+		default: return DieRollGrade.Unknown;
+	}
+}
+
+export function gradeRoll(roll: TDiceRoll): DieRollGrade {
+	return booleanToGrade(testRoll(roll));
 }
 
 //#endregion
