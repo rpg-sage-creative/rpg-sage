@@ -1,4 +1,5 @@
 import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
+import { shiftDie } from "../../../sage-dice/dice/essence20";
 import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf";
 import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20";
 import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse";
@@ -202,11 +203,10 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 			if (!skillDie) {
 				return;
 			}
-			const shiftedDie = shiftDie(skillDie, activeEdgeSnagShift);
-			const arrow = shiftArrow(skillDie, shiftedDie);
+			const { shiftedDie, shiftArrow } = shiftDie(skillDie, activeEdgeSnagShift);
 			const plus = shiftedDie === "d20" ? "" : "+";
 			selectMenu.addOptions({
-				label: `Skill Roll: ${skill.name} ${plus}${shiftedDie}${arrow}`,
+				label: `Skill Roll: ${skill.name} ${plus}${shiftedDie}${shiftArrow}`,
 				value: skill.name,
 				default: isDefault(skill.name)
 			});
@@ -214,7 +214,7 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 				skill.specializations?.forEach((spec, index) => {
 					const specValue = `${skill.name}-${index}-${spec.name}`;
 					selectMenu.addOptions({
-						label: `Specialization Roll: ${skill.name} (${spec.name}) ${plus}${shiftedDie}${arrow}*`,
+						label: `Specialization Roll: ${skill.name} (${spec.name}) ${plus}${shiftedDie}${shiftArrow}*`,
 						value: specValue,
 						default: isDefault(specValue)
 					});
@@ -230,12 +230,11 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 				if (!skillDie) {
 					return;
 				}
-				const shiftedDie = shiftDie(skillDie, activeEdgeSnagShift);
-				const arrow = shiftArrow(skillDie, shiftedDie);
+				const { shiftedDie, shiftArrow } = shiftDie(skillDie, activeEdgeSnagShift);
 				const plus = shiftedDie === "d20" ? "" : "+";
 				const skillName = `Zord ${skill.name}`;
 				selectMenu.addOptions({
-					label: `Zord Skill Roll: ${skill.name ?? "Unlabeled"} ${plus}${shiftedDie}${arrow}`,
+					label: `Zord Skill Roll: ${skill.name ?? "Unlabeled"} ${plus}${shiftedDie}${shiftArrow}`,
 					value: skillName,
 					default: isDefault(skillName)
 				});
@@ -263,13 +262,12 @@ function createSkillSpecializationSelectRow(character: TPlayerCharacter): Messag
 			if (!skillDie) {
 				return;
 			}
-			const shiftedDie = shiftDie(skillDie, activeEdgeSnagShift);
-			const arrow = shiftArrow(skillDie, shiftedDie);
+			const { shiftedDie, shiftArrow } = shiftDie(skillDie, activeEdgeSnagShift);
 			const plus = shiftedDie === "d20" ? "" : "+";
 			skill.specializations?.forEach((spec, index) => {
 				const specValue = `${skill.name}-${index}-${spec.name}`;
 				selectMenu.addOptions({
-					label: `Specialization Roll: ${skill.name} (${spec.name}) ${plus}${shiftedDie}${arrow}*`,
+					label: `Specialization Roll: ${skill.name} (${spec.name}) ${plus}${shiftedDie}${shiftArrow}*`,
 					value: specValue,
 					default: specValue === activeSkill
 				});
@@ -385,26 +383,7 @@ function testEdgeSnag<T>(testValues: TEdgeSnagShift[], outValues: { edge: T, sna
 		return outValues.none;
 	}
 }
-function shiftDie<T extends string>(skillDie: T, testValues: TEdgeSnagShift[]): T {
-	const ladder = ["d20","d2","d4","d6","d8","d10","d12","2d8","3d6"];
-	const minIndex = 0, maxIndex = ladder.length - 1;
-	let index = ladder.indexOf(skillDie);
-	[1, 2, 3].forEach(val => {
-		if (testValues.includes(`+${val}` as TShift)) { index += val; }
-		if (testValues.includes(`-${val}` as TShift)) { index -= val; }
-	});
-	index = Math.min(Math.max(index, minIndex), maxIndex);
-	return ladder[index] as T;
-}
-function shiftArrow(skillDie: string, shiftedDie: string): "" | "↑" | "↓" {
-	if (skillDie === shiftedDie) {
-		return "";
-	}
-	const ladder = ["d20","d2","d4","d6","d8","d10","d12","2d8","3d6"];
-	return ladder.indexOf(skillDie) < ladder.indexOf(shiftedDie)
-		? "↑"
-		: "↓";
-}
+
 async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, character: TPlayerCharacter, secret = false, init = false, untrained = false): Promise<void> {
 	let dice = "";
 	if (untrained) {
@@ -425,8 +404,7 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 		}
 		const activeEdgeSnagShift = getActiveEdgeSnagShiftValues(character);
 		const skillDie = skill?.die ?? "d20";
-		const shiftedDie = shiftDie(skillDie, activeEdgeSnagShift);
-		const arrow = shiftArrow(skillDie, shiftedDie);
+		const { shiftedDie, shiftArrow } = shiftDie(skillDie, activeEdgeSnagShift);
 		const plus = shiftedDie === "d20" ? "" : "+";
 		const specStar = specialization ? "*" : "";
 		const edgeSnag = testEdgeSnag(activeEdgeSnagShift, { edge:"e", snag:"s", none:"" });
@@ -434,7 +412,7 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 		const secretText = secret ? " Secret" : "";
 		const skillName = isZord ? activeSkill : skill?.name;
 		const specName = specialization ? ` (${specialization.name})` : "";
-		dice = `[${plus}${shiftedDie}${specStar}${edgeSnag} ${charName}${secretText} ${skillName}${specName}${arrow}]`;
+		dice = `[${plus}${shiftedDie}${specStar}${edgeSnag} ${charName}${secretText} ${skillName}${specName}${shiftArrow}]`;
 	}
 	const matches = parseDiceMatches(sageInteraction, dice);
 	const output = matches.map(match => match.output).flat();

@@ -1,3 +1,4 @@
+import type { TSkillDie } from "../../sage-dice/dice/essence20";
 import { isBlank } from "../../sage-utils/utils/StringUtils";
 import { generate } from "../../sage-utils/utils/UuidUtils";
 import { PdfJsonFields, TRawJson } from "./pdf";
@@ -145,7 +146,7 @@ export class PdfJsonParserE20 extends PdfJsonFields {
 			}else {
 				const dieChecked = this.findChecked(`${prefixLower}${i}`);
 				if (dieChecked) {
-					skill.die = dice[i];
+					skill.die = dice[i] as TSkillDie;
 				}
 			}
 

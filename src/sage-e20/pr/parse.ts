@@ -1,3 +1,4 @@
+import type { TSkillDie } from "../../sage-dice/dice/essence20";
 import { filterValuesWithKeys, PdfJsonParserE20, SkillPairKey } from "../common/parse";
 import type { TField, TRawJson } from "../common/pdf";
 import type { PlayerCharacterCorePR, TAttackZord, TSkillZord, TStatPR, TStatZord, TZord } from "./PlayerCharacterPR";
@@ -81,7 +82,7 @@ export class PdfJsonParserPR extends PdfJsonParserE20 {
 			}else {
 				const dieChecked = this.findChecked(`${prefix}${i}`);
 				if (dieChecked) {
-					skill.die = dice[i];
+					skill.die = dice[i] as TSkillDie;
 				}
 			}
 		}

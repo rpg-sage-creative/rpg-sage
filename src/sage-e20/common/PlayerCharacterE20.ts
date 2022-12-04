@@ -1,3 +1,4 @@
+import type { TSkillDie } from "../../sage-dice/dice/essence20";
 import type { Optional } from "../../sage-utils";
 import CharacterBase, { CharacterBaseCore } from "../../sage-utils/utils/CharacterUtils/CharacterBase";
 
@@ -19,7 +20,7 @@ export type TAttackE20 = {
 export type TSkillE20 = {
 	name: string;
 	bonus?: number;
-	die?: string;
+	die?: TSkillDie;
 	specializations?: TSkillSpecialization[];
 };
 
