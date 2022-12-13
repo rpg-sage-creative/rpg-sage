@@ -26,12 +26,12 @@ import type {
 //#region Tokenizer
 function getParsers(): TParsers {
 	const parsers = baseGetParsers();
-	parsers["suffix"] = /[\*se]+/i;
+	parsers["suffix"] = /(e|s|\*|up\d+|dn\d+)+/i;
 	parsers["target"] = /\b(vs\s*dif|dif|vs)\s*(\d+)/i;
 	return parsers;
 }
 
-function applyEdgeSnagSpec<T extends DicePartCore>({ core, hasEdge, hasSnag, hasSpecialization }: { core: T, hasEdge: boolean, hasSnag: boolean, hasSpecialization: boolean }): T {
+function applyEdgeSnagSpecShift<T extends DicePartCore>({ core, hasEdge, hasSnag, hasSpecialization, upShift, downShift }: { core: T, hasEdge: boolean, hasSnag: boolean, hasSpecialization: boolean, upShift: number, downShift: number }): T {
 	if (hasEdge && !hasSnag) {
 		core.dropKeep = { type:DropKeepType.KeepHighest, value:1 };
 	}else if (!hasEdge && hasSnag) {
@@ -41,6 +41,9 @@ function applyEdgeSnagSpec<T extends DicePartCore>({ core, hasEdge, hasSnag, has
 		core.sign = "+";
 		core.specialization = true;
 	}
+	// use || instead of ?? in case we have a 0
+	core.upShift = upShift || undefined;
+	core.downShift = downShift || undefined;
 	return core;
 }
 
@@ -48,11 +51,13 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 	if (token.type === "suffix") {
 		const prevToken = tokens[index - 1];
 		if (prevToken?.type === "dice") {
-			return applyEdgeSnagSpec({
+			return applyEdgeSnagSpecShift({
 				core,
 				hasEdge: token.token.match(/e/i) !== null,
 				hasSnag: token.token.match(/s/i) !== null,
-				hasSpecialization: token.token.includes("*")
+				hasSpecialization: token.token.includes("*"),
+				upShift: +(token.token.match(/up(\d+)/i)?.[1] ?? 0),
+				downShift: +(token.token.match(/dn(\d+)/i)?.[1] ?? 0)
 			});
 		}
 	}
@@ -80,19 +85,69 @@ function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
 }
 //#endregion
 
+//#region helpers
+export type TSkillDie = "d20" | "d2" | "d4" | "d6" | "d8" | "d10" | "d12" | "2d8" | "3d6";
+/** return ["d20","d2","d4","d6","d8","d10","d12","2d8","3d6"]; */
+function getLadder(): TSkillDie[] {
+	return ["d20","d2","d4","d6","d8","d10","d12","2d8","3d6"];
+}
+
+type TShiftArrow = "↑" | "↓" | "";
+type TDieShift = {
+	skillDie: TSkillDie;
+	shiftedDie: TSkillDie;
+	shiftArrow: TShiftArrow;
+	shiftNumber: number;
+};
+
+/** shiftValues *need* to be "+1" or "-1" (no spaces; sign required), not up1 or dn1 */
+export function shiftDie(skillDie: TSkillDie, shiftValues: string[]): TDieShift {
+	const ladder = getLadder();
+
+	const skillIndex = ladder.indexOf(skillDie);
+	let shiftedIndex = skillIndex;
+	ladder.forEach((_, stepNumber) => {
+		if (shiftValues.includes(`+${stepNumber}`)) { shiftedIndex += stepNumber; }
+		// if (shiftValues.includes(`↑${stepNumber}`)) { shiftedIndex += stepNumber; }
+		if (shiftValues.includes(`-${stepNumber}`)) { shiftedIndex -= stepNumber; }
+		// if (shiftValues.includes(`↓${stepNumber}`)) { shiftedIndex -= stepNumber; }
+	});
+	const minIndex = 0, maxIndex = ladder.length - 1;
+	shiftedIndex = Math.min(Math.max(shiftedIndex, minIndex), maxIndex);
+
+	let shiftNumber = 0;
+	let shiftArrow: TShiftArrow = "";
+	if (skillIndex !== shiftedIndex) {
+		shiftNumber = shiftedIndex - skillIndex;
+		shiftArrow = skillIndex < shiftedIndex ? "↑" : "↓";
+	}
+
+	const shiftedDie = ladder[shiftedIndex];
+
+	return { skillDie, shiftedDie, shiftArrow, shiftNumber };
+}
+//#endregion
+
 //#region DicePart
 interface DicePartCore extends baseDicePartCore {
+	downShift?: number;
+	upShift?: number;
 	specialization?: boolean;
 	target?: TTargetData;
 }
 type TDicePartCoreArgs = baseTDicePartCoreArgs & {
+	downShift?: number;
+	upShift?: number;
 	specialization?: boolean;
 	testOrTarget?: TTestData | TTargetData;
 };
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
+	public get hasShift(): boolean { return this.upShift + this.downShift !== 0; }
+	public get upShift(): number { return this.core.upShift ?? 0; }
+	public get downShift(): number { return this.core.downShift ?? 0; }
 	public get hasSpecialization(): boolean { return this.core.specialization === true; }
 	//#region static
-	public static create({ count, description, dropKeep, sides, sign, specialization, testOrTarget }: TDicePartCoreArgs = {}): DicePart {
+	public static create({ count, description, dropKeep, sides, sign, specialization, testOrTarget, downShift, upShift }: TDicePartCoreArgs = {}): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.E20,
@@ -101,13 +156,15 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			count: count ?? 1,
 			description: cleanDescription(description),
 			dropKeep: dropKeep ?? undefined,
+			downShift: downShift ?? undefined,
 			modifier: 0,
 			noSort: false,
 			sides: sides ?? 0,
 			sign: sign,
 			specialization,
 			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget ?? null,
-			target: <TTargetData>testOrTarget ?? null
+			target: <TTargetData>testOrTarget ?? null,
+			upShift: upShift ?? undefined
 		});
 	}
 	public static fromCore(core: DicePartCore): DicePart {
@@ -115,26 +172,51 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	}
 	public static fromTokens(tokens: TToken[]): DicePart {
 		const core = tokens.reduce(reduceTokenToDicePartCore, <DicePartCore>{ description:"" });
-		if (core.sides !== 20 && core.description.match(/^[es\*]+/i)) {
-			let hasEdge = false, hasSnag = false, hasSpecialization = false;
+		if (core.sides !== 20 && match(core)) {
+			let hasEdge = false, hasSnag = false, hasSpecialization = false, downShift = 0, upShift = 0;
 			//#region collect the flags
-			while (core.description.match(/^[es\*]+/i)) {
-				if (core.description.match(/^e/i)) {
+			while (match(core)) {
+				let sliceLength = 1;
+				//#region edge
+				if (match(core, /^e/i)) {
 					hasEdge = true;
 				}
-				if (core.description.match(/^s/i)) {
+				//#endregion
+				//#region snag
+				if (match(core, /^s/i)) {
 					hasSnag = true;
 				}
-				if (core.description.match(/^\*/i)) {
+				//#endregion
+				//#region specialization
+				if (match(core, /^\*/i)) {
 					hasSpecialization = true;
 				}
-				core.description = core.description.slice(1);
+				//#endregion
+				//#region upShift
+				const upMatch = match(core, /(↑|up)(\d*)/i);
+				if (upMatch) {
+					upShift = +upMatch[2];
+					sliceLength = upMatch[0].length;
+				}
+				//#endregion
+				//#region downShift
+				const downMatch = match(core, /(↓|dn)(\d*)/i);
+				if (downMatch) {
+					downShift = +downMatch[2];
+					sliceLength = downMatch[0].length;
+				}
+				//#endregion
+				core.description = core.description.slice(sliceLength);
 			}
 			//#endregion
-			applyEdgeSnagSpec({ core, hasEdge, hasSnag, hasSpecialization });
+			applyEdgeSnagSpecShift({ core, hasEdge, hasSnag, hasSpecialization, downShift, upShift });
 		}
 		const args = <TDicePartCoreArgs>{ testOrTarget:core.target ?? core.test, ...core };
 		return DicePart.create(args);
+
+		function match(core: DicePartCore, regex = /^(e|s|\*|↑\d*|up\d+|↓\d*|dn\d+)+/i): RegExpMatchArray | null {
+			return core.description.match(regex);
+		}
 	}
 	//#endregion
 }
@@ -238,6 +320,16 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	}
 	public static fromTokens(tokens: TToken[], diceOutputType?: DiceOutputType): DiceGroup {
 		const skillDicePart = DicePart.fromTokens(tokens);
+		if (skillDicePart.hasShift) {
+			const { upShift, downShift } = skillDicePart;
+			const skillDie = `${skillDicePart.count}d${skillDicePart.sides}`.replace(/^1d/, "d") as TSkillDie;
+			const { shiftedDie, shiftArrow, shiftNumber } = shiftDie(skillDie, [`+${upShift}`, `-${downShift}`]);
+			const [count, sides] = shiftedDie.split("d");
+			const core = skillDicePart.toJSON();
+			core.count = +count || 1;
+			core.sides = +sides;
+			core.description += `${core.description?" ":""}(${skillDie}${shiftArrow}${shiftNumber})`;
+		}
 		const skillDice = Dice.create([skillDicePart]);
 		const dice = [skillDice];
 		if (skillDicePart.sides !== 20 && skillDicePart.sign === "+") {
@@ -265,21 +357,23 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 			}
 		}
 
-		const step = `${skillDicePart.count}d${skillDicePart.sides}`;
-		const ladder = ["1d2","1d4","1d6","1d8","1d10","1d12","2d8","3d6"];
-		if (skillDicePart.hasSpecialization && ladder.indexOf(step) > 0) {
-			for (let index = ladder.indexOf(step); index--;) {
-				const [count, sides] = ladder[index].split("d");
-				dice.push(Dice.create([new DicePart({
-					objectType: "DicePart",
-					gameType: GameType.E20,
-					id: generate(),
-					count: +count,
-					sides: +sides,
-					description: "",
-					modifier: 0,
-					noSort: false
-				})]));
+		const step = `${skillDicePart.count}d${skillDicePart.sides}`.replace(/^1d/, "d") as TSkillDie;
+		if (skillDicePart.hasSpecialization) {
+			const specializationLadder = getLadder().slice(1);
+			if (specializationLadder.indexOf(step) > 0) {
+				for (let index = specializationLadder.indexOf(step); index--;) {
+					const [count, sides] = specializationLadder[index].split("d");
+					dice.push(Dice.create([new DicePart({
+						objectType: "DicePart",
+						gameType: GameType.E20,
+						id: generate(),
+						count: +count || 1,
+						sides: +sides,
+						description: "",
+						modifier: 0,
+						noSort: false
+					})]));
+				}
 			}
 		}
 		return DiceGroup.create(dice, diceOutputType);

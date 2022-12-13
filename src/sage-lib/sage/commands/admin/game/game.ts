@@ -146,11 +146,11 @@ async function showGameGetGame(sageMessage: SageMessage): Promise<Game | null> {
 			game = await sageMessage.caches.games.getById(gameId);
 		}
 		if (!game) {
-			await sageMessage.reactFailure();
+			await sageMessage.message.reply("*No Game Found!*");
 		}
 	}
 	if (!sageMessage.canAdminGames && !game?.hasGameMaster(sageMessage.authorDid)) {
-		await sageMessage.reactBlock();
+		await sageMessage.message.reply("*Server Admin, Game Admin, or Game Master privilege required!*");
 	}
 	return game ?? null;
 }

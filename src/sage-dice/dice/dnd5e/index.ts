@@ -11,7 +11,7 @@ import {
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
-	GameType, isGradeSuccess,
+	GameType, gradeRoll, isGradeSuccess,
 	parseTestType,
 	rollDice, TDiceLiteral, TestType, TSign,
 	TTestData
@@ -19,8 +19,7 @@ import {
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers,
-	reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
+	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
 	TReduceSignToDropKeep
 } from "../base";
 import type {
@@ -100,16 +99,15 @@ function targetDataToTestData(targetData: TTargetData | TTestData): OrUndefined<
 
 function gradeResults(roll: DiceRoll): DieRollGrade {
 	const test = roll.dice.test;
-	if (!test) {
-		return DieRollGrade.Unknown;
+	if (test?.alias?.match(/ac|dc|vs/i)) {
+		if (roll.isMax) {
+			return DieRollGrade.CriticalSuccess;
+		}else if (roll.isMin) {
+			return DieRollGrade.CriticalFailure;
+		}
+		return roll.total >= test.value ? DieRollGrade.Success : DieRollGrade.Failure;
 	}
-
-	if (roll.isMax) {
-		return DieRollGrade.CriticalSuccess;
-	}else if (roll.isMin) {
-		return DieRollGrade.CriticalFailure;
-	}
-	return roll.total >= test.value ? DieRollGrade.Success : DieRollGrade.Failure;
+	return gradeRoll(roll);
 }
 
 //#endregion

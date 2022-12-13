@@ -1,3 +1,4 @@
+import type { TSkillDie } from "../../sage-dice/dice/essence20";
 import type { Optional } from "../../sage-utils";
 import PlayerCharacterE20, { orQ, PlayerCharacterCoreE20, TAbilityName, TStatE20 } from "../common/PlayerCharacterE20";
 
@@ -22,7 +23,7 @@ export type TStatZord = {
 export type TSkillZord = {
 	name?: string;
 	bonus?: number;
-	die?: string;
+	die?: TSkillDie;
 };
 
 export type TZord = {

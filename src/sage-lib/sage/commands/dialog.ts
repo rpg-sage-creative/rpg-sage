@@ -478,12 +478,12 @@ async function companionChat(sageMessage: SageMessage, dialogContent: TDialogCon
 
 // #region Edit Dialog
 
-function updateEmbed(originalEmbed: Discord.MessageEmbed, title: Optional<string>, imageUrl: Optional<string>, content: string): Discord.MessageEmbed {
+function updateEmbed(originalEmbed: Discord.MessageEmbed | undefined, title: Optional<string>, imageUrl: Optional<string>, content: string): Discord.MessageEmbed {
 	const updatedEmbed = new Discord.MessageEmbed();
-	updatedEmbed.setTitle(title ?? originalEmbed.title ?? "");
+	updatedEmbed.setTitle(title ?? originalEmbed?.title ?? "");
 	updatedEmbed.setDescription(content);
-	updatedEmbed.setThumbnail(imageUrl ?? originalEmbed.thumbnail?.url ?? "");
-	updatedEmbed.setColor(originalEmbed.color as Discord.ColorResolvable);
+	updatedEmbed.setThumbnail(imageUrl ?? originalEmbed?.thumbnail?.url ?? "");
+	updatedEmbed.setColor(originalEmbed?.color as Discord.ColorResolvable);
 	return updatedEmbed;
 }
 
