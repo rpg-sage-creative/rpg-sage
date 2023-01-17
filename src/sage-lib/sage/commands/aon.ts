@@ -52,10 +52,14 @@ type TPostData = {
 	sort: ["_score","_doc"];
 };
 
+const SearchTermSpaceReplacement = "%20";
+function replaceSpace(...values: string[]): string {
+	return values.join(" ").replace(/\s+/g, SearchTermSpaceReplacement) ?? "";
+}
 function buildPostData(terms: string[]): TPostData {
-	const mpp = { match_phrase_prefix: { name: { query:terms.join(" ") } } };
+	const mpp = { match_phrase_prefix: { name: { query:replaceSpace(...terms) } } };
 	const bm = { bool:{ must:
-		terms.map<Tmm>(term => ({ multi_match: { query:term, type:"best_fields", fields:["name","text^0.1","trait_raw","type"], fuzziness:"auto" } }))
+		terms.map<Tmm>(term => ({ multi_match: { query:replaceSpace(term), type:"best_fields", fields:["name","text^0.1","trait_raw","type"], fuzziness:"auto" } }))
 	} };
 	const postData: TPostData = {
 		query: {
