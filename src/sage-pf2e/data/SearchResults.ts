@@ -1,3 +1,4 @@
+import { GameType } from "../../sage-dice";
 import type { IMenuRenderable } from "../../sage-lib/discord";
 import utils, { OrUndefined } from "../../sage-utils";
 import type { SearchScore } from "../../sage-utils/utils/SearchUtils";
@@ -11,18 +12,44 @@ import { findByAonBase } from "./Repository";
 type TScore = SearchScore<AonBase>;
 
 function createLabel(searchInfo: utils.SearchUtils.SearchInfo, objectType?: string): string {
+	if (searchInfo.gameType !== GameType.PF2e) {
+		return `Cannot Search: ${GameType[searchInfo.gameType]} `;
+	}
 	const prefix = objectType ? `${objectType} ` : ``;
 	const suffix = searchInfo.keyTerm ? ` \\${searchInfo.keyTerm}` : ``;
 	return `${prefix}Search Results for: \`${searchInfo.searchText + suffix}\``;
 }
 
 function createRenderable(searchResults: SearchResults): utils.RenderUtils.RenderableContent {
-	const hasComp = !!searchResults.scores?.[0].compScore;
+	const isEmpty = searchResults.isEmpty;
+	const hasComp = !!searchResults.scores[0]?.compScore;
 	const label = createLabel(searchResults.searchInfo, searchResults.objectType);
-	const content = new utils.RenderUtils.RenderableContent(hasComp ? `<b>${label}</b> not found!` : `<b>${label}</b>`);
-	content.append(hasComp ? `<i>Did you mean ...</i>` : `<b>Top Matches</b> (of ${searchResults.scores.length})`);
-	content.append(`[spacer] <i><b>(#)</b> represents number of search term hits.</i>`);
+	const title = hasComp || isEmpty ? `<b>${label}</b> not found!` : `<b>${label}</b>`;
+	const content = new utils.RenderUtils.RenderableContent(searchResults.searchInfo.gameType !== GameType.PF2e ? label : title);
+	if (!isEmpty) {
+		content.append(hasComp ? `<i>Did you mean ...</i>` : `<b>Top Matches</b> (of ${searchResults.scores.length})`);
+		content.append(`[spacer] <i><b>(#)</b> represents number of search term hits.</i>`);
+	}
 	return content;
+}
+
+function createClickableSearchLink(searchResults: SearchResults, label: string): string {
+	const query = searchResults.searchInfo.searchText.replace(/\s+/g, "+") ?? "";
+	let url = "";
+	switch (searchResults.searchInfo.gameType) {
+		case GameType.SF1e:
+			url = `https://www.aonsrd.com/Search.aspx?Query=${query}`;
+			break;
+		case GameType.PF1e:
+			url = `https://www.aonprd.com/Search.aspx?Query=${query}`;
+			break;
+		case GameType.PF2e:
+			url = `https://2e.aonprd.com/Search.aspx?query=${query}`;
+			break;
+		default:
+			return "<i>Unable to Search for this Game System</i>";
+	}
+	return `<a href="${url}">${label}</a>`;
 }
 
 type TRenderableMeta = { hasCompScore:boolean; sources:Source[]; unicodeArray:string[]; unicodeIndex:number; };
@@ -131,17 +158,22 @@ export default class SearchResults extends utils.SearchUtils.HasScoredSearchable
 			return this.theOne.toRenderableContent();
 		}
 
+
 		const meta: TRenderableMeta = {
-			hasCompScore: !!this.scores[0].compScore,
+			hasCompScore: !!this.scores[0]?.compScore,
 			sources: [],
 			unicodeArray: this.getMenuUnicodeArray(),
 			unicodeIndex: 0
 		};
 
 		const content = createRenderable(this);
-		content.append(...this.scores.slice(0, this.getMenuLength()).map((score, scoreIndex) => scoreToLineItem.call(this, meta, score, scoreIndex)));
-		content.append(...meta.sources.map(sourceToFootnote));
-		content.append(`<br/><a href="http://2e.aonprd.com/Search.aspx?query=${this.searchInfo.searchText.replace(/\s+/g, "+") ?? ""}">View Results on Archives of Nethys</a>`);
+		if (this.isEmpty) {
+			content.append(createClickableSearchLink(this, `Search Archives of Nethys Directly`));
+		}else {
+			content.append(...this.scores.slice(0, this.getMenuLength()).map((score, scoreIndex) => scoreToLineItem.call(this, meta, score, scoreIndex)));
+			content.append(...meta.sources.map(sourceToFootnote));
+			content.append(createClickableSearchLink(this, `View Results on Archives of Nethys`));
+		}
 		return content;
 	}
 
