@@ -1,6 +1,7 @@
 import type { GameType } from "../../../sage-dice";
 import { existsAndUnique } from "../ArrayUtils/Filters";
 import { oneToUS, reduceNoise } from "../LangUtils";
+import { Tokenizer, dequote } from "../StringUtils";
 import SearchScore, { TTermInfo } from "./SearchScore";
 import type { ISearchable } from "./types";
 
@@ -15,7 +16,9 @@ type TSearchableContent = string | string[] | undefined;
 type TFlag = "g" | "r" | "";
 
 function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean) {
-	return reduceNoise(term.split(/\s+/)).map(_term => {
+	const tokens = Tokenizer.tokenize(term, { quoted:/"[^"]*"/, other:/\S+/ });
+	const terms = tokens.map(token => token.token).map(s => dequote(s)).filter(existsAndUnique);
+	return reduceNoise(terms).map(_term => {
 		const minus = _term.startsWith("-"),
 			plus = _term.startsWith("+"),
 			cleanTerm = oneToUS(minus || plus ? _term.slice(1) : _term);
