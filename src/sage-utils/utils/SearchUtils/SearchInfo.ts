@@ -1,3 +1,4 @@
+import type { GameType } from "../../../sage-dice";
 import { existsAndUnique } from "../ArrayUtils/Filters";
 import { oneToUS, reduceNoise } from "../LangUtils";
 import SearchScore, { TTermInfo } from "./SearchScore";
@@ -40,7 +41,7 @@ export default class SearchInfo {
 	public keyTerm: string | undefined;
 	public terms: TTermInfo[];
 
-	public constructor(public searchText: string, ...flags: TFlag[]) {
+	public constructor(public searchText: string, public gameType: GameType, ...flags: TFlag[]) {
 		this.globalFlag = ((searchText.match(/\s\-[gr]*$/i) ?? [])[0] ?? "").includes("g") || flags.includes("g");
 		const regexFlag = ((searchText.match(/\s\-[gr]*$/i) ?? [])[0] ?? "").includes("r") || flags.includes("r"),
 			term = searchText.replace(/\s\-[gr]*$/i, "").replace(/\s+/g, " ").replace(/([\+\-])\s+(\w)/gi, `$1$2`).trim();
