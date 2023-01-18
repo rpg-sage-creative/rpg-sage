@@ -5,8 +5,10 @@ import { Base, RARITIES, SearchResults } from "../../../sage-pf2e";
 import type SageMessage from "../model/SageMessage";
 import { send } from "../../discord/messages";
 import type { TChannel } from "../../discord";
+import { GameType } from "../../../sage-dice";
 
 // const PF2E_SEARCH_URL = `https://elasticsearch.galdiuz.com/aon/_search`;
+// const PF1E_SEARCH_URL = `https://www.aonprd.com:9200/aon/_search`;
 const PF2E_SEARCH_URL = `https://2e.aonprd.com:9200/aon/_search`;
 
 type TScore = utils.SearchUtils.SearchScore<AonBase>;
@@ -38,7 +40,7 @@ type TScore = utils.SearchUtils.SearchScore<AonBase>;
 
 type Tmpp = { match_phrase_prefix: { name: { query:string; } } };
 type Tmm = { multi_match: { query:string; type:"best_fields"; fields:["name","text^0.1","trait_raw","type"]; fuzziness:"auto"; } };
-type Tbm = { bool: { must:Tmm[]; } };
+type Tbm = { bool: { must:Tmm[]; /*should?:Tmm[];*/ } };
 type TPostData = {
 	query: {
 		bool: {
@@ -52,14 +54,13 @@ type TPostData = {
 	sort: ["_score","_doc"];
 };
 
-const SearchTermSpaceReplacement = "%20";
-function replaceSpace(...values: string[]): string {
-	return values.join(" ").replace(/\s+/g, SearchTermSpaceReplacement) ?? "";
+function cleanSpaces(terms: string | string[]): string {
+	return (Array.isArray(terms) ? terms.join(" ") : terms).replace(/\s+/g, " ");
 }
 function buildPostData(terms: string[]): TPostData {
-	const mpp = { match_phrase_prefix: { name: { query:replaceSpace(...terms) } } };
+	const mpp = { match_phrase_prefix: { name: { query:cleanSpaces(terms) } } };
 	const bm = { bool:{ must:
-		terms.map<Tmm>(term => ({ multi_match: { query:replaceSpace(term), type:"best_fields", fields:["name","text^0.1","trait_raw","type"], fuzziness:"auto" } }))
+		terms.map<Tmm>(term => ({ multi_match: { query:cleanSpaces(term), type:"best_fields", fields:["name","text^0.1","trait_raw","type"], fuzziness:"auto" } }))
 	} };
 	const postData: TPostData = {
 		query: {
@@ -190,7 +191,7 @@ function parseSearchInfo(terms: utils.ArrayUtils.Collection<string>): TParsedSea
 	const minusTypes = terms.remove(term => term.startsWith("-")).map(term => term.slice(1));
 	const minusRarities = minusTypes.remove(term => findRarity(term));
 	const searchTerms = terms;
-	const searchText = searchTerms.join(" ");
+	const searchText = searchTerms.map(term => term.match(/\s+/) ? `"${term}"` : term).join(" ");
 	return { searchText, searchTerms, plusTypes, minusTypes, plusRarities, minusRarities };
 
 	function findRarity(term: string): boolean {
@@ -241,8 +242,45 @@ function sortResults(a: TScore, b: TScore, types: TPlusMinus, _: TPlusMinus): TS
 
 //#endregion
 
-export async function searchAon(parsedSearchInfo: TParsedSearchInfo, nameOnly = false): Promise<SearchResults> {
-	const searchInfo = new utils.SearchUtils.SearchInfo(parsedSearchInfo.searchText, nameOnly ? "" : "g");
+async function searchAon(gameType: GameType, parsedSearchInfo: TParsedSearchInfo, nameOnly = false): Promise<SearchResults> {
+	// if (gameType === GameType.PF1e) {
+	// 	return searchAonPf1e(parsedSearchInfo, nameOnly);
+	// }
+	if (gameType === GameType.PF2e) {
+		return searchAonPf2e(parsedSearchInfo, nameOnly);
+	}
+	return new SearchResults(new utils.SearchUtils.SearchInfo(parsedSearchInfo.searchText, gameType));
+}
+// async function searchAonPf1e(parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<SearchResults> {
+// 	const searchInfo = new utils.SearchUtils.SearchInfo(parsedSearchInfo.searchText, "pf1e", nameOnly ? "" : "g");
+// 	const postData = buildPostData(searchInfo.terms.map(term => utils.LangUtils.oneToUS(term.term)));
+// 	const searchResults = new SearchResults(searchInfo);
+// 	const response = await utils.HttpsUtils.getJson<TResponseData>(PF1E_SEARCH_URL, postData).catch(e => console.error(e)! || null);
+// 	console.log(JSON.stringify({postData,response}));
+// 	response?.hits?.hits?.forEach(hit => searchResults.add(...AonBase.searchRecursive(hit._source, searchInfo)));
+
+// 	//#region type shuffle
+
+// 	const types = ensurePlusMinusTypes(parsedSearchInfo.plusTypes, parsedSearchInfo.minusTypes);
+// 	const rarities = { plus:parsedSearchInfo.plusRarities, minus:parsedSearchInfo.minusRarities };
+// 	searchResults.scores.sort((a: TScore, b: TScore) => sortResults(a, b, types, rarities));
+
+// 	//#endregion
+
+// 	// #region perfect match resort
+
+// 	const stringMatcher = utils.StringUtils.StringMatcher.from(searchInfo.searchText);
+// 	const nameMatches = searchResults.scores.filter(score => score.searchable.matches(stringMatcher));
+// 	if (nameMatches.length) {
+// 		searchResults.scores = nameMatches.concat(searchResults.scores.filter(score => !nameMatches.includes(score)));
+// 	}
+
+// 	// #endregion
+
+// 	return searchResults;
+// }
+async function searchAonPf2e(parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<SearchResults> {
+	const searchInfo = new utils.SearchUtils.SearchInfo(parsedSearchInfo.searchText, GameType.PF2e, nameOnly ? "" : "g");
 	const postData = buildPostData(searchInfo.terms.map(term => utils.LangUtils.oneToUS(term.term)));
 	const searchResults = new SearchResults(searchInfo);
 	const response = await utils.HttpsUtils.getJson<TResponseData>(PF2E_SEARCH_URL, postData).catch(e => console.error(e)! || null);
@@ -285,19 +323,31 @@ export async function aonHandler(sageMessage: SageMessage, nameOnly = false): Pr
 		return sageMessage.reactBlock();
 	}
 
-	// Let em know we are busy ...
-	const promise = send(sageMessage.caches, sageMessage.message.channel as TChannel, `> Searching Archives of Nethys, please wait ...`, sageMessage.message.author);
-
-	// Parse the query and start the search ...
+	// Parse the query
 	const parsedSearchInfo = parseSearchInfo(utils.ArrayUtils.Collection.from(sageMessage.args));
-	const searchResults = await searchAon(parsedSearchInfo, nameOnly);
-	const renderableToSend = theOneOrMatchToSage(searchResults, nameOnly) ?? searchResults;
 
-	// delete the "please wait" message(s)
-	const messages = await promise;
-	messages.forEach(message => message.deletable ? message.delete() : void 0);
+	// make sure we have a game at AoN
+	const gameType = sageMessage.gameType;
+	if (gameType === GameType.PF2e) {
+		// Let em know we are busy ...
+		const promise = send(sageMessage.caches, sageMessage.message.channel as TChannel, `> Searching Archives of Nethys, please wait ...`, sageMessage.message.author);
 
-	// Send the proper results
-	await send(sageMessage.caches, sageMessage.message.channel as TChannel, renderableToSend, sageMessage.message.author);
+		// start the search
+		const searchResults = await searchAon(gameType, parsedSearchInfo, nameOnly);
+
+		// decide what to render
+		const renderableToSend = theOneOrMatchToSage(searchResults, nameOnly) ?? searchResults;
+
+		// delete the "please wait" message(s)
+		const messages = await promise;
+		messages.forEach(message => message.deletable ? message.delete() : void 0);
+
+		// Send the proper results
+		await send(sageMessage.caches, sageMessage.message.channel as TChannel, renderableToSend, sageMessage.message.author);
+	}else {
+		const unableSearchResults = new SearchResults(new utils.SearchUtils.SearchInfo(parsedSearchInfo.searchText, gameType));
+		await send(sageMessage.caches, sageMessage.message.channel as TChannel, unableSearchResults, sageMessage.message.author);
+	}
+
 	return Promise.resolve();
 }
