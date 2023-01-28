@@ -1,5 +1,6 @@
 import type * as Discord from "discord.js";
-import type { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../../sage-dice";
+import type { GameType } from "../../../../sage-common";
+import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
 import utils, { IdCore, Optional, OrNull, UUID } from "../../../../sage-utils";
 import type { DicePostType } from "../../commands/dice";
 import type SageCache from "../../model/SageCache";

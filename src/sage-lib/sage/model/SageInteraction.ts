@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
 import type { IHasChannels, IHasGame } from ".";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../sage-dice";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { isDefined, Optional } from "../../../sage-utils";
 import type { TGameType } from "../../../slash.mjs";
 import { DInteraction, DiscordKey, DUser, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
@@ -13,6 +13,7 @@ import type GameCharacter from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";
 import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
 import SageCache from "./SageCache";
+import { GameType } from "../../../sage-common";
 
 interface SageInteractionCore extends HasSageCacheCore {
 	interaction: DInteraction;

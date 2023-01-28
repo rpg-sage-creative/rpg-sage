@@ -11,7 +11,7 @@ import {
 	DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade, dropKeepToString, DropKeepType,
-	GameType, gradeRoll, gradeToEmoji, HasDieCore, IDiceBase,
+	gradeRoll, gradeToEmoji, HasDieCore, IDiceBase,
 	IRollBase, mapRollToJson,
 	parseValueDropKeepData,
 	parseValueTestData,
@@ -26,6 +26,7 @@ import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
 	DicePartCore, DicePartRollCore, DiceRollCore, TDice, TDiceGroup, TDiceGroupRoll, TDicePart, TDicePartCoreArgs, TDicePartRoll, TDiceRoll
 } from "./types";
+import { GameType } from "../../../sage-common";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 //#endregion

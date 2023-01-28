@@ -9,10 +9,8 @@ export { default as GDate } from "./cal/GDate";
 //#endregion
 
 //#region data
-export * from "./data/consts";
 export { default as RenderableContent } from "./data/RenderableContent";
 export * as Repository from "./data/Repository";
-export { default as SearchResults } from "./data/SearchResults";
 export { default as Pf2tBase } from "./model/base/Pf2tBase";
 export { Pf2tBaseCore } from "./model/base/Pf2tBase";
 //#endregion

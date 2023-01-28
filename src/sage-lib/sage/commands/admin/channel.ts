@@ -1,5 +1,5 @@
 import type * as Discord from "discord.js";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../../sage-dice";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
 import utils, { Optional } from "../../../../sage-utils";
 import { DiscordCache, DiscordKey } from "../../../discord";
 import type Game from "../../model/Game";
@@ -11,6 +11,7 @@ import { DialogType, PermissionType, type IChannel } from "../../repo/base/IdRep
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";
+import { GameType } from "../../../../sage-common";
 
 //#region add
 

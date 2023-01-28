@@ -1,5 +1,6 @@
 //#region imports
 
+import { GameType } from "../../../sage-common";
 import type { OrNull, OrUndefined, TParsers, TToken } from "../../../sage-utils";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
@@ -7,7 +8,7 @@ import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
 	cleanDescription,
 	createValueTestData, DiceOutputType,
-	DiceSecretMethodType, DropKeepType, GameType, rollDice, TDiceLiteral, TestType, TTestData
+	DiceSecretMethodType, DropKeepType, rollDice, TDiceLiteral, TestType, TTestData
 } from "../../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,

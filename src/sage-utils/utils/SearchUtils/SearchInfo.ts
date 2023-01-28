@@ -1,4 +1,3 @@
-import type { GameType } from "../../../sage-dice";
 import { existsAndUnique } from "../ArrayUtils/Filters";
 import { oneToUS, reduceNoise } from "../LangUtils";
 import { Tokenizer, dequote } from "../StringUtils";
@@ -13,7 +12,7 @@ function createRegex(value: string, flags = "gi"): RegExp {
 }
 
 type TSearchableContent = string | string[] | undefined;
-type TFlag = "g" | "r" | "";
+export type TSearchFlag = "" | "g" | "r" | "gr" | "rg";
 
 function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean) {
 	const tokens = Tokenizer.tokenize(term, { quoted:/"[^"]*"/, other:/\S+/ });
@@ -44,7 +43,7 @@ export default class SearchInfo {
 	public keyTerm: string | undefined;
 	public terms: TTermInfo[];
 
-	public constructor(public searchText: string, public gameType: GameType, ...flags: TFlag[]) {
+	public constructor(public searchText: string, flags: TSearchFlag) {
 		this.globalFlag = ((searchText.match(/\s\-[gr]*$/i) ?? [])[0] ?? "").includes("g") || flags.includes("g");
 		const regexFlag = ((searchText.match(/\s\-[gr]*$/i) ?? [])[0] ?? "").includes("r") || flags.includes("r"),
 			term = searchText.replace(/\s\-[gr]*$/i, "").replace(/\s+/g, " ").replace(/([\+\-])\s+(\w)/gi, `$1$2`).trim();

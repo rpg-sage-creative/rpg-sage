@@ -1,5 +1,6 @@
 //#region imports
 
+import { GameType } from "../../../sage-common";
 import type { OrNull, OrUndefined, TParsers, TToken } from "../../../sage-utils";
 import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
@@ -11,7 +12,7 @@ import {
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
-	GameType, gradeRoll, increaseGrade,
+	gradeRoll, increaseGrade,
 	isGradeSuccess,
 	parseTestType,
 	rollDice, TDiceLiteral, TestType, TSign,
