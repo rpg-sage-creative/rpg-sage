@@ -1,10 +1,9 @@
 // import { writeFileSync } from "fs";
 import { GameType } from "../../sage-common";
-import { getText } from "../../sage-utils/utils/HttpsUtils";
 import { SearchScore } from "../../sage-utils/utils/SearchUtils";
 import { StringMatcher } from "../../sage-utils/utils/StringUtils";
 import { GameSearchInfo } from "../GameSearchInfo";
-import type { TParsedSearchInfo } from "../common";
+import { TParsedSearchInfo, getAonSearchResults } from "../common";
 import AonPf1SearchBase from "./AonPf1SearchBase";
 import Pf1eSearchResults from "./Pf1eSearchResults";
 
@@ -41,6 +40,7 @@ function parseResultsLine(line: string): TResultsCat {
 
 function parseResultsHtml(html: string): TResultsLink[] {
 	const lines = html.replace(/<h1/ig, `\n<h1`).split(/\n/).map(s => s.trim()).filter(s => s);
+	// writeFileSync("../pf1e-aon-results-lines.html", lines.join("\n"));
 	const categories = lines.map(parseResultsLine).filter(cat => cat.label !== "INVALID");
 	// const exactCats = categories.filter(cat => cat.exact);
 	const otherCats = categories.filter(cat => !cat.exact);
@@ -56,21 +56,14 @@ function parseResultsHtml(html: string): TResultsLink[] {
 			});
 		});
 	}
+	// writeFileSync("../pf1e-aon-results.json", JSON.stringify(results));
 	return results;
 }
 
 export async function searchAonPf1e(parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<Pf1eSearchResults> {
 	const url = createSearchUrl(parsedSearchInfo.searchText);
-	const html = await getText(url);
-
-	const startString = `<span id="ctl00_MainContent_SearchOutput">`,
-		startIndex = html.indexOf(startString) + startString.length,
-		stopString = `</span>`,
-		stopIndex = html.indexOf(stopString, startIndex);
-	const resultsHtml = html.slice(startIndex, stopIndex);
+	const resultsHtml = await getAonSearchResults(url);
 	const links = parseResultsHtml(resultsHtml);
-	// writeFileSync("./pf1e-aon-results.html", html);
-	// writeFileSync("./pf1e-aon-results.json", JSON.stringify(results));
 
 	const searchInfo = new GameSearchInfo(GameType.PF1e, parsedSearchInfo.searchText, nameOnly ? "" : "g");
 	const searchResults = new Pf1eSearchResults(searchInfo);

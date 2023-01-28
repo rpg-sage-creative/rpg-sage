@@ -6,7 +6,7 @@ import type HasSource from "../../sage-pf2e/model/base/HasSource";
 import type Source from "../../sage-pf2e/model/base/Source";
 import type { OrUndefined } from "../../sage-utils";
 import { toSuperscript } from "../../sage-utils/utils/NumberUtils";
-import type { RenderableContent } from "../../sage-utils/utils/RenderUtils";
+import { RenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { SearchScore } from "../../sage-utils/utils/SearchUtils";
 import SearchResults from "../SearchResults";
 
@@ -69,6 +69,24 @@ export default class Pf2eSearchResults extends SearchResults<AonBase> {
 			}
 		});
 		return { sageSearchables, actionableSearchables };
+	}
+
+	protected createRenderable(): RenderableContent {
+		const isEmpty = this.isEmpty;
+		const hasComp = !!this.scores[0]?.compScore;
+
+		const labelPrefix = this.objectType ? `${this.objectType} ` : ``;
+		const labelSuffix = this.searchInfo.keyTerm ? ` \\${this.searchInfo.keyTerm}` : ``;
+		const label = `Pathfinder 2e ${labelPrefix}Search Results for: \`${this.searchInfo.searchText + labelSuffix}\``;
+
+		const title = hasComp || isEmpty ? `<b>${label}</b> not found!` : `<b>${label}</b>`;
+
+		const content = new RenderableContent(title);
+		if (!isEmpty) {
+			content.append(hasComp ? `<i>Did you mean ...</i>` : `<b>Top Matches</b> (of ${this.scores.length})`);
+			content.append(`[spacer] <i><b>(#)</b> represents number of search term hits.</i>`);
+		}
+		return content;
 	}
 
 	// #region utils.DiscordUtils.IMenuRenderable
