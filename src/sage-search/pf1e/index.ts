@@ -1,5 +1,4 @@
 // import { writeFileSync } from "fs";
-import { existsSync, readFileSync, writeFileSync } from "fs";
 import { GameType } from "../../sage-common";
 import { getText } from "../../sage-utils/utils/HttpsUtils";
 import { SearchScore } from "../../sage-utils/utils/SearchUtils";
@@ -60,21 +59,9 @@ function parseResultsHtml(html: string): TResultsLink[] {
 	return results;
 }
 
-async function runSearch(url: string): Promise<string> {
-	if (createSearchUrl("elf") === url) {
-		const file = "./pf1-search-results-elf.html";
-		if (!existsSync(file)) {
-			const html = await getText(url);
-			writeFileSync(file, html);
-		}
-		return readFileSync(file).toString();
-	}
-	return getText(url);
-}
-
 export async function searchAonPf1e(parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<Pf1eSearchResults> {
 	const url = createSearchUrl(parsedSearchInfo.searchText);
-	const html = await runSearch(url);
+	const html = await getText(url);
 
 	const startString = `<span id="ctl00_MainContent_SearchOutput">`,
 		startIndex = html.indexOf(startString) + startString.length,
