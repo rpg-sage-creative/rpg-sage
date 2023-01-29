@@ -8,7 +8,7 @@ import { registerInteractionListener, registerMessageListener } from "../../disc
 import type { TCommandAndArgs } from "../../discord/types";
 import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
-import { aonHandler } from "./aon";
+import { searchHandler } from "./search";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp, registerFindHelp, registerSearchHelp } from "./help";
 
@@ -162,10 +162,6 @@ function searchTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	return null;
 }
 
-async function searchHandler(sageMessage: SageMessage): Promise<void> {
-	return aonHandler(sageMessage, false);
-}
-
 /** Checks searchText to see if the entire string is an object type, or an object type followed by "by source"; if so it lists all items of the given objectType */
 // async function repositoryFind_listObjectType(sageMessage: SageMessage, searchInfo: TParsedSearchInfo): Promise<boolean> {
 // 	if (searchInfo.objectTypes.length) return false;
@@ -214,7 +210,7 @@ async function findHandler(sageMessage: SageMessage): Promise<void> {
 	if (await repositoryFindRenderTable(sageMessage)) {
 		return Promise.resolve();
 	}
-	return aonHandler(sageMessage, true);
+	return searchHandler(sageMessage, true);
 }
 
 // #endregion

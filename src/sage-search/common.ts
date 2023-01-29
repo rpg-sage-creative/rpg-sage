@@ -1,28 +1,6 @@
-import { GameType } from "../sage-common";
-import { createSearchUrl as createSearchUrlPf1e } from "./pf1e";
-import { createSearchUrl as createSearchUrlPf2e } from "./pf2e";
-import { createSearchUrl as createSearchUrlSf1e } from "./sf1e";
 import type { Collection } from "../sage-utils/utils/ArrayUtils";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { getText } from "../sage-utils/utils/HttpsUtils";
-
-export function createSearchUrl(gameType: GameType, searchText: string): string | null {
-	switch (gameType) {
-		case GameType.SF1e:
-			return createSearchUrlSf1e(searchText);
-		case GameType.PF1e:
-			return createSearchUrlPf1e(searchText);
-		case GameType.PF2e:
-			return createSearchUrlPf2e(searchText);
-		default:
-			return null;
-	}
-}
-
-export function createClickableSearchLink(gameType: GameType, searchText: string, label: string): string {
-	const url = createSearchUrl(gameType, searchText);
-	return `<a href="${url}">${label}</a>`;
-}
 
 export type TParsedSearchInfo = {
 	searchText: string;
