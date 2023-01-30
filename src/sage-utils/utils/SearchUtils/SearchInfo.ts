@@ -1,5 +1,6 @@
 import { existsAndUnique } from "../ArrayUtils/Filters";
 import { oneToUS, reduceNoise } from "../LangUtils";
+import { Tokenizer, dequote } from "../StringUtils";
 import SearchScore, { TTermInfo } from "./SearchScore";
 import type { ISearchable } from "./types";
 
@@ -11,10 +12,12 @@ function createRegex(value: string, flags = "gi"): RegExp {
 }
 
 type TSearchableContent = string | string[] | undefined;
-type TFlag = "g" | "r" | "";
+export type TSearchFlag = "" | "g" | "r" | "gr" | "rg";
 
 function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean) {
-	return reduceNoise(term.split(/\s+/)).map(_term => {
+	const tokens = Tokenizer.tokenize(term, { quoted:/"[^"]*"/, other:/\S+/ });
+	const terms = tokens.map(token => token.token).map(s => dequote(s)).filter(existsAndUnique);
+	return reduceNoise(terms).map(_term => {
 		const minus = _term.startsWith("-"),
 			plus = _term.startsWith("+"),
 			cleanTerm = oneToUS(minus || plus ? _term.slice(1) : _term);
@@ -40,7 +43,7 @@ export default class SearchInfo {
 	public keyTerm: string | undefined;
 	public terms: TTermInfo[];
 
-	public constructor(public searchText: string, ...flags: TFlag[]) {
+	public constructor(public searchText: string, flags: TSearchFlag) {
 		this.globalFlag = ((searchText.match(/\s\-[gr]*$/i) ?? [])[0] ?? "").includes("g") || flags.includes("g");
 		const regexFlag = ((searchText.match(/\s\-[gr]*$/i) ?? [])[0] ?? "").includes("r") || flags.includes("r"),
 			term = searchText.replace(/\s\-[gr]*$/i, "").replace(/\s+/g, " ").replace(/([\+\-])\s+(\w)/gi, `$1$2`).trim();

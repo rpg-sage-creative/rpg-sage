@@ -10,7 +10,7 @@ import {
 	createValueTestData, DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade,
-	GameType, gradeToEmoji,
+	gradeToEmoji,
 	rollDice, TestType
 } from "../../common";
 import type {
@@ -26,6 +26,7 @@ import {
 import { generate } from "../../../sage-utils/utils/UuidUtils";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
+import { GameType } from "../../../sage-common";
 
 //#endregion
 

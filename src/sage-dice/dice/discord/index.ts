@@ -5,10 +5,9 @@ import {
 	CritMethodType,
 	DiceOutputType,
 	DiceSecretMethodType,
-	GameType,
 
 	getCritMethodRegex,
-	parseCritMethodType, parseDiceOutputType, parseGameType, TDiceOutput
+	parseCritMethodType, parseDiceOutputType, TDiceOutput
 } from "../../common";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
@@ -40,6 +39,7 @@ import {
 } from "../quest";
 import { generate } from "../../../sage-utils/utils/UuidUtils";
 import { HasCore, toJSON } from "../../../sage-utils/utils/ClassUtils";
+import { GameType, parseGameType } from "../../../sage-common";
 
 //#endregion
 

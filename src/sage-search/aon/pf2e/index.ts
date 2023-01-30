@@ -1,15 +1,49 @@
-import AonBase from "../../../sage-pf2e/model/base/AonBase";
-import type { AonBaseCore } from "../../../sage-pf2e/model/base/AonBase";
-import utils, { TSortResult } from "../../../sage-utils";
-import { Base, RARITIES, SearchResults } from "../../../sage-pf2e";
-import type SageMessage from "../model/SageMessage";
-import { send } from "../../discord/messages";
-import type { TChannel } from "../../discord";
+import { GameType } from "../../../sage-common";
+import AonBase, { AonBaseCore } from "../../../sage-pf2e/model/base/AonBase";
+import type { TSortResult } from "../../../sage-utils";
+import { sortAscending, sortDescending } from "../../../sage-utils/utils/ArrayUtils/Sort";
+import { getJson } from "../../../sage-utils/utils/HttpsUtils";
+import { oneToUS } from "../../../sage-utils/utils/LangUtils";
+import type { SearchScore } from "../../../sage-utils/utils/SearchUtils";
+import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
+import { GameSearchInfo } from "../../GameSearchInfo";
+import type { TParsedSearchInfo } from "../../common";
+import Pf2eSearchResults from "./Pf2eSearchResults";
 
-// const PF2E_SEARCH_URL = `https://elasticsearch.galdiuz.com/aon/_search`;
 const PF2E_SEARCH_URL = `https://2e.aonprd.com:9200/aon/_search`;
 
-type TScore = utils.SearchUtils.SearchScore<AonBase>;
+export function createSearchUrl(searchText: string): string | null {
+	const cleanSearchText = searchText.replace(/\s+/g, "+");
+	return `https://2e.aonprd.com/Search.aspx?query=${cleanSearchText}`;
+}
+
+export async function searchAonPf2e(parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<Pf2eSearchResults> {
+	const searchInfo = new GameSearchInfo(GameType.PF2e, parsedSearchInfo.searchText, nameOnly ? "" : "g");
+	const postData = buildPostData(searchInfo.terms.map(term => oneToUS(term.term)));
+	const searchResults = new Pf2eSearchResults(searchInfo);
+	const response = await getJson<TResponseData>(PF2E_SEARCH_URL, postData).catch(e => console.error(e)! || null);
+	response?.hits?.hits?.forEach(hit => searchResults.add(...AonBase.searchRecursive(hit._source, searchInfo)));
+
+	//#region type shuffle
+
+	const types = ensurePlusMinusTypes(parsedSearchInfo.plusTypes, parsedSearchInfo.minusTypes);
+	const rarities = { plus:parsedSearchInfo.plusRarities, minus:parsedSearchInfo.minusRarities };
+	searchResults.scores.sort((a: TScore, b: TScore) => sortResults(a, b, types, rarities));
+
+	//#endregion
+
+	// #region perfect match resort
+
+	const stringMatcher = StringMatcher.from(searchInfo.searchText);
+	const nameMatches = searchResults.scores.filter(score => score.searchable.matches(stringMatcher));
+	if (nameMatches.length) {
+		searchResults.scores = nameMatches.concat(searchResults.scores.filter(score => !nameMatches.includes(score)));
+	}
+
+	// #endregion
+
+	return searchResults;
+}
 
 //#region PostData
 
@@ -38,7 +72,7 @@ type TScore = utils.SearchUtils.SearchScore<AonBase>;
 
 type Tmpp = { match_phrase_prefix: { name: { query:string; } } };
 type Tmm = { multi_match: { query:string; type:"best_fields"; fields:["name","text^0.1","trait_raw","type"]; fuzziness:"auto"; } };
-type Tbm = { bool: { must:Tmm[]; } };
+type Tbm = { bool: { must:Tmm[]; /*should?:Tmm[];*/ } };
 type TPostData = {
 	query: {
 		bool: {
@@ -52,10 +86,13 @@ type TPostData = {
 	sort: ["_score","_doc"];
 };
 
+function cleanSpaces(terms: string | string[]): string {
+	return (Array.isArray(terms) ? terms.join(" ") : terms).replace(/\s+/g, " ");
+}
 function buildPostData(terms: string[]): TPostData {
-	const mpp = { match_phrase_prefix: { name: { query:terms.join(" ") } } };
+	const mpp = { match_phrase_prefix: { name: { query:cleanSpaces(terms) } } };
 	const bm = { bool:{ must:
-		terms.map<Tmm>(term => ({ multi_match: { query:term, type:"best_fields", fields:["name","text^0.1","trait_raw","type"], fuzziness:"auto" } }))
+		terms.map<Tmm>(term => ({ multi_match: { query:cleanSpaces(term), type:"best_fields", fields:["name","text^0.1","trait_raw","type"], fuzziness:"auto" } }))
 	} };
 	const postData: TPostData = {
 		query: {
@@ -170,29 +207,7 @@ type THit = {
 
 //#region SearchResults sorting
 
-type TParsedSearchInfo = {
-	searchText: string;
-	searchTerms: string[];
-	plusTypes: string[];
-	minusTypes: string[];
-	plusRarities: string[];
-	minusRarities: string[];
-};
-
-function parseSearchInfo(terms: utils.ArrayUtils.Collection<string>): TParsedSearchInfo {
-	const lowerRarities = RARITIES.map(rarity => rarity.toLowerCase());
-	const plusTypes = terms.remove(term => term.startsWith("+")).map(term => term.slice(1));
-	const plusRarities = plusTypes.remove(term => findRarity(term));
-	const minusTypes = terms.remove(term => term.startsWith("-")).map(term => term.slice(1));
-	const minusRarities = minusTypes.remove(term => findRarity(term));
-	const searchTerms = terms;
-	const searchText = searchTerms.join(" ");
-	return { searchText, searchTerms, plusTypes, minusTypes, plusRarities, minusRarities };
-
-	function findRarity(term: string): boolean {
-		return lowerRarities.find(rarity => rarity === term || rarity[0] === term) as any;
-	}
-}
+type TScore = SearchScore<AonBase>;
 
 type TPlusMinus = { plus:string[]; minus:string[]; };
 
@@ -218,7 +233,7 @@ function ensurePlusMinusTypes(plus: string[], minus: string[]): TPlusMinus {
 }
 
 function sort(aValue: string, bValue: string, plusMinus: TPlusMinus, plus: boolean): TSortResult {
-	const sorter = utils.ArrayUtils.Sort[plus ? "sortDescending" : "sortAscending"],
+	const sorter = plus ? sortDescending : sortAscending,
 		array = plusMinus[plus ? "plus" : "minus"],
 		aIndex = array.indexOf(aValue),
 		bIndex = array.indexOf(bValue);
@@ -231,69 +246,8 @@ function sortResults(a: TScore, b: TScore, types: TPlusMinus, _: TPlusMinus): TS
 		// || sort(a.searchable.rarityLower, b.searchable.rarityLower, rarities, true)
 		// || sort(a.searchable.rarityLower, b.searchable.rarityLower, rarities, false)
 		|| sort(a.searchable.objectTypeLower, b.searchable.objectTypeLower, types, false)
-		|| utils.ArrayUtils.Sort.sortDescending(a.totalHits, b.totalHits)
-		|| utils.ArrayUtils.Sort.sortAscending(a.searchable.name, b.searchable.name);
+		|| sortDescending(a.totalHits, b.totalHits)
+		|| sortAscending(a.searchable.name, b.searchable.name);
 }
 
 //#endregion
-
-export async function searchAon(parsedSearchInfo: TParsedSearchInfo, nameOnly = false): Promise<SearchResults> {
-	const searchInfo = new utils.SearchUtils.SearchInfo(parsedSearchInfo.searchText, nameOnly ? "" : "g");
-	const postData = buildPostData(searchInfo.terms.map(term => utils.LangUtils.oneToUS(term.term)));
-	const searchResults = new SearchResults(searchInfo);
-	const response = await utils.HttpsUtils.getJson<TResponseData>(PF2E_SEARCH_URL, postData).catch(e => console.error(e)! || null);
-	response?.hits?.hits?.forEach(hit => searchResults.add(...AonBase.searchRecursive(hit._source, searchInfo)));
-
-	//#region type shuffle
-
-	const types = ensurePlusMinusTypes(parsedSearchInfo.plusTypes, parsedSearchInfo.minusTypes);
-	const rarities = { plus:parsedSearchInfo.plusRarities, minus:parsedSearchInfo.minusRarities };
-	searchResults.scores.sort((a: TScore, b: TScore) => sortResults(a, b, types, rarities));
-
-	//#endregion
-
-	// #region perfect match resort
-
-	const stringMatcher = utils.StringUtils.StringMatcher.from(searchInfo.searchText);
-	const nameMatches = searchResults.scores.filter(score => score.searchable.matches(stringMatcher));
-	if (nameMatches.length) {
-		searchResults.scores = nameMatches.concat(searchResults.scores.filter(score => !nameMatches.includes(score)));
-	}
-
-	// #endregion
-
-	return searchResults;
-}
-
-function theOneOrMatchToSage(searchResults: SearchResults, match = false): Base | null {
-	const aon = searchResults.theOne ?? (match ? searchResults.theMatch : null);
-	if (aon) {
-		const searchables = searchResults.searchables,
-			index = searchables.indexOf(aon),
-			sage = searchResults.sageSearchables[index];
-		return sage ?? null;
-	}
-	return null;
-}
-
-export async function aonHandler(sageMessage: SageMessage, nameOnly = false): Promise<void> {
-	if (!sageMessage.allowSearch) {
-		return sageMessage.reactBlock();
-	}
-
-	// Let em know we are busy ...
-	const promise = send(sageMessage.caches, sageMessage.message.channel as TChannel, `> Searching Archives of Nethys, please wait ...`, sageMessage.message.author);
-
-	// Parse the query and start the search ...
-	const parsedSearchInfo = parseSearchInfo(utils.ArrayUtils.Collection.from(sageMessage.args));
-	const searchResults = await searchAon(parsedSearchInfo, nameOnly);
-	const renderableToSend = theOneOrMatchToSage(searchResults, nameOnly) ?? searchResults;
-
-	// delete the "please wait" message(s)
-	const messages = await promise;
-	messages.forEach(message => message.deletable ? message.delete() : void 0);
-
-	// Send the proper results
-	await send(sageMessage.caches, sageMessage.message.channel as TChannel, renderableToSend, sageMessage.message.author);
-	return Promise.resolve();
-}

@@ -1,5 +1,5 @@
 import type { TextChannel } from "discord.js";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../../../sage-dice";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
 import utils, { Optional } from "../../../../../sage-utils";
 import { DiscordId } from "../../../../discord";
 import { discordPromptYesNo } from "../../../../discord/prompts";
@@ -11,6 +11,7 @@ import { DialogType, IChannel, PermissionType } from "../../../repo/base/IdRepos
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
+import { GameType } from "../../../../../sage-common";
 
 async function getGames(sageMessage: SageMessage): Promise<Game[]> {
 	const guild = sageMessage.discord.guild;

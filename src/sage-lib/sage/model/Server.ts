@@ -1,5 +1,5 @@
 import type * as Discord from "discord.js";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../sage-dice";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { LogLevel, Optional, TConsoleCommandType } from "../../../sage-utils";
 import { DiscordKey } from "../../discord";
 import { DicePostType } from "../commands/dice";
@@ -11,6 +11,7 @@ import Emoji from "./Emoji";
 import Game from "./Game";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
+import { GameType } from "../../../sage-common";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
 export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdmin = 3 }

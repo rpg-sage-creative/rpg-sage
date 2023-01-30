@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
 import type { IHasChannels, IHasGame } from ".";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType, GameType } from "../../../sage-dice";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Optional } from "../../../sage-utils";
 import { DiscordKey, DMessage, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
 import { send } from "../../discord/messages";
@@ -14,6 +14,7 @@ import { EmojiType } from "./HasEmojiCore";
 import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
 import SageCache from "./SageCache";
 import SageMessageArgsManager from "./SageMessageArgsManager";
+import { GameType } from "../../../sage-common";
 
 interface SageMessageCore extends HasSageCacheCore {
 	message: DMessage;

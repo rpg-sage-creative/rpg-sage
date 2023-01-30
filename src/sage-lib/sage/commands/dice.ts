@@ -1,5 +1,5 @@
 import type * as Discord from "discord.js";
-import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput, type GameType } from "../../../sage-dice";
+import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "../../../sage-dice";
 import { NEWLINE } from "../../../sage-pf2e";
 import type { Optional, TKeyValueArg } from "../../../sage-utils";
 import { addCommas } from "../../../sage-utils/utils/NumberUtils";
@@ -18,6 +18,7 @@ import SageMessage from "../model/SageMessage";
 import type { TMacro } from "../model/User";
 import { registerCommandRegex } from "./cmd";
 import { registerInlineHelp } from "./help";
+import type { GameType } from "../../../sage-common";
 
 type TInteraction = SageMessage | SageInteraction;
 
