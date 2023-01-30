@@ -1,31 +1,11 @@
 import { Base, RARITIES } from "../../../sage-pf2e";
 import type SearchResults from "../../../sage-search/SearchResults";
-import { TParsedSearchInfo, parseSearchInfo } from "../../../sage-search/common";
-import { searchAonPf1e } from "../../../sage-search/pf1e";
-import { searchAonPf2e } from "../../../sage-search/pf2e";
-import { searchAonSf1e } from "../../../sage-search/sf1e";
+import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common";
 import { Collection } from "../../../sage-utils/utils/ArrayUtils";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { TChannel } from "../../discord";
 import { send } from "../../discord/messages";
 import type SageMessage from "../model/SageMessage";
-
-enum AonGameType {
-	PF1e = 11, //GameType.PF1e,
-	PF2e = 12, //GameType.PF2e,
-	SF1e = 21, //GameType.SF1e
-};
-
-function searchAon(gameType: AonGameType, parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<SearchResults> {
-	switch(gameType) {
-		case AonGameType.PF1e:
-			return searchAonPf1e(parsedSearchInfo, nameOnly);
-		case AonGameType.PF2e:
-			return searchAonPf2e(parsedSearchInfo, nameOnly);
-		case AonGameType.SF1e:
-			return searchAonSf1e(parsedSearchInfo, nameOnly);
-	}
-}
 
 function theOneOrMatchToSage(searchResults: SearchResults<any>, match = false): Base | null {
 	const aon = searchResults.theOne ?? (match ? searchResults.theMatch : null);
@@ -58,19 +38,19 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 	}
 
 	// make sure we have a game at AoN
-	const gameType = sageMessage.gameType as number as AonGameType;
-	if (!AonGameType[gameType]) {
+	const searchEngine = getSearchEngine(sageMessage.gameType);
+	if (!searchEngine) {
 		return invalidGame(sageMessage);
 	}
 
 	// Let em know we are busy ...
-	const promise = send(sageMessage.caches, sageMessage.message.channel as TChannel, `> Searching Archives of Nethys, please wait ...`, sageMessage.message.author);
+	const promise = send(sageMessage.caches, sageMessage.message.channel as TChannel, `> Searching ${searchEngine.name}, please wait ...`, sageMessage.message.author);
 
 	// Parse the query
 	const parsedSearchInfo = parseSearchInfo(Collection.from(sageMessage.args), RARITIES);
 
 	// start the search
-	const searchResults = await searchAon(gameType, parsedSearchInfo, nameOnly);
+	const searchResults = await searchEngine.search(parsedSearchInfo, nameOnly);
 
 	// decide what to render
 	const renderableToSend = theOneOrMatchToSage(searchResults, nameOnly) ?? searchResults;

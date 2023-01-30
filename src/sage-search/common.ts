@@ -1,6 +1,9 @@
+import { GameType } from "../sage-common";
 import type { Collection } from "../sage-utils/utils/ArrayUtils";
-import { existsSync, readFileSync, writeFileSync } from "fs";
-import { getText } from "../sage-utils/utils/HttpsUtils";
+import type SearchResults from "./SearchResults";
+import { searchAonPf1e } from "./aon/pf1e";
+import { searchAonPf2e } from "./aon/pf2e";
+import { searchAonSf1e } from "./aon/sf1e";
 
 export type TParsedSearchInfo = {
 	searchText: string;
@@ -25,42 +28,16 @@ export function parseSearchInfo(searchTerms: Collection<string>, rarities: strin
 	}
 }
 
-async function getOrCreateHtmlCache(url: string): Promise<string> {
-	const cleanUrl = url.replace(/\W/g, "");
-	const filePath = `../${cleanUrl}.full.html`;
-	if (existsSync(filePath)) {
-		return readFileSync(filePath).toString();
-	}
-
-	const html = await getText(url);
-	writeFileSync(filePath, html);
-	return html;
+type TSearchSource = {
+	name: string;
+	search: (parsedSearchInfo:TParsedSearchInfo, nameOnly:boolean) => Promise<SearchResults>;
 }
 
-async function getOrCreateAonSearchResultsCache(url: string): Promise<string> {
-	const cleanUrl = url.replace(/\W/g, "");
-	const filePath = `../${cleanUrl}.results.html`;
-	if (existsSync(filePath)) {
-		return readFileSync(filePath).toString();
+export function getSearchEngine(gameType: GameType): TSearchSource | null {
+	switch(gameType) {
+		case GameType.PF1e: return { name:"Archives of Nethys", search:searchAonPf1e };
+		case GameType.PF2e: return { name:"Archives of Nethys", search:searchAonPf2e };
+		case GameType.SF1e: return { name:"Archives of Nethys", search:searchAonSf1e };
+		default: return null;
 	}
-
-	const html = await getOrCreateHtmlCache(url),
-		resultsHtml = parseAonSearchResults(html);
-	writeFileSync(filePath, resultsHtml);
-	return resultsHtml;
-}
-
-function parseAonSearchResults(html: string): string {
-	const startString = `<span id="ctl00_MainContent_SearchOutput">`,
-		startIndex = html.indexOf(startString) + startString.length,
-		stopString = `</span>`,
-		stopIndex = html.indexOf(stopString, startIndex);
-	return html.slice(startIndex, stopIndex);
-}
-
-export async function getAonSearchResults(url: string, useDevCache = false): Promise<string> {
-	if (useDevCache) {
-		return getOrCreateAonSearchResultsCache(url);
-	}
-	return parseAonSearchResults(await getText(url));
 }

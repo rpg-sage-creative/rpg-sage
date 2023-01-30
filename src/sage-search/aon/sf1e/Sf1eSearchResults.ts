@@ -1,7 +1,7 @@
 import { createSearchUrl } from ".";
-import { RenderableContent } from "../../sage-utils/utils/RenderUtils";
-import SearchResults from "../SearchResults";
-import type AonPf1SearchBase from "./AonPf1SearchBase";
+import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import SearchResults from "../../SearchResults";
+import type AonPf1SearchBase from "./AonSf1SearchBase";
 
 function createClickableSearchLink(searchResults: Pf1eSearchResults, label: string): string {
 	const url = createSearchUrl(searchResults.searchInfo.searchText);
@@ -14,7 +14,7 @@ export default class Pf1eSearchResults extends SearchResults<AonPf1SearchBase> {
 		// const labelPrefix = this.objectType ? `${this.objectType} ` : ``;
 		// const labelSuffix = this.searchInfo.keyTerm ? ` \\${this.searchInfo.keyTerm}` : ``;
 		// const label = `${labelPrefix}Search Results for: \`${this.searchInfo.searchText + labelSuffix}\``;
-		const label = `Pathfinder 1e Search Results for: \`${this.searchInfo.searchText}\``;
+		const label = `Starfinder Search Results for: \`${this.searchInfo.searchText}\``;
 
 		const title = this.isEmpty ? `<b>${label}</b> not found!` : `<b>${label}</b>`;
 

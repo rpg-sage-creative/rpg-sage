@@ -1,16 +1,17 @@
-import { TResultsLink, createSearchResultUrl } from ".";
-import type { IHasName } from "../../sage-pf2e";
-import type { IRenderable, ISearchable } from "../../sage-utils";
-import { HasCore } from "../../sage-utils/utils/ClassUtils";
-import { RenderableContent } from "../../sage-utils/utils/RenderUtils";
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
-import { StringMatcher } from "../../sage-utils/utils/StringUtils";
+import { createSearchResultUrl } from ".";
+import type { TResultsLink } from "../";
+import type { IHasName } from "../../../sage-pf2e";
+import type { IRenderable, ISearchable } from "../../../sage-utils";
+import { HasCore } from "../../../sage-utils/utils/ClassUtils";
+import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
+import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
 
 /**
- * temp solution for pf1 search results using the existing search output mechanism
+ * temp solution for Sf1 search results using the existing search output mechanism
  * ultimately this should house the results and not the categories ... but i wanna just get *A* solution first
  */
-export default class AonPf1SearchBase
+export default class AonSf1SearchBase
 	extends
 		HasCore<TResultsLink, string>
 	implements
@@ -48,7 +49,7 @@ export default class AonPf1SearchBase
 	}
 
 	public toSearchResult(): string {
-		const category = this.searchResultCategory.replace("Magic Items - Wondrous Items", "Wondrous Items");
+		const category = this.searchResultCategory;
 		const url = createSearchResultUrl(this.core);
 		return `[aon] ${this.name} - ${category} <a href="${url}">(link)</a>`;
 	}
