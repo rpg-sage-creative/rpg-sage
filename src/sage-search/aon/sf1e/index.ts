@@ -17,7 +17,7 @@ export function createSearchResultUrl(link: TResultsLink): string {
 
 export async function searchAonSf1e(parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<Sf1eSearchResults> {
 	const url = createSearchUrl(parsedSearchInfo.searchText);
-	const links = await getSearchResultsLinks(url, true);
+	const links = await getSearchResultsLinks(url);
 
 	const searchInfo = new GameSearchInfo(GameType.SF1e, parsedSearchInfo.searchText, nameOnly ? "" : "g");
 	const searchResults = new Sf1eSearchResults(searchInfo);
