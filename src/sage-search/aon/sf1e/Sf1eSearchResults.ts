@@ -25,6 +25,9 @@ export default class Pf1eSearchResults extends SearchResults<AonPf1SearchBase> {
 		return content;
 	}
 
+	public get theOne(): AonPf1SearchBase | null { return null; }
+	public get theMatch(): AonPf1SearchBase | null { return null; }
+
 	// #region utils.DiscordUtils.IMenuRenderable
 
 	public getMenuLength(): number {
