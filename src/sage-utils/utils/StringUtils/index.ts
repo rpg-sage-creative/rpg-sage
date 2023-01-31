@@ -215,7 +215,7 @@ export function cleanWhitespace(value: string): string {
 
 /** Removes first and last character if they are both quotes. */
 export function dequote(value: string): string {
-	return isQuoted(value) ? value.slice(1, -1).trim() : value;
+	return isQuoted(value) ? value.slice(1, -1) : value;
 }
 
 //#region .format
