@@ -40,8 +40,17 @@ export type TToken = {
 //#endregion
 
 export type TKeyValueArg = {
+	/** key */
 	key: string;
+	/** key.toLowerCase() */
 	keyLower: string;
+	/** value (can have spaces) */
 	value: string;
+	/** keyLower="value" (value can have spaces, not trimmed) */
 	clean: string;
+	/**
+	 * keyLower=value (value can have spaces, trimmed)
+	 * @obsolete recode to use .clean or just .value
+	 */
+	simple: string;
 };

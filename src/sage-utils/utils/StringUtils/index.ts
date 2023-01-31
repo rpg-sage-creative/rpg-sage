@@ -378,7 +378,8 @@ export function parseKeyValueArg(input: string, key?: string): TKeyValueArg | nu
 		const value = dequote(input.slice(index + 1).trim());
 		const quoted = quoteValue(value);
 		const clean = `${keyLower}=${quoted}`;
-		return { key, keyLower, value, clean };
+		const simple = `${keyLower}=${value.trim()}`;
+		return { key, keyLower, value, clean, simple };
 	}
 	return null;
 }
