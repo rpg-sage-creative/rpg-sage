@@ -1,6 +1,5 @@
 import * as Discord from "discord.js";
 import utils, { OrNull, type Awaitable } from "../../../sage-utils";
-import ArgsManager from "../../discord/ArgsManager";
 import { MessageType } from "../../discord/enums";
 import { registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs, TMessageHandler } from "../../discord/types";
@@ -8,6 +7,7 @@ import ActiveBot from "../model/ActiveBot";
 import type { IHasColorsCore } from "../model/HasColorsCore";
 import { ColorType } from "../model/HasColorsCore";
 import type SageMessage from "../model/SageMessage";
+import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
 
 export enum BotServerGameType { Bot, Server, Game }
 
@@ -63,7 +63,7 @@ export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler, 
 			//TODO: move to using groups: match.groups
 			return {
 				command: "command-regex",
-				args: new ArgsManager(Array.from(match).slice(1).map(s => s ?? ""))
+				args: ArgsManager.from(Array.from(match).slice(1).map(s => s ?? ""))
 			};
 		}
 		return null;

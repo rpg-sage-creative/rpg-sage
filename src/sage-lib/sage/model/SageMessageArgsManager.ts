@@ -2,7 +2,6 @@ import type * as Discord from "discord.js";
 import { GameType, parseGameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, parseCritMethodType, parseDiceOutputType } from "../../../sage-dice";
 import utils, { Optional } from "../../../sage-utils";
-import ArgsManager from "../../discord/ArgsManager";
 import DiscordId from "../../discord/DiscordId";
 import { DicePostType } from "../commands/dice";
 import { DialogType, PermissionType, type IChannel, type IChannelOptions, type TPermissionType } from "../repo/base/IdRepository";
@@ -11,6 +10,7 @@ import type { GameCharacterCore } from "./GameCharacter";
 import { ColorType } from "./HasColorsCore";
 import type SageMessage from "./SageMessage";
 import type Server from "./Server";
+import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
 
 export type TKeyValuePair = { key: string; value: string; };
 
@@ -243,7 +243,7 @@ function removeAndReturnPermissionType(args: string[], key: "gamemaster" | "nonp
 
 export default class SageMessageArgsManager extends ArgsManager {
 	public constructor(protected sageMessage: SageMessage, argsManager: ArgsManager) {
-		super(argsManager ?? []);
+		super(...(argsManager ?? []));
 	}
 
 	private attachments?: Discord.Collection<Discord.Snowflake, Discord.MessageAttachment>;

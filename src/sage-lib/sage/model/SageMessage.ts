@@ -81,7 +81,7 @@ export default class SageMessage
 	public setCommandAndArgs(commandAndArgs?: TCommandAndArgs): SageMessage {
 		this.commandAndArgs = {
 			command: commandAndArgs?.command,
-			args: SageMessageArgsManager.from(commandAndArgs?.args!)
+			args: SageMessageArgsManager.from(commandAndArgs?.args ?? [])
 		};
 		this.args = new SageMessageArgsManager(this, this.commandAndArgs.args!);
 		return this;

@@ -3,7 +3,6 @@ import utils, { Optional } from "../../../sage-utils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import type { TChannel, TCommandAndArgs } from "../../discord";
-import ArgsManager from "../../discord/ArgsManager";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import { send } from "../../discord/messages";
 import type SageCache from "../model/SageCache";
@@ -11,6 +10,7 @@ import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
 import User from "../model/User";
 import { createCommandRenderableContent } from "./cmd";
+import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
 
 // #region Register Help Text
 
@@ -229,7 +229,7 @@ function renderHelpTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	if (User.isSuperUser(sageMessage?.message?.author?.id) && sageMessage.slicedContent === "!help-all") {
 		return {
 			command: "help",
-			args: new ArgsManager(["help", "all"])
+			args: new ArgsManager("help", "all")
 		};
 	}
 

@@ -292,7 +292,7 @@ export default class ArgsManager<T extends string = string> extends Collection<T
 		}
 
 		if (typeof(content) !== "string") {
-			return new ArgsManager(...Array.from(content));
+			return ArgsManager.from(content);
 		}
 
 		const trimmed = content.trim();
@@ -314,7 +314,7 @@ export default class ArgsManager<T extends string = string> extends Collection<T
 			.map(token => parseKeyValueArg(token)?.simple ?? token)
 			.map(dequote)
 			;
-		return new ArgsManager(...tokenized);
+		return ArgsManager.from(tokenized);
 	}
 
 	public static from(content: ArrayLike<string> | Iterable<string>): ArgsManager {

@@ -4,7 +4,7 @@ import type { Awaitable, IRenderable } from "../../sage-utils";
 import type SageInteraction from "../sage/model/SageInteraction";
 import type SageMessage from "../sage/model/SageMessage";
 import type SageReaction from "../sage/model/SageReaction";
-import type ArgsManager from "./ArgsManager";
+import type { ArgsManager } from "../../sage-utils/utils/ArgsUtils";
 
 export type TRenderableContentResolvable = string | IRenderable | utils.RenderUtils.RenderableContent;
 

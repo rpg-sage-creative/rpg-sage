@@ -2,7 +2,6 @@ import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../.
 import utils from "../../../sage-utils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
-import ArgsManager from "../../discord/ArgsManager";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs } from "../../discord/types";
@@ -11,6 +10,7 @@ import type SageMessage from "../model/SageMessage";
 import { searchHandler } from "./search";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp, registerFindHelp, registerSearchHelp } from "./help";
+import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
 
 // #region Common Types and Functions
 
