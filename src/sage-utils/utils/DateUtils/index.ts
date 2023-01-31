@@ -1,10 +1,10 @@
 import { HemisphereType, SeasonType, TemperateSeasonType, TropicalSeasonType } from "./enums";
-import type { TDateStrings } from "./types";
+import type { IDate, TDateStrings } from "./types";
 
 /** Returns a TDateStrings type for a new Date() */
 export function getDateStrings(): TDateStrings;
 /** Returns a TDateStrings type for the given Date */
-export function getDateStrings(date: Date): TDateStrings;
+export function getDateStrings<T extends IDate>(date: T): TDateStrings;
 export function getDateStrings(_date = new Date()): TDateStrings {
 	const year = String(_date.getFullYear());
 	const month = String(_date.getMonth() + 1).padStart(2, "0");

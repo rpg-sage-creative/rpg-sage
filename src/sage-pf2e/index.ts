@@ -3,11 +3,6 @@ import registerObjects from "./model";
 import registerBaseObjects from "./model/base";
 import registerBestiaryObjects from "./model/bestiary";
 
-//#region cal
-export * from "./cal/cal";
-export { default as GDate } from "./cal/GDate";
-//#endregion
-
 //#region data
 export { default as RenderableContent } from "./data/RenderableContent";
 export * as Repository from "./data/Repository";
