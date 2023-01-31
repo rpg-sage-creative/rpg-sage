@@ -69,8 +69,8 @@ export default class SageDate<
 		return getDateStrings(this._).date;
 	}
 	public toLongEarthString(): string {
-		const day = this._.toLocaleString(undefined, { weekday:"long" });
-		const month = this._.toLocaleString(undefined, { month:"long" });
+		const day = Days[this._.getDay()];
+		const month = Months[this._.getMonth()];
 		return `${day}, ${month} ${this.getDate()}, ${this.getEarthFullYear()}`;
 	}
 
