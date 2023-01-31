@@ -15,6 +15,9 @@ export type OrNull<T> = T | null;
 /** Represents an object that can be undefined. */
 export type OrUndefined<T> = T | undefined;
 
+/** Represents a conditional data type. */
+export type If<T extends boolean, A, B = undefined> = T extends true ? A : T extends false ? B : A | B;
+
 /** Returns true if the object is NULL or UNDEFINED. */
 export function isNullOrUndefined<T>(value: Optional<T>): value is null | undefined {
 	return value === null || value === undefined;
