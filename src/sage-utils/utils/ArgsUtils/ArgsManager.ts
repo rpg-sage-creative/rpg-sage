@@ -1,10 +1,7 @@
-import * as _XRegExp from "xregexp";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
-import type { Optional, OrNull, OrUndefined, TKeyValueArg, UUID } from "../..";
+import { Optional, OrNull, OrUndefined, TKeyValueArg, TParsers, UUID, isNullOrUndefined } from "../..";
 import { Collection } from "../ArrayUtils";
-import { sortDescending } from "../ArrayUtils/Sort";
 import { Color } from "../ColorUtils";
-import { isKeyValueArg, parseKeyValueArg } from "../StringUtils";
+import { Tokenizer, dequote, isKeyValueArg, parseKeyValueArg } from "../StringUtils";
 import { isValid as isValidUuid } from "../UuidUtils";
 
 type TArgIndexRet<T> = {
@@ -56,7 +53,7 @@ function cleanUrl(value: Optional<string>): Optional<string> {
 	return value;
 }
 
-export default class ArgsManager<T extends string> extends Collection<T> {
+export default class ArgsManager<T extends string = string> extends Collection<T> {
 
 	public initialArgs: T[] = Array.from(this);
 
@@ -92,7 +89,7 @@ export default class ArgsManager<T extends string> extends Collection<T> {
 
 	/** Removes and returns the key/value pair with a key that matches the given string or RegExp. */
 	public removeKeyValuePair<U extends string = string>(key: string | RegExp): OrUndefined<TKeyValuePair<U>> {
-		const regex = typeof(key) === "string" ? XRegExp(`^${key}$`, "i") : key;
+		const regex = typeof(key) === "string" ? new RegExp(`^${key}$`, "i") : key;
 		const keyValuePair = this.parseKeyValuePairs<U>().find(pair => pair?.key.match(regex));
 		const index = keyValuePair?.index ?? -1;
 		if (index > -1) {
@@ -104,9 +101,8 @@ export default class ArgsManager<T extends string> extends Collection<T> {
 	//#endregion
 
 	/** Removes the given arg/index from the args. */
-	protected removeByArgAndIndex(...withIndexes: TArgAndIndex[]): void {
-		withIndexes.sort((a, b) => sortDescending(a.index, b.index));
-		withIndexes.forEach(withIndex => this.removeAt(withIndex.index));
+	protected removeByArgAndIndex(...withIndexes: TArgAndIndex[]): (T | undefined)[] {
+		return this.removeAt(withIndexes.map(withIndex => withIndex.index));
 	}
 
 	//#region Key Args (anything with key=value)
@@ -290,4 +286,38 @@ export default class ArgsManager<T extends string> extends Collection<T> {
 
 	//#endregion
 
+	public static tokenize(content: string | ArrayLike<string> | Iterable<string>, additionalParsers: TParsers = {}): ArgsManager {
+		if (isNullOrUndefined(content)) {
+			return new ArgsManager();
+		}
+
+		if (typeof(content) !== "string") {
+			return new ArgsManager(...Array.from(content));
+		}
+
+		const trimmed = content.trim();
+		if (!trimmed.length) {
+			return new ArgsManager();
+		}
+
+		const parsers: TParsers = {
+			arg: /\w+=("[^"]*"|\S+|\s+)/i,
+			spaces: /\s+/,
+			quotes: /"[^"]*"/,
+			...additionalParsers
+		};
+
+		const tokenized = Tokenizer
+			.tokenize(trimmed, parsers)
+			.map(token => token.token.trim())
+			.filter(token => token.length)
+			.map(token => parseKeyValueArg(token)?.simple ?? token)
+			.map(dequote)
+			;
+		return new ArgsManager(...tokenized);
+	}
+
+	public static from(content: ArrayLike<string> | Iterable<string>): ArgsManager {
+		return new ArgsManager(...Array.from(content));
+	}
 }
