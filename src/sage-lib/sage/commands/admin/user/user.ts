@@ -2,7 +2,7 @@ import type * as Discord from "discord.js";
 import utils, { Optional } from "../../../../../sage-utils";
 import type SageMessage from "../../../model/SageMessage";
 import type User from "../../../model/User";
-import { DialogType } from "../../../repo/base/IdRepository";
+import { DialogType } from "../../../repo/base/channel";
 import { renderCount, registerAdminCommand, createAdminRenderableContent } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 

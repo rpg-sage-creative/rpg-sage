@@ -7,7 +7,7 @@ import Game, { GameRoleType, GameUserType, IGameUser, mapSageChannelNameTags, na
 import GameCharacter from "../../../model/GameCharacter";
 import type SageMessage from "../../../model/SageMessage";
 import type Server from "../../../model/Server";
-import { DialogType, IChannel, PermissionType } from "../../../repo/base/IdRepository";
+import { DialogType, IChannel, PermissionType } from "../../../repo/base/channel";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";

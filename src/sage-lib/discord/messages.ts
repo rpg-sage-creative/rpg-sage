@@ -1,7 +1,7 @@
 import type * as Discord from "discord.js";
 import utils, { Optional, OrNull } from "../../sage-utils";
 import type SageCache from "../sage/model/SageCache";
-import { DialogType } from "../sage/repo/base/IdRepository";
+import { DialogType } from "../sage/repo/base/channel";
 import DiscordKey from "./DiscordKey";
 import { createMessageEmbed, embedsToTexts, resolveToEmbeds, resolveToTexts } from "./embeds";
 import type { DMessage, DUser, IMenuRenderable, TChannel, TRenderableContentResolvable } from "./types";

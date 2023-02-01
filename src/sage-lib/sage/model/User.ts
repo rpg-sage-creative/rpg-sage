@@ -1,7 +1,7 @@
 import type * as Discord from "discord.js";
 import type { Optional } from "../../../sage-utils";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
-import type { DialogType } from "../repo/base/IdRepository";
+import type { DialogType } from "../repo/base/channel";
 import CharacterManager from "./CharacterManager";
 import type GameCharacter from "./GameCharacter";
 import type { GameCharacterCore } from "./GameCharacter";

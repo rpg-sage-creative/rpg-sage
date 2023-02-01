@@ -7,7 +7,7 @@ import { AdminRoleType, IAdminRole } from "../../../model/Server";
 import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
-import { DialogType } from "../../../repo/base/IdRepository";
+import { DialogType } from "../../../repo/base/channel";
 import { GameType } from "../../../../../sage-common";
 
 async function serverCount(sageMessage: SageMessage): Promise<void> {

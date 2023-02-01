@@ -7,7 +7,7 @@ import { send } from "../../discord/messages";
 import { DicePostType } from "../commands/dice";
 import type Game from "../model/Game";
 import { GameRoleType } from "../model/Game";
-import { DialogType, IChannel } from "../repo/base/IdRepository";
+import { DialogType, IChannel } from "../repo/base/channel";
 import type GameCharacter from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";
 import { EmojiType } from "./HasEmojiCore";

@@ -5,7 +5,7 @@ import { DiscordKey } from "../../discord";
 import { DicePostType } from "../commands/dice";
 import ActiveBot from "../model/ActiveBot";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
-import { DialogType, IChannel, updateChannel } from "../repo/base/IdRepository";
+import { DialogType, IChannel, updateChannel } from "../repo/base/channel";
 import Colors from "./Colors";
 import Emoji from "./Emoji";
 import Game from "./Game";

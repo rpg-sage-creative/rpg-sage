@@ -4,7 +4,8 @@ import { CritMethodType, DiceOutputType, DiceSecretMethodType, parseCritMethodTy
 import utils, { Optional } from "../../../sage-utils";
 import DiscordId from "../../discord/DiscordId";
 import { DicePostType } from "../commands/dice";
-import { DialogType, PermissionType, type IChannel, type IChannelOptions, type TPermissionType } from "../repo/base/IdRepository";
+import { DialogType, PermissionType, type TPermissionType } from "../repo/base/channel";
+import type { IChannel, IChannelOptions } from "../repo/base/channel";
 import type { TColorAndType } from "./Colors";
 import type { GameCharacterCore } from "./GameCharacter";
 import { ColorType } from "./HasColorsCore";

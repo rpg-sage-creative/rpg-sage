@@ -11,7 +11,7 @@ import { ColorType } from "../model/HasColorsCore";
 import { EmojiType } from "../model/HasEmojiCore";
 import type SageMessage from "../model/SageMessage";
 import type SageReaction from "../model/SageReaction";
-import { DialogType } from "../repo/base/IdRepository";
+import { DialogType } from "../repo/base/channel";
 import DialogMessageRepository from "../repo/DialogMessageRepository";
 import { parseDiceMatches, sendDice } from "./dice";
 import { registerInlineHelp } from "./help";

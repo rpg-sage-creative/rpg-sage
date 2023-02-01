@@ -7,7 +7,7 @@ import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game";
 import type SageCache from "../../model/SageCache";
 import type SageMessage from "../../model/SageMessage";
 import type Server from "../../model/Server";
-import { DialogType, PermissionType, type IChannel } from "../../repo/base/IdRepository";
+import { DialogType, PermissionType, type IChannel } from "../../repo/base/channel";
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";

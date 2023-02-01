@@ -4,8 +4,8 @@ import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../..
 import utils, { IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
 import { DiscordKey } from "../../discord";
 import type { DicePostType } from "../commands/dice";
-import type { DialogType, IChannel } from "../repo/base/IdRepository";
-import { HasIdCoreAndSageCache, PermissionType, updateChannel } from "../repo/base/IdRepository";
+import { HasIdCoreAndSageCache } from "../repo/base/IdRepository";
+import { DialogType, IChannel, PermissionType, updateChannel } from "../repo/base/channel";
 import CharacterManager from "./CharacterManager";
 import Colors from "./Colors";
 import Emoji from "./Emoji";

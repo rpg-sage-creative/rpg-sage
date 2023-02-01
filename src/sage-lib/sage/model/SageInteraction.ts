@@ -7,7 +7,7 @@ import { DInteraction, DiscordKey, DUser, InteractionType, TChannel, TRenderable
 import { resolveToEmbeds } from "../../discord/embeds";
 import { send } from "../../discord/messages";
 import { DicePostType } from "../commands/dice";
-import type { IChannel } from "../repo/base/IdRepository";
+import type { IChannel } from "../repo/base/channel";
 import { GameRoleType } from "./Game";
 import type GameCharacter from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";

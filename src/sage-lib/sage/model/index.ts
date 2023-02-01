@@ -2,7 +2,7 @@ import type * as Discord from "discord.js";
 import type { GameType } from "../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import type { DicePostType } from "../commands/dice";
-import type { IChannel } from "../repo/base/IdRepository";
+import type { IChannel } from "../repo/base/channel";
 import * as activeBot from "./ActiveBot";
 import * as bot from "./Bot";
 import * as characterManager from "./CharacterManager";

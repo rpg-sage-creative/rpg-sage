@@ -1,55 +1,5 @@
-import type * as Discord from "discord.js";
-import type { GameType } from "../../../../sage-common";
-import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
 import utils, { IdCore, Optional, OrNull, UUID } from "../../../../sage-utils";
-import type { DicePostType } from "../../commands/dice";
 import type SageCache from "../../model/SageCache";
-
-export type TPermissionType = keyof typeof PermissionType;
-export enum PermissionType { None = 0, Read = 1, React = 2, Write = 3 }
-export type TDialogType = keyof typeof DialogType;
-export enum DialogType { Embed = 0, Post = 1 }
-export interface IChannelOptions {
-	// Features
-	admin?: boolean;
-	commands?: boolean;
-	dialog?: boolean;
-	dice?: boolean;
-	search?: boolean;
-
-	// Access
-	gameMaster?: PermissionType;
-	player?: PermissionType;
-	nonPlayer?: PermissionType;
-
-	//Defaults
-	defaultDialogType?: DialogType;
-	defaultCritMethodType?: CritMethodType;
-	defaultDicePostType?: DicePostType;
-	defaultDiceOutputType?: DiceOutputType;
-	defaultDiceSecretMethodType?: DiceSecretMethodType;
-	defaultGameType?: GameType;
-
-	// Future Use
-	sendCommandTo?: Discord.Snowflake;
-	sendDialogTo?: Discord.Snowflake;
-	sendDiceTo?: Discord.Snowflake;
-	sendSearchTo?: Discord.Snowflake;
-}
-export interface IChannel extends IChannelOptions {
-	did: Discord.Snowflake;
-}
-
-type IChannelKey = keyof IChannel;
-type IChannelOptionsKey = keyof IChannelOptions;
-export function updateChannel(channel: IChannel, changes: IChannelOptions): IChannel {
-	Object.keys(changes).forEach(key => {
-		if (changes[<IChannelOptionsKey>key] !== undefined) {
-			(<any>channel[<IChannelKey>key]) = changes[<IChannelOptionsKey>key];
-		}
-	});
-	return channel;
-}
 
 export class HasIdCoreAndSageCache<T extends IdCore<U>, U extends string = string> extends utils.ClassUtils.HasIdCore<T, U> {
 	public constructor(core: T, protected sageCache: SageCache) { super(core); }
