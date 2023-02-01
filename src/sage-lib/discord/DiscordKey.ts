@@ -47,8 +47,18 @@ export default class DiscordKey {
 		this.isValid = (this.isDm && this.hasChannel) || (this.hasServer && (this.hasChannel || this.hasThread || this.hasMessage));
 	}
 
-	public get threadOrChannel(): Discord.Snowflake {
-		return this.hasThread ? this.thread : this.channel;
+	public get threadOrChannel(): Discord.Snowflake | undefined {
+		if (this.hasThread) {
+			return this.thread;
+		}
+		if (this.hasChannel) {
+			return this.channel;
+		}
+		return undefined;
+	}
+
+	public cloneForMessage(message: Optional<TSnowflakeResolvable>): DiscordKey {
+		return new DiscordKey(this.server, this.channel, this.thread, message);
 	}
 
 	public toString(): string { return this.key; }

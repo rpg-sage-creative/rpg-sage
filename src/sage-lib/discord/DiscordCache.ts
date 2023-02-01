@@ -135,7 +135,7 @@ export default class DiscordCache {
 	private async fetchTextChannel(discordKey: DiscordKey): Promise<TextChannel | null> {
 		const guildDid = discordKey.hasServer ? discordKey.server : this.guild?.id;
 		const guild = guildDid ? await this.fetchGuild(guildDid) : null;
-		return guild ? dGet<TextChannel>(guild.channels, discordKey.threadOrChannel) : null;
+		return guild ? dGet<TextChannel>(guild.channels, discordKey.threadOrChannel ?? NilSnowflake) : null;
 	}
 	public async fetchChannelName(channelDid: Snowflake): Promise<string>;
 	public async fetchChannelName(discordKey: DiscordKey): Promise<string>;
