@@ -50,7 +50,7 @@ export type TKeyValueArg = {
 	clean: string;
 	/**
 	 * keyLower=value (value can have spaces, trimmed)
-	 * @obsolete recode to use .clean or just .value
+	 * @deprecated recode to use .clean or just .value
 	 */
 	simple: string;
 };
