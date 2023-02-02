@@ -218,6 +218,11 @@ export function dequote(value: string): string {
 	return isQuoted(value) ? value.slice(1, -1).trim() : value;
 }
 
+/** Convenience for XRegExp.escape(value). */
+export function escapeForRegExp(value: string): string {
+	return XRegExp.escape(value);
+}
+
 //#region .format
 
 export function namedFormat(template: string, args: any[]): string {
@@ -353,8 +358,14 @@ export function createKeyValueArgRegex(key?: string): RegExp {
 }
 
 /** Convenience for creating/sharing whitespace regex in case we change it later. */
-export function createWhitespaceRegex(): RegExp {
-	return /\s+/;
+export function createWhitespaceRegex(globalFlag = false): RegExp {
+	return globalFlag ? /\s+/ : /\s+/g;
+}
+
+/** Convenience for creating/sharing regex that matches discord emoji _and_ unicode emoji. */
+export function createDiscordEmojiRegex(globalFlag = false): RegExp {
+	const flags = globalFlag ? "gu" : "u";
+	return new RegExp(/<a?:.+?:\d+>|\p{Extended_Pictographic}/, flags);
 }
 
 /** Returns true if the value is key=value or key="value" or key="", false otherwise. Passing in a key will make sure they keys match. */
