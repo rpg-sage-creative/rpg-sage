@@ -1,5 +1,6 @@
 //#region imports
 
+import { correctEscapeForEmoji } from "..";
 import { GameType } from "../../../sage-common";
 import type { OrNull, OrUndefined, TParsers, TToken } from "../../../sage-utils";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
@@ -427,7 +428,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 			return out;
 		});
 
-		const desc = description ? `\`${description}\`` : "";
+		const desc = description ? correctEscapeForEmoji(`\`${description}\``) : "";
 		return `${emoji} <b>${total}</b> ${dif} ${desc} ⟵ ${parts.join("; ")}`.replace(/\s+/g, " ");
 	}
 	public static create(diceGroup: DiceGroup): DiceGroupRoll {
