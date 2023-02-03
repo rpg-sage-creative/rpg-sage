@@ -5,6 +5,7 @@ DISCORD_VER="13.10.2"
 XREGEXP_VER="5.1.0"
 CANVAS_VER="0.1.30"
 PDF2JSON_VER="2.0.1"
+EMOJI_REGEX_VER="10.2.1"
 
 #region npm lib names/versions
 
@@ -13,6 +14,7 @@ DISCORD_NPM="discord.js@$DISCORD_VER"
 XREGEXP_NPM="xregexp@$XREGEXP_VER"
 CANVAS_NPM="@napi-rs/canvas@$CANVAS_VER"
 PDF2JSON_NPM="pdf2json@$PDF2JSON_VER"
+EMOJI_REGEX_NPM="emoji-regex@$EMOJI_REGEX_VER"
 
 #endregion
 

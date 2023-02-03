@@ -111,6 +111,7 @@ else
 		"npm install $DISCORD_NPM"
 		"npm install $XREGEXP_NPM"
 		"npm install $PDF2JSON_NPM"
+		"npm install $EMOJI_REGEX_NPM"
 		#"echo \"declare module 'pdf2json';\" > ./node_modules/pdf2json/pdfparser.d.ts"
 		"pm2 delete sage-$WHICH"
 		"mv $runDir $runDirOld"
