@@ -5,6 +5,7 @@ DISCORD_VER="13.10.2"
 XREGEXP_VER="5.1.0"
 CANVAS_VER="0.1.30"
 PDF2JSON_VER="2.0.1"
+FOLLOW_REDIRECTS_VER="1.15.2"
 
 #region npm lib names/versions
 
@@ -13,6 +14,7 @@ DISCORD_NPM="discord.js@$DISCORD_VER"
 XREGEXP_NPM="xregexp@$XREGEXP_VER"
 CANVAS_NPM="@napi-rs/canvas@$CANVAS_VER"
 PDF2JSON_NPM="pdf2json@$PDF2JSON_VER"
+FOLLOW_REDIRECTS_NPM="follow-redirects@$FOLLOW_REDIRECTS_VER"
 
 #endregion
 
