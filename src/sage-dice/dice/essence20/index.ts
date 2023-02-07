@@ -88,18 +88,55 @@ function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
 //#endregion
 
 //#region helpers
-export type TSkillDie = "d20" | "d2" | "d4" | "d6" | "d8" | "d10" | "d12" | "2d8" | "3d6";
+export type TSkillDie = "fumble" | "fail" | "d20" | "d2" | "d4" | "d6" | "d8" | "d10" | "d12" | "2d8" | "3d6" | "success" | "critical";
 /** return ["d20","d2","d4","d6","d8","d10","d12","2d8","3d6"]; */
 function getLadder(): TSkillDie[] {
-	return ["d20","d2","d4","d6","d8","d10","d12","2d8","3d6"];
+	return ["fumble","fail","d20","d2","d4","d6","d8","d10","d12","2d8","3d6","success","critical"];
 }
 
 type TShiftArrow = "↑" | "↓" | "";
 type TDieShift = {
+	/** original die value */
 	skillDie: TSkillDie;
+
+	/** shifted die value */
 	shiftedDie: TSkillDie;
+
+	/** arrow representing shift direction as "↑" | "↓" | "" */
 	shiftArrow: TShiftArrow;
+
+	/** number of steps up (positive) or down (negative) the shiftedDie is from the skillDie */
 	shiftNumber: number;
+
+	/** is the value a flat d20 */
+	d20: boolean;
+
+	/** is the value "fumble" */
+	fumble: boolean;
+
+	/** is the value "fail" */
+	fail: boolean;
+
+	/** is the value "fail" or "fumble" */
+	failOrFumble: boolean;
+
+	/** is the value "success" */
+	success: boolean;
+
+	/** is the value "critical" */
+	critical: boolean;
+
+	/** is the value "success" or "critical" */
+	successOrCritical: boolean;
+
+	/** is the value NOT "fumble", "fail", "success", "critical" */
+	rollable: boolean;
+
+	/** descriptive text for shifted die */
+	label: string;
+
+	/** descriptive text for shifted die specialization */
+	specLabel: string;
 };
 
 /** shiftValues *need* to be "+1" or "-1" (no spaces; sign required), not up1 or dn1 */
@@ -126,7 +163,42 @@ export function shiftDie(skillDie: TSkillDie, shiftValues: string[]): TDieShift 
 
 	const shiftedDie = ladder[shiftedIndex];
 
-	return { skillDie, shiftedDie, shiftArrow, shiftNumber };
+	const d20 = shiftedDie === "d20";
+
+	const fail = shiftedDie === "fail";
+	const fumble = shiftedDie === "fumble";
+	const failOrFumble = fail || fumble;
+
+	const success = shiftedDie === "success";
+	const critical = shiftedDie === "critical";
+	const successOrCritical = success || critical;
+
+	const rollable = !failOrFumble && !successOrCritical;
+
+	const plus = rollable && !d20 ? "+" : "";
+	const label = rollable ? `${plus}${shiftedDie}${shiftArrow}`
+		: fail ? "Auto Fail"
+		: fumble ? "Fumble"
+		: success ? "Auto Success"
+		: "Critical Success";
+	const specLabel = rollable ? `${label}*` : label;
+
+	return {
+		skillDie,
+		shiftedDie,
+		shiftArrow,
+		shiftNumber,
+		d20,
+		fail,
+		fumble,
+		failOrFumble,
+		success,
+		critical,
+		successOrCritical,
+		rollable,
+		label,
+		specLabel
+	};
 }
 //#endregion
 
