@@ -8,7 +8,9 @@ import type { OrUndefined } from "../../../sage-utils";
 import { toSuperscript } from "../../../sage-utils/utils/NumberUtils";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { SearchScore } from "../../../sage-utils/utils/SearchUtils";
+import type { GameSearchInfo } from "../../GameSearchInfo";
 import SearchResults from "../../SearchResults";
+import type { TResponseData } from "./types";
 
 type TScore = SearchScore<Base>;
 
@@ -56,6 +58,12 @@ function sourceToFootnote(source: Source, sourceIndex: number): string {
 
 export default class Pf2eSearchResults extends SearchResults<AonBase> {
 
+	public constructor(searchInfo: GameSearchInfo, responseData: TResponseData) {
+		super(searchInfo);
+		responseData?.hits?.hits?.forEach(hit => this.add(...AonBase.searchRecursive(hit._source, searchInfo)));
+		this._totalHits = responseData?.hits?.total?.value;
+	}
+
 	protected prepSearchables(): { sageSearchables:OrUndefined<AonBase>[], actionableSearchables:AonBase[] } {
 		const menuLength = this.getMenuLength();
 		const sageSearchables: OrUndefined<AonBase>[] = [];
@@ -83,11 +91,15 @@ export default class Pf2eSearchResults extends SearchResults<AonBase> {
 
 		const content = new RenderableContent(title);
 		if (!isEmpty) {
-			content.append(hasComp ? `<i>Did you mean ...</i>` : `<b>Top Matches</b> (of ${this.scores.length})`);
+			content.append(hasComp ? `<i>Did you mean ...</i>` : `<b>Top Matches</b> (of ${this.totalHits})`);
 			content.append(`[spacer] <i><b>(#)</b> represents number of search term hits.</i>`);
 		}
 		return content;
 	}
+
+	private _totalHits?: number;
+	/** Total items that contained a hit for the search terms, even if we have a lower number loaded into the results. */
+	public get totalHits(): number { return this._totalHits ?? this.scores.length; }
 
 	// #region utils.DiscordUtils.IMenuRenderable
 
