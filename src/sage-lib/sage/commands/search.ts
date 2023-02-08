@@ -32,6 +32,15 @@ async function invalidGame(sageMessage: SageMessage): Promise<void> {
 	return Promise.resolve();
 }
 
+async function currentlyDisabled(sageMessage: SageMessage): Promise<void> {
+	const unableSearchResults = new RenderableContent(`<b>Cannot Perform Search</b>`);
+	unableSearchResults.append(`We are sorry, we have disabled the search engine for this game system for the following reason:`);
+	unableSearchResults.append(`<br/>${sageMessage.bot.getSearchStatus(sageMessage.gameType)}`);
+	unableSearchResults.append(`<br/>For more information, join us at <https://discord.com/invite/pfAcUMN>`);
+	await send(sageMessage.caches, sageMessage.message.channel as TChannel, unableSearchResults, sageMessage.message.author);
+	return Promise.resolve();
+}
+
 export async function searchHandler(sageMessage: SageMessage, nameOnly = false): Promise<void> {
 	if (!sageMessage.allowSearch) {
 		return;
@@ -41,6 +50,12 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 	const searchEngine = getSearchEngine(sageMessage.gameType);
 	if (!searchEngine) {
 		return invalidGame(sageMessage);
+	}
+
+	// make sure we haven't disabled the search for some reason
+	const searchEnabled = sageMessage.bot.canSearch(sageMessage.gameType);
+	if (!searchEnabled) {
+		return currentlyDisabled(sageMessage);
 	}
 
 	// Let em know we are busy ...
