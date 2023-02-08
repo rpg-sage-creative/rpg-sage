@@ -471,7 +471,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 
 		const step = `${skillDicePart.count}d${skillDicePart.sides}`.replace(/^1d/, "d") as TSkillDie;
 		if (skillDicePart.hasSpecialization) {
-			const specializationLadder = getLadder("d20");
+			const specializationLadder = getLadder("d2");
 			if (specializationLadder.indexOf(step) > 0) {
 				for (let index = specializationLadder.indexOf(step); index--;) {
 					const [count, sides] = specializationLadder[index].split("d");
