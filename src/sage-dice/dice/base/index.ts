@@ -1,10 +1,9 @@
 //#region imports
 
-import * as _XRegExp from "xregexp";
 import type { Optional, OrNull, OrUndefined, TParsers, TSortResult, TToken } from "../../../sage-utils";
 import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { cleanWhitespace, dequote, Tokenizer } from "../../../sage-utils/utils/StringUtils";
+import { cleanWhitespace, dequote, escapeForRegExp, Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
 	cleanDescription, CritMethodType,
@@ -27,7 +26,7 @@ import type {
 	DicePartCore, DicePartRollCore, DiceRollCore, TDice, TDiceGroup, TDiceGroupRoll, TDicePart, TDicePartCoreArgs, TDicePartRoll, TDiceRoll
 } from "./types";
 import { GameType } from "../../../sage-common";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
+import { correctEscapeForEmoji } from "..";
 
 //#endregion
 
@@ -45,8 +44,7 @@ function strike(value: string): string {
 
 /** Removes the first instance of desc from description while ensuring it doesn't break HTML (ex: Removing "b" from "<b>8</b> b") */
 function removeDesc(description: string, desc: string): string {
-	const escapedDesc = XRegExp.escape(desc);
-	const tokens = Tokenizer.tokenize(description, { html:/<[^>]+>/, desc:new RegExp(escapedDesc) });
+	const tokens = Tokenizer.tokenize(description, { html:/<[^>]+>/, desc:new RegExp(escapeForRegExp(desc)) });
 	const firstDesc = tokens.find(token => token.type === "desc");
 	return tokens
 		.filter(token => token !== firstDesc)
@@ -585,12 +583,12 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			const output = desc
 				? `${emoji} '${dequote(desc)}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
 				: `${emoji} ${escapedTotal} ${UNICODE_LEFT_ARROW} ${description}`;
-			return cleanWhitespace(output);
+			return correctEscapeForEmoji(cleanWhitespace(output));
 		}else {
 			const output = desc
 				? `${xxs} \`${dequote(desc)}\` ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
 				: `${xxs} ${UNICODE_LEFT_ARROW} ${description}`;
-			return cleanWhitespace(output);
+			return correctEscapeForEmoji(cleanWhitespace(output));
 		}
 	}
 	protected toStringXS(hideRolls: boolean): string {
@@ -599,7 +597,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		const output = desc
 			? `${xxs} \`${desc ?? ""}\``
 			: xxs;
-		return cleanWhitespace(output);
+		return correctEscapeForEmoji(cleanWhitespace(output));
 	}
 	protected toStringXXS(hideRolls: boolean): string {
 		const gradeEmoji = gradeToEmoji(this.grade),

@@ -27,6 +27,7 @@
     "@napi-rs/canvas": "^0.1.30",
     "discord-api-types": "^0.27.3",
     "discord.js": "^13.10.2",
+    "emoji-regex": "^10.2.1",
     "follow-redirects": "^1.15.2",
     "pdf2json": "^2.0.1",
     "xregexp": "^5.1.0"
