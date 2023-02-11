@@ -20,7 +20,7 @@ export class Collection<T> extends Array<T> {
 	// 		const value = this[index];
 	// 		if (predicate.call(thisArg, value, index, this)) {
 	// 			return value;
-	// 		}else if (!value && orElsePredicate.call(thisArg, value, index, this)) {
+	// 		}else if (!orElse && orElsePredicate.call(thisArg, value, index, this)) {
 	// 			orElse = value;
 	// 		}
 	// 	}
