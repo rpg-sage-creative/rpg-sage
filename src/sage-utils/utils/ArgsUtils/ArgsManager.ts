@@ -1,5 +1,6 @@
 import { Optional, OrNull, OrUndefined, TKeyValueArg, TParsers, UUID, isNullOrUndefined } from "../..";
 import { Collection } from "../ArrayUtils";
+import { exists } from "../ArrayUtils/Filters";
 import { Color } from "../ColorUtils";
 import { Tokenizer, dequote, isKeyValueArg, parseKeyValueArg } from "../StringUtils";
 import { isValid as isValidUuid } from "../UuidUtils";
@@ -317,7 +318,12 @@ export default class ArgsManager<T extends string = string> extends Collection<T
 		return ArgsManager.from(tokenized);
 	}
 
-	public static from(content: ArrayLike<string> | Iterable<string>): ArgsManager {
-		return new ArgsManager(...Array.from(content));
+	public constructor(arrayLength: number);
+	public constructor(...items: T[]);
+	public constructor(...args: (number | T)[]) {
+		super(...args.filter(exists) as T[]);
+	}
+	public static from(items: ArrayLike<string> | Iterable<string>): ArgsManager {
+		return new ArgsManager(...Array.from(items));
 	}
 }
