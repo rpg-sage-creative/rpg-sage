@@ -25,6 +25,43 @@ import type {
 
 //#endregion
 
+//#region test dice
+/*
+[+d4dn5 is fumble]
+[+d4dn4 is fumble]
+[+d4dn3 is fail]
+[+d4dn2 is twenty]
+[+d4dn1 is two]
+[+d4]
+[+d4up1 is six]
+[+d4up2 is eight]
+[+d4up3 is ten]
+[+d4up4 is twelve]
+[+d4up5 is 2 eights]
+[+d4up6 is 3 sixes]
+[+d4up7 is success]
+[+d4up8 is critical]
+[+d4up9 is critical]
+*/
+/*
+[+d4dn5* is fumble]
+[+d4dn4* is fumble]
+[+d4dn3* is fail]
+[+d4dn2* is twenty]
+[+d4dn1* is two]
+[+d4*]
+[+d4up1* is six]
+[+d4up2* is eight]
+[+d4up3* is ten]
+[+d4up4* is twelve]
+[+d4up5* is 2 eights]
+[+d4up6* is 3 sixes]
+[+d4up7* is success]
+[+d4up8* is critical]
+[+d4up9* is critical]
+*/
+//#endregion
+
 //#region Tokenizer
 function getParsers(): TParsers {
 	const parsers = baseGetParsers();
@@ -139,6 +176,12 @@ type TDieShift = {
 
 	/** descriptive text for shifted die specialization */
 	specLabel: string;
+
+	/** number of dice to roll for a rollable value */
+	count: number | undefined;
+
+	/** number sides of the die for a rollable value */
+	sides: number | undefined;
 };
 
 /** shiftValues *need* to be "+1" or "-1" (no spaces; sign required), not up1 or dn1 */
@@ -185,6 +228,8 @@ export function shiftDie(skillDie: TSkillDie, shiftValues: string[]): TDieShift 
 		: "Critical Success";
 	const specLabel = rollable ? `${label}*` : label;
 
+	const [count, sides] = rollable ? shiftedDie.split("d").map(s => +s || undefined) : [];
+
 	return {
 		skillDie,
 		shiftedDie,
@@ -199,7 +244,9 @@ export function shiftDie(skillDie: TSkillDie, shiftValues: string[]): TDieShift 
 		successOrCritical,
 		rollable,
 		label,
-		specLabel
+		specLabel,
+		count,
+		sides
 	};
 }
 //#endregion
@@ -210,35 +257,76 @@ interface DicePartCore extends baseDicePartCore {
 	upShift?: number;
 	specialization?: boolean;
 	target?: TTargetData;
+	/** ex: d4↑1 */
+	shiftedDesc?: string;
+	skillDie: TSkillDie;
 }
 type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 	downShift?: number;
 	upShift?: number;
 	specialization?: boolean;
 	testOrTarget?: TTestData | TTargetData;
+	/** ex: d4↑1 */
+	shiftedDesc?: string;
+	skillDie?: TSkillDie;
 };
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
-	//#region die shift non-rollable information
-	public get shiftedDie(): TDieShift {
-		const skillDie = `d${this.sides}` as TSkillDie;
-		const shiftValues = [`+${this.upShift}`, `-${this.downShift}`];
-		return shiftDie(skillDie, shiftValues);
+	public get shiftedDicePart(): DicePart | null {
+		if (this.hasShift) {
+			const { skillDie, shiftedDie, shiftArrow, shiftNumber, count, sides } = shiftDie(this.skillDie, [`+${this.upShift}`, `-${this.downShift}`]);
+			const shiftedDesc = `${skillDie}${shiftArrow}${Math.abs(shiftNumber)}`;
+			return DicePart.create({
+				count,
+				description: this.core.description,
+				shiftedDesc,
+				sides,
+				sign: this.core.sign,
+				skillDie: shiftedDie,
+				specialization: this.core.specialization,
+				testOrTarget: this.core.target ?? this.core.test
+			});
+		}
+		return null;
 	}
-	public get isCriticalSuccess(): boolean { return this.shiftedDie.critical; }
-	public get isAutoSuccess(): boolean { return this.shiftedDie.success; }
-	public get isAutoFail(): boolean { return this.shiftedDie.fail; }
-	public get isFumble(): boolean { return this.shiftedDie.fumble; }
+	//#region die shift non-rollable information
+	public get skillDie(): TSkillDie {
+		return this.core.skillDie;
+	}
+	public get isCriticalSuccess(): boolean { return this.skillDie === "critical"; }
+	public get isAutoSuccess(): boolean { return this.skillDie === "success"; }
+	public get isAutoFail(): boolean { return this.skillDie === "fail"; }
+	public get isFumble(): boolean { return this.skillDie === "fumble"; }
 	public get isRollable(): boolean { return !(this.isCriticalSuccess || this.isAutoSuccess || this.isAutoFail || this.isFumble); }
-	public getNonRollableLabel(): string | null { return this.isRollable ? null : this.shiftedDie.label; }
+	public getNonRollableLabel(): string | null {
+		if (!this.isRollable) {
+			if (this.isCriticalSuccess) {
+				return "Critical Success";
+			}
+			if (this.isAutoSuccess) {
+				return "Auto Success";
+			}
+			if (this.isAutoFail) {
+				return "Auto Fail";
+			}
+			if (this.isFumble) {
+				return "Fumble";
+			}
+		}
+		return null;
+	}
 	//#endregion
 
+	/** Description of the original die if this was shifted. */
+	public get shiftedDesc(): string | undefined { return this.core.shiftedDesc; }
+	/** Was this die shifted or not. */
+	public get wasShifted(): boolean { return this.core.shiftedDesc !== undefined; }
 	public get hasShift(): boolean { return this.upShift + this.downShift !== 0; }
 	public get upShift(): number { return this.core.upShift ?? 0; }
 	public get downShift(): number { return this.core.downShift ?? 0; }
 	public get hasSpecialization(): boolean { return this.core.specialization === true; }
 
 	//#region static
-	public static create({ count, description, dropKeep, sides, sign, specialization, testOrTarget, downShift, upShift }: TDicePartCoreArgs = {}): DicePart {
+	public static create({ count, description, dropKeep, sides, sign, specialization, testOrTarget, downShift, upShift, shiftedDesc, skillDie }: TDicePartCoreArgs = { }): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.E20,
@@ -250,8 +338,10 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			downShift: downShift ?? undefined,
 			modifier: 0,
 			noSort: false,
+			shiftedDesc,
 			sides: sides ?? 0,
 			sign: sign,
+			skillDie: skillDie ?? `${count ?? ""}d${sides ?? 20}`.replace(/^1d/, "d") as TSkillDie,
 			specialization,
 			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget ?? null,
 			target: <TTargetData>testOrTarget ?? null,
@@ -318,12 +408,14 @@ type DicePartRollCore = baseDicePartRollCore;
 export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 	//#region static
 	public static create(dicePart: DicePart): DicePartRoll {
+		const dp = dicePart.shiftedDicePart ?? dicePart;
+		const dpRolls = dp.isRollable ? rollDice(dp.count, dp.sides) : [];
 		return new DicePartRoll({
 			objectType: "DicePartRoll",
 			gameType: GameType.E20,
 			id: generate(),
-			dice: dicePart.toJSON(),
-			rolls: dicePart.count && dicePart.sides ? rollDice(dicePart.count, dicePart.sides) : []
+			dice: dp.toJSON(),
+			rolls: dpRolls
 		});
 	}
 	public static fromCore(core: DicePartRollCore): DicePartRoll {
@@ -344,7 +436,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 	public get isAutoFail(): boolean { return this.diceParts.find(dicePart => dicePart.isAutoFail) !== undefined; }
 	public get isFumble(): boolean { return this.diceParts.find(dicePart => dicePart.isFumble) !== undefined; }
 	public get isRollable(): boolean { return !(this.isCriticalSuccess || this.isAutoSuccess || this.isAutoFail || this.isFumble); }
-	public getNonRollableLabel(): string | null { return this.diceParts.find(dicePart => !dicePart.isRollable)?.shiftedDie.label ?? null; }
+	public getNonRollableLabel(): string | null { return this.diceParts.find(dicePart => !dicePart.isRollable)?.getNonRollableLabel() ?? null; }
 	//#endregion
 
 	//#region static
@@ -409,7 +501,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public get isAutoFail(): boolean { return this.dice.find(die => die.isAutoFail) !== undefined; }
 	public get isFumble(): boolean { return this.dice.find(die => die.isFumble) !== undefined; }
 	public get isRollable(): boolean { return !(this.isCriticalSuccess || this.isAutoSuccess || this.isAutoFail || this.isFumble); }
-	public getNonRollableLabel(): string | null { return this.dice.find(die => !die.isRollable)?.diceParts.find(dicePart => !dicePart.isRollable)?.shiftedDie.label ?? null; }
+	public getNonRollableLabel(): string | null { return this.dice.find(die => !die.isRollable)?.diceParts.find(dicePart => !dicePart.isRollable)?.getNonRollableLabel() ?? null; }
 	//#endregion
 
 	//#region static
@@ -428,19 +520,9 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup(core);
 	}
 	public static fromTokens(tokens: TToken[], diceOutputType?: DiceOutputType): DiceGroup {
-		const skillDicePart = DicePart.fromTokens(tokens);
+		let skillDicePart = DicePart.fromTokens(tokens);
 		if (skillDicePart.hasShift) {
-			/** @todo this whole changing of the actual values might be replaced by giving diepart, dice, dicegroup "shifted" properties that return full objects with shifted values */
-			const { upShift, downShift } = skillDicePart;
-			const skillDie = `${skillDicePart.count}d${skillDicePart.sides}`.replace(/^1d/, "d") as TSkillDie;
-			const { shiftedDie, shiftArrow, shiftNumber } = shiftDie(skillDie, [`+${upShift}`, `-${downShift}`]);
-			const core = skillDicePart.toJSON();
-			if (skillDicePart.shiftedDie.rollable) {
-				const [count, sides] = shiftedDie.split("d");
-				core.count = +count || 1;
-				core.sides = +sides || 0;
-			}
-			core.description += `${core.description ? " " : ""}(${skillDie}${shiftArrow}${Math.abs(shiftNumber)})`;
+			skillDicePart = skillDicePart.shiftedDicePart!;
 		}
 		const skillDice = Dice.create([skillDicePart]);
 		const dice = [skillDice];
@@ -453,7 +535,8 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 				sides: 20,
 				description: "",
 				modifier: 0,
-				noSort: false
+				noSort: false,
+				skillDie: "d20"
 			};
 			if (skillDicePart.hasDropKeep) {
 				d20DicePartCore.count = 2;
@@ -469,12 +552,13 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 			}
 		}
 
-		const step = `${skillDicePart.count}d${skillDicePart.sides}`.replace(/^1d/, "d") as TSkillDie;
-		if (skillDicePart.hasSpecialization) {
+		if (skillDicePart.isRollable && skillDicePart.hasSpecialization) {
+			const skillDie = skillDicePart.skillDie;
 			const specializationLadder = getLadder("d2");
-			if (specializationLadder.indexOf(step) > 0) {
-				for (let index = specializationLadder.indexOf(step); index--;) {
-					const [count, sides] = specializationLadder[index].split("d");
+			if (specializationLadder.indexOf(skillDie) > 0) {
+				for (let index = specializationLadder.indexOf(skillDie); index--;) {
+					const stepSkillDie = specializationLadder[index];
+					const [count, sides] = stepSkillDie.split("d");
 					dice.push(Dice.create([new DicePart({
 						objectType: "DicePart",
 						gameType: GameType.E20,
@@ -483,7 +567,8 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 						sides: +sides || 0,
 						description: "",
 						modifier: 0,
-						noSort: false
+						noSort: false,
+						skillDie: stepSkillDie
 					})]));
 				}
 			}
@@ -512,7 +597,6 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		const highestRoll: DiceRoll | undefined = slicedRolls.reduce((highest, roll) => !highest || roll.total > highest.total ? roll : highest, undefined as DiceRoll | undefined);
 		const maxRoll = slicedRolls.find(roll => (roll.dice.baseDicePart?.sides ?? 0) > 2 && roll.rolls.find(dpRoll => dpRoll.maxCount));
 
-		const description = baseRoll?.dice.baseDicePart?.description ?? d20Roll.dice.baseDicePart?.description;
 		const total = d20Roll.total + (highestRoll?.total ?? 0);
 
 		const test = baseRoll?.dice.test ?? d20Roll.dice.test;
@@ -551,9 +635,12 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 			return out;
 		});
 
-		const nonRollableLabel = this.dice.getNonRollableLabel();
+		const baseDescription = baseRoll?.dice.baseDicePart?.description ?? baseRoll?.dice.diceParts.find(dp => dp.description)?.description;
+		const d20Description = d20Roll?.dice.baseDicePart?.description ?? d20Roll?.dice.diceParts.find(dp => dp.description)?.description;
+		const description = baseDescription ?? d20Description;
 		const desc = description ? correctEscapeForEmoji(`\`${description}\``) : "";
 		const partsDesc = rollable ? `⟵ ${parts.join("; ")}` : ``;
+		const nonRollableLabel = this.dice.getNonRollableLabel();
 		return `${emoji} <b>${nonRollableLabel ?? total}</b> ${dif} ${desc} ${partsDesc}`.replace(/\s+/g, " ");
 	}
 	public static create(diceGroup: DiceGroup): DiceGroupRoll {
