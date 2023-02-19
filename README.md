@@ -5,13 +5,8 @@ This code represents the RPG Sage, a Discord Bot designed for Play by Discord us
 While originally written specific to Pathfinder 2e, the core dialog and dice functionality allow for any TTRPG.
 
 ## Dev Setup
-Sage uses multiple repos, and expects them to be in the same parent folder.
-I suggest `sage`, but any will do.
-Copy the `sage-data` folder to `sage/sage-data`.
-Clone (or sym link) `hmt-bot-sage` to `sage/hmt-bot-sage` folder.
-From the `sage/hmt-bot-sage` folder run `bash dev.sh`.
-This will pull the needed repos, configure everything, and start up Sage.
- - Alternately, if you just run `dev.sh` from `sage/inst` it will also pull `hmt-bot-sage`.
+To ensure compatibility, use VSCode, Node 18.14.1, and Typescript 4.7.4 (other TS versions break it currently)!
+The tasks.json file's build task includes a dependency that creates an index.d.ts for pdf2json ... mind it!
 
 ## Installation
 
