@@ -1,15 +1,7 @@
 #!/bin/bash
 
-#region consts and imports
-
-# bring in all the config information
-if [ -f "./config.sh" ]; then
-	source "./config.sh"
-elif [ -f "./scripts/config.sh" ]; then
-	source "./scripts/config.sh"
-fi
-
-#endregion
+# import constants and functions
+[ -f "./inc/all.sh" ] && source "./inc/all.sh" || source "./scripts/inc/all.sh"
 
 # Don't run if we are in sageRoot folder or we don't have .git folder
 if [ "$currentApp" != "$sageRoot" ] && [ -d "./.git" ]; then
