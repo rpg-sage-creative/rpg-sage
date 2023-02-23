@@ -1,28 +1,23 @@
 #!/bin/bash
 
-#region consts and imports
+# import constants and functions
+[ -f "./inc/all.sh" ] && source "./inc/all.sh" || source "./scripts/inc/all.sh"
 
-# bring in all the config information
-if [ -f "./config.sh" ]; then
-	source "./config.sh"
-elif [ -f "./scripts/config.sh" ]; then
-	source "./scripts/config.sh"
+echoLog "run-tests.sh starting ..."
+
+if [ "$PKG" = "data" ]; then
+
+	appTestsDir="$sageRootDir/tests"
+
+	if [ -f "$appTestsDir/run.mjs" ]; then
+		echoAndDo "cd $appTestsDir"
+		echoAndDo "node --es-module-specifier-resolution=node run.mjs"
+	else
+		echoLog "run-tests.sh skipped."
+		exit 0
+	fi
+
+else
 fi
 
-#endregion
-
-# runs tests if they exist
-appTestsDir="$sageRootDir/tests"
-
-if [ ! -f "$appTestsDir/run.mjs" ]; then
-	echo "run-tests.sh '$currentApp' skipped."
-	exit 0;
-fi
-
-echo "run-tests.sh starting ..."
-
-cd "$appTestsDir"
-
-node --es-module-specifier-resolution=node run.mjs
-
-echo "run-tests.sh done."
+echoLog "run-tests.sh done."
