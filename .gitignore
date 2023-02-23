@@ -8,7 +8,7 @@ localstack/
 # ignore scripts (to ignore the root level links)
 *.sh
 # negate ignore scripts folder scripts
-!scripts/*.sh
+!scripts/**/*.sh
 
 # ignore data folder
 data/pf2e/aon/
