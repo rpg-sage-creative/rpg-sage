@@ -1,15 +1,16 @@
-import type * as Discord from "discord.js";
-import utils from "../../../sage-utils";
-import type { TKeyValuePair } from "./SageMessageArgs";
+import type { Snowflake } from "discord.js";
+import { existsAndUnique } from "../../../sage-utils/utils/ArrayUtils/Filters";
 
 interface IHasSave { save(): Promise<boolean>; }
+
+type TKeyValuePair = { key: string; value: string; };
 
 export type TNoteCategory = {
 	category: string;
 	notes: TNote[];
 };
 export type TNote = {
-	ownerDid?: Discord.Snowflake;
+	ownerDid?: Snowflake;
 	category: string;
 	title: string;
 	note: string;
@@ -31,7 +32,7 @@ export default class NoteManager {
 	public constructor(private notes: TNote[], protected owner?: IHasSave) { }
 
 	public getCategories(): string[] {
-		return this.notes.map(note => ensure(note.category, CategoryUncategorized)).filter(utils.ArrayUtils.Filters.existsAndUnique);
+		return this.notes.map(note => ensure(note.category, CategoryUncategorized)).filter(existsAndUnique);
 	}
 	public getCategorized(): TNoteCategory[] {
 		const categories = this.getCategories();
