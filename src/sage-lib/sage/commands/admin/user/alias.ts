@@ -44,7 +44,7 @@ function dialogContentToTarget(dialogContent: TDialogContent, separator = "::"):
 	return parts.filter(utils.StringUtils.isNotBlank).join(separator) + separator;
 }
 
-async function aliasList(sageMessage: SageMessage): Promise<void> {
+async function aliasList(sageMessage: SageMessage<true>): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
 		return sageMessage.reactBlock();
 	}
@@ -78,7 +78,7 @@ function aliasTest(sageMessage: SageMessage, dialogContent: TDialogContent): boo
 	}
 	return false;
 }
-async function aliasSet(sageMessage: SageMessage): Promise<void> {
+async function aliasSet(sageMessage: SageMessage<true>): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
 		return sageMessage.reactBlock();
 	}

@@ -107,7 +107,7 @@ function findKeyMatchAndReturnCommandAndArgs(slicedContent: string): TCommandAnd
 		if (match) {
 			return {
 				command: command.key,
-				args: new ArgsManager(match[1])
+				args: ArgsManager.tokenize(match[1])
 			};
 		}
 	}

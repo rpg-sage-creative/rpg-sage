@@ -52,7 +52,7 @@ async function serverInit(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.server) {
 		return Promise.resolve();
 	}
-	if (!sageMessage.isOwner && !sageMessage.isSuperUser) {
+	if (!sageMessage.isServerOwner && !sageMessage.isSuperUser) {
 		return sageMessage.reactBlock();
 	}
 
@@ -113,7 +113,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	return <any>sageMessage.send(renderableContent);
 }
 
-async function serverSet(sageMessage: SageMessage): Promise<void> {
+async function serverSet(sageMessage: SageMessage<true>): Promise<void> {
 	let server: Optional<Server> = sageMessage.server;
 	if (server && !sageMessage.canAdminServer) {
 		return sageMessage.reactBlock();

@@ -1,8 +1,7 @@
-import * as _PDFParser from "pdf2json";
+import PDFParser from "pdf2json";
 import { deleteFileSync, writeFile } from "../FsUtils";
 import { getBuffer } from "../HttpsUtils";
 import { generate } from "../UuidUtils";
-const PDFParser: typeof _PDFParser = _PDFParser.default;
 
 export class PdfCacher {
 

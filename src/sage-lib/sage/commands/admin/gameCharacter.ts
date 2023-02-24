@@ -6,7 +6,7 @@ import type { Optional, OrUndefined } from "../../../../sage-utils";
 import type CharacterManager from "../../model/CharacterManager";
 import GameCharacter from "../../model/GameCharacter";
 import type SageMessage from "../../model/SageMessage";
-import type { TNames } from "../../model/SageMessageArgsManager";
+import type { TNames } from "../../model/SageMessageArgs";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
 

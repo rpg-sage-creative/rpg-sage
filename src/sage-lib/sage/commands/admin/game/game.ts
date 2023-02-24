@@ -147,7 +147,9 @@ async function showGameGetGame(sageMessage: SageMessage): Promise<Game | null> {
 			game = await sageMessage.caches.games.getById(gameId);
 		}
 		if (!game) {
-			await sageMessage.message.reply("*No Game Found!*");
+			/** @todo start using the new and improved whisper! */
+			await sageMessage.reactFailure("*No Game Found!*");
+			// await sageMessage.message.reply("*No Game Found!*");
 		}
 	}
 	if (!sageMessage.canAdminGames && !game?.hasGameMaster(sageMessage.authorDid)) {
@@ -364,7 +366,7 @@ function getArgValues(sageMessage: SageMessage): TGameDefaults {
 	const defaultDiceSecretMethodType = sageMessage.args.removeAndReturnDiceSecretMethodType() ?? undefined;
 	return { gameType, defaultCritMethodType, defaultDialogType, defaultDiceOutputType, defaultDicePostType, defaultDiceSecretMethodType };
 }
-function getGameValues(sageMessage: SageMessage): TGameDefaults {
+function getGameValues(sageMessage: SageMessage<true>): TGameDefaults {
 	const def = getServerValues(sageMessage.server);
 	const arg = getArgValues(sageMessage);
 
@@ -391,7 +393,7 @@ function getGameChannels(sageMessage: SageMessage): IChannel[] {
 	}
 
 	if (!channels.length) {
-		channels.push({ did:sageMessage.channelDid!, admin:true, commands:true, dialog:true, dice:true, search:true, gameMaster:PermissionType.Write, player:PermissionType.Write });
+		channels.push({ did:sageMessage.discordKey.threadOrChannel!, admin:true, commands:true, dialog:true, dice:true, search:true, gameMaster:PermissionType.Write, player:PermissionType.Write });
 	}
 
 	return channels;
@@ -419,7 +421,7 @@ async function getGameUsers(sageMessage: SageMessage): Promise<IGameUser[]> {
 
 	return users;
 }
-function createGame(sageMessage: SageMessage, name: string, gameValues: TGameDefaults, channels: IChannel[], users: IGameUser[]): Game {
+function createGame(sageMessage: SageMessage<true>, name: string, gameValues: TGameDefaults, channels: IChannel[], users: IGameUser[]): Game {
 	return new Game({
 		objectType: "Game",
 		id: utils.UuidUtils.generate(),
@@ -434,8 +436,8 @@ function createGame(sageMessage: SageMessage, name: string, gameValues: TGameDef
 	}, sageMessage.server, sageMessage.caches);
 }
 
-async function gameCreate(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGames || !sageMessage.channelDid) {
+async function gameCreate(sageMessage: SageMessage<true>): Promise<void> {
+	if (!sageMessage.canAdminGames || !sageMessage.discordKey.threadOrChannel) {
 		return sageMessage.reactBlock();
 	}
 

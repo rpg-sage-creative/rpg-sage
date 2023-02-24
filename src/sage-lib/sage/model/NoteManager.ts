@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
 import utils from "../../../sage-utils";
-import type { TKeyValuePair } from "./SageMessageArgsManager";
+import type { TKeyValuePair } from "./SageMessageArgs";
 
 interface IHasSave { save(): Promise<boolean>; }
 

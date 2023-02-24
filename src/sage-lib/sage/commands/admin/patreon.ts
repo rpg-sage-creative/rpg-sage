@@ -1,13 +1,12 @@
 import { send } from "../../../discord/messages";
 import type SageCache from "../../model/SageCache";
 import type SageMessage from "../../model/SageMessage";
-import Server from "../../model/Server";
 import User, { PatronTierSnowflakes, PatronTierType } from "../../model/User";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 
 
 async function patreonSync(sageMessage: SageMessage): Promise<void> {
-	const isHome = Server.isHome(sageMessage.server?.did),
+	const isHome = sageMessage.server?.isHome,
 		isDm = sageMessage.message.channel.type === "DM";
 	if (!sageMessage.isSuperUser || !(isHome || isDm)) {
 		return sageMessage.reactBlock();

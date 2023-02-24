@@ -3,7 +3,7 @@ import type SageMessage from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
-async function prefixSet(sageMessage: SageMessage): Promise<void> {
+async function prefixSet(sageMessage: SageMessage<true>): Promise<void> {
 	if (!sageMessage.canAdminSage) {
 		return sageMessage.reactBlock();
 	}
@@ -16,7 +16,7 @@ async function prefixSet(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(saved);
 }
 
-async function prefixGet(sageMessage: SageMessage): Promise<void> {
+async function prefixGet(sageMessage: SageMessage<true>): Promise<void> {
 	if (!sageMessage.canAdminSage) {
 		return sageMessage.reactBlock();
 	}
@@ -30,7 +30,7 @@ async function prefixGet(sageMessage: SageMessage): Promise<void> {
 	return <any>sageMessage.send(renderableContent);
 }
 
-async function prefixSync(sageMessage: SageMessage): Promise<void> {
+async function prefixSync(sageMessage: SageMessage<true>): Promise<void> {
 	if (!sageMessage.canAdminSage) {
 		return sageMessage.reactBlock();
 	}
@@ -43,7 +43,7 @@ async function prefixSync(sageMessage: SageMessage): Promise<void> {
 	return Promise.resolve();
 }
 
-async function prefixUnset(sageMessage: SageMessage): Promise<void> {
+async function prefixUnset(sageMessage: SageMessage<true>): Promise<void> {
 	if (!sageMessage.canAdminSage) {
 		return sageMessage.reactBlock();
 	}

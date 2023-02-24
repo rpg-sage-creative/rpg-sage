@@ -1,10 +1,9 @@
-import utils from "../../../../sage-utils";
+import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
+import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { discordPromptYesNo } from "../../../discord/prompts";
 import type Emoji from "../../model/Emoji";
-import type Game from "../../model/Game";
 import { EmojiType } from "../../model/HasEmojiCore";
 import type SageMessage from "../../model/SageMessage";
-import type Server from "../../model/Server";
 import { BotServerGameType, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
 
@@ -19,33 +18,21 @@ function getEmoji(sageMessage: SageMessage, which: BotServerGameType): Emoji {
 	}
 	return sageMessage.bot.emoji;
 }
-function getEmojiName(which: BotServerGameType): string {
-	return which === BotServerGameType.Server ? "Server" : "Game";
-}
-function getOtherName(which: BotServerGameType): string {
-	return which === BotServerGameType.Server ? "Sage" : "Server";
-}
-function getOtherEmoji(sageMessage: SageMessage, which: BotServerGameType): Emoji {
-	const server = sageMessage.server;
-	if (server) {
-		return which === BotServerGameType.Server ? sageMessage.bot.emoji : server.emoji;
-	}
-	return sageMessage.bot.emoji;
-}
-function getWhichEntity(sageMessage: SageMessage, which: BotServerGameType): Server | Game | undefined {
-	return which === BotServerGameType.Server ? sageMessage.server : sageMessage.game;
-}
+
 async function _emojiList(sageMessage: SageMessage, which: BotServerGameType): Promise<void> {
 	const emoji = getEmoji(sageMessage, which);
 	let render = emoji.size > 0;
 	if (!render) {
 		if (which !== BotServerGameType.Bot) {
-			const emojiName = getEmojiName(which);
-			const otherName = getOtherName(which);
-			const booleanResponse = await discordPromptYesNo(sageMessage, `**No ${emojiName} Emoji Found!**\n> Sync with ${otherName}?`).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+			const emojiName = which === BotServerGameType.Server ? "Server" : "Game";
+			const otherName = which === BotServerGameType.Server ? "Sage" : "Server";
+			const prompt = `**No ${emojiName} Emoji Found!**\n> Sync with ${otherName}?`;
+			const booleanResponse = await discordPromptYesNo(sageMessage, prompt).catch(errorReturnNull);
 			if (booleanResponse) {
-				emoji.sync(getOtherEmoji(sageMessage, which));
-				render = await getWhichEntity(sageMessage, which)?.save() ?? false;
+				const otherEmoji = (which === BotServerGameType.Server ? sageMessage.bot : sageMessage.server ?? sageMessage.bot).emoji;
+				emoji.sync(otherEmoji);
+				const whichEntity = which === BotServerGameType.Server ? sageMessage.server : sageMessage.game;
+				render = await whichEntity?.save() ?? false;
 			}
 		}
 		if (!render) {
@@ -97,11 +84,7 @@ async function emojiList(sageMessage: SageMessage): Promise<void> {
 //#region get
 
 async function _emojiGet(sageMessage: SageMessage, ...emoji: Emoji[]): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
-
-	emoji = emoji.filter(utils.ArrayUtils.Filters.exists);
+	emoji = emoji.filter(exists);
 
 	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType)!;
 	let inherited = false;
@@ -111,7 +94,8 @@ async function _emojiGet(sageMessage: SageMessage, ...emoji: Emoji[]): Promise<v
 		_emoji = emoji.shift()!.get(emojiType);
 	}
 	if (!_emoji) {
-		return sageMessage.reactFailure();
+		const attemptedEmoji = EmojiType[emojiType] ?? sageMessage.args[0];
+		return sageMessage.reactFailure(`Unable to find Emoji: ${attemptedEmoji}`);
 	}
 
 	const inheritedText = inherited ? ` (unset, inherited)` : ``;
@@ -127,7 +111,7 @@ async function emojiGetServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiGetGame(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminGame ? _emojiGet(sageMessage, sageMessage.game?.emoji!, sageMessage.server?.emoji, sageMessage.bot.emoji) : sageMessage.reactBlock();
+	return sageMessage.canAdminGame ? _emojiGet(sageMessage, sageMessage.game?.emoji!, sageMessage.server?.emoji!, sageMessage.bot.emoji) : sageMessage.reactBlock();
 }
 
 async function emojiGet(sageMessage: SageMessage): Promise<void> {

@@ -15,7 +15,7 @@ async function renderUser(renderableContent: utils.RenderUtils.RenderableContent
 	renderableContent.append(`<b>Role</b> ${AdminRoleType[user.role] ?? "<i>Unknown</i>"}`);
 }
 
-async function adminList(sageMessage: SageMessage): Promise<void> {
+async function adminList(sageMessage: SageMessage<true>): Promise<void> {
 	if (!sageMessage.canAdminSage) {
 		return sageMessage.reactBlock();
 	}
@@ -54,7 +54,7 @@ function getAdminRoleType(command: string): AdminRoleType | null {
 	return null;
 }
 
-async function adminAdd(sageMessage: SageMessage): Promise<void> {
+async function adminAdd(sageMessage: SageMessage<true>): Promise<void> {
 	if (!sageMessage.canAdminSage) {
 		return sageMessage.reactBlock();
 	}
@@ -73,7 +73,7 @@ async function adminAdd(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(added);
 }
 
-async function adminUpdate(sageMessage: SageMessage): Promise<void> {
+async function adminUpdate(sageMessage: SageMessage<true>): Promise<void> {
 	if (!sageMessage.canAdminSage) {
 		return sageMessage.reactBlock();
 	}
@@ -92,7 +92,7 @@ async function adminUpdate(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(updated);
 }
 
-async function adminRemove(sageMessage: SageMessage): Promise<void> {
+async function adminRemove(sageMessage: SageMessage<true>): Promise<void> {
 	if (!sageMessage.canAdminSage) {
 		return sageMessage.reactBlock();
 	}

@@ -1,10 +1,11 @@
+import type { Optional } from "../../../../sage-utils";
+import { Collection } from "../../../../sage-utils/utils/ArrayUtils";
+import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
+import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { discordPromptYesNo } from "../../../discord/prompts";
-import utils, { Optional } from "../../../../sage-utils";
 import type Colors from "../../model/Colors";
-import type Game from "../../model/Game";
 import { ColorType } from "../../model/HasColorsCore";
 import type SageMessage from "../../model/SageMessage";
-import type Server from "../../model/Server";
 import { BotServerGameType, embedColor, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
 
@@ -14,30 +15,26 @@ function getColors(sageMessage: SageMessage, which: BotServerGameType): Colors {
 	if (which === BotServerGameType.Game && sageMessage.game) {
 		return sageMessage.game.colors;
 	}
-	return which !== BotServerGameType.Bot ? sageMessage.server.colors : sageMessage.bot.colors;
+	if (which === BotServerGameType.Server && sageMessage.server) {
+		return sageMessage.server.colors;
+	}
+	return sageMessage.bot.colors;
 }
-function getColorName(which: BotServerGameType): string {
-	return which === BotServerGameType.Server ? "Server" : "Game";
-}
-function getOtherName(which: BotServerGameType): string {
-	return which === BotServerGameType.Server ? "Sage" : "Server";
-}
-function getOtherColors(sageMessage: SageMessage, which: BotServerGameType): Colors {
-	return which === BotServerGameType.Server ? sageMessage.bot.colors : sageMessage.server.colors;
-}
-function getWhichEntity(sageMessage: SageMessage, which: BotServerGameType): Server | Game {
-	return which === BotServerGameType.Server ? sageMessage.server : sageMessage.game!;
-}
+
 async function _colorList(sageMessage: SageMessage, which: BotServerGameType): Promise<void> {
 	const colors = getColors(sageMessage, which);
 	let render = colors.size > 0;
 	if (!render) {
 		if (which !== BotServerGameType.Bot) {
-			const prompt = `**No ${getColorName(which)} Colors Found!**\n> Sync with ${getOtherName(which)}?`;
-			const booleanResponse = await discordPromptYesNo(sageMessage, prompt).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+			const colorName = which === BotServerGameType.Server ? "Server" : "Game";
+			const otherName = which === BotServerGameType.Server ? "Sage" : "Server";
+			const prompt = `**No ${colorName} Colors Found!**\n> Sync with ${otherName}?`;
+			const booleanResponse = await discordPromptYesNo(sageMessage, prompt).catch(errorReturnNull);
 			if (booleanResponse) {
-				colors.sync(getOtherColors(sageMessage, which));
-				render = await getWhichEntity(sageMessage, which).save();
+				const otherColors = (which === BotServerGameType.Server ? sageMessage.bot : sageMessage.server ?? sageMessage.bot).colors;
+				colors.sync(otherColors);
+				const whichEntity = which === BotServerGameType.Server ? sageMessage.server : sageMessage.game;
+				render = await whichEntity?.save() ?? false;
 			}
 		}
 		if (!render) {
@@ -64,7 +61,7 @@ async function _colorList(sageMessage: SageMessage, which: BotServerGameType): P
 			const countText = `(${++colorIndex} of ${colorCount})`;
 			return embedColor(color, ColorType[botColor.type], inheritedText, countText);
 		});
-		const embedGroups = utils.ArrayUtils.Collection.partition(embeds, (_, index) => Math.floor(index / 10));
+		const embedGroups = Collection.partition(embeds, (_, index) => Math.floor(index / 10));
 		for (const embedGroup of embedGroups) {
 			await sageMessage.message.channel.send({ embeds:embedGroup });
 		}
@@ -94,11 +91,7 @@ async function colorList(sageMessage: SageMessage): Promise<void> {
 //#region get
 
 async function _colorGet(sageMessage: SageMessage, ...colors: Optional<Colors>[]): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
-
-	colors = colors.filter(utils.ArrayUtils.Filters.exists);
+	colors = colors.filter(exists);
 
 	const colorType = sageMessage.args.removeAndReturnEnum<ColorType>(ColorType)!;
 	let inherited = false;
@@ -108,7 +101,8 @@ async function _colorGet(sageMessage: SageMessage, ...colors: Optional<Colors>[]
 		color = colors.shift()!.get(colorType);
 	}
 	if (!color) {
-		return sageMessage.reactFailure();
+		const attemptedColor = ColorType[colorType] ?? sageMessage.args[0];
+		return sageMessage.reactFailure(`Unable to find Color: ${attemptedColor}`);
 	}
 
 	const inheritedText = inherited ? ` (unset, inherited)` : ``;
@@ -117,7 +111,7 @@ async function _colorGet(sageMessage: SageMessage, ...colors: Optional<Colors>[]
 }
 
 async function colorGetBot(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.isSuperUser ? _colorGet(sageMessage, sageMessage.bot.colors) : sageMessage.reactBlock();
+	return sageMessage.isSuperUser ? _colorGet(sageMessage, sageMessage.bot.colors) : sageMessage.denyByPerm("No Color For You!", "colorGetBot:!.isSuperUser");
 }
 
 async function colorGetServer(sageMessage: SageMessage): Promise<void> {

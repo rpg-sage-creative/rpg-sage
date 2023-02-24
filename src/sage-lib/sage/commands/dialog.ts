@@ -515,7 +515,7 @@ function getDialogArgNotDid(arg: Optional<string>): string | null {
 	return DiscordId.isValidId(arg) ? null : arg ?? null;
 }
 
-async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
+async function editChat(sageMessage: SageMessage<true>, dialogContent: TDialogContent): Promise<void> {
 	const messageDid = dialogContent.name ?? sageMessage.message.reference?.messageId,
 		dialogMessage = await findLastMessage(sageMessage, messageDid).catch(utils.ConsoleUtils.Catchers.errorReturnNull),
 		discordKey = dialogMessage ? dialogMessageToDiscordKey(dialogMessage) : null,
@@ -529,7 +529,7 @@ async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent)
 		updatedImageUrl = dialogContent.imageUrl,
 		updatedContent = sageMessage.caches.format(dialogContent.content),
 		updatedEmbed = updateEmbed(embed, updatedTitle, updatedImageUrl, updatedContent);
-	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, SageDialogWebhookName);
+	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid!, SageDialogWebhookName);
 	if (webhook) {
 		const threadId = sageMessage.threadDid;
 		const content = sageMessage.dialogType === DialogType.Post ? embedsToTexts([updatedEmbed]).join("\n") : undefined;

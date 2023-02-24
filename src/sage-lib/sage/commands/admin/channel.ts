@@ -165,7 +165,7 @@ async function getChannelNameAndActiveGame(sageCache: SageCache, channelDid: Dis
 	return [channel.name, await sageCache.games.findActiveByDiscordKey(discordKey)];
 }
 
-export async function channelDetails(sageMessage: SageMessage, channel?: IChannel): Promise<void> {
+export async function channelDetails(sageMessage: SageMessage<true>, channel?: IChannel): Promise<void> {
 	if (!sageMessage.canAdminServer && !sageMessage.canAdminGame) {
 		return sageMessage.reactBlock();
 	}
@@ -212,7 +212,7 @@ async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: I
 	return existing;
 }
 
-async function _channelList(sageMessage: SageMessage, whichType: BotServerGameType): Promise<void> {
+async function _channelList(sageMessage: SageMessage<true>, whichType: BotServerGameType): Promise<void> {
 	const which = whichType === BotServerGameType.Game ? sageMessage.game! : sageMessage.server;
 	const guildChannels = await fetchAndFilterGuildChannels(sageMessage, which.channels);
 	const renderableContent = createAdminRenderableContent(which, `<b>${BotServerGameType[whichType]} Channel List</b>`);

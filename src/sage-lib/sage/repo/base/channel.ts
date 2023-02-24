@@ -186,3 +186,37 @@ export async function mapChannels(sageCache: SageCache, channels: IChannel[]): P
 	}
 	return mappedChannels;
 }
+
+function trueFalseUndefined(channelType: Optional<GameChannelType>, trueList: GameChannelType[], falseList: GameChannelType[]): boolean | undefined {
+	if (trueList.includes(channelType!)) {
+		return true;
+	}
+	if (falseList.includes(channelType!)) {
+		return false;
+	}
+	return undefined;
+}
+
+function writeNoneUndefined(channelType: Optional<GameChannelType>, writeList: GameChannelType[], noneList: GameChannelType[]): PermissionType | undefined {
+	if (writeList.includes(channelType!)) {
+		return PermissionType.Write;
+	}
+	if (noneList.includes(channelType!)) {
+		return PermissionType.None;
+	}
+	return undefined;
+}
+
+export function channelTypeToChannelOptions(channelType: Optional<GameChannelType>): IChannelOptions {
+	return {
+		admin: trueFalseUndefined(channelType, [GameChannelType.InCharacter, GameChannelType.OutOfCharacter, GameChannelType.GameMaster, GameChannelType.Miscellaneous], []),
+		commands: trueFalseUndefined(channelType, [GameChannelType.OutOfCharacter, GameChannelType.GameMaster, GameChannelType.Miscellaneous], [GameChannelType.InCharacter]),
+		dialog: trueFalseUndefined(channelType,[GameChannelType.InCharacter, GameChannelType.OutOfCharacter, GameChannelType.GameMaster, GameChannelType.Miscellaneous], []),
+		dice: trueFalseUndefined(channelType, [GameChannelType.InCharacter, GameChannelType.OutOfCharacter, GameChannelType.GameMaster, GameChannelType.Miscellaneous], []),
+		search: trueFalseUndefined(channelType, [GameChannelType.OutOfCharacter, GameChannelType.GameMaster, GameChannelType.Miscellaneous], [GameChannelType.InCharacter]),
+
+		gameMaster: writeNoneUndefined(channelType, [GameChannelType.InCharacter, GameChannelType.OutOfCharacter, GameChannelType.GameMaster, GameChannelType.Miscellaneous], []),
+		nonPlayer: writeNoneUndefined(channelType, [], [GameChannelType.InCharacter, GameChannelType.OutOfCharacter, GameChannelType.GameMaster, GameChannelType.Miscellaneous]),
+		player: writeNoneUndefined(channelType, [GameChannelType.InCharacter, GameChannelType.OutOfCharacter, GameChannelType.Miscellaneous], [GameChannelType.GameMaster])
+	};
+}

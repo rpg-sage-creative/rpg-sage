@@ -1,30 +1,38 @@
 import type * as Discord from "discord.js";
-import { ReactionType } from "../../discord";
-import type { HasSageCacheCore } from "./HasSageCache";
-import HasSageCache from "./HasSageCache";
+import { ReactionType, TChannel, TRenderableContentResolvable } from "../../discord";
+import { SageCommandBase, SageCommandCore, TSendArgs } from "./SageCommand";
 import SageCache from "./SageCache";
+import SageReactionArgs from "./SageReactionArgs";
 
 type DUser = Discord.User | Discord.PartialUser;
 type DMessage = Discord.Message | Discord.PartialMessage;
 type DReaction = Discord.MessageReaction | Discord.PartialMessageReaction;
 
-interface SageReactionCore extends HasSageCacheCore {
+interface SageReactionCore extends SageCommandCore {
 	messageReaction: DReaction;
-	user: DUser;
 	reactionType: ReactionType;
-};
+}
 
 export default class SageReaction
-	extends HasSageCache<SageReactionCore, SageReaction> {
+	extends SageCommandBase<SageReactionCore, SageReactionArgs, SageReaction> {
+
+	public constructor(protected core: SageReactionCore) {
+		super(core);
+	}
+
+	public args = new SageReactionArgs();
+
+	public isSageReaction(): this is SageReaction { return true; }
+
 	public static async fromMessageReaction(messageReaction: DReaction, user: DUser, reactionType: ReactionType): Promise<SageReaction> {
-		const caches = await SageCache.fromMessageReaction(messageReaction, user);
+		const sageCache = await SageCache.fromMessageReaction(messageReaction, user);
 		return new SageReaction({
-			caches,
+			sageCache,
 			messageReaction,
-			reactionType,
-			user
+			reactionType
 		});
 	}
+
 	public get isAdd(): boolean {
 		return this.core.reactionType === ReactionType.Add;
 	}
@@ -38,14 +46,6 @@ export default class SageReaction
 		return this.core.messageReaction;
 	}
 
-	public get user(): DUser {
-		return this.core.user;
-	}
-
-	public constructor(protected core: SageReactionCore) {
-		super(core);
-	}
-
 	public get message(): DMessage {
 		return this.core.messageReaction.message;
 	}
@@ -57,4 +57,22 @@ export default class SageReaction
 
 	public command: string | null = null;
 
+	public async reply(args: TSendArgs): Promise<void>;
+	public async reply(renderable: TRenderableContentResolvable, ephemeral: boolean): Promise<void>;
+	public async reply(renderableOrArgs: TRenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void> {
+		const canSend = await this.canSend(this.message.channel as TChannel);
+		if (!canSend) {
+			return this.whisper(`Unable to send message because Sage doesn't have permissions to channel: ${this.message.channel}`);
+		}
+		const args = this.resolveToOptions(renderableOrArgs, ephemeral);
+		return this.message.reply(args) as Promise<any>;
+	}
+
+	public async whisper(content: string): Promise<void>;
+	public async whisper(args: TSendArgs): Promise<void>;
+	public async whisper(contentOrArgs: string | TSendArgs): Promise<void> {
+		const args = typeof(contentOrArgs) === "string" ? { content:contentOrArgs } : contentOrArgs;
+		const sendOptions = this.resolveToOptions(args);
+		await this.actor.d.send(sendOptions);
+	}
 }
