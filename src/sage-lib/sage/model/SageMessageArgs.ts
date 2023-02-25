@@ -1,10 +1,12 @@
 import type * as Discord from "discord.js";
 import { GameType, parseGameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, parseCritMethodType, parseDiceOutputType } from "../../../sage-dice";
-import utils, { Optional, VALID_UUID } from "../../../sage-utils";
+import type { Optional, VALID_UUID } from "../../../sage-utils";
 import { EnumUtils } from "../../../sage-utils/utils";
 import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
-import { isValid } from "../../../sage-utils/utils/UuidUtils";
+import { Color } from "../../../sage-utils/utils/ColorUtils";
+import { capitalize } from "../../../sage-utils/utils/StringUtils";
+import { isValid as isValidUuid } from "../../../sage-utils/utils/UuidUtils";
 import DiscordId from "../../discord/DiscordId";
 import { DicePostType } from "../commands/dice";
 import { DialogType, GameChannelType, PermissionType, channelTypeToChannelOptions, parseChannelType, type IChannel, type IChannelOptions, type TPermissionType } from "../repo/base/channel";
@@ -14,8 +16,6 @@ import { ColorType } from "./HasColorsCore";
 import type { ISageCommandArgs } from "./SageCommand";
 import type SageMessage from "./SageMessage";
 import type Server from "./Server";
-
-export type TKeyValuePair = { key: string; value: string; };
 
 type TArgIndexRet<T> = { arg: string; index: number; ret: T };
 
@@ -27,199 +27,21 @@ export type TNames = {
 	count?: number;
 };
 
-// #region Args Manipulation
-
-type TValidBooleanFlags = "admin" | "command" | "commands" | "dialog" | "dice" | "search";
-
-/** /^(admin|commands?|dialog|dice|search)=(0|1|f|t|false|true)$/i */
-function removeAndReturnBooleanFlag(args: string[], key: TValidBooleanFlags): boolean | undefined {
-	const lower = key.toLowerCase().replace("commands", "command");
-	const regex = /^(admin|commands?|dialog|dice|search)=(0|1|f|t|false|true)$/i;
-	for (const arg of args) {
-		const match = arg.match(regex);
-		if (match && match[1].toLowerCase().replace("commands", "command") === lower) {
-			args.splice(args.indexOf(arg), 1);
-			return match[2] === "1" || match[2][0].toLowerCase() === "t";
-		}
-	}
-	// server.updateChannel ignores arguments that are undefined
-	return undefined;
-}
-
-type TValidTargetChannelFlags = "admin" | "command" | "commands" | "dialog" | "dice" | "search";
-
-/** /^(admin|commands?|dialog|dice|search)(?:to)?=(\d{16,}|<#\d{16,}>)$/i; */
-function removeAndReturnChannelSnowflake(args: string[], key: TValidTargetChannelFlags): Discord.Snowflake | undefined {
-	const lower = key.toLowerCase().replace("commands", "command");
-	const regex = /^(admin|commands?|dialog|dice|search)(?:to)?=(\d{16,}|<#\d{16,}>)$/i;
-	for (const arg of args) {
-		const match = arg.match(regex);
-		if (match && match[1].toLowerCase().replace("commands", "command") === lower) {
-			args.splice(args.indexOf(arg), 1);
-			return DiscordId.from(match[2])?.did ?? undefined;
-		}
-	}
-	// server.updateChannel ignores arguments that are undefined
-	return undefined;
-}
-
-/** /^(crit)=(TIMESTWO|ROLLTWICE|ADDMAX|UNSET)?$/i; returns null to unset */
-function removeAndReturnCritMethodType(args: string[]): Optional<CritMethodType> {
-	const regex = /^(crit)=(TIMESTWO|ROLLTWICE|ADDMAX|UNSET)?$/i;
-	for (const arg of args) {
-		const match = arg.match(regex);
-		if (match) {
-			args.splice(args.indexOf(arg), 1);
-			return parseCritMethodType(GameType.PF2e, match[2] ?? "") ?? null;
-		}
-	}
-	return undefined;
-}
-
-/** /^(diceoutput)=(XXS|XS|S|M|XXL|XL|L|UNSET)?$/i; returns null to unset */
-function removeAndReturnDiceOutputType(args: string[]): Optional<DiceOutputType> {
-	const regex = /^(diceoutput)=(XXS|XS|S|M|XXL|XL|L|ROLLEM|UNSET)?$/i;
-	for (const arg of args) {
-		const match = arg.match(regex);
-		if (match) {
-			args.splice(args.indexOf(arg), 1);
-			return parseDiceOutputType(match[2] ?? "") ?? null;
-		}
-	}
-	return undefined;
-}
-
-/** /^(dicepost)=(POST|SINGLEPOST|MULTI(PLE)?POSTS?|EMBED|SINGLEE?MBED|MULTI(PLE)?E?MBEDS?|UNSET)?$/i; returns null to unset */
-function removeAndReturnDicePostType(args: string[]): Optional<DicePostType> {
-	const regex = /^(dicepost)=(POST|SINGLEPOST|MULTI(PLE)?POSTS?|EMBED|SINGLEE?MBED|MULTI(PLE)?E?MBEDS?|UNSET)?$/i;
-	for (const arg of args) {
-		const match = arg.match(regex);
-		if (match) {
-			args.splice(args.indexOf(arg), 1);
-			const dicePostTypeString = (match[2] || "").toUpperCase();
-			if (dicePostTypeString.match(/POSTS?$/)) {
-				return dicePostTypeString.startsWith("MULTI") ? DicePostType.MultiplePosts : DicePostType.SinglePost;
-			}
-			if (dicePostTypeString.match(/EMBEDS?$/)) {
-				return dicePostTypeString.startsWith("MULTI") ? DicePostType.MultipleEmbeds : DicePostType.SingleEmbed;
-			}
-			return null;
-		}
-	}
-	return undefined;
-}
-
-function removeAndReturnChannelType(args: string[]): Optional<GameChannelType> {
-	const regex = /^((?:channel)?type)="(IC|OOC|GM|MISC|UNSET)?"$/i;
-	for (const arg of args) {
-		const match = arg.match(regex);
-		if (match) {
-			args.splice(args.indexOf(arg), 1);
-			return parseChannelType(match[2]?.toUpperCase()) ?? null;
-			// return match[2]?.toUpperCase() as TChannelType ?? null;
-		}
-	}
-	return undefined;
-}
-
-/** /^(dialogtype)=(EMBED|POST|UNSET)?$/i; returns null to unset */
-function removeAndReturnDialogType(args: string[]): Optional<DialogType> {
-	const regex = /^(dialogtype)=(EMBED|POST|UNSET)?$/i;
-	for (const arg of args) {
-		const match = arg.match(regex);
-		if (match) {
-			args.splice(args.indexOf(arg), 1);
-			const dialogTypeString = (match[2] ?? "").toUpperCase();
-			if (dialogTypeString === "EMBED") {
-				return DialogType.Embed;
-			}
-			if (dialogTypeString === "POST") {
-				return DialogType.Post;
-			}
-			return null;
-		}
-	}
-	return undefined;
-}
-
-/** /^(sageposttype)=(EMBED|POST|UNSET)?$/i; returns null to unset */
-function removeAndReturnSagePostType(args: string[]): Optional<DialogType> {
-	const regex = /^(sageposttype)=(EMBED|POST|UNSET)?$/i;
-	for (const arg of args) {
-		const match = arg.match(regex);
-		if (match) {
-			args.splice(args.indexOf(arg), 1);
-			const dialogTypeString = (match[2] ?? "").toUpperCase();
-			if (dialogTypeString === "EMBED") {
-				return DialogType.Embed;
-			}
-			if (dialogTypeString === "POST") {
-				return DialogType.Post;
-			}
-			return null;
-		}
-	}
-	return undefined;
-}
-
-/** /^(dicesecret)=(GAMEMASTER|GM|HIDE|IGNORE|UNSET)?$/i; returns null to unset */
-function removeAndReturnDiceSecretMethodType(args: string[]): Optional<DiceSecretMethodType> {
-	const regex = /^(dicesecret)=(GAMEMASTER|GM|DM|GMDM|DMGM|HIDE|IGNORE|UNSET)?$/i;
-	for (const arg of args) {
-		const match = arg.match(regex);
-		if (match) {
-			args.splice(args.indexOf(arg), 1);
-			const diceSecretMethodType = (match[2] || "").toUpperCase();
-			if (["DM","DMGM","GMDM"].includes(diceSecretMethodType)) {
-				return DiceSecretMethodType.GameMasterDirect;
-			}
-			if (["GM","GAMEMASTER"].includes(diceSecretMethodType)) {
-				return DiceSecretMethodType.GameMasterChannel;
-			}
-			if (diceSecretMethodType === "HIDE") {
-				return DiceSecretMethodType.Hide;
-			}
-			if (diceSecretMethodType === "IGNORE") {
-				return DiceSecretMethodType.Ignore;
-			}
-			return null;
-		}
-	}
-	return undefined;
-}
-
-/** /^(gamesystem|gametype|game|system|type)=(ESSENCE20|ESS20|E20|PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE|UNSET)?$/i; returns null to unset */
-function removeAndReturnGameType(args: string[]): Optional<GameType> {
-	// const regex = /^(game)=(PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE|UNSET)?$/i;
-	const regex = /^(gamesystem|gametype|game|system|type)=(ESSENCE20|ESS20|E20|PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE|UNSET)?$/i;
-	for (const arg of args) {
-		const match = arg.match(regex);
-		if (match) {
-			args.splice(args.indexOf(arg), 1);
-			return parseGameType(match[2] ?? "") ?? null;
-		}
-	}
-	return undefined;
-}
-
-function removeAndReturnPermissionType(args: string[], key: "gamemaster" | "nonplayer" | "player"): PermissionType | undefined {
-	const regex = /^(gm|gamemaster|player|nonplayer)s?=(?:(0|1|2|3)|(none|read|react|write))$/i;
-	for (const arg of args) {
-		const match = arg.match(regex);
-		if (match && match[1].toLowerCase().replace(/^gm$/, "gamemaster") === key) {
-			args.splice(args.indexOf(arg), 1);
-			return match[3] ? PermissionType[<TPermissionType>utils.StringUtils.capitalize(match[3])] : +match[2];
-		}
-	}
-	// game.updateChannel ignores arguments that are undefined
-	return undefined;
-}
-
-// #endregion
-
 export default class SageMessageArgs extends ArgsManager implements ISageCommandArgs {
 	public constructor(protected sageMessage: SageMessage, argsManager: ArgsManager) {
 		super(...(argsManager ?? []));
+	}
+
+	protected async findChannelIndexWithDid(): Promise<TArgIndexRet<Discord.Snowflake> | undefined> {
+		if (this.isEmpty) {
+			return undefined;
+		}
+
+		return <Promise<TArgIndexRet<Discord.Snowflake> | undefined>>this.asyncFindArgIndexRet(async arg =>
+			DiscordId.isChannelReference(arg) ? DiscordId.parseId(arg)
+			: DiscordId.isValidId(arg) ? (await this.sageMessage.discord.fetchChannel(arg))?.id
+			: undefined
+		);
 	}
 
 	//#region ISageCommandArgs
@@ -335,7 +157,7 @@ export default class SageMessageArgs extends ArgsManager implements ISageCommand
 	public getUuid(name: string, required: true): VALID_UUID;
 	public getUuid(name: string): VALID_UUID | null {
 		const str = this.getString(name);
-		return isValid(str) ? str : null;
+		return isValidUuid(str) ? str : null;
 	}
 	/** Returns true if the argument was given a VALID_UUID value. */
 	public hasUuid(name: string): boolean {
@@ -354,17 +176,21 @@ export default class SageMessageArgs extends ArgsManager implements ISageCommand
 		return this.removeAndReturnUrl();
 	}
 
-	protected async findChannelIndexWithDid(): Promise<TArgIndexRet<Discord.Snowflake> | undefined> {
-		if (this.isEmpty) {
-			return undefined;
+	/**
+	 * /^(admin|commands?|dialog|dice|search)=(0|1|f|t|false|true)$/i;
+	 * returns undefined if not found.
+	 */
+	public removeAndReturnBooleanFlag(arg: "admin" | "commands" | "dialog" | "dice" | "search"): boolean | undefined {
+		const q = arg === "commands" ? "?" : "";
+		const keyRegex = new RegExp(arg + q, "i");
+		const valueRegex = /0|1|f|t|false|true/i;
+		const keyValuePair = this.removeKeyValuePair(keyRegex, valueRegex);
+		if (keyValuePair) {
+			return ["1","t"].includes(keyValuePair.value[0].toLowerCase());
 		}
-
-		return <Promise<TArgIndexRet<Discord.Snowflake> | undefined>>this.asyncFindArgIndexRet(async arg =>
-			DiscordId.isChannelReference(arg) ? DiscordId.parseId(arg)
-			: DiscordId.isValidId(arg) ? (await this.sageMessage.discord.fetchChannel(arg))?.id
-			: undefined
-		);
+		return undefined;
 	}
+
 	public async removeAndReturnChannelDid(): Promise<Discord.Snowflake | null>;
 	public async removeAndReturnChannelDid(defaultThisChannel: false): Promise<Discord.Snowflake | null>;
 	public async removeAndReturnChannelDid(defaultThisChannel: true): Promise<Discord.Snowflake>;
@@ -378,33 +204,64 @@ export default class SageMessageArgs extends ArgsManager implements ISageCommand
 	}
 
 	public removeAndReturnChannelOptions(): IChannelOptions | null {
-		const gameChannelType = removeAndReturnChannelType(this);
+		const gameChannelType = this.removeAndReturnChannelType();
 		const channelTypeOptions = channelTypeToChannelOptions(gameChannelType);
 		const channelOptions: IChannelOptions = {
-			admin: channelTypeOptions.admin ?? removeAndReturnBooleanFlag(this, "admin"),
-			commands: channelTypeOptions.commands ?? removeAndReturnBooleanFlag(this, "commands"),
-			defaultDialogType: removeAndReturnDialogType(this)!,
-			defaultCritMethodType: removeAndReturnCritMethodType(this)!,
-			defaultDiceOutputType: removeAndReturnDiceOutputType(this)!,
-			defaultDicePostType: removeAndReturnDicePostType(this)!,
-			defaultDiceSecretMethodType: removeAndReturnDiceSecretMethodType(this)!,
-			defaultGameType: removeAndReturnGameType(this)!,
-			dialog: channelTypeOptions.dialog ?? removeAndReturnBooleanFlag(this, "dialog"),
-			dice: channelTypeOptions.dice ?? removeAndReturnBooleanFlag(this, "dice"),
+			admin: channelTypeOptions.admin ?? this.removeAndReturnBooleanFlag("admin"),
+			commands: channelTypeOptions.commands ?? this.removeAndReturnBooleanFlag("commands"),
+			defaultDialogType: this.removeAndReturnDialogType()!,
+			defaultCritMethodType: this.removeAndReturnCritMethodType()!,
+			defaultDiceOutputType: this.removeAndReturnDiceOutputType()!,
+			defaultDicePostType: this.removeAndReturnDicePostType()!,
+			defaultDiceSecretMethodType: this.removeAndReturnDiceSecretMethodType()!,
+			defaultGameType: this.removeAndReturnGameType()!,
+			dialog: channelTypeOptions.dialog ?? this.removeAndReturnBooleanFlag("dialog"),
+			dice: channelTypeOptions.dice ?? this.removeAndReturnBooleanFlag("dice"),
 			gameChannelType: gameChannelType ?? undefined,
-			gameMaster: channelTypeOptions.gameMaster ?? removeAndReturnPermissionType(this, "gamemaster"),
-			nonPlayer: channelTypeOptions.nonPlayer ?? removeAndReturnPermissionType(this, "nonplayer"),
-			player: channelTypeOptions.player ?? removeAndReturnPermissionType(this, "player"),
-			search: channelTypeOptions.search ?? removeAndReturnBooleanFlag(this, "search"),
-			sendCommandTo: removeAndReturnChannelSnowflake(this, "command"),
-			sendDialogTo: removeAndReturnChannelSnowflake(this, "dialog"),
-			sendDiceTo: removeAndReturnChannelSnowflake(this, "dice"),
-			sendSearchTo: removeAndReturnChannelSnowflake(this, "search")
+			gameMaster: channelTypeOptions.gameMaster ?? this.removeAndReturnPermissionType("gamemaster"),
+			nonPlayer: channelTypeOptions.nonPlayer ?? this.removeAndReturnPermissionType("nonplayer"),
+			player: channelTypeOptions.player ?? this.removeAndReturnPermissionType("player"),
+			search: channelTypeOptions.search ?? this.removeAndReturnBooleanFlag("search"),
+			sendCommandTo: this.removeAndReturnChannelSnowflake("commands"),
+			sendDialogTo: this.removeAndReturnChannelSnowflake("dialog"),
+			sendDiceTo: this.removeAndReturnChannelSnowflake("dice"),
+			sendSearchTo: this.removeAndReturnChannelSnowflake("search")
 		};
 		if (!Object.keys(channelOptions).find(key => channelOptions[<keyof IChannelOptions>key] !== undefined)) {
 			return null;
 		}
 		return channelOptions;
+	}
+
+	/**
+	 * /^(admin|commands?|dialog|dice|search)(?:to)?=(\d{16,}|<#\d{16,}>)$/i;
+	 * returns undefined if not found.
+	 */
+	public removeAndReturnChannelSnowflake(arg: "admin" | "commands" | "dialog" | "dice" | "search"): Discord.Snowflake | undefined {
+		const q = arg === "commands" ? "?" : "";
+		const keyRegex = new RegExp(`${arg}${q}(to)?`, "i");
+		/** @todo confirm this regex for snowflakes */
+		const valueRegex = /\d{16,}|<#\d{16,}>/i;
+		const keyValuePair = this.removeKeyValuePair(keyRegex, valueRegex);
+		if (keyValuePair) {
+			/** @todo return null if parsing failed for some reason? */
+			return DiscordId.from(keyValuePair.value)?.did ?? undefined;
+		}
+		return undefined;
+	}
+
+	/**
+	 * returns undefined if not found.
+	 * returns null to unset.
+	 */
+	public removeAndReturnChannelType(): Optional<GameChannelType> {
+		const keyRegex = /(channel)?type/i;
+		const valueRegex = /IC|OOC|GM|MISC|UNSET/i;
+		const keyValuePair = this.removeKeyValuePair(keyRegex, valueRegex);
+		if (keyValuePair) {
+			return parseChannelType(keyValuePair.value) ?? null;
+		}
+		return undefined;
 	}
 
 	public removeAndReturnCharacterOptions(names: TNames, userDid?: Discord.Snowflake): GameCharacterCore {
@@ -440,28 +297,128 @@ export default class SageMessageArgs extends ArgsManager implements ISageCommand
 		return null;
 	}
 
+	/**
+	 * /^((dice)?crit(method)?(type)?)=(TIMESTWO|ROLLTWICE|ADDMAX|UNSET)$/i;
+	 * returns undefined if not found.
+	 * returns null to unset.
+	 */
 	public removeAndReturnCritMethodType(): Optional<CritMethodType> {
-		return removeAndReturnCritMethodType(this);
+		const keyRegex = /(dice)?crit(method)?(type)?/i;
+		const valueRegex = /TIMESTWO|ROLLTWICE|ADDMAX|UNSET/i;
+		const keyValuePair = this.removeKeyValuePair(keyRegex, valueRegex);
+		if (keyValuePair) {
+			return parseCritMethodType(GameType.PF2e, keyValuePair.value) ?? null;
+		}
+		return undefined;
 	}
 
+	/**
+	 * /^(dialogtype)=(EMBED|POST|UNSET)$/i;
+	 * returns undefined if not found.
+	 * returns null to unset.
+	 */
 	public removeAndReturnDialogType(): Optional<DialogType> {
-		return removeAndReturnDialogType(this);
+		const keyRegex = /dialogtype/i;
+		const valueRegex = /EMBED|POST|UNSET/i;
+		const keyValuePair = this.removeKeyValuePair(keyRegex, valueRegex);
+		if (keyValuePair) {
+			const dialogTypeString = keyValuePair.value.toUpperCase();
+			if (dialogTypeString === "EMBED") {
+				return DialogType.Embed;
+			}
+			if (dialogTypeString === "POST") {
+				return DialogType.Post;
+			}
+			return null;
+		}
+		return undefined;
 	}
 
+	/**
+	 * /^(sageposttype)=(EMBED|POST|UNSET)$/i;
+	 * returns undefined if not found.
+	 * returns null to unset.
+	 */
 	public removeAndReturnSagePostType(): Optional<DialogType> {
-		return removeAndReturnSagePostType(this);
+		const keyRegex = /sageposttype/i;
+		const valueRegex = /EMBED|POST|UNSET/i;
+		const keyValuePair = this.removeKeyValuePair(keyRegex, valueRegex);
+		if (keyValuePair) {
+			const dialogTypeString = keyValuePair.value.toUpperCase();
+			if (dialogTypeString === "EMBED") {
+				return DialogType.Embed;
+			}
+			if (dialogTypeString === "POST") {
+				return DialogType.Post;
+			}
+			return null;
+		}
+		return undefined;
 	}
 
+	/**
+	 * /^(diceoutput)=(XXS|XS|S|M|XXL|XL|L|UNSET)$/i;
+	 * returns undefined if not found.
+	 * returns null to unset.
+	 */
 	public removeAndReturnDiceOutputType(): Optional<DiceOutputType> {
-		return removeAndReturnDiceOutputType(this);
+		const keyRegex = /diceoutput/i;
+		const valueRegex = /XXS|XS|S|M|XXL|XL|L|ROLLEM|UNSET/i;
+		const keyValuePair = this.removeKeyValuePair(keyRegex, valueRegex);
+		if (keyValuePair) {
+			return parseDiceOutputType(keyValuePair.value) ?? null;
+		}
+		return undefined;
 	}
 
+	/**
+	 * /^(dicepost)=(POST|SINGLEPOST|MULTI(PLE)?POSTS?|EMBED|SINGLEE?MBED|MULTI(PLE)?E?MBEDS?|UNSET)$/i;
+	 * returns undefined if not found.
+	 * returns null to unset.
+	 */
 	public removeAndReturnDicePostType(): Optional<DicePostType> {
-		return removeAndReturnDicePostType(this);
+		const keyRegex = /dicepost/i;
+		const valueRegex = /POST|SINGLEPOST|MULTI(PLE)?POSTS?|EMBED|SINGLEE?MBED|MULTI(PLE)?E?MBEDS?|UNSET/i;
+		const keyValuePair = this.removeKeyValuePair(keyRegex, valueRegex);
+		if (keyValuePair) {
+			const dicePostTypeString = (keyValuePair.value ?? "").toUpperCase();
+			if (dicePostTypeString.match(/POSTS?$/)) {
+				return dicePostTypeString.startsWith("MULTI") ? DicePostType.MultiplePosts : DicePostType.SinglePost;
+			}
+			if (dicePostTypeString.match(/EMBEDS?$/)) {
+				return dicePostTypeString.startsWith("MULTI") ? DicePostType.MultipleEmbeds : DicePostType.SingleEmbed;
+			}
+			return null;
+		}
+		return undefined;
 	}
 
+	/**
+	 * /^(dicesecret)=(GAMEMASTER|GM|HIDE|IGNORE|UNSET)?$/i;
+	 * returns undefined if not found.
+	 * returns null to unset
+	 */
 	public removeAndReturnDiceSecretMethodType(): Optional<DiceSecretMethodType> {
-		return removeAndReturnDiceSecretMethodType(this);
+		const keyRegex = /dicesecret/i;
+		const valueRegex = /GAMEMASTER|GM|DM|GMDM|DMGM|HIDE|IGNORE|UNSET/i;
+		const keyValuePair = this.removeKeyValuePair(keyRegex, valueRegex);
+		if (keyValuePair) {
+			const diceSecretMethodType = (keyValuePair.value ?? "").toUpperCase();
+			if (["DM","DMGM","GMDM"].includes(diceSecretMethodType)) {
+				return DiceSecretMethodType.GameMasterDirect;
+			}
+			if (["GM","GAMEMASTER"].includes(diceSecretMethodType)) {
+				return DiceSecretMethodType.GameMasterChannel;
+			}
+			if (diceSecretMethodType === "HIDE") {
+				return DiceSecretMethodType.Hide;
+			}
+			if (diceSecretMethodType === "IGNORE") {
+				return DiceSecretMethodType.Ignore;
+			}
+			return null;
+		}
+		return undefined;
 	}
 
 	public removeAndReturnDiscordColor(argKey?: string): Optional<string> {
@@ -472,8 +429,8 @@ export default class SageMessageArgs extends ArgsManager implements ISageCommand
 				return color;
 			}
 			// return valid color or null
-			return utils.ColorUtils.Color.isValid(color)
-				? utils.ColorUtils.Color.from(color).toDiscordColor()
+			return Color.isValid(color)
+				? Color.from(color).toDiscordColor()
 				: null;
 		}
 		return this.removeAndReturnColor()?.toDiscordColor();
@@ -497,8 +454,19 @@ export default class SageMessageArgs extends ArgsManager implements ISageCommand
 		return game.getChannel(this.sageMessage.discordKey.channel) ?? null;
 	}
 
+	/**
+	 * /^(gamesystem|gametype|game|system|type)=(ESSENCE20|ESS20|E20|PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE|UNSET)?$/i;
+	 * returns undefined if not found.
+	 * returns null to unset.
+	 */
 	public removeAndReturnGameType(): Optional<GameType> {
-		return removeAndReturnGameType(this);
+		const keyRegex = /gamesystem|gametype|game|system|type/i
+		const valueRegex = /ESSENCE20|ESS20|E20|PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE|UNSET/i
+		const keyValuePair = this.removeKeyValuePair(keyRegex, valueRegex);
+		if (keyValuePair) {
+			return parseGameType(keyValuePair.value ?? "") ?? null;
+		}
+		return undefined;
 	}
 
 	public removeAndReturnName(defaultJoinRemaining = false, defaultJoinSeparator = " "): string | undefined {
@@ -542,6 +510,23 @@ export default class SageMessageArgs extends ArgsManager implements ISageCommand
 		return names;
 	}
 
+	/**
+	 * /^(gm|gamemaster|player|nonplayer)s?=(?:(0|1|2|3)|(none|read|react|write))$/i;
+	 * returns undefined if not found.
+	 */
+	public removeAndReturnPermissionType(key: "gamemaster" | "nonplayer" | "player"): PermissionType | undefined {
+		const orGm = key === "gamemaster" ? "|gm" : "";
+		const keyRegex = new RegExp(key + orGm, "i");
+		const valueRegex = /0|1|2|3|none|read|react|write/i;
+		const keyValuePair = this.removeKeyValuePair(keyRegex, valueRegex);
+		if (keyValuePair) {
+			return "0123".includes(keyValuePair.value)
+				? +keyValuePair.value
+				: PermissionType[capitalize(keyValuePair.value) as TPermissionType];
+		}
+		return undefined;
+	}
+
 	public async removeAndReturnRoleDid(): Promise<Discord.Snowflake | null> {
 		if (this.isEmpty) {
 			return null;
@@ -567,7 +552,7 @@ export default class SageMessageArgs extends ArgsManager implements ISageCommand
 		const servers = this.sageMessage.sageCache.servers;
 
 		const server = await this.asyncFindArgAndRemoveAndMap<Optional<Server>>(async arg =>
-			utils.UuidUtils.isValid(arg) ? servers.getById(arg)
+			isValidUuid(arg) ? servers.getById(arg)
 			: DiscordId.isValidId(arg) ? servers.getByDid(arg)
 			: undefined
 		);
@@ -621,7 +606,7 @@ export default class SageMessageArgs extends ArgsManager implements ISageCommand
 
 		async function argToSnowflake(arg: string): Promise<Discord.Snowflake | undefined> {
 			return DiscordId.isUserMention(arg) ? DiscordId.parseId(arg)
-				: utils.UuidUtils.isValid(arg) ? (await userRepo.getById(arg))?.did
+				: isValidUuid(arg) ? (await userRepo.getById(arg))?.did
 				: DiscordId.isValidId(arg) ? (await discord.fetchGuildMember(arg))?.id
 				: undefined;
 		}
