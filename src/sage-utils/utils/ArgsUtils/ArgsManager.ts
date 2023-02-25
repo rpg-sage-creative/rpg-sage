@@ -1,8 +1,8 @@
-import { Optional, OrNull, OrUndefined, TKeyValueArg, TParsers, UUID, isNullOrUndefined } from "../..";
+import { Optional, OrNull, OrUndefined, TKeyValueArg, TParsers, UUID, isNullOrUndefined, If } from "../..";
 import { Collection } from "../ArrayUtils";
 import { exists } from "../ArrayUtils/Filters";
 import { Color } from "../ColorUtils";
-import { Tokenizer, dequote, isKeyValueArg, parseKeyValueArg } from "../StringUtils";
+import { Tokenizer, dequote, isKeyValueArg, parseKeyValueArg, createQuotedRegex, createKeyValueArgRegex, createWhitespaceRegex } from "../StringUtils";
 import { isValid as isValidUuid } from "../UuidUtils";
 
 type TArgIndexRet<T> = {
@@ -14,11 +14,11 @@ type TArgIndexRet<T> = {
 type TArgAndIndex = TArgIndexRet<any>;
 
 /** Represents an argument that was 'key=value'. If value is an empty string, it will be set as NULL. */
-type TKeyValuePair<T extends string = string> = {
+type TKeyValuePair<T extends string = string, CanHaveNull extends boolean = true> = {
 	/** The value on the left of the first equals sign. */
 	key: string;
 	/** This value is null if they value was an empty string. */
-	value: T | null;
+	value: If<CanHaveNull, T | null, T>;
 };
 
 /** Used to enable simpler removal of key value pairs from the ArgsManager. */
@@ -60,23 +60,6 @@ export default class ArgsManager<T extends string = string> extends Collection<T
 
 	//#region key/value pairs
 
-	// public forEachArg(callbackfn: (pair: TKeyValuePair, index: number, array: TKeyValuePair[]) => void, thisArg?: any): void {
-	// 	const regex = XRegExp(`^([\\w\\pL\\pN]+)=(.*?)$`, "i");
-	// 	this.args
-	// 		.map(value => value.match(regex))
-	// 		.filter(m => m)
-	// 		.map(match => { return <TKeyValuePair>{ key:match[1], value:match[2] }; })
-	// 		.forEach(callbackfn, thisArg);
-	// }
-	// public mapArg(callbackfn: (pair: TKeyValuePair, index: number, array: TKeyValuePair[]) => void, thisArg?: any): void {
-	// 	const regex = XRegExp(`^([\\w\\pL\\pN]+)=(.*?)$`, "i");
-	// 	this.args
-	// 		.map(value => value.match(regex))
-	// 		.filter(m => m)
-	// 		.map(match => { return <TKeyValuePair>{ key:match[1], value:match[2] }; })
-	// 		.forEach(callbackfn, thisArg);
-	// }
-
 	/** Maps each value to a key/value pair or null if the value isn't a key/value pair. */
 	protected parseKeyValuePairs<U extends string = string>(): OrNull<TKeyValueIndex<U>>[] {
 		return this.map(parseKeyValuePair) as TKeyValueIndex<U>[];
@@ -89,14 +72,21 @@ export default class ArgsManager<T extends string = string> extends Collection<T
 	}
 
 	/** Removes and returns the key/value pair with a key that matches the given string or RegExp. */
-	public removeKeyValuePair<U extends string = string>(key: string | RegExp): OrUndefined<TKeyValuePair<U>> {
-		const regex = typeof(key) === "string" ? new RegExp(`^${key}$`, "i") : key;
-		const keyValuePair = this.parseKeyValuePairs<U>().find(pair => pair?.key.match(regex));
+	public removeKeyValuePair<U extends string = string>(key: string | RegExp): OrUndefined<TKeyValuePair<U>>;
+	/** Removes and returns the key/value pair with a key and value that matche the given string or RegExp values. */
+	public removeKeyValuePair<U extends string = string>(key: string | RegExp, value: string | RegExp): OrUndefined<TKeyValuePair<U, false>>;
+	public removeKeyValuePair(key: string | RegExp, value?: string | RegExp): OrUndefined<TKeyValuePair<any, any>> {
+		const keyRegex = typeof(key) === "string" ? new RegExp(`^${key}$`, "i") : key;
+		const valueRegex = value !== undefined ? typeof(key) === "string" ? new RegExp(`^${value}$`, "i") : value : undefined;
+		const matcher = valueRegex
+			? (pair: OrNull<TKeyValueIndex>) => pair?.key.match(keyRegex) && pair?.value?.match(valueRegex)
+			: (pair: OrNull<TKeyValueIndex>) => pair?.key.match(keyRegex);
+		const keyValuePair = this.parseKeyValuePairs().find(matcher);
 		const index = keyValuePair?.index ?? -1;
 		if (index > -1) {
 			this.removeAt(index);
 		}
-		return keyValuePair as TKeyValuePair<U> ?? undefined;
+		return keyValuePair ?? undefined;
 	}
 
 	//#endregion
@@ -302,9 +292,9 @@ export default class ArgsManager<T extends string = string> extends Collection<T
 		}
 
 		const parsers: TParsers = {
-			arg: /\w+=("[^"]*"|\S+|\s+)/i,
-			spaces: /\s+/,
-			quotes: /"[^"]*"/,
+			arg: createKeyValueArgRegex(),
+			spaces: createWhitespaceRegex(),
+			quotes: createQuotedRegex(false),
 			...additionalParsers
 		};
 
@@ -312,7 +302,7 @@ export default class ArgsManager<T extends string = string> extends Collection<T
 			.tokenize(trimmed, parsers)
 			.map(token => token.token.trim())
 			.filter(token => token.length)
-			.map(token => parseKeyValueArg(token)?.simple ?? token)
+			.map(token => parseKeyValueArg(token)?.clean ?? token)
 			.map(dequote)
 			;
 		return ArgsManager.from(tokenized);
