@@ -68,26 +68,10 @@
 			}
 		},
 		{
-			"label": "pdf2json-clean",
+			"label": "node-module-fixes",
 			"type": "shell",
-			"command": "rm",
-			"args": ["-rf","./node_modules/pdf2json/index.d.ts"],
-			"group": "build",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared",
-				"showReuseMessage": false,
-				"clear": false
-			}
-		},
-		{
-			"label": "pdf2json-declare",
-			"dependsOn": ["pdf2json-clean"],
-			"type": "shell",
-			"command": "echo",
-			"args": ["'declare module \"pdf2json\";'",">","./node_modules/pdf2json/index.d.ts"],
+			"command": "bash",
+			"args": ["./scripts/node-module-fixes.sh"],
 			"group": "build",
 			"presentation": {
 				"echo": true,
@@ -100,7 +84,7 @@
 		},
 		{
 			"label": "Transpile",
-			"dependsOn": ["pdf2json-declare"],
+			"dependsOn": ["node-module-fixes"],
 			"type": "typescript",
 			"tsconfig": "tsconfig.json",
 			"problemMatcher": "$tsc",
