@@ -8,10 +8,6 @@ type THasSnowflakeId = { id:Discord.Snowflake; };
 type THasSnowflakeDid = { did:Discord.Snowflake; };
 type TSnowflakeResolvable = Discord.Snowflake | THasSnowflakeId | THasSnowflakeDid;
 
-function matchCustomEmoji(value: Optional<string>): Optional<RegExpMatchArray> {
-	return value?.match(/^<(a)?:(\w{2,}):(\d{16,})>$/);
-}
-
 export default class DiscordId {
 	protected constructor(
 		public type: SnowflakeType,
@@ -42,7 +38,7 @@ export default class DiscordId {
 			return new DiscordId(SnowflakeType.ChannelReference, DiscordId.parseId(value));
 		}
 		if (DiscordId.isCustomEmoji(value)) {
-			const [_, animated, name, did] = matchCustomEmoji(value) ?? [];
+			const [_, animated, name, did] = value.match(DiscordId.createCustomEmojiRegex()) ?? [];
 			return new DiscordId(SnowflakeType.CustomEmoji, did, name, animated === "a");
 		}
 		if (DiscordId.isRoleMention(value)) {
@@ -65,7 +61,7 @@ export default class DiscordId {
 		return isDefined(value?.match(/^<#\d{16,}>$/));
 	}
 	public static isCustomEmoji(value: string): boolean {
-		return isDefined(matchCustomEmoji(value));
+		return isDefined(value?.match(DiscordId.createCustomEmojiRegex()));
 	}
 	public static isRoleMention(value: string): boolean {
 		return isDefined(value?.match(/^<@&\d{16,}>$/));
@@ -75,6 +71,13 @@ export default class DiscordId {
 	}
 	public static isUserMention(value: string): boolean {
 		return isDefined(value?.match(/^<@\!?\d{16,}>$/));
+	}
+
+	public static createChannelReferenceOrDidRegex(): RegExp {
+		return /^(\d{16,}|<#\d{16,}>)$/;
+	}
+	public static createCustomEmojiRegex(): RegExp {
+		return /^<(a)?:(\w{2,}):(\d{16,})>$/;
 	}
 
 	public static isMentionOrReference(value: string): boolean {
