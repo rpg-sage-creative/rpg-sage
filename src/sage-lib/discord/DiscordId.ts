@@ -8,11 +8,16 @@ type THasSnowflakeId = { id:Discord.Snowflake; };
 type THasSnowflakeDid = { did:Discord.Snowflake; };
 type TSnowflakeResolvable = Discord.Snowflake | THasSnowflakeId | THasSnowflakeDid;
 
+function matchCustomEmoji(value: Optional<string>): Optional<RegExpMatchArray> {
+	return value?.match(/^<(a)?:(\w{2,}):(\d{16,})>$/);
+}
+
 export default class DiscordId {
 	protected constructor(
 		public type: SnowflakeType,
 		public did: Discord.Snowflake,
-		public name?: string
+		public name?: string,
+		public animated?: boolean
 	) { }
 
 	public toString(): string | null {
@@ -37,8 +42,8 @@ export default class DiscordId {
 			return new DiscordId(SnowflakeType.ChannelReference, DiscordId.parseId(value));
 		}
 		if (DiscordId.isCustomEmoji(value)) {
-			const [_, name, did] = value.match(/<:(\w+):(\d+)>/) ?? [];
-			return new DiscordId(SnowflakeType.CustomEmoji, did, name);
+			const [_, animated, name, did] = matchCustomEmoji(value) ?? [];
+			return new DiscordId(SnowflakeType.CustomEmoji, did, name, animated === "a");
 		}
 		if (DiscordId.isRoleMention(value)) {
 			return new DiscordId(SnowflakeType.RoleMention, DiscordId.parseId(value));
@@ -60,7 +65,7 @@ export default class DiscordId {
 		return isDefined(value?.match(/^<#\d{16,}>$/));
 	}
 	public static isCustomEmoji(value: string): boolean {
-		return isDefined(value?.match(/^<:\w{2,}:\d{16,}>$/));
+		return isDefined(matchCustomEmoji(value));
 	}
 	public static isRoleMention(value: string): boolean {
 		return isDefined(value?.match(/^<@&\d{16,}>$/));
