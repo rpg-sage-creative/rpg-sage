@@ -39,13 +39,13 @@ export type TToken = {
 
 //#endregion
 
-export type TKeyValueArg = {
+export type TKeyValueArg<T extends string = string> = {
 	/** key */
 	key: string;
 	/** key.toLowerCase() */
 	keyLower: string;
 	/** value (can have spaces) */
-	value: string;
+	value: T;
 	/** keyLower="value" (value can have spaces, not trimmed) */
 	clean: string;
 	/**
