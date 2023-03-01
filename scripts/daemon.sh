@@ -9,9 +9,9 @@ if [ -z "$ACT" ] || [ -z "$ENV" ] || [ -z "$PKG" ] || [ "$ENV" = "local" ]; then
 	exit 1
 fi
 
-command="[ -f \"app.mjs\" ] && pm2 $ACT sage-$PKG"
+command="pm2 desc sage-$PKG-$ENV >/dev/null && pm2 $ACT sage-$PKG-$ENV"
 if [ "$ACT" = "start" ]; then
-	command="[ -f \"app.mjs\" ] && pm2 start app.mjs --name sage-$PKG --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $PKG dist"
+	command="[ -f \"app.mjs\" ] && pm2 start app.mjs --name sage-$PKG-$ENV --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $PKG dist"
 fi
 
 sshCommands=(

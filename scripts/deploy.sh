@@ -28,7 +28,6 @@ if [ "$PKG" = "data" ]; then
 	echoAndDo "echo 'ver 0.0.0' > version.txt"
 	echoAndDo "echo 'ver 0.0.0' > sage-data-pf2e.ver"
 	echoAndDo "cp -r $sageRootDir/data/pf2e/dist/* $deployDirLocal/tmp"
-	echoAndDo "zip -rq9 $deployDirLocal/$PKG.zip *"
 else
 	# echoAndDo "cp -r $sageRootDir/node_modules $deployDirLocal/tmp"
 	echoAndDo "cp -r $sageRootDir/dist/sage* $deployDirLocal/tmp"
@@ -55,9 +54,9 @@ if [ "$PKG" = "data" ]; then
 		"mv $packageDir/pf2e/dist $packageDir/pf2e/dist-$NOW"
 		"unzip -q $deployDirRemote/data -d $packageDir/pf2e/dist"
 		"rm -f $deployDirRemote/data.zip"
-		"[ -f \"$botDir/dev/app.mjs\" ] && pm2 restart sage-dev"
-		"[ -f \"$botDir/beta/app.mjs\" ] && pm2 restart sage-beta"
-		"[ -f \"$botDir/stable/app.mjs\" ] && pm2 restart sage-stable"
+		"pm2 desc sage-dev-$ENV >/dev/null && pm2 restart sage-dev-$ENV"
+		"pm2 desc sage-beta-$ENV >/dev/null && pm2 restart sage-beta-$ENV"
+		"pm2 desc sage-stable-$ENV >/dev/null && pm2 restart sage-stable-$ENV"
 	)
 else
 	packageDirTmp="$packageDir-tmp"
@@ -69,11 +68,11 @@ else
 		"rm -f $deployDirRemote/$PKG.zip"
 		"cd $packageDirTmp"
 		"npm install"
-		"pm2 delete sage-$PKG"
+		"pm2 desc sage-$PKG-$ENV >/dev/null && pm2 delete sage-$PKG-$ENV"
 		"mv $packageDir $packageDirOld"
 		"mv $packageDirTmp $packageDir"
 		"cd $packageDir"
-		"pm2 start app.mjs --name sage-$PKG --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $PKG dist"
+		"pm2 start app.mjs --name sage-$PKG-$ENV --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $PKG dist"
 		"pm2 save"
 	)
 fi
