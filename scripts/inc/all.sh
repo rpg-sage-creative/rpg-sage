@@ -45,7 +45,14 @@ function scpFrom() {
 	echoAndDo "scp $sshKey $sshHost:$remotePath $localPath"
 }
 
+function esc() {
+	printf "%s\n" "$1" | sed -e "s/\"/\\\\\"/g"
+}
+
 function sshRun() {
+	sshFileRemote="$botDir/deploy/ssh-cmd.sh"
+	sshFileLocal="$sageRootDir/scripts/ssh-cmd.sh"
+
 	sshCommand=""
 
 	# If going to dev, source the shell
@@ -53,16 +60,35 @@ function sshRun() {
 		sshCommand="source ~/.zshrc;"
 	fi
 
-	# combine all other args into a single command
-	sshCommands=("$@")
-	for cmd in "${sshCommands[@]}"; do
-		sshCommand="$sshCommand echo \\\"$cmd\\\"; eval \\\"$cmd\\\";"
-	done
+	# execute the remote .sh file
+	sshCommand="$sshCommand /bin/bash $sshFileRemote;"
+
+	# delete the remote .sh file
+	sshCommand="$sshCommand rm -f $sshFileRemote;"
 
 	# include an exit
 	sshCommand="$sshCommand exit;"
 
+	# start script file
+	echoAndDo "echo \"# start of remote script\" > $sshFileLocal"
+
+	# add all commands to file
+	sshCommands=("$@")
+	for cmd in "${sshCommands[@]}"; do
+		# escape those pesky quotes first!
+		escaped=$(esc "$cmd")
+		# write command to file
+		echoAndDo "echo \"$escaped\" >> $sshFileLocal"
+	done
+
+	# send file
+	scpTo "$sshFileLocal" "$sshFileRemote"
+
+	# run file
 	echoAndDo "ssh $sshHost $sshKey \"$sshCommand\""
+
+	# remove file
+	echoAndDo "rm -f $sshFileLocal"
 }
 
 #endregion
