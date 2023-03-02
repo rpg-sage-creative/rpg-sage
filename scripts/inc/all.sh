@@ -147,7 +147,7 @@ PKG=
 while test $# -gt 0; do
 	case "$1" in
 		start|stop|delete|restart) ACT="$1"; shift; ;;
-		aws|local|mini|vps) ENV="$1"; shift; ;;
+		aws|local|mini) ENV="$1"; shift; ;;
 		data|dev|beta|stable) PKG="$1"; shift; ;;
 		-script) outputToScript="true"; shift; ;;
 		*) break; ;;

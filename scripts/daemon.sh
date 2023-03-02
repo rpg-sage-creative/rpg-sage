@@ -5,7 +5,7 @@
 
 # warn if any args are missing
 if [ -z "$ACT" ] || [ -z "$ENV" ] || [ -z "$PKG" ] || [ "$ENV" = "local" ]; then
-	echo "/bin/bash daemon.sh start|stop|restart|delete aws|vps dev|beta|stable"
+	echo "/bin/bash daemon.sh start|stop|restart|delete aws dev|beta|stable"
 	exit 1
 fi
 

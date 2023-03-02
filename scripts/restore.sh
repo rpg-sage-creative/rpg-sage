@@ -5,12 +5,7 @@
 
 # warn if any args are missing
 if [ -z "$ENV" ] || [ -z "$PKG" ]; then
-	echoLog "/bin/bash restore.sh dev|beta|stable|data aws|vps"
-	exit 1
-fi
-
-if [ "$ENV" != "aws" ]; then
-	echoLog "Don't touch VPS! (ENV must be 'aws')"
+	echoLog "/bin/bash restore.sh dev|beta|stable|data aws"
 	exit 1
 fi
 

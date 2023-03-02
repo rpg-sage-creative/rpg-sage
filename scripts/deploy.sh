@@ -5,7 +5,7 @@
 
 # warn if any args are missing
 if [ -z "$ENV" ] || [ -z "$PKG" ]; then
-	echoLog "/bin/bash deploy.sh dev|beta|stable|data aws|vps"
+	echoLog "/bin/bash deploy.sh dev|beta|stable|data aws"
 	exit 1
 fi
 

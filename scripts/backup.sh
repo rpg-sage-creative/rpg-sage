@@ -5,7 +5,7 @@
 
 # warn if any args are missing
 if [ -z "$ENV" ]; then
-	echo "/bin/bash backup.sh aws|vps"
+	echo "/bin/bash backup.sh aws"
 	exit 1
 fi
 
