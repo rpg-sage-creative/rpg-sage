@@ -27,7 +27,7 @@ export function cleanJson<T>(value: T, rules = DefaultJsonCleanRules): T {
 		}
 		return value;
 	}
-	cleanObject(value, rules);
+	cleanObject(value as TObject, rules);
 	return value;
 }
 
