@@ -6,7 +6,7 @@ import { registerCommandHelp } from "./help";
 
 // #region rpg.SpUtils
 async function spUtils(sageMessage: SageMessage): Promise<void> {
-	const data = sageMessage.args.shift()!;
+	const data = sageMessage.args.valueAt(0)!;
 
 	const values = data.match(/\s*[\-\+]?\s*\d+(?:,\d{3})*\s*(?:cp|sp|gp|pp)/gi)!,
 		signedAndSorted = values.map(s => ("+" + s).replace(/\s+/g, "").replace(/\+([\-\+])/, "$1").toLowerCase()).sort(),
@@ -27,7 +27,7 @@ async function spUtils(sageMessage: SageMessage): Promise<void> {
 
 // #region Starting Wealth
 async function startingWealth(sageMessage: SageMessage): Promise<void> {
-	const levelString = sageMessage.args.shift()!;
+	const levelString = sageMessage.args.valueAt(0)!;
 
 	const table = Table.findByNumber("10-10")!,
 		level = +levelString.replace(/st|nd|rd|th/, "");
@@ -49,13 +49,15 @@ async function startingWealth(sageMessage: SageMessage): Promise<void> {
 
 // #region Earned Income
 async function incomeEarnedA(sageMessage: SageMessage): Promise<void> {
-	const taskLevelString = sageMessage.args.shift()!;
-	const proficiencyString = sageMessage.args.shift()!;
+	const values = sageMessage.args.unkeyedValues();
+	const taskLevelString = values.shift()!;
+	const proficiencyString = values.shift()!;
 	_incomeEarned(sageMessage, taskLevelString, proficiencyString);
 }
 async function incomeEarnedB(sageMessage: SageMessage): Promise<void> {
-	const proficiencyString = sageMessage.args.shift()!;
-	const taskLevelString = sageMessage.args.shift()!;
+	const values = sageMessage.args.unkeyedValues();
+	const proficiencyString = values.shift()!;
+	const taskLevelString = values.shift()!;
 	_incomeEarned(sageMessage, taskLevelString, proficiencyString);
 }
 async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, proficiencyString: string): Promise<void> {

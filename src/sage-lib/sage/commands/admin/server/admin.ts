@@ -26,7 +26,7 @@ async function adminList(sageMessage: SageMessage<true>): Promise<void> {
 		};
 	});
 	if (users) {
-		const filter = sageMessage.args.join(" ");
+		const filter = sageMessage.args.unkeyedValues().join(" ");
 		if (filter && users.length) {
 			const lower = filter.toLowerCase();
 			users = users.filter(user => user?.discordUser?.username?.toLowerCase().includes(lower));
@@ -59,13 +59,13 @@ async function adminAdd(sageMessage: SageMessage<true>): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const userDid = await sageMessage.args.removeAndReturnUserDid();
+	const userDid = sageMessage.args.findUserDid("user", true);
 	if (!userDid) {
 		return sageMessage.reactFailure();
 	}
 
-	const roleType = getAdminRoleType(sageMessage.command) ?? sageMessage.args.removeAndReturnEnum(AdminRoleType) ?? null;
-	if (roleType === null) {
+	const roleType = getAdminRoleType(sageMessage.command) ?? sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type", true);
+	if (!roleType) {
 		return sageMessage.reactFailure();
 	}
 
@@ -78,13 +78,13 @@ async function adminUpdate(sageMessage: SageMessage<true>): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const userDid = await sageMessage.args.removeAndReturnUserDid();
+	const userDid = sageMessage.args.findUserDid("user", true);
 	if (!userDid) {
 		return sageMessage.reactFailure();
 	}
 
-	const roleType = getAdminRoleType(sageMessage.command) ?? sageMessage.args.removeAndReturnEnum(AdminRoleType) ?? null;
-	if (roleType === null) {
+	const roleType = getAdminRoleType(sageMessage.command) ?? sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type", true);
+	if (!roleType) {
 		return sageMessage.reactFailure();
 	}
 
@@ -97,7 +97,7 @@ async function adminRemove(sageMessage: SageMessage<true>): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const userDid = await sageMessage.args.removeAndReturnUserDid();
+	const userDid = sageMessage.args.findUserDid("user", true);
 	if (!userDid) {
 		return sageMessage.reactFailure();
 	}

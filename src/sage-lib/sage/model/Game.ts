@@ -1,11 +1,12 @@
 import type * as Discord from "discord.js";
 import type { GameType } from "../../../sage-common";
-import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import utils, { IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
+import utils, { Args, IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
+import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
 import { DiscordKey } from "../../discord";
-import type { DicePostType } from "../commands/dice";
+import { DicePostType } from "../commands/dice";
+import { DialogType, GameChannelType, IChannel, IChannelOptions, parseGameChannelType, PermissionType, updateChannel } from "../repo/base/channel";
 import { HasIdCoreAndSageCache } from "../repo/base/IdRepository";
-import { DialogType, IChannel, PermissionType, updateChannel } from "../repo/base/channel";
 import CharacterManager from "./CharacterManager";
 import Colors from "./Colors";
 import Emoji from "./Emoji";
@@ -14,9 +15,12 @@ import type { GameCharacterCore } from "./GameCharacter";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
 import type SageCache from "./SageCache";
+import { applyValues, getEnum, hasValues, ISageCommandArgs } from "./SageCommandArgs";
 import type Server from "./Server";
 
 const exists = utils.ArrayUtils.Filters.exists;
+
+type IChannelArgs = Args<IChannelOptions> & { did:Discord.Snowflake; };
 
 export type TGameRoleType = keyof typeof GameRoleType;
 export enum GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Cast = 4, Table = 5 }
@@ -30,6 +34,7 @@ export function getRoleTypes(roleType: GameRoleType): GameRoleType[] {
 		default: return [];
 	}
 }
+
 export interface IGameRole {
 	did: Discord.Snowflake;
 	type: GameRoleType;
@@ -39,19 +44,35 @@ export interface IGameRole {
 export enum GameUserType { Unknown = 0, Player = 1, GameMaster = 2 }
 export interface IGameUser { did: Discord.Snowflake; type: GameUserType; dicePing: boolean; }
 
-export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
+export type TDefaultGameOptions = {
+	defaultCritMethodType: CritMethodType;
+	defaultDialogType: DialogType;
+	defaultDiceOutputType: DiceOutputType;
+	defaultDicePostType: DicePostType;
+	defaultDiceSecretMethodType: DiceSecretMethodType;
+}
+
+export function getDefaultGameOptions(args: ISageCommandArgs): Args<TDefaultGameOptions> | null {
+	const opts: Args<TDefaultGameOptions> = {
+		defaultCritMethodType: getEnum(args, CritMethodType, "crit", "critMethod", "critMethodType"),
+		defaultDialogType: getEnum(args, DialogType, "dialogType"),
+		defaultDiceOutputType: getEnum(args, DiceOutputType, "diceOutput", "diceOutputType"),
+		defaultDicePostType: getEnum(args, DicePostType, "dicePost", "dicePostType"),
+		defaultDiceSecretMethodType: getEnum(args, DiceSecretMethodType, "diceSecret", "diceSecretMethod", "diceSecretMethodType")
+	};
+	return hasValues(opts) ? opts : null;
+}
+
+export type TGameOptions = TDefaultGameOptions & {
+	gameType: GameType;
+	gmCharacterName: string;
+	name: string;
+};
+
+export interface IGameCore extends IdCore, IHasColors, IHasEmoji, Partial<TGameOptions> {
 	objectType: "Game";
 	createdTs: number;
 	archivedTs?: number;
-
-	name: string;
-	gameType?: GameType;
-
-	defaultDialogType?: DialogType;
-	defaultCritMethodType?: CritMethodType;
-	defaultDiceOutputType?: DiceOutputType;
-	defaultDicePostType?: DicePostType;
-	defaultDiceSecretMethodType?: DiceSecretMethodType;
 
 	serverId: UUID;
 	serverDid: Discord.Snowflake;
@@ -63,7 +84,6 @@ export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
 
 	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
 	playerCharacters?: (GameCharacter | GameCharacterCore)[];
-	gmCharacterName?: string;
 }
 
 export type TMappedChannelNameTags = {
@@ -71,6 +91,7 @@ export type TMappedChannelNameTags = {
 	ooc: boolean;
 	gm: boolean;
 	misc: boolean;
+	type: GameChannelType;
 };
 export type TMappedGameChannel = {
 	did: Discord.Snowflake;
@@ -94,8 +115,15 @@ export function mapSageChannelNameTags(channel: IChannel): TMappedChannelNameTag
 	const ic = bothWrite && !ooc && dialog;
 	const misc = !ic && !ooc && !gm;
 
-	return { ic, gm, ooc, misc };
+	let type: GameChannelType = GameChannelType.None;
+	if (ic) type = GameChannelType.InCharacter;
+	if (gm) type = GameChannelType.GameMaster;
+	if (ooc) type = GameChannelType.OutOfCharacter;
+	if (misc) type = GameChannelType.Miscellaneous;
+
+	return { ic, gm, ooc, misc, type };
 }
+
 export function nameTagsToType(nameTags: TMappedChannelNameTags): string {
 	if (nameTags.gm) {
 		return "GM <i>(Game Master)</i>";
@@ -113,12 +141,15 @@ export function nameTagsToType(nameTags: TMappedChannelNameTags): string {
 }
 
 /** Reads GuildChannel.name to determine channel type: IC, GM, OOC, MISC */
-function mapGuildChannelNameTags(channel: Discord.GuildChannel): TMappedChannelNameTags {
-	const ic = channel.name.match(/\bic\b/i) !== null;
-	const gm = !ic && channel.name.match(/\bgms?\b/i) !== null;
-	const ooc = !ic && !gm && channel.name.match(/\booc\b/i) !== null;
-	const misc = !ic && !ooc && !gm;
-	return { ic, ooc, gm, misc };
+export function mapGuildChannelNameTags(channelName: string): TMappedChannelNameTags {
+	const type = parseGameChannelType(channelName) ?? GameChannelType.Miscellaneous;
+	return {
+		ic: type === GameChannelType.InCharacter,
+		ooc: type === GameChannelType.OutOfCharacter,
+		gm: type === GameChannelType.GameMaster,
+		misc: type === GameChannelType.Miscellaneous,
+		type
+	};
 }
 
 /** Returns [guildChannels.concat(sageChannels), guildChannels, sageChannels] */
@@ -139,7 +170,7 @@ async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<
 				did: sChannel.did,
 				sChannel: sChannel,
 				gChannel: gChannel,
-				nameTags: mapGuildChannelNameTags(gChannel)
+				nameTags: mapGuildChannelNameTags(gChannel.name)
 			});
 		}
 	}
@@ -158,7 +189,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	public get archivedDate(): Date | undefined { return this.core.archivedTs ? new Date(this.core.archivedTs) : undefined; }
 	public get isArchived(): boolean { return this.core.createdTs && this.core.archivedTs ? this.core.createdTs < this.core.archivedTs : false; }
 
-	public get name(): string { return this.core.name; }
+	public get name(): string { return this.core.name ?? ""; }
 	public get gameType(): GameType | undefined { return this.core.gameType; }
 	public get defaultCritMethodType(): CritMethodType | undefined { return this.core.defaultCritMethodType; }
 	public get defaultDialogType(): DialogType | undefined { return this.core.defaultDialogType; }
@@ -271,13 +302,14 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 	// #region Channel actions
 
-	public async addOrUpdateChannels(...channels: IChannel[]): Promise<boolean> {
+	public async addOrUpdateChannels(...channels: IChannelArgs[]): Promise<boolean> {
 		channels.forEach(channel => {
 			const found = this.getChannel(new DiscordKey(this.serverDid, channel.did));
 			if (found) {
 				updateChannel(found, channel);
 			} else {
-				(this.core.channels || (this.core.channels = [])).push({ ...channel });
+				const cleanChannel = cleanJson({ ...channel } as IChannel, { deleteNull:true, deleteUndefined:true });
+				(this.core.channels ?? (this.core.channels = [])).push(cleanChannel);
 			}
 		});
 		return this.save();
@@ -474,21 +506,8 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		return undefined;
 	}
 
-	private updateName(name: Optional<string>): void { this.core.name = name ?? this.core.name ?? ""; }
-	private updateGameType(gameType: Optional<GameType>): void { this.core.gameType = gameType === null ? undefined : gameType ?? this.core.gameType; }
-	private updateCritMethodType(critMethodType: Optional<CritMethodType>): void { this.core.defaultCritMethodType = critMethodType === null ? undefined : critMethodType ?? this.core.defaultCritMethodType; }
-	private updateDialogType(dialogType: Optional<DialogType>): void { this.core.defaultDialogType = dialogType === null ? undefined : dialogType ?? this.core.defaultDialogType; }
-	private updateDiceOutputType(diceOutputType: Optional<DiceOutputType>): void { this.core.defaultDiceOutputType = diceOutputType === null ? undefined : diceOutputType ?? this.core.defaultDiceOutputType; }
-	private updateDicePostType(dicePostType: Optional<DicePostType>): void { this.core.defaultDicePostType = dicePostType === null ? undefined : dicePostType ?? this.core.defaultDicePostType; }
-	private updateDiceSecretMethodType(diceSecretMethodType: Optional<DiceSecretMethodType>): void { this.core.defaultDiceSecretMethodType = diceSecretMethodType === null ? undefined : diceSecretMethodType ?? this.core.defaultDiceSecretMethodType; }
-	public async update(name: Optional<string>, gameType: Optional<GameType>, dialogType: Optional<DialogType>, critMethodType: Optional<CritMethodType>, diceOutputType: Optional<DiceOutputType>, dicePostType: Optional<DicePostType>, diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
-		this.updateName(name);
-		this.updateGameType(gameType);
-		this.updateCritMethodType(critMethodType);
-		this.updateDialogType(dialogType);
-		this.updateDiceOutputType(diceOutputType);
-		this.updateDicePostType(dicePostType);
-		this.updateDiceSecretMethodType(diceSecretMethodType);
+	public async update(opts: Args<TGameOptions>): Promise<boolean> {
+		applyValues(this.core, opts);
 		return this.save();
 	}
 

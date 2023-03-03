@@ -1,14 +1,14 @@
 import type * as Discord from "discord.js";
-import utils, { Optional } from "../../../../../sage-utils";
+import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
+import utils, { Optional } from "../../../../../sage-utils";
 import type SageMessage from "../../../model/SageMessage";
 import type Server from "../../../model/Server";
-import { AdminRoleType, IAdminRole } from "../../../model/Server";
+import { AdminRoleType, getServerDefaultGameOptions, IAdminRole } from "../../../model/Server";
+import { DialogType } from "../../../repo/base/channel";
 import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
-import { DialogType } from "../../../repo/base/channel";
-import { GameType } from "../../../../../sage-common";
 
 async function serverCount(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
@@ -25,7 +25,7 @@ async function serverList(sageMessage: SageMessage): Promise<void> {
 	}
 	let servers = await sageMessage.caches.servers.getAll();
 	if (servers) {
-		const filter = sageMessage.args.join(" ");
+		const filter = sageMessage.args.unkeyedValues().join(" ");
 		if (filter && servers.length) {
 			const lower = filter.toLowerCase();
 			servers = servers.filter(server => server.discord?.guild?.name.toLowerCase().includes(lower));
@@ -70,6 +70,7 @@ function serverDetailsDefaultTypes(renderableContent: utils.RenderUtils.Renderab
 	renderableContent.append(`<b>Default Dice Post Type</b> ${DicePostType[server.defaultDicePostType!] ?? "<i>unset (Post)</i>"}`);
 	renderableContent.append(`<b>Default Dice Secret Method Type</b> ${DiceSecretMethodType[server.defaultDiceSecretMethodType!] ?? "<i>unset (Ignore)</i>"}`);
 }
+
 type TRole = { role:IAdminRole, discordRole:Discord.Role };
 async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	let server: Optional<Server> = sageMessage.server;
@@ -77,7 +78,10 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 	if (!server && sageMessage.isSuperUser) {
-		server = await sageMessage.args.removeAndReturnServer();
+		const uuid = sageMessage.args.findUuid("server", true)
+		if (uuid) {
+			server = await sageMessage.sageCache.servers.getById(uuid);
+		}
 	}
 	if (!server) {
 		return sageMessage.reactFailure();
@@ -118,27 +122,16 @@ async function serverSet(sageMessage: SageMessage<true>): Promise<void> {
 	if (server && !sageMessage.canAdminServer) {
 		return sageMessage.reactBlock();
 	}
-	if (!server && sageMessage.isSuperUser) {
-		server = await sageMessage.args.removeAndReturnServer();
-	}
 	if (!server) {
 		return sageMessage.reactFailure();
 	}
 
-	// TODO: consider allowing updating games by messaging bot directly
-
-	const gameType = sageMessage.args.removeAndReturnGameType();
-	const critMethodType = sageMessage.args.removeAndReturnCritMethodType();
-	const dialogType = sageMessage.args.removeAndReturnDialogType();
-	const diceOutputType = sageMessage.args.removeAndReturnDiceOutputType();
-	const dicePostType = sageMessage.args.removeAndReturnDicePostType();
-	const diceSecretMethodType = sageMessage.args.removeAndReturnDiceSecretMethodType();
-
-	if (gameType === undefined && dialogType === undefined && critMethodType === undefined && diceOutputType === undefined && dicePostType === undefined && diceSecretMethodType === undefined) {
+	const options = getServerDefaultGameOptions(sageMessage.args);
+	if (options === null) {
 		return sageMessage.reactFailure();
 	}
 
-	const updated = await sageMessage.server.update(gameType, dialogType, critMethodType, diceOutputType, dicePostType, diceSecretMethodType);
+	const updated = await sageMessage.server.update(options);
 	return sageMessage.reactSuccessOrFailure(updated);
 }
 
@@ -147,7 +140,7 @@ export default function register(): void {
 	registerAdminCommand(serverList, "server-list");
 	registerAdminCommand(serverInit, "server-init");
 	registerAdminCommand(serverDetails, "server-details");
-	registerAdminCommand(serverSet, "server-set");
+	registerAdminCommand(serverSet, "server-update", "server-set");
 
 	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server count");
 	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server list");

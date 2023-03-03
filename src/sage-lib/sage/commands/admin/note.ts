@@ -29,7 +29,7 @@ Game PC Notes
 // async function notesList(sageMessage: SageMessage): Promise<void> {
 // 	let notes = sageMessage.user.notes;
 // 	// if (notes.size) {
-// 	// 	const filter = sageMessage.args.join(" ");
+// 	// 	const filter = sageMessage.args.unkeyedValues().join(" ");
 // 	// 	if (filter) {
 // 	// 		const lower = filter.toLowerCase();
 // 	// 		notes = notes.filter(note => note.category?.toLowerCase().includes(lower));
@@ -46,23 +46,23 @@ function getPcForStats(sageMessage: SageMessage): GameCharacter | undefined {
 	if (sageMessage.game && sageMessage.isPlayer) {
 		return sageMessage.playerCharacter;
 	}
-	const chars = sageMessage.game
-		? sageMessage.game.playerCharacters
-		: sageMessage.sageUser.playerCharacters;
-	return sageMessage.args.findArgAndRemoveAndMap(arg => chars.findByName(arg)) ?? undefined;
+	const name = sageMessage.args.valueByKey("name");
+	const owner = sageMessage.game ?? sageMessage.sageUser;
+	const char = owner.playerCharacters.findByName(name);
+	return char ?? undefined;
 }
 function getNpcForStats(sageMessage: SageMessage): GameCharacter | undefined {
-	const chars = sageMessage.game
-		? sageMessage.game.nonPlayerCharacters
-		: sageMessage.sageUser.nonPlayerCharacters;
-	return sageMessage.args.findArgAndRemoveAndMap(arg => chars.findByName(arg)) ?? undefined;
+	const name = sageMessage.args.valueByKey("name");
+	const owner = sageMessage.game ?? sageMessage.sageUser;
+	const char = owner.nonPlayerCharacters.findByName(name);
+	return char ?? undefined;
 }
 async function statsSet(sageMessage: SageMessage): Promise<void> {
 	const character = getPcForStats(sageMessage) || getNpcForStats(sageMessage);
 	if (!character) {
 		return sageMessage.reactWarn();
 	}
-	const updated = await character.notes.setStats(sageMessage.args.keyValuePairs());
+	const updated = await character.notes.setStats(sageMessage.args.keyed());
 	if (updated) {
 		await sendGameCharacter(sageMessage, character);
 	}
@@ -84,7 +84,7 @@ async function statsSet(sageMessage: SageMessage): Promise<void> {
 // async function journalEntry(sageMessage: SageMessage): Promise<void> {
 // 	const gameCharacter = sageMessage.game ? sageMessage.playerCharacter : sageMessage.user.playerCharacters.first();
 // 	if (gameCharacter) {
-// 		const lines = sageMessage.args.join(" ").split(/\n/),
+// 		const lines = sageMessage.args.unkeyedValues().join(" ").split(/\n/),
 // 			title = lines.shift();
 // 		let updated: boolean;
 // 		switch(sageMessage.command) {

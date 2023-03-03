@@ -1,103 +1,150 @@
-import type * as Discord from "discord.js";
-import type { VALID_UUID } from "../../../sage-utils";
-import { EnumUtils } from "../../../sage-utils/utils";
-import type { ISageCommandArgs } from "./SageCommand";
+import type { GuildBasedChannel, Snowflake } from "discord.js";
+import type { Optional, VALID_UUID } from "../../../sage-utils";
+import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import type { ISageCommandArgs } from "./SageCommandArgs";
 
 export default class SageReactionArgs implements ISageCommandArgs {
 
-	/** Gets the named option as a boolean or null */
-	public getBoolean(name: string): boolean | null;
+	/** Returns true if an argument matches the given key, regardless of value. */
+	public hasKey(name: string): boolean;
+	public hasKey(): boolean {
+		return false;
+	}
+
+	/** Returns true if the argument matching the given key has the value "unset". */
+	public hasUnset(name: string): boolean;
+	public hasUnset(): boolean {
+		return false;
+	}
+
+	/**
+	 * Gets the named option as a boolean.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid boolean or "unset".
+	 */
+	public getBoolean(name: string): Optional<boolean>;
 	/** Gets the named option as a boolean */
 	public getBoolean(name: string, required: true): boolean;
-	public getBoolean(): boolean | null {
-		return null;
+	public getBoolean(): Optional<boolean> {
+		return false;
 	}
-	/** Returns true if the argument was given a value. */
+
+	/** Returns true if getBoolean(name) is not null and not undefined. */
 	public hasBoolean(name: string): boolean {
-		return this.getBoolean(name) !== null;
+		return exists(this.getBoolean(name));
 	}
 
-	/** Gets the named option as a GuildBasedChannel or null */
-	public getChannel(name: string): Discord.GuildBasedChannel | null;
+	/**
+	 * Gets the named option as a GuildBasedChannel.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid GuildBasedChannel or "unset".
+	 */
+	public getChannel(name: string): Optional<GuildBasedChannel>;
 	/** Gets the named option as a GuildBasedChannel */
-	public getChannel(name: string, required: true): Discord.GuildBasedChannel;
-	public getChannel(): Discord.GuildBasedChannel | null {
+	public getChannel(name: string, required: true): GuildBasedChannel;
+	public getChannel(): Optional<GuildBasedChannel> {
 		return null;
 	}
-	/** Returns true if the argument was given a value. */
+
+	/** Returns true if getChannel(name) is not null and not undefined. */
 	public hasChannel(name: string): boolean {
-		return this.getChannel(name) !== null;
+		return exists(this.getChannel(name));
 	}
 
-	/** Gets the named option as a GuildBasedChannel or null */
-	public getChannelDid(name: string): Discord.Snowflake | null;
-	/** Gets the named option as a GuildBasedChannel */
-	public getChannelDid(name: string, required: true): Discord.Snowflake;
-	public getChannelDid(): Discord.Snowflake | null {
+	/**
+	 * Gets the named option as a Snowflake.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid Snowflake or "unset".
+	 */
+	public getChannelDid(name: string): Optional<Snowflake>;
+	/** Gets the named option as a Snowflake */
+	public getChannelDid(name: string, required: true): Snowflake;
+	public getChannelDid(): Optional<Snowflake> {
 		return null;
 	}
-	/** Returns true if the argument was given a value. */
+
+	/** Returns true if getChannelDid(name) is not null and not undefined. */
 	public hasChannelDid(name: string): boolean {
-		return this.getChannelDid(name) !== null;
+		return exists(this.getChannelDid(name));
 	}
 
-	/** Gets the named option as a value from the given enum type or null if not valid */
-	public getEnum<U>(type: any, name: string): U | null;
-	/** Gets the named option as a string */
+	/**
+	 * Gets the named option as a value from the given enum type.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid enum value or "unset".
+	 */
+	public getEnum<U>(type: any, name: string): Optional<U>;
+	/** Gets the named option as a value from the given enum type. */
 	public getEnum<U>(type: any, name: string, required: true): U;
-	public getEnum<U>(type: any, name: string): U | null {
-		const str = this.getString(name);
-		if (str !== null) {
-			const value = EnumUtils.parse<U>(type, str);
-			if (value !== undefined) {
-				return value;
-			}
-		}
+	public getEnum<U>(): Optional<U> {
 		return null;
 	}
-	/** Returns true if the argument was given a value. */
+
+	/** Returns true if getEnum(type, name) is not null and not undefined. */
 	public hasEnum(type: any, name: string): boolean {
-		return this.getEnum(type, name) !== null;
+		return exists(this.getEnum(type, name));
 	}
 
-	/** Gets the named option as a number or null */
-	public getNumber(name: string): number | null;
+	/**
+	 * Gets the named option as a number.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid number or "unset".
+	 */
+	public getNumber(name: string): Optional<number>;
 	/** Gets the named option as a number */
 	public getNumber(name: string, required: true): number;
-	public getNumber(): number | null {
+	public getNumber(): Optional<number> {
 		return null;
 	}
-	/** Returns true if the argument was given a value. */
+
+	/** Returns true if getNumber(name) is not null and not undefined. */
 	public hasNumber(name: string): boolean {
-		return this.getNumber(name) !== null;
+		return exists(this.getNumber(name));
 	}
 
-	/** Gets the named option as a string or null */
-	public getString<U extends string = string>(name: string): U | null;
+	/**
+	 * Gets the named option as a string.
+	 * Returns undefined if not found.
+	 * Returns null if empty or "unset".
+	 */
+	public getString<U extends string = string>(name: string): Optional<U>;
 	/** Gets the named option as a string */
 	public getString<U extends string = string>(name: string, required: true): U;
-	public getString(): string | null {
+	public getString(): Optional<string> {
 		return null;
 	}
-	/** Returns true if the argument was given a value. */
-	public hasString(name: string): boolean {
-		return this.getString(name) !== null;
+
+	/** Returns true if getString(name) is not null and not undefined. */
+	public hasString(name: string): boolean;
+	/** Returns true if the argument was given the value passed. */
+	public hasString(name: string, value: string): boolean;
+	/** Returns true if the argument matches the given regex. */
+	public hasString(name: string, regex: RegExp): boolean;
+	public hasString(name: string, value?: string | RegExp): boolean {
+		const argValue = this.getString(name);
+		if (!argValue) return false;
+		if (value) {
+			if (typeof(value) === "string") return argValue === value;
+			return value.test(argValue);
+		}
+		return true;
 	}
 
-	/** Returns true if the argument was given the value "unset". */
-	public hasUnset(name: string): boolean {
-		return this.getString(name)?.trim().toLowerCase() === "unset";
-	}
-
-	/** Gets the named option as a VALID_UUID or null */
-	public getUuid(name: string): VALID_UUID | null;
-	/** Gets the named option as a VALID_UUID */
+	/**
+	 * Gets the named option as a VALID_UUID.
+	 * Returns undefined if not found.
+	 * Returns null if empty or "unset".
+	 */
+	public getUuid(name: string): Optional<VALID_UUID>;
+	/** Gets the named option as a VALID_UUID. */
 	public getUuid(name: string, required: true): VALID_UUID;
-	public getUuid(): VALID_UUID | null {
+	public getUuid(): Optional<VALID_UUID> {
 		return null;
 	}
-	/** Returns true if the argument was given a VALID_UUID value. */
+
+	/** Returns true if getUuid(name) is not null and not undefined. */
 	public hasUuid(name: string): boolean {
-		return this.getUuid(name) !== null;
+		return exists(this.getUuid(name));
 	}
+
 }

@@ -1,5 +1,5 @@
 import type * as Discord from "discord.js";
-import type { Optional } from "../../../sage-utils";
+import type { Args, Optional } from "../../../sage-utils";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
 import type { DialogType } from "../repo/base/channel";
 import CharacterManager from "./CharacterManager";
@@ -8,6 +8,7 @@ import type { GameCharacterCore } from "./GameCharacter";
 import NamedCollection from "./NamedCollection";
 import NoteManager, { TNote } from "./NoteManager";
 import type SageCache from "./SageCache";
+import { applyValues } from "./SageCommandArgs";
 
 export type TAlias = {
 	name: string;
@@ -21,11 +22,14 @@ export type TMacro = {
 export enum PatronTierType { None = 0, Friend = 1, Informant = 2, Trusted = 3 }
 export const PatronTierSnowflakes: Discord.Snowflake[] = [undefined!, "730147338529669220", "730147486446125057", "730147633867259904"];
 
-export interface UserCore extends DidCore<"User"> {
+export type TUserOptions = {
+	defaultDialogType: DialogType;
+	defaultSagePostType: DialogType;
+}
+
+export interface UserCore extends DidCore<"User">, Partial<TUserOptions> {
 	aliases?: TAlias[];
 	allowDynamicDialogSeparator?: boolean;
-	defaultDialogType?: DialogType;
-	defaultSagePostType?: DialogType;
 	macros?: TMacro[];
 	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
 	notes?: TNote[];
@@ -90,11 +94,8 @@ export default class User extends HasDidCore<UserCore> {
 		return undefined;
 	}
 
-	private updateDialogType(dialogType: Optional<DialogType>): void { this.core.defaultDialogType = dialogType === null ? undefined : dialogType ?? this.core.defaultDialogType; }
-	private updateSagePostType(sagePostType: Optional<DialogType>): void { this.core.defaultSagePostType = sagePostType === null ? undefined : sagePostType ?? this.core.defaultSagePostType; }
-	public update({ dialogType, sagePostType }: { dialogType?: Optional<DialogType>, sagePostType?: Optional<DialogType> }): Promise<boolean> {
-		this.updateDialogType(dialogType);
-		this.updateSagePostType(sagePostType);
+	public update(opts: Args<TUserOptions>): Promise<boolean> {
+		applyValues(this.core, opts);
 		return this.save();
 	}
 

@@ -68,8 +68,8 @@ function _calDate(value?: Optional<string>, origin?: Optional<TYearOrigin>): Ren
 	return content;
 }
 function calDate(sageMessage: SageMessage): Promise<void> {
-	const date = sageMessage.args[0];
-	const origin = capitalize(sageMessage.args[1]) as TYearOrigin;
+	const date = sageMessage.args.valueAt(0);
+	const origin = capitalize(sageMessage.args.valueAt(1)!) as TYearOrigin;
 	return sageMessage.send(_calDate(date, origin)) as Promise<any>;
 }
 

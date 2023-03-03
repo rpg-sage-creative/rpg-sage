@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
 import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e";
-import type { UUID } from "../../../sage-utils";
+import type { Args, UUID } from "../../../sage-utils";
 import * as _XRegExp from "xregexp";
 import { DiscordKey, NilSnowflake } from "../../discord";
 import CharacterManager from "./CharacterManager";
@@ -18,7 +18,9 @@ export type TDialogMessage = {
 	timestamp: number;
 	userDid: Discord.Snowflake;
 };
+
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion";
+
 export interface GameCharacterCore {
 	/** Channels to automatically treat input as dialog */
 	autoChannels?: Discord.Snowflake[];
@@ -282,34 +284,26 @@ export default class GameCharacter implements IHasSave {
 		return this._pathbuilder ?? null;
 	}
 
-	public update(values: Partial<GameCharacterCore>, save = true): Promise<boolean> {
+	public update(values: Args<GameCharacterCore>, save = true): Promise<boolean> {
 		let changed = false;
-		if (values.avatarUrl !== undefined) {
-			this.avatarUrl = values.avatarUrl;
-			changed = true;
-		}
-		if (values.embedColor !== undefined) {
-			this.embedColor = values.embedColor;
-			changed = true;
-		}
-		if (values.tokenUrl !== undefined) {
-			this.tokenUrl = values.tokenUrl;
-			changed = true;
-		}
-		if (values.name !== undefined && values.name !== this.name) {
-			this.name = values.name;
-			this._preparedName = undefined;
-			changed = true;
-		}
-		if (values.userDid !== undefined && values.userDid !== this.userDid) {
-			this.userDid = values.userDid;
-			changed = true;
-		}
-		if (values.pathbuilder !== undefined) {
-			this.core.pathbuilder = values.pathbuilder;
-			delete this._pathbuilder;
-			changed = true;
-		}
+		const keys = Object.keys(values) as (keyof GameCharacterCore)[];
+		keys.forEach(key => {
+			const value = values[key];
+			if (value !== undefined && value !== this[key]) {
+				if (value === null) {
+					delete this.core[key];
+				}else {
+					/** @todo is there a better way than casting as any to avoid this flagging as an error? */
+					this.core[key] = value as any;
+					if (key === "name") {
+						delete this._preparedName;
+					}else if (key === "pathbuilder") {
+						delete this._pathbuilder;
+					}
+					changed = true;
+				}
+			}
+		});
 		if (changed && save) {
 			return this.save();
 		}

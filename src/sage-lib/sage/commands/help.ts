@@ -229,7 +229,7 @@ function renderHelpTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	if (User.isSuperUser(sageMessage?.message?.author?.id) && sageMessage.slicedContent === "!help-all") {
 		return {
 			command: "help",
-			args: new ArgsManager("help", "all")
+			args: ArgsManager.from(["help", "all"])
 		};
 	}
 

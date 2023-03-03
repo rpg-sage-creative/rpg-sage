@@ -40,8 +40,8 @@ async function serverRoleSet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const roleDid = await sageMessage.args.removeAndReturnRoleDid();
-	const roleType = sageMessage.args.removeAndReturnEnum<AdminRoleType>(AdminRoleType);
+	const roleDid = sageMessage.args.findRoleDid("role", true);
+	const roleType = sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type", true);
 	if (!roleDid || !roleType) {
 		return sageMessage.reactFailure();
 	}
@@ -69,8 +69,8 @@ async function serverRoleRemove(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const roleType = sageMessage.args.removeAndReturnEnum<AdminRoleType>(AdminRoleType);
-	if (roleType === undefined) {
+	const roleType = sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type", true);
+	if (!roleType) {
 		return sageMessage.reactFailure();
 	}
 

@@ -1,34 +1,46 @@
 import type * as Discord from "discord.js";
+import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import utils, { LogLevel, Optional, TConsoleCommandType } from "../../../sage-utils";
+import utils, { Args, LogLevel, Optional, TConsoleCommandType } from "../../../sage-utils";
+import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
 import { DiscordKey } from "../../discord";
 import { DicePostType } from "../commands/dice";
 import ActiveBot from "../model/ActiveBot";
+import { DialogType, IChannel, IChannelOptions, updateChannel } from "../repo/base/channel";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
-import { DialogType, IChannel, updateChannel } from "../repo/base/channel";
 import Colors from "./Colors";
 import Emoji from "./Emoji";
-import Game from "./Game";
+import Game, { getDefaultGameOptions, TDefaultGameOptions } from "./Game";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
-import { GameType } from "../../../sage-common";
+import { applyValues, hasValues, ISageCommandArgs } from "./SageCommandArgs";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
 export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdmin = 3 }
 export interface IAdminRole { did: Discord.Snowflake; type: AdminRoleType; }
 export interface IAdminUser { did: Discord.Snowflake; role: AdminRoleType; }
 
-export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji {
+type IChannelArgs = Args<IChannelOptions> & { did:Discord.Snowflake; };
+
+export type TServerDefaultGameOptions = TDefaultGameOptions & {
+	defaultGameType: GameType;
+	defaultGmCharacterName: string;
+}
+
+export function getServerDefaultGameOptions(args: ISageCommandArgs): Args<TServerDefaultGameOptions> | null {
+	const opts: Args<TServerDefaultGameOptions> = {
+		...getDefaultGameOptions(args),
+		defaultGameType: args.getEnum(GameType, "gameType"),
+		defaultGmCharacterName: args.getString("gmCharName")
+	};
+	return hasValues(opts) ? opts : null;
+}
+
+
+export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, Partial<TServerDefaultGameOptions> {
 	admins: IAdminUser[];
 	channels: IChannel[];
 	commandPrefix?: string;
-	defaultCritMethodType?: CritMethodType;
-	defaultDialogType?: DialogType;
-	defaultDiceOutputType?: DiceOutputType;
-	defaultDicePostType?: DicePostType;
-	defaultDiceSecretMethodType?: DiceSecretMethodType;
-	defaultGameType?: GameType;
-	defaultGmCharacterName: string;
 	logLevel: TConsoleCommandType;
 	name: string;
 	roles: IAdminRole[];
@@ -50,7 +62,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	public get defaultDicePostType(): DicePostType | undefined { return this.core.defaultDicePostType; }
 	public get defaultDiceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.defaultDiceSecretMethodType; }
 	public get defaultGameType(): GameType | undefined { return this.core.defaultGameType; }
-	public get defaultGmCharacterName(): string { return this.core.defaultGmCharacterName; }
+	public get defaultGmCharacterName(): string { return this.core.defaultGmCharacterName ?? "Game Master"; }
 	public get discord() { return this.sageCache.discord; }
 	public get logLevel(): LogLevel | null { return this._logLevel !== undefined ? this._logLevel : (this._logLevel = LogLevel[this.core.logLevel] ?? null); }
 	public get name(): string { return this.core.name; }
@@ -195,13 +207,14 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	// #endregion
 
 	// #region Channel actions
-	public async addOrUpdateChannels(...channels: IChannel[]): Promise<boolean> {
+	public async addOrUpdateChannels(...channels: IChannelArgs[]): Promise<boolean> {
 		channels.forEach(channel => {
 			const found = this.getChannel(channel.did);
 			if (found) {
 				updateChannel(found, channel);
 			} else {
-				(this.core.channels || (this.core.channels = [])).push({ ...channel });
+				const cleanChannel = cleanJson({ ...channel } as IChannel, { deleteNull:true, deleteUndefined:true });
+				(this.core.channels || (this.core.channels = [])).push(cleanChannel);
 			}
 		});
 		return this.save();
@@ -318,17 +331,10 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	}
 	// #endregion
 
-	//#region update (defaultGame, defaultDiceOutput)
-	public async update(gameType: Optional<GameType>, dialogType: Optional<DialogType>, critMethodType: Optional<CritMethodType>, diceOutputType: Optional<DiceOutputType>, dicePostType: Optional<DicePostType>, diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
-		this.core.defaultCritMethodType = critMethodType === null ? undefined : critMethodType ?? this.core.defaultCritMethodType;
-		this.core.defaultDialogType = dialogType === null ? undefined : dialogType ?? this.core.defaultDialogType;
-		this.core.defaultDiceOutputType = diceOutputType === null ? undefined : diceOutputType ?? this.core.defaultDiceOutputType;
-		this.core.defaultDicePostType = dicePostType === null ? undefined : dicePostType ?? this.core.defaultDicePostType;
-		this.core.defaultDiceSecretMethodType = diceSecretMethodType === null ? undefined : diceSecretMethodType ?? this.core.defaultDiceSecretMethodType;
-		this.core.defaultGameType = gameType === null ? undefined : gameType ?? this.core.defaultGameType;
+	public async update(opts: Args<TServerDefaultGameOptions>): Promise<boolean> {
+		applyValues(this.core, opts);
 		return this.save();
 	}
-	//#endregion
 
 	// #region IHasColorsCore
 	public colors = new Colors(this.core.colors || (this.core.colors = []));

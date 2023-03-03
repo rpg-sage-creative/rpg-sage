@@ -83,8 +83,9 @@ async function aliasSet(sageMessage: SageMessage<true>): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const alias = sageMessage.args.shift()!;
-	const dialogContent = parseDialogContent(sageMessage.args.join(" "), sageMessage.sageUser?.allowDynamicDialogSeparator);
+	const values = sageMessage.args.unkeyedValues();
+	const alias = sageMessage.args.getString("alias") ?? sageMessage.args.getString("name") ?? values.shift()!;
+	const dialogContent = parseDialogContent(values.join(" "), sageMessage.sageUser?.allowDynamicDialogSeparator);
 	if (!dialogContent || !aliasTest(sageMessage, dialogContent)) {
 		return sageMessage.reactFailure();
 	}
@@ -104,7 +105,7 @@ async function aliasDelete(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const alias = sageMessage.args.shift()!;
+	const alias = sageMessage.args.getString("alias") ?? sageMessage.args.getString("name") ?? sageMessage.args.valueAt(0)!;
 	const saved = await sageMessage.sageUser.aliases.removeByName(alias);
 	return sageMessage.reactSuccessOrFailure(saved);
 }
@@ -131,6 +132,6 @@ export default function register(): void {
 	registerAdminCommand(aliasDelete, "alias-delete");
 
 	registerAdminCommandHelp("Dialog", "Alias", "alias list");
-	registerAdminCommandHelp("Dialog", "Alias", "alias set {alias} {dialog prefix}");
-	registerAdminCommandHelp("Dialog", "Alias", "alias delete {alias}");
+	registerAdminCommandHelp("Dialog", "Alias", `alias set alias="Grog" pc::Grog the Wizard::`);
+	registerAdminCommandHelp("Dialog", "Alias", `alias delete alias="Grog"`);
 }

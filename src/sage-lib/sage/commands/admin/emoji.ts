@@ -1,9 +1,13 @@
+import type { Optional } from "../../../../sage-utils";
 import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
 import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { DiscordId } from "../../../discord";
 import { discordPromptYesNo } from "../../../discord/prompts";
+import type { TEmojiAndType } from "../../model/Emoji";
 import type Emoji from "../../model/Emoji";
 import { EmojiType } from "../../model/HasEmojiCore";
 import type SageMessage from "../../model/SageMessage";
+import type SageMessageArgs from "../../model/SageMessageArgs";
 import { BotServerGameType, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
 
@@ -86,7 +90,7 @@ async function emojiList(sageMessage: SageMessage): Promise<void> {
 async function _emojiGet(sageMessage: SageMessage, ...emoji: Emoji[]): Promise<void> {
 	emoji = emoji.filter(exists);
 
-	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType)!;
+	const emojiType = sageMessage.args.findEnum<EmojiType>(EmojiType, "type", true)!;
 	let inherited = false;
 	let _emoji = emoji.shift()!.get(emojiType);
 	while (!_emoji && emoji.length) {
@@ -122,6 +126,25 @@ async function emojiGet(sageMessage: SageMessage): Promise<void> {
 
 //#region set
 
+/**
+ * Returns both color and type from the args.
+ * @todo ensure any calls to this expect the color and type to be keyed so that we can stop falling through to unkeyed args.
+ */
+function findEmojiAndType(args: SageMessageArgs): Optional<TEmojiAndType> {
+	if (args.isEmpty) {
+		return null;
+	}
+	const type = args.findEnum<EmojiType>(EmojiType, "type", true);
+	const replacement = args.getString("emoji") ?? args.unkeyedValues().find(value => value.match(DiscordId.createEmojiRegex()));
+	if (replacement && type) {
+		return { replacement, type };
+	}
+	if (replacement === undefined && type === undefined) {
+		return undefined;
+	}
+	return null;
+}
+
 async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminServer) {
 		return sageMessage.reactBlock();
@@ -132,13 +155,12 @@ async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
 
 	const server = sageMessage.server;
 
-	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType) ?? null;
-	const replacement = sageMessage.args.join("");
-	if (emojiType === null || !replacement) {
+	const emojiAndType = findEmojiAndType(sageMessage.args);
+	if (!emojiAndType) {
 		return sageMessage.reactFailure();
 	}
 
-	const set = server.emoji.set(emojiType, replacement);
+	const set = server.emoji.set(emojiAndType.type, emojiAndType.replacement);
 	if (!set) {
 		return sageMessage.reactFailure();
 	}
@@ -146,8 +168,9 @@ async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
 	const saved = await server.save();
 	sageMessage.reactSuccessOrFailure(saved);
 	if (saved) {
-		return <any>sageMessage.send(`${EmojiType[emojiType]} ${replacement}`);
+		return <any>sageMessage.send(`${EmojiType[emojiAndType.type]} ${emojiAndType.replacement}`);
 	}
+
 	return Promise.resolve();
 }
 
@@ -158,13 +181,12 @@ async function emojiSetGame(sageMessage: SageMessage): Promise<void> {
 
 	const game = sageMessage.game!;
 
-	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType) ?? null;
-	const replacement = sageMessage.args.join("");
-	if (emojiType === null || !replacement) {
+	const emojiAndType = findEmojiAndType(sageMessage.args);
+	if (!emojiAndType) {
 		return sageMessage.reactFailure();
 	}
 
-	const set = game.emoji.set(emojiType, replacement);
+	const set = game.emoji.set(emojiAndType.type, emojiAndType.replacement);
 	if (!set) {
 		return sageMessage.reactFailure();
 	}
@@ -172,7 +194,7 @@ async function emojiSetGame(sageMessage: SageMessage): Promise<void> {
 	const saved = await game.save();
 	sageMessage.reactSuccessOrFailure(saved);
 	if (saved) {
-		return <any>sageMessage.send(`${EmojiType[emojiType]} ${replacement}`);
+		return <any>sageMessage.send(`${EmojiType[emojiAndType.type]} ${emojiAndType.replacement}`);
 	}
 
 	return Promise.resolve();
@@ -246,7 +268,7 @@ async function emojiUnsetServer(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType)!;
+	const emojiType = sageMessage.args.findEnum<EmojiType>(EmojiType, "type", true)!;
 	const unset = sageMessage.server.emoji.unset(emojiType);
 	if (!unset) {
 		return sageMessage.reactFailure();
@@ -263,7 +285,7 @@ async function emojiUnsetGame(sageMessage: SageMessage): Promise<void> {
 
 	const game = sageMessage.game!;
 
-	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType)!;
+	const emojiType = sageMessage.args.findEnum<EmojiType>(EmojiType, "type", true)!;
 	const unset = game.emoji.unset(emojiType);
 	if (!unset) {
 		return sageMessage.reactFailure();

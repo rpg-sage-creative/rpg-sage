@@ -73,9 +73,14 @@ export default class DiscordId {
 		return isDefined(value?.match(/^<@\!?\d{16,}>$/));
 	}
 
-	public static createChannelReferenceOrDidRegex(): RegExp {
-		return /^(\d{16,}|<#\d{16,}>)$/;
+	// public static createChannelReferenceOrDidRegex(): RegExp {
+	// 	return /^(\d{16,}|<#\d{16,}>)$/;
+	// }
+	/** Used to detect one or more adjacent emoji. */
+	public static createEmojiRegex(): RegExp {
+		return /((?:<a?)?:\w{2,}:(?:\d{16,}>)?)+/;
 	}
+	/** Used to capture the parts of a custom emoji. */
 	public static createCustomEmojiRegex(): RegExp {
 		return /^<(a)?:(\w{2,}):(\d{16,})>$/;
 	}

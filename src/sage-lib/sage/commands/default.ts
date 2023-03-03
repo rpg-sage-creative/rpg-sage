@@ -105,10 +105,10 @@ export function renderAll(objectType: string, objectTypePlural: string, _bySourc
 // #endregion
 
 async function objectsBy(sageMessage: SageMessage): Promise<void> {
-	const objectTypePlural = sageMessage.args.shift()!,
+	const objectTypePlural = sageMessage.args.shift()?.value!,
 		objectType = Repository.parseObjectType(utils.LangUtils.oneToUS(objectTypePlural.replace(/gods/i, "deities")))!,
-		traitOr = sageMessage.args.shift() ?? (objectType.objectType === "Deity" ? "domain" : "trait"),
-		searchTerm = sageMessage.args.shift()!;
+		traitOr = sageMessage.args.shift()?.value ?? (objectType.objectType === "Deity" ? "domain" : "trait"),
+		searchTerm = sageMessage.args.shift()?.value!;
 
 	const content = createCommandRenderableContent(),
 		trait = traitOr === "trait" && Repository.findByValue("Trait", searchTerm),
@@ -156,7 +156,7 @@ function searchTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	if (sageMessage.hasPrefix && slicedContent.match(/^\?[^!].+$/)) {
 		return {
 			command: "search",
-			args: new ArgsManager(slicedContent.slice(1))
+			args: ArgsManager.tokenize(slicedContent.slice(1))
 		};
 	}
 	return null;
@@ -182,7 +182,7 @@ function searchTester(sageMessage: SageMessage): TCommandAndArgs | null {
 // }
 /** Checks searchText for the word table, then checks to see if the rest of the text is a table name; if so, renders table */
 async function repositoryFindRenderTable(sageMessage: SageMessage): Promise<boolean> {
-	const searchText = sageMessage.args.join(" ");
+	const searchText = sageMessage.args.unkeyedValues().join(" ");
 	const tableName = searchText.match(/\btable\b/i) && searchText.replace(/\btable\b/i, "") || "";
 	const table = Repository.findByValue("Table", tableName);
 	if (table) {
@@ -196,7 +196,7 @@ function findTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	if (sageMessage.hasPrefix && slicedContent.match(/^\?\!.+$/)) {
 		return {
 			command: "find",
-			args: new ArgsManager(slicedContent.slice(2))
+			args: ArgsManager.tokenize(slicedContent.slice(2))
 		};
 	}
 	return null;

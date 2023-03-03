@@ -238,6 +238,8 @@ function toColorCore(colorOrRed: string | number | TColorCore, alphaOrGreen?: nu
 
 // #endregion
 
+type VALID_COLOR = string & { valid_color:never; }
+
 export default class Color {
 	// #region public properties
 	public get name(): string | undefined { return this.core.name; }
@@ -294,7 +296,7 @@ export default class Color {
 	// #region "is" tests
 
 	/** Tests all color types in this module */
-	public static isValid(color: string): boolean {
+	public static isValid(color: string): color is VALID_COLOR {
 		return Color.isHexa(color) || Color.isRgba(color);
 	}
 

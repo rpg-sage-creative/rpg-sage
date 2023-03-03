@@ -25,7 +25,7 @@ function _simpleDcs(proficiency: Optional<string>): utils.RenderUtils.Renderable
 }
 
 function simpleDcs(sageMessage: SageMessage): Promise<void> {
-	const renderable = _simpleDcs(sageMessage.args[0]);
+	const renderable = _simpleDcs(sageMessage.args.valueAt(0));
 	return sageMessage.send(renderable) as Promise<any>;
 }
 
@@ -50,7 +50,7 @@ function _dcsByLevel(bySpell: boolean, level: Optional<number>): utils.RenderUti
 }
 
 async function dcsByLevel(sageMessage: SageMessage): Promise<void> {
-	const renderable = _dcsByLevel(sageMessage.args[0] === "spell", +sageMessage.args[1]);
+	const renderable = _dcsByLevel(sageMessage.args.valueAt(0) === "spell", +sageMessage.args[1]);
 	return sageMessage.send(renderable) as Promise<any>;
 }
 

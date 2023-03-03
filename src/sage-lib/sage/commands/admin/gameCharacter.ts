@@ -4,7 +4,7 @@ import { sendWebhook } from "../../../discord/messages";
 import { discordPromptYesNo } from "../../../discord/prompts";
 import type { Optional, OrUndefined } from "../../../../sage-utils";
 import type CharacterManager from "../../model/CharacterManager";
-import GameCharacter from "../../model/GameCharacter";
+import GameCharacter, { GameCharacterCore } from "../../model/GameCharacter";
 import type SageMessage from "../../model/SageMessage";
 import type { TNames } from "../../model/SageMessageArgs";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
@@ -66,10 +66,10 @@ function getCharacterTypeMeta(sageMessage: SageMessage): TCharacterTypeMeta {
 
 //#region helpers
 
-async function getUserDid(sageMessage: SageMessage): Promise<Discord.Snowflake | null> {
+function getUserDid(sageMessage: SageMessage): Discord.Snowflake | null {
 	return !sageMessage.game || sageMessage.isPlayer
 		? sageMessage.authorDid
-		: sageMessage.args.removeAndReturnUserDid("user");
+		: sageMessage.args.findUserDid("user") ?? null;
 }
 
 function testCanAdminCharacter(sageMessage: SageMessage, characterTypeMeta: TCharacterTypeMeta): boolean {
@@ -100,21 +100,6 @@ async function promptAndDo(sageMessage: SageMessage, character: GameCharacter, p
 		const updated = await action(character);
 		await sageMessage.reactSuccessOrFailure(updated);
 	}
-}
-
-async function removeAndReturnChannelDids(sageMessage: SageMessage): Promise<Discord.Snowflake[]> {
-	const channelDids = <Discord.Snowflake[]>[];
-	let channelDid: Optional<Discord.Snowflake>;
-	do {
-		channelDid = await sageMessage.args.removeAndReturnChannelDid();
-		if (channelDid) {
-			channelDids.push(channelDid);
-		}
-	} while (channelDid);
-	if (!channelDids.length && sageMessage.channelDid) {
-		channelDids.push(sageMessage.channelDid);
-	}
-	return channelDids;
 }
 
 function getAutoGameCharacter(sageMessage: SageMessage): OrUndefined<GameCharacter> {
@@ -189,7 +174,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	return sendWebhook(sageMessage.caches, targetChannel, renderableContent, { avatarURL: avatarUrl, username: character.name }, sageMessage.dialogType);
 }
 
-function sendNotFound(sageMessage: SageMessage, command: string, entityNamePlural: string, nameFilter?: string): Promise<void> {
+function sendNotFound(sageMessage: SageMessage, command: string, entityNamePlural: string, nameFilter?: Optional<string>): Promise<void> {
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>${command}</b>`);
 	if (nameFilter) {
 		renderableContent.append(`<b>Filtered by:</b> ${nameFilter}`);
@@ -199,9 +184,9 @@ function sendNotFound(sageMessage: SageMessage, command: string, entityNamePlura
 }
 
 async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterManager: Optional<CharacterManager>, command: string, entityNamePlural: string): Promise<void> {
-	const nameFilter = sageMessage.args.removeAndReturnName(true),
+	const nameFilter = sageMessage.args.valueByKey("filter"),
 		hasNameFilter = nameFilter?.length,
-		characters: GameCharacter[] = hasNameFilter ? characterManager?.filterByName(nameFilter) ?? [] : characterManager?.slice() ?? [];
+		characters: GameCharacter[] = hasNameFilter ? characterManager?.filterByName(nameFilter, true) ?? [] : characterManager?.slice() ?? [];
 	if (characters.length) {
 		// Always show the Game Master first
 		const gmIndex = characters.findIndex(character => character.isGM);
@@ -232,18 +217,6 @@ async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterM
 	return Promise.resolve();
 }
 
-// async function getCharacter(sageMessage: SageMessage): Promise<GameCharacter> {
-// 	const characterTypeMeta = getCharacterTypeMeta(sageMessage),
-// 		userDid = await getUserDid(sageMessage),
-// 		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser,
-// 		characterManager = characterTypeMeta.isNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
-// 		names = sageMessage.args.removeAndReturnNames("charName", "name");
-
-// 	return characterTypeMeta.isCompanion
-// 		? characterManager.findCompanion(userDid, names.charName, names.name)
-// 		: characterManager.findByUserAndName(userDid, names.name);
-// }
-
 //#endregion
 
 async function gameCharacterList(sageMessage: SageMessage): Promise<void> {
@@ -257,8 +230,8 @@ async function gameCharacterList(sageMessage: SageMessage): Promise<void> {
 	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
 		const userDid = await getUserDid(sageMessage),
-			names = sageMessage.args.removeAndReturnNames(true),
-			characterName = names.charName ?? names.name ?? sageMessage.playerCharacter?.name,
+			charName = sageMessage.args.valueByKey("charName"),
+			characterName = charName ?? sageMessage.playerCharacter?.name,
 			character = characterManager.findByUserAndName(userDid, characterName);
 		characterManager = character?.companions;
 	}
@@ -288,7 +261,7 @@ async function gameCharacterDetails(sageMessage: SageMessage): Promise<void> {
 	const userDid = await getUserDid(sageMessage),
 		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser,
 		characterManager = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
-		names = characterTypeMeta.isGm ? <TNames>{ name: sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName } : sageMessage.args.removeAndReturnNames(true);
+		names = characterTypeMeta.isGm ? <TNames>{ name: sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName } : sageMessage.args.findNames();
 
 	const character = characterTypeMeta.isCompanion
 		? findCompanion(characterManager, userDid, names)
@@ -306,8 +279,8 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const userDid = await getUserDid(sageMessage),
-		names = sageMessage.args.removeAndReturnNames(),
-		core = sageMessage.args.removeAndReturnCharacterOptions(names, userDid!);
+		charArgs = sageMessage.args.findCharacterArgs(),
+		core = { userDid, ...charArgs } as GameCharacterCore;
 	if (!core.name) {
 		core.name = urlToName(core.tokenUrl) ?? urlToName(core.avatarUrl)!;
 	}
@@ -320,7 +293,7 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 
 	let characterManager = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
-		const character = characterManager.findByUserAndName(userDid, names.charName) ?? characterManager.findByUser(userDid!)!;
+		const character = characterManager.findByUserAndName(userDid, sageMessage.args.valueByKey("charName")) ?? characterManager.findByUser(userDid!)!;
 		core.userDid = character.userDid;
 		characterManager = character.companions;
 	}
@@ -362,7 +335,7 @@ async function gameCharacterUpdate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const names = sageMessage.args.removeAndReturnNames();
+	const names = sageMessage.args.findNames();
 	if (characterTypeMeta.isGm) {
 		if (names.newName) {
 			names.oldName = sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName;
@@ -372,12 +345,19 @@ async function gameCharacterUpdate(sageMessage: SageMessage): Promise<void> {
 		}
 	}
 
-	const userDid = await getUserDid(sageMessage),
-		newUserDid = await sageMessage.args.removeAndReturnUserDid("newuser") ?? await sageMessage.args.removeAndReturnUserDid("user"),
-		core = sageMessage.args.removeAndReturnCharacterOptions(names, newUserDid ?? userDid!),
+	const userDid = getUserDid(sageMessage),
+		newUserDid = sageMessage.args.findUserDid("newUser") ?? sageMessage.args.findUserDid("user"),
+		charArgs = sageMessage.args.findCharacterArgs(),
 		character = await getCharacter(sageMessage, characterTypeMeta, userDid!, names);
 
 	if (character) {
+		const core = {
+			avatarUrl: charArgs.avatarUrl,
+			embedColor: charArgs.embedColor,
+			name: names.newName ?? names.name,
+			tokenUrl: charArgs.tokenUrl,
+			userDid: newUserDid ?? userDid
+		} as GameCharacterCore;
 		await character.update(core, false);
 		return promptAndDo(sageMessage, character, `Update ${character.name}?`, async char => {
 			const charSaved = await char.save();
@@ -398,11 +378,11 @@ async function gameCharacterStats(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const userDid = await getUserDid(sageMessage),
-		names = sageMessage.args.removeAndReturnNames(),
+		names = sageMessage.args.findNames(),
 		character = await getCharacter(sageMessage, characterTypeMeta, userDid!, names);
 
 	if (character) {
-		character.notes.updateStats(sageMessage.args.keyValuePairs(), false);
+		character.notes.updateStats(sageMessage.args.keyed(), false);
 		return promptAndDo(sageMessage, character, `Update ${character.name}?`, async char => {
 			const charSaved = await char.save();
 			if (charSaved && characterTypeMeta.isGm) {
@@ -424,7 +404,7 @@ async function characterDelete(sageMessage: SageMessage): Promise<void> {
 	const userDid = await getUserDid(sageMessage),
 		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser,
 		characterManager = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
-		names = sageMessage.args.removeAndReturnNames(true);
+		names = sageMessage.args.findNames();
 
 	const character = characterTypeMeta.isCompanion
 		? characterManager.findCompanion(userDid, names.charName!, names.name!)
@@ -442,16 +422,15 @@ async function characterAutoOn(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	// MUST RUN removeAndReturnChannelDids BEFORE NAME
-	const channelDids = await removeAndReturnChannelDids(sageMessage);
 	const name = sageMessage.isGameMaster
 		? (sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName)
-		: sageMessage.args.removeAndReturnName(true);
+		: sageMessage.args.valueByKey("name");
 	const character = sageMessage.isGameMaster
 		? sageMessage.game?.nonPlayerCharacters.findByName(name)
 		: (sageMessage.playerCharacter ?? sageMessage.sageUser.playerCharacters.findByName(name));
 
 	if (character) {
+		const channelDids = sageMessage.args.channelDids(true);
 		const channelLinks = channelDids.map(channelDid => DiscordId.toChannelReference(channelDid));
 		const prompt = channelDids.length > 1 || channelDids[0] !== sageMessage.channelDid
 			? `Use Auto Dialog with ${character.name} for the given channel(s)?\n> ${channelLinks.join("\n> ")}`
@@ -472,16 +451,15 @@ async function characterAutoOff(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	// removeAndReturnChannelDids MUST RUN BEFORE removeAndReturnName
-	const channelDids = await removeAndReturnChannelDids(sageMessage);
 	const name = sageMessage.isGameMaster
 		? (sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName)
-		: sageMessage.args.removeAndReturnName(true);
+		: sageMessage.args.valueByKey("name");
 	const character = sageMessage.isGameMaster
 		? sageMessage.game?.nonPlayerCharacters.findByName(name)
 		: (sageMessage.playerCharacter ?? sageMessage.sageUser.playerCharacters.findByName(name));
 
 	if (character) {
+		const channelDids = sageMessage.args.channelDids(true);
 		const channelLinks = channelDids.map(channelDid => DiscordId.toChannelReference(channelDid));
 		const prompt = channelDids.length > 1 || channelDids[0] !== sageMessage.channelDid
 			? `Stop using Auto Dialog with ${character.name} for the given channel(s)?\n> ${channelLinks.join("\n> ")}`
@@ -505,8 +483,8 @@ function registerHelp(): void {
 	[playerCharacterSubCategory, nonPlayerCharacterSubCategory, companionSubCategory].forEach(subCat => {
 		const charName = subCat === companionSubCategory ? ` charname="character name"` : ``;
 		const cmd = subCat.toLowerCase();
-		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} list "optional filter"`);
-		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} details "name"`);
+		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} list filter="optional filter"`);
+		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} details name="name"`);
 		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} create ${charName} name="name" avatar="image url" token="image url"`);
 		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} update ${charName} name="name" avatar="image url"`);
 		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} update ${charName} oldname="old name" newname="new name"`);

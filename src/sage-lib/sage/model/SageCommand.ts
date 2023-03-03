@@ -1,7 +1,7 @@
 import type * as Discord from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import type { If, Optional, VALID_UUID } from "../../../sage-utils";
+import type { If, Optional } from "../../../sage-utils";
 import { SuperClass } from "../../../sage-utils/utils/ClassUtils";
 import { DiscordCache, DiscordKey, TChannel, TRenderableContentResolvable } from "../../discord";
 import { resolveToEmbeds, resolveToTexts } from "../../discord/embeds";
@@ -14,6 +14,7 @@ import type GameCharacter from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";
 import type SageCache from "./SageCache";
 import type { TSageDiscordPair } from "./SageCache";
+import type { ISageCommandArgs } from "./SageCommandArgs";
 import type SageInteraction from "./SageInteraction";
 import type SageMessage from "./SageMessage";
 import type SageReaction from "./SageReaction";
@@ -41,60 +42,6 @@ export interface ICanHaveGame<HasGame extends boolean = boolean> {
 
 export interface IHaveGame {
 	game: Game;
-}
-
-export interface ISageCommandArgs {
-	/** Gets the named option as a boolean or null */
-	getBoolean(name: string): boolean | null;
-	/** Gets the named option as a boolean */
-	getBoolean(name: string, required: true): boolean;
-	/** Returns true if the argument was given a value. */
-	hasBoolean(name: string): boolean;
-
-	/** Gets the named option as a GuildBasedChannel or null */
-	getChannel(name: string): Discord.GuildBasedChannel | null;
-	/** Gets the named option as a GuildBasedChannel */
-	getChannel(name: string, required: true): Discord.GuildBasedChannel;
-	/** Returns true if the argument was given a value. */
-	hasChannel(name: string): boolean;
-
-	/** Gets the named option as a Snowflake or null */
-	getChannelDid(name: string): Discord.Snowflake | null;
-	/** Gets the named option as a Snowflake */
-	getChannelDid(name: string, required: true): Discord.Snowflake;
-	/** Returns true if the argument was given a value. */
-	hasChannelDid(name: string): boolean;
-
-	/** Gets the named option as a value from the given enum type or null if not valid */
-	getEnum<U>(type: any, name: string): U | null;
-	/** Gets the named option as a string */
-	getEnum<U>(type: any, name: string, required: true): U;
-	/** Returns true if the argument was given a value. */
-	hasEnum(type: any, name: string): boolean;
-
-	/** Gets the named option as a number or null */
-	getNumber(name: string): number | null;
-	/** Gets the named option as a number */
-	getNumber(name: string, required: true): number;
-	/** Returns true if the argument was given a value. */
-	hasNumber(name: string): boolean;
-
-	/** Gets the named option as a string or null */
-	getString<U extends string = string>(name: string): U | null;
-	/** Gets the named option as a string */
-	getString<U extends string = string>(name: string, required: true): U;
-	/** Returns true if the argument was given a value. */
-	hasString(name: string): boolean;
-
-	/** Returns true if the argument was given the value "unset". */
-	hasUnset(name: string): boolean;
-
-	/** Gets the named option as a VALID_UUID or null */
-	getUuid(name: string): VALID_UUID | null;
-	/** Gets the named option as a VALID_UUID */
-	getUuid(name: string, required: true): VALID_UUID;
-	/** Returns true if the argument was given a VALID_UUID value. */
-	hasUuid(name: string): boolean;
 }
 
 export type TSendArgs<HasEphemeral extends boolean = boolean> = {

@@ -3,7 +3,7 @@ import utils, { Optional } from "../../../../../sage-utils";
 import type SageMessage from "../../../model/SageMessage";
 import type User from "../../../model/User";
 import { DialogType } from "../../../repo/base/channel";
-import { renderCount, registerAdminCommand, createAdminRenderableContent } from "../../cmd";
+import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
 async function userCount(sageMessage: SageMessage): Promise<void> {
@@ -27,7 +27,7 @@ async function userList(sageMessage: SageMessage): Promise<void> {
 	}
 	let users = await sageMessage.caches.users.getAll();
 	if (users) {
-		const filter = sageMessage.args.join(" ");
+		const filter = sageMessage.args.unkeyedValues().join(" ");
 		if (filter && users.length) {
 			const lower = filter.toLowerCase();
 			users = await utils.ArrayUtils.Collection.filterAsync(users, async user => {
@@ -52,9 +52,9 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin) {
 		return sageMessage.reactBlock();
 	}
-	const dialogType = sageMessage.args.removeAndReturnDialogType();
-	const sagePostType = sageMessage.args.removeAndReturnSagePostType();
-	const updated = await sageMessage.sageUser.update({ dialogType, sagePostType });
+	const defaultDialogType = sageMessage.args.getEnum<DialogType>(DialogType, "dialogType");
+	const defaultSagePostType = sageMessage.args.getEnum<DialogType>(DialogType, "sagePostType");
+	const updated = await sageMessage.sageUser.update({ defaultDialogType, defaultSagePostType });
 	if (updated) {
 		return userDetails(sageMessage);
 	}
@@ -64,12 +64,12 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 async function userDetails(sageMessage: SageMessage): Promise<void> {
 	let user: User | null = sageMessage.sageUser;
 	if (sageMessage.isSuperUser) {
-		const userDid = await sageMessage.args.removeAndReturnUserDid();
+		const userDid = sageMessage.args.findUserDid("user", true);
 		if (userDid) {
 			user = await sageMessage.caches.users.getByDid(userDid);
 		}
 		if (!user) {
-			const userId = sageMessage.args.removeAndReturnUuid();
+			const userId = sageMessage.args.findUuid("user", true);
 			user = await sageMessage.caches.users.getById(userId);
 		}
 		if (!user) {

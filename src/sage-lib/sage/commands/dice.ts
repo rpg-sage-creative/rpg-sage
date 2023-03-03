@@ -625,15 +625,13 @@ async function diceTest(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	const pairs = sageMessage.args.keyValuePairs(),
-		filtered = pairs.filter(pair => ["die", "sides", "type"].includes(pair.key.toLowerCase())),
-		pair = filtered.shift() ?? { key:sageMessage.args[0], value:+dequote(sageMessage.args[1]) };
+	const pair = sageMessage.args.findByKey(/die|sides|type/i, /d?\d+/);
 	if (!pair?.value) {
 		await sageMessage.message.reply("*Die type not given!*");
 		return;
 	}
 
-	const dieSize = +pair.value;
+	const dieSize = +pair.value.replace(/\D/g, "");
 	if (![2,3,4,6,8,10,12,20].includes(dieSize)) {
 		await sageMessage.message.reply("*Die type not valid! (2, 3, 4, 6, 8, 10, 12, 20)*");
 		return;

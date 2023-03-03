@@ -12,7 +12,8 @@ async function prefixSet(sageMessage: SageMessage<true>): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const saved = await sageMessage.server.setCommandPrefix(sageMessage.args.shift()!);
+	const prefix = sageMessage.args.valueByKey("prefix") ?? sageMessage.args[0]?.value;
+	const saved = await sageMessage.server.setCommandPrefix(prefix);
 	return sageMessage.reactSuccessOrFailure(saved);
 }
 

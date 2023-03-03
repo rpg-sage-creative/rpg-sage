@@ -1,19 +1,43 @@
 import type * as Discord from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import utils, { Optional } from "../../../../sage-utils";
+import utils, { Args, Optional } from "../../../../sage-utils";
 import { DiscordCache, DiscordKey } from "../../../discord";
 import type Game from "../../model/Game";
 import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game";
 import type SageCache from "../../model/SageCache";
 import type SageMessage from "../../model/SageMessage";
 import type Server from "../../model/Server";
-import { DialogType, PermissionType, type IChannel } from "../../repo/base/channel";
+import { channelTypeToChannelOptions, DialogType, GameChannelType, IChannelOptions, PermissionType, type IChannel } from "../../repo/base/channel";
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";
 import { GameType } from "../../../../sage-common";
+import { hasValues, ISageCommandArgs } from "../../model/SageCommandArgs";
+import { getServerDefaultGameOptions } from "../../model/Server";
 
 //#region add
+
+function getChannelOptions(args: ISageCommandArgs): Args<IChannelOptions> | null {
+	const gameChannelType = args.getEnum<GameChannelType>(GameChannelType, "type");
+	const channelTypeOptions = channelTypeToChannelOptions(gameChannelType);
+	const opts: Args<IChannelOptions> = {
+		...getServerDefaultGameOptions(args),
+		admin: channelTypeOptions.admin ?? args.getBoolean("admin"),
+		commands: channelTypeOptions.commands ?? args.getBoolean("commands"),
+		dialog: channelTypeOptions.dialog ?? args.getBoolean("dialog"),
+		dice: channelTypeOptions.dice ?? args.getBoolean("dice"),
+		gameChannelType: gameChannelType,
+		gameMaster: channelTypeOptions.gameMaster,
+		nonPlayer: channelTypeOptions.nonPlayer,
+		player: channelTypeOptions.player,
+		search: channelTypeOptions.search ?? args.getBoolean("search"),
+		sendCommandTo: args.getChannelDid("commandsto"),
+		sendDialogTo: args.getChannelDid("dialogto"),
+		sendDiceTo: args.getChannelDid("diceto"),
+		sendSearchTo: args.getChannelDid("searchto")
+	};
+	return hasValues(opts) ? opts : null;
+}
 
 async function channelAdd(sageMessage: SageMessage): Promise<void> {
 	// Don't allow this command in DMs
@@ -35,8 +59,8 @@ async function channelAdd(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const channelOptions = sageMessage.args.removeAndReturnChannelOptions() || { gameMaster: PermissionType.Write };
-	const channels = channelDids.map(channelDid => ({ did: channelDid, ...channelOptions }));
+	const channelOptions = getChannelOptions(sageMessage.args) || { type:GameChannelType.Miscellaneous };
+	const channels = channelDids.map(channelDid => ({ did: channelDid, ...channelOptions } as IChannel));
 	const saved = await game.addOrUpdateChannels(...channels);
 	return sageMessage.reactSuccessOrFailure(saved);
 	// TODO: should i render the channels' details?
@@ -171,7 +195,7 @@ export async function channelDetails(sageMessage: SageMessage<true>, channel?: I
 	}
 
 	// Get channel from args if it isn't passed
-	const channelDid = channel?.did ?? await sageMessage.args.removeAndReturnChannelDid(true);
+	const channelDid = channel?.did ?? sageMessage.args.getChannelDid("channel") ?? sageMessage.discordKey.threadOrChannel!;
 	const [guildChannelName, game] = await getChannelNameAndActiveGame(sageMessage.caches, channelDid);
 	const server = sageMessage.server;
 	channel = game?.getChannel(channelDid) ?? server?.getChannel(channelDid);
@@ -204,7 +228,7 @@ async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: I
 	const guildChannels = await utils.ArrayUtils.Collection.mapAsync(channels, async channel => sageMessage.discord.fetchChannel(channel.did));
 	const existing = guildChannels.filter(utils.ArrayUtils.Filters.exists) as Discord.GuildChannel[];
 
-	const filter = sageMessage.args.join(" ").trim();
+	const filter = sageMessage.args.unkeyedValues().join(" ").trim();
 	if (filter && existing.length) {
 		const lower = filter.toLowerCase();
 		return existing.filter(guildChannel => guildChannel.name.toLowerCase().includes(lower));
@@ -245,19 +269,16 @@ async function channelList(sageMessage: SageMessage): Promise<void> {
 async function channelRemove(sageMessage: SageMessage): Promise<void> {
 	const game = await sageMessage.getGameOrCategoryGame();
 	if (!sageMessage.testGameAdmin(game)) {
-		return sageMessage.reactBlock();
+		return sageMessage.reactBlock("Not authorized to admin this game!");
 	}
 
 	// Grab channels from mentions and filter for the game
-	const channelDids: Discord.Snowflake[] = sageMessage.message.mentions.channels
-		.map(channel => channel.id)
-		.filter(channelDid => game.hasChannel(channelDid));
-	if (!channelDids.length && sageMessage.game) {
-		const channelDid = await sageMessage.args.removeAndReturnChannelDid(true);
-		channelDids.push(channelDid);
-	}
+	const channelDids: Discord.Snowflake[] = sageMessage.args.channelDids().filter(channelDid => game.hasChannel(channelDid));
 	if (!channelDids.length) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("No valid Game channels to remove!");
+	}
+	if (channelDids.length === game.channels.length) {
+		return sageMessage.reactFailure("Cannot remove all channels from a Game!");
 	}
 
 	const saved = await game.removeChannels(...channelDids);
@@ -269,7 +290,7 @@ async function channelRemove(sageMessage: SageMessage): Promise<void> {
 //#region set
 
 async function channelSet(sageMessage: SageMessage): Promise<void> {
-	const targetChannelDid = await sageMessage.args.removeAndReturnChannelDid(true);
+	const targetChannelDid = sageMessage.args.getChannelDid("channel") ??  sageMessage.discordKey.threadOrChannel!;
 	if (!sageMessage.testChannelAdmin(targetChannelDid)) {
 		return sageMessage.reactBlock();
 	}
@@ -279,15 +300,13 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const channelOptions = sageMessage.args.removeAndReturnChannelOptions();
+	const channelOptions = getChannelOptions(sageMessage.args);
 	if (!channelOptions) {
 		console.warn(`No or Invalid Channel Options: ${JSON.stringify(channelOptions)}`);
 		return sageMessage.reactFailure();
 	}
 
-	const hasGameOptions = channelOptions.gameMaster || channelOptions.nonPlayer || channelOptions.player;
-
-	if (game && hasGameOptions) {
+	if (game && channelOptions.gameChannelType) {
 		const saved = await game.addOrUpdateChannels({ did: targetChannelDid, ...channelOptions });
 		if (saved) {
 			await sageMessage.server.removeChannels(targetChannelDid);

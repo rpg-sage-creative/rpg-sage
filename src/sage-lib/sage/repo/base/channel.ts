@@ -1,16 +1,25 @@
 import type { GuildChannel, Snowflake } from "discord.js";
-import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import type { Optional } from "../../../../sage-utils";
+import type { Args, Optional } from "../../../../sage-utils";
 import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
-import type { DicePostType } from "../../commands/dice";
+import { mapGuildChannelNameTags, mapSageChannelNameTags } from "../../model/Game";
 import type SageCache from "../../model/SageCache";
-import type { GameType } from "../../../../sage-common";
+import type { TServerDefaultGameOptions } from "../../model/Server";
+import { applyValues } from "../../model/SageCommandArgs";
+import { cleanJson } from "../../../../sage-utils/utils/JsonUtils";
 
 export type TPermissionType = keyof typeof PermissionType;
 export enum PermissionType { None = 0, Read = 1, React = 2, Write = 3 }
 
 export type TGameChannelType = keyof typeof GameChannelType;
 export enum GameChannelType { None = 0, InCharacter = 1, OutOfCharacter = 2, GameMaster = 3, Miscellaneous = 4 }
+export function parseGameChannelType(value: Optional<string>): GameChannelType | undefined {
+	if (value?.match(/\b(gm|game\-?master)s?\b/i)) return GameChannelType.GameMaster;
+	if (value?.match(/\b(ic|in\-?char(acter)?)\b/i)) return GameChannelType.InCharacter;
+	if (value?.match(/\b(ooc|out\-?of\-?char(acter)?)\b/i)) return GameChannelType.OutOfCharacter;
+	if (value?.match(/\bmisc(ellaneous)?\b/i)) return GameChannelType.Miscellaneous;
+	if (value?.match(/\bnone\b/i)) return GameChannelType.None;
+	return undefined;
+}
 
 export type TDialogType = keyof typeof DialogType;
 export enum DialogType { Embed = 0, Post = 1 }
@@ -27,7 +36,7 @@ export interface IOldChannelOptions {
 }
 
 /** @todo remove "default" from these dice/game settings */
-export interface IChannelOptions extends IOldChannelOptions {
+export interface IChannelOptions extends IOldChannelOptions, Partial<TServerDefaultGameOptions> {
 	gameChannelType?: GameChannelType;
 
 	// Features
@@ -36,14 +45,6 @@ export interface IChannelOptions extends IOldChannelOptions {
 	dialog?: boolean;
 	dice?: boolean;
 	search?: boolean;
-
-	//Defaults
-	defaultDialogType?: DialogType;
-	defaultCritMethodType?: CritMethodType;
-	defaultDicePostType?: DicePostType;
-	defaultDiceOutputType?: DiceOutputType;
-	defaultDiceSecretMethodType?: DiceSecretMethodType;
-	defaultGameType?: GameType;
 
 	// Future Use
 	sendCommandTo?: Snowflake;
@@ -56,77 +57,19 @@ export interface IChannel extends IChannelOptions {
 	did: Snowflake;
 }
 
+type TChannelArgs = Args<IChannelOptions> & { did:Snowflake; };
+
 /** Any key that has a value of undefined is set; if the value is null, the key is deleted */
-export function updateChannel(channel: IChannel, changes: IChannelOptions): IChannel {
-	const keys = Object.keys(changes) as (keyof IChannelOptions)[];
-	keys.forEach(key => {
-		const value = changes[key];
-		if (value === null) {
-			delete channel[key];
-		}else if (value !== undefined) {
-			(channel as any)[key] = changes[key];
-		}
-	});
+export function updateChannel(channel: IChannel, changes: TChannelArgs): IChannel {
+	applyValues(channel, changes);
+	cleanJson(channel, { deleteNull:true, deleteUndefined:true });
 	return channel;
 }
 
-/** parses the channel name (for: ic, ooc, gm, misc) to get channel types */
-function parseChannelTypeByName(channelName: string): GameChannelType | null {
-	if (channelName.match(/\b(ic|in-char(acter)?)\b/i) !== null) {
-		return GameChannelType.InCharacter;
-	}
-	if (channelName.match(/\b(ooc|out-of-char(acter)?)\b/i) !== null) {
-		return GameChannelType.OutOfCharacter;
-	}
-	if (channelName.match(/\b(gm|game-?master)s?\b/i) !== null) {
-		return GameChannelType.GameMaster;
-	}
-	if (channelName.match(/\b(misc(ellaneous)?)\b/i) !== null) {
-		return GameChannelType.Miscellaneous;
-	}
-	return null;
-}
-
-function parseChannelTypeByChannel(channel: IChannel): GameChannelType | null {
-	const commandsPerm = channel.commands === true;
-	// we ignore channel.admin because it was often needed in IC channels for configuring a game
-	const dialogPerm = channel.dialog === true;
-	const dicePerm = channel.dice === true;
-	const searchPerm = channel.search === true;
-
-	// export enum PermissionType { None = 0, Read = 1, React = 2, Write = 3 }
-	const gameMasterWrite = channel.gameMaster === PermissionType.Write;
-	const playerNone = channel.player === PermissionType.None;
-	const playerWrite = channel.player === PermissionType.Write;
-	const nonPlayerWrite = channel.nonPlayer === PermissionType.Write;
-
-	// GM: gm only
-	if (gameMasterWrite && playerNone && !nonPlayerWrite) {
-		return GameChannelType.GameMaster;
-	}
-
-	// IC: gm and player, dialog and dice, no commands/search
-	if (gameMasterWrite && playerWrite && !nonPlayerWrite && dialogPerm && dicePerm && !commandsPerm && !searchPerm) {
-		return GameChannelType.InCharacter;
-	}
-
-	// OOC: gm and player, dice or dialog, commands or search
-	if (gameMasterWrite && playerWrite && !nonPlayerWrite && (dialogPerm || dicePerm) && (commandsPerm || searchPerm)) {
-		return GameChannelType.OutOfCharacter;
-	}
-
-	// MISC: any access values set makes this a catch all
-	if (channel.gameMaster || channel.player || channel.nonPlayer) {
-		return GameChannelType.Miscellaneous;
-	}
-
-	return null;
-}
-
-export function parseChannelType(channelOrName?: string | IChannel): GameChannelType | null {
+function parseChannelType(channelOrName?: string | IChannel): GameChannelType | null {
 	switch (typeof(channelOrName)) {
-		case "string": return parseChannelTypeByName(channelOrName);
-		case "object": return parseChannelTypeByChannel(channelOrName);
+		case "string": return mapGuildChannelNameTags(channelOrName).type;
+		case "object": return mapSageChannelNameTags(channelOrName).type;
 		default: return null;
 	}
 }

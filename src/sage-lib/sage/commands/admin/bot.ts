@@ -22,8 +22,8 @@ async function botDetails(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const firstMention = sageMessage.message.mentions.users.first();
-	const botDid = firstMention && firstMention.id || await sageMessage.args.removeAndReturnUserDid();
-	const bot = botDid && (await sageMessage.caches.bots.getByDid(botDid)) || sageMessage.bot;
+	const botDid = firstMention?.id ?? sageMessage.args.findUserDid("bot", true);
+	const bot = (await sageMessage.caches.bots.getByDid(botDid)) ?? sageMessage.bot;
 
 	return sendBot(sageMessage, bot);
 }

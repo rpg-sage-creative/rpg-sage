@@ -95,7 +95,7 @@
 
 // 	// const mentions = sageMessage.message.mentions;
 
-// 	const nameInput = sageMessage.args.join(" ");
+// 	const nameInput = sageMessage.args.unkeyedValues().join(" ");
 // 	const foundPrefix = nameInput.match(/\([^\)]+\)/i);
 // 	const gamePrefix = foundPrefix ? foundPrefix[0].slice(1, -1) : nameInput.split(" ").map(s => s[0]).join("");
 

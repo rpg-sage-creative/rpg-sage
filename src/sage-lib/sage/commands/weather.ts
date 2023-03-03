@@ -32,9 +32,9 @@ function parseWeatherArgs(climate: Optional<string>, elevation: Optional<string>
 }
 
 async function weatherRandom(sageMessage: SageMessage): Promise<void> {
-	const climate = ClimateType[sageMessage.args.removeAndReturnEnum<ClimateType>(ClimateType, true)!];
-	const elevation = ElevationType[sageMessage.args.removeAndReturnEnum<ElevationType>(ElevationType, true)!];
-	const season = SeasonType[sageMessage.args.removeAndReturnEnum<SeasonType>(SeasonType, true)!];
+	const climate = ClimateType[sageMessage.args.findEnum<ClimateType>(ClimateType, "climate", true)!];
+	const elevation = ElevationType[sageMessage.args.findEnum<ElevationType>(ElevationType, "elevation", true)!];
+	const season = SeasonType[sageMessage.args.findEnum<SeasonType>(SeasonType, "season", true)!];
 	const args = parseWeatherArgs(climate, elevation, season);
 	const renderable = createWeatherRenderable(args);
 	return <any>sageMessage.send(renderable);

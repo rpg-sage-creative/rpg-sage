@@ -60,7 +60,13 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	}
 
 	/** Returns all characters that match the given name. */
-	public filterByName(name: string): NamedCollection<GameCharacter> {
+	public filterByName(name: string): NamedCollection<GameCharacter>;
+	/** Returns all characters that match the given partial name. */
+	public filterByName(name: string, partial: true): NamedCollection<GameCharacter>;
+	public filterByName(name: string, partial?: true): NamedCollection<GameCharacter> {
+		if (partial) {
+			return this.filter(character => character.name.match(new RegExp(name, "i"))) as NamedCollection<GameCharacter>;
+		}
 		return this.filter(character => character.matches(name)) as NamedCollection<GameCharacter>;
 	}
 

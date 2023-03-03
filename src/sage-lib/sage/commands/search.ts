@@ -47,7 +47,7 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 	const promise = send(sageMessage.caches, sageMessage.message.channel as TChannel, `> Searching ${searchEngine.name}, please wait ...`, sageMessage.message.author);
 
 	// Parse the query
-	const parsedSearchInfo = parseSearchInfo(Collection.from(sageMessage.args), RARITIES);
+	const parsedSearchInfo = parseSearchInfo(Collection.from(sageMessage.args.unkeyedValues()), RARITIES);
 
 	// start the search
 	const searchResults = await searchEngine.search(parsedSearchInfo, nameOnly);

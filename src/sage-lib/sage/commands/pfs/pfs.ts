@@ -39,10 +39,11 @@ function summaryForDays(incomeRolls: TIncomeRoll[], days: number): string {
 
 // #region Earn Income
 function earnIncome(sageMessage: SageMessage): void {
-	const pcLevelString = sageMessage.args.shift()!;
-	const proficiencyString = sageMessage.args.shift()!;
-	const modifierString = sageMessage.args.shift()!;
-	const daysString = sageMessage.args.shift()!;
+	const values = sageMessage.args.unkeyedValues();
+	const pcLevelString = values.shift()!;
+	const proficiencyString = values.shift()!;
+	const modifierString = values.shift()!;
+	const daysString = values.shift()!;
 	//this: Discord.Message, pcLevelString: string, proficiencyString: string, modifierString: string, daysString: string
 
 	const renderable = createPfsRenderableContent(sageMessage),
@@ -208,8 +209,9 @@ function calculateTierInfo(tier: string, pcLevels: number[]): TTierInfo {
 	};
 }
 function pfsTier(sageMessage: SageMessage): void {
-	const tierString = sageMessage.args.shift()!;
-	const pcLevelStrings = sageMessage.args;
+	const values = sageMessage.args.unkeyedValues();
+	const tierString = values.shift()!;
+	const pcLevelStrings = values;
 	//this: Discord.Message, tierString: string, ...pcLevelStrings: string[]
 
 	const tierInfo = calculateTierInfo(tierString, cleanPcLevels(pcLevelStrings)),
@@ -247,11 +249,12 @@ export function addScenario(scenarioId: string, tier: string, callback: TScenari
 }
 
 function pfsScenario(sageMessage: SageMessage): void {
-	const scenarioOrQuestId = sageMessage.args.shift();
-	const pcLevelStrings = sageMessage.args;
+	const values = sageMessage.args.unkeyedValues();
+	const scenarioOrQuestId = values.shift();
+	const pcLevelStrings = values;
 	//this: Discord.Message, tierString: string, ...pcLevelStrings: string[]
 	try {
-		const scenarioOrQuestIdUpper = scenarioOrQuestId && scenarioOrQuestId.toUpperCase() || null,
+		const scenarioOrQuestIdUpper = scenarioOrQuestId?.toUpperCase() ?? null,
 			scenario = scenarios.find(_scenario => _scenario.id === scenarioOrQuestIdUpper);
 		if (!scenario) {
 			const renderableContent = createPfsRenderableContent(sageMessage);

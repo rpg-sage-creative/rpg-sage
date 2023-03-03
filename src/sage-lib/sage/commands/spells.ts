@@ -15,15 +15,17 @@ function reduceByLevel<T extends Spell<string, any>>(spells: T[]): T[][] {
 }
 
 async function spellListA(sageMessage: SageMessage): Promise<void> {
-	const levelString = sageMessage.args.shift()!;
-	const traditionString = sageMessage.args.shift()!;
-	const by = <"school">sageMessage.args.shift();
+	const values = sageMessage.args.unkeyedValues();
+	const levelString = values.shift()!;
+	const traditionString = values.shift()!;
+	const by = values.shift()! as "school";
 	_spellList(sageMessage, traditionString, levelString, by);
 }
 async function spellListB(sageMessage: SageMessage): Promise<void> {
-	const traditionString = sageMessage.args.shift()!;
-	const levelString = sageMessage.args.shift()!;
-	const by = <"school">sageMessage.args.shift();
+	const values = sageMessage.args.unkeyedValues();
+	const traditionString = values.shift()!;
+	const levelString = values.shift()!;
+	const by = values.shift()! as "school";
 	_spellList(sageMessage, traditionString, levelString, by);
 }
 async function _spellList(sageMessage: SageMessage, traditionString: string, levelString: string, by: "school"): Promise<void> {
@@ -101,7 +103,7 @@ function filterFocusSpells(archetypeName: Optional<string>, className: Optional<
 	}
 }
 async function spellListFocus(sageMessage: SageMessage): Promise<void> {
-	const archetypeOrClassOrDomain = (sageMessage.args.find(s => s?.trim()) || "").trim();
+	const archetypeOrClassOrDomain = (sageMessage.args.findBy(s => s.value.trim())?.value ?? "").trim();
 	if (archetypeOrClassOrDomain.toLowerCase() === "help") {
 		//TODO: short circuit help command?
 		return;
@@ -164,8 +166,9 @@ async function spellListFocus(sageMessage: SageMessage): Promise<void> {
 type TSpecialistListModifier = "+" | "-" | "|" | "&";
 const SpecialistCommands = "+-|&";
 async function specialistLists(sageMessage: SageMessage): Promise<void> {
-	const levelString = sageMessage.args.shift()!;
-	const traditionStrings = sageMessage.args;
+	const values = sageMessage.args.unkeyedValues();
+	const levelString = values.shift()!;
+	const traditionStrings = values;
 
 	const traditionsAndModifiers = traditionStrings.filter(s => s).map(traditionString => {
 		let tradition: TMagicTradition;

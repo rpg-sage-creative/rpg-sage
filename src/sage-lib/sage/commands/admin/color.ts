@@ -4,8 +4,10 @@ import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
 import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { discordPromptYesNo } from "../../../discord/prompts";
 import type Colors from "../../model/Colors";
+import type { TColorAndType } from "../../model/Colors";
 import { ColorType } from "../../model/HasColorsCore";
 import type SageMessage from "../../model/SageMessage";
+import type SageMessageArgs from "../../model/SageMessageArgs";
 import { BotServerGameType, embedColor, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
 
@@ -93,7 +95,7 @@ async function colorList(sageMessage: SageMessage): Promise<void> {
 async function _colorGet(sageMessage: SageMessage, ...colors: Optional<Colors>[]): Promise<void> {
 	colors = colors.filter(exists);
 
-	const colorType = sageMessage.args.removeAndReturnEnum<ColorType>(ColorType)!;
+	const colorType = sageMessage.args.findEnum<ColorType>(ColorType, "type", true)!;
 	let inherited = false;
 	let color = colors.shift()!.get(colorType);
 	while (!color && colors.length) {
@@ -130,6 +132,25 @@ async function colorGet(sageMessage: SageMessage): Promise<void> {
 
 //#region set
 
+/**
+ * Returns both color and type from the args.
+ * @todo ensure any calls to this expect the color and type to be keyed so that we can stop falling through to unkeyed args.
+ */
+function findColorAndType(args: SageMessageArgs): Optional<TColorAndType> {
+	if (args.isEmpty) {
+		return null;
+	}
+	const color = args.findColor("color", true),
+		type = args.findEnum<ColorType>(ColorType, "type", true);
+	if (color && type) {
+		return { color, type };
+	}
+	if (color === undefined && type === undefined) {
+		return undefined;
+	}
+	return null;
+}
+
 async function colorSetServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminServer) {
 		return sageMessage.reactBlock();
@@ -138,7 +159,7 @@ async function colorSetServer(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const colorAndType = sageMessage.args.removeAndReturnColorAndType();
+	const colorAndType = findColorAndType(sageMessage.args);
 	if (!colorAndType) {
 		return sageMessage.reactFailure();
 	}
@@ -163,7 +184,7 @@ async function colorSetGame(sageMessage: SageMessage): Promise<void> {
 
 	const game = sageMessage.game!;
 
-	const colorAndType = sageMessage.args.removeAndReturnColorAndType();
+	const colorAndType = findColorAndType(sageMessage.args);
 	if (!colorAndType) {
 		return sageMessage.reactFailure();
 	}
@@ -250,7 +271,7 @@ async function colorUnsetServer(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const colorType = sageMessage.args.removeAndReturnEnum<ColorType>(ColorType);
+	const colorType = sageMessage.args.findEnum<ColorType>(ColorType, "type", true);
 	const unset = sageMessage.server.colors.unset(colorType);
 	if (!unset) {
 		return sageMessage.reactFailure();
@@ -267,7 +288,7 @@ async function colorUnsetGame(sageMessage: SageMessage): Promise<void> {
 
 	const game = sageMessage.game!;
 
-	const colorType = sageMessage.args.removeAndReturnEnum<ColorType>(ColorType);
+	const colorType = sageMessage.args.findEnum<ColorType>(ColorType, "type", true);
 	const unset = game.colors.unset(colorType);
 	if (!unset) {
 		return sageMessage.reactFailure();
@@ -308,21 +329,21 @@ export default function register(): void {
 	registerAdminCommand(colorUnsetGame, "color-unset-game");
 	registerAdminCommand(colorUnset, "color-unset");
 
-	registerAdminCommandHelp("Admin", "SuperUser", "Color", "color get bot {ColorType}");
+	registerAdminCommandHelp("Admin", "SuperUser", "Color", "color get bot type=\"ColorType\"");
 	registerAdminCommandHelp("Admin", "SuperUser", "Color", "color list bot");
 
-	registerAdminCommandHelp("Admin", "Color", "color get {ColorType}");
-	registerAdminCommandHelp("Admin", "Color", "color get {server|game} {ColorType}");
+	registerAdminCommandHelp("Admin", "Color", "color get type=\"ColorType\"");
+	registerAdminCommandHelp("Admin", "Color", "color get {server|game} type=\"ColorType\"");
 
 	registerAdminCommandHelp("Admin", "Color", "color list");
 	registerAdminCommandHelp("Admin", "Color", "color list {server|game}");
 
-	registerAdminCommandHelp("Admin", "Color", "color set {ColorType} {hexColorValue}");
-	registerAdminCommandHelp("Admin", "Color", "color set {server|game} {ColorType} {hexColorValue}");
+	registerAdminCommandHelp("Admin", "Color", "color set type=\"ColorType\" {hexColorValue}");
+	registerAdminCommandHelp("Admin", "Color", "color set {server|game} type=\"ColorType\" {hexColorValue}");
 
 	registerAdminCommandHelp("Admin", "Color", "color sync");
 	registerAdminCommandHelp("Admin", "Color", "color sync {server|game}");
 
-	registerAdminCommandHelp("Admin", "Color", "color unset {ColorType}");
-	registerAdminCommandHelp("Admin", "Color", "color unset {server|game} {ColorType}");
+	registerAdminCommandHelp("Admin", "Color", "color unset type=\"ColorType\"");
+	registerAdminCommandHelp("Admin", "Color", "color unset {server|game} type=\"ColorType\"");
 }
