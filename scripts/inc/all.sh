@@ -95,23 +95,7 @@ function sshRun() {
 
 #region npm lib versions: CHANGE ONLY AS REQUIRED
 
-#region local npm libs for DEV only
-
-NODE_TYPES_NPM="@types/node@18.14.0"
-NODE_TYPES_FOLLOW_REDIRECTS="@types/follow-redirects@1.14.1"
-
-#endregion
-
-#region npm libs for DEPLOY
-
-DISCORD_NPM="discord.js@13.12.0"
-XREGEXP_NPM="xregexp@5.1.1"
-CANVAS_NPM="@napi-rs/canvas@0.1.35"
-PDF2JSON_NPM="pdf2json@3.0.2"
-EMOJI_REGEX_NPM="emoji-regex@10.2.1"
-FOLLOW_REDIRECTS_NPM="follow-redirects@1.15.2"
-
-#endregion
+include "npm"
 
 #endregion
 

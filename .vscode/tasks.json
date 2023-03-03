@@ -68,10 +68,10 @@
 			}
 		},
 		{
-			"label": "pdf2json",
+			"label": "node-module-fixes",
 			"type": "shell",
-			"command": "echo",
-			"args": ["'declare module \"pdf2json\";'",">","./node_modules/pdf2json/index.d.ts"],
+			"command": "bash",
+			"args": ["./scripts/node-module-fixes.sh"],
 			"group": "build",
 			"presentation": {
 				"echo": true,
@@ -84,7 +84,7 @@
 		},
 		{
 			"label": "Transpile",
-			"dependsOn": ["pdf2json"],
+			"dependsOn": ["node-module-fixes"],
 			"type": "typescript",
 			"tsconfig": "tsconfig.json",
 			"problemMatcher": "$tsc",
