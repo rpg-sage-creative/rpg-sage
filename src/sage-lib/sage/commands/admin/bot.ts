@@ -80,15 +80,16 @@ async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
 		return sageMessage.reactBlock();
 	}
-	const gameType = sageMessage.args.removeAndReturnGameType();
+
+	const gameType = sageMessage.args.getEnum<GameType>(GameType, "game");
 	if (!gameType) {
 		return sageMessage.reactFailure("Unable to parse GameType.");
 	}
 
-	const setEnabled = sageMessage.args.length === 1 && sageMessage.args[0] === "true";
-	const setInactive = sageMessage.args.length === 1 && sageMessage.args[0] === "false";
-	const disabledMessage = sageMessage.args.join(" ");
-	const status = setEnabled ? true : setInactive ? false : (disabledMessage || "Unknown Reason");
+	const enabled = sageMessage.args.getBoolean("enabled");
+	const disabledMessage = sageMessage.args.getString("message");
+	const status = enabled ?? (disabledMessage || "Unknown Reason");
+
 	const saved = await sageMessage.bot.setSearchStatus(gameType, status);
 	await sageMessage.reactSuccessOrFailure(saved);
 	if (saved) {
