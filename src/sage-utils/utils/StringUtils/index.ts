@@ -2,6 +2,8 @@ import * as _XRegExp from "xregexp";
 import type { Optional, TKeyValueArg } from "../..";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
+import { default as createEmojiRegex } from "emoji-regex";
+
 export * as Comparison from "./Comparison";
 export * as Markdown from "./Markdown";
 export { default as StringMatcher } from "./StringMatcher";
@@ -11,7 +13,7 @@ export * as Tokenizer from "./Tokenizer";
 /*
 // const DOUBLE_ARROW_LEFT = "\u00AB";
 // const DOUBLE_ARROW_RIGHT = "\u00BB";
-// const DOUBLE_REGEX = new RegExp(`[${DOUBLE_LEFT}${DOUBLE_RIGHT}]`, "g");
+// const DOUBLE_REGEX = XRegExp(`[${DOUBLE_LEFT}${DOUBLE_RIGHT}]`, "g");
 */
 
 /*
@@ -22,7 +24,7 @@ export * as Tokenizer from "./Tokenizer";
 // const SINGLE_ARROW_LEFT = "\u2039";
 // const SINGLE_ARROW_RIGHT = "\u203A";
 // const SINGLE_ENGLISH = `${SINGLE_LEFT}[^${SINGLE_RIGHT}]*${SINGLE_RIGHT}`;
-// const SINGLE_REGEX = new RegExp(`[${SINGLE_LEFT}${SINGLE_RIGHT}]`, "g");
+// const SINGLE_REGEX = XRegExp(`[${SINGLE_LEFT}${SINGLE_RIGHT}]`, "g");
 */
 /*
 // const DOUBLE = "\u0022";
@@ -41,8 +43,8 @@ export * as Tokenizer from "./Tokenizer";
 */
 
 /*
-// const DEQUOTE_REGEX = new RegExp(`^[${DOUBLE}${DOUBLE_LEFT}${DOUBLE_LEFT_LOW}][^${DOUBLE}${DOUBLE_LEFT}${DOUBLE_LEFT_LOW}${DOUBLE_RIGHT}]*[${DOUBLE}${DOUBLE_LEFT}${DOUBLE_RIGHT}]$`);
-// const DEQUOTE_REGEX_STRICT = new RegExp(`^(${DOUBLE_ENGLISH}|${DOUBLE_GERMAN}|${DOUBLE_POLISH}|${DOUBLE_UNIVERSAL})$`);
+// const DEQUOTE_REGEX = XRegExp(`^[${DOUBLE}${DOUBLE_LEFT}${DOUBLE_LEFT_LOW}][^${DOUBLE}${DOUBLE_LEFT}${DOUBLE_LEFT_LOW}${DOUBLE_RIGHT}]*[${DOUBLE}${DOUBLE_LEFT}${DOUBLE_RIGHT}]$`);
+// const DEQUOTE_REGEX_STRICT = XRegExp(`^(${DOUBLE_ENGLISH}|${DOUBLE_GERMAN}|${DOUBLE_POLISH}|${DOUBLE_UNIVERSAL})$`);
 */
 
 //#endregion
@@ -218,6 +220,11 @@ export function dequote(value: string): string {
 	return isQuoted(value) ? value.slice(1, -1) : value;
 }
 
+/** Convenience for XRegExp.escape(value). */
+export function escapeForRegExp(value: string): string {
+	return XRegExp.escape(value);
+}
+
 //#region .format
 
 export function namedFormat(template: string, args: any[]): string {
@@ -246,7 +253,7 @@ export function namedFormat(template: string, args: any[]): string {
 export function originalFormat(template: string, args: any[]): string {
 	let result = template;
 	for (let i = args.length; i--;) {
-		result = result.replace(new RegExp(`\\{${i}\\}`, "g"), args[i]);
+		result = result.replace(XRegExp(XRegExp.escape(`{${i}}`), "g"), args[i]);
 	}
 	return result;
 }
@@ -353,8 +360,24 @@ export function createKeyValueArgRegex(key?: string): RegExp {
 }
 
 /** Convenience for creating/sharing whitespace regex in case we change it later. */
-export function createWhitespaceRegex(): RegExp {
-	return /\s+/;
+export function createWhitespaceRegex(globalFlag = false): RegExp {
+	return globalFlag ? /\s+/ : /\s+/g;
+}
+
+export enum DiscordEmojiRegexMatchCount { AllowEmpty = 0, SingleMatch = 1, MultipleMatches = 2 }
+
+/** Convenience for creating/sharing regex that matches discord emoji _and_ unicode emoji. */
+export function createDiscordEmojiRegex(matchCount = DiscordEmojiRegexMatchCount.SingleMatch, globalFlag = false): RegExp {
+	const discordEmojiRegex = `<a?:\\w{2,}:\\d{16,}>`;
+	const unicodeEmojiRegex = createEmojiRegex();
+	const flags = globalFlag ? "g" : "";
+	const regex = `${discordEmojiRegex}|${unicodeEmojiRegex.source}`;
+	if (matchCount !== DiscordEmojiRegexMatchCount.SingleMatch) {
+		const plus = matchCount === DiscordEmojiRegexMatchCount.MultipleMatches ? "+" : "";
+		const star = matchCount === DiscordEmojiRegexMatchCount.AllowEmpty ? "*" : "";
+		return XRegExp(`(?:${regex})${plus}${star}`, flags);
+	}
+	return XRegExp(regex, flags);
 }
 
 /** Returns true if the value is key=value or key="value" or key="", false otherwise. Passing in a key will make sure they keys match. */

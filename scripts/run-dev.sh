@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# import constants and functions
+[ -f "./inc/all.sh" ] && source "./inc/all.sh" || source "./scripts/inc/all.sh"
+
 BUILD=
 FULL=
 while test $# -gt 0; do
@@ -10,24 +13,11 @@ while test $# -gt 0; do
 	esac
 done
 
-
-#region consts and imports
-
-# bring in all the config information
-if [ -f "./config.sh" ]; then
-	source "./config.sh"
-elif [ -f "./scripts/config.sh" ]; then
-	source "./scripts/config.sh"
-fi
-
-#endregion
-
-echoAndDo "cd $sageRootDir"
 if [ "$FULL" = "true" ]; then
 	echoAndDo "/bin/bash ./scripts/pre-build.sh"
 fi
 if [ "$FULL" = "true" ] || [ "$BUILD" = "true" ]; then
-	echoAndDo "tsc --build tsconfig.json"
+	echoAndDo "/bin/bash ./scripts/build.sh"
 fi
 if [ "$FULL" = "true" ]; then
 	echoAndDo "/bin/bash ./scripts/post-build.sh"
@@ -43,9 +33,7 @@ if [ "$FULL" = "true" ]; then
 	# make sure we have the sage data sub folders
 	sageDataSubs=( "backup" "dice" "games" "logs" "logs/dev" "logs/beta" "logs/stable" "messages" "servers" "users" )
 	for sageDataSub in "${sageDataSubs[@]}"; do
-		if [ ! -d $sageDataDir/$sageDataSub ]; then
-			echoAndDo "mkdir $sageDataDir/$sageDataSub"
-		fi
+		echoAndDo "mkdir -p $sageDataDir/$sageDataSub"
 	done
 fi
 
@@ -53,5 +41,5 @@ fi
 # if [ ! -f $sageBotDir/sage/schema.json ]; then echoAndDo "cd $sageBotDir; /bin/bash schema.sh"; fi
 
 # start the bot
-cd "$sageRootDir/dist"
-node --es-module-specifier-resolution=node app.mjs dev
+echoAndDo "cd $sageRootDir/dist"
+echoAndDo "node --es-module-specifier-resolution=node app.mjs dev"

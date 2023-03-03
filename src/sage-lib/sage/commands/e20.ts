@@ -203,10 +203,9 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 			if (!skillDie) {
 				return;
 			}
-			const { shiftedDie, shiftArrow } = shiftDie(skillDie, activeEdgeSnagShift);
-			const plus = shiftedDie === "d20" ? "" : "+";
+			const { label, specLabel } = shiftDie(skillDie, activeEdgeSnagShift);
 			selectMenu.addOptions({
-				label: `Skill Roll: ${skill.name} ${plus}${shiftedDie}${shiftArrow}`,
+				label: `Skill Roll: ${skill.name} ${label}`,
 				value: skill.name,
 				default: isDefault(skill.name)
 			});
@@ -214,7 +213,7 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 				skill.specializations?.forEach((spec, index) => {
 					const specValue = `${skill.name}-${index}-${spec.name}`;
 					selectMenu.addOptions({
-						label: `Specialization Roll: ${skill.name} (${spec.name}) ${plus}${shiftedDie}${shiftArrow}*`,
+						label: `Specialization Roll: ${skill.name} (${spec.name}) ${specLabel}`,
 						value: specValue,
 						default: isDefault(specValue)
 					});
@@ -230,11 +229,10 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 				if (!skillDie) {
 					return;
 				}
-				const { shiftedDie, shiftArrow } = shiftDie(skillDie, activeEdgeSnagShift);
-				const plus = shiftedDie === "d20" ? "" : "+";
+				const { label } = shiftDie(skillDie, activeEdgeSnagShift);
 				const skillName = `Zord ${skill.name}`;
 				selectMenu.addOptions({
-					label: `Zord Skill Roll: ${skill.name ?? "Unlabeled"} ${plus}${shiftedDie}${shiftArrow}`,
+					label: `Zord Skill Roll: ${skill.name ?? "Unlabeled"} ${label}`,
 					value: skillName,
 					default: isDefault(skillName)
 				});
@@ -262,12 +260,11 @@ function createSkillSpecializationSelectRow(character: TPlayerCharacter): Messag
 			if (!skillDie) {
 				return;
 			}
-			const { shiftedDie, shiftArrow } = shiftDie(skillDie, activeEdgeSnagShift);
-			const plus = shiftedDie === "d20" ? "" : "+";
+			const { specLabel } = shiftDie(skillDie, activeEdgeSnagShift);
 			skill.specializations?.forEach((spec, index) => {
 				const specValue = `${skill.name}-${index}-${spec.name}`;
 				selectMenu.addOptions({
-					label: `Specialization Roll: ${skill.name} (${spec.name}) ${plus}${shiftedDie}${shiftArrow}*`,
+					label: `Specialization Roll: ${skill.name} (${spec.name}) ${specLabel}`,
 					value: specValue,
 					default: specValue === activeSkill
 				});
@@ -404,7 +401,7 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 		}
 		const activeEdgeSnagShift = getActiveEdgeSnagShiftValues(character);
 		const skillDie = skill?.die ?? "d20";
-		const { shiftedDie, shiftArrow } = shiftDie(skillDie, activeEdgeSnagShift);
+		const { shiftedDie, shiftArrow, rollable, label } = shiftDie(skillDie, activeEdgeSnagShift);
 		const plus = shiftedDie === "d20" ? "" : "+";
 		const specStar = specialization ? "*" : "";
 		const edgeSnag = testEdgeSnag(activeEdgeSnagShift, { edge:"e", snag:"s", none:"" });
@@ -412,7 +409,11 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 		const secretText = secret ? " Secret" : "";
 		const skillName = isZord ? activeSkill : skill?.name;
 		const specName = specialization ? ` (${specialization.name})` : "";
-		dice = `[${plus}${shiftedDie}${specStar}${edgeSnag} ${charName}${secretText} ${skillName}${specName}${shiftArrow}]`;
+		if (rollable) {
+			dice = `[${plus}${shiftedDie}${specStar}${edgeSnag} ${charName}${secretText} ${skillName}${specName}${shiftArrow}]`;
+		}else {
+			dice = `[${label} ${charName} ${skillName}${specName}${shiftArrow}]`;
+		}
 	}
 	const matches = parseDiceMatches(sageInteraction, dice);
 	const output = matches.map(match => match.output).flat();

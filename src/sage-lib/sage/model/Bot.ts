@@ -6,6 +6,7 @@ import Emoji from "./Emoji";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
 import type SageCache from "./SageCache";
+import type { GameType } from "../../../sage-common";
 
 export type TBotCodeName = "dev" | "beta" | "stable";
 
@@ -13,6 +14,14 @@ export type TCoreAuthor = { iconUrl?: string; name?: string; url?: string; };
 export type TCorePrefixes = { command?: string; search?: string; };
 
 export type TDev = { did: Discord.Snowflake; logLevel: TConsoleCommandType; };
+
+/**
+ * key = GameType
+ * undefined | false = no search for this game
+ * string = description for why search is disabled for this game
+ * true = search is enabled for this game
+ */
+type TSearchStatus = { [key: number]: undefined | boolean | string; };
 
 export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	codeName: TBotCodeName;
@@ -25,6 +34,9 @@ export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 
 	/** Url to the Sage avatar/token. */
 	tokenUrl: string;
+
+	/** Current status of the search engine by game. */
+	searchStatus: TSearchStatus;
 }
 
 export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmojiCore {
@@ -35,6 +47,19 @@ export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore,
 	public get logLevel(): LogLevel { return LogLevel[<keyof typeof LogLevel>this.core.logLevel] || null; }
 	public get token(): string { return this.core.token; }
 	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
+
+	/** returns true if we can search the given game */
+	public canSearch(gameType: GameType): boolean { return this.core.searchStatus?.[gameType] === true; }
+	/** returns string if disabled, true if enabled, or false if gameType not found (no search logic for this game) */
+	public getSearchStatus(gameType: GameType): boolean | string {
+		const status = this.core.searchStatus?.[gameType];
+		return typeof(status) === "string" ? status : status === true;
+	}
+	public setSearchStatus(gameType: GameType, status: boolean | string): Promise<boolean> {
+		const searchStatus = this.core.searchStatus ?? (this.core.searchStatus = {});
+		searchStatus[gameType] = status;
+		return this.sageCache.bots.write(this);
+	}
 
 	// #region IHasColorsCore
 	public colors = new Colors(this.core.colors || (this.core.colors = []));
