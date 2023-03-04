@@ -8,7 +8,7 @@ function getGameRoleLabel(gameRole: IGameRole): TGameRoleType {
 }
 
 async function gameRoleList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -30,7 +30,7 @@ async function gameRoleList(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameRoleSet(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -58,7 +58,7 @@ async function gameRoleSet(sageMessage: SageMessage): Promise<void> {
 
 
 async function gameRoleRemove(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 

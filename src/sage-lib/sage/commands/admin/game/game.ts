@@ -18,7 +18,7 @@ import { registerAdminCommandHelp } from "../../help";
 async function getGames(sageMessage: SageMessage): Promise<Game[]> {
 	const guild = sageMessage.discord.guild;
 	if (guild) {
-		if (sageMessage.canAdminGames) {
+		if (sageMessage.checkCanAdminGames()) {
 			return sageMessage.caches.games.getByServerDid(guild.id);
 		}
 	} else if (sageMessage.isSuperUser) {
@@ -28,7 +28,7 @@ async function getGames(sageMessage: SageMessage): Promise<Game[]> {
 }
 
 async function gameCount(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!sageMessage.checkCanAdminServer()) {
 		return sageMessage.reactBlock();
 	}
 	const games = await getGames(sageMessage);
@@ -98,7 +98,7 @@ async function myGameList(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGames) {
+	if (!sageMessage.checkCanAdminGames()) {
 		return sageMessage.reactBlock();
 	}
 	let games = await getGames(sageMessage);
@@ -154,7 +154,7 @@ async function showGameGetGame(sageMessage: SageMessage): Promise<Game | null> {
 			// await sageMessage.message.reply("*No Game Found!*");
 		}
 	}
-	if (!sageMessage.canAdminGames && !game?.hasGameMaster(sageMessage.authorDid)) {
+	if (!sageMessage.checkCanAdminGames() && !game?.hasGameMaster(sageMessage.authorDid)) {
 		await sageMessage.message.reply("*Server Admin, Game Admin, or Game Master privilege required!*");
 	}
 	return game ?? null;
@@ -436,7 +436,7 @@ function createGame(sageMessage: SageMessage<true>, name: string, gameValues: Pa
 }
 
 async function gameCreate(sageMessage: SageMessage<true>): Promise<void> {
-	if (!sageMessage.canAdminGames || !sageMessage.discordKey.threadOrChannel) {
+	if (!sageMessage.checkCanAdminGames() || !sageMessage.discordKey.threadOrChannel) {
 		return sageMessage.reactBlock();
 	}
 
@@ -482,7 +482,7 @@ function getGameOptions(args: ISageCommandArgs): Args<TGameOptions> | null {
 }
 
 async function gameUpdate(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -499,7 +499,7 @@ async function gameUpdate(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameArchive(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 

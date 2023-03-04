@@ -48,7 +48,7 @@ async function channelAdd(sageMessage: SageMessage): Promise<void> {
 
 	// Make sure we have a game
 	const game = await sageMessage.getGameOrCategoryGame();
-	if (!sageMessage.testGameAdmin(game)) {
+	if (!sageMessage.checkCanAdminGame(game)) {
 		return sageMessage.reactBlock();
 	}
 
@@ -189,15 +189,15 @@ async function getChannelNameAndActiveGame(sageCache: SageCache, channelDid: Dis
 	return [channel.name, await sageCache.games.findActiveByDiscordKey(discordKey)];
 }
 
-export async function channelDetails(sageMessage: SageMessage<true>, channel?: IChannel): Promise<void> {
-	if (!sageMessage.canAdminServer && !sageMessage.canAdminGame) {
+export async function channelDetails(sageMessage: SageMessage, channel?: IChannel): Promise<void> {
+	if (!(sageMessage.game ? sageMessage.checkCanAdminGame() : sageMessage.checkCanAdminServer())) {
 		return sageMessage.reactBlock();
 	}
 
 	// Get channel from args if it isn't passed
 	const channelDid = channel?.did ?? sageMessage.args.getChannelDid("channel") ?? sageMessage.discordKey.threadOrChannel!;
 	const [guildChannelName, game] = await getChannelNameAndActiveGame(sageMessage.caches, channelDid);
-	const server = sageMessage.server;
+	const server = sageMessage.server!;
 	channel = game?.getChannel(channelDid) ?? server?.getChannel(channelDid);
 
 	if (!channel) {
@@ -251,11 +251,11 @@ async function _channelList(sageMessage: SageMessage<true>, whichType: BotServer
 }
 
 async function channelListServer(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminServer ? _channelList(sageMessage, BotServerGameType.Server) : sageMessage.reactBlock();
+	return sageMessage.checkCanAdminServer() ? _channelList(sageMessage, BotServerGameType.Server) : sageMessage.reactBlock();
 }
 
 async function channelListGame(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminGame ? _channelList(sageMessage, BotServerGameType.Game) : sageMessage.reactBlock();
+	return sageMessage.checkCanAdminGame() ? _channelList(sageMessage, BotServerGameType.Game) : sageMessage.reactBlock();
 }
 
 async function channelList(sageMessage: SageMessage): Promise<void> {
@@ -268,7 +268,7 @@ async function channelList(sageMessage: SageMessage): Promise<void> {
 
 async function channelRemove(sageMessage: SageMessage): Promise<void> {
 	const game = await sageMessage.getGameOrCategoryGame();
-	if (!sageMessage.testGameAdmin(game)) {
+	if (!sageMessage.checkCanAdminGame(game)) {
 		return sageMessage.reactBlock("Not authorized to admin this game!");
 	}
 
@@ -296,7 +296,7 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const game = await sageMessage.getGameOrCategoryGame();
-	if (game && !sageMessage.testGameAdmin(game)) {
+	if (game && !sageMessage.checkCanAdminGame(game)) {
 		return sageMessage.reactBlock();
 	}
 

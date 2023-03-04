@@ -161,35 +161,11 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 
 	//#endregion
 
-	//#region user "canAdminX" flags
-
-	/** Quick flag for "this" Game (game && (canAdminGames || isGameMaster)) */
-	public get canAdminGame(): boolean {
-		return this.cache.get("canAdminGame", () => !!this.game && (this.canAdminGames || this.isGameMaster));
-	}
-
-	/** Quick flag for Game admins (canAdminServer || isGameAdmin) */
-	public get canAdminGames(): boolean {
-		return this.cache.get("canAdminGames", () => this.canAdminServer || this.isGameAdmin);
-	}
-
-	/** Quick flag for Sage admins (isSuperUser || isOwner || isSageAdmin) */
-	public get canAdminSage(): boolean {
-		return this.cache.get("canAdminSage", () => this.isSuperUser || this.isServerOwner || this.isSageAdmin);
-	}
-
-	/** Quick flag for Server admins (canAdminSage || isServerAdmin) */
-	public get canAdminServer(): boolean {
-		return this.cache.get("canAdminServer", () => this.canAdminSage || this.isServerAdmin);
-	}
-
-	//#endregion
-
 	//#region user "isX" flags
 
-	/** Can admin Games and Game channels */
+	/** Can admin Games */
 	public get isGameAdmin(): boolean {
-		return this.cache.get("isGameAdmin", () => this.server?.hasGameAdmin(this.actor.did) === true);
+		return this.sageCache.actor.isGameAdmin;
 	}
 
 	/** Is the server HomeServer */
@@ -197,24 +173,14 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 		return this.guild?.s.isHome === true;
 	}
 
-	/** Is the actor a SageAdmin (can admin Sage settings, Server channels, Games, and Game channels) for the server being acted in */
-	public get isSageAdmin(): boolean {
-		return this.cache.get("isSageAdmin", () => this.server?.hasSageAdmin(this.actor.did) === true);
-	}
-
-	/** Can admin Server channels and Game channels */
+	/** Can admin Server */
 	public get isServerAdmin(): boolean {
-		return this.cache.get("isServerAdmin", () => this.server?.hasServerAdmin(this.actor.did) === true);
+		return this.sageCache.actor.isServerAdmin;
 	}
 
-	/** Is the actor the owner of the server being acted in */
-	public get isServerOwner(): boolean {
-		return this.cache.get("isOwner", () => this.actor.did === this.guild?.d.ownerId);
-	}
-
-	/** Is the author SuperUser */
+	/** Is a SuperUser */
 	public get isSuperUser(): boolean {
-		return this.actor.s.isSuperUser === true;
+		return this.sageCache.actor.isSuperUser;
 	}
 
 	//#endregion
@@ -342,15 +308,23 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 		return channelDid === this.discordKey.channel || this.channel?.admin === true;
 	}
 
-	/** Ensures we have a game and can admin games or are the GM. */
-	public testGameAdmin(game: Optional<Game>): game is Game {
-		return !!game && (this.canAdminGames || game.hasGameMaster(this.actor.did));
+	/** Checks to see if the actor can admin the Command's Game. */
+	public checkCanAdminGame(): this is IHaveGame & IHaveServer;
+	/** Checks to see if the actor can admin the given Game. */
+	public checkCanAdminGame(game: Optional<Game>): game is Game;
+	public checkCanAdminGame(...args: Optional<Game>[]): boolean {
+		const game = args.length ? args[0] : this.game;
+		return !!game && (this.checkCanAdminGames() || this.isGameMaster);
 	}
 
-	/** Ensures we are either in an admin channel or are the server owner or SuperUser. */
-	public testServerAdmin(): this is IHaveServer {
-		/** @todo This should ensure "ServerAdmin"; There should be another to determine if we can use config commands via the channel.admin flag */
-		return this.isServerOwner || this.isSuperUser || this.serverChannel?.admin === true;
+	public checkCanAdminGames(): this is IHaveServer;
+	public checkCanAdminGames(): boolean {
+		return !!this.server && this.isSuperUser || this.isServerAdmin || this.isGameAdmin;
+	}
+
+	public checkCanAdminServer(): this is IHaveServer;
+	public checkCanAdminServer(): boolean {
+		return !!this.server && this.channel?.admin === true && (this.isSuperUser || this.isServerAdmin);
 	}
 
 	// #endregion

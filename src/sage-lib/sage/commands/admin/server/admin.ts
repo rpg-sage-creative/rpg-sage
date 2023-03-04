@@ -15,10 +15,11 @@ async function renderUser(renderableContent: utils.RenderUtils.RenderableContent
 	renderableContent.append(`<b>Role</b> ${AdminRoleType[user.role] ?? "<i>Unknown</i>"}`);
 }
 
-async function adminList(sageMessage: SageMessage<true>): Promise<void> {
-	if (!sageMessage.canAdminSage) {
-		return sageMessage.reactBlock();
+async function adminList(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.checkCanAdminServer()) {
+		return sageMessage.reactBlock("Must be a Server Owner, Server Administrator, or Server Manager!");
 	}
+
 	let users: TAdminUser[] = <TAdminUser[]>await utils.ArrayUtils.Collection.mapAsync(sageMessage.server.admins, async admin => {
 		return {
 			discordUser: await sageMessage.discord.fetchUser(admin.did),
@@ -44,19 +45,24 @@ async function adminList(sageMessage: SageMessage<true>): Promise<void> {
 	return Promise.resolve();
 }
 
-function getAdminRoleType(command: string): AdminRoleType | null {
-	if (command.includes("game-admin")) {
-		return AdminRoleType.GameAdmin;
+async function adminAdd(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.checkCanAdminServer()) {
+		return sageMessage.reactBlock("Must be a Server Owner, Server Administrator, or Server Manager!");
 	}
-	if (command.includes("server-admin")) {
-		return AdminRoleType.ServerAdmin;
+
+	const userDid = sageMessage.args.findUserDid("user");
+	const roleType = sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type");
+	if (!userDid || !roleType) {
+		return sageMessage.reactFailure(`You must provide user and role type. Ex: sage!!admin add user="@User" role="GameAdmin"`);
 	}
-	return null;
+
+	const saved = await sageMessage.server.setAdmin(userDid, roleType);
+	return sageMessage.reactSuccessOrFailure(saved);
 }
 
-async function adminAdd(sageMessage: SageMessage<true>): Promise<void> {
-	if (!sageMessage.canAdminSage) {
-		return sageMessage.reactBlock();
+async function adminRemove(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.checkCanAdminServer()) {
+		return sageMessage.reactBlock("Must be a Server Owner, Server Administrator, or Server Manager!");
 	}
 
 	const userDid = sageMessage.args.findUserDid("user", true);
@@ -64,46 +70,8 @@ async function adminAdd(sageMessage: SageMessage<true>): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const roleType = getAdminRoleType(sageMessage.command) ?? sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type", true);
-	if (!roleType) {
-		return sageMessage.reactFailure();
-	}
-
-	const added = await sageMessage.server.addAdmin(userDid, roleType);
-	return sageMessage.reactSuccessOrFailure(added);
-}
-
-async function adminUpdate(sageMessage: SageMessage<true>): Promise<void> {
-	if (!sageMessage.canAdminSage) {
-		return sageMessage.reactBlock();
-	}
-
-	const userDid = sageMessage.args.findUserDid("user", true);
-	if (!userDid) {
-		return sageMessage.reactFailure();
-	}
-
-	const roleType = getAdminRoleType(sageMessage.command) ?? sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type", true);
-	if (!roleType) {
-		return sageMessage.reactFailure();
-	}
-
-	const updated = await sageMessage.server.updateAdminRole(userDid, roleType);
-	return sageMessage.reactSuccessOrFailure(updated);
-}
-
-async function adminRemove(sageMessage: SageMessage<true>): Promise<void> {
-	if (!sageMessage.canAdminSage) {
-		return sageMessage.reactBlock();
-	}
-
-	const userDid = sageMessage.args.findUserDid("user", true);
-	if (!userDid) {
-		return sageMessage.reactFailure();
-	}
-
-	const removed = await sageMessage.server.removeAdmin(userDid);
-	return sageMessage.reactSuccessOrFailure(removed);
+	const saved = await sageMessage.server.setAdmin(userDid, null);
+	return sageMessage.reactSuccessOrFailure(saved);
 }
 
 export default function register(): void {
@@ -111,12 +79,9 @@ export default function register(): void {
 	registerAdminCommandHelp("Admin", "SuperUser", "Admin", "admin list");
 	registerAdminCommandHelp("Admin", "SuperUser", "Admin", "admin list {optionalNameFilter}");
 
-	registerAdminCommand(adminAdd, "admin-add", "add-admin", "add-game-admin", "add-server-admin");
-	registerAdminCommandHelp("Admin", "Admin", "admin add {@UserMention} {GameAdmin|ServerAdmin|SageAdmin}");
-
-	registerAdminCommand(adminUpdate, "admin-update");
-	registerAdminCommandHelp("Admin", "Admin", "admin update {@UserMention} {GameAdmin|ServerAdmin|SageAdmin}");
+	registerAdminCommand(adminAdd, "admin-add");
+	registerAdminCommandHelp("Admin", "Admin", `admin add user="@User" role="GameAdmin"`);
 
 	registerAdminCommand(adminRemove, "admin-remove");
-	registerAdminCommandHelp("Admin", "Admin", "admin remove {@UserMention}");
+	registerAdminCommandHelp("Admin", "Admin", `admin remove user="@User"`);
 }

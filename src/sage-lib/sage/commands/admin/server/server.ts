@@ -52,7 +52,7 @@ async function serverInit(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.server) {
 		return Promise.resolve();
 	}
-	if (!sageMessage.isServerOwner && !sageMessage.isSuperUser) {
+	if (!sageMessage.checkCanAdminServer()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -74,7 +74,7 @@ function serverDetailsDefaultTypes(renderableContent: utils.RenderUtils.Renderab
 type TRole = { role:IAdminRole, discordRole:Discord.Role };
 async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	let server: Optional<Server> = sageMessage.server;
-	if (server && !sageMessage.canAdminServer) {
+	if (server && !sageMessage.checkCanAdminServer()) {
 		return sageMessage.reactBlock();
 	}
 	if (!server && sageMessage.isSuperUser) {
@@ -117,9 +117,9 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	return <any>sageMessage.send(renderableContent);
 }
 
-async function serverSet(sageMessage: SageMessage<true>): Promise<void> {
+async function serverSet(sageMessage: SageMessage): Promise<void> {
 	let server: Optional<Server> = sageMessage.server;
-	if (server && !sageMessage.canAdminServer) {
+	if (server && !sageMessage.checkCanAdminServer()) {
 		return sageMessage.reactBlock();
 	}
 	if (!server) {
@@ -131,7 +131,7 @@ async function serverSet(sageMessage: SageMessage<true>): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const updated = await sageMessage.server.update(options);
+	const updated = await server.update(options);
 	return sageMessage.reactSuccessOrFailure(updated);
 }
 

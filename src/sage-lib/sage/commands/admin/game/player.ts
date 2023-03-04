@@ -4,7 +4,7 @@ import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
 export async function gameUserList(sageMessage: SageMessage, who: string, userDids: Discord.Snowflake[] = []): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -33,7 +33,7 @@ async function playerList(sageMessage: SageMessage): Promise<void> {
 }
 
 async function playerAdd(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -43,7 +43,7 @@ async function playerAdd(sageMessage: SageMessage): Promise<void> {
 }
 
 async function playerRemove(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 

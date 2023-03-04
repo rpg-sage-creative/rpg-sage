@@ -8,6 +8,7 @@ import ServerRepo from "../repo/ServerRepo";
 import UserRepo from "../repo/UserRepo";
 import type Bot from "./Bot";
 import type Game from "./Game";
+import { AdminRoleType } from "./Server";
 import type Server from "./Server";
 import type User from "./User";
 
@@ -21,7 +22,7 @@ export type TSageCacheCore = {
 	users: UserRepo;
 
 	/** The User objects for the actor doing the thing. */
-	actor: TSageDiscordPair<DUser, User>;
+	actor: TUserPair;
 
 	/** The User objects for the author of the message. */
 	author?: TSageDiscordPair<DUser, User>;
@@ -58,9 +59,58 @@ export type TSageDiscordPair<T extends THasShowflakeId, U extends THasUuidId> = 
 	s: U;
 };
 
+export type TUserPair = TSageDiscordPair<DUser, User> & {
+	isSuperUser: boolean;
+	isServerOwner: boolean;
+	isServerAdministrator: boolean;
+	isServerManager: boolean;
+	isGameAdministrator: boolean;
+
+	// isSageAdmin: boolean;
+	isServerAdmin: boolean;
+	isGameAdmin: boolean;
+}
+
 /** Helper for creating TSageDiscordPair objects. */
 function pair<D extends THasShowflakeId, S extends THasUuidId>(d: D, s: S): TSageDiscordPair<D, S> {
 	return { d, did:d.id, uuid:s.id, s };
+}
+
+async function pairUser(sageCache: SageCache, d: DUser, s: User): Promise<TUserPair> {
+	const guild = sageCache.guild?.d;
+	const member = await guild?.members.fetch(d.id);
+	const permissions = member?.permissions;
+	const server = sageCache.guild?.s;
+	const roleDid = server?.getRole(AdminRoleType.GameAdmin)?.did;
+	const guildRole = roleDid ? await guild?.roles.fetch(roleDid) : null;
+
+	const isSuperUser = s.isSuperUser;
+	const isServerOwner = d.id === guild?.ownerId;
+	const isServerAdministrator = permissions?.has("ADMINISTRATOR") === true;
+	const isServerManager = permissions?.has("MANAGE_GUILD") === true;
+	const isGameAdministrator = guildRole?.members.has(d.id) === true;
+console.log({isSuperUser,
+	isServerOwner,
+	isServerAdministrator,
+	isServerManager,
+	isGameAdministrator,
+
+	isSageAdmin: isSuperUser,
+	isServerAdmin: isServerOwner || isServerAdministrator || isServerManager,
+	isGameAdmin: isGameAdministrator});
+	return {
+		...pair(d, s),
+
+		isSuperUser,
+		isServerOwner,
+		isServerAdministrator,
+		isServerManager,
+		isGameAdministrator,
+
+		// isSageAdmin: isSuperUser,
+		isServerAdmin: isServerOwner || isServerAdministrator || isServerManager,
+		isGameAdmin: isGameAdministrator
+	};
 }
 
 /** Helper for creating SageCache that returns both it and its core for extending. */
@@ -191,6 +241,7 @@ export default class SageCache {
 	public get home(): Server { return this.core.home; }
 
 	public get guild(): TSageDiscordPair<Discord.Guild, Server> | undefined { return this.core.server; }
+	/** @deprecated use .guild?.s */
 	public get server(): Server | undefined { return this.core.server?.s; }
 
 	public get channel(): TChannel | undefined { return this.core.channel; }
@@ -198,7 +249,7 @@ export default class SageCache {
 	public get game(): Game | undefined { return this.core.game; }
 
 	/** The User objects for the actor doing the thing. */
-	public get actor(): TSageDiscordPair<DUser, User> { return this.core.actor; }
+	public get actor(): TUserPair { return this.core.actor; }
 
 	/** The User objects for the author of the message. */
 	public get author(): TSageDiscordPair<DUser, User> | undefined	{ return this.core.author; }
@@ -263,7 +314,8 @@ export default class SageCache {
 		if (guildMember.guild) {
 			core.server = pair(guildMember.guild, await core.servers.getOrCreateByGuild(guildMember.guild));
 		}
-		core.actor = pair(guildMember.user, await core.users.getOrCreateByDid(guildMember.id));
+		// core.actor = pair(guildMember.user, await core.users.getOrCreateByDid(guildMember.id));
+		core.actor = await pairUser(sageCache, guildMember.user, await core.users.getOrCreateByDid(guildMember.id));
 		return sageCache;
 	}
 	public static async fromMessage(message: DMessage, discordActor: DUser = message.author!): Promise<SageCache> {
@@ -277,7 +329,8 @@ export default class SageCache {
 			core.server = pair(message.guild, await core.servers.getOrCreateByGuild(message.guild));
 			core.game = await core.games.findActiveByDiscordKey(core.discordKey);
 		}
-		core.actor = pair(discordActor, await core.users.getOrCreateByDid(discordActor.id));
+		// core.actor = pair(discordActor, await core.users.getOrCreateByDid(discordActor.id));
+		core.actor = await pairUser(sageCache, discordActor, await core.users.getOrCreateByDid(discordActor.id));
 		core.author = message.author ? pair(message.author, await core.users.getOrCreateByDid(message.author.id)) : undefined;
 		return sageCache;
 	}
@@ -295,7 +348,8 @@ export default class SageCache {
 			core.server = pair(interaction.guild, await core.servers.getOrCreateByGuild(interaction.guild));
 			core.game = await core.games.findActiveByDiscordKey(core.discordKey);
 		}
-		core.actor = pair(interaction.user, await core.users.getOrCreateByDid(interaction.user.id));
+		// core.actor = pair(interaction.user, await core.users.getOrCreateByDid(interaction.user.id));
+		core.actor = await pairUser(sageCache, interaction.user, await core.users.getOrCreateByDid(interaction.user.id));
 		core.author = !interaction.isApplicationCommand() ? pair(interaction.message.author as DUser, await core.users.getOrCreateByDid(interaction.message.author.id)) : undefined;
 		return sageCache;
 	}

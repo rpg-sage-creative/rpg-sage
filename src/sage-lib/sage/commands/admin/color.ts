@@ -77,11 +77,11 @@ async function colorListBot(sageMessage: SageMessage): Promise<void> {
 }
 
 async function colorListServer(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminServer && sageMessage.testServerAdmin() ? _colorList(sageMessage, BotServerGameType.Server) : sageMessage.reactBlock();
+	return sageMessage.checkCanAdminServer() ? _colorList(sageMessage, BotServerGameType.Server) : sageMessage.reactBlock();
 }
 
 async function colorListGame(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminGame ? _colorList(sageMessage, BotServerGameType.Game) : sageMessage.reactBlock();
+	return sageMessage.checkCanAdminGame() ? _colorList(sageMessage, BotServerGameType.Game) : sageMessage.reactBlock();
 }
 
 async function colorList(sageMessage: SageMessage): Promise<void> {
@@ -117,11 +117,11 @@ async function colorGetBot(sageMessage: SageMessage): Promise<void> {
 }
 
 async function colorGetServer(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminServer && sageMessage.testServerAdmin() ? _colorGet(sageMessage, sageMessage.server?.colors, sageMessage.bot.colors) : sageMessage.reactBlock();
+	return sageMessage.checkCanAdminServer() ? _colorGet(sageMessage, sageMessage.server?.colors, sageMessage.bot.colors) : sageMessage.reactBlock();
 }
 
 async function colorGetGame(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminGame ? _colorGet(sageMessage, sageMessage.game?.colors, sageMessage.server?.colors, sageMessage.bot.colors) : sageMessage.reactBlock();
+	return sageMessage.checkCanAdminGame() ? _colorGet(sageMessage, sageMessage.game?.colors, sageMessage.server?.colors, sageMessage.bot.colors) : sageMessage.reactBlock();
 }
 
 async function colorGet(sageMessage: SageMessage): Promise<void> {
@@ -152,10 +152,7 @@ function findColorAndType(args: SageMessageArgs): Optional<TColorAndType> {
 }
 
 async function colorSetServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
-		return sageMessage.reactBlock();
-	}
-	if (!sageMessage.testServerAdmin()) {
+	if (!sageMessage.checkCanAdminServer()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -178,7 +175,7 @@ async function colorSetServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function colorSetGame(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -212,10 +209,7 @@ async function colorSet(sageMessage: SageMessage): Promise<void> {
 //#region sync
 
 async function colorSyncServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
-		return sageMessage.reactBlock();
-	}
-	if (!sageMessage.testServerAdmin()) {
+	if (!sageMessage.checkCanAdminServer()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -235,7 +229,7 @@ async function colorSyncServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function colorSyncGame(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -264,10 +258,7 @@ async function colorSync(sageMessage: SageMessage): Promise<void> {
 //#region unset
 
 async function colorUnsetServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
-		return sageMessage.reactBlock();
-	}
-	if (!sageMessage.testServerAdmin()) {
+	if (!sageMessage.checkCanAdminServer()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -282,7 +273,7 @@ async function colorUnsetServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function colorUnsetGame(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 

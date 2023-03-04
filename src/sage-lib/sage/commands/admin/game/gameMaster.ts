@@ -8,7 +8,7 @@ async function listGameMasters(sageMessage: SageMessage): Promise<void> {
 }
 
 async function addGameMaster(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -18,7 +18,7 @@ async function addGameMaster(sageMessage: SageMessage): Promise<void> {
 }
 
 async function removeGameMaster(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 

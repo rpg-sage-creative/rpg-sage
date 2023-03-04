@@ -72,11 +72,11 @@ async function emojiListBot(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiListServer(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminServer && sageMessage.testServerAdmin() ? _emojiList(sageMessage, BotServerGameType.Server) : sageMessage.reactBlock();
+	return sageMessage.checkCanAdminServer() ? _emojiList(sageMessage, BotServerGameType.Server) : sageMessage.reactBlock();
 }
 
 async function emojiListGame(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminGame ? _emojiList(sageMessage, BotServerGameType.Game) : sageMessage.reactBlock();
+	return sageMessage.checkCanAdminGame() ? _emojiList(sageMessage, BotServerGameType.Game) : sageMessage.reactBlock();
 }
 
 async function emojiList(sageMessage: SageMessage): Promise<void> {
@@ -111,11 +111,11 @@ async function emojiGetBot(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiGetServer(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminServer && sageMessage.testServerAdmin() ? _emojiGet(sageMessage, sageMessage.server?.emoji, sageMessage.bot.emoji) : sageMessage.reactBlock();
+	return sageMessage.checkCanAdminServer() ? _emojiGet(sageMessage, sageMessage.server?.emoji, sageMessage.bot.emoji) : sageMessage.reactBlock();
 }
 
 async function emojiGetGame(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminGame ? _emojiGet(sageMessage, sageMessage.game?.emoji!, sageMessage.server?.emoji!, sageMessage.bot.emoji) : sageMessage.reactBlock();
+	return sageMessage.checkCanAdminGame() ? _emojiGet(sageMessage, sageMessage.game?.emoji!, sageMessage.server?.emoji!, sageMessage.bot.emoji) : sageMessage.reactBlock();
 }
 
 async function emojiGet(sageMessage: SageMessage): Promise<void> {
@@ -146,10 +146,7 @@ function findEmojiAndType(args: SageMessageArgs): Optional<TEmojiAndType> {
 }
 
 async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
-		return sageMessage.reactBlock();
-	}
-	if (!sageMessage.testServerAdmin()) {
+	if (!sageMessage.checkCanAdminServer()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -175,7 +172,7 @@ async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiSetGame(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -209,10 +206,7 @@ async function emojiSet(sageMessage: SageMessage): Promise<void> {
 //#region sync
 
 async function emojiSyncServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
-		return sageMessage.reactBlock();
-	}
-	if (!sageMessage.testServerAdmin()) {
+	if (!sageMessage.checkCanAdminServer()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -232,7 +226,7 @@ async function emojiSyncServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiSyncGame(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -261,10 +255,7 @@ async function emojiSync(sageMessage: SageMessage): Promise<void> {
 //#region unset
 
 async function emojiUnsetServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
-		return sageMessage.reactBlock();
-	}
-	if (!sageMessage.testServerAdmin()) {
+	if (!sageMessage.checkCanAdminServer()) {
 		return sageMessage.reactBlock();
 	}
 
@@ -279,7 +270,7 @@ async function emojiUnsetServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiUnsetGame(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.checkCanAdminGame()) {
 		return sageMessage.reactBlock();
 	}
 
