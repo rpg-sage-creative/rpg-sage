@@ -1,9 +1,10 @@
 import type * as Discord from "discord.js";
 import utils, { Optional, UUID } from "../../../sage-utils";
 import type { DiscordKey } from "../../discord";
+import type { TDialogMessage } from "../repo/DialogMessageRepository";
 import CharactersMatch from "./CharactersMatch";
 import type Game from "./Game";
-import type { GameCharacterCore, TDialogMessage, TGameCharacterType } from "./GameCharacter";
+import type { GameCharacterCore, TGameCharacterType } from "./GameCharacter";
 import GameCharacter from "./GameCharacter";
 import type { IHasSave } from "./NamedCollection";
 import NamedCollection from "./NamedCollection";

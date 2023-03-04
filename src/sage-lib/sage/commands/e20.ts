@@ -469,7 +469,7 @@ export async function slashHandlerEssence20(sageInteraction: SageInteraction): P
 		rawJson = await PdfCacher.read<TRawJson>(value);
 	}else if (isMessageUrl) {
 		const [serverDid, channelDid, messageDid] = value.split("/").slice(-3);
-		const discordKey = new DiscordKey(serverDid.replace("@me", NilSnowflake), channelDid, NilSnowflake, messageDid);
+		const discordKey = DiscordKey.from({ server:serverDid.replace("@me", NilSnowflake), channel:channelDid, message:messageDid });
 		const message = await sageInteraction.discord.fetchMessage(discordKey);
 		const attachment = message?.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
 		if (attachment) {

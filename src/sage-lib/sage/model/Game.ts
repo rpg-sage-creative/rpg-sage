@@ -304,7 +304,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 	public async addOrUpdateChannels(...channels: IChannelArgs[]): Promise<boolean> {
 		channels.forEach(channel => {
-			const found = this.getChannel(new DiscordKey(this.serverDid, channel.did));
+			const found = this.getChannel(DiscordKey.from({ server:this.serverDid, channel:channel.did }));
 			if (found) {
 				updateChannel(found, channel);
 			} else {

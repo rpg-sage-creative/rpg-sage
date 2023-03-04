@@ -1,112 +1,198 @@
-import type * as Discord from "discord.js";
+import type { AnyChannel, Guild, GuildChannel, MessageReaction, Snowflake, ThreadChannel } from "discord.js";
 import type { Optional } from "../../sage-utils";
+import { cleanJson } from "../../sage-utils/utils/JsonUtils";
+import type { TDialogMessage } from "../sage/repo/DialogMessageRepository";
+import DialogMessageRepository from "../sage/repo/DialogMessageRepository";
 import { NilSnowflake } from "./consts";
-import type { DInteraction, DMessage, TChannel } from "./types";
+import type { DInteraction, DMessage, DUser } from "./types";
 
-interface IHasSnowflakeId { id:Discord.Snowflake; }
+interface IHasSnowflakeId { id:Snowflake; }
 type TSnowflakeResolvable = string | IHasSnowflakeId;
+type TAnyChannel = AnyChannel | GuildChannel;
 
-export default class DiscordKey {
+export interface DiscordKeyCore {
+	server?: Snowflake;
+	channel?: Snowflake;
+	thread?: Snowflake;
+	message?: Snowflake;
+}
 
-	public server: Discord.Snowflake;
-	public channel: Discord.Snowflake;
-	public thread: Discord.Snowflake;
-	public message: Discord.Snowflake;
+export type DiscordKeyArgs = {
+	server?: Optional<TSnowflakeResolvable>;
+	channel?: Optional<TSnowflakeResolvable>;
+	thread?: Optional<TSnowflakeResolvable>;
+	message?: Optional<TSnowflakeResolvable>;
+};
 
-	public isDm: boolean;
-	public isEmpty: boolean;
-	public isValid: boolean;
-	public key: string;
-	public shortKey: string;
+function argsToCore(args: DiscordKeyArgs): DiscordKeyCore {
+	if (!args) {
+		console.trace("argsToCore: NO ARGS");
+		return { };
+	}
+	const server = DiscordKey.resolveDid(args.server);
+	const channel = DiscordKey.resolveDid(args.channel);
+	const thread = DiscordKey.resolveDid(args.thread);
+	const message = DiscordKey.resolveDid(args.message);
+	return cleanJson({ server, channel, thread, message });
+}
 
-	public hasServer: boolean;
-	public hasChannel: boolean;
-	public hasThread: boolean;
-	public hasMessage: boolean;
+function any(...bools: boolean[]): boolean {
+	return bools.find(bool => bool) !== undefined;
+}
 
-	public constructor(
-		server: Optional<TSnowflakeResolvable>,
-		channel: Optional<TSnowflakeResolvable>,
-		thread?: Optional<TSnowflakeResolvable>,
-		message?: Optional<TSnowflakeResolvable>
-	) {
-		this.server = DiscordKey.resolveDid(server) ?? NilSnowflake;
-		this.channel = DiscordKey.resolveDid(channel) ?? NilSnowflake;
-		this.thread = DiscordKey.resolveDid(thread) ?? NilSnowflake;
-		this.message = DiscordKey.resolveDid(message) ?? NilSnowflake;
+type TNotThreadChannel = Exclude<TAnyChannel, ThreadChannel>;
 
-		this.isDm = this.server === NilSnowflake;
-		this.key = DiscordKey.createKey(server, channel, thread, message);
-		this.shortKey = DiscordKey.createKey(server, message ?? thread ?? channel);
+type TCanHaveGuild = { guild:Guild | null; };
+type TMightHaveGuild = TCanHaveGuild | AnyChannel;
+function guild(mightHaveGuild?: TMightHaveGuild): Guild | undefined | null {
+	return (mightHaveGuild as TCanHaveGuild)?.guild;
+}
 
+export type TDiscordKeyResolvable = DiscordKey | DiscordKeyArgs | DiscordKeyCore;
+
+export default class DiscordKey implements DiscordKeyCore {
+
+	private core: DiscordKeyCore;
+	public toJSON(): DiscordKeyCore { return this.core; }
+	public toString(): string { return this.key; }
+
+	/** External code should only use one of the DiscordKey.from methods */
+	private constructor(args: DiscordKeyArgs) {
+		this.core = argsToCore(args);
+		this.initSnowflakes();
+		this.initKeys();
+		this.initFlags();
+	}
+
+	//#region snowflakes
+
+	public server!: Snowflake;
+	public channel!: Snowflake;
+	public thread!: Snowflake;
+	public message!: Snowflake;
+
+	private initSnowflakes(): void {
+		this.server = this.core.server ?? NilSnowflake;
+		this.channel = this.core.channel ?? NilSnowflake;
+		this.thread = this.core.thread ?? NilSnowflake;
+		this.message = this.core.message ?? NilSnowflake;
+	}
+
+	//#endregion
+
+	//#region keys
+
+	public key!: string;
+	public shortKey!: string;
+
+	private initKeys(): void {
+		// include NilSnowflake for missing values
+		this.key = [this.server, this.channel, this.thread, this.message].join("-");
+
+		// We only want the Server and the "Most Relevant"
+		const { server, channel, thread, message } = this.core;
+		const left = server ?? NilSnowflake;
+		const right = message ?? thread ?? channel ?? NilSnowflake;
+		this.shortKey = `${left}-${right}`;
+	}
+
+	//#endregion
+
+	//#region flags
+
+	public hasServer!: boolean;
+	public hasChannel!: boolean;
+	public hasThread!: boolean;
+	public hasMessage!: boolean;
+
+	public isDm!: boolean;
+	public isEmpty!: boolean;
+	public isValid!: boolean;
+
+	private initFlags(): void {
 		this.hasServer = this.server !== NilSnowflake;
 		this.hasChannel = this.channel !== NilSnowflake;
 		this.hasThread = this.thread !== NilSnowflake;
 		this.hasMessage = this.message !== NilSnowflake;
-		this.isEmpty = !this.hasServer && !this.hasChannel && !this.hasThread && !this.hasMessage;
-		this.isValid = (this.isDm && this.hasChannel) || (this.hasServer && (this.hasChannel || this.hasThread || this.hasMessage));
+
+		this.isDm = !this.hasServer;
+		this.isEmpty = !any(this.hasServer, this.hasChannel, this.hasThread, this.hasMessage);
+		this.isValid = (this.isDm && this.hasChannel) || (this.hasServer && any(this.hasChannel, this.hasThread, this.hasMessage));
 	}
 
-	public get threadOrChannel(): Discord.Snowflake | undefined {
-		if (this.hasThread) {
-			return this.thread;
+	//#endregion
+
+	/** Returns thread if one exists, otherwise it returns the channel */
+	public get threadOrChannel(): Snowflake {
+		return this.hasThread ? this.thread : this.channel;
+	}
+
+	/** Returns a new DiscordKey that doesn't include .message */
+	public cloneWithoutMessage(): DiscordKey {
+		return new DiscordKey({
+			server: this.core.server,
+			channel: this.core.channel,
+			thread: this.core.thread
+		});
+	}
+
+	/** Returns a new DiscordKey that includes the given message */
+	public cloneForMessage(message: TSnowflakeResolvable): DiscordKey {
+		return new DiscordKey({
+			server: this.core.server,
+			channel: this.core.channel,
+			thread: this.core.thread,
+			message
+		});
+	}
+
+	public static toShortKey(discordKey: TDiscordKeyResolvable): string {
+		return DiscordKey.from(discordKey).shortKey;
+	}
+
+	public static from(discordKey: TDiscordKeyResolvable): DiscordKey {
+		return discordKey instanceof DiscordKey ? discordKey : new DiscordKey(discordKey);
+	}
+
+	public static fromTarget(target: TAnyChannel | DUser): DiscordKey {
+		if ("isThread" in target) {
+			return DiscordKey.fromChannel(target);
 		}
-		if (this.hasChannel) {
-			return this.channel;
-		}
-		return undefined;
+		return DiscordKey.from({ channel:target });
 	}
 
-	public cloneForMessage(message: Optional<TSnowflakeResolvable>): DiscordKey {
-		return new DiscordKey(this.server, this.channel, this.thread, message);
+	public static fromChannel(channel: TAnyChannel): DiscordKey;
+	public static fromChannel(anyChannel: TAnyChannel): DiscordKey {
+		const thread = anyChannel.isThread() ? anyChannel : undefined;
+		const channel = thread?.parent ?? anyChannel as TNotThreadChannel;
+		const server = guild(anyChannel);
+		return new DiscordKey({ server, channel, thread });
 	}
 
-	public toString(): string { return this.key; }
-
-	public static createKey(...resolvables: Optional<TSnowflakeResolvable>[]): string {
-		return resolvables
-			.map(resolvable => DiscordKey.resolveDid(resolvable) ?? NilSnowflake)
-			.join("-");
-	}
-
-	public static fromChannel(channel: TChannel): DiscordKey {
-		const guildId = (channel as Discord.GuildChannel).guild?.id;
-		if (channel.isThread()) {
-			const threadDid = channel.id;
-			const channelDid = channel.parent?.id;
-			return new DiscordKey(guildId, channelDid, threadDid);
-		}
-		return new DiscordKey(guildId, channel.id);
+	public static fromDialogMessage(dialogMessage: TDialogMessage): DiscordKey {
+		DialogMessageRepository.ensureDiscordKey(dialogMessage);
+		return new DiscordKey(dialogMessage.discordKey);
 	}
 
 	public static fromInteraction(interaction: DInteraction): DiscordKey {
-		const channel = interaction.channel;
-		if (channel?.isThread()) {
-			const threadDid = channel.id;
-			const channelDid = channel.parent?.id;
-			return new DiscordKey(interaction.guildId, channelDid, threadDid);
+		if (interaction.channel) {
+			return DiscordKey.fromChannel(interaction.channel);
 		}
-		return new DiscordKey(interaction.guildId, interaction.channelId);
+		const server = interaction.guild;
+		return new DiscordKey({ server });
 	}
 
 	public static fromMessage(message: DMessage): DiscordKey {
-		const channel = message.channel;
-		const guildId = (channel as Discord.GuildChannel).guild?.id;
-		if (channel.isThread()) {
-			const threadDid = channel.id;
-			const channelDid = channel.parent?.id;
-			return new DiscordKey(guildId, channelDid, threadDid, message.id);
-		}
-		return new DiscordKey(guildId, message.channel.id, null, message.id);
+		return DiscordKey.fromChannel(message.channel).cloneForMessage(message);
 	}
 
-	public static fromMessageReaction(messageReaction: Discord.MessageReaction): DiscordKey {
+	public static fromMessageReaction(messageReaction: MessageReaction): DiscordKey {
 		return DiscordKey.fromMessage(messageReaction.message);
 	}
 
-	public static resolveDid(resolvable: TSnowflakeResolvable): Discord.Snowflake;
-	public static resolveDid(resolvable: Optional<TSnowflakeResolvable>): Discord.Snowflake | undefined;
-	public static resolveDid(resolvable: Optional<TSnowflakeResolvable>): Discord.Snowflake | undefined {
+	public static resolveDid(resolvable: TSnowflakeResolvable): Snowflake;
+	public static resolveDid(resolvable: Optional<TSnowflakeResolvable>): Snowflake | undefined;
+	public static resolveDid(resolvable: Optional<TSnowflakeResolvable>): Snowflake | undefined {
 		return typeof(resolvable) === "string" ? resolvable : resolvable?.id;
 	}
 }

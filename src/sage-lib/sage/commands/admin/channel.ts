@@ -310,7 +310,7 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 		const saved = await game.addOrUpdateChannels({ did: targetChannelDid, ...channelOptions });
 		if (saved) {
 			await sageMessage.server.removeChannels(targetChannelDid);
-			return channelDetails(sageMessage, game.getChannel(new DiscordKey(sageMessage.server.did, targetChannelDid)));
+			return channelDetails(sageMessage, game.getChannel(DiscordKey.from({ server:sageMessage.server.did, channel:targetChannelDid })));
 		}
 		return sageMessage.reactFailure();
 	}

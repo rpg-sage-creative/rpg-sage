@@ -6,13 +6,13 @@ import { embedsToTexts } from "../../discord/embeds";
 import { isAuthorBotOrWebhook, registerMessageListener, registerReactionListener } from "../../discord/handlers";
 import { replaceWebhook, SageDialogWebhookName, sendWebhook } from "../../discord/messages";
 import type CharacterManager from "../model/CharacterManager";
-import GameCharacter, { type GameCharacterCore, type TDialogMessage } from "../model/GameCharacter";
+import GameCharacter, { type GameCharacterCore } from "../model/GameCharacter";
 import { ColorType } from "../model/HasColorsCore";
 import { EmojiType } from "../model/HasEmojiCore";
 import type SageMessage from "../model/SageMessage";
 import type SageReaction from "../model/SageReaction";
 import { DialogType } from "../repo/base/channel";
-import DialogMessageRepository from "../repo/DialogMessageRepository";
+import DialogMessageRepository, { TDialogMessage } from "../repo/DialogMessageRepository";
 import { parseDiceMatches, sendDice } from "./dice";
 import { registerInlineHelp } from "./help";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
@@ -114,17 +114,23 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 		//#endregion
 		const last = messages[messages.length - 1];
 
-		const dialogMessage: Partial<TDialogMessage> = {
-			channelDid: last.channel.isThread() ? last.channel.parent?.id : last.channel.id,
-			characterId: character.id,
-			gameId: sageMessage.game?.id,
-			messageDid: last.id,
-			serverDid: last.guild?.id,
-			threadDid: last.channel.isThread() ? last.channel.id : undefined,
+		const dialogMessage: TDialogMessage = {
+			discordKey: {
+				channel: last.channel.isThread() ? last.channel.parent?.id : last.channel.id,
+				message: last.id,
+				server: last.guild?.id,
+				thread: last.channel.isThread() ? last.channel.id : undefined,
+			},
+			sageKey: {
+				character: character.id,
+				game: sageMessage.game?.id,
+				server: sageMessage.server?.id,
+				user: sageMessage.actor.uuid
+			},
 			timestamp: last.createdTimestamp,
 			userDid: character.userDid ?? sageMessage.sageUser.did
 		};
-		await DialogMessageRepository.write(DiscordKey.fromMessage(last), dialogMessage as TDialogMessage);
+		await DialogMessageRepository.write(dialogMessage);
 
 		character.setLastMessage(dialogMessage as TDialogMessage);
 		await character.save();
@@ -487,12 +493,9 @@ function updateEmbed(originalEmbed: Discord.MessageEmbed | undefined, title: Opt
 	return updatedEmbed;
 }
 
-function dialogMessageToDiscordKey(dialogMessage: TDialogMessage): DiscordKey {
-	return new DiscordKey(dialogMessage.serverDid, dialogMessage.channelDid, dialogMessage.threadDid, dialogMessage.messageDid);
-}
 async function findLastMessage(sageMessage: SageMessage, messageDid: Optional<Discord.Snowflake>): Promise<TDialogMessage | null> {
 	if (DiscordId.isValidId(messageDid) && messageDid !== NilSnowflake) {
-		const messageKey = new DiscordKey(sageMessage.server?.did, null, null, messageDid);
+		const messageKey = DiscordKey.from({ server:sageMessage.server?.did, message:messageDid });
 		return DialogMessageRepository.read(messageKey);
 	}
 
@@ -518,7 +521,7 @@ function getDialogArgNotDid(arg: Optional<string>): string | null {
 async function editChat(sageMessage: SageMessage<true>, dialogContent: TDialogContent): Promise<void> {
 	const messageDid = dialogContent.name ?? sageMessage.message.reference?.messageId,
 		dialogMessage = await findLastMessage(sageMessage, messageDid).catch(utils.ConsoleUtils.Catchers.errorReturnNull),
-		discordKey = dialogMessage ? dialogMessageToDiscordKey(dialogMessage) : null,
+		discordKey = dialogMessage ? DiscordKey.fromDialogMessage(dialogMessage) : null,
 		message = discordKey ? await sageMessage.discord.fetchMessage(discordKey) : null;
 	if (!message) {
 		return sageMessage.reactWarn();

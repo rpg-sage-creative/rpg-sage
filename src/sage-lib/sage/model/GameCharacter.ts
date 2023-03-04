@@ -1,29 +1,20 @@
-import type * as Discord from "discord.js";
-import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e";
-import type { Args, UUID } from "../../../sage-utils";
+import type { Snowflake } from "discord.js";
 import * as _XRegExp from "xregexp";
+import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e";
+import type { Args, Optional, UUID, VALID_UUID } from "../../../sage-utils";
 import { DiscordKey, NilSnowflake } from "../../discord";
+import type { DiscordKeyCore } from "../../discord/DiscordKey";
+import type { TDialogMessage } from "../repo/DialogMessageRepository";
+import DialogMessageRepository from "../repo/DialogMessageRepository";
 import CharacterManager from "./CharacterManager";
 import type { IHasSave } from "./NamedCollection";
 import NoteManager, { type TNote } from "./NoteManager";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
-export type TDialogMessage = {
-	channelDid: Discord.Snowflake;
-	characterId: UUID;
-	gameId: UUID;
-	messageDid: Discord.Snowflake;
-	serverDid: Discord.Snowflake;
-	threadDid: Discord.Snowflake;
-	timestamp: number;
-	userDid: Discord.Snowflake;
-};
-
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion";
-
 export interface GameCharacterCore {
 	/** Channels to automatically treat input as dialog */
-	autoChannels?: Discord.Snowflake[];
+	autoChannels?: Snowflake[];
 	/** The image used for the right side of the dialog */
 	avatarUrl?: string;
 	/** The character's companion characters */
@@ -43,7 +34,7 @@ export interface GameCharacterCore {
 	/** The image used to represent the character to the left of the post */
 	tokenUrl?: string;
 	/** The character's user's Discord ID */
-	userDid?: Discord.Snowflake;
+	userDid?: Snowflake;
 }
 // 		export type TPlayerCharacterImageType = "Default"
 // 												| "Token" | "TokenBloody" | "TokenDying"
@@ -51,27 +42,21 @@ export interface GameCharacterCore {
 // 												| "Full" | "FullBloody" | "FullDying";
 
 /** Determine if the snowflakes are different. */
-function diff(a?: Discord.Snowflake, b?: Discord.Snowflake) {
+function diff(a?: Snowflake, b?: Snowflake) {
 	return (a ?? NilSnowflake) !== (b ?? NilSnowflake);
 }
 
-/** Temp convenience function to get a DiscordKey from varying input */
-export function toDiscordKey(channelDidOrDiscordKey: DiscordKey | Discord.Snowflake, threadDid?: Discord.Snowflake): DiscordKey {
-	if (channelDidOrDiscordKey instanceof DiscordKey) {
-		return channelDidOrDiscordKey;
-	}
-	return new DiscordKey(null, channelDidOrDiscordKey, threadDid);
-}
 function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage): boolean {
-	const hasThread = (dialogMessage.threadDid ?? NilSnowflake) !== NilSnowflake;
+	const messageKey = DialogMessageRepository.ensureDiscordKey(dialogMessage).discordKey;
+	const hasThread = (messageKey.thread ?? NilSnowflake) !== NilSnowflake;
 	if (hasThread) {
-		return dialogMessage.channelDid === discordKey.channel
-			&& dialogMessage.threadDid === discordKey.thread;
+		return messageKey.channel === discordKey.channel
+			&& messageKey.thread === discordKey.thread;
 	}
 	if (discordKey.hasThread) {
-		return dialogMessage.channelDid === discordKey.thread;
+		return messageKey.channel === discordKey.thread;
 	}
-	return dialogMessage.channelDid === discordKey.channel;
+	return messageKey.channel === discordKey.channel;
 }
 
 //#region Core Updates
@@ -110,7 +95,7 @@ export default class GameCharacter implements IHasSave {
 	}
 
 	/** Channels to automatically treat input as dialog */
-	public get autoChannels(): Discord.Snowflake[] { return this.core.autoChannels ?? (this.core.autoChannels = []); }
+	public get autoChannels(): Snowflake[] { return this.core.autoChannels ?? (this.core.autoChannels = []); }
 
 	/** The image used for the right side of the dialog */
 	public get avatarUrl(): string | undefined { return this.core.avatarUrl; }
@@ -168,12 +153,12 @@ export default class GameCharacter implements IHasSave {
 	public get type(): TGameCharacterType { return this.owner?.characterType ?? "gm"; }
 
 	/** The character's user's Discord ID */
-	public get userDid(): Discord.Snowflake | undefined { return this.core.userDid; }
-	public set userDid(userDid: Discord.Snowflake | undefined) { this.core.userDid = userDid; }
+	public get userDid(): Snowflake | undefined { return this.core.userDid; }
+	public set userDid(userDid: Snowflake | undefined) { this.core.userDid = userDid; }
 
 	//#region AutoChannels
 
-	public addAutoChannel(did: Discord.Snowflake, save = true): Promise<boolean> {
+	public addAutoChannel(did: Snowflake, save = true): Promise<boolean> {
 		const autoChannels = this.autoChannels;
 		if (!autoChannels.includes(did)) {
 			autoChannels.push(did);
@@ -194,11 +179,21 @@ export default class GameCharacter implements IHasSave {
 		return Promise.resolve(false);
 	}
 
-	public hasAutoChannel(did: Discord.Snowflake): boolean {
-		return this.autoChannels.includes(did);
+	public hasAutoChannel(didOrKey: Optional<DiscordKeyCore | Snowflake>): boolean {
+		if (didOrKey) {
+			const autoChannels = this.autoChannels;
+			const discordKey = typeof(didOrKey) === "string" ? { channel:didOrKey } : didOrKey;
+			const channel = discordKey.channel!;
+			if (discordKey.thread) {
+				return autoChannels.includes(discordKey.thread)
+					?? autoChannels.includes(channel);
+			}
+			return autoChannels.includes(channel);
+		}
+		return false;
 	}
 
-	public removeAutoChannel(did: Discord.Snowflake, save = true): Promise<boolean> {
+	public removeAutoChannel(did: Snowflake, save = true): Promise<boolean> {
 		const autoChannels = this.autoChannels;
 		const index = autoChannels.indexOf(did);
 		if (index > -1) {
@@ -232,23 +227,28 @@ export default class GameCharacter implements IHasSave {
 	}
 
 	public setLastMessage(dialogMessage: TDialogMessage): void {
-		const newHasThread = diff(dialogMessage.threadDid);
+		const dialogMessageKey = DialogMessageRepository.ensureDiscordKey(dialogMessage).discordKey;
+		const newHasThread = diff(dialogMessageKey.thread);
 		const lastMessages = this.lastMessages;
-		const filtered = lastMessages.filter(dMessage => {
-			if (diff(dMessage.serverDid, dialogMessage.serverDid)) {
+		// we only replace the last message for the given thread/channel in a given server; so keep the others
+		const filtered = lastMessages.filter(lastMessage => {
+			const lastMessageKey = DialogMessageRepository.ensureDiscordKey(lastMessage).discordKey;
+			if (diff(lastMessageKey.server, dialogMessageKey.server)) {
 				return true;
 			}
-			const thisHasThread = diff(dMessage.threadDid);
+			const thisHasThread = diff(lastMessageKey.thread);
 			if (newHasThread && thisHasThread) {
-				return diff(dialogMessage.threadDid, dMessage.threadDid);
+				return diff(lastMessageKey.thread, dialogMessageKey.thread);
 			}else if (thisHasThread) {
 				return true;
 			}else if (newHasThread) {
-				return diff(dialogMessage.threadDid, dMessage.channelDid);
+				// fallback for older data that wasn't tracking threads
+				return diff(lastMessageKey.channel, dialogMessageKey.thread);
 			}
-			return diff(dialogMessage.channelDid, dMessage.channelDid);
+			return diff(lastMessageKey.channel, dialogMessageKey.channel);
 		});
 
+		// lastMessages is a reference to the core's object, manipulate it directly
 		lastMessages.length = 0;
 		lastMessages.push(...filtered);
 		lastMessages.push(dialogMessage);

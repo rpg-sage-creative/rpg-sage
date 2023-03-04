@@ -88,7 +88,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	// #region Game actions
 
 	public async findActiveGameByChannelDid(channelDid: Snowflake): Promise<Game | undefined> {
-		return this.sageCache.games.findActiveByDiscordKey(new DiscordKey(this.did, channelDid));
+		return this.sageCache.games.findActiveByDiscordKey(DiscordKey.from({ server:this.did, channel:channelDid }));
 	}
 
 	public async addGame(channelDid: Snowflake, name: string, _gameType: Optional<GameType>, _dialogType: Optional<DialogType>, _critMethodType: Optional<CritMethodType>, _diceOutputType: Optional<DiceOutputType>, _dicePostType: Optional<DicePostType>, _diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {

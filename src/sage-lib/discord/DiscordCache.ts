@@ -119,7 +119,7 @@ export default class DiscordCache {
 		if (!didOrKey) {
 			return null;
 		}
-		const discordKey = didOrKey instanceof DiscordKey ? didOrKey : new DiscordKey(this.guild?.id, didOrKey);
+		const discordKey = didOrKey instanceof DiscordKey ? didOrKey : DiscordKey.from({ server:this.guild?.id, channel:didOrKey });
 		if (!this.channelMap.has(discordKey.shortKey)) {
 			const channel = discordKey.isDm
 				? await this.fetchDmChannel(discordKey)
@@ -209,7 +209,7 @@ export default class DiscordCache {
 	}
 
 	private async fetchWebhookChannel(guildResolvable: TGuildResolvable, channelResolvable: TChannelResolvable): Promise<TextChannel | null> {
-		const discordKey = new DiscordKey(guildResolvable, channelResolvable);
+		const discordKey = DiscordKey.from({ server:guildResolvable, channel:channelResolvable });
 		const guildOrThreadChannel = await this.fetchChannel(discordKey);
 		const parentChannel = guildOrThreadChannel?.isThread() ? guildOrThreadChannel.parent : null;
 		const channel = parentChannel ?? guildOrThreadChannel;
@@ -268,7 +268,7 @@ export default class DiscordCache {
 			return null;
 		}
 
-		const discordKey = new DiscordKey(webhook.guildId, channelResolvable);
+		const discordKey = DiscordKey.from({ server:webhook.guildId, channel:channelResolvable });
 		const channel = await this.fetchChannel(discordKey);
 		if (!channel || !channel.lastMessageId) {
 			return null;
