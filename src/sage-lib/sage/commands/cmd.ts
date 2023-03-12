@@ -1,6 +1,5 @@
 import * as Discord from "discord.js";
 import utils, { OrNull, type Awaitable } from "../../../sage-utils";
-import { MessageType } from "../../discord/enums";
 import { registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs, TMessageHandler } from "../../discord/types";
 import ActiveBot from "../model/ActiveBot";
@@ -8,6 +7,7 @@ import type { IHasColorsCore } from "../model/HasColorsCore";
 import { ColorType } from "../model/HasColorsCore";
 import type SageMessage from "../model/SageMessage";
 import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
+import { MessageType } from "../../../sage-utils/utils/DiscordUtils";
 
 export enum BotServerGameType { Bot, Server, Game }
 
@@ -69,7 +69,7 @@ export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler, 
 		return null;
 	};
 	const _handler = async function (sageMessage: SageMessage): Promise<void> {
-		return sageMessage.allowCommand ? handler(sageMessage) : sageMessage.reactBlock();
+		return sageMessage.allowCommand ? handler(sageMessage) : sageMessage.denyByProv("Sage Command", "Channel must Allow Commands!");
 	};
 	registerMessageListener(_tester, _handler, type);
 	// registerMessageListener("MessageListener", { command: handler.name || String(matcher), tester: _tester, handler: _handler, type: type, priorityIndex: undefined });

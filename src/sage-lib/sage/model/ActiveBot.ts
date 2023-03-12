@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import utils, { LogLevel, Optional } from "../../../sage-utils";
-import { MessageType, ReactionType } from "../../discord";
+import { DMessage, MessageType, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
 import BotRepo from "../repo/BotRepo";
 import type { IBotCore } from "./Bot";
@@ -185,7 +185,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 	}
 
 	onClientMessageCreate(message: Discord.Message): void {
-		handleMessage(message, null, MessageType.Post).then(data => {
+		handleMessage(message as DMessage, null, MessageType.Post).then(data => {
 			if (data.handled > 0) {
 				console.info(`Discord.Client.on("message", "${message.id}") => ${data.tested}.${data.handled}`);
 			}
@@ -193,7 +193,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 	}
 
 	onClientMessageUpdate(originalMessage: Discord.Message | Discord.PartialMessage, updatedMessage: Discord.Message | Discord.PartialMessage): void {
-		handleMessage(updatedMessage, originalMessage, MessageType.Edit).then(data => {
+		handleMessage(updatedMessage as DMessage, originalMessage as DMessage, MessageType.Edit).then(data => {
 			if (data.handled > 0) {
 				console.info(`Discord.Client.on("messageUpdate", "${originalMessage.id}", "${updatedMessage.id}") => ${data.tested}.${data.handled}`);
 			}

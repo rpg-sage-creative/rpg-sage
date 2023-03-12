@@ -1,41 +1,10 @@
-import type * as Discord from "discord.js";
-import type utils from "../../sage-utils";
-import type { Awaitable, IRenderable } from "../../sage-utils";
+import type { Awaitable } from "../../sage-utils";
+import type { ArgsManager } from "../../sage-utils/utils/ArgsUtils";
 import type SageInteraction from "../sage/model/SageInteraction";
 import type SageMessage from "../sage/model/SageMessage";
 import type SageReaction from "../sage/model/SageReaction";
-import type { ArgsManager } from "../../sage-utils/utils/ArgsUtils";
-
-export type TRenderableContentResolvable = string | IRenderable | utils.RenderUtils.RenderableContent;
-
-export interface IMenuRenderable extends IRenderable {
-	getMenuLength(): number;
-	getMenuUnicodeArray(): string[];
-	toMenuRenderableContent(): utils.RenderUtils.RenderableContent;
-	toMenuRenderableContent(index: number): utils.RenderUtils.RenderableContent;
-}
-
-export type DInteraction = Discord.CommandInteraction | Discord.ButtonInteraction | Discord.SelectMenuInteraction | Discord.MessageComponentInteraction;
-
-/** Discord Message or Partial Message */
-export type DMessage = Discord.Message | Discord.PartialMessage;
-
-export type DReaction = Discord.MessageReaction | Discord.PartialMessageReaction;
-
-/** Discord User or Partial User */
-export type DUser = Discord.User | Discord.PartialUser;
-
-/** Guild or Guild Snowflake */
-export type TGuildResolvable = Discord.Guild | Discord.Snowflake;
-
-/** Text Channel */
-export type TChannel = Discord.ThreadChannel | Discord.TextChannel | Discord.DMChannel;
-
-/** Text Channel or Channel Snowflake */
-export type TChannelResolvable = TChannel | Discord.Snowflake;
 
 export type THandlerOutput = { tested: number; handled: number; };
-
 
 //#region interaction type
 

@@ -1,12 +1,14 @@
 import type * as Discord from "discord.js";
 import utils, { Optional } from "../../../sage-utils";
-import { DMessage, DiscordKey, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
+import type { DChannel, DMessage } from "../../../sage-utils/utils/DiscordUtils";
+import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
+import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
+import type { TCommandAndArgs } from "../../discord";
 import { send } from "../../discord/messages";
 import { EmojiType } from "./HasEmojiCore";
 import SageCache from "./SageCache";
 import { SageCommandBase, SageCommandCore, TSendArgs } from "./SageCommand";
 import SageMessageArgs from "./SageMessageArgs";
-import { resolveToEmbeds } from "../../discord/embeds";
 
 interface SageMessageCore extends SageCommandCore {
 	message: DMessage;
@@ -18,9 +20,6 @@ interface SageMessageCore extends SageCommandCore {
 
 export default class SageMessage<HasServer extends boolean = boolean>
 	extends SageCommandBase<SageMessageCore, SageMessageArgs, SageMessage, HasServer> {
-
-	/** @deprecated Use actor.did */
-	public get authorDid(): Discord.Snowflake { return this.actor.did; }
 
 	public constructor(protected core: SageMessageCore) {
 		super(core);
@@ -44,12 +43,12 @@ export default class SageMessage<HasServer extends boolean = boolean>
 		});
 	}
 
-	// TODO: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE!
-	public clone(): SageMessage {
-		const clone = new SageMessage(this.core);
-		clone._ = this._;
-		return clone;
-	}
+	/** @todo THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE! */
+	// public clone(): SageMessage {
+	// 	const clone = new SageMessage(this.core);
+	// 	clone._ = this._;
+	// 	return clone;
+	// }
 
 	//#region core
 
@@ -86,14 +85,12 @@ export default class SageMessage<HasServer extends boolean = boolean>
 
 	public _ = new Map<"Dialog" | "Dice" | "Replacement" | "Sent", DMessage>();
 	public send(renderableContentResolvable: TRenderableContentResolvable): Promise<Discord.Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel): Promise<Discord.Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel, originalAuthor: Discord.User): Promise<Discord.Message[]>;
-	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.message.channel as TChannel, originalAuthor = this.message.author, notifyIfBlocked = false): Promise<Discord.Message[]> {
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DChannel): Promise<Discord.Message[]>;
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DChannel, originalAuthor: Discord.User): Promise<Discord.Message[]>;
+	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.message.channel as DChannel, originalAuthor = this.message.author): Promise<Discord.Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
-			if (notifyIfBlocked) {
-				await this.reactBlock(`Unable to send message because Sage doesn't have permissions to channel: ${targetChannel}`);
-			}
+			await this.reactBlock(`Unable to send message because Sage doesn't have permissions to channel: ${targetChannel}`);
 			return [];
 		}
 		// check to see if we have channel send message permissions
@@ -101,7 +98,7 @@ export default class SageMessage<HasServer extends boolean = boolean>
 		if (renderableContent) {
 			const sent = await send(this.sageCache, targetChannel, renderableContent, originalAuthor);
 			if (sent.length) {
-				this._.set("Sent", sent[sent.length - 1]);
+				this._.set("Sent", sent[sent.length - 1] as DMessage);
 			}
 			return sent;
 		}
@@ -111,10 +108,9 @@ export default class SageMessage<HasServer extends boolean = boolean>
 	public async reply(args: TSendArgs): Promise<void>;
 	public async reply(renderable: TRenderableContentResolvable, ephemeral: boolean): Promise<void>;
 	public async reply(renderableOrArgs: TRenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void> {
-		const canSend = await this.canSend(this.message.channel as TChannel);
+		const canSend = await this.canSend(this.message.channel as DChannel);
 		if (!canSend) {
-			this.reactBlock();
-			return this.whisper(`Unable to reply to your message because Sage doesn't have permissions to channel: ${this.message.channel}`);
+			return this.reactBlock(`Unable to reply to your message because Sage doesn't have permissions to channel: ${this.message.channel}`);
 		}
 		const args = this.resolveToOptions(renderableOrArgs, ephemeral);
 		return this.message.reply(args) as Promise<any>;
@@ -125,13 +121,13 @@ export default class SageMessage<HasServer extends boolean = boolean>
 	public async whisper(contentOrArgs: TSendArgs | TRenderableContentResolvable): Promise<void> {
 		const args = typeof(contentOrArgs) === "string" ? { content:contentOrArgs } : contentOrArgs;
 		const sendOptions = this.resolveToOptions(args);
-		const canSend = await this.canSend(this.message.channel as TChannel);
+		const canSend = await this.canSend(this.message.channel as DChannel);
 		if (canSend && false) {
 			//include a button to delete the reply message!
 			return this.message.reply(sendOptions) as Promise<any>;
 		}
 		// include a link to the original message!
-		(sendOptions.embeds ?? (sendOptions.embeds = [])).push(...resolveToEmbeds(this.sageCache, `<a href="${this.message.url}">[link to original message]</a>`));
+		(sendOptions.embeds ?? (sendOptions.embeds = [])).push(...resolveToEmbeds(`<a href="${this.message.url}">[link to original message]</a>`, this.sageCache.getFormatter()));
 		return this.actor.d.send(sendOptions) as Promise<any>;
 	}
 
@@ -147,16 +143,19 @@ export default class SageMessage<HasServer extends boolean = boolean>
 	}
 
 	/** If the given emoji is valid, react to this message with it. If this message posted a new message, react to it. */
-	public async react(emojiType: EmojiType, reason?: string): Promise<void> {
+	private async react(emojiType: EmojiType, reason?: string): Promise<void> {
 		// TODO: start saving the reason for reactions so users can click them to get a DM about what the fuck is going on
 		const emoji = this.getEmoji(emojiType);
 		if (emoji) {
 			const reacted = await this._react(this.message, emoji)
-				|| await this._react(this._.get("Dialog") ?? this._.get("Replacement") ?? this._.get("Sent"), emoji);
+				|| await this._react(this._.get("Dialog") as DMessage ?? this._.get("Replacement") ?? this._.get("Sent"), emoji);
 			if (!reacted && reason) {
 				// in case we are unable to react to something, we can ping the user and let them know what's up
 				this.message.author?.send(`${emoji} ${reason}\n<${this.message.url}>`);
 			}
+		}
+		if (reason) {
+			this.whisper(`${emoji ?? ""} ${reason}`);
 		}
 	}
 	/** This was pulled here to avoid duplicating code. */
@@ -171,21 +170,31 @@ export default class SageMessage<HasServer extends boolean = boolean>
 		if (!message || !message.deletable) {
 			return false;
 		}
-		return this.sageCache.canReactTo(DiscordKey.fromMessage(message));
+		return this.sageCache.discord.canReactTo(message);
 	}
 
-	public async reactBlock(reason?: string): Promise<void> { this.react(EmojiType.PermissionDenied, reason); }
+	public async reactBlock(reason: string): Promise<void> { this.react(EmojiType.PermissionDenied, reason); }
 	public async reactDie(reason?: string): Promise<void> { this._.set("Dice", this.message); this.react(EmojiType.Die, reason); }
-	public async reactError(reason?: string): Promise<void> { this.react(EmojiType.CommandError, reason); }
-	public async reactWarn(reason?: string): Promise<void> { this.react(EmojiType.CommandWarn, reason); }
-	public async reactFailure(reason?: string): Promise<void> {
-		this.react(EmojiType.CommandFailure, reason);
+	public async reactError(reason: string): Promise<void> { this.react(EmojiType.CommandError, reason); }
+	public async reactWarn(reason: string): Promise<void> { this.react(EmojiType.CommandWarn, reason); }
+	public async reactFailure(reason: string): Promise<void> {
+		this.react(EmojiType.CommandFailure);
 		if (reason) {
 			this.whisper(`Your command failed for the following reason:\n> ${reason}`);
 		}
 	}
 	public async reactSuccess(reason?: string): Promise<void> { this.react(EmojiType.CommandSuccess, reason); }
-	public async reactSuccessOrFailure(bool: boolean, reason?: string): Promise<void> { bool ? this.reactSuccess(reason) : this.reactFailure(reason); }
+
+	/** Reacts according to given boolean, passing the reason along to a failure. */
+	// public async reactSuccessOrFailure(bool: boolean, failureReason: string): Promise<void>;
+	/** Reacts according to given boolean, passing the reasons along as appropriate. */
+	public async reactSuccessOrFailure(bool: boolean, successReason: string, failureReason: string): Promise<void>;
+	public async reactSuccessOrFailure(bool: boolean, ...reasons: string[]): Promise<void> {
+		if (bool) {
+			return this.reactSuccess(reasons[0]);
+		}
+		return this.reactFailure(reasons.pop()!);
+	}
 
 	// #endregion
 

@@ -2,8 +2,8 @@ import type * as Discord from "discord.js";
 import type { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Args, IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
+import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
-import { DiscordKey } from "../../discord";
 import { DicePostType } from "../commands/dice";
 import { DialogType, GameChannelType, IChannel, IChannelOptions, parseGameChannelType, PermissionType, updateChannel } from "../repo/base/channel";
 import { HasIdCoreAndSageCache } from "../repo/base/IdRepository";
@@ -304,7 +304,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 	public async addOrUpdateChannels(...channels: IChannelArgs[]): Promise<boolean> {
 		channels.forEach(channel => {
-			const found = this.getChannel(DiscordKey.from({ server:this.serverDid, channel:channel.did }));
+			const found = this.getChannel(channel.did);
 			if (found) {
 				updateChannel(found, channel);
 			} else {
@@ -537,21 +537,9 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 	// #region Get
 
-	public getChannel(discordKey: DiscordKey): IChannel | undefined;
-	public getChannel(channelDid: Optional<Discord.Snowflake>): IChannel | undefined;
-	public getChannel(didOrKey: Optional<Discord.Snowflake> | DiscordKey): IChannel | undefined {
-		if (didOrKey) {
-			if (typeof(didOrKey) === "string") {
-				return this.channels.find(channel => channel.did === didOrKey);
-			}
-			if (didOrKey.hasThread && didOrKey.hasChannel) {
-				return this.channels.find(channel => channel.did === didOrKey.thread)
-					?? this.channels.find(channel => channel.did === didOrKey.channel);
-			}else if (didOrKey.hasThread) {
-				return this.channels.find(channel => channel.did === didOrKey.thread);
-			}else if (didOrKey.hasChannel) {
-				return this.channels.find(channel => channel.did === didOrKey.channel);
-			}
+	public getChannel(channelDid: Optional<Discord.Snowflake>): IChannel | undefined {
+		if (channelDid) {
+			return this.channels.find(channel => channel.did === channelDid);
 		}
 		return undefined;
 	}
@@ -583,10 +571,8 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 	// #region Has
 
-	public hasChannel(discordKey: DiscordKey): boolean;
-	public hasChannel(channelDid: Optional<Discord.Snowflake>): boolean;
-	public hasChannel(didOrKey: Optional<Discord.Snowflake> | DiscordKey): boolean {
-		return this.getChannel(didOrKey as DiscordKey) !== undefined;
+	public hasChannel(channelDid: Optional<Discord.Snowflake>): boolean {
+		return this.getChannel(channelDid) !== undefined;
 	}
 
 	public hasGameMaster(userDid: Optional<Discord.Snowflake>): boolean {

@@ -1,10 +1,14 @@
 import * as Discord from "discord.js";
 import * as _XRegExp from "xregexp";
 import utils, { OrUndefined, TParsers, type Optional } from "../../../sage-utils";
-import { DiscordId, DiscordKey, MessageType, NilSnowflake, ReactionType, TCommand, TCommandAndArgsAndData } from "../../discord";
-import { embedsToTexts } from "../../discord/embeds";
-import { isAuthorBotOrWebhook, registerMessageListener, registerReactionListener } from "../../discord/handlers";
-import { replaceWebhook, SageDialogWebhookName, sendWebhook } from "../../discord/messages";
+import { MessageType, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
+import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
+import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
+import { embedsToTexts } from "../../../sage-utils/utils/DiscordUtils/embeds";
+import { isNonNilSnowflake } from "../../../sage-utils/utils/DiscordUtils/snowflake";
+import type { TCommand, TCommandAndArgsAndData } from "../../discord";
+import { registerMessageListener, registerReactionListener } from "../../discord/handlers";
+import { replaceWebhook, sendWebhook } from "../../discord/messages";
 import type CharacterManager from "../model/CharacterManager";
 import GameCharacter, { type GameCharacterCore } from "../model/GameCharacter";
 import { ColorType } from "../model/HasColorsCore";
@@ -35,9 +39,9 @@ async function sendDialogRenderable(sageMessage: SageMessage, renderableContent:
 	const targetChannel = await sageMessage.discord.fetchChannel(sageMessage.channel?.sendDialogTo);
 	if (targetChannel) {
 		// const sent = sageMessage.dialogType === "Webhook"
-		// 	? await sendWebhook(sageMessage.caches, targetChannel, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
-		// 	: await send(sageMessage.caches, targetChannel, renderableContent, sageMessage.message.author).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
-		const sent = await sendWebhook(sageMessage.caches, targetChannel, renderableContent, authorOptions, sageMessage.dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		// 	? await sendWebhook(sageMessage.sageCache, targetChannel, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
+		// 	: await send(sageMessage.sageCache, targetChannel, renderableContent, sageMessage.message.author).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		const sent = await sendWebhook(sageMessage.sageCache, targetChannel, renderableContent, authorOptions, sageMessage.dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 		if (sent.length) {
 			// sageMessage._.set("Dialog", sent[sent.length - 1]);
 			// if (sageMessage.message.deletable) {
@@ -47,9 +51,9 @@ async function sendDialogRenderable(sageMessage: SageMessage, renderableContent:
 		return sent;
 	} else {
 		// const replaced = sageMessage.dialogType === "Webhook"
-		// 	? await replaceWebhook(sageMessage.caches, sageMessage.message, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
-		// 	: await replace(sageMessage.caches, sageMessage.message, renderableContent).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
-		const replaced = await replaceWebhook(sageMessage.caches, sageMessage.message, renderableContent, authorOptions, sageMessage.dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		// 	? await replaceWebhook(sageMessage.sageCache, sageMessage.message, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
+		// 	: await replace(sageMessage.sageCache, sageMessage.message, renderableContent).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		const replaced = await replaceWebhook(sageMessage.sageCache, sageMessage.message, renderableContent, authorOptions, sageMessage.dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 		if (replaced.length) {
 			// sageMessage._.set("Dialog", replaced[replaced.length - 1]);
 			// if (sageMessage._.has("Dice")) {
@@ -116,10 +120,9 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 
 		const dialogMessage: TDialogMessage = {
 			discordKey: {
-				channel: last.channel.isThread() ? last.channel.parent?.id : last.channel.id,
+				channel: last.channel.id,
 				message: last.id,
-				server: last.guild?.id,
-				thread: last.channel.isThread() ? last.channel.id : undefined,
+				server: last.guild?.id
 			},
 			sageKey: {
 				character: character.id,
@@ -128,7 +131,7 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 				user: sageMessage.actor.uuid
 			},
 			timestamp: last.createdTimestamp,
-			userDid: character.userDid ?? sageMessage.sageUser.did
+			userDid: character.userDid ?? sageMessage.actor.s.did
 		};
 		await DialogMessageRepository.write(dialogMessage);
 
@@ -147,9 +150,9 @@ function findPc(sageMessage: SageMessage, pcNameOrIndex: Optional<string>): Game
 		return sageMessage.playerCharacter;
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
 		if (utils.StringUtils.isBlank(pcNameOrIndex)) {
-			return sageMessage.sageUser.playerCharacters.first();
+			return sageMessage.actor.s.playerCharacters.first();
 		}
-		return sageMessage.sageUser.playerCharacters.findByNameOrIndex(pcNameOrIndex);
+		return sageMessage.actor.s.playerCharacters.findByNameOrIndex(pcNameOrIndex);
 	}
 	return undefined;
 }
@@ -160,7 +163,7 @@ function findCompanion(sageMessage: SageMessage, companionNameOrIndex: Optional<
 		companions = sageMessage.playerCharacter?.companions;
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
 		// Currently only allow a single PC per server outside of games
-		companions = sageMessage.sageUser.playerCharacters.first()?.companions;
+		companions = sageMessage.actor.s.playerCharacters.first()?.companions;
 	}
 	if (companions) {
 		if (utils.StringUtils.isBlank(companionNameOrIndex)) {
@@ -175,7 +178,7 @@ function findNpc(sageMessage: SageMessage, npcName: string): GameCharacter | und
 	if (sageMessage.gameChannel) {
 		return sageMessage.isGameMaster ? sageMessage.game!.nonPlayerCharacters.findByName(npcName) : undefined;
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
-		return sageMessage.sageUser.nonPlayerCharacters.findByName(npcName);
+		return sageMessage.actor.s.nonPlayerCharacters.findByName(npcName);
 	}
 	return undefined;
 }
@@ -350,15 +353,13 @@ export function parseDialogContent(content: string, allowDynamicDialogSeparator:
 
 export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogContent | null {
 	const content = sageMessage.message.content ?? ""; //TODO: was message.edits[0].content
-	const dialogContent = parseDialogContent(content, sageMessage.sageUser?.allowDynamicDialogSeparator);
+	const dialogContent = parseDialogContent(content, sageMessage.actor.s?.allowDynamicDialogSeparator);
 	if (dialogContent) {
 		return dialogContent;
 	}
 	if (!sageMessage.hasCommandOrQueryOrSlicedContent) {
-		const autoCharacter = sageMessage.game?.getAutoCharacterForChannel(sageMessage.sageUser.did, sageMessage.threadDid)
-			?? sageMessage.game?.getAutoCharacterForChannel(sageMessage.sageUser.did, sageMessage.channelDid)
-			?? sageMessage.sageUser.getAutoCharacterForChannel(sageMessage.threadDid)
-			?? sageMessage.sageUser.getAutoCharacterForChannel(sageMessage.channelDid);
+		const autoCharacter = sageMessage.game?.getAutoCharacterForChannel(sageMessage.actor.did, sageMessage.discordKey.channel)
+			?? sageMessage.actor.s.getAutoCharacterForChannel(sageMessage.discordKey.channel);
 		if (autoCharacter) {
 			return {
 				type: autoCharacter.isGM ? "gm" : "pc",
@@ -423,7 +424,7 @@ async function npcChat(sageMessage: SageMessage, dialogContent: TDialogContent):
 			title: dialogContent.title
 		}).catch(console.error);
 	} else {
-		return sageMessage.reactWarn();
+		return sageMessage.reactWarn("NPC Not Found!");
 	}
 }
 // #endregion
@@ -442,7 +443,7 @@ async function gmChat(sageMessage: SageMessage, dialogContent: TDialogContent): 
 			title: dialogContent.title
 		}).catch(console.error);
 	}
-	return sageMessage.reactWarn();
+	return sageMessage.reactWarn("GM Character Not Found!");
 }
 // #endregion
 
@@ -460,7 +461,7 @@ async function pcChat(sageMessage: SageMessage, dialogContent: TDialogContent): 
 			title: dialogContent.title
 		}).catch(console.error);
 	}
-	return sageMessage.reactWarn();
+	return sageMessage.reactWarn("PC Not Found!");
 }
 // #endregion
 
@@ -478,7 +479,7 @@ async function companionChat(sageMessage: SageMessage, dialogContent: TDialogCon
 			title: dialogContent.title
 		}).catch(console.error);
 	}
-	return sageMessage.reactWarn();
+	return sageMessage.reactWarn("Companion Not Found!");
 }
 // #endregion
 
@@ -494,7 +495,7 @@ function updateEmbed(originalEmbed: Discord.MessageEmbed | undefined, title: Opt
 }
 
 async function findLastMessage(sageMessage: SageMessage, messageDid: Optional<Discord.Snowflake>): Promise<TDialogMessage | null> {
-	if (DiscordId.isValidId(messageDid) && messageDid !== NilSnowflake) {
+	if (isNonNilSnowflake(messageDid)) {
 		const messageKey = DiscordKey.from({ server:sageMessage.server?.did, message:messageDid });
 		return DialogMessageRepository.read(messageKey);
 	}
@@ -507,8 +508,8 @@ async function findLastMessage(sageMessage: SageMessage, messageDid: Optional<Di
 			lastMessages.push(...sageMessage.game.nonPlayerCharacters.getLastMessages(sageMessage.discordKey));
 		}
 	} else {
-		lastMessages.push(...sageMessage.sageUser.playerCharacters.getLastMessages(sageMessage.discordKey));
-		lastMessages.push(...sageMessage.sageUser.nonPlayerCharacters.getLastMessages(sageMessage.discordKey));
+		lastMessages.push(...sageMessage.actor.s.playerCharacters.getLastMessages(sageMessage.discordKey));
+		lastMessages.push(...sageMessage.actor.s.nonPlayerCharacters.getLastMessages(sageMessage.discordKey));
 	}
 	lastMessages.sort((a, b) => a.timestamp - b.timestamp);
 	return lastMessages.pop() ?? null;
@@ -521,25 +522,27 @@ function getDialogArgNotDid(arg: Optional<string>): string | null {
 async function editChat(sageMessage: SageMessage<true>, dialogContent: TDialogContent): Promise<void> {
 	const messageDid = dialogContent.name ?? sageMessage.message.reference?.messageId,
 		dialogMessage = await findLastMessage(sageMessage, messageDid).catch(utils.ConsoleUtils.Catchers.errorReturnNull),
-		discordKey = dialogMessage ? DiscordKey.fromDialogMessage(dialogMessage) : null,
-		message = discordKey ? await sageMessage.discord.fetchMessage(discordKey) : null;
+		discordKey = dialogMessage ? DiscordKey.from(DialogMessageRepository.ensureDiscordKey(dialogMessage).discordKey) : null,
+		message = discordKey?.hasMessage ? await sageMessage.discord.fetchMessage(discordKey.message) : null;
 	if (!message) {
-		return sageMessage.reactWarn();
+		return sageMessage.reactWarn("Unable to find Dialog Message!");
 	}
 
 	const embed = message.embeds[0],
 		updatedTitle = getDialogArgNotDid(dialogContent.title),
 		updatedImageUrl = dialogContent.imageUrl,
-		updatedContent = sageMessage.caches.format(dialogContent.content),
-		updatedEmbed = updateEmbed(embed, updatedTitle, updatedImageUrl, updatedContent);
-	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid!, SageDialogWebhookName);
+		updatedContent = sageMessage.sageCache.format(dialogContent.content),
+		updatedEmbed = updateEmbed(embed, updatedTitle, updatedImageUrl, updatedContent),
+		channelDid = sageMessage.discordKey.channel;
+	const webhook = await sageMessage.sageCache.discord.fetchWebhook();
 	if (webhook) {
-		const threadId = sageMessage.threadDid;
 		const content = sageMessage.dialogType === DialogType.Post ? embedsToTexts([updatedEmbed]).join("\n") : undefined;
 		const embeds = sageMessage.dialogType === DialogType.Embed ? [updatedEmbed] : [];
-			await webhook.editMessage(message.id, { content, embeds, threadId }).then(() => sageMessage.message.delete(), console.error);
+		const channel = await sageMessage.discord.fetchChannel(channelDid);
+		const threadId = channel?.isThread() ? channelDid : undefined;
+		await webhook.editMessage(message.id, { content, embeds, threadId }).then(() => sageMessage.message.delete(), console.error);
 	}else {
-		return sageMessage.reactWarn();
+		return sageMessage.reactWarn("Unable to find Dialog Webhook!");
 	}
 	return Promise.resolve();
 }
@@ -549,12 +552,12 @@ async function editChat(sageMessage: SageMessage<true>, dialogContent: TDialogCo
 // #region Alias Dialog
 
 function updateAliasDialogArgsAndReturnType(sageMessage: SageMessage, dialogContent: TDialogContent): TDialogContent | null {
-	const aliasFound = sageMessage.sageUser.aliases.findByName(dialogContent.type, true);
+	const aliasFound = sageMessage.actor.s.aliases.findByName(dialogContent.type, true);
 	if (!aliasFound) {
 		return null;
 	}
 
-	const aliasContent = parseDialogContent(aliasFound.target, sageMessage.sageUser?.allowDynamicDialogSeparator)!;
+	const aliasContent = parseDialogContent(aliasFound.target, sageMessage.actor.s?.allowDynamicDialogSeparator)!;
 	return {
 		type: aliasContent.type,
 		name: aliasContent.name,
@@ -580,7 +583,7 @@ async function aliasChat(sageMessage: SageMessage, dialogContent: TDialogContent
 				case "alt": case "hireling": case "companion":
 					return companionChat(sageMessage, updatedDialogContent);
 			}
-			return sageMessage.reactWarn();
+			return sageMessage.reactWarn("Invalid Dialog Type!");
 		}
 	}
 }
@@ -611,12 +614,25 @@ function isValidDeleteAction(sageReaction: SageReaction): boolean {
 	return true;
 }
 
+/** @todo update this to use SageCommand and likely move it to new DiscordUtils */
+async function isAuthorBotOrWebhook(sageCommand: SageMessage | SageReaction): Promise<boolean> {
+	const messageAuthorDid = sageCommand.message.author?.id;
+	if (messageAuthorDid === sageCommand.bot.did) {
+		return true;
+	}
+	if (!sageCommand.guild) {
+		return false;
+	}
+	const webhook = await sageCommand.sageCache.discord.fetchWebhook();
+	return webhook?.id === messageAuthorDid;
+}
+
 async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 	if (!isValidDeleteAction(sageReaction)) {
 		return null;
 	}
 
-	const userDid = sageReaction.user.id;
+	const userDid = sageReaction.actor.did;
 	const dialogMessage = await DialogMessageRepository.read(sageReaction.discordKey, () => null);
 	if (dialogMessage?.userDid === userDid) {
 		// This covers PCs inside a game *AND* outside a game
@@ -625,7 +641,7 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 
 	const { game } = sageReaction;
 	if (game) {
-		const actorIsGameUser = await game?.hasUser(sageReaction.user.id);
+		const actorIsGameUser = await game?.hasUser(sageReaction.actor.did);
 		if (!actorIsGameUser) {
 			return null;
 		}
@@ -695,7 +711,7 @@ async function isPin(sageReaction: SageReaction): Promise<TCommand | null> {
 		return null;
 	}
 
-	const actorIsGameUser = await game.hasUser(sageReaction.user.id);
+	const actorIsGameUser = await game.hasUser(sageReaction.actor.did);
 	if (!actorIsGameUser) {
 		return null;
 	}

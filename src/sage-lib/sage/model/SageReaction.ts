@@ -1,8 +1,9 @@
 import type * as Discord from "discord.js";
-import { ReactionType, TChannel, TRenderableContentResolvable } from "../../discord";
 import { SageCommandBase, SageCommandCore, TSendArgs } from "./SageCommand";
 import SageCache from "./SageCache";
 import SageReactionArgs from "./SageReactionArgs";
+import { DChannel, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
+import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
 
 type DUser = Discord.User | Discord.PartialUser;
 type DMessage = Discord.Message | Discord.PartialMessage;
@@ -51,16 +52,16 @@ export default class SageReaction
 	}
 
 
-	public clone(): SageReaction {
-		return new SageReaction(this.core);
-	}
+	// public clone(): SageReaction {
+	// 	return new SageReaction(this.core);
+	// }
 
 	public command: string | null = null;
 
 	public async reply(args: TSendArgs): Promise<void>;
 	public async reply(renderable: TRenderableContentResolvable, ephemeral: boolean): Promise<void>;
 	public async reply(renderableOrArgs: TRenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void> {
-		const canSend = await this.canSend(this.message.channel as TChannel);
+		const canSend = await this.canSend(this.message.channel as DChannel);
 		if (!canSend) {
 			return this.whisper(`Unable to send message because Sage doesn't have permissions to channel: ${this.message.channel}`);
 		}

@@ -1,79 +1,41 @@
-import type * as Discord from "discord.js";
-import utils, { Optional } from "../../../../../sage-utils";
 import type SageMessage from "../../../model/SageMessage";
 import type User from "../../../model/User";
 import { DialogType } from "../../../repo/base/channel";
 import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
-import { registerAdminCommandHelp } from "../../help";
 
 async function userCount(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
+	if (sageMessage.isSuperUser) {
+		const users = await sageMessage.sageCache.users.getAll();
+		return renderCount(sageMessage, "Users", users.length);
 	}
-	const users = await sageMessage.caches.users.getAll();
-	return renderCount(sageMessage, "Users", users.length);
-}
-
-async function renderUser(renderableContent: utils.RenderUtils.RenderableContent, user: User, discordUser: Optional<Discord.User>): Promise<void> {
-	renderableContent.appendTitledSection(`<b>${discordUser?.tag || "<i>Unknown</i>"}</b>`);
-	renderableContent.append(`<b>User Id</b> ${user.did}`);
-	renderableContent.append(`<b>UUID</b> ${user.id}`);
-	renderableContent.append(`<b>Username</b> ${discordUser?.username || "<i>Unknown</i>"}`);
-}
-
-async function userList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
-	let users = await sageMessage.caches.users.getAll();
-	if (users) {
-		const filter = sageMessage.args.unkeyedValues().join(" ");
-		if (filter && users.length) {
-			const lower = filter.toLowerCase();
-			users = await utils.ArrayUtils.Collection.filterAsync(users, async user => {
-				const discordUser = await sageMessage.discord.fetchUser(user.did);
-				return discordUser?.username?.toLowerCase().includes(lower) ?? false;
-			});
-		}
-
-		const renderableContent = createAdminRenderableContent(sageMessage.bot);
-		renderableContent.setTitle(`<b>user-list</b>`);
-		if (users.length) {
-			await utils.ArrayUtils.Collection.forEachAsync(users, async user => renderUser(renderableContent, user, await sageMessage.discord.fetchUser(user.did)));
-		} else {
-			renderableContent.append(`<blockquote>No Users Found!</blockquote>`);
-		}
-		await sageMessage.send(renderableContent);
-	}
-	return Promise.resolve();
 }
 
 async function userUpdate(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("Update User", "This channel must Allow Admin commands.");
 	}
 	const defaultDialogType = sageMessage.args.getEnum<DialogType>(DialogType, "dialogType");
 	const defaultSagePostType = sageMessage.args.getEnum<DialogType>(DialogType, "sagePostType");
-	const updated = await sageMessage.sageUser.update({ defaultDialogType, defaultSagePostType });
+	const updated = await sageMessage.actor.s.update({ defaultDialogType, defaultSagePostType });
 	if (updated) {
 		return userDetails(sageMessage);
 	}
-	return sageMessage.reactSuccessOrFailure(updated);
+	return sageMessage.reactFailure("Unknown Error; User NOT Updated!");
 }
 
 async function userDetails(sageMessage: SageMessage): Promise<void> {
-	let user: User | null = sageMessage.sageUser;
+	let user: User | null = sageMessage.actor.s;
 	if (sageMessage.isSuperUser) {
 		const userDid = sageMessage.args.findUserDid("user", true);
 		if (userDid) {
-			user = await sageMessage.caches.users.getByDid(userDid);
+			user = await sageMessage.sageCache.users.getByDid(userDid);
 		}
 		if (!user) {
 			const userId = sageMessage.args.findUuid("user", true);
-			user = await sageMessage.caches.users.getById(userId);
+			user = await sageMessage.sageCache.users.getById(userId);
 		}
 		if (!user) {
-			user = sageMessage.sageUser;
+			user = sageMessage.actor.s;
 		}
 	}
 
@@ -116,15 +78,6 @@ async function userDetails(sageMessage: SageMessage): Promise<void> {
 
 export default function register(): void {
 	registerAdminCommand(userCount, "user-count");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user count");
-
-	registerAdminCommand(userList, "user-list");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user list");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user list {optionalNameFilter}");
-
 	registerAdminCommand(userDetails, "user-details");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user details {@UserMention}");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user details {UserId}");
-
 	registerAdminCommand(userUpdate, "user-set", "user-update");
 }

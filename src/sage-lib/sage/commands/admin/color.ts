@@ -40,7 +40,7 @@ async function _colorList(sageMessage: SageMessage, which: BotServerGameType): P
 			}
 		}
 		if (!render) {
-			return sageMessage.reactError();
+			return sageMessage.reactError("Unknown Error rendering Color List.");
 		}
 	}
 
@@ -73,15 +73,15 @@ async function _colorList(sageMessage: SageMessage, which: BotServerGameType): P
 }
 
 async function colorListBot(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.isSuperUser ? _colorList(sageMessage, BotServerGameType.Bot) : sageMessage.reactBlock();
+	return _colorList(sageMessage, BotServerGameType.Bot);
 }
 
 async function colorListServer(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.checkCanAdminServer() ? _colorList(sageMessage, BotServerGameType.Server) : sageMessage.reactBlock();
+	return _colorList(sageMessage, BotServerGameType.Server);
 }
 
 async function colorListGame(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.checkCanAdminGame() ? _colorList(sageMessage, BotServerGameType.Game) : sageMessage.reactBlock();
+	return _colorList(sageMessage, BotServerGameType.Game);
 }
 
 async function colorList(sageMessage: SageMessage): Promise<void> {
@@ -109,19 +109,18 @@ async function _colorGet(sageMessage: SageMessage, ...colors: Optional<Colors>[]
 
 	const inheritedText = inherited ? ` (unset, inherited)` : ``;
 	await sageMessage.message.channel.send({ embeds:[embedColor(color, ColorType[colorType], inheritedText)] });
-	return Promise.resolve();
 }
 
 async function colorGetBot(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.isSuperUser ? _colorGet(sageMessage, sageMessage.bot.colors) : sageMessage.denyByPerm("No Color For You!", "colorGetBot:!.isSuperUser");
+	return _colorGet(sageMessage, sageMessage.bot.colors);
 }
 
 async function colorGetServer(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.checkCanAdminServer() ? _colorGet(sageMessage, sageMessage.server?.colors, sageMessage.bot.colors) : sageMessage.reactBlock();
+	return _colorGet(sageMessage, sageMessage.server?.colors, sageMessage.bot.colors);
 }
 
 async function colorGetGame(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.checkCanAdminGame() ? _colorGet(sageMessage, sageMessage.game?.colors, sageMessage.server?.colors, sageMessage.bot.colors) : sageMessage.reactBlock();
+	return _colorGet(sageMessage, sageMessage.game?.colors, sageMessage.server?.colors, sageMessage.bot.colors);
 }
 
 async function colorGet(sageMessage: SageMessage): Promise<void> {
@@ -153,50 +152,49 @@ function findColorAndType(args: SageMessageArgs): Optional<TColorAndType> {
 
 async function colorSetServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminServer("Set Server Color");
 	}
 
 	const colorAndType = findColorAndType(sageMessage.args);
 	if (!colorAndType) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Missing color and type values.");
 	}
 
 	const set = sageMessage.server.colors.set(colorAndType);
 	if (!set) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Invalid color or type values.");
 	}
 
 	const saved = await sageMessage.server.save();
-	sageMessage.reactSuccessOrFailure(saved);
 	if (saved) {
-		sageMessage.message.channel.send({ embeds:[embedColor(colorAndType.color, ColorType[colorAndType.type])] });
+		await sageMessage.message.channel.send({ embeds:[embedColor(colorAndType.color, ColorType[colorAndType.type])] });
 	}
+	await sageMessage.reactSuccessOrFailure(saved, "Server Color Set.", "Unknown Error; Server Color NOT Set!");
 	return Promise.resolve();
 }
 
 async function colorSetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("Set Game Color");
 	}
 
 	const game = sageMessage.game!;
 
 	const colorAndType = findColorAndType(sageMessage.args);
 	if (!colorAndType) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Missing color and type values.");
 	}
 
 	const set = game.colors.set(colorAndType);
 	if (!set) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Invalid color or type values.");
 	}
 
 	const saved = await game.save();
-	sageMessage.reactSuccessOrFailure(saved);
 	if (saved) {
-		sageMessage.message.channel.send({ embeds:[embedColor(colorAndType.color, ColorType[colorAndType.type])] });
+		await sageMessage.message.channel.send({ embeds:[embedColor(colorAndType.color, ColorType[colorAndType.type])] });
 	}
-
+	await sageMessage.reactSuccessOrFailure(saved, "Game Color Set.", "Unknown Error; Game Color NOT Set!");
 	return Promise.resolve();
 }
 
@@ -210,7 +208,7 @@ async function colorSet(sageMessage: SageMessage): Promise<void> {
 
 async function colorSyncServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminServer("Sync Server Colors")
 	}
 
 	const server = sageMessage.server;
@@ -220,7 +218,7 @@ async function colorSyncServer(sageMessage: SageMessage): Promise<void> {
 		server.colors.sync(sageMessage.bot.colors);
 		const saved = await server.save();
 		if (!saved) {
-			sageMessage.reactError();
+			sageMessage.reactError("Unable to save Server.");
 		} else {
 			colorListServer(sageMessage);
 		}
@@ -230,7 +228,7 @@ async function colorSyncServer(sageMessage: SageMessage): Promise<void> {
 
 async function colorSyncGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("Sync Game Colors");
 	}
 
 	const game = sageMessage.game!;
@@ -240,7 +238,7 @@ async function colorSyncGame(sageMessage: SageMessage): Promise<void> {
 		game.colors.sync(game.server.colors);
 		const saved = await game.save();
 		if (!saved) {
-			sageMessage.reactError();
+			sageMessage.reactError("Unable to save Game.");
 		} else {
 			colorListGame(sageMessage);
 		}
@@ -259,22 +257,22 @@ async function colorSync(sageMessage: SageMessage): Promise<void> {
 
 async function colorUnsetServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminServer("Unset Server Color");
 	}
 
 	const colorType = sageMessage.args.findEnum<ColorType>(ColorType, "type", true);
 	const unset = sageMessage.server.colors.unset(colorType);
 	if (!unset) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Invalid color type.");
 	}
 
 	const saved = await sageMessage.server.save();
-	return sageMessage.reactSuccessOrFailure(saved);
+	return sageMessage.reactSuccessOrFailure(saved, "Server Color Unset.", "Unknown Error; Server Color NOT Unset!");
 }
 
 async function colorUnsetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("Unset Game Color");
 	}
 
 	const game = sageMessage.game!;
@@ -282,13 +280,11 @@ async function colorUnsetGame(sageMessage: SageMessage): Promise<void> {
 	const colorType = sageMessage.args.findEnum<ColorType>(ColorType, "type", true);
 	const unset = game.colors.unset(colorType);
 	if (!unset) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Invalid color type.");
 	}
 
 	const saved = await game.save();
-	sageMessage.reactSuccessOrFailure(saved);
-
-	return Promise.resolve();
+	return sageMessage.reactSuccessOrFailure(saved, "Game Color Unset.", "Unknown Error; Game Color NOT Unset!");
 }
 
 async function colorUnset(sageMessage: SageMessage): Promise<void> {
@@ -320,21 +316,23 @@ export default function register(): void {
 	registerAdminCommand(colorUnsetGame, "color-unset-game");
 	registerAdminCommand(colorUnset, "color-unset");
 
-	registerAdminCommandHelp("Admin", "SuperUser", "Color", "color get bot type=\"ColorType\"");
-	registerAdminCommandHelp("Admin", "SuperUser", "Color", "color list bot");
-
 	registerAdminCommandHelp("Admin", "Color", "color get type=\"ColorType\"");
-	registerAdminCommandHelp("Admin", "Color", "color get {server|game} type=\"ColorType\"");
+	registerAdminCommandHelp("Admin", "Color", "color get game type=\"ColorType\"");
+	registerAdminCommandHelp("Admin", "Color", "color get server type=\"ColorType\"");
 
 	registerAdminCommandHelp("Admin", "Color", "color list");
-	registerAdminCommandHelp("Admin", "Color", "color list {server|game}");
+	registerAdminCommandHelp("Admin", "Color", "color list game");
+	registerAdminCommandHelp("Admin", "Color", "color list server");
 
-	registerAdminCommandHelp("Admin", "Color", "color set type=\"ColorType\" {hexColorValue}");
-	registerAdminCommandHelp("Admin", "Color", "color set {server|game} type=\"ColorType\" {hexColorValue}");
+	registerAdminCommandHelp("Admin", "Color", "color set type=\"ColorType\" value=\"hexColorValue\"");
+	registerAdminCommandHelp("Admin", "Color", "color set game type=\"ColorType\" value=\"hexColorValue\"");
+	registerAdminCommandHelp("Admin", "Color", "color set server type=\"ColorType\" value=\"hexColorValue\"");
 
 	registerAdminCommandHelp("Admin", "Color", "color sync");
-	registerAdminCommandHelp("Admin", "Color", "color sync {server|game}");
+	registerAdminCommandHelp("Admin", "Color", "color sync game");
+	registerAdminCommandHelp("Admin", "Color", "color sync server");
 
 	registerAdminCommandHelp("Admin", "Color", "color unset type=\"ColorType\"");
-	registerAdminCommandHelp("Admin", "Color", "color unset {server|game} type=\"ColorType\"");
+	registerAdminCommandHelp("Admin", "Color", "color unset game type=\"ColorType\"");
+	registerAdminCommandHelp("Admin", "Color", "color unset server type=\"ColorType\"");
 }

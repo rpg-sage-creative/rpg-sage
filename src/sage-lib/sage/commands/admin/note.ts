@@ -47,26 +47,27 @@ function getPcForStats(sageMessage: SageMessage): GameCharacter | undefined {
 		return sageMessage.playerCharacter;
 	}
 	const name = sageMessage.args.valueByKey("name");
-	const owner = sageMessage.game ?? sageMessage.sageUser;
+	const owner = sageMessage.game ?? sageMessage.actor.s;
 	const char = owner.playerCharacters.findByName(name);
 	return char ?? undefined;
 }
 function getNpcForStats(sageMessage: SageMessage): GameCharacter | undefined {
 	const name = sageMessage.args.valueByKey("name");
-	const owner = sageMessage.game ?? sageMessage.sageUser;
+	const owner = sageMessage.game ?? sageMessage.actor.s;
 	const char = owner.nonPlayerCharacters.findByName(name);
 	return char ?? undefined;
 }
 async function statsSet(sageMessage: SageMessage): Promise<void> {
 	const character = getPcForStats(sageMessage) || getNpcForStats(sageMessage);
 	if (!character) {
-		return sageMessage.reactWarn();
+		return sageMessage.reactFailure("Character Not Found!")
 	}
 	const updated = await character.notes.setStats(sageMessage.args.keyed());
 	if (updated) {
 		await sendGameCharacter(sageMessage, character);
+	}else {
+		await sageMessage.reactFailure("Unknown Error; Character Stats NOT Set!")
 	}
-	return sageMessage.reactSuccessOrFailure(updated);
 }
 // async function statsUnset(sageMessage: SageMessage): Promise<void> {
 // 	const charAndInput = getPcForStats(sageMessage) || getNpcForStats(sageMessage);

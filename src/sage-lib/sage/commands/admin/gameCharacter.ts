@@ -1,5 +1,4 @@
 import type * as Discord from "discord.js";
-import { DiscordId, NilSnowflake, TChannel } from "../../../discord";
 import { sendWebhook } from "../../../discord/messages";
 import { discordPromptYesNo } from "../../../discord/prompts";
 import type { Optional, OrUndefined } from "../../../../sage-utils";
@@ -9,6 +8,9 @@ import type SageMessage from "../../model/SageMessage";
 import type { TNames } from "../../model/SageMessageArgs";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
+import DiscordId from "../../../../sage-utils/utils/DiscordUtils/DiscordId";
+import { orNilSnowflake } from "../../../../sage-utils/utils/DiscordUtils/snowflake";
+import type { DChannel } from "../../../../sage-utils/utils/DiscordUtils";
 
 //#region Character Command Types
 
@@ -68,15 +70,11 @@ function getCharacterTypeMeta(sageMessage: SageMessage): TCharacterTypeMeta {
 
 function getUserDid(sageMessage: SageMessage): Discord.Snowflake | null {
 	return !sageMessage.game || sageMessage.isPlayer
-		? sageMessage.authorDid
+		? sageMessage.actor.did
 		: sageMessage.args.findUserDid("user") ?? null;
 }
 
 function testCanAdminCharacter(sageMessage: SageMessage, characterTypeMeta: TCharacterTypeMeta): boolean {
-	if (!sageMessage.allowAdmin) {
-		return false;
-	}
-
 	if (sageMessage.game) {
 		return characterTypeMeta.isPcOrCompanion
 			? sageMessage.isGameMaster || sageMessage.isPlayer
@@ -91,37 +89,47 @@ function urlToName(url: Optional<string>): string | undefined {
 	return url?.split("/").pop()?.split(".").shift();
 }
 
-async function promptAndDo(sageMessage: SageMessage, character: GameCharacter, prompt: string, action: (char: GameCharacter) => Promise<boolean>): Promise<void> {
+async function promptAndDo(sageMessage: SageMessage, character: GameCharacter, prompt: string, action: (char: GameCharacter) => Promise<boolean | void>): Promise<void> {
 	await sendGameCharacter(sageMessage, character);
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
 	promptRenderable.append(prompt);
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable);
 	if (yes === true) {
 		const updated = await action(character);
-		await sageMessage.reactSuccessOrFailure(updated);
+		if (updated !== undefined) {
+			await sageMessage.reactSuccessOrFailure(updated, "", "");
+		}
 	}
 }
 
+/** If in a Game, returns the GameMaster for a GM or the PC for a Player. */
 function getAutoGameCharacter(sageMessage: SageMessage): OrUndefined<GameCharacter> {
 	if (sageMessage.game) {
 		if (sageMessage.isGameMaster) {
 			return sageMessage.game.nonPlayerCharacters.findByName(sageMessage.game.gmCharacterName ?? GameCharacter.defaultGmCharacterName);
 		}
-		return sageMessage.game.playerCharacters.findByUser(sageMessage.sageUser.did);
+		return sageMessage.game.playerCharacters.findByUser(sageMessage.actor.s.did);
 	}
 	return undefined;
 }
+
+/** For each channel given, the actor's auto channel character is removed. */
 async function removeAuto(sageMessage: SageMessage, ...channelDids: Discord.Snowflake[]): Promise<void> {
 	const gameCharacter = getAutoGameCharacter(sageMessage);
 	for (const channelDid of channelDids) {
-		const char = gameCharacter ?? sageMessage.sageUser.getAutoCharacterForChannel(channelDid);
-		await char?.removeAutoChannel(channelDid);
+		const char = gameCharacter ?? sageMessage.actor.s.getAutoCharacterForChannel(channelDid);
+		if (char) {
+			const saved = await char.removeAutoChannel(channelDid);
+			if (!saved) {
+				await sageMessage.whisper(`[command-error] Unknown Error; Unable to remove Auto Dailog for "${char.name}" in ${DiscordId.toChannelReference(channelDid)}`);
+			}
+		}
 	}
 }
 
 /** Reusable code to get GameCharacter for the commands. */
 async function getCharacter(sageMessage: SageMessage, characterTypeMeta: TCharacterTypeMeta, userDid: Discord.Snowflake, names: TNames): Promise<GameCharacter | undefined> {
-	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
+	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s;
 	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
 		characterManager = characterManager?.findByUserAndName(userDid, names.charName!)?.companions;
@@ -169,9 +177,9 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.appendTitledSection(`<b>Notes</b>`, ...notes);
 	}
 
-	const targetChannel = (await sageMessage.caches.discord.fetchChannel(sageMessage.channel?.sendCommandTo)) ?? sageMessage.message.channel as TChannel;
+	const targetChannel = (await sageMessage.sageCache.discord.fetchChannel(sageMessage.channel?.sendCommandTo)) ?? sageMessage.message.channel as DChannel;
 	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
-	return sendWebhook(sageMessage.caches, targetChannel, renderableContent, { avatarURL: avatarUrl, username: character.name }, sageMessage.dialogType);
+	return sendWebhook(sageMessage.sageCache, targetChannel, renderableContent, { avatarURL: avatarUrl, username: character.name }, sageMessage.dialogType);
 }
 
 function sendNotFound(sageMessage: SageMessage, command: string, entityNamePlural: string, nameFilter?: Optional<string>): Promise<void> {
@@ -220,12 +228,16 @@ async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterM
 //#endregion
 
 async function gameCharacterList(sageMessage: SageMessage): Promise<void> {
-	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock();
+	if (!sageMessage.allowAdmin) {
+		return sageMessage.denyByProv("List Characters", "Channel must allow Admin actions.");
 	}
 
-	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
+	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
+	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
+		return sageMessage.reactBlock("Cannot ");
+	}
+
+	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s;
 
 	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
@@ -242,7 +254,7 @@ async function gameCharacterList(sageMessage: SageMessage): Promise<void> {
 function findCompanion(characterManager: CharacterManager, userDid: Optional<Discord.Snowflake>, names: TNames): GameCharacter | undefined {
 	const character = names.charName
 		? characterManager.findByUserAndName(userDid, names.charName)
-		: characterManager.filterByUser(userDid ?? NilSnowflake)?.[0];
+		: characterManager.filterByUser(orNilSnowflake(userDid))?.[0];
 	if (!character) {
 		return undefined;
 	}
@@ -253,13 +265,17 @@ function findCompanion(characterManager: CharacterManager, userDid: Optional<Dis
 }
 
 async function gameCharacterDetails(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.allowAdmin) {
+		return sageMessage.denyByProv("Character Details", "Channel must allow Admin actions.");
+	}
+
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
 	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock();
+		return sageMessage.reactBlock(sageMessage.game ? "Must be a GM or Player of this game." : "Cannot *currently* use NPCs outside a Game.");
 	}
 
 	const userDid = await getUserDid(sageMessage),
-		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser,
+		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s,
 		characterManager = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
 		names = characterTypeMeta.isGm ? <TNames>{ name: sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName } : sageMessage.args.findNames();
 
@@ -273,23 +289,26 @@ async function gameCharacterDetails(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
-	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock();
+	if (!sageMessage.allowAdmin) {
+		return sageMessage.denyByProv("Add Character", "Channel must allow Admin actions.");
 	}
 
-	const userDid = await getUserDid(sageMessage),
+	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
+	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
+		return sageMessage.reactBlock(sageMessage.game ? "Must be a GM or Player of this game." : "Cannot *currently* use NPCs outside a Game.");
+	}
+
+	const userDid = getUserDid(sageMessage),
 		charArgs = sageMessage.args.findCharacterArgs(),
 		core = { userDid, ...charArgs } as GameCharacterCore;
 	if (!core.name) {
 		core.name = urlToName(core.tokenUrl) ?? urlToName(core.avatarUrl)!;
 	}
 	if (!core.name) {
-		await sageMessage.send("Cannot create a character without a name!");
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Cannot create a character without a name!");
 	}
 
-	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
+	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s;
 
 	let characterManager = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
@@ -298,7 +317,7 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 		characterManager = character.companions;
 	}
 	if (!characterManager) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Unable to find Character for this Companion.");
 	}
 
 	const newChar = new GameCharacter(core, characterManager);
@@ -309,30 +328,33 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 				if (!sageMessage.game.hasGameMaster(userDid)) {
 					const gameMasterAdded = await sageMessage.game.addGameMasters([userDid]);
 					if (!gameMasterAdded) {
-						await sageMessage.reactFailure();
-						return false;
+						await sageMessage.reactFailure("Unable to add GM on the fly.");
+						return;
 					}
 				}
 			} else {
 				if (!sageMessage.game.hasPlayer(userDid)) {
 					const playerAdded = await sageMessage.game.addPlayers([userDid]);
 					if (!playerAdded) {
-						await sageMessage.reactFailure();
-						return false;
+						await sageMessage.reactFailure("Unable to add Player on the fly.");
+						return;
 					}
 				}
 			}
 		}
 		const gc = await characterManager.addCharacter(char.toJSON());
-		// console.log(gc, gc?.toJSON())
-		return Promise.resolve(!!gc);
+		await sageMessage.reactSuccessOrFailure(!!gc, "Character Created.", "Unknown Error; Character NOT Created.");
 	});
 }
 
 async function gameCharacterUpdate(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.allowAdmin) {
+		return sageMessage.denyByProv("Update Character", "Channel must allow Admin actions.");
+	}
+
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
 	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock();
+		return sageMessage.reactBlock(sageMessage.game ? "Must be a GM or Player of this game." : "Cannot *currently* create NPCs outside a Game.");
 	}
 
 	const names = sageMessage.args.findNames();
@@ -363,21 +385,27 @@ async function gameCharacterUpdate(sageMessage: SageMessage): Promise<void> {
 			const charSaved = await char.save();
 			if (charSaved && characterTypeMeta.isGm) {
 				sageMessage.game!.updateGmCharacterName(char.name);
-				return sageMessage.game!.save();
+				const gameSaved = await sageMessage.game!.save();
+				await sageMessage.reactSuccessOrFailure(charSaved && gameSaved, "Game Master Updated", "Unknown Error; Game Master NOT Updated!");
+				return;
 			}
-			return charSaved;
+			await sageMessage.reactSuccessOrFailure(charSaved, "Character Updated", "Unknown Error; Character NOT Updated!");
 		});
 	}
-	return sageMessage.reactFailure();
+	return sageMessage.reactFailure("Character not found.");
 }
 
 async function gameCharacterStats(sageMessage: SageMessage): Promise<void> {
-	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock();
+	if (!sageMessage.allowAdmin) {
+		return sageMessage.denyByProv("Update Character Stats", "Channel must allow Admin actions.");
 	}
 
-	const userDid = await getUserDid(sageMessage),
+	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
+	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
+		return sageMessage.reactBlock(sageMessage.game ? "Must be a GM or Player of this game." : "Cannot *currently* create NPCs outside a Game.");
+	}
+
+	const userDid = getUserDid(sageMessage),
 		names = sageMessage.args.findNames(),
 		character = await getCharacter(sageMessage, characterTypeMeta, userDid!, names);
 
@@ -387,22 +415,28 @@ async function gameCharacterStats(sageMessage: SageMessage): Promise<void> {
 			const charSaved = await char.save();
 			if (charSaved && characterTypeMeta.isGm) {
 				sageMessage.game!.updateGmCharacterName(char.name);
-				return sageMessage.game!.save();
+				const gameSaved = await sageMessage.game!.save();
+				await sageMessage.reactSuccessOrFailure(charSaved && gameSaved, "Game Master Updated", "Unknown Error; Game Master NOT Updated!");
+				return;
 			}
-			return charSaved;
+			await sageMessage.reactSuccessOrFailure(charSaved, "Character Updated", "Unknown Error; Character NOT Updated!");
 		});
 	}
-	return sageMessage.reactFailure();
+	return sageMessage.reactFailure("Character not found.");
 }
 
 async function characterDelete(sageMessage: SageMessage): Promise<void> {
-	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock();
+	if (!sageMessage.allowAdmin) {
+		return sageMessage.denyByProv("Delete Character", "Channel must allow Admin actions.");
 	}
 
-	const userDid = await getUserDid(sageMessage),
-		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser,
+	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
+	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
+		return sageMessage.reactBlock(sageMessage.game ? "Must be a GM or Player of this game." : "Cannot *currently* create NPCs outside a Game.");
+	}
+
+	const userDid = getUserDid(sageMessage),
+		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s,
 		characterManager = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
 		names = sageMessage.args.findNames();
 
@@ -411,15 +445,22 @@ async function characterDelete(sageMessage: SageMessage): Promise<void> {
 		: characterManager.findByUserAndName(userDid, names.name!);
 
 	if (character) {
-		return promptAndDo(sageMessage, character, `Delete ${character.name}?`, char => char.remove());
+		return promptAndDo(sageMessage, character, `Delete ${character.name}?`, async char => {
+			const removed = await char.remove();
+			await sageMessage.reactSuccessOrFailure(removed, "Character Deleted.", "Unknown Error; Character NOT Deleted!");
+		});
 	}
 	return sendNotFound(sageMessage, `${characterTypeMeta.commandDescriptor}-delete`, characterTypeMeta.singularDescriptor!, names.name);
 }
 
 async function characterAutoOn(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.allowAdmin) {
+		return sageMessage.denyByProv("Character Auto Dialog", "Channel must allow Admin actions.");
+	}
+
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
 	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock();
+		return sageMessage.reactBlock(sageMessage.game ? "Must be a GM or Player of this game." : "Cannot *currently* create NPCs outside a Game.");
 	}
 
 	const name = sageMessage.isGameMaster
@@ -427,7 +468,7 @@ async function characterAutoOn(sageMessage: SageMessage): Promise<void> {
 		: sageMessage.args.valueByKey("name");
 	const character = sageMessage.isGameMaster
 		? sageMessage.game?.nonPlayerCharacters.findByName(name)
-		: (sageMessage.playerCharacter ?? sageMessage.sageUser.playerCharacters.findByName(name));
+		: (sageMessage.playerCharacter ?? sageMessage.actor.s.playerCharacters.findByName(name));
 
 	if (character) {
 		const channelDids = sageMessage.args.channelDids(true);
@@ -439,16 +480,21 @@ async function characterAutoOn(sageMessage: SageMessage): Promise<void> {
 		return promptAndDo(sageMessage, character, prompt, async char => {
 			await removeAuto(sageMessage, ...channelDids);
 			channelDids.forEach(channelDid => char.addAutoChannel(channelDid, false));
-			return char.save();
+			const saved = await char.save();
+			await sageMessage.reactSuccessOrFailure(saved, "Auto Dialog Enabled", "Unknown Error; Auto Dialog NOT Enabled!");
 		});
 	}
 	return sendNotFound(sageMessage, `${characterTypeMeta.commandDescriptor}-auto-on`, characterTypeMeta.singularDescriptor!, name);
 }
 
 async function characterAutoOff(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.allowAdmin) {
+		return sageMessage.denyByProv("Character Auto Dialog", "Channel must allow Admin actions.");
+	}
+
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
 	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock();
+		return sageMessage.reactBlock(sageMessage.game ? "Must be a GM or Player of this game." : "Cannot *currently* create NPCs outside a Game.");
 	}
 
 	const name = sageMessage.isGameMaster
@@ -456,7 +502,7 @@ async function characterAutoOff(sageMessage: SageMessage): Promise<void> {
 		: sageMessage.args.valueByKey("name");
 	const character = sageMessage.isGameMaster
 		? sageMessage.game?.nonPlayerCharacters.findByName(name)
-		: (sageMessage.playerCharacter ?? sageMessage.sageUser.playerCharacters.findByName(name));
+		: (sageMessage.playerCharacter ?? sageMessage.actor.s.playerCharacters.findByName(name));
 
 	if (character) {
 		const channelDids = sageMessage.args.channelDids(true);
@@ -467,7 +513,8 @@ async function characterAutoOff(sageMessage: SageMessage): Promise<void> {
 
 		return promptAndDo(sageMessage, character, prompt, async char => {
 			await removeAuto(sageMessage, ...channelDids);
-			return char.save();
+			const saved = await char.save();
+			await sageMessage.reactSuccessOrFailure(saved, "Auto Dialog Disabled", "Unknown Error; Auto Dialog NOT Disabled!");
 		});
 	}
 	return sendNotFound(sageMessage, `${characterTypeMeta.commandDescriptor}-auto-off`, characterTypeMeta.singularDescriptor!, name);
@@ -481,13 +528,13 @@ function registerHelp(): void {
 	const nonPlayerCharacterSubCategory = "NPC";
 	const companionSubCategory = "Companion";
 	[playerCharacterSubCategory, nonPlayerCharacterSubCategory, companionSubCategory].forEach(subCat => {
-		const charName = subCat === companionSubCategory ? ` charname="character name"` : ``;
+		const charName = subCat === companionSubCategory ? ` charName="character name"` : ``;
 		const cmd = subCat.toLowerCase();
 		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} list filter="optional filter"`);
 		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} details name="name"`);
 		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} create ${charName} name="name" avatar="image url" token="image url"`);
 		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} update ${charName} name="name" avatar="image url"`);
-		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} update ${charName} oldname="old name" newname="new name"`);
+		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} update ${charName} oldName="old name" newName="new name"`);
 		registerAdminCommandHelp(AdminCategory, subCat, `${cmd} delete ${charName} name="name"`);
 	});
 }

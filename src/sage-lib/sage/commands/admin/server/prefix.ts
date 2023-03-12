@@ -1,67 +1,71 @@
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import type SageMessage from "../../../model/SageMessage";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
+import { registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
 async function prefixSet(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminServer("Set Sage Prefix");
 	}
 
-	if (sageMessage.args?.length > 1) {
-		return sageMessage.reactFailure();
+	const prefix = sageMessage.args.getString("prefix");
+	if (prefix === null) {
+		return prefixUnset(sageMessage);
 	}
 
-	const prefix = sageMessage.args.valueByKey("prefix") ?? sageMessage.args[0]?.value;
+	if (!prefix) {
+		return sageMessage.reactFailure("Mising prefix value. Ex: sage!!prefix set prefix=\"sage\"");
+	}
+
 	const saved = await sageMessage.server.setCommandPrefix(prefix);
-	return sageMessage.reactSuccessOrFailure(saved);
+	return sageMessage.reactSuccessOrFailure(saved, "Sage Prefix Set", "Unknown Error; Sage Prefix NOT Set");
 }
 
-async function prefixGet(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
-	}
+// async function prefixGet(sageMessage: SageMessage): Promise<void> {
+// 	if (!sageMessage.checkCanAdminServer()) {
+// 		return sageMessage.reactBlock();
+// 	}
 
-	const renderableContent = createAdminRenderableContent(sageMessage.server, "<b>Server Command Prefix</b>");
-	const commandPrefix =
-		(sageMessage.server.commandPrefix ?? `<i>inherited (${sageMessage.bot.commandPrefix})</i>`)
-		|| `<i>unset (no prefix)</i>`;
+// 	const renderableContent = createAdminRenderableContent(sageMessage.server, "<b>Server Command Prefix</b>");
+// 	const commandPrefix =
+// 		(sageMessage.server.commandPrefix ?? `<i>inherited (${sageMessage.bot.commandPrefix})</i>`)
+// 		|| `<i>unset (no prefix)</i>`;
 
-	renderableContent.append(commandPrefix);
-	return <any>sageMessage.send(renderableContent);
-}
+// 	renderableContent.append(commandPrefix);
+// 	return <any>sageMessage.send(renderableContent);
+// }
 
 async function prefixSync(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminServer("Reset Sage Prefix");
 	}
 
-	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync command prefix with Sage?");
+	const booleanResponse = await discordPromptYesNo(sageMessage, "> Reset Sage's command prefix to the default `sage`?");
 	if (booleanResponse) {
 		const saved = await sageMessage.server.syncCommandPrefix();
-		sageMessage.reactSuccessOrFailure(saved);
+		await sageMessage.reactSuccessOrFailure(saved, "Sage Prefix Reset", "Unknown Error; Sage Prefix NOT Reset!");
 	}
-	return Promise.resolve();
 }
 
 async function prefixUnset(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminServer("Unset Sage Prefix");
 	}
 
 	const saved = await sageMessage.server.unsetCommandPrefix();
-	return sageMessage.reactSuccessOrFailure(saved);
+	return sageMessage.reactSuccessOrFailure(saved, "Sage Prefix Unset", "Unknown Error; Sage Prefix NOT Unset!");
 }
 
 export default function register(): void {
 	registerAdminCommand(prefixSet, "prefix-set");
 	registerAdminCommandHelp("Admin", "Prefix", "prefix set {commandPrefix; ex: sage}");
 
-	registerAdminCommand(prefixGet, "prefix-get");
-	registerAdminCommandHelp("Admin", "Prefix", "prefix get");
+	// registerAdminCommand(prefixGet, "prefix-get");
+	// registerAdminCommandHelp("Admin", "Prefix", "prefix get");
 
-	registerAdminCommand(prefixSync, "prefix-sync");
+	registerAdminCommand(prefixSync, "prefix-sync", "prefix-reset");
 	registerAdminCommandHelp("Admin", "Prefix", "prefix sync");
+	registerAdminCommandHelp("Admin", "Prefix", "prefix reset");
 
 	registerAdminCommand(prefixUnset, "prefix-unset");
 	registerAdminCommandHelp("Admin", "Prefix", "prefix unset");

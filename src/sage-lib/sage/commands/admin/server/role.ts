@@ -31,32 +31,32 @@ async function roleList(sageMessage: SageMessage): Promise<void> {
 
 async function roleSet(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock("Must be a Server Owner, Server Administrator, or Server Manager!");
+		return sageMessage.denyForCanAdminServer("Set Sage Admin Role");
 	}
 
 	const roleDid = sageMessage.args.findRoleDid("role");
 	const guildRole = roleDid ? await sageMessage.discord.fetchGuildRole(roleDid) : null;
 	const roleType = sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type");
 	if (!roleDid || !roleType || !guildRole) {
-		return sageMessage.reactFailure(`You must provide a valid role and role type. Ex: sage!!admin add user="@User" role="GameAdmin"`);
+		return sageMessage.reactFailure(`You must provide a valid role and role type. Ex: sage!!role set role="@SageGameAdmin" type="GameAdmin"`);
 	}
 
 	const saved = await sageMessage.server.setRole(roleType, roleDid);
-	return sageMessage.reactSuccessOrFailure(saved);
+	return sageMessage.reactSuccessOrFailure(saved, "Sage Admin Role Set", "Unknown Error; Sage Admin Role NOT Set!");
 }
 
 async function roleRemove(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock("Must be a Server Owner, Server Administrator, or Server Manager!");
+		return sageMessage.denyForCanAdminServer("Remove Sage Admin Role");
 	}
 
 	const roleType = sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type", true);
 	if (!roleType) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure(`You must provide a valid role type. Ex: sage!!role remove type="GameAdmin"`);
 	}
 
 	const saved = await sageMessage.server.setRole(roleType, null);
-	return sageMessage.reactSuccessOrFailure(saved);
+	return sageMessage.reactSuccessOrFailure(saved, "Sage Admin Role Removed", "Unknown Error; Sage Admin Role NOT Removed!");
 }
 
 //TODO: remove roles by mentioning them
@@ -67,8 +67,8 @@ export default function register(): void {
 	registerAdminCommandHelp("Admin", "Server", "server role list");
 
 	registerAdminCommand(roleSet, "role-set");
-	registerAdminCommandHelp("Admin", "Server", "server role set {@RoleMention} {ServerRoleType}");
+	registerAdminCommandHelp("Admin", "Server", "server role set role=\"@RoleMention\" type=\"GameAdmin\"");
 
 	registerAdminCommand(roleRemove, "role-remove", "server-role-delete", "server-role-unset");
-	registerAdminCommandHelp("Admin", "Server", "server role remove {ServerRoleType}");
+	registerAdminCommandHelp("Admin", "Server", "server role remove type=\"GameAdmin\"");
 }

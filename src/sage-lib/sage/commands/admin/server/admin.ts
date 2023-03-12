@@ -15,11 +15,7 @@ async function renderUser(renderableContent: utils.RenderUtils.RenderableContent
 	renderableContent.append(`<b>Role</b> ${AdminRoleType[user.role] ?? "<i>Unknown</i>"}`);
 }
 
-async function adminList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock("Must be a Server Owner, Server Administrator, or Server Manager!");
-	}
-
+async function adminList(sageMessage: SageMessage<true>): Promise<void> {
 	let users: TAdminUser[] = <TAdminUser[]>await utils.ArrayUtils.Collection.mapAsync(sageMessage.server.admins, async admin => {
 		return {
 			discordUser: await sageMessage.discord.fetchUser(admin.did),
@@ -47,7 +43,7 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 
 async function adminAdd(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock("Must be a Server Owner, Server Administrator, or Server Manager!");
+		return sageMessage.denyForCanAdminServer("Add Sage Admin");
 	}
 
 	const userDid = sageMessage.args.findUserDid("user");
@@ -57,27 +53,25 @@ async function adminAdd(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const saved = await sageMessage.server.setAdmin(userDid, roleType);
-	return sageMessage.reactSuccessOrFailure(saved);
+	return sageMessage.reactSuccessOrFailure(saved, "Sage Server Admin Added", "Unknown Error; Sage Server Admin NOT Added!");
 }
 
 async function adminRemove(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock("Must be a Server Owner, Server Administrator, or Server Manager!");
+		return sageMessage.denyForCanAdminServer("Remove Sage Admin");
 	}
 
 	const userDid = sageMessage.args.findUserDid("user", true);
 	if (!userDid) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure(`You must provide a user to remove. Ex: sage!!admin remove user="@User"`);
 	}
 
 	const saved = await sageMessage.server.setAdmin(userDid, null);
-	return sageMessage.reactSuccessOrFailure(saved);
+	return sageMessage.reactSuccessOrFailure(saved, "Sage Server Admin Removed", "Unknown Error; Sage Server Admin NOT Removed!");
 }
 
 export default function register(): void {
 	registerAdminCommand(adminList, "admin-list");
-	registerAdminCommandHelp("Admin", "SuperUser", "Admin", "admin list");
-	registerAdminCommandHelp("Admin", "SuperUser", "Admin", "admin list {optionalNameFilter}");
 
 	registerAdminCommand(adminAdd, "admin-add");
 	registerAdminCommandHelp("Admin", "Admin", `admin add user="@User" role="GameAdmin"`);

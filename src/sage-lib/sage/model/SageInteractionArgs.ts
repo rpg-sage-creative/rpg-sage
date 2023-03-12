@@ -2,8 +2,8 @@ import type { CommandInteraction, GuildBasedChannel, Snowflake } from "discord.j
 import type { Optional, VALID_UUID } from "../../../sage-utils";
 import { EnumUtils } from "../../../sage-utils/utils";
 import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import type { DInteraction } from "../../../sage-utils/utils/DiscordUtils";
 import { isValid as isValidUuid } from "../../../sage-utils/utils/UuidUtils";
-import type { DInteraction } from "../../discord";
 import type { ISageCommandArgs } from "./SageCommandArgs";
 
 export default class SageInteractionArgs implements ISageCommandArgs {

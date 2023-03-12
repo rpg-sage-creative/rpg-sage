@@ -99,8 +99,8 @@ async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
 	if (sageInteraction.isCommand("Finder", "calendar")) {
 		return sageInteraction.reply(_calCalendar(), false);
 	}
-	const date = sageInteraction.getString("date");
-	const origin = sageInteraction.getString<TYearOrigin>("origin");
+	const date = sageInteraction.args.getString("date");
+	const origin = sageInteraction.args.getString<TYearOrigin>("origin");
 	return sageInteraction.reply(_calDate(date, origin), false);
 }
 

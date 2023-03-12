@@ -2,8 +2,8 @@ import type { Guild, Snowflake } from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Args, LogLevel, Optional, TConsoleCommandType } from "../../../sage-utils";
+import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
-import { DiscordKey } from "../../discord";
 import { DicePostType } from "../commands/dice";
 import ActiveBot from "../model/ActiveBot";
 import { DialogType, IChannel, IChannelOptions, updateChannel } from "../repo/base/channel";
@@ -256,17 +256,8 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	public getChannel(channelDid: Optional<Snowflake>): IChannel | undefined;
 	public getChannel(didOrKey: Optional<Snowflake> | DiscordKey): IChannel | undefined {
 		if (didOrKey) {
-			if (typeof(didOrKey) === "string") {
-				return this.channels.find(channel => channel.did === didOrKey);
-			}
-			if (didOrKey.hasThread && didOrKey.hasChannel) {
-				return this.channels.find(channel => channel.did === didOrKey.thread)
-					?? this.channels.find(channel => channel.did === didOrKey.channel);
-			}else if (didOrKey.hasThread) {
-				return this.channels.find(channel => channel.did === didOrKey.thread);
-			}else if (didOrKey.hasChannel) {
-				return this.channels.find(channel => channel.did === didOrKey.channel);
-			}
+			const did = typeof(didOrKey) === "string" ? didOrKey : didOrKey.channel;
+			return this.channels.find(channel => channel.did === did);
 		}
 		return undefined;
 	}

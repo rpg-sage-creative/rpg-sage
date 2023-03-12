@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
 import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
+import DiscordId from "../../../../sage-utils/utils/DiscordUtils/DiscordId";
 import { dequote, StringMatcher } from "../../../../sage-utils/utils/StringUtils";
-import { DiscordId } from "../../../discord";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
 
 export type TParsedGameMapCore = Omit<TGameMapCore, "messageId">;

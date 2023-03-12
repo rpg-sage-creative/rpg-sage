@@ -4,29 +4,18 @@ import ActiveBot from "../../model/ActiveBot";
 import type Bot from "../../model/Bot";
 import type SageMessage from "../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
-import { registerAdminCommandHelp } from "../help";
 
 async function botList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
+	if (sageMessage.isSuperUser) {
+		const bots: Bot[] = await sageMessage.sageCache.bots.getAll().catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		for (const bot of bots) {
+			await sendBot(sageMessage, bot);
+		}
 	}
-	const bots: Bot[] = await sageMessage.caches.bots.getAll().catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
-	for (const bot of bots) {
-		await sendBot(sageMessage, bot);
-	}
-	return Promise.resolve();
 }
 
 async function botDetails(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
-
-	const firstMention = sageMessage.message.mentions.users.first();
-	const botDid = firstMention?.id ?? sageMessage.args.findUserDid("bot", true);
-	const bot = (await sageMessage.caches.bots.getByDid(botDid)) ?? sageMessage.bot;
-
-	return sendBot(sageMessage, bot);
+	return sendBot(sageMessage, sageMessage.bot);
 }
 
 function searchStatusToReadable(status: string | boolean): string {
@@ -77,23 +66,21 @@ async function sendBot(sageMessage: SageMessage, bot: Bot): Promise<void> {
 }
 
 async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
+	if (sageMessage.isSuperUser) {
+		const gameType = sageMessage.args.getEnum<GameType>(GameType, "game");
+		if (!gameType) {
+			return sageMessage.reactFailure("Unable to parse GameType.");
+		}
 
-	const gameType = sageMessage.args.getEnum<GameType>(GameType, "game");
-	if (!gameType) {
-		return sageMessage.reactFailure("Unable to parse GameType.");
-	}
+		const enabled = sageMessage.args.getBoolean("enabled");
+		const disabledMessage = sageMessage.args.getString("message");
+		const status = enabled ?? (disabledMessage || "Unknown Reason");
 
-	const enabled = sageMessage.args.getBoolean("enabled");
-	const disabledMessage = sageMessage.args.getString("message");
-	const status = enabled ?? (disabledMessage || "Unknown Reason");
-
-	const saved = await sageMessage.bot.setSearchStatus(gameType, status);
-	await sageMessage.reactSuccessOrFailure(saved);
-	if (saved) {
-		return sendBot(sageMessage, sageMessage.bot);
+		const saved = await sageMessage.bot.setSearchStatus(gameType, status);
+		await sageMessage.reactSuccessOrFailure(saved, "Bot Search Status Set", "Unknown Error; Bot Search Status NOT Set!");
+		if (saved) {
+			return sendBot(sageMessage, sageMessage.bot);
+		}
 	}
 }
 
@@ -105,14 +92,7 @@ async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 
 export default function register(): void {
 	registerAdminCommand(botList, "bot-list");
-	registerAdminCommandHelp("Admin", "SuperUser", "Bot", "bot list");
-
 	registerAdminCommand(botDetails, "bot-details");
-	registerAdminCommandHelp("Admin", "SuperUser", "Bot", "bot details");
-	registerAdminCommandHelp("Admin", "SuperUser", "Bot", "bot details {@UserMention}");
-	registerAdminCommandHelp("Admin", "SuperUser", "Bot", "bot details {UserId}");
-
 	registerAdminCommand(botCodeVersion, "code-version");
-
 	registerAdminCommand(setBotSearchStatus, "bot-set-search-status");
 }

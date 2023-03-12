@@ -6,12 +6,12 @@ import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 
 
 async function patreonSync(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.isSuperUser) return;
 	const isHome = sageMessage.server?.isHome,
 		isDm = sageMessage.message.channel.type === "DM";
-	if (!sageMessage.isSuperUser || !(isHome || isDm)) {
-		return sageMessage.reactBlock();
+	if (isHome || isDm) {
+		await syncPatreon(sageMessage.sageCache);
 	}
-	return syncPatreon(sageMessage.caches);
 }
 
 export async function syncPatreon(sageCache: SageCache): Promise<void> {

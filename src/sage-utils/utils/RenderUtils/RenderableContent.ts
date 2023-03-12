@@ -5,6 +5,8 @@ function createSection(index = 0, title: string | null = null, content = <string
 	return { index, title:title, content, columns };
 }
 
+export type TRenderableContentResolvable = string | IRenderable | RenderableContent;
+
 export default class RenderableContent implements IRenderable {
 	private _sections: TRenderableContentSection[] = [];
 	private _appendSection(section: TRenderableContentSection): TRenderableContentSection {
@@ -87,7 +89,7 @@ export default class RenderableContent implements IRenderable {
 		return title + sections;
 	}
 
-	public static resolve(resolvable: string | IRenderable): RenderableContent | null {
+	public static resolve(resolvable: Optional<TRenderableContentResolvable>): RenderableContent | null {
 		if (!resolvable) {
 			return null;
 		}

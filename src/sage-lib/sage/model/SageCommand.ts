@@ -3,8 +3,11 @@ import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import type { If, Optional } from "../../../sage-utils";
 import { SuperClass } from "../../../sage-utils/utils/ClassUtils";
-import { DiscordCache, DiscordKey, TChannel, TRenderableContentResolvable } from "../../discord";
-import { resolveToEmbeds, resolveToTexts } from "../../discord/embeds";
+import type { DChannel } from "../../../sage-utils/utils/DiscordUtils";
+import type DiscordFetches from "../../../sage-utils/utils/DiscordUtils/DiscordFetches";
+import type DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
+import { resolveToEmbeds, resolveToTexts } from "../../../sage-utils/utils/DiscordUtils/embeds";
+import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
 import { createAdminRenderableContent } from "../commands/cmd";
 import { DicePostType } from "../commands/dice";
 import { DialogType, IChannel } from "../repo/base/channel";
@@ -19,10 +22,9 @@ import type SageInteraction from "./SageInteraction";
 import type SageMessage from "./SageMessage";
 import type SageReaction from "./SageReaction";
 import type Server from "./Server";
-import type User from "./User";
 
-export interface SageCommandCore {
-	sageCache: SageCache;
+export interface SageCommandCore<HasGuild extends boolean = boolean, HasGuildChannel extends boolean = boolean, HasUser extends boolean = boolean> {
+	sageCache: SageCache<HasGuild, HasGuildChannel, HasUser>;
 }
 
 export interface ICanHaveServer<HasServer extends boolean = boolean> {
@@ -60,35 +62,21 @@ export type TSendOptions<HasEphemeral extends boolean = boolean> = {
 
 export type SageCommand = SageCommandBase<SageCommandCore, ISageCommandArgs, any>;
 
-export abstract class SageCommandBase<T extends SageCommandCore, U extends ISageCommandArgs, V extends SageCommandBase<T, U, any>, HasServer extends boolean = boolean>
+export abstract class SageCommandBase<
+		T extends SageCommandCore,
+		U extends ISageCommandArgs,
+		_V extends SageCommandBase<T, U, any>,
+		HasServer extends boolean = boolean,
+		HasGuild extends boolean = boolean,
+		HasGuildChannel extends boolean = boolean,
+		HasUser extends boolean = boolean
+		>
 	extends SuperClass
 	implements ICanHaveServer<HasServer>, ICanHaveGame {
 
 	//#region deprecated as part of SageCommand consolidation and object clarification
 	/** @deprecated use .discordKey.channel */
 	public get channelDid() { return this.discordKey.channel; }
-	/** @deprecated use .discordKey.thread */
-	public get threadDid() { return this.discordKey.thread; }
-	/** @deprecated use .discordKey.threadOrChannel */
-	public get threadOrChannelDid() { return this.discordKey.threadOrChannel; }
-	/** @deprecated use .actor.d */
-	public get user() { return this.actor.d; }
-	/** @deprecated use .args.getBoolean */
-	public getBoolean(name: string) { return this.args.getBoolean(name); }
-	/** @deprecated use .args.getNumber */
-	public getNumber(name: string): number | null;
-	/** @deprecated use .args.getNumber */
-	public getNumber(name: string, required: true): number;
-	public getNumber(name: string, required?: boolean) { return this.args.getNumber(name, required as true); }
-	/** @deprecated use .args.hasNumber */
-	public hasNumber(name: string) { return this.args.hasNumber(name); }
-	/** @deprecated use .args.getString */
-	public getString<T extends string = string>(name: string): T | null;
-	/** @deprecated use .args.getString */
-	public getString<T extends string = string>(name: string, required: true): T;
-	public getString(name: string, required?: boolean) { return this.args.getString(name, required as true); }
-	/** @deprecated use .args.hasString */
-	public hasString(name: string) { return this.args.hasString(name); }
 	//#endregion
 
 	public constructor(protected core: T) {
@@ -103,8 +91,8 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 
 	public abstract args: U;
 
-	/** TODO: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE! */
-	public abstract clone(): V;
+	/** @todo THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE! */
+	public clone(): this { return this; };
 
 	public abstract reply(renderableOrArgs: TRenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void>;
 
@@ -116,16 +104,13 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 
 	/** The User objects for the actor doing the thing. */
 	public get actor() { return this.sageCache.actor; }
-	/** @deprecated Renamed .sageCache */
-	public get caches(): SageCache { return this.core.sageCache; }
-	public get sageCache(): SageCache { return this.core.sageCache; }
+	public get sageCache(): SageCache<HasGuild, HasGuildChannel, HasUser> { return this.core.sageCache as SageCache; }
 	public get bot(): Bot { return this.sageCache.bot; }
-	public get discord(): DiscordCache { return this.sageCache.discord; }
+	/** @deprecated Use .sageCache.discord */
+	public get discord(): DiscordFetches<HasGuild, HasGuildChannel, HasUser> { return this.sageCache.discord; }
 	public get discordKey(): DiscordKey { return this.sageCache.discordKey; }
 	public get game(): Game | undefined { return this.sageCache.game; }
 	public get guild(): If<HasServer, TSageDiscordPair<Discord.Guild, Server>> { return this.sageCache.guild as any; }
-	/** @deprecated User .actor.s */
-	public get sageUser(): User { return this.actor.s; }
 	public get server(): If<HasServer, Server> { return this.sageCache.guild?.s as any; }
 
 	//#endregion
@@ -163,20 +148,20 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 
 	//#region user "isX" flags
 
-	/** Can admin Games */
-	public get isGameAdmin(): boolean {
-		return this.sageCache.actor.isGameAdmin;
-	}
+	// /** Can admin Games */
+	// public get isGameAdmin(): boolean {
+	// 	return this.sageCache.actor.isGameAdmin;
+	// }
 
 	/** Is the server HomeServer */
 	public get isHomeServer(): boolean {
 		return this.guild?.s.isHome === true;
 	}
 
-	/** Can admin Server */
-	public get isServerAdmin(): boolean {
-		return this.sageCache.actor.isServerAdmin;
-	}
+	// /** Can admin Server */
+	// public get isServerAdmin(): boolean {
+	// 	return this.sageCache.actor.isServerAdmin;
+	// }
 
 	/** Is a SuperUser */
 	public get isSuperUser(): boolean {
@@ -211,7 +196,7 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 		// 		// const categoryGames = await utils.ArrayUtils.Async.map(categoryChannels, channel => server.getActiveGameByChannelDid(channel.id));
 		// 		const categoryGame = categoryGames[0];
 		// 		if (categoryGame) {
-		// 			return this.caches.games.getById(categoryGame.id);
+		// 			return this.sageCache.games.getById(categoryGame.id);
 		// 		}
 		// 	}
 		// }
@@ -244,7 +229,7 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 
 	/** Returns the gameChannel meta for the message, checking the thread before checking its channel. */
 	public get gameChannel(): IChannel | undefined {
-		return this.cache.get("gameChannel", () => this.game?.getChannel(this.discordKey));
+		return this.cache.get("gameChannel", () => this.game?.getChannel(this.discordKey.channel));
 	}
 
 	/** Returns the GameType by climbing the chain: game > serverChannel > server > GameType.None */
@@ -319,12 +304,12 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 
 	public checkCanAdminGames(): this is IHaveServer;
 	public checkCanAdminGames(): boolean {
-		return !!this.server && this.isSuperUser || this.isServerAdmin || this.isGameAdmin;
+		return !!this.server && (this.actor.isSuperUser || this.actor.isServerAdmin || this.actor.isGameAdmin);
 	}
 
 	public checkCanAdminServer(): this is IHaveServer;
 	public checkCanAdminServer(): boolean {
-		return !!this.server && this.channel?.admin === true && (this.isSuperUser || this.isServerAdmin);
+		return !!this.server && (this.actor.isSuperUser || this.actor.isServerAdmin);
 	}
 
 	// #endregion
@@ -332,7 +317,7 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 	protected resolveToOptions(renderableOrArgs: TRenderableContentResolvable | TSendArgs, ephemeral?: boolean): TSendOptions {
 		if ((typeof(renderableOrArgs) === "string") || ("toRenderableContent" in renderableOrArgs)) {
 			return {
-				embeds: resolveToEmbeds(this.sageCache, renderableOrArgs),
+				embeds: resolveToEmbeds(renderableOrArgs, this.sageCache.getFormatter()),
 				ephemeral: ephemeral
 			};
 		}
@@ -341,12 +326,12 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 		if (renderableOrArgs.content) {
 			options.content = typeof(renderableOrArgs.content) === "string"
 				? renderableOrArgs.content
-				: resolveToTexts(this.sageCache, renderableOrArgs.content).join("\n");
+				: resolveToTexts(renderableOrArgs.content, this.sageCache.getFormatter()).join("\n");
 		}
 		if (renderableOrArgs.embeds) {
 			options.embeds = Array.isArray(renderableOrArgs.embeds)
 				? renderableOrArgs.embeds
-				: resolveToEmbeds(this.sageCache, renderableOrArgs.embeds);
+				: resolveToEmbeds(renderableOrArgs.embeds, this.sageCache.getFormatter());
 		}
 		if (renderableOrArgs.components) {
 			options.components = renderableOrArgs.components;
@@ -356,13 +341,16 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 	}
 
 	/** tests to see if Sage can send messsages to the channel (given or from the message/interaction) */
-	public async canSend(targetChannel: Optional<TChannel>): Promise<boolean> {
-		if (this.isSageMessage() || this.isSageReaction()) {
-			return this.sageCache.canSendMessageTo(DiscordKey.fromChannel(targetChannel ?? this.message.channel as TChannel));
-		}else if (this.isSageInteraction()) {
-			return this.sageCache.canSendMessageTo(DiscordKey.fromChannel(targetChannel ?? this.interaction.channel as TChannel));
+	public async canSend(targetChannel: Optional<DChannel>): Promise<boolean> {
+		if (!targetChannel) {
+			if (this.isSageMessage() || this.isSageReaction()) {
+				targetChannel = this.message.channel as DChannel;
+			}
+			if (this.isSageInteraction()) {
+				targetChannel = this.interaction.channel as DChannel;
+			}
 		}
-		return false;
+		return this.sageCache.discord.canSendMessageTo(targetChannel);
 	}
 
 	//#region deny commands
@@ -382,11 +370,15 @@ export abstract class SageCommandBase<T extends SageCommandCore, U extends ISage
 	}
 
 	public denyForCanAdminGame(label: string): Promise<void> {
-		return this.denyByPerm(label, "Must be a GameMaster for this game or a GameAdmin, ServerAdmin, SageAdmin, or Owner of this server.");
+		return this.denyByPerm(label, "Must be a GameMaster for this game or a GameAdmin, Administrator, Manager, or Owner of this server.");
+	}
+
+	public denyForCanAdminGames(label: string): Promise<void> {
+		return this.denyByPerm(label, "Must be GameAdmin, Administrator, Manager, or Owner of this server.");
 	}
 
 	public denyForCanAdminServer(label: string): Promise<void> {
-		return this.denyByPerm(label, "Must be a ServerAdmin, SageAdmin, or Owner of this server.");
+		return this.denyByPerm(label, "Must be Administrator, Manager, or Owner of this server.");
 	}
 
 	//#endregion

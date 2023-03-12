@@ -9,22 +9,22 @@ async function listGameMasters(sageMessage: SageMessage): Promise<void> {
 
 async function addGameMaster(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("Add Game Master");
 	}
 
 	const users = Array.from(sageMessage.message.mentions.users.values());
 	const added = await sageMessage.game!.addGameMasters(users.map(user => user.id));
-	return sageMessage.reactSuccessOrFailure(added);
+	return sageMessage.reactSuccessOrFailure(added, "Game Master Added.", "Unknown Error; Game Master NOT Added!");
 }
 
 async function removeGameMaster(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("Remove Game Master");
 	}
 
 	const users = Array.from(sageMessage.message.mentions.users.values());
-	const added = await sageMessage.game!.removeGameMasters(users.map(user => user.id));
-	return sageMessage.reactSuccessOrFailure(added);
+	const removed = await sageMessage.game!.removeGameMasters(users.map(user => user.id));
+	return sageMessage.reactSuccessOrFailure(removed, "Game Master Removed.", "Unknown Error; Game Master NOT Removed!");
 }
 
 export default function register(): void {

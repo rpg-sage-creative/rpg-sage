@@ -1,9 +1,9 @@
 import type { Snowflake } from "discord.js";
 import * as _XRegExp from "xregexp";
 import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e";
-import type { Args, Optional, UUID, VALID_UUID } from "../../../sage-utils";
-import { DiscordKey, NilSnowflake } from "../../discord";
-import type { DiscordKeyCore } from "../../discord/DiscordKey";
+import type { Args, Optional, UUID } from "../../../sage-utils";
+import { isNonNilSnowflake } from "../../../sage-utils/utils/DiscordUtils";
+import type DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import type { TDialogMessage } from "../repo/DialogMessageRepository";
 import DialogMessageRepository from "../repo/DialogMessageRepository";
 import CharacterManager from "./CharacterManager";
@@ -43,19 +43,13 @@ export interface GameCharacterCore {
 
 /** Determine if the snowflakes are different. */
 function diff(a?: Snowflake, b?: Snowflake) {
-	return (a ?? NilSnowflake) !== (b ?? NilSnowflake);
+	const aIsNotNil = isNonNilSnowflake(a);
+	const bIsNotNil = isNonNilSnowflake(b);
+	return aIsNotNil && bIsNotNil && a !== b;
 }
 
 function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage): boolean {
 	const messageKey = DialogMessageRepository.ensureDiscordKey(dialogMessage).discordKey;
-	const hasThread = (messageKey.thread ?? NilSnowflake) !== NilSnowflake;
-	if (hasThread) {
-		return messageKey.channel === discordKey.channel
-			&& messageKey.thread === discordKey.thread;
-	}
-	if (discordKey.hasThread) {
-		return messageKey.channel === discordKey.thread;
-	}
 	return messageKey.channel === discordKey.channel;
 }
 
@@ -179,16 +173,9 @@ export default class GameCharacter implements IHasSave {
 		return Promise.resolve(false);
 	}
 
-	public hasAutoChannel(didOrKey: Optional<DiscordKeyCore | Snowflake>): boolean {
-		if (didOrKey) {
-			const autoChannels = this.autoChannels;
-			const discordKey = typeof(didOrKey) === "string" ? { channel:didOrKey } : didOrKey;
-			const channel = discordKey.channel!;
-			if (discordKey.thread) {
-				return autoChannels.includes(discordKey.thread)
-					?? autoChannels.includes(channel);
-			}
-			return autoChannels.includes(channel);
+	public hasAutoChannel(channelId: Optional<Snowflake>): boolean {
+		if (channelId) {
+			return this.autoChannels.includes(channelId);
 		}
 		return false;
 	}
@@ -228,22 +215,12 @@ export default class GameCharacter implements IHasSave {
 
 	public setLastMessage(dialogMessage: TDialogMessage): void {
 		const dialogMessageKey = DialogMessageRepository.ensureDiscordKey(dialogMessage).discordKey;
-		const newHasThread = diff(dialogMessageKey.thread);
 		const lastMessages = this.lastMessages;
 		// we only replace the last message for the given thread/channel in a given server; so keep the others
 		const filtered = lastMessages.filter(lastMessage => {
 			const lastMessageKey = DialogMessageRepository.ensureDiscordKey(lastMessage).discordKey;
 			if (diff(lastMessageKey.server, dialogMessageKey.server)) {
 				return true;
-			}
-			const thisHasThread = diff(lastMessageKey.thread);
-			if (newHasThread && thisHasThread) {
-				return diff(lastMessageKey.thread, dialogMessageKey.thread);
-			}else if (thisHasThread) {
-				return true;
-			}else if (newHasThread) {
-				// fallback for older data that wasn't tracking threads
-				return diff(lastMessageKey.channel, dialogMessageKey.thread);
 			}
 			return diff(lastMessageKey.channel, dialogMessageKey.channel);
 		});

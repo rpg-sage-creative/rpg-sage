@@ -1,11 +1,11 @@
 import { UNICODE_ZERO_TO_TEN } from "../sage-common";
-import type { IMenuRenderable } from "../sage-lib/discord";
 import type { IHasName } from "../sage-pf2e";
 import type Source from "../sage-pf2e/model/base/Source";
 import type { IRenderable, ISearchable, OrUndefined } from "../sage-utils";
 import { RenderableContent } from "../sage-utils/utils/RenderUtils";
 import { HasScoredSearchables, SearchInfo, SearchScore } from "../sage-utils/utils/SearchUtils";
 import { StringMatcher } from "../sage-utils/utils/StringUtils";
+import type { IMenuRenderable } from "./IMenuRenderable";
 
 type TRenderableMeta = { hasCompScore:boolean; sources:Source[]; unicodeArray:string[]; unicodeIndex:number; };
 

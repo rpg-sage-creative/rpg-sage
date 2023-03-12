@@ -1,16 +1,14 @@
-import type * as Discord from "discord.js";
-import utils, { Optional } from "../../../sage-utils";
+import utils from "../../../sage-utils";
+import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
-import type { TChannel, TCommandAndArgs } from "../../discord";
+import type { TCommandAndArgs } from "../../discord";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import { send } from "../../discord/messages";
 import type SageCache from "../model/SageCache";
 import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
-import User from "../model/User";
 import { createCommandRenderableContent } from "./cmd";
-import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
 
 // #region Register Help Text
 
@@ -95,10 +93,6 @@ async function appendHelpSection(renderableContent: utils.RenderUtils.Renderable
 	renderableContent.append(`${helpTexts.map(helpText => prefix + helpText).join("\n")}`);
 }
 
-type TSuperUserFilter = (value: string) => boolean;
-function getSuperUserFilter(authorDid: Optional<Discord.Snowflake>): TSuperUserFilter {
-	return User.isSuperUser(authorDid) ? utils.ArrayUtils.Filters.exists : (value: string) => value !== "SuperUser";
-}
 async function renderHelpAll(caches: SageCache): Promise<utils.RenderUtils.RenderableContent> {
 	const renderableContent = createCommandRenderableContent();
 	const prefix = caches.getPrefixOrDefault();
@@ -124,9 +118,8 @@ async function renderHelpAll(caches: SageCache): Promise<utils.RenderUtils.Rende
 }
 async function renderMainHelp(caches: SageCache): Promise<utils.RenderUtils.RenderableContent> {
 	const renderableContent = createCommandRenderableContent();
-	const suFilter = getSuperUserFilter(caches.userDid);
 	const prefix = caches.getPrefixOrDefault();
-	const categoriesOutput = getHelpSubCategories("", 0).filter(suFilter).join("\n").trim();
+	const categoriesOutput = getHelpSubCategories("", 0).join("\n").trim();
 	renderableContent.appendTitledSection("<i>help syntax</i>", `<code>${prefix}!help {category}</code>`);
 	renderableContent.appendTitledSection("Categories", categoriesOutput);
 	renderableContent.appendTitledSection("<i>examples</i>", `<code>${prefix}!help command</code>`, `<code>${prefix}!help search</code>`);
@@ -143,8 +136,7 @@ async function renderSubCategoriesOnly(caches: SageCache, categories: string[]):
 	const renderableContent = createCommandRenderableContent(),
 		helpCategoryKey = toHelpCategoryKey(categories),
 		category = categories.slice().pop(),
-		suFilter = getSuperUserFilter(caches.user?.id),
-		helpSubCategories = getHelpSubCategories(helpCategoryKey, categories.length).filter(suFilter);
+		helpSubCategories = getHelpSubCategories(helpCategoryKey, categories.length);
 	let prefix = caches.getPrefixOrDefault();
 
 	renderableContent.appendTitledSection(`<b>${category} syntax</b>`);
@@ -226,7 +218,7 @@ function renderHelpTester(sageMessage: SageMessage): TCommandAndArgs | null {
 		return null;
 	}
 
-	if (User.isSuperUser(sageMessage?.message?.author?.id) && sageMessage.slicedContent === "!help-all") {
+	if (sageMessage.isSuperUser && sageMessage.slicedContent === "!help-all") {
 		return {
 			command: "help",
 			args: ArgsManager.from(["help", "all"])
@@ -245,8 +237,8 @@ function renderHelpTester(sageMessage: SageMessage): TCommandAndArgs | null {
 async function renderHelpHandler(sageMessage: SageMessage): Promise<void> {
 	const renderableContent = createCommandRenderableContent(`<b>RPG Sage Help</b>`);
 	renderableContent.appendTitledSection("Slash Command", `/sage help`);
-	renderableContent.appendTitledSection("Guides", `<a href="https://rpgsage.io">Command Guide</a>`, `<a href="https://rpgsage.io/quick.html">Quick Start Guide</a>`);
-	await send(sageMessage.caches, sageMessage.message.channel as TChannel, renderableContent, sageMessage.message.author);
+	renderableContent.appendTitledSection("Guides", `<a href="https://rpgsage.io/features.html">Feature Guide</a>`, `<a href="https://rpgsage.io">Command Guide</a>`, `<a href="https://rpgsage.io/quick.html">Quick Start Guide</a>`);
+	await send(sageMessage.sageCache, sageMessage.message.channel, renderableContent, sageMessage.message.author);
 }
 // #endregion
 
@@ -257,8 +249,8 @@ function helpSlashTester(sageInteraction: SageInteraction): boolean {
 }
 
 async function helpSlashHandler(sageInteraction: SageInteraction): Promise<void> {
-	const categories = sageInteraction.getString("category")?.split(",") ?? [];
-	const renderableContent = await createHelpRenderable(sageInteraction.caches, categories);
+	const categories = sageInteraction.args.getString("category")?.split(",") ?? [];
+	const renderableContent = await createHelpRenderable(sageInteraction.sageCache, categories);
 	return sageInteraction.reply(renderableContent, true);
 }
 

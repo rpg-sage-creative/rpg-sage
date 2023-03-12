@@ -1,12 +1,11 @@
 import utils, { LogLevel } from "../sage-utils";
-import registerPrompts from "./discord";
-import { setBotMeta } from "./discord/handlers";
-import { SageDialogWebhookName } from "./discord/messages";
+import { addAcceptableBot } from "./discord/handlers";
 import { registerAndLoad } from "../sage-pf2e";
 import { registerCommandHandlers } from "./sage/commands";
 import ActiveBot from "./sage/model/ActiveBot";
 import type { TBotCodeName } from "./sage/model/Bot";
 import BotRepo from "./sage/repo/BotRepo";
+import DiscordFetches from "../sage-utils/utils/DiscordUtils/DiscordFetches";
 /*
 // import type Bot from "./sage/model/Bot";
 // import Server from "./sage/model/Server";
@@ -17,14 +16,15 @@ export function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: st
 	utils.ConsoleUtils.startHandling(logLevel);
 
 	BotRepo.getByCodeName(botCodeName).then(bot => {
-		setBotMeta({ activeBotDid:bot.did, dialogWebhookName:SageDialogWebhookName, testBotDid:undefined });
+		DiscordFetches.botId = bot.did;
+		DiscordFetches.webhookName = bot.dialogWebhookName;
+		addAcceptableBot(...bot.acceptableBots);
 
 		/*
 		// configureCommands(bot);
 		*/
 
 		registerCommandHandlers();
-		registerPrompts();
 
 		registerAndLoad(pf2DataPath, includePf2ToolsData).then(() => ActiveBot.activate(botCodeName, ver));
 	}, err => {

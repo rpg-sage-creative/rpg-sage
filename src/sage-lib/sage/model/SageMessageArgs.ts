@@ -3,8 +3,8 @@ import type { Args, Optional, VALID_UUID } from "../../../sage-utils";
 import { EnumUtils } from "../../../sage-utils/utils";
 import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
 import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
 import { isValid as isValidUuid } from "../../../sage-utils/utils/UuidUtils";
-import DiscordId from "../../discord/DiscordId";
 import { cleanEnumArgValues, ISageCommandArgs } from "./SageCommandArgs";
 import type SageMessage from "./SageMessage";
 
@@ -219,11 +219,8 @@ export default class SageMessageArgs<T extends string = string> extends ArgsMana
 	public channelDids(addCurrentIfEmpty: true): Snowflake[];
 	public channelDids(addCurrentIfEmpty?: true): Snowflake[] {
 		const channelDids = this.sageMessage.message.mentions.channels.map(channel => channel.id);
-		if (!channelDids.length && addCurrentIfEmpty) {
-			const current = this.sageMessage.discordKey.threadOrChannel;
-			if (current) {
-				channelDids.push(current);
-			}
+		if (!channelDids.length && addCurrentIfEmpty && this.sageMessage.discordKey.hasChannel) {
+			channelDids.push(this.sageMessage.discordKey.channel);
 		}
 		return channelDids;
 	}

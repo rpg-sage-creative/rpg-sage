@@ -15,10 +15,10 @@ function findMacro(sageMessage: SageMessage, name?: Optional<string>, category?:
 
 	const categoryMatcher = utils.StringUtils.StringMatcher.from(category);
 	if (categoryMatcher.isBlank) {
-		return sageMessage.sageUser.macros.find(macro => nameMatcher.matches(macro.name));
+		return sageMessage.actor.s.macros.find(macro => nameMatcher.matches(macro.name));
 	}
 
-	return sageMessage.sageUser.macros.find(macro => nameMatcher.matches(macro.name) && macro.category && categoryMatcher.matches(macro.category));
+	return sageMessage.actor.s.macros.find(macro => nameMatcher.matches(macro.name) && macro.category && categoryMatcher.matches(macro.category));
 }
 
 async function noMacrosFound(sageMessage: SageMessage): Promise<void> {
@@ -34,10 +34,10 @@ function toList(macros: TMacro[]): string {
 
 async function macroList(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("List Macros", "This channel must Allow Admin or Dice commands.");
 	}
 
-	const macros = sageMessage.sageUser.macros;
+	const macros = sageMessage.actor.s.macros;
 	if (!macros.length) {
 		return noMacrosFound(sageMessage);
 	}
@@ -100,7 +100,7 @@ async function macroCreate(sageMessage: SageMessage, macro: TMacro): Promise<boo
 
 	const bool = await discordPromptYesNo(sageMessage, promptRenderable);
 	if (bool === true) {
-		return sageMessage.sageUser.macros.pushAndSave(macro);
+		return sageMessage.actor.s.macros.pushAndSave(macro);
 	}
 	return false;
 }
@@ -115,50 +115,45 @@ async function macroUpdate(sageMessage: SageMessage, existing: TMacro, updated: 
 	if (bool === true) {
 		existing.category = updated.category ?? existing.category;
 		existing.dice = updated.dice;
-		return sageMessage.sageUser.save();
+		return sageMessage.actor.s.save();
 	}
 	return false;
 }
 async function macroSet(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("Set Macro", "This channel must Allow Admin or Dice commands.");
 	}
 
 	const content = sageMessage.args.valueByKey(/dice|macro|value/i)
 		?? sageMessage.args.unkeyedValues().join(" ");
 
 	const diceMatch = content.match(/\[[^\]]+\]/ig);
-	if (!diceMatch) {
-		return sageMessage.reactFailure();
-	}
-
 	const macroCategory = sageMessage.args.valueByKey(/cat(egory)?/i) ?? undefined;
-	const macroDice = diceMatch.join("");
-	const macroName = sageMessage.args.valueByKey("name") ?? content.replace(macroDice, "").trim();
-	if (!macroName) {
-		return sageMessage.reactFailure();
+	const macroName = sageMessage.args.valueByKey("name");
+	if (!macroName || !diceMatch) {
+		return sageMessage.reactFailure("Must include a name and dice roll. Ex: sage!!macro set name=\"sword\" dice=\"[1d20 sword]\"");
 	}
 
 	let saved = false;
 	const oldMacro = findMacro(sageMessage, macroName);
-	const newMacro = { category:macroCategory, name:macroName, dice:macroDice };
+	const newMacro = { category:macroCategory, name:macroName, dice:diceMatch.join(" ") };
 	if (oldMacro) {
 		saved = await macroUpdate(sageMessage, oldMacro, newMacro);
 	} else {
 		saved = await macroCreate(sageMessage, newMacro);
 	}
-	return sageMessage.reactSuccessOrFailure(saved);
+	return sageMessage.reactSuccessOrFailure(saved, "Macro Set.", "Unkonwn Error; Macro NOT Set!");
 }
 
 async function macroMove(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("Move Macro", "This channel must Allow Admin or Dice commands.");
 	}
 
 	const macroCategory = sageMessage.args.valueByKey(/cat(egory)?/i);
 	const macroName = sageMessage.args.valueByKey("name");
 	if (!macroName || !macroCategory) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Must include a category and a name. Ex: sage!!amcro move name=\"short sword\" cat=\"swords\"");
 	}
 
 	let saved = false;
@@ -173,15 +168,15 @@ async function macroMove(sageMessage: SageMessage): Promise<void> {
 		const bool = await discordPromptYesNo(sageMessage, promptRenderable);
 		if (bool === true) {
 			existing.category = macroCategory ?? existing.category;
-			saved = await sageMessage.sageUser.save();
+			saved = await sageMessage.actor.s.save();
 		}
 	}
-	return sageMessage.reactSuccessOrFailure(saved);
+	return sageMessage.reactSuccessOrFailure(saved, "Macro Moved.", "Unknown Error; Macro NOT Moved!");
 }
 
 async function macroDetails(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("Show Macro Details", "This channel must Allow Admin or Dice commands.");
 	}
 
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>Macro Details</b>`);
@@ -198,7 +193,7 @@ async function macroDetails(sageMessage: SageMessage): Promise<void> {
 
 async function deleteCategory(sageMessage: SageMessage, category: string): Promise<void> {
 	const cleanCategory = utils.StringUtils.StringMatcher.clean(category);
-	const byCategory = sageMessage.sageUser.macros.filter(macro => cleanCategory === utils.StringUtils.StringMatcher.clean(macro.category ?? UNCATEGORIZED));
+	const byCategory = sageMessage.actor.s.macros.filter(macro => cleanCategory === utils.StringUtils.StringMatcher.clean(macro.category ?? UNCATEGORIZED));
 	if (!byCategory.length) {
 		return <any>sageMessage.send(createAdminRenderableContent(sageMessage.getHasColors(), `Macro Category Not Found!`));
 	}
@@ -208,42 +203,42 @@ async function deleteCategory(sageMessage: SageMessage, category: string): Promi
 
 	const yes = await discordPromptYesNo(sageMessage, renderableContent);
 	if (yes === true) {
-		const saved = await sageMessage.sageUser.macros.removeAndSave(...byCategory);
-		return sageMessage.reactSuccessOrFailure(saved);
+		const saved = await sageMessage.actor.s.macros.removeAndSave(...byCategory);
+		return sageMessage.reactSuccessOrFailure(saved, "Macro Category Deleted.", "Unknown Error; Macro Category NOT Deleted!");
 	}
 
 	return Promise.resolve();
 }
 async function macroDeleteCategory(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("Delete Macro Category", "This channel must Allow Admin or Dice commands.");
 	}
 
 	const macroCategory = sageMessage.args.valueByKey(/cat(egory)?/i);
 	if (macroCategory) {
 		return deleteCategory(sageMessage, macroCategory);
 	}
-	return sageMessage.reactFailure();
+	return sageMessage.reactFailure("Macro Category not found!");
 }
 
 async function macroDeleteAll(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("Delete All Macros", "This channel must Allow Admin or Dice commands.");
 	}
 
-	const count = sageMessage.sageUser.macros.length;
+	const count = sageMessage.actor.s.macros.length;
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Delete All ${count} Macros?`);
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable);
 	if (yes === true) {
-		const saved = await sageMessage.sageUser.macros.emptyAndSave();
-		return sageMessage.reactSuccessOrFailure(saved);
+		const saved = await sageMessage.actor.s.macros.emptyAndSave();
+		await sageMessage.reactSuccessOrFailure(saved, "All Macros Deleted", "Unknown Error; All Macros NOT Deleted!");
 	}
 	return Promise.resolve();
 }
 
 async function deleteMacro(sageMessage: SageMessage, macro: Optional<TMacro>): Promise<void> {
 	if (!macro) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Macro Not Found!");
 	}
 
 	const macroPrompt = macroToPrompt(macro, false);
@@ -251,14 +246,14 @@ async function deleteMacro(sageMessage: SageMessage, macro: Optional<TMacro>): P
 	promptRenderable.append(macroPrompt);
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable);
 	if (yes === true) {
-		const saved = await sageMessage.sageUser.macros.removeAndSave(macro);
-		return sageMessage.reactSuccessOrFailure(saved);
+		const saved = await sageMessage.actor.s.macros.removeAndSave(macro);
+		return sageMessage.reactSuccessOrFailure(saved, "Macro Deleted.", "Unknown Error; Macro NOT Deleted!");
 	}
 	return Promise.resolve();
 }
 async function macroDelete(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("Delete Macro", "This channel must Allow Admin or Dice commands.");
 	}
 
 	const macroCategory = sageMessage.args.valueByKey(/cat(egory)?/i);
@@ -270,10 +265,10 @@ async function macroDelete(sageMessage: SageMessage): Promise<void> {
 		const macro = findMacro(sageMessage, macroName, macroCategory);
 		return deleteMacro(sageMessage, macro);
 	} else if (macroName) {
-		const macro = sageMessage.sageUser.macros.findByName(macroName);
+		const macro = sageMessage.actor.s.macros.findByName(macroName);
 		return deleteMacro(sageMessage, macro);
 	}
-	return sageMessage.reactFailure();
+	return sageMessage.reactFailure("Macro not found!");
 }
 
 export default function register(): void {

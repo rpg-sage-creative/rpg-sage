@@ -1,11 +1,13 @@
 import * as Discord from "discord.js";
 import type { Optional } from "../../../sage-utils";
 import { errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import type { DChannel } from "../../../sage-utils/utils/DiscordUtils";
+import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
 import { getText } from "../../../sage-utils/utils/HttpsUtils";
 import { capitalize, StringMatcher } from "../../../sage-utils/utils/StringUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
-import { DiscordId, TChannel, TCommandAndArgsAndData } from "../../discord";
+import type { TCommandAndArgsAndData } from "../../discord";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import { discordPromptYesNoDeletable } from "../../discord/prompts";
 import ActiveBot from "../model/ActiveBot";
@@ -105,7 +107,7 @@ function ensurePlayerCharacter(sageInteraction: SageInteraction, gameMap: GameMa
 					pos: gameMap.spawn ?? [1,1],
 					size: [1,1],
 					url: charUrl,
-					userId: sageInteraction.user.id
+					userId: sageInteraction.actor.did
 				});
 				updated = true;
 			}else {
@@ -324,9 +326,9 @@ async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore)
 		const pwConfiguring = await channel.send(`Importing and configuring: ${mapCore.name} ...`);
 		del(msgImport);
 		if (!mapCore.userId) {
-			mapCore.userId = sageMessage.sageUser.did;
+			mapCore.userId = sageMessage.actor.s.did;
 		}
-		const success = await renderMap(channel as TChannel, new GameMap(mapCore, mapCore.userId));
+		const success = await renderMap(channel, new GameMap(mapCore, mapCore.userId));
 		if (!success) {
 			await channel.send(`Sorry, something went wrong importing the map.`);
 		}
@@ -356,8 +358,8 @@ async function actionTester(sageInteraction: SageInteraction): Promise<TActionDa
 	const mapAction = (sageInteraction.interaction.customId ?? "").split("|")[1] as TMapAction;
 	const messageId = sageInteraction.interaction.message?.id;
 	if (MapActions.includes(mapAction) && messageId && GameMap.exists(messageId)) {
-		const userDid = sageInteraction.user?.id;
-		const gameMap = userDid ? await GameMap.forUser(messageId, sageInteraction.user.id, true) : null;
+		const userDid = sageInteraction.actor?.did;
+		const gameMap = userDid ? await GameMap.forUser(messageId, userDid, true) : null;
 		if (gameMap) {
 			return { gameMap, mapAction };
 		}
@@ -373,19 +375,19 @@ async function actionTester(sageInteraction: SageInteraction): Promise<TActionDa
 function mapAuraTester(sageInteraction: SageInteraction): boolean {
 	return !!sageInteraction.interaction.channel
 		&& sageInteraction.isCommand("Map", "AddImage")
-		&& sageInteraction.getString("layer") === "aura";
+		&& sageInteraction.args.getString("layer") === "aura";
 }
 
 function mapTerrainTester(sageInteraction: SageInteraction): boolean {
 	return !!sageInteraction.interaction.channel
 		&& sageInteraction.isCommand("Map", "AddImage")
-		&& sageInteraction.getString("layer") === "terrain";
+		&& sageInteraction.args.getString("layer") === "terrain";
 }
 
 function mapTokenTester(sageInteraction: SageInteraction): boolean {
 	return !!sageInteraction.interaction.channel
 		&& sageInteraction.isCommand("Map", "AddImage")
-		&& sageInteraction.getString("layer") === "token";
+		&& sageInteraction.args.getString("layer") === "token";
 }
 
 //#endregion
@@ -433,7 +435,7 @@ async function mapAuraHandler(sageInteraction: SageInteraction): Promise<void> {
 
 	aura.opacity = 0.5;
 
-	const anchorName = sageInteraction.getString("anchor");
+	const anchorName = sageInteraction.args.getString("anchor");
 	const matcher = new StringMatcher(anchorName);
 	const anchor = gameMap.userTokens.find(token => matcher.matches(token.name));
 	if (anchor) {
@@ -500,9 +502,9 @@ async function mapTokenHandler(sageInteraction: SageInteraction): Promise<void> 
 
 /** reads the interaction's channel's messages to find the map */
 async function findGameMap(sageInteraction: SageInteraction<Discord.ButtonInteraction>): Promise<GameMap | null> {
-	const mapValue = sageInteraction.getString("map", true);
+	const mapValue = sageInteraction.args.getString("map", true);
 	if (DiscordId.isValidId(mapValue)) {
-		return GameMap.forUser(mapValue, sageInteraction.user.id);
+		return GameMap.forUser(mapValue, sageInteraction.actor.did);
 	}
 	const messages = await sageInteraction.interaction.channel?.messages.fetch();
 	if (!messages) {
@@ -517,7 +519,7 @@ async function findGameMap(sageInteraction: SageInteraction<Discord.ButtonIntera
 		return false;
 	});
 	return messageId
-		? GameMap.forUser(messageId, sageInteraction.user.id)
+		? GameMap.forUser(messageId, sageInteraction.actor.did)
 		: null;
 }
 
@@ -528,29 +530,31 @@ async function parseInput<T extends TGameMapImage>(sageInteraction: SageInteract
 		return [null, null];
 	}
 
-	const layerValue = capitalize(sageInteraction.getString("layer", true)) as "Aura" | "Terrain" | "Token";
+	const args = sageInteraction.args;
+
+	const layerValue = capitalize(args.getString("layer", true)) as "Aura" | "Terrain" | "Token";
 
 	const image: TGameMapImage = {
 		auras: [],
 		id: Discord.SnowflakeUtil.generate(),
 		layer: LayerType[layerValue],
-		name: sageInteraction.getString("name", true),
+		name: args.getString("name", true),
 		pos: [
-			sageInteraction.getNumber("col") ?? gameMap.spawn[COL],
-			sageInteraction.getNumber("row") ?? gameMap.spawn[ROW]
+			args.getNumber("col") ?? gameMap.spawn[COL],
+			args.getNumber("row") ?? gameMap.spawn[ROW]
 		],
 		size: [
-			sageInteraction.getNumber("cols") ?? 1,
-			sageInteraction.getNumber("rows") ?? 1
+			args.getNumber("cols") ?? 1,
+			args.getNumber("rows") ?? 1
 		],
-		url: sageInteraction.getString("url", true),
-		userId: sageInteraction.user.id
+		url: args.getString("url", true),
+		userId: sageInteraction.actor.did
 	};
 
 	return [gameMap, image as T];
 }
 
-async function renderMap(messageOrChannel: Optional<Discord.Message | TChannel>, gameMap: GameMap): Promise<boolean> {
+async function renderMap(messageOrChannel: Optional<Discord.Message | DChannel>, gameMap: GameMap): Promise<boolean> {
 	if (!messageOrChannel) {
 		return false;
 	}

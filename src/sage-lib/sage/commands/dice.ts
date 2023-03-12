@@ -1,15 +1,17 @@
 import type * as Discord from "discord.js";
+import type { GameType } from "../../../sage-common";
 import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "../../../sage-dice";
 import { NEWLINE } from "../../../sage-pf2e";
 import type { Optional, TKeyValueArg } from "../../../sage-utils";
+import { DChannel, DUser, MessageType, toHumanReadable } from "../../../sage-utils/utils/DiscordUtils";
+import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
+import { createMessageEmbed } from "../../../sage-utils/utils/DiscordUtils/embeds";
+import { sendTo } from "../../../sage-utils/utils/DiscordUtils/sendMessage";
 import { addCommas } from "../../../sage-utils/utils/NumberUtils";
 import { random, randomItem } from "../../../sage-utils/utils/RandomUtils";
 import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, Tokenizer } from "../../../sage-utils/utils/StringUtils";
-import type { DUser, TChannel, TCommandAndArgsAndData } from "../../discord";
-import { DiscordId, MessageType } from "../../discord";
-import { createMessageEmbed } from "../../discord/embeds";
+import type { TCommandAndArgsAndData } from "../../discord";
 import { registerMessageListener } from "../../discord/handlers";
-import { authorToMention, sendTo } from "../../discord/messages";
 import { GameUserType } from "../model/Game";
 import { ColorType } from "../model/HasColorsCore";
 import type NamedCollection from "../model/NamedCollection";
@@ -18,11 +20,10 @@ import SageMessage from "../model/SageMessage";
 import type { TMacro } from "../model/User";
 import { registerCommandRegex } from "./cmd";
 import { registerInlineHelp } from "./help";
-import type { GameType } from "../../../sage-common";
 
 type TInteraction = SageMessage | SageInteraction;
 
-type TGmChannel = Optional<TChannel | DUser>;
+type TGmChannel = Optional<DChannel | DUser>;
 
 // type TDiceOutput = {
 // 	hasSecret: boolean;
@@ -89,9 +90,9 @@ function parseDiscordMacro(sageMessage: SageMessage, macroString: string): Disco
 	let diceString = macroString;
 	const macroNames = <string[]>[];
 	let macroAndOutput: TMacroAndOutput | null;
-	while (macroAndOutput = macroToDice(sageMessage.sageUser.macros, debrace(diceString))) {
+	while (macroAndOutput = macroToDice(sageMessage.actor.s.macros, debrace(diceString))) {
 		if (macroNames.includes(macroAndOutput.macro.name)) {
-			console.error(`MACRO RECURSION: User(${sageMessage.sageUser.id}) ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}`);
+			console.error(`MACRO RECURSION: User(${sageMessage.actor.s.id}) ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}`);
 			return parseDiscordDice(sageMessage, `[1d1 MACRO RECURSION: ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}]`);
 		}
 		macroNames.push(macroAndOutput.macro.name);
@@ -169,12 +170,12 @@ async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommand
 	return null;
 }
 
-async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: TChannel, gmTargetChannel: TGmChannel): Promise<void> {
+async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: DChannel, gmTargetChannel: TGmChannel): Promise<void> {
 	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0,
 		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
 		publicMentionLine = await createMentionLine(sageMessage),
 		secretMentionLine = await createMentionLine(sageMessage, true),
-		sageCache = sageMessage.caches;
+		sageCache = sageMessage.sageCache;
 
 	let doGmMention = hasSecret && !!gmTargetChannel;
 	let doMention = !allSecret;
@@ -187,19 +188,19 @@ async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: T
 			// prepend the mention if we haven't done so yet; stop us from doing it again; send the message
 			const gmPostContent = doGmMention ? `${secretMentionLine}\n${formattedOutput.postContent}` : formattedOutput.postContent!;
 			doGmMention = false;
-			await sendTo({ target: gmTargetChannel, content: gmPostContent.trim(), embeds, sageCache });
+			await sendTo({ target: gmTargetChannel, content: gmPostContent.trim(), embeds, embedsAsContent:sageCache.sendEmbedsAsContent, botId:sageCache.bot.did });
 
 			if (!allSecret) {
 				// prepend the mention if we haven't done so yet; stop use from doing it again; send the message
 				const notificationContent = doMention ? `${publicMentionLine}\n${formattedOutput.notificationContent}` : formattedOutput.notificationContent;
 				doMention = false;
-				await sendTo({ target: targetChannel, content: notificationContent.trim(), sageCache });
+				await sendTo({ target: targetChannel, content: notificationContent.trim(), embedsAsContent:sageCache.sendEmbedsAsContent, botId:sageCache.bot.did });
 			}
 		} else {
 			// prepend the mention if we haven't done so yet; stop use from doing it again; send the message
 			const postContent = doMention ? `${publicMentionLine}\n${formattedOutput.postContent}` : formattedOutput.postContent!;
 			doMention = false;
-			await sendTo({ target: targetChannel, content: postContent.trim(), embeds, sageCache });
+			await sendTo({ target: targetChannel, content: postContent.trim(), embeds, embedsAsContent:sageCache.sendEmbedsAsContent, botId:sageCache.bot.did });
 		}
 	}
 	if (allSecret && sageMessage instanceof SageMessage) {
@@ -207,12 +208,12 @@ async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: T
 	}
 }
 
-async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: TChannel, gmTargetChannel: TGmChannel): Promise<void> {
+async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: DChannel, gmTargetChannel: TGmChannel): Promise<void> {
 	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0,
 		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
 		publicMentionLine = await createMentionLine(sageMessage),
 		secretMentionLine = await createMentionLine(sageMessage, true),
-		sageCache = sageMessage.caches;
+		sageCache = sageMessage.sageCache;
 
 	const gmPostContents: Optional<string>[] = [];
 	const gmEmbedContents: Optional<string>[] = [];
@@ -246,7 +247,7 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 		if (gmTargetChannel) {
 			const embed = createEmbedOrNull(sageMessage, gmEmbedContent);
 			const embeds = embed ? [embed] : [];
-			await sendTo({ target: gmTargetChannel, content: gmPostContent, embeds, sageCache });
+			await sendTo({ target: gmTargetChannel, content: gmPostContent, embeds, embedsAsContent:sageCache.sendEmbedsAsContent, botId:sageCache.bot.did });
 		}else {
 			console.log("no gmTargetChannel!");
 		}
@@ -258,7 +259,7 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 		if (!targetChannel) console.log("no targetChannel!");
 		const embed = createEmbedOrNull(sageMessage, mainEmbedContent);
 		const embeds = embed ? [embed] : [];
-		await sendTo({ target: targetChannel, content: mainPostContent, embeds, sageCache });
+		await sendTo({ target: targetChannel, content: mainPostContent, embeds, embedsAsContent:sageCache.sendEmbedsAsContent, botId:sageCache.bot.did });
 	}
 
 	if (allSecret && sageMessage instanceof SageMessage) {
@@ -350,7 +351,7 @@ function doSimple(_: TInteraction, input: string): TDiceOutput[] {
 //#region Message
 
 function formatDiceOutput(sageMessage: TInteraction, diceRoll: TDiceOutput, noGmTargetChannel: boolean): TFormattedDiceOutput {
-	const formatted = sageMessage.caches.format(diceRoll.output),
+	const formatted = sageMessage.sageCache.format(diceRoll.output),
 		output = diceRoll.hasSecret && (sageMessage.diceSecretMethodType === DiceSecretMethodType.Hide || noGmTargetChannel) ? `||${formatted}||` : formatted,
 		isEmbed = sageMessage.dicePostType === DicePostType.SingleEmbed || sageMessage.dicePostType === DicePostType.MultipleEmbeds
 		;
@@ -358,7 +359,7 @@ function formatDiceOutput(sageMessage: TInteraction, diceRoll: TDiceOutput, noGm
 		hasSecret: diceRoll.hasSecret,
 		postContent: isEmbed ? undefined : output,
 		embedContent: isEmbed ? output : undefined,
-		notificationContent: sageMessage.caches.format(`${diceRoll.input} [die]`)
+		notificationContent: sageMessage.sageCache.format(`${diceRoll.input} [die]`)
 	};
 }
 
@@ -386,7 +387,7 @@ function createGmMention(sageMessage: TInteraction): string {
 }
 
 async function createAuthorMention(sageMessage: TInteraction, isSecretMention = false): Promise<string | null> {
-	const userDid = sageMessage instanceof SageMessage ? sageMessage.authorDid : sageMessage.user.id;
+	const userDid = sageMessage.actor.did;
 	const gameUser = sageMessage.game?.getUser(userDid);
 	if (!gameUser) {
 		return DiscordId.toUserMention(userDid);
@@ -395,7 +396,7 @@ async function createAuthorMention(sageMessage: TInteraction, isSecretMention = 
 	let authorReference = DiscordId.toUserMention(gameUser.did);
 	if (isSecretMention || gameUser.dicePing === false) {
 		const user = await sageMessage.discord.fetchUser(userDid);
-		authorReference = authorToMention(user);
+		authorReference = toHumanReadable(user);
 	}
 	if (sageMessage.playerCharacter) {
 		authorReference = authorReference
@@ -421,15 +422,15 @@ async function createMentionLine(sageMessage: TInteraction, isSecretMention = fa
 
 //#region Channels
 
-async function ensureTargetChannel(sageMessage: TInteraction): Promise<TChannel> {
+async function ensureTargetChannel(sageMessage: TInteraction): Promise<DChannel> {
 	const channel = await sageMessage.discord.fetchChannel(sageMessage.channel?.sendDiceTo);
 	if (channel) {
 		return channel;
 	}
 	if (sageMessage instanceof SageInteraction) {
-		return (sageMessage.interaction as Discord.ButtonInteraction).channel as TChannel;
+		return (sageMessage.interaction as Discord.ButtonInteraction).channel as DChannel;
 	}
-	return sageMessage.message.channel as TChannel;
+	return sageMessage.message.channel as DChannel;
 }
 
 async function ensureGmTargetChannel(sageMessage: TInteraction, hasSecret: boolean): Promise<TGmChannel> {
@@ -439,7 +440,7 @@ async function ensureGmTargetChannel(sageMessage: TInteraction, hasSecret: boole
 	if (sageMessage.diceSecretMethodType === DiceSecretMethodType.GameMasterChannel) {
 		const channel = await sageMessage.game?.gmGuildChannel();
 		if (channel) {
-			return channel as TChannel;
+			return channel as DChannel;
 		}
 	}
 	const member = await sageMessage.game?.gmGuildMember();

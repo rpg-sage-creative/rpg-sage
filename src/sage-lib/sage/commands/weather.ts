@@ -65,9 +65,9 @@ function slashTester(sageInteraction: SageInteraction): boolean {
 }
 
 async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
-	const climate = sageInteraction.getString("climate");
-	const elevation = sageInteraction.getString("elevation");
-	const season = sageInteraction.getString("season");
+	const climate = sageInteraction.args.getString("climate");
+	const elevation = sageInteraction.args.getString("elevation");
+	const season = sageInteraction.args.getString("season");
 	const args = parseWeatherArgs(climate, elevation, season);
 	const renderable = createWeatherRenderable(args);
 	return sageInteraction.reply(renderable, false);

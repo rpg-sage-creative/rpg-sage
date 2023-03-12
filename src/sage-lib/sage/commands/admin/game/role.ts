@@ -9,7 +9,7 @@ function getGameRoleLabel(gameRole: IGameRole): TGameRoleType {
 
 async function gameRoleList(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("List Game Roles");
 	}
 
 	const game = sageMessage.game!;
@@ -31,44 +31,44 @@ async function gameRoleList(sageMessage: SageMessage): Promise<void> {
 
 async function gameRoleSet(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("Set Game Role");
 	}
 
 	const roleDid = sageMessage.args.findRoleDid("role", true);
 	const roleType = sageMessage.args.findEnum<GameRoleType>(GameRoleType, "type", true);
 	if (!roleDid || !roleType) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Missing role or type values.");
 	}
 
 	const guild = sageMessage.discord.guild;
 	const guildRole = await sageMessage.discord.fetchGuildRole(roleDid);
 	if (!guild || !guildRole) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Invalid role or type values.");
 	}
 
 	const game = sageMessage.game!;
 	const role = game.getRole(roleType);
 	if (!role) {
 		const added = await game.addRole(roleType, roleDid);
-		return sageMessage.reactSuccessOrFailure(added);
+		return sageMessage.reactSuccessOrFailure(added, "Game Role Set", "Unknown Error; Game Role NOT Set");
 	}
 	const updated = await game.updateRole(roleType, roleDid);
-	return sageMessage.reactSuccessOrFailure(updated);
+	return sageMessage.reactSuccessOrFailure(updated, "Game Role Set", "Unknown Error; Game Role NOT Set");
 }
 
 
 async function gameRoleRemove(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("Remove Game Role");
 	}
 
 	const roleType = sageMessage.args.findEnum<GameRoleType>(GameRoleType, "type", true);
 	if (!roleType) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Missing or Invalid role type.");
 	}
 
 	const removed = await sageMessage.game!.removeRole(roleType);
-	return sageMessage.reactSuccessOrFailure(removed);
+	return sageMessage.reactSuccessOrFailure(removed, "Game Role Removed", "Unknown Error; Game Role NOT Removed");
 }
 
 //TODO: remove roles by mentioning them

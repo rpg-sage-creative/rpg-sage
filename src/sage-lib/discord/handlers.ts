@@ -1,17 +1,17 @@
-import * as Discord from "discord.js";
+import { Intents, IntentsString, Interaction, PermissionString, Snowflake } from "discord.js";
 import { isDefined, isNullOrUndefined, Optional } from "../../sage-utils";
+import { DMessage, DReaction, DUser, MessageType, ReactionType, toHumanReadable } from "../../sage-utils/utils/DiscordUtils";
+import DiscordFetches from "../../sage-utils/utils/DiscordUtils/DiscordFetches";
+import type { TAcceptableBot } from "../sage/model/Bot";
 import SageInteraction from "../sage/model/SageInteraction";
 import SageMessage from "../sage/model/SageMessage";
 import SageReaction from "../sage/model/SageReaction";
-import { MessageType, ReactionType } from "./enums";
-import { authorToMention } from "./messages";
-import type { DMessage, DReaction, DUser, TChannel, TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
+import type { TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
 
 //#region helpers
 
 /**
  * We only call a handler if the tester returns a value other than: undefined, null, false
- * @param object
  */
 function isActionableObject(object: any): boolean {
 	return isDefined(object) && object !== false;
@@ -28,44 +28,22 @@ function isActionableType(listener: TMessageListener | TReactionListener, type: 
 	return !listener.type || listener.type === type;
 }
 
-export async function isAuthorBotOrWebhook(sageMessage: SageMessage): Promise<boolean>;
-export async function isAuthorBotOrWebhook(sageReaction: SageReaction): Promise<boolean>;
-export async function isAuthorBotOrWebhook(messageOrReaction: SageMessage | SageReaction): Promise<boolean> {
-	const message = ((<SageReaction>messageOrReaction).messageReaction ?? (<SageMessage>messageOrReaction)).message;
-	const messageAuthorDid = message.author?.id;
-	if (isActiveBot(messageAuthorDid)) {
-		return true;
-	}
-	//TODO: This next line throws an exception if we don't have webhook access. TEST FOR IT FIRST!
-	const webhook = await messageOrReaction.caches.discord.fetchWebhook(message.guild!, message.channel as TChannel, botMeta.dialogWebhookName!);
-	return webhook?.id === messageAuthorDid;
-}
-
 //#endregion
 
-type TBotMeta = { activeBotDid?: Discord.Snowflake; testBotDid?: Discord.Snowflake; dialogWebhookName?: string; };
-const botMeta: TBotMeta = {};
-export function setBotMeta(meta: TBotMeta): void {
-	botMeta.activeBotDid = meta.activeBotDid;
-	botMeta.dialogWebhookName = meta.dialogWebhookName;
-	botMeta.testBotDid = meta.testBotDid;
+const acceptableBots: TAcceptableBot[] = [];
+function isAcceptableBot(did: Optional<Snowflake>): boolean {
+	return acceptableBots.find(bot => bot.did === did) !== undefined;
 }
-// export function getActiveBotId(): Discord.Snowflake {
-// 	return botMeta.activeBotId!;
-// }
-function isActiveBot(did: Optional<Discord.Snowflake>): boolean {
-	return did && botMeta.activeBotDid ? did === botMeta.activeBotDid : false;
-}
-function isTesterBot(did: Optional<Discord.Snowflake>): boolean {
-	return did && botMeta.testBotDid ? did === botMeta.testBotDid : false;
+export function addAcceptableBot(...bots: TAcceptableBot[]): void {
+	acceptableBots.push(...bots);
 }
 
 //#region listeners
 
 type TListener = {
 	command?: string;
-	intents: Discord.IntentsString[];
-	permissions: Discord.PermissionString[];
+	intents: IntentsString[];
+	permissions: PermissionString[];
 	priorityIndex?: number;
 };
 
@@ -103,8 +81,8 @@ function getListeners<T extends TListenerType>(which: TListenerTypeName): T[] {
 
 type TListenerTypeName = "InteractionListener" | "MessageListener" | "ReactionListener";
 function registerListener<T extends TListenerType>(which: TListenerTypeName, listener: T): void {
-	if (!botMeta.activeBotDid) {
-		console.error(`Please call setBotMeta({ activeBotDid:"", testBotDid?:"", dialogWebhookName:"" })`);
+	if (!DiscordFetches.botId) {
+		console.error(`Please call setBotMeta(botMeta)`);
 	}
 	const listeners: T[] = getListeners(which);
 	if (isNullOrUndefined(listener.priorityIndex)) {
@@ -119,24 +97,24 @@ function registerListener<T extends TListenerType>(which: TListenerTypeName, lis
 	}
 }
 
-export function registerInteractionListener(tester: TInteractionTester, handler: TInteractionHandler, type?: TInteractionType, intents: Discord.IntentsString[] = [], permissions: Discord.PermissionString[] = [], priorityIndex?: number): void {
+export function registerInteractionListener(tester: TInteractionTester, handler: TInteractionHandler, type?: TInteractionType, intents: IntentsString[] = [], permissions: PermissionString[] = [], priorityIndex?: number): void {
 	registerListener("InteractionListener", { tester, handler, type, intents, permissions, priorityIndex });
 }
 
-export function registerMessageListener(tester: TMessageTester, handler: TMessageHandler, type = MessageType.Post, intents: Discord.IntentsString[] = [], permissions: Discord.PermissionString[] = [], priorityIndex?: number): void {
+export function registerMessageListener(tester: TMessageTester, handler: TMessageHandler, type = MessageType.Post, intents: IntentsString[] = [], permissions: PermissionString[] = [], priorityIndex?: number): void {
 	registerListener("MessageListener", { tester, handler, type, intents, permissions, priorityIndex });
 }
 
-export function registerReactionListener<T>(tester: TReactionTester<T>, handler: TReactionHandler<T>, type = ReactionType.Both, intents: Discord.IntentsString[] = [], permissions: Discord.PermissionString[] = [], priorityIndex?: number): void {
+export function registerReactionListener<T>(tester: TReactionTester<T>, handler: TReactionHandler<T>, type = ReactionType.Both, intents: IntentsString[] = [], permissions: PermissionString[] = [], priorityIndex?: number): void {
 	registerListener("ReactionListener", { tester, handler, type, intents, permissions, priorityIndex });
 }
 
-export function registeredIntents(): Discord.Intents {
-	const registered: Discord.IntentsString[] = [];
+export function registeredIntents(): Intents {
+	const registered: IntentsString[] = [];
 	messageListeners.forEach(listener => registered.push(...listener.intents));
 	reactionListeners.forEach(listener => registered.push(...listener.intents));
 
-	const intents = new Discord.Intents();
+	const intents = new Intents();
 	intents.add(
 		// registered.filter(utils.ArrayUtils.Filters.unique)
 		[
@@ -158,7 +136,7 @@ export function registeredIntents(): Discord.Intents {
 
 //#region interactions
 
-export async function handleInteraction(interaction: Discord.Interaction): Promise<THandlerOutput> {
+export async function handleInteraction(interaction: Interaction): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
 		const isCommand = interaction.isCommand();
@@ -169,7 +147,7 @@ export async function handleInteraction(interaction: Discord.Interaction): Promi
 			await handleInteractions(sageInteraction, output);
 		}
 	}catch(ex) {
-		console.error(authorToMention(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
+		console.error(toHumanReadable(interaction.user), interaction.toJSON(), ex);
 	}
 	return output;
 }
@@ -219,15 +197,15 @@ function isEditWeCanIgnore(message: DMessage, originalMessage: Optional<DMessage
 export async function handleMessage(message: DMessage, originalMessage: Optional<DMessage>, messageType: MessageType): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
-		const isBot = message.author?.bot && !isTesterBot(message.author.id);
-		const isWebhook = !!message.webhookId;
-		const canIgnore = isEditWeCanIgnore(message, originalMessage);
-		if (!isBot && !isWebhook && !canIgnore) {
+		const isNotBotOrIsAcceptableBot = !message.author?.bot || isAcceptableBot(message.author.id);
+		const isNotWebhook = !message.webhookId;
+		const isNotEditWeCanIgnore = !isEditWeCanIgnore(message, originalMessage);
+		if (isNotBotOrIsAcceptableBot && isNotWebhook && isNotEditWeCanIgnore) {
 			const sageMessage: SageMessage = await SageMessage.fromMessage(message, originalMessage);
 			await handleMessages(sageMessage, messageType, output);
 		}
 	} catch (ex) {
-		console.error(authorToMention(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
+		console.error(toHumanReadable(message.author), `\`${message.content}\``, ex);
 	}
 	return output;
 }
@@ -256,13 +234,13 @@ async function handleMessages(sageMessage: SageMessage, messageType: MessageType
 export async function handleReaction(messageReaction: DReaction, user: DUser, reactionType: ReactionType): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
-		const isBot = user.bot && !isTesterBot(user.id);
-		if (!isBot) {
+		const isNotBotOrIsAcceptableBot = !user.bot || isAcceptableBot(user.id);
+		if (isNotBotOrIsAcceptableBot) {
 			const sageReaction = await SageReaction.fromMessageReaction(messageReaction, user, reactionType);
 			await handleReactions(sageReaction, reactionType, output);
 		}
 	} catch (ex) {
-		console.error(authorToMention(user), `\`${messageReaction.emoji.name}\``, ex);
+		console.error(toHumanReadable(user), `\`${messageReaction.emoji.name}\``, ex);
 	}
 	return output;
 }

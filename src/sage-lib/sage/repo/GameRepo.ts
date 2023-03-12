@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
 import type { UUID } from "../../../sage-utils";
-import type { DiscordKey } from "../../discord";
+import type DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import Game, { type IGameCore } from "../model/Game";
 import type SageCache from "../model/SageCache";
 import IdRepository from "./base/IdRepository";
@@ -18,14 +18,14 @@ export default class GameRepo extends IdRepository<IGameCore, Game> {
 		return games.find(game =>
 			!game.isArchived
 			&& game.serverDid === discordKey.server
-			&& game.hasChannel(discordKey)
+			&& game.hasChannel(discordKey.channel)
 		);
 	}
 	public async findByDiscordKey(discordKey: DiscordKey): Promise<Game | undefined> {
 		const games = await this.getAll();
 		return games.find(game =>
 			game.serverDid === discordKey.server
-			&& game.hasChannel(discordKey)
+			&& game.hasChannel(discordKey.channel)
 		);
 	}
 

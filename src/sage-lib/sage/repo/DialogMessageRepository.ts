@@ -1,10 +1,10 @@
 import type { Snowflake } from "discord.js";
 import { NilUuid, UUID } from "../../../sage-utils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { isNilSnowflake } from "../../../sage-utils/utils/DiscordUtils";
+import DiscordKey, { DiscordKeyCore, TDiscordKeyResolvable } from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
-import { DiscordKey, NilSnowflake } from "../../discord";
-import type { DiscordKeyCore, TDiscordKeyResolvable } from "../../discord/DiscordKey";
 import IdRepository from "./base/IdRepository";
 
 export type SageKeyCore = {
@@ -72,7 +72,7 @@ export default class DialogMessageRepository {
 				discordKeyKeys.forEach(discordKeyKey => {
 					const dialogMessageKey = `${discordKeyKey}Did` as keyof TDialogMessage;
 					const snowflake = dialogMessage[dialogMessageKey] as Snowflake | undefined;
-					discordKey[discordKeyKey] = snowflake === NilSnowflake ? undefined : snowflake ?? undefined;
+					discordKey[discordKeyKey] = isNilSnowflake(snowflake) ? undefined : snowflake ?? undefined;
 					delete dialogMessage[dialogMessageKey];
 				});
 				dialogMessage.discordKey = cleanJson(discordKey);

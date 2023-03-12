@@ -2,6 +2,8 @@ import type * as Discord from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
 import utils, { Optional } from "../../../../../sage-utils";
+import { isNonNilSnowflake } from "../../../../../sage-utils/utils/DiscordUtils";
+import { isValid } from "../../../../../sage-utils/utils/UuidUtils";
 import type SageMessage from "../../../model/SageMessage";
 import type Server from "../../../model/Server";
 import { AdminRoleType, getServerDefaultGameOptions, IAdminRole } from "../../../model/Server";
@@ -11,19 +13,17 @@ import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
 
 async function serverCount(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
+	if (sageMessage.isSuperUser) {
+		const servers = await sageMessage.sageCache.servers.getAll();
+		const active = servers.filter(server => server.isActive);
+		return renderCount(sageMessage, "Servers", servers.length, active.length);
 	}
-	const servers = await sageMessage.caches.servers.getAll();
-	const active = servers.filter(server => server.isActive);
-	return renderCount(sageMessage, "Servers", servers.length, active.length);
 }
 
 async function serverList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
-	let servers = await sageMessage.caches.servers.getAll();
+	if (!sageMessage.isSuperUser) return;
+
+	let servers = await sageMessage.sageCache.servers.getAll();
 	if (servers) {
 		const filter = sageMessage.args.unkeyedValues().join(" ");
 		if (filter && servers.length) {
@@ -50,14 +50,15 @@ async function serverList(sageMessage: SageMessage): Promise<void> {
 
 async function serverInit(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.server) {
-		return Promise.resolve();
-	}
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
+		return;
 	}
 
-	const saved = await sageMessage.caches.servers.initializeServer(sageMessage.message.guild);
-	return sageMessage.reactSuccessOrFailure(saved);
+	if (!sageMessage.checkCanAdminServer()) {
+		return;
+	}
+
+	const saved = await sageMessage.sageCache.servers.initializeServer(sageMessage.message.guild);
+	return sageMessage.reactSuccessOrFailure(saved, "Server Initialized", "Unknown Error; Server NOT Initialized!");
 }
 
 function serverDetailsDefaultTypes(renderableContent: utils.RenderUtils.RenderableContent, server: Server): void {
@@ -74,17 +75,20 @@ function serverDetailsDefaultTypes(renderableContent: utils.RenderUtils.Renderab
 type TRole = { role:IAdminRole, discordRole:Discord.Role };
 async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	let server: Optional<Server> = sageMessage.server;
-	if (server && !sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
-	}
+	// if (server && !sageMessage.checkCanAdminServer()) {
+	// 	return sageMessage.denyForCanAdminServer("Server Details");
+	// }
 	if (!server && sageMessage.isSuperUser) {
-		const uuid = sageMessage.args.findUuid("server", true)
-		if (uuid) {
-			server = await sageMessage.sageCache.servers.getById(uuid);
+		const idOrDid = sageMessage.args.getString("server");
+		if (isValid(idOrDid)) {
+			server = await sageMessage.sageCache.servers.getById(idOrDid);
+		}
+		if (isNonNilSnowflake(idOrDid)) {
+			server = await sageMessage.sageCache.servers.getByDid(idOrDid);
 		}
 	}
 	if (!server) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Server Not Found!");
 	}
 
 	const roles = <TRole[]>await utils.ArrayUtils.Collection.mapAsync(server.roles, async role => {
@@ -106,7 +110,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 			// renderableContent.append(`<b>Region</b> ${guild.region}`);
 			renderableContent.append(`<b>MemberCount</b> ${guild.memberCount}`);
 			serverDetailsDefaultTypes(renderableContent, server);
-			renderableContent.append(`<b>Sage Roles</b> ${!roles.length ? "<i>none set</i>" : roles.map(role => `@${role.discordRole.name} (${AdminRoleType[role.role.type]})`).join(", ")}`);
+			renderableContent.append(`<b>Sage Admin Roles</b> ${!roles.length ? "<i>none set</i>" : roles.map(role => `@${role.discordRole.name} (${AdminRoleType[role.role.type]})`).join(", ")}`);
 		} else {
 			renderableContent.append(`<b>Server Id</b> ${server.did || "<i>NOT SET</i>"}`);
 			renderableContent.append(`<b>Status</b> ${"<i>NOT FOUND</i>"}`);
@@ -119,20 +123,20 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 
 async function serverSet(sageMessage: SageMessage): Promise<void> {
 	let server: Optional<Server> = sageMessage.server;
-	if (server && !sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
-	}
 	if (!server) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Server Not Found!");
+	}
+	if (!sageMessage.checkCanAdminServer()) {
+		return sageMessage.denyForCanAdminServer("Set Server Options");
 	}
 
 	const options = getServerDefaultGameOptions(sageMessage.args);
 	if (options === null) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("No Options given!");
 	}
 
 	const updated = await server.update(options);
-	return sageMessage.reactSuccessOrFailure(updated);
+	return sageMessage.reactSuccessOrFailure(updated, "Server Updated", "Unknown Error; Server NOT Updated!");
 }
 
 export default function register(): void {
@@ -142,9 +146,6 @@ export default function register(): void {
 	registerAdminCommand(serverDetails, "server-details");
 	registerAdminCommand(serverSet, "server-update", "server-set");
 
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server count");
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server list");
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server list {optionalFilter}");
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server details");
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server set game=PF2E|NONE diceoutput=XXS|XS|S|M|L|XL|UNSET dicepost=POST|EMBED|UNSET crit=TIMESTWO|ROLLTWICE");
+	registerAdminCommandHelp("Admin", "Server", "server details");
+	registerAdminCommandHelp("Admin", "Server", "server set game=PF2E|NONE diceoutput=XXS|XS|S|M|L|XL|UNSET dicepost=POST|EMBED|UNSET crit=TIMESTWO|ROLLTWICE");
 }

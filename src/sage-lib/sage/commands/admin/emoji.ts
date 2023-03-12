@@ -1,13 +1,15 @@
 import type { Optional } from "../../../../sage-utils";
 import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
 import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { DiscordId } from "../../../discord";
+import { createEmojiRegex } from "../../../../sage-utils/utils/DiscordUtils/emoji";
 import { discordPromptYesNo } from "../../../discord/prompts";
 import type { TEmojiAndType } from "../../model/Emoji";
 import type Emoji from "../../model/Emoji";
+import type Game from "../../model/Game";
 import { EmojiType } from "../../model/HasEmojiCore";
 import type SageMessage from "../../model/SageMessage";
 import type SageMessageArgs from "../../model/SageMessageArgs";
+import type Server from "../../model/Server";
 import { BotServerGameType, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
 
@@ -40,7 +42,7 @@ async function _emojiList(sageMessage: SageMessage, which: BotServerGameType): P
 			}
 		}
 		if (!render) {
-			return sageMessage.reactError();
+			return sageMessage.reactError("Unknown Error rendering Emoji List");
 		}
 	}
 
@@ -68,15 +70,15 @@ async function _emojiList(sageMessage: SageMessage, which: BotServerGameType): P
 }
 
 async function emojiListBot(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.isSuperUser ? _emojiList(sageMessage, BotServerGameType.Bot) : sageMessage.reactBlock();
+	return _emojiList(sageMessage, BotServerGameType.Bot);
 }
 
 async function emojiListServer(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.checkCanAdminServer() ? _emojiList(sageMessage, BotServerGameType.Server) : sageMessage.reactBlock();
+	return _emojiList(sageMessage, BotServerGameType.Server);
 }
 
 async function emojiListGame(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.checkCanAdminGame() ? _emojiList(sageMessage, BotServerGameType.Game) : sageMessage.reactBlock();
+	return _emojiList(sageMessage, BotServerGameType.Game);
 }
 
 async function emojiList(sageMessage: SageMessage): Promise<void> {
@@ -87,7 +89,7 @@ async function emojiList(sageMessage: SageMessage): Promise<void> {
 
 //#region get
 
-async function _emojiGet(sageMessage: SageMessage, ...emoji: Emoji[]): Promise<void> {
+async function _emojiGet(sageMessage: SageMessage, ...emoji: Optional<Emoji>[]): Promise<void> {
 	emoji = emoji.filter(exists);
 
 	const emojiType = sageMessage.args.findEnum<EmojiType>(EmojiType, "type", true)!;
@@ -103,19 +105,19 @@ async function _emojiGet(sageMessage: SageMessage, ...emoji: Emoji[]): Promise<v
 	}
 
 	const inheritedText = inherited ? ` (unset, inherited)` : ``;
-	return <any>sageMessage.send(`${EmojiType[emojiType]} ${_emoji} ${inheritedText}`.trim());
+	await sageMessage.send(`${EmojiType[emojiType]} ${_emoji} ${inheritedText}`.trim());
 }
 
 async function emojiGetBot(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.isSuperUser ? _emojiGet(sageMessage, sageMessage.bot.emoji) : sageMessage.reactBlock();
+	return _emojiGet(sageMessage, sageMessage.bot.emoji);
 }
 
 async function emojiGetServer(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.checkCanAdminServer() ? _emojiGet(sageMessage, sageMessage.server?.emoji, sageMessage.bot.emoji) : sageMessage.reactBlock();
+	return _emojiGet(sageMessage, sageMessage.server?.emoji, sageMessage.bot.emoji);
 }
 
 async function emojiGetGame(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.checkCanAdminGame() ? _emojiGet(sageMessage, sageMessage.game?.emoji!, sageMessage.server?.emoji!, sageMessage.bot.emoji) : sageMessage.reactBlock();
+	return _emojiGet(sageMessage, sageMessage.game?.emoji!, sageMessage.server?.emoji!, sageMessage.bot.emoji);
 }
 
 async function emojiGet(sageMessage: SageMessage): Promise<void> {
@@ -135,7 +137,7 @@ function findEmojiAndType(args: SageMessageArgs): Optional<TEmojiAndType> {
 		return null;
 	}
 	const type = args.findEnum<EmojiType>(EmojiType, "type", true);
-	const replacement = args.getString("emoji") ?? args.unkeyedValues().find(value => value.match(DiscordId.createEmojiRegex()));
+	const replacement = args.getString("emoji") ?? args.unkeyedValues().find(value => value.match(createEmojiRegex()));
 	if (replacement && type) {
 		return { replacement, type };
 	}
@@ -147,54 +149,52 @@ function findEmojiAndType(args: SageMessageArgs): Optional<TEmojiAndType> {
 
 async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
+		return sageMessage.reactBlock("Set Server Emoji");
 	}
 
 	const server = sageMessage.server;
 
 	const emojiAndType = findEmojiAndType(sageMessage.args);
 	if (!emojiAndType) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Missing emoji or type values.");
 	}
 
 	const set = server.emoji.set(emojiAndType.type, emojiAndType.replacement);
 	if (!set) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Invalid emoji or type values.");
 	}
 
 	const saved = await server.save();
-	sageMessage.reactSuccessOrFailure(saved);
 	if (saved) {
-		return <any>sageMessage.send(`${EmojiType[emojiAndType.type]} ${emojiAndType.replacement}`);
+		await sageMessage.send(`${EmojiType[emojiAndType.type]} ${emojiAndType.replacement}`);
+		return;
 	}
-
-	return Promise.resolve();
+	return sageMessage.reactFailure("Unknown Error; Server Emoji NOT Set!");
 }
 
 async function emojiSetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.reactBlock("Set Game Emoji");
 	}
 
 	const game = sageMessage.game!;
 
 	const emojiAndType = findEmojiAndType(sageMessage.args);
 	if (!emojiAndType) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Missing emoji or type values.");
 	}
 
 	const set = game.emoji.set(emojiAndType.type, emojiAndType.replacement);
 	if (!set) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Invalid emoji or type values.");
 	}
 
 	const saved = await game.save();
-	sageMessage.reactSuccessOrFailure(saved);
 	if (saved) {
-		return <any>sageMessage.send(`${EmojiType[emojiAndType.type]} ${emojiAndType.replacement}`);
+		await sageMessage.send(`${EmojiType[emojiAndType.type]} ${emojiAndType.replacement}`);
+		return;
 	}
-
-	return Promise.resolve();
+	return sageMessage.reactFailure("Unknown Error; Game Emoji NOT Set!");
 }
 
 async function emojiSet(sageMessage: SageMessage): Promise<void> {
@@ -207,7 +207,7 @@ async function emojiSet(sageMessage: SageMessage): Promise<void> {
 
 async function emojiSyncServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminServer("Sync Server Emoji");
 	}
 
 	const server = sageMessage.server;
@@ -217,7 +217,7 @@ async function emojiSyncServer(sageMessage: SageMessage): Promise<void> {
 		server.emoji.sync(sageMessage.bot.emoji);
 		const saved = await server.save();
 		if (!saved) {
-			return sageMessage.reactError();
+			return sageMessage.reactError("Unable to save Server.");
 		} else {
 			return emojiListServer(sageMessage);
 		}
@@ -227,7 +227,7 @@ async function emojiSyncServer(sageMessage: SageMessage): Promise<void> {
 
 async function emojiSyncGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("Sync Game Emoji");
 	}
 
 	const game = sageMessage.game!;
@@ -237,7 +237,7 @@ async function emojiSyncGame(sageMessage: SageMessage): Promise<void> {
 		game.emoji.sync(game.server.emoji);
 		const saved = await game.save();
 		if (!saved) {
-			sageMessage.reactError();
+			sageMessage.reactError("Unable to save Game.");
 		} else {
 			emojiListGame(sageMessage);
 		}
@@ -254,38 +254,28 @@ async function emojiSync(sageMessage: SageMessage): Promise<void> {
 
 //#region unset
 
+async function _emojiUnset(sageMessage: SageMessage, which: Game | Server): Promise<void> {
+	const emojiType = sageMessage.args.findEnum<EmojiType>(EmojiType, "type", true);
+	const unset = exists(emojiType) ? which.emoji.unset(emojiType) : false;
+	if (!unset) {
+		return sageMessage.reactFailure("Invalid emoji type.");
+	}
+	const saved = await which.save();
+	return sageMessage.reactSuccessOrFailure(saved, `${which.objectType} Emoji Unset`, `Unknown Error; ${which.objectType} Emoji NOT Unset!`);
+}
+
 async function emojiUnsetServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminServer("Unset Server Emoji");
 	}
-
-	const emojiType = sageMessage.args.findEnum<EmojiType>(EmojiType, "type", true)!;
-	const unset = sageMessage.server.emoji.unset(emojiType);
-	if (!unset) {
-		return sageMessage.reactFailure();
-	}
-
-	const saved = await sageMessage.server.save();
-	return sageMessage.reactSuccessOrFailure(saved);
+	return _emojiUnset(sageMessage, sageMessage.server);
 }
 
 async function emojiUnsetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("Unset Game Emoji");
 	}
-
-	const game = sageMessage.game!;
-
-	const emojiType = sageMessage.args.findEnum<EmojiType>(EmojiType, "type", true)!;
-	const unset = game.emoji.unset(emojiType);
-	if (!unset) {
-		return sageMessage.reactFailure();
-	}
-
-	const saved = await game.save();
-	sageMessage.reactSuccessOrFailure(saved);
-
-	return Promise.resolve();
+	return _emojiUnset(sageMessage, sageMessage.game);
 }
 
 async function emojiUnset(sageMessage: SageMessage): Promise<void> {
@@ -317,21 +307,23 @@ export default function register(): void {
 	registerAdminCommand(emojiUnsetGame, "emoji-unset-game");
 	registerAdminCommand(emojiUnset, "emoji-unset");
 
-	registerAdminCommandHelp("Admin", "SuperUser", "Emoji", "emoji get bot {EmojiType}");
-	registerAdminCommandHelp("Admin", "SuperUser", "Emoji", "emoji list bot");
-
 	registerAdminCommandHelp("Admin", "Emoji", "emoji get {EmojiType}");
-	registerAdminCommandHelp("Admin", "Emoji", "emoji get {server|game} {EmojiType}");
+	registerAdminCommandHelp("Admin", "Emoji", "emoji get game {EmojiType}");
+	registerAdminCommandHelp("Admin", "Emoji", "emoji get server {EmojiType}");
 
 	registerAdminCommandHelp("Admin", "Emoji", "emoji list");
-	registerAdminCommandHelp("Admin", "Emoji", "emoji list {server|game}");
+	registerAdminCommandHelp("Admin", "Emoji", "emoji list game");
+	registerAdminCommandHelp("Admin", "Emoji", "emoji list server");
 
-	registerAdminCommandHelp("Admin", "Emoji", "emoji set {EmojiType} {emoji}");
-	registerAdminCommandHelp("Admin", "Emoji", "emoji set {server|game} {EmojiType} {emoji}");
+	registerAdminCommandHelp("Admin", "Emoji", "emoji set type=\"EmojiType\" value=\"emoji\"");
+	registerAdminCommandHelp("Admin", "Emoji", "emoji set game type=\"EmojiType\" value=\"emoji\"");
+	registerAdminCommandHelp("Admin", "Emoji", "emoji set server type=\"EmojiType\" value=\"emoji\"");
 
 	registerAdminCommandHelp("Admin", "Emoji", "emoji sync");
-	registerAdminCommandHelp("Admin", "Emoji", "emoji sync {server|game}");
+	registerAdminCommandHelp("Admin", "Emoji", "emoji sync game");
+	registerAdminCommandHelp("Admin", "Emoji", "emoji sync server");
 
-	registerAdminCommandHelp("Admin", "Emoji", "emoji unset {EmojiType}");
-	registerAdminCommandHelp("Admin", "Emoji", "emoji unset {server|game} {EmojiType}");
+	registerAdminCommandHelp("Admin", "Emoji", "emoji unset type=\"EmojiType\"");
+	registerAdminCommandHelp("Admin", "Emoji", "emoji unset game type=\"EmojiType\"");
+	registerAdminCommandHelp("Admin", "Emoji", "emoji unset server type=\"EmojiType\"");
 }

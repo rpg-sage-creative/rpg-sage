@@ -1,17 +1,18 @@
-import type * as Discord from "discord.js";
+import type { Snowflake } from "discord.js";
 import type SageMessage from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
-export async function gameUserList(sageMessage: SageMessage, who: string, userDids: Discord.Snowflake[] = []): Promise<void> {
+export async function gameUserList(sageMessage: SageMessage, who: string, userDids: Snowflake[] = []): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("List Game Users");
 	}
 
 	const game = sageMessage.game!;
 	if (userDids.length) {
+		const discord = await sageMessage.sageCache.discord.forGuild(game.serverDid);
 		for (const userDid of userDids) {
-			const guildMember = await sageMessage.discord.fetchGuildMember(userDid);
+			const guildMember = await discord?.fetchGuildMember(userDid);
 			const title = guildMember ? `@${guildMember.user.tag}` : userDid;
 			const renderableContent = createAdminRenderableContent(game, title);
 			renderableContent.append(`<b>User Id</b> ${userDid}`);
@@ -34,22 +35,22 @@ async function playerList(sageMessage: SageMessage): Promise<void> {
 
 async function playerAdd(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("Add Game Player");
 	}
 
 	const users = Array.from(sageMessage.message.mentions.users.values());
 	const added = await sageMessage.game!.addPlayers(users.map(user => user.id));
-	return sageMessage.reactSuccessOrFailure(added);
+	return sageMessage.reactSuccessOrFailure(added, "Game Player Added.", "Unknown Error; Game Player NOT Added!");
 }
 
 async function playerRemove(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyForCanAdminGame("Remove Game Player");
 	}
 
 	const users = Array.from(sageMessage.message.mentions.users.values());
 	const removed = await sageMessage.game!.removePlayers(users.map(user => user.id));
-	return sageMessage.reactSuccessOrFailure(removed);
+	return sageMessage.reactSuccessOrFailure(removed, "Game Player Removed.", "Unknown Error; Game Player NOT Removed!");
 }
 
 export default function register(): void {

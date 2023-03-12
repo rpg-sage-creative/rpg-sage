@@ -1,8 +1,10 @@
 import * as Discord from "discord.js";
-import type { Optional, OrUndefined } from "../../sage-utils";
-import { isDefined } from "../../sage-utils";
+import type { Optional, OrUndefined } from "../..";
+import { isDefined } from "../..";
 import { NilSnowflake } from "./consts";
+import { createCustomEmojiRegex } from "./emoji";
 import { SnowflakeType } from "./enums";
+import { isSnowflake } from "./snowflake";
 
 type THasSnowflakeId = { id:Discord.Snowflake; };
 type THasSnowflakeDid = { did:Discord.Snowflake; };
@@ -38,7 +40,7 @@ export default class DiscordId {
 			return new DiscordId(SnowflakeType.ChannelReference, DiscordId.parseId(value));
 		}
 		if (DiscordId.isCustomEmoji(value)) {
-			const [_, animated, name, did] = value.match(DiscordId.createCustomEmojiRegex()) ?? [];
+			const [_, animated, name, did] = value.match(createCustomEmojiRegex()) ?? [];
 			return new DiscordId(SnowflakeType.CustomEmoji, did, name, animated === "a");
 		}
 		if (DiscordId.isRoleMention(value)) {
@@ -61,28 +63,16 @@ export default class DiscordId {
 		return isDefined(value?.match(/^<#\d{16,}>$/));
 	}
 	public static isCustomEmoji(value: string): boolean {
-		return isDefined(value?.match(DiscordId.createCustomEmojiRegex()));
+		return isDefined(value?.match(createCustomEmojiRegex()));
 	}
 	public static isRoleMention(value: string): boolean {
 		return isDefined(value?.match(/^<@&\d{16,}>$/));
 	}
 	public static isValidId(value: Optional<Discord.Snowflake>): boolean {
-		return isDefined(value?.match(/^\d{16,}$/));
+		return isSnowflake(value);
 	}
 	public static isUserMention(value: string): boolean {
 		return isDefined(value?.match(/^<@\!?\d{16,}>$/));
-	}
-
-	// public static createChannelReferenceOrDidRegex(): RegExp {
-	// 	return /^(\d{16,}|<#\d{16,}>)$/;
-	// }
-	/** Used to detect one or more adjacent emoji. */
-	public static createEmojiRegex(): RegExp {
-		return /((?:<a?)?:\w{2,}:(?:\d{16,}>)?)+/;
-	}
-	/** Used to capture the parts of a custom emoji. */
-	public static createCustomEmojiRegex(): RegExp {
-		return /^<(a)?:(\w{2,}):(\d{16,})>$/;
 	}
 
 	public static isMentionOrReference(value: string): boolean {

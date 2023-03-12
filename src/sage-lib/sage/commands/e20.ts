@@ -1,4 +1,4 @@
-import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
+import { ButtonInteraction, CommandInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/essence20";
 import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf";
 import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20";
@@ -10,10 +10,11 @@ import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
 import PlayerCharacterTransformer, { PlayerCharacterCoreTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
 import type { Optional, UUID } from "../../../sage-utils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import type { DChannel, DUser } from "../../../sage-utils/utils/DiscordUtils";
+import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
+import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import { PdfCacher } from "../../../sage-utils/utils/PdfUtils";
-import { DiscordId, DiscordKey, DUser, NilSnowflake, TChannel } from "../../discord";
-import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
 import type SageCache from "../model/SageCache";
 import type SageInteraction from "../model/SageInteraction";
@@ -29,8 +30,8 @@ function createSelectMenuRow(selectMenu: MessageSelectMenu): MessageActionRow {
 	return new MessageActionRow().addComponents(selectMenu);
 }
 
-async function attachCharacter(sageCache: SageCache, channel: TChannel | DUser, attachmentName: string, character: TPlayerCharacter, pin: boolean): Promise<void> {
-	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.description).join("");
+async function attachCharacter(sageCache: SageCache, channel: DChannel | DUser, attachmentName: string, character: TPlayerCharacter, pin: boolean): Promise<void> {
+	const raw = resolveToEmbeds(character.toHtml(), sageCache.getFormatter()).map(e => e.description).join("");
 	const buffer = Buffer.from(raw, "utf-8");
 	const attachment = new MessageAttachment(buffer, `${attachmentName}.txt`);
 	const message = await channel.send({
@@ -83,7 +84,7 @@ function getPath(characterId: string): string {
 	return `./data/sage/e20/${characterId}.json`;
 }
 
-async function postCharacter(sageCache: SageCache, channel: TChannel, character: TPlayerCharacter, pin: boolean): Promise<void> {
+async function postCharacter(sageCache: SageCache, channel: DChannel, character: TPlayerCharacter, pin: boolean): Promise<void> {
 	const saved = await saveCharacter(character);
 	if (saved) {
 		const output = prepareOutput(sageCache, character);
@@ -92,7 +93,7 @@ async function postCharacter(sageCache: SageCache, channel: TChannel, character:
 			await message.pin();
 		}
 	}else {
-		const output = { embeds:resolveToEmbeds(sageCache, character.toHtml()) };
+		const output = { embeds:resolveToEmbeds(character.toHtml(), sageCache.getFormatter()) };
 		const message = await channel.send(output).catch(errorReturnNull);
 		if (pin && message?.pinnable) {
 			await message.pin();
@@ -101,7 +102,7 @@ async function postCharacter(sageCache: SageCache, channel: TChannel, character:
 }
 
 async function updateSheet(sageInteraction: SageInteraction, character: TPlayerCharacter) {
-	const output = prepareOutput(sageInteraction.caches, character);
+	const output = prepareOutput(sageInteraction.sageCache, character);
 	const message = sageInteraction.interaction.message as Message;
 	await message.edit(output);
 }
@@ -318,7 +319,7 @@ function createComponents(character: TPlayerCharacter): MessageActionRow[] {
 
 type TOutput = { embeds:MessageEmbed[], components:MessageActionRow[] };
 function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): TOutput {
-	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character) as any));
+	const embeds = resolveToEmbeds(character.toHtml(getActiveSections(character) as any), sageCache.getFormatter());
 	const components = createComponents(character);
 	return { embeds, components };
 }
@@ -419,7 +420,7 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
-		await sageInteraction.interaction.channel?.send(`${DiscordId.toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`);
+		await sageInteraction.interaction.channel?.send(`${DiscordId.toUserMention(sageInteraction.actor.did)} *Secret Dice sent to the GM* 🎲`);
 	}
 
 	function findSkill(ability: Optional<TStatE20>, value: string): TSkillE20 | undefined {
@@ -454,10 +455,10 @@ export function registerCommandHandlers(): void {
 
 export const e20Pdf = "e20-pdf";
 
-export async function slashHandlerEssence20(sageInteraction: SageInteraction): Promise<void> {
+export async function slashHandlerEssence20(sageInteraction: SageInteraction<CommandInteraction>): Promise<void> {
 	await sageInteraction.reply(`Attempting to import character ...`, false);
 
-	const value = sageInteraction.getString(e20Pdf, true);
+	const value = sageInteraction.args.getString(e20Pdf, true);
 	const isPdfUrl = value.match(/^http.*?\.pdf$/) !== null;
 	const isMessageUrl = value.startsWith("https://discord.com/channels/");
 
@@ -469,8 +470,16 @@ export async function slashHandlerEssence20(sageInteraction: SageInteraction): P
 		rawJson = await PdfCacher.read<TRawJson>(value);
 	}else if (isMessageUrl) {
 		const [serverDid, channelDid, messageDid] = value.split("/").slice(-3);
-		const discordKey = DiscordKey.from({ server:serverDid.replace("@me", NilSnowflake), channel:channelDid, message:messageDid });
-		const message = await sageInteraction.discord.fetchMessage(discordKey);
+		let message: Message | null = null;
+		if (serverDid === "@me") {
+			const forUser = await sageInteraction.sageCache.discord.forUser(channelDid);
+			message = await forUser?.fetchMessage(messageDid) ?? null;
+		}else {
+			const forGuild = await sageInteraction.sageCache.discord.forGuild(serverDid);
+			const forChannel = await forGuild?.forUser(sageInteraction.actor.did);
+			message = await forChannel?.fetchMessage(messageDid) ?? null;
+		}
+		// const message = await sageInteraction.discord.fetchMessage(discordKey);
 		const attachment = message?.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
 		if (attachment) {
 			fileName = attachment.name ?? undefined;
@@ -489,14 +498,14 @@ export async function slashHandlerEssence20(sageInteraction: SageInteraction): P
 
 	await sageInteraction.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
 
-	const channel = sageInteraction.interaction.channel ?? sageInteraction.user;
+	const channel = sageInteraction.interaction.channel as DChannel ?? sageInteraction.actor.d;
 
-	const pin = sageInteraction.getBoolean("pin") ?? false;
-	const attach = sageInteraction.getBoolean("attach") ?? false;
+	const pin = sageInteraction.args.getBoolean("pin") ?? false;
+	const attach = sageInteraction.args.getBoolean("attach") ?? false;
 	if (attach) {
-		await attachCharacter(sageInteraction.caches, channel, fileName!, character, pin);
+		await attachCharacter(sageInteraction.sageCache, channel, fileName!, character, pin);
 	}else {
-		await postCharacter(sageInteraction.caches, channel, character, pin);
+		await postCharacter(sageInteraction.sageCache, channel, character, pin);
 	}
 	return sageInteraction.deleteReply();
 }

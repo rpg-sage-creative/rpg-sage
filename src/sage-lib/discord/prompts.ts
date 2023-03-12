@@ -1,11 +1,12 @@
 import * as Discord from "discord.js";
 import utils from "../../sage-utils";
+import type { DChannel, DUser } from "../../sage-utils/utils/DiscordUtils";
+import { resolveToEmbeds } from "../../sage-utils/utils/DiscordUtils/embeds";
+import type { TRenderableContentResolvable } from "../../sage-utils/utils/RenderUtils/RenderableContent";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageCache from "../sage/model/SageCache";
 import type SageInteraction from "../sage/model/SageInteraction";
 import SageMessage from "../sage/model/SageMessage";
-import { resolveToEmbeds } from "./embeds";
-import type { DUser, TChannel, TRenderableContentResolvable } from "./types";
 
 const TIMEOUT_MILLI = 60 * 1000;
 
@@ -33,7 +34,7 @@ export async function discordPromptYesNo(sageMessage: SageMessage, resolvable: T
 export async function discordPromptYesNoDeletable(hasSageCache: SageMessage | SageInteraction, resolvable: TRenderableContentResolvable): Promise<[boolean | null, Discord.Message | null]> {
 	const yesNo: TPromptButton[] = [{ label:"Yes", style:"SUCCESS"}, { label:"No", style:"SECONDARY" }];
 	const channel = hasSageCache instanceof SageMessage ? hasSageCache.message.channel : hasSageCache.interaction.channel;
-	const [result, message] = await _prompt(hasSageCache.caches, resolvable, yesNo, channel as TChannel);
+	const [result, message] = await _prompt(hasSageCache.sageCache, resolvable, yesNo, channel as DChannel);
 	if (result) {
 		return [result === "Yes", message];
 	}
@@ -41,18 +42,18 @@ export async function discordPromptYesNoDeletable(hasSageCache: SageMessage | Sa
 }
 
 export async function prompt(sageMessage: SageMessage, resolvable: TRenderableContentResolvable, buttons: TPromptButton[]): Promise<string | null> {
-	const [value] = await _prompt(sageMessage.caches, resolvable, buttons, sageMessage.message.channel as TChannel);
+	const [value] = await _prompt(sageMessage.sageCache, resolvable, buttons, sageMessage.message.channel as DChannel);
 	return value;
 }
 
-export async function _prompt(sageCache: SageCache, resolvable: TRenderableContentResolvable, buttons: TPromptButton[], targetChannel: TChannel | DUser): Promise<[string | null, Discord.Message | null]> {
+export async function _prompt(sageCache: SageCache, resolvable: TRenderableContentResolvable, buttons: TPromptButton[], targetChannel: DChannel | DUser): Promise<[string | null, Discord.Message | null]> {
 	return new Promise<[string | null, Discord.Message | null]>(async resolve => {
 		const buttonRow = new Discord.MessageActionRow();
 		const messageButtons = createButtons(buttons);
 		buttonRow.setComponents(...messageButtons);
 
 		// send the message
-		const embeds = resolveToEmbeds(sageCache, resolvable);
+		const embeds = resolveToEmbeds(resolvable, sageCache.getFormatter());
 		const components = [buttonRow];
 		const message = await targetChannel.send({ embeds, components });
 
@@ -76,7 +77,7 @@ export async function _prompt(sageCache: SageCache, resolvable: TRenderableConte
 
 		// create unique handler and listen to it
 		handler = (interaction: Discord.Interaction) => {
-			if (interaction.isButton() && interaction.user.id === sageCache.userDid) {
+			if (interaction.isButton() && interaction.user.id === sageCache.actor.did) {
 				const btn = messageButtons.find(_btn => interaction.customId === _btn.customId);
 				if (btn) {
 					interaction.deferUpdate();

@@ -1,6 +1,5 @@
 export * as ArgsUtils from "./ArgsUtils";
 export * as ArrayUtils from "./ArrayUtils";
-export * as AwsUtilsShim from "./AwsUtils";
 export * as ClassUtils from "./ClassUtils";
 export * as ColorUtils from "./ColorUtils";
 export * as ConsoleUtils from "./ConsoleUtils";

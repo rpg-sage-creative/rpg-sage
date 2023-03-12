@@ -8,6 +8,13 @@ import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
 import type SageCache from "./SageCache";
 import type { GameType } from "../../../sage-common";
 
+export type TAcceptableBot = {
+	/** user.id of the bot */
+	did: Discord.Snowflake;
+	/** name or category of the bot, for example: "SageTest" or "Tupperbox" */
+	desc: "Tupperbox";
+};
+
 export type TBotCodeName = "dev" | "beta" | "stable";
 
 export type TCoreAuthor = { iconUrl?: string; name?: string; url?: string; };
@@ -24,10 +31,27 @@ export type TDev = { did: Discord.Snowflake; logLevel: TConsoleCommandType; };
 type TSearchStatus = { [key: number]: undefined | boolean | string; };
 
 export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
+
+	/** List of bots that we can let through to the handlers. */
+	acceptableBots?: TAcceptableBot[];
+
+	/** "dev" | "beta" | "stable" */
 	codeName: TBotCodeName;
+
+	/** defaults to "sage" */
 	commandPrefix?: string;
+
+	/** list of devs and their log levels */
 	devs?: TDev[];
+
+	/** defaults to "SageDialogWebhookName" */
+	dialogWebhookName?: string;
+
+	/** Used to determine how much logging to perform during execution. */
 	logLevel: TConsoleCommandType;
+
+	/** Current status of the search engine by game. */
+	searchStatus: TSearchStatus;
 
 	/** Discord API bot token */
 	token: string;
@@ -35,15 +59,15 @@ export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	/** Url to the Sage avatar/token. */
 	tokenUrl: string;
 
-	/** Current status of the search engine by game. */
-	searchStatus: TSearchStatus;
 }
 
 export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmojiCore {
 	public constructor(core: IBotCore, sageCache: SageCache) { super(core, sageCache); }
+	public get acceptableBots(): TAcceptableBot[] { return this.core.acceptableBots ?? []; }
 	public get codeName(): TBotCodeName { return this.core.codeName; }
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }
 	public get devs(): TDev[] { return this.core.devs ?? []; }
+	public get dialogWebhookName(): string { return this.core.dialogWebhookName ?? "SageDialogWebhookName"; }
 	public get logLevel(): LogLevel { return LogLevel[<keyof typeof LogLevel>this.core.logLevel] || null; }
 	public get token(): string { return this.core.token; }
 	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }

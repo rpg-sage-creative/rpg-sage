@@ -1,9 +1,10 @@
 import type { InteractionReplyOptions, Message, User, WebhookMessageOptions } from "discord.js";
 import { RenderableContent } from "../../../sage-pf2e";
 import { isDefined } from "../../../sage-utils";
+import { DChannel, DInteraction, InteractionType } from "../../../sage-utils/utils/DiscordUtils";
+import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
+import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
 import type { TGameType } from "../../../slash.mjs";
-import { DInteraction, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
-import { resolveToEmbeds } from "../../discord/embeds";
 import { send } from "../../discord/messages";
 import SageCache from "./SageCache";
 import { SageCommandBase, SageCommandCore, TSendArgs } from "./SageCommand";
@@ -41,9 +42,9 @@ export default class SageInteraction<T extends DInteraction = any>
 
 	//#region SageCommand
 
-	public clone(): SageInteraction<T> {
-		return new SageInteraction(this.core);
-	}
+	// public clone(): SageInteraction<T> {
+	// 	return new SageInteraction(this.core);
+	// }
 
 	//#endregion
 
@@ -108,7 +109,7 @@ export default class SageInteraction<T extends DInteraction = any>
 			return this.interaction.deferUpdate();
 		}
 		return this.interaction.deferReply({
-			ephemeral:this.sageCache.server ? (ephemeral ?? true) : false
+			ephemeral:this.sageCache.guild?.s ? (ephemeral ?? true) : false
 		});
 	}
 
@@ -138,7 +139,7 @@ export default class SageInteraction<T extends DInteraction = any>
 	/** Uses followUp() if a reply was given, otherwise uses reply()  */
 	public async update(renderable: TRenderableContentResolvable, ephemeral: boolean): Promise<void> {
 		if (this.interaction.replied) {
-			const embeds = resolveToEmbeds(this.sageCache, renderable);
+			const embeds = resolveToEmbeds(renderable, this.sageCache.getFormatter());
 			this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Message<boolean>);
 		}else {
 			await this.reply(renderable, ephemeral);
@@ -147,9 +148,9 @@ export default class SageInteraction<T extends DInteraction = any>
 
 	/** Sends a full message to the channel or user the interaction originated in. */
 	public send(renderableContentResolvable: TRenderableContentResolvable): Promise<Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel): Promise<Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel, originalAuthor: User): Promise<Message[]>;
-	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.interaction.channel as TChannel, originalAuthor = this.interaction.user): Promise<Message[]> {
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DChannel): Promise<Message[]>;
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DChannel, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.interaction.channel as DChannel, originalAuthor = this.interaction.user): Promise<Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			return [];
@@ -166,7 +167,7 @@ export default class SageInteraction<T extends DInteraction = any>
 	public async whisper(content: string): Promise<void>;
 	public async whisper(contentOrArgs: string | TSendArgs): Promise<void> {
 		const args = typeof(contentOrArgs) === "string" ? { content:contentOrArgs } : { ...contentOrArgs };
-		args.ephemeral = !!this.sageCache.server;
+		args.ephemeral = !!this.sageCache.guild?.s;
 		return this.reply(args);
 	}
 

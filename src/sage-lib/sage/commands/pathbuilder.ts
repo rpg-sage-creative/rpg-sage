@@ -3,10 +3,11 @@ import { PathbuilderCharacter, toModifier } from "../../../sage-pf2e";
 import { getCharacterSections, TCharacterSectionType, TCharacterViewType, TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import { isDefined, Optional, UUID } from "../../../sage-utils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import type { DChannel, DUser } from "../../../sage-utils/utils/DiscordUtils";
+import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
+import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
-import { DiscordId, DUser, TChannel } from "../../discord";
-import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
 import type SageCache from "../model/SageCache";
 import type SageInteraction from "../model/SageInteraction";
@@ -67,8 +68,8 @@ function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
 	}
 }
 
-async function attachCharacter(sageCache: SageCache, channel: TChannel | DUser, pathbuilderId: number, character: PathbuilderCharacter, pin: boolean): Promise<void> {
-	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.description).join("");
+async function attachCharacter(sageCache: SageCache, channel: DChannel | DUser, pathbuilderId: number, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+	const raw = resolveToEmbeds(character.toHtml(), sageCache.getFormatter()).map(e => e.description).join("");
 	const buffer = Buffer.from(raw, "utf-8");
 	const attachment = new Discord.MessageAttachment(buffer, `pathbuilder2e-${pathbuilderId}.txt`);
 	const message = await channel.send({
@@ -98,25 +99,25 @@ function getPath(characterId: string): string {
 async function notifyOfSlicedMacros(sageCache: SageCache, character: PathbuilderCharacter): Promise<void> {
 	const slicedMacros = character.getSheetValue<string[]>("slicedMacros") ?? [];
 	if (slicedMacros.length) {
-		const user = await sageCache.discord.fetchUser(sageCache.user.did);
+		const user = await sageCache.discord.fetchUser(sageCache.actor.d);
 		if (user) {
 			await user.send({ content:`While importing ${character.name}, the combined list of attacks and custom macros exceeded the allowed number of options. The following macros were not displayed to avoid errors:\n> ${slicedMacros.join(", ")}` });
 		}
 	}
 }
 
-async function postCharacter(sageCache: SageCache, channel: TChannel, character: PathbuilderCharacter, pin: boolean): Promise<void> {
-	setMacroUser(character, sageCache.user);
+async function postCharacter(sageCache: SageCache, channel: DChannel, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+	setMacroUser(character, sageCache.actor.s);
 	const saved = await saveCharacter(character);
 	if (saved) {
-		const output = prepareOutput(sageCache, character, sageCache.user);
+		const output = prepareOutput(sageCache, character, sageCache.actor.s);
 		const message = await channel.send(output).catch(errorReturnNull);
 		if (pin && message?.pinnable) {
 			await message.pin();
 		}
 		await notifyOfSlicedMacros(sageCache, character);
 	}else {
-		const output = { embeds:resolveToEmbeds(sageCache, character.toHtml()) };
+		const output = { embeds:resolveToEmbeds(character.toHtml(), sageCache.getFormatter()) };
 		const message = await channel.send(output).catch(errorReturnNull);
 		if (pin && message?.pinnable) {
 			await message.pin();
@@ -125,11 +126,11 @@ async function postCharacter(sageCache: SageCache, channel: TChannel, character:
 }
 
 async function updateSheet(sageInteraction: SageInteraction, character: PathbuilderCharacter) {
-	const macroUser = await sageInteraction.caches.users.getById(character.getSheetValue("macroUserId"));
-	const output = prepareOutput(sageInteraction.caches, character, macroUser);
+	const macroUser = await sageInteraction.sageCache.users.getById(character.getSheetValue("macroUserId"));
+	const output = prepareOutput(sageInteraction.sageCache, character, macroUser);
 	const message = sageInteraction.interaction.message as Discord.Message;
 	await message.edit(output);
-	await notifyOfSlicedMacros(sageInteraction.caches, character);
+	await notifyOfSlicedMacros(sageInteraction.sageCache, character);
 }
 
 function getActiveSections(character: PathbuilderCharacter): TCharacterSectionType[] {
@@ -263,7 +264,7 @@ function createComponents(character: PathbuilderCharacter, macroUser: Optional<U
 
 type TOutput = { embeds:Discord.MessageEmbed[], components:Discord.MessageActionRow[] };
 function prepareOutput(sageCache: SageCache, character: PathbuilderCharacter, macroUser: Optional<User>): TOutput {
-	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character)));
+	const embeds = resolveToEmbeds(character.toHtml(getActiveSections(character)), sageCache.getFormatter());
 	const components = createComponents(character, macroUser);
 	return { embeds, components };
 }
@@ -345,7 +346,7 @@ async function skillHandler(sageInteraction: SageInteraction<Discord.SelectMenuI
 async function macroHandler(sageInteraction: SageInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeMacro = sageInteraction.interaction.values[0];
 	if (activeMacro === "REFRESH") {
-		setMacroUser(character, sageInteraction.sageUser);
+		setMacroUser(character, sageInteraction.actor.s);
 	}else {
 		character.setSheetValue("activeMacro", activeMacro);
 	}
@@ -372,12 +373,12 @@ async function rollHandler(sageInteraction: SageInteraction<Discord.ButtonIntera
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
-		await sageInteraction.interaction.channel?.send(`${DiscordId.toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`);
+		await sageInteraction.interaction.channel?.send(`${DiscordId.toUserMention(sageInteraction.actor.did)} *Secret Dice sent to the GM* 🎲`);
 	}
 }
 
 async function macroRollHandler(sageInteraction: SageInteraction, character: PathbuilderCharacter): Promise<void> {
-	const macroUser = await sageInteraction.caches.users.getById(character.getSheetValue("macroUserId"));
+	const macroUser = await sageInteraction.sageCache.users.getById(character.getSheetValue("macroUserId"));
 	const activeMacro = character.getSheetValue("activeMacro");
 	const macros = getMacros(character, macroUser);
 	// check by id first (proper) then by name second (fallback to old renders)
@@ -387,7 +388,7 @@ async function macroRollHandler(sageInteraction: SageInteraction, character: Pat
 		const output = matches.map(match => match.output).flat();
 		await sendDice(sageInteraction, output);
 	}else {
-		setMacroUser(character, sageInteraction.sageUser);
+		setMacroUser(character, sageInteraction.actor.s);
 		await saveCharacter(character);
 		await updateSheet(sageInteraction, character);
 		if (macros.length) {
@@ -429,7 +430,7 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 export const pb2eId = "pathbuilder2e-id";
 
 export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction): Promise<void> {
-	const pathbuilderId = sageInteraction.getNumber(pb2eId, true);
+	const pathbuilderId = sageInteraction.args.getNumber(pb2eId, true);
 	await sageInteraction.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, false);
 
 	const pathbuilderChar = await PathbuilderCharacter.fetch(pathbuilderId, { });
@@ -437,14 +438,14 @@ export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction
 		return sageInteraction.reply(`Failed to fetch Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}!`, false);
 	}
 
-	const channel = sageInteraction.interaction.channel as TChannel ?? sageInteraction.user;
+	const channel = sageInteraction.interaction.channel as DChannel ?? sageInteraction.actor.d;
 
-	const pin = sageInteraction.getBoolean("pin") ?? false;
-	const attach = sageInteraction.getBoolean("attach") ?? false;
+	const pin = sageInteraction.args.getBoolean("pin") ?? false;
+	const attach = sageInteraction.args.getBoolean("attach") ?? false;
 	if (attach) {
-		await attachCharacter(sageInteraction.caches, channel, pathbuilderId, pathbuilderChar, pin);
+		await attachCharacter(sageInteraction.sageCache, channel, pathbuilderId, pathbuilderChar, pin);
 	}else {
-		await postCharacter(sageInteraction.caches, channel, pathbuilderChar, pin);
+		await postCharacter(sageInteraction.sageCache, channel, pathbuilderChar, pin);
 	}
 	return sageInteraction.deleteReply();
 }

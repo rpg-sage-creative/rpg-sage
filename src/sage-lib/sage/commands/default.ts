@@ -1,16 +1,15 @@
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
+import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
-import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs } from "../../discord/types";
 import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
-import { searchHandler } from "./search";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp, registerFindHelp, registerSearchHelp } from "./help";
-import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
+import { searchHandler } from "./search";
 
 // #region Common Types and Functions
 
@@ -105,10 +104,11 @@ export function renderAll(objectType: string, objectTypePlural: string, _bySourc
 // #endregion
 
 async function objectsBy(sageMessage: SageMessage): Promise<void> {
-	const objectTypePlural = sageMessage.args.shift()?.value!,
-		objectType = Repository.parseObjectType(utils.LangUtils.oneToUS(objectTypePlural.replace(/gods/i, "deities")))!,
-		traitOr = sageMessage.args.shift()?.value ?? (objectType.objectType === "Deity" ? "domain" : "trait"),
-		searchTerm = sageMessage.args.shift()?.value!;
+	const argValues = sageMessage.args.unkeyedValues();
+	const objectTypePlural = argValues.shift(),
+		objectType = Repository.parseObjectType(utils.LangUtils.oneToUS(objectTypePlural!.replace(/gods/i, "deities")))!,
+		traitOr = argValues.shift() ?? (objectType.objectType === "Deity" ? "domain" : "trait"),
+		searchTerm = argValues.shift()!;
 
 	const content = createCommandRenderableContent(),
 		trait = traitOr === "trait" && Repository.findByValue("Trait", searchTerm),
@@ -203,7 +203,7 @@ function findTester(sageMessage: SageMessage): TCommandAndArgs | null {
 }
 async function findHandler(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowSearch) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("Game Content Search", "This channel must Allow Search commands.");
 	}
 
 	// if (await repositoryFind_listObjectType(sageMessage, parsedSearchInfo)) return;
@@ -225,7 +225,7 @@ async function dmSlashHandler(sageInteraction: SageInteraction): Promise<void> {
 
 	function deferred(): Promise<void> {
 		const dmContent = `Hello!\nRPG Sage will now reply to your Direct Messages.\n*Note: Anytime RPG Sage is disconnected from Discord, you will need to reestablish this channel. I apologize for the inconvenience.*`;
-		return sageInteraction.user.send(dmContent).then(success, failure);
+		return sageInteraction.actor.d.send(dmContent).then(success, failure);
 	}
 	function success(): Promise<void> {
 		return sageInteraction.reply(`Please check your DMs!`, true);
@@ -261,43 +261,6 @@ export function registerCommandHandlers(): void {
 	registerMessageListener(findTester, findHandler);
 	registerFindHelp("Search", "Find", `WORD OR WORDS`);
 	registerFindHelp("Search", "Find", `WORD OR WORDS -CATEGORY\n\tCATEGORY can be armor, spell, weapon, etc.`);
-
-	registerCommandRegex(/debug\-log\-all\-items/, async (sageMessage: SageMessage) => {
-		if (sageMessage.isSuperUser) {
-			console.log(`debug-log-all-items: begin`);
-			let maxEmbeds = 0;
-			let maxCharacters = 0;
-			const clean = <string[]>[];
-			const objectTypes = Repository.getObjectTypes();
-			for (const objectType of objectTypes) {
-				console.log(`\tdebug-log-all-items(${objectType}): begin`);
-				const broken = <string[]>[];
-				const objects = Repository.all(objectType);
-				for (const object of objects) {
-					try {
-						// console.log(`\t\t${objectType}::${object.id}::${object.name}`);
-						const renderable = object.toRenderableContent();
-// console.log((renderable as any)?.prototype?.constructor?.name ?? Object.prototype.toString.call(object));
-						const embeds = resolveToEmbeds(sageMessage.caches, renderable);
-						maxEmbeds = Math.max(maxEmbeds, embeds.length);
-						const string = renderable.toString();
-						maxCharacters = Math.max(maxCharacters, string.length);
-					} catch (ex) {
-						broken.push(`${object.id}::${object.name}`);
-						// console.error(ex);
-					}
-				}
-				if (!broken.length) {
-					clean.push(objectType);
-				} else {
-					await sageMessage.send(`__**${objectType}: ${broken.length} errors.**__\n${broken.join("\n")}`);
-				}
-				console.log(`\tdebug-log-all-items(${objectType}): end`);
-			}
-			await sageMessage.send(`__**Clean Objects (${clean.length}):**__ ${clean.join(", ")}; maxEmbeds (${maxEmbeds}), maxCharacters (${maxCharacters})`);
-			console.log(`debug-log-all-items: end`);
-		}
-	});
 
 	registerInteractionListener(dmSlashTester, dmSlashHandler);
 }

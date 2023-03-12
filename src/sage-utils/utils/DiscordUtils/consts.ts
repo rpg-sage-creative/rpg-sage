@@ -22,4 +22,4 @@ export const DiscordMaxValues = {
 	usernameLength: 80
 };
 
-export const NilSnowflake: Snowflake = "000000000000000000";
+export const NilSnowflake: Snowflake = "0000000000000000";

@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
 import utils, { Optional, UUID } from "../../../sage-utils";
-import type { DiscordKey } from "../../discord";
+import type DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import type { TDialogMessage } from "../repo/DialogMessageRepository";
 import CharactersMatch from "./CharactersMatch";
 import type Game from "./Game";
