@@ -5,13 +5,12 @@ import utils, { Args, Optional } from "../../../../sage-utils";
 import type { DChannel } from "../../../../sage-utils/utils/DiscordUtils";
 import DiscordKey from "../../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import type Game from "../../model/Game";
-import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game";
 import type SageCache from "../../model/SageCache";
 import { hasValues, ISageCommandArgs } from "../../model/SageCommandArgs";
 import type SageMessage from "../../model/SageMessage";
 import type Server from "../../model/Server";
 import { getServerDefaultGameOptions } from "../../model/Server";
-import { channelTypeToChannelOptions, DialogType, GameChannelType, IChannelOptions, PermissionType, type IChannel } from "../../repo/base/channel";
+import { DialogType, GameChannelType, IChannelOptions, type IChannel } from "../../repo/base/channel";
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";
@@ -20,22 +19,14 @@ import { registerAdminCommandHelp } from "../help";
 
 function getChannelOptions(args: ISageCommandArgs): Args<IChannelOptions> | null {
 	const gameChannelType = args.getEnum<GameChannelType>(GameChannelType, "type");
-	const channelTypeOptions = channelTypeToChannelOptions(gameChannelType);
 	const opts: Args<IChannelOptions> = {
 		...getServerDefaultGameOptions(args),
-		admin: channelTypeOptions.admin ?? args.getBoolean("admin"),
-		commands: channelTypeOptions.commands ?? args.getBoolean("commands"),
-		dialog: channelTypeOptions.dialog ?? args.getBoolean("dialog"),
-		dice: channelTypeOptions.dice ?? args.getBoolean("dice"),
+		commands: args.getBoolean("commands"),
+		dialog: args.getBoolean("dialog"),
+		dice: args.getBoolean("dice"),
 		gameChannelType: gameChannelType,
-		gameMaster: channelTypeOptions.gameMaster,
-		nonPlayer: channelTypeOptions.nonPlayer,
-		player: channelTypeOptions.player,
-		search: channelTypeOptions.search ?? args.getBoolean("search"),
-		sendCommandTo: args.getChannelDid("commandsto"),
 		sendDialogTo: args.getChannelDid("dialogto"),
-		sendDiceTo: args.getChannelDid("diceto"),
-		sendSearchTo: args.getChannelDid("searchto")
+		sendDiceTo: args.getChannelDid("diceto")
 	};
 	return hasValues(opts) ? opts : null;
 }
@@ -67,32 +58,12 @@ async function channelAdd(sageMessage: SageMessage): Promise<void> {
 
 function channelDetailsAppendActions(renderableContent: utils.RenderUtils.RenderableContent, channel: IChannel): void {
 	const allowed: string[] = [], blocked: string[] = [];
-	(channel.admin ? allowed : blocked).push("Admin");
 	(channel.commands ? allowed : blocked).push("Commands");
 	(channel.dialog ? allowed : blocked).push("Dialog");
 	(channel.dice ? allowed : blocked).push("Dice");
-	(channel.search ? allowed : blocked).push("Search");
 	renderableContent.append(`<b>Actions</b>`);
 	renderableContent.append(`[spacer]<b>Allowed</b> ${allowed.join(", ") || "<i>none</i>"}`);
 	renderableContent.append(`[spacer]<b>Blocked</b> ${blocked.join(", ") || "<i>none</i>"}`);
-}
-
-async function channelDetailsAppendAdmin(renderableContent: utils.RenderUtils.RenderableContent, server: Server, channel: IChannel): Promise<void> {
-	if (channel.admin && channel.sendCommandTo) {
-		renderableContent.append(`<b>Admin Options</b>`);
-
-		const sendToName = await server.discord.fetchChannelName(channel.sendCommandTo);
-		renderableContent.append(`[spacer]<b>Send Results To</b> #${sendToName} (${channel.sendCommandTo})`);
-	}
-}
-
-async function channelDetailsAppendCommand(renderableContent: utils.RenderUtils.RenderableContent, server: Server, channel: IChannel): Promise<void> {
-	if (channel.commands && channel.sendCommandTo) {
-		renderableContent.append(`<b>Command Options</b>`);
-
-		const sendToName = await server.discord.fetchChannelName(channel.sendCommandTo);
-		renderableContent.append(`[spacer]<b>Send Results To</b> #${sendToName} (${channel.sendCommandTo})`);
-	}
 }
 
 async function channelDetailsAppendDialog(renderableContent: utils.RenderUtils.RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): Promise<void> {
@@ -139,12 +110,15 @@ async function channelDetailsAppendDice(renderableContent: utils.RenderUtils.Ren
 	}
 }
 
-async function channelDetailsAppendSearch(renderableContent: utils.RenderUtils.RenderableContent, server: Server, channel: IChannel): Promise<void> {
-	if (channel.search && channel.sendSearchTo) {
-		renderableContent.append(`<b>Search Options</b>`);
-
-		const sendToName = await server.discord.fetchChannelName(channel.sendSearchTo);
-		renderableContent.append(`[spacer]<b>Send Results To</b> #${sendToName}`);
+function gameChannelTypeToString(type: Optional<GameChannelType>): string {
+	switch(type) {
+		case GameChannelType.Dice: return "Dice";
+		case GameChannelType.GameMaster: return "GM <i>(Game Master)</i>";
+		case GameChannelType.InCharacter: return "IC <i>(In Character)</i>";
+		case GameChannelType.Miscellaneous: return "Misc";
+		case GameChannelType.None: return "None";
+		case GameChannelType.OutOfCharacter: return "OOC <i>(Out of Character)</i>";
+		default: return "<i>Unset</i>";
 	}
 }
 
@@ -154,16 +128,9 @@ function channelDetailsAppendGame(renderableContent: utils.RenderUtils.Renderabl
 		const gameTypeText = gameType === "None" ? "" : `<i>(${gameType})</i>`;
 		renderableContent.appendTitledSection(`<b>Game:</b> ${game.name} ${gameTypeText}`);
 
-		const nameTags = mapSageChannelNameTags(channel);
-		const channelType = nameTagsToType(nameTags);
+		const channelType = gameChannelTypeToString(channel.gameChannelType);
 		renderableContent.append(`<b>Channel Type</b> ${channelType}`);
 
-		if (nameTags.misc) {
-			renderableContent.append(`[spacer]<b>Permissions</b>`);
-			renderableContent.append(`[spacer][spacer]<b>GameMaster</b> ${PermissionType[channel.gameMaster || 0]}`);
-			renderableContent.append(`[spacer][spacer]<b>Player</b> ${PermissionType[channel.player || 0]}`);
-			// renderableContent.append(`[spacer][spacer]<b>NonPlayer</b> ${PermissionType[channel.nonPlayer || 0]}`);
-		}
 	} else {
 		const defaultGameType = GameType[channel.defaultGameType!];
 		const inheritedGameType = GameType[server.defaultGameType ?? GameType.None];
@@ -209,11 +176,8 @@ export async function channelDetails(sageMessage: SageMessage, channel?: IChanne
 
 	channelDetailsAppendGame(renderableContent, server, game, channel);
 	channelDetailsAppendActions(renderableContent, channel);
-	await channelDetailsAppendAdmin(renderableContent, server, channel);
-	await channelDetailsAppendCommand(renderableContent, server, channel);
 	await channelDetailsAppendDialog(renderableContent, server, game, channel);
 	await channelDetailsAppendDice(renderableContent, server, game, channel);
-	await channelDetailsAppendSearch(renderableContent, server, channel);
 
 	await sageMessage.send(renderableContent);
 }
@@ -292,9 +256,9 @@ async function channelRemove(sageMessage: SageMessage): Promise<void> {
 
 //#region set
 
-async function channelSet(sageMessage: SageMessage): Promise<void> {
+async function channelSet(sageMessage: SageMessage<true>): Promise<void> {
 	const targetChannelDid = sageMessage.args.getChannelDid("channel") ??  sageMessage.discordKey.channel;
-	if (!sageMessage.testChannelAdmin(targetChannelDid)) {
+	if (!sageMessage.checkCanAdminChannel(targetChannelDid)) {
 		return sageMessage.denyByProv("Set Channel Options", "You must be in the channel to set or in a channel that allows commands.");
 	}
 

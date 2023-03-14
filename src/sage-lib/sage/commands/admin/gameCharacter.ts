@@ -1,16 +1,15 @@
-import type * as Discord from "discord.js";
+import type { Message, Snowflake } from "discord.js";
+import type { Optional, OrUndefined } from "../../../../sage-utils";
+import DiscordId from "../../../../sage-utils/utils/DiscordUtils/DiscordId";
+import { orNilSnowflake } from "../../../../sage-utils/utils/DiscordUtils/snowflake";
 import { sendWebhook } from "../../../discord/messages";
 import { discordPromptYesNo } from "../../../discord/prompts";
-import type { Optional, OrUndefined } from "../../../../sage-utils";
 import type CharacterManager from "../../model/CharacterManager";
 import GameCharacter, { GameCharacterCore } from "../../model/GameCharacter";
 import type SageMessage from "../../model/SageMessage";
 import type { TNames } from "../../model/SageMessageArgs";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
-import DiscordId from "../../../../sage-utils/utils/DiscordUtils/DiscordId";
-import { orNilSnowflake } from "../../../../sage-utils/utils/DiscordUtils/snowflake";
-import type { DChannel } from "../../../../sage-utils/utils/DiscordUtils";
 
 //#region Character Command Types
 
@@ -68,7 +67,7 @@ function getCharacterTypeMeta(sageMessage: SageMessage): TCharacterTypeMeta {
 
 //#region helpers
 
-function getUserDid(sageMessage: SageMessage): Discord.Snowflake | null {
+function getUserDid(sageMessage: SageMessage): Snowflake | null {
 	return !sageMessage.game || sageMessage.isPlayer
 		? sageMessage.actor.did
 		: sageMessage.args.findUserDid("user") ?? null;
@@ -114,7 +113,7 @@ function getAutoGameCharacter(sageMessage: SageMessage): OrUndefined<GameCharact
 }
 
 /** For each channel given, the actor's auto channel character is removed. */
-async function removeAuto(sageMessage: SageMessage, ...channelDids: Discord.Snowflake[]): Promise<void> {
+async function removeAuto(sageMessage: SageMessage, ...channelDids: Snowflake[]): Promise<void> {
 	const gameCharacter = getAutoGameCharacter(sageMessage);
 	for (const channelDid of channelDids) {
 		const char = gameCharacter ?? sageMessage.actor.s.getAutoCharacterForChannel(channelDid);
@@ -128,7 +127,7 @@ async function removeAuto(sageMessage: SageMessage, ...channelDids: Discord.Snow
 }
 
 /** Reusable code to get GameCharacter for the commands. */
-async function getCharacter(sageMessage: SageMessage, characterTypeMeta: TCharacterTypeMeta, userDid: Discord.Snowflake, names: TNames): Promise<GameCharacter | undefined> {
+async function getCharacter(sageMessage: SageMessage, characterTypeMeta: TCharacterTypeMeta, userDid: Snowflake, names: TNames): Promise<GameCharacter | undefined> {
 	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s;
 	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
@@ -141,7 +140,7 @@ async function getCharacter(sageMessage: SageMessage, characterTypeMeta: TCharac
 
 //#region Render Character / Characters
 
-export async function sendGameCharacter(sageMessage: SageMessage, character: GameCharacter): Promise<Discord.Message[]> {
+export async function sendGameCharacter(sageMessage: SageMessage, character: GameCharacter): Promise<Message[]> {
 	const ownerGuildMember = character.userDid ? await sageMessage.discord.fetchGuildMember(character.userDid) : null,
 		ownerTag = ownerGuildMember?.user ? `@${ownerGuildMember.user.tag}` : ownerGuildMember?.displayName ?? character.userDid,
 		renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), character.name);
@@ -177,7 +176,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.appendTitledSection(`<b>Notes</b>`, ...notes);
 	}
 
-	const targetChannel = (await sageMessage.sageCache.discord.fetchChannel(sageMessage.channel?.sendCommandTo)) ?? sageMessage.message.channel as DChannel;
+	const targetChannel = sageMessage.message.channel;
 	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
 	return sendWebhook(sageMessage.sageCache, targetChannel, renderableContent, { avatarURL: avatarUrl, username: character.name }, sageMessage.dialogType);
 }
@@ -228,8 +227,9 @@ async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterM
 //#endregion
 
 async function gameCharacterList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin) {
-		return sageMessage.denyByProv("List Characters", "Channel must allow Admin actions.");
+	const denial = sageMessage.checkDenyCommand("List Characters");
+	if (denial) {
+		return denial;
 	}
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -251,7 +251,7 @@ async function gameCharacterList(sageMessage: SageMessage): Promise<void> {
 	return sendGameCharactersOrNotFound(sageMessage, characterManager, `${characterTypeMeta.commandDescriptor}-list`, characterTypeMeta.pluralDescriptor!);
 }
 
-function findCompanion(characterManager: CharacterManager, userDid: Optional<Discord.Snowflake>, names: TNames): GameCharacter | undefined {
+function findCompanion(characterManager: CharacterManager, userDid: Optional<Snowflake>, names: TNames): GameCharacter | undefined {
 	const character = names.charName
 		? characterManager.findByUserAndName(userDid, names.charName)
 		: characterManager.filterByUser(orNilSnowflake(userDid))?.[0];
@@ -265,8 +265,9 @@ function findCompanion(characterManager: CharacterManager, userDid: Optional<Dis
 }
 
 async function gameCharacterDetails(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin) {
-		return sageMessage.denyByProv("Character Details", "Channel must allow Admin actions.");
+	const denial = sageMessage.checkDenyCommand("Character Details");
+	if (denial) {
+		return denial;
 	}
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -274,7 +275,7 @@ async function gameCharacterDetails(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock(sageMessage.game ? "Must be a GM or Player of this game." : "Cannot *currently* use NPCs outside a Game.");
 	}
 
-	const userDid = await getUserDid(sageMessage),
+	const userDid = getUserDid(sageMessage),
 		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s,
 		characterManager = characterTypeMeta.isGmOrNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
 		names = characterTypeMeta.isGm ? <TNames>{ name: sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName } : sageMessage.args.findNames();
@@ -289,8 +290,12 @@ async function gameCharacterDetails(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin) {
-		return sageMessage.denyByProv("Add Character", "Channel must allow Admin actions.");
+	const permOrProv = sageMessage.checkCanCommandChannel();
+	if (!permOrProv) {
+		if (permOrProv === false) {
+			return sageMessage.denyByProv("Add Character", "Channel must allow Command actions.");
+		}
+		return sageMessage.denyByPerm("Add Character", "Must be a GM or Player of this game.");
 	}
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -348,8 +353,9 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameCharacterUpdate(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin) {
-		return sageMessage.denyByProv("Update Character", "Channel must allow Admin actions.");
+	const denial = sageMessage.checkDenyCommand("Update Character");
+	if (denial) {
+		return denial;
 	}
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -396,8 +402,9 @@ async function gameCharacterUpdate(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameCharacterStats(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin) {
-		return sageMessage.denyByProv("Update Character Stats", "Channel must allow Admin actions.");
+	const denial = sageMessage.checkDenyCommand("Update Character Stats");
+	if (denial) {
+		return denial;
 	}
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -426,8 +433,9 @@ async function gameCharacterStats(sageMessage: SageMessage): Promise<void> {
 }
 
 async function characterDelete(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin) {
-		return sageMessage.denyByProv("Delete Character", "Channel must allow Admin actions.");
+	const denial = sageMessage.checkDenyCommand("Delete Character");
+	if (denial) {
+		return denial;
 	}
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -454,8 +462,9 @@ async function characterDelete(sageMessage: SageMessage): Promise<void> {
 }
 
 async function characterAutoOn(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin) {
-		return sageMessage.denyByProv("Character Auto Dialog", "Channel must allow Admin actions.");
+	const denial = sageMessage.checkDenyCommand("Character Auto Dialog");
+	if (denial) {
+		return denial;
 	}
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -488,8 +497,9 @@ async function characterAutoOn(sageMessage: SageMessage): Promise<void> {
 }
 
 async function characterAutoOff(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin) {
-		return sageMessage.denyByProv("Character Auto Dialog", "Channel must allow Admin actions.");
+	const denial = sageMessage.checkDenyCommand("Character Auto Dialog");
+	if (denial) {
+		return denial;
 	}
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);

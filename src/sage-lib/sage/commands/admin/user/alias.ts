@@ -46,8 +46,9 @@ function dialogContentToTarget(dialogContent: TDialogContent, separator = "::"):
 }
 
 async function aliasList(sageMessage: SageMessage<true>): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
-		return sageMessage.denyByProv("List Aliases", "This channel must Allow Admin and Dialog commands.");
+	const denial = sageMessage.checkDenyCommand("List Aliases");
+	if (denial) {
+		return denial;
 	}
 
 	const aliases = sageMessage.actor.s.aliases;
@@ -76,8 +77,9 @@ function aliasTest(sageMessage: SageMessage, dialogContent: TDialogContent): boo
 	return false;
 }
 async function aliasSet(sageMessage: SageMessage<true>): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
-		return sageMessage.denyByProv("Set Alias", "This channel must Allow Admin and Dialog commands.");
+	const denial = sageMessage.checkDenyCommand("Set Alias");
+	if (denial) {
+		return denial;
 	}
 
 	const values = sageMessage.args.unkeyedValues();
@@ -98,8 +100,9 @@ async function aliasSet(sageMessage: SageMessage<true>): Promise<void> {
 }
 
 async function aliasDelete(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
-		return sageMessage.denyByProv("Delete Alias", "This channel must Allow Admin and Dialog commands.");
+	const denial = sageMessage.checkDenyCommand("Delete Alias");
+	if (denial) {
+		return denial;
 	}
 
 	const alias = sageMessage.args.getString("alias") ?? sageMessage.args.getString("name") ?? sageMessage.args.valueAt(0)!;
@@ -108,8 +111,9 @@ async function aliasDelete(sageMessage: SageMessage): Promise<void> {
 }
 
 async function aliasDeleteAll(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
-		return sageMessage.denyByProv("Delete All Aliases", "This channel must Allow Admin and Dialog commands.");
+	const denial = sageMessage.checkDenyCommand("Delete All Aliases");
+	if (denial) {
+		return denial;
 	}
 
 	const count = sageMessage.actor.s.aliases.length;

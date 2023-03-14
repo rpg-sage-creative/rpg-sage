@@ -11,9 +11,11 @@ async function userCount(sageMessage: SageMessage): Promise<void> {
 }
 
 async function userUpdate(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin) {
-		return sageMessage.denyByProv("Update User", "This channel must Allow Admin commands.");
+	const denial = sageMessage.checkDenyCommand("Update User");
+	if (denial) {
+		return denial;
 	}
+
 	const defaultDialogType = sageMessage.args.getEnum<DialogType>(DialogType, "dialogType");
 	const defaultSagePostType = sageMessage.args.getEnum<DialogType>(DialogType, "sagePostType");
 	const updated = await sageMessage.actor.s.update({ defaultDialogType, defaultSagePostType });

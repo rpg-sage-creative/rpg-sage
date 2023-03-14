@@ -4,13 +4,13 @@ import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../.
 import utils, { Args, Optional } from "../../../../../sage-utils";
 import DiscordId from "../../../../../sage-utils/utils/DiscordUtils/DiscordId";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import Game, { GameRoleType, GameUserType, getDefaultGameOptions, IGameUser, mapSageChannelNameTags, nameTagsToType, TDefaultGameOptions } from "../../../model/Game";
+import Game, { GameRoleType, GameUserType, getDefaultGameOptions, IGameUser, TDefaultGameOptions } from "../../../model/Game";
 import GameCharacter from "../../../model/GameCharacter";
 import { getEnum, hasValues, ISageCommandArgs } from "../../../model/SageCommandArgs";
 import type SageMessage from "../../../model/SageMessage";
 import type Server from "../../../model/Server";
 import { getServerDefaultGameOptions } from "../../../model/Server";
-import { DialogType, GameChannelType, IChannel } from "../../../repo/base/channel";
+import { DialogType, GameChannelType, IChannel, toGameChannelTypeString } from "../../../repo/base/channel";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
@@ -39,7 +39,7 @@ async function gameCount(sageMessage: SageMessage): Promise<void> {
 }
 
 async function myGameList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowCommand) {
+	if (!sageMessage.checkCanCommandChannel()) {
 		return sageMessage.denyByPerm("My Game List", "The current channel doesn't allow basic commands.");
 	}
 	const myDid = sageMessage.actor.did;
@@ -228,16 +228,17 @@ async function showGameRenderServer(renderableContent: utils.RenderUtils.Rendera
 async function showGameRenderChannels(renderableContent: utils.RenderUtils.RenderableContent, sageMessage: SageMessage, game: Game): Promise<void> {
 	renderableContent.append(`<b>Channels</b> ${game.channels.length}`);
 
-	const tags = ["ic", "ooc", "gm", "misc"];
-	for (const tag of tags) {
-		const metas = game.channels
-			.map(sageChannel => ({ sageChannel, nameTags:mapSageChannelNameTags(sageChannel) }))
-			.filter(ch => ch.nameTags[tag as "ic"]);
-		if (metas.length) {
-			renderableContent.append(`[spacer]<b>${nameTagsToType(metas[0].nameTags)}</b>`);
-			for (const meta of metas) {
-				const discord = await sageMessage.sageCache.discord.forGuild(game.serverDid);
-				const guildChannel = await discord?.fetchChannel<TextChannel>(meta.sageChannel.did);
+	const discord = await sageMessage.sageCache.discord.forGuild(game.serverDid);
+	const allChannels = game.channels;
+
+	const types = [GameChannelType.InCharacter, GameChannelType.OutOfCharacter, GameChannelType.GameMaster, GameChannelType.Dice, GameChannelType.Miscellaneous, GameChannelType.None];
+	for (const type of types) {
+		const channels = allChannels.filter(channel => (channel.gameChannelType ?? GameChannelType.None) === type);
+		if (channels.length) {
+			const typeLabel = type === GameChannelType.None ? "Other" : toGameChannelTypeString(type);
+			renderableContent.append(`[spacer]<b>${typeLabel}</b>`);
+			for (const channel of channels) {
+				const guildChannel = await discord?.fetchChannel<TextChannel>(channel.did);
 				const guildChannelName = guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`;
 				renderableContent.append(`[spacer][spacer]${guildChannelName}`);
 			}
@@ -517,8 +518,7 @@ async function gameArchive(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameToggleDicePing(sageMessage: SageMessage): Promise<void> {
-	const gameChannel = sageMessage.gameChannel;
-	if (gameChannel?.admin && (sageMessage.isGameMaster || sageMessage.isPlayer)) {
+	if (sageMessage.checkCanCommandChannel() && (sageMessage.isGameMaster || sageMessage.isPlayer)) {
 		const message = sageMessage.isGameMaster
 			? "Do you want to get a ping when dice are rolled in this game?"
 			: "Do you want to get a ping when you roll dice in this game?";

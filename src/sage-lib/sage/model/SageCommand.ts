@@ -1,7 +1,8 @@
-import type * as Discord from "discord.js";
+import type { Guild, MessageActionRow, MessageEmbed, Snowflake } from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import type { If, Optional } from "../../../sage-utils";
+import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
 import { SuperClass } from "../../../sage-utils/utils/ClassUtils";
 import type { DChannel } from "../../../sage-utils/utils/DiscordUtils";
 import type DiscordFetches from "../../../sage-utils/utils/DiscordUtils/DiscordFetches";
@@ -10,7 +11,7 @@ import { resolveToEmbeds, resolveToTexts } from "../../../sage-utils/utils/Disco
 import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
 import { createAdminRenderableContent } from "../commands/cmd";
 import { DicePostType } from "../commands/dice";
-import { DialogType, IChannel } from "../repo/base/channel";
+import { DialogType, GameChannelType, IChannel } from "../repo/base/channel";
 import type Bot from "./Bot";
 import type Game from "./Game";
 import type GameCharacter from "./GameCharacter";
@@ -28,12 +29,12 @@ export interface SageCommandCore<HasGuild extends boolean = boolean, HasGuildCha
 }
 
 export interface ICanHaveServer<HasServer extends boolean = boolean> {
-	guild: If<HasServer, TSageDiscordPair<Discord.Guild, Server>>;
+	guild: If<HasServer, TSageDiscordPair<Guild, Server>>;
 	server: If<HasServer, Server>;
 }
 
 export interface IHaveServer {
-	guild: TSageDiscordPair<Discord.Guild, Server>;
+	guild: TSageDiscordPair<Guild, Server>;
 	/** @deprecated User .guild.s */
 	server: Server;
 }
@@ -44,21 +45,24 @@ export interface ICanHaveGame<HasGame extends boolean = boolean> {
 
 export interface IHaveGame {
 	game: Game;
+	gameChannel: IChannel;
 }
 
 export type TSendArgs<HasEphemeral extends boolean = boolean> = {
 	content?: TRenderableContentResolvable;
-	embeds?: TRenderableContentResolvable | Discord.MessageEmbed[];
-	components?: Discord.MessageActionRow[];
+	embeds?: TRenderableContentResolvable | MessageEmbed[];
+	components?: MessageActionRow[];
 	ephemeral?: If<HasEphemeral, boolean | null, never>;
 };
 
 export type TSendOptions<HasEphemeral extends boolean = boolean> = {
 	content?: string | null;
-	embeds?: Discord.MessageEmbed[];
-	components?: Discord.MessageActionRow[];
+	embeds?: MessageEmbed[];
+	components?: MessageActionRow[];
 	ephemeral?: If<HasEphemeral, boolean | null, never>;
 };
+
+type TDenial = { denyPerm:string; denyProv:never; } | { denyPerm:never; denyProv:string; };
 
 export type SageCommand = SageCommandBase<SageCommandCore, ISageCommandArgs, any>;
 
@@ -110,7 +114,7 @@ export abstract class SageCommandBase<
 	public get discord(): DiscordFetches<HasGuild, HasGuildChannel, HasUser> { return this.sageCache.discord; }
 	public get discordKey(): DiscordKey { return this.sageCache.discordKey; }
 	public get game(): Game | undefined { return this.sageCache.game; }
-	public get guild(): If<HasServer, TSageDiscordPair<Discord.Guild, Server>> { return this.sageCache.guild as any; }
+	public get guild(): If<HasServer, TSageDiscordPair<Guild, Server>> { return this.sageCache.guild as any; }
 	public get server(): If<HasServer, Server> { return this.sageCache.guild?.s as any; }
 
 	//#endregion
@@ -119,49 +123,40 @@ export abstract class SageCommandBase<
 
 	//#region channel "allow" flags
 
-	/** Quick flag for "this" Channel (!this.channel || this.channel.admin === true) */
-	public get allowAdmin(): boolean {
-		return this.cache.get("allowAdmin", () => !this.channel || this.channel.admin === true);
+	/**
+	 * @deprecated use .checkCanCommandChannel();
+	 */
+	public get allowCommands(): boolean {
+		return this.cache.get("allowCommands", () => this.checkCanCommandChannel() === true);
 	}
 
-	/** Quick flag for "this" Channel (!this.channel || this.channel.commands === true) */
-	public get allowCommand(): boolean {
-		return this.cache.get("allowCommand", () => !this.channel || this.channel.commands === true);
-	}
-
-	/** Quick flag for "this" Channel (this.server ? this.channel?.dialog === true : false) */
+	/**
+	 * @deprecated use .checkCanDialogChannel();
+	 */
 	public get allowDialog(): boolean {
-		return this.cache.get("allowDialog", () => this.server ? this.channel?.dialog === true : false);
+		return this.cache.get("allowDialog", () => this.checkCanDialogChannel() === true);
 	}
 
-	/** Quick flag for "this" Channel (!this.channel || this.channel.dice === true) */
+	/**
+	 * @deprecated use .checkCanDiceChannel();
+	 */
 	public get allowDice(): boolean {
-		return this.cache.get("allowDice", () => !this.channel || this.channel.dice === true);
+		return this.cache.get("allowDice", () => this.checkCanDiceChannel() === true);
 	}
 
-	/** Quick flag for "this" Channel (!this.channel || this.channel.search === true) */
-	public get allowSearch(): boolean {
-		return this.cache.get("allowSearch", () => !this.channel || this.channel.search === true);
-	}
+	/**
+	 * @deprecated use .checkCanCommandChannel();
+	 */
+	public get allowSearch(): boolean { return this.allowCommands; }
 
 	//#endregion
 
 	//#region user "isX" flags
 
-	// /** Can admin Games */
-	// public get isGameAdmin(): boolean {
-	// 	return this.sageCache.actor.isGameAdmin;
-	// }
-
 	/** Is the server HomeServer */
 	public get isHomeServer(): boolean {
 		return this.guild?.s.isHome === true;
 	}
-
-	// /** Can admin Server */
-	// public get isServerAdmin(): boolean {
-	// 	return this.sageCache.actor.isServerAdmin;
-	// }
 
 	/** Is a SuperUser */
 	public get isSuperUser(): boolean {
@@ -287,10 +282,176 @@ export abstract class SageCommandBase<
 
 	// #region Permission
 
-	/** Ensures we are either in the channel being targeted or we are in an admin channel. */
-	public testChannelAdmin(channelDid: Optional<Discord.Snowflake>): this is IHaveServer {
-		//TODO: figure out if i even need this or if there is a better way
-		return channelDid === this.discordKey.channel || this.channel?.admin === true;
+	/**
+	 * Returns true if commands are allowed *and* you have access.
+	 * Returns undefined if commands are allowed *but* you don't have access.
+	 * Returns false if commands are not allowed.
+	 */
+	public checkCanCommandChannel(): boolean | undefined {
+		// always allow an admin access to commands to enable setup
+		if (this.checkCanAdminServer()) {
+			return true;
+		}
+
+		const game = this.game;
+		if (game) {
+			// If you aren't an admin or part of the game, no commands AT ALL
+			if (!(this.actor.isGameAdmin || this.isGameMaster || this.isPlayer)) {
+				return undefined;
+			}
+
+			// if we allow it, then return true
+			if (checkOverrideAndType(this.gameChannel)) {
+				return true;
+			}
+
+			// before returning false, we need to ensure at least one channel in the game allows commands
+			if (game.channels.find(ch => checkOverrideAndType(ch))) {
+				return false;
+			}
+
+			// must allow commands until a channel is set to allow commands
+			return true;
+
+		}
+
+		// if we allow it or we aren't provisioned yet, allow commands
+		return checkOverrideAndType(this.serverChannel) !== false;
+
+		function checkOverrideAndType(channel: Optional<IChannel>): boolean | undefined {
+			if (!channel) {
+				return undefined;
+			}
+
+			// check to see if it was set/overridden w/o channel type
+			if (exists(channel.commands)) {
+				return channel.commands;
+			}
+
+			// we haven't overridden as true/false, so we can now check channel type
+			const channelType = channel.gameChannelType ?? undefined;
+
+			// if we have a channel type set ...
+			if (exists(channelType)) {
+				// ... if we are in a channel that allows commands, then allow the command
+				return [GameChannelType.OutOfCharacter, GameChannelType.GameMaster, GameChannelType.Miscellaneous].includes(channelType);
+			}
+
+			return false;
+		}
+	}
+
+	private denyMap = new Map<string, TDenial | undefined>();
+	public checkDenyCommand(label: string): Promise<void> | undefined {
+		const key = `${this.discordKey.channel}-commands`;
+		if (!this.denyMap.has(key)) {
+			const canCommand = this.checkCanCommandChannel();
+			const denial = canCommand ? undefined
+				: canCommand === false
+				? { denyProv:"Channel must allow Command actions." } as TDenial
+				: { denyPerm:"You must be a Game Master or Player for this Game or a GameAdmin, Administrator, Manager, or Owner of this server." } as TDenial;
+			this.denyMap.set(key, denial);
+		}
+		const denial = this.denyMap.get(key);
+		return denial ? this.denyBy(label, denial) : undefined;
+	}
+
+	/**
+	 * Returns true if dialog is allowed *and* you have access.
+	 * Returns undefined if dialog is allowed *but* you don't have access.
+	 * Returns false if dialog is not allowed.
+	 */
+	public checkCanDialogChannel(): boolean | undefined {
+		const game = this.game;
+		if (game) {
+			// If you aren't part of the game, no dialog AT ALL
+			if (!(this.isGameMaster || this.isPlayer)) {
+				return undefined;
+			}
+		}
+
+		// we don't allow dialog in unprovisioned channels
+		return checkOverrideAndType(this.channel) === true;
+
+		function checkOverrideAndType(channel: Optional<IChannel>): boolean | undefined {
+			if (!channel) {
+				return undefined;
+			}
+
+			// check to see if it was set/overridden w/o channel type
+			if (exists(channel.dialog)) {
+				return channel.dialog;
+			}
+
+			// we haven't overridden as true/false, so we can now check channel type
+			const channelType = channel.gameChannelType ?? undefined;
+
+			// if we have a channel type set ...
+			if (exists(channelType)) {
+				// ... if we are in a channel that allows dialog, then allow the dialog
+				return ![GameChannelType.None, GameChannelType.Dice].includes(channelType);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Returns true if dice is allowed *and* you have access.
+	 * Returns undefined if dice is allowed *but* you don't have access.
+	 * Returns false if dice is not allowed.
+	 */
+	public checkCanDiceChannel(): boolean | undefined {
+		const game = this.game;
+		if (game) {
+			// If you aren't part of the game, no dice AT ALL
+			if (!(this.isGameMaster || this.isPlayer)) {
+				return undefined;
+			}
+		}
+
+		// if we allow it or we aren't provisioned yet, allow dice
+		return checkOverrideAndType(this.channel) !== false;
+
+		function checkOverrideAndType(channel: Optional<IChannel>): boolean | undefined {
+			if (!channel) {
+				return undefined;
+			}
+
+			// check to see if it was set/overridden w/o channel type
+			if (exists(channel.dice)) {
+				return channel.dice;
+			}
+
+			// we haven't overridden as true/false, so we can now check channel type
+			const channelType = channel.gameChannelType ?? undefined;
+
+			// if we have a channel type set ...
+			if (exists(channelType)) {
+				// ... if we are in a channel that allows dice, then allow the dice
+				return channelType !== GameChannelType.None;
+			}
+
+			return false;
+		}
+	}
+
+	/** Checks to see if the actor can admin the Command's Channel. */
+	public checkCanAdminChannel(): boolean;
+	/** Checks to see if the actor can admin the given Channel did. */
+	public checkCanAdminChannel(channelDid: Optional<Snowflake>): channelDid is Snowflake;
+	public checkCanAdminChannel(...args: Optional<Snowflake>[]): boolean {
+		const channelDid = args.length ? args[0] : this.channel?.did;
+		if (channelDid) {
+			// server admins can always admin channels
+			if (this.checkCanAdminServer()) {
+				return true;
+			}
+			if (this.game?.hasChannel(channelDid) && (this.actor.isGameAdmin || this.isGameMaster)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/** Checks to see if the actor can admin the Command's Game. */
@@ -357,16 +518,29 @@ export abstract class SageCommandBase<
 
 	public deny(label: string, what: string, details: string): Promise<void> {
 		const renderable = createAdminRenderableContent(this.getHasColors());
-		renderable.appendTitledSection(`<b>${label}</b>`, what, `<i>${details}</i>`);
+		if (label) {
+			renderable.appendTitledSection(`<b>${label}</b>`, what, `<i>${details}</i>`);
+		}else {
+			renderable.appendSection(what, `<i>${details}</i>`);
+		}
 		return this.whisper({ embeds:renderable });
 	}
 
+	/** @deprecated */
 	public denyByPerm(label: string, details: string): Promise<void> {
 		return this.deny(label, "You do not have permission to do that!", details);
 	}
 
+	/** @deprecated */
 	public denyByProv(label: string, details: string): Promise<void> {
 		return this.deny(label, "This channel does not allow that!", details);
+	}
+
+	public denyBy(label: string, denial: TDenial): Promise<void> {
+		if (denial.denyProv) {
+			return this.denyByProv(label, denial.denyProv);
+		}
+		return this.denyByPerm(label, denial.denyPerm);
 	}
 
 	public denyForCanAdminGame(label: string): Promise<void> {

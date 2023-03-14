@@ -33,8 +33,9 @@ function toList(macros: TMacro[]): string {
 }
 
 async function macroList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.denyByProv("List Macros", "This channel must Allow Admin or Dice commands.");
+	const denial = sageMessage.checkDenyCommand("List Macros");
+	if (denial) {
+		return denial;
 	}
 
 	const macros = sageMessage.actor.s.macros;
@@ -120,8 +121,9 @@ async function macroUpdate(sageMessage: SageMessage, existing: TMacro, updated: 
 	return false;
 }
 async function macroSet(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.denyByProv("Set Macro", "This channel must Allow Admin or Dice commands.");
+	const denial = sageMessage.checkDenyCommand("Set Macro");
+	if (denial) {
+		return denial;
 	}
 
 	const content = sageMessage.args.valueByKey(/dice|macro|value/i)
@@ -146,8 +148,9 @@ async function macroSet(sageMessage: SageMessage): Promise<void> {
 }
 
 async function macroMove(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.denyByProv("Move Macro", "This channel must Allow Admin or Dice commands.");
+	const denial = sageMessage.checkDenyCommand("Move Macro");
+	if (denial) {
+		return denial;
 	}
 
 	const macroCategory = sageMessage.args.valueByKey(/cat(egory)?/i);
@@ -175,8 +178,9 @@ async function macroMove(sageMessage: SageMessage): Promise<void> {
 }
 
 async function macroDetails(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.denyByProv("Show Macro Details", "This channel must Allow Admin or Dice commands.");
+	const denial = sageMessage.checkDenyCommand("Show Macro Details");
+	if (denial) {
+		return denial;
 	}
 
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>Macro Details</b>`);
@@ -210,8 +214,9 @@ async function deleteCategory(sageMessage: SageMessage, category: string): Promi
 	return Promise.resolve();
 }
 async function macroDeleteCategory(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.denyByProv("Delete Macro Category", "This channel must Allow Admin or Dice commands.");
+	const denial = sageMessage.checkDenyCommand("Delete Macro Category");
+	if (denial) {
+		return denial;
 	}
 
 	const macroCategory = sageMessage.args.valueByKey(/cat(egory)?/i);
@@ -222,8 +227,9 @@ async function macroDeleteCategory(sageMessage: SageMessage): Promise<void> {
 }
 
 async function macroDeleteAll(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.denyByProv("Delete All Macros", "This channel must Allow Admin or Dice commands.");
+	const denial = sageMessage.checkDenyCommand("Delete All Macros");
+	if (denial) {
+		return denial;
 	}
 
 	const count = sageMessage.actor.s.macros.length;
@@ -252,8 +258,9 @@ async function deleteMacro(sageMessage: SageMessage, macro: Optional<TMacro>): P
 	return Promise.resolve();
 }
 async function macroDelete(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.denyByProv("Delete Macro", "This channel must Allow Admin or Dice commands.");
+	const denial = sageMessage.checkDenyCommand("Delete Macro");
+	if (denial) {
+		return denial;
 	}
 
 	const macroCategory = sageMessage.args.valueByKey(/cat(egory)?/i);
