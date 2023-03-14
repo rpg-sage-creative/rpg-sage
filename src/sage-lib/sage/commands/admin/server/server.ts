@@ -53,8 +53,9 @@ async function serverInit(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	if (!sageMessage.checkCanAdminServer()) {
-		return;
+	const denial = sageMessage.checkDenyAdminServer("Initialize Server");
+	if (denial) {
+		return denial;
 	}
 
 	const saved = await sageMessage.sageCache.servers.initializeServer(sageMessage.message.guild);
@@ -121,21 +122,18 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	return <any>sageMessage.send(renderableContent);
 }
 
-async function serverSet(sageMessage: SageMessage): Promise<void> {
-	let server: Optional<Server> = sageMessage.server;
-	if (!server) {
-		return sageMessage.reactFailure("Server Not Found!");
-	}
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Set Server Options");
+async function serverSet(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Set Server Options");
+	if (denial) {
+		return denial;
 	}
 
 	const options = getServerDefaultGameOptions(sageMessage.args);
 	if (options === null) {
-		return sageMessage.reactFailure("No Options given!");
+		return sageMessage.reactWarn("No Options given!");
 	}
 
-	const updated = await server.update(options);
+	const updated = await sageMessage.server.update(options);
 	return sageMessage.reactSuccessOrFailure(updated, "Server Updated", "Unknown Error; Server NOT Updated!");
 }
 

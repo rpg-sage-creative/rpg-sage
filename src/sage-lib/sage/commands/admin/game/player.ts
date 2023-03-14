@@ -4,8 +4,9 @@ import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
 export async function gameUserList(sageMessage: SageMessage, who: string, userDids: Snowflake[] = []): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("List Game Users");
+	const denial = sageMessage.checkDenyAdminGame("List Game Users");
+	if (denial) {
+		return denial;
 	}
 
 	const game = sageMessage.game!;
@@ -34,8 +35,9 @@ async function playerList(sageMessage: SageMessage): Promise<void> {
 }
 
 async function playerAdd(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Add Game Player");
+	const denial = sageMessage.checkDenyAdminGame("Add Game Player");
+	if (denial) {
+		return denial;
 	}
 
 	const users = Array.from(sageMessage.message.mentions.users.values());
@@ -44,8 +46,9 @@ async function playerAdd(sageMessage: SageMessage): Promise<void> {
 }
 
 async function playerRemove(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Remove Game Player");
+	const denial = sageMessage.checkDenyAdminGame("Remove Game Player");
+	if (denial) {
+		return denial;
 	}
 
 	const users = Array.from(sageMessage.message.mentions.users.values());

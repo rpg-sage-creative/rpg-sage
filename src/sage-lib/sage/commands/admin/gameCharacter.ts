@@ -290,12 +290,9 @@ async function gameCharacterDetails(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
-	const permOrProv = sageMessage.checkCanCommandChannel();
-	if (!permOrProv) {
-		if (permOrProv === false) {
-			return sageMessage.denyByProv("Add Character", "Channel must allow Command actions.");
-		}
-		return sageMessage.denyByPerm("Add Character", "Must be a GM or Player of this game.");
+	const denial = sageMessage.checkDenyCommand("Add Character");
+	if (denial) {
+		return denial;
 	}
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);

@@ -212,6 +212,10 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
 		return this.channels.filter((_, index) => !all[index]);
 	}
+	public async orphanUsers(): Promise<IGameUser[]> {
+		const all = await Promise.all(this.users.map(user => this.discord.fetchUser(user.did)));
+		return this.users.filter((_, index) => !all[index]);
+	}
 	public async gmGuildMembers(): Promise<GuildMember[]> {
 		const gmGuildMembers = (await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)))).filter(exists);
 		const gmRoleDid = this.gmRoleDid;

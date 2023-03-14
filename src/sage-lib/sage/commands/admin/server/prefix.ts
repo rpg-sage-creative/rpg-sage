@@ -3,9 +3,10 @@ import type SageMessage from "../../../model/SageMessage";
 import { registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
-async function prefixSet(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Set Sage Prefix");
+async function prefixSet(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Set Sage Prefix");
+	if (denial) {
+		return denial;
 	}
 
 	const prefix = sageMessage.args.getString("prefix");
@@ -35,9 +36,10 @@ async function prefixSet(sageMessage: SageMessage): Promise<void> {
 // 	return <any>sageMessage.send(renderableContent);
 // }
 
-async function prefixSync(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Reset Sage Prefix");
+async function prefixSync(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Reset Sage Prefix");
+	if (denial) {
+		return denial;
 	}
 
 	const booleanResponse = await discordPromptYesNo(sageMessage, "> Reset Sage's command prefix to the default `sage`?");
@@ -47,9 +49,10 @@ async function prefixSync(sageMessage: SageMessage): Promise<void> {
 	}
 }
 
-async function prefixUnset(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Unset Sage Prefix");
+async function prefixUnset(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Unset Sage Prefix");
+	if (denial) {
+		return denial;
 	}
 
 	const saved = await sageMessage.server.unsetCommandPrefix();

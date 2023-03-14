@@ -30,7 +30,7 @@ async function adminList(sageMessage: SageMessage<true>): Promise<void> {
 		}
 
 		const renderableContent = createAdminRenderableContent(sageMessage.server);
-		renderableContent.setTitle(`<b>admin-list</b>`);
+		renderableContent.setTitle(`<b>Sage Admin List</b>`);
 		if (users.length) {
 			await utils.ArrayUtils.Collection.forEachAsync(users, async user => renderUser(renderableContent, user));
 		} else {
@@ -41,9 +41,10 @@ async function adminList(sageMessage: SageMessage<true>): Promise<void> {
 	return Promise.resolve();
 }
 
-async function adminAdd(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Add Sage Admin");
+async function adminAdd(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Add Sage Admin");
+	if (denial) {
+		return denial;
 	}
 
 	const userDid = sageMessage.args.findUserDid("user");
@@ -53,12 +54,13 @@ async function adminAdd(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const saved = await sageMessage.server.setAdmin(userDid, roleType);
-	return sageMessage.reactSuccessOrFailure(saved, "Sage Server Admin Added", "Unknown Error; Sage Server Admin NOT Added!");
+	return sageMessage.reactSuccessOrFailure(saved, "Sage Admin Added", "Unknown Error; Sage Admin NOT Added!");
 }
 
-async function adminRemove(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Remove Sage Admin");
+async function adminRemove(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Remove Sage Admin");
+	if (denial) {
+		return denial;
 	}
 
 	const userDid = sageMessage.args.findUserDid("user", true);
@@ -67,7 +69,7 @@ async function adminRemove(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const saved = await sageMessage.server.setAdmin(userDid, null);
-	return sageMessage.reactSuccessOrFailure(saved, "Sage Server Admin Removed", "Unknown Error; Sage Server Admin NOT Removed!");
+	return sageMessage.reactSuccessOrFailure(saved, "Sage Admin Removed", "Unknown Error; Sage Admin NOT Removed!");
 }
 
 export default function register(): void {

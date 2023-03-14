@@ -8,8 +8,9 @@ async function listGameMasters(sageMessage: SageMessage): Promise<void> {
 }
 
 async function addGameMaster(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Add Game Master");
+	const denial = sageMessage.checkDenyAdminGame("Add Game Master");
+	if (denial) {
+		return denial;
 	}
 
 	const users = Array.from(sageMessage.message.mentions.users.values());
@@ -18,8 +19,9 @@ async function addGameMaster(sageMessage: SageMessage): Promise<void> {
 }
 
 async function removeGameMaster(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Remove Game Master");
+	const denial = sageMessage.checkDenyAdminGame("Remove Game Master");
+	if (denial) {
+		return denial;
 	}
 
 	const users = Array.from(sageMessage.message.mentions.users.values());

@@ -1,4 +1,4 @@
-import type { Guild, MessageActionRow, MessageEmbed, Snowflake } from "discord.js";
+import type { Guild, MessageActionRow, MessageEmbed } from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import type { If, Optional } from "../../../sage-utils";
@@ -28,19 +28,10 @@ export interface SageCommandCore<HasGuild extends boolean = boolean, HasGuildCha
 	sageCache: SageCache<HasGuild, HasGuildChannel, HasUser>;
 }
 
-export interface ICanHaveServer<HasServer extends boolean = boolean> {
-	guild: If<HasServer, TSageDiscordPair<Guild, Server>>;
-	server: If<HasServer, Server>;
-}
-
 export interface IHaveServer {
 	guild: TSageDiscordPair<Guild, Server>;
 	/** @deprecated User .guild.s */
 	server: Server;
-}
-
-export interface ICanHaveGame<HasGame extends boolean = boolean> {
-	game: If<HasGame, Game>;
 }
 
 export interface IHaveGame {
@@ -62,7 +53,9 @@ export type TSendOptions<HasEphemeral extends boolean = boolean> = {
 	ephemeral?: If<HasEphemeral, boolean | null, never>;
 };
 
-type TDenial = { denyPerm:string; denyProv:never; } | { denyPerm:never; denyProv:string; };
+type TDenial = { denyPerm:string; denyProv:never;  notFound:never;  }
+			 | { denyPerm:never;  denyProv:string; notFound:never;  }
+			 | { denyPerm:never;  denyProv:never;  notFound:string; };
 
 export type SageCommand = SageCommandBase<SageCommandCore, ISageCommandArgs, any>;
 
@@ -75,8 +68,7 @@ export abstract class SageCommandBase<
 		HasGuildChannel extends boolean = boolean,
 		HasUser extends boolean = boolean
 		>
-	extends SuperClass
-	implements ICanHaveServer<HasServer>, ICanHaveGame {
+	extends SuperClass {
 
 	//#region deprecated as part of SageCommand consolidation and object clarification
 	/** @deprecated use .discordKey.channel */
@@ -119,38 +111,6 @@ export abstract class SageCommandBase<
 
 	//#endregion
 
-	//#region flags
-
-	//#region channel "allow" flags
-
-	/**
-	 * @deprecated use .checkCanCommandChannel();
-	 */
-	public get allowCommands(): boolean {
-		return this.cache.get("allowCommands", () => this.checkCanCommandChannel() === true);
-	}
-
-	/**
-	 * @deprecated use .checkCanDialogChannel();
-	 */
-	public get allowDialog(): boolean {
-		return this.cache.get("allowDialog", () => this.checkCanDialogChannel() === true);
-	}
-
-	/**
-	 * @deprecated use .checkCanDiceChannel();
-	 */
-	public get allowDice(): boolean {
-		return this.cache.get("allowDice", () => this.checkCanDiceChannel() === true);
-	}
-
-	/**
-	 * @deprecated use .checkCanCommandChannel();
-	 */
-	public get allowSearch(): boolean { return this.allowCommands; }
-
-	//#endregion
-
 	//#region user "isX" flags
 
 	/** Is the server HomeServer */
@@ -162,8 +122,6 @@ export abstract class SageCommandBase<
 	public get isSuperUser(): boolean {
 		return this.sageCache.actor.isSuperUser;
 	}
-
-	//#endregion
 
 	//#endregion
 
@@ -196,10 +154,6 @@ export abstract class SageCommandBase<
 		// 	}
 		// }
 		return null;
-	}
-
-	public async getGameOrCategoryGame(): Promise<Game | null> {
-		return this.game ?? this.findCategoryGame();
 	}
 
 	public get critMethodType(): CritMethodType {
@@ -282,14 +236,41 @@ export abstract class SageCommandBase<
 
 	// #region Permission
 
+	private denyMap = new Map<string, TDenial | undefined>();
+	private processDenial(key: string, label: string, handler: () => TDenial | undefined): Promise<void> | undefined {
+		if (!this.denyMap.has(key)) {
+			this.denyMap.set(key, handler());
+		}
+		const denial = this.denyMap.get(key);
+		if (denial) {
+			if (denial.denyPerm) {
+				return this.deny(label, "You do not have permission to do that!", denial.denyPerm);
+			}
+			if (denial.denyProv) {
+				return this.deny(label, "This channel does not allow that!", denial.denyProv);
+			}
+			if (denial.notFound) {
+				return this.deny(label, `${denial.notFound} Not Found!`, "");
+			}
+			console.warn({ fn:"processDenial", key, label, denial })
+			return this.deny(label, `Sorry, you can't do that!`, "");
+		}
+		return undefined;
+	}
+
 	/**
 	 * Returns true if commands are allowed *and* you have access.
 	 * Returns undefined if commands are allowed *but* you don't have access.
 	 * Returns false if commands are not allowed.
 	 */
-	public checkCanCommandChannel(): boolean | undefined {
+	private checkCanCommandChannel(): boolean | undefined {
+		// always allow commands in DM
+		if (!this.server) {
+			return true;
+		}
+
 		// always allow an admin access to commands to enable setup
-		if (this.checkCanAdminServer()) {
+		if (this.server && (this.actor.isSuperUser || this.actor.isServerAdmin)) {
 			return true;
 		}
 
@@ -341,19 +322,15 @@ export abstract class SageCommandBase<
 		}
 	}
 
-	private denyMap = new Map<string, TDenial | undefined>();
-	public checkDenyCommand(label: string): Promise<void> | undefined {
+	public checkDenyCommand(label = ""): Promise<void> | undefined {
 		const key = `${this.discordKey.channel}-commands`;
-		if (!this.denyMap.has(key)) {
-			const canCommand = this.checkCanCommandChannel();
-			const denial = canCommand ? undefined
-				: canCommand === false
+		return this.processDenial(key, label, () => {
+			const checkResults = this.checkCanCommandChannel();
+			return checkResults ? undefined
+				: checkResults === false
 				? { denyProv:"Channel must allow Command actions." } as TDenial
 				: { denyPerm:"You must be a Game Master or Player for this Game or a GameAdmin, Administrator, Manager, or Owner of this server." } as TDenial;
-			this.denyMap.set(key, denial);
-		}
-		const denial = this.denyMap.get(key);
-		return denial ? this.denyBy(label, denial) : undefined;
+		});
 	}
 
 	/**
@@ -361,7 +338,7 @@ export abstract class SageCommandBase<
 	 * Returns undefined if dialog is allowed *but* you don't have access.
 	 * Returns false if dialog is not allowed.
 	 */
-	public checkCanDialogChannel(): boolean | undefined {
+	private checkCanDialogChannel(): boolean | undefined {
 		const game = this.game;
 		if (game) {
 			// If you aren't part of the game, no dialog AT ALL
@@ -396,12 +373,23 @@ export abstract class SageCommandBase<
 		}
 	}
 
+	public checkDenyDialog(label = "Dialog Commands"): Promise<void> | undefined {
+		const key = `${this.discordKey.channel}-dialog`;
+		return this.processDenial(key, label, () => {
+			const checkResults = this.checkCanDialogChannel();
+			return checkResults ? undefined
+				: checkResults === false
+				? { denyProv:"Channel must allow Dialog actions." } as TDenial
+				: { denyPerm:"You must be a Game Master or Player for this Game." } as TDenial;
+		});
+	}
+
 	/**
 	 * Returns true if dice is allowed *and* you have access.
 	 * Returns undefined if dice is allowed *but* you don't have access.
 	 * Returns false if dice is not allowed.
 	 */
-	public checkCanDiceChannel(): boolean | undefined {
+	private checkCanDiceChannel(): boolean | undefined {
 		const game = this.game;
 		if (game) {
 			// If you aren't part of the game, no dice AT ALL
@@ -436,41 +424,63 @@ export abstract class SageCommandBase<
 		}
 	}
 
-	/** Checks to see if the actor can admin the Command's Channel. */
-	public checkCanAdminChannel(): boolean;
-	/** Checks to see if the actor can admin the given Channel did. */
-	public checkCanAdminChannel(channelDid: Optional<Snowflake>): channelDid is Snowflake;
-	public checkCanAdminChannel(...args: Optional<Snowflake>[]): boolean {
-		const channelDid = args.length ? args[0] : this.channel?.did;
-		if (channelDid) {
-			// server admins can always admin channels
-			if (this.checkCanAdminServer()) {
-				return true;
+	public checkDenyDice(label = "Dice Commands"): Promise<void> | undefined {
+		const key = `${this.discordKey.channel}-dice`;
+		return this.processDenial(key, label, () => {
+			const checkResults = this.checkCanDiceChannel();
+			return checkResults ? undefined
+				: checkResults === false
+				? { denyProv:"Channel must allow Dice actions." } as TDenial
+				: { denyPerm:"You must be a Game Master or Player for this Game." } as TDenial;
+		});
+	}
+
+	public checkDenyAdminGame(game: Optional<Game>): Promise<void> | undefined;
+	public checkDenyAdminGame(game: Optional<Game>, label: string): Promise<void> | undefined;
+	public checkDenyAdminGame(label: string): Promise<void> | undefined;
+	public checkDenyAdminGame(...args: (Optional<Game> | string)[]): Promise<void> | undefined {
+		// Grab the only string arg or use default label
+		const label = args.find(arg => typeof(arg) === "string") as string ?? "Game Admin";
+		// Filter to all non-string args, because we might have a null or undefined Game ...
+		const games = args.filter(arg => typeof(arg) !== "string") as Game[];
+		// If we weren't passed a possible Game, then get it from sageMessage
+		const game = games.length === 0 ? this.game : games[0];
+		// Build the key, undefined will be fine in the key
+		const key = `${game?.id}-adminGame`;
+		return this.processDenial(key, label, () => {
+			if (!game) {
+				return { notFound:"Game" } as TDenial;
 			}
-			if (this.game?.hasChannel(channelDid) && (this.actor.isGameAdmin || this.isGameMaster)) {
-				return true;
+			const checkResults = this.actor.isSuperUser || this.actor.isServerAdmin || this.actor.isGameAdmin || game.hasGameMaster(this.actor.did);
+			return checkResults ? undefined
+				: { denyPerm:"You must be a GameMaster for this game or a GameAdmin, Administrator, Manager, or Owner of this server." } as TDenial;
+		});
+	}
+
+	public checkDenyAdminGames(label = "Games Admin"): Promise<void> | undefined {
+		const guildDid = this.guild?.did;
+		const key = `${guildDid}-adminGames`;
+		return this.processDenial(key, label, () => {
+			if (!guildDid) {
+				return { notFound:"Server" } as TDenial;
 			}
-		}
-		return false;
+			const checkResults = this.actor.isSuperUser || this.actor.isServerAdmin || this.actor.isGameAdmin;
+			return checkResults ? undefined
+				: { denyPerm:"You must be a GameAdmin, Administrator, Manager, or Owner of this server." } as TDenial;
+		});
 	}
 
-	/** Checks to see if the actor can admin the Command's Game. */
-	public checkCanAdminGame(): this is IHaveGame & IHaveServer;
-	/** Checks to see if the actor can admin the given Game. */
-	public checkCanAdminGame(game: Optional<Game>): game is Game;
-	public checkCanAdminGame(...args: Optional<Game>[]): boolean {
-		const game = args.length ? args[0] : this.game;
-		return !!game && (this.checkCanAdminGames() || this.isGameMaster);
-	}
-
-	public checkCanAdminGames(): this is IHaveServer;
-	public checkCanAdminGames(): boolean {
-		return !!this.server && (this.actor.isSuperUser || this.actor.isServerAdmin || this.actor.isGameAdmin);
-	}
-
-	public checkCanAdminServer(): this is IHaveServer;
-	public checkCanAdminServer(): boolean {
-		return !!this.server && (this.actor.isSuperUser || this.actor.isServerAdmin);
+	public checkDenyAdminServer(label = "Server Admin"): Promise<void> | undefined {
+		const guildDid = this.guild?.did;
+		const key = `${guildDid}-adminServer`;
+		return this.processDenial(key, label, () => {
+			if (!guildDid) {
+				return { notFound:"Server" } as TDenial;
+			}
+			const checkResults = this.actor.isSuperUser || this.actor.isServerAdmin;
+			return checkResults ? undefined
+				: { denyPerm:"You must be an Administrator, Manager, or Owner of this server." } as TDenial;
+		});
 	}
 
 	// #endregion
@@ -519,9 +529,12 @@ export abstract class SageCommandBase<
 	public deny(label: string, what: string, details: string): Promise<void> {
 		const renderable = createAdminRenderableContent(this.getHasColors());
 		if (label) {
-			renderable.appendTitledSection(`<b>${label}</b>`, what, `<i>${details}</i>`);
+			renderable.appendTitledSection(`<b>${label}</b>`, what);
 		}else {
-			renderable.appendSection(what, `<i>${details}</i>`);
+			renderable.appendSection(what);
+		}
+		if (details) {
+			renderable.append(`<i>${details}</i>`);
 		}
 		return this.whisper({ embeds:renderable });
 	}
@@ -534,13 +547,6 @@ export abstract class SageCommandBase<
 	/** @deprecated */
 	public denyByProv(label: string, details: string): Promise<void> {
 		return this.deny(label, "This channel does not allow that!", details);
-	}
-
-	public denyBy(label: string, denial: TDenial): Promise<void> {
-		if (denial.denyProv) {
-			return this.denyByProv(label, denial.denyProv);
-		}
-		return this.denyByPerm(label, denial.denyPerm);
 	}
 
 	public denyForCanAdminGame(label: string): Promise<void> {

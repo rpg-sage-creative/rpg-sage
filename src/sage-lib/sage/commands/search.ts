@@ -41,8 +41,9 @@ async function currentlyDisabled(sageMessage: SageMessage): Promise<void> {
 }
 
 export async function searchHandler(sageMessage: SageMessage, nameOnly = false): Promise<void> {
-	if (!sageMessage.allowSearch) {
-		return;
+	const denial = sageMessage.checkDenyCommand("Game Content Search");
+	if (denial) {
+		return denial;
 	}
 
 	// make sure we have a game at AoN

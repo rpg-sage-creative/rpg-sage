@@ -8,8 +8,9 @@ function getGameRoleLabel(gameRole: IGameRole): TGameRoleType {
 }
 
 async function gameRoleList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("List Game Roles");
+	const denial = sageMessage.checkDenyAdminGame("List Game Roles");
+	if (denial) {
+		return denial;
 	}
 
 	const game = sageMessage.game!;
@@ -30,8 +31,9 @@ async function gameRoleList(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameRoleSet(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Set Game Role");
+	const denial = sageMessage.checkDenyAdminGame("Set Game Role");
+	if (denial) {
+		return denial;
 	}
 
 	const roleDid = sageMessage.args.findRoleDid("role", true);
@@ -58,8 +60,9 @@ async function gameRoleSet(sageMessage: SageMessage): Promise<void> {
 
 
 async function gameRoleRemove(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Remove Game Role");
+	const denial = sageMessage.checkDenyAdminGame("Remove Game Role");
+	if (denial) {
+		return denial;
 	}
 
 	const roleType = sageMessage.args.findEnum<GameRoleType>(GameRoleType, "type", true);

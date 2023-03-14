@@ -381,7 +381,8 @@ export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogConte
 
 /** Returns the dialog content if found or null otherwise. */
 async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TDialogContent> | null> {
-	if (!sageMessage.allowDialog) {
+	const denial = sageMessage.checkDenyDialog();
+	if (denial) {
 		return null;
 	}
 

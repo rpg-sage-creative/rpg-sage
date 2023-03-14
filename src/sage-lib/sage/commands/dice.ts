@@ -155,10 +155,8 @@ export function parseDiceMatches(sageMessage: TInteraction, content: string): TD
 //#region listener / handler
 
 async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TDiceOutput[]> | null> {
-	if (!sageMessage.allowDice || sageMessage.slicedContent.match(/^\!*\s*((add|set)[ \-]?macro|macro[ \-]?(add|set))/i)) {
-		return null;
-	}
-	if (sageMessage.game && !(sageMessage.isGameMaster || sageMessage.isPlayer)) {
+	const denial = sageMessage.checkDenyDice();
+	if (denial || sageMessage.slicedContent.match(/^\!*\s*((add|set)[ \-]?macro|macro[ \-]?(add|set))/i)) {
 		return null;
 	}
 
@@ -615,16 +613,12 @@ function macroToDice(userMacros: NamedCollection<TMacro>, input: string): TMacro
 //#region dice test
 
 async function diceTest(sageMessage: SageMessage): Promise<void> {
-	//#region validate command
+	const denial = sageMessage.checkDenyDice();
+	if (denial) {
+		return denial;
+	}
 
-	if (!sageMessage.allowDice) {
-		await sageMessage.message.reply("*Dice not allowed in this channel!*");
-		return;
-	}
-	if (sageMessage.game && !(sageMessage.isGameMaster || sageMessage.isPlayer)) {
-		await sageMessage.message.reply("*Only members of this game allowed!*");
-		return;
-	}
+	//#region validate command
 
 	const pair = sageMessage.args.findByKey(/die|sides|type/i, /d?\d+/);
 	if (!pair?.value) {

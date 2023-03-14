@@ -147,9 +147,10 @@ function findEmojiAndType(args: SageMessageArgs): Optional<TEmojiAndType> {
 	return null;
 }
 
-async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock("Set Server Emoji");
+async function emojiSetServer(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Set Server Emoji");
+	if (denial) {
+		return denial;
 	}
 
 	const server = sageMessage.server;
@@ -173,8 +174,9 @@ async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiSetGame(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.reactBlock("Set Game Emoji");
+	const denial = sageMessage.checkDenyAdminGame("Set Game Emoji");
+	if (denial) {
+		return denial;
 	}
 
 	const game = sageMessage.game!;
@@ -205,15 +207,16 @@ async function emojiSet(sageMessage: SageMessage): Promise<void> {
 
 //#region sync
 
-async function emojiSyncServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Sync Server Emoji");
+async function emojiSyncServer(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Reset Server Emoji");
+	if (denial) {
+		return denial;
 	}
 
-	const server = sageMessage.server;
 
-	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync emoji with Sage?");
+	const booleanResponse = await discordPromptYesNo(sageMessage, "> Reset emoji with Sage defaults?");
 	if (booleanResponse) {
+		const server = sageMessage.server;
 		server.emoji.sync(sageMessage.bot.emoji);
 		const saved = await server.save();
 		if (!saved) {
@@ -226,13 +229,14 @@ async function emojiSyncServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiSyncGame(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Sync Game Emoji");
+	const denial = sageMessage.checkDenyAdminGame("Reset Game Emoji");
+	if (denial) {
+		return denial;
 	}
 
 	const game = sageMessage.game!;
 
-	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync emoji with Server?");
+	const booleanResponse = await discordPromptYesNo(sageMessage, "> Reset emoji with Server defaults?");
 	if (booleanResponse) {
 		game.emoji.sync(game.server.emoji);
 		const saved = await game.save();
@@ -265,17 +269,19 @@ async function _emojiUnset(sageMessage: SageMessage, which: Game | Server): Prom
 }
 
 async function emojiUnsetServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Unset Server Emoji");
+	const denial = sageMessage.checkDenyAdminServer("Unset Server Emoji");
+	if (denial) {
+		return denial;
 	}
-	return _emojiUnset(sageMessage, sageMessage.server);
+	return _emojiUnset(sageMessage, sageMessage.server!);
 }
 
 async function emojiUnsetGame(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Unset Game Emoji");
+	const denial = sageMessage.checkDenyAdminGame("Unset Game Emoji");
+	if (denial) {
+		return denial;
 	}
-	return _emojiUnset(sageMessage, sageMessage.game);
+	return _emojiUnset(sageMessage, sageMessage.game!);
 }
 
 async function emojiUnset(sageMessage: SageMessage): Promise<void> {

@@ -150,9 +150,10 @@ function findColorAndType(args: SageMessageArgs): Optional<TColorAndType> {
 	return null;
 }
 
-async function colorSetServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Set Server Color");
+async function colorSetServer(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Set Server Color");
+	if (denial) {
+		return denial;
 	}
 
 	const colorAndType = findColorAndType(sageMessage.args);
@@ -174,8 +175,9 @@ async function colorSetServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function colorSetGame(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Set Game Color");
+	const denial = sageMessage.checkDenyAdminGame("Set Game Color");
+	if (denial) {
+		return denial;
 	}
 
 	const game = sageMessage.game!;
@@ -206,14 +208,15 @@ async function colorSet(sageMessage: SageMessage): Promise<void> {
 
 //#region sync
 
-async function colorSyncServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Sync Server Colors")
+async function colorSyncServer(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Reset Server Colors");
+	if (denial) {
+		return denial;
 	}
 
 	const server = sageMessage.server;
 
-	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync colors with Sage?");
+	const booleanResponse = await discordPromptYesNo(sageMessage, "> Reset colors to Sage defaults?");
 	if (booleanResponse) {
 		server.colors.sync(sageMessage.bot.colors);
 		const saved = await server.save();
@@ -227,13 +230,14 @@ async function colorSyncServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function colorSyncGame(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Sync Game Colors");
+	const denial = sageMessage.checkDenyAdminGame("Reset Game Colors");
+	if (denial) {
+		return denial;
 	}
 
 	const game = sageMessage.game!;
 
-	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync colors with Server?");
+	const booleanResponse = await discordPromptYesNo(sageMessage, "> Reset colors to Server defaults?");
 	if (booleanResponse) {
 		game.colors.sync(game.server.colors);
 		const saved = await game.save();
@@ -255,9 +259,10 @@ async function colorSync(sageMessage: SageMessage): Promise<void> {
 
 //#region unset
 
-async function colorUnsetServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Unset Server Color");
+async function colorUnsetServer(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Unset Server Color");
+	if (denial) {
+		return denial;
 	}
 
 	const colorType = sageMessage.args.findEnum<ColorType>(ColorType, "type", true);
@@ -271,8 +276,9 @@ async function colorUnsetServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function colorUnsetGame(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Unset Game Color");
+	const denial = sageMessage.checkDenyAdminGame("Unset Game Color");
+	if (denial) {
+		return denial;
 	}
 
 	const game = sageMessage.game!;

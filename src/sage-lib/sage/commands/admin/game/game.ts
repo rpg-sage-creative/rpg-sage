@@ -15,33 +15,37 @@ import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
 
-async function getGames(sageMessage: SageMessage): Promise<Game[]> {
-	const guild = sageMessage.sageCache.guild?.d;
-	if (guild) {
-		if (sageMessage.checkCanAdminGames()) {
-			return sageMessage.sageCache.games.getByServerDid(guild.id);
-		}
-	} else if (sageMessage.isSuperUser) {
-		return sageMessage.sageCache.games.getAll();
-	}
-	return [];
+async function allGameCount(sageMessage: SageMessage): Promise<void> {
+	const games = await sageMessage.sageCache.games.getAll();
+	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>All Game Count</b>`);
+	renderableContent.append(`<b>Active</b> ${games.filter(game => !game.isArchived).length}`);
+	renderableContent.append(`<b>Archived</b> ${games.filter(game => game.isArchived).length}`);
+	renderableContent.append(`<b>Total</b> ${games.length}`);
+	await sageMessage.send(renderableContent);
 }
 
 async function gameCount(sageMessage: SageMessage): Promise<void> {
-	if (sageMessage.checkCanAdminServer()) {
-		const games = await getGames(sageMessage);
-		const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>game-count</b>`);
-		renderableContent.append(`<b>Active</b> ${games.filter(game => !game.isArchived).length}`);
-		renderableContent.append(`<b>Archived</b> ${games.filter(game => game.isArchived).length}`);
-		renderableContent.append(`<b>Total</b> ${games.length}`);
-		await sageMessage.send(renderableContent);
+	if (!sageMessage.server && sageMessage.isSuperUser) return allGameCount(sageMessage);
+
+	const denial = sageMessage.checkDenyAdminServer("Count Server Games");
+	if (denial) {
+		return denial;
 	}
+
+	const games = await sageMessage.sageCache.games.getByServerDid(sageMessage.guild!.did);
+	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>Server Game Count</b>`);
+	renderableContent.append(`<b>Active</b> ${games.filter(game => !game.isArchived).length}`);
+	renderableContent.append(`<b>Archived</b> ${games.filter(game => game.isArchived).length}`);
+	renderableContent.append(`<b>Total</b> ${games.length}`);
+	await sageMessage.send(renderableContent);
 }
 
 async function myGameList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanCommandChannel()) {
-		return sageMessage.denyByPerm("My Game List", "The current channel doesn't allow basic commands.");
+	const denial = sageMessage.checkDenyCommand("My Game List");
+	if (denial) {
+		return denial;
 	}
+
 	const myDid = sageMessage.actor.did;
 	const allGames = await sageMessage.sageCache.games.getAll();
 
@@ -97,11 +101,12 @@ async function myGameList(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGames()) {
-		return sageMessage.denyForCanAdminGames("Game List");
+	const denial = sageMessage.checkDenyAdminGames("List Server Games");
+	if (denial) {
+		return denial;
 	}
 
-	let games = await getGames(sageMessage);
+	let games = await sageMessage.sageCache.games.getByServerDid(sageMessage.guild!.did);
 	if (!games) {
 		return Promise.resolve();
 	}
@@ -148,14 +153,11 @@ async function showGameGetGame(sageMessage: SageMessage): Promise<Game | null> {
 		if (gameId) {
 			game = await sageMessage.sageCache.games.getById(gameId);
 		}
-		if (!game) {
-			/** @todo start using the new and improved whisper! */
-			await sageMessage.reactFailure("*No Game Found!*");
-			// await sageMessage.message.reply("*No Game Found!*");
-		}
 	}
-	if (!sageMessage.checkCanAdminGames() && !game?.hasGameMaster(sageMessage.actor.did)) {
-		await sageMessage.message.reply("*Server Admin, Game Admin, or Game Master privilege required!*");
+	const denial = sageMessage.checkDenyAdminGame(game, "Show Game Details");
+	if (denial) {
+		await denial;
+		return null;
 	}
 	return game ?? null;
 }
@@ -247,7 +249,7 @@ async function showGameRenderChannels(renderableContent: utils.RenderUtils.Rende
 
 	const orphanChannels = (await game.orphanChannels()).map(channel => channel ? `#${channel.did}` : `<i>unavailable</i>`);
 	if (orphanChannels.length) {
-		renderableContent.append(`<b>Orphan Channels</b> ${orphanChannels.length}; ${orphanChannels.join(", ")}`);
+		renderableContent.append(`<b>Orphaned Channels</b> ${orphanChannels.length}; ${orphanChannels.join(", ")}`);
 	}
 }
 
@@ -288,6 +290,11 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 	const playerCharacters = playerGuildMembers.map(pGuildMember => game.playerCharacters.findByUser(pGuildMember?.id)?.name).map(name => name ? ` (${name})` : ``);
 	renderableContent.append(`<b>Players (Characters)</b> ${players.length}`);
 	players.forEach((player, index) => renderableContent.append(`[spacer]${player}${playerCharacters[index]}`));
+
+	const orphanUsers = (await game.orphanUsers()).map(user => user ? `@${user.did}` : `<i>unavailable</i>`);
+	if (orphanUsers.length) {
+		renderableContent.append(`<b>Orphaned Users</b> ${orphanUsers.length}; ${orphanUsers.join(", ")}`);
+	}
 
 	const orphanPCs = game.orphanedPlayerCharacters;
 	if (orphanPCs.length) {
@@ -438,15 +445,16 @@ function createGame(sageMessage: SageMessage<true>, name: string, gameValues: Pa
 	}, sageMessage.server, sageMessage.sageCache);
 }
 
-async function gameCreate(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGames()) {
-		return sageMessage.denyForCanAdminGames("Create Game");
+async function gameCreate(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminGames("Create Game");
+	if (denial) {
+		return denial;
 	}
 	if (!sageMessage.discordKey.hasChannel) {
 		return sageMessage.deny("Create Game", "Unable to create Game.", "You must provide at least one channel to create a Game.");
 	}
 	if (sageMessage.game) {
-		return sageMessage.reactFailure("A Game already exists for this channel.");
+		return sageMessage.deny("Create Game", "Unable to create Game.", "A Game already exists for this channel.");
 	}
 
 	const name = sageMessage.args.getString("name")?.trim();
@@ -485,8 +493,9 @@ function getGameOptions(args: ISageCommandArgs): Args<TGameOptions> | null {
 }
 
 async function gameUpdate(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Update Game");
+	const denial = sageMessage.checkDenyAdminGame("Update Game");
+	if (denial) {
+		return denial;
 	}
 
 	const options = getGameOptions(sageMessage.args);
@@ -502,8 +511,9 @@ async function gameUpdate(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameArchive(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminGame()) {
-		return sageMessage.denyForCanAdminGame("Update Game");
+	const denial = sageMessage.checkDenyAdminGame("Update Game");
+	if (denial) {
+		return denial;
 	}
 
 	// TODO: consider allowing removing games by messaging bot directly
@@ -518,17 +528,19 @@ async function gameArchive(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameToggleDicePing(sageMessage: SageMessage): Promise<void> {
-	if (sageMessage.checkCanCommandChannel() && (sageMessage.isGameMaster || sageMessage.isPlayer)) {
-		const message = sageMessage.isGameMaster
-			? "Do you want to get a ping when dice are rolled in this game?"
-			: "Do you want to get a ping when you roll dice in this game?";
-		const yesNo = await discordPromptYesNo(sageMessage, message);
-		if (yesNo === true || yesNo === false) {
-			const updated = await sageMessage.game?.updateDicePing(sageMessage.actor.did, yesNo);
-			sageMessage.reactSuccessOrFailure(updated === true, "Dice Ping Toggled!", "Unknown Error; Game NOT Toggled!");
-		}
+	const denial = sageMessage.checkDenyCommand("My Game List");
+	if (denial) {
+		return denial;
 	}
-	return Promise.resolve();
+
+	const message = sageMessage.isGameMaster
+		? "Do you want to get a ping when dice are rolled in this game?"
+		: "Do you want to get a ping when you roll dice in this game?";
+	const yesNo = await discordPromptYesNo(sageMessage, message);
+	if (yesNo === true || yesNo === false) {
+		const updated = await sageMessage.game?.updateDicePing(sageMessage.actor.did, yesNo);
+		await sageMessage.reactSuccessOrFailure(updated === true, "Dice Ping Toggled!", "Unknown Error; Game NOT Toggled!");
+	}
 }
 
 export default function register(): void {

@@ -69,7 +69,7 @@ export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler, 
 		return null;
 	};
 	const _handler = async function (sageMessage: SageMessage): Promise<void> {
-		return sageMessage.checkDenyCommand("") ?? handler(sageMessage);
+		return sageMessage.checkDenyCommand() ?? handler(sageMessage);
 	};
 	registerMessageListener(_tester, _handler, type);
 	// registerMessageListener("MessageListener", { command: handler.name || String(matcher), tester: _tester, handler: _handler, type: type, priorityIndex: undefined });

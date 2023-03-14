@@ -7,14 +7,15 @@ function getAdminRoleLabel(adminRole: IAdminRole): TAdminRoleType {
 	return <TAdminRoleType>AdminRoleType[adminRole.type ?? 0];
 }
 
-async function roleList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.reactBlock("Must be a Server Owner, Server Administrator, or Server Manager!");
+async function roleList(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("List Sage Admin Roles");
+	if (denial) {
+		return denial;
 	}
 
 	const server = sageMessage.server;
 
-	const renderableContent = createAdminRenderableContent(server, `<b>server-role-list</b>`);
+	const renderableContent = createAdminRenderableContent(server, `<b>Sage Admin Roles</b>`);
 	if (server.roles.length) {
 		for (const adminRole of server.roles) {
 			const role = await sageMessage.discord.fetchGuildRole(adminRole.did);
@@ -29,9 +30,10 @@ async function roleList(sageMessage: SageMessage): Promise<void> {
 	return <any>sageMessage.send(renderableContent);
 }
 
-async function roleSet(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Set Sage Admin Role");
+async function roleSet(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Set Sage Admin Role");
+	if (denial) {
+		return denial;
 	}
 
 	const roleDid = sageMessage.args.findRoleDid("role");
@@ -45,9 +47,10 @@ async function roleSet(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(saved, "Sage Admin Role Set", "Unknown Error; Sage Admin Role NOT Set!");
 }
 
-async function roleRemove(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.checkCanAdminServer()) {
-		return sageMessage.denyForCanAdminServer("Remove Sage Admin Role");
+async function roleRemove(sageMessage: SageMessage<true>): Promise<void> {
+	const denial = sageMessage.checkDenyAdminServer("Remove Sage Admin Role");
+	if (denial) {
+		return denial;
 	}
 
 	const roleType = sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type", true);

@@ -32,10 +32,15 @@ function getChannelOptions(args: ISageCommandArgs): Args<IChannelOptions> | null
 }
 
 async function channelAdd(sageMessage: SageMessage): Promise<void> {
+	const denial = sageMessage.checkDenyCommand("Add Game Channel");
+	if (denial) {
+		return denial;
+	}
+
 	// Make sure we have a game
-	const game = await sageMessage.getGameOrCategoryGame();
-	if (!sageMessage.checkCanAdminGame(game)) {
-		return sageMessage.denyByProv("Add Game Channel", "Must be in a Game Channel to add another Game Channel");
+	const game = sageMessage.game;
+	if (!game) {
+		return sageMessage.deny("Add Game Channel", "You cannot modify a Game from outside a Game.", "");
 	}
 
 	// Grab channels from mentions, filter out those in active games
@@ -152,14 +157,11 @@ export async function channelDetails(sageMessage: SageMessage, channel?: IChanne
 	const channelDid = channel?.did ?? sageMessage.args.getChannelDid("channel") ?? sageMessage.discordKey.channel;
 	const [guildChannelName, game] = await getChannelNameAndActiveGame(sageMessage.sageCache, channelDid);
 
-	if (game) {
-		if (!sageMessage.checkCanAdminGame(game)) {
-			return sageMessage.denyForCanAdminGame("Show Game Channel Details");
-		}
-	}else {
-		if (!sageMessage.checkCanAdminServer()) {
-			return sageMessage.denyForCanAdminGame("Show Server Channel Details");
-		}
+	const denial = game
+		? sageMessage.checkDenyAdminGame(game, "Show Game Channel Details")
+		: sageMessage.checkDenyAdminServer("Show Server Channel Details");
+	if (denial) {
+		return denial;
 	}
 
 	channel = game?.getChannel(channelDid) ?? sageMessage.server?.getChannel(channelDid);
@@ -213,16 +215,19 @@ async function _channelList(sageMessage: SageMessage<true>, whichType: BotServer
 }
 
 async function channelListServer(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.checkCanAdminServer()
-		? _channelList(sageMessage, BotServerGameType.Server)
-		: sageMessage.denyForCanAdminServer("List Server Channels");
+	const denial = sageMessage.checkDenyAdminServer("List Server Channels");
+	if (denial) {
+		return denial;
+	}
+	return _channelList(sageMessage, BotServerGameType.Server);
 }
 
 async function channelListGame(sageMessage: SageMessage): Promise<void> {
-	const game = await sageMessage.getGameOrCategoryGame();
-	return sageMessage.checkCanAdminGame(game)
-		? _channelList(sageMessage, BotServerGameType.Game)
-		: sageMessage.denyForCanAdminGame("List Game Channels");
+	const denial = sageMessage.checkDenyAdminGame("List Game Channels");
+	if (denial) {
+		return denial;
+	}
+	return _channelList(sageMessage, BotServerGameType.Game);
 }
 
 async function channelList(sageMessage: SageMessage): Promise<void> {
@@ -234,9 +239,15 @@ async function channelList(sageMessage: SageMessage): Promise<void> {
 //#region remove
 
 async function channelRemove(sageMessage: SageMessage): Promise<void> {
-	const game = await sageMessage.getGameOrCategoryGame();
-	if (!sageMessage.checkCanAdminGame(game)) {
-		return sageMessage.denyForCanAdminGame("Not authorized to admin this game!");
+	const denial = sageMessage.checkDenyCommand("Remove Game Channel");
+	if (denial) {
+		return denial;
+	}
+
+	// Make sure we have a game
+	const game = sageMessage.game;
+	if (!game) {
+		return sageMessage.deny("Add Game Channel", "You cannot modify a Game from outside a Game.", "");
 	}
 
 	// Grab channels from mentions and filter for the game
@@ -257,14 +268,14 @@ async function channelRemove(sageMessage: SageMessage): Promise<void> {
 //#region set
 
 async function channelSet(sageMessage: SageMessage<true>): Promise<void> {
-	const targetChannelDid = sageMessage.args.getChannelDid("channel") ??  sageMessage.discordKey.channel;
-	if (!sageMessage.checkCanAdminChannel(targetChannelDid)) {
-		return sageMessage.denyByProv("Set Channel Options", "You must be in the channel to set or in a channel that allows commands.");
+	const denial = sageMessage.checkDenyCommand("Set Channel Options");
+	if (denial) {
+		return denial;
 	}
 
-	const game = await sageMessage.getGameOrCategoryGame();
-	if (game && !sageMessage.checkCanAdminGame(game)) {
-		return sageMessage.denyForCanAdminGame("Set Game Channel Options")
+	const targetChannelDid = sageMessage.args.getChannelDid("channel") ?? sageMessage.discordKey.channel;
+	if (sageMessage.game && !sageMessage.game.hasChannel(targetChannelDid)) {
+		return sageMessage.deny("Set Channel Options", "You cannot modify a non Game channel from within a Game.", "");
 	}
 
 	const channelOptions = getChannelOptions(sageMessage.args);
@@ -272,6 +283,8 @@ async function channelSet(sageMessage: SageMessage<true>): Promise<void> {
 		console.warn(`No or Invalid Channel Options: ${JSON.stringify(channelOptions)}`);
 		return sageMessage.reactFailure("No Channel Options found!");
 	}
+
+	const game = sageMessage.game;
 
 	// If we are adding this channel to a Game, make sure we remove the Server channel options.
 	if (game && channelOptions.gameChannelType) {

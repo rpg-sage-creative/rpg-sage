@@ -202,8 +202,9 @@ function findTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	return null;
 }
 async function findHandler(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowSearch) {
-		return sageMessage.denyByProv("Game Content Search", "This channel must Allow Search commands.");
+	const denial = sageMessage.checkDenyCommand("Game Content Find");
+	if (denial) {
+		return denial;
 	}
 
 	// if (await repositoryFind_listObjectType(sageMessage, parsedSearchInfo)) return;
