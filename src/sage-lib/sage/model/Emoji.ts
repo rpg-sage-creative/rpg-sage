@@ -22,7 +22,7 @@ function emojify(text: string, matches: string[], replacement: string): string {
 
 	const parsers = {
 		boundary: /:/,
-		emoji: XRegExp(markedMatches.map(XRegExp.escape).join("|"))
+		emoji: XRegExp(markedMatches.map(XRegExp.escape).join("|"), "i")
 	};
 
 	const tokenized = utils.StringUtils.Tokenizer.tokenize(text, parsers).map((token, i, arr) => {
