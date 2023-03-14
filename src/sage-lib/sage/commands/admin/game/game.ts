@@ -241,7 +241,7 @@ async function showGameRenderChannels(renderableContent: utils.RenderUtils.Rende
 
 	const orphanChannels = (await game.orphanChannels()).map(channel => channel ? `#${channel.did}` : `<i>unavailable</i>`);
 	if (orphanChannels.length) {
-		renderableContent.append(`<b>Orphan Channels</b> ${orphanChannels.length}; ${orphanChannels.join(", ")}`);
+		renderableContent.append(`<b>Orphaned Channels</b> ${orphanChannels.length}; ${orphanChannels.join(", ")}`);
 	}
 }
 
@@ -282,6 +282,11 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 	const playerCharacters = playerGuildMembers.map(pGuildMember => game.playerCharacters.findByUser(pGuildMember?.id)?.name).map(name => name ? ` (${name})` : ``);
 	renderableContent.append(`<b>Players (Characters)</b> ${players.length}`);
 	players.forEach((player, index) => renderableContent.append(`[spacer]${player}${playerCharacters[index]}`));
+
+	const orphanUsers = (await game.orphanUsers()).map(user => user ? `@${user.did}` : `<i>unavailable</i>`);
+	if (orphanUsers.length) {
+		renderableContent.append(`<b>Orphaned Users</b> ${orphanUsers.length}; ${orphanUsers.join(", ")}`);
+	}
 
 	const orphanPCs = game.orphanedPlayerCharacters;
 	if (orphanPCs.length) {
