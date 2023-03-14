@@ -55,7 +55,7 @@ function checkNpmLibs() {
 			echo "NPM lib '$npmLib' found."
 		else
 			if [ "$installMissingLibs" = "true" ]; then
-				npm i --save-dev "$npmLib"
+				npm i "$npmLib"
 			else
 				echo "NPM lib '$npmLib' NOT found!"
 			fi
