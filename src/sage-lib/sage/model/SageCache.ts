@@ -12,6 +12,7 @@ import ServerRepo from "../repo/ServerRepo";
 import UserRepo from "../repo/UserRepo";
 import type Bot from "./Bot";
 import type Game from "./Game";
+import { GameRoleType, GameUserType } from "./Game";
 import type Server from "./Server";
 import { AdminRoleType } from "./Server";
 import type User from "./User";
@@ -77,22 +78,72 @@ function pair<D extends THasShowflakeId, S extends THasUuidId>(d: D, s: S): TSag
 
 //#region ServerPair
 
-export type TServerPair = TSageDiscordPair<Guild, Server> & {
-	gameAdminRole?: Role;
+type TServerRoles = {
+	// AdminRoleType { Unknown = 0, GameAdmin = 1 }
+	gameAdmin?: Role;
 };
 
-async function pairServer(core: SageCacheCore, dGuild: Guild): Promise<TServerPair>;
-async function pairServer(core: SageCacheCore, dGuild: Optional<Guild>): Promise<TServerPair | undefined>;
+type TGameRoles = {
+	// GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Table = 4, Room = 5 }
+	spectator?: Role;
+	player?: Role;
+	gameMaster?: Role;
+	table?: Role;
+	room?: Role;
+};
+
+export type TServerPair = TSageDiscordPair<Guild, Server> & {
+	serverRoles: TServerRoles;
+	gameRoles: TGameRoles;
+};
+
+async function getServerRoles(paired: TSageDiscordPair<Guild, Server>): Promise<TServerRoles> {
+	const gameAdminRoleDid = paired.s.getRole(AdminRoleType.GameAdmin)?.did;
+	const gameAdminRole = gameAdminRoleDid ? await paired.d.roles.fetch(gameAdminRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+
+	return {
+		gameAdmin: gameAdminRole ?? undefined
+	};
+}
+
+async function getGameRoles(game: Game, guild: Guild): Promise<TGameRoles> {
+	const spectatorRoleDid = game.getRole(GameRoleType.Spectator)?.did;
+	const spectatorRole = spectatorRoleDid ? await guild.roles.fetch(spectatorRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+
+	const playerRoleDid = game.getRole(GameRoleType.Player)?.did;
+	const playerRole = playerRoleDid ? await guild.roles.fetch(playerRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+
+	const gameMasterRoleDid = game.getRole(GameRoleType.GameMaster)?.did;
+	const gameMasterRole = gameMasterRoleDid ? await guild.roles.fetch(gameMasterRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+
+	const tableRoleDid = game.getRole(GameRoleType.Table)?.did;
+	const tableRole = tableRoleDid ? await guild.roles.fetch(tableRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+
+	const roomRoleDid = game.getRole(GameRoleType.Room)?.did;
+	const roomRole = roomRoleDid ? await guild.roles.fetch(roomRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+
+	return {
+		spectator: spectatorRole ?? undefined,
+		player: playerRole ?? undefined,
+		gameMaster: gameMasterRole ?? undefined,
+		table: tableRole ?? undefined,
+		room: roomRole ?? undefined
+	};
+}
+
+/** MUST run AFTER setting the core.Game */
 async function pairServer(core: SageCacheCore, dGuild: Optional<Guild>): Promise<TServerPair | undefined> {
 	if (!dGuild) return undefined;
 	const sServer = await core.servers.getOrCreateByGuild(dGuild);
 	const paired = pair(dGuild, sServer);
 
-	const gameAdminRoleDid = sServer.getRole(AdminRoleType.GameAdmin)?.did;
-	const gameAdminRole = gameAdminRoleDid ? await dGuild.roles.fetch(gameAdminRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+	const serverRoles = await getServerRoles(paired);
+
+	const gameRoles = core.game ? await getGameRoles(core.game, dGuild) : { };
 
 	return {
-		gameAdminRole: gameAdminRole ?? undefined,
+		serverRoles,
+		gameRoles,
 		...paired
 	};
 }
@@ -101,7 +152,7 @@ async function pairServer(core: SageCacheCore, dGuild: Optional<Guild>): Promise
 
 //#region UserPair
 
-export type TUserPair = TSageDiscordPair<DUser, User> & TIsGameAdmin & TIsServerAdmin & {
+export type TUserPair = TSageDiscordPair<DUser, User> & {
 	/** from discord */
 	guildMember?: GuildMember;
 
@@ -110,68 +161,129 @@ export type TUserPair = TSageDiscordPair<DUser, User> & TIsGameAdmin & TIsServer
 
 	/** a sage dev */
 	isSuperUser: boolean;
+
+	/** able to admin games */
+	isGameAdmin?: TIsGameAdmin;
+
+	/** able to access the game */
+	isGameUser?: TIsGameUser;
+
+	/** able to admin Sage */
+	isServerAdmin?: TIsServerAdmin;
 }
 
-type TIsGameAdmin = {
-	/** from sage server admin roles, only checked if not admin by user */
-	isGameAdminByRole?: boolean;
-
-	/** from sage server admins */
-	isGameAdminByUser: boolean;
-
-	/** isGameAdminByRole || isGameAdminByUser */
-	isGameAdmin: boolean;
+type TByRoleOrByUser = {
+	/** Has access via a Role, only checked if !byUser. */
+	byRole?: boolean;
+	/** Has access by having been added manually. */
+	byUser: boolean;
 };
 
-async function getIsGameAdmin(core: SageCacheCore, did: Snowflake): Promise<TIsGameAdmin> {
+type TByRoleOrByUserOrByOther = TByRoleOrByUser & {
+	/** Has access from some other method. */
+	byOther: boolean;
+};
+
+function pairByRoleOrByUser(byRole: boolean | undefined, byUser: boolean): TByRoleOrByUser | undefined;
+function pairByRoleOrByUser(byRole: boolean | undefined, byUser: boolean, byOther: boolean | undefined): TByRoleOrByUserOrByOther | undefined;
+function pairByRoleOrByUser(byRole: boolean | undefined, byUser: boolean, byOther?: boolean | undefined): TByRoleOrByUser | TByRoleOrByUserOrByOther | undefined {
+	if (byOther) {
+		return { byRole, byUser, byOther };
+	}
+	return byRole || byUser ? { byRole, byUser } : undefined;
+}
+
+type TIsGameAdmin = TByRoleOrByUser | false;
+
+async function getIsGameAdmin(core: SageCacheCore, did: Snowflake): Promise<TIsGameAdmin | undefined> {
 	const sServer = core.server?.s;
 
-	const isGameAdminByUser = sServer?.hasAdmin(did, AdminRoleType.GameAdmin) === true;
+	const byUser = sServer?.hasAdmin(did, AdminRoleType.GameAdmin) === true;
+	const byRole = byUser ? undefined : core.server?.serverRoles.gameAdmin?.members.has(did) === true;
+	return pairByRoleOrByUser(byRole, byUser);
+}
 
-	let isGameAdminByRole: boolean | undefined;
-	if (!isGameAdminByUser) {
-		isGameAdminByRole = core.server?.gameAdminRole?.members.has(did) === true;
-	}
+type TIsGameUser = {
+	// GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Table = 4, Room = 5 }
 
-	const isGameAdmin = isGameAdminByRole || isGameAdminByUser;
+	/** Can see the game, but cannot interact with the game. */
+	isSpectator?: TByRoleOrByUser;
 
-	return { isGameAdmin, isGameAdminByRole, isGameAdminByUser };
+	/** Is a player of the game. */
+	isPlayer?: TByRoleOrByUser;
+
+	/** Is a game master of the game. */
+	isGameMaster?: TByRoleOrByUser;
+
+	/** isPlayer || isGameMaster */
+	isTable?: TByRoleOrByUserOrByOther;
+
+	/** isSpectator || isPlayer || isGameMaster */
+	isRoom?: TByRoleOrByUserOrByOther;
+}
+
+async function getIsGameUser(core: SageCacheCore, did: Snowflake): Promise<TIsGameUser | undefined> {
+	const game = core.game;
+	if (!game) return undefined;
+
+	const spectatorByUser = false; // game.getUser(did)?.type === GameRoleType.Spectator; // GameUserType !== GameRoleType
+	const spectatorByRole = spectatorByUser ? undefined : core.server?.gameRoles.spectator?.members.has(did) === true;
+	const isSpectator = pairByRoleOrByUser(spectatorByRole, spectatorByUser);
+
+	const playerByUser = game.getUser(did)?.type === GameUserType.Player;
+	const playerByRole = playerByUser ? undefined : core.server?.gameRoles.player?.members.has(did) === true;
+	const isPlayer = pairByRoleOrByUser(playerByRole, playerByUser);
+
+	const gameMasterByUser = game.getUser(did)?.type === GameUserType.Player;
+	const gameMasterByRole = gameMasterByUser ? undefined : core.server?.gameRoles.gameMaster?.members.has(did) === true;
+	const isGameMaster = pairByRoleOrByUser(gameMasterByRole, gameMasterByUser);
+
+	const tableByUser = false; // game.getUser(did)?.type === GameRoleType.Spectator; // GameUserType !== GameRoleType
+	const tableByRole = tableByUser ? undefined : core.server?.gameRoles.spectator?.members.has(did) === true;
+	const isTable = pairByRoleOrByUser(tableByRole, tableByUser, !!isPlayer || !!isGameMaster);
+
+	const roomByUser = false; // game.getUser(did)?.type === GameRoleType.Spectator; // GameUserType !== GameRoleType
+	const roomByRole = roomByUser ? undefined : core.server?.gameRoles.spectator?.members.has(did) === true;
+	const isRoom = pairByRoleOrByUser(roomByRole, roomByUser, !!isTable || !!isSpectator);
+
+	const isGameUser = isSpectator || isPlayer || isGameMaster || isTable || isRoom;
+	return isGameUser ? { isSpectator, isPlayer, isGameMaster, isTable, isRoom } : undefined;
 }
 
 type TIsServerAdmin = {
 	/** from discord */
-	isServerOwner: boolean;
+	asOwner: boolean;
 
-	/** from discord */
-	isServerAdministrator?: boolean;
+	/** from discord, only checked if !asOwner */
+	asAdministrator?: boolean;
 
-	/** from discord */
-	isServerManager?: boolean;
-
-	/** isServerOwner || isServerAdministrator || isServerManager */
-	isServerAdmin: boolean;
+	/** from discord, only checked if !asOwner */
+	asManager?: boolean;
 };
 
-async function getIsServerAdmin(core: SageCacheCore, did: Snowflake, guildMember: Optional<GuildMember>): Promise<TIsServerAdmin> {
+async function getIsServerAdmin(core: SageCacheCore, did: Snowflake, guildMember: Optional<GuildMember>): Promise<TIsServerAdmin | undefined> {
 	const guild = core.server?.d;
 
-	let isServerAdministrator: boolean | undefined;
-	let isServerManager: boolean | undefined;
+	let asAdministrator: boolean | undefined;
+	let asManager: boolean | undefined;
 
-	const isServerOwner = did === guild?.ownerId;
-	if (!isServerOwner) {
-		isServerAdministrator = guildMember?.permissions?.has("ADMINISTRATOR") === true;
-		isServerManager = guildMember?.permissions?.has("MANAGE_GUILD") === true;
+	const asOwner = did === guild?.ownerId;
+	if (!asOwner) {
+		asAdministrator = guildMember?.permissions?.has("ADMINISTRATOR") === true;
+		asManager = guildMember?.permissions?.has("MANAGE_GUILD") === true;
 	}
 
-	const isServerAdmin = isServerAdministrator || isServerManager || isServerOwner;
-
-	return { isServerAdmin, isServerAdministrator, isServerManager, isServerOwner };
+	const isServerAdmin = asAdministrator || asManager || asOwner;
+	return isServerAdmin ? { asAdministrator, asManager, asOwner } : undefined;
 }
 
+/** MUST run AFTER pairServer */
 async function pairUser(core: SageCacheCore, dUser: DUser): Promise<TUserPair>;
+/** MUST run AFTER pairServer */
 async function pairUser(core: SageCacheCore, dUser: GuildMember): Promise<TUserPair>;
+/** MUST run AFTER pairServer */
 async function pairUser(core: SageCacheCore, dUser: Optional<DUser>): Promise<TUserPair | undefined>
+/** MUST run AFTER pairServer */
 async function pairUser(core: SageCacheCore, user: Optional<DUser | GuildMember>): Promise<TUserPair | undefined> {
 	// Don't bother w/o user
 	if (!user) return undefined;
@@ -188,16 +300,18 @@ async function pairUser(core: SageCacheCore, user: Optional<DUser | GuildMember>
 
 	const guildMember = isGuildMember ? user : await core.server?.d.members.fetch(dUser.id).catch(warnUnknownElseErrorReturnNull);
 
-	const gameAdmin = await getIsGameAdmin(core, dUser.id);
-	const serverAdmin = await getIsServerAdmin(core, dUser.id, guildMember);
+	const isGameAdmin = await getIsGameAdmin(core, dUser.id);
+	const isServerAdmin = await getIsServerAdmin(core, dUser.id, guildMember);
+	const isGameUser = await getIsGameUser(core, dUser.id);
 
 	return {
 		isBot: dUser.bot,
+		isGameAdmin,
+		isGameUser,
+		isServerAdmin,
 		isSuperUser: sUser.isSuperUser,
 		guildMember: guildMember ?? undefined,
-		...paired,
-		...gameAdmin,
-		...serverAdmin
+		...paired
 	};
 }
 
@@ -245,9 +359,6 @@ export default class SageCache<
 	/** The User objects for the actor doing the thing. */
 	public get actor(): TUserPair { return this.core.actor; }
 
-	/** The User objects for the author of the message. */
-	// public get author(): TSageDiscordPair<DUser, User> | undefined	{ return this.core.author; }
-
 	public emojify(text: string): string {
 		if (this.game) {
 			return this.game.emojify(text);
@@ -283,10 +394,6 @@ export default class SageCache<
 		return this.guild?.s.getPrefixOrDefault() ?? "";
 	}
 
-	// protected static create(core: TSageCacheCore): SageCache {
-	// 	return new SageCache(core);
-	// }
-
 	public static async fromClient(client: Client): Promise<SageCache<false, false, false>> {
 		const { core, sageCache } = createCoreAndCache();
 		core.discord = DiscordFetches.from({ client });
@@ -303,14 +410,12 @@ export default class SageCache<
 		core.discord = DiscordFetches.fromMessage(message);
 		core.discordKey = DiscordKey.fromMessage(message);
 		core.bot = ActiveBot.active;
+		core.channel = message.guild ? message.channel as DChannel : undefined;
+		core.game = message.guild ? await core.games.findActiveByDiscordKey(core.discordKey) : undefined;
 		core.home = await core.servers.getHome();
-		core.server = await pairServer(core, message.guild);
-		core.actor = await pairUser(core, discordActor ?? message.author!);
+		core.server = await pairServer(core, message.guild); // MUST run AFTER setting core.game
+		core.actor = await pairUser(core, discordActor ?? message.author!); // MUST run AFTER setting core.server
 		// core.author = await pairUser(core, message.author);
-		if (message.guild) {
-			core.channel = message.channel as DChannel;
-			core.game = await core.games.findActiveByDiscordKey(core.discordKey);
-		}
 		return sageCache;
 	}
 
@@ -323,14 +428,12 @@ export default class SageCache<
 		core.discord = DiscordFetches.fromInteraction(interaction);
 		core.discordKey = DiscordKey.fromInteraction(interaction);
 		core.bot = ActiveBot.active;
+		core.channel = interaction.channel as DChannel ?? undefined;
+		core.game = interaction.guild ? await core.games.findActiveByDiscordKey(core.discordKey) : undefined;
 		core.home = await core.servers.getHome();
-		core.server = await pairServer(core, interaction.guild);
-		core.actor = await pairUser(core, interaction.user);
+		core.server = await pairServer(core, interaction.guild); // MUST run AFTER setting core.game
+		core.actor = await pairUser(core, interaction.user); // MUST run AFTER setting core.server
 		// core.author = !interaction.isApplicationCommand() ? await pairUser(core, interaction.message.author as DUser) : undefined;
-		if (interaction.guild) {
-			core.channel = interaction.channel as DChannel;
-			core.game = await core.games.findActiveByDiscordKey(core.discordKey);
-		}
 		return sageCache;
 	}
 

@@ -129,32 +129,12 @@ export abstract class SageCommandBase<
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
 	public get channel(): IChannel | undefined {
-		return this.cache.get("channel", () => this.gameChannel ?? this.serverChannel);
+		return this.gameChannel ?? this.serverChannel;
 	}
 
 	//#endregion
 
 	//#region games
-
-	public async findCategoryGame(): Promise<Game | null> {
-		// const category = (<Discord.TextChannel>this.message.channel).parent;
-		// if (category) {
-		// 	const server = this.server;
-		// 	if (server) {
-		// 		// const categoryChannels = category.children.array();
-		// 		const categoryGames: Game[] = [];
-		// 		// for (const channel of categoryChannels) {
-		// 		// 	categoryGames.push(await server.getActiveGameByChannelDid(channel.id));
-		// 		// }
-		// 		// const categoryGames = await utils.ArrayUtils.Async.map(categoryChannels, channel => server.getActiveGameByChannelDid(channel.id));
-		// 		const categoryGame = categoryGames[0];
-		// 		if (categoryGame) {
-		// 			return this.sageCache.games.getById(categoryGame.id);
-		// 		}
-		// 	}
-		// }
-		return null;
-	}
 
 	public get critMethodType(): CritMethodType {
 		return this.cache.get("critMethodType", () => this.gameChannel?.defaultCritMethodType ?? this.game?.defaultCritMethodType ?? this.serverChannel?.defaultCritMethodType ?? this.server?.defaultCritMethodType ?? CritMethodType.Unknown);
@@ -188,12 +168,12 @@ export abstract class SageCommandBase<
 
 	/** Is there a game and is the actor a GameMaster */
 	public get isGameMaster(): boolean {
-		return this.cache.get("isGameMaster", () => this.game?.hasGameMaster(this.actor.did) === true);
+		return !!this.sageCache.actor.isGameUser?.isGameMaster;
 	}
 
 	/** Is there a game and is the actor a Player */
 	public get isPlayer(): boolean {
-		return this.cache.get("isPlayer", () => this.game?.hasPlayer(this.actor.did) === true);
+		return !!this.sageCache.actor.isGameUser?.isPlayer;
 	}
 
 	/** Get the PlayerCharacter if there a game and the actor is a Player */
@@ -264,15 +244,11 @@ export abstract class SageCommandBase<
 	 * Returns false if commands are not allowed.
 	 */
 	private checkCanCommandChannel(): boolean | undefined {
-		// always allow commands in DM
-		if (!this.server) {
+		// always allow commands in DM, always allow an admin access to commands (to enable setup)
+		if (!this.server || this.actor.isSuperUser || this.actor.isServerAdmin) {
 			return true;
 		}
 
-		// always allow an admin access to commands to enable setup
-		if (this.server && (this.actor.isSuperUser || this.actor.isServerAdmin)) {
-			return true;
-		}
 
 		const game = this.game;
 		if (game) {
