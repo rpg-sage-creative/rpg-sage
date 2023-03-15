@@ -1,3 +1,4 @@
+import type { Snowflake } from "discord.js";
 import type SageMessage from "../../../model/SageMessage";
 import { AdminRoleType, IAdminRole, TAdminRoleType } from "../../../model/Server";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
@@ -36,30 +37,16 @@ async function roleSet(sageMessage: SageMessage<true>): Promise<void> {
 		return denial;
 	}
 
-	const roleDid = sageMessage.args.findRoleDid("role");
-	const guildRole = roleDid ? await sageMessage.discord.fetchGuildRole(roleDid) : null;
-	const roleType = sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type");
-	if (!roleDid || !roleType || !guildRole) {
-		return sageMessage.reactFailure(`You must provide a valid role and role type. Ex: sage!!role set role="@SageGameAdmin" type="GameAdmin"`);
+	// AdminRoleType { Unknown = 0, GameAdmin = 1 }
+	const adminRoles = [1]
+		.map((type: AdminRoleType) => ({ type, did: sageMessage.args.getRoleDid(AdminRoleType[type]) }))
+		.filter(adminRole => adminRole.did !== undefined) as {type:AdminRoleType;did:Snowflake|null}[];
+	if (!adminRoles.length) {
+		return sageMessage.reactFailure(`You must provide a valid role and role type. Ex: sage!!role set gameAdmin="@SageGameAdmin"`);
 	}
 
-	const saved = await sageMessage.server.setRole(roleType, roleDid);
-	return sageMessage.reactSuccessOrFailure(saved, "Sage Admin Role Set", "Unknown Error; Sage Admin Role NOT Set!");
-}
-
-async function roleRemove(sageMessage: SageMessage<true>): Promise<void> {
-	const denial = sageMessage.checkDenyAdminServer("Remove Sage Admin Role");
-	if (denial) {
-		return denial;
-	}
-
-	const roleType = sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type", true);
-	if (!roleType) {
-		return sageMessage.reactFailure(`You must provide a valid role type. Ex: sage!!role remove type="GameAdmin"`);
-	}
-
-	const saved = await sageMessage.server.setRole(roleType, null);
-	return sageMessage.reactSuccessOrFailure(saved, "Sage Admin Role Removed", "Unknown Error; Sage Admin Role NOT Removed!");
+	const updated = await sageMessage.server.setRole(...adminRoles);
+	return sageMessage.reactSuccessOrFailure(updated, "Sage Admin Role Set", "Unknown Error; Sage Admin Role NOT Set!");
 }
 
 //TODO: remove roles by mentioning them
@@ -70,8 +57,5 @@ export default function register(): void {
 	registerAdminCommandHelp("Admin", "Server", "server role list");
 
 	registerAdminCommand(roleSet, "role-set");
-	registerAdminCommandHelp("Admin", "Server", "server role set role=\"@RoleMention\" type=\"GameAdmin\"");
-
-	registerAdminCommand(roleRemove, "role-remove", "server-role-delete", "server-role-unset");
-	registerAdminCommandHelp("Admin", "Server", "server role remove type=\"GameAdmin\"");
+	registerAdminCommandHelp("Admin", "Server", "server role set gameAdmin=\"@RoleMention\"");
 }

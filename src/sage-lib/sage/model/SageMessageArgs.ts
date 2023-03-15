@@ -1,4 +1,4 @@
-import type { GuildBasedChannel, Snowflake } from "discord.js";
+import type { GuildBasedChannel, Role, Snowflake } from "discord.js";
 import type { Args, Optional, VALID_UUID } from "../../../sage-utils";
 import { EnumUtils } from "../../../sage-utils/utils";
 import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
@@ -157,6 +157,52 @@ export default class SageMessageArgs<T extends string = string> extends ArgsMana
 	/** Returns true if getNumber(name) is not null and not undefined. */
 	public hasNumber(name: string): boolean {
 		return exists(this.getNumber(name));
+	}
+
+	/**
+	 * Gets the named option as a Role.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid GuildBasedChannel or "unset".
+	 */
+	public getRole(name: string): Optional<Role>;
+	/** Gets the named option as a GuildBasedChannel */
+	public getRole(name: string, required: true): Role;
+	public getRole(name: string): Optional<Role> {
+		const roleDid = this.getRoleDid(name);
+		if (roleDid) {
+			const role = this.sageMessage.message.mentions.roles.find(role => role.id === roleDid);
+			return role as Role ?? null;
+		}
+		return roleDid as null | undefined;
+	}
+
+	/** Returns true if getRole(name) is not null and not undefined. */
+	public hasRole(name: string): boolean {
+		return exists(this.getRole(name));
+	}
+
+	/**
+	 * Gets the named option as a Snowflake.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid Snowflake or "unset".
+	 */
+	public getRoleDid(name: string): Optional<Snowflake>;
+	/** Gets the named option as a Snowflake */
+	public getRoleDid(name: string, required: true): Snowflake;
+	public getRoleDid(name: string): Optional<Snowflake> {
+		const value = this.getString(name);
+		if (value) {
+			if (DiscordId.isValidId(value) || DiscordId.isRoleMention(value)) {
+				return DiscordId.parseId(value);
+			}
+			return null;
+		}
+		return value;
+	}
+
+	/** Returns true if getRoleDid(name) is not null and not undefined. */
+	public hasRoleDid(name: string): boolean {
+		return exists(this.getRoleDid(name));
 	}
 
 	/**

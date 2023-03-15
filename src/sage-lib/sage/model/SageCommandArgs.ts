@@ -1,4 +1,4 @@
-import type { GuildBasedChannel, Snowflake } from "discord.js";
+import type { GuildBasedChannel, Role, Snowflake } from "discord.js";
 import { GameType, parseGameType } from "../../../sage-common";
 import { CritMethodType, DiceSecretMethodType } from "../../../sage-dice";
 import type { Args, Optional, VALID_UUID } from "../../../sage-utils";
@@ -69,6 +69,28 @@ export interface ISageCommandArgs {
 	getNumber(name: string, required: true): number;
 	/** Returns true if getNumber(name) is not null and not undefined. */
 	hasNumber(name: string): boolean;
+
+	/**
+	 * Gets the named option as a Role.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid Role or "unset".
+	 */
+	getRole(name: string): Optional<Role>;
+	/** Gets the named option as a Role */
+	getRole(name: string, required: true): Role;
+	/** Returns true if getRole(name) is not null and not undefined. */
+	hasRole(name: string): boolean;
+
+	/**
+	 * Gets the named option as a Snowflake.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid Snowflake or "unset".
+	 */
+	getRoleDid(name: string): Optional<Snowflake>;
+	/** Gets the named option as a Snowflake */
+	getRoleDid(name: string, required: true): Snowflake;
+	/** Returns true if getRoleDid(name) is not null and not undefined. */
+	hasRoleDid(name: string): boolean;
 
 	/**
 	 * Gets the named option as a string.

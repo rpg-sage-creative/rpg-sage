@@ -1,4 +1,4 @@
-import type { CommandInteraction, GuildBasedChannel, Snowflake } from "discord.js";
+import type { CommandInteraction, GuildBasedChannel, Role, Snowflake } from "discord.js";
 import type { Optional, VALID_UUID } from "../../../sage-utils";
 import { EnumUtils } from "../../../sage-utils/utils";
 import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
@@ -119,6 +119,44 @@ export default class SageInteractionArgs implements ISageCommandArgs {
 	/** Returns true if getNumber(name) is not null and not undefined. */
 	public hasNumber(name: string): boolean {
 		return exists(this.getNumber(name));
+	}
+
+	/**
+	 * Gets the named option as a Role.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid GuildBasedChannel or "unset".
+	 */
+	public getRole(name: string): Optional<Role>;
+	/** Gets the named option as a GuildBasedChannel */
+	public getRole(name: string, required: true): Role;
+	public getRole(name: string): Optional<Role> {
+		if (!this.hasKey(name)) return undefined;
+		if (this.hasUnset(name)) return null;
+		return this.interaction.options.getRole(name) as Role;
+	}
+
+	/** Returns true if getRole(name) is not null and not undefined. */
+	public hasRole(name: string): boolean {
+		return exists(this.getRole(name));
+	}
+
+	/**
+	 * Gets the named option as a Snowflake.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid Snowflake or "unset".
+	 */
+	public getRoleDid(name: string): Optional<Snowflake>;
+	/** Gets the named option as a Snowflake */
+	public getRoleDid(name: string, required: true): Snowflake;
+	public getRoleDid(name: string): Optional<Snowflake> {
+		if (!this.hasKey(name)) return undefined;
+		if (this.hasUnset(name)) return null;
+		return this.getRole(name)?.id ?? null;
+	}
+
+	/** Returns true if getRoleDid(name) is not null and not undefined. */
+	public hasRoleDid(name: string): boolean {
+		return exists(this.getRoleDid(name));
 	}
 
 	/**

@@ -1,4 +1,6 @@
-import { IGameRole, TGameRoleType, GameRoleType } from "../../../model/Game";
+import type { Snowflake } from "discord.js";
+import type { Optional } from "../../../../../sage-utils";
+import { GameRoleType, IGameRole, TGameRoleType } from "../../../model/Game";
 import type SageMessage from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
@@ -15,7 +17,7 @@ async function gameRoleList(sageMessage: SageMessage): Promise<void> {
 
 	const game = sageMessage.game!;
 
-	const renderableContent = createAdminRenderableContent(game, `<b>game-role-list</b>`);
+	const renderableContent = createAdminRenderableContent(game, `<b>Game Roles</b>`);
 	if (game.roles.length) {
 		for (const gameRole of game.roles) {
 			const role = await sageMessage.discord.fetchGuildRole(gameRole.did);
@@ -30,48 +32,29 @@ async function gameRoleList(sageMessage: SageMessage): Promise<void> {
 	return <any>sageMessage.send(renderableContent);
 }
 
+function getRoleDidArg(sageMessage: SageMessage, type: GameRoleType): Optional<Snowflake> {
+	if (type === GameRoleType.GameMaster && sageMessage.args.hasKey("GM")) {
+		return sageMessage.args.getRoleDid("GM");
+	}
+	return sageMessage.args.getRoleDid(GameRoleType[type]);
+}
+
 async function gameRoleSet(sageMessage: SageMessage): Promise<void> {
 	const denial = sageMessage.checkDenyAdminGame("Set Game Role");
 	if (denial) {
 		return denial;
 	}
 
-	const roleDid = sageMessage.args.findRoleDid("role", true);
-	const roleType = sageMessage.args.findEnum<GameRoleType>(GameRoleType, "type", true);
-	if (!roleDid || !roleType) {
-		return sageMessage.reactFailure("Missing role or type values.");
+	// GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Cast = 4, Table = 5 }
+	const gameRoles = [1,2,3,4,5]
+		.map((type: GameRoleType) => ({ type, did: getRoleDidArg(sageMessage, type) }))
+		.filter(gameRole => gameRole.did !== undefined) as {type:GameRoleType;did:Snowflake|null}[];
+	if (!gameRoles.length) {
+		return sageMessage.reactFailure(`You must provide at least one valid role type and value. Ex: sage!!game role set player="@MyGamePlayer" gm="@MyGameMaster"`);
 	}
 
-	const guild = sageMessage.discord.guild;
-	const guildRole = await sageMessage.discord.fetchGuildRole(roleDid);
-	if (!guild || !guildRole) {
-		return sageMessage.reactFailure("Invalid role or type values.");
-	}
-
-	const game = sageMessage.game!;
-	const role = game.getRole(roleType);
-	if (!role) {
-		const added = await game.addRole(roleType, roleDid);
-		return sageMessage.reactSuccessOrFailure(added, "Game Role Set", "Unknown Error; Game Role NOT Set");
-	}
-	const updated = await game.updateRole(roleType, roleDid);
+	const updated = await sageMessage.game!.setRole(...gameRoles);
 	return sageMessage.reactSuccessOrFailure(updated, "Game Role Set", "Unknown Error; Game Role NOT Set");
-}
-
-
-async function gameRoleRemove(sageMessage: SageMessage): Promise<void> {
-	const denial = sageMessage.checkDenyAdminGame("Remove Game Role");
-	if (denial) {
-		return denial;
-	}
-
-	const roleType = sageMessage.args.findEnum<GameRoleType>(GameRoleType, "type", true);
-	if (!roleType) {
-		return sageMessage.reactFailure("Missing or Invalid role type.");
-	}
-
-	const removed = await sageMessage.game!.removeRole(roleType);
-	return sageMessage.reactSuccessOrFailure(removed, "Game Role Removed", "Unknown Error; Game Role NOT Removed");
 }
 
 //TODO: remove roles by mentioning them
@@ -82,8 +65,5 @@ export default function register(): void {
 	registerAdminCommandHelp("Admin", "Game", "role list");
 
 	registerAdminCommand(gameRoleSet, "game-role-set");
-	registerAdminCommandHelp("Admin", "Game", "game role set {@RoleMention} {GameRoleType}");
-
-	registerAdminCommand(gameRoleRemove, "game-role-remove", "game-role-delete", "game-role-unset");
-	registerAdminCommandHelp("Admin", "Game", "game role remove {GameRoleType}");
+	registerAdminCommandHelp("Admin", "Game", `game role set player="@MyGamePlayer" gm="@MyGameMaster"`);
 }

@@ -275,57 +275,31 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	// #endregion
 
 	// #region Role actions
-	public async addRole(roleType: GameRoleType, roleDid: Snowflake): Promise<boolean> {
-		const found = this.getRole(roleType);
-		if (found) {
-			return false;
+	public async setRole(...roles: {type:GameRoleType;did:Snowflake|null}[]): Promise<boolean> {
+		const changes = roles.map(role => {
+			const existing = this.getRole(role.type);
+			if (existing) {
+				if (!role.did) {
+					// exists, setting null
+					this.core.roles = this.core.roles!.filter(role => role !== existing);
+				}else {
+					// exists, setting same value ... no change
+					if (existing.did === role.did) return false;
+					// exists, setting role
+					existing.did = role.did;
+				}
+			}else {
+				// doesn't exist, setting null ... no change
+				if (!role.did) return false;
+				// doesn't exist, setting role
+				this.core.roles!.push({ did: role.did, type: role.type, dicePing: true });
+			}
+			return true;
+		});
+		if (changes.includes(true)) {
+			return this.save();
 		}
-		const role = { did: roleDid, type: roleType, dicePing: true };
-		(this.core.roles || (this.core.roles = [])).push(role);
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const userDids = this.getUsersByRole(role.type);
-		// 	await Roles.addRoleToUser(this.sageCache, role.did, userDids);
-		// }
-		// return saved;
-		*/
-		return this.save();
-	}
-	public async updateRole(roleType: GameRoleType, roleDid: Snowflake): Promise<boolean> {
-		const role = this.getRole(roleType);
-		if (!role || role.did === roleDid) {
-			return false;
-		}
-		/*
-		// const oldRole = { type:role.type, did:role.did };
-		*/
-		role.did = roleDid;
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const userDids = this.getUsersByRole(oldRole.type);
-		// 	await Roles.updateRoleForUser(this.sageCache, oldRole.did, role.did, userDids);
-		// }
-		// return saved;
-		*/
-		return this.save();
-	}
-	public async removeRole(roleType: GameRoleType): Promise<boolean> {
-		const role = this.getRole(roleType);
-		if (!role) {
-			return false;
-		}
-		this.core.roles = this.core.roles!.filter(_role => _role !== role);
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const userDids = this.getUsersByRole(role.type);
-		// 	await Roles.removeRoleFromUser(this.sageCache, role.did, userDids);
-		// }
-		// return saved;
-		*/
-		return this.save();
+		return false;
 	}
 	// #endregion
 

@@ -134,44 +134,30 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 
 	// #region Role actions
 
-	/** Removes the Role. */
-	public async setRole(roleType: AdminRoleType, roleDid: null): Promise<boolean>;
-	/** Adds or updates the Role. */
-	public async setRole(roleType: AdminRoleType, roleDid: Snowflake): Promise<boolean>;
-	public async setRole(type: AdminRoleType, did?: Optional<Snowflake>): Promise<boolean> {
-		let save = false;
-		const found = this.getRole(type);
-
-		// Delete
-		if (!did) {
-			// Only delete if it exists
-			if (found) {
-				this.core.roles = this.core.roles.filter(_role => _role !== found);
-				save = true;
-			}
-
-		// Add/Update
-		}else {
-			// Update
-			if (found) {
-				// Only update if different
-				if (found.did !== did) {
-					found.did = did;
-					save = true;
+	public async setRole(...roles: {type:AdminRoleType,did:Snowflake|null}[]): Promise<boolean> {
+		const changes = roles.map(role => {
+			const existing = this.getRole(role.type);
+			if (existing) {
+				if (!role.did) {
+					// exists, setting null
+					this.core.roles = this.core.roles!.filter(role => role !== existing);
+				}else {
+					// exists, setting same value ... no change
+					if (existing.did === role.did) return false;
+					// exists, setting role
+					existing.did = role.did;
 				}
-
-			// Add
 			}else {
-				(this.core.roles ?? (this.core.roles = [])).push({ did, type });
-				save = true;
+				// doesn't exist, setting null ... no change
+				if (!role.did) return false;
+				// doesn't exist, setting role
+				this.core.roles!.push({ did: role.did, type: role.type });
 			}
-		}
-
-		// Only save if something changed
-		if (save) {
+			return true;
+		});
+		if (changes.includes(true)) {
 			return this.save();
 		}
-
 		return false;
 	}
 
