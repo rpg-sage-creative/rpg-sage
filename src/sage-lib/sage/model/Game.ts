@@ -23,17 +23,7 @@ const exists = utils.ArrayUtils.Filters.exists;
 type IChannelArgs = Args<IChannelOptions> & { did:Snowflake; };
 
 export type TGameRoleType = keyof typeof GameRoleType;
-export enum GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Cast = 4, Table = 5 }
-export function getRoleTypes(roleType: GameRoleType): GameRoleType[] {
-	switch (roleType) {
-		// case GameRoleType.Table: return [];
-		// case GameRoleType.Cast: return [];
-		case GameRoleType.GameMaster: return [GameRoleType.GameMaster, GameRoleType.Cast, GameRoleType.Table];
-		case GameRoleType.Player: return [GameRoleType.Player, GameRoleType.Cast, GameRoleType.Table];
-		case GameRoleType.Spectator: return [GameRoleType.Spectator, GameRoleType.Table];
-		default: return [];
-	}
-}
+export enum GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Table = 4, Room = 5 }
 
 export interface IGameRole {
 	did: Snowflake;
@@ -322,18 +312,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		}
 
 		const gameMasters = userDids.map(userDid => (<IGameUser>{ did: userDid, type: GameUserType.GameMaster }));
-		(this.core.users || (this.core.users = [])).push(...gameMasters);
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const roleTypes = getRoleTypes(GameRoleType.GameMaster);
-		// 	const roleDids = this.roles.filter(role => roleTypes.includes(role.type)).map(role => role.did);
-		// 	if (roleDids.length) {
-		// 		await Roles.addRoleToUser(this.sageCache, roleDids, userDids);
-		// 	}
-		// }
-		// return saved;
-		*/
+		this.users.push(...gameMasters);
 		return this.save();
 	}
 	public async removeGameMasters(userDids: Snowflake[]): Promise<boolean> {
@@ -345,17 +324,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		const nonPlayerCharacters = this.nonPlayerCharacters;
 		filtered.map(userDid => nonPlayerCharacters.filter(npc => npc.userDid === userDid)).forEach(npcs => npcs.forEach(npc => delete npc.userDid));
 
-		this.core.users = this.core.users!.filter(user => user.type !== GameUserType.GameMaster || !filtered.includes(user.did));
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const roleDids = this.roles.map(role => role.did);
-		// 	if (roleDids.length) {
-		// 		await Roles.removeRoleFromUser(this.sageCache, roleDids, filtered);
-		// 	}
-		// }
-		// return saved;
-		*/
+		this.core.users = this.users.filter(user => user.type !== GameUserType.GameMaster || !filtered.includes(user.did));
 		return this.save();
 	}
 	// #endregion GameMaster actions
@@ -379,18 +348,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		}
 
 		const players = userDids.map(userDid => (<IGameUser>{ did: userDid, type: GameUserType.Player }));
-		(this.core.users || (this.core.users = [])).push(...players);
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const roleTypes = getRoleTypes(GameRoleType.Player);
-		// 	const roleDids = this.roles.filter(role => roleTypes.includes(role.type)).map(role => role.did);
-		// 	if (roleDids.length) {
-		// 		await Roles.addRoleToUser(this.sageCache, roleDids, userDids);
-		// 	}
-		// }
-		// return saved;
-		*/
+		this.users.push(...players);
 		return this.save();
 	}
 	public async removePlayers(userDids: Snowflake[]): Promise<boolean> {
@@ -402,17 +360,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		const playerCharacters = this.playerCharacters;
 		filtered.map(userDid => playerCharacters.filter(pc => pc.userDid === userDid)).forEach(pcs => pcs.forEach(pc => delete pc.userDid));
 
-		this.core.users = this.core.users!.filter(user => user.type !== GameUserType.Player || !filtered.includes(user.did));
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const roleDids = this.roles.map(role => role.did);
-		// 	if (roleDids.length) {
-		// 		await Roles.removeRoleFromUser(this.sageCache, roleDids, filtered);
-		// 	}
-		// }
-		// return saved;
-		*/
+		this.core.users = this.users.filter(user => user.type !== GameUserType.Player || !filtered.includes(user.did));
 		return this.save();
 	}
 	// #endregion PC actions
@@ -475,17 +423,6 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 	public getPlayer(userDid: Optional<Snowflake>): IGameUser | undefined {
 		return this.users.find(user => user.did === userDid && user.type === GameUserType.Player);
-	}
-
-	public getUsersByRole(roleType: GameRoleType): Snowflake[] {
-		if ([GameRoleType.Cast, GameRoleType.Table].includes(roleType)) {
-			return this.gameMasters.concat(this.players);
-		}else if (roleType === GameRoleType.GameMaster) {
-			return this.gameMasters;
-		}else if (roleType === GameRoleType.Player) {
-			return this.players;
-		}
-		return [];
 	}
 
 	// #endregion
