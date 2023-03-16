@@ -234,7 +234,7 @@ async function getIsGameUser(core: SageCacheCore, did: Snowflake): Promise<TIsGa
 	const playerByRole = playerByUser ? undefined : core.server?.gameRoles.player?.members.has(did) === true;
 	const isPlayer = pairByRoleOrByUser(playerByRole, playerByUser);
 
-	const gameMasterByUser = game.getUser(did)?.type === GameUserType.Player;
+	const gameMasterByUser = game.getUser(did)?.type === GameUserType.GameMaster;
 	const gameMasterByRole = gameMasterByUser ? undefined : core.server?.gameRoles.gameMaster?.members.has(did) === true;
 	const isGameMaster = pairByRoleOrByUser(gameMasterByRole, gameMasterByUser);
 
