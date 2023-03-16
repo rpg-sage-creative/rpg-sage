@@ -411,23 +411,24 @@ export abstract class SageCommandBase<
 		});
 	}
 
-	public checkDenyAdminGame(game: Optional<Game>): Promise<void> | undefined;
-	public checkDenyAdminGame(game: Optional<Game>, label: string): Promise<void> | undefined;
+	// public checkDenyAdminGame(game: Optional<Game>): Promise<void> | undefined;
+	// public checkDenyAdminGame(game: Optional<Game>, label: string): Promise<void> | undefined;
 	public checkDenyAdminGame(label: string): Promise<void> | undefined;
 	public checkDenyAdminGame(...args: (Optional<Game> | string)[]): Promise<void> | undefined {
 		// Grab the only string arg or use default label
 		const label = args.find(arg => typeof(arg) === "string") as string ?? "Game Admin";
 		// Filter to all non-string args, because we might have a null or undefined Game ...
-		const games = args.filter(arg => typeof(arg) !== "string") as Game[];
+		// const games = args.filter(arg => typeof(arg) !== "string") as Game[];
 		// If we weren't passed a possible Game, then get it from sageMessage
-		const game = games.length === 0 ? this.game : games[0];
+		// const game = games.length === 0 ? this.game : games[0];
+		const game = this.game;
 		// Build the key, undefined will be fine in the key
 		const key = `${game?.id}-adminGame`;
 		return this.processDenial(key, label, () => {
 			if (!game) {
 				return { notFound:"Game" } as TDenial;
 			}
-			const checkResults = this.actor.isSuperUser || this.actor.isServerAdmin || this.actor.isGameAdmin || game.hasGameMaster(this.actor.did);
+			const checkResults = this.actor.isSuperUser || this.actor.isServerAdmin || this.actor.isGameAdmin || this.actor.isGameUser?.isGameMaster;
 			return checkResults ? undefined
 				: { denyPerm:"You must be a GameMaster for this game or a GameAdmin, Administrator, Manager, or Owner of this server." } as TDenial;
 		});

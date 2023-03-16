@@ -386,11 +386,11 @@ function createGmMention(sageMessage: TInteraction): string {
 
 async function createAuthorMention(sageMessage: TInteraction, isSecretMention = false): Promise<string | null> {
 	const userDid = sageMessage.actor.did;
-	const gameUser = sageMessage.game?.getUser(userDid);
-	if (!gameUser) {
+	if (!sageMessage.actor.isGameUser?.isTable) {
 		return DiscordId.toUserMention(userDid);
 	}
 
+	const gameUser = sageMessage.game!.getUser(userDid)!;
 	let authorReference = DiscordId.toUserMention(gameUser.did);
 	if (isSecretMention || gameUser.dicePing === false) {
 		const user = await sageMessage.discord.fetchUser(userDid);

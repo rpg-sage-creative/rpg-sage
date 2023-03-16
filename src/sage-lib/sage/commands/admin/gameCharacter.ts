@@ -324,26 +324,26 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 
 	const newChar = new GameCharacter(core, characterManager);
 	return promptAndDo(sageMessage, newChar, `Create ${newChar.name}?`, async char => {
-		if (sageMessage.game && userDid) {
-			// why? console.log("Checking owner's status as player/gm ...");
-			if (characterTypeMeta.isNpc) {
-				if (!sageMessage.game.hasGameMaster(userDid)) {
-					const gameMasterAdded = await sageMessage.game.addGameMasters([userDid]);
-					if (!gameMasterAdded) {
-						await sageMessage.reactFailure("Unable to add GM on the fly.");
-						return;
-					}
-				}
-			} else {
-				if (!sageMessage.game.hasPlayer(userDid)) {
-					const playerAdded = await sageMessage.game.addPlayers([userDid]);
-					if (!playerAdded) {
-						await sageMessage.reactFailure("Unable to add Player on the fly.");
-						return;
-					}
-				}
-			}
-		}
+		// if (sageMessage.game && userDid) {
+		// 	// why? console.log("Checking owner's status as player/gm ...");
+		// 	if (characterTypeMeta.isNpc) {
+		// 		if (!sageMessage.game.hasGameMaster(userDid)) {
+		// 			const gameMasterAdded = await sageMessage.game.addGameMasters([userDid]);
+		// 			if (!gameMasterAdded) {
+		// 				await sageMessage.reactFailure("Unable to add GM on the fly.");
+		// 				return;
+		// 			}
+		// 		}
+		// 	} else {
+		// 		if (!sageMessage.game.hasPlayer(userDid)) {
+		// 			const playerAdded = await sageMessage.game.addPlayers([userDid]);
+		// 			if (!playerAdded) {
+		// 				await sageMessage.reactFailure("Unable to add Player on the fly.");
+		// 				return;
+		// 			}
+		// 		}
+		// 	}
+		// }
 		const gc = await characterManager.addCharacter(char.toJSON());
 		await sageMessage.reactSuccessOrFailure(!!gc, "Character Created.", "Unknown Error; Character NOT Created.");
 	});

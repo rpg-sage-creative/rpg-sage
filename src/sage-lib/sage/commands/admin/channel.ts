@@ -152,13 +152,13 @@ async function getChannelNameAndActiveGame(sageCache: SageCache, channelDid: Dis
 	return [channel.name, await sageCache.games.findActiveByDiscordKey(discordKey)];
 }
 
-export async function channelDetails(sageMessage: SageMessage, channel?: IChannel): Promise<void> {
+async function channelDetails(sageMessage: SageMessage, channel?: IChannel): Promise<void> {
 	// Get channel from args if it isn't passed
 	const channelDid = channel?.did ?? sageMessage.args.getChannelDid("channel") ?? sageMessage.discordKey.channel;
 	const [guildChannelName, game] = await getChannelNameAndActiveGame(sageMessage.sageCache, channelDid);
 
 	const denial = game
-		? sageMessage.checkDenyAdminGame(game, "Show Game Channel Details")
+		? sageMessage.checkDenyAdminGame("Show Game Channel Details")
 		: sageMessage.checkDenyAdminServer("Show Server Channel Details");
 	if (denial) {
 		return denial;

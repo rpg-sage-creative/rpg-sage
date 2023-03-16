@@ -1,10 +1,13 @@
-import type { TextChannel } from "discord.js";
+import type { GuildMember, Role, Snowflake } from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
 import utils, { Args, Optional } from "../../../../../sage-utils";
+import type { DGuildChannel } from "../../../../../sage-utils/utils/DiscordUtils";
+import type DiscordFetches from "../../../../../sage-utils/utils/DiscordUtils/DiscordFetches";
 import DiscordId from "../../../../../sage-utils/utils/DiscordUtils/DiscordId";
+import { toSuperscript } from "../../../../../sage-utils/utils/NumberUtils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import Game, { GameRoleType, GameUserType, getDefaultGameOptions, IGameUser, TDefaultGameOptions } from "../../../model/Game";
+import Game, { GameRoleType, GameUserType, getDefaultGameOptions, IGameRole, IGameUser, TDefaultGameOptions } from "../../../model/Game";
 import GameCharacter from "../../../model/GameCharacter";
 import { getEnum, hasValues, ISageCommandArgs } from "../../../model/SageCommandArgs";
 import type SageMessage from "../../../model/SageMessage";
@@ -62,7 +65,7 @@ async function myGameList(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const renderableContent = createAdminRenderableContent(sageMessage.bot);
-	renderableContent.setTitle(`<b>my-games</b>`);
+	renderableContent.setTitle(`<b>My Games</b>`);
 	if (gameCount) {
 		const servers = Array.from(serverGameMap.keys());
 		const UNKNOWN_SERVER = "<i>Unknown Server</i>";
@@ -74,7 +77,7 @@ async function myGameList(sageMessage: SageMessage): Promise<void> {
 
 			const games = serverGameMap.get(server)!;
 			for (const game of games) {
-				const isGM = game.hasGameMaster(myDid);
+				const isGM = await game.hasUser(myDid, GameRoleType.GameMaster);
 				let channel: IChannel | undefined;
 
 				renderableContent.append(`[spacer]<b>${game.name}</b>`);
@@ -154,7 +157,7 @@ async function showGameGetGame(sageMessage: SageMessage): Promise<Game | null> {
 			game = await sageMessage.sageCache.games.getById(gameId);
 		}
 	}
-	const denial = sageMessage.checkDenyAdminGame(game, "Show Game Details");
+	const denial = sageMessage.checkDenyAdminGame("Show Game Details");
 	if (denial) {
 		await denial;
 		return null;
@@ -231,26 +234,82 @@ async function showGameRenderChannels(renderableContent: utils.RenderUtils.Rende
 	renderableContent.append(`<b>Channels</b> ${game.channels.length}`);
 
 	const discord = await sageMessage.sageCache.discord.forGuild(game.serverDid);
-	const allChannels = game.channels;
+	const gameChannels = game.channels;
+	const allChannels = [] as { gameChannel:IChannel, guildChannel?:DGuildChannel }[];
+	for (const gameChannel of gameChannels) {
+		const guildChannel = await discord?.fetchChannel(gameChannel.did) ?? undefined;
+		allChannels.push({ gameChannel, guildChannel })
+	}
 
 	const types = [GameChannelType.InCharacter, GameChannelType.OutOfCharacter, GameChannelType.GameMaster, GameChannelType.Dice, GameChannelType.Miscellaneous, GameChannelType.None];
 	for (const type of types) {
-		const channels = allChannels.filter(channel => (channel.gameChannelType ?? GameChannelType.None) === type);
+		const channels = allChannels.filter(pair => pair.guildChannel && (pair.gameChannel.gameChannelType ?? GameChannelType.None) === type);
 		if (channels.length) {
 			const typeLabel = type === GameChannelType.None ? "Other" : toGameChannelTypeString(type);
 			renderableContent.append(`[spacer]<b>${typeLabel}</b>`);
-			for (const channel of channels) {
-				const guildChannel = await discord?.fetchChannel<TextChannel>(channel.did);
-				const guildChannelName = guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`;
-				renderableContent.append(`[spacer][spacer]${guildChannelName}`);
-			}
+			channels.forEach(pair => renderableContent.append(`[spacer][spacer]#${pair.guildChannel!.name}`));
 		}
 	}
 
-	const orphanChannels = (await game.orphanChannels()).map(channel => channel ? `#${channel.did}` : `<i>unavailable</i>`);
+	const orphanChannels = allChannels.filter(pair => !pair.guildChannel);
 	if (orphanChannels.length) {
-		renderableContent.append(`<b>Orphaned Channels</b> ${orphanChannels.length}; ${orphanChannels.join(", ")}`);
+		renderableContent.append(`<b>Orphaned Channels</b> ${orphanChannels.length}`);
+		orphanChannels.forEach(pair => {
+			const typeLabel = pair.gameChannel.gameChannelType === GameChannelType.None ? "Other" : toGameChannelTypeString(pair.gameChannel.gameChannelType);
+			renderableContent.append(`[spacer]<b>${typeLabel}</b> <i>#${pair.gameChannel.did}</i>`);
+		});
 	}
+}
+
+type TMembersAndOrphans = {
+	byRole: GuildMember[];
+	byUser: GuildMember[];
+	orphans: Snowflake[];
+	members: GuildMember[];
+	names: string[];
+};
+async function fetchMembersAndOrphans(discordFetches: DiscordFetches, userDids: Snowflake[], roleDid: Snowflake | undefined): Promise<TMembersAndOrphans> {
+	const byUser = [] as GuildMember[];
+	const orphans = [] as Snowflake[];
+	for (const did of userDids) {
+		const guildMember = await discordFetches.fetchGuildMember(did);
+		if (guildMember) {
+			byUser.push(guildMember);
+		}else {
+			orphans.push(did);
+		}
+	}
+
+	const role = await discordFetches.fetchGuildRole(roleDid);
+	const byRole = Array.from(role?.members.values() ?? []);
+
+	const hasBoth = byUser.length > 0 && byRole.length > 0;
+
+	const members = [] as GuildMember[];
+	const names = [] as string[];
+	byUser.forEach(member => {
+		members.push(member);
+
+		const name = member.user?.tag ?? member.displayName;
+		let note = "";
+		if (hasBoth) {
+			const zero = toSuperscript(0);
+			const one = byRole.find(m => member.id === m.id) ? toSuperscript(1) : "";
+			note = zero + one;
+		}
+		names.push( `@${name}${note}`);
+	});
+	byRole.forEach(member => {
+		if (!members.find(m => member.id === m.id)) {
+			members.push(member);
+
+			const name = member.user?.tag ?? member.displayName;
+			const one = hasBoth ? toSuperscript(1) : "";
+			names.push(`@${name}${one}`);
+		}
+	});
+
+	return { byUser, orphans, byRole, members, names };
 }
 
 async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: Game): Promise<void> {
@@ -273,30 +332,65 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 
 	await showGameRenderChannels(renderableContent, sageMessage, game);
 
-	const guildRoles = await game.guildRoles();
-	const roles = guildRoles.map(guildRole => guildRole ? `@${guildRole.name} (${GameRoleType[game.roles.find(role => role.did === guildRole.id)?.type!]})` : `<i>unavailable</i>`);
-	renderableContent.append(`<b>Roles</b> ${roles.length}; ${roles.join(", ")}`);
+	//#region roles
 
-	const gmGuildMembers = await game.gmGuildMembers();
-	const gameMasters = gmGuildMembers.map((gmGuildMember, index) => gmGuildMember ? `@${gmGuildMember.user?.tag ?? gmGuildMember.displayName}` : `<i>${game.gameMasters[index]}</i>`);
+	const roles: { gameRole:IGameRole; guildRole:Role|null; }[] = [];
+	const gameRoles = game.roles;
+	for (const gameRole of gameRoles) {
+		const guildRole = await sageMessage.sageCache.discord.fetchGuildRole(gameRole.did);
+		roles.push({ gameRole, guildRole });
+	}
+	const validRoles = roles.filter(role => role.guildRole).map(role => `@${role.guildRole!.name} (${GameRoleType[role.gameRole.type]})`);
+	renderableContent.append(`<b>Roles</b> ${validRoles.length}; ${validRoles.join(", ")}`);
+	const orphanedRoles = roles.filter(role => !role.guildRole).map(role => `@${role.gameRole.did} (${GameRoleType[role.gameRole.type]})`);
+	if (orphanedRoles.length) {
+		renderableContent.append(`<b>Orphaned Roles</b> ${orphanedRoles.length}; ${orphanedRoles.join(", ")}`);
+	}
+
+	//#endregion
+
+	//#region game masters
+
+	const gameMasterDids = game.users.filter(user => user.type === GameUserType.GameMaster).map(user => user.did);
+	const gameMastersAndOrphans = await fetchMembersAndOrphans(sageMessage.sageCache.discord, gameMasterDids, game.gmRole?.did);
 	renderableContent.append(`<b>Game Master Name</b>`, `[spacer]${game.gmCharacterName ?? `<i>inherited (${game.server.defaultGmCharacterName ?? GameCharacter.defaultGmCharacterName})</i>`}`);
-	renderableContent.append(`<b>Game Masters</b> ${gameMasters.length}`);
-	gameMasters.forEach(gm => renderableContent.append(`[spacer]${gm}`));
+	renderableContent.append(`<b>Game Masters</b> ${gameMastersAndOrphans.names.length}`);
+	gameMastersAndOrphans.names.forEach(gm => renderableContent.append(`[spacer]${gm}`));
+	if (gameMastersAndOrphans.byRole.length && gameMastersAndOrphans.byUser.length) {
+		renderableContent.append(`<i>${toSuperscript(0)}</i> Game Master added directly to the Game.`);
+		renderableContent.append(`<i>${toSuperscript(1)}</i> Game Master added via Role.`);
+	}
+	if (gameMastersAndOrphans.orphans.length) {
+		renderableContent.append(`<b>Orphaned Game Masters</b> ${gameMastersAndOrphans.orphans.length}; ${gameMastersAndOrphans.orphans.join(", ")}`);
+	}
+
+	//#endregion
 
 	renderableContent.append(`<b>NonPlayer Characters</b> ${game.nonPlayerCharacters.length}`);
 
-	const playerGuildMembers = await game.pGuildMembers();
-	const players = playerGuildMembers.map((pGuildMember, index) => pGuildMember ? `@${pGuildMember.user?.tag ?? pGuildMember.displayName}` : `<i>${game.players[index]}</i>`);
-	const playerCharacters = playerGuildMembers.map(pGuildMember => game.playerCharacters.findByUser(pGuildMember?.id)?.name).map(name => name ? ` (${name})` : ``);
-	renderableContent.append(`<b>Players (Characters)</b> ${players.length}`);
-	players.forEach((player, index) => renderableContent.append(`[spacer]${player}${playerCharacters[index]}`));
+	//#region players
 
-	const orphanUsers = (await game.orphanUsers()).map(user => user ? `@${user.did}` : `<i>unavailable</i>`);
-	if (orphanUsers.length) {
-		renderableContent.append(`<b>Orphaned Users</b> ${orphanUsers.length}; ${orphanUsers.join(", ")}`);
+	const playerDids = game.users.filter(user => user.type === GameUserType.Player).map(user => user.did);
+	const playersAndOrphans = await fetchMembersAndOrphans(sageMessage.sageCache.discord, playerDids, game.playerRole?.did);
+	renderableContent.append(`<b>Players (Characters)</b> ${playersAndOrphans.names.length}`);
+	playersAndOrphans.members.forEach((member, index) => {
+		const playerName = playersAndOrphans.names[index];
+		const pc = game.playerCharacters.findByUser(member.id);
+		const pcName = pc?.name ? ` (${pc.name})` : ``;
+		renderableContent.append(`[spacer]${playerName}${pcName}`);
+	});
+	if (playersAndOrphans.byRole.length && playersAndOrphans.byUser.length) {
+		renderableContent.append(`<i>${toSuperscript(0)}</i> Player added directly to the Game.`);
+		renderableContent.append(`<i>${toSuperscript(1)}</i> Player added via Role.`);
 	}
 
-	const orphanPCs = game.orphanedPlayerCharacters;
+	if (playersAndOrphans.orphans.length) {
+		renderableContent.append(`<b>Orphaned Players</b> ${playersAndOrphans.orphans.length}; ${playersAndOrphans.orphans.join(", ")}`);
+	}
+
+	//#endregion
+
+	const orphanPCs = game.playerCharacters.filter(pc => gameMastersAndOrphans.orphans.includes(pc.userDid!) || playersAndOrphans.orphans.includes(pc.userDid!));
 	if (orphanPCs.length) {
 		renderableContent.append(`<b>Orphaned Player Characters</b> ${orphanPCs.length}`);
 		orphanPCs.forEach(pc => renderableContent.append(`[spacer]${pc.name}`));
@@ -308,16 +402,10 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 	await sageMessage.send(renderableContent);
 
 	if (sageMessage.server && !skipPrune) {
-		const missingPlayerSnowflakes = playerGuildMembers
-			.map((guildMember, index) => { return { guildMember: guildMember, index: index }; })
-			.filter(meta => !meta.guildMember)
-			.map(meta => game.players[meta.index]);
+		const missingPlayerSnowflakes = playersAndOrphans.orphans;
 		const missingPlayers = missingPlayerSnowflakes.length > 0;
 
-		const missingGmSnowflakes = gmGuildMembers
-			.map((guildMember, index) => { return { guildMember: guildMember, index: index }; })
-			.filter(meta => !meta.guildMember)
-			.map(meta => game.gameMasters[meta.index]);
+		const missingGmSnowflakes = gameMastersAndOrphans.orphans
 		const missingGms = missingGmSnowflakes.length > 0;
 
 		if (missingPlayers || missingGms) {
@@ -349,6 +437,8 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 				}
 				if (showAgain) {
 					await gameDetails(sageMessage, true);
+				}else {
+					sageMessage.whisper(`Unknown Error;\n${unable.join("\n")}`);
 				}
 			}
 		}

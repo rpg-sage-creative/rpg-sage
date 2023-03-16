@@ -10,6 +10,7 @@ import type { TCommand, TCommandAndArgsAndData } from "../../discord";
 import { registerMessageListener, registerReactionListener } from "../../discord/handlers";
 import { replaceWebhook, sendWebhook } from "../../discord/messages";
 import type CharacterManager from "../model/CharacterManager";
+import { GameRoleType } from "../model/Game";
 import GameCharacter, { type GameCharacterCore } from "../model/GameCharacter";
 import { ColorType } from "../model/HasColorsCore";
 import { EmojiType } from "../model/HasEmojiCore";
@@ -351,14 +352,14 @@ export function parseDialogContent(content: string, allowDynamicDialogSeparator:
 	return null;
 }
 
-export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogContent | null {
+export async function parseOrAutoDialogContent(sageMessage: SageMessage): Promise<TDialogContent | null> {
 	const content = sageMessage.message.content ?? ""; //TODO: was message.edits[0].content
 	const dialogContent = parseDialogContent(content, sageMessage.actor.s?.allowDynamicDialogSeparator);
 	if (dialogContent) {
 		return dialogContent;
 	}
 	if (!sageMessage.hasCommandOrQueryOrSlicedContent) {
-		const autoCharacter = sageMessage.game?.getAutoCharacterForChannel(sageMessage.actor.did, sageMessage.discordKey.channel)
+		const autoCharacter = await sageMessage.game?.getAutoCharacterForChannel(sageMessage.actor.did, sageMessage.discordKey.channel)
 			?? sageMessage.actor.s.getAutoCharacterForChannel(sageMessage.discordKey.channel);
 		if (autoCharacter) {
 			return {
@@ -386,7 +387,7 @@ async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndDat
 		return null;
 	}
 
-	const dialogContent = parseOrAutoDialogContent(sageMessage);
+	const dialogContent = await parseOrAutoDialogContent(sageMessage);
 	if (!dialogContent?.content) {
 		return null;
 	}
@@ -642,19 +643,17 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 
 	const { game } = sageReaction;
 	if (game) {
-		const actorIsGameUser = await game?.hasUser(sageReaction.actor.did);
-		if (!actorIsGameUser) {
+		// only GMs at this point
+		const actorIsGm = await game?.hasUser(userDid, GameRoleType.GameMaster);
+		if (!actorIsGm) {
 			return null;
 		}
 
+		// make sure post is from Sage
 		const isBotOrWebhook = await isAuthorBotOrWebhook(sageReaction);
+		// make sure post author is a GM or Player
 		const authorIsGameUser = await game?.hasUser(sageReaction.message.author?.id);
 		if (!isBotOrWebhook && !authorIsGameUser) {
-			return null;
-		}
-
-		const isGm = game.hasGameMaster(userDid);
-		if (!isGm) {
 			return null;
 		}
 

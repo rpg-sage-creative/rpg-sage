@@ -1,10 +1,12 @@
+import { GameRoleType } from "../../../model/Game";
 import type SageMessage from "../../../model/SageMessage";
 import { registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 import { gameUserList } from "./player";
 
 async function listGameMasters(sageMessage: SageMessage): Promise<void> {
-	return gameUserList(sageMessage, "Game Masters", sageMessage.game?.gameMasters);
+	const gameMasters = await sageMessage.game?.fetchUsers(GameRoleType.GameMaster);
+	return gameUserList(sageMessage, "Game Masters", gameMasters);
 }
 
 async function addGameMaster(sageMessage: SageMessage): Promise<void> {

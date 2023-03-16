@@ -1,7 +1,8 @@
-import type { GuildChannel, GuildMember, Message, Role, Snowflake } from "discord.js";
+import type { GuildChannel, GuildMember, Message, Snowflake } from "discord.js";
 import type { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Args, IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
+import { unique } from "../../../sage-utils/utils/ArrayUtils/Filters";
 import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
 import { DicePostType } from "../commands/dice";
@@ -17,8 +18,6 @@ import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
 import type SageCache from "./SageCache";
 import { applyValues, getEnum, hasValues, ISageCommandArgs } from "./SageCommandArgs";
 import type Server from "./Server";
-
-const exists = utils.ArrayUtils.Filters.exists;
 
 type IChannelArgs = Args<IChannelOptions> & { did:Snowflake; };
 
@@ -83,6 +82,16 @@ export type TMappedGameChannel = {
 	gameChannelType: GameChannelType | undefined;
 };
 
+export type TFetchedGameUser = {
+	dicePing: boolean;
+	did: Snowflake;
+	guildMember: GuildMember | undefined;
+	isGM: boolean;
+	isOnline: boolean;
+	isPlayer: boolean;
+	roleType: GameRoleType;
+}
+
 /** Returns [guildChannels.concat(sageChannels), guildChannels, sageChannels] */
 async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<[TMappedGameChannel[], TMappedGameChannel[], TMappedGameChannel[]]> {
 	const sChannels: TMappedGameChannel[] = [];
@@ -134,18 +143,13 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	private get discord() { return this.sageCache.discord; }
 
 	public get gmRole(): IGameRole | undefined { return this.roles.find(role => role.type === GameRoleType.GameMaster); }
-	public get gmRoleDid(): Snowflake | undefined { return this.gmRole?.did; }
-
 	public get playerRole(): IGameRole | undefined { return this.roles.find(role => role.type === GameRoleType.Player); }
-	public get playerRoleDid(): Snowflake | undefined { return this.playerRole?.did; }
-	public get players(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.Player).map(user => user.did); }
 
 	public get channels(): IChannel[] { return this.core.channels ?? (this.core.channels = []); }
-	public get gameMasters(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.GameMaster).map(user => user.did); }
 	public get gmCharacterName(): string { return this.core.gmCharacterName ?? this.server.defaultGmCharacterName; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
-	public get orphanedPlayerCharacters() { return this.playerCharacters.filter(pc => !pc.userDid || !this.players.includes(pc.userDid)); }
+	// public get orphanedPlayerCharacters() { return this.playerCharacters.filter(pc => !pc.userDid || !this.players.includes(pc.userDid)); }
 	public get roles(): IGameRole[] { return this.core.roles ?? (this.core.roles = []); }
 	public get users(): IGameUser[] { return this.core.users ?? (this.core.users = []); }
 
@@ -167,6 +171,40 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 				?? allChannels[0]
 			)?.sChannel;
 	}
+	private fetchedUsers: Map<number, TFetchedGameUser[]> = new Map();
+	public async fetchUsers(gameRoleType?: GameRoleType, cache = true): Promise<TFetchedGameUser[]> {
+		const out: TFetchedGameUser[] = [];
+		const roleTypes = gameRoleType ? [gameRoleType] : [1,2,3,4,5] as GameRoleType[];
+		for (const roleType of roleTypes) {
+			if (!cache || !this.fetchedUsers.has(roleType)) {
+				const userType = GameUserType[GameRoleType[roleType] as keyof typeof GameUserType];
+				const byUser = this.users.filter(user => user.type === userType);
+				const gameRole = this.roles.find(role => role.type === roleType);
+				const role = await this.discord.fetchGuildRole(gameRole?.did);
+				const byRole = Array.from(role?.members.values() ?? []);
+				const userDids = byUser.map(user => user.did).concat(byRole.map(user => user.id)).filter(unique);
+				const users = [] as TFetchedGameUser[];
+				for (const did of userDids) {
+					const dicePing = byUser.find(user => user.did === did)?.dicePing !== false;
+					const guildMember = byRole.find(user => user.id === did) ?? await this.discord.fetchGuildMember(did) ?? undefined;
+					const isOnline = ["online"].includes(guildMember?.presence?.status!);
+					users.push({
+						did,
+						guildMember,
+						isGM: roleType === GameRoleType.GameMaster,
+						isOnline,
+						isPlayer: roleType === GameRoleType.Player,
+						dicePing,
+						roleType
+					});
+				}
+				this.fetchedUsers.set(roleType, users);
+			}
+			out.push(...this.fetchedUsers.get(roleType)!);
+		}
+		return out;
+	}
+
 	public async gmGuildChannel(): Promise<OrNull<GuildChannel>> {
 		for (const sChannel of this.channels) {
 			if (sChannel.gameChannelType === GameChannelType.GameMaster) {
@@ -178,63 +216,13 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		}
 		return null;
 	}
-	public async pGuildMembers(): Promise<GuildMember[]> {
-		// TODO: investiage iterating over guild.memebers as "cleaner"
-		// return Promise.all(this.players.map(player => this.discord.fetchGuildMember(player)));
 
-		const pGuildMembers = (await Promise.all(this.players.map(player => this.discord.fetchGuildMember(player))))
-			.filter(exists);
-		const pRoleDid = this.playerRoleDid;
-		if (pRoleDid) {
-			const discordRole = await this.discord.fetchGuildRole(pRoleDid);
-			if (discordRole) {
-				const roleOnly = discordRole.members.filter(guildMember => !pGuildMembers.find(p => p.id === guildMember.id));
-				pGuildMembers.push(...roleOnly.values());
-			}
-		}
-		return pGuildMembers;
-	}
-	public async guildChannels(): Promise<GuildChannel[]> {
-		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
-		return all.filter(exists) as GuildChannel[];
-	}
-	public async orphanChannels(): Promise<IChannel[]> {
-		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
-		return this.channels.filter((_, index) => !all[index]);
-	}
-	public async orphanUsers(): Promise<IGameUser[]> {
-		const all = await Promise.all(this.users.map(user => this.discord.fetchUser(user.did)));
-		return this.users.filter((_, index) => !all[index]);
-	}
-	public async gmGuildMembers(): Promise<GuildMember[]> {
-		const gmGuildMembers = (await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)))).filter(exists);
-		const gmRoleDid = this.gmRoleDid;
-		if (gmRoleDid) {
-			const discordRole = await this.discord.fetchGuildRole(gmRoleDid);
-			if (discordRole) {
-				const roleOnly = discordRole.members.filter(guildMember => !gmGuildMembers.find(gm => gm.id === guildMember.id));
-				gmGuildMembers.push(...roleOnly.values());
-			}
-		}
-		return gmGuildMembers;
-	}
 	public async gmGuildMember(): Promise<GuildMember | null> {
-		return this.discord.fetchGuildMember(this.gameMasters[0]);
-		//TODO: LEARN HOW TO CHECK ONLINE STATUS
-		// let first: GuildMember;
-		// for (const gameMaster of this.gameMasters) {
-		// 	const guildMember = await this.discord.fetchGuildMember(gameMaster);
-		// 	const user = guildMember?.user;
-		// 	if (["online"].includes(user?.presence?.status)) {
-		// 		return guildMember;
-		// 	}
-		// 	first = first || guildMember;
-		// }
-		// return first || null;
+		const gameMasters = await this.fetchUsers(GameRoleType.GameMaster);
+		const gameMaster = gameMasters.find(gm => gm.isOnline) ?? gameMasters[0];
+		return gameMaster.guildMember ?? null;
 	}
-	public async guildRoles(): Promise<Role[]> {
-		return (await Promise.all(this.roles.map(role => this.discord.fetchGuildRole(role.did)))).filter(exists);
-	}
+
 	//#endregion
 
 	// #region Channel actions
@@ -316,7 +304,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		return this.save();
 	}
 	public async removeGameMasters(userDids: Snowflake[]): Promise<boolean> {
-		const filtered = userDids.filter(userDid => this.hasGameMaster(userDid));
+		const filtered = userDids.filter(userDid => this.users.find(user => user.did === userDid && user.type === GameUserType.GameMaster));
 		if (!filtered.length) {
 			return false;
 		}
@@ -352,7 +340,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		return this.save();
 	}
 	public async removePlayers(userDids: Snowflake[]): Promise<boolean> {
-		const filtered = userDids.filter(userDid => this.hasPlayer(userDid));
+		const filtered = userDids.filter(userDid => this.users.find(user => user.did === userDid && user.type === GameUserType.Player));
 		if (!filtered.length) {
 			return false;
 		}
@@ -365,9 +353,10 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	}
 	// #endregion PC actions
 
-	public getAutoCharacterForChannel(userDid: Snowflake, channelDid: Optional<Snowflake>): GameCharacter | undefined {
+	public async getAutoCharacterForChannel(userDid: Snowflake, channelDid: Optional<Snowflake>): Promise<GameCharacter | undefined> {
 		if (channelDid) {
-			const char = this.hasGameMaster(userDid)
+			const isGameMaster = await this.hasUser(userDid, GameRoleType.GameMaster);
+			const char = isGameMaster
 				? this.nonPlayerCharacters.findByName(this.gmCharacterName)
 				: this.playerCharacters.findByUser(userDid);
 			return char?.hasAutoChannel(channelDid) ? char : undefined;
@@ -421,24 +410,12 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		return this.users.find(user => user.did === userDid);
 	}
 
-	public getPlayer(userDid: Optional<Snowflake>): IGameUser | undefined {
-		return this.users.find(user => user.did === userDid && user.type === GameUserType.Player);
-	}
-
 	// #endregion
 
 	// #region Has
 
 	public hasChannel(channelDid: Optional<Snowflake>): boolean {
 		return this.getChannel(channelDid) !== undefined;
-	}
-
-	public hasGameMaster(userDid: Optional<Snowflake>): boolean {
-		return this.getUser(userDid)?.type === GameUserType.GameMaster;
-	}
-
-	public hasPlayer(userDid: Optional<Snowflake>): boolean {
-		return this.getUser(userDid)?.type === GameUserType.Player;
 	}
 
 	/** Returns true if the game has the given User. */
@@ -450,14 +427,13 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 			return false;
 		}
 		if (roleType === undefined) {
-			if (this.getUser(userDid) !== undefined) {
+			const byUser = this.getUser(userDid) !== undefined;
+			if (byUser) {
 				return true;
 			}
-			for (const role of this.roles) {
-				const bool = await hasRole(this.sageCache, userDid, role.did);
-				if (bool) {
-					return true;
-				}
+			const byRole = await hasRole(this.sageCache, userDid, ...this.roles.map(role => role.did));
+			if (byRole) {
+				return true;
 			}
 			return false;
 		}
@@ -471,10 +447,11 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		}
 		return false;
 
-		async function hasRole(sageCache: SageCache, _userDid: Snowflake, _roleDid: Snowflake): Promise<boolean> {
+		async function hasRole(sageCache: SageCache, _userDid: Snowflake, ..._roleDids: Snowflake[]): Promise<boolean> {
+			if (!_roleDids.length) return false;
 			const guildMember = await sageCache.discord.fetchGuildMember(_userDid);
 			const roleDids = Array.from(guildMember?.roles.cache.values() ?? []).map(role => role.id);
-			return roleDids.includes(_roleDid);
+			return _roleDids.find(_roleDid => roleDids.includes(_roleDid)) !== undefined;
 		}
 	}
 

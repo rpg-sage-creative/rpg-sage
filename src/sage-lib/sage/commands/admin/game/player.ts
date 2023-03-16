@@ -1,29 +1,27 @@
-import type { Snowflake } from "discord.js";
+import { GameRoleType, TFetchedGameUser } from "../../../model/Game";
 import type SageMessage from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
-export async function gameUserList(sageMessage: SageMessage, who: string, userDids: Snowflake[] = []): Promise<void> {
+export async function gameUserList(sageMessage: SageMessage, who: string, gameUsers: TFetchedGameUser[] = []): Promise<void> {
 	const denial = sageMessage.checkDenyAdminGame("List Game Users");
 	if (denial) {
 		return denial;
 	}
 
 	const game = sageMessage.game!;
-	if (userDids.length) {
-		const discord = await sageMessage.sageCache.discord.forGuild(game.serverDid);
-		for (const userDid of userDids) {
-			const guildMember = await discord?.fetchGuildMember(userDid);
-			const title = guildMember ? `@${guildMember.user.tag}` : userDid;
+	if (gameUsers.length) {
+		for (const gameUser of gameUsers) {
+			const title = gameUser.guildMember ? `@${gameUser.guildMember.user.tag}` : gameUser.did;
 			const renderableContent = createAdminRenderableContent(game, title);
-			renderableContent.append(`<b>User Id</b> ${userDid}`);
-			if (guildMember) {
-				renderableContent.setThumbnailUrl(guildMember.user.displayAvatarURL());
+			renderableContent.append(`<b>User Id</b> ${gameUser.did}`);
+			if (gameUser.guildMember) {
+				renderableContent.setThumbnailUrl(gameUser.guildMember.user.displayAvatarURL());
 			}
 			sageMessage.send(renderableContent);
 		}
 	} else {
-		const renderableContent = createAdminRenderableContent(game, `<b>list-${who.toLowerCase().replace(" ", "-")}</b>`);
+		const renderableContent = createAdminRenderableContent(game, `<b>${who} List</b>`);
 		renderableContent.append(`<blockquote>No ${who} Found!</blockquote>`);
 		sageMessage.send(renderableContent);
 	}
@@ -31,7 +29,8 @@ export async function gameUserList(sageMessage: SageMessage, who: string, userDi
 }
 
 async function playerList(sageMessage: SageMessage): Promise<void> {
-	return gameUserList(sageMessage, "Players", sageMessage.game?.players);
+	const players = await sageMessage.game?.fetchUsers(GameRoleType.Player);
+	return gameUserList(sageMessage, "Players", players);
 }
 
 async function playerAdd(sageMessage: SageMessage): Promise<void> {
