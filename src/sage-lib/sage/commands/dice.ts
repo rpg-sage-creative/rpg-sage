@@ -155,8 +155,8 @@ export function parseDiceMatches(sageMessage: TInteraction, content: string): TD
 //#region listener / handler
 
 async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TDiceOutput[]> | null> {
-	const denial = sageMessage.checkDenyDice();
-	if (denial || sageMessage.slicedContent.match(/^\!*\s*((add|set)[ \-]?macro|macro[ \-]?(add|set))/i)) {
+	const canDice = sageMessage.checkCanDiceChannel();
+	if (!canDice || sageMessage.slicedContent.match(/^\!*\s*((add|set)[ \-]?macro|macro[ \-]?(add|set))/i)) {
 		return null;
 	}
 

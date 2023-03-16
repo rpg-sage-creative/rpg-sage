@@ -1,14 +1,15 @@
-import type { Guild, MessageActionRow, MessageEmbed } from "discord.js";
+import { ButtonInteraction, Guild, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import type { If, Optional } from "../../../sage-utils";
 import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
 import { SuperClass } from "../../../sage-utils/utils/ClassUtils";
-import type { DChannel } from "../../../sage-utils/utils/DiscordUtils";
+import { DChannel, DMessage, warnUnknownElseErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
 import type DiscordFetches from "../../../sage-utils/utils/DiscordUtils/DiscordFetches";
 import type DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { resolveToEmbeds, resolveToTexts } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
+import { registerInteractionListener } from "../../discord/handlers";
 import { createAdminRenderableContent } from "../commands/cmd";
 import { DicePostType } from "../commands/dice";
 import { DialogType, GameChannelType, IChannel } from "../repo/base/channel";
@@ -58,6 +59,40 @@ type TDenial = { denyPerm:string; denyProv:never;  notFound:never;  }
 			 | { denyPerm:never;  denyProv:never;  notFound:string; };
 
 export type SageCommand = SageCommandBase<SageCommandCore, ISageCommandArgs, any>;
+
+//#region Message Delete Button
+
+export async function addMessageDeleteButton(message: Optional<DMessage>): Promise<boolean> {
+	if (message?.editable) {
+		const button = new MessageButton({ customId:`message-delete-button-${message.id}`, style:"SECONDARY", emoji:"❌" });
+		const buttonRow = new MessageActionRow().addComponents(button);
+		const edited = await message.edit({
+			components: (message.components ?? []).concat([buttonRow]),
+			content: message.content,
+			embeds: message.embeds
+		}).catch(warnUnknownElseErrorReturnNull);
+		return edited !== null;
+	}
+	return false;
+}
+
+function messageDeleteButtonTester(sageInteraction: SageInteraction): boolean {
+	const regex = /^message\-delete\-button\-\d{16,}$/;
+	return regex.test(sageInteraction.interaction.customId);
+}
+
+async function messageDeleteButtonHandler(sageInteraction: SageInteraction<ButtonInteraction>): Promise<void> {
+	const message = sageInteraction.interaction.message as DMessage;
+	if (message.deletable) {
+		await message.delete();
+	}
+}
+
+export function registerCommandHandlers(): void {
+	registerInteractionListener(messageDeleteButtonTester, messageDeleteButtonHandler);
+}
+
+//#endregion
 
 export abstract class SageCommandBase<
 		T extends SageCommandCore,
@@ -365,7 +400,7 @@ export abstract class SageCommandBase<
 	 * Returns undefined if dice is allowed *but* you don't have access.
 	 * Returns false if dice is not allowed.
 	 */
-	private checkCanDiceChannel(): boolean | undefined {
+	public checkCanDiceChannel(): boolean | undefined {
 		const game = this.game;
 		if (game) {
 			// If you aren't part of the game, no dice AT ALL

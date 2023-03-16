@@ -15,6 +15,8 @@ import registerSpells from "./spells";
 import registerWealth from "./wealth";
 import { registerCommandHandlers as registerWeather, registerSlashCommands as registerWeatherSlashCommands } from "./weather";
 
+import { registerCommandHandlers as registerSageCommand } from "../model/SageCommand";
+
 export function registerCommandHandlers(): void {
 	registerAdmin();
 	registerCal();
@@ -32,6 +34,8 @@ export function registerCommandHandlers(): void {
 	registerSpells();
 	registerWealth();
 	registerWeather();
+
+	registerSageCommand();
 }
 
 export function registerSlashCommands(): void {

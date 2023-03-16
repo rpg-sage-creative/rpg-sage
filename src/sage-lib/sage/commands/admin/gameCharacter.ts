@@ -234,7 +234,7 @@ async function gameCharacterList(sageMessage: SageMessage): Promise<void> {
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
 	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock("Cannot ");
+		return sageMessage.reactBlock("You don't have access to those characters!");
 	}
 
 	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s;

@@ -1,13 +1,13 @@
-import type * as Discord from "discord.js";
+import type { Message, User } from "discord.js";
 import utils, { Optional } from "../../../sage-utils";
-import type { DChannel, DMessage } from "../../../sage-utils/utils/DiscordUtils";
+import { DChannel, DMessage, warnUnknownElseErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
 import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
 import type { TCommandAndArgs } from "../../discord";
 import { send } from "../../discord/messages";
 import { EmojiType } from "./HasEmojiCore";
 import SageCache from "./SageCache";
-import { SageCommandBase, SageCommandCore, TSendArgs } from "./SageCommand";
+import { addMessageDeleteButton, SageCommandBase, SageCommandCore, TSendArgs } from "./SageCommand";
 import SageMessageArgs from "./SageMessageArgs";
 
 interface SageMessageCore extends SageCommandCore {
@@ -84,10 +84,10 @@ export default class SageMessage<HasServer extends boolean = boolean>
 	//#region Send / Replace / Whisper
 
 	public _ = new Map<"Dialog" | "Dice" | "Replacement" | "Sent", DMessage>();
-	public send(renderableContentResolvable: TRenderableContentResolvable): Promise<Discord.Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DChannel): Promise<Discord.Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DChannel, originalAuthor: Discord.User): Promise<Discord.Message[]>;
-	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.message.channel as DChannel, originalAuthor = this.message.author): Promise<Discord.Message[]> {
+	public send(renderableContentResolvable: TRenderableContentResolvable): Promise<Message[]>;
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DChannel): Promise<Message[]>;
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DChannel, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.message.channel as DChannel, originalAuthor = this.message.author): Promise<Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			await this.reactBlock(`Unable to send message because Sage doesn't have permissions to channel: ${targetChannel}`);
@@ -122,13 +122,15 @@ export default class SageMessage<HasServer extends boolean = boolean>
 		const args = typeof(contentOrArgs) === "string" ? { content:contentOrArgs } : contentOrArgs;
 		const sendOptions = this.resolveToOptions(args);
 		const canSend = await this.canSend(this.message.channel as DChannel);
-		if (canSend && false) {
+		if (canSend) {
+			const message = await this.message.reply(sendOptions).catch(warnUnknownElseErrorReturnNull);
 			//include a button to delete the reply message!
-			return this.message.reply(sendOptions) as Promise<any>;
+			await addMessageDeleteButton(message as DMessage);
+		}else {
+			// include a link to the original message!
+			(sendOptions.embeds ?? (sendOptions.embeds = [])).push(...resolveToEmbeds(`<a href="${this.message.url}">[link to original message]</a>`, this.sageCache.getFormatter()));
+			await this.actor.d.send(sendOptions);
 		}
-		// include a link to the original message!
-		(sendOptions.embeds ?? (sendOptions.embeds = [])).push(...resolveToEmbeds(`<a href="${this.message.url}">[link to original message]</a>`, this.sageCache.getFormatter()));
-		return this.actor.d.send(sendOptions) as Promise<any>;
 	}
 
 	//#endregion
@@ -146,7 +148,7 @@ export default class SageMessage<HasServer extends boolean = boolean>
 	private async react(emojiType: EmojiType, reason?: string): Promise<void> {
 		// TODO: start saving the reason for reactions so users can click them to get a DM about what the fuck is going on
 		const emoji = this.getEmoji(emojiType);
-		if (emoji) {
+		if (emoji && !reason) {
 			const reacted = await this._react(this.message, emoji)
 				|| await this._react(this._.get("Dialog") as DMessage ?? this._.get("Replacement") ?? this._.get("Sent"), emoji);
 			if (!reacted && reason) {
