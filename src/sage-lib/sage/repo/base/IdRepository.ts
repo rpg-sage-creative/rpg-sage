@@ -1,28 +1,27 @@
-import utils, { IdCore, Optional, OrNull, UUID } from "../../../../sage-utils";
+import type { IdCore, Optional, OrNull, UUID } from "../../../../sage-utils";
+import { HasIdCore } from "../../../../sage-utils/utils/ClassUtils";
+import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { deleteFileSync, fileExistsSync, listFiles, readJsonFile, writeFile } from "../../../../sage-utils/utils/FsUtils";
+import { generate } from "../../../../sage-utils/utils/UuidUtils";
 import type SageCache from "../../model/SageCache";
 
-export class HasIdCoreAndSageCache<T extends IdCore<U>, U extends string = string> extends utils.ClassUtils.HasIdCore<T, U> {
+export class HasIdCoreAndSageCache<T extends IdCore<U>, U extends string = string> extends HasIdCore<T, U> {
 	public constructor(core: T, protected sageCache: SageCache) { super(core); }
 }
 
-type TParser<T extends IdCore, U extends utils.ClassUtils.HasIdCore<T>> = (core: T, sageCache: SageCache) => Promise<U>;
+type TParser<T extends IdCore, U extends HasIdCore<T>> = (core: T, sageCache: SageCache) => Promise<U>;
 
-export default abstract class IdRepository<T extends IdCore, U extends utils.ClassUtils.HasIdCore<T>> {
+export default abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
 	//#region Cache
 
-	private idToEntityMap = new Map<UUID, U>();
+	private idToEntityMap = new Map<string, U>();
 
 	/** Caches the given id/entity pair. */
-	protected cacheId(id: UUID, entity: U): void {
+	protected cacheId<ID extends string = UUID>(id: ID, entity: U): void {
 		if (id && entity) {
 			this.idToEntityMap.set(id, entity);
 		}
-	}
-
-	/** Returns the cached values. */
-	protected get cached(): U[] {
-		return Array.from(this.idToEntityMap.values());
 	}
 
 	//#endregion
@@ -34,90 +33,75 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 		this.objectTypePlural = (<typeof IdRepository>this.constructor).objectTypePlural.toLowerCase();
 	}
 
-	//#region Ids
-
-	/** Reads all the uuid.json files and returns all the "Id" values. */
-	protected async getIds(): Promise<UUID[]> {
-		const files = await utils.FsUtils.listFiles(`${IdRepository.DataPath}/${this.objectTypePlural}`)
-			.catch<string[]>(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
-		return files
-			.filter(file => file.endsWith(".json"))
-			.map(file => file.slice(0, -5))
-			.filter(utils.UuidUtils.isValid);
-	}
-
-	//#endregion
-
 	//#region Cores
 
-	/** Reads all cores by iterating all uuid.json files. */
-	protected async readAllCores(): Promise<T[]> {
-		const ids = await this.getIds(),
-			cores = await this.readCoresByIds(...ids);
-		return cores.filter(utils.ArrayUtils.Filters.exists);
+	private async getAllFileIds(): Promise<string[]> {
+		const files = await listFiles(`${IdRepository.DataPath}/${this.objectTypePlural}`, "json")
+			.catch<string[]>(errorReturnEmptyArray);
+		const fileIds = files.map(file => file.slice(0, -5));
+		return fileIds;
 	}
 
-	/** Reads all uncached cores by iterating all uuid.json files and checking cache. */
-	protected async readUncachedCores(): Promise<T[]> {
-		const ids = await this.getIds(),
-			uncachedIds = ids.filter(id => !this.idToEntityMap.has(id)),
-			cores = await this.readCoresByIds(...uncachedIds);
-		return cores.filter(utils.ArrayUtils.Filters.exists);
+	protected async findUncachedCore(predicate: (core: T) => unknown): Promise<T | undefined> {
+		const fileIds = await this.getAllFileIds();
+		for (const fileId of fileIds) {
+			if (!this.idToEntityMap.has(fileId)) {
+				const core = await this.readCoreById(fileId);
+				if (core && predicate(core)) {
+					return core;
+				}
+			}
+		}
+		return undefined;
 	}
 
 	/** Reads the uuid.json for the given "Id". */
-	protected readCoreById(id: UUID): Promise<OrNull<T>> {
-		return utils.FsUtils
-			.readJsonFile<T>(`${IdRepository.DataPath}/${this.objectTypePlural}/${id}.json`)
-			.catch(utils.ConsoleUtils.Catchers.errorReturnNull);
-	}
-
-	/** Reads the uuid.json for each given "Id". */
-	protected async readCoresByIds(...ids: UUID[]): Promise<OrNull<T>[]> {
-		const cores: OrNull<T>[] = [];
-		for (const id of ids) {
-			cores.push(await this.readCoreById(id));
+	protected async readCoreById<ID extends string = UUID>(id: ID): Promise<OrNull<T>> {
+		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${id}.json`;
+		if (fileExistsSync(path)) {
+			return readJsonFile<T>(path).catch(errorReturnNull);
 		}
-		return cores;
+		return null;
 	}
 
 	//#endregion
 
 	//#region Entities
 
-	/** Gets all of the entities by using getIds() and getByIds(), which checks cache first. */
+	/** Gets all of the entities, checking cache first. */
 	public async getAll(): Promise<U[]> {
-		const ids = await this.getIds(),
-			entities = await this.getByIds(...ids);
-		return entities.filter(utils.ArrayUtils.Filters.exists);
+		const entities: U[] = [];
+		const fileIds = await this.getAllFileIds();
+		for (const fileId of fileIds) {
+			const entity = this.idToEntityMap.has(fileId)
+				? this.idToEntityMap.get(fileId)
+				: await this.parseAndCache(await this.readCoreById(fileId));
+			if (entity) {
+				entities.push(entity);
+			}
+		}
+		return entities;
 	}
 
 	/** Gets the entity by id, checking cache first. */
-	public async getById(id: Optional<UUID>): Promise<OrNull<U>> {
+	public async getById<ID extends string = UUID>(id: Optional<ID>): Promise<OrNull<U>> {
 		if (!id) {
 			return null;
 		}
 		if (this.idToEntityMap.has(id)) {
 			return this.idToEntityMap.get(id) ?? null;
 		}
-		return this.readById(id);
+		// return this.readById(id);
+		const core = await this.readCoreById(id)
+			?? await this.findUncachedCore(core => core.id === id);
+		return this.parseAndCache(core);
 	}
 
-	/** Gets the entities by id, checking cache first. */
-	public async getByIds(...ids: UUID[]): Promise<OrNull<U>[]> {
-		const entities: OrNull<U>[] = [];
-		for (const id of ids) {
-			entities.push(await this.getById(id));
-		}
-		return entities;
-	}
-
-	/** Gets the entity using .readCoreById(), caching the value before returning it. */
-	protected async readById(id: UUID): Promise<OrNull<U>> {
-		const core = await this.readCoreById(id);
+	/** Parses the entity from the core, caching the value before returning it. */
+	protected async parseAndCache(core: Optional<T>): Promise<OrNull<U>> {
 		if (core) {
 			const entity = <U>await (<typeof IdRepository>this.constructor).fromCore(core, this.sageCache);
-			this.cacheId(id, entity);
+			this.cacheId(core.id, entity);
 			return entity;
 		}
 		return null;
@@ -125,20 +109,29 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 
 	/** Writes the entity's core to uuid.json using (or creating if needed) the "Id". */
 	public async write(entity: U): Promise<boolean> {
+		return this.writeBy(entity, "id");
+	}
+	protected async writeBy(entity: U, idKey: keyof U): Promise<boolean> {
+		const json = entity.toJSON();
 		if (!entity.id) {
-			entity.toJSON().id = utils.UuidUtils.generate();
-			console.log(`Creating new ${(<typeof IdRepository>this.constructor).objectType}: `, entity.toJSON());
+			json.id = generate();
+			console.log(`IdRepository.write: ${(<typeof IdRepository>this.constructor).objectType}`, json);
 		}
-		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${entity.id}.json`,
-			saved = await utils.FsUtils.writeFile(path, entity.toJSON()).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
+		const idValue = entity[idKey] ?? entity.id;
+		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${idValue}.json`,
+			saved = await writeFile(path, json).catch(errorReturnFalse);
 		if (saved) {
 			this.cacheId(entity.id, entity);
+			if (idKey !== "id") {
+				const idPath = `${IdRepository.DataPath}/${this.objectTypePlural}/${entity.id}.json`;
+				deleteFileSync(idPath);
+			}
 		}
 		return saved;
 	}
 	//#endregion
 
-	public static fromCore: TParser<IdCore, utils.ClassUtils.HasIdCore<IdCore>>;
+	public static fromCore: TParser<IdCore, HasIdCore<IdCore>>;
 
 	public static get objectType(): string {
 		return this.name.replace(/Repo(sitory)?$/, "");

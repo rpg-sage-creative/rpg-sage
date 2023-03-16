@@ -1,49 +1,26 @@
-import type * as Discord from "discord.js";
-import type { IdCore, Optional, UUID } from "../../../../sage-utils";
+import { Snowflake, SnowflakeUtil } from "discord.js";
+import type { IdCore, Optional } from "../../../../sage-utils";
 import IdRepository, { HasIdCoreAndSageCache } from "./IdRepository";
 
 export interface DidCore<T extends string = string> extends IdCore<T> {
-	did: Discord.Snowflake;
+	did: Snowflake;
 }
 
 export class HasDidCore<T extends DidCore<U>, U extends string = string> extends HasIdCoreAndSageCache<T, U> {
-	public get did(): Discord.Snowflake { return this.core.did; }
+	public get did(): Snowflake { return this.core.did; }
 }
 
 export default abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> extends IdRepository<T, U> {
 
 	//#region Cache
 
-	private didToIdMap = new Map<Discord.Snowflake, UUID>();
-
 	/** Overrides the parent .cacheId() to also cache the did/id pair. */
-	protected cacheId(id: Discord.Snowflake, entity: U): void {
+	protected cacheId(id: Snowflake, entity: U): void {
 		super.cacheId(id, entity);
-		if (entity) {
-			this.cacheDid(entity.did, entity.id);
-		}
-	}
-
-	/** Caches the given did/id pair. */
-	protected cacheDid(did: Discord.Snowflake, id: UUID | undefined): void {
+		const did = entity?.did;
 		if (did) {
-			this.didToIdMap.set(did, id!);
+			super.cacheId(did, entity);
 		}
-	}
-
-	//#endregion
-
-	//#region Dids
-
-	/** Reads all of the cores (by iterating all uuid.json files) and returns all the "Did" values. */
-	public async getDids(): Promise<Discord.Snowflake[]> {
-		const dids = Array.from(this.didToIdMap.keys()),
-			cores = await this.readUncachedCores();
-		cores.forEach(core => {
-			this.cacheDid(core.did, core.id);
-			dids.push(core.did);
-		});
-		return dids;
 	}
 
 	//#endregion
@@ -51,28 +28,23 @@ export default abstract class DidRepository<T extends DidCore, U extends HasDidC
 	//#region Entities
 
 	/** Gets the entity by did, checking cache first, then .readByDid(), then .readFromUncached(). */
-	public async getByDid(did: Optional<Discord.Snowflake>): Promise<U | null> {
-		if (!did) {
-			return null;
-		}
-		if (!this.didToIdMap.has(did)) {
-			let entity: U | null = this.cached.find(_entity => _entity.did === did) ?? null;
-			if (!entity) {
-				entity = await this.readFromUncached(did);
-			}
-			this.cacheDid(did, entity?.id);
+	public async getByDid(did: Optional<Snowflake>): Promise<U | null> {
+		const entity = await this.getById(did);
+		if (entity) {
 			return entity;
 		}
-		return this.getById(this.didToIdMap.get(did));
+		const core = await this.findUncachedCore(_core => _core.did === did);
+		return this.parseAndCache(core);
 	}
 
-	/** Gets the entity using .readUncachedCores() to get the id, caching the value before returning it. */
-	private async readFromUncached(did: Discord.Snowflake): Promise<U | null> {
-		// Iterate the existing id.json files
-		const cores = await this.readUncachedCores(),
-			uncached = cores.find(core => core.did === did),
-			id = uncached?.id;
-		return this.getById(id);
+	/** Writes the entity's core to did.json using the "Did". */
+	public async write(entity: U): Promise<boolean> {
+		if (!entity.did) {
+			const json = entity.toJSON();
+			json.did = SnowflakeUtil.generate();
+			console.log(`DidRepository.write: ${(<typeof IdRepository>this.constructor).objectType}`, json);
+		}
+		return this.writeBy(entity, "did");
 	}
 
 }

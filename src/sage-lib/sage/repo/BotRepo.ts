@@ -13,9 +13,8 @@ export default class BotRepo extends DidRepository<IBotCore, Bot> {
 
 	public static async getByCodeName(codeName: TBotCodeName): Promise<Bot> {
 		const botRepo = new BotRepo(null!),
-			botCores = await botRepo.readAllCores(),
-			botCore = botCores.find(core => core.codeName === codeName)!;
-		return botRepo.getById(botCore.id) as Promise<Bot>;
+			botCore = await botRepo.findUncachedCore(core => core.codeName === codeName);
+		return botRepo.getById(botCore?.id) as Promise<Bot>;
 	}
 
 	public static isTesterBot(userDid: Discord.Snowflake): boolean;
