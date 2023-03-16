@@ -1,4 +1,5 @@
 import { isValid } from ".";
+import type { TMatcherResolvable } from "../types";
 import { NilUuid } from "./consts";
 import type { TUuidMatcher, TUuidMatcherResolvable, UUID } from "./types";
 
@@ -17,8 +18,14 @@ export default class UuidMatcher implements TUuidMatcher {
 	public isNormalized = this.isValid && this.value === this.normalized;
 
 	/** Compares a given value (a matcher's normalized value or a .toLowerCase()) to this.normalized */
+	public matches(other: TMatcherResolvable): boolean;
+	public matches(other: TUuidMatcherResolvable): boolean;
 	public matches(other: TUuidMatcherResolvable): boolean {
-		return ((other as TUuidMatcher).normalized ?? String(other).toLowerCase()) === this.normalized;
+		if (other === null || other === undefined) {
+			return false;
+		}
+		const otherValue = (other as TUuidMatcher).normalized ?? String(other).toLowerCase();
+		return otherValue === this.normalized;
 	}
 
 	/** Returns the original value. */

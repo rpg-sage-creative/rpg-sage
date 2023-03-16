@@ -10,5 +10,6 @@ export * from "./humanReadable";
 export * from "./permChecks";
 export * from "./sendMessage";
 export * from "./snowflake";
+export * from "./SnowflakeMatcher";
 export * from "./typeChecks";
 export * from "./types";

@@ -2,10 +2,26 @@ import type { Optional } from "../..";
 
 export * from "./Comparison/types";
 
+//#region generic xMatcher
+
+/** An umbrella for various Matching classes */
+export type TMatcher = {
+	/** Compares a given value. */
+	matches(value: TMatcherResolvable): boolean;
+
+	/** Returns the matcher's value or "" if the value was null or undefined. */
+	toString(): string;
+}
+
+/** Convenience type for Optional<string> | TMatcher */
+export type TMatcherResolvable = Optional<string> | TMatcher;
+
+//#endregion
+
 //#region StringMatcher.ts
 
 /** Contains all the properties that represent a StringMatcher. */
-export type TStringMatcher = {
+export type TStringMatcher = TMatcher & {
 
 	/** Stores StringMatcher.clean(value) */
 	clean: string;
@@ -19,6 +35,8 @@ export type TStringMatcher = {
 	/** Stores the raw value. */
 	value: Optional<string>;
 };
+
+/** Convenience type for Optional<string> | TStringMatcher */
 export type TStringMatcherResolvable = Optional<string> | TStringMatcher;
 
 //#endregion

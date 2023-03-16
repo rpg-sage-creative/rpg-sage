@@ -1,6 +1,6 @@
 import { cleanWhitespace, normalizeAscii, removeAccents } from ".";
 import type { Optional } from "../..";
-import type { TStringMatcher, TStringMatcherResolvable } from "./types";
+import type { TMatcherResolvable, TStringMatcher, TStringMatcherResolvable } from "./types";
 
 /** A reusable object for comparing a string without the need to repeatedly manipulate the value. */
 export default class StringMatcher implements TStringMatcher {
@@ -19,8 +19,14 @@ export default class StringMatcher implements TStringMatcher {
 	public lower = this.value?.toLowerCase() ?? "";
 
 	/** Compares the clean values. */
+	public matches(other: TMatcherResolvable): boolean;
+	public matches(other: TStringMatcherResolvable): boolean;
 	public matches(other: TStringMatcherResolvable): boolean {
-		return other === null || other === undefined ? false : ((other as TStringMatcher).clean ?? StringMatcher.clean(other as string)) === this.clean;
+		if (other === null || other === undefined) {
+			return false;
+		}
+		const otherValue = (other as TStringMatcher).clean ?? StringMatcher.clean(String(other));
+		return otherValue === this.clean;
 	}
 
 	/** Compares the clean values until it finds a match. */
@@ -29,8 +35,8 @@ export default class StringMatcher implements TStringMatcher {
 	}
 
 	/** Returns the original value. */
-	public toString(): Optional<string> {
-		return this.value;
+	public toString(): string {
+		return this.value ?? "";
 	}
 
 	/**

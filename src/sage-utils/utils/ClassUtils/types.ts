@@ -13,9 +13,9 @@ export interface Core<T extends string = string> {
 //#region HasIdCore
 
 /** The second most basic Core used. */
-export interface IdCore<T extends string = string> extends Core<T> {
+export interface IdCore<T extends string = string, U extends string = UUID> extends Core<T> {
 	/** The unique identifier for this object. */
-	id: UUID;
+	id: U;
 }
 
 //#endregion
