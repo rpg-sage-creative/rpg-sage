@@ -125,11 +125,12 @@ export default class SageMessage<HasServer extends boolean = boolean>
 		if (canSend) {
 			const message = await this.message.reply(sendOptions).catch(warnUnknownElseErrorReturnNull);
 			//include a button to delete the reply message!
-			await addMessageDeleteButton(message as DMessage);
+			await addMessageDeleteButton(message as DMessage, this.actor.did);
 		}else {
 			// include a link to the original message!
 			(sendOptions.embeds ?? (sendOptions.embeds = [])).push(...resolveToEmbeds(`<a href="${this.message.url}">[link to original message]</a>`, this.sageCache.getFormatter()));
-			await this.actor.d.send(sendOptions);
+			const message = await this.actor.d.send(sendOptions);
+			await addMessageDeleteButton(message as DMessage, this.actor.did);
 		}
 	}
 

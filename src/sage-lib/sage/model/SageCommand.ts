@@ -1,4 +1,4 @@
-import { ButtonInteraction, Guild, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { ButtonInteraction, Guild, MessageActionRow, MessageButton, MessageEmbed, Snowflake } from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import type { If, Optional } from "../../../sage-utils";
@@ -62,23 +62,26 @@ export type SageCommand = SageCommandBase<SageCommandCore, ISageCommandArgs, any
 
 //#region Message Delete Button
 
-export async function addMessageDeleteButton(message: Optional<DMessage>): Promise<boolean> {
+export async function addMessageDeleteButton(message: Optional<DMessage>, userDid: Snowflake): Promise<boolean> {
 	if (message?.editable) {
-		const button = new MessageButton({ customId:`message-delete-button-${message.id}`, style:"SECONDARY", emoji:"❌" });
-		const buttonRow = new MessageActionRow().addComponents(button);
+		const buttonRow = new MessageActionRow().addComponents(new MessageButton({ customId:`message-delete-button-${message.id}-${userDid}`, style:"SECONDARY", emoji:"❌" }));
+		const embed = new MessageEmbed({ description:`*(To delete this message, click the :x: button below.)*` });
 		const edited = await message.edit({
 			components: (message.components ?? []).concat([buttonRow]),
 			content: message.content,
-			embeds: message.embeds
+			embeds: (message.embeds ?? []).concat([embed])
 		}).catch(warnUnknownElseErrorReturnNull);
 		return edited !== null;
 	}
 	return false;
 }
 
-function messageDeleteButtonTester(sageInteraction: SageInteraction): boolean {
-	const regex = /^message\-delete\-button\-\d{16,}$/;
-	return regex.test(sageInteraction.interaction.customId);
+function messageDeleteButtonTester(sageInteraction: SageInteraction<ButtonInteraction>): boolean {
+	const customId = sageInteraction.interaction.customId;
+	const regex = /^message\-delete\-button\-(\d{16,})\-(\d{16,})$/;
+	const match = customId.match(regex) ?? [];
+	return sageInteraction.interaction.message.id === match[1]
+		&& sageInteraction.actor.did === match[2];
 }
 
 async function messageDeleteButtonHandler(sageInteraction: SageInteraction<ButtonInteraction>): Promise<void> {
