@@ -135,19 +135,23 @@ export default class DiscordFetches {
 	public async forWebhook(channel: Optional<DGuildChannel>, webhookName: Optional<string>): Promise<DiscordFetches | null>;
 	public async forWebhook(...args: Optional<DGuildChannel | string>[]): Promise<DiscordFetches | null> {
 		const thisChannel = this.channel as DGuildChannel | null ?? null;
-		const channel = args.find(arg => typeof(arg) !== "string") as DGuildChannel | null ?? null;
-		const isNotThisChannel = channel !== thisChannel && channel?.id !== thisChannel?.id;
+		const thisHookChannel = thisChannel?.isThread() ? thisChannel.parent : thisChannel;
+
+		const argChannel = args.find(arg => typeof(arg) !== "string") as DGuildChannel | null ?? null;
+		const argHookChannel = argChannel?.isThread() ? argChannel.parent : argChannel;
+
+		const channel = argHookChannel as DChannel ?? thisHookChannel;
+		const isNewChannel = (channel !== thisChannel) && (channel?.id !== thisChannel?.id);
 
 		const thisWebhookName = this.args.webhookName as string | null ?? null;
-		const webhookName = args.find(arg => typeof(arg) === "string") as string | null ?? null;
-		const isNotThisWebhookName = webhookName !== thisWebhookName;
+		const argWebhookName = args.find(arg => typeof(arg) === "string") as string | null ?? null;
 
+		const webhookName = argWebhookName ?? thisWebhookName;
+		const isNewWebhookName = webhookName !== thisWebhookName;
 
-		if ((channel && isNotThisChannel) || (webhookName && isNotThisWebhookName)) {
-			const newChannel = channel ?? thisChannel;
-			if (canFetchWebhooksFor(newChannel)) {
-				const newWebhookName = webhookName ?? thisWebhookName;
-				return new DiscordFetches({ botId:this.args.botId, client:this.args.client, channel:newChannel, guild:newChannel.guild, webhookName:newWebhookName });
+		if ((channel && isNewChannel) || (webhookName && isNewWebhookName)) {
+			if (canFetchWebhooksFor(channel)) {
+				return new DiscordFetches({ botId:this.args.botId, client:this.args.client, channel:channel, guild:channel.guild, webhookName:webhookName });
 			}
 			return null;
 		}

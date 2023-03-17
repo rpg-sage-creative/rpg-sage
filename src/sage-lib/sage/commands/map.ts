@@ -2,7 +2,7 @@ import { ActionRowBuilder } from "@discordjs/builders";
 import { ButtonBuilder, ButtonInteraction, ButtonStyle, Collection, Message, Snowflake, SnowflakeUtil } from "discord.js";
 import type { Optional } from "../../../sage-utils";
 import { errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import type { DChannel } from "../../../sage-utils/utils/DiscordUtils";
+import type { DMessageChannel } from "../../../sage-utils/utils/DiscordUtils";
 import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
 import { getText } from "../../../sage-utils/utils/HttpsUtils";
 import { capitalize, StringMatcher } from "../../../sage-utils/utils/StringUtils";
@@ -557,7 +557,7 @@ async function parseInput<T extends TGameMapImage>(sageInteraction: SageInteract
 	return [gameMap, image as T];
 }
 
-async function renderMap(messageOrChannel: Optional<Message | DChannel>, gameMap: GameMap): Promise<boolean> {
+async function renderMap(messageOrChannel: Optional<Message | DMessageChannel>, gameMap: GameMap): Promise<boolean> {
 	if (!messageOrChannel) {
 		return false;
 	}

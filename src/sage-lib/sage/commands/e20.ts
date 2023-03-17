@@ -10,7 +10,7 @@ import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
 import PlayerCharacterTransformer, { PlayerCharacterCoreTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
 import type { Optional, UUID } from "../../../sage-utils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import type { DChannel, DUser } from "../../../sage-utils/utils/DiscordUtils";
+import type { DMessageChannel, DMessageTarget } from "../../../sage-utils/utils/DiscordUtils";
 import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
 import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
@@ -30,7 +30,7 @@ function createSelectMenuRow(selectMenu: StringSelectMenuBuilder): ActionRowBuil
 	return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu);
 }
 
-async function attachCharacter(sageCache: SageCache, channel: DChannel | DUser, attachmentName: string, character: TPlayerCharacter, pin: boolean): Promise<void> {
+async function attachCharacter(sageCache: SageCache, channel: DMessageTarget, attachmentName: string, character: TPlayerCharacter, pin: boolean): Promise<void> {
 	const raw = resolveToEmbeds(character.toHtml(), sageCache.getFormatter()).map(e => e.data.description).join("");
 	const buffer = Buffer.from(raw, "utf-8");
 	const attachment = new AttachmentBuilder(buffer, { name:`${attachmentName}.txt` });
@@ -84,7 +84,7 @@ function getPath(characterId: string): string {
 	return `./data/sage/e20/${characterId}.json`;
 }
 
-async function postCharacter(sageCache: SageCache, channel: DChannel, character: TPlayerCharacter, pin: boolean): Promise<void> {
+async function postCharacter(sageCache: SageCache, channel: DMessageChannel, character: TPlayerCharacter, pin: boolean): Promise<void> {
 	const saved = await saveCharacter(character);
 	if (saved) {
 		const output = prepareOutput(sageCache, character);
@@ -498,7 +498,7 @@ export async function slashHandlerEssence20(sageInteraction: SageInteraction<Cha
 
 	await sageInteraction.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
 
-	const channel = sageInteraction.interaction.channel as DChannel ?? sageInteraction.actor.d;
+	const channel = sageInteraction.interaction.channel as DMessageChannel ?? sageInteraction.actor.d;
 
 	const pin = sageInteraction.args.getBoolean("pin") ?? false;
 	const attach = sageInteraction.args.getBoolean("attach") ?? false;

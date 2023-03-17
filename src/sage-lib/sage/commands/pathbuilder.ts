@@ -3,7 +3,7 @@ import { PathbuilderCharacter, toModifier } from "../../../sage-pf2e";
 import { getCharacterSections, TCharacterSectionType, TCharacterViewType, TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import { isDefined, Optional, UUID } from "../../../sage-utils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import type { DChannel, DUser } from "../../../sage-utils/utils/DiscordUtils";
+import type { DMessageChannel, DMessageTarget } from "../../../sage-utils/utils/DiscordUtils";
 import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
 import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
@@ -68,7 +68,7 @@ function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
 	}
 }
 
-async function attachCharacter(sageCache: SageCache, channel: DChannel | DUser, pathbuilderId: number, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+async function attachCharacter(sageCache: SageCache, channel: DMessageTarget, pathbuilderId: number, character: PathbuilderCharacter, pin: boolean): Promise<void> {
 	const raw = resolveToEmbeds(character.toHtml(), sageCache.getFormatter()).map(e => e.data.description).join("");
 	const buffer = Buffer.from(raw, "utf-8");
 	const attachment = new AttachmentBuilder(buffer, { name:`pathbuilder2e-${pathbuilderId}.txt` });
@@ -106,7 +106,7 @@ async function notifyOfSlicedMacros(sageCache: SageCache, character: Pathbuilder
 	}
 }
 
-async function postCharacter(sageCache: SageCache, channel: DChannel, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+async function postCharacter(sageCache: SageCache, channel: DMessageChannel, character: PathbuilderCharacter, pin: boolean): Promise<void> {
 	setMacroUser(character, sageCache.actor.s);
 	const saved = await saveCharacter(character);
 	if (saved) {
@@ -438,7 +438,7 @@ export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction
 		return sageInteraction.reply(`Failed to fetch Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}!`, false);
 	}
 
-	const channel = sageInteraction.interaction.channel as DChannel ?? sageInteraction.actor.d;
+	const channel = sageInteraction.interaction.channel as DMessageChannel ?? sageInteraction.actor.d;
 
 	const pin = sageInteraction.args.getBoolean("pin") ?? false;
 	const attach = sageInteraction.args.getBoolean("attach") ?? false;

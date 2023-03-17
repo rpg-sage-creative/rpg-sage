@@ -3,7 +3,7 @@ import { embedsToTexts } from "./embeds";
 import { handleDiscordErrorReturnNull } from "./errorHandlers";
 import { canSendMessageTo } from "./permChecks";
 import { canCheckPermissionsFor } from "./typeChecks";
-import type { DChannel, DUser } from "./types";
+import type { DMessageTarget } from "./types";
 
 type TSendToArgs = {
 	botId: Snowflake;
@@ -11,7 +11,7 @@ type TSendToArgs = {
 	embeds?: EmbedBuilder[];
 	embedsAsContent: boolean;
 	errMsg?: string;
-	target: DChannel | DUser;
+	target: DMessageTarget;
 };
 /**
  * @todo PLEASE MOVE THIS TO A SHARED LOCATION

@@ -15,25 +15,27 @@ export type DGuildResolvable = Guild | GuildPreview | Snowflake;
 
 export type DRoleResolvable = Role | Snowflake;
 
-/** Text Channel */
+export type DDMChannel = DMChannel | PartialDMChannel;
+
 export type DForumChannel = ForumChannel & { type: ChannelType.GuildForum; };
 export type DTextChannel = TextChannel & { type: ChannelType.GuildText; }
 export type DThreadChannel = ThreadChannel & { type: ChannelType.PublicThread | ChannelType.PrivateThread; }
-export type DGuildChannel = DTextChannel | DThreadChannel;
 
-/** This allows us to update which channels have webhooks later. */
+export type DGuildChannel = DForumChannel | DTextChannel | DThreadChannel;
 export type DWebhookChannel = DTextChannel | DForumChannel;
 
-export type DDMChannel = DMChannel | PartialDMChannel;
+export type DMessageChannel = DTextChannel | DThreadChannel | DDMChannel;
 
 export type DChannel = DGuildChannel | DDMChannel;
+
+export type DMessageTarget = DMessageChannel | DUser;
 
 /** Text Channel or Channel Snowflake */
 export type DChannelResolvable = DChannel | Snowflake;
 
 /** Discord Message or Partial Message */
-export type DMessageCache<Cached extends boolean = boolean> = Message<Cached> & If<Cached, { channel:DGuildChannel; }, { channel:DDMChannel; }>;
-export type DMessagePartial = PartialMessage & { channel:DChannel; }
+export type DMessageCache<Cached extends boolean = boolean> = Message<Cached> & If<Cached, { channel:DMessageChannel; }, { channel:DDMChannel; }>;
+export type DMessagePartial = PartialMessage & { channel:DMessageChannel; }
 export type DMessage<Cached extends boolean = boolean> = DMessageCache<Cached> | DMessagePartial;
 
 //#endregion SnowflakeMatcher

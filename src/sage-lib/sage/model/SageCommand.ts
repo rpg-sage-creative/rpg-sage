@@ -4,7 +4,7 @@ import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../s
 import type { If, Optional } from "../../../sage-utils";
 import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
 import { SuperClass } from "../../../sage-utils/utils/ClassUtils";
-import { DChannel, DMessage, handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
+import { DChannel, DMessage, DMessageChannel, handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
 import type DiscordFetches from "../../../sage-utils/utils/DiscordUtils/DiscordFetches";
 import type DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { resolveToEmbeds, resolveToTexts } from "../../../sage-utils/utils/DiscordUtils/embeds";
@@ -160,6 +160,14 @@ export abstract class SageCommandBase<
 	//#endregion
 
 	//#region channels
+
+	public get dChannel(): DChannel | undefined {
+		const channel =  this.isSageMessage() ? this.message.channel
+			: this.isSageInteraction() ? ("channel" in this.interaction ? this.interaction.channel : null)
+			: this.isSageReaction() ? this.message.channel
+			: null;
+		return channel as DChannel ?? undefined;
+	}
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
 	public get channel(): IChannel | undefined {
@@ -523,13 +531,13 @@ export abstract class SageCommandBase<
 	}
 
 	/** tests to see if Sage can send messsages to the channel (given or from the message/interaction) */
-	public async canSend(targetChannel: Optional<DChannel>): Promise<boolean> {
+	public canSend(targetChannel: Optional<DMessageChannel>): targetChannel is DMessageChannel {
 		if (!targetChannel) {
 			if (this.isSageMessage() || this.isSageReaction()) {
-				targetChannel = this.message.channel as DChannel;
+				targetChannel = this.message.channel as DMessageChannel;
 			}
 			if (this.isSageInteraction()) {
-				targetChannel = this.interaction.channel as DChannel;
+				targetChannel = this.interaction.channel as DMessageChannel;
 			}
 		}
 		return this.sageCache.discord.canSendMessageTo(targetChannel);

@@ -3,7 +3,7 @@ import type { GameType } from "../../../sage-common";
 import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "../../../sage-dice";
 import { NEWLINE } from "../../../sage-pf2e";
 import type { Optional, TKeyValueArg } from "../../../sage-utils";
-import { DChannel, DUser, MessageType, toHumanReadable } from "../../../sage-utils/utils/DiscordUtils";
+import { DMessageChannel, DMessageTarget, MessageType, toHumanReadable } from "../../../sage-utils/utils/DiscordUtils";
 import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
 import { createMessageEmbed } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import { sendTo } from "../../../sage-utils/utils/DiscordUtils/sendMessage";
@@ -23,7 +23,7 @@ import { registerInlineHelp } from "./help";
 
 type TInteraction = SageMessage | SageInteraction;
 
-type TGmChannel = Optional<DChannel | DUser>;
+type TGmChannel = Optional<DMessageTarget>;
 
 // type TDiceOutput = {
 // 	hasSecret: boolean;
@@ -168,7 +168,7 @@ async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommand
 	return null;
 }
 
-async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: DChannel, gmTargetChannel: TGmChannel): Promise<void> {
+async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: DMessageChannel, gmTargetChannel: TGmChannel): Promise<void> {
 	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0,
 		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
 		publicMentionLine = await createMentionLine(sageMessage),
@@ -206,7 +206,7 @@ async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: T
 	}
 }
 
-async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: DChannel, gmTargetChannel: TGmChannel): Promise<void> {
+async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: DMessageChannel, gmTargetChannel: TGmChannel): Promise<void> {
 	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0,
 		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
 		publicMentionLine = await createMentionLine(sageMessage),
@@ -420,15 +420,15 @@ async function createMentionLine(sageMessage: TInteraction, isSecretMention = fa
 
 //#region Channels
 
-async function ensureTargetChannel(sageMessage: TInteraction): Promise<DChannel> {
+async function ensureTargetChannel(sageMessage: TInteraction): Promise<DMessageChannel> {
 	const channel = await sageMessage.discord.fetchChannel(sageMessage.channel?.sendDiceTo);
 	if (channel) {
-		return channel;
+		return channel as DMessageChannel;
 	}
 	if (sageMessage instanceof SageInteraction) {
-		return (sageMessage.interaction as ButtonInteraction).channel as DChannel;
+		return (sageMessage.interaction as ButtonInteraction).channel as DMessageChannel;
 	}
-	return sageMessage.message.channel as DChannel;
+	return sageMessage.message.channel as DMessageChannel;
 }
 
 async function ensureGmTargetChannel(sageMessage: TInteraction, hasSecret: boolean): Promise<TGmChannel> {
@@ -438,7 +438,7 @@ async function ensureGmTargetChannel(sageMessage: TInteraction, hasSecret: boole
 	if (sageMessage.diceSecretMethodType === DiceSecretMethodType.GameMasterChannel) {
 		const channel = await sageMessage.game?.gmGuildChannel();
 		if (channel) {
-			return channel as DChannel;
+			return channel as DMessageChannel;
 		}
 	}
 	const member = await sageMessage.game?.gmGuildMember();

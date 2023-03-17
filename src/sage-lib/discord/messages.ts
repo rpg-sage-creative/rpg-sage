@@ -1,10 +1,12 @@
 import { ChannelType, EmbedBuilder, Guild, Message, MessageReaction, User, Webhook, WebhookMessageCreateOptions, WebhookMessageEditOptions } from "discord.js";
 import type { IMenuRenderable } from "../../sage-search/IMenuRenderable";
-import utils, { Optional, OrNull } from "../../sage-utils";
-import { DChannel, DMessage, DUser, toHumanReadable } from "../../sage-utils/utils/DiscordUtils";
+import type { Optional, OrNull } from "../../sage-utils";
+import { errorReturnNull, warnReturnNull } from "../../sage-utils/utils/ConsoleUtils/Catchers";
+import { DChannel, DMessage, DMessageChannel, DMessageTarget, DUser, toHumanReadable } from "../../sage-utils/utils/DiscordUtils";
 import { createMessageEmbed, resolveToEmbeds, resolveToTexts } from "../../sage-utils/utils/DiscordUtils/embeds";
 import { sendTo } from "../../sage-utils/utils/DiscordUtils/sendMessage";
 import type { TRenderableContentResolvable } from "../../sage-utils/utils/RenderUtils/RenderableContent";
+import RenderableContent from "../../sage-utils/utils/RenderUtils/RenderableContent";
 import type SageCache from "../sage/model/SageCache";
 import { DialogType } from "../sage/repo/base/channel";
 
@@ -14,23 +16,24 @@ function authorToProfileUrl(author: Optional<DUser>): OrNull<string> {
 	return author ? `https://discordapp.com/users/${author.id}` : null;
 }
 
-export function guildToInviteUrl(_guild: Optional<Guild>): OrNull<string> {
-	// if (!guild) {
-	// 	return null;
-	// }
-	// try {
-	// 	const bestInvite = guild.invites.cache.find(invite => !invite.stageInstance && !invite.targetUser && !invite.temporary && !!invite.channel.isText);
-	// 	return bestInvite?.url ?? null;
-	// }catch(ex) {
-	// 	console.error(ex);
-	// }
+async function guildToInviteUrl(guild: Optional<Guild>): Promise<OrNull<string>> {
+	if (!guild) {
+		return null;
+	}
+	try {
+		const invites = await guild.invites.fetch();
+		const bestInvite = invites.find(invite => !invite.targetUser && !invite.temporary && invite.channel?.isTextBased());
+		return bestInvite?.url ?? null;
+	}catch(ex) {
+		console.error(ex);
+	}
 	return null;
 }
 
-function messageToDetails(message: DMessage): string {
+async function messageToDetails(message: DMessage): Promise<string> {
 	const channelName = toHumanReadable(message),
 		profileUrl = authorToProfileUrl(message.author) ?? "Invalid ProfileUrl",
-		inviteUrl = guildToInviteUrl(message.guild) ?? "Invalid InviteUrl";
+		inviteUrl = (await guildToInviteUrl(message.guild)) ?? "Invalid InviteUrl";
 	return `${channelName}\n<${profileUrl}>\n<${inviteUrl}>`;
 }
 
@@ -48,13 +51,9 @@ export const SageDialogWebhookName = "SageDialogWebhookName";
 
 async function sendWebhookAndReturnMessages(webhook: Webhook, options: WebhookMessageCreateOptions): Promise<Message[]> {
 	const messages: Message[] = [];
-	const response = await webhook.send(options).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
-	if (response) {
-		if (typeof(response.type) === "string") {
-			messages.push(response as Message);
-		}else {
-			console.warn(`sendWebhookAndReturnMessage(): I should not hit this line of code.`);
-		}
+	const message = await webhook.send(options).catch(errorReturnNull);
+	if (message) {
+		messages.push(message);
 	}
 	return messages;
 }
@@ -67,11 +66,13 @@ export async function sendWebhook(caches: SageCache, targetChannel: DChannel, re
 		}
 		return [];
 	}
+
 	const discord = await caches.discord.forWebhook(targetChannel);
 	const webhook = await discord?.fetchOrCreateWebhook();
 	if (!webhook) {
 		return Promise.reject(`Cannot Find Webhook: ${targetChannel.guild?.id}-${targetChannel.id}-${SageDialogWebhookName}`);
 	}
+
 	const formatter = caches.getFormatter(targetChannel);
 	const content = dialogType === DialogType.Post ? resolveToTexts(renderableContent, formatter).join("\n") : undefined;
 	const embeds = dialogType === DialogType.Embed ? resolveToEmbeds(renderableContent, formatter) : [];
@@ -89,7 +90,7 @@ export async function replaceWebhook(caches: SageCache, originalMessage: DMessag
 		return [];
 	}
 	if (!originalMessage.deletable) {
-		return Promise.reject(`Cannot Delete Message: ${messageToDetails(originalMessage)}`);
+		return Promise.reject(`Cannot Delete Message: ${await messageToDetails(originalMessage)}`);
 	}
 	if (!originalMessage.guild) {
 		return Promise.reject(`Cannot Find Webhook w/o a Guild: ${originalMessage.channel?.id}`);
@@ -112,18 +113,18 @@ export async function replaceWebhook(caches: SageCache, originalMessage: DMessag
 
 export async function replace(caches: SageCache, originalMessage: DMessage, renderableContent: TRenderableContentResolvable): Promise<Message[]> {
 	if (!originalMessage.deletable) {
-		return Promise.reject(`Cannot Delete Message: ${messageToDetails(originalMessage)}`);
+		return Promise.reject(`Cannot Delete Message: ${await messageToDetails(originalMessage)}`);
 	}
 	await originalMessage.delete();
-	return send(caches, originalMessage.channel as DChannel, renderableContent, originalMessage.author);
+	return send(caches, originalMessage.channel, renderableContent, originalMessage.author);
 }
 
-export async function send(caches: SageCache, targetChannel: DChannel, renderableContent: TRenderableContentResolvable, originalAuthor: User | null): Promise<Message[]> {
+export async function send(caches: SageCache, targetChannel: DMessageChannel, renderableContent: TRenderableContentResolvable, originalAuthor: User | null): Promise<Message[]> {
 	try {
 		const menuRenderable = (renderableContent as IMenuRenderable).toMenuRenderableContent && renderableContent as IMenuRenderable || null,
 			menuItemCount = menuRenderable?.getMenuLength() ?? 0;
 		if (!menuItemCount) {
-			const resolvedRenderableContent = utils.RenderUtils.RenderableContent.resolve(renderableContent);
+			const resolvedRenderableContent = RenderableContent.resolve(renderableContent);
 			if (resolvedRenderableContent) {
 				return sendRenderableContent(caches, resolvedRenderableContent, targetChannel, originalAuthor);
 			}
@@ -137,7 +138,7 @@ export async function send(caches: SageCache, targetChannel: DChannel, renderabl
 	return [];
 }
 
-async function sendRenderableContent(sageCache: SageCache, renderableContent: TRenderableContentResolvable, targetChannel: DChannel, originalAuthor: User | null): Promise<Message[]> {
+async function sendRenderableContent(sageCache: SageCache, renderableContent: TRenderableContentResolvable, targetChannel: DMessageChannel, originalAuthor: User | null): Promise<Message[]> {
 	const messages: Message[] = [],
 		embeds = resolveToEmbeds(renderableContent, sageCache.getFormatter(targetChannel));
 	if (embeds.length > 2) {
@@ -163,7 +164,7 @@ async function sendRenderableContent(sageCache: SageCache, renderableContent: TR
 }
 
 
-async function sendMessageEmbeds({ sageCache, target, embeds }: { sageCache: SageCache; target: DUser | DChannel; embeds: EmbedBuilder[] }): Promise<Message[]> {
+async function sendMessageEmbeds({ sageCache, target, embeds }: { sageCache: SageCache; target: DMessageTarget; embeds: EmbedBuilder[] }): Promise<Message[]> {
 	const messages: Message[] = [];
 	for (const embed of embeds) {
 		const message = await sendTo({
@@ -179,7 +180,7 @@ async function sendMessageEmbeds({ sageCache, target, embeds }: { sageCache: Sag
 	return messages;
 }
 
-function sendMenuRenderableContent(caches: SageCache, menuRenderable: IMenuRenderable, targetChannel: DChannel, originalAuthor: User | null): void {
+function sendMenuRenderableContent(caches: SageCache, menuRenderable: IMenuRenderable, targetChannel: DMessageChannel, originalAuthor: User | null): void {
 	const menuLength = menuRenderable.getMenuLength();
 	if (menuLength > 1) {
 		sendAndAwaitReactions(caches, menuRenderable, targetChannel, originalAuthor).then(index => {
@@ -197,7 +198,7 @@ function sendMenuRenderableContent(caches: SageCache, menuRenderable: IMenuRende
 
 const TIMEOUT = "TIMEOUT";
 const TIMEOUT_MILLI = 60 * 1000;
-function sendAndAwaitReactions(caches: SageCache, menuRenderable: IMenuRenderable, targetChannel: DChannel, originalAuthor: User | null): Promise<number> {
+function sendAndAwaitReactions(caches: SageCache, menuRenderable: IMenuRenderable, targetChannel: DMessageChannel, originalAuthor: User | null): Promise<number> {
 	return new Promise<number>(async (resolve, reject) => {
 		const menuLength = menuRenderable.getMenuLength();
 		if (menuLength < 1) {
@@ -257,7 +258,7 @@ function sendAndAwaitReactions(caches: SageCache, menuRenderable: IMenuRenderabl
 		for (let index = 0; index < menuLength; index++) {
 			let emoji: string;
 			if (!deleted && (emoji = unicodeArray[index])) {
-				const reaction = await lastMessage.react(emoji).catch(utils.ConsoleUtils.Catchers.warnReturnNull);
+				const reaction = await lastMessage.react(emoji).catch(warnReturnNull);
 				if (reaction) {
 					reactions.push(reaction);
 				}

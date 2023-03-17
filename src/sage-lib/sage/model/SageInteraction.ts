@@ -1,7 +1,7 @@
 import type { InteractionReplyOptions, Message, User, WebhookMessageEditOptions } from "discord.js";
 import { RenderableContent } from "../../../sage-pf2e";
 import { isDefined } from "../../../sage-utils";
-import { DChannel, DInteraction, InteractionType, handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
+import { DInteraction, DMessageChannel, handleDiscordErrorReturnNull, InteractionType } from "../../../sage-utils/utils/DiscordUtils";
 import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
 import type { TGameType } from "../../../slash.mjs";
@@ -149,10 +149,10 @@ export default class SageInteraction<T extends DInteraction = any>
 
 	/** Sends a full message to the channel or user the interaction originated in. */
 	public send(renderableContentResolvable: TRenderableContentResolvable): Promise<Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DChannel): Promise<Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DChannel, originalAuthor: User): Promise<Message[]>;
-	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.interaction.channel as DChannel, originalAuthor = this.interaction.user): Promise<Message[]> {
-		const canSend = await this.canSend(targetChannel);
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DMessageChannel): Promise<Message[]>;
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DMessageChannel, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.interaction.channel as DMessageChannel | null, originalAuthor = this.interaction.user): Promise<Message[]> {
+		const canSend = this.canSend(targetChannel);
 		if (!canSend) {
 			return [];
 		}

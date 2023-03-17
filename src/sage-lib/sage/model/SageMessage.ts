@@ -1,6 +1,6 @@
 import type { Message, User } from "discord.js";
 import utils, { Optional } from "../../../sage-utils";
-import { DChannel, DMessage, handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
+import { DMessage, DMessageChannel, handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
 import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
 import type { TCommandAndArgs } from "../../discord";
@@ -85,9 +85,9 @@ export default class SageMessage<HasServer extends boolean = boolean>
 
 	public _ = new Map<"Dialog" | "Dice" | "Replacement" | "Sent", DMessage>();
 	public send(renderableContentResolvable: TRenderableContentResolvable): Promise<Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DChannel): Promise<Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DChannel, originalAuthor: User): Promise<Message[]>;
-	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.message.channel as DChannel, originalAuthor = this.message.author): Promise<Message[]> {
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DMessageChannel): Promise<Message[]>;
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: DMessageChannel, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.message.channel as DMessageChannel, originalAuthor = this.message.author): Promise<Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			await this.reactBlock(`Unable to send message because Sage doesn't have permissions to channel: ${targetChannel}`);
@@ -108,7 +108,7 @@ export default class SageMessage<HasServer extends boolean = boolean>
 	public async reply(args: TSendArgs): Promise<void>;
 	public async reply(renderable: TRenderableContentResolvable, ephemeral: boolean): Promise<void>;
 	public async reply(renderableOrArgs: TRenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void> {
-		const canSend = await this.canSend(this.message.channel as DChannel);
+		const canSend = this.canSend(this.message.channel);
 		if (!canSend) {
 			return this.reactBlock(`Unable to reply to your message because Sage doesn't have permissions to channel: ${this.message.channel}`);
 		}
@@ -121,7 +121,7 @@ export default class SageMessage<HasServer extends boolean = boolean>
 	public async whisper(contentOrArgs: TSendArgs | TRenderableContentResolvable): Promise<void> {
 		const args = typeof(contentOrArgs) === "string" ? { content:contentOrArgs } : contentOrArgs;
 		const sendOptions = this.resolveToOptions(args);
-		const canSend = await this.canSend(this.message.channel as DChannel);
+		const canSend = this.canSend(this.message.channel);
 		if (canSend) {
 			const message = await this.message.reply(sendOptions).catch(handleDiscordErrorReturnNull);
 			//include a button to delete the reply message!
