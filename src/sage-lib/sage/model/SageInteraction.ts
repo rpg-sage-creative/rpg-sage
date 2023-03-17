@@ -1,7 +1,7 @@
-import type { InteractionReplyOptions, Message, User, WebhookMessageOptions } from "discord.js";
+import type { InteractionReplyOptions, Message, User, WebhookMessageEditOptions } from "discord.js";
 import { RenderableContent } from "../../../sage-pf2e";
 import { isDefined } from "../../../sage-utils";
-import { DChannel, DInteraction, InteractionType } from "../../../sage-utils/utils/DiscordUtils";
+import { DChannel, DInteraction, InteractionType, handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
 import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
 import type { TGameType } from "../../../slash.mjs";
@@ -78,7 +78,7 @@ export default class SageInteraction<T extends DInteraction = any>
 	}
 
 	public get commandValues(): string[] {
-		if (!this.interaction.isCommand()) {
+		if (!this.interaction.isChatInputCommand()) {
 			return [];
 		}
 		return [
@@ -106,11 +106,12 @@ export default class SageInteraction<T extends DInteraction = any>
 			return Promise.resolve();
 		}
 		if ("deferUpdate" in this.interaction) {
-			return this.interaction.deferUpdate();
+			await this.interaction.deferUpdate().catch(handleDiscordErrorReturnNull);
+		}else {
+			await this.interaction.deferReply({
+				ephemeral:this.sageCache.guild?.s ? (ephemeral ?? true) : false
+			}).catch(handleDiscordErrorReturnNull);
 		}
-		return this.interaction.deferReply({
-			ephemeral:this.sageCache.guild?.s ? (ephemeral ?? true) : false
-		});
 	}
 
 	/** Deletes the reply and any updates (ONLY IF NOT EPHEMERAL) */
@@ -130,7 +131,7 @@ export default class SageInteraction<T extends DInteraction = any>
 		/** @todo if (ephemeral === false && !this.canSend()) inform user about failure */
 		const args = this.resolveToOptions(renderableOrArgs, ephemeral);
 		if (this.interaction.deferred || this.interaction.replied) {
-			await this.interaction.editReply(args as WebhookMessageOptions);
+			await this.interaction.editReply(args as WebhookMessageEditOptions);
 		}else {
 			await this.interaction.reply(args as InteractionReplyOptions);
 		}

@@ -41,7 +41,7 @@ export default abstract class DidRepository<T extends DidCore, U extends HasDidC
 	public async write(entity: U): Promise<boolean> {
 		if (!entity.did) {
 			const json = entity.toJSON();
-			json.did = SnowflakeUtil.generate();
+			json.did = SnowflakeUtil.generate().toString();
 			console.log(`DidRepository.write: ${(<typeof IdRepository>this.constructor).objectType}`, json);
 		}
 		return this.writeBy(entity, "did");

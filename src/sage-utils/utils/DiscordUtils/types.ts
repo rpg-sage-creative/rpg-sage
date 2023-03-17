@@ -1,8 +1,8 @@
-import type { ButtonInteraction, CommandInteraction, DMChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, SelectMenuInteraction, Snowflake, TextChannel, ThreadChannel, User } from "discord.js";
+import type { ButtonInteraction, ChannelType, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, StringSelectMenuInteraction, Snowflake, TextChannel, ThreadChannel, User, ChatInputCommandInteraction } from "discord.js";
 import type { Optional } from "../..";
 import type { TMatcher } from "../types";
 
-export type DInteraction = CommandInteraction | ButtonInteraction | SelectMenuInteraction | MessageComponentInteraction;
+export type DInteraction = ChatInputCommandInteraction | ButtonInteraction | StringSelectMenuInteraction | MessageComponentInteraction;
 
 export type DReaction = MessageReaction | PartialMessageReaction;
 
@@ -16,12 +16,13 @@ export type DGuildResolvable = Guild | GuildPreview | Snowflake;
 export type DRoleResolvable = Role | Snowflake;
 
 /** Text Channel */
-export type DThreadChannel = ThreadChannel & { type: "GUILD_PRIVATE_THREAD" | "GUILD_PUBLIC_THREAD"; }
-export type DTextChannel = TextChannel & { type: "GUILD_TEXT"; }
-export type DGuildChannel = DThreadChannel | DTextChannel;
+export type DForumChannel = ForumChannel & { type: ChannelType.GuildForum; };
+export type DTextChannel = TextChannel & { type: ChannelType.GuildText; }
+export type DThreadChannel = ThreadChannel & { type: ChannelType.PublicThread | ChannelType.PrivateThread; }
+export type DGuildChannel = DTextChannel | DThreadChannel;
 
 /** This allows us to update which channels have webhooks later. */
-export type DWebhookChannel = DTextChannel;
+export type DWebhookChannel = DTextChannel | DForumChannel;
 
 export type DDMChannel = DMChannel | PartialDMChannel;
 

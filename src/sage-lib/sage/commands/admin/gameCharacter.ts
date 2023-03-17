@@ -1,5 +1,6 @@
 import type { Message, Snowflake } from "discord.js";
 import type { Optional, OrUndefined } from "../../../../sage-utils";
+import { errorReturnEmptyArray } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
 import DiscordId from "../../../../sage-utils/utils/DiscordUtils/DiscordId";
 import { orNilSnowflake } from "../../../../sage-utils/utils/DiscordUtils/snowflake";
 import { sendWebhook } from "../../../discord/messages";
@@ -89,7 +90,7 @@ function urlToName(url: Optional<string>): string | undefined {
 }
 
 async function promptAndDo(sageMessage: SageMessage, character: GameCharacter, prompt: string, action: (char: GameCharacter) => Promise<boolean | void>): Promise<void> {
-	await sendGameCharacter(sageMessage, character);
+	await sendGameCharacter(sageMessage, character).catch(errorReturnEmptyArray);
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
 	promptRenderable.append(prompt);
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable);
@@ -216,7 +217,16 @@ async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterM
 				nameIndex++;
 				await character.save();
 			}
-			await sendGameCharacter(sageMessage, character);
+			let webhookError = false;
+			await sendGameCharacter(sageMessage, character).catch(err => {
+				if (err.startsWith("Cannot Find Webhook: ")) {
+					webhookError = true;
+				}
+			});
+			if (webhookError) {
+				await sageMessage.whisper(`We are sorry! *(An error occurred and we can't list your characters.)*`);
+				break;
+			}
 		}
 	} else {
 		await sendNotFound(sageMessage, command, entityNamePlural, nameFilter);
@@ -285,7 +295,7 @@ async function gameCharacterDetails(sageMessage: SageMessage): Promise<void> {
 		: characterManager.findByUserAndName(userDid, names.name) ?? characterManager.filterByUser(userDid!)[0];
 
 	return character
-		? <any>sendGameCharacter(sageMessage, character)
+		? <any>sendGameCharacter(sageMessage, character).catch(errorReturnEmptyArray)
 		: sendNotFound(sageMessage, `${characterTypeMeta.commandDescriptor}-details`, characterTypeMeta.singularDescriptor!, names.name);
 }
 

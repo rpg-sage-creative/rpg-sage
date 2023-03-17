@@ -65,8 +65,8 @@ export default class SageReaction
 		if (!canSend) {
 			return this.whisper(`Unable to send message because Sage doesn't have permissions to channel: ${this.message.channel}`);
 		}
-		const args = this.resolveToOptions(renderableOrArgs, ephemeral);
-		return this.message.reply(args) as Promise<any>;
+		const replyOptions = this.resolveToOptions(renderableOrArgs, ephemeral);
+		await this.message.reply(replyOptions);
 	}
 
 	public async whisper(content: string): Promise<void>;

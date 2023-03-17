@@ -1,12 +1,12 @@
-import { Client, Guild, GuildMember, GuildPreview, Message, Role, Snowflake, User, Webhook } from "discord.js";
-import type { If, Optional } from "../..";
+import { Client, Guild, GuildMember, GuildPreview, Message, PermissionFlagsBits, Role, Snowflake, User, Webhook } from "discord.js";
+import type { Optional } from "../..";
 import { Collection } from "../ArrayUtils";
-import { warnUnknownElseErrorReturnNull } from "./errorHandlers";
+import { handleDiscordErrorReturnNull } from "./errorHandlers";
 import { toHumanReadable } from "./humanReadable";
 import { canReactTo, canSendMessageTo } from "./permChecks";
 import { isNonNilSnowflake, resolveSnowflake } from "./snowflake";
 import { canCheckPermissionsFor, canFetchWebhooksFor } from "./typeChecks";
-import type { DChannel, DChannelResolvable, DDMChannel, DGuildChannel, DGuildResolvable, DInteraction, DMessage, DRoleResolvable, DUserResolvable, DWebhookChannel } from "./types";
+import type { DChannel, DChannelResolvable, DDMChannel, DGuildChannel, DGuildResolvable, DInteraction, DMessage, DRoleResolvable, DTextChannel, DUserResolvable, DWebhookChannel } from "./types";
 
 export type DiscordFetchesArgs = {
 	botId?: Optional<Snowflake>;
@@ -27,25 +27,21 @@ type FilterOptions = {
 	 * @todo SageChannelResolvable should be or include SnowflakeResolvable? Will need to check if a channel or just a has did/id ...
 	 */
 
-export default class DiscordFetches<
-		HasGuild extends boolean = boolean,
-		HasGuildChannel extends boolean = boolean,
-		HasUser extends boolean = boolean
-		> {
+export default class DiscordFetches {
 
 	//#region properties
 
 	public static botId: Snowflake;
 	public get botId(): Snowflake { return this.args.botId ?? DiscordFetches.botId; }
 
-	public get channel(): If<HasGuildChannel, DGuildChannel, null> { return this.args.channel ?? null as any; }
+	public get channel(): DGuildChannel | null { return this.args.channel ?? null; }
 
 	public static client: Client;
 	public get client(): Client { return this.args.client ?? DiscordFetches.client; }
 
-	public get guild(): If<HasGuild, Guild, null> { return this.args.guild ?? null as any; }
+	public get guild(): Guild | null { return this.args.guild ?? null; }
 
-	public get user(): If<HasUser, User, null> { return this.args.user ?? null as any; }
+	public get user(): User | null { return this.args.user ?? null; }
 
 	public static webhookName: string;
 	public get webhookName(): string { return this.args.webhookName ?? DiscordFetches.webhookName; }
@@ -74,13 +70,13 @@ export default class DiscordFetches<
 		return new DiscordFetches({
 			client: interaction.client,
 			guild: interaction.guild,
-			channel: interaction.channel?.type === "DM" ? null : interaction.channel as DGuildChannel,
+			channel: interaction.channel?.isDMBased() ? null : interaction.channel as DGuildChannel,
 			user: interaction.user
 		});
 	}
 
 	public static fromMessage(message: DMessage): DiscordFetches {
-		if (message.channel.type === "DM") {
+		if (message.channel.isDMBased()) {
 			return new DiscordFetches({
 				client: message.client,
 				user: message.author
@@ -99,17 +95,17 @@ export default class DiscordFetches<
 	//#region for
 
 	/** Creates a new DiscordFetches for the given Client. */
-	public async forClient(client: Client): Promise<DiscordFetches<false, false, false>> {
+	public async forClient(client: Client): Promise<DiscordFetches> {
 		return new DiscordFetches({ botId:this.args.botId, client, webhookName:this.args.webhookName });
 	}
 
 	/** Creates a new DiscordFetches for the given dm channel's User. */
-	public async forChannel(channel: Optional<DDMChannel>): Promise<DiscordFetches<false, false, true> | null>;
+	public async forChannel(channel: Optional<DDMChannel>): Promise<DiscordFetches | null>;
 	/** Creates a new DiscordFetches for the given guild channel. */
-	public async forChannel(channel: Optional<DGuildChannel>): Promise<DiscordFetches<true, true, false> | null>;
+	public async forChannel(channel: Optional<DGuildChannel>): Promise<DiscordFetches | null>;
 	public async forChannel(channel: Optional<DChannel>): Promise<DiscordFetches | null> {
 		if (channel) {
-			if (channel.type === "DM") {
+			if (channel.isDMBased()) {
 				return this.forUser(channel.recipient);
 			}
 			return new DiscordFetches({ botId:this.args.botId, client:this.args.client, channel, guild:channel.guild, webhookName:this.args.webhookName });
@@ -118,25 +114,25 @@ export default class DiscordFetches<
 	}
 
 	/** Creates a new DiscordFetches for the given Guild. */
-	public async forGuild(guildResolvable: Optional<DGuildResolvable>): Promise<DiscordFetches<true, false, false> | null> {
+	public async forGuild(guildResolvable: Optional<DGuildResolvable>): Promise<DiscordFetches | null> {
 		const guild = await this.fetchGuild(guildResolvable);
 		return guild ? new DiscordFetches({ botId:this.args.botId, client:this.args.client, guild, webhookName:this.args.webhookName }) : null;
 	}
 
 	/** Creates a new DiscordFetches for the given User. */
-	public async forUser(userResolvable: Optional<DUserResolvable>): Promise<DiscordFetches<false, false, true> | null> {
+	public async forUser(userResolvable: Optional<DUserResolvable>): Promise<DiscordFetches | null> {
 		const user = await this.fetchUser(userResolvable);
 		return user ? new DiscordFetches({ botId:this.args.botId, client:this.args.client, user, webhookName:this.args.webhookName }) : null;
 	}
 
 	/** Makes sure we can use the channel for webhooks. */
-	public async forWebhook(): Promise<DiscordFetches<true, true, false> | null>;
+	public async forWebhook(): Promise<DiscordFetches | null>;
 	/** Creates a new fetch object for the given webhook. */
-	public async forWebhook(webhookName: Optional<string>): Promise<DiscordFetches<true, true, false> | null>;
+	public async forWebhook(webhookName: Optional<string>): Promise<DiscordFetches | null>;
 	/** Creates a new fetch object for the given channel. */
-	public async forWebhook(channel: Optional<DGuildChannel>): Promise<DiscordFetches<true, true, false> | null>;
+	public async forWebhook(channel: Optional<DGuildChannel>): Promise<DiscordFetches | null>;
 	/** Creates a new fetch object for the given channel and webhook. */
-	public async forWebhook(channel: Optional<DGuildChannel>, webhookName: Optional<string>): Promise<DiscordFetches<true, true, false> | null>;
+	public async forWebhook(channel: Optional<DGuildChannel>, webhookName: Optional<string>): Promise<DiscordFetches | null>;
 	public async forWebhook(...args: Optional<DGuildChannel | string>[]): Promise<DiscordFetches | null> {
 		const thisChannel = this.channel as DGuildChannel | null ?? null;
 		const channel = args.find(arg => typeof(arg) !== "string") as DGuildChannel | null ?? null;
@@ -177,8 +173,8 @@ export default class DiscordFetches<
 			if (preview && guildResolvable instanceof GuildPreview) return guildResolvable;
 			const guildId = resolveSnowflake(guildResolvable);
 			if (!isNonNilSnowflake(guildId)) {
-				if (preview) return this.client.fetchGuildPreview(guildId).catch(warnUnknownElseErrorReturnNull);
-				return this.client.guilds.fetch(guildId).catch(warnUnknownElseErrorReturnNull);
+				if (preview) return this.client.fetchGuildPreview(guildId).catch(handleDiscordErrorReturnNull);
+				return this.client.guilds.fetch(guildId).catch(handleDiscordErrorReturnNull);
 			}
 		}
 		return null;
@@ -199,7 +195,7 @@ export default class DiscordFetches<
 			if (userResolvable instanceof User) return userResolvable;
 			const userId = resolveSnowflake(userResolvable);
 			if (isNonNilSnowflake(userId)) {
-				return this.client.users.fetch(userId).catch(warnUnknownElseErrorReturnNull);
+				return this.client.users.fetch(userId).catch(handleDiscordErrorReturnNull);
 			}
 		}
 		return null;
@@ -210,7 +206,7 @@ export default class DiscordFetches<
 	//#region guild fetches
 
 	/** Return the current guild or dm channel. */
-	public async fetchChannel(): Promise<If<HasGuildChannel, DGuildChannel, If<HasUser, DDMChannel, null>>>;
+	public async fetchChannel<T extends DGuildChannel | DDMChannel>(): Promise<T | null>;
 	/** Fetch the given channel. */
 	public async fetchChannel<T extends DGuildChannel>(channelResolvable: Optional<DChannelResolvable>): Promise<T | null>;
 	public async fetchChannel<T extends DGuildChannel>(...args: Optional<DChannelResolvable>[]): Promise<DChannel | null> {
@@ -225,7 +221,7 @@ export default class DiscordFetches<
 			if (typeof(channelResolvable) !== "string") return channelResolvable as T;
 			const channelId = resolveSnowflake(channelResolvable);
 			if (isNonNilSnowflake(channelId)) {
-				const channel = await this.guild?.channels.fetch(channelResolvable).catch(warnUnknownElseErrorReturnNull);;
+				const channel = await this.guild?.channels.fetch(channelResolvable).catch(handleDiscordErrorReturnNull);;
 				return channel ? channel as T : null;
 			}
 		}
@@ -233,13 +229,12 @@ export default class DiscordFetches<
 	}
 
 	/** Fetches the given user as a GuildMember only if we have a guild. */
-	public async fetchGuildMember(userResolvable: Optional<DUserResolvable>): Promise<If<HasGuild, GuildMember | null, null>>
 	public async fetchGuildMember(userResolvable: Optional<DUserResolvable>): Promise<GuildMember | null> {
 		const guild = this.guild;
 		if (guild && userResolvable) {
 			const userId = resolveSnowflake(userResolvable);
 			if (isNonNilSnowflake(userId)) {
-				const guildMember = await guild.members.fetch(userId).catch(warnUnknownElseErrorReturnNull);
+				const guildMember = await guild.members.fetch(userId).catch(handleDiscordErrorReturnNull);
 				return guildMember ?? null;
 			}
 		}
@@ -247,14 +242,13 @@ export default class DiscordFetches<
 	}
 
 	/** Fetches the given user as a GuildMember only if we have a guild. */
-	public async fetchGuildRole(roleResolvable: Optional<DRoleResolvable>): Promise<If<HasGuild, Role | null, null>>
 	public async fetchGuildRole(roleResolvable: Optional<DRoleResolvable>): Promise<Role | null> {
 		const guild = this.guild;
 		if (guild && roleResolvable) {
 			if (roleResolvable instanceof Role) return roleResolvable;
 			const roleId = resolveSnowflake(roleResolvable);
 			if (isNonNilSnowflake(roleId)) {
-				const guildRole = await guild.roles.fetch(roleId).catch(warnUnknownElseErrorReturnNull);
+				const guildRole = await guild.roles.fetch(roleId).catch(handleDiscordErrorReturnNull);
 				return guildRole ?? null;
 			}
 		}
@@ -283,7 +277,6 @@ export default class DiscordFetches<
 		return "UnknownChannel";
 	}
 
-	public async fetchMessage(messageId: Snowflake): Promise<If<HasGuildChannel | HasUser, Message, null>>;
 	public async fetchMessage(messageId: Snowflake): Promise<Message | null> {
 		if (isNonNilSnowflake(messageId)) {
 			const channel = await this.fetchChannel();
@@ -293,19 +286,19 @@ export default class DiscordFetches<
 		return null;
 	}
 
-	public async filterMessages(opts: FilterOptions): Promise<If<HasGuildChannel | HasUser, Message[], null>>;
 	public async filterMessages(opts: FilterOptions): Promise<Message[] | null> {
 		const channel = await this.fetchChannel();
 		if (!channel) return null;
 
 		const before = opts.lastMessageId ?? channel.lastMessageId ?? undefined;
 		const limit = opts.limit ?? 25;
-		const collection = await channel.messages.fetch({ before, limit }).catch(warnUnknownElseErrorReturnNull);
+		const collection = await channel.messages.fetch({ before, limit }).catch(handleDiscordErrorReturnNull);
 		if (!collection) {
 			return [];
 		}
 
-		const array = Array.from(collection.values());
+		const array: Message[] = [];
+		collection.forEach(value => array.push(value));
 		if (!opts.filter) {
 			return array;
 		}
@@ -320,12 +313,12 @@ export default class DiscordFetches<
 	/** Fetches the webhook channel and checks it for perms. */
 	private async fetchWebhookChannel(): Promise<DWebhookChannel | null> {
 		if (!this.channel) return null;
-		const parentChannel = this.channel.isThread() ? this.channel.parent as DGuildChannel : null;
+		const parentChannel = this.channel.isThread() ? this.channel.parent as DTextChannel : null;
 		const channel = parentChannel ?? this.channel;
 		if (channel) {
 			if (canFetchWebhooksFor(channel)) {
 				if (canCheckPermissionsFor(channel)) {
-					const hasPerm = channel.permissionsFor(this.botId, true)?.has("MANAGE_WEBHOOKS");
+					const hasPerm = channel.permissionsFor(this.botId, true)?.has(PermissionFlagsBits.ManageWebhooks);
 					if (hasPerm) {
 						return channel as DWebhookChannel;
 					}else {
@@ -342,27 +335,25 @@ export default class DiscordFetches<
 	}
 
 	/** Fetches the Webhook. */
-	public async fetchWebhook(): Promise<If<HasGuildChannel, Webhook | null, null>>;
 	public async fetchWebhook(): Promise<Webhook | null> {
 		const webhookName = this.webhookName;
 		const channel = await this.fetchWebhookChannel();
-		const webhooksCollection = await channel?.fetchWebhooks().catch(warnUnknownElseErrorReturnNull);
+		const webhooksCollection = await channel?.fetchWebhooks().catch(handleDiscordErrorReturnNull);
 		return webhooksCollection?.find(w => w.name === webhookName) ?? null;
 	}
 
 	/** Fetches or creates the Webhook. */
-	public async fetchOrCreateWebhook(avatar?: string): Promise<If<HasGuildChannel, Webhook | null, null>>;
 	public async fetchOrCreateWebhook(avatar?: string): Promise<Webhook | null> {
 		let webhook: Optional<Webhook> = await this.fetchWebhook();
 		if (!webhook) {
+			const name = this.webhookName;
 			const channel = await this.fetchWebhookChannel();
-			webhook = await channel?.createWebhook(this.webhookName, { avatar:avatar }).catch(warnUnknownElseErrorReturnNull);
+			webhook = await channel?.createWebhook({ avatar, name }).catch(handleDiscordErrorReturnNull);
 		}
 		return webhook ?? null;
 	}
 
 	/** Search the last 25 messages in this channel to find the last message posted as a webhook using the given filter. */
-	public async findLastWebhookMessageByAuthor(filter: (authorName: string, index: number, messages: Message[]) => Promise<unknown>): Promise<If<HasGuildChannel, Message | null, null>>;
 	public async findLastWebhookMessageByAuthor(filter: (authorName: string, index: number, messages: Message[]) => Promise<unknown>): Promise<Message | null> {
 		if (!this.channel) return null;
 
@@ -377,7 +368,7 @@ export default class DiscordFetches<
 
 		const before = this.channel.lastMessageId ?? undefined;
 		const limit = 25;
-		const collection = await this.channel.messages.fetch({ before, limit }).catch(warnUnknownElseErrorReturnNull);
+		const collection = await this.channel.messages.fetch({ before, limit }).catch(handleDiscordErrorReturnNull);
 		if (!collection) {
 			return null;
 		}

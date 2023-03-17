@@ -3,7 +3,7 @@ import type { Snowflake } from "discord.js";
 export const DiscordMaxValues = {
 	embed: {
 		titleLength: 256,
-		descriptionLength: 2048,
+		descriptionLength: 4096,
 		field: {
 			count: 25,
 			nameLength: 256,
@@ -16,10 +16,19 @@ export const DiscordMaxValues = {
 	message: {
 		contentLength: 2000,
 		embedCount: 10,
-		fileCount: 10,
-		reactionCount: 20
+		// fileCount: 10,
+		// reactionCount: 20
 	},
 	usernameLength: 80
 };
+
+// files
+// limited by size limite based on tier, not count
+
+// channel
+// tag limit of 20
+// name length of 100
+// topic 1024 (4096 forum)
+// maxed pin messages 50
 
 export const NilSnowflake: Snowflake = "0000000000000000";

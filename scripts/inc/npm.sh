@@ -7,10 +7,10 @@ NODE_TYPES_FOLLOW_REDIRECTS="@types/follow-redirects@1.14.1"
 
 #region npm libs for DEPLOY
 
-DISCORD_NPM="discord.js@13.12.0"
+DISCORD_NPM="discord.js@14.8.0"
 XREGEXP_NPM="xregexp@5.1.1"
-CANVAS_NPM="@napi-rs/canvas@0.1.35"
-PDF2JSON_NPM="pdf2json@3.0.2"
+CANVAS_NPM="@napi-rs/canvas@0.1.39"
+PDF2JSON_NPM="pdf2json@3.0.3"
 EMOJI_REGEX_NPM="emoji-regex@10.2.1"
 FOLLOW_REDIRECTS_NPM="follow-redirects@1.15.2"
 

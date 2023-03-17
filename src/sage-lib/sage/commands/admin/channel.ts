@@ -1,9 +1,11 @@
-import type * as Discord from "discord.js";
+import { ChannelType, Snowflake } from "discord.js";
 import { GameType } from "../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import utils, { Args, Optional } from "../../../../sage-utils";
-import type { DChannel } from "../../../../sage-utils/utils/DiscordUtils";
+import type { Args, Optional } from "../../../../sage-utils";
+import { Collection } from "../../../../sage-utils/utils/ArrayUtils";
+import type { DChannel, DGuildChannel } from "../../../../sage-utils/utils/DiscordUtils";
 import DiscordKey from "../../../../sage-utils/utils/DiscordUtils/DiscordKey";
+import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import type Game from "../../model/Game";
 import type SageCache from "../../model/SageCache";
 import { hasValues, ISageCommandArgs } from "../../model/SageCommandArgs";
@@ -14,6 +16,7 @@ import { DialogType, GameChannelType, IChannelOptions, type IChannel } from "../
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";
+import { Filters } from "../../../../sage-utils/utils/ArrayUtils";
 
 //#region add
 
@@ -44,8 +47,8 @@ async function channelAdd(sageMessage: SageMessage): Promise<void> {
 	}
 
 	// Grab channels from mentions, filter out those in active games
-	let channelDids: Discord.Snowflake[] = sageMessage.message.mentions.channels.map(channel => channel.id);
-	channelDids = await utils.ArrayUtils.Collection.filterAsync(channelDids, async channelDid => !(await game.server.findActiveGameByChannelDid(channelDid)));
+	let channelDids: Snowflake[] = sageMessage.message.mentions.channels.map(channel => channel.id);
+	channelDids = await Collection.filterAsync(channelDids, async channelDid => !(await game.server.findActiveGameByChannelDid(channelDid)));
 	if (!channelDids.length) {
 		return sageMessage.reactFailure("No Valid Channels given!");
 	}
@@ -61,7 +64,7 @@ async function channelAdd(sageMessage: SageMessage): Promise<void> {
 
 //#region details
 
-function channelDetailsAppendActions(renderableContent: utils.RenderUtils.RenderableContent, channel: IChannel): void {
+function channelDetailsAppendActions(renderableContent: RenderableContent, channel: IChannel): void {
 	const allowed: string[] = [], blocked: string[] = [];
 	(channel.commands ? allowed : blocked).push("Commands");
 	(channel.dialog ? allowed : blocked).push("Dialog");
@@ -71,7 +74,7 @@ function channelDetailsAppendActions(renderableContent: utils.RenderUtils.Render
 	renderableContent.append(`[spacer]<b>Blocked</b> ${blocked.join(", ") || "<i>none</i>"}`);
 }
 
-async function channelDetailsAppendDialog(renderableContent: utils.RenderUtils.RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): Promise<void> {
+async function channelDetailsAppendDialog(renderableContent: RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): Promise<void> {
 	if (channel.dialog) {
 		renderableContent.append(`<b>Dialog Options</b>`);
 
@@ -86,7 +89,7 @@ async function channelDetailsAppendDialog(renderableContent: utils.RenderUtils.R
 	}
 }
 
-async function channelDetailsAppendDice(renderableContent: utils.RenderUtils.RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): Promise<void> {
+async function channelDetailsAppendDice(renderableContent: RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): Promise<void> {
 	if (channel.dice) {
 		renderableContent.append(`<b>Dice Options</b>`);
 
@@ -127,7 +130,7 @@ function gameChannelTypeToString(type: Optional<GameChannelType>): string {
 	}
 }
 
-function channelDetailsAppendGame(renderableContent: utils.RenderUtils.RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): void {
+function channelDetailsAppendGame(renderableContent: RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): void {
 	if (game) {
 		const gameType = GameType[game.gameType!] ?? "None";
 		const gameTypeText = gameType === "None" ? "" : `<i>(${gameType})</i>`;
@@ -143,9 +146,9 @@ function channelDetailsAppendGame(renderableContent: utils.RenderUtils.Renderabl
 	}
 }
 
-async function getChannelNameAndActiveGame(sageCache: SageCache, channelDid: Discord.Snowflake): Promise<[string, Game | undefined]> {
+async function getChannelNameAndActiveGame(sageCache: SageCache, channelDid: Snowflake): Promise<[string, Game | undefined]> {
 	const channel = sageCache.guild ? await sageCache.discord.fetchChannel(channelDid) as DChannel : null;
-	if (!channel || channel.type === "DM") {
+	if (!channel || channel.type ===  ChannelType.DM) {
 		return ["DM", undefined];
 	}
 	const discordKey = DiscordKey.fromChannel(channel);
@@ -188,9 +191,13 @@ async function channelDetails(sageMessage: SageMessage, channel?: IChannel): Pro
 
 //#region list
 
-async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: IChannel[]): Promise<Discord.GuildChannel[]> {
-	const guildChannels = await utils.ArrayUtils.Collection.mapAsync(channels, async channel => sageMessage.sageCache.discord.forGuild(sageMessage.server!.did).then(forGuild => forGuild?.fetchChannel(channel.did)));
-	const existing = guildChannels.filter(utils.ArrayUtils.Filters.exists) as Discord.GuildChannel[];
+async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: IChannel[]): Promise<DGuildChannel[]> {
+	const guildChannels = await Collection.mapAsync(channels, async channel => {
+		const forGuild = await sageMessage.sageCache.discord.forGuild(sageMessage.server!.did);
+		return forGuild?.fetchChannel(channel.did);
+	});
+	/** @todo Figure out why Filters.exists isn't working here! */
+	const existing = guildChannels.filter(Filters.exists) as Collection<DGuildChannel>;
 
 	const filter = sageMessage.args.unkeyedValues().join(" ").trim();
 	if (filter && existing.length) {
@@ -251,7 +258,7 @@ async function channelRemove(sageMessage: SageMessage): Promise<void> {
 	}
 
 	// Grab channels from mentions and filter for the game
-	const channelDids: Discord.Snowflake[] = sageMessage.args.channelDids().filter(channelDid => game.hasChannel(channelDid));
+	const channelDids: Snowflake[] = sageMessage.args.channelDids().filter(channelDid => game.hasChannel(channelDid));
 	if (!channelDids.length) {
 		return sageMessage.reactFailure("No valid Game channels to remove!");
 	}

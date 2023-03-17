@@ -1,4 +1,4 @@
-import type { Snowflake } from "discord.js";
+import { ChannelType, PermissionFlagsBits, Snowflake } from "discord.js";
 import type { Optional } from "../..";
 import type { DChannel } from "./types";
 
@@ -11,9 +11,9 @@ import type { DChannel } from "./types";
  * @returns true if we can send to the channel
  */
 export function canSendMessageTo(botId: Snowflake, channel: Optional<DChannel>): boolean {
-	const types = ["GUILD_TEXT", "DM", "GUILD_PRIVATE_THREAD", "GUILD_PUBLIC_THREAD"];
+	const types = [ChannelType.GuildText, ChannelType.DM, ChannelType.PrivateThread, ChannelType.PublicThread, ChannelType.GuildForum];
 	if (channel && types.includes(channel.type)) {
-		if (channel.type === "DM") {
+		if (channel.isDMBased()) {
 			return true;
 		}
 
@@ -28,16 +28,16 @@ export function canSendMessageTo(botId: Snowflake, channel: Optional<DChannel>):
 		}
 
 		const perms = channel.permissionsFor(botId, true);
-		const perm = channel.isThread() ? "SEND_MESSAGES_IN_THREADS" : "SEND_MESSAGES";
+		const perm = channel.isThread() ? PermissionFlagsBits.SendMessagesInThreads : PermissionFlagsBits.SendMessages;
 		return perms?.has(perm) ?? false;
 	}
 	return false;
 }
 
 export function canReactTo(botId: Snowflake, channel: Optional<DChannel>): boolean {
-	const types = ["GUILD_TEXT", "DM", "GUILD_PRIVATE_THREAD", "GUILD_PUBLIC_THREAD"];
+	const types = [ChannelType.GuildText, ChannelType.DM, ChannelType.PrivateThread, ChannelType.PublicThread, ChannelType.GuildForum];
 	if (channel && types.includes(channel.type)) {
-		if (channel.type === "DM") {
+		if (channel.isDMBased()) {
 			return true;
 		}
 
@@ -52,7 +52,7 @@ export function canReactTo(botId: Snowflake, channel: Optional<DChannel>): boole
 		}
 
 		const perms = channel.permissionsFor(botId, true);
-		return perms?.has("ADD_REACTIONS") ?? false;
+		return perms?.has(PermissionFlagsBits.AddReactions) ?? false;
 	}
 	return false;
 }

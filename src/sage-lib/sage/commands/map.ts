@@ -1,4 +1,5 @@
-import * as Discord from "discord.js";
+import { ActionRowBuilder } from "@discordjs/builders";
+import { ButtonBuilder, ButtonInteraction, ButtonStyle, Collection, Message, Snowflake, SnowflakeUtil } from "discord.js";
 import type { Optional } from "../../../sage-utils";
 import { errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import type { DChannel } from "../../../sage-utils/utils/DiscordUtils";
@@ -26,8 +27,8 @@ type TMapAction = "MapUpLeft"   | "MapUp"     | "MapUpRight"   | "MapTerrain" | 
 	const MapActions = "MapUpLeft,MapUp,MapUpRight,MapTerrain,MapRaise,MapLeft,MapConfig,MapRight,MapAura,MapDelete,MapDownLeft,MapDown,MapDownRight,MapToken,MapLower".split(",");
 	const MapActionEmojis = "↖️,⬆️,↗️,⛰️,🔼,⬅️,⚙️,➡️,🟡,❌,↙️,⬇️,↘️,👤,🔽".split(",");
 
-function createButton(gameMap: GameMap, label: string, style: Discord.MessageButtonStyleResolvable): Discord.MessageButton {
-	const button = new Discord.MessageButton();
+function createButton(gameMap: GameMap, label: string, style: ButtonStyle): ButtonBuilder {
+	const button = new ButtonBuilder();
 	button.setCustomId(`${gameMap.id}|${label}`);
 	if (MapActions.includes(label)) {
 		button.setEmoji(MapActionEmojis[MapActions.indexOf(label)]);
@@ -47,13 +48,13 @@ function createButton(gameMap: GameMap, label: string, style: Discord.MessageBut
 	return button;
 }
 
-function createButtonRow(gameMap: GameMap, ...labels: TMapAction[]): Discord.MessageActionRow {
-	const actionRow = new Discord.MessageActionRow();
-	labels.forEach(label => actionRow.addComponents(createButton(gameMap, label, "SECONDARY")));
+function createButtonRow(gameMap: GameMap, ...labels: TMapAction[]): ActionRowBuilder<ButtonBuilder> {
+	const actionRow = new ActionRowBuilder<ButtonBuilder>();
+	labels.forEach(label => actionRow.addComponents(createButton(gameMap, label, ButtonStyle.Secondary)));
 	return actionRow;
 }
 
-function createMapComponents(gameMap: GameMap): Discord.MessageActionRow[] {
+function createMapComponents(gameMap: GameMap): ActionRowBuilder<ButtonBuilder>[] {
 	return [
 		createButtonRow(gameMap, "MapUpLeft", "MapUp", "MapUpRight", "MapTerrain", "MapRaise"),
 		createButtonRow(gameMap, "MapLeft", "MapConfig", "MapRight", "MapAura", "MapDelete"),
@@ -101,7 +102,7 @@ function ensurePlayerCharacter(sageInteraction: SageInteraction, gameMap: GameMa
 				gameMap.tokens.push({
 					auras: [],
 					characterId: char.id,
-					id: Discord.SnowflakeUtil.generate(),
+					id: SnowflakeUtil.generate().toString(),
 					layer: LayerType.Token,
 					name: charName,
 					pos: gameMap.spawn ?? [1,1],
@@ -146,7 +147,7 @@ async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: G
 	const toggledAura = gameMap.activeAura;
 	sageInteraction.reply(`Setting active aura for ${activeToken?.name} to ${toggledAura?.name ?? "none"} ...`, false);
 	updated = toggled
-		&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+		&& await renderMap(sageInteraction.interaction.message, gameMap);
 	if (updated) {
 		return sageInteraction.reply(`Your active aura for ${activeToken?.name} is: ${toggledAura?.name ?? "none"}`, false);
 	}
@@ -160,7 +161,7 @@ async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: 
 	sageInteraction.reply(`Setting ${activeToken?.name} as active ...`, false);
 	let updated = false;
 	if (added) {
-		updated = await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+		updated = await renderMap(sageInteraction.interaction.message, gameMap);
 	}else {
 		updated = toggled && await gameMap.save();
 	}
@@ -195,7 +196,7 @@ async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: 
 			break;
 	}
 	if (updated) {
-		updated = await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+		updated = await renderMap(sageInteraction.interaction.message, gameMap);
 	}
 	if (updated) {
 		return sageInteraction.reply(output, false);
@@ -228,7 +229,7 @@ async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: 
 			break;
 	}
 	if (updated) {
-		updated = await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+		updated = await renderMap(sageInteraction.interaction.message, gameMap);
 	}
 	if (updated) {
 		return sageInteraction.reply(output, false);
@@ -249,7 +250,7 @@ async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap:
 			del(msgConfirm);
 			const deleted = gameMap.deleteImage(activeImage);
 			const updated = deleted
-				&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+				&& await renderMap(sageInteraction.interaction.message, gameMap);
 			if (updated) {
 				return sageInteraction.reply(`Deleted image: ${activeImage.name}`, false);
 			}
@@ -272,7 +273,7 @@ async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData
 		const moved = gameMap.moveActiveToken(mapAction.slice(3).toLowerCase() as TMoveDirection);
 		const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
 		updated = (moved || shuffled)
-			&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+			&& await renderMap(sageInteraction.interaction.message, gameMap);
 		if (updated) {
 			return sageInteraction.deleteReply();
 		}
@@ -303,7 +304,9 @@ async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArg
 	}
 	const client = ActiveBot.active.client;
 	for (const att of attachments) {
-		const url = att[1].attachment.toString();
+		/** @todo double check that this is the correct change */
+		// const url = att[1].attachment.toString();
+		const url = att[1].url;
 		if (url.match(/map\.txt$/i)) {
 			const raw = await getText(url);
 			const parsedCore = gameMapImporter(raw, client);
@@ -316,7 +319,7 @@ async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArg
 	}
 	return null;
 }
-async function del(msg?: Discord.Message | null): Promise<Discord.Message | null> {
+async function del(msg?: Message | null): Promise<Message | null> {
 	return msg?.deletable ? msg.delete() : msg ?? null;
 }
 async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore): Promise<void> {
@@ -501,23 +504,23 @@ async function mapTokenHandler(sageInteraction: SageInteraction): Promise<void> 
 //#endregion
 
 /** reads the interaction's channel's messages to find the map */
-async function findGameMap(sageInteraction: SageInteraction<Discord.ButtonInteraction>): Promise<GameMap | null> {
+async function findGameMap(sageInteraction: SageInteraction<ButtonInteraction>): Promise<GameMap | null> {
 	const mapValue = sageInteraction.args.getString("map", true);
 	if (DiscordId.isValidId(mapValue)) {
 		return GameMap.forUser(mapValue, sageInteraction.actor.did);
 	}
-	const messages = await sageInteraction.interaction.channel?.messages.fetch();
+	const messages = await sageInteraction.interaction.channel?.messages.fetch() as Collection<Snowflake, Message<true>>;
 	if (!messages) {
 		return null;
 	}
-	let messageId: Discord.Snowflake | undefined;
-	messages.find(msg => {
-		if (msg.attachments.size && msg.components.length && GameMap.matches(msg.id, mapValue)) {
-			messageId = msg.id;
-			return true;
-		}
-		return false;
-	});
+	let messageId = messages.findKey((msg: Message) => msg.attachments.size && msg.components.length && GameMap.matches(msg.id, mapValue));
+	// messages.find(msg => {
+	// 	if (msg.attachments.size && msg.components.length && GameMap.matches(msg.id, mapValue)) {
+	// 		messageId = msg.id;
+	// 		return true;
+	// 	}
+	// 	return false;
+	// });
 	return messageId
 		? GameMap.forUser(messageId, sageInteraction.actor.did)
 		: null;
@@ -536,7 +539,7 @@ async function parseInput<T extends TGameMapImage>(sageInteraction: SageInteract
 
 	const image: TGameMapImage = {
 		auras: [],
-		id: Discord.SnowflakeUtil.generate(),
+		id: SnowflakeUtil.generate().toString(),
 		layer: LayerType[layerValue],
 		name: args.getString("name", true),
 		pos: [
@@ -554,7 +557,7 @@ async function parseInput<T extends TGameMapImage>(sageInteraction: SageInteract
 	return [gameMap, image as T];
 }
 
-async function renderMap(messageOrChannel: Optional<Discord.Message | DChannel>, gameMap: GameMap): Promise<boolean> {
+async function renderMap(messageOrChannel: Optional<Message | DChannel>, gameMap: GameMap): Promise<boolean> {
 	if (!messageOrChannel) {
 		return false;
 	}
@@ -563,7 +566,7 @@ async function renderMap(messageOrChannel: Optional<Discord.Message | DChannel>,
 		const content = `**${gameMap.name}**`;
 		const files = [buffer];
 		const components = createMapComponents(gameMap);
-		const message = messageOrChannel instanceof Discord.Message
+		const message = messageOrChannel instanceof Message
 			? await messageOrChannel.edit({ content, files, components }).catch(errorReturnNull)
 			: await messageOrChannel.send({ content, files, components }).catch(errorReturnNull);
 		if (message) {

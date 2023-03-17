@@ -1,6 +1,6 @@
 import type { Message, User } from "discord.js";
 import utils, { Optional } from "../../../sage-utils";
-import { DChannel, DMessage, warnUnknownElseErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
+import { DChannel, DMessage, handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
 import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
 import type { TCommandAndArgs } from "../../discord";
@@ -123,7 +123,7 @@ export default class SageMessage<HasServer extends boolean = boolean>
 		const sendOptions = this.resolveToOptions(args);
 		const canSend = await this.canSend(this.message.channel as DChannel);
 		if (canSend) {
-			const message = await this.message.reply(sendOptions).catch(warnUnknownElseErrorReturnNull);
+			const message = await this.message.reply(sendOptions).catch(handleDiscordErrorReturnNull);
 			//include a button to delete the reply message!
 			await addMessageDeleteButton(message as DMessage, this.actor.did);
 		}else {

@@ -1,6 +1,6 @@
-import type { Message, MessageEmbed, Snowflake } from "discord.js";
+import { EmbedBuilder, embedLength, Message, Snowflake } from "discord.js";
 import { embedsToTexts } from "./embeds";
-import { toHumanReadable } from "./humanReadable";
+import { handleDiscordErrorReturnNull } from "./errorHandlers";
 import { canSendMessageTo } from "./permChecks";
 import { canCheckPermissionsFor } from "./typeChecks";
 import type { DChannel, DUser } from "./types";
@@ -8,7 +8,7 @@ import type { DChannel, DUser } from "./types";
 type TSendToArgs = {
 	botId: Snowflake;
 	content?: string;
-	embeds?: MessageEmbed[];
+	embeds?: EmbedBuilder[];
 	embedsAsContent: boolean;
 	errMsg?: string;
 	target: DChannel | DUser;
@@ -28,12 +28,9 @@ type TSendToArgs = {
 		content = (content ? `${content}\n------------------\n` : "") + embedsToTexts(embeds).join("\n");
 		embeds = [];
 	}
-	return target.send({ content, embeds }).catch(error => {
-		let msg = `Trying to send w/o permissions (${toHumanReadable(target)})`;
-		if (errMsg) {
-			msg += `: ${errMsg}`;
-		}
-		console.error(msg, error);
+	if (!content && (!embeds?.length || !embeds.find(embed => embedLength(embed.data)))) {
+		console.trace("Empty Contents and Embeds!");
 		return null;
-	});
+	}
+	return target.send({ content, embeds }).catch(error => handleDiscordErrorReturnNull(error, { errMsg, target }));
 }

@@ -8,7 +8,7 @@ import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 async function patreonSync(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) return;
 	const isHome = sageMessage.server?.isHome,
-		isDm = sageMessage.message.channel.type === "DM";
+		isDm = sageMessage.message.channel.isDMBased();
 	if (isHome || isDm) {
 		await syncPatreon(sageMessage.sageCache);
 	}

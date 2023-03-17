@@ -1,11 +1,15 @@
-import * as Discord from "discord.js";
+import { ColorResolvable, Embed, EmbedBuilder, Message, Snowflake, WebhookMessageCreateOptions } from "discord.js";
 import * as _XRegExp from "xregexp";
-import utils, { OrUndefined, TParsers, type Optional } from "../../../sage-utils";
+import type { Optional, OrUndefined, TParsers } from "../../../sage-utils";
+import { errorReturnEmptyArray, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { MessageType, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
 import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
 import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { embedsToTexts } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import { isNonNilSnowflake } from "../../../sage-utils/utils/DiscordUtils/snowflake";
+import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import { isBlank } from "../../../sage-utils/utils/StringUtils";
+import { tokenize } from "../../../sage-utils/utils/StringUtils/Tokenizer";
 import type { TCommand, TCommandAndArgsAndData } from "../../discord";
 import { registerMessageListener, registerReactionListener } from "../../discord/handlers";
 import { replaceWebhook, sendWebhook } from "../../discord/messages";
@@ -36,13 +40,13 @@ type TDialogPostData = {
 };
 
 //TODO: sort out why i am casting caches to <any>
-async function sendDialogRenderable(sageMessage: SageMessage, renderableContent: utils.RenderUtils.RenderableContent, authorOptions: Discord.WebhookMessageOptions): Promise<Discord.Message[]> {
+async function sendDialogRenderable(sageMessage: SageMessage, renderableContent: RenderableContent, authorOptions: WebhookMessageCreateOptions): Promise<Message[]> {
 	const targetChannel = await sageMessage.discord.fetchChannel(sageMessage.channel?.sendDialogTo);
 	if (targetChannel) {
 		// const sent = sageMessage.dialogType === "Webhook"
 		// 	? await sendWebhook(sageMessage.sageCache, targetChannel, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
 		// 	: await send(sageMessage.sageCache, targetChannel, renderableContent, sageMessage.message.author).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
-		const sent = await sendWebhook(sageMessage.sageCache, targetChannel, renderableContent, authorOptions, sageMessage.dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		const sent = await sendWebhook(sageMessage.sageCache, targetChannel, renderableContent, authorOptions, sageMessage.dialogType).catch(errorReturnEmptyArray);
 		if (sent.length) {
 			// sageMessage._.set("Dialog", sent[sent.length - 1]);
 			// if (sageMessage.message.deletable) {
@@ -54,7 +58,7 @@ async function sendDialogRenderable(sageMessage: SageMessage, renderableContent:
 		// const replaced = sageMessage.dialogType === "Webhook"
 		// 	? await replaceWebhook(sageMessage.sageCache, sageMessage.message, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
 		// 	: await replace(sageMessage.sageCache, sageMessage.message, renderableContent).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
-		const replaced = await replaceWebhook(sageMessage.sageCache, sageMessage.message, renderableContent, authorOptions, sageMessage.dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		const replaced = await replaceWebhook(sageMessage.sageCache, sageMessage.message, renderableContent, authorOptions, sageMessage.dialogType).catch(errorReturnEmptyArray);
 		if (replaced.length) {
 			// sageMessage._.set("Dialog", replaced[replaced.length - 1]);
 			// if (sageMessage._.has("Dice")) {
@@ -65,14 +69,14 @@ async function sendDialogRenderable(sageMessage: SageMessage, renderableContent:
 	}
 }
 
-async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostData): Promise<Discord.Message[]> {
+async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostData): Promise<Message[]> {
 	const character = postData?.character;
 	if (!character) {
 		return Promise.reject("Invalid TDialogPostData");
 	}
 
 	const webhook = true; //sageMessage.dialogType === "Webhook";
-	const renderableContent = new utils.RenderUtils.RenderableContent();
+	const renderableContent = new RenderableContent();
 
 	const authorName = postData.authorName || character.name;
 	const title = postData.title || authorName;
@@ -108,8 +112,8 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 	// Discord "avatarURL" is the profile pic, which I am calling the "tokenUrl"
 	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
 
-	const messages: Discord.Message[] = await sendDialogRenderable(sageMessage, renderableContent, { username: authorName, avatarURL: avatarUrl })
-		.catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+	const messages: Message[] = await sendDialogRenderable(sageMessage, renderableContent, { username: authorName, avatarURL: avatarUrl })
+		.catch(errorReturnEmptyArray);
 	if (messages.length) {
 		//#region dice
 		const diceOutputs = otherDiceMatches.map(match => match.output).flat();
@@ -150,7 +154,7 @@ function findPc(sageMessage: SageMessage, pcNameOrIndex: Optional<string>): Game
 	if (sageMessage.game) {
 		return sageMessage.playerCharacter;
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
-		if (utils.StringUtils.isBlank(pcNameOrIndex)) {
+		if (isBlank(pcNameOrIndex)) {
 			return sageMessage.actor.s.playerCharacters.first();
 		}
 		return sageMessage.actor.s.playerCharacters.findByNameOrIndex(pcNameOrIndex);
@@ -167,7 +171,7 @@ function findCompanion(sageMessage: SageMessage, companionNameOrIndex: Optional<
 		companions = sageMessage.actor.s.playerCharacters.first()?.companions;
 	}
 	if (companions) {
-		if (utils.StringUtils.isBlank(companionNameOrIndex)) {
+		if (isBlank(companionNameOrIndex)) {
 			return companions.first();
 		}
 		return companions.findByNameOrIndex(companionNameOrIndex);
@@ -326,7 +330,7 @@ export function parseDialogContent(content: string, allowDynamicDialogSeparator:
 	const typeAndSeparator = getDialogSeparator(content, allowDynamicDialogSeparator);
 	if (typeAndSeparator) {
 		const parsers = getDialogParsers(typeAndSeparator),
-			tokens = utils.StringUtils.Tokenizer.tokenize(content, parsers, "content"),
+			tokens = tokenize(content, parsers, "content"),
 			nameTokens = tokens.filter(token => token.type === "names"),
 			titleTokens = tokens.filter(token => token.type === "title"),
 			partTokens = tokens.filter(token => token.type === "part");
@@ -487,16 +491,16 @@ async function companionChat(sageMessage: SageMessage, dialogContent: TDialogCon
 
 // #region Edit Dialog
 
-function updateEmbed(originalEmbed: Discord.MessageEmbed | undefined, title: Optional<string>, imageUrl: Optional<string>, content: string): Discord.MessageEmbed {
-	const updatedEmbed = new Discord.MessageEmbed();
+function updateEmbed(originalEmbed: Embed | undefined, title: Optional<string>, imageUrl: Optional<string>, content: string): EmbedBuilder {
+	const updatedEmbed = new EmbedBuilder();
 	updatedEmbed.setTitle(title ?? originalEmbed?.title ?? "");
 	updatedEmbed.setDescription(content);
 	updatedEmbed.setThumbnail(imageUrl ?? originalEmbed?.thumbnail?.url ?? "");
-	updatedEmbed.setColor(originalEmbed?.color as Discord.ColorResolvable);
+	updatedEmbed.setColor(originalEmbed?.color as ColorResolvable);
 	return updatedEmbed;
 }
 
-async function findLastMessage(sageMessage: SageMessage, messageDid: Optional<Discord.Snowflake>): Promise<TDialogMessage | null> {
+async function findLastMessage(sageMessage: SageMessage, messageDid: Optional<Snowflake>): Promise<TDialogMessage | null> {
 	if (isNonNilSnowflake(messageDid)) {
 		const messageKey = DiscordKey.from({ server:sageMessage.server?.did, message:messageDid });
 		return DialogMessageRepository.read(messageKey);
@@ -523,7 +527,7 @@ function getDialogArgNotDid(arg: Optional<string>): string | null {
 
 async function editChat(sageMessage: SageMessage<true>, dialogContent: TDialogContent): Promise<void> {
 	const messageDid = dialogContent.name ?? sageMessage.message.reference?.messageId,
-		dialogMessage = await findLastMessage(sageMessage, messageDid).catch(utils.ConsoleUtils.Catchers.errorReturnNull),
+		dialogMessage = await findLastMessage(sageMessage, messageDid).catch(errorReturnNull),
 		discordKey = dialogMessage ? DiscordKey.from(DialogMessageRepository.ensureDiscordKey(dialogMessage).discordKey) : null,
 		message = discordKey?.hasMessage ? await sageMessage.discord.fetchMessage(discordKey.message) : null;
 	if (!message) {

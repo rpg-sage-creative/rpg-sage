@@ -1,4 +1,4 @@
-import * as Discord from "discord.js";
+import { ActivityType, Client, ClientOptions, Guild, GuildBan, GuildMember, Interaction, Message, MessageReaction, PartialGuildMember, PartialMessage, PartialMessageReaction, PartialUser, Snowflake, User } from "discord.js";
 import utils, { LogLevel, Optional } from "../../../sage-utils";
 import { DMessage, MessageType, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
@@ -9,35 +9,35 @@ import SageCache from "./SageCache";
 
 interface IClientEventHandler {
 	onClientReady(): void;
-	onClientGuildCreate(guild: Discord.Guild): void;
-	onClientGuildDelete(guild: Discord.Guild): void;
-	onClientGuildBanAdd(ban: Discord.GuildBan): void;
-	onClientGuildBanRemove(ban: Discord.GuildBan): void;
-	onClientGuildMemberUpdate(member: Discord.GuildMember | Discord.PartialGuildMember, originalMember: Discord.GuildMember): void;
-	onClientGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember): void;
-	onClientMessageCreate(message: Discord.Message): void;
-	onClientMessageUpdate(originalMessage: Discord.Message | Discord.PartialMessage, message: Discord.Message | Discord.PartialMessage): void;
-	onClientMessageReactionAdd(messageReaction: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.User | Discord.PartialUser): void;
-	onClientMessageReactionRemove(messageReaction: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.User | Discord.PartialUser): void;
+	onClientGuildCreate(guild: Guild): void;
+	onClientGuildDelete(guild: Guild): void;
+	onClientGuildBanAdd(ban: GuildBan): void;
+	onClientGuildBanRemove(ban: GuildBan): void;
+	onClientGuildMemberUpdate(member: GuildMember | PartialGuildMember, originalMember: GuildMember): void;
+	onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void;
+	onClientMessageCreate(message: Message): void;
+	onClientMessageUpdate(originalMessage: Message | PartialMessage, message: Message | PartialMessage): void;
+	onClientMessageReactionAdd(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void;
+	onClientMessageReactionRemove(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void;
 }
 
-function createDiscordClientOptions(): Discord.ClientOptions {
+function createDiscordClientOptions(): ClientOptions {
 	return { intents:registeredIntents() };
 }
 
 export default class ActiveBot extends Bot implements IClientEventHandler {
 	public static active: ActiveBot;
 	public static get isDev(): boolean { return ActiveBot.active?.codeName === "dev"; }
-	public static isActiveBot(userDid: Optional<Discord.Snowflake>): boolean {
+	public static isActiveBot(userDid: Optional<Snowflake>): boolean {
 		return ActiveBot.active?.did === userDid;
 	}
 
-	public client = new Discord.Client(createDiscordClientOptions());
+	public client = new Client(createDiscordClientOptions());
 
 	private constructor(core: IBotCore, public codeVersion: string) {
 		super(core, null!);
 
-		// To see options, look for: Discord.ClientEvents (right click nav .on below)
+		// To see options, look for: ClientEvents (right click nav .on below)
 		this.client.once("ready", this.onClientReady.bind(this));
 
 		// TODO: if created in a game category i could add or prompt to add?
@@ -92,11 +92,11 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		this.client.login(this.token);
 	}
 
-	onInteractionCreate(interaction: Discord.Interaction): void {
+	onInteractionCreate(interaction: Interaction): void {
 		handleInteraction(interaction).then(data => {
 			if (data.handled > 0 || data.tested > 0) {
 				const commandName = interaction.isCommand() ? interaction.commandName : "";
-				console.info(`Discord.Client.on("interactionCreate", "${interaction.id}", "${commandName}") => ${data.tested}.${data.handled}`);
+				console.info(`Client.on("interactionCreate", "${interaction.id}", "${commandName}") => ${data.tested}.${data.handled}`);
 			}
 		});
 	}
@@ -106,7 +106,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 			status: "online"
 		});
 		this.client.user?.setActivity("rpgsage.io; /sage help", {
-			type: "PLAYING"
+			type: ActivityType.Playing
 		});
 
 		SageCache.fromClient(this.client).then(sageCache => {
@@ -116,9 +116,9 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 			const logDir = `./data/sage/logs/${this.codeName}`;
 			utils.ConsoleUtils.setConsoleHandler(consoleHandler.bind(this), logDir, this.codeName === "dev");
 
-			console.info(`Discord.Client.on("ready") [success]`);
+			console.info(`Client.on("ready") [success]`);
 		}, err => {
-			console.error(`Discord.Client.on("ready") [error]`, err);
+			console.error(`Client.on("ready") [error]`, err);
 		});
 
 		async function consoleHandler(this: ActiveBot, level: LogLevel, ...args: any[]): Promise<void> {
@@ -137,81 +137,81 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		}
 	}
 
-	onClientGuildCreate(guild: Discord.Guild): void {
+	onClientGuildCreate(guild: Guild): void {
 		this.sageCache.servers.initializeServer(guild).then(initialized => {
-			console.info(`Discord.Client.on("guildCreate", "${guild.id}::${guild.name}") => ${initialized}`);
+			console.info(`Client.on("guildCreate", "${guild.id}::${guild.name}") => ${initialized}`);
 		});
 	}
 
-	onClientGuildDelete(guild: Discord.Guild): void {
+	onClientGuildDelete(guild: Guild): void {
 		this.sageCache.servers.retireServer(guild).then(retired => {
-			console.info(`NOT IMPLEMENTED: Discord.Client.on("guildDelete", "${guild.id}::${guild.name}") => ${retired}`);
+			console.info(`NOT IMPLEMENTED: Client.on("guildDelete", "${guild.id}::${guild.name}") => ${retired}`);
 		});
 	}
 
-	onClientGuildBanAdd(ban: Discord.GuildBan): void {
+	onClientGuildBanAdd(ban: GuildBan): void {
 		const user = ban.user;
 		if (ActiveBot.isActiveBot(user.id)) {
 			const guild = ban.guild;
 			this.sageCache.servers.retireServer(guild, false, true).then(retired => {
-				console.info(`NOT IMPLEMENTED: Discord.Client.on("guildBanAdd", "${guild.id}::${guild.name}", "${user.id}::${user.username}") => ${retired}`);
+				console.info(`NOT IMPLEMENTED: Client.on("guildBanAdd", "${guild.id}::${guild.name}", "${user.id}::${user.username}") => ${retired}`);
 			});
 		}
 	}
 
-	onClientGuildBanRemove(ban: Discord.GuildBan): void {
+	onClientGuildBanRemove(ban: GuildBan): void {
 		const user = ban.user;
 		if (ActiveBot.isActiveBot(user.id)) {
 			const guild = ban.guild;
 			//TODO: IMPLEMENT UNARCHIVE/UNRETIRE?
-			console.info(`NOT IMPLEMENTED: Discord.Client.on("guildBanRemove", "${guild.id}::${guild.name}", "${user.id}::${user.username}")`);
+			console.info(`NOT IMPLEMENTED: Client.on("guildBanRemove", "${guild.id}::${guild.name}", "${user.id}::${user.username}")`);
 		}
 	}
 
-	onClientGuildMemberUpdate(originalMember: Discord.GuildMember | Discord.PartialGuildMember, updatedMember: Discord.GuildMember): void {
+	onClientGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): void {
 		handleGuildMemberUpdate(originalMember, updatedMember).then(updated => {
 			if (updated) {
-				console.info(`Discord.Client.on("guildMemberUpdate", "${originalMember.id}::${originalMember.displayName}", "${updatedMember.id}::${updatedMember.displayName}")`);
+				console.info(`Client.on("guildMemberUpdate", "${originalMember.id}::${originalMember.displayName}", "${updatedMember.id}::${updatedMember.displayName}")`);
 			}
 		});
 	}
 
-	onClientGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember): void {
+	onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void {
 		if (ActiveBot.isActiveBot(member.id)) {
 			this.sageCache.servers.retireServer(member.guild, true).then(retired => {
-				console.info(`NOT IMPLEMENTED: Discord.Client.on("guildMemberRemove", "${member.id}::${member.displayName}") => ${retired}`);
+				console.info(`NOT IMPLEMENTED: Client.on("guildMemberRemove", "${member.id}::${member.displayName}") => ${retired}`);
 			});
 		}
 	}
 
-	onClientMessageCreate(message: Discord.Message): void {
+	onClientMessageCreate(message: Message): void {
 		handleMessage(message as DMessage, null, MessageType.Post).then(data => {
 			if (data.handled > 0) {
-				console.info(`Discord.Client.on("message", "${message.id}") => ${data.tested}.${data.handled}`);
+				console.info(`Client.on("message", "${message.id}") => ${data.tested}.${data.handled}`);
 			}
 		});
 	}
 
-	onClientMessageUpdate(originalMessage: Discord.Message | Discord.PartialMessage, updatedMessage: Discord.Message | Discord.PartialMessage): void {
+	onClientMessageUpdate(originalMessage: Message | PartialMessage, updatedMessage: Message | PartialMessage): void {
 		handleMessage(updatedMessage as DMessage, originalMessage as DMessage, MessageType.Edit).then(data => {
 			if (data.handled > 0) {
-				console.info(`Discord.Client.on("messageUpdate", "${originalMessage.id}", "${updatedMessage.id}") => ${data.tested}.${data.handled}`);
+				console.info(`Client.on("messageUpdate", "${originalMessage.id}", "${updatedMessage.id}") => ${data.tested}.${data.handled}`);
 			}
 		});
 	}
 
-	onClientMessageReactionAdd(messageReaction: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.User | Discord.PartialUser): void {
+	onClientMessageReactionAdd(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void {
 		handleReaction(messageReaction, user, ReactionType.Add).then(data => {
 			if (data.handled > 0) {
-				console.info(`Discord.Client.on("messageReactionAdd", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
+				console.info(`Client.on("messageReactionAdd", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
 			}
 		});
 	}
 
-	onClientMessageReactionRemove(messageReaction: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.User | Discord.PartialUser): void {
+	onClientMessageReactionRemove(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void {
 		handleReaction(messageReaction, user, ReactionType.Remove).then(data => {
 			if (data.handled > 0) {
-				console.info(`Discord.Client.on("messageReactionRemove", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
+				console.info(`Client.on("messageReactionRemove", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
 			}
 		});
 	}
@@ -231,7 +231,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 
 }
 
-async function handleGuildMemberUpdate(originalMember: Discord.GuildMember | Discord.PartialGuildMember, updatedMember: Discord.GuildMember): Promise<boolean>;
-async function handleGuildMemberUpdate(_: Discord.GuildMember | Discord.PartialGuildMember, __: Discord.GuildMember): Promise<boolean> {
+async function handleGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): Promise<boolean>;
+async function handleGuildMemberUpdate(_: GuildMember | PartialGuildMember, __: GuildMember): Promise<boolean> {
 	return true;
 }

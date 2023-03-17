@@ -1,4 +1,4 @@
-import { Intents, IntentsString, Interaction, PermissionString, Snowflake } from "discord.js";
+import { GatewayIntentBits, IntentsBitField, Interaction, PermissionsString, Snowflake } from "discord.js";
 import { isDefined, isNullOrUndefined, Optional } from "../../sage-utils";
 import { DMessage, DReaction, DUser, MessageType, ReactionType, toHumanReadable } from "../../sage-utils/utils/DiscordUtils";
 import DiscordFetches from "../../sage-utils/utils/DiscordUtils/DiscordFetches";
@@ -42,8 +42,8 @@ export function addAcceptableBot(...bots: TAcceptableBot[]): void {
 
 type TListener = {
 	command?: string;
-	intents: IntentsString[];
-	permissions: PermissionString[];
+	intents: GatewayIntentBits[];
+	permissions: PermissionsString[];
 	priorityIndex?: number;
 };
 
@@ -97,37 +97,39 @@ function registerListener<T extends TListenerType>(which: TListenerTypeName, lis
 	}
 }
 
-export function registerInteractionListener(tester: TInteractionTester, handler: TInteractionHandler, type?: TInteractionType, intents: IntentsString[] = [], permissions: PermissionString[] = [], priorityIndex?: number): void {
+export function registerInteractionListener(tester: TInteractionTester, handler: TInteractionHandler, type?: TInteractionType, intents: GatewayIntentBits[] = [], permissions: PermissionsString[] = [], priorityIndex?: number): void {
 	registerListener("InteractionListener", { tester, handler, type, intents, permissions, priorityIndex });
 }
 
-export function registerMessageListener(tester: TMessageTester, handler: TMessageHandler, type = MessageType.Post, intents: IntentsString[] = [], permissions: PermissionString[] = [], priorityIndex?: number): void {
+export function registerMessageListener(tester: TMessageTester, handler: TMessageHandler, type = MessageType.Post, intents: GatewayIntentBits[] = [], permissions: PermissionsString[] = [], priorityIndex?: number): void {
 	registerListener("MessageListener", { tester, handler, type, intents, permissions, priorityIndex });
 }
 
-export function registerReactionListener<T>(tester: TReactionTester<T>, handler: TReactionHandler<T>, type = ReactionType.Both, intents: IntentsString[] = [], permissions: PermissionString[] = [], priorityIndex?: number): void {
+export function registerReactionListener<T>(tester: TReactionTester<T>, handler: TReactionHandler<T>, type = ReactionType.Both, intents: GatewayIntentBits[] = [], permissions: PermissionsString[] = [], priorityIndex?: number): void {
 	registerListener("ReactionListener", { tester, handler, type, intents, permissions, priorityIndex });
 }
 
-export function registeredIntents(): Intents {
-	const registered: IntentsString[] = [];
+export function registeredIntents(): IntentsBitField {
+	const registered: GatewayIntentBits[] = [];
 	messageListeners.forEach(listener => registered.push(...listener.intents));
 	reactionListeners.forEach(listener => registered.push(...listener.intents));
 
-	const intents = new Intents();
+	const intents = new IntentsBitField();
 	intents.add(
 		// registered.filter(utils.ArrayUtils.Filters.unique)
 		[
-		"DIRECT_MESSAGES",
-		"DIRECT_MESSAGE_REACTIONS",
-		"GUILDS",
-		"GUILD_BANS",
-		"GUILD_EMOJIS_AND_STICKERS",
-		"GUILD_MEMBERS",
-		"GUILD_MESSAGES",
-		"GUILD_MESSAGE_REACTIONS",
-		"GUILD_PRESENCES",
-		"GUILD_WEBHOOKS"
+		IntentsBitField.Flags.DirectMessages,
+		IntentsBitField.Flags.DirectMessageReactions,
+		IntentsBitField.Flags.Guilds,
+		IntentsBitField.Flags.GuildEmojisAndStickers,
+		IntentsBitField.Flags.GuildInvites,
+		IntentsBitField.Flags.GuildMembers,
+		IntentsBitField.Flags.GuildMessages,
+		IntentsBitField.Flags.GuildMessageReactions,
+		IntentsBitField.Flags.GuildModeration,
+		IntentsBitField.Flags.GuildPresences,
+		IntentsBitField.Flags.GuildWebhooks,
+		IntentsBitField.Flags.MessageContent
 	]);
 	return intents;
 }
@@ -139,9 +141,9 @@ export function registeredIntents(): Intents {
 export async function handleInteraction(interaction: Interaction): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
-		const isCommand = interaction.isCommand();
+		const isCommand = interaction.isChatInputCommand();
 		const isButton = interaction.isButton();
-		const isSelectMenu = interaction.isSelectMenu();
+		const isSelectMenu = interaction.isStringSelectMenu();
 		if (isCommand || isButton || isSelectMenu) {
 			const sageInteraction = await SageInteraction.fromInteraction(interaction);
 			await handleInteractions(sageInteraction, output);
@@ -213,12 +215,12 @@ export async function handleMessage(message: DMessage, originalMessage: Optional
 async function handleMessages(sageMessage: SageMessage, messageType: MessageType, output: THandlerOutput): Promise<void> {
 	for (const listener of messageListeners) {
 		if (isActionableType(listener, messageType)) {
-			const clonedMessage = sageMessage.clone();
-			const commandAndArgsAndData = <TCommandAndArgsAndData<any>>await listener.tester(clonedMessage);
+			// const clonedMessage = sageMessage.clone();
+			const commandAndArgsAndData = <TCommandAndArgsAndData<any>>await listener.tester(sageMessage);
 			output.tested++;
 			if (isActionableObject(commandAndArgsAndData)) {
-				clonedMessage.setCommandAndArgs(commandAndArgsAndData);
-				await listener.handler(clonedMessage, commandAndArgsAndData.data);
+				sageMessage.setCommandAndArgs(commandAndArgsAndData);
+				await listener.handler(sageMessage, commandAndArgsAndData.data);
 				output.handled++;
 				break;
 			}

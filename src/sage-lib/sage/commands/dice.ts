@@ -1,4 +1,4 @@
-import type * as Discord from "discord.js";
+import type { ButtonInteraction, EmbedBuilder } from "discord.js";
 import type { GameType } from "../../../sage-common";
 import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "../../../sage-dice";
 import { NEWLINE } from "../../../sage-pf2e";
@@ -361,7 +361,7 @@ function formatDiceOutput(sageMessage: TInteraction, diceRoll: TDiceOutput, noGm
 	};
 }
 
-function createEmbedOrNull(sageMessage: TInteraction, embedContent?: string): Discord.MessageEmbed | null {
+function createEmbedOrNull(sageMessage: TInteraction, embedContent?: string): EmbedBuilder | null {
 	return embedContent ? createMessageEmbed("", embedContent, sageMessage.toDiscordColor(ColorType.Dice)) : null;
 }
 
@@ -426,7 +426,7 @@ async function ensureTargetChannel(sageMessage: TInteraction): Promise<DChannel>
 		return channel;
 	}
 	if (sageMessage instanceof SageInteraction) {
-		return (sageMessage.interaction as Discord.ButtonInteraction).channel as DChannel;
+		return (sageMessage.interaction as ButtonInteraction).channel as DChannel;
 	}
 	return sageMessage.message.channel as DChannel;
 }

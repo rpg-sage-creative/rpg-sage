@@ -1,4 +1,4 @@
-import * as Discord from "discord.js";
+import { ColorResolvable, EmbedBuilder, embedLength as getEmbedLength } from "discord.js";
 import { Optional, TDisplayType, TRenderableContentSection } from "../..";
 import { RenderableContent } from "../RenderUtils";
 import type { TRenderableContentResolvable } from "../RenderUtils/RenderableContent";
@@ -6,24 +6,24 @@ import { chunk } from "../StringUtils";
 import { DiscordMaxValues } from "./consts";
 
 /** Ensures we have a string, prepending a NewLine if needed. */
-function getValueToAppend(value: string | null, newLine: boolean): string {
+function getValueToAppend(value: Optional<string>, newLine: boolean): string {
 	return `${newLine ? "\n" : ""}${value ?? ""}`;
 }
 
 type ContentFormatter = (content: string) => string;
 
 /** Resolves a simple text section. */
-function resolveSection(renderableContent: RenderableContent, formatter: ContentFormatter, embeds: Discord.MessageEmbed[], section: TRenderableContentSection): void {
+function resolveSection(renderableContent: RenderableContent, formatter: ContentFormatter, embeds: EmbedBuilder[], section: TRenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
 	const joinedContent = section.content.join(renderableContent.paragraphDelimiter),
 		formattedContent = formatter(joinedContent),
 		// We want the first chunk to be short enough to fit in the previous embed
-		maxChunkLengthCallback = (chunkIndex: number) => chunkIndex === 0 ? DiscordMaxValues.embed.descriptionLength - renderableContent.paragraphDelimiter.length - embed.length : DiscordMaxValues.embed.descriptionLength,
+		maxChunkLengthCallback = (chunkIndex: number) => chunkIndex === 0 ? DiscordMaxValues.embed.descriptionLength - renderableContent.paragraphDelimiter.length - getEmbedLength(embed.data) : DiscordMaxValues.embed.descriptionLength,
 		chunkedContent = chunk(formattedContent, maxChunkLengthCallback);
 
 	chunkedContent.forEach((chunk, index) => {
 		if (index === 0) {
-			embed.description = (embed.description ?? "") + renderableContent.paragraphDelimiter + chunk;
+			embed.setDescription((embed.data.description ?? "") + renderableContent.paragraphDelimiter + chunk);
 		}else {
 			embed = createMessageEmbed(undefined, chunk, renderableContent.color);
 			embeds.push(embed);
@@ -31,14 +31,21 @@ function resolveSection(renderableContent: RenderableContent, formatter: Content
 	});
 }
 
+function reachedMaxFieldCount(embed: EmbedBuilder): boolean {
+	return embed.data.fields?.length === DiscordMaxValues.embed.field.count;
+}
+function reachedMaxEmbedLength(embed: EmbedBuilder, additionalLength: number): boolean {
+	const embedLength = getEmbedLength(embed.data);
+	return embedLength + additionalLength > DiscordMaxValues.embed.totalLength;
+}
+
 /** Resolves a section that has columns. */
-function resolveColumnedSection(renderableContent: RenderableContent, formatter: ContentFormatter, embeds: Discord.MessageEmbed[], columnedSection: TRenderableContentSection): void {
+function resolveColumnedSection(renderableContent: RenderableContent, formatter: ContentFormatter, embeds: EmbedBuilder[], columnedSection: TRenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
 	columnedSection.columns.forEach(column => {
 		const formattedTitle = formatter(column.title),
 			formattedContent = formatter(column.content);
-		if (embed.fields.length === DiscordMaxValues.embed.field.count
-				|| embed.length + formattedTitle.length + formattedContent.length > DiscordMaxValues.embed.totalLength) {
+		if (reachedMaxFieldCount(embed) || reachedMaxEmbedLength(embed, formattedTitle.length + formattedContent.length)) {
 			embed = createMessageEmbed(undefined, undefined, renderableContent.color);
 			embeds.push(embed);
 		}
@@ -47,7 +54,7 @@ function resolveColumnedSection(renderableContent: RenderableContent, formatter:
 }
 
 /** Resolves a section that has a title. */
-function resolveTitledSection(renderableContent: RenderableContent, formatter: ContentFormatter, embeds: Discord.MessageEmbed[], titledSection: TRenderableContentSection): void {
+function resolveTitledSection(renderableContent: RenderableContent, formatter: ContentFormatter, embeds: EmbedBuilder[], titledSection: TRenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
 	const formattedTitle = formatter(titledSection.title ?? ""),
 		joinedContent = titledSection.content.join(renderableContent.paragraphDelimiter),
@@ -59,8 +66,7 @@ function resolveTitledSection(renderableContent: RenderableContent, formatter: C
 	chunkedContent.forEach((chunk, index) => {
 		if (index === 0) {
 			// We need to add a field for the first chunk so that we can add a title
-			if (embed.fields.length === DiscordMaxValues.embed.field.count
-					|| embed.length + formattedTitle.length + chunk.length > DiscordMaxValues.embed.totalLength) {
+			if (reachedMaxFieldCount(embed) || reachedMaxEmbedLength(embed, formattedTitle.length + chunk.length)) {
 				embed = createMessageEmbed(undefined, undefined, renderableContent.color);
 				embeds.push(embed);
 			}
@@ -73,7 +79,7 @@ function resolveTitledSection(renderableContent: RenderableContent, formatter: C
 	});
 }
 
-function resolveSections(renderableContent: RenderableContent, formatter: ContentFormatter, embeds: Discord.MessageEmbed[]): void {
+function resolveSections(renderableContent: RenderableContent, formatter: ContentFormatter, embeds: EmbedBuilder[]): void {
 	for (const section of renderableContent.sections) {
 		if (section.title) {
 			resolveTitledSection(renderableContent, formatter, embeds, section);
@@ -86,17 +92,17 @@ function resolveSections(renderableContent: RenderableContent, formatter: Conten
 }
 
 /** Converts the given renderableContent to MessageEmbed objects, using the given caches. */
-export function resolveToEmbeds(renderableContentResolvable: TRenderableContentResolvable, formatter: ContentFormatter): Discord.MessageEmbed[] {
+export function resolveToEmbeds(renderableContentResolvable: TRenderableContentResolvable, formatter: ContentFormatter): EmbedBuilder[] {
 	const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 	if (!renderableContent) {
 		return [];
 	}
 
-	const embed: Discord.MessageEmbed = createMessageEmbed(undefined, undefined, <Discord.HexColorString>renderableContent.color);
+	const embed = createMessageEmbed(undefined, undefined, renderableContent.color);
 
 	const title = formatter(renderableContent.title ?? "");
 	if (renderableContent.display === TDisplayType.Compact && title && renderableContent.thumbnailUrl) {
-		embed.setAuthor(title, renderableContent.thumbnailUrl);
+		embed.setAuthor({ name:title, url:renderableContent.thumbnailUrl });
 	}else {
 		if (title) {
 			embed.setTitle(title);
@@ -111,13 +117,13 @@ export function resolveToEmbeds(renderableContentResolvable: TRenderableContentR
 	return embeds;
 }
 
-export function embedsToTexts(embeds: Discord.MessageEmbed[]): string[] {
+export function embedsToTexts(embeds: EmbedBuilder[]): string[] {
 	return embeds.map(embed => {
 		let text = "";
-		text += getValueToAppend(embed.title, !!text);
-		text += getValueToAppend(embed.description, !!text);
-		if (embed.fields.length) {
-			embed.fields.forEach(field => {
+		text += getValueToAppend(embed.data.title, !!text);
+		text += getValueToAppend(embed.data.description, !!text);
+		if (embed.data.fields?.length) {
+			embed.data.fields.forEach(field => {
 				text += getValueToAppend(field.name, !!text);
 				text += getValueToAppend(field.value, !!text);
 			});
@@ -133,8 +139,8 @@ export function resolveToTexts(renderableContent: TRenderableContentResolvable, 
 }
 
 /** Creates a new MessageEmbed, setting the title, description, and color if given. */
-export function createMessageEmbed(title?: Optional<string>, description?: Optional<string>, color?: Optional<string>): Discord.MessageEmbed {
-	const embed = new Discord.MessageEmbed();
+export function createMessageEmbed(title?: Optional<string>, description?: Optional<string>, color?: Optional<string>): EmbedBuilder {
+	const embed = new EmbedBuilder();
 
 	if (title) {
 		if (title.length > DiscordMaxValues.embed.titleLength) {
@@ -153,7 +159,12 @@ export function createMessageEmbed(title?: Optional<string>, description?: Optio
 	}
 
 	if (color) {
-		embed.setColor(<Discord.ColorResolvable>color);
+		try {
+			const colorResolvable = color.startsWith("0x") ? Number(color) : color as ColorResolvable;
+			embed.setColor(colorResolvable);
+		}catch(ex) {
+			console.warn(`Invalid DiscordColor: ${JSON.stringify({color})}`);
+		}
 	}
 
 	return embed;

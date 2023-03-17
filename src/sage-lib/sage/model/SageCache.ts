@@ -1,6 +1,6 @@
-import type { Client, Guild, GuildMember, Role, Snowflake } from "discord.js";
+import { Client, Guild, GuildMember, PermissionFlagsBits, Role, Snowflake } from "discord.js";
 import utils, { Optional, UUID } from "../../../sage-utils";
-import { warnUnknownElseErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
+import { handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
 import DiscordFetches from "../../../sage-utils/utils/DiscordUtils/DiscordFetches";
 import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import type { DChannel, DInteraction, DMessage, DReaction, DUser } from "../../../sage-utils/utils/DiscordUtils/types";
@@ -17,13 +17,8 @@ import type Server from "./Server";
 import { AdminRoleType } from "./Server";
 import type User from "./User";
 
-type SageCacheCore<
-		HasGuild extends boolean = boolean,
-		HasGuildChannel extends boolean = boolean,
-		HasUser extends boolean = boolean,
-		Fetches = DiscordFetches<HasGuild, HasGuildChannel, HasUser>
-		> = {
-	discord: Fetches;
+type SageCacheCore = {
+	discord: DiscordFetches;
 	discordKey: DiscordKey;
 
 	bots: BotRepo;
@@ -99,7 +94,7 @@ export type TServerPair = TSageDiscordPair<Guild, Server> & {
 
 async function getServerRoles(paired: TSageDiscordPair<Guild, Server>): Promise<TServerRoles> {
 	const gameAdminRoleDid = paired.s.getRole(AdminRoleType.GameAdmin)?.did;
-	const gameAdminRole = gameAdminRoleDid ? await paired.d.roles.fetch(gameAdminRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+	const gameAdminRole = gameAdminRoleDid ? await paired.d.roles.fetch(gameAdminRoleDid).catch(handleDiscordErrorReturnNull) : null;
 
 	return {
 		gameAdmin: gameAdminRole ?? undefined
@@ -108,19 +103,19 @@ async function getServerRoles(paired: TSageDiscordPair<Guild, Server>): Promise<
 
 async function getGameRoles(game: Game, guild: Guild): Promise<TGameRoles> {
 	const spectatorRoleDid = game.getRole(GameRoleType.Spectator)?.did;
-	const spectatorRole = spectatorRoleDid ? await guild.roles.fetch(spectatorRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+	const spectatorRole = spectatorRoleDid ? await guild.roles.fetch(spectatorRoleDid).catch(handleDiscordErrorReturnNull) : null;
 
 	const playerRoleDid = game.getRole(GameRoleType.Player)?.did;
-	const playerRole = playerRoleDid ? await guild.roles.fetch(playerRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+	const playerRole = playerRoleDid ? await guild.roles.fetch(playerRoleDid).catch(handleDiscordErrorReturnNull) : null;
 
 	const gameMasterRoleDid = game.getRole(GameRoleType.GameMaster)?.did;
-	const gameMasterRole = gameMasterRoleDid ? await guild.roles.fetch(gameMasterRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+	const gameMasterRole = gameMasterRoleDid ? await guild.roles.fetch(gameMasterRoleDid).catch(handleDiscordErrorReturnNull) : null;
 
 	const tableRoleDid = game.getRole(GameRoleType.Table)?.did;
-	const tableRole = tableRoleDid ? await guild.roles.fetch(tableRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+	const tableRole = tableRoleDid ? await guild.roles.fetch(tableRoleDid).catch(handleDiscordErrorReturnNull) : null;
 
 	const roomRoleDid = game.getRole(GameRoleType.Room)?.did;
-	const roomRole = roomRoleDid ? await guild.roles.fetch(roomRoleDid).catch(warnUnknownElseErrorReturnNull) : null;
+	const roomRole = roomRoleDid ? await guild.roles.fetch(roomRoleDid).catch(handleDiscordErrorReturnNull) : null;
 
 	return {
 		spectator: spectatorRole ?? undefined,
@@ -269,8 +264,8 @@ async function getIsServerAdmin(core: SageCacheCore, did: Snowflake, guildMember
 
 	const asOwner = did === guild?.ownerId;
 	if (!asOwner) {
-		asAdministrator = guildMember?.permissions?.has("ADMINISTRATOR") === true;
-		asManager = guildMember?.permissions?.has("MANAGE_GUILD") === true;
+		asAdministrator = guildMember?.permissions?.has(PermissionFlagsBits.Administrator) === true;
+		asManager = guildMember?.permissions?.has(PermissionFlagsBits.ManageGuild) === true;
 	}
 
 	const isServerAdmin = asAdministrator || asManager || asOwner;
@@ -298,7 +293,7 @@ async function pairUser(core: SageCacheCore, user: Optional<DUser | GuildMember>
 	const sUser = await core.users.getOrCreateByDid(dUser.id);
 	const paired = pair(dUser, sUser);
 
-	const guildMember = isGuildMember ? user : await core.server?.d.members.fetch(dUser.id).catch(warnUnknownElseErrorReturnNull);
+	const guildMember = isGuildMember ? user : await core.server?.d.members.fetch(dUser.id).catch(handleDiscordErrorReturnNull);
 
 	const isGameAdmin = await getIsGameAdmin(core, dUser.id);
 	const isServerAdmin = await getIsServerAdmin(core, dUser.id, guildMember);
@@ -330,16 +325,12 @@ function createCoreAndCache(): { core:SageCacheCore, sageCache:SageCache } {
 	return { core, sageCache };
 }
 
-export default class SageCache<
-		HasGuild extends boolean = boolean,
-		HasGuildChannel extends boolean = boolean,
-		HasUser extends boolean = boolean
-		> {
+export default class SageCache {
 	constructor(protected core: SageCacheCore) { }
 
 	public get sendEmbedsAsContent(): boolean { return this.actor.s.defaultSagePostType === DialogType.Post; }
 
-	public get discord(): DiscordFetches<HasGuild, HasGuildChannel, HasUser> { return this.core.discord; }
+	public get discord(): DiscordFetches { return this.core.discord; }
 	public get discordKey(): DiscordKey { return this.core.discordKey; }
 
 	public get bots(): BotRepo { return this.core.bots; }
@@ -394,7 +385,7 @@ export default class SageCache<
 		return this.guild?.s.getPrefixOrDefault() ?? "";
 	}
 
-	public static async fromClient(client: Client): Promise<SageCache<false, false, false>> {
+	public static async fromClient(client: Client): Promise<SageCache> {
 		const { core, sageCache } = createCoreAndCache();
 		core.discord = DiscordFetches.from({ client });
 		core.bot = ActiveBot.active;
@@ -402,9 +393,6 @@ export default class SageCache<
 		return sageCache;
 	}
 
-	public static async fromMessage(message: DMessage<true>, discordActor?: Optional<DUser>): Promise<SageCache<true, true, false>>;
-	public static async fromMessage(message: DMessage<false>, discordActor?: Optional<DUser>): Promise<SageCache<false, false, true>>;
-	public static async fromMessage(message: DMessage, discordActor?: Optional<DUser>): Promise<SageCache>;
 	public static async fromMessage(message: DMessage, discordActor?: Optional<DUser>): Promise<SageCache> {
 		const { core, sageCache } = createCoreAndCache();
 		core.discord = DiscordFetches.fromMessage(message);
@@ -423,7 +411,7 @@ export default class SageCache<
 		return SageCache.fromMessage(messageReaction.message as DMessage<true>, discordActor);
 	}
 
-	public static async fromInteraction(interaction: DInteraction): Promise<SageCache<false, false, true>> {
+	public static async fromInteraction(interaction: DInteraction): Promise<SageCache> {
 		const { core, sageCache } = createCoreAndCache();
 		core.discord = DiscordFetches.fromInteraction(interaction);
 		core.discordKey = DiscordKey.fromInteraction(interaction);

@@ -1,4 +1,4 @@
-import { ButtonInteraction, CommandInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
+import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/essence20";
 import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf";
 import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20";
@@ -23,17 +23,17 @@ import { parseDiceMatches, sendDice } from "./dice";
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
 type TPlayerCharacterCore = PlayerCharacterCoreJoe | PlayerCharacterCorePR | PlayerCharacterCoreTransformer;
 
-function createSelectMenuRow(selectMenu: MessageSelectMenu): MessageActionRow {
+function createSelectMenuRow(selectMenu: StringSelectMenuBuilder): ActionRowBuilder<StringSelectMenuBuilder> {
 	if (selectMenu.options.length > 25) {
 		selectMenu.options.length = 25;
 	}
-	return new MessageActionRow().addComponents(selectMenu);
+	return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu);
 }
 
 async function attachCharacter(sageCache: SageCache, channel: DChannel | DUser, attachmentName: string, character: TPlayerCharacter, pin: boolean): Promise<void> {
-	const raw = resolveToEmbeds(character.toHtml(), sageCache.getFormatter()).map(e => e.description).join("");
+	const raw = resolveToEmbeds(character.toHtml(), sageCache.getFormatter()).map(e => e.data.description).join("");
 	const buffer = Buffer.from(raw, "utf-8");
-	const attachment = new MessageAttachment(buffer, `${attachmentName}.txt`);
+	const attachment = new AttachmentBuilder(buffer, { name:`${attachmentName}.txt` });
 	const message = await channel.send({
 		content: `Attaching Character: ${character.name}`,
 		files:[attachment]
@@ -113,8 +113,8 @@ function getActiveSections(character: TPlayerCharacter): TCharacterSectionType[]
 	return getCharacterSections(activeView) ?? activeSections ?? getCharacterSections("Combat") ?? [];
 }
 
-function createViewSelectRow(character: TPlayerCharacter): MessageActionRow {
-	const selectMenu = new MessageSelectMenu();
+function createViewSelectRow(character: TPlayerCharacter): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`E20|${character.id}|View`);
 	selectMenu.setPlaceholder("Character Sheet Sections");
 	selectMenu.setMinValues(1);
@@ -146,8 +146,8 @@ function createViewSelectRow(character: TPlayerCharacter): MessageActionRow {
 	return createSelectMenuRow(selectMenu);
 }
 
-function createEdgeSnagShiftRow(character: TPlayerCharacter): MessageActionRow {
-	const selectMenu = new MessageSelectMenu();
+function createEdgeSnagShiftRow(character: TPlayerCharacter): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`E20|${character.id}|EdgeSnagShift`);
 	selectMenu.setPlaceholder("Edge, Snag, Upshift, Downshift");
 	selectMenu.setMinValues(1);
@@ -190,8 +190,8 @@ function countTrainedAndSpecs(character: TPlayerCharacter): number {
 	}
 	return count;
 }
-function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean): MessageActionRow {
-	const selectMenu = new MessageSelectMenu();
+function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`E20|${character.id}|Skill`);
 	selectMenu.setPlaceholder("Select a Skill to Roll");
 
@@ -247,8 +247,8 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 		return name === activeSkill || (!activeSkill && name === "Initiative");
 	}
 }
-function createSkillSpecializationSelectRow(character: TPlayerCharacter): MessageActionRow {
-	const selectMenu = new MessageSelectMenu();
+function createSkillSpecializationSelectRow(character: TPlayerCharacter): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`E20|${character.id}|Spec`);
 	selectMenu.setPlaceholder("Select a Specialization to Roll");
 
@@ -276,8 +276,8 @@ function createSkillSpecializationSelectRow(character: TPlayerCharacter): Messag
 	return createSelectMenuRow(selectMenu);
 }
 
-function createButton(customId: string, label: string, style: MessageButtonStyleResolvable): MessageButton {
-	const button = new MessageButton();
+function createButton(customId: string, label: string, style: ButtonStyle): ButtonBuilder {
+	const button = new ButtonBuilder();
 	button.setCustomId(customId);
 	button.setLabel(label);
 	button.setStyle(style);
@@ -294,18 +294,18 @@ function getActiveEdgeSnagShiftValues<T extends TEdgeSnag | TShift | TEdgeSnagSh
 	return activeValue.split(",").filter(s => s) as T[];
 }
 
-function createRollButtonRow(character: TPlayerCharacter): MessageActionRow {
+function createRollButtonRow(character: TPlayerCharacter): ActionRowBuilder<ButtonBuilder> {
 	const activeEdgeSnagShift = getActiveEdgeSnagShiftValues(character);
-	const testColor = testEdgeSnag(activeEdgeSnagShift, { edge:"SUCCESS", snag:"DANGER", none:"PRIMARY" }) as MessageButtonStyleResolvable;
-	const untrainedColor = testEdgeSnag(activeEdgeSnagShift, { edge:"PRIMARY", snag:"DANGER", none:"DANGER" }) as MessageButtonStyleResolvable;
+	const testColor = testEdgeSnag(activeEdgeSnagShift, { edge:ButtonStyle.Success, snag:ButtonStyle.Danger, none:ButtonStyle.Primary });
+	const untrainedColor = testEdgeSnag(activeEdgeSnagShift, { edge:ButtonStyle.Primary, snag:ButtonStyle.Danger, none:ButtonStyle.Danger });
 	const rollButton = createButton(`E20|${character.id}|Roll`, `Roll Test`, testColor);
 	const rollSecretButton = createButton(`E20|${character.id}|Secret`, `Roll Secret Test`, testColor);
 	const rollInitButton = createButton(`E20|${character.id}|Init`, `Roll Initiative`, testColor);
 	const rollUntrainedButton = createButton(`E20|${character.id}|Untrained`, `Roll Untrained`, untrainedColor);
-	return new MessageActionRow().addComponents(rollButton, rollSecretButton, rollInitButton, rollUntrainedButton);
+	return new ActionRowBuilder<ButtonBuilder>().addComponents(rollButton, rollSecretButton, rollInitButton, rollUntrainedButton);
 }
 
-function createComponents(character: TPlayerCharacter): MessageActionRow[] {
+function createComponents(character: TPlayerCharacter): ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[] {
 	const countSkillOptions = countTrainedAndSpecs(character);
 	const includeSpecs = countSkillOptions < 25;
 	return [
@@ -317,7 +317,7 @@ function createComponents(character: TPlayerCharacter): MessageActionRow[] {
 	].filter(row => row);
 }
 
-type TOutput = { embeds:MessageEmbed[], components:MessageActionRow[] };
+type TOutput = { embeds:EmbedBuilder[], components:ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[] };
 function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): TOutput {
 	const embeds = resolveToEmbeds(character.toHtml(getActiveSections(character) as any), sageCache.getFormatter());
 	const components = createComponents(character);
@@ -335,7 +335,7 @@ function sheetTester(sageInteraction: SageInteraction): boolean {
 	return _e20 === "E20" && charFileExists(characterId);
 }
 
-async function viewHandler(sageInteraction: SageInteraction<SelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
+async function viewHandler(sageInteraction: SageInteraction<StringSelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
 	const values = sageInteraction.interaction.values;
 	const activeSections: string[] = [];
 	if (values.includes("All")) {
@@ -354,7 +354,7 @@ async function viewHandler(sageInteraction: SageInteraction<SelectMenuInteractio
 	return updateSheet(sageInteraction, character);
 }
 
-async function skillHandler(sageInteraction: SageInteraction<SelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
+async function skillHandler(sageInteraction: SageInteraction<StringSelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
 	const activeSkill = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeSkill", activeSkill);
 	await saveCharacter(character);
@@ -455,7 +455,7 @@ export function registerCommandHandlers(): void {
 
 export const e20Pdf = "e20-pdf";
 
-export async function slashHandlerEssence20(sageInteraction: SageInteraction<CommandInteraction>): Promise<void> {
+export async function slashHandlerEssence20(sageInteraction: SageInteraction<ChatInputCommandInteraction>): Promise<void> {
 	await sageInteraction.reply(`Attempting to import character ...`, false);
 
 	const value = sageInteraction.args.getString(e20Pdf, true);

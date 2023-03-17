@@ -100,7 +100,7 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 		auras: [],
 		clip: clip as [number, number, number, number],
 		grid: grid as [number, number],
-		id: Discord.SnowflakeUtil.generate(),
+		id: Discord.SnowflakeUtil.generate().toString(),
 		name: name,
 		spawn: spawn as [number, number],
 		terrain: [],

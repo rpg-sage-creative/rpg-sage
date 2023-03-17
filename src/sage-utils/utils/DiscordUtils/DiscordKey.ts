@@ -1,7 +1,8 @@
-import type { AnyChannel, ButtonInteraction, CommandInteraction, Guild, Message, MessageComponentInteraction, PartialMessage, SelectMenuInteraction, Snowflake } from "discord.js";
+import type { ButtonInteraction, Channel, CommandInteraction, Guild, Message, MessageComponentInteraction, PartialMessage, SelectMenuInteraction, Snowflake } from "discord.js";
 import type { Optional } from "../..";
 import { cleanJson } from "../JsonUtils";
 import { NilSnowflake } from "./consts";
+import type { DChannel } from "./types";
 
 interface IHasSnowflakeId { id:Snowflake; }
 type TSnowflakeResolvable = string | IHasSnowflakeId;
@@ -33,7 +34,7 @@ function argsToCore(args: DiscordKeyArgs): DiscordKeyCore {
 }
 
 type TCanHaveGuild = { guild:Guild | null; };
-type TMightHaveGuild = TCanHaveGuild | AnyChannel;
+type TMightHaveGuild = TCanHaveGuild | Channel;
 function guild(mightHaveGuild?: TMightHaveGuild): Guild | undefined | null {
 	return (mightHaveGuild as TCanHaveGuild)?.guild;
 }
@@ -133,7 +134,7 @@ export default class DiscordKey implements DiscordKeyCore {
 		return discordKey instanceof DiscordKey ? discordKey : new DiscordKey(discordKey);
 	}
 
-	public static fromChannel(channel: AnyChannel): DiscordKey {
+	public static fromChannel(channel: DChannel): DiscordKey {
 		const server = guild(channel);
 		return new DiscordKey({ server, channel });
 	}
@@ -146,14 +147,14 @@ export default class DiscordKey implements DiscordKeyCore {
 
 	public static fromInteraction(interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction | MessageComponentInteraction): DiscordKey {
 		if (interaction.channel) {
-			return DiscordKey.fromChannel(interaction.channel);
+			return DiscordKey.fromChannel(interaction.channel as DChannel);
 		}
 		const server = interaction.guild;
 		return new DiscordKey({ server });
 	}
 
 	public static fromMessage(message: Message | PartialMessage): DiscordKey {
-		return DiscordKey.fromChannel(message.channel).cloneForMessage(message);
+		return DiscordKey.fromChannel(message.channel as DChannel).cloneForMessage(message);
 	}
 
 	// public static fromMessageReaction(messageReaction: MessageReaction): DiscordKey {

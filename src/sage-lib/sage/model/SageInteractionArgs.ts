@@ -1,4 +1,4 @@
-import type { CommandInteraction, GuildBasedChannel, Role, Snowflake } from "discord.js";
+import type { ChatInputCommandInteraction, GuildBasedChannel, Role, Snowflake } from "discord.js";
 import type { Optional, VALID_UUID } from "../../../sage-utils";
 import { EnumUtils } from "../../../sage-utils/utils";
 import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
@@ -9,11 +9,11 @@ import type { ISageCommandArgs } from "./SageCommandArgs";
 export default class SageInteractionArgs implements ISageCommandArgs {
 	public constructor(private _interaction: DInteraction) { }
 
-	private get interaction(): CommandInteraction { return this._interaction as CommandInteraction; }
+	private get interaction(): ChatInputCommandInteraction { return this._interaction as ChatInputCommandInteraction; }
 
 	/** Returns true if an argument matches the given key, regardless of value. */
 	public hasKey(name: string): boolean {
-		if (!this.interaction.isCommand()) return false;
+		if (!this.interaction.isChatInputCommand()) return false;
 		return this.interaction.options.get(name) !== null;
 	}
 

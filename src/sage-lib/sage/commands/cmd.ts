@@ -1,4 +1,3 @@
-import * as Discord from "discord.js";
 import utils, { OrNull, type Awaitable } from "../../../sage-utils";
 import { registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs, TMessageHandler } from "../../discord/types";
@@ -8,6 +7,7 @@ import { ColorType } from "../model/HasColorsCore";
 import type SageMessage from "../model/SageMessage";
 import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
 import { MessageType } from "../../../sage-utils/utils/DiscordUtils";
+import { EmbedBuilder } from "@discordjs/builders";
 
 export enum BotServerGameType { Bot, Server, Game }
 
@@ -23,8 +23,8 @@ export function renderCount(sageMessage: SageMessage, label: string, count: numb
 	return <any>sageMessage.send(renderableContent);
 }
 
-export function embedColor(color: utils.ColorUtils.Color, ...labels: string[]): Discord.MessageEmbed {
-	const embed = new Discord.MessageEmbed();
+export function embedColor(color: utils.ColorUtils.Color, ...labels: string[]): EmbedBuilder {
+	const embed = new EmbedBuilder();
 	embed.setColor(<any>color.toDiscordColor());
 	let desc = color.hex;
 	if (color.name) {

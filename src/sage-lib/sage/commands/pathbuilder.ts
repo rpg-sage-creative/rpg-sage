@@ -1,4 +1,4 @@
-import * as Discord from "discord.js";
+import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, EmbedBuilder, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
 import { PathbuilderCharacter, toModifier } from "../../../sage-pf2e";
 import { getCharacterSections, TCharacterSectionType, TCharacterViewType, TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import { isDefined, Optional, UUID } from "../../../sage-utils";
@@ -15,11 +15,11 @@ import type User from "../model/User";
 import type { TMacro } from "../model/User";
 import { parseDiceMatches, sendDice } from "./dice";
 
-function createSelectMenuRow(selectMenu: Discord.MessageSelectMenu): Discord.MessageActionRow {
+function createSelectMenuRow(selectMenu: StringSelectMenuBuilder): ActionRowBuilder<StringSelectMenuBuilder> {
 	if (selectMenu.options.length > 25) {
 		selectMenu.options.length = 25;
 	}
-	return new Discord.MessageActionRow().addComponents(selectMenu);
+	return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu);
 }
 
 type TLabeledMacro = TMacro & { id:string; prefix:string; };
@@ -69,9 +69,9 @@ function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
 }
 
 async function attachCharacter(sageCache: SageCache, channel: DChannel | DUser, pathbuilderId: number, character: PathbuilderCharacter, pin: boolean): Promise<void> {
-	const raw = resolveToEmbeds(character.toHtml(), sageCache.getFormatter()).map(e => e.description).join("");
+	const raw = resolveToEmbeds(character.toHtml(), sageCache.getFormatter()).map(e => e.data.description).join("");
 	const buffer = Buffer.from(raw, "utf-8");
-	const attachment = new Discord.MessageAttachment(buffer, `pathbuilder2e-${pathbuilderId}.txt`);
+	const attachment = new AttachmentBuilder(buffer, { name:`pathbuilder2e-${pathbuilderId}.txt` });
 	const message = await channel.send({
 		content: `Attaching Pathbuilder2e Character: ${character.name} (${pathbuilderId})`,
 		files:[attachment]
@@ -128,7 +128,7 @@ async function postCharacter(sageCache: SageCache, channel: DChannel, character:
 async function updateSheet(sageInteraction: SageInteraction, character: PathbuilderCharacter) {
 	const macroUser = await sageInteraction.sageCache.users.getById(character.getSheetValue("macroUserId"));
 	const output = prepareOutput(sageInteraction.sageCache, character, macroUser);
-	const message = sageInteraction.interaction.message as Discord.Message;
+	const message = sageInteraction.interaction.message as Message;
 	await message.edit(output);
 	await notifyOfSlicedMacros(sageInteraction.sageCache, character);
 }
@@ -138,8 +138,8 @@ function getActiveSections(character: PathbuilderCharacter): TCharacterSectionTy
 	const activeSections = character.getSheetValue<TCharacterSectionType[]>("activeSections");
 	return getCharacterSections(activeView) ?? activeSections ?? getCharacterSections("Combat") ?? [];
 }
-function createViewSelectRow(character: PathbuilderCharacter): Discord.MessageActionRow {
-	const selectMenu = new Discord.MessageSelectMenu();
+function createViewSelectRow(character: PathbuilderCharacter): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`PB2E|${character.id}|View`);
 	selectMenu.setPlaceholder("Character Sheet Sections");
 	selectMenu.setMinValues(1);
@@ -174,8 +174,8 @@ function createViewSelectRow(character: PathbuilderCharacter): Discord.MessageAc
 const skills = "Perception,Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery".split(",");
 const saves = ["Fortitude", "Reflex", "Will"];
 
-function createExplorationSelectRow(character: PathbuilderCharacter): Discord.MessageActionRow {
-	const selectMenu = new Discord.MessageSelectMenu();
+function createExplorationSelectRow(character: PathbuilderCharacter): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`PB2E|${character.id}|Exploration`);
 	selectMenu.setPlaceholder("Select Exploration Mode");
 
@@ -192,8 +192,8 @@ function createExplorationSelectRow(character: PathbuilderCharacter): Discord.Me
 	return createSelectMenuRow(selectMenu);
 }
 
-function createSkillSelectRow(character: PathbuilderCharacter): Discord.MessageActionRow {
-	const selectMenu = new Discord.MessageSelectMenu();
+function createSkillSelectRow(character: PathbuilderCharacter): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`PB2E|${character.id}|Skill`);
 	selectMenu.setPlaceholder("Select a Skill to Roll");
 
@@ -213,8 +213,8 @@ function createSkillSelectRow(character: PathbuilderCharacter): Discord.MessageA
 	return createSelectMenuRow(selectMenu);
 }
 
-function createMacroSelectRow(character: PathbuilderCharacter, macros: TLabeledMacro[]): Discord.MessageActionRow {
-	const selectMenu = new Discord.MessageSelectMenu();
+function createMacroSelectRow(character: PathbuilderCharacter, macros: TLabeledMacro[]): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`PB2E|${character.id}|Macro`);
 	selectMenu.setPlaceholder("Select a Macro to Roll");
 
@@ -235,23 +235,23 @@ function createMacroSelectRow(character: PathbuilderCharacter, macros: TLabeledM
 	return createSelectMenuRow(selectMenu);
 }
 
-function createButton(customId: string, label: string, style: Discord.MessageButtonStyleResolvable): Discord.MessageButton {
-	const button = new Discord.MessageButton();
+function createButton(customId: string, label: string, style: ButtonStyle): ButtonBuilder {
+	const button = new ButtonBuilder();
 	button.setCustomId(customId);
 	button.setLabel(label);
 	button.setStyle(style);
 	return button;
 }
 
-function createRollButtonRow(character: PathbuilderCharacter, macros: TMacro[]): Discord.MessageActionRow {
-	const rollButton = createButton(`PB2E|${character.id}|Roll`, `Roll Check`, "PRIMARY");
-	const rollSecretButton = createButton(`PB2E|${character.id}|Secret`, `Roll Secret Check`, "PRIMARY");
-	const rollInitButton = createButton(`PB2E|${character.id}|Init`, `Roll Initiative`, "PRIMARY");
-	const macroButton = createButton(`PB2E|${character.id}|MacroRoll`, macros.length > 0 ? `Roll Macro` : `Load Macros`, "PRIMARY");
-	return new Discord.MessageActionRow().addComponents(rollButton, rollSecretButton, rollInitButton, macroButton);
+function createRollButtonRow(character: PathbuilderCharacter, macros: TMacro[]): ActionRowBuilder<ButtonBuilder> {
+	const rollButton = createButton(`PB2E|${character.id}|Roll`, `Roll Check`, ButtonStyle.Primary);
+	const rollSecretButton = createButton(`PB2E|${character.id}|Secret`, `Roll Secret Check`, ButtonStyle.Primary);
+	const rollInitButton = createButton(`PB2E|${character.id}|Init`, `Roll Initiative`, ButtonStyle.Primary);
+	const macroButton = createButton(`PB2E|${character.id}|MacroRoll`, macros.length > 0 ? `Roll Macro` : `Load Macros`, ButtonStyle.Primary);
+	return new ActionRowBuilder<ButtonBuilder>().addComponents(rollButton, rollSecretButton, rollInitButton, macroButton);
 }
 
-function createComponents(character: PathbuilderCharacter, macroUser: Optional<User>): Discord.MessageActionRow[] {
+function createComponents(character: PathbuilderCharacter, macroUser: Optional<User>): ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[] {
 	const macros = getMacros(character, macroUser);
 	return [
 		createViewSelectRow(character),
@@ -262,7 +262,7 @@ function createComponents(character: PathbuilderCharacter, macroUser: Optional<U
 	].filter(isDefined);
 }
 
-type TOutput = { embeds:Discord.MessageEmbed[], components:Discord.MessageActionRow[] };
+type TOutput = { embeds:EmbedBuilder[], components:ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[] };
 function prepareOutput(sageCache: SageCache, character: PathbuilderCharacter, macroUser: Optional<User>): TOutput {
 	const embeds = resolveToEmbeds(character.toHtml(getActiveSections(character)), sageCache.getFormatter());
 	const components = createComponents(character, macroUser);
@@ -310,7 +310,7 @@ function sheetTester(sageInteraction: SageInteraction): boolean {
 	return false;
 }
 
-async function viewHandler(sageInteraction: SageInteraction<Discord.SelectMenuInteraction>, character: PathbuilderCharacter): Promise<void> {
+async function viewHandler(sageInteraction: SageInteraction<StringSelectMenuInteraction>, character: PathbuilderCharacter): Promise<void> {
 	const values = sageInteraction.interaction.values;
 	const activeSections: string[] = [];
 	if (values.includes("All")) {
@@ -329,14 +329,14 @@ async function viewHandler(sageInteraction: SageInteraction<Discord.SelectMenuIn
 	return updateSheet(sageInteraction, character);
 }
 
-async function explorationHandler(sageInteraction: SageInteraction, character: PathbuilderCharacter): Promise<void> {
-	const activeExploration = (sageInteraction.interaction as Discord.SelectMenuInteraction).values[0];
+async function explorationHandler(sageInteraction: SageInteraction<StringSelectMenuInteraction>, character: PathbuilderCharacter): Promise<void> {
+	const activeExploration = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeExploration", activeExploration);
 	await saveCharacter(character);
 	return updateSheet(sageInteraction, character);
 }
 
-async function skillHandler(sageInteraction: SageInteraction<Discord.SelectMenuInteraction>, character: PathbuilderCharacter): Promise<void> {
+async function skillHandler(sageInteraction: SageInteraction<StringSelectMenuInteraction>, character: PathbuilderCharacter): Promise<void> {
 	const activeSkill = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeSkill", activeSkill);
 	await saveCharacter(character);
@@ -362,7 +362,7 @@ function getInitSkill(character: PathbuilderCharacter): string {
 		default: return "Perception";
 	}
 }
-async function rollHandler(sageInteraction: SageInteraction<Discord.ButtonInteraction>, character: PathbuilderCharacter, secret = false, init = false): Promise<void> {
+async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, character: PathbuilderCharacter, secret = false, init = false): Promise<void> {
 	const skill = init ? getInitSkill(character) : character.getSheetValue<string>("activeSkill") ?? "Perception";
 	const skillMod = character.getProficiencyAndMod(skill)[1];
 	const incredibleMod = character.hasFeat("Incredible Initiative") ? 2 : 0;

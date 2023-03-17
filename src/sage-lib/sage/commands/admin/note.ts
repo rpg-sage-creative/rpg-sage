@@ -1,3 +1,4 @@
+import { errorReturnEmptyArray } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
 import type GameCharacter from "../../model/GameCharacter";
 import type SageMessage from "../../model/SageMessage";
 import { registerAdminCommand } from "../cmd";
@@ -64,7 +65,7 @@ async function statsSet(sageMessage: SageMessage): Promise<void> {
 	}
 	const updated = await character.notes.setStats(sageMessage.args.keyed());
 	if (updated) {
-		await sendGameCharacter(sageMessage, character);
+		await sendGameCharacter(sageMessage, character).catch(errorReturnEmptyArray);
 	}else {
 		await sageMessage.reactFailure("Unknown Error; Character Stats NOT Set!")
 	}

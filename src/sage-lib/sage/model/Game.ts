@@ -1,8 +1,9 @@
-import type { GuildChannel, GuildMember, Message, Snowflake } from "discord.js";
+import type { GuildMember, Message, Snowflake } from "discord.js";
 import type { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Args, IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
 import { unique } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import type { DGuildChannel } from "../../../sage-utils/utils/DiscordUtils";
 import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
 import { DicePostType } from "../commands/dice";
@@ -78,7 +79,7 @@ export interface IGameCore extends IdCore, IHasColors, IHasEmoji, Partial<TGameO
 export type TMappedGameChannel = {
 	did: Snowflake;
 	sChannel: IChannel;
-	gChannel: GuildChannel | undefined;
+	gChannel: DGuildChannel | undefined;
 	gameChannelType: GameChannelType | undefined;
 };
 
@@ -104,7 +105,7 @@ async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<
 			gameChannelType: sChannel.gameChannelType
 		});
 
-		const gChannel = await sageCache.discord.fetchChannel(sChannel.did) as GuildChannel;
+		const gChannel = await sageCache.discord.fetchChannel(sChannel.did);
 		if (gChannel) {
 			gChannels.push({
 				did: sChannel.did,
@@ -205,12 +206,12 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		return out;
 	}
 
-	public async gmGuildChannel(): Promise<OrNull<GuildChannel>> {
+	public async gmGuildChannel(): Promise<OrNull<DGuildChannel>> {
 		for (const sChannel of this.channels) {
 			if (sChannel.gameChannelType === GameChannelType.GameMaster) {
 				const gChannel = await this.discord.fetchChannel(sChannel.did);
 				if (gChannel) {
-					return gChannel as GuildChannel;
+					return gChannel;
 				}
 			}
 		}

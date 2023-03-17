@@ -1,10 +1,10 @@
-import { ButtonInteraction, Guild, MessageActionRow, MessageButton, MessageEmbed, Snowflake } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, EmbedBuilder, Guild, Snowflake, StringSelectMenuBuilder } from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import type { If, Optional } from "../../../sage-utils";
 import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
 import { SuperClass } from "../../../sage-utils/utils/ClassUtils";
-import { DChannel, DMessage, warnUnknownElseErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
+import { DChannel, DMessage, handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
 import type DiscordFetches from "../../../sage-utils/utils/DiscordUtils/DiscordFetches";
 import type DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { resolveToEmbeds, resolveToTexts } from "../../../sage-utils/utils/DiscordUtils/embeds";
@@ -25,8 +25,8 @@ import type SageMessage from "./SageMessage";
 import type SageReaction from "./SageReaction";
 import type Server from "./Server";
 
-export interface SageCommandCore<HasGuild extends boolean = boolean, HasGuildChannel extends boolean = boolean, HasUser extends boolean = boolean> {
-	sageCache: SageCache<HasGuild, HasGuildChannel, HasUser>;
+export interface SageCommandCore {
+	sageCache: SageCache;
 }
 
 export interface IHaveServer {
@@ -42,15 +42,15 @@ export interface IHaveGame {
 
 export type TSendArgs<HasEphemeral extends boolean = boolean> = {
 	content?: TRenderableContentResolvable;
-	embeds?: TRenderableContentResolvable | MessageEmbed[];
-	components?: MessageActionRow[];
+	embeds?: TRenderableContentResolvable | EmbedBuilder[];
+	components?: ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[];
 	ephemeral?: If<HasEphemeral, boolean | null, never>;
 };
 
 export type TSendOptions<HasEphemeral extends boolean = boolean> = {
-	content?: string | null;
-	embeds?: MessageEmbed[];
-	components?: MessageActionRow[];
+	content?: string;
+	embeds?: EmbedBuilder[];
+	components?: ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[];
 	ephemeral?: If<HasEphemeral, boolean | null, never>;
 };
 
@@ -64,13 +64,12 @@ export type SageCommand = SageCommandBase<SageCommandCore, ISageCommandArgs, any
 
 export async function addMessageDeleteButton(message: Optional<DMessage>, userDid: Snowflake): Promise<boolean> {
 	if (message?.editable) {
-		const buttonRow = new MessageActionRow().addComponents(new MessageButton({ customId:`message-delete-button-${message.id}-${userDid}`, style:"SECONDARY", emoji:"❌" }));
-		const embed = new MessageEmbed({ description:`*(To delete this message, click the :x: button below.)*` });
+		const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(new ButtonBuilder({ customId:`message-delete-button-${message.id}-${userDid}`, style:ButtonStyle.Secondary, emoji:"❌", label:"Delete this alert." }));
 		const edited = await message.edit({
-			components: (message.components ?? []).concat([buttonRow]),
+			components: (message.components ?? []) .concat([buttonRow as any]), /** @todo figure out this cast */
 			content: message.content,
-			embeds: (message.embeds ?? []).concat([embed])
-		}).catch(warnUnknownElseErrorReturnNull);
+			embeds: message.embeds
+		}).catch(handleDiscordErrorReturnNull);
 		return edited !== null;
 	}
 	return false;
@@ -101,10 +100,7 @@ export abstract class SageCommandBase<
 		T extends SageCommandCore,
 		U extends ISageCommandArgs,
 		_V extends SageCommandBase<T, U, any>,
-		HasServer extends boolean = boolean,
-		HasGuild extends boolean = boolean,
-		HasGuildChannel extends boolean = boolean,
-		HasUser extends boolean = boolean
+		HasServer extends boolean = boolean
 		>
 	extends SuperClass {
 
@@ -138,10 +134,10 @@ export abstract class SageCommandBase<
 
 	/** The User objects for the actor doing the thing. */
 	public get actor() { return this.sageCache.actor; }
-	public get sageCache(): SageCache<HasGuild, HasGuildChannel, HasUser> { return this.core.sageCache as SageCache; }
+	public get sageCache(): SageCache { return this.core.sageCache as SageCache; }
 	public get bot(): Bot { return this.sageCache.bot; }
 	/** @deprecated Use .sageCache.discord */
-	public get discord(): DiscordFetches<HasGuild, HasGuildChannel, HasUser> { return this.sageCache.discord; }
+	public get discord(): DiscordFetches { return this.sageCache.discord; }
 	public get discordKey(): DiscordKey { return this.sageCache.discordKey; }
 	public get game(): Game | undefined { return this.sageCache.game; }
 	public get guild(): If<HasServer, TSageDiscordPair<Guild, Server>> { return this.sageCache.guild as any; }
