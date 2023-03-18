@@ -1,6 +1,7 @@
 import { ActivityType, Client, ClientOptions, Guild, GuildBan, GuildMember, Interaction, Message, MessageReaction, PartialGuildMember, PartialMessage, PartialMessageReaction, PartialUser, Snowflake, User } from "discord.js";
-import utils, { LogLevel, Optional } from "../../../sage-utils";
-import { DMessage, MessageType, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
+import { LogLevel, Optional } from "../../../sage-utils";
+import { formatArg, setConsoleHandler } from "../../../sage-utils/utils/ConsoleUtils";
+import { DiscordMaxValues, DMessage, MessageType, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
 import BotRepo from "../repo/BotRepo";
 import type { IBotCore } from "./Bot";
@@ -114,7 +115,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 			ActiveBot.active = this;
 
 			const logDir = `./data/sage/logs/${this.codeName}`;
-			utils.ConsoleUtils.setConsoleHandler(consoleHandler.bind(this), logDir, this.codeName === "dev");
+			setConsoleHandler(consoleHandler.bind(this), logDir, this.codeName === "dev");
 
 			console.info(`Client.on("ready") [success]`);
 		}, err => {
@@ -127,12 +128,15 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 				return devLogLevel && level <= devLogLevel;
 			});
 			if (devs.length) {
-				devs.forEach(dev => {
-					const contents = `**${LogLevel[level]}**\n${args.map(utils.ConsoleUtils.formatArg).join("\n")}`;
-					const chunks = utils.StringUtils.chunk(contents, 2000);
-					this.sageCache.discord.fetchUser(dev.did)
-						.then(user => user ? chunks.forEach(chunk => user.send(chunk)) : void 0);
-				});
+				const logLevel = LogLevel[level];
+				const formattedArgs = args.map(formatArg).join("\n");
+				const contents = `**${logLevel}**\n${formattedArgs}`;
+				const maxLength = DiscordMaxValues.message.contentLength;
+				const truncated = contents.length < maxLength ? contents : `${contents.slice(0, maxLength - 5)} ...`;
+				for (const dev of devs) {
+					const user = await this.sageCache.discord.fetchUser(dev.did);
+					user?.send(truncated);
+				}
 			}
 		}
 	}
