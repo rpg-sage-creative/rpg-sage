@@ -1,3 +1,5 @@
+import { listFiles, readJsonFile } from "./sage-utils/utils/FsUtils";
+
 async function processUpdates(): Promise<void> {
 	console.log(`Checking for data file updates ...`);
 	let total = 0;
@@ -11,22 +13,72 @@ async function processUpdates(): Promise<void> {
 	console.log(`Total data file updates: ${total}`);
 }
 
+const sagePath = `./data/sage`;
+type TPair<T> = { id:string; path:string; json:T; };
+async function readFiles<T>(what: string): Promise<TPair<T>[]> {
+	const out: TPair<T>[] = [];
+	const ids = await listFiles(`${sagePath}/${what}`, "json");
+	for (const id of ids) {
+		const path = `${sagePath}/${what}/${id}.json`;
+		const json = await readJsonFile<T>(path);
+		if (json) {
+			out.push({ id, path, json });
+		}else {
+			console.warn(`\t\tInvalid JSON file: ${sagePath}/${what}/${id}.json`);
+		}
+	}
+	return out;
+}
+
 //#region bots
 
 async function updateBots(): Promise<number> {
 	let total = 0;
 	console.log(`\tChecking for bot file updates ...`);
 	total += await updateBots_v1();
-	total += await updateBots_v1_1();
+	total += await updateBots_v2();
 	console.log(`\tTotal bot file updates: ${total}`);
 	return total;
 }
 
-async function updateBots_v1(): Promise<number> {
-	return 0;
+type BotCore_v1 = {
+	devs: {
+		did: string;
+		logLevel: string;
+		/** @deprecated */
+		channelDids?:[];
+	}[];
 }
 
-async function updateBots_v1_1(): Promise<number> {
+async function updateBots_v1(): Promise<number> {
+	let changes = 0;
+	const bots = await readFiles<BotCore_v1>("bot");
+	for (const bot of bots) {
+		let changed = false;
+		const json = bot.json;
+
+		// remove channels from devs
+		if (!json.devs) {
+			json.devs = [{ did:"253330271678627841", logLevel:"Error" }];
+			console.log(`\t\t${bot.id}: devs added.`);
+			changed = true;
+		}
+		for (const dev of json.devs) {
+			if (dev.channelDids) {
+				delete dev["channelDids"];
+			console.log(`\t\t${bot.id}: channelDids removed.`);
+			changed = true;
+			}
+		};
+
+		if (changed) {
+			changes++;
+		}
+	}
+	return changes;
+}
+
+async function updateBots_v2(): Promise<number> {
 	return 0;
 }
 
