@@ -42,7 +42,7 @@ export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	commandPrefix?: string;
 
 	/** list of devs and their log levels */
-	devs?: TDev[];
+	devs: TDev[];
 
 	/** defaults to "SageDialogWebhookName" */
 	dialogWebhookName?: string;

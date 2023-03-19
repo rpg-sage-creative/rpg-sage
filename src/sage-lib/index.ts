@@ -16,6 +16,11 @@ export function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: st
 	utils.ConsoleUtils.startHandling(logLevel);
 
 	BotRepo.getByCodeName(botCodeName).then(bot => {
+		if (!bot) {
+			console.error(`BotRepo.getByCodeName("${botCodeName}") failed!`);
+			return;
+		}
+
 		DiscordFetches.botId = bot.did;
 		DiscordFetches.webhookName = bot.dialogWebhookName;
 		addAcceptableBot(...bot.acceptableBots);
@@ -26,7 +31,7 @@ export function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: st
 
 		registerCommandHandlers();
 
-		registerAndLoad(pf2DataPath, includePf2ToolsData).then(() => ActiveBot.activate(botCodeName, ver));
+		registerAndLoad(pf2DataPath, includePf2ToolsData).then(() => new ActiveBot(bot.toJSON(), ver));
 	}, err => {
 		console.error(`BotRepo.getByCodeName("${botCodeName}") failed!`, err);
 	});

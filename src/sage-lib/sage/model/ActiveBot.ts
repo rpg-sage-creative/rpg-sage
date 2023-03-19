@@ -3,9 +3,8 @@ import { LogLevel, Optional } from "../../../sage-utils";
 import { formatArg, setConsoleHandler } from "../../../sage-utils/utils/ConsoleUtils";
 import { DiscordMaxValues, DMessage, MessageType, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
-import BotRepo from "../repo/BotRepo";
 import type { IBotCore } from "./Bot";
-import Bot, { TBotCodeName } from "./Bot";
+import Bot from "./Bot";
 import SageCache from "./SageCache";
 
 interface IClientEventHandler {
@@ -35,7 +34,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 
 	public client = new Client(createDiscordClientOptions());
 
-	private constructor(core: IBotCore, public codeVersion: string) {
+	public constructor(core: IBotCore, public codeVersion: string) {
 		super(core, null!);
 
 		// To see options, look for: ClientEvents (right click nav .on below)
@@ -218,19 +217,6 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 				console.info(`Client.on("messageReactionRemove", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
 			}
 		});
-	}
-
-	public static async activate(codeName: TBotCodeName, codeVersion: string): Promise<void> {
-		const bot = await BotRepo.getByCodeName(codeName);
-		if (bot) {
-			ActiveBot.from(bot, codeVersion);
-		}else {
-			console.error(`Failure to load: ${codeName}`);
-		}
-	}
-
-	public static from(bot: Bot, codeVersion: string): ActiveBot {
-		return new ActiveBot(bot.toJSON(), codeVersion);
 	}
 
 }
