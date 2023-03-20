@@ -4,7 +4,6 @@ const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 import { default as createEmojiRegex } from "emoji-regex";
 
-export * as Comparison from "./Comparison";
 export * as Markdown from "./Markdown";
 export { default as StringMatcher } from "./StringMatcher";
 export * as Tokenizer from "./Tokenizer";

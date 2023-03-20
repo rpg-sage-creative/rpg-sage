@@ -1,7 +1,5 @@
 import type { Optional } from "../..";
 
-export * from "./Comparison/types";
-
 //#region generic xMatcher
 
 /** An umbrella for various Matching classes */
