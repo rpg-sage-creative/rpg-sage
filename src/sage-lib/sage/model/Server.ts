@@ -6,14 +6,13 @@ import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
 import { DicePostType } from "../commands/dice";
 import ActiveBot from "../model/ActiveBot";
-import { cleanChannelCore, DialogType, IChannel, IChannelOptions, updateChannel } from "../repo/base/channel";
+import { DialogType, IChannel, IChannelOptions, updateChannel } from "../repo/base/channel";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
 import Colors from "./Colors";
 import Emoji from "./Emoji";
 import Game, { getDefaultGameOptions, TDefaultGameOptions } from "./Game";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
-import type SageCache from "./SageCache";
 import { applyValues, hasValues, ISageCommandArgs } from "./SageCommandArgs";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
@@ -48,11 +47,6 @@ export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, Pa
 }
 
 export default class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IHasEmojiCore {
-
-	public constructor(core: ServerCore, sageCache: SageCache) {
-		super(core, sageCache);
-		this.channels.forEach(cleanChannelCore);
-	}
 
 	// #region Private Properties
 

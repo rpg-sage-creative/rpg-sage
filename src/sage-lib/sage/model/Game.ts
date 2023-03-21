@@ -7,7 +7,7 @@ import type { DGuildChannel } from "../../../sage-utils/utils/DiscordUtils";
 import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
 import { DicePostType } from "../commands/dice";
-import { cleanChannelCore, DialogType, GameChannelType, IChannel, IChannelOptions, parseGameChannelType, updateChannel } from "../repo/base/channel";
+import { DialogType, GameChannelType, IChannel, IChannelOptions, parseGameChannelType, updateChannel } from "../repo/base/channel";
 import { HasIdCoreAndSageCache } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";
 import Colors from "./Colors";
@@ -122,10 +122,8 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	public constructor(core: IGameCore, public server: Server, sageCache: SageCache) {
 		super(core, sageCache);
 
-		this.channels.forEach(cleanChannelCore);
-
-		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
-		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
+		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as [] ?? [], this, "npc");
+		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as [] ?? [], this, "pc");
 	}
 
 	public get createdDate(): Date { return new Date(this.core.createdTs ?? 283305600000); }

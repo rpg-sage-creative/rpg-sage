@@ -1,6 +1,5 @@
 import type { GuildChannel, Snowflake } from "discord.js";
 import type { Args, Optional } from "../../../../sage-utils";
-import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
 import { cleanJson } from "../../../../sage-utils/utils/JsonUtils";
 import type SageCache from "../../model/SageCache";
 import { applyValues } from "../../model/SageCommandArgs";
@@ -97,90 +96,3 @@ export async function mapChannels(sageCache: SageCache, channels: IChannel[]): P
 	}
 	return mappedChannels;
 }
-
-/** @deprecated */
-type THasAdminSearch = {
-	/** @deprecated */
-	admin: boolean;
-	/** @deprecated */
-	search: boolean;
-}
-function removeAdminSearch(channel: IChannel & Partial<THasAdminSearch>): IChannel {
-	if (channel.admin || channel.search) {
-		channel.commands = true;
-	}
-
-	delete channel.admin;
-	delete channel.search;
-
-	return channel;
-}
-
-/** @deprecated */
-type THasGameMasterPlayerNonPlayer = {
-	/** @deprecated */
-	gameMaster: PermissionType;
-	/** @deprecated */
-	player: PermissionType;
-	/** @deprecated */
-	nonPlayer: PermissionType;
-}
-
-function removeGameMasterPlayerNonPlayer(channel: IChannel & Partial<THasGameMasterPlayerNonPlayer>): IChannel {
-	if (!exists(channel.gameChannelType)) {
-		const gameMaster = channel.gameMaster;
-		const player = channel.player;
-		const nonPlayer = channel.nonPlayer;
-
-		if (exists(gameMaster) || exists(player) || exists(nonPlayer)) {
-			const gmWrite = channel.gameMaster === PermissionType.Write;
-			const pcWrite = channel.player === PermissionType.Write;
-			const bothWrite = gmWrite && pcWrite;
-
-			const dialog = channel.dialog === true;
-			const commands = channel.commands === true;
-
-			const gm = gmWrite && !pcWrite;
-			const ooc = bothWrite && (!dialog || commands);
-			const ic = bothWrite && !ooc && dialog;
-			const misc = !ic && !ooc && !gm;
-
-			let type: GameChannelType | undefined;
-			if (ic) type = GameChannelType.InCharacter;
-			if (gm) type = GameChannelType.GameMaster;
-			if (ooc) type = GameChannelType.OutOfCharacter;
-			if (misc) type = GameChannelType.Miscellaneous;
-			channel.gameChannelType = type;
-		}
-	}
-
-	delete channel.gameMaster;
-	delete channel.player;
-	delete channel.nonPlayer;
-
-	return channel;
-}
-
-/** @deprecated */
-type THasSendCommandToSendSearchTo = {
-	/** @deprecated */
-	sendCommandTo: string;
-	/** @deprecated */
-	sendSearchTo: string;
-}
-
-function removeSendCommandToSendSearchTo(channel: IChannel & Partial<THasSendCommandToSendSearchTo>): IChannel {
-	delete channel.sendCommandTo;
-	delete channel.sendSearchTo;
-
-	return channel;
-}
-
-export function cleanChannelCore(channel: IChannel): IChannel {
-	removeAdminSearch(channel);
-	removeGameMasterPlayerNonPlayer(channel);
-	removeSendCommandToSendSearchTo(channel);
-	cleanJson(channel);
-	return channel;
-}
-

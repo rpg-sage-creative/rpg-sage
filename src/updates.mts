@@ -2,6 +2,23 @@ import { existsSync, readdir, readFile, rmSync, writeFile } from "fs";
 
 //#region helpers
 
+function cleanJson(object: any): boolean {
+	let changed = false;
+	Object.keys(object as any).forEach(key => {
+		if (!exists(object[key])) {
+			delete object[key];
+			changed = true;
+		}else if (typeof(object[key]) === "object") {
+			changed ||= cleanJson(object[key]);
+		}
+	});
+	return changed;
+}
+
+function exists<T>(value?: T | null | undefined): value is T {
+	return value !== null && value !== undefined;
+}
+
 function isNonNilSnowflake(value: string): boolean {
 	return !!value.match(/^\d{16,}$/) && !value.match(/^0{16,}$/);
 }
@@ -53,7 +70,7 @@ function readJsonFile<T>(path: string): Promise<T | null> {
 	});
 }
 
-function save<T extends TCore>(core: TPair<T>): Promise<true> {
+function save<T extends IdCore>(core: TPair<T>): Promise<true> {
 	return new Promise((resolve, reject) => {
 		if (live) {
 			writeFile(core.path, JSON.stringify(core.json), error => {
@@ -70,7 +87,7 @@ function save<T extends TCore>(core: TPair<T>): Promise<true> {
 	});
 }
 
-function rename<T extends TCore>(core: TPair<T>): Promise<true> {
+function rename<T extends IdCore>(core: TPair<T>): Promise<true> {
 	return new Promise((resolve, reject) => {
 		const oldPath = core.path;
 		if (core.parentPath) {
@@ -92,6 +109,122 @@ function rename<T extends TCore>(core: TPair<T>): Promise<true> {
 
 //#endregion
 
+//#region channels
+
+type IChannel = {
+	did: string;
+	commands?: boolean;
+	dialog?: boolean;
+	dice?: boolean;
+	gameChannelType?: GameChannelType;
+}
+
+// type TGameChannelType = keyof typeof GameChannelType;
+enum GameChannelType { None = 0, InCharacter = 1, OutOfCharacter = 2, GameMaster = 3, Miscellaneous = 4, Dice = 5 }
+
+/** @deprecated */
+type THasAdminSearch = {
+	/** @deprecated */
+	admin: boolean;
+	/** @deprecated */
+	search: boolean;
+}
+function removeAdminSearch(channel: IChannel & Partial<THasAdminSearch>): boolean {
+	let changed = "admin" in channel || "search" in channel;
+
+	if (channel.admin || channel.search) {
+		channel.commands = true;
+	}
+
+	delete channel.admin;
+	delete channel.search;
+
+	return changed;
+}
+
+/** @deprecated */
+type THasGameMasterPlayerNonPlayer = {
+	/** @deprecated */
+	gameMaster: number;
+	/** @deprecated */
+	player: number;
+	/** @deprecated */
+	nonPlayer: number;
+}
+
+function removeGameMasterPlayerNonPlayer(channel: IChannel & Partial<THasGameMasterPlayerNonPlayer>): boolean {
+	let changed = "gameMaster" in channel || "player" in channel || "nonPlayer" in channel;
+
+	if (!exists(channel.gameChannelType)) {
+		const gameMaster = channel.gameMaster;
+		const player = channel.player;
+		const nonPlayer = channel.nonPlayer;
+
+		if (exists(gameMaster) || exists(player) || exists(nonPlayer)) {
+			const gmWrite = channel.gameMaster === 3;
+			const pcWrite = channel.player === 3;
+			const bothWrite = gmWrite && pcWrite;
+
+			const dialog = channel.dialog === true;
+			const commands = channel.commands === true;
+
+			const gm = gmWrite && !pcWrite;
+			const ooc = bothWrite && (!dialog || commands);
+			const ic = bothWrite && !ooc && dialog;
+			const misc = !ic && !ooc && !gm;
+
+			let type: GameChannelType | undefined;
+			if (ic) type = GameChannelType.InCharacter;
+			if (gm) type = GameChannelType.GameMaster;
+			if (ooc) type = GameChannelType.OutOfCharacter;
+			if (misc) type = GameChannelType.Miscellaneous;
+			channel.gameChannelType = type;
+		}
+	}
+
+	delete channel.gameMaster;
+	delete channel.player;
+	delete channel.nonPlayer;
+
+	return changed;
+}
+
+/** @deprecated */
+type THasSendCommandToSendSearchTo = {
+	/** @deprecated */
+	sendCommandTo: string;
+	/** @deprecated */
+	sendSearchTo: string;
+}
+
+function removeSendCommandToSendSearchTo(channel: IChannel & Partial<THasSendCommandToSendSearchTo>): boolean {
+	let changed = "sendCommandTo" in channel || "sendSearchTo" in channel;
+
+	delete channel.sendCommandTo;
+	delete channel.sendSearchTo;
+
+	return changed;
+}
+
+function cleanChannelCore_v1(channel: IChannel): boolean {
+	let changed = false;
+	changed ||= removeGameMasterPlayerNonPlayer(channel);
+	changed ||= cleanJson(channel);
+	return changed;
+}
+
+function cleanChannelCore_v2(channel: IChannel): boolean {
+	let changed = false;
+	changed ||= removeAdminSearch(channel);
+	changed ||= removeSendCommandToSendSearchTo(channel);
+	changed ||= cleanJson(channel);
+	return changed;
+}
+
+//#endregion
+
+//#region main processing
+
 async function processUpdates(): Promise<void> {
 	console.log(`Checking for data file updates ...`);
 	const changes: [string, number][] = [];
@@ -106,9 +239,10 @@ async function processUpdates(): Promise<void> {
 }
 
 const sagePath = `./data/sage`;
-type TCore = { id:string; did:string; }
-type TPair<T extends TCore> = { type:string; id:string; did:string; path:string; json:T; parentPath?:string; };
-async function readFiles<T extends TCore>(type: string): Promise<TPair<T>[]> {
+type IdCore = { id:string; }
+type DidCore = IdCore & { did:string; }
+type TPair<T extends IdCore> = { type:string; id:string; did:string; path:string; json:T; parentPath?:string; };
+async function readFiles<T extends IdCore>(type: string): Promise<TPair<T>[]> {
 	const out: TPair<T>[] = [];
 	const typePath = `${sagePath}/${type}`;
 	const files = await listFiles(typePath, "json");
@@ -117,8 +251,8 @@ async function readFiles<T extends TCore>(type: string): Promise<TPair<T>[]> {
 		const path = `${typePath}/${file}`;
 		const json = await readJsonFile<T>(path);
 		if (json) {
-			const did = json.did;
-			out.push({ type, id, did, path, json });
+			const did = (json as IdCore as DidCore).did;
+			out.push({ type, id, did, path, json  });
 		}else {
 			console.warn(`\t\tInvalid JSON file: ${typePath}/${id}.json`);
 		}
@@ -126,8 +260,8 @@ async function readFiles<T extends TCore>(type: string): Promise<TPair<T>[]> {
 	return out;
 }
 
-type TUpdateHandler<T extends TCore> = (core: TPair<T>) => Promise<[string, number] | null>;
-async function updateType<T extends TCore>(type: string, handlers: TUpdateHandler<T>[]):  Promise<[string, number][]> {
+type TUpdateHandler<T extends IdCore> = (core: TPair<T>) => Promise<[string, number] | null>;
+async function updateType<T extends IdCore>(type: string, handlers: TUpdateHandler<T>[]):  Promise<[string, number][]> {
 	const singular = type.endsWith("s") ? type.slice(0, -1) : type;
 	console.log(`\tChecking for ${singular} file updates ...`);
 	const changes: [string, number][] = [];
@@ -142,7 +276,7 @@ async function updateType<T extends TCore>(type: string, handlers: TUpdateHandle
 
 }
 
-async function update<T extends TCore>(type: string, handler: TUpdateHandler<T>): Promise<[string, number][]> {
+async function update<T extends IdCore>(type: string, handler: TUpdateHandler<T>): Promise<[string, number][]> {
 	const changes: [string, number][] = [];
 	const cores = await readFiles<T>(type);
 	for (const core of cores) {
@@ -154,13 +288,15 @@ async function update<T extends TCore>(type: string, handler: TUpdateHandler<T>)
 	return changes;
 }
 
+//#endregion
+
 //#region bots
 
 async function updateBots(): Promise<[string, number][]> {
 	return updateType("bots", [updateBots_v1, updateBots_v2]);
 }
 
-type BotCore_v1 = TCore & {
+type BotCore_v1 = DidCore & {
 	devs: {
 		did: string;
 		logLevel: string;
@@ -216,9 +352,9 @@ async function updateBots_v2(bot: TPair<BotCore_v1>): Promise<[string, number] |
 
 //#endregion
 
-//#region games
+//#region characters
 
-type CharacterCore_v2 = TCore & {
+type CharacterCore_v2 = IdCore & {
 	sheet: { macroUserId:string; };
 }
 
@@ -240,16 +376,62 @@ async function updateCharacters_v2(char: TPair<CharacterCore_v2>): Promise<[stri
 
 //#region games
 
+type GameCore_v1 = IdCore & {
+	channels?: IChannel[];
+};
+
+type GameCore_v2 = IdCore & {
+	channels?: IChannel[];
+};
+
 async function updateGames(): Promise<[string, number][]> {
 	return updateType("games", [updateGames_v1, updateGames_v2]);
 }
 
-async function updateGames_v1(): Promise<[string, number] | null> {
-	return null;
+async function updateGames_v1(game: TPair<GameCore_v1>): Promise<[string, number] | null> {
+	let changes = 0;
+
+	//#region update channels
+	let channelChanges = 0;
+	game.json.channels?.forEach(channel => {
+		if (cleanChannelCore_v1(channel)) {
+			channelChanges++;
+		}
+	});
+	if (channelChanges) {
+		console.log(`\t\t${game.id}: channel cleanup.`);
+		changes += channelChanges;
+	}
+	//#endregion
+
+	if (changes) {
+		save(game);
+	}
+
+	return [game.id, changes];
 }
 
-async function updateGames_v2(): Promise<[string, number] | null> {
-	return null;
+async function updateGames_v2(game: TPair<GameCore_v2>): Promise<[string, number] | null> {
+	let changes = 0;
+
+	//#region update channels
+	let channelChanges = 0;
+	game.json.channels?.forEach(channel => {
+		if (cleanChannelCore_v2(channel)) {
+			channelChanges++;
+		}
+	});
+	if (channelChanges) {
+		console.log(`\t\t${game.id}: channel cleanup.`);
+		changes += channelChanges;
+	}
+	//#endregion
+
+	if (changes) {
+		save(game);
+	}
+
+	return [game.id, changes];
 }
 
 //#endregion
@@ -292,20 +474,46 @@ async function updateServers(): Promise<[string, number][]> {
 	return updateType("servers", [updateServers_v1, updateServers_v2]);
 }
 
-type ServerCore_v1 = TCore & {
-};
+// type ServerCore_v1 = DidCore & {
+// };
 
 async function updateServers_v1(): Promise<[string, number] | null> {
 	return null;
 }
 
-async function updateServers_v2(server: TPair<ServerCore_v1>): Promise<[string, number] | null> {
+type ServerCore_v2 = DidCore & {
+	channels?: IChannel[];
+};
+
+async function updateServers_v2(server: TPair<ServerCore_v2>): Promise<[string, number] | null> {
+	let changes = 0;
+
+	//#region update channels
+	let channelChanges = 0;
+	server.json.channels?.forEach(channel => {
+		if (cleanChannelCore_v2(channel)) {
+			channelChanges++;
+		}
+	});
+	if (channelChanges) {
+		console.log(`\t\t${server.id}: channel cleanup.`);
+		changes += channelChanges;
+	}
+	//#endregion
+
+	if (changes) {
+		save(server);
+	}
+
+	//#region rename
 	if (server.id !== server.json.did && !isNonNilSnowflake(server.id)) {
 		const renamed = await rename(server);
 		if (!renamed) throw new Error(`Unable to rename: ${server.path}`);
-		return [server.did, 1];
+		changes++;
 	}
-	return null;
+	//#endregion
+
+	return [server.did, changes];
 }
 
 //#endregion
@@ -316,7 +524,7 @@ async function updateUsers(): Promise<[string, number][]> {
 	return updateType("users", [updateUsers_v1, updateUsers_v2]);
 }
 
-type UserCore_v1 = TCore & {
+type UserCore_v1 = DidCore & {
 };
 
 async function updateUsers_v1(): Promise<[string, number] | null> {
