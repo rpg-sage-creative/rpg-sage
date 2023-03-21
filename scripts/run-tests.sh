@@ -17,7 +17,7 @@ if [ "$PKG" = "data" ]; then
 		exit 0
 	fi
 
-else
+# else
 fi
 
 echoLog "run-tests.sh done."
