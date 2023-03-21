@@ -1,47 +1,166 @@
-import { listFiles, readJsonFile } from "./sage-utils/utils/FsUtils";
+import { existsSync, readdir, readFile, rmSync, writeFile } from "fs";
+
+//#region helpers
+
+function isNonNilSnowflake(value: string): boolean {
+	return !!value.match(/^\d{16,}$/) && !value.match(/^0{16,}$/);
+}
+
+function listFiles(path: string, ext?: string): Promise<string[]> {
+	return new Promise((resolve, reject) => {
+		if (existsSync(path)) {
+			readdir(path, (error: NodeJS.ErrnoException | null, files: string[]) => {
+				if (error) {
+					reject(error);
+				}else {
+					if (ext) {
+						const fileExt = `.${ext}`;
+						resolve(files.filter(file => file.endsWith(fileExt)));
+					}else {
+						resolve(files);
+					}
+				}
+			});
+		}else {
+			console.warn(`Invalid path: ${path}`);
+			resolve([]);
+		}
+	});
+}
+
+function readJsonFile<T>(path: string): Promise<T | null> {
+	return new Promise((resolve, reject) => {
+		readFile(path, null, (error: NodeJS.ErrnoException | null, buffer: Buffer) => {
+			if (error) {
+				reject(error);
+			}else if (Buffer.isBuffer(buffer)) {
+				let object: T | null | undefined;
+				try {
+					object = JSON.parse(buffer.toString("utf8"));
+				}catch(ex) {
+					reject(ex);
+				}
+				if (object !== undefined) {
+					resolve(object as T);
+				}else {
+					// In case we didn't reject an exception somehow, we don't want the Promise to hang ...
+					reject("Unable to parse!");
+				}
+			}else {
+				reject("Not a Buffer");
+			}
+		});
+	});
+}
+
+function save<T extends TCore>(core: TPair<T>): Promise<true> {
+	return new Promise((resolve, reject) => {
+		if (live) {
+			writeFile(core.path, JSON.stringify(core.json), error => {
+				if (error) {
+					reject(error);
+				}else {
+					resolve(true);
+				}
+			});
+		}else {
+			console.log(`WRITE FILE: ${core.path}`);
+			resolve(true);
+		}
+	});
+}
+
+function rename<T extends TCore>(core: TPair<T>): Promise<true> {
+	return new Promise((resolve, reject) => {
+		const oldPath = core.path;
+		if (core.parentPath) {
+			core.path = `${core.parentPath}/${core.did ?? core.id}.json`;
+		}else {
+			core.path = oldPath.replace(core.id, core.did);
+		}
+		if (live) {
+			save(core).then(() => {
+				rmSync(oldPath);
+				resolve(true);
+			}).catch(reject);
+		}else {
+			console.log(`RENAME FILE: ${oldPath} => ${core.path}`);
+			resolve(true);
+		}
+	});
+}
+
+//#endregion
 
 async function processUpdates(): Promise<void> {
 	console.log(`Checking for data file updates ...`);
-	let total = 0;
-	total += await updateBots();
-	total += await updateCharacters();
-	total += await updateGames();
-	total += await updateMaps();
-	total += await updateMessages();
-	total += await updateServers();
-	total += await updateUsers();
-	console.log(`Total data file updates: ${total}`);
+	const changes: [string, number][] = [];
+	const updateFns = [updateBots, updateCharacters, updateGames, updateMaps, updateMessages, updateServers, updateUsers];
+	for (const updateFn of updateFns) {
+		const updates = await updateFn();
+		changes.push(...updates);
+	}
+	const totalChanges = changes.reduce((count, change) => count += change[1], 0);
+	const totalFiles = changes.map(change => change[0]).filter((s, i, a) => a.indexOf(s) === i).length;
+	console.log(`Total updates: ${totalChanges} (${totalFiles} files)`);
 }
 
 const sagePath = `./data/sage`;
-type TPair<T> = { id:string; path:string; json:T; };
-async function readFiles<T>(what: string): Promise<TPair<T>[]> {
+type TCore = { id:string; did:string; }
+type TPair<T extends TCore> = { type:string; id:string; did:string; path:string; json:T; parentPath?:string; };
+async function readFiles<T extends TCore>(type: string): Promise<TPair<T>[]> {
 	const out: TPair<T>[] = [];
-	const ids = await listFiles(`${sagePath}/${what}`, "json");
-	for (const id of ids) {
-		const path = `${sagePath}/${what}/${id}.json`;
+	const typePath = `${sagePath}/${type}`;
+	const files = await listFiles(typePath, "json");
+	for (const file of files) {
+		const id = file.slice(0, -5);
+		const path = `${typePath}/${file}`;
 		const json = await readJsonFile<T>(path);
 		if (json) {
-			out.push({ id, path, json });
+			const did = json.did;
+			out.push({ type, id, did, path, json });
 		}else {
-			console.warn(`\t\tInvalid JSON file: ${sagePath}/${what}/${id}.json`);
+			console.warn(`\t\tInvalid JSON file: ${typePath}/${id}.json`);
 		}
 	}
 	return out;
 }
 
-//#region bots
+type TUpdateHandler<T extends TCore> = (core: TPair<T>) => Promise<[string, number] | null>;
+async function updateType<T extends TCore>(type: string, handlers: TUpdateHandler<T>[]):  Promise<[string, number][]> {
+	const singular = type.endsWith("s") ? type.slice(0, -1) : type;
+	console.log(`\tChecking for ${singular} file updates ...`);
+	const changes: [string, number][] = [];
+	for (const handler of handlers) {
+		const updates = await update(type, handler);
+		changes.push(...updates);
+	}
+	const totalChanges = changes.reduce((count, change) => count += change[1], 0);
+	const totalFiles = changes.map(change => change[0]).filter((s, i, a) => a.indexOf(s) === i).length;
+	console.log(`\tTotal ${singular} updates: ${totalChanges} (${totalFiles} files)`);
+	return changes;
 
-async function updateBots(): Promise<number> {
-	let total = 0;
-	console.log(`\tChecking for bot file updates ...`);
-	total += await updateBots_v1();
-	total += await updateBots_v2();
-	console.log(`\tTotal bot file updates: ${total}`);
-	return total;
 }
 
-type BotCore_v1 = {
+async function update<T extends TCore>(type: string, handler: TUpdateHandler<T>): Promise<[string, number][]> {
+	const changes: [string, number][] = [];
+	const cores = await readFiles<T>(type);
+	for (const core of cores) {
+		const updates = await handler(core);
+		if (updates) {
+			changes.push(updates);
+		}
+	}
+	return changes;
+}
+
+//#region bots
+
+async function updateBots(): Promise<[string, number][]> {
+	return updateType("bots", [updateBots_v1, updateBots_v2]);
+}
+
+type BotCore_v1 = TCore & {
 	devs: {
 		did: string;
 		logLevel: string;
@@ -50,164 +169,171 @@ type BotCore_v1 = {
 	}[];
 }
 
-async function updateBots_v1(): Promise<number> {
+/**
+ * ensure devs array
+ * remove .channels dev entries
+ */
+async function updateBots_v1(bot: TPair<BotCore_v1>): Promise<[string, number] | null> {
 	let changes = 0;
-	const bots = await readFiles<BotCore_v1>("bot");
-	for (const bot of bots) {
-		let changed = false;
-		const json = bot.json;
+	const json = bot.json;
 
-		// remove channels from devs
-		if (!json.devs) {
-			json.devs = [{ did:"253330271678627841", logLevel:"Error" }];
-			console.log(`\t\t${bot.id}: devs added.`);
-			changed = true;
-		}
-		for (const dev of json.devs) {
-			if (dev.channelDids) {
-				delete dev["channelDids"];
+	//#region ensure devs includes Randal
+	if (!json.devs) {
+		json.devs = [{ did:"253330271678627841", logLevel:"Error" }];
+		console.log(`\t\t${bot.id}: devs added.`);
+		changes++;
+	}
+	//#endregion
+
+	//#region remove channels from devs
+	for (const dev of json.devs) {
+		if (dev.channelDids) {
+			delete dev["channelDids"];
 			console.log(`\t\t${bot.id}: channelDids removed.`);
-			changed = true;
-			}
-		};
-
-		if (changed) {
 			changes++;
 		}
+	};
+	//#endregion
+
+	if (changes) {
+		save(bot);
 	}
-	return changes;
+
+	return [bot.did, changes];
 }
 
-async function updateBots_v2(): Promise<number> {
-	return 0;
-}
-
-//#endregion
-
-//#region games
-
-async function updateCharacters(): Promise<number> {
-	let total = 0;
-	console.log(`\tChecking for character file updates ...`);
-	total += await updateCharacters_v1();
-	total += await updateCharacters_v1_1();
-	console.log(`\tTotal character file updates: ${total}`);
-	return total;
-}
-
-async function updateCharacters_v1(): Promise<number> {
-	return 0;
-}
-
-async function updateCharacters_v1_1(): Promise<number> {
-	return 0;
+/**
+ * rename files to did.json
+ */
+async function updateBots_v2(bot: TPair<BotCore_v1>): Promise<[string, number] | null> {
+	if (bot.id !== bot.json.did && !isNonNilSnowflake(bot.id)) {
+		const renamed = await rename(bot);
+		if (!renamed) throw new Error(`Unable to rename: ${bot.path}`);
+		return [bot.did, 1];
+	}
+	return null;
 }
 
 //#endregion
 
 //#region games
 
-async function updateGames(): Promise<number> {
-	let total = 0;
-	console.log(`\tChecking for game file updates ...`);
-	total += await updateGames_v1();
-	total += await updateGames_v1_1();
-	console.log(`\tTotal game file updates: ${total}`);
-	return total;
+type CharacterCore_v2 = TCore & {
+	sheet: { macroUserId:string; };
 }
 
-async function updateGames_v1(): Promise<number> {
-	return 0;
+async function updateCharacters(): Promise<[string, number][]> {
+	return updateType("characters", [updateCharacters_v1, updateCharacters_v2]);
 }
 
-async function updateGames_v1_1(): Promise<number> {
-	return 0;
+async function updateCharacters_v1(): Promise<[string, number] | null> {
+	return null;
+}
+
+async function updateCharacters_v2(char: TPair<CharacterCore_v2>): Promise<[string, number] | null> {
+	// set parentPath and save?
+	console.log({id:char.id,did:char.did,userId:char.json.sheet?.macroUserId})
+	return null;
+}
+
+//#endregion
+
+//#region games
+
+async function updateGames(): Promise<[string, number][]> {
+	return updateType("games", [updateGames_v1, updateGames_v2]);
+}
+
+async function updateGames_v1(): Promise<[string, number] | null> {
+	return null;
+}
+
+async function updateGames_v2(): Promise<[string, number] | null> {
+	return null;
 }
 
 //#endregion
 
 //#region maps
 
-async function updateMaps(): Promise<number> {
-	let total = 0;
-	console.log(`\tChecking for map file updates ...`);
-	total += await updateMaps_v1();
-	total += await updateMaps_v1_1();
-	console.log(`\tTotal map file updates: ${total}`);
-	return total;
+async function updateMaps(): Promise<[string, number][]> {
+	return updateType("maps", [updateMaps_v1, updateMaps_v2]);
 }
 
-async function updateMaps_v1(): Promise<number> {
-	return 0;
+async function updateMaps_v1(): Promise<[string, number] | null> {
+	return null;
 }
 
-async function updateMaps_v1_1(): Promise<number> {
-	return 0;
+async function updateMaps_v2(): Promise<[string, number] | null> {
+	return null;
 }
 
 //#endregion
 
 //#region messages
 
-async function updateMessages(): Promise<number> {
-	let total = 0;
-	console.log(`\tChecking for message file updates ...`);
-	total += await updateMessages_v1();
-	total += await updateMessages_v1_1();
-	console.log(`\tTotal message file updates: ${total}`);
-	return total;
+async function updateMessages(): Promise<[string, number][]> {
+	return updateType("messages", [updateMessages_v1, updateMessages_v2]);
 }
 
-async function updateMessages_v1(): Promise<number> {
-	return 0;
+async function updateMessages_v1(): Promise<[string, number] | null> {
+	return null;
 }
 
-async function updateMessages_v1_1(): Promise<number> {
-	return 0;
+async function updateMessages_v2(): Promise<[string, number] | null> {
+	return null;
 }
 
 //#endregion
 
 //#region servers
 
-async function updateServers(): Promise<number> {
-	let total = 0;
-	console.log(`\tChecking for server file updates ...`);
-	total += await updateServers_v1();
-	total += await updateServers_v1_1();
-	console.log(`\tTotal server file updates: ${total}`);
-	return total;
+async function updateServers(): Promise<[string, number][]> {
+	return updateType("servers", [updateServers_v1, updateServers_v2]);
 }
 
-async function updateServers_v1(): Promise<number> {
-	return 0;
+type ServerCore_v1 = TCore & {
+};
+
+async function updateServers_v1(): Promise<[string, number] | null> {
+	return null;
 }
 
-async function updateServers_v1_1(): Promise<number> {
-	return 0;
+async function updateServers_v2(server: TPair<ServerCore_v1>): Promise<[string, number] | null> {
+	if (server.id !== server.json.did && !isNonNilSnowflake(server.id)) {
+		const renamed = await rename(server);
+		if (!renamed) throw new Error(`Unable to rename: ${server.path}`);
+		return [server.did, 1];
+	}
+	return null;
 }
 
 //#endregion
 
 //#region users
 
-async function updateUsers(): Promise<number> {
-	let total = 0;
-	console.log(`\tChecking for user file updates ...`);
-	total += await updateUsers_v1();
-	total += await updateUsers_v1_1();
-	console.log(`\tTotal user file updates: ${total}`);
-	return total;
+async function updateUsers(): Promise<[string, number][]> {
+	return updateType("users", [updateUsers_v1, updateUsers_v2]);
 }
 
-async function updateUsers_v1(): Promise<number> {
-	return 0;
+type UserCore_v1 = TCore & {
+};
+
+async function updateUsers_v1(): Promise<[string, number] | null> {
+	return null;
 }
 
-async function updateUsers_v1_1(): Promise<number> {
-	return 0;
+async function updateUsers_v2(user: TPair<UserCore_v1>): Promise<[string, number] | null> {
+	if (user.id !== user.json.did && !isNonNilSnowflake(user.id)) {
+		const renamed = await rename(user);
+		if (!renamed) throw new Error(`Unable to rename: ${user.path}`);
+		return [user.did, 1];
+	}
+	return null;
+
 }
 
 //#endregion
 
+const live = false;
 processUpdates();
