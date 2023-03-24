@@ -118,13 +118,15 @@ function rename<T extends IdCore>(core: TPair<T>): Promise<true> {
 
 //#region channels
 
-type IChannel = {
+type ChannelCore = {
 	did: string;
 	commands?: boolean;
 	dialog?: boolean;
 	dice?: boolean;
 	gameChannelType?: GameChannelType;
-}
+};
+type ChannelCore_v1 = ChannelCore;
+type ChannelCore_v2 = ChannelCore;
 
 // type TGameChannelType = keyof typeof GameChannelType;
 enum GameChannelType { None = 0, InCharacter = 1, OutOfCharacter = 2, GameMaster = 3, Miscellaneous = 4, Dice = 5 }
@@ -132,11 +134,12 @@ enum GameChannelType { None = 0, InCharacter = 1, OutOfCharacter = 2, GameMaster
 /** @deprecated */
 type THasAdminSearch = {
 	/** @deprecated */
-	admin: boolean;
+	admin?: boolean;
 	/** @deprecated */
-	search: boolean;
-}
-function removeAdminSearch(channel: IChannel & Partial<THasAdminSearch>): boolean {
+	search?: boolean;
+};
+
+function removeAdminSearch(channel: ChannelCore_v2 & THasAdminSearch): boolean {
 	let changed = "admin" in channel || "search" in channel;
 
 	if (channel.admin || channel.search) {
@@ -152,14 +155,14 @@ function removeAdminSearch(channel: IChannel & Partial<THasAdminSearch>): boolea
 /** @deprecated */
 type THasGameMasterPlayerNonPlayer = {
 	/** @deprecated */
-	gameMaster: number;
+	gameMaster?: number;
 	/** @deprecated */
-	player: number;
+	player?: number;
 	/** @deprecated */
-	nonPlayer: number;
+	nonPlayer?: number;
 }
 
-function removeGameMasterPlayerNonPlayer(channel: IChannel & Partial<THasGameMasterPlayerNonPlayer>): boolean {
+function removeGameMasterPlayerNonPlayer(channel: ChannelCore_v1 & THasGameMasterPlayerNonPlayer): boolean {
 	let changed = "gameMaster" in channel || "player" in channel || "nonPlayer" in channel;
 
 	if (!exists(channel.gameChannelType)) {
@@ -199,12 +202,12 @@ function removeGameMasterPlayerNonPlayer(channel: IChannel & Partial<THasGameMas
 /** @deprecated */
 type THasSendCommandToSendSearchTo = {
 	/** @deprecated */
-	sendCommandTo: string;
+	sendCommandTo?: string;
 	/** @deprecated */
-	sendSearchTo: string;
+	sendSearchTo?: string;
 }
 
-function removeSendCommandToSendSearchTo(channel: IChannel & Partial<THasSendCommandToSendSearchTo>): boolean {
+function removeSendCommandToSendSearchTo(channel: ChannelCore_v2 & THasSendCommandToSendSearchTo): boolean {
 	let changed = "sendCommandTo" in channel || "sendSearchTo" in channel;
 
 	delete channel.sendCommandTo;
@@ -213,13 +216,13 @@ function removeSendCommandToSendSearchTo(channel: IChannel & Partial<THasSendCom
 	return changed;
 }
 
-function cleanChannelCore_v1(channel: IChannel): boolean {
+function cleanChannelCore_v1(channel: ChannelCore_v1): boolean {
 	const removed = removeGameMasterPlayerNonPlayer(channel);
 	const cleaned = cleanJson(channel);
 	return removed || cleaned;
 }
 
-function cleanChannelCore_v2(channel: IChannel): boolean {
+function cleanChannelCore_v2(channel: ChannelCore_v2): boolean {
 	const removed_a = removeAdminSearch(channel);
 	const removed_b = removeSendCommandToSendSearchTo(channel);
 	const cleaned = cleanJson(channel);
@@ -233,7 +236,7 @@ function cleanChannelCore_v2(channel: IChannel): boolean {
 async function processUpdates(): Promise<void> {
 	console.log(`Checking for data file updates ...`);
 	const changes: [string, number][] = [];
-	const updateFns = [updateBots, updateCharacters, updateGames, updateMaps, updateMessages, updateServers, updateUsers];
+	const updateFns = [updateBots, updateGames, updateMaps, updateMessages, updateServers, updateUsers];
 	for (const updateFn of updateFns) {
 		const updates = await updateFn();
 		changes.push(...updates);
@@ -360,54 +363,64 @@ async function updateBots_v2(bot: TPair<BotCore_v1>): Promise<[string, number] |
 //#region characters
 
 type GameCharacterTag = "pc" | "npc" | "gm" | "ally" | "enemy" | "boss";
-type GameCharacter = {
+type GameCharacter_v2 = {
 	userDid: string;
 	charId: string;
 	tags: GameCharacterTag[];
 } | {
-	char: GameCharacterCore;
+	char: CharacterCore_v2;
 	tags: GameCharacterTag[];
 };
-type UserCharacter = {
+
+type UserCharacter_v2 = {
 	charId: string;
 	tags: GameCharacterTag[];
 };
-type GameCharacterCore = {
-	id: string;
+
+type CharacterCore_v1 = IdCore & {
+	avatarUrl: string;
 	userDid?: string;
+};
+
+/** @deprecated */
+type THasIconUrl = {
+	/** @deprecated */
+	iconUrl?: string;
+}
+
+function updateCharacters_v1(v1: CharacterCore_v1 & THasIconUrl): boolean {
+	if ("iconUrl" in v1) {
+		if (v1.iconUrl) {
+			v1.avatarUrl = v1.iconUrl;
+		}
+		delete v1.iconUrl;
+		return true;
+	}
+	return false;
 }
 
 type CharacterCore_v2 = IdCore & {
 	sheet: { macroUserId:string; };
 }
 
-async function updateCharacters(): Promise<[string, number][]> {
-	return updateType("characters", [updateCharacters_v1, updateCharacters_v2]);
-}
-
-async function updateCharacters_v1(): Promise<[string, number] | null> {
-	return null;
-}
-
-async function updateCharacters_v2(char: TPair<CharacterCore_v2>): Promise<[string, number] | null> {
-	// set parentPath and save?
-	console.log({id:char.id,did:char.did,userId:char.json.sheet?.macroUserId})
-	return null;
-}
+// async function updateCharacters_v2(v1: CharacterCore_v1, v2: CharacterCore_v2): Promise<[string, number] | null> {
+// 	// set parentPath and save?
+// 	return null;
+// }
 
 //#endregion
 
 //#region games
 
 type GameCore_v1 = IdCore & {
-	channels?: IChannel[];
-	playerCharacters?: GameCharacterCore[];
-	nonPlayerCharacters?: GameCharacterCore[];
+	channels?: ChannelCore_v1[];
+	playerCharacters?: CharacterCore_v1[];
+	nonPlayerCharacters?: CharacterCore_v1[];
 };
 
 type GameCore_v2 = IdCore & {
-	channels?: IChannel[];
-	characters?: GameCharacter[];
+	channels?: ChannelCore_v2[];
+	characters?: GameCharacter_v2[];
 };
 
 async function updateGames(): Promise<[string, number][]> {
@@ -427,6 +440,24 @@ async function updateGames_v1(pair: TPair<IdCore>, v1: GameCore_v1): Promise<[st
 	if (channelChanges) {
 		console.log(`\t\t${pair.id}: channel cleanup.`);
 		changes += channelChanges;
+	}
+	//#endregion
+
+	//#region update characters
+	let characterChanges = 0;
+	v1.nonPlayerCharacters?.forEach(character => {
+		if (updateCharacters_v1(character)) {
+			characterChanges++;
+		}
+	});
+	v1.playerCharacters?.forEach(character => {
+		if (updateCharacters_v1(character)) {
+			characterChanges++;
+		}
+	});
+	if (characterChanges) {
+		console.log(`\t\t${pair.id}: character cleanup.`);
+		changes += characterChanges;
 	}
 	//#endregion
 
@@ -457,7 +488,7 @@ async function updateGames_v2(pair: TPair<IdCore>, v1: GameCore_v1, v2: GameCore
 
 	//#region make characters references to User characters
 	if ("playerCharacters" in v1 || "nonPlayerCharacters" in v1) {
-		const characters: GameCharacter[] = [];
+		const characters: GameCharacter_v2[] = [];
 
 		v1.playerCharacters?.forEach(gc => {
 			if (gc.userDid) {
@@ -473,7 +504,7 @@ async function updateGames_v2(pair: TPair<IdCore>, v1: GameCore_v1, v2: GameCore
 				gameCharactersForUsers.push({ gameId:pair.id, userId:gc.userDid, charId:gc.id, char:gc, type:"npc" });
 				characters.push({ userDid:gc.userDid, charId:gc.id, tags:["npc"] });
 			}else {
-				characters.push({ char:gc, tags:["npc"] });
+				characters.push({ char:gc as unknown as CharacterCore_v2, tags:["npc"] });
 			}
 			changes++;
 		});
@@ -543,7 +574,7 @@ async function updateServers_v1(): Promise<[string, number] | null> {
 }
 
 type ServerCore_v2 = DidCore & {
-	channels?: IChannel[];
+	channels?: ChannelCore_v2[];
 };
 
 async function updateServers_v2(server: TPair<ServerCore_v2>): Promise<[string, number] | null> {
@@ -587,19 +618,23 @@ async function updateUsers(): Promise<[string, number][]> {
 
 type UserCore_v1 = DidCore & {
 	/** @deprecated */
-	characters?: GameCharacterCore[];
+	characters?: CharacterCore_v1[];
 	/** @deprecated */
-	nonPlayerCharacters?: GameCharacterCore[];
+	nonPlayerCharacters?: CharacterCore_v1[];
 	/** @deprecated */
-	playerCharacters?: GameCharacterCore[];
+	playerCharacters?: CharacterCore_v1[];
 };
 
 type UserCore_v2 = DidCore & {
-	characters?: UserCharacter[];
+	characters?: UserCharacter_v2[];
 };
 
-async function updateUsers_v1(): Promise<[string, number] | null> {
-	return null;
+async function updateUsers_v1(pair: TPair<DidCore>, v1: UserCore_v1): Promise<[string, number]> {
+	const charUpdates = (v1.characters?.forEach(char => updateCharacters_v1(char)) ?? []).filter(b => b).length;
+	const npcUpdates = (v1.nonPlayerCharacters?.forEach(char => updateCharacters_v1(char)) ?? []).filter(b => b).length;
+	const pcUpdates = (v1.playerCharacters?.forEach(char => updateCharacters_v1(char)) ?? []).filter(b => b).length;
+	const changes = charUpdates + npcUpdates + pcUpdates;
+	return [pair.id, changes];
 }
 
 async function updateUsers_v2(pair: TPair<DidCore>, v1: UserCore_v1, v2: UserCore_v2): Promise<[string, number]> {
@@ -616,13 +651,16 @@ async function updateUsers_v2(pair: TPair<DidCore>, v1: UserCore_v1, v2: UserCor
 	//#region user characters
 	if ("nonPlayerCharacters" in v1) {
 		const v1NonPlayerCharacters = v1.nonPlayerCharacters ?? [];
-		delete v1.nonPlayerCharacters;
-		v2.characters = [];
-		for (const v1Char of v1NonPlayerCharacters) {
-			await writeUserCharacterToFile(pair.did, v1Char.id, v1Char);
-			v2.characters!.push({ charId:v1Char.id, tags:["npc"] });
-			changes++;
+		if (v1NonPlayerCharacters.length) {
+			v2.characters = [];
+			for (const v1Char of v1NonPlayerCharacters) {
+				v1Char.userDid = pair.did;
+				await writeUserCharacterToFile(pair.did, v1Char.id, v1Char);
+				v2.characters!.push({ charId:v1Char.id, tags:["npc"] });
+				changes++;
+			}
 		}
+		delete v1.nonPlayerCharacters;
 		console.log(`\t\t${pair.did} nonPlayer character cleanup.`);
 	}
 	if ("characters" in v1 || "playerCharacters" in v1) {
@@ -630,6 +668,7 @@ async function updateUsers_v2(pair: TPair<DidCore>, v1: UserCore_v1, v2: UserCor
 		if (v1PlayerCharacters.length) {
 			v2.characters = [];
 			for (const v1Char of v1PlayerCharacters) {
+				v1Char.userDid = pair.did;
 				await writeUserCharacterToFile(pair.did, v1Char.id, v1Char);
 				v2.characters!.push({ charId:v1Char.id, tags:["pc"] });
 				changes++;
@@ -657,7 +696,7 @@ async function updateUsers_v2(pair: TPair<DidCore>, v1: UserCore_v1, v2: UserCor
 
 }
 
-async function writeUserCharacterToFile(userDid: string, charId: string, char: GameCharacterCore): Promise<boolean> {
+async function writeUserCharacterToFile(userDid: string, charId: string, char: CharacterCore_v1 | CharacterCore_v2): Promise<boolean> {
 	const path = `${sagePath}/users/${userDid}/characters`;
 	const filePath = `${path}/${charId}.json`;
 	return new Promise((resolve, reject) => {

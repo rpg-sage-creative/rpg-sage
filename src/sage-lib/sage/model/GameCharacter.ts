@@ -55,28 +55,8 @@ function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage
 	return messageKey.channel === discordKey.channel;
 }
 
-//#region Core Updates
-
-interface IOldGameCharacterCore extends GameCharacterCore {
-	iconUrl?: string;
-}
-
-function updateCore(core: IOldGameCharacterCore): GameCharacterCore {
-	//#region move .iconUrl to .avatarUrl
-	if (core.iconUrl) {
-		core.avatarUrl = core.iconUrl;
-	}
-	delete core.iconUrl;
-	//#endregion
-	return core;
-}
-
-//#endregion
-
 export default class GameCharacter implements IHasSave {
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
-		updateCore(core);
-
 		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, "companion");
 
 		this.isGM = this.type === "npc" && this.name === (this.owner?.gmCharacterName ?? GameCharacter.defaultGmCharacterName);
