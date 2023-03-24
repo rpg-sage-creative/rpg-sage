@@ -27,7 +27,7 @@ async function removeGameMaster(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const users = Array.from(sageMessage.message.mentions.users.values());
-	const removed = await sageMessage.game!.removeGameMasters(users.map(user => user.id));
+	const removed = await sageMessage.game!.removeUsers(users.map(user => user.id));
 	return sageMessage.reactSuccessOrFailure(removed, "Game Master Removed.", "Unknown Error; Game Master NOT Removed!");
 }
 

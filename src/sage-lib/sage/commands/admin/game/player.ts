@@ -51,7 +51,7 @@ async function playerRemove(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const users = Array.from(sageMessage.message.mentions.users.values());
-	const removed = await sageMessage.game!.removePlayers(users.map(user => user.id));
+	const removed = await sageMessage.game!.removeUsers(users.map(user => user.id));
 	return sageMessage.reactSuccessOrFailure(removed, "Game Player Removed.", "Unknown Error; Game Player NOT Removed!");
 }
 

@@ -11,6 +11,8 @@ import type { IHasSave } from "./NamedCollection";
 import NoteManager, { type TNote } from "./NoteManager";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
+export type TGameCharacterTag = "pc" | "npc" | "gm" | "ally" | "enemy" | "boss";
+
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion";
 export interface GameCharacterCore {
 	/** Channels to automatically treat input as dialog */

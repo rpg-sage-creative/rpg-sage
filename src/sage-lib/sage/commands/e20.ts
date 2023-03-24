@@ -416,7 +416,7 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 			dice = `[${label} ${charName} ${skillName}${specName}${shiftArrow}]`;
 		}
 	}
-	const matches = parseDiceMatches(sageInteraction, dice);
+	const matches = await parseDiceMatches(sageInteraction, dice);
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {

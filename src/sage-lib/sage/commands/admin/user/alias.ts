@@ -10,25 +10,35 @@ import { registerAdminCommandHelp } from "../../help";
 function testGmTarget(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
 	return sageMessage.isGameMaster && !dialogContent.name;
 }
-function testNpcTarget(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
+
+async function testNpcTarget(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<boolean> {
 	if (sageMessage.game) {
-		return sageMessage.isGameMaster
-			? sageMessage.game.nonPlayerCharacters.findByName(dialogContent.name) !== undefined
-			: false;
+		if (sageMessage.isGameMaster) {
+			const nonPlayerCharacters = await sageMessage.game.fetchNonPlayerCharacters();
+			return nonPlayerCharacters.findByName(dialogContent.name) !== undefined;
+		}
+		return false;
 	}
-	return sageMessage.actor.s.nonPlayerCharacters.findByName(dialogContent.name) !== undefined;
+	const nonPlayerCharacters = await sageMessage.actor.s.fetchNonPlayerCharacters();
+	return nonPlayerCharacters.findByName(dialogContent.name) !== undefined;
 }
-function testPcTarget(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
+
+async function testPcTarget(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<boolean> {
 	if (sageMessage.game) {
-		return !!sageMessage.playerCharacter && !dialogContent.name;// && !dialogContent.displayName;
+		const playerCharacter = await sageMessage.fetchPlayerCharacter();
+		return !!playerCharacter && !dialogContent.name;
 	}
-	return sageMessage.actor.s.playerCharacters.findByName(dialogContent.name) !== undefined;
+	const playerCharacters = await sageMessage.actor.s.fetchPlayerCharacters();
+	return playerCharacters.findByName(dialogContent.name) !== undefined;
 }
-function testCompanionTarget(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
+
+async function testCompanionTarget(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<boolean> {
 	if (sageMessage.game) {
-		return sageMessage.playerCharacter?.companions.findByName(dialogContent.name) !== undefined;
+		const playerCharacter = await sageMessage.fetchPlayerCharacter();
+		return playerCharacter?.companions.findByName(dialogContent.name) !== undefined;
 	}
-	return !sageMessage.actor.s.playerCharacters.findCompanionByName(dialogContent.name) !== undefined;
+	const playerCharacters = await sageMessage.actor.s.fetchPlayerCharacters();
+	return playerCharacters.findCompanionByName(dialogContent.name) !== undefined;
 }
 
 function dialogContentToTarget(dialogContent: TDialogContent, separator = "::"): string {
@@ -63,7 +73,7 @@ async function aliasList(sageMessage: SageMessage<true>): Promise<void> {
 	return <any>sageMessage.send(renderableContent);
 }
 
-function aliasTest(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
+async function aliasTest(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<boolean> {
 	switch (dialogContent.type) {
 		case "gm":
 			return testGmTarget(sageMessage, dialogContent);

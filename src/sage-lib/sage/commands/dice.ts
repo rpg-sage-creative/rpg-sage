@@ -63,12 +63,12 @@ const BASE_REGEX = /\[+[^\]]+\]+/ig;
 const MATH_REGEX = /\[[ \d\+\-\*\/\(\)\^]+[\+\-\*\/\^]+[ \d\+\-\*\/\(\)\^]+\]/i;
 const RANDOM_REGEX = /\[(\d+[usgm]*#)?([^,\]]+)(,([^,\]]+))+\]/i;
 
-function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): DiscordDice | null {
+async function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): Promise<DiscordDice | null> {
 	if (!diceString) {
 		return null;
 	}
 
-	const pc = sageMessage.playerCharacter;
+	const pc = await sageMessage.fetchPlayerCharacter();
 	if (pc) {
 		diceString = diceString.replace(/\{stat\:([^\}]+)\}/i, match => {
 			const stat = match.slice(6, -1);
@@ -86,7 +86,7 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 	});
 }
 
-function parseDiscordMacro(sageMessage: SageMessage, macroString: string): DiscordDice | null {
+async function parseDiscordMacro(sageMessage: SageMessage, macroString: string): Promise<DiscordDice | null> {
 	let diceString = macroString;
 	const macroNames = <string[]>[];
 	let macroAndOutput: TMacroAndOutput | null;
@@ -109,16 +109,16 @@ function debrace(input: string): string {
 	return input;
 }
 
-function parseMatch(sageMessage: TInteraction, match: string): TDiceOutput[] {
+async function parseMatch(sageMessage: TInteraction, match: string): Promise<TDiceOutput[]> {
 	const noBraces = debrace(match);
-	if (sageMessage instanceof SageMessage) {
-		const macro = parseDiscordMacro(sageMessage, noBraces);
+	if (sageMessage.isSageMessage()) {
+		const macro = await parseDiscordMacro(sageMessage, noBraces);
 		if (macro) {
 			// console.log("macro", match);
 			return macro.roll().toStrings(sageMessage.diceOutputType);
 		}
 	}
-	const dice = parseDiscordDice(sageMessage, `[${noBraces}]`);
+	const dice = await parseDiscordDice(sageMessage, `[${noBraces}]`);
 	if (dice) {
 		// console.log("dice", match);
 		return dice.roll().toStrings(sageMessage.diceOutputType);
@@ -134,7 +134,7 @@ function parseMatch(sageMessage: TInteraction, match: string): TDiceOutput[] {
 	return [];
 }
 
-export function parseDiceMatches(sageMessage: TInteraction, content: string): TDiceMatch[] {
+export async function parseDiceMatches(sageMessage: TInteraction, content: string): Promise<TDiceMatch[]> {
 	const diceMatches: TDiceMatch[] = [];
 	const withoutCodeBlocks = redactCodeBlocks(content);
 	let execArray: RegExpExecArray | null;
@@ -142,7 +142,7 @@ export function parseDiceMatches(sageMessage: TInteraction, content: string): TD
 		const match = execArray[0];
 		const index = execArray.index;
 		const inline = match.match(/^\[{2}/) && match.match(/\]{2}$/) ? true : false;
-		const output = parseMatch(sageMessage, content.slice(index, index + match.length));
+		const output = await parseMatch(sageMessage, content.slice(index, index + match.length));
 		if (output.length) {
 			diceMatches.push({ match, index, inline, output });
 		}
@@ -160,7 +160,7 @@ async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommand
 		return null;
 	}
 
-	const matches = parseDiceMatches(sageMessage, sageMessage.slicedContent);
+	const matches = await parseDiceMatches(sageMessage, sageMessage.slicedContent);
 	if (matches.length > 0) {
 		const output = matches.map(m => m.output).flat();
 		return { command: "unified-dice", data: output };
@@ -396,10 +396,11 @@ async function createAuthorMention(sageMessage: TInteraction, isSecretMention = 
 		const user = await sageMessage.discord.fetchUser(userDid);
 		authorReference = toHumanReadable(user);
 	}
-	if (sageMessage.playerCharacter) {
+	const playerCharacter = await sageMessage.fetchPlayerCharacter();
+	if (playerCharacter) {
 		authorReference = authorReference
-			? `${authorReference} (${sageMessage.playerCharacter.name})`
-			: sageMessage.playerCharacter.name;
+			? `${authorReference} (${playerCharacter.name})`
+			: playerCharacter.name;
 	}
 	return authorReference;
 }

@@ -84,11 +84,12 @@ function toDirection(action: TMapAction): string {
 //#endregion
 
 /** If the user is a player in a game, this will ensure their tokens (pc/companions) are on the map */
-function ensurePlayerCharacter(sageInteraction: SageInteraction, gameMap: GameMap): boolean {
-	const pc = sageInteraction.playerCharacter;
+async function ensurePlayerCharacter(sageInteraction: SageInteraction, gameMap: GameMap): Promise<boolean> {
+	const pc = await sageInteraction.fetchPlayerCharacter();
 	if (!pc) {
 		return false;
 	}
+
 	let updated = false;
 	[pc].concat(pc.companions).forEach(char => {
 		const charUrl = char.tokenUrl ?? char.avatarUrl;
@@ -142,23 +143,24 @@ async function actionHandlerMapTerrain(sageInteraction: SageInteraction, gameMap
 
 async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	const activeToken = gameMap.activeToken;
-	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
+	let updated = await ensurePlayerCharacter(sageInteraction, gameMap);
 	const toggled = gameMap.cycleActiveAura();
 	const toggledAura = gameMap.activeAura;
-	sageInteraction.reply(`Setting active aura for ${activeToken?.name} to ${toggledAura?.name ?? "none"} ...`, false);
+	const reply = sageInteraction.reply(`Setting active aura for ${activeToken?.name} to ${toggledAura?.name ?? "none"} ...`, false);
 	updated = toggled
 		&& await renderMap(sageInteraction.interaction.message, gameMap);
 	if (updated) {
+		await reply;
 		return sageInteraction.reply(`Your active aura for ${activeToken?.name} is: ${toggledAura?.name ?? "none"}`, false);
 	}
 	return sageInteraction.deleteReply();
 }
 
 async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
-	const added = ensurePlayerCharacter(sageInteraction, gameMap);
+	const added = await ensurePlayerCharacter(sageInteraction, gameMap);
 	const toggled = gameMap.cycleActiveToken();
 	const activeToken = gameMap.activeToken;
-	sageInteraction.reply(`Setting ${activeToken?.name} as active ...`, false);
+	const reply = sageInteraction.reply(`Setting ${activeToken?.name} as active ...`, false);
 	let updated = false;
 	if (added) {
 		updated = await renderMap(sageInteraction.interaction.message, gameMap);
@@ -166,6 +168,7 @@ async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: 
 		updated = toggled && await gameMap.save();
 	}
 	if (updated) {
+		await reply;
 		return sageInteraction.reply(`Your active token is: ${activeToken?.name ?? "Unknown"}`, false);
 	}
 	return sageInteraction.deleteReply();
@@ -265,11 +268,11 @@ async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap:
 
 async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData: TActionData): Promise<void> {
 	const gameMap = actionData.gameMap;
-	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
+	let updated = await ensurePlayerCharacter(sageInteraction, gameMap);
 	const activeImage = gameMap.activeImage;
 	const mapAction = actionData.mapAction;
 	if (activeImage) {
-		sageInteraction.reply(`Moving ${activeImage.name} ${toDirection(mapAction)} ...`, false);
+		const reply = sageInteraction.reply(`Moving ${activeImage.name} ${toDirection(mapAction)} ...`, false);
 		const moved = gameMap.moveActiveToken(mapAction.slice(3).toLowerCase() as TMoveDirection);
 		const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
 		updated = (moved || shuffled)
@@ -277,6 +280,7 @@ async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData
 		if (updated) {
 			return sageInteraction.deleteReply();
 		}
+		await reply;
 		return sageInteraction.reply(`Error moving image ...`, false);
 	}
 	return sageInteraction.reply(`You have no image to move ...`, true);

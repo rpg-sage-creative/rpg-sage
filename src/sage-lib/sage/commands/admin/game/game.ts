@@ -86,7 +86,8 @@ async function myGameList(sageMessage: SageMessage): Promise<void> {
 					channel = await game.findBestGameMasterChannel();
 				} else {
 					channel = await game.findBestPlayerChannel();
-					const myPC = game.playerCharacters.findByUser(myDid);
+					const playerCharacters = await game.fetchPlayerCharacters();
+					const myPC = playerCharacters.findByUser(myDid);
 					renderableContent.append(`[spacer][spacer]<b>Character</b> ${myPC?.name ?? "<i>None</i>"}`);
 				}
 				if (channel) {
@@ -366,16 +367,22 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 
 	//#endregion
 
-	renderableContent.append(`<b>NonPlayer Characters</b> ${game.nonPlayerCharacters.length}`);
+	//#region npcs
+
+	const nonPlayerCharacters = await game.fetchNonPlayerCharacters();
+	renderableContent.append(`<b>NonPlayer Characters</b> ${nonPlayerCharacters.length}`);
+
+	//#endregion
 
 	//#region players
 
+	const playerCharacters = await game.fetchPlayerCharacters();
 	const playerDids = game.users.filter(user => user.type === GameUserType.Player).map(user => user.did);
 	const playersAndOrphans = await fetchMembersAndOrphans(sageMessage.sageCache.discord, playerDids, game.playerRole?.did);
 	renderableContent.append(`<b>Players (Characters)</b> ${playersAndOrphans.names.length}`);
 	playersAndOrphans.members.forEach((member, index) => {
 		const playerName = playersAndOrphans.names[index];
-		const pc = game.playerCharacters.findByUser(member.id);
+		const pc = playerCharacters.findByUser(member.id);
 		const pcName = pc?.name ? ` (${pc.name})` : ``;
 		renderableContent.append(`[spacer]${playerName}${pcName}`);
 	});
@@ -390,7 +397,7 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 
 	//#endregion
 
-	const orphanPCs = game.playerCharacters.filter(pc => gameMastersAndOrphans.orphans.includes(pc.userDid!) || playersAndOrphans.orphans.includes(pc.userDid!));
+	const orphanPCs = playerCharacters.filter(pc => gameMastersAndOrphans.orphans.includes(pc.userDid!) || playersAndOrphans.orphans.includes(pc.userDid!));
 	if (orphanPCs.length) {
 		renderableContent.append(`<b>Orphaned Player Characters</b> ${orphanPCs.length}`);
 		orphanPCs.forEach(pc => renderableContent.append(`[spacer]${pc.name}`));
@@ -402,43 +409,17 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 	await sageMessage.send(renderableContent);
 
 	if (sageMessage.server && !skipPrune) {
-		const missingPlayerSnowflakes = playersAndOrphans.orphans;
-		const missingPlayers = missingPlayerSnowflakes.length > 0;
+		const missingSnowflakes = playersAndOrphans.orphans.concat(gameMastersAndOrphans.orphans);
 
-		const missingGmSnowflakes = gameMastersAndOrphans.orphans
-		const missingGms = missingGmSnowflakes.length > 0;
-
-		if (missingPlayers || missingGms) {
-			const message = [
-				missingPlayers ? `${missingPlayerSnowflakes.length} player(s) left the server.` : ``,
-				missingGms ? `${missingGmSnowflakes.length} game master(s) left the server.` : ``,
-				`Remove them from the game?`
-			].filter(s => s).join("\n");
-
+		if (missingSnowflakes.length) {
+			const message = `${missingSnowflakes.length} user(s) left the server.\nRemove them from the game?`;
 			const remove = await discordPromptYesNo(sageMessage, message);
 			if (remove) {
-				let showAgain = false;
-				const unable: string[] = [];
-				if (missingPlayers) {
-					const removed = await game.removePlayers(missingPlayerSnowflakes);
-					if (removed) {
-						showAgain = true;
-					} else {
-						unable.push(`<i>Unable to remove player(s)!</i>`);
-					}
-				}
-				if (missingGms) {
-					const removed = await game.removeGameMasters(missingGmSnowflakes);
-					if (removed) {
-						showAgain = true;
-					} else {
-						unable.push(`<i>Unable to remove game master(s)!</i>`);
-					}
-				}
-				if (showAgain) {
+				const removed = await game.removeUsers(missingSnowflakes);
+				if (removed) {
 					await gameDetails(sageMessage, true);
-				}else {
-					sageMessage.whisper(`Unknown Error;\n${unable.join("\n")}`);
+				} else {
+					sageMessage.whisper(`Unknown Error;\n<i>Unable to remove user(s)!</i>`);
 				}
 			}
 		}

@@ -52,7 +52,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	public async addCharacter(core: GameCharacterCore): Promise<GameCharacter | null> {
 		const found = this.findByUserAndName(core.userDid, core.name);
 		if (!found) {
-			const newCore = <GameCharacterCore>{ ...core, id: utils.UuidUtils.generate() };
+			const newCore = { ...core, id: utils.UuidUtils.generate() };
 			const character = new GameCharacter(newCore, this),
 				added = await this.pushAndSave(character);
 			return added ? character : null;

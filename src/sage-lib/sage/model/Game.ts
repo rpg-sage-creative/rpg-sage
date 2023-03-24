@@ -2,7 +2,7 @@ import type { GuildMember, Message, Snowflake } from "discord.js";
 import type { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Args, IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
-import { unique } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import { exists, unique } from "../../../sage-utils/utils/ArrayUtils/Filters";
 import type { DGuildChannel } from "../../../sage-utils/utils/DiscordUtils";
 import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
@@ -13,12 +13,13 @@ import CharacterManager from "./CharacterManager";
 import Colors from "./Colors";
 import Emoji from "./Emoji";
 import type GameCharacter from "./GameCharacter";
-import type { GameCharacterCore } from "./GameCharacter";
+import type { GameCharacterCore, TGameCharacterTag } from "./GameCharacter";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
 import type SageCache from "./SageCache";
 import { applyValues, getEnum, hasValues, ISageCommandArgs } from "./SageCommandArgs";
 import type Server from "./Server";
+import User from "./User";
 
 type IChannelArgs = Args<IChannelOptions> & { did:Snowflake; };
 
@@ -59,6 +60,15 @@ export type TGameOptions = TDefaultGameOptions & {
 	name: string;
 };
 
+type TGameCharacter = {
+	userDid: string;
+	charId: string;
+	tags: TGameCharacterTag[];
+} | {
+	char: GameCharacterCore;
+	tags: TGameCharacterTag[];
+};
+
 export interface IGameCore extends IdCore, IHasColors, IHasEmoji, Partial<TGameOptions> {
 	objectType: "Game";
 	createdTs: number;
@@ -70,10 +80,8 @@ export interface IGameCore extends IdCore, IHasColors, IHasEmoji, Partial<TGameO
 	channels: IChannel[];
 	roles?: IGameRole[];
 
+	characters?: TGameCharacter[];
 	users?: IGameUser[];
-
-	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
-	playerCharacters?: (GameCharacter | GameCharacterCore)[];
 }
 
 export type TMappedGameChannel = {
@@ -121,9 +129,6 @@ async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<
 export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IComparable<Game>, IHasColorsCore, IHasEmojiCore {
 	public constructor(core: IGameCore, public server: Server, sageCache: SageCache) {
 		super(core, sageCache);
-
-		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as [] ?? [], this, "npc");
-		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as [] ?? [], this, "pc");
 	}
 
 	public get createdDate(): Date { return new Date(this.core.createdTs ?? 283305600000); }
@@ -146,13 +151,40 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 	public get channels(): IChannel[] { return this.core.channels ?? (this.core.channels = []); }
 	public get gmCharacterName(): string { return this.core.gmCharacterName ?? this.server.defaultGmCharacterName; }
-	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
-	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
-	// public get orphanedPlayerCharacters() { return this.playerCharacters.filter(pc => !pc.userDid || !this.players.includes(pc.userDid)); }
 	public get roles(): IGameRole[] { return this.core.roles ?? (this.core.roles = []); }
 	public get users(): IGameUser[] { return this.core.users ?? (this.core.users = []); }
 
+	//#region characters
+
+	private characters = new Map<string, CharacterManager>();
+
+	private async fetchCharacters(tag: "pc" | "npc"): Promise<CharacterManager> {
+		if (!this.characters.has(tag)) {
+			const cores: GameCharacterCore[] = [];
+			const chars = this.core.characters?.filter(char => char.tags.includes(tag)) ?? [];
+			for (const char of chars) {
+				const core = "char" in char ? char.char : await User.fetchCharacter(char.userDid, char.charId);
+				if (core) {
+					cores.push(core);
+				}
+			}
+			this.characters.set(tag, CharacterManager.from(cores, this, tag));
+		}
+		return this.characters.get(tag)!;
+	}
+
+	public async fetchPlayerCharacters(): Promise<CharacterManager> {
+		return this.fetchCharacters("pc");
+	}
+
+	public async fetchNonPlayerCharacters(): Promise<CharacterManager> {
+		return this.fetchCharacters("npc");
+	}
+
+	//#endregion
+
 	//#region Guild fetches
+
 	public async findBestPlayerChannel(): Promise<IChannel | undefined> {
 		const [allChannels, gChannels, sChannels] = await mapChannels(this.channels, this.sageCache);
 		return (
@@ -162,6 +194,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 				?? gChannels.find(channel => channel.gameChannelType !== GameChannelType.GameMaster)
 			)?.sChannel;
 	}
+
 	public async findBestGameMasterChannel(): Promise<IChannel> {
 		const [allChannels] = await mapChannels(this.channels, this.sageCache);
 		return (
@@ -170,6 +203,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 				?? allChannels[0]
 			)?.sChannel;
 	}
+
 	private fetchedUsers: Map<number, TFetchedGameUser[]> = new Map();
 	public async fetchUsers(gameRoleType?: GameRoleType, cache = true): Promise<TFetchedGameUser[]> {
 		const out: TFetchedGameUser[] = [];
@@ -249,6 +283,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		});
 		return this.core.channels.length !== count ? this.save() : false;
 	}
+
 	// #endregion
 
 	// #region Role actions
@@ -281,83 +316,51 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	// #endregion
 
 	// #region GameMaster actions
+
 	public async addGameMasters(userDids: Snowflake[]): Promise<boolean> {
-		const filtered: Snowflake[] = [];
-		for (const userDid of userDids) {
-			const user = this.getUser(userDid);
-			if (user) {
-				if (user.type !== GameUserType.GameMaster) {
-					await this.removePlayers([userDid]);
-					filtered.push(userDid);
-				}
-			} else {
-				filtered.push(userDid);
-			}
-		}
-		if (!filtered.length) {
+		const adds = userDids.filter(userDid => !this.users.find(user => user.did === userDid));
+		const players = userDids.map(userDid => this.users.find(user => user.did === userDid && user.type === GameUserType.Player)).filter(exists);
+		if (!adds.length && !players.length) {
 			return false;
 		}
-
-		const gameMasters = userDids.map(userDid => (<IGameUser>{ did: userDid, type: GameUserType.GameMaster }));
-		this.users.push(...gameMasters);
+		adds.forEach(userDid => this.users.push({ type:GameUserType.GameMaster, did:userDid, dicePing:true }));
+		players.forEach(user => user.type = GameUserType.GameMaster);
 		return this.save();
 	}
-	public async removeGameMasters(userDids: Snowflake[]): Promise<boolean> {
-		const filtered = userDids.filter(userDid => this.users.find(user => user.did === userDid && user.type === GameUserType.GameMaster));
-		if (!filtered.length) {
-			return false;
-		}
 
-		const nonPlayerCharacters = this.nonPlayerCharacters;
-		filtered.map(userDid => nonPlayerCharacters.filter(npc => npc.userDid === userDid)).forEach(npcs => npcs.forEach(npc => delete npc.userDid));
-
-		this.core.users = this.users.filter(user => user.type !== GameUserType.GameMaster || !filtered.includes(user.did));
-		return this.save();
-	}
-	// #endregion GameMaster actions
+	// #endregion
 
 	// #region Player actions
+
 	public async addPlayers(userDids: Snowflake[]): Promise<boolean> {
-		const filtered: Snowflake[] = [];
-		for (const userDid of userDids) {
-			const user = this.getUser(userDid);
-			if (user) {
-				if (user.type !== GameUserType.Player) {
-					await this.removeGameMasters([userDid]);
-					filtered.push(userDid);
-				}
-			} else {
-				filtered.push(userDid);
-			}
-		}
-		if (!filtered.length) {
+		const adds = userDids.filter(userDid => !this.users.find(user => user.did === userDid));
+		const gameMasters = userDids.map(userDid => this.users.find(user => user.did === userDid && user.type === GameUserType.GameMaster)).filter(exists);
+		if (!adds.length && !gameMasters.length) {
 			return false;
 		}
-
-		const players = userDids.map(userDid => (<IGameUser>{ did: userDid, type: GameUserType.Player }));
-		this.users.push(...players);
+		adds.forEach(userDid => this.users.push({ type:GameUserType.Player, did:userDid, dicePing:true }));
+		gameMasters.forEach(user => user.type = GameUserType.Player);
 		return this.save();
 	}
-	public async removePlayers(userDids: Snowflake[]): Promise<boolean> {
-		const filtered = userDids.filter(userDid => this.users.find(user => user.did === userDid && user.type === GameUserType.Player));
-		if (!filtered.length) {
-			return false;
-		}
 
-		const playerCharacters = this.playerCharacters;
-		filtered.map(userDid => playerCharacters.filter(pc => pc.userDid === userDid)).forEach(pcs => pcs.forEach(pc => delete pc.userDid));
+	// #endregion
 
-		this.core.users = this.users.filter(user => user.type !== GameUserType.Player || !filtered.includes(user.did));
+	public async removeUsers(userDids: Snowflake[]): Promise<boolean> {
+		this.core.users = this.users.filter(user => !userDids.includes(user.did));
 		return this.save();
 	}
-	// #endregion PC actions
 
-	public async getAutoCharacterForChannel(userDid: Snowflake, channelDid: Optional<Snowflake>): Promise<GameCharacter | undefined> {
+	public async fetchAutoCharacterForChannel(userDid: Snowflake, channelDid: Optional<Snowflake>): Promise<GameCharacter | undefined> {
 		if (channelDid) {
+			let char: GameCharacter | undefined;
 			const isGameMaster = await this.hasUser(userDid, GameRoleType.GameMaster);
-			const char = isGameMaster
-				? this.nonPlayerCharacters.findByName(this.gmCharacterName)
-				: this.playerCharacters.findByUser(userDid);
+			if (isGameMaster) {
+				const chars = await this.fetchNonPlayerCharacters();
+				char = chars.findByName(this.gmCharacterName);
+			}else {
+				const chars = await this.fetchPlayerCharacters();
+				char = chars.findByUser(userDid);
+			}
 			return char?.hasAutoChannel(channelDid) ? char : undefined;
 		}
 		return undefined;

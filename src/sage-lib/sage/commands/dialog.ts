@@ -89,7 +89,7 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 
 	let content = postData.content;
 	//#region dice lists
-	const diceMatches = parseDiceMatches(sageMessage, content);
+	const diceMatches = await parseDiceMatches(sageMessage, content);
 	const inlineDiceMatches = diceMatches.filter(match => match.inline);
 	const otherDiceMatches = diceMatches.filter(match => !match.inline);
 	//#endregion
@@ -150,25 +150,28 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 
 //#region Helpers
 
-function findPc(sageMessage: SageMessage, pcNameOrIndex: Optional<string>): GameCharacter | undefined {
+async function findPc(sageMessage: SageMessage, pcNameOrIndex: Optional<string>): Promise<GameCharacter | undefined> {
 	if (sageMessage.game) {
-		return sageMessage.playerCharacter;
+		return sageMessage.fetchPlayerCharacter();
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
+		const playerCharacters = await sageMessage.actor.s.fetchPlayerCharacters();
 		if (isBlank(pcNameOrIndex)) {
-			return sageMessage.actor.s.playerCharacters.first();
+			return playerCharacters.first();
 		}
-		return sageMessage.actor.s.playerCharacters.findByNameOrIndex(pcNameOrIndex);
+		return playerCharacters.findByNameOrIndex(pcNameOrIndex);
 	}
 	return undefined;
 }
 
-function findCompanion(sageMessage: SageMessage, companionNameOrIndex: Optional<string>): GameCharacter | undefined {
+async function findCompanion(sageMessage: SageMessage, companionNameOrIndex: Optional<string>): Promise<GameCharacter | undefined> {
 	let companions: CharacterManager | undefined;
 	if (sageMessage.gameChannel) {
-		companions = sageMessage.playerCharacter?.companions;
+		const playerCharacter = await sageMessage.fetchPlayerCharacter();
+		companions = playerCharacter?.companions;
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
 		// Currently only allow a single PC per server outside of games
-		companions = sageMessage.actor.s.playerCharacters.first()?.companions;
+		const playerCharacters = await sageMessage.actor.s.fetchPlayerCharacters();
+		companions = playerCharacters.first()?.companions;
 	}
 	if (companions) {
 		if (isBlank(companionNameOrIndex)) {
@@ -179,11 +182,18 @@ function findCompanion(sageMessage: SageMessage, companionNameOrIndex: Optional<
 	return undefined;
 }
 
-function findNpc(sageMessage: SageMessage, npcName: string): GameCharacter | undefined {
-	if (sageMessage.gameChannel) {
-		return sageMessage.isGameMaster ? sageMessage.game!.nonPlayerCharacters.findByName(npcName) : undefined;
-	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
-		return sageMessage.actor.s.nonPlayerCharacters.findByName(npcName);
+async function findNpc(sageMessage: SageMessage, npcName: Optional<string>): Promise<GameCharacter | undefined> {
+	if (npcName) {
+		if (sageMessage.gameChannel) {
+			if (sageMessage.isGameMaster) {
+				const nonPlayerCharacters = await sageMessage.game?.fetchNonPlayerCharacters();
+				return nonPlayerCharacters?.findByName(npcName);
+			}
+			return undefined;
+		} else if (!sageMessage.channel || sageMessage.channel.dialog) {
+			const nonPlayerCharacters = await sageMessage.actor.s.fetchNonPlayerCharacters();
+			return nonPlayerCharacters.findByName(npcName);
+		}
 	}
 	return undefined;
 }
@@ -193,11 +203,12 @@ async function findGm(sageMessage: SageMessage): Promise<GameCharacter | undefin
 	if (sageMessage.game) {
 		if (sageMessage.isGameMaster) {
 			const gmCharacterName = sageMessage.game.gmCharacterName ?? GameCharacter.defaultGmCharacterName;
-			const gm = findNpc(sageMessage, gmCharacterName);
+			const gm = await findNpc(sageMessage, gmCharacterName);
 			if (gm) {
 				return gm;
 			}
-			const added = await sageMessage.game.nonPlayerCharacters.addCharacter(<GameCharacterCore>{ name: gmCharacterName });
+			const nonPlayerCharacters = await sageMessage.game.fetchNonPlayerCharacters();
+			const added = await nonPlayerCharacters.addCharacter({ name: gmCharacterName } as GameCharacterCore);
 			return added ?? undefined;
 		}
 		return undefined;
@@ -363,8 +374,8 @@ export async function parseOrAutoDialogContent(sageMessage: SageMessage): Promis
 		return dialogContent;
 	}
 	if (!sageMessage.hasCommandOrQueryOrSlicedContent) {
-		const autoCharacter = await sageMessage.game?.getAutoCharacterForChannel(sageMessage.actor.did, sageMessage.discordKey.channel)
-			?? sageMessage.actor.s.getAutoCharacterForChannel(sageMessage.discordKey.channel);
+		const autoCharacter = await sageMessage.game?.fetchAutoCharacterForChannel(sageMessage.actor.did, sageMessage.discordKey.channel)
+			?? await sageMessage.actor.s.fetchAutoCharacterForChannel(sageMessage.discordKey.channel);
 		if (autoCharacter) {
 			return {
 				type: autoCharacter.isGM ? "gm" : "pc",
@@ -418,9 +429,9 @@ async function doDialog(sageMessage: SageMessage, dialogContent: TDialogContent)
 
 // #region NPC Dialog
 async function npcChat(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
-	const npc = dialogContent.name && findNpc(sageMessage, dialogContent.name);
+	const npc = await findNpc(sageMessage, dialogContent.name);
 	if (npc) {
-		return <Promise<void>>sendDialogPost(sageMessage, {
+		return sendDialogPost(sageMessage, {
 			authorName: dialogContent.displayName, // defaults to character.name
 			character: npc,
 			colorType: getColorType(dialogContent.type) ?? undefined,
@@ -428,7 +439,7 @@ async function npcChat(sageMessage: SageMessage, dialogContent: TDialogContent):
 			imageUrl: dialogContent.imageUrl,
 			embedColor: dialogContent.embedColor,
 			title: dialogContent.title
-		}).catch(console.error);
+		}).catch(console.error) as Promise<void>;
 	} else {
 		return sageMessage.reactWarn("NPC Not Found!");
 	}
@@ -455,7 +466,7 @@ async function gmChat(sageMessage: SageMessage, dialogContent: TDialogContent): 
 
 // #region PC Dialog
 async function pcChat(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
-	const pc = findPc(sageMessage, dialogContent.name);
+	const pc = await findPc(sageMessage, dialogContent.name);
 	if (pc) {
 		return <Promise<void>>sendDialogPost(sageMessage, {
 			authorName: dialogContent.displayName, // defaults to character.name
@@ -473,7 +484,7 @@ async function pcChat(sageMessage: SageMessage, dialogContent: TDialogContent): 
 
 // #region Companion Dialog
 async function companionChat(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
-	const companion = findCompanion(sageMessage, dialogContent.name);
+	const companion = await findCompanion(sageMessage, dialogContent.name);
 	if (companion) {
 		return <Promise<void>>sendDialogPost(sageMessage, {
 			authorName: dialogContent.displayName, // defaults to character.name
@@ -509,13 +520,22 @@ async function findLastMessage(sageMessage: SageMessage, messageDid: Optional<Sn
 	const lastMessages: TDialogMessage[] = [];
 	if (sageMessage.game) {
 		if (sageMessage.isPlayer) {
-			lastMessages.push(...(sageMessage.playerCharacter?.getLastMessages(sageMessage.discordKey) ?? []));
+			const playerCharacter = await sageMessage.fetchPlayerCharacter();
+			const messages = playerCharacter?.getLastMessages(sageMessage.discordKey) ?? [];
+			lastMessages.push(...messages);
 		} else if (sageMessage.isGameMaster) {
-			lastMessages.push(...sageMessage.game.nonPlayerCharacters.getLastMessages(sageMessage.discordKey));
+			const nonPlayerCharacters = await sageMessage.game.fetchNonPlayerCharacters();
+			const messages = nonPlayerCharacters.getLastMessages(sageMessage.discordKey);
+			lastMessages.push(...messages);
 		}
 	} else {
-		lastMessages.push(...sageMessage.actor.s.playerCharacters.getLastMessages(sageMessage.discordKey));
-		lastMessages.push(...sageMessage.actor.s.nonPlayerCharacters.getLastMessages(sageMessage.discordKey));
+		const playerCharacters = await sageMessage.actor.s.fetchPlayerCharacters();
+		const pcMessages = playerCharacters.getLastMessages(sageMessage.discordKey);
+		lastMessages.push(...pcMessages);
+
+		const nonPlayerCharacters = await sageMessage.actor.s.fetchNonPlayerCharacters();
+		const npcMessages = nonPlayerCharacters.getLastMessages(sageMessage.discordKey);
+		lastMessages.push(...npcMessages);
 	}
 	lastMessages.sort((a, b) => a.timestamp - b.timestamp);
 	return lastMessages.pop() ?? null;

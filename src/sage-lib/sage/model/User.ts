@@ -1,14 +1,15 @@
 import type * as Discord from "discord.js";
-import type { Args, Optional } from "../../../sage-utils";
+import type { Args, Optional, UUID } from "../../../sage-utils";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
 import type { DialogType } from "../repo/base/channel";
 import CharacterManager from "./CharacterManager";
 import type GameCharacter from "./GameCharacter";
-import type { GameCharacterCore } from "./GameCharacter";
+import type { GameCharacterCore, TGameCharacterTag } from "./GameCharacter";
 import NamedCollection from "./NamedCollection";
 import NoteManager, { TNote } from "./NoteManager";
 import type SageCache from "./SageCache";
 import { applyValues } from "./SageCommandArgs";
+import { readJsonFile } from "../../../sage-utils/utils/FsUtils";
 
 export type TAlias = {
 	name: string;
@@ -27,44 +28,26 @@ export type TUserOptions = {
 	defaultSagePostType: DialogType;
 }
 
+type TUserCharacter = {
+	charId: UUID;
+	tags: TGameCharacterTag[];
+};
+
 export interface UserCore extends DidCore<"User">, Partial<TUserOptions> {
 	aliases?: TAlias[];
 	allowDynamicDialogSeparator?: boolean;
 	macros?: TMacro[];
-	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
 	notes?: TNote[];
 	patronTier?: PatronTierType;
-	playerCharacters?: (GameCharacter | GameCharacterCore)[];
+	characters?: TUserCharacter[];
 }
-
-//#region Core Updates
-
-interface IOldUserCore extends UserCore {
-	/** Phase out in favor of playerCharacters */
-	characters?: GameCharacterCore[];
-}
-
-function updateCore(core: IOldUserCore): UserCore {
-	//#region move .characters to .playerCharacters
-	if (core.characters) {
-		core.playerCharacters = core.characters;
-	}
-	delete core.characters;
-	//#endregion
-	return core;
-}
-
-//#endregion
 
 export default class User extends HasDidCore<UserCore> {
 	public constructor(core: UserCore, sageCache: SageCache) {
-		super(updateCore(core), sageCache);
+		super(core, sageCache);
 
 		this.core.aliases = NamedCollection.from(this.core.aliases ?? [], this);
 		this.core.macros = NamedCollection.from(this.core.macros ?? [], this);
-
-		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
-		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []), this);
 	}
@@ -74,9 +57,36 @@ export default class User extends HasDidCore<UserCore> {
 	public get defaultDialogType(): DialogType | undefined { return this.core.defaultDialogType; }
 	public get defaultSagePostType(): DialogType | undefined { return this.core.defaultSagePostType; }
 	public get macros(): NamedCollection<TMacro> { return this.core.macros as NamedCollection<TMacro>; }
-	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public notes: NoteManager;
-	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
+
+	//#region characters
+
+	private characters = new Map<string, CharacterManager>();
+
+	private async fetchCharacters(tag: "pc" | "npc"): Promise<CharacterManager> {
+		if (!this.characters.has(tag)) {
+			const cores: GameCharacterCore[] = [];
+			const chars = this.core.characters?.filter(char => char.tags.includes(tag)) ?? [];
+			for (const char of chars) {
+				const core = await User.fetchCharacter(this.did, char.charId);
+				if (core) {
+					cores.push(core);
+				}
+			}
+			this.characters.set(tag, CharacterManager.from(cores, this, tag));
+		}
+		return this.characters.get(tag)!;
+	}
+
+	public async fetchPlayerCharacters(): Promise<CharacterManager> {
+		return this.fetchCharacters("pc");
+	}
+
+	public async fetchNonPlayerCharacters(): Promise<CharacterManager> {
+		return this.fetchCharacters("npc");
+	}
+
+	//#endregion
 
 	public get patronTier(): PatronTierType { return this.core.patronTier ?? 0; }
 	public set patronTier(patronTierType: PatronTierType) { this.core.patronTier = patronTierType; }
@@ -86,10 +96,16 @@ export default class User extends HasDidCore<UserCore> {
 	public isPatron = this.isFriend || this.isInformant || this.isTrusted;
 	public get isSuperUser(): boolean { return User.isSuperUser(this.did); }
 
-	public getAutoCharacterForChannel(did: Optional<Discord.Snowflake>): GameCharacter | undefined {
+	public async fetchAutoCharacterForChannel(did: Optional<Discord.Snowflake>): Promise<GameCharacter | undefined> {
 		if (did) {
-			return this.playerCharacters.find(char => char.hasAutoChannel(did))
-				?? this.nonPlayerCharacters.find(char => char.hasAutoChannel(did));
+			const pcs = await this.fetchPlayerCharacters();
+			const pc = pcs.find(char => char.hasAutoChannel(did));
+			if (pc) {
+				return pc;
+			}
+			const npcs = await this.fetchNonPlayerCharacters();
+			const npc = npcs.find(char => char.hasAutoChannel(did));
+			return npc;
 		}
 		return undefined;
 	}
@@ -101,6 +117,12 @@ export default class User extends HasDidCore<UserCore> {
 
 	public async save(): Promise<boolean> {
 		return this.sageCache.users.write(this);
+	}
+
+	public static async fetchCharacter(userDid: Discord.Snowflake, charId: UUID): Promise<GameCharacterCore | null> {
+		/** @todo sort out a variable for the path root */
+		const path = `./sage/data/users/${userDid}/characters/${charId}.json`;
+		return readJsonFile<GameCharacterCore>(path);
 	}
 
 	public static createCore(userDid: Discord.Snowflake): UserCore {

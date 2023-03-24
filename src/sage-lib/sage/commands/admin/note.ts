@@ -43,23 +43,25 @@ Game PC Notes
 // registerAdminCommandHelp("Admin", "Notes", "notes list {optionalCategoryFilter}");
 
 // type TCharacterAndInput = { character: GameCharacter; input: string; };
-function getPcForStats(sageMessage: SageMessage): GameCharacter | undefined {
+async function getPcForStats(sageMessage: SageMessage): Promise<GameCharacter | undefined> {
 	if (sageMessage.game && sageMessage.isPlayer) {
-		return sageMessage.playerCharacter;
+		return sageMessage.fetchPlayerCharacter();
 	}
 	const name = sageMessage.args.valueByKey("name");
 	const owner = sageMessage.game ?? sageMessage.actor.s;
-	const char = owner.playerCharacters.findByName(name);
+	const playerCharacters = await owner.fetchPlayerCharacters();
+	const char = playerCharacters.findByName(name);
 	return char ?? undefined;
 }
-function getNpcForStats(sageMessage: SageMessage): GameCharacter | undefined {
+async function getNpcForStats(sageMessage: SageMessage): Promise<GameCharacter | undefined> {
 	const name = sageMessage.args.valueByKey("name");
 	const owner = sageMessage.game ?? sageMessage.actor.s;
-	const char = owner.nonPlayerCharacters.findByName(name);
+	const nonPlayerCharacters = await owner.fetchNonPlayerCharacters();
+	const char = nonPlayerCharacters.findByName(name);
 	return char ?? undefined;
 }
 async function statsSet(sageMessage: SageMessage): Promise<void> {
-	const character = getPcForStats(sageMessage) || getNpcForStats(sageMessage);
+	const character = await getPcForStats(sageMessage) ?? await getNpcForStats(sageMessage);
 	if (!character) {
 		return sageMessage.reactFailure("Character Not Found!")
 	}

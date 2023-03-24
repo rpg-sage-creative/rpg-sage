@@ -1,17 +1,26 @@
-import { existsSync, readdir, readFile, rmSync, writeFile } from "fs";
+import { existsSync, mkdir, readdir, readFile, rmSync, writeFile } from "fs";
 
 //#region helpers
 
+function isPrimitive(value: any): boolean {
+	return !exists(value) || value instanceof Date || ["string", "number", "boolean"].includes(typeof(value));
+}
+
 function cleanJson(object: any): boolean {
+	if (isPrimitive(object)) return false;
+	if (Array.isArray(object)) return object.map(cleanJson).includes(true);
+
 	let changed = false;
 	Object.keys(object as any).forEach(key => {
-		if (!exists(object[key])) {
+		const value = object[key];
+		if (!exists(value)) {
 			delete object[key];
 			changed = true;
-		}else if (typeof(object[key]) === "object") {
-			changed ||= cleanJson(object[key]);
+		}else if (!isPrimitive(value)) {
+			changed = cleanJson(value) || changed;
 		}
 	});
+
 	return changed;
 }
 
@@ -77,11 +86,12 @@ function save<T extends IdCore>(core: TPair<T>): Promise<true> {
 				if (error) {
 					reject(error);
 				}else {
+					console.log(`\t\t${core.path}: saved.`);
 					resolve(true);
 				}
 			});
 		}else {
-			console.log(`WRITE FILE: ${core.path}`);
+			console.log(`\t\t${core.path}: saved.`);
 			resolve(true);
 		}
 	});
@@ -95,15 +105,12 @@ function rename<T extends IdCore>(core: TPair<T>): Promise<true> {
 		}else {
 			core.path = oldPath.replace(core.id, core.did);
 		}
-		if (live) {
-			save(core).then(() => {
+		save(core).then(() => {
+			if (live) {
 				rmSync(oldPath);
-				resolve(true);
-			}).catch(reject);
-		}else {
-			console.log(`RENAME FILE: ${oldPath} => ${core.path}`);
+			}
 			resolve(true);
-		}
+		}).catch(reject);
 	});
 }
 
@@ -207,18 +214,16 @@ function removeSendCommandToSendSearchTo(channel: IChannel & Partial<THasSendCom
 }
 
 function cleanChannelCore_v1(channel: IChannel): boolean {
-	let changed = false;
-	changed ||= removeGameMasterPlayerNonPlayer(channel);
-	changed ||= cleanJson(channel);
-	return changed;
+	const removed = removeGameMasterPlayerNonPlayer(channel);
+	const cleaned = cleanJson(channel);
+	return removed || cleaned;
 }
 
 function cleanChannelCore_v2(channel: IChannel): boolean {
-	let changed = false;
-	changed ||= removeAdminSearch(channel);
-	changed ||= removeSendCommandToSendSearchTo(channel);
-	changed ||= cleanJson(channel);
-	return changed;
+	const removed_a = removeAdminSearch(channel);
+	const removed_b = removeSendCommandToSendSearchTo(channel);
+	const cleaned = cleanJson(channel);
+	return removed_a || removed_b || cleaned;
 }
 
 //#endregion
@@ -260,8 +265,8 @@ async function readFiles<T extends IdCore>(type: string): Promise<TPair<T>[]> {
 	return out;
 }
 
-type TUpdateHandler<T extends IdCore> = (core: TPair<T>) => Promise<[string, number] | null>;
-async function updateType<T extends IdCore>(type: string, handlers: TUpdateHandler<T>[]):  Promise<[string, number][]> {
+type TUpdateHandler<T extends IdCore, U extends IdCore, V extends IdCore> = (pair: TPair<T>, oldCore: U, newCore: V) => Promise<[string, number] | null>;
+async function updateType<T extends IdCore, U extends IdCore, V extends IdCore>(type: string, handlers: TUpdateHandler<T, U, V>[]):  Promise<[string, number][]> {
 	const singular = type.endsWith("s") ? type.slice(0, -1) : type;
 	console.log(`\tChecking for ${singular} file updates ...`);
 	const changes: [string, number][] = [];
@@ -276,11 +281,11 @@ async function updateType<T extends IdCore>(type: string, handlers: TUpdateHandl
 
 }
 
-async function update<T extends IdCore>(type: string, handler: TUpdateHandler<T>): Promise<[string, number][]> {
+async function update<T extends IdCore, U extends IdCore, V extends IdCore>(type: string, handler: TUpdateHandler<T, U, V>): Promise<[string, number][]> {
 	const changes: [string, number][] = [];
-	const cores = await readFiles<T>(type);
-	for (const core of cores) {
-		const updates = await handler(core);
+	const pairs = await readFiles<T>(type);
+	for (const pair of pairs) {
+		const updates = await handler(pair, pair.json as any, pair.json as any);
 		if (updates) {
 			changes.push(updates);
 		}
@@ -354,6 +359,24 @@ async function updateBots_v2(bot: TPair<BotCore_v1>): Promise<[string, number] |
 
 //#region characters
 
+type GameCharacterTag = "pc" | "npc" | "gm" | "ally" | "enemy" | "boss";
+type GameCharacter = {
+	userDid: string;
+	charId: string;
+	tags: GameCharacterTag[];
+} | {
+	char: GameCharacterCore;
+	tags: GameCharacterTag[];
+};
+type UserCharacter = {
+	charId: string;
+	tags: GameCharacterTag[];
+};
+type GameCharacterCore = {
+	id: string;
+	userDid?: string;
+}
+
 type CharacterCore_v2 = IdCore & {
 	sheet: { macroUserId:string; };
 }
@@ -378,60 +401,98 @@ async function updateCharacters_v2(char: TPair<CharacterCore_v2>): Promise<[stri
 
 type GameCore_v1 = IdCore & {
 	channels?: IChannel[];
+	playerCharacters?: GameCharacterCore[];
+	nonPlayerCharacters?: GameCharacterCore[];
 };
 
 type GameCore_v2 = IdCore & {
 	channels?: IChannel[];
+	characters?: GameCharacter[];
 };
 
 async function updateGames(): Promise<[string, number][]> {
 	return updateType("games", [updateGames_v1, updateGames_v2]);
 }
 
-async function updateGames_v1(game: TPair<GameCore_v1>): Promise<[string, number] | null> {
+async function updateGames_v1(pair: TPair<IdCore>, v1: GameCore_v1): Promise<[string, number] | null> {
 	let changes = 0;
 
 	//#region update channels
 	let channelChanges = 0;
-	game.json.channels?.forEach(channel => {
+	v1.channels?.forEach(channel => {
 		if (cleanChannelCore_v1(channel)) {
 			channelChanges++;
 		}
 	});
 	if (channelChanges) {
-		console.log(`\t\t${game.id}: channel cleanup.`);
+		console.log(`\t\t${pair.id}: channel cleanup.`);
 		changes += channelChanges;
 	}
 	//#endregion
 
 	if (changes) {
-		save(game);
+		save(pair);
 	}
 
-	return [game.id, changes];
+	return [pair.id, changes];
 }
 
-async function updateGames_v2(game: TPair<GameCore_v2>): Promise<[string, number] | null> {
+type GameCharacterForUser = { gameId:string; userId:string; charId:string; char:any; type:"pc"|"npc"; };
+const gameCharactersForUsers: GameCharacterForUser[] = [];
+async function updateGames_v2(pair: TPair<IdCore>, v1: GameCore_v1, v2: GameCore_v2): Promise<[string, number] | null> {
 	let changes = 0;
 
 	//#region update channels
 	let channelChanges = 0;
-	game.json.channels?.forEach(channel => {
+	v2.channels?.forEach(channel => {
 		if (cleanChannelCore_v2(channel)) {
 			channelChanges++;
 		}
 	});
 	if (channelChanges) {
-		console.log(`\t\t${game.id}: channel cleanup.`);
+		console.log(`\t\t${pair.id}: channel cleanup.`);
 		changes += channelChanges;
 	}
 	//#endregion
 
-	if (changes) {
-		save(game);
+	//#region make characters references to User characters
+	if ("playerCharacters" in v1 || "nonPlayerCharacters" in v1) {
+		const characters: GameCharacter[] = [];
+
+		v1.playerCharacters?.forEach(gc => {
+			if (gc.userDid) {
+				gameCharactersForUsers.push({ gameId:pair.id, userId:gc.userDid, charId:gc.id, char:gc, type:"pc" });
+				characters.push({ userDid:gc.userDid, charId:gc.id, tags:["pc"] });
+			}
+			changes++;
+		});
+		delete v1.playerCharacters;
+
+		v1.nonPlayerCharacters?.forEach(gc => {
+			if (gc.userDid) {
+				gameCharactersForUsers.push({ gameId:pair.id, userId:gc.userDid, charId:gc.id, char:gc, type:"npc" });
+				characters.push({ userDid:gc.userDid, charId:gc.id, tags:["npc"] });
+			}else {
+				characters.push({ char:gc, tags:["npc"] });
+			}
+			changes++;
+		});
+		delete v1.nonPlayerCharacters;
+
+		if (characters.length) {
+			v2.characters = characters;
+		}
+
+		console.log(`\t\t${pair.id} character cleanup.`);
 	}
 
-	return [game.id, changes];
+	//#endregion
+
+	if (changes) {
+		save(pair);
+	}
+
+	return [pair.id, changes];
 }
 
 //#endregion
@@ -525,20 +586,103 @@ async function updateUsers(): Promise<[string, number][]> {
 }
 
 type UserCore_v1 = DidCore & {
+	/** @deprecated */
+	characters?: GameCharacterCore[];
+	/** @deprecated */
+	nonPlayerCharacters?: GameCharacterCore[];
+	/** @deprecated */
+	playerCharacters?: GameCharacterCore[];
+};
+
+type UserCore_v2 = DidCore & {
+	characters?: UserCharacter[];
 };
 
 async function updateUsers_v1(): Promise<[string, number] | null> {
 	return null;
 }
 
-async function updateUsers_v2(user: TPair<UserCore_v1>): Promise<[string, number] | null> {
-	if (user.id !== user.json.did && !isNonNilSnowflake(user.id)) {
-		const renamed = await rename(user);
-		if (!renamed) throw new Error(`Unable to rename: ${user.path}`);
-		return [user.did, 1];
-	}
-	return null;
+async function updateUsers_v2(pair: TPair<DidCore>, v1: UserCore_v1, v2: UserCore_v2): Promise<[string, number]> {
+	let changes = 0;
 
+	//#region rename file
+	if (pair.id !== pair.did && !isNonNilSnowflake(pair.id)) {
+		const renamed = await rename(pair);
+		if (!renamed) throw new Error(`Unable to rename: ${pair.path}`);
+		changes++;
+	}
+	//#endregion
+
+	//#region user characters
+	if ("nonPlayerCharacters" in v1) {
+		const v1NonPlayerCharacters = v1.nonPlayerCharacters ?? [];
+		delete v1.nonPlayerCharacters;
+		v2.characters = [];
+		for (const v1Char of v1NonPlayerCharacters) {
+			await writeUserCharacterToFile(pair.did, v1Char.id, v1Char);
+			v2.characters!.push({ charId:v1Char.id, tags:["npc"] });
+			changes++;
+		}
+		console.log(`\t\t${pair.did} nonPlayer character cleanup.`);
+	}
+	if ("characters" in v1 || "playerCharacters" in v1) {
+		const v1PlayerCharacters = (v1.characters ?? []).concat(v1.playerCharacters ?? []);
+		if (v1PlayerCharacters.length) {
+			v2.characters = [];
+			for (const v1Char of v1PlayerCharacters) {
+				await writeUserCharacterToFile(pair.did, v1Char.id, v1Char);
+				v2.characters!.push({ charId:v1Char.id, tags:["pc"] });
+				changes++;
+			}
+		}
+		delete v1.characters;
+		delete v1.playerCharacters;
+		console.log(`\t\t${pair.did} player character cleanup.`);
+	}
+	//#endregion
+
+	//#region game characters
+	const gameCharacters = gameCharactersForUsers.filter(gc => gc.userId === pair.did);
+	if (gameCharacters.length) {
+		for (const gc of gameCharacters) {
+			await writeUserCharacterToFile(pair.did, gc.charId, gc.char);
+			v2.characters?.push({ charId:gc.charId, tags:[gc.type] });
+			changes++;
+		}
+		console.log(`\t\t${pair.did} game character cleanup.`);
+	}
+	//#endregion
+
+	return [pair.did, changes];
+
+}
+
+async function writeUserCharacterToFile(userDid: string, charId: string, char: GameCharacterCore): Promise<boolean> {
+	const path = `${sagePath}/users/${userDid}/characters`;
+	const filePath = `${path}/${charId}.json`;
+	return new Promise((resolve, reject) => {
+		if (live) {
+			if (!existsSync(path)) {
+				mkdir(path, { recursive:true }, err => {
+					console.error(err);
+				});
+			}
+			if (existsSync(path)) {
+				writeFile(filePath, JSON.stringify(char), error => {
+					if (error) {
+						reject(error);
+					}else {
+						console.log(`\t\t${filePath}: saved.`);
+						resolve(true);
+					}
+				});
+			}
+			reject("NO PATH!");
+		}else {
+			console.log(`\t\t${filePath}: saved.`);
+			resolve(true);
+		}
+	});
 }
 
 //#endregion

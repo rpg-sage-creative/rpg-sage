@@ -219,8 +219,10 @@ export abstract class SageCommandBase<
 	}
 
 	/** Get the PlayerCharacter if there a game and the actor is a Player */
-	public get playerCharacter(): GameCharacter | undefined {
-		return this.cache.get("playerCharacter", () => this.isPlayer ? this.game?.playerCharacters.findByUser(this.actor.did) ?? undefined : undefined);
+	public async fetchPlayerCharacter(): Promise<GameCharacter | undefined> {
+		return this.cache.get("playerCharacter", () => {
+			return this.game?.fetchPlayerCharacters().then(pcs => pcs.findByUser(this.actor.did)) ?? undefined;
+		});
 	}
 
 	//#endregion
