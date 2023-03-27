@@ -130,13 +130,24 @@ function isOlderVer(obj: Core<any>, verToCheck: ValidVersion): boolean {
 
 //#region main processing
 
+function getUpdateHandlers(ver: ValidVersion): Function[] {
+	switch(ver) {
+		default: return[];
+		case "v1": return [updateBots_v1, updateGames_v1, updateMaps_v1, updateMessages_v1, updateServers_v1, updateUsers_v1];
+		case "v2": return [updateBots_v2, updateGames_v2, updateMaps_v2, updateMessages_v2, updateServers_v2, updateUsers_v2];
+	}
+}
+
 async function processUpdates(): Promise<void> {
-	console.log(`Checking for data file updates ...`);
 	const changes: [string, number][] = [];
-	const updateFns = [updateBots, updateGames, updateMaps, updateMessages, updateServers, updateUsers];
-	for (const updateFn of updateFns) {
-		const updates = await updateFn();
-		changes.push(...updates);
+	const versions = ["v1", "v2"] as ValidVersion[];
+	for (const ver of versions) {
+		console.log(`Checking for ${ver} file updates ...`);
+		const handlers = getUpdateHandlers(ver);
+		for (const handler of handlers) {
+			const type = handler.name.match(/update(\w+)_v\d/)?.[1].toLowerCase()!;
+			changes.push(...(await updateType(type, handler)));
+		}
 	}
 	const totalChanges = changes.reduce((count, change) => count += change[1], 0);
 	const totalFiles = changes.map(change => change[0]).filter((s, i, a) => a.indexOf(s) === i).length;
@@ -168,22 +179,9 @@ async function readFiles<T extends IdCore<any>>(type: string): Promise<TPair<T>[
 	return out;
 }
 
-async function updateType(type: string, handlers: Function[]):  Promise<[string, number][]> {
+async function updateType(type: string, handler: Function):  Promise<[string, number][]> {
 	const singular = type.endsWith("s") ? type.slice(0, -1) : type;
 	console.log(`\tChecking for ${singular} file updates ...`);
-	const changes: [string, number][] = [];
-	for (const handler of handlers) {
-		const updates = await update(type, handler);
-		changes.push(...updates);
-	}
-	const totalChanges = changes.reduce((count, change) => count += change[1], 0);
-	const totalFiles = changes.map(change => change[0]).filter((s, i, a) => a.indexOf(s) === i).length;
-	console.log(`\tTotal ${singular} updates: ${totalChanges} (${totalFiles} files)`);
-	return changes;
-
-}
-
-async function update(type: string, handler: Function): Promise<[string, number][]> {
 	const changes: [string, number][] = [];
 	const pairs = await readFiles(type);
 	for (const pair of pairs) {
@@ -192,16 +190,16 @@ async function update(type: string, handler: Function): Promise<[string, number]
 			changes.push(updates);
 		}
 	}
+	const totalChanges = changes.reduce((count, change) => count += change[1], 0);
+	const totalFiles = changes.map(change => change[0]).filter((s, i, a) => a.indexOf(s) === i).length;
+	console.log(`\tTotal ${singular} updates: ${totalChanges} (${totalFiles} files)`);
 	return changes;
+
 }
 
 //#endregion
 
 //#region bots - completed: v1 (devs), v2 (images, rename)
-
-async function updateBots(): Promise<[string, number][]> {
-	return updateType("bots", [updateBots_v1, updateBots_v2]);
-}
 
 type BotCore_v1 = DidCore<"v1"> & {
 	devs: {
@@ -504,10 +502,6 @@ type GameCore_v2 = IdCore<"v2"> & {
 	characters?: GameCharacter_v2[];
 };
 
-async function updateGames(): Promise<[string, number][]> {
-	return updateType("games", [updateGames_v1, updateGames_v2]);
-}
-
 async function updateGames_v1(pair: TPair<GameCore_v1>, v1: GameCore_v1): Promise<[string, number] | null> {
 	if (!isOlderVer(v1, "v1")) return null;
 
@@ -629,10 +623,6 @@ async function updateGames_v2(pair: TPair<GameCore_v2>, v1: GameCore_v1, v2: Gam
 
 //#region maps
 
-async function updateMaps(): Promise<[string, number][]> {
-	return updateType("maps", [updateMaps_v1, updateMaps_v2]);
-}
-
 async function updateMaps_v1(): Promise<[string, number] | null> {
 	return null;
 }
@@ -645,10 +635,6 @@ async function updateMaps_v2(): Promise<[string, number] | null> {
 
 //#region messages
 
-async function updateMessages(): Promise<[string, number][]> {
-	return updateType("messages", [updateMessages_v1, updateMessages_v2]);
-}
-
 async function updateMessages_v1(): Promise<[string, number] | null> {
 	return null;
 }
@@ -660,10 +646,6 @@ async function updateMessages_v2(): Promise<[string, number] | null> {
 //#endregion
 
 //#region servers
-
-async function updateServers(): Promise<[string, number][]> {
-	return updateType("servers", [updateServers_v1, updateServers_v2]);
-}
 
 // type ServerCore_v1 = DidCore & {
 // };
@@ -710,10 +692,6 @@ async function updateServers_v2(pair: TPair<ServerCore_v2>, v2: ServerCore_v2): 
 //#endregion
 
 //#region users
-
-async function updateUsers(): Promise<[string, number][]> {
-	return updateType("users", [updateUsers_v1, updateUsers_v2]);
-}
 
 type UserCore_v1 = DidCore<"v1"> & {
 	/** @deprecated */
