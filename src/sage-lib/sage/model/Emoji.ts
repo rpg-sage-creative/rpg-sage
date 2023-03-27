@@ -1,9 +1,96 @@
 import * as _XRegExp from "xregexp";
 import utils from "../../../sage-utils";
-import type { EmojiType, IEmoji } from "./HasEmojiCore";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
-export type TEmojiAndType = { type: EmojiType; replacement: string; };
+//#region types
+
+export enum EmojiType {
+
+	// Command = 1,
+	CommandSuccess = 11,
+	CommandFailure = 12,
+	CommandWarn = 13,
+	CommandError = 14,
+	CommandDelete = 15,
+	CommandPin = 16,
+
+	// Permission = 2
+	PermissionDenied = 21,
+	PermissionPatreon = 22,
+
+	// Actions = 3
+	ActionsOne = 31,
+	ActionsTwo = 32,
+	ActionsThree = 33,
+	ActionsReaction = 34,
+	ActionsFree = 35,
+
+	// Dice
+	Die = 4,
+	DieCriticalSuccess = 41,
+	DieSuccess = 42,
+	DieFailure = 43,
+	DieCriticalFailure = 44,
+	DieDamage = 45,
+	DieTestConcealed = 461,
+	DieTestConcealedSuccess = 4611,
+	DieTestConcealedFailure = 4612,
+	DieTestHidden = 462,
+	DieTestHiddenSuccess = 4621,
+	DieTestHiddenFailure = 4622,
+	DieTestUndetected = 463,
+	DieTestUndetectedSuccess = 4631,
+	DieTestUndetectedFailure = 4632,
+	DieTestDeafened = 464,
+	DieTestDeafenedSuccess = 4641,
+	DieTestDeafenedFailure = 4642,
+	DieTestStupefied = 465,
+	DieTestStupefiedSuccess = 4651,
+	DieTestStupefiedFailure = 4652,
+
+	// Dialog = 5
+	DialogEyes = 51,
+	DialogLook = 52,
+	DialogSpeech = 53,
+	DialogThought = 54,
+
+	// Condition = 6
+	ConditionDead = 61,
+	ConditionUnconcious = 62,
+
+	// Prompt = 7
+	PromptSpacer = 70,
+	PromptChecked = 701,
+	PromptUnchecked = 702,
+	PromptYes = 71,
+	PromptNo = 711,
+
+	// Other = 9
+	AoN = 90
+}
+
+export type EmojiData = {
+	type: EmojiType;
+	matches: string[];
+	replacement: string;
+};
+
+//#endregion
+
+//#region interfaces
+
+export interface CoreWithEmoji {
+	emoji?: EmojiData[];
+}
+
+export interface HasCoreWithEmoji {
+	emoji: Emoji;
+	emojify(text: string): string;
+}
+
+//#endregion
+
+//#region helpers
 
 const actionMatches = ["A", "AA", "AAA", "R", "F"];
 function emojify(text: string, matches: string[], replacement: string): string {
@@ -38,10 +125,12 @@ function emojify(text: string, matches: string[], replacement: string): string {
 	return tokenized.join("");
 }
 
-export default class Emoji {
-	public constructor(private emoji: IEmoji[]) { }
+//#endregion
 
-	private findEmoji(type: EmojiType): IEmoji | undefined {
+export default class Emoji {
+	public constructor(private emoji: EmojiData[]) { }
+
+	private findEmoji(type: EmojiType): EmojiData | undefined {
 		return this.emoji.find(emoji => emoji.type === type);
 	}
 
@@ -90,7 +179,7 @@ export default class Emoji {
 			|| this.emoji.find((_, i) => oldEmoji[i].type !== this.emoji[i].type || oldEmoji[i].replacement !== this.emoji[i].replacement) !== undefined;
 	}
 
-	public toArray(): IEmoji[] {
+	public toArray(): EmojiData[] {
 		return this.emoji.map(({ type, matches, replacement }) => ({ type, matches: matches.slice(), replacement }));
 	}
 

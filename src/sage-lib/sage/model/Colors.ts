@@ -1,12 +1,58 @@
 import utils, { Optional } from "../../../sage-utils";
-import { ColorType, IColor } from "./HasColorsCore";
+
+//#region types
+
+export enum ColorType {
+	Command = 1,
+
+	AdminCommand = 2,
+
+	Search = 3,
+	SearchFind = 31,
+
+	Dice = 4,
+
+	Dialog = 5,
+	GameMaster = 51,
+	NonPlayerCharacter = 52,
+	NonPlayerCharacterAlly = 521,
+	NonPlayerCharacterEnemy = 522,
+	PlayerCharacter = 53,
+	PlayerCharacterAlt = 531,
+	PlayerCharacterCompanion = 532,
+	PlayerCharacterHireling = 533,
+
+	PfsCommand = 6
+}
+
+//#endregion
+
+//#region interfaces
+
+export type ColorData = {
+	type: ColorType;
+	hex: string;
+	/** only used for dev purposes */
+	label?: string;
+};
+
+export interface CoreWithColors {
+	colors: ColorData[];
+}
+
+export interface HasCoreWithColors {
+	colors: Colors;
+	toDiscordColor(colorType: ColorType): string | null;
+}
+
+//#endregion
 
 export type TColorAndType = { type: ColorType; color: utils.ColorUtils.Color };
 
 export default class Colors {
-	public constructor(private colors: IColor[]) { }
+	public constructor(private colors: ColorData[]) { }
 
-	private findColor(type: Optional<ColorType>): IColor | undefined {
+	private findColor(type: Optional<ColorType>): ColorData | undefined {
 		return this.colors.find(color => color.type === type);
 	}
 
@@ -51,7 +97,7 @@ export default class Colors {
 			|| this.colors.find((_, i) => oldColors[i].type !== this.colors[i].type || oldColors[i].hex !== this.colors[i].hex) !== undefined;
 	}
 
-	public toArray(): IColor[] {
+	public toArray(): ColorData[] {
 		return this.colors.map(({ type, hex }) => ({ type, hex }));
 	}
 

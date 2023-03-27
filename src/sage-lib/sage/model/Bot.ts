@@ -1,12 +1,11 @@
 import type * as Discord from "discord.js";
+import type { GameType } from "../../../sage-common";
 import { LogLevel, TConsoleCommandType } from "../../../sage-utils";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository";
-import Colors from "./Colors";
-import Emoji from "./Emoji";
-import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
-import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
+import Colors, { ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
+import Emoji, { CoreWithEmoji, EmojiType, HasCoreWithEmoji } from "./Emoji";
+import { CoreWithImages, HasCoreWithImages, Images } from "./Images";
 import type SageCache from "./SageCache";
-import type { GameType } from "../../../sage-common";
 
 export type TAcceptableBot = {
 	/** user.id of the bot */
@@ -17,10 +16,9 @@ export type TAcceptableBot = {
 
 export type TBotCodeName = "dev" | "beta" | "stable";
 
-export type TCoreAuthor = { iconUrl?: string; name?: string; url?: string; };
-export type TCorePrefixes = { command?: string; search?: string; };
+type TDev = { did: Discord.Snowflake; logLevel: TConsoleCommandType; };
 
-export type TDev = { did: Discord.Snowflake; logLevel: TConsoleCommandType; };
+type TBotImageTag = "avatar";
 
 /**
  * key = GameType
@@ -30,7 +28,7 @@ export type TDev = { did: Discord.Snowflake; logLevel: TConsoleCommandType; };
  */
 type TSearchStatus = { [key: number]: undefined | boolean | string; };
 
-export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
+export interface BotCore extends DidCore<"Bot">, CoreWithColors, CoreWithEmoji, CoreWithImages<TBotImageTag> {
 
 	/** List of bots that we can let through to the handlers. */
 	acceptableBots?: TAcceptableBot[];
@@ -56,21 +54,18 @@ export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	/** Discord API bot token */
 	token: string;
 
-	/** Url to the Sage avatar/token. */
-	tokenUrl: string;
-
 }
 
-export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmojiCore {
-	public constructor(core: IBotCore, sageCache: SageCache) { super(core, sageCache); }
+export default class Bot extends HasDidCore<BotCore> implements HasCoreWithColors, HasCoreWithEmoji, HasCoreWithImages<TBotImageTag> {
+	public constructor(core: BotCore, sageCache: SageCache) { super(core, sageCache); }
 	public get acceptableBots(): TAcceptableBot[] { return this.core.acceptableBots ?? []; }
+	public get avatarUrl(): string { return this.images.getUrl("avatar") ?? "https://rpgsage.io/SageBotToken.png"; }
 	public get codeName(): TBotCodeName { return this.core.codeName; }
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }
 	public get devs(): TDev[] { return this.core.devs ?? []; }
 	public get dialogWebhookName(): string { return this.core.dialogWebhookName ?? "SageDialogWebhookName"; }
 	public get logLevel(): LogLevel { return LogLevel[<keyof typeof LogLevel>this.core.logLevel] || null; }
 	public get token(): string { return this.core.token; }
-	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
 
 	/** returns true if we can search the given game */
 	public canSearch(gameType: GameType): boolean { return this.core.searchStatus?.[gameType] === true; }
@@ -86,7 +81,7 @@ export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore,
 	}
 
 	// #region IHasColorsCore
-	public colors = new Colors(this.core.colors || (this.core.colors = []));
+	public colors = new Colors(this.core.colors ?? (this.core.colors = []));
 	public toDiscordColor(colorType: ColorType): string | null {
 		if (!this.core.colors.length) {
 			console.warn(`Colors Missing: Bot (${this.codeName || this.id})`);
@@ -96,7 +91,7 @@ export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore,
 	}
 	// #endregion
 
-	// #region IHasEmoji
+	// #region HasCoreWithEmoji
 	public emoji = new Emoji(this.core.emoji ?? (this.core.emoji = []));
 	public emojify(text: string): string {
 		return this.emoji.emojify(text);
@@ -105,5 +100,9 @@ export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore,
 		return this.emoji.get(emojiType) ?? null;
 	}
 	// #endregion
+
+	//#region HasCoreWithImages
+	public images = new Images<TBotImageTag>(this.core.images ?? (this.core.images = []));
+	//#endregion
 
 }

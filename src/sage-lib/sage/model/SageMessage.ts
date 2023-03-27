@@ -5,7 +5,7 @@ import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
 import type { TCommandAndArgs } from "../../discord";
 import { send } from "../../discord/messages";
-import { EmojiType } from "./HasEmojiCore";
+import { EmojiType } from "./Emoji";
 import SageCache from "./SageCache";
 import { addMessageDeleteButton, SageCommandBase, SageCommandCore, TSendArgs } from "./SageCommand";
 import SageMessageArgs from "./SageMessageArgs";

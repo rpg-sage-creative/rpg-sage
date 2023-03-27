@@ -92,7 +92,7 @@ async function ensurePlayerCharacter(sageInteraction: SageInteraction, gameMap: 
 
 	let updated = false;
 	[pc].concat(pc.companions).forEach(char => {
-		const charUrl = char.tokenUrl ?? char.avatarUrl;
+		const charUrl = char.images.getUrl("token") ?? char.images.getUrl("avatar");
 		if (charUrl) {
 			const charName = char.name;
 			const found = gameMap.tokens.find(token => token.characterId === char.id)

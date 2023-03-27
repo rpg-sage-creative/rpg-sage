@@ -150,12 +150,8 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		ownerTag = ownerGuildMember?.user ? `@${ownerGuildMember.user.tag}` : ownerGuildMember?.displayName ?? character.userDid,
 		renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), character.name);
 
-	if (character.embedColor) {
-		renderableContent.setColor(character.embedColor);
-	}
-	if (character.avatarUrl) {
-		renderableContent.setThumbnailUrl(character.avatarUrl);
-	}
+	renderableContent.setColor(character.embedColor);
+	renderableContent.setThumbnailUrl(character.images.getUrl("dialog"));
 
 	const ownerOrPlayer = character.isGMorNPC ? "Owner" : "Player";
 	renderableContent.append(`<b>${ownerOrPlayer}</b> ${ownerTag ?? "<i>none</i>"}`);
@@ -182,7 +178,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	}
 
 	const targetChannel = sageMessage.message.channel;
-	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
+	const avatarUrl = character.images.getUrl("avatar") ?? sageMessage.bot.avatarUrl;
 	return sendWebhook(sageMessage.sageCache, targetChannel, renderableContent, { avatarURL: avatarUrl, username: character.name }, sageMessage.dialogType);
 }
 
@@ -322,7 +318,9 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 		charArgs = sageMessage.args.findCharacterArgs(),
 		core = { userDid, ...charArgs } as GameCharacterCore;
 	if (!core.name) {
-		core.name = urlToName(core.tokenUrl) ?? urlToName(core.avatarUrl)!;
+		core.name = urlToName(core.images?.find(img => img.tags.includes("avatar"))?.url)
+			?? urlToName(core.images?.find(img => img.tags.includes("dialog"))?.url)
+			?? urlToName(core.images?.find(img => img.tags.includes("token"))?.url)!;
 	}
 	if (!core.name) {
 		return sageMessage.reactFailure("Cannot create a character without a name!");
@@ -397,10 +395,9 @@ async function gameCharacterUpdate(sageMessage: SageMessage): Promise<void> {
 
 	if (character) {
 		const core = {
-			avatarUrl: charArgs.avatarUrl,
 			embedColor: charArgs.embedColor,
+			images: charArgs.images,
 			name: names.newName ?? names.name,
-			tokenUrl: charArgs.tokenUrl,
 			userDid: newUserDid ?? userDid
 		} as GameCharacterCore;
 		await character.update(core, false);

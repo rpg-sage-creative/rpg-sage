@@ -14,12 +14,13 @@ import Colors from "./Colors";
 import Emoji from "./Emoji";
 import type GameCharacter from "./GameCharacter";
 import type { GameCharacterCore, TGameCharacterTag } from "./GameCharacter";
-import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
-import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
+import type { ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
+import type { EmojiType, CoreWithEmoji, HasCoreWithEmoji } from "./Emoji";
 import type SageCache from "./SageCache";
 import { applyValues, getEnum, hasValues, ISageCommandArgs } from "./SageCommandArgs";
 import type Server from "./Server";
 import User from "./User";
+import { readJsonFile } from "../../../sage-utils/utils/FsUtils";
 
 type IChannelArgs = Args<IChannelOptions> & { did:Snowflake; };
 
@@ -60,16 +61,15 @@ export type TGameOptions = TDefaultGameOptions & {
 	name: string;
 };
 
+/** Represents a reference to a character. */
 type TGameCharacter = {
-	userDid: string;
+	/** If the PC is owned by a User, we need their Snowflake. */
+	userDid?: string;
 	charId: string;
-	tags: TGameCharacterTag[];
-} | {
-	char: GameCharacterCore;
 	tags: TGameCharacterTag[];
 };
 
-export interface IGameCore extends IdCore, IHasColors, IHasEmoji, Partial<TGameOptions> {
+export interface IGameCore extends IdCore, CoreWithColors, CoreWithEmoji, Partial<TGameOptions> {
 	objectType: "Game";
 	createdTs: number;
 	archivedTs?: number;
@@ -126,7 +126,7 @@ async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<
 	return [gChannels.concat(sChannels), gChannels, sChannels];
 }
 
-export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IComparable<Game>, IHasColorsCore, IHasEmojiCore {
+export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IComparable<Game>, HasCoreWithColors, HasCoreWithEmoji {
 	public constructor(core: IGameCore, public server: Server, sageCache: SageCache) {
 		super(core, sageCache);
 	}
@@ -163,7 +163,9 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 			const cores: GameCharacterCore[] = [];
 			const chars = this.core.characters?.filter(char => char.tags.includes(tag)) ?? [];
 			for (const char of chars) {
-				const core = "char" in char ? char.char : await User.fetchCharacter(char.userDid, char.charId);
+				const core = char.userDid
+					? await User.fetchCharacter(char.userDid, char.charId)
+					: await Game.fetchCharacter(this.id, char.charId);
 				if (core) {
 					cores.push(core);
 				}
@@ -498,6 +500,12 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	}
 
 	// #endregion
+
+	public static async fetchCharacter(gameId: UUID, charId: UUID): Promise<GameCharacterCore | null> {
+		/** @todo sort out a variable for the path root */
+		const path = `./sage/data/games/${gameId}/characters/${charId}.json`;
+		return readJsonFile<GameCharacterCore>(path);
+	}
 
 	public static async from(message: Message, sageCache: SageCache): Promise<Game | null> {
 		if (message.guild) {

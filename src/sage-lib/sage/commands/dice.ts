@@ -13,7 +13,7 @@ import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequo
 import type { TCommandAndArgsAndData } from "../../discord";
 import { registerMessageListener } from "../../discord/handlers";
 import { GameUserType } from "../model/Game";
-import { ColorType } from "../model/HasColorsCore";
+import { ColorType } from "../model/Colors";
 import type NamedCollection from "../model/NamedCollection";
 import SageInteraction from "../model/SageInteraction";
 import SageMessage from "../model/SageMessage";

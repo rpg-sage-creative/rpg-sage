@@ -5,7 +5,7 @@ import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catch
 import { discordPromptYesNo } from "../../../discord/prompts";
 import type Colors from "../../model/Colors";
 import type { TColorAndType } from "../../model/Colors";
-import { ColorType } from "../../model/HasColorsCore";
+import { ColorType } from "../../model/Colors";
 import type SageMessage from "../../model/SageMessage";
 import type SageMessageArgs from "../../model/SageMessageArgs";
 import { BotServerGameType, embedColor, registerAdminCommand } from "../cmd";

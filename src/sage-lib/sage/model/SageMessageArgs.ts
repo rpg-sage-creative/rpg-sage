@@ -9,10 +9,9 @@ import { cleanEnumArgValues, ISageCommandArgs } from "./SageCommandArgs";
 import type SageMessage from "./SageMessage";
 
 type TGameCharacterArgs = {
-	avatarUrl: string;
 	embedColor: string;
+	images: { tags:string[]; url:string; }[];
 	name: string;
-	tokenUrl: string;
 }
 
 export type TNames = {
@@ -273,42 +272,56 @@ export default class SageMessageArgs<T extends string = string> extends ArgsMana
 
 	/** Finds the arguments used to create / update a GameCharacter */
 	public findCharacterArgs(): Args<TGameCharacterArgs> {
+		const images = ["avatar", "dialog", "token"].map(tag => {
+			const url = this.findUrl(tag);
+			return url ? { tags:[tag], url } : null;
+		}).filter(exists) as { tags:("avatar"|"dialog"|"token")[]; url:string; }[];
+
 		const charArgs: Args<TGameCharacterArgs> = {
-			avatarUrl: this.findUrl("avatar"),
 			embedColor: this.findDiscordColor("color"),
-			name: this.getString("newName") ?? this.getString("name"),
-			tokenUrl: this.findUrl("token")
+			images,
+			name: this.getString("newName") ?? this.getString("name")
 		};
 
 		// If image urls aren't given as key/value pairs, let's take a look and see if they attached any images to the command
-		let noToken = charArgs.tokenUrl === undefined;
-		let noAvatar = charArgs.avatarUrl === undefined;
-		if (noToken || noAvatar) {
-			const atts = this.sageMessage.message.attachments;
-			const tokenUrl = atts.find(att => !!att.contentType?.includes("image") && !!att.name?.match(/token/i) && !!att.url?.match(/token/i))?.url;
-			const avatarUrl = atts.find(att => !!att.contentType?.includes("image") && !!att.name?.match(/avatar/i) && !!att.url?.match(/avatar/i))?.url;
-			const otherUrls = atts.filter(att => !!att.contentType?.includes("image") && att.url !== tokenUrl && att.url !== avatarUrl).map(att => att.url);
-			if (noToken) {
-				charArgs.tokenUrl = tokenUrl ?? otherUrls.shift();
+		let noAvatar = images.find(img => img.tags.includes("avatar")) === undefined;
+		let noDialog = images.find(img => img.tags.includes("dialog")) === undefined;
+		let noToken = images.find(img => img.tags.includes("token")) === undefined;
+		if (noAvatar || noDialog || noToken) {
+			const atts = this.sageMessage.message.attachments.filter(att => !!att.contentType?.includes("image"));
+			const avatarUrl = atts.find(att => att.name.match(/avatar/i) || att.url.match(/avatar/i))?.url;
+			const dialogUrl = atts.find(att => att.url !== avatarUrl && (att.name.match(/dialog/i) || att.url.match(/dialog/i)))?.url;
+			const tokenUrl = atts.find(att => ![avatarUrl, dialogUrl].includes(att.url) && (att.name.match(/token/i) || att.url.match(/token/i)))?.url;
+			const otherUrls = atts.filter(att => ![avatarUrl, dialogUrl, tokenUrl].includes(att.url)).map(att => att.url);
+			if (noAvatar && (avatarUrl ?? otherUrls.length)) {
+				images.push({ tags:["avatar"], url:avatarUrl ?? otherUrls.shift()! });
 			}
-			if (noAvatar) {
-				charArgs.avatarUrl = avatarUrl ?? otherUrls.shift();
+			if (noDialog && (dialogUrl ?? otherUrls.length)) {
+				images.push({ tags:["dialog"], url:dialogUrl ?? otherUrls.shift()! });
+			}
+			if (noToken && (tokenUrl ?? otherUrls.length)) {
+				images.push({ tags:["token"], url:tokenUrl ?? otherUrls.shift()! });
 			}
 		}
 
 		// If we are still missing images, let's see if they blinding pasted the urls in as unkeyed args.
-		noToken = charArgs.tokenUrl === undefined;
-		noAvatar = charArgs.avatarUrl === undefined;
-		if (noToken || noAvatar) {
+		noAvatar = images.find(img => img.tags.includes("avatar")) === undefined;
+		noDialog = images.find(img => img.tags.includes("dialog")) === undefined;
+		noToken = images.find(img => img.tags.includes("token")) === undefined;
+		if (noAvatar || noDialog || noToken) {
 			const urls = this.unkeyedUrls();
-			const tokenUrl = urls.find(url => url.match(/token/i));
 			const avatarUrl = urls.find(url => url.match(/avatar/i));
-			const otherUrls = urls.filter(url => url !== tokenUrl && url !== avatarUrl);
-			if (noToken) {
-				charArgs.tokenUrl = tokenUrl ?? otherUrls.shift();
+			const dialogUrl = urls.find(url => url !== avatarUrl && url.match(/dialog/i));
+			const tokenUrl = urls.find(url => ![avatarUrl, dialogUrl].includes(url) && url.match(/token/i));
+			const otherUrls = urls.filter(url => ![avatarUrl, dialogUrl, tokenUrl].includes(url));
+			if (noAvatar && (avatarUrl ?? otherUrls.length)) {
+				images.push({ tags:["avatar"], url:avatarUrl ?? otherUrls.shift()! });
 			}
-			if (noAvatar) {
-				charArgs.avatarUrl = avatarUrl ?? otherUrls.shift();
+			if (noDialog && (dialogUrl ?? otherUrls.length)) {
+				images.push({ tags:["dialog"], url:dialogUrl ?? otherUrls.shift()! });
+			}
+			if (noToken && (tokenUrl ?? otherUrls.length)) {
+				images.push({ tags:["token"], url:tokenUrl ?? otherUrls.shift()! });
 			}
 		}
 

@@ -1,7 +1,7 @@
 import utils from "../../../../sage-utils";
 import _dice, { DieRollGrade } from "../../../../sage-dice";
 import { PROFICIENCIES, toModifier, Coins, Table } from "../../../../sage-pf2e";
-import { ColorType } from "../../model/HasColorsCore";
+import { ColorType } from "../../model/Colors";
 import type SageMessage from "../../model/SageMessage";
 import { createRenderableContent, registerCommandRegex } from "../cmd";
 import { registerCommandHelp } from "../help";

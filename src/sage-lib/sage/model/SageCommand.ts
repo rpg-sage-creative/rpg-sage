@@ -16,7 +16,7 @@ import { DialogType, GameChannelType, IChannel } from "../repo/base/channel";
 import type Bot from "./Bot";
 import type Game from "./Game";
 import type GameCharacter from "./GameCharacter";
-import type { ColorType, IHasColorsCore } from "./HasColorsCore";
+import type { ColorType, HasCoreWithColors } from "./Colors";
 import type SageCache from "./SageCache";
 import type { TSageDiscordPair } from "./SageCache";
 import type { ISageCommandArgs } from "./SageCommandArgs";
@@ -236,9 +236,9 @@ export abstract class SageCommandBase<
 
 	//#endregion
 
-	// #region IHasColorsCore related
+	// #region HasCoreWithColors related
 
-	public getHasColors(): IHasColorsCore {
+	public getHasColors(): HasCoreWithColors {
 		return this.game ?? this.server ?? this.bot;
 	}
 

@@ -14,10 +14,10 @@ import type { TCommand, TCommandAndArgsAndData } from "../../discord";
 import { registerMessageListener, registerReactionListener } from "../../discord/handlers";
 import { replaceWebhook, sendWebhook } from "../../discord/messages";
 import type CharacterManager from "../model/CharacterManager";
+import { ColorType } from "../model/Colors";
+import { EmojiType } from "../model/Emoji";
 import { GameRoleType } from "../model/Game";
 import GameCharacter, { type GameCharacterCore } from "../model/GameCharacter";
-import { ColorType } from "../model/HasColorsCore";
-import { EmojiType } from "../model/HasEmojiCore";
 import type SageMessage from "../model/SageMessage";
 import type SageReaction from "../model/SageReaction";
 import { DialogType } from "../repo/base/channel";
@@ -106,11 +106,12 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 	//#endregion
 	renderableContent.append(content);
 
-	const thumbnailUrl = postData.imageUrl ?? character.avatarUrl;
+	// thumbnail image is the image in embedded content on the right side; we call that "dialog"
+	const thumbnailUrl = postData.imageUrl ?? character.images.getUrl("dialog");
 	renderableContent.setThumbnailUrl(thumbnailUrl);
 
-	// Discord "avatarURL" is the profile pic, which I am calling the "tokenUrl"
-	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
+	// avatar image is the image of the "poster" (the one who sent the message) and is on the left side of the name.
+	const avatarUrl = character.images.getUrl("avatar") ?? sageMessage.bot.avatarUrl;
 
 	const messages: Message[] = await sendDialogRenderable(sageMessage, renderableContent, { username: authorName, avatarURL: avatarUrl })
 		.catch(errorReturnEmptyArray);

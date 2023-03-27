@@ -3,10 +3,9 @@ import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
 import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { createEmojiRegex } from "../../../../sage-utils/utils/DiscordUtils/emoji";
 import { discordPromptYesNo } from "../../../discord/prompts";
-import type { TEmojiAndType } from "../../model/Emoji";
 import type Emoji from "../../model/Emoji";
+import { EmojiType } from "../../model/Emoji";
 import type Game from "../../model/Game";
-import { EmojiType } from "../../model/HasEmojiCore";
 import type SageMessage from "../../model/SageMessage";
 import type SageMessageArgs from "../../model/SageMessageArgs";
 import type Server from "../../model/Server";
@@ -127,6 +126,8 @@ async function emojiGet(sageMessage: SageMessage): Promise<void> {
 //#endregion
 
 //#region set
+
+type TEmojiAndType = { type: EmojiType; replacement: string; };
 
 /**
  * Returns both color and type from the args.

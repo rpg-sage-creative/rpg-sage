@@ -3,7 +3,7 @@ import { LogLevel, Optional } from "../../../sage-utils";
 import { formatArg, setConsoleHandler } from "../../../sage-utils/utils/ConsoleUtils";
 import { DiscordMaxValues, DMessage, MessageType, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
-import type { IBotCore } from "./Bot";
+import type { BotCore } from "./Bot";
 import Bot from "./Bot";
 import SageCache from "./SageCache";
 
@@ -34,7 +34,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 
 	public client = new Client(createDiscordClientOptions());
 
-	public constructor(core: IBotCore, public codeVersion: string) {
+	public constructor(core: BotCore, public codeVersion: string) {
 		super(core, null!);
 
 		// To see options, look for: ClientEvents (right click nav .on below)

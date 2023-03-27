@@ -11,8 +11,8 @@ import { DidCore, HasDidCore } from "../repo/base/DidRepository";
 import Colors from "./Colors";
 import Emoji from "./Emoji";
 import Game, { getDefaultGameOptions, TDefaultGameOptions } from "./Game";
-import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
-import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
+import type { ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
+import type { EmojiType, CoreWithEmoji, HasCoreWithEmoji } from "./Emoji";
 import { applyValues, hasValues, ISageCommandArgs } from "./SageCommandArgs";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
@@ -37,7 +37,7 @@ export function getServerDefaultGameOptions(args: ISageCommandArgs): Args<TServe
 }
 
 
-export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, Partial<TServerDefaultGameOptions> {
+export interface ServerCore extends DidCore<"Server">, CoreWithColors, CoreWithEmoji, Partial<TServerDefaultGameOptions> {
 	admins: IAdminUser[];
 	channels: IChannel[];
 	commandPrefix?: string;
@@ -46,7 +46,7 @@ export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, Pa
 	roles: IAdminRole[];
 }
 
-export default class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IHasEmojiCore {
+export default class Server extends HasDidCore<ServerCore> implements HasCoreWithColors, HasCoreWithEmoji {
 
 	// #region Private Properties
 

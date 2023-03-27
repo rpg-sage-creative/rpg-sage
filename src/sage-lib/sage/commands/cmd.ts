@@ -2,8 +2,8 @@ import utils, { OrNull, type Awaitable } from "../../../sage-utils";
 import { registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs, TMessageHandler } from "../../discord/types";
 import ActiveBot from "../model/ActiveBot";
-import type { IHasColorsCore } from "../model/HasColorsCore";
-import { ColorType } from "../model/HasColorsCore";
+import type { HasCoreWithColors } from "../model/Colors";
+import { ColorType } from "../model/Colors";
 import type SageMessage from "../model/SageMessage";
 import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
 import { MessageType } from "../../../sage-utils/utils/DiscordUtils";
@@ -37,7 +37,7 @@ export function embedColor(color: utils.ColorUtils.Color, ...labels: string[]): 
 	return embed;
 }
 
-export function createRenderableContent(hasColors: IHasColorsCore, colorType: ColorType, title?: string): utils.RenderUtils.RenderableContent {
+export function createRenderableContent(hasColors: HasCoreWithColors, colorType: ColorType, title?: string): utils.RenderUtils.RenderableContent {
 	const renderableContent = new utils.RenderUtils.RenderableContent(title);
 	renderableContent.setColor(hasColors.toDiscordColor(colorType));
 	return renderableContent;
@@ -79,7 +79,7 @@ export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler, 
 
 // #region Admin Command Registration
 
-export function createAdminRenderableContent(hasColors: IHasColorsCore, title?: string): utils.RenderUtils.RenderableContent {
+export function createAdminRenderableContent(hasColors: HasCoreWithColors, title?: string): utils.RenderUtils.RenderableContent {
 	const renderableContent = new utils.RenderUtils.RenderableContent(title);
 	renderableContent.setColor(hasColors.toDiscordColor(ColorType.AdminCommand));
 	return renderableContent;

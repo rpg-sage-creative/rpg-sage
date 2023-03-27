@@ -10,7 +10,7 @@ import {
 } from "@discordjs/builders";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
-import type { IBotCore } from "./sage-lib/sage/model/Bot";
+import type { BotCore } from "./sage-lib/sage/model/Bot";
 import utils, { Optional } from "./sage-utils";
 import { registerSlashCommands } from "./sage-lib/sage/commands";
 import type { TNameDescription, TSlashCommand, TSlashCommandChoice, TSlashCommandOption } from "./types";
@@ -25,7 +25,7 @@ const nodeArgs = process.argv.slice(2),
 let characterCount = 0;
 
 const botJson = utils.FsUtils.listFilesSync("./data/sage/bots")
-	.map(file => utils.FsUtils.readJsonFileSync<IBotCore>(`./data/sage/bots/${file}`))
+	.map(file => utils.FsUtils.readJsonFileSync<BotCore>(`./data/sage/bots/${file}`))
 	.find(json => json?.codeName === botCodeName);
 
 //#region Register Slash Commands
@@ -195,7 +195,7 @@ function buildCommands(which: TBot): (SlashCommandBuilder | ContextMenuCommandBu
 
 //#endregion
 
-async function updateSlashCommands(bot: IBotCore): Promise<void> {
+async function updateSlashCommands(bot: BotCore): Promise<void> {
 	const rest = new REST({version: '9'}).setToken(bot.token);
 	try {
 		console.log(`Started refreshing application (/) commands for: ${botCodeName}`);
@@ -211,7 +211,7 @@ async function updateSlashCommands(bot: IBotCore): Promise<void> {
 		console.error(error);
 	}
 }
-async function wipeSlashCommands(bot: IBotCore): Promise<void> {
+async function wipeSlashCommands(bot: BotCore): Promise<void> {
 	const rest = new REST({version: '9'}).setToken(bot.token);
 	try {
 		console.log(`Started wiping application (/) commands for: ${botCodeName}`);

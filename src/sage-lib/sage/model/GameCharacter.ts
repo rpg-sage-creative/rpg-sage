@@ -7,18 +7,43 @@ import type DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import type { TDialogMessage } from "../repo/DialogMessageRepository";
 import DialogMessageRepository from "../repo/DialogMessageRepository";
 import CharacterManager from "./CharacterManager";
+import { CoreWithImages, HasCoreWithImages, Images } from "./Images";
 import type { IHasSave } from "./NamedCollection";
 import NoteManager, { type TNote } from "./NoteManager";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
-export type TGameCharacterTag = "pc" | "npc" | "gm" | "ally" | "enemy" | "boss";
+export type TGameCharacterTag = "gm"
+	| "npc" | "ally" | "enemy" | "boss"
+	| "pc" | "alt" | "companion" | "familiar" | "hireling";
 
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion";
-export interface GameCharacterCore {
+
+export type TCharacterImageTag =
+	/** The image of the "poster". (The image on the left of the post.) */
+	"avatar"
+	/** The image posted with the dialog. (The image on the right of the post content.) */
+	| "dialog"
+	/** The image used on the map. */
+	| "token"
+
+	/** An image used when the character is injured. (default 100% > hp >= 75%) */
+	| "scratched"
+
+	/** An image used when the character is injured. (default 75% > hp >= 50%) */
+	| "injured"
+
+	/** An image used when the character is injured. (default 50% > hp >= 25%) */
+	| "bloody"
+
+	/** An image used when the character is injured. (default 50% > hp >= 25%) */
+	| "dying"
+
+	/** An image used when the character is dead. */
+	| "dead";
+
+export interface GameCharacterCore extends CoreWithImages<TCharacterImageTag> {
 	/** Channels to automatically treat input as dialog */
 	autoChannels?: Snowflake[];
-	/** The image used for the right side of the dialog */
-	avatarUrl?: string;
 	/** The character's companion characters */
 	companions?: (GameCharacter | GameCharacterCore)[];
 	/** Discord compatible color: 0x001122 */
@@ -33,8 +58,6 @@ export interface GameCharacterCore {
 	notes?: TNote[];
 	/** The character's Pathbuilder build. */
 	pathbuilder?: TPathbuilderCharacter;
-	/** The image used to represent the character to the left of the post */
-	tokenUrl?: string;
 	/** The character's user's Discord ID */
 	userDid?: Snowflake;
 }
@@ -55,7 +78,7 @@ function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage
 	return messageKey.channel === discordKey.channel;
 }
 
-export default class GameCharacter implements IHasSave {
+export default class GameCharacter implements IHasSave, HasCoreWithImages<TCharacterImageTag> {
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
 		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, "companion");
 
@@ -72,10 +95,6 @@ export default class GameCharacter implements IHasSave {
 
 	/** Channels to automatically treat input as dialog */
 	public get autoChannels(): Snowflake[] { return this.core.autoChannels ?? (this.core.autoChannels = []); }
-
-	/** The image used for the right side of the dialog */
-	public get avatarUrl(): string | undefined { return this.core.avatarUrl; }
-	public set avatarUrl(avatarUrl: string | undefined) { this.core.avatarUrl = avatarUrl; }
 
 	/** The character's companion characters. */
 	public get companions(): CharacterManager { return this.core.companions as CharacterManager; }
@@ -121,10 +140,6 @@ export default class GameCharacter implements IHasSave {
 
 	private _preparedName?: string;
 	private get preparedName(): string { return this._preparedName ?? (this._preparedName = GameCharacter.prepareName(this.name)); }
-
-	/** The image used to represent the character to the left of the post. */
-	public get tokenUrl(): string | undefined { return this.core.tokenUrl; }
-	public set tokenUrl(tokenUrl: string | undefined) { this.core.tokenUrl = tokenUrl; }
 
 	public get type(): TGameCharacterType { return this.owner?.characterType ?? "gm"; }
 
@@ -273,6 +288,10 @@ export default class GameCharacter implements IHasSave {
 	public save(): Promise<boolean> {
 		return this.owner?.save() ?? Promise.resolve(false);
 	}
+	//#endregion
+
+	//#region HasCoreWithImages
+	public images = new Images<TCharacterImageTag>(this.core.images ?? (this.core.images = []));
 	//#endregion
 
 	public static defaultGmCharacterName = "Game Master";
