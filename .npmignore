@@ -1,0 +1,19 @@
+#####################################################
+#
+# Ignore everything by default - don't worry, package.json is always included
+*
+
+#####################################################
+#
+# Whitelist just these:
+#
+
+# The main file
+# !/index.js
+# The location of my transpiled code
+!dist/**/*
+
+# Some other things that we want users to be able to see:
+!/README.md
+!/CHANGELOG.md
+!/LICENSE
