@@ -1,9 +1,9 @@
-import * as fs from "fs";
+import { existsSync, mkdir, mkdirSync, readdir, readdirSync, readFile as fsReadFile, readFileSync as fsReadFileSync, rmSync, writeFile as fsWriteFile, writeFileSync as fsWriteFileSync } from "fs";
 import { formattedStringify } from "../JsonUtils";
 import { isNotBlank } from "../StringUtils";
 
 export function fileExistsSync(path: string): boolean {
-	return fs.existsSync(path);
+	return existsSync(path);
 }
 
 /**
@@ -13,7 +13,7 @@ export function fileExistsSync(path: string): boolean {
 export function deleteFileSync(path: string): boolean {
 	const before = fileExistsSync(path);
 	if (before) {
-		fs.rmSync(path);
+		rmSync(path);
 		const after = fileExistsSync(path);
 		return before !== after;
 	}
@@ -24,7 +24,7 @@ export function listFiles(path: string): Promise<string[]>;
 export function listFiles(path: string, ext: string): Promise<string[]>;
 export function listFiles(path: string, ext?: string): Promise<string[]> {
 	return new Promise((resolve, reject) => {
-		fs.readdir(path, (error: NodeJS.ErrnoException | null, files: string[]) => {
+		readdir(path, (error: NodeJS.ErrnoException | null, files: string[]) => {
 			if (error) {
 				reject(error);
 			}else {
@@ -41,7 +41,7 @@ export function listFiles(path: string, ext?: string): Promise<string[]> {
 
 export function listFilesSync(path: string): string[] {
 	try {
-		return fs.readdirSync(path);
+		return readdirSync(path);
 	}catch(ex) {
 		console.error(ex);
 	}
@@ -82,7 +82,7 @@ export function filterFilesSync(path: string, filter: TFileFilter, recursive = f
  */
 export function readFile(path: string): Promise<Buffer> {
 	return new Promise((resolve, reject) => {
-		fs.readFile(path, null, (error: NodeJS.ErrnoException | null, buffer: Buffer) => {
+		fsReadFile(path, null, (error: NodeJS.ErrnoException | null, buffer: Buffer) => {
 			if (error) {
 				reject(error);
 			}else if (Buffer.isBuffer(buffer)) {
@@ -96,8 +96,8 @@ export function readFile(path: string): Promise<Buffer> {
 
 /** Returns a Buffer if the file exists and it can read a buffer, or null otherwise. */
 export function readFileSync(path: string): Buffer | null {
-	if (fs.existsSync(path)) {
-		const buffer = fs.readFileSync(path);
+	if (existsSync(path)) {
+		const buffer = fsReadFileSync(path);
 		if (Buffer.isBuffer(buffer)) {
 			return buffer;
 		}
@@ -208,17 +208,17 @@ function contentToFileOutput<T>(content: T, formatted = false): string | Buffer 
 export function writeFile<T>(filePathAndName: string, content: T): Promise<boolean>;
 export function writeFile<T>(filePathAndName: string, content: T, mkdir: boolean): Promise<boolean>;
 export function writeFile<T>(filePathAndName: string, content: T, mkdir: boolean, formatted: boolean): Promise<boolean>;
-export function writeFile<T>(filePathAndName: string, content: T, mkdir?: boolean, formatted?: boolean): Promise<boolean> {
+export function writeFile<T>(filePathAndName: string, content: T, makeDir?: boolean, formatted?: boolean): Promise<boolean> {
 	return new Promise((resolve, reject) => {
 		const errors: unknown[] = [];
-		if (mkdir) {
-			fs.mkdir(toFilePath(filePathAndName), { recursive:true }, error => {
+		if (makeDir) {
+			mkdir(toFilePath(filePathAndName), { recursive:true }, error => {
 				if (error) {
 					errors.push(error);
 				}
 			});
 		}
-		fs.writeFile(filePathAndName, contentToFileOutput(content, formatted), error => {
+		fsWriteFile(filePathAndName, contentToFileOutput(content, formatted), error => {
 			if (error) {
 				errors.push(error);
 				reject(errors);
@@ -232,16 +232,16 @@ export function writeFile<T>(filePathAndName: string, content: T, mkdir?: boolea
 export function writeFileSync<T>(filePathAndName: string, content: T): boolean;
 export function writeFileSync<T>(filePathAndName: string, content: T, mkdir: boolean): boolean;
 export function writeFileSync<T>(filePathAndName: string, content: T, mkdir: boolean, formatted: boolean): boolean;
-export function writeFileSync<T>(filePathAndName: string, content: T, mkdir?: boolean, formatted?: boolean): boolean {
+export function writeFileSync<T>(filePathAndName: string, content: T, makeDir?: boolean, formatted?: boolean): boolean {
 	try {
-		if (mkdir) {
-			fs.mkdirSync(toFilePath(filePathAndName), { recursive:true });
+		if (makeDir) {
+			mkdirSync(toFilePath(filePathAndName), { recursive:true });
 		}
 	} catch(ex) {
 		console.error(ex);
 	}
 	try {
-		fs.writeFileSync(filePathAndName, contentToFileOutput(content, formatted));
+		fsWriteFileSync(filePathAndName, contentToFileOutput(content, formatted));
 	} catch(ex) {
 		console.error(ex);
 		return false;

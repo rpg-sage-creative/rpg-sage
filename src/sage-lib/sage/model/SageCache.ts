@@ -1,9 +1,10 @@
 import { Client, Guild, GuildMember, PermissionFlagsBits, Role, Snowflake } from "discord.js";
-import utils, { Optional, UUID } from "../../../sage-utils";
+import type { Optional, UUID } from "../../../sage-utils";
 import { handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
 import DiscordFetches from "../../../sage-utils/utils/DiscordUtils/DiscordFetches";
 import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import type { DChannel, DInteraction, DMessage, DReaction, DUser } from "../../../sage-utils/utils/DiscordUtils/types";
+import { format } from "../../../sage-utils/utils/StringUtils/Markdown";
 import ActiveBot from "../model/ActiveBot";
 import { DialogType } from "../repo/base/channel";
 import BotRepo from "../repo/BotRepo";
@@ -361,7 +362,7 @@ export default class SageCache {
 	}
 
 	public format(text: string): string {
-		return utils.StringUtils.Markdown.format(this.emojify(text));
+		return format(this.emojify(text));
 	}
 
 	public getFormatter(): (content: string) => string;

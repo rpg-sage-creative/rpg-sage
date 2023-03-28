@@ -1,7 +1,7 @@
 import type utils from "../../sage-utils";
 import { MDASH, NEWLINE, TAB, toModifier } from "../common";
 import RenderableContent from "../data/RenderableContent";
-import * as Repository from "../data/Repository";
+import { filter, findByValue } from "../data/Repository";
 import type ArmorGroup from "./ArmorGroup";
 import type { BulkCore } from "./HasBulk";
 import HasBulk from "./HasBulk";
@@ -46,7 +46,7 @@ export default class Armor extends HasBulk<ArmorCore, Armor> {
 	private _group?: ArmorGroup | null;
 	public get group(): ArmorGroup | undefined {
 		if (this._group === undefined) {
-			this._group = Repository.findByValue("ArmorGroup", this.core.group) ?? null;
+			this._group = findByValue("ArmorGroup", this.core.group) ?? null;
 		}
 		return this._group ?? undefined;
 	}
@@ -59,7 +59,7 @@ export default class Armor extends HasBulk<ArmorCore, Armor> {
 	public get Traits(): Trait[] {
 		if (!this._Traits) {
 			const coreTraits = this.traits;
-			this._Traits = Repository.filter("Trait", trait => coreTraits.includes(trait.name));
+			this._Traits = filter("Trait", trait => coreTraits.includes(trait.name));
 		}
 		return this._Traits;
 	}

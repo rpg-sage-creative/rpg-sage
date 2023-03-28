@@ -1,18 +1,13 @@
 import {
-	SlashCommandBuilder,
-	SlashCommandStringOption,
-	SlashCommandAttachmentOption,
-	SlashCommandNumberOption,
-	SlashCommandBooleanOption,
-	SlashCommandSubcommandBuilder,
-	SlashCommandSubcommandGroupBuilder,
-	ContextMenuCommandBuilder
+	ContextMenuCommandBuilder, SlashCommandAttachmentOption, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandNumberOption, SlashCommandStringOption, SlashCommandSubcommandBuilder,
+	SlashCommandSubcommandGroupBuilder
 } from "@discordjs/builders";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
-import type { BotCore } from "./sage-lib/sage/model/Bot";
-import utils, { Optional } from "./sage-utils";
 import { registerSlashCommands } from "./sage-lib/sage/commands";
+import type { BotCore } from "./sage-lib/sage/model/Bot";
+import type { Optional } from "./sage-utils";
+import { listFilesSync, readJsonFileSync, writeFileSync } from "./sage-utils/utils/FsUtils";
 import type { TNameDescription, TSlashCommand, TSlashCommandChoice, TSlashCommandOption } from "./types";
 
 type TBot = "dev" | "beta" | "stable";
@@ -24,8 +19,8 @@ const nodeArgs = process.argv.slice(2),
 
 let characterCount = 0;
 
-const botJson = utils.FsUtils.listFilesSync("./data/sage/bots")
-	.map(file => utils.FsUtils.readJsonFileSync<BotCore>(`./data/sage/bots/${file}`))
+const botJson = listFilesSync("./data/sage/bots")
+	.map(file => readJsonFileSync<BotCore>(`./data/sage/bots/${file}`))
 	.find(json => json?.codeName === botCodeName);
 
 //#region Register Slash Commands
@@ -237,7 +232,7 @@ if (!botJson) {
 	}else {
 		try {
 			const built = buildCommands(botCodeName);
-			utils.FsUtils.writeFileSync(`../data/slash/${botCodeName}.json`, built, true, true);
+			writeFileSync(`../data/slash/${botCodeName}.json`, built, true, true);
 			console.log(`Slash Commands built for ${botCodeName}: ${built.length} commands; ${characterCount} characters`);
 		}catch(ex) {
 			console.error(ex);

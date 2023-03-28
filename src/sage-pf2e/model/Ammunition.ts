@@ -1,7 +1,7 @@
 import type utils from "../../sage-utils";
 import { MDASH, NEWLINE, TAB } from "../common";
 import RenderableContent from "../data/RenderableContent";
-import * as Repository from "../data/Repository";
+import { filter } from "../data/Repository";
 import type { BulkCore } from "./HasBulk";
 import HasBulk from "./HasBulk";
 import type Weapon from "./Weapon";
@@ -22,7 +22,7 @@ export default class Ammunition extends HasBulk<AmmunitionCore, Ammunition>{
 	private _weapons?: Weapon[];
 	public get weapons(): Weapon[] {
 		if (!this._weapons) {
-			this._weapons = Repository.filter("Weapon", weapon => weapon.ammunition === this);
+			this._weapons = filter("Weapon", weapon => weapon.ammunition === this);
 		}
 		return this._weapons;
 	}

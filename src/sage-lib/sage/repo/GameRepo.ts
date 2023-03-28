@@ -1,4 +1,4 @@
-import type * as Discord from "discord.js";
+import type { Snowflake } from "discord.js";
 import type { UUID } from "../../../sage-utils";
 import type DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import Game, { type IGameCore } from "../model/Game";
@@ -29,7 +29,7 @@ export default class GameRepo extends IdRepository<IGameCore, Game> {
 		);
 	}
 
-	public async getByServerDid(serverDid: Discord.Snowflake): Promise<Game[]> {
+	public async getByServerDid(serverDid: Snowflake): Promise<Game[]> {
 		const allGames = await this.getAll();
 		return allGames.filter(game => game.serverDid === serverDid);
 	}

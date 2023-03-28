@@ -1,7 +1,12 @@
 import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/User";
-import utils, { Optional, OrUndefined } from "../../../sage-utils";
+import type { Optional, OrUndefined } from "../../../sage-utils";
+import { Collection } from "../../../sage-utils/utils/ArrayUtils";
 import CharacterBase, { CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
+import { getJson } from "../../../sage-utils/utils/HttpsUtils";
+import { nth } from "../../../sage-utils/utils/NumberUtils";
+import { capitalize, StringMatcher } from "../../../sage-utils/utils/StringUtils";
+import { generate } from "../../../sage-utils/utils/UuidUtils";
 import type { TProficiency, TSavingThrow } from "../../common";
 import { toModifier } from "../../common";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository";
@@ -288,7 +293,7 @@ function abilitiesToHtml(char: PathbuilderCharacter): string {
 	const core = char.toJSON();
 	return (<TPathbuilderCharacterAbilityKey[]>["str", "dex", "con", "int", "wis", "cha"]).map(key => {
 		const score = core.abilities[key], mod = Abilities.scoreToMod(score);
-		return `<b>${utils.StringUtils.capitalize(key)}</b> ${toModifier(mod)}`;
+		return `<b>${capitalize(key)}</b> ${toModifier(mod)}`;
 	}).join(", ");
 }
 function itemsToHtml(weapons: TPathbuilderCharacterWeapon[], armors: TPathbuilderCharacterArmor[]): string {
@@ -351,8 +356,8 @@ function spellCasterToLabel(spellCaster: TPathbuilderCharacterSpellCaster): stri
 	if (spellCaster.name === "Other Spells (Staves etc)") {
 		return spellCaster.name;
 	}
-	const tradition = utils.StringUtils.capitalize(spellCaster.magicTradition);
-	const type = utils.StringUtils.capitalize(spellCaster.spellcastingType);
+	const tradition = capitalize(spellCaster.magicTradition);
+	const type = capitalize(spellCaster.spellcastingType);
 	return `${tradition} ${type} Spells`;
 }
 
@@ -400,9 +405,9 @@ function spellCasterLevelToHtml(char: PathbuilderCharacter, spellCaster: TPathbu
 		}
 	}
 	if (spells.spellLevel) {
-		return utils.NumberUtils.nth(spells.spellLevel);
+		return nth(spells.spellLevel);
 	}
-	return `Cantrips (${utils.NumberUtils.nth(Math.max(cantripLevel, 1))})`;
+	return `Cantrips (${nth(Math.max(cantripLevel, 1))})`;
 }
 
 //#endregion
@@ -602,7 +607,7 @@ function weaponToMacro(char: PathbuilderCharacter, weapon: TPathbuilderCharacter
 
 function eq<T, U>(a: T, b: U, matcher = false): boolean {
 	if (matcher) {
-		return utils.StringUtils.StringMatcher.matches(String(a), String(b));
+		return StringMatcher.matches(String(a), String(b));
 	}
 	return String(a).toLowerCase() === String(b).toLowerCase();
 }
@@ -630,7 +635,7 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 	public constructor(core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
 		super(core);
 		if (!core.id) {
-			core.id = utils.UuidUtils.generate();
+			core.id = generate();
 		}
 		Object.keys(flags).forEach(key => {
 			core[key as TPathbuilderCharacterCustomFlag] = flags[key as TPathbuilderCharacterCustomFlag];
@@ -641,10 +646,10 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 
 	//#region flags/has
 	public hasFeat(value: string): boolean {
-		return utils.StringUtils.StringMatcher.matchesAny(value, this.core.feats.map(feat => feat[0]));
+		return StringMatcher.matchesAny(value, this.core.feats.map(feat => feat[0]));
 	}
 	public hasSpecial(value: string): boolean {
-		return utils.StringUtils.StringMatcher.matchesAny(value, this.core.specials);
+		return StringMatcher.matchesAny(value, this.core.specials);
 	}
 	private _resilientBonus: number | undefined;
 	public get resilientBonus(): number {
@@ -665,7 +670,7 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 
 	/** Implements IHasAbilities */
 	public abilities = Abilities.for(this);
-	public feats = utils.ArrayUtils.Collection.from(this.core.feats ?? []);
+	public feats = Collection.from(this.core.feats ?? []);
 	public savingThrows = SavingThrows.for(this);
 
 	public get level(): number {
@@ -980,7 +985,7 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 		return new Promise<TPathbuilderCharacter>(async (resolve, reject) => {
 			try {
 				const url = `https://pathbuilder2e.com/json.php?id=${id}`;
-				const json = await utils.HttpsUtils.getJson<TPathbuilderCharacterResponse>(url).catch(reject);
+				const json = await getJson<TPathbuilderCharacterResponse>(url).catch(reject);
 // utils.FsUtils.writeFileSync(`pathfbuilder2e-${id}.json`, json);
 				if (json?.success) {
 					resolve(json.build);

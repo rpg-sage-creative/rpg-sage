@@ -1,18 +1,19 @@
 import type { Guild, Snowflake } from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import utils, { Args, LogLevel, Optional, TConsoleCommandType } from "../../../sage-utils";
+import { Args, LogLevel, Optional, TConsoleCommandType } from "../../../sage-utils";
 import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
 import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
+import { generate } from "../../../sage-utils/utils/UuidUtils";
 import { DicePostType } from "../commands/dice";
 import ActiveBot from "../model/ActiveBot";
 import { DialogType, IChannel, IChannelOptions, updateChannel } from "../repo/base/channel";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
+import type { ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
 import Colors from "./Colors";
+import type { CoreWithEmoji, EmojiType, HasCoreWithEmoji } from "./Emoji";
 import Emoji from "./Emoji";
 import Game, { getDefaultGameOptions, TDefaultGameOptions } from "./Game";
-import type { ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
-import type { EmojiType, CoreWithEmoji, HasCoreWithEmoji } from "./Emoji";
 import { applyValues, hasValues, ISageCommandArgs } from "./SageCommandArgs";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
@@ -104,7 +105,7 @@ export default class Server extends HasDidCore<ServerCore> implements HasCoreWit
 		const diceSecretMethodType = _diceSecretMethodType ?? this.defaultDiceSecretMethodType;
 		const game = new Game({
 			objectType: "Game",
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 			serverDid: this.did,
 			serverId: this.id,
 			createdTs: new Date().getTime(),

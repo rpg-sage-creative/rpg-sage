@@ -1,6 +1,7 @@
 import type { BaseCore, Pf2tBaseCore, TDetail, THasSuccessOrFailure } from "../../sage-pf2e";
 import { parseSource } from "../../sage-pf2e/data/Repository";
-import utils, { OrNull } from "../../sage-utils";
+import type { OrNull } from "../../sage-utils";
+import { capitalize } from "../../sage-utils/utils/StringUtils";
 import { compareNames, getPf2tCores, getSageCores } from "../common.mjs";
 import type { TCore } from "../types.mjs";
 import { parseSpell } from "./Spell.mjs";
@@ -9,7 +10,7 @@ export function split<T extends string = string>(values?: string): T[] | undefin
 	return values?.split(",") as T[];
 }
 export function splitAndCapitalize<T extends string = string>(values?: string): T[] | undefined {
-	return values?.split(",").map(value => utils.StringUtils.capitalize(value)) as T[];
+	return values?.split(",").map(value => capitalize(value)) as T[];
 }
 
 export function findAndRemove(lines: string[], key: string): string | undefined;
@@ -182,8 +183,8 @@ function isObject<T>(object: any): object is T {
 	return typeof(object) === "object";
 }
 function compareObject<T, U extends keyof T>(a: T, b: T): boolean {
-	const aKeys = Object.keys(a).sort() as U[];
-	const bKeys = Object.keys(b).sort() as U[];
+	const aKeys = Object.keys(a as any).sort() as U[];
+	const bKeys = Object.keys(b as any).sort() as U[];
 	if (aKeys.length === bKeys.length && !aKeys.find((key, i) => key !== bKeys[i])) {
 		return !aKeys.find(key => !compare(a[key], b[key]))
 	}

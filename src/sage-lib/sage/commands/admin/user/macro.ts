@@ -1,19 +1,21 @@
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import utils, { Optional } from "../../../../../sage-utils";
+import type { Optional } from "../../../../../sage-utils";
 import type SageMessage from "../../../model/SageMessage";
 import type { TMacro } from "../../../model/User";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
+import { StringMatcher } from "../../../../../sage-utils/utils/StringUtils";
+import { existsAndUnique } from "../../../../../sage-utils/utils/ArrayUtils/Filters";
 
 const UNCATEGORIZED = "Uncategorized";
 
 function findMacro(sageMessage: SageMessage, name?: Optional<string>, category?: Optional<string>): TMacro | undefined {
-	const nameMatcher = utils.StringUtils.StringMatcher.from(name);
+	const nameMatcher = StringMatcher.from(name);
 	if (nameMatcher.isBlank) {
 		return undefined;
 	}
 
-	const categoryMatcher = utils.StringUtils.StringMatcher.from(category);
+	const categoryMatcher = StringMatcher.from(category);
 	if (categoryMatcher.isBlank) {
 		return sageMessage.actor.s.macros.find(macro => nameMatcher.matches(macro.name));
 	}
@@ -44,8 +46,8 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const categoryInput = sageMessage.args.valueByKey(/cat(egory)?/i) ?? "";
-	const cleanCategory = utils.StringUtils.StringMatcher.clean(categoryInput);
-	const filtered = macros.filter(macro => macro.category && cleanCategory === utils.StringUtils.StringMatcher.clean(macro.category));
+	const cleanCategory = StringMatcher.clean(categoryInput);
+	const filtered = macros.filter(macro => macro.category && cleanCategory === StringMatcher.clean(macro.category));
 	if (filtered.length) {
 		const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>macro-list (filtered)</b>`);
 		renderableContent.appendTitledSection(filtered[0].category!, toList(filtered));
@@ -54,7 +56,7 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 
 	} else {
 		const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>macro-list</b>`);
-		const categories = macros.map(macro => macro.category).filter<string>(utils.ArrayUtils.Filters.existsAndUnique);
+		const categories = macros.map(macro => macro.category).filter<string>(existsAndUnique);
 		categories.unshift(UNCATEGORIZED);
 		categories.forEach(category => {
 			const byCategory = macros.filter(macro => (macro.category ?? UNCATEGORIZED) === category);
@@ -196,8 +198,8 @@ async function macroDetails(sageMessage: SageMessage): Promise<void> {
 }
 
 async function deleteCategory(sageMessage: SageMessage, category: string): Promise<void> {
-	const cleanCategory = utils.StringUtils.StringMatcher.clean(category);
-	const byCategory = sageMessage.actor.s.macros.filter(macro => cleanCategory === utils.StringUtils.StringMatcher.clean(macro.category ?? UNCATEGORIZED));
+	const cleanCategory = StringMatcher.clean(category);
+	const byCategory = sageMessage.actor.s.macros.filter(macro => cleanCategory === StringMatcher.clean(macro.category ?? UNCATEGORIZED));
 	if (!byCategory.length) {
 		return <any>sageMessage.send(createAdminRenderableContent(sageMessage.getHasColors(), `Macro Category Not Found!`));
 	}

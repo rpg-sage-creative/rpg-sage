@@ -1,5 +1,6 @@
-import utils, { isDefined } from "../sage-utils";
-import { getSageCores, debug, info, warn } from "./common.mjs";
+import { isDefined } from "../sage-utils";
+import { writeFileSync } from "../sage-utils/utils/FsUtils/index.js";
+import { debug, getSageCores, info, warn } from "./common.mjs";
 import type { TCore } from "./types.mjs";
 
 export function processAbcData() {
@@ -38,6 +39,6 @@ export function processAbcData() {
 			abcData.push(...dedications.filter(isDefined) as TCore[]);
 		}
 	});
-	utils.FsUtils.writeFileSync("./data/abc-data.json", abcData, false, true);
+	writeFileSync("./data/abc-data.json", abcData, false, true);
 	info(`Creating abc-data.json ... done!`);
 }

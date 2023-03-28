@@ -1,9 +1,10 @@
-import type { OrNull, OrUndefined } from "../../../sage-utils";
-import utils, { UUID } from "../../../sage-utils";
+import type { OrNull, OrUndefined, UUID } from "../../../sage-utils";
+import type { RenderableContent as _RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import { UuidMatcher } from "../../../sage-utils/utils/UuidUtils";
 import type { TRarity } from "../../common";
 import { COMMON, RARITIES } from "../../common";
 import RenderableContent from "../../data/RenderableContent";
-import * as Repository from "../../data/Repository";
+import { find, findByValue } from "../../data/Repository";
 import Base, { BaseCore } from "./Base";
 import type { IHasRarity, IHasTraits, RarityCore, TraitsCore } from "./interfaces";
 import type Source from "./Source";
@@ -41,7 +42,7 @@ function doPages(sourceInfo: TSourceInfoRaw): string[] {
 }
 function parseSourceInfo(sourceInfo: TSourceInfoRaw): TSourceInfo {
 	const pages = doPages(sourceInfo);
-	const source = Repository.findByValue("Source", sourceInfo.source)!;
+	const source = findByValue("Source", sourceInfo.source)!;
 	const version = sourceInfo.version || 0;
 	return { pages: pages, source: source, version: version };
 }
@@ -70,7 +71,7 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 	private _source?: Source;
 	public get source(): Source {
 		if (this._source === undefined) {
-			this._source = Repository.findByValue("Source", this.core.source)!;
+			this._source = findByValue("Source", this.core.source)!;
 		}
 		return this._source;
 	}
@@ -92,9 +93,9 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 
 	public get previousId(): OrUndefined<UUID> { return this.core.previousId; }
 
-	private _previousIdMatcher?: utils.UuidUtils.UuidMatcher;
-	protected get previousIdMatcher(): utils.UuidUtils.UuidMatcher {
-		return this._previousIdMatcher ?? (this._previousIdMatcher = utils.UuidUtils.UuidMatcher.from(this.core.previousId!));
+	private _previousIdMatcher?: UuidMatcher;
+	protected get previousIdMatcher(): UuidMatcher {
+		return this._previousIdMatcher ?? (this._previousIdMatcher = UuidMatcher.from(this.core.previousId!));
 	}
 
 	/** Store null if we look but can't find one. */
@@ -102,7 +103,7 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 	/** Only return a UUID or undefined */
 	public get nextId(): OrUndefined<UUID> {
 		if (this._nextId === undefined) {
-			this._nextId = Repository.find<HasSource>(this.objectType, other =>
+			this._nextId = find<HasSource>(this.objectType, other =>
 				other.isErrata && this.idMatcher.matches(other.previousIdMatcher)
 			)?.id ?? null;
 		}
@@ -139,7 +140,7 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 
 	// #region utils.RenderUtils.IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): _RenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.hasTraits || this.isNotCommon) {

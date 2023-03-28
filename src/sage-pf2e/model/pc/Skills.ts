@@ -1,7 +1,7 @@
-import utils from "../../../sage-utils";
+import { stringIgnoreCase } from "../../../sage-utils/utils/ArrayUtils/Sort";
 import type { TProficiency } from "../../common";
 import { DEXTERITY, EXPERT, LEGENDARY, MASTER, NO_ARMOR, TRAINED, UNTRAINED } from "../../common";
-import * as Repository from "../../data/Repository";
+import { all, findByValue } from "../../data/Repository";
 import type Action from "../Action";
 import type Armor from "../Armor";
 import type Shield from "../Shield";
@@ -22,14 +22,14 @@ export default class Skills {
 	}
 	public get skills(): Skill[] {
 		const skills: Skill[] = [];
-		Repository.all("Skill").forEach(skill => {
+		all("Skill").forEach(skill => {
 			if (skill.hasSpecialty) {
 				skills.push(...skill.specialties);
 			} else {
 				skills.push(skill);
 			}
 		});
-		skills.sort((a, b) => utils.ArrayUtils.Sort.stringIgnoreCase(a.name, b.name));
+		skills.sort((a, b) => stringIgnoreCase(a.name, b.name));
 		return skills;
 	}
 
@@ -94,14 +94,14 @@ export default class Skills {
 
 function ensure<T extends Skill>(objectType: string, objectOrName: T | string): T {
 	return typeof (objectOrName) === "string"
-		? Repository.findByValue(objectType, objectOrName) as T
+		? findByValue(objectType, objectOrName) as T
 		: objectOrName;
 }
 
 function getItemOrDefault<T extends Armor>(equipmentItem: EquipmentItem | undefined, objectType: "Armor", defaultName: string): T;
 function getItemOrDefault<T extends Shield>(equipmentItem: EquipmentItem | undefined, objectType: "Shield", defaultName: string): T;
 function getItemOrDefault<T extends Armor | Shield>(equipmentItem: EquipmentItem | undefined, objectType: string, defaultName: string): T {
-	return equipmentItem?.item as T ?? Repository.findByValue(objectType, defaultName);
+	return equipmentItem?.item as T ?? findByValue(objectType, defaultName);
 }
 
 function applyArmorCheckPenalty(check: Check, skill: Skill, armor: Armor): void {

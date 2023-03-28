@@ -1,4 +1,9 @@
-import utils, { IComparable, IdCore, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
+import type { IComparable, IdCore, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
+import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
+import { HasIdCore } from "../../../sage-utils/utils/ClassUtils";
+import type { RenderableContent as _RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
+import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
 import { NEWLINE, TAB } from "../../common";
 import RenderableContent from "../../data/RenderableContent";
 import type {
@@ -46,7 +51,7 @@ export interface BaseCore<T extends string = string> extends IdCore<T>, Archived
 type TChildCoreParser<T extends BaseCore> = (core: T) => T[];
 export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = string>
 	extends
-		utils.ClassUtils.HasIdCore<T, U>
+		HasIdCore<T, U>
 	implements
 		IHasArchives,
 		IComparable<Base<T, U>>,
@@ -222,49 +227,49 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 
 	// #region IHasName
 
-	private _nameMatcher?: utils.StringUtils.StringMatcher;
-	private get nameMatcher(): utils.StringUtils.StringMatcher {
-		return this._nameMatcher ?? (this._nameMatcher = utils.StringUtils.StringMatcher.from(this.name));
+	private _nameMatcher?: StringMatcher;
+	private get nameMatcher(): StringMatcher {
+		return this._nameMatcher ?? (this._nameMatcher = StringMatcher.from(this.name));
 	}
 
 	public get name(): string { return this.core.name; }
 	public get nameClean(): string { return this.nameMatcher.clean; }
 	public get nameLower(): string { return this.nameMatcher.lower; }
 
-	public matches(other: utils.StringUtils.StringMatcher): boolean {
+	public matches(other: StringMatcher): boolean {
 		return this.nameMatcher.matches(other);
 	}
 
 	// #endregion IHasName
 
-	// #region utils.RenderUtils.IRenderable
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	// #region IRenderable
+	public toRenderableContent(): _RenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		this.appendDescriptionTo(renderable);
 		this.appendDetailsTo(renderable);
 		return renderable;
 	}
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion IRenderable
 
-	// #region utils.ArrayUtils.Sort.IComparable
+	// #region IComparable
 
 	public compareTo(other: Base<T, U>): TSortResult {
-		return utils.ArrayUtils.Sort.sortAscending(this.objectType, other.objectType)
-			|| utils.ArrayUtils.Sort.sortAscending(this.nameClean, other.nameClean)
-			|| utils.ArrayUtils.Sort.sortAscending(this.nameLower, other.nameLower)
-			|| utils.ArrayUtils.Sort.sortAscending(this.name, other.name);
+		return sortAscending(this.objectType, other.objectType)
+			|| sortAscending(this.nameClean, other.nameClean)
+			|| sortAscending(this.nameLower, other.nameLower)
+			|| sortAscending(this.name, other.name);
 	}
 
-	// #endregion utils.ArrayUtils.Sort.IComparable
+	// #endregion IComparable
 
-	// #region utils.SearchUtils.ISearchable
+	// #region ISearchable
 
 	public get searchResultCategory(): string {
 		return this.objectType as unknown as string;
 	}
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = searchInfo.score(this, this.name);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.description));
@@ -279,7 +284,7 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 		return score;
 	}
 
-	public searchRecursive(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this>[] {
+	public searchRecursive(searchInfo: SearchInfo): SearchScore<this>[] {
 		return [this.search(searchInfo)];
 	}
 
@@ -287,5 +292,5 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 		return this.core.name;
 	}
 
-	// #endregion utils.SearchUtils.ISearchable
+	// #endregion ISearchable
 }

@@ -1,4 +1,4 @@
-import utils from "../sage-utils";
+import { writeFile } from "../sage-utils/utils/FsUtils/index.js";
 import { DistDataPath, info, getPf2tCores, getSageCores } from "./common.mjs";
 import { coresMatch, objectTypeToPf2Type } from "./pf2-tools-parsers/common.mjs";
 
@@ -32,7 +32,7 @@ export async function processPf2tData(): Promise<void> {
 	const leftovers = pf2tCores.filter(pf2t => !sageHashes.includes(pf2t.hash));
 
 	info({leftovers:leftovers.length});
-	await utils.FsUtils.writeFile(`${DistDataPath}/pf2t-leftovers.json`, leftovers, true, false);
+	await writeFile(`${DistDataPath}/pf2t-leftovers.json`, leftovers, true, false);
 
 	const matchesByName = leftovers.map((pf2t, i, a) => {
 		const p = 100 * (i + 1) / a.length;

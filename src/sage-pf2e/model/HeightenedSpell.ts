@@ -1,4 +1,5 @@
-import utils, { Core, UUID } from "../../sage-utils";
+import type { Core, UUID } from "../../sage-utils";
+import { HasCore } from "../../sage-utils/utils/ClassUtils";
 import { DASH } from '../common';
 import Spell from "./Spell";
 
@@ -9,7 +10,7 @@ export interface HeightenedSpellCore extends Core<"HeightenedSpell"> {
 	spell: UUID;
 }
 
-export default class HeightenedSpell extends utils.ClassUtils.HasCore<HeightenedSpellCore> {
+export default class HeightenedSpell extends HasCore<HeightenedSpellCore> {
 	public id: string;
 
 	public constructor(core: HeightenedSpellCore) {

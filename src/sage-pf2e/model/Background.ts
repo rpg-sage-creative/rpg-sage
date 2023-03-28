@@ -1,5 +1,5 @@
-import utils from "../../sage-utils";
-import * as Repository from "../data/Repository";
+import { Collection } from "../../sage-utils/utils/ArrayUtils";
+import { findByValue } from "../data/Repository";
 import type Ancestry from "./Ancestry";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from "./base/HasSource";
@@ -24,7 +24,7 @@ export default class Background extends HasSource<BackgroundCore> {
 	private _ancestry?: Ancestry | null;
 	public get ancestry(): Ancestry | undefined {
 		if (this._ancestry === undefined) {
-			this._ancestry = Repository.findByValue("Ancestry", this.core.ancestry) ?? null;
+			this._ancestry = findByValue("Ancestry", this.core.ancestry) ?? null;
 		}
 		return this._ancestry ?? undefined;
 	}
@@ -61,7 +61,7 @@ export default class Background extends HasSource<BackgroundCore> {
 	public static FeatureObjectType = "BackgroundFeature";
 
 	public static removeFeatures(features: FeatureCore[]): FeatureCore[] {
-		return utils.ArrayUtils.Collection.remove(features, feature => feature.objectType === Background.FeatureObjectType);
+		return Collection.remove(features, feature => feature.objectType === Background.FeatureObjectType);
 	}
 
 	public static replaceFeatures(level: FeatureLevelCore, background?: Background): void {

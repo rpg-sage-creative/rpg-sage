@@ -1,4 +1,5 @@
-import utils, { type TSimpleDice } from "../../sage-utils";
+import type { TSimpleDice } from "../../sage-utils";
+import { random } from "../../sage-utils/utils/RandomUtils";
 import { ClimateType, WindType } from "./weather";
 
 export interface TableItem { min: number; max: number; }
@@ -55,7 +56,7 @@ export function rollOnTable(tableName: string): TableItem | null {
 		return null;
 	}
 
-	const rand = utils.RandomUtils.random(min, max);
+	const rand = random(min, max);
 	const item = table.find(_item => _item.min <= rand && rand <= _item.max) ?? null;
 	// We clone the item so that we can manipulate the values when tinkering with weather
 	return JSON.parse(JSON.stringify(item));

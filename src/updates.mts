@@ -1,4 +1,5 @@
-import { existsSync, mkdir, readdir, readFile, rmSync, writeFile } from "fs";
+import { randomUUID } from "crypto";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 
 //#region helpers
 
@@ -32,86 +33,94 @@ function isNonNilSnowflake(value: string): boolean {
 	return !!value.match(/^\d{16,}$/) && !value.match(/^0{16,}$/);
 }
 
-function listFiles(path: string, ext?: string): Promise<string[]> {
-	return new Promise((resolve, reject) => {
-		if (existsSync(path)) {
-			readdir(path, (error: NodeJS.ErrnoException | null, files: string[]) => {
-				if (error) {
-					reject(error);
-				}else {
-					if (ext) {
-						const fileExt = `.${ext}`;
-						resolve(files.filter(file => file.endsWith(fileExt)));
-					}else {
-						resolve(files);
-					}
-				}
-			});
-		}else {
-			console.warn(`Invalid path: ${path}`);
-			resolve([]);
+function listFiles(path: string): string[] {
+	if (existsSync(path)) {
+		const files = readdirSync(path);
+		const filtered = files.filter(file => file.match(/^\d{16,}\.json$/) || file.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\.json$/i));
+		return filtered;
+	}else {
+		console.warn(`Invalid path: ${path}`);
+		return [];
+	}
+}
+
+function readJsonFile<T>(path: string): T | null {
+	const buffer = readFileSync(path);
+	if (Buffer.isBuffer(buffer)) {
+		let object: T | null | undefined;
+		try {
+			object = JSON.parse(buffer.toString("utf8"));
+		}catch(ex) {
+			console.error(ex);
 		}
-	});
-}
-
-function readJsonFile<T>(path: string): Promise<T | null> {
-	return new Promise((resolve, reject) => {
-		readFile(path, null, (error: NodeJS.ErrnoException | null, buffer: Buffer) => {
-			if (error) {
-				reject(error);
-			}else if (Buffer.isBuffer(buffer)) {
-				let object: T | null | undefined;
-				try {
-					object = JSON.parse(buffer.toString("utf8"));
-				}catch(ex) {
-					reject(ex);
-				}
-				if (object !== undefined) {
-					resolve(object as T);
-				}else {
-					// In case we didn't reject an exception somehow, we don't want the Promise to hang ...
-					reject("Unable to parse!");
-				}
-			}else {
-				reject("Not a Buffer");
-			}
-		});
-	});
-}
-
-function save<T extends IdCore<any>>(core: TPair<T>): Promise<true> {
-	return new Promise((resolve, reject) => {
-		if (live) {
-			writeFile(core.path, JSON.stringify(core.json), error => {
-				if (error) {
-					reject(error);
-				}else {
-					console.log(`\t\t${core.path}: saved.`);
-					resolve(true);
-				}
-			});
+		if (object !== undefined) {
+			return object as T;
 		}else {
+			console.warn("Unable to parse!");
+		}
+	}else {
+		console.warn("Not a Buffer");
+	}
+	return null;
+}
+
+function save<T extends IdCore<any>>(core: TPair<T>): boolean {
+	if (live) {
+		try {
+			writeFileSync(core.path, JSON.stringify(core.json));
 			console.log(`\t\t${core.path}: saved.`);
-			resolve(true);
+		}catch(ex) {
+			console.error(ex);
+			return false;
 		}
-	});
+	}else {
+		console.log(`\t\t${core.path}: saved. --fake`);
+	}
+	return true;
 }
 
-function rename<T extends IdCore<any>>(core: TPair<T>): Promise<true> {
-	return new Promise((resolve, reject) => {
-		const oldPath = core.path;
-		if (core.parentPath) {
-			core.path = `${core.parentPath}/${core.did ?? core.id}.json`;
-		}else {
-			core.path = oldPath.replace(core.id, core.did);
-		}
-		save(core).then(() => {
-			if (live) {
-				rmSync(oldPath);
+function rename<T extends IdCore<any>>(core: TPair<T>): boolean {
+	const oldPath = core.path;
+	if (core.parentPath) {
+		core.path = `${core.parentPath}/${core.did ?? core.id}.json`;
+	}else {
+		core.path = oldPath.replace(core.id, core.did);
+	}
+	const saved = save(core);
+	if (saved) {
+		if (live) rmSync(oldPath);
+	}
+	return saved;
+}
+
+function saveCharacter<T extends IdCore<any>>(ownerPlural: "games" | "users", ownerId: string, char: T): boolean {
+	const path = `${sagePath}/${ownerPlural}/${ownerId}/characters`;
+	const filePath = `${path}/${char.id}.json`;
+	if (live) {
+		if (!existsSync(path)) {
+			const made = mkdirSync(path, {recursive:true});
+			if (!made) {
+				console.error(`Unable to create: ${path}`);
+				return false;
 			}
-			resolve(true);
-		}).catch(reject);
-	});
+		}
+		if (existsSync(path)) {
+			try {
+				writeFileSync(filePath, JSON.stringify(char));
+			}catch(ex) {
+				console.error(ex);
+				return false;
+			}
+			console.log(`\t\t${filePath}: saved.`);
+			return true;
+		}else {
+			console.warn(`Invalid Path: ${path}`);
+			return false;
+		}
+	}else {
+		console.log(`\t\t${filePath}: saved. --fake`);
+		return true;
+	}
 }
 
 function isOlderVer(obj: Core<any>, verToCheck: ValidVersion): boolean {
@@ -138,7 +147,7 @@ function getUpdateHandlers(ver: ValidVersion): Function[] {
 	}
 }
 
-async function processUpdates(): Promise<void> {
+function processUpdates(): void {
 	const changes: [string, number][] = [];
 	const versions = ["v1", "v2"] as ValidVersion[];
 	for (const ver of versions) {
@@ -146,7 +155,7 @@ async function processUpdates(): Promise<void> {
 		const handlers = getUpdateHandlers(ver);
 		for (const handler of handlers) {
 			const type = handler.name.match(/update(\w+)_v\d/)?.[1].toLowerCase()!;
-			changes.push(...(await updateType(type, handler)));
+			changes.push(...(updateType(type, handler)));
 		}
 	}
 	const totalChanges = changes.reduce((count, change) => count += change[1], 0);
@@ -161,31 +170,35 @@ type IdCore<V extends ValidVersion> = Core<V> & { id:string; }
 type DidCore<V extends ValidVersion> = IdCore<V> & { did:string; }
 type TPair<T extends IdCore<any>> = { type:string; id:string; did:string; path:string; json:T; parentPath?:string; };
 
-async function readFiles<T extends IdCore<any>>(type: string): Promise<TPair<T>[]> {
+function readFiles<T extends IdCore<any>>(type: string): TPair<T>[] {
 	const out: TPair<T>[] = [];
 	const typePath = `${sagePath}/${type}`;
-	const files = await listFiles(typePath, "json");
+	const files = listFiles(typePath);
 	for (const file of files) {
 		const id = file.slice(0, -5);
-		const path = `${typePath}/${file}`;
-		const json = await readJsonFile<T>(path);
-		if (json) {
-			const did = (json as IdCore<any> as DidCore<any>).did;
-			out.push({ type, id, did, path, json  });
+		if (id.match(/^\d{16,}$/) || id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)) {
+			const path = `${typePath}/${file}`;
+			const json = readJsonFile<T>(path);
+			if (json) {
+				const did = (json as IdCore<any> as DidCore<any>).did;
+				out.push({ type, id, did, path, json  });
+			}else {
+				console.warn(`\t\tInvalid JSON file: ${typePath}/${id}.json`);
+			}
 		}else {
-			console.warn(`\t\tInvalid JSON file: ${typePath}/${id}.json`);
+			console.warn(`\t\tInvalid JSON id: ${typePath}/${id}.json`);
 		}
 	}
 	return out;
 }
 
-async function updateType(type: string, handler: Function):  Promise<[string, number][]> {
+function updateType(type: string, handler: Function):  [string, number][] {
 	const singular = type.endsWith("s") ? type.slice(0, -1) : type;
 	console.log(`\tChecking for ${singular} file updates ...`);
 	const changes: [string, number][] = [];
-	const pairs = await readFiles(type);
+	const pairs = readFiles(type);
 	for (const pair of pairs) {
-		const updates = await handler(pair, pair.json, pair.json);
+		const updates = handler(pair, pair.json, pair.json);
 		if (updates) {
 			changes.push(updates);
 		}
@@ -215,7 +228,7 @@ type BotCore_v1 = DidCore<"v1"> & {
  * ensure devs array
  * remove .channels dev entries
  */
-async function updateBots_v1(pair: TPair<BotCore_v1>, v1: BotCore_v1): Promise<[string, number] | null> {
+function updateBots_v1(pair: TPair<BotCore_v1>, v1: BotCore_v1): [string, number] | null {
 	if (!isOlderVer(v1, "v1")) return null;
 
 	let changes = 0;
@@ -243,7 +256,7 @@ async function updateBots_v1(pair: TPair<BotCore_v1>, v1: BotCore_v1): Promise<[
 
 	save(pair);
 
-	return [pair.did, changes];
+	return [pair.did, Math.max(1, changes)];
 }
 
 type BotImage = { tags:"avatar"[]; url:string; };
@@ -256,7 +269,7 @@ type BotCore_v2 = DidCore<"v2"> & {
  * move old tokenUrl to an image with tag "avatar" (bring image names inline with Discord)
  * rename files to did.json
  */
-async function updateBots_v2(pair: TPair<BotCore_v1>, v1: BotCore_v1, v2: BotCore_v2): Promise<[string, number] | null> {
+function updateBots_v2(pair: TPair<BotCore_v1>, v1: BotCore_v1, v2: BotCore_v2): [string, number] | null {
 	if (!isOlderVer(v2, "v2")) return null;
 
 	let changes = 0;
@@ -273,13 +286,13 @@ async function updateBots_v2(pair: TPair<BotCore_v1>, v1: BotCore_v1, v2: BotCor
 	v2.ver = "v2";
 
 	if (pair.id !== pair.did && !isNonNilSnowflake(pair.id)) {
-		const renamed = await rename(pair);
+		const renamed = rename(pair);
 		if (!renamed) throw new Error(`Unable to rename: ${pair.path}`);
 	}else {
 		save(pair);
 	}
 
-	return [pair.did, changes];
+	return [pair.did, Math.max(1, changes)];
 }
 
 //#endregion
@@ -397,7 +410,7 @@ function cleanChannelCore_v2(channel: ChannelCore_v2): boolean {
 
 //#endregion
 
-//#region characters - completed: v1 (iconUrl), v2 (images)
+//#region characters - completed: v1 (iconUrl, nameLower), v2 (images)
 
 type GameCharacterTag = "pc" | "npc" | "gm" | "ally" | "enemy" | "boss";
 
@@ -423,19 +436,35 @@ type THasIconUrl = {
 	iconUrl?: string;
 }
 
-function updateCharacters_v1(v1: CharacterCore_v1 & THasIconUrl): boolean {
+/** @deprecated */
+type THasNameLower = {
+	/** @deprecated */
+	nameLower?: string;
+}
+
+function updateCharacters_v1(v1: CharacterCore_v1 & THasIconUrl & THasNameLower): boolean {
 	if (!isOlderVer(v1, "v1")) return false;
+
+	if (!v1.id) {
+		v1.id = randomUUID();
+	}
+	if (v1.id !== v1.id.toLowerCase()) {
+		console.log("NOT LOWER char.id (UUID)");
+	}
+
+	if ("nameLower" in v1) {
+		delete v1.nameLower;
+	}
 
 	if ("iconUrl" in v1) {
 		if (v1.iconUrl) {
 			v1.avatarUrl = v1.iconUrl;
 		}
 		delete v1.iconUrl;
-		return true;
 	}
 
 	v1.ver = "v1";
-	return false;
+	return true;
 }
 
 type TCharacterImageTag = "avatar" | "dialog" | "token";
@@ -463,8 +492,6 @@ type THasOldCharacterImages = {
 function updateCharacters_v2(v2: CharacterCore_v2 & THasOldCharacterImages): boolean {
 	if (!isOlderVer(v2, "v2")) return false;
 
-	let changes = false;
-
 	//#region image changes
 	if ("avatarUrl" in v2 || "tokenUrl" in v2) {
 		const images: TCharacterImage[] = [];
@@ -478,13 +505,11 @@ function updateCharacters_v2(v2: CharacterCore_v2 & THasOldCharacterImages): boo
 
 		delete v2.avatarUrl;
 		delete v2.tokenUrl;
-
-		changes = true;
 	}
 	//#endregion
 
 	v2.ver = "v2";
-	return changes;
+	return true;
 }
 
 //#endregion
@@ -502,7 +527,7 @@ type GameCore_v2 = IdCore<"v2"> & {
 	characters?: GameCharacter_v2[];
 };
 
-async function updateGames_v1(pair: TPair<GameCore_v1>, v1: GameCore_v1): Promise<[string, number] | null> {
+function updateGames_v1(pair: TPair<GameCore_v1>, v1: GameCore_v1): [string, number] | null {
 	if (!isOlderVer(v1, "v1")) return null;
 
 	let changes = 0;
@@ -542,12 +567,12 @@ async function updateGames_v1(pair: TPair<GameCore_v1>, v1: GameCore_v1): Promis
 
 	save(pair);
 
-	return [pair.id, changes];
+	return [pair.id, Math.max(1, changes)];
 }
 
 type GameCharacterForUser = { gameId:string; userId:string; charId:string; char:any; type:"pc"|"npc"; };
 const gameCharactersForUsers: GameCharacterForUser[] = [];
-async function updateGames_v2(pair: TPair<GameCore_v2>, v1: GameCore_v1, v2: GameCore_v2): Promise<[string, number] | null> {
+function updateGames_v2(pair: TPair<GameCore_v2>, v1: GameCore_v1, v2: GameCore_v2): [string, number] | null {
 	if (!isOlderVer(v2, "v2")) return null;
 
 	let changes = 0;
@@ -593,7 +618,7 @@ async function updateGames_v2(pair: TPair<GameCore_v2>, v1: GameCore_v1, v2: Gam
 						characters.push({ userDid:v1Char.userDid, charId:v1Char.id, tags:["npc"] });
 					}else {
 						updateCharacters_v2(v1Char as unknown as CharacterCore_v2);
-						await writeCharacterToFile("games", pair.id, v1Char)
+						saveCharacter("games", pair.id, v1Char);
 						characters.push({ charId:v1Char.id, tags:["npc"] });
 					}
 				}
@@ -616,18 +641,18 @@ async function updateGames_v2(pair: TPair<GameCore_v2>, v1: GameCore_v1, v2: Gam
 
 	save(pair);
 
-	return [pair.id, changes];
+	return [pair.id, Math.max(1, changes)];
 }
 
 //#endregion
 
 //#region maps
 
-async function updateMaps_v1(): Promise<[string, number] | null> {
+function updateMaps_v1(): [string, number] | null {
 	return null;
 }
 
-async function updateMaps_v2(): Promise<[string, number] | null> {
+function updateMaps_v2(): [string, number] | null {
 	return null;
 }
 
@@ -635,11 +660,11 @@ async function updateMaps_v2(): Promise<[string, number] | null> {
 
 //#region messages
 
-async function updateMessages_v1(): Promise<[string, number] | null> {
+function updateMessages_v1(): [string, number] | null {
 	return null;
 }
 
-async function updateMessages_v2(): Promise<[string, number] | null> {
+function updateMessages_v2(): [string, number] | null {
 	return null;
 }
 
@@ -650,7 +675,7 @@ async function updateMessages_v2(): Promise<[string, number] | null> {
 // type ServerCore_v1 = DidCore & {
 // };
 
-async function updateServers_v1(): Promise<[string, number] | null> {
+function updateServers_v1(): [string, number] | null {
 	return null;
 }
 
@@ -658,7 +683,7 @@ type ServerCore_v2 = DidCore<"v2"> & {
 	channels?: ChannelCore_v2[];
 };
 
-async function updateServers_v2(pair: TPair<ServerCore_v2>, v2: ServerCore_v2): Promise<[string, number] | null> {
+function updateServers_v2(pair: TPair<ServerCore_v2>, v2: ServerCore_v2): [string, number] | null {
 	if (!isOlderVer(v2, "v2")) return null;
 
 	let changes = 0;
@@ -671,7 +696,7 @@ async function updateServers_v2(pair: TPair<ServerCore_v2>, v2: ServerCore_v2): 
 		}
 	});
 	if (channelChanges) {
-		console.log(`\t\t${pair.id}: channel cleanup.`);
+		console.log(`\t\t${pair.did}: channel cleanup.`);
 		changes += channelChanges;
 	}
 	//#endregion
@@ -679,14 +704,14 @@ async function updateServers_v2(pair: TPair<ServerCore_v2>, v2: ServerCore_v2): 
 	v2.ver = "v2";
 
 	if (pair.id !== pair.did && !isNonNilSnowflake(pair.id)) {
-		const renamed = await rename(pair);
+		const renamed = rename(pair);
 		if (!renamed) throw new Error(`Unable to rename: ${pair.path}`);
 		changes++;
 	}else {
 		save(pair);
 	}
 
-	return [pair.did, changes];
+	return [pair.did, Math.max(1, changes)];
 }
 
 //#endregion
@@ -706,7 +731,7 @@ type UserCore_v2 = DidCore<"v2"> & {
 	characters?: UserCharacter_v2[];
 };
 
-async function updateUsers_v1(pair: TPair<DidCore<any>>, v1: UserCore_v1): Promise<[string, number] | null> {
+function updateUsers_v1(pair: TPair<DidCore<any>>, v1: UserCore_v1): [string, number] | null {
 	if (!isOlderVer(v1, "v1")) return null;
 
 	const charUpdates = (v1.characters?.forEach(char => updateCharacters_v1(char)) ?? []).filter(b => b).length;
@@ -718,10 +743,10 @@ async function updateUsers_v1(pair: TPair<DidCore<any>>, v1: UserCore_v1): Promi
 
 	save(pair);
 
-	return [pair.id, changes];
+	return [pair.id, Math.max(1, changes)];
 }
 
-async function updateUsers_v2(pair: TPair<DidCore<any>>, v1: UserCore_v1, v2: UserCore_v2): Promise<[string, number] | null> {
+function updateUsers_v2(pair: TPair<DidCore<any>>, v1: UserCore_v1, v2: UserCore_v2): [string, number] | null {
 	if (!isOlderVer(v2, "v2")) return null;
 
 	let changes = 0;
@@ -735,7 +760,7 @@ async function updateUsers_v2(pair: TPair<DidCore<any>>, v1: UserCore_v1, v2: Us
 			for (const v1Char of v1NonPlayerCharacters) {
 				v1Char.userDid = pair.did;
 				updateCharacters_v2(v1Char as unknown as CharacterCore_v2);
-				await writeCharacterToFile("users", pair.did, v1Char);
+				saveCharacter("users", pair.did, v1Char);
 				v2Characters.push({ charId:v1Char.id, tags:["npc"] });
 				changes++;
 			}
@@ -749,7 +774,7 @@ async function updateUsers_v2(pair: TPair<DidCore<any>>, v1: UserCore_v1, v2: Us
 			for (const v1Char of v1PlayerCharacters) {
 				v1Char.userDid = pair.did;
 				updateCharacters_v2(v1Char as unknown as CharacterCore_v2);
-				await writeCharacterToFile("users", pair.did, v1Char);
+				saveCharacter("users", pair.did, v1Char);
 				v2Characters.push({ charId:v1Char.id, tags:["pc"] });
 				changes++;
 			}
@@ -765,7 +790,7 @@ async function updateUsers_v2(pair: TPair<DidCore<any>>, v1: UserCore_v1, v2: Us
 	if (gameCharacters.length) {
 		for (const gc of gameCharacters) {
 			updateCharacters_v2(gc.char);
-			await writeCharacterToFile("users", pair.did, gc.char);
+			saveCharacter("users", pair.did, gc.char);
 			v2Characters.push({ charId:gc.charId, tags:[gc.type] });
 			changes++;
 		}
@@ -776,46 +801,19 @@ async function updateUsers_v2(pair: TPair<DidCore<any>>, v1: UserCore_v1, v2: Us
 	v2.ver = "v2";
 
 	if (pair.id !== pair.did && !isNonNilSnowflake(pair.id)) {
-		const renamed = await rename(pair);
+		const renamed = rename(pair);
 		if (!renamed) throw new Error(`Unable to rename: ${pair.path}`);
 		changes++;
 	}else {
 		save(pair);
 	}
 
-	return [pair.did, changes];
+	return [pair.did, Math.max(1, changes)];
 
-}
-
-async function writeCharacterToFile<T extends IdCore<any>>(ownerPlural: "games" | "users", ownerId: string, char: T): Promise<boolean> {
-	const path = `${sagePath}/${ownerPlural}/${ownerId}/characters`;
-	const filePath = `${path}/${char.id}.json`;
-	return new Promise((resolve, reject) => {
-		if (live) {
-			if (!existsSync(path)) {
-				mkdir(path, { recursive:true }, err => {
-					console.error(err);
-				});
-			}
-			if (existsSync(path)) {
-				writeFile(filePath, JSON.stringify(char), error => {
-					if (error) {
-						reject(error);
-					}else {
-						console.log(`\t\t${filePath}: saved.`);
-						resolve(true);
-					}
-				});
-			}
-			reject("NO PATH!");
-		}else {
-			console.log(`\t\t${filePath}: saved.`);
-			resolve(true);
-		}
-	});
 }
 
 //#endregion
 
-const live = false;
+const live = process.argv.includes("--live");
+console.log(`\n\n\nStarting new process: ${new Date()}`)
 processUpdates();

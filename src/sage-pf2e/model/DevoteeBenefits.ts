@@ -1,10 +1,8 @@
-import utils from "../../sage-utils";
-
-import * as Repository from '../data/Repository';
-
+import { nth } from '../../sage-utils/utils/NumberUtils';
+import { findByValue } from '../data/Repository';
+import type Domain from "./Domain";
 import type Skill from './Skill';
 import type Spell from './Spell';
-import type Domain from "./Domain";
 
 export type TDevoteeBenefitsCore = {
 	divineFont: string[];
@@ -20,21 +18,21 @@ export default class DevoteeBenefits {
 	public constructor(private core: TDevoteeBenefitsCore) { }
 
 	private _divineFont?: Spell[];
-	public get divineFont(): Spell[] { return this._divineFont ?? (this._divineFont = this.core.divineFont.map(spellName => Repository.findByValue("Spell", spellName)!)); }
+	public get divineFont(): Spell[] { return this._divineFont ?? (this._divineFont = this.core.divineFont.map(spellName => findByValue("Spell", spellName)!)); }
 
 	private _divineSkill?: Skill[];
-	public get divineSkill(): Skill[] { return this._divineSkill ?? (this._divineSkill = this.core.divineSkill.map(skillName => Repository.findByValue("Skill", skillName)!)); }
+	public get divineSkill(): Skill[] { return this._divineSkill ?? (this._divineSkill = this.core.divineSkill.map(skillName => findByValue("Skill", skillName)!)); }
 
 	public get favoredWeapon(): string { return this.core.favoredWeapon; }
 
 	private _domains?: Domain[];
-	public get domains(): Domain[] { return this._domains ?? (this._domains = this.core.domains.map(domainName => Repository.findByValue("Domain", domainName)!)); }
+	public get domains(): Domain[] { return this._domains ?? (this._domains = this.core.domains.map(domainName => findByValue("Domain", domainName)!)); }
 
 	private _clericSpells?: Spell[];
-	public get clericSpells(): Spell[] { return this._clericSpells ?? (this._clericSpells = this.core.clericSpells.map(spell => Repository.findByValue("Spell", spell.split(/\s*\(/)[0])!)); }
+	public get clericSpells(): Spell[] { return this._clericSpells ?? (this._clericSpells = this.core.clericSpells.map(spell => findByValue("Spell", spell.split(/\s*\(/)[0])!)); }
 
 	private _alternateDomains?: Domain[];
-	public get alternateDomains(): Domain[] { return this._alternateDomains ?? (this._alternateDomains = (this.core.alternateDomains || []).map(domainName => Repository.findByValue("Domain", domainName)!)); }
+	public get alternateDomains(): Domain[] { return this._alternateDomains ?? (this._alternateDomains = (this.core.alternateDomains || []).map(domainName => findByValue("Domain", domainName)!)); }
 
 	public fontToContent(index: number): string {
 		const spell = this.divineFont[index];
@@ -57,10 +55,10 @@ export default class DevoteeBenefits {
 	public spellToContent(index: number): string {
 		const spell = this.clericSpells[index];
 		if (spell) {
-			return `${utils.NumberUtils.nth(spell.level)}: <i>${this.core.clericSpells[index].toLowerCase()}</i>`;
+			return `${nth(spell.level)}: <i>${this.core.clericSpells[index].toLowerCase()}</i>`;
 		}
 		const spellName = this.core.clericSpells[index];
-		const found = Repository.findByValue("Spell", spellName.split(/\s*\(/)[0]);
+		const found = findByValue("Spell", spellName.split(/\s*\(/)[0]);
 		console.warn(found ? `TyPo Deity Spell: ${spellName}` : `Missing Deity Spell: ${spellName}`);
 		return `?: <i>${spellName.toLowerCase()}</i>`;
 	}

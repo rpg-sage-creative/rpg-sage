@@ -1,13 +1,13 @@
-import type * as Discord from "discord.js";
+import type { Message, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
 import { DMessageChannel, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
 import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
 import SageCache from "./SageCache";
 import { SageCommandBase, SageCommandCore, TSendArgs } from "./SageCommand";
 import SageReactionArgs from "./SageReactionArgs";
 
-type DUser = Discord.User | Discord.PartialUser;
-type DMessage = Discord.Message | Discord.PartialMessage;
-type DReaction = Discord.MessageReaction | Discord.PartialMessageReaction;
+type DUser = User | PartialUser;
+type DMessage = Message | PartialMessage;
+type DReaction = MessageReaction | PartialMessageReaction;
 
 interface SageReactionCore extends SageCommandCore {
 	messageReaction: DReaction;

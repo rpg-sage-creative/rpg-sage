@@ -1,4 +1,4 @@
-import utils from "../../sage-utils";
+import { Collection } from "../../sage-utils/utils/ArrayUtils";
 import type { TProficiency } from "../common";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from './base/HasSource';
@@ -132,7 +132,7 @@ export default class Class extends HasSource<ClassCore> {
 	}
 
 	public static removeFeatures(features: FeatureCore[]): FeatureCore[] {
-		return utils.ArrayUtils.Collection.remove(features, feature => feature.objectType === Class.FeatureObjectType);
+		return Collection.remove(features, feature => feature.objectType === Class.FeatureObjectType);
 	}
 	public static replaceFeatures(level: FeatureLevelCore, klass: Class): void {
 		Class.removeFeatures(level.features);

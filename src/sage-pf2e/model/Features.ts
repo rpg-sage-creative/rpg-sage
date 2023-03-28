@@ -1,4 +1,5 @@
-import utils from "../../sage-utils";
+import { exists } from "../../sage-utils/utils/ArrayUtils/Filters";
+import { sortAscending } from "../../sage-utils/utils/ArrayUtils/Sort";
 import type { TProficiency } from "../common";
 import { ARMOR_UNARMORED, profToMod, TRAINED, UNTRAINED } from "../common";
 import { findById, findByValue } from "../data/Repository";
@@ -96,7 +97,7 @@ export default class Features {
 		const featureProficiencies = this.map(feature => feature.hasMetadata, feature => feature.metadata.getProficiencies(subject)).flat(Infinity) as TProficiency[],
 			featProficiencies = this.getFeats().filter(feat => feat.hasMetadata).map(feature => feature.metadata.getProficiencies(subject)).flat(Infinity) as TProficiency[],
 			proficiencies = featureProficiencies.concat(featProficiencies);
-		proficiencies.sort((aProf, bProf) => utils.ArrayUtils.Sort.sortAscending(profToMod(aProf), profToMod(bProf)));
+		proficiencies.sort((aProf, bProf) => sortAscending(profToMod(aProf), profToMod(bProf)));
 		const proficiency = proficiencies.pop();
 		if (!proficiency && subject === ARMOR_UNARMORED) {
 			return TRAINED;
@@ -112,7 +113,7 @@ export default class Features {
 	public map<T>(objectType: string, featureName: string, mapper: TFeatureMapper<T>): T[];
 	public map<T>(objectType: string, featureName: string, filter: TFeatureFilter, mapper: TFeatureMapper<T>): T[];
 	public map<T>(...args: (string | TFeatureFilter | TFeatureMapper<T>)[]): T[] {
-		args = args.filter(utils.ArrayUtils.Filters.exists);
+		args = args.filter(exists);
 		const mapper = <TFeatureMapper<T>>args.pop(),
 			strings = <string[]>args.filter(arg => typeof (arg) === "string"),
 			objectType = strings[0],

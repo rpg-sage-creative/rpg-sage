@@ -1,7 +1,10 @@
-import utils, { Core, UUID } from "../../sage-utils";
+import type { Core, UUID } from "../../sage-utils";
+import { HasCore } from "../../sage-utils/utils/ClassUtils";
+import { random, randomItem } from "../../sage-utils/utils/RandomUtils";
+import { generate } from "../../sage-utils/utils/UuidUtils";
 import type { TMagicTradition } from "../common";
 import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL } from "../common";
-import * as Repository from "../data/Repository";
+import { filter, findByValue } from "../data/Repository";
 import type ArcaneSchool from "./ArcaneSchool";
 import Source from "./base/Source";
 import SpellCollection from "./SpellCollection";
@@ -53,7 +56,7 @@ function calcMaxSpellLevel(level: number): number {
 export const CasterClasses = ["Bard", "Cleric", "Druid", "Sorcerer", "Wizard"];
 
 export function randomCasterClass(): string {
-	return utils.RandomUtils.randomItem(CasterClasses)!;
+	return randomItem(CasterClasses)!;
 }
 
 export interface SpellbookCore extends Core<"Spellbook"> {
@@ -64,7 +67,7 @@ export interface SpellbookCore extends Core<"Spellbook"> {
 	sources: string[];
 }
 
-export default class Spellbook extends utils.ClassUtils.HasCore<SpellbookCore> {
+export default class Spellbook extends HasCore<SpellbookCore> {
 
 	/**************************************************************************************************************************/
 	// Constructors
@@ -73,13 +76,13 @@ export default class Spellbook extends utils.ClassUtils.HasCore<SpellbookCore> {
 	public constructor(spells: SpellCollection);
 	public constructor(spells?: any) {
 		super(<any>{ spells: new SpellCollection(spells) });
-		this.id = `Spellbook${DASH}${utils.UuidUtils.generate()}`;
+		this.id = `Spellbook${DASH}${generate()}`;
 	}
 
 	/**************************************************************************************************************************/
 	// Properties
 
-	public get arcaneSchool(): ArcaneSchool | undefined { return this.casterClass === "Wizard" && this.core.casterSpecialty ? Repository.findByValue("ArcaneSchool", this.core.casterSpecialty) : undefined; }
+	public get arcaneSchool(): ArcaneSchool | undefined { return this.casterClass === "Wizard" && this.core.casterSpecialty ? findByValue("ArcaneSchool", this.core.casterSpecialty) : undefined; }
 	public set arcaneSchool(arcaneSchool: ArcaneSchool | undefined) { this.core.casterSpecialty = arcaneSchool?.id; }
 
 	public get bloodline(): UUID | undefined { return this.casterClass === "Sorcerer" ? this.core.casterSpecialty : undefined; }
@@ -99,7 +102,7 @@ export default class Spellbook extends utils.ClassUtils.HasCore<SpellbookCore> {
 
 	// public get maxSpellLevel(): number { let levels = this.spells.levels; return levels[levels.length - 1]; }
 
-	public get sources(): Source[] { return this.core.sources.map(source => Repository.findByValue("Source", source)); }
+	public get sources(): Source[] { return this.core.sources.map(source => findByValue("Source", source)); }
 	public set sources(sources: Source[]) { this.core.sources = sources.map(source => source.code); }
 
 	public get spells(): SpellCollection { return this.core.spells; }
@@ -135,11 +138,11 @@ export default class Spellbook extends utils.ClassUtils.HasCore<SpellbookCore> {
 	public static random(casterClass: string, casterLevel: number, casterSpecialty?: string, sources?: string[]): Spellbook;
 	public static random(casterClass = "Wizard", casterLevel = 1, casterSpecialty?: string, sources: string[] = []): Spellbook {
 		const tradition = getTradition(casterClass, casterSpecialty),
-			traditionSpells = Repository.filter("Spell", spell => spell.traditions.includes(tradition)),
+			traditionSpells = filter("Spell", spell => spell.traditions.includes(tradition)),
 			traditionCollection = new SpellCollection(traditionSpells);
 
-		const sourceFilter = sources.map(source => Repository.findByValue("Source", source)),
-			arcaneSchool = Repository.findByValue("ArcaneSchool", casterSpecialty),
+		const sourceFilter = sources.map(source => findByValue("Source", source)),
+			arcaneSchool = findByValue("ArcaneSchool", casterSpecialty),
 			isWizardSpecialist = casterClass === "Wizard" && arcaneSchool !== undefined,
 			// CRB = !sourceFilter.length || sourceFilter.find(source => source.isCore) ? Source.Core : null,
 			spells: SpellCollection = new SpellCollection();
@@ -226,17 +229,17 @@ function addSpells({ casterSpecialty, isWizardSpecialist, maxSpellLevelAtThisLev
 	while (spells.count < totalSpellsAtThisLevel) {
 		//pick a random level and remove opposed schools and current spells
 		let pool = traditionCollection
-			.filter(utils.RandomUtils.random(maxSpellLevelAtThisLevel))
+			.filter(random(maxSpellLevelAtThisLevel))
 			.filter(sourceFilter)
 			.exclude(spells.names);
 
 		//75% chance of core spell
-		if (utils.RandomUtils.random(100) > 25 && pool.filter(Source.Core).count) {
+		if (random(100) > 25 && pool.filter(Source.Core).count) {
 			pool = pool.filter(Source.Core);
 		}
 
 		//50% chance of specialty school
-		if (isWizardSpecialist && utils.RandomUtils.random(100) > 50 && pool.filter(casterSpecialty!).count) {
+		if (isWizardSpecialist && random(100) > 50 && pool.filter(casterSpecialty!).count) {
 			pool = pool.filter(casterSpecialty!);
 		}
 

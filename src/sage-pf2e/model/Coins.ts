@@ -1,4 +1,7 @@
-import utils, { Core, IComparable, TSortResult } from "../../sage-utils";
+import type { Core, IComparable, TSortResult } from "../../sage-utils";
+import { sortAscending } from "../../sage-utils/utils/ArrayUtils/Sort";
+import { HasCore } from "../../sage-utils/utils/ClassUtils";
+import { addCommas, round } from "../../sage-utils/utils/NumberUtils";
 import Bulk from "./Bulk";
 
 type TMoney = number | string | Coins;
@@ -20,16 +23,16 @@ function ensureCoins(value: TMoney): Coins {
 function format(pp: number, gp: number, sp: number, cp: number, neg: boolean): string {
 	const parts: string[] = [];
 	if (pp) {
-		parts.push(`${utils.NumberUtils.addCommas(pp)} pp`);
+		parts.push(`${addCommas(pp)} pp`);
 	}
 	if (gp) {
-		parts.push(`${utils.NumberUtils.addCommas(gp)} gp`);
+		parts.push(`${addCommas(gp)} gp`);
 	}
 	if (sp) {
-		parts.push(`${utils.NumberUtils.addCommas(sp)} sp`);
+		parts.push(`${addCommas(sp)} sp`);
 	}
 	if (cp) {
-		parts.push(`${utils.NumberUtils.addCommas(cp)} cp`);
+		parts.push(`${addCommas(cp)} cp`);
 	}
 	const negOut = neg ? "-" : "";
 	const partsOut = parts.filter(part => part).join(", ");
@@ -37,7 +40,7 @@ function format(pp: number, gp: number, sp: number, cp: number, neg: boolean): s
 }
 function updateValues(coins: Coins): void {
 	coins.bulk = bulkCalculator(coins);
-	coins.spValue = utils.NumberUtils.round(coins.pp * 100 + coins.gp * 10 + coins.sp + coins.cp / 10, 1);
+	coins.spValue = round(coins.pp * 100 + coins.gp * 10 + coins.sp + coins.cp / 10, 1);
 	if (coins.neg) {
 		coins.spValue *= -1;
 	}
@@ -57,7 +60,7 @@ export interface CoinsCore extends Core<"Coins"> {
 	pp: number;
 }
 
-export default class Coins extends utils.ClassUtils.HasCore<CoinsCore> implements IComparable<Coins> {
+export default class Coins extends HasCore<CoinsCore> implements IComparable<Coins> {
 	/**************************************************************************************************************************/
 	// Constructors
 
@@ -324,7 +327,7 @@ export default class Coins extends utils.ClassUtils.HasCore<CoinsCore> implement
 
 	// #region utils.ArrayUtils.Sort.IComparable<T>
 	public compareTo(other: Coins): TSortResult {
-		return utils.ArrayUtils.Sort.sortAscending(this.spValue, other.spValue);
+		return sortAscending(this.spValue, other.spValue);
 	}
 	// #endregion utils.ArrayUtils.Sort.IComparable<T>
 

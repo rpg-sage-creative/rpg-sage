@@ -1,4 +1,3 @@
-import type * as Discord from "discord.js";
 import type { Args, Optional, UUID } from "../../../sage-utils";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
 import type { DialogType } from "../repo/base/channel";
@@ -10,6 +9,7 @@ import NoteManager, { TNote } from "./NoteManager";
 import type SageCache from "./SageCache";
 import { applyValues } from "./SageCommandArgs";
 import { readJsonFile } from "../../../sage-utils/utils/FsUtils";
+import type { Snowflake } from "discord.js";
 
 export type TAlias = {
 	name: string;
@@ -21,7 +21,7 @@ export type TMacro = {
 	dice: string;
 };
 export enum PatronTierType { None = 0, Friend = 1, Informant = 2, Trusted = 3 }
-export const PatronTierSnowflakes: Discord.Snowflake[] = [undefined!, "730147338529669220", "730147486446125057", "730147633867259904"];
+export const PatronTierSnowflakes: Snowflake[] = [undefined!, "730147338529669220", "730147486446125057", "730147633867259904"];
 
 export type TUserOptions = {
 	defaultDialogType: DialogType;
@@ -96,7 +96,7 @@ export default class User extends HasDidCore<UserCore> {
 	public isPatron = this.isFriend || this.isInformant || this.isTrusted;
 	public get isSuperUser(): boolean { return User.isSuperUser(this.did); }
 
-	public async fetchAutoCharacterForChannel(did: Optional<Discord.Snowflake>): Promise<GameCharacter | undefined> {
+	public async fetchAutoCharacterForChannel(did: Optional<Snowflake>): Promise<GameCharacter | undefined> {
 		if (did) {
 			const pcs = await this.fetchPlayerCharacters();
 			const pc = pcs.find(char => char.hasAutoChannel(did));
@@ -119,18 +119,18 @@ export default class User extends HasDidCore<UserCore> {
 		return this.sageCache.users.write(this);
 	}
 
-	public static async fetchCharacter(userDid: Discord.Snowflake, charId: UUID): Promise<GameCharacterCore | null> {
+	public static async fetchCharacter(userDid: Snowflake, charId: UUID): Promise<GameCharacterCore | null> {
 		/** @todo sort out a variable for the path root */
 		const path = `./sage/data/users/${userDid}/characters/${charId}.json`;
 		return readJsonFile<GameCharacterCore>(path);
 	}
 
-	public static createCore(userDid: Discord.Snowflake): UserCore {
+	public static createCore(userDid: Snowflake): UserCore {
 		return { objectType: "User", did: userDid, id: null! };
 	}
 
 	public static SuperUserDid = "253330271678627841";
-	public static isSuperUser(userDid: Optional<Discord.Snowflake>): boolean {
+	public static isSuperUser(userDid: Optional<Snowflake>): boolean {
 		return userDid === User.SuperUserDid;
 	}
 

@@ -1,9 +1,11 @@
-import utils, { BULLET } from "../../../../sage-utils";
-import dice from "../../../../sage-dice";
+import { Dice } from "../../../../sage-dice/dice/base";
+import { BULLET } from "../../../../sage-utils";
+import { shuffle } from "../../../../sage-utils/utils/RandomUtils";
+import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import type SageMessage from "../../model/SageMessage";
 import { addScenario, createPfsRenderableContent, TPfsFaction, TTierInfo } from "./pfs";
 
-const roll = dice.base.Dice.roll;
+const roll = Dice.roll;
 
 type TMission = "Flotsam Graveyard" | "Petals District" | "Precipice Quarter" | "Westgate";
 type TFactionLeader = {
@@ -25,7 +27,7 @@ type TFactionLeader = {
 };
 const AllAttendees = ["Aaqir al-Hakam", "Ambrus Valsin", "Gloriana Morilla", "Kreighton Shane", "Sorrina Westyr", "Tamrin Credence", "Urwal", "Valais Durant", "Zarta Dralneen"];
 function s0101(tierInfo: TTierInfo): Map<string, TFactionLeader> {
-	let randomAttendees = utils.RandomUtils.shuffle(AllAttendees).slice(0, 4);
+	let randomAttendees = shuffle(AllAttendees).slice(0, 4);
 	let factionLeaders = <TFactionLeader[]>[
 		{ name: "Calisro Benarry", faction: "Horizon Hunters", horizonHunters: true, missions: ["Flotsam Graveyard", "Precipice Quarter", "Westgate"], mission: "", attendee: "", additionalAidOptions: ["minor healing potion", "lesser healing potion"], additionalAid: "" },
 		{ name: "Eando Kline", faction: "Vigilant Seal", vigilantSeal: true, missions: ["Flotsam Graveyard", "Petals District", "Westgate"], mission: "", attendee: "", additionalAidOptions: ["", ""], additionalAid: "" },
@@ -47,7 +49,7 @@ function s0101(tierInfo: TTierInfo): Map<string, TFactionLeader> {
 	return factionLeadersByMission;
 }
 const FleshforgeTemperament = ["",
-	`<b>Temperament</b> Hoarding <b>Behavior</b> The creature has stashed a small hoard of shiny objects scavenged from the ship in the remnants of its crate. It breaks o its attack and retreats to its hoard if the PCs oer it something suitably shiny (such as a few coins, a weapon, or a similar item).`,
+	`<b>Temperament</b> Hoarding <b>Behavior</b> The creature has stashed a small hoard of shiny objects scavenged from the ship in the remnants of its crate. It breaks off its attack and retreats to its hoard if the PCs offer it something suitably shiny (such as a few coins, a weapon, or a similar item).`,
 	`<b>Temperament</b> Loneliness <b>Behavior</b> A crude replica of the creature has been assembled next to the remnants of its crate. A PC who succeeds at a Diplomacy check to Make an Impression on the creature can relate peaceful intentions; the creature then quietly tags along with the party for the rest of their time on the ship.`,
 	`<b>Temperament</b> Curiosity <b>Behavior</b> The walls of the cargo hold have been inartistically scratched to resemble views of the Absalom skyline. A PC who succeeds at a Society or Absalom Lore check can relate enough information about the city to satiate the creature’s interests.`,
 	`<b>Temperament</b> Hunger <b>Behavior</b> Gnawed bones of sea birds lie in a heap in one corner. PCs can distract the creature by offering it a day’s worth of food in any form (such as trail rations, the bodies of other creatures, or fish caught from the deck).`,
@@ -70,7 +72,7 @@ const FleshForgeAbilitiesHighTier = ["",
 	`<b>Roots</b> [A] The fleshforge prototype roots into the surface it is standing on. It gains fast healing 5 until it leaves that space.`,
 	`<b>Leaping Charge</b> [A] The fleshforge prototype Strides up to 10 feet, ignoring difficult terrain as it leaps over obstacles. It then makes a fist Strike, gaining a +1 circumstance bonus to its attack roll.`
 ];
-function s0101A(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): utils.RenderUtils.RenderableContent {
+function s0101A(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): RenderableContent {
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	renderableContent.appendTitledSection(`<b>A: Flotsam Graveyard - Surfaced Wreck (${faction})</b>`, `<b>A2 - Cargo Hold</b>`);
 	renderableContent.append(`<b>Fleshforge ${tierInfo.lowTier ? "Dreg" : "Prototype"}</b>`, `<blockquote>${FleshforgeTemperament[roll("1d6")]}</blockquote>`);
@@ -101,7 +103,7 @@ function s0101A(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFact
 	}
 	return renderableContent;
 }
-function s0101B(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): utils.RenderUtils.RenderableContent {
+function s0101B(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): RenderableContent {
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	renderableContent.appendTitledSection(`<b>B: Petals District - Blakros Museum (${faction})</b>`, `<b>B5 - Third Floor</b>`);
 	renderableContent.append(`<b>${tierInfo.lowTier ? "" : "Deeply "}Flawed Ritual (${tierInfo.lowTier ? "" : "Greater "}Shadow Wisp)</b>`);
@@ -127,7 +129,7 @@ function s0101B(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFact
 	}
 	return renderableContent;
 }
-function s0101C(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): utils.RenderUtils.RenderableContent {
+function s0101C(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): RenderableContent {
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	renderableContent.appendTitledSection(`<b>C: Precipice Quarter - Mavedarus Manor (${faction})</b>`, `<b>Haunted Past</b>`);
 	let hauntRoll = roll("1d6");
@@ -187,7 +189,7 @@ function s0101C(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFact
 	}
 	return renderableContent;
 }
-function s0101D(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): utils.RenderUtils.RenderableContent {
+function s0101D(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): RenderableContent {
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	let leaderCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0],
 		totalLeaders = 3 + (tierInfo.pcCount > 4 ? tierInfo.pcCount - 4 : 0);
@@ -239,7 +241,7 @@ function s0101D(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFact
 	return renderableContent;
 }
 
-function randomize(sageMessage: SageMessage, tierInfo: TTierInfo): utils.RenderUtils.RenderableContent {
+function randomize(sageMessage: SageMessage, tierInfo: TTierInfo): RenderableContent {
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	renderableContent.setTitle(`<b>PFS2e Scenario 1-01</b>`);
 	renderableContent.append(`<b>Tier</b> ${tierInfo.tier}`);

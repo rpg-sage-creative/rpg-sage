@@ -1,4 +1,6 @@
-import utils, { IdCore, UUID } from "../../../sage-utils";
+import type { IdCore, UUID } from "../../../sage-utils";
+import { HasIdCore } from "../../../sage-utils/utils/ClassUtils";
+import { generate } from "../../../sage-utils/utils/UuidUtils";
 import type { TQuality } from "../../common";
 import { findById } from "../../data/Repository";
 import type Base from "../base/Base";
@@ -35,7 +37,7 @@ function toUuid(equipmentItemResolvable: TEquipmentItemResolvable): UUID {
 	return typeof (equipmentItemResolvable) === "string" ? equipmentItemResolvable : equipmentItemResolvable.id;
 }
 
-export default class EquipmentItem extends utils.ClassUtils.HasIdCore<EquipmentItemCore> {
+export default class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 
 	public constructor(private eq: Equipment, core: EquipmentItemCore) {
 		super(core);
@@ -343,7 +345,7 @@ export default class EquipmentItem extends utils.ClassUtils.HasIdCore<EquipmentI
 		this.core.count -= count;
 		const core = <EquipmentItemCore>JSON.parse(JSON.stringify(this.core));
 		core.count = count;
-		core.id = utils.UuidUtils.generate();
+		core.id = generate();
 		this.eq.addItem(new EquipmentItem(this.eq, core));
 	}
 	public unequip(): void {
@@ -381,7 +383,7 @@ export default class EquipmentItem extends utils.ClassUtils.HasIdCore<EquipmentI
 			entries: undefined,
 			itemId: item.id,
 			itemQuality: "Standard",
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 			isInvested: false,
 			isRaised: false,
 			listId: undefined,

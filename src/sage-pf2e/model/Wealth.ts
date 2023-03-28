@@ -1,4 +1,5 @@
-import utils, { Core } from "../../sage-utils";
+import type { Core } from "../../sage-utils";
+import { HasCore } from "../../sage-utils/utils/ClassUtils";
 import type { CoinsCore } from "./Coins";
 import Coins from "./Coins";
 
@@ -21,7 +22,7 @@ export interface IWealth extends Core {
 	valuables: IValuable[];
 }
 
-export default class Wealth extends utils.ClassUtils.HasCore<IWealth> {
+export default class Wealth extends HasCore<IWealth> {
 
 	public constructor(core: IWealth = <any>{}) {
 		super(core);

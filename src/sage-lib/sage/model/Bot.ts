@@ -1,4 +1,4 @@
-import type * as Discord from "discord.js";
+import type { Snowflake } from "discord.js";
 import type { GameType } from "../../../sage-common";
 import { LogLevel, TConsoleCommandType } from "../../../sage-utils";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository";
@@ -9,14 +9,14 @@ import type SageCache from "./SageCache";
 
 export type TAcceptableBot = {
 	/** user.id of the bot */
-	did: Discord.Snowflake;
+	did: Snowflake;
 	/** name or category of the bot, for example: "SageTest" or "Tupperbox" */
 	desc: "Tupperbox";
 };
 
 export type TBotCodeName = "dev" | "beta" | "stable";
 
-type TDev = { did: Discord.Snowflake; logLevel: TConsoleCommandType; };
+type TDev = { did: Snowflake; logLevel: TConsoleCommandType; };
 
 type TBotImageTag = "avatar";
 

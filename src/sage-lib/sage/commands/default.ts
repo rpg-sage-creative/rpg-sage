@@ -1,6 +1,11 @@
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
-import utils from "../../../sage-utils";
 import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
+import { Collection } from "../../../sage-utils/utils/ArrayUtils";
+import { exists, existsAndUnique, unique } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import { sortComparable } from "../../../sage-utils/utils/ArrayUtils/Sort";
+import { oneToUS } from "../../../sage-utils/utils/LangUtils";
+import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import { capitalize } from "../../../sage-utils/utils/StringUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
@@ -13,20 +18,20 @@ import { searchHandler } from "./search";
 
 // #region Common Types and Functions
 
-function renderAllSource(objectType: string, objectTypePlural: string): utils.RenderUtils.RenderableContent {
+function renderAllSource(objectType: string, objectTypePlural: string): RenderableContent {
 	const content = createCommandRenderableContent();
-	const all = Repository.all<Source>(objectType), //.sort(utils.ArrayUtils.Sort.sortComparable),
-		categories = all.map(source => source.searchResultCategory).filter(utils.ArrayUtils.Filters.unique);
+	const all = Repository.all<Source>(objectType), //.sort(sortComparable),
+		categories = all.map(source => source.searchResultCategory).filter(unique);
 	content.setTitle(`<b>${objectTypePlural} (${all.length})</b>`);
 	categories.forEach(category => {
-		const byCategory = utils.ArrayUtils.Collection.filterThenMap(all, source => source.searchResultCategory === category, source => source.toSearchResult());
+		const byCategory = Collection.filterThenMap(all, source => source.searchResultCategory === category, source => source.toSearchResult());
 		content.append(`<b>${category} (${byCategory.length})</b>\n> ${byCategory.join("\n> ")}`);
 	});
 	return content;
 }
-function renderAllSkill(objectType: string, objectTypePlural: string): utils.RenderUtils.RenderableContent {
+function renderAllSkill(objectType: string, objectTypePlural: string): RenderableContent {
 	const content = createCommandRenderableContent();
-	const all = Repository.all<Skill>(objectType).sort(utils.ArrayUtils.Sort.sortComparable);
+	const all = Repository.all<Skill>(objectType).sort(sortComparable);
 	const sourceMap = new SourceNotationMap(all);
 
 	const nonLore = all.filter(skill => !skill.isSpecialty);
@@ -45,17 +50,17 @@ function renderAllSkill(objectType: string, objectTypePlural: string): utils.Ren
 // 	if (a === b) return 0;
 // 	const aParts = a.split(" ["), aLeft = aParts[0];
 // 	const bParts = b.split(" ["), bLeft = bParts[0];
-// 	const left = utils.ArrayUtils.Sort.stringIgnoreCase(aLeft, bLeft);
+// 	const left = stringIgnoreCase(aLeft, bLeft);
 // 	if (left === 0) return 0;
 // 	const aRight = aParts[1]?.split("]")[0] ?? "", aRarity = RARITIES.indexOf(<any>aRight);
 // 	const bRight = bParts[1]?.split("]")[0] ?? "", bRarity = RARITIES.indexOf(<any>bRight);
 // 	if (aRarity !== bRarity) return aRarity < bRarity ? -1 : 1;
-// 	return utils.ArrayUtils.Sort.stringIgnoreCase(aRight, bRight);
+// 	return stringIgnoreCase(aRight, bRight);
 
 // }
-function renderAllBySource(objectType: string, objectTypePlural: string): utils.RenderUtils.RenderableContent[] {
+function renderAllBySource(objectType: string, objectTypePlural: string): RenderableContent[] {
 	const _content = createCommandRenderableContent();
-	const all = Repository.all<HasSource>(objectType).sort(utils.ArrayUtils.Sort.sortComparable);
+	const all = Repository.all<HasSource>(objectType).sort(sortComparable);
 	_content.setTitle(`<b>${objectTypePlural} (${all.length})</b>`);
 
 	const sources = Repository.all<Source>("Source");
@@ -64,11 +69,11 @@ function renderAllBySource(objectType: string, objectTypePlural: string): utils.
 		if (bySource.length) {
 			const content = createCommandRenderableContent();
 			content.setTitle(`<b>${source.name} ${objectTypePlural} (${bySource.length})</b>`);
-			const categories = bySource.map(hasSource => hasSource.searchResultCategory).filter(utils.ArrayUtils.Filters.existsAndUnique);
+			const categories = bySource.map(hasSource => hasSource.searchResultCategory).filter(existsAndUnique);
 			// categories.sort(sortCatWithRarity);
 			if (categories.length) {
 				categories.forEach(category => {
-					const byCategory = utils.ArrayUtils.Collection.filterThenMap(bySource, item => item.searchResultCategory === category, item => item.toSearchResult());
+					const byCategory = Collection.filterThenMap(bySource, item => item.searchResultCategory === category, item => item.toSearchResult());
 					content.append(`<b>${category} (${byCategory.length})</b>\n> ${byCategory.join(", ")}`);
 				});
 			} else {
@@ -77,10 +82,10 @@ function renderAllBySource(objectType: string, objectTypePlural: string): utils.
 			return content;
 		}
 		return null;
-	}).filter(utils.ArrayUtils.Filters.exists);
+	}).filter(exists);
 	return [_content].concat(mapped);
 }
-export function renderAll(objectType: string, objectTypePlural: string, _bySource = false): utils.RenderUtils.RenderableContent[] {
+export function renderAll(objectType: string, objectTypePlural: string, _bySource = false): RenderableContent[] {
 	console.info("renderAll", objectType, objectTypePlural);
 	try {
 		if (objectType === "Source") {
@@ -92,7 +97,7 @@ export function renderAll(objectType: string, objectTypePlural: string, _bySourc
 		if (_bySource) {
 			return renderAllBySource(objectType, objectTypePlural);
 		}
-		const all = Repository.all<HasSource>(objectType).sort(utils.ArrayUtils.Sort.sortComparable);
+		const all = Repository.all<HasSource>(objectType).sort(sortComparable);
 		const content = createCommandRenderableContent(`<b>${objectTypePlural} (${all.length})</b>`);
 		SourceNotationMap.appendNotatedItems(content, all);
 		return [content];
@@ -106,7 +111,7 @@ export function renderAll(objectType: string, objectTypePlural: string, _bySourc
 async function objectsBy(sageMessage: SageMessage): Promise<void> {
 	const argValues = sageMessage.args.unkeyedValues();
 	const objectTypePlural = argValues.shift(),
-		objectType = Repository.parseObjectType(utils.LangUtils.oneToUS(objectTypePlural!.replace(/gods/i, "deities")))!,
+		objectType = Repository.parseObjectType(oneToUS(objectTypePlural!.replace(/gods/i, "deities")))!,
 		traitOr = argValues.shift() ?? (objectType.objectType === "Deity" ? "domain" : "trait"),
 		searchTerm = argValues.shift()!;
 
@@ -115,9 +120,9 @@ async function objectsBy(sageMessage: SageMessage): Promise<void> {
 		domain = traitOr === "domain" && Repository.findByValue("Domain", searchTerm);
 	// source = traitOr === "source",
 
-	content.setTitle(`<b>${objectType.objectTypePlural} by ${utils.StringUtils.capitalize(traitOr)} (${searchTerm})</b>`);
+	content.setTitle(`<b>${objectType.objectTypePlural} by ${capitalize(traitOr)} (${searchTerm})</b>`);
 	if (trait) {
-		const capped = utils.StringUtils.capitalize(searchTerm);
+		const capped = capitalize(searchTerm);
 		/** @todo This uses weapon for all to expose traits ... create a HasTraits interface and properly implement */
 		const items = Repository.filter(objectType.objectType as "Weapon", weapon => weapon.Traits?.includes(trait) || weapon.traits.includes(capped));
 		if (items.length) {
@@ -135,7 +140,7 @@ async function objectsBy(sageMessage: SageMessage): Promise<void> {
 			content.appendSection(`<a href="http://2e.aonprd.com/Search.aspx?query=${searchTerm.replace(/\s+/g, "+")}">Search Archives of Nethys</a>`);
 		}
 	} else if (objectType.objectType === "Spell") {
-		const capped = utils.StringUtils.capitalize(searchTerm);
+		const capped = capitalize(searchTerm);
 		const spells = Repository.filter("Spell", spell => spell.traits.includes(capped));
 		if (spells.length) {
 			SourceNotationMap.appendNotatedItems(content, spells);

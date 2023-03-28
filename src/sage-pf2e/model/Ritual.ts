@@ -1,4 +1,5 @@
-import utils from "../../sage-utils";
+import { nth } from "../../sage-utils/utils/NumberUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import { NEWLINE } from "../common";
 import RenderableContent from "../data/RenderableContent";
 import type { SourcedCore } from "./base/HasSource";
@@ -76,7 +77,7 @@ export default class Ritual extends HasSource<RitualCore> {
 		}
 		return rangeAreaTargets.join("; ");
 	}
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): RenderableContent {
 		const content = new RenderableContent(this);
 
 		const title = `<b>${this.name}</b> - Ritual ${this.level}`;
@@ -109,7 +110,7 @@ export default class Ritual extends HasSource<RitualCore> {
 
 		if (this.canHeighten) {
 			content.append("");
-			const heightenedList = (this.core.heightened || []).map(h => `<b>Heightened (${h.bump ? "+" + h.bump : utils.NumberUtils.nth(h.level!)})</b> ${h.change}`);
+			const heightenedList = (this.core.heightened || []).map(h => `<b>Heightened (${h.bump ? "+" + h.bump : nth(h.level!)})</b> ${h.change}`);
 			if (this.core.heightenedAs) {
 				content.append(`<b>Heightened</b> As <i>${this.core.heightenedAs}</i>`);
 				if (heightenedList.length) {
@@ -133,7 +134,7 @@ export default class Ritual extends HasSource<RitualCore> {
 	}
 	//#endregion utils.RenderUtils.IRenderable
 
-	//#region utils.SearchUtils.ISearchable
+	//#region ISearchable
 
 	public get searchResultCategory(): string {
 		const level = `Ritual ${this.level}`;
@@ -141,7 +142,7 @@ export default class Ritual extends HasSource<RitualCore> {
 		return `${level} ${rarity}`;
 	}
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.cast, this.cost, this.secondaryCasters, this.primaryCheck, this.secondaryChecks, this.area, this.range, this.targets, this.duration));
@@ -153,6 +154,6 @@ export default class Ritual extends HasSource<RitualCore> {
 		return this.name.italics();
 	}
 
-	//#endregion utils.SearchUtils.ISearchable
+	//#endregion ISearchable
 
 }

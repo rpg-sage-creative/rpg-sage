@@ -1,4 +1,8 @@
-import utils, { Core, UUID } from "../../sage-utils";
+import type { Core, UUID } from "../../sage-utils";
+import { unique } from "../../sage-utils/utils/ArrayUtils/Filters";
+import { nth } from "../../sage-utils/utils/NumberUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
+import { capitalize } from "../../sage-utils/utils/StringUtils";
 import type { TMagicComponent, TMagicTradition } from '../common';
 import { ABILITIES, NEWLINE, toModifier } from '../common';
 import RenderableContent from '../data/RenderableContent';
@@ -94,7 +98,7 @@ function creatureToHtml(creature: TSpellCreature): string {
 	const mappedSpeeds = creature.speeds.map(speed => `${speed.type} ${speed.value} feet`).join(", ");
 	return `<blockquote>`
 		+ `<b><u>${creature.name} - Creature ${creature.level}</u></b>`
-		+ `<br/>` + creature.traits.map(t => utils.StringUtils.capitalize(t)).join(", ")
+		+ `<br/>` + creature.traits.map(t => capitalize(t)).join(", ")
 		+ `<br/><b>Perception</b> ${toModifier(creature.perception.value)}; ${creature.perception.senses.join(", ")}`
 		+ `<br/><b>Languages</b> ${(creature.languages || []).length ? creature.languages.join(", ") : "-"}${languagesSpecial}`
 		+ `<br/><b>Skills</b> ${mappedSkills}`
@@ -178,7 +182,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 	public get area(): string | undefined { return this.core.area; }
 	public canHeighten = (this.core.heightenedAs ?? this.core.heightened ?? []).length > 0;
 	public get cast(): string { return this.core.cast; }
-	public components = <TMagicComponent[]>(this.core.components ?? []).map(component => utils.StringUtils.capitalize(component));
+	public components = <TMagicComponent[]>(this.core.components ?? []).map(component => capitalize(component));
 	public get cost(): string | undefined { return this.core.cost; }
 	private _domain?: Domain | null;
 	public get domain(): Domain | undefined {
@@ -201,7 +205,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 	public get requirements(): string | undefined { return this.core.requirements; }
 	public get savingThrow(): string | undefined { return this.core.savingThrow; }
 	public get targets(): string | undefined { return this.core.targets; }
-	public traditions = <TMagicTradition[]>(this.core.traditions || []).map(tradition => utils.StringUtils.capitalize(tradition));
+	public traditions = <TMagicTradition[]>(this.core.traditions || []).map(tradition => capitalize(tradition));
 	public get trigger(): string | undefined { return this.core.trigger; }
 
 	//#endregion
@@ -218,7 +222,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 	//#endregion
 
 	//#region utils.RenderUtils.IRenderable
-	private toRenderableContentTitle(content: utils.RenderUtils.RenderableContent): void {
+	private toRenderableContentTitle(content: RenderableContent): void {
 		const cantrip = this.isCantrip ? " Cantrip" : "";
 		const focus = !this.isCantrip && this.isFocus ? " Focus" : "";
 		const spell = !this.isCantrip && !this.isFocus ? " Spell" : "";
@@ -280,10 +284,10 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 		}
 		return savingThrowDuration.join("; ");
 	}
-	private toRenderableContentHeighten(content: utils.RenderUtils.RenderableContent): void {
+	private toRenderableContentHeighten(content: RenderableContent): void {
 		if (this.canHeighten) {
 			content.append("");
-			const heightenedList = (this.core.heightened ?? []).map(h => `<b>Heightened (${h.bump ? "+" + h.bump : utils.NumberUtils.nth(h.level!)})</b> ${h.change}`);
+			const heightenedList = (this.core.heightened ?? []).map(h => `<b>Heightened (${h.bump ? "+" + h.bump : nth(h.level!)})</b> ${h.change}`);
 			if (this.core.heightenedAs) {
 				content.append(`<b>Heightened</b> As <i>${this.core.heightenedAs}</i>`);
 				if (heightenedList.length) {
@@ -294,7 +298,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 			}
 		}
 	}
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): RenderableContent {
 		const content = new RenderableContent(this);
 
 		this.toRenderableContentTitle(content);
@@ -344,7 +348,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 		const italicPhrases = italicMatches.map(match => match.slice(3, -4));
 		const spellSearches = italicPhrases.map(Spell.find);
 		const validSpells = <Spell[]>spellSearches.filter(sp => sp && sp !== this);
-		const uniqueSpells = [this, ...validSpells].filter(utils.ArrayUtils.Filters.unique);
+		const uniqueSpells = [this, ...validSpells].filter(unique);
 		const otherSpells = uniqueSpells.slice(1);
 		content.addAonLink(...otherSpells.map(spell => spell.toAonLink()));
 
@@ -360,13 +364,13 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 		return `${level} ${rarity}`;
 	}
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.traits, this.traditions, this.archetypeName));
 		}
 
-		const keyTerm = utils.StringUtils.capitalize(searchInfo.keyTerm || "");
+		const keyTerm = capitalize(searchInfo.keyTerm || "");
 		if (findByValue("Class", keyTerm) && !this.traits.includes(keyTerm)) {
 			score.fail();
 		}

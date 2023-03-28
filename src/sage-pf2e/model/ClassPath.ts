@@ -1,6 +1,6 @@
 import type utils from "../../sage-utils";
 import RenderableContent from '../data/RenderableContent';
-import * as Repository from '../data/Repository';
+import { findByValue } from "../data/Repository";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from './base/HasSource';
 
@@ -14,7 +14,7 @@ export default class ClassPath extends HasSource<ClassPathCore> {
 		super(core);
 	}
 
-	public class = Repository.findByValue("Class", this.core.class)!;
+	public class = findByValue("Class", this.core.class)!;
 
 	//#region Instance Methods
 

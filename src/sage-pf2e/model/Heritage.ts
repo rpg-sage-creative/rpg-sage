@@ -1,4 +1,4 @@
-import utils from "../../sage-utils";
+import { Collection } from "../../sage-utils/utils/ArrayUtils";
 import RenderableContent from "../data/RenderableContent";
 import { findByValue } from "../data/Repository";
 import Ancestry from "./Ancestry";
@@ -24,7 +24,7 @@ export default class Heritage extends HasSource<HeritageCore> {
 
 	//#region utils.RenderUtils.IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): RenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		this.appendDescriptionTo(renderable);
@@ -40,7 +40,7 @@ export default class Heritage extends HasSource<HeritageCore> {
 	public static FeatureObjectType = "HeritageFeature";
 
 	public static removeFeatures(features: FeatureCore[]): FeatureCore[] {
-		return utils.ArrayUtils.Collection.remove(features, feature => feature.objectType === Heritage.FeatureObjectType);
+		return Collection.remove(features, feature => feature.objectType === Heritage.FeatureObjectType);
 	}
 	public static replaceFeatures(level: FeatureLevelCore, heritage: Heritage): void {
 		Ancestry.removeFeatures(level.features);

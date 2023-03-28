@@ -1,5 +1,5 @@
 import type { ISourceReference } from "../../common";
-import * as Repository from "../../data/Repository";
+import { findByValue } from "../../data/Repository";
 import type { BaseCore } from "../base/Base";
 import type { SourcedCore } from "../base/HasSource";
 import HasSource from "../base/HasSource";
@@ -41,7 +41,7 @@ export default class CreatureCategory extends HasSource<CreatureCategoryCore, "C
 	public get creatures(): Creature[] {
 		if (!this._creatures) {
 			this._creatures = this.core.creatures
-				.map(creature => Repository.findByValue("Creature", creature.name)!)
+				.map(creature => findByValue("Creature", creature.name)!)
 				.sort(sortByLevelThenName);
 		}
 		return this._creatures;
@@ -51,7 +51,7 @@ export default class CreatureCategory extends HasSource<CreatureCategoryCore, "C
 	public get items(): Item[] {
 		if (!this._items) {
 			this._items = this.core.items
-				.map(item => Repository.findByValue("Item", item.name)!)
+				.map(item => findByValue("Item", item.name)!)
 				.sort(sortByLevelThenName);
 		}
 		return this._items;

@@ -1,8 +1,10 @@
 import type { Message, User } from "discord.js";
-import utils, { Optional } from "../../../sage-utils";
+import type { Optional } from "../../../sage-utils";
+import { errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { DMessage, DMessageChannel, handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
 import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
 import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
+import RenderableContent from "../../../sage-utils/utils/RenderUtils/RenderableContent";
 import type { TCommandAndArgs } from "../../discord";
 import { send } from "../../discord/messages";
 import { EmojiType } from "./Emoji";
@@ -94,7 +96,7 @@ export default class SageMessage<HasServer extends boolean = boolean>
 			return [];
 		}
 		// check to see if we have channel send message permissions
-		const renderableContent = utils.RenderUtils.RenderableContent.resolve(renderableContentResolvable);
+		const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 		if (renderableContent) {
 			const sent = await send(this.sageCache, targetChannel, renderableContent, originalAuthor);
 			if (sent.length) {
@@ -164,7 +166,7 @@ export default class SageMessage<HasServer extends boolean = boolean>
 	/** This was pulled here to avoid duplicating code. */
 	private async _react(message: Optional<DMessage>, emoji: string): Promise<boolean> {
 		if (message && await this.canReact(message)) {
-			const reaction = await message.react(emoji).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+			const reaction = await message.react(emoji).catch(errorReturnNull);
 			return reaction ? true : false;
 		}
 		return false;

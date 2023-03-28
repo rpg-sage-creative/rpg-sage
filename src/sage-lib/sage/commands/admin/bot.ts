@@ -1,5 +1,5 @@
 import { GameType } from "../../../../sage-common";
-import utils from "../../../../sage-utils";
+import { errorReturnEmptyArray } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
 import ActiveBot from "../../model/ActiveBot";
 import type Bot from "../../model/Bot";
 import type SageMessage from "../../model/SageMessage";
@@ -7,7 +7,7 @@ import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 
 async function botList(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.isSuperUser) {
-		const bots: Bot[] = await sageMessage.sageCache.bots.getAll().catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		const bots: Bot[] = await sageMessage.sageCache.bots.getAll().catch(errorReturnEmptyArray);
 		for (const bot of bots) {
 			await sendBot(sageMessage, bot);
 		}

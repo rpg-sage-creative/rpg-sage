@@ -1,5 +1,10 @@
 import { GameType } from "../sage-common";
-import utils, { IdCore, TToken } from "../sage-utils";
+import type { IdCore, TToken } from "../sage-utils";
+import { exists } from "../sage-utils/utils/ArrayUtils/Filters";
+import { sortAscending } from "../sage-utils/utils/ArrayUtils/Sort";
+import { HasIdCore } from "../sage-utils/utils/ClassUtils";
+import { random } from "../sage-utils/utils/RandomUtils";
+import { cleanWhitespace } from "../sage-utils/utils/StringUtils";
 import type { TDiceRoll } from "./dice/base/types";
 
 //#region rpg.common.ts
@@ -63,11 +68,11 @@ export const SECRET_REGEX = /secret/i;
 /** This strips a trailing colon (,) or semicolon (;) */
 export function cleanDescription(description?: string): string {
 	const replaced = (description ?? "").replace(/[;,]\s*$/, "");
-	return utils.StringUtils.cleanWhitespace(replaced);
+	return cleanWhitespace(replaced);
 }
 
 export function filterExists<T>(value: T): boolean {
-	return utils.ArrayUtils.Filters.exists(value) && <unknown>value !== "";
+	return exists(value) && <unknown>value !== "";
 }
 
 //#endregion
@@ -77,7 +82,7 @@ export function filterExists<T>(value: T): boolean {
 export function rollDice(count: number, sides: number): number[] {
 	const rolls: number[] = [];
 	for (let i = count; i--;) {
-		rolls.push(utils.RandomUtils.random(sides));
+		rolls.push(random(sides));
 	}
 	return rolls;
 }
@@ -90,7 +95,7 @@ export function sumDropKeep(values: number[], dropKeep?: TDropKeepData): number 
 	if (!dropKeep) {
 		return sum(values);
 	}
-	const sorted = values.slice().sort(utils.ArrayUtils.Sort.sortAscending);
+	const sorted = values.slice().sort(sortAscending);
 	switch (dropKeep.type) {
 		case DropKeepType.DropHighest:
 			return sum(sorted.slice(0, -dropKeep.value));
@@ -290,7 +295,7 @@ export type TSign = "+" | "-" | "*" | "/";
 export interface DieCore<T extends string = string> extends IdCore<T> {
 	gameType: GameType;
 }
-export abstract class HasDieCore<T extends DieCore<U>, U extends string = string> extends utils.ClassUtils.HasIdCore<T, U> {
+export abstract class HasDieCore<T extends DieCore<U>, U extends string = string> extends HasIdCore<T, U> {
 	public get gameType(): GameType { return this.core.gameType; }
 }
 

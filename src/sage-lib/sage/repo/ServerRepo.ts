@@ -1,4 +1,4 @@
-import type * as Discord from "discord.js";
+import type { Guild } from "discord.js";
 import ActiveBot from "../model/ActiveBot";
 import type SageCache from "../model/SageCache";
 import Server, { ServerCore } from "../model/Server";
@@ -13,7 +13,7 @@ export default class ServerRepo extends DidRepository<ServerCore, Server> {
 	}
 
 	/** This finds or creates the server object. It also updates the server name if changed. */
-	public async getOrCreateByGuild(guild: Discord.Guild): Promise<Server> {
+	public async getOrCreateByGuild(guild: Guild): Promise<Server> {
 		let server = await this.getByDid(guild.id);
 		if (!server) {
 			server = new Server(Server.createCore(guild), this.sageCache);
@@ -25,7 +25,7 @@ export default class ServerRepo extends DidRepository<ServerCore, Server> {
 		return server;
 	}
 
-	public async initializeServer(guild: Discord.Guild | null): Promise<boolean> {
+	public async initializeServer(guild: Guild | null): Promise<boolean> {
 		if (!guild) {
 			return false;
 		}
@@ -45,7 +45,7 @@ export default class ServerRepo extends DidRepository<ServerCore, Server> {
 		return saved;
 	}
 
-	public async retireServer(guild: Discord.Guild, kicked = false, banned = false): Promise<boolean> {
+	public async retireServer(guild: Guild, kicked = false, banned = false): Promise<boolean> {
 		const server = await this.getByDid(guild.id);
 		if (server) {
 			console.info(`NOT IMPLEMENTED: ${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} ${banned && "banned" || kicked && "kicked" || "left"} ${guild.name} (${guild.id})`);

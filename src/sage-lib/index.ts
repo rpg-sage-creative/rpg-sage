@@ -1,11 +1,12 @@
-import utils, { LogLevel } from "../sage-utils";
-import { addAcceptableBot } from "./discord/handlers";
 import { registerAndLoad } from "../sage-pf2e";
+import { LogLevel } from "../sage-utils";
+import { startHandling } from "../sage-utils/utils/ConsoleUtils";
+import DiscordFetches from "../sage-utils/utils/DiscordUtils/DiscordFetches";
+import { addAcceptableBot } from "./discord/handlers";
 import { registerCommandHandlers } from "./sage/commands";
 import ActiveBot from "./sage/model/ActiveBot";
 import type { TBotCodeName } from "./sage/model/Bot";
 import BotRepo from "./sage/repo/BotRepo";
-import DiscordFetches from "../sage-utils/utils/DiscordUtils/DiscordFetches";
 /*
 // import type Bot from "./sage/model/Bot";
 // import Server from "./sage/model/Server";
@@ -13,7 +14,7 @@ import DiscordFetches from "../sage-utils/utils/DiscordUtils/DiscordFetches";
 
 export function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: string, includePf2ToolsData = false): void {
 	const logLevel = botCodeName === "dev" ? LogLevel.Info : LogLevel.Warn;
-	utils.ConsoleUtils.startHandling(logLevel);
+	startHandling(logLevel);
 
 	BotRepo.getByCodeName(botCodeName).then(bot => {
 		if (!bot) {

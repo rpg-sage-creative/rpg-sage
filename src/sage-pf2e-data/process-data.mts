@@ -1,14 +1,16 @@
-import * as fs from "fs";
-import { clearStringify, getPf2tCores, stringify } from "./common.mjs";
+import { existsSync, readdirSync, rmSync } from "fs";
 import type { THasSuccessOrFailure } from "../sage-pf2e";
-import utils, { type UUID } from "../sage-utils";
-import { compareNames, debug, DistDataPath, error, info, loadPf2tCores, log, getSageCores, SrcDataPath, warn } from "./common.mjs";
+import type { UUID } from "../sage-utils";
+import Collection from "../sage-utils/utils/ArrayUtils/Collection.js";
+import { readJsonFileSync, writeFileSync } from "../sage-utils/utils/FsUtils/index.js";
+import { generate, isNotNormalized, normalize } from "../sage-utils/utils/UuidUtils/index.js";
+import { clearStringify, compareNames, debug, DistDataPath, error, getPf2tCores, getSageCores, info, loadPf2tCores, log, SrcDataPath, stringify, warn } from "./common.mjs";
 import { findPf2tCore, parsePf2Data } from "./pf2-tools-parsers/common.mjs";
 import { processAbcData } from "./process-abc.mjs";
 import { processPf2tData } from "./processPf2taData.mjs";
 import type { TCore } from "./types.mjs";
 
-type CoreList = utils.ArrayUtils.Collection<TCore>;
+type CoreList = Collection<TCore>;
 
 let total = 0, created = 0, unique = 0, recreated = 0, normalized = 0, aoned = 0, linked = 0;
 
@@ -21,7 +23,7 @@ function isUnique(uuid: UUID): boolean {
 }
 function createUuid(): UUID {
 	let uuid;
-	do { uuid = utils.UuidUtils.generate(); }while(!isUnique(uuid));
+	do { uuid = generate(); }while(!isUnique(uuid));
 	return uuid;
 }
 //#endregion
@@ -34,7 +36,7 @@ function getPathForSource(source: TCore) {
 		`${SrcDataPath}/${source.name}`,
 		`${SrcDataPath}/${source.name} ${source.code}`
 	];
-	const found = paths.find(path => fs.existsSync(path));
+	const found = paths.find(path => existsSync(path));
 	if (found) {
 		sourcePaths.push(found);
 	}else {
@@ -44,14 +46,14 @@ function getPathForSource(source: TCore) {
 }
 function getFullPathOfAllJsonFilesIn(path?: string) {
 	if (!path) { return []; }
-	const names = fs.readdirSync(path);
+	const names = readdirSync(path);
 	const json = names.filter(name => name.endsWith(".json")).map(name => `${path}/${name}`);
 	const subs = names.filter(name => !name.includes(".")).map(name => getFullPathOfAllJsonFilesIn(`${path}/${name}`));
 	subs.forEach(sub => json.push(...sub));
 	return json;
 }
 function getNonSourcePaths() {
-	return fs.readdirSync(SrcDataPath)
+	return readdirSync(SrcDataPath)
 		.filter(name => !name.includes("."))
 		.map(name => `${SrcDataPath}/${name}`)
 		.filter(path => !sourcePaths.includes(path));
@@ -123,7 +125,7 @@ function fixDedicationFeatObjectType(core: TCore): boolean {
 
 function processData(filePathAndName: string) {
 	info(`Processing file: ${filePathAndName} ...`);
-	const coreList = utils.ArrayUtils.Collection.from(utils.FsUtils.readJsonFileSync(filePathAndName) as TCore[]);
+	const coreList = Collection.from(readJsonFileSync(filePathAndName) as TCore[]);
 
 	//#region invalid file/data
 	if (!coreList) {
@@ -139,14 +141,14 @@ function processData(filePathAndName: string) {
 
 	//#region invalid source/folder
 	if (!filePathAndName.includes("source-list") && coreList.find(core => !filePathAndName.includes(core.source!) && !filePathAndName.includes(pluralObjectType(core.objectType)))) {
-		fs.rmSync(filePathAndName);
+		rmSync(filePathAndName);
 		const fileName = filePathAndName.split("/").pop();
 		const coreSources = coreList.map(core => core.source).filter((s, i, a) => s && a.indexOf(s) === i);
 		coreSources.forEach(src => {
 			const srcCores = coreList.filter(core => core.source === src);
 			const _filePathAndName = `${SrcDataPath}/${src}/${pluralObjectType(srcCores[0].objectType)}/${fileName}`;
 			warn(`Moving ${srcCores.length} from ${filePathAndName} to ${_filePathAndName}`)
-			utils.FsUtils.writeFileSync(_filePathAndName, srcCores, true, true);
+			writeFileSync(_filePathAndName, srcCores, true, true);
 			processData(_filePathAndName);
 		});
 		return coreList;
@@ -169,8 +171,8 @@ function processData(filePathAndName: string) {
 			_recreated++;
 		}else {
 			unique++;
-			if (utils.UuidUtils.isNotNormalized(core.id)) {
-				core.id = utils.UuidUtils.normalize(core.id);
+			if (isNotNormalized(core.id)) {
+				core.id = normalize(core.id);
 				_normalized++;
 			}
 		}
@@ -197,7 +199,7 @@ function processData(filePathAndName: string) {
 		}
 		validateAbbreviation(core);
 		delete (core as any).hash;
-		utils.FsUtils.writeFileSync(`${DistDataPath}/${core.objectType}/${core.id}.json`, core, true, false);
+		writeFileSync(`${DistDataPath}/${core.objectType}/${core.id}.json`, core, true, false);
 	}
 
 	created += _created;
@@ -207,7 +209,7 @@ function processData(filePathAndName: string) {
 	linked += _linked;
 	if (_created || _recreated || _normalized || _aoned || _linked || updateFile) {
 		info(`\tSaving ${_created} IDs created, ${_recreated} IDs recreated, ${_normalized} IDs normalized, ${_aoned} aonIDs set, and ${_linked} links set`);
-		utils.FsUtils.writeFileSync(filePathAndName, coreList, false, true);
+		writeFileSync(filePathAndName, coreList, false, true);
 	}
 	// info(`Processing file: ${filePathAndName} ... done`);
 	return coreList;
@@ -332,7 +334,7 @@ function processLore() {
 		lores?.forEach(lore => pushLore(lore));
 	});
 	allLores.sort((a, b) => a.name === b.name ? 0 : a.name < b.name ? -1 : 1);
-	fs.writeFileSync("./data/all-lores.csv", allLores.map(lore => `${lore.name},${lore.type ?? ""}`).join("\n"));
+	writeFileSync("./data/all-lores.csv", allLores.map(lore => `${lore.name},${lore.type ?? ""}`).join("\n"));
 	info(`Creating all-lores.csv ... done!`);
 }
 //#endregion

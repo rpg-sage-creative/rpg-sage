@@ -1,13 +1,18 @@
-import utils, { isDefined, Optional, OrNull, OrUndefined, TUuidMatcher, UUID } from "../../sage-utils";
+import { isDefined, Optional, OrNull, OrUndefined, TUuidMatcher, UUID } from "../../sage-utils";
+import { errorReturnEmptyArray } from "../../sage-utils/utils/ConsoleUtils/Catchers";
+import { filterFiles, readJsonFile } from "../../sage-utils/utils/FsUtils";
+import { randomItem } from "../../sage-utils/utils/RandomUtils";
+import { StringMatcher } from "../../sage-utils/utils/StringUtils";
+import { UuidMatcher } from "../../sage-utils/utils/UuidUtils";
 import type { TEntity } from "../model";
+import type AonBase from "../model/base/AonBase";
 import type Base from "../model/base/Base";
 import type { BaseCore } from "../model/base/Base";
 import type HasSource from "../model/base/HasSource";
-import Source from "../model/base/Source";
-import type Creature from "../model/bestiary/Creature";
 import Pf2tBase, { type Pf2tBaseCore } from "../model/base/Pf2tBase";
 import type { SourceCore } from "../model/base/Source";
-import type AonBase from "../model/base/AonBase";
+import Source from "../model/base/Source";
+import type Creature from "../model/bestiary/Creature";
 
 export type TObjectTypeAndPlural = { objectType: string; objectTypePlural: string; };
 
@@ -73,7 +78,7 @@ export function all<T extends HasSource>(objectType: string, source: string): T[
 export function all(objectType: string, source?: string): Base[] {
 	const items = _all(objectType);
 	if (source) {
-		const stringMatcher = utils.StringUtils.StringMatcher.from(source);
+		const stringMatcher = StringMatcher.from(source);
 		return (<HasSource[]>items).filter((item: HasSource) => item.source?.matches(stringMatcher));
 	}
 	return items.slice();
@@ -110,7 +115,7 @@ export function findByAonBase<T extends Base | HasSource>(aonBase: AonBase): OrU
 
 /** Finds the object for the given UUID. */
 export function findById<T extends Base>(id: OrUndefined<UUID>): OrUndefined<T> {
-	const uuidMatcher = id ? utils.UuidUtils.UuidMatcher.from(id) : null;
+	const uuidMatcher = id ? UuidMatcher.from(id) : null;
 	if (uuidMatcher?.isValid) {
 		for (const objectType of getObjectTypes()) {
 			const found = _findById(objectType, uuidMatcher);
@@ -132,12 +137,12 @@ export function findByValue<T extends Base<any>>(objectType: string, value: Opti
 		return undefined;
 	}
 
-	const uuidMatcher = utils.UuidUtils.UuidMatcher.from(value);
+	const uuidMatcher = UuidMatcher.from(value);
 	if (uuidMatcher.isValid) {
 		return _findById(objectType, uuidMatcher);
 	}
 
-	const stringMatcher = utils.StringUtils.StringMatcher.from(value);
+	const stringMatcher = StringMatcher.from(value);
 	if (stringMatcher.isBlank) {
 		return undefined;
 	}
@@ -150,7 +155,7 @@ export function random<T extends string>(objectType: T): TEntity<T>;
 export function random<T extends Base>(objectType: string, predicate: BaseFilterCallbackFn<T>): T;
 export function random<T extends Base>(objectType: string, predicate?: BaseFilterCallbackFn<T>): T {
 	const objects: T[] = all(objectType);
-	return utils.RandomUtils.randomItem(predicate ? objects.filter(predicate) : objects)!;
+	return randomItem(predicate ? objects.filter(predicate) : objects)!;
 }
 
 //#region load data
@@ -233,8 +238,8 @@ function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 }
 
 async function loadDataFromDist(distPath: string): Promise<void> {
-	const files: string[] = await utils.FsUtils.filterFiles(distPath, file => file.endsWith(".json") && !file.includes("pf2t-leftovers"), true)
-		.catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+	const files: string[] = await filterFiles(distPath, file => file.endsWith(".json") && !file.includes("pf2t-leftovers"), true)
+		.catch(errorReturnEmptyArray);
 	if (!files.length) {
 		console.warn(`No files in "${distPath}" ...`);
 		return Promise.resolve();
@@ -245,13 +250,13 @@ async function loadDataFromDist(distPath: string): Promise<void> {
 	const sources = files.filter(file => file.includes("/Source/"));
 	console.info(`Loading Data: ${sources.length} sources`);
 	for (const source of sources) {
-		await utils.FsUtils.readJsonFile<BaseCore>(source).then(core => coresLoaded += loadCore(core, source), console.warn);
+		await readJsonFile<BaseCore>(source).then(core => coresLoaded += loadCore(core, source), console.warn);
 	}
 
 	const others = files.filter(file => !file.includes("/Source/"));
 	console.info(`Loading Data: ${others.length} objects`);
 	for (const other of others) {
-		await utils.FsUtils.readJsonFile<BaseCore>(other).then(core => coresLoaded += loadCore(core, other), console.warn);
+		await readJsonFile<BaseCore>(other).then(core => coresLoaded += loadCore(core, other), console.warn);
 	}
 
 	console.info(`\t\t${coresLoaded} Total Cores loaded`);
@@ -261,7 +266,7 @@ async function loadDataFromDist(distPath: string): Promise<void> {
 
 async function loadFromPF2t(distPath: string): Promise<void> {
 	const pathAndFile = `${distPath}/pf2t-leftovers.json`;
-	const cores = await utils.FsUtils.readJsonFile<Pf2tBaseCore[]>(pathAndFile).catch(() => null) ?? [];
+	const cores = await readJsonFile<Pf2tBaseCore[]>(pathAndFile).catch(() => null) ?? [];
 	console.info(`\t\t${cores.length} Total PF2 Tools Cores loaded`);
 	cores.forEach(core => {
 		const data = new Pf2tBase(core);

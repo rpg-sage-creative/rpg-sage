@@ -1,4 +1,8 @@
-import utils, { Core, UUID } from "../../sage-utils";
+import type { Core, UUID } from "../../sage-utils";
+import { existsAndUnique } from "../../sage-utils/utils/ArrayUtils/Filters";
+import { sortComparable } from "../../sage-utils/utils/ArrayUtils/Sort";
+import { HasCore } from "../../sage-utils/utils/ClassUtils";
+import { randomItem } from "../../sage-utils/utils/RandomUtils";
 import type { TMagicTradition } from "../common";
 import type ArcaneSchool from "./ArcaneSchool";
 import type Source from "./base/Source";
@@ -7,7 +11,7 @@ import Spell from "./Spell";
 
 
 function uniqueClean<T>(array: (T | undefined)[]): T[] {
-	return array.filter(utils.ArrayUtils.Filters.existsAndUnique);
+	return array.filter(existsAndUnique);
 }
 function flatUniqueClean<T>(array: T[][]): T[] {
 	return uniqueClean(array.flat(Infinity)) as T[];
@@ -17,7 +21,7 @@ export interface SpellCollectionCore extends Core {
 	spells: UUID[];
 }
 
-export default class SpellCollection extends utils.ClassUtils.HasCore<SpellCollectionCore> {
+export default class SpellCollection extends HasCore<SpellCollectionCore> {
 
 	/**************************************************************************************************************************/
 	// Constructors
@@ -49,9 +53,9 @@ export default class SpellCollection extends utils.ClassUtils.HasCore<SpellColle
 	public get heightenedSpells(): HeightenedSpell[] { return this.core.spells.map(spell => HeightenedSpell.find(spell)!); }
 	public get names(): string[] { return uniqueClean(this.spells.map(spell => spell.name)).sort(); }
 	public get levels(): number[] { return uniqueClean(this.spells.map(spell => spell.level)).sort(); }
-	public get schools(): ArcaneSchool[] { return uniqueClean(this.spells.map(spell => spell.arcaneSchool)).sort(utils.ArrayUtils.Sort.sortComparable); }
-	public get spells(): Spell[] { return uniqueClean(this.heightenedSpells.map(spell => spell.spell)).sort(utils.ArrayUtils.Sort.sortComparable); }
-	public get sources(): Source[] { return uniqueClean(this.spells.map(spell => spell.source)).sort(utils.ArrayUtils.Sort.sortComparable); }
+	public get schools(): ArcaneSchool[] { return uniqueClean(this.spells.map(spell => spell.arcaneSchool)).sort(sortComparable); }
+	public get spells(): Spell[] { return uniqueClean(this.heightenedSpells.map(spell => spell.spell)).sort(sortComparable); }
+	public get sources(): Source[] { return uniqueClean(this.spells.map(spell => spell.source)).sort(sortComparable); }
 	public get traditions(): TMagicTradition[] { return flatUniqueClean<TMagicTradition>(this.spells.map(spell => spell.traditions)); }
 
 	/**************************************************************************************************************************/
@@ -120,7 +124,7 @@ export default class SpellCollection extends utils.ClassUtils.HasCore<SpellColle
 	}
 
 	public random(): HeightenedSpell {
-		return utils.RandomUtils.randomItem(this.heightenedSpells)!;
+		return randomItem(this.heightenedSpells)!;
 	}
 
 }

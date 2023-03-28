@@ -1,4 +1,4 @@
-import type * as Discord from "discord.js";
+import type { Snowflake } from "discord.js";
 import { errorReturnFalse, errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../../sage-utils/utils/FsUtils";
 import RenderableGameMap from "./RenderableGameMap";
@@ -15,11 +15,11 @@ export enum UserLayerType { Layer = 0, Terrain = 1, Aura = 2, Token = 3, Previou
 
 export type TGameMapImage = {
 	/** the active aura for this image */
-	auraId?: Discord.Snowflake;
+	auraId?: Snowflake;
 	/** images that should go on the aura layer: above the terrain layer, below the token layer */
 	auras: TGameMapAura[];
 	/** unique identifier */
-	id: Discord.Snowflake;
+	id: Snowflake;
 	/** the map layer this image belongs on */
 	layer: LayerType;
 	/** name of the token */
@@ -31,12 +31,12 @@ export type TGameMapImage = {
 	/** url to the image */
 	url: string;
 	/** the owner of the image */
-	userId?: Discord.Snowflake;
+	userId?: Snowflake;
 };
 
 export type TGameMapAura = TGameMapImage & {
 	/** id of another token to anchor this one to */
-	anchorId?: Discord.Snowflake;
+	anchorId?: Snowflake;
 	/** opacity of the token; primarily for auras */
 	opacity?: number;
 };
@@ -52,11 +52,11 @@ export type TActiveLayerMapValues = [
 	/** Active Layer */
 	LayerType,
 	/** Active Terrain */
-	Discord.Snowflake | undefined,
+	Snowflake | undefined,
 	/** Active Aura */
-	Discord.Snowflake | undefined,
+	Snowflake | undefined,
 	/** Active Token */
-	Discord.Snowflake | undefined,
+	Snowflake | undefined,
 	/** Previous Layer */
 	LayerType
 ];
@@ -75,9 +75,9 @@ export type TGameMapCore = {
 	/** grid dimensions: [cols, rows] */
 	grid: [number, number];
 	/** unique identifier */
-	id: Discord.Snowflake;
+	id: Snowflake;
 	/** the message this map is posted in */
-	messageId: Discord.Snowflake;
+	messageId: Snowflake;
 	/** name of the map */
 	name: string;
 	/** where tokens first appear: [col, row] */
@@ -87,7 +87,7 @@ export type TGameMapCore = {
 	/** images that should go on the token layer: the top layer */
 	tokens: TGameMapToken[];
 	/** the owner of the map */
-	userId: Discord.Snowflake;
+	userId: Snowflake;
 	/** url to the image */
 	url: string;
 };
@@ -95,7 +95,7 @@ export type TGameMapCore = {
 //#endregion
 
 /** returns path to the json file */
-function getMapFilePath(messageId: Discord.Snowflake): string {
+function getMapFilePath(messageId: Snowflake): string {
 	return `./data/sage/maps/${messageId}.json`;
 }
 
@@ -139,7 +139,7 @@ export default abstract class GameMapBase {
 	//#region methods
 
 	/** returns true if the user owns the map or has an image */
-	public isValidUser(userId: Discord.Snowflake): boolean {
+	public isValidUser(userId: Snowflake): boolean {
 		return this.ownerId === userId
 			|| this.terrain.find(terrain => terrain.userId === userId)
 			|| this.auras.find(aura => aura.userId === userId)
@@ -161,17 +161,17 @@ export default abstract class GameMapBase {
 	//#region static
 
 	/** returns true if a map for the given id exists */
-	public static exists(messageId: Discord.Snowflake): boolean {
+	public static exists(messageId: Snowflake): boolean {
 		return fileExistsSync(getMapFilePath(messageId));
 	}
 
 	/** returns true if a map for the given id has the given name */
-	public static matches(messageId: Discord.Snowflake, name: string): boolean {
+	public static matches(messageId: Snowflake, name: string): boolean {
 		const core = this.exists(messageId) ? readJsonFileSync<TGameMapCore>(getMapFilePath(messageId)) : null;
 		return core?.name === name;
 	}
 
-	public static readCore(messageId: Discord.Snowflake) {
+	public static readCore(messageId: Snowflake) {
 		return readJsonFile<TGameMapCore>(getMapFilePath(messageId)).catch(errorReturnNull);
 	}
 

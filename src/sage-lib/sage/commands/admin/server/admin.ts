@@ -1,14 +1,15 @@
-import type * as Discord from "discord.js";
-import utils from "../../../../../sage-utils";
+import type { User } from "discord.js";
+import { Collection } from "../../../../../sage-utils/utils/ArrayUtils";
+import type { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
 import type SageMessage from "../../../model/SageMessage";
 import { type IAdminUser, AdminRoleType } from "../../../model/Server";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
 
-type TAdminUser = IAdminUser & { discordUser: Discord.User };
+type TAdminUser = IAdminUser & { discordUser: User };
 
-async function renderUser(renderableContent: utils.RenderUtils.RenderableContent, user: TAdminUser): Promise<void> {
+async function renderUser(renderableContent: RenderableContent, user: TAdminUser): Promise<void> {
 	renderableContent.appendTitledSection(`<b>${user?.discordUser?.tag || "<i>Unknown</i>"}</b>`);
 	// renderableContent.append(`<b>User Id</b> ${user.discordUser?.id}`);
 	// renderableContent.append(`<b>Username</b> ${user?.discordUser?.username || "<i>Unknown</i>"}`);
@@ -16,7 +17,7 @@ async function renderUser(renderableContent: utils.RenderUtils.RenderableContent
 }
 
 async function adminList(sageMessage: SageMessage<true>): Promise<void> {
-	let users: TAdminUser[] = <TAdminUser[]>await utils.ArrayUtils.Collection.mapAsync(sageMessage.server.admins, async admin => {
+	let users: TAdminUser[] = <TAdminUser[]>await Collection.mapAsync(sageMessage.server.admins, async admin => {
 		return {
 			discordUser: await sageMessage.discord.fetchUser(admin.did),
 			...admin
@@ -32,7 +33,7 @@ async function adminList(sageMessage: SageMessage<true>): Promise<void> {
 		const renderableContent = createAdminRenderableContent(sageMessage.server);
 		renderableContent.setTitle(`<b>Sage Admin List</b>`);
 		if (users.length) {
-			await utils.ArrayUtils.Collection.forEachAsync(users, async user => renderUser(renderableContent, user));
+			await Collection.forEachAsync(users, async user => renderUser(renderableContent, user));
 		} else {
 			renderableContent.append(`<blockquote>No Admins Found!</blockquote>`);
 		}

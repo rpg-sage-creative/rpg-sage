@@ -1,5 +1,6 @@
 import type { Optional, OrNull } from "../../sage-utils";
-import utils from "../../sage-utils";
+import { existsAndUnique } from "../../sage-utils/utils/ArrayUtils/Filters";
+import { random } from "../../sage-utils/utils/RandomUtils";
 import { Dice } from "../dice/base";
 import type { TDice } from "../dice/base/types";
 
@@ -201,7 +202,7 @@ export class NextTableInfo {
 			nextTable = allTables[nextItem.tableName];
 			spread = nextTable.getTotalSpread();
 			for (let loopIndex = nextItem.times; loopIndex--;) {
-				value = utils.RandomUtils.random(spread);
+				value = random(spread);
 				nextResults = <TRI>nextTable.createTableResultsItem(value);
 				nextResults.descriptor = nextItem.descriptor;
 				items[itemIndex++] = nextResults;
@@ -228,7 +229,7 @@ export class TableResults<TI extends TableItem> {
 		let counter = rolls,
 			value: number;
 		while (counter--) {
-			value = utils.RandomUtils.random(totalSpread);
+			value = random(totalSpread);
 			items[counter] = table.createTableResultsItem(value);
 		}
 	}
@@ -284,7 +285,7 @@ export class TableResultsItem<TI extends TableItem> {
 				labels = labels.concat(items[itemIndex].getUniqueLabels());
 			}
 		}
-		return labels.filter(utils.ArrayUtils.Filters.existsAndUnique);
+		return labels.filter(existsAndUnique);
 	}
 	public toHtmlString(tabLevel: number): string {
 		let html = "<div class='Result'><table><tr>";

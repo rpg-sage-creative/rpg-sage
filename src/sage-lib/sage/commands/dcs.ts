@@ -1,18 +1,20 @@
-import utils, { Optional } from "../../../sage-utils";
 import { PROFICIENCIES, Table } from "../../../sage-pf2e";
+import type { Optional } from "../../../sage-utils";
+import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import { capitalize } from "../../../sage-utils/utils/StringUtils";
+import { registerSlashCommand } from "../../../slash.mjs";
+import type { TSlashCommand } from "../../../types";
+import { registerInteractionListener } from "../../discord/handlers";
+import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
-import { registerSlashCommand } from "../../../slash.mjs";
-import type SageInteraction from "../model/SageInteraction";
-import type { TSlashCommand } from "../../../types";
-import { registerInteractionListener } from "../../discord/handlers";
 
 //#region simple dcs
 
-function _simpleDcs(proficiency: Optional<string>): utils.RenderUtils.RenderableContent {
+function _simpleDcs(proficiency: Optional<string>): RenderableContent {
 	const table = Table.findByNumber("10-4")!,
-		proficiencyLetter = utils.StringUtils.capitalize(proficiency ?? "")[0],
+		proficiencyLetter = capitalize(proficiency ?? "")[0],
 		proficiencyLetterIndex = PROFICIENCIES.findIndex(prof => prof[0] === proficiencyLetter);
 	if (proficiencyLetterIndex < 0) {
 		return table.toRenderableContent();
@@ -33,7 +35,7 @@ function simpleDcs(sageMessage: SageMessage): Promise<void> {
 
 //#region dcs by level
 
-function _dcsByLevel(bySpell: boolean, level: Optional<number>): utils.RenderUtils.RenderableContent {
+function _dcsByLevel(bySpell: boolean, level: Optional<number>): RenderableContent {
 	const table = Table.findByNumber("10-5")!;
 	if (!level) {
 		return table.toRenderableContent();

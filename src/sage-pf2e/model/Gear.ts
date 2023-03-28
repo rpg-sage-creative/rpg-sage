@@ -1,4 +1,5 @@
-import utils from "../../sage-utils";
+import { asStringIgnoreCase } from "../../sage-utils/utils/ArrayUtils/Sort";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { IHasContents, TObjectQuantity } from "../common";
 import { COMMON, MDASH } from "../common";
 import RenderableContent from "../data/RenderableContent";
@@ -26,15 +27,15 @@ function contentToString(objectQuantity: TObjectQuantity<Gear>): string {
 
 export function sortGear(a: Gear, b: Gear): number {
 	if (a.category && b.category && a.category !== b.category) {
-		return utils.ArrayUtils.Sort.asStringIgnoreCase(`${a.category.name || ""}${a.name}`, `${b.category.name || ""}${b.name}`);
+		return asStringIgnoreCase(`${a.category.name || ""}${a.name}`, `${b.category.name || ""}${b.name}`);
 	}
 	if (!a.category) {
-		return utils.ArrayUtils.Sort.asStringIgnoreCase(a.name, b.name);
+		return asStringIgnoreCase(a.name, b.name);
 	}
 	if (a.price && b.price && a.price !== b.price) {
 		return Coins.compare(a.price, b.price);
 	}
-	return utils.ArrayUtils.Sort.asStringIgnoreCase(a.name, b.name);
+	return asStringIgnoreCase(a.name, b.name);
 }
 
 //#endregion
@@ -95,7 +96,7 @@ export default class Gear extends HasBulk<GearCore, Gear> {
 
 	//#endregion
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): RenderableContent {
 		const content = new RenderableContent(this);
 
 		const rarityAndLevelValues: string[] = [];
@@ -122,9 +123,9 @@ export default class Gear extends HasBulk<GearCore, Gear> {
 		return content;
 	}
 
-	//#region utils.SearchUtils.ISearchable
+	//#region ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			const terms: string[] = [];

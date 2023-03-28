@@ -1,7 +1,11 @@
-import utils, { IdCore, Optional, UUID } from "../../../sage-utils";
+import type { IdCore, Optional, UUID } from "../../../sage-utils";
+import { unique } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import { asStringIgnoreCase } from "../../../sage-utils/utils/ArrayUtils/Sort";
+import { HasIdCore } from "../../../sage-utils/utils/ClassUtils";
+import { generate } from "../../../sage-utils/utils/UuidUtils";
 import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
 import { PERCEPTION, profToMod, WISDOM } from "../../common";
-import * as Repository from "../../data/Repository";
+import { findById, findByValue } from "../../data/Repository";
 import type Action from "../Action";
 import Ancestry from "../Ancestry";
 import Background from "../Background";
@@ -99,7 +103,7 @@ export interface IHasProficiencies {
 	getProficiencyMod(subject: string): number;
 }
 
-export default class PlayerCharacter extends utils.ClassUtils.HasIdCore<PlayerCharacterCore, "PlayerCharacter"> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+export default class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerCharacter"> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
 	private _background?: Background;
 	private _class?: Class;
 	private _deity?: Deity;
@@ -113,7 +117,7 @@ export default class PlayerCharacter extends utils.ClassUtils.HasIdCore<PlayerCh
 			core.bio = <any>{};
 		}
 		if (!core.id) {
-			core.id = utils.UuidUtils.generate();
+			core.id = generate();
 		}
 		if (!core.effects) {
 			core.effects = [];
@@ -141,10 +145,10 @@ export default class PlayerCharacter extends utils.ClassUtils.HasIdCore<PlayerCh
 		this.speeds = new Speeds(this);
 		this.wealth = new Wealth(core.wealth);
 
-		this._background = Repository.findByValue("Background", this.core.background);
-		this._class = Repository.findByValue("Class", this.core.class);
-		this._deity = Repository.findById(this.bio.deityId);
-		this._heritage = Repository.findByValue("Heritage", this.core.heritage);
+		this._background = findByValue("Background", this.core.background);
+		this._class = findByValue("Class", this.core.class);
+		this._deity = findById(this.bio.deityId);
+		this._heritage = findByValue("Heritage", this.core.heritage);
 
 		// TODO: Global PC cache? --> PlayerCharacter.LoadedPlayerCharacters.push(this);
 	}
@@ -156,8 +160,8 @@ export default class PlayerCharacter extends utils.ClassUtils.HasIdCore<PlayerCh
 	public abilities: Abilities;
 	public get actions(): Action[] {
 		return (this.features.getMetadata().map(meta => meta.metadata.actions).flat(Infinity) as string[])
-			.filter(utils.ArrayUtils.Filters.unique)
-			.map(action => Repository.findByValue("Action", action)!);
+			.filter(unique)
+			.map(action => findByValue("Action", action)!);
 	}
 	public get activeSpells(): Spell[] {
 		return [];
@@ -252,9 +256,9 @@ export default class PlayerCharacter extends utils.ClassUtils.HasIdCore<PlayerCh
 	public get languages(): Language[] {
 		const languages = (this.features.getMetadata().map(feature => feature.metadata.languages)
 			.flat(Infinity) as string[])
-			.filter(utils.ArrayUtils.Filters.unique);
-		return languages.map(language => Repository.findByValue("Language", language))
-			.sort(utils.ArrayUtils.Sort.asStringIgnoreCase) as Language[];
+			.filter(unique);
+		return languages.map(language => findByValue("Language", language))
+			.sort(asStringIgnoreCase) as Language[];
 	}
 	public set languages(languages: Language[]) {
 		const languageNames = languages.map(language => language.name),

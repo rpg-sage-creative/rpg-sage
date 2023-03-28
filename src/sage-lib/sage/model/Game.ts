@@ -1,26 +1,27 @@
 import type { GuildMember, Message, Snowflake } from "discord.js";
 import type { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import utils, { Args, IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
+import type { Args, IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
 import { exists, unique } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import { stringIgnoreCase } from "../../../sage-utils/utils/ArrayUtils/Sort";
 import type { DGuildChannel } from "../../../sage-utils/utils/DiscordUtils";
 import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
+import { readJsonFile } from "../../../sage-utils/utils/FsUtils";
 import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
 import { DicePostType } from "../commands/dice";
 import { DialogType, GameChannelType, IChannel, IChannelOptions, parseGameChannelType, updateChannel } from "../repo/base/channel";
 import { HasIdCoreAndSageCache } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";
+import type { ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
 import Colors from "./Colors";
+import type { CoreWithEmoji, EmojiType, HasCoreWithEmoji } from "./Emoji";
 import Emoji from "./Emoji";
 import type GameCharacter from "./GameCharacter";
 import type { GameCharacterCore, TGameCharacterTag } from "./GameCharacter";
-import type { ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
-import type { EmojiType, CoreWithEmoji, HasCoreWithEmoji } from "./Emoji";
 import type SageCache from "./SageCache";
 import { applyValues, getEnum, hasValues, ISageCommandArgs } from "./SageCommandArgs";
 import type Server from "./Server";
 import User from "./User";
-import { readJsonFile } from "../../../sage-utils/utils/FsUtils";
 
 type IChannelArgs = Args<IChannelOptions> & { did:Snowflake; };
 
@@ -467,7 +468,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 	// #region IComparable
 	public compareTo(other: Game): -1 | 0 | 1 {
-		return utils.ArrayUtils.Sort.stringIgnoreCase(this.name, other.name);
+		return stringIgnoreCase(this.name, other.name);
 	}
 	// #endregion
 

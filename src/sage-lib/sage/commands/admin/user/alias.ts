@@ -1,5 +1,4 @@
-// import { discordPromptYesNo } from "../../../../../discord/prompts";
-import utils from "../../../../../sage-utils";
+import { isNotBlank } from "../../../../../sage-utils/utils/StringUtils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import type SageMessage from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
@@ -52,7 +51,7 @@ function dialogContentToTarget(dialogContent: TDialogContent, separator = "::"):
 		dialogContent.embedColor,
 		dialogContent.content
 	];
-	return parts.filter(utils.StringUtils.isNotBlank).join(separator) + separator;
+	return parts.filter(isNotBlank).join(separator) + separator;
 }
 
 async function aliasList(sageMessage: SageMessage<true>): Promise<void> {

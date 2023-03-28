@@ -1,13 +1,15 @@
-import utils, { OrNull, type Awaitable } from "../../../sage-utils";
+import { EmbedBuilder } from "@discordjs/builders";
+import type { Awaitable, OrNull } from "../../../sage-utils";
+import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
+import type { Color } from "../../../sage-utils/utils/ColorUtils";
+import { MessageType } from "../../../sage-utils/utils/DiscordUtils";
+import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs, TMessageHandler } from "../../discord/types";
 import ActiveBot from "../model/ActiveBot";
 import type { HasCoreWithColors } from "../model/Colors";
 import { ColorType } from "../model/Colors";
 import type SageMessage from "../model/SageMessage";
-import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
-import { MessageType } from "../../../sage-utils/utils/DiscordUtils";
-import { EmbedBuilder } from "@discordjs/builders";
 
 export enum BotServerGameType { Bot, Server, Game }
 
@@ -23,7 +25,7 @@ export function renderCount(sageMessage: SageMessage, label: string, count: numb
 	return <any>sageMessage.send(renderableContent);
 }
 
-export function embedColor(color: utils.ColorUtils.Color, ...labels: string[]): EmbedBuilder {
+export function embedColor(color: Color, ...labels: string[]): EmbedBuilder {
 	const embed = new EmbedBuilder();
 	embed.setColor(<any>color.toDiscordColor());
 	let desc = color.hex;
@@ -37,13 +39,13 @@ export function embedColor(color: utils.ColorUtils.Color, ...labels: string[]): 
 	return embed;
 }
 
-export function createRenderableContent(hasColors: HasCoreWithColors, colorType: ColorType, title?: string): utils.RenderUtils.RenderableContent {
-	const renderableContent = new utils.RenderUtils.RenderableContent(title);
+export function createRenderableContent(hasColors: HasCoreWithColors, colorType: ColorType, title?: string): RenderableContent {
+	const renderableContent = new RenderableContent(title);
 	renderableContent.setColor(hasColors.toDiscordColor(colorType));
 	return renderableContent;
 }
 
-export function createCommandRenderableContent(title?: string): utils.RenderUtils.RenderableContent {
+export function createCommandRenderableContent(title?: string): RenderableContent {
 	return createRenderableContent(ActiveBot.active, ColorType.Command, title);
 }
 
@@ -79,8 +81,8 @@ export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler, 
 
 // #region Admin Command Registration
 
-export function createAdminRenderableContent(hasColors: HasCoreWithColors, title?: string): utils.RenderUtils.RenderableContent {
-	const renderableContent = new utils.RenderUtils.RenderableContent(title);
+export function createAdminRenderableContent(hasColors: HasCoreWithColors, title?: string): RenderableContent {
+	const renderableContent = new RenderableContent(title);
 	renderableContent.setColor(hasColors.toDiscordColor(ColorType.AdminCommand));
 	return renderableContent;
 }

@@ -1,4 +1,6 @@
-import utils, { IdCore } from "../../../sage-utils";
+import type { IdCore } from "../../../sage-utils";
+import { HasIdCore } from "../../../sage-utils/utils/ClassUtils";
+import { generate } from "../../../sage-utils/utils/UuidUtils";
 import type { NamedCore } from "../base/interfaces";
 import Bulk from "../Bulk";
 import Coins from "../Coins";
@@ -7,7 +9,7 @@ import type EquipmentItem from "./EquipmentItem";
 
 export interface EquipmentListCore extends IdCore<"EquipmentList">, NamedCore { }
 
-export default class EquipmentList extends utils.ClassUtils.HasIdCore<EquipmentListCore, "EquipmentList"> {
+export default class EquipmentList extends HasIdCore<EquipmentListCore, "EquipmentList"> {
 
 	public constructor(private eq: Equipment, core: EquipmentListCore) {
 		super(core);
@@ -45,7 +47,7 @@ export default class EquipmentList extends utils.ClassUtils.HasIdCore<EquipmentL
 
 	public static createCore(name: string): EquipmentListCore {
 		return {
-			id: utils.UuidUtils.generate(),
+			id: generate(),
 			name: name,
 			objectType: "EquipmentList"
 		};

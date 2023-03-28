@@ -1,7 +1,8 @@
-import utils from "../../sage-utils";
+import { sortAscending, stringIgnoreCase } from "../../sage-utils/utils/ArrayUtils/Sort";
+import { nth } from "../../sage-utils/utils/NumberUtils";
 import { rarityToSuper } from "../common";
 import RenderableContent from "../data/RenderableContent";
-import * as Repository from "../data/Repository";
+import { all, find, findByValue } from "../data/Repository";
 import HasSource, { SourcedCore } from "../model/base/HasSource";
 import type DedicationFeat from "./DedicationFeat";
 import type Feat from "./Feat";
@@ -12,7 +13,7 @@ export interface ArchetypeCore extends SourcedCore<"Archetype"> {
 }
 
 function featNameToOutput(featName: string): string {
-	const feat = Repository.findByValue("Feat", featName);
+	const feat = findByValue("Feat", featName);
 	if (!feat?.source) {
 		return featName;
 	}
@@ -26,14 +27,14 @@ function toRenderableContentByLevel(byLevel: string[][]): string[] {
 		if (!levelArray.length) {
 			return "";
 		}
-		const levelString = level < 1 || level > 20 ? `` : `<b>${utils.NumberUtils.nth(level)}</b>`;
+		const levelString = level < 1 || level > 20 ? `` : `<b>${nth(level)}</b>`;
 		const featStrings = levelArray.map(featNameToOutput);
 		return `${levelString} ${featStrings.join(", ")}`.trim();
 	}).filter(s => s);
 }
 
 function findFeats(archetype: Archetype): Feat[] {
-	const allFeats = Repository.all<Feat>("Feat");
+	const allFeats = all<Feat>("Feat");
 
 	const feats: Feat<any>[] = [];
 	const dedication = archetype.dedication;
@@ -42,8 +43,8 @@ function findFeats(archetype: Archetype): Feat[] {
 		feats.push(...findChildrenFeats(dedication.name));
 	}
 	feats.sort((a, b) => {
-		return utils.ArrayUtils.Sort.number(a.level, b.level)
-			|| utils.ArrayUtils.Sort.stringIgnoreCase(a.name, b.name);
+		return sortAscending(a.level, b.level)
+			|| stringIgnoreCase(a.name, b.name);
 	});
 	return feats;
 
@@ -61,14 +62,14 @@ export default class Archetype extends HasSource<ArchetypeCore> {
 	private _dedication?: DedicationFeat;
 	public get dedication(): DedicationFeat {
 		if (!this._dedication) {
-			this._dedication = Repository.find("DedicationFeat", dedication => dedication.archetype === this);
+			this._dedication = find("DedicationFeat", dedication => dedication.archetype === this);
 		}
 		return this._dedication!;
 	}
 
 	//#region utils.RenderUtils.IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): RenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.hasDescription) {

@@ -1,6 +1,7 @@
-import utils from "../../../../sage-utils";
 import _dice, { DieRollGrade } from "../../../../sage-dice";
-import { PROFICIENCIES, toModifier, Coins, Table } from "../../../../sage-pf2e";
+import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e";
+import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
+import { capitalize } from "../../../../sage-utils/utils/StringUtils";
 import { ColorType } from "../../model/Colors";
 import type SageMessage from "../../model/SageMessage";
 import { createRenderableContent, registerCommandRegex } from "../cmd";
@@ -8,7 +9,7 @@ import { registerCommandHelp } from "../help";
 
 export type TPfsFaction = "Horizon Hunters" | "Vigilant Seal" | "Envoys' Alliance" | "Grand Archive";
 
-export function createPfsRenderableContent(sageMessage: SageMessage): utils.RenderUtils.RenderableContent {
+export function createPfsRenderableContent(sageMessage: SageMessage): RenderableContent {
 	return createRenderableContent(sageMessage.getHasColors(), ColorType.PfsCommand);
 }
 
@@ -49,7 +50,7 @@ function earnIncome(sageMessage: SageMessage): void {
 	const renderable = createPfsRenderableContent(sageMessage),
 		pcLevel = +pcLevelString,
 		taskLevel = Math.max(0, pcLevel - 2),
-		proficiencyLetter = utils.StringUtils.capitalize(proficiencyString ?? "")[0],
+		proficiencyLetter = capitalize(proficiencyString ?? "")[0],
 		proficiencyLetterIndex = PROFICIENCIES.findIndex(_proficiency => _proficiency[0] === proficiencyLetter),
 		proficiency = PROFICIENCIES[proficiencyLetterIndex],
 		modifier = (modifierString.startsWith("-") ? -1 : 1) * +modifierString.match(/\d+/)![0],
@@ -241,7 +242,7 @@ function registerTiers(): void {
 // #endregion Tier Calculator
 
 // #region Scenario/Quest Randomizer/Scaler
-export type TScenarioCallback = (sageMessage: SageMessage, tierInfo: TTierInfo) => utils.RenderUtils.RenderableContent;
+export type TScenarioCallback = (sageMessage: SageMessage, tierInfo: TTierInfo) => RenderableContent;
 export type TScenario = { id: string; tier: string; callback: TScenarioCallback; }
 const scenarios: TScenario[] = [];
 export function addScenario(scenarioId: string, tier: string, callback: TScenarioCallback): void {

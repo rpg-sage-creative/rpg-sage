@@ -1,7 +1,7 @@
-import utils from "../../sage-utils";
-import { LIGHT_BULK, DASH, MDASH } from "../common";
+import { SuperClass } from "../../sage-utils/utils/ClassUtils";
+import { DASH, LIGHT_BULK, MDASH } from "../common";
 
-export default class Bulk extends utils.ClassUtils.SuperClass {
+export default class Bulk extends SuperClass {
 	public constructor();
 	public constructor(bulk: number);
 	public constructor(bulk: string);

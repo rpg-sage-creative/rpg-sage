@@ -4,7 +4,6 @@ import type { SourceCore } from "../../sage-pf2e/model/base/Source";
 import type { TSpellHeighten } from "../../sage-pf2e/model/Spell";
 import { getSageCores } from "../common.mjs";
 import { findAndRemove, labelToKey, parseBody, split, splitAndCapitalize } from "./common.mjs";
-// import utils from "sage-utils";
 
 /*
 {

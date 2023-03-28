@@ -1,6 +1,6 @@
-import utils from "../../sage-utils";
+import { Collection } from "../../sage-utils/utils/ArrayUtils";
 import RenderableContent from "../data/RenderableContent";
-import * as Repository from "../data/Repository";
+import { filter } from "../data/Repository";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from "./base/HasSource";
 import type { FeatureCore } from "./Feature";
@@ -28,7 +28,7 @@ export default class Ancestry extends HasSource<AncestryCore> {
 
 	// public get adventurers(): string[] { return this.core.adventurers || []; }
 	public features = new Features([{ level: 1, features: this.core.features ?? [] }]);
-	public get heritages(): Heritage[] { return Repository.filter("Heritage", h => h.ancestry === this); }
+	public get heritages(): Heritage[] { return filter("Heritage", h => h.ancestry === this); }
 
 	//#endregion
 
@@ -45,7 +45,7 @@ export default class Ancestry extends HasSource<AncestryCore> {
 
 	//#region utils.RenderUtils.IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): RenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.hasTraits || this.isNotCommon) {
@@ -91,7 +91,7 @@ export default class Ancestry extends HasSource<AncestryCore> {
 	}
 
 	public static removeFeatures(features: FeatureCore[]): FeatureCore[] {
-		return utils.ArrayUtils.Collection.remove(features, feature => feature.objectType === Ancestry.FeatureObjectType);
+		return Collection.remove(features, feature => feature.objectType === Ancestry.FeatureObjectType);
 	}
 
 	//#endregion

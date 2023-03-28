@@ -1,10 +1,13 @@
-import type { TMagicTradition, Domain, Spell } from "../../../sage-pf2e";
-import { SourceNotationMap, Repository, FocusSpell } from "../../../sage-pf2e";
+import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e";
+import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e";
+import type { Optional } from "../../../sage-utils";
+import { existsAndUnique } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import { nth } from "../../../sage-utils/utils/NumberUtils";
+import { capitalize } from "../../../sage-utils/utils/StringUtils";
 import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { renderAll } from "./default";
 import { registerCommandHelp } from "./help";
-import utils, { Optional } from "../../../sage-utils";
 
 // #region Spell
 function reduceByLevel<T extends Spell<string, any>>(spells: T[]): T[][] {
@@ -31,7 +34,7 @@ async function spellListB(sageMessage: SageMessage): Promise<void> {
 async function _spellList(sageMessage: SageMessage, traditionString: string, levelString: string, by: "school"): Promise<void> {
 	/*// console.debug("spellList", traditionString, levelString);*/
 	const content = createCommandRenderableContent(),
-		tradition = <TMagicTradition>utils.StringUtils.capitalize(traditionString),
+		tradition = <TMagicTradition>capitalize(traditionString),
 		byTradition = Repository.filter("Spell", spell => spell.traditions.includes(tradition));
 	const sourceMap = new SourceNotationMap();
 	if (!levelString) {
@@ -45,7 +48,7 @@ async function _spellList(sageMessage: SageMessage, traditionString: string, lev
 				// 	levels[spellLevel] = (levels[spellLevel] || 0) + 1;
 				// 	return levels;
 				// }, <number[]>[]);
-				// content.appendTitledSection(`<b>${school.name} (${byLevel.length})</b>`, byLevel.map((spellCount, index) => `${index ? utils.NumberUtils.nth(index) : "Cantrips"} (${spellCount})`).join(", "));
+				// content.appendTitledSection(`<b>${school.name} (${byLevel.length})</b>`, byLevel.map((spellCount, index) => `${index ? nth(index) : "Cantrips"} (${spellCount})`).join(", "));
 				const filteredBySchool = bySchool.filter(spell => spell.traits.includes(school.name));
 				sourceMap.addByHasSource(filteredBySchool);
 				content.appendTitledSection(`<b>${school.name} (${filteredBySchool.length})</b>`, `${sourceMap.formatNames(filteredBySchool, ", ")}`);
@@ -60,8 +63,8 @@ async function _spellList(sageMessage: SageMessage, traditionString: string, lev
 				return levels;
 			}, <number[]>[]);
 			content.setTitle(`<b>${tradition} Spells</b> (${byTradition.length}) <i>by Level</i>`);
-			/*// byLevel.forEach((spellCount, index) => content.append(`<b>${index ? utils.NumberUtils.nth(index) : "Cantrips"}</b> (${spellCount})`));*/
-			content.append(byLevel.map((spellCount, index) => `${index ? utils.NumberUtils.nth(index) : "Cantrips"} (${spellCount})`).join(", "));
+			/*// byLevel.forEach((spellCount, index) => content.append(`<b>${index ? nth(index) : "Cantrips"}</b> (${spellCount})`));*/
+			content.append(byLevel.map((spellCount, index) => `${index ? nth(index) : "Cantrips"} (${spellCount})`).join(", "));
 		}
 
 	} else {
@@ -73,7 +76,7 @@ async function _spellList(sageMessage: SageMessage, traditionString: string, lev
 		} else {
 			const level = +levelString.match(/\d+/)![0];
 			filtered = byTradition.filter(spell => spell.level === level && !spell.isCantrip);
-			content.setTitle(`<b>${utils.NumberUtils.nth(level)} Level ${tradition} Spells</b> (${filtered.length})${bySchool}`);
+			content.setTitle(`<b>${nth(level)} Level ${tradition} Spells</b> (${filtered.length})${bySchool}`);
 		}
 		sourceMap.addByHasSource(filtered);
 		if (bySchool) {
@@ -119,10 +122,10 @@ async function spellListFocus(sageMessage: SageMessage): Promise<void> {
 		const focusSpells = Repository.all<Spell>("FocusSpell");
 
 		const allClassNames = Repository.all("Class").map(clss => clss.name);
-		const classNames = focusSpells.map(spell => spell.traits.find(trait => allClassNames.includes(trait))).filter(utils.ArrayUtils.Filters.existsAndUnique);
+		const classNames = focusSpells.map(spell => spell.traits.find(trait => allClassNames.includes(trait))).filter(existsAndUnique);
 		content.append(`<b>Classes (${classNames.length})</b> ${classNames.map(className => `${className} (${focusSpells.filter(spell => spell.traits.includes(className)).length})`).join(", ")}`);
 
-		const archetypeNames = focusSpells.map(spell => spell.archetypeName).filter(utils.ArrayUtils.Filters.existsAndUnique);
+		const archetypeNames = focusSpells.map(spell => spell.archetypeName).filter(existsAndUnique);
 		content.append(`\n<b>Archetypes (${archetypeNames.length})</b> ${archetypeNames.map(archetypeName => `${archetypeName} (${focusSpells.filter(spell => spell.archetypeName === archetypeName).length})`).join(", ")}`);
 
 	} else if (!archetypeName && !className && !domain) {
@@ -176,9 +179,9 @@ async function specialistLists(sageMessage: SageMessage): Promise<void> {
 		const trimmed = traditionString.trim();
 		if (SpecialistCommands.includes(trimmed[0])) {
 			modifier = <TSpecialistListModifier>trimmed[0];
-			tradition = <TMagicTradition>utils.StringUtils.capitalize(trimmed.slice(1).trim());
+			tradition = <TMagicTradition>capitalize(trimmed.slice(1).trim());
 		} else {
-			tradition = <TMagicTradition>utils.StringUtils.capitalize(trimmed);
+			tradition = <TMagicTradition>capitalize(trimmed);
 		}
 		return { tradition: tradition, modifier: modifier };
 	});
@@ -201,7 +204,7 @@ async function specialistLists(sageMessage: SageMessage): Promise<void> {
 	});
 
 	const content = createCommandRenderableContent();
-	const spellsLevel = isCantrip ? "Cantrips" : `${utils.NumberUtils.nth(spellLevel!)} Level`;
+	const spellsLevel = isCantrip ? "Cantrips" : `${nth(spellLevel!)} Level`;
 	const traditionsJoin = traditionsAndModifiers.map(tam => `${tam.modifier} ${tam.tradition}`).join(" ").slice(1);
 	content.setTitle(`<b>${spellsLevel} Spells: ${traditionsJoin}</b> (${spells.length})`);
 	SourceNotationMap.appendNotatedItems(content, spells);

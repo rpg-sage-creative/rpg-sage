@@ -1,5 +1,5 @@
 import * as _XRegExp from "xregexp";
-import utils from "../../../sage-utils";
+import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 //#region types
@@ -112,7 +112,7 @@ function emojify(text: string, matches: string[], replacement: string): string {
 		emoji: XRegExp(markedMatches.map(XRegExp.escape).join("|"), "i")
 	};
 
-	const tokenized = utils.StringUtils.Tokenizer.tokenize(text, parsers).map((token, i, arr) => {
+	const tokenized = Tokenizer.tokenize(text, parsers).map((token, i, arr) => {
 		if (token.type !== "emoji") {
 			return token.token;
 		}

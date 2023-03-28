@@ -1,7 +1,7 @@
-import utils from "../../../sage-utils";
+import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
+import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
 import RenderableContent from "../../data/RenderableContent";
-import type { IFile } from "../../data/Repository";
-import * as Repository from "../../data/Repository";
+import { findByValue, IFile } from "../../data/Repository";
 import Base, { BaseCore } from "./Base";
 
 export interface SourceCore extends BaseCore<"Source"> {
@@ -66,16 +66,16 @@ export default class Source extends Base<SourceCore, "Source"> {
 
 	// #region IHasName
 
-	private _codeMatcher?: utils.StringUtils.StringMatcher;
-	public matches(other: utils.StringUtils.StringMatcher): boolean {
-		const codeMatcher = this._codeMatcher ?? (this._codeMatcher = utils.StringUtils.StringMatcher.from(this.code));
+	private _codeMatcher?: StringMatcher;
+	public matches(other: StringMatcher): boolean {
+		const codeMatcher = this._codeMatcher ?? (this._codeMatcher = StringMatcher.from(this.code));
 		return codeMatcher.matches(other) || super.matches(other);
 	}
 
 	// #endregion IHasName
 
 	// #region utils.RenderUtils.IRenderable
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): RenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.isAp || this.is3PP) {
@@ -93,8 +93,8 @@ export default class Source extends Base<SourceCore, "Source"> {
 	}
 	// #endregion utils.RenderUtils.IRenderable
 
-	// #region utils.SearchUtils.ISearchable
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	// #region ISearchable
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		score.append(searchInfo.score(this, this.abbreviation));
 		if (this.isAp) {
@@ -105,11 +105,11 @@ export default class Source extends Base<SourceCore, "Source"> {
 	public get searchResultCategory(): string {
 		return `Source (${this.productLine})`;
 	}
-	// #endregion utils.SearchUtils.ISearchable
+	// #endregion ISearchable
 
 	// #region Static Properties
 	public static CoreCode = "PZO2101";
-	public static get Core(): Source { return crb ?? (crb = Repository.findByValue("Source", Source.CoreCode)); }
+	public static get Core(): Source { return crb ?? (crb = findByValue("Source", Source.CoreCode)); }
 
 	// #endregion Static Properties
 

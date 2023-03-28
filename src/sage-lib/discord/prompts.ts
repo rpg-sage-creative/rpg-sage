@@ -1,8 +1,9 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, Interaction, Message } from "discord.js";
-import utils, { UUID } from "../../sage-utils";
+import type { UUID } from "../../sage-utils";
 import type { DMessageTarget } from "../../sage-utils/utils/DiscordUtils";
 import { resolveToEmbeds } from "../../sage-utils/utils/DiscordUtils/embeds";
 import type { TRenderableContentResolvable } from "../../sage-utils/utils/RenderUtils/RenderableContent";
+import { generate } from "../../sage-utils/utils/UuidUtils";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageCache from "../sage/model/SageCache";
 import type SageInteraction from "../sage/model/SageInteraction";
@@ -15,7 +16,7 @@ export type TPromptButton = { label:string; style:ButtonStyle; };
 function createButtons(buttons: TPromptButton[]): Map<UUID, ButtonBuilder> {
 	const map = new Map<UUID, ButtonBuilder>();
 	buttons.forEach(button => {
-		const uuid = utils.UuidUtils.generate();
+		const uuid = generate();
 		const buttonBuilder = new ButtonBuilder();
 		buttonBuilder.setCustomId(uuid);
 		buttonBuilder.setLabel(button.label);

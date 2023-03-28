@@ -1,5 +1,7 @@
 import type { IComparable, ISearchable, TSortResult } from "../../../sage-utils";
-import utils from "../../../sage-utils";
+import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
+import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
+import { capitalize } from "../../../sage-utils/utils/StringUtils";
 import { parseSources, TParsedSource } from "../../data/Repository";
 import type Base from "./Base";
 import type { SourcedCore, TSourceInfo } from "./HasSource";
@@ -87,7 +89,7 @@ export default class AonBase
 			?? sageData.toJSON().pf2t?.src?.endsWith(this.core.url);
 	}
 
-	private _objectType = utils.StringUtils.capitalize(this.core.type);
+	private _objectType = capitalize(this.core.type);
 	public get objectType(): string { return this._objectType; }
 	public objectTypeLower = this.objectType.toLowerCase();
 	public rarityLower = this.rarity.toLowerCase();
@@ -140,7 +142,6 @@ export default class AonBase
 	// #region utils.ArrayUtils.Sort.IComparable
 
 	public compareTo(other: AonBase): TSortResult {
-		const sortAscending = utils.ArrayUtils.Sort.sortAscending;
 		return sortAscending(this.objectType, other.objectType)
 			|| sortAscending(this.nameClean, other.nameClean)
 			|| sortAscending(this.nameLower, other.nameLower)
@@ -149,7 +150,7 @@ export default class AonBase
 
 	// #endregion utils.ArrayUtils.Sort.IComparable
 
-	// #region utils.SearchUtils.ISearchable
+	// #region ISearchable
 
 	public get searchResultCategory(): string {
 		return this.core.level
@@ -157,11 +158,11 @@ export default class AonBase
 			: this.objectType;
 	}
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		return searchInfo.score(this, searchInfo.globalFlag ? this.core.text : this.name);
 	}
 
-	public searchRecursive(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this>[] {
+	public searchRecursive(searchInfo: SearchInfo): SearchScore<this>[] {
 		return [this.search(searchInfo)];
 	}
 
@@ -169,9 +170,9 @@ export default class AonBase
 		return this.core.name;
 	}
 
-	// #endregion utils.SearchUtils.ISearchable
+	// #endregion ISearchable
 
-	public static searchRecursive(core: AonBaseCore, searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<AonBase>[] {
+	public static searchRecursive(core: AonBaseCore, searchInfo: SearchInfo): SearchScore<AonBase>[] {
 		return new AonBase(core).searchRecursive(searchInfo);
 	}
 }

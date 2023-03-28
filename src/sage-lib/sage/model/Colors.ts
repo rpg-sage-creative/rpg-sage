@@ -1,4 +1,5 @@
-import utils, { Optional } from "../../../sage-utils";
+import type { Optional } from "../../../sage-utils";
+import { Color } from "../../../sage-utils/utils/ColorUtils";
 
 //#region types
 
@@ -47,7 +48,7 @@ export interface HasCoreWithColors {
 
 //#endregion
 
-export type TColorAndType = { type: ColorType; color: utils.ColorUtils.Color };
+export type TColorAndType = { type: ColorType; color: Color };
 
 export default class Colors {
 	public constructor(private colors: ColorData[]) { }
@@ -60,9 +61,9 @@ export default class Colors {
 
 	// #region get/set/unset
 
-	public get(type: ColorType): utils.ColorUtils.Color | null {
+	public get(type: ColorType): Color | null {
 		const color = this.findColor(type);
-		return color && utils.ColorUtils.Color.from(color.hex) || null;
+		return color && Color.from(color.hex) || null;
 	}
 
 	public set(colorAndType: TColorAndType): boolean {
@@ -97,6 +98,7 @@ export default class Colors {
 			|| this.colors.find((_, i) => oldColors[i].type !== this.colors[i].type || oldColors[i].hex !== this.colors[i].hex) !== undefined;
 	}
 
+	/** Duplicates the colors to a new array of new objects. (To avoid referencing the originals.) */
 	public toArray(): ColorData[] {
 		return this.colors.map(({ type, hex }) => ({ type, hex }));
 	}

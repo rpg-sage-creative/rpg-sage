@@ -1,9 +1,12 @@
 import type { IComparable, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
-import utils from "../../../sage-utils";
-import HasSource, { SourcedCore } from "./HasSource";
-import type { IHasArchives, IHasDetails, IHasLink, IHasName } from "./interfaces";
+import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
+import type { RenderableContent as _RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
+import { capitalize } from "../../../sage-utils/utils/StringUtils";
 import RenderableContent from "../../data/RenderableContent";
 import { parseSource, TParsedSource } from "../../data/Repository";
+import HasSource, { SourcedCore } from "./HasSource";
+import type { IHasArchives, IHasDetails, IHasLink, IHasName } from "./interfaces";
 import type Source from "./Source";
 
 export interface Pf2tBaseCore extends SourcedCore<""> {
@@ -91,7 +94,7 @@ export default class Pf2tBase
 	}
 
 	public get id(): string { return this.core.hash; }
-	public get objectType(): string { return utils.StringUtils.capitalize(this.core.type); }
+	public get objectType(): string { return capitalize(this.core.type); }
 	public toString(): string { return this.core.name; }
 
 	//#region HasSource properies
@@ -158,7 +161,7 @@ export default class Pf2tBase
 
 	// #region IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): _RenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.hasTraits || this.isNotCommon) {
@@ -181,7 +184,6 @@ export default class Pf2tBase
 	// #region utils.ArrayUtils.Sort.IComparable
 
 	public compareTo(other: Pf2tBase): TSortResult {
-		const sortAscending = utils.ArrayUtils.Sort.sortAscending;
 		return sortAscending(this.objectType, other.objectType)
 			|| sortAscending(this.nameClean, other.nameClean)
 			|| sortAscending(this.nameLower, other.nameLower)
@@ -190,13 +192,13 @@ export default class Pf2tBase
 
 	// #endregion utils.ArrayUtils.Sort.IComparable
 
-	// #region utils.SearchUtils.ISearchable
+	// #region ISearchable
 
 	public get searchResultCategory(): string {
 		return this.objectType as unknown as string;
 	}
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = searchInfo.score(this, this.name);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.rarity, this.traits, this.description));
@@ -211,7 +213,7 @@ export default class Pf2tBase
 		return score;
 	}
 
-	public searchRecursive(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this>[] {
+	public searchRecursive(searchInfo: SearchInfo): SearchScore<this>[] {
 		return [this.search(searchInfo)];
 	}
 
@@ -219,7 +221,7 @@ export default class Pf2tBase
 		return this.core.name;
 	}
 
-	// #endregion utils.SearchUtils.ISearchable
+	// #endregion ISearchable
 
 	public static logKeyMap(): void {
 		console.log(keyMap);

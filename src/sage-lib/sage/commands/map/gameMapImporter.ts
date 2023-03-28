@@ -1,4 +1,4 @@
-import * as Discord from "discord.js";
+import { Client, Snowflake, SnowflakeUtil } from "discord.js";
 import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
 import DiscordId from "../../../../sage-utils/utils/DiscordUtils/DiscordId";
 import { dequote, StringMatcher } from "../../../../sage-utils/utils/StringUtils";
@@ -64,7 +64,7 @@ function matchUrlAndName(lines: string[]): [string?, string?] {
 	return [url, name];
 }
 
-function parseUser(client: Discord.Client, userValue?: string): Discord.Snowflake | undefined {
+function parseUser(client: Client, userValue?: string): Snowflake | undefined {
 	if (!userValue) {
 		return undefined;
 	}
@@ -100,7 +100,7 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 		auras: [],
 		clip: clip as [number, number, number, number],
 		grid: grid as [number, number],
-		id: Discord.SnowflakeUtil.generate().toString(),
+		id: SnowflakeUtil.generate().toString(),
 		name: name,
 		spawn: spawn as [number, number],
 		terrain: [],
@@ -132,7 +132,7 @@ function mapSectionTo<T extends TGameMapImage>(lines: string[], layerType: Layer
 
 	return {
 		auras: [],
-		id: Discord.SnowflakeUtil.generate(),
+		id: SnowflakeUtil.generate(),
 		layer: layerType,
 		name: name,
 		pos: pos as [number, number],
@@ -182,7 +182,7 @@ function matchAnchor(mapCore: TParsedGameMapCore, aura: TGameMapAura | null): vo
 	}
 }
 
-export default function gameMapImporter(raw: string, client: Discord.Client): TParsedGameMapCore | null {
+export default function gameMapImporter(raw: string, client: Client): TParsedGameMapCore | null {
 	const lines = raw.split(/\r?\n\r?/);
 
 	//#region map

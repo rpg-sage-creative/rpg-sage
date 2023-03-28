@@ -1,8 +1,8 @@
-import * as http from "http";
+import { createServer } from "http";
 import { tMapToBuffer } from "./sage-utils/utils/MapUtils";
 import type { TMap } from "./sage-utils/utils/MapUtils/types";
 
-http.createServer(async function (req, res) {
+createServer(async function (req, res) {
 	if (req.method === "POST") {
 		const chunks: Buffer[] = [];
 		req.on("data", (chunk: Buffer) => {

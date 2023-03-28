@@ -1,5 +1,7 @@
-import utils from "../../../sage-utils";
-import { PROFICIENCIES, TProficiency, Coins, Table } from "../../../sage-pf2e";
+import { Coins, PROFICIENCIES, Table, TProficiency } from "../../../sage-pf2e";
+import { addCommas, nth } from "../../../sage-utils/utils/NumberUtils";
+import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import { capitalize } from "../../../sage-utils/utils/StringUtils";
 import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
@@ -20,7 +22,7 @@ async function spUtils(sageMessage: SageMessage): Promise<void> {
 		}
 	});
 	const content = createCommandRenderableContent(`<b>Coin Counter</b>`);
-	content.append(`${data}\n\n${coins.toString()}\n(${utils.NumberUtils.addCommas(coins.spValue)} sp)`);
+	content.append(`${data}\n\n${coins.toString()}\n(${addCommas(coins.spValue)} sp)`);
 	return <any>sageMessage.send(content);
 }
 // #endregion
@@ -31,13 +33,13 @@ async function startingWealth(sageMessage: SageMessage): Promise<void> {
 
 	const table = Table.findByNumber("10-10")!,
 		level = +levelString.replace(/st|nd|rd|th/, "");
-	let renderable: utils.RenderUtils.RenderableContent;
+	let renderable: RenderableContent;
 	if (isNaN(level) || level < 1 || 20 < level) {
 		renderable = table.toRenderableContent();
 	} else {
 		renderable = createCommandRenderableContent();
 		const levelRow = table.rows[level];
-		renderable.setTitle(`<b>Starting Wealth</b> (${utils.NumberUtils.nth(level)} Level)`);
+		renderable.setTitle(`<b>Starting Wealth</b> (${nth(level)} Level)`);
 		renderable.append(`<b>Permanent Items</b>`, `<blockquote>${levelRow[1].split(/,\s*/).join("\n")}</blockquote>`);
 		renderable.append(`<b>Currency</b> ${levelRow[2]}`);
 		renderable.append(`<h1>Optionally</h1>`);
@@ -64,10 +66,10 @@ async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, 
 	console.info("incomeEarned", taskLevelString, proficiencyString);
 	const table = Table.findByNumber("4-2")!,
 		taskLevel = +taskLevelString,
-		proficiencyLetter = <TProficiency>utils.StringUtils.capitalize(proficiencyString || "")[0],
+		proficiencyLetter = <TProficiency>capitalize(proficiencyString || "")[0],
 		proficiencyIndex = PROFICIENCIES.findIndex(prof => prof[0] === proficiencyLetter),
 		proficiency = PROFICIENCIES[proficiencyIndex];
-	let renderable: utils.RenderUtils.RenderableContent;
+	let renderable: RenderableContent;
 	if (isNaN(taskLevel) || taskLevel < 0 || 20 < taskLevel) {
 		renderable = table.toRenderableContent();
 	} else {

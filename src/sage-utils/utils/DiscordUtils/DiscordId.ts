@@ -1,4 +1,4 @@
-import * as Discord from "discord.js";
+import { channelMention, roleMention, Snowflake, userMention } from "discord.js";
 import type { Optional, OrUndefined } from "../..";
 import { isDefined } from "../..";
 import { NilSnowflake } from "./consts";
@@ -6,14 +6,14 @@ import { createCustomEmojiRegex } from "./emoji";
 import { SnowflakeType } from "./enums";
 import { isSnowflake } from "./snowflake";
 
-type THasSnowflakeId = { id:Discord.Snowflake; };
-type THasSnowflakeDid = { did:Discord.Snowflake; };
-type TSnowflakeResolvable = Discord.Snowflake | THasSnowflakeId | THasSnowflakeDid;
+type THasSnowflakeId = { id:Snowflake; };
+type THasSnowflakeDid = { did:Snowflake; };
+type TSnowflakeResolvable = Snowflake | THasSnowflakeId | THasSnowflakeDid;
 
 export default class DiscordId {
 	protected constructor(
 		public type: SnowflakeType,
-		public did: Discord.Snowflake,
+		public did: Snowflake,
 		public name?: string,
 		public animated?: boolean
 	) { }
@@ -55,7 +55,7 @@ export default class DiscordId {
 		return null;
 	}
 
-	public static parseId(value: string): Discord.Snowflake {
+	public static parseId(value: string): Snowflake {
 		return (value?.match(/\d{16,}/) ?? [])[0] ?? NilSnowflake;
 	}
 
@@ -68,7 +68,7 @@ export default class DiscordId {
 	public static isRoleMention(value: string): boolean {
 		return isDefined(value?.match(/^<@&\d{16,}>$/));
 	}
-	public static isValidId(value: Optional<Discord.Snowflake>): boolean {
+	public static isValidId(value: Optional<Snowflake>): boolean {
 		return isSnowflake(value);
 	}
 	public static isUserMention(value: string): boolean {
@@ -81,23 +81,23 @@ export default class DiscordId {
 			|| DiscordId.isUserMention(value);
 	}
 
-	public static toChannelReference(did: Optional<Discord.Snowflake>): string | null {
-		return did ? Discord.Formatters.channelMention(did) : null;
+	public static toChannelReference(did: Optional<Snowflake>): string | null {
+		return did ? channelMention(did) : null;
 	}
-	public static toCustomEmoji(name: Optional<string>, did: Optional<Discord.Snowflake>): string | null {
+	public static toCustomEmoji(name: Optional<string>, did: Optional<Snowflake>): string | null {
 		// TODO: should I create my own formatter? --> return did ? Discord.Formatters.formatEmoji(did) : null;
 		return name && did ? `<:${name}:${did}>` : null;
 	}
-	public static toRoleMention(did: Optional<Discord.Snowflake>): string | null {
-		return did ? Discord.Formatters.roleMention(did) : null;
+	public static toRoleMention(did: Optional<Snowflake>): string | null {
+		return did ? roleMention(did) : null;
 	}
-	public static toUserMention(did: Optional<Discord.Snowflake>): string | null {
-		return did ? Discord.Formatters.userMention(did) : null;
+	public static toUserMention(did: Optional<Snowflake>): string | null {
+		return did ? userMention(did) : null;
 	}
 
-	public static resolve(resolvable: TSnowflakeResolvable): Discord.Snowflake;
-	public static resolve(resolvable: Optional<TSnowflakeResolvable>): OrUndefined<Discord.Snowflake>;
-	public static resolve(resolvable: Optional<TSnowflakeResolvable>): OrUndefined<Discord.Snowflake> {
+	public static resolve(resolvable: TSnowflakeResolvable): Snowflake;
+	public static resolve(resolvable: Optional<TSnowflakeResolvable>): OrUndefined<Snowflake>;
+	public static resolve(resolvable: Optional<TSnowflakeResolvable>): OrUndefined<Snowflake> {
 		if (resolvable) {
 			if (typeof(resolvable) === "string") {
 				return resolvable;

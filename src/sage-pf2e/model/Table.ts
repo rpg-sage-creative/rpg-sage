@@ -1,6 +1,6 @@
 import type utils from "../../sage-utils";
 import RenderableContent from "../data/RenderableContent";
-import * as Repository from "../data/Repository";
+import { find } from "../data/Repository";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from "./base/HasSource";
 
@@ -41,7 +41,7 @@ export default class Table extends HasSource<TableCore> {
 	}
 
 	public static findByNumber(number: string, source?: string): Table | undefined {
-		return Repository.find("Table", source, table => table.number === number);
+		return find("Table", source, table => table.number === number);
 	}
 
 }

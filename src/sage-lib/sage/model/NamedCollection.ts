@@ -1,4 +1,5 @@
-import utils from "../../../sage-utils";
+import { Collection } from "../../../sage-utils/utils/ArrayUtils";
+import { exists, existsAndUnique } from "../../../sage-utils/utils/ArrayUtils/Filters";
 
 export interface IHasSave {
 	save(): Promise<boolean>;
@@ -8,7 +9,7 @@ interface IHasName {
 	name: string;
 }
 
-export class NamedCollection<T extends IHasName> extends utils.ArrayUtils.Collection<T> {
+export class NamedCollection<T extends IHasName> extends Collection<T> {
 
 	/** The owner of this collection that can be saved when changes are made. */
 	protected owner?: IHasSave;
@@ -32,8 +33,8 @@ export class NamedCollection<T extends IHasName> extends utils.ArrayUtils.Collec
 	}
 
 	/** We likely don't want a NamedCollection if we map to a non-named value. */
-	public map<U>(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => U, thisArg?: any): utils.ArrayUtils.Collection<U> {
-		const mapped = new utils.ArrayUtils.Collection<U>();
+	public map<U>(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => U, thisArg?: any): Collection<U> {
+		const mapped = new Collection<U>();
 		this.forEach((value, index, collection) => mapped.push(callbackfn.call(thisArg, value, index, collection)));
 		return mapped;
 	}
@@ -51,7 +52,7 @@ export class NamedCollection<T extends IHasName> extends utils.ArrayUtils.Collec
 	/** Removes all of the given objects (by reference) and then calls owner.save() if the length changed. */
 	public removeAndSave(...values: T[]): Promise<boolean> {
 		const length = this.length;
-		values.filter(utils.ArrayUtils.Filters.exists).forEach(value => {
+		values.filter(exists).forEach(value => {
 			const index = this.indexOf(value);
 			if (index > -1) {
 				this.splice(index, 1);
@@ -66,7 +67,7 @@ export class NamedCollection<T extends IHasName> extends utils.ArrayUtils.Collec
 	/** Finds the objects for the given names and then calls removeAndSave(...values). */
 	public removeByName(...names: string[]): Promise<boolean> {
 		const found = names.map(name => this.findByName(name))
-			.filter(utils.ArrayUtils.Filters.existsAndUnique);
+			.filter(existsAndUnique);
 		return this.removeAndSave(...found);
 	}
 
@@ -99,7 +100,7 @@ export interface NamedCollection<T extends IHasName> {
 
 	forEach(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => void, thisArg?: any): void;
 
-	map<U>(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => U, thisArg?: any): utils.ArrayUtils.Collection<U>;
+	map<U>(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => U, thisArg?: any): Collection<U>;
 
 	reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: NamedCollection<T>) => T): T;
 	reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: NamedCollection<T>) => T, initialValue: T): T;
