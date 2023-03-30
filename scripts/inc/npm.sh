@@ -5,6 +5,12 @@ NODE_TYPES_FOLLOW_REDIRECTS="@types/follow-redirects@1.14.1"
 
 #endregion
 
+#region npm libs for slash command update
+
+DISCORD_REST_NPM="@discordjs/rest@1.6.0"
+
+#endregion
+
 #region npm libs for DEPLOY
 
 DISCORD_NPM="discord.js@14.8.0"
@@ -41,6 +47,7 @@ function checkNpmLibs() {
 	done
 
 	local NPM_LIBS=(
+		"$DISCORD_REST_NPM"
 		"$DISCORD_NPM"
 		"$XREGEXP_NPM"
 		"$CANVAS_NPM"
