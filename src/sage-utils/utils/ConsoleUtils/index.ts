@@ -85,7 +85,15 @@ function logToFile(args: any[]): void {
 		const now = getDateStrings();
 		const fileName = `${_logDir}/${now.date}.log`;
 		const lines = args.map(arg => `${now.date} ${now.time}::${formatArg(arg)}`).concat("").join("\n");
-		appendFile(fileName, lines, () => { /* ignore this callback */ });
+		appendFile(fileName, lines, error => {
+			if (error) {
+				try {
+					originals["error"].apply(console, ["Unable to log to file!", error]);
+				}catch(ex) {
+					/* nothing to do at this point ... */
+				}
+			}
+		});
 	}
 }
 
