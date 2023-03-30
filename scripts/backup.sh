@@ -50,6 +50,11 @@ sshCommands=(
 	"cd $botDir/dev"
 	"zip -rq9 $deployDirRemote/dev.zip ./* -x './data/*' './node_modules/*'"
 	"find $logDirRemote/dev -mtime +30 -name '*.log' -delete"
+
+	# remove old log-backup, create new log-backup
+	"rm -f $deployDirRemote/logs.zip"
+	"cd $logDirRemote"
+	"zip -rq9 $deployDirRemote/logs.zip ./*"
 )
 sshRun "${sshCommands[@]}"
 
@@ -61,6 +66,7 @@ scpFrom "$deployDirRemote/data.zip" "$backupDir/latest/data.zip"
 scpFrom "$deployDirRemote/stable.zip" "$backupDir/latest/stable.zip"
 scpFrom "$deployDirRemote/beta.zip" "$backupDir/latest/beta.zip"
 scpFrom "$deployDirRemote/dev.zip" "$backupDir/latest/dev.zip"
+scpFrom "$deployDirRemote/logs.zip" "$backupDir/latest/logs.zip"
 
 #endregion
 
@@ -71,6 +77,7 @@ sshCommands=(
 	"rm -f $deployDirRemote/stable.zip"
 	"rm -f $deployDirRemote/beta.zip"
 	"rm -f $deployDirRemote/dev.zip"
+	"rm -f $deployDirRemote/logs.zip"
 )
 sshRun "${sshCommands[@]}"
 
