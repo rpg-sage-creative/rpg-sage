@@ -1,9 +1,7 @@
 import { appendFile } from "fs";
-import { getDateStrings } from "../DateUtils";
+import { getDateTimeStrings } from "../DateUtils";
 import { LogLevel } from "./enums";
 import type { TConsoleHandler } from "./types";
-
-export * as Catchers from "./Catchers";
 
 let _consoleHandler: TConsoleHandler;
 export function setConsoleHandler(consoleHandler: TConsoleHandler): void;
@@ -82,10 +80,10 @@ export function formatArg(arg: any): string {
 /** Logs the args to file if we have a folder to log to. */
 function logToFile(args: any[]): void {
 	if (_logDir) {
-		const now = getDateStrings();
+		const now = getDateTimeStrings();
 		const fileName = `${_logDir}/${now.date}.log`;
-		const lines = args.map(arg => `${now.date} ${now.time}::${formatArg(arg)}`).concat("").join("\n");
-		appendFile(fileName, lines, () => { /* ignore this callback */ });
+		const lines = args.map(arg => `${now.dateTime}::${formatArg(arg)}`).concat("").join("\n");
+		appendFile(fileName, lines, error => { if (error) { try { originals["error"].apply(console, ["Unable to log to file!", error]); }catch(ex) { } } });
 	}
 }
 

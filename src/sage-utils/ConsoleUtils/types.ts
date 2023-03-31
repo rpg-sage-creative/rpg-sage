@@ -1,4 +1,4 @@
-import type { Awaitable } from "../..";
+import type { Awaitable } from "..";
 import type { LogLevel } from "./enums";
 
 export type TConsoleCommandType = "Error" | "Debug" | "Warn" | "Info";
