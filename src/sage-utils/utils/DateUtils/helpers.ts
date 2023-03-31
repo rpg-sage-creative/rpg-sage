@@ -6,18 +6,9 @@ export function getDayOfYear(date = new Date()): number {
 	return Math.ceil((date.getTime() - oneJanDate.getTime()) / 86400000);
 }
 
-/** Returns a date that represents midnight for the given date (or current if none given). */
-export function getMidnight(date = new Date()): Date {
-	const midnightDate = new Date(0);
-	midnightDate.setUTCFullYear(date.getUTCFullYear());
-	midnightDate.setUTCMonth(date.getUTCMonth());
-	midnightDate.setUTCDate(date.getUTCDate());
-	return midnightDate;
-}
-
-/** Returns true if the value is a date object. */
-export function isDate(value: any): value is Date {
-	return value instanceof Date;
+/** Returns the number of days in the given month. */
+export function getDaysInMonth(month: Month): number {
+	return getDaysPerMonth()[month];
 }
 
 /** Returns an array of days per month. */
@@ -38,7 +29,21 @@ export function getDaysPerMonth(): number[] {
 	];
 }
 
-/** Returns the number of days in the given month. */
-export function getDaysInMonth(month: Month): number {
-	return getDaysPerMonth()[month];
+/** Returns a date that represents midnight for the given date (or current if none given). */
+export function getMidnight(date = new Date()): Date {
+	const midnightDate = new Date(0);
+	midnightDate.setUTCFullYear(date.getUTCFullYear());
+	midnightDate.setUTCMonth(date.getUTCMonth());
+	midnightDate.setUTCDate(date.getUTCDate());
+	return midnightDate;
+}
+
+/** Returns the number of milliseconds in a day. */
+export function getMillisPerDay(): number {
+	return 1000 * 60 * 60 * 24;
+}
+
+/** Returns true if the value is a date object. */
+export function isDate(value: any): value is Date {
+	return value instanceof Date;
 }
