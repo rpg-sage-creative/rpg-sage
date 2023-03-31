@@ -1,6 +1,19 @@
 import { round } from "../NumberUtils";
-import { NAMED_COLORS } from "./consts";
-import type { TColorCore } from "./types";
+
+/** Stores all the information we know about a color */
+export type ColorCore = {
+	name?: string;
+	lower?: string;
+	hex: string;
+	hexa: string;
+	rgb: string;
+	rgba: string;
+	red: number;
+	green: number;
+	blue: number;
+	alpha: number;
+};
+
 
 //#region type checking
 
@@ -8,7 +21,7 @@ function isNumber(value: any): value is number {
 	return typeof(value) === "number";
 }
 
-function isColorCore(value: any): value is TColorCore {
+function isColorCore(value: any): value is ColorCore {
 	return typeof(value) === "object";
 }
 
@@ -128,7 +141,7 @@ function rgbaToHexa(rgbaOrRed: string | number, alphaOrGreen?: number, blue?: nu
 // #region color converters
 
 /** Converts a hex/hexa value (with optional new alpha) to a Color object */
-export function hexToColor(value: string, alpha?: number): TColorCore | null {
+export function hexToColor(value: string, alpha?: number): ColorCore | null {
 	let hexa = parseHexa(value);
 	if (!hexa) {
 		return null;
@@ -165,12 +178,12 @@ export function hexToColor(value: string, alpha?: number): TColorCore | null {
 }
 
 /** Converts any given values to Hex and then to a Color object */
-function toColorCore(color: string): TColorCore;
-function toColorCore(color: string, alpha: number): TColorCore;
-function toColorCore(color: TColorCore, alpha: number): TColorCore;
-function toColorCore(red: number, green: number, blue: number): TColorCore;
-function toColorCore(red: number, green: number, blue: number, alpha: number): TColorCore;
-function toColorCore(colorOrRed: string | number | TColorCore, alphaOrGreen?: number, blue?: number, alpha?: number): TColorCore | null {
+function toColorCore(color: string): ColorCore;
+function toColorCore(color: string, alpha: number): ColorCore;
+function toColorCore(color: ColorCore, alpha: number): ColorCore;
+function toColorCore(red: number, green: number, blue: number): ColorCore;
+function toColorCore(red: number, green: number, blue: number, alpha: number): ColorCore;
+function toColorCore(colorOrRed: string | number | ColorCore, alphaOrGreen?: number, blue?: number, alpha?: number): ColorCore | null {
 	if (isNumber(colorOrRed)) {
 		if (alpha !== undefined) {
 			return hexToColor(rgbaToHexa(colorOrRed, alphaOrGreen!, blue!, alpha));
@@ -240,7 +253,9 @@ function toColorCore(colorOrRed: string | number | TColorCore, alphaOrGreen?: nu
 
 type VALID_COLOR = string & { valid_color:never; }
 
-export default class Color {
+export const NAMED_COLORS: Map<string, Color> = new Map();
+
+export class Color {
 	// #region public properties
 	public get name(): string | undefined { return this.core.name; }
 	public get hex(): string { return this.core.hex; }
@@ -253,7 +268,7 @@ export default class Color {
 	public get alpha(): number { return this.core.alpha; }
 	// #endregion
 
-	public constructor(public core: TColorCore) { }
+	public constructor(public core: ColorCore) { }
 
 	public toDiscordColor(): string { return "0x" + this.hex.slice(1); }
 
@@ -285,10 +300,10 @@ export default class Color {
 
 	public static from(color: string): Color;
 	public static from(color: string, alpha: number): Color;
-	public static from(color: TColorCore, alpha: number): Color;
+	public static from(color: ColorCore, alpha: number): Color;
 	public static from(red: number, green: number, blue: number): Color;
 	public static from(red: number, green: number, blue: number, alpha: number): Color;
-	public static from(colorOrRed: string | number | TColorCore, alphaOrGreen?: number, blue?: number, alpha?: number): Color | null {
+	public static from(colorOrRed: string | number | ColorCore, alphaOrGreen?: number, blue?: number, alpha?: number): Color | null {
 		const color = toColorCore(colorOrRed as number, alphaOrGreen as number, blue as number, alpha as number);
 		return color ? new Color(color) : null;
 	}

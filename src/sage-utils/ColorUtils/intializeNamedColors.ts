@@ -1,7 +1,4 @@
-import { Color } from ".";
-import { hexToColor } from "./Color";
-import { NAMED_COLORS } from "./consts";
-import type { TColorCore } from "./types";
+import { Color, ColorCore, hexToColor, NAMED_COLORS } from "./Color";
 
 type TSimpleColor = { name:string; hex:string };
 
@@ -67,7 +64,7 @@ export function intializeNamedColors(): void {
 		{ name: "Wheat", hex: "#F5DEB3" }, { name: "White", hex: "#FFFFFF" }, { name: "WhiteSmoke", hex: "#F5F5F5" },
 		{ name: "Yellow", hex: "#FFFF00" }, { name: "YellowGreen", hex: "#9ACD32" }
 	].forEach((simpleColor: TSimpleColor) => {
-		const colorCore = hexToColor(simpleColor.hex) as TColorCore;
+		const colorCore = hexToColor(simpleColor.hex) as ColorCore;
 		colorCore.name = simpleColor.name;
 		colorCore.lower = simpleColor.name.toLowerCase();
 
