@@ -1,4 +1,4 @@
-import { isDefined } from "../..";
+import { isDefined } from "..";
 import { unique } from "./filters";
 import { sortDescending } from "./sort";
 

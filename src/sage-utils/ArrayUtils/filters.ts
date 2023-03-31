@@ -1,4 +1,4 @@
-import type { Optional } from "../..";
+import type { Optional } from "..";
 
 /** Reusable filter method to ensure array items exist: o => o !== null && o !== undefined */
 export function exists<T>(object: Optional<T>): object is T {
