@@ -1,42 +1,42 @@
-import { isNullOrUndefined, Optional, OrUndefined, TKeyValueArg, TParsers, VALID_UUID } from "../..";
-import { Collection } from "../ArrayUtils";
-import { exists } from "../ArrayUtils/Filters";
+import { isNullOrUndefined, Optional, OrUndefined } from "..";
+import { Collection, exists } from "../ArrayUtils";
 import { Color } from "../ColorUtils";
+import { EnumLike, getKeys } from "../EnumUtils";
+import type { ESCAPED_URL, VALID_URL } from "../HttpsUtils";
 import { cleanUrl, isUrl } from "../HttpsUtils";
-import type { ESCAPED_URL, VALID_URL } from "../HttpsUtils/types";
-import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, parseKeyValueArg, Tokenizer } from "../StringUtils";
-import { isValid as isValidUuid } from "../UuidUtils";
+import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, KeyValueArg, parseKeyValueArg, tokenize, TokenParsers } from "../StringUtils";
+import { isValid as isValidUuid, VALID_UUID } from "../UuidUtils";
 
 /** Represents a key/value arg */
-type TKeyedArg<T extends string = string> = TKeyValueArg<T>;
+type KeyedArg<T extends string = string> = KeyValueArg<T>;
 
 /** Represents a value only arg */
-type TUnkeyedArg<T extends string = string> = {
+type UnkeyedArg<T extends string = string> = {
 	/** value (can have spaces) */
 	value: T;
 }
 
-type TArg<T extends string = string> = TKeyedArg<T> | TUnkeyedArg<T>;
+type TArg<T extends string = string> = KeyedArg<T> | UnkeyedArg<T>;
 
-/** Represents an indexed TKeyedArg. */
-type TKeyedIndexedArg<T extends string = string> = TKeyedArg<T> & {
+/** Represents an indexed KeyedArg. */
+type TKeyedIndexedArg<T extends string = string> = KeyedArg<T> & {
 	/** index */
 	index: number;
 }
 
-/** Represents an indexed TKeyedArg. */
-type TUnkeyedIndexedArg<T extends string = string> = TUnkeyedArg<T> & {
+/** Represents an indexed KeyedArg. */
+type TUnkeyedIndexedArg<T extends string = string> = UnkeyedArg<T> & {
 	/** index */
 	index: number;
 	key: never;
 }
 
-/** Represents an indexed TKeyedArg. key/keyLower/clean are undefined if the arg had no key. */
+/** Represents an indexed KeyedArg. key/keyLower/clean are undefined if the arg had no key. */
 export type TIndexedArg<T extends string = string> = TKeyedIndexedArg<T> | TUnkeyedIndexedArg<T>;
 
 export type TIndexedRetArg<T extends string = string, U = any> = TIndexedArg<T> & { ret:U; };
 
-export default class ArgsManager<T extends string = string> extends Collection<TArg<T>> {
+export class ArgsManager<T extends string = string> extends Collection<TArg<T>> {
 
 	public constructor(arrayLength: number);
 	public constructor(...items: TArg<T>[]);
@@ -145,14 +145,14 @@ export default class ArgsManager<T extends string = string> extends Collection<T
 	}
 
 	/** Removes and returns the key/value pair with a key that matches the given string or RegExp. */
-	public removeByKey(key: string | RegExp): OrUndefined<TKeyedArg<T>>;
+	public removeByKey(key: string | RegExp): OrUndefined<KeyedArg<T>>;
 	/** Removes and returns the key/value pair with a key and value that matche the given string or RegExp values. */
-	public removeByKey(key: string | RegExp, value: string | RegExp): OrUndefined<TKeyedArg<T>>;
-	public removeByKey(key: string | RegExp, value?: string | RegExp): OrUndefined<TKeyedArg<T>> {
+	public removeByKey(key: string | RegExp, value: string | RegExp): OrUndefined<KeyedArg<T>>;
+	public removeByKey(key: string | RegExp, value?: string | RegExp): OrUndefined<KeyedArg<T>> {
 		const arg = this.findByKey(key, value!);
 		if (arg && arg.index > -1) {
 			this.removeAt(arg.index);
-			return arg as TKeyedArg<T>;
+			return arg as KeyedArg<T>;
 		}
 		return undefined;
 	}
@@ -212,26 +212,26 @@ export default class ArgsManager<T extends string = string> extends Collection<T
 	 * Returns the first unkeyed Enum value.
 	 * Returns undefined if none found.
 	 */
-	public findEnum<U>(typeofEnum: any): OrUndefined<U>;
+	public findEnum<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>): OrUndefined<V>;
 	/**
 	 * Returns the Enum value for the given key.
 	 * Returns null if the value isn't a valid Enum value.
 	 * Returns undefined if the key is not found.
 	 */
-	public findEnum<U>(typeofEnum: any, key: string): Optional<U>;
+	public findEnum<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>, key: string): Optional<V>;
 	/**
 	 * Returns the Enum value for the given key.
 	 * Returns null if the value isn't a valid Enum value.
 	 * If the key is not found, the first unkeyed Enum value will be returned.
 	 */
-	public findEnum<U>(typeofEnum: any, key: string, unkeyed: true): Optional<U>;
-	public findEnum<U>(typeofEnum: any, key?: string, unkeyed?: true): Optional<U> {
-		type KeyOfEnum = string & keyof typeof typeofEnum;
-		type Tester = (value: string) => value is KeyOfEnum;
-		const types = Object.keys(typeofEnum);
-		const lowerTypes = types.map(s => s.toLowerCase());
-		const isValidValue = (value: string) => lowerTypes.includes(value.toLowerCase());
-		const toEnumValue = (value: string) => typeofEnum[types[lowerTypes.indexOf(value.toLowerCase())]] as U;
+	public findEnum<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>, key: string, unkeyed: true): Optional<V>;
+
+	public findEnum<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>, key?: string, unkeyed?: true): Optional<V> {
+		type Tester = (value: string) => value is K;
+		const keys = getKeys(enumLike);
+		const lowerKeys = keys.map(s => s.toLowerCase());
+		const isValidValue = (value: string) => lowerKeys.includes(value.toLowerCase());
+		const toEnumValue = (value: string) => enumLike[keys[lowerKeys.indexOf(value.toLowerCase())]];
 		return this.findByKeyOrUnkeyed(key, unkeyed, isValidValue as Tester, toEnumValue);
 	}
 
@@ -299,7 +299,7 @@ export default class ArgsManager<T extends string = string> extends Collection<T
 
 	//#region static
 
-	public static tokenize(content: string, additionalParsers: TParsers = {}): ArgsManager {
+	public static tokenize(content: string, additionalParsers: TokenParsers = {}): ArgsManager {
 		if (isNullOrUndefined(content)) {
 			return new ArgsManager();
 		}
@@ -313,15 +313,14 @@ export default class ArgsManager<T extends string = string> extends Collection<T
 			return new ArgsManager();
 		}
 
-		const parsers: TParsers = {
+		const parsers: TokenParsers = {
 			arg: createKeyValueArgRegex(),
 			spaces: createWhitespaceRegex(),
 			quotes: createQuotedRegex(false),
 			...additionalParsers
 		};
 
-		const tokenized = Tokenizer
-			.tokenize(trimmed, parsers)
+		const tokenized = tokenize(trimmed, parsers)
 			.map(token => token.token.trim())
 			.filter(token => token.length)
 			.map(token => parseKeyValueArg(token) ?? { value:dequote(token) })
