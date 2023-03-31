@@ -42,8 +42,3 @@ export function getMidnight(date = new Date()): Date {
 export function getMillisPerDay(): number {
 	return 1000 * 60 * 60 * 24;
 }
-
-/** Returns true if the value is a date object. */
-export function isDate(value: any): value is Date {
-	return value instanceof Date;
-}
