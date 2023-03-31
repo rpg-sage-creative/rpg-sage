@@ -1,4 +1,5 @@
-export enum MonthType {
+/** Represents the 0 index based values returned from a DateLike .getMonth(). */
+export enum Month {
 	January,
 	February,
 	March,
@@ -13,7 +14,7 @@ export enum MonthType {
 	December
 }
 
-export enum DayType {
+export enum Day {
 	Sunday,
 	Monday,
 	Tuesday,
@@ -23,29 +24,29 @@ export enum DayType {
 	Saturday
 }
 
-export enum DayNightType {
+export enum DayNight {
 	Day,
 	Night
 }
 
-export enum HemisphereType {
+export enum Hemisphere {
 	Northern,
 	Southern
 }
 
-export enum TemperateSeasonType {
+export enum TemperateSeason {
 	Winter = 1,
 	Spring = 2,
 	Summer = 3,
 	Fall = 4
 }
 
-export enum TropicalSeasonType {
+export enum TropicalSeason {
 	Wet = 5,
 	Dry = 6
 }
 
-export enum SeasonType {
+export enum Season {
 	Winter = 1,
 	Spring = 2,
 	Summer = 3,
