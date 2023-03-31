@@ -1,7 +1,7 @@
 import { ColorResolvable, EmbedBuilder, embedLength as getEmbedLength } from "discord.js";
-import { Optional, TDisplayType, TRenderableContentSection } from "../..";
-import { RenderableContent } from "../RenderUtils";
-import type { TRenderableContentResolvable } from "../RenderUtils/RenderableContent";
+import type { Optional } from "..";
+import type { TRenderableContentResolvable, TRenderableContentSection } from "../RenderUtils";
+import { RenderableContent, TDisplayType } from "../RenderUtils";
 import { chunk } from "../StringUtils";
 import { DiscordMaxValues } from "./consts";
 

@@ -9,7 +9,7 @@ export function isSnowflake(value: Optional<Snowflake>): value is Snowflake {
 
 /**
  * Returns true if the value is a series of at least 16 0s.
- * This accounts for possibly old data that incorrectly assumed a static length of a Snowflake and had a different length for NilSnowflake.
+ * This accounts for possibly old data that incorrectly assumed a static length of a Snowflake and had a different length for NIL_SNOWFLAKE.
  */
 export function isNilSnowflake(value: Optional<Snowflake>): value is NIL_SNOWFLAKE {
 	const match = value?.match(/^0{16,}$/) ?? null;
@@ -21,7 +21,7 @@ export function isNonNilSnowflake(value: Optional<Snowflake>): value is Snowflak
 	return isSnowflake(value) && !isNilSnowflake(value);
 }
 
-/** Returns the value if it is a valid Snowflake, otherwise it returns NilSnowflake. */
+/** Returns the value if it is a valid Snowflake, otherwise it returns NIL_SNOWFLAKE. */
 export function orNilSnowflake(value: Optional<Snowflake>): Snowflake {
 	return isSnowflake(value) && !isNilSnowflake(value) ? value : NIL_SNOWFLAKE;
 }

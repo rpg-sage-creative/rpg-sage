@@ -1,7 +1,7 @@
-import type { ButtonInteraction, Channel, CommandInteraction, Guild, Message, MessageComponentInteraction, PartialMessage, SelectMenuInteraction, Snowflake } from "discord.js";
-import type { Optional } from "../..";
+import type { ButtonInteraction, Channel, CommandInteraction, Guild, Message, MessageComponentInteraction, PartialMessage, StringSelectMenuInteraction, Snowflake } from "discord.js";
+import type { Optional } from "..";
 import { cleanJson } from "../JsonUtils";
-import { NilSnowflake } from "./consts";
+import { isNonNilSnowflake, orNilSnowflake } from "../SnowflakeUtils";
 import type { DChannel } from "./types";
 
 interface IHasSnowflakeId { id:Snowflake; }
@@ -41,7 +41,7 @@ function guild(mightHaveGuild?: TMightHaveGuild): Guild | undefined | null {
 
 export type TDiscordKeyResolvable = DiscordKey | DiscordKeyArgs | DiscordKeyCore;
 
-export default class DiscordKey implements DiscordKeyCore {
+export class DiscordKey implements DiscordKeyCore {
 
 	private core: DiscordKeyCore;
 	public toJSON(): DiscordKeyCore { return this.core; }
@@ -62,9 +62,9 @@ export default class DiscordKey implements DiscordKeyCore {
 	public message!: Snowflake;
 
 	private initSnowflakes(): void {
-		this.server = this.core.server ?? NilSnowflake;
-		this.channel = this.core.channel ?? NilSnowflake;
-		this.message = this.core.message ?? NilSnowflake;
+		this.server = orNilSnowflake(this.core.server);
+		this.channel = orNilSnowflake(this.core.channel);
+		this.message = orNilSnowflake(this.core.message);
 	}
 
 	//#endregion
@@ -80,8 +80,8 @@ export default class DiscordKey implements DiscordKeyCore {
 
 		// We only want the Server and the "Most Relevant"
 		const { server, channel, message } = this.core;
-		const left = server ?? NilSnowflake;
-		const right = message ?? channel ?? NilSnowflake;
+		const left = orNilSnowflake(server);
+		const right = orNilSnowflake(message ?? channel);
 		this.shortKey = `${left}-${right}`;
 	}
 
@@ -98,9 +98,9 @@ export default class DiscordKey implements DiscordKeyCore {
 	public isValid!: boolean;
 
 	private initFlags(): void {
-		this.hasServer = this.server !== NilSnowflake;
-		this.hasChannel = this.channel !== NilSnowflake;
-		this.hasMessage = this.message !== NilSnowflake;
+		this.hasServer = isNonNilSnowflake(this.server);
+		this.hasChannel = isNonNilSnowflake(this.channel);
+		this.hasMessage = isNonNilSnowflake(this.message);
 
 		this.isDm = !this.hasServer && this.hasChannel;
 		this.isEmpty = !this.hasServer && !this.hasChannel && !this.hasMessage;
@@ -145,7 +145,7 @@ export default class DiscordKey implements DiscordKeyCore {
 	*/
 	public static fromDialogMessage(_: any): null { return null; }
 
-	public static fromInteraction(interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction | MessageComponentInteraction): DiscordKey {
+	public static fromInteraction(interaction: CommandInteraction | ButtonInteraction | StringSelectMenuInteraction | MessageComponentInteraction): DiscordKey {
 		if (interaction.channel) {
 			return DiscordKey.fromChannel(interaction.channel as DChannel);
 		}
@@ -166,6 +166,6 @@ export default class DiscordKey implements DiscordKeyCore {
 	public static resolveDid(resolvable: Optional<TSnowflakeResolvable>): Snowflake | undefined;
 	public static resolveDid(resolvable: Optional<TSnowflakeResolvable>): Snowflake | undefined {
 		const did = typeof(resolvable) === "string" ? resolvable : resolvable?.id;
-		return did === NilSnowflake ? undefined : did;
+		return isNonNilSnowflake(did) ? did : undefined;
 	}
 }

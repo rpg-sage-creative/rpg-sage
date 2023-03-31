@@ -1,12 +1,13 @@
 import { Client, Guild, GuildMember, GuildPreview, Message, PermissionFlagsBits, Role, Snowflake, User, Webhook } from "discord.js";
-import type { Optional } from "../..";
+import type { Optional } from "..";
 import { Collection } from "../ArrayUtils";
 import { handleDiscordErrorReturnNull } from "./errorHandlers";
 import { toHumanReadable } from "./humanReadable";
 import { canReactTo, canSendMessageTo } from "./permChecks";
-import { isNonNilSnowflake, resolveSnowflake } from "./snowflake";
+import { resolveSnowflake } from "./resolveSnowflake";
 import { canCheckPermissionsFor, canFetchWebhooksFor } from "./typeChecks";
 import type { DChannel, DChannelResolvable, DDMChannel, DGuildChannel, DGuildResolvable, DInteraction, DMessage, DRoleResolvable, DTextChannel, DUserResolvable, DWebhookChannel } from "./types";
+import { isNonNilSnowflake } from "../SnowflakeUtils";
 
 export type DiscordFetchesArgs = {
 	botId?: Optional<Snowflake>;
@@ -27,7 +28,7 @@ type FilterOptions = {
 	 * @todo SageChannelResolvable should be or include SnowflakeResolvable? Will need to check if a channel or just a has did/id ...
 	 */
 
-export default class DiscordFetches {
+export class DiscordFetches {
 
 	//#region properties
 

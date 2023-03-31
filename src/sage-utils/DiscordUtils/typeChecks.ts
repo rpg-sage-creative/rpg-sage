@@ -1,4 +1,4 @@
-import type { Optional } from "../..";
+import type { Optional } from "..";
 import type { DChannel, DGuildChannel, DTextChannel, DUser, DWebhookChannel } from "./types";
 
 export function canCheckPermissionsFor(channel: Optional<DUser>): false;

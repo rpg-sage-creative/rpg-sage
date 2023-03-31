@@ -1,4 +1,4 @@
-import type { Optional } from "../..";
+import type { Optional } from "..";
 import type { DChannel, DForumChannel, DMessage, DUser } from "./types";
 
 function channelToName(channel: DChannel): string;

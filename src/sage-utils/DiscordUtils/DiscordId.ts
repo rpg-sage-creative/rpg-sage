@@ -1,16 +1,16 @@
 import { channelMention, roleMention, Snowflake, userMention } from "discord.js";
-import type { Optional, OrUndefined } from "../..";
-import { isDefined } from "../..";
-import { NilSnowflake } from "./consts";
+import type { Optional, OrUndefined } from "..";
+import { isDefined } from "..";
+import { isSnowflake, NIL_SNOWFLAKE } from "../SnowflakeUtils";
 import { createCustomEmojiRegex } from "./emoji";
-import { SnowflakeType } from "./enums";
-import { isSnowflake } from "./snowflake";
+
+export enum SnowflakeType { ChannelReference, CustomEmoji, RoleMention, UserMention, Snowflake }
 
 type THasSnowflakeId = { id:Snowflake; };
 type THasSnowflakeDid = { did:Snowflake; };
 type TSnowflakeResolvable = Snowflake | THasSnowflakeId | THasSnowflakeDid;
 
-export default class DiscordId {
+export class DiscordId {
 	protected constructor(
 		public type: SnowflakeType,
 		public did: Snowflake,
@@ -55,8 +55,8 @@ export default class DiscordId {
 		return null;
 	}
 
-	public static parseId(value: string): Snowflake {
-		return (value?.match(/\d{16,}/) ?? [])[0] ?? NilSnowflake;
+	public static parseId(value: string): Snowflake | NIL_SNOWFLAKE {
+		return (value?.match(/\d{16,}/) ?? [])[0] ?? NIL_SNOWFLAKE;
 	}
 
 	public static isChannelReference(value: string): boolean {

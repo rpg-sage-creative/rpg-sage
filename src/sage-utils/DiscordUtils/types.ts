@@ -1,6 +1,4 @@
-import type { ButtonInteraction, ChannelType, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, StringSelectMenuInteraction, Snowflake, TextChannel, ThreadChannel, User, ChatInputCommandInteraction } from "discord.js";
-import type { Optional } from "../..";
-import type { TMatcher } from "../types";
+import type { ButtonInteraction, ChannelType, ChatInputCommandInteraction, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, Snowflake, StringSelectMenuInteraction, TextChannel, ThreadChannel, User } from "discord.js";
 
 export type DInteraction = ChatInputCommandInteraction | ButtonInteraction | StringSelectMenuInteraction | MessageComponentInteraction;
 
@@ -37,20 +35,3 @@ export type DChannelResolvable = DChannel | Snowflake;
 export type DMessageCache<Cached extends boolean = boolean> = Message<Cached> & If<Cached, { channel:DMessageChannel; }, { channel:DDMChannel; }>;
 export type DMessagePartial = PartialMessage & { channel:DMessageChannel; }
 export type DMessage<Cached extends boolean = boolean> = DMessageCache<Cached> | DMessagePartial;
-
-//#endregion SnowflakeMatcher
-
-/** Contains all the properties that represent a TSnowflakeMatcher. */
-export type TSnowflakeMatcher = TMatcher & {
-	/** Stores isNonNilSnowflake */
-	isNonNil: boolean;
-	/** Stores isSnowflake(value) */
-	isValid: boolean;
-	/** Stores the raw value. */
-	value: Snowflake;
-}
-
-/** Convenience type for Snowflake | TSnowflakeMatcher */
-export type TSnowflakeMatcherResolvable = Optional<Snowflake> | TSnowflakeMatcher;
-
-//#endregion

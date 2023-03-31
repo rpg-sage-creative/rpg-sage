@@ -1,5 +1,5 @@
 import { ChannelType, PermissionFlagsBits, Snowflake } from "discord.js";
-import type { Optional } from "../..";
+import type { Optional } from "..";
 import type { DChannel } from "./types";
 
 /**

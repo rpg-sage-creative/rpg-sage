@@ -1,4 +1,3 @@
-export enum SnowflakeType { ChannelReference, CustomEmoji, RoleMention, UserMention, Snowflake }
 
 export enum MessageType { Both = 0, Post = 1, Edit = 2 }
 
