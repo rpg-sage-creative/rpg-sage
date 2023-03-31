@@ -1,10 +1,24 @@
-import { isValid } from ".";
-import type { TMatcherResolvable } from "../types";
-import { NilUuid } from "./consts";
-import type { TUuidMatcher, TUuidMatcherResolvable, UUID } from "./types";
+
+import type { TMatcher, TMatcherResolvable } from "..";
+import { NIL_UUID, UUID, isValid } from "./";
+
+/** Contains all the properties that represent a UuidMatcher. */
+export type TUuidMatcher = TMatcher & {
+	/** Stores UuidUtils.isNormalized(value). */
+	isNormalized: boolean;
+	/** Stores UuidUtils.isValid(value). */
+	isValid: boolean;
+	/** Stores UuidUtils.normalize(value). */
+	normalized: UUID;
+	/** Stores the raw value. */
+	value: UUID;
+};
+
+/** Convenience type for UUID | TUuidMatcher */
+export type TUuidMatcherResolvable = UUID | TUuidMatcher;
 
 /** A reusable object for comparing a UUID without the need to repeatedly manipulate the value. */
-export default class UuidMatcher implements TUuidMatcher {
+export class UuidMatcher implements TUuidMatcher {
 	public constructor(
 		/** Stores the raw value. */
 		public value: UUID
@@ -13,12 +27,13 @@ export default class UuidMatcher implements TUuidMatcher {
 	/** Stores UuidUtils.isValid(value). */
 	public isValid = isValid(this.value);
 	/** Stores UuidUtils.normalize(value). */
-	public normalized = this.isValid ? this.value.toLowerCase() : NilUuid;
+	public normalized = this.isValid ? this.value.toLowerCase() : NIL_UUID;
 	/** Stores UuidUtils.isNormalized(value). */
 	public isNormalized = this.isValid && this.value === this.normalized;
 
 	/** Compares a given value (a matcher's normalized value or a .toLowerCase()) to this.normalized */
 	public matches(other: TMatcherResolvable): boolean;
+	/** Compares a given value (a uuid matcher's normalized value or a .toLowerCase()) to this.normalized */
 	public matches(other: TUuidMatcherResolvable): boolean;
 	public matches(other: TUuidMatcherResolvable): boolean {
 		if (other === null || other === undefined) {
