@@ -1,10 +1,9 @@
-import type { UUID } from "../types";
-import { generate } from "../UuidUtils";
+import { generate, UUID } from "../UuidUtils";
 
 type TMap = Map<string, any>;
 const CACHE_MAP: Map<UUID, TMap> = new Map();
 
-export default class ClassCache {
+export class ClassCache {
 	//#region instance
 
 	/** Construct a new ClassCache for the given UUID. */

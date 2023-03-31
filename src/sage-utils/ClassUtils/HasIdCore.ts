@@ -1,11 +1,20 @@
-import { HasCore } from ".";
-import { isSnowflake } from "../DiscordUtils";
-import SnowflakeMatcher from "../DiscordUtils/SnowflakeMatcher";
+import type { TMatcher } from "..";
+import { isSnowflake, SnowflakeMatcher } from "../SnowflakeUtils";
 import { StringMatcher } from "../StringUtils";
-import type { TMatcher, UUID } from "../types";
-import { isValid, UuidMatcher } from "../UuidUtils";
-import type { IdCore } from "./types";
+import { isValid, UUID, UuidMatcher } from "../UuidUtils";
+import { Core, HasCore } from "./HasCore";
 
+//#region types
+
+/** The second most basic Core used. */
+export interface IdCore<T extends string = string, U extends string = UUID> extends Core<T> {
+	/** The unique identifier for this object. */
+	id: U;
+}
+
+//#endregion
+
+//#region helpers
 
 function createIdMatcher(id: string): TMatcher {
 	if (isValid(id)) return UuidMatcher.from(id);
@@ -13,7 +22,9 @@ function createIdMatcher(id: string): TMatcher {
 	return StringMatcher.from(id);
 }
 
-export default abstract class HasIdCore<T extends IdCore<U, V>, U extends string = string, V extends string = UUID> extends HasCore<T, U> {
+//#endregion
+
+export abstract class HasIdCore<T extends IdCore<U, V>, U extends string = string, V extends string = UUID> extends HasCore<T, U> {
 
 	/** Must have a core. */
 	public constructor(core: T) {

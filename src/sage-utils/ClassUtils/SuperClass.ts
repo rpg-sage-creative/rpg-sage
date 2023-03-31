@@ -1,9 +1,9 @@
-import ClassCache from "./ClassCache";
+import { ClassCache } from "./ClassCache";
 
 /**
  * NOTE: For SuperClass.instanceOf to work correctly, ensure that classes relying on it have unique names.
  */
-export default abstract class SuperClass {
+export abstract class SuperClass {
 
 	/** Provides a caching mechanism for all SuperClass classes. */
 	private _cache: ClassCache | undefined;
