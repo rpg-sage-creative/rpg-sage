@@ -1,15 +1,30 @@
-import SageDate from "../SageDate";
-import {
-	Days, DayType, Months, MonthType, TDayType, TMonthType
-} from "./cal";
+import { SageDate } from "../SageDate";
+import { Day, Month } from "./cal";
 
-export default class SDate extends SageDate<SDate, DayType, TDayType, MonthType, TMonthType> {
+/** This represents a Date on Absalom, the primary setting of Starfinder RPG. */
+export class SDate
+	extends SageDate<SDate, Day, keyof typeof Day, Month, keyof typeof Month> {
 
-	public get dayType(): DayType { return this._.getDay(); }
-	public get day(): TDayType { return Days[this._.getDay()]; }
+	/** the day of the week as an enum */
+	public get day(): Day {
+		return this.earthDate.getDay();
+	}
 
-	public get monthType(): MonthType { return this._.getMonth(); }
-	public get month(): TMonthType { return Months[this._.getMonth()]; }
+	/** the name of day of the week */
+	public get dayName(): keyof typeof Day {
+		return Day[this.earthDate.getDay()] as keyof typeof Day;
+	}
 
+	/** the month as an enum */
+	public get month(): Month {
+		return this.earthDate.getMonth();
+	}
+
+	/** the name of the month */
+	public get monthName(): keyof typeof Month {
+		return Month[this.earthDate.getMonth()] as keyof typeof Month;
+	}
+
+	/** The difference between this year and the Earth-based year. */
 	public static YearDelta = -1700;
 }

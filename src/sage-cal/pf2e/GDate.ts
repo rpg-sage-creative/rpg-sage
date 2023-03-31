@@ -1,39 +1,59 @@
-import { TemperateSeasonType, TropicalSeasonType } from "../../sage-utils";
-import { getTemperateSeason, getTropicalSeason } from "../../sage-utils/utils/DateUtils";
-import SageDate from "../SageDate";
-import {
-	Days, DayType, Months, MonthType, TDayType, TMonthType
-} from "./cal";
+import { TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason } from "../../sage-utils/utils/DateUtils";
+import { SageDate } from "../SageDate";
+import { Day, Month } from "./cal";
 
-export default class GDate extends SageDate<GDate, DayType, TDayType, MonthType, TMonthType> {
+/** This represents a Date on Golarion, the primary world of Pathfinder RPG. */
+export class GDate
+	extends SageDate<GDate, Day, keyof typeof Day, Month, keyof typeof Month> {
 
-	public get dayType(): DayType { return this._.getDay(); }
-	public get day(): TDayType { return Days[this._.getDay()]; }
-
-	public get monthType(): MonthType { return this._.getMonth(); }
-	public get month(): TMonthType { return Months[this._.getMonth()]; }
-
-	public get temperateSeasonType(): TemperateSeasonType {
-		return GDate.dateToTemperateSeason(this._);
-	}
-	public get temperateSeason(): keyof typeof TemperateSeasonType {
-		return TemperateSeasonType[this.temperateSeasonType] as keyof typeof TemperateSeasonType;
+	/** the day of the week as an enum */
+	public get day(): Day {
+		return this.earthDate.getDay();
 	}
 
-	public get tropicalSeasonType(): TropicalSeasonType {
-		return GDate.dateToTropicalSeason(this._);
-	}
-	public get tropicalSeason(): keyof typeof TropicalSeasonType {
-		return TropicalSeasonType[this.tropicalSeasonType] as keyof typeof TropicalSeasonType;
+	/** the name of day of the week */
+	public get dayName(): keyof typeof Day {
+		return Day[this.earthDate.getDay()] as keyof typeof Day;
 	}
 
+	/** the month as an enum */
+	public get month(): Month {
+		return this.earthDate.getMonth();
+	}
+
+	/** the name of the month */
+	public get monthName(): keyof typeof Month {
+		return Month[this.earthDate.getMonth()] as keyof typeof Month;
+	}
+
+	/** the temperate season */
+	public get temperateSeason(): TemperateSeason {
+		return GDate.dateToTemperateSeason(this.earthDate);
+	}
+
+	/** the name of the temperate season */
+	public get temperateSeasonName(): keyof typeof TemperateSeason {
+		return TemperateSeason[this.temperateSeason] as keyof typeof TemperateSeason;
+	}
+
+	/** the tropical season */
+	public get tropicalSeason(): TropicalSeason {
+		return GDate.dateToTropicalSeason(this.earthDate);
+	}
+
+	/** the name of the tropical season */
+	public get tropicalSeasonName(): keyof typeof TropicalSeason {
+		return TropicalSeason[this.tropicalSeason] as keyof typeof TropicalSeason;
+	}
+
+	/** The difference between this year and the Earth-based year. */
 	public static YearDelta = 2700;
 
-	public static dateToTemperateSeason(date: Date): TemperateSeasonType {
+	public static dateToTemperateSeason(date: Date): TemperateSeason {
 		return getTemperateSeason(date);
 	}
 
-	public static dateToTropicalSeason(date: Date): TropicalSeasonType {
+	public static dateToTropicalSeason(date: Date): TropicalSeason {
 		return getTropicalSeason(date);
 	}
 }
