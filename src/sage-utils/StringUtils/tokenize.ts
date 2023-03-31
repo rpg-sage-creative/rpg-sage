@@ -1,4 +1,18 @@
-import type { TParsers, TToken } from "./types";
+//#region types
+
+/** A group of regular expressions used for Tokenizer.tokenize() */
+export type TokenParsers = {
+	[key: string]: RegExp;
+};
+
+/** A token returned from Tokenizer.tokenize() */
+export type TokenData = {
+	token: string;
+	type: string;
+	matches: string[]
+};
+
+//#endregion
 
 // XRegExp.matchRecursive should improve my tokenization in the future!
 // https://www.npmjs.com/package/xregexp
@@ -10,13 +24,13 @@ import type { TParsers, TToken } from "./types";
 * - Returns an array of token objects
 *
 * tokenize('this is text.', { word:/\w+/, whitespace:/\s+/, punctuation:/[^\w\s]/ }, 'invalid');
-* result => [{ token="this", type="word" },{ token=" ", type="whitespace" }, Object { token="is", type="word" }, ... ]
+* result => [{ token="this", type="word" }, { token=" ", type="whitespace" }, { token="is", type="word" }, ... ]
 *
 */
-export function tokenize(input: string, parsers: TParsers, deftok = "unknown"): TToken[] {
-	const tokens: TToken[] = [];
+export function tokenize(input: string, parsers: TokenParsers, deftok = "unknown"): TokenData[] {
+	const tokens: TokenData[] = [];
 	let matchIndex: number,
-		token: TToken | null;
+		token: TokenData | null;
 	while (input) {
 		token = null;
 		matchIndex = input.length;

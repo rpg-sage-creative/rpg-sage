@@ -1,4 +1,7 @@
-import { HORIZONTAL_TAB, BULLET } from "./consts";
+// export const ZERO_LENGTH_SPACE = "\u200b";
+// export const NONBREAKING_SPACE = "\u00A0";
+export const HORIZONTAL_TAB = " \u00A0 \u00A0";
+export const BULLET = "\u2022";
 
 type TAttributes = { [key:string]: string; };
 
@@ -133,11 +136,12 @@ class Formatter {
 	}
 }
 
-export function format(text: string): string {
-	if (!text) {
-		return text;
+/** Converts HTML text to Markdown text. */
+export function toMarkdown(html: string): string {
+	if (!html) {
+		return html;
 	}
-	return new Formatter(text)
+	return new Formatter(html)
 		.formatNewLine()
 		.formatTable()
 

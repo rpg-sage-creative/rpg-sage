@@ -1,9 +1,32 @@
-import { cleanWhitespace, normalizeAscii, removeAccents } from ".";
-import type { Optional } from "../..";
-import type { TMatcherResolvable, TStringMatcher, TStringMatcherResolvable } from "./types";
+import type { Optional, TMatcher, TMatcherResolvable } from "..";
+import { normalizeAscii, removeAccents } from "./normalize";
+import { cleanWhitespace } from "./whitespace";
+
+//#region StringMatcher.ts
+
+/** Contains all the properties that represent a StringMatcher. */
+export type TStringMatcher = TMatcher & {
+
+	/** Stores StringMatcher.clean(value) */
+	clean: string;
+
+	/** Stores string.isBlank(value) */
+	isBlank: boolean;
+
+	/** Stores string.toLowerCase() */
+	lower: string;
+
+	/** Stores the raw value. */
+	value: Optional<string>;
+};
+
+/** Convenience type for Optional<string> | TStringMatcher */
+export type TStringMatcherResolvable = Optional<string> | TStringMatcher;
+
+//#endregion
 
 /** A reusable object for comparing a string without the need to repeatedly manipulate the value. */
-export default class StringMatcher implements TStringMatcher {
+export class StringMatcher implements TStringMatcher {
 	public constructor(
 		/** Stores the raw value. */
 		public value: Optional<string>
@@ -25,8 +48,8 @@ export default class StringMatcher implements TStringMatcher {
 		if (other === null || other === undefined) {
 			return false;
 		}
-		const otherValue = (other as TStringMatcher).clean ?? StringMatcher.clean(String(other));
-		return otherValue === this.clean;
+		const otherClean = (other as TStringMatcher).clean ?? StringMatcher.clean(String(other));
+		return otherClean === this.clean;
 	}
 
 	/** Compares the clean values until it finds a match. */
