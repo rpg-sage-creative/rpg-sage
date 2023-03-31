@@ -1,23 +1,37 @@
-import { existsAndUnique } from "../ArrayUtils/Filters";
+import { existsAndUnique } from "../ArrayUtils";
 import { oneToUS, reduceNoise } from "../LangUtils";
-import { Tokenizer, dequote } from "../StringUtils";
-import SearchScore, { TTermInfo } from "./SearchScore";
-import type { ISearchable } from "./types";
+import { createQuotedRegex, dequote, tokenize } from "../StringUtils";
+import { SearchScore } from "./SearchScore";
+import type { ISearchable, TSearchTermMeta } from "./types";
 
+//#region types
+
+type TSearchableContent = string | string[] | undefined;
+
+export type TSearchFlag = "" | "g" | "r" | "gr" | "rg";
+
+//#endregion
+
+//#region helpers
+
+/** Escapes the value for use in RegExp. */
 function escapeRegexCharacters(value: string): string {
+	/** @todo why am i not using XRegExp.escape ? ? ? */
 	return value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
+
+/** Creates a RegExp by escaping the given value. */
 function createRegex(value: string, flags = "gi"): RegExp {
 	return new RegExp(escapeRegexCharacters(value), flags);
 }
 
-type TSearchableContent = string | string[] | undefined;
-export type TSearchFlag = "" | "g" | "r" | "gr" | "rg";
-
-function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean) {
-	const tokens = Tokenizer.tokenize(term, { quoted:/"[^"]*"/, other:/\S+/ });
-	const terms = tokens.map(token => token.token).map(s => dequote(s)).filter(existsAndUnique);
-	return reduceNoise(terms).map(_term => {
+/** Generates a set of search terms with metadata from the given SearchInfo and search string. */
+function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean): TSearchTermMeta[] {
+	const tokenized = tokenize(term, { quoted:createQuotedRegex(true), other:/\S+/ });
+	const tokens = tokenized.map(t => t.token);
+	const terms = tokens.map(s => dequote(s).trim());
+	const reduced = reduceNoise(terms);
+	return reduced.map(_term => {
 		const minus = _term.startsWith("-"),
 			plus = _term.startsWith("+"),
 			cleanTerm = oneToUS(minus || plus ? _term.slice(1) : _term);
@@ -36,12 +50,14 @@ function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean) {
 	});
 }
 
-export default class SearchInfo {
+//#endregion
+
+export class SearchInfo {
 	public globalFlag: boolean;
 	public hasMinus = false;
 	public hasPlus = false;
 	public keyTerm: string | undefined;
-	public terms: TTermInfo[];
+	public terms: TSearchTermMeta[];
 
 	public constructor(public searchText: string, flags: TSearchFlag) {
 		this.globalFlag = ((searchText.match(/\s\-[gr]*$/i) ?? [])[0] ?? "").includes("g") || flags.includes("g");

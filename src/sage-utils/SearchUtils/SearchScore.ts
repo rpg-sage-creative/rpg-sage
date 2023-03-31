@@ -1,14 +1,7 @@
-import type { ISearchable } from "./types";
-
-export type TTermInfo = {
-	term: string;
-	regex: RegExp | null;
-	plus: boolean;
-	minus: boolean;
-};
+import type { ISearchable, TSearchTermMeta } from "./types";
 
 /** Returns a multiplier based on specific include (plus) and exclude (minus) terms. */
-function getTermMultiplier(termInfo: TTermInfo): number {
+function getTermMultiplier(termInfo: TSearchTermMeta): number {
 	if (termInfo.minus) {
 		return -5;
 	}
@@ -23,7 +16,7 @@ function getNameMultiplier(included: boolean): number {
 	return included ? 2 : 1;
 }
 
-export default class SearchScore<T extends ISearchable> {
+export class SearchScore<T extends ISearchable> {
 	public constructor(public searchable: T, public compScore?: number) { }
 
 	/** All criteria has been met, no minus matches, all plus matches, any other matches */
@@ -72,7 +65,7 @@ export default class SearchScore<T extends ISearchable> {
 		return 1;
 	}
 
-	public terms: TTermInfo[] = [];
+	public terms: TSearchTermMeta[] = [];
 
 	public get totalScore(): number {
 		let score = 0;
@@ -90,7 +83,7 @@ export default class SearchScore<T extends ISearchable> {
 		return this.hits.reduce((total, current) => total + current, 0);
 	}
 
-	public add(termInfo: TTermInfo, hits: number): void {
+	public add(termInfo: TSearchTermMeta, hits: number): void {
 		const index = this.terms.findIndex(t => t.term === termInfo.term);
 		if (index < 0) {
 			this.terms.push(termInfo);

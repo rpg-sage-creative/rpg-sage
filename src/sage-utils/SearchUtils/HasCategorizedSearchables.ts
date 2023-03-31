@@ -1,4 +1,4 @@
-import { sortAscending } from "../ArrayUtils/Sort";
+import { sortAscending } from "../ArrayUtils";
 import type { ISearchable } from "./types";
 
 type TCategorizedSearchables<T extends ISearchable> = {
@@ -37,7 +37,7 @@ function sortByCountThenLabel<T extends ISearchable>(a: TCategorizedSearchables<
 	return sortAscending(b.searchables.length, a.searchables.length) || sortAscending(a.label, b.label);
 }
 
-export default class HasCategorizedSearchables<T extends ISearchable> {
+export class HasCategorizedSearchables<T extends ISearchable> {
 
 	protected _unsortedSearchables: T[] = [];
 

@@ -1,7 +1,6 @@
-import type { SearchScore } from ".";
-import { sortAscending } from "../ArrayUtils/Sort";
+import { sortAscending } from "../ArrayUtils";
+import type { SearchScore } from "./SearchScore";
 import type { ISearchable } from "./types";
-import type { HasSource } from "../../../sage-pf2e";
 
 function sortByCompScore<T extends ISearchable>(a: SearchScore<T>, b: SearchScore<T>): number {
 	return sortAscending(b.compScore ?? 0, a.compScore ?? 0)
@@ -9,16 +8,22 @@ function sortByCompScore<T extends ISearchable>(a: SearchScore<T>, b: SearchScor
 		|| sortAscending(a.searchable.name, b.searchable.name);
 }
 
+/**
+ * @deprecated Simulates a pf2e HasSource super class
+ * @todo REMOVE THIS REALLY TERRIBLE HACK
+ */
+type HasSource = { source?: { code?: string;} };
+
 function searchableToLabel<T extends ISearchable>(score: SearchScore<T>): string {
 	const category = score.searchable.searchResultCategory,
-		source = (score.searchable as unknown as  HasSource)?.source?.code;
+		source = (score.searchable as unknown as HasSource)?.source?.code;
 	if (category) {
 		return `${score.searchable.toSearchResult()}${source} - ${category}`;
 	}
 	return `${score.searchable.toSearchResult()}${source}`;
 }
 
-export default class HasScoredSearchables<T extends ISearchable> {
+export class HasScoredSearchables<T extends ISearchable> {
 
 	// #region properties
 
