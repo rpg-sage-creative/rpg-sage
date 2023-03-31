@@ -1,13 +1,42 @@
-import { IRenderable, Optional, TDisplayType, TRenderableContentSection, TRenderableContentSectionColumn } from "../..";
-import { unique } from "../ArrayUtils/Filters";
+import type { Optional } from "..";
+import { unique } from "../ArrayUtils";
+
+//#region types
+
+export enum TDisplayType { Unset = 0, Compact = 1, Cozy = 2 }
+
+export interface IRenderable {
+	toRenderableContent(): RenderableContent;
+}
+
+export type TRenderableContentSection = {
+	content: string[];
+	index: number;
+	title: string | null;
+	columns: TRenderableContentSectionColumn[];
+};
+
+export type TRenderableContentSectionColumn = {
+	title: string;
+	content: string;
+};
+
+export type TRenderableContentResolvable = string | IRenderable | RenderableContent;
+
+//#endregion
+
+//#region helpers
 
 function createSection(index = 0, title: string | null = null, content = <string[]>[], columns = <TRenderableContentSectionColumn[]>[]): TRenderableContentSection {
 	return { index, title:title, content, columns };
 }
 
-export type TRenderableContentResolvable = string | IRenderable | RenderableContent;
+//#endregion
 
-export default class RenderableContent implements IRenderable {
+/**
+ * This represents content that can be rendered as HTML so that it can be parsed and formatted for other markups (or Markdown in the case of Discord; the original reason this was written).
+ */
+export class RenderableContent implements IRenderable {
 	private _sections: TRenderableContentSection[] = [];
 	private _appendSection(section: TRenderableContentSection): TRenderableContentSection {
 		this._sections.push(section);
