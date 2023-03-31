@@ -1,7 +1,6 @@
 import { Canvas, createCanvas, Image, loadImage, SKRSContext2D } from "@napi-rs/canvas";
-import { errorReturnNull } from "../ConsoleUtils/Catchers";
-import { getBuffer } from "../HttpsUtils";
-import type { IMap, IMapLayer, THasClip, THasNatural, TImageMeta, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage, TOrPromiseT } from "./types";
+import { errorReturnNull } from "../ConsoleUtils";
+import type { THasClip, THasNatural, TImageMeta, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "./types";
 
 type mimeType = "image/png" | "image/jpeg";
 
@@ -23,7 +22,8 @@ async function _loadImage(mapArgs: TMapArgs, imgMeta: TImageMeta): Promise<Image
 	return mapArgs.images.get(imgMeta.url) ?? null;
 }
 
-type TCalcClip = [
+/** A valid clip region. Returned from calculateValidClip. */
+type TValidClip = [
 	/** x */
 	number,
 	/** y */
@@ -33,7 +33,9 @@ type TCalcClip = [
 	/** height */
 	number
 ];
-function calcClip(clip: Partial<THasClip>, natural: THasNatural): TCalcClip {
+
+/** Calculates a valid clip region based on the given clip and dimensions. */
+function calculateValidClip(clip: Partial<THasClip>, natural: THasNatural): TValidClip {
 	//#region x
 	const clipX = clip.clipX ?? 0;
 	// calculate x from right (if negative) or left
@@ -69,24 +71,6 @@ function calcClip(clip: Partial<THasClip>, natural: THasNatural): TCalcClip {
 	return [x, y, w, h];
 }
 
-function catchBufferFetch(err: any): null {
-	if (String(err).includes("ECONNREFUSED")) {
-		console.warn(`MapServer down, creating internally.`);
-	}else {
-		console.error(err);
-	}
-	return null;
-}
-
-/** fetches and returns an image Buffer */
-export async function iMapToBuffer(iMap: IMap, fileType?: mimeType): Promise<Buffer | null> {
-	const tMap = await Promise.resolve(iMap.toJSON()).catch(errorReturnNull);
-	if (tMap) {
-		const buffer = await getBuffer("http://localhost:3000", tMap).catch(catchBufferFetch);
-		return buffer ?? tMapToBuffer(tMap, fileType);
-	}
-	return null;
-}
 
 /** creates and returns an image Buffer */
 export async function tMapToBuffer(map: TMap, fileType: mimeType = "image/jpeg"): Promise<Buffer | null> {
@@ -114,7 +98,7 @@ export async function tMapToBuffer(map: TMap, fileType: mimeType = "image/jpeg")
 	mapArgs.bgImage = bgImage;
 	//#endregion
 
-	const [bgClipX, bgClipY, bgWidth, bgHeight] = calcClip(map.background, bgImage);
+	const [bgClipX, bgClipY, bgWidth, bgHeight] = calculateValidClip(map.background, bgImage);
 	mapArgs.canvas = createCanvas(bgWidth, bgHeight);
 	mapArgs.context = mapArgs.canvas.getContext("2d");
 
@@ -151,6 +135,7 @@ function gridOffsetToZeroZero(offset?: [number, number]): [number, number] {
 	return [col, row];
 }
 
+/** Draws all images for the given layer, ensuring offsets are adhered to. */
 async function drawMapLayer(mapArgs: TMapArgs, mapLayer: TMapLayer): Promise<void> {
 	const images = mapLayer.images;
 	if (images.length) {
@@ -166,10 +151,12 @@ async function drawMapLayer(mapArgs: TMapArgs, mapLayer: TMapLayer): Promise<voi
 }
 
 type TMapLayerMeta = TMapMeta & { layerOffsetX:number; layerOffsetY:number; };
+
+/** Draws the given image. */
 async function drawMapImage(mapArgs: TMapArgs, mapLayerMeta: TMapLayerMeta, mapLayerImage: TMapLayerImage): Promise<void> {
 	const imgImage = await _loadImage(mapArgs, mapLayerImage);
 	if (imgImage) {
-		const [imgClipX, imgClipY, imgClipWidth, imgClipHeight] = calcClip(mapLayerImage, imgImage),
+		const [imgClipX, imgClipY, imgClipWidth, imgClipHeight] = calculateValidClip(mapLayerImage, imgImage),
 			gridOffset = gridOffsetToZeroZero(mapLayerImage.gridOffset),
 			imgOffsetX = mapLayerImage.pixelOffset?.[0] ?? (gridOffset[0] * mapLayerMeta.pxPerCol),
 			imgWidth = (mapLayerImage.size[0] ?? 1) * mapLayerMeta.pxPerCol,
@@ -185,12 +172,3 @@ async function drawMapImage(mapArgs: TMapArgs, mapLayerMeta: TMapLayerMeta, mapL
 	}
 }
 
-export abstract class RenderableMap implements IMap {
-	abstract getBackground(): TOrPromiseT<TMapBackgroundImage>;
-	abstract getGrid(): TOrPromiseT<[number, number]>;
-	abstract getLayers(): TOrPromiseT<IMapLayer[]>;
-	public render(): Promise<Buffer | null> {
-		return iMapToBuffer(this).catch(errorReturnNull);
-	}
-	abstract toJSON(): TOrPromiseT<TMap>;
-}

@@ -1,4 +1,5 @@
 
+/** This object type has a clip rectangle. */
 export type THasClip = {
 	/** x-axis pixels to start rendering from */
 	clipX: number;
@@ -13,6 +14,7 @@ export type THasClip = {
 	clipHeight: number;
 };
 
+/** This object has natural height and width. */
 export type THasNatural = {
 	/** pixels on the x-axis */
 	naturalWidth: number;
@@ -21,6 +23,7 @@ export type THasNatural = {
 	naturalHeight: number;
 }
 
+/** This object has grid and pixel offsets. */
 export type THasOffset = {
 	/** offset from origin: [col, row] */
 	gridOffset: [number, number];
@@ -29,6 +32,7 @@ export type THasOffset = {
 	pixelOffset: [number, number];
 };
 
+/** This object has opacity and url. */
 export type TImageMeta = {
 	/** opacity of image, from 0 to 1 */
 	opacity?: number;
