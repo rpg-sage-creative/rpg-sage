@@ -1,11 +1,26 @@
-import type { Snowflake } from "discord.js";
-import type { Optional } from "../..";
-import type { TMatcherResolvable } from "../types";
-import { isNilSnowflake, isNonNilSnowflake, isSnowflake } from "./snowflake";
-import type { TSnowflakeMatcher, TSnowflakeMatcherResolvable } from "./types";
+import type { Optional, TMatcher, TMatcherResolvable } from "..";
+import { isNilSnowflake, isNonNilSnowflake, isSnowflake } from "./helpers";
+import type { Snowflake } from "./types";
+
+//#region types
+
+/** Contains all the properties that represent a TSnowflakeMatcher. */
+export type TSnowflakeMatcher = TMatcher & {
+	/** Stores isNonNilSnowflake */
+	isNonNil: boolean;
+	/** Stores isSnowflake(value) */
+	isValid: boolean;
+	/** Stores the raw value. */
+	value: Snowflake;
+}
+
+/** Convenience type for Snowflake | TSnowflakeMatcher */
+export type TSnowflakeMatcherResolvable = Optional<Snowflake> | TSnowflakeMatcher;
+
+//#endregion
 
 /** A reusable object for comparing a UUID without the need to repeatedly manipulate the value. */
-export default class SnowflakeMatcher implements TSnowflakeMatcher {
+export class SnowflakeMatcher implements TSnowflakeMatcher {
 	public constructor(
 		/** Stores the raw value. */
 		public value: Snowflake
