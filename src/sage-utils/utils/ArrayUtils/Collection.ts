@@ -1,6 +1,6 @@
 import { isDefined } from "../..";
-import { unique } from "./Filters";
-import { sortDescending } from "./Sort";
+import { unique } from "./filters";
+import { sortDescending } from "./sort";
 
 type ValueOf<T, U extends keyof T = keyof T> = T[U];
 
@@ -311,4 +311,4 @@ export interface Collection<T> {
 	splice(start: number, deleteCount: number, ...items: T[]): Collection<T>;
 }
 
-export default Collection;
+// export default Collection;
