@@ -37,8 +37,3 @@ export function getMidnight(date = new Date()): Date {
 	midnightDate.setUTCDate(date.getUTCDate());
 	return midnightDate;
 }
-
-/** Returns the number of milliseconds in a day. */
-export function getMillisPerDay(): number {
-	return 1000 * 60 * 60 * 24;
-}
