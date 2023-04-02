@@ -1,8 +1,9 @@
-import type { TSkillDie } from "../../sage-dice/dice/essence20";
-import { isBlank } from "../../sage-utils/utils/StringUtils";
-import { generate } from "../../sage-utils/utils/UuidUtils";
+import type { TSkillDie } from "../../sage-dice/e20";
+import { isBlank } from "../../sage-utils/StringUtils";
+import { generate } from "../../sage-utils/UuidUtils";
 import { PdfJsonFields, TRawJson } from "./pdf";
 import type { PlayerCharacterCoreE20, TArmorE20, TAttackE20, TSkillE20, TStatE20, TWeaponE20 } from "./PlayerCharacterE20";
+
 
 /** All the skills (name and abbreviation) for each ability. */
 const SkillPairs = {

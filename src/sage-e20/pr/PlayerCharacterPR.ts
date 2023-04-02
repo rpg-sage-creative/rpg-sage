@@ -1,6 +1,6 @@
-import type { TSkillDie } from "../../sage-dice/dice/essence20";
+import type { TSkillDie } from "../../sage-dice/e20";
 import type { Optional } from "../../sage-utils";
-import PlayerCharacterE20, { orQ, PlayerCharacterCoreE20, TAbilityName, TStatE20 } from "../common/PlayerCharacterE20";
+import { orQ, PlayerCharacterCoreE20, PlayerCharacterE20, TAbilityName, TStatE20 } from "../common/PlayerCharacterE20";
 
 export type TStatPR = TStatE20 & {
 	morphed?: string;
@@ -73,7 +73,7 @@ export interface PlayerCharacterCorePR extends PlayerCharacterCoreE20 {
 	zord: TZord;
 }
 
-export default class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacterCorePR> {
+export class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacterCorePR> {
 	public get zord(): TZord { return this.core.zord ?? { }; }
 
 	public toHtmlName(): string {

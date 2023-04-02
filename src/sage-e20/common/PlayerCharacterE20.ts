@@ -1,6 +1,6 @@
-import type { TSkillDie } from "../../sage-dice/dice/essence20";
+import type { TSkillDie } from "../../sage-dice/e20";
 import type { Optional } from "../../sage-utils";
-import CharacterBase, { CharacterBaseCore } from "../../sage-utils/utils/CharacterUtils/CharacterBase";
+import { CharacterBase, CharacterBaseCore } from "../../sage-utils/CharacterUtils";
 
 export type TArmorE20 = {
 	name?: string;
@@ -87,7 +87,7 @@ export function orQ(value: Optional<string>): string {
 	return (value ?? "").trim() || "?";
 }
 
-export default abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> extends CharacterBase<T> {
+export abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> extends CharacterBase<T> {
 
 	public get abilities(): TStatE20[] { return this.core.abilities ?? []; }
 

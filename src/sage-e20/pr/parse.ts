@@ -1,4 +1,4 @@
-import type { TSkillDie } from "../../sage-dice/dice/essence20";
+import type { TSkillDie } from "../../sage-dice/e20";
 import { filterValuesWithKeys, PdfJsonParserE20, SkillPairKey } from "../common/parse";
 import type { TField, TRawJson } from "../common/pdf";
 import type { PlayerCharacterCorePR, TAttackZord, TSkillZord, TStatPR, TStatZord, TZord } from "./PlayerCharacterPR";

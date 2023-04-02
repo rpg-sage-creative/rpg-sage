@@ -1,5 +1,5 @@
 import type { Optional } from "../../sage-utils";
-import { isBlank } from "../../sage-utils/utils/StringUtils";
+import { isBlank } from "../../sage-utils/StringUtils";
 
 export type TTextField = { name:string; value:string; };
 export type TCheckField = { name:string; checked:boolean; };

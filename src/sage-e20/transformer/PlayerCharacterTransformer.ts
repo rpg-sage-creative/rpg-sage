@@ -1,6 +1,6 @@
 import type { Optional } from "../../sage-utils";
 import type { PlayerCharacterCoreE20, TWeaponE20 } from "../common/PlayerCharacterE20";
-import PlayerCharacterE20 from "../common/PlayerCharacterE20";
+import { PlayerCharacterE20 } from "../common/PlayerCharacterE20";
 
 export type TAltMode = {
 	name?: string;
@@ -55,7 +55,7 @@ export interface PlayerCharacterCoreTransformer extends PlayerCharacterCoreE20 {
 	gear?: string;
 }
 
-export default class PlayerCharacterTransformer extends PlayerCharacterE20<PlayerCharacterCoreTransformer> {
+export class PlayerCharacterTransformer extends PlayerCharacterE20<PlayerCharacterCoreTransformer> {
 	public get altModes(): TAltMode[] { return this.core.altModes ?? []; }
 
 	public toHtmlName(): string {
