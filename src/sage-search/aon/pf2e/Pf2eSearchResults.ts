@@ -7,7 +7,7 @@ import type { Source } from "../../../sage-pf2e/model/base/Source";
 import { toSuperscript } from "../../../sage-utils/NumberUtils";
 import { RenderableContent } from "../../../sage-utils/RenderUtils";
 import type { SearchScore } from "../../../sage-utils/SearchUtils";
-import type { OrUndefined } from "../../../sage-utils/types";
+import type { OrUndefined } from "../../../sage-utils";
 import type { GameSearchInfo } from "../../GameSearchInfo";
 import { SearchResults } from "../../SearchResults";
 import type { TResponseData } from "./types";
