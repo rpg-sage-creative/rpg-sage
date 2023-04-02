@@ -1,15 +1,16 @@
 import { UNICODE_ZERO_TO_TEN } from "../sage-common";
-import type { IHasName } from "../sage-pf2e";
-import type Source from "../sage-pf2e/model/base/Source";
-import type { IRenderable, ISearchable, OrUndefined } from "../sage-utils";
-import { RenderableContent } from "../sage-utils/utils/RenderUtils";
-import { HasScoredSearchables, SearchInfo, SearchScore } from "../sage-utils/utils/SearchUtils";
-import { StringMatcher } from "../sage-utils/utils/StringUtils";
+import type { Source } from "../sage-pf2e/model/base/Source";
+import type { OrUndefined } from "../sage-utils";
+import type { IHasNameCore } from "../sage-utils/ClassUtils";
+import { IRenderable, RenderableContent } from "../sage-utils/RenderUtils";
+import type { ISearchable, SearchInfo, SearchScore } from "../sage-utils/SearchUtils";
+import { HasScoredSearchables } from "../sage-utils/SearchUtils";
+import { StringMatcher } from "../sage-utils/StringUtils";
 import type { IMenuRenderable } from "./IMenuRenderable";
 
 type TRenderableMeta = { hasCompScore:boolean; sources:Source[]; unicodeArray:string[]; unicodeIndex:number; };
 
-type TSearchable = IHasName & ISearchable & IRenderable;
+type TSearchable = IHasNameCore & ISearchable & IRenderable;
 
 function scoreToLineItem<T extends TSearchable>(this: SearchResults<T>, meta: TRenderableMeta, score: SearchScore<T>, scoreIndex: number): string {
 	const searchable = this.searchables[scoreIndex],
@@ -24,7 +25,8 @@ function scoreToLineItem<T extends TSearchable>(this: SearchResults<T>, meta: TR
 	return `${emoji} <b>(${score.totalHits})</b> ${label}`;
 }
 
-export default class SearchResults<T extends TSearchable = TSearchable> extends HasScoredSearchables<T> implements IMenuRenderable {
+/** A renderable collection of search results that allows for rendering a single result or a menu of results. */
+export class SearchResults<T extends TSearchable = TSearchable> extends HasScoredSearchables<T> implements IMenuRenderable {
 
 	public constructor(public searchInfo: SearchInfo, public objectType?: string) {
 		super();
@@ -125,7 +127,7 @@ export default class SearchResults<T extends TSearchable = TSearchable> extends 
 		return content;
 	}
 
-	// #region utils.RenderUtils.IRenderable
+	// #region IRenderable
 
 	public toRenderableContent(): RenderableContent {
 		return this.toMenuRenderableContent();

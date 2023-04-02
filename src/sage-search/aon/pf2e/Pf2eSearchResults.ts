@@ -1,15 +1,15 @@
 import { createSearchUrl } from ".";
 import { findByAonBase } from "../../../sage-pf2e/data/Repository";
-import AonBase from "../../../sage-pf2e/model/base/AonBase";
-import type Base from "../../../sage-pf2e/model/base/Base";
-import type HasSource from "../../../sage-pf2e/model/base/HasSource";
-import type Source from "../../../sage-pf2e/model/base/Source";
-import type { OrUndefined } from "../../../sage-utils";
-import { toSuperscript } from "../../../sage-utils/utils/NumberUtils";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import type { SearchScore } from "../../../sage-utils/utils/SearchUtils";
+import { AonBase } from "../../../sage-pf2e/model/base/AonBase";
+import type { Base } from "../../../sage-pf2e/model/base/Base";
+import type { HasSource } from "../../../sage-pf2e/model/base/HasSource";
+import type { Source } from "../../../sage-pf2e/model/base/Source";
+import { toSuperscript } from "../../../sage-utils/NumberUtils";
+import { RenderableContent } from "../../../sage-utils/RenderUtils";
+import type { SearchScore } from "../../../sage-utils/SearchUtils";
+import type { OrUndefined } from "../../../sage-utils/types";
 import type { GameSearchInfo } from "../../GameSearchInfo";
-import SearchResults from "../../SearchResults";
+import { SearchResults } from "../../SearchResults";
 import type { TResponseData } from "./types";
 
 type TScore = SearchScore<Base>;
@@ -56,7 +56,7 @@ function sourceToFootnote(source: Source, sourceIndex: number): string {
 	return `<i>${toSuperscript(sourceIndex + 1)}${source.name}</i>`;
 }
 
-export default class Pf2eSearchResults extends SearchResults<AonBase> {
+export class Pf2eSearchResults extends SearchResults<AonBase> {
 
 	public constructor(searchInfo: GameSearchInfo, responseData: TResponseData) {
 		super(searchInfo);

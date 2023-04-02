@@ -1,9 +1,7 @@
 import { GameType } from "../sage-common";
-import type { Collection } from "../sage-utils/utils/ArrayUtils";
-import type SearchResults from "./SearchResults";
-import { searchAonPf1e } from "./aon/pf1e";
-import { searchAonPf2e } from "./aon/pf2e";
-import { searchAonSf1e } from "./aon/sf1e";
+import type { Collection } from "../sage-utils/ArrayUtils";
+import type { SearchResults } from "./SearchResults";
+import { searchAonPf1e, searchAonPf2e, searchAonSf1e } from "./aon";
 
 export type TParsedSearchInfo = {
 	searchText: string;

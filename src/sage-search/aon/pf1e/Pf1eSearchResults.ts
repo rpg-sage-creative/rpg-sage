@@ -1,14 +1,14 @@
-import { createSearchUrl } from ".";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import SearchResults from "../../SearchResults";
-import type AonPf1SearchBase from "./AonPf1SearchBase";
+import { RenderableContent } from "../../../sage-utils/RenderUtils";
+import { SearchResults } from "../../SearchResults";
+import type { AonPf1SearchBase } from "./AonPf1SearchBase";
+import { createSearchUrl } from "./helpers";
 
 function createClickableSearchLink(searchResults: Pf1eSearchResults, label: string): string {
 	const url = createSearchUrl(searchResults.searchInfo.searchText);
 	return `<a href="${url}">${label}</a>`;
 }
 
-export default class Pf1eSearchResults extends SearchResults<AonPf1SearchBase> {
+export class Pf1eSearchResults extends SearchResults<AonPf1SearchBase> {
 
 	protected createRenderable(): RenderableContent {
 		// const labelPrefix = this.objectType ? `${this.objectType} ` : ``;

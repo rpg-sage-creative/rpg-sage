@@ -1,21 +1,19 @@
-import { createSearchResultUrl } from ".";
-import type { TResultsLink } from "../";
-import type { IHasName } from "../../../sage-pf2e";
-import type { IRenderable, ISearchable } from "../../../sage-utils";
-import { HasCore } from "../../../sage-utils/utils/ClassUtils";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
-import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
+import type { TResultsLink } from "..";
+import { HasCore, IHasNameCore } from "../../../sage-utils/ClassUtils";
+import { IRenderable, RenderableContent } from "../../../sage-utils/RenderUtils";
+import type { ISearchable, SearchInfo, SearchScore } from "../../../sage-utils/SearchUtils";
+import { StringMatcher } from "../../../sage-utils/StringUtils";
+import { createSearchResultUrl } from "./helpers";
 
 /**
  * temp solution for Sf1 search results using the existing search output mechanism
  * ultimately this should house the results and not the categories ... but i wanna just get *A* solution first
  */
-export default class AonSf1SearchBase
+export class AonSf1SearchBase
 	extends
 		HasCore<TResultsLink, string>
 	implements
-		IHasName,
+		IHasNameCore,
 		IRenderable,
 		ISearchable {
 
@@ -27,8 +25,8 @@ export default class AonSf1SearchBase
 	}
 
 	public get name(): string { return this.core.label; }
-	public get nameClean(): string { return this.nameMatcher.clean; }
-	public get nameLower(): string { return this.nameMatcher.lower; }
+	// public get nameClean(): string { return this.nameMatcher.clean; }
+	// public get nameLower(): string { return this.nameMatcher.lower; }
 
 	public matches(other: StringMatcher): boolean {
 		return this.nameMatcher.matches(other);
@@ -36,7 +34,7 @@ export default class AonSf1SearchBase
 
 	// #endregion IHasName
 
-	//#region utils.SearchUtils.ISearchable
+	//#region ISearchable
 
 	public get searchResultCategory(): string { return this.core.cat; }
 
@@ -56,7 +54,7 @@ export default class AonSf1SearchBase
 
 	//#endregion
 
-	// #region utils.RenderUtils.IRenderable
+	// #region IRenderable
 
 	public toRenderableContent(): RenderableContent {
 		const renderable = new RenderableContent(this.name);
@@ -65,6 +63,6 @@ export default class AonSf1SearchBase
 		return renderable;
 	}
 
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion IRenderable
 
 }
