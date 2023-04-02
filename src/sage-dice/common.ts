@@ -1,11 +1,9 @@
 import { GameType } from "../sage-common";
-import type { IdCore, TToken } from "../sage-utils";
-import { exists } from "../sage-utils/utils/ArrayUtils/Filters";
-import { sortAscending } from "../sage-utils/utils/ArrayUtils/Sort";
-import { HasIdCore } from "../sage-utils/utils/ClassUtils";
-import { random } from "../sage-utils/utils/RandomUtils";
-import { cleanWhitespace } from "../sage-utils/utils/StringUtils";
-import type { TDiceRoll } from "./dice/base/types";
+import { exists, sortAscending } from "../sage-utils/ArrayUtils";
+import { HasIdCore, IdCore } from "../sage-utils/ClassUtils";
+import { random } from "../sage-utils/RandomUtils";
+import { TokenData, cleanWhitespace } from "../sage-utils/StringUtils";
+import type { TDiceRoll } from "./base/types";
 
 //#region rpg.common.ts
 
@@ -150,7 +148,7 @@ export type TDropKeepData = { type:DropKeepType; value:number; alias?:string; };
 export function createValueDropKeepData(type: DropKeepType, value: number, alias = DropKeepTypeAliases[type]): TDropKeepData {
 	return { type:type, value:value, alias:alias };
 }
-export function parseValueDropKeepData(token: TToken): TDropKeepData | undefined {
+export function parseValueDropKeepData(token: TokenData): TDropKeepData | undefined {
 	if (token.matches) {
 		const type = parseDropKeepType(token.matches[0]);
 		const value = +token.matches[1] || 1;
@@ -201,7 +199,7 @@ export function createValueTestData(type: TestType, value: number, alias = TestT
 	return { type, value, alias };
 }
 
-export function parseValueTestData(token: TToken): TTestData | undefined {
+export function parseValueTestData(token: TokenData): TTestData | undefined {
 	if (token.matches) {
 		const type = parseTestType(token.matches[0]);
 		const value = +token.matches[1] || 0;

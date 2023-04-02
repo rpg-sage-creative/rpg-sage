@@ -1,8 +1,8 @@
 import type { Optional, OrNull } from "../../sage-utils";
-import { existsAndUnique } from "../../sage-utils/utils/ArrayUtils/Filters";
-import { random } from "../../sage-utils/utils/RandomUtils";
-import { Dice } from "../dice/base";
-import type { TDice } from "../dice/base/types";
+import { existsAndUnique } from "../../sage-utils/ArrayUtils";
+import { random } from "../../sage-utils/RandomUtils";
+import { Dice } from "../base/dice";
+import type { TDice } from "../base/types";
 
 const allTables: { [key: string]: Table<TableItem> } = {};
 

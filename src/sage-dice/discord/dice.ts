@@ -1,6 +1,10 @@
 //#region imports
 
-import type { IdCore, OrNull, OrUndefined } from "../../../sage-utils";
+import { GameType, parseGameType } from "../../sage-common";
+import type { OrNull, OrUndefined } from "../../sage-utils";
+import type { IdCore } from "../../sage-utils/ClassUtils";
+import { HasCore, toJSON } from "../../sage-utils/ClassUtils";
+import { generate } from "../../sage-utils/UuidUtils";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -8,7 +12,12 @@ import {
 
 	getCritMethodRegex,
 	parseCritMethodType, parseDiceOutputType, TDiceOutput
-} from "../../common";
+} from "../common";
+import {
+	Dice as baseDice,
+	DiceGroup as baseDiceGroup,
+	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart
+} from "../base/dice";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore, TDice as baseTDice,
@@ -17,29 +26,21 @@ import type {
 	TDicePart as baseTDicePart
 } from "../base/types";
 import {
-	Dice as baseDice,
-	DiceGroup as baseDiceGroup,
-	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart
-} from "../base";
-import {
 	DiceGroup as dnd5eDiceGroup,
 	DiceGroupRoll as dnd5eDiceGroupRoll
-} from "../dnd5e";
+} from "../dnd5e/dice";
 import {
 	DiceGroup as e20DiceGroup,
 	DiceGroupRoll as e20DiceGroupRoll
-} from "../essence20";
+} from "../e20/dice";
 import {
 	DiceGroup as pf2eDiceGroup,
 	DiceGroupRoll as pf2eDiceGroupRoll
-} from "../pf2e";
+} from "../pf2e/dice";
 import {
 	DiceGroup as questDiceGroup,
 	DiceGroupRoll as questDiceGroupRoll
-} from "../quest";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
-import { HasCore, toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { GameType, parseGameType } from "../../../sage-common";
+} from "../quest/dice";
 
 //#endregion
 

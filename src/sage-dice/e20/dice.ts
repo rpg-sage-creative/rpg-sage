@@ -1,22 +1,27 @@
 //#region imports
 
-import { correctEscapeForEmoji } from "..";
-import { GameType } from "../../../sage-common";
-import type { OrNull, OrUndefined, TParsers, TToken } from "../../../sage-utils";
-import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
+import { correctEscapeForEmoji } from "../internal";
+import { GameType } from "../../sage-common";
+import type { OrNull, OrUndefined } from "../../sage-utils";
+import { toJSON } from "../../sage-utils/ClassUtils";
+import { TokenData, TokenParsers, tokenize } from "../../sage-utils/StringUtils";
+import { generate } from "../../sage-utils/UuidUtils";
 import {
+	DiceOutputType,
+	DiceSecretMethodType, DropKeepType,
+	TDiceLiteral,
+	TTestData,
+	TestType,
 	cleanDescription,
-	createValueTestData, DiceOutputType,
-	DiceSecretMethodType, DropKeepType, rollDice, TDiceLiteral, TestType, TTestData
-} from "../../common";
+	createValueTestData,
+	rollDice
+} from "../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
 	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers,
 	reduceTokenToDicePartCore as baseReduceTokenToDicePartCore
-} from "../base";
+} from "../base/dice";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
@@ -63,7 +68,7 @@ import type {
 //#endregion
 
 //#region Tokenizer
-function getParsers(): TParsers {
+function getParsers(): TokenParsers {
 	const parsers = baseGetParsers();
 	parsers["suffix"] = /(e|s|\*|up\d+|dn\d+)+/i;
 	parsers["target"] = /\b(vs\s*dif|dif|vs)\s*(\d+)/i;
@@ -86,7 +91,7 @@ function applyEdgeSnagSpecShift<T extends DicePartCore>({ core, hasEdge, hasSnag
 	return core;
 }
 
-function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[]): T {
+function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData, index: number, tokens: TokenData[]): T {
 	if (token.type === "suffix") {
 		const prevToken = tokens[index - 1];
 		if (prevToken?.type === "dice") {
@@ -111,7 +116,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 //#region Targets/Tests
 enum TargetType { None = 0, DIF = 1 }
 type TTargetData = { type:TargetType; value:number; raw:string; };
-function parseTargetData(token: TToken): OrUndefined<TTargetData> {
+function parseTargetData(token: TokenData): OrUndefined<TTargetData> {
 	if (token.matches) {
 		const type = TargetType.DIF,
 			value = +token.matches[1] || 0;
@@ -351,7 +356,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	public static fromCore(core: DicePartCore): DicePart {
 		return new DicePart(core);
 	}
-	public static fromTokens(tokens: TToken[]): DicePart {
+	public static fromTokens(tokens: TokenData[]): DicePart {
 		const core = tokens.reduce(reduceTokenToDicePartCore, <DicePartCore>{ description:"" });
 		if (core.sides !== 20 && match(core)) {
 			let hasEdge = false, hasSnag = false, hasSpecialization = false, downShift = 0, upShift = 0;
@@ -519,7 +524,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public static fromCore(core: DiceGroupCore): DiceGroup {
 		return new DiceGroup(core);
 	}
-	public static fromTokens(tokens: TToken[], diceOutputType?: DiceOutputType): DiceGroup {
+	public static fromTokens(tokens: TokenData[], diceOutputType?: DiceOutputType): DiceGroup {
 		let skillDicePart = DicePart.fromTokens(tokens);
 		if (skillDicePart.hasShift) {
 			skillDicePart = skillDicePart.shiftedDicePart!;
@@ -576,7 +581,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return DiceGroup.create(dice, diceOutputType);
 	}
 	public static parse(diceString: string, diceOutputType?: DiceOutputType): DiceGroup {
-		const tokens = Tokenizer.tokenize(diceString, getParsers(), "desc");
+		const tokens = tokenize(diceString, getParsers(), "desc");
 		return DiceGroup.fromTokens(tokens, diceOutputType);
 	}
 	public static Part = <typeof baseDice>Dice;

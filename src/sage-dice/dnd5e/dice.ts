@@ -1,28 +1,32 @@
 //#region imports
 
-import { GameType } from "../../../sage-common";
-import type { OrNull, OrUndefined, TParsers, TToken } from "../../../sage-utils";
-import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
-import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
+import { GameType } from "../../sage-common";
+import type { OrNull, OrUndefined } from "../../sage-utils";
+import { exists } from "../../sage-utils/ArrayUtils";
+import { toJSON } from "../../sage-utils/ClassUtils";
+import { TokenData, TokenParsers, tokenize } from "../../sage-utils/StringUtils";
+import { generate } from "../../sage-utils/UuidUtils";
 import {
-	cleanDescription,
-	createValueTestData, CritMethodType, DiceOutputType,
+	CritMethodType, DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
+	TDiceLiteral,
+	TSign,
+	TTestData,
+	TestType,
+	cleanDescription,
+	createValueTestData,
 	gradeRoll, isGradeSuccess,
 	parseTestType,
-	rollDice, TDiceLiteral, TestType, TSign,
-	TTestData
-} from "../../common";
+	rollDice
+} from "../common";
 import {
+	TReduceSignToDropKeep,
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
-	TReduceSignToDropKeep
-} from "../base";
+	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore
+} from "../base/dice";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
@@ -32,14 +36,14 @@ import type {
 //#endregion
 
 //#region Tokenizer
-function getParsers(): TParsers {
+function getParsers(): TokenParsers {
 	const parsers = baseGetParsers();
 	parsers["target"] = /(vs\s*ac|vs\s*dc|ac|dc|vs)\s*(\d+)/i;
 	return parsers;
 }
 const ADVANTAGE = "Advantage";
 const DISADVANTAGE = "Disadvantage";
-function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[]): T {
+function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData, index: number, tokens: TokenData[]): T {
 	if (token.type === "target") {
 		core.target = parseTargetData(token);
 		return core;
@@ -73,7 +77,7 @@ function parseTargetType(targetType: string): TargetType {
 function parseTargetValue(type: TargetType, value: number): number {
 	return type ? value : 0;
 }
-function parseTargetData(token: TToken): OrUndefined<TTargetData> {
+function parseTargetData(token: TokenData): OrUndefined<TTargetData> {
 	if (token.matches) {
 		const type = parseTargetType(token.matches[0]),
 			value = parseTargetValue(type, +token.matches[1] || 0);
@@ -177,7 +181,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	public static fromCore(core: DicePartCore): DicePart {
 		return new DicePart(core);
 	}
-	public static fromTokens(tokens: TToken[]): DicePart {
+	public static fromTokens(tokens: TokenData[]): DicePart {
 		const core = tokens.reduce(reduceTokenToDicePartCore, <DicePartCore>{ description:"" });
 		const args = <TDicePartCoreArgs>{ testOrTarget:core.target ?? core.test, ...core };
 		return DicePart.create(args);
@@ -270,10 +274,10 @@ Dice.Roll = <typeof baseDiceRoll>DiceRoll;
 //#endregion
 
 //#region DiceGroup
-function isTestOrTarget(currentToken: TToken): boolean {
+function isTestOrTarget(currentToken: TokenData): boolean {
 	return ["test","target"].includes(currentToken.type);
 }
-function shouldStartNewPart(currentPart: TToken[], currentToken: TToken): boolean {
+function shouldStartNewPart(currentPart: TokenData[], currentToken: TokenData): boolean {
 	return !currentPart || ["dice","mod","test","target"].includes(currentToken.type);
 }
 
@@ -348,9 +352,9 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public static fromCore(core: DiceGroupCore): DiceGroup {
 		return new DiceGroup(core);
 	}
-	public static fromTokens(tokens: TToken[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): DiceGroup {
-		let currentPart: TToken[];
-		const partedTokens: TToken[][] = [];
+	public static fromTokens(tokens: TokenData[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): DiceGroup {
+		let currentPart: TokenData[];
+		const partedTokens: TokenData[][] = [];
 		tokens.forEach(token => {
 			if (shouldStartNewPart(currentPart, token)) {
 				currentPart = [];
@@ -391,7 +395,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return DiceGroup.create(_dice, diceOutputType, diceSecretMethodType, critMethodType);
 	}
 	public static parse(diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): DiceGroup {
-		const tokens = Tokenizer.tokenize(diceString, getParsers(), "desc");
+		const tokens = tokenize(diceString, getParsers(), "desc");
 		return DiceGroup.fromTokens(tokens, diceOutputType, diceSecretMethodType, critMethodType);
 	}
 	public static Part = <typeof baseDice>Dice;

@@ -1,10 +1,12 @@
 //#region imports
 
-import type { Optional, OrNull, OrUndefined, TParsers, TSortResult, TToken } from "../../../sage-utils";
-import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
-import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { cleanWhitespace, dequote, escapeForRegExp, Tokenizer } from "../../../sage-utils/utils/StringUtils";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
+import { correctEscapeForEmoji } from "../internal";
+import { GameType } from "../../sage-common";
+import type { Optional, OrNull, OrUndefined } from "../../sage-utils";
+import { sortAscending } from "../../sage-utils/ArrayUtils";
+import { toJSON } from "../../sage-utils/ClassUtils";
+import { TokenData, TokenParsers, cleanWhitespace, dequote, escapeForRegExp, tokenize } from "../../sage-utils/StringUtils";
+import { generate } from "../../sage-utils/UuidUtils";
 import {
 	cleanDescription, CritMethodType,
 	DiceOutputType,
@@ -20,13 +22,11 @@ import {
 	TDropKeepData,
 	TSign,
 	TTestData, UNICODE_LEFT_ARROW
-} from "../../common";
+} from "../common";
 import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
 	DicePartCore, DicePartRollCore, DiceRollCore, TDice, TDiceGroup, TDiceGroupRoll, TDicePart, TDicePartCoreArgs, TDicePartRoll, TDiceRoll
 } from "./types";
-import { GameType } from "../../../sage-common";
-import { correctEscapeForEmoji } from "..";
 
 //#endregion
 
@@ -44,7 +44,7 @@ function strike(value: string): string {
 
 /** Removes the first instance of desc from description while ensuring it doesn't break HTML (ex: Removing "b" from "<b>8</b> b") */
 function removeDesc(description: string, desc: string): string {
-	const tokens = Tokenizer.tokenize(description, { html:/<[^>]+>/, desc:new RegExp(escapeForRegExp(desc)) });
+	const tokens = tokenize(description, { html:/<[^>]+>/, desc:new RegExp(escapeForRegExp(desc)) });
 	const firstDesc = tokens.find(token => token.type === "desc");
 	return tokens
 		.filter(token => token !== firstDesc)
@@ -57,7 +57,7 @@ function removeDesc(description: string, desc: string): string {
 //#region Tokenizer
 
 /** Returns a new object with the default dice parsers for use with Tokenizer */
-export function getParsers(): TParsers {
+export function getParsers(): TokenParsers {
 	return {
 		dice: /([\-\+\*\/])?(?:\s*(\d+)\s*|\b)d\s*(\d+)/i,
 		dropKeep: /(dl|dh|kl|kh)\s*(\d+)?/i,
@@ -71,7 +71,7 @@ export function getParsers(): TParsers {
 //#region Token Reduce Helpers
 
 /** Appends the token's value to the core's description */
-function reduceDescriptionToken<T extends DicePartCore>(core: T, token: TToken): T {
+function reduceDescriptionToken<T extends DicePartCore>(core: T, token: TokenData): T {
 	core.description = (core.description ?? "") + token.token;
 	return core;
 }
@@ -81,13 +81,13 @@ export type TReduceSignToDropKeep = {
 	type: DropKeepType;
 	value: number;
 	alias: string;
-	test: (core: DicePartCore, token: TToken) => boolean;
+	test: (core: DicePartCore, token: TokenData) => boolean;
 };
 /**
  * Sets the core's .sign, .count, and .sides values from the tokens .matches
  * If reducePlusMinusToDropKeepData provided, a +2d20/-2d20 roll will be converted to 2d20kh1/2d20kl1 (Fortune/Misfortune; Advantage/Disadvantage)
  * */
-function reduceDiceToken<T extends DicePartCore>(core: T, token: TToken, reduceSignToDropKeepData?: TReduceSignToDropKeep[]): T {
+function reduceDiceToken<T extends DicePartCore>(core: T, token: TokenData, reduceSignToDropKeepData?: TReduceSignToDropKeep[]): T {
 	if (token.matches) {
 		core.sign = <TSign>token.matches[0];
 		core.count = +token.matches[1] || 0;
@@ -104,23 +104,23 @@ function reduceDiceToken<T extends DicePartCore>(core: T, token: TToken, reduceS
 	return core;
 }
 
-function reduceDropKeepToken<T extends DicePartCore>(core: T, token: TToken, lastToken: TToken): T {
-	if (["dice", "noSort"].includes(lastToken?.type)) {
+function reduceDropKeepToken<T extends DicePartCore>(core: T, token: TokenData, lasTokenData: TokenData): T {
+	if (["dice", "noSort"].includes(lasTokenData?.type)) {
 		core.dropKeep = parseValueDropKeepData(token);
 		return core;
 	}
 	return reduceDescriptionToken(core, token);
 }
 
-function reduceNoSortToken<T extends DicePartCore>(core: T, token: TToken, lastToken: TToken): T {
-	if (["dice", "dropKeep"].includes(lastToken?.type)) {
+function reduceNoSorTokenData<T extends DicePartCore>(core: T, token: TokenData, lasTokenData: TokenData): T {
+	if (["dice", "dropKeep"].includes(lasTokenData?.type)) {
 		core.noSort = true;
 		return core;
 	}
 	return reduceDescriptionToken(core, token);
 }
 
-function reduceModToken<T extends DicePartCore>(core: T, token: TToken): T {
+function reduceModToken<T extends DicePartCore>(core: T, token: TokenData): T {
 	if (token.matches) {
 		core.sign = <TSign>token.matches[0];
 		core.modifier = +token.matches[1] || 0;
@@ -128,20 +128,20 @@ function reduceModToken<T extends DicePartCore>(core: T, token: TToken): T {
 	return core;
 }
 
-function reduceTestToken<T extends DicePartCore>(core: T, token: TToken): T {
+function reduceTesTokenData<T extends DicePartCore>(core: T, token: TokenData): T {
 	core.test = parseValueTestData(token);
 	return core;
 }
 
 //#endregion
 
-export function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[], reduceSignToDropKeepData?: TReduceSignToDropKeep[]): T {
+export function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData, index: number, tokens: TokenData[], reduceSignToDropKeepData?: TReduceSignToDropKeep[]): T {
 	switch (token.type) {
 		case "dice": return reduceDiceToken(core, token, reduceSignToDropKeepData);
 		case "dropKeep": return reduceDropKeepToken(core, token, tokens[index - 1]);
-		case "noSort": return reduceNoSortToken(core, token, tokens[index - 1]);
+		case "noSort": return reduceNoSorTokenData(core, token, tokens[index - 1]);
 		case "mod": return reduceModToken(core, token);
-		case "test": return reduceTestToken(core, token);
+		case "test": return reduceTesTokenData(core, token);
 
 		//TODO: after doing a test, this needs to become another dicepart
 		default: return reduceDescriptionToken(core, token);
@@ -174,7 +174,7 @@ function mapRollAndIndex(sides: number, roll: number, index: number): TRollAndIn
 
 type TMappedAndSortedRolls = { byIndex:TRollAndIndex[]; byRoll:TRollAndIndex[]; length:number };
 
-function sortRollAndIndex(a: TRollAndIndex, b: TRollAndIndex): TSortResult {
+function sortRollAndIndex(a: TRollAndIndex, b: TRollAndIndex): -1 | 0 | 1 {
 	const byRoll = sortAscending(a.roll, b.roll);
 	if (byRoll !== 0) {
 		return byRoll;
@@ -362,7 +362,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	public static fromCore(core: DicePartCore): TDicePart {
 		return new DicePart(core);
 	}
-	public static fromTokens(tokens: TToken[]): TDicePart {
+	public static fromTokens(tokens: TokenData[]): TDicePart {
 		const core = tokens.reduce(reduceTokenToDicePartCore, <DicePartCore>{ description:"" });
 		return DicePart.create(core);
 	}
@@ -656,12 +656,12 @@ Dice.Roll = DiceRoll;
 
 //#region DiceGroup
 
-function isTestOrTarget(currentToken: TToken): boolean {
-	return ["test","target"].includes(currentToken.type);
+function isTestOrTarget(currenTokenData: TokenData): boolean {
+	return ["test","target"].includes(currenTokenData.type);
 }
 
-function shouldStartNewPart(currentPart: TToken[], currentToken: TToken): boolean {
-	return !currentPart || ["dice","mod","test"].includes(currentToken.type);
+function shouldStartNewPart(currentPart: TokenData[], currenTokenData: TokenData): boolean {
+	return !currentPart || ["dice","mod","test"].includes(currenTokenData.type);
 }
 
 export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDiceGroupRoll> extends HasDieCore<T> implements IDiceBase<V> {
@@ -717,9 +717,9 @@ export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDice
 	public static fromCore(core: DiceGroupCore): TDiceGroup {
 		return new DiceGroup(core);
 	}
-	public static fromTokens(tokens: TToken[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: number): TDiceGroup {
-		let currentPart: TToken[];
-		const partedTokens: TToken[][] = [];
+	public static fromTokens(tokens: TokenData[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: number): TDiceGroup {
+		let currentPart: TokenData[];
+		const partedTokens: TokenData[][] = [];
 		tokens.forEach(token => {
 			if (shouldStartNewPart(currentPart, token)) {
 				currentPart = [];
@@ -750,7 +750,7 @@ export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDice
 		return DiceGroup.create(_dice, diceOutputType, diceSecretMethodType, critMethodType);
 	}
 	public static parse(diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType): TDiceGroup {
-		const tokens = Tokenizer.tokenize(diceString, getParsers(), "desc");
+		const tokens = tokenize(diceString, getParsers(), "desc");
 		return DiceGroup.fromTokens(tokens, diceOutputType, diceSecretMethodType);
 	}
 	public static Part = Dice;

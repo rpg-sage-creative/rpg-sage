@@ -1,8 +1,9 @@
 export * from "./common";
-export * as default from "./dice";
-export * from "./dice/base/types";
-export * from "./dice/discord";
-export * from "./tables";
-
-import { Dice } from "./dice/base/index";
-export const roll = Dice.roll;
+export * as dice from "./base";
+export * as cnc from "./cnc";
+export * as discord from "./discord";
+export * as dnd5e from "./dnd5e";
+export * as e20 from "./e20";
+export * as pf2e from "./pf2e";
+export * as quest from "./quest";
+export * as tables from "./tables";
