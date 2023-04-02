@@ -1,5 +1,5 @@
 import { isDate } from "util/types";
-import { DateLike, Day, MILLISECONDS_PER_DAY, Month, getDateStrings } from "../sage-utils/utils/DateUtils";
+import { DateLike, Day, MILLISECONDS_PER_DAY, Month, getDateStrings } from "../sage-utils/DateUtils";
 
 /**
  * This class allows us to link an in game Date to a real world Earth date.

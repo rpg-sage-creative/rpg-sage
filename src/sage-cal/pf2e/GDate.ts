@@ -1,4 +1,4 @@
-import { TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason } from "../../sage-utils/utils/DateUtils";
+import { TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason } from "../../sage-utils/DateUtils";
 import { SageDate } from "../SageDate";
 import { Day, Month } from "./cal";
 

@@ -1,4 +1,4 @@
-import { getDaysPerMonth } from "../../sage-utils/utils/DateUtils";
+import { getDaysPerMonth } from "../../sage-utils/DateUtils";
 
 export enum Month { Abadius, Calistril, Pharast, Gozran, Desnus, Sarenith, Erastus, Arodus, Rova, Lamashan, Neth, Kuthona }
 export enum Day { Firstday, Seconday, Thirday, Fourthday, Fifthday, Sixthday, Seventhday }
