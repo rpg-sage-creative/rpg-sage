@@ -1,6 +1,7 @@
 
 import type { TMatcher, TMatcherResolvable } from "..";
-import { NIL_UUID, UUID, isValid } from "./helpers";
+import { isValid } from "./helpers";
+import { NIL_UUID, UUID } from "./types";
 
 /** Contains all the properties that represent a UuidMatcher. */
 export type TUuidMatcher = TMatcher & {
