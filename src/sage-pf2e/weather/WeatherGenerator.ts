@@ -1,22 +1,23 @@
-import { CloudCoverTableItem, PrecipitationTableItem, rollOnTable, rollTemperatureVariation, WindStrength, WindTableItem } from "..";
-import GDate from "../../sage-cal/pf2e/GDate";
-import type { TSimpleDice } from "../../sage-utils";
-import { isDefined, SeasonType } from "../../sage-utils";
-import { random, randomBoolean, randomRoll } from "../../sage-utils/utils/RandomUtils";
-import { fahrenheitToCelsius } from "../../sage-utils/utils/TempUtils";
+import { GDate } from "../../sage-cal/pf2e/GDate";
+import { isDefined } from "../../sage-utils";
+import { Season } from "../../sage-utils/DateUtils";
+import { TSimpleDice, random, randomBoolean, randomRoll } from "../../sage-utils/RandomUtils";
+import { fahrenheitToCelsius } from "../../sage-utils/TemperatureUtils";
+import { CloudCoverTableItem, PrecipitationTableItem, WindStrength, WindTableItem, rollOnTable, rollTemperatureVariation } from "./tables";
 import {
-	ClimateType,
-	CloudCoverType,
-	ElevationType,
+	Climate,
+	CloudCover,
+	Elevation,
+	PrecipitationFrequency,
+	PrecipitationIntensity,
+	Wind,
+} from "./types";
+import {
 	getBasePrecipitationFrequency,
 	getBasePrecipitationIntensity,
 	getBaseTemp,
-	PrecipitationFrequencyType,
-	PrecipitationIntensityType,
-	testForPrecipitation,
-	WindType
+	testForPrecipitation
 } from "./weather";
-
 const HeavySnow = "Heavy Snow";
 
 //TODO: integrate the time data from https://sunrise-sunset.org/api
@@ -38,12 +39,12 @@ export interface IWeatherDayResult {
 	high: number;
 	current: number;
 	low: number;
-	cloudCover: CloudCoverType;
-	precipIntensity?: PrecipitationIntensityType;
+	cloudCover: CloudCover;
+	precipIntensity?: PrecipitationIntensity;
 	precipStart?: number;
 	precipDuration?: number;
 	precipItem?: PrecipitationTableItem;
-	windStrength?: WindType;
+	windStrength?: Wind;
 	hours: IWeatherHourResult[];
 	description?: string;
 }
@@ -52,22 +53,22 @@ export interface IWeatherHourResult {
 	hour: number;
 	// dayNight: cal.DayNightType;
 	temp: number;
-	cloudCover: CloudCoverType;
+	cloudCover: CloudCover;
 	precipitation?: string;
-	windStrength?: WindType;
+	windStrength?: Wind;
 	windSpeed?: number;
 	description?: string;
 }
 
 interface IGenParameters {
-	climate: ClimateType;
-	elevation: ElevationType;
+	climate: Climate;
+	elevation: Elevation;
 	desert: boolean;
 }
 
-export default class WeatherGenerator {
+export class WeatherGenerator {
 	public desert = false;
-	public constructor(public climate: ClimateType, public elevation: ElevationType, public date = new GDate()) { }
+	public constructor(public climate: Climate, public elevation: Elevation, public date = new GDate()) { }
 
 	public createToday(): IWeatherDayResult {
 		return generateDays(this, this.date, 1).shift()!;
@@ -82,11 +83,11 @@ export default class WeatherGenerator {
 		return generateDays(this, this.date, 366);
 	}
 
-	public createMonth(monthType = this.date.monthType): IWeatherDayResult[] {
+	public createMonth(monthType = this.date.month): IWeatherDayResult[] {
 		const gdate = new GDate(new Date(this.date.getEarthFullYear(), monthType, 1)),
 			days = generateDays(this, gdate, 31);
-		monthType = gdate.monthType;
-		while (days[days.length - 1].date.monthType !== monthType) {
+		monthType = gdate.month;
+		while (days[days.length - 1].date.month !== monthType) {
 			days.pop();
 		}
 		return days;
@@ -139,20 +140,20 @@ function createExport(days: IWeatherDayResult[], delimiter: "," | "\t"): string 
 	].join(delimiter));
 	days.forEach(day => {
 		const dayColumns = <any[]>[
-			ElevationType[day.genProps.elevation],
-			ClimateType[day.genProps.climate],
+			Elevation[day.genProps.elevation],
+			Climate[day.genProps.climate],
 			day.genProps.desert,
-			day.date.month,
+			day.date.monthName,
 			day.date.getDate(),
-			day.date.day,
+			day.date.dayName,
 			day.date.getFullYear(),
 			day.high,
 			day.low,
-			CloudCoverType[day.cloudCover],
-			PrecipitationIntensityType[day.precipIntensity!],
+			CloudCover[day.cloudCover],
+			PrecipitationIntensity[day.precipIntensity!],
 			day.precipStart,
 			day.precipDuration,
-			WindType[day.windStrength!],
+			Wind[day.windStrength!],
 			day.description
 		];
 		day.hours.forEach(hour => {
@@ -160,9 +161,9 @@ function createExport(days: IWeatherDayResult[], delimiter: "," | "\t"): string 
 				hour.hour,
 				hour.temp,
 				fahrenheitToCelsius(hour.temp),
-				CloudCoverType[hour.cloudCover],
+				CloudCover[hour.cloudCover],
 				hour.precipitation,
-				WindType[hour.windStrength!],
+				Wind[hour.windStrength!],
 				hour.windSpeed,
 				hour.description
 			];
@@ -249,15 +250,15 @@ function normalizeDailyResults(days: IWeatherDayResult[]): void {
 			precip = precipHour?.precipitation ?? "",
 			cloudCover = precipHour?.cloudCover ?? day.cloudCover,
 			cloudText = cloudCoverToString(cloudCover),
-			windStrength = precipHour && WindType[precipHour.windStrength ?? day.windStrength!],
+			windStrength = precipHour && Wind[precipHour.windStrength ?? day.windStrength!],
 			windText = ((windStrength ?? "No") + " Wind").replace("Windstorm Wind", "Windstorm");
 		day.description = `${precip || cloudText}, ${windText}`;
 	});
 }
-function cloudCoverToString(cloudCover: CloudCoverType): string {
+function cloudCoverToString(cloudCover: CloudCover): string {
 	switch (cloudCover) {
-		case CloudCoverType.Light: return "Partly Cloudy";
-		case CloudCoverType.Medium: return "Cloudy";
+		case CloudCover.Light: return "Partly Cloudy";
+		case CloudCover.Medium: return "Cloudy";
 	}
 	return cloudCover ? "Overcast" : "Clear";
 }
@@ -286,9 +287,9 @@ function createHourlyResults(days: IWeatherDayResult[]): void {
 			precipEnd = day.precipStart + day.precipDuration;
 
 			windItem = getWind(precip);
-			day.windStrength = WindType[windItem.strength];
+			day.windStrength = Wind[windItem.strength];
 
-			if (precip.precipitation === HeavySnow && day.windStrength >= WindType.Severe) {
+			if (precip.precipitation === HeavySnow && day.windStrength >= Wind.Severe) {
 				// If Heavy Snow and Severe Wind, there is a 20% (1 in 5) chance of a Blizzard
 				precip = <PrecipitationTableItem>{ precipitation: "Blizzard", duration: "2d12", min: 1, max: 1 };
 				if (random(5) === 5) {
@@ -297,7 +298,7 @@ function createHourlyResults(days: IWeatherDayResult[]): void {
 			}
 		}else {
 			windItem = getWind();
-			day.windStrength = WindType[windItem.strength];
+			day.windStrength = Wind[windItem.strength];
 		}
 
 		day.hours = day.hours.map((oldResult, hour) => mapHours({ oldResult, hour, precip, day, windItem }));
@@ -342,7 +343,7 @@ function createHourResult(day: IWeatherDayResult, hour: number, temp: number, pr
 		temp: temp,
 		cloudCover: day.cloudCover,
 		precipitation: precipitation,
-		windStrength: WindType[<keyof typeof WindType>wind?.strength],
+		windStrength: Wind[<keyof typeof Wind>wind?.strength],
 		windSpeed: wind ? roll(wind.speed) : undefined,
 		description: undefined
 	};
@@ -368,8 +369,8 @@ function normalizeHourlyResults(days: IWeatherDayResult[]): void {
 	});
 }
 
-function getPrecipitation(intensity: PrecipitationIntensityType, temp: number): PrecipitationTableItem {
-	const key = `${PrecipitationIntensityType[intensity]}${temp < 32 ? "F" : "Unf"}rozenPrecipitation`;
+function getPrecipitation(intensity: PrecipitationIntensity, temp: number): PrecipitationTableItem {
+	const key = `${PrecipitationIntensity[intensity]}${temp < 32 ? "F" : "Unf"}rozenPrecipitation`;
 	return rollOnTable(key);
 }
 function getWind(precip?: PrecipitationTableItem): WindTableItem {
@@ -384,27 +385,27 @@ function getWind(precip?: PrecipitationTableItem): WindTableItem {
 	}
 	return rollOnTable("WindStrength");
 }
-function getOvercastVariation(isOvercast: boolean, hasPrecip: boolean, season: SeasonType): -10 | 0 | 10 {
+function getOvercastVariation(isOvercast: boolean, hasPrecip: boolean, season: Season): -10 | 0 | 10 {
 	if (isOvercast && !hasPrecip) {
-		return season === SeasonType.Fall || season === SeasonType.Winter ? 10 : -10;
+		return season === Season.Fall || season === Season.Winter ? 10 : -10;
 	}
 	return 0;
 }
 function randomWeather(properties: IGenParameters, date: GDate): IWeatherDayResult[] {
-	const season = date.temperateSeasonType as unknown as SeasonType,
+	const season = date.temperateSeason as unknown as Season,
 		tempVariationItem = rollTemperatureVariation(properties.climate),
 		tempVariation = roll(tempVariationItem.variation),
 		days: IWeatherDayResult[] = [];
 
 	let tempDuration = roll(tempVariationItem.duration);
 	while (tempDuration--) {
-		const precipFrequency = properties.desert ? PrecipitationFrequencyType.Drought : getBasePrecipitationFrequency(properties.climate, season, properties.elevation),
+		const precipFrequency = properties.desert ? PrecipitationFrequency.Drought : getBasePrecipitationFrequency(properties.climate, season, properties.elevation),
 			hasPrecip = testForPrecipitation(precipFrequency),
 			precipIntensity = hasPrecip ? getBasePrecipitationIntensity(properties.climate, season, properties.elevation) : undefined,
 
 			cloudCoverItem = hasPrecip ? null : rollOnTable<CloudCoverTableItem>("CloudCover"),
-			cloudCover = hasPrecip ? CloudCoverType.Overcast : CloudCoverType[<keyof typeof CloudCoverType>cloudCoverItem!.cloudCover],
-			isOvercast = cloudCover === CloudCoverType.Overcast,
+			cloudCover = hasPrecip ? CloudCover.Overcast : CloudCover[<keyof typeof CloudCover>cloudCoverItem!.cloudCover],
+			isOvercast = cloudCover === CloudCover.Overcast,
 
 			overcastVariation = getOvercastVariation(isOvercast, hasPrecip, season),
 

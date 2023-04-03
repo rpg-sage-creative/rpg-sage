@@ -1,6 +1,5 @@
-import type { TSimpleDice } from "../../sage-utils";
-import { random } from "../../sage-utils/utils/RandomUtils";
-import { ClimateType, WindType } from "./weather";
+import { TSimpleDice, random } from "../../sage-utils/RandomUtils";
+import { Climate, Wind } from "./types";
 
 export interface TableItem { min: number; max: number; }
 
@@ -62,8 +61,8 @@ export function rollOnTable(tableName: string): TableItem | null {
 	return JSON.parse(JSON.stringify(item));
 }
 
-export function rollTemperatureVariation(climate: ClimateType): TemperatureVariationTableItem {
-	return rollOnTable(ClimateType[climate] + "RegionTemperatureVariations");
+export function rollTemperatureVariation(climate: Climate): TemperatureVariationTableItem {
+	return rollOnTable(Climate[climate] + "RegionTemperatureVariations");
 }
 
 export interface TemperatureVariationTableItem extends TableItem {
@@ -184,7 +183,7 @@ export const TorrentialFrozenPrecipitation: PrecipitationTableItem[] = [
 ];
 
 export interface WindTableItem extends TableItem {
-	strength: keyof typeof WindType;
+	strength: keyof typeof Wind;
 	speed: TSimpleDice;
 }
 export const ThunderstormWinds: WindTableItem[] = [

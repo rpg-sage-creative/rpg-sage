@@ -1,80 +1,76 @@
-import { SeasonType } from "../../sage-utils";
-import { random } from "../../sage-utils/utils/RandomUtils";
+import { Season } from "../../sage-utils/DateUtils";
+import { random } from "../../sage-utils/RandomUtils";
+import { Climate, Elevation, PrecipitationFrequency, PrecipitationIntensity } from "./types";
 
-export enum ElevationType { SeaLevel, Lowland, Highland }
-export enum ClimateType { Cold, Temperate, Tropical }
-export enum PrecipitationFrequencyType { Drought, Rare, Intermittent, Common, Constant }
-export enum PrecipitationIntensityType { Light, Medium, Heavy, Torrential }
-export enum CloudCoverType { None, Light, Medium, Overcast }
-export enum WindType { Light, Moderate, Strong, Severe, Windstorm }
+
 
 /** [SeaLevel, Lowland, Highland] */
-export const ElevationTypes = [ElevationType.SeaLevel, ElevationType.Lowland, ElevationType.Highland];
+export const Elevations = [Elevation.SeaLevel, Elevation.Lowland, Elevation.Highland];
 /** [Cold, Temperate, Tropical] */
-export const ClimateTypes = [ClimateType.Cold, ClimateType.Temperate, ClimateType.Tropical];
+export const Climates = [Climate.Cold, Climate.Temperate, Climate.Tropical];
 /** [Winter, Spring, Summer, Fall] */
-export const SeasonTypes = [SeasonType.Winter, SeasonType.Spring, SeasonType.Summer, SeasonType.Fall];
-/** usage: BaselineTemps[ClimateTypes.indexOf(climateType)][SeasonTypes.indexOf(seasonType)] */
+export const Seasons = [Season.Winter, Season.Spring, Season.Summer, Season.Fall];
+/** usage: BaselineTemps[Climates.indexOf(Climate)][Seasons.indexOf(Season)] */
 export const BaselineTemps = [[20, 30, 40, 30], [30, 60, 80, 60], [50, 75, 95, 75]];
 
-export function getBasePrecipitationFrequency(climate: ClimateType, season: SeasonType, elevation: ElevationType): PrecipitationFrequencyType {
-	let frequency: PrecipitationFrequencyType = 0;
+export function getBasePrecipitationFrequency(climate: Climate, season: Season, elevation: Elevation): PrecipitationFrequency {
+	let frequency: PrecipitationFrequency = 0;
 	switch (season) {
-		case SeasonType.Fall:
-		case SeasonType.Spring:
-			frequency = climate === ClimateType.Tropical ? PrecipitationFrequencyType.Common : PrecipitationFrequencyType.Intermittent;
+		case Season.Fall:
+		case Season.Spring:
+			frequency = climate === Climate.Tropical ? PrecipitationFrequency.Common : PrecipitationFrequency.Intermittent;
 			break;
-		case SeasonType.Summer:
-			frequency = climate === ClimateType.Tropical ? PrecipitationFrequencyType.Intermittent : PrecipitationFrequencyType.Common;
+		case Season.Summer:
+			frequency = climate === Climate.Tropical ? PrecipitationFrequency.Intermittent : PrecipitationFrequency.Common;
 			break;
-		case SeasonType.Winter:
-			frequency = PrecipitationFrequencyType.Rare;
+		case Season.Winter:
+			frequency = PrecipitationFrequency.Rare;
 			break;
 		default:
 			console.error("getBasePrecipitationFrequency: " + season);
 			break;
 	}
 	// desert, Drought (Rare a few weeks a year)
-	// if (climate == ClimateType.Cold) frequency--;
-	if (elevation === ElevationType.Highland) {
+	// if (climate == Climate.Cold) frequency--;
+	if (elevation === Elevation.Highland) {
 		frequency--;
 	}
-	if (frequency < PrecipitationFrequencyType.Drought) {
-		return PrecipitationFrequencyType.Drought;
-	}else if (frequency > PrecipitationFrequencyType.Constant) {
-		return PrecipitationFrequencyType.Constant;
+	if (frequency < PrecipitationFrequency.Drought) {
+		return PrecipitationFrequency.Drought;
+	}else if (frequency > PrecipitationFrequency.Constant) {
+		return PrecipitationFrequency.Constant;
 	}else {
 		return frequency;
 	}
 }
 
-export function getBasePrecipitationIntensity(climate: ClimateType, _: SeasonType, elevation: ElevationType): PrecipitationIntensityType {
-	let intensity = PrecipitationIntensityType.Medium;
-	if (elevation === ElevationType.SeaLevel) {
-		intensity = PrecipitationIntensityType.Heavy;
+export function getBasePrecipitationIntensity(climate: Climate, _: Season, elevation: Elevation): PrecipitationIntensity {
+	let intensity = PrecipitationIntensity.Medium;
+	if (elevation === Elevation.SeaLevel) {
+		intensity = PrecipitationIntensity.Heavy;
 	}
-	if (climate === ClimateType.Cold) {
+	if (climate === Climate.Cold) {
 		intensity--;
 	}
-	else if (climate === ClimateType.Tropical) {
+	else if (climate === Climate.Tropical) {
 		intensity++;
 	}
-	if (intensity < PrecipitationIntensityType.Light) {
-		return PrecipitationIntensityType.Light;
-	}else if (intensity > PrecipitationIntensityType.Torrential) {
-		return PrecipitationIntensityType.Torrential;
+	if (intensity < PrecipitationIntensity.Light) {
+		return PrecipitationIntensity.Light;
+	}else if (intensity > PrecipitationIntensity.Torrential) {
+		return PrecipitationIntensity.Torrential;
 	}else {
 		return intensity;
 	}
 }
 
-export function getBaseTemp(climate: ClimateType, season: SeasonType, elevation: ElevationType): number {
-	const climateIndex = ClimateTypes.indexOf(climate);
-	const seasonIndex = SeasonTypes.indexOf(season);
+export function getBaseTemp(climate: Climate, season: Season, elevation: Elevation): number {
+	const climateIndex = Climates.indexOf(climate);
+	const seasonIndex = Seasons.indexOf(season);
 	let temp = BaselineTemps[climateIndex][seasonIndex];
-	if (elevation === ElevationType.SeaLevel) {
+	if (elevation === Elevation.SeaLevel) {
 		temp += 10;
-	}else if (elevation === ElevationType.Highland) {
+	}else if (elevation === Elevation.Highland) {
 		temp -= 10;
 	}
 	// 0 - 250 miles of poles, -20
@@ -82,14 +78,14 @@ export function getBaseTemp(climate: ClimateType, season: SeasonType, elevation:
 	return temp;
 }
 
-export function testForPrecipitation(frequency: PrecipitationFrequencyType): boolean {
+export function testForPrecipitation(frequency: PrecipitationFrequency): boolean {
 	const roll = random(100);
 	switch (frequency) {
-		case PrecipitationFrequencyType.Drought: return roll <= 5;
-		case PrecipitationFrequencyType.Rare: return roll <= 15;
-		case PrecipitationFrequencyType.Intermittent: return roll <= 30;
-		case PrecipitationFrequencyType.Common: return roll <= 60;
-		case PrecipitationFrequencyType.Constant: return roll <= 95;
+		case PrecipitationFrequency.Drought: return roll <= 5;
+		case PrecipitationFrequency.Rare: return roll <= 15;
+		case PrecipitationFrequency.Intermittent: return roll <= 30;
+		case PrecipitationFrequency.Common: return roll <= 60;
+		case PrecipitationFrequency.Constant: return roll <= 95;
 		default:
 			console.error("testforPrecipitation: " + frequency);
 			return false;
