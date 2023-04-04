@@ -1,4 +1,5 @@
 import type { OrNull, OrUndefined } from "../../sage-utils";
+import { isString } from "../../sage-utils/StringUtils";
 import type { Base, BaseCore, TChildCoreParser } from "../model/base/Base";
 import type { HasSource } from "../model/base/HasSource";
 
@@ -51,10 +52,10 @@ export function registerObject<T = any>(itemConstructor: T): void;
 export function registerObject(objectType: string, objectTypePlural: string): void;
 
 export function registerObject(objectTypeOrItemConstructor: string | typeof Base, objectTypePlural?: string): void {
-	const objectType = typeof(objectTypeOrItemConstructor) === "string" ? objectTypeOrItemConstructor : objectTypeOrItemConstructor.singular;
+	const objectType = isString(objectTypeOrItemConstructor) ? objectTypeOrItemConstructor : objectTypeOrItemConstructor.singular;
 	if (!repoMap.has(objectType)) {
-		const itemConstructor = typeof(objectTypeOrItemConstructor) === "string" ? null! : objectTypeOrItemConstructor;
-		objectTypePlural = typeof(objectTypeOrItemConstructor) === "string" ? objectTypePlural! : objectTypeOrItemConstructor.plural;
+		const itemConstructor = isString(objectTypeOrItemConstructor) ? null! : objectTypeOrItemConstructor;
+		objectTypePlural = isString(objectTypeOrItemConstructor) ? objectTypePlural! : objectTypeOrItemConstructor.plural;
 		repoMap.set(objectType, {
 			objectType: objectType,
 			objectTypeLower: objectType.toLowerCase(),

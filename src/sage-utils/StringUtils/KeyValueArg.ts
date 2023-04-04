@@ -1,4 +1,3 @@
-import XRegExp from "xregexp";
 import { dequote, getQuotedRegexSource, quote } from "./quotes";
 
 export type KeyValueArg<T extends string = string> = {
@@ -34,12 +33,12 @@ function getKeyValueArgSource(key: string = getWordCharSource("+")): string {
 
 /** Convenience for creating/sharing key=value regex in case we change it later. Passing in a key will make sure they keys match. */
 export function createKeyValueArgRegex(key?: string): RegExp {
-	return XRegExp(getKeyValueArgSource(key), "i");
+	return new RegExp(getKeyValueArgSource(key), "i");
 }
 
 /** Returns true if the value is key=value or key="value" or key="", false otherwise. Passing in a key will make sure they keys match. */
 export function isKeyValueArg(value: string, key?: string): boolean {
-	const regex = XRegExp(`^${getKeyValueArgSource(key)}$`, "i");
+	const regex = new RegExp(`^${getKeyValueArgSource(key)}$`, "i");
 	return value.match(regex) !== null;
 }
 

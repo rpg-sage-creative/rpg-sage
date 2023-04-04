@@ -1,5 +1,5 @@
 import type { Snowflake } from "discord.js";
-import { existsAndUnique } from "../../../sage-utils/ArrayUtils";
+import { isDefinedAndUnique } from "../../../sage-utils/ArrayUtils";
 
 interface IHasSave { save(): Promise<boolean>; }
 
@@ -32,7 +32,7 @@ export class NoteManager {
 	public constructor(private notes: TNote[], protected owner?: IHasSave) { }
 
 	public getCategories(): string[] {
-		return this.notes.map(note => ensure(note.category, CategoryUncategorized)).filter(existsAndUnique);
+		return this.notes.map(note => ensure(note.category, CategoryUncategorized)).filter(isDefinedAndUnique);
 	}
 	public getCategorized(): TNoteCategory[] {
 		const categories = this.getCategories();

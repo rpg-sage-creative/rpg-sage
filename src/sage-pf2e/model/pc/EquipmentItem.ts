@@ -1,4 +1,5 @@
 import { HasIdCore, IdCore } from "../../../sage-utils/ClassUtils";
+import { isString } from "../../../sage-utils/StringUtils";
 import { generate, UUID } from "../../../sage-utils/UuidUtils";
 import type { TQuality } from "../../common";
 import { findById } from "../../data";
@@ -31,7 +32,7 @@ interface IHasTraits extends HasBulk<BulkCore, IHasTraits> {
 type TEquipmentItemResolvable = EquipmentItem | UUID;
 
 function toUuid(equipmentItemResolvable: TEquipmentItemResolvable): UUID {
-	return typeof (equipmentItemResolvable) === "string" ? equipmentItemResolvable : equipmentItemResolvable.id;
+	return isString(equipmentItemResolvable) ? equipmentItemResolvable : equipmentItemResolvable.id;
 }
 
 export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
@@ -144,7 +145,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 	public canAdd(itemId: string): boolean;
 	public canAdd(item: EquipmentItem): boolean;
 	public canAdd(itemOrId: string | EquipmentItem): boolean {
-		const item = typeof (itemOrId) === "string" ? this.eq.getItem(itemOrId) : itemOrId;
+		const item = isString(itemOrId) ? this.eq.getItem(itemOrId) : itemOrId;
 		if (!item) {
 			return false;
 		}
@@ -222,7 +223,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 	public addEntry(entry: string): void;
 	public addEntry(spell: Spell): void
 	public addEntry(entryOrEntity: string | Base): void {
-		const entry = typeof (entryOrEntity) === "string" ? entryOrEntity : entryOrEntity.name;
+		const entry = isString(entryOrEntity) ? entryOrEntity : entryOrEntity.name;
 		if (!this.core.entries) {
 			this.core.entries = [];
 		}
@@ -329,7 +330,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 	public removeEntry(entry: string): void;
 	public removeEntry(spell: Spell): void
 	public removeEntry(entryOrEntity: string | Base): void {
-		const entry = typeof (entryOrEntity) === "string" ? entryOrEntity : entryOrEntity.name;
+		const entry = isString(entryOrEntity) ? entryOrEntity : entryOrEntity.name;
 		if (this.entries.includes(entry)) {
 			this.core.entries!.splice(this.core.entries!.indexOf(entry), 1);
 		}

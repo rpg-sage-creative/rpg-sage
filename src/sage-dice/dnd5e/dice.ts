@@ -1,8 +1,7 @@
 //#region imports
 
 import { GameType } from "../../sage-common";
-import type { OrNull, OrUndefined } from "../../sage-utils";
-import { exists } from "../../sage-utils/ArrayUtils";
+import { isDefined, type OrNull, type OrUndefined } from "../../sage-utils";
 import { toJSON } from "../../sage-utils/ClassUtils";
 import { TokenData, TokenParsers, tokenize } from "../../sage-utils/StringUtils";
 import { generate } from "../../sage-utils/UuidUtils";
@@ -325,7 +324,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	}
 	public get otherDice(): Dice[] {
 		const nonOtherDice = [this.attackDice, this.damageDice]
-			.filter(exists);
+			.filter(isDefined);
 		return this.dice.filter(_dice => !nonOtherDice.includes(_dice));
 	}
 	//#endregion
@@ -333,7 +332,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public toString(outputType?: DiceOutputType): string {
 		const sortedDice = [this.attackDice, this.damageDice]
 			.concat(this.otherDice)
-			.filter(exists);
+			.filter(isDefined);
 		return `[${sortedDice.map(_dice => _dice.toString(outputType)).join("; ")}]`;
 	}
 
@@ -475,7 +474,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 	}
 	public get otherRolls(): DiceRoll[] {
 		const nonOtherRolls = [this.attackRoll, this.damageRoll]
-			.filter(exists);
+			.filter(isDefined);
 		return this.core.rolls.filter(rollCore => !nonOtherRolls.find(roll => roll.is(rollCore))).map(DiceRoll.fromCore);
 	}
 

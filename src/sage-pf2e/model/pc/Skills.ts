@@ -1,4 +1,5 @@
 import { stringIgnoreCase } from "../../../sage-utils/ArrayUtils";
+import { isString } from "../../../sage-utils/StringUtils";
 import type { TProficiency } from "../../common";
 import { DEXTERITY, EXPERT, LEGENDARY, MASTER, NO_ARMOR, TRAINED, UNTRAINED } from "../../common";
 import { findByValue, getByType } from "../../data";
@@ -80,7 +81,7 @@ export class Skills {
 	public isTrained(skill: Skill): boolean;
 	public isTrained(skillName: string): boolean;
 	public isTrained(skillOrName: Skill | string): boolean {
-		const skillName = typeof (skillOrName) === "string" ? skillOrName : skillOrName.name;
+		const skillName = isString(skillOrName) ? skillOrName : skillOrName.name;
 		/*
 		// let deity = this.pc.bio.deity;
 		// if (skillName === "Deity Lore" && deity) {
@@ -93,7 +94,7 @@ export class Skills {
 }
 
 function ensure<T extends Skill>(objectType: string, objectOrName: T | string): T {
-	return typeof (objectOrName) === "string"
+	return isString(objectOrName)
 		? findByValue(objectType, objectOrName) as T
 		: objectOrName;
 }

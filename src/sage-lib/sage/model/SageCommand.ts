@@ -1,8 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, EmbedBuilder, Guild, Snowflake, StringSelectMenuBuilder } from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import type { If, Optional } from "../../../sage-utils";
-import { exists } from "../../../sage-utils/ArrayUtils";
+import { isDefined, type If, type Optional } from "../../../sage-utils";
 import { SuperClass } from "../../../sage-utils/ClassUtils";
 import { DChannel, DMessage, DMessageChannel, handleDiscordErrorReturnNull } from "../../../sage-utils/DiscordUtils";
 import type { DiscordFetches } from "../../../sage-utils/DiscordUtils";
@@ -24,6 +23,7 @@ import type { SageInteraction } from "./SageInteraction";
 import type { SageMessage } from "./SageMessage";
 import type { SageReaction } from "./SageReaction";
 import type { Server } from "./Server";
+import { isString } from "../../../sage-utils/StringUtils";
 
 export interface SageCommandCore {
 	sageCache: SageCache;
@@ -169,7 +169,7 @@ export abstract class SageCommandBase<
 		return channel as DChannel ?? undefined;
 	}
 
-	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
+	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel isDefined. */
 	public get channel(): IChannel | undefined {
 		return this.gameChannel ?? this.serverChannel;
 	}
@@ -325,7 +325,7 @@ export abstract class SageCommandBase<
 			}
 
 			// check to see if it was set/overridden w/o channel type
-			if (exists(channel.commands)) {
+			if (isDefined(channel.commands)) {
 				return channel.commands;
 			}
 
@@ -333,7 +333,7 @@ export abstract class SageCommandBase<
 			const channelType = channel.gameChannelType ?? undefined;
 
 			// if we have a channel type set ...
-			if (exists(channelType)) {
+			if (isDefined(channelType)) {
 				// ... if we are in a channel that allows commands, then allow the command
 				return [GameChannelType.OutOfCharacter, GameChannelType.GameMaster, GameChannelType.Miscellaneous].includes(channelType);
 			}
@@ -376,7 +376,7 @@ export abstract class SageCommandBase<
 			}
 
 			// check to see if it was set/overridden w/o channel type
-			if (exists(channel.dialog)) {
+			if (isDefined(channel.dialog)) {
 				return channel.dialog;
 			}
 
@@ -384,7 +384,7 @@ export abstract class SageCommandBase<
 			const channelType = channel.gameChannelType ?? undefined;
 
 			// if we have a channel type set ...
-			if (exists(channelType)) {
+			if (isDefined(channelType)) {
 				// ... if we are in a channel that allows dialog, then allow the dialog
 				return ![GameChannelType.None, GameChannelType.Dice].includes(channelType);
 			}
@@ -427,7 +427,7 @@ export abstract class SageCommandBase<
 			}
 
 			// check to see if it was set/overridden w/o channel type
-			if (exists(channel.dice)) {
+			if (isDefined(channel.dice)) {
 				return channel.dice;
 			}
 
@@ -435,7 +435,7 @@ export abstract class SageCommandBase<
 			const channelType = channel.gameChannelType ?? undefined;
 
 			// if we have a channel type set ...
-			if (exists(channelType)) {
+			if (isDefined(channelType)) {
 				// ... if we are in a channel that allows dice, then allow the dice
 				return channelType !== GameChannelType.None;
 			}
@@ -460,7 +460,7 @@ export abstract class SageCommandBase<
 	public checkDenyAdminGame(label: string): Promise<void> | undefined;
 	public checkDenyAdminGame(...args: (Optional<Game> | string)[]): Promise<void> | undefined {
 		// Grab the only string arg or use default label
-		const label = args.find(arg => typeof(arg) === "string") as string ?? "Game Admin";
+		const label = args.find(isString) as string ?? "Game Admin";
 		// Filter to all non-string args, because we might have a null or undefined Game ...
 		// const games = args.filter(arg => typeof(arg) !== "string") as Game[];
 		// If we weren't passed a possible Game, then get it from sageMessage

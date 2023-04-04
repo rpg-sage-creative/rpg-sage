@@ -1,5 +1,4 @@
-import { existsAndUnique } from "../../sage-utils/ArrayUtils";
-import { sortComparable } from "../../sage-utils/ArrayUtils";
+import { isDefinedAndUnique, sortComparable } from "../../sage-utils/ArrayUtils";
 import { Core, HasCore } from "../../sage-utils/ClassUtils";
 import { randomItem } from "../../sage-utils/RandomUtils";
 import type { UUID } from "../../sage-utils/UuidUtils";
@@ -11,7 +10,7 @@ import { Spell } from "./Spell";
 
 
 function uniqueClean<T>(array: (T | undefined)[]): T[] {
-	return array.filter(existsAndUnique);
+	return array.filter(isDefinedAndUnique);
 }
 function flatUniqueClean<T>(array: T[][]): T[] {
 	return uniqueClean(array.flat(Infinity)) as T[];

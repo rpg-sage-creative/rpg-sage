@@ -1,5 +1,5 @@
 import { GameType } from "../sage-common";
-import { exists, sortAscending } from "../sage-utils/ArrayUtils";
+import { sortAscending } from "../sage-utils/ArrayUtils";
 import { HasIdCore, IdCore } from "../sage-utils/ClassUtils";
 import { random } from "../sage-utils/RandomUtils";
 import { TokenData, cleanWhitespace } from "../sage-utils/StringUtils";
@@ -67,10 +67,6 @@ export const SECRET_REGEX = /secret/i;
 export function cleanDescription(description?: string): string {
 	const replaced = (description ?? "").replace(/[;,]\s*$/, "");
 	return cleanWhitespace(replaced);
-}
-
-export function filterExists<T>(value: T): boolean {
-	return exists(value) && <unknown>value !== "";
 }
 
 //#endregion

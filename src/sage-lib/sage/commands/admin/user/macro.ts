@@ -5,7 +5,7 @@ import type { TMacro } from "../../../model/User";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 import { StringMatcher } from "../../../../../sage-utils/StringUtils";
-import { existsAndUnique } from "../../../../../sage-utils/ArrayUtils";
+import { isDefinedAndUnique } from "../../../../../sage-utils/ArrayUtils";
 
 const UNCATEGORIZED = "Uncategorized";
 
@@ -56,7 +56,7 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 
 	} else {
 		const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>macro-list</b>`);
-		const categories = macros.map(macro => macro.category).filter<string>(existsAndUnique);
+		const categories = macros.map(macro => macro.category).filter<string>(isDefinedAndUnique);
 		categories.unshift(UNCATEGORIZED);
 		categories.forEach(category => {
 			const byCategory = macros.filter(macro => (macro.category ?? UNCATEGORIZED) === category);

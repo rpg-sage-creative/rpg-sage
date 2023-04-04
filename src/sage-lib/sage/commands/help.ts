@@ -1,6 +1,5 @@
 import { ArgsManager } from "../../../sage-utils/ArgsUtils";
-import { existsAndUnique } from "../../../sage-utils/ArrayUtils";
-import { stringIgnoreCase } from "../../../sage-utils/ArrayUtils";
+import { isDefinedAndUnique, stringIgnoreCase } from "../../../sage-utils/ArrayUtils";
 import type { RenderableContent } from "../../../sage-utils/RenderUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
@@ -84,7 +83,7 @@ function getHelpSubCategories(categoryKey: string, depth: number): string[] {
 	return Array.from(helpTextMaps.keys())
 		.filter(key => key.startsWith(categoryKey))
 		.map(key => key.split(",").slice(depth)[0])
-		.filter(existsAndUnique)
+		.filter(isDefinedAndUnique)
 		.sort()
 		;
 }

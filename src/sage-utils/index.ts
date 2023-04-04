@@ -16,6 +16,7 @@ export * as MathUtils from "./MathUtils";
 export * as NumberUtils from "./NumberUtils";
 export * as PdfUtils from "./PdfUtils";
 export * as RandomUtils from "./RandomUtils";
+export * as RegExpUtils from "./RegExpUtils";
 export * as RenderUtils from "./RenderUtils";
 export * as SearchUtils from "./SearchUtils";
 export * as SnowflakeUtils from "./SnowflakeUtils";

@@ -1,7 +1,6 @@
 import type { GuildBasedChannel, Role, Snowflake } from "discord.js";
-import type { Args, Optional } from "../../../sage-utils";
+import { isDefined, type Args, type Optional } from "../../../sage-utils";
 import { ArgsManager } from "../../../sage-utils/ArgsUtils";
-import { exists } from "../../../sage-utils/ArrayUtils";
 import { DiscordId } from "../../../sage-utils/DiscordUtils";
 import { VALID_UUID, isValid as isValidUuid } from "../../../sage-utils/UuidUtils";
 import { cleanEnumArgValues, ISageCommandArgs } from "./SageCommandArgs";
@@ -66,7 +65,7 @@ export class SageMessageArgs<T extends string = string> extends ArgsManager<T> i
 
 	/** Returns true if getBoolean(name) is not null and not undefined. */
 	public hasBoolean(name: string): boolean {
-		return exists(this.getBoolean(name));
+		return isDefined(this.getBoolean(name));
 	}
 
 	/**
@@ -88,7 +87,7 @@ export class SageMessageArgs<T extends string = string> extends ArgsManager<T> i
 
 	/** Returns true if getChannel(name) is not null and not undefined. */
 	public hasChannel(name: string): boolean {
-		return exists(this.getChannel(name));
+		return isDefined(this.getChannel(name));
 	}
 
 	/**
@@ -112,7 +111,7 @@ export class SageMessageArgs<T extends string = string> extends ArgsManager<T> i
 
 	/** Returns true if getChannelDid(name) is not null and not undefined. */
 	public hasChannelDid(name: string): boolean {
-		return exists(this.getChannelDid(name));
+		return isDefined(this.getChannelDid(name));
 	}
 
 	/**
@@ -134,7 +133,7 @@ export class SageMessageArgs<T extends string = string> extends ArgsManager<T> i
 
 	/** Returns true if getEnum(type, name) is not null and not undefined. */
 	public hasEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): boolean {
-		return exists(this.getEnum(type, name));
+		return isDefined(this.getEnum(type, name));
 	}
 
 	/**
@@ -156,7 +155,7 @@ export class SageMessageArgs<T extends string = string> extends ArgsManager<T> i
 
 	/** Returns true if getNumber(name) is not null and not undefined. */
 	public hasNumber(name: string): boolean {
-		return exists(this.getNumber(name));
+		return isDefined(this.getNumber(name));
 	}
 
 	/**
@@ -178,7 +177,7 @@ export class SageMessageArgs<T extends string = string> extends ArgsManager<T> i
 
 	/** Returns true if getRole(name) is not null and not undefined. */
 	public hasRole(name: string): boolean {
-		return exists(this.getRole(name));
+		return isDefined(this.getRole(name));
 	}
 
 	/**
@@ -202,7 +201,7 @@ export class SageMessageArgs<T extends string = string> extends ArgsManager<T> i
 
 	/** Returns true if getRoleDid(name) is not null and not undefined. */
 	public hasRoleDid(name: string): boolean {
-		return exists(this.getRoleDid(name));
+		return isDefined(this.getRoleDid(name));
 	}
 
 	/**
@@ -251,7 +250,7 @@ export class SageMessageArgs<T extends string = string> extends ArgsManager<T> i
 
 	/** Returns true if getUuid(name) is not null and not undefined. */
 	public hasUuid(name: string): boolean {
-		return exists(this.getUuid(name));
+		return isDefined(this.getUuid(name));
 	}
 
 	//#endregion
@@ -276,7 +275,7 @@ export class SageMessageArgs<T extends string = string> extends ArgsManager<T> i
 		const images = ["avatar", "dialog", "token"].map(tag => {
 			const url = this.findUrl(tag);
 			return url ? { tags:[tag], url } : null;
-		}).filter(exists) as { tags:("avatar"|"dialog"|"token")[]; url:string; }[];
+		}).filter(isDefined) as { tags:("avatar"|"dialog"|"token")[]; url:string; }[];
 
 		const charArgs: Args<TGameCharacterArgs> = {
 			embedColor: this.findDiscordColor("color"),

@@ -1,5 +1,4 @@
 import type { Snowflake } from "discord.js";
-import * as _XRegExp from "xregexp";
 import type { Args, Optional } from "../../../sage-utils";
 import { isNonNilSnowflake } from "../../../sage-utils/SnowflakeUtils";
 import type { DiscordKey } from "../../../sage-utils/DiscordUtils";
@@ -11,7 +10,7 @@ import type { IHasSave } from "./NamedCollection";
 import { NoteManager,  type TNote } from "./NoteManager";
 import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import type { UUID } from "../../../sage-utils/UuidUtils";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
+import { XRegExp } from "../../../sage-utils/RegExpUtils";
 
 export type TGameCharacterTag = "gm"
 	| "npc" | "ally" | "enemy" | "boss"

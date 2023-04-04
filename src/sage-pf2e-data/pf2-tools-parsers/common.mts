@@ -3,7 +3,7 @@ import type { BaseCore } from "../../sage-pf2e/model/base/Base";
 import type { Pf2tBaseCore } from "../../sage-pf2e/model/base/Pf2tBase";
 import type { TDetail, THasSuccessOrFailure } from "../../sage-pf2e/model/base/interfaces";
 import type { OrNull } from "../../sage-utils";
-import { capitalize } from "../../sage-utils/StringUtils";
+import { capitalize, isString } from "../../sage-utils/StringUtils";
 import { compareNames, getPf2tCores, getSageCores } from "../common.mjs";
 import type { TCore } from "../types.mjs";
 import { parseSpell } from "./Spell.mjs";
@@ -19,7 +19,7 @@ export function findAndRemove(lines: string[], key: string): string | undefined;
 export function findAndRemove(lines: string[], key: string, count: number): string[] | undefined;
 export function findAndRemove(lines: string[], key: string, count?: number): string | string[] | undefined {
 	const prefix = `**${key}**`;
-	const index = lines.findIndex(line => typeof(line) === "string" && line.startsWith(prefix));
+	const index = lines.findIndex(line => isString(line) && line.startsWith(prefix));
 	if (index > -1) {
 		const spliced = lines.splice(index, count ?? 1);
 		spliced[0] = spliced[0].slice(prefix.length).trim();
@@ -35,7 +35,7 @@ function cleanDetails(lines: TDetail[]): void {
 	do {
 		indexes.length = 0;
 		matches.length = 0;
-		indexes[0] = lines.findIndex(line => typeof(line) === "string" ? matches[0] = line.match(regex) : false);
+		indexes[0] = lines.findIndex(line => isString(line) ? matches[0] = line.match(regex) : false);
 		if (indexes[0] > -1) {
 			for (let i = 1; i < 4; i++) {
 				indexes[i] = (matches[i] = String(lines[indexes[0] + i]).match(regex)) ? indexes[0] + i : -1;
@@ -71,7 +71,7 @@ export function objectTypeToPf2Type(sageCore: TCore): string;
 export function objectTypeToPf2Type(objectType: string): string;
 export function objectTypeToPf2Type(objectType: string, cleanOnly: true): string;
 export function objectTypeToPf2Type(sageCore: TCore | string, cleanOnly?: true): string {
-	if (typeof(sageCore) === "string") {
+	if (isString(sageCore)) {
 		return cleanOnly === true ? cleanType(sageCore) : toPf2Type(sageCore);
 	}
 	if (sageCore.objectType === "ClassPath") {

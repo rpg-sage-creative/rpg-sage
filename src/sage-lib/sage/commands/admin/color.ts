@@ -1,6 +1,5 @@
-import type { Optional } from "../../../../sage-utils";
+import { isDefined, type Optional } from "../../../../sage-utils";
 import { Collection } from "../../../../sage-utils/ArrayUtils";
-import { exists } from "../../../../sage-utils/ArrayUtils";
 import { errorReturnNull } from "../../../../sage-utils/ConsoleUtils";
 import { discordPromptYesNo } from "../../../discord/prompts";
 import type { Colors } from "../../model/Colors";
@@ -93,7 +92,7 @@ async function colorList(sageMessage: SageMessage): Promise<void> {
 //#region get
 
 async function _colorGet(sageMessage: SageMessage, ...colors: Optional<Colors>[]): Promise<void> {
-	colors = colors.filter(exists);
+	colors = colors.filter(isDefined);
 
 	const colorType = sageMessage.args.findEnum(ColorType, "type", true)!;
 	let inherited = false;

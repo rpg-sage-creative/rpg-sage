@@ -2,7 +2,7 @@
 	"compileOnSave": false,
 	"compilerOptions": {
 		"alwaysStrict": true,
-		"allowSyntheticDefaultImports": true,
+		// "allowSyntheticDefaultImports": true,
 
 		"declaration": true,
 		"declarationDir": "./types",
@@ -12,10 +12,11 @@
 
 		"forceConsistentCasingInFileNames": true,
 
-		"importsNotUsedAsValues": "error",
+		// "importsNotUsedAsValues": "error",
+		// "verbatimModuleSyntax": true,
 
 		"lib": [ "DOM", "ES2020" ],
-		"locale": "en-US",
+		// "locale": "en-US",
 
 		"module": "ES2020",
 		"moduleResolution": "Node",
@@ -35,6 +36,8 @@
 		"removeComments": true,
 		"rootDir": "./src",
 
+		"skipLibCheck": true,
+
 		"sourceMap": true,
 		"strict": true,
 		"strictBindCallApply": true,
@@ -47,6 +50,7 @@
 	},
 	"exclude": [
 		"dist",
+		"node_modules",
 		"scripts",
 		"types"
 	]

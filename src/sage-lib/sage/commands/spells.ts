@@ -3,15 +3,15 @@ import { getByType, filterBy, findByValue } from "../../../sage-pf2e/data";
 import type { Domain } from "../../../sage-pf2e/model/Domain";
 import type { FocusSpell } from "../../../sage-pf2e/model/FocusSpell";
 import type { Spell } from "../../../sage-pf2e/model/Spell";
-import { SourceNotationMap } from "../../../sage-pf2e/model/base/SourceNotationMap";
+import { SourceNotationMap } from "../../../sage-pf2e";
 import type { Optional } from "../../../sage-utils";
-import { existsAndUnique } from "../../../sage-utils/ArrayUtils";
 import { nth } from "../../../sage-utils/NumberUtils";
 import { capitalize } from "../../../sage-utils/StringUtils";
 import type { SageMessage } from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { renderAll } from "./default";
 import { registerCommandHelp } from "./help";
+import { isDefinedAndUnique } from "../../../sage-utils/ArrayUtils";
 
 // #region Spell
 function reduceByLevel<T extends Spell<string, any>>(spells: T[]): T[][] {
@@ -126,10 +126,10 @@ async function spellListFocus(sageMessage: SageMessage): Promise<void> {
 		const focusSpells = getByType<Spell>("FocusSpell");
 
 		const allClassNames = getByType("Class").map(clss => clss.name);
-		const classNames = focusSpells.map(spell => spell.traits.find(trait => allClassNames.includes(trait))).filter(existsAndUnique);
+		const classNames = focusSpells.map(spell => spell.traits.find(trait => allClassNames.includes(trait))).filter(isDefinedAndUnique);
 		content.append(`<b>Classes (${classNames.length})</b> ${classNames.map(className => `${className} (${focusSpells.filter(spell => spell.traits.includes(className)).length})`).join(", ")}`);
 
-		const archetypeNames = focusSpells.map(spell => spell.archetypeName).filter(existsAndUnique);
+		const archetypeNames = focusSpells.map(spell => spell.archetypeName).filter(isDefinedAndUnique);
 		content.append(`\n<b>Archetypes (${archetypeNames.length})</b> ${archetypeNames.map(archetypeName => `${archetypeName} (${focusSpells.filter(spell => spell.archetypeName === archetypeName).length})`).join(", ")}`);
 
 	} else if (!archetypeName && !className && !domain) {

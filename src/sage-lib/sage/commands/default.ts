@@ -2,8 +2,9 @@ import { HasSource, Source, SourceNotationMap } from "../../../sage-pf2e";
 import { filterBy, findByValue, getByType } from "../../../sage-pf2e/data";
 import { parseObjectType } from "../../../sage-pf2e/data/repoMap";
 import type { Skill } from "../../../sage-pf2e/model/Skill";
+import { isDefined } from "../../../sage-utils";
 import { ArgsManager } from "../../../sage-utils/ArgsUtils";
-import { Collection, exists, existsAndUnique, sortComparable, unique } from "../../../sage-utils/ArrayUtils";
+import { Collection, isDefinedAndUnique, isUnique, sortComparable } from "../../../sage-utils/ArrayUtils";
 import { oneToUS } from "../../../sage-utils/LangUtils";
 import type { RenderableContent } from "../../../sage-utils/RenderUtils";
 import { capitalize } from "../../../sage-utils/StringUtils";
@@ -22,7 +23,7 @@ import { searchHandler } from "./search";
 function renderAllSource(objectType: string, objectTypePlural: string): RenderableContent {
 	const content = createCommandRenderableContent();
 	const all = getByType<Source>(objectType), //.sort(sortComparable),
-		categories = all.map(source => source.searchResultCategory).filter(unique);
+		categories = all.map(source => source.searchResultCategory).filter(isUnique);
 	content.setTitle(`<b>${objectTypePlural} (${all.length})</b>`);
 	categories.forEach(category => {
 		const byCategory = Collection.filterThenMap(all, source => source.searchResultCategory === category, source => source.toSearchResult());
@@ -70,7 +71,7 @@ function renderAllBySource(objectType: string, objectTypePlural: string): Render
 		if (bySource.length) {
 			const content = createCommandRenderableContent();
 			content.setTitle(`<b>${source.name} ${objectTypePlural} (${bySource.length})</b>`);
-			const categories = bySource.map(hasSource => hasSource.searchResultCategory).filter(existsAndUnique);
+			const categories = bySource.map(hasSource => hasSource.searchResultCategory).filter(isDefinedAndUnique);
 			// categories.sort(sortCatWithRarity);
 			if (categories.length) {
 				categories.forEach(category => {
@@ -83,7 +84,7 @@ function renderAllBySource(objectType: string, objectTypePlural: string): Render
 			return content;
 		}
 		return null;
-	}).filter(exists);
+	}).filter(isDefined);
 	return [_content].concat(mapped);
 }
 export function renderAll(objectType: string, objectTypePlural: string, _bySource = false): RenderableContent[] {

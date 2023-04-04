@@ -160,7 +160,8 @@ export function getEnum<K extends string = string, V extends number = number>(ar
 	return undefined;
 }
 
-export function cleanEnumArgValues<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>, value: string): string {
+export function cleanEnumArgValues<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>, value: string): string;
+export function cleanEnumArgValues(enumLike: EnumLike<any, any>, value: string): string {
 	if (enumLike === GameChannelType) {
 		return GameChannelType[parseGameChannelType(value)!];
 	}

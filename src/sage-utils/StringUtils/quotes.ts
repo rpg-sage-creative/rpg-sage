@@ -1,8 +1,6 @@
-import XRegExp from "xregexp";
-
 /** Convenience for creating/sharing quoted value regex in case we change it later. */
 export function createQuotedRegex(allowEmpty: boolean): RegExp {
-	return XRegExp(getQuotedRegexSource(allowEmpty ? "*" : "+"));
+	return new RegExp(getQuotedRegexSource(allowEmpty ? "*" : "+"));
 }
 
 /** Removes first and last character if they are both quotes. */
@@ -17,7 +15,7 @@ export function getQuotedRegexSource(s: "*" | "+"): string {
 
 /** Returns true if the value begins and ends in quotes, false otherwise. */
 export function isQuoted(value: string): boolean {
-	const regex = XRegExp(`^${getQuotedRegexSource("*")}$`);
+	const regex = new RegExp(`^${getQuotedRegexSource("*")}$`);
 	return value.match(regex) !== null;
 }
 

@@ -1,10 +1,10 @@
-import { isNullOrUndefined, Optional, OrUndefined } from "..";
-import { Collection, exists } from "../ArrayUtils";
+import { isDefined, isNullOrUndefined, Optional, OrUndefined } from "..";
+import { Collection } from "../ArrayUtils";
 import { Color } from "../ColorUtils";
 import { EnumLike, getKeys } from "../EnumUtils";
 import type { ESCAPED_URL, VALID_URL } from "../HttpsUtils";
 import { cleanUrl, isUrl } from "../HttpsUtils";
-import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, KeyValueArg, parseKeyValueArg, tokenize, TokenParsers } from "../StringUtils";
+import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isString, KeyValueArg, parseKeyValueArg, tokenize, TokenParsers } from "../StringUtils";
 import { isValid as isValidUuid, VALID_UUID } from "../UuidUtils";
 
 /** Represents a key/value arg */
@@ -16,6 +16,7 @@ type UnkeyedArg<T extends string = string> = {
 	value: T;
 }
 
+/** Represents both types of args (keyed/unkeyed). */
 type TArg<T extends string = string> = KeyedArg<T> | UnkeyedArg<T>;
 
 /** Represents an indexed KeyedArg. */
@@ -41,7 +42,7 @@ export class ArgsManager<T extends string = string> extends Collection<TArg<T>> 
 	public constructor(arrayLength: number);
 	public constructor(...items: TArg<T>[]);
 	public constructor(...args: (number | TArg<T>)[]) {
-		super(...args.filter(exists) as TArg<T>[]);
+		super(...args.filter(isDefined) as TArg<T>[]);
 	}
 
 	//#region indexed, keyed, unkeyed, unkeyedValues
@@ -98,8 +99,8 @@ export class ArgsManager<T extends string = string> extends Collection<TArg<T>> 
 	/** Returns the key/value pair with a key and value that match the given string or RegExp values. */
 	public findByKey(key: string | RegExp, value: string | RegExp): TIndexedArg<T> | undefined;
 	public findByKey(key: string | RegExp, value?: string | RegExp): TIndexedArg<T> | undefined {
-		const keyRegex = typeof(key) === "string" ? new RegExp(`^${key}$`, "i") : key;
-		const valueRegex = value !== undefined ? typeof(value) === "string" ? new RegExp(`^${value}$`, "i") : value : undefined;
+		const keyRegex = isString(key) ? new RegExp(`^${key}$`, "i") : key;
+		const valueRegex = value !== undefined ? isString(value) ? new RegExp(`^${value}$`, "i") : value : undefined;
 		const matcher = valueRegex
 			? (arg: TKeyedIndexedArg<T>) => arg.key.match(keyRegex) && arg.value.match(valueRegex)
 			: (arg: TKeyedIndexedArg<T>) => arg.key.match(keyRegex);
@@ -332,7 +333,7 @@ export class ArgsManager<T extends string = string> extends Collection<TArg<T>> 
 	public static from<T extends string = string>(items: ArrayLike<TArg<T>> | Iterable<TArg<T>>): ArgsManager;
 	public static from<T extends string = string>(items: (T | TArg<T>)[]): ArgsManager {
 		const array = Array.from(items);
-		const mapped = array.map(item => typeof(item) === "string" ? { value:item } : item);
+		const mapped = array.map(item => isString(item) ? { value:item } : item);
 		return new ArgsManager(...mapped);
 	}
 

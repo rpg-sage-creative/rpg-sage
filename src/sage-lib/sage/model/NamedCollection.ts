@@ -1,4 +1,5 @@
-import { Collection, exists, existsAndUnique } from "../../../sage-utils/ArrayUtils";
+import { isDefined } from "../../../sage-utils";
+import { Collection, isDefinedAndUnique } from "../../../sage-utils/ArrayUtils";
 
 export interface IHasSave {
 	save(): Promise<boolean>;
@@ -51,7 +52,7 @@ export class NamedCollection<T extends IHasName> extends Collection<T> {
 	/** Removes all of the given objects (by reference) and then calls owner.save() if the length changed. */
 	public removeAndSave(...values: T[]): Promise<boolean> {
 		const length = this.length;
-		values.filter(exists).forEach(value => {
+		values.filter(isDefined).forEach(value => {
 			const index = this.indexOf(value);
 			if (index > -1) {
 				this.splice(index, 1);
@@ -66,7 +67,7 @@ export class NamedCollection<T extends IHasName> extends Collection<T> {
 	/** Finds the objects for the given names and then calls removeAndSave(...values). */
 	public removeByName(...names: string[]): Promise<boolean> {
 		const found = names.map(name => this.findByName(name))
-			.filter(existsAndUnique);
+			.filter(isDefinedAndUnique);
 		return this.removeAndSave(...found);
 	}
 

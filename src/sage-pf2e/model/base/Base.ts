@@ -2,7 +2,7 @@ import { IComparable, sortAscending } from "../../../sage-utils/ArrayUtils";
 import { HasIdCore, IdCore } from "../../../sage-utils/ClassUtils";
 import type { RenderableContent, IRenderable } from "../../../sage-utils/RenderUtils";
 import type { ISearchable, SearchInfo, SearchScore } from "../../../sage-utils/SearchUtils";
-import { StringMatcher } from "../../../sage-utils/StringUtils";
+import { isString, StringMatcher } from "../../../sage-utils/StringUtils";
 import { NEWLINE, TAB } from "../../common";
 import { Pf2eRenderableContent } from "../../Pf2eRenderableContent";
 import type {
@@ -179,7 +179,7 @@ export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = stri
 		}
 		let wasBlock = false;
 		this.details.forEach((detail, detailIndex) => {
-			if (typeof (detail) === "string") {
+			if (isString(detail)) {
 				content.append(tabNewLineOrEmpty(detailIndex, wasBlock) + detail);
 				wasBlock = false;
 			} else {
@@ -273,7 +273,7 @@ export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = stri
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.description));
 			this.details.forEach(detail => {
-				if (typeof (detail) === "string") {
+				if (isString(detail)) {
 					score.append(searchInfo.score(this, detail));
 				} else {
 					Object.keys(detail).forEach(key => score.append(searchInfo.score(this, detail[key])));

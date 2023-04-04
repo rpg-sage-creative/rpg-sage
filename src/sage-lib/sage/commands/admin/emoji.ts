@@ -1,5 +1,4 @@
-import type { Optional } from "../../../../sage-utils";
-import { exists } from "../../../../sage-utils/ArrayUtils";
+import { isDefined, type Optional } from "../../../../sage-utils";
 import { errorReturnNull } from "../../../../sage-utils/ConsoleUtils";
 import { createEmojiRegex, EmojiRegexMatchCount } from "../../../../sage-utils/DiscordUtils";
 import { discordPromptYesNo } from "../../../discord/prompts";
@@ -89,7 +88,7 @@ async function emojiList(sageMessage: SageMessage): Promise<void> {
 //#region get
 
 async function _emojiGet(sageMessage: SageMessage, ...emoji: Optional<Emoji>[]): Promise<void> {
-	emoji = emoji.filter(exists);
+	emoji = emoji.filter(isDefined);
 
 	const emojiType = sageMessage.args.findEnum(EmojiType, "type", true)!;
 	let inherited = false;
@@ -265,7 +264,7 @@ async function emojiSync(sageMessage: SageMessage): Promise<void> {
 
 async function _emojiUnset(sageMessage: SageMessage, which: Game | Server): Promise<void> {
 	const emojiType = sageMessage.args.findEnum(EmojiType, "type", true);
-	const unset = exists(emojiType) ? which.emoji.unset(emojiType) : false;
+	const unset = isDefined(emojiType) ? which.emoji.unset(emojiType) : false;
 	if (!unset) {
 		return sageMessage.reactFailure("Invalid emoji type.");
 	}

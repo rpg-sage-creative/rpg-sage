@@ -5,7 +5,7 @@ import { GameType } from "../../sage-common";
 import type { Optional, OrNull, OrUndefined } from "../../sage-utils";
 import { sortAscending } from "../../sage-utils/ArrayUtils";
 import { toJSON } from "../../sage-utils/ClassUtils";
-import { TokenData, TokenParsers, cleanWhitespace, dequote, escapeForRegExp, tokenize } from "../../sage-utils/StringUtils";
+import { TokenData, TokenParsers, cleanWhitespace, dequote, tokenize } from "../../sage-utils/StringUtils";
 import { generate } from "../../sage-utils/UuidUtils";
 import {
 	cleanDescription, CritMethodType,
@@ -27,6 +27,7 @@ import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
 	DicePartCore, DicePartRollCore, DiceRollCore, TDice, TDiceGroup, TDiceGroupRoll, TDicePart, TDicePartCoreArgs, TDicePartRoll, TDiceRoll
 } from "./types";
+import { XRegExp } from "../../sage-utils/RegExpUtils";
 
 //#endregion
 
@@ -44,7 +45,7 @@ function strike(value: string): string {
 
 /** Removes the first instance of desc from description while ensuring it doesn't break HTML (ex: Removing "b" from "<b>8</b> b") */
 function removeDesc(description: string, desc: string): string {
-	const tokens = tokenize(description, { html:/<[^>]+>/, desc:new RegExp(escapeForRegExp(desc)) });
+	const tokens = tokenize(description, { html:/<[^>]+>/, desc:new RegExp(XRegExp.escape(desc)) });
 	const firstDesc = tokens.find(token => token.type === "desc");
 	return tokens
 		.filter(token => token !== firstDesc)

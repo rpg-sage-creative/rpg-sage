@@ -1,6 +1,5 @@
-import * as _XRegExp from "xregexp";
+import { XRegExp } from "../../../sage-utils/RegExpUtils";
 import { tokenize } from "../../../sage-utils/StringUtils";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 //#region types
 

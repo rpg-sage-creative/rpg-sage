@@ -1,8 +1,8 @@
 import { ChannelType, Snowflake } from "discord.js";
 import { GameType } from "../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import type { Args, Optional } from "../../../../sage-utils";
-import { Collection, exists } from "../../../../sage-utils/ArrayUtils";
+import { isDefined, type Args, type Optional } from "../../../../sage-utils";
+import { Collection } from "../../../../sage-utils/ArrayUtils";
 import type { DChannel, DGuildChannel } from "../../../../sage-utils/DiscordUtils";
 import { DiscordKey } from "../../../../sage-utils/DiscordUtils";
 import type { RenderableContent } from "../../../../sage-utils/RenderUtils";
@@ -196,7 +196,7 @@ async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: I
 		return forGuild?.fetchChannel(channel.did);
 	});
 	/** @todo Figure out why Filters.exists isn't working here! */
-	const existing = guildChannels.filter(exists) as Collection<DGuildChannel>;
+	const existing = guildChannels.filter(isDefined) as Collection<DGuildChannel>;
 
 	const filter = sageMessage.args.unkeyedValues().join(" ").trim();
 	if (filter && existing.length) {

@@ -1,5 +1,5 @@
 import type { Optional } from "../../../sage-utils";
-import { asStringIgnoreCase, unique } from "../../../sage-utils/ArrayUtils";
+import { asStringIgnoreCase, isUnique } from "../../../sage-utils/ArrayUtils";
 import { HasIdCore, IdCore } from "../../../sage-utils/ClassUtils";
 import { UUID, generate } from "../../../sage-utils/UuidUtils";
 import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
@@ -158,7 +158,7 @@ export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerChara
 	public abilities: Abilities;
 	public get actions(): Action[] {
 		return (this.features.getMetadata().map(meta => meta.metadata.actions).flat(Infinity) as string[])
-			.filter(unique)
+			.filter(isUnique)
 			.map(action => findByValue("Action", action)!);
 	}
 	public get activeSpells(): Spell[] {
@@ -254,7 +254,7 @@ export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerChara
 	public get languages(): Language[] {
 		const languages = (this.features.getMetadata().map(feature => feature.metadata.languages)
 			.flat(Infinity) as string[])
-			.filter(unique);
+			.filter(isUnique);
 		return languages.map(language => findByValue("Language", language))
 			.sort(asStringIgnoreCase) as Language[];
 	}

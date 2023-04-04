@@ -1,4 +1,6 @@
-import { exists, sortAscending } from "../../sage-utils/ArrayUtils";
+import { isDefined } from "../../sage-utils";
+import { sortAscending } from "../../sage-utils/ArrayUtils";
+import { isString } from "../../sage-utils/StringUtils";
 import type { TProficiency } from "../common";
 import { ARMOR_UNARMORED, profToMod, TRAINED, UNTRAINED } from "../common";
 import { findById, findByValue } from "../data";
@@ -46,7 +48,7 @@ export class Features {
 	public find(objectType: string): Feature;
 	public find(filter: TFeatureFilter): Feature;
 	public find(stringOrFilter: string | TFeatureFilter): Feature | undefined {
-		const string = typeof (stringOrFilter) === "string" ? stringOrFilter : null,
+		const string = isString(stringOrFilter) ? stringOrFilter : null,
 			filter = typeof (stringOrFilter) === "function" ? stringOrFilter : null;
 		for (const level of this.levels) {
 			for (const featureCore of level.features) {
@@ -112,9 +114,9 @@ export class Features {
 	public map<T>(objectType: string, featureName: string, mapper: TFeatureMapper<T>): T[];
 	public map<T>(objectType: string, featureName: string, filter: TFeatureFilter, mapper: TFeatureMapper<T>): T[];
 	public map<T>(...args: (string | TFeatureFilter | TFeatureMapper<T>)[]): T[] {
-		args = args.filter(exists);
+		args = args.filter(isDefined);
 		const mapper = <TFeatureMapper<T>>args.pop(),
-			strings = <string[]>args.filter(arg => typeof (arg) === "string"),
+			strings = <string[]>args.filter(isString),
 			objectType = strings[0],
 			featureName = strings[1],
 			filter = <TFeatureFilter>args.find(arg => typeof (arg) === "function"),

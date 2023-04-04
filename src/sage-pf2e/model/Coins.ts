@@ -1,6 +1,7 @@
 import { IComparable, sortAscending } from "../../sage-utils/ArrayUtils";
 import { Core, HasCore } from "../../sage-utils/ClassUtils";
 import { addCommas, round } from "../../sage-utils/NumberUtils";
+import { isString } from "../../sage-utils/StringUtils";
 import { Bulk } from "./Bulk";
 
 type TMoney = number | string | Coins;
@@ -17,7 +18,7 @@ function ensureCoins(value: TMoney): Coins {
 	if (Coins.instanceOf(value)) {
 		return value;
 	}
-	return Coins.parse(typeof (value) === "string" ? value : value + "sp");
+	return Coins.parse(isString(value) ? value : value + "sp");
 }
 function format(pp: number, gp: number, sp: number, cp: number, neg: boolean): string {
 	const parts: string[] = [];
@@ -187,7 +188,7 @@ export class Coins extends HasCore<CoinsCore> implements IComparable<Coins> {
 	public add(coins: Coins): void;
 	public add(coins: string): void;
 	public add(coinsOrString: Coins | string): void {
-		const coins = typeof (coinsOrString) === "string" ? Coins.parse(coinsOrString) : coinsOrString,
+		const coins = isString(coinsOrString) ? Coins.parse(coinsOrString) : coinsOrString,
 			thisValue = this.spValue,
 			coinsValue = coins.spValue,
 			finalValue = thisValue + coinsValue;
@@ -261,7 +262,7 @@ export class Coins extends HasCore<CoinsCore> implements IComparable<Coins> {
 	public subtract(coinsOrString: Coins | string): void {
 		//TODO: Some extra debugging to ensure that this logic is right (it seems to be good so far!)
 		// console.log(`(${JSON.stringify(this)}).subtract(${JSON.stringify(coinsOrString)})`)
-		const coins = typeof (coinsOrString) === "string" ? Coins.parse(coinsOrString) : coinsOrString,
+		const coins = isString(coinsOrString) ? Coins.parse(coinsOrString) : coinsOrString,
 			thisValue = this.spValue,
 			coinsValue = coins.spValue,
 			finalValue = thisValue - coinsValue;

@@ -8,6 +8,7 @@ import { send } from "../../discord/messages";
 import { SageCache } from "./SageCache";
 import { SageCommandBase, SageCommandCore, TSendArgs } from "./SageCommand";
 import { SageInteractionArgs } from "./SageInteractionArgs";
+import { isString } from "../../../sage-utils/StringUtils";
 
 interface SageInteractionCore extends SageCommandCore {
 	interaction: DInteraction;
@@ -32,7 +33,7 @@ export class SageInteraction<T extends DInteraction = any>
 	public customIdMatches(valueOrRegex: string | RegExp): boolean {
 		if (this.interaction.isButton() || this.interaction.isSelectMenu()) {
 			const customId = this.interaction.customId;
-			return typeof(valueOrRegex) === "string"
+			return isString(valueOrRegex)
 				? customId === valueOrRegex
 				: valueOrRegex.test(customId);
 		}
@@ -166,7 +167,7 @@ export class SageInteraction<T extends DInteraction = any>
 	public async whisper(args: TSendArgs): Promise<void>;
 	public async whisper(content: string): Promise<void>;
 	public async whisper(contentOrArgs: string | TSendArgs): Promise<void> {
-		const args = typeof(contentOrArgs) === "string" ? { content:contentOrArgs } : { ...contentOrArgs };
+		const args = isString(contentOrArgs) ? { content:contentOrArgs } : { ...contentOrArgs };
 		args.ephemeral = !!this.sageCache.guild?.s;
 		return this.reply(args);
 	}

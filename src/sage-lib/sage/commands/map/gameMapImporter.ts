@@ -1,8 +1,8 @@
 import { Client, Snowflake, SnowflakeUtil } from "discord.js";
-import { exists } from "../../../../sage-utils/ArrayUtils";
 import { DiscordId } from "../../../../sage-utils/DiscordUtils";
 import { dequote, StringMatcher } from "../../../../sage-utils/StringUtils";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
+import { isDefined } from "../../../../sage-utils";
 
 export type TParsedGameMapCore = Omit<TGameMapCore, "messageId">;
 
@@ -202,7 +202,7 @@ export function gameMapImporter(raw: string, client: Client): TParsedGameMapCore
 			_terrain.userId = parseUser(client, _terrain.userId);
 		}
 		return _terrain;
-	}).filter(exists);
+	}).filter(isDefined);
 	parsedCore.terrain.push(...terrain);
 	//#endregion
 
@@ -214,7 +214,7 @@ export function gameMapImporter(raw: string, client: Client): TParsedGameMapCore
 			_token.userId = parseUser(client, _token.userId);
 		}
 		return _token;
-	}).filter(exists);
+	}).filter(isDefined);
 	parsedCore.tokens.push(...tokens);
 	//#endregion
 
@@ -227,7 +227,7 @@ export function gameMapImporter(raw: string, client: Client): TParsedGameMapCore
 			matchAnchor(parsedCore, _aura);
 		}
 		return _aura;
-	}).filter(exists);
+	}).filter(isDefined);
 	parsedCore.auras.push(...auras.filter(aura => !aura.anchorId));
 	//#endregion
 

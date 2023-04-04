@@ -1,29 +1,26 @@
 import type { GuildMember, Message, Snowflake } from "discord.js";
 import type { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import type { Args, Optional, OrNull } from "../../../sage-utils";
-import { exists, unique } from "../../../sage-utils/ArrayUtils";
-import { IComparable, stringIgnoreCase } from "../../../sage-utils/ArrayUtils";
+import { isDefined, type Args, type Optional, type OrNull } from "../../../sage-utils";
+import { IComparable, isUnique, stringIgnoreCase } from "../../../sage-utils/ArrayUtils";
+import type { IdCore } from "../../../sage-utils/ClassUtils";
 import type { DGuildChannel } from "../../../sage-utils/DiscordUtils";
 import { DiscordKey } from "../../../sage-utils/DiscordUtils";
 import { readJsonFile } from "../../../sage-utils/FsUtils";
 import { cleanJson } from "../../../sage-utils/JsonUtils";
+import type { UUID } from "../../../sage-utils/UuidUtils";
 import { DicePostType } from "../commands/dice";
-import { DialogType, GameChannelType, IChannel, IChannelOptions, parseGameChannelType, updateChannel } from "../repo";
-import { HasIdCoreAndSageCache } from "../repo";
+import { DialogType, GameChannelType, HasIdCoreAndSageCache, IChannel, IChannelOptions, parseGameChannelType, updateChannel } from "../repo";
 import { CharacterManager } from "./CharacterManager";
 import type { ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
 import { Colors } from "./Colors";
 import type { CoreWithEmoji, EmojiType, HasCoreWithEmoji } from "./Emoji";
 import { Emoji } from "./Emoji";
-import type { GameCharacter } from "./GameCharacter";
-import type { GameCharacterCore, TGameCharacterTag } from "./GameCharacter";
+import type { GameCharacter, GameCharacterCore, TGameCharacterTag } from "./GameCharacter";
 import type { SageCache } from "./SageCache";
-import { applyValues, getEnum, hasValues, ISageCommandArgs } from "./SageCommandArgs";
+import { ISageCommandArgs, applyValues, getEnum, hasValues } from "./SageCommandArgs";
 import type { Server } from "./Server";
 import { User } from "./User";
-import type { IdCore } from "../../../sage-utils/ClassUtils";
-import type { UUID } from "../../../sage-utils/UuidUtils";
 
 type IChannelArgs = Args<IChannelOptions> & { did:Snowflake; };
 
@@ -220,7 +217,7 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements IComparabl
 				const gameRole = this.roles.find(role => role.type === roleType);
 				const role = await this.discord.fetchGuildRole(gameRole?.did);
 				const byRole = Array.from(role?.members.values() ?? []);
-				const userDids = byUser.map(user => user.did).concat(byRole.map(user => user.id)).filter(unique);
+				const userDids = byUser.map(user => user.did).concat(byRole.map(user => user.id)).filter(isUnique);
 				const users = [] as TFetchedGameUser[];
 				for (const did of userDids) {
 					const dicePing = byUser.find(user => user.did === did)?.dicePing !== false;
@@ -324,7 +321,7 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements IComparabl
 
 	public async addGameMasters(userDids: Snowflake[]): Promise<boolean> {
 		const adds = userDids.filter(userDid => !this.users.find(user => user.did === userDid));
-		const players = userDids.map(userDid => this.users.find(user => user.did === userDid && user.type === GameUserType.Player)).filter(exists);
+		const players = userDids.map(userDid => this.users.find(user => user.did === userDid && user.type === GameUserType.Player)).filter(isDefined);
 		if (!adds.length && !players.length) {
 			return false;
 		}
@@ -339,7 +336,7 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements IComparabl
 
 	public async addPlayers(userDids: Snowflake[]): Promise<boolean> {
 		const adds = userDids.filter(userDid => !this.users.find(user => user.did === userDid));
-		const gameMasters = userDids.map(userDid => this.users.find(user => user.did === userDid && user.type === GameUserType.GameMaster)).filter(exists);
+		const gameMasters = userDids.map(userDid => this.users.find(user => user.did === userDid && user.type === GameUserType.GameMaster)).filter(isDefined);
 		if (!adds.length && !gameMasters.length) {
 			return false;
 		}

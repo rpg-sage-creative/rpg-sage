@@ -1,6 +1,5 @@
 import type { GuildBasedChannel, Role, Snowflake } from "discord.js";
-import type { Optional } from "../../../sage-utils";
-import { exists } from "../../../sage-utils/ArrayUtils";
+import { isDefined, type Optional } from "../../../sage-utils";
 import type { ISageCommandArgs } from "./SageCommandArgs";
 import type { EnumLike } from "../../../sage-utils/EnumUtils";
 import type { VALID_UUID } from "../../../sage-utils/UuidUtils";
@@ -33,7 +32,7 @@ export class SageReactionArgs implements ISageCommandArgs {
 
 	/** Returns true if getBoolean(name) is not null and not undefined. */
 	public hasBoolean(name: string): boolean {
-		return exists(this.getBoolean(name));
+		return isDefined(this.getBoolean(name));
 	}
 
 	/**
@@ -50,7 +49,7 @@ export class SageReactionArgs implements ISageCommandArgs {
 
 	/** Returns true if getChannel(name) is not null and not undefined. */
 	public hasChannel(name: string): boolean {
-		return exists(this.getChannel(name));
+		return isDefined(this.getChannel(name));
 	}
 
 	/**
@@ -67,7 +66,7 @@ export class SageReactionArgs implements ISageCommandArgs {
 
 	/** Returns true if getChannelDid(name) is not null and not undefined. */
 	public hasChannelDid(name: string): boolean {
-		return exists(this.getChannelDid(name));
+		return isDefined(this.getChannelDid(name));
 	}
 
 	/**
@@ -84,7 +83,7 @@ export class SageReactionArgs implements ISageCommandArgs {
 
 	/** Returns true if getEnum(type, name) is not null and not undefined. */
 	public hasEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): boolean {
-		return exists(this.getEnum(type, name));
+		return isDefined(this.getEnum(type, name));
 	}
 
 	/**
@@ -101,7 +100,7 @@ export class SageReactionArgs implements ISageCommandArgs {
 
 	/** Returns true if getNumber(name) is not null and not undefined. */
 	public hasNumber(name: string): boolean {
-		return exists(this.getNumber(name));
+		return isDefined(this.getNumber(name));
 	}
 
 	/**
@@ -118,7 +117,7 @@ export class SageReactionArgs implements ISageCommandArgs {
 
 	/** Returns true if getRole(name) is not null and not undefined. */
 	public hasRole(name: string): boolean {
-		return exists(this.getRole(name));
+		return isDefined(this.getRole(name));
 	}
 
 	/**
@@ -135,7 +134,7 @@ export class SageReactionArgs implements ISageCommandArgs {
 
 	/** Returns true if getRoleDid(name) is not null and not undefined. */
 	public hasRoleDid(name: string): boolean {
-		return exists(this.getRoleDid(name));
+		return isDefined(this.getRoleDid(name));
 	}
 
 	/**
@@ -180,7 +179,7 @@ export class SageReactionArgs implements ISageCommandArgs {
 
 	/** Returns true if getUuid(name) is not null and not undefined. */
 	public hasUuid(name: string): boolean {
-		return exists(this.getUuid(name));
+		return isDefined(this.getUuid(name));
 	}
 
 }

@@ -1,5 +1,5 @@
 import type { Optional } from "..";
-import { unique } from "../ArrayUtils";
+import { isUnique } from "../ArrayUtils";
 
 //#region types
 
@@ -87,7 +87,7 @@ export class RenderableContent implements IRenderable {
 			// TODO: see why i was gonna use this --> if (section.title) matches.push(...(section.title.match(regex) || []));
 			section.content.forEach(s => matches.push(...(s.match(regex) || [])));
 		});
-		return matches.filter(unique);
+		return matches.filter(isUnique);
 	}
 
 	public setColor(color: Optional<string>): void {

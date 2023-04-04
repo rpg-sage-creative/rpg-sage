@@ -1,5 +1,5 @@
 import type { Optional, OrNull } from "../../sage-utils";
-import { existsAndUnique } from "../../sage-utils/ArrayUtils";
+import { isDefinedAndUnique } from "../../sage-utils/ArrayUtils";
 import { random } from "../../sage-utils/RandomUtils";
 import { Dice } from "../base/dice";
 import type { TDice } from "../base/types";
@@ -285,7 +285,7 @@ export class TableResultsItem<TI extends TableItem> {
 				labels = labels.concat(items[itemIndex].getUniqueLabels());
 			}
 		}
-		return labels.filter(existsAndUnique);
+		return labels.filter(isDefinedAndUnique);
 	}
 	public toHtmlString(tabLevel: number): string {
 		let html = "<div class='Result'><table><tr>";

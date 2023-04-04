@@ -1,8 +1,37 @@
 import { isDefined } from "..";
-import { unique } from "./filters";
+import { isUnique } from "./filters";
 import { sortDescending } from "./sort";
 
 type ValueOf<T, U extends keyof T = keyof T> = T[U];
+
+// Update the Array signatures to indicate that we are now returning a Collection
+export interface Collection<T> {
+
+	concat(...items: ConcatArray<T>[]): Collection<T>;
+	concat(...items: (T | ConcatArray<T>)[]): Collection<T>;
+
+	filter(predicate: (value: T, index: number, collection: Collection<T>) => unknown, thisArg?: any): Collection<T>;
+	filter<S extends T>(predicate: (value: T, index: number, collection: Collection<T>) => value is S, thisArg?: any): Collection<S>;
+
+	forEach(callbackfn: (value: T, index: number, collection: Collection<T>) => void, thisArg?: any): void;
+
+	map<U>(callbackfn: (value: T, index: number, collection: Collection<T>) => U, thisArg?: any): Collection<U>;
+
+	reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: Collection<T>) => T): T;
+	reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: Collection<T>) => T, initialValue: T): T;
+	reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, collection: Collection<T>) => U, initialValue: U): U;
+
+	reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: Collection<T>) => T): T;
+	reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: Collection<T>) => T, initialValue: T): T;
+	reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, collection: Collection<T>) => U, initialValue: U): U;
+
+	reverse(): this;
+
+	slice(start?: number, end?: number): Collection<T>;
+
+	splice(start: number, deleteCount?: number): Collection<T>;
+	splice(start: number, deleteCount: number, ...items: T[]): Collection<T>;
+}
 
 export class Collection<T> extends Array<T> {
 
@@ -12,23 +41,6 @@ export class Collection<T> extends Array<T> {
 	public get isEmpty(): boolean {
 		return this.length === 0;
 	}
-
-	/** Returns the first value found by the predicate. If one isn't found, it returns the first value found by the second predicate. Uses only one loop/iteration. */
-	// public findOrElse(predicate: (value: T, index: number, obj: Collection<T>) => unknown, orElsePredicate: (value: T, index: number, obj: Collection<T>) => unknown, thisArg?: any): T | undefined {
-	// 	let orElse: T | undefined;
-	// 	for (let index = 0, len = this.length; index < len; index++) {
-	// 		const value = this[index];
-	// 		if (predicate.call(thisArg, value, index, this)) {
-	// 			return value;
-	// 		}else if (!orElse && orElsePredicate.call(thisArg, value, index, this)) {
-	// 			orElse = value;
-	// 		}
-	// 	}
-	// 	return orElse;
-
-	// 	// return this.find(predicate as (value: T, index: number, array: T[]) => unknown, thisArg)
-	// 	// 	?? this.find(orElsePredicate as (value: T, index: number, array: T[]) => unknown, thisArg);
-	// }
 
 	/** Returns the value and its index ([value, index]), or [undefined, -1] if the value is not found. */
 	public findWithIndex(predicate: (value: T, index: number, obj: Collection<T>) => unknown, thisArg?: any): [T | undefined, number] {
@@ -94,11 +106,11 @@ export class Collection<T> extends Array<T> {
 	/** Convenience for .map(item => item.key); */
 	public pluck<U extends keyof T = keyof T, V extends ValueOf<T, U> = ValueOf<T, U>>(key: U): V[];
 	/** When onlyUnique is true: Convenience for .map(item => item.key).filter(unique); */
-	public pluck<U extends keyof T = keyof T, V extends ValueOf<T, U> = ValueOf<T, U>>(key: U, onlyUnique: boolean): V[];
+	public pluck<U extends keyof T = keyof T, V extends ValueOf<T, U> = ValueOf<T, U>>(key: U, onlyUnique: true): V[];
 	public pluck<U extends keyof T = keyof T, V extends ValueOf<T, U> = ValueOf<T, U>>(key: U, onlyUnique?: boolean): V[] {
 		const values = this.map(value => value[key] as V);
 		if (onlyUnique) {
-			return values.filter(unique);
+			return values.filter(isUnique);
 		}
 		return values;
 	}
@@ -282,33 +294,4 @@ export class Collection<T> extends Array<T> {
 	//#endregion
 }
 
-// Update the Array signatures to indicate that we are now returning a Collection
-export interface Collection<T> {
-
-	concat(...items: ConcatArray<T>[]): Collection<T>;
-	concat(...items: (T | ConcatArray<T>)[]): Collection<T>;
-
-	filter(predicate: (value: T, index: number, collection: Collection<T>) => unknown, thisArg?: any): Collection<T>;
-	filter<S extends T>(predicate: (value: T, index: number, collection: Collection<T>) => value is S, thisArg?: any): Collection<S>;
-
-	forEach(callbackfn: (value: T, index: number, collection: Collection<T>) => void, thisArg?: any): void;
-
-	map<U>(callbackfn: (value: T, index: number, collection: Collection<T>) => U, thisArg?: any): Collection<U>;
-
-	reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: Collection<T>) => T): T;
-	reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: Collection<T>) => T, initialValue: T): T;
-	reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, collection: Collection<T>) => U, initialValue: U): U;
-
-	reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: Collection<T>) => T): T;
-	reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: Collection<T>) => T, initialValue: T): T;
-	reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, collection: Collection<T>) => U, initialValue: U): U;
-
-	reverse(): this;
-
-	slice(start?: number, end?: number): Collection<T>;
-
-	splice(start: number, deleteCount?: number): Collection<T>;
-	splice(start: number, deleteCount: number, ...items: T[]): Collection<T>;
-}
-
-// export default Collection;
+export default Collection;

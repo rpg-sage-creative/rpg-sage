@@ -1,4 +1,4 @@
-import XRegExp from "xregexp";
+import { XRegExp } from "../RegExpUtils";
 
 /** Used to capture the parts of a custom emoji. */
 export function createCustomEmojiRegex(): RegExp {

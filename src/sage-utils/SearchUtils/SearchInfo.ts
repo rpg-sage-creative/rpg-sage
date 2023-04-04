@@ -1,5 +1,6 @@
-import { existsAndUnique } from "../ArrayUtils";
+import { isDefinedAndUnique } from "../ArrayUtils";
 import { oneToUS, reduceNoise } from "../LangUtils";
+import { XRegExp } from "../RegExpUtils";
 import { createQuotedRegex, dequote, tokenize } from "../StringUtils";
 import { SearchScore } from "./SearchScore";
 import type { ISearchable, TSearchTermMeta } from "./types";
@@ -13,17 +14,6 @@ export type TSearchFlag = "" | "g" | "r" | "gr" | "rg";
 //#endregion
 
 //#region helpers
-
-/** Escapes the value for use in RegExp. */
-function escapeRegexCharacters(value: string): string {
-	/** @todo why am i not using XRegExp.escape ? ? ? */
-	return value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-}
-
-/** Creates a RegExp by escaping the given value. */
-function createRegex(value: string, flags = "gi"): RegExp {
-	return new RegExp(escapeRegexCharacters(value), flags);
-}
 
 /** Generates a set of search terms with metadata from the given SearchInfo and search string. */
 function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean): TSearchTermMeta[] {
@@ -43,7 +33,7 @@ function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean): 
 		}
 		return {
 			term: cleanTerm,
-			regex: regexFlag ? new RegExp(cleanTerm, "gi") : createRegex(cleanTerm),
+			regex: new RegExp(regexFlag ? cleanTerm : XRegExp.escape(cleanTerm), "gi"),
 			plus: plus,
 			minus: minus
 		};
@@ -68,7 +58,7 @@ export class SearchInfo {
 		}else {
 			this.terms = [{
 				term: term,
-				regex: regexFlag ? new RegExp(term, "gi") : createRegex(term),
+				regex: new RegExp(regexFlag ? term : XRegExp.escape(term), "gi"),
 				plus: false,
 				minus: false
 			}];
@@ -87,7 +77,7 @@ export class SearchInfo {
 	}
 
 	public score<T extends ISearchable>(searchable: T, ...args: TSearchableContent[]): SearchScore<T> {
-		const contents = <string[]>args.flat(Infinity).filter(existsAndUnique),
+		const contents = <string[]>args.flat(Infinity).filter(isDefinedAndUnique),
 			score = new SearchScore(searchable);
 		this.terms.forEach(termInfo => {
 			const mapped = contents.map(s => (termInfo.regex ? s.match(termInfo.regex) ?? [] : []).length);

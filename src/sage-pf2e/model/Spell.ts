@@ -1,4 +1,3 @@
-import { unique } from "../../sage-utils/ArrayUtils";
 import type { Core } from "../../sage-utils/ClassUtils";
 import { nth } from "../../sage-utils/NumberUtils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
@@ -14,6 +13,7 @@ import { HasSource } from './base/HasSource';
 import type { Domain } from './Domain';
 import { HeightenedSpell } from "./HeightenedSpell";
 import type { RenderableContent } from "../../sage-utils/RenderUtils";
+import { isUnique } from "../../sage-utils/ArrayUtils";
 
 //#region types
 
@@ -350,7 +350,7 @@ export class Spell<T extends string = "Spell", U extends SpellCoreBase<T> = Spel
 		const italicPhrases = italicMatches.map(match => match.slice(3, -4));
 		const spellSearches = italicPhrases.map(Spell.find);
 		const validSpells = <Spell[]>spellSearches.filter(sp => sp && sp !== this);
-		const uniqueSpells = [this, ...validSpells].filter(unique);
+		const uniqueSpells = [this, ...validSpells].filter(isUnique);
 		const otherSpells = uniqueSpells.slice(1);
 		content.addAonLink(...otherSpells.map(spell => spell.toAonLink()));
 

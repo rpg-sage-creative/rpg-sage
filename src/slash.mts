@@ -9,6 +9,7 @@ import type { BotCore } from "./sage-lib/sage/model/Bot";
 import type { Optional } from "./sage-utils";
 import { listFilesSync, readJsonFileSync, writeFileSync } from "./sage-utils/FsUtils";
 import type { TNameDescription, TSlashCommand, TSlashCommandChoice, TSlashCommandOption } from "./types";
+import { isString } from "./sage-utils/StringUtils";
 
 type TBot = "dev" | "beta" | "stable";
 
@@ -33,7 +34,7 @@ export type TGameType = "PF1E" | "PF2E" | "SF" | "Finder";
 export function registerSlashCommand(...slashCommands: TSlashCommand[]): void;
 export function registerSlashCommand(gameType: TGameType, ...slashCommands: TSlashCommand[]): void;
 export function registerSlashCommand(...args: (TGameType | TSlashCommand)[]): void {
-	const defaultGameType = args.find(arg => typeof(arg) === "string") as TGameType;
+	const defaultGameType = args.find(arg => isString(arg)) as TGameType;
 	const slashCommands = args.filter(arg => typeof(arg) !== "string") as TSlashCommand[];
 	slashCommands.forEach(slashCommand => {
 		const gameType = defaultGameType ?? slashCommand.game;
@@ -62,7 +63,7 @@ function toChoice(choice: TSlashCommandChoice): [string, string] {
 	if (Array.isArray(choice)) {
 		return [choice[0], choice[1]];
 	}
-	if (typeof(choice) === "string") {
+	if (isString(choice)) {
 		return [choice, choice];
 	}
 	return [choice.name, choice.value ?? choice.name];
