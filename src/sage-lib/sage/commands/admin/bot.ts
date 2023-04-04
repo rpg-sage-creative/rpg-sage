@@ -1,8 +1,8 @@
 import { GameType } from "../../../../sage-common";
-import { errorReturnEmptyArray } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
-import ActiveBot from "../../model/ActiveBot";
-import type Bot from "../../model/Bot";
-import type SageMessage from "../../model/SageMessage";
+import { errorReturnEmptyArray } from "../../../../sage-utils/ConsoleUtils";
+import { ActiveBot } from "../../model/ActiveBot";
+import type { Bot } from "../../model/Bot";
+import type { SageMessage } from "../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 
 async function botList(sageMessage: SageMessage): Promise<void> {
@@ -67,7 +67,7 @@ async function sendBot(sageMessage: SageMessage, bot: Bot): Promise<void> {
 
 async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.isSuperUser) {
-		const gameType = sageMessage.args.getEnum<GameType>(GameType, "game");
+		const gameType = sageMessage.args.getEnum(GameType, "game");
 		if (!gameType) {
 			return sageMessage.reactFailure("Unable to parse GameType.");
 		}
@@ -90,7 +90,7 @@ async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 	}
 }
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(botList, "bot-list");
 	registerAdminCommand(botDetails, "bot-details");
 	registerAdminCommand(botCodeVersion, "code-version");

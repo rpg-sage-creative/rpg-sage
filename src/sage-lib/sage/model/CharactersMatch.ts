@@ -1,5 +1,5 @@
-import type CharacterManager from "./CharacterManager";
-import GameCharacter from "./GameCharacter";
+import type { CharacterManager } from "./CharacterManager";
+import { GameCharacter } from "./GameCharacter";
 
 export type TCharacterMatch = {
 	index: number;
@@ -7,7 +7,7 @@ export type TCharacterMatch = {
 	character: GameCharacter;
 };
 
-export default class CharactersMatch {
+export class CharactersMatch {
 	public constructor(public characterManager: CharacterManager, public matches: TCharacterMatch[]) { }
 	public get firstCharacter(): GameCharacter { return this.matches[0]?.character; }
 	public get firstMatch(): TCharacterMatch { return this.matches[0]; }

@@ -1,9 +1,9 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent } from '../../sage-utils/RenderUtils';
 import type { TAlignment } from '../common';
 import { ALIGNMENTS } from '../common';
-import RenderableContent from '../data/RenderableContent';
+import { Pf2eRenderableContent } from '../Pf2eRenderableContent';
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
+import { HasSource } from './base/HasSource';
 
 
 export interface FaithCoreBase<T extends string = string> extends SourcedCore<T> {
@@ -15,7 +15,7 @@ export interface FaithCoreBase<T extends string = string> extends SourcedCore<T>
 export type FaithCore = FaithCoreBase<"Faith">;
 /*// export interface FaithCore extends FaithCoreBase<"Faith"> { }*/
 
-export default class Faith<T extends string = "Faith", U extends FaithCoreBase<T> = FaithCoreBase<T>> extends HasSource<U, T> {
+export class Faith<T extends string = "Faith", U extends FaithCoreBase<T> = FaithCoreBase<T>> extends HasSource<U, T> {
 
 	/**************************************************************************************************************************/
 	// Properties
@@ -36,8 +36,8 @@ export default class Faith<T extends string = "Faith", U extends FaithCoreBase<T
 		return followerAlignments;
 	}
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const content = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const content = new Pf2eRenderableContent(this);
 		content.setTitle(`<b>${this.name}</b>`);
 		this.appendDetailsTo(content);
 		content.append(`<blockquote><b>Edicts</b> ${this.edicts.join(", ")}</blockquote>`);

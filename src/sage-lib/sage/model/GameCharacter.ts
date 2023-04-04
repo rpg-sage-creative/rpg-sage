@@ -1,15 +1,16 @@
 import type { Snowflake } from "discord.js";
 import * as _XRegExp from "xregexp";
-import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e";
-import type { Args, Optional, UUID } from "../../../sage-utils";
-import { isNonNilSnowflake } from "../../../sage-utils/utils/DiscordUtils";
-import type DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
-import type { TDialogMessage } from "../repo/DialogMessageRepository";
-import DialogMessageRepository from "../repo/DialogMessageRepository";
-import CharacterManager from "./CharacterManager";
+import type { Args, Optional } from "../../../sage-utils";
+import { isNonNilSnowflake } from "../../../sage-utils/SnowflakeUtils";
+import type { DiscordKey } from "../../../sage-utils/DiscordUtils";
+import type { TDialogMessage } from "../repo";
+import { DialogMessageRepository } from "../repo";
+import { CharacterManager } from "./CharacterManager";
 import { CoreWithImages, HasCoreWithImages, Images } from "./Images";
 import type { IHasSave } from "./NamedCollection";
-import NoteManager, { type TNote } from "./NoteManager";
+import { NoteManager,  type TNote } from "./NoteManager";
+import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
+import type { UUID } from "../../../sage-utils/UuidUtils";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 export type TGameCharacterTag = "gm"
@@ -78,7 +79,7 @@ function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage
 	return messageKey.channel === discordKey.channel;
 }
 
-export default class GameCharacter implements IHasSave, HasCoreWithImages<TCharacterImageTag> {
+export class GameCharacter implements IHasSave, HasCoreWithImages<TCharacterImageTag> {
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
 		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, "companion");
 

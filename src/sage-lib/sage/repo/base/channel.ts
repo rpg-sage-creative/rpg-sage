@@ -1,7 +1,7 @@
 import type { GuildChannel, Snowflake } from "discord.js";
 import type { Args, Optional } from "../../../../sage-utils";
-import { cleanJson } from "../../../../sage-utils/utils/JsonUtils";
-import type SageCache from "../../model/SageCache";
+import { cleanJson } from "../../../../sage-utils/JsonUtils";
+import type { SageCache } from "../../model/SageCache";
 import { applyValues } from "../../model/SageCommandArgs";
 import type { TServerDefaultGameOptions } from "../../model/Server";
 

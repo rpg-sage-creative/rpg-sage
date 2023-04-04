@@ -1,13 +1,14 @@
-import type { OrNull, OrUndefined, UUID } from "../../../sage-utils";
-import type { RenderableContent as _RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import { UuidMatcher } from "../../../sage-utils/utils/UuidUtils";
+import type { OrNull, OrUndefined } from "../../../sage-utils";
+import type { RenderableContent } from "../../../sage-utils/RenderUtils";
+import type { UUID } from "../../../sage-utils/UuidUtils";
+import { UuidMatcher } from "../../../sage-utils/UuidUtils";
+import { Pf2eRenderableContent } from "../../Pf2eRenderableContent";
 import type { TRarity } from "../../common";
 import { COMMON, RARITIES } from "../../common";
-import RenderableContent from "../../data/RenderableContent";
-import { find, findByValue } from "../../data/Repository";
-import Base, { BaseCore } from "./Base";
+import { findByType, findByValue } from "../../data";
+import { Base, BaseCore } from "./Base";
+import type { Source } from "./Source";
 import type { IHasRarity, IHasTraits, RarityCore, TraitsCore } from "./interfaces";
-import type Source from "./Source";
 
 export type TSourceInfoRaw = {
 	page?: number;
@@ -49,7 +50,7 @@ function parseSourceInfo(sourceInfo: TSourceInfoRaw): TSourceInfo {
 
 
 
-export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<any>, U extends string = string>
+export abstract class HasSource<T extends SourcedCore<U> = SourcedCore<any>, U extends string = string>
 	extends
 		Base<T, U>
 	implements
@@ -103,7 +104,7 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 	/** Only return a UUID or undefined */
 	public get nextId(): OrUndefined<UUID> {
 		if (this._nextId === undefined) {
-			this._nextId = find<HasSource>(this.objectType, other =>
+			this._nextId = findByType<HasSource>(this.objectType, other =>
 				other.isErrata && this.idMatcher.matches(other.previousIdMatcher)
 			)?.id ?? null;
 		}
@@ -138,10 +139,10 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 
 	//#endregion
 
-	// #region utils.RenderUtils.IRenderable
+	// #region IRenderable
 
-	public toRenderableContent(): _RenderableContent {
-		const renderable = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const renderable = new Pf2eRenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.hasTraits || this.isNotCommon) {
 			const traits: string[] = [];
@@ -158,5 +159,5 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 		return renderable;
 	}
 
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion IRenderable
 }

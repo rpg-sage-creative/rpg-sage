@@ -1,37 +1,35 @@
-import type { IdCore, Optional, UUID } from "../../../sage-utils";
-import { unique } from "../../../sage-utils/utils/ArrayUtils/Filters";
-import { asStringIgnoreCase } from "../../../sage-utils/utils/ArrayUtils/Sort";
-import { HasIdCore } from "../../../sage-utils/utils/ClassUtils";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
+import type { Optional } from "../../../sage-utils";
+import { asStringIgnoreCase, unique } from "../../../sage-utils/ArrayUtils";
+import { HasIdCore, IdCore } from "../../../sage-utils/ClassUtils";
+import { UUID, generate } from "../../../sage-utils/UuidUtils";
 import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
-import { PERCEPTION, profToMod, WISDOM } from "../../common";
-import { findById, findByValue } from "../../data/Repository";
-import type Action from "../Action";
-import Ancestry from "../Ancestry";
-import Background from "../Background";
-import Class from "../Class";
-import type Deity from "../Deity";
-import type Feature from "../Feature";
-import type { FeatureCore } from "../Feature";
+import { PERCEPTION, WISDOM, profToMod } from "../../common";
+import { findById, findByValue } from "../../data";
+import type { Action } from "../Action";
+import { Ancestry } from "../Ancestry";
+import { Background } from "../Background";
+import { Class } from "../Class";
+import type { Deity } from "../Deity";
+import type { Feature, FeatureCore } from "../Feature";
 import type { FeatureLevelCore } from "../Features";
-import Features from "../Features";
-import Heritage from "../Heritage";
-import Language from "../Language";
+import { Features } from "../Features";
+import { Heritage } from "../Heritage";
+import { Language } from "../Language";
 import type { IHasMetadata } from "../Metadata";
-import type Spell from "../Spell";
+import type { Spell } from "../Spell";
 import type { IWealth } from "../Wealth";
-import Wealth from "../Wealth";
+import { Wealth } from "../Wealth";
 import type { IHasAbilities } from "./Abilities";
-import Abilities from "./Abilities";
-import ArmorClasses from "./ArmorClasses";
-import Check from "./Check";
-import Encumbrance from "./Encumbrance";
+import { Abilities } from "./Abilities";
+import { ArmorClasses } from "./ArmorClasses";
+import { Check } from "./Check";
+import { Encumbrance } from "./Encumbrance";
 import type { IEquipment } from "./Equipment";
-import Equipment from "./Equipment";
+import { Equipment } from "./Equipment";
 import type { IHasSavingThrows } from "./SavingThrows";
-import SavingThrows from "./SavingThrows";
-import Skills from "./Skills";
-import Speeds from "./Speeds";
+import { SavingThrows } from "./SavingThrows";
+import { Skills } from "./Skills";
+import { Speeds } from "./Speeds";
 
 //#region Interfaces & Types
 
@@ -103,7 +101,7 @@ export interface IHasProficiencies {
 	getProficiencyMod(subject: string): number;
 }
 
-export default class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerCharacter"> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerCharacter"> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
 	private _background?: Background;
 	private _class?: Class;
 	private _deity?: Deity;

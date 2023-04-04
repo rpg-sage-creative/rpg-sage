@@ -1,21 +1,20 @@
 import type { InteractionReplyOptions, Message, User, WebhookMessageEditOptions } from "discord.js";
-import { RenderableContent } from "../../../sage-pf2e";
 import { isDefined } from "../../../sage-utils";
-import { DInteraction, DMessageChannel, handleDiscordErrorReturnNull, InteractionType } from "../../../sage-utils/utils/DiscordUtils";
-import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
-import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
+import { DInteraction, DMessageChannel, handleDiscordErrorReturnNull, InteractionType } from "../../../sage-utils/DiscordUtils";
+import { resolveToEmbeds } from "../../../sage-utils/DiscordUtils";
+import { RenderableContent, TRenderableContentResolvable } from "../../../sage-utils/RenderUtils";
 import type { TGameType } from "../../../slash.mjs";
 import { send } from "../../discord/messages";
-import SageCache from "./SageCache";
+import { SageCache } from "./SageCache";
 import { SageCommandBase, SageCommandCore, TSendArgs } from "./SageCommand";
-import SageInteractionArgs from "./SageInteractionArgs";
+import { SageInteractionArgs } from "./SageInteractionArgs";
 
 interface SageInteractionCore extends SageCommandCore {
 	interaction: DInteraction;
 	type: InteractionType;
 }
 
-export default class SageInteraction<T extends DInteraction = any>
+export class SageInteraction<T extends DInteraction = any>
 	extends SageCommandBase<SageInteractionCore, SageInteractionArgs, SageInteraction<any>> {
 
 	public constructor(protected core: SageInteractionCore) {

@@ -1,8 +1,7 @@
-import type { Core, IComparable, TSortResult } from "../../sage-utils";
-import { sortAscending } from "../../sage-utils/utils/ArrayUtils/Sort";
-import { HasCore } from "../../sage-utils/utils/ClassUtils";
-import { addCommas, round } from "../../sage-utils/utils/NumberUtils";
-import Bulk from "./Bulk";
+import { IComparable, sortAscending } from "../../sage-utils/ArrayUtils";
+import { Core, HasCore } from "../../sage-utils/ClassUtils";
+import { addCommas, round } from "../../sage-utils/NumberUtils";
+import { Bulk } from "./Bulk";
 
 type TMoney = number | string | Coins;
 
@@ -60,7 +59,7 @@ export interface CoinsCore extends Core<"Coins"> {
 	pp: number;
 }
 
-export default class Coins extends HasCore<CoinsCore> implements IComparable<Coins> {
+export class Coins extends HasCore<CoinsCore> implements IComparable<Coins> {
 	/**************************************************************************************************************************/
 	// Constructors
 
@@ -326,7 +325,7 @@ export default class Coins extends HasCore<CoinsCore> implements IComparable<Coi
 	}
 
 	// #region utils.ArrayUtils.Sort.IComparable<T>
-	public compareTo(other: Coins): TSortResult {
+	public compareTo(other: Coins): -1 | 0 | 1 {
 		return sortAscending(this.spValue, other.spValue);
 	}
 	// #endregion utils.ArrayUtils.Sort.IComparable<T>
@@ -334,7 +333,7 @@ export default class Coins extends HasCore<CoinsCore> implements IComparable<Coi
 	/**************************************************************************************************************************/
 	// Static Methods
 
-	public static compare(a: TMoney, b: TMoney): TSortResult {
+	public static compare(a: TMoney, b: TMoney): -1 | 0 | 1 {
 		return ensureCoins(a).compareTo(ensureCoins(b));
 	}
 	public static parse(coinString: string): Coins {

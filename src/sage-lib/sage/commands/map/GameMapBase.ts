@@ -1,7 +1,7 @@
 import type { Snowflake } from "discord.js";
-import { errorReturnFalse, errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../../sage-utils/utils/FsUtils";
-import RenderableGameMap from "./RenderableGameMap";
+import { errorReturnFalse, errorReturnNull } from "../../../../sage-utils/ConsoleUtils";
+import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../../sage-utils/FsUtils";
+import { RenderableGameMap } from "./RenderableGameMap";
 
 //#region types
 
@@ -99,7 +99,7 @@ function getMapFilePath(messageId: Snowflake): string {
 	return `./data/sage/maps/${messageId}.json`;
 }
 
-export default abstract class GameMapBase {
+export abstract class GameMapBase {
 	/** constructs a map for the given core */
 	public constructor(protected core: TGameMapCore) { }
 

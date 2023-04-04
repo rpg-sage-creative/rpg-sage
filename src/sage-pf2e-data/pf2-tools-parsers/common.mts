@@ -1,7 +1,9 @@
-import type { BaseCore, Pf2tBaseCore, TDetail, THasSuccessOrFailure } from "../../sage-pf2e";
-import { parseSource } from "../../sage-pf2e/data/Repository";
+import { parseSource } from "../../sage-pf2e/data";
+import type { BaseCore } from "../../sage-pf2e/model/base/Base";
+import type { Pf2tBaseCore } from "../../sage-pf2e/model/base/Pf2tBase";
+import type { TDetail, THasSuccessOrFailure } from "../../sage-pf2e/model/base/interfaces";
 import type { OrNull } from "../../sage-utils";
-import { capitalize } from "../../sage-utils/utils/StringUtils";
+import { capitalize } from "../../sage-utils/StringUtils";
 import { compareNames, getPf2tCores, getSageCores } from "../common.mjs";
 import type { TCore } from "../types.mjs";
 import { parseSpell } from "./Spell.mjs";

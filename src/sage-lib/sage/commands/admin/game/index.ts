@@ -1,10 +1,10 @@
-import registerGame from "./game";
-import registerGameMaster from "./gameMaster";
-import registerPlayer from "./player";
-import registerRole from "./role";
-// import registerWizard from "./wizard";
+import { register as registerGame } from "./game";
+import { register as registerGameMaster } from "./gameMaster";
+import { register as registerPlayer } from "./player";
+import { register as registerRole } from "./role";
+// import { registerWizard } from "./wizard";
 
-export default function register(): void {
+export function register(): void {
 	registerGame();
 	registerGameMaster();
 	registerPlayer();

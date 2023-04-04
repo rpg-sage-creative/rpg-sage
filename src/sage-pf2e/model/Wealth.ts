@@ -1,7 +1,6 @@
-import type { Core } from "../../sage-utils";
-import { HasCore } from "../../sage-utils/utils/ClassUtils";
+import { Core, HasCore } from "../../sage-utils/ClassUtils";
 import type { CoinsCore } from "./Coins";
-import Coins from "./Coins";
+import { Coins } from "./Coins";
 
 export interface IValuable {
 	bulk: string;
@@ -22,7 +21,7 @@ export interface IWealth extends Core {
 	valuables: IValuable[];
 }
 
-export default class Wealth extends HasCore<IWealth> {
+export class Wealth extends HasCore<IWealth> {
 
 	public constructor(core: IWealth = <any>{}) {
 		super(core);

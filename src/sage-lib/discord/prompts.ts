@@ -1,13 +1,12 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, Interaction, Message } from "discord.js";
-import type { UUID } from "../../sage-utils";
-import type { DMessageTarget } from "../../sage-utils/utils/DiscordUtils";
-import { resolveToEmbeds } from "../../sage-utils/utils/DiscordUtils/embeds";
-import type { TRenderableContentResolvable } from "../../sage-utils/utils/RenderUtils/RenderableContent";
-import { generate } from "../../sage-utils/utils/UuidUtils";
-import ActiveBot from "../sage/model/ActiveBot";
-import type SageCache from "../sage/model/SageCache";
-import type SageInteraction from "../sage/model/SageInteraction";
-import type SageMessage from "../sage/model/SageMessage";
+import type { DMessageTarget } from "../../sage-utils/DiscordUtils";
+import { resolveToEmbeds } from "../../sage-utils/DiscordUtils";
+import type { TRenderableContentResolvable } from "../../sage-utils/RenderUtils";
+import { UUID, generate } from "../../sage-utils/UuidUtils";
+import { ActiveBot } from "../sage/model/ActiveBot";
+import type { SageCache } from "../sage/model/SageCache";
+import type { SageInteraction } from "../sage/model/SageInteraction";
+import type { SageMessage } from "../sage/model/SageMessage";
 
 const TIMEOUT_MILLI = 60 * 1000;
 

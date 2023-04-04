@@ -1,7 +1,7 @@
-import type utils from "../../sage-utils";
-import RenderableContent from "../data/RenderableContent";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface VersatileHeritageCore extends SourcedCore<"VersatileHeritage"> {
 	// features: FeatureCore[];
@@ -15,7 +15,7 @@ function toList(items: string[]): string {
 	return `<ul>${listItems.join("")}</ul>`;
 }
 
-export default class VersatileHeritage extends HasSource<VersatileHeritageCore> {
+export class VersatileHeritage extends HasSource<VersatileHeritageCore> {
 
 	//#region properties
 
@@ -23,10 +23,10 @@ export default class VersatileHeritage extends HasSource<VersatileHeritageCore> 
 
 	//#endregion
 
-	//#region utils.RenderUtils.IRenderable
+	//#region IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const renderable = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const renderable = new Pf2eRenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (Versatile Heritage)`);
 		this.appendDescriptionTo(renderable);
 		this.appendDetailsTo(renderable);

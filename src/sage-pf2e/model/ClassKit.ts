@@ -1,16 +1,16 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
 import type { TObjectQuantity } from "../common";
-import RenderableContent from "../data/RenderableContent";
-import { findByValue } from "../data/Repository";
-import type Ammunition from "./Ammunition";
-import type Armor from "./Armor";
-import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
-import Bulk from "./Bulk";
-import Coins from "./Coins";
-import type Gear from "./Gear";
+import { findByValue } from "../data";
+import type { Ammunition } from "./Ammunition";
+import type { Armor } from "./Armor";
+import { Bulk } from "./Bulk";
+import { Coins } from "./Coins";
+import type { Gear } from "./Gear";
 import { getQuantity, toObjectQuantities } from "./HasBulk";
-import type Weapon from "./Weapon";
+import type { Weapon } from "./Weapon";
+import type { SourcedCore } from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 type TClassKitItem = Weapon | Ammunition | Armor | Gear;
 
@@ -55,7 +55,7 @@ function _toString<T extends TClassKitItem>(objectQuantities: TObjectQuantity<T>
 	}).join(", ");
 }
 
-export default class ClassKit extends HasSource<ClassKitCore> {
+export class ClassKit extends HasSource<ClassKitCore> {
 	private _armor?: Armor | null;
 	public get armor(): Armor | undefined {
 		if (this._armor === undefined) {
@@ -120,8 +120,8 @@ export default class ClassKit extends HasSource<ClassKitCore> {
 	public get weapons(): TObjectQuantity<Weapon>[] { return this._weapons ?? (this._weapons = toObjectQuantities<Weapon>(this.core.weapons!, "Weapon")); }
 	public get hasWeapons(): boolean { return this.weapons.length > 0; }
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const content = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const content = new Pf2eRenderableContent(this);
 		content.setTitle(`<b>${this.name}</b> (Class Kit)`);
 		content.append(`<b>Price</b> ${this.price}; <b>Bulk</b> ${this.bulk}; <b>Money Left Over</b> ${this.moneyLeftOver}`);
 		if (this.hasArmor) {

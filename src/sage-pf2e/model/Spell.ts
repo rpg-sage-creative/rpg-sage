@@ -1,17 +1,19 @@
-import type { Core, UUID } from "../../sage-utils";
-import { unique } from "../../sage-utils/utils/ArrayUtils/Filters";
-import { nth } from "../../sage-utils/utils/NumberUtils";
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
-import { capitalize } from "../../sage-utils/utils/StringUtils";
+import { unique } from "../../sage-utils/ArrayUtils";
+import type { Core } from "../../sage-utils/ClassUtils";
+import { nth } from "../../sage-utils/NumberUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
+import { capitalize } from "../../sage-utils/StringUtils";
+import type { UUID } from "../../sage-utils/UuidUtils";
 import type { TMagicComponent, TMagicTradition } from '../common';
 import { ABILITIES, NEWLINE, toModifier } from '../common';
-import RenderableContent from '../data/RenderableContent';
-import { find, findByValue } from '../data/Repository';
-import type ArcaneSchool from './ArcaneSchool';
+import { Pf2eRenderableContent } from '../Pf2eRenderableContent';
+import { findByType, findByValue } from '../data';
+import type { ArcaneSchool } from './ArcaneSchool';
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
-import type Domain from './Domain';
-import HeightenedSpell from "./HeightenedSpell";
+import { HasSource } from './base/HasSource';
+import type { Domain } from './Domain';
+import { HeightenedSpell } from "./HeightenedSpell";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
 
 //#region types
 
@@ -149,7 +151,7 @@ function heightenSpell(spellId: UUID, core: SpellCore): HeightenedSpell[] {
 
 //#endregion
 
-export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T> = SpellCoreBase<T>> extends HasSource<U, T> {
+export class Spell<T extends string = "Spell", U extends SpellCoreBase<T> = SpellCoreBase<T>> extends HasSource<U, T> {
 	public constructor(core: U) {
 		super(core);
 		/*
@@ -188,7 +190,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 	public get domain(): Domain | undefined {
 		if (this._domain === undefined) {
 			this._domain = (this.core.domain ? findByValue("Domain", this.core.domain) : null)
-				?? find("Domain", (domain: Domain) => domain.toJSON().spells.includes(this.name))
+				?? findByType("Domain", (domain: Domain) => domain.toJSON().spells.includes(this.name))
 				?? null;
 		}
 		return this._domain ?? undefined;
@@ -221,7 +223,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 
 	//#endregion
 
-	//#region utils.RenderUtils.IRenderable
+	//#region IRenderable
 	private toRenderableContentTitle(content: RenderableContent): void {
 		const cantrip = this.isCantrip ? " Cantrip" : "";
 		const focus = !this.isCantrip && this.isFocus ? " Focus" : "";
@@ -299,7 +301,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 		}
 	}
 	public toRenderableContent(): RenderableContent {
-		const content = new RenderableContent(this);
+		const content = new Pf2eRenderableContent(this);
 
 		this.toRenderableContentTitle(content);
 
@@ -354,9 +356,9 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 
 		return content;
 	}
-	//#endregion utils.RenderUtils.IRenderable
+	//#endregion IRenderable
 
-	//#region utils.SearchUtils.ISearchable
+	//#region ISearchable
 
 	public get searchResultCategory(): string {
 		const level = this.isCantrip ? `Cantrip` : `Spell ${this.level}`;
@@ -381,7 +383,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 		return this.name.italics();
 	}
 
-	//#endregion utils.SearchUtils.ISearchable
+	//#endregion ISearchable
 
 	//#region static
 

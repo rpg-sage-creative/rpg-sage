@@ -1,14 +1,15 @@
-import { asStringIgnoreCase } from "../../sage-utils/utils/ArrayUtils/Sort";
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
+import { asStringIgnoreCase } from "../../sage-utils/ArrayUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
 import type { IHasContents, TObjectQuantity } from "../common";
 import { COMMON, MDASH } from "../common";
-import RenderableContent from "../data/RenderableContent";
-import { findByValue } from "../data/Repository";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
+import { findByValue } from "../data";
 import type { TDetail } from "./base/interfaces";
-import Coins from "./Coins";
-import type GearCategory from "./GearCategory";
+import { Coins } from "./Coins";
+import type { GearCategory } from "./GearCategory";
 import type { BulkCore } from "./HasBulk";
-import HasBulk from "./HasBulk";
+import { HasBulk } from "./HasBulk";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
 
 //#region Helpers
 
@@ -49,7 +50,7 @@ export interface GearCore extends BulkCore<"Gear">, IHasContents {
 	quantity: number;
 }
 
-export default class Gear extends HasBulk<GearCore, Gear> {
+export class Gear extends HasBulk<GearCore, Gear> {
 	// #region IHasName
 	private _name?: string;
 	public get name(): string {
@@ -97,7 +98,7 @@ export default class Gear extends HasBulk<GearCore, Gear> {
 	//#endregion
 
 	public toRenderableContent(): RenderableContent {
-		const content = new RenderableContent(this);
+		const content = new Pf2eRenderableContent(this);
 
 		const rarityAndLevelValues: string[] = [];
 		if (this.rarity !== COMMON) {

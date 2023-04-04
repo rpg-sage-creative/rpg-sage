@@ -1,9 +1,9 @@
-import registerAdmin from "./admin";
-import registerPrefix from "./prefix";
-import registerRole from "./role";
-import registerServer from "./server";
+import { register as registerAdmin } from "./admin";
+import { register as registerPrefix } from "./prefix";
+import { register as registerRole } from "./role";
+import { register as registerServer } from "./server";
 
-export default function register(): void {
+export function register(): void {
 	registerAdmin();
 	registerPrefix();
 	registerRole();

@@ -1,14 +1,14 @@
 import { ChannelType, EmbedBuilder, Guild, Message, MessageReaction, User, Webhook, WebhookMessageCreateOptions, WebhookMessageEditOptions } from "discord.js";
 import type { IMenuRenderable } from "../../sage-search/IMenuRenderable";
 import type { Optional, OrNull } from "../../sage-utils";
-import { errorReturnNull, warnReturnNull } from "../../sage-utils/utils/ConsoleUtils/Catchers";
-import { DChannel, DMessage, DMessageChannel, DMessageTarget, DUser, toHumanReadable } from "../../sage-utils/utils/DiscordUtils";
-import { createMessageEmbed, resolveToEmbeds, resolveToTexts } from "../../sage-utils/utils/DiscordUtils/embeds";
-import { sendTo } from "../../sage-utils/utils/DiscordUtils/sendMessage";
-import type { TRenderableContentResolvable } from "../../sage-utils/utils/RenderUtils/RenderableContent";
-import RenderableContent from "../../sage-utils/utils/RenderUtils/RenderableContent";
-import type SageCache from "../sage/model/SageCache";
-import { DialogType } from "../sage/repo/base/channel";
+import { errorReturnNull, warnReturnNull } from "../../sage-utils/ConsoleUtils";
+import { DChannel, DMessage, DMessageChannel, DMessageTarget, DUser, toHumanReadable } from "../../sage-utils/DiscordUtils";
+import { createMessageEmbed, resolveToEmbeds, resolveToTexts } from "../../sage-utils/DiscordUtils";
+import { sendTo } from "../../sage-utils/DiscordUtils";
+import type { TRenderableContentResolvable } from "../../sage-utils/RenderUtils";
+import { RenderableContent } from "../../sage-utils/RenderUtils";
+import type { SageCache } from "../sage/model/SageCache";
+import { DialogType } from "../sage/repo";
 
 //#region helpers
 

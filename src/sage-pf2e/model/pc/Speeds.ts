@@ -1,7 +1,7 @@
-import Check from "./Check";
-import type PlayerCharacter from "./PlayerCharacter";
+import { Check } from "./Check";
+import type { PlayerCharacter } from "./PlayerCharacter";
 
-export default class Speeds {
+export class Speeds {
 
 	public constructor(public pc: PlayerCharacter) { }
 

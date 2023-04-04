@@ -1,6 +1,6 @@
-import { errorReturnEmptyArray } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
-import type GameCharacter from "../../model/GameCharacter";
-import type SageMessage from "../../model/SageMessage";
+import { errorReturnEmptyArray } from "../../../../sage-utils/ConsoleUtils";
+import type { GameCharacter } from "../../model/GameCharacter";
+import type { SageMessage } from "../../model/SageMessage";
 import { registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
 import { sendGameCharacter } from "./gameCharacter";
@@ -116,7 +116,7 @@ async function statsSet(sageMessage: SageMessage): Promise<void> {
 // registerAdminCommandHelp("Admin", "Journal", `journal update {entry title}\n{updated journal entry}`);
 // registerAdminCommandHelp("Admin", "Journal", `journal remove {entry title}`);
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(statsSet, "stats-set");
 	// registerAdminCommand(statsUnset, "stats-unset");
 	registerAdminCommandHelp("Admin", "Stats", `stats set {stat}={value}`);

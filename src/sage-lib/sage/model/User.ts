@@ -1,15 +1,16 @@
-import type { Args, Optional, UUID } from "../../../sage-utils";
-import { DidCore, HasDidCore } from "../repo/base/DidRepository";
-import type { DialogType } from "../repo/base/channel";
-import CharacterManager from "./CharacterManager";
-import type GameCharacter from "./GameCharacter";
+import type { Args, Optional } from "../../../sage-utils";
+import { DidCore, HasDidCore } from "../repo";
+import type { DialogType } from "../repo";
+import { CharacterManager } from "./CharacterManager";
+import type { GameCharacter } from "./GameCharacter";
 import type { GameCharacterCore, TGameCharacterTag } from "./GameCharacter";
-import NamedCollection from "./NamedCollection";
-import NoteManager, { TNote } from "./NoteManager";
-import type SageCache from "./SageCache";
+import { NamedCollection } from "./NamedCollection";
+import { NoteManager,  TNote } from "./NoteManager";
+import type { SageCache } from "./SageCache";
 import { applyValues } from "./SageCommandArgs";
-import { readJsonFile } from "../../../sage-utils/utils/FsUtils";
+import { readJsonFile } from "../../../sage-utils/FsUtils";
 import type { Snowflake } from "discord.js";
+import type { UUID } from "../../../sage-utils/UuidUtils";
 
 export type TAlias = {
 	name: string;
@@ -42,7 +43,7 @@ export interface UserCore extends DidCore<"User">, Partial<TUserOptions> {
 	characters?: TUserCharacter[];
 }
 
-export default class User extends HasDidCore<UserCore> {
+export class User extends HasDidCore<UserCore> {
 	public constructor(core: UserCore, sageCache: SageCache) {
 		super(core, sageCache);
 

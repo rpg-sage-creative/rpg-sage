@@ -1,11 +1,11 @@
-import { Collection } from "../../sage-utils/utils/ArrayUtils";
-import { findByValue } from "../data/Repository";
-import type Ancestry from "./Ancestry";
+import { Collection } from "../../sage-utils/ArrayUtils";
+import { findByValue } from "../data";
+import type { Ancestry } from "./Ancestry";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 import type { FeatureCore } from "./Feature";
 import type { FeatureLevelCore } from "./Features";
-import Features from "./Features";
+import { Features } from "./Features";
 
 export interface BackgroundCore extends SourcedCore<"Background"> {
 	ancestry?: string;
@@ -13,7 +13,7 @@ export interface BackgroundCore extends SourcedCore<"Background"> {
 	features: FeatureCore[];
 }
 
-export default class Background extends HasSource<BackgroundCore> {
+export class Background extends HasSource<BackgroundCore> {
 	// #region Constructor
 	// public constructor(core: IBackground) {
 	// 	super(core);
@@ -47,13 +47,13 @@ export default class Background extends HasSource<BackgroundCore> {
 	// }
 	// #endregion
 
-	// #region utils.SearchUtils.ISearchable
+	// #region ISearchable
 	public get searchResultCategory(): string {
 		const region = this.region ? `(${this.region})` : ``;
 		const rarity = this.isNotCommon ? ` [${this.rarity}]` : ``;
 		return `Background ${region} ${rarity}`;
 	}
-	// #endregion utils.SearchUtils.ISearchable
+	// #endregion ISearchable
 
 	// #region static
 

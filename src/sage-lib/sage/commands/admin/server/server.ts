@@ -2,14 +2,14 @@ import type { Role } from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
 import type { Optional } from "../../../../../sage-utils";
-import { Collection } from "../../../../../sage-utils/utils/ArrayUtils";
-import { isNonNilSnowflake } from "../../../../../sage-utils/utils/DiscordUtils";
-import type { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
-import { isValid } from "../../../../../sage-utils/utils/UuidUtils";
-import type SageMessage from "../../../model/SageMessage";
-import type Server from "../../../model/Server";
+import { Collection } from "../../../../../sage-utils/ArrayUtils";
+import { isNonNilSnowflake } from "../../../../../sage-utils/SnowflakeUtils";
+import type { RenderableContent } from "../../../../../sage-utils/RenderUtils";
+import { isValid } from "../../../../../sage-utils/UuidUtils";
+import type { SageMessage } from "../../../model/SageMessage";
+import type { Server } from "../../../model/Server";
 import { AdminRoleType, getServerDefaultGameOptions, IAdminRole } from "../../../model/Server";
-import { DialogType } from "../../../repo/base/channel";
+import { DialogType } from "../../../repo";
 import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
@@ -139,7 +139,7 @@ async function serverSet(sageMessage: SageMessage<true>): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(updated, "Server Updated", "Unknown Error; Server NOT Updated!");
 }
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(serverCount, "server-count");
 	registerAdminCommand(serverList, "server-list");
 	registerAdminCommand(serverInit, "server-init");

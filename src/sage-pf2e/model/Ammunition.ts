@@ -1,17 +1,18 @@
-import type utils from "../../sage-utils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
 import { MDASH, NEWLINE, TAB } from "../common";
-import RenderableContent from "../data/RenderableContent";
-import { filter } from "../data/Repository";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
+import { filterBy } from "../data";
 import type { BulkCore } from "./HasBulk";
-import HasBulk from "./HasBulk";
-import type Weapon from "./Weapon";
+import { HasBulk } from "./HasBulk";
+import type { Weapon } from "./Weapon";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
 
 export interface AmmunitionCore extends BulkCore<"Ammunition"> {
 	quantity: number;
 	price: string;
 }
 
-export default class Ammunition extends HasBulk<AmmunitionCore, Ammunition>{
+export class Ammunition extends HasBulk<AmmunitionCore, Ammunition>{
 
 	/**************************************************************************************************************************/
 	// Properties
@@ -22,13 +23,13 @@ export default class Ammunition extends HasBulk<AmmunitionCore, Ammunition>{
 	private _weapons?: Weapon[];
 	public get weapons(): Weapon[] {
 		if (!this._weapons) {
-			this._weapons = filter("Weapon", weapon => weapon.ammunition === this);
+			this._weapons = filterBy("Weapon", weapon => weapon.ammunition === this);
 		}
 		return this._weapons;
 	}
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const content = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const content = new Pf2eRenderableContent(this);
 		content.setTitle(`<b>${this.name}</b> (Ammunition)`);
 		content.append(`<b>Quantity</b> ${this.quantity}; <b>Price</b> ${this.price || MDASH}; ${this.toRenderableBulkString()}`);
 		content.append(...this.details.map((d, i) => (i ? TAB : NEWLINE) + d));
@@ -37,9 +38,9 @@ export default class Ammunition extends HasBulk<AmmunitionCore, Ammunition>{
 	}
 
 	/**************************************************************************************************************************/
-	// utils.SearchUtils.ISearchable
+	// ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			const terms: string[] = [];

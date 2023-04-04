@@ -1,6 +1,6 @@
-import { isNotBlank } from "../../../../../sage-utils/utils/StringUtils";
+import { isNotBlank } from "../../../../../sage-utils/StringUtils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { type TDialogContent, parseDialogContent } from "../../dialog";
 import { registerAdminCommandHelp } from "../../help";
@@ -151,7 +151,7 @@ async function aliasDeleteAll(sageMessage: SageMessage): Promise<void> {
 // 		})
 // }
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(aliasList, "alias-list");
 	registerAdminCommand(aliasSet, "alias-set");
 	registerAdminCommand(aliasDelete, "alias-delete");

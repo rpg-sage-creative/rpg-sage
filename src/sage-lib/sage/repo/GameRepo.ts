@@ -1,11 +1,11 @@
 import type { Snowflake } from "discord.js";
-import type { UUID } from "../../../sage-utils";
-import type DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
-import Game, { type IGameCore } from "../model/Game";
-import type SageCache from "../model/SageCache";
-import IdRepository from "./base/IdRepository";
+import type { UUID } from "../../../sage-utils/UuidUtils";
+import type { DiscordKey } from "../../../sage-utils/DiscordUtils";
+import { Game,  type IGameCore } from "../model/Game";
+import type { SageCache } from "../model/SageCache";
+import { IdRepository } from "./base/IdRepository";
 
-export default class GameRepo extends IdRepository<IGameCore, Game> {
+export class GameRepo extends IdRepository<IGameCore, Game> {
 
 	//TODO: consider historical game lookup/cleanup
 

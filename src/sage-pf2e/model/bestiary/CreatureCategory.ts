@@ -1,11 +1,9 @@
 import type { ISourceReference } from "../../common";
-import { findByValue } from "../../data/Repository";
-import type { BaseCore } from "../base/Base";
-import type { SourcedCore } from "../base/HasSource";
-import HasSource from "../base/HasSource";
-import type Item from "../Item";
-import type { ItemCore } from "../Item";
-import type Creature from "./Creature";
+import { findByValue } from "../../data";
+import type { BaseCore, SourcedCore } from "../base";
+import { HasSource } from "../base";
+import type { Item, ItemCore } from "../Item";
+import type { Creature } from "./Creature";
 import type { ICreature } from "./ICreature";
 
 export interface IHasLevelAndName { level: number; name: string; }
@@ -32,7 +30,7 @@ export interface CreatureCategoryCore extends SourcedCore<"CreatureCategory"> {
 	items: ItemCore[];
 }
 
-export default class CreatureCategory extends HasSource<CreatureCategoryCore, "CreatureCategory"> {
+export class CreatureCategory extends HasSource<CreatureCategoryCore, "CreatureCategory"> {
 
 	/**************************************************************************************************************************/
 	// Properties
@@ -73,9 +71,9 @@ export default class CreatureCategory extends HasSource<CreatureCategoryCore, "C
 	// }
 
 	/**************************************************************************************************************************/
-	// utils.SearchUtils.ISearchable
+	// ISearchable
 
-	// public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore {
+	// public search(searchInfo: SearchInfo): SearchScore {
 	// 	let score = super.search(searchInfo);
 	// 	if (searchInfo.globalFlag) {
 	// 		score.append(searchInfo.score(this.description, this.details));

@@ -1,16 +1,10 @@
 import { Snowflake, SnowflakeUtil } from "discord.js";
-import type { IdCore, Optional } from "../../../../sage-utils";
-import IdRepository, { HasIdCoreAndSageCache } from "./IdRepository";
+import type { Optional } from "../../../../sage-utils";
+import { IdRepository } from "./IdRepository";
+import type { DidCore, HasDidCore } from "./HasDidCore";
 
-export interface DidCore<T extends string = string> extends IdCore<T> {
-	did: Snowflake;
-}
-
-export class HasDidCore<T extends DidCore<U>, U extends string = string> extends HasIdCoreAndSageCache<T, U> {
-	public get did(): Snowflake { return this.core.did; }
-}
-
-export default abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> extends IdRepository<T, U> {
+/** Represents a repository of HasDidCore objects. */
+export abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> extends IdRepository<T, U> {
 
 	//#region Cache
 

@@ -1,6 +1,6 @@
-import type utils from "../../sage-utils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface SnareCore extends SourcedCore<"Snare"> {
 	price: string;
@@ -8,7 +8,7 @@ export interface SnareCore extends SourcedCore<"Snare"> {
 	craftRequirements: string[];
 }
 
-export default class Snare extends HasSource<SnareCore> {
+export class Snare extends HasSource<SnareCore> {
 
 	/**************************************************************************************************************************/
 	// Properties
@@ -18,9 +18,9 @@ export default class Snare extends HasSource<SnareCore> {
 	public get craftRequirements(): string[] { return this.core.craftRequirements || []; }
 
 	/**************************************************************************************************************************/
-	// utils.SearchUtils.ISearchable
+	// ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.rarity, this.traits, this.craftRequirements));

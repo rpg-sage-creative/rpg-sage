@@ -1,7 +1,7 @@
 import { send } from "../../../discord/messages";
-import type SageCache from "../../model/SageCache";
-import type SageMessage from "../../model/SageMessage";
-import User, { PatronTierSnowflakes, PatronTierType } from "../../model/User";
+import type { SageCache } from "../../model/SageCache";
+import type { SageMessage } from "../../model/SageMessage";
+import { User,  PatronTierSnowflakes, PatronTierType } from "../../model/User";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 
 
@@ -62,6 +62,6 @@ export async function syncPatreon(sageCache: SageCache): Promise<void> {
 	send(sageCache, dmChannel, renderableContent, superUser);
 }
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(patreonSync, "patreon-sync");
 }

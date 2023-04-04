@@ -1,16 +1,16 @@
 import type { Snowflake } from "discord.js";
-import type { Optional, UUID } from "../../../sage-utils";
-import { Collection } from "../../../sage-utils/utils/ArrayUtils";
-import type DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
-import type { TDialogMessage } from "../repo/DialogMessageRepository";
-import CharactersMatch from "./CharactersMatch";
-import type Game from "./Game";
+import type { Optional } from "../../../sage-utils";
+import { Collection } from "../../../sage-utils/ArrayUtils";
+import type { DiscordKey } from "../../../sage-utils/DiscordUtils";
+import { UUID, generate } from "../../../sage-utils/UuidUtils";
+import type { TDialogMessage } from "../repo";
+import { CharactersMatch } from "./CharactersMatch";
+import type { Game } from "./Game";
 import type { GameCharacterCore, TGameCharacterType } from "./GameCharacter";
-import GameCharacter from "./GameCharacter";
+import { GameCharacter } from "./GameCharacter";
 import type { IHasSave } from "./NamedCollection";
-import NamedCollection from "./NamedCollection";
-import type User from "./User";
+import { NamedCollection } from "./NamedCollection";
+import type { User } from "./User";
 
 /*
 // function remapCharacters(this: CharacterManager, core: GameCharacterCore, index: number, array: (GameCharacterCore | GameCharacter)[]): void {
@@ -237,5 +237,3 @@ export interface CharacterManager {
 	splice(start: number, deleteCount?: number): CharacterManager;
 	splice(start: number, deleteCount: number, ...items: GameCharacter[]): CharacterManager;
 }
-
-export default CharacterManager;

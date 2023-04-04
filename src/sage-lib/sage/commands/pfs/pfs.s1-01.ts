@@ -1,8 +1,8 @@
-import { Dice } from "../../../../sage-dice/dice/base";
-import { BULLET } from "../../../../sage-utils";
-import { shuffle } from "../../../../sage-utils/utils/RandomUtils";
-import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
-import type SageMessage from "../../model/SageMessage";
+import { Dice } from "../../../../sage-dice/base";
+import { shuffle } from "../../../../sage-utils/RandomUtils";
+import type { RenderableContent } from "../../../../sage-utils/RenderUtils";
+import { BULLET } from "../../../../sage-utils/StringUtils";
+import type { SageMessage } from "../../model/SageMessage";
 import { addScenario, createPfsRenderableContent, TPfsFaction, TTierInfo } from "./pfs";
 
 const roll = Dice.roll;
@@ -263,6 +263,6 @@ function randomize(sageMessage: SageMessage, tierInfo: TTierInfo): RenderableCon
 	return renderableContent;
 }
 
-export default function register(): void {
+export function registerS101(): void {
 	addScenario("S1-01", "1-4", randomize);
 }

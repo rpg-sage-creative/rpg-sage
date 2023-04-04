@@ -1,11 +1,11 @@
 import { ActivityType, Client, ClientOptions, Guild, GuildBan, GuildMember, Interaction, Message, MessageReaction, PartialGuildMember, PartialMessage, PartialMessageReaction, PartialUser, Snowflake, User } from "discord.js";
-import { LogLevel, Optional } from "../../../sage-utils";
-import { formatArg, setConsoleHandler } from "../../../sage-utils/utils/ConsoleUtils";
-import { DiscordMaxValues, DMessage, MessageType, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
+import type { Optional } from "../../../sage-utils";
+import { LogLevel, formatArg, setConsoleHandler } from "../../../sage-utils/ConsoleUtils";
+import { DiscordMaxValues, DMessage, MessageType, ReactionType } from "../../../sage-utils/DiscordUtils";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
 import type { BotCore } from "./Bot";
-import Bot from "./Bot";
-import SageCache from "./SageCache";
+import { Bot } from "./Bot";
+import { SageCache } from "./SageCache";
 
 interface IClientEventHandler {
 	onClientReady(): void;
@@ -25,7 +25,7 @@ function createDiscordClientOptions(): ClientOptions {
 	return { intents:registeredIntents() };
 }
 
-export default class ActiveBot extends Bot implements IClientEventHandler {
+export class ActiveBot extends Bot implements IClientEventHandler {
 	public static active: ActiveBot;
 	public static get isDev(): boolean { return ActiveBot.active?.codeName === "dev"; }
 	public static isActiveBot(userDid: Optional<Snowflake>): boolean {

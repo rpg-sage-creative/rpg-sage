@@ -1,10 +1,10 @@
-import type utils from "../../sage-utils";
-import type { TSortResult } from "../../sage-utils";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
 import type { TAction, TSkill } from "../common";
 import { NEWLINE, TAB } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface ActionCore<T extends string = "Action"> extends SourcedCore<T> {
 	actionType?: TAction;
@@ -17,7 +17,7 @@ export interface ActionCore<T extends string = "Action"> extends SourcedCore<T> 
 	trigger: string[];
 }
 
-export default class Action<T extends string = "Action", U extends ActionCore<T> = ActionCore<T>>  extends HasSource<U, T> {
+export class Action<T extends string = "Action", U extends ActionCore<T> = ActionCore<T>>  extends HasSource<U, T> {
 	//#region Constructor
 
 	public constructor(core: U) {
@@ -41,7 +41,7 @@ export default class Action<T extends string = "Action", U extends ActionCore<T>
 
 	//#region utils.ArrayUtils.Sort.IComparable<T>
 
-	public compareTo(other: Action<T, U>): TSortResult {
+	public compareTo(other: Action<T, U>): -1 | 0 | 1 {
 		const result = super.compareTo(other);
 		if (result !== 0) {
 			return result;
@@ -65,10 +65,10 @@ export default class Action<T extends string = "Action", U extends ActionCore<T>
 
 	//#endregion
 
-	//#region utils.RenderUtils.IRenderable
+	//#region IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const content = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const content = new Pf2eRenderableContent(this);
 
 		content.setTitle(`<b>${this.name}</b> ${this.actionType}`);
 
@@ -85,9 +85,9 @@ export default class Action<T extends string = "Action", U extends ActionCore<T>
 
 	//#endregion
 
-	//#region utils.SearchUtils.ISearchable
+	//#region ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.skill || "", this.trained ? "trained" : "", this.traits, this.frequency, this.trigger, this.requirements, this.effect));

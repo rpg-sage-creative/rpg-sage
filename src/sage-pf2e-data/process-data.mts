@@ -1,14 +1,14 @@
 import { existsSync, readdirSync, rmSync } from "fs";
-import type { THasSuccessOrFailure } from "../sage-pf2e";
-import type { UUID } from "../sage-utils";
-import Collection from "../sage-utils/utils/ArrayUtils/Collection.js";
-import { readJsonFileSync, writeFileSync } from "../sage-utils/utils/FsUtils/index.js";
-import { generate, isNotNormalized, normalize } from "../sage-utils/utils/UuidUtils/index.js";
+import type { UUID } from "../sage-utils/UuidUtils";
+import { Collection } from "../sage-utils/ArrayUtils";
+import { readJsonFileSync, writeFileSync } from "../sage-utils/FsUtils";
+import { generate, isNotNormalized, normalize } from "../sage-utils/UuidUtils";
 import { clearStringify, compareNames, debug, DistDataPath, error, getPf2tCores, getSageCores, info, loadPf2tCores, log, SrcDataPath, stringify, warn } from "./common.mjs";
 import { findPf2tCore, parsePf2Data } from "./pf2-tools-parsers/common.mjs";
 import { processAbcData } from "./process-abc.mjs";
 import { processPf2tData } from "./processPf2taData.mjs";
 import type { TCore } from "./types.mjs";
+import type { THasSuccessOrFailure } from "../sage-pf2e/model/base/interfaces";
 
 type CoreList = Collection<TCore>;
 
@@ -370,7 +370,7 @@ function processDomainSpells(): void {
 	info(`Checking domain spells ... ${missingSpells} missing spells; ${missingDomains} missing domains`);
 }
 
-export default async function process(): Promise<void> {
+export async function process(): Promise<void> {
 
 	await loadPf2tCores();
 	processSources();

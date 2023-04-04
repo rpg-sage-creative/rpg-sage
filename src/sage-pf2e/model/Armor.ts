@@ -1,11 +1,12 @@
-import type utils from "../../sage-utils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
 import { MDASH, NEWLINE, TAB, toModifier } from "../common";
-import RenderableContent from "../data/RenderableContent";
-import { filter, findByValue } from "../data/Repository";
-import type ArmorGroup from "./ArmorGroup";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
+import { filterBy, findByValue } from "../data";
+import type { ArmorGroup } from "./ArmorGroup";
 import type { BulkCore } from "./HasBulk";
-import HasBulk from "./HasBulk";
-import type Trait from "./Trait";
+import { HasBulk } from "./HasBulk";
+import type { Trait } from "./Trait";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
 
 /*
 // function sortGear(a: Gear, b: Gear): number {
@@ -34,7 +35,7 @@ export interface ArmorCore extends BulkCore<"Armor"> {
 	strength?: number;
 }
 
-export default class Armor extends HasBulk<ArmorCore, Armor> {
+export class Armor extends HasBulk<ArmorCore, Armor> {
 
 	/**************************************************************************************************************************/
 	// Properties
@@ -59,14 +60,14 @@ export default class Armor extends HasBulk<ArmorCore, Armor> {
 	public get Traits(): Trait[] {
 		if (!this._Traits) {
 			const coreTraits = this.traits;
-			this._Traits = filter("Trait", trait => coreTraits.includes(trait.name));
+			this._Traits = filterBy("Trait", trait => coreTraits.includes(trait.name));
 		}
 		return this._Traits;
 	}
 
 	public hasTrait(traitName: string): boolean { return this.Traits.find(trait => trait.name === traitName) !== undefined; }
 
-	public toRenderableContentCategoryGroup(content: utils.RenderUtils.RenderableContent): void {
+	public toRenderableContentCategoryGroup(content: RenderableContent): void {
 		const catGroupTraits = [`<b>Category</b> ${this.category}`];
 		if (this.group) {
 			catGroupTraits.push(`<b>Group</b> ${this.group || MDASH}`);
@@ -74,7 +75,7 @@ export default class Armor extends HasBulk<ArmorCore, Armor> {
 		catGroupTraits.push(`<b>Traits</b> ${this.nonRarityTraits.join(", ") || MDASH}`);
 		content.append(catGroupTraits.join("; "));
 	}
-	public toRenderableContentStrengthGroupTraits(content: utils.RenderUtils.RenderableContent): void {
+	public toRenderableContentStrengthGroupTraits(content: RenderableContent): void {
 		if (this.strength) {
 			content.appendTitledSection(`<b>Strength</b>`, `This entry indicates the Strength score at which you are strong enough to overcome some of the armor's penalties. If your Strength is equal to or greater than this value, you no longer take the armor's check penalty, and you decrease the Speed penalty by 5 feet (to no penalty if the penalty was –5 feet, or to a –5-foot penalty if the penalty was –10 feet).`);
 		}
@@ -83,8 +84,8 @@ export default class Armor extends HasBulk<ArmorCore, Armor> {
 		}
 		this.Traits.forEach(trait => content.appendTitledSection(`<b>Trait</b> ${trait}`, ...trait.details.map((d, i) => (i ? TAB : NEWLINE) + d)));
 	}
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const content = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const content = new Pf2eRenderableContent(this);
 
 		const level = this.level ? `(level ${this.level})` : ``;
 		const title = `<b>${this.name}</b> ${level}`;
@@ -112,9 +113,9 @@ export default class Armor extends HasBulk<ArmorCore, Armor> {
 	}
 
 	/**************************************************************************************************************************/
-	// utils.SearchUtils.ISearchable
+	// ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			const terms: string[] = [];

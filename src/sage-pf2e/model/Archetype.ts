@@ -1,11 +1,12 @@
-import { sortAscending, stringIgnoreCase } from "../../sage-utils/utils/ArrayUtils/Sort";
-import { nth } from "../../sage-utils/utils/NumberUtils";
+import { sortAscending, stringIgnoreCase } from "../../sage-utils/ArrayUtils";
+import { nth } from "../../sage-utils/NumberUtils";
 import { rarityToSuper } from "../common";
-import RenderableContent from "../data/RenderableContent";
-import { all, find, findByValue } from "../data/Repository";
-import HasSource, { SourcedCore } from "../model/base/HasSource";
-import type DedicationFeat from "./DedicationFeat";
-import type Feat from "./Feat";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
+import { getByType, findByType, findByValue } from "../data";
+import { HasSource, SourcedCore } from "../model/base/HasSource";
+import type { DedicationFeat } from "./DedicationFeat";
+import type { Feat } from "./Feat";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
 
 export type TAdditionalFeat = string | { level: number; name: string; };
 export interface ArchetypeCore extends SourcedCore<"Archetype"> {
@@ -34,7 +35,7 @@ function toRenderableContentByLevel(byLevel: string[][]): string[] {
 }
 
 function findFeats(archetype: Archetype): Feat[] {
-	const allFeats = all<Feat>("Feat");
+	const allFeats = getByType<Feat>("Feat");
 
 	const feats: Feat<any>[] = [];
 	const dedication = archetype.dedication;
@@ -57,20 +58,20 @@ function findFeats(archetype: Archetype): Feat[] {
 	}
 }
 
-export default class Archetype extends HasSource<ArchetypeCore> {
+export class Archetype extends HasSource<ArchetypeCore> {
 
 	private _dedication?: DedicationFeat;
 	public get dedication(): DedicationFeat {
 		if (!this._dedication) {
-			this._dedication = find("DedicationFeat", dedication => dedication.archetype === this);
+			this._dedication = findByType("DedicationFeat", dedication => dedication.archetype === this);
 		}
 		return this._dedication!;
 	}
 
-	//#region utils.RenderUtils.IRenderable
+	//#region IRenderable
 
 	public toRenderableContent(): RenderableContent {
-		const renderable = new RenderableContent(this);
+		const renderable = new Pf2eRenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.hasDescription) {
 			renderable.appendSection(`<i>${this.description}</i>`);

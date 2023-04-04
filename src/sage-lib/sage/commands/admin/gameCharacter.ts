@@ -1,13 +1,13 @@
 import type { Message, Snowflake } from "discord.js";
 import type { Optional, OrUndefined } from "../../../../sage-utils";
-import { errorReturnEmptyArray } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
-import DiscordId from "../../../../sage-utils/utils/DiscordUtils/DiscordId";
-import { orNilSnowflake } from "../../../../sage-utils/utils/DiscordUtils/snowflake";
+import { errorReturnEmptyArray } from "../../../../sage-utils/ConsoleUtils";
+import { DiscordId } from "../../../../sage-utils/DiscordUtils";
+import { orNilSnowflake } from "../../../../sage-utils/SnowflakeUtils";
 import { sendWebhook } from "../../../discord/messages";
 import { discordPromptYesNo } from "../../../discord/prompts";
-import type CharacterManager from "../../model/CharacterManager";
-import GameCharacter, { GameCharacterCore } from "../../model/GameCharacter";
-import type SageMessage from "../../model/SageMessage";
+import type { CharacterManager } from "../../model/CharacterManager";
+import { GameCharacter,  GameCharacterCore } from "../../model/GameCharacter";
+import type { SageMessage } from "../../model/SageMessage";
 import type { TNames } from "../../model/SageMessageArgs";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
@@ -566,7 +566,7 @@ function registerHelp(): void {
 }
 //#endregion
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(gameCharacterList, "pc-list", "pcs-list", "my-pc-list", "my-pcs");
 	registerAdminCommand(gameCharacterList, "npc-list", "npcs-list", "my-npc-list", "my-npcs");
 	registerAdminCommand(gameCharacterList, "companion-list", "my-companion-list", "my-companions");

@@ -1,5 +1,5 @@
-import { RenderableMap } from "../../../../sage-utils/utils/MapUtils";
-import type { IMapLayer, THasOffset, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils/types";
+import { RenderableMap } from "../../../../sage-utils/MapUtils";
+import type { IMapLayer, THasOffset, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "../../../../sage-utils/MapUtils";
 import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
 
 class RenderableGameMapLayer implements IMapLayer {
@@ -28,7 +28,7 @@ class RenderableGameMapLayer implements IMapLayer {
 	}
 }
 
-export default class RenderableGameMap extends RenderableMap {
+export class RenderableGameMap extends RenderableMap {
 	public constructor (protected core: TGameMapCore) {
 		super();
 	}

@@ -1,12 +1,13 @@
-import { Collection } from "../../sage-utils/utils/ArrayUtils";
-import RenderableContent from "../data/RenderableContent";
-import { filter } from "../data/Repository";
+import { Collection } from "../../sage-utils/ArrayUtils";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
+import { filterBy } from "../data";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 import type { FeatureCore } from "./Feature";
-import Feature from "./Feature";
-import Features from "./Features";
-import type Heritage from "./Heritage";
+import { Feature } from "./Feature";
+import { Features } from "./Features";
+import type { Heritage } from "./Heritage";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
 
 export interface AncestryCore extends SourcedCore<"Ancestry"> {
 	// adventurers: string[];
@@ -22,13 +23,13 @@ function toUl(items: string[]): string {
 	return `<ul>${listItems}</ul>`;
 }
 
-export default class Ancestry extends HasSource<AncestryCore> {
+export class Ancestry extends HasSource<AncestryCore> {
 
 	//#region properties
 
 	// public get adventurers(): string[] { return this.core.adventurers || []; }
 	public features = new Features([{ level: 1, features: this.core.features ?? [] }]);
-	public get heritages(): Heritage[] { return filter("Heritage", h => h.ancestry === this); }
+	public get heritages(): Heritage[] { return filterBy("Heritage", h => h.ancestry === this); }
 
 	//#endregion
 
@@ -43,10 +44,10 @@ export default class Ancestry extends HasSource<AncestryCore> {
 
 	//#endregion
 
-	//#region utils.RenderUtils.IRenderable
+	//#region IRenderable
 
 	public toRenderableContent(): RenderableContent {
-		const renderable = new RenderableContent(this);
+		const renderable = new Pf2eRenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.hasTraits || this.isNotCommon) {
 			const traits: string[] = [];

@@ -1,12 +1,12 @@
 import type { GuildBasedChannel, Role, Snowflake } from "discord.js";
-import type { Args, Optional, VALID_UUID } from "../../../sage-utils";
-import { EnumUtils } from "../../../sage-utils/utils";
-import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
-import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
-import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
-import { isValid as isValidUuid } from "../../../sage-utils/utils/UuidUtils";
+import type { Args, Optional } from "../../../sage-utils";
+import { ArgsManager } from "../../../sage-utils/ArgsUtils";
+import { exists } from "../../../sage-utils/ArrayUtils";
+import { DiscordId } from "../../../sage-utils/DiscordUtils";
+import { VALID_UUID, isValid as isValidUuid } from "../../../sage-utils/UuidUtils";
 import { cleanEnumArgValues, ISageCommandArgs } from "./SageCommandArgs";
-import type SageMessage from "./SageMessage";
+import type { SageMessage } from "./SageMessage";
+import { EnumLike, parse } from "../../../sage-utils/EnumUtils";
 
 type TGameCharacterArgs = {
 	embedColor: string;
@@ -22,7 +22,7 @@ export type TNames = {
 	count?: number;
 };
 
-export default class SageMessageArgs<T extends string = string> extends ArgsManager<T> implements ISageCommandArgs {
+export class SageMessageArgs<T extends string = string> extends ArgsManager<T> implements ISageCommandArgs {
 	public constructor(protected sageMessage: SageMessage, argsManager: ArgsManager<T>) {
 		super();
 		if (argsManager?.length) {
@@ -120,19 +120,20 @@ export default class SageMessageArgs<T extends string = string> extends ArgsMana
 	 * Returns undefined if not found.
 	 * Returns null if not a valid enum value or "unset".
 	 */
-	public getEnum<U>(type: any, name: string): Optional<U>;
+	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): Optional<V>;
 	/** Gets the named option as a value from the given enum type. */
-	public getEnum<U>(type: any, name: string, required: true): U;
-	public getEnum<U>(type: any, name: string): Optional<U> {
+	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string, required: true): V;
+	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): Optional<V> {
 		let value = this.getString(name);
 		if (value) {
-			return EnumUtils.parse<U>(type, cleanEnumArgValues(type, value)) ?? null;
+			/** @todo figure out why i am casting as any */
+			return parse(type, cleanEnumArgValues(type as any, value) as K) ?? null;
 		}
 		return value as null | undefined;
 	}
 
 	/** Returns true if getEnum(type, name) is not null and not undefined. */
-	public hasEnum(type: any, name: string): boolean {
+	public hasEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): boolean {
 		return exists(this.getEnum(type, name));
 	}
 

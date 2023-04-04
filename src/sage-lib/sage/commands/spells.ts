@@ -1,10 +1,14 @@
-import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e";
-import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e";
+import type { TMagicTradition } from "../../../sage-pf2e";
+import { getByType, filterBy, findByValue } from "../../../sage-pf2e/data";
+import type { Domain } from "../../../sage-pf2e/model/Domain";
+import type { FocusSpell } from "../../../sage-pf2e/model/FocusSpell";
+import type { Spell } from "../../../sage-pf2e/model/Spell";
+import { SourceNotationMap } from "../../../sage-pf2e/model/base/SourceNotationMap";
 import type { Optional } from "../../../sage-utils";
-import { existsAndUnique } from "../../../sage-utils/utils/ArrayUtils/Filters";
-import { nth } from "../../../sage-utils/utils/NumberUtils";
-import { capitalize } from "../../../sage-utils/utils/StringUtils";
-import type SageMessage from "../model/SageMessage";
+import { existsAndUnique } from "../../../sage-utils/ArrayUtils";
+import { nth } from "../../../sage-utils/NumberUtils";
+import { capitalize } from "../../../sage-utils/StringUtils";
+import type { SageMessage } from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { renderAll } from "./default";
 import { registerCommandHelp } from "./help";
@@ -35,12 +39,12 @@ async function _spellList(sageMessage: SageMessage, traditionString: string, lev
 	/*// console.debug("spellList", traditionString, levelString);*/
 	const content = createCommandRenderableContent(),
 		tradition = <TMagicTradition>capitalize(traditionString),
-		byTradition = Repository.filter("Spell", spell => spell.traditions.includes(tradition));
+		byTradition = filterBy("Spell", spell => spell.traditions.includes(tradition));
 	const sourceMap = new SourceNotationMap();
 	if (!levelString) {
 		if (by === "school") {
 			content.setTitle(`<b>${tradition} Spells</b> (${byTradition.length}) <i>by School</i>`);
-			const schools = Repository.all("ArcaneSchool");
+			const schools = getByType("ArcaneSchool");
 			schools.forEach(school => {
 				const bySchool = byTradition.filter(spell => spell.traits.includes(school.name));
 				// let byLevel = bySchool.reduce((levels, spell) => {
@@ -80,7 +84,7 @@ async function _spellList(sageMessage: SageMessage, traditionString: string, lev
 		}
 		sourceMap.addByHasSource(filtered);
 		if (bySchool) {
-			const schools = Repository.all("ArcaneSchool");
+			const schools = getByType("ArcaneSchool");
 			schools.forEach(school => {
 				const filteredBySchool = filtered.filter(spell => spell.traits.includes(school.name));
 				content.appendTitledSection(`<b>${school.name} (${filteredBySchool.length})</b>`, `${sourceMap.formatNames(filteredBySchool, ", ")}`);
@@ -96,11 +100,11 @@ async function _spellList(sageMessage: SageMessage, traditionString: string, lev
 }
 function filterFocusSpells(archetypeName: Optional<string>, className: Optional<string>, domain: Optional<Domain>): FocusSpell[] {
 	if (archetypeName) {
-		return Repository.filter("FocusSpell", spell => spell.archetypeName === archetypeName);
+		return filterBy("FocusSpell", spell => spell.archetypeName === archetypeName);
 	}else if (className) {
-		return Repository.filter("FocusSpell", spell => spell.traits.includes(className));
+		return filterBy("FocusSpell", spell => spell.traits.includes(className));
 	}else if (domain) {
-		return Repository.filter("FocusSpell", spell => spell?.domain === domain);
+		return filterBy("FocusSpell", spell => spell?.domain === domain);
 	}else {
 		return [];
 	}
@@ -113,15 +117,15 @@ async function spellListFocus(sageMessage: SageMessage): Promise<void> {
 	}
 
 	/*// console.debug("spellListFocus", archetypeOrClassOrDomain);*/
-	const className = Repository.findByValue("Class", archetypeOrClassOrDomain)?.name,
-		archetypeName = className ? undefined : Repository.findByValue("Archetype", archetypeOrClassOrDomain)?.name,
-		domain = Repository.findByValue("Domain", archetypeOrClassOrDomain),
+	const className = findByValue("Class", archetypeOrClassOrDomain)?.name,
+		archetypeName = className ? undefined : findByValue("Archetype", archetypeOrClassOrDomain)?.name,
+		domain = findByValue("Domain", archetypeOrClassOrDomain),
 		content = createCommandRenderableContent();
 	content.setTitle(`<b>Focus Spells</b>`);
 	if (!archetypeOrClassOrDomain) {
-		const focusSpells = Repository.all<Spell>("FocusSpell");
+		const focusSpells = getByType<Spell>("FocusSpell");
 
-		const allClassNames = Repository.all("Class").map(clss => clss.name);
+		const allClassNames = getByType("Class").map(clss => clss.name);
 		const classNames = focusSpells.map(spell => spell.traits.find(trait => allClassNames.includes(trait))).filter(existsAndUnique);
 		content.append(`<b>Classes (${classNames.length})</b> ${classNames.map(className => `${className} (${focusSpells.filter(spell => spell.traits.includes(className)).length})`).join(", ")}`);
 
@@ -144,7 +148,7 @@ async function spellListFocus(sageMessage: SageMessage): Promise<void> {
 		const sourceMap = new SourceNotationMap(filtered);
 
 		if (className === "Cleric") {
-			const domains = Repository.all("Domain").sort(),
+			const domains = getByType("Domain").sort(),
 				byDomain = domains.map(d => filtered.filter(spell => spell.domain === d));
 			byDomain.forEach((domainSpells, index) => {
 				sourceMap.addByHasSource(domainSpells);
@@ -189,7 +193,7 @@ async function specialistLists(sageMessage: SageMessage): Promise<void> {
 	let spells: Spell[] = [];
 	const isCantrip = levelString.startsWith("cantrip");
 	const spellLevel = isCantrip ? undefined : +levelString.match(/\d+/)![0];
-	const byLevel = Repository.filter("Spell", spell => isCantrip ? spell.isCantrip : !spell.isCantrip && spell.level === spellLevel);
+	const byLevel = filterBy("Spell", spell => isCantrip ? spell.isCantrip : !spell.isCantrip && spell.level === spellLevel);
 	traditionsAndModifiers.forEach(traditionAndModifier => {
 		const byTradition = byLevel.filter(spell => spell.traditions.includes(traditionAndModifier.tradition));
 		if (traditionAndModifier.modifier === "+" || traditionAndModifier.modifier === "|") {
@@ -214,7 +218,7 @@ async function specialistLists(sageMessage: SageMessage): Promise<void> {
 
 // #endregion
 
-export default function register(): void {
+export function register(): void {
 	registerCommandRegex(/^\s*spells\s*(arcane|divine|occult|primal)\s*(\d+(?:\s*st|nd|rd|th)?|cantrips?)?(?:\s*by\s*(school))?\s*$/i, spellListB);
 	registerCommandHelp("Spells", `spells {tradition} {level|Cantrips}`);
 	registerCommandHelp("Spells", `spells {tradition} {level|Cantrips} by school`);

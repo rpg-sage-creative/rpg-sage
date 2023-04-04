@@ -1,13 +1,12 @@
-import type { Core, UUID } from "../../sage-utils";
-import { HasCore } from "../../sage-utils/utils/ClassUtils";
-import { random, randomItem } from "../../sage-utils/utils/RandomUtils";
-import { generate } from "../../sage-utils/utils/UuidUtils";
+import { Core, HasCore } from "../../sage-utils/ClassUtils";
+import { random, randomItem } from "../../sage-utils/RandomUtils";
+import { generate, UUID } from "../../sage-utils/UuidUtils";
 import type { TMagicTradition } from "../common";
 import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL } from "../common";
-import { filter, findByValue } from "../data/Repository";
-import type ArcaneSchool from "./ArcaneSchool";
-import Source from "./base/Source";
-import SpellCollection from "./SpellCollection";
+import { filterBy, findByValue } from "../data";
+import type { ArcaneSchool } from "./ArcaneSchool";
+import { Source } from "./base/Source";
+import { SpellCollection } from "./SpellCollection";
 
 /*
 // function valueOfSpell(spellLevel: number): number {
@@ -67,7 +66,7 @@ export interface SpellbookCore extends Core<"Spellbook"> {
 	sources: string[];
 }
 
-export default class Spellbook extends HasCore<SpellbookCore> {
+export class Spellbook extends HasCore<SpellbookCore> {
 
 	/**************************************************************************************************************************/
 	// Constructors
@@ -138,7 +137,7 @@ export default class Spellbook extends HasCore<SpellbookCore> {
 	public static random(casterClass: string, casterLevel: number, casterSpecialty?: string, sources?: string[]): Spellbook;
 	public static random(casterClass = "Wizard", casterLevel = 1, casterSpecialty?: string, sources: string[] = []): Spellbook {
 		const tradition = getTradition(casterClass, casterSpecialty),
-			traditionSpells = filter("Spell", spell => spell.traditions.includes(tradition)),
+			traditionSpells = filterBy("Spell", spell => spell.traditions.includes(tradition)),
 			traditionCollection = new SpellCollection(traditionSpells);
 
 		const sourceFilter = sources.map(source => findByValue("Source", source)),

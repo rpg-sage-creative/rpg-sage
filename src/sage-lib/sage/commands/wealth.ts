@@ -1,8 +1,10 @@
-import { Coins, PROFICIENCIES, Table, TProficiency } from "../../../sage-pf2e";
-import { addCommas, nth } from "../../../sage-utils/utils/NumberUtils";
-import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import { capitalize } from "../../../sage-utils/utils/StringUtils";
-import type SageMessage from "../model/SageMessage";
+import { PROFICIENCIES, TProficiency } from "../../../sage-pf2e";
+import { Coins } from "../../../sage-pf2e/model/Coins";
+import { Table } from "../../../sage-pf2e/model/Table";
+import { addCommas, nth } from "../../../sage-utils/NumberUtils";
+import type { RenderableContent } from "../../../sage-utils/RenderUtils";
+import { capitalize } from "../../../sage-utils/StringUtils";
+import type { SageMessage } from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
 
@@ -100,7 +102,7 @@ async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, 
 	sageMessage.send(renderable);
 }
 
-export default function register(): void {
+export function register(): void {
 	registerCommandRegex(/^((?:\s*[\-\+]?\s*\d+(?:,\d{3})*\s*[csgp]p)+)$/i, spUtils);
 	registerCommandHelp("Wealth", "Coin Counter", `{1pp} {2gp} {3sp} {4cp}\n{1pp} {-2gp} {+3sp} {-4cp}`);
 

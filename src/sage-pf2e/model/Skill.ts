@@ -1,11 +1,11 @@
-import type utils from "../../sage-utils";
 import type { TAbility } from '../common';
 import { CONSTITUTION, DEXTERITY, STRENGTH } from '../common';
-import RenderableContent from '../data/RenderableContent';
-import { filter, findByValue } from '../data/Repository';
-import type Action from './Action';
+import { Pf2eRenderableContent } from '../Pf2eRenderableContent';
+import { filterBy, findByValue } from '../data';
+import type { Action } from './Action';
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
+import { HasSource } from './base/HasSource';
+import type { RenderableContent } from '../../sage-utils/RenderUtils';
 
 /**************************************************************************************************************************/
 // Interface and Class
@@ -19,7 +19,7 @@ export interface SkillCore extends SourcedCore<"Skill"> {
 
 const ARMOR_PENALTY_ABILITIES = [STRENGTH, DEXTERITY, CONSTITUTION];
 
-export default class Skill extends HasSource<SkillCore> {
+export class Skill extends HasSource<SkillCore> {
 
 	public constructor(core: SkillCore) {
 		super(core);
@@ -32,7 +32,7 @@ export default class Skill extends HasSource<SkillCore> {
 	public get ability(): TAbility { return this.core.ability; }
 
 	private _actions?: Action[];
-	public get actions(): Action[] { return this._actions ?? (this._actions = filter("Action", action => action.skill === this.name)); }
+	public get actions(): Action[] { return this._actions ?? (this._actions = filterBy("Action", action => action.skill === this.name)); }
 
 	private _actionsTrained?: Action[];
 	public get actionsTrained(): Action[] { return this._actionsTrained ?? (this._actionsTrained = this.actions.filter(action => action.trained)); }
@@ -60,7 +60,7 @@ export default class Skill extends HasSource<SkillCore> {
 	private _specialties?: Skill[];
 	public get specialties(): Skill[] {
 		if (!this._specialties) {
-			this._specialties = filter("Skill", skill => skill.parent?.name === this.name);
+			this._specialties = filterBy("Skill", skill => skill.parent?.name === this.name);
 		}
 		return this._specialties;
 	}
@@ -68,10 +68,10 @@ export default class Skill extends HasSource<SkillCore> {
 	public get trainedDetails(): string[] { return this.core.trainedDetails || []; }
 
 	/**************************************************************************************************************************/
-	// utils.RenderUtils.IRenderable
+	// IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const content = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const content = new Pf2eRenderableContent(this);
 		content.setTitle(`<b>${this.name}</b> (${this.ability.slice(0, 3)})`);
 		content.append(...this.details.map((s, i) => (i ? "\t" : "") + s));
 

@@ -1,9 +1,11 @@
 import type { GuildBasedChannel, Role, Snowflake } from "discord.js";
-import type { Optional, VALID_UUID } from "../../../sage-utils";
-import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import type { Optional } from "../../../sage-utils";
+import { exists } from "../../../sage-utils/ArrayUtils";
 import type { ISageCommandArgs } from "./SageCommandArgs";
+import type { EnumLike } from "../../../sage-utils/EnumUtils";
+import type { VALID_UUID } from "../../../sage-utils/UuidUtils";
 
-export default class SageReactionArgs implements ISageCommandArgs {
+export class SageReactionArgs implements ISageCommandArgs {
 
 	/** Returns true if an argument matches the given key, regardless of value. */
 	public hasKey(name: string): boolean;
@@ -73,15 +75,15 @@ export default class SageReactionArgs implements ISageCommandArgs {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid enum value or "unset".
 	 */
-	public getEnum<U>(type: any, name: string): Optional<U>;
+	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): Optional<V>;
 	/** Gets the named option as a value from the given enum type. */
-	public getEnum<U>(type: any, name: string, required: true): U;
-	public getEnum<U>(): Optional<U> {
+	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string, required: true): V;
+	public getEnum(): null {
 		return null;
 	}
 
 	/** Returns true if getEnum(type, name) is not null and not undefined. */
-	public hasEnum(type: any, name: string): boolean {
+	public hasEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): boolean {
 		return exists(this.getEnum(type, name));
 	}
 

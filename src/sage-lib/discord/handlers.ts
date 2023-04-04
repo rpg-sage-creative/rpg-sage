@@ -1,11 +1,11 @@
 import { GatewayIntentBits, IntentsBitField, Interaction, PermissionsString, Snowflake } from "discord.js";
 import { isDefined, isNullOrUndefined, Optional } from "../../sage-utils";
-import { DMessage, DReaction, DUser, MessageType, ReactionType, toHumanReadable } from "../../sage-utils/utils/DiscordUtils";
-import DiscordFetches from "../../sage-utils/utils/DiscordUtils/DiscordFetches";
+import { DMessage, DReaction, DUser, MessageType, ReactionType, toHumanReadable } from "../../sage-utils/DiscordUtils";
+import { DiscordFetches } from "../../sage-utils/DiscordUtils";
 import type { TAcceptableBot } from "../sage/model/Bot";
-import SageInteraction from "../sage/model/SageInteraction";
-import SageMessage from "../sage/model/SageMessage";
-import SageReaction from "../sage/model/SageReaction";
+import { SageInteraction } from "../sage/model/SageInteraction";
+import { SageMessage } from "../sage/model/SageMessage";
+import { SageReaction } from "../sage/model/SageReaction";
 import type { TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
 
 //#region helpers

@@ -1,11 +1,10 @@
-import { exists } from "../../sage-utils/utils/ArrayUtils/Filters";
-import { sortAscending } from "../../sage-utils/utils/ArrayUtils/Sort";
+import { exists, sortAscending } from "../../sage-utils/ArrayUtils";
 import type { TProficiency } from "../common";
 import { ARMOR_UNARMORED, profToMod, TRAINED, UNTRAINED } from "../common";
-import { findById, findByValue } from "../data/Repository";
-import type Feat from "./Feat";
+import { findById, findByValue } from "../data";
+import type { Feat } from "./Feat";
 import type { FeatureCore } from "./Feature";
-import Feature from "./Feature";
+import { Feature } from "./Feature";
 import type { IHasMetadata } from "./Metadata";
 
 export type TFeatureFilter = (feature: Feature, level: number) => boolean;
@@ -17,7 +16,7 @@ export interface FeatureLevelCore {
 	level: number;
 }
 
-export default class Features {
+export class Features {
 	public constructor(protected levels: FeatureLevelCore[]) { }
 
 	public add(...features: Feature[]): void {

@@ -1,15 +1,15 @@
 import { EmbedBuilder } from "@discordjs/builders";
 import type { Awaitable, OrNull } from "../../../sage-utils";
-import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
-import type { Color } from "../../../sage-utils/utils/ColorUtils";
-import { MessageType } from "../../../sage-utils/utils/DiscordUtils";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import { ArgsManager } from "../../../sage-utils/ArgsUtils";
+import type { Color } from "../../../sage-utils/ColorUtils";
+import { MessageType } from "../../../sage-utils/DiscordUtils";
+import { RenderableContent } from "../../../sage-utils/RenderUtils";
 import { registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs, TMessageHandler } from "../../discord/types";
-import ActiveBot from "../model/ActiveBot";
+import { ActiveBot } from "../model/ActiveBot";
 import type { HasCoreWithColors } from "../model/Colors";
 import { ColorType } from "../model/Colors";
-import type SageMessage from "../model/SageMessage";
+import type { SageMessage } from "../model/SageMessage";
 
 export enum BotServerGameType { Bot, Server, Game }
 
@@ -136,6 +136,6 @@ async function adminCommandHandler(sageMessage: SageMessage): Promise<void> {
 
 // #endregion
 
-export default function register(): void {
+export function register(): void {
 	registerMessageListener(adminCommandTest, adminCommandHandler);
 }

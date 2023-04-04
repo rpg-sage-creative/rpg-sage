@@ -1,8 +1,8 @@
-import { nth } from '../../sage-utils/utils/NumberUtils';
-import { findByValue } from '../data/Repository';
-import type Domain from "./Domain";
-import type Skill from './Skill';
-import type Spell from './Spell';
+import { nth } from '../../sage-utils/NumberUtils';
+import { findByValue } from '../data';
+import type { Domain } from "./Domain";
+import type { Skill } from './Skill';
+import type { Spell } from './Spell';
 
 export type TDevoteeBenefitsCore = {
 	divineFont: string[];
@@ -13,7 +13,7 @@ export type TDevoteeBenefitsCore = {
 	alternateDomains: string[];
 };
 
-export default class DevoteeBenefits {
+export class DevoteeBenefits {
 
 	public constructor(private core: TDevoteeBenefitsCore) { }
 

@@ -1,5 +1,5 @@
 import type { TAbility, TBonusType, TProficiency } from "../../common";
-import { CIRCUMSTANCE, ITEM, STATUS, toModifier, UNTYPED } from "../../common";
+import { CIRCUMSTANCE, ITEM, STATUS, UNTYPED, toModifier } from "../../common";
 import type { IHasAbilities } from "./Abilities";
 import type { IHasProficiencies } from "./PlayerCharacter";
 
@@ -33,7 +33,7 @@ interface IProficiencyModifier {
 
 export type TCheckPlayerCharacter = IHasAbilities & IHasProficiencies;
 
-export default class Check {
+export class Check {
 	/**************************************************************************************************************************/
 	// Constructor
 

@@ -1,10 +1,10 @@
-import type utils from "../../sage-utils";
-import type { TSortResult } from "../../sage-utils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
 import type { TAction } from "../common";
-import RenderableContent from "../data/RenderableContent";
-import HasSource, { SourcedCore } from "../model/base/HasSource";
-import type Metadata from "./Metadata";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
+import { HasSource,  SourcedCore } from "../model/base/HasSource";
+import type { Metadata } from "./Metadata";
 import type { IHasMetadata, IMetadata } from "./Metadata";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
 
 /**************************************************************************************************************************/
 // Interface and Class
@@ -28,7 +28,7 @@ function ensureArray(input: string | string[]): string[] {
 	return typeof (input) === "string" ? [input] : [];
 }
 
-export default class Feat<T extends string = "Feat", U extends FeatCore<T> = FeatCore<T>> extends HasSource<U, T> implements IHasMetadata {
+export class Feat<T extends string = "Feat", U extends FeatCore<T> = FeatCore<T>> extends HasSource<U, T> implements IHasMetadata {
 	/**************************************************************************************************************************/
 	// Constructor
 
@@ -62,7 +62,7 @@ export default class Feat<T extends string = "Feat", U extends FeatCore<T> = Fea
 	public isSkill = this.traits.includes("Skill");
 
 	// #region utils.ArrayUtils.Sort.IComparable<T>
-	public compareTo(other: Feat<T, U>): TSortResult {
+	public compareTo(other: Feat<T, U>): -1 | 0 | 1 {
 		if (this.core.objectType !== other.objectType) {
 			return this.core.objectType < other.core.objectType ? -1 : 1;
 		}
@@ -76,9 +76,9 @@ export default class Feat<T extends string = "Feat", U extends FeatCore<T> = Fea
 	}
 	// #endregion utils.ArrayUtils.Sort.IComparable<T>
 
-	// #region utils.RenderUtils.IRenderable
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const content = new RenderableContent(this);
+	// #region IRenderable
+	public toRenderableContent(): RenderableContent {
+		const content = new Pf2eRenderableContent(this);
 
 		const title = `<b>${this.name}</b> - Feat ${this.level}`;
 		content.setTitle(title);
@@ -102,9 +102,9 @@ export default class Feat<T extends string = "Feat", U extends FeatCore<T> = Fea
 
 		return content;
 	}
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion IRenderable
 
-	// #region utils.SearchUtils.ISearchable
+	// #region ISearchable
 
 	public get searchResultCategory(): string {
 		const types: string[] = [];
@@ -118,7 +118,7 @@ export default class Feat<T extends string = "Feat", U extends FeatCore<T> = Fea
 		return `${types.join(" ")} Feat ${this.level} ${rarity}`;
 	}
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.access, this.cost, this.frequency, this.prerequisites, this.special, this.traits, this.trigger));
@@ -126,6 +126,6 @@ export default class Feat<T extends string = "Feat", U extends FeatCore<T> = Fea
 		return score;
 	}
 
-	// #endregion utils.SearchUtils.ISearchable
+	// #endregion ISearchable
 
 }

@@ -1,11 +1,11 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent } from '../../sage-utils/RenderUtils';
 import type { TAlignment } from '../common';
-import RenderableContent from '../data/RenderableContent';
+import { Pf2eRenderableContent } from '../Pf2eRenderableContent';
 import type { TDevoteeBenefitsCore } from "./DevoteeBenefits";
-import DevoteeBenefits from "./DevoteeBenefits";
-import type Domain from "./Domain";
+import { DevoteeBenefits } from "./DevoteeBenefits";
+import type { Domain } from "./Domain";
 import type { FaithCoreBase } from "./Faith";
-import HasFaith from "./Faith";
+import { Faith as HasFaith } from "./Faith";
 
 export type TDeitySpell = {
 	level: number;
@@ -20,7 +20,7 @@ export interface DeityCore extends FaithCoreBase<"Deity"> {
 //TODO: cleanup the data to not need these xxxToContent functions
 //TODO: figure out how to handle spells with (x only) or (appears as x) alterations
 
-export default class Deity extends HasFaith<"Deity", DeityCore> {
+export class Deity extends HasFaith<"Deity", DeityCore> {
 
 	public constructor(core: DeityCore) {
 		super(core);
@@ -36,10 +36,10 @@ export default class Deity extends HasFaith<"Deity", DeityCore> {
 	public hasDomain(domain: Domain): boolean { return this.devoteeBenefits.domains.includes(domain) || this.devoteeBenefits.alternateDomains.includes(domain); }
 
 	/**************************************************************************************************************************/
-	// utils.RenderUtils.IRenderable
+	// IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const content = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const content = new Pf2eRenderableContent(this);
 		if (this.source.isCore) {
 			content.setThumbnailUrl(`http://rpgsage.io/images/religious/${this.name.replace(/\s/g, "")}.png`);
 		}

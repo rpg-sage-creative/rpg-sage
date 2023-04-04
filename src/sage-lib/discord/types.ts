@@ -1,8 +1,8 @@
 import type { Awaitable } from "../../sage-utils";
-import type { ArgsManager } from "../../sage-utils/utils/ArgsUtils";
-import type SageInteraction from "../sage/model/SageInteraction";
-import type SageMessage from "../sage/model/SageMessage";
-import type SageReaction from "../sage/model/SageReaction";
+import type { ArgsManager } from "../../sage-utils/ArgsUtils";
+import type { SageInteraction } from "../sage/model/SageInteraction";
+import type { SageMessage } from "../sage/model/SageMessage";
+import type { SageReaction } from "../sage/model/SageReaction";
 
 export type THandlerOutput = { tested: number; handled: number; };
 

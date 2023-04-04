@@ -1,7 +1,7 @@
-import type { Core, UUID } from "../../sage-utils";
-import { HasCore } from "../../sage-utils/utils/ClassUtils";
+import { Core, HasCore } from "../../sage-utils/ClassUtils";
+import type { UUID } from "../../sage-utils/UuidUtils";
 import { DASH } from '../common';
-import Spell from "./Spell";
+import { Spell } from "./Spell";
 
 export interface HeightenedSpellCore extends Core<"HeightenedSpell"> {
 	bumps: number;
@@ -10,7 +10,7 @@ export interface HeightenedSpellCore extends Core<"HeightenedSpell"> {
 	spell: UUID;
 }
 
-export default class HeightenedSpell extends HasCore<HeightenedSpellCore> {
+export class HeightenedSpell extends HasCore<HeightenedSpellCore> {
 	public id: string;
 
 	public constructor(core: HeightenedSpellCore) {

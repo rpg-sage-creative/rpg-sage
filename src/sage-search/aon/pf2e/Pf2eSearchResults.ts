@@ -1,5 +1,5 @@
 import { createSearchUrl } from ".";
-import { findByAonBase } from "../../../sage-pf2e/data/Repository";
+import { findByAonBase } from "../../../sage-pf2e/data";
 import { AonBase } from "../../../sage-pf2e/model/base/AonBase";
 import type { Base } from "../../../sage-pf2e/model/base/Base";
 import type { HasSource } from "../../../sage-pf2e/model/base/HasSource";

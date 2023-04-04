@@ -1,5 +1,5 @@
 import type { Optional } from "../../../sage-utils";
-import { Color } from "../../../sage-utils/utils/ColorUtils";
+import { Color } from "../../../sage-utils/ColorUtils";
 
 //#region types
 
@@ -50,7 +50,7 @@ export interface HasCoreWithColors {
 
 export type TColorAndType = { type: ColorType; color: Color };
 
-export default class Colors {
+export class Colors {
 	public constructor(private colors: ColorData[]) { }
 
 	private findColor(type: Optional<ColorType>): ColorData | undefined {

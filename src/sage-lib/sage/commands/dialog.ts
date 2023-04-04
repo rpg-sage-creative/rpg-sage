@@ -1,31 +1,25 @@
 import { ColorResolvable, Embed, EmbedBuilder, Message, Snowflake, WebhookMessageCreateOptions } from "discord.js";
-import * as _XRegExp from "xregexp";
-import type { Optional, OrUndefined, TParsers } from "../../../sage-utils";
-import { errorReturnEmptyArray, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { MessageType, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
-import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
-import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
-import { embedsToTexts } from "../../../sage-utils/utils/DiscordUtils/embeds";
-import { isNonNilSnowflake } from "../../../sage-utils/utils/DiscordUtils/snowflake";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import { isBlank } from "../../../sage-utils/utils/StringUtils";
-import { tokenize } from "../../../sage-utils/utils/StringUtils/Tokenizer";
+import XRegExp from "xregexp";
+import type { Optional, OrUndefined } from "../../../sage-utils";
+import { errorReturnEmptyArray, errorReturnNull } from "../../../sage-utils/ConsoleUtils";
+import { DiscordId, DiscordKey, MessageType, ReactionType, embedsToTexts } from "../../../sage-utils/DiscordUtils";
+import { RenderableContent } from "../../../sage-utils/RenderUtils";
+import { isNonNilSnowflake } from "../../../sage-utils/SnowflakeUtils";
+import { TokenParsers, isBlank, tokenize } from "../../../sage-utils/StringUtils";
 import type { TCommand, TCommandAndArgsAndData } from "../../discord";
 import { registerMessageListener, registerReactionListener } from "../../discord/handlers";
 import { replaceWebhook, sendWebhook } from "../../discord/messages";
-import type CharacterManager from "../model/CharacterManager";
+import type { CharacterManager } from "../model/CharacterManager";
 import { ColorType } from "../model/Colors";
 import { EmojiType } from "../model/Emoji";
 import { GameRoleType } from "../model/Game";
-import GameCharacter, { type GameCharacterCore } from "../model/GameCharacter";
-import type SageMessage from "../model/SageMessage";
-import type SageReaction from "../model/SageReaction";
-import { DialogType } from "../repo/base/channel";
-import DialogMessageRepository, { TDialogMessage } from "../repo/DialogMessageRepository";
+import { GameCharacter, type GameCharacterCore } from "../model/GameCharacter";
+import type { SageMessage } from "../model/SageMessage";
+import type { SageReaction } from "../model/SageReaction";
+import { DialogMessageRepository, TDialogMessage } from "../repo";
+import { DialogType } from "../repo";
 import { parseDiceMatches, sendDice } from "./dice";
 import { registerInlineHelp } from "./help";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
-
 
 //#region Dialog Post
 
@@ -316,7 +310,7 @@ function getDialogSeparator(content: string, allowDynamicDialogSeparator: boolea
 }
 
 /** Generates parsers for the given separator. */
-function getDialogParsers(typeAndSeparator: TTypeRegexAndSeparatorParts): TParsers {
+function getDialogParsers(typeAndSeparator: TTypeRegexAndSeparatorParts): TokenParsers {
 	return {
 		type: XRegExp(`^${typeAndSeparator.type}${typeAndSeparator.separator}`, "i"),
 		color: XRegExp(`(?:0x|#)([0-9a-f]{3}|[0-9a-f]{6})${typeAndSeparator.separator}`, "i"),
@@ -761,7 +755,7 @@ async function doPin(sageReaction: SageReaction): Promise<void> {
 
 // #endregion
 
-export default function register(): void {
+export function register(): void {
 	registerMessageListener(isDialog, doDialog, MessageType.Both, undefined, undefined, 0);
 
 	// registerInlineHelp("Dialog", "edit::{content}");

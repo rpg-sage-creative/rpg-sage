@@ -1,11 +1,11 @@
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import type { Optional } from "../../../../../sage-utils";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import type { TMacro } from "../../../model/User";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
-import { StringMatcher } from "../../../../../sage-utils/utils/StringUtils";
-import { existsAndUnique } from "../../../../../sage-utils/utils/ArrayUtils/Filters";
+import { StringMatcher } from "../../../../../sage-utils/StringUtils";
+import { existsAndUnique } from "../../../../../sage-utils/ArrayUtils";
 
 const UNCATEGORIZED = "Uncategorized";
 
@@ -280,7 +280,7 @@ async function macroDelete(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactFailure("Macro not found!");
 }
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(macroList, "macro-list");
 
 	registerAdminCommand(macroSet, "macro-set", "macro-add");

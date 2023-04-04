@@ -1,15 +1,15 @@
-import registerBot from "./bot";
-import registerChannel from "./channel";
-import registerColor from "./color";
-import registerEmoji from "./emoji";
-import registerGame from "./game/index";
-import registerGameCharacter from "./gameCharacter";
-import registerNote from "./note";
-import registerPatreon from "./patreon";
-import registerServer from "./server/index";
-import registerUser from "./user/index";
+import { register as registerBot } from "./bot";
+import { register as registerChannel } from "./channel";
+import { register as registerColor } from "./color";
+import { register as registerEmoji } from "./emoji";
+import { register as registerGame } from "./game/index";
+import { register as registerGameCharacter } from "./gameCharacter";
+import { register as registerNote } from "./note";
+import { register as registerPatreon } from "./patreon";
+import { register as registerServer } from "./server/index";
+import { register as registerUser } from "./user/index";
 
-export default function register(): void {
+export function register(): void {
 	registerBot();
 	registerChannel();
 	registerColor();

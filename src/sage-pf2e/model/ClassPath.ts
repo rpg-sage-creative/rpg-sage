@@ -1,14 +1,14 @@
-import type utils from "../../sage-utils";
-import RenderableContent from '../data/RenderableContent';
-import { findByValue } from "../data/Repository";
+import type { RenderableContent } from '../../sage-utils/RenderUtils';
+import { Pf2eRenderableContent } from '../Pf2eRenderableContent';
+import { findByValue } from "../data";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
+import { HasSource } from './base/HasSource';
 
 export interface ClassPathCore extends SourcedCore<"ClassPath"> {
 	class: string;
 }
 
-export default class ClassPath extends HasSource<ClassPathCore> {
+export class ClassPath extends HasSource<ClassPathCore> {
 
 	public constructor(core: ClassPathCore) {
 		super(core);
@@ -18,8 +18,8 @@ export default class ClassPath extends HasSource<ClassPathCore> {
 
 	//#region Instance Methods
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const renderable = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const renderable = new Pf2eRenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.class.classPath})`);
 		if (this.hasTraits || this.isNotCommon) {
 			const traits: string[] = [];
@@ -37,7 +37,7 @@ export default class ClassPath extends HasSource<ClassPathCore> {
 
 	//#endregion
 
-	//#region utils.SearchUtils.ISearchable
+	//#region ISearchable
 
 	public get searchResultCategory(): string {
 		return this.class.classPath;

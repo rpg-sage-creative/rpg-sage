@@ -1,10 +1,10 @@
 import type { Pf2tBaseCore } from "../sage-pf2e";
 import type { SourceCore } from "../sage-pf2e/model/base/Source";
 import type { ClassCore } from "../sage-pf2e/model/Class";
-import { Collection } from "../sage-utils/utils/ArrayUtils";
-import { readJsonFile, writeFile } from "../sage-utils/utils/FsUtils";
-import { getJson } from "../sage-utils/utils/HttpsUtils";
-import { StringMatcher } from "../sage-utils/utils/StringUtils";
+import { Collection } from "../sage-utils/ArrayUtils";
+import { readJsonFile, writeFile } from "../sage-utils/FsUtils";
+import { getJson } from "../sage-utils/HttpsUtils";
+import { StringMatcher } from "../sage-utils/StringUtils";
 import type { TCore } from "./types.mjs";
 
 export const SrcDataPath = "../data/pf2e/src";

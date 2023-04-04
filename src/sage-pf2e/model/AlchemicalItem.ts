@@ -1,6 +1,6 @@
-import type utils from "../../sage-utils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
 import type { BulkCore } from "./HasBulk";
-import HasBulk from "./HasBulk";
+import { HasBulk } from "./HasBulk";
 
 
 /**************************************************************************************************************************/
@@ -11,7 +11,7 @@ export interface AlchemicalItemCore extends BulkCore<"AlchemicalItem"> {
 	price: string;
 }
 
-export default class AlchemicalItem extends HasBulk<AlchemicalItemCore, AlchemicalItem> {
+export class AlchemicalItem extends HasBulk<AlchemicalItemCore, AlchemicalItem> {
 
 	/**************************************************************************************************************************/
 	// Constructor
@@ -28,9 +28,9 @@ export default class AlchemicalItem extends HasBulk<AlchemicalItemCore, Alchemic
 	public get price(): string | undefined { return this.core.price ?? undefined; }
 
 	/**************************************************************************************************************************/
-	// utils.SearchUtils.ISearchable
+	// ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			const terms: string[] = [];

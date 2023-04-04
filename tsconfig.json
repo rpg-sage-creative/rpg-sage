@@ -2,7 +2,7 @@
 	"compileOnSave": false,
 	"compilerOptions": {
 		"alwaysStrict": true,
-		// "allowSyntheticDefaultImports": true,
+		"allowSyntheticDefaultImports": true,
 
 		"declaration": true,
 		"declarationDir": "./types",

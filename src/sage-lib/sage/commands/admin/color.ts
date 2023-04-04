@@ -1,13 +1,13 @@
 import type { Optional } from "../../../../sage-utils";
-import { Collection } from "../../../../sage-utils/utils/ArrayUtils";
-import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
-import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { Collection } from "../../../../sage-utils/ArrayUtils";
+import { exists } from "../../../../sage-utils/ArrayUtils";
+import { errorReturnNull } from "../../../../sage-utils/ConsoleUtils";
 import { discordPromptYesNo } from "../../../discord/prompts";
-import type Colors from "../../model/Colors";
+import type { Colors } from "../../model/Colors";
 import type { TColorAndType } from "../../model/Colors";
 import { ColorType } from "../../model/Colors";
-import type SageMessage from "../../model/SageMessage";
-import type SageMessageArgs from "../../model/SageMessageArgs";
+import type { SageMessage } from "../../model/SageMessage";
+import type { SageMessageArgs } from "../../model/SageMessageArgs";
 import { BotServerGameType, embedColor, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
 
@@ -95,7 +95,7 @@ async function colorList(sageMessage: SageMessage): Promise<void> {
 async function _colorGet(sageMessage: SageMessage, ...colors: Optional<Colors>[]): Promise<void> {
 	colors = colors.filter(exists);
 
-	const colorType = sageMessage.args.findEnum<ColorType>(ColorType, "type", true)!;
+	const colorType = sageMessage.args.findEnum(ColorType, "type", true)!;
 	let inherited = false;
 	let color = colors.shift()!.get(colorType);
 	while (!color && colors.length) {
@@ -140,7 +140,7 @@ function findColorAndType(args: SageMessageArgs): Optional<TColorAndType> {
 		return null;
 	}
 	const color = args.findColor("color", true),
-		type = args.findEnum<ColorType>(ColorType, "type", true);
+		type = args.findEnum(ColorType, "type", true);
 	if (color && type) {
 		return { color, type };
 	}
@@ -265,7 +265,7 @@ async function colorUnsetServer(sageMessage: SageMessage<true>): Promise<void> {
 		return denial;
 	}
 
-	const colorType = sageMessage.args.findEnum<ColorType>(ColorType, "type", true);
+	const colorType = sageMessage.args.findEnum(ColorType, "type", true);
 	const unset = sageMessage.server.colors.unset(colorType);
 	if (!unset) {
 		return sageMessage.reactFailure("Invalid color type.");
@@ -283,7 +283,7 @@ async function colorUnsetGame(sageMessage: SageMessage): Promise<void> {
 
 	const game = sageMessage.game!;
 
-	const colorType = sageMessage.args.findEnum<ColorType>(ColorType, "type", true);
+	const colorType = sageMessage.args.findEnum(ColorType, "type", true);
 	const unset = game.colors.unset(colorType);
 	if (!unset) {
 		return sageMessage.reactFailure("Invalid color type.");
@@ -299,7 +299,7 @@ async function colorUnset(sageMessage: SageMessage): Promise<void> {
 
 //#endregion
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(colorListBot, "color-list-bot");
 	registerAdminCommand(colorListServer, "color-list-server");
 	registerAdminCommand(colorListGame, "color-list-game");

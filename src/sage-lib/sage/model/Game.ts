@@ -1,27 +1,29 @@
 import type { GuildMember, Message, Snowflake } from "discord.js";
 import type { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import type { Args, IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
-import { exists, unique } from "../../../sage-utils/utils/ArrayUtils/Filters";
-import { stringIgnoreCase } from "../../../sage-utils/utils/ArrayUtils/Sort";
-import type { DGuildChannel } from "../../../sage-utils/utils/DiscordUtils";
-import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
-import { readJsonFile } from "../../../sage-utils/utils/FsUtils";
-import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
+import type { Args, Optional, OrNull } from "../../../sage-utils";
+import { exists, unique } from "../../../sage-utils/ArrayUtils";
+import { IComparable, stringIgnoreCase } from "../../../sage-utils/ArrayUtils";
+import type { DGuildChannel } from "../../../sage-utils/DiscordUtils";
+import { DiscordKey } from "../../../sage-utils/DiscordUtils";
+import { readJsonFile } from "../../../sage-utils/FsUtils";
+import { cleanJson } from "../../../sage-utils/JsonUtils";
 import { DicePostType } from "../commands/dice";
-import { DialogType, GameChannelType, IChannel, IChannelOptions, parseGameChannelType, updateChannel } from "../repo/base/channel";
-import { HasIdCoreAndSageCache } from "../repo/base/IdRepository";
-import CharacterManager from "./CharacterManager";
+import { DialogType, GameChannelType, IChannel, IChannelOptions, parseGameChannelType, updateChannel } from "../repo";
+import { HasIdCoreAndSageCache } from "../repo";
+import { CharacterManager } from "./CharacterManager";
 import type { ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
-import Colors from "./Colors";
+import { Colors } from "./Colors";
 import type { CoreWithEmoji, EmojiType, HasCoreWithEmoji } from "./Emoji";
-import Emoji from "./Emoji";
-import type GameCharacter from "./GameCharacter";
+import { Emoji } from "./Emoji";
+import type { GameCharacter } from "./GameCharacter";
 import type { GameCharacterCore, TGameCharacterTag } from "./GameCharacter";
-import type SageCache from "./SageCache";
+import type { SageCache } from "./SageCache";
 import { applyValues, getEnum, hasValues, ISageCommandArgs } from "./SageCommandArgs";
-import type Server from "./Server";
-import User from "./User";
+import type { Server } from "./Server";
+import { User } from "./User";
+import type { IdCore } from "../../../sage-utils/ClassUtils";
+import type { UUID } from "../../../sage-utils/UuidUtils";
 
 type IChannelArgs = Args<IChannelOptions> & { did:Snowflake; };
 
@@ -127,7 +129,7 @@ async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<
 	return [gChannels.concat(sChannels), gChannels, sChannels];
 }
 
-export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IComparable<Game>, HasCoreWithColors, HasCoreWithEmoji {
+export class Game extends HasIdCoreAndSageCache<IGameCore> implements IComparable<Game>, HasCoreWithColors, HasCoreWithEmoji {
 	public constructor(core: IGameCore, public server: Server, sageCache: SageCache) {
 		super(core, sageCache);
 	}

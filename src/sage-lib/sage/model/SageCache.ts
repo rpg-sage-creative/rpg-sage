@@ -1,22 +1,23 @@
 import { Client, Guild, GuildMember, PermissionFlagsBits, Role, Snowflake } from "discord.js";
-import type { Optional, UUID } from "../../../sage-utils";
-import { handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
-import DiscordFetches from "../../../sage-utils/utils/DiscordUtils/DiscordFetches";
-import DiscordKey from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
-import type { DChannel, DInteraction, DMessage, DReaction, DUser } from "../../../sage-utils/utils/DiscordUtils/types";
-import { format } from "../../../sage-utils/utils/StringUtils/Markdown";
-import ActiveBot from "../model/ActiveBot";
-import { DialogType } from "../repo/base/channel";
-import BotRepo from "../repo/BotRepo";
-import GameRepo from "../repo/GameRepo";
-import ServerRepo from "../repo/ServerRepo";
-import UserRepo from "../repo/UserRepo";
-import type Bot from "./Bot";
-import type Game from "./Game";
+import type { Optional } from "../../../sage-utils";
+import { handleDiscordErrorReturnNull } from "../../../sage-utils/DiscordUtils";
+import { DiscordFetches } from "../../../sage-utils/DiscordUtils";
+import { DiscordKey } from "../../../sage-utils/DiscordUtils";
+import type { DChannel, DInteraction, DMessage, DReaction, DUser } from "../../../sage-utils/DiscordUtils";
+import { ActiveBot } from "../model/ActiveBot";
+import { DialogType } from "../repo";
+import { BotRepo } from "../repo";
+import { GameRepo } from "../repo";
+import { ServerRepo } from "../repo";
+import { UserRepo } from "../repo";
+import type { Bot } from "./Bot";
+import type { Game } from "./Game";
 import { GameRoleType, GameUserType } from "./Game";
-import type Server from "./Server";
+import type { Server } from "./Server";
 import { AdminRoleType } from "./Server";
-import type User from "./User";
+import type { User } from "./User";
+import type { UUID } from "../../../sage-utils/UuidUtils";
+import { toMarkdown } from "../../../sage-utils/StringUtils";
 
 type SageCacheCore = {
 	discord: DiscordFetches;
@@ -326,7 +327,7 @@ function createCoreAndCache(): { core:SageCacheCore, sageCache:SageCache } {
 	return { core, sageCache };
 }
 
-export default class SageCache {
+export class SageCache {
 	constructor(protected core: SageCacheCore) { }
 
 	public get sendEmbedsAsContent(): boolean { return this.actor.s.defaultSagePostType === DialogType.Post; }
@@ -362,7 +363,7 @@ export default class SageCache {
 	}
 
 	public format(text: string): string {
-		return format(this.emojify(text));
+		return toMarkdown(this.emojify(text));
 	}
 
 	public getFormatter(): (content: string) => string;

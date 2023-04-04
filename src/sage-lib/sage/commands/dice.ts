@@ -1,22 +1,20 @@
 import type { ButtonInteraction, EmbedBuilder } from "discord.js";
 import type { GameType } from "../../../sage-common";
-import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "../../../sage-dice";
+import { DiceOutputType, DiceSecretMethodType, TDiceOutput } from "../../../sage-dice";
+import { DiscordDice } from "../../../sage-dice/discord";
 import { NEWLINE } from "../../../sage-pf2e";
-import type { Optional, TKeyValueArg } from "../../../sage-utils";
-import { DMessageChannel, DMessageTarget, MessageType, toHumanReadable } from "../../../sage-utils/utils/DiscordUtils";
-import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
-import { createMessageEmbed } from "../../../sage-utils/utils/DiscordUtils/embeds";
-import { sendTo } from "../../../sage-utils/utils/DiscordUtils/sendMessage";
-import { addCommas } from "../../../sage-utils/utils/NumberUtils";
-import { random, randomItem } from "../../../sage-utils/utils/RandomUtils";
-import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, Tokenizer } from "../../../sage-utils/utils/StringUtils";
+import type { Optional } from "../../../sage-utils";
+import { DMessageChannel, DMessageTarget, DiscordId, MessageType, createMessageEmbed, sendTo, toHumanReadable } from "../../../sage-utils/DiscordUtils";
+import { addCommas } from "../../../sage-utils/NumberUtils";
+import { random, randomItem } from "../../../sage-utils/RandomUtils";
+import { KeyValueArg, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, tokenize } from "../../../sage-utils/StringUtils";
 import type { TCommandAndArgsAndData } from "../../discord";
 import { registerMessageListener } from "../../discord/handlers";
-import { GameUserType } from "../model/Game";
 import { ColorType } from "../model/Colors";
-import type NamedCollection from "../model/NamedCollection";
-import SageInteraction from "../model/SageInteraction";
-import SageMessage from "../model/SageMessage";
+import { GameUserType } from "../model/Game";
+import type { NamedCollection } from "../model/NamedCollection";
+import { SageInteraction } from "../model/SageInteraction";
+import { SageMessage } from "../model/SageMessage";
 import type { TMacro } from "../model/User";
 import { registerCommandRegex } from "./cmd";
 import { registerInlineHelp } from "./help";
@@ -503,14 +501,14 @@ function findPrefixMacroArgs(userMacros: NamedCollection<TMacro>, input: string)
 	return [cleanPrefix, macro, slicedArgs];
 }
 
-type TArgs = { indexed:string[]; named:TKeyValueArg[] };
+type TArgs = { indexed:string[]; named:KeyValueArg[] };
 function parseMacroArgs(argString: string): TArgs {
 	const parsers = {
 		spaces: createWhitespaceRegex(),
 		named: createKeyValueArgRegex(),
 		quotes: createQuotedRegex(true)
 	};
-	const tokens = Tokenizer.tokenize(argString.trim(), parsers);
+	const tokens = tokenize(argString.trim(), parsers);
 	const named = tokens
 		.filter(token => token.type === "named")
 		.map(token => parseKeyValueArg(token.token)!);
@@ -538,7 +536,7 @@ function nonEmptyStringOrDefaultValue(arg: Optional<string>, def: Optional<strin
 	return argOrEmptyString !== "" ? argOrEmptyString : defOrEmptyString;
 }
 
-function namedArgValueOrDefaultValue(arg: Optional<TKeyValueArg>, def: Optional<string>): string {
+function namedArgValueOrDefaultValue(arg: Optional<KeyValueArg>, def: Optional<string>): string {
 	if (arg) {
 		const value = nonEmptyStringOrDefaultValue(arg.value, def);
 		if (arg.keyLower.match(/^(ac|dc|vs)$/) && value) {
@@ -798,7 +796,7 @@ function mapDiceTestResults({ dieSize, iterations, rolls }: { dieSize: number; i
 
 //#endregion
 
-export default function register(): void {
+export function register(): void {
 	registerCommandRegex(/dice test (die|size)=("d?\d+"|\d+)/i, diceTest);
 	registerMessageListener(hasUnifiedDiceCommand, sendDice as any, MessageType.Post, undefined, undefined, 1);
 

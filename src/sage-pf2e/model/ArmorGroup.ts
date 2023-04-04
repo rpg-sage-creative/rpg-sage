@@ -1,17 +1,16 @@
-import type utils from "../../sage-utils";
-import type { TRenderableContentSection } from "../../sage-utils";
+import type { RenderableContent, TRenderableContentSection } from "../../sage-utils/RenderUtils";
 import { TAB } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface ArmorGroupCore extends SourcedCore<"ArmorGroup"> {
 	specializationEffect: string[];
 }
-export default class ArmorGroup extends HasSource<ArmorGroupCore> {
+export class ArmorGroup extends HasSource<ArmorGroupCore> {
 	public get specializationEffect(): string[] { return this.core.specializationEffect || []; }
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const content = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const content = new Pf2eRenderableContent(this);
 		content.setTitle(`<b>${this.name}</b> (Armor Group)`);
 		content.append(`<b>Specialization Effect</b>`);
 		content.append(...this.specializationEffect.map((d, i) => (i ? TAB : "") + d));

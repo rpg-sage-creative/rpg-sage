@@ -1,13 +1,13 @@
 import type { Snowflake } from "discord.js";
-import { NilUuid, UUID } from "../../../sage-utils";
-import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { isNilSnowflake } from "../../../sage-utils/utils/DiscordUtils";
-import DiscordKey, { DiscordKeyCore, TDiscordKeyResolvable } from "../../../sage-utils/utils/DiscordUtils/DiscordKey";
-import { readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
-import { cleanJson } from "../../../sage-utils/utils/JsonUtils";
-import IdRepository from "./base/IdRepository";
+import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/ConsoleUtils";
+import { isNilSnowflake } from "../../../sage-utils/SnowflakeUtils";
+import { DiscordKey,  DiscordKeyCore, TDiscordKeyResolvable } from "../../../sage-utils/DiscordUtils";
+import { readJsonFile, writeFile } from "../../../sage-utils/FsUtils";
+import { cleanJson } from "../../../sage-utils/JsonUtils";
+import { IdRepository } from "./base/IdRepository";
+import { NIL_UUID, UUID } from "../../../sage-utils/UuidUtils";
 
-export type SageKeyCore = {
+type SageKeyCore = {
 	bot?: UUID;
 	character?: UUID;
 	game?: UUID;
@@ -27,27 +27,27 @@ export type TDialogMessage = {
 
 //#region obsolete
 
-export type TObsoleteDialogMessage = TDialogMessage & {
-	characterId?: UUID;
-	gameId?: UUID;
-	serverId?: UUID;
+// export type TObsoleteDialogMessage = TDialogMessage & {
+// 	characterId?: UUID;
+// 	gameId?: UUID;
+// 	serverId?: UUID;
 
-	/** @deprecated Use .discordKey?.category */
-	categoryDid?: Snowflake;
+// 	/** @deprecated Use .discordKey?.category */
+// 	categoryDid?: Snowflake;
 
-	/** @deprecated Use .discordKey?.channel */
-	channelDid?: Snowflake;
+// 	/** @deprecated Use .discordKey?.channel */
+// 	channelDid?: Snowflake;
 
-	/** @deprecated Use .discordKey?.message */
-	messageDid?: Snowflake;
+// 	/** @deprecated Use .discordKey?.message */
+// 	messageDid?: Snowflake;
 
-	/** @deprecated Use .discordKey?.server */
-	serverDid?: Snowflake;
+// 	/** @deprecated Use .discordKey?.server */
+// 	serverDid?: Snowflake;
 
-	/** @deprecated Use .discordKey?.thread */
-	threadDid?: Snowflake;
+// 	/** @deprecated Use .discordKey?.thread */
+// 	threadDid?: Snowflake;
 
-};
+// };
 
 //#endregion
 
@@ -57,7 +57,7 @@ function toPath(discordKey: TDiscordKeyResolvable): string {
 	return `${root}/messages/${file}.json`;
 }
 
-export default class DialogMessageRepository {
+export class DialogMessageRepository {
 	/**
 	 * @deprecated
 	 * This is a stop-gap solution.
@@ -83,7 +83,7 @@ export default class DialogMessageRepository {
 				sageKeyKeys.forEach(sageKeyKey => {
 					const dialogMessageKey = `${sageKeyKey}Id` as keyof TDialogMessage;
 					const uuid = dialogMessage[dialogMessageKey] as UUID | undefined;
-					sageKey[sageKeyKey] = uuid === NilUuid ? undefined : uuid as UUID ?? undefined;
+					sageKey[sageKeyKey] = uuid === NIL_UUID ? undefined : uuid as UUID ?? undefined;
 					delete dialogMessage[dialogMessageKey];
 				});
 				dialogMessage.sageKey = cleanJson(sageKey);

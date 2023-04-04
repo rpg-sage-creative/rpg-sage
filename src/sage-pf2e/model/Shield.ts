@@ -1,8 +1,8 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
 import { MDASH, NEWLINE, TAB, toModifier } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
 import type { BulkCore } from "./HasBulk";
-import HasBulk from "./HasBulk";
+import { HasBulk } from "./HasBulk";
 
 /**************************************************************************************************************************/
 // Interface and Class
@@ -18,7 +18,7 @@ export interface ShieldCore extends BulkCore<"Shield"> {
 	speedPenalty?: number;
 }
 
-export default class Shield extends HasBulk<ShieldCore, Shield> {
+export class Shield extends HasBulk<ShieldCore, Shield> {
 
 	public get acBonus(): number { return this.core.acBonus ?? 0; }
 	public get breakThreshold(): number { return this.core.breakThreshold ?? (this.hitPoints / 2); }
@@ -30,8 +30,8 @@ export default class Shield extends HasBulk<ShieldCore, Shield> {
 	public get price(): string | undefined { return this.core.price; }
 	public get speedPenalty(): number | undefined { return this.core.speedPenalty; }
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const content = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const content = new Pf2eRenderableContent(this);
 
 		const level = this.level ? `(level ${this.level})` : ``;
 		const title = `<b>${this.name}</b> ${level}`;

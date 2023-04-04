@@ -1,7 +1,7 @@
-import { SuperClass } from "../../sage-utils/utils/ClassUtils";
+import { SuperClass } from "../../sage-utils/ClassUtils";
 import { DASH, LIGHT_BULK, MDASH } from "../common";
 
-export default class Bulk extends SuperClass {
+export class Bulk extends SuperClass {
 	public constructor();
 	public constructor(bulk: number);
 	public constructor(bulk: string);

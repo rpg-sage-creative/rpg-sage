@@ -1,9 +1,9 @@
 import type { BotCore, TBotCodeName } from "../model/Bot";
-import Bot from "../model/Bot";
-import type SageCache from "../model/SageCache";
-import DidRepository from "./base/DidRepository";
+import { Bot } from "../model/Bot";
+import type { SageCache } from "../model/SageCache";
+import { DidRepository } from "./base/DidRepository";
 
-export default class BotRepo extends DidRepository<BotCore, Bot> {
+export class BotRepo extends DidRepository<BotCore, Bot> {
 
 	public static async fromCore<T = BotCore, U = Bot>(core: T, sageCache: SageCache): Promise<U> {
 		return new Bot(core as unknown as BotCore, sageCache) as unknown as U;

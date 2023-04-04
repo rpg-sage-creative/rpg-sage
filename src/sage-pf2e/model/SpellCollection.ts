@@ -1,13 +1,13 @@
-import type { Core, UUID } from "../../sage-utils";
-import { existsAndUnique } from "../../sage-utils/utils/ArrayUtils/Filters";
-import { sortComparable } from "../../sage-utils/utils/ArrayUtils/Sort";
-import { HasCore } from "../../sage-utils/utils/ClassUtils";
-import { randomItem } from "../../sage-utils/utils/RandomUtils";
+import { existsAndUnique } from "../../sage-utils/ArrayUtils";
+import { sortComparable } from "../../sage-utils/ArrayUtils";
+import { Core, HasCore } from "../../sage-utils/ClassUtils";
+import { randomItem } from "../../sage-utils/RandomUtils";
+import type { UUID } from "../../sage-utils/UuidUtils";
 import type { TMagicTradition } from "../common";
-import type ArcaneSchool from "./ArcaneSchool";
-import type Source from "./base/Source";
-import HeightenedSpell from "./HeightenedSpell";
-import Spell from "./Spell";
+import type { ArcaneSchool } from "./ArcaneSchool";
+import type { Source } from "./base/Source";
+import { HeightenedSpell } from "./HeightenedSpell";
+import { Spell } from "./Spell";
 
 
 function uniqueClean<T>(array: (T | undefined)[]): T[] {
@@ -21,7 +21,7 @@ export interface SpellCollectionCore extends Core {
 	spells: UUID[];
 }
 
-export default class SpellCollection extends HasCore<SpellCollectionCore> {
+export class SpellCollection extends HasCore<SpellCollectionCore> {
 
 	/**************************************************************************************************************************/
 	// Constructors

@@ -1,7 +1,7 @@
 import { Client, Snowflake, SnowflakeUtil } from "discord.js";
-import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
-import DiscordId from "../../../../sage-utils/utils/DiscordUtils/DiscordId";
-import { dequote, StringMatcher } from "../../../../sage-utils/utils/StringUtils";
+import { exists } from "../../../../sage-utils/ArrayUtils";
+import { DiscordId } from "../../../../sage-utils/DiscordUtils";
+import { dequote, StringMatcher } from "../../../../sage-utils/StringUtils";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
 
 export type TParsedGameMapCore = Omit<TGameMapCore, "messageId">;
@@ -182,7 +182,7 @@ function matchAnchor(mapCore: TParsedGameMapCore, aura: TGameMapAura | null): vo
 	}
 }
 
-export default function gameMapImporter(raw: string, client: Client): TParsedGameMapCore | null {
+export function gameMapImporter(raw: string, client: Client): TParsedGameMapCore | null {
 	const lines = raw.split(/\r?\n\r?/);
 
 	//#region map

@@ -1,10 +1,11 @@
-import { Base, RARITIES } from "../../../sage-pf2e";
-import type SearchResults from "../../../sage-search/SearchResults";
+import { RARITIES } from "../../../sage-pf2e";
+import type { Base } from "../../../sage-pf2e/model/base/Base";
+import type { SearchResults } from "../../../sage-search/SearchResults";
 import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common";
-import { Collection } from "../../../sage-utils/utils/ArrayUtils";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import { Collection } from "../../../sage-utils/ArrayUtils";
+import { RenderableContent } from "../../../sage-utils/RenderUtils";
 import { send } from "../../discord/messages";
-import type SageMessage from "../model/SageMessage";
+import type { SageMessage } from "../model/SageMessage";
 
 function theOneOrMatchToSage(searchResults: SearchResults<any>, match = false): Base | null {
 	const aon = searchResults.theOne ?? (match ? searchResults.theMatch : null);

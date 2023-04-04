@@ -1,7 +1,7 @@
 import type { User } from "discord.js";
-import { Collection } from "../../../../../sage-utils/utils/ArrayUtils";
-import type { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
-import type SageMessage from "../../../model/SageMessage";
+import { Collection } from "../../../../../sage-utils/ArrayUtils";
+import type { RenderableContent } from "../../../../../sage-utils/RenderUtils";
+import type { SageMessage } from "../../../model/SageMessage";
 import { type IAdminUser, AdminRoleType } from "../../../model/Server";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
@@ -49,7 +49,7 @@ async function adminAdd(sageMessage: SageMessage<true>): Promise<void> {
 	}
 
 	const userDid = sageMessage.args.findUserDid("user");
-	const roleType = sageMessage.args.findEnum<AdminRoleType>(AdminRoleType, "type");
+	const roleType = sageMessage.args.findEnum(AdminRoleType, "type");
 	if (!userDid || !roleType) {
 		return sageMessage.reactFailure(`You must provide user and role type. Ex: sage!!admin add user="@User" role="GameAdmin"`);
 	}
@@ -73,7 +73,7 @@ async function adminRemove(sageMessage: SageMessage<true>): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(saved, "Sage Admin Removed", "Unknown Error; Sage Admin NOT Removed!");
 }
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(adminList, "admin-list");
 
 	registerAdminCommand(adminAdd, "admin-add");

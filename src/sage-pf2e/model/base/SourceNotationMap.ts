@@ -1,11 +1,11 @@
-import type { UUID } from "../../../sage-utils";
-import { toSuperscript } from "../../../sage-utils/utils/NumberUtils";
-import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import type HasSource from "./HasSource";
-import Source from "./Source";
+import { toSuperscript } from "../../../sage-utils/NumberUtils";
+import type { RenderableContent } from "../../../sage-utils/RenderUtils";
+import type { UUID } from "../../../sage-utils/UuidUtils";
+import type { HasSource } from "./HasSource";
+import { Source } from "./Source";
 
 
-export default class SourceNotationMap<T extends HasSource> {
+export class SourceNotationMap<T extends HasSource> {
 	private sources: Source[];
 
 	public constructor(items: T[] = [], public includeCore = false) {

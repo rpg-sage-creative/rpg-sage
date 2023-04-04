@@ -1,5 +1,6 @@
-import type { Pf2tBaseCore, TDetail, THasSuccessOrFailure } from "../sage-pf2e";
-import type { UUID } from "../sage-utils";
+import type { Pf2tBaseCore } from "../sage-pf2e/model/base/Pf2tBase";
+import type { TDetail, THasSuccessOrFailure } from "../sage-pf2e/model/base/interfaces";
+import type { UUID } from "../sage-utils/UuidUtils";
 
 export type TCore = {
 	objectType:string; id:UUID; name:string;

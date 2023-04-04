@@ -1,5 +1,5 @@
 import { GameRoleType, TFetchedGameUser } from "../../../model/Game";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
@@ -55,7 +55,7 @@ async function playerRemove(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(removed, "Game Player Removed.", "Unknown Error; Game Player NOT Removed!");
 }
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(playerList, "player-list", "players-list");
 	registerAdminCommandHelp("Admin", "Player", "player list");
 

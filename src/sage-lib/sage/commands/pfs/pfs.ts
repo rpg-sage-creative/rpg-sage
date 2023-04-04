@@ -1,9 +1,12 @@
-import _dice, { DieRollGrade } from "../../../../sage-dice";
-import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e";
-import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
-import { capitalize } from "../../../../sage-utils/utils/StringUtils";
+import { DieRollGrade } from "../../../../sage-dice";
+import { Dice } from "../../../../sage-dice/pf2e";
+import { PROFICIENCIES, toModifier } from "../../../../sage-pf2e/common";
+import { Coins } from "../../../../sage-pf2e/model/Coins";
+import { Table } from "../../../../sage-pf2e/model/Table";
+import type { RenderableContent } from "../../../../sage-utils/RenderUtils";
+import { capitalize } from "../../../../sage-utils/StringUtils";
 import { ColorType } from "../../model/Colors";
-import type SageMessage from "../../model/SageMessage";
+import type { SageMessage } from "../../model/SageMessage";
 import { createRenderableContent, registerCommandRegex } from "../cmd";
 import { registerCommandHelp } from "../help";
 
@@ -75,7 +78,7 @@ function earnIncome(sageMessage: SageMessage): void {
 		renderable.append(`<blockquote><b>Success</b> ${levelRow[1 + proficiencyLetterIndex]}\n<b>Critical Success</b> ${critRow[1 + proficiencyLetterIndex]}</blockquote>`);
 
 		const rolls: TIncomeRoll[] = [];
-		const dice = _dice.pf2e.Dice.parse(`1d20+${modifier}dc${dc}`);
+		const dice = Dice.parse(`1d20+${modifier}dc${dc}`);
 		let dayCounter = days;
 		do {
 			const diceRoll = dice.roll();
@@ -281,7 +284,7 @@ function registerScenarios(): void {
 }
 // #endregion Scenario/Quest Randomizer
 
-export default function register(): void {
+export function registerPfs(): void {
 	registerDowntime();
 	registerTiers();
 	registerScenarios();

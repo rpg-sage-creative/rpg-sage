@@ -1,9 +1,11 @@
 import type { GuildBasedChannel, Role, Snowflake } from "discord.js";
 import { GameType, parseGameType } from "../../../sage-common";
 import { CritMethodType, DiceSecretMethodType } from "../../../sage-dice";
-import type { Args, Optional, VALID_UUID } from "../../../sage-utils";
+import type { Args, Optional } from "../../../sage-utils";
 import { DicePostType } from "../commands/dice";
-import { GameChannelType, parseGameChannelType } from "../repo/base/channel";
+import { GameChannelType, parseGameChannelType } from "../repo";
+import type { VALID_UUID } from "../../../sage-utils/UuidUtils";
+import type { EnumLike } from "../../../sage-utils/EnumUtils";
 
 export interface ISageCommandArgs {
 
@@ -51,11 +53,11 @@ export interface ISageCommandArgs {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid enum value or "unset".
 	 */
-	getEnum<U>(type: any, name: string): Optional<U>;
+	getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): Optional<V>;
 	/** Gets the named option as a value from the given enum type. */
-	getEnum<U>(type: any, name: string, required: true): U;
+	getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string, required: true): V;
 	/** Returns true if getEnum(type, name) is not null and not undefined. */
-	hasEnum(type: any, name: string): boolean;
+	hasEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): boolean;
 	/** Returns true if getEnum(type, name) matches {value} passed value. */
 	// hasEnum<U>(type: any, name: string, value: U): boolean;
 
@@ -148,30 +150,32 @@ export function applyValues<T>(core: Partial<T>, args: Args<T>): boolean {
 	return changes;
 }
 
-export function getEnum<T>(args: ISageCommandArgs, _enum: any, ...keys: string[]): Optional<T> {
+export function getEnum<K extends string = string, V extends number = number>(args: ISageCommandArgs, enumLike: EnumLike<K, V>, ...keys: string[]): Optional<V> {
 	for (const key of keys) {
-		const value = args.getEnum<T>(_enum, key);
-		if (value !== undefined) return value;
+		const value = args.getEnum(enumLike, key);
+		if (value !== undefined) {
+			return value;
+		}
 	}
 	return undefined;
 }
 
-export function cleanEnumArgValues(type: any, value: string): string {
-	if (type === GameChannelType) {
+export function cleanEnumArgValues<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>, value: string): string {
+	if (enumLike === GameChannelType) {
 		return GameChannelType[parseGameChannelType(value)!];
 	}
-	if (type === CritMethodType) {
+	if (enumLike === CritMethodType) {
 		return value.match(/x2/i) ? "TimesTwo" : value;
 	}
 	// DialogType = fine
 	// DiceOutputType = fine
-	if (type === DicePostType) {
+	if (enumLike === DicePostType) {
 		return value.match(/post/i) ? "SinglePost" : value.match(/embed/i) ? "SingleEmbed" : value;
 	}
-	if (type === DiceSecretMethodType) {
+	if (enumLike === DiceSecretMethodType) {
 		return value.match(/gm/i) ? "GameMasterChannel" : value.match(/dm/i) ? "GameMasterDirect" : value;
 	}
-	if (type === GameType) {
+	if (enumLike === GameType) {
 		return GameType[parseGameType(value)!];
 	}
 	return value;

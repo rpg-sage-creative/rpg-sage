@@ -1,18 +1,18 @@
-import registerAdmin from "./admin";
+import { register as registerAdmin } from "./admin";
 import { registerCommandHandlers as registerCal, registerSlashCommands as registerCalSlashCommands } from "./cal";
-import registerCmd from "./cmd";
+import { register as registerCmd } from "./cmd";
 import { registerCommandHandlers as registerDcs, registerSlashCommands as registerDcsSlashCommands } from "./dcs";
 import { registerCommandHandlers as registerDefault, registerSlashCommands as registerDefaultSlashCommands } from "./default";
-import registerDialog from "./dialog";
-import registerDice from "./dice";
+import { register as registerDialog } from "./dialog";
+import { register as registerDice } from "./dice";
 import { registerCommandHandlers as registerE20 } from "./e20";
 import { registerCommandHandlers as registerHelp, registerSlashCommands as registerHelpSlashCommands } from "./help";
 import { registerCommandHandlers as registerImport, registerSlashCommands as registerImportSlashCommands } from "./import";
 import { registerCommandHandlers as registerMap, registerSlashCommands as registerMapSlashCommands } from "./map";
 import { registerCommandHandlers as registerPathbuilder } from "./pathbuilder";
-import registerPfs from "./pfs";
-import registerSpells from "./spells";
-import registerWealth from "./wealth";
+import { register as registerPfs } from "./pfs";
+import { register as registerSpells } from "./spells";
+import { register as registerWealth } from "./wealth";
 import { registerCommandHandlers as registerWeather, registerSlashCommands as registerWeatherSlashCommands } from "./weather";
 
 import { registerCommandHandlers as registerSageCommand } from "../model/SageCommand";

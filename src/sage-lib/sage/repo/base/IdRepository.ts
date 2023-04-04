@@ -1,17 +1,14 @@
-import type { IdCore, Optional, OrNull, UUID } from "../../../../sage-utils";
-import { HasIdCore } from "../../../../sage-utils/utils/ClassUtils";
-import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { deleteFileSync, fileExistsSync, listFiles, readJsonFile, writeFile } from "../../../../sage-utils/utils/FsUtils";
-import { generate } from "../../../../sage-utils/utils/UuidUtils";
-import type SageCache from "../../model/SageCache";
-
-export class HasIdCoreAndSageCache<T extends IdCore<U>, U extends string = string> extends HasIdCore<T, U> {
-	public constructor(core: T, protected sageCache: SageCache) { super(core); }
-}
+import type { Optional, OrNull } from "../../../../sage-utils";
+import type { HasIdCore, IdCore } from "../../../../sage-utils/ClassUtils";
+import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull } from "../../../../sage-utils/ConsoleUtils";
+import { deleteFileSync, fileExistsSync, listFiles, readJsonFile, writeFile } from "../../../../sage-utils/FsUtils";
+import { UUID, generate } from "../../../../sage-utils/UuidUtils";
+import type { SageCache } from "../../model/SageCache";
 
 type TParser<T extends IdCore, U extends HasIdCore<T>> = (core: T, sageCache: SageCache) => Promise<U>;
 
-export default abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
+/** Represents a repository of HasIdCore objects. */
+export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
 	//#region Cache
 

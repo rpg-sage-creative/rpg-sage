@@ -1,12 +1,12 @@
-import { all, find, findByValue } from '../data/Repository';
-import type Domain from './Domain';
+import { getByType, findByType, findByValue } from '../data';
+import type { Domain } from './Domain';
 import type { SpellCoreBase } from './Spell';
-import Spell from './Spell';
+import { Spell } from './Spell';
 
 export type FocusSpellCore = SpellCoreBase<"FocusSpell">;
 /*// export interface FocusSpellCore extends SpellCoreBase<"FocusSpell"> { }*/
 
-export default class FocusSpell extends Spell<"FocusSpell", FocusSpellCore> {
+export class FocusSpell extends Spell<"FocusSpell", FocusSpellCore> {
 
 	public constructor(core: FocusSpellCore) {
 		super(core);
@@ -18,11 +18,11 @@ export default class FocusSpell extends Spell<"FocusSpell", FocusSpellCore> {
 		let specialName = this.archetypeName ?? this.domainName;
 		if (!specialName) {
 			// In case I forget to set the domain
-			specialName = find("Domain", (domain: Domain) => domain.toJSON().spells.includes(this.name))?.name;
+			specialName = findByType("Domain", (domain: Domain) => domain.toJSON().spells.includes(this.name))?.name;
 		}
 		if (!specialName) {
 			// Check the traits for a class
-			const classNames = all("Class").map(clss => clss.name);
+			const classNames = getByType("Class").map(clss => clss.name);
 			specialName = this.traits.find(trait => classNames.includes(trait));
 		}
 		// if (!specialName) console.log(this.archetypeName, this.domainName, this.traits);

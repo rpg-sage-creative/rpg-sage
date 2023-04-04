@@ -1,5 +1,6 @@
-import type { Pf2tBaseCore, TCore, TEntity } from "../../sage-pf2e";
-import { parseSource } from "../../sage-pf2e/data/Repository";
+import { parseSource } from "../../sage-pf2e/data";
+import type { TCore, TEntity } from "../../sage-pf2e/model";
+import type { Pf2tBaseCore } from "../../sage-pf2e/model/base/Pf2tBase";
 import type { SourceCore } from "../../sage-pf2e/model/base/Source";
 import type { TSpellHeighten } from "../../sage-pf2e/model/Spell";
 import { getSageCores } from "../common.mjs";

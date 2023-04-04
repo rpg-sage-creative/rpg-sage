@@ -1,5 +1,5 @@
 import { isDefined } from "../sage-utils";
-import { writeFileSync } from "../sage-utils/utils/FsUtils/index.js";
+import { writeFileSync } from "../sage-utils/FsUtils";
 import { debug, getSageCores, info, warn } from "./common.mjs";
 import type { TCore } from "./types.mjs";
 

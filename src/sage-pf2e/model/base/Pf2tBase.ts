@@ -1,13 +1,12 @@
-import type { IComparable, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
-import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
-import type { RenderableContent as _RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
-import { capitalize } from "../../../sage-utils/utils/StringUtils";
-import RenderableContent from "../../data/RenderableContent";
-import { parseSource, TParsedSource } from "../../data/Repository";
-import HasSource, { SourcedCore } from "./HasSource";
+import { IComparable, sortAscending } from "../../../sage-utils/ArrayUtils";
+import type { RenderableContent, IRenderable } from "../../../sage-utils/RenderUtils";
+import type { ISearchable, SearchInfo, SearchScore } from "../../../sage-utils/SearchUtils";
+import { capitalize } from "../../../sage-utils/StringUtils";
+import { parseSource, TParsedSource } from "../../data";
+import { Pf2eRenderableContent } from "../../Pf2eRenderableContent";
+import { HasSource,  SourcedCore } from "./HasSource";
 import type { IHasArchives, IHasDetails, IHasLink, IHasName } from "./interfaces";
-import type Source from "./Source";
+import type { Source } from "./Source";
 
 export interface Pf2tBaseCore extends SourcedCore<""> {
 	/** The id(s) of Sage's version(s) of this object. */
@@ -64,7 +63,7 @@ function hackCore(core: Pf2tBaseCore): Pf2tBaseCore {
 	return core;
 }
 
-export default class Pf2tBase
+export class Pf2tBase
 	extends
 		HasSource<Pf2tBaseCore>
 	implements
@@ -141,11 +140,11 @@ export default class Pf2tBase
 	public get hasDetails(): boolean { return this.details.length > 0; }
 	public get hasSuccessOrFailure(): boolean { return false; }
 
-	protected appendDescriptionTo(_: RenderableContent): void {
+	protected appendDescriptionTo(_: Pf2eRenderableContent): void {
 		// these don't have descriptions
 	}
 
-	protected appendDetailsTo(content: RenderableContent): void {
+	protected appendDetailsTo(content: Pf2eRenderableContent): void {
 		this.details.forEach(detail => content.append(detail));
 	}
 
@@ -161,8 +160,8 @@ export default class Pf2tBase
 
 	// #region IRenderable
 
-	public toRenderableContent(): _RenderableContent {
-		const renderable = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const renderable = new Pf2eRenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.hasTraits || this.isNotCommon) {
 			const traits: string[] = [];
@@ -179,11 +178,11 @@ export default class Pf2tBase
 		return renderable;
 	}
 
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion IRenderable
 
 	// #region utils.ArrayUtils.Sort.IComparable
 
-	public compareTo(other: Pf2tBase): TSortResult {
+	public compareTo(other: Pf2tBase): -1 | 0 | 1 {
 		return sortAscending(this.objectType, other.objectType)
 			|| sortAscending(this.nameClean, other.nameClean)
 			|| sortAscending(this.nameLower, other.nameLower)

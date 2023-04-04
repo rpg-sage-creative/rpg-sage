@@ -1,9 +1,9 @@
 import type { Message, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
-import { DMessageChannel, ReactionType } from "../../../sage-utils/utils/DiscordUtils";
-import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
-import SageCache from "./SageCache";
+import { DMessageChannel, ReactionType } from "../../../sage-utils/DiscordUtils";
+import type { TRenderableContentResolvable } from "../../../sage-utils/RenderUtils";
+import { SageCache } from "./SageCache";
 import { SageCommandBase, SageCommandCore, TSendArgs } from "./SageCommand";
-import SageReactionArgs from "./SageReactionArgs";
+import { SageReactionArgs } from "./SageReactionArgs";
 
 type DUser = User | PartialUser;
 type DMessage = Message | PartialMessage;
@@ -14,7 +14,7 @@ interface SageReactionCore extends SageCommandCore {
 	reactionType: ReactionType;
 }
 
-export default class SageReaction
+export class SageReaction
 	extends SageCommandBase<SageReactionCore, SageReactionArgs, SageReaction> {
 
 	public constructor(protected core: SageReactionCore) {

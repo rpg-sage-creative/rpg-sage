@@ -2,26 +2,25 @@ import { ChannelType, Snowflake } from "discord.js";
 import { GameType } from "../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
 import type { Args, Optional } from "../../../../sage-utils";
-import { Collection } from "../../../../sage-utils/utils/ArrayUtils";
-import type { DChannel, DGuildChannel } from "../../../../sage-utils/utils/DiscordUtils";
-import DiscordKey from "../../../../sage-utils/utils/DiscordUtils/DiscordKey";
-import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
-import type Game from "../../model/Game";
-import type SageCache from "../../model/SageCache";
+import { Collection, exists } from "../../../../sage-utils/ArrayUtils";
+import type { DChannel, DGuildChannel } from "../../../../sage-utils/DiscordUtils";
+import { DiscordKey } from "../../../../sage-utils/DiscordUtils";
+import type { RenderableContent } from "../../../../sage-utils/RenderUtils";
+import type { Game } from "../../model/Game";
+import type { SageCache } from "../../model/SageCache";
 import { hasValues, ISageCommandArgs } from "../../model/SageCommandArgs";
-import type SageMessage from "../../model/SageMessage";
-import type Server from "../../model/Server";
+import type { SageMessage } from "../../model/SageMessage";
+import type { Server } from "../../model/Server";
 import { getServerDefaultGameOptions } from "../../model/Server";
-import { DialogType, GameChannelType, IChannelOptions, type IChannel } from "../../repo/base/channel";
+import { DialogType, GameChannelType, IChannelOptions, type IChannel } from "../../repo";
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";
-import { Filters } from "../../../../sage-utils/utils/ArrayUtils";
 
 //#region add
 
 function getChannelOptions(args: ISageCommandArgs): Args<IChannelOptions> | null {
-	const gameChannelType = args.getEnum<GameChannelType>(GameChannelType, "type");
+	const gameChannelType = args.getEnum(GameChannelType, "type");
 	const opts: Args<IChannelOptions> = {
 		...getServerDefaultGameOptions(args),
 		commands: args.getBoolean("commands"),
@@ -197,7 +196,7 @@ async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: I
 		return forGuild?.fetchChannel(channel.did);
 	});
 	/** @todo Figure out why Filters.exists isn't working here! */
-	const existing = guildChannels.filter(Filters.exists) as Collection<DGuildChannel>;
+	const existing = guildChannels.filter(exists) as Collection<DGuildChannel>;
 
 	const filter = sageMessage.args.unkeyedValues().join(" ").trim();
 	if (filter && existing.length) {
@@ -313,7 +312,7 @@ async function channelSet(sageMessage: SageMessage<true>): Promise<void> {
 
 //#endregion
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(channelAdd, "channel-add");
 	registerAdminCommand(channelDetails, "channel-details");
 	registerAdminCommand(channelListServer, "channel-list-server");

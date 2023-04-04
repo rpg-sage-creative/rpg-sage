@@ -1,15 +1,15 @@
 import { registerAndLoad } from "../sage-pf2e";
-import { LogLevel } from "../sage-utils";
-import { startHandling } from "../sage-utils/utils/ConsoleUtils";
-import DiscordFetches from "../sage-utils/utils/DiscordUtils/DiscordFetches";
+import { LogLevel } from "../sage-utils/ConsoleUtils";
+import { startHandling } from "../sage-utils/ConsoleUtils";
+import { DiscordFetches } from "../sage-utils/DiscordUtils";
 import { addAcceptableBot } from "./discord/handlers";
 import { registerCommandHandlers } from "./sage/commands";
-import ActiveBot from "./sage/model/ActiveBot";
+import { ActiveBot } from "./sage/model/ActiveBot";
 import type { TBotCodeName } from "./sage/model/Bot";
-import BotRepo from "./sage/repo/BotRepo";
+import { BotRepo } from "./sage/repo";
 /*
-// import type Bot from "./sage/model/Bot";
-// import Server from "./sage/model/Server";
+// import type { Bot } from "./sage/model/Bot";
+// import { Server } from "./sage/model/Server";
 */
 
 export function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: string, includePf2ToolsData = false): void {

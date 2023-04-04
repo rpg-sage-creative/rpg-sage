@@ -1,21 +1,20 @@
-import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/User";
 import type { Optional, OrUndefined } from "../../../sage-utils";
-import { Collection } from "../../../sage-utils/utils/ArrayUtils";
-import CharacterBase, { CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
-import { getJson } from "../../../sage-utils/utils/HttpsUtils";
-import { nth } from "../../../sage-utils/utils/NumberUtils";
-import { capitalize, StringMatcher } from "../../../sage-utils/utils/StringUtils";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
+import { Collection } from "../../../sage-utils/ArrayUtils";
+import { CharacterBase, CharacterBaseCore } from "../../../sage-utils/CharacterUtils";
+import { getJson } from "../../../sage-utils/HttpsUtils";
+import { nth } from "../../../sage-utils/NumberUtils";
+import { StringMatcher, capitalize } from "../../../sage-utils/StringUtils";
+import { generate } from "../../../sage-utils/UuidUtils";
 import type { TProficiency, TSavingThrow } from "../../common";
-import { toModifier } from "../../common";
-import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository";
-import type Weapon from "../Weapon";
+import { ABILITIES, toModifier } from "../../common";
+import { filterBy, findByValue } from "../../data";
+import type { Weapon } from "../Weapon";
 import type { IHasAbilities } from "./Abilities";
-import Abilities from "./Abilities";
+import { Abilities } from "./Abilities";
 import type { IHasProficiencies } from "./PlayerCharacter";
 import type { IHasSavingThrows } from "./SavingThrows";
-import SavingThrows from "./SavingThrows";
+import { SavingThrows } from "./SavingThrows";
 
 const skillNames = "Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery".split(",");
 const skillStatKeys: TPathbuilderCharacterAbilityKey[] = ["dex", "int", "str", "int", "cha", "cha", "cha", "wis", "wis", "int", "cha", "wis", "int", "dex", "wis", "dex"];
@@ -529,7 +528,7 @@ function weaponToDamage(char: PathbuilderCharacter, weapon: TPathbuilderCharacte
 function findWeaponIn(value: string): OrUndefined<Weapon> {
 	const lower = value?.toLowerCase();
 	if (lower) {
-		const matches = repoFilter("Weapon", wpn => lower.includes(wpn.nameLower));
+		const matches = filterBy("Weapon", wpn => lower.includes(wpn.nameLower));
 		const maxLength = matches.reduce((length, wpn) => Math.max(length, wpn.name.length), 0);
 		const longest = matches.filter(wpn => wpn.name.length === maxLength);
 		if (longest.length === 1) {
@@ -540,7 +539,7 @@ function findWeaponIn(value: string): OrUndefined<Weapon> {
 }
 
 function findWeapon(weapon: TPathbuilderCharacterWeapon): OrUndefined<Weapon> {
-	return repoFind("Weapon", weapon.name) ?? findWeaponIn(weapon.display) ?? findWeaponIn(weapon.name);
+	return findByValue("Weapon", weapon.name) ?? findWeaponIn(weapon.display) ?? findWeaponIn(weapon.name);
 }
 
 function getWeaponSpecMod(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): number {
@@ -630,7 +629,7 @@ export function getCharacterSections(view: Optional<TCharacterViewType>): TChara
 export type TCharacterViewType = "All" | "Combat" | "Equipment" | "Feats" | "Formulas" | "Pets" | "Spells";
 export const CharacterViewTypes: TCharacterViewType[] = ["All", "Combat", "Equipment", "Feats", "Formulas", "Pets", "Spells"];
 
-export default class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
 
 	public constructor(core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
 		super(core);

@@ -7,7 +7,7 @@ import { Routes } from "discord-api-types/v9";
 import { registerSlashCommands } from "./sage-lib/sage/commands";
 import type { BotCore } from "./sage-lib/sage/model/Bot";
 import type { Optional } from "./sage-utils";
-import { listFilesSync, readJsonFileSync, writeFileSync } from "./sage-utils/utils/FsUtils";
+import { listFilesSync, readJsonFileSync, writeFileSync } from "./sage-utils/FsUtils";
 import type { TNameDescription, TSlashCommand, TSlashCommandChoice, TSlashCommandOption } from "./types";
 
 type TBot = "dev" | "beta" | "stable";

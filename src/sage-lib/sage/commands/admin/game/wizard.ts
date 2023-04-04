@@ -1,5 +1,5 @@
 // import { discordPrompt } from "../../../../discord/prompts";
-// import type SageMessage from "../../../model/SageMessage";
+// import type { SageMessage } from "../../../model/SageMessage";
 // import { registerAdminCommand } from "../../cmd";
 
 // // const POINT_RIGHT = "➡️";
@@ -29,8 +29,8 @@
 // 			}
 // */
 
-// function channelWizardRenderable(title: string, gameChannels: TGameChannels, currentIndex: number): utils.RenderUtils.RenderableContent {
-// 	const renderableContent = new utils.RenderUtils.RenderableContent(title);
+// function channelWizardRenderable(title: string, gameChannels: TGameChannels, currentIndex: number): RenderableContent {
+// 	const renderableContent = new RenderableContent(title);
 // 	renderableContent.appendTitledSection(`<b>Channel Options</b>`);
 // 	const gameChannelKeys = Object.keys(gameChannels);
 // 	gameChannelKeys.forEach((key, index) => {
@@ -178,6 +178,6 @@
 // 	return gameChannels;
 // }
 
-// export default function register(): void {
+// export function register(): void {
 // 	registerAdminCommand(gameWizard, "new game");
 // }

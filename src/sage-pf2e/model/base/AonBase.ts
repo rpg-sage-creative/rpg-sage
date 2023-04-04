@@ -1,13 +1,12 @@
-import type { IComparable, ISearchable, TSortResult } from "../../../sage-utils";
-import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
-import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
-import { capitalize } from "../../../sage-utils/utils/StringUtils";
-import { parseSources, TParsedSource } from "../../data/Repository";
-import type Base from "./Base";
+import { IComparable, sortAscending } from "../../../sage-utils/ArrayUtils";
+import type { ISearchable, SearchInfo, SearchScore } from "../../../sage-utils/SearchUtils";
+import { capitalize } from "../../../sage-utils/StringUtils";
+import { parseSources, TParsedSource } from "../../data";
+import type { Base } from "./Base";
 import type { SourcedCore, TSourceInfo } from "./HasSource";
-import HasSource from "./HasSource";
+import { HasSource } from "./HasSource";
 import type { IHasArchives, IHasLink, IHasName } from "./interfaces";
-import type Source from "./Source";
+import type { Source } from "./Source";
 
 /*
 From https://elasticsearch.galdiuz.com/aon/_search
@@ -70,7 +69,7 @@ function hackCore(core: AonBaseCore): AonBaseCore {
 	return core;
 }
 
-export default class AonBase
+export class AonBase
 	extends
 		HasSource<AonBaseCore>
 	implements
@@ -141,7 +140,7 @@ export default class AonBase
 
 	// #region utils.ArrayUtils.Sort.IComparable
 
-	public compareTo(other: AonBase): TSortResult {
+	public compareTo(other: AonBase): -1 | 0 | 1 {
 		return sortAscending(this.objectType, other.objectType)
 			|| sortAscending(this.nameClean, other.nameClean)
 			|| sortAscending(this.nameLower, other.nameLower)

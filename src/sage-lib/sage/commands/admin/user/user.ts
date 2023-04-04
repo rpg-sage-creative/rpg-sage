@@ -1,6 +1,6 @@
-import type SageMessage from "../../../model/SageMessage";
-import type User from "../../../model/User";
-import { DialogType } from "../../../repo/base/channel";
+import type { SageMessage } from "../../../model/SageMessage";
+import type { User } from "../../../model/User";
+import { DialogType } from "../../../repo";
 import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
 
 async function userCount(sageMessage: SageMessage): Promise<void> {
@@ -16,8 +16,8 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		return denial;
 	}
 
-	const defaultDialogType = sageMessage.args.getEnum<DialogType>(DialogType, "dialogType");
-	const defaultSagePostType = sageMessage.args.getEnum<DialogType>(DialogType, "sagePostType");
+	const defaultDialogType = sageMessage.args.getEnum(DialogType, "dialogType");
+	const defaultSagePostType = sageMessage.args.getEnum(DialogType, "sagePostType");
 	const updated = await sageMessage.actor.s.update({ defaultDialogType, defaultSagePostType });
 	if (updated) {
 		return userDetails(sageMessage);
@@ -78,7 +78,7 @@ async function userDetails(sageMessage: SageMessage): Promise<void> {
 	return <any>sageMessage.send(renderableContent);
 }
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(userCount, "user-count");
 	registerAdminCommand(userDetails, "user-details");
 	registerAdminCommand(userUpdate, "user-set", "user-update");

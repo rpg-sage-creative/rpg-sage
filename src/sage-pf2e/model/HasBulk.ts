@@ -1,11 +1,11 @@
 import type { HasContents, HasParent, HasQuantity, IHasContents, IHasParent, IHasQuantity, TContentItem, TContentItemArray, TObjectQuantity } from "../common";
 import { MDASH } from "../common";
-import { filter, findByValue } from "../data/Repository";
+import { filterBy, findByValue } from "../data";
 import type { TDetail } from "../model/base/interfaces";
-import type Base from "./base/Base";
+import type { Base } from "./base/Base";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
-import Bulk from "./Bulk";
+import { HasSource } from "./base/HasSource";
+import { Bulk } from "./Bulk";
 
 export function toObjectQuantities<T extends HasBulk>(contentItems: TContentItemArray, defaultObjectType: string): TObjectQuantity<T>[] {
 	return (contentItems ?? []).map(contentItem => toObjectQuantity(contentItem, defaultObjectType));
@@ -44,7 +44,7 @@ export interface BulkCore<T extends string = string> extends SourcedCore<T>, IHa
 	wornBulk: string;
 }
 
-export default class HasBulk<T extends BulkCore = BulkCore, U extends HasBulk<T, U> = HasBulk<any, any>> extends HasSource<T> implements HasContents<U>, HasParent<U> {
+export class HasBulk<T extends BulkCore = BulkCore, U extends HasBulk<T, U> = HasBulk<any, any>> extends HasSource<T> implements HasContents<U>, HasParent<U> {
 	private _bulk?: Bulk;
 	public get bulk(): Bulk {
 		if (!this._bulk) {
@@ -113,7 +113,7 @@ export default class HasBulk<T extends BulkCore = BulkCore, U extends HasBulk<T,
 	private _children?: U[];
 	public get children(): U[] {
 		if (this._children === undefined) {
-			this._children = filter(this.objectType, o => o.parent === <U><unknown>this);
+			this._children = filterBy(this.objectType, o => o.parent === <U><unknown>this);
 		}
 		return this._children;
 	}

@@ -1,5 +1,4 @@
-import { Collection } from "../../../sage-utils/utils/ArrayUtils";
-import { exists, existsAndUnique } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import { Collection, exists, existsAndUnique } from "../../../sage-utils/ArrayUtils";
 
 export interface IHasSave {
 	save(): Promise<boolean>;
@@ -117,5 +116,3 @@ export interface NamedCollection<T extends IHasName> {
 	splice(start: number, deleteCount?: number): NamedCollection<T>;
 	splice(start: number, deleteCount: number, ...items: T[]): NamedCollection<T>;
 }
-
-export default NamedCollection;

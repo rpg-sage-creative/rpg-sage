@@ -1,15 +1,15 @@
-import type { IdCore } from "../../../sage-utils";
-import { HasIdCore } from "../../../sage-utils/utils/ClassUtils";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
-import type { NamedCore } from "../base/interfaces";
-import Bulk from "../Bulk";
-import Coins from "../Coins";
-import type Equipment from "./Equipment";
-import type EquipmentItem from "./EquipmentItem";
+import type { IdCore } from "../../../sage-utils/ClassUtils";
+import { HasIdCore } from "../../../sage-utils/ClassUtils";
+import { generate } from "../../../sage-utils/UuidUtils";
+import type { NamedCore } from "../base";
+import { Bulk } from "../Bulk";
+import { Coins } from "../Coins";
+import type { Equipment } from "./Equipment";
+import type { EquipmentItem } from "./EquipmentItem";
 
 export interface EquipmentListCore extends IdCore<"EquipmentList">, NamedCore { }
 
-export default class EquipmentList extends HasIdCore<EquipmentListCore, "EquipmentList"> {
+export class EquipmentList extends HasIdCore<EquipmentListCore, "EquipmentList"> {
 
 	public constructor(private eq: Equipment, core: EquipmentListCore) {
 		super(core);

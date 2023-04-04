@@ -1,16 +1,16 @@
 import type { Message, User } from "discord.js";
 import type { Optional } from "../../../sage-utils";
-import { errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { DMessage, DMessageChannel, handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils";
-import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
-import type { TRenderableContentResolvable } from "../../../sage-utils/utils/RenderUtils/RenderableContent";
-import RenderableContent from "../../../sage-utils/utils/RenderUtils/RenderableContent";
+import { errorReturnNull } from "../../../sage-utils/ConsoleUtils";
+import { DMessage, DMessageChannel, handleDiscordErrorReturnNull } from "../../../sage-utils/DiscordUtils";
+import { resolveToEmbeds } from "../../../sage-utils/DiscordUtils";
+import type { TRenderableContentResolvable } from "../../../sage-utils/RenderUtils";
+import { RenderableContent } from "../../../sage-utils/RenderUtils";
 import type { TCommandAndArgs } from "../../discord";
 import { send } from "../../discord/messages";
 import { EmojiType } from "./Emoji";
-import SageCache from "./SageCache";
+import { SageCache } from "./SageCache";
 import { addMessageDeleteButton, SageCommandBase, SageCommandCore, TSendArgs } from "./SageCommand";
-import SageMessageArgs from "./SageMessageArgs";
+import { SageMessageArgs } from "./SageMessageArgs";
 
 interface SageMessageCore extends SageCommandCore {
 	message: DMessage;
@@ -20,7 +20,7 @@ interface SageMessageCore extends SageCommandCore {
 	slicedContent: string;
 }
 
-export default class SageMessage<HasServer extends boolean = boolean>
+export class SageMessage<HasServer extends boolean = boolean>
 	extends SageCommandBase<SageMessageCore, SageMessageArgs, SageMessage, HasServer> {
 
 	public constructor(protected core: SageMessageCore) {

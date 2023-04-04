@@ -1,19 +1,20 @@
-import { Collection } from "../../sage-utils/utils/ArrayUtils";
-import RenderableContent from "../data/RenderableContent";
-import { findByValue } from "../data/Repository";
-import Ancestry from "./Ancestry";
+import { Collection } from "../../sage-utils/ArrayUtils";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
+import { findByValue } from "../data";
+import { Ancestry } from "./Ancestry";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 import type { FeatureCore } from "./Feature";
 import type { FeatureLevelCore } from "./Features";
-import Features from "./Features";
+import { Features } from "./Features";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
 
 export interface HeritageCore extends SourcedCore<"Heritage"> {
 	ancestry: string;
 	features: FeatureCore[];
 }
 
-export default class Heritage extends HasSource<HeritageCore> {
+export class Heritage extends HasSource<HeritageCore> {
 
 	//#region properties
 
@@ -22,10 +23,10 @@ export default class Heritage extends HasSource<HeritageCore> {
 
 	//#endregion
 
-	//#region utils.RenderUtils.IRenderable
+	//#region IRenderable
 
 	public toRenderableContent(): RenderableContent {
-		const renderable = new RenderableContent(this);
+		const renderable = new Pf2eRenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		this.appendDescriptionTo(renderable);
 		this.appendDetailsTo(renderable);

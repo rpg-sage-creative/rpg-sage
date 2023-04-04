@@ -1,12 +1,12 @@
-import type { TRenderableContentSection } from "../../sage-utils";
-import { RenderableContent as _RenderableContent } from "../../sage-utils/utils/RenderUtils";
-import { NEWLINE, TAB } from "../common";
-import type Base from "../model/base/Base";
-import type HasSource from "../model/base/HasSource";
+import type { TRenderableContentSection } from "../sage-utils/RenderUtils";
+import { RenderableContent } from "../sage-utils/RenderUtils";
+import { NEWLINE, TAB } from "./common";
+import type { Base } from "./model/base/Base";
+import type { HasSource } from "./model/base/HasSource";
 
 type TRenderable = Base | HasSource;
 
-export default class RenderableContent extends _RenderableContent {
+export class Pf2eRenderableContent extends RenderableContent {
 
 	private _aonLinksSection?: TRenderableContentSection;
 	private get aonLinksSection(): TRenderableContentSection {
@@ -70,19 +70,19 @@ export default class RenderableContent extends _RenderableContent {
 
 	public appendParagraphs(input: string[], label?: string): void {
 		if (input?.length) {
-			this.append(...RenderableContent.toParagraphs(input, label));
+			this.append(...Pf2eRenderableContent.toParagraphs(input, label));
 		}
 	}
 
 	public appendParagraphsSection(input: string[], label?: string): void {
 		if (input?.length) {
-			this.appendSection(...RenderableContent.toParagraphs(input, label));
+			this.appendSection(...Pf2eRenderableContent.toParagraphs(input, label));
 		}
 	}
 
 	public appendBlockquote(input: string[], label?: string): void {
 		if (input?.length) {
-			this.append(`<blockquote>${RenderableContent.toParagraphs(input, label).join(NEWLINE)}</blockquote>`);
+			this.append(`<blockquote>${Pf2eRenderableContent.toParagraphs(input, label).join(NEWLINE)}</blockquote>`);
 		}
 	}
 

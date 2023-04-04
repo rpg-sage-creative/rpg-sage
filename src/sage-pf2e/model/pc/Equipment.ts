@@ -1,17 +1,17 @@
-import type { UUID } from "../../../sage-utils";
-import { Collection } from "../../../sage-utils/utils/ArrayUtils";
+import { Collection } from "../../../sage-utils/ArrayUtils";
+import type { UUID } from "../../../sage-utils/UuidUtils";
 import { DEXTERITY, STRENGTH } from "../../common";
-import AlchemicalItem from "../AlchemicalItem";
-import type HasSource from "../base/HasSource";
-import Bulk from "../Bulk";
-import Coins from "../Coins";
-import Weapon from "../Weapon";
-import Check from "./Check";
+import { AlchemicalItem } from "../AlchemicalItem";
+import { Bulk } from "../Bulk";
+import { Coins } from "../Coins";
+import { Weapon } from "../Weapon";
+import type { HasSource } from "../base";
+import { Check } from "./Check";
 import type { EquipmentItemCore } from "./EquipmentItem";
-import EquipmentItem from "./EquipmentItem";
+import { EquipmentItem } from "./EquipmentItem";
 import type { EquipmentListCore } from "./EquipmentList";
-import EquipmentList from "./EquipmentList";
-import type PlayerCharacter from "./PlayerCharacter";
+import { EquipmentList } from "./EquipmentList";
+import type { PlayerCharacter } from "./PlayerCharacter";
 
 type TFilter<T> = (value: T, index: number, array: T[]) => unknown;
 type TIterator<T> = (value: T, index: number, array: T[]) => void;
@@ -27,7 +27,7 @@ export interface IEquipment {
 	wornList: EquipmentListCore;
 }
 
-export default class Equipment {
+export class Equipment {
 	/**************************************************************************************************************************/
 	// Constructor
 

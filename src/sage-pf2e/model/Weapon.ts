@@ -1,13 +1,14 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
 import type { TWeaponCategory, TWeaponGroup, TWeaponHands, TWeaponType } from "../common";
 import { MDASH, NEWLINE, TAB } from "../common";
-import RenderableContent from "../data/RenderableContent";
-import { filter, findByValue } from "../data/Repository";
-import type Ammunition from "./Ammunition";
+import { filterBy, findByValue } from "../data";
+import type { Ammunition } from "./Ammunition";
 import type { BulkCore } from "./HasBulk";
-import HasBulk from "./HasBulk";
-import type Trait from "./Trait";
-import type WeaponGroup from "./WeaponGroup";
+import { HasBulk } from "./HasBulk";
+import type { Trait } from "./Trait";
+import type { WeaponGroup } from "./WeaponGroup";
 
 export interface WeaponCore extends BulkCore<"Weapon"> {
 	ammunition?: string;
@@ -22,7 +23,7 @@ export interface WeaponCore extends BulkCore<"Weapon"> {
 	type: TWeaponType;
 }
 
-export default class Weapon extends HasBulk<WeaponCore, Weapon> {
+export class Weapon extends HasBulk<WeaponCore, Weapon> {
 
 	/**************************************************************************************************************************/
 	// Properties
@@ -47,14 +48,14 @@ export default class Weapon extends HasBulk<WeaponCore, Weapon> {
 	public get Traits(): Trait[] {
 		if (!this._Traits) {
 			const coreTraits = this.nonRarityTraits.map(t => t.split(/ /)[0]);
-			this._Traits = filter("Trait", trait => coreTraits.includes(trait.name));
+			this._Traits = filterBy("Trait", trait => coreTraits.includes(trait.name));
 		}
 		return this._Traits;
 	}
 	public get type(): TWeaponType { return this.core.type || null; }
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const content = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const content = new Pf2eRenderableContent(this);
 
 		const level = this.level ? `(level ${this.level})` : ``;
 		const title = `<b>${this.name}</b> ${level}`;
@@ -89,9 +90,9 @@ export default class Weapon extends HasBulk<WeaponCore, Weapon> {
 	}
 
 	/**************************************************************************************************************************/
-	// utils.SearchUtils.ISearchable
+	// ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			const terms: string[] = [];

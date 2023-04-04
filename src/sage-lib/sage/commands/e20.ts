@@ -1,23 +1,20 @@
 import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
-import { shiftDie } from "../../../sage-dice/dice/essence20";
-import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf";
-import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20";
-import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse";
-import PlayerCharacterJoe, { PlayerCharacterCoreJoe } from "../../../sage-e20/joe/PlayerCharacterJoe";
-import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
-import PlayerCharacterPR, { getCharacterSections, PlayerCharacterCorePR, TCharacterSectionType, TCharacterViewType, TSkillZord, TStatZord } from "../../../sage-e20/pr/PlayerCharacterPR";
-import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
-import PlayerCharacterTransformer, { PlayerCharacterCoreTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
-import type { Optional, UUID } from "../../../sage-utils";
-import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import type { DMessageChannel, DMessageTarget } from "../../../sage-utils/utils/DiscordUtils";
-import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
-import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
-import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
-import { PdfCacher } from "../../../sage-utils/utils/PdfUtils";
+import { shiftDie } from "../../../sage-dice/e20";
+import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20";
+import { PdfJsonFields, TRawJson } from "../../../sage-e20";
+import { PdfJsonParserJoe, PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe";
+import { PdfJsonParserPR, PlayerCharacterCorePR, PlayerCharacterPR, TCharacterSectionType, TCharacterViewType, TSkillZord, TStatZord, getCharacterSections } from "../../../sage-e20/pr";
+import { PdfJsonParserTransformer, PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer";
+import type { Optional } from "../../../sage-utils";
+import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/ConsoleUtils";
+import type { DMessageChannel, DMessageTarget } from "../../../sage-utils/DiscordUtils";
+import { DiscordId, resolveToEmbeds } from "../../../sage-utils/DiscordUtils";
+import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/FsUtils";
+import { PdfCacher } from "../../../sage-utils/PdfUtils";
+import type { UUID } from "../../../sage-utils/UuidUtils";
 import { registerInteractionListener } from "../../discord/handlers";
-import type SageCache from "../model/SageCache";
-import type SageInteraction from "../model/SageInteraction";
+import type { SageCache } from "../model/SageCache";
+import type { SageInteraction } from "../model/SageInteraction";
 import { parseDiceMatches, sendDice } from "./dice";
 
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
@@ -493,7 +490,7 @@ export async function slashHandlerEssence20(sageInteraction: SageInteraction<Cha
 
 	const character = jsonToCharacter(rawJson);
 	if (!character) {
-		return sageInteraction.reply(`Failed to import character from: ${fileName}!`, false);
+		return sageInteraction.reply(`Failed to import { character } from: ${fileName}!`, false);
 	}
 
 	await sageInteraction.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);

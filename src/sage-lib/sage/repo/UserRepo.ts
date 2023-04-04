@@ -1,9 +1,9 @@
 import type { Snowflake } from "discord.js";
-import type SageCache from "../model/SageCache";
-import User, { UserCore } from "../model/User";
-import DidRepository from "./base/DidRepository";
+import type { SageCache } from "../model/SageCache";
+import { User,  UserCore } from "../model/User";
+import { DidRepository } from "./base/DidRepository";
 
-export default class UserRepo extends DidRepository<UserCore, User> {
+export class UserRepo extends DidRepository<UserCore, User> {
 
 	public getSuperUser(): Promise<User> {
 		return this.getByDid(User.SuperUserDid) as Promise<User>;

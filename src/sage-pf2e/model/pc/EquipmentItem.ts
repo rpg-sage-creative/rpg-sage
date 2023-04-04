@@ -1,19 +1,16 @@
-import type { IdCore, UUID } from "../../../sage-utils";
-import { HasIdCore } from "../../../sage-utils/utils/ClassUtils";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
+import { HasIdCore, IdCore } from "../../../sage-utils/ClassUtils";
+import { generate, UUID } from "../../../sage-utils/UuidUtils";
 import type { TQuality } from "../../common";
-import { findById } from "../../data/Repository";
-import type Base from "../base/Base";
-import type HasSource from "../base/HasSource";
-import Bulk from "../Bulk";
-import Coins from "../Coins";
-import type Gear from "../Gear";
-import type HasBulk from "../HasBulk";
-import type { BulkCore } from "../HasBulk";
+import { findById } from "../../data";
+import type { Base, HasSource } from "../base";
+import { Bulk } from "../Bulk";
+import { Coins } from "../Coins";
+import type { Gear } from "../Gear";
+import type { BulkCore, HasBulk } from "../HasBulk";
 import type { IMetadata } from "../Metadata";
-import type Spell from "../Spell";
-import type Equipment from "./Equipment";
-import type EquipmentList from "./EquipmentList";
+import type { Spell } from "../Spell";
+import type { Equipment } from "./Equipment";
+import type { EquipmentList } from "./EquipmentList";
 
 export interface EquipmentItemCore extends IdCore<"EquipmentItem"> {
 	containerId?: UUID;
@@ -37,7 +34,7 @@ function toUuid(equipmentItemResolvable: TEquipmentItemResolvable): UUID {
 	return typeof (equipmentItemResolvable) === "string" ? equipmentItemResolvable : equipmentItemResolvable.id;
 }
 
-export default class EquipmentItem extends HasIdCore<EquipmentItemCore> {
+export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 
 	public constructor(private eq: Equipment, core: EquipmentItemCore) {
 		super(core);

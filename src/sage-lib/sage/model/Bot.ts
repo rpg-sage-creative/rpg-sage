@@ -1,11 +1,11 @@
 import type { Snowflake } from "discord.js";
 import type { GameType } from "../../../sage-common";
-import { LogLevel, TConsoleCommandType } from "../../../sage-utils";
-import { HasDidCore, type DidCore } from "../repo/base/DidRepository";
-import Colors, { ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
-import Emoji, { CoreWithEmoji, EmojiType, HasCoreWithEmoji } from "./Emoji";
+import { HasDidCore, type DidCore } from "../repo";
+import { Colors, ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
+import { CoreWithEmoji, Emoji, EmojiType, HasCoreWithEmoji } from "./Emoji";
 import { CoreWithImages, HasCoreWithImages, Images } from "./Images";
-import type SageCache from "./SageCache";
+import type { SageCache } from "./SageCache";
+import { LogLevel, TConsoleCommandType } from "../../../sage-utils/ConsoleUtils";
 
 export type TAcceptableBot = {
 	/** user.id of the bot */
@@ -56,7 +56,7 @@ export interface BotCore extends DidCore<"Bot">, CoreWithColors, CoreWithEmoji, 
 
 }
 
-export default class Bot extends HasDidCore<BotCore> implements HasCoreWithColors, HasCoreWithEmoji, HasCoreWithImages<TBotImageTag> {
+export class Bot extends HasDidCore<BotCore> implements HasCoreWithColors, HasCoreWithEmoji, HasCoreWithImages<TBotImageTag> {
 	public constructor(core: BotCore, sageCache: SageCache) { super(core, sageCache); }
 	public get acceptableBots(): TAcceptableBot[] { return this.core.acceptableBots ?? []; }
 	public get avatarUrl(): string { return this.images.getUrl("avatar") ?? "https://rpgsage.io/SageBotToken.png"; }

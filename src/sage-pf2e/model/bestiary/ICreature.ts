@@ -3,7 +3,7 @@ import type {
 	TCasterType, TMagicTradition, TSpeedType
 } from "../../common";
 import type { ActionCore } from "../Action";
-import type { SourcedCore } from "../base/HasSource";
+import type { SourcedCore } from "../base";
 
 export interface ICreaturePerception {
 	value: number;

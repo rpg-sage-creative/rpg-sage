@@ -1,9 +1,10 @@
-import { nth } from "../../sage-utils/utils/NumberUtils";
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
+import { nth } from "../../sage-utils/NumberUtils";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
 import { NEWLINE } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 import type { TSpellHeighten } from "./Spell";
 
 export interface RitualCore extends SourcedCore<"Ritual"> {
@@ -21,7 +22,7 @@ export interface RitualCore extends SourcedCore<"Ritual"> {
 	heightenedAs?: string[];
 }
 
-export default class Ritual extends HasSource<RitualCore> {
+export class Ritual extends HasSource<RitualCore> {
 	public constructor(core: RitualCore) {
 		super(core);
 		this.canHeighten = !!core.heightenedAs || (core.heightened?.length ?? 0) > 0;
@@ -40,7 +41,7 @@ export default class Ritual extends HasSource<RitualCore> {
 
 	public canHeighten: boolean;
 
-	//#region utils.RenderUtils.IRenderable
+	//#region IRenderable
 	private toCastCostSecondaries(): string {
 		const castCostSecondaries: string[] = [];
 		if (this.cast) {
@@ -78,7 +79,7 @@ export default class Ritual extends HasSource<RitualCore> {
 		return rangeAreaTargets.join("; ");
 	}
 	public toRenderableContent(): RenderableContent {
-		const content = new RenderableContent(this);
+		const content = new Pf2eRenderableContent(this);
 
 		const title = `<b>${this.name}</b> - Ritual ${this.level}`;
 		content.setTitle(title);
@@ -132,7 +133,7 @@ export default class Ritual extends HasSource<RitualCore> {
 
 		return content;
 	}
-	//#endregion utils.RenderUtils.IRenderable
+	//#endregion IRenderable
 
 	//#region ISearchable
 

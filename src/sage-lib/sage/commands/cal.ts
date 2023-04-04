@@ -1,15 +1,16 @@
-import GDate from "../../../sage-cal/pf2e/GDate";
-import { DaysPerMonth, Days as GDays, Months } from "../../../sage-cal/pf2e/cal";
-import SDate from "../../../sage-cal/sf1e/SDate";
-import { Days as SDays } from "../../../sage-cal/sf1e/cal";
+import { GDate } from "../../../sage-cal/pf2e/GDate";
+import { Day as GDay, Month, getDaysInMonth } from "../../../sage-cal/pf2e/cal";
+import { SDate } from "../../../sage-cal/sf1e/SDate";
+import { Day as SDay } from "../../../sage-cal/sf1e/cal";
 import type { Optional } from "../../../sage-utils";
-import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import { capitalize } from "../../../sage-utils/utils/StringUtils";
+import { getKeys, getValues } from "../../../sage-utils/EnumUtils";
+import type { RenderableContent } from "../../../sage-utils/RenderUtils";
+import { capitalize } from "../../../sage-utils/StringUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import { registerInteractionListener } from "../../discord/handlers";
-import type SageInteraction from "../model/SageInteraction";
-import type SageMessage from "../model/SageMessage";
+import type { SageInteraction } from "../model/SageInteraction";
+import type { SageMessage } from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
 
@@ -76,11 +77,11 @@ function calDate(sageMessage: SageMessage): Promise<void> {
 function _calCalendar(): RenderableContent {
 	const content = createCommandRenderableContent();
 	content.appendTitledSection(`<b>Golarion's Days of the Week</b>`);
-	content.append(GDays.join(", "));
+	content.append(getKeys(GDay).join(", "));
 	content.appendTitledSection(`<b>Absalom Station's Days of the Week</b>`);
-	content.append(SDays.join(", "));
+	content.append(getKeys(SDay).join(", "));
 	content.appendTitledSection(`<b>Golarion's Months (# of Days)</b>`);
-	content.append(Months.map((m, i) => `${String(i + 1)}. ${m} (${DaysPerMonth[i]})`).join(`, `));
+	content.append(getValues(Month).map((m, i) => `${String(i + 1)}. ${Month[m]} (${getDaysInMonth(m)})`).join(`, `));
 	content.append(`<i>Absalom Station still uses these months.</i>`);
 	return content;
 }

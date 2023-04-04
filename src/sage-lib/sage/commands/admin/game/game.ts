@@ -2,21 +2,21 @@ import type { GuildMember, Role, Snowflake } from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
 import type { Args, Optional } from "../../../../../sage-utils";
-import { sortComparable } from "../../../../../sage-utils/utils/ArrayUtils/Sort";
-import type { DGuildChannel } from "../../../../../sage-utils/utils/DiscordUtils";
-import type DiscordFetches from "../../../../../sage-utils/utils/DiscordUtils/DiscordFetches";
-import DiscordId from "../../../../../sage-utils/utils/DiscordUtils/DiscordId";
-import { toSuperscript } from "../../../../../sage-utils/utils/NumberUtils";
-import type { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
-import { generate, isValid } from "../../../../../sage-utils/utils/UuidUtils";
+import { sortComparable } from "../../../../../sage-utils/ArrayUtils";
+import type { DGuildChannel } from "../../../../../sage-utils/DiscordUtils";
+import type { DiscordFetches } from "../../../../../sage-utils/DiscordUtils";
+import { DiscordId } from "../../../../../sage-utils/DiscordUtils";
+import { toSuperscript } from "../../../../../sage-utils/NumberUtils";
+import type { RenderableContent } from "../../../../../sage-utils/RenderUtils";
+import { generate, isValid } from "../../../../../sage-utils/UuidUtils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import Game, { GameRoleType, GameUserType, getDefaultGameOptions, IGameRole, IGameUser, TDefaultGameOptions } from "../../../model/Game";
-import GameCharacter from "../../../model/GameCharacter";
+import { Game,  GameRoleType, GameUserType, getDefaultGameOptions, IGameRole, IGameUser, TDefaultGameOptions } from "../../../model/Game";
+import { GameCharacter } from "../../../model/GameCharacter";
 import { getEnum, hasValues, ISageCommandArgs } from "../../../model/SageCommandArgs";
-import type SageMessage from "../../../model/SageMessage";
-import type Server from "../../../model/Server";
+import type { SageMessage } from "../../../model/SageMessage";
+import type { Server } from "../../../model/Server";
 import { getServerDefaultGameOptions } from "../../../model/Server";
-import { DialogType, GameChannelType, IChannel, toGameChannelTypeString } from "../../../repo/base/channel";
+import { DialogType, GameChannelType, IChannel, toGameChannelTypeString } from "../../../repo";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
@@ -444,7 +444,7 @@ function getServerValues(server: Server): Partial<TGameOptions> {
 function getArgValues(sageMessage: SageMessage): Args<TGameOptions> {
 	return {
 		...getServerDefaultGameOptions(sageMessage.args),
-		gameType: getEnum<GameType>(sageMessage.args, GameType, "gameType", "type")
+		gameType: getEnum(sageMessage.args, GameType, "gameType", "type")
 	}
 }
 
@@ -559,7 +559,7 @@ async function gameCreate(sageMessage: SageMessage<true>): Promise<void> {
 function getGameOptions(args: ISageCommandArgs): Args<TGameOptions> | null {
 	const opts: Args<TGameOptions> = {
 		...getDefaultGameOptions(args),
-		gameType: getEnum<GameType>(args, GameType, "gameType", "type"),
+		gameType: getEnum(args, GameType, "gameType", "type"),
 		gmCharacterName: args.getString("gmCharName"),
 		name: args.getString("newName")
 	};
@@ -617,7 +617,7 @@ async function gameToggleDicePing(sageMessage: SageMessage): Promise<void> {
 	}
 }
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(gameCount, "game-count");
 	registerAdminCommandHelp("Admin", "Game", "game count");
 

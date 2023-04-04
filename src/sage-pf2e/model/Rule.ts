@@ -1,8 +1,9 @@
-import type utils from "../../sage-utils";
-import RenderableContent from "../data/RenderableContent";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
+import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
 import type { ActionCore } from "./Action";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 type TRuleChildArray = (RuleCore | ActionCore)[];
 
@@ -31,7 +32,7 @@ function parseChildren(cores?: TRuleChildArray): Rule[] {
 	return filtered.map(Rule.from);
 }
 
-export default class Rule extends HasSource<RuleCore> {
+export class Rule extends HasSource<RuleCore> {
 	private _children?: Rule[];
 	public get children(): Rule[] {
 		return this._children ?? (this._children = parseChildren(this.core.children));
@@ -42,28 +43,28 @@ export default class Rule extends HasSource<RuleCore> {
 		return this._hasChildren ?? (this._hasChildren = this.children.length > 0);
 	}
 
-	// #region utils.RenderUtils.IRenderable
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const renderable = new RenderableContent(this);
+	// #region IRenderable
+	public toRenderableContent(): RenderableContent {
+		const renderable = new Pf2eRenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b>`);
 		this.appendDescriptionTo(renderable);
 		this.appendDetailsTo(renderable);
 		this.children.forEach(child => child.appendAsChild(renderable));
 		return renderable;
 	}
-	private appendAsChild(renderable: RenderableContent): void {
+	private appendAsChild(renderable: Pf2eRenderableContent): void {
 		if (this.hasDescription) {
 			renderable.appendTitledSection(`<b>${this.name}</b>`, `<i>${this.description}</i>`);
 			renderable.appendParagraphsSection(<string[]>this.details);
 		} else if (this.hasDetails) {
-			renderable.appendTitledSection(`<b>${this.name}</b>`, ...RenderableContent.toParagraphs(<string[]>this.details));
+			renderable.appendTitledSection(`<b>${this.name}</b>`, ...Pf2eRenderableContent.toParagraphs(<string[]>this.details));
 		}
 		this.children.forEach(child => child.appendAsChild(renderable));
 	}
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion IRenderable
 
-	// #region utils.SearchUtils.ISearchable
-	public searchRecursive(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this>[] {
+	// #region ISearchable
+	public searchRecursive(searchInfo: SearchInfo): SearchScore<this>[] {
 		const scores = [];
 		scores.push(this.search(searchInfo));
 		this.children.forEach(child => {
@@ -71,7 +72,7 @@ export default class Rule extends HasSource<RuleCore> {
 		});
 		return scores;
 	}
-	// #endregion utils.SearchUtils.ISearchable
+	// #endregion ISearchable
 
 	public static from(core: RuleCore): Rule { return new Rule(core); }
 }

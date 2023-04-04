@@ -1,22 +1,22 @@
 import { ActionRowBuilder } from "@discordjs/builders";
 import { ButtonBuilder, ButtonInteraction, ButtonStyle, Collection, Message, Snowflake, SnowflakeUtil } from "discord.js";
 import type { Optional } from "../../../sage-utils";
-import { errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import type { DMessageChannel } from "../../../sage-utils/utils/DiscordUtils";
-import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
-import { getText } from "../../../sage-utils/utils/HttpsUtils";
-import { capitalize, StringMatcher } from "../../../sage-utils/utils/StringUtils";
+import { errorReturnNull } from "../../../sage-utils/ConsoleUtils";
+import type { DMessageChannel } from "../../../sage-utils/DiscordUtils";
+import { DiscordId } from "../../../sage-utils/DiscordUtils";
+import { getText } from "../../../sage-utils/HttpsUtils";
+import { capitalize, StringMatcher } from "../../../sage-utils/StringUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import type { TCommandAndArgsAndData } from "../../discord";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import { discordPromptYesNoDeletable } from "../../discord/prompts";
-import ActiveBot from "../model/ActiveBot";
-import type SageInteraction from "../model/SageInteraction";
-import type SageMessage from "../model/SageMessage";
-import GameMap, { TMoveDirection } from "./map/GameMap";
+import { ActiveBot } from "../model/ActiveBot";
+import type { SageInteraction } from "../model/SageInteraction";
+import type { SageMessage } from "../model/SageMessage";
+import { GameMap,  TMoveDirection } from "./map/GameMap";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, TGameMapTerrain, TGameMapToken } from "./map/GameMapBase";
-import gameMapImporter, { TParsedGameMapCore } from "./map/gameMapImporter";
+import { gameMapImporter,  TParsedGameMapCore } from "./map/gameMapImporter";
 
 //#region buttons
 

@@ -1,12 +1,13 @@
-import { PROFICIENCIES, Table } from "../../../sage-pf2e";
+import { PROFICIENCIES } from "../../../sage-pf2e";
+import { Table } from "../../../sage-pf2e/model/Table";
 import type { Optional } from "../../../sage-utils";
-import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import { capitalize } from "../../../sage-utils/utils/StringUtils";
+import type { RenderableContent } from "../../../sage-utils/RenderUtils";
+import { capitalize } from "../../../sage-utils/StringUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import { registerInteractionListener } from "../../discord/handlers";
-import type SageInteraction from "../model/SageInteraction";
-import type SageMessage from "../model/SageMessage";
+import type { SageInteraction } from "../model/SageInteraction";
+import type { SageMessage } from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
 

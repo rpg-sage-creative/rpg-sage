@@ -1,8 +1,7 @@
-import type utils from "../../../sage-utils";
-import type { Core } from "../../../sage-utils";
+import type { Core } from "../../../sage-utils/ClassUtils";
+import type { StringMatcher } from "../../../sage-utils/StringUtils";
 import type { TRarity } from "../../common";
-import type Base from "./Base";
-import type { BaseCore } from "./Base";
+import type { Base, BaseCore } from "./Base";
 
 // #region DetailedCore core interface and HasDetails class interface
 
@@ -78,7 +77,7 @@ export interface IHasName {
 	nameLower: string;
 
 	/** This must check to see if the value matches the name, nameClean (when cleaned), or nameLower (when lowered) */
-	matches(value: utils.StringUtils.StringMatcher): boolean;
+	matches(value: StringMatcher): boolean;
 }
 
 // #endregion NamedCore core interface and IHasName class interface

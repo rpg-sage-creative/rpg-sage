@@ -1,15 +1,15 @@
-import type utils from "../../sage-utils";
-import RenderableContent from '../data/RenderableContent';
-import { findByValue } from '../data/Repository';
+import { Pf2eRenderableContent } from '../Pf2eRenderableContent';
+import { findByValue } from '../data';
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
-import type FocusSpell from './FocusSpell';
+import { HasSource } from './base/HasSource';
+import type { FocusSpell } from './FocusSpell';
+import type { RenderableContent } from '../../sage-utils/RenderUtils';
 
 export interface DomainCore extends SourcedCore<"Domain"> {
 	spells: string[];
 }
 
-export default class Domain extends HasSource<DomainCore> {
+export class Domain extends HasSource<DomainCore> {
 	private _spells?: FocusSpell[];
 
 	public get spells(): FocusSpell[] {
@@ -19,10 +19,10 @@ export default class Domain extends HasSource<DomainCore> {
 	}
 
 	/**************************************************************************************************************************/
-	// utils.RenderUtils.IRenderable
+	// IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
-		const content = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const content = new Pf2eRenderableContent(this);
 		content.setTitle(`<b>${this.name}</b> (Domain)`);
 		content.append(this.description);
 		content.append(`<b>Domain Spell</b> <i>${this.spells[0] && this.spells[0].nameLower || this.core.spells[0].toLowerCase()}</i>`);

@@ -1,7 +1,7 @@
 import type { Snowflake } from "discord.js";
 import type { Optional } from "../../../../../sage-utils";
 import { GameRoleType, IGameRole, TGameRoleType } from "../../../model/Game";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
@@ -60,7 +60,7 @@ async function gameRoleSet(sageMessage: SageMessage): Promise<void> {
 //TODO: remove roles by mentioning them
 //TODO: have a generic set of role commands that dyanmically figure out game or server roletype
 
-export default function register(): void {
+export function register(): void {
 	registerAdminCommand(gameRoleList, "game-role-list");
 	registerAdminCommandHelp("Admin", "Game", "role list");
 

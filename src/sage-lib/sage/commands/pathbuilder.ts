@@ -1,18 +1,17 @@
 import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, EmbedBuilder, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
-import { PathbuilderCharacter, toModifier } from "../../../sage-pf2e";
-import { getCharacterSections, TCharacterSectionType, TCharacterViewType, TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
-import { isDefined, Optional, UUID } from "../../../sage-utils";
-import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import type { DMessageChannel, DMessageTarget } from "../../../sage-utils/utils/DiscordUtils";
-import DiscordId from "../../../sage-utils/utils/DiscordUtils/DiscordId";
-import { resolveToEmbeds } from "../../../sage-utils/utils/DiscordUtils/embeds";
-import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
-import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
+import { toModifier } from "../../../sage-pf2e";
+import { PathbuilderCharacter, TCharacterSectionType, TCharacterViewType, TPathbuilderCharacter, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
+import { Optional, isDefined } from "../../../sage-utils";
+import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/ConsoleUtils";
+import type { DMessageChannel, DMessageTarget } from "../../../sage-utils/DiscordUtils";
+import { DiscordId, resolveToEmbeds } from "../../../sage-utils/DiscordUtils";
+import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/FsUtils";
+import { StringMatcher } from "../../../sage-utils/StringUtils";
+import type { UUID } from "../../../sage-utils/UuidUtils";
 import { registerInteractionListener } from "../../discord/handlers";
-import type SageCache from "../model/SageCache";
-import type SageInteraction from "../model/SageInteraction";
-import type User from "../model/User";
-import type { TMacro } from "../model/User";
+import type { SageCache } from "../model/SageCache";
+import type { SageInteraction } from "../model/SageInteraction";
+import type { TMacro, User } from "../model/User";
 import { parseDiceMatches, sendDice } from "./dice";
 
 function createSelectMenuRow(selectMenu: StringSelectMenuBuilder): ActionRowBuilder<StringSelectMenuBuilder> {

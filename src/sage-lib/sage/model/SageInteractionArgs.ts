@@ -1,12 +1,12 @@
 import type { ChatInputCommandInteraction, GuildBasedChannel, Role, Snowflake } from "discord.js";
-import type { Optional, VALID_UUID } from "../../../sage-utils";
-import { EnumUtils } from "../../../sage-utils/utils";
-import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
-import type { DInteraction } from "../../../sage-utils/utils/DiscordUtils";
-import { isValid as isValidUuid } from "../../../sage-utils/utils/UuidUtils";
+import type { Optional,  } from "../../../sage-utils";
+import { exists } from "../../../sage-utils/ArrayUtils";
+import type { DInteraction } from "../../../sage-utils/DiscordUtils";
+import { VALID_UUID, isValid as isValidUuid } from "../../../sage-utils/UuidUtils";
 import type { ISageCommandArgs } from "./SageCommandArgs";
+import { EnumLike, parse } from "../../../sage-utils/EnumUtils";
 
-export default class SageInteractionArgs implements ISageCommandArgs {
+export class SageInteractionArgs implements ISageCommandArgs {
 	public constructor(private _interaction: DInteraction) { }
 
 	private get interaction(): ChatInputCommandInteraction { return this._interaction as ChatInputCommandInteraction; }
@@ -86,19 +86,19 @@ export default class SageInteractionArgs implements ISageCommandArgs {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid enum value or "unset".
 	 */
-	public getEnum<U>(type: any, name: string): Optional<U>;
+	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): Optional<V>;
 	/** Gets the named option as a value from the given enum type. */
-	public getEnum<U>(type: any, name: string, required: true): U;
-	public getEnum<U>(type: any, name: string): Optional<U> {
+	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string, required: true): V;
+	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): Optional<V> {
 		const value = this.getString(name);
 		if (value) {
-			return EnumUtils.parse<U>(type, value) ?? null;
+			return parse(type, value) ?? null;
 		}
 		return value as null | undefined;
 	}
 
 	/** Returns true if getEnum(type, name) is not null and not undefined. */
-	public hasEnum(type: any, name: string): boolean {
+	public hasEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): boolean {
 		return exists(this.getEnum(type, name));
 	}
 

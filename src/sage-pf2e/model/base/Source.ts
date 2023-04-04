@@ -1,8 +1,10 @@
-import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
-import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
-import RenderableContent from "../../data/RenderableContent";
-import { findByValue, IFile } from "../../data/Repository";
-import Base, { BaseCore } from "./Base";
+import type { SearchInfo, SearchScore } from "../../../sage-utils/SearchUtils";
+import { StringMatcher } from "../../../sage-utils/StringUtils";
+import { Pf2eRenderableContent } from "../../Pf2eRenderableContent";
+import { findByValue } from "../../data/findByValue";
+import { Base, BaseCore } from "./Base";
+
+interface IFile { filename: string; label: string; }
 
 export interface SourceCore extends BaseCore<"Source"> {
 	apName?: string;
@@ -18,7 +20,7 @@ export interface SourceCore extends BaseCore<"Source"> {
 }
 
 let crb: Source;
-export default class Source extends Base<SourceCore, "Source"> {
+export class Source extends Base<SourceCore, "Source"> {
 	// #region Instance Properties
 
 	/** @deprecated */
@@ -74,9 +76,9 @@ export default class Source extends Base<SourceCore, "Source"> {
 
 	// #endregion IHasName
 
-	// #region utils.RenderUtils.IRenderable
-	public toRenderableContent(): RenderableContent {
-		const renderable = new RenderableContent(this);
+	// #region IRenderable
+	public toRenderableContent(): Pf2eRenderableContent {
+		const renderable = new Pf2eRenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.isAp || this.is3PP) {
 			renderable.append(`<i>${this.toVerboseString()}</i>`);
@@ -91,7 +93,7 @@ export default class Source extends Base<SourceCore, "Source"> {
 		}
 		return renderable;
 	}
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion IRenderable
 
 	// #region ISearchable
 	public search(searchInfo: SearchInfo): SearchScore<this> {

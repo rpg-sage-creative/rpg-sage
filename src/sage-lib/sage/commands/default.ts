@@ -1,17 +1,18 @@
-import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
-import { ArgsManager } from "../../../sage-utils/utils/ArgsUtils";
-import { Collection } from "../../../sage-utils/utils/ArrayUtils";
-import { exists, existsAndUnique, unique } from "../../../sage-utils/utils/ArrayUtils/Filters";
-import { sortComparable } from "../../../sage-utils/utils/ArrayUtils/Sort";
-import { oneToUS } from "../../../sage-utils/utils/LangUtils";
-import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import { capitalize } from "../../../sage-utils/utils/StringUtils";
+import { HasSource, Source, SourceNotationMap } from "../../../sage-pf2e";
+import { filterBy, findByValue, getByType } from "../../../sage-pf2e/data";
+import { parseObjectType } from "../../../sage-pf2e/data/repoMap";
+import type { Skill } from "../../../sage-pf2e/model/Skill";
+import { ArgsManager } from "../../../sage-utils/ArgsUtils";
+import { Collection, exists, existsAndUnique, sortComparable, unique } from "../../../sage-utils/ArrayUtils";
+import { oneToUS } from "../../../sage-utils/LangUtils";
+import type { RenderableContent } from "../../../sage-utils/RenderUtils";
+import { capitalize } from "../../../sage-utils/StringUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs } from "../../discord/types";
-import type SageInteraction from "../model/SageInteraction";
-import type SageMessage from "../model/SageMessage";
+import type { SageInteraction } from "../model/SageInteraction";
+import type { SageMessage } from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp, registerFindHelp, registerSearchHelp } from "./help";
 import { searchHandler } from "./search";
@@ -20,7 +21,7 @@ import { searchHandler } from "./search";
 
 function renderAllSource(objectType: string, objectTypePlural: string): RenderableContent {
 	const content = createCommandRenderableContent();
-	const all = Repository.all<Source>(objectType), //.sort(sortComparable),
+	const all = getByType<Source>(objectType), //.sort(sortComparable),
 		categories = all.map(source => source.searchResultCategory).filter(unique);
 	content.setTitle(`<b>${objectTypePlural} (${all.length})</b>`);
 	categories.forEach(category => {
@@ -31,7 +32,7 @@ function renderAllSource(objectType: string, objectTypePlural: string): Renderab
 }
 function renderAllSkill(objectType: string, objectTypePlural: string): RenderableContent {
 	const content = createCommandRenderableContent();
-	const all = Repository.all<Skill>(objectType).sort(sortComparable);
+	const all = getByType<Skill>(objectType).sort(sortComparable);
 	const sourceMap = new SourceNotationMap(all);
 
 	const nonLore = all.filter(skill => !skill.isSpecialty);
@@ -60,10 +61,10 @@ function renderAllSkill(objectType: string, objectTypePlural: string): Renderabl
 // }
 function renderAllBySource(objectType: string, objectTypePlural: string): RenderableContent[] {
 	const _content = createCommandRenderableContent();
-	const all = Repository.all<HasSource>(objectType).sort(sortComparable);
+	const all = getByType<HasSource>(objectType).sort(sortComparable);
 	_content.setTitle(`<b>${objectTypePlural} (${all.length})</b>`);
 
-	const sources = Repository.all<Source>("Source");
+	const sources = getByType<Source>("Source");
 	const mapped = sources.map(source => {
 		const bySource = all.filter(item => item.source === source);
 		if (bySource.length) {
@@ -97,7 +98,7 @@ export function renderAll(objectType: string, objectTypePlural: string, _bySourc
 		if (_bySource) {
 			return renderAllBySource(objectType, objectTypePlural);
 		}
-		const all = Repository.all<HasSource>(objectType).sort(sortComparable);
+		const all = getByType<HasSource>(objectType).sort(sortComparable);
 		const content = createCommandRenderableContent(`<b>${objectTypePlural} (${all.length})</b>`);
 		SourceNotationMap.appendNotatedItems(content, all);
 		return [content];
@@ -111,20 +112,20 @@ export function renderAll(objectType: string, objectTypePlural: string, _bySourc
 async function objectsBy(sageMessage: SageMessage): Promise<void> {
 	const argValues = sageMessage.args.unkeyedValues();
 	const objectTypePlural = argValues.shift(),
-		objectType = Repository.parseObjectType(oneToUS(objectTypePlural!.replace(/gods/i, "deities")))!,
+		objectType = parseObjectType(oneToUS(objectTypePlural!.replace(/gods/i, "deities")))!,
 		traitOr = argValues.shift() ?? (objectType.objectType === "Deity" ? "domain" : "trait"),
 		searchTerm = argValues.shift()!;
 
 	const content = createCommandRenderableContent(),
-		trait = traitOr === "trait" && Repository.findByValue("Trait", searchTerm),
-		domain = traitOr === "domain" && Repository.findByValue("Domain", searchTerm);
+		trait = traitOr === "trait" && findByValue("Trait", searchTerm),
+		domain = traitOr === "domain" && findByValue("Domain", searchTerm);
 	// source = traitOr === "source",
 
 	content.setTitle(`<b>${objectType.objectTypePlural} by ${capitalize(traitOr)} (${searchTerm})</b>`);
 	if (trait) {
 		const capped = capitalize(searchTerm);
 		/** @todo This uses weapon for all to expose traits ... create a HasTraits interface and properly implement */
-		const items = Repository.filter(objectType.objectType as "Weapon", weapon => weapon.Traits?.includes(trait) || weapon.traits.includes(capped));
+		const items = filterBy(objectType.objectType as "Weapon", weapon => weapon.Traits?.includes(trait) || weapon.traits.includes(capped));
 		if (items.length) {
 			SourceNotationMap.appendNotatedItems(content, items);
 		} else {
@@ -132,7 +133,7 @@ async function objectsBy(sageMessage: SageMessage): Promise<void> {
 			content.appendSection(`<a href="http://2e.aonprd.com/Search.aspx?query=${searchTerm.replace(/\s+/g, "+")}">Search Archives of Nethys</a>`);
 		}
 	} else if (domain) {
-		const deities = Repository.filter(objectType.objectType as "Deity", deity => deity.hasDomain(domain));
+		const deities = filterBy(objectType.objectType as "Deity", deity => deity.hasDomain(domain));
 		if (deities.length) {
 			SourceNotationMap.appendNotatedItems(content, deities);
 		} else {
@@ -141,7 +142,7 @@ async function objectsBy(sageMessage: SageMessage): Promise<void> {
 		}
 	} else if (objectType.objectType === "Spell") {
 		const capped = capitalize(searchTerm);
-		const spells = Repository.filter("Spell", spell => spell.traits.includes(capped));
+		const spells = filterBy("Spell", spell => spell.traits.includes(capped));
 		if (spells.length) {
 			SourceNotationMap.appendNotatedItems(content, spells);
 		} else {
@@ -189,7 +190,7 @@ function searchTester(sageMessage: SageMessage): TCommandAndArgs | null {
 async function repositoryFindRenderTable(sageMessage: SageMessage): Promise<boolean> {
 	const searchText = sageMessage.args.unkeyedValues().join(" ");
 	const tableName = searchText.match(/\btable\b/i) && searchText.replace(/\btable\b/i, "") || "";
-	const table = Repository.findByValue("Table", tableName);
+	const table = findByValue("Table", tableName);
 	if (table) {
 		await sageMessage.send(table);
 		return true;

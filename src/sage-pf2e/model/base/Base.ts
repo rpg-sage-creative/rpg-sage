@@ -1,11 +1,10 @@
-import type { IComparable, IdCore, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
-import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
-import { HasIdCore } from "../../../sage-utils/utils/ClassUtils";
-import type { RenderableContent as _RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
-import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
+import { IComparable, sortAscending } from "../../../sage-utils/ArrayUtils";
+import { HasIdCore, IdCore } from "../../../sage-utils/ClassUtils";
+import type { RenderableContent, IRenderable } from "../../../sage-utils/RenderUtils";
+import type { ISearchable, SearchInfo, SearchScore } from "../../../sage-utils/SearchUtils";
+import { StringMatcher } from "../../../sage-utils/StringUtils";
 import { NEWLINE, TAB } from "../../common";
-import RenderableContent from "../../data/RenderableContent";
+import { Pf2eRenderableContent } from "../../Pf2eRenderableContent";
 import type {
 	ArchivedCore,
 	DetailedCore,
@@ -48,8 +47,8 @@ export interface BaseCore<T extends string = string> extends IdCore<T>, Archived
 	pf2t?: Pf2tBaseCore;
 }
 
-type TChildCoreParser<T extends BaseCore> = (core: T) => T[];
-export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = string>
+export type TChildCoreParser<T extends BaseCore> = (core: T) => T[];
+export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = string>
 	extends
 		HasIdCore<T, U>
 	implements
@@ -167,14 +166,14 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 		return isSuccessFailureDetail(this.core) || this.details.find(isSuccessFailureDetail) !== undefined;
 	}
 
-	protected appendDescriptionTo(content: RenderableContent): void {
+	protected appendDescriptionTo(content: Pf2eRenderableContent): void {
 		if (!this.hasDescription) {
 			return;
 		}
 		content.appendSection(`<i>${this.description}</i>`);
 	}
 
-	protected appendDetailsTo(content: RenderableContent): void {
+	protected appendDetailsTo(content: Pf2eRenderableContent): void {
 		if (!this.hasDetails) {
 			return;
 		}
@@ -202,7 +201,7 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 	}
 
 	/** Returns true if the given detail was a THasSuccessOrFailure and was appended. */
-	private appendSuccessFailureTo(content: RenderableContent, detail: TDetail | THasSuccessOrFailure): detail is THasSuccessOrFailure {
+	private appendSuccessFailureTo(content: Pf2eRenderableContent, detail: TDetail | THasSuccessOrFailure): detail is THasSuccessOrFailure {
 		if (isSuccessFailureDetail(detail)) {
 			if (detail.criticalSuccess?.length) {
 				content.appendBlockquote(detail.criticalSuccess, "Critical Success");
@@ -217,7 +216,7 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 				content.appendBlockquote(detail.criticalFailure, "Critical Failure");
 			}
 			if (detail.followUp?.length) {
-				content.append(...RenderableContent.toParagraphs(detail.followUp));
+				content.append(...Pf2eRenderableContent.toParagraphs(detail.followUp));
 			}
 			return true;
 		}
@@ -243,8 +242,8 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 	// #endregion IHasName
 
 	// #region IRenderable
-	public toRenderableContent(): _RenderableContent {
-		const renderable = new RenderableContent(this);
+	public toRenderableContent(): RenderableContent {
+		const renderable = new Pf2eRenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		this.appendDescriptionTo(renderable);
 		this.appendDetailsTo(renderable);
@@ -254,7 +253,7 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 
 	// #region IComparable
 
-	public compareTo(other: Base<T, U>): TSortResult {
+	public compareTo(other: Base<T, U>): -1 | 0 | 1 {
 		return sortAscending(this.objectType, other.objectType)
 			|| sortAscending(this.nameClean, other.nameClean)
 			|| sortAscending(this.nameLower, other.nameLower)

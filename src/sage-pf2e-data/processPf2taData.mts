@@ -1,4 +1,4 @@
-import { writeFile } from "../sage-utils/utils/FsUtils/index.js";
+import { writeFile } from "../sage-utils/FsUtils";
 import { DistDataPath, info, getPf2tCores, getSageCores } from "./common.mjs";
 import { coresMatch, objectTypeToPf2Type } from "./pf2-tools-parsers/common.mjs";
 

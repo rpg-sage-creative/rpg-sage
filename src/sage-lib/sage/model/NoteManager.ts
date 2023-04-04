@@ -1,5 +1,5 @@
 import type { Snowflake } from "discord.js";
-import { existsAndUnique } from "../../../sage-utils/utils/ArrayUtils/Filters";
+import { existsAndUnique } from "../../../sage-utils/ArrayUtils";
 
 interface IHasSave { save(): Promise<boolean>; }
 
@@ -28,7 +28,7 @@ function compare(input: string, lower: string): boolean {
 	return ensure(input).toLowerCase() === lower;
 }
 
-export default class NoteManager {
+export class NoteManager {
 	public constructor(private notes: TNote[], protected owner?: IHasSave) { }
 
 	public getCategories(): string[] {
