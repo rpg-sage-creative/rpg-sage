@@ -32,9 +32,9 @@ type TUnkeyedIndexedArg<T extends string = string> = UnkeyedArg<T> & {
 }
 
 /** Represents an indexed KeyedArg. key/keyLower/clean are undefined if the arg had no key. */
-export type TIndexedArg<T extends string = string> = TKeyedIndexedArg<T> | TUnkeyedIndexedArg<T>;
+type TIndexedArg<T extends string = string> = TKeyedIndexedArg<T> | TUnkeyedIndexedArg<T>;
 
-export type TIndexedRetArg<T extends string = string, U = any> = TIndexedArg<T> & { ret:U; };
+type TIndexedRetArg<T extends string = string, U = any> = TIndexedArg<T> & { ret:U; };
 
 export class ArgsManager<T extends string = string> extends Array<TArg<T>> {
 
