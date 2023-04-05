@@ -1,13 +1,13 @@
-import { Collection } from "../../sage-utils/ArrayUtils";
+import { remove } from "../../sage-utils/ArrayUtils";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
 import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
 import { filterBy } from "../data";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
 import type { FeatureCore } from "./Feature";
 import { Feature } from "./Feature";
 import { Features } from "./Features";
 import type { Heritage } from "./Heritage";
-import type { RenderableContent } from "../../sage-utils/RenderUtils";
+import type { SourcedCore } from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface AncestryCore extends SourcedCore<"Ancestry"> {
 	// adventurers: string[];
@@ -92,7 +92,7 @@ export class Ancestry extends HasSource<AncestryCore> {
 	}
 
 	public static removeFeatures(features: FeatureCore[]): FeatureCore[] {
-		return Collection.remove(features, feature => feature.objectType === Ancestry.FeatureObjectType);
+		return remove(features, feature => feature.objectType === Ancestry.FeatureObjectType);
 	}
 
 	//#endregion

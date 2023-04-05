@@ -6,6 +6,6 @@ export function isNullOrUndefined<T>(value: Optional<T>): value is null | undefi
 }
 
 /** Convenience for !isNullOrUndefined(value) */
-export function isDefined<T>(value: Optional<T>): value is T {
+export function isDefined<T>(value: Optional<T> | void): value is T {
 	return value !== null && value !== undefined;
 }

@@ -1,5 +1,6 @@
+import { isDefinedAndUnique } from "../sage-utils/ArrayUtils";
 import { writeFile } from "../sage-utils/FsUtils";
-import { DistDataPath, info, getPf2tCores, getSageCores } from "./common.mjs";
+import { DistDataPath, getPf2tCores, getSageCores, info } from "./common.mjs";
 import { coresMatch, objectTypeToPf2Type } from "./pf2-tools-parsers/common.mjs";
 
 export async function processPf2tData(): Promise<void> {
@@ -9,8 +10,8 @@ export async function processPf2tData(): Promise<void> {
 	const pf2tCores = getPf2tCores();
 
 	const sageTypes: string[] = [];
-	sageCores.pluck("objectType", true)
-			.concat(sageCores.pluck("classPath", true).filter(s => s) as string[])
+	sageCores.map(c => c.objectType).filter(isDefinedAndUnique)
+			.concat(sageCores.map(c => c.classPath).filter(isDefinedAndUnique))
 			.forEach(type => {
 		const clean = objectTypeToPf2Type(type, true);
 		if (!sageTypes.includes(clean)) sageTypes.push(clean);
@@ -19,8 +20,7 @@ export async function processPf2tData(): Promise<void> {
 	});
 
 	const pf2tTypes: string[] = [];
-	pf2tCores.pluck("type", true)
-			.forEach(type => {
+	pf2tCores.map(c => c.type).filter(isDefinedAndUnique).forEach(type => {
 		const clean = type.toLowerCase().replace(/^cantrip$/, "spell");
 		if (!pf2tTypes.includes(clean)) pf2tTypes.push(clean);
 	});

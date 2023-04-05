@@ -1,14 +1,13 @@
-import type { Role } from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
-import type { Optional } from "../../../../../sage-utils";
-import { Collection } from "../../../../../sage-utils/ArrayUtils";
-import { isNonNilSnowflake } from "../../../../../sage-utils/SnowflakeUtils";
+import { isDefined, type Optional } from "../../../../../sage-utils";
+import { mapAsync } from "../../../../../sage-utils/ArrayUtils";
 import type { RenderableContent } from "../../../../../sage-utils/RenderUtils";
+import { isNonNilSnowflake } from "../../../../../sage-utils/SnowflakeUtils";
 import { isValid } from "../../../../../sage-utils/UuidUtils";
 import type { SageMessage } from "../../../model/SageMessage";
 import type { Server } from "../../../model/Server";
-import { AdminRoleType, getServerDefaultGameOptions, IAdminRole } from "../../../model/Server";
+import { AdminRoleType, getServerDefaultGameOptions } from "../../../model/Server";
 import { DialogType } from "../../../repo/base/channel";
 import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
 import { DicePostType } from "../../dice";
@@ -75,7 +74,6 @@ function serverDetailsDefaultTypes(renderableContent: RenderableContent, server:
 	renderableContent.append(`<b>Default Dice Secret Method Type</b> ${DiceSecretMethodType[server.defaultDiceSecretMethodType!] ?? "<i>unset (Ignore)</i>"}`);
 }
 
-type TRole = { role:IAdminRole, discordRole:Role };
 async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	let server: Optional<Server> = sageMessage.server;
 	// if (server && !sageMessage.checkCanAdminServer()) {
@@ -94,12 +92,13 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure("Server Not Found!");
 	}
 
-	const roles = <TRole[]>await Collection.mapAsync(server.roles, async role => {
+	const mappedRoles = await mapAsync(server.roles, async role => {
 		return {
-			role: role,
-			discordRole: await sageMessage.discord.fetchGuildRole(role.did)
+			sRole: role,
+			dRole: await sageMessage.discord.fetchGuildRole(role.did)
 		};
 	});
+	const roles = mappedRoles.filter(isDefined);
 
 	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>server-details</b>`);
 	if (server) {
@@ -113,7 +112,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 			// renderableContent.append(`<b>Region</b> ${guild.region}`);
 			renderableContent.append(`<b>MemberCount</b> ${guild.memberCount}`);
 			serverDetailsDefaultTypes(renderableContent, server);
-			renderableContent.append(`<b>Sage Admin Roles</b> ${!roles.length ? "<i>none set</i>" : roles.map(role => `@${role.discordRole.name} (${AdminRoleType[role.role.type]})`).join(", ")}`);
+			renderableContent.append(`<b>Sage Admin Roles</b> ${!roles.length ? "<i>none set</i>" : roles.map(role => `@${role.dRole?.name} (${AdminRoleType[role.sRole.type]})`).join(", ")}`);
 		} else {
 			renderableContent.append(`<b>Server Id</b> ${server.did || "<i>NOT SET</i>"}`);
 			renderableContent.append(`<b>Status</b> ${"<i>NOT FOUND</i>"}`);

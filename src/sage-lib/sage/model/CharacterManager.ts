@@ -1,6 +1,5 @@
 import type { Snowflake } from "discord.js";
 import type { Optional } from "../../../sage-utils";
-import { Collection } from "../../../sage-utils/ArrayUtils";
 import type { DiscordKey } from "../../../sage-utils/DiscordUtils";
 import { UUID, generate } from "../../../sage-utils/UuidUtils";
 import type { TDialogMessage } from "../repo/DialogMessageRepository";
@@ -164,8 +163,8 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	}
 
 	/** We likely don't want a CharacterManager if we map to a non-named value. */
-	public map<T>(callbackfn: (value: GameCharacter, index: number, collection: CharacterManager) => T, thisArg?: any): Collection<T> {
-		const mapped = new Collection<T>();
+	public map<T>(callbackfn: (value: GameCharacter, index: number, collection: CharacterManager) => T, thisArg?: any): Array<T> {
+		const mapped: T[] = [];
 		this.forEach((value, index, collection) => mapped.push(callbackfn.call(thisArg, value, index, collection)));
 		return mapped;
 	}
@@ -219,7 +218,7 @@ export interface CharacterManager {
 
 	forEach(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => void, thisArg?: any): void;
 
-	map<T>(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => T, thisArg?: any): Collection<T>;
+	map<T>(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => T, thisArg?: any): Array<T>;
 	// map<T extends GameCharacter>(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => T, thisArg?: any): NamedCollection<T>;
 
 	reduce(callbackfn: (previousValue: GameCharacter, currentValue: GameCharacter, currentIndex: number, manager: CharacterManager) => GameCharacter): GameCharacter;

@@ -1,3 +1,4 @@
+import { isDefined } from "../../../sage-utils";
 import type { CharacterManager } from "./CharacterManager";
 import { GameCharacter } from "./GameCharacter";
 
@@ -33,6 +34,6 @@ export class CharactersMatch {
 			}
 			return null;
 		});
-		return new CharactersMatch(characterManager, matches.existing());
+		return new CharactersMatch(characterManager, matches.filter(isDefined));
 	}
 }

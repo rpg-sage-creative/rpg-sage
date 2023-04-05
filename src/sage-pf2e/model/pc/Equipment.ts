@@ -1,4 +1,3 @@
-import { Collection } from "../../../sage-utils/ArrayUtils";
 import type { UUID } from "../../../sage-utils/UuidUtils";
 import { DEXTERITY, STRENGTH } from "../../common";
 import { AlchemicalItem } from "../AlchemicalItem";
@@ -172,7 +171,7 @@ export class Equipment {
 		const iterator = args.pop(),
 			filter = args.pop();
 		if (filter) {
-			Collection.filterThenEach(this.items as T[], filter as TFilter<T>, iterator as TFilteredIterator<T>, this);
+			(this.items as T[]).filter(filter as TFilter<T>, this).forEach(iterator as TFilteredIterator<T>, this);
 		}else {
 			(this.items as T[]).forEach(iterator as TIterator<T>, this);
 		}

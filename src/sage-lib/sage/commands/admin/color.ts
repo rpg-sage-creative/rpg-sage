@@ -1,9 +1,8 @@
 import { isDefined, type Optional } from "../../../../sage-utils";
-import { Collection } from "../../../../sage-utils/ArrayUtils";
+import { partition } from "../../../../sage-utils/ArrayUtils";
 import { errorReturnNull } from "../../../../sage-utils/ConsoleUtils";
 import { discordPromptYesNo } from "../../../discord/prompts";
-import type { Colors } from "../../model/Colors";
-import type { TColorAndType } from "../../model/Colors";
+import type { Colors, TColorAndType } from "../../model/Colors";
 import { ColorType } from "../../model/Colors";
 import type { SageMessage } from "../../model/SageMessage";
 import type { SageMessageArgs } from "../../model/SageMessageArgs";
@@ -62,7 +61,7 @@ async function _colorList(sageMessage: SageMessage, which: BotServerGameType): P
 			const countText = `(${++colorIndex} of ${colorCount})`;
 			return embedColor(color, ColorType[botColor.type], inheritedText, countText);
 		});
-		const embedGroups = Collection.partition(embeds, (_, index) => Math.floor(index / 10));
+		const embedGroups = partition(embeds, (_, index) => Math.floor(index / 10));
 		for (const embedGroup of embedGroups) {
 			await sageMessage.message.channel.send({ embeds:embedGroup });
 		}

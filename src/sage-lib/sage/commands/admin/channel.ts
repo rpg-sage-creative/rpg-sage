@@ -2,7 +2,7 @@ import { ChannelType, Snowflake } from "discord.js";
 import { GameType } from "../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
 import { isDefined, type Args, type Optional } from "../../../../sage-utils";
-import { Collection } from "../../../../sage-utils/ArrayUtils";
+import { filterAsync, mapAsync } from "../../../../sage-utils/ArrayUtils";
 import type { DChannel, DGuildChannel } from "../../../../sage-utils/DiscordUtils";
 import { DiscordKey } from "../../../../sage-utils/DiscordUtils";
 import type { RenderableContent } from "../../../../sage-utils/RenderUtils";
@@ -46,14 +46,14 @@ async function channelAdd(sageMessage: SageMessage): Promise<void> {
 	}
 
 	// Grab channels from mentions, filter out those in active games
-	let channelDids: Snowflake[] = sageMessage.message.mentions.channels.map(channel => channel.id);
-	channelDids = await Collection.filterAsync(channelDids, async channelDid => !(await game.server.findActiveGameByChannelDid(channelDid)));
-	if (!channelDids.length) {
+	const mentionedChannelDids: Snowflake[] = sageMessage.message.mentions.channels.map(channel => channel.id);
+	const usableChannelDids = await filterAsync(mentionedChannelDids, async channelDid => !(await game.server.findActiveGameByChannelDid(channelDid)));
+	if (!usableChannelDids.length) {
 		return sageMessage.reactFailure("No Valid Channels given!");
 	}
 
 	const channelOptions = getChannelOptions(sageMessage.args) || { type:GameChannelType.Miscellaneous };
-	const channels = channelDids.map(channelDid => ({ did: channelDid, ...channelOptions } as IChannel));
+	const channels = usableChannelDids.map(channelDid => ({ did: channelDid, ...channelOptions } as IChannel));
 	const saved = await game.addOrUpdateChannels(...channels);
 	return sageMessage.reactSuccessOrFailure(saved, "Game Channel Added.", "Unknown Error; Game Channel NOT Added!");
 	// TODO: should i render the channels' details?
@@ -191,12 +191,11 @@ async function channelDetails(sageMessage: SageMessage, channel?: IChannel): Pro
 //#region list
 
 async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: IChannel[]): Promise<DGuildChannel[]> {
-	const guildChannels = await Collection.mapAsync(channels, async channel => {
+	const guildChannels = await mapAsync(channels, async channel => {
 		const forGuild = await sageMessage.sageCache.discord.forGuild(sageMessage.server!.did);
 		return forGuild?.fetchChannel(channel.did);
 	});
-	/** @todo Figure out why Filters.exists isn't working here! */
-	const existing = guildChannels.filter(isDefined) as Collection<DGuildChannel>;
+	const existing = guildChannels.filter(isDefined);
 
 	const filter = sageMessage.args.unkeyedValues().join(" ").trim();
 	if (filter && existing.length) {

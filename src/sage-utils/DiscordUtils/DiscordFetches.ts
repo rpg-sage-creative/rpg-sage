@@ -1,13 +1,13 @@
 import { Client, Guild, GuildMember, GuildPreview, Message, PermissionFlagsBits, Role, Snowflake, User, Webhook } from "discord.js";
 import type { Optional } from "..";
-import { Collection } from "../ArrayUtils";
+import { filterAsync } from "../ArrayUtils";
+import { isNonNilSnowflake } from "../SnowflakeUtils";
 import { handleDiscordErrorReturnNull } from "./errorHandlers";
 import { toHumanReadable } from "./humanReadable";
 import { canReactTo, canSendMessageTo } from "./permChecks";
 import { resolveSnowflake } from "./resolveSnowflake";
 import { canCheckPermissionsFor, canFetchWebhooksFor } from "./typeChecks";
 import type { DChannel, DChannelResolvable, DDMChannel, DGuildChannel, DGuildResolvable, DInteraction, DMessage, DRoleResolvable, DTextChannel, DUserResolvable, DWebhookChannel } from "./types";
-import { isNonNilSnowflake } from "../SnowflakeUtils";
 
 export type DiscordFetchesArgs = {
 	botId?: Optional<Snowflake>;
@@ -308,7 +308,7 @@ export class DiscordFetches {
 			return array;
 		}
 
-		return Collection.filterAsync(array, opts.filter);
+		return filterAsync(array, opts.filter);
 	}
 
 	//#endregion

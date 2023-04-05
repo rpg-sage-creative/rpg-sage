@@ -1,16 +1,13 @@
 import { existsSync, readdirSync, rmSync } from "fs";
-import type { UUID } from "../sage-utils/UuidUtils";
-import { Collection } from "../sage-utils/ArrayUtils";
+import type { THasSuccessOrFailure } from "../sage-pf2e/model/base/interfaces";
 import { readJsonFileSync, writeFileSync } from "../sage-utils/FsUtils";
+import type { UUID } from "../sage-utils/UuidUtils";
 import { generate, isNotNormalized, normalize } from "../sage-utils/UuidUtils";
-import { clearStringify, compareNames, debug, DistDataPath, error, getPf2tCores, getSageCores, info, loadPf2tCores, log, SrcDataPath, stringify, warn } from "./common.mjs";
+import { DistDataPath, SrcDataPath, clearStringify, compareNames, debug, error, getPf2tCores, getSageCores, info, loadPf2tCores, log, stringify, warn } from "./common.mjs";
 import { findPf2tCore, parsePf2Data } from "./pf2-tools-parsers/common.mjs";
 import { processAbcData } from "./process-abc.mjs";
 import { processPf2tData } from "./processPf2taData.mjs";
 import type { TCore } from "./types.mjs";
-import type { THasSuccessOrFailure } from "../sage-pf2e/model/base/interfaces";
-
-type CoreList = Collection<TCore>;
 
 let total = 0, created = 0, unique = 0, recreated = 0, normalized = 0, aoned = 0, linked = 0;
 
@@ -125,7 +122,7 @@ function fixDedicationFeatObjectType(core: TCore): boolean {
 
 function processData(filePathAndName: string) {
 	info(`Processing file: ${filePathAndName} ...`);
-	const coreList = Collection.from(readJsonFileSync(filePathAndName) as TCore[]);
+	const coreList = readJsonFileSync(filePathAndName) as TCore[];
 
 	//#region invalid file/data
 	if (!coreList) {
@@ -215,12 +212,12 @@ function processData(filePathAndName: string) {
 	return coreList;
 }
 
-function missingObjectType(coreList: CoreList, typesToCheck: string[], typeToFind: string, pf2tType: string = typeToFind.toLowerCase()): CoreList {
+function missingObjectType(coreList: TCore[], typesToCheck: string[], typeToFind: string, pf2tType: string = typeToFind.toLowerCase()): TCore[] {
 	const pf2tCores = getPf2tCores();
 	const missing = coreList.filter(sage => typesToCheck.includes(sage.objectType) && !coreList.find(core => core.objectType === typeToFind && core.name === sage.name));
 	return missing.filter(sage => pf2tCores.find(pf2t => pf2t.type === pf2tType && sage.name === pf2t.name));
 }
-function ensureTrait(coreList: CoreList): void {
+function ensureTrait(coreList: TCore[]): void {
 	const objectTypes = ["Class","Ancestry","Archetype","VersatileHeritage"];
 	const missingTraits = missingObjectType(coreList, objectTypes, "Trait");
 	missingTraits.forEach(sage => {
@@ -228,7 +225,7 @@ function ensureTrait(coreList: CoreList): void {
 		coreList.splice(coreList.indexOf(sage) + 1, 0, core);
 	});
 }
-function ensureLanguage(coreList: CoreList): void {
+function ensureLanguage(coreList: TCore[]): void {
 	if (coreList[0]?.source === "PZO2101") return;
 	const objectTypes = ["Ancestry", "Heritage", "VersatileHeritage"];
 	const missingLanguages = missingObjectType(coreList, objectTypes, "Language");

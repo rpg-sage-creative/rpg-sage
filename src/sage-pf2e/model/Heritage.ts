@@ -1,13 +1,13 @@
-import { Collection } from "../../sage-utils/ArrayUtils";
+import { remove } from "../../sage-utils/ArrayUtils";
+import type { RenderableContent } from "../../sage-utils/RenderUtils";
 import { Pf2eRenderableContent } from "../Pf2eRenderableContent";
 import { findByValue } from "../data";
 import { Ancestry } from "./Ancestry";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
 import type { FeatureCore } from "./Feature";
 import type { FeatureLevelCore } from "./Features";
 import { Features } from "./Features";
-import type { RenderableContent } from "../../sage-utils/RenderUtils";
+import type { SourcedCore } from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface HeritageCore extends SourcedCore<"Heritage"> {
 	ancestry: string;
@@ -41,7 +41,7 @@ export class Heritage extends HasSource<HeritageCore> {
 	public static FeatureObjectType = "HeritageFeature";
 
 	public static removeFeatures(features: FeatureCore[]): FeatureCore[] {
-		return Collection.remove(features, feature => feature.objectType === Heritage.FeatureObjectType);
+		return remove(features, feature => feature.objectType === Heritage.FeatureObjectType);
 	}
 	public static replaceFeatures(level: FeatureLevelCore, heritage: Heritage): void {
 		Ancestry.removeFeatures(level.features);

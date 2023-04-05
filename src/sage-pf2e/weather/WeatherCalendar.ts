@@ -1,4 +1,4 @@
-import { Collection } from "../../sage-utils/ArrayUtils";
+import { partition } from "../../sage-utils/ArrayUtils";
 import { HasIdCore, IdCore } from "../../sage-utils/ClassUtils";
 import type { IMapLocation } from "../map/map";
 import type { IWeatherDayResult } from "./WeatherGenerator";
@@ -15,7 +15,7 @@ export class WeatherCalendar extends HasIdCore<WeatherCalendarCore> {
 	public get data() { return this.core && this.core.data || []; }
 
 	public get all() { return this.data.slice(); }
-	public get months() { return Collection.partition(this.data, t => t.date.month); }
-	public get tempeateSeasons() { return Collection.partition(this.data, t => t.date.temperateSeason); }
-	public get tropicalSeasons() { return Collection.partition(this.data, t => t.date.tropicalSeason); }
+	public get months() { return partition(this.data, t => t.date.month); }
+	public get tempeateSeasons() { return partition(this.data, t => t.date.temperateSeason); }
+	public get tropicalSeasons() { return partition(this.data, t => t.date.tropicalSeason); }
 }

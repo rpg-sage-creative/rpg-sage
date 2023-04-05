@@ -1,6 +1,5 @@
 import type { TMacro } from "../../../sage-lib/sage/model/User";
 import type { Optional, OrUndefined } from "../../../sage-utils";
-import { Collection } from "../../../sage-utils/ArrayUtils";
 import { CharacterBase, CharacterBaseCore } from "../../../sage-utils/CharacterUtils";
 import { getJson } from "../../../sage-utils/HttpsUtils";
 import { nth } from "../../../sage-utils/NumberUtils";
@@ -669,7 +668,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 
 	/** Implements IHasAbilities */
 	public abilities = Abilities.for(this);
-	public feats = Collection.from(this.core.feats ?? []);
+	public feats = this.core.feats ?? [];
 	public savingThrows = SavingThrows.for(this);
 
 	public get level(): number {

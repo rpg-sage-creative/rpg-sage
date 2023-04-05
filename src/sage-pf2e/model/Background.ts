@@ -1,4 +1,4 @@
-import { Collection } from "../../sage-utils/ArrayUtils";
+import { remove } from "../../sage-utils/ArrayUtils";
 import { findByValue } from "../data";
 import type { Ancestry } from "./Ancestry";
 import type { SourcedCore } from "./base/HasSource";
@@ -61,7 +61,7 @@ export class Background extends HasSource<BackgroundCore> {
 	public static FeatureObjectType = "BackgroundFeature";
 
 	public static removeFeatures(features: FeatureCore[]): FeatureCore[] {
-		return Collection.remove(features, feature => feature.objectType === Background.FeatureObjectType);
+		return remove(features, feature => feature.objectType === Background.FeatureObjectType);
 	}
 
 	public static replaceFeatures(level: FeatureLevelCore, background?: Background): void {

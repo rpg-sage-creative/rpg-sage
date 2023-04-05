@@ -1,5 +1,5 @@
 import type { User } from "discord.js";
-import { Collection } from "../../../../../sage-utils/ArrayUtils";
+import { mapAsync } from "../../../../../sage-utils/ArrayUtils";
 import type { RenderableContent } from "../../../../../sage-utils/RenderUtils";
 import type { SageMessage } from "../../../model/SageMessage";
 import { type IAdminUser, AdminRoleType } from "../../../model/Server";
@@ -17,12 +17,12 @@ async function renderUser(renderableContent: RenderableContent, user: TAdminUser
 }
 
 async function adminList(sageMessage: SageMessage<true>): Promise<void> {
-	let users = await Collection.mapAsync(sageMessage.server.admins, async admin => {
+	let users = await mapAsync(sageMessage.server.admins, async admin => {
 		return {
 			discordUser: await sageMessage.discord.fetchUser(admin.did),
 			...admin
 		} as TAdminUser;
-	}) as Collection<TAdminUser>;
+	}) as TAdminUser[];
 	if (users) {
 		const filter = sageMessage.args.unkeyedValues().join(" ");
 		if (filter && users.length) {
@@ -33,7 +33,9 @@ async function adminList(sageMessage: SageMessage<true>): Promise<void> {
 		const renderableContent = createAdminRenderableContent(sageMessage.server);
 		renderableContent.setTitle(`<b>Sage Admin List</b>`);
 		if (users.length) {
-			await users.forEachAsync(async user => renderUser(renderableContent, user));
+			for (const user of users) {
+				await renderUser(renderableContent, user);
+			}
 		} else {
 			renderableContent.append(`<blockquote>No Admins Found!</blockquote>`);
 		}

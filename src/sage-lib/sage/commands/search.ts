@@ -2,7 +2,6 @@ import { RARITIES } from "../../../sage-pf2e";
 import type { Base } from "../../../sage-pf2e/model/base/Base";
 import type { SearchResults } from "../../../sage-search/SearchResults";
 import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common";
-import { Collection } from "../../../sage-utils/ArrayUtils";
 import { RenderableContent } from "../../../sage-utils/RenderUtils";
 import { send } from "../../discord/messages";
 import type { SageMessage } from "../model/SageMessage";
@@ -63,7 +62,7 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 	const promise = send(sageMessage.sageCache, sageMessage.message.channel, `> Searching ${searchEngine.name}, please wait ...`, sageMessage.message.author);
 
 	// Parse the query
-	const parsedSearchInfo = parseSearchInfo(Collection.from(sageMessage.args.unkeyedValues()), RARITIES);
+	const parsedSearchInfo = parseSearchInfo(sageMessage.args.unkeyedValues(), RARITIES);
 
 	// start the search
 	const searchResults = await searchEngine.search(parsedSearchInfo, nameOnly);

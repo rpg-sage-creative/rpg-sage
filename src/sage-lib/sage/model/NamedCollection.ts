@@ -100,7 +100,7 @@ export interface NamedCollection<T extends IHasName> {
 
 	forEach(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => void, thisArg?: any): void;
 
-	map<U>(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => U, thisArg?: any): U[];
+	map<U>(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => U, thisArg?: any): Array<U>;
 
 	reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: NamedCollection<T>) => T): T;
 	reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: NamedCollection<T>) => T, initialValue: T): T;

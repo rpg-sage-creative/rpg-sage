@@ -1,7 +1,6 @@
 import type { Pf2tBaseCore } from "../sage-pf2e";
 import type { SourceCore } from "../sage-pf2e/model/base/Source";
 import type { ClassCore } from "../sage-pf2e/model/Class";
-import { Collection } from "../sage-utils/ArrayUtils";
 import { readJsonFile, writeFile } from "../sage-utils/FsUtils";
 import { getJson } from "../sage-utils/HttpsUtils";
 import { StringMatcher } from "../sage-utils/StringUtils";
@@ -34,10 +33,10 @@ export function debug(...args: any[]) {
 	}
 }
 
-const sageCores = new Collection<TCore>();
-export function getSageCores(): Collection<TCore>
-export function getSageCores(objectType: "Source"): Collection<SourceCore>;
-export function getSageCores(objectType: "Class"): Collection<ClassCore>;
+const sageCores: TCore[] = [];
+export function getSageCores(): TCore[]
+export function getSageCores(objectType: "Source"): SourceCore[];
+export function getSageCores(objectType: "Class"): ClassCore[];
 export function getSageCores(objectType?: string): any {
 	if (objectType) {
 		return sageCores.filter(core => core.objectType === objectType);
@@ -46,7 +45,7 @@ export function getSageCores(objectType?: string): any {
 }
 
 const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
-const pf2tCores = new Collection<Pf2tBaseCore>();
+const pf2tCores: Pf2tBaseCore[] = [];
 export function getPf2tCores() { return pf2tCores; }
 export async function loadPf2tCores(): Promise<void> {
 	const path = `${SrcDataPath}/pf2t-all.json`;

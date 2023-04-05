@@ -42,7 +42,7 @@ export class VersatileHeritage extends HasSource<VersatileHeritageCore> {
 	// public static FeatureObjectType = "VersatileHeritageFeature";
 
 	// public static removeFeatures(features: FeatureCore[]): FeatureCore[] {
-	// 	return utils.ArrayUtils.remove(features, feature => feature.objectType === VersatileHeritage.FeatureObjectType);
+	// 	return remove(features, feature => feature.objectType === VersatileHeritage.FeatureObjectType);
 	// }
 	// public static replaceFeatures(level: FeatureLevelCore, versatileHeritage: VersatileHeritage): void {
 	// 	VersatileHeritage.removeFeatures(level.features);

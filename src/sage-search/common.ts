@@ -1,5 +1,5 @@
 import { GameType } from "../sage-common";
-import type { Collection } from "../sage-utils/ArrayUtils";
+import { remove } from "../sage-utils/ArrayUtils";
 import type { SearchResults } from "./SearchResults";
 import { searchAonPf1e, searchAonPf2e, searchAonSf1e } from "./aon";
 
@@ -12,12 +12,12 @@ export type TParsedSearchInfo = {
 	minusRarities: string[];
 };
 
-export function parseSearchInfo(searchTerms: Collection<string>, rarities: string[] = []): TParsedSearchInfo {
+export function parseSearchInfo(searchTerms: string[], rarities: string[] = []): TParsedSearchInfo {
 	const lowerRarities = rarities.map(rarity => rarity.toLowerCase());
-	const plusTypes = searchTerms.remove(term => term.startsWith("+")).map(term => term.slice(1));
-	const plusRarities = plusTypes.remove(term => findRarity(term));
-	const minusTypes = searchTerms.remove(term => term.startsWith("-")).map(term => term.slice(1));
-	const minusRarities = minusTypes.remove(term => findRarity(term));
+	const plusTypes = remove(searchTerms, term => term.startsWith("+")).map(term => term.slice(1));
+	const plusRarities = remove(plusTypes, term => findRarity(term));
+	const minusTypes = remove(searchTerms, term => term.startsWith("-")).map(term => term.slice(1));
+	const minusRarities = remove(minusTypes, term => findRarity(term));
 	const searchText = searchTerms.map(term => term.match(/\s+/) ? `"${term}"` : term).join(" ");
 	return { searchText, searchTerms, plusTypes, minusTypes, plusRarities, minusRarities };
 

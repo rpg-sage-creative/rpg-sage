@@ -4,7 +4,7 @@ import { parseObjectType } from "../../../sage-pf2e/data/repoMap";
 import type { Skill } from "../../../sage-pf2e/model/Skill";
 import { isDefined } from "../../../sage-utils";
 import { ArgsManager } from "../../../sage-utils/ArgsUtils";
-import { Collection, isDefinedAndUnique, isUnique, sortComparable } from "../../../sage-utils/ArrayUtils";
+import { isDefinedAndUnique, isUnique, sortComparable } from "../../../sage-utils/ArrayUtils";
 import { oneToUS } from "../../../sage-utils/LangUtils";
 import type { RenderableContent } from "../../../sage-utils/RenderUtils";
 import { capitalize } from "../../../sage-utils/StringUtils";
@@ -26,7 +26,7 @@ function renderAllSource(objectType: string, objectTypePlural: string): Renderab
 		categories = all.map(source => source.searchResultCategory).filter(isUnique);
 	content.setTitle(`<b>${objectTypePlural} (${all.length})</b>`);
 	categories.forEach(category => {
-		const byCategory = Collection.filterThenMap(all, source => source.searchResultCategory === category, source => source.toSearchResult());
+		const byCategory = all.filter(source => source.searchResultCategory === category).map(source => source.toSearchResult());
 		content.append(`<b>${category} (${byCategory.length})</b>\n> ${byCategory.join("\n> ")}`);
 	});
 	return content;
@@ -75,7 +75,7 @@ function renderAllBySource(objectType: string, objectTypePlural: string): Render
 			// categories.sort(sortCatWithRarity);
 			if (categories.length) {
 				categories.forEach(category => {
-					const byCategory = Collection.filterThenMap(bySource, item => item.searchResultCategory === category, item => item.toSearchResult());
+					const byCategory = bySource.filter(item => item.searchResultCategory === category).map(item => item.toSearchResult());
 					content.append(`<b>${category} (${byCategory.length})</b>\n> ${byCategory.join(", ")}`);
 				});
 			} else {
