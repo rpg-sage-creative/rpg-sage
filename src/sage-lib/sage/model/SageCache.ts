@@ -5,11 +5,6 @@ import { DiscordFetches } from "../../../sage-utils/DiscordUtils";
 import { DiscordKey } from "../../../sage-utils/DiscordUtils";
 import type { DChannel, DInteraction, DMessage, DReaction, DUser } from "../../../sage-utils/DiscordUtils";
 import { ActiveBot } from "../model/ActiveBot";
-import { DialogType } from "../repo";
-import { BotRepo } from "../repo";
-import { GameRepo } from "../repo";
-import { ServerRepo } from "../repo";
-import { UserRepo } from "../repo";
 import type { Bot } from "./Bot";
 import type { Game } from "./Game";
 import { GameRoleType, GameUserType } from "./Game";
@@ -18,6 +13,11 @@ import { AdminRoleType } from "./Server";
 import type { User } from "./User";
 import type { UUID } from "../../../sage-utils/UuidUtils";
 import { toMarkdown } from "../../../sage-utils/StringUtils";
+import { BotRepo } from "../repo/BotRepo";
+import { ServerRepo } from "../repo/ServerRepo";
+import { GameRepo } from "../repo/GameRepo";
+import { UserRepo } from "../repo/UserRepo";
+import { DialogType } from "../repo/base/channel";
 
 type SageCacheCore = {
 	discord: DiscordFetches;

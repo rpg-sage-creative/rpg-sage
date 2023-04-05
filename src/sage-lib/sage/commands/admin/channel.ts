@@ -12,7 +12,7 @@ import { hasValues, ISageCommandArgs } from "../../model/SageCommandArgs";
 import type { SageMessage } from "../../model/SageMessage";
 import type { Server } from "../../model/Server";
 import { getServerDefaultGameOptions } from "../../model/Server";
-import { DialogType, GameChannelType, IChannelOptions, type IChannel } from "../../repo";
+import { DialogType, GameChannelType, IChannelOptions, type IChannel } from "../../repo/base/channel";
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";

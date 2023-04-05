@@ -1,16 +1,16 @@
 import type { Snowflake } from "discord.js";
+import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import type { Args, Optional } from "../../../sage-utils";
-import { isNonNilSnowflake } from "../../../sage-utils/SnowflakeUtils";
 import type { DiscordKey } from "../../../sage-utils/DiscordUtils";
-import type { TDialogMessage } from "../repo";
-import { DialogMessageRepository } from "../repo";
+import { XRegExp } from "../../../sage-utils/RegExpUtils";
+import { isNonNilSnowflake } from "../../../sage-utils/SnowflakeUtils";
+import type { UUID } from "../../../sage-utils/UuidUtils";
+import type { TDialogMessage } from "../repo/DialogMessageRepository";
+import { DialogMessageRepository } from "../repo/DialogMessageRepository";
 import { CharacterManager } from "./CharacterManager";
 import { CoreWithImages, HasCoreWithImages, Images } from "./Images";
 import type { IHasSave } from "./NamedCollection";
-import { NoteManager,  type TNote } from "./NoteManager";
-import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
-import type { UUID } from "../../../sage-utils/UuidUtils";
-import { XRegExp } from "../../../sage-utils/RegExpUtils";
+import { NoteManager, type TNote } from "./NoteManager";
 
 export type TGameCharacterTag = "gm"
 	| "npc" | "ally" | "enemy" | "boss"

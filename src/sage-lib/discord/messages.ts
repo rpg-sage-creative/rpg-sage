@@ -8,7 +8,7 @@ import { sendTo } from "../../sage-utils/DiscordUtils";
 import type { TRenderableContentResolvable } from "../../sage-utils/RenderUtils";
 import { RenderableContent } from "../../sage-utils/RenderUtils";
 import type { SageCache } from "../sage/model/SageCache";
-import { DialogType } from "../sage/repo";
+import { DialogType } from "../sage/repo/base/channel";
 
 //#region helpers
 

@@ -16,7 +16,7 @@ import { getEnum, hasValues, ISageCommandArgs } from "../../../model/SageCommand
 import type { SageMessage } from "../../../model/SageMessage";
 import type { Server } from "../../../model/Server";
 import { getServerDefaultGameOptions } from "../../../model/Server";
-import { DialogType, GameChannelType, IChannel, toGameChannelTypeString } from "../../../repo";
+import { DialogType, GameChannelType, IChannel, toGameChannelTypeString } from "../../../repo/base/channel";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";

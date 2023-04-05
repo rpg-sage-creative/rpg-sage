@@ -1,16 +1,15 @@
+import type { Snowflake } from "discord.js";
 import type { Args, Optional } from "../../../sage-utils";
-import { DidCore, HasDidCore } from "../repo";
-import type { DialogType } from "../repo";
+import { readJsonFile } from "../../../sage-utils/FsUtils";
+import type { UUID } from "../../../sage-utils/UuidUtils";
+import { DidCore, HasDidCore } from "../repo/base/HasDidCore";
+import type { DialogType } from "../repo/base/channel";
 import { CharacterManager } from "./CharacterManager";
-import type { GameCharacter } from "./GameCharacter";
-import type { GameCharacterCore, TGameCharacterTag } from "./GameCharacter";
+import type { GameCharacter, GameCharacterCore, TGameCharacterTag } from "./GameCharacter";
 import { NamedCollection } from "./NamedCollection";
-import { NoteManager,  TNote } from "./NoteManager";
+import { NoteManager, TNote } from "./NoteManager";
 import type { SageCache } from "./SageCache";
 import { applyValues } from "./SageCommandArgs";
-import { readJsonFile } from "../../../sage-utils/FsUtils";
-import type { Snowflake } from "discord.js";
-import type { UUID } from "../../../sage-utils/UuidUtils";
 
 export type TAlias = {
 	name: string;

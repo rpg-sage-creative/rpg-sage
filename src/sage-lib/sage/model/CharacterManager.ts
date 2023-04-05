@@ -3,7 +3,7 @@ import type { Optional } from "../../../sage-utils";
 import { Collection } from "../../../sage-utils/ArrayUtils";
 import type { DiscordKey } from "../../../sage-utils/DiscordUtils";
 import { UUID, generate } from "../../../sage-utils/UuidUtils";
-import type { TDialogMessage } from "../repo";
+import type { TDialogMessage } from "../repo/DialogMessageRepository";
 import { CharactersMatch } from "./CharactersMatch";
 import type { Game } from "./Game";
 import type { GameCharacterCore, TGameCharacterType } from "./GameCharacter";

@@ -6,7 +6,7 @@ import { addAcceptableBot } from "./discord/handlers";
 import { registerCommandHandlers } from "./sage/commands";
 import { ActiveBot } from "./sage/model/ActiveBot";
 import type { TBotCodeName } from "./sage/model/Bot";
-import { BotRepo } from "./sage/repo";
+import { BotRepo } from "./sage/repo/BotRepo";
 /*
 // import type { Bot } from "./sage/model/Bot";
 // import { Server } from "./sage/model/Server";

@@ -1,11 +1,11 @@
 import type { Snowflake } from "discord.js";
 import type { GameType } from "../../../sage-common";
-import { HasDidCore, type DidCore } from "../repo";
 import { Colors, ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
 import { CoreWithEmoji, Emoji, EmojiType, HasCoreWithEmoji } from "./Emoji";
 import { CoreWithImages, HasCoreWithImages, Images } from "./Images";
 import type { SageCache } from "./SageCache";
 import { LogLevel, TConsoleCommandType } from "../../../sage-utils/ConsoleUtils";
+import { DidCore, HasDidCore } from "../repo/base/HasDidCore";
 
 export type TAcceptableBot = {
 	/** user.id of the bot */

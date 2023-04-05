@@ -10,7 +10,7 @@ import { readJsonFile } from "../../../sage-utils/FsUtils";
 import { cleanJson } from "../../../sage-utils/JsonUtils";
 import type { UUID } from "../../../sage-utils/UuidUtils";
 import { DicePostType } from "../commands/dice";
-import { DialogType, GameChannelType, HasIdCoreAndSageCache, IChannel, IChannelOptions, parseGameChannelType, updateChannel } from "../repo";
+import { DialogType, GameChannelType, IChannel, IChannelOptions, parseGameChannelType, updateChannel } from "../repo/base/channel";
 import { CharacterManager } from "./CharacterManager";
 import type { ColorType, CoreWithColors, HasCoreWithColors } from "./Colors";
 import { Colors } from "./Colors";
@@ -21,6 +21,7 @@ import type { SageCache } from "./SageCache";
 import { ISageCommandArgs, applyValues, getEnum, hasValues } from "./SageCommandArgs";
 import type { Server } from "./Server";
 import { User } from "./User";
+import { HasIdCoreAndSageCache } from "../repo/base/HasIdCoreAndSageCache";
 
 type IChannelArgs = Args<IChannelOptions> & { did:Snowflake; };
 

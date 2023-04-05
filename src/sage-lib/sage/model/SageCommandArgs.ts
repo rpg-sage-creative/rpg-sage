@@ -3,7 +3,7 @@ import { GameType, parseGameType } from "../../../sage-common";
 import { CritMethodType, DiceSecretMethodType } from "../../../sage-dice";
 import type { Args, Optional } from "../../../sage-utils";
 import { DicePostType } from "../commands/dice";
-import { GameChannelType, parseGameChannelType } from "../repo";
+import { GameChannelType, parseGameChannelType } from "../repo/base/channel";
 import type { VALID_UUID } from "../../../sage-utils/UuidUtils";
 import type { EnumLike } from "../../../sage-utils/EnumUtils";
 

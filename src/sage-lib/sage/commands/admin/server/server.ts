@@ -9,7 +9,7 @@ import { isValid } from "../../../../../sage-utils/UuidUtils";
 import type { SageMessage } from "../../../model/SageMessage";
 import type { Server } from "../../../model/Server";
 import { AdminRoleType, getServerDefaultGameOptions, IAdminRole } from "../../../model/Server";
-import { DialogType } from "../../../repo";
+import { DialogType } from "../../../repo/base/channel";
 import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";

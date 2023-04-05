@@ -1,6 +1,6 @@
 import type { SageMessage } from "../../../model/SageMessage";
 import type { User } from "../../../model/User";
-import { DialogType } from "../../../repo";
+import { DialogType } from "../../../repo/base/channel";
 import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
 
 async function userCount(sageMessage: SageMessage): Promise<void> {

@@ -11,7 +11,7 @@ import type { TRenderableContentResolvable } from "../../../sage-utils/RenderUti
 import { registerInteractionListener } from "../../discord/handlers";
 import { createAdminRenderableContent } from "../commands/cmd";
 import { DicePostType } from "../commands/dice";
-import { DialogType, GameChannelType, IChannel } from "../repo";
+import { DialogType, GameChannelType, IChannel } from "../repo/base/channel";
 import type { Bot } from "./Bot";
 import type { Game } from "./Game";
 import type { GameCharacter } from "./GameCharacter";
