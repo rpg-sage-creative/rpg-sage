@@ -14,7 +14,7 @@ export interface TimeLike {
 }
 
 /** A container for the time parts of a TimeLike as strings. */
-export type TTimeStrings = {
+export type TimeStrings = {
 	/** 2 digit hours */
 	hours: string;
 
@@ -32,16 +32,16 @@ export type TTimeStrings = {
 };
 
 /**
- * Returns a TTimeStrings type for a new Date()
+ * Returns a TimeStrings type for a new Date()
  */
-export function getTimeStrings(): TTimeStrings;
+export function getTimeStrings(): TimeStrings;
 
 /**
- * Returns a TTimeStrings type for the given TimeLike
+ * Returns a TimeStrings type for the given TimeLike
  */
-export function getTimeStrings<T extends TimeLike>(timeLike: T): TTimeStrings;
+export function getTimeStrings<T extends TimeLike>(timeLike: T): TimeStrings;
 
-export function getTimeStrings(timeLike = new Date()): TTimeStrings {
+export function getTimeStrings(timeLike = new Date()): TimeStrings {
 	const hours = String(timeLike.getHours()).padStart(2, "0");
 	const minutes = String(timeLike.getMinutes()).padStart(2, "0");
 	const seconds = String(timeLike.getSeconds()).padStart(2, "0");

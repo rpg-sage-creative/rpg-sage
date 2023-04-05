@@ -10,7 +10,7 @@ export interface DateLike {
 }
 
 /** A container for the date parts of a DateLike as strings. */
-export type TDateStrings = {
+export type DateStrings = {
 	/** 4 digit year */
 	year: string;
 
@@ -25,16 +25,16 @@ export type TDateStrings = {
 };
 
 /**
- * Returns a TDateStrings type for a new Date()
+ * Returns a DateStrings type for a new Date()
  */
-export function getDateStrings(): TDateStrings;
+export function getDateStrings(): DateStrings;
 
 /**
- * Returns a TDateStrings type for the given Date
+ * Returns a DateStrings type for the given Date
  */
-export function getDateStrings<T extends DateLike>(dateLike: T): TDateStrings;
+export function getDateStrings<T extends DateLike>(dateLike: T): DateStrings;
 
-export function getDateStrings(dateLike = new Date()): TDateStrings {
+export function getDateStrings(dateLike = new Date()): DateStrings {
 	const year = String(dateLike.getFullYear());
 	const month = String(dateLike.getMonth() + 1).padStart(2, "0");
 	const day = String(dateLike.getDate()).padStart(2, "0");
