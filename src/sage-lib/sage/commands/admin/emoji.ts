@@ -133,7 +133,7 @@ type TEmojiAndType = { type: EmojiType; replacement: string; };
  * @todo ensure any calls to this expect the color and type to be keyed so that we can stop falling through to unkeyed args.
  */
 function findEmojiAndType(args: SageMessageArgs): Optional<TEmojiAndType> {
-	if (args.isEmpty) {
+	if (args.length === 0) {
 		return null;
 	}
 	const type = args.findEnum(EmojiType, "type", true);

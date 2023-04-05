@@ -229,7 +229,7 @@ function ensureTrait(coreList: CoreList): void {
 	});
 }
 function ensureLanguage(coreList: CoreList): void {
-	if (coreList.first()?.source === "PZO2101") return;
+	if (coreList[0]?.source === "PZO2101") return;
 	const objectTypes = ["Ancestry", "Heritage", "VersatileHeritage"];
 	const missingLanguages = missingObjectType(coreList, objectTypes, "Language");
 	missingLanguages.forEach(sage => {
@@ -344,7 +344,7 @@ function findDuplicateCores(): void {
 	const dupes = sageCores.map(core => sageCores.filter(dupe =>
 		core.objectType !== "Feat" && core.objectType === dupe.objectType && core.name === dupe.name && core.source === dupe.source && core.id !== dupe.id
 	)).filter(dupes => dupes.length);
-	info(`Duplicate Entries (${dupes.length}): ${dupes.map(list => list.first()!.name)}`);
+	info(`Duplicate Entries (${dupes.length}): ${dupes.map(list => list[0]!.name)}`);
 }
 
 function processDomainSpells(): void {

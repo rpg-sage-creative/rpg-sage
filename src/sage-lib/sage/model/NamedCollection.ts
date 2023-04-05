@@ -1,5 +1,5 @@
 import { isDefined } from "../../../sage-utils";
-import { Collection, isDefinedAndUnique } from "../../../sage-utils/ArrayUtils";
+import { isDefinedAndUnique } from "../../../sage-utils/ArrayUtils";
 
 export interface IHasSave {
 	save(): Promise<boolean>;
@@ -9,7 +9,7 @@ interface IHasName {
 	name: string;
 }
 
-export class NamedCollection<T extends IHasName> extends Collection<T> {
+export class NamedCollection<T extends IHasName> extends Array<T> {
 
 	/** The owner of this collection that can be saved when changes are made. */
 	protected owner?: IHasSave;
@@ -17,7 +17,7 @@ export class NamedCollection<T extends IHasName> extends Collection<T> {
 	/** Empties this Collection and then calls owner.save() */
 	public emptyAndSave(): Promise<boolean> {
 		if (this.length) {
-			this.empty();
+			this.length = 0;
 			return this.owner?.save() ?? Promise.resolve(true);
 		}
 		return Promise.resolve(false);
@@ -33,8 +33,8 @@ export class NamedCollection<T extends IHasName> extends Collection<T> {
 	}
 
 	/** We likely don't want a NamedCollection if we map to a non-named value. */
-	public map<U>(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => U, thisArg?: any): Collection<U> {
-		const mapped = new Collection<U>();
+	public map<U>(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => U, thisArg?: any): U[] {
+		const mapped: U[] = [];
 		this.forEach((value, index, collection) => mapped.push(callbackfn.call(thisArg, value, index, collection)));
 		return mapped;
 	}
@@ -100,7 +100,7 @@ export interface NamedCollection<T extends IHasName> {
 
 	forEach(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => void, thisArg?: any): void;
 
-	map<U>(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => U, thisArg?: any): Collection<U>;
+	map<U>(callbackfn: (value: T, index: number, collection: NamedCollection<T>) => U, thisArg?: any): U[];
 
 	reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: NamedCollection<T>) => T): T;
 	reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, collection: NamedCollection<T>) => T, initialValue: T): T;

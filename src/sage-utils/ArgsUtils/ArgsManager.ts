@@ -1,5 +1,4 @@
 import { isDefined, isNullOrUndefined, Optional, OrUndefined } from "..";
-import { Collection } from "../ArrayUtils";
 import { Color } from "../ColorUtils";
 import { EnumLike, getKeys } from "../EnumUtils";
 import type { ESCAPED_URL, VALID_URL } from "../HttpsUtils";
@@ -37,7 +36,7 @@ export type TIndexedArg<T extends string = string> = TKeyedIndexedArg<T> | TUnke
 
 export type TIndexedRetArg<T extends string = string, U = any> = TIndexedArg<T> & { ret:U; };
 
-export class ArgsManager<T extends string = string> extends Collection<TArg<T>> {
+export class ArgsManager<T extends string = string> extends Array<TArg<T>> {
 
 	public constructor(arrayLength: number);
 	public constructor(...items: TArg<T>[]);
@@ -48,25 +47,25 @@ export class ArgsManager<T extends string = string> extends Collection<TArg<T>> 
 	//#region indexed, keyed, unkeyed, unkeyedValues
 
 	/** Maps each value to a TIndexedKeyValueArg. */
-	protected indexed<U extends TIndexedArg<T> = TIndexedArg<T>>(): Collection<U> {
-		const collection = new Collection<U>();
-		this.forEach((value, index) => collection.push({ index, ...value } as U));
-		return collection;
+	protected indexed<U extends TIndexedArg<T> = TIndexedArg<T>>(): U[] {
+		const array: U[] = [];
+		this.forEach((value, index) => array.push({ index, ...value } as U));
+		return array;
 	}
 
 	/** Returns all indexed args that have keys. */
-	public keyed<U extends string = T>(): Collection<TKeyedIndexedArg<U>> {
-		return this.indexed<TKeyedIndexedArg<T>>().filter(arg => arg.key) as unknown as Collection<TKeyedIndexedArg<U>>;
+	public keyed<U extends string = T>(): TKeyedIndexedArg<U>[] {
+		return this.indexed<TKeyedIndexedArg<T>>().filter(arg => arg.key) as unknown as TKeyedIndexedArg<U>[];
 	}
 
 	/** Returns all indexed args that DO NOT have keys. */
-	public unkeyed<U extends string = T>(): Collection<TUnkeyedIndexedArg<U>> {
-		return this.indexed<TUnkeyedIndexedArg<T>>().filter(arg => !arg.key) as unknown as Collection<TUnkeyedIndexedArg<U>>;
+	public unkeyed<U extends string = T>(): TUnkeyedIndexedArg<U>[] {
+		return this.indexed<TUnkeyedIndexedArg<T>>().filter(arg => !arg.key) as unknown as TUnkeyedIndexedArg<U>[];
 	}
 
 	/** Returns all the values of the unkeyed args. */
-	public unkeyedValues<U extends string = T>(): Collection<U> {
-		return this.unkeyed().map(arg => arg.value) as unknown as Collection<U>;
+	public unkeyedValues<U extends string = T>(): U[] {
+		return this.unkeyed().map(arg => arg.value) as unknown as U[];
 	}
 
 	//#endregion
@@ -111,7 +110,7 @@ export class ArgsManager<T extends string = string> extends Collection<TArg<T>> 
 	protected findByKeyOrUnkeyed<U extends string>(key: OrUndefined<string>, unkeyed: OrUndefined<true>, tester: (value: string, unkeyed: boolean) => value is U): Optional<U>;
 	protected findByKeyOrUnkeyed<U, V extends string>(key: OrUndefined<string>, unkeyed: OrUndefined<true>, tester: (value: string, unkeyed: boolean) => value is V, mapper?: (value: V) => U | null): Optional<U>;
 	protected findByKeyOrUnkeyed<U, V extends string>(key: OrUndefined<string>, unkeyed: OrUndefined<true>, tester: (value: string, unkeyed: boolean) => value is V, mapper?: (value: V) => U | null): Optional<T | U> {
-		if (this.isEmpty) {
+		if (this.length === 0) {
 			return undefined;
 		}
 
@@ -152,7 +151,7 @@ export class ArgsManager<T extends string = string> extends Collection<TArg<T>> 
 	public removeByKey(key: string | RegExp, value?: string | RegExp): OrUndefined<KeyedArg<T>> {
 		const arg = this.findByKey(key, value!);
 		if (arg && arg.index > -1) {
-			this.removeAt(arg.index);
+			this.splice(arg.index, 1);
 			return arg as KeyedArg<T>;
 		}
 		return undefined;
@@ -261,7 +260,7 @@ export class ArgsManager<T extends string = string> extends Collection<TArg<T>> 
 		return this.findByKeyOrUnkeyed<VALID_UUID>(key, unkeyed, isValidUuid);
 	}
 
-	public unkeyedUuids(): Collection<VALID_UUID> {
+	public unkeyedUuids(): VALID_UUID[] {
 		return this.unkeyedValues<VALID_UUID>().filter(value => isValidUuid(value));
 	}
 
@@ -290,7 +289,7 @@ export class ArgsManager<T extends string = string> extends Collection<TArg<T>> 
 		return this.findByKeyOrUnkeyed(key, unkeyed, isUrl, cleanUrl);
 	}
 
-	public unkeyedUrls(): Collection<VALID_URL> {
+	public unkeyedUrls(): VALID_URL[] {
 		return this.unkeyedValues<VALID_URL | ESCAPED_URL>().filter(value => isUrl(value)).map(cleanUrl);
 	}
 

@@ -135,7 +135,7 @@ async function colorGet(sageMessage: SageMessage): Promise<void> {
  * @todo ensure any calls to this expect the color and type to be keyed so that we can stop falling through to unkeyed args.
  */
 function findColorAndType(args: SageMessageArgs): Optional<TColorAndType> {
-	if (args.isEmpty) {
+	if (args.length === 0) {
 		return null;
 	}
 	const color = args.findColor("color", true),

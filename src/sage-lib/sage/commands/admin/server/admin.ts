@@ -17,12 +17,12 @@ async function renderUser(renderableContent: RenderableContent, user: TAdminUser
 }
 
 async function adminList(sageMessage: SageMessage<true>): Promise<void> {
-	let users: TAdminUser[] = <TAdminUser[]>await Collection.mapAsync(sageMessage.server.admins, async admin => {
+	let users = await Collection.mapAsync(sageMessage.server.admins, async admin => {
 		return {
 			discordUser: await sageMessage.discord.fetchUser(admin.did),
 			...admin
-		};
-	});
+		} as TAdminUser;
+	}) as Collection<TAdminUser>;
 	if (users) {
 		const filter = sageMessage.args.unkeyedValues().join(" ");
 		if (filter && users.length) {
@@ -33,7 +33,7 @@ async function adminList(sageMessage: SageMessage<true>): Promise<void> {
 		const renderableContent = createAdminRenderableContent(sageMessage.server);
 		renderableContent.setTitle(`<b>Sage Admin List</b>`);
 		if (users.length) {
-			await Collection.forEachAsync(users, async user => renderUser(renderableContent, user));
+			await users.forEachAsync(async user => renderUser(renderableContent, user));
 		} else {
 			renderableContent.append(`<blockquote>No Admins Found!</blockquote>`);
 		}

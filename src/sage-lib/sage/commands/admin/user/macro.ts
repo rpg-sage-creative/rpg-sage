@@ -65,8 +65,8 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 			}
 		});
 		renderableContent.appendTitledSection(`<b>To view a macro, use:</b>`,
-			`${sageMessage.prefix ?? ""}!!macro details name="${macros.first()!.name}"`,
-			`${sageMessage.prefix ?? ""}!!macro list cat="${macros.first()!.name}"`
+			`${sageMessage.prefix ?? ""}!!macro details name="${macros[0]!.name}"`,
+			`${sageMessage.prefix ?? ""}!!macro list cat="${macros[0]!.name}"`
 			);
 		return <any>sageMessage.send(renderableContent);
 

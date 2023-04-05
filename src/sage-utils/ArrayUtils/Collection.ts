@@ -14,15 +14,15 @@ export class Collection<T> extends Array<T> {
 	}
 
 	/** Returns the value and its index ([value, index]), or [undefined, -1] if the value is not found. */
-	public findWithIndex(predicate: (value: T, index: number, obj: Collection<T>) => unknown, thisArg?: any): [T | undefined, number] {
-		const index = this.findIndex(predicate as (value: T, index: number, array: T[]) => unknown, thisArg);
-		return [index === -1 ? undefined : this[index], index];
-	}
+	// public findWithIndex(predicate: (value: T, index: number, obj: Collection<T>) => unknown, thisArg?: any): [T | undefined, number] {
+	// 	const index = this.findIndex(predicate as (value: T, index: number, array: T[]) => unknown, thisArg);
+	// 	return [index === -1 ? undefined : this[index], index];
+	// }
 
 	/** Removes all objects. */
-	public empty(): void {
-		this.length = 0;
-	}
+	// public empty(): void {
+	// 	this.length = 0;
+	// }
 
 	/** Returns a new Collection with only values that are not null and not undefined. */
 	public existing(): Collection<NonNullable<T>> {
@@ -35,19 +35,19 @@ export class Collection<T> extends Array<T> {
 	}
 
 	/** Convenience method for .filter().forEach() that uses a single iteration */
-	public filterThenEach(predicate: (value: T, index: number, values: Collection<T>) => unknown, callbackfn: (value: T, newIndex: number) => void, thisArg?: any): void {
-		Collection.filterThenEach(this, predicate, callbackfn, thisArg);
-	}
+	// public filterThenEach(predicate: (value: T, index: number, values: Collection<T>) => unknown, callbackfn: (value: T, newIndex: number) => void, thisArg?: any): void {
+	// 	Collection.filterThenEach(this, predicate, callbackfn, thisArg);
+	// }
 
 	/** Convenience method for .filter().map() that uses a single iteration */
-	public filterThenMap<U>(predicate: (value: T, index: number, values: Collection<T>) => unknown, callbackfn: (value: T, newIndex: number) => U, thisArg?: any): Collection<U> {
-		return Collection.filterThenMap(this, predicate, callbackfn, thisArg);
-	}
+	// public filterThenMap<U>(predicate: (value: T, index: number, values: Collection<T>) => unknown, callbackfn: (value: T, newIndex: number) => U, thisArg?: any): Collection<U> {
+	// 	return Collection.filterThenMap(this, predicate, callbackfn, thisArg);
+	// }
 
 	/** Uses asynchronous logic to perform a find on an array. Exceptions in the predicate will be sent to console.warn and considered "falsey". */
-	public async findAsync(predicate: (value: T, index: number, obj: T[]) => Promise<T>, thisArg?: any): Promise<T | undefined> {
-		return Collection.findAsync(this, predicate, thisArg);
-	}
+	// public async findAsync(predicate: (value: T, index: number, obj: T[]) => Promise<T>, thisArg?: any): Promise<T | undefined> {
+	// 	return Collection.findAsync(this, predicate, thisArg);
+	// }
 
 	/** Uses asynchronous functions to iterate over a collection in order. Exceptions in the callback will be sent to console.warn. */
 	public async forEachAsync(callbackfn: (value: T, newIndex: number, values: Collection<T>) => Promise<void>, thisArg?: any): Promise<void> {
@@ -55,19 +55,19 @@ export class Collection<T> extends Array<T> {
 	}
 
 	/** Returns the first object. */
-	public first(): T | undefined {
-		return this[0];
-	}
+	// public first(): T | undefined {
+	// 	return this[0];
+	// }
 
 	/** Returns the last object. */
-	public last(): T | undefined {
-		return this[this.length - 1];
-	}
+	// public last(): T | undefined {
+	// 	return this[this.length - 1];
+	// }
 
 	/** Uses asynchronous functions to map a collection in order. Exceptions in the callback will be sent to console.warn. */
-	public async mapAsync<U>(callbackfn: (value: T, newIndex: number, values: Collection<T>) => Promise<U>, thisArg?: any): Promise<Collection<U | void>> {
-		return Collection.mapAsync(this, callbackfn, thisArg);
-	}
+	// public async mapAsync<U>(callbackfn: (value: T, newIndex: number, values: Collection<T>) => Promise<U>, thisArg?: any): Promise<Collection<U | void>> {
+	// 	return Collection.mapAsync(this, callbackfn, thisArg);
+	// }
 
 	/** Partitions the values into nested Collections based on the partitionfn */
 	public partition(partitionfn: (value: T, index: number, collection: Collection<T>) => number, thisArg?: any): Collection<Collection<T>> {
@@ -92,17 +92,17 @@ export class Collection<T> extends Array<T> {
 	}
 
 	/** Remove the value at the given index. */
-	public removeAt(index: number): T | undefined;
+	// public removeAt(index: number): T | undefined;
 	/** Remove the values at the given indexes. */
-	public removeAt(indexes: number[]): (T | undefined)[];
-	public removeAt(indexOrIndexes: number | number[]): T | undefined | (T | undefined)[] {
-		return Collection.removeAt(this, indexOrIndexes as number);
-	}
+	// public removeAt(indexes: number[]): (T | undefined)[];
+	// public removeAt(indexOrIndexes: number | number[]): T | undefined | (T | undefined)[] {
+	// 	return Collection.removeAt(this, indexOrIndexes as number);
+	// }
 
 	/** Returns a new array that doesn't contain the passed args */
-	public without(...args: T[]): Collection<T> {
-		return Collection.without(this, ...args) as Collection<T>;
-	}
+	// public without(...args: T[]): Collection<T> {
+	// 	return Collection.without(this, ...args) as Collection<T>;
+	// }
 
 	//#endregion
 
@@ -156,20 +156,20 @@ export class Collection<T> extends Array<T> {
 	}
 
 	/** Uses asynchronous logic to perform a find on an array. Exceptions in the predicate will be sent to console.warn and considered "falsey". */
-	public static async findAsync<T>(values: Array<T>, predicate: (value: T, index: number, values: Array<T>) => Promise<T>, thisArg?: any): Promise<T | undefined>;
+	// public static async findAsync<T>(values: Array<T>, predicate: (value: T, index: number, values: Array<T>) => Promise<T>, thisArg?: any): Promise<T | undefined>;
 	/** Uses asynchronous logic to perform a find on an array. Exceptions in the predicate will be sent to console.warn and considered "falsey". */
-	public static async findAsync<T>(values: Collection<T>, predicate: (value: T, index: number, values: Collection<T>) => Promise<T>, thisArg?: any): Promise<T | undefined>;
-	public static async findAsync<T, U extends Array<T> | Collection<T>>(values: U, predicate: (value: T, index: number, values: U) => Promise<T>, thisArg?: any): Promise<T | undefined> {
-		for (let index = 0, len = values.length; index < len; index++) {
-			const item = values[index];
-			const result = await predicate.call(thisArg, item, index, values)
-				.catch((err: any) => console.warn(err instanceof Error ? err : new Error(err)));
-			if (result) {
-				return item;
-			}
-		}
-		return undefined;
-	}
+	// public static async findAsync<T>(values: Collection<T>, predicate: (value: T, index: number, values: Collection<T>) => Promise<T>, thisArg?: any): Promise<T | undefined>;
+	// public static async findAsync<T, U extends Array<T> | Collection<T>>(values: U, predicate: (value: T, index: number, values: U) => Promise<T>, thisArg?: any): Promise<T | undefined> {
+	// 	for (let index = 0, len = values.length; index < len; index++) {
+	// 		const item = values[index];
+	// 		const result = await predicate.call(thisArg, item, index, values)
+	// 			.catch((err: any) => console.warn(err instanceof Error ? err : new Error(err)));
+	// 		if (result) {
+	// 			return item;
+	// 		}
+	// 	}
+	// 	return undefined;
+	// }
 
 	/** Uses asynchronous functions to iterate over an array in order. Exceptions in the callback will be sent to console.warn. */
 	public static async forEachAsync<T>(values: Array<T>, callbackfn: (value: T, newIndex: number, values: Array<T>) => Promise<void>, thisArg?: any): Promise<void>;
@@ -255,12 +255,12 @@ export class Collection<T> extends Array<T> {
 	}
 
 	/** Returns a new array that doesn't contain the passed args */
-	public static without<T>(array: Array<T>, ...args: T[]): Array<T>;
+	// public static without<T>(array: Array<T>, ...args: T[]): Array<T>;
 	/** Returns a new array that doesn't contain the passed args */
-	public static without<T>(collection: Collection<T>, ...args: T[]): Collection<T>;
-	public static without<T, U extends Array<T>>(array: U, ...args: T[]): U {
-		return array.filter(obj => !args.includes(obj)) as U;
-	}
+	// public static without<T>(collection: Collection<T>, ...args: T[]): Collection<T>;
+	// public static without<T, U extends Array<T>>(array: U, ...args: T[]): U {
+	// 	return array.filter(obj => !args.includes(obj)) as U;
+	// }
 
 	//#endregion
 }

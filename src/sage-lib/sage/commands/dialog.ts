@@ -151,7 +151,7 @@ async function findPc(sageMessage: SageMessage, pcNameOrIndex: Optional<string>)
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
 		const playerCharacters = await sageMessage.actor.s.fetchPlayerCharacters();
 		if (isBlank(pcNameOrIndex)) {
-			return playerCharacters.first();
+			return playerCharacters[0];
 		}
 		return playerCharacters.findByNameOrIndex(pcNameOrIndex);
 	}
@@ -166,11 +166,11 @@ async function findCompanion(sageMessage: SageMessage, companionNameOrIndex: Opt
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
 		// Currently only allow a single PC per server outside of games
 		const playerCharacters = await sageMessage.actor.s.fetchPlayerCharacters();
-		companions = playerCharacters.first()?.companions;
+		companions = playerCharacters[0]?.companions;
 	}
 	if (companions) {
 		if (isBlank(companionNameOrIndex)) {
-			return companions.first();
+			return companions[0];
 		}
 		return companions.findByNameOrIndex(companionNameOrIndex);
 	}
