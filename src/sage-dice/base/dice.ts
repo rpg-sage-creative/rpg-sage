@@ -481,7 +481,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 
 	//#region methods
 	public includes(dicePartOrCore: TDicePart | DicePartCore): boolean {
-		const dicePartCore = DicePart.toJSON<DicePartCore>(dicePartOrCore);
+		const dicePartCore = toJSON<DicePartCore>(dicePartOrCore);
 		return this.diceParts.find(_dicePart => _dicePart.toJSON() === dicePartCore) !== undefined;
 	}
 
