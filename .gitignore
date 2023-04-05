@@ -1,9 +1,11 @@
 dist/
+localstack/
 node_modules/
 types/
+
 **/.DS_Store
 all-lores.csv
-localstack/
+package-lock.json
 
 # ignore scripts (to ignore the root level links)
 *.sh
