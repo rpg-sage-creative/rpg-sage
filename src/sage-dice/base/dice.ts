@@ -1,6 +1,6 @@
 //#region imports
 
-import { correctEscapeForEmoji } from "../internal";
+import XRegExp from "xregexp";
 import { GameType } from "../../sage-common";
 import type { Optional, OrNull, OrUndefined } from "../../sage-utils";
 import { sortAscending } from "../../sage-utils/ArrayUtils";
@@ -8,26 +8,34 @@ import { toJSON } from "../../sage-utils/ClassUtils";
 import { TokenData, TokenParsers, cleanWhitespace, dequote, tokenize } from "../../sage-utils/StringUtils";
 import { generate } from "../../sage-utils/UuidUtils";
 import {
-	cleanDescription, CritMethodType,
+	CritMethodType,
 	DiceOutputType,
 	DiceSecretMethodType,
-	DieRollGrade, dropKeepToString, DropKeepType,
-	gradeRoll, gradeToEmoji, HasDieCore, IDiceBase,
-	IRollBase, mapRollToJson,
-	parseValueDropKeepData,
-	parseValueTestData,
-	rollDice, SECRET_REGEX, sum,
-	sumDicePartRolls,
-	sumDropKeep, TDiceLiteral,
+	DieRollGrade,
+	DropKeepType,
+	HasDieCore, IDiceBase,
+	IRollBase,
+	SECRET_REGEX,
+	TDiceLiteral,
 	TDropKeepData,
 	TSign,
-	TTestData, UNICODE_LEFT_ARROW
+	TTestData, UNICODE_LEFT_ARROW,
+	cleanDescription,
+	dropKeepToString,
+	gradeRoll, gradeToEmoji,
+	mapRollToJson,
+	parseValueDropKeepData,
+	parseValueTestData,
+	rollDice,
+	sum,
+	sumDicePartRolls,
+	sumDropKeep
 } from "../common";
+import { correctEscapeForEmoji } from "../internal";
 import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
 	DicePartCore, DicePartRollCore, DiceRollCore, TDice, TDiceGroup, TDiceGroupRoll, TDicePart, TDicePartCoreArgs, TDicePartRoll, TDiceRoll
 } from "./types";
-import { XRegExp } from "../../sage-utils/RegExpUtils";
 
 //#endregion
 

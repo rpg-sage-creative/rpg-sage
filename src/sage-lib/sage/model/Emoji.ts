@@ -1,4 +1,4 @@
-import { XRegExp } from "../../../sage-utils/RegExpUtils";
+import XRegExp from "xregexp";
 import { tokenize } from "../../../sage-utils/StringUtils";
 
 //#region types

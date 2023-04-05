@@ -1,4 +1,5 @@
 import { ColorResolvable, Embed, EmbedBuilder, Message, Snowflake, WebhookMessageCreateOptions } from "discord.js";
+import XRegExp from "xregexp";
 import type { Optional, OrUndefined } from "../../../sage-utils";
 import { errorReturnEmptyArray, errorReturnNull } from "../../../sage-utils/ConsoleUtils";
 import { DiscordId, DiscordKey, MessageType, ReactionType, embedsToTexts } from "../../../sage-utils/DiscordUtils";
@@ -19,7 +20,6 @@ import { DialogMessageRepository, TDialogMessage } from "../repo/DialogMessageRe
 import { DialogType } from "../repo/base/channel";
 import { parseDiceMatches, sendDice } from "./dice";
 import { registerInlineHelp } from "./help";
-import { XRegExp } from "../../../sage-utils/RegExpUtils";
 
 //#region Dialog Post
 

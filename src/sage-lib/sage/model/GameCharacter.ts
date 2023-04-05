@@ -1,8 +1,8 @@
 import type { Snowflake } from "discord.js";
+import XRegExp from "xregexp";
 import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import type { Args, Optional } from "../../../sage-utils";
 import type { DiscordKey } from "../../../sage-utils/DiscordUtils";
-import { XRegExp } from "../../../sage-utils/RegExpUtils";
 import { isNonNilSnowflake } from "../../../sage-utils/SnowflakeUtils";
 import type { UUID } from "../../../sage-utils/UuidUtils";
 import type { TDialogMessage } from "../repo/DialogMessageRepository";

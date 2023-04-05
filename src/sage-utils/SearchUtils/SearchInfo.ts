@@ -1,6 +1,6 @@
+import XRegExp from "xregexp";
 import { isDefinedAndUnique } from "../ArrayUtils";
 import { oneToUS, reduceNoise } from "../LangUtils";
-import { XRegExp } from "../RegExpUtils";
 import { createQuotedRegex, dequote, tokenize } from "../StringUtils";
 import { SearchScore } from "./SearchScore";
 import type { ISearchable, TSearchTermMeta } from "./types";
