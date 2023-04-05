@@ -1,17 +1,26 @@
-import { generate, UUID } from "../UuidUtils";
-
+/** Key/Value type map for each Class instance. */
 type TMap = Map<string, any>;
-const CACHE_MAP: Map<UUID, TMap> = new Map();
+
+/** Numeric id of each ClassCache created */
+let cacheMapId = 0;
+
+/** Set of all Key/Value maps. */
+let cacheMap: Map<number, TMap>;
+
+/** Getter that creates map on first access. */
+function getCacheMap(): Map<number, TMap> {
+	return cacheMap ?? (cacheMap = new Map());
+}
 
 export class ClassCache {
 	//#region instance
 
 	/** Construct a new ClassCache for the given UUID. */
-	public constructor(public key: UUID = generate()) { }
+	public constructor(public id = cacheMapId++) { }
 
 	/** Get the map for this cache instance. */
 	private get map(): TMap {
-		return ClassCache.get(this.key);
+		return ClassCache.get(this.id);
 	}
 
 	/** Removes all values from this cache instance. Returns true if data was removed, false otherwise. */
@@ -49,26 +58,29 @@ export class ClassCache {
 
 	/** Removes all the caches for all the HasCache objects. */
 	public static clear(): void {
-		const oldMaps = Array.from(CACHE_MAP.values());
-		CACHE_MAP.clear();
-		oldMaps.forEach(map => map.clear());
+		const map = getCacheMap();
+		const oldMaps = Array.from(map.values());
+		map.clear();
+		oldMaps.forEach(oldMap => oldMap.clear());
 	}
 
 	/** Removes the cache for the HasCache object with the given UUID. */
-	public static delete(key: UUID): boolean {
-		if (CACHE_MAP.has(key)) {
-			CACHE_MAP.delete(key);
+	public static delete(key: number): boolean {
+		const map = getCacheMap();
+		if (map.has(key)) {
+			map.delete(key);
 			return true;
 		}
 		return false;
 	}
 
 	/** Gets the cache for the HasCache object with the given UUID. */
-	public static get(key: UUID): TMap {
-		if (!CACHE_MAP.has(key)) {
-			CACHE_MAP.set(key, new Map());
+	public static get(key: number): TMap {
+		const map = getCacheMap();
+		if (!map.has(key)) {
+			map.set(key, new Map());
 		}
-		return CACHE_MAP.get(key) as TMap;
+		return map.get(key) as TMap;
 	}
 
 	//#endregion
