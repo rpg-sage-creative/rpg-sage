@@ -1,3 +1,6 @@
+import { getKeys } from "./getKeys";
+import { getValues } from "./getValues";
+
 /** Represents a TypeScript enum object. */
 export type EnumLike<K extends string = string, V extends number = number> = Record<K, V>;
 
@@ -44,14 +47,4 @@ export function parse<K extends string = string, V extends number = number>(enum
 		return enumLike[enumKey] ?? defaultValue;
 	}
 	return defaultValue;
-}
-
-/** Used to get the keys of a numerical enum. Use the following syntax: keys<typeof Enum>(Enum); */
-export function getKeys<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>): K[] {
-	return Object.keys(enumLike).filter(key => typeof(key) === "string") as K[];
-}
-
-/** Used to get the values of a numerical enum. Use the following syntax: values<Enum>(Enum); */
-export function getValues<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>): V[] {
-	return getKeys(enumLike).map(key => enumLike[key]);
 }
