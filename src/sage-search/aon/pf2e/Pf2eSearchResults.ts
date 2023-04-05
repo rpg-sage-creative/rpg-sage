@@ -58,7 +58,7 @@ function sourceToFootnote(source: Source, sourceIndex: number): string {
 
 export class Pf2eSearchResults extends SearchResults<AonBase> {
 
-	public constructor(searchInfo: GameSearchInfo, responseData: TResponseData) {
+	public constructor(searchInfo: GameSearchInfo, responseData: TResponseData | null) {
 		super(searchInfo);
 		responseData?.hits?.hits?.forEach(hit => this.add(...AonBase.searchRecursive(hit._source, searchInfo)));
 		this._totalHits = responseData?.hits?.total?.value;

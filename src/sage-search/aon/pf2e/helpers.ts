@@ -1,6 +1,7 @@
 import { GameType } from "../../../sage-common";
 import type { AonBase } from "../../../sage-pf2e/model/base/AonBase";
 import { sortAscending, sortDescending } from "../../../sage-utils/ArrayUtils";
+// import { writeFileSync } from "../../../sage-utils/FsUtils";
 import { getJson } from "../../../sage-utils/HttpsUtils";
 import { allToUS } from "../../../sage-utils/LangUtils";
 import type { SearchScore } from "../../../sage-utils/SearchUtils";
@@ -20,9 +21,11 @@ export function createSearchUrl(searchText: string): string | null {
 export async function searchAonPf2e(parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<Pf2eSearchResults> {
 	const searchInfo = new GameSearchInfo(GameType.PF2e, parsedSearchInfo.searchText, nameOnly ? "" : "g");
 
-	const postDataShould = buildPostData(allToUS(searchInfo.terms.map(term => term.term)), "should");
-	const responseShould = await getJson<TResponseData>(PF2E_SEARCH_URL, postDataShould).catch(e => console.error(e)! || null);
-	const searchResults = new Pf2eSearchResults(searchInfo, responseShould);
+	const terms = allToUS(searchInfo.terms.map(term => term.term));
+	const responseDataMust = null as TResponseData | null; // await getResponseJson(terms, "must");
+	const responseDataShould = responseDataMust?.hits.total.value ? null : await getResponseJson(terms, "should");
+
+	const searchResults = new Pf2eSearchResults(searchInfo, responseDataShould ?? responseDataMust);
 	/** @todo run a "must" search before running a "should" search and splice the results with "must" results at the top */
 
 	//#region type shuffle
@@ -49,26 +52,29 @@ export async function searchAonPf2e(parsedSearchInfo: TParsedSearchInfo, nameOnl
 function cleanSpaces(terms: string | string[]): string {
 	return (Array.isArray(terms) ? terms.join(" ") : terms).replace(/\s+/g, " ");
 }
+
 function buildPostData(terms: string[], shouldMust: "should" | "must"): TPostData {
+	const cleanTerms = cleanSpaces(terms);
 	const postData: TPostData = {
 		query: {
 			bool: {
 				should: [
-					{ match_phrase_prefix: { name: { query:cleanSpaces(terms) } } },
+					{ match_phrase_prefix: { name: { query:cleanTerms } } },
 					{ bool: { } }
 				],
 				minimum_should_match: 1
 			}
 		},
-		sort: ["_score","_doc"]
+		sort: ["_score", "_doc"]
 	};
-	postData.query.bool.should[1].bool[shouldMust] = terms.map(term => {
+	const multiMatchTerms = shouldMust === "must" ? [cleanTerms] : terms;
+	postData.query.bool.should[1].bool[shouldMust] = multiMatchTerms.map(term => {
 		return {
 			multi_match: {
 				query: cleanSpaces(term),
 				type: "best_fields",
-				fields: ["name","text^0.1","trait_raw","type"],
-				fuzziness:"auto"
+				fields: ["name", "text^0.1", "trait_raw", "type"],
+				fuzziness: "auto"
 			}
 		};
 	});
@@ -82,6 +88,15 @@ function buildPostData(terms: string[], shouldMust: "should" | "must"): TPostDat
 	// }
 	*/
 	return postData;
+}
+
+async function getResponseJson(terms: string[], shouldMust: "should" | "must"): Promise<TResponseData | null> {
+	const postData = buildPostData(terms, shouldMust);
+	// writeFileSync(`../pf2e-request-${shouldMust}.json`, postData);
+	const response: TResponseData | null = await getJson(PF2E_SEARCH_URL, postData).catch(e => console.error(e)! || null);
+	// writeFileSync(`../pf2e-response-${shouldMust}.json`, response);
+	return response;
+
 }
 
 //#region SearchResults sorting
