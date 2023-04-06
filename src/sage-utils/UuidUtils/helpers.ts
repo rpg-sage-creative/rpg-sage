@@ -12,16 +12,19 @@ export function generate(): VALID_UUID {
 	return randomUUID() as VALID_UUID;
 }
 
-const uuidRegex = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
+/** Returns the RegExp for a valid or nil UUID. */
+function getRegex(): RegExp {
+	return /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
+}
 
 /** Returns true if NOT a valid UUID string (regardless of case), or false otherwise. */
 export function isNotValid(uuid: Optional<UUID>): uuid is null | undefined | string {
-	return typeof uuid !== "string" || !uuidRegex.test(uuid);
+	return typeof uuid !== "string" || !getRegex().test(uuid);
 }
 
 /** Returns true if a valid UUID string (regardless of case), or false otherwise. */
 export function isValid(uuid: Optional<UUID>): uuid is VALID_UUID {
-	return typeof uuid === "string" && uuidRegex.test(uuid);
+	return typeof uuid === "string" && getRegex().test(uuid);
 }
 
 /** Returns true if the value is a normalized UUID, false otherwise. */
