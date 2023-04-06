@@ -19,12 +19,27 @@ export type TGameCharacterTag = "gm"
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion";
 
 export type TCharacterImageTag =
+	//#region what type of image
+
 	/** The image of the "poster". (The image on the left of the post.) */
 	"avatar"
+
 	/** The image posted with the dialog. (The image on the right of the post content.) */
 	| "dialog"
+
 	/** The image used on the map. */
 	| "token"
+
+	//#endregion
+
+	//#region basic image tags
+
+	/** An image that doesn't have any special changes or modifiers. */
+	| "default"
+
+	//#endregion
+
+	//#region hp related tags
 
 	/** An image used when the character is injured. (default 100% > hp >= 75%) */
 	| "scratched"
@@ -39,7 +54,10 @@ export type TCharacterImageTag =
 	| "dying"
 
 	/** An image used when the character is dead. */
-	| "dead";
+	| "dead"
+
+	//#endregion
+;
 
 export interface GameCharacterCore extends CoreWithImages<TCharacterImageTag> {
 	/** Channels to automatically treat input as dialog */
@@ -61,10 +79,6 @@ export interface GameCharacterCore extends CoreWithImages<TCharacterImageTag> {
 	/** The character's user's Discord ID */
 	userDid?: Snowflake;
 }
-// 		export type TPlayerCharacterImageType = "Default"
-// 												| "Token" | "TokenBloody" | "TokenDying"
-// 												| "Profile" | "ProfileBloody" | "ProfileDying"
-// 												| "Full" | "FullBloody" | "FullDying";
 
 /** Determine if the snowflakes are different. */
 function diff(a?: Snowflake, b?: Snowflake) {
