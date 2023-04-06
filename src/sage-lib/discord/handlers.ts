@@ -144,7 +144,8 @@ export async function handleInteraction(interaction: Interaction): Promise<THand
 		const isCommand = interaction.isChatInputCommand();
 		const isButton = interaction.isButton();
 		const isSelectMenu = interaction.isStringSelectMenu();
-		if (isCommand || isButton || isSelectMenu) {
+		const isModalSubmit = interaction.isModalSubmit();
+		if (isCommand || isButton || isSelectMenu || isModalSubmit) {
 			const sageInteraction = await SageInteraction.fromInteraction(interaction);
 			await handleInteractions(sageInteraction, output);
 		}
