@@ -3,7 +3,7 @@ import type { GameCharacter } from "../../model/GameCharacter";
 import type { SageMessage } from "../../model/SageMessage";
 import { registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
-import { sendGameCharacter } from "./gameCharacter";
+import { sendGameCharacter } from "./character/sendGameCharacter";
 
 // async function renderNotesList(sageMessage: SageMessage, notes = sageMessage.user.notes): Promise<void> {
 // 	const renderableContent = createAdminRenderableContent(BotRepo.active);

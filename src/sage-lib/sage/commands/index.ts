@@ -1,4 +1,6 @@
 import { register as registerAdmin } from "./admin";
+import { registerCommandHandlers as registerCharForm } from "./admin/character/charListForm";
+import { registerCommandHandlers as registerCharModal, registerSlashCommands as registerCharModalSlashCommands } from "./admin/character/charModal";
 import { registerCommandHandlers as registerCal, registerSlashCommands as registerCalSlashCommands } from "./cal";
 import { register as registerCmd } from "./cmd";
 import { registerCommandHandlers as registerDcs, registerSlashCommands as registerDcsSlashCommands } from "./dcs";
@@ -20,6 +22,8 @@ import { registerCommandHandlers as registerSageCommand } from "../model/SageCom
 export function registerCommandHandlers(): void {
 	registerAdmin();
 	registerCal();
+	registerCharForm();
+	registerCharModal();
 	registerCmd();
 	registerDcs();
 	registerDefault();
@@ -40,6 +44,7 @@ export function registerCommandHandlers(): void {
 
 export function registerSlashCommands(): void {
 	registerCalSlashCommands();
+	registerCharModalSlashCommands();
 	registerDcsSlashCommands();
 	registerDefaultSlashCommands();
 	registerHelpSlashCommands();

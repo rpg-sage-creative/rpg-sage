@@ -1,89 +1,23 @@
-import type { Message, Snowflake } from "discord.js";
+import type { Snowflake } from "discord.js";
 import type { Optional, OrUndefined } from "../../../../sage-utils";
 import { errorReturnEmptyArray } from "../../../../sage-utils/ConsoleUtils";
 import { DiscordId } from "../../../../sage-utils/DiscordUtils";
 import { orNilSnowflake } from "../../../../sage-utils/SnowflakeUtils";
-import { sendWebhook } from "../../../discord/messages";
 import { discordPromptYesNo } from "../../../discord/prompts";
 import type { CharacterManager } from "../../model/CharacterManager";
-import { GameCharacter,  GameCharacterCore } from "../../model/GameCharacter";
+import { GameCharacter, GameCharacterCore } from "../../model/GameCharacter";
 import type { SageMessage } from "../../model/SageMessage";
 import type { TNames } from "../../model/SageMessageArgs";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
-
-//#region Character Command Types
-
-type TCharacterTypeMetaMatchFlags = {
-	isCompanion: boolean;
-	isGm: boolean;
-	isMy: boolean;
-	isNpc: boolean;
-	isPc: boolean;
-};
-type TCharacterTypeMeta = TCharacterTypeMetaMatchFlags & {
-	commandDescriptor?: string;
-	isGmOrNpc: boolean;
-	isPcOrCompanion: boolean;
-	pluralDescriptor?: string;
-	singularDescriptor?: string;
-};
-
-function getCharacterTypeMetaMatchFlags(sageMessage: SageMessage): TCharacterTypeMetaMatchFlags {
-	const isCompanion = sageMessage.command.match(/^(my-?)?(companion|alt|familiar)/i) !== null;
-	const isGm = sageMessage.command.match(/^(my-?)?(gm|gamemaster)/i) !== null;
-	const isMy = sageMessage.command.match(/^my/i) !== null;
-	const isNpc = sageMessage.command.match(/^(my-?)?(npc|nonplayercharacter)/i) !== null;
-	const isPc = sageMessage.command.match(/^(my-?)?(pc|playercharacter)/i) !== null;
-	return {
-		isCompanion, isGm, isMy, isNpc, isPc
-	};
-}
-function getCharacterTypeMetaText(matchFlags: TCharacterTypeMetaMatchFlags, values: string[]): OrUndefined<string> {
-	if (matchFlags.isCompanion) {
-		return values[0];
-	}else if (matchFlags.isPc) {
-		return values[1];
-	}else if (matchFlags.isNpc) {
-		return values[2];
-	}else if (matchFlags.isGm) {
-		return values[3];
-	}else {
-		return undefined;
-	}
-}
-function getCharacterTypeMeta(sageMessage: SageMessage): TCharacterTypeMeta {
-	const matchFlags = getCharacterTypeMetaMatchFlags(sageMessage);
-	return {
-		commandDescriptor: getCharacterTypeMetaText(matchFlags, ["companion", "playerCharacter", "nonPlayerCharacter", "gameMaster"]),
-		isGmOrNpc: matchFlags.isGm || matchFlags.isNpc,
-		isPcOrCompanion: matchFlags.isPc || matchFlags.isCompanion,
-		pluralDescriptor: getCharacterTypeMetaText(matchFlags, ["Companions", "Player Characters", "Non-Player Characters", "Game Masters"]),
-		singularDescriptor: getCharacterTypeMetaText(matchFlags, ["Companion", "Player Character", "Non-Player Character", "Game Master"]),
-		...matchFlags
-	};
-}
-
-//#endregion
+import { gameCharacterList } from "./character/gameCharacterList";
+import { TCharacterTypeMeta, getCharacterTypeMeta } from "./character/getCharacterTypeMeta";
+import { getUserDid } from "./character/getUserDid";
+import { sendGameCharacter } from "./character/sendGameCharacter";
+import { testCanAdminCharacter } from "./character/testCanAdminCharacter";
+import { sendNotFound } from "./character/sendNotFound";
 
 //#region helpers
-
-function getUserDid(sageMessage: SageMessage): Snowflake | null {
-	return !sageMessage.game || sageMessage.isPlayer
-		? sageMessage.actor.did
-		: sageMessage.args.findUserDid("user") ?? null;
-}
-
-function testCanAdminCharacter(sageMessage: SageMessage, characterTypeMeta: TCharacterTypeMeta): boolean {
-	if (sageMessage.game) {
-		return characterTypeMeta.isPcOrCompanion
-			? sageMessage.isGameMaster || sageMessage.isPlayer
-			: sageMessage.isGameMaster;
-	}
-
-	return characterTypeMeta.isPcOrCompanion;
-	// TODO: When we have NPCs outside of games ... return true;
-}
 
 function urlToName(url: Optional<string>): string | undefined {
 	return url?.split("/").pop()?.split(".").shift();
@@ -142,126 +76,6 @@ async function getCharacter(sageMessage: SageMessage, characterTypeMeta: TCharac
 }
 
 //#endregion
-
-//#region Render Character / Characters
-
-export async function sendGameCharacter(sageMessage: SageMessage, character: GameCharacter): Promise<Message[]> {
-	const ownerGuildMember = character.userDid ? await sageMessage.discord.fetchGuildMember(character.userDid) : null,
-		ownerTag = ownerGuildMember?.user ? `@${ownerGuildMember.user.tag}` : ownerGuildMember?.displayName ?? character.userDid,
-		renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), character.name);
-
-	renderableContent.setColor(character.embedColor);
-	renderableContent.setThumbnailUrl(character.images.getUrl("dialog"));
-
-	const ownerOrPlayer = character.isGMorNPC ? "Owner" : "Player";
-	renderableContent.append(`<b>${ownerOrPlayer}</b> ${ownerTag ?? "<i>none</i>"}`);
-	if (character.isCompanion) {
-		renderableContent.append(`<b>Character</b> ${character.parent?.name ?? "<i>unknown</i>"}`);
-	} else {
-		const companionNames = character.companions.map(companion => companion.name).join(", ");
-		renderableContent.append(`<b>Companions</b> ${companionNames || "<i>none</i>"}`);
-	}
-	renderableContent.append(`<b>Dialog Color</b> ${character.embedColor ?? "<i>unset</i>"}`);
-
-	const autoChannels = character.autoChannels;
-	const autoChannelLinks = autoChannels.map(channelDid => DiscordId.toChannelReference(channelDid)).join(", ");
-	renderableContent.append(`<b>Auto Dialog</b> ${autoChannelLinks || "<i>none</i>"}`);
-
-	const stats = character.notes.getStats().map(note => note.title ? `<b>${note.title}</b> ${note.note}` : note.note);
-	if (stats.length) {
-		renderableContent.appendTitledSection(`<b>Stats</b>`, ...stats);
-	}
-
-	const notes = character.notes.getUncategorizedNotes().map(note => note.title ? `<b>${note.title}</b> ${note.note}` : note.note);
-	if (notes.length) {
-		renderableContent.appendTitledSection(`<b>Notes</b>`, ...notes);
-	}
-
-	const targetChannel = sageMessage.message.channel;
-	const avatarUrl = character.images.getUrl("avatar") ?? sageMessage.bot.avatarUrl;
-	return sendWebhook(sageMessage.sageCache, targetChannel, renderableContent, { avatarURL: avatarUrl, username: character.name }, sageMessage.dialogType);
-}
-
-function sendNotFound(sageMessage: SageMessage, command: string, entityNamePlural: string, nameFilter?: Optional<string>): Promise<void> {
-	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>${command}</b>`);
-	if (nameFilter) {
-		renderableContent.append(`<b>Filtered by:</b> ${nameFilter}`);
-	}
-	renderableContent.append(`<blockquote>No ${entityNamePlural} Found!</blockquote>`);
-	return <any>sageMessage.send(renderableContent);
-}
-
-async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterManager: Optional<CharacterManager>, command: string, entityNamePlural: string): Promise<void> {
-	const nameFilter = sageMessage.args.valueByKey("filter"),
-		hasNameFilter = nameFilter?.length,
-		characters: GameCharacter[] = hasNameFilter ? characterManager?.filterByName(nameFilter, true) ?? [] : characterManager?.slice() ?? [];
-	if (characters.length) {
-		// Always show the Game Master first
-		const gmIndex = characters.findIndex(character => character.isGM);
-		if (gmIndex > 0) {
-			const gm = characters.splice(gmIndex, 1).pop()!;
-			characters.unshift(gm);
-		}
-
-		const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>${command}</b>`);
-		if (hasNameFilter) {
-			renderableContent.append(`<b>Filtered by:</b> ${nameFilter}`);
-		}
-		renderableContent.append(`<blockquote>${characters.length} ${entityNamePlural} Found!</blockquote>`);
-		await sageMessage.send(renderableContent);
-
-		let nameIndex = 0;
-		for (const character of characters) {
-			if (!character.name) {
-				character.name = nameIndex ? `Unnamed Character ${nameIndex}` : `Unnamed Character`;
-				nameIndex++;
-				await character.save();
-			}
-			let webhookError = false;
-			await sendGameCharacter(sageMessage, character).catch(err => {
-				if (err.startsWith("Cannot Find Webhook: ")) {
-					webhookError = true;
-				}
-			});
-			if (webhookError) {
-				await sageMessage.whisper(`We are sorry! *(An error occurred and we can't list your characters.)*`);
-				break;
-			}
-		}
-	} else {
-		await sendNotFound(sageMessage, command, entityNamePlural, nameFilter);
-	}
-	return Promise.resolve();
-}
-
-//#endregion
-
-async function gameCharacterList(sageMessage: SageMessage): Promise<void> {
-	const denial = sageMessage.checkDenyCommand("List Characters");
-	if (denial) {
-		return denial;
-	}
-
-	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock("You don't have access to those characters!");
-	}
-
-	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s;
-
-	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpc
-		? await hasCharacters.fetchNonPlayerCharacters()
-		: await hasCharacters.fetchPlayerCharacters();
-	if (characterTypeMeta.isCompanion) {
-		const userDid = getUserDid(sageMessage),
-			charName = sageMessage.args.valueByKey("charName"),
-			characterName = charName ?? (await sageMessage.fetchPlayerCharacter())?.name,
-			character = characterManager.findByUserAndName(userDid, characterName);
-		characterManager = character?.companions;
-	}
-
-	return sendGameCharactersOrNotFound(sageMessage, characterManager, `${characterTypeMeta.commandDescriptor}-list`, characterTypeMeta.pluralDescriptor!);
-}
 
 function findCompanion(characterManager: CharacterManager, userDid: Optional<Snowflake>, names: TNames): GameCharacter | undefined {
 	const character = names.charName
