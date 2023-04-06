@@ -1,6 +1,6 @@
-import type { ButtonInteraction, ChannelType, ChatInputCommandInteraction, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, Snowflake, StringSelectMenuInteraction, TextChannel, ThreadChannel, User } from "discord.js";
+import type { ButtonInteraction, ChannelType, ChatInputCommandInteraction, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, Snowflake, StringSelectMenuInteraction, TextChannel, ThreadChannel, User } from "discord.js";
 
-export type DInteraction = ChatInputCommandInteraction | ButtonInteraction | StringSelectMenuInteraction | MessageComponentInteraction;
+export type DInteraction = ChatInputCommandInteraction | ButtonInteraction | StringSelectMenuInteraction | MessageComponentInteraction | ModalSubmitInteraction;
 
 export type DReaction = MessageReaction | PartialMessageReaction;
 
