@@ -191,8 +191,9 @@ function buildCommands(which: TBot): (SlashCommandBuilder | ContextMenuCommandBu
 
 //#endregion
 
+const version = "10";
 async function updateSlashCommands(bot: BotCore): Promise<void> {
-	const rest = new REST({version: '9'}).setToken(bot.token);
+	const rest = new REST({version}).setToken(bot.token);
 	try {
 		console.log(`Started refreshing application (/) commands for: ${botCodeName}`);
 
@@ -208,7 +209,7 @@ async function updateSlashCommands(bot: BotCore): Promise<void> {
 	}
 }
 async function wipeSlashCommands(bot: BotCore): Promise<void> {
-	const rest = new REST({version: '9'}).setToken(bot.token);
+	const rest = new REST({version}).setToken(bot.token);
 	try {
 		console.log(`Started wiping application (/) commands for: ${botCodeName}`);
 
