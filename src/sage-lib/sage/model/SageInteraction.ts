@@ -1,4 +1,4 @@
-import type { InteractionReplyOptions, Message, User, WebhookMessageEditOptions } from "discord.js";
+import type { InteractionReplyOptions, Message, Snowflake, User, WebhookMessageEditOptions } from "discord.js";
 import { isDefined } from "../../../sage-utils";
 import { DInteraction, DMessageChannel, handleDiscordErrorReturnNull, InteractionType } from "../../../sage-utils/DiscordUtils";
 import { resolveToEmbeds } from "../../../sage-utils/DiscordUtils";
@@ -15,6 +15,8 @@ interface SageInteractionCore extends SageCommandCore {
 	type: InteractionType;
 }
 
+type TIdParts = { indicator:string; userDid:Snowflake; action:string; }
+
 export class SageInteraction<T extends DInteraction = any>
 	extends SageCommandBase<SageInteractionCore, SageInteractionArgs, SageInteraction<any>> {
 
@@ -26,12 +28,30 @@ export class SageInteraction<T extends DInteraction = any>
 
 	public isSageInteraction(): this is SageInteraction { return true; }
 
+	public parseCustomId<IdParts extends TIdParts>(parser: (customId: string) => IdParts | null): IdParts | null {
+		if ("customId" in this.interaction) {
+			return parser(this.interaction.customId);
+		}
+		return null;
+	}
+
+	public getModalForm<T>(): T | null {
+		if (this.interaction.isModalSubmit()) {
+			const form = { } as { [key:string]: string; };
+			this.interaction.fields.fields.forEach(comp => {
+				form[comp.customId] = comp.value;
+			});
+			return form as T;
+		}
+		return null;
+	}
+
 	/** The interaction's customId is exactly this string. */
 	public customIdMatches(value: string): boolean;
 	/** The interaction's customId .matches(regex) !== null */
 	public customIdMatches(regex: RegExp): boolean;
 	public customIdMatches(valueOrRegex: string | RegExp): boolean {
-		if (this.interaction.isButton() || this.interaction.isSelectMenu()) {
+		if ("customId" in this.interaction) {
 			const customId = this.interaction.customId;
 			return isString(valueOrRegex)
 				? customId === valueOrRegex
