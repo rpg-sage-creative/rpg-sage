@@ -1,8 +1,8 @@
-import type { ButtonInteraction, Channel, CommandInteraction, Guild, Message, MessageComponentInteraction, PartialMessage, StringSelectMenuInteraction, Snowflake } from "discord.js";
+import type { Channel, Guild, Message, PartialMessage, Snowflake } from "discord.js";
 import type { Optional } from "..";
 import { cleanJson } from "../JsonUtils";
 import { isNonNilSnowflake, orNilSnowflake } from "../SnowflakeUtils";
-import type { DChannel } from "./types";
+import type { DChannel, DInteraction } from "./types";
 
 interface IHasSnowflakeId { id:Snowflake; }
 type TSnowflakeResolvable = string | IHasSnowflakeId;
@@ -145,7 +145,7 @@ export class DiscordKey implements DiscordKeyCore {
 	*/
 	public static fromDialogMessage(_: any): null { return null; }
 
-	public static fromInteraction(interaction: CommandInteraction | ButtonInteraction | StringSelectMenuInteraction | MessageComponentInteraction): DiscordKey {
+	public static fromInteraction(interaction: DInteraction): DiscordKey {
 		if (interaction.channel) {
 			return DiscordKey.fromChannel(interaction.channel as DChannel);
 		}
