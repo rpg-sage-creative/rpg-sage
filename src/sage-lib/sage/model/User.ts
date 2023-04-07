@@ -86,6 +86,10 @@ export class User extends HasDidCore<UserCore> {
 		return this.fetchCharacters("npc");
 	}
 
+	public hasCharacter(charId: UUID): boolean {
+		return this.core.characters?.find(char => char.charId === charId) !== undefined;
+	}
+
 	//#endregion
 
 	public get patronTier(): PatronTierType { return this.core.patronTier ?? 0; }

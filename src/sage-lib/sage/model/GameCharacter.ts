@@ -8,7 +8,7 @@ import type { UUID } from "../../../sage-utils/UuidUtils";
 import type { TDialogMessage } from "../repo/DialogMessageRepository";
 import { DialogMessageRepository } from "../repo/DialogMessageRepository";
 import { CharacterManager } from "./CharacterManager";
-import { CoreWithImages, HasCoreWithImages, Images } from "./Images";
+import { CoreWithImages, HasCoreWithImages, ImageData, Images } from "./Images";
 import type { IHasSave } from "./NamedCollection";
 import { NoteManager, type TNote } from "./NoteManager";
 
@@ -18,8 +18,8 @@ export type TGameCharacterTag = "gm"
 
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion";
 
-export type TCharacterImageTag =
-	//#region what type of image
+/** The basic types of images that Sage uses. */
+export type TCharacterBaseImageTag =
 
 	/** The image of the "poster". (The image on the left of the post.) */
 	"avatar"
@@ -29,17 +29,40 @@ export type TCharacterImageTag =
 
 	/** The image used on the map. */
 	| "token"
+;
+function getBaseImageTypes(): TCharacterBaseImageTag[] {
+	return ["avatar", "dialog", "token"];
+}
 
-	//#endregion
+// base
+// dialog > avatar > token
+// avatar > token > dialog
+// token > avatar > dialog
+function getBaseImages(images: ImageData<TCharacterImageTag>[], tags: TCharacterImageTag[]): ImageData<TCharacterImageTag>[] {
+	const baseTag = getBaseImageTypes().find(tag => tags.includes(tag));
+	if (baseTag) {
+		const baseImages = images.filter(image => image.tags.includes(baseTag));
+		if (baseImages.length) {
+			return baseImages;
+		}
 
-	//#region basic image tags
+		const nextTag = { "dialog":"avatar", "avatar":"token", "token":"avatar" }[baseTag] as TCharacterBaseImageTag;
+		const nextImages = images.filter(image => image.tags.includes(nextTag));
+		if (nextImages.length) {
+			return nextImages;
+		}
 
-	/** An image that doesn't have any special changes or modifiers. */
-	| "default"
+		const lastTag = { "dialog":"token", "avatar":"dialog", "token":"dialog" }[baseTag] as TCharacterBaseImageTag;
+		const lastImages = images.filter(image => image.tags.includes(lastTag));
+		if (lastImages.length) {
+			return lastImages;
+		}
+	}
+	return images;
+}
 
-	//#endregion
-
-	//#region hp related tags
+/** The hp threshold images. */
+export type TCharacterHpImageTag =
 
 	/** An image used when the character is injured. (default 100% > hp >= 75%) */
 	| "scratched"
@@ -55,9 +78,41 @@ export type TCharacterImageTag =
 
 	/** An image used when the character is dead. */
 	| "dead"
-
-	//#endregion
 ;
+function getHpTags(): TCharacterHpImageTag[] {
+	return ["dead", "dying", "bloody", "injured", "scratched"];
+}
+function getHpImages(images: ImageData<TCharacterImageTag>[], tags: TCharacterImageTag[]): ImageData<TCharacterImageTag>[] {
+	const hpTags = getHpTags();
+	const hpTag = tags.find(tag => hpTags.includes(tag as TCharacterHpImageTag)) as TCharacterHpImageTag;
+	if (hpTag) {
+		const slicedTags = hpTags.slice(hpTags.indexOf(hpTag));
+		for (const tag of slicedTags) {
+			const hpImages = images.filter(image => image.tags.includes(tag));
+			if (hpImages.length) {
+				return hpImages;
+			}
+		}
+	}
+	return images;
+}
+
+/** Image tags used for conditions. May not need this. */
+export type TCharacterConditionImageTag = never;
+// function getConditionTags(): TCharacterConditionImageTag[] {
+// 	return [];
+// }
+function countMatches(tagsA: string[], tagsB: string[]): number {
+	return tagsA.filter(tag => tagsB.includes(tag)).length;
+}
+function getConditionImages(images: ImageData<TCharacterImageTag>[], tags: TCharacterImageTag[]): ImageData<TCharacterImageTag>[] {
+	const counted = images.map(image => ({ image, matches:countMatches(image.tags, tags)}));
+	const highest = counted.reduce((count, pair) => Math.max(count, pair.matches), 0);
+	return counted.filter(pair => pair.matches === highest).map(pair => pair.image);
+}
+
+/** All image tag types in one. */
+export type TCharacterImageTag = TCharacterBaseImageTag | TCharacterHpImageTag | TCharacterConditionImageTag;
 
 export interface GameCharacterCore extends CoreWithImages<TCharacterImageTag> {
 	/** Channels to automatically treat input as dialog */
@@ -306,6 +361,13 @@ export class GameCharacter implements IHasSave, HasCoreWithImages<TCharacterImag
 
 	//#region HasCoreWithImages
 	public images = new Images<TCharacterImageTag>(this.core.images ?? (this.core.images = []));
+	public getBestImageUrl(...tags: TCharacterImageTag[]): string | undefined {
+		const baseImages = getBaseImages(this.core.images ?? [], tags);
+		const hpImages = getHpImages(baseImages, tags);
+		const conditionImages = getConditionImages(hpImages, tags);
+		const image = conditionImages[0];
+		return image?.url;
+	}
 	//#endregion
 
 	public static defaultGmCharacterName = "Game Master";

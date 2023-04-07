@@ -467,7 +467,7 @@ function updateCharacters_v1(v1: CharacterCore_v1 & THasIconUrl & THasNameLower)
 	return true;
 }
 
-type TCharacterImageTag = "avatar" | "dialog" | "token" | "default";
+type TCharacterImageTag = "avatar" | "dialog" | "token";
 
 type TCharacterImage = {
 	/** Tags to note how to use this image. */
@@ -496,10 +496,10 @@ function updateCharacters_v2(v2: CharacterCore_v2 & THasOldCharacterImages): boo
 	if ("avatarUrl" in v2 || "tokenUrl" in v2) {
 		const images: TCharacterImage[] = [];
 		if (v2.avatarUrl) {
-			images.push({ url:v2.avatarUrl, tags:["dialog","default"] });
+			images.push({ url:v2.avatarUrl, tags:["dialog"] });
 		}
 		if (v2.tokenUrl) {
-			images.push({ url:v2.tokenUrl, tags:["token","default"] });
+			images.push({ url:v2.tokenUrl, tags:["token"] });
 		}
 		v2.images = images;
 
