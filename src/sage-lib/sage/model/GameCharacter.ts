@@ -30,32 +30,34 @@ export type TCharacterBaseImageTag =
 	/** The image used on the map. */
 	| "token"
 ;
-function getBaseImageTypes(): TCharacterBaseImageTag[] {
+/** Returns the BaseImage tags */
+function getBaseImageTags<Type extends TCharacterImageTag = TCharacterBaseImageTag>(): Type[];
+function getBaseImageTags(): TCharacterBaseImageTag[] {
 	return ["avatar", "dialog", "token"];
 }
+/**
+ * Returns the base tags in the preferred order to find a suitable replacement if one doesn't exist.
+ * Example: we don't have a token image, so we check for an avatar image before checking for a dialog image.
+ */
+function getBaseImageTagsOrder(tag: TCharacterImageTag): TCharacterBaseImageTag[] {
+	switch(tag) {
+		case "avatar": return ["avatar", "token", "dialog"];
+		case "dialog": return ["dialog", "avatar", "token"];
+		case "token": return ["token", "avatar", "dialog"];
+		default: return [];
+	}
+}
 
-// base
-// dialog > avatar > token
-// avatar > token > dialog
-// token > avatar > dialog
+/** Returns all the images that have the first BaseImageTag found in the set of tags. */
 function getBaseImages(images: ImageData<TCharacterImageTag>[], tags: TCharacterImageTag[]): ImageData<TCharacterImageTag>[] {
-	const baseTag = getBaseImageTypes().find(tag => tags.includes(tag));
+	const baseTag = getBaseImageTags().find(tag => tags.includes(tag));
 	if (baseTag) {
-		const baseImages = images.filter(image => image.tags.includes(baseTag));
-		if (baseImages.length) {
-			return baseImages;
-		}
-
-		const nextTag = { "dialog":"avatar", "avatar":"token", "token":"avatar" }[baseTag] as TCharacterBaseImageTag;
-		const nextImages = images.filter(image => image.tags.includes(nextTag));
-		if (nextImages.length) {
-			return nextImages;
-		}
-
-		const lastTag = { "dialog":"token", "avatar":"dialog", "token":"dialog" }[baseTag] as TCharacterBaseImageTag;
-		const lastImages = images.filter(image => image.tags.includes(lastTag));
-		if (lastImages.length) {
-			return lastImages;
+		const baseTagsInOrder = getBaseImageTagsOrder(baseTag);
+		for (const tag of baseTagsInOrder) {
+			const baseImages = images.filter(image => image.tags.includes(tag));
+			if (baseImages.length) {
+				return baseImages;
+			}
 		}
 	}
 	return images;
@@ -79,12 +81,19 @@ export type TCharacterHpImageTag =
 	/** An image used when the character is dead. */
 	| "dead"
 ;
-function getHpTags(): TCharacterHpImageTag[] {
+/** Returns all the ImageTags related to HP, in order of least to most healthy. */
+function getHpImageTags<Type extends TCharacterImageTag = TCharacterHpImageTag>(): Type[];
+function getHpImageTags(): TCharacterHpImageTag[] {
 	return ["dead", "dying", "bloody", "injured", "scratched"];
 }
+/**
+ * Finds the closest HP related ImageTag in the set of tags that has images in the set of images.
+ * The first HP tag is checked, and then we progress *UP* the HP ladder from least healthy to most healthy looking for images.
+ * It is expected that the images were already filtered for base tags.
+ */
 function getHpImages(images: ImageData<TCharacterImageTag>[], tags: TCharacterImageTag[]): ImageData<TCharacterImageTag>[] {
-	const hpTags = getHpTags();
-	const hpTag = tags.find(tag => hpTags.includes(tag as TCharacterHpImageTag)) as TCharacterHpImageTag;
+	const hpTags = getHpImageTags();
+	const hpTag = tags.find(tag => hpTags.includes(tag as TCharacterHpImageTag)) as TCharacterHpImageTag | undefined;
 	if (hpTag) {
 		const slicedTags = hpTags.slice(hpTags.indexOf(hpTag));
 		for (const tag of slicedTags) {
@@ -102,13 +111,28 @@ export type TCharacterConditionImageTag = never;
 // function getConditionTags(): TCharacterConditionImageTag[] {
 // 	return [];
 // }
+/** Counts the number of tags that exist in both sets of tags. */
 function countMatches(tagsA: string[], tagsB: string[]): number {
 	return tagsA.filter(tag => tagsB.includes(tag)).length;
 }
+/**
+ * Finds the images that have the highest count of tags that match the given tags.
+ * It is expected that these images are already filtered by base and hp tags.
+ */
 function getConditionImages(images: ImageData<TCharacterImageTag>[], tags: TCharacterImageTag[]): ImageData<TCharacterImageTag>[] {
-	const counted = images.map(image => ({ image, matches:countMatches(image.tags, tags)}));
-	const highest = counted.reduce((count, pair) => Math.max(count, pair.matches), 0);
-	return counted.filter(pair => pair.matches === highest).map(pair => pair.image);
+	// base and hp are done elsewhere
+	const baseHpTags = getBaseImageTags<TCharacterImageTag>().concat(getHpImageTags())
+	// filter do only conditions ... if we create a set for this, we won't need to exclude base/hp
+	const conditionTags = tags.filter(tag => !baseHpTags.includes(tag)) as TCharacterConditionImageTag[];
+	if (conditionTags.length) {
+		// count the number of condition tag matches an image has
+		const counted = images.map(image => ({ image, matches:countMatches(image.tags, tags) }));
+		// figure out the highest number of matches
+		const highest = counted.reduce((count, pair) => Math.max(count, pair.matches), 0);
+		// we only want the images with the most matches
+		return counted.filter(pair => pair.matches === highest).map(pair => pair.image);
+	}
+	return images;
 }
 
 /** All image tag types in one. */
@@ -151,6 +175,7 @@ export class GameCharacter implements IHasSave, HasCoreWithImages<TCharacterImag
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
 		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, "companion");
 
+		/** @todo can we move all the "isX" logic to read from tags !?!? */
 		this.isGM = this.type === "npc" && this.name === (this.owner?.gmCharacterName ?? GameCharacter.defaultGmCharacterName);
 		this.isNPC = this.type === "npc";
 		this.isGMorNPC = this.isGM || this.isNPC;
@@ -365,6 +390,7 @@ export class GameCharacter implements IHasSave, HasCoreWithImages<TCharacterImag
 		const baseImages = getBaseImages(this.core.images ?? [], tags);
 		const hpImages = getHpImages(baseImages, tags);
 		const conditionImages = getConditionImages(hpImages, tags);
+		/** @todo is there going to be logic to figure out which conditions have precedence? */
 		const image = conditionImages[0];
 		return image?.url;
 	}
