@@ -142,7 +142,7 @@ export class User extends HasDidCore<UserCore> {
 		/** @todo sort out a variable for the path root */
 		char.userDid = userDid;
 		const path = `./sage/data/users/${userDid}/characters/${char.id}.tmp.json`;
-		return writeFile(path, char);
+		return writeFile(path, char, true);
 	}
 
 	/**
