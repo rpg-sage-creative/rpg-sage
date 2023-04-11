@@ -1,17 +1,17 @@
 import { Message } from "discord.js";
-import { GameCharacter } from "../../../model/GameCharacter";
-import { SageMessage } from "../../../model/SageMessage";
-import { createAdminRenderableContent } from "../../cmd";
+import { DChannel, DiscordId } from "../../../../../sage-utils/DiscordUtils";
 import { sendWebhook } from "../../../../discord/messages";
-import { DiscordId } from "../../../../../sage-utils/DiscordUtils";
+import { GameCharacter } from "../../../model/GameCharacter";
+import { SageCommand } from "../../../model/SageCommand";
+import { createAdminRenderableContent } from "../../cmd";
 
-export async function sendGameCharacter(sageMessage: SageMessage, character: GameCharacter): Promise<Message[]> {
-	const ownerGuildMember = character.userDid ? await sageMessage.discord.fetchGuildMember(character.userDid) : null,
+export async function sendGameCharacter(sageCommand: SageCommand, character: GameCharacter): Promise<Message[]> {
+	const ownerGuildMember = character.userDid ? await sageCommand.sageCache.discord.fetchGuildMember(character.userDid) : null,
 		ownerTag = ownerGuildMember?.user ? `@${ownerGuildMember.user.tag}` : ownerGuildMember?.displayName ?? character.userDid,
-		renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), character.name);
+		renderableContent = createAdminRenderableContent(sageCommand.getHasColors(), character.name);
 
 	renderableContent.setColor(character.embedColor);
-	renderableContent.setThumbnailUrl(character.images.getUrl("dialog"));
+	renderableContent.setThumbnailUrl(character.getBestImageUrl("dialog"));
 
 	const ownerOrPlayer = character.isGMorNPC ? "Owner" : "Player";
 	renderableContent.append(`<b>${ownerOrPlayer}</b> ${ownerTag ?? "<i>none</i>"}`);
@@ -37,7 +37,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.appendTitledSection(`<b>Notes</b>`, ...notes);
 	}
 
-	const targetChannel = sageMessage.message.channel;
-	const avatarUrl = character.images.getUrl("avatar") ?? sageMessage.bot.avatarUrl;
-	return sendWebhook(sageMessage.sageCache, targetChannel, renderableContent, { avatarURL: avatarUrl, username: character.name }, sageMessage.dialogType);
+	const targetChannel = sageCommand.isSageMessage() ? sageCommand.message.channel : sageCommand.isSageInteraction() ? sageCommand.interaction.channel as DChannel : null;
+	const avatarUrl = character.getBestImageUrl("avatar") ?? sageCommand.bot.avatarUrl;
+	return sendWebhook(sageCommand.sageCache, targetChannel!, renderableContent, { avatarURL: avatarUrl, username: character.name }, sageCommand.dialogType);
 }
