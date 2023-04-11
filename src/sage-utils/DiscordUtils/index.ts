@@ -7,6 +7,7 @@ export * from "./emoji";
 export * from "./enums";
 export * from "./errorHandlers";
 export * from "./humanReadable";
+export * from "./modal";
 export * from "./permChecks";
 export * from "./sendMessage";
 export * from "./resolveSnowflake";
