@@ -4,7 +4,7 @@ import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../s
 import { isDefined, type If, type Optional } from "../../../sage-utils";
 import { SuperClass } from "../../../sage-utils/ClassUtils";
 import { DChannel, DMessage, DMessageChannel, handleDiscordErrorReturnNull } from "../../../sage-utils/DiscordUtils";
-import type { DiscordFetches } from "../../../sage-utils/DiscordUtils";
+import type { DInteraction, DiscordFetches } from "../../../sage-utils/DiscordUtils";
 import type { DiscordKey } from "../../../sage-utils/DiscordUtils";
 import { resolveToEmbeds, resolveToTexts } from "../../../sage-utils/DiscordUtils";
 import type { TRenderableContentResolvable } from "../../../sage-utils/RenderUtils";
@@ -113,7 +113,7 @@ export abstract class SageCommandBase<
 		super();
 	}
 
-	public isSageInteraction(): this is SageInteraction { return false; }
+	public isSageInteraction<U extends DInteraction>(): this is SageInteraction<U> { return false; }
 	public isSageMessage(): this is SageMessage { return false; }
 	public isSageReaction(): this is SageReaction { return false; }
 
