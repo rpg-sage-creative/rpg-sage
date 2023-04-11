@@ -1,6 +1,6 @@
 import type { Snowflake } from "discord.js";
 import type { Args, Optional } from "../../../sage-utils";
-import { readJsonFile } from "../../../sage-utils/FsUtils";
+import { deleteFileSync, readJsonFile, writeFile } from "../../../sage-utils/FsUtils";
 import type { UUID } from "../../../sage-utils/UuidUtils";
 import { DidCore, HasDidCore } from "../repo/base/HasDidCore";
 import type { DialogType } from "../repo/base/channel";
@@ -123,10 +123,36 @@ export class User extends HasDidCore<UserCore> {
 		return this.sageCache.users.write(this);
 	}
 
-	public static async fetchCharacter(userDid: Snowflake, charId: UUID): Promise<GameCharacterCore | null> {
+	/**
+	 * Reads a character's core.
+	 * Optionally reads changes that haven't been confirmed yet.
+	 */
+	public static async fetchCharacter(userDid: Snowflake, charId: UUID, temp = false): Promise<GameCharacterCore | null> {
 		/** @todo sort out a variable for the path root */
-		const path = `./sage/data/users/${userDid}/characters/${charId}.json`;
+		const tmp = temp ? ".tmp" : "";
+		const path = `./sage/data/users/${userDid}/characters/${charId}${tmp}.json`;
 		return readJsonFile<GameCharacterCore>(path);
+	}
+
+	/**
+	 * Writes a character's temporary core.
+	 * Used for storing state while editing.
+	 */
+	public static async writeTempCharacter(userDid: Snowflake, char: GameCharacterCore): Promise<boolean> {
+		/** @todo sort out a variable for the path root */
+		char.userDid = userDid;
+		const path = `./sage/data/users/${userDid}/characters/${char.id}.tmp.json`;
+		return writeFile(path, char);
+	}
+
+	/**
+	 * Deletes a character's temporary core.
+	 * Used to cleanup after editing.
+	 */
+	public static async deleteTempCharacter(userDid: Snowflake, charId: UUID): Promise<boolean> {
+		/** @todo sort out a variable for the path root */
+		const path = `./sage/data/users/${userDid}/characters/${charId}.tmp.json`;
+		return deleteFileSync(path);
 	}
 
 	public static createCore(userDid: Snowflake): UserCore {
