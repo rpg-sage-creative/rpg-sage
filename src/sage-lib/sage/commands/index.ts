@@ -6,6 +6,7 @@ import { register as registerCmd } from "./cmd";
 import { registerCommandHandlers as registerDcs, registerSlashCommands as registerDcsSlashCommands } from "./dcs";
 import { registerCommandHandlers as registerDefault, registerSlashCommands as registerDefaultSlashCommands } from "./default";
 import { register as registerDialog } from "./dialog";
+import { registerCommandHandlers as registerDialogModal } from "./dialogModal";
 import { register as registerDice } from "./dice";
 import { registerCommandHandlers as registerE20 } from "./e20";
 import { registerCommandHandlers as registerHelp, registerSlashCommands as registerHelpSlashCommands } from "./help";
@@ -28,6 +29,7 @@ export function registerCommandHandlers(): void {
 	registerDcs();
 	registerDefault();
 	registerDialog();
+	registerDialogModal();
 	registerDice();
 	registerE20();
 	registerHelp();

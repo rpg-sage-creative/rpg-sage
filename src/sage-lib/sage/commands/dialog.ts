@@ -20,6 +20,7 @@ import { DialogMessageRepository, TDialogMessage } from "../repo/DialogMessageRe
 import { DialogType } from "../repo/base/channel";
 import { parseDiceMatches, sendDice } from "./dice";
 import { registerInlineHelp } from "./help";
+import { promptForModal } from "./dialogModal";
 
 //#region Dialog Post
 
@@ -393,7 +394,7 @@ export async function parseOrAutoDialogContent(sageMessage: SageMessage): Promis
 /** Returns the dialog content if found or null otherwise. */
 async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TDialogContent> | null> {
 	const dialogContent = await parseOrAutoDialogContent(sageMessage);
-	if (!dialogContent?.content) {
+	if (!dialogContent) {
 		return null;
 	}
 
@@ -410,6 +411,9 @@ async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndDat
 }
 
 async function doDialog(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
+	if (!dialogContent.content) {
+		return promptForModal(sageMessage, dialogContent);
+	}
 	switch (dialogContent.type) {
 		case "npc": case "enemy": case "ally": return npcChat(sageMessage, dialogContent);
 		case "gm": return gmChat(sageMessage, dialogContent);
