@@ -39,7 +39,7 @@ export default class SageMessage
 		const caches = await SageCache.fromMessage(message),
 			prefix = caches.getPrefixOrDefault(),
 			hasPrefix = message.content?.slice(0, prefix.length).toLowerCase() === prefix.toLowerCase(),
-			slicedContent = hasPrefix ? message.content!.slice(prefix.length).trim() : message.content!;
+			slicedContent = ((hasPrefix ? message.content?.slice(prefix.length).trim() : message.content) ?? "").replace(/@everyone/g, "@\\everyone");
 		const sageMessage = new SageMessage({
 			message,
 			originalMessage: originalMessage ?? undefined,

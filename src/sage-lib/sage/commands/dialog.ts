@@ -344,7 +344,7 @@ export function parseDialogContent(content: string, allowDynamicDialogSeparator:
 }
 
 export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogContent | null {
-	const content = sageMessage.message.content ?? ""; //TODO: was message.edits[0].content
+	const content = sageMessage.slicedContent;
 	const dialogContent = parseDialogContent(content, sageMessage.sageUser?.allowDynamicDialogSeparator);
 	if (dialogContent) {
 		return dialogContent;
