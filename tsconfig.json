@@ -12,7 +12,7 @@
 
 		"forceConsistentCasingInFileNames": true,
 
-		"importsNotUsedAsValues": "error",
+		// "importsNotUsedAsValues": "error",
 
 		"lib": [ "DOM", "ES2020" ],
 		"locale": "en-US",
