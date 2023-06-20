@@ -222,7 +222,7 @@ export default class DiscordCache {
 	 * Logging is done here, once, because this is sometimes called twice in fetchOrCreateWebhook.
 	 */
 	private hasManageWebhooksPerm(channel: Optional<TextChannel>): channel is TextChannel {
-		if (!channel || !channel.isText() || !channel.createWebhook || !channel.fetchWebhooks) {
+		if (!channel || !channel.createWebhook || !channel.fetchWebhooks) {
 			return false;
 		}
 
