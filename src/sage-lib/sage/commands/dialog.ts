@@ -166,8 +166,9 @@ function findCompanion(sageMessage: SageMessage, companionNameOrIndex: Optional<
 }
 
 function findNpc(sageMessage: SageMessage, npcName: string): GameCharacter | undefined {
-	if (sageMessage.gameChannel) {
-		return sageMessage.isGameMaster ? sageMessage.game!.nonPlayerCharacters.findByName(npcName) : undefined;
+	if (sageMessage.gameChannel && sageMessage.isGameMaster) {
+			return sageMessage.game!.nonPlayerCharacters.findByName(npcName)
+				?? sageMessage.game!.nonPlayerCharacters.findCompanionByName(npcName);
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
 		return sageMessage.sageUser.nonPlayerCharacters.findByName(npcName);
 	}
