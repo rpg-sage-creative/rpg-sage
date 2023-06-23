@@ -71,13 +71,9 @@ function parseUser(client: Discord.Client, userValue?: string): Discord.Snowflak
 	if (DiscordId.isValidId(userValue)) {
 		return userValue;
 	}
-	const user = client.users.cache.find(_user => {
-		const username = _user.username;
-		const discriminator = _user.discriminator === "0" ? "" : "#" + _user.discriminator;
-		const name = username + discriminator;
-		const atName = "@" + name;
-		return [name, atName].includes(userValue);
-	});
+	const [_, username, discriminator] = userValue.match(/^@?([^#]+)#(\d{1,4})$/) ?? [];
+	const tag = `${username}#${discriminator ?? "0"}`;
+	const user = client.users.cache.find(_user => _user.tag === tag);
 	return user?.id;
 }
 
