@@ -42,7 +42,7 @@ export function isKeyValueArg(value: string, key?: string): boolean {
 	return value.match(regex) !== null;
 }
 
-/** Returns [key, value, key=value] if the input is a valid key/value pairing, null otherwise */
+/** Returns KeyValueArg if the input is a valid key/value pairing, null otherwise */
 export function parseKeyValueArg(input: string, key?: string): KeyValueArg | null {
 	if (isKeyValueArg(input, key)) {
 		const index = input.indexOf("=");
