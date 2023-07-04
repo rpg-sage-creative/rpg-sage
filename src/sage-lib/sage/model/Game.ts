@@ -394,7 +394,7 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements IComparabl
 	public updateGmCharacterName(gmCharacterName: string): void { this.core.gmCharacterName = gmCharacterName; }
 
 	public async archive(): Promise<boolean> {
-		this.core.archivedTs = new Date().getTime();
+		this.core.archivedTs = Date.now();
 		return this.save();
 	}
 

@@ -388,7 +388,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 			// meta: <any>{ },
 			name: name,
 			objectType: "EquipmentItem",
-			// timestamp: new Date().getTime(),
+			// timestamp: Date.now(),
 		};
 	}
 

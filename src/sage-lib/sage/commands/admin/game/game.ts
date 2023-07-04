@@ -511,7 +511,7 @@ function createGame(sageMessage: SageMessage<true>, name: string, gameValues: Pa
 		id: generate(),
 		serverDid: sageMessage.server.did,
 		serverId: sageMessage.server.id,
-		createdTs: new Date().getTime(),
+		createdTs: Date.now(),
 		name,
 		channels,
 		colors: sageMessage.server.colors.toArray(),
