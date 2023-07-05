@@ -1,4 +1,4 @@
-import { generate } from "./generate";
+import { random } from "./random";
 
 /**
  * Creates a new array by randomly reordering the contents of the given array.
@@ -9,7 +9,7 @@ export function shuffle<T>(array: T[]): T[] {
 	do {
 		let currentIndex = shuffled.length;
 		while (0 !== currentIndex) {
-			const randomIndex = generate(1, currentIndex) - 1;
+			const randomIndex = random(currentIndex) - 1;
 			currentIndex -= 1;
 			const temporaryValue = shuffled[currentIndex];
 			shuffled[currentIndex] = shuffled[randomIndex];
