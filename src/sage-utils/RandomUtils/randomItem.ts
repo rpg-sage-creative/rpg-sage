@@ -1,4 +1,4 @@
-import { generate } from "./generate";
+import { random } from "./random";
 
 /**
  * Returns a random value from the array.
@@ -12,6 +12,6 @@ export function randomItem<T>(array: T[]): T | null {
 	if (length === 1) {
 		return array[0];
 	}
-	const index = generate(0, length - 1);
+	const index = random(0, length - 1);
 	return array[index];
 }
