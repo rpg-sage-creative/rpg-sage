@@ -5,5 +5,13 @@ import { generate } from "./generate";
  * @param array array of values to select from
  */
 export function randomItem<T>(array: T[]): T | null {
-	return array.length === 0 ? null : array[generate(1, array.length) - 1];
+	const length = array.length;
+	if (length === 0) {
+		return null;
+	}
+	if (length === 1) {
+		return array[0];
+	}
+	const index = generate(0, length - 1);
+	return array[index];
 }
