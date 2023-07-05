@@ -4,7 +4,7 @@ import { EnumLike, getKeys } from "../EnumUtils";
 import type { ESCAPED_URL, VALID_URL } from "../HttpsUtils";
 import { cleanUrl, isUrl } from "../HttpsUtils";
 import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isString, KeyValueArg, parseKeyValueArg, tokenize, TokenParsers } from "../StringUtils";
-import { isValid as isValidUuid, VALID_UUID } from "../UuidUtils";
+import { isUuid, ValidUuid } from "../UuidUtils";
 
 /** Represents a key/value arg */
 type KeyedArg<T extends string = string> = KeyValueArg<T>;
@@ -243,25 +243,25 @@ export class ArgsManager<T extends string = string> extends Array<TArg<T>> {
 	 * Returns the first unkeyed uuid.
 	 * Returns undefined if none found.
 	 */
-	public findUuid(): OrUndefined<VALID_UUID>;
+	public findUuid(): OrUndefined<ValidUuid>;
 	/**
 	 * Returns the uuid for the given key.
 	 * Returns null if the value isn't a uuid.
 	 * Returns undefined if the key is not found.
 	 */
-	public findUuid(key: string): Optional<VALID_UUID>;
+	public findUuid(key: string): Optional<ValidUuid>;
 	/**
 	 * Returns the uuid for the given key.
 	 * Returns null if the value isn't a uuid.
 	 * If the key is not found, the first unkeyed Color object will be returned.
 	 */
-	public findUuid(key: string, unkeyed: true): Optional<VALID_UUID>;
-	public findUuid(key?: string, unkeyed?: true): Optional<VALID_UUID> {
-		return this.findByKeyOrUnkeyed<VALID_UUID>(key, unkeyed, isValidUuid);
+	public findUuid(key: string, unkeyed: true): Optional<ValidUuid>;
+	public findUuid(key?: string, unkeyed?: true): Optional<ValidUuid> {
+		return this.findByKeyOrUnkeyed<ValidUuid>(key, unkeyed, isUuid);
 	}
 
-	public unkeyedUuids(): VALID_UUID[] {
-		return this.unkeyedValues<VALID_UUID>().filter(value => isValidUuid(value));
+	public unkeyedUuids(): ValidUuid[] {
+		return this.unkeyedValues<ValidUuid>().filter(value => isUuid(value));
 	}
 
 	//#endregion

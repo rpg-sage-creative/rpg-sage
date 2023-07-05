@@ -1,6 +1,6 @@
+import { randomUUID } from "crypto";
 import type { IdCore } from "../../../sage-utils/ClassUtils";
 import { HasIdCore } from "../../../sage-utils/ClassUtils";
-import { generate } from "../../../sage-utils/UuidUtils";
 import type { NamedCore } from "../base";
 import { Bulk } from "../Bulk";
 import { Coins } from "../Coins";
@@ -47,7 +47,7 @@ export class EquipmentList extends HasIdCore<EquipmentListCore, "EquipmentList">
 
 	public static createCore(name: string): EquipmentListCore {
 		return {
-			id: generate(),
+			id: randomUUID(),
 			name: name,
 			objectType: "EquipmentList"
 		};

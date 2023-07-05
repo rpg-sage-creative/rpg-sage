@@ -1,6 +1,6 @@
+import { randomUUID } from "crypto";
 import type { TSkillDie } from "../../sage-dice/e20";
 import { isBlank } from "../../sage-utils/StringUtils";
-import { generate } from "../../sage-utils/UuidUtils";
 import { PdfJsonFields, TRawJson } from "./pdf";
 import type { PlayerCharacterCoreE20, TArmorE20, TAttackE20, TSkillE20, TStatE20, TWeaponE20 } from "./PlayerCharacterE20";
 
@@ -86,7 +86,7 @@ export class PdfJsonParserE20 extends PdfJsonFields {
 			objectType: "PlayerCharacter",
 			diceEngine: "E20",
 			gameType: undefined!,
-			id: generate(),
+			id: randomUUID(),
 
 			abilities: [
 				this.parseStat("Strength", "Toughness", "Str"),

@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ModalBuilder, ModalSubmitInteraction, Snowflake, StringSelectMenuBuilder, userMention } from "discord.js";
-import { NIL_UUID, UUID, isValid as isValidUuid } from "../../../sage-utils/UuidUtils";
+import { NIL_UUID, UUID, isUuid } from "../../../sage-utils/UuidUtils";
 import { isNonNilSnowflake } from "../../../sage-utils/SnowflakeUtils";
 import { SageInteraction } from "../model/SageInteraction";
 import { DChannel, DInteraction, DiscordMaxValues, addParagraph, addShortText } from "../../../sage-utils/DiscordUtils";
@@ -71,7 +71,7 @@ function isValidAction(action: string): action is DialogModalAction {
 }
 function parseCustomId(customId: string): CustomIdParts | null {
 	const [indicator, userDid, charId, charType, action] = customId.split("|");
-	if (isValidIndicator(indicator) && isNonNilSnowflake(userDid) && isValidUuid(charId) && isValidCharType(charType) && isValidAction(action)) {
+	if (isValidIndicator(indicator) && isNonNilSnowflake(userDid) && isUuid(charId) && isValidCharType(charType) && isValidAction(action)) {
 		return { indicator, userDid, charId, charType, action };
 	}
 	return null;

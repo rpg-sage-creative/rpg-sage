@@ -8,7 +8,7 @@ import type { DiscordFetches } from "../../../../../sage-utils/DiscordUtils";
 import { DiscordId } from "../../../../../sage-utils/DiscordUtils";
 import { toSuperscript } from "../../../../../sage-utils/NumberUtils";
 import type { RenderableContent } from "../../../../../sage-utils/RenderUtils";
-import { generate, isValid } from "../../../../../sage-utils/UuidUtils";
+import { isUuid } from "../../../../../sage-utils/UuidUtils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import { Game,  GameRoleType, GameUserType, getDefaultGameOptions, IGameRole, IGameUser, TDefaultGameOptions } from "../../../model/Game";
 import { GameCharacter } from "../../../model/GameCharacter";
@@ -20,6 +20,7 @@ import { DialogType, GameChannelType, IChannel, toGameChannelTypeString } from "
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
+import { randomUUID } from "crypto";
 
 async function allGameCount(sageMessage: SageMessage): Promise<void> {
 	const games = await sageMessage.sageCache.games.getAll();
@@ -156,7 +157,7 @@ function formatDateTime(date: Date): string | null {
 async function showGameGetGame(sageMessage: SageMessage): Promise<Game | null> {
 	let game: Optional<Game> = sageMessage.game;
 	if (!game) {
-		const gameId = sageMessage.args.findBy(arg => isValid(arg.value))?.value;
+		const gameId = sageMessage.args.findBy(arg => isUuid(arg.value))?.value;
 		if (gameId) {
 			game = await sageMessage.sageCache.games.getById(gameId);
 		}
@@ -508,7 +509,7 @@ function createGame(sageMessage: SageMessage<true>, name: string, gameValues: Pa
 	return new Game({
 		...gameValues,
 		objectType: "Game",
-		id: generate(),
+		id: randomUUID(),
 		serverDid: sageMessage.server.did,
 		serverId: sageMessage.server.id,
 		createdTs: Date.now(),

@@ -2,11 +2,12 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, Interaction,
 import type { DMessageTarget } from "../../sage-utils/DiscordUtils";
 import { resolveToEmbeds } from "../../sage-utils/DiscordUtils";
 import type { TRenderableContentResolvable } from "../../sage-utils/RenderUtils";
-import { UUID, generate } from "../../sage-utils/UuidUtils";
+import { UUID } from "../../sage-utils/UuidUtils";
 import { ActiveBot } from "../sage/model/ActiveBot";
 import type { SageCache } from "../sage/model/SageCache";
 import type { SageInteraction } from "../sage/model/SageInteraction";
 import type { SageMessage } from "../sage/model/SageMessage";
+import { randomUUID } from "crypto";
 
 const TIMEOUT_MILLI = 60 * 1000;
 
@@ -15,7 +16,7 @@ export type TPromptButton = { label:string; style:ButtonStyle; };
 function createButtons(buttons: TPromptButton[]): Map<UUID, ButtonBuilder> {
 	const map = new Map<UUID, ButtonBuilder>();
 	buttons.forEach(button => {
-		const uuid = generate();
+		const uuid = randomUUID();
 		const buttonBuilder = new ButtonBuilder();
 		buttonBuilder.setCustomId(uuid);
 		buttonBuilder.setLabel(button.label);

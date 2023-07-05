@@ -5,7 +5,6 @@ import type { Args, Optional } from "../../../sage-utils";
 import { LogLevel, TConsoleCommandType } from "../../../sage-utils/ConsoleUtils";
 import { DiscordKey } from "../../../sage-utils/DiscordUtils";
 import { cleanJson } from "../../../sage-utils/JsonUtils";
-import { generate } from "../../../sage-utils/UuidUtils";
 import { DicePostType } from "../commands/dice";
 import { ActiveBot } from "../model/ActiveBot";
 import { DidCore, HasDidCore } from "../repo/base/HasDidCore";
@@ -16,6 +15,7 @@ import type { CoreWithEmoji, EmojiType, HasCoreWithEmoji } from "./Emoji";
 import { Emoji } from "./Emoji";
 import { Game, TDefaultGameOptions, getDefaultGameOptions } from "./Game";
 import { ISageCommandArgs, applyValues, hasValues } from "./SageCommandArgs";
+import { randomUUID } from "crypto";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
 export enum AdminRoleType { Unknown = 0, GameAdmin = 1 }
@@ -106,7 +106,7 @@ export class Server extends HasDidCore<ServerCore> implements HasCoreWithColors,
 		const diceSecretMethodType = _diceSecretMethodType ?? this.defaultDiceSecretMethodType;
 		const game = new Game({
 			objectType: "Game",
-			id: generate(),
+			id: randomUUID(),
 			serverDid: this.did,
 			serverId: this.id,
 			createdTs: Date.now(),

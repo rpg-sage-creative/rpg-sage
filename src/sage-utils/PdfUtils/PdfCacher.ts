@@ -1,11 +1,11 @@
 import PDFParser from "pdf2json";
 import { deleteFileSync, writeFile } from "../FsUtils";
 import { getBuffer } from "../HttpsUtils";
-import { generate } from "../UuidUtils";
+import { randomUUID } from "crypto";
 
 export class PdfCacher {
 
-	private uuid = generate();
+	private uuid = randomUUID();
 
 	public constructor(private url: string) { }
 

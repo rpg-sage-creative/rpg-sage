@@ -1,24 +1,10 @@
 //#region imports
 
+import { randomUUID } from "crypto";
 import { GameType } from "../../sage-common";
 import type { OrNull } from "../../sage-utils";
 import { toJSON } from "../../sage-utils/ClassUtils";
 import { TokenData, TokenParsers, tokenize } from "../../sage-utils/StringUtils";
-import { generate } from "../../sage-utils/UuidUtils";
-import type {
-	TDiceLiteral,
-	TTestData
-} from "../common";
-import {
-	DiceOutputType,
-	DiceSecretMethodType,
-	DieRollGrade,
-	TestType,
-	cleanDescription,
-	createValueTestData,
-	gradeToEmoji,
-	rollDice
-} from "../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
@@ -29,6 +15,17 @@ import type {
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
 } from "../base/types";
+import type {
+	TDiceLiteral,
+} from "../common";
+import {
+	DiceOutputType,
+	DiceSecretMethodType,
+	cleanDescription,
+	rollDice
+} from "../common";
+import { DiceTestData, DiceTestType } from "../common/DiceTest";
+import { DieRollGrade, gradeToEmoji } from "../common/grade";
 
 //#endregion
 
@@ -55,8 +52,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 //#region Targets/Tests
 enum TargetType { None = 0, VS = 1 }
 type TTargetData = { type:TargetType; value:number; };
-function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	return !targetData ? null : createValueTestData(TestType.GreaterThan, targetData.value, "vs");
+function targetDataToTestData(targetData: TTargetData): OrNull<DiceTestData> {
+	return !targetData ? null : { alias:"vs", type:DiceTestType.GreaterThan, value:targetData.value };
 }
 //#endregion
 
@@ -94,7 +91,7 @@ interface DicePartCore extends baseDicePartCore {
 	target?: TTargetData;
 }
 type TDicePartCoreArgs = baseTDicePartCoreArgs & {
-	testOrTarget?: TTestData | TTargetData;
+	testOrTarget?: DiceTestData | TTargetData;
 };
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region static
@@ -102,7 +99,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.Quest,
-			id: generate(),
+			id: randomUUID(),
 
 			count: 1,
 			description: cleanDescription(description),
@@ -111,8 +108,8 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			noSort: false,
 			sides: 20,
 			sign: undefined,
-			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget ?? null,
-			target: <TTargetData>testOrTarget ?? null
+			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as DiceTestData ?? null,
+			target: testOrTarget as TTargetData ?? null
 		});
 	}
 	public static fromCore(core: DicePartCore): DicePart {
@@ -135,7 +132,7 @@ export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 		return new DicePartRoll({
 			objectType: "DicePartRoll",
 			gameType: GameType.Quest,
-			id: generate(),
+			id: randomUUID(),
 			dice: dicePart.toJSON(),
 			rolls: rollDice(dicePart.count, dicePart.sides)
 		});
@@ -157,7 +154,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.Quest,
-			id: generate(),
+			id: randomUUID(),
 			diceParts: diceParts.map<DicePartCore>(toJSON)
 		});
 	}
@@ -192,7 +189,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		return new DiceRoll({
 			objectType: "DiceRoll",
 			gameType: GameType.Quest,
-			id: generate(),
+			id: randomUUID(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
 		});
@@ -214,7 +211,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.Quest,
-			id: generate(),
+			id: randomUUID(),
 			critMethodType: undefined,
 			dice: _dice.map<DiceCore>(toJSON),
 			diceOutputType: diceOutputType,
@@ -248,7 +245,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		return new DiceGroupRoll({
 			objectType: "DiceGroupRoll",
 			gameType: GameType.Quest,
-			id: generate(),
+			id: randomUUID(),
 			diceGroup: diceGroup.toJSON(),
 			rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
 		});

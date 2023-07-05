@@ -1,7 +1,7 @@
 import type { Snowflake } from "discord.js";
 import type { Optional } from "../../../sage-utils";
 import type { DiscordKey } from "../../../sage-utils/DiscordUtils";
-import { UUID, generate } from "../../../sage-utils/UuidUtils";
+import { UUID } from "../../../sage-utils/UuidUtils";
 import type { TDialogMessage } from "../repo/DialogMessageRepository";
 import { CharactersMatch } from "./CharactersMatch";
 import type { Game } from "./Game";
@@ -10,6 +10,7 @@ import { GameCharacter } from "./GameCharacter";
 import type { IHasSave } from "./NamedCollection";
 import { NamedCollection } from "./NamedCollection";
 import type { User } from "./User";
+import { randomUUID } from "crypto";
 
 /*
 // function remapCharacters(this: CharacterManager, core: GameCharacterCore, index: number, array: (GameCharacterCore | GameCharacter)[]): void {
@@ -53,7 +54,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	public async addCharacter(core: GameCharacterCore): Promise<GameCharacter | null> {
 		const found = this.findByUserAndName(core.userDid, core.name);
 		if (!found) {
-			const newCore = { ...core, id: generate() };
+			const newCore = { ...core, id: randomUUID() };
 			const character = new GameCharacter(newCore, this),
 				added = await this.pushAndSave(character);
 			return added ? character : null;
@@ -198,7 +199,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		}else if (values) {
 			Array.from(values).forEach(core => {
 				if (!core.id) {
-					core.id = generate();
+					core.id = randomUUID();
 				}
 				characterManager.push(new GameCharacter(core, characterManager));
 			});

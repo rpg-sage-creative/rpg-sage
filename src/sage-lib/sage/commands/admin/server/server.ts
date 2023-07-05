@@ -4,7 +4,7 @@ import { isDefined, type Optional } from "../../../../../sage-utils";
 import { mapAsync } from "../../../../../sage-utils/ArrayUtils";
 import type { RenderableContent } from "../../../../../sage-utils/RenderUtils";
 import { isNonNilSnowflake } from "../../../../../sage-utils/SnowflakeUtils";
-import { isValid } from "../../../../../sage-utils/UuidUtils";
+import { isUuid } from "../../../../../sage-utils/UuidUtils";
 import type { SageMessage } from "../../../model/SageMessage";
 import type { Server } from "../../../model/Server";
 import { AdminRoleType, getServerDefaultGameOptions } from "../../../model/Server";
@@ -81,7 +81,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	// }
 	if (!server && sageMessage.isSuperUser) {
 		const idOrDid = sageMessage.args.getString("server");
-		if (isValid(idOrDid)) {
+		if (isUuid(idOrDid)) {
 			server = await sageMessage.sageCache.servers.getById(idOrDid);
 		}
 		if (isNonNilSnowflake(idOrDid)) {

@@ -1,13 +1,13 @@
 import { existsSync, readdirSync, rmSync } from "fs";
 import type { THasSuccessOrFailure } from "../sage-pf2e/model/base/interfaces";
 import { readJsonFileSync, writeFileSync } from "../sage-utils/FsUtils";
-import type { UUID } from "../sage-utils/UuidUtils";
-import { generate, isNotNormalized, normalize } from "../sage-utils/UuidUtils";
+import { orNilUuid, type UUID } from "../sage-utils/UuidUtils";
 import { DistDataPath, SrcDataPath, clearStringify, compareNames, debug, error, getPf2tCores, getSageCores, info, loadPf2tCores, log, stringify, warn } from "./common.mjs";
 import { findPf2tCore, parsePf2Data } from "./pf2-tools-parsers/common.mjs";
 import { processAbcData } from "./process-abc.mjs";
 import { processPf2tData } from "./processPf2taData.mjs";
 import type { TCore } from "./types.mjs";
+import { randomUUID } from "crypto";
 
 let total = 0, created = 0, unique = 0, recreated = 0, normalized = 0, aoned = 0, linked = 0;
 
@@ -20,7 +20,7 @@ function isUnique(uuid: UUID): boolean {
 }
 function createUuid(): UUID {
 	let uuid;
-	do { uuid = generate(); }while(!isUnique(uuid));
+	do { uuid = randomUUID(); }while(!isUnique(uuid));
 	return uuid;
 }
 //#endregion
@@ -168,8 +168,9 @@ function processData(filePathAndName: string) {
 			_recreated++;
 		}else {
 			unique++;
-			if (isNotNormalized(core.id)) {
-				core.id = normalize(core.id);
+			const normalized = orNilUuid(core.id);
+			if (core.id !== normalized) {
+				core.id = normalized
 				_normalized++;
 			}
 		}

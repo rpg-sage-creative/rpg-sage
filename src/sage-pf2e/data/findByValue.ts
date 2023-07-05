@@ -1,6 +1,6 @@
 import type { Optional, OrUndefined } from "../../sage-utils";
 import { StringMatcher } from "../../sage-utils/StringUtils";
-import { UuidMatcher } from "../../sage-utils/UuidUtils";
+import { UuidMatcher, isNilUuid } from "../../sage-utils/UuidUtils";
 import type { TEntity } from "../model";
 import type { Base } from "../model/base/Base";
 import type { Source } from "../model/base/Source";
@@ -24,7 +24,7 @@ export function findByValue<T extends Base<any>>(objectType: string, value: Opti
 	}
 
 	const uuidMatcher = UuidMatcher.from(value);
-	if (uuidMatcher.isValid) {
+	if (!isNilUuid(uuidMatcher.normalized)) {
 		return findByTypeAndId(objectType, uuidMatcher);
 	}
 

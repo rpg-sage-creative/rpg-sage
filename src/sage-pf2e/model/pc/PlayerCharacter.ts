@@ -1,7 +1,8 @@
+import { randomUUID } from "crypto";
 import type { Optional } from "../../../sage-utils";
 import { asStringIgnoreCase, isUnique } from "../../../sage-utils/ArrayUtils";
 import { HasIdCore, IdCore } from "../../../sage-utils/ClassUtils";
-import { UUID, generate } from "../../../sage-utils/UuidUtils";
+import { UUID } from "../../../sage-utils/UuidUtils";
 import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
 import { PERCEPTION, WISDOM, profToMod } from "../../common";
 import { findById, findByValue } from "../../data";
@@ -115,7 +116,7 @@ export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerChara
 			core.bio = <any>{};
 		}
 		if (!core.id) {
-			core.id = generate();
+			core.id = randomUUID();
 		}
 		if (!core.effects) {
 			core.effects = [];

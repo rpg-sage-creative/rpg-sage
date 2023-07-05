@@ -2,7 +2,7 @@ import type { GuildBasedChannel, Role, Snowflake } from "discord.js";
 import { isDefined, type Optional } from "../../../sage-utils";
 import type { ISageCommandArgs } from "./SageCommandArgs";
 import type { EnumLike } from "../../../sage-utils/EnumUtils";
-import type { VALID_UUID } from "../../../sage-utils/UuidUtils";
+import type { ValidUuid } from "../../../sage-utils/UuidUtils";
 
 export class SageReactionArgs implements ISageCommandArgs {
 
@@ -170,10 +170,10 @@ export class SageReactionArgs implements ISageCommandArgs {
 	 * Returns undefined if not found.
 	 * Returns null if empty or "unset".
 	 */
-	public getUuid(name: string): Optional<VALID_UUID>;
+	public getUuid(name: string): Optional<ValidUuid>;
 	/** Gets the named option as a VALID_UUID. */
-	public getUuid(name: string, required: true): VALID_UUID;
-	public getUuid(): Optional<VALID_UUID> {
+	public getUuid(name: string, required: true): ValidUuid;
+	public getUuid(): Optional<ValidUuid> {
 		return null;
 	}
 

@@ -4,7 +4,6 @@ import { GameType, parseGameType } from "../../sage-common";
 import type { OrNull, OrUndefined } from "../../sage-utils";
 import type { IdCore } from "../../sage-utils/ClassUtils";
 import { HasCore, toJSON } from "../../sage-utils/ClassUtils";
-import { generate } from "../../sage-utils/UuidUtils";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -41,6 +40,7 @@ import {
 	DiceGroup as questDiceGroup,
 	DiceGroupRoll as questDiceGroupRoll
 } from "../quest/dice";
+import { randomUUID } from "crypto";
 
 //#endregion
 
@@ -80,7 +80,7 @@ function cloneDicePart<T extends baseDicePartCore, U extends baseTDicePart>(clss
 		description: core.description,
 		dropKeep: core.dropKeep ? { ...core.dropKeep } : undefined,
 		gameType: core.gameType,
-		id: generate(),
+		id: randomUUID(),
 		modifier: core.modifier,
 		noSort: core.noSort,
 		objectType: core.objectType,
@@ -100,7 +100,7 @@ function cloneDice<T extends baseDiceCore, U extends baseTDice>(clss: typeof bas
 			description: "<i>(MAP)</i>",
 			dropKeep: undefined,
 			gameType: gameType,
-			id: generate(),
+			id: randomUUID(),
 			modifier: Math.abs(map),
 			noSort: false,
 			objectType: "DicePart",
@@ -133,7 +133,7 @@ function cloneDice<T extends baseDiceCore, U extends baseTDice>(clss: typeof bas
 	return <U>clss.fromCore({
 		diceParts: diceParts,
 		gameType: core.gameType,
-		id: generate(),
+		id: randomUUID(),
 		objectType: <"Dice">core.objectType
 	});
 }
@@ -145,7 +145,7 @@ function cloneDiceGroup<T extends baseDiceGroupCore, U extends baseTDiceGroup>(c
 		diceOutputType: core.diceOutputType,
 		diceSecretMethodType: core.diceSecretMethodType,
 		gameType: core.gameType,
-		id: generate(),
+		id: randomUUID(),
 		objectType: <"DiceGroup">core.objectType
 	});
 }
@@ -189,7 +189,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 	public static create(diceGroups: baseTDiceGroup[]): DiscordDice {
 		const core: DiscordDiceCore = {
 			objectType: "DiscordDice",
-			id: generate(),
+			id: randomUUID(),
 			diceGroups: diceGroups.map<baseDiceGroupCore>(toJSON)
 		};
 		return new DiscordDice(core);
@@ -366,7 +366,7 @@ export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 	public static create(discordDice: DiscordDice): DiscordDiceRoll {
 		const core: DiscordDiceRollCore = {
 			objectType: "DiscordDiceRoll",
-			id: generate(),
+			id: randomUUID(),
 			discordDice: discordDice.toJSON(),
 			rolls: discordDice.diceGroups.map(diceGroup => diceGroup.roll().toJSON())
 		};

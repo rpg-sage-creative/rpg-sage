@@ -1,5 +1,7 @@
-import type { DicePart, DicePartRoll, DiceRoll, Dice, DiceGroupRoll, DiceGroup } from "./dice";
-import type { DieCore, TDropKeepData, TSign, TTestData, CritMethodType, DiceOutputType, DiceSecretMethodType } from "..";
+import type { CritMethodType, DiceOutputType, DiceSecretMethodType, DieCore, TSign } from "..";
+import { DiceDropKeepData } from "../common/DiceDropKeep";
+import { DiceTestData } from "../common/DiceTest";
+import type { Dice, DiceGroup, DiceGroupRoll, DicePart, DicePartRoll, DiceRoll } from "./dice";
 
 //#region DicePart
 
@@ -12,7 +14,7 @@ interface DicePartCoreBase {
 	description: string;
 
 	/** drop/keep notation info */
-	dropKeep?: TDropKeepData;
+	dropKeep?: DiceDropKeepData;
 
 	/** roll modifier */
 	modifier: number;
@@ -27,7 +29,7 @@ interface DicePartCoreBase {
 	sign?: TSign;
 
 	/** target test information */
-	test?: TTestData;
+	test?: DiceTestData;
 }
 
 export type TDicePartCoreArgs = Partial<DicePartCoreBase>;

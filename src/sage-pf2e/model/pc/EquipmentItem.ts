@@ -1,6 +1,7 @@
+import { randomUUID } from "crypto";
 import { HasIdCore, IdCore } from "../../../sage-utils/ClassUtils";
 import { isString } from "../../../sage-utils/StringUtils";
-import { generate, UUID } from "../../../sage-utils/UuidUtils";
+import { UUID } from "../../../sage-utils/UuidUtils";
 import type { TQuality } from "../../common";
 import { findById } from "../../data";
 import type { Base, HasSource } from "../base";
@@ -343,7 +344,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 		this.core.count -= count;
 		const core = <EquipmentItemCore>JSON.parse(JSON.stringify(this.core));
 		core.count = count;
-		core.id = generate();
+		core.id = randomUUID();
 		this.eq.addItem(new EquipmentItem(this.eq, core));
 	}
 	public unequip(): void {
@@ -381,7 +382,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 			entries: undefined,
 			itemId: item.id,
 			itemQuality: "Standard",
-			id: generate(),
+			id: randomUUID(),
 			isInvested: false,
 			isRaised: false,
 			listId: undefined,

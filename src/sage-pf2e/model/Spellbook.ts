@@ -1,6 +1,7 @@
+import { randomUUID } from "crypto";
 import { Core, HasCore } from "../../sage-utils/ClassUtils";
 import { random, randomItem } from "../../sage-utils/RandomUtils";
-import { generate, UUID } from "../../sage-utils/UuidUtils";
+import { UUID } from "../../sage-utils/UuidUtils";
 import type { TMagicTradition } from "../common";
 import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL } from "../common";
 import { filterBy, findByValue } from "../data";
@@ -75,7 +76,7 @@ export class Spellbook extends HasCore<SpellbookCore> {
 	public constructor(spells: SpellCollection);
 	public constructor(spells?: any) {
 		super(<any>{ spells: new SpellCollection(spells) });
-		this.id = `Spellbook${DASH}${generate()}`;
+		this.id = `Spellbook${DASH}${randomUUID()}`;
 	}
 
 	/**************************************************************************************************************************/

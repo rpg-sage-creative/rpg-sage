@@ -1,7 +1,7 @@
 import type { TMatcher } from "..";
 import { isSnowflake, SnowflakeMatcher } from "../SnowflakeUtils";
 import { StringMatcher } from "../StringUtils";
-import { isValid, UUID, UuidMatcher } from "../UuidUtils";
+import { isUuid, UUID, UuidMatcher } from "../UuidUtils";
 import { Core, HasCore } from "./HasCore";
 
 //#region types
@@ -19,7 +19,7 @@ export interface IdCore<ObjectType extends string = string, IdType extends strin
 
 /** @todo move matcher to a static property instead of doing it this way. */
 function createIdMatcher(id: string): TMatcher {
-	if (isValid(id)) return UuidMatcher.from(id);
+	if (isUuid(id)) return UuidMatcher.from(id);
 	if (isSnowflake(id)) return SnowflakeMatcher.from(id);
 	return StringMatcher.from(id);
 }

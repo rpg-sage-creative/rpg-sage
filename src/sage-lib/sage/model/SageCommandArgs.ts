@@ -4,7 +4,7 @@ import { CritMethodType, DiceSecretMethodType } from "../../../sage-dice";
 import type { Args, Optional } from "../../../sage-utils";
 import { DicePostType } from "../commands/dice";
 import { GameChannelType, parseGameChannelType } from "../repo/base/channel";
-import type { VALID_UUID } from "../../../sage-utils/UuidUtils";
+import type { ValidUuid } from "../../../sage-utils/UuidUtils";
 import type { EnumLike } from "../../../sage-utils/EnumUtils";
 
 export interface ISageCommandArgs {
@@ -114,9 +114,9 @@ export interface ISageCommandArgs {
 	 * Returns undefined if not found.
 	 * Returns null if empty or "unset".
 	 */
-	getUuid(name: string): Optional<VALID_UUID>;
+	getUuid(name: string): Optional<ValidUuid>;
 	/** Gets the named option as a VALID_UUID. */
-	getUuid(name: string, required: true): VALID_UUID;
+	getUuid(name: string, required: true): ValidUuid;
 	/** Returns true if getUuid(name) is not null and not undefined. */
 	hasUuid(name: string): boolean;
 

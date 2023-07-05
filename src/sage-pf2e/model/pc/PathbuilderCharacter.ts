@@ -1,10 +1,10 @@
+import { randomUUID } from "crypto";
 import type { TMacro } from "../../../sage-lib/sage/model/User";
 import type { Optional, OrUndefined } from "../../../sage-utils";
 import { CharacterBase, CharacterBaseCore } from "../../../sage-utils/CharacterUtils";
 import { getJson } from "../../../sage-utils/HttpsUtils";
 import { nth } from "../../../sage-utils/NumberUtils";
 import { StringMatcher, capitalize } from "../../../sage-utils/StringUtils";
-import { generate } from "../../../sage-utils/UuidUtils";
 import type { TProficiency, TSavingThrow } from "../../common";
 import { ABILITIES, toModifier } from "../../common";
 import { filterBy, findByValue } from "../../data";
@@ -633,7 +633,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 	public constructor(core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
 		super(core);
 		if (!core.id) {
-			core.id = generate();
+			core.id = randomUUID();
 		}
 		Object.keys(flags).forEach(key => {
 			core[key as TPathbuilderCharacterCustomFlag] = flags[key as TPathbuilderCharacterCustomFlag];

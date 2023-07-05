@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ChatInputCommandInteraction, ModalBuilder, Snowflake } from "discord.js";
 import { DInteraction, DiscordMaxValues, addShortText } from "../../../../../sage-utils/DiscordUtils";
 import { isNonNilSnowflake } from "../../../../../sage-utils/SnowflakeUtils";
-import { isNil as isNilUuid, isValid as isValidUuid } from "../../../../../sage-utils/UuidUtils";
+import { isNilUuid, isUuid } from "../../../../../sage-utils/UuidUtils";
 import { NIL_UUID, UUID } from "../../../../../sage-utils/UuidUtils/types";
 import { registerSlashCommand } from "../../../../../slash.mjs";
 import { TSlashCommand } from "../../../../../types";
@@ -62,7 +62,7 @@ function isValidAction(action: string): action is CharModalAction {
 }
 function parseCustomId(customId: string): CustomIdParts | null {
 	const [indicator, userDid, charId, charType, action] = customId.split("|");
-	if (isValidIndicator(indicator) && isNonNilSnowflake(userDid) && isValidUuid(charId) && isValidCharType(charType) && isValidAction(action)) {
+	if (isValidIndicator(indicator) && isNonNilSnowflake(userDid) && isUuid(charId) && isValidCharType(charType) && isValidAction(action)) {
 		return { indicator, userDid, charId, charType, action };
 	}
 	return null;

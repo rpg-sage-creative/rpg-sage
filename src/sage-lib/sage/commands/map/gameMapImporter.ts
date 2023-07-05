@@ -71,10 +71,9 @@ function parseUser(client: Client, userValue?: string): Snowflake | undefined {
 	if (DiscordId.isValidId(userValue)) {
 		return userValue;
 	}
-	const user = client.users.cache.find(_user => {
-		const name = `${_user.username}#${_user.discriminator}`;
-		return userValue === name || userValue === `@${name}`;
-	});
+	const [_, username, discriminator] = userValue.match(/^@?([^#]+)#(\d{1,4})$/) ?? [];
+	const tag = `${username}#${discriminator ?? "0"}`;
+	const user = client.users.cache.find(_user => _user.tag === tag);
 	return user?.id;
 }
 

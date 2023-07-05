@@ -1,8 +1,9 @@
+import { randomUUID } from "crypto";
 import type { Optional, OrNull } from "../../../../sage-utils";
 import type { HasIdCore, IdCore } from "../../../../sage-utils/ClassUtils";
 import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull } from "../../../../sage-utils/ConsoleUtils";
 import { deleteFileSync, fileExistsSync, listFiles, readJsonFile, writeFile } from "../../../../sage-utils/FsUtils";
-import { UUID, generate } from "../../../../sage-utils/UuidUtils";
+import { UUID } from "../../../../sage-utils/UuidUtils";
 import type { SageCache } from "../../model/SageCache";
 
 type TParser<T extends IdCore, U extends HasIdCore<T>> = (core: T, sageCache: SageCache) => Promise<U>;
@@ -111,7 +112,7 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 	protected async writeBy(entity: U, idKey: keyof U): Promise<boolean> {
 		const json = entity.toJSON();
 		if (!entity.id) {
-			json.id = generate();
+			json.id = randomUUID();
 			console.log(`IdRepository.write: ${(<typeof IdRepository>this.constructor).objectType}`, json);
 		}
 		const idValue = entity[idKey] ?? entity.id;

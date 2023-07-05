@@ -1,7 +1,7 @@
 import type { ChatInputCommandInteraction, GuildBasedChannel, Role, Snowflake } from "discord.js";
 import { isDefined, type Optional,  } from "../../../sage-utils";
 import type { DInteraction } from "../../../sage-utils/DiscordUtils";
-import { VALID_UUID, isValid as isValidUuid } from "../../../sage-utils/UuidUtils";
+import { ValidUuid, isUuid } from "../../../sage-utils/UuidUtils";
 import type { ISageCommandArgs } from "./SageCommandArgs";
 import { EnumLike, parse } from "../../../sage-utils/EnumUtils";
 
@@ -193,13 +193,13 @@ export class SageInteractionArgs implements ISageCommandArgs {
 	 * Returns undefined if not found.
 	 * Returns null if empty or "unset".
 	 */
-	public getUuid(name: string): Optional<VALID_UUID>;
+	public getUuid(name: string): Optional<ValidUuid>;
 	/** Gets the named option as a VALID_UUID. */
-	public getUuid(name: string, required: true): VALID_UUID;
-	public getUuid(name: string): Optional<VALID_UUID> {
+	public getUuid(name: string, required: true): ValidUuid;
+	public getUuid(name: string): Optional<ValidUuid> {
 		const value = this.getString(name);
 		if (value) {
-			return isValidUuid(value) ? value : null;
+			return isUuid(value) ? value : null;
 		}
 		return value as null | undefined;
 	}
