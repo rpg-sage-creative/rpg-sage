@@ -24,25 +24,28 @@ function parseAttributes(attributesString: string): TAttributes {
 }
 
 type THtmlToMarkdownHandler = (innerHtml: string, attributes: TAttributes, nodeName: string, outerHtml: string) => string;
-function htmlToMarkdown(text: string, elementName: string, handler: THtmlToMarkdownHandler): string {
+
+/**
+ * Handles nested html tags
+ */
+function htmlToMarkdown(text: string, elementName: string, openMarkdown: string): string;
+function htmlToMarkdown(text: string, elementName: string, handler: THtmlToMarkdownHandler): string;
+function htmlToMarkdown(text: string, elementName: string, handlerOrOpenMarkdown: string | THtmlToMarkdownHandler): string {
 	if (!text) {
 		return text;
 	}
+
+	let handler: THtmlToMarkdownHandler;
+	if (typeof handlerOrOpenMarkdown === "function") {
+		handler = handlerOrOpenMarkdown;
+	}else {
+		const openMarkdown = handlerOrOpenMarkdown;
+		const closeMarkdown = Array.from(openMarkdown).reverse().join("");
+		handler = (inner: string) => openMarkdown + inner + closeMarkdown;
+	}
+
 	const regex = new RegExp(`<(${elementName})( [^>]+)?>((?:.|\\n)*?)<\\/(?:${elementName})>`, "gi");
 	return text.replace(regex, (outer, nodeName, attributes, inner) => handler(inner, parseAttributes(attributes), nodeName, outer));
-}
-
-function nodeToMarkdown(text: string, nodeName: string, openMarkdown: string): string {
-	if (!text) {
-		return text;
-	}
-	const closeMarkdown = Array.from(openMarkdown).reverse().join("");
-	if (openMarkdown !== closeMarkdown) {
-		return text
-			.replace(new RegExp(`<(?:${nodeName})(?: [^>]+)?>`, "gi"), openMarkdown)
-			.replace(new RegExp(`<\\/(?:${nodeName})>`, "gi"), closeMarkdown);
-	}
-	return text.replace(new RegExp(`<(?:${nodeName})(?: [^>]+)?>|<\\/(?:${nodeName})>`, "gi"), openMarkdown);
 }
 
 function stripHtml(text: string): string {
@@ -53,21 +56,28 @@ class Formatter {
 	public constructor(public text: string) { }
 
 	public formatBlockQuote(): Formatter {
-		this.text = htmlToMarkdown(this.text, "BLOCKQUOTE", innerHtml => innerHtml.split("\n").map(s => "> " + s).join("\n"));
+		this.text = htmlToMarkdown(this.text, "blockquote", innerHtml => innerHtml.split("\n").map(s => "> " + s).join("\n"));
 		return this;
 	}
+
 	public formatBold(): Formatter {
-		this.text = nodeToMarkdown(this.text, "b|strong", "**");
+		this.text = htmlToMarkdown(this.text, "b|strong", "**");
 		return this;
 	}
+
 	public formatCode(): Formatter {
-		this.text = nodeToMarkdown(this.text, "code", "`");
+		this.text = htmlToMarkdown(this.text, "code", "`");
 		return this;
 	}
+
 	public formatHeaders(): Formatter {
-		this.text = nodeToMarkdown(this.text, "h\\d", "\n__**");
+		this.text = htmlToMarkdown(this.text, "h1", innerHtml => `\n# ` + innerHtml);
+		this.text = htmlToMarkdown(this.text, "h2", innerHtml => `\n## ` + innerHtml);
+		this.text = htmlToMarkdown(this.text, "h3", innerHtml => `\n### ` + innerHtml);
+		this.text = htmlToMarkdown(this.text, "h\\d", "\n__**");
 		return this;
 	}
+
 	public formatHorizontalTab(): Formatter {
 		if (this.text) {
 			// ensures blockquotes aren't broken
@@ -75,12 +85,14 @@ class Formatter {
 		}
 		return this;
 	}
+
 	public formatItalics(): Formatter {
-		this.text = nodeToMarkdown(this.text, "i|em", "*");
+		this.text = htmlToMarkdown(this.text, "i|em", "*");
 		return this;
 	}
+
 	public formatLinks(): Formatter {
-		this.text = htmlToMarkdown(this.text, "A", (text, attributes) => {
+		this.text = htmlToMarkdown(this.text, "a", (text, attributes) => {
 			if (!attributes || !attributes.href) {
 				return text;
 			}
@@ -89,48 +101,65 @@ class Formatter {
 		});
 		return this;
 	}
+
 	public formatNewLine(): Formatter {
-		this.text = nodeToMarkdown(this.text, "BR\/?", "\n");
+		this.text = htmlToMarkdown(this.text, "br\/?", "\n");
 		return this;
 	}
+
 	public formatOrderedList(): Formatter {
-		this.text = htmlToMarkdown(this.text, "OL", (list, attributes) => {
+		this.text = htmlToMarkdown(this.text, "ol", (list, attributes) => {
 			const start = isNaN(+attributes.start) ? 1 : +attributes.start;
 			let index = 0;
-			return htmlToMarkdown(list, "LI", value => `\n> **${start + index++}.** ${value}`);
+			return htmlToMarkdown(list, "li", value => `\n> **${start + index++}.** ${value}`);
 		});
 		return this;
 	}
+
 	public formatParagraph(): Formatter {
-		//TODO: format <P> tags
+		//TODO: format <p> tags
 		return this;
 	}
+
 	public formatStrikethrough(): Formatter {
-		this.text = nodeToMarkdown(this.text, "s|strike", "~~");
+		this.text = htmlToMarkdown(this.text, "s|strike", "~~");
 		return this;
 	}
+
 	public formatTable(): Formatter {
-		this.text = htmlToMarkdown(this.text, "TABLE", tableHtml => {
-			const table = (tableHtml.match(createHtmlRegex("TR", "gi")) ?? []).map(trHtml =>
-				(trHtml.match(createHtmlRegex("TH|TD", "gi")) ?? []).map(s => (s.match(createHtmlRegex("TH|TD", "i")) ?? [])[1] ?? "")
-			);
-			return table.map((row, rowIndex) => `> ${rowIndex ? "" : "__"}${row.map(stripHtml).join(" | ")}${rowIndex ? "" : "__"}`).join("\n");
+		this.text = htmlToMarkdown(this.text, "table", tableHtml => {
+			const table = [] as string[][];
+			htmlToMarkdown(tableHtml, "tr", rowHtml => {
+				const row = [] as string[];
+				htmlToMarkdown(rowHtml, "th|td", cellHtml => {
+					row.push(stripHtml(cellHtml));
+					return "";
+				});
+				table.push(row);
+				return "";
+			});
+			return table.map((row, rowIndex) => {
+				const underline = rowIndex ? "" : "__";
+				const cells = row.join(" | ");
+				return `> ${underline}${cells}${underline}`;
+			}).join("\n");
 		});
 		return this;
-		function createHtmlRegex(elementName: string, flags: "gi" | "i"): RegExp {
-			return new RegExp(`<(?:${elementName})(?: [^>]+)?>((?:.|\\n)*?)<\\/(?:${elementName})>`, flags);
-		}
 	}
+
 	public formatUnderline(): Formatter {
-		this.text = nodeToMarkdown(this.text, "U", "__");
+		this.text = htmlToMarkdown(this.text, "u", "__");
 		return this;
 	}
+
 	public formatUnorderedList(): Formatter {
-		this.text = htmlToMarkdown(this.text, "UL", list =>
-			htmlToMarkdown(list, "LI", value => `\n> **${BULLET}** ${value}`)
-		);
+		this.text = htmlToMarkdown(this.text, "ul", parentList => {
+			const childHandled = htmlToMarkdown(parentList, "ul", nestedList => htmlToMarkdown(nestedList, "li", value => `\n> - ${value}`));
+			return htmlToMarkdown(childHandled, "li", value => `\n>- ${value}`);
+		});
 		return this;
 	}
+
 	public toString(): string {
 		return this.text;
 	}
