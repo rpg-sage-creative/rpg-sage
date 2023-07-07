@@ -5,34 +5,39 @@ function channelToName(channel: DChannel): string;
 function channelToName(channel: DForumChannel): string;
 function channelToName(channel: Optional<DChannel>): string | null;
 function channelToName(channel: Optional<DForumChannel>): string | null;
-function channelToName(channel: Optional<DChannel>, defaultName: string): string;
-function channelToName(channel: Optional<DForumChannel>, defaultName: string): string;
-function channelToName(channel: Optional<DChannel | DForumChannel>, defaultName?: string): string | null {
+function channelToName(channel: Optional<DChannel | DForumChannel>): string | null {
 	if (channel) {
 		if ("guild" in channel) {
-			return `${channel.guild?.name ?? channel.guildId ?? "UnknownGuild"}#${channel.name ?? channel.id}`;
+			const guildName = channel.guild?.name ?? channel.guildId ?? "UnknownGuild";
+			const channelName = channel.name ?? channel.id;
+			return `${guildName}#${channelName}`;
 		}
 		if (channel.recipient) {
-			return `dm@${channel.recipient.username}#${channel.recipient.discriminator}`;
+			return userToMention(channel.recipient);
 		}
-		return `dm@${channel.id}`;
+		return `#${channel.id}`;
 	}
-	return defaultName ?? null;
+	return null;
 }
 
 function messageToChannelName(message: DMessage): string {
-	const author = authorToMention(message.author);
+	const author = userToMention(message.author);
 	if (message.guild) {
-		return `${channelToName(message.channel)}${author}`;
+		return channelToName(message.channel) + author;
 	}else {
-		return `dm${author}`;
+		return author;
 	}
 }
 
-function authorToMention(author: DUser): string;
-function authorToMention(author: Optional<DUser>): string;
-function authorToMention(author: Optional<DUser>): string {
-	return author ? `@${author.username}#${author.discriminator}` : "@UnknownAuthor";
+function userToMention(user: DUser): string;
+function userToMention(user: Optional<DUser>): string;
+function userToMention(user: Optional<DUser>): string {
+	if (user) {
+		const base = `@${user.username}`;
+		const discriminator = (user.discriminator ?? "0") !== "0" ? `#${user.discriminator}` : ``;
+		return base + discriminator;
+	}
+	return "@UnknownUser";
 }
 
 export function toHumanReadable(channel: DChannel): string;
@@ -48,7 +53,7 @@ export function toHumanReadable(target: Optional<DChannel | DForumChannel | DMes
 export function toHumanReadable(target: Optional<DChannel | DForumChannel | DMessage | DUser>): string | null {
 	if (target) {
 		if ("createDM" in target) {
-			return authorToMention(target);
+			return userToMention(target);
 		}
 		if ("channel" in target) {
 			return messageToChannelName(target);
