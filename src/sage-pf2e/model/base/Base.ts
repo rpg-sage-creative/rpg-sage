@@ -17,7 +17,6 @@ import type {
 	TDetail,
 	THasSuccessOrFailure
 } from "./interfaces";
-import type { Pf2tBaseCore } from "./Pf2tBase";
 
 function isSuccessFailureDetail(detail: TDetail | THasSuccessOrFailure): detail is THasSuccessOrFailure {
 	return ((<THasSuccessOrFailure>detail).success?.length ?? 0) > 0
@@ -43,9 +42,7 @@ function tabNewLineOrEmpty(index: number, wasBlock: boolean): "\t" | "\n" | "" {
 	return NEWLINE;
 }
 
-export interface BaseCore<T extends string = string> extends IdCore<T>, ArchivedCore, DetailedCore<T>, LinkedCore, NamedCore {
-	pf2t?: Pf2tBaseCore;
-}
+export interface BaseCore<T extends string = string> extends IdCore<T>, ArchivedCore, DetailedCore<T>, LinkedCore, NamedCore { }
 
 export type TChildCoreParser<T extends BaseCore> = (core: T) => T[];
 export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = string>
@@ -84,11 +81,6 @@ export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = stri
 	/** Represents the objectType in Archives of Nethys */
 	public static get aon(): string {
 		return this.plural;
-	}
-
-	/** Represents the type in PF2 Tools */
-	public static get pf2Tools(): string {
-		return this.singular.toLowerCase();
 	}
 
 	/** Represents the objectType */

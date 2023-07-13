@@ -73,12 +73,6 @@ export function hasObjectType(objectType: string): boolean {
 	return repoMap.has(objectType);
 }
 
-/** Adds the given Pf2t entity to the appropriate collection. */
-export function loadPf2t(entity: Base): void {
-	registerObject(entity.objectType, entity.objectType + "s");
-	repoMap.get(entity.objectType)?.objects.push(entity);
-}
-
 /** Adds the given Sage entity to the appropriate collection. */
 export function loadSageCore(core: BaseCore): void {
 	const repoItem = repoMap.get(core.objectType);

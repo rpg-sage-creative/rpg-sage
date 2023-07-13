@@ -8,9 +8,9 @@ export * from "./map";
 export * from "./model";
 export * from "./weather";
 
-export function registerAndLoad(pf2DataPath: string, includePf2ToolsData = false): Promise<void> {
+export function registerAndLoad(): Promise<void> {
 	registerBaseObjects();
 	registerBestiaryObjects();
 	registerObjects();
-	return loadData(pf2DataPath, includePf2ToolsData);
+	return loadData();
 }

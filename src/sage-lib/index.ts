@@ -1,24 +1,23 @@
+import { getBotCodeName } from "../env.mjs";
 import { registerAndLoad } from "../sage-pf2e";
-import { LogLevel } from "../sage-utils/ConsoleUtils";
-import { startHandling } from "../sage-utils/ConsoleUtils";
+import { LogLevel, startHandling } from "../sage-utils/ConsoleUtils";
 import { DiscordFetches } from "../sage-utils/DiscordUtils";
 import { addAcceptableBot } from "./discord/handlers";
 import { registerCommandHandlers } from "./sage/commands";
 import { ActiveBot } from "./sage/model/ActiveBot";
-import type { TBotCodeName } from "./sage/model/Bot";
 import { BotRepo } from "./sage/repo/BotRepo";
 /*
 // import type { Bot } from "./sage/model/Bot";
 // import { Server } from "./sage/model/Server";
 */
 
-export function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: string, includePf2ToolsData = false): void {
-	const logLevel = botCodeName === "dev" ? LogLevel.Info : LogLevel.Warn;
+export function activate(): void {
+	const logLevel = getBotCodeName() === "dev" ? LogLevel.Info : LogLevel.Warn;
 	startHandling(logLevel);
 
-	BotRepo.getByCodeName(botCodeName).then(bot => {
+	BotRepo.getByCodeName(getBotCodeName()).then(bot => {
 		if (!bot) {
-			console.error(`BotRepo.getByCodeName("${botCodeName}") failed!`);
+			console.error(`BotRepo.getByCodeName("${getBotCodeName()}") failed!`);
 			return;
 		}
 
@@ -32,9 +31,9 @@ export function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: st
 
 		registerCommandHandlers();
 
-		registerAndLoad(pf2DataPath, includePf2ToolsData).then(() => new ActiveBot(bot.toJSON(), ver));
+		registerAndLoad().then(() => new ActiveBot(bot.toJSON(), "rpg-sage\n1.6.9"));
 	}, err => {
-		console.error(`BotRepo.getByCodeName("${botCodeName}") failed!`, err);
+		console.error(`BotRepo.getByCodeName("${getBotCodeName()}") failed!`, err);
 	});
 }
 

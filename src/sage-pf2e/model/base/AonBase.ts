@@ -84,8 +84,7 @@ export class AonBase
 	}
 
 	public matchesBase(sageData: Base): boolean {
-		return sageData.toAonLink().includes(this.core.url + '"')
-			?? sageData.toJSON().pf2t?.src?.endsWith(this.core.url);
+		return sageData.toAonLink().includes(this.core.url + '"');
 	}
 
 	private _objectType = capitalize(this.core.type);

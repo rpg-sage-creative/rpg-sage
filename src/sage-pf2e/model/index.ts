@@ -40,7 +40,6 @@ import { VersatileHeritage, type VersatileHeritageCore } from "./VersatileHerita
 import { Weapon, type WeaponCore } from "./Weapon";
 import { WeaponGroup, type WeaponGroupCore } from "./WeaponGroup";
 import type { SourcedCore } from "./base/HasSource";
-import type { Pf2tBase, Pf2tBaseCore } from "./base/Pf2tBase";
 //#endregion
 
 //#region TCore
@@ -83,7 +82,6 @@ export type TCore<T extends string> =
 	: T extends "VersatileHeritage" ? VersatileHeritageCore
 	: T extends "Weapon" ? WeaponCore
 	: T extends "WeaponGroup" ? WeaponGroupCore
-	: T extends "Pf2t" ? Pf2tBaseCore
 	: BaseCore
 //#endregion
 
@@ -127,7 +125,6 @@ export type TEntity<T extends string> =
 	: T extends "VersatileHeritage" ? VersatileHeritage
 	: T extends "Weapon" ? Weapon
 	: T extends "WeaponGroup" ? WeaponGroup
-	: T extends "Pf2t" ? Pf2tBase
 	: Base;
 
 export function register(): void {
@@ -174,5 +171,5 @@ export function register(): void {
 
 //#region exports
 export * from "./pc";
-export { HasSource, Pf2tBaseCore, Source, SourceNotationMap } from "./base";
+export { HasSource, Source, SourceNotationMap } from "./base";
 //#endregion

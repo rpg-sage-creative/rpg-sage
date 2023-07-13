@@ -1,13 +1,11 @@
+import { randomUUID } from "crypto";
 import { existsSync, readdirSync, rmSync } from "fs";
 import type { THasSuccessOrFailure } from "../sage-pf2e/model/base/interfaces";
 import { readJsonFileSync, writeFileSync } from "../sage-utils/FsUtils";
 import { orNilUuid, type UUID } from "../sage-utils/UuidUtils";
-import { DistDataPath, SrcDataPath, clearStringify, compareNames, debug, error, getPf2tCores, getSageCores, info, loadPf2tCores, log, stringify, warn } from "./common.mjs";
-import { findPf2tCore, parsePf2Data } from "./pf2-tools-parsers/common.mjs";
+import { DistDataPath, SrcDataPath, debug, error, getSageCores, info, stringify, warn } from "./common.mjs";
 import { processAbcData } from "./process-abc.mjs";
-import { processPf2tData } from "./processPf2taData.mjs";
 import type { TCore } from "./types.mjs";
-import { randomUUID } from "crypto";
 
 let total = 0, created = 0, unique = 0, recreated = 0, normalized = 0, aoned = 0, linked = 0;
 
@@ -155,9 +153,6 @@ function processData(filePathAndName: string) {
 	debug(`Parsing (${coreList.length}): ${filePathAndName}`);
 	total += coreList.length;
 
-	ensureTrait(coreList);
-	ensureLanguage(coreList);
-
 	for (const core of coreList) {
 		getSageCores().push(core);
 		if (!core.id) {
@@ -187,14 +182,6 @@ function processData(filePathAndName: string) {
 			updateFile = true;
 		}
 		warnInvalidSource(filePathAndName, core);
-		if (fixPf2tAon(core)) {
-			_aoned++;
-			updateFile = true;
-		}
-		if (updatePf2t(core)) {
-			_linked++;
-			updateFile = true;
-		}
 		validateAbbreviation(core);
 		delete (core as any).hash;
 		writeFileSync(`${DistDataPath}/${core.objectType}/${core.id}.json`, core, true, false);
@@ -212,30 +199,6 @@ function processData(filePathAndName: string) {
 	// info(`Processing file: ${filePathAndName} ... done`);
 	return coreList;
 }
-
-function missingObjectType(coreList: TCore[], typesToCheck: string[], typeToFind: string, pf2tType: string = typeToFind.toLowerCase()): TCore[] {
-	const pf2tCores = getPf2tCores();
-	const missing = coreList.filter(sage => typesToCheck.includes(sage.objectType) && !coreList.find(core => core.objectType === typeToFind && core.name === sage.name));
-	return missing.filter(sage => pf2tCores.find(pf2t => pf2t.type === pf2tType && sage.name === pf2t.name));
-}
-function ensureTrait(coreList: TCore[]): void {
-	const objectTypes = ["Class","Ancestry","Archetype","VersatileHeritage"];
-	const missingTraits = missingObjectType(coreList, objectTypes, "Trait");
-	missingTraits.forEach(sage => {
-		const core = { objectType:"Trait", name:sage.name, source:sage.source, id:createUuid() } as TCore;
-		coreList.splice(coreList.indexOf(sage) + 1, 0, core);
-	});
-}
-function ensureLanguage(coreList: TCore[]): void {
-	if (coreList[0]?.source === "PZO2101") return;
-	const objectTypes = ["Ancestry", "Heritage", "VersatileHeritage"];
-	const missingLanguages = missingObjectType(coreList, objectTypes, "Language");
-	missingLanguages.forEach(sage => {
-		const core = { objectType:"Language", name:sage.name, source:sage.source, id:createUuid() } as TCore;
-		coreList.splice(coreList.indexOf(sage) + 1, 0, core);
-	});
-}
-
 
 function fixDetails(core: TCore): boolean {
 	let updated = false;
@@ -267,46 +230,6 @@ function fixHasSuccessOrFailure(core: TCore): boolean {
 		return true;
 	}
 	return false;
-}
-
-function fixPf2tAon(core: TCore): boolean {
-	const found = findPf2tCore(core);
-	if (found?.aon) {
-		const match = found.aon.match(/(\D+)(\d+)/i) ?? [];
-		const aonId = +match[2];
-		if (aonId) {
-			if (core.aonId === aonId) {
-				warn(`\tUpdated aonId for ${core.objectType}:${core.name}:${core.aonId} >> PF2-TOOLS(${found.aon})`);
-			}else {
-				warn(`\tMissing aonId for ${core.objectType}:${core.name} >> PF2-TOOLS(${found.aon})`);
-				core.aonId = aonId;
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-function updatePf2t(core: TCore): boolean {
-	const found = findPf2tCore(core);
-	if (found) {
-		if (stringify(core.pf2t) !== stringify(found)) {
-			core.pf2t = found;
-			clearStringify(core.id);
-			return true;
-		}
-	}
-	return false;
-}
-
-function processMissingSpells() {
-	info(`\nChecking for missing spells ...`);
-	const sageCores = getSageCores();
-	const pf2tCores = getPf2tCores();
-	const missing = pf2tCores.filter(pf2 => !sageCores.find(core => compareNames(core, pf2)));
-	const missingSpells = missing.filter(sp => sp.type === "spell");
-	info(`Checking for missing spells ... found ${missingSpells.length}!`);
-	log(`\t${missingSpells.map(sp => `${sp.name} (${sp.source})`).join("\n\t")}`);
 }
 
 //#region lore
@@ -370,17 +293,12 @@ function processDomainSpells(): void {
 
 export async function process(): Promise<void> {
 
-	await loadPf2tCores();
 	processSources();
-	await processPf2tData();
 	processAbcData();
-	processMissingSpells();
 	processDomainSpells();
 	processLore();
 	if (false)
 	findDuplicateCores();
-	if (false)
-	parsePf2Data();
 
 	info(""); // spacer for bash script
 }

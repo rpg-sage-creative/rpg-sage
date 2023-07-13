@@ -1,19 +1,16 @@
+import { getPf2DataPath } from "../../env.mjs";
 import type { Optional } from "../../sage-utils";
 import { errorReturnEmptyArray } from "../../sage-utils/ConsoleUtils";
 import { filterFiles, readJsonFile } from "../../sage-utils/FsUtils";
 import type { BaseCore } from "../model/base/Base";
-import { Pf2tBase, Pf2tBaseCore } from "../model/base/Pf2tBase";
-import { getChildParser, hasObjectType, loadPf2t, loadSageCore } from "./repoMap";
+import { getChildParser, hasObjectType, loadSageCore } from "./repoMap";
 
 const missing: string[] = [];
 
-export async function loadData(dataPath: string, includePf2ToolsData = false): Promise<void> {
+export async function loadData(): Promise<void> {
+	const dataPath = getPf2DataPath();
 	const distPath = `${dataPath}/dist`.replace(/\/+/g, "/");
-	await loadDataFromDist(distPath);
-	if (includePf2ToolsData) {
-		return loadFromPF2t(distPath);
-	}
-	return Promise.resolve();
+	return loadDataFromDist(distPath);
 }
 
 function handleMissingObjectType(core: BaseCore, fromLabel: string): void {
@@ -66,7 +63,7 @@ function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 }
 
 async function loadDataFromDist(distPath: string): Promise<void> {
-	const files: string[] = await filterFiles(distPath, file => file.endsWith(".json") && !file.includes("pf2t-leftovers"), true)
+	const files: string[] = await filterFiles(distPath, file => file.endsWith(".json"), true)
 		.catch(errorReturnEmptyArray);
 	if (!files.length) {
 		console.warn(`No files in "${distPath}" ...`);
@@ -90,11 +87,4 @@ async function loadDataFromDist(distPath: string): Promise<void> {
 	console.info(`\t\t${coresLoaded} Total Cores loaded`);
 
 	return Promise.resolve();
-}
-
-async function loadFromPF2t(distPath: string): Promise<void> {
-	const pathAndFile = `${distPath}/pf2t-leftovers.json`;
-	const cores = await readJsonFile<Pf2tBaseCore[]>(pathAndFile).catch(() => null) ?? [];
-	console.info(`\t\t${cores.length} Total PF2 Tools Cores loaded`);
-	cores.forEach(core => loadPf2t(new Pf2tBase(core)));
 }

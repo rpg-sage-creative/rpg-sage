@@ -1,4 +1,3 @@
-import type { Pf2tBaseCore } from "../sage-pf2e/model/base/Pf2tBase";
 import type { TDetail, THasSuccessOrFailure } from "../sage-pf2e/model/base/interfaces";
 import type { UUID } from "../sage-utils/UuidUtils";
 
@@ -23,8 +22,5 @@ export type TCore = {
 
 	/** Archives linkage */
 	aon?:string; aonId?:number;
-
-	/** PF2 Tools linkage */
-	pf2t?: Pf2tBaseCore;
 
 } & THasSuccessOrFailure;
