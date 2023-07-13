@@ -5,6 +5,10 @@ import { RenderableContent, TDisplayType } from "../RenderUtils";
 import { chunk } from "../StringUtils";
 import { DiscordMaxValues } from "./consts";
 
+/*
+To add a blank field to the embed, you can use .addFields({ name: '\u200b', value: '\u200b' }).
+*/
+
 /** Ensures we have a string, prepending a NewLine if needed. */
 function getValueToAppend(value: Optional<string>, newLine: boolean): string {
 	return `${newLine ? "\n" : ""}${value ?? ""}`;
@@ -120,10 +124,12 @@ export function resolveToEmbeds(renderableContentResolvable: TRenderableContentR
 export function embedsToTexts(embeds: EmbedBuilder[]): string[] {
 	return embeds.map(embed => {
 		let text = "";
+		/** @todo look into using "h3" (###) for title */
 		text += getValueToAppend(embed.data.title, !!text);
 		text += getValueToAppend(embed.data.description, !!text);
 		if (embed.data.fields?.length) {
 			embed.data.fields.forEach(field => {
+			/** @todo look into using "h3" (###) for name */
 				text += getValueToAppend(field.name, !!text);
 				text += getValueToAppend(field.value, !!text);
 			});

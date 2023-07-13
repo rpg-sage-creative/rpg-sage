@@ -13,6 +13,7 @@ type TSendToArgs = {
 	errMsg?: string;
 	target: DMessageTarget;
 };
+
 /**
  * @todo PLEASE MOVE THIS TO A SHARED LOCATION
  * Returns a Discord.Message upon success, null upon error, and undefined if Sage doesn't have permissions to send to this channel/thread.
@@ -32,5 +33,6 @@ type TSendToArgs = {
 		console.trace("Empty Contents and Embeds!");
 		return null;
 	}
+	/** @todo call safeMentions for content and embeds */
 	return target.send({ content, embeds }).catch(error => handleDiscordErrorReturnNull(error, { errMsg, target }));
 }
