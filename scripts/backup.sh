@@ -51,6 +51,8 @@ sshCommands=(
 	"zip -rq9 $deployDirRemote/dev.zip ./* -x './data/*' './node_modules/*'"
 	"find $logDirRemote/dev -mtime +30 -name '*.log' -delete"
 
+	"find /home/ec2-user/.pm2/logs -mtime +30 -name '*.log*' -delete"
+
 	# remove old log-backup, create new log-backup
 	"rm -f $deployDirRemote/logs.zip"
 	"cd $logDirRemote"
