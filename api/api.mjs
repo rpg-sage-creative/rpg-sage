@@ -119,7 +119,7 @@ createServer(async function (req, res) {
 				const post = Buffer.concat(chunks).toString();
 				try {
 					const json = JSON.parse(post);
-					const data = readAll(json.uuid, json.did);
+					const data = readAll(json.uuid ?? json.id, json.did);
 					endJson(res, 200, data);
 				}catch(exParse) {
 					endJson(res, 500, { error: "Error parsing POST!", post });
