@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>RPG Sage</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+		<link href="./maps.css" rel="stylesheet">
+	</head>
+	<body data-require-session="true">
+		<nav class="navbar navbar-expand-lg bg-dark-subtle">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="/">
+					RPG Sage
+				</a>
+				<div class="d-flex justify-content-end">
+				</div>
+			</div>
+		</nav>
+		<div class="container header">
+			<h1 class="text-center">Map Payload Generator</h1>
+		</div>
+		<div class="map"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<ul class="nav nav-tabs" id="nav-tabs" role="tablist">
+						<li class="nav-item" role="presentation">
+							<button class="nav-link active" id="map-tab" data-bs-toggle="tab" data-bs-target="#map-tab-pane" type="button" role="tab" aria-controls="map-tab-pane" aria-selected="true">Meta</a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="terrain-tab" data-bs-toggle="tab" data-bs-target="#terrain-tab-pane" type="button" role="tab" aria-controls="terrain-tab-pane" aria-selected="false">Terrain</a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="aura-tab" data-bs-toggle="tab" data-bs-target="#aura-tab-pane" type="button" role="tab" aria-controls="aura-tab-pane" aria-selected="false">Auras</a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="token-tab" data-bs-toggle="tab" data-bs-target="#token-tab-pane" type="button" role="tab" aria-controls="token-tab-pane" aria-selected="false">Tokens</a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="payload-tab" data-bs-toggle="tab" data-bs-target="#payload-tab-pane" type="button" role="tab" aria-controls="payload-tab-pane" aria-selected="false">Payload</a>
+						</li>
+					</ul>
+					<div class="tab-content" id="nav-tabs-content">
+						<div class="tab-pane fade show active" id="map-tab-pane" role="tabpanel" aria-labelledby="map-tab" tabindex="0">
+							<div class="card">
+								<div class="card-body">
+									<div class="mb-3">
+										<label for="mapName" class="form-label">Map Name</label>
+										<input type="text" class="form-control" id="mapName" placeholder="Boss Lair"/>
+									</div>
+									<div class="mb-3">
+										<label for="backgroundImageUrl" class="form-label">Background Image Url</label>
+										<input type="url" class="form-control" id="backroundImageUrl" placeholder="http://www.internet.com/image.png"/>
+									</div>
+									<div class="row mb-3">
+										<div class="col-4 offset-1 text-center">
+											<label for="gridCols" class="form-label">Grid Columns</label>
+											<input type="number" class="form-control" id="gridCols" min="1" max="48" />
+										</div>
+										<div class="col-4 offset-2 text-center">
+											<label for="gridRows" class="form-label">Grid Rows</label>
+											<input type="number" class="form-control" id="gridRows" min="1" max="48" />
+										</div>
+									</div>
+									<div class="row mb-3">
+										<div class="col-4 offset-1 text-center">
+											<label for="spawnCol" class="form-label">Spawn Column</label>
+											<input type="number" class="form-control" id="spawnCol" min="1" max="48" />
+										</div>
+										<div class="col-4 offset-2 text-center">
+											<label for="spawnRow" class="form-label">Spawn Row</label>
+											<input type="number" class="form-control" id="spawnRow" min="1" max="48" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="terrain-tab-pane" role="tabpanel" aria-labelledby="terrain-tab" tabindex="0">
+							<div class="card">
+								<div class="card-body">
+									<table class="table table-sm table-striped" id="tableTerrain">
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>Size</th>
+												<th>Position</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody class="table-group-divider">
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="card">
+								<div class="card-header">New Terrain</div>
+								<div class="card-body">
+									<div class="mb-3">
+										<label for="terrainName" class="form-label">Name</label>
+										<input type="text" class="form-control form-control-sm" id="terrainName" placeholder="Boss Throne"/>
+									</div>
+									<div class="mb-3">
+										<label for="terrainImageUrl" class="form-label">Image Url</label>
+										<input type="url" class="form-control form-control-sm" id="terrainImageUrl" placeholder="http://www.internet.com/image.png"/>
+									</div>
+									<div class="row mb-3">
+										<div class="col-4 offset-1 text-center">
+											<label for="terrainSizeCols" class="form-label">Width (Columns)</label>
+											<input type="number" class="form-control form-control-sm" id="terrainSizeCols" min="1" max="48" />
+										</div>
+										<div class="col-4 offset-2 text-center">
+											<label for="terrainSizeRows" class="form-label">Height (Rows)</label>
+											<input type="number" class="form-control form-control-sm" id="terrainSizeRows" min="1" max="48" />
+										</div>
+									</div>
+									<div class="row mb-3">
+										<div class="col-4 offset-1 text-center">
+											<label for="terrainPositionCol" class="form-label">Pos. Column (Left)</label>
+											<input type="number" class="form-control form-control-sm" id="terrainPositionCol" min="1" max="48" />
+										</div>
+										<div class="col-4 offset-2 text-center">
+											<label for="terrainPositionRow" class="form-label">Pos. Row (Top)</label>
+											<input type="number" class="form-control form-control-sm" id="terrainPositionRow" min="1" max="48" />
+										</div>
+									</div>
+									<div class="row">
+										<div class="col text-end">
+											<button type="button" class="btn btn-sm btn-primary" id="btnTerrainAdd">Add</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="aura-tab-pane" role="tabpanel" aria-labelledby="aura-tab" tabindex="0">
+							<div class="card">
+								<div class="card-body">
+									<table class="table table-sm table-striped" id="tableAuras">
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>Anchor</th>
+												<th>Opacity</th>
+												<th>Size</th>
+												<th>Position</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody class="table-group-divider">
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="card">
+								<div class="card-header">New Aura</div>
+								<div class="card-body">
+									<div class="mb-3">
+										<label for="auraName" class="form-label">Name</label>
+										<input type="text" class="form-control form-control-sm" id="auraName" placeholder="Boss Throne"/>
+									</div>
+									<div class="mb-3">
+										<label for="auraAnchor" class="form-label">Anchor</label>
+										<input type="text" class="form-control form-control-sm" id="auraAnchor" placeholder="Waldo the Wizard"/>
+									</div>
+									<div class="mb-3">
+										<label for="auraOpacity" class="form-label">Opacity</label>
+										<input type="text" class="form-control form-control-sm" id="auraOpacity"/>
+									</div>
+									<div class="mb-3">
+										<label for="auraImageUrl" class="form-label">Image Url</label>
+										<input type="url" class="form-control form-control-sm" id="auraImageUrl" placeholder="http://www.internet.com/image.png"/>
+									</div>
+									<div class="row mb-3">
+										<div class="col-4 offset-1 text-center">
+											<label for="auraSizeCols" class="form-label">Width (Columns)</label>
+											<input type="number" class="form-control form-control-sm" id="auraSizeCols" min="1" max="48" />
+										</div>
+										<div class="col-4 offset-2 text-center">
+											<label for="auraSizeRows" class="form-label">Height (Rows)</label>
+											<input type="number" class="form-control form-control-sm" id="auraSizeRows" min="1" max="48" />
+										</div>
+									</div>
+									<div class="row mb-3">
+										<div class="col-4 offset-1 text-center">
+											<label for="auraPositionCol" class="form-label">Pos. Column (Left)</label>
+											<input type="number" class="form-control form-control-sm" id="auraPositionCol" min="-10" max="10" />
+										</div>
+										<div class="col-4 offset-2 text-center">
+											<label for="auraPositionRow" class="form-label">Pos. Row (Top)</label>
+											<input type="number" class="form-control form-control-sm" id="auraPositionRow" min="-10" max="10" />
+										</div>
+									</div>
+									<div class="row">
+										<div class="col text-end">
+											<button type="button" class="btn btn-sm btn-primary" id="btnAuraAdd">Add</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="token-tab-pane" role="tabpanel" aria-labelledby="token-tab" tabindex="0">
+							<div class="card">
+								<div class="card-body">
+									<table class="table table-sm table-striped" id="tableTokens">
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>Size</th>
+												<th>Position</th>
+												<th>Owner</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody class="table-group-divider">
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="card">
+								<div class="card-header">New Token</div>
+								<div class="card-body">
+									<div class="mb-3">
+										<label for="tokenName" class="form-label">Name</label>
+										<input type="text" class="form-control form-control-sm" id="tokenName" placeholder="Waldo the Wizard"/>
+									</div>
+									<div class="mb-3">
+										<label for="tokenImageUrl" class="form-label">Image Url</label>
+										<input type="url" class="form-control form-control-sm" id="tokenImageUrl" placeholder="http://www.internet.com/image.png"/>
+									</div>
+									<div class="row mb-3">
+										<div class="col-4 offset-1 text-center">
+											<label for="tokenSizeCols" class="form-label">Width (Columns)</label>
+											<input type="number" class="form-control form-control-sm" id="tokenSizeCols" min="1" max="10" />
+										</div>
+										<div class="col-4 offset-2 text-center">
+											<label for="tokenSizeRows" class="form-label">Height (Rows)</label>
+											<input type="number" class="form-control form-control-sm" id="tokenSizeRows" min="1" max="10" />
+										</div>
+									</div>
+									<div class="row mb-3">
+										<div class="col-4 offset-1 text-center">
+											<label for="tokenPositionCol" class="form-label">Pos. Column (Left)</label>
+											<input type="number" class="form-control form-control-sm" id="tokenPositionCol" min="1" max="48" />
+										</div>
+										<div class="col-4 offset-2 text-center">
+											<label for="tokenPositionRow" class="form-label">Pos. Row (Top)</label>
+											<input type="number" class="form-control form-control-sm" id="tokenPositionRow" min="1" max="48" />
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="tokenUser" class="form-label">User / Owner</label>
+										<input type="text" class="form-control form-control-sm" id="tokenUser" placeholder="@bob.the.player"/>
+									</div>
+									<div class="row">
+										<div class="col text-end">
+											<button type="button" class="btn btn-sm btn-primary" id="btnTokenAdd">Add</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="payload-tab-pane" role="tabpanel" aria-labelledby="payload-tab" tabindex="0">
+							<div class="card">
+								<div class="card-body">
+									<div class="mb-3">
+										<label for="txtPayload" class="form-label">Text Payload</label>
+										<textarea class="form-control" id="txtPayload" rows="10"></textarea>
+									</div>
+									<div class="mb-3 d-none">
+										<label for="jsonPayload" class="form-label">JSON Payload</label>
+										<textarea class="form-control" id="jsonPayload" rows="10"></textarea>
+									</div>
+									<hr/>
+									<button type="button" class="btn btn-primary" onclick="onDownloadClick()">Download</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col text-center">
+					<h5>Preview</h5>
+					<div class="border"><canvas id="canvasPreview" class="w-100"></canvas></div>
+				</div>
+			</div>
+		</div>
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js" type="text/javascript"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+		<script src="./maps.js" type="text/javascript"></script>
+	</body>
+</html>
