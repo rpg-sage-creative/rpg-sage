@@ -1,7 +1,7 @@
 import { createServer } from "http";
 import { existsSync, readFileSync, readdirSync } from "fs";
 
-const PATH = `../dist/data/sage`;
+const PATH = `/Users/randaltmeyer/rpg-sage/dist/data/sage`;
 
 function toRegex(uuid, did) {
 	return new RegExp(`"${did && uuid ? `(${did}|${uuid})` : did ?? uuid}"`);
@@ -135,6 +135,9 @@ createServer(async function (req, res) {
 		}else if (req.url?.includes("api.js")) {
 			res.writeHead(200, { 'Content-type':'text/javascript' });
 			res.end(readFileSync(`./api.js`).toString());
+		}else if (req.url?.includes("themePicker.js")) {
+			res.writeHead(200, { 'Content-type':'text/javascript' });
+			res.end(readFileSync(`./themePicker.js`).toString());
 		}else {
 			res.writeHead(200, { 'Content-type':'text/html' });
 			res.end(readFileSync(`./api.html`).toString());
