@@ -1,20 +1,20 @@
-import type { Core } from "../../sage-utils/ClassUtils";
-import { nth } from "../../sage-utils/NumberUtils";
-import type { SearchInfo, SearchScore } from "../../sage-utils/SearchUtils";
-import { capitalize } from "../../sage-utils/StringUtils";
-import type { UUID } from "../../sage-utils/UuidUtils";
-import type { TMagicComponent, TMagicTradition } from '../common';
-import { ABILITIES, NEWLINE, toModifier } from '../common';
-import { Pf2eRenderableContent } from '../Pf2eRenderableContent';
-import { findByType, findByValue } from '../data';
-import type { ArcaneSchool } from './ArcaneSchool';
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from './base/HasSource';
-import type { Domain } from './Domain';
-import { HeightenedSpell } from "./HeightenedSpell";
-import type { RenderableContent } from "../../sage-utils/RenderUtils";
-import { isUnique } from "../../sage-utils/ArrayUtils";
-import { TSpellAffliction, TSpellReaction } from "./Spell";
+import type { Core } from "../../src/sage-utils/ClassUtils";
+import { nth } from "../../src/sage-utils/NumberUtils";
+import type { SearchInfo, SearchScore } from "../../src/sage-utils/SearchUtils";
+import { capitalize } from "../../src/sage-utils/StringUtils";
+import type { UUID } from "../../src/sage-utils/UuidUtils";
+import type { TMagicComponent, TMagicTradition } from '../../src/sage-pf2e/common';
+import { ABILITIES, NEWLINE, toModifier } from '../../src/sage-pf2e/common';
+import { Pf2eRenderableContent } from '../../src/sage-pf2e/Pf2eRenderableContent';
+import { findByType, findByValue } from '../../src/sage-pf2e/data';
+import type { ArcaneSchool } from '../../src/sage-pf2e/model/ArcaneSchool';
+import type { SourcedCore } from "../../src/sage-pf2e/model/base/HasSource";
+import { HasSource } from '../../src/sage-pf2e/model/base/HasSource';
+import type { Domain } from '../../src/sage-pf2e/model/Domain';
+import { HeightenedSpell } from "../../src/sage-pf2e/model/HeightenedSpell";
+import type { RenderableContent } from "../../src/sage-utils/RenderUtils";
+import { isUnique } from "../../src/sage-utils/ArrayUtils";
+import { TSpellAffliction, TSpellReaction } from "../../src/sage-pf2e/model/Spell";
 
 //#region types
 
