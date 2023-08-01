@@ -4,6 +4,7 @@ import { SageMessage } from "../../../model/SageMessage";
 type TCharacterTypeMetaMatchFlags = {
 	isCompanion: boolean;
 	isGm: boolean;
+	isMinion: boolean;
 	isMy: boolean;
 	isNpc: boolean;
 	isPc: boolean;
@@ -11,7 +12,7 @@ type TCharacterTypeMetaMatchFlags = {
 
 export type TCharacterTypeMeta = TCharacterTypeMetaMatchFlags & {
 	commandDescriptor?: string;
-	isGmOrNpc: boolean;
+	isGmOrNpcOrMinion: boolean;
 	isPcOrCompanion: boolean;
 	pluralDescriptor?: string;
 	singularDescriptor?: string;
@@ -20,11 +21,12 @@ export type TCharacterTypeMeta = TCharacterTypeMetaMatchFlags & {
 function getCharacterTypeMetaMatchFlags(sageMessage: SageMessage): TCharacterTypeMetaMatchFlags {
 	const isCompanion = sageMessage.command.match(/^(my-?)?(companion|alt|familiar)/i) !== null;
 	const isGm = sageMessage.command.match(/^(my-?)?(gm|gamemaster)/i) !== null;
+	const isMinion = sageMessage.command.match(/^(my-?)?(minion)/i) !== null;
 	const isMy = sageMessage.command.match(/^my/i) !== null;
 	const isNpc = sageMessage.command.match(/^(my-?)?(npc|nonplayercharacter)/i) !== null;
 	const isPc = sageMessage.command.match(/^(my-?)?(pc|playercharacter)/i) !== null;
 	return {
-		isCompanion, isGm, isMy, isNpc, isPc
+		isCompanion, isGm, isMinion, isMy, isNpc, isPc
 	};
 }
 
@@ -37,6 +39,8 @@ function getCharacterTypeMetaText(matchFlags: TCharacterTypeMetaMatchFlags, valu
 		return values[2];
 	}else if (matchFlags.isGm) {
 		return values[3];
+	}else if (matchFlags.isMinion) {
+		return values[4];
 	}else {
 		return undefined;
 	}
@@ -45,11 +49,11 @@ function getCharacterTypeMetaText(matchFlags: TCharacterTypeMetaMatchFlags, valu
 export function getCharacterTypeMeta(sageMessage: SageMessage): TCharacterTypeMeta {
 	const matchFlags = getCharacterTypeMetaMatchFlags(sageMessage);
 	return {
-		commandDescriptor: getCharacterTypeMetaText(matchFlags, ["companion", "playerCharacter", "nonPlayerCharacter", "gameMaster"]),
-		isGmOrNpc: matchFlags.isGm || matchFlags.isNpc,
+		commandDescriptor: getCharacterTypeMetaText(matchFlags, ["companion", "playerCharacter", "nonPlayerCharacter", "gameMaster", "minion"]),
+		isGmOrNpcOrMinion: matchFlags.isGm || matchFlags.isNpc || matchFlags.isMinion,
 		isPcOrCompanion: matchFlags.isPc || matchFlags.isCompanion,
-		pluralDescriptor: getCharacterTypeMetaText(matchFlags, ["Companions", "Player Characters", "Non-Player Characters", "Game Masters"]),
-		singularDescriptor: getCharacterTypeMetaText(matchFlags, ["Companion", "Player Character", "Non-Player Character", "Game Master"]),
+		pluralDescriptor: getCharacterTypeMetaText(matchFlags, ["Companions", "Player Characters", "Non-Player Characters", "Game Masters", "Minions"]),
+		singularDescriptor: getCharacterTypeMetaText(matchFlags, ["Companion", "Player Character", "Non-Player Character", "Game Master", "Minion"]),
 		...matchFlags
 	};
 }

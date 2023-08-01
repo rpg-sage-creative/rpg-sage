@@ -23,7 +23,7 @@ export async function gameCharacterList(sageMessage: SageMessage): Promise<void>
 
 	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s;
 
-	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpc
+	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpcOrMinion
 		? await hasCharacters.fetchNonPlayerCharacters()
 		: await hasCharacters.fetchPlayerCharacters();
 	if (characterTypeMeta.isCompanion) {
@@ -31,6 +31,11 @@ export async function gameCharacterList(sageMessage: SageMessage): Promise<void>
 			charName = sageMessage.args.valueByKey("charName"),
 			characterName = charName ?? (await sageMessage.fetchPlayerCharacter())?.name,
 			character = characterManager.findByUserAndName(userDid, characterName);
+		characterManager = character?.companions;
+	}else if (characterTypeMeta.isMinion) {
+		const names = sageMessage.args.findNames(),
+			characterName = names.charName ?? names.name,
+			character = characterManager.findByName(characterName);
 		characterManager = character?.companions;
 	}
 

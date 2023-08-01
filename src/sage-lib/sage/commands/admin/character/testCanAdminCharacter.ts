@@ -9,5 +9,5 @@ export function testCanAdminCharacter(sageMessage: SageMessage, characterTypeMet
 	}
 
 	return characterTypeMeta.isPcOrCompanion;
-	// TODO: When we have NPCs outside of games ... return true;
+	/** @todo When we have NPCs outside of games ... return true; */
 }

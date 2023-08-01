@@ -66,11 +66,13 @@ async function removeAuto(sageMessage: SageMessage, ...channelDids: Snowflake[])
 /** Reusable code to get GameCharacter for the commands. */
 async function getCharacter(sageMessage: SageMessage, characterTypeMeta: TCharacterTypeMeta, userDid: Snowflake, names: TNames): Promise<GameCharacter | undefined> {
 	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s;
-	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpc
+	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpcOrMinion
 		? await hasCharacters.fetchNonPlayerCharacters()
 		: await hasCharacters.fetchPlayerCharacters();
 	if (characterTypeMeta.isCompanion) {
 		characterManager = characterManager?.findByUserAndName(userDid, names.charName!)?.companions;
+	}else if (characterTypeMeta.isMinion) {
+		characterManager = characterManager?.findByName(names.charName)?.companions;
 	}
 	return characterManager?.findByName(names.oldName ?? names.name!);
 }
@@ -103,13 +105,14 @@ async function gameCharacterDetails(sageMessage: SageMessage): Promise<void> {
 
 	const userDid = getUserDid(sageMessage),
 		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s,
-		characterManager = characterTypeMeta.isGmOrNpc
+		characterManager = characterTypeMeta.isGmOrNpcOrMinion
 			? await hasCharacters.fetchNonPlayerCharacters()
 			: await hasCharacters.fetchPlayerCharacters(),
 		names = characterTypeMeta.isGm ? <TNames>{ name: sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName } : sageMessage.args.findNames();
 
-	const character = characterTypeMeta.isCompanion
-		? findCompanion(characterManager, userDid, names)
+	const character =
+		characterTypeMeta.isCompanion ? findCompanion(characterManager, userDid, names)
+		: characterTypeMeta.isMinion ? characterManager.findCompanionByName(names.name)
 		: characterManager.findByUserAndName(userDid, names.name) ?? characterManager.filterByUser(userDid!)[0];
 
 	return character
@@ -142,13 +145,17 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 
 	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s;
 
-	let characterManager = characterTypeMeta.isGmOrNpc
+	let characterManager = characterTypeMeta.isGmOrNpcOrMinion
 		? await hasCharacters.fetchNonPlayerCharacters()
 		: await hasCharacters.fetchPlayerCharacters();
 	if (characterTypeMeta.isCompanion) {
 		const character = characterManager.findByUserAndName(userDid, sageMessage.args.valueByKey("charName")) ?? characterManager.findByUser(userDid!)!;
 		core.userDid = character.userDid;
 		characterManager = character.companions;
+	}
+	if (characterTypeMeta.isMinion) {
+		const character = characterManager.findByName(sageMessage.args.valueByKey("charName"));
+		characterManager = character?.companions!;
 	}
 	if (!characterManager) {
 		return sageMessage.reactFailure("Unable to find Character for this Companion.");
@@ -273,13 +280,14 @@ async function characterDelete(sageMessage: SageMessage): Promise<void> {
 
 	const userDid = getUserDid(sageMessage),
 		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.actor.s,
-		characterManager = characterTypeMeta.isGmOrNpc
+		characterManager = characterTypeMeta.isGmOrNpcOrMinion
 			? await hasCharacters.fetchNonPlayerCharacters()
 			: await hasCharacters.fetchPlayerCharacters(),
 		names = sageMessage.args.findNames();
 
-	const character = characterTypeMeta.isCompanion
-		? characterManager.findCompanion(userDid, names.charName!, names.name!)
+	const character =
+		characterTypeMeta.isCompanion ? characterManager.findCompanion(userDid, names.charName!, names.name!)
+		: characterTypeMeta.isMinion ? characterManager.findByCompanionName(names.name!)
 		: characterManager.findByUserAndName(userDid, names.name!);
 
 	if (character) {
@@ -384,11 +392,12 @@ export function register(): void {
 	registerAdminCommand(gameCharacterList, "pc-list", "pcs-list", "my-pc-list", "my-pcs");
 	registerAdminCommand(gameCharacterList, "npc-list", "npcs-list", "my-npc-list", "my-npcs");
 	registerAdminCommand(gameCharacterList, "companion-list", "my-companion-list", "my-companions");
-	registerAdminCommand(gameCharacterDetails, "pc-details", "npc-details", "companion-details", "gm-details");
-	registerAdminCommand(gameCharacterAdd, `pc-create`, `npc-create`, `companion-create`);
-	registerAdminCommand(gameCharacterUpdate, "pc-update", "npc-update", "companion-update", "gm-update");
-	registerAdminCommand(gameCharacterStats, "pc-stats", "npc-stats", "companion-stats");
-	registerAdminCommand(characterDelete, "pc-delete", "npc-delete", "companion-delete");
+	registerAdminCommand(gameCharacterList, "minion-list", "my-minion-list", "my-minions");
+	registerAdminCommand(gameCharacterDetails, "pc-details", "npc-details", "companion-details", "gm-details", "minion-details");
+	registerAdminCommand(gameCharacterAdd, `pc-create`, `npc-create`, `companion-create`, `minion-create`);
+	registerAdminCommand(gameCharacterUpdate, "pc-update", "npc-update", "companion-update", "gm-update", `minion-update`);
+	registerAdminCommand(gameCharacterStats, "pc-stats", "npc-stats", "companion-stats", `minion-stats`);
+	registerAdminCommand(characterDelete, "pc-delete", "npc-delete", "companion-delete", `minion-delete`);
 	registerAdminCommand(characterAutoOn, "pc-auto-on", "gm-auto-on");
 	registerAdminCommand(characterAutoOff, "pc-auto-off", "gm-auto-off");
 

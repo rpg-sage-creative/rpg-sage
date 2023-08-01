@@ -14,12 +14,14 @@ export async function sendGameCharacter(sageCommand: SageCommand, character: Gam
 	renderableContent.setThumbnailUrl(character.getBestImageUrl("dialog"));
 
 	const ownerOrPlayer = character.isGMorNPC ? "Owner" : "Player";
+	const characterOrBoss = character.isGMorNPC ? "Boss" : "Character";
+	const companionsOrMinions = character.isGMorNPC ? "Minions" : "Companions";
 	renderableContent.append(`<b>${ownerOrPlayer}</b> ${ownerTag ?? "<i>none</i>"}`);
-	if (character.isCompanion) {
-		renderableContent.append(`<b>Character</b> ${character.parent?.name ?? "<i>unknown</i>"}`);
+	if (character.parent) {
+		renderableContent.append(`<b>${characterOrBoss}</b> ${character.parent?.name ?? "<i>unknown</i>"}`);
 	} else {
 		const companionNames = character.companions.map(companion => companion.name).join(", ");
-		renderableContent.append(`<b>Companions</b> ${companionNames || "<i>none</i>"}`);
+		renderableContent.append(`<b>${companionsOrMinions}</b> ${companionNames || "<i>none</i>"}`);
 	}
 	renderableContent.append(`<b>Dialog Color</b> ${character.embedColor ?? "<i>unset</i>"}`);
 
