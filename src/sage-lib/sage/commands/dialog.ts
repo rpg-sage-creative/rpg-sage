@@ -364,8 +364,8 @@ export function parseDialogContent(content: string, allowDynamicDialogSeparator:
 }
 
 export async function parseOrAutoDialogContent(sageMessage: SageMessage): Promise<TDialogContent | null> {
-	const content = sageMessage.message.content ?? ""; //TODO: was message.edits[0].content
-	const dialogContent = parseDialogContent(content, sageMessage.actor.s?.allowDynamicDialogSeparator);
+	const slicedContent = sageMessage.slicedContent;
+	const dialogContent = parseDialogContent(slicedContent, sageMessage.actor.s?.allowDynamicDialogSeparator);
 	if (dialogContent) {
 		return dialogContent;
 	}
@@ -374,13 +374,13 @@ export async function parseOrAutoDialogContent(sageMessage: SageMessage): Promis
 			?? await sageMessage.actor.s.fetchAutoCharacterForChannel(sageMessage.discordKey.channel);
 		if (autoCharacter) {
 			return {
-				type: autoCharacter.isGM ? "gm" : "pc",
+				type: autoCharacter.isGM ? "gm" : autoCharacter.isNPC ? "npc" : "pc",
 				name: autoCharacter.name,
 				displayName: undefined,
 				title: undefined,
 				imageUrl: undefined,
 				embedColor: undefined,
-				content: sageMessage.slicedContent
+				content: slicedContent
 			};
 		}
 	}
