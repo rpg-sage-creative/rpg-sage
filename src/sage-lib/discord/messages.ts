@@ -11,7 +11,13 @@ import type { DMessage, DUser, IMenuRenderable, TChannel, TRenderableContentReso
 export function authorToMention(author: DUser): string;
 export function authorToMention(author: Optional<DUser>): OrNull<string>;
 export function authorToMention(author: Optional<DUser>): OrNull<string> {
-	return author ? `@${author.username}#${author.discriminator}` : null;
+	if (author) {
+		if (author.discriminator === "0") {
+			return "@" + author.username;
+		}
+		return `@${author.username}#${author.discriminator}`;
+	}
+	return null;
 }
 
 export function authorToProfileUrl(author: DUser): string;

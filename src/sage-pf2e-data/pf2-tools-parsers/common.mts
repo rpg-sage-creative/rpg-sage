@@ -182,8 +182,8 @@ function isObject<T>(object: any): object is T {
 	return typeof(object) === "object";
 }
 function compareObject<T, U extends keyof T>(a: T, b: T): boolean {
-	const aKeys = Object.keys(a).sort() as U[];
-	const bKeys = Object.keys(b).sort() as U[];
+	const aKeys = Object.keys(a as any).sort() as U[];
+	const bKeys = Object.keys(b as any).sort() as U[];
 	if (aKeys.length === bKeys.length && !aKeys.find((key, i) => key !== bKeys[i])) {
 		return !aKeys.find(key => !compare(a[key], b[key]))
 	}

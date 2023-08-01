@@ -143,6 +143,9 @@ export default class DiscordCache {
 		const channel = await this.fetchChannel(didOrKey as DiscordKey);
 		if (channel) {
 			if (channel.type === "DM") {
+				if (channel.recipient.discriminator === "0") {
+					return "dm@" + channel.recipient.username;
+				}
 				return `dm@${channel.recipient.username}#${channel.recipient.discriminator}`;
 			}
 			return `${channel.guild.name}#${channel.name}`;
@@ -222,7 +225,7 @@ export default class DiscordCache {
 	 * Logging is done here, once, because this is sometimes called twice in fetchOrCreateWebhook.
 	 */
 	private hasManageWebhooksPerm(channel: Optional<TextChannel>): channel is TextChannel {
-		if (!channel || !channel.isText() || !channel.createWebhook || !channel.fetchWebhooks) {
+		if (!channel || !channel.createWebhook || !channel.fetchWebhooks) {
 			return false;
 		}
 
