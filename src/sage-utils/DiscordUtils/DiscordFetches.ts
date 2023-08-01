@@ -319,6 +319,7 @@ export class DiscordFetches {
 	private async fetchWebhookChannel(): Promise<DWebhookChannel | null> {
 		if (!this.channel) return null;
 		const parentChannel = this.channel.isThread() ? this.channel.parent as DTextChannel : null;
+		/** @todo look into parent channel being a forum channel */
 		const channel = parentChannel ?? this.channel;
 		if (channel) {
 			if (canFetchWebhooksFor(channel)) {
