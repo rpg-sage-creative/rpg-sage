@@ -320,11 +320,11 @@ function draw(meta, dCol = 0, dRow = 0, opacity) {
 			const ctx = canvas.getContext("2d");
 			ctx.globalAlpha = opacity ?? 1;
 			ctx.drawImage(image, x, y, imgWidth, imgHeight, pX, pY, pxWidth, pxHeight);
-			res();
+			res(true);
 		};
 		image.onerror = (...args) => {
 			console.error(...args);
-			rej();
+			rej(args);
 		};
 		image.src = meta.url;
 	});
@@ -332,7 +332,15 @@ function draw(meta, dCol = 0, dRow = 0, opacity) {
 
 async function renderPreview() {
 	reset();
-	await draw({ url:map?.background?.url });
+	const bool = await draw({ url:map?.background?.url }).catch(() => false);
+	if (bool) {
+		$("#canvasPreview").closest(".border").removeClass("d-none");
+		$(".alert-no-bg-image").addClass("d-none");
+	}else {
+		$("#canvasPreview").closest(".border").addClass("d-none");
+		$(".alert-no-bg-image").removeClass("d-none");
+		return;
+	}
 	for (const layer of map.layers) {
 		for (const image of layer.images) {
 			let dCol = 0;
