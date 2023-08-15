@@ -1,5 +1,7 @@
 #!/bin/bash
 
+NOW=`date '+%F-%H%M'`;
+
 # import constants and functions
 [ -f "./inc/all.sh" ] && source "./inc/all.sh" || source "./scripts/inc/all.sh"
 
@@ -25,7 +27,17 @@ echoAndDo "rm -rf $deployDirLocal; mkdir $deployDirLocal"
 # build a tmp deploy folder and add files that need to get deployed
 echoAndDo "mkdir $deployDirLocal/tmp; cd $deployDirLocal/tmp"
 if [ "$PKG" = "data" ]; then
-	echoAndDo "echo 'ver 0.0.0' > version.txt"
+	echoAndDo "echo 'VERSION' >> version.txt"
+	echoAndDo "echo 'v1.?.?' >> version.txt"
+	echoAndDo "echo '' >> version.txt"
+	echoAndDo "echo 'DATE' > version.txt"
+	echoAndDo "echo '$NOW' >> version.txt"
+	echoAndDo "echo '' >> version.txt"
+	echoAndDo "echo 'BRANCH' >> version.txt"
+	echoAndDo "git branch --show-current >> version.txt"
+	echoAndDo "echo '' >> version.txt"
+	echoAndDo "echo 'COMMIT' >> version.txt"
+	echoAndDo "git log -n 1 --pretty=oneline >> version.txt"
 	echoAndDo "echo 'ver 0.0.0' > sage-data-pf2e.ver"
 	echoAndDo "cp -r $sageRootDir/data/pf2e/dist/* $deployDirLocal/tmp"
 else
@@ -47,7 +59,6 @@ echoAndDo "rm -rf $deployDirLocal"
 #endregion
 
 # execute the deploy script on the remote
-NOW=`date '+%F-%H%M'`;
 if [ "$PKG" = "data" ]; then
 	sshCommands=(
 		# "zip -rq9 $packageDir/pf2e/dist-$NOW $packageDir/pf2e/dist"
