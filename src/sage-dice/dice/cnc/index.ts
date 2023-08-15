@@ -1,34 +1,39 @@
 //#region imports
 
+import { SnowflakeUtil } from "discord.js";
+import { GameType } from "../../../sage-common";
 import type { OrNull, TParsers, TToken } from "../../../sage-utils";
+import { toJSON } from "../../../sage-utils/utils/ClassUtils";
+import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import type {
 	TDiceLiteral,
 	TTestData
 } from "../../common";
 import {
-	cleanDescription,
-	createValueTestData, DiceOutputType,
+	DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade,
+	TestType, UNICODE_LEFT_ARROW,
+	cleanDescription,
 	gradeToEmoji,
-	rollDice, TestType
+	rollDice
 } from "../../common";
-import type {
-	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
-	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
-	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
-} from "../base/types";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
 	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll
 } from "../base";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
-import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
-import { GameType } from "../../../sage-common";
+import type {
+	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
+	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
+	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
+} from "../base/types";
+import { explodeDice } from "../common/explodeDice";
 
 //#endregion
+
+function randomSnowflake() { return SnowflakeUtil.generate().toString(); }
+function cleanWhitespace(value: string): string { return value.replace(/\s+/g, " ").trim(); }
 
 /*
 default target ("VS") = 8
@@ -62,8 +67,8 @@ function getParsers(): TParsers {
 
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken): T {
 	if (token.type === "dice") {
-		core.sides = +token.matches[0];
-		core.count = 12;
+		core.count = +token.matches[0];
+		core.sides = 12;
 	}else if (token.type === "target") {
 		core.target = { type:TargetType.VS, value:+(token.matches ?? [])[1] ?? 0 };
 	}else {
@@ -81,38 +86,71 @@ enum TargetType { None = 0, VS = 1 }
 type TTargetData = { type:TargetType; value:number; };
 
 function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	return !targetData ? null : createValueTestData(TestType.GreaterThanOrEqual, targetData.value, "vs");
+	return !targetData ? null : { alias:"vs", type: TestType.GreaterThanOrEqual, value:targetData.value };
 }
 
 //#endregion
 
 //#region Grades
 
-function gradeResults(roll: DiceRoll): DieRollGrade {
-	const test = roll.dice.test;
-	const vs = test?.value ?? 8;
-	if (roll.total === 12) {
+function gradeDie(value: number, vs: number): DieRollGrade {
+	if (value === 12) {
 		return DieRollGrade.CriticalSuccess;
-	}else if (roll.total >= vs) {
+	}else if (value >= vs) {
 		return DieRollGrade.Success;
-	}else if (roll.total > 1) {
+	}else if (value > 1) {
 		return DieRollGrade.Failure;
-	}else if (roll.total === 1) {
+	}else if (value === 1) {
 		return DieRollGrade.CriticalFailure;
 	}else {
 		return DieRollGrade.Unknown;
 	}
 }
 
-//#endregion
+function gradeRoll(baseValues: number[], explodedValues: number[], vs: number): [DieRollGrade, number[]] {
+	const values = [
+		/** total successes */
+		0,
+		/** CriticalFailures */
+		0,
+		/** Failures */
+		0,
+		/** Successes */
+		0,
+		/** CriticalSuccesses */
+		0,
+		/** total exploded successes */
+		0
+	];
 
-//#region diceGroupRollToString
+	// base values can be success or failure
+	baseValues.forEach(value => {
+		const grade = gradeDie(value, vs);
+		const success = grade === DieRollGrade.CriticalSuccess || grade === DieRollGrade.Success;
+		// update total successes
+		values[0] += success ? 1 : -1;
+		// increment count for grade
+		values[grade]++;
+	});
 
-function _gradeEmoji(grade: DieRollGrade, vs: boolean): string {
-	if (vs) {
-		return gradeToEmoji(grade) ?? `:question:`;
-	}
-	return gradeToEmoji(grade) ?? `:bangbang:`;
+	// exploded values are only crit success or success
+	explodedValues.forEach(value => {
+		const grade = gradeDie(value, vs);
+		const success = grade === DieRollGrade.CriticalSuccess || grade === DieRollGrade.Success;
+		// update total successes
+		values[0] += success ? 2 : 1;
+		// update total exploded successes
+		values[5] += success ? 2 : 1;
+		// increment count for grade
+		values[success ? DieRollGrade.CriticalSuccess : DieRollGrade.Success]++;
+	});
+
+	const successes = values[0];
+	const grade = successes === 0 ? DieRollGrade.Failure
+		: successes < 0 ? DieRollGrade.CriticalFailure
+		: DieRollGrade.Success;
+
+	return [grade, values];
 }
 
 //#endregion
@@ -129,21 +167,21 @@ type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region static
-	public static create({ description, testOrTarget }: TDicePartCoreArgs = {}): DicePart {
+	public static create({ count, description, testOrTarget }: TDicePartCoreArgs = {}): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.CnC,
-			id: generate(),
+			id: randomSnowflake(),
 
-			count: 1,
+			count: count ?? 1,
 			description: cleanDescription(description),
 			dropKeep: undefined,
 			modifier: 0,
 			noSort: false,
 			sides: 12,
 			sign: undefined,
-			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget ?? null,
-			target: <TTargetData>testOrTarget ?? null
+			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as TTestData ?? null,
+			target: testOrTarget as TTargetData ?? null
 		});
 	}
 	public static fromCore(core: DicePartCore): DicePart {
@@ -169,7 +207,7 @@ export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 		return new DicePartRoll({
 			objectType: "DicePartRoll",
 			gameType: GameType.CnC,
-			id: generate(),
+			id: randomSnowflake(),
 			dice: dicePart.toJSON(),
 			rolls: rollDice(dicePart.count, dicePart.sides)
 		});
@@ -195,7 +233,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.CnC,
-			id: generate(),
+			id: randomSnowflake(),
 			diceParts: diceParts.map<DicePartCore>(toJSON)
 		});
 	}
@@ -227,15 +265,52 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 type DiceRollCore = baseDiceRollCore;
 
 export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
-	public toString(): string { return `${this.total} ${_gradeEmoji(gradeResults(this), this.dice.hasTest)}`; }
+	public toString(): string {
+		const baseValues = this.rolls[0].rolls;
+		const critValues = this.rolls[1]?.rolls ?? [];
+		const vs = this.dice.test?.value ?? 8;
+		const [grade, gradeValues] = gradeRoll(baseValues, critValues, vs);
+		const gradeOutput = gradeToEmoji(grade);
+		const baseOutput = ` [${baseValues.join(",")}]${baseValues.length}d12 (${gradeValues[0]})`;
+		const critOutput = critValues.length ? ` + [${critValues.join(",")}]${critValues.length}d12 (${gradeValues[5]})` : ``;
+		const vsOutput = ` vs ${vs} `;
+		const desc = this.dice.diceParts.find(dp => dp.hasDescription)?.description;
+		const descOutput = desc ? "`" + desc + "`" : "";
+		return cleanWhitespace(`${gradeOutput} ${descOutput} ${UNICODE_LEFT_ARROW} ${baseOutput} ${critOutput} ${vsOutput}`);
+	}
+
 	//#region static
 	public static create(_dice: Dice): DiceRoll {
+		const dicePartsRolls = _dice.diceParts.map(dicePart => dicePart.roll());
+		const dicePartsRollsJson = dicePartsRolls.map(dicePartRoll => dicePartRoll.toJSON());
+		const explodedDice: number[] = [];
+		dicePartsRolls.forEach(dicePartRoll => {
+			explodedDice.push(...explodeDice(12, dicePartRoll.rolls, 12));
+		});
+		if (explodedDice.length) {
+			dicePartsRollsJson.push({
+				objectType: "DicePartRoll",
+				gameType: GameType.CnC,
+				id: randomSnowflake(),
+				dice: {
+					objectType: "DicePart",
+					gameType: GameType.CnC,
+					id: randomSnowflake(),
+					count: explodedDice.length,
+					sides: 12,
+					description: "Crit Dice",
+					modifier: 0,
+					noSort: false
+				},
+				rolls: explodedDice
+			});
+		}
 		return new DiceRoll({
 			objectType: "DiceRoll",
 			gameType: GameType.CnC,
-			id: generate(),
+			id: randomSnowflake(),
 			dice: _dice.toJSON(),
-			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
+			rolls: dicePartsRollsJson
 		});
 	}
 	public static fromCore(core: DiceRollCore): DiceRoll {
@@ -259,7 +334,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.CnC,
-			id: generate(),
+			id: randomSnowflake(),
 			critMethodType: undefined,
 			dice: _dice.map<DiceCore>(toJSON),
 			diceOutputType: diceOutputType,
@@ -296,7 +371,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		return new DiceGroupRoll({
 			objectType: "DiceGroupRoll",
 			gameType: GameType.CnC,
-			id: generate(),
+			id: randomSnowflake(),
 			diceGroup: diceGroup.toJSON(),
 			rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
 		});
