@@ -27,17 +27,19 @@ type TDialogPostData = {
 	content: string;
 	embedColor?: string;
 	imageUrl?: string;
+	postType?: DialogType;
 	title?: string;
 };
 
 //TODO: sort out why i am casting caches to <any>
-async function sendDialogRenderable(sageMessage: SageMessage, renderableContent: utils.RenderUtils.RenderableContent, authorOptions: Discord.WebhookMessageOptions): Promise<Discord.Message[]> {
+async function sendDialogRenderable(sageMessage: SageMessage, renderableContent: utils.RenderUtils.RenderableContent, authorOptions: Discord.WebhookMessageOptions, dialogTypeOverride?: DialogType): Promise<Discord.Message[]> {
+	const dialogType = dialogTypeOverride ?? sageMessage.dialogType;
 	const targetChannel = await sageMessage.discord.fetchChannel(sageMessage.channel?.sendDialogTo);
 	if (targetChannel) {
 		// const sent = sageMessage.dialogType === "Webhook"
 		// 	? await sendWebhook(sageMessage.caches, targetChannel, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
 		// 	: await send(sageMessage.caches, targetChannel, renderableContent, sageMessage.message.author).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
-		const sent = await sendWebhook(sageMessage.caches, targetChannel, renderableContent, authorOptions, sageMessage.dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		const sent = await sendWebhook(sageMessage.caches, targetChannel, renderableContent, authorOptions, dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 		if (sent.length) {
 			// sageMessage._.set("Dialog", sent[sent.length - 1]);
 			// if (sageMessage.message.deletable) {
@@ -49,7 +51,7 @@ async function sendDialogRenderable(sageMessage: SageMessage, renderableContent:
 		// const replaced = sageMessage.dialogType === "Webhook"
 		// 	? await replaceWebhook(sageMessage.caches, sageMessage.message, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
 		// 	: await replace(sageMessage.caches, sageMessage.message, renderableContent).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
-		const replaced = await replaceWebhook(sageMessage.caches, sageMessage.message, renderableContent, authorOptions, sageMessage.dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		const replaced = await replaceWebhook(sageMessage.caches, sageMessage.message, renderableContent, authorOptions, dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 		if (replaced.length) {
 			// sageMessage._.set("Dialog", replaced[replaced.length - 1]);
 			// if (sageMessage._.has("Dice")) {
@@ -103,7 +105,9 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 	// Discord "avatarURL" is the profile pic, which I am calling the "tokenUrl"
 	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
 
-	const messages: Discord.Message[] = await sendDialogRenderable(sageMessage, renderableContent, { username: authorName, avatarURL: avatarUrl })
+	const postType = postData.postType;
+
+	const messages: Discord.Message[] = await sendDialogRenderable(sageMessage, renderableContent, { username: authorName, avatarURL: avatarUrl }, postType)
 		.catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 	if (messages.length) {
 		//#region dice
@@ -197,8 +201,8 @@ async function findGm(sageMessage: SageMessage): Promise<GameCharacter | undefin
 
 //#region Dialog Color
 
-type TNpcType = "ally" | "enemy" | "npc";
-type TCompanionType = "alt" | "companion" | "hireling";
+type TNpcType = "ally" | "enemy" | "npc" | "boss" | "minion";
+type TCompanionType = "alt" | "companion" | "familiar" | "hireling";
 type TDialogType = "edit" | "gm" | TNpcType | "pc" | TCompanionType;
 
 function getColorType(dialogType: TDialogType): ColorType | null {
@@ -208,12 +212,15 @@ function getColorType(dialogType: TDialogType): ColorType | null {
 		case "npc": return ColorType.NonPlayerCharacter;
 		case "ally": return ColorType.NonPlayerCharacterAlly;
 		case "enemy": return ColorType.NonPlayerCharacterEnemy;
+		case "boss": return ColorType.NonPlayerCharacterBoss;
+		case "minion": return ColorType.NonPlayerCharacterMinion;
 
 		case "pc": return ColorType.PlayerCharacter;
 
 		case "alt": return ColorType.PlayerCharacter;
-		case "hireling": return ColorType.PlayerCharacterHireling;
 		case "companion": return ColorType.PlayerCharacterCompanion;
+		case "familiar": return ColorType.PlayerCharacterFamiliar;
+		case "hireling": return ColorType.PlayerCharacterHireling;
 	}
 	return null;
 }
@@ -224,6 +231,7 @@ function getColorType(dialogType: TDialogType): ColorType | null {
 
 export type TDialogContent = {
 	type: TDialogType;
+	postType?: DialogType;
 	name?: string;
 	displayName?: string;
 	title?: string;
@@ -238,7 +246,7 @@ type TTypeRegexAndSeparatorParts = {
 };
 
 const colonSeparatorPart = `(:)`;
-const dialogTypePart = `(edit|gm|npc|enemy|ally|pc|alt|companion|hireling)`;
+const dialogTypePart = `(edit|gm|npc|enemy|ally|boss|minion|pc|alt|companion|familiar|hireling)`;
 const dialogSeparatorPart = `([^\\w\\s])`;
 const dynamicTypePart = `([\\pL\\pN]+)`;
 const dynamicSeparatorPart = `([^\\pL\\pN\\s])`;
@@ -323,15 +331,17 @@ export function parseDialogContent(content: string, allowDynamicDialogSeparator:
 			partTokens = tokens.filter(token => token.type === "part");
 
 		const typeToken = tokens.find(token => token.type === "type")!,
+			postTypeToken = tokens.find(token => token.type === "post"),
 			nameToken = nameTokens.shift() ?? (titleTokens.length > 1 ? titleTokens.shift() : null) ?? partTokens.shift(),
 			titleToken = titleTokens.find(token => token !== nameToken),
 			imageToken = tokens.find(token => token.type === "image"),
 			colorToken = tokens.find(token => token.type === "color"),
-			usedTokens = [typeToken, nameToken, titleToken, imageToken, colorToken],
+			usedTokens = [typeToken, postTypeToken, nameToken, titleToken, imageToken, colorToken],
 			otherTokens = tokens.filter(token => !usedTokens.includes(token));
 
 		return {
 			type: <TDialogType>typeToken.matches[0].toLowerCase(),
+			postType: [DialogType.Embed, DialogType.Post].find(val => postTypeToken?.matches[0].toLowerCase() === DialogType[val].toLowerCase()),
 			name: nameToken?.matches[0],
 			displayName: nameToken?.matches[nameToken?.type === "title" ? 0 : 1],
 			title: titleToken?.matches[0],
@@ -356,7 +366,8 @@ export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogConte
 			?? sageMessage.sageUser.getAutoCharacterForChannel(sageMessage.channelDid);
 		if (autoCharacter) {
 			return {
-				type: autoCharacter.isGM ? "gm" : "pc",
+				type: autoCharacter.isGM ? "gm" : autoCharacter.isNPC ? "npc" : "pc",
+				postType: undefined,
 				name: autoCharacter.name,
 				displayName: undefined,
 				title: undefined,
@@ -393,10 +404,10 @@ async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndDat
 
 async function doDialog(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
 	switch (dialogContent.type) {
-		case "npc": case "enemy": case "ally": return npcChat(sageMessage, dialogContent);
+		case "npc": case "enemy": case "ally": case "boss": case "minion": return npcChat(sageMessage, dialogContent);
 		case "gm": return gmChat(sageMessage, dialogContent);
 		case "pc": return pcChat(sageMessage, dialogContent);
-		case "alt": case "companion": case "hireling": return companionChat(sageMessage, dialogContent);
+		case "alt": case "companion": case "familiar": case "hireling": return companionChat(sageMessage, dialogContent);
 		case "edit": return editChat(sageMessage, dialogContent);
 		default: return aliasChat(sageMessage, dialogContent);// console.warn(`Invalid dialogContent.type(${dialogContent.type})`);
 	}
@@ -415,6 +426,7 @@ async function npcChat(sageMessage: SageMessage, dialogContent: TDialogContent):
 			content: dialogContent.content,
 			imageUrl: dialogContent.imageUrl,
 			embedColor: dialogContent.embedColor,
+			postType: dialogContent.postType,
 			title: dialogContent.title
 		}).catch(console.error);
 	} else {
@@ -434,6 +446,7 @@ async function gmChat(sageMessage: SageMessage, dialogContent: TDialogContent): 
 			content: dialogContent.content,
 			imageUrl: dialogContent.imageUrl,
 			embedColor: dialogContent.embedColor,
+			postType: dialogContent.postType,
 			title: dialogContent.title
 		}).catch(console.error);
 	}
@@ -452,6 +465,7 @@ async function pcChat(sageMessage: SageMessage, dialogContent: TDialogContent): 
 			content: dialogContent.content,
 			imageUrl: dialogContent.imageUrl,
 			embedColor: dialogContent.embedColor,
+			postType: dialogContent.postType,
 			title: dialogContent.title
 		}).catch(console.error);
 	}
@@ -470,6 +484,7 @@ async function companionChat(sageMessage: SageMessage, dialogContent: TDialogCon
 			content: dialogContent.content,
 			imageUrl: dialogContent.imageUrl,
 			embedColor: dialogContent.embedColor,
+			postType: dialogContent.postType,
 			title: dialogContent.title
 		}).catch(console.error);
 	}
@@ -547,7 +562,7 @@ async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent)
 // #region Alias Dialog
 
 function updateAliasDialogArgsAndReturnType(sageMessage: SageMessage, dialogContent: TDialogContent): TDialogContent | null {
-	const aliasFound = sageMessage.sageUser.aliases.findByName(dialogContent.type, true);
+	const aliasFound = sageMessage.findAlias(dialogContent.type)
 	if (!aliasFound) {
 		return null;
 	}
@@ -555,6 +570,7 @@ function updateAliasDialogArgsAndReturnType(sageMessage: SageMessage, dialogCont
 	const aliasContent = parseDialogContent(aliasFound.target, sageMessage.sageUser?.allowDynamicDialogSeparator)!;
 	return {
 		type: aliasContent.type,
+		postType: dialogContent.postType ?? aliasContent.postType,
 		name: aliasContent.name,
 		displayName: aliasContent.displayName,
 		title: dialogContent.title ?? aliasContent.title,
@@ -571,11 +587,11 @@ async function aliasChat(sageMessage: SageMessage, dialogContent: TDialogContent
 			switch (updatedDialogContent.type) {
 				case "gm":
 					return gmChat(sageMessage, updatedDialogContent);
-				case "npc": case "ally": case "enemy":
+				case "npc": case "ally": case "enemy": case "boss": case "minion":
 					return npcChat(sageMessage, updatedDialogContent);
 				case "pc":
 					return pcChat(sageMessage, updatedDialogContent);
-				case "alt": case "hireling": case "companion":
+				case "alt": case "hireling": case "familiar": case "hireling":
 					return companionChat(sageMessage, updatedDialogContent);
 			}
 			return sageMessage.reactWarn();
@@ -729,7 +745,7 @@ export default function register(): void {
 	// registerInlineHelp("Dialog", "{type} :: {name} ( {display name} ) :: ( {title} ) :: {color} :: {content}");
 	registerInlineHelp("Dialog",
 		"\ntype::name(display name)::(title)::color::avatar::content"
-		+ "\n - <b>type</b>: gm, npc, enemy, ally, pc, alt, companion, hireling"
+		+ "\n - <b>type</b>: gm, npc, enemy, ally, boss, minion, pc, alt, companion, familiar, hireling"
 		+ "\n - <b>name</b>: the name of the npc, pc, or companion to post as"
 		+ "\n - - <i>optional for PCs in a game</i>"
 		+ "\n - <b>display name</b>: the name to post as"
