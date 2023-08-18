@@ -11,10 +11,10 @@ if [ -z "$ENV" ] || [ -z "$PKG" ]; then
 	exit 1
 fi
 
-echoAndDo "/bin/bash ./scripts/pre-build.sh"
-echoAndDo "/bin/bash ./scripts/build.sh"
-echoAndDo "/bin/bash ./scripts/post-build.sh"
-echoAndDo "/bin/bash ./scripts/run-tests.sh"
+[ -f "./pre-build.sh" ] && echoAndDo "/bin/bash ./pre-build.sh" || echoAndDo "/bin/bash ./scripts/pre-build.sh"
+[ -f "./build.sh" ] && echoAndDo "/bin/bash ./build.sh" || echoAndDo "/bin/bash ./scripts/build.sh"
+[ -f "./post-build.sh" ] && echoAndDo "/bin/bash ./post-build.sh" || echoAndDo "/bin/bash ./scripts/post-build.sh"
+[ -f "./run-tests.sh" ] && echoAndDo "/bin/bash ./run-tests.sh" || echoAndDo "/bin/bash ./scripts/run-tests.sh"
 
 # other dir vars
 deployDirRemote="$botDir/deploy"

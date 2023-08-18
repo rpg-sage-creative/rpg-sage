@@ -18,6 +18,7 @@ if [ "$PKG" = "data" ]; then
 	fi
 
 else
+	echo "Do nothing for non-data."
 fi
 
 echoLog "run-tests.sh done."

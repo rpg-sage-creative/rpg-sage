@@ -6,6 +6,7 @@
 echoLog "post-build.sh starting ..."
 
 if [ "$PKG" = "data" ]; then
+	echo "Do nothing for data."
 else
 
 	echoAndDo "mkdir -p $sageRootDir/dist/data/pf2e"
