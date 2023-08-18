@@ -372,8 +372,10 @@ export default class SageMessage
 	// #endregion
 
 	public findAlias(aliasName: string): TAlias | null {
-		const game = this.game;
-		if (game) {
+		const found = this.sageUser.aliases.findByName(aliasName, true);
+		if (found) return found;
+
+		if (this.game) {
 			if (this.isPlayer) {
 				const pc = this.playerCharacter;
 				if (pc?.matches(aliasName)) return alias(pc);
@@ -382,10 +384,10 @@ export default class SageMessage
 				if (companion) return alias(companion);
 
 			}else if (this.isGameMaster) {
-				const npc = game.nonPlayerCharacters.findByName(aliasName);
+				const npc = this.game.nonPlayerCharacters.findByName(aliasName);
 				if (npc) return alias(npc);
 
-				const minion = game.nonPlayerCharacters.findCompanionByName(aliasName);
+				const minion = this.game.nonPlayerCharacters.findCompanionByName(aliasName);
 				if (minion) return alias(minion);
 			}
 		}else {
@@ -395,7 +397,8 @@ export default class SageMessage
 			if (!char) char = this.sageUser.nonPlayerCharacters.findCompanionByName(aliasName);
 			if (char) return alias(char);
 		}
-		return this.sageUser.aliases.findByName(aliasName, true) ?? null;
+
+		return null;
 
 		function alias(char: GameCharacter) {
 			return { name:aliasName, target:`${char.type}::${char.name}::` };
