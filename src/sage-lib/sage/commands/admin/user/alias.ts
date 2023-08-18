@@ -39,16 +39,21 @@ function testCompanionTarget(sageMessage: SageMessage, dialogContent: TDialogCon
 function dialogContentToTarget(dialogContent: TDialogContent, separator = "::"): string {
 	const name = dialogContent.name ?? "";
 	const displayName = dialogContent.displayName ? `(${dialogContent.displayName})` : ``;
-	const parts = [
+	// dialog parts
+	const baseParts = [
 		dialogContent.type,
 		name + displayName,
 		dialogContent.title,
 		dialogContent.imageUrl,
 		dialogContent.embedColor,
 		DialogType[dialogContent.postType!],
-		dialogContent.content
 	];
-	return parts.filter(utils.StringUtils.isNotBlank).join(separator) + separator;
+	// only valid parts
+	const filteredParts = baseParts.filter(utils.StringUtils.isNotBlank);
+	// push content or empty string to get final :: in the right place
+	const allParts = filteredParts.concat([dialogContent.content ?? ""]);
+	// join output
+	return allParts.join(separator);
 }
 
 async function aliasList(sageMessage: SageMessage): Promise<void> {
