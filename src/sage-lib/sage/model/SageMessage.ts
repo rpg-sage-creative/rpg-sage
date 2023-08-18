@@ -243,7 +243,7 @@ export default class SageMessage
 	}
 
 	public get dialogType(): DialogType {
-		return this.cache.get("dialogType", () => this.sageUser.defaultDialogType ?? this.channel?.defaultDialogType ?? this.game?.defaultDialogType ?? this.server.defaultDialogType ?? DialogType.Embed);
+		return this.cache.get("dialogType", () => this.sageUser.defaultDialogType ?? this.channel?.defaultDialogType ?? this.game?.defaultDialogType ?? this.server?.defaultDialogType ?? DialogType.Embed);
 	}
 
 	// #endregion
