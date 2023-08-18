@@ -302,6 +302,7 @@ function getDialogSeparator(content: string, allowDynamicDialogSeparator: boolea
 function getDialogParsers(typeAndSeparator: TTypeRegexAndSeparatorParts): TParsers {
 	return {
 		type: XRegExp(`^${typeAndSeparator.type}${typeAndSeparator.separator}`, "i"),
+		post: XRegExp(`(post|embed)${typeAndSeparator.separator}`, "i"),
 		color: XRegExp(`(?:0x|#)([0-9a-f]{3}|[0-9a-f]{6})${typeAndSeparator.separator}`, "i"),
 		image: XRegExp(`((?:https?:\\/\\/.*?)|(?:<https?:\\/\\/.*?>))${typeAndSeparator.separator}`, "i"),
 		names: XRegExp(`([^\(]+)(?!${typeAndSeparator.separator})\\(([^\\)]+)\\)${typeAndSeparator.separator}`),
