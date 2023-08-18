@@ -592,7 +592,7 @@ async function aliasChat(sageMessage: SageMessage, dialogContent: TDialogContent
 					return npcChat(sageMessage, updatedDialogContent);
 				case "pc":
 					return pcChat(sageMessage, updatedDialogContent);
-				case "alt": case "hireling": case "familiar": case "hireling":
+				case "alt": case "companion": case "familiar": case "hireling":
 					return companionChat(sageMessage, updatedDialogContent);
 			}
 			return sageMessage.reactWarn();
