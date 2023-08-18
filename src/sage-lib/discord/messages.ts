@@ -5,20 +5,9 @@ import { DialogType } from "../sage/repo/base/IdRepository";
 import DiscordKey from "./DiscordKey";
 import { createMessageEmbed, embedsToTexts, resolveToEmbeds, resolveToTexts } from "./embeds";
 import type { DMessage, DUser, IMenuRenderable, TChannel, TRenderableContentResolvable } from "./types";
+import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 
 //#region helpers
-
-export function authorToMention(author: DUser): string;
-export function authorToMention(author: Optional<DUser>): OrNull<string>;
-export function authorToMention(author: Optional<DUser>): OrNull<string> {
-	if (author) {
-		if (author.discriminator === "0") {
-			return "@" + author.username;
-		}
-		return `@${author.username}#${author.discriminator}`;
-	}
-	return null;
-}
 
 export function authorToProfileUrl(author: DUser): string;
 export function authorToProfileUrl(author: Optional<DUser>): OrNull<string>;
@@ -40,7 +29,7 @@ export function guildToInviteUrl(guild: Optional<Discord.Guild>): OrNull<string>
 }
 
 function targetToName(target: DUser | TChannel): string {
-	return "createDM" in target ? authorToMention(target) : channelToName(target);
+	return "createDM" in target ? toHumanReadable(target) : channelToName(target);
 }
 export function channelToName(channel: Discord.GuildTextBasedChannel |  Discord.TextBasedChannel): string {
 	if ("guild" in channel) {
@@ -49,7 +38,7 @@ export function channelToName(channel: Discord.GuildTextBasedChannel |  Discord.
 	return `${"DMChannel"}#${channel.id}`;
 }
 function messageToChannelName(message: DMessage): string {
-	const author = authorToMention(message.author) ?? "@NoAuthor";
+	const author = toHumanReadable(message.author) ?? "@NoAuthor";
 	if (message.guild) {
 		return `${channelToName(message.channel)}${author}`;
 	}else {

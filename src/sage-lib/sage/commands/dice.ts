@@ -9,7 +9,7 @@ import type { DUser, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { DiscordId, MessageType } from "../../discord";
 import { createMessageEmbed } from "../../discord/embeds";
 import { registerMessageListener } from "../../discord/handlers";
-import { authorToMention, sendTo } from "../../discord/messages";
+import { sendTo } from "../../discord/messages";
 import { GameUserType } from "../model/Game";
 import { ColorType } from "../model/HasColorsCore";
 import type NamedCollection from "../model/NamedCollection";
@@ -19,6 +19,7 @@ import type { TMacro } from "../model/User";
 import { registerCommandRegex } from "./cmd";
 import { registerInlineHelp } from "./help";
 import type { GameType } from "../../../sage-common";
+import { toHumanReadable } from "../../../sage-utils/utils/DiscordUtils/humanReadable";
 
 type TInteraction = SageMessage | SageInteraction;
 
@@ -395,7 +396,7 @@ async function createAuthorMention(sageMessage: TInteraction, isSecretMention = 
 	let authorReference = DiscordId.toUserMention(gameUser.did);
 	if (isSecretMention || gameUser.dicePing === false) {
 		const user = await sageMessage.discord.fetchUser(userDid);
-		authorReference = authorToMention(user);
+		authorReference = toHumanReadable(user);
 	}
 	if (sageMessage.playerCharacter) {
 		authorReference = authorReference

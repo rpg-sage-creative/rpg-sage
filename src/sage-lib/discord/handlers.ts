@@ -4,8 +4,8 @@ import SageInteraction from "../sage/model/SageInteraction";
 import SageMessage from "../sage/model/SageMessage";
 import SageReaction from "../sage/model/SageReaction";
 import { MessageType, ReactionType } from "./enums";
-import { authorToMention } from "./messages";
 import type { DMessage, DReaction, DUser, TChannel, TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
+import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 
 //#region helpers
 
@@ -169,7 +169,7 @@ export async function handleInteraction(interaction: Discord.Interaction): Promi
 			await handleInteractions(sageInteraction, output);
 		}
 	}catch(ex) {
-		console.error(authorToMention(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
+		console.error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
 	}
 	return output;
 }
@@ -227,7 +227,7 @@ export async function handleMessage(message: DMessage, originalMessage: Optional
 			await handleMessages(sageMessage, messageType, output);
 		}
 	} catch (ex) {
-		console.error(authorToMention(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
+		console.error(toHumanReadable(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
 	}
 	return output;
 }
@@ -262,7 +262,7 @@ export async function handleReaction(messageReaction: DReaction, user: DUser, re
 			await handleReactions(sageReaction, reactionType, output);
 		}
 	} catch (ex) {
-		console.error(authorToMention(user), `\`${messageReaction.emoji.name}\``, ex);
+		console.error(toHumanReadable(user), `\`${messageReaction.emoji.name}\``, ex);
 	}
 	return output;
 }
