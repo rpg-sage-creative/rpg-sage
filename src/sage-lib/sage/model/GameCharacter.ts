@@ -18,8 +18,10 @@ export type TDialogMessage = {
 	timestamp: number;
 	userDid: Discord.Snowflake;
 };
-export type TGameCharacterType = "gm" | "npc" | "pc" | "companion";
+export type TGameCharacterType = "gm" | "npc" | "pc" | "companion" | "minion";
 export interface GameCharacterCore {
+	/** short name used to ease dialog access */
+	alias?: string;
 	/** Channels to automatically treat input as dialog */
 	autoChannels?: Discord.Snowflake[];
 	/** The image used for the right side of the dialog */
@@ -94,7 +96,8 @@ export default class GameCharacter implements IHasSave {
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
 		updateCore(core);
 
-		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, "companion");
+		const characterType = owner?.characterType === "pc" ? "companion" : "minion";
+		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, characterType);
 
 		this.isGM = this.type === "npc" && this.name === (this.owner?.gmCharacterName ?? GameCharacter.defaultGmCharacterName);
 		this.isNPC = this.type === "npc";
@@ -106,6 +109,10 @@ export default class GameCharacter implements IHasSave {
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []), this.owner);
 	}
+
+	/** short name used to ease dialog access */
+	public get alias(): string | undefined { return this.core.alias; }
+	public set alias(alias: string | undefined) { this.core.alias = alias; }
 
 	/** Channels to automatically treat input as dialog */
 	public get autoChannels(): Discord.Snowflake[] { return this.core.autoChannels ?? (this.core.autoChannels = []); }
@@ -156,6 +163,8 @@ export default class GameCharacter implements IHasSave {
 	/** The ID of the parent of a companion. */
 	public get parentId(): UUID | undefined { return this.parent?.id; }
 
+	private _preparedAlias?: string;
+	private get preparedAlias(): string { return this._preparedAlias ?? (this._preparedAlias = GameCharacter.prepareName(this.name)); }
 	private _preparedName?: string;
 	private get preparedName(): string { return this._preparedName ?? (this._preparedName = GameCharacter.prepareName(this.name)); }
 
@@ -254,9 +263,13 @@ export default class GameCharacter implements IHasSave {
 
 	//#endregion
 
-	/** Compares name literal, then preparedName. If recursive, it also checks companions. */
+	/** Compares name literal, alias literal, then preparedName. If recursive, it also checks companions. */
 	public matches(name: string, recursive = false): boolean {
-		if (this.name === name || this.preparedName === GameCharacter.prepareName(name)) {
+		if (this.name === name || this.alias === name) {
+			return true;
+		}
+		const preparedName = GameCharacter.prepareName(name);
+		if (this.preparedName === preparedName || this.preparedAlias === preparedName) {
 			return true;
 		}
 		return recursive && this.companions.hasMatching(name, true);
@@ -284,6 +297,11 @@ export default class GameCharacter implements IHasSave {
 
 	public update(values: Partial<GameCharacterCore>, save = true): Promise<boolean> {
 		let changed = false;
+		if (values.alias !== undefined) {
+			this.alias = values.alias;
+			this._preparedAlias = undefined;
+			changed = true;
+		}
 		if (values.avatarUrl !== undefined) {
 			this.avatarUrl = values.avatarUrl;
 			changed = true;
