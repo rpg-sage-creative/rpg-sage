@@ -15,7 +15,7 @@
 		// "importsNotUsedAsValues": "error",
 
 		"lib": [ "DOM", "ES2020" ],
-		"locale": "en-US",
+		// "locale": "en-US",
 
 		"module": "ES2020",
 		"moduleResolution": "Node",
