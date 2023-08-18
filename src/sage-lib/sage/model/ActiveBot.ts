@@ -117,8 +117,18 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 			utils.ConsoleUtils.setConsoleHandler(consoleHandler.bind(this), logDir, this.codeName === "dev");
 
 			console.info(`Discord.Client.on("ready") [success]`);
+			// Notify super user of successful start.
+			this.sageCache.discord.fetchUser("253330271678627841").then(user => user?.send(`Discord.Client.on("ready") [success]`));
+			process.on("beforeExit", async (code) => {
+				console.log(`process.on("beforeExit") = ${code}`);
+				return this.sageCache.discord.fetchUser("253330271678627841").then(user => user?.send(`process.on("beforeExit")`));
+			});
+			process.on("exit", (code) => {
+				console.log(`process.on("exit") = ${code}`);
+			});
 		}, err => {
 			console.error(`Discord.Client.on("ready") [error]`, err);
+			process.exit(1);
 		});
 
 		async function consoleHandler(this: ActiveBot, level: LogLevel, ...args: any[]): Promise<void> {

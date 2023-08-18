@@ -262,6 +262,12 @@ export function registerCommandHandlers(): void {
 	registerFindHelp("Search", "Find", `WORD OR WORDS`);
 	registerFindHelp("Search", "Find", `WORD OR WORDS -CATEGORY\n\tCATEGORY can be armor, spell, weapon, etc.`);
 
+	registerCommandRegex(/shutdown/, async (sageMessage: SageMessage) => {
+		if (sageMessage.isSuperUser) {
+			await sageMessage.reactSuccess();
+			process.exit(0);
+		}
+	});
 	registerCommandRegex(/debug\-log\-all\-items/, async (sageMessage: SageMessage) => {
 		if (sageMessage.isSuperUser) {
 			console.log(`debug-log-all-items: begin`);
