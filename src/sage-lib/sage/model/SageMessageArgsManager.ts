@@ -311,6 +311,7 @@ export default class SageMessageArgsManager extends ArgsManager {
 
 	public removeAndReturnCharacterOptions(names: TNames, userDid?: Discord.Snowflake): GameCharacterCore {
 		const characterCore: GameCharacterCore = {
+			alias: this.removeByKey("alias")!,
 			autoChannels: undefined,
 			avatarUrl: this.removeAndReturnUrl("avatar")!,
 			companions: undefined,
