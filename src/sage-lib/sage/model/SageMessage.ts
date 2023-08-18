@@ -1,8 +1,9 @@
 import type * as Discord from "discord.js";
 import type { IHasChannels, IHasGame } from ".";
+import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Optional } from "../../../sage-utils";
-import { DiscordKey, DMessage, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
+import { DMessage, DiscordKey, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
 import { send } from "../../discord/messages";
 import { DicePostType } from "../commands/dice";
 import type Game from "../model/Game";
@@ -14,7 +15,7 @@ import { EmojiType } from "./HasEmojiCore";
 import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
 import SageCache from "./SageCache";
 import SageMessageArgsManager from "./SageMessageArgsManager";
-import { GameType } from "../../../sage-common";
+import { TAlias } from "./User";
 
 interface SageMessageCore extends HasSageCacheCore {
 	message: DMessage;
@@ -370,4 +371,34 @@ export default class SageMessage
 
 	// #endregion
 
+	public findAlias(aliasName: string): TAlias | null {
+		const game = this.game;
+		if (game) {
+			if (this.isPlayer) {
+				const pc = this.playerCharacter;
+				if (pc?.matches(aliasName)) return alias(pc);
+
+				const companion = pc?.companions.findByName(aliasName);
+				if (companion) return alias(companion);
+
+			}else if (this.isGameMaster) {
+				const npc = game.nonPlayerCharacters.findByName(aliasName);
+				if (npc) return alias(npc);
+
+				const minion = game.nonPlayerCharacters.findCompanionByName(aliasName);
+				if (minion) return alias(minion);
+			}
+		}else {
+			let char = this.sageUser.playerCharacters.findByName(aliasName);
+			if (!char) char = this.sageUser.playerCharacters.findCompanionByName(aliasName);
+			if (!char) char = this.sageUser.nonPlayerCharacters.findByName(aliasName);
+			if (!char) char = this.sageUser.nonPlayerCharacters.findCompanionByName(aliasName);
+			if (char) return alias(char);
+		}
+		return this.sageUser.aliases.findByName(aliasName, true) ?? null;
+
+		function alias(char: GameCharacter) {
+			return { name:aliasName, target:`${char.type}::${char.name}::` };
+		}
+	}
 }
