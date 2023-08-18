@@ -71,7 +71,7 @@ export function toHumanReadable(target: Optional<DChannel | DForumChannel | DMes
 	if (target) {
 		if ("createDM" in target) {
 			if ("user" in target) {
-				memberToMention(target);
+				return memberToMention(target);
 			}else {
 				return userToMention(target);
 			}
