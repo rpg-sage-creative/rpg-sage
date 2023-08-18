@@ -9,6 +9,7 @@ import type SageMessage from "../../model/SageMessage";
 import type { TNames } from "../../model/SageMessageArgsManager";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
+import { toHumanReadable } from "../../../../sage-utils/utils/DiscordUtils/humanReadable";
 
 //#region Character Command Types
 
@@ -155,8 +156,8 @@ async function getCharacter(sageMessage: SageMessage, characterTypeMeta: TCharac
 //#region Render Character / Characters
 
 export async function sendGameCharacter(sageMessage: SageMessage, character: GameCharacter): Promise<Discord.Message[]> {
-	const ownerGuildMember = character.userDid ? await sageMessage.discord.fetchGuildMember(character.userDid) : null,
-		ownerTag = ownerGuildMember?.user ? `@${ownerGuildMember.user.tag}` : ownerGuildMember?.displayName ?? character.userDid,
+	const ownerGuildMember = character.userDid ? await sageMessage.discord.fetchGuildMember(character.userDid) : null;
+	const ownerTag = toHumanReadable(ownerGuildMember) ?? character.userDid,
 		renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), character.name);
 
 	if (character.embedColor) {
