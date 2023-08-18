@@ -166,6 +166,8 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.setThumbnailUrl(character.avatarUrl);
 	}
 
+	renderableContent.append(`<b>Alias</b> ${character.alias ?? "<i>unset</i>"}`);
+
 	const ownerOrPlayer = character.isGMorNPC ? "Owner" : "Player";
 	renderableContent.append(`<b>${ownerOrPlayer}</b> ${ownerTag ?? "<i>none</i>"}`);
 	if (character.isCompanion) {
