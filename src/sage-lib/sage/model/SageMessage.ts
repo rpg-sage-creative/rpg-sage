@@ -301,6 +301,8 @@ export default class SageMessage
 				// in case we are unable to react to something, we can ping the user and let them know what's up
 				this.message.author?.send(`${emoji} ${reason}\n<${this.message.url}>`);
 			}
+		}else {
+			console.warn(`Invalid emojiType: ${emojiType} >> ${reason ?? "no reason given"}`)
 		}
 	}
 	/** This was pulled here to avoid duplicating code. */
@@ -312,19 +314,17 @@ export default class SageMessage
 		return false;
 	}
 	public async canReact(message: DMessage = this.message): Promise<boolean> {
-		if (!message || !message.deletable) {
-			return false;
-		}
+		if (!message) return false;
 		return this.caches.canReactTo(DiscordKey.fromMessage(message));
 	}
 
-	public async reactBlock(reason?: string): Promise<void> { this.react(EmojiType.PermissionDenied, reason); }
-	public async reactDie(reason?: string): Promise<void> { this._.set("Dice", this.message); this.react(EmojiType.Die, reason); }
-	public async reactError(reason?: string): Promise<void> { this.react(EmojiType.CommandError, reason); }
-	public async reactWarn(reason?: string): Promise<void> { this.react(EmojiType.CommandWarn, reason); }
-	public async reactFailure(reason?: string): Promise<void> { this.react(EmojiType.CommandFailure, reason); }
-	public async reactSuccess(reason?: string): Promise<void> { this.react(EmojiType.CommandSuccess, reason); }
-	public async reactSuccessOrFailure(bool: boolean, reason?: string): Promise<void> { bool ? this.reactSuccess(reason) : this.reactFailure(reason); }
+	public reactBlock(reason?: string): Promise<void> { return this.react(EmojiType.PermissionDenied, reason); }
+	public reactDie(reason?: string): Promise<void> { this._.set("Dice", this.message); return this.react(EmojiType.Die, reason); }
+	public reactError(reason?: string): Promise<void> { return this.react(EmojiType.CommandError, reason); }
+	public reactWarn(reason?: string): Promise<void> { return this.react(EmojiType.CommandWarn, reason); }
+	public reactFailure(reason?: string): Promise<void> { return this.react(EmojiType.CommandFailure, reason); }
+	public reactSuccess(reason?: string): Promise<void> { return this.react(EmojiType.CommandSuccess, reason); }
+	public reactSuccessOrFailure(bool: boolean, reason?: string): Promise<void> { return bool ? this.reactSuccess(reason) : this.reactFailure(reason); }
 
 	// #endregion
 
