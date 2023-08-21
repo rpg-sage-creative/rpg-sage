@@ -22,6 +22,10 @@ import {
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart
 } from "../base";
 import {
+	DiceGroup as cncDiceGroup,
+	DiceGroupRoll as cndDiceGroupRoll
+} from "../cnc";
+import {
 	DiceGroup as dnd5eDiceGroup,
 	DiceGroupRoll as dnd5eDiceGroupRoll
 } from "../dnd5e";
@@ -44,12 +48,13 @@ import { GameType, parseGameType } from "../../../sage-common";
 //#endregion
 
 const DICE_REGEX = /\[[^\]]*d\d+[^\]]*\]/ig;
-const GAME_CHECK = /^(?:(dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest)\b)?/i;
+const GAME_CHECK = /^(?:(cnc|dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest)\b)?/i;
 const DICE_OUTPUT_CHECK = /^(?:(xxs|xs|s|m|xxl|xl|l|rollem)\b)?/i;
 const COUNT_CHECK = /^(\d+)(map\-\d+)?\#/i;
 
 function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {
 	switch (gameType) {
+		case GameType.CnC: return <typeof baseDiceGroup>cncDiceGroup;
 		case GameType.DnD5e: return <typeof baseDiceGroup>dnd5eDiceGroup;
 		case GameType.E20: return <typeof baseDiceGroup>e20DiceGroup;
 		case GameType.PF2e: return <typeof baseDiceGroup>pf2eDiceGroup;
@@ -60,6 +65,8 @@ function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {
 
 function parseDice(diceString: string, gameType?: GameType, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): baseTDiceGroup {
 	switch (gameType) {
+		case GameType.CnC:
+			return cncDiceGroup.parse(diceString, diceOutputType);
 		case GameType.DnD5e:
 			return dnd5eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
 		case GameType.E20:
@@ -159,6 +166,8 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 		if (!this._diceGroups) {
 			this._diceGroups = this.core.diceGroups.map(core => {
 				switch (core.gameType) {
+					case GameType.CnC:
+						return cncDiceGroup.fromCore(core);
 					case GameType.DnD5e:
 						return dnd5eDiceGroup.fromCore(core);
 					case GameType.E20:
@@ -319,6 +328,8 @@ export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 		if (!this._rolls) {
 			this._rolls = this.core.rolls.map(core => {
 				switch (core.gameType) {
+					case GameType.CnC:
+						return cndDiceGroupRoll.fromCore(core);
 					case GameType.DnD5e:
 						return dnd5eDiceGroupRoll.fromCore(core);
 					case GameType.E20:

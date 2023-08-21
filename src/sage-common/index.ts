@@ -1,6 +1,6 @@
 //#region GameType
 
-export type TGameType = "NONE" | "PF" | "PF1" | "PF1E" | "PF2" | "PF2E" | "SF" | "SF1" | "SF1E" | "DND5E" | "5E";
+export type TGameType = "NONE" | "PF" | "PF1" | "PF1E" | "PF2" | "PF2E" | "SF" | "SF1" | "SF1E" | "CNC" | "DND5E" | "5E";
 
 export enum GameType {
 	None = 0,
