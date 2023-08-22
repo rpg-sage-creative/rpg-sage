@@ -215,7 +215,7 @@ function removeAndReturnDiceSecretMethodType(args: string[]): Optional<DiceSecre
 
 /** /^(game)=(PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE)?$/i */
 function removeAndReturnGameType(args: string[]): GameType | undefined {
-	const regex = /^(gamesystem|gametype|game|system|type)="(ESSENCE20|ESS20|E20|PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|NONE)?"$/i;
+	const regex = /^(gamesystem|gametype|game|system|type)="(ESSENCE20|ESS20|E20|PF1E|PF1|PF2E|PF2|PF|SF1E|SF1|SF|DND5E|5E|QUEST|CNC|NONE)?"$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match) {
