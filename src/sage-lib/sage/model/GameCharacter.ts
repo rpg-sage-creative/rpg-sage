@@ -164,7 +164,7 @@ export default class GameCharacter implements IHasSave {
 	public get parentId(): UUID | undefined { return this.parent?.id; }
 
 	private _preparedAlias?: string;
-	private get preparedAlias(): string { return this._preparedAlias ?? (this._preparedAlias = GameCharacter.prepareName(this.name)); }
+	private get preparedAlias(): string { return this._preparedAlias ?? (this._preparedAlias = GameCharacter.prepareName(this.alias ?? this.name)); }
 	private _preparedName?: string;
 	private get preparedName(): string { return this._preparedName ?? (this._preparedName = GameCharacter.prepareName(this.name)); }
 
