@@ -12,6 +12,7 @@ import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
 import { GameType } from "../../../../../sage-common";
+import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
 
 async function getGames(sageMessage: SageMessage): Promise<Game[]> {
 	const guild = sageMessage.discord.guild;
@@ -270,7 +271,7 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 	renderableContent.append(`<b>Roles</b> ${roles.length}; ${roles.join(", ")}`);
 
 	const gmGuildMembers = await game.gmGuildMembers();
-	const gameMasters = gmGuildMembers.map((gmGuildMember, index) => gmGuildMember ? `@${gmGuildMember.user?.tag ?? gmGuildMember.displayName}` : `<i>${game.gameMasters[index]}</i>`);
+	const gameMasters = gmGuildMembers.map((gmGuildMember, index) => gmGuildMember ? toHumanReadable(gmGuildMember) : `<i>${game.gameMasters[index]}</i>`);
 	renderableContent.append(`<b>Game Master Name</b>`, `[spacer]${game.gmCharacterName ?? `<i>inherited (${game.server.defaultGmCharacterName ?? GameCharacter.defaultGmCharacterName})</i>`}`);
 	renderableContent.append(`<b>Game Masters</b> ${gameMasters.length}`);
 	gameMasters.forEach(gm => renderableContent.append(`[spacer]${gm}`));
@@ -278,7 +279,7 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 	renderableContent.append(`<b>NonPlayer Characters</b> ${game.nonPlayerCharacters.length}`);
 
 	const playerGuildMembers = await game.pGuildMembers();
-	const players = playerGuildMembers.map((pGuildMember, index) => pGuildMember ? `@${pGuildMember.user?.tag ?? pGuildMember.displayName}` : `<i>${game.players[index]}</i>`);
+	const players = playerGuildMembers.map((pGuildMember, index) => pGuildMember ? toHumanReadable(pGuildMember) : `<i>${game.players[index]}</i>`);
 	const playerCharacters = playerGuildMembers.map(pGuildMember => game.playerCharacters.findByUser(pGuildMember?.id)?.name).map(name => name ? ` (${name})` : ``);
 	renderableContent.append(`<b>Players (Characters)</b> ${players.length}`);
 	players.forEach((player, index) => renderableContent.append(`[spacer]${player}${playerCharacters[index]}`));

@@ -40,19 +40,40 @@ const DOWN = 1;
 const LEFT = -1;
 const RIGHT = 1;
 
+export type TCompassDirection = "nw" | "n" | "ne" | "w" | "e" | "sw" | "s" | "se";
 export type TMoveDirection = "upleft" | "up" | "upright" | "left" | "right" | "downleft" | "down" | "downright";
-function moveImage(image: TGameMapImage, direction: TMoveDirection): boolean {
-	switch(direction) {
-		case "upleft": return move(image, [ROW, UP], [COL, LEFT]);
-		case "up": return move(image, [ROW, UP]);
-		case "upright": return move(image, [ROW, UP], [COL, RIGHT]);
-		case "left": return move(image, [COL, LEFT]);
-		case "right": return move(image, [COL, RIGHT]);
-		case "downleft": return move(image, [ROW, DOWN], [COL, LEFT]);
-		case "down": return move(image, [ROW, DOWN]);
-		case "downright": return move(image, [ROW, DOWN], [COL, RIGHT]);
-		default: return false;
-	}
+export type TDirection = TCompassDirection | TMoveDirection;
+function ensureMoveDirections(directions: TDirection[]): TMoveDirection[] {
+	return directions.map(dir => {
+		switch(dir) {
+			case "nw": return "upleft";
+			case "n": return "up";
+			case "ne": return "upright";
+			case "w": return "left";
+			case "e": return "right";
+			case "sw": return "downleft";
+			case "s": return "down";
+			case "se": return "downright";
+			default: return dir;
+		}
+	});
+}
+function moveImage(image: TGameMapImage, ...directions: TMoveDirection[]): boolean {
+	const [startCol, startRow] = image.pos;
+	directions.forEach(direction => {
+		switch(direction) {
+			case "upleft": return move(image, [ROW, UP], [COL, LEFT]);
+			case "up": return move(image, [ROW, UP]);
+			case "upright": return move(image, [ROW, UP], [COL, RIGHT]);
+			case "left": return move(image, [COL, LEFT]);
+			case "right": return move(image, [COL, RIGHT]);
+			case "downleft": return move(image, [ROW, DOWN], [COL, LEFT]);
+			case "down": return move(image, [ROW, DOWN]);
+			case "downright": return move(image, [ROW, DOWN], [COL, RIGHT]);
+			default: return false;
+		}
+	});
+	return image.pos[COL] !== startCol || image.pos[ROW] !== startRow;
 }
 
 const POS = 0;
@@ -241,12 +262,13 @@ export default class GameMap extends GameMapBase {
 	}
 
 	/** move the active token in the given direction */
-	public moveActiveToken(direction: TMoveDirection): boolean {
+	public moveActiveToken(...directions: TDirection[]): boolean {
 		const activeImage = this.activeImage;
 		if (!activeImage) {
 			return false;
 		}
-		return moveImage(activeImage, direction);
+		const moveDirections = ensureMoveDirections(directions);
+		return moveImage(activeImage, ...moveDirections);
 	}
 
 	/** change the active aura's opacity */
