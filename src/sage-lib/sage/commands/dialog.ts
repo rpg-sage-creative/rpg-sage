@@ -97,6 +97,12 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 		}
 	}
 	//#endregion
+	//#region map/movement arrows
+	const regex = /\[(\b(\s|nw|n|ne|w|c|e|sw|s|se))+\]/ig;
+	content = content.replace(regex, match => {
+		return match.slice(1, -1).split(/\s/).filter(s => s).map(s => `[${s}]`).join(" ");
+	});
+	//#endregion
 	renderableContent.append(content);
 
 	const thumbnailUrl = postData.imageUrl ?? character.avatarUrl;
