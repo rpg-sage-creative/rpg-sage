@@ -563,7 +563,7 @@ async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent)
 // #region Alias Dialog
 
 function updateAliasDialogArgsAndReturnType(sageMessage: SageMessage, dialogContent: TDialogContent): TDialogContent | null {
-	const aliasFound = sageMessage.findAlias(dialogContent.type)
+	const aliasFound = sageMessage.findAlias(dialogContent.type);
 	if (!aliasFound) {
 		return null;
 	}
