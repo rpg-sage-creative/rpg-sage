@@ -1,16 +1,25 @@
 // import { discordPromptYesNo } from "../../../../../discord/prompts";
 import utils, { Optional } from "../../../../../sage-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import type SageMessage from "../../../model/SageMessage";
+import SageMessage from "../../../model/SageMessage";
 import { TAlias } from "../../../model/User";
 import { DialogType } from "../../../repo/base/IdRepository";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
-import { type TDialogContent, parseDialogContent } from "../../dialog";
+import { parseDialogContent, type TDialogContent } from "../../dialog";
 import { registerAdminCommandHelp } from "../../help";
 
 
 function testGmTarget(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
-	return sageMessage.isGameMaster && !dialogContent.name;
+	if (!sageMessage.game || sageMessage.isGameMaster) {
+		return !!(dialogContent.postType
+			|| dialogContent.name
+			|| dialogContent.displayName
+			|| dialogContent.title
+			|| dialogContent.imageUrl
+			|| dialogContent.embedColor
+			|| dialogContent.content);
+	}
+	return false;
 }
 function testNpcTarget(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
 	if (sageMessage.game) {
@@ -36,14 +45,28 @@ function testCompanionTarget(sageMessage: SageMessage, dialogContent: TDialogCon
 	return !sageMessage.sageUser.playerCharacters.findCompanionByName(dialogContent.name) !== undefined;
 }
 
+function toNamePart(dialogContent: TDialogContent): string {
+	const { name, displayName } = dialogContent;
+	const parts = [
+		name ?? ``,
+		displayName ? `(${displayName})` : ``
+	];
+	if (dialogContent.type === "gm") {
+		if (name && !displayName) {
+			parts[1] = `(${name})`;
+		}else if (!name && displayName) {
+			parts[0] = displayName;
+		}
+	}
+	return parts.join("");
+}
+
 function dialogContentToTarget(dialogContent: TDialogContent, separator = "::"): string {
-	const name = dialogContent.name ?? "";
-	const displayName = dialogContent.displayName ? `(${dialogContent.displayName})` : ``;
 	// dialog parts
 	const baseParts = [
 		dialogContent.type,
-		name + displayName,
-		dialogContent.title,
+		toNamePart(dialogContent),
+		dialogContent.title ? `(${dialogContent.title})` : ``,
 		dialogContent.imageUrl,
 		dialogContent.embedColor,
 		DialogType[dialogContent.postType!],
@@ -94,7 +117,7 @@ function aliasTest(sageMessage: SageMessage, dialogContent: TDialogContent): boo
 function aliasToPrompt(alias: TAlias, usage: boolean): string {
 	const parts = [
 		`\n> **Name:** ${alias.name}`,
-		`\n> **Target:** \`\`${alias.target}\`\``
+		`\n> **Target:** \`${alias.target}\``
 	];
 	if (usage) {
 		parts.push(`\n\n*Usage:* \`${alias.name.toLowerCase()}::\``);
