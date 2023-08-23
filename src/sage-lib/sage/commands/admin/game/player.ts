@@ -2,6 +2,7 @@ import type * as Discord from "discord.js";
 import type SageMessage from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
+import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
 
 export async function gameUserList(sageMessage: SageMessage, who: string, userDids: Discord.Snowflake[] = []): Promise<void> {
 	if (!sageMessage.canAdminGame) {
@@ -12,7 +13,7 @@ export async function gameUserList(sageMessage: SageMessage, who: string, userDi
 	if (userDids.length) {
 		for (const userDid of userDids) {
 			const guildMember = await sageMessage.discord.fetchGuildMember(userDid);
-			const title = guildMember ? `@${guildMember.user.tag}` : userDid;
+			const title = guildMember ? `${toHumanReadable(guildMember.user)}` : userDid;
 			const renderableContent = createAdminRenderableContent(game, title);
 			renderableContent.append(`<b>User Id</b> ${userDid}`);
 			if (guildMember) {

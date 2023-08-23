@@ -1,5 +1,6 @@
 import { GameType } from "../../../../sage-common";
 import utils from "../../../../sage-utils";
+import { toHumanReadable } from "../../../../sage-utils/utils/DiscordUtils/humanReadable";
 import ActiveBot from "../../model/ActiveBot";
 import type Bot from "../../model/Bot";
 import type SageMessage from "../../model/SageMessage";
@@ -55,7 +56,7 @@ async function sendBot(sageMessage: SageMessage, bot: Bot): Promise<void> {
 		const botUser = await sageMessage.discord.fetchUser(bot.did);
 		if (botUser) {
 			renderableContent.setThumbnailUrl(botUser.displayAvatarURL());
-			renderableContent.append(`<b>Username</b> @${botUser.tag}`);
+			renderableContent.append(`<b>Username</b> ${toHumanReadable(botUser)}`);
 			renderableContent.append(`<b>User Id</b> ${botUser.id}`);
 			//TODO: resolved to a guildmember to get presence and last message
 			// renderableContent.append(`<b>Status</b> ${botUser.presence.status}`);

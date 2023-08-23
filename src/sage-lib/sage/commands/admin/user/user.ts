@@ -5,6 +5,7 @@ import type User from "../../../model/User";
 import { DialogType } from "../../../repo/base/IdRepository";
 import { renderCount, registerAdminCommand, createAdminRenderableContent } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
+import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
 
 async function userCount(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
@@ -15,7 +16,7 @@ async function userCount(sageMessage: SageMessage): Promise<void> {
 }
 
 async function renderUser(renderableContent: utils.RenderUtils.RenderableContent, user: User, discordUser: Optional<Discord.User>): Promise<void> {
-	renderableContent.appendTitledSection(`<b>${discordUser?.tag || "<i>Unknown</i>"}</b>`);
+	renderableContent.appendTitledSection(`<b>${toHumanReadable(discordUser) || "<i>Unknown</i>"}</b>`);
 	renderableContent.append(`<b>User Id</b> ${user.did}`);
 	renderableContent.append(`<b>UUID</b> ${user.id}`);
 	renderableContent.append(`<b>Username</b> ${discordUser?.username || "<i>Unknown</i>"}`);
@@ -81,7 +82,7 @@ async function userDetails(sageMessage: SageMessage): Promise<void> {
 	if (user) {
 		const discordUser = await sageMessage.discord.fetchUser(user.did);
 		if (discordUser) {
-			renderableContent.setTitle(`<b>@${discordUser.tag}</b>`);
+			renderableContent.setTitle(`<b>${toHumanReadable(discordUser)}</b>`);
 			renderableContent.append(`<b>Discord Id</b> ${discordUser.id}`);
 			renderableContent.setThumbnailUrl(discordUser.displayAvatarURL());
 			//TODO: sort out presence

@@ -4,12 +4,13 @@ import type SageMessage from "../../../model/SageMessage";
 import { type IAdminUser, AdminRoleType } from "../../../model/Server";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
+import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
 
 
 type TAdminUser = IAdminUser & { discordUser: Discord.User };
 
 async function renderUser(renderableContent: utils.RenderUtils.RenderableContent, user: TAdminUser): Promise<void> {
-	renderableContent.appendTitledSection(`<b>${user?.discordUser?.tag || "<i>Unknown</i>"}</b>`);
+	renderableContent.appendTitledSection(`<b>${toHumanReadable(user?.discordUser) || "<i>Unknown</i>"}</b>`);
 	// renderableContent.append(`<b>User Id</b> ${user.discordUser?.id}`);
 	// renderableContent.append(`<b>Username</b> ${user?.discordUser?.username || "<i>Unknown</i>"}`);
 	renderableContent.append(`<b>Role</b> ${AdminRoleType[user.role] ?? "<i>Unknown</i>"}`);
