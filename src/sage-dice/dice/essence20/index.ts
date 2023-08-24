@@ -95,8 +95,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 				hasEdge: token.token.match(/e/i) !== null,
 				hasSnag: token.token.match(/s/i) !== null,
 				hasSpecialization: token.token.includes("*"),
-				upShift: +(token.token.match(/up(\d+)/i)?.[1] ?? 0),
-				downShift: +(token.token.match(/dn(\d+)/i)?.[1] ?? 0)
+				upShift: +(token.token.match(/(?:↑|up)(\d+)/i)?.[1] ?? 0),
+				downShift: +(token.token.match(/(?:↓|dn)(\d+)/i)?.[1] ?? 0)
 			});
 		}
 	}
@@ -283,7 +283,8 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 				sign: this.core.sign,
 				skillDie: shiftedDie,
 				specialization: this.core.specialization,
-				testOrTarget: this.core.target ?? this.core.test
+				testOrTarget: this.core.target ?? this.core.test,
+				dropKeep: this.core.dropKeep
 			});
 		}
 		return null;
@@ -374,16 +375,16 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 				}
 				//#endregion
 				//#region upShift
-				const upMatch = match(core, /(↑|up)(\d*)/i);
+				const upMatch = match(core, /^(↑|up)(\d*)/i);
 				if (upMatch) {
-					upShift = +upMatch[2];
+					upShift += +upMatch[2];
 					sliceLength = upMatch[0].length;
 				}
 				//#endregion
 				//#region downShift
-				const downMatch = match(core, /(↓|dn)(\d*)/i);
+				const downMatch = match(core, /^(↓|dn)(\d*)/i);
 				if (downMatch) {
-					downShift = +downMatch[2];
+					downShift += +downMatch[2];
 					sliceLength = downMatch[0].length;
 				}
 				//#endregion
