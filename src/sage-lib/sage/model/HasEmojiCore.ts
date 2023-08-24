@@ -61,6 +61,27 @@ export enum EmojiType {
 	PromptYes = 71,
 	PromptNo = 711,
 
+	// Map = 8
+	// MapNorthWest = 8000,
+	// MapNorth = 8001,
+	// MapNorthEast = 8002,
+	// MapWest = 8003,
+	// MapCenter = 8004,
+	// MapEast = 8005,
+	// MapSouthWest = 8006,
+	// MapSouth = 8007,
+	// MapSouthEast = 8008,
+
+	MapMoveNorthWest = 8100,
+	MapMoveNorth = 8101,
+	MapMoveNorthEast = 8102,
+	MapMoveWest = 8103,
+	MapMoveCenter = 8104,
+	MapMoveEast = 8105,
+	MapMoveSouthWest = 8106,
+	MapMoveSouth = 8107,
+	MapMoveSouthEast = 8108,
+
 	// Other = 9
 	AoN = 90
 }

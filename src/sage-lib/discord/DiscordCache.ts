@@ -7,6 +7,7 @@ import type SageMessage from "../sage/model/SageMessage";
 import DiscordKey from "./DiscordKey";
 import { channelToName } from "./messages";
 import type { TChannel, TChannelResolvable, TGuildResolvable } from "./types";
+import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 
 //#region Helpers
 
@@ -143,10 +144,7 @@ export default class DiscordCache {
 		const channel = await this.fetchChannel(didOrKey as DiscordKey);
 		if (channel) {
 			if (channel.type === "DM") {
-				if (channel.recipient.discriminator === "0") {
-					return "dm@" + channel.recipient.username;
-				}
-				return `dm@${channel.recipient.username}#${channel.recipient.discriminator}`;
+				return `dm${toHumanReadable(channel.recipient)}`;
 			}
 			return `${channel.guild.name}#${channel.name}`;
 		}

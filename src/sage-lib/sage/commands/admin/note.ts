@@ -1,8 +1,3 @@
-import type GameCharacter from "../../model/GameCharacter";
-import type SageMessage from "../../model/SageMessage";
-import { registerAdminCommand } from "../cmd";
-import { registerAdminCommandHelp } from "../help";
-import { sendGameCharacter } from "./gameCharacter";
 
 // async function renderNotesList(sageMessage: SageMessage, notes = sageMessage.user.notes): Promise<void> {
 // 	const renderableContent = createAdminRenderableContent(BotRepo.active);
@@ -41,46 +36,6 @@ Game PC Notes
 // registerAdminCommandHelp("Admin", "Notes", "notes list");
 // registerAdminCommandHelp("Admin", "Notes", "notes list {optionalCategoryFilter}");
 
-// type TCharacterAndInput = { character: GameCharacter; input: string; };
-function getPcForStats(sageMessage: SageMessage): GameCharacter | undefined {
-	if (sageMessage.game && sageMessage.isPlayer) {
-		return sageMessage.playerCharacter;
-	}
-	const chars = sageMessage.game
-		? sageMessage.game.playerCharacters
-		: sageMessage.sageUser.playerCharacters;
-	return sageMessage.args.findArgAndRemoveAndMap(arg => chars.findByName(arg)) ?? undefined;
-}
-function getNpcForStats(sageMessage: SageMessage): GameCharacter | undefined {
-	const chars = sageMessage.game
-		? sageMessage.game.nonPlayerCharacters
-		: sageMessage.sageUser.nonPlayerCharacters;
-	return sageMessage.args.findArgAndRemoveAndMap(arg => chars.findByName(arg)) ?? undefined;
-}
-async function statsSet(sageMessage: SageMessage): Promise<void> {
-	const character = getPcForStats(sageMessage) || getNpcForStats(sageMessage);
-	if (!character) {
-		return sageMessage.reactWarn();
-	}
-	const updated = await character.notes.setStats(sageMessage.args.keyValuePairs());
-	if (updated) {
-		await sendGameCharacter(sageMessage, character);
-	}
-	return sageMessage.reactSuccessOrFailure(updated);
-}
-// async function statsUnset(sageMessage: SageMessage): Promise<void> {
-// 	const charAndInput = getPcForStats(sageMessage) || getNpcForStats(sageMessage);
-// 	if (!charAndInput) {
-// 		return sageMessage.reactWarn();
-// 	}
-// 	const stats = NoteManager.parseKeys(charAndInput.input),
-// 		updated = await charAndInput.character.notes.unsetStats(...stats);
-// 	if (updated) {
-// 		await sendGameCharacter(sageMessage, charAndInput.character);
-// 	}
-// 	return sageMessage.reactSuccessOrFailure(updated);
-// }
-
 // async function journalEntry(sageMessage: SageMessage): Promise<void> {
 // 	const gameCharacter = sageMessage.game ? sageMessage.playerCharacter : sageMessage.user.playerCharacters.first();
 // 	if (gameCharacter) {
@@ -113,8 +68,4 @@ async function statsSet(sageMessage: SageMessage): Promise<void> {
 // registerAdminCommandHelp("Admin", "Journal", `journal remove {entry title}`);
 
 export default function register(): void {
-	registerAdminCommand(statsSet, "stats-set");
-	// registerAdminCommand(statsUnset, "stats-unset");
-	registerAdminCommandHelp("Admin", "Stats", `stats set {stat}={value}`);
-	// registerAdminCommandHelp("Admin", "Stats", `stats unset {stat}`);
 }

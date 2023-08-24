@@ -9,6 +9,7 @@ import type SageMessage from "../../model/SageMessage";
 import type { TNames } from "../../model/SageMessageArgsManager";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
+import { toHumanReadable } from "../../../../sage-utils/utils/DiscordUtils/humanReadable";
 
 //#region Character Command Types
 
@@ -154,10 +155,18 @@ async function getCharacter(sageMessage: SageMessage, characterTypeMeta: TCharac
 
 //#region Render Character / Characters
 
+async function toReadableOwner(sageMessage: SageMessage, userId: Optional<string>): Promise<string | null> {
+	if (userId) {
+		const guildMember = await sageMessage.discord.fetchGuildMember(userId);
+		if (guildMember) return toHumanReadable(guildMember);
+		const user = await sageMessage.discord.fetchUser(userId);
+		if (user) return toHumanReadable(user);
+	}
+	return null;
+}
+
 export async function sendGameCharacter(sageMessage: SageMessage, character: GameCharacter): Promise<Discord.Message[]> {
-	const ownerGuildMember = character.userDid ? await sageMessage.discord.fetchGuildMember(character.userDid) : null,
-		ownerTag = ownerGuildMember?.user ? `@${ownerGuildMember.user.tag}` : ownerGuildMember?.displayName ?? character.userDid,
-		renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), character.name);
+	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), character.name);
 
 	if (character.embedColor) {
 		renderableContent.setColor(character.embedColor);
@@ -166,8 +175,12 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.setThumbnailUrl(character.avatarUrl);
 	}
 
+	renderableContent.append(`<b>Alias</b> ${character.alias ?? "<i>unset</i>"}`);
+
 	const ownerOrPlayer = character.isGMorNPC ? "Owner" : "Player";
+	const ownerTag = await toReadableOwner(sageMessage, character.userDid);
 	renderableContent.append(`<b>${ownerOrPlayer}</b> ${ownerTag ?? "<i>none</i>"}`);
+
 	if (character.isCompanion) {
 		renderableContent.append(`<b>Character</b> ${character.parent?.name ?? "<i>unknown</i>"}`);
 	} else {

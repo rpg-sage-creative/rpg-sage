@@ -38,22 +38,22 @@ function cleanWhitespace(value: string): string { return value.replace(/\s+/g, "
 /*
 default target ("VS") = 8
 
-roll xd12
+roll Xd12
 
 for each die:
- - 1 is crit fail
- - < VS fail == -1 success
- - VS+ 1 success
- - 12 1 success plus crit die
+     1: -1 success
+  < VS:  0 successes
+   VS+: +1 success
+    12: +1 success and crit die
 
- for each 12, roll another die:
- - < VS 1 success
- -VS+ 2 successes plus crit die
+for each crit die:
+  < VS: +1 success
+   VS+: +2 successes and crit die
 
-add/subtract successes
- - 1+ success
- - 0 fail
- - < 0 critical failure
+final success/failure
+   1+: success
+    0: failure
+  < 0: critical failure
 */
 
 //#region Tokenizer
@@ -126,28 +126,41 @@ function gradeRoll(baseValues: number[], explodedValues: number[], vs: number): 
 	// base values can be success or failure
 	baseValues.forEach(value => {
 		const grade = gradeDie(value, vs);
-		const success = grade === DieRollGrade.CriticalSuccess || grade === DieRollGrade.Success;
-		// update total successes
-		values[0] += success ? 1 : -1;
+
 		// increment count for grade
 		values[grade]++;
+
+		// update total successes
+		switch(grade) {
+			case DieRollGrade.CriticalSuccess:
+			case DieRollGrade.Success:
+				values[0] += 1;
+				break;
+			case DieRollGrade.CriticalFailure:
+				values[0] -= 1;
+				break;
+		}
 	});
 
 	// exploded values are only crit success or success
 	explodedValues.forEach(value => {
 		const grade = gradeDie(value, vs);
-		const success = grade === DieRollGrade.CriticalSuccess || grade === DieRollGrade.Success;
-		// update total successes
-		values[0] += success ? 2 : 1;
-		// update total exploded successes
-		values[5] += success ? 2 : 1;
-		// increment count for grade
-		values[success ? DieRollGrade.CriticalSuccess : DieRollGrade.Success]++;
+		if (grade === DieRollGrade.CriticalSuccess) {
+			// increment count for grade
+			values[DieRollGrade.CriticalSuccess]++;
+			// update total exploded successes
+			values[5] += 2;
+		}else {
+			// increment count for grade
+			values[DieRollGrade.Success]++;
+			// update total exploded successes
+			values[5] += 1;
+		}
 	});
 
-	const successes = values[0];
-	const grade = successes === 0 ? DieRollGrade.Failure
-		: successes < 0 ? DieRollGrade.CriticalFailure
+	const totalSuccesses = values[0] + values[5];
+	const grade = totalSuccesses === 0 ? DieRollGrade.Failure
+		: totalSuccesses < 0 ? DieRollGrade.CriticalFailure
 		: DieRollGrade.Success;
 
 	return [grade, values];
@@ -269,14 +282,15 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		const baseValues = this.rolls[0].rolls;
 		const critValues = this.rolls[1]?.rolls ?? [];
 		const vs = this.dice.test?.value ?? 8;
+		const vsOutput = vs !== 8 ? ` vs ${vs} ` : ``;
 		const [grade, gradeValues] = gradeRoll(baseValues, critValues, vs);
 		const gradeOutput = gradeToEmoji(grade);
-		const baseOutput = ` [${baseValues.join(",")}]${baseValues.length}d12 (${gradeValues[0]})`;
-		const critOutput = critValues.length ? ` + [${critValues.join(",")}]${critValues.length}d12 (${gradeValues[5]})` : ``;
-		const vsOutput = ` vs ${vs} `;
+		const baseOutput = ` [${baseValues.join(",")}]${baseValues.length}d12 ${vsOutput} (**${gradeValues[0]}**)`;
+		const critOutput = critValues.length ? ` + [${critValues.join(",")}]${critValues.length}d12 ${vsOutput} (**${gradeValues[5]}**)` : ``;
+		const totalSuccesses = critValues.length ? ` -> **${gradeValues[0] + gradeValues[5]}**` : ``;
 		const desc = this.dice.diceParts.find(dp => dp.hasDescription)?.description;
 		const descOutput = desc ? "`" + desc + "`" : "";
-		return cleanWhitespace(`${gradeOutput} ${descOutput} ${UNICODE_LEFT_ARROW} ${baseOutput} ${critOutput} ${vsOutput}`);
+		return cleanWhitespace(`${gradeOutput} ${descOutput} ${UNICODE_LEFT_ARROW} ${baseOutput} ${critOutput} ${totalSuccesses}`);
 	}
 
 	//#region static

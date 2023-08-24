@@ -76,11 +76,14 @@ export default class Colors {
 
 			case ColorType.PlayerCharacterAlt:
 			case ColorType.PlayerCharacterCompanion:
+			case ColorType.PlayerCharacterFamiliar:
 			case ColorType.PlayerCharacterHireling:
 				return color?.toDiscordColor() ?? this.toDiscordColor(ColorType.PlayerCharacter);
 
 			case ColorType.NonPlayerCharacterAlly:
 			case ColorType.NonPlayerCharacterEnemy:
+			case ColorType.NonPlayerCharacterBoss:
+			case ColorType.NonPlayerCharacterMinion:
 				return color?.toDiscordColor() ?? this.toDiscordColor(ColorType.NonPlayerCharacter);
 
 			default:

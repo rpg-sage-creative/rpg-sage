@@ -9,11 +9,12 @@ import { DiscordId, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import { discordPromptYesNoDeletable } from "../../discord/prompts";
 import ActiveBot from "../model/ActiveBot";
-import type SageInteraction from "../model/SageInteraction";
+import SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
-import GameMap, { TMoveDirection } from "./map/GameMap";
+import GameMap, { TCompassDirection, TMoveDirection } from "./map/GameMap";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, TGameMapTerrain, TGameMapToken } from "./map/GameMapBase";
 import gameMapImporter, { TParsedGameMapCore } from "./map/gameMapImporter";
+import { registerCommandRegex } from "./cmd";
 
 //#region buttons
 
@@ -81,8 +82,10 @@ function toDirection(action: TMapAction): string {
 //#endregion
 
 /** If the user is a player in a game, this will ensure their tokens (pc/companions) are on the map */
-function ensurePlayerCharacter(sageInteraction: SageInteraction, gameMap: GameMap): boolean {
-	const pc = sageInteraction.playerCharacter;
+function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameMap: GameMap): boolean {
+	const reply = "message" in sageCommand ? sageCommand.message.reply : sageCommand.reply;
+
+	const pc = sageCommand.playerCharacter;
 	if (!pc) {
 		return false;
 	}
@@ -95,7 +98,7 @@ function ensurePlayerCharacter(sageInteraction: SageInteraction, gameMap: GameMa
 				?? gameMap.tokens.find(token => token.name === charName)
 				?? gameMap.tokens.find(token => token.url === charUrl);
 			if (!found) {
-				sageInteraction.reply(`Adding token for ${charName} ...`, false);
+				reply(`Adding token for ${charName} ...`, false);
 				gameMap.tokens.push({
 					auras: [],
 					characterId: char.id,
@@ -105,12 +108,12 @@ function ensurePlayerCharacter(sageInteraction: SageInteraction, gameMap: GameMa
 					pos: gameMap.spawn ?? [1,1],
 					size: [1,1],
 					url: charUrl,
-					userId: sageInteraction.user.id
+					userId: sageCommand.sageUser.did
 				});
 				updated = true;
 			}else {
 				if (found.name !== charName || found.url !== charUrl) {
-					sageInteraction.reply(`Updating token for ${charName} ...`, false);
+					reply(`Updating token for ${charName} ...`, false);
 					found.name = charName;
 					found.url = charUrl;
 					updated = true;
@@ -344,6 +347,7 @@ export function registerCommandHandlers(): void {
 	registerInteractionListener(mapTerrainTester, mapTerrainHandler);
 	registerInteractionListener(mapTokenTester, mapTokenHandler);
 	registerMessageListener(mapImportTester, mapImportHandler);
+	registerCommandRegex(/^map(-|\s+)move(\s*\[(\b(\s|nw|n|ne|w|e|sw|s|se))+\])+\s*$/i, mapMoveHandler);
 }
 
 //#region interaction listener testers
@@ -609,4 +613,47 @@ function mapCommand(): TSlashCommand {
 
 export function registerSlashCommands(): void {
 	registerSlashCommand(mapCommand());
+}
+
+function inputToCompassDirections(sageMessage: SageMessage): TCompassDirection[] {
+	const directions: TCompassDirection[] = [];
+	const matches = sageMessage.slicedContent.match(/\[(\b(\s|nw|n|ne|w|e|sw|s|se))+\]/ig);
+	matches?.forEach(match => {
+		directions.push(...match.slice(1, -1).toLowerCase().split(/\s/).filter(s => s) as TCompassDirection[]);
+	});
+	return directions;
+}
+
+async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
+	const directions = inputToCompassDirections(sageMessage);
+	const mapUserId = sageMessage.sageUser.did;
+	const mapMessageId = sageMessage.message.reference?.messageId;
+	const mapExists = mapMessageId && directions.length && GameMap.exists(mapMessageId);
+	const gameMap = mapExists ? await GameMap.forUser(mapMessageId, mapUserId, true) : null;
+	if (gameMap) {
+		ensurePlayerCharacter(sageMessage, gameMap);
+		const activeImage = gameMap.activeImage;
+		if (!activeImage) {
+			await sageMessage.message.reply(`You have no image to move ...`);
+			return;
+		}
+		const moveEmoji = directions.map(dir => `[${dir}]`).join(" ");
+		const [bool, promptMsg] = await discordPromptYesNoDeletable(sageMessage, `Move ${activeImage.name} ${moveEmoji} ?`);
+		await promptMsg?.delete();
+		if (bool === true) {
+			const movingMessage = await sageMessage.send(`Moving ${activeImage.name} ${moveEmoji} ...`);
+			const moved = gameMap.moveActiveToken(...directions);
+			const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
+			const updated = (moved || shuffled)
+				&& await renderMap(await sageMessage.message.fetchReference() as Discord.Message, gameMap);
+			if (updated) {
+				for (const msg of movingMessage) await msg.delete();
+				await sageMessage.reactSuccess();
+				return;
+			}
+			await sageMessage.message.reply(`Error moving image ...`);
+		}else {
+			await sageMessage.reactFailure();
+		}
+	}
 }

@@ -6,6 +6,7 @@
 echoLog "pre-build.sh starting ..."
 
 if [ "$PKG" = "data" ]; then
+	echo "Do nothing for data."
 else
 	echoAndDo "cd $sageRootDir"
 	echoAndDo "rm -rf dist"

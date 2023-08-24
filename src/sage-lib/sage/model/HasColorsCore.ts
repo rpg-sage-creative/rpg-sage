@@ -15,10 +15,13 @@ export enum ColorType {
 	NonPlayerCharacter = 52,
 	NonPlayerCharacterAlly = 521,
 	NonPlayerCharacterEnemy = 522,
+	NonPlayerCharacterBoss = 523,
+	NonPlayerCharacterMinion = 524,
 	PlayerCharacter = 53,
 	PlayerCharacterAlt = 531,
 	PlayerCharacterCompanion = 532,
-	PlayerCharacterHireling = 533,
+	PlayerCharacterFamiliar = 533,
+	PlayerCharacterHireling = 534,
 
 	PfsCommand = 6
 }
