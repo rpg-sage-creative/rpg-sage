@@ -33,6 +33,9 @@ export default class DiscordId {
 	}
 
 	public static from(value: string): DiscordId | null {
+		if (DiscordId.isChannelLink(value)) {
+			return new DiscordId(SnowflakeType.ChannelReference, value.split("/").pop()!);
+		}
 		if (DiscordId.isChannelReference(value)) {
 			return new DiscordId(SnowflakeType.ChannelReference, DiscordId.parseId(value));
 		}
@@ -56,12 +59,27 @@ export default class DiscordId {
 		return (value?.match(/\d{16,}/) ?? [])[0] ?? NilSnowflake;
 	}
 
+	public static isChannelLink(value: string): boolean {
+		// messageUrl: https://discord.com/channels/480488957889609733/680955207487586363/1147994502989095002
+		// serverId: 480488957889609733
+		// channelId: 680955207487586363
+		// messageId: 1147994502989095002
+
+		// channelUrl: https://discord.com/channels/480488957889609733/680955207487586363
+		// serverId: 480488957889609733
+		// channelId: 680955207487586363
+
+		return isDefined(value?.match(/^https:\/\/discord\.com\/channels\/\d{16,}\/\d{16,}$/));
+	}
+
 	public static isChannelReference(value: string): boolean {
 		return isDefined(value?.match(/^<#\d{16,}>$/));
 	}
+
 	public static isCustomEmoji(value: string): boolean {
 		return isDefined(value?.match(/^<:\w{2,}:\d{16,}>$/));
 	}
+
 	public static isRoleMention(value: string): boolean {
 		return isDefined(value?.match(/^<@&\d{16,}>$/));
 	}
@@ -70,12 +88,6 @@ export default class DiscordId {
 	}
 	public static isUserMention(value: string): boolean {
 		return isDefined(value?.match(/^<@\!?\d{16,}>$/));
-	}
-
-	public static isMentionOrReference(value: string): boolean {
-		return DiscordId.isChannelReference(value)
-			|| DiscordId.isRoleMention(value)
-			|| DiscordId.isUserMention(value);
 	}
 
 	public static toChannelReference(did: Optional<Discord.Snowflake>): string | null {
