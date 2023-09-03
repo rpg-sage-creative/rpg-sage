@@ -3,6 +3,8 @@ import type { Optional, OrUndefined } from "../../sage-utils";
 import { isDefined } from "../../sage-utils";
 import { NilSnowflake } from "./consts";
 import { SnowflakeType } from "./enums";
+import { existsAndUnique } from "../../sage-utils/utils/ArrayUtils/Filters";
+import { DMessage } from "./types";
 
 type THasSnowflakeId = { id:Discord.Snowflake; };
 type THasSnowflakeDid = { did:Discord.Snowflake; };
@@ -53,6 +55,20 @@ export default class DiscordId {
 			return new DiscordId(SnowflakeType.Snowflake, value);
 		}
 		return null;
+	}
+
+	public static parseMentions(message: DMessage): { channelIds: Discord.Snowflake[]; } {
+		const channelMentions = message.mentions.channels;
+		const channelUrls = message.content?.match(/https:\/\/discord\.com\/channels\/\d{16,}\/\d{16,}[^\/]/g) ?? [];
+		const channelReferences = message.content?.match(/<#\d{16,}>/g) ?? [];
+		const channelIds = channelMentions.map(channel => channel.id)
+							.concat(channelUrls.map(url => url.split("/").pop()!))
+							.concat(channelReferences.map(DiscordId.parseId))
+							.filter(existsAndUnique)
+							;
+		return {
+			channelIds
+		};
 	}
 
 	public static parseId(value: string): Discord.Snowflake {
