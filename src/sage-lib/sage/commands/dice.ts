@@ -4,9 +4,9 @@ import { NEWLINE } from "../../../sage-pf2e";
 import type { Optional, TKeyValueArg } from "../../../sage-utils";
 import { addCommas } from "../../../sage-utils/utils/NumberUtils";
 import { random, randomItem } from "../../../sage-utils/utils/RandomUtils";
-import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, Tokenizer } from "../../../sage-utils/utils/StringUtils";
+import { chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import type { DUser, TChannel, TCommandAndArgsAndData } from "../../discord";
-import { DiscordId, MessageType } from "../../discord";
+import { DiscordId, DiscordMaxValues, MessageType } from "../../discord";
 import { createMessageEmbed } from "../../discord/embeds";
 import { registerMessageListener } from "../../discord/handlers";
 import { sendTo } from "../../discord/messages";
@@ -212,8 +212,7 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0,
 		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
 		publicMentionLine = await createMentionLine(sageMessage),
-		secretMentionLine = await createMentionLine(sageMessage, true),
-		sageCache = sageMessage.caches;
+		secretMentionLine = await createMentionLine(sageMessage, true);
 
 	const gmPostContents: Optional<string>[] = [];
 	const gmEmbedContents: Optional<string>[] = [];
@@ -245,9 +244,7 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 	const gmEmbedContent = gmEmbedContents.filter(isNotBlank).join(NEWLINE);
 	if (gmPostContent || gmEmbedContent) {
 		if (gmTargetChannel) {
-			const embed = createEmbedOrNull(sageMessage, gmEmbedContent);
-			const embeds = embed ? [embed] : [];
-			await sendTo({ target: gmTargetChannel, content: gmPostContent, embeds, sageCache });
+			await _sendTo(sageMessage, gmTargetChannel, gmPostContent, gmEmbedContent);
 		}else {
 			console.log("no gmTargetChannel!");
 		}
@@ -256,14 +253,40 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 	const mainPostContent = mainPostContents.filter(isNotBlank).join(NEWLINE);
 	const mainEmbedContent = mainEmbedContents.filter(isNotBlank).join(NEWLINE);
 	if (mainPostContent || mainEmbedContent) {
-		if (!targetChannel) console.log("no targetChannel!");
-		const embed = createEmbedOrNull(sageMessage, mainEmbedContent);
-		const embeds = embed ? [embed] : [];
-		await sendTo({ target: targetChannel, content: mainPostContent, embeds, sageCache });
+		if (targetChannel) {
+			await _sendTo(sageMessage, targetChannel, mainPostContent, mainEmbedContent);
+		}else {
+			console.log("no targetChannel!");
+		}
 	}
 
 	if (allSecret && sageMessage instanceof SageMessage) {
 		await sageMessage.reactDie();
+	}
+}
+
+function createDiceOutputEmbeds(sageMessage: TInteraction, embedContent?: string): Discord.MessageEmbed[] {
+	if (embedContent) {
+		const chunks = chunk(embedContent, DiscordMaxValues.embed.totalLength);
+		return chunks.map(chunk => createMessageEmbed("", chunk, sageMessage.toDiscordColor(ColorType.Dice)));
+	}
+	return [];
+}
+
+async function _sendTo(sageMessage: TInteraction, target: TChannel | DUser, postContent: string, embedContent: string): Promise<void> {
+	const sageCache = sageMessage.caches;
+	const _embeds = createDiceOutputEmbeds(sageMessage, embedContent);
+	const _chunks = chunk(postContent, DiscordMaxValues.message.contentLength);
+	while (_chunks.length) {
+		// if last chunk and we have embeds, grab the first embed
+		const embeds = _chunks.length === 1 && _embeds.length > 0 ? [_embeds.shift()!] : [];
+		const content = _chunks.shift();
+		await sendTo({ target, content, embeds, sageCache });
+	}
+	for (const embed of _embeds) {
+		const embeds = [embed];
+		const content = "";
+		await sendTo({ target, content, embeds, sageCache });
 	}
 }
 

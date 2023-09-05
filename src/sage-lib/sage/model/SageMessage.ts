@@ -16,6 +16,7 @@ import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
 import SageCache from "./SageCache";
 import SageMessageArgsManager from "./SageMessageArgsManager";
 import { TAlias } from "./User";
+import { isDeleted } from "../../discord/deletedMessages";
 
 interface SageMessageCore extends HasSageCacheCore {
 	message: DMessage;
@@ -308,11 +309,18 @@ export default class SageMessage
 	}
 	/** This was pulled here to avoid duplicating code. */
 	private async _react(message: Optional<DMessage>, emoji: string): Promise<boolean> {
-		if (message && await this.canReact(message)) {
-			const reaction = await message.react(emoji).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
-			return reaction ? true : false;
-		}
-		return false;
+		if (!message) return false;
+		// before checking to see if we can react, let's see if it still exists
+		if (isDeleted(message.id)) return false;
+		if (!(await this.canReact(message))) return false;
+		// just in case it was deleted while we were checking
+		if (isDeleted(message.id)) return false;
+		const fetched = await message.fetch(true).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+		if (!fetched) return false;
+		// just in case it was deleted while we were fetching
+		if (isDeleted(fetched.id)) return false;
+		const reaction = await fetched?.react(emoji).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+		return reaction ? true : false;
 	}
 	public async canReact(message: DMessage = this.message): Promise<boolean> {
 		if (!message) return false;
