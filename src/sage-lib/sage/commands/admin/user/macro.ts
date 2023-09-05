@@ -174,9 +174,8 @@ async function macroMove(sageMessage: SageMessage): Promise<void> {
 	let saved = false;
 	const existing = findMacro(sageMessage, macroName);
 	if (existing) {
-		const warning = checkForOverride(sageMessage, `[${existing.name}]`);
 		const existingPrompt = macroToPrompt(existing, false, false);
-		const updatedPrompt = macroToPrompt(categoryPair.value, existing.name, existing.dice, false, warning);
+		const updatedPrompt = macroToPrompt(categoryPair.value, existing.name, existing.dice, false, false);
 
 		const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Update macro?`);
 		promptRenderable.append(`from:${existingPrompt}\nto:${updatedPrompt}`);
