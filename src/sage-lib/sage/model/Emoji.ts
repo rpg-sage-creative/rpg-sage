@@ -21,6 +21,7 @@ function emojify(text: string, matches: string[], replacement: string): string {
 	});
 
 	const parsers = {
+		redacted: /```[^`]*```|``[^`]*``|`[^`]*`/,
 		boundary: /:/,
 		emoji: XRegExp(markedMatches.map(XRegExp.escape).join("|"), "i")
 	};
