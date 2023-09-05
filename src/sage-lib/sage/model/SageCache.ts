@@ -10,6 +10,8 @@ import type Bot from "./Bot";
 import type Game from "./Game";
 import type Server from "./Server";
 import type User from "./User";
+import { isDeleted } from "../../discord/deletedMessages";
+import { errorReturnFalse } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 
 export type TSageCacheCore = {
 	discord: DiscordCache;
@@ -87,26 +89,61 @@ export default class SageCache {
 		return this.canSendMessageToMap.get(key)!;
 	}
 
+	private hasTupperMap = new Map<string, boolean>();
+	public async hasTupper(discordKey: DiscordKey): Promise<boolean> {
+		const key = discordKey.key;
+		if (!this.hasTupperMap.has(key)) {
+			this.hasTupperMap.set(key, await _hasTupper(this, discordKey).catch(errorReturnFalse));
+		}
+		return this.hasTupperMap.get(key) ?? false;
+
+		async function _hasTupper(sageCache: SageCache, discordKey: DiscordKey): Promise<boolean> {
+			if (!discordKey.hasServer) return false;
+
+			const tupperId = "431544605209788416";
+			const tupper = await sageCache.discord.fetchGuildMember(tupperId);
+			// console.log({tupperId,tupper:!!tupper});
+			if (!tupper) return false;
+
+			const thread = await sageCache.discord.fetchChannel<Discord.ThreadChannel>(discordKey.thread);
+			// console.log({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId)});
+			if (thread?.guildMembers.has(tupperId)) return true;
+
+			const channel = await sageCache.discord.fetchChannel<Discord.TextChannel>(discordKey.channel);
+			// console.log({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId),channelId:discordKey.channel,channel:!!channel?.members.has(tupperId)});
+			return channel?.members.has(tupperId) === true;
+		}
+	}
+
 	private canReactToMap = new Map<string, boolean>();
 	public async canReactTo(discordKey: DiscordKey): Promise<boolean> {
 		const key = discordKey.key;
 		if (!this.canReactToMap.has(key)) {
+			this.canReactToMap.set(key, await _canReactTo(this, discordKey).catch(errorReturnFalse));
+		}
+		return !isDeleted(discordKey.message) // check deleted messages just in case
+			&& this.canReactToMap.get(key)!;
+
+		async function _canReactTo(sageCache: SageCache, discordKey: DiscordKey): Promise<boolean> {
 			if (discordKey.isDm) {
-				this.canReactToMap.set(key, true);
+				return true;
 			}else {
-				const thread = await this.discord.fetchChannel(discordKey.thread);
-				const channel = await this.discord.fetchChannel<Discord.TextChannel>(discordKey.channel);
-				const botUser = await this.discord.fetchUser(ActiveBot.active.did);
+				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
+				const thread = await sageCache.discord.fetchChannel(discordKey.thread);
+				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
+				const channel = await sageCache.discord.fetchChannel<Discord.TextChannel>(discordKey.channel);
+				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
+				const botUser = await sageCache.discord.fetchUser(ActiveBot.active.did);
+				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
 				if (botUser && (thread || channel)) {
 					const reactPerm = "ADD_REACTIONS";
 					const perms = channel?.permissionsFor(botUser);
-					this.canReactToMap.set(key, perms?.has(reactPerm) ?? true);
+					return perms?.has(reactPerm) ?? true;
 				}else {
-					this.canReactToMap.set(key, false);
+					return false;
 				}
 			}
 		}
-		return this.canReactToMap.get(key)!;
 	}
 
 	private canWebhookToMap = new Map<string, boolean>();

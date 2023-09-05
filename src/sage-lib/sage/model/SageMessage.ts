@@ -310,16 +310,21 @@ export default class SageMessage
 	/** This was pulled here to avoid duplicating code. */
 	private async _react(message: Optional<DMessage>, emoji: string): Promise<boolean> {
 		if (!message) return false;
-		// before checking to see if we can react, let's see if it still exists
-		if (isDeleted(message.id)) return false;
+
+		const hasTupper = await this.caches.hasTupper(DiscordKey.fromMessage(message));
+		if (hasTupper) {
+			// let's pause for a second in case Tupper is involved ...
+			if (this.bot.codeName === "dev") console.log(`Pausing for Tupper ...`);
+			await (new Promise(res => setTimeout(res, 1000)));
+			if (this.bot.codeName === "dev") console.log(`                   ... done pausing for Tupper.`);
+		}
+
 		if (!(await this.canReact(message))) return false;
-		// just in case it was deleted while we were checking
+
+		// just in case it was deleted while we were waiting
 		if (isDeleted(message.id)) return false;
-		const fetched = await message.fetch(true).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
-		if (!fetched) return false;
-		// just in case it was deleted while we were fetching
-		if (isDeleted(fetched.id)) return false;
-		const reaction = await fetched?.react(emoji).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+
+		const reaction = await message?.react(emoji).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
 		return reaction ? true : false;
 	}
 	public async canReact(message: DMessage = this.message): Promise<boolean> {
