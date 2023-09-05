@@ -10,6 +10,47 @@ type THasSnowflakeId = { id:Discord.Snowflake; };
 type THasSnowflakeDid = { did:Discord.Snowflake; };
 type TSnowflakeResolvable = Discord.Snowflake | THasSnowflakeId | THasSnowflakeDid;
 
+function createUrlRegex(global?: "g"): RegExp {
+	// https://discord.com/channels/480488957889609733/680954802003378218
+	// https://discord.com/channels/480488957889609733/680954802003378218/1148099095555215422
+	// serverId = 480488957889609733
+	// channelId = 680954802003378218
+	// messageId = 1148099095555215422
+
+	// https://discord.com/channels/@me/471161996411142149/1148033705789632592
+	// userId = 193773494079717378
+	// channelId = 471161996411142149
+	// messageId = 1148033705789632592
+
+	if (global === "g")
+	return  /https:\/\/discord\.com\/channels\/(@me|\d{16,})\/(\d{16,})(?:\/(\d{16,}))?/g;
+	return /^https:\/\/discord\.com\/channels\/(@me|\d{16,})\/(\d{16,})(?:\/(\d{16,}))?$/;
+}
+function contentToUrls(content: Optional<string>): string[] {
+	return content?.match(createUrlRegex("g")) ?? [];
+}
+type TDiscordKey = { server:Discord.Snowflake; channel:Discord.Snowflake; message:Discord.Snowflake; };
+function urlToKey(url: Optional<string>): TDiscordKey | null {
+	return urlsToKeys([url])[0] ?? null;
+}
+function isNilSnowflake(value: Optional<Discord.Snowflake>): boolean {
+	return value?.match(/^0{16,}$/) !== null;
+}
+function orNilSnowflake(value: Optional<Discord.Snowflake>): Discord.Snowflake {
+	return value?.match(/^\d{16,}$/) && !isNilSnowflake(value) ? value : NilSnowflake;
+}
+function urlsToKeys(urls: Optional<string>[]): TDiscordKey[] {
+	const regex = createUrlRegex();
+	return urls.map(url => {
+		const match = url?.match(regex);
+		if (match) {
+			const [_url, server, channel, message] = match;
+			return { server:orNilSnowflake(server), channel:orNilSnowflake(channel), message:orNilSnowflake(message) };
+		}
+		return null;
+	}).filter(key => key !== null) as TDiscordKey[];
+}
+
 export default class DiscordId {
 	protected constructor(
 		public type: SnowflakeType,
@@ -36,7 +77,7 @@ export default class DiscordId {
 
 	public static from(value: string): DiscordId | null {
 		if (DiscordId.isChannelLink(value)) {
-			return new DiscordId(SnowflakeType.ChannelReference, value.split("/").pop()!);
+			return new DiscordId(SnowflakeType.ChannelReference, urlToKey(value)?.channel!);
 		}
 		if (DiscordId.isChannelReference(value)) {
 			return new DiscordId(SnowflakeType.ChannelReference, DiscordId.parseId(value));
@@ -59,12 +100,13 @@ export default class DiscordId {
 
 	public static parseMentions(message: DMessage): { channelIds: Discord.Snowflake[]; } {
 		const channelMentions = message.mentions.channels;
-		const channelUrls = message.content?.match(/https:\/\/discord\.com\/channels\/\d{16,}\/\d{16,}[^\/]/g) ?? [];
+		const channelUrls = urlsToKeys(contentToUrls(message.content));
 		const channelReferences = message.content?.match(/<#\d{16,}>/g) ?? [];
 		const channelIds = channelMentions.map(channel => channel.id)
-							.concat(channelUrls.map(url => url.split("/").pop()!))
+							.concat(channelUrls.map(url => url.channel))
 							.concat(channelReferences.map(DiscordId.parseId))
 							.filter(existsAndUnique)
+							.filter(id => !isNilSnowflake(id))
 							;
 		return {
 			channelIds
@@ -76,16 +118,7 @@ export default class DiscordId {
 	}
 
 	public static isChannelLink(value: string): boolean {
-		// messageUrl: https://discord.com/channels/480488957889609733/680955207487586363/1147994502989095002
-		// serverId: 480488957889609733
-		// channelId: 680955207487586363
-		// messageId: 1147994502989095002
-
-		// channelUrl: https://discord.com/channels/480488957889609733/680955207487586363
-		// serverId: 480488957889609733
-		// channelId: 680955207487586363
-
-		return isDefined(value?.match(/^https:\/\/discord\.com\/channels\/\d{16,}\/\d{16,}$/));
+		return !isNilSnowflake(urlToKey(value)?.channel);
 	}
 
 	public static isChannelReference(value: string): boolean {

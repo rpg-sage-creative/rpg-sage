@@ -386,7 +386,7 @@ function getGameValues(sageMessage: SageMessage): TGameDefaults {
 function channelArgToDid(arg: string | undefined | null): Snowflake | undefined {
 	if (arg) {
 		if (DiscordId.isChannelReference(arg)) return DiscordId.parseId(arg);
-		if (DiscordId.isChannelLink(arg)) return arg.split("/").pop();
+		if (DiscordId.isChannelLink(arg)) return DiscordId.from(arg)?.did;
 	}
 	return undefined;
 }

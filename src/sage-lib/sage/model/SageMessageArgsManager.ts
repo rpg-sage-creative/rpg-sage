@@ -266,7 +266,7 @@ export default class SageMessageArgsManager extends ArgsManager {
 			let did: Discord.Snowflake | undefined;
 			if (DiscordId.isValidId(arg)) did = arg;
 			if (DiscordId.isChannelReference(arg)) did = DiscordId.parseId(arg);
-			if (DiscordId.isChannelLink(arg)) did = arg.split("/").pop();
+			if (DiscordId.isChannelLink(arg)) did = DiscordId.from(arg)?.did;
 			if (did) {
 				const channel = await this.sageMessage.discord.fetchChannel(did);
 				return channel?.id;
