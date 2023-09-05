@@ -71,7 +71,7 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 
 }
 
-function _macroToPrompt(macro: TMacro, usage: boolean): string {
+function _macroToPrompt(macro: TMacro, usage: boolean, warning: boolean): string {
 	const parts = [
 		`\n> **Name:** ${macro.name}`,
 		`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
@@ -80,20 +80,27 @@ function _macroToPrompt(macro: TMacro, usage: boolean): string {
 	if (usage) {
 		parts.push(`\n\n*Usage:* \`[${macro.name.toLowerCase()}]\``);
 	}
+	if (warning) {
+		parts.push(`\n***Warning:** This overrides Sage dialog emoji: [${macro.name.toLowerCase()}]*`);
+	}
 	return parts.join("");
 }
 
-function macroToPrompt(macro: TMacro, usage: boolean): string;
-function macroToPrompt(category: Optional<string>, name: string, dice: string, usage: boolean): string;
+function macroToPrompt(macro: TMacro, usage: boolean, warning: boolean): string;
+function macroToPrompt(category: Optional<string>, name: string, dice: string, usage: boolean, warning: boolean): string;
 function macroToPrompt(...args: (boolean | Optional<string> | TMacro)[]): string {
-	const usage = <boolean>args.find(arg => typeof (arg) === "boolean");
+	const warning = args.pop() as boolean;
+	const usage = args.pop() as boolean;
 	const macro = <TMacro>args.find(arg => typeof (arg) === "object")
 		?? { category: <Optional<string>>args[0], name: <string>args[1], dice: <string>args[2] };
-	return _macroToPrompt(macro, usage);
+	return _macroToPrompt(macro, usage, warning);
 }
-
+function checkForOverride(sageMessage: SageMessage, usage: string): boolean {
+	return sageMessage.caches.emojify(usage) !== usage;
+}
 async function macroCreate(sageMessage: SageMessage, macro: TMacro): Promise<boolean> {
-	const macroPrompt = macroToPrompt(macro, true);
+	const warning = checkForOverride(sageMessage, `[${macro.name}]`);
+	const macroPrompt = macroToPrompt(macro, true, warning);
 
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Create macro?`);
 	promptRenderable.append(macroPrompt);
@@ -105,8 +112,9 @@ async function macroCreate(sageMessage: SageMessage, macro: TMacro): Promise<boo
 	return false;
 }
 async function macroUpdate(sageMessage: SageMessage, existing: TMacro, updated: TMacro): Promise<boolean> {
-	const existingPrompt = macroToPrompt(existing, false);
-	const updatedPrompt = macroToPrompt(updated, true);
+	const warning = checkForOverride(sageMessage, `[${updated.name}]`);
+	const existingPrompt = macroToPrompt(existing, false, false);
+	const updatedPrompt = macroToPrompt(updated, true, warning);
 
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Update macro?`);
 	promptRenderable.append(`from:${existingPrompt}\nto:${updatedPrompt}`);
@@ -166,8 +174,9 @@ async function macroMove(sageMessage: SageMessage): Promise<void> {
 	let saved = false;
 	const existing = findMacro(sageMessage, macroName);
 	if (existing) {
-		const existingPrompt = macroToPrompt(existing, false);
-		const updatedPrompt = macroToPrompt(categoryPair.value, existing.name, existing.dice, false);
+		const warning = checkForOverride(sageMessage, `[${existing.name}]`);
+		const existingPrompt = macroToPrompt(existing, false, false);
+		const updatedPrompt = macroToPrompt(categoryPair.value, existing.name, existing.dice, false, warning);
 
 		const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Update macro?`);
 		promptRenderable.append(`from:${existingPrompt}\nto:${updatedPrompt}`);
@@ -191,7 +200,8 @@ async function macroDetails(sageMessage: SageMessage): Promise<void> {
 	const macroName = sageMessage.args.removeAndReturnName(true);
 	const existing = findMacro(sageMessage, macroName);
 	if (existing) {
-		renderableContent.append(macroToPrompt(existing, true));
+		const warning = checkForOverride(sageMessage, `[${existing.name}]`);
+		renderableContent.append(macroToPrompt(existing, true, warning));
 	} else {
 		renderableContent.append(`Macro not found! \`${macroName}\``);
 	}
@@ -248,7 +258,7 @@ async function deleteMacro(sageMessage: SageMessage, macro: Optional<TMacro>): P
 		return sageMessage.reactFailure();
 	}
 
-	const macroPrompt = macroToPrompt(macro, false);
+	const macroPrompt = macroToPrompt(macro, false, false);
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Delete Macro?`);
 	promptRenderable.append(macroPrompt);
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable);
