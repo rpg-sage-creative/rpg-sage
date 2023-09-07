@@ -4,6 +4,7 @@ import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common";
 import { Collection } from "../../../sage-utils/utils/ArrayUtils";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { TChannel } from "../../discord";
+import { deleteMessages } from "../../discord/deletedMessages";
 import { send } from "../../discord/messages";
 import type SageMessage from "../model/SageMessage";
 
@@ -72,7 +73,7 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 
 	// delete the "please wait" message(s)
 	const messages = await promise;
-	messages.forEach(message => message.deletable ? message.delete() : void 0);
+	deleteMessages(messages);
 
 	// Send the proper results
 	await send(sageMessage.caches, sageMessage.message.channel as TChannel, renderableToSend, sageMessage.message.author);

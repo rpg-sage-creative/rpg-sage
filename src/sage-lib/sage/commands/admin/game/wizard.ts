@@ -27,7 +27,7 @@
 // 				let updatedTitle = sageMessage.args[DialogArgIndex.Name] && !DiscordUtils.Id.isValidId(sageMessage.args[DialogArgIndex.Name]) && sageMessage.args[DialogArgIndex.Name]
 // 					|| sageMessage.args[DialogArgIndex.DisplayName] && !DiscordUtils.Id.isValidId(sageMessage.args[DialogArgIndex.DisplayName]) && sageMessage.args[DialogArgIndex.DisplayName];
 // 				let updatedContent = sageMessage.args[DialogArgIndex.Content];
-// 				message.edit(updateEmbed(embed, updatedTitle, updatedContent)).then(() => sageMessage.message.delete(), console.error);
+// 				message.edit(updateEmbed(embed, updatedTitle, updatedContent)).then(deleteMessage, console.error);
 // 			}
 // */
 

@@ -6,15 +6,16 @@ import { capitalize, StringMatcher } from "../../../sage-utils/utils/StringUtils
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import { DiscordId, TChannel, TCommandAndArgsAndData } from "../../discord";
+import { deleteMessage, deleteMessages } from "../../discord/deletedMessages";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import { discordPromptYesNoDeletable } from "../../discord/prompts";
 import ActiveBot from "../model/ActiveBot";
 import SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
+import { registerCommandRegex } from "./cmd";
 import GameMap, { TCompassDirection, TMoveDirection } from "./map/GameMap";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, TGameMapTerrain, TGameMapToken } from "./map/GameMapBase";
 import gameMapImporter, { TParsedGameMapCore } from "./map/gameMapImporter";
-import { registerCommandRegex } from "./cmd";
 
 //#region buttons
 
@@ -247,7 +248,7 @@ async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap:
 		await sageInteraction.reply(`Deleting image: ${activeImage.name} ...`, false);
 		const [boolConfirm, msgConfirm] = await discordPromptYesNoDeletable(sageInteraction, `Delete image: ${activeImage.name}?`);
 		if (boolConfirm) {
-			del(msgConfirm);
+			deleteMessage(msgConfirm);
 			const deleted = gameMap.deleteImage(activeImage);
 			const updated = deleted
 				&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
@@ -256,7 +257,7 @@ async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap:
 			}
 			return sageInteraction.reply(`Error deleting image ...`, false);
 		}
-		del(msgConfirm);
+		deleteMessage(msgConfirm);
 		return sageInteraction.deleteReply();
 	}else {
 		return sageInteraction.reply(`You have no image to delete ...`, true);
@@ -317,15 +318,13 @@ async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArg
 	}
 	return null;
 }
-async function del(msg?: Discord.Message | null): Promise<Discord.Message | null> {
-	return msg?.deletable ? msg.delete() : msg ?? null;
-}
+
 async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore): Promise<void> {
 	const channel = sageMessage.message.channel;
 	const [boolImport, msgImport] = await discordPromptYesNoDeletable(sageMessage, `Try to import map: ${mapCore.name}?`);
 	if (boolImport) {
 		const pwConfiguring = await channel.send(`Importing and configuring: ${mapCore.name} ...`);
-		del(msgImport);
+		deleteMessage(msgImport);
 		if (!mapCore.userId) {
 			mapCore.userId = sageMessage.sageUser.did;
 		}
@@ -333,9 +332,9 @@ async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore)
 		if (!success) {
 			await channel.send(`Sorry, something went wrong importing the map.`);
 		}
-		del(pwConfiguring);
+		deleteMessage(pwConfiguring);
 	}
-	del(msgImport);
+	deleteMessage(msgImport);
 }
 
 //#endregion
@@ -639,7 +638,7 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 		}
 		const moveEmoji = directions.map(dir => `[${dir}]`).join(" ");
 		const [bool, promptMsg] = await discordPromptYesNoDeletable(sageMessage, `Move ${activeImage.name} ${moveEmoji} ?`);
-		await promptMsg?.delete();
+		await deleteMessage(promptMsg);
 		if (bool === true) {
 			const movingMessage = await sageMessage.send(`Moving ${activeImage.name} ${moveEmoji} ...`);
 			const moved = gameMap.moveActiveToken(...directions);
@@ -647,7 +646,7 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 			const updated = (moved || shuffled)
 				&& await renderMap(await sageMessage.message.fetchReference() as Discord.Message, gameMap);
 			if (updated) {
-				for (const msg of movingMessage) await msg.delete();
+				await deleteMessages(movingMessage);
 				await sageMessage.reactSuccess();
 				return;
 			}
