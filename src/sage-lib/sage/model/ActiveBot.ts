@@ -6,6 +6,7 @@ import BotRepo from "../repo/BotRepo";
 import type { IBotCore } from "./Bot";
 import Bot, { TBotCodeName } from "./Bot";
 import SageCache from "./SageCache";
+import { setDeleted } from "../../discord/deletedMessages";
 
 interface IClientEventHandler {
 	onClientReady(): void;
@@ -67,7 +68,9 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		this.client.on("messageUpdate", this.onClientMessageUpdate.bind(this));
 		// TODO: Do I need to track deletes for any reason?
 		// messageDelete: [message: Message | PartialMessage];
+		this.client.on("messageDelete", msg => setDeleted(msg.id));
 		// messageDeleteBulk: [messages: Collection<Snowflake, Message | PartialMessage>];
+		this.client.on("messageDeleteBulk", msgs => msgs.forEach(msg => setDeleted(msg.id)));
 
 		this.client.on("messageReactionAdd", this.onClientMessageReactionAdd.bind(this));
 		this.client.on("messageReactionRemove", this.onClientMessageReactionRemove.bind(this));

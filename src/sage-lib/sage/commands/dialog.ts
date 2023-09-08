@@ -2,17 +2,18 @@ import * as Discord from "discord.js";
 import * as _XRegExp from "xregexp";
 import utils, { OrUndefined, TParsers, type Optional } from "../../../sage-utils";
 import { DiscordId, DiscordKey, MessageType, NilSnowflake, ReactionType, TCommand, TCommandAndArgsAndData } from "../../discord";
+import { deleteMessage } from "../../discord/deletedMessages";
 import { embedsToTexts } from "../../discord/embeds";
 import { isAuthorBotOrWebhook, registerMessageListener, registerReactionListener } from "../../discord/handlers";
-import { replaceWebhook, SageDialogWebhookName, sendWebhook } from "../../discord/messages";
+import { SageDialogWebhookName, replaceWebhook, sendWebhook } from "../../discord/messages";
 import type CharacterManager from "../model/CharacterManager";
 import GameCharacter, { type GameCharacterCore, type TDialogMessage } from "../model/GameCharacter";
 import { ColorType } from "../model/HasColorsCore";
 import { EmojiType } from "../model/HasEmojiCore";
 import type SageMessage from "../model/SageMessage";
 import type SageReaction from "../model/SageReaction";
-import { DialogType } from "../repo/base/IdRepository";
 import DialogMessageRepository from "../repo/DialogMessageRepository";
+import { DialogType } from "../repo/base/IdRepository";
 import { parseDiceMatches, sendDice } from "./dice";
 import { registerInlineHelp } from "./help";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
@@ -42,9 +43,7 @@ async function sendDialogRenderable(sageMessage: SageMessage, renderableContent:
 		const sent = await sendWebhook(sageMessage.caches, targetChannel, renderableContent, authorOptions, dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 		if (sent.length) {
 			// sageMessage._.set("Dialog", sent[sent.length - 1]);
-			// if (sageMessage.message.deletable) {
-			// 	sageMessage.message.delete();
-			// }
+			// 	deleteMesage(sageMessage.message);
 		}
 		return sent;
 	} else {
@@ -557,7 +556,7 @@ async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent)
 		const threadId = sageMessage.threadDid;
 		const content = sageMessage.dialogType === DialogType.Post ? embedsToTexts([updatedEmbed]).join("\n") : undefined;
 		const embeds = sageMessage.dialogType === DialogType.Embed ? [updatedEmbed] : [];
-			await webhook.editMessage(message.id, { content, embeds, threadId }).then(() => sageMessage.message.delete(), console.error);
+			await webhook.editMessage(message.id, { content, embeds, threadId }).then(() => deleteMessage(sageMessage.message), console.error);
 	}else {
 		return sageMessage.reactWarn();
 	}
@@ -669,7 +668,7 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 }
 
 async function doDelete(sageReaction: SageReaction): Promise<void> {
-	await sageReaction.messageReaction.message.delete();
+	await deleteMessage(sageReaction.messageReaction.message);
 }
 
 // #endregion

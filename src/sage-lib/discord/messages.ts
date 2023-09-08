@@ -1,11 +1,12 @@
 import type * as Discord from "discord.js";
 import utils, { Optional, OrNull } from "../../sage-utils";
+import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import type SageCache from "../sage/model/SageCache";
 import { DialogType } from "../sage/repo/base/IdRepository";
 import DiscordKey from "./DiscordKey";
+import { deleteMessage, deleteMessages } from "./deletedMessages";
 import { createMessageEmbed, embedsToTexts, resolveToEmbeds, resolveToTexts } from "./embeds";
 import type { DMessage, DUser, IMenuRenderable, TChannel, TRenderableContentResolvable } from "./types";
-import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 
 //#region helpers
 
@@ -109,8 +110,7 @@ export async function replaceWebhook(caches: SageCache, originalMessage: DMessag
 	if (!webhook) {
 		return Promise.reject(`Cannot Find Webhook: ${originalMessage.guild?.id}-${originalMessage.channel?.id}-${SageDialogWebhookName}`);
 	}
-	// const deleted =
-		await originalMessage.delete();
+	await deleteMessage(originalMessage);
 	const threadId = originalMessage.channel.isThread() ? originalMessage.channel.id : undefined;
 	const content = dialogType === DialogType.Post ? resolveToTexts(caches.cloneForChannel(originalMessage.channel as TChannel), renderableContent).join("\n") : undefined;
 	const embeds = dialogType === DialogType.Embed ? resolveToEmbeds(caches.cloneForChannel(originalMessage.channel as TChannel), renderableContent) : [];
@@ -125,7 +125,7 @@ export async function replace(caches: SageCache, originalMessage: DMessage, rend
 	if (!originalMessage.deletable) {
 		return Promise.reject(`Cannot Delete Message: ${messageToDetails(originalMessage)}`);
 	}
-	await originalMessage.delete();
+	await deleteMessage(originalMessage);
 	return send(caches, originalMessage.channel as TChannel, renderableContent, originalMessage.author);
 }
 
@@ -302,7 +302,7 @@ function sendAndAwaitReactions(caches: SageCache, menuRenderable: IMenuRenderabl
 
 function deleteMessagesOrClearReactions(sentMessages: Discord.Message[], reactions: Discord.MessageReaction[], reacting: boolean, deleted: boolean): void {
 	if (!reacting && deleted) {
-		Promise.all(sentMessages.map(message => message?.deletable && message.delete())).catch(() => {
+		deleteMessages(sentMessages).catch(() => {
 			const popped = sentMessages.pop();
 			if (popped && popped.deletable) {
 				popped.reactions.removeAll().catch(() => {

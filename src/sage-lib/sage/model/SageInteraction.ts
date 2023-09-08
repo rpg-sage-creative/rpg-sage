@@ -1,9 +1,11 @@
 import type * as Discord from "discord.js";
 import type { IHasChannels, IHasGame } from ".";
+import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import utils, { isDefined, Optional } from "../../../sage-utils";
+import utils, { Optional, isDefined } from "../../../sage-utils";
 import type { TGameType } from "../../../slash.mjs";
-import { DInteraction, DiscordKey, DUser, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
+import { DInteraction, DUser, DiscordKey, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
+import { deleteMessages } from "../../discord/deletedMessages";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { send } from "../../discord/messages";
 import { DicePostType } from "../commands/dice";
@@ -13,7 +15,6 @@ import type GameCharacter from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";
 import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
 import SageCache from "./SageCache";
-import { GameType } from "../../../sage-common";
 
 interface SageInteractionCore extends HasSageCacheCore {
 	interaction: DInteraction;
@@ -172,7 +173,7 @@ export default class SageInteraction<T extends DInteraction = any>
 		return this.pushToReplyStack(async () => {
 			if (this.interaction.replied) {
 				if (this.updates.length) {
-					await Promise.all(this.updates.map(update => update.deletable ? update.delete() : Promise.resolve()));
+					await deleteMessages(this.updates);
 				}
 				await this.interaction.deleteReply();
 			}

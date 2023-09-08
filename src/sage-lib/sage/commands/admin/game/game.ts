@@ -1,4 +1,4 @@
-import type { TextChannel } from "discord.js";
+import type { Snowflake, TextChannel } from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
 import utils, { Optional } from "../../../../../sage-utils";
 import { DiscordId } from "../../../../discord";
@@ -383,17 +383,26 @@ function getGameValues(sageMessage: SageMessage): TGameDefaults {
 
 	return { gameType, defaultCritMethodType, defaultDialogType, defaultDiceOutputType, defaultDicePostType, defaultDiceSecretMethodType };
 }
+function channelArgToDid(arg: string | undefined | null): Snowflake | undefined {
+	if (arg) {
+		if (DiscordId.isChannelReference(arg)) return DiscordId.parseId(arg);
+		if (DiscordId.isChannelLink(arg)) return DiscordId.from(arg)?.did;
+	}
+	return undefined;
+}
 function getGameChannels(sageMessage: SageMessage): IChannel[] {
 	const channels: IChannel[] = [];
 
 	const ic = sageMessage.args.removeKeyValuePair("ic")?.value;
-	if (ic && DiscordId.isChannelReference(ic)) {
-		channels.push({ did:DiscordId.parseId(ic), admin:true, dialog:true, dice:true, gameMaster:PermissionType.Write, player:PermissionType.Write });
+	const icDid = channelArgToDid(ic);
+	if (icDid) {
+		channels.push({ did:icDid, admin:true, dialog:true, dice:true, gameMaster:PermissionType.Write, player:PermissionType.Write });
 	}
 
 	const ooc = sageMessage.args.removeKeyValuePair("ooc")?.value;
-	if (ooc && DiscordId.isChannelReference(ooc)) {
-		channels.push({ did:DiscordId.parseId(ooc), admin:true, commands:true, dialog:true, dice:true, search:true, gameMaster:PermissionType.Write, player:PermissionType.Write });
+	const oocDid = channelArgToDid(ooc);
+	if (oocDid) {
+		channels.push({ did:oocDid, admin:true, commands:true, dialog:true, dice:true, search:true, gameMaster:PermissionType.Write, player:PermissionType.Write });
 	}
 
 	if (!channels.length) {

@@ -1,4 +1,4 @@
-import type * as Discord from "discord.js";
+import * as Discord from "discord.js";
 import { GameType, parseGameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, parseCritMethodType, parseDiceOutputType } from "../../../sage-dice";
 import utils, { Optional } from "../../../sage-utils";
@@ -48,7 +48,7 @@ type TValidTargetChannelFlags = "admin" | "command" | "commands" | "dialog" | "d
 /** /^(admin|commands?|dialog|dice|search)(?:to)?=(\d{16,}|<#\d{16,}>)$/i */
 function removeAndReturnChannelSnowflake(args: string[], key: TValidTargetChannelFlags): Discord.Snowflake | undefined {
 	const lower = key.toLowerCase().replace("commands", "command");
-	const regex = /^(admin|commands?|dialog|dice|search)(?:to)?="(\d{16,}|<#\d{16,}>)"$/i;
+	const regex = /^(admin|commands?|dialog|dice|search)(?:to)?="(\d{16,}|<#\d{16,}>|https:\/\/discord\.com\/channels\/\d{16,}\/\d{16,})"$/i;
 	for (const arg of args) {
 		const match = arg.match(regex);
 		if (match && match[1].toLowerCase().replace("commands", "command") === lower) {
@@ -262,11 +262,17 @@ export default class SageMessageArgsManager extends ArgsManager {
 			return undefined;
 		}
 
-		return <Promise<TArgIndexRet<Discord.Snowflake> | undefined>>this.asyncFindArgIndexRet(async arg =>
-			DiscordId.isChannelReference(arg) ? DiscordId.parseId(arg)
-			: DiscordId.isValidId(arg) ? (await this.sageMessage.discord.fetchChannel(arg))?.id
-			: undefined
-		);
+		return <Promise<TArgIndexRet<Discord.Snowflake> | undefined>>this.asyncFindArgIndexRet(async arg => {
+			let did: Discord.Snowflake | undefined;
+			if (DiscordId.isValidId(arg)) did = arg;
+			if (DiscordId.isChannelReference(arg)) did = DiscordId.parseId(arg);
+			if (DiscordId.isChannelLink(arg)) did = DiscordId.from(arg)?.did;
+			if (did) {
+				const channel = await this.sageMessage.discord.fetchChannel(did);
+				return channel?.id;
+			}
+			return undefined;
+		});
 	}
 	public async removeAndReturnChannelDid(): Promise<Discord.Snowflake | null>;
 	public async removeAndReturnChannelDid(defaultThisChannel: false): Promise<Discord.Snowflake | null>;
