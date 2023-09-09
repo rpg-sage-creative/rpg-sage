@@ -115,6 +115,16 @@ export default class SageCache {
 		}
 	}
 
+	public async pauseForTupper(discordKey: DiscordKey): Promise<void> {
+		const hasTupper = await this.hasTupper(discordKey);
+		if (hasTupper) {
+			// let's pause for a second in case Tupper is involved ...
+			if (this.bot.codeName === "dev") console.log(`Pausing for Tupper ...`);
+			await (new Promise(res => setTimeout(res, 1000)));
+			if (this.bot.codeName === "dev") console.log(`                   ... done pausing for Tupper.`);
+		}
+	}
+
 	private canReactToMap = new Map<string, boolean>();
 	public async canReactTo(discordKey: DiscordKey): Promise<boolean> {
 		const key = discordKey.key;

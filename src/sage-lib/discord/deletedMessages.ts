@@ -2,8 +2,11 @@ import { Snowflake } from "discord.js";
 import { Optional } from "../../sage-utils";
 import { errorReturnNull } from "../../sage-utils/utils/ConsoleUtils/Catchers";
 import { DMessage } from "./types";
+import { EphemeralSet } from "../../sage-utils/utils/ArrayUtils/EphemeralSet";
 
-const deleted = new Set<Snowflake>();
+const deleted = new EphemeralSet<Snowflake>(1000 * 60);
+
+/* We only really need to store deleted state for seconds due to races with Tupper. */
 
 export function setDeleted(messageId: Snowflake): void {
 	// console.log(`${Date.now()}: setDeleted("${messageId}")`);

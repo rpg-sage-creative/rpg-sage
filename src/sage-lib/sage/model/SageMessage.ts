@@ -311,13 +311,7 @@ export default class SageMessage
 	private async _react(message: Optional<DMessage>, emoji: string): Promise<boolean> {
 		if (!message) return false;
 
-		const hasTupper = await this.caches.hasTupper(DiscordKey.fromMessage(message));
-		if (hasTupper) {
-			// let's pause for a second in case Tupper is involved ...
-			if (this.bot.codeName === "dev") console.log(`Pausing for Tupper ...`);
-			await (new Promise(res => setTimeout(res, 1000)));
-			if (this.bot.codeName === "dev") console.log(`                   ... done pausing for Tupper.`);
-		}
+		await this.caches.pauseForTupper(DiscordKey.fromMessage(message));
 
 		if (!(await this.canReact(message))) return false;
 
@@ -327,6 +321,7 @@ export default class SageMessage
 		const reaction = await message?.react(emoji).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
 		return reaction ? true : false;
 	}
+
 	public async canReact(message: DMessage = this.message): Promise<boolean> {
 		if (!message) return false;
 		return this.caches.canReactTo(DiscordKey.fromMessage(message));

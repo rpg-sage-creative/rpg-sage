@@ -110,6 +110,7 @@ export async function replaceWebhook(caches: SageCache, originalMessage: DMessag
 	if (!webhook) {
 		return Promise.reject(`Cannot Find Webhook: ${originalMessage.guild?.id}-${originalMessage.channel?.id}-${SageDialogWebhookName}`);
 	}
+	await caches.pauseForTupper(DiscordKey.fromMessage(originalMessage));
 	await deleteMessage(originalMessage);
 	const threadId = originalMessage.channel.isThread() ? originalMessage.channel.id : undefined;
 	const content = dialogType === DialogType.Post ? resolveToTexts(caches.cloneForChannel(originalMessage.channel as TChannel), renderableContent).join("\n") : undefined;
