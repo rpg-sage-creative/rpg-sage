@@ -1,14 +1,14 @@
 import type * as Discord from "discord.js";
-import utils, { Optional } from "../../../../../sage-utils";
+import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
+import utils, { Optional } from "../../../../../sage-utils";
 import type SageMessage from "../../../model/SageMessage";
 import type Server from "../../../model/Server";
 import { AdminRoleType, IAdminRole } from "../../../model/Server";
-import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
+import { DialogType } from "../../../repo/base/IdRepository";
+import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
-import { DialogType } from "../../../repo/base/IdRepository";
-import { GameType } from "../../../../../sage-common";
 
 async function serverCount(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
@@ -16,7 +16,15 @@ async function serverCount(sageMessage: SageMessage): Promise<void> {
 	}
 	const servers = await sageMessage.caches.servers.getAll();
 	const active = servers.filter(server => server.isActive);
-	return renderCount(sageMessage, "Servers", servers.length, active.length);
+	const guilds = await sageMessage.caches.discord.client.guilds.fetch();
+
+	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>Server Count</b>`);
+	renderableContent.append(`<b>Total</b> ${servers.length}`);
+	renderableContent.append(`<b>Active</b> ${active.length}`);
+	renderableContent.append(`<b>Inactive</b> ${servers.length - active.length}`);
+	renderableContent.append(`<b>Connected</b> ${guilds.size}`);
+	await sageMessage.send(renderableContent);
+	// return renderCount(sageMessage, "Servers", servers.length, active.length);
 }
 
 async function serverList(sageMessage: SageMessage): Promise<void> {
