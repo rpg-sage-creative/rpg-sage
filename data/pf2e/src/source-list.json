@@ -58,7 +58,7 @@
 		"name": "Secrets of Magic",
 		"productLine": "Rulebooks",
 		"code": "PZO2108",
-		"aonId": 0,
+		"aonId": 96,
 		"paizoId": "btq026l5",
 		"id": "aed2d8ea-5ad0-4a75-84c5-523c2f8a76fa"
 	},
@@ -67,7 +67,7 @@
 		"name": "Guns & Gears",
 		"productLine": "Rulebooks",
 		"code": "PZO2109",
-		"aonId": 0,
+		"aonId": 98,
 		"paizoId": "btq026mw",
 		"id": "7f4fa44b-9e86-420a-9767-7be3f5a15a88"
 	},
@@ -76,8 +76,8 @@
 		"name": "Book of the Dead",
 		"productLine": "Rulebooks",
 		"code": "PZO2110",
-		"aonId": 0,
-		"paizoId": "",
+		"aonId": 118,
+		"paizoId": "btq02c0j",
 		"id": "bba086e2-e2e5-46cc-a19d-72ec7d853d17"
 	},
 	{
@@ -85,10 +85,27 @@
 		"name": "Dark Archive",
 		"productLine": "Rulebooks",
 		"code": "PZO2111",
-		"aonId": 0,
-		"paizoId": "",
-		"paizoUrl": "https://downloads.paizo.com/PZO2111+Dark+Archive+Class+Playtest.pdf",
+		"aonId": 129,
+		"paizoId": "btq02d8j",
 		"id": "185b4dee-afab-4747-bb3f-72bb055be2a7"
+	},
+	{
+		"objectType": "Source",
+		"name": "Treasure Vault",
+		"productLine": "Rulebooks",
+		"code": "PZO2112",
+		"aonId": 191,
+		"paizoId": "btq02eav",
+		"id": "baeb8b40-816f-4144-aa0c-aaeac3204449"
+	},
+	{
+		"objectType": "Source",
+		"name": "Rage of Elements",
+		"productLine": "Rulebooks",
+		"code": "PZO2113",
+		"aonId": 205,
+		"paizoId": "btq02eju",
+		"id": "851475f7-30c7-48a5-b67e-d7433da5d486"
 	},
 
 	{
@@ -132,7 +149,7 @@
 		"name": "Lost Omens: Absalom, City of Lost Omens",
 		"productLine": "Lost Omens",
 		"code": "PZO9304",
-		"aonId": 0,
+		"aonId": 108,
 		"paizoId": "btq021bz",
 		"id": "3e44a193-d200-4229-85e2-c0719a8dbfb1"
 	},
@@ -159,7 +176,6 @@
 		"productLine": "Rulebooks",
 		"code": "AAWS",
 		"aonId": 76,
-		"aonUrl": "http://2e.aonprd.com/Sources.aspx?ID=76",
 		"paizoUrl": "https://paizo-images.s3-us-west-2.amazonaws.com/image/download/Azarketi+Ancestry.pdf",
 		"id": "52a9642b-3aac-4558-ad3c-3847faa2899a"
 	},
@@ -186,7 +202,7 @@
 		"name": "Lost Omens: The Grand Bazaar",
 		"productLine": "Lost Omens",
 		"code": "PZO9310",
-		"aonId": 0,
+		"aonId": 100,
 		"paizoId": "btq029xo",
 		"id": "017a777f-24ba-4525-b3b9-327688c4265d"
 	},
@@ -195,9 +211,53 @@
 		"name": "Lost Omens: Monsters of Myth",
 		"productLine": "Lost Omens",
 		"code": "PZO9311",
-		"aonId": 0,
+		"aonId": 107,
 		"paizoId": "btq027u2",
 		"id": "2185018b-5cd7-4ffc-8204-4d8e7cecd27c"
+	},
+	{
+		"objectType": "Source",
+		"name": "Lost Omens: Knights of Lastwall",
+		"productLine": "Lost Omens",
+		"code": "PZO9312",
+		"aonId": 123,
+		"paizoId": "btq02c3a",
+		"id": "8ba7186e-d199-4b5f-a81f-b52012faf97f"
+	},
+	{
+		"objectType": "Source",
+		"name": "Lost Omens: Travel Guide",
+		"productLine": "Lost Omens",
+		"code": "PZO9313",
+		"aonId": 141,
+		"paizoId": "btq02dv8",
+		"id": "3005c912-ebd0-4bc7-9588-078f31814728"
+	},	{
+		"objectType": "Source",
+		"name": "Lost Omens: Impossible Lands",
+		"productLine": "Lost Omens",
+		"code": "PZO9314",
+		"aonId": 146,
+		"paizoId": "btq02dxx",
+		"id": "6d5282d3-4c31-4db2-8028-98655ff3ab55"
+	},
+	{
+		"objectType": "Source",
+		"name": "Lost Omens: Firebrands",
+		"productLine": "Lost Omens",
+		"code": "PZO9315",
+		"aonId": 196,
+		"paizoId": "btq02dy5",
+		"id": "ba44c252-bcdc-46c3-9ca6-b6ff4b7499d5"
+	},
+	{
+		"objectType": "Source",
+		"name": "Lost Omens: Highhelm",
+		"productLine": "Lost Omens",
+		"code": "PZO9316",
+		"aonId": 204,
+		"paizoId": "btq02e6p",
+		"id": "4fad69ad-d1cd-46e8-8c19-d5f97da406c8"
 	},
 
 	{
@@ -793,6 +853,16 @@
 		"productLine": "PFS Scenario",
 		"code": "PFS#S01-03",
 		"aonId": 0,
+		"paizoId": "btq01znd",
+		"id": "ccb60b4e-af3a-489c-aa6b-3f2497cf6b98"
+	},
+	{
+		"objectType": "Source",
+		"name": "The Dragon Who Stole Evoking Day",
+		"pfsQuest": 5,
+		"productLine": "PFS Quest",
+		"code": "PFS#Q5",
+		"aonId": 27,
 		"paizoId": "btq01znd",
 		"id": "ccb60b4e-af3a-489c-aa6b-3f2497cf6b98"
 	}
