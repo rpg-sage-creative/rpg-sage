@@ -59,7 +59,7 @@ function spliceSections(lines: string[], section: "map" | "terrain" | "token" | 
 }
 
 function matchUrlAndName(lines: string[]): [string?, string?] {
-	const url = matchLine(lines, /^https?\:\/\//i);
+	const url = matchLine(lines, /^url=/i, true) ?? matchLine(lines, /^https?\:\/\//i);
 	const name = matchLine(lines, /^name=/i, true);
 	return [url, name];
 }
