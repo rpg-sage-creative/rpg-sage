@@ -84,7 +84,13 @@ function toDirection(action: TMapAction): string {
 
 /** If the user is a player in a game, this will ensure their tokens (pc/companions) are on the map */
 function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameMap: GameMap): boolean {
-	const reply = "message" in sageCommand ? sageCommand.message.reply : sageCommand.reply;
+	function reply(content: string, ephemeral: boolean) {
+		if ("message" in sageCommand) {
+			sageCommand.message.reply(content)
+		}else {
+			sageCommand.reply(content, ephemeral);
+		}
+	}
 
 	const pc = sageCommand.playerCharacter;
 	if (!pc) {
