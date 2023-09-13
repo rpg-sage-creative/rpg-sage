@@ -35,5 +35,10 @@
   "devDependencies": {
     "@types/follow-redirects": "^1.14.1",
     "@types/node": "^18.14.0"
+  },
+  "scripts": {
+    "start": "bash scripts/run-dev.sh",
+    "daemon": "bash scripts/daemon.sh",
+    "deploy": "bash scripts/deploy.sh"
   }
 }
