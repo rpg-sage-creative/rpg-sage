@@ -180,8 +180,9 @@ export default class SageInteraction<T extends DInteraction = any>
 		});
 	}
 
-	private replyStack: Promise<any> = Promise.resolve();
+	private replyStack?: Promise<any>;
 	private pushToReplyStack(fn: () => Promise<any>): Promise<any> {
+		if (!this.replyStack) this.replyStack = Promise.resolve();
 		this.replyStack = this.replyStack.then(fn);
 		return this.replyStack;
 	}
