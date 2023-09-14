@@ -33,10 +33,17 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		return ActiveBot.active?.did === userDid;
 	}
 
-	public client = new Discord.Client(createDiscordClientOptions());
+	public client: Discord.Client;
 
 	private constructor(core: IBotCore, public codeVersion: string) {
 		super(core, null!);
+
+		this.client = new Discord.Client(createDiscordClientOptions());
+		process.on("SIGINT", (_eventName: "SIGINT", code: number) => {
+			console.log("Destroying Discord.Client");
+			this.client.destroy();
+			process.exit(code === 2 ? 0 : 1);
+		});
 
 		// To see options, look for: Discord.ClientEvents (right click nav .on below)
 		this.client.once("ready", this.onClientReady.bind(this));
