@@ -3,6 +3,7 @@ import { Optional } from "../../sage-utils";
 import { errorReturnNull } from "../../sage-utils/utils/ConsoleUtils/Catchers";
 import { DMessage } from "./types";
 import { EphemeralSet } from "../../sage-utils/utils/ArrayUtils/EphemeralSet";
+import GameMapBase from "../sage/commands/map/GameMapBase";
 
 const deleted = new EphemeralSet<Snowflake>(1000 * 60);
 
@@ -11,6 +12,7 @@ const deleted = new EphemeralSet<Snowflake>(1000 * 60);
 export function setDeleted(messageId: Snowflake): void {
 	// console.log(`${Date.now()}: setDeleted("${messageId}")`);
 	deleted.add(messageId);
+	GameMapBase.delete(messageId);
 }
 
 export function isDeleted(messageId: Snowflake): boolean {

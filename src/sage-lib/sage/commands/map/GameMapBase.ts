@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
 import { errorReturnFalse, errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../../sage-utils/utils/FsUtils";
+import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../../sage-utils/utils/FsUtils";
 import RenderableGameMap from "./RenderableGameMap";
 
 //#region types
@@ -163,6 +163,11 @@ export default abstract class GameMapBase {
 	/** returns true if a map for the given id exists */
 	public static exists(messageId: Discord.Snowflake): boolean {
 		return fileExistsSync(getMapFilePath(messageId));
+	}
+
+	public static delete(messageId: Discord.Snowflake): boolean {
+		const path = getMapFilePath(messageId);
+		return deleteFileSync(path);
 	}
 
 	/** returns true if a map for the given id has the given name */
