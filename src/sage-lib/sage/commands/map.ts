@@ -82,6 +82,33 @@ function toDirection(action: TMapAction): string {
 
 //#endregion
 
+/**
+ * Assists in comparing discord attachment image urls.
+ * Removes querystring from links grabbed from the web (usually width/height).
+ * Changes media.discordapp.net to cdn.discordapp.com.
+ */
+function simplifyDiscordAttachmentUrl(url: string): string {
+	// app https://cdn.discordapp.com/attachments/1140421024777781340/1141450682545745930/opal.png
+	// web https://media.discordapp.net/attachments/1140421024777781340/1141450682545745930/opal.png?width=211&height=211
+	const appPrefix = "https://cdn.discordapp.com";
+	const webPrefix = "https://media.discordapp.net";
+	if (url.startsWith(webPrefix)) {
+		const endIndex = url.includes("?") ? url.indexOf("?") : undefined;
+		return appPrefix + url.slice(webPrefix.length, endIndex);
+	}
+	return url;
+}
+
+/** Compares urls only after simplifying them (if they are discord attachment urls from the web). */
+function urlsMatch(a: string, b: string | undefined): boolean {
+	return a && b ? simplifyDiscordAttachmentUrl(a) === simplifyDiscordAttachmentUrl(b) : false;
+}
+
+/** Compares names by cleaning up the text. */
+function namesMatch(a: string, b: string | undefined): boolean {
+	return a && b ? StringMatcher.matches(a, b) : false;
+}
+
 /** If the user is a player in a game, this will ensure their tokens (pc/companions) are on the map */
 function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameMap: GameMap): boolean {
 	function reply(content: string, ephemeral: boolean) {
@@ -98,12 +125,14 @@ function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameM
 	}
 	let updated = false;
 	[pc].concat(pc.companions).forEach(char => {
-		const charUrl = char.tokenUrl ?? char.avatarUrl;
+		const { tokenUrl, avatarUrl } = char;
+		const charUrl = tokenUrl ?? avatarUrl;
 		if (charUrl) {
 			const charName = char.name;
+			const charAlias = char.alias;
 			const found = gameMap.tokens.find(token => token.characterId === char.id)
-				?? gameMap.tokens.find(token => token.name === charName)
-				?? gameMap.tokens.find(token => token.url === charUrl);
+				?? gameMap.tokens.find(token => namesMatch(token.name, charName) || namesMatch(token.name, charAlias))
+				?? gameMap.tokens.find(token => urlsMatch(token.url, tokenUrl) || urlsMatch(token.url, avatarUrl));
 			if (!found) {
 				reply(`Adding token for ${charName} ...`, false);
 				gameMap.tokens.push({
