@@ -155,7 +155,11 @@ export function parseDiceMatches(sageMessage: TInteraction, content: string): TD
 //#region listener / handler
 
 async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TDiceOutput[]> | null> {
-	if (!sageMessage.allowDice || sageMessage.slicedContent.match(/^\!*\s*((add|set)[ \-]?macro|macro[ \-]?(add|set))/i)) {
+	if (!sageMessage.allowDice) return null;
+	if (sageMessage.slicedContent.match(/^\!*\s*((add|set)[ \-]?macro|macro[ \-]?(add|set))/i)) {
+		return null;
+	}
+	if (sageMessage.slicedContent.match(/^\!*\s*((add|set)[ \-]?alias|alias[ \-]?(add|set))/i)) {
 		return null;
 	}
 	if (sageMessage.game && !(sageMessage.isGameMaster || sageMessage.isPlayer)) {
