@@ -6,7 +6,7 @@ NOW=`date '+%F-%H%M'`;
 [ -f "./inc/all.sh" ] && source "./inc/all.sh" || source "./scripts/inc/all.sh"
 
 # warn if any args are missing
-if [ -z "$ENV" ] || [ -z "$PKG" ]; then
+if [ -z "$ENV" ] || [ -z "$PKG" ] || [ "$PKG" = "maps" ]; then
 	echoLog "/bin/bash deploy.sh dev|beta|stable|data aws"
 	exit 1
 fi
@@ -72,6 +72,12 @@ if [ "$PKG" = "data" ]; then
 else
 	packageDirTmp="$packageDir-tmp"
 	packageDirOld="$packageDir-$NOW"
+	mapsDelete=""
+	mapsStart=""
+	if [ "$PKG" = "stable" ]; then
+		mapsDelete="pm2 desc sage-maps-$ENV >/dev/null && pm2 delete sage-maps-$ENV"
+		mapsStart="pm2 start map.mjs --name sage-maps-$ENV --node-args='--experimental-modules --es-module-specifier-resolution=node'"
+	fi
 	sshCommands=(
 		"mkdir $packageDirTmp"
 		"ln -s $botDir/data $packageDirTmp/data"
@@ -80,10 +86,12 @@ else
 		"cd $packageDirTmp"
 		"npm install"
 		"pm2 desc sage-$PKG-$ENV >/dev/null && pm2 delete sage-$PKG-$ENV"
+		"$mapsDelete"
 		"mv $packageDir $packageDirOld"
 		"mv $packageDirTmp $packageDir"
 		"cd $packageDir"
 		"pm2 start app.mjs --name sage-$PKG-$ENV --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $PKG dist"
+		"$mapsStart"
 		"pm2 save"
 	)
 fi

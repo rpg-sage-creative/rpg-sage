@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # ssh connection
 sshHost="ec2-user@api.rpgsage.io"

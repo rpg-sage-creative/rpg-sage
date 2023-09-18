@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #region local npm libs for DEV only
 
 NODE_TYPES_NPM="@types/node@18.14.0"

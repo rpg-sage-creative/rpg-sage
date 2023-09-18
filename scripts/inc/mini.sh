@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # ssh connection
 sshHost="Ladnar-Mini.local"
