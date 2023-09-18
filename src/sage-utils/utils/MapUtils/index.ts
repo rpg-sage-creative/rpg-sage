@@ -1,6 +1,6 @@
 import { Canvas, createCanvas, Image, loadImage, SKRSContext2D } from "@napi-rs/canvas";
 import { errorReturnNull } from "../ConsoleUtils/Catchers";
-// import { getBuffer } from "../HttpsUtils";
+import { getBuffer } from "../HttpsUtils";
 import type { IMap, IMapLayer, THasClip, THasNatural, TImageMeta, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage, TOrPromiseT } from "./types";
 
 type mimeType = "image/png" | "image/jpeg" | "image/webp";
@@ -69,21 +69,21 @@ function calcClip(clip: Partial<THasClip>, natural: THasNatural): TCalcClip {
 	return [x, y, w, h];
 }
 
-// function catchBufferFetch(err: any): null {
-// 	if (String(err).includes("ECONNREFUSED")) {
-// 		console.warn(`MapServer down, creating internally.`);
-// 	}else {
-// 		console.error(err);
-// 	}
-// 	return null;
-// }
+function catchBufferFetch(err: any): null {
+	if (String(err).includes("ECONNREFUSED")) {
+		console.warn(`MapServer down, creating internally.`);
+	}else {
+		console.error(err);
+	}
+	return null;
+}
 
 /** fetches and returns an image Buffer */
 export async function iMapToBuffer(iMap: IMap, fileType?: mimeType): Promise<Buffer | null> {
 	const tMap = await Promise.resolve(iMap.toJSON()).catch(errorReturnNull);
 	if (tMap) {
-		// const buffer = await getBuffer("http://localhost:3000", tMap).catch(catchBufferFetch);
-		// if (buffer) return buffer;
+		const buffer = await getBuffer("http://localhost:3000", tMap).catch(catchBufferFetch);
+		if (buffer) return buffer;
 		return tMapToBuffer(tMap, fileType);
 	}
 	return null;
