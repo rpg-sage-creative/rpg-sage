@@ -76,7 +76,7 @@ else
 	mapsStart=""
 	if [ "$PKG" = "stable" ]; then
 		mapsDelete="pm2 desc sage-maps-$ENV >/dev/null && pm2 delete sage-maps-$ENV"
-		mapsStart="pm2 start map.mjs --name sage-maps-$ENV --node-args='--experimental-modules --es-module-specifier-resolution=node'"
+		mapsStart="pm2 start map.mjs --name sage-maps-$ENV --max-memory-restart 500M --node-args='--experimental-modules --es-module-specifier-resolution=node'"
 	fi
 	sshCommands=(
 		"mkdir $packageDirTmp"
@@ -90,7 +90,7 @@ else
 		"mv $packageDir $packageDirOld"
 		"mv $packageDirTmp $packageDir"
 		"cd $packageDir"
-		"pm2 start app.mjs --name sage-$PKG-$ENV --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $PKG dist"
+		"pm2 start app.mjs --name sage-$PKG-$ENV --max-memory-restart 750M --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $PKG dist"
 		"$mapsStart"
 		"pm2 save"
 	)
