@@ -44,7 +44,6 @@ const _console = {
 /** Returns the current logger. */
 export function getLogger(): Logger {
 	if (!_logger) {
-		_console.debug(`debug::`, "NODE_ENV", process.env["NODE_ENV"]);
 
 		/** Single logging function to ensure we don't duplicate code deciding which environment logs what. */
 		function log(level: LogLevel, ...args: any[]) {
