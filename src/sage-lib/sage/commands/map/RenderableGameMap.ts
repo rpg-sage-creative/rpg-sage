@@ -8,9 +8,10 @@ class RenderableGameMapLayer implements IMapLayer {
 	public getImages<T extends TMapLayerImage>(): T[] {
 		return this.images.map(image => {
 			return {
-				size: image.size,
 				gridOffset: image.pos,
 				opacity: (image as TGameMapAura).opacity,
+				scale: image.scale,
+				size: image.size,
 				url: image.url
 			} as T;
 		});

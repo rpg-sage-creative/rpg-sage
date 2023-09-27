@@ -127,17 +127,23 @@ function mapSectionTo<T extends TGameMapImage>(lines: string[], layerType: Layer
 		size[COL] = size[ROW] = 1;
 	}
 
+	const scaleString = matchLine(lines, /^scale=/i, true);
+	const scalePercent = (scaleString?.match(/(\d+)%/) ?? [])[1];
+	const scaleDecimal = (scaleString?.match(/(\d+\.\d+|\.\d+|\d+)/) ?? [])[1];
+	const scale = scalePercent ? (+scalePercent / 100) : scaleDecimal ? +scaleDecimal : undefined;
+
 	const userId = matchLine(lines, /^user=/i, true);
 
 	return {
 		auras: [],
 		id: Discord.SnowflakeUtil.generate(),
 		layer: layerType,
-		name: name,
-		pos: pos as [number, number],
-		size: size as [number, number],
-		url: url,
-		userId: userId
+		name,
+		pos,
+		scale,
+		size,
+		url,
+		userId
 	} as unknown as T;
 }
 

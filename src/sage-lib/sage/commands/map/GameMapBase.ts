@@ -26,6 +26,8 @@ export type TGameMapImage = {
 	name: string;
 	/** position on the map: [col, row] */
 	pos: [number, number];
+	/** for token art that bleeds over their token/base */
+	scale?: number;
 	/** token size: [cols, rows] */
 	size: [number, number];
 	/** url to the image */

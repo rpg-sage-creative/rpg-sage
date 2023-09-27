@@ -33,6 +33,9 @@ export type TImageMeta = {
 	/** opacity of image, from 0 to 1 */
 	opacity?: number;
 
+	/** for token art that bleeds over their token/base */
+	scale?: number;
+
 	/** url to the image */
 	url: string;
 };
