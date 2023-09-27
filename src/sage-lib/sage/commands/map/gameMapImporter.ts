@@ -81,12 +81,14 @@ function parseUser(client: Discord.Client, userValue?: string): Discord.Snowflak
 function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 	const [url, name] = matchUrlAndName(lines);
 	if (!url || !name) {
+		console.debug(`mapSectionToMapCore: !url (${!url}) || !name (${!name})`);
 		return null;
 	}
 
 	const grid = matchLine(lines, /^grid=/i, true, true)
 		?? [+matchLine(lines, /^cols=/i, true)!, +matchLine(lines, /^rows=/i, true)!];
 	if (isNaN(grid[COL]) || isNaN(grid[ROW])) {
+		console.debug(`mapSectionToMapCore: isNaN(grid[COL]) (${isNaN(grid[COL])}) || isNaN(grid[ROW]) (${isNaN(grid[ROW])})`);
 		return null;
 	}
 
@@ -112,12 +114,14 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 function mapSectionTo<T extends TGameMapImage>(lines: string[], layerType: LayerType): T | null {
 	const [url, name] = matchUrlAndName(lines);
 	if (!url || !name) {
+		console.debug(`mapSectionTo(${LayerType[layerType]}): !url (${!url}) || !name (${!name})`);
 		return null;
 	}
 
 	const pos = matchLine(lines, /^pos(ition)?=/i, true, true)
 		?? [+matchLine(lines, /^col=/i, true)!, +matchLine(lines, /^row=/i, true)!];
 	if (isNaN(pos[COL]) || isNaN(pos[ROW])) {
+		console.debug(`mapSectionTo(${LayerType[layerType]}): isNaN(pos[COL]) (${isNaN(pos[COL])}) || isNaN(pos[ROW]) (${isNaN(pos[ROW])})`);
 		return null;
 	}
 
@@ -188,6 +192,7 @@ export default function gameMapImporter(raw: string, client: Discord.Client): TP
 	const mapSection = spliceSection(lines, "map");
 	const parsedCore = mapSectionToMapCore(mapSection);
 	if (!parsedCore) {
+		console.debug(`gameMapImporter: !parsedCore`);
 		return null;
 	}
 	parsedCore.userId = parseUser(client, parsedCore.userId)!;
