@@ -333,16 +333,30 @@ async function actionHandler(sageInteraction: SageInteraction, actionData: TActi
 
 //#region map import handler
 
+function getValidUrl(attachment: Discord.MessageAttachment): string | null {
+	const regex = /map\.txt$/i;
+	if (regex.test(attachment.url.split("?")[0])) {
+		return attachment.url;
+	}
+	if (regex.test(attachment.proxyURL.split("?")[0])) {
+		return attachment.proxyURL;
+	}
+	if (attachment.name && regex.test(attachment.name)) {
+		return attachment.attachment.toString();
+	}
+	return null;
+}
+
 async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TParsedGameMapCore> | null> {
 	const attachments = sageMessage.message.attachments;
 	if (!attachments.size) {
 		return null;
 	}
 	const client = ActiveBot.active.client;
-	for (const att of attachments) {
-		const url = att[1].attachment.toString();
-		if (url.match(/map\.txt$/i)) {
-			const raw = await getText(url);
+	for (const [_id, attachment] of attachments) {
+		const validUrl = getValidUrl(attachment);
+		if (validUrl) {
+			const raw = await getText(validUrl);
 			const parsedCore = gameMapImporter(raw, client);
 			if (parsedCore) {
 				return {
