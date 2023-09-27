@@ -13,7 +13,7 @@ import BotRepo from "./sage/repo/BotRepo";
 */
 
 export function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: string, includePf2ToolsData = false): void {
-	const logLevel = botCodeName === "dev" ? LogLevel.Info : LogLevel.Warn;
+	const logLevel = botCodeName === "dev" ? LogLevel.Silly : LogLevel.Warn;
 	utils.ConsoleUtils.startHandling(logLevel);
 
 	BotRepo.getByCodeName(botCodeName).then(bot => {
