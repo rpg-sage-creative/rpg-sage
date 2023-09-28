@@ -147,8 +147,8 @@ export async function tMapToBuffer(map: TMap, fileType: mimeType = "image/webp")
 
 /** Incoming map meta assumes grid origin of 1,1 not 0,0 */
 function gridOffsetToZeroZero(offset?: [number, number]): [number, number] {
-	const col = offset && offset[0] ? Math.max(offset[0] - 1, 0) : 0;
-	const row = offset && offset[1] ? Math.max(offset[1] - 1, 0) : 0;
+	const col = offset ? (offset[0] ?? 0) - 1 : 0;
+	const row = offset ? (offset[1] ?? 0) - 1 : 0;
 	return [col, row];
 }
 
