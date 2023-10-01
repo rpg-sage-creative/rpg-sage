@@ -70,22 +70,12 @@ function cleanObject(object: TObject, rules: IJsonCleanRules): void {
 
 //#region formattedStringify
 
-import { normalizeAscii } from "../StringUtils";
-
 const MAX_LINE_LENGTH = 250;
 
 function cleanWhitespaceIfShort(value: string): string {
 	return value.length > MAX_LINE_LENGTH
 		? value
 		: value.replace(/\s+/g, " ");
-}
-
-function normalizeValueIfString<T extends any = string>(value: T): T {
-	if (typeof(value) === "string") {
-		return normalizeAscii(value) as T;
-	}
-	return value;
-
 }
 
 function inlineCurlyBraces(value: string): string {
@@ -98,7 +88,7 @@ function inlineSquareBrackets(value: string): string {
 
 /** Formats JSON as readable, while trying to keep {} or [] on a single line where <= 250 characters. */
 export function formattedStringify<T>(object: T): string {
-	const stringified = JSON.stringify(object, (_, value: string) => normalizeValueIfString(value), "\t");
+	const stringified = JSON.stringify(object, (_key, value) => value, "\t");
 	return inlineCurlyBraces(inlineSquareBrackets(stringified));
 }
 
