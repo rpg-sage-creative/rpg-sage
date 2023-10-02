@@ -1,11 +1,11 @@
 import * as Discord from "discord.js";
 import { PathbuilderCharacter, toModifier } from "../../../sage-pf2e";
-import { getCharacterSections, TCharacterSectionType, TCharacterViewType, TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
-import { isDefined, Optional, UUID } from "../../../sage-utils";
+import { TCharacterSectionType, TCharacterViewType, TPathbuilderCharacter, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
+import { Optional, UUID, isDefined } from "../../../sage-utils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
-import { DiscordId, DUser, TChannel } from "../../discord";
+import { DUser, DiscordId, TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
 import type SageCache from "../model/SageCache";
@@ -212,6 +212,25 @@ function createSkillSelectRow(character: PathbuilderCharacter): Discord.MessageA
 	return createSelectMenuRow(selectMenu);
 }
 
+const maxLength = 100;
+function createMacroLabel(macro: TLabeledMacro): string {
+	let prefix = macro.prefix;
+	let name = macro.name;
+	if (`${prefix}: ${name}`.length > maxLength) {
+		if (macro.prefix === "Attack Roll") prefix = "Atk Roll";
+	}
+	if (`${prefix}: ${name}`.length > maxLength) {
+		if (macro.prefix === "Attack Roll") prefix = "Attack";
+		if (macro.prefix === "Macro Roll") prefix = "Macro";
+	}
+	if (`${prefix}: ${name}`.length > maxLength) {
+		if (macro.prefix === "Attack Roll") prefix = "Atk";
+	}
+	if (`${prefix}: ${name}`.length > maxLength) {
+		return `${prefix}: ${name}`.slice(0, 99) + "\u2026";
+	}
+	return `${prefix}: ${name}`;
+}
 function createMacroSelectRow(character: PathbuilderCharacter, macros: TLabeledMacro[]): Discord.MessageActionRow {
 	const selectMenu = new Discord.MessageSelectMenu();
 	selectMenu.setCustomId(`PB2E|${character.id}|Macro`);
@@ -220,7 +239,7 @@ function createMacroSelectRow(character: PathbuilderCharacter, macros: TLabeledM
 	const activeMacro = character.getSheetValue("activeMacro");
 	macros.forEach(macro => {
 		selectMenu.addOptions({
-			label: `${macro.prefix}: ${macro.name}`,
+			label: createMacroLabel(macro),
 			value: macro.id,
 			default: macro.id === activeMacro
 		});
