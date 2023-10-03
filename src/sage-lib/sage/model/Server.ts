@@ -12,13 +12,16 @@ import Game from "./Game";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
 import { GameType } from "../../../sage-common";
+import { CoreWithMacros, HasMacros, TMacro } from "./types";
+import NamedCollection from "./NamedCollection";
+import SageCache from "./SageCache";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
 export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdmin = 3 }
 export interface IAdminRole { did: Discord.Snowflake; type: AdminRoleType; }
 export interface IAdminUser { did: Discord.Snowflake; role: AdminRoleType; }
 
-export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji {
+export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, CoreWithMacros {
 	admins: IAdminUser[];
 	channels: IChannel[];
 	commandPrefix?: string;
@@ -34,7 +37,14 @@ export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji {
 	roles: IAdminRole[];
 }
 
-export default class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IHasEmojiCore {
+export default class Server
+				extends HasDidCore<ServerCore>
+				implements IHasColorsCore, IHasEmojiCore, HasMacros {
+
+	public constructor(core: ServerCore, sageCache: SageCache) {
+		super(core, sageCache);
+		this.core.macros = NamedCollection.from(this.core.macros ?? [], this);
+	}
 
 	// #region Private Properties
 	private _logLevel?: LogLevel;
@@ -53,6 +63,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	public get defaultGmCharacterName(): string { return this.core.defaultGmCharacterName; }
 	public get discord() { return this.sageCache.discord; }
 	public get logLevel(): LogLevel | null { return this._logLevel !== undefined ? this._logLevel : (this._logLevel = LogLevel[this.core.logLevel] ?? null); }
+	public get macros(): NamedCollection<TMacro> { return this.core.macros as NamedCollection<TMacro>; }
 	public get name(): string { return this.core.name; }
 	public get roles(): IAdminRole[] { return this.core.roles ?? []; }
 	// #endregion

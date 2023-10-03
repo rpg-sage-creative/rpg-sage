@@ -1,10 +1,12 @@
 import type * as Discord from "discord.js";
+import type { GameType } from "../../../sage-common";
 import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "../../../sage-dice";
 import { NEWLINE } from "../../../sage-pf2e";
 import type { Optional, TKeyValueArg } from "../../../sage-utils";
+import { toHumanReadable } from "../../../sage-utils/utils/DiscordUtils/humanReadable";
 import { addCommas } from "../../../sage-utils/utils/NumberUtils";
 import { random, randomItem } from "../../../sage-utils/utils/RandomUtils";
-import { chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, Tokenizer } from "../../../sage-utils/utils/StringUtils";
+import { Tokenizer, chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks } from "../../../sage-utils/utils/StringUtils";
 import type { DUser, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { DiscordId, DiscordMaxValues, MessageType } from "../../discord";
 import { createMessageEmbed } from "../../discord/embeds";
@@ -12,14 +14,11 @@ import { registerMessageListener } from "../../discord/handlers";
 import { sendTo } from "../../discord/messages";
 import { GameUserType } from "../model/Game";
 import { ColorType } from "../model/HasColorsCore";
-import type NamedCollection from "../model/NamedCollection";
 import SageInteraction from "../model/SageInteraction";
 import SageMessage from "../model/SageMessage";
-import type { TMacro } from "../model/User";
+import type { TMacro } from "../model/types";
 import { registerCommandRegex } from "./cmd";
 import { registerInlineHelp } from "./help";
-import type { GameType } from "../../../sage-common";
-import { toHumanReadable } from "../../../sage-utils/utils/DiscordUtils/humanReadable";
 
 type TInteraction = SageMessage | SageInteraction;
 
@@ -90,7 +89,8 @@ function parseDiscordMacro(sageMessage: SageMessage, macroString: string): Disco
 	let diceString = macroString;
 	const macroNames = <string[]>[];
 	let macroAndOutput: TMacroAndOutput | null;
-	while (macroAndOutput = macroToDice(sageMessage.sageUser.macros, debrace(diceString))) {
+	const macros = sageMessage.getMacroStack();
+	while (macroAndOutput = macroToDice(macros, debrace(diceString))) {
 		if (macroNames.includes(macroAndOutput.macro.name)) {
 			console.error(`MACRO RECURSION: User(${sageMessage.sageUser.id}) ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}`);
 			return parseDiscordDice(sageMessage, `[1d1 MACRO RECURSION: ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}]`);
@@ -516,7 +516,7 @@ function parsePrefix(prefix: string): TPrefix {
 }
 
 /** returns [cleanPrefix, TMacro, slicedArgs] */
-function findPrefixMacroArgs(userMacros: NamedCollection<TMacro>, input: string): [string, TMacro | null, string] {
+function findPrefixMacroArgs(userMacros: TMacro[], input: string): [string, TMacro | null, string] {
 	const lower = input.toLowerCase();
 	const [_, dirtyPrefix, dirtyMacro] = lower.match(/^((?:\d*#)|(?:\d*k[hl]\d*#)|(?:[\+\-]))?(.*?)$/) ?? [];
 	const cleanPrefix = (dirtyPrefix ?? "").trim();
@@ -549,7 +549,7 @@ function parseMacroArgs(argString: string): TArgs {
 }
 
 type TMacroAndArgs = TArgs & { macro?: TMacro; prefix: TPrefix; };
-function parseMacroAndArgs(userMacros: NamedCollection<TMacro>, input: string): TMacroAndArgs {
+function parseMacroAndArgs(userMacros: TMacro[], input: string): TMacroAndArgs {
 	const [prefix, userMacro, slicedArgs] = findPrefixMacroArgs(userMacros, input);
 	const macroArgs = userMacro ? parseMacroArgs(slicedArgs) : null;
 	return {
@@ -589,7 +589,7 @@ function splitKeyValueFromBraces(input: string): [string, string] {
 }
 
 type TMacroAndOutput = { macro: TMacro; output: string; };
-function macroToDice(userMacros: NamedCollection<TMacro>, input: string): TMacroAndOutput | null {
+function macroToDice(userMacros: TMacro[], input: string): TMacroAndOutput | null {
 	const { prefix, macro, indexed, named } = parseMacroAndArgs(userMacros, input);
 	if (!macro) {
 		return null;

@@ -7,6 +7,8 @@ import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
 import type SageCache from "./SageCache";
 import type { GameType } from "../../../sage-common";
+import NamedCollection from "./NamedCollection";
+import { CoreWithMacros, HasMacros, TMacro } from "./types";
 
 export type TBotCodeName = "dev" | "beta" | "stable";
 
@@ -23,7 +25,7 @@ export type TDev = { did: Discord.Snowflake; logLevel: TConsoleCommandType; };
  */
 type TSearchStatus = { [key: number]: undefined | boolean | string; };
 
-export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
+export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji, CoreWithMacros {
 	codeName: TBotCodeName;
 	commandPrefix?: string;
 	devs?: TDev[];
@@ -39,14 +41,18 @@ export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	searchStatus: TSearchStatus;
 }
 
-export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmojiCore {
-	public constructor(core: IBotCore, sageCache: SageCache) { super(core, sageCache); }
+export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmojiCore, HasMacros {
+	public constructor(core: IBotCore, sageCache: SageCache) {
+		super(core, sageCache);
+		this.core.macros = NamedCollection.from(this.core.macros ?? [], this);
+	}
 	public get codeName(): TBotCodeName { return this.core.codeName; }
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }
 	public get devs(): TDev[] { return this.core.devs ?? []; }
 	public get logLevel(): LogLevel { return LogLevel[<keyof typeof LogLevel>this.core.logLevel] || null; }
 	public get token(): string { return this.core.token; }
 	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
+	public get macros(): NamedCollection<TMacro> { return this.core.macros as NamedCollection<TMacro>; }
 
 	/** returns true if we can search the given game */
 	public canSearch(gameType: GameType): boolean { return this.core.searchStatus?.[gameType] === true; }
@@ -82,4 +88,9 @@ export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore,
 	}
 	// #endregion
 
+	//#region IHasSave
+	public async save(): Promise<boolean> {
+		return this.sageCache.bots.write(this);
+	}
+	//#endregion
 }

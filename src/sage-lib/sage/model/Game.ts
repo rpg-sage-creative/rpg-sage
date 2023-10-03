@@ -15,6 +15,8 @@ import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
 import type SageCache from "./SageCache";
 import type Server from "./Server";
+import { CoreWithMacros, HasMacros, TMacro } from "./types";
+import NamedCollection from "./NamedCollection";
 
 const exists = utils.ArrayUtils.Filters.exists;
 
@@ -39,7 +41,7 @@ export interface IGameRole {
 export enum GameUserType { Unknown = 0, Player = 1, GameMaster = 2 }
 export interface IGameUser { did: Discord.Snowflake; type: GameUserType; dicePing: boolean; }
 
-export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
+export interface IGameCore extends IdCore, IHasColors, IHasEmoji, CoreWithMacros {
 	objectType: "Game";
 	createdTs: number;
 	archivedTs?: number;
@@ -146,10 +148,13 @@ async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<
 	return [gChannels.concat(sChannels), gChannels, sChannels];
 }
 
-export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IComparable<Game>, IHasColorsCore, IHasEmojiCore {
+export default class Game
+				extends HasIdCoreAndSageCache<IGameCore>
+				implements IComparable<Game>, IHasColorsCore, IHasEmojiCore, HasMacros {
 	public constructor(core: IGameCore, public server: Server, sageCache: SageCache) {
 		super(core, sageCache);
 
+		this.core.macros = NamedCollection.from(this.core.macros ?? [], this);
 		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
 	}
@@ -158,6 +163,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	public get archivedDate(): Date | undefined { return this.core.archivedTs ? new Date(this.core.archivedTs) : undefined; }
 	public get isArchived(): boolean { return this.core.createdTs && this.core.archivedTs ? this.core.createdTs < this.core.archivedTs : false; }
 
+	public get macros(): NamedCollection<TMacro> { return this.core.macros as NamedCollection<TMacro>; }
 	public get name(): string { return this.core.name; }
 	public get gameType(): GameType | undefined { return this.core.gameType; }
 	public get defaultCritMethodType(): CritMethodType | undefined { return this.core.defaultCritMethodType; }

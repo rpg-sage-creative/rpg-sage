@@ -103,4 +103,8 @@ export default class Emoji {
 		return text;
 	}
 
+	public findByMatch(match: string): IEmoji | undefined {
+		const lower = match.toLowerCase();
+		return this.emoji.find(emoji => emoji.matches.find(m => m.toLowerCase() === lower));
+	}
 }

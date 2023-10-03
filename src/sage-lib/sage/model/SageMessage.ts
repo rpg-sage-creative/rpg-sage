@@ -11,12 +11,14 @@ import { GameRoleType } from "../model/Game";
 import { DialogType, IChannel } from "../repo/base/IdRepository";
 import type GameCharacter from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";
-import { EmojiType } from "./HasEmojiCore";
+import { EmojiType, IEmoji } from "./HasEmojiCore";
 import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
 import SageCache from "./SageCache";
 import SageMessageArgsManager from "./SageMessageArgsManager";
 import { TAlias } from "./User";
 import { isDeleted } from "../../discord/deletedMessages";
+import { TMacro } from "./types";
+import NamedCollection from "./NamedCollection";
 
 interface SageMessageCore extends HasSageCacheCore {
 	message: DMessage;
@@ -285,6 +287,12 @@ export default class SageMessage
 
 	// #region Reactions
 
+	public findEmojiByMatch(match: string): IEmoji | undefined {
+		return this.game?.emoji.findByMatch(match)
+			?? this.server?.emoji.findByMatch(match)
+			?? this.bot?.emoji.findByMatch(match);
+	}
+
 	/** Get the given emoji, checking first the game, then server, then the bot. */
 	public getEmoji(emojiType: EmojiType): string | null {
 		return this.game?.emoji.get(emojiType)
@@ -411,5 +419,12 @@ export default class SageMessage
 		function alias(char: GameCharacter) {
 			return { name:aliasName, target:`${char.type}::${char.name}::` };
 		}
+	}
+
+	public getMacroStack(): NamedCollection<TMacro> {
+		return this.sageUser.macros
+			.concat(this.game?.macros ?? [])
+			.concat(this.server?.macros ?? [])
+			.concat(this.bot.macros)
 	}
 }

@@ -8,25 +8,20 @@ import type { GameCharacterCore } from "./GameCharacter";
 import NamedCollection from "./NamedCollection";
 import NoteManager, { TNote } from "./NoteManager";
 import type SageCache from "./SageCache";
+import { CoreWithMacros, HasMacros, TMacro } from "./types";
 
 export type TAlias = {
 	name: string;
 	target: string;
 };
-export type TMacro = {
-	category?: string;
-	name: string;
-	dice: string;
-};
 export enum PatronTierType { None = 0, Friend = 1, Informant = 2, Trusted = 3 }
 export const PatronTierSnowflakes: Discord.Snowflake[] = [undefined!, "730147338529669220", "730147486446125057", "730147633867259904"];
 
-export interface UserCore extends DidCore<"User"> {
+export interface UserCore extends DidCore<"User">, CoreWithMacros {
 	aliases?: TAlias[];
 	allowDynamicDialogSeparator?: boolean;
 	defaultDialogType?: DialogType;
 	defaultSagePostType?: DialogType;
-	macros?: TMacro[];
 	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
 	notes?: TNote[];
 	patronTier?: PatronTierType;
@@ -52,7 +47,7 @@ function updateCore(core: IOldUserCore): UserCore {
 
 //#endregion
 
-export default class User extends HasDidCore<UserCore> {
+export default class User extends HasDidCore<UserCore> implements HasMacros {
 	public constructor(core: UserCore, sageCache: SageCache) {
 		super(updateCore(core), sageCache);
 
