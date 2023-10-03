@@ -1,5 +1,9 @@
+import type { Awaitable } from "../..";
 
-export type THasClip = {
+export type MimeType = "image/png" | "image/jpeg" | "image/webp";
+
+/** This object type has a clip rectangle. */
+export type HasClip = {
 	/** x-axis pixels to start rendering from */
 	clipX: number;
 
@@ -13,7 +17,8 @@ export type THasClip = {
 	clipHeight: number;
 };
 
-export type THasNatural = {
+/** This object has natural height and width. */
+export type HasNatural = {
 	/** pixels on the x-axis */
 	naturalWidth: number;
 
@@ -21,7 +26,8 @@ export type THasNatural = {
 	naturalHeight: number;
 }
 
-export type THasOffset = {
+/** This object has grid and pixel offsets. */
+export type HasOffset = {
 	/** offset from origin: [col, row] */
 	gridOffset: [number, number];
 
@@ -29,7 +35,12 @@ export type THasOffset = {
 	pixelOffset: [number, number];
 };
 
-export type TImageMeta = {
+export type HasSize = {
+	size: [number, number];
+}
+
+/** This object has opacity and url. */
+export type ImageMeta = {
 	/** opacity of image, from 0 to 1 */
 	opacity?: number;
 
@@ -40,31 +51,66 @@ export type TImageMeta = {
 	url: string;
 };
 
-export type TMapBackgroundImage = TImageMeta & Partial<THasClip>;
+export type GameMapLayerImage = ImageMeta & Partial<HasClip> & HasOffset & HasSize;
 
-export type TMapLayerImage = TImageMeta & THasOffset & Partial<THasClip> & { size:[number, number]; };
+export type GameMapBackgroundImage = ImageMeta & Partial<HasClip>;
 
-export type TOrPromiseT<T> = T | PromiseLike<T>;
+//#region GameLayer
 
-export interface IMapLayer {
-	getImages(): TOrPromiseT<TMapLayerImage[]>;
-	getOffset(): TOrPromiseT<Partial<THasOffset>>;
-}
-
-export interface IMap {
-	getBackground(): TOrPromiseT<TMapBackgroundImage>;
-	getGrid(): TOrPromiseT<[number, number]>;
-	getLayers(): TOrPromiseT<IMapLayer[]>;
-	toJSON(): TOrPromiseT<TMap>;
-}
-
-export type TMapLayer = {
-	images: TMapLayerImage[];
-	offset: Partial<THasOffset> | null;
+export type GameMapLayerData = {
+	images: GameMapLayerImage[];
+	offset: Partial<HasOffset> | null;
 };
 
-export type TMap = {
-	background: TMapBackgroundImage | null;
+export interface GameMapLayer {
+	getImages(): Awaitable<GameMapLayerImage[]>;
+	getOffset(): Awaitable<Partial<HasOffset>>;
+}
+
+//#endregion
+
+//#region GameMap
+
+export type GameMapData = {
+	background: GameMapBackgroundImage | null;
 	grid: [number, number] | null;
-	layers: TMapLayer[];
+	layers: GameMapLayerData[];
 };
+
+export interface GameMap {
+	getBackground(): Awaitable<GameMapBackgroundImage>;
+	getGrid(): Awaitable<[number, number]>;
+	getLayers(): Awaitable<GameMapLayer[]>;
+	toJSON(): Awaitable<GameMapData>;
+}
+
+//#endregion
+
+//#region Render
+
+export type MapRenderPayload = {
+	/** The map data to render. */
+	mapData: GameMapData;
+
+	/** The desired mimeType of the output image. */
+	mimeType: MimeType;
+};
+
+export type MapRenderResponse = {
+	/** The image's Buffer as a base64 string */
+	base64?: string | null;
+
+	/** A list of image urls that couldn't be drawn. */
+	invalidImages: string[];
+
+	/** A list of image urls that couldn't be loaded. */
+	invalidImageUrls: string[];
+
+	/** The map data originally given. */
+	mapData: GameMapData;
+
+	/** The mime type originally given. */
+	mimeType: MimeType;
+};
+
+//#endregion

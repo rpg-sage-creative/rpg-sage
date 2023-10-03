@@ -5,6 +5,7 @@ import { getLogger } from "./logger";
 import type { TConsoleHandler } from "./types";
 
 export * as Catchers from "./Catchers";
+export * from "./logger";
 
 //#region Console
 
