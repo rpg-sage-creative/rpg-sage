@@ -101,9 +101,14 @@ export default class SageCache {
 			if (!discordKey.hasServer) return false;
 
 			const tupperId = "431544605209788416";
-			const tupper = await sageCache.discord.fetchGuildMember(tupperId);
-			// console.log({tupperId,tupper:!!tupper});
-			if (!tupper) return false;
+
+			const guild = await sageCache.discord.fetchGuild(discordKey.server);
+			if (!guild) return false;
+			if (!guild.members.cache.has(tupperId)) return false;
+
+			// const tupper = await sageCache.discord.fetchGuildMember(tupperId);
+			// // console.log({tupperId,tupper:!!tupper});
+			// if (!tupper) return false;
 
 			const thread = await sageCache.discord.fetchChannel<Discord.ThreadChannel>(discordKey.thread);
 			// console.log({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId)});
