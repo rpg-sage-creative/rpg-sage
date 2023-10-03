@@ -1,9 +1,64 @@
 import { appendFile } from "fs";
 import { getDateStrings } from "../DateUtils";
 import { LogLevel } from "./enums";
+import { getLogger } from "./logger";
 import type { TConsoleHandler } from "./types";
 
 export * as Catchers from "./Catchers";
+
+//#region Console
+
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console) */
+interface Console {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/assert) */
+    assert(condition?: boolean, ...data: any[]): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/clear) */
+    clear(): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/count) */
+    count(label?: string): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/countReset) */
+    countReset(label?: string): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/debug) */
+    debug(...data: any[]): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/dir) */
+    dir(item?: any, options?: any): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/dirxml) */
+    dirxml(...data: any[]): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/error) */
+    error(...data: any[]): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/group) */
+    group(...data: any[]): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/groupCollapsed) */
+    groupCollapsed(...data: any[]): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/groupEnd) */
+    groupEnd(): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/info) */
+    info(...data: any[]): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/log) */
+    log(...data: any[]): void;
+	silly(...args: any[]): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/table) */
+    table(tabularData?: any, properties?: string[]): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/time) */
+    time(label?: string): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/timeEnd) */
+    timeEnd(label?: string): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/timeLog) */
+    timeLog(label?: string, ...data: any[]): void;
+    timeStamp(label?: string): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/trace) */
+    trace(...data: any[]): void;
+	verbose(...args: any[]): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/warn) */
+    warn(...data: any[]): void;
+}
+
+declare var console: Console;
+
+if (!console.silly) console.silly = console.log;
+if (!console.verbose) console.verbose = console.log;
+
+//#endregion
 
 let _consoleHandler: TConsoleHandler;
 export function setConsoleHandler(consoleHandler: TConsoleHandler): void;
@@ -44,26 +99,24 @@ function passThrough(logLevel: LogLevel, functionName: string, ...args: any[]) {
 		_consoleHandler(logLevel, ...args);
 	}
 
-	args.unshift(`<${LogLevel[logLevel]}>`);
-
 	// No log level; all written to console or file
 	if (_logLevel === undefined) {
 		// if we have a logDir
-		logToFile(args);
+		logToFile(logLevel, args);
 
 		// if we want console or we don't have a logDir
 		if (_logToConsole || !_logDir) {
-			originals[functionName].apply(console, args);
+			getLogger().log(functionName as "error", ...args);
 		}
 
 	// Log level; make sure we want it logged
 	}else if (_logLevel >= logLevel) {
 		// if we have a log path, write to the file
-		logToFile(args);
+		logToFile(logLevel, args);
 
 		// if we are logging to console, write everything
 		if (_logToConsole) {
-			originals[functionName].apply(console, args);
+			getLogger().log(functionName as "error", ...args);
 		}
 	}
 }
@@ -80,11 +133,11 @@ export function formatArg(arg: any): string {
 }
 
 /** Logs the args to file if we have a folder to log to. */
-function logToFile(args: any[]): void {
+function logToFile(logLevel: LogLevel, args: any[]): void {
 	if (_logDir) {
 		const now = getDateStrings();
 		const fileName = `${_logDir}/${now.date}.log`;
-		const lines = args.map(arg => `${now.date} ${now.time}::${formatArg(arg)}`).concat("").join("\n");
+		const lines = args.map(arg => `${now.date}T${now.time}: ${LogLevel[logLevel].toLowerCase()}:: ${formatArg(arg)}`).concat("").join("\n");
 		appendFile(fileName, lines, error => {
 			if (error) {
 				try {

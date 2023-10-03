@@ -1,5 +1,5 @@
 import { ABILITIES } from "../..";
-import type { TMacro } from "../../../sage-lib/sage/model/User";
+import type { TMacro } from "../../../sage-lib/sage/model/types";
 import utils, { Optional, OrUndefined } from "../../../sage-utils";
 import CharacterBase, { CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
 import type { TProficiency, TSavingThrow } from "../../common";
