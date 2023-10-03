@@ -39,6 +39,7 @@
   "scripts": {
     "start": "bash scripts/run-dev.sh",
     "daemon": "bash scripts/daemon.sh",
-    "deploy": "bash scripts/deploy.sh"
+    "deploy": "bash scripts/deploy.sh",
+		"mono": "cd dist; node --experimental-modules --es-module-specifier-resolution=node mono.mjs dev"
   }
 }
