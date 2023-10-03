@@ -15,7 +15,7 @@ DISCORD_REST_NPM="@discordjs/rest@1.6.0"
 
 #region npm libs for DEPLOY
 
-DISCORD_NPM="discord.js@13.14.0"
+DISCORD_NPM="discord.js@13.16.0"
 XREGEXP_NPM="xregexp@5.1.1"
 CANVAS_NPM="@napi-rs/canvas@0.1.35"
 PDF2JSON_NPM="pdf2json@2.0.1"
