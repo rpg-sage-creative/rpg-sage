@@ -1,4 +1,5 @@
 import { HasCache } from "../../../sage-utils/utils/ClassUtils";
+import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
 import type { DiscordCache, DiscordKey } from "../../discord";
 import type Bot from "./Bot";
 import type Game from "./Game";
@@ -12,8 +13,8 @@ export interface HasSageCacheCore {
 
 export default abstract class HasSageCache<T extends HasSageCacheCore, U extends HasSageCache<T, any>> extends HasCache {
 
-	public constructor(protected core: T) {
-		super();
+	protected constructor(protected core: T, cache?: ClassCache | null) {
+		super(cache);
 	}
 
 	//#region abstract

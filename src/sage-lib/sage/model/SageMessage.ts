@@ -3,7 +3,10 @@ import type { IHasChannels, IHasGame } from ".";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Optional } from "../../../sage-utils";
+import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
+import { verbose } from "../../../sage-utils/utils/ConsoleUtils";
 import { DMessage, DiscordKey, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
+import { isDeleted } from "../../discord/deletedMessages";
 import { send } from "../../discord/messages";
 import { DicePostType } from "../commands/dice";
 import type Game from "../model/Game";
@@ -16,8 +19,6 @@ import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
 import SageCache from "./SageCache";
 import SageMessageArgsManager from "./SageMessageArgsManager";
 import { TAlias } from "./User";
-import { isDeleted } from "../../discord/deletedMessages";
-import { verbose } from "../../../sage-utils/utils/ConsoleUtils";
 
 interface SageMessageCore extends HasSageCacheCore {
 	message: DMessage;
@@ -33,8 +34,8 @@ export default class SageMessage
 	extends HasSageCache<SageMessageCore, SageMessage>
 	implements IHasGame, IHasChannels {
 
-	public constructor(protected core: SageMessageCore) {
-		super(core);
+	private constructor(protected core: SageMessageCore, cache?: ClassCache) {
+		super(core, cache);
 		this.setCommandAndArgs();
 	}
 
@@ -58,7 +59,7 @@ export default class SageMessage
 
 	// TODO: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE!
 	public clone(): SageMessage {
-		const clone = new SageMessage(this.core);
+		const clone = new SageMessage(this.core, this.cache);
 		clone._ = this._;
 		return clone;
 	}

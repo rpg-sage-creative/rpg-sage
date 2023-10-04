@@ -6,8 +6,11 @@ import { SuperClass } from "./SuperClass";
  */
 export abstract class HasCache extends SuperClass {
 
+	protected constructor(private _cache?: ClassCache | null) {
+		super();
+	}
+
 	/** Provides a caching mechanism for all SuperClass classes. */
-	private _cache?: ClassCache | null;
 	protected get cache(): ClassCache {
 		return this._cache ?? (this._cache = new ClassCache());
 	}

@@ -3,6 +3,8 @@ import type { IHasChannels, IHasGame } from ".";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Optional, isDefined } from "../../../sage-utils";
+import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
+import { verbose } from "../../../sage-utils/utils/ConsoleUtils";
 import type { TGameType } from "../../../slash.mjs";
 import { DInteraction, DUser, DiscordKey, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
 import { deleteMessages } from "../../discord/deletedMessages";
@@ -15,7 +17,6 @@ import type GameCharacter from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";
 import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
 import SageCache from "./SageCache";
-import { verbose } from "../../../sage-utils/utils/ConsoleUtils";
 
 interface SageInteractionCore extends HasSageCacheCore {
 	interaction: DInteraction;
@@ -28,14 +29,14 @@ export default class SageInteraction<T extends DInteraction = any>
 	extends HasSageCache<SageInteractionCore, SageInteraction<any>>
 	implements IHasGame, IHasChannels {
 
-	public constructor(protected core: SageInteractionCore) {
-		super(core);
+	private constructor(protected core: SageInteractionCore, cache?: ClassCache) {
+		super(core, cache);
 	}
 
 	//#region HasSageCache
 
 	public clone(): SageInteraction<T> {
-		return new SageInteraction(this.core);
+		return new SageInteraction(this.core, this.cache);
 	}
 
 	public clear(): void {
