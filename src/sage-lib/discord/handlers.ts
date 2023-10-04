@@ -167,6 +167,7 @@ export async function handleInteraction(interaction: Discord.Interaction): Promi
 		if (isCommand || isButton || isSelectMenu) {
 			const sageInteraction = await SageInteraction.fromInteraction(interaction);
 			await handleInteractions(sageInteraction, output);
+			sageInteraction.clear();
 		}
 	}catch(ex) {
 		console.error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
@@ -223,8 +224,9 @@ export async function handleMessage(message: DMessage, originalMessage: Optional
 		const isWebhook = !!message.webhookId;
 		const canIgnore = isEditWeCanIgnore(message, originalMessage);
 		if (!isBot && !isWebhook && !canIgnore) {
-			const sageMessage: SageMessage = await SageMessage.fromMessage(message, originalMessage);
+			const sageMessage = await SageMessage.fromMessage(message, originalMessage);
 			await handleMessages(sageMessage, messageType, output);
+			sageMessage.clear();
 		}
 	} catch (ex) {
 		console.error(toHumanReadable(message.author) ?? "Unknown User", `\`${message.content}\``, ex);

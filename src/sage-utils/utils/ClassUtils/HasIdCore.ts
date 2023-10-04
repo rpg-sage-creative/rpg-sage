@@ -1,21 +1,35 @@
-import { HasCore } from ".";
-import type { TUuidMatcher, UUID } from "../types";
 import { UuidMatcher } from "../UuidUtils";
-import type { IdCore } from "./types";
+import { TUuidMatcher, UUID } from "../types";
+import { Core, HasCore } from "./HasCore";
 
-export default abstract class HasIdCore<T extends IdCore<U>, U extends string = string> extends HasCore<T, U> {
+//#region types
 
-	/** Must have a core. */
-	public constructor(core: T) {
-		super(core);
-		this.cache.key = core.id;
-	}
+/** Represents an object that has an ID. */
+type HasId<IdType extends string = string> = {
+	/** The unique identifier for this object. */
+	id: IdType;
+}
+
+/** The second most basic Core used. */
+export type IdCore<
+	ObjectType extends string = string,
+	IdType extends string = string
+>
+= Core<ObjectType>
+	& HasId<IdType>;
+
+//#endregion
+
+/** Abstract Class with properties and methods related to the id. */
+export abstract class HasIdCore<
+			TypedCore extends IdCore<ObjectType>,
+			ObjectType extends string = string,
+			IdType extends string = string
+		>
+		extends HasCore<TypedCore, ObjectType> {
 
 	/** The unique identifier for this object. */
-	public get id(): UUID {
-		return this.core.id;
-	}
-
+	public get id(): IdType { return this.core.id as IdType; }
 	private _idMatcher?: UuidMatcher;
 	/** Used to cache the UuidMatcher used for .equals(). */
 	protected get idMatcher(): UuidMatcher {

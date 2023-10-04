@@ -15,6 +15,7 @@ import type GameCharacter from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";
 import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
 import SageCache from "./SageCache";
+import { verbose } from "../../../sage-utils/utils/ConsoleUtils";
 
 interface SageInteractionCore extends HasSageCacheCore {
 	interaction: DInteraction;
@@ -35,6 +36,12 @@ export default class SageInteraction<T extends DInteraction = any>
 
 	public clone(): SageInteraction<T> {
 		return new SageInteraction(this.core);
+	}
+
+	public clear(): void {
+		verbose("Clearing SageInteraction");
+		this.cache.clear();
+		this.caches.clear();
 	}
 
 	//#endregion

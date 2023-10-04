@@ -1,32 +1,40 @@
 //#region imports
 
+import { correctEscapeForEmoji } from "..";
+import { GameType } from "../../../sage-common";
 import type { Optional, OrNull, OrUndefined, TParsers, TSortResult, TToken } from "../../../sage-utils";
 import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { cleanWhitespace, dequote, escapeForRegExp, Tokenizer } from "../../../sage-utils/utils/StringUtils";
+import { Tokenizer, cleanWhitespace, dequote, escapeForRegExp } from "../../../sage-utils/utils/StringUtils";
 import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
-	cleanDescription, CritMethodType,
+	CritMethodType,
 	DiceOutputType,
 	DiceSecretMethodType,
-	DieRollGrade, dropKeepToString, DropKeepType,
-	gradeRoll, gradeToEmoji, HasDieCore, IDiceBase,
-	IRollBase, mapRollToJson,
-	parseValueDropKeepData,
-	parseValueTestData,
-	rollDice, SECRET_REGEX, sum,
-	sumDicePartRolls,
-	sumDropKeep, TDiceLiteral,
+	DieRollGrade,
+	DropKeepType,
+	HasDieCore, IDiceBase,
+	IRollBase,
+	SECRET_REGEX,
+	TDiceLiteral,
 	TDropKeepData,
 	TSign,
-	TTestData, UNICODE_LEFT_ARROW
+	TTestData, UNICODE_LEFT_ARROW,
+	cleanDescription,
+	dropKeepToString,
+	gradeRoll, gradeToEmoji,
+	mapRollToJson,
+	parseValueDropKeepData,
+	parseValueTestData,
+	rollDice,
+	sum,
+	sumDicePartRolls,
+	sumDropKeep
 } from "../../common";
 import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
 	DicePartCore, DicePartRollCore, DiceRollCore, TDice, TDiceGroup, TDiceGroupRoll, TDicePart, TDicePartCoreArgs, TDicePartRoll, TDiceRoll
 } from "./types";
-import { GameType } from "../../../sage-common";
-import { correctEscapeForEmoji } from "..";
 
 //#endregion
 
@@ -367,7 +375,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 		return DicePart.create(core);
 	}
 	public static toCore(dicePartOrCore: TDicePart | DicePartCore): DicePartCore {
-		return "toJSON" in dicePartOrCore ? dicePartOrCore.toJSON() : dicePartOrCore;
+		return toJSON(dicePartOrCore);
 	}
 	public static Roll: typeof DicePartRoll;
 	//#endregion
@@ -472,7 +480,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 
 	//#region methods
 	public includes(dicePartOrCore: TDicePart | DicePartCore): boolean {
-		const dicePartCore = DicePart.toJSON<DicePartCore>(dicePartOrCore);
+		const dicePartCore = toJSON<DicePartCore>(dicePartOrCore);
 		return this.diceParts.find(_dicePart => _dicePart.toJSON() === dicePartCore) !== undefined;
 	}
 

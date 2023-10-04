@@ -1,4 +1,5 @@
-import utils, { IdCore, Optional, UUID } from "../../../sage-utils";
+import utils, { Optional, UUID } from "../../../sage-utils";
+import { IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
 import { PERCEPTION, profToMod, WISDOM } from "../../common";
 import * as Repository from "../../data/Repository";

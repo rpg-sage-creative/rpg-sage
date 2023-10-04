@@ -1,4 +1,5 @@
-import utils, { Core, UUID } from "../../sage-utils";
+import utils, { UUID } from "../../sage-utils";
+import { Core } from "../../sage-utils/utils/ClassUtils";
 import type { TMagicComponent, TMagicTradition } from '../common';
 import { ABILITIES, NEWLINE, toModifier } from '../common';
 import RenderableContent from '../data/RenderableContent';

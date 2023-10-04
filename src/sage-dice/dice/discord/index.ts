@@ -1,14 +1,22 @@
 //#region imports
 
-import type { IdCore, OrNull, OrUndefined } from "../../../sage-utils";
+import { GameType, parseGameType } from "../../../sage-common";
+import type { OrNull, OrUndefined } from "../../../sage-utils";
+import { HasCore, IdCore, toJSON } from "../../../sage-utils/utils/ClassUtils";
+import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
 	CritMethodType,
 	DiceOutputType,
 	DiceSecretMethodType,
-
+	TDiceOutput,
 	getCritMethodRegex,
-	parseCritMethodType, parseDiceOutputType, TDiceOutput
+	parseCritMethodType, parseDiceOutputType
 } from "../../common";
+import {
+	Dice as baseDice,
+	DiceGroup as baseDiceGroup,
+	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart
+} from "../base";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore, TDice as baseTDice,
@@ -16,11 +24,6 @@ import type {
 	TDiceGroupRoll as baseTDiceGroupRoll,
 	TDicePart as baseTDicePart
 } from "../base/types";
-import {
-	Dice as baseDice,
-	DiceGroup as baseDiceGroup,
-	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart
-} from "../base";
 import {
 	DiceGroup as cncDiceGroup,
 	DiceGroupRoll as cndDiceGroupRoll
@@ -41,9 +44,6 @@ import {
 	DiceGroup as questDiceGroup,
 	DiceGroupRoll as questDiceGroupRoll
 } from "../quest";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
-import { HasCore, toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { GameType, parseGameType } from "../../../sage-common";
 
 //#endregion
 

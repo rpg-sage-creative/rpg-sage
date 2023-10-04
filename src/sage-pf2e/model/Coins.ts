@@ -1,4 +1,5 @@
-import utils, { Core, IComparable, TSortResult } from "../../sage-utils";
+import utils, { IComparable, TSortResult } from "../../sage-utils";
+import { Core } from "../../sage-utils/utils/ClassUtils";
 import Bulk from "./Bulk";
 
 type TMoney = number | string | Coins;

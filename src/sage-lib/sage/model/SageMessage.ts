@@ -17,6 +17,7 @@ import SageCache from "./SageCache";
 import SageMessageArgsManager from "./SageMessageArgsManager";
 import { TAlias } from "./User";
 import { isDeleted } from "../../discord/deletedMessages";
+import { verbose } from "../../../sage-utils/utils/ConsoleUtils";
 
 interface SageMessageCore extends HasSageCacheCore {
 	message: DMessage;
@@ -60,6 +61,11 @@ export default class SageMessage
 		const clone = new SageMessage(this.core);
 		clone._ = this._;
 		return clone;
+	}
+	public clear(): void {
+		verbose("Clearing SageMessage");
+		this.cache.clear();
+		this.caches.clear();
 	}
 
 	//#region core
@@ -128,7 +134,10 @@ export default class SageMessage
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
 	public get channel(): IChannel | undefined {
-		return this.cache.get("channel", () => this.gameChannel ?? this.serverChannel);
+		return this.cache.get("channel", () => {
+			verbose(`caching .channel ${this.message.id}`);
+			return this.gameChannel ?? this.serverChannel
+		});
 	}
 
 	/** Returns the channelDid this message (or its thread) is in. */

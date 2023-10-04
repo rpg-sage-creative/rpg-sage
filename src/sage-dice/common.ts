@@ -1,5 +1,6 @@
 import { GameType } from "../sage-common";
-import utils, { IdCore, TToken } from "../sage-utils";
+import utils, { TToken } from "../sage-utils";
+import { IdCore } from "../sage-utils/utils/ClassUtils";
 import type { TDiceRoll } from "./dice/base/types";
 
 //#region rpg.common.ts

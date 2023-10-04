@@ -1,4 +1,4 @@
-import { SuperClass } from "../../../sage-utils/utils/ClassUtils";
+import { HasCache } from "../../../sage-utils/utils/ClassUtils";
 import type { DiscordCache, DiscordKey } from "../../discord";
 import type Bot from "./Bot";
 import type Game from "./Game";
@@ -10,7 +10,7 @@ export interface HasSageCacheCore {
 	caches: SageCache;
 }
 
-export default abstract class HasSageCache<T extends HasSageCacheCore, U extends HasSageCache<T, any>> extends SuperClass {
+export default abstract class HasSageCache<T extends HasSageCacheCore, U extends HasSageCache<T, any>> extends HasCache {
 
 	public constructor(protected core: T) {
 		super();

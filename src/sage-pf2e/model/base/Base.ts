@@ -1,4 +1,5 @@
-import utils, { IComparable, IdCore, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
+import utils, { IComparable, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
+import { IdCore } from "../../../sage-utils/utils/ClassUtils";
 import { NEWLINE, TAB } from "../../common";
 import RenderableContent from "../../data/RenderableContent";
 import type {

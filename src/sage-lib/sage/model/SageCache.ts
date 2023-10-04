@@ -12,6 +12,7 @@ import type Server from "./Server";
 import type User from "./User";
 import { isDeleted } from "../../discord/deletedMessages";
 import { errorReturnFalse } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { verbose } from "../../../sage-utils/utils/ConsoleUtils";
 
 export type TSageCacheCore = {
 	discord: DiscordCache;
@@ -66,6 +67,16 @@ export async function canSendMessageTo(channel: DMessageChannel): Promise<boolea
 
 export default class SageCache {
 	constructor(protected core: TSageCacheCore) { }
+
+	/** Clears the cache/maps in an attempt to avoid memory leaks. */
+	public clear(): void {
+		verbose("Clearing SageCache");
+		this.canSendMessageToMap.clear();
+		this.hasTupperMap.clear();
+		this.canReactToMap.clear();
+		this.canWebhookToMap.clear();
+		this.discord.clear();
+	}
 
 	private canSendMessageToMap = new Map<string, boolean>();
 	public async canSendMessageTo(discordKey: DiscordKey): Promise<boolean> {

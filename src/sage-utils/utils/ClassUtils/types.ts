@@ -1,21 +1,16 @@
-//#region HasCore
+import { TStringMatcher } from "../..";
 
-import type { UUID } from "../types";
-
-/** The most basic Core used. */
-export interface Core<T extends string = string> {
-	/** The type of data that is represented. Often the Class that the Core is for. */
-	objectType: T;
+/** A core with a name */
+export interface NameCore {
+	/** The name of the object. */
+	name: string;
 }
 
-//#endregion
+export interface IHasNameCore {
 
-//#region HasIdCore
+	/** The name of the object. */
+	name: string;
 
-/** The second most basic Core used. */
-export interface IdCore<T extends string = string> extends Core<T> {
-	/** The unique identifier for this object. */
-	id: UUID;
+	/** This must check to see if the value matches the name, nameClean (when cleaned), or nameLower (when lowered) */
+	matches(value: TStringMatcher): boolean;
 }
-
-//#endregion
