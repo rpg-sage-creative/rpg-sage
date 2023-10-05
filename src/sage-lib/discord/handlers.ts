@@ -263,6 +263,7 @@ export async function handleReaction(messageReaction: DReaction, user: DUser, re
 		if (!isBot) {
 			const sageReaction = await SageReaction.fromMessageReaction(messageReaction, user, reactionType);
 			await handleReactions(sageReaction, reactionType, output);
+			sageReaction.clear();
 		}
 	} catch (ex) {
 		error(toHumanReadable(user), `\`${messageReaction.emoji.name}\``, ex);
