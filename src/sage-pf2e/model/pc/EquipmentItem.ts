@@ -1,5 +1,6 @@
 import utils, { UUID } from "../../../sage-utils";
 import { IdCore } from "../../../sage-utils/utils/ClassUtils";
+import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import type { TQuality } from "../../common";
 import { findById } from "../../data/Repository";
 import type Base from "../base/Base";
@@ -110,7 +111,7 @@ export default class EquipmentItem extends utils.ClassUtils.HasIdCore<EquipmentI
 		if (this.core.containerId) {
 			const container = this.container;
 			if (!container) {
-				console.trace("item with containerid but no container");
+				warn(`item with containerid (${this.core.containerId}) but no container`);
 			}else {
 				const list = container.list;
 				if (list) {

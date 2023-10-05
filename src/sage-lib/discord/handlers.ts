@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import { isDefined, isNullOrUndefined, Optional } from "../../sage-utils";
-import { error, warn } from "../../sage-utils/utils/ConsoleUtils";
+import { error, info, warn } from "../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import SageInteraction from "../sage/model/SageInteraction";
 import SageMessage from "../sage/model/SageMessage";
@@ -109,10 +109,10 @@ function registerListener<T extends TListenerType>(which: TListenerTypeName, lis
 	}
 	const listeners: T[] = getListeners(which);
 	if (isNullOrUndefined(listener.priorityIndex)) {
-		console.info(`Registering ${which} #${listeners.length + 1}: ${listener.command ?? listener.tester.name}`);
+		info(`Registering ${which} #${listeners.length + 1}: ${listener.command ?? listener.tester.name}`);
 		listeners.push(listener);
 	} else {
-		console.info(`Registering ${which} #${listeners.length + 1} at priorityIndex ${listener.priorityIndex}: ${listener.command ?? listener.tester.name}`);
+		info(`Registering ${which} #${listeners.length + 1} at priorityIndex ${listener.priorityIndex}: ${listener.command ?? listener.tester.name}`);
 		if (listeners.find(l => l.priorityIndex === listener.priorityIndex)) {
 			warn(`${which} at priorityIndex ${listener.priorityIndex} already exists!`);
 		}

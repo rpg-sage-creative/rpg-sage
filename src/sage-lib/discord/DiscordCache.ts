@@ -2,7 +2,7 @@ import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Int
 import { NilSnowflake } from ".";
 import type { Optional } from "../../sage-utils";
 import { Collection } from "../../sage-utils/utils/ArrayUtils";
-import { debug, error, warn } from "../../sage-utils/utils/ConsoleUtils";
+import { debug, error, info, warn } from "../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageMessage from "../sage/model/SageMessage";
@@ -309,7 +309,7 @@ export default class DiscordCache {
 		if (!this.manageWebhooksPermMap.has(did)) {
 			const hasPerm = channel.permissionsFor(ActiveBot.active.did, true)?.has("MANAGE_WEBHOOKS");
 			if (!hasPerm) {
-				console.info(`No Permission (MANAGE_WEBHOOKS): ${channelToName(channel)}`);
+				info(`No Permission (MANAGE_WEBHOOKS): ${channelToName(channel)}`);
 			}
 			this.manageWebhooksPermMap.set(did, hasPerm);
 		}

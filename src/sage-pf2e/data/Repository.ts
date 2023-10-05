@@ -1,5 +1,5 @@
 import utils, { isDefined, Optional, OrNull, OrUndefined, TUuidMatcher, UUID } from "../../sage-utils";
-import { debug, warn } from "../../sage-utils/utils/ConsoleUtils";
+import { debug, verbose, warn } from "../../sage-utils/utils/ConsoleUtils";
 import type { TEntity } from "../model";
 import type AonBase from "../model/base/AonBase";
 import type Base from "../model/base/Base";
@@ -53,7 +53,7 @@ export function registerObject(itemConstructor: typeof Base): void {
 		objects: [],
 		erratad: []
 	});
-	console.info(`Registering Object #${repoMap.size}: ${objectType}`);
+	verbose(`Registering Object #${repoMap.size}: ${objectType}`);
 }
 
 /** Returns the objectType values (sorted) currently loaded. */
@@ -120,7 +120,7 @@ export function findById<T extends Base>(id: OrUndefined<UUID>): OrUndefined<T> 
 			}
 		}
 	}
-	console.info(`findById(${uuidMatcher?.value ?? id}) not found!`);
+	verbose(`findById(${uuidMatcher?.value ?? id}) not found!`);
 	return undefined;
 }
 
@@ -244,18 +244,18 @@ async function loadDataFromDist(distPath: string): Promise<void> {
 	let coresLoaded = 0;
 
 	const sources = files.filter(file => file.includes("/Source/"));
-	console.info(`Loading Data: ${sources.length} sources`);
+	verbose(`Loading Data: ${sources.length} sources`);
 	for (const source of sources) {
 		await utils.FsUtils.readJsonFile<BaseCore>(source).then(core => coresLoaded += loadCore(core, source), warn);
 	}
 
 	const others = files.filter(file => !file.includes("/Source/"));
-	console.info(`Loading Data: ${others.length} objects`);
+	verbose(`Loading Data: ${others.length} objects`);
 	for (const other of others) {
 		await utils.FsUtils.readJsonFile<BaseCore>(other).then(core => coresLoaded += loadCore(core, other), warn);
 	}
 
-	console.info(`\t\t${coresLoaded} Total Cores loaded`);
+	verbose(`\t\t${coresLoaded} Total Cores loaded`);
 
 	return Promise.resolve();
 }
@@ -263,7 +263,7 @@ async function loadDataFromDist(distPath: string): Promise<void> {
 async function loadFromPF2t(distPath: string): Promise<void> {
 	const pathAndFile = `${distPath}/pf2t-leftovers.json`;
 	const cores = await utils.FsUtils.readJsonFile<Pf2tBaseCore[]>(pathAndFile).catch(() => null) ?? [];
-	console.info(`\t\t${cores.length} Total PF2 Tools Cores loaded`);
+	verbose(`\t\t${cores.length} Total PF2 Tools Cores loaded`);
 	cores.forEach(core => {
 		const data = new Pf2tBase(core);
 		if (!repoMap.has(data.objectType)) {

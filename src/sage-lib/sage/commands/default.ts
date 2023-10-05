@@ -1,6 +1,6 @@
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
-import { debug, error } from "../../../sage-utils/utils/ConsoleUtils";
+import { debug, error, verbose } from "../../../sage-utils/utils/ConsoleUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import ArgsManager from "../../discord/ArgsManager";
@@ -83,7 +83,7 @@ function renderAllBySource(objectType: string, objectTypePlural: string): utils.
 	return [_content].concat(mapped);
 }
 export function renderAll(objectType: string, objectTypePlural: string, _bySource = false): utils.RenderUtils.RenderableContent[] {
-	console.info("renderAll", objectType, objectTypePlural);
+	verbose("renderAll", objectType, objectTypePlural);
 	try {
 		if (objectType === "Source") {
 			return [renderAllSource(objectType, objectTypePlural)];

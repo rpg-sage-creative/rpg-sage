@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import utils, { LogLevel, Optional } from "../../../sage-utils";
-import { error, info } from "../../../sage-utils/utils/ConsoleUtils";
+import { error, info, verbose } from "../../../sage-utils/utils/ConsoleUtils";
 import { MessageType, ReactionType } from "../../discord";
 import { setDeleted } from "../../discord/deletedMessages";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
@@ -107,7 +107,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		handleInteraction(interaction).then(data => {
 			if (data.handled > 0 || data.tested > 0) {
 				const commandName = interaction.isCommand() ? interaction.commandName : "";
-				console.info(`Discord.Client.on("interactionCreate", "${interaction.id}", "${commandName}") => ${data.tested}.${data.handled}`);
+				verbose(`Discord.Client.on("interactionCreate", "${interaction.id}", "${commandName}") => ${data.tested}.${data.handled}`);
 			}
 		});
 	}
@@ -127,7 +127,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 			const logDir = `./data/sage/logs/${this.codeName}`;
 			utils.ConsoleUtils.setConsoleHandler(consoleHandler.bind(this), logDir, this.codeName === "dev");
 
-			console.info(`Discord.Client.on("ready") [success]`);
+			info(`Discord.Client.on("ready") [success]`);
 			// Notify super user of successful start.
 			this.sageCache.discord.fetchUser("253330271678627841").then(user => user?.send(`Discord.Client.on("ready") [success]`));
 			process.on("beforeExit", async (code) => {
@@ -160,13 +160,13 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 
 	onClientGuildCreate(guild: Discord.Guild): void {
 		this.sageCache.servers.initializeServer(guild).then(initialized => {
-			console.info(`Discord.Client.on("guildCreate", "${guild.id}::${guild.name}") => ${initialized}`);
+			verbose(`Discord.Client.on("guildCreate", "${guild.id}::${guild.name}") => ${initialized}`);
 		});
 	}
 
 	onClientGuildDelete(guild: Discord.Guild): void {
 		this.sageCache.servers.retireServer(guild).then(retired => {
-			console.info(`NOT IMPLEMENTED: Discord.Client.on("guildDelete", "${guild.id}::${guild.name}") => ${retired}`);
+			verbose(`NOT IMPLEMENTED: Discord.Client.on("guildDelete", "${guild.id}::${guild.name}") => ${retired}`);
 		});
 	}
 
@@ -175,7 +175,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		if (ActiveBot.isActiveBot(user.id)) {
 			const guild = ban.guild;
 			this.sageCache.servers.retireServer(guild, false, true).then(retired => {
-				console.info(`NOT IMPLEMENTED: Discord.Client.on("guildBanAdd", "${guild.id}::${guild.name}", "${user.id}::${user.username}") => ${retired}`);
+				verbose(`NOT IMPLEMENTED: Discord.Client.on("guildBanAdd", "${guild.id}::${guild.name}", "${user.id}::${user.username}") => ${retired}`);
 			});
 		}
 	}
@@ -185,14 +185,14 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		if (ActiveBot.isActiveBot(user.id)) {
 			const guild = ban.guild;
 			//TODO: IMPLEMENT UNARCHIVE/UNRETIRE?
-			console.info(`NOT IMPLEMENTED: Discord.Client.on("guildBanRemove", "${guild.id}::${guild.name}", "${user.id}::${user.username}")`);
+			verbose(`NOT IMPLEMENTED: Discord.Client.on("guildBanRemove", "${guild.id}::${guild.name}", "${user.id}::${user.username}")`);
 		}
 	}
 
 	onClientGuildMemberUpdate(originalMember: Discord.GuildMember | Discord.PartialGuildMember, updatedMember: Discord.GuildMember): void {
 		handleGuildMemberUpdate(originalMember, updatedMember).then(updated => {
 			if (updated) {
-				console.info(`Discord.Client.on("guildMemberUpdate", "${originalMember.id}::${originalMember.displayName}", "${updatedMember.id}::${updatedMember.displayName}")`);
+				verbose(`Discord.Client.on("guildMemberUpdate", "${originalMember.id}::${originalMember.displayName}", "${updatedMember.id}::${updatedMember.displayName}")`);
 			}
 		});
 	}
@@ -200,7 +200,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 	onClientGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember): void {
 		if (ActiveBot.isActiveBot(member.id)) {
 			this.sageCache.servers.retireServer(member.guild, true).then(retired => {
-				console.info(`NOT IMPLEMENTED: Discord.Client.on("guildMemberRemove", "${member.id}::${member.displayName}") => ${retired}`);
+				verbose(`NOT IMPLEMENTED: Discord.Client.on("guildMemberRemove", "${member.id}::${member.displayName}") => ${retired}`);
 			});
 		}
 	}
@@ -208,7 +208,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 	onClientMessageCreate(message: Discord.Message): void {
 		handleMessage(message, null, MessageType.Post).then(data => {
 			if (data.handled > 0) {
-				console.info(`Discord.Client.on("message", "${message.id}") => ${data.tested}.${data.handled}`);
+				verbose(`Discord.Client.on("message", "${message.id}") => ${data.tested}.${data.handled}`);
 			}
 		});
 	}
@@ -216,7 +216,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 	onClientMessageUpdate(originalMessage: Discord.Message | Discord.PartialMessage, updatedMessage: Discord.Message | Discord.PartialMessage): void {
 		handleMessage(updatedMessage, originalMessage, MessageType.Edit).then(data => {
 			if (data.handled > 0) {
-				console.info(`Discord.Client.on("messageUpdate", "${originalMessage.id}", "${updatedMessage.id}") => ${data.tested}.${data.handled}`);
+				verbose(`Discord.Client.on("messageUpdate", "${originalMessage.id}", "${updatedMessage.id}") => ${data.tested}.${data.handled}`);
 			}
 		});
 	}
@@ -224,7 +224,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 	onClientMessageReactionAdd(messageReaction: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.User | Discord.PartialUser): void {
 		handleReaction(messageReaction, user, ReactionType.Add).then(data => {
 			if (data.handled > 0) {
-				console.info(`Discord.Client.on("messageReactionAdd", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
+				verbose(`Discord.Client.on("messageReactionAdd", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
 			}
 		});
 	}
@@ -232,7 +232,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 	onClientMessageReactionRemove(messageReaction: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.User | Discord.PartialUser): void {
 		handleReaction(messageReaction, user, ReactionType.Remove).then(data => {
 			if (data.handled > 0) {
-				console.info(`Discord.Client.on("messageReactionRemove", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
+				verbose(`Discord.Client.on("messageReactionRemove", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
 			}
 		});
 	}
