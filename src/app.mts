@@ -1,5 +1,6 @@
 // import * as fs from "fs";
 import { activate } from "./sage-lib";
+import { setEnv } from "./sage-utils/utils/ConsoleUtils";
 
 type TBot = "dev" | "beta" | "stable";
 
@@ -7,6 +8,7 @@ const args = process.argv.slice(2),
 	botCodeName = ["dev","beta","stable"].find(s => args.includes(s)) as TBot ?? "dev",
 	pf2DataPath = "./data/pf2e";
 
+setEnv(botCodeName);
 // const appNames = ["sage-bot", "sage-utils", "sage-data-pf2e", "sage-dice", "sage-lib-pf2e", "sage-lib"];
 // const versions = appNames.map(appName => {
 // 	if (appName === "sage-data-pf2e") {

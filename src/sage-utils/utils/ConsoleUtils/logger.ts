@@ -41,6 +41,11 @@ const _console = {
 	warn: console.warn,
 };
 
+let _env: "dev" | "beta" | "stable" = process.env["NODE_ENV"] as "dev" ?? "dev";
+export function setEnv(env: "dev" | "beta" | "stable"): void {
+	_env = env;
+}
+
 /** Returns the current logger. */
 export function getLogger(): Logger {
 	if (!_logger) {
@@ -48,11 +53,10 @@ export function getLogger(): Logger {
 		/** Single logging function to ensure we don't duplicate code deciding which environment logs what. */
 		function log(level: LogLevel, ...args: any[]) {
 			// ignore certain events based on environment
-			const env = process.env["NODE_ENV"];
-			if (env === "beta") {
+			if (_env === "beta") {
 				if (["silly", "debug"].includes(level)) return;
 			}
-			if (env === "stable") {
+			if (_env === "stable") {
 				if (["silly", "debug", "verbose"].includes(level)) return;
 			}
 
