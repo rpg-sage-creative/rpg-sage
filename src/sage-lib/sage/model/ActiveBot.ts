@@ -1,6 +1,7 @@
 import * as Discord from "discord.js";
 import utils, { Optional } from "../../../sage-utils";
 import { LogLevel, error, info, verbose } from "../../../sage-utils/utils/ConsoleUtils";
+import { captureProcessExit } from "../../../sage-utils/utils/ConsoleUtils/process";
 import { MessageType, ReactionType } from "../../discord";
 import { setDeleted } from "../../discord/deletedMessages";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
@@ -40,10 +41,9 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		super(core, null!);
 
 		this.client = new Discord.Client(createDiscordClientOptions());
-		process.on("SIGINT", (_eventName: "SIGINT", code: number) => {
-			info("\nDestroying Discord.Client");
+		captureProcessExit(() => {
+			info("Destroying Discord.Client");
 			this.client.destroy();
-			process.exit(code === 2 ? 0 : 1);
 		});
 
 		// To see options, look for: Discord.ClientEvents (right click nav .on below)
@@ -129,13 +129,6 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 			info(`Discord.Client.on("ready") [success]`);
 			// Notify super user of successful start.
 			this.sageCache.discord.fetchUser("253330271678627841").then(user => user?.send(`Discord.Client.on("ready") [success]`));
-			process.on("beforeExit", async (code) => {
-				info(`process.on("beforeExit") = ${code}`);
-				return this.sageCache.discord.fetchUser("253330271678627841").then(user => user?.send(`process.on("beforeExit")`));
-			});
-			process.on("exit", (code) => {
-				info(`process.on("exit") = ${code}`);
-			});
 		}, err => {
 			error(`Discord.Client.on("ready") [error]`, err);
 			process.exit(1);
