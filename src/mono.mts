@@ -10,22 +10,7 @@ const args = process.argv.slice(2),
 	pf2DataPath = "./data/pf2e";
 
 setEnv(botCodeName);
-
 RenderableMap.startServer(3000);
-
-// const appNames = ["sage-bot", "sage-utils", "sage-data-pf2e", "sage-dice", "sage-lib-pf2e", "sage-lib"];
-// const versions = appNames.map(appName => {
-// 	if (appName === "sage-data-pf2e") {
-// 		try {
-// 			return String(fs.readFileSync(`${pf2DataPath}/dist/${appName}.ver`));
-// 		}catch(ex) {
-// 			return String(fs.readFileSync(`${pf2DataPath}/src/${appName}.ver`));
-// 		}
-// 	}
-// 	return String(fs.readFileSync(`${appName}.ver`));
-// });
-
-const includePf2ToolsData = false;
-activate(pf2DataPath, botCodeName, "rpg-sage\n0.0.0", includePf2ToolsData);
+activate(pf2DataPath, botCodeName, "rpg-sage\n0.0.0");
 
 // node --experimental-modules --es-module-specifier-resolution=node app.mjs

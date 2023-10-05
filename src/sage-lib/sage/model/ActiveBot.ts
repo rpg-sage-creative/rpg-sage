@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
-import utils, { LogLevel, Optional } from "../../../sage-utils";
-import { error, info, verbose } from "../../../sage-utils/utils/ConsoleUtils";
+import utils, { Optional } from "../../../sage-utils";
+import { LogLevel, error, info, verbose } from "../../../sage-utils/utils/ConsoleUtils";
 import { MessageType, ReactionType } from "../../discord";
 import { setDeleted } from "../../discord/deletedMessages";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
@@ -124,8 +124,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 			this.sageCache = sageCache;
 			ActiveBot.active = this;
 
-			const logDir = `./data/sage/logs/${this.codeName}`;
-			utils.ConsoleUtils.setConsoleHandler(consoleHandler.bind(this), logDir, this.codeName === "dev");
+			utils.ConsoleUtils.addLogHandler("error", consoleHandler.bind(this));
 
 			info(`Discord.Client.on("ready") [success]`);
 			// Notify super user of successful start.
@@ -142,19 +141,13 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 			process.exit(1);
 		});
 
-		async function consoleHandler(this: ActiveBot, level: LogLevel, ...args: any[]): Promise<void> {
-			const devs = this.devs.filter(dev => {
-				const devLogLevel = LogLevel[dev.logLevel];
-				return devLogLevel && level <= devLogLevel;
+		async function consoleHandler(this: ActiveBot, logLevel: LogLevel, ...args: any[]): Promise<void> {
+			this.devs.forEach(dev => {
+				const contents = `**${logLevel}**\n${args.map(utils.ConsoleUtils.formatArg).join("\n")}`;
+				const chunks = utils.StringUtils.chunk(contents, 2000);
+				this.sageCache.discord.fetchUser(dev.did)
+					.then(user => user ? chunks.forEach(chunk => user.send(chunk)) : void 0);
 			});
-			if (devs.length) {
-				devs.forEach(dev => {
-					const contents = `**${LogLevel[level]}**\n${args.map(utils.ConsoleUtils.formatArg).join("\n")}`;
-					const chunks = utils.StringUtils.chunk(contents, 2000);
-					this.sageCache.discord.fetchUser(dev.did)
-						.then(user => user ? chunks.forEach(chunk => user.send(chunk)) : void 0);
-				});
-			}
 		}
 	}
 

@@ -1,7 +1,7 @@
 import type * as Discord from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import utils, { LogLevel, Optional, TConsoleCommandType } from "../../../sage-utils";
+import utils, { Optional } from "../../../sage-utils";
 import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { DiscordKey } from "../../discord";
 import { DicePostType } from "../commands/dice";
@@ -30,16 +30,11 @@ export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji {
 	defaultDiceSecretMethodType?: DiceSecretMethodType;
 	defaultGameType?: GameType;
 	defaultGmCharacterName: string;
-	logLevel: TConsoleCommandType;
 	name: string;
 	roles: IAdminRole[];
 }
 
 export default class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IHasEmojiCore {
-
-	// #region Private Properties
-	private _logLevel?: LogLevel;
-	// #endregion
 
 	// #region Public Properties
 	public get admins(): IAdminUser[] { return this.core.admins ?? []; }
@@ -53,7 +48,6 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	public get defaultGameType(): GameType | undefined { return this.core.defaultGameType; }
 	public get defaultGmCharacterName(): string { return this.core.defaultGmCharacterName; }
 	public get discord() { return this.sageCache.discord; }
-	public get logLevel(): LogLevel | null { return this._logLevel !== undefined ? this._logLevel : (this._logLevel = LogLevel[this.core.logLevel] ?? null); }
 	public get name(): string { return this.core.name; }
 	public get roles(): IAdminRole[] { return this.core.roles ?? []; }
 	// #endregion
@@ -286,7 +280,6 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	// #endregion
 
 	public async save(): Promise<boolean> {
-		delete this._logLevel;
 		return this.sageCache.servers.write(this);
 	}
 
@@ -369,7 +362,6 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 			defaultGameType: GameType.None,
 			defaultGmCharacterName: "Game Master",
 			id: null!,
-			logLevel: null!,
 			name: guild.name,
 			objectType: "Server",
 			commandPrefix: activeBot.commandPrefix,

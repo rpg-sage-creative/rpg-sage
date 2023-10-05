@@ -1,6 +1,5 @@
 export * from "./ArrayUtils/types";
 export * from "./ColorUtils/types";
-export * from "./ConsoleUtils/types";
 export * from "./ClassUtils/types";
 export * from "./DateUtils/types";
 export * from "./JsonUtils/types";

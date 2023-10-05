@@ -1,6 +1,5 @@
 import type * as Discord from "discord.js";
 import type { GameType } from "../../../sage-common";
-import { LogLevel, TConsoleCommandType } from "../../../sage-utils";
 import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository";
 import Colors from "./Colors";
@@ -14,7 +13,7 @@ export type TBotCodeName = "dev" | "beta" | "stable";
 export type TCoreAuthor = { iconUrl?: string; name?: string; url?: string; };
 export type TCorePrefixes = { command?: string; search?: string; };
 
-export type TDev = { did: Discord.Snowflake; logLevel: TConsoleCommandType; };
+export type TDev = { did: Discord.Snowflake; };
 
 /**
  * key = GameType
@@ -28,7 +27,6 @@ export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	codeName: TBotCodeName;
 	commandPrefix?: string;
 	devs?: TDev[];
-	logLevel: TConsoleCommandType;
 
 	/** Discord API bot token */
 	token: string;
@@ -45,7 +43,6 @@ export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore,
 	public get codeName(): TBotCodeName { return this.core.codeName; }
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }
 	public get devs(): TDev[] { return this.core.devs ?? []; }
-	public get logLevel(): LogLevel { return LogLevel[<keyof typeof LogLevel>this.core.logLevel] || null; }
 	public get token(): string { return this.core.token; }
 	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
 

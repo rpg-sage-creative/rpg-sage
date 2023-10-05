@@ -1,5 +1,4 @@
 import { registerAndLoad } from "../sage-pf2e";
-import utils, { LogLevel } from "../sage-utils";
 import { error } from "../sage-utils/utils/ConsoleUtils";
 import registerPrompts from "./discord";
 import { setBotMeta } from "./discord/handlers";
@@ -14,9 +13,6 @@ import BotRepo from "./sage/repo/BotRepo";
 */
 
 export function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: string, includePf2ToolsData = false): void {
-	const logLevel = botCodeName === "dev" ? LogLevel.Silly : LogLevel.Warn;
-	utils.ConsoleUtils.startHandling(logLevel);
-
 	BotRepo.getByCodeName(botCodeName).then(bot => {
 		setBotMeta({ activeBotDid:bot.did, dialogWebhookName:SageDialogWebhookName, testBotDid:undefined });
 
