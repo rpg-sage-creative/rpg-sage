@@ -191,9 +191,9 @@ function rank<T>(items: T[], text: string, options: TRankOptions<T> = { }): TRan
 	}
 
 	/**
-	// console.log(`${text}: maxLev (${maxScores.lev}), maxTri (${maxScores.tri}), maxJar (${maxScores.jar})`);
+	// debug(`${text}: maxLev (${maxScores.lev}), maxTri (${maxScores.tri}), maxJar (${maxScores.jar})`);
 	// results.forEach(result => {
-	// 	console.log(`\t${_options.toString(result.item)}: lev ${result.lev}, tri ${JSON.stringify(result.tri)}, jar ${result.jar}`);
+	// 	debug(`\t${_options.toString(result.item)}: lev ${result.lev}, tri ${JSON.stringify(result.tri)}, jar ${result.jar}`);
 	// });
 	*/
 

@@ -1,13 +1,14 @@
 import utils, { isDefined, Optional, OrNull, OrUndefined, TUuidMatcher, UUID } from "../../sage-utils";
+import { debug } from "../../sage-utils/utils/ConsoleUtils";
 import type { TEntity } from "../model";
+import type AonBase from "../model/base/AonBase";
 import type Base from "../model/base/Base";
 import type { BaseCore } from "../model/base/Base";
 import type HasSource from "../model/base/HasSource";
-import Source from "../model/base/Source";
-import type Creature from "../model/bestiary/Creature";
 import Pf2tBase, { type Pf2tBaseCore } from "../model/base/Pf2tBase";
 import type { SourceCore } from "../model/base/Source";
-import type AonBase from "../model/base/AonBase";
+import Source from "../model/base/Source";
+import type Creature from "../model/bestiary/Creature";
 
 export type TObjectTypeAndPlural = { objectType: string; objectTypePlural: string; };
 
@@ -323,7 +324,7 @@ export function parseSource(value?: string, sources?: TSourceOrCore[]): TParsedS
 	// "source": "Core Rulebook pg. 283 2.0",
 	const parts = value?.match(/^(.*?) pg. (\d+)(?: \d+\.\d+)?$/);
 	if (!parts) {
-		// console.log(value, sources?.map(src => src.name));
+		// debug(value, sources?.map(src => src.name));
 		return null;
 	}
 
@@ -338,7 +339,7 @@ export function parseSource(value?: string, sources?: TSourceOrCore[]): TParsedS
 	const source = matchSource(sources, name);
 	if (!source && !missingSources.includes(name)) {
 		missingSources.push(name);
-		console.log(`Unknown Source: ${name}`);
+		debug(`Unknown Source: ${name}`);
 		return null;
 	}
 

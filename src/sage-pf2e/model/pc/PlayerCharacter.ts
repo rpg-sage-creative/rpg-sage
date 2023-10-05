@@ -420,7 +420,7 @@ export default class PlayerCharacter extends utils.ClassUtils.HasIdCore<PlayerCh
 				}
 				/*continue;*/
 			}
-			// console.log(prerequisite)
+			// debug(prerequisite)
 		}
 		return true;
 	}

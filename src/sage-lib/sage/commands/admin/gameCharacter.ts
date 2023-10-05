@@ -362,7 +362,7 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 	const newChar = new GameCharacter(core, characterManager);
 	return promptAndDo(sageMessage, newChar, `Create ${newChar.name}?`, async char => {
 		if (sageMessage.game && userDid) {
-			// why? console.log("Checking owner's status as player/gm ...");
+			// why? debug("Checking owner's status as player/gm ...");
 			if (characterTypeMeta.isNpc) {
 				if (!sageMessage.game.hasGameMaster(userDid)) {
 					const gameMasterAdded = await sageMessage.game.addGameMasters([userDid]);
@@ -382,7 +382,7 @@ async function gameCharacterAdd(sageMessage: SageMessage): Promise<void> {
 			}
 		}
 		const gc = await characterManager!.addCharacter(char.toJSON());
-		// console.log(gc, gc?.toJSON())
+		// debug(gc, gc?.toJSON())
 		return Promise.resolve(!!gc);
 	});
 }

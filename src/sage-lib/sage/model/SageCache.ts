@@ -1,6 +1,9 @@
 import type * as Discord from "discord.js";
 import utils from "../../../sage-utils";
+import { silly, verbose } from "../../../sage-utils/utils/ConsoleUtils";
+import { errorReturnFalse } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { DInteraction, DiscordCache, DiscordKey, DMessage, DReaction, DUser, NilSnowflake, TChannel } from "../../discord";
+import { isDeleted } from "../../discord/deletedMessages";
 import ActiveBot from "../model/ActiveBot";
 import BotRepo from "../repo/BotRepo";
 import GameRepo from "../repo/GameRepo";
@@ -10,9 +13,6 @@ import type Bot from "./Bot";
 import type Game from "./Game";
 import type Server from "./Server";
 import type User from "./User";
-import { isDeleted } from "../../discord/deletedMessages";
-import { errorReturnFalse } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { verbose } from "../../../sage-utils/utils/ConsoleUtils";
 
 export type TSageCacheCore = {
 	discord: DiscordCache;
@@ -118,15 +118,15 @@ export default class SageCache {
 			if (!guild.members.cache.has(tupperId)) return false;
 
 			// const tupper = await sageCache.discord.fetchGuildMember(tupperId);
-			// // console.log({tupperId,tupper:!!tupper});
+			// // debug({tupperId,tupper:!!tupper});
 			// if (!tupper) return false;
 
 			const thread = await sageCache.discord.fetchChannel<Discord.ThreadChannel>(discordKey.thread);
-			// console.log({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId)});
+			// debug({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId)});
 			if (thread?.guildMembers.has(tupperId)) return true;
 
 			const channel = await sageCache.discord.fetchChannel<Discord.TextChannel>(discordKey.channel);
-			// console.log({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId),channelId:discordKey.channel,channel:!!channel?.members.has(tupperId)});
+			// debug({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId),channelId:discordKey.channel,channel:!!channel?.members.has(tupperId)});
 			return channel?.members.has(tupperId) === true;
 		}
 	}
@@ -135,9 +135,9 @@ export default class SageCache {
 		const hasTupper = await this.hasTupper(discordKey);
 		if (hasTupper) {
 			// let's pause for a second in case Tupper is involved ...
-			if (this.bot.codeName === "dev") console.log(`Pausing for Tupper ...`);
+			silly(`Pausing for Tupper ...`);
 			await (new Promise(res => setTimeout(res, 1000)));
-			if (this.bot.codeName === "dev") console.log(`                   ... done pausing for Tupper.`);
+			silly(`                   ... done pausing for Tupper.`);
 		}
 	}
 

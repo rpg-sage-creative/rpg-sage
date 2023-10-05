@@ -1,5 +1,6 @@
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
+import { debug } from "../../../sage-utils/utils/ConsoleUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import ArgsManager from "../../discord/ArgsManager";
@@ -8,9 +9,9 @@ import { registerInteractionListener, registerMessageListener } from "../../disc
 import type { TCommandAndArgs } from "../../discord/types";
 import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
-import { searchHandler } from "./search";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp, registerFindHelp, registerSearchHelp } from "./help";
+import { searchHandler } from "./search";
 
 // #region Common Types and Functions
 
@@ -270,20 +271,20 @@ export function registerCommandHandlers(): void {
 	});
 	registerCommandRegex(/debug\-log\-all\-items/, async (sageMessage: SageMessage) => {
 		if (sageMessage.isSuperUser) {
-			console.log(`debug-log-all-items: begin`);
+			debug(`debug-log-all-items: begin`);
 			let maxEmbeds = 0;
 			let maxCharacters = 0;
 			const clean = <string[]>[];
 			const objectTypes = Repository.getObjectTypes();
 			for (const objectType of objectTypes) {
-				console.log(`\tdebug-log-all-items(${objectType}): begin`);
+				debug(`\tdebug-log-all-items(${objectType}): begin`);
 				const broken = <string[]>[];
 				const objects = Repository.all(objectType);
 				for (const object of objects) {
 					try {
-						// console.log(`\t\t${objectType}::${object.id}::${object.name}`);
+						// debug(`\t\t${objectType}::${object.id}::${object.name}`);
 						const renderable = object.toRenderableContent();
-// console.log((renderable as any)?.prototype?.constructor?.name ?? Object.prototype.toString.call(object));
+// debug((renderable as any)?.prototype?.constructor?.name ?? Object.prototype.toString.call(object));
 						const embeds = resolveToEmbeds(sageMessage.caches, renderable);
 						maxEmbeds = Math.max(maxEmbeds, embeds.length);
 						const string = renderable.toString();
@@ -298,10 +299,10 @@ export function registerCommandHandlers(): void {
 				} else {
 					await sageMessage.send(`__**${objectType}: ${broken.length} errors.**__\n${broken.join("\n")}`);
 				}
-				console.log(`\tdebug-log-all-items(${objectType}): end`);
+				debug(`\tdebug-log-all-items(${objectType}): end`);
 			}
 			await sageMessage.send(`__**Clean Objects (${clean.length}):**__ ${clean.join(", ")}; maxEmbeds (${maxEmbeds}), maxCharacters (${maxCharacters})`);
-			console.log(`debug-log-all-items: end`);
+			debug(`debug-log-all-items: end`);
 		}
 	});
 

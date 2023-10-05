@@ -1,4 +1,5 @@
 
+import { debug } from "../ConsoleUtils";
 import { errorReturnEmptyArray } from "../ConsoleUtils/Catchers";
 import { listFiles } from "../FsUtils";
 import type { UUID } from "../types";
@@ -40,6 +41,6 @@ export async function listObjectsShim(parition: string): Promise<UUID[]> {
 			uuids.push(file.slice(0, -5));
 		}
 	});
-	console.log(files);
+	debug(files);
 	return uuids;
 }

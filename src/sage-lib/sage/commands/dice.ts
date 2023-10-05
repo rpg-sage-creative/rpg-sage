@@ -1,10 +1,13 @@
 import type * as Discord from "discord.js";
+import type { GameType } from "../../../sage-common";
 import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "../../../sage-dice";
 import { NEWLINE } from "../../../sage-pf2e";
 import type { Optional, TKeyValueArg } from "../../../sage-utils";
+import { debug } from "../../../sage-utils/utils/ConsoleUtils";
+import { toHumanReadable } from "../../../sage-utils/utils/DiscordUtils/humanReadable";
 import { addCommas } from "../../../sage-utils/utils/NumberUtils";
 import { random, randomItem } from "../../../sage-utils/utils/RandomUtils";
-import { chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, Tokenizer } from "../../../sage-utils/utils/StringUtils";
+import { Tokenizer, chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks } from "../../../sage-utils/utils/StringUtils";
 import type { DUser, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { DiscordId, DiscordMaxValues, MessageType } from "../../discord";
 import { createMessageEmbed } from "../../discord/embeds";
@@ -18,8 +21,6 @@ import SageMessage from "../model/SageMessage";
 import type { TMacro } from "../model/User";
 import { registerCommandRegex } from "./cmd";
 import { registerInlineHelp } from "./help";
-import type { GameType } from "../../../sage-common";
-import { toHumanReadable } from "../../../sage-utils/utils/DiscordUtils/humanReadable";
 
 type TInteraction = SageMessage | SageInteraction;
 
@@ -114,21 +115,21 @@ function parseMatch(sageMessage: TInteraction, match: string): TDiceOutput[] {
 	if (sageMessage instanceof SageMessage) {
 		const macro = parseDiscordMacro(sageMessage, noBraces);
 		if (macro) {
-			// console.log("macro", match);
+			// debug("macro", match);
 			return macro.roll().toStrings(sageMessage.diceOutputType);
 		}
 	}
 	const dice = parseDiscordDice(sageMessage, `[${noBraces}]`);
 	if (dice) {
-		// console.log("dice", match);
+		// debug("dice", match);
 		return dice.roll().toStrings(sageMessage.diceOutputType);
 	}
 	if (match.match(RANDOM_REGEX)) {
-		// console.log("simple", match);
+		// verbose("simple", match);
 		return doSimple(sageMessage, noBraces);
 	}
 	if (match.match(MATH_REGEX)) {
-		// console.log("math", match);
+		// verbose("math", match);
 		return doMath(sageMessage, noBraces);
 	}
 	return [];
@@ -250,7 +251,7 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 		if (gmTargetChannel) {
 			await _sendTo(sageMessage, gmTargetChannel, gmPostContent, gmEmbedContent);
 		}else {
-			console.log("no gmTargetChannel!");
+			debug("no gmTargetChannel!");
 		}
 	}
 
@@ -260,7 +261,7 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 		if (targetChannel) {
 			await _sendTo(sageMessage, targetChannel, mainPostContent, mainEmbedContent);
 		}else {
-			console.log("no targetChannel!");
+			debug("no targetChannel!");
 		}
 	}
 

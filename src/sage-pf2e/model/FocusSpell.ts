@@ -25,7 +25,7 @@ export default class FocusSpell extends Spell<"FocusSpell", FocusSpellCore> {
 			const classNames = Repository.all("Class").map(clss => clss.name);
 			specialName = this.traits.find(trait => classNames.includes(trait));
 		}
-		// if (!specialName) console.log(this.archetypeName, this.domainName, this.traits);
+		// if (!specialName) debug(this.archetypeName, this.domainName, this.traits);
 		const specialLabel = specialName ? ` (${specialName})` : ``;
 		return level + specialLabel;
 	}

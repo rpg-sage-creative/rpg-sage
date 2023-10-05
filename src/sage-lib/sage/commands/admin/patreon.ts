@@ -1,3 +1,4 @@
+import { verbose } from "../../../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../../../sage-utils/utils/DiscordUtils/humanReadable";
 import { send } from "../../../discord/messages";
 import type SageCache from "../../model/SageCache";
@@ -22,7 +23,7 @@ export async function syncPatreon(sageCache: SageCache): Promise<void> {
 	const guildRoles = await Promise.all(PatronTierSnowflakes.map(roleDid => roleDid ? sageCache.discord.fetchGuildRole(roleDid) : null));
 	const guildRoleMembers = guildRoles.map((guildRole, tier) => guildRole && tier ? Array.from(guildRole.members.values()) : []);
 
-	console.log(`Removing ex-Patreon Users`);
+	verbose(`Removing ex-Patreon Users`);
 	const sageUsers = await sageCache.users.getAll();
 	for (const sageUser of sageUsers) {
 		const tier = guildRoleMembers.findIndex((members, _tier) => _tier ? members?.find(member => member.id === sageUser.did) : undefined);
@@ -33,7 +34,7 @@ export async function syncPatreon(sageCache: SageCache): Promise<void> {
 		}
 	}
 
-	console.log(`Syncing Patreon Users`);
+	verbose(`Syncing Patreon Users`);
 	for (let tier = 1; tier < guildRoleMembers.length; tier++) {
 		for (const member of guildRoleMembers[tier]) {
 			let sageUser = sageUsers.find(user => user.did === member.id);

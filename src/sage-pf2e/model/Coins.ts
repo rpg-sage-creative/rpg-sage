@@ -259,33 +259,33 @@ export default class Coins extends utils.ClassUtils.HasCore<CoinsCore> implement
 	public subtract(coins: string): void;
 	public subtract(coinsOrString: Coins | string): void {
 		//TODO: Some extra debugging to ensure that this logic is right (it seems to be good so far!)
-		// console.log(`(${JSON.stringify(this)}).subtract(${JSON.stringify(coinsOrString)})`)
+		// debug(`(${JSON.stringify(this)}).subtract(${JSON.stringify(coinsOrString)})`)
 		const coins = typeof (coinsOrString) === "string" ? Coins.parse(coinsOrString) : coinsOrString,
 			thisValue = this.spValue,
 			coinsValue = coins.spValue,
 			finalValue = thisValue - coinsValue;
-		// console.log([thisValue, coinsValue, finalValue])
+		// debug([thisValue, coinsValue, finalValue])
 
 		if (!finalValue) {
-			// console.log(`zeroOut`)
+			// debug(`zeroOut`)
 			// if values are equal and opposite, zero
 			zeroOut(this.core);
 
 		} else if (this.neg !== coins.neg) {
-			// console.log(`this.neg !== coins.neg`)
+			// debug(`this.neg !== coins.neg`)
 			// neg - pos and pos - neg simply increase all values
 			this.addValues(coins);
 
 		} else if (coins.neg) {
-			// console.log(`coins.neg`)
+			// debug(`coins.neg`)
 			// neg - neg = neg + pos
 			if (finalValue < 0) {
-				// console.log(`finalValue < 0`)
+				// debug(`finalValue < 0`)
 				// subtract the smaller
 				this.subtractValues(coins);
 
 			} else {
-				// console.log(`finalValue < 0::else`)
+				// debug(`finalValue < 0::else`)
 				// invert the bigger and subtract the smaller, reset values
 				const invertedCoins = coins.clone(true);
 				invertedCoins.subtractValues(this);

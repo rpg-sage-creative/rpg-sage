@@ -1,10 +1,11 @@
 import type { IComparable, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
 import utils from "../../../sage-utils";
-import HasSource, { SourcedCore } from "./HasSource";
-import type { IHasArchives, IHasDetails, IHasLink, IHasName } from "./interfaces";
+import { debug, verbose } from "../../../sage-utils/utils/ConsoleUtils";
 import RenderableContent from "../../data/RenderableContent";
-import { parseSource, TParsedSource } from "../../data/Repository";
+import { TParsedSource, parseSource } from "../../data/Repository";
+import HasSource, { SourcedCore } from "./HasSource";
 import type Source from "./Source";
+import type { IHasArchives, IHasDetails, IHasLink, IHasName } from "./interfaces";
 
 export interface Pf2tBaseCore extends SourcedCore<""> {
 	/** The id(s) of Sage's version(s) of this object. */
@@ -78,7 +79,7 @@ export default class Pf2tBase
 		const keys = Object.keys(core);
 		const newKeys = keys.filter(key => !keys.includes(key));
 		if (newKeys.length) {
-			console.log(`New PF2 Tools Keys: ${newKeys}`);
+			verbose(`New PF2 Tools Keys: ${newKeys}`);
 		}
 		keys.forEach(key => {
 			let list = keyMap.get(key);
@@ -222,6 +223,6 @@ export default class Pf2tBase
 	// #endregion utils.SearchUtils.ISearchable
 
 	public static logKeyMap(): void {
-		console.log(keyMap);
+		debug(keyMap);
 	}
 }

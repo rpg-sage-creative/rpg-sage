@@ -2,7 +2,7 @@ import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Int
 import { NilSnowflake } from ".";
 import type { Optional } from "../../sage-utils";
 import { Collection } from "../../sage-utils/utils/ArrayUtils";
-import { verbose } from "../../sage-utils/utils/ConsoleUtils";
+import { debug } from "../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageMessage from "../sage/model/SageMessage";
@@ -51,7 +51,7 @@ function warnUnknownElseErrorReturnNull(reason: any): null {
 }
 
 function dGet<T>(manager: CachedManager<Snowflake, any, T>, did: Snowflake): T | null {
-	console.log(`dGet(${manager ? manager.constructor?.name ?? Object.prototype.toString.apply(manager) : String(manager)}, ${did})`);
+	debug(`dGet(${manager ? manager.constructor?.name ?? Object.prototype.toString.apply(manager) : String(manager)}, ${did})`);
 	return manager?.cache.get(did) ?? null;
 }
 
@@ -60,7 +60,7 @@ async function dFetchGuild(client: Client, guildResolvable: TGuildResolvable): P
 		return null;
 	}
 	const guildDid = guildResolvable instanceof Guild ? guildResolvable.id : guildResolvable;
-	console.log(`dFetchGuild(${guildDid})`);
+	debug(`dFetchGuild(${guildDid})`);
 	return client.guilds.fetch(guildDid).catch(warnUnknownElseErrorReturnNull) ?? null;
 }
 
@@ -94,7 +94,7 @@ export default class DiscordCache {
 
 	/** Clears the cache/maps in an attempt to avoid memory leaks. */
 	public clear(): void {
-		verbose("Clearing DiscordCache");
+		debug("Clearing DiscordCache");
 		this.channelMap.clear();
 		this.guildMap.clear();
 		this.guildPreviewMap.clear();
