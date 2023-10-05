@@ -74,12 +74,12 @@ export default class SageCache {
 			if (discordKey.isDm) {
 				this.canSendMessageToMap.set(key, true);
 			}else {
-				const thread = await this.discord.fetchChannel(discordKey.thread);
+				const thread = await this.discord.fetchChannel<Discord.ThreadChannel>(discordKey.thread);
 				const channel = await this.discord.fetchChannel<Discord.TextChannel>(discordKey.channel);
 				const botUser = await this.discord.fetchUser(ActiveBot.active.did);
 				if (botUser && (thread || channel)) {
 					const sendPerm = thread ? "SEND_MESSAGES_IN_THREADS" : "SEND_MESSAGES";
-					const perms = channel?.permissionsFor(botUser);
+					const perms = thread?.permissionsFor(botUser) ?? channel?.permissionsFor(botUser);
 					this.canSendMessageToMap.set(key, perms?.has(sendPerm) ?? true);
 				}else {
 					this.canSendMessageToMap.set(key, false);
