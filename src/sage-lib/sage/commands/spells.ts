@@ -1,10 +1,11 @@
-import type { TMagicTradition, Domain, Spell } from "../../../sage-pf2e";
-import { SourceNotationMap, Repository, FocusSpell } from "../../../sage-pf2e";
+import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e";
+import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e";
+import utils, { Optional } from "../../../sage-utils";
+import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { renderAll } from "./default";
 import { registerCommandHelp } from "./help";
-import utils, { Optional } from "../../../sage-utils";
 
 // #region Spell
 function reduceByLevel<T extends Spell<string, any>>(spells: T[]): T[][] {
@@ -27,7 +28,7 @@ async function spellListB(sageMessage: SageMessage): Promise<void> {
 	_spellList(sageMessage, traditionString, levelString, by);
 }
 async function _spellList(sageMessage: SageMessage, traditionString: string, levelString: string, by: "school"): Promise<void> {
-	/*// console.debug("spellList", traditionString, levelString);*/
+	/*// debug("spellList", traditionString, levelString);*/
 	const content = createCommandRenderableContent(),
 		tradition = <TMagicTradition>utils.StringUtils.capitalize(traditionString),
 		byTradition = Repository.filter("Spell", spell => spell.traditions.includes(tradition));
@@ -107,7 +108,7 @@ async function spellListFocus(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	/*// console.debug("spellListFocus", archetypeOrClassOrDomain);*/
+	/*// debug("spellListFocus", archetypeOrClassOrDomain);*/
 	const className = Repository.findByValue("Class", archetypeOrClassOrDomain)?.name,
 		archetypeName = className ? undefined : Repository.findByValue("Archetype", archetypeOrClassOrDomain)?.name,
 		domain = Repository.findByValue("Domain", archetypeOrClassOrDomain),
@@ -193,7 +194,7 @@ async function specialistLists(sageMessage: SageMessage): Promise<void> {
 		} else if (traditionAndModifier.modifier === "&") {
 			spells = spells.slice().filter(spell => spells.includes(spell) && byTradition.includes(spell));
 		} else {
-			console.warn(traditionAndModifier);
+			warn(traditionAndModifier);
 		}
 	});
 

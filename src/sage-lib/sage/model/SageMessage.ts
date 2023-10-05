@@ -3,7 +3,10 @@ import type { IHasChannels, IHasGame } from ".";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Optional } from "../../../sage-utils";
+import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
+import { debug, verbose, warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { DMessage, DiscordKey, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
+import { isDeleted } from "../../discord/deletedMessages";
 import { send } from "../../discord/messages";
 import { DicePostType } from "../commands/dice";
 import type Game from "../model/Game";
@@ -16,7 +19,6 @@ import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
 import SageCache from "./SageCache";
 import SageMessageArgsManager from "./SageMessageArgsManager";
 import { TAlias } from "./User";
-import { isDeleted } from "../../discord/deletedMessages";
 
 interface SageMessageCore extends HasSageCacheCore {
 	message: DMessage;
@@ -32,8 +34,8 @@ export default class SageMessage
 	extends HasSageCache<SageMessageCore, SageMessage>
 	implements IHasGame, IHasChannels {
 
-	public constructor(protected core: SageMessageCore) {
-		super(core);
+	private constructor(protected core: SageMessageCore, cache?: ClassCache) {
+		super(core, cache);
 		this.setCommandAndArgs();
 	}
 
@@ -57,9 +59,14 @@ export default class SageMessage
 
 	// TODO: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE!
 	public clone(): SageMessage {
-		const clone = new SageMessage(this.core);
+		const clone = new SageMessage(this.core, this.cache);
 		clone._ = this._;
 		return clone;
+	}
+	public clear(): void {
+		debug("Clearing SageMessage");
+		this.cache.clear();
+		this.caches.clear();
 	}
 
 	//#region core
@@ -128,7 +135,10 @@ export default class SageMessage
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
 	public get channel(): IChannel | undefined {
-		return this.cache.get("channel", () => this.gameChannel ?? this.serverChannel);
+		return this.cache.get("channel", () => {
+			verbose(`caching .channel ${this.message.id}`);
+			return this.gameChannel ?? this.serverChannel
+		});
 	}
 
 	/** Returns the channelDid this message (or its thread) is in. */
@@ -304,7 +314,7 @@ export default class SageMessage
 				this.message.author?.send(`${emoji} ${reason}\n<${this.message.url}>`);
 			}
 		}else {
-			console.warn(`Invalid emojiType: ${emojiType} >> ${reason ?? "no reason given"}`)
+			warn(`Invalid emojiType: ${emojiType} >> ${reason ?? "no reason given"}`)
 		}
 	}
 	/** This was pulled here to avoid duplicating code. */

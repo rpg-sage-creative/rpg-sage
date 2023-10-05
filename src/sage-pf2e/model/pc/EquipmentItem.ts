@@ -1,4 +1,6 @@
-import utils, { IdCore, UUID } from "../../../sage-utils";
+import utils, { UUID } from "../../../sage-utils";
+import { IdCore } from "../../../sage-utils/utils/ClassUtils";
+import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import type { TQuality } from "../../common";
 import { findById } from "../../data/Repository";
 import type Base from "../base/Base";
@@ -82,7 +84,7 @@ export default class EquipmentItem extends utils.ClassUtils.HasIdCore<EquipmentI
 	//#region other properties
 	public get count(): number { return this.core.count; }
 	public get entries(): string[] { return this.core.entries ?? []; }
-	public set entries(entries: string[]) { this.setOrDelete("entries", entries); }
+	public set entries(entries: string[]) { this.core.entries = entries; }
 	public item: HasBulk<BulkCore, any>;
 	public get itemQuality(): TQuality { return this.core.itemQuality; }
 	public get items(): EquipmentItem[] { return this.eq.items.filter(item => item.containerId === this.id); }
@@ -100,7 +102,7 @@ export default class EquipmentItem extends utils.ClassUtils.HasIdCore<EquipmentI
 		return this.core.containerId;
 	}
 	public set containerId(containerId: UUID | undefined) {
-		this.setOrDelete("containerId", containerId);
+		this.core.containerId = containerId;
 	}
 	//#endregion
 
@@ -109,7 +111,7 @@ export default class EquipmentItem extends utils.ClassUtils.HasIdCore<EquipmentI
 		if (this.core.containerId) {
 			const container = this.container;
 			if (!container) {
-				console.trace("item with containerid but no container");
+				warn(`item with containerid (${this.core.containerId}) but no container`);
 			}else {
 				const list = container.list;
 				if (list) {
@@ -126,7 +128,7 @@ export default class EquipmentItem extends utils.ClassUtils.HasIdCore<EquipmentI
 		return this.core.listId;
 	}
 	public set listId(listId: UUID | undefined) {
-		this.setOrDelete("listId", listId);
+		this.core.listId = listId;
 	}
 	//#endregion
 

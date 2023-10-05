@@ -1,4 +1,5 @@
 import type * as Discord from "discord.js";
+import { info } from "../../../sage-utils/utils/ConsoleUtils";
 import ActiveBot from "../model/ActiveBot";
 import type SageCache from "../model/SageCache";
 import Server, { ServerCore } from "../model/Server";
@@ -33,14 +34,14 @@ export default class ServerRepo extends DidRepository<ServerCore, Server> {
 		const existingServer = await this.getByDid(guild.id);
 		if (existingServer) {
 			guild = existingServer.discord.guild;
-			console.info(`${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} rejoined ${guild?.name} (${guild?.id}) as ${existingServer.id}`);
+			info(`${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} rejoined ${guild?.name} (${guild?.id}) as ${existingServer.id}`);
 			return false;
 		}
 
 		const server = new Server(Server.createCore(guild), this.sageCache),
 			saved = await this.write(server);
 		if (saved) {
-			console.info(`${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} joined ${guild.name} (${guild.id}) as ${server.id}`);
+			info(`${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} joined ${guild.name} (${guild.id}) as ${server.id}`);
 		}
 		return saved;
 	}
@@ -48,7 +49,7 @@ export default class ServerRepo extends DidRepository<ServerCore, Server> {
 	public async retireServer(guild: Discord.Guild, kicked = false, banned = false): Promise<boolean> {
 		const server = await this.getByDid(guild.id);
 		if (server) {
-			console.info(`NOT IMPLEMENTED: ${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} ${banned && "banned" || kicked && "kicked" || "left"} ${guild.name} (${guild.id})`);
+			info(`NOT IMPLEMENTED: ${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} ${banned && "banned" || kicked && "kicked" || "left"} ${guild.name} (${guild.id})`);
 			//TODO: IMPLEMENT THIS
 		}
 		return false;

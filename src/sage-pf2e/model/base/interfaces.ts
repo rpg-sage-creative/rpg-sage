@@ -1,5 +1,5 @@
 import type utils from "../../../sage-utils";
-import type { Core } from "../../../sage-utils";
+import { Core } from "../../../sage-utils/utils/ClassUtils";
 import type { TRarity } from "../../common";
 import type Base from "./Base";
 import type { BaseCore } from "./Base";

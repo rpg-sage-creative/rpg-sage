@@ -2,6 +2,7 @@ import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/types";
 import utils, { Optional, OrUndefined } from "../../../sage-utils";
 import CharacterBase, { CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
+import { debug } from "../../../sage-utils/utils/ConsoleUtils";
 import type { TProficiency, TSavingThrow } from "../../common";
 import { toModifier } from "../../common";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository";
@@ -449,7 +450,7 @@ function doPets(char: PathbuilderCharacter): string[] {
 			const equipment = pet.equipment.length ? `; ${equipmentToHtml(pet.equipment)}` : ``;
 			return `<b>${pet.type}</b> ${name}${specializations}${armor}${equipment}`;
 		}else {
-			console.log(JSON.stringify(pet));
+			debug(JSON.stringify(pet));
 			return pet.name;
 		}
 	});

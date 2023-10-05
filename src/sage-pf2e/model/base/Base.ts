@@ -1,4 +1,6 @@
-import utils, { IComparable, IdCore, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
+import utils, { IComparable, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
+import { IdCore } from "../../../sage-utils/utils/ClassUtils";
+import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { NEWLINE, TAB } from "../../common";
 import RenderableContent from "../../data/RenderableContent";
 import type {
@@ -61,7 +63,7 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 	public constructor(protected core: T) {
 		super(core);
 		if (!core.id && !((core as any).hash)) {
-			console.warn("NO ID!", core.name ?? core);
+			warn("NO ID!", core.name ?? core);
 		}
 	}
 

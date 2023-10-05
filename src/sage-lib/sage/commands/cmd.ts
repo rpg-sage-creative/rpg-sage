@@ -1,5 +1,6 @@
 import * as Discord from "discord.js";
 import utils, { OrNull, type Awaitable } from "../../../sage-utils";
+import { error } from "../../../sage-utils/utils/ConsoleUtils";
 import ArgsManager from "../../discord/ArgsManager";
 import { MessageType } from "../../discord/enums";
 import { registerMessageListener } from "../../discord/handlers";
@@ -124,7 +125,7 @@ function adminCommandTest(sageMessage: SageMessage): OrNull<TCommandAndArgs> {
 		return adminCommandAndArgs;
 	}
 
-	console.error(`I got ${handlers.length} admin handlers, but "${slicedContent}" ain't one!`);
+	error(`I got ${handlers.length} admin handlers, but "${slicedContent}" ain't one!`);
 
 	return null;
 }

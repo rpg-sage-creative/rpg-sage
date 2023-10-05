@@ -1,4 +1,5 @@
 import { isDefined } from "../..";
+import { warn } from "../ConsoleUtils";
 import { unique } from "./Filters";
 import { sortDescending } from "./Sort";
 
@@ -134,7 +135,7 @@ export class Collection<T> extends Array<T> {
 		for (let index = 0, len = values.length; index < len; index++) {
 			const item = values[index];
 			const result = await predicate.call(thisArg, item, index, values)
-				.catch((err: any) => console.warn(err instanceof Error ? err : new Error(err)));
+				.catch((err: any) => warn(err instanceof Error ? err : new Error(err)));
 			if (result) {
 				filtered.push(item);
 			}
@@ -180,7 +181,7 @@ export class Collection<T> extends Array<T> {
 		for (let index = 0, len = values.length; index < len; index++) {
 			const item = values[index];
 			const result = await predicate.call(thisArg, item, index, values)
-				.catch((err: any) => console.warn(err instanceof Error ? err : new Error(err)));
+				.catch((err: any) => warn(err instanceof Error ? err : new Error(err)));
 			if (result) {
 				return item;
 			}
@@ -195,7 +196,7 @@ export class Collection<T> extends Array<T> {
 	public static async forEachAsync<T, U extends Array<T> | Collection<T>>(values: U, callbackfn: (value: T, newIndex: number, values: U) => Promise<void>, thisArg?: any): Promise<void> {
 		for (let index = 0, len = values.length; index < len; index++) {
 			await callbackfn.call(thisArg, values[index], index, values)
-				.catch((err: any) => console.warn(err instanceof Error ? err : new Error(err)));
+				.catch((err: any) => warn(err instanceof Error ? err : new Error(err)));
 		}
 	}
 
@@ -217,7 +218,7 @@ export class Collection<T> extends Array<T> {
 		const mapped = new Collection<U | void>();
 		for (let index = 0, len = values.length; index < len; index++) {
 			mapped.push(await callbackfn.call(thisArg, values[index], index, values)
-				.catch((err: any) => console.warn(err instanceof Error ? err : new Error(err))));
+				.catch((err: any) => warn(err instanceof Error ? err : new Error(err))));
 		}
 		return mapped;
 	}

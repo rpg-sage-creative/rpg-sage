@@ -1,3 +1,7 @@
+import { appendFile } from "fs";
+import { getDateStrings } from "../DateUtils";
+import { formatArg } from "./formatArgs";
+
 /**
  * @todo figure out better logging so we can have .debug in dev but not in stable.
  * https://www.npmjs.com/package/pino
@@ -5,7 +9,7 @@
  * https://www.npmjs.com/package/winston
  */
 
-type LogLevel = "silly" | "debug" | "verbose" | "info" | "warn" | "error";
+export type LogLevel = "silly" | "debug" | "verbose" | "info" | "warn" | "error";
 
 /** Common interface to ensure all logging functions are accessible. */
 export interface Logger {
@@ -33,13 +37,33 @@ export function addLogHandler(level: LogLevel, handler: Function): void {
 	_handlers.get(level)?.add(handler);
 }
 
-/** Stores the original methods to ensure validity. */
-const _console = {
-	debug: console.debug,
-	error: console.error,
-	log: console.log,
-	warn: console.warn,
-};
+let _env: "dev" | "beta" | "stable" = process.env["NODE_ENV"] as "dev" ?? "dev";
+let _logDir: string | undefined;
+
+export function setEnv(env: "dev" | "beta" | "stable"): void {
+	_env = env;
+	_logDir = `./data/sage/logs/${env}`;
+	["silly", "debug", "verbose", "info", "warn", "error"].forEach(level => addLogHandler(level as "silly", logToFile))
+}
+
+
+/** Logs the args to file if we have a folder to log to. */
+function logToFile(logLevel: LogLevel, ...args: any[]): void {
+	if (_logDir) {
+		const now = getDateStrings();
+		const fileName = `${_logDir}/${now.date}.log`;
+		const lines = args.map(arg => `${now.date}T${now.time}: ${logLevel}:: ${formatArg(arg)}`).concat("").join("\n");
+		appendFile(fileName, lines, err => {
+			if (err) {
+				try {
+					error("Unable to log to file!", err);
+				}catch(ex) {
+					/* nothing to do at this point ... */
+				}
+			}
+		});
+	}
+}
 
 /** Returns the current logger. */
 export function getLogger(): Logger {
@@ -48,21 +72,20 @@ export function getLogger(): Logger {
 		/** Single logging function to ensure we don't duplicate code deciding which environment logs what. */
 		function log(level: LogLevel, ...args: any[]) {
 			// ignore certain events based on environment
-			const env = process.env["NODE_ENV"];
-			if (env === "beta") {
+			if (_env === "beta") {
 				if (["silly", "debug"].includes(level)) return;
 			}
-			if (env === "stable") {
+			if (_env === "stable") {
 				if (["silly", "debug", "verbose"].includes(level)) return;
 			}
 
 			// send the args to the proper logger function
-			if (level === "error") _console.error(`${level}::`, ...args);
-			else if (level === "warn") _console.warn(`${level}::`, ...args);
-			else _console.log(`${level}::`, ...args);
+			if (level === "error") console.error(`${level}::`, ...args);
+			else if (level === "warn") console.warn(`${level}::`, ...args);
+			else console.log(`${level}::`, ...args);
 
 			// send the args to any extra handlers
-			_handlers.get(level)?.forEach(handler => handler(...args));
+			_handlers.get(level)?.forEach(handler => handler(level, ...args));
 		}
 
 		/** Create the default logger. */

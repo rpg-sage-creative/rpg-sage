@@ -1,4 +1,6 @@
-export { default as HasCore, toJSON } from "./HasCore";
-export { default as HasIdCore } from "./HasIdCore";
-export { default as SuperClass } from "./SuperClass";
-
+export * from "./HasCache";
+export * from "./HasCore";
+export * from "./HasIdCore";
+export * from "./SuperClass";
+export * from "./toJSON";
+export * from "./types";

@@ -1,11 +1,12 @@
 import * as Discord from "discord.js";
 import { isDefined, isNullOrUndefined, Optional } from "../../sage-utils";
+import { error, verbose, warn } from "../../sage-utils/utils/ConsoleUtils";
+import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import SageInteraction from "../sage/model/SageInteraction";
 import SageMessage from "../sage/model/SageMessage";
 import SageReaction from "../sage/model/SageReaction";
 import { MessageType, ReactionType } from "./enums";
 import type { DMessage, DReaction, DUser, TChannel, TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
-import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 
 //#region helpers
 
@@ -104,16 +105,16 @@ function getListeners<T extends TListenerType>(which: TListenerTypeName): T[] {
 type TListenerTypeName = "InteractionListener" | "MessageListener" | "ReactionListener";
 function registerListener<T extends TListenerType>(which: TListenerTypeName, listener: T): void {
 	if (!botMeta.activeBotDid) {
-		console.error(`Please call setBotMeta({ activeBotDid:"", testBotDid?:"", dialogWebhookName:"" })`);
+		error(`Please call setBotMeta({ activeBotDid:"", testBotDid?:"", dialogWebhookName:"" })`);
 	}
 	const listeners: T[] = getListeners(which);
 	if (isNullOrUndefined(listener.priorityIndex)) {
-		console.info(`Registering ${which} #${listeners.length + 1}: ${listener.command ?? listener.tester.name}`);
+		verbose(`Registering ${which} #${listeners.length + 1}: ${listener.command ?? listener.tester.name}`);
 		listeners.push(listener);
 	} else {
-		console.info(`Registering ${which} #${listeners.length + 1} at priorityIndex ${listener.priorityIndex}: ${listener.command ?? listener.tester.name}`);
+		verbose(`Registering ${which} #${listeners.length + 1} at priorityIndex ${listener.priorityIndex}: ${listener.command ?? listener.tester.name}`);
 		if (listeners.find(l => l.priorityIndex === listener.priorityIndex)) {
-			console.warn(`${which} at priorityIndex ${listener.priorityIndex} already exists!`);
+			warn(`${which} at priorityIndex ${listener.priorityIndex} already exists!`);
 		}
 		listeners.splice(listener.priorityIndex, 0, listener);
 	}
@@ -167,9 +168,10 @@ export async function handleInteraction(interaction: Discord.Interaction): Promi
 		if (isCommand || isButton || isSelectMenu) {
 			const sageInteraction = await SageInteraction.fromInteraction(interaction);
 			await handleInteractions(sageInteraction, output);
+			sageInteraction.clear();
 		}
 	}catch(ex) {
-		console.error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
+		error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
 	}
 	return output;
 }
@@ -223,11 +225,12 @@ export async function handleMessage(message: DMessage, originalMessage: Optional
 		const isWebhook = !!message.webhookId;
 		const canIgnore = isEditWeCanIgnore(message, originalMessage);
 		if (!isBot && !isWebhook && !canIgnore) {
-			const sageMessage: SageMessage = await SageMessage.fromMessage(message, originalMessage);
+			const sageMessage = await SageMessage.fromMessage(message, originalMessage);
 			await handleMessages(sageMessage, messageType, output);
+			sageMessage.clear();
 		}
 	} catch (ex) {
-		console.error(toHumanReadable(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
+		error(toHumanReadable(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
 	}
 	return output;
 }
@@ -260,9 +263,10 @@ export async function handleReaction(messageReaction: DReaction, user: DUser, re
 		if (!isBot) {
 			const sageReaction = await SageReaction.fromMessageReaction(messageReaction, user, reactionType);
 			await handleReactions(sageReaction, reactionType, output);
+			sageReaction.clear();
 		}
 	} catch (ex) {
-		console.error(toHumanReadable(user), `\`${messageReaction.emoji.name}\``, ex);
+		error(toHumanReadable(user), `\`${messageReaction.emoji.name}\``, ex);
 	}
 	return output;
 }

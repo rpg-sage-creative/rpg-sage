@@ -1,5 +1,6 @@
 import type * as Discord from "discord.js";
-import type { IdCore, Optional, UUID } from "../../../../sage-utils";
+import type { Optional, UUID } from "../../../../sage-utils";
+import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
 import IdRepository, { HasIdCoreAndSageCache } from "./IdRepository";
 
 export interface DidCore<T extends string = string> extends IdCore<T> {

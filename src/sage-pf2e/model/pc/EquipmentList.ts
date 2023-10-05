@@ -1,4 +1,5 @@
-import utils, { IdCore } from "../../../sage-utils";
+import utils from "../../../sage-utils";
+import { IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { NamedCore } from "../base/interfaces";
 import Bulk from "../Bulk";
 import Coins from "../Coins";

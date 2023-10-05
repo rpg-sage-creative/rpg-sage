@@ -1,5 +1,6 @@
+import { Coins, PROFICIENCIES, TProficiency, Table } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
-import { PROFICIENCIES, TProficiency, Coins, Table } from "../../../sage-pf2e";
+import { debug } from "../../../sage-utils/utils/ConsoleUtils";
 import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
@@ -59,7 +60,7 @@ async function incomeEarnedB(sageMessage: SageMessage): Promise<void> {
 	_incomeEarned(sageMessage, taskLevelString, proficiencyString);
 }
 async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, proficiencyString: string): Promise<void> {
-	console.info("incomeEarned", taskLevelString, proficiencyString);
+	debug("incomeEarned", taskLevelString, proficiencyString);
 	const table = Table.findByNumber("4-2")!,
 		taskLevel = +taskLevelString,
 		proficiencyLetter = <TProficiency>utils.StringUtils.capitalize(proficiencyString || "")[0],

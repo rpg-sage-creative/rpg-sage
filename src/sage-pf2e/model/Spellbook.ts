@@ -1,4 +1,5 @@
-import utils, { Core, UUID } from "../../sage-utils";
+import utils, { UUID } from "../../sage-utils";
+import { Core } from "../../sage-utils/utils/ClassUtils";
 import type { TMagicTradition } from "../common";
 import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL } from "../common";
 import * as Repository from "../data/Repository";

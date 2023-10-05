@@ -1,4 +1,5 @@
-import utils, { IdCore, Optional, UUID } from "../../../sage-utils";
+import utils, { Optional, UUID } from "../../../sage-utils";
+import { IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
 import { PERCEPTION, profToMod, WISDOM } from "../../common";
 import * as Repository from "../../data/Repository";
@@ -340,7 +341,7 @@ export default class PlayerCharacter extends utils.ClassUtils.HasIdCore<PlayerCh
 	}
 	public get size(): TSize | undefined {
 		const features = this.features.filter(feature => feature.hasMetadata && feature.metadata.size !== null);
-		/*// console.warn("//TODO: Look at conditions for a different size!");*/
+		/*// warn("//TODO: Look at conditions for a different size!");*/
 		return features.pop()?.metadata.size;
 	}
 	public skills: Skills;
@@ -419,7 +420,7 @@ export default class PlayerCharacter extends utils.ClassUtils.HasIdCore<PlayerCh
 				}
 				/*continue;*/
 			}
-			// console.log(prerequisite)
+			// debug(prerequisite)
 		}
 		return true;
 	}
@@ -437,13 +438,13 @@ export default class PlayerCharacter extends utils.ClassUtils.HasIdCore<PlayerCh
 	/** Broadcasts the character to all listeners. */
 	// public static async broadcast(pc: PlayerCharacter, action: "updated"): Promise<boolean> {
 	// 	// EventHandler.fireEvent("pc-updated", this);
-	// 	console.warn("PlayerCharacter.broadcast(): Not Implemented!");
+	// 	warn("PlayerCharacter.broadcast(): Not Implemented!");
 	// 	return false;
 	// }
 
 	/** Saves the character's core.  */
 	// public static async save(id: UUID, core: IPlayerCharacter): Promise<boolean> {
-	// 	console.warn("PlayerCharacter.save(): Not Implemented!");
+	// 	warn("PlayerCharacter.save(): Not Implemented!");
 	// 	return false;
 	// }
 

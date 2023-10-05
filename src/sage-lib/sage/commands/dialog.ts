@@ -1,6 +1,7 @@
 import * as Discord from "discord.js";
 import * as _XRegExp from "xregexp";
 import utils, { OrUndefined, TParsers, type Optional } from "../../../sage-utils";
+import { error } from "../../../sage-utils/utils/ConsoleUtils";
 import { DiscordId, DiscordKey, MessageType, NilSnowflake, ReactionType, TCommand, TCommandAndArgsAndData } from "../../discord";
 import { deleteMessage } from "../../discord/deletedMessages";
 import { embedsToTexts } from "../../discord/embeds";
@@ -415,7 +416,7 @@ async function doDialog(sageMessage: SageMessage, dialogContent: TDialogContent)
 		case "pc": return pcChat(sageMessage, dialogContent);
 		case "alt": case "companion": case "familiar": case "hireling": return companionChat(sageMessage, dialogContent);
 		case "edit": return editChat(sageMessage, dialogContent);
-		default: return aliasChat(sageMessage, dialogContent);// console.warn(`Invalid dialogContent.type(${dialogContent.type})`);
+		default: return aliasChat(sageMessage, dialogContent);// warn(`Invalid dialogContent.type(${dialogContent.type})`);
 	}
 }
 
@@ -434,7 +435,7 @@ async function npcChat(sageMessage: SageMessage, dialogContent: TDialogContent):
 			embedColor: dialogContent.embedColor,
 			postType: dialogContent.postType,
 			title: dialogContent.title
-		}).catch(console.error);
+		}).catch(error);
 	} else {
 		return sageMessage.reactWarn();
 	}
@@ -454,7 +455,7 @@ async function gmChat(sageMessage: SageMessage, dialogContent: TDialogContent): 
 			embedColor: dialogContent.embedColor,
 			postType: dialogContent.postType,
 			title: dialogContent.title
-		}).catch(console.error);
+		}).catch(error);
 	}
 	return sageMessage.reactWarn();
 }
@@ -473,7 +474,7 @@ async function pcChat(sageMessage: SageMessage, dialogContent: TDialogContent): 
 			embedColor: dialogContent.embedColor,
 			postType: dialogContent.postType,
 			title: dialogContent.title
-		}).catch(console.error);
+		}).catch(error);
 	}
 	return sageMessage.reactWarn();
 }
@@ -492,7 +493,7 @@ async function companionChat(sageMessage: SageMessage, dialogContent: TDialogCon
 			embedColor: dialogContent.embedColor,
 			postType: dialogContent.postType,
 			title: dialogContent.title
-		}).catch(console.error);
+		}).catch(error);
 	}
 	return sageMessage.reactWarn();
 }
@@ -556,7 +557,7 @@ async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent)
 		const threadId = sageMessage.threadDid;
 		const content = sageMessage.dialogType === DialogType.Post ? embedsToTexts([updatedEmbed]).join("\n") : undefined;
 		const embeds = sageMessage.dialogType === DialogType.Embed ? [updatedEmbed] : [];
-			await webhook.editMessage(message.id, { content, embeds, threadId }).then(() => deleteMessage(sageMessage.message), console.error);
+			await webhook.editMessage(message.id, { content, embeds, threadId }).then(() => deleteMessage(sageMessage.message), error);
 	}else {
 		return sageMessage.reactWarn();
 	}

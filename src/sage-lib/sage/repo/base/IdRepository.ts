@@ -1,7 +1,9 @@
 import type * as Discord from "discord.js";
 import type { GameType } from "../../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import utils, { IdCore, Optional, OrNull, UUID } from "../../../../sage-utils";
+import utils, { Optional, OrNull, UUID } from "../../../../sage-utils";
+import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
+import { verbose } from "../../../../sage-utils/utils/ConsoleUtils";
 import type { DicePostType } from "../../commands/dice";
 import type SageCache from "../../model/SageCache";
 
@@ -177,7 +179,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 	public async write(entity: U): Promise<boolean> {
 		if (!entity.id) {
 			entity.toJSON().id = utils.UuidUtils.generate();
-			console.log(`Creating new ${(<typeof IdRepository>this.constructor).objectType}: `, entity.toJSON());
+			verbose(`Creating new ${(<typeof IdRepository>this.constructor).objectType}: `, entity.toJSON());
 		}
 		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${entity.id}.json`,
 			saved = await utils.FsUtils.writeFile(path, entity.toJSON()).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);

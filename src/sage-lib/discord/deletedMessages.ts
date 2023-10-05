@@ -1,22 +1,23 @@
 import { Snowflake } from "discord.js";
 import { Optional } from "../../sage-utils";
-import { errorReturnNull } from "../../sage-utils/utils/ConsoleUtils/Catchers";
-import { DMessage } from "./types";
 import { EphemeralSet } from "../../sage-utils/utils/ArrayUtils/EphemeralSet";
+import { debug } from "../../sage-utils/utils/ConsoleUtils";
+import { errorReturnNull } from "../../sage-utils/utils/ConsoleUtils/Catchers";
 import GameMapBase from "../sage/commands/map/GameMapBase";
+import { DMessage } from "./types";
 
 const deleted = new EphemeralSet<Snowflake>(1000 * 60);
 
 /* We only really need to store deleted state for seconds due to races with Tupper. */
 
 export function setDeleted(messageId: Snowflake): void {
-	// console.log(`${Date.now()}: setDeleted("${messageId}")`);
+	debug(`${Date.now()}: setDeleted("${messageId}")`);
 	deleted.add(messageId);
 	GameMapBase.delete(messageId);
 }
 
 export function isDeleted(messageId: Snowflake): boolean {
-	// console.log(`${Date.now()}: isDeleted("${messageId}") = ${deleted.has(messageId)}`);
+	debug(`${Date.now()}: isDeleted("${messageId}") = ${deleted.has(messageId)}`);
 	return deleted.has(messageId);
 }
 
@@ -29,6 +30,13 @@ export enum MessageDeleteResults { InvalidMessage = -2, NotDeletable = -1, NotDe
  * Only then is a delete call attempted.
  */
 export async function deleteMessage(message: Optional<DMessage>): Promise<MessageDeleteResults> {
+	const result = await _deleteMessage(message);
+	debug(`deleteMessage(${message?.id}) = ${MessageDeleteResults[result]}`);
+	return result;
+}
+
+/** @private Worker function for deleteMessage. */
+async function _deleteMessage(message: Optional<DMessage>): Promise<MessageDeleteResults> {
 	if (!message?.id) return MessageDeleteResults.InvalidMessage;
 	if (!message.deletable) return MessageDeleteResults.NotDeletable;
 	if (isDeleted(message.id)) return MessageDeleteResults.AlreadyDeleted;

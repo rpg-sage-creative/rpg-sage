@@ -1,4 +1,5 @@
-import utils, { Core, UUID } from "../../sage-utils";
+import utils, { UUID } from "../../sage-utils";
+import { Core } from "../../sage-utils/utils/ClassUtils";
 import type { TMagicTradition } from "../common";
 import type ArcaneSchool from "./ArcaneSchool";
 import type Source from "./base/Source";
@@ -79,7 +80,6 @@ export default class SpellCollection extends utils.ClassUtils.HasCore<SpellColle
 	public filter(value: TMagicTradition): SpellCollection;
 	public filter(value: TMagicTradition[]): SpellCollection;
 	public filter(...args: any[]): SpellCollection {
-		/*// console.time(`SpellCollection.filter(${args.join(", ")})`);*/
 		const values = flatUniqueClean<number | string | ArcaneSchool | Source>(args);
 		if (!values.length) {
 			return new SpellCollection(this);
@@ -93,7 +93,6 @@ export default class SpellCollection extends utils.ClassUtils.HasCore<SpellColle
 				|| values.find(value => spell.traditions.includes(<TMagicTradition>value));
 		});
 		return new SpellCollection(spells);
-		/*// console.timeEnd(`SpellCollection.filter(${args.join(", ")})`);*/
 	}
 
 	public exclude(value: number): SpellCollection;

@@ -1,4 +1,5 @@
 import utils, { Optional } from "../../../sage-utils";
+import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { ColorType, IColor } from "./HasColorsCore";
 
 export type TColorAndType = { type: ColorType; color: utils.ColorUtils.Color };
@@ -87,7 +88,7 @@ export default class Colors {
 				return color?.toDiscordColor() ?? this.toDiscordColor(ColorType.NonPlayerCharacter);
 
 			default:
-				console.warn(`Missing ColorType: ${colorType}`);
+				warn(`Missing ColorType: ${colorType}`);
 				return null;
 		}
 	}

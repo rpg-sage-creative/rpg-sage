@@ -1,6 +1,7 @@
-import utils from "../../../../sage-utils";
 import _dice, { DieRollGrade } from "../../../../sage-dice";
-import { PROFICIENCIES, toModifier, Coins, Table } from "../../../../sage-pf2e";
+import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e";
+import utils from "../../../../sage-utils";
+import { error, warn } from "../../../../sage-utils/utils/ConsoleUtils";
 import { ColorType } from "../../model/HasColorsCore";
 import type SageMessage from "../../model/SageMessage";
 import { createRenderableContent, registerCommandRegex } from "../cmd";
@@ -149,7 +150,7 @@ function levelToPoints(level: number, tierMin: number, tierMax: number): number 
 	if (level === tierMin + 1) return 3;
 	if (level === tierMax - 1) return 4;
 	if (level === tierMax) return 6;
-	console.warn(`levelToPoints(level: ${level}, tierMin: ${tierMin}, tierMax: ${tierMax})`);
+	warn(`levelToPoints(level: ${level}, tierMin: ${tierMin}, tierMax: ${tierMax})`);
 	if (level < tierMin) return 2;
 	if (tierMax < level) return 6;
 	return 0;
@@ -167,7 +168,7 @@ function pointsToSubTier(points: number): string {
 	if (testRange(points, 23, 27)) return "High Subtier (6-player adjustment) OR High Subtier (level bump)";
 	if (testRange(points, 28, 32)) return "High Subtier (5-player adjustment with level bump)";
 	if (testRange(points, 33, 42)) return "High Subtier (6-player adjustment with level bump)";
-	console.warn(`pointsToSubTier(points: ${points})`);
+	warn(`pointsToSubTier(points: ${points})`);
 	if (points < 8) return "Low Subtier";
 	if (42 < points) return "High Subtier (6-player adjustment with level bump)";
 	return "Unknown Subtier";
@@ -269,7 +270,9 @@ function pfsScenario(sageMessage: SageMessage): void {
 			return;
 		}
 		sageMessage.send(scenario.callback(sageMessage, tierInfo));
-	} catch (ex) { console.error("pfsScenario", ex); }
+	} catch (ex) {
+		error("pfsScenario", ex);
+	}
 }
 function registerScenarios(): void {
 	registerCommandRegex(/^\s*pfs\s*((?:s\d+\-\d+)|(?:q\d+))\s+(\d+)(?:\s+|\s*,\s*)(\d+)(?:\s+|\s*,\s*)(\d+)(?:\s+|\s*,\s*)(\d+)((?:\s+|\s*,\s*)\d+)?((?:\s+|\s*,\s*)\d+)?((?:\s+|\s*,\s*)\d+)?\s*$/i, pfsScenario);

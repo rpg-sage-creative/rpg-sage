@@ -1,7 +1,9 @@
 import type * as Discord from "discord.js";
 import type { GameType } from "../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import utils, { IComparable, IdCore, Optional, OrNull, UUID } from "../../../sage-utils";
+import utils, { IComparable, Optional, OrNull, UUID } from "../../../sage-utils";
+import { IdCore } from "../../../sage-utils/utils/ClassUtils";
+import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { DiscordKey } from "../../discord";
 import type { DicePostType } from "../commands/dice";
 import type { DialogType, IChannel } from "../repo/base/IdRepository";
@@ -637,7 +639,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 	public toDiscordColor(colorType: ColorType): string | null {
 		if (!this.core.colors.length) {
-			console.warn(`Colors Missing: Game (${this.name || this.id})`);
+			warn(`Colors Missing: Game (${this.name || this.id})`);
 			return this.server.toDiscordColor(colorType);
 		}
 		return this.colors.toDiscordColor(colorType)

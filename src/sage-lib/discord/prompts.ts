@@ -1,5 +1,6 @@
 import * as Discord from "discord.js";
 import utils from "../../sage-utils";
+import { error } from "../../sage-utils/utils/ConsoleUtils";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageCache from "../sage/model/SageCache";
 import type SageInteraction from "../sage/model/SageInteraction";
@@ -87,7 +88,7 @@ export async function _prompt(sageCache: SageCache, resolvable: TRenderableConte
 		ActiveBot.active.client.on("interactionCreate", handler);
 	})
 	.catch(reason => {
-		console.error(reason);
+		error(reason);
 		return [null, null];
 	});
 }

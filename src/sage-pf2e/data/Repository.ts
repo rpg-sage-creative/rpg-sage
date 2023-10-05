@@ -1,13 +1,14 @@
 import utils, { isDefined, Optional, OrNull, OrUndefined, TUuidMatcher, UUID } from "../../sage-utils";
+import { debug, verbose, warn } from "../../sage-utils/utils/ConsoleUtils";
 import type { TEntity } from "../model";
+import type AonBase from "../model/base/AonBase";
 import type Base from "../model/base/Base";
 import type { BaseCore } from "../model/base/Base";
 import type HasSource from "../model/base/HasSource";
-import Source from "../model/base/Source";
-import type Creature from "../model/bestiary/Creature";
 import Pf2tBase, { type Pf2tBaseCore } from "../model/base/Pf2tBase";
 import type { SourceCore } from "../model/base/Source";
-import type AonBase from "../model/base/AonBase";
+import Source from "../model/base/Source";
+import type Creature from "../model/bestiary/Creature";
 
 export type TObjectTypeAndPlural = { objectType: string; objectTypePlural: string; };
 
@@ -52,7 +53,7 @@ export function registerObject(itemConstructor: typeof Base): void {
 		objects: [],
 		erratad: []
 	});
-	console.info(`Registering Object #${repoMap.size}: ${objectType}`);
+	verbose(`Registering Object #${repoMap.size}: ${objectType}`);
 }
 
 /** Returns the objectType values (sorted) currently loaded. */
@@ -119,7 +120,7 @@ export function findById<T extends Base>(id: OrUndefined<UUID>): OrUndefined<T> 
 			}
 		}
 	}
-	console.info(`findById(${uuidMatcher?.value ?? id}) not found!`);
+	verbose(`findById(${uuidMatcher?.value ?? id}) not found!`);
 	return undefined;
 }
 
@@ -170,7 +171,7 @@ export function loadData(dataPath: string, includePf2ToolsData = false): Promise
 function handleMissingObjectType(core: BaseCore, fromLabel: string): void {
 	if (!missing.includes(core.objectType)) {
 		missing.push(core.objectType);
-		console.warn(`Missing parser for "${core.objectType}" from "${fromLabel}" ("${core.name}")`);
+		warn(`Missing parser for "${core.objectType}" from "${fromLabel}" ("${core.name}")`);
 	}
 }
 
@@ -184,7 +185,7 @@ function parseChildren(core: BaseCore, fromLabel: string, itemConstructor: typeo
 		childCores.forEach(childCore => {
 			const loaded = loadCore(childCore, fromLabel);
 			if (!loaded) {
-				console.warn(`Error parsing child core!`, core, childCore);
+				warn(`Error parsing child core!`, core, childCore);
 			}
 			childrenLoaded += loaded;
 		});
@@ -195,7 +196,7 @@ function parseChildren(core: BaseCore, fromLabel: string, itemConstructor: typeo
 
 function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 	if (!core) {
-		console.warn(`Invalid core from "${fromLabel}": ${core}`);
+		warn(`Invalid core from "${fromLabel}": ${core}`);
 		return 0;
 	}
 	const objectType = core.objectType;
@@ -236,25 +237,25 @@ async function loadDataFromDist(distPath: string): Promise<void> {
 	const files: string[] = await utils.FsUtils.filterFiles(distPath, file => file.endsWith(".json") && !file.includes("pf2t-leftovers"), true)
 		.catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 	if (!files.length) {
-		console.warn(`No files in "${distPath}" ...`);
+		warn(`No files in "${distPath}" ...`);
 		return Promise.resolve();
 	}
 
 	let coresLoaded = 0;
 
 	const sources = files.filter(file => file.includes("/Source/"));
-	console.info(`Loading Data: ${sources.length} sources`);
+	verbose(`Loading Data: ${sources.length} sources`);
 	for (const source of sources) {
-		await utils.FsUtils.readJsonFile<BaseCore>(source).then(core => coresLoaded += loadCore(core, source), console.warn);
+		await utils.FsUtils.readJsonFile<BaseCore>(source).then(core => coresLoaded += loadCore(core, source), warn);
 	}
 
 	const others = files.filter(file => !file.includes("/Source/"));
-	console.info(`Loading Data: ${others.length} objects`);
+	verbose(`Loading Data: ${others.length} objects`);
 	for (const other of others) {
-		await utils.FsUtils.readJsonFile<BaseCore>(other).then(core => coresLoaded += loadCore(core, other), console.warn);
+		await utils.FsUtils.readJsonFile<BaseCore>(other).then(core => coresLoaded += loadCore(core, other), warn);
 	}
 
-	console.info(`\t\t${coresLoaded} Total Cores loaded`);
+	verbose(`\t\t${coresLoaded} Total Cores loaded`);
 
 	return Promise.resolve();
 }
@@ -262,7 +263,7 @@ async function loadDataFromDist(distPath: string): Promise<void> {
 async function loadFromPF2t(distPath: string): Promise<void> {
 	const pathAndFile = `${distPath}/pf2t-leftovers.json`;
 	const cores = await utils.FsUtils.readJsonFile<Pf2tBaseCore[]>(pathAndFile).catch(() => null) ?? [];
-	console.info(`\t\t${cores.length} Total PF2 Tools Cores loaded`);
+	verbose(`\t\t${cores.length} Total PF2 Tools Cores loaded`);
 	cores.forEach(core => {
 		const data = new Pf2tBase(core);
 		if (!repoMap.has(data.objectType)) {
@@ -323,7 +324,7 @@ export function parseSource(value?: string, sources?: TSourceOrCore[]): TParsedS
 	// "source": "Core Rulebook pg. 283 2.0",
 	const parts = value?.match(/^(.*?) pg. (\d+)(?: \d+\.\d+)?$/);
 	if (!parts) {
-		// console.log(value, sources?.map(src => src.name));
+		// debug(value, sources?.map(src => src.name));
 		return null;
 	}
 
@@ -338,7 +339,7 @@ export function parseSource(value?: string, sources?: TSourceOrCore[]): TParsedS
 	const source = matchSource(sources, name);
 	if (!source && !missingSources.includes(name)) {
 		missingSources.push(name);
-		console.log(`Unknown Source: ${name}`);
+		debug(`Unknown Source: ${name}`);
 		return null;
 	}
 

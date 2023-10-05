@@ -20,14 +20,14 @@
 // /*
 // 			async function editChat(sageMessage: SageMessage): Promise<void> {
 // 				const messageDid = sageMessage.args[DialogArgIndex.Name],
-// 					message = await findLastMessage(sageMessage, messageDid).catch(ex => <any>console.error(ex) || null);
+// 					message = await findLastMessage(sageMessage, messageDid).catch(ex => <any>error(ex) || null);
 // 				if (!message) return sageMessage.reactWarn();
 
 // 				let embed = message.embeds[0];
 // 				let updatedTitle = sageMessage.args[DialogArgIndex.Name] && !DiscordUtils.Id.isValidId(sageMessage.args[DialogArgIndex.Name]) && sageMessage.args[DialogArgIndex.Name]
 // 					|| sageMessage.args[DialogArgIndex.DisplayName] && !DiscordUtils.Id.isValidId(sageMessage.args[DialogArgIndex.DisplayName]) && sageMessage.args[DialogArgIndex.DisplayName];
 // 				let updatedContent = sageMessage.args[DialogArgIndex.Content];
-// 				message.edit(updateEmbed(embed, updatedTitle, updatedContent)).then(deleteMessage, console.error);
+// 				message.edit(updateEmbed(embed, updatedTitle, updatedContent)).then(deleteMessage, error);
 // 			}
 // */
 
@@ -103,20 +103,20 @@
 // 	const prefixLower = gamePrefix.trim().toLowerCase();
 
 // 	const gameChannels = await channelWizard(sageMessage, `<u><b>New Game Wizard:</b> ${nameLower}</u>`, prefixLower);
-// 	console.log(JSON.stringify(gameChannels));
+// 	debug(JSON.stringify(gameChannels));
 
 // 	/*
 // 	// const members = Array.from(mentions.members.values());
-// 	// console.log("members");
-// 	// members.forEach(member => console.log("@"+member.user.tag));
+// 	// debug("members");
+// 	// members.forEach(member => debug("@"+member.user.tag));
 
 // 	// const roles = Array.from(mentions.roles.values());
-// 	// console.log("roles");
-// 	// roles.forEach(role => console.log("@"+role.name));
+// 	// debug("roles");
+// 	// roles.forEach(role => debug("@"+role.name));
 
 // 	// const users = Array.from(mentions.users.values());
-// 	// console.log("users");
-// 	// users.forEach(user => console.log("@"+user.tag));
+// 	// debug("users");
+// 	// users.forEach(user => debug("@"+user.tag));
 // 	*/
 // }
 

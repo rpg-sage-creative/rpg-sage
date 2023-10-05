@@ -1,5 +1,4 @@
-import { HasIdCore } from "../ClassUtils"
-import type { IdCore } from "../types";
+import { HasIdCore, IdCore } from "../ClassUtils"
 
 type TSimpleMap = { [key:string]:any; };
 
@@ -10,7 +9,7 @@ export interface CharacterBaseCore<T extends string = string> extends IdCore<T> 
 
 export default abstract class CharacterBase<T extends CharacterBaseCore<U> = CharacterBaseCore<any>, U extends string = string> extends HasIdCore<T, U> {
 	public get name(): string { return this.core.name ?? ""; }
-	public set name(name: string) { this.setOrDelete("name", name); }
+	public set name(name: string) { this.core.name = name; }
 
 	//#region interactive char sheet
 	private get sheet(): TSimpleMap { return this.core.sheet ?? (this.core.sheet = {}); }

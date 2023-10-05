@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import { error } from "../ConsoleUtils";
 import { formattedStringify } from "../JsonUtils";
 import { isNotBlank } from "../StringUtils";
 
@@ -43,7 +44,7 @@ export function listFilesSync(path: string): string[] {
 	try {
 		return fs.readdirSync(path);
 	}catch(ex) {
-		console.error(ex);
+		error(ex);
 	}
 	return [];
 }
@@ -162,7 +163,7 @@ export function readJsonFileDb<T>(path: string): Promise<T[]> {
 				try {
 					objects.push(JSON.parse(line));
 				}catch(ex) {
-					console.error({ index, ex });
+					error({ index, ex });
 				}
 				if (objects.length) {
 					resolve(objects);
@@ -238,12 +239,12 @@ export function writeFileSync<T>(filePathAndName: string, content: T, mkdir?: bo
 			fs.mkdirSync(toFilePath(filePathAndName), { recursive:true });
 		}
 	} catch(ex) {
-		console.error(ex);
+		error(ex);
 	}
 	try {
 		fs.writeFileSync(filePathAndName, contentToFileOutput(content, formatted));
 	} catch(ex) {
-		console.error(ex);
+		error(ex);
 		return false;
 	}
 	return true;

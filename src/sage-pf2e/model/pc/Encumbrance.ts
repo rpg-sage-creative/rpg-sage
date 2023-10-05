@@ -16,7 +16,7 @@ export default class Encumbrance {
 		});
 		return check;
 	}
-	// public get bulkLimitTooltip(): string {console.debug(this.bulkLimit);
+	// public get bulkLimitTooltip(): string {debug(this.bulkLimit);
 	// 	let strMod = this.pc.abilities.strMod;
 	// 	return `Bulk Limit: ${strMod + 10} = ${strMod} + 10`;
 	// }

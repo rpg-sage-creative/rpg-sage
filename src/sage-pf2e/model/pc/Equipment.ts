@@ -1,4 +1,5 @@
 import utils, { UUID } from "../../../sage-utils";
+import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { DEXTERITY, STRENGTH } from "../../common";
 import AlchemicalItem from "../AlchemicalItem";
 import type HasSource from "../base/HasSource";
@@ -61,12 +62,12 @@ export default class Equipment {
 
 		this.items.forEach(item => {
 			if (item.containerId && !item.container) {
-				console.warn("Invalid Container: " + item.name);
+				warn("Invalid Container: " + item.name);
 				item.containerId = undefined!;
 				pc.save();
 			}
 			if (!item.containerId && !item.listId) {
-				console.warn("No Container nor List: " + item.name);
+				warn("No Container nor List: " + item.name);
 				item.listId = this.dropped.id;
 				pc.save();
 			}
@@ -181,7 +182,7 @@ export default class Equipment {
 			check = new Check(this.pc, item.name);
 		if (item instanceof Weapon) {
 			if (item.type === "Melee") {
-				console.warn("Weapon Check: Which Stat?");
+				warn("Weapon Check: Which Stat?");
 				check.setAbility(STRENGTH);
 			}
 			if (item.type === "Ranged") {

@@ -54,7 +54,7 @@ Game PC Notes
 // 				updated = await gameCharacter.notes.unsetJournalEntry(title);
 // 				break;
 // 			default:
-// 				console.warn(`journalEntry(${sageMessage.command})`);
+// 				warn(`journalEntry(${sageMessage.command})`);
 // 				return sageMessage.reactWarn();
 // 		}
 // 		return sageMessage.reactSuccessOrFailure(updated);

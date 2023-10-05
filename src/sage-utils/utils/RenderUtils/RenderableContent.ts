@@ -1,5 +1,6 @@
 import { IRenderable, Optional, TDisplayType, TRenderableContentSection, TRenderableContentSectionColumn } from "../..";
 import { unique } from "../ArrayUtils/Filters";
+import { error } from "../ConsoleUtils";
 
 function createSection(index = 0, title: string | null = null, content = <string[]>[], columns = <TRenderableContentSectionColumn[]>[]): TRenderableContentSection {
 	return { index, title:title, content, columns };
@@ -103,7 +104,7 @@ export default class RenderableContent implements IRenderable {
 			}catch(ex) {
 				const toStringValue = Object.prototype.toString.call(resolvable) ?? "No toString";
 				const constructorName = resolvable?.constructor?.name ?? "No Constructor";
-				console.error(`Unable to resolve IRenderable: ${toStringValue} (${constructorName}); "toRenderableContent in resolvable === ${"toRenderableContent" in resolvable}`, JSON.stringify(resolvable));
+				error(`Unable to resolve IRenderable: ${toStringValue} (${constructorName}); "toRenderableContent in resolvable === ${"toRenderableContent" in resolvable}`, JSON.stringify(resolvable));
 			}
 		}
 

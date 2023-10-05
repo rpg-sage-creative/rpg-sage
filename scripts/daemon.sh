@@ -12,7 +12,7 @@ fi
 command="pm2 desc sage-$PKG-$ENV >/dev/null && pm2 $ACT sage-$PKG-$ENV"
 if [ "$ACT" = "start" ]; then
 	if [ "$PKG" = "maps" ]; then
-		command="[ -f \"map.mjs\" ] && pm2 start map.mjs --name sage-$PKG-$ENV --max-memory-restart 500M --node-args='--experimental-modules --es-module-specifier-resolution=node'"
+		command="[ -f \"map.mjs\" ] && pm2 start map.mjs --name sage-$PKG-$ENV --max-memory-restart 500M --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $PKG"
 	else
 		command="[ -f \"app.mjs\" ] && pm2 start app.mjs --name sage-$PKG-$ENV --max-memory-restart 750M --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $PKG dist"
 	fi

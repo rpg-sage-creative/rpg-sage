@@ -2,12 +2,13 @@ import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Int
 import { NilSnowflake } from ".";
 import type { Optional } from "../../sage-utils";
 import { Collection } from "../../sage-utils/utils/ArrayUtils";
+import { debug, error, info, warn } from "../../sage-utils/utils/ConsoleUtils";
+import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageMessage from "../sage/model/SageMessage";
 import DiscordKey from "./DiscordKey";
 import { channelToName } from "./messages";
 import type { TChannel, TChannelResolvable, TGuildResolvable } from "./types";
-import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 
 //#region Helpers
 
@@ -38,19 +39,19 @@ function isUnknownUser(reason: TDiscordApiError): boolean {
 }
 function warnUnknownElseErrorReturnNull(reason: any): null {
 	if (isDiscordApiErrorMissingPermissionsFetchWebhook(reason)) {
-		console.warn(`DiscordAPIError: Missing Permissions (TextChannel.fetchWebhooks)`);
+		warn(`DiscordAPIError: Missing Permissions (TextChannel.fetchWebhooks)`);
 	}else {
 		if (isDiscordApiError(reason) && (isUnknownMember(reason) || isUnknownGuild(reason) || isUnknownUser(reason))) {
-			console.warn(`${reason.message}: ${reason.path}`);
+			warn(`${reason.message}: ${reason.path}`);
 		}else {
-			console.error(reason);
+			error(reason);
 		}
 	}
 	return null;
 }
 
 function dGet<T>(manager: CachedManager<Snowflake, any, T>, did: Snowflake): T | null {
-	console.log(`dGet(${manager ? manager.constructor?.name ?? Object.prototype.toString.apply(manager) : String(manager)}, ${did})`);
+	debug(`dGet(${manager ? manager.constructor?.name ?? Object.prototype.toString.apply(manager) : String(manager)}, ${did})`);
 	return manager?.cache.get(did) ?? null;
 }
 
@@ -59,7 +60,7 @@ async function dFetchGuild(client: Client, guildResolvable: TGuildResolvable): P
 		return null;
 	}
 	const guildDid = guildResolvable instanceof Guild ? guildResolvable.id : guildResolvable;
-	console.log(`dFetchGuild(${guildDid})`);
+	debug(`dFetchGuild(${guildDid})`);
 	return client.guilds.fetch(guildDid).catch(warnUnknownElseErrorReturnNull) ?? null;
 }
 
@@ -71,49 +72,45 @@ function createWebhookKey(channel: TextChannel, name: string): string {
 //#endregion
 
 export default class DiscordCache {
-	public constructor(public client: Client, public guild: Guild | null = null) {
+	public constructor(public client: Client, public guild: Guild | null = null, channel: TChannel | null = null) {
+		this.channelMap = new Map();
+		this.guildMap = new Map();
+		this.guildPreviewMap = new Map();
+		this.guildMemberMap = new Map([[NilSnowflake, null]]);
+		this.guildMemberRoleMap = new Map();
+		this.messageMap = new Map();
+		this.roleMap = new Map();
+		this.userMap = new Map();
+		this.webhookMap = new Map();
+		this.manageWebhooksPermMap = new Map();
+
+		if (channel) {
+			this.channelMap.set(channel.id, channel);
+		}
 		if (guild) {
 			this.guildMap.set(guild.id, guild);
 		}
 	}
 
-	private messageMap = new Map<Snowflake, Message | null>();
-	public async fetchMessage(discordKey: DiscordKey): Promise<Message | null> {
-		if (!this.messageMap.has(discordKey.shortKey)) {
-			const channel = await this.fetchChannel(discordKey);
-			const message = channel ? await channel.messages.fetch(discordKey.message, { cache:true, force:true }) : null;
-			this.messageMap.set(discordKey.shortKey, message);
-		}
-		return this.messageMap.get(discordKey.shortKey) ?? null;
+	/** Clears the cache/maps in an attempt to avoid memory leaks. */
+	public clear(): void {
+		debug("Clearing DiscordCache");
+		this.channelMap.clear();
+		this.guildMap.clear();
+		this.guildPreviewMap.clear();
+		this.guildMemberMap.clear();
+		this.guildMemberRoleMap.clear();
+		this.messageMap.clear();
+		this.roleMap.clear();
+		this.userMap.clear();
+		this.webhookMap.clear();
+		this.manageWebhooksPermMap.clear();
 	}
 
-	private guildMap = new Map<Snowflake, Guild | null>();
-	public async fetchGuild(guildResolvable: TGuildResolvable): Promise<Guild | null> {
-		if (guildResolvable instanceof Guild) {
-			this.guildMap.set(guildResolvable.id, guildResolvable);
-			return guildResolvable;
-		}
-		if (!this.guildMap.has(guildResolvable)) {
-			this.guildMap.set(guildResolvable, await dFetchGuild(this.client, guildResolvable));
-		}
-		return this.guildMap.get(guildResolvable) ?? null;
-	}
+	//#region channel
 
-	private guildPreviewMap = new Map<Snowflake, GuildPreview | null>();
-	public async fetchGuildName(guildResolvable: TGuildResolvable, defaultValue?: string): Promise<string> {
-		if (guildResolvable instanceof Guild) {
-			const guild = await this.fetchGuild(guildResolvable);
-			return guild?.name ?? defaultValue ?? "ERROR_FETCHING_GUILD";
-		}
+	private channelMap: Map<string, TChannel | null>;
 
-		if (!this.guildPreviewMap.has(guildResolvable)) {
-			const guildPreview = await this.client.fetchGuildPreview(guildResolvable).catch(warnUnknownElseErrorReturnNull);
-			this.guildPreviewMap.set(guildResolvable, guildPreview);
-		}
-		return this.guildPreviewMap.get(guildResolvable)?.name ?? defaultValue ?? "ERROR_FETCHING_GUILD_PREVIEW";
-	}
-
-	private channelMap = new Map<string, TChannel | null>();
 	public async fetchChannel<T extends TChannel>(discordKey: DiscordKey): Promise<T | null>;
 	public async fetchChannel<T extends TChannel>(channelDid: Optional<Snowflake>): Promise<T | null>;
 	public async fetchChannel(didOrKey: DiscordKey | Optional<Snowflake>): Promise<TChannel | null> {
@@ -129,15 +126,18 @@ export default class DiscordCache {
 		}
 		return this.channelMap.get(discordKey.shortKey) ?? null;
 	}
+
 	private async fetchDmChannel(discordKey: DiscordKey): Promise<DMChannel | null> {
 		const user = discordKey.isDm ? await this.fetchUser(discordKey.channel) : null;
 		return user ? user.dmChannel : null;
 	}
+
 	private async fetchTextChannel(discordKey: DiscordKey): Promise<TextChannel | null> {
 		const guildDid = discordKey.hasServer ? discordKey.server : this.guild?.id;
 		const guild = guildDid ? await this.fetchGuild(guildDid) : null;
 		return guild ? dGet<TextChannel>(guild.channels, discordKey.threadOrChannel) : null;
 	}
+
 	public async fetchChannelName(channelDid: Snowflake): Promise<string>;
 	public async fetchChannelName(discordKey: DiscordKey): Promise<string>;
 	public async fetchChannelName(didOrKey: Snowflake | DiscordKey): Promise<string> {
@@ -151,7 +151,48 @@ export default class DiscordCache {
 		return "ERROR_FETCHING_GUILD_CHANNEL";
 	}
 
-	private guildMemberMap = new Map<Snowflake, GuildMember | null>([[NilSnowflake, null]]);
+	//#endregion
+
+	//#region guild
+
+	private guildMap: Map<Snowflake, Guild | null>;
+
+	public async fetchGuild(guildResolvable: TGuildResolvable): Promise<Guild | null> {
+		if (guildResolvable instanceof Guild) {
+			this.guildMap.set(guildResolvable.id, guildResolvable);
+			return guildResolvable;
+		}
+		if (!this.guildMap.has(guildResolvable)) {
+			this.guildMap.set(guildResolvable, await dFetchGuild(this.client, guildResolvable));
+		}
+		return this.guildMap.get(guildResolvable) ?? null;
+	}
+
+	//#endregion
+
+	//#region guild preview
+
+	private guildPreviewMap: Map<Snowflake, GuildPreview | null>;
+
+	public async fetchGuildName(guildResolvable: TGuildResolvable, defaultValue?: string): Promise<string> {
+		if (guildResolvable instanceof Guild) {
+			const guild = await this.fetchGuild(guildResolvable);
+			return guild?.name ?? defaultValue ?? "ERROR_FETCHING_GUILD";
+		}
+
+		if (!this.guildPreviewMap.has(guildResolvable)) {
+			const guildPreview = await this.client.fetchGuildPreview(guildResolvable).catch(warnUnknownElseErrorReturnNull);
+			this.guildPreviewMap.set(guildResolvable, guildPreview);
+		}
+		return this.guildPreviewMap.get(guildResolvable)?.name ?? defaultValue ?? "ERROR_FETCHING_GUILD_PREVIEW";
+	}
+
+	//#endregion
+
+	//#region guild member
+
+	private guildMemberMap: Map<Snowflake, GuildMember | null>;
+
 	public async fetchGuildMember(userDid: Snowflake): Promise<GuildMember | null> {
 		if (!this.guildMemberMap.has(userDid)) {
 			const guildMember = await this.guild?.members.fetch({ user:userDid, cache:true, force:true }).catch(warnUnknownElseErrorReturnNull);
@@ -160,7 +201,12 @@ export default class DiscordCache {
 		return this.guildMemberMap.get(userDid) ?? null;
 	}
 
-	private guildMemberRoleMap = new Map<string, Role | null>();
+	//#endregion
+
+	//#region guild member role
+
+	private guildMemberRoleMap: Map<string, Role | null>;
+
 	public async fetchGuildMemberRole(userDid: Snowflake, roleDid: Snowflake): Promise<Role | null> {
 		const key = `${userDid}-${roleDid}`;
 		if (!this.guildMemberRoleMap.has(key)) {
@@ -171,7 +217,27 @@ export default class DiscordCache {
 		return this.guildMemberRoleMap.get(key) ?? null;
 	}
 
-	private roleMap = new Map<Snowflake, Role | null>();
+	//#endregion
+
+	//#region message
+
+	private messageMap: Map<Snowflake, Message | null>;
+
+	public async fetchMessage(discordKey: DiscordKey): Promise<Message | null> {
+		if (!this.messageMap.has(discordKey.shortKey)) {
+			const channel = await this.fetchChannel(discordKey);
+			const message = channel ? await channel.messages.fetch(discordKey.message, { cache:true, force:true }) : null;
+			this.messageMap.set(discordKey.shortKey, message);
+		}
+		return this.messageMap.get(discordKey.shortKey) ?? null;
+	}
+
+	//#endregion
+
+	//#region role
+
+	private roleMap: Map<Snowflake, Role | null>;
+
 	public async fetchGuildRole(roleDid: Snowflake): Promise<Role | null> {
 		if (!this.roleMap.has(roleDid)) {
 			const role = await this.guild?.roles.fetch(roleDid, { cache:true, force:true }).catch(warnUnknownElseErrorReturnNull);
@@ -180,7 +246,12 @@ export default class DiscordCache {
 		return this.roleMap.get(roleDid) ?? null;
 	}
 
-	private userMap = new Map<Snowflake, User | null>();
+	//#endregion
+
+	//#region user
+
+	private userMap: Map<Snowflake, User | null>;
+
 	public async fetchUser(userDid: Snowflake): Promise<User | null> {
 		if (!this.userMap.has(userDid) && userDid !== NilSnowflake) {
 			const user = await this.client.users.fetch(userDid, { cache:true, force:true }).catch(warnUnknownElseErrorReturnNull);
@@ -189,7 +260,12 @@ export default class DiscordCache {
 		return this.userMap.get(userDid) ?? null;
 	}
 
-	private webhookMap = new Map<string, Webhook | null>();
+	//#endregion
+
+	//#region webhook
+
+	private webhookMap: Map<string, Webhook | null>;
+
 	public async fetchWebhook(guildResolvable: TGuildResolvable, channelResolvable: TChannelResolvable, name: string): Promise<Webhook | null> {
 		if (!guildResolvable || !channelResolvable || !name) {
 			return null;
@@ -217,7 +293,9 @@ export default class DiscordCache {
 		return channel as TextChannel;
 	}
 
-	private manageWebhooksPermMap = new Map<Snowflake, Optional<boolean>>();
+	//#endregion
+
+	private manageWebhooksPermMap: Map<Snowflake, Optional<boolean>>;
 	/**
 	 * Reusable code to check and log when we don't have permissions.
 	 * Logging is done here, once, because this is sometimes called twice in fetchOrCreateWebhook.
@@ -231,7 +309,7 @@ export default class DiscordCache {
 		if (!this.manageWebhooksPermMap.has(did)) {
 			const hasPerm = channel.permissionsFor(ActiveBot.active.did, true)?.has("MANAGE_WEBHOOKS");
 			if (!hasPerm) {
-				console.info(`No Permission (MANAGE_WEBHOOKS): ${channelToName(channel)}`);
+				info(`No Permission (MANAGE_WEBHOOKS): ${channelToName(channel)}`);
 			}
 			this.manageWebhooksPermMap.set(did, hasPerm);
 		}
