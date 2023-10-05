@@ -1,8 +1,8 @@
 import type * as Discord from "discord.js";
 import utils from "../../../sage-utils";
-import { silly, verbose } from "../../../sage-utils/utils/ConsoleUtils";
+import { debug, silly } from "../../../sage-utils/utils/ConsoleUtils";
 import { errorReturnFalse } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { DInteraction, DiscordCache, DiscordKey, DMessage, DReaction, DUser, NilSnowflake, TChannel } from "../../discord";
+import { DInteraction, DMessage, DReaction, DUser, DiscordCache, DiscordKey, NilSnowflake, TChannel } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
 import ActiveBot from "../model/ActiveBot";
 import BotRepo from "../repo/BotRepo";
@@ -70,7 +70,7 @@ export default class SageCache {
 
 	/** Clears the cache/maps in an attempt to avoid memory leaks. */
 	public clear(): void {
-		verbose("Clearing SageCache");
+		debug("Clearing SageCache");
 		this.canSendMessageToMap.clear();
 		this.hasTupperMap.clear();
 		this.canReactToMap.clear();

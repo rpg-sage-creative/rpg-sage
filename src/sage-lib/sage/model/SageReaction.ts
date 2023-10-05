@@ -1,5 +1,6 @@
 import type * as Discord from "discord.js";
 import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
+import { debug } from "../../../sage-utils/utils/ConsoleUtils";
 import { ReactionType } from "../../discord";
 import type { HasSageCacheCore } from "./HasSageCache";
 import HasSageCache from "./HasSageCache";
@@ -20,6 +21,11 @@ export default class SageReaction
 
 	private constructor(protected core: SageReactionCore, cache?: ClassCache) {
 		super(core, cache);
+	}
+	public clear(): void {
+		debug("Clearing SageReaction");
+		this.cache.clear();
+		this.caches.clear();
 	}
 
 	public static async fromMessageReaction(messageReaction: DReaction, user: DUser, reactionType: ReactionType): Promise<SageReaction> {

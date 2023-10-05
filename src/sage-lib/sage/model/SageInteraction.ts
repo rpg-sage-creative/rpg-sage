@@ -4,7 +4,7 @@ import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Optional, isDefined } from "../../../sage-utils";
 import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
-import { verbose } from "../../../sage-utils/utils/ConsoleUtils";
+import { debug } from "../../../sage-utils/utils/ConsoleUtils";
 import type { TGameType } from "../../../slash.mjs";
 import { DInteraction, DUser, DiscordKey, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
 import { deleteMessages } from "../../discord/deletedMessages";
@@ -40,7 +40,7 @@ export default class SageInteraction<T extends DInteraction = any>
 	}
 
 	public clear(): void {
-		verbose("Clearing SageInteraction");
+		debug("Clearing SageInteraction");
 		this.cache.clear();
 		this.caches.clear();
 	}

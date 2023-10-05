@@ -4,7 +4,7 @@ import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Optional } from "../../../sage-utils";
 import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
-import { verbose, warn } from "../../../sage-utils/utils/ConsoleUtils";
+import { debug, verbose, warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { DMessage, DiscordKey, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
 import { send } from "../../discord/messages";
@@ -64,7 +64,7 @@ export default class SageMessage
 		return clone;
 	}
 	public clear(): void {
-		verbose("Clearing SageMessage");
+		debug("Clearing SageMessage");
 		this.cache.clear();
 		this.caches.clear();
 	}
