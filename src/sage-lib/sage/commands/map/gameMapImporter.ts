@@ -1,5 +1,6 @@
 import * as Discord from "discord.js";
 import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
+import { debug } from "../../../../sage-utils/utils/ConsoleUtils";
 import { dequote, StringMatcher } from "../../../../sage-utils/utils/StringUtils";
 import { DiscordId } from "../../../discord";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
@@ -81,14 +82,14 @@ function parseUser(client: Discord.Client, userValue?: string): Discord.Snowflak
 function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 	const [url, name] = matchUrlAndName(lines);
 	if (!url || !name) {
-		console.debug(`mapSectionToMapCore: !url (${!url}) || !name (${!name})`);
+		debug(`mapSectionToMapCore: !url (${!url}) || !name (${!name})`);
 		return null;
 	}
 
 	const grid = matchLine(lines, /^grid=/i, true, true)
 		?? [+matchLine(lines, /^cols=/i, true)!, +matchLine(lines, /^rows=/i, true)!];
 	if (isNaN(grid[COL]) || isNaN(grid[ROW])) {
-		console.debug(`mapSectionToMapCore: isNaN(grid[COL]) (${isNaN(grid[COL])}) || isNaN(grid[ROW]) (${isNaN(grid[ROW])})`);
+		debug(`mapSectionToMapCore: isNaN(grid[COL]) (${isNaN(grid[COL])}) || isNaN(grid[ROW]) (${isNaN(grid[ROW])})`);
 		return null;
 	}
 
@@ -114,14 +115,14 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 function mapSectionTo<T extends TGameMapImage>(lines: string[], layerType: LayerType): T | null {
 	const [url, name] = matchUrlAndName(lines);
 	if (!url || !name) {
-		console.debug(`mapSectionTo(${LayerType[layerType]}): !url (${!url}) || !name (${!name})`);
+		debug(`mapSectionTo(${LayerType[layerType]}): !url (${!url}) || !name (${!name})`);
 		return null;
 	}
 
 	const pos = matchLine(lines, /^pos(ition)?=/i, true, true)
 		?? [+matchLine(lines, /^col=/i, true)!, +matchLine(lines, /^row=/i, true)!];
 	if (isNaN(pos[COL]) || isNaN(pos[ROW])) {
-		console.debug(`mapSectionTo(${LayerType[layerType]}): isNaN(pos[COL]) (${isNaN(pos[COL])}) || isNaN(pos[ROW]) (${isNaN(pos[ROW])})`);
+		debug(`mapSectionTo(${LayerType[layerType]}): isNaN(pos[COL]) (${isNaN(pos[COL])}) || isNaN(pos[ROW]) (${isNaN(pos[ROW])})`);
 		return null;
 	}
 
@@ -198,7 +199,7 @@ export default function gameMapImporter(raw: string, client: Discord.Client): TP
 	const mapSection = spliceSection(lines, "map");
 	const parsedCore = mapSectionToMapCore(mapSection);
 	if (!parsedCore) {
-		console.debug(`gameMapImporter: !parsedCore`);
+		debug(`gameMapImporter: !parsedCore`);
 		return null;
 	}
 	parsedCore.userId = parseUser(client, parsedCore.userId)!;

@@ -28,7 +28,7 @@ async function spellListB(sageMessage: SageMessage): Promise<void> {
 	_spellList(sageMessage, traditionString, levelString, by);
 }
 async function _spellList(sageMessage: SageMessage, traditionString: string, levelString: string, by: "school"): Promise<void> {
-	/*// console.debug("spellList", traditionString, levelString);*/
+	/*// debug("spellList", traditionString, levelString);*/
 	const content = createCommandRenderableContent(),
 		tradition = <TMagicTradition>utils.StringUtils.capitalize(traditionString),
 		byTradition = Repository.filter("Spell", spell => spell.traditions.includes(tradition));
@@ -108,7 +108,7 @@ async function spellListFocus(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	/*// console.debug("spellListFocus", archetypeOrClassOrDomain);*/
+	/*// debug("spellListFocus", archetypeOrClassOrDomain);*/
 	const className = Repository.findByValue("Class", archetypeOrClassOrDomain)?.name,
 		archetypeName = className ? undefined : Repository.findByValue("Archetype", archetypeOrClassOrDomain)?.name,
 		domain = Repository.findByValue("Domain", archetypeOrClassOrDomain),

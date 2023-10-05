@@ -1,5 +1,6 @@
 import utils, { UUID } from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
+import { debug } from "../../sage-utils/utils/ConsoleUtils";
 import type { TMagicComponent, TMagicTradition } from '../common';
 import { ABILITIES, NEWLINE, toModifier } from '../common';
 import RenderableContent from '../data/RenderableContent';
@@ -139,7 +140,7 @@ function heightenSpell(spellId: UUID, core: SpellCore): HeightenedSpell[] {
 		spells.push(last);
 	}
 	if (spells.length !== 11 - core.level) {
-		console.debug(spellId, core, spells);
+		debug(spellId, core, spells);
 	}
 	return spells;
 }
