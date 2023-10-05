@@ -2,9 +2,10 @@ import utils from "../../sage-utils";
 
 import * as Repository from '../data/Repository';
 
+import { warn } from "../../sage-utils/utils/ConsoleUtils";
+import type Domain from "./Domain";
 import type Skill from './Skill';
 import type Spell from './Spell';
-import type Domain from "./Domain";
 
 export type TDevoteeBenefitsCore = {
 	divineFont: string[];
@@ -42,7 +43,7 @@ export default class DevoteeBenefits {
 			return spell.nameLower.italics();
 		}
 		const spellName = this.core.divineFont[index];
-		console.warn(`Missing Deity Divine Font: ${spellName}`);
+		warn(`Missing Deity Divine Font: ${spellName}`);
 		return spellName.toLowerCase().italics();
 	}
 	public domainToContent(index: number): string {
@@ -51,7 +52,7 @@ export default class DevoteeBenefits {
 			return domain.nameLower;
 		}
 		const domainName = this.core.domains[index];
-		console.warn(`Missing Deity Domain: ${domainName}`);
+		warn(`Missing Deity Domain: ${domainName}`);
 		return domainName.toLowerCase();
 	}
 	public spellToContent(index: number): string {
@@ -61,7 +62,7 @@ export default class DevoteeBenefits {
 		}
 		const spellName = this.core.clericSpells[index];
 		const found = Repository.findByValue("Spell", spellName.split(/\s*\(/)[0]);
-		console.warn(found ? `TyPo Deity Spell: ${spellName}` : `Missing Deity Spell: ${spellName}`);
+		warn(found ? `TyPo Deity Spell: ${spellName}` : `Missing Deity Spell: ${spellName}`);
 		return `?: <i>${spellName.toLowerCase()}</i>`;
 	}
 	public alternateDomainToContent(index: number): string {
@@ -70,7 +71,7 @@ export default class DevoteeBenefits {
 			return domain.nameLower;
 		}
 		const domainName = (this.core.alternateDomains || [])[index];
-		console.warn(`Missing Deity Alternate Domain: ${domainName}`);
+		warn(`Missing Deity Alternate Domain: ${domainName}`);
 		return domainName.toLowerCase();
 	}
 }

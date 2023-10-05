@@ -1,3 +1,5 @@
+import { warn } from "./logger";
+
 /** Used for catching a Promise. Logs the reason to console.error and then returns false. */
 export function errorReturnFalse<T = any>(reason: T): false {
 	console.error(reason);
@@ -18,6 +20,6 @@ export function errorReturnEmptyArray<T = any>(reason: T): any[] {
 
 /** Used for catching a Promise. Logs the reason to console.warn and then returns null. */
 export function warnReturnNull<T = any>(reason: T): null {
-	console.warn(reason);
+	warn(reason);
 	return null;
 }

@@ -1,4 +1,5 @@
 import utils, { UUID } from "../../../sage-utils";
+import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import type HasSource from "./HasSource";
 import Source from "./Source";
 
@@ -62,7 +63,7 @@ export default class SourceNotationMap<T extends HasSource> {
 	}
 	public static filterByHasSource<T extends HasSource>(item: T): boolean {
 		if (!item.source) {
-			console.warn(`Missing Source: ${item.objectType} (${item.id})`);
+			warn(`Missing Source: ${item.objectType} (${item.id})`);
 		}
 		return !!item.source;
 	}

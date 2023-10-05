@@ -2,6 +2,8 @@
 // type TEventListener<T> = (object: T) => void;
 // interface IEventHandler<T> { eventName:string; listeners:TEventListener<T>[]; }
 
+import { warn } from "../sage-utils/utils/ConsoleUtils";
+
 // let handlers: IEventHandler<any>[] = [];
 // export namespace EventHandler {
 // 	export function addListener<T>(eventName: string, listener: TEventListener<T>): void {
@@ -263,7 +265,7 @@ export function profToMod(prof: TProficiency): number {
 		case MASTER: return 6;
 		case LEGENDARY: return 8;
 		default:
-			console.warn(`Invalid Proficiency: ${prof}`);
+			warn(`Invalid Proficiency: ${prof}`);
 			return 0;
 	}
 }

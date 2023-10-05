@@ -341,7 +341,7 @@ export default class PlayerCharacter extends utils.ClassUtils.HasIdCore<PlayerCh
 	}
 	public get size(): TSize | undefined {
 		const features = this.features.filter(feature => feature.hasMetadata && feature.metadata.size !== null);
-		/*// console.warn("//TODO: Look at conditions for a different size!");*/
+		/*// warn("//TODO: Look at conditions for a different size!");*/
 		return features.pop()?.metadata.size;
 	}
 	public skills: Skills;
@@ -438,13 +438,13 @@ export default class PlayerCharacter extends utils.ClassUtils.HasIdCore<PlayerCh
 	/** Broadcasts the character to all listeners. */
 	// public static async broadcast(pc: PlayerCharacter, action: "updated"): Promise<boolean> {
 	// 	// EventHandler.fireEvent("pc-updated", this);
-	// 	console.warn("PlayerCharacter.broadcast(): Not Implemented!");
+	// 	warn("PlayerCharacter.broadcast(): Not Implemented!");
 	// 	return false;
 	// }
 
 	/** Saves the character's core.  */
 	// public static async save(id: UUID, core: IPlayerCharacter): Promise<boolean> {
-	// 	console.warn("PlayerCharacter.save(): Not Implemented!");
+	// 	warn("PlayerCharacter.save(): Not Implemented!");
 	// 	return false;
 	// }
 

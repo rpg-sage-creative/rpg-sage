@@ -1,5 +1,6 @@
 import * as Discord from "discord.js";
 import utils, { Optional, TDisplayType, TRenderableContentSection } from "../../sage-utils";
+import { warn } from "../../sage-utils/utils/ConsoleUtils";
 import type SageCache from "../sage/model/SageCache";
 import { DiscordMaxValues } from "./consts";
 import type { TRenderableContentResolvable } from "./types";
@@ -136,7 +137,7 @@ export function createMessageEmbed(title?: Optional<string>, description?: Optio
 
 	if (title) {
 		if (title.length > DiscordMaxValues.embed.titleLength) {
-			console.warn(`MessageEmbed.title too long (${title.length}/${DiscordMaxValues.embed.titleLength}): ${title}`);
+			warn(`MessageEmbed.title too long (${title.length}/${DiscordMaxValues.embed.titleLength}): ${title}`);
 			title = title.slice(0, DiscordMaxValues.embed.titleLength);
 		}
 		embed.setTitle(title);
@@ -144,7 +145,7 @@ export function createMessageEmbed(title?: Optional<string>, description?: Optio
 
 	if (description) {
 		if (description.length > DiscordMaxValues.embed.descriptionLength) {
-			console.warn(`MessageEmbed.description too long (${description.length}/${DiscordMaxValues.embed.descriptionLength}): ${description}`);
+			warn(`MessageEmbed.description too long (${description.length}/${DiscordMaxValues.embed.descriptionLength}): ${description}`);
 			description = description.slice(0, DiscordMaxValues.embed.descriptionLength);
 		}
 		embed.setDescription(description);

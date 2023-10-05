@@ -4,7 +4,7 @@ import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Optional } from "../../../sage-utils";
 import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
-import { verbose } from "../../../sage-utils/utils/ConsoleUtils";
+import { verbose, warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { DMessage, DiscordKey, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
 import { send } from "../../discord/messages";
@@ -314,7 +314,7 @@ export default class SageMessage
 				this.message.author?.send(`${emoji} ${reason}\n<${this.message.url}>`);
 			}
 		}else {
-			console.warn(`Invalid emojiType: ${emojiType} >> ${reason ?? "no reason given"}`)
+			warn(`Invalid emojiType: ${emojiType} >> ${reason ?? "no reason given"}`)
 		}
 	}
 	/** This was pulled here to avoid duplicating code. */

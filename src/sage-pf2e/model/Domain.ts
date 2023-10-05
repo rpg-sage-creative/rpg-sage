@@ -1,4 +1,5 @@
 import type utils from "../../sage-utils";
+import { warn } from "../../sage-utils/utils/ConsoleUtils";
 import RenderableContent from '../data/RenderableContent';
 import { findByValue } from '../data/Repository';
 import type { SourcedCore } from "./base/HasSource";
@@ -30,7 +31,7 @@ export default class Domain extends HasSource<DomainCore> {
 
 		content.addAonLink(...this.spells.filter((spell, index) => {
 			if (!spell) {
-				console.warn(`Missing Domain (${this.name}) Spell: ${this.core.spells[index]}`);
+				warn(`Missing Domain (${this.name}) Spell: ${this.core.spells[index]}`);
 			}
 			return !!spell;
 		}).map(spell => spell.toAonLink()));

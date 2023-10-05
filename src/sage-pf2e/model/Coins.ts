@@ -1,5 +1,6 @@
 import utils, { IComparable, TSortResult } from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
+import { warn } from "../../sage-utils/utils/ConsoleUtils";
 import Bulk from "./Bulk";
 
 type TMoney = number | string | Coins;
@@ -344,7 +345,7 @@ export default class Coins extends utils.ClassUtils.HasCore<CoinsCore> implement
 			?? [],
 			core = createCore();
 		if (!values.length) {
-			console.warn("Invalid coinString: " + coinString);
+			warn("Invalid coinString: " + coinString);
 		}
 		values.forEach(value => {
 			if (value === "0") {

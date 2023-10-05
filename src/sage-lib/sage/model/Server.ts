@@ -1,6 +1,8 @@
 import type * as Discord from "discord.js";
+import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { LogLevel, Optional, TConsoleCommandType } from "../../../sage-utils";
+import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { DiscordKey } from "../../discord";
 import { DicePostType } from "../commands/dice";
 import ActiveBot from "../model/ActiveBot";
@@ -11,7 +13,6 @@ import Emoji from "./Emoji";
 import Game from "./Game";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
-import { GameType } from "../../../sage-common";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
 export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdmin = 3 }
@@ -334,7 +335,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	public colors = new Colors(this.core.colors || (this.core.colors = []));
 	public toDiscordColor(colorType: ColorType): string | null {
 		if (!this.core.colors.length) {
-			console.warn(`Colors Missing: Server (${this.discord?.guild?.name || this.id})`);
+			warn(`Colors Missing: Server (${this.discord?.guild?.name || this.id})`);
 			return this.sageCache.bot.toDiscordColor(colorType);
 		}
 		return this.colors.toDiscordColor(colorType)

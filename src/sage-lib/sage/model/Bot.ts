@@ -1,12 +1,13 @@
 import type * as Discord from "discord.js";
+import type { GameType } from "../../../sage-common";
 import { LogLevel, TConsoleCommandType } from "../../../sage-utils";
+import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository";
 import Colors from "./Colors";
 import Emoji from "./Emoji";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
 import type SageCache from "./SageCache";
-import type { GameType } from "../../../sage-common";
 
 export type TBotCodeName = "dev" | "beta" | "stable";
 
@@ -65,7 +66,7 @@ export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore,
 	public colors = new Colors(this.core.colors || (this.core.colors = []));
 	public toDiscordColor(colorType: ColorType): string | null {
 		if (!this.core.colors.length) {
-			console.warn(`Colors Missing: Bot (${this.codeName || this.id})`);
+			warn(`Colors Missing: Bot (${this.codeName || this.id})`);
 			return null;
 		}
 		return this.colors.toDiscordColor(colorType);

@@ -1,3 +1,4 @@
+import { warn } from "../../sage-utils/utils/ConsoleUtils";
 import type { HasContents, HasParent, HasQuantity, IHasContents, IHasParent, IHasQuantity, TContentItem, TContentItemArray, TObjectQuantity } from "../common";
 import { MDASH } from "../common";
 import { filter, findByValue } from "../data/Repository";
@@ -20,7 +21,7 @@ export function toObjectQuantity<T extends HasBulk>(contentItem: TContentItem, d
 		objectQuantity.quantity = contentItem.quantity || 1;
 	}
 	if (!objectQuantity.object) {
-		console.warn(defaultObjectType, contentItem);
+		warn(defaultObjectType, contentItem);
 	}
 	return objectQuantity;
 }

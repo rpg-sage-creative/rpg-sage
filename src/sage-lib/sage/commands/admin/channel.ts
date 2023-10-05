@@ -1,6 +1,8 @@
 import type * as Discord from "discord.js";
+import { GameType } from "../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
 import utils, { Optional } from "../../../../sage-utils";
+import { warn } from "../../../../sage-utils/utils/ConsoleUtils";
 import { DiscordCache, DiscordId, DiscordKey } from "../../../discord";
 import type Game from "../../model/Game";
 import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game";
@@ -11,7 +13,6 @@ import { DialogType, PermissionType, type IChannel } from "../../repo/base/IdRep
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";
-import { GameType } from "../../../../sage-common";
 
 //#region add
 
@@ -280,7 +281,7 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 
 	const channelOptions = sageMessage.args.removeAndReturnChannelOptions();
 	if (!channelOptions) {
-		console.warn(`No or Invalid Channel Options: ${JSON.stringify(channelOptions)}`);
+		warn(`No or Invalid Channel Options: ${JSON.stringify(channelOptions)}`);
 		return sageMessage.reactFailure();
 	}
 

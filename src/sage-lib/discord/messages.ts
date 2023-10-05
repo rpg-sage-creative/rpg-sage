@@ -1,5 +1,6 @@
 import type * as Discord from "discord.js";
 import utils, { Optional, OrNull } from "../../sage-utils";
+import { warn } from "../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import type SageCache from "../sage/model/SageCache";
 import { DialogType } from "../sage/repo/base/IdRepository";
@@ -73,7 +74,7 @@ async function sendWebhookAndReturnMessages(webhook: Discord.Webhook, options: D
 		if (typeof(response.type) === "string") {
 			messages.push(response as Discord.Message);
 		}else {
-			console.warn(`sendWebhookAndReturnMessage(): I should not hit this line of code.`);
+			warn(`sendWebhookAndReturnMessage(): I should not hit this line of code.`);
 		}
 	}
 	return messages;
@@ -221,7 +222,7 @@ function sendMenuRenderableContent(caches: SageCache, menuRenderable: IMenuRende
 		if (renderable) {
 			send(caches, targetChannel, renderable, originalAuthor);
 		}else {
-			console.warn(`sendMenuRenderableContent: Nothing to send!`);
+			warn(`sendMenuRenderableContent: Nothing to send!`);
 		}
 	}
 }
@@ -278,7 +279,7 @@ function sendAndAwaitReactions(caches: SageCache, menuRenderable: IMenuRenderabl
 		}, (/*reason*/) => {
 			if (!caches.discordKey.isDm) {
 				lastMessage.reactions.removeAll().catch(ex => {
-					console.warn(`Clearing Reactions`, ex);
+					warn(`Clearing Reactions`, ex);
 					reactions.forEach(reaction => reaction.remove().catch(x => console.error(`Clearing Reaction`, x)));
 				});
 			}

@@ -1,11 +1,12 @@
 import * as _XRegExp from "xregexp";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 import type { Optional, OrNull, OrUndefined, TKeyValueArg, UUID } from "../..";
 import { Collection } from "../ArrayUtils";
 import { sortDescending } from "../ArrayUtils/Sort";
 import { Color } from "../ColorUtils";
+import { warn } from "../ConsoleUtils";
 import { isKeyValueArg, parseKeyValueArg } from "../StringUtils";
 import { isValid as isValidUuid } from "../UuidUtils";
+const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 type TArgIndexRet<T> = {
 	arg: string;
@@ -200,7 +201,7 @@ export default class ArgsManager<T extends string> extends Collection<T> {
 		for (let index = 0; index < length; index++) {
 			const arg = this[index],
 				promise = predicate.call(thisArg, arg, index, this) as Promise<any>,
-				ret = await promise.catch(ex => console.warn(`Error calling a asyncFindWithIndex(predicate): ${ex}`));
+				ret = await promise.catch(ex => warn(`Error calling a asyncFindWithIndex(predicate): ${ex}`));
 			if (ret) {
 				return { arg:arg, index:index, ret:ret };
 			}

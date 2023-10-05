@@ -1,6 +1,7 @@
 import { GameType } from "../sage-common";
 import utils, { TToken } from "../sage-utils";
 import { IdCore } from "../sage-utils/utils/ClassUtils";
+import { warn } from "../sage-utils/utils/ConsoleUtils";
 import type { TDiceRoll } from "./dice/base/types";
 
 //#region rpg.common.ts
@@ -102,7 +103,7 @@ export function sumDropKeep(values: number[], dropKeep?: TDropKeepData): number 
 		case DropKeepType.KeepLowest:
 			return sum(sorted.slice(0, dropKeep.value));
 		default:
-			console.warn(`Invalid dropKeep.type = ${dropKeep.type} (${DropKeepType[dropKeep.type]})`);
+			warn(`Invalid dropKeep.type = ${dropKeep.type} (${DropKeepType[dropKeep.type]})`);
 			return sum(values);
 	}
 }
@@ -221,7 +222,7 @@ export function testRoll(roll: TDiceRoll): boolean | undefined {
 			case TestType.LessThanOrEqual:
 				return roll.total <= test.value;
 			default:
-				console.warn(`testRoll(): invalid roll.dice.test.type = ${test.type} (${test.alias})`);
+				warn(`testRoll(): invalid roll.dice.test.type = ${test.type} (${test.alias})`);
 		}
 	}
 	return undefined;

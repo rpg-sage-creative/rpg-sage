@@ -5,6 +5,7 @@ import { GameType } from "../../../sage-common";
 import type { Optional, OrNull, OrUndefined, TParsers, TSortResult, TToken } from "../../../sage-utils";
 import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
+import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { Tokenizer, cleanWhitespace, dequote, escapeForRegExp } from "../../../sage-utils/utils/StringUtils";
 import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
@@ -631,7 +632,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			case DiceOutputType.XS: return this.toStringXS(hideRolls);
 			case DiceOutputType.XXS: return this.toStringXXS(hideRolls);
 			default: {
-				console.warn(`DiceRoll.toString(${args})`);
+				warn(`DiceRoll.toString(${args})`);
 				return this.toString(DiceOutputType.M, hideRolls);
 			}
 		}

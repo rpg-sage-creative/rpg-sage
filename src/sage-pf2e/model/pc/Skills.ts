@@ -74,7 +74,7 @@ export default class Skills {
 			}
 		}
 
-		/*// console.warn("Add Skill item and other bonuses/penalties");*/
+		/*// warn("Add Skill item and other bonuses/penalties");*/
 		return check;
 	}
 	public isTrained(skill: Skill): boolean;

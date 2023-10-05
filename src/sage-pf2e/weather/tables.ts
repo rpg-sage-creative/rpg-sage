@@ -1,4 +1,5 @@
 import utils, { type TSimpleDice } from "../../sage-utils";
+import { warn } from "../../sage-utils/utils/ConsoleUtils";
 import { ClimateType, WindType } from "./weather";
 
 export interface TableItem { min: number; max: number; }
@@ -41,17 +42,17 @@ export function rollOnTable(tableName: string): TableItem;
 export function rollOnTable(tableName: string): TableItem | null {
 	const table: TableItem[] | undefined = tables[tableName as WeatherTableKey];
 	if (!table) {
-		console.warn(`Invalid Table: ${tableName}`);
+		warn(`Invalid Table: ${tableName}`);
 		return null;
 	}
 	if (!table.length) {
-		console.warn(`Empty Table: ${tableName}`);
+		warn(`Empty Table: ${tableName}`);
 		return null;
 	}
 
 	const [min, max] = getMinMax(table);
 	if (min === Infinity || max === -Infinity) {
-		console.warn(`Invalid Table min/max values: ${tableName} min(${min}) / max(${max})`);
+		warn(`Invalid Table min/max values: ${tableName} min(${min}) / max(${max})`);
 		return null;
 	}
 

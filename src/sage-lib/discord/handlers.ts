@@ -1,11 +1,12 @@
 import * as Discord from "discord.js";
 import { isDefined, isNullOrUndefined, Optional } from "../../sage-utils";
+import { warn } from "../../sage-utils/utils/ConsoleUtils";
+import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import SageInteraction from "../sage/model/SageInteraction";
 import SageMessage from "../sage/model/SageMessage";
 import SageReaction from "../sage/model/SageReaction";
 import { MessageType, ReactionType } from "./enums";
 import type { DMessage, DReaction, DUser, TChannel, TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
-import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 
 //#region helpers
 
@@ -113,7 +114,7 @@ function registerListener<T extends TListenerType>(which: TListenerTypeName, lis
 	} else {
 		console.info(`Registering ${which} #${listeners.length + 1} at priorityIndex ${listener.priorityIndex}: ${listener.command ?? listener.tester.name}`);
 		if (listeners.find(l => l.priorityIndex === listener.priorityIndex)) {
-			console.warn(`${which} at priorityIndex ${listener.priorityIndex} already exists!`);
+			warn(`${which} at priorityIndex ${listener.priorityIndex} already exists!`);
 		}
 		listeners.splice(listener.priorityIndex, 0, listener);
 	}

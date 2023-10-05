@@ -415,7 +415,7 @@ async function doDialog(sageMessage: SageMessage, dialogContent: TDialogContent)
 		case "pc": return pcChat(sageMessage, dialogContent);
 		case "alt": case "companion": case "familiar": case "hireling": return companionChat(sageMessage, dialogContent);
 		case "edit": return editChat(sageMessage, dialogContent);
-		default: return aliasChat(sageMessage, dialogContent);// console.warn(`Invalid dialogContent.type(${dialogContent.type})`);
+		default: return aliasChat(sageMessage, dialogContent);// warn(`Invalid dialogContent.type(${dialogContent.type})`);
 	}
 }
 

@@ -1,5 +1,5 @@
 import utils, { isDefined, Optional, OrNull, OrUndefined, TUuidMatcher, UUID } from "../../sage-utils";
-import { debug } from "../../sage-utils/utils/ConsoleUtils";
+import { debug, warn } from "../../sage-utils/utils/ConsoleUtils";
 import type { TEntity } from "../model";
 import type AonBase from "../model/base/AonBase";
 import type Base from "../model/base/Base";
@@ -171,7 +171,7 @@ export function loadData(dataPath: string, includePf2ToolsData = false): Promise
 function handleMissingObjectType(core: BaseCore, fromLabel: string): void {
 	if (!missing.includes(core.objectType)) {
 		missing.push(core.objectType);
-		console.warn(`Missing parser for "${core.objectType}" from "${fromLabel}" ("${core.name}")`);
+		warn(`Missing parser for "${core.objectType}" from "${fromLabel}" ("${core.name}")`);
 	}
 }
 
@@ -185,7 +185,7 @@ function parseChildren(core: BaseCore, fromLabel: string, itemConstructor: typeo
 		childCores.forEach(childCore => {
 			const loaded = loadCore(childCore, fromLabel);
 			if (!loaded) {
-				console.warn(`Error parsing child core!`, core, childCore);
+				warn(`Error parsing child core!`, core, childCore);
 			}
 			childrenLoaded += loaded;
 		});
@@ -196,7 +196,7 @@ function parseChildren(core: BaseCore, fromLabel: string, itemConstructor: typeo
 
 function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 	if (!core) {
-		console.warn(`Invalid core from "${fromLabel}": ${core}`);
+		warn(`Invalid core from "${fromLabel}": ${core}`);
 		return 0;
 	}
 	const objectType = core.objectType;
@@ -237,7 +237,7 @@ async function loadDataFromDist(distPath: string): Promise<void> {
 	const files: string[] = await utils.FsUtils.filterFiles(distPath, file => file.endsWith(".json") && !file.includes("pf2t-leftovers"), true)
 		.catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 	if (!files.length) {
-		console.warn(`No files in "${distPath}" ...`);
+		warn(`No files in "${distPath}" ...`);
 		return Promise.resolve();
 	}
 
@@ -246,13 +246,13 @@ async function loadDataFromDist(distPath: string): Promise<void> {
 	const sources = files.filter(file => file.includes("/Source/"));
 	console.info(`Loading Data: ${sources.length} sources`);
 	for (const source of sources) {
-		await utils.FsUtils.readJsonFile<BaseCore>(source).then(core => coresLoaded += loadCore(core, source), console.warn);
+		await utils.FsUtils.readJsonFile<BaseCore>(source).then(core => coresLoaded += loadCore(core, source), warn);
 	}
 
 	const others = files.filter(file => !file.includes("/Source/"));
 	console.info(`Loading Data: ${others.length} objects`);
 	for (const other of others) {
-		await utils.FsUtils.readJsonFile<BaseCore>(other).then(core => coresLoaded += loadCore(core, other), console.warn);
+		await utils.FsUtils.readJsonFile<BaseCore>(other).then(core => coresLoaded += loadCore(core, other), warn);
 	}
 
 	console.info(`\t\t${coresLoaded} Total Cores loaded`);

@@ -2,7 +2,7 @@ import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Int
 import { NilSnowflake } from ".";
 import type { Optional } from "../../sage-utils";
 import { Collection } from "../../sage-utils/utils/ArrayUtils";
-import { debug } from "../../sage-utils/utils/ConsoleUtils";
+import { debug, warn } from "../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageMessage from "../sage/model/SageMessage";
@@ -39,10 +39,10 @@ function isUnknownUser(reason: TDiscordApiError): boolean {
 }
 function warnUnknownElseErrorReturnNull(reason: any): null {
 	if (isDiscordApiErrorMissingPermissionsFetchWebhook(reason)) {
-		console.warn(`DiscordAPIError: Missing Permissions (TextChannel.fetchWebhooks)`);
+		warn(`DiscordAPIError: Missing Permissions (TextChannel.fetchWebhooks)`);
 	}else {
 		if (isDiscordApiError(reason) && (isUnknownMember(reason) || isUnknownGuild(reason) || isUnknownUser(reason))) {
-			console.warn(`${reason.message}: ${reason.path}`);
+			warn(`${reason.message}: ${reason.path}`);
 		}else {
 			console.error(reason);
 		}
