@@ -3,7 +3,7 @@ import type { GameType } from "../../../sage-common";
 import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "../../../sage-dice";
 import { NEWLINE } from "../../../sage-pf2e";
 import type { Optional, TKeyValueArg } from "../../../sage-utils";
-import { debug } from "../../../sage-utils/utils/ConsoleUtils";
+import { debug, error } from "../../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../../sage-utils/utils/DiscordUtils/humanReadable";
 import { addCommas } from "../../../sage-utils/utils/NumberUtils";
 import { random, randomItem } from "../../../sage-utils/utils/RandomUtils";
@@ -93,7 +93,7 @@ function parseDiscordMacro(sageMessage: SageMessage, macroString: string): Disco
 	let macroAndOutput: TMacroAndOutput | null;
 	while (macroAndOutput = macroToDice(sageMessage.sageUser.macros, debrace(diceString))) {
 		if (macroNames.includes(macroAndOutput.macro.name)) {
-			console.error(`MACRO RECURSION: User(${sageMessage.sageUser.id}) ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}`);
+			error(`MACRO RECURSION: User(${sageMessage.sageUser.id}) ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}`);
 			return parseDiscordDice(sageMessage, `[1d1 MACRO RECURSION: ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}]`);
 		}
 		macroNames.push(macroAndOutput.macro.name);

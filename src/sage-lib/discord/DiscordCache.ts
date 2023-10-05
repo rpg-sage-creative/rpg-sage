@@ -2,7 +2,7 @@ import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Int
 import { NilSnowflake } from ".";
 import type { Optional } from "../../sage-utils";
 import { Collection } from "../../sage-utils/utils/ArrayUtils";
-import { debug, warn } from "../../sage-utils/utils/ConsoleUtils";
+import { debug, error, warn } from "../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageMessage from "../sage/model/SageMessage";
@@ -44,7 +44,7 @@ function warnUnknownElseErrorReturnNull(reason: any): null {
 		if (isDiscordApiError(reason) && (isUnknownMember(reason) || isUnknownGuild(reason) || isUnknownUser(reason))) {
 			warn(`${reason.message}: ${reason.path}`);
 		}else {
-			console.error(reason);
+			error(reason);
 		}
 	}
 	return null;

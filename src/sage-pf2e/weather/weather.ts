@@ -1,4 +1,5 @@
 import utils, { SeasonType } from "../../sage-utils";
+import { error } from "../../sage-utils/utils/ConsoleUtils";
 
 export enum ElevationType { SeaLevel, Lowland, Highland }
 export enum ClimateType { Cold, Temperate, Tropical }
@@ -30,7 +31,7 @@ export function getBasePrecipitationFrequency(climate: ClimateType, season: Seas
 			frequency = PrecipitationFrequencyType.Rare;
 			break;
 		default:
-			console.error("getBasePrecipitationFrequency: " + season);
+			error("getBasePrecipitationFrequency: " + season);
 			break;
 	}
 	// desert, Drought (Rare a few weeks a year)
@@ -90,7 +91,7 @@ export function testForPrecipitation(frequency: PrecipitationFrequencyType): boo
 		case PrecipitationFrequencyType.Common: return roll <= 60;
 		case PrecipitationFrequencyType.Constant: return roll <= 95;
 		default:
-			console.error("testforPrecipitation: " + frequency);
+			error("testforPrecipitation: " + frequency);
 			return false;
 	}
 }

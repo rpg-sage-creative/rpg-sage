@@ -1,8 +1,9 @@
+import { registerAndLoad } from "../sage-pf2e";
 import utils, { LogLevel } from "../sage-utils";
+import { error } from "../sage-utils/utils/ConsoleUtils";
 import registerPrompts from "./discord";
 import { setBotMeta } from "./discord/handlers";
 import { SageDialogWebhookName } from "./discord/messages";
-import { registerAndLoad } from "../sage-pf2e";
 import { registerCommandHandlers } from "./sage/commands";
 import ActiveBot from "./sage/model/ActiveBot";
 import type { TBotCodeName } from "./sage/model/Bot";
@@ -28,7 +29,7 @@ export function activate(pf2DataPath: string, botCodeName: TBotCodeName, ver: st
 
 		registerAndLoad(pf2DataPath, includePf2ToolsData).then(() => ActiveBot.activate(botCodeName, ver));
 	}, err => {
-		console.error(`BotRepo.getByCodeName("${botCodeName}") failed!`, err);
+		error(`BotRepo.getByCodeName("${botCodeName}") failed!`, err);
 	});
 }
 

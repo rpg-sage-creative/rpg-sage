@@ -1,6 +1,6 @@
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
-import { debug } from "../../../sage-utils/utils/ConsoleUtils";
+import { debug, error } from "../../../sage-utils/utils/ConsoleUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import ArgsManager from "../../discord/ArgsManager";
@@ -99,7 +99,7 @@ export function renderAll(objectType: string, objectTypePlural: string, _bySourc
 		SourceNotationMap.appendNotatedItems(content, all);
 		return [content];
 	} catch (ex) {
-		console.error(ex);
+		error(ex);
 	}
 	return [];
 }
@@ -232,7 +232,7 @@ async function dmSlashHandler(sageInteraction: SageInteraction): Promise<void> {
 		return sageInteraction.reply(`Please check your DMs!`, true);
 	}
 	function failure(reason: any): Promise<void> {
-		console.error(reason);
+		error(reason);
 		return sageInteraction.reply(`Sorry, there was a problem!`, true);
 	}
 }
@@ -291,7 +291,7 @@ export function registerCommandHandlers(): void {
 						maxCharacters = Math.max(maxCharacters, string.length);
 					} catch (ex) {
 						broken.push(`${object.id}::${object.name}`);
-						// console.error(ex);
+						// error(ex);
 					}
 				}
 				if (!broken.length) {

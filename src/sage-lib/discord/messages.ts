@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
 import utils, { Optional, OrNull } from "../../sage-utils";
-import { warn } from "../../sage-utils/utils/ConsoleUtils";
+import { error, warn } from "../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import type SageCache from "../sage/model/SageCache";
 import { DialogType } from "../sage/repo/base/IdRepository";
@@ -25,7 +25,7 @@ export function guildToInviteUrl(guild: Optional<Discord.Guild>): OrNull<string>
 		const bestInvite = guild.invites.cache.find(invite => !invite.stageInstance && !invite.targetUser && !invite.temporary && !!invite.channel.isText);
 		return bestInvite?.url ?? null;
 	}catch(ex) {
-		console.error(ex);
+		error(ex);
 	}
 	return null;
 }
@@ -57,7 +57,7 @@ function messageToDetails(message: DMessage): string {
 
 function logIfNotTimeout(typeOfReason: string, reason: string): void {
 	if (reason !== TIMEOUT) {
-		console.error(`${typeOfReason}: ${reason}`);
+		error(`${typeOfReason}: ${reason}`);
 	}
 }
 
@@ -145,7 +145,7 @@ export async function send(caches: SageCache, targetChannel: TChannel, renderabl
 			return [];
 		}
 	}catch(ex) {
-		console.error(ex);
+		error(ex);
 	}
 	return [];
 }
@@ -195,7 +195,7 @@ type TSendToArgs = {
 		if (errMsg) {
 			msg += `: ${errMsg}`;
 		}
-		console.error(msg, error);
+		error(msg, error);
 		return null;
 	});
 }
@@ -280,7 +280,7 @@ function sendAndAwaitReactions(caches: SageCache, menuRenderable: IMenuRenderabl
 			if (!caches.discordKey.isDm) {
 				lastMessage.reactions.removeAll().catch(ex => {
 					warn(`Clearing Reactions`, ex);
-					reactions.forEach(reaction => reaction.remove().catch(x => console.error(`Clearing Reaction`, x)));
+					reactions.forEach(reaction => reaction.remove().catch(x => error(`Clearing Reaction`, x)));
 				});
 			}
 			reject(TIMEOUT);

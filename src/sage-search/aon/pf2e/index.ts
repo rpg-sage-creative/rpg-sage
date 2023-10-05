@@ -2,6 +2,7 @@ import { GameType } from "../../../sage-common";
 import type AonBase from "../../../sage-pf2e/model/base/AonBase";
 import type { TSortResult } from "../../../sage-utils";
 import { sortAscending, sortDescending } from "../../../sage-utils/utils/ArrayUtils/Sort";
+import { error } from "../../../sage-utils/utils/ConsoleUtils";
 import { getJson } from "../../../sage-utils/utils/HttpsUtils";
 import { oneToUS } from "../../../sage-utils/utils/LangUtils";
 import type { SearchScore } from "../../../sage-utils/utils/SearchUtils";
@@ -22,7 +23,7 @@ export async function searchAonPf2e(parsedSearchInfo: TParsedSearchInfo, nameOnl
 	const searchInfo = new GameSearchInfo(GameType.PF2e, parsedSearchInfo.searchText, nameOnly ? "" : "g");
 
 	const postDataShould = buildPostData(searchInfo.terms.map(term => oneToUS(term.term)), "should");
-	const responseShould = await getJson<TResponseData>(PF2E_SEARCH_URL, postDataShould).catch(e => console.error(e)! || null);
+	const responseShould = await getJson<TResponseData>(PF2E_SEARCH_URL, postDataShould).catch(e => error(e)! || null);
 	const searchResults = new Pf2eSearchResults(searchInfo, responseShould);
 	/** @todo run a "must" search before running a "should" search and splice the results with "must" results at the top */
 

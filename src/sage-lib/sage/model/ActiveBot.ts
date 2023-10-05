@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import utils, { LogLevel, Optional } from "../../../sage-utils";
-import { info } from "../../../sage-utils/utils/ConsoleUtils";
+import { error, info } from "../../../sage-utils/utils/ConsoleUtils";
 import { MessageType, ReactionType } from "../../discord";
 import { setDeleted } from "../../discord/deletedMessages";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
@@ -138,7 +138,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 				info(`process.on("exit") = ${code}`);
 			});
 		}, err => {
-			console.error(`Discord.Client.on("ready") [error]`, err);
+			error(`Discord.Client.on("ready") [error]`, err);
 			process.exit(1);
 		});
 
@@ -242,7 +242,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		if (bot) {
 			ActiveBot.from(bot, codeVersion);
 		}else {
-			console.error(`Failure to load: ${codeName}`);
+			error(`Failure to load: ${codeName}`);
 		}
 	}
 

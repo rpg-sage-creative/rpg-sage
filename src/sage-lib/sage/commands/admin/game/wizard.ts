@@ -20,14 +20,14 @@
 // /*
 // 			async function editChat(sageMessage: SageMessage): Promise<void> {
 // 				const messageDid = sageMessage.args[DialogArgIndex.Name],
-// 					message = await findLastMessage(sageMessage, messageDid).catch(ex => <any>console.error(ex) || null);
+// 					message = await findLastMessage(sageMessage, messageDid).catch(ex => <any>error(ex) || null);
 // 				if (!message) return sageMessage.reactWarn();
 
 // 				let embed = message.embeds[0];
 // 				let updatedTitle = sageMessage.args[DialogArgIndex.Name] && !DiscordUtils.Id.isValidId(sageMessage.args[DialogArgIndex.Name]) && sageMessage.args[DialogArgIndex.Name]
 // 					|| sageMessage.args[DialogArgIndex.DisplayName] && !DiscordUtils.Id.isValidId(sageMessage.args[DialogArgIndex.DisplayName]) && sageMessage.args[DialogArgIndex.DisplayName];
 // 				let updatedContent = sageMessage.args[DialogArgIndex.Content];
-// 				message.edit(updateEmbed(embed, updatedTitle, updatedContent)).then(deleteMessage, console.error);
+// 				message.edit(updateEmbed(embed, updatedTitle, updatedContent)).then(deleteMessage, error);
 // 			}
 // */
 

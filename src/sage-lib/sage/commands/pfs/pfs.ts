@@ -1,7 +1,7 @@
 import _dice, { DieRollGrade } from "../../../../sage-dice";
 import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e";
 import utils from "../../../../sage-utils";
-import { warn } from "../../../../sage-utils/utils/ConsoleUtils";
+import { error, warn } from "../../../../sage-utils/utils/ConsoleUtils";
 import { ColorType } from "../../model/HasColorsCore";
 import type SageMessage from "../../model/SageMessage";
 import { createRenderableContent, registerCommandRegex } from "../cmd";
@@ -270,7 +270,9 @@ function pfsScenario(sageMessage: SageMessage): void {
 			return;
 		}
 		sageMessage.send(scenario.callback(sageMessage, tierInfo));
-	} catch (ex) { console.error("pfsScenario", ex); }
+	} catch (ex) {
+		error("pfsScenario", ex);
+	}
 }
 function registerScenarios(): void {
 	registerCommandRegex(/^\s*pfs\s*((?:s\d+\-\d+)|(?:q\d+))\s+(\d+)(?:\s+|\s*,\s*)(\d+)(?:\s+|\s*,\s*)(\d+)(?:\s+|\s*,\s*)(\d+)((?:\s+|\s*,\s*)\d+)?((?:\s+|\s*,\s*)\d+)?((?:\s+|\s*,\s*)\d+)?\s*$/i, pfsScenario);

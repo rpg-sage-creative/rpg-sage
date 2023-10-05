@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import { isDefined, isNullOrUndefined, Optional } from "../../sage-utils";
-import { warn } from "../../sage-utils/utils/ConsoleUtils";
+import { error, warn } from "../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import SageInteraction from "../sage/model/SageInteraction";
 import SageMessage from "../sage/model/SageMessage";
@@ -105,7 +105,7 @@ function getListeners<T extends TListenerType>(which: TListenerTypeName): T[] {
 type TListenerTypeName = "InteractionListener" | "MessageListener" | "ReactionListener";
 function registerListener<T extends TListenerType>(which: TListenerTypeName, listener: T): void {
 	if (!botMeta.activeBotDid) {
-		console.error(`Please call setBotMeta({ activeBotDid:"", testBotDid?:"", dialogWebhookName:"" })`);
+		error(`Please call setBotMeta({ activeBotDid:"", testBotDid?:"", dialogWebhookName:"" })`);
 	}
 	const listeners: T[] = getListeners(which);
 	if (isNullOrUndefined(listener.priorityIndex)) {
@@ -171,7 +171,7 @@ export async function handleInteraction(interaction: Discord.Interaction): Promi
 			sageInteraction.clear();
 		}
 	}catch(ex) {
-		console.error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
+		error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
 	}
 	return output;
 }
@@ -230,7 +230,7 @@ export async function handleMessage(message: DMessage, originalMessage: Optional
 			sageMessage.clear();
 		}
 	} catch (ex) {
-		console.error(toHumanReadable(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
+		error(toHumanReadable(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
 	}
 	return output;
 }
@@ -265,7 +265,7 @@ export async function handleReaction(messageReaction: DReaction, user: DUser, re
 			await handleReactions(sageReaction, reactionType, output);
 		}
 	} catch (ex) {
-		console.error(toHumanReadable(user), `\`${messageReaction.emoji.name}\``, ex);
+		error(toHumanReadable(user), `\`${messageReaction.emoji.name}\``, ex);
 	}
 	return output;
 }
