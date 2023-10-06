@@ -136,7 +136,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 
 		async function consoleHandler(this: ActiveBot, logLevel: LogLevel, ...args: any[]): Promise<void> {
 			this.devs.forEach(dev => {
-				const contents = `**${logLevel}**\n${args.map(utils.ConsoleUtils.formatArg).join("\n")}`;
+				const contents = `# ${logLevel}\n${args.map(utils.ConsoleUtils.formatArg).join("\n")}`;
 				const chunks = utils.StringUtils.chunk(contents, 2000);
 				this.sageCache.discord.fetchUser(dev.did)
 					.then(user => user ? chunks.forEach(chunk => user.send(chunk)) : void 0);

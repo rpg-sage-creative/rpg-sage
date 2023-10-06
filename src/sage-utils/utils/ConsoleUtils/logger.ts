@@ -56,13 +56,20 @@ function logToFile(logLevel: LogLevel, ...args: any[]): void {
 		appendFile(fileName, lines, err => {
 			if (err) {
 				try {
-					error("Unable to log to file!", err);
+					const args = ["Unable to log to file!", fileName, err];
+					handle("error", ...args);
+					console.error(`error::`, ...args);
 				}catch(ex) {
 					/* nothing to do at this point ... */
 				}
 			}
 		});
 	}
+}
+
+function handle(level: LogLevel, ...args: any[]): void {
+	// send the args to any extra handlers
+	_handlers.get(level)?.forEach(handler => handler(level, ...args));
 }
 
 /** Returns the current logger. */
@@ -85,7 +92,7 @@ export function getLogger(): Logger {
 			else console.log(`${level}::`, ...args);
 
 			// send the args to any extra handlers
-			_handlers.get(level)?.forEach(handler => handler(level, ...args));
+			handle(level, ...args);
 		}
 
 		/** Create the default logger. */

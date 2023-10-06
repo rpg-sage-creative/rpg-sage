@@ -190,12 +190,12 @@ type TSendToArgs = {
 		content = (content ? `${content}\n------------------\n` : "") + embedsToTexts(embeds).join("\n");
 		embeds = [];
 	}
-	return target.send({ content, embeds }).catch(error => {
+	return target.send({ content, embeds }).catch(err => {
 		let msg = `Trying to send w/o permissions (${targetToName(target)})`;
 		if (errMsg) {
 			msg += `: ${errMsg}`;
 		}
-		error(msg, error);
+		error(msg, err);
 		return null;
 	});
 }
