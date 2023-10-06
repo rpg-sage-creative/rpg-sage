@@ -76,6 +76,10 @@ export default class SageCache {
 		this.canReactToMap.clear();
 		this.canWebhookToMap.clear();
 		this.discord.clear();
+		this.bots.clear();
+		this.servers.clear();
+		this.games.clear();
+		this.users.clear();
 	}
 
 	private canSendMessageToMap = new Map<string, boolean>();

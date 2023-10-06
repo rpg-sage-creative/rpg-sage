@@ -1,24 +1,29 @@
-import type * as Discord from "discord.js";
+import { Snowflake, SnowflakeUtil } from "discord.js";
+import { existsSync } from "fs";
 import type { Optional, UUID } from "../../../../sage-utils";
+import { EphemeralMap } from "../../../../sage-utils/utils/ArrayUtils/EphemeralMap";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
+import { verbose } from "../../../../sage-utils/utils/ConsoleUtils";
+import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { readJsonFile, symLinkSync } from "../../../../sage-utils/utils/FsUtils";
 import IdRepository, { HasIdCoreAndSageCache } from "./IdRepository";
 
 export interface DidCore<T extends string = string> extends IdCore<T> {
-	did: Discord.Snowflake;
+	did: Snowflake;
 }
 
 export class HasDidCore<T extends DidCore<U>, U extends string = string> extends HasIdCoreAndSageCache<T, U> {
-	public get did(): Discord.Snowflake { return this.core.did; }
+	public get did(): Snowflake { return this.core.did; }
 }
 
 export default abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> extends IdRepository<T, U> {
 
 	//#region Cache
 
-	private didToIdMap = new Map<Discord.Snowflake, UUID>();
+	private didToIdMap = new EphemeralMap<Snowflake, UUID>(15000);
 
 	/** Overrides the parent .cacheId() to also cache the did/id pair. */
-	protected cacheId(id: Discord.Snowflake, entity: U): void {
+	protected cacheId(id: Snowflake, entity: U): void {
 		super.cacheId(id, entity);
 		if (entity) {
 			this.cacheDid(entity.did, entity.id);
@@ -26,10 +31,15 @@ export default abstract class DidRepository<T extends DidCore, U extends HasDidC
 	}
 
 	/** Caches the given did/id pair. */
-	protected cacheDid(did: Discord.Snowflake, id: UUID | undefined): void {
+	protected cacheDid(did: Snowflake, id: UUID | undefined): void {
 		if (did) {
 			this.didToIdMap.set(did, id!);
 		}
+	}
+
+	public clear(): void {
+		this.didToIdMap.clear();
+		super.clear();
 	}
 
 	//#endregion
@@ -37,7 +47,7 @@ export default abstract class DidRepository<T extends DidCore, U extends HasDidC
 	//#region Dids
 
 	/** Reads all of the cores (by iterating all uuid.json files) and returns all the "Did" values. */
-	public async getDids(): Promise<Discord.Snowflake[]> {
+	public async getDids(): Promise<Snowflake[]> {
 		const dids = Array.from(this.didToIdMap.keys()),
 			cores = await this.readUncachedCores();
 		cores.forEach(core => {
@@ -52,7 +62,7 @@ export default abstract class DidRepository<T extends DidCore, U extends HasDidC
 	//#region Entities
 
 	/** Gets the entity by did, checking cache first, then .readByDid(), then .readFromUncached(). */
-	public async getByDid(did: Optional<Discord.Snowflake>): Promise<U | null> {
+	public async getByDid(did: Optional<Snowflake>): Promise<U | null> {
 		if (!did) {
 			return null;
 		}
@@ -68,7 +78,19 @@ export default abstract class DidRepository<T extends DidCore, U extends HasDidC
 	}
 
 	/** Gets the entity using .readUncachedCores() to get the id, caching the value before returning it. */
-	private async readFromUncached(did: Discord.Snowflake): Promise<U | null> {
+	private async readFromUncached(did: Snowflake): Promise<U | null> {
+		// Check for did.json
+		const didPath = `${IdRepository.DataPath}/${this.objectTypePlural}/did/${did}.json`;
+		if (existsSync(didPath)) {
+			const core = await readJsonFile<T>(didPath).catch(errorReturnNull);
+			if (core) {
+				this.cacheDid(did, core.id);
+				const entity = <U>await (<typeof IdRepository>this.constructor).fromCore(core, this.sageCache);
+				this.cacheId(core.id, entity);
+				return entity;
+			}
+		}
+
 		// Iterate the existing id.json files
 		const cores = await this.readUncachedCores(),
 			uncached = cores.find(core => core.did === did),
@@ -76,4 +98,25 @@ export default abstract class DidRepository<T extends DidCore, U extends HasDidC
 		return this.getById(id);
 	}
 
+	/** Writes the entity's core to uuid.json using (or creating if needed) the "Id". */
+	public async write(entity: U): Promise<boolean> {
+		if (!entity.did) {
+			entity.toJSON().did = SnowflakeUtil.generate();
+			verbose(`Missing ${(<typeof DidRepository>this.constructor).objectType}.did:`, entity.toJSON());
+		}
+
+		const saved = await super.write(entity);
+		if (saved) {
+			const idPath = `../${entity.id}.json`;
+			const didPath = `${IdRepository.DataPath}/${this.objectTypePlural}/did/${entity.did}.json`;
+			const linked = symLinkSync(idPath, didPath, { mkdir:true, overwrite:true });
+			if (linked) {
+				this.cacheDid(entity.did, entity.id);
+			}
+			return saved && linked;
+		}
+		return saved;
+	}
+
+	//#endregion
 }

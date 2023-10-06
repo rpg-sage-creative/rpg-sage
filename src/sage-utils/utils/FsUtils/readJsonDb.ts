@@ -1,0 +1,18 @@
+import { parseJsonDb } from "./internal/parseJsonDb";
+import { readText } from "./readText";
+
+/**
+ * Designed for reading a Foundry .db file that is a list of json items on each line, but not an array.
+ */
+export function readJsonDb<T>(path: string): Promise<T[]> {
+	return new Promise((resolve, reject) => {
+		readText(path).then(raw => {
+			const objects = raw ? parseJsonDb<T>(raw) : [];
+			if (objects.length) {
+				resolve(objects);
+			}else {
+				reject(`Unable to read "${path}"`);
+			}
+		}, reject);
+	});
+}

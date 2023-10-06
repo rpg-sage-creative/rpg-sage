@@ -1,7 +1,8 @@
-import type * as Discord from "discord.js";
+import { Snowflake } from "discord.js";
 import type { GameType } from "../../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
 import utils, { Optional, OrNull, UUID } from "../../../../sage-utils";
+import { EphemeralMap } from "../../../../sage-utils/utils/ArrayUtils/EphemeralMap";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
 import { verbose } from "../../../../sage-utils/utils/ConsoleUtils";
 import type { DicePostType } from "../../commands/dice";
@@ -33,13 +34,13 @@ export interface IChannelOptions {
 	defaultGameType?: GameType;
 
 	// Future Use
-	sendCommandTo?: Discord.Snowflake;
-	sendDialogTo?: Discord.Snowflake;
-	sendDiceTo?: Discord.Snowflake;
-	sendSearchTo?: Discord.Snowflake;
+	sendCommandTo?: Snowflake;
+	sendDialogTo?: Snowflake;
+	sendDiceTo?: Snowflake;
+	sendSearchTo?: Snowflake;
 }
 export interface IChannel extends IChannelOptions {
-	did: Discord.Snowflake;
+	did: Snowflake;
 }
 
 type IChannelKey = keyof IChannel;
@@ -63,7 +64,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 
 	//#region Cache
 
-	private idToEntityMap = new Map<UUID, U>();
+	private idToEntityMap = new EphemeralMap<UUID, U>(15000);
 
 	/** Caches the given id/entity pair. */
 	protected cacheId(id: UUID, entity: U): void {
@@ -75,6 +76,10 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 	/** Returns the cached values. */
 	protected get cached(): U[] {
 		return Array.from(this.idToEntityMap.values());
+	}
+
+	public clear(): void {
+		this.idToEntityMap.clear();
 	}
 
 	//#endregion
@@ -179,10 +184,11 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 	public async write(entity: U): Promise<boolean> {
 		if (!entity.id) {
 			entity.toJSON().id = utils.UuidUtils.generate();
-			verbose(`Creating new ${(<typeof IdRepository>this.constructor).objectType}: `, entity.toJSON());
+			verbose(`Missing ${(<typeof IdRepository>this.constructor).objectType}.id:`, entity.toJSON());
 		}
-		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${entity.id}.json`,
-			saved = await utils.FsUtils.writeFile(path, entity.toJSON()).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
+
+		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${entity.id}.json`;
+		const saved = await utils.FsUtils.writeFile(path, entity.toJSON(), true).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
 		if (saved) {
 			this.cacheId(entity.id, entity);
 		}

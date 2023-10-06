@@ -18,4 +18,5 @@ export * as RenderUtils from "./RenderUtils";
 export * as SearchUtils from "./SearchUtils";
 export * as StringUtils from "./StringUtils";
 export * as TempUtils from "./TempUtils";
+export * as TypeUtils from "./TypeUtils";
 export * as UuidUtils from "./UuidUtils";

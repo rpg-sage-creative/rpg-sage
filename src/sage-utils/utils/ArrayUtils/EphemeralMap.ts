@@ -1,10 +1,10 @@
-// set.entries
-// set.forEach
 
-export class EphemeralSet<T> {
+type EphemeralValue<Value> = { ts:number; value:Value; };
+
+export class EphemeralMap<Key, Value> {
 	/** @todo a proper Iterator */
 
-	private map: Map<T, number>;
+	private map: Map<Key, EphemeralValue<Value>>;
 
 	public constructor(msToLive: number);
 	public constructor(private _msToLive: number) {
@@ -15,34 +15,38 @@ export class EphemeralSet<T> {
 		return this._msToLive;
 	}
 
-	/** adds a value to the data and then queues up the process */
-	public add(value: T): this {
-		this.map.set(value, Date.now());
+	/** sets a value to the data and then queues up the process */
+	public set(key: Key, value: Value): this {
+		this.map.set(key, { ts:Date.now(), value });
 		this.queue();
 		return this;
 	}
 
-	/** Empty the set */
+	/** Empty the map */
 	public clear(): void {
 		this.map.clear();
 		this.clearTimer();
 	}
 
-	public delete(value: T): boolean {
-		return this.map.delete(value);
+	public delete(key: Key): boolean {
+		return this.map.delete(key);
 	}
 
-	/** @todo a proper IterableIterator<[T, T]> */
-	public entries(): [T, T][] {
-		return Array.from(this.map.keys()).map(key => [key, key]);
+	/** @todo a proper IterableIterator<[Key, Value]> */
+	public entries(): [Key, Value][] {
+		return Array.from(this.map.entries()).map(([key, ephValue]) => [key, ephValue.value]);
 	}
 
-	public forEach(fn: (value: T, value2: T, set: EphemeralSet<T>) => unknown, thisArg?: any): void {
-		Array.from(this.map.keys()).forEach(key => fn.call(thisArg, key, key, this));
+	public forEach(fn: (value: Value, key: Key, map: EphemeralMap<Key, Value>) => unknown, thisArg?: any): void {
+		this.entries().forEach(([key, value]) => fn.call(thisArg, value, key, this));
 	}
 
-	public has(value: T): boolean {
-		return this.map.has(value);
+	public get(key: Key): Value | undefined {
+		return this.map.get(key)?.value;
+	}
+
+	public has(key: Key): boolean {
+		return this.map.has(key);
 	}
 
 	public keys() {
@@ -53,8 +57,9 @@ export class EphemeralSet<T> {
 		return this.map.size;
 	}
 
+	/** @todo a proper IterableIterator<[Value]> */
 	public values() {
-		return this.map.keys();
+		return Array.from(this.map.values()).map(ephValue => ephValue.value);
 	}
 
 	/** timeout reference */
@@ -97,7 +102,7 @@ export class EphemeralSet<T> {
 			}
 
 			// get timestamp for key
-			const ts = this.map.get(key) ?? 0;
+			const ts = this.map.get(key)?.ts ?? 0;
 
 			// remove old key
 			if (ts < cutOff) {

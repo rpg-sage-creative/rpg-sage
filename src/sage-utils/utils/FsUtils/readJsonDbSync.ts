@@ -1,0 +1,10 @@
+import { parseJsonDb } from "./internal/parseJsonDb";
+import { readTextSync } from "./readTextSync";
+
+/**
+ * Designed for reading a Foundry .db file that is a list of json items on each line, but not an array.
+ */
+export function readJsonDbSync<T>(path: string): T[] {
+	const raw = readTextSync(path);
+	return raw ? parseJsonDb(raw) : [];
+}
