@@ -1,4 +1,3 @@
-export * from "./destroy";
 export * from "./HasCache";
 export * from "./HasCore";
 export * from "./HasIdCore";

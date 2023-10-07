@@ -1,4 +1,4 @@
-import { destroy } from "../../ClassUtils";
+import { destroy } from "../../TypeUtils";
 import type { GameMapData, MapRenderResponse, MimeType } from "../types";
 import { createMapCache } from "./createMapCache.js";
 import { createMapRenderResponse } from "./createMapRenderResponse.js";

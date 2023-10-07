@@ -1,6 +1,5 @@
 import type * as Discord from "discord.js";
-import utils from "../../../sage-utils";
-import { destroy } from "../../../sage-utils/utils/ClassUtils";
+import utils, { destroy } from "../../../sage-utils";
 import { debug, silly } from "../../../sage-utils/utils/ConsoleUtils";
 import { errorReturnFalse } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { DInteraction, DMessage, DReaction, DUser, DiscordCache, DiscordKey, NilSnowflake, TChannel } from "../../discord";
