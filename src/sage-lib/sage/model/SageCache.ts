@@ -1,5 +1,6 @@
 import type * as Discord from "discord.js";
 import utils from "../../../sage-utils";
+import { destroy } from "../../../sage-utils/utils/ClassUtils";
 import { debug, silly } from "../../../sage-utils/utils/ConsoleUtils";
 import { errorReturnFalse } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { DInteraction, DMessage, DReaction, DUser, DiscordCache, DiscordKey, NilSnowflake, TChannel } from "../../discord";
@@ -75,11 +76,7 @@ export default class SageCache {
 		this.hasTupperMap.clear();
 		this.canReactToMap.clear();
 		this.canWebhookToMap.clear();
-		this.discord.clear();
-		this.bots.clear();
-		this.servers.clear();
-		this.games.clear();
-		this.users.clear();
+		this.core = destroy(this.core)!;
 	}
 
 	private canSendMessageToMap = new Map<string, boolean>();

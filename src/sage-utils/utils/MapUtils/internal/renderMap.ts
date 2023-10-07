@@ -1,7 +1,7 @@
+import { destroy } from "../../ClassUtils";
 import type { GameMapData, MapRenderResponse, MimeType } from "../types";
 import { createMapCache } from "./createMapCache.js";
 import { createMapRenderResponse } from "./createMapRenderResponse.js";
-import { destroyMapCache } from "./destroyMapCache.js";
 import { drawMapLayer } from "./drawMapLayer.js";
 import { renderBackground } from "./renderBackground.js";
 import type { MapCache } from "./types";
@@ -30,8 +30,7 @@ export async function renderMap(map: GameMapData, mimeType: MimeType): Promise<M
 	const response = createMapRenderResponse(mapCache!, buffer);
 
 	// help free some memory
-	destroyMapCache(mapCache);
-	mapCache = null;
+	mapCache = destroy(mapCache);
 	buffer = null;
 
 	// return the response
