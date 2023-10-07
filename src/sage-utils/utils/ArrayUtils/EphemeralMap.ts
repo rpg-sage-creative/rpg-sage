@@ -1,14 +1,21 @@
+import { wrapIterableIterator } from "./internal/wrapIterableIterator";
 
 type EphemeralValue<Value> = { ts:number; value:Value; };
 
-export class EphemeralMap<Key, Value> {
-	/** @todo a proper Iterator */
-
+export class EphemeralMap<Key, Value> implements Map<Key, Value> {
 	private map: Map<Key, EphemeralValue<Value>>;
 
 	public constructor(msToLive: number);
 	public constructor(private _msToLive: number) {
 		this.map = new Map();
+	}
+
+	[Symbol.iterator](): IterableIterator<[Key, Value]> {
+		return this.entries();
+	}
+
+	get [Symbol.toStringTag](): string {
+		return "EphemeralMap";
 	}
 
 	public get msToLive(): number {
@@ -32,13 +39,17 @@ export class EphemeralMap<Key, Value> {
 		return this.map.delete(key);
 	}
 
-	/** @todo a proper IterableIterator<[Key, Value]> */
-	public entries(): [Key, Value][] {
-		return Array.from(this.map.entries()).map(([key, ephValue]) => [key, ephValue.value]);
+	/** iterate the entries as [key, value] */
+	public entries(): IterableIterator<[Key, Value]> {
+		return wrapIterableIterator(this.map.keys(), key => {
+			return { value:[key, this.get(key)!], skip:!this.has(key) };
+		});
 	}
 
 	public forEach(fn: (value: Value, key: Key, map: EphemeralMap<Key, Value>) => unknown, thisArg?: any): void {
-		this.entries().forEach(([key, value]) => fn.call(thisArg, value, key, this));
+		for (const entry of this.entries()) {
+			fn.call(thisArg, entry[1], entry[0], this);
+		}
 	}
 
 	public get(key: Key): Value | undefined {
@@ -49,17 +60,20 @@ export class EphemeralMap<Key, Value> {
 		return this.map.has(key);
 	}
 
-	public keys() {
-		return this.map.keys();
+	public keys(): IterableIterator<Key> {
+		return wrapIterableIterator(this.map.keys(), key => {
+			return { value:key, skip:!this.has(key) };
+		});
 	}
 
 	public get size(): number {
 		return this.map.size;
 	}
 
-	/** @todo a proper IterableIterator<[Value]> */
-	public values() {
-		return Array.from(this.map.values()).map(ephValue => ephValue.value);
+	public values(): IterableIterator<Value> {
+		return wrapIterableIterator(this.map.keys(), key => {
+			return { value:this.get(key)!, skip:!this.has(key) };
+		});
 	}
 
 	/** timeout reference */

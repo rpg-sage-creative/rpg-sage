@@ -1,14 +1,19 @@
-// set.entries
-// set.forEach
+import { wrapIterableIterator } from "./internal/wrapIterableIterator";
 
-export class EphemeralSet<T> {
-	/** @todo a proper Iterator */
-
+export class EphemeralSet<T> implements Set<T> {
 	private map: Map<T, number>;
 
 	public constructor(msToLive: number);
 	public constructor(private _msToLive: number) {
 		this.map = new Map();
+	}
+
+	[Symbol.iterator](): IterableIterator<T> {
+		return this.values();
+	}
+
+	get [Symbol.toStringTag](): string {
+		return "EphemeralSet";
 	}
 
 	public get msToLive(): number {
@@ -28,33 +33,42 @@ export class EphemeralSet<T> {
 		this.clearTimer();
 	}
 
+	/** delete the value */
 	public delete(value: T): boolean {
 		return this.map.delete(value);
 	}
 
-	/** @todo a proper IterableIterator<[T, T]> */
-	public entries(): [T, T][] {
-		return Array.from(this.map.keys()).map(key => [key, key]);
+	/** iterate the entries as [value, value] */
+	public entries(): IterableIterator<[T, T]> {
+		return wrapIterableIterator(this.map.keys(), value => {
+			return { value:[value, value], skip:!this.has(value) };
+		});
 	}
 
 	public forEach(fn: (value: T, value2: T, set: EphemeralSet<T>) => unknown, thisArg?: any): void {
-		Array.from(this.map.keys()).forEach(key => fn.call(thisArg, key, key, this));
+		for (const entry of this.entries()) {
+			fn.call(thisArg, entry[1], entry[0], this);
+		}
 	}
 
 	public has(value: T): boolean {
 		return this.map.has(value);
 	}
 
-	public keys() {
-		return this.map.keys();
+	public keys(): IterableIterator<T> {
+		return wrapIterableIterator(this.map.keys(), value => {
+			return { value, skip:!this.has(value) };
+		});
 	}
 
 	public get size(): number {
 		return this.map.size;
 	}
 
-	public values() {
-		return this.map.keys();
+	public values(): IterableIterator<T> {
+		return wrapIterableIterator(this.map.keys(), value => {
+			return { value, skip:!this.has(value) };
+		});
 	}
 
 	/** timeout reference */
