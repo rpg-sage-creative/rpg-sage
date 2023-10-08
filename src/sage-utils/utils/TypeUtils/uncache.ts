@@ -6,7 +6,7 @@ type UncacheOptions = {
 };
 
 function attempt(object: any, fnName: "clear" | "destroy"): void {
-	if (typeof(object[fnName]) === "function") {
+	if (typeof(object?.[fnName]) === "function") {
 		object[fnName]();
 	}
 }
