@@ -86,6 +86,13 @@ function applyEdgeSnagSpecShift<T extends DicePartCore>({ core, hasEdge, hasSnag
 	return core;
 }
 
+function tallyShifts(text: string, shift: "up" | "down"): number {
+	const regex = shift === "up" ? /(↑|up)\d+/gi : /(↓|dn)\d+/gi;
+	const matches = text.match(regex) ?? [];
+	const values = matches.map(match => +match.replace(/↑|up|↓|dn/ig, ""));
+	return values.reduce((out, value) => out + value, 0);
+}
+
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[]): T {
 	if (token.type === "suffix") {
 		const prevToken = tokens[index - 1];
@@ -95,8 +102,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 				hasEdge: token.token.match(/e/i) !== null,
 				hasSnag: token.token.match(/s/i) !== null,
 				hasSpecialization: token.token.includes("*"),
-				upShift: +(token.token.match(/(?:↑|up)(\d+)/i)?.[1] ?? 0),
-				downShift: +(token.token.match(/(?:↓|dn)(\d+)/i)?.[1] ?? 0)
+				upShift: tallyShifts(token.token, "up"),
+				downShift: tallyShifts(token.token, "down")
 			});
 		}
 	}
