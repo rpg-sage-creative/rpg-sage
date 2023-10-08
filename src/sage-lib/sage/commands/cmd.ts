@@ -56,10 +56,10 @@ export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler):
 export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler, type: MessageType): void;
 export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler, type = MessageType.Post): void {
 	const _tester = async function (sageMessage: SageMessage): Promise<TCommandAndArgs | null> {
-		if (!sageMessage.hasPrefix || !sageMessage.slicedContent.match(/^\![^!]/)) {
+		if (!sageMessage.hasPrefix || !sageMessage.slicedContent.match(/^\!\!?/)) {
 			return null;
 		}
-		const match = sageMessage.slicedContent.slice(1).match(matcher);
+		const match = sageMessage.slicedContent.replace(/^\!\!?/, "").trim().match(matcher);
 		if (match) {
 			//TODO: move to using groups: match.groups
 			return {
@@ -85,6 +85,7 @@ export function createAdminRenderableContent(hasColors: IHasColorsCore, title?: 
 	renderableContent.setColor(hasColors.toDiscordColor(ColorType.AdminCommand));
 	return renderableContent;
 }
+
 type TSageMessageHandler = (sageMessage: SageMessage) => Awaitable<void>;
 type TCommandHandler = { key: string; regex: RegExp; handler: TSageMessageHandler; };
 const handlers: TCommandHandler[] = [];
@@ -115,11 +116,11 @@ function findKeyMatchAndReturnCommandAndArgs(slicedContent: string): TCommandAnd
 	return null;
 }
 function adminCommandTest(sageMessage: SageMessage): OrNull<TCommandAndArgs> {
-	if (!sageMessage.hasPrefix || !sageMessage.slicedContent.startsWith("!!") || sageMessage.slicedContent.match(/^\!\!\s*help/i)) {
+	if (!sageMessage.hasPrefix || !sageMessage.slicedContent.match(/^\!\!?/) || sageMessage.slicedContent.match(/^\!\!?\s*help/i)) {
 		return null;
 	}
 
-	const slicedContent = sageMessage.slicedContent.slice(2).trim(),
+	const slicedContent = sageMessage.slicedContent.replace(/^\!\!?/, "").trim(),
 		adminCommandAndArgs = findKeyMatchAndReturnCommandAndArgs(slicedContent);
 	if (adminCommandAndArgs) {
 		return adminCommandAndArgs;
@@ -130,7 +131,10 @@ function adminCommandTest(sageMessage: SageMessage): OrNull<TCommandAndArgs> {
 	return null;
 }
 async function adminCommandHandler(sageMessage: SageMessage): Promise<void> {
-	handlers.find(handler => handler.key === sageMessage.command)?.handler(sageMessage);
+	const adminCommand = handlers.find(handler => handler.key === sageMessage.command);
+	if (adminCommand) {
+		await adminCommand.handler(sageMessage);
+	}
 }
 
 // #endregion

@@ -4,7 +4,7 @@ import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { Optional } from "../../../sage-utils";
 import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
-import { debug, verbose, warn } from "../../../sage-utils/utils/ConsoleUtils";
+import { debug, warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { DMessage, DiscordKey, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
 import { send } from "../../discord/messages";
@@ -136,7 +136,7 @@ export default class SageMessage
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
 	public get channel(): IChannel | undefined {
 		return this.cache.get("channel", () => {
-			verbose(`caching .channel ${this.message.id}`);
+			debug(`caching .channel ${this.message.id}`);
 			return this.gameChannel ?? this.serverChannel
 		});
 	}
