@@ -4,6 +4,7 @@ import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "
 import { NEWLINE } from "../../../sage-pf2e";
 import type { Optional, TKeyValueArg } from "../../../sage-utils";
 import { debug, error } from "../../../sage-utils/utils/ConsoleUtils";
+import { createMessageLink } from "../../../sage-utils/utils/DiscordUtils/createMessageLink";
 import { toHumanReadable } from "../../../sage-utils/utils/DiscordUtils/humanReadable";
 import { addCommas } from "../../../sage-utils/utils/NumberUtils";
 import { random, randomItem } from "../../../sage-utils/utils/RandomUtils";
@@ -180,6 +181,7 @@ async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: T
 		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
 		publicMentionLine = await createMentionLine(sageMessage),
 		secretMentionLine = await createMentionLine(sageMessage, true),
+		secretReferenceLink = sageMessage instanceof SageMessage ? createMessageLink(sageMessage.message) : ``,
 		sageCache = sageMessage.caches;
 
 	let doGmMention = hasSecret && !!gmTargetChannel;
@@ -197,7 +199,7 @@ async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: T
 
 			if (!allSecret) {
 				// prepend the mention if we haven't done so yet; stop use from doing it again; send the message
-				const notificationContent = doMention ? `${publicMentionLine}\n${formattedOutput.notificationContent}` : formattedOutput.notificationContent;
+				const notificationContent = doMention ? `${publicMentionLine} ${secretReferenceLink}\n${formattedOutput.notificationContent}` : formattedOutput.notificationContent;
 				doMention = false;
 				await sendTo({ target: targetChannel, content: notificationContent.trim(), sageCache });
 			}
@@ -217,7 +219,8 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0,
 		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
 		publicMentionLine = await createMentionLine(sageMessage),
-		secretMentionLine = await createMentionLine(sageMessage, true);
+		secretMentionLine = await createMentionLine(sageMessage, true),
+		secretReferenceLink = sageMessage instanceof SageMessage ? createMessageLink(sageMessage.message) : ``;
 
 	const gmPostContents: Optional<string>[] = [];
 	const gmEmbedContents: Optional<string>[] = [];
@@ -225,7 +228,7 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 	const mainEmbedContents: Optional<string>[] = [];
 
 	if (hasSecret && gmTargetChannel) {
-		gmPostContents.push(secretMentionLine);
+		gmPostContents.push(`${secretMentionLine} ${secretReferenceLink}`);
 	}
 	if (!allSecret) {
 		mainPostContents.push(publicMentionLine);

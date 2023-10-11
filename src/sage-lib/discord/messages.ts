@@ -8,6 +8,7 @@ import DiscordKey from "./DiscordKey";
 import { deleteMessage, deleteMessages } from "./deletedMessages";
 import { createMessageEmbed, embedsToTexts, resolveToEmbeds, resolveToTexts } from "./embeds";
 import type { DMessage, DUser, IMenuRenderable, TChannel, TRenderableContentResolvable } from "./types";
+import { createMessageLink } from "../../sage-utils/utils/DiscordUtils/createMessageLink";
 
 //#region helpers
 
@@ -80,44 +81,64 @@ async function sendWebhookAndReturnMessages(webhook: Discord.Webhook, options: D
 	return messages;
 }
 
-export async function sendWebhook(caches: SageCache, targetChannel: TChannel, renderableContent: TRenderableContentResolvable, authorOptions: Discord.WebhookMessageOptions, dialogType: DialogType): Promise<Discord.Message[]> {
+type WebhookOptions = {
+	authorOptions: Discord.WebhookMessageOptions;
+	renderableContent: TRenderableContentResolvable;
+	dialogType: DialogType;
+	files?: Discord.MessageAttachment[];
+	sageCache: SageCache;
+};
+
+export async function sendWebhook(targetChannel: TChannel, { authorOptions, renderableContent, dialogType, files, sageCache }: WebhookOptions): Promise<Discord.Message[]> {
 	if (targetChannel.type === "DM") {
-		const user = await caches.discord.fetchUser(caches.userDid);
+		const user = await sageCache.discord.fetchUser(sageCache.userDid);
 		if (user) {
-			return send(caches, targetChannel, renderableContent, user);
+			return send(sageCache, targetChannel, renderableContent, user);
 		}
 		return [];
 	}
-	const webhook = await caches.discord.fetchOrCreateWebhook(targetChannel.guild, targetChannel, SageDialogWebhookName);
+	const webhook = await sageCache.discord.fetchOrCreateWebhook(targetChannel.guild, targetChannel, SageDialogWebhookName);
 	if (!webhook) {
 		return Promise.reject(`Cannot Find Webhook: ${targetChannel.guild?.id}-${targetChannel.id}-${SageDialogWebhookName}`);
 	}
 	const threadId = targetChannel.isThread() ? targetChannel.id : undefined;
-	const content = dialogType === DialogType.Post ? resolveToTexts(caches.cloneForChannel(targetChannel), renderableContent).join("\n") : undefined;
-	const embeds = dialogType === DialogType.Embed ? resolveToEmbeds(caches.cloneForChannel(targetChannel), renderableContent) : [];
-	const messages = await sendWebhookAndReturnMessages(webhook, { content, embeds, threadId, ...authorOptions });
-	// caches.meta.push({ messagesSent:messages.slice() });
+	const content = dialogType === DialogType.Post ? resolveToTexts(sageCache.cloneForChannel(targetChannel), renderableContent).join("\n") : undefined;
+	const embeds = dialogType === DialogType.Embed ? resolveToEmbeds(sageCache.cloneForChannel(targetChannel), renderableContent) : [];
+	const messages = await sendWebhookAndReturnMessages(webhook, { content, embeds, files, threadId, ...authorOptions });
 	return messages;
 }
 
-export async function replaceWebhook(caches: SageCache, originalMessage: DMessage, renderableContent: TRenderableContentResolvable, authorOptions: Discord.WebhookMessageOptions, dialogType: DialogType): Promise<Discord.Message[]> {
+export async function replaceWebhook(originalMessage: DMessage, { authorOptions, renderableContent, dialogType, files, sageCache }: WebhookOptions): Promise<Discord.Message[]> {
 	if (!originalMessage.deletable) {
 		return Promise.reject(`Cannot Delete Message: ${messageToDetails(originalMessage)}`);
 	}
 	if (!originalMessage.guild) {
 		return Promise.reject(`Cannot Find Webhook w/o a Guild: ${originalMessage.channel?.id}`);
 	}
-	const webhook = await caches.discord.fetchOrCreateWebhook(originalMessage.guild, originalMessage.channel as TChannel, SageDialogWebhookName);
+	const webhook = await sageCache.discord.fetchOrCreateWebhook(originalMessage.guild, originalMessage.channel as TChannel, SageDialogWebhookName);
 	if (!webhook) {
 		return Promise.reject(`Cannot Find Webhook: ${originalMessage.guild?.id}-${originalMessage.channel?.id}-${SageDialogWebhookName}`);
 	}
-	await caches.pauseForTupper(DiscordKey.fromMessage(originalMessage));
+
+	await sageCache.pauseForTupper(DiscordKey.fromMessage(originalMessage));
 	await deleteMessage(originalMessage);
+
+	const replyingTo = originalMessage.reference
+		? `*replying to* ${createMessageLink(originalMessage.reference)}`
+		: undefined;
+	const postContent = dialogType === DialogType.Post
+		? resolveToTexts(sageCache.cloneForChannel(originalMessage.channel as TChannel), renderableContent).join("\n")
+		: undefined;
+	const content = replyingTo && postContent
+		? `${replyingTo}\n${postContent}`
+		: replyingTo ?? postContent;
+
+	const embeds = dialogType === DialogType.Embed
+		? resolveToEmbeds(sageCache.cloneForChannel(originalMessage.channel as TChannel), renderableContent)
+		: [];
+
 	const threadId = originalMessage.channel.isThread() ? originalMessage.channel.id : undefined;
-	const content = dialogType === DialogType.Post ? resolveToTexts(caches.cloneForChannel(originalMessage.channel as TChannel), renderableContent).join("\n") : undefined;
-	const embeds = dialogType === DialogType.Embed ? resolveToEmbeds(caches.cloneForChannel(originalMessage.channel as TChannel), renderableContent) : [];
-	const messages = await sendWebhookAndReturnMessages(webhook, { content, embeds, threadId, ...authorOptions });
-	// caches.meta.push({ messagesDeleted:[deleted], messagesSent:messages.slice() });
+	const messages = await sendWebhookAndReturnMessages(webhook, { content, embeds, files, threadId, ...authorOptions });
 	return messages;
 }
 
