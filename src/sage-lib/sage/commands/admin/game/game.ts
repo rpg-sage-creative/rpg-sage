@@ -562,11 +562,11 @@ export default function register(): void {
 	// registerAdminCommandHelp("Admin", "Game", "game create {Game Name} {#OptionalChannelReferences}");
 	// registerAdminCommandHelp("Admin", "Game", "game create {Game Name} {@GameMasterReference} {@OptionalPlayerReferences}");
 	registerAdminCommandHelp("Admin", "Game", `game create name="{Game Name}"`);
-	registerAdminCommandHelp("Admin", "Game", `game create name="{Game Name}" game={DND5E|E20|PF2E|Quest|NONE}`);
+	registerAdminCommandHelp("Admin", "Game", `game create name="{Game Name}" game={DND5E|E20|PF2E|Quest|VtM5e|NONE}`);
 
 	registerAdminCommand(gameUpdate, "game-update", "game-set");
 	registerAdminCommandHelp("Admin", "Game", `game update name="{New Name}"`);
-	registerAdminCommandHelp("Admin", "Game", "game update game={DND5E|E20|PF2E|Quest|NONE}");
+	registerAdminCommandHelp("Admin", "Game", "game update game={DND5E|E20|PF2E|Quest|VtM5e|NONE}");
 	registerAdminCommandHelp("Admin", "Game", "game update diceoutput={XXS|XS|S|M|L|XL|XXL|ROLLEM|UNSET}");
 
 	registerAdminCommand(gameToggleDicePing, "game-toggle-dice-ping");

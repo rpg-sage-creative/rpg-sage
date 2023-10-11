@@ -1,6 +1,6 @@
 //#region GameType
 
-export type TGameType = "NONE" | "PF" | "PF1" | "PF1E" | "PF2" | "PF2E" | "SF" | "SF1" | "SF1E" | "CNC" | "DND5E" | "5E";
+export type TGameType = "NONE" | "PF" | "PF1" | "PF1E" | "PF2" | "PF2E" | "SF" | "SF1" | "SF1E" | "SF2" | "SF2E" | "CNC" | "DND5E" | "5E" | "VTM5" | "VTM5E";
 
 export enum GameType {
 	None = 0,
@@ -10,6 +10,8 @@ export enum GameType {
 	PF2e = 12,
 	/** Starfinder */
 	SF1e = 21,
+	/** Starfinder */
+	SF2e = 22,
 	/** Coyote & Crow */
 	CnC = 31,
 	/** Dungeons and Dragons 5e */
@@ -17,7 +19,9 @@ export enum GameType {
 	/** Essence 20 */
 	E20 = 41,
 	/** Quest */
-	Quest = 71
+	Quest = 71,
+	/** Vampire the Masquerade 5 */
+	VtM5e = 85
 }
 
 const GameTypeMap = {
@@ -25,10 +29,12 @@ const GameTypeMap = {
 	"PF":GameType.PF1e, "PF1":GameType.PF1e, "PF1E":GameType.PF1e,
 	"PF2":GameType.PF2e, "PF2E":GameType.PF2e,
 	"SF":GameType.SF1e, "SF1":GameType.SF1e, "SF1E":GameType.SF1e,
+	"SF2":GameType.SF2e, "SF2E":GameType.SF2e,
 	"CNC":GameType.CnC,
 	"5E":GameType.DnD5e, "DND5E":GameType.DnD5e,
 	"E20":GameType.E20, "ESS20":GameType.E20, "ESSENCE20":GameType.E20,
-	"QUEST":GameType.Quest
+	"QUEST":GameType.Quest,
+	"VTM5":GameType.VtM5e, "VTM5E":GameType.VtM5e
 };
 
 export function parseGameType(gameType: string, defaultGameType?: GameType): GameType | undefined {

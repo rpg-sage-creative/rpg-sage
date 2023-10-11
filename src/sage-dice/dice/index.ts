@@ -2,9 +2,13 @@ import { createDiscordEmojiRegex } from "../../sage-utils/utils/StringUtils";
 import { tokenize } from "../../sage-utils/utils/StringUtils/Tokenizer";
 
 export * as base from "./base";
+export * as cnc from "./cnc";
 export * as discord from "./discord";
+export * as dnd5e from "./dnd5e";
+export * as essence20 from "./essence20";
 export * as pf2e from "./pf2e";
 export * as quest from "./quest";
+export * as vtm5e from "./vtm5e";
 
 /** Looks for text escaped with ` characters that contain emoji (:die: or <:die:12345>) and unescapes those emoji so they render correctly. */
 export function correctEscapeForEmoji(value: string): string {

@@ -31,9 +31,9 @@ export type TParsers = {
 };
 
 /** A token returned from Tokenizer.tokenize() */
-export type TToken = {
+export type TToken<Type extends string = string> = {
 	token: string;
-	type: string;
+	type: Type;
 	matches: string[]
 };
 
