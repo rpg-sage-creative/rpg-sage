@@ -53,6 +53,7 @@ export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore,
 	public get token(): string { return this.core.token; }
 	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
 	public get macros(): NamedCollection<TMacro> { return this.core.macros as NamedCollection<TMacro>; }
+	public get name(): string { const code = this.codeName === "stable" ? `` : ` (${this.codeName})`; return `RPG Sage${code}`; }
 
 	/** returns true if we can search the given game */
 	public canSearch(gameType: GameType): boolean { return this.core.searchStatus?.[gameType] === true; }
