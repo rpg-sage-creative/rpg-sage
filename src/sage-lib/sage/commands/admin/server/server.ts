@@ -69,14 +69,15 @@ async function serverInit(sageMessage: SageMessage): Promise<void> {
 }
 
 function serverDetailsDefaultTypes(renderableContent: utils.RenderUtils.RenderableContent, server: Server): void {
-	renderableContent.append(`<b>Default Dialog Type</b> ${DialogType[server.defaultDialogType!] ?? "<i>unset (Embed)</i>"}`);
-	renderableContent.append(`<b>Default Game Type</b> ${GameType[server.defaultGameType!] ?? "<i>unset (None)</i>"}`);
+	renderableContent.append(`<b>Defaults</b>`);
+	renderableContent.append(`> <b>Dialog Type</b> ${DialogType[server.defaultDialogType!] ?? "<i>unset (Embed)</i>"}`);
+	renderableContent.append(`> <b>Game Type</b> ${GameType[server.defaultGameType!] ?? "<i>unset (None)</i>"}`);
 	if (server.defaultGameType === GameType.PF2e) {
-		renderableContent.append(`<b>Default Crit Method Type</b> ${CritMethodType[server.defaultCritMethodType!] ?? "<i>unset (x2)</i>"}`);
+		renderableContent.append(`> <b>Crit Method Type</b> ${CritMethodType[server.defaultCritMethodType!] ?? "<i>unset (x2)</i>"}`);
 	}
-	renderableContent.append(`<b>Default Dice Output Type</b> ${DiceOutputType[server.defaultDiceOutputType!] ?? "<i>unset (M)</i>"}`);
-	renderableContent.append(`<b>Default Dice Post Type</b> ${DicePostType[server.defaultDicePostType!] ?? "<i>unset (Post)</i>"}`);
-	renderableContent.append(`<b>Default Dice Secret Method Type</b> ${DiceSecretMethodType[server.defaultDiceSecretMethodType!] ?? "<i>unset (Ignore)</i>"}`);
+	renderableContent.append(`> <b>Dice Output Type</b> ${DiceOutputType[server.defaultDiceOutputType!] ?? "<i>unset (M)</i>"}`);
+	renderableContent.append(`> <b>Dice Post Type</b> ${DicePostType[server.defaultDicePostType!] ?? "<i>unset (Post)</i>"}`);
+	renderableContent.append(`> <b>Dice Secret Method Type</b> ${DiceSecretMethodType[server.defaultDiceSecretMethodType!] ?? "<i>unset (Ignore)</i>"}`);
 }
 type TRole = { role:IAdminRole, discordRole:Discord.Role };
 async function serverDetails(sageMessage: SageMessage): Promise<void> {
@@ -98,9 +99,8 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 		};
 	});
 
-	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>server-details</b>`);
+	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>Server Details</b>`);
 	if (server) {
-		renderableContent.append(server.id);
 		const guild = server.discord?.guild;
 		if (guild) {
 			renderableContent.setThumbnailUrl(guild.iconURL());
@@ -108,7 +108,8 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 			renderableContent.append(`<b>Server Id</b> ${guild.id}`);
 			renderableContent.append(`<b>Available</b> ${guild.available}`);
 			// renderableContent.append(`<b>Region</b> ${guild.region}`);
-			renderableContent.append(`<b>MemberCount</b> ${guild.memberCount}`);
+			renderableContent.append(`<b>Member Count</b> ${guild.memberCount}`);
+			renderableContent.append(`<b>Macro Count</b> ${server.macros.length}`);
 			serverDetailsDefaultTypes(renderableContent, server);
 			renderableContent.append(`<b>Sage Roles</b> ${!roles.length ? "<i>none set</i>" : roles.map(role => `@${role.discordRole.name} (${AdminRoleType[role.role.type]})`).join(", ")}`);
 		} else {
