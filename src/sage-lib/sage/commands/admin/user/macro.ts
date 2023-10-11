@@ -1,11 +1,13 @@
+import { Optional } from "../../../../../sage-utils";
+import { existsAndUnique } from "../../../../../sage-utils/utils/ArrayUtils/Filters";
+import { StringMatcher } from "../../../../../sage-utils/utils/StringUtils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import utils, { Optional } from "../../../../../sage-utils";
+import { IEmoji } from "../../../model/HasEmojiCore";
+import NamedCollection from "../../../model/NamedCollection";
 import type SageMessage from "../../../model/SageMessage";
+import { HasMacros, TMacro } from "../../../model/types";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
-import NamedCollection from "../../../model/NamedCollection";
-import { IEmoji } from "../../../model/HasEmojiCore";
-import { HasMacros, TMacro } from "../../../model/types";
 
 const UNCATEGORIZED = "Uncategorized";
 
@@ -34,36 +36,51 @@ function getHasMacros(sageMessage: SageMessage, category?: string): HasMacros {
 
 /** Gets the appropriate level of Macro for the prompts' titles. */
 function getMacroCategoryLabel(sageMessage: SageMessage, category?: string): string {
-	return isSageBotCategory(sageMessage, category) ? "Global"
-		: isSageServerCategory(sageMessage, category) ? "Server"
-		: isSageGameCategory(sageMessage, category) ? "Game"
-		: "User";
+	return isSageBotCategory(sageMessage, category) ? "Global "
+		: isSageServerCategory(sageMessage, category) ? "Server "
+		: isSageGameCategory(sageMessage, category) ? "Game "
+		: "User ";
 }
 
-function getMacros(sageMessage: SageMessage, category?: string): NamedCollection<TMacro> {
-	return getHasMacros(sageMessage, category).macros;
+function getMacroCategoryName(sageMessage: SageMessage, category?: string): string | undefined {
+	return isSageBotCategory(sageMessage, category) ? sageMessage.bot.name
+		: isSageServerCategory(sageMessage, category) ? sageMessage.caches.discord.guild?.name ?? (sageMessage.server.name || "Server")
+		: isSageGameCategory(sageMessage, category) ? sageMessage.game?.name ?? "Game"
+		: undefined;
+}
+
+type MacroMeta = {
+	macros: NamedCollection<TMacro>;
+	hasCat: boolean;
+	catMacros: TMacro[];
+	catLabel: string;
+	catName: string;
+}
+
+function getMacros(sageMessage: SageMessage, category?: string): MacroMeta {
+	const categoryMatcher = StringMatcher.from(category);
+	const hasCat = !categoryMatcher.isBlank;
+	const macros = getHasMacros(sageMessage, category).macros;
+	const catMacros = hasCat ? macros.filter(macro => macro.category && (macro.category === category || categoryMatcher.matches(macro.category))) : [];
+	const catLabel = hasCat ? getMacroCategoryLabel(sageMessage, category) : "";
+	const catName = hasCat ? getMacroCategoryName(sageMessage, category) ?? catMacros![0]?.name : "";
+	return {
+		macros: macros,
+		hasCat,
+		catMacros,
+		catLabel,
+		catName
+	};
 }
 
 function findMacro(sageMessage: SageMessage, name?: string, category?: string): TMacro | undefined {
-	const nameMatcher = utils.StringUtils.StringMatcher.from(name);
+	const nameMatcher = StringMatcher.from(name);
 	if (nameMatcher.isBlank) {
 		return undefined;
 	}
 
-	const macros = getMacros(sageMessage, category);
-
-	const categoryMatcher = utils.StringUtils.StringMatcher.from(category);
-	if (categoryMatcher.isBlank) {
-		return macros.find(macro => nameMatcher.matches(macro.name));
-	}
-
-	return macros.find(macro => nameMatcher.matches(macro.name) && macro.category && categoryMatcher.matches(macro.category));
-}
-
-async function noMacrosFound(sageMessage: SageMessage): Promise<void> {
-	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>macro-list</b>`);
-	renderableContent.append("<b>No Macros Found!</b>");
-	return <any>sageMessage.send(renderableContent);
+	const { macros, hasCat, catMacros } = getMacros(sageMessage, category);
+	return (hasCat ? catMacros : macros).find(macro => nameMatcher.matches(macro.name));
 }
 
 function toList(macros: TMacro[]): string {
@@ -77,39 +94,44 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const categoryInput = sageMessage.args.removeKeyValuePair(/cat(egory)?/i)?.value ?? sageMessage.args[0] ?? "";
-	const cleanCategory = utils.StringUtils.StringMatcher.clean(categoryInput);
+	const cleanCategory = StringMatcher.clean(categoryInput);
 
-	const macros = getMacros(sageMessage, cleanCategory);
-	if (!macros.length) {
-		return noMacrosFound(sageMessage);
+	const { macros, hasCat, catMacros, catLabel, catName } = getMacros(sageMessage, cleanCategory);
+
+	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>${catLabel}Macro List</b>`);
+
+	if (hasCat ? !catMacros.length : !macros.length) {
+		if (catName) {
+			renderableContent.appendTitledSection(catName, `<ul><li><b>No Macros Found!</b></li></ul>`);
+		}else {
+			renderableContent.append("<b>No Macros Found!</b>");
+		}
+		await sageMessage.send(renderableContent);
+		return;
 	}
 
-	const filtered = macros.filter(macro => macro.category && cleanCategory === utils.StringUtils.StringMatcher.clean(macro.category));
-	if (filtered.length) {
-		const cat = filtered[0].category!;
-		const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>macro-list (category: "${cat}")</b>`);
-		renderableContent.appendTitledSection(cat, toList(filtered));
-		renderableContent.appendTitledSection(`<b>To view a macro, use:</b>`, `${sageMessage.prefix ?? ""}!!macro details name="${filtered[0].name}"`);
-		return <any>sageMessage.send(renderableContent);
+	const firstMacro = (hasCat ? catMacros : macros)[0]!;
 
-	} else {
-		const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>macro-list</b>`);
-		const categories = macros.map(macro => macro.category).filter<string>(utils.ArrayUtils.Filters.existsAndUnique);
-		categories.unshift(UNCATEGORIZED);
-		categories.forEach(category => {
-			const byCategory = macros.filter(macro => (macro.category ?? UNCATEGORIZED) === category);
-			if (byCategory.length) {
-				renderableContent.appendTitledSection(category, toList(byCategory));
-			}
-		});
-		renderableContent.appendTitledSection(`<b>To view a macro, use:</b>`,
-			`${sageMessage.prefix ?? ""}!!macro details name="${macros.first()!.name}"`,
-			`${sageMessage.prefix ?? ""}!!macro list cat="${macros.first()!.name}"`
-			);
-		return <any>sageMessage.send(renderableContent);
-
+	if (hasCat) {
+		renderableContent.appendTitledSection(catName, toList(catMacros));
+		renderableContent.appendTitledSection(`<b>To view a macro, use:</b>`, `${sageMessage.prefix ?? ""}!!macro details name="${firstMacro.name}"`);
+		await sageMessage.send(renderableContent);
+		return;
 	}
 
+	const categories = macros.map(macro => macro.category).filter<string>(existsAndUnique);
+	categories.unshift(UNCATEGORIZED);
+	categories.forEach(category => {
+		const byCategory = macros.filter(macro => (macro.category ?? UNCATEGORIZED) === category);
+		if (byCategory.length) {
+			renderableContent.appendTitledSection(category, toList(byCategory));
+		}
+	});
+	renderableContent.appendTitledSection(`<b>To view a macro, use:</b>`,
+		`${sageMessage.prefix ?? ""}!!macro details name="${macros.first()!.name}"`,
+		`${sageMessage.prefix ?? ""}!!macro list cat="${macros.first()!.name}"`
+		);
+	await sageMessage.send(renderableContent);
 }
 
 function _macroToPrompt(macro: TMacro, usage: boolean, emoji: Optional<IEmoji>, globalMacro: Optional<TMacro>): string {
@@ -184,7 +206,7 @@ async function macroCreate(sageMessage: SageMessage, macro: TMacro): Promise<boo
 
 	const bool = await discordPromptYesNo(sageMessage, promptRenderable);
 	if (bool === true) {
-		const macros = getMacros(sageMessage, macro.category);
+		const { macros } = getMacros(sageMessage, macro.category);
 		return macros.pushAndSave(macro);
 	}
 	return false;
@@ -301,12 +323,12 @@ async function macroDetails(sageMessage: SageMessage): Promise<void> {
 }
 
 async function deleteCategory(sageMessage: SageMessage, category: string): Promise<void> {
-	const cleanCategory = utils.StringUtils.StringMatcher.clean(category);
+	const cleanCategory = StringMatcher.clean(category);
 	if (cleanCategory === "sage") {
 		return sageMessage.reactFailure("Cannot Delete Sage Macro Category");
 	}
 
-	const byCategory = sageMessage.sageUser.macros.filter(macro => cleanCategory === utils.StringUtils.StringMatcher.clean(macro.category ?? UNCATEGORIZED));
+	const byCategory = sageMessage.sageUser.macros.filter(macro => cleanCategory === StringMatcher.clean(macro.category ?? UNCATEGORIZED));
 	if (!byCategory.length) {
 		return <any>sageMessage.send(createAdminRenderableContent(sageMessage.getHasColors(), `Macro Category Not Found!`));
 	}
@@ -359,7 +381,7 @@ async function deleteMacro(sageMessage: SageMessage, macro: Optional<TMacro>): P
 	promptRenderable.append(macroPrompt);
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable);
 	if (yes === true) {
-		const macros = getMacros(sageMessage, macro.category);
+		const { macros } = getMacros(sageMessage, macro.category);
 		const saved = await macros.removeAndSave(macro);
 		return sageMessage.reactSuccessOrFailure(saved);
 	}
