@@ -10,10 +10,12 @@ const deleted = new EphemeralSet<Snowflake>(1000 * 60);
 
 /* We only really need to store deleted state for seconds due to races with Tupper. */
 
-export function setDeleted(messageId: Snowflake): void {
-	debug(`${Date.now()}: setDeleted("${messageId}")`);
-	deleted.add(messageId);
-	GameMapBase.delete(messageId);
+export function setDeleted(...messageIds: Snowflake[]): void {
+	debug(`${Date.now()}: setDeleted(${messageIds.map(id => `"${id}"`).join(", ")})`);
+	for (const messageId of messageIds) {
+		deleted.add(messageId);
+		GameMapBase.delete(messageId);
+	}
 }
 
 export function isDeleted(messageId: Snowflake): boolean {
@@ -41,7 +43,7 @@ async function _deleteMessage(message: Optional<DMessage>): Promise<MessageDelet
 	if (!message.deletable) return MessageDeleteResults.NotDeletable;
 	if (isDeleted(message.id)) return MessageDeleteResults.AlreadyDeleted;
 	const results = await message.delete().catch(errorReturnNull);
-	if (results?.deletable === false) MessageDeleteResults.Deleted;
+	if (results?.deletable === false) return MessageDeleteResults.Deleted;
 	return MessageDeleteResults.NotDeleted;
 }
 
