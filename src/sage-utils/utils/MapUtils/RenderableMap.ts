@@ -57,7 +57,13 @@ export abstract class RenderableMap implements GameMap {
 			if (response !== null) {
 				/** @todo do something about these bad images */
 				verbose(`${response.invalidImageUrls.length ?? 0} invalidImageUrls`);
+				if (response.invalidImageUrls.length) {
+					response.invalidImageUrls.forEach(url => verbose(`\tinvalidImageUrl: ${url}`));
+				}
 				verbose(`${response.invalidImages.length ?? 0} invalidImages`);
+				if (response.invalidImages.length) {
+					response.invalidImages.forEach(url => verbose(`\tinvalidImage: ${url}`));
+				}
 
 				return response.base64 ? Buffer.from(response.base64, "base64") : null;
 			}
