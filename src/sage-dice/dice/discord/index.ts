@@ -44,11 +44,15 @@ import {
 	DiceGroup as questDiceGroup,
 	DiceGroupRoll as questDiceGroupRoll
 } from "../quest";
+import {
+	DiceGroup as vtm5eDiceGroup,
+	DiceGroupRoll as vtm5eDiceGroupRoll
+} from "../vtm5e";
 
 //#endregion
 
 const DICE_REGEX = /\[[^\]]*d\d+[^\]]*\]/ig;
-const GAME_CHECK = /^(?:(cnc|dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest)\b)?/i;
+const GAME_CHECK = /^(?:(cnc|dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest|vtm5|vtm5e)\b)?/i;
 const DICE_OUTPUT_CHECK = /^(?:(xxs|xs|s|m|xxl|xl|l|rollem)\b)?/i;
 const COUNT_CHECK = /^(\d+)(map\-\d+)?\#/i;
 
@@ -59,6 +63,7 @@ function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {
 		case GameType.E20: return <typeof baseDiceGroup>e20DiceGroup;
 		case GameType.PF2e: return <typeof baseDiceGroup>pf2eDiceGroup;
 		case GameType.Quest: return <typeof baseDiceGroup>questDiceGroup;
+		case GameType.VtM5e: return <typeof baseDiceGroup>vtm5eDiceGroup;
 		default: return baseDiceGroup;
 	}
 }
@@ -75,6 +80,8 @@ function parseDice(diceString: string, gameType?: GameType, diceOutputType?: Dic
 			return pf2eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
 		case GameType.Quest:
 			return questDiceGroup.parse(diceString, diceOutputType);
+		case GameType.VtM5e:
+			return vtm5eDiceGroup.parse(diceString, diceOutputType);
 		default:
 			return baseDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType);
 	}
@@ -176,6 +183,8 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 						return pf2eDiceGroup.fromCore(core);
 					case GameType.Quest:
 						return questDiceGroup.fromCore(core);
+					case GameType.VtM5e:
+						return vtm5eDiceGroup.fromCore(core);
 					default:
 						return baseDiceGroup.fromCore(core);
 				}
@@ -338,6 +347,8 @@ export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 						return pf2eDiceGroupRoll.fromCore(core);
 					case GameType.Quest:
 						return questDiceGroupRoll.fromCore(core);
+					case GameType.VtM5e:
+						return vtm5eDiceGroupRoll.fromCore(core);
 					default:
 						return baseDiceGroupRoll.fromCore(core);
 				}
