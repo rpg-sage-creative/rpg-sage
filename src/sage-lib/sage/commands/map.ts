@@ -9,7 +9,6 @@ import { DiscordId, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { deleteMessage, deleteMessages } from "../../discord/deletedMessages";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import { discordPromptYesNoDeletable } from "../../discord/prompts";
-import ActiveBot from "../model/ActiveBot";
 import SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
 import { registerCommandRegex } from "./cmd";
@@ -348,16 +347,19 @@ function getValidUrl(attachment: Discord.MessageAttachment): string | null {
 }
 
 async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TParsedGameMapCore> | null> {
+	// not doing maps in DMs
+	if (!sageMessage.caches.discord.guild) return null;
+
 	const attachments = sageMessage.message.attachments;
 	if (!attachments.size) {
 		return null;
 	}
-	const client = ActiveBot.active.client;
+
 	for (const [_id, attachment] of attachments) {
 		const validUrl = getValidUrl(attachment);
 		if (validUrl) {
 			const raw = await getText(validUrl);
-			const parsedCore = gameMapImporter(raw, client);
+			const parsedCore = await gameMapImporter(raw, sageMessage.caches.discord.guild);
 			if (parsedCore) {
 				return {
 					data: parsedCore
@@ -368,16 +370,18 @@ async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArg
 	return null;
 }
 
-async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore): Promise<void> {
+async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore | TParsedGameMapCore): Promise<void> {
+	const invalidUsers = (mapCore as TParsedGameMapCore).invalidUsers ?? [];
+	const invalidUserText = invalidUsers.length ? `\n### Warning\nThe following users could not be found:\n> ${invalidUsers.join("\n> ")}` : ``;
 	const channel = sageMessage.message.channel;
-	const [boolImport, msgImport] = await discordPromptYesNoDeletable(sageMessage, `Try to import map: ${mapCore.name}?`);
+	const [boolImport, msgImport] = await discordPromptYesNoDeletable(sageMessage, `Try to import map: ${mapCore.name}?${invalidUserText}`);
 	if (boolImport) {
 		const pwConfiguring = await channel.send(`Importing and configuring: ${mapCore.name} ...`);
 		deleteMessage(msgImport);
 		if (!mapCore.userId) {
 			mapCore.userId = sageMessage.sageUser.did;
 		}
-		const success = await renderMap(channel as TChannel, new GameMap(mapCore, mapCore.userId));
+		const success = await renderMap(channel as TChannel, new GameMap(mapCore as TGameMapCore, mapCore.userId));
 		if (!success) {
 			await channel.send(`Sorry, something went wrong importing the map.`);
 		}
