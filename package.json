@@ -40,6 +40,12 @@
     "start": "bash scripts/run-dev.sh",
     "daemon": "bash scripts/daemon.sh",
     "deploy": "bash scripts/deploy.sh",
-    "mono": "cd dist; node --experimental-modules --es-module-specifier-resolution=node mono.mjs dev"
+
+    "premono-scrub": "pm2 delete all || true",
+		"mono-scrub": "bash scripts/scrub.sh 'logs'",
+		"premono-pm2": "npm run mono-scrub",
+		"mono-pm2": "pm2 start mono.config.cjs --env dev",
+		"premono": "npm run mono-scrub",
+		"mono": "cd dist; node --experimental-modules --es-module-specifier-resolution=node mono.mjs dev botCodeName=dev dataRoot=/Users/randaltmeyer/git/rpg-sage/data/v2 dataRootFoundry=/Users/randaltmeyer/git/rpg-sage/data/foundry superUserId=253330271678627841 homeServerId=963531189254238278"
   }
 }

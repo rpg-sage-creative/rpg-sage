@@ -4,6 +4,7 @@ types/
 **/.DS_Store
 all-lores.csv
 localstack/
+logs/
 
 # ignore scripts (to ignore the root level links)
 *.sh
