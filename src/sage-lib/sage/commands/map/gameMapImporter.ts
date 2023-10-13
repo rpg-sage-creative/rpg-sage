@@ -81,8 +81,8 @@ async function parseUser(guild: Discord.Guild, userValue?: string): Promise<Disc
 		return user?.id;
 	}
 
-	// break the user string down
-	const [_, username, discriminator] = userValue.match(/^@?([^#]+)(?:#(\d{1,4}))?$/) ?? [];
+	// break the user string down (ignore ZERO_WIDTH_SPACE in case if is a copy/paste from game/char/user details)
+	const [_, username, discriminator] = userValue.match(/^@?\u200b?([^#]+)(?:#(\d{1,4}))?$/) ?? [];
 
 	// look for proper tag match
 	const tag = `${username}#${discriminator ?? "0"}`;

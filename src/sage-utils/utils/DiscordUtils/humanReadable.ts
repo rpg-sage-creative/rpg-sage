@@ -1,6 +1,5 @@
 import { GuildMember } from "discord.js";
-import type { Optional } from "../..";
-import { ZERO_WIDTH_SPACE } from "./consts";
+import { ZERO_WIDTH_SPACE, type Optional } from "../..";
 import type { DChannel, DForumChannel, DMessage, DUser } from "./types";
 
 function channelToName(channel: DChannel): string;
