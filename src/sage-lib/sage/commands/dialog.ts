@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import * as _XRegExp from "xregexp";
-import utils, { OrUndefined, TParsers, type Optional } from "../../../sage-utils";
+import utils, { OrUndefined, TParsers, type Optional, ZERO_WIDTH_SPACE } from "../../../sage-utils";
 import { error } from "../../../sage-utils/utils/ConsoleUtils";
 import { DiscordId, DiscordKey, MessageType, NilSnowflake, ReactionType, TCommand, TCommandAndArgsAndData } from "../../discord";
 import { deleteMessage } from "../../discord/deletedMessages";
@@ -566,8 +566,9 @@ async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent)
 	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, SageDialogWebhookName);
 	if (webhook) {
 		const threadId = sageMessage.threadDid;
-		const content = sageMessage.dialogType === DialogType.Post ? embedsToTexts([updatedEmbed]).join("\n") : undefined;
-		const embeds = sageMessage.dialogType === DialogType.Embed ? [updatedEmbed] : [];
+		const postType = dialogContent.postType ?? (embed ? DialogType.Embed : DialogType.Post);
+		const content = postType === DialogType.Post ? embedsToTexts([updatedEmbed]).join("\n") : ZERO_WIDTH_SPACE;
+		const embeds = postType === DialogType.Embed ? [updatedEmbed] : [];
 			await webhook.editMessage(message.id, { content, embeds, threadId }).then(() => deleteMessage(sageMessage.message), error);
 	}else {
 		return sageMessage.reactWarn();
