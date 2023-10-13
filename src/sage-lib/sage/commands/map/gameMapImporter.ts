@@ -3,8 +3,11 @@ import { debug } from "../../../../sage-utils/utils/ConsoleUtils";
 import { StringMatcher, dequote, escapeForRegExp } from "../../../../sage-utils/utils/StringUtils";
 import { DiscordId } from "../../../discord";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
+import RenderableGameMap from "./RenderableGameMap";
 
-export type TParsedGameMapCore = Omit<TGameMapCore, "messageId"> & {
+export type TParsedGameMapCore = Omit<TGameMapCore, "messageId">;
+export type TValidatedGameMapCore = TParsedGameMapCore & {
+	invalidImages: string[];
 	invalidUsers: string[];
 };
 
@@ -142,7 +145,6 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 		clip: clip as [number, number, number, number],
 		grid: grid as [number, number],
 		id: Discord.SnowflakeUtil.generate(),
-		invalidUsers: [],
 		name: name,
 		spawn: spawn as [number, number],
 		terrain: [],
@@ -232,10 +234,8 @@ function matchAnchor(mapCore: TParsedGameMapCore, aura: TGameMapAura | null): vo
 	}
 }
 
-export default async function gameMapImporter(raw: string, guild: Discord.Guild): Promise<TParsedGameMapCore | null> {
+export default function gameMapImporter(raw: string): TParsedGameMapCore | null {
 	const lines = raw.split(/\r?\n\r?/);
-
-	const invalidUsers = new Set<string>();
 
 	//#region map
 	const mapSection = spliceSection(lines, "map");
@@ -244,7 +244,6 @@ export default async function gameMapImporter(raw: string, guild: Discord.Guild)
 		debug(`gameMapImporter: !parsedCore`);
 		return null;
 	}
-	parsedCore.userId = await validateUserId(parsedCore.userId) as string;
 	//#endregion
 
 	//#region terrain
@@ -252,7 +251,6 @@ export default async function gameMapImporter(raw: string, guild: Discord.Guild)
 	for (const section of terrainSections) {
 		const terrain = mapSectionTo(section, LayerType.Terrain);
 		if (terrain) {
-			terrain.userId = await validateUserId(terrain.userId);
 			parsedCore.terrain.push(terrain);
 		}
 	};
@@ -263,7 +261,6 @@ export default async function gameMapImporter(raw: string, guild: Discord.Guild)
 	for (const section of tokenSections) {
 		const token = mapSectionTo(section, LayerType.Token);
 		if (token) {
-			token.userId = await validateUserId(token.userId);
 			parsedCore.tokens.push(token);
 		}
 	}
@@ -274,7 +271,6 @@ export default async function gameMapImporter(raw: string, guild: Discord.Guild)
 	for (const section of auraSections) {
 		const aura = mapSectionToAura(section);
 		if (aura) {
-			aura.userId = await validateUserId(aura.userId);
 			matchAnchor(parsedCore, aura);
 			if (!aura.anchorId) {
 				parsedCore.auras.push(aura);
@@ -283,15 +279,35 @@ export default async function gameMapImporter(raw: string, guild: Discord.Guild)
 	}
 	//#endregion
 
-	parsedCore.invalidUsers = [...invalidUsers];
-
 	return parsedCore;
+}
+
+
+export async function validateMapCore(parsedCore: TParsedGameMapCore, guild: Discord.Guild): Promise<TValidatedGameMapCore> {
+	const testRenderResponse = await RenderableGameMap.testRender(parsedCore);
+
+	const invalidUserSet = new Set<string>();
+	parsedCore.userId = await validateUserId(parsedCore.userId) as string;
+	for (const terrain of parsedCore.terrain) {
+		terrain.userId = await validateUserId(terrain.userId) as string;
+	}
+	for (const aura of parsedCore.auras) {
+		aura.userId = await validateUserId(aura.userId) as string;
+	}
+	for (const token of parsedCore.tokens) {
+		token.userId = await validateUserId(token.userId) as string;
+	}
+
+	const invalidImages = testRenderResponse.invalidImageUrls;
+	const invalidUsers = [...invalidUserSet];
+
+	return { ...parsedCore, invalidImages, invalidUsers };
 
 	async function validateUserId(userValue?: string): Promise<string | undefined> {
 		if (userValue) {
 			const validId = await parseUser(guild, userValue);
 			if (validId) return validId;
-			invalidUsers.add(userValue);
+			invalidUserSet.add(userValue);
 		}
 		return undefined;
 	}
