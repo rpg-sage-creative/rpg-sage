@@ -128,12 +128,14 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 		return null;
 	}
 
-	const grid = matchLine(lines, /^grid=/i, true, true)
+	const [cols, rows] = matchLine(lines, /^grid=/i, true, true)
 		?? [+matchLine(lines, /^cols=/i, true)!, +matchLine(lines, /^rows=/i, true)!];
-	if (isNaN(grid[COL]) || isNaN(grid[ROW])) {
-		debug(`mapSectionToMapCore: isNaN(grid[COL]) (${isNaN(grid[COL])}) || isNaN(grid[ROW]) (${isNaN(grid[ROW])})`);
+	if (isNaN(cols) || isNaN(rows)) {
+		debug(`mapSectionToMapCore: isNaN(cols) (${isNaN(cols)}) || isNaN(rows) (${isNaN(rows)})`);
 		return null;
 	}
+
+	const gridColor = (matchLine(lines, /^gridColor=/i, true)?.match(/^#([a-f0-9]{3}){1,2}$/i) ?? [])[0];
 
 	const spawn = matchLine(lines, /^spawn=/i, true, true);
 	const clip = matchLine(lines, /^clip=/i, true, true);
@@ -143,7 +145,7 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 		activeMap: {},
 		auras: [],
 		clip: clip as [number, number, number, number],
-		grid: grid as [number, number],
+		grid: [cols, rows, gridColor],
 		id: Discord.SnowflakeUtil.generate(),
 		name: name,
 		spawn: spawn as [number, number],

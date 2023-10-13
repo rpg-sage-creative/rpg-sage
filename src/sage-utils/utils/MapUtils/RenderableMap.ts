@@ -73,7 +73,7 @@ async function renderMapData(mapData: GameMapData, mimeType: MimeType = "image/w
  */
 export abstract class RenderableMap implements GameMap {
 	abstract getBackground(): Awaitable<GameMapBackgroundImage>;
-	abstract getGrid(): Awaitable<[number, number]>;
+	abstract getGrid(): Awaitable<[number, number, string | undefined]>;
 	abstract getLayers(): Awaitable<GameMapLayer[]>;
 	public async render(mimeType?: MimeType): Promise<Buffer | null> {
 		const mapData = await Promise.resolve(this.toJSON()).catch(errorReturnNull);

@@ -1,8 +1,16 @@
-import { createCanvas } from "@napi-rs/canvas";
+import { SKRSContext2D, createCanvas } from "@napi-rs/canvas";
 import { error, verbose } from "../../ConsoleUtils";
 import { calculateValidClip } from "./calculateValidClip.js";
 import { loadImage } from "./loadImage.js";
 import type { MapCache } from "./types";
+
+function drawLine(context: SKRSContext2D, x1: number, y1: number, x2: number, y2: number): void {
+	context.beginPath();
+	context.moveTo(x1, y1);
+	context.lineTo(x2, y2);
+	context.closePath();
+	context.stroke();
+}
 
 /**
  * @private
@@ -29,11 +37,15 @@ export async function renderBackground(mapCache: MapCache): Promise<boolean> {
 	// get background image metadata
 	const [bgClipX, bgClipY, bgWidth, bgHeight] = calculateValidClip(background, bgImage);
 
+	// get grid cols, rows, color
+	const gridCols = mapCache.mapData.grid?.[0] ?? 1;
+	const gridRows = mapCache.mapData.grid?.[1] ?? 1;
+	const gridColor = (mapCache.mapData.grid?.[2]?.match(/^#([a-f0-9]{3}){1,2}$/i) ?? [])[0];
+
 	// create map pixel metadata
-	mapCache.mapMeta = {
-		pxPerCol: Math.floor(bgWidth / (mapCache.mapData.grid?.[0] ?? 1)),
-		pxPerRow: Math.floor(bgHeight / (mapCache.mapData.grid?.[1] ?? 1))
-	};
+	const pxPerCol = bgWidth / gridCols;
+	const pxPerRow = bgHeight / gridRows;
+	mapCache.mapMeta = { pxPerCol, pxPerRow };
 
 	// create canvas and context
 	mapCache.context = createCanvas(bgWidth, bgHeight).getContext("2d");
@@ -41,6 +53,21 @@ export async function renderBackground(mapCache: MapCache): Promise<boolean> {
 	try {
 		// draw the background
 		mapCache.context.drawImage(bgImage, bgClipX, bgClipY, bgWidth, bgHeight, 0, 0, bgWidth, bgHeight);
+
+		// draw the grid if a color was provided
+		if (gridColor) {
+			mapCache.context.strokeStyle = gridColor;
+			for (let col = 0; col <= gridCols; col++) {
+				const x = col * pxPerCol;
+				drawLine(mapCache.context, x, 0, x, bgHeight);
+			}
+			for (let row = 0; row <= gridRows; row++) {
+				const y = row * pxPerCol;
+				drawLine(mapCache.context, 0, y, bgWidth, y);
+			}
+
+		}
+
 		return true;
 
 	}catch(ex) {

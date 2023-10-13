@@ -42,7 +42,7 @@ export default class RenderableGameMap extends RenderableMap {
 		};
 	}
 
-	public getGrid(): [number, number] {
+	public getGrid(): [number, number, string | undefined] {
 		return this.core.grid;
 	}
 
