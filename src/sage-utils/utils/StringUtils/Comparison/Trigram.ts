@@ -13,8 +13,10 @@ function toTriGrams(text: string, ignoreCase: boolean): string[] {
 }
 
 export default class SimpleTriGramComparator {
-	private baseTriGrams = toTriGrams(this.baseText, this.ignoreCase);
-	public constructor(public baseText: string, public ignoreCase = false) { }
+	private baseTriGrams: string[];
+	public constructor(public baseText: string, public ignoreCase = false) {
+		this.baseTriGrams = toTriGrams(this.baseText, this.ignoreCase);
+	}
 	public compare(inputText: string): number {
 		const inputTriGrams = toTriGrams(inputText, this.ignoreCase);
 		const matchingTriGrams = this.baseTriGrams.filter((triGram, index) => inputTriGrams[index] === triGram);
