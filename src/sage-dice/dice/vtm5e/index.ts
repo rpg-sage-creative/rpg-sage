@@ -57,23 +57,25 @@ hunger takes priority in critical pairings ...
 
 function getParsers(): TParsers {
 	return {
-		dice: /(\d+)?\s*d\s*(10)/i,
-		hunger: /(h)\s*(\d+)/i,
+		dice: /(\d+)?\s*d\s*10\s*(?:h\s*(\d+)|(\d+)\s*h)?/i,
 		target: /(vs)\s*(\d+)/i
 	};
 }
 
-type TokenType = TToken<"dice" | "hunger" | "target" | "desc">;
+type TokenType = TToken<"dice" | "target" | "desc">;
 
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken<any>): T;
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenType): T {
 	if (token.type === "dice") {
 		core.count = +token.matches[0];
 		core.sides = 10;
-	}else if (token.type === "hunger") {
-		core.hunger = +token.matches[1];
+		if (token.matches[1] || token.matches[2]) {
+			core.hunger = +(token.matches[1] ?? token.matches[2]);
+		}
+
 	}else if (token.type === "target") {
 		core.target = { type:TargetType.VS, value:+token.matches[1] };
+
 	}else {
 		core.description = (core.description ?? "") + token.token;
 	}
@@ -215,6 +217,7 @@ function rollGradeToEmoji(gradeResults: RollGradeResult): string {
 	const hunger = gradeResults.hungerResults.find(result => result.grade === grade)?.hunger ?? false;
 	return toEmoji({ grade, hunger });
 }
+
 function gradeToEmoji(gradeResults: RollGradeResult): string {
 	if (gradeResults.grade) {
 		return rollGradeToEmoji(gradeResults);
@@ -272,7 +275,7 @@ function toStringL(gradeResults: RollGradeResult, desc?: string): string {
 	const gradeOutput = gradeToEmoji(gradeResults);
 	const successesOutput = ` (${gradeResults.successes})`;
 	const descOutput = desc ? "`" + desc + "`" : "";
-	const baseOutput = gradeResults.baseResults.length ? ` ${gradeResults.baseResults.length}d10h` : ``;
+	const baseOutput = gradeResults.baseResults.length ? ` ${gradeResults.baseResults.length}d10` : ``;
 	const plusOutput = gradeResults.baseResults.length && gradeResults.hungerResults.length ? ` + ` : ``;
 	const hungerOutput = gradeResults.hungerResults.length ? ` ${gradeResults.hungerResults.length}d10h` : ``;
 	const vsOutput = gradeResults.vs ? ` vs ${gradeResults.vs} ` : ``;
