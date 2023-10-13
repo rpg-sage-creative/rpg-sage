@@ -1,0 +1,11 @@
+/*
+https://code.visualstudio.com/docs/getstarted/keybindings
+*/
+[
+	{
+		"key": "cmd+shift+t cmd+shift+t",
+		"command": "tasks",
+		"args": [],
+		"when": ""
+	}
+]
