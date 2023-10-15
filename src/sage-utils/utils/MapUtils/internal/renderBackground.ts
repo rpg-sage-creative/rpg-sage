@@ -1,15 +1,13 @@
-import { SKRSContext2D, createCanvas } from "@napi-rs/canvas";
+import { createCanvas } from "@napi-rs/canvas";
 import { error, verbose } from "../../ConsoleUtils";
 import { calculateValidClip } from "./calculateValidClip.js";
 import { loadImage } from "./loadImage.js";
+import { renderSquareGrid } from "./renderSquareGrid";
 import type { MapCache } from "./types";
 
-function drawLine(context: SKRSContext2D, x1: number, y1: number, x2: number, y2: number): void {
-	context.beginPath();
-	context.moveTo(x1, y1);
-	context.lineTo(x2, y2);
-	context.closePath();
-	context.stroke();
+function parseGridType(gridType?: string): "square" | "hex" {
+	const lower = gridType?.toLowerCase();
+	return ["square", "hex"].find(type => type === lower) as "square" ?? "square";
 }
 
 /**
@@ -32,19 +30,19 @@ export async function renderBackground(mapCache: MapCache): Promise<boolean> {
 		verbose(`!bgImage`, background);
 		return false;
 	}
-	// mapCache.bgImage = bgImage;
 
 	// get background image metadata
 	const [bgClipX, bgClipY, bgWidth, bgHeight] = calculateValidClip(background, bgImage);
 
 	// get grid cols, rows, color
-	const gridCols = mapCache.mapData.grid?.[0] ?? 1;
-	const gridRows = mapCache.mapData.grid?.[1] ?? 1;
-	const gridColor = (mapCache.mapData.grid?.[2]?.match(/^#([a-f0-9]{3}){1,2}$/i) ?? [])[0];
+	const cols = mapCache.mapData.grid?.[0] ?? 1;
+	const rows = mapCache.mapData.grid?.[1] ?? 1;
+	const strokeStyle = (mapCache.mapData.grid?.[2]?.match(/^#([a-f0-9]{3}){1,2}$/i) ?? [])[0];
+	const gridType = parseGridType(mapCache.mapData.grid?.[3]);
 
 	// create map pixel metadata
-	const pxPerCol = bgWidth / gridCols;
-	const pxPerRow = bgHeight / gridRows;
+	const pxPerCol = bgWidth / cols;
+	const pxPerRow = bgHeight / rows;
 	mapCache.mapMeta = { pxPerCol, pxPerRow };
 
 	// create canvas and context
@@ -55,17 +53,12 @@ export async function renderBackground(mapCache: MapCache): Promise<boolean> {
 		mapCache.context.drawImage(bgImage, bgClipX, bgClipY, bgWidth, bgHeight, 0, 0, bgWidth, bgHeight);
 
 		// draw the grid if a color was provided
-		if (gridColor) {
-			mapCache.context.strokeStyle = gridColor;
-			for (let col = 0; col <= gridCols; col++) {
-				const x = col * pxPerCol;
-				drawLine(mapCache.context, x, 0, x, bgHeight);
-			}
-			for (let row = 0; row <= gridRows; row++) {
-				const y = row * pxPerCol;
-				drawLine(mapCache.context, 0, y, bgWidth, y);
-			}
+		if (strokeStyle) {
+			if (gridType === "hex") {
 
+			}else {
+				renderSquareGrid(mapCache.context, { strokeStyle, cols, rows, pxPerCol, pxPerRow });
+			}
 		}
 
 		return true;

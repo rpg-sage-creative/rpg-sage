@@ -1,5 +1,6 @@
 import * as Discord from "discord.js";
 import { debug } from "../../../../sage-utils/utils/ConsoleUtils";
+import { NumberPair, NumberQuartet } from "../../../../sage-utils/utils/MapUtils";
 import { StringMatcher, dequote, escapeForRegExp } from "../../../../sage-utils/utils/StringUtils";
 import { DiscordId } from "../../../discord";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
@@ -136,19 +137,20 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 	}
 
 	const gridColor = (matchLine(lines, /^gridColor=/i, true)?.match(/^#([a-f0-9]{3}){1,2}$/i) ?? [])[0];
+	const gridType = (matchLine(lines, /^gridType=/i, true)?.match(/^(square|vhex|hex)$/i) ?? [])[0]?.toLowerCase() as "square";
 
-	const spawn = matchLine(lines, /^spawn=/i, true, true);
-	const clip = matchLine(lines, /^clip=/i, true, true);
+	const spawn = matchLine(lines, /^spawn=/i, true, true) as NumberPair;
+	const clip = matchLine(lines, /^clip=/i, true, true) as NumberQuartet;
 	const userId = matchLine(lines, /^user=/i, true);
 
 	return {
 		activeMap: {},
 		auras: [],
-		clip: clip as [number, number, number, number],
-		grid: [cols, rows, gridColor],
+		clip,
+		grid: [cols, rows, gridColor, gridType],
 		id: Discord.SnowflakeUtil.generate(),
-		name: name,
-		spawn: spawn as [number, number],
+		name,
+		spawn,
 		terrain: [],
 		tokens: [],
 		url: url,

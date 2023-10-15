@@ -4,7 +4,7 @@ import { errorReturnNull } from "../ConsoleUtils/Catchers";
 import { AppServer, AppServerEndpoint, getJson } from "../HttpsUtils";
 import { renderMap } from "./internal/renderMap.js";
 import { serverHandler } from "./internal/serverHandler.js";
-import type { GameMap, GameMapBackgroundImage, GameMapData, GameMapLayer, MapRenderPayload, MapRenderResponse, MimeType } from "./types";
+import type { GameGridData, GameMap, GameMapBackgroundImage, GameMapData, GameMapLayer, MapRenderPayload, MapRenderResponse, MimeType } from "./types";
 
 /**
  * Catches an error when using an internal server to creating image buffers.
@@ -73,7 +73,7 @@ async function renderMapData(mapData: GameMapData, mimeType: MimeType = "image/w
  */
 export abstract class RenderableMap implements GameMap {
 	abstract getBackground(): Awaitable<GameMapBackgroundImage>;
-	abstract getGrid(): Awaitable<[number, number, string | undefined]>;
+	abstract getGrid(): Awaitable<GameGridData>;
 	abstract getLayers(): Awaitable<GameMapLayer[]>;
 	public async render(mimeType?: MimeType): Promise<Buffer | null> {
 		const mapData = await Promise.resolve(this.toJSON()).catch(errorReturnNull);

@@ -1,5 +1,9 @@
 import type { Awaitable } from "../..";
 
+export type NumberPair = [number, number];
+
+export type NumberQuartet = [number, number, number, number];
+
 export type MimeType = "image/png" | "image/jpeg" | "image/webp";
 
 /** This object type has a clip rectangle. */
@@ -29,14 +33,14 @@ export type HasNatural = {
 /** This object has grid and pixel offsets. */
 export type HasOffset = {
 	/** offset from origin: [col, row] */
-	gridOffset: [number, number];
+	gridOffset: NumberPair;
 
 	/** pixel offset from origin: [x, y] */
-	pixelOffset: [number, number];
+	pixelOffset: NumberPair;
 };
 
 export type HasSize = {
-	size: [number, number];
+	size: NumberPair;
 }
 
 /** This object has opacity and url. */
@@ -71,15 +75,21 @@ export interface GameMapLayer {
 
 //#region GameMap
 
+type GridCols = number;
+type GridRows = number;
+type GridStrokeStyle = string | undefined;
+type GridType = "square" | "vhex" | "hex" | undefined;
+export type GameGridData = [GridCols, GridRows, GridStrokeStyle, GridType];
+
 export type GameMapData = {
 	background: GameMapBackgroundImage | null;
-	grid: [number, number, string | undefined] | null;
+	grid: GameGridData | null;
 	layers: GameMapLayerData[];
 };
 
 export interface GameMap {
 	getBackground(): Awaitable<GameMapBackgroundImage>;
-	getGrid(): Awaitable<[number, number, string | undefined]>;
+	getGrid(): Awaitable<GameGridData>;
 	getLayers(): Awaitable<GameMapLayer[]>;
 	toJSON(): Awaitable<GameMapData>;
 }

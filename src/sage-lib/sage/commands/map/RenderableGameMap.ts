@@ -1,5 +1,5 @@
 import { RenderableMap } from "../../../../sage-utils/utils/MapUtils";
-import type { IMapLayer, MapRenderResponse, THasOffset, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils";
+import type { GameGridData, IMapLayer, MapRenderResponse, THasOffset, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils";
 import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
 import { TParsedGameMapCore } from "./gameMapImporter";
 
@@ -42,7 +42,7 @@ export default class RenderableGameMap extends RenderableMap {
 		};
 	}
 
-	public getGrid(): [number, number, string | undefined] {
+	public getGrid(): GameGridData {
 		return this.core.grid;
 	}
 

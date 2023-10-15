@@ -1,6 +1,7 @@
 import type * as Discord from "discord.js";
 import { errorReturnFalse, errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../../sage-utils/utils/FsUtils";
+import { GameGridData, NumberPair, NumberQuartet } from "../../../../sage-utils/utils/MapUtils";
 import RenderableGameMap from "./RenderableGameMap";
 
 //#region types
@@ -12,6 +13,7 @@ export const Y = 1;
 
 export enum LayerType { Terrain = 1, Aura = 2, Token = 3 }
 export enum UserLayerType { Layer = 0, Terrain = 1, Aura = 2, Token = 3, PreviousLayer = 4 }
+
 
 export type TGameMapImage = {
 	/** the active aura for this image */
@@ -25,11 +27,11 @@ export type TGameMapImage = {
 	/** name of the token */
 	name: string;
 	/** position on the map: [col, row] */
-	pos: [number, number];
+	pos: NumberPair;
 	/** for token art that bleeds over their token/base */
 	scale?: number;
 	/** token size: [cols, rows] */
-	size: [number, number];
+	size: NumberPair;
 	/** url to the image */
 	url: string;
 	/** the owner of the image */
@@ -73,9 +75,9 @@ export type TGameMapCore = {
 	/** images that should go on the aura layer: above the terrain layer, below the token layer */
 	auras: TGameMapAura[];
 	/** image clip rectangle: [xOffset, yOffset, width, height] */
-	clip?: [number, number, number, number];
+	clip?: NumberQuartet;
 	/** grid dimensions: [cols, rows, color] */
-	grid: [number, number, string | undefined];
+	grid: GameGridData;
 	/** unique identifier */
 	id: Discord.Snowflake;
 	/** the message this map is posted in */
@@ -83,7 +85,7 @@ export type TGameMapCore = {
 	/** name of the map */
 	name: string;
 	/** where tokens first appear: [col, row] */
-	spawn?: [number, number];
+	spawn?: NumberPair;
 	/** images that should go on the terrain layer: the bottom layer */
 	terrain: TGameMapTerrain[];
 	/** images that should go on the token layer: the top layer */
