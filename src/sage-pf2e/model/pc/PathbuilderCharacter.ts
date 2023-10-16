@@ -636,6 +636,10 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 		Object.keys(flags).forEach(key => {
 			core[key as TPathbuilderCharacterCustomFlag] = flags[key as TPathbuilderCharacterCustomFlag];
 		});
+
+		this.abilities = Abilities.for(this);
+		this.feats = utils.ArrayUtils.Collection.from(this.core.feats ?? []);
+		this.savingThrows = SavingThrows.for(this);
 	}
 
 	public getAttackMacros(): TMacro[] { return this.core.weapons?.map(weapon => weaponToMacro(this, weapon)) ?? []; }
@@ -665,9 +669,9 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 	//#endregion
 
 	/** Implements IHasAbilities */
-	public abilities = Abilities.for(this);
-	public feats = utils.ArrayUtils.Collection.from(this.core.feats ?? []);
-	public savingThrows = SavingThrows.for(this);
+	public abilities: Abilities;
+	public feats: utils.ArrayUtils.Collection<TPathbuilderCharacterFeat>;
+	public savingThrows: SavingThrows;
 
 	public get level(): number {
 		return this.core.level;

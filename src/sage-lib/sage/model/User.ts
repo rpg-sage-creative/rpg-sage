@@ -63,6 +63,11 @@ export default class User extends HasDidCore<UserCore> {
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []), this);
+
+		this.isFriend = this.core.patronTier === PatronTierType.Friend;
+		this.isInformant = this.core.patronTier === PatronTierType.Informant;
+		this.isTrusted = this.core.patronTier === PatronTierType.Trusted;
+		this.isPatron = this.isFriend || this.isInformant || this.isTrusted;
 	}
 	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
 	public get allowDynamicDialogSeparator(): boolean { return this.core.allowDynamicDialogSeparator === true; }
@@ -76,10 +81,10 @@ export default class User extends HasDidCore<UserCore> {
 
 	public get patronTier(): PatronTierType { return this.core.patronTier ?? 0; }
 	public set patronTier(patronTierType: PatronTierType) { this.core.patronTier = patronTierType; }
-	public isFriend = this.core.patronTier === PatronTierType.Friend;
-	public isInformant = this.core.patronTier === PatronTierType.Informant;
-	public isTrusted = this.core.patronTier === PatronTierType.Trusted;
-	public isPatron = this.isFriend || this.isInformant || this.isTrusted;
+	public isFriend: boolean;
+	public isInformant: boolean;
+	public isTrusted: boolean;
+	public isPatron: boolean;
 	public get isSuperUser(): boolean { return User.isSuperUser(this.did); }
 
 	public getAutoCharacterForChannel(did: Optional<Discord.Snowflake>): GameCharacter | undefined {

@@ -7,14 +7,18 @@ export default class UuidMatcher implements TUuidMatcher {
 	public constructor(
 		/** Stores the raw value. */
 		public value: UUID
-	) { }
+	) {
+		this.isValid = isValid(this.value);
+		this.normalized = this.isValid ? this.value.toLowerCase() : NilUuid;
+		this.isNormalized = this.isValid && this.value === this.normalized;
+	}
 
 	/** Stores UuidUtils.isValid(value). */
-	public isValid = isValid(this.value);
+	public isValid: boolean;
 	/** Stores UuidUtils.normalize(value). */
-	public normalized = this.isValid ? this.value.toLowerCase() : NilUuid;
+	public normalized: string;
 	/** Stores UuidUtils.isNormalized(value). */
-	public isNormalized = this.isValid && this.value === this.normalized;
+	public isNormalized: boolean;
 
 	/** Compares a given value (a matcher's normalized value or a .toLowerCase()) to this.normalized */
 	public matches(other: TUuidMatcherResolvable): boolean {
