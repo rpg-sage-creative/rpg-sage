@@ -74,8 +74,8 @@ export type TGameMapCore = {
 	auras: TGameMapAura[];
 	/** image clip rectangle: [xOffset, yOffset, width, height] */
 	clip?: [number, number, number, number];
-	/** grid dimensions: [cols, rows] */
-	grid: [number, number];
+	/** grid dimensions: [cols, rows, color] */
+	grid: [number, number, string | undefined];
 	/** unique identifier */
 	id: Discord.Snowflake;
 	/** the message this map is posted in */

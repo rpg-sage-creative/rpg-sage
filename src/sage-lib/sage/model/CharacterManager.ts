@@ -38,7 +38,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	public get gmCharacterName(): string | undefined { return (this.owner as Game).gmCharacterName; }
 
 	/** The owner of this collection that can be saved when changes are made. */
-	protected owner?: TGameCharacterOwner;
+	declare protected owner?: TGameCharacterOwner;
 
 	/** Tests to see if any characters match the given name, defaults to no recursion. */
 	public hasMatching(name: string, recursive = false): boolean {

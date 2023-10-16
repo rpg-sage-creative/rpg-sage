@@ -4,9 +4,9 @@
 		"path": "/usr/local/bin/zsh"
 	},
 	"terminal.integrated.defaultProfile.osx": "zsh",
-	
+
 	"diffEditor.ignoreTrimWhitespace": true,
-	
+
 	"editor.folding": true,
 	"editor.insertSpaces": false,
 	"editor.renderWhitespace": "all",
@@ -14,8 +14,18 @@
 	"editor.wordWrap": "off",
 	"editor.minimap.enabled": false,
 	"editor.autoIndent": "full",
-	
+
 	"files.trimTrailingWhitespace": true,
 	"window.autoDetectColorScheme": true,
 
+	/*
+	https://json-schema.org/draft/2020-12/json-schema-validation
+	*/
+	"json.schemas": [
+		{
+			"fileMatch": ["**/bots/*.json"],
+			"url": "./schemas/bot.json"
+			// "url": "tsschema:///#IBotCore"
+		}
+	]
 }

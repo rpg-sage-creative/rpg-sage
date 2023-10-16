@@ -73,13 +73,13 @@ export interface GameMapLayer {
 
 export type GameMapData = {
 	background: GameMapBackgroundImage | null;
-	grid: [number, number] | null;
+	grid: [number, number, string | undefined] | null;
 	layers: GameMapLayerData[];
 };
 
 export interface GameMap {
 	getBackground(): Awaitable<GameMapBackgroundImage>;
-	getGrid(): Awaitable<[number, number]>;
+	getGrid(): Awaitable<[number, number, string | undefined]>;
 	getLayers(): Awaitable<GameMapLayer[]>;
 	toJSON(): Awaitable<GameMapData>;
 }

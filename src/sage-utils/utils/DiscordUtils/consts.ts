@@ -21,8 +21,6 @@ export const DiscordMaxValues = {
 	usernameLength: 80
 };
 
-export const ZERO_WIDTH_SPACE = `\u200b`;
-
 // files
 // limited by size limit based on tier, not count
 

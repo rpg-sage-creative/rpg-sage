@@ -1,4 +1,4 @@
-import { appendFile } from "fs";
+import { appendFile, existsSync } from "fs";
 import { getDateStrings } from "../DateUtils";
 import { formatArg } from "./formatArgs";
 
@@ -49,7 +49,7 @@ export function setEnv(env: "dev" | "beta" | "stable"): void {
 
 /** Logs the args to file if we have a folder to log to. */
 function logToFile(logLevel: LogLevel, ...args: any[]): void {
-	if (_logDir) {
+	if (_logDir && existsSync(_logDir)) {
 		const now = getDateStrings();
 		const fileName = `${_logDir}/${now.date}.log`;
 		const lines = args.map(arg => `${now.date}T${now.time}: ${logLevel}:: ${formatArg(arg)}`).concat("").join("\n");

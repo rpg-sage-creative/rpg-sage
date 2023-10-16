@@ -1,6 +1,7 @@
 import { RenderableMap } from "../../../../sage-utils/utils/MapUtils";
-import type { IMapLayer, THasOffset, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils";
+import type { IMapLayer, MapRenderResponse, THasOffset, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils";
 import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
+import { TParsedGameMapCore } from "./gameMapImporter";
 
 class RenderableGameMapLayer implements IMapLayer {
 	public constructor(protected images: TGameMapImage[]) { }
@@ -41,7 +42,7 @@ export default class RenderableGameMap extends RenderableMap {
 		};
 	}
 
-	public getGrid(): [number, number] {
+	public getGrid(): [number, number, string | undefined] {
 		return this.core.grid;
 	}
 
@@ -61,5 +62,10 @@ export default class RenderableGameMap extends RenderableMap {
 			grid: this.getGrid(),
 			layers: this.getLayers().map(layer => layer.toJSON())
 		};
+	}
+
+	public static testRender(gameData: TGameMapCore | TParsedGameMapCore): Promise<MapRenderResponse> {
+		const map = new RenderableGameMap(gameData as TGameMapCore);
+		return RenderableMap._testRender(map.toJSON());
 	}
 }

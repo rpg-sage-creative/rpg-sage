@@ -4,6 +4,8 @@ types/
 **/.DS_Store
 all-lores.csv
 localstack/
+logs/
+**/tsconfig.tsbuildinfo
 
 # ignore scripts (to ignore the root level links)
 *.sh

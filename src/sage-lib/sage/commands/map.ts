@@ -9,13 +9,12 @@ import { DiscordId, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { deleteMessage, deleteMessages } from "../../discord/deletedMessages";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import { discordPromptYesNoDeletable } from "../../discord/prompts";
-import ActiveBot from "../model/ActiveBot";
 import SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
 import { registerCommandRegex } from "./cmd";
 import GameMap, { TCompassDirection, TMoveDirection } from "./map/GameMap";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, TGameMapTerrain, TGameMapToken } from "./map/GameMapBase";
-import gameMapImporter, { TParsedGameMapCore } from "./map/gameMapImporter";
+import gameMapImporter, { TParsedGameMapCore, validateMapCore } from "./map/gameMapImporter";
 
 //#region buttons
 
@@ -348,16 +347,19 @@ function getValidUrl(attachment: Discord.MessageAttachment): string | null {
 }
 
 async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TParsedGameMapCore> | null> {
+	// not doing maps in DMs
+	if (!sageMessage.caches.discord.guild) return null;
+
 	const attachments = sageMessage.message.attachments;
 	if (!attachments.size) {
 		return null;
 	}
-	const client = ActiveBot.active.client;
+
 	for (const [_id, attachment] of attachments) {
 		const validUrl = getValidUrl(attachment);
 		if (validUrl) {
 			const raw = await getText(validUrl);
-			const parsedCore = gameMapImporter(raw, client);
+			const parsedCore = gameMapImporter(raw);
 			if (parsedCore) {
 				return {
 					data: parsedCore
@@ -368,19 +370,32 @@ async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArg
 	return null;
 }
 
-async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore): Promise<void> {
-	const channel = sageMessage.message.channel;
+async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore | TParsedGameMapCore): Promise<void> {
 	const [boolImport, msgImport] = await discordPromptYesNoDeletable(sageMessage, `Try to import map: ${mapCore.name}?`);
 	if (boolImport) {
+		const channel = sageMessage.message.channel;
 		const pwConfiguring = await channel.send(`Importing and configuring: ${mapCore.name} ...`);
 		deleteMessage(msgImport);
-		if (!mapCore.userId) {
-			mapCore.userId = sageMessage.sageUser.did;
+
+		const validatedCore = await validateMapCore(mapCore as TParsedGameMapCore, sageMessage.message.guild!);
+		const invalidUsers = validatedCore.invalidUsers ?? [];
+		const invalidImages = validatedCore.invalidImages ?? [];
+		if (invalidUsers.length || invalidImages.length) {
+			const warning = `### Warning\nThe map cannot be loaded for the following reasons ...`;
+			const invalidUserText = invalidUsers.length ? `\n### Invalid Users\nThe following users could not be found:\n> ${invalidUsers.join("\n> ")}` : ``;
+			const invalidImageText = invalidImages.length ? `\n### Invalid Images\nThe following images could not be loaded:\n> ${invalidImages.map(url => `<${url}>`).join("\n> ")}` : ``;
+			await channel.send(warning + invalidUserText + invalidImageText);
+
+		}else {
+			if (!mapCore.userId) {
+				mapCore.userId = sageMessage.sageUser.did;
+			}
+			const success = await renderMap(channel as TChannel, new GameMap(mapCore as TGameMapCore, mapCore.userId));
+			if (!success) {
+				await channel.send(`Sorry, something went wrong importing the map.`);
+			}
 		}
-		const success = await renderMap(channel as TChannel, new GameMap(mapCore, mapCore.userId));
-		if (!success) {
-			await channel.send(`Sorry, something went wrong importing the map.`);
-		}
+
 		deleteMessage(pwConfiguring);
 	}
 	deleteMessage(msgImport);

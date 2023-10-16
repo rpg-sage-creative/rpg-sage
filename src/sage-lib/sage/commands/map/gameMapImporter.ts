@@ -1,11 +1,15 @@
 import * as Discord from "discord.js";
-import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
 import { debug } from "../../../../sage-utils/utils/ConsoleUtils";
-import { dequote, StringMatcher } from "../../../../sage-utils/utils/StringUtils";
+import { StringMatcher, dequote, escapeForRegExp } from "../../../../sage-utils/utils/StringUtils";
 import { DiscordId } from "../../../discord";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
+import RenderableGameMap from "./RenderableGameMap";
 
 export type TParsedGameMapCore = Omit<TGameMapCore, "messageId">;
+export type TValidatedGameMapCore = TParsedGameMapCore & {
+	invalidImages: string[];
+	invalidUsers: string[];
+};
 
 /** matches a line and cleans it up for use if found */
 function matchLine(lines: string[], regex: RegExp, slice?: boolean): string | undefined;
@@ -65,17 +69,55 @@ function matchUrlAndName(lines: string[]): [string?, string?] {
 	return [url, name];
 }
 
-function parseUser(client: Discord.Client, userValue?: string): Discord.Snowflake | undefined {
+async function parseUser(guild: Discord.Guild, userValue?: string): Promise<Discord.Snowflake | undefined> {
+	// don't waste time
 	if (!userValue) {
 		return undefined;
 	}
+
+	// if we have a discord snowflake ... make sure it is valid
 	if (DiscordId.isValidId(userValue)) {
-		return userValue;
+		const user = await guild.client.users.fetch(userValue);
+		return user?.id;
 	}
-	const [_, username, discriminator] = userValue.match(/^@?([^#]+)#(\d{1,4})$/) ?? [];
+
+	// break the user string down (ignore ZERO_WIDTH_SPACE in case if is a copy/paste from game/char/user details)
+	const [_, username, discriminator] = userValue.match(/^@?\u200b?([^#]+)(?:#(\d{1,4}))?$/) ?? [];
+
+	// look for proper tag match
 	const tag = `${username}#${discriminator ?? "0"}`;
-	const user = client.users.cache.find(_user => _user.tag === tag);
-	return user?.id;
+	const tagRegex = new RegExp(escapeForRegExp(tag), "i");
+	const tagMatch = guild.members.cache.find(member => tagRegex.test(member.user.tag));
+	if (tagMatch) {
+		debug(`parseUser match: tag = "${tag}"`);
+		return tagMatch.id;
+	}
+
+	// look for username, displayName, and nickname matches and only return a singleton
+	const usernameRegex = new RegExp(escapeForRegExp(username), "i");
+	const usernameMatches = Array.from(guild.members.cache.filter(member => {
+		if (usernameRegex.test(member.user.username)) {
+			debug(`parseUser match: username = "${member.user.username}"`);
+			return true;
+		}
+		if (usernameRegex.test(member.displayName)) {
+			debug(`parseUser match: displayName = "${member.displayName}"`);
+			return true;
+		}
+		if (usernameRegex.test(member.nickname ?? "")) {
+			debug(`parseUser match: nickname = "${member.nickname}"`);
+			return true;
+		}
+		return false;
+	}).values());
+	if (usernameMatches.length === 1) {
+		return usernameMatches[0].id;
+	}
+
+	debug(`parseUser no match: ${userValue}`);
+
+	// we got nothing
+	return undefined;
 }
 
 /** returns a GameMapCore that contains the imported settings */
@@ -86,12 +128,14 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 		return null;
 	}
 
-	const grid = matchLine(lines, /^grid=/i, true, true)
+	const [cols, rows] = matchLine(lines, /^grid=/i, true, true)
 		?? [+matchLine(lines, /^cols=/i, true)!, +matchLine(lines, /^rows=/i, true)!];
-	if (isNaN(grid[COL]) || isNaN(grid[ROW])) {
-		debug(`mapSectionToMapCore: isNaN(grid[COL]) (${isNaN(grid[COL])}) || isNaN(grid[ROW]) (${isNaN(grid[ROW])})`);
+	if (isNaN(cols) || isNaN(rows)) {
+		debug(`mapSectionToMapCore: isNaN(cols) (${isNaN(cols)}) || isNaN(rows) (${isNaN(rows)})`);
 		return null;
 	}
+
+	const gridColor = (matchLine(lines, /^gridColor=/i, true)?.match(/^#([a-f0-9]{3}){1,2}$/i) ?? [])[0];
 
 	const spawn = matchLine(lines, /^spawn=/i, true, true);
 	const clip = matchLine(lines, /^clip=/i, true, true);
@@ -101,7 +145,7 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 		activeMap: {},
 		auras: [],
 		clip: clip as [number, number, number, number],
-		grid: grid as [number, number],
+		grid: [cols, rows, gridColor],
 		id: Discord.SnowflakeUtil.generate(),
 		name: name,
 		spawn: spawn as [number, number],
@@ -192,7 +236,7 @@ function matchAnchor(mapCore: TParsedGameMapCore, aura: TGameMapAura | null): vo
 	}
 }
 
-export default function gameMapImporter(raw: string, client: Discord.Client): TParsedGameMapCore | null {
+export default function gameMapImporter(raw: string): TParsedGameMapCore | null {
 	const lines = raw.split(/\r?\n\r?/);
 
 	//#region map
@@ -202,45 +246,71 @@ export default function gameMapImporter(raw: string, client: Discord.Client): TP
 		debug(`gameMapImporter: !parsedCore`);
 		return null;
 	}
-	parsedCore.userId = parseUser(client, parsedCore.userId)!;
 	//#endregion
 
 	//#region terrain
 	const terrainSections = spliceSections(lines, "terrain");
-	const terrain = terrainSections.map(section => {
-		const _terrain = mapSectionTo(section, LayerType.Terrain);
-		if (_terrain) {
-			_terrain.userId = parseUser(client, _terrain.userId);
+	for (const section of terrainSections) {
+		const terrain = mapSectionTo(section, LayerType.Terrain);
+		if (terrain) {
+			parsedCore.terrain.push(terrain);
 		}
-		return _terrain;
-	}).filter(exists);
-	parsedCore.terrain.push(...terrain);
+	};
 	//#endregion
 
 	//#region tokens
 	const tokenSections = spliceSections(lines, "token");
-	const tokens = tokenSections.map(section => {
-		const _token = mapSectionTo(section, LayerType.Token);
-		if (_token) {
-			_token.userId = parseUser(client, _token.userId);
+	for (const section of tokenSections) {
+		const token = mapSectionTo(section, LayerType.Token);
+		if (token) {
+			parsedCore.tokens.push(token);
 		}
-		return _token;
-	}).filter(exists);
-	parsedCore.tokens.push(...tokens);
+	}
 	//#endregion
 
 	//#region auras
 	const auraSections = spliceSections(lines, "aura");
-	const auras = auraSections.map(section => {
-		const _aura = mapSectionToAura(section);
-		if (_aura) {
-			_aura.userId = parseUser(client, _aura.userId);
-			matchAnchor(parsedCore, _aura);
+	for (const section of auraSections) {
+		const aura = mapSectionToAura(section);
+		if (aura) {
+			matchAnchor(parsedCore, aura);
+			if (!aura.anchorId) {
+				parsedCore.auras.push(aura);
+			}
 		}
-		return _aura;
-	}).filter(exists);
-	parsedCore.auras.push(...auras.filter(aura => !aura.anchorId));
+	}
 	//#endregion
 
 	return parsedCore;
+}
+
+
+export async function validateMapCore(parsedCore: TParsedGameMapCore, guild: Discord.Guild): Promise<TValidatedGameMapCore> {
+	const testRenderResponse = await RenderableGameMap.testRender(parsedCore);
+
+	const invalidUserSet = new Set<string>();
+	parsedCore.userId = await validateUserId(parsedCore.userId) as string;
+	for (const terrain of parsedCore.terrain) {
+		terrain.userId = await validateUserId(terrain.userId) as string;
+	}
+	for (const aura of parsedCore.auras) {
+		aura.userId = await validateUserId(aura.userId) as string;
+	}
+	for (const token of parsedCore.tokens) {
+		token.userId = await validateUserId(token.userId) as string;
+	}
+
+	const invalidImages = testRenderResponse.invalidImageUrls;
+	const invalidUsers = [...invalidUserSet];
+
+	return { ...parsedCore, invalidImages, invalidUsers };
+
+	async function validateUserId(userValue?: string): Promise<string | undefined> {
+		if (userValue) {
+			const validId = await parseUser(guild, userValue);
+			if (validId) return validId;
+			invalidUserSet.add(userValue);
+		}
+		return undefined;
+	}
 }

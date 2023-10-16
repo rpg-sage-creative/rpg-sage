@@ -2,7 +2,9 @@
 	"compileOnSave": false,
 	"compilerOptions": {
 		"alwaysStrict": true,
-		// "allowSyntheticDefaultImports": true,
+		"allowSyntheticDefaultImports": true,
+
+		"composite": true,
 
 		"declaration": true,
 		"declarationDir": "./types",
@@ -12,12 +14,15 @@
 
 		"forceConsistentCasingInFileNames": true,
 
-		// "importsNotUsedAsValues": "error",
+		"incremental": true,
 
-		"lib": [ "DOM", "ES2020" ],
+		// "importsNotUsedAsValues": "error",
+		// "verbatimModuleSyntax": true,
+
+		"lib": [ "DOM", "ES2022" ],
 		// "locale": "en-US",
 
-		"module": "ES2020",
+		"module": "ES2022",
 		"moduleResolution": "Node",
 
 		"newLine": "LF",
@@ -35,7 +40,9 @@
 		"removeComments": true,
 		"rootDir": "./src",
 
-		"sourceMap": true,
+		"skipLibCheck": true,
+
+		// "sourceMap": true,
 		"strict": true,
 		"strictBindCallApply": true,
 		"strictFunctionTypes": true,
@@ -43,7 +50,7 @@
 		"strictPropertyInitialization": true,
 		"stripInternal": true,
 
-		"target": "ES2020"
+		"target": "ES2022"
 	},
 	"exclude": [
 		"dist",

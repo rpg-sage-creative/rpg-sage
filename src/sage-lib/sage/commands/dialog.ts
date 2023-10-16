@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import * as _XRegExp from "xregexp";
-import utils, { OrUndefined, TParsers, type Optional } from "../../../sage-utils";
+import utils, { OrUndefined, TParsers, type Optional, ZERO_WIDTH_SPACE } from "../../../sage-utils";
 import { error } from "../../../sage-utils/utils/ConsoleUtils";
 import { DiscordId, DiscordKey, MessageType, NilSnowflake, ReactionType, TCommand, TCommandAndArgsAndData } from "../../discord";
 import { deleteMessage } from "../../discord/deletedMessages";
@@ -17,6 +17,8 @@ import DialogMessageRepository from "../repo/DialogMessageRepository";
 import { DialogType } from "../repo/base/IdRepository";
 import { parseDiceMatches, sendDice } from "./dice";
 import { registerInlineHelp } from "./help";
+import { getBuffer } from "../../../sage-utils/utils/HttpsUtils";
+import { warnReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 
@@ -33,31 +35,24 @@ type TDialogPostData = {
 	title?: string;
 };
 
+type DialogRenderableOptions = {
+	authorOptions: Discord.WebhookMessageOptions;
+	dialogTypeOverride?: DialogType;
+	files?: Discord.MessageAttachment[];
+	renderableContent: utils.RenderUtils.RenderableContent;
+	sageMessage: SageMessage;
+}
+
 //TODO: sort out why i am casting caches to <any>
-async function sendDialogRenderable(sageMessage: SageMessage, renderableContent: utils.RenderUtils.RenderableContent, authorOptions: Discord.WebhookMessageOptions, dialogTypeOverride?: DialogType): Promise<Discord.Message[]> {
+async function sendDialogRenderable({ authorOptions, dialogTypeOverride, files, renderableContent, sageMessage }: DialogRenderableOptions): Promise<Discord.Message[]> {
 	const dialogType = dialogTypeOverride ?? sageMessage.dialogType;
 	const targetChannel = await sageMessage.discord.fetchChannel(sageMessage.channel?.sendDialogTo);
+	const sageCache = sageMessage.caches;
 	if (targetChannel) {
-		// const sent = sageMessage.dialogType === "Webhook"
-		// 	? await sendWebhook(sageMessage.caches, targetChannel, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
-		// 	: await send(sageMessage.caches, targetChannel, renderableContent, sageMessage.message.author).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
-		const sent = await sendWebhook(sageMessage.caches, targetChannel, renderableContent, authorOptions, dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
-		if (sent.length) {
-			// sageMessage._.set("Dialog", sent[sent.length - 1]);
-			// 	deleteMesage(sageMessage.message);
-		}
+		const sent = await sendWebhook(targetChannel, { sageCache, renderableContent, authorOptions, dialogType, files }).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 		return sent;
 	} else {
-		// const replaced = sageMessage.dialogType === "Webhook"
-		// 	? await replaceWebhook(sageMessage.caches, sageMessage.message, renderableContent, authorOptions).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray)
-		// 	: await replace(sageMessage.caches, sageMessage.message, renderableContent).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
-		const replaced = await replaceWebhook(sageMessage.caches, sageMessage.message, renderableContent, authorOptions, dialogType).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
-		if (replaced.length) {
-			// sageMessage._.set("Dialog", replaced[replaced.length - 1]);
-			// if (sageMessage._.has("Dice")) {
-			// 	await sageMessage.reactDie();
-			// }
-		}
+		const replaced = await replaceWebhook(sageMessage.message, { sageCache, renderableContent, authorOptions, dialogType, files }).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 		return replaced;
 	}
 }
@@ -110,19 +105,35 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 
 	// Discord "avatarURL" is the profile pic, which I am calling the "tokenUrl"
 	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
+	const authorOptions = { username: authorName, avatarURL: avatarUrl };
 
-	const postType = postData.postType;
+	const dialogTypeOverride = postData.postType;
 
-	const messages: Discord.Message[] = await sendDialogRenderable(sageMessage, renderableContent, { username: authorName, avatarURL: avatarUrl }, postType)
+	//#region files
+	const files: Discord.MessageAttachment[] = [];
+	if (sageMessage.message.attachments.size) {
+		for (const att of sageMessage.message.attachments.values()) {
+			if (att.contentType?.match(/image/i) && att.url) {
+				const buffer = await getBuffer(att.url).catch(warnReturnNull);
+				if (buffer !== null) {
+					files.push(new Discord.MessageAttachment(buffer, att.name ?? undefined))
+				}
+			}
+		}
+	}
+	//#endregion
+
+	const messages: Discord.Message[] = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files })
 		.catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 	if (messages.length) {
+		const last = messages[messages.length - 1];
+
 		//#region dice
 		const diceOutputs = otherDiceMatches.map(match => match.output).flat();
 		if (diceOutputs.length) {
 			await sendDice(sageMessage, diceOutputs);
 		}
 		//#endregion
-		const last = messages[messages.length - 1];
 
 		const dialogMessage: Partial<TDialogMessage> = {
 			channelDid: last.channel.isThread() ? last.channel.parent?.id : last.channel.id,
@@ -555,8 +566,9 @@ async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent)
 	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, SageDialogWebhookName);
 	if (webhook) {
 		const threadId = sageMessage.threadDid;
-		const content = sageMessage.dialogType === DialogType.Post ? embedsToTexts([updatedEmbed]).join("\n") : undefined;
-		const embeds = sageMessage.dialogType === DialogType.Embed ? [updatedEmbed] : [];
+		const postType = dialogContent.postType ?? (embed ? DialogType.Embed : DialogType.Post);
+		const content = postType === DialogType.Post ? embedsToTexts([updatedEmbed]).join("\n") : ZERO_WIDTH_SPACE;
+		const embeds = postType === DialogType.Embed ? [updatedEmbed] : [];
 			await webhook.editMessage(message.id, { content, embeds, threadId }).then(() => deleteMessage(sageMessage.message), error);
 	}else {
 		return sageMessage.reactWarn();

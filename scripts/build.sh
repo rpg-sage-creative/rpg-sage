@@ -9,6 +9,7 @@ if [ "$PKG" = "data" ]; then
 	echoLog "processData ?"
 else
 	echoAndDo "cd $sageRootDir"
+	echoAndDo "rm -rf tsconfig.tsbuildinfo"
 	echoAndDo "tsc --build tsconfig.json"
 fi
 
