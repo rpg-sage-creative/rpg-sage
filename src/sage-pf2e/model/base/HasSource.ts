@@ -120,11 +120,11 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 
 	//#region IHasTraits
 
-	public traits = this.core.traits ?? (this.core.traits = []);
-	public hasTraits = this.traits.length > 0;
+	public get traits() { return this.core.traits ?? (this.core.traits = []); }
+	public get hasTraits() { return this.traits.length > 0; }
 
-	public nonRarityTraits = this.traits.filter(trait => !RARITIES.includes(<TRarity>trait));
-	public hasNonRarityTraits = this.nonRarityTraits.length > 0;
+	public get nonRarityTraits() { return this.traits.filter(trait => !RARITIES.includes(<TRarity>trait)); }
+	public get hasNonRarityTraits() { return this.nonRarityTraits.length > 0; }
 
 	public includesTrait(trait: string): boolean { return this.traits.includes(trait); }
 
@@ -132,8 +132,8 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 
 	//#region IHasRarity
 
-	public rarity = RARITIES.find(rarity => rarity === this.core.rarity) ?? RARITIES.find(rarity => this.traits.includes(rarity)) ?? COMMON;
-	public isNotCommon = this.rarity !== COMMON;
+	public get rarity() { return RARITIES.find(rarity => rarity === this.core.rarity) ?? RARITIES.find(rarity => this.traits.includes(rarity)) ?? COMMON; }
+	public get isNotCommon() { return this.rarity !== COMMON; }
 
 	//#endregion
 

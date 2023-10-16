@@ -7,16 +7,20 @@ export default class StringMatcher implements TStringMatcher {
 	public constructor(
 		/** Stores the raw value. */
 		public value: Optional<string>
-	) { }
+	) {
+		this.clean = StringMatcher.clean(this.value ?? "");
+		this.isBlank = this.clean === "";
+		this.lower = this.value?.toLowerCase() ?? "";
+	}
 
 	/** Stores StringMatcher.clean(value) */
-	public clean = StringMatcher.clean(this.value ?? "");
+	public clean: string;
 
 	/** Stores string.isBlank(value) */
-	public isBlank = this.clean === "";
+	public isBlank: boolean;
 
 	/** Stores string.toLowerCase() */
-	public lower = this.value?.toLowerCase() ?? "";
+	public lower: string;
 
 	/** Compares the clean values. */
 	public matches(other: TStringMatcherResolvable): boolean {

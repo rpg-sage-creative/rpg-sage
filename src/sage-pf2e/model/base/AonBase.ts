@@ -80,6 +80,7 @@ export default class AonBase
 
 	public constructor(protected core: AonBaseCore) {
 		super(hackCore(core));
+		this._objectType = utils.StringUtils.capitalize(this.core.type);
 	}
 
 	public matchesBase(sageData: Base): boolean {
@@ -87,10 +88,10 @@ export default class AonBase
 			?? sageData.toJSON().pf2t?.src?.endsWith(this.core.url);
 	}
 
-	private _objectType = utils.StringUtils.capitalize(this.core.type);
-	public get objectType(): string { return this._objectType; }
-	public objectTypeLower = this.objectType.toLowerCase();
-	public rarityLower = this.rarity.toLowerCase();
+	private _objectType: string;
+	public get objectType() { return this._objectType; }
+	public get objectTypeLower() { return this.objectType.toLowerCase(); }
+	public get rarityLower() { return this.rarity.toLowerCase(); }
 	public toString(): string { return this.core.name; }
 
 	//#region HasSource properies

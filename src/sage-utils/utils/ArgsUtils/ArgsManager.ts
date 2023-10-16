@@ -58,8 +58,15 @@ function cleanUrl(value: Optional<string>): Optional<string> {
 }
 
 export default class ArgsManager<T extends string> extends Collection<T> {
+	public constructor();
+	public constructor(arrayLength: number);
+	public constructor(...items: T[]);
+	public constructor(...args: any[]) {
+		super(...args);
+		this.initialArgs = Array.from(this);
+	}
 
-	public initialArgs: T[] = Array.from(this);
+	public initialArgs: T[];
 
 	//#region key/value pairs
 

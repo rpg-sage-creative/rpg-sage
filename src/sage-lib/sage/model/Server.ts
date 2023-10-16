@@ -325,25 +325,46 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	//#endregion
 
 	// #region IHasColorsCore
-	public colors = new Colors(this.core.colors || (this.core.colors = []));
+
+	private _colors?: Colors;
+
+	public get colors(): Colors {
+		if (!this._colors) {
+			this._colors = new Colors(this.core.colors ?? (this.core.colors = []));
+		}
+		return this._colors;
+	}
+
 	public toDiscordColor(colorType: ColorType): string | null {
 		if (!this.core.colors.length) {
-			warn(`Colors Missing: Server (${this.discord?.guild?.name || this.id})`);
+			warn(`Colors Missing: Server (${this.discord?.guild?.name ?? this.id})`);
 			return this.sageCache.bot.toDiscordColor(colorType);
 		}
 		return this.colors.toDiscordColor(colorType)
-			|| this.sageCache.bot.toDiscordColor(colorType);
+			?? this.sageCache.bot.toDiscordColor(colorType);
 	}
+
 	// #endregion
 
 	// #region IHasEmoji
-	public emoji = new Emoji(this.core.emoji || (this.core.emoji = []));
+
+	private _emoji?: Emoji;
+
+	public get emoji(): Emoji {
+		if (!this._emoji) {
+			this._emoji = new Emoji(this.core.emoji ?? (this.core.emoji = []));
+		}
+		return this._emoji;
+	}
+
 	public emojify(text: string): string {
 		return this.sageCache.bot.emojify(this.emoji.emojify(text));
 	}
+
 	public getEmoji(emojiType: EmojiType): string | null {
 		return this.emoji.get(emojiType) ?? this.sageCache.bot.getEmoji(emojiType);
 	}
+
 	// #endregion
 
 	public static createCore(guild: Discord.Guild): ServerCore {

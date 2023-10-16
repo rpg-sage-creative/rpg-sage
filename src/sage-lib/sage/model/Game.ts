@@ -308,7 +308,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 			return false;
 		}
 		const role = { did: roleDid, type: roleType, dicePing: true };
-		(this.core.roles || (this.core.roles = [])).push(role);
+		(this.core.roles ?? (this.core.roles = [])).push(role);
 		/*
 		// const saved = await this.save();
 		// if (saved) {
@@ -375,7 +375,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		}
 
 		const gameMasters = userDids.map(userDid => (<IGameUser>{ did: userDid, type: GameUserType.GameMaster }));
-		(this.core.users || (this.core.users = [])).push(...gameMasters);
+		(this.core.users ?? (this.core.users = [])).push(...gameMasters);
 		/*
 		// const saved = await this.save();
 		// if (saved) {
@@ -432,7 +432,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		}
 
 		const players = userDids.map(userDid => (<IGameUser>{ did: userDid, type: GameUserType.Player }));
-		(this.core.users || (this.core.users = [])).push(...players);
+		(this.core.users ?? (this.core.users = [])).push(...players);
 		/*
 		// const saved = await this.save();
 		// if (saved) {
@@ -635,7 +635,14 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 	// #region IHasColorsCore
 
-	public colors = new Colors(this.core.colors ?? (this.core.colors = []));
+	private _colors?: Colors;
+
+	public get colors(): Colors {
+		if (!this._colors) {
+			this._colors = new Colors(this.core.colors ?? (this.core.colors = []));
+		}
+		return this._colors;
+	}
 
 	public toDiscordColor(colorType: ColorType): string | null {
 		if (!this.core.colors.length) {
@@ -650,7 +657,14 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 	// #region IHasEmoji
 
-	public emoji = new Emoji(this.core.emoji || (this.core.emoji = []));
+	private _emoji?: Emoji;
+
+	public get emoji(): Emoji {
+		if (!this._emoji) {
+			this._emoji = new Emoji(this.core.emoji ?? (this.core.emoji = []));
+		}
+		return this._emoji;
+	}
 
 	public emojify(text: string): string {
 		return this.server.emojify(this.emoji.emojify(text));

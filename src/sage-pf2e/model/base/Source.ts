@@ -27,8 +27,8 @@ export default class Source extends Base<SourceCore, "Source"> {
 	public get apNumber(): number | undefined { return this.core.apNumber; }
 	public get apVolume(): number | undefined { return this.core.apVolume; }
 	public get code(): string { return this.core.code ?? ""; }
-	public isAp = !!this.core.apName && !!this.core.apNumber && !!this.core.apVolume;
-	public isPfs = !!this.core.pfsSeason && !!this.core.pfsVolume;
+	public get isAp() { return !!this.core.apName && !!this.core.apNumber && !!this.core.apVolume; }
+	public get isPfs() { return !!this.core.pfsSeason && !!this.core.pfsVolume; }
 	public get isCore(): boolean { return this.core.code === Source.CoreCode; }
 	public get pfsSeason(): number | undefined { return this.core.pfsSeason; }
 	public get pfsVolume(): number | undefined { return this.core.pfsVolume; }
