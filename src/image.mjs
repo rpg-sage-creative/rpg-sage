@@ -6,14 +6,10 @@ import { argv } from "process";
 
 // https://github.com/flauwekeul/honeycomb/blob/master/src/grid/grid.ts
 
-const REMOTE = "https://cdn.discordapp.com/attachments/1150530513723990117/1161449588562071592/Plains_26x26.png?ex=65385738&is=6525e238&hm=047176805d751041faa25072e73cdf300ad27db0edb0c6a70ee74d1c5b5cf806&"
+// const REMOTE = "https://cdn.discordapp.com/attachments/1150530513723990117/1161449588562071592/Plains_26x26.png?ex=65385738&is=6525e238&hm=047176805d751041faa25072e73cdf300ad27db0edb0c6a70ee74d1c5b5cf806&"
 const LOCAL = "/Users/randaltmeyer/Downloads/Plains_26x26.png";
 const ROWS = 26;
 const COLS = 26;
-const arg = process.argv.find(arg => arg.match(/^\d+(\.\d+)?$/));
-const KEY_DX_MULTIPLIER = arg ? +arg : 0.5;
-const KEY_DY_MULTIPLIER = arg ? +arg : 0.5;
-//#region square
 
 
 function colToKey(col) {
@@ -23,84 +19,236 @@ function colToKey(col) {
 	const rightCode = 65 + right;
 	return (leftCode ? String.fromCharCode(leftCode) : "") + String.fromCharCode(rightCode);
 }
-
-//#endregion
+function keyToCol(colKey = "") {
+	const [left, right] = colKey.split("");
+	const leftCode = left.charCodeAt(0);
+	if (right) {
+		const rightCode = right?.charCodeAt(0);
+		return 26 * (leftCode - 65) + (rightCode - 64);
+	}
+	return leftCode - 64;
+}
 
 //#region Grid & Tile
 
 class Grid {
-	constructor({ bgImage, width, height, cols, rows, gridType, key }) {
+	constructor({ bgImage, width, height, cols, rows, gridType, keys, colKeys, rowKeys, keyScale, colKeyScale, rowKeyScale } = { }) {
 		width = bgImage?.naturalWidth ?? bgImage?.width ?? width;
 		height = bgImage?.naturalHeight ?? bgImage?.height ?? height;
-		const pxPerCol = width / cols;
-		const pxPerRow = height / rows;
-		this.core = { bgImage, width, height, cols, rows, pxPerCol, pxPerRow, gridType, key };
+		colKeys = colKeys ?? keys ?? false;
+		rowKeys = rowKeys ?? keys ?? false;
+		colKeyScale = colKeyScale ?? keyScale ?? 1;
+		rowKeyScale = rowKeyScale ?? keyScale ?? 1;
+		const tileWidth = width / cols;
+		const tileHeight = height / rows;
+		const dX = rowKeys ? rowKeyScale * tileWidth : 0;
+		const dY = colKeys ? colKeyScale * tileHeight : 0;
+		const context = createCanvas(width + dX, height + dY).getContext("2d");
+		this.core = { context, bgImage, width, height, cols, rows, tileWidth, tileHeight, gridType, colKeys, rowKeys, colKeyScale, rowKeyScale };
 	}
 
-	/**
-	 * @param {({col:number,row:number,context:import("@napi-rs/canvas").SKRSContext2D,color?:string,dX?:number,dY?:number})}
-	 * @returns {Tile}
-	 */
-	draw({ col, row, context, color, dX, dY }) {
-		// if col/row, draw that one
-		this.get({ col, row }).draw({ context, color, dX, dY });
-		// if col only, draw that column
-		// if row only, draw that row
-		// if no col/row, draw the whole thing
+	drawTile({ col, row, context, strokeStyle, dX, dY } = { }) {
+		if (!context) {
+			context = this.core.context;
+			if (!context) return;
+
+			const { tileWidth, tileHeight, colKeys, rowKeys, colKeyScale, rowKeyScale } = this.core;
+
+			dX = rowKeys ? tileWidth * rowKeyScale : 0;
+			dY = colKeys ? tileHeight * colKeyScale : 0;
+		}
+
+		this.get({ col, row }).draw({ context, strokeStyle, dX, dY });
 	}
 
-	/**
-	 * @param {({context:import("@napi-rs/canvas").SKRSContext2D})}
-	 */
-	drawAll({ context }) {
-		const { bgImage, pxPerCol, pxPerRow, key } = this.core;
+	fillTile({ col, row, context, fillStyle, dX, dY } = { }) {
+		if (!context) {
+			context = this.core.context;
+			if (!context) return;
 
-		const dX = key ? pxPerCol * KEY_DX_MULTIPLIER : 0;
-		const dY = key ? pxPerRow * KEY_DY_MULTIPLIER : 0;
+			const { tileWidth, tileHeight, colKeys, rowKeys, colKeyScale, rowKeyScale } = this.core;
 
-		for (let col = 0; this.has({col}); col++) {
-			for (let row = 0; this.has({row}); row++) {
-				const tile = this.get({ col, row });
-				if (key) {
-					if (!row) {
-						tile.fillGridKey({ context, bgImage, col });
-						if (col) tile.drawGridKey({ context, col });
-					}
-					if (!col) {
-						tile.fillGridKey({ context, bgImage, row });
-						if (row) tile.drawGridKey({ context, row });
-					}
-				}
-				this.draw({ col, row, context, dX, dY });
+			dX = rowKeys ? tileWidth * rowKeyScale : 0;
+			dY = colKeys ? tileHeight * colKeyScale : 0;
+		}
+
+		this.get({ col, row }).fill({ context, fillStyle, dX, dY });
+	}
+
+	renderBackground({ context, bgImage } = { }) {
+		context = context ?? this.core.context;
+		if (!context) return;
+
+		bgImage = bgImage ?? this.core.bgImage;
+		if (!bgImage) return;
+
+		const { tileWidth, tileHeight, colKeys, rowKeys, colKeyScale, rowKeyScale } = this.core;
+
+		const dX = rowKeys ? tileWidth * rowKeyScale : 0;
+		const dY = colKeys ? tileHeight * colKeyScale : 0;
+
+		context.drawImage(bgImage, dX, dY);
+	}
+
+	renderGrid({ context, strokeStyle } = { }) {
+		context = context ?? this.core.context;
+		if (!context) return;
+
+		const { tileWidth, tileHeight, colKeys, rowKeys, colKeyScale, rowKeyScale } = this.core;
+
+		const dX = rowKeys ? tileWidth * rowKeyScale : 0;
+		const dY = colKeys ? tileHeight * colKeyScale : 0;
+
+		for (let col = 0; this.visible({col}); col++) {
+			for (let row = 0; this.visible({row}); row++) {
+				this.drawTile({ context, col, row, dX, dY, strokeStyle });
 			}
 		}
 	}
 
-	/**
-	 * @param {({col:number,row:number})}
-	 * @returns {Tile}
-	 */
-	get({ col, row }) {
-		const [width, height] = [this.core.pxPerCol, this.core.pxPerRow];
+	renderKeys({ context, bgImage, globalAlpha, fillStyle, strokeStyle } = { }) {
+		context = context ?? this.core.context;
+		if (!context) return;
+
+		bgImage = bgImage ?? this.core.bgImage;
+		if (!bgImage) return;
+
+		const { colKeys, rowKeys } = this.core;
+		if (!colKeys && !rowKeys) return;
+
+		const { width, height, tileWidth, tileHeight, colKeyScale, rowKeyScale } = this.core;
+
+		const adjustedHeight = tileHeight * colKeyScale;
+		const adjustedWidth = tileWidth * rowKeyScale;
+
+		//#region drawImage
+
+		if (colKeys || rowKeys) {
+
+			// use pixel 0,0 to fill in the top left corner
+			context.drawImage(bgImage, 0, 0, 1, 1, 0, 0, adjustedWidth, adjustedHeight);
+
+			if (colKeys) {
+				const adjustedX = rowKeys ? tileWidth * rowKeyScale : 0;
+				context.drawImage(bgImage, 0, 0, width, 1, adjustedX, 0, width, adjustedHeight);
+			}
+
+			if (rowKeys) {
+				const adjustedY = colKeys ? tileHeight * colKeyScale : 0;
+				context.drawImage(bgImage, 0, 0, 1, height, 0, adjustedY, adjustedWidth, height);
+			}
+
+		}
+
+		//#endregion
+
+		//#region fillRect
+
+		if (colKeys || rowKeys) {
+			context.save();
+			context.globalAlpha = globalAlpha ?? 0.7;
+			context.fillStyle = fillStyle ?? "#000";
+
+			context.fillRect(0, 0, adjustedWidth, adjustedHeight);
+
+			if (colKeys) {
+				context.fillRect(adjustedWidth, 0, width, adjustedHeight);
+			}
+
+			if (rowKeys) {
+				context.fillRect(0, adjustedHeight, adjustedWidth, height);
+			}
+
+			context.restore();
+		}
+
+		//#endregion
+
+		//#region text
+
+		context.save();
+		context.fillStyle = strokeStyle ?? "#fff";
+		context.strokeStyle = strokeStyle ?? "#fff";
+		context.textAlign = "center";
+		context.textBaseline = "middle";
+		context.font = `${Math.min(tileWidth, tileHeight) * 0.33}px serif`;
+
+		if (colKeys) {
+			const dX = rowKeys ? tileWidth * rowKeyScale : 0;
+			for (let col = 0; this.has({col}); col++) {
+				const centerX = this.get({col,row:0}).center.x;
+				// move up from center
+				const mY = 0.5 * colKeyScale;
+
+				context.fillText(colToKey(col), centerX + dX, tileHeight * mY, adjustedWidth);
+			}
+		}
+
+		if (rowKeys) {
+			const dY = colKeys ? tileHeight * colKeyScale : 0;
+			for (let row = 0; this.visible({row}); row++) {
+				const centerY = this.get({col:0,row}).center.y;
+				// move left from center
+				const mX = 0.5 * rowKeyScale;
+
+				context.fillText(String(row+1), tileWidth * mX, centerY + dY, adjustedWidth);
+			}
+		}
+
+		context.restore();
+
+		//#endregion
+
+	}
+
+	render({ context, bgImage, mimeType } = { }) {
+		context = context ?? this.core.context;
+		if (!context) return;
+
+		bgImage = bgImage ?? this.core.bgImage;
+		if (!bgImage) return;
+
+		this.renderBackground({ context, bgImage });
+		this.renderKeys({ context, bgImage });
+		this.renderGrid({ context });
+
+		return context.canvas.toBuffer(mimeType ?? "image/png");
+	}
+
+	toBuffer({ mimeType } = { }) {
+		return this.core.context?.canvas.toBuffer(mimeType ?? "image/png");
+	}
+
+	get({ col, row } = { }) {
+		const [width, height] = [this.core.tileWidth, this.core.tileHeight];
 		return new Tile({ col, row, width, height, gridType });
 	}
 
-	/**
-	 * @param {({col:number,row:number})}
-	 * @returns {boolean}
-	 */
-	has({ col, row }) {
-		const { pxPerCol, pxPerRow, key } = this.core;
-		const dX = key ? pxPerCol : 0;
-		const dY = key ? pxPerRow : 0;
-		const tile = this.get({ col:col??0, row:row??0 })
-		return tile.center.x < this.core.width + dX && tile.center.y < this.core.height + dY;
+	has({ col, row } = { }) {
+		const { tileWidth, tileHeight, key } = this.core;
+		const dX = key ? tileWidth : 0;
+		const dY = key ? tileHeight : 0;
+		const tile = this.get({ col:col??0, row:row??0 });
+		const center = tile.center;
+		return center.x < this.core.width + dX && center.y < this.core.height + dY;
+	}
+
+	visible({ col, row } = { }) {
+		const { tileWidth, tileHeight, key } = this.core;
+		const dX = key ? tileWidth : 0;
+		const dY = key ? tileHeight : 0;
+		const tile = this.get({ col:col??0, row:row??0 });
+		const least = tile.least;
+		return least.x < this.core.width + dX && least.y < this.core.height + dY;
 	}
 }
+
 class Tile {
-	constructor({ col, row, width, height, gridType }) {
+	constructor({ col, row, width, height, gridType } = { }) {
 		this.core = { col, row, width, height, gridType };
 	}
+
+	/** { x, y } that represents center of the tile */
 	get center() {
 		const { col, row, width, height } = this.core;
 		const x = col * width + width / 2;
@@ -120,6 +268,18 @@ class Tile {
 				return { x, y };
 		}
 	}
+
+	/** { x, y } that represents the point closest to origin (0,0) */
+	get least() {
+		const points = this.points;
+		return points.reduce((least, point) => {
+			if (!least) return point;
+			if (point.x < least.x || point.y < least.y) return point;
+			return least;
+		}, undefined);
+	}
+
+	/** { x, y }[] that represents all points of the tile */
 	get points() {
 		const { x, y } = this.center;
 		const w = this.core.width;
@@ -155,9 +315,12 @@ class Tile {
 			}
 		}
 	}
-	draw({ context, color, dX, dY }) {
+
+	draw({ context, strokeStyle, dX, dY } = { }) {
+		if (!context) return;
+
 		context.save();
-		context.strokeStyle = color ?? "#000";
+		context.strokeStyle = strokeStyle ?? "#000";
 		context.beginPath();
 
 		dX = dX ?? 0;
@@ -169,117 +332,59 @@ class Tile {
 		context.stroke();
 		context.restore();
 	}
-	/**
-	 * @param {({context:import("@napi-rs/canvas").SKRSContext2D})}
-	 */
-	fillGridKey({ context, bgImage, col, row, globalAlpha, fillStyle }) {
-		const { width, height } = this.core;
 
-		const adjustedWidth = width * KEY_DX_MULTIPLIER;
-		const adjustedHeight = height * KEY_DY_MULTIPLIER;
+	fill({ context, fillStyle, dX, dY } = { }) {
+		if (!context) return;
 
 		context.save();
-		if (bgImage) {
-			if (col !== undefined) {
-				context.drawImage(bgImage, col * width, 0, width, adjustedHeight, col * width + adjustedWidth, 0, width, adjustedHeight);
-			}
-			if (row !== undefined) {
-				context.drawImage(bgImage, 0, row * height, adjustedWidth, height, 0, row * height + adjustedHeight, adjustedWidth, height);
-			}
-		}
-		context.globalAlpha = globalAlpha ?? 0.7;
 		context.fillStyle = fillStyle ?? "#000";
-		if (col !== undefined) {
-			context.fillRect(col * width, 0, width, adjustedHeight);
-		}
-		if (row !== undefined) {
-			context.fillRect(0, row * height, adjustedWidth, height);
-		}
-		context.restore();
-	}
-	drawGridKey({ context, col, row, fillStyle, strokeStyle, textAlign, textBaseLine, font }) {
-		const { width, height, gridType } = this.core;
+		context.beginPath();
 
-		context.save();
-		context.fillStyle = fillStyle ?? "#fff";
-		context.strokeStyle = strokeStyle ?? "#000";
-		context.textAlign = textAlign ?? "center";
-		context.textBaseline = textBaseLine ?? "middle";
-		context.font = font ?? `${Math.min(width, height) * 0.33}px serif`;
+		dX = dX ?? 0;
+		dY = dY ?? 0;
 
-		if (col !== undefined) {
-			// shift by row key width, subtracted by width because we are a col ahead
-			const shiftX = width * KEY_DX_MULTIPLIER - width;
-			// wobble the flat hexes
-			const wobbleX = gridType === "flat" ? width * 0.25 : 0;
-			// move up from center
-			const mY = 0.5 * KEY_DY_MULTIPLIER;
+		this.points.forEach(({ x, y }) => context.lineTo(x + dX, y + dY));
 
-			context.fillText(colToKey(col - 1), this.center.x + shiftX + wobbleX, height * mY, width);
-		}
-		if (row !== undefined) {
-			// shift by col key height, subtracted by height because we are a row ahead
-			const shiftY = height * KEY_DY_MULTIPLIER - height;
-			// wobble pointy hexes
-			const wobbleY = gridType === "pointy" ? height * 0.25 : 0;
-			// move left from center
-			const mX = 0.5 * KEY_DX_MULTIPLIER;
-
-			context.fillText(String(row), width * mX, this.center.y + shiftY + wobbleY, width);
-		}
+		context.closePath();
+		context.fill();
 		context.restore();
 	}
 }
 
 //#endregion
 
-//#region hex
-
-//#endregion
-
-//#region h-hex
-
-function drawHexGridKey(context, { x, y, col, row, pxPerCol, pxPerRow }) {
-	context.save();
-	context.fillStyle = "#fff";
-	context.strokeStyle = "#000";
-	context.textAlign = "center";
-	context.textBaseline = "middle";
-	context.font = `${pxPerRow / 2}px serif`;
-	if (col !== undefined) {
-		context.fillText(colToKey(col), (col + 1) * pxPerCol + pxPerCol / 2, pxPerRow / 2, pxPerCol);
-	}
-	if (row !== undefined) {
-		context.fillText(String(row + 1), pxPerCol / 2, (row + 1) * pxPerRow + pxPerRow / 2, pxPerCol);
-	}
-	// context.fillText(colToKey(col) + String(row + 1), pxPerCol / 2, (row+1) * pxPerRow + pxPerRow / 2, pxPerCol);
-	context.restore();
-}
-
-
-function labelHexGrid(context, { bgImage, width, height, cols, rows, pxPerCol, pxPerRow, key, gridType }) {
-
-}
-
-async function main({ url, cols, rows, gridType, key }) {
+async function main({ url, cols, rows, gridType, keys, colKeys, rowKeys, colKeyScale, rowKeyScale, tile }) {
 	const bgImage = await loadImage(url);
-	const { height, width } = bgImage;
 
-	const pxPerRow = height / rows;
-	const pxPerCol = width / cols;
+	const grid = new Grid({ bgImage, cols, rows, gridType, keys, colKeys, rowKeys, colKeyScale, rowKeyScale });
+	grid.renderBackground();
+	grid.renderKeys();
+	grid.renderGrid();
 
-	const dX = key ? pxPerCol * KEY_DX_MULTIPLIER : 0;
-	const dY = key ? pxPerRow * KEY_DY_MULTIPLIER : 0;
+	const [_tile, tileCol, tileRow] = tile?.match(/(\d+)[,x](\d+)/i) ?? tile?.match(/([a-z]+)(\d+)/i) ?? [];
+	if (_tile) {
+		const _col = +tileCol || keyToCol(tileCol.toUpperCase());
+		const col = _col - 1;
+		const _row = +tileRow;
+		const row = _row - 1;
+		const fillStyle = "#ff0000";
+		const strokeStyle = "#ff0000";
+		grid.fillTile({ col, row, fillStyle, strokeStyle });
+	}
 
-	const context = createCanvas(width + dX, height + dY).getContext("2d");
-	context.drawImage(bgImage, dX, dY);
+	const buffer = grid.toBuffer();
 
-	const grid = new Grid({ bgImage, cols, rows, gridType, key });
-	grid.drawAll({ context });
-
-	writeFileSync("./out.png", context.canvas.toBuffer("image/png"));
+	writeFileSync("./out.png", buffer);
 
 }
-const gridType = argv.find(arg => ["flat","pointy"].includes(arg));
-const key = argv.includes("key");
-main({ url:LOCAL, cols:COLS, rows:ROWS, gridType, key });
+
+const args = argv.slice(2);
+const gridType = args.find(arg => ["flat","pointy"].includes(arg));
+const keys = args.includes("keys");
+const rowKeys = args.includes("rowKeys") || keys;
+const colKeys = args.includes("colKeys") || keys;
+const keyScales = args.filter(arg => arg.match(/^\d+(\.\d+)?$/));
+const colKeyScale = keyScales[0] ? +keyScales[0] : 0.5;
+const rowKeyScale = keyScales[1] ? +keyScales[1] : colKeyScale;
+const tile = args.find(arg => arg.match(/[a-z]+\d+|\d+[,x]\d+/i));
+main({ url:LOCAL, cols:COLS, rows:ROWS, gridType, keys, colKeys, rowKeys, colKeyScale, rowKeyScale, tile });
