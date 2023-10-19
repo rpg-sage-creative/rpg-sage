@@ -18,7 +18,7 @@ import { DialogType } from "../repo/base/IdRepository";
 import { parseDiceMatches, sendDice } from "./dice";
 import { registerInlineHelp } from "./help";
 import { getBuffer } from "../../../sage-utils/utils/HttpsUtils";
-import { warnReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { errorReturnNull, warnReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 
@@ -131,7 +131,13 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 		//#region dice
 		const diceOutputs = otherDiceMatches.map(match => match.output).flat();
 		if (diceOutputs.length) {
-			await sendDice(sageMessage, diceOutputs);
+			const diceResults = await sendDice(sageMessage, diceOutputs).catch(errorReturnNull);
+			if (diceResults?.allSecret && diceResults?.hasGmChannel) {
+				const emoji = sageMessage.getEmoji(EmojiType.Die);
+				if (emoji) {
+					await last.react(emoji).catch(errorReturnNull);
+				}
+			}
 		}
 		//#endregion
 
