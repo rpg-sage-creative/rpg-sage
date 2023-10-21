@@ -1,3 +1,4 @@
+.VSCodeCounter/
 dist/
 node_modules/
 types/
