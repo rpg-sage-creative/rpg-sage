@@ -83,10 +83,11 @@ async function sendWebhookAndReturnMessages(webhook: Discord.Webhook, options: D
 
 type WebhookOptions = {
 	authorOptions: Discord.WebhookMessageOptions;
-	renderableContent: TRenderableContentResolvable;
 	dialogType: DialogType;
 	files?: Discord.MessageAttachment[];
+	renderableContent: TRenderableContentResolvable;
 	sageCache: SageCache;
+	skipDelete?: boolean;
 };
 
 export async function sendWebhook(targetChannel: TChannel, { authorOptions, renderableContent, dialogType, files, sageCache }: WebhookOptions): Promise<Discord.Message[]> {
@@ -108,8 +109,8 @@ export async function sendWebhook(targetChannel: TChannel, { authorOptions, rend
 	return messages;
 }
 
-export async function replaceWebhook(originalMessage: DMessage, { authorOptions, renderableContent, dialogType, files, sageCache }: WebhookOptions): Promise<Discord.Message[]> {
-	if (!originalMessage.deletable) {
+export async function replaceWebhook(originalMessage: DMessage, { authorOptions, renderableContent, dialogType, files, sageCache, skipDelete }: WebhookOptions): Promise<Discord.Message[]> {
+	if (!skipDelete && !originalMessage.deletable) {
 		return Promise.reject(`Cannot Delete Message: ${messageToDetails(originalMessage)}`);
 	}
 	if (!originalMessage.guild) {
@@ -121,7 +122,9 @@ export async function replaceWebhook(originalMessage: DMessage, { authorOptions,
 	}
 
 	await sageCache.pauseForTupper(DiscordKey.fromMessage(originalMessage));
-	await deleteMessage(originalMessage);
+	if (!skipDelete) {
+		await deleteMessage(originalMessage);
+	}
 
 	const replyingTo = originalMessage.reference
 		? `*replying to* ${createMessageLink(originalMessage.reference)}`
