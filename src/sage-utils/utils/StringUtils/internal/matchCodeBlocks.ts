@@ -1,7 +1,7 @@
 type CodeBlockMatch = {
 	index: number;
 	length: number;
-	redacted: string;
+	match: string;
 	ticks: number;
 };
 
@@ -36,12 +36,11 @@ function findNext(content: string, startIndex: number): CodeBlockMatch | null {
 			/** total length of match, including ticks */
 			const length = rightMatch.index + ticks * 2;
 
-			const ends = "".padEnd(ticks, "`");
-			const center = "".padEnd(rightMatch.index, "*");
-			const redacted = ends + center + ends;
+			/** the matched text */
+			const match = content.slice(index, index + length);
 
 			// return match
-			return { index, length, redacted, ticks };
+			return { index, length, match, ticks };
 		}
 
 		// we didn't get a match, so we try with fewer ticks

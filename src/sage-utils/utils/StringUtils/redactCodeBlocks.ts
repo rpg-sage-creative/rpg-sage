@@ -7,15 +7,20 @@ import { matchCodeBlocks } from "./internal/matchCodeBlocks.js";
  * Ex: " \`doesn't redact\` "
  * Matches 1, 2, or 3 back-tick characters (because Discord's Markdown supports them).
 */
-export function redactCodeBlocks(content: string) {
+export function redactCodeBlocks(content: string, redactedCharacter = "*") {
 	// find all the matches
 	const matches = matchCodeBlocks(content);
 
 	// redacted the matches
-	matches.forEach(match => {
-		content = content.slice(0, match.index)
-			+ match.redacted
-			+ content.slice(match.index + match.length);
+	matches.forEach(({ index, ticks, length }) => {
+		/** the redacted / replacement text */
+		const ends = "".padEnd(ticks, "`");
+		const center = "".padEnd(length - ticks * 2, redactedCharacter);
+		const redacted = ends + center + ends;
+
+		content = content.slice(0, index)
+			+ redacted
+			+ content.slice(index + length);
 	});
 
 	return content;
