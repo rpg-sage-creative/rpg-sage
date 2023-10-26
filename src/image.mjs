@@ -243,6 +243,41 @@ class Grid {
 	}
 }
 
+function squareMove({ col, row, dir } = { }) {
+	dir = dir.toUpperCase();
+	if (["NW", "N", "NE"].includes(dir)) row--;
+	if (["SW", "S", "SE"].includes(dir)) row++;
+	if (["NW", "W", "SW"].includes(dir)) col--;
+	if (["NE", "E", "SE"].includes(dir)) col++;
+	return { col, row };
+}
+function flatMove({ col, row, dir } = { }) {
+	dir = dir.toUpperCase();
+	const evenCol = col % 2 === 0;
+	switch(dir) {
+		case "NW": col--; row -= evenCol ? 1 : 0; break;
+		case "N":         row--; break;
+		case "NE": col++; row -= evenCol ? 1 : 0; break;
+		case "SW": col--; row += evenCol ? 0 : 1; break;
+		case "S":         row++; break;
+		case "SE": col++; row += evenCol ? 0 : 1; break;
+	}
+	return { col, row };
+}
+function pointyMove({ col, row, dir } = { }) {
+	dir = dir.toUpperCase();
+	const evenRow = row % 2 === 0;
+	switch(dir) {
+		case "NW": col -= evenRow ? 1 : 0; row--; break;
+		case "W":  col--; break;
+		case "SW": col -= evenRow ? 1 : 0; row++; break;
+		case "NE": col += evenRow ? 0 : 1; row--; break;
+		case "E":  col++; break;
+		case "SE": col += evenRow ? 0 : 1; row++; break;
+	}
+	return { col, row };
+}
+
 class Tile {
 	constructor({ col, row, width, height, gridType } = { }) {
 		this.core = { col, row, width, height, gridType };
@@ -349,6 +384,15 @@ class Tile {
 		context.fill();
 		context.restore();
 	}
+
+	move({ dir } = { }) {
+		const args = { ...this.core, dir };
+		switch(this.core.gridType) {
+			case "flat": return new Tile({ ...this.core, ...flatMove(args) });
+			case "pointy": return new Tile({ ...this.core, ...pointyMove(args) });
+			default: return new Tile({ ...this.core, ...squareMove(args) });
+		}
+	}
 }
 
 //#endregion
@@ -367,9 +411,16 @@ async function main({ url, cols, rows, gridType, keys, colKeys, rowKeys, colKeyS
 		const col = _col - 1;
 		const _row = +tileRow;
 		const row = _row - 1;
-		const fillStyle = "#ff0000";
+		// const fillStyle = "#ff0000";
 		const strokeStyle = "#ff0000";
-		grid.fillTile({ col, row, fillStyle, strokeStyle });
+		const one = grid.get({ col, row });
+		const two = one.move({ dir:"NW" });
+		const three = two.move({ dir:"N" });
+		const four = three.move({ dir:"NE" });
+		grid.fillTile({ ...one.core, fillStyle:"#ff0000", strokeStyle });
+		grid.fillTile({ ...two.core, fillStyle:"#00ff00", strokeStyle });
+		grid.fillTile({ ...three.core, fillStyle:"#0000ff", strokeStyle });
+		grid.fillTile({ ...four.core, fillStyle:"#ff00ff", strokeStyle });
 	}
 
 	const buffer = grid.toBuffer();
