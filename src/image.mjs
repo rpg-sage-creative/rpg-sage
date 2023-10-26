@@ -8,6 +8,7 @@ import { argv } from "process";
 
 // const REMOTE = "https://cdn.discordapp.com/attachments/1150530513723990117/1161449588562071592/Plains_26x26.png?ex=65385738&is=6525e238&hm=047176805d751041faa25072e73cdf300ad27db0edb0c6a70ee74d1c5b5cf806&"
 const LOCAL = "/Users/randaltmeyer/Downloads/Plains_26x26.png";
+const TOKEN = "/Users/randaltmeyer/Downloads/1200px-BirthdayMassareBunnyLogo.svg.png";
 const ROWS = 26;
 const COLS = 26;
 
@@ -29,6 +30,51 @@ function keyToCol(colKey = "") {
 	return leftCode - 64;
 }
 
+function squareMove({ col, row, dir } = { }) {
+	dir = dir.toUpperCase();
+	if (["NW", "N", "NE"].includes(dir)) row--;
+	if (["SW", "S", "SE"].includes(dir)) row++;
+	if (["NW", "W", "SW"].includes(dir)) col--;
+	if (["NE", "E", "SE"].includes(dir)) col++;
+	return { col, row };
+}
+function flatMove({ col, row, dir } = { }) {
+	dir = dir.toUpperCase();
+	const evenCol = col % 2 === 0;
+	switch(dir) {
+		case "NW": col--; row -= evenCol ? 1 : 0; break;
+		case "N":         row--; break;
+		case "NE": col++; row -= evenCol ? 1 : 0; break;
+		case "SW": col--; row += evenCol ? 0 : 1; break;
+		case "S":         row++; break;
+		case "SE": col++; row += evenCol ? 0 : 1; break;
+	}
+	return { col, row };
+}
+function pointyMove({ col, row, dir } = { }) {
+	dir = dir.toUpperCase();
+	const evenRow = row % 2 === 0;
+	switch(dir) {
+		case "NW": col -= evenRow ? 1 : 0; row--; break;
+		case "W":  col--; break;
+		case "SW": col -= evenRow ? 1 : 0; row++; break;
+		case "NE": col += evenRow ? 0 : 1; row--; break;
+		case "E":  col++; break;
+		case "SE": col += evenRow ? 0 : 1; row++; break;
+	}
+	return { col, row };
+}
+// function hexToRGB(hex) {
+// 	const [_, red, green, blue] = /#([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})/.exec(hex);
+// 	const r = parseInt(red, 16);
+// 	const g = parseInt(green, 16);
+// 	const b = parseInt(blue, 16);
+// 	return { r, g, b };
+// }
+// function gradeColors({ start, end, count }) {
+// 	const startRGB = hexToRGB(start);
+// 	const endRGB = hexToRGB(end);
+// }
 //#region Grid & Tile
 
 class Grid {
@@ -61,7 +107,7 @@ class Grid {
 		this.get({ col, row }).draw({ context, strokeStyle, dX, dY });
 	}
 
-	fillTile({ col, row, context, fillStyle, dX, dY } = { }) {
+	fillTile({ col, row, context, fillStyle, alpha, dX, dY } = { }) {
 		if (!context) {
 			context = this.core.context;
 			if (!context) return;
@@ -72,7 +118,7 @@ class Grid {
 			dY = colKeys ? tileHeight * colKeyScale : 0;
 		}
 
-		this.get({ col, row }).fill({ context, fillStyle, dX, dY });
+		this.get({ col, row }).fill({ context, fillStyle, alpha, dX, dY });
 	}
 
 	renderBackground({ context, bgImage } = { }) {
@@ -88,6 +134,33 @@ class Grid {
 		const dY = colKeys ? tileHeight * colKeyScale : 0;
 
 		context.drawImage(bgImage, dX, dY);
+	}
+
+	renderImage({ col, row, imageCols, imageRows, context, image, alpha, dX, dY } = { }) {
+		if (!image) return;
+
+		const { tileWidth, tileHeight } = this.core;
+
+		if (!context) {
+			context = this.core.context;
+			if (!context) return;
+
+			const { colKeys, rowKeys, colKeyScale, rowKeyScale } = this.core;
+
+			dX = rowKeys ? tileWidth * rowKeyScale : 0;
+			dY = colKeys ? tileHeight * colKeyScale : 0;
+		}
+
+		const tile = this.get({ col, row });
+		const x = tile.least.x + (dX ?? 0);
+		const y = tile.least.y + (dY ?? 0);
+		const w = tileWidth * (imageCols ?? 1);
+		const h = tileHeight * (imageRows ?? 1);
+
+		context.save();
+		context.globalAlpha = alpha ?? 1;
+		context.drawImage(image, x, y, w, h);
+		context.restore();
 	}
 
 	renderGrid({ context, strokeStyle } = { }) {
@@ -215,6 +288,23 @@ class Grid {
 		return context.canvas.toBuffer(mimeType ?? "image/png");
 	}
 
+	renderPath({ col, row, path, context, image, fillStyle, strokeStyle, dX, dY }) {
+		const tiles = [];
+		tiles.push(this.get({ col, row }));
+		for (const dir of path) {
+			tiles.push(tiles[tiles.length - 1].move({ dir }));
+		}
+		const alphaDelta = 1 / tiles.length;
+		tiles.forEach((tile, index) => {
+			const alpha = 0.25 + 0.5 * index * alphaDelta;
+			if (image) {
+				this.renderImage({ ...tile.core, context, image, alpha, dX, dY });
+			}else {
+				this.fillTile({ ...tile.core, context, fillStyle, strokeStyle, alpha, dX, dY })
+			}
+		});
+	}
+
 	toBuffer({ mimeType } = { }) {
 		return this.core.context?.canvas.toBuffer(mimeType ?? "image/png");
 	}
@@ -243,41 +333,6 @@ class Grid {
 	}
 }
 
-function squareMove({ col, row, dir } = { }) {
-	dir = dir.toUpperCase();
-	if (["NW", "N", "NE"].includes(dir)) row--;
-	if (["SW", "S", "SE"].includes(dir)) row++;
-	if (["NW", "W", "SW"].includes(dir)) col--;
-	if (["NE", "E", "SE"].includes(dir)) col++;
-	return { col, row };
-}
-function flatMove({ col, row, dir } = { }) {
-	dir = dir.toUpperCase();
-	const evenCol = col % 2 === 0;
-	switch(dir) {
-		case "NW": col--; row -= evenCol ? 1 : 0; break;
-		case "N":         row--; break;
-		case "NE": col++; row -= evenCol ? 1 : 0; break;
-		case "SW": col--; row += evenCol ? 0 : 1; break;
-		case "S":         row++; break;
-		case "SE": col++; row += evenCol ? 0 : 1; break;
-	}
-	return { col, row };
-}
-function pointyMove({ col, row, dir } = { }) {
-	dir = dir.toUpperCase();
-	const evenRow = row % 2 === 0;
-	switch(dir) {
-		case "NW": col -= evenRow ? 1 : 0; row--; break;
-		case "W":  col--; break;
-		case "SW": col -= evenRow ? 1 : 0; row++; break;
-		case "NE": col += evenRow ? 0 : 1; row--; break;
-		case "E":  col++; break;
-		case "SE": col += evenRow ? 0 : 1; row++; break;
-	}
-	return { col, row };
-}
-
 class Tile {
 	constructor({ col, row, width, height, gridType } = { }) {
 		this.core = { col, row, width, height, gridType };
@@ -304,13 +359,14 @@ class Tile {
 		}
 	}
 
-	/** { x, y } that represents the point closest to origin (0,0) */
+	/** { x, y } that represents a point made up of the smallest x and smallest y from all points. */
 	get least() {
 		const points = this.points;
 		return points.reduce((least, point) => {
-			if (!least) return point;
-			if (point.x < least.x || point.y < least.y) return point;
-			return least;
+			return {
+				x: Math.min(point.x, least?.x ?? point.x),
+				y: Math.min(point.y, least?.y ?? point.y)
+			};
 		}, undefined);
 	}
 
@@ -368,11 +424,12 @@ class Tile {
 		context.restore();
 	}
 
-	fill({ context, fillStyle, dX, dY } = { }) {
+	fill({ context, fillStyle, alpha, dX, dY } = { }) {
 		if (!context) return;
 
 		context.save();
 		context.fillStyle = fillStyle ?? "#000";
+		context.globalAlpha = alpha ?? 1;
 		context.beginPath();
 
 		dX = dX ?? 0;
@@ -399,11 +456,18 @@ class Tile {
 
 async function main({ url, cols, rows, gridType, keys, colKeys, rowKeys, colKeyScale, rowKeyScale, tile }) {
 	const bgImage = await loadImage(url);
+	const token = await loadImage(TOKEN);
 
 	const grid = new Grid({ bgImage, cols, rows, gridType, keys, colKeys, rowKeys, colKeyScale, rowKeyScale });
 	grid.renderBackground();
 	grid.renderKeys();
 	grid.renderGrid();
+
+	const path = gridType === "pointy"
+		? ["NW","NW","NE","E","E","SE","SE","SW","SE"]
+		: gridType === "flat"
+		? ["NW","N","NE","SE","NE","SE","S","SE","S"]
+		: ["NW","N","NE","E","E","S","E","S","SE","S"]
 
 	const [_tile, tileCol, tileRow] = tile?.match(/(\d+)[,x](\d+)/i) ?? tile?.match(/([a-z]+)(\d+)/i) ?? [];
 	if (_tile) {
@@ -411,17 +475,9 @@ async function main({ url, cols, rows, gridType, keys, colKeys, rowKeys, colKeyS
 		const col = _col - 1;
 		const _row = +tileRow;
 		const row = _row - 1;
-		// const fillStyle = "#ff0000";
-		const strokeStyle = "#ff0000";
-		const one = grid.get({ col, row });
-		const two = one.move({ dir:"NW" });
-		const three = two.move({ dir:"N" });
-		const four = three.move({ dir:"NE" });
-		grid.fillTile({ ...one.core, fillStyle:"#ff0000", strokeStyle });
-		grid.fillTile({ ...two.core, fillStyle:"#00ff00", strokeStyle });
-		grid.fillTile({ ...three.core, fillStyle:"#0000ff", strokeStyle });
-		grid.fillTile({ ...four.core, fillStyle:"#ff00ff", strokeStyle });
+		grid.renderPath({ col, row, path, fillStyle:"#ff0000" });
 	}
+	grid.renderPath({ col:3, row:12, path, image:token });
 
 	const buffer = grid.toBuffer();
 
@@ -439,3 +495,33 @@ const colKeyScale = keyScales[0] ? +keyScales[0] : 0.5;
 const rowKeyScale = keyScales[1] ? +keyScales[1] : colKeyScale;
 const tile = args.find(arg => arg.match(/[a-z]+\d+|\d+[,x]\d+/i));
 main({ url:LOCAL, cols:COLS, rows:ROWS, gridType, keys, colKeys, rowKeys, colKeyScale, rowKeyScale, tile });
+
+
+
+/*
+want to animate the path???
+
+var getPixels = require('get-pixels')
+var GifEncoder = require('gif-encoder');
+var gif = new GifEncoder(1280, 720);
+var file = require('fs').createWriteStream('img.gif');
+var pics = ['./pics/1.jpg', './pics/2.jpg', './pics/3.jpg'];
+
+gif.pipe(file);
+gif.setQuality(20);
+gif.setDelay(1000);
+gif.writeHeader();
+
+var addToGif = function(images, counter = 0) {
+  getPixels(images[counter], function(err, pixels) {
+    gif.addFrame(pixels.data);
+    gif.read();
+    if (counter === images.length - 1) {
+      gif.finish();
+    } else {
+      addToGif(images, ++counter);
+    }
+  })
+}
+addToGif(pics);
+*/
