@@ -65,10 +65,16 @@ function removeDesc(description: string, desc: string): string {
 
 //#region Tokenizer
 
+// dice parser parts
+// sign:  ([\-\+\*\/])?
+// rolls: (?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?
+// count: (?:\s*(\d+)\s*|\b)
+// sides: d\s*(\d+)
+
 /** Returns a new object with the default dice parsers for use with Tokenizer */
 export function getParsers(): TParsers {
 	return {
-		dice: /([\-\+\*\/])?(?:\s*(\d+)\s*|\b)d\s*(\d+)/i,
+		dice: /([\-\+\*\/])?(?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?(?:\s*(\d+)\s*|\b)d\s*(\d+)/i,
 		dropKeep: /(dl|dh|kl|kh)\s*(\d+)?/i,
 		noSort: /(ns)/i,
 		mod: /([\-\+\*\/])\s*(\d+)(?!d\d)/i,
@@ -99,8 +105,9 @@ export type TReduceSignToDropKeep = {
 function reduceDiceToken<T extends DicePartCore>(core: T, token: TToken, reduceSignToDropKeepData?: TReduceSignToDropKeep[]): T {
 	if (token.matches) {
 		core.sign = <TSign>token.matches[0];
-		core.count = +token.matches[1] || 0;
-		core.sides = +token.matches[2] || 0;
+		core.fixedRolls = (token.matches[1] ?? "").split(",").map(s => +s.trim()).filter(n => n);
+		core.count = +token.matches[2] || 0;
+		core.sides = +token.matches[3] || 0;
 		if (!core.count && core.sides) {
 			core.count = 1;
 		}
@@ -281,6 +288,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	public get dropKeep(): OrUndefined<TDropKeepData> { return this.core.dropKeep; }
 	public get modifier(): number { return this.core.modifier; }
 	public get noSort(): boolean { return this.core.noSort; }
+	public get fixedRolls(): OrUndefined<number[]> { return this.core.fixedRolls; }
 	public get sides(): number { return this.core.sides; }
 	public get sign(): OrUndefined<TSign> { return this.core.sign; }
 	public get test(): OrUndefined<TTestData> { return this.core.test; }
@@ -352,7 +360,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	//#endregion
 
 	//#region static
-	public static create({ count, sides, dropKeep, noSort, modifier, sign, description, test }: TDicePartCoreArgs = {}): TDicePart {
+	public static create({ count, sides, dropKeep, noSort, modifier, fixedRolls, sign, description, test }: TDicePartCoreArgs = {}): TDicePart {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.None,
@@ -363,6 +371,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 			dropKeep: dropKeep ?? undefined,
 			modifier: modifier ?? 0,
 			noSort: noSort === true,
+			fixedRolls: fixedRolls ?? undefined,
 			sides: sides ?? 0,
 			sign: sign ?? undefined,
 			test: test ?? undefined
@@ -433,12 +442,16 @@ export class DicePartRoll<T extends DicePartRollCore, U extends TDicePart> exten
 
 	//#region static
 	public static create(dicePart: TDicePart): TDicePartRoll {
+		const rolls = dicePart.fixedRolls?.slice(0, dicePart.count) ?? [];
+		if (rolls.length < dicePart.count) {
+			rolls.push(...rollDice(dicePart.count - rolls.length, dicePart.sides));
+		}
 		return new DicePartRoll({
 			objectType: "DicePartRoll",
 			gameType: GameType.None,
 			id: generate(),
 			dice: dicePart.toJSON(),
-			rolls: rollDice(dicePart.count, dicePart.sides)
+			rolls
 		});
 	}
 	public static fromCore(core: DicePartRollCore): TDicePartRoll {

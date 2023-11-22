@@ -14,6 +14,9 @@ interface DicePartCoreBase {
 	/** drop/keep notation info */
 	dropKeep?: TDropKeepData;
 
+	/** values to use instead of rolling */
+	fixedRolls?: number[];
+
 	/** roll modifier */
 	modifier: number;
 
