@@ -441,18 +441,25 @@ export class DicePartRoll<T extends DicePartRollCore, U extends TDicePart> exten
 	//#endregion
 
 	//#region static
-	public static create(dicePart: TDicePart): TDicePartRoll {
+
+	protected static _createCore<Core extends DicePartRollCore>(dicePart: TDicePart): Core;
+	protected static _createCore<Core extends DicePartRollCore>(dicePart: TDicePart, gameType: GameType): Core;
+	protected static _createCore(dicePart: TDicePart, gameType = GameType.None) {
 		const rolls = dicePart.fixedRolls?.slice(0, dicePart.count) ?? [];
 		if (rolls.length < dicePart.count) {
 			rolls.push(...rollDice(dicePart.count - rolls.length, dicePart.sides));
 		}
-		return new DicePartRoll({
+		return {
 			objectType: "DicePartRoll",
-			gameType: GameType.None,
+			gameType,
 			id: generate(),
 			dice: dicePart.toJSON(),
 			rolls
-		});
+		};
+	}
+
+	public static create(dicePart: TDicePart): TDicePartRoll {
+		return new DicePartRoll(this._createCore(dicePart));
 	}
 	public static fromCore(core: DicePartRollCore): TDicePartRoll {
 		return new DicePartRoll(core);
