@@ -65,10 +65,16 @@ function removeDesc(description: string, desc: string): string {
 
 //#region Tokenizer
 
+// dice parser parts
+// sign:  ([\-\+\*\/])?
+// rolls: (?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?
+// count: (?:\s*(\d+)\s*|\b)
+// sides: d\s*(\d+)
+
 /** Returns a new object with the default dice parsers for use with Tokenizer */
 export function getParsers(): TParsers {
 	return {
-		dice: /([\-\+\*\/])?(?:\s*(\d+)\s*|\b)d\s*(\d+)/i,
+		dice: /([\-\+\*\/])?(?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?(?:\s*(\d+)\s*|\b)d\s*(\d+)/i,
 		dropKeep: /(dl|dh|kl|kh)\s*(\d+)?/i,
 		noSort: /(ns)/i,
 		mod: /([\-\+\*\/])\s*(\d+)(?!d\d)/i,
@@ -99,8 +105,9 @@ export type TReduceSignToDropKeep = {
 function reduceDiceToken<T extends DicePartCore>(core: T, token: TToken, reduceSignToDropKeepData?: TReduceSignToDropKeep[]): T {
 	if (token.matches) {
 		core.sign = <TSign>token.matches[0];
-		core.count = +token.matches[1] || 0;
-		core.sides = +token.matches[2] || 0;
+		core.fixedRolls = (token.matches[1] ?? "").split(",").map(s => +s.trim()).filter(n => n);
+		core.count = +token.matches[2] || 0;
+		core.sides = +token.matches[3] || 0;
 		if (!core.count && core.sides) {
 			core.count = 1;
 		}
@@ -162,15 +169,17 @@ export function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token
 //#region dicePartRollToString
 
 type TRollAndIndex = {
-	/** The roll value */
-	roll: number;
+	/** Is the roll/result fixed. */
+	fixed: boolean;
 	/** The original index of the roll (order it was rolled in) */
 	index: number;
 	/** String output to be bolded, italicized, or striked */
 	output: string;
+	/** The roll value */
+	roll: number;
 };
 
-function mapRollAndIndex(sides: number, roll: number, index: number): TRollAndIndex {
+function mapRollAndIndex(sides: number, roll: number, index: number, fixed: boolean): TRollAndIndex {
 	let output = String(roll);
 	if (roll === sides) {
 		output = bold(output);
@@ -178,7 +187,10 @@ function mapRollAndIndex(sides: number, roll: number, index: number): TRollAndIn
 	if (roll === 1) {
 		output = italics(output);
 	}
-	return { roll:roll, index:index, output:output };
+	if (fixed) {
+		output += "f";
+	}
+	return { fixed, index, output, roll };
 }
 
 type TMappedAndSortedRolls = { byIndex:TRollAndIndex[]; byRoll:TRollAndIndex[]; length:number };
@@ -192,8 +204,10 @@ function sortRollAndIndex(a: TRollAndIndex, b: TRollAndIndex): TSortResult {
 	return sortAscending(a.index, b.index);
 }
 
-function mapAndSortRolls(sides: number, rolls: number[]): TMappedAndSortedRolls {
-	const byIndex = rolls.map((roll, index) => mapRollAndIndex(sides, roll, index));
+function mapAndSortRolls({ dice, rolls }: TDicePartRoll): TMappedAndSortedRolls {
+	const { fixedRolls, sides } = dice;
+	const fixedRollsLength = fixedRolls?.length ?? 0;
+	const byIndex = rolls.map((roll, index) => mapRollAndIndex(sides, roll, index, index < fixedRollsLength));
 	const byRoll = byIndex.slice().sort(sortRollAndIndex);
 	return { byIndex:byIndex, byRoll:byRoll, length:rolls.length };
 }
@@ -216,13 +230,8 @@ function strikeDroppedRolls(dropKeep: Optional<TDropKeepData>, sortedRolls: TRol
 	}
 }
 
-function diceTotalToString(value: number): string {
-	return italics(bold(String(value)));
-}
-
 function dicePartRollToString(dicePartRoll: TDicePartRoll): string {
-	const sides = dicePartRoll.dice.sides,
-		rollsAndIndexes = mapAndSortRolls(sides, dicePartRoll.rolls);
+	const rollsAndIndexes = mapAndSortRolls(dicePartRoll);
 	strikeDroppedRolls(dicePartRoll.dice.dropKeep, rollsAndIndexes.byRoll);
 	const outputRollsAndIndexes = dicePartRoll.dice.noSort ? rollsAndIndexes.byIndex : rollsAndIndexes.byRoll;
 	const mappedOutuputRolls = outputRollsAndIndexes.map(rollAndIndex => rollAndIndex.output);
@@ -281,6 +290,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	public get dropKeep(): OrUndefined<TDropKeepData> { return this.core.dropKeep; }
 	public get modifier(): number { return this.core.modifier; }
 	public get noSort(): boolean { return this.core.noSort; }
+	public get fixedRolls(): OrUndefined<number[]> { return this.core.fixedRolls; }
 	public get sides(): number { return this.core.sides; }
 	public get sign(): OrUndefined<TSign> { return this.core.sign; }
 	public get test(): OrUndefined<TTestData> { return this.core.test; }
@@ -352,7 +362,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	//#endregion
 
 	//#region static
-	public static create({ count, sides, dropKeep, noSort, modifier, sign, description, test }: TDicePartCoreArgs = {}): TDicePart {
+	public static create({ count, sides, dropKeep, noSort, modifier, fixedRolls, sign, description, test }: TDicePartCoreArgs = {}): TDicePart {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.None,
@@ -363,6 +373,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 			dropKeep: dropKeep ?? undefined,
 			modifier: modifier ?? 0,
 			noSort: noSort === true,
+			fixedRolls: fixedRolls ?? undefined,
 			sides: sides ?? 0,
 			sign: sign ?? undefined,
 			test: test ?? undefined
@@ -432,14 +443,25 @@ export class DicePartRoll<T extends DicePartRollCore, U extends TDicePart> exten
 	//#endregion
 
 	//#region static
-	public static create(dicePart: TDicePart): TDicePartRoll {
-		return new DicePartRoll({
+
+	protected static _createCore<Core extends DicePartRollCore>(dicePart: TDicePart): Core;
+	protected static _createCore<Core extends DicePartRollCore>(dicePart: TDicePart, gameType: GameType): Core;
+	protected static _createCore(dicePart: TDicePart, gameType = GameType.None) {
+		const rolls = dicePart.fixedRolls?.slice(0, dicePart.count) ?? [];
+		if (rolls.length < dicePart.count) {
+			rolls.push(...rollDice(dicePart.count - rolls.length, dicePart.sides));
+		}
+		return {
 			objectType: "DicePartRoll",
-			gameType: GameType.None,
+			gameType,
 			id: generate(),
 			dice: dicePart.toJSON(),
-			rolls: rollDice(dicePart.count, dicePart.sides)
-		});
+			rolls
+		};
+	}
+
+	public static create(dicePart: TDicePart): TDicePartRoll {
+		return new DicePartRoll(this._createCore(dicePart));
 	}
 	public static fromCore(core: DicePartRollCore): TDicePartRoll {
 		return new DicePartRoll(core);
@@ -474,7 +496,8 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 	//#endregion
 
 	//#region flags
-	public get hasTest(): boolean { return  this.test !== undefined; }
+	public get hasFixed(): boolean { return !!this.baseDicePart?.fixedRolls?.length; }
+	public get hasTest(): boolean { return this.test !== undefined; }
 	public get isD20(): boolean { return this.baseDicePart?.sides === 20; }
 	public get isEmpty(): boolean { return this.diceParts.length === 0 || this.diceParts.filter(dicePart => !dicePart.isEmpty).length === 0; }
 	//#endregion
@@ -610,8 +633,11 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 	}
 	protected toStringXXS(hideRolls: boolean): string {
 		const gradeEmoji = gradeToEmoji(this.grade),
-			total = hideRolls ? `||${diceTotalToString(this.total)}||` : diceTotalToString(this.total),
-			output = `${hideRolls ? ":question:" : gradeEmoji ?? ""} ${total}`;
+			outputEmoji = hideRolls ? ":question:" : gradeEmoji ?? "",
+			fixedOutput = this.dice.hasFixed ? "f" : "",
+			totalString = italics(bold(String(this.total) + fixedOutput)),
+			totalOutput = hideRolls ? `||${totalString}||` : totalString,
+			output = `${outputEmoji} ${totalOutput}`;
 		return cleanWhitespace(output);
 	}
 	public toString(): string;

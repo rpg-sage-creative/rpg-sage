@@ -7,22 +7,27 @@ import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
-	cleanDescription,
-	createValueTestData, CritMethodType, decreaseGrade, DiceOutputType,
+	CritMethodType,
+	DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
+	TDiceLiteral,
+	TSign,
+	TTestData,
+	TestType,
+	cleanDescription,
+	createValueTestData,
+	decreaseGrade,
 	gradeRoll, increaseGrade,
 	isGradeSuccess,
-	parseTestType,
-	rollDice, TDiceLiteral, TestType, TSign,
-	TTestData
+	parseTestType
 } from "../../common";
 import {
+	TReduceSignToDropKeep,
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
-	TReduceSignToDropKeep
+	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore
 } from "../base";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
@@ -318,7 +323,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#endregion
 
 	//#region static
-	public static create({ count, sides, dropKeep, noSort, modifier, sign, description, testOrTarget }: TDicePartCoreArgs = {}): DicePart {
+	public static create({ count, sides, dropKeep, noSort, modifier, sign, description, testOrTarget, fixedRolls }: TDicePartCoreArgs = {}): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.PF2e,
@@ -327,6 +332,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			count: count ?? 0,
 			description: cleanDescription(description),
 			dropKeep: dropKeep,
+			fixedRolls,
 			modifier: modifier ?? 0,
 			noSort: noSort === true,
 			sides: sides ?? 0,
@@ -352,13 +358,7 @@ type DicePartRollCore = baseDicePartRollCore;
 export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 	//#region static
 	public static create(dicePart: DicePart): DicePartRoll {
-		return new DicePartRoll({
-			objectType: "DicePartRoll",
-			gameType: GameType.PF2e,
-			id: generate(),
-			dice: dicePart.toJSON(),
-			rolls: rollDice(dicePart.count, dicePart.sides)
-		});
+		return new DicePartRoll(this._createCore(dicePart, GameType.PF2e));
 	}
 	public static fromCore(core: DicePartRollCore): DicePartRoll {
 		return new DicePartRoll(core);
