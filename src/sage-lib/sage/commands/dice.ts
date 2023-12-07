@@ -72,7 +72,7 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 
 	const pc = sageMessage.playerCharacter;
 	if (pc) {
-		diceString = diceString.replace(/\{stat\:([^\}]+)\}/i, match => {
+		diceString = diceString.replace(/\{stat:([^}]+)\}/ig, match => {
 			const stat = match.slice(6, -1);
 			const note = pc.notes.getStat(stat);
 			return String(+(note?.note ?? "0"));
