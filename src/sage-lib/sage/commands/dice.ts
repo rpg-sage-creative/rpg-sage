@@ -22,6 +22,7 @@ import SageMessage from "../model/SageMessage";
 import type { TMacro } from "../model/User";
 import { registerCommandRegex } from "./cmd";
 import { registerInlineHelp } from "./help";
+import GameCharacter from "../model/GameCharacter";
 
 type TInteraction = SageMessage | SageInteraction;
 
@@ -70,13 +71,41 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 		return null;
 	}
 
-	const pc = sageMessage.playerCharacter;
-	if (pc) {
-		diceString = diceString.replace(/\{stat:([^}]+)\}/ig, match => {
-			const stat = match.slice(6, -1);
-			const note = pc.notes.getStat(stat);
-			return String(+(note?.note ?? "0"));
-		});
+	const statRegex = /\{(\w+):{1,2}([^}]+)\}/i;
+	if (statRegex.test(diceString)) {
+		const { game, isGameMaster, isPlayer } = sageMessage;
+		if (!game || isGameMaster || isPlayer) {
+			const npcs = game?.nonPlayerCharacters ?? sageMessage.sageUser.nonPlayerCharacters;
+			const pcs = game?.playerCharacters ?? sageMessage.sageUser.playerCharacters;
+			const pc = isPlayer && game ? sageMessage.playerCharacter : null;
+			const typeRegex = /^(pc|stat)?(companion|hireling|alt|familiar)?$/i;
+			diceString = diceString.replace(new RegExp(statRegex, "gi"), match => {
+				const [_, name, stat] = statRegex.exec(match) ?? [];
+				let char: GameCharacter | null = null;
+				if (name) {
+					const [isPc, isAlt] = typeRegex.exec(name) ?? [];
+					if (isPc) {
+						char = pc ?? null;
+					}else if (isAlt) {
+						char = pc?.companions[0] ?? null;
+					}else {
+						char = pcs.findByName(name)
+							?? pcs.findCompanionByName(name)
+							?? npcs.findByName(name)
+							?? npcs.findCompanionByName(name)
+							?? null;
+					}
+				}else {
+					char = pc ?? null;
+				}
+				const note = char?.notes.getStat(stat);
+				const noteValue = note?.note.trim() ?? "";
+				if (noteValue.length) {
+					return String(+noteValue || 0);
+				}
+				return "`" + match + "`";
+			});
+		}
 	}
 
 	return DiscordDice.parse({
