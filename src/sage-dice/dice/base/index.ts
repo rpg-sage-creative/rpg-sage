@@ -51,6 +51,10 @@ function strike(value: string): string {
 	return `<s>${value}</s>`;
 }
 
+function detick(value: string): string {
+	return value.replace(/`/g, "");
+}
+
 /** Removes the first instance of desc from description while ensuring it doesn't break HTML (ex: Removing "b" from "<b>8</b> b") */
 function removeDesc(description: string, desc: string): string {
 	const tokens = Tokenizer.tokenize(description, { html:/<[^>]+>/, desc:new RegExp(escapeForRegExp(desc)) });
@@ -613,12 +617,12 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			const escapedTotal = `\` ${total} \``;
 
 			const output = desc
-				? `${emoji} '${dequote(desc)}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
+				? `${emoji} '${detick(dequote(desc))}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
 				: `${emoji} ${escapedTotal} ${UNICODE_LEFT_ARROW} ${description}`;
 			return correctEscapeForEmoji(cleanWhitespace(output));
 		}else {
 			const output = desc
-				? `${xxs} \`${dequote(desc)}\` ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
+				? `${xxs} \`${detick(dequote(desc))}\` ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
 				: `${xxs} ${UNICODE_LEFT_ARROW} ${description}`;
 			return correctEscapeForEmoji(cleanWhitespace(output));
 		}
@@ -627,7 +631,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		const xxs = this.toStringXXS(hideRolls);
 		const desc = this.dice.diceParts.find(dp => dp.hasDescription)?.description;
 		const output = desc
-			? `${xxs} \`${desc ?? ""}\``
+			? `${xxs} \`${detick(dequote(desc)) ?? ""}\``
 			: xxs;
 		return correctEscapeForEmoji(cleanWhitespace(output));
 	}
