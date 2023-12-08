@@ -9,7 +9,7 @@ import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
 	cleanDescription,
 	createValueTestData, DiceOutputType,
-	DiceSecretMethodType, DropKeepType, rollDice, TDiceLiteral, TestType, TTestData
+	DiceSecretMethodType, DropKeepType, parseTestTargetValue, rollDice, TDiceLiteral, TestType, TTestData
 } from "../../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
@@ -66,7 +66,7 @@ import type {
 function getParsers(): TParsers {
 	const parsers = baseGetParsers();
 	parsers["suffix"] = /(e|s|\*|up\d+|dn\d+)+/i;
-	parsers["target"] = /\b(vs\s*dif|dif|vs)\s*(\d+)/i;
+	parsers["target"] = /\b(vs\s*dif|dif|vs)\s*(\d+|\|\|\d+\|\|)/i;
 	return parsers;
 }
 
@@ -117,17 +117,17 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 
 //#region Targets/Tests
 enum TargetType { None = 0, DIF = 1 }
-type TTargetData = { type:TargetType; value:number; raw:string; };
+type TTargetData = { type:TargetType; value:number; hidden:boolean; raw:string; };
 function parseTargetData(token: TToken): OrUndefined<TTargetData> {
 	if (token.matches) {
-		const type = TargetType.DIF,
-			value = +token.matches[1] || 0;
-		return { type:type, value:value, raw:token.token };
+		const type = TargetType.DIF;
+		const { value, hidden } = parseTestTargetValue(token.matches[1]);
+		return { type, value, hidden, raw:token.token };
 	}
 	return undefined;
 }
 function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	return !targetData ? null : createValueTestData(TestType.GreaterThanOrEqual, targetData.value, "dif");
+	return !targetData ? null : createValueTestData(TestType.GreaterThanOrEqual, targetData.value, targetData.hidden, "dif");
 }
 //#endregion
 

@@ -11,6 +11,7 @@ import {
 	DiceSecretMethodType,
 	DieRollGrade,
 	gradeToEmoji,
+	parseTestTargetValue,
 	rollDice, TestType
 } from "../../common";
 import type {
@@ -34,7 +35,7 @@ import { GameType } from "../../../sage-common";
 function getParsers(): TParsers {
 	return {
 		dice: /\s*(1)?\s*d\s*(20)/i,
-		target: /(vs)\s*(\d+)/i
+		target: /(vs)\s*(\d+|\|\|\d+\|\|)/i
 	};
 }
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken): T {
@@ -42,7 +43,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 		core.count = 1;
 		core.sides = 20;
 	}else if (token.type === "target") {
-		core.target = { type:TargetType.VS, value:+(token.matches || [])[1] || 0 };
+		const { value, hidden } = parseTestTargetValue(token.matches[1]);
+		core.target = { type:TargetType.VS, value, hidden };
 	}else {
 		core.description = (core.description || "") + token.token;
 	}
@@ -52,9 +54,9 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 
 //#region Targets/Tests
 enum TargetType { None = 0, VS = 1 }
-type TTargetData = { type:TargetType; value:number; };
+type TTargetData = { type:TargetType; value:number; hidden:boolean; };
 function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	return !targetData ? null : createValueTestData(TestType.GreaterThan, targetData.value, "vs");
+	return !targetData ? null : createValueTestData(TestType.GreaterThan, targetData.value, targetData.hidden, "vs");
 }
 //#endregion
 

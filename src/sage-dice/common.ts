@@ -192,17 +192,22 @@ export function parseTestType(testType: string): TestType {
 
 const TestTypeAliases = [undefined, "=", ">", ">=", "<", "<=" ];
 
-export type TTestData = { type:TestType; value:number; alias?:string; };
+export type TTestData = { type:TestType; value:number; hidden:boolean; alias?:string; };
 
-export function createValueTestData(type: TestType, value: number, alias = TestTypeAliases[type]): TTestData {
-	return { type, value, alias };
+export function createValueTestData(type: TestType, value: number, hidden: boolean, alias = TestTypeAliases[type]): TTestData {
+	return { type, value, hidden, alias };
 }
 
+export function parseTestTargetValue(rawValue: string): { value:number; hidden:boolean; } {
+	const hidden = rawValue.length > 4 && rawValue.startsWith("||") && rawValue.endsWith("||");
+	const value = +(hidden ? rawValue.slice(2, -2) : rawValue) || 0;
+	return { value, hidden };
+}
 export function parseValueTestData(token: TToken): TTestData | undefined {
 	if (token.matches) {
 		const type = parseTestType(token.matches[0]);
-		const value = +token.matches[1] || 0;
-		return createValueTestData(type, value);
+		const { value, hidden } = parseTestTargetValue(token.matches[1]);
+		return createValueTestData(type, value, hidden);
 	}
 	return undefined;
 }

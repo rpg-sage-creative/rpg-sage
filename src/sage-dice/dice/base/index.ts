@@ -83,7 +83,7 @@ export function getParsers(): TParsers {
 		noSort: /(ns)/i,
 		mod: /([\-\+\*\/])\s*(\d+)(?!d\d)/i,
 		quotes: /`[^`]+`|“[^”]+”|„[^“]+“|„[^”]+”|"[^"]+"/,
-		test: /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+)/i
+		test: /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i
 	};
 }
 
@@ -246,18 +246,20 @@ type TDicePartToString = (dicePartRoll: TDicePartRoll) => string;
 
 function mapDicePartRollToString(dicePartRoll: TDicePartRoll, includeSign: boolean, includeModifier: boolean, includeDescription: boolean, dieModToString: TDicePartToString): string {
 	let dicePartRollOutput = "";
-	if (includeSign && (dicePartRoll.dice.hasDie || dicePartRoll.dice.modifier)) {
+	const dice = dicePartRoll.dice;
+	if (includeSign && (dice.hasDie || dice.modifier)) {
 		dicePartRollOutput += ` ${dicePartRoll.sign || "+"}`;
 	}
 	dicePartRollOutput += ` ${dieModToString(dicePartRoll)}`;
-	if (includeModifier && dicePartRoll.dice.modifier) {
-		dicePartRollOutput += ` ${Math.abs(dicePartRoll.dice.modifier)}`;
+	if (includeModifier && dice.modifier) {
+		dicePartRollOutput += ` ${Math.abs(dice.modifier)}`;
 	}
 	if (includeDescription) {
-		dicePartRollOutput += ` ${dicePartRoll.dice.description}`;
+		dicePartRollOutput += ` ${dice.description}`;
 	}
-	if (dicePartRoll.dice.hasTest) {
-		dicePartRollOutput += ` ${dicePartRoll.dice.test!.alias} ${dicePartRoll.dice.test!.value}`;
+	if (dice.hasTest) {
+		const { alias, value, hidden } = dice.test!;
+		dicePartRollOutput += ` ${alias} ${hidden ? "??" : value}`;
 	}
 	return dicePartRollOutput.replace(/ +/g, " ").trim();
 }
@@ -355,7 +357,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 		const die = this.count && this.sides ? `${this.count}d${this.sides}` : ``,
 			dropKeep = this.dropKeep ? ` ${dropKeepToString(this.dropKeep)}` : ``,
 			mod = this.modifier ? ` ${this.modifier}` : ``,
-			valueTest = this.hasTest ? ` ${this.test!.alias} ${this.test!.value}` : ``,
+			valueTest = this.hasTest ? ` ${this.test!.alias} ${this.test!.hidden ? "??" : this.test!.value}` : ``,
 			withoutDescription = die + dropKeep + mod + valueTest;
 		if (outputType === DiceOutputType.S) {
 			return withoutDescription;

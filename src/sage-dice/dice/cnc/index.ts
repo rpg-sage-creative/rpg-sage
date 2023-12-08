@@ -16,6 +16,7 @@ import {
 	TestType, UNICODE_LEFT_ARROW,
 	cleanDescription,
 	gradeToEmoji,
+	parseTestTargetValue,
 	rollDice
 } from "../../common";
 import {
@@ -70,7 +71,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 		core.count = +token.matches[0];
 		core.sides = 12;
 	}else if (token.type === "target") {
-		core.target = { type:TargetType.VS, value:+(token.matches ?? [])[1] ?? 0 };
+		const { value, hidden } = parseTestTargetValue(token.matches[1]);
+		core.target = { type:TargetType.VS, value, hidden };
 	}else {
 		core.description = (core.description ?? "") + token.token;
 	}
@@ -83,10 +85,12 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 
 enum TargetType { None = 0, VS = 1 }
 
-type TTargetData = { type:TargetType; value:number; };
+type TTargetData = { type:TargetType; value:number; hidden:boolean; };
 
 function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	return !targetData ? null : { alias:"vs", type: TestType.GreaterThanOrEqual, value:targetData.value };
+	if (!targetData) return null;
+	const { value, hidden } = targetData;
+	return { alias:"vs", type: TestType.GreaterThanOrEqual, value, hidden };
 }
 
 //#endregion
