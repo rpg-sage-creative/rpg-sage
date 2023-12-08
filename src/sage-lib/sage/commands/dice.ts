@@ -117,28 +117,25 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 	});
 }
 
-function parseDiscordMacro(sageMessage: TInteraction, macroString: string): TDiceOutput[] | null {
+function parseDiscordMacro(sageMessage: TInteraction, macroString: string, macroStack: string[] = []): TDiceOutput[] | null {
 	if (!(sageMessage instanceof SageMessage)) return null;
 
-	let diceString = macroString;
-	const macroNames = <string[]>[];
-	let macroAndOutput: TMacroAndOutput | null;
-	while (macroAndOutput = macroToDice(sageMessage.sageUser.macros, debrace(diceString))) {
-		if (macroNames.includes(macroAndOutput.macro.name)) {
-			error(`MACRO RECURSION: User(${sageMessage.sageUser.id}) ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}`);
-			return parseDiscordDice(sageMessage, `[1d1 MACRO RECURSION: ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}]`)?.roll().toStrings(sageMessage.diceOutputType) ?? null;
+	const macroAndOutput = macroToDice(sageMessage.sageUser.macros, debrace(macroString));
+	if (macroAndOutput) {
+		const { macro, output } = macroAndOutput;
+		if (macroStack.includes(macro.name)) {
+			error(`Macro Recursion`, { macroString, macroStack });
+			return parseDiscordDice(sageMessage, `[1d1 Recursion!]`)?.roll().toStrings() ?? [];
 		}
-		macroNames.push(macroAndOutput.macro.name);
-		diceString = macroAndOutput.output;
-	}
 
-	if (macroString === diceString) {
-		return null;
-	}
+		const diceToParse = output.match(BASE_REGEX) ?? [];
 
-	const regex = new RegExp(BASE_REGEX);
-	const diceToParse = [...regex.exec(diceString) ?? []];
-	return diceToParse.map(dice => parseDiscordMacro(sageMessage, dice) ?? parseMatch(sageMessage, dice, { diceOutputType: DiceOutputType.XXL })).flat();
+		return diceToParse.map(dice =>
+			parseDiscordMacro(sageMessage, dice, macroStack.concat([macro.name]))
+			?? parseMatch(sageMessage, dice, { diceOutputType: DiceOutputType.XXL })
+		).flat();
+	}
+	return null;
 }
 
 /** Removes all braces: [] or [[]]  */
