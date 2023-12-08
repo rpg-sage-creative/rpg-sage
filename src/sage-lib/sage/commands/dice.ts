@@ -71,7 +71,7 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 		return null;
 	}
 
-	const statRegex = /\{(\w+):{1,2}([^}]+)\}/i;
+	const statRegex = /\{(\w+):{2}([^:}]+)(?::([^}]+))?\}/i;
 	if (statRegex.test(diceString)) {
 		const { game, isGameMaster, isPlayer } = sageMessage;
 		if (!game || isGameMaster || isPlayer) {
@@ -80,7 +80,7 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 			const pc = isPlayer && game ? sageMessage.playerCharacter : null;
 			const typeRegex = /^(pc|stat)?(companion|hireling|alt|familiar)?$/i;
 			diceString = diceString.replace(new RegExp(statRegex, "gi"), match => {
-				const [_, name, stat] = statRegex.exec(match) ?? [];
+				const [_, name, stat, defaultValue] = statRegex.exec(match) ?? [];
 				let char: GameCharacter | null = null;
 				if (name) {
 					const [isPc, isAlt] = typeRegex.exec(name) ?? [];
@@ -99,9 +99,9 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 					char = pc ?? null;
 				}
 				const note = char?.notes.getStat(stat);
-				const noteValue = note?.note.trim() ?? "";
+				const noteValue = note?.note.trim() ?? defaultValue?.trim() ?? "";
 				if (noteValue.length) {
-					return String(+noteValue || 0);
+					return noteValue;
 				}
 				return "`" + match + "`";
 			});
@@ -117,19 +117,28 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 	});
 }
 
-function parseDiscordMacro(sageMessage: SageMessage, macroString: string): DiscordDice | null {
+function parseDiscordMacro(sageMessage: TInteraction, macroString: string): TDiceOutput[] | null {
+	if (!(sageMessage instanceof SageMessage)) return null;
+
 	let diceString = macroString;
 	const macroNames = <string[]>[];
 	let macroAndOutput: TMacroAndOutput | null;
 	while (macroAndOutput = macroToDice(sageMessage.sageUser.macros, debrace(diceString))) {
 		if (macroNames.includes(macroAndOutput.macro.name)) {
 			error(`MACRO RECURSION: User(${sageMessage.sageUser.id}) ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}`);
-			return parseDiscordDice(sageMessage, `[1d1 MACRO RECURSION: ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}]`);
+			return parseDiscordDice(sageMessage, `[1d1 MACRO RECURSION: ${macroNames.join(" > ")} > ${macroAndOutput.macro.name}]`)?.roll().toStrings(sageMessage.diceOutputType) ?? null;
 		}
 		macroNames.push(macroAndOutput.macro.name);
 		diceString = macroAndOutput.output;
 	}
-	return parseDiscordDice(sageMessage, diceString, { diceOutputType: DiceOutputType.XXL });
+
+	if (macroString === diceString) {
+		return null;
+	}
+
+	const regex = new RegExp(BASE_REGEX);
+	const diceToParse = [...regex.exec(diceString) ?? []];
+	return diceToParse.map(dice => parseDiscordMacro(sageMessage, dice) ?? parseMatch(sageMessage, dice, { diceOutputType: DiceOutputType.XXL })).flat();
 }
 
 /** Removes all braces: [] or [[]]  */
@@ -140,16 +149,9 @@ function debrace(input: string): string {
 	return input;
 }
 
-function parseMatch(sageMessage: TInteraction, match: string): TDiceOutput[] {
+function parseMatch(sageMessage: TInteraction, match: string, overrides?: TDiscordDiceParseOptions): TDiceOutput[] {
 	const noBraces = debrace(match);
-	if (sageMessage instanceof SageMessage) {
-		const macro = parseDiscordMacro(sageMessage, noBraces);
-		if (macro) {
-			// debug("macro", match);
-			return macro.roll().toStrings(sageMessage.diceOutputType);
-		}
-	}
-	const dice = parseDiscordDice(sageMessage, `[${noBraces}]`);
+	const dice = parseDiscordDice(sageMessage, `[${noBraces}]`, overrides);
 	if (dice) {
 		// debug("dice", match);
 		return dice.roll().toStrings(sageMessage.diceOutputType);
@@ -168,12 +170,13 @@ function parseMatch(sageMessage: TInteraction, match: string): TDiceOutput[] {
 export function parseDiceMatches(sageMessage: TInteraction, content: string): TDiceMatch[] {
 	const diceMatches: TDiceMatch[] = [];
 	const withoutCodeBlocks = redactCodeBlocks(content);
+	const regex = new RegExp(BASE_REGEX);
 	let execArray: RegExpExecArray | null;
-	while (execArray = BASE_REGEX.exec(withoutCodeBlocks)) {
+	while (execArray = regex.exec(withoutCodeBlocks)) {
 		const match = execArray[0];
 		const index = execArray.index;
 		const inline = match.match(/^\[{2}/) && match.match(/\]{2}$/) ? true : false;
-		const output = parseMatch(sageMessage, content.slice(index, index + match.length));
+		const output = parseDiscordMacro(sageMessage, content.slice(index, index + match.length)) ?? parseMatch(sageMessage, content.slice(index, index + match.length));
 		if (output.length) {
 			diceMatches.push({ match, index, inline, output });
 		}
@@ -631,23 +634,23 @@ function macroToDice(userMacros: NamedCollection<TMacro>, input: string): TMacro
 	let maxIndex = -1;
 	let dice = macro.dice
 		// indexed args
-		.replace(/\{(\d+)(\:([-+]?\d+))?\}/g, match => {
+		.replace(/\{(\d+)(:(?!:)([-+]?\d+))?\}/g, match => {
 			const [argIndex, defaultValue] = splitKeyValueFromBraces(match);
 			maxIndex = Math.max(maxIndex, +argIndex);
 			return nonEmptyStringOrDefaultValue(indexed[+argIndex], defaultValue);
 		})
 		// named args
-		.replace(/\{(\w+)(\:[^\}]+)?\}/ig, match => {
+		.replace(/\{(\w+)(:(?!:)[^}]+)?\}/ig, match => {
 			const [argName, defaultValue] = splitKeyValueFromBraces(match);
 			const argNameLower = argName.toLowerCase();
 			const namedArg = named.find(arg => arg.keyLower === argNameLower);
 			return namedArgValueOrDefaultValue(namedArg, defaultValue);
 		})
 		// remaining args
-		.replace(/\{\.\.\.\}/g, indexed.slice(maxIndex + 1).join(" "))
+		.replace(/\{\.{3}\}/g, indexed.slice(maxIndex + 1).join(" "))
 		// fix adjacent plus/minus
-		.replace(/\-\s*\+/g, "-")
-		.replace(/\+\s*\-/g, "-")
+		.replace(/-\s*\+/g, "-")
+		.replace(/\+\s*-/g, "-")
 		.replace(/\+\s*\+/g, "+")
 		;
 
