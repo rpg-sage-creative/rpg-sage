@@ -68,14 +68,16 @@ const MATH_REGEX = /\[[ \d\+\-\*\/\(\)\^]+[\+\-\*\/\^]+[ \d\+\-\*\/\(\)\^]+\]/i;
 const RANDOM_REGEX = /\[(\d+[usgm]*#)?([^,\]]+)(,([^,\]]+))+\]/i;
 
 type ReplaceStatsArgs = {
+	/** /\{(\w+):{2}([^:}]+)(?::([^}]+))?\}/i */
 	statRegex: RegExp;
+	/** /^(pc|stat)?(companion|hireling|alt|familiar)?$/i */
 	typeRegex: RegExp;
 	npcs: CharacterManager;
 	pcs: CharacterManager;
 	pc?: GameCharacter | null;
 };
 function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[] = []): string {
-	return diceString.replace(new RegExp(args.statRegex, "gi"), match => {
+	const replaced = diceString.replace(new RegExp(args.statRegex, "gi"), match => {
 		const [_, name, stat, defaultValue] = args.statRegex.exec(match) ?? [];
 		const stackValue = `${name}::${stat}`.toLowerCase();
 		if (stack.includes(stackValue)) {
@@ -98,16 +100,26 @@ function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[
 		}else {
 			char = args.pc ?? null;
 		}
-		const note = char?.notes.getStat(stat);
-		const noteValue = note?.note.trim() ?? defaultValue?.trim() ?? "";
-		if (noteValue.length) {
-			if (args.statRegex.test(noteValue)) {
-				return replaceStats(noteValue, args, stack.concat([stackValue]));
+		const statVal = char?.getStat(stat);
+		const statValue = statVal ?? defaultValue?.trim() ?? "";
+		if (statValue.length) {
+			if (args.statRegex.test(statValue)) {
+				return replaceStats(statValue, args, stack.concat([stackValue]));
 			}
-			return noteValue;
+			return statValue;
 		}
 		return "`" + match + "`";
 	});
+	const isPiped = replaced.startsWith("||") && replaced.endsWith("||");
+	const unpiped = isPiped ? replaced.slice(2, -2) : replaced;
+	const braced = `[${unpiped}]`;
+	if (MATH_REGEX.test(braced)) {
+		const value = _doMath(unpiped);
+		if (value !== null) {
+			return isPiped ? `||${value}||` : value;
+		}
+	}
+	return replaced;
 }
 function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): DiscordDice | null {
 	if (!diceString) {
@@ -370,22 +382,24 @@ export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]
 	}
 	return { allSecret, count, countPublic, countSecret, hasGmChannel, hasSecret };
 }
-
-function doMath(_: TInteraction, input: string): TDiceOutput[] {
-	let result = "INVALID!";
+function _doMath(noBraces: string): string | null {
 	try {
-		if (input.match(/^[\s\(\)\d\*\/\+\-\^]+$/i)) {
-			const equation = input
+		if (noBraces.match(/^[\s\(\)\d\*\/\+\-\^]+$/i)) {
+			const equation = noBraces
 				.replace(/ /g, "")
 				.replace(/(\d+)\(([^)]+)\)/g, "($1*($2))")
 				.replace(/(\d)\(/g, "$1*(")
 				.replace(/\^/g, "**")
 				;
-			result = eval(equation);
+			return String(eval(equation));
 		}
 	} catch (ex) {
 		/* ignore */
 	}
+	return null;
+}
+function doMath(_: TInteraction, input: string): TDiceOutput[] {
+	const result = _doMath(input) ?? "INVALID!";
 	return [{
 		hasSecret: false,
 		inlineOutput: result,
