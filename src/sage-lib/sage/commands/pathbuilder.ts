@@ -1,9 +1,8 @@
 import * as Discord from "discord.js";
 import { PathbuilderCharacter, toModifier } from "../../../sage-pf2e";
-import { TCharacterSectionType, TCharacterViewType, TPathbuilderCharacter, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
+import { TCharacterSectionType, TCharacterViewType, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import { Optional, UUID, isDefined } from "../../../sage-utils";
-import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
+import { errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
 import { DUser, DiscordId, TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
@@ -81,20 +80,6 @@ async function attachCharacter(sageCache: SageCache, channel: TChannel | DUser, 
 	return Promise.resolve();
 }
 
-function saveCharacter(character: PathbuilderCharacter): Promise<boolean> {
-	return writeFile(getPath(character.id), character.toJSON(), true).catch(errorReturnFalse);
-}
-async function loadCharacter(characterId: UUID): Promise<PathbuilderCharacter | null> {
-	const core = await readJsonFile<TPathbuilderCharacter>(getPath(characterId)).catch(errorReturnNull);
-	return core ? new PathbuilderCharacter(core) : null;
-}
-function charFileExists(characterId: string): boolean {
-	return fileExistsSync(getPath(characterId));
-}
-function getPath(characterId: string): string {
-	return `./data/sage/pb2e/${characterId}.json`;
-}
-
 async function notifyOfSlicedMacros(sageCache: SageCache, character: PathbuilderCharacter): Promise<void> {
 	const slicedMacros = character.getSheetValue<string[]>("slicedMacros") ?? [];
 	if (slicedMacros.length) {
@@ -107,7 +92,7 @@ async function notifyOfSlicedMacros(sageCache: SageCache, character: Pathbuilder
 
 async function postCharacter(sageCache: SageCache, channel: TChannel, character: PathbuilderCharacter, pin: boolean): Promise<void> {
 	setMacroUser(character, sageCache.user);
-	const saved = await saveCharacter(character);
+	const saved = await character.save();
 	if (saved) {
 		const output = prepareOutput(sageCache, character, sageCache.user);
 		const message = await channel.send(output).catch(errorReturnNull);
@@ -256,7 +241,11 @@ function createMacroSelectRow(character: PathbuilderCharacter, macros: TLabeledM
 function createButton(customId: string, label: string, style: Discord.MessageButtonStyleResolvable): Discord.MessageButton {
 	const button = new Discord.MessageButton();
 	button.setCustomId(customId);
-	button.setLabel(label);
+	if (label.startsWith("<") && label.endsWith(">")) {
+		button.setEmoji(label);
+	}else {
+		button.setLabel(label);
+	}
 	button.setStyle(style);
 	return button;
 }
@@ -266,7 +255,10 @@ function createRollButtonRow(character: PathbuilderCharacter, macros: TMacro[]):
 	const rollSecretButton = createButton(`PB2E|${character.id}|Secret`, `Roll Secret Check`, "PRIMARY");
 	const rollInitButton = createButton(`PB2E|${character.id}|Init`, `Roll Initiative`, "PRIMARY");
 	const macroButton = createButton(`PB2E|${character.id}|MacroRoll`, macros.length > 0 ? `Roll Macro` : `Load Macros`, "PRIMARY");
-	return new Discord.MessageActionRow().addComponents(rollButton, rollSecretButton, rollInitButton, macroButton);
+	const linkButton = character.characterId
+		? createButton(`PB2E|${character.id}|Unlink`, "🔗", "DANGER")
+		: createButton(`PB2E|${character.id}|Link`, "🔗", "SECONDARY");
+	return new Discord.MessageActionRow().addComponents(rollButton, rollSecretButton, rollInitButton, macroButton, linkButton);
 }
 
 function createComponents(character: PathbuilderCharacter, macroUser: Optional<User>): Discord.MessageActionRow[] {
@@ -289,14 +281,14 @@ function prepareOutput(sageCache: SageCache, character: PathbuilderCharacter, ma
 
 //#region button command
 
-type TActionIdType = ["PB2E", UUID, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll"];
+type TActionIdType = ["PB2E", UUID, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll" | "Link" | "Unlink"];
 
 const _uuidActionRegex = /^(?:PB2E\|)*(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll)$/i;
 function matchesOldActionRegex(customId: string): boolean {
 	return _uuidActionRegex.test(customId);
 }
 
-const uuidActionRegex = /^(?:PB2E)\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll)$/i;
+const uuidActionRegex = /^(?:PB2E)\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll|Link|Unlink)$/i;
 function matchesActionRegex(customId: string): boolean {
 	return uuidActionRegex.test(customId);
 }
@@ -323,7 +315,7 @@ function sheetTester(sageInteraction: SageInteraction): boolean {
 		TODO: figure out when this can go away!
 		*/
 		const [_pb2e, characterId] = parseCustomId(customId);
-		return _pb2e === "PB2E" && charFileExists(characterId);
+		return _pb2e === "PB2E" && PathbuilderCharacter.exists(characterId);
 	}
 	return false;
 }
@@ -343,21 +335,21 @@ async function viewHandler(sageInteraction: SageInteraction<Discord.SelectMenuIn
 	}
 	character.setSheetValue("activeView", undefined);
 	character.setSheetValue("activeSections", activeSections);
-	await saveCharacter(character);
+	await character.save();
 	return updateSheet(sageInteraction, character);
 }
 
 async function explorationHandler(sageInteraction: SageInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeExploration = (sageInteraction.interaction as Discord.SelectMenuInteraction).values[0];
 	character.setSheetValue("activeExploration", activeExploration);
-	await saveCharacter(character);
+	await character.save();
 	return updateSheet(sageInteraction, character);
 }
 
 async function skillHandler(sageInteraction: SageInteraction<Discord.SelectMenuInteraction>, character: PathbuilderCharacter): Promise<void> {
 	const activeSkill = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeSkill", activeSkill);
-	await saveCharacter(character);
+	await character.save();
 	return updateSheet(sageInteraction, character);
 }
 
@@ -368,7 +360,7 @@ async function macroHandler(sageInteraction: SageInteraction, character: Pathbui
 	}else {
 		character.setSheetValue("activeMacro", activeMacro);
 	}
-	await saveCharacter(character);
+	await character.save();
 	return updateSheet(sageInteraction, character);
 }
 
@@ -407,7 +399,7 @@ async function macroRollHandler(sageInteraction: SageInteraction, character: Pat
 		await sendDice(sageInteraction, output);
 	}else {
 		setMacroUser(character, sageInteraction.sageUser);
-		await saveCharacter(character);
+		await character.save();
 		await updateSheet(sageInteraction, character);
 		if (macros.length) {
 			sageInteraction.send("Invalid Macro!");
@@ -415,11 +407,69 @@ async function macroRollHandler(sageInteraction: SageInteraction, character: Pat
 	}
 }
 
+async function linkHandler(sageInteraction: SageInteraction, character: PathbuilderCharacter): Promise<void> {
+	const { game, isPlayer, isGameMaster, sageUser } = sageInteraction;
+	if (game && !(isPlayer || isGameMaster)) {
+		return sageInteraction.reply("You aren't part of this game.", true);
+	}
+
+	const name = character.name;
+	const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
+	const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
+	const char = pcs.findByName(name) ?? pcs.findCompanionByName(name)
+		?? npcs.findByName(name) ?? npcs.findCompanionByName(name);
+
+	if (char) {
+		character.characterId = char.id;
+		character.userDid = char.userDid;
+		char.pathbuilderId = character.id;
+		const charSaved = await character.save();
+		const gameSaved = charSaved ? await (game ?? sageUser).save() : false;
+		if (gameSaved) {
+			updateSheet(sageInteraction, character);
+			return sageInteraction.reply("Character Successfully Linked.", true);
+		}else {
+			return sageInteraction.reply("Sorry, unable to link character.", true);
+		}
+	}else {
+		return sageInteraction.reply("No character to link to.", true);
+	}
+}
+
+async function unlinkHandler(sageInteraction: SageInteraction, character: PathbuilderCharacter): Promise<void> {
+	const { game, isGameMaster, sageUser } = sageInteraction;
+	const isUser = character.userDid === sageInteraction.sageUser.did;
+
+	if (game && !isUser && !isGameMaster) {
+		return sageInteraction.reply("You aren't part of this game.", true);
+	}
+
+	const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
+	const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
+	const char = pcs.findById(character.characterId) ?? npcs.findById(character.characterId);
+
+	if (char) {
+		character.characterId = null;
+		character.userDid = null;
+		char.pathbuilderId = null;
+		const charSaved = await character.save();
+		const gameSaved = charSaved ? await (game ?? sageUser).save() : false;
+		if (gameSaved) {
+			updateSheet(sageInteraction, character);
+			return sageInteraction.reply("Character Successfully Unlinked.", true);
+		}else {
+			return sageInteraction.reply("Sorry, unable to unlink character.", true);
+		}
+	}else {
+		return sageInteraction.reply("No character to unlink.", true);
+	}
+}
+
 async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 	await sageInteraction.interaction.deferUpdate();
 	const customId = sageInteraction.interaction.customId;
 	const [_PB2E, characterId, command] = parseCustomId(customId);
-	const character = await loadCharacter(characterId);
+	const character = await PathbuilderCharacter.loadCharacter(characterId);
 	if (character) {
 
 		// if we matched the old regex, force the sheet to update
@@ -436,6 +486,8 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 			case "Secret": return rollHandler(sageInteraction, character, true);
 			case "Init": return rollHandler(sageInteraction, character, false, true);
 			case "MacroRoll": return macroRollHandler(sageInteraction, character);
+			case "Link": return linkHandler(sageInteraction, character);
+			case "Unlink": return unlinkHandler(sageInteraction, character);
 		}
 	}
 	return Promise.resolve();
