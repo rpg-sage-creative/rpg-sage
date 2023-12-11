@@ -24,7 +24,7 @@ import { warn } from "../sage-utils/utils/ConsoleUtils";
 // }
 //#endregion EventListener and EventHandler
 
-export type GetStatPrefix = "" | "dc" | "mod" | "prof";
+export type GetStatPrefix = "" | "dc" | "mod" | "prof" | "proficiency";
 
 //#region Abilities
 export const STRENGTH = "Strength", DEXTERITY = "Dexterity", CONSTITUTION = "Constitution", INTELLIGENCE = "Intelligence", WISDOM = "Wisdom", CHARISMA = "Charisma";

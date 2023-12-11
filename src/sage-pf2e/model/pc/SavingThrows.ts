@@ -26,7 +26,7 @@ export default abstract class SavingThrows {
 
 	public abstract getSavingThrow(savingThrow: TSavingThrow, ability?: TAbility): Check;
 
-	public getStat(statLower: string, prefix: GetStatPrefix): number | null {
+	public getStat(statLower: string, prefix: GetStatPrefix): number | string | null {
 		const savingThrow = SAVING_THROWS.find(save => {
 			const lower = save.toLowerCase();
 			if (statLower === "fort" && save === "Fortitude") return true;
@@ -38,7 +38,8 @@ export default abstract class SavingThrows {
 				case "dc": return this.getSavingThrow(savingThrow).dc;
 				case "mod": return this.getSavingThrow(savingThrow).modifier;
 				case "prof": return this.getSavingThrow(savingThrow).proficiencyModifier?.modifier ?? 0;
-				default: return 0;
+				case "proficiency": return this.getSavingThrow(savingThrow).proficiencyModifier?.proficiency ?? null;
+				default: return null;
 			}
 		}
 		return null;

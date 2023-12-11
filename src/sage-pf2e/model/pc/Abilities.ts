@@ -59,7 +59,8 @@ export default abstract class Abilities {
 			switch(prefix) {
 				case "dc": return this.getAbilityScoreModifier(ability) + 10;
 				case "mod": return this.getAbilityScoreModifier(ability);
-				case "prof": return 0;
+				case "prof": return null;
+				case "proficiency": return null;
 				default: return this.getAbilityScore(ability);
 			}
 		}
