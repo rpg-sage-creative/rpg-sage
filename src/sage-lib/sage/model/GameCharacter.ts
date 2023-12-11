@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
 import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e";
-import type { UUID } from "../../../sage-utils";
+import type { Optional, UUID } from "../../../sage-utils";
 import * as _XRegExp from "xregexp";
 import { DiscordKey, NilSnowflake } from "../../discord";
 import CharacterManager from "./CharacterManager";
@@ -40,6 +40,7 @@ export interface GameCharacterCore {
 	notes?: TNote[];
 	/** The character's Pathbuilder build. */
 	pathbuilder?: TPathbuilderCharacter;
+	pathbuilderId?: string;
 	/** The image used to represent the character to the left of the post */
 	tokenUrl?: string;
 	/** The character's user's Discord ID */
@@ -287,12 +288,26 @@ export default class GameCharacter implements IHasSave {
 		return Promise.resolve(false);
 	}
 
+	public get pathbuilderId(): string | undefined { return this.core.pathbuilderId; }
+	public set pathbuilderId(pathbuilderId: Optional<string>) { this.core.pathbuilderId = pathbuilderId ?? undefined; }
+
 	private _pathbuilder: PathbuilderCharacter | null | undefined;
 	public get pathbuilder(): PathbuilderCharacter | null {
-		if (this._pathbuilder === undefined && this.core.pathbuilder) {
-			this._pathbuilder = new PathbuilderCharacter(this.core.pathbuilder);
+		if (this._pathbuilder === undefined) {
+			if (this.core.pathbuilder) {
+				this._pathbuilder = new PathbuilderCharacter(this.core.pathbuilder);
+			}
+			if (this.core.pathbuilderId) {
+				this._pathbuilder = PathbuilderCharacter.loadCharacterSync(this.core.pathbuilderId);
+			}
 		}
 		return this._pathbuilder ?? null;
+	}
+
+	public getStat(key: string): string | null {
+		const stat = this.pathbuilder?.getStat(key) ?? null;
+		if (stat !== null) return String(stat);
+		return this.notes.getStat(key)?.note.trim() ?? null;
 	}
 
 	public update(values: Partial<GameCharacterCore>, save = true): Promise<boolean> {
