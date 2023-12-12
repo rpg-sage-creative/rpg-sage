@@ -110,13 +110,12 @@ function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[
 		}
 		return "`" + match + "`";
 	});
-	const isPiped = replaced.startsWith("||") && replaced.endsWith("||");
-	const unpiped = isPiped ? replaced.slice(2, -2) : replaced;
-	const braced = `[${unpiped}]`;
-	if (MATH_REGEX.test(braced)) {
+	const hasPipes = (/\|{2}[^|]+\|{2}/).test(replaced);
+	const unpiped = replaced.replace(/\|{2}/g, "");
+	if (MATH_REGEX.test(`[${unpiped}]`)) {
 		const value = _doMath(unpiped);
 		if (value !== null) {
-			return isPiped ? `||${value}||` : value;
+			return hasPipes ? `||${value}||` : value;
 		}
 	}
 	return replaced;
