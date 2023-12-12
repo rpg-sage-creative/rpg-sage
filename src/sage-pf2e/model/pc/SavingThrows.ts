@@ -39,7 +39,7 @@ export default abstract class SavingThrows {
 				case "mod": return this.getSavingThrow(savingThrow).modifier;
 				case "prof": return this.getSavingThrow(savingThrow).proficiencyModifier?.modifier ?? 0;
 				case "proficiency": return this.getSavingThrow(savingThrow).proficiencyModifier?.proficiency ?? null;
-				default: return null;
+				default: return this.getSavingThrow(savingThrow).modifier;
 			}
 		}
 		return null;
