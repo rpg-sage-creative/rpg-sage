@@ -79,10 +79,14 @@ type ReplaceStatsArgs = {
 function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[] = []): string {
 	const replaced = diceString.replace(new RegExp(args.statRegex, "gi"), match => {
 		const [_, name, stat, defaultValue] = args.statRegex.exec(match) ?? [];
+
+		// check stack for recursion
 		const stackValue = `${name}::${stat}`.toLowerCase();
 		if (stack.includes(stackValue)) {
 			return "`" + match + "`";
 		}
+
+		// get character
 		let char: GameCharacter | null = null;
 		if (name) {
 			const [isPc, isAlt] = args.typeRegex.exec(name) ?? [];
@@ -100,16 +104,23 @@ function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[
 		}else {
 			char = args.pc ?? null;
 		}
+
+		// get stat
 		const statVal = char?.getStat(stat);
 		const statValue = statVal ?? defaultValue?.trim() ?? "";
 		if (statValue.length) {
+			// check for nested stat block
 			if (args.statRegex.test(statValue)) {
 				return replaceStats(statValue, args, stack.concat([stackValue]));
 			}
 			return statValue;
 		}
+
+		// return escaped match
 		return "`" + match + "`";
 	});
+
+	// check for piped "hidden" values
 	const hasPipes = (/\|{2}[^|]+\|{2}/).test(replaced);
 	const unpiped = replaced.replace(/\|{2}/g, "");
 	if (MATH_REGEX.test(`[${unpiped}]`)) {
@@ -118,6 +129,8 @@ function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[
 			return hasPipes ? `||${value}||` : value;
 		}
 	}
+
+	// return updated value
 	return replaced;
 }
 function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): DiscordDice | null {
