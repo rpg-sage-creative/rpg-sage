@@ -1,7 +1,7 @@
 import type * as Discord from "discord.js";
+import * as _XRegExp from "xregexp";
 import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e";
 import type { Optional, UUID } from "../../../sage-utils";
-import * as _XRegExp from "xregexp";
 import { DiscordKey, NilSnowflake } from "../../discord";
 import CharacterManager from "./CharacterManager";
 import type { IHasSave } from "./NamedCollection";
@@ -305,9 +305,15 @@ export default class GameCharacter implements IHasSave {
 	}
 
 	public getStat(key: string): string | null {
-		const stat = this.pathbuilder?.getStat(key) ?? null;
-		if (stat !== null) return String(stat);
-		return this.notes.getStat(key)?.note.trim() ?? null;
+		if (/^name$/i.test(key)) return this.name;
+
+		const pbStat = this.pathbuilder?.getStat(key) ?? null;
+		if (pbStat !== null) {
+			return String(pbStat);
+		}
+
+		const noteStat = this.notes.getStat(key)?.note.trim() ?? null;
+		return noteStat;
 	}
 
 	public update(values: Partial<GameCharacterCore>, save = true): Promise<boolean> {
