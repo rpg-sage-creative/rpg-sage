@@ -302,7 +302,15 @@ export default class SageMessage
 
 	/** Get the PlayerCharacter if there a game and the actor has a PlayerCharacter OR the actor has a PlayerCharacter set to use this channel with AutoChannel */
 	public get playerCharacter(): GameCharacter | undefined {
-		return this.cache.get("playerCharacter", () => this.game?.playerCharacters.findByUser(this.sageUser.did) ?? this.sageUser.playerCharacters.find(pc => pc.hasAutoChannel(this.channel?.did!)) ?? undefined);
+		return this.cache.get("playerCharacter", () => {
+			const channelDid = this.channel?.did!;
+			const userDid = this.sageUser.did;
+			const autoChannelData = { channelDid, userDid };
+			return this.game?.playerCharacters.getAutoCharacter(autoChannelData)
+				?? this.game?.playerCharacters.findByUser(userDid)
+				?? this.sageUser.playerCharacters.getAutoCharacter(autoChannelData)
+				?? undefined;
+		});
 	}
 
 	public get critMethodType(): CritMethodType {
