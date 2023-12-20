@@ -14,6 +14,7 @@ import registerPfs from "./pfs";
 import registerSpells from "./spells";
 import registerWealth from "./wealth";
 import { registerCommandHandlers as registerWeather, registerSlashCommands as registerWeatherSlashCommands } from "./weather";
+import { registerDeleteButtonHandler } from "../model/utils/deleteButton";
 
 export function registerCommandHandlers(): void {
 	registerAdmin();
@@ -32,6 +33,8 @@ export function registerCommandHandlers(): void {
 	registerSpells();
 	registerWealth();
 	registerWeather();
+
+	registerDeleteButtonHandler();
 }
 
 export function registerSlashCommands(): void {
