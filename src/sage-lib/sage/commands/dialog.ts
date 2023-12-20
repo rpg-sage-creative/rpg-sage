@@ -19,6 +19,7 @@ import { parseDiceMatches, sendDice } from "./dice";
 import { registerInlineHelp } from "./help";
 import { getBuffer } from "../../../sage-utils/utils/HttpsUtils";
 import { errorReturnNull, warnReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 
@@ -384,21 +385,24 @@ export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogConte
 		return dialogContent;
 	}
 	if (!sageMessage.hasCommandOrQueryOrSlicedContent) {
-		const autoCharacter = sageMessage.game?.getAutoCharacterForChannel(sageMessage.sageUser.did, sageMessage.threadDid)
-			?? sageMessage.game?.getAutoCharacterForChannel(sageMessage.sageUser.did, sageMessage.channelDid)
-			?? sageMessage.sageUser.getAutoCharacterForChannel(sageMessage.threadDid)
-			?? sageMessage.sageUser.getAutoCharacterForChannel(sageMessage.channelDid);
-		if (autoCharacter) {
-			return {
-				type: autoCharacter.isGM ? "gm" : autoCharacter.isNPC ? "npc" : "pc",
-				postType: undefined,
-				name: autoCharacter.name,
-				displayName: undefined,
-				title: undefined,
-				imageUrl: undefined,
-				embedColor: undefined,
-				content: sageMessage.slicedContent
-			};
+		const userDid = sageMessage.sageUser.did;
+		const channelDids = [sageMessage.threadDid, sageMessage.channelDid].filter(exists);
+		for (const channelDid of channelDids) {
+			const autoCharacter = sageMessage.game?.getAutoCharacterForChannel(userDid, channelDid)
+				?? sageMessage.sageUser.getAutoCharacterForChannel(channelDid);
+			if (autoCharacter) {
+				const autoChannel = autoCharacter.getAutoChannel({channelDid,userDid});
+				return {
+					type: autoCharacter.type,
+					postType: autoChannel?.dialogPostType,
+					name: autoCharacter.name,
+					displayName: undefined,
+					title: undefined,
+					imageUrl: undefined,
+					embedColor: undefined,
+					content: sageMessage.slicedContent
+				};
+			}
 		}
 	}
 	return null;
