@@ -6,6 +6,7 @@ import { DiscordKey, NilSnowflake } from "../../discord";
 import CharacterManager from "./CharacterManager";
 import type { IHasSave } from "./NamedCollection";
 import NoteManager, { type TNote } from "./NoteManager";
+import { DialogType } from "../repo/base/IdRepository";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 export type TDialogMessage = {
@@ -19,11 +20,16 @@ export type TDialogMessage = {
 	userDid: Discord.Snowflake;
 };
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion" | "minion";
+type AutoChannelData = {
+	channelDid: Discord.Snowflake;
+	dialogPostType?: DialogType;
+	userDid?: Discord.Snowflake;
+};
 export interface GameCharacterCore {
 	/** short name used to ease dialog access */
 	alias?: string;
 	/** Channels to automatically treat input as dialog */
-	autoChannels?: Discord.Snowflake[];
+	autoChannels?: AutoChannelData[];
 	/** The image used for the right side of the dialog */
 	avatarUrl?: string;
 	/** The character's companion characters */
@@ -77,18 +83,29 @@ function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage
 
 //#region Core Updates
 
-interface IOldGameCharacterCore extends GameCharacterCore {
+interface IOldGameCharacterCore extends Omit<GameCharacterCore, "autoChannels"> {
+	autoChannels?: (Discord.Snowflake | AutoChannelData)[];
 	iconUrl?: string;
 }
 
 function updateCore(core: IOldGameCharacterCore): GameCharacterCore {
+	//#region update autoChannels
+	if (core.autoChannels) {
+		core.autoChannels = core.autoChannels.map(data => {
+			if (typeof(data) === "string") {
+				return { channelDid:data, userDid:core.userDid };
+			}
+			return data;
+		});
+	}
+	//#endregion
 	//#region move .iconUrl to .avatarUrl
 	if (core.iconUrl) {
 		core.avatarUrl = core.iconUrl;
 	}
 	delete core.iconUrl;
 	//#endregion
-	return core;
+	return core as GameCharacterCore;
 }
 
 //#endregion
@@ -116,7 +133,7 @@ export default class GameCharacter implements IHasSave {
 	public set alias(alias: string | undefined) { this.core.alias = alias; }
 
 	/** Channels to automatically treat input as dialog */
-	public get autoChannels(): Discord.Snowflake[] { return this.core.autoChannels ?? (this.core.autoChannels = []); }
+	public get autoChannels(): AutoChannelData[] { return this.core.autoChannels ?? (this.core.autoChannels = []); }
 
 	/** The image used for the right side of the dialog */
 	public get avatarUrl(): string | undefined { return this.core.avatarUrl; }
@@ -181,13 +198,18 @@ export default class GameCharacter implements IHasSave {
 
 	//#region AutoChannels
 
-	public addAutoChannel(did: Discord.Snowflake, save = true): Promise<boolean> {
-		const autoChannels = this.autoChannels;
-		if (!autoChannels.includes(did)) {
-			autoChannels.push(did);
-			if (save) {
-				return this.save();
-			}
+	public getAutoChannel(data: AutoChannelData): AutoChannelData | null {
+		return this.autoChannels.find(ch => ch.channelDid === data.channelDid && ch.userDid === data.userDid) ?? null;
+	}
+
+	public setAutoChannel(data: AutoChannelData, save = true): Promise<boolean> {
+		const autoChannel = this.getAutoChannel(data);
+		if (autoChannel && autoChannel.dialogPostType !== data.dialogPostType) {
+			this.removeAutoChannel(data);
+		}
+		this.autoChannels.push(data);
+		if (save) {
+			return this.save();
 		}
 		return Promise.resolve(false);
 	}
@@ -202,13 +224,13 @@ export default class GameCharacter implements IHasSave {
 		return Promise.resolve(false);
 	}
 
-	public hasAutoChannel(did: Discord.Snowflake): boolean {
-		return this.autoChannels.includes(did);
+	public hasAutoChannel(data: AutoChannelData): boolean {
+		return !!this.getAutoChannel(data);
 	}
 
-	public removeAutoChannel(did: Discord.Snowflake, save = true): Promise<boolean> {
+	public removeAutoChannel(data: AutoChannelData, save = true): Promise<boolean> {
 		const autoChannels = this.autoChannels;
-		const index = autoChannels.indexOf(did);
+		const index = autoChannels.indexOf(this.getAutoChannel(data)!);
 		if (index > -1) {
 			autoChannels.splice(index, 1);
 			if (save) {
@@ -305,15 +327,21 @@ export default class GameCharacter implements IHasSave {
 	}
 
 	public getStat(key: string): string | null {
-		if (/^name$/i.test(key)) return this.name;
+		if (/^name$/i.test(key)) {
+			return this.name;
+		}
+
+		const noteStat = this.notes.getStat(key)?.note.trim() ?? null;
+		if (noteStat !== null) {
+			return noteStat;
+		}
 
 		const pbStat = this.pathbuilder?.getStat(key) ?? null;
 		if (pbStat !== null) {
 			return String(pbStat);
 		}
 
-		const noteStat = this.notes.getStat(key)?.note.trim() ?? null;
-		return noteStat;
+		return null;
 	}
 
 	public update(values: Partial<GameCharacterCore>, save = true): Promise<boolean> {
