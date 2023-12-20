@@ -165,6 +165,20 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		return CharactersMatch.match(this, input);
 	}
 
+	public getAutoCharacter(autoChannelData: {channelDid:Discord.Snowflake;userDid:Discord.Snowflake;}): GameCharacter | null {
+		for (const char of this) {
+			if (char.hasAutoChannel(autoChannelData)) {
+				return char;
+			}
+			for (const comp of char.companions) {
+				if (comp.hasAutoChannel(autoChannelData)) {
+					return comp;
+				}
+			}
+		}
+		return null;
+	}
+
 	//#region IHasSave
 
 	/** Fires a .save on the owner, generally a Game or User. Returns false if no owner. */
