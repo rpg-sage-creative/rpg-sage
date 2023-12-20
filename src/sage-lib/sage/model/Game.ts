@@ -154,7 +154,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
-	}
+			}
 
 	public get createdDate(): Date { return new Date(this.core.createdTs ?? 283305600000); }
 	public get archivedDate(): Date | undefined { return this.core.archivedTs ? new Date(this.core.archivedTs) : undefined; }
@@ -470,12 +470,14 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	}
 	// #endregion PC actions
 
-	public getAutoCharacterForChannel(userDid: Discord.Snowflake, channelDid: Optional<Discord.Snowflake>): GameCharacter | undefined {
-		if (channelDid) {
-			const char = this.hasGameMaster(userDid)
-				? this.nonPlayerCharacters.findByName(this.gmCharacterName)
-				: this.playerCharacters.findByUser(userDid);
-			return char?.hasAutoChannel(channelDid) ? char : undefined;
+	public getAutoCharacterForChannel(userDid: Discord.Snowflake, ...channelDids: Optional<Discord.Snowflake>[]): GameCharacter | undefined {
+		for (const channelDid of channelDids) {
+			if (channelDid) {
+				const autoChannelData = { channelDid, userDid };
+				return this.playerCharacters.getAutoCharacter(autoChannelData)
+					?? this.nonPlayerCharacters.getAutoCharacter(autoChannelData)
+					?? undefined;
+			}
 		}
 		return undefined;
 	}
