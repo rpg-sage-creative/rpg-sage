@@ -7,6 +7,7 @@ import CharacterManager from "./CharacterManager";
 import type { IHasSave } from "./NamedCollection";
 import NoteManager, { type TNote } from "./NoteManager";
 import { DialogType } from "../repo/base/IdRepository";
+import { TKeyValuePair } from "./SageMessageArgsManager";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 export type TDialogMessage = {
@@ -343,6 +344,34 @@ export default class GameCharacter implements IHasSave {
 
 		return null;
 	}
+	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
+		let changes = false;
+		const forNotes: TKeyValuePair[] = [];
+		const pb = this.pathbuilder;
+		for (const pair of pairs) {
+			const { key, value } = pair;
+			if (/^name$/i.test(key) && value?.trim() && (this.name !== value || (pb && pb.name !== value))) {
+				this.name = value;
+				if (pb) {
+					pb.name = value;
+				}
+				changes ||= true;
+				continue;
+			}
+			if (pb) {
+				if (/^level$/i.test(key) && +value) {
+					const updatedLevel = await pb.setLevel(+value, save);
+					changes ||= updatedLevel;
+					continue;
+				}
+				// abilities?
+				// proficiencies?
+			}
+			forNotes.push(pair);
+		}
+		const updatedNotes = await this.notes.updateStats(forNotes, save);
+		return changes || updatedNotes;
+	}
 
 	public update(values: Partial<GameCharacterCore>, save = true): Promise<boolean> {
 		let changed = false;
@@ -384,8 +413,13 @@ export default class GameCharacter implements IHasSave {
 	}
 
 	//#region IHasSave
-	public save(): Promise<boolean> {
-		return this.owner?.save() ?? Promise.resolve(false);
+	public async save(savePathbuilder?: boolean): Promise<boolean> {
+		const ownerSaved = await this.owner?.save() ?? false;
+		if (savePathbuilder && this.pathbuilderId) {
+			const pathbuilderSaved = await this.pathbuilder?.save() ?? false;
+			return ownerSaved && pathbuilderSaved;
+		}
+		return ownerSaved;
 	}
 	//#endregion
 
