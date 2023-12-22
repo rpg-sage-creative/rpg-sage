@@ -731,6 +731,16 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 	public get level(): number {
 		return this.core.level;
 	}
+	public async setLevel(level: number, save: boolean): Promise<boolean> {
+		if (level > 0 && level < 21) {
+			this.core.level = level;
+			if (save) {
+				return this.save();
+			}
+			return true;
+		}
+		return false;
+	}
 
 	private get untrainedProficiencyMod(): number {
 		return this.core._untrainedPenalty === true ? -1 : 0;
