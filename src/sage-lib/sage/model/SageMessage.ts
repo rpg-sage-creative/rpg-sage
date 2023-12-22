@@ -90,6 +90,10 @@ export default class SageMessage
 
 	private commandAndArgs?: TCommandAndArgs;
 	public get command(): string { return this.commandAndArgs?.command ?? "INVALID COMMAND"; }
+	public commandMatches(value: string | RegExp): boolean {
+		const regex = value instanceof RegExp ? value : new RegExp(`^${value}`, "i");
+		return regex.test(this.command);
+	}
 	public args!: SageMessageArgsManager;
 	public setCommandAndArgs(commandAndArgs?: TCommandAndArgs): SageMessage {
 		this.commandAndArgs = {
