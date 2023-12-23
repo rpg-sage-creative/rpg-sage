@@ -13,6 +13,7 @@ import { PartyManager } from "../commands/trackers/party/PartyManager";
 import type { DialogType, IChannel } from "../repo/base/IdRepository";
 import { HasIdCoreAndSageCache, PermissionType, updateChannel } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";
+import type { CharacterShell } from "./CharacterShell";
 import Colors from "./Colors";
 import Emoji from "./Emoji";
 import type GameCharacter from "./GameCharacter";
@@ -193,6 +194,16 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
 	public get orphanedPlayerCharacters() { return this.playerCharacters.filter(pc => !pc.userDid || !this.players.includes(pc.userDid)); }
+	public findCharacterOrCompanion(name: string): GameCharacter | CharacterShell | undefined {
+		return this.playerCharacters.findByName(name)
+			?? this.playerCharacters.findCompanionByName(name)
+			?? this.nonPlayerCharacters.findByName(name)
+			?? this.nonPlayerCharacters.findCompanionByName(name)
+			?? this.orphanedPlayerCharacters.findByName(name)
+			?? this.orphanedPlayerCharacters.findCompanionByName(name)
+			?? this.encounters.findCharacter(name)
+			?? this.parties.findCharacter(name);
+	}
 	public get roles(): IGameRole[] { return this.core.roles ?? (this.core.roles = []); }
 	public get users(): IGameUser[] { return this.core.users ?? (this.core.users = []); }
 
