@@ -5,10 +5,12 @@ import { registerCommandHandlers as registerDcs, registerSlashCommands as regist
 import { registerCommandHandlers as registerDefault, registerSlashCommands as registerDefaultSlashCommands } from "./default";
 import registerDialog from "./dialog";
 import registerDice from "./dice";
+import { registerEncounter } from "./trackers/registerEncounter";
 import { registerCommandHandlers as registerE20 } from "./e20";
 import { registerCommandHandlers as registerHelp, registerSlashCommands as registerHelpSlashCommands } from "./help";
 import { registerCommandHandlers as registerImport, registerSlashCommands as registerImportSlashCommands } from "./import";
 import { registerCommandHandlers as registerMap, registerSlashCommands as registerMapSlashCommands } from "./map";
+import { registerParty } from "./trackers/registerParty";
 import { registerCommandHandlers as registerPathbuilder } from "./pathbuilder";
 import registerPfs from "./pfs";
 import registerSpells from "./spells";
@@ -24,10 +26,12 @@ export function registerCommandHandlers(): void {
 	registerDefault();
 	registerDialog();
 	registerDice();
+	registerEncounter();
 	registerE20();
 	registerHelp();
 	registerImport();
 	registerMap();
+	registerParty();
 	registerPathbuilder();
 	registerPfs();
 	registerSpells();
