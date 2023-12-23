@@ -1,8 +1,11 @@
 import type { Optional } from "../../../../../sage-utils";
+import type { CharacterShell } from "../../../model/CharacterShell";
 import type Game from "../../../model/Game";
+import type { HasCharacters } from "./HasCharacters";
+import type { HasPins } from "./HasPins";
 
 type Base = { id:string; name:string; };
-type BaseClass = { id:string; name:string; updatePins(): Promise<void>; };
+type BaseClass = HasCharacters<any> & HasPins<any, any>;
 
 export abstract class Manager<Core extends Base, Class extends BaseClass> {
 	public constructor(protected cores: Core[], protected game: Game) { }
@@ -23,6 +26,17 @@ export abstract class Manager<Core extends Base, Class extends BaseClass> {
 		this.cores.push(core);
 		this.changed();
 		return this.wrap(core);
+	}
+
+	public findCharacter(name: string): CharacterShell | undefined {
+		const wrapped = this.all;
+		for (const wrap of wrapped) {
+			const charPair = wrap.getCharPair(name);
+			if (charPair) {
+				return charPair;
+			}
+		}
+		return undefined;
 	}
 
 	public get(value: Optional<string>): Class | null {
