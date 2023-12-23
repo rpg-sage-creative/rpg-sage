@@ -7,14 +7,18 @@ function getName(ctor: Constructor): string {
 type ConflictResolutionMethod = "all" | "mixin" | "none";
 
 type MixinOptions = {
-	/** use process.exit(1) if a conflict is found */
+	/** use process.exit(1) if a conflict is found; defaults to true */
 	exitOnConflict?: boolean;
-	/** how to handle conflicts */
+
+	/** when to log the property map; defaults to "conflict" */
+	logPropertyMap?: true | false | "conflict";
+
+	/** how to handle conflicts; defaults to "mixin" */
 	resolutionMethod?: ConflictResolutionMethod;
 };
 
 export function applyMixins(ctor: Constructor, mixins: any[], options: MixinOptions = {}): void {
-	const { exitOnConflict = true, resolutionMethod = "mixin" } = options;
+	const { exitOnConflict = true, logPropertyMap = "conflict", resolutionMethod = "mixin" } = options;
 
 	let conflicts = false;
 	const propertyMap = new Map<string, string[]>();
@@ -46,7 +50,7 @@ export function applyMixins(ctor: Constructor, mixins: any[], options: MixinOpti
 			// apply the property if we still want it
 			if (apply) {
 				Object.defineProperty(
-					mixin.prototype,
+					ctor.prototype,
 					name,
 					Object.getOwnPropertyDescriptor(mixin.prototype, name) ?? Object.create(null)
 				);
@@ -55,13 +59,13 @@ export function applyMixins(ctor: Constructor, mixins: any[], options: MixinOpti
 		});
 	});
 
-	if (conflicts) {
-		// log the updated property map just in case
-		[...propertyMap].forEach(([key, stack]) => console.debug(`${key}: ${stack.join(" -> ")}`));
+	// log the updated property map
+	if (logPropertyMap === true || (conflicts && logPropertyMap === "conflict")) {
+		[...propertyMap].forEach(([key, stack]) => console.debug(`debug:: ${key}: ${stack.join(" -> ")}`));
+	}
 
-		// if we have conflicts and are exiting because of them
-		if (exitOnConflict) {
-			process.exit(1);
-		}
+	// if we have conflicts and are exiting because of them
+	if (conflicts && exitOnConflict) {
+		process.exit(1);
 	}
 }
