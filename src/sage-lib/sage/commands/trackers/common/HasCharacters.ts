@@ -13,6 +13,7 @@ export type CharacterSorter = (a: CharacterShell, b: CharacterShell) => -1 | 0 |
 export abstract class HasCharacters<Core extends HasCharactersCore> {
 	declare protected core: Core;
 	declare public game: Game;
+	declare public id: string;
 	declare public name: string;
 	protected abstract changed(): void;
 	protected abstract getCharacterSorter(): CharacterSorter;

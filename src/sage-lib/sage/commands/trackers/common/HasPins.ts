@@ -11,6 +11,7 @@ export type HasPinsCore = {
 
 export abstract class HasPins<Core extends HasPinsCore, Type extends string> {
 	declare protected core: Core;
+	declare public id: string;
 	declare public game: Game;
 	protected abstract changed(): void;
 	protected abstract render(type: Type): string;
