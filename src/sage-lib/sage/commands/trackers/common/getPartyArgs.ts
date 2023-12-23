@@ -10,7 +10,7 @@ export function getPartyArgs(sageMessage: SageMessage): Party[] {
 
 	const keyRegex = /^party$/i;
 	return sageMessage.args.keyValuePairs()
-		.filter(kvp => keyRegex.test(kvp.value ?? ""))
+		.filter(kvp => keyRegex.test(kvp.key))
 		.map(kvp => game.parties.get(kvp.value))
 		.filter(exists);
 }
