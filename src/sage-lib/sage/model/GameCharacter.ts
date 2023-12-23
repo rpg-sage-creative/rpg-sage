@@ -361,6 +361,9 @@ export default class GameCharacter implements IHasSave {
 			if (pb) {
 				if (/^level$/i.test(key) && +value) {
 					const updatedLevel = await pb.setLevel(+value, save);
+					if (updatedLevel) {
+						this.notes.unsetStats("level");
+					}
 					changes ||= updatedLevel;
 					continue;
 				}
