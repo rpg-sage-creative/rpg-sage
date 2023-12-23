@@ -19,14 +19,17 @@ export async function gcCmdStats(sageMessage: SageMessage): Promise<void> {
 		character.updateStats(sageMessage.args.keyValuePairs(), false);
 		return promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
 			const charSaved = await char.save(true);
-			if (charSaved && characterTypeMeta.isGm) {
+			if (charSaved) {
 				const { game } = sageMessage;
 				if (game) {
 					game.encounters.updatePins();
 					game.parties.updatePins();
-					game.updateGmCharacterName(char.name);
-					return game.save();
+					if (characterTypeMeta.isGm) {
+						game.updateGmCharacterName(char.name);
+						return game.save();
+					}
 				}
+
 			}
 			return charSaved;
 		});
