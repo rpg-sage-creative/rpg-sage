@@ -13,7 +13,7 @@ export type PartyType = "pc" | "npc" | "mixed";
 
 type PinType = "loot" | "status";
 
-type TemplateType = "statusHeader" | "statusCharacter" | "statusCompanion" | "statusFooter"
+type TemplateType = "statusHeader" | "statusCharacter" | "statusCharacterExploration" | "statusCompanion" | "statusCompanionExploration" | "statusFooter"
 	| "lootHeader" | "lootCharacter" | "lootSummaryHeader" | "lootSummaryName" | "lootSummary";
 
 export type PartyCore = HasCharactersCore & HasPinsCore & HasTemplatesCore & {
@@ -125,7 +125,9 @@ export class Party {
 		}
 
 		const characterTemplate = this.getTemplate("statusCharacter", "{name} ({hp}/{maxhp} HP): {conditions}");
-		const companionTemplate = this.getTemplate("statusCompanion", "- {name} ({hp}/{maxhp} HP): {conditions}");
+		const characterExplorationTemplate = this.getTemplate("statusCharacterExploration", "- Exploration Mode: {explorationMode} ({explorationSkill})");
+		const companionTemplate = this.getTemplate("statusCompanion", "> {name} ({hp}/{maxhp} HP): {conditions}");
+		const companionExplorationTemplate = this.getTemplate("statusCompanionExploration", "> - Exploration Mode: {explorationMode} ({explorationSkill})");
 		const characters = this.getSortedCharacters();
 		if (characters.length) {
 			const formatter = (charShell: CharacterShell | GameCharacter, template: string) => template
@@ -133,10 +135,21 @@ export class Party {
 				.replace(/{hp}/gi, charShell.getStat("hp") ?? "?")
 				.replace(/{maxhp}/gi, charShell.getStat("maxhp") ?? "?")
 				.replace(/{conditions}/gi, charShell.getStat("conditions") ?? "*no conditions*")
+				.replace(/{explorationMode}/gi, charShell.getStat("explorationMode") ?? "*unknown*")
+				.replace(/ \({explorationSkill}\)$/gi, () => { const skill = charShell.getStat("explorationSkill") ?? ""; return skill ? ` (${skill})` : ""; })
+				.replace(/{explorationSkill}/gi, charShell.getStat("explorationSkill") ?? "*unknown*")
 				;
 			characters.forEach(charShell => {
 				lines.push(formatter(charShell, characterTemplate));
-				charShell.companions?.forEach(comp => lines.push(formatter(comp, companionTemplate)));
+				if (charShell.getStat("explorationMode")) {
+					lines.push(formatter(charShell, characterExplorationTemplate));
+				}
+				charShell.companions?.forEach(comp => {
+					lines.push(formatter(comp, companionTemplate));
+					if (comp.getStat("explorationMode")) {
+						lines.push(formatter(comp, companionExplorationTemplate));
+					}
+					});
 			});
 		}else {
 			lines.push(`*empty party*`);
