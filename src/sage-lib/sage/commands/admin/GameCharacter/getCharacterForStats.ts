@@ -11,27 +11,25 @@ export async function getCharacterForStats(sageMessage: SageMessage, characterTy
 	}
 
 	const game = sageMessage.game;
-	if (!game) {
-		return getCharacter(sageMessage, characterTypeMeta, userDid, names);
-	}
+	if (game) {
+		const encounters = game.encounters.all;
+		for (const encounter of encounters) {
+			if (encounter.active) {
+				const char = encounter.getCharPair(name);
+				if (char) {
+					return char.game ?? null;
+				}
+			}
+		}
 
-	const encounters = game.encounters.all;
-	for (const encounter of encounters) {
-		if (encounter.active) {
-			const char = encounter.getCharPair(name);
+		const parties = game.parties.all;
+		for (const party of parties) {
+			const char = party.getCharPair(name);
 			if (char) {
 				return char.game ?? null;
 			}
 		}
 	}
 
-	const parties = game.parties.all;
-	for (const party of parties) {
-		const char = party.getCharPair(name);
-		if (char) {
-			return char.game ?? null;
-		}
-	}
-
-	return null;
+	return getCharacter(sageMessage, characterTypeMeta, userDid, names);
 }
