@@ -435,7 +435,7 @@ export default class SageMessageArgsManager extends ArgsManager {
 
 	public removeAndReturnNames(defaultJoinRemaining = false, defaultJoinSeparator = " "): TNames {
 		const names = <TNames>{
-			charName: this.removeByKey("charName"),
+			charName: this.removeByKey("charName") ?? this.removeByKey("char"),
 			oldName: this.removeByKey("oldName"),
 			name: this.removeByKey("name"),
 			newName: this.removeByKey("newName"),
