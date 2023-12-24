@@ -26,8 +26,7 @@ export async function gcCmdAdd(sageMessage: SageMessage): Promise<void> {
 	}
 
 	if (!core.name) {
-		await sageMessage.send("Cannot create a character without a name!");
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure("Cannot create a character without a name!");
 	}
 
 	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
@@ -43,7 +42,7 @@ export async function gcCmdAdd(sageMessage: SageMessage): Promise<void> {
 		characterManager = character?.companions;
 	}
 	if (!characterManager) {
-		return sageMessage.reactFailure();
+		return sageMessage.reactFailure(`Unable to find character "${names.charName}".`);
 	}
 
 	const newChar = new GameCharacter(core, characterManager);
