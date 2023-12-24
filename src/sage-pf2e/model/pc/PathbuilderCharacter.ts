@@ -6,7 +6,7 @@ import { debug } from "../../../sage-utils/utils/ConsoleUtils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../sage-utils/utils/FsUtils";
 import type { GetStatPrefix, TProficiency, TSavingThrow } from "../../common";
-import { SAVING_THROWS, toModifier } from "../../common";
+import { getSavingThrows, toModifier } from "../../common";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository";
 import type Weapon from "../Weapon";
 import type { IHasAbilities } from "./Abilities";
@@ -671,6 +671,7 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 		const [prefix, statLower] = lower.includes(".") ? lower.split(".") as [GetStatPrefix, string] : ["", lower] as [GetStatPrefix, string];
 
 		switch(statLower) {
+			case "activeexploration": return this.getSheetValue("activeExploration") ?? null;
 			case "level": return this.level;
 			case "maxhp": return this.maxHp;
 			case "ac": return prefix === "prof" ? this.core.acTotal.acProfBonus : this.core.acTotal.acTotal;
@@ -680,7 +681,15 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 				?? this.savingThrows.getStat(statLower, prefix)
 				?? this.abilities.getStat(statLower, prefix);
 		}
-		return null;
+	}
+
+	public getInitSkill(): string {
+		const activeExploration = this.getSheetValue("activeExploration");
+		switch(activeExploration) {
+			case "Avoid Notice": return "Stealth";
+			case "Other": return this.getSheetValue("activeSkill") ?? "Perception";
+			default: return "Perception";
+		}
 	}
 
 	public constructor(core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
@@ -822,7 +831,7 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 			const lore = this.getLore(key)!;
 			return [PathbuilderCharacterProficiencyType[lore[1]] as TProficiency, this.getLoreMod(key)];
 		}
-		if (SAVING_THROWS.includes(key as TSavingThrow)) {
+		if (getSavingThrows().includes(key as TSavingThrow)) {
 			const ability = SavingThrows.getAbilityForSavingThrow(key as TSavingThrow);
 			const check = this.savingThrows.getSavingThrow(key as TSavingThrow, ability ?? "Constitution");
 			return [this.getProficiency(key as TPathbuilderCharacterProficienciesKey), check.modifier];

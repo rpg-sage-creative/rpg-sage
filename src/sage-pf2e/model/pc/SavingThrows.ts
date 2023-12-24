@@ -1,5 +1,5 @@
 import type { GetStatPrefix, TAbility, TSavingThrow } from "../../common";
-import { CONSTITUTION, DEXTERITY, FORTITUDE, REFLEX, SAVING_THROWS, toModifier, WILL, WISDOM } from "../../common";
+import { CONSTITUTION, DEXTERITY, FORTITUDE, getSavingThrows, REFLEX, toModifier, WILL, WISDOM } from "../../common";
 import type Armor from "../Armor";
 import Check from "./Check";
 import PathbuilderCharacter from "./PathbuilderCharacter";
@@ -27,7 +27,7 @@ export default abstract class SavingThrows {
 	public abstract getSavingThrow(savingThrow: TSavingThrow, ability?: TAbility): Check;
 
 	public getStat(statLower: string, prefix: GetStatPrefix): number | string | null {
-		const savingThrow = SAVING_THROWS.find(save => {
+		const savingThrow = getSavingThrows().find(save => {
 			const lower = save.toLowerCase();
 			if (statLower === "fort" && save === "Fortitude") return true;
 			if (statLower === "ref" && save === "Reflex") return true;
