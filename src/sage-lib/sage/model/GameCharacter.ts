@@ -1,6 +1,6 @@
 import type * as Discord from "discord.js";
 import * as _XRegExp from "xregexp";
-import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e";
+import { PathbuilderCharacter, TPathbuilderCharacter, getExplorationModes, getSkills } from "../../../sage-pf2e";
 import type { Optional, UUID } from "../../../sage-utils";
 import { DiscordKey, NilSnowflake } from "../../discord";
 import CharacterManager from "./CharacterManager";
@@ -337,9 +337,15 @@ export default class GameCharacter implements IHasSave {
 			return noteStat;
 		}
 
-		const pbStat = this.pathbuilder?.getStat(key) ?? null;
-		if (pbStat !== null) {
-			return String(pbStat);
+		const pb = this.pathbuilder;
+		if (pb) {
+			let pbKey = key;
+			if (/^explorationmode$/i.test(key)) pbKey = "activeExploration";
+			if (/^explorationskill$/i.test(key)) pbKey = "initskill";
+			const pbStat = pb.getStat(pbKey) ?? null;
+			if (pbStat !== null) {
+				return String(pbStat);
+			}
 		}
 
 		return null;
@@ -350,6 +356,8 @@ export default class GameCharacter implements IHasSave {
 		const pb = this.pathbuilder;
 		for (const pair of pairs) {
 			const { key, value } = pair;
+			let correctedKey: string | undefined;
+			let correctedValue: string | undefined;
 			if (/^name$/i.test(key) && value?.trim() && (this.name !== value || (pb && pb.name !== value))) {
 				this.name = value;
 				if (pb) {
@@ -358,6 +366,18 @@ export default class GameCharacter implements IHasSave {
 				changes ||= true;
 				continue;
 			}
+			const isExplorationMode = /^explorationmode$/i.test(key);
+			if (isExplorationMode) {
+				correctedKey = "explorationMode";
+				const modeRegex = new RegExp(`^${value.replace(/(\s)/g, "$1?")}$`, "i");
+				correctedValue = getExplorationModes().find(mode => modeRegex.test(mode));
+			}
+			const isExplorationSkill = /^explorationskill$/i.test(key);
+			if (isExplorationSkill) {
+				correctedKey = "explorationSkill";
+				const skillRegex = new RegExp(`^${value.replace(/(\s)/g, "$1?")}$`, "i");
+				correctedValue = getSkills().find(skill => skillRegex.test(skill));
+		}
 			if (pb) {
 				if (/^level$/i.test(key) && +value) {
 					const updatedLevel = await pb.setLevel(+value, save);
@@ -367,10 +387,20 @@ export default class GameCharacter implements IHasSave {
 					changes ||= updatedLevel;
 					continue;
 				}
+				if (isExplorationMode) {
+					pb.setSheetValue("activeExploration", correctedValue ?? "Other");
+					this.notes.unsetStats(correctedKey ?? key);
+					continue;
+				}
+				if (isExplorationSkill) {
+					pb.setSheetValue("activeSkill", correctedValue ?? "Perception");
+					this.notes.unsetStats(correctedKey ?? key);
+					continue;
+				}
 				// abilities?
 				// proficiencies?
 			}
-			forNotes.push(pair);
+			forNotes.push({ key:correctedKey??key, value:correctedValue??value });
 		}
 		const updatedNotes = await this.notes.updateStats(forNotes, save);
 		return changes || updatedNotes;
