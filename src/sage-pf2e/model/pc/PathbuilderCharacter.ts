@@ -672,6 +672,7 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 
 		switch(statLower) {
 			case "activeexploration": return this.getSheetValue("activeExploration") ?? null;
+			case "initskill": return this.getInitSkill();
 			case "level": return this.level;
 			case "maxhp": return this.maxHp;
 			case "ac": return prefix === "prof" ? this.core.acTotal.acProfBonus : this.core.acTotal.acTotal;
