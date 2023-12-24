@@ -1,4 +1,4 @@
-import { HasIdCore, IdCore } from "../ClassUtils"
+import { HasIdCore, IdCore } from "../ClassUtils";
 import { Optional } from "../types";
 
 type TSimpleMap = { [key:string]:any; };
@@ -8,6 +8,8 @@ export interface CharacterBaseCore<T extends string = string> extends IdCore<T> 
 	sheet?: TSimpleMap;
 	/** link to the game/user character */
 	characterId?: string;
+	/** message where the char sheet is posted */
+	messageId?: string;
 	/** link to the character's user */
 	userDid?: string;
 }
@@ -20,13 +22,17 @@ export default abstract class CharacterBase<T extends CharacterBaseCore<U> = Cha
 	public get characterId(): string { return this.core.characterId ?? ""; }
 	public set characterId(characterId: Optional<string>) { this.core.characterId = characterId ?? undefined; }
 
+	/** The messageId value from the Message where the character sheet is posted. */
+	public get messageId(): string { return this.core.messageId ?? ""; }
+	public set messageId(messageId: Optional<string>) { this.core.messageId = messageId ?? undefined; }
+
 	/** The id value from the characterId's User. */
 	public get userDid(): string { return this.core.userDid ?? ""; }
 	public set userDid(userDid: Optional<string>) { this.core.userDid = userDid ?? undefined; }
 
 	//#region interactive char sheet
 	private get sheet(): TSimpleMap { return this.core.sheet ?? (this.core.sheet = {}); }
-	public getSheetValue<V extends any = string>(key: string): V | undefined {
+	public getSheetValue<V = string>(key: string): V | undefined {
 		return this.sheet[key];
 	}
 	public setSheetValue<V>(key: string, value: V): void {
