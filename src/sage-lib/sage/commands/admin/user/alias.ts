@@ -1,8 +1,7 @@
-// import { discordPromptYesNo } from "../../../../../discord/prompts";
-import utils, { Optional } from "../../../../../sage-utils";
+import { isNotBlank } from "../../../../../sage-utils/utils/StringUtils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import SageMessage from "../../../model/SageMessage";
-import { TAlias } from "../../../model/User";
+import type { TAlias } from "../../../model/User";
 import { DialogType } from "../../../repo/base/IdRepository";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { parseDialogContent, type TDialogContent } from "../../dialog";
@@ -72,7 +71,7 @@ function dialogContentToTarget(dialogContent: TDialogContent, separator = "::"):
 		DialogType[dialogContent.postType!],
 	];
 	// only valid parts
-	const filteredParts = baseParts.filter(utils.StringUtils.isNotBlank);
+	const filteredParts = baseParts.filter(isNotBlank);
 	// push content or empty string to get final :: in the right place
 	const allParts = filteredParts.concat([dialogContent.content ?? ""]);
 	// join output
@@ -81,21 +80,23 @@ function dialogContentToTarget(dialogContent: TDialogContent, separator = "::"):
 
 async function aliasList(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("Alias List", "You cannot manage your aliases here.");
 	}
 
 	const aliases = sageMessage.sageUser.aliases;
 	if (aliases.length) {
-		const renderableContent = createAdminRenderableContent(sageMessage.game || sageMessage.server, `<b>alias-list</b>`);
-		aliases.forEach(alias => {
-			renderableContent.appendSection(`\`${alias.name}::\`\nis an alias for\n\`${alias.target}\`<br/>`);
+		const renderableContent = createAdminRenderableContent(sageMessage.game ?? sageMessage.server, `<b>Alias List</b>`);
+		aliases.forEach((alias, index) => {
+			const newLine = index ? "\n" : "";
+			const target = alias.target.replace(/\n/g, "\n> ");
+			renderableContent.appendSection(`${newLine}\`${alias.name}::\` is an alias for:\n> \`\`\`${target}\`\`\``);
 		});
-		return <any>sageMessage.send(renderableContent);
+		return <any>sageMessage.sendPost(renderableContent);
 
 	} else {
-		const renderableContent = createAdminRenderableContent(sageMessage.game || sageMessage.server, `<b>alias-list</b>`);
+		const renderableContent = createAdminRenderableContent(sageMessage.game ?? sageMessage.server, `<b>Alias List</b>`);
 		renderableContent.append("<b>No Aliases Found!</b>");
-		return <any>sageMessage.send(renderableContent);
+		return <any>sageMessage.sendPost(renderableContent);
 
 	}
 }
@@ -116,11 +117,11 @@ function aliasTest(sageMessage: SageMessage, dialogContent: TDialogContent): boo
 
 function aliasToPrompt(alias: TAlias, usage: boolean): string {
 	const parts = [
-		`\n> **Name:** ${alias.name}`,
-		`\n> **Target:** \`${alias.target}\``
+		`> **Name:** ${alias.name}`,
+		`\n> **Target:** \`\`\`${alias.target.replace(/\n/g, "\n> ")}\`\`\``
 	];
 	if (usage) {
-		parts.push(`\n\n*Usage:* \`${alias.name.toLowerCase()}::\``);
+		parts.push(`\n*Usage:* \`${alias.name.toLowerCase()}::\``);
 	}
 	return parts.join("");
 }
@@ -155,7 +156,7 @@ async function aliasUpdate(sageMessage: SageMessage, existing: TAlias, updated: 
 
 async function aliasSet(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("Set Alias", "You cannot manage your aliases here.");
 	}
 
 	const namePair = sageMessage.args.removeKeyValuePair("name");
@@ -164,9 +165,23 @@ async function aliasSet(sageMessage: SageMessage): Promise<void> {
 	const aliasName = namePair?.value ?? sageMessage.args.shift()!;
 	const aliasTarget = targetPair?.value ?? sageMessage.args.join(" ");
 
-	const dialogContent = parseDialogContent(aliasTarget, sageMessage.sageUser?.allowDynamicDialogSeparator);
-	if (!dialogContent || !aliasTest(sageMessage, dialogContent)) {
-		return sageMessage.reactFailure();
+	const dialogContent = aliasTarget ? parseDialogContent(aliasTarget, sageMessage.sageUser?.allowDynamicDialogSeparator) : null;
+	const validTarget = dialogContent ? aliasTest(sageMessage, dialogContent) : false;
+	if (!aliasName || !aliasTarget || !dialogContent || !validTarget) {
+		const details = [
+			"The command for setting an advanced alias is:",
+			"> ```sage!!alias set name=\"\" value=\"\"```",
+			"For example:",
+			"> ```sage!!alias set name=\"gobfireball\" value=\"npc::gobbo::Gobbo grabs his torch, waves it around, and casts fireball with it!\"```",
+		];
+		if (aliasTarget) {
+			if (!dialogContent) {
+				details.push("Error:\n> Please format your alias value using Sage Dialog notation: `pc::dialog` or `npc::gobbo::dialog`");
+			}else if (!validTarget) {
+				details.push("Error:\n> Please ensure your alias includes a valid character: `pc::dialog` or `npc::gobbo::dialog`");
+			}
+		}
+		return sageMessage.whisper(details.join("\n"));
 	}
 
 	const target = dialogContentToTarget(dialogContent);
@@ -182,11 +197,7 @@ async function aliasSet(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(saved);
 }
 
-async function deleteAlias(sageMessage: SageMessage, alias: Optional<TAlias>): Promise<void> {
-	if (!alias) {
-		return sageMessage.reactFailure();
-	}
-
+async function deleteAlias(sageMessage: SageMessage, alias: TAlias): Promise<void> {
 	const aliasPrompt = aliasToPrompt(alias, false);
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Delete Alias?`);
 	promptRenderable.append(aliasPrompt);
@@ -200,32 +211,50 @@ async function deleteAlias(sageMessage: SageMessage, alias: Optional<TAlias>): P
 
 async function aliasDelete(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("Delete Alias", "You cannot manage your aliases here.");
 	}
 
-	const aliasName = sageMessage.args.removeAndReturnName(true) ?? sageMessage.args.shift();
-	if (aliasName) {
-		const alias = sageMessage.sageUser.aliases.findByName(aliasName);
-		return deleteAlias(sageMessage, alias);
+	const aliasName = sageMessage.args.removeAndReturnName() ?? sageMessage.args.shift();
+	const alias = aliasName ? sageMessage.sageUser.aliases.findByName(aliasName) : null;
+	if (!aliasName || !alias) {
+		const details = [
+			"The command for deleting an advanced alias is:",
+			"> ```sage!!alias delete name=\"\"```",
+			"For example:",
+			"> ```sage!!alias delete name=\"gobfireball\"```",
+		];
+		if (aliasName && !alias) {
+			details.push(`Error:\n> Unable to find Alias: "${aliasName}"`);
+		}
+		return sageMessage.whisper(details.join("\n"));
 	}
-	return sageMessage.reactFailure();
+
+	return deleteAlias(sageMessage, alias);
 }
 
 async function aliasDetails(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
-		return sageMessage.reactBlock();
+		return sageMessage.denyByProv("Alias Details", "You cannot manage your aliases here.");
+	}
+
+	const aliasName = sageMessage.args.removeAndReturnName() ?? sageMessage.args.shift();
+	const alias = aliasName ? sageMessage.sageUser.aliases.findByName(aliasName) : null;
+	if (!aliasName || !alias) {
+		const details = [
+			"The command for viewing an advanced alias is:",
+			"> ```sage!!alias details name=\"\"```",
+			"For example:",
+			"> ```sage!!alias details name=\"gobfireball\"```",
+		];
+		if (aliasName && !alias) {
+			details.push(`Error:\n> Unable to find Alias: "${aliasName}"`);
+		}
+		return sageMessage.whisper(details.join("\n"));
 	}
 
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>Alias Details</b>`);
-
-	const aliasName = sageMessage.args.removeAndReturnName() ?? sageMessage.args.shift()!;
-	const existing = sageMessage.sageUser.aliases.findByName(aliasName);
-	if (existing) {
-		renderableContent.append(aliasToPrompt(existing, true));
-	} else {
-		renderableContent.append(`Alias not found! \`${aliasName}\``);
-	}
-	return <any>sageMessage.send(renderableContent);
+	renderableContent.append(aliasToPrompt(alias, true));
+	return <any>sageMessage.sendPost(renderableContent);
 }
 
 // async function toggleAllowDynamicDialogSeparator(sageMessage: SageMessage): Promise<void> {
@@ -244,10 +273,29 @@ async function aliasDetails(sageMessage: SageMessage): Promise<void> {
 // 		})
 // }
 
+async function aliasHelp(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
+		return sageMessage.denyByProv("Alias Details", "You cannot manage your aliases here.");
+	}
+	const details = [
+		"The command for listing advanced aliases is:",
+		"> ```sage!!alias list```",
+		"The command for viewing an advanced alias is:",
+		"> ```sage!!alias details name=\"\"```",
+		"The command for setting an advanced alias is:",
+		"> ```sage!!alias set name=\"\" value=\"\"```",
+		"The command for deleting an advanced alias is:",
+		"> ```sage!!alias delete name=\"\"```",
+	];
+	return sageMessage.whisper(details.join("\n"));
+
+}
+
 export default function register(): void {
+	registerAdminCommand(aliasHelp, "alias-help", "alias");
 	registerAdminCommand(aliasList, "alias-list");
 	registerAdminCommand(aliasSet, "alias-set", "alias-add");
-	registerAdminCommand(aliasDetails, "alias-details");
+	registerAdminCommand(aliasDetails, "alias-details", "alias-view");
 	registerAdminCommand(aliasDelete, "alias-delete", "alias-unset", "alias-remove");
 
 	registerAdminCommandHelp("Dialog", "Alias", "alias list");
