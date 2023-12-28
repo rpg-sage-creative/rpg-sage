@@ -19,6 +19,7 @@ import { parseDiceMatches, sendDice } from "./dice";
 import { registerInlineHelp } from "./help";
 import { getBuffer } from "../../../sage-utils/utils/HttpsUtils";
 import { errorReturnNull, warnReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { redactCodeBlocks } from "../../../sage-utils/utils/StringUtils";
 import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
@@ -42,10 +43,11 @@ type DialogRenderableOptions = {
 	files?: Discord.MessageAttachment[];
 	renderableContent: utils.RenderUtils.RenderableContent;
 	sageMessage: SageMessage;
+	skipDelete?: boolean;
 }
 
 //TODO: sort out why i am casting caches to <any>
-async function sendDialogRenderable({ authorOptions, dialogTypeOverride, files, renderableContent, sageMessage }: DialogRenderableOptions): Promise<Discord.Message[]> {
+async function sendDialogRenderable({ authorOptions, dialogTypeOverride, files, renderableContent, sageMessage, skipDelete }: DialogRenderableOptions): Promise<Discord.Message[]> {
 	const dialogType = dialogTypeOverride ?? sageMessage.dialogType;
 	const targetChannel = await sageMessage.discord.fetchChannel(sageMessage.channel?.sendDialogTo);
 	const sageCache = sageMessage.caches;
@@ -53,12 +55,12 @@ async function sendDialogRenderable({ authorOptions, dialogTypeOverride, files, 
 		const sent = await sendWebhook(targetChannel, { sageCache, renderableContent, authorOptions, dialogType, files }).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 		return sent;
 	} else {
-		const replaced = await replaceWebhook(sageMessage.message, { sageCache, renderableContent, authorOptions, dialogType, files }).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		const replaced = await replaceWebhook(sageMessage.message, { sageCache, renderableContent, authorOptions, dialogType, files, skipDelete }).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 		return replaced;
 	}
 }
 
-async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostData): Promise<Discord.Message[]> {
+async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostData, { doAttachment, skipDelete }: ChatOptions): Promise<Discord.Message[]> {
 	const character = postData?.character;
 	if (!character) {
 		return Promise.reject("Invalid TDialogPostData");
@@ -112,7 +114,7 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 
 	//#region files
 	const files: Discord.MessageAttachment[] = [];
-	if (sageMessage.message.attachments.size) {
+	if (doAttachment && sageMessage.message.attachments.size) {
 		for (const att of sageMessage.message.attachments.values()) {
 			if (att.contentType?.match(/image/i) && att.url) {
 				const buffer = await getBuffer(att.url).catch(warnReturnNull);
@@ -124,7 +126,7 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 	}
 	//#endregion
 
-	const messages: Discord.Message[] = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files })
+	const messages: Discord.Message[] = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files, skipDelete })
 		.catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
 	if (messages.length) {
 		const last = messages[messages.length - 1];
@@ -132,8 +134,8 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 		//#region dice
 		const diceOutputs = otherDiceMatches.map(match => match.output).flat();
 		if (diceOutputs.length) {
-			const diceResults = await sendDice(sageMessage, diceOutputs).catch(errorReturnNull);
-			if (diceResults?.allSecret && diceResults?.hasGmChannel) {
+			const diceResults = await sendDice(sageMessage, diceOutputs);
+			if (diceResults.allSecret && diceResults.hasGmChannel) {
 				const emoji = sageMessage.getEmoji(EmojiType.Die);
 				if (emoji) {
 					await last.react(emoji).catch(errorReturnNull);
@@ -255,6 +257,7 @@ function getColorType(dialogType: TDialogType): ColorType | null {
 
 export type TDialogContent = {
 	type: TDialogType;
+	attachment?: boolean;
 	postType?: DialogType;
 	name?: string;
 	displayName?: string;
@@ -326,6 +329,7 @@ function getDialogSeparator(content: string, allowDynamicDialogSeparator: boolea
 function getDialogParsers(typeAndSeparator: TTypeRegexAndSeparatorParts): TParsers {
 	return {
 		type: XRegExp(`^${typeAndSeparator.type}${typeAndSeparator.separator}`, "i"),
+		attachment: XRegExp(`(attachment)${typeAndSeparator.separator}`, "i"),
 		post: XRegExp(`(post|embed)${typeAndSeparator.separator}`, "i"),
 		color: XRegExp(`(?:0x|#)([0-9a-f]{3}|[0-9a-f]{6})${typeAndSeparator.separator}`, "i"),
 		image: XRegExp(`((?:https?:\\/\\/.*?)|(?:<https?:\\/\\/.*?>))${typeAndSeparator.separator}`, "i"),
@@ -345,6 +349,21 @@ function cleanUrl(url: Optional<string>): OrUndefined<string> {
 	return undefined;
 }
 
+function parseDialogContents(content: string, allowDynamicDialogSeparator: boolean): TDialogContent[] {
+	const lines = redactCodeBlocks(content).split(/\n/);
+	const dialogLines = lines.reduce((dLines, line) => {
+		if (!dLines.length || getDialogSeparator(line, allowDynamicDialogSeparator)) {
+			dLines.push(line);
+		}else {
+			dLines[dLines.length - 1] += `\n${line}`;
+		}
+		return dLines;
+	}, [] as string[]);
+	return dialogLines
+		.map(lineContent => parseDialogContent(lineContent, allowDynamicDialogSeparator))
+		.filter(d => d?.content) as TDialogContent[];
+}
+
 /** Uses tokens to parse the dialog content. */
 export function parseDialogContent(content: string, allowDynamicDialogSeparator: boolean): TDialogContent | null {
 	const typeAndSeparator = getDialogSeparator(content, allowDynamicDialogSeparator);
@@ -356,16 +375,18 @@ export function parseDialogContent(content: string, allowDynamicDialogSeparator:
 			partTokens = tokens.filter(token => token.type === "part");
 
 		const typeToken = tokens.find(token => token.type === "type")!,
+			attachmentToken = tokens.find(token => token.type === "attachment"),
 			postTypeToken = tokens.find(token => token.type === "post"),
 			nameToken = nameTokens.shift() ?? (titleTokens.length > 1 ? titleTokens.shift() : null) ?? partTokens.shift(),
 			titleToken = titleTokens.find(token => token !== nameToken),
 			imageToken = tokens.find(token => token.type === "image"),
 			colorToken = tokens.find(token => token.type === "color"),
-			usedTokens = [typeToken, postTypeToken, nameToken, titleToken, imageToken, colorToken],
+			usedTokens = [typeToken, attachmentToken, postTypeToken, nameToken, titleToken, imageToken, colorToken],
 			otherTokens = tokens.filter(token => !usedTokens.includes(token));
 
 		return {
 			type: <TDialogType>typeToken.matches[0].toLowerCase(),
+			attachment: attachmentToken ? true : undefined,
 			postType: [DialogType.Embed, DialogType.Post].find(val => postTypeToken?.matches[0].toLowerCase() === DialogType[val].toLowerCase()),
 			name: nameToken?.matches[0],
 			displayName: nameToken?.matches[nameToken?.type === "title" ? 0 : 1],
@@ -378,10 +399,10 @@ export function parseDialogContent(content: string, allowDynamicDialogSeparator:
 	return null;
 }
 
-export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogContent | null {
+export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogContent[] {
 	const content = sageMessage.slicedContent;
-	const dialogContent = parseDialogContent(content, sageMessage.sageUser?.allowDynamicDialogSeparator);
-	if (dialogContent) {
+	const dialogContent = parseDialogContents(content, sageMessage.sageUser?.allowDynamicDialogSeparator);
+	if (dialogContent.length) {
 		return dialogContent;
 	}
 	if (!sageMessage.hasCommandOrQueryOrSlicedContent) {
@@ -392,7 +413,7 @@ export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogConte
 				?? sageMessage.sageUser.getAutoCharacterForChannel(channelDid);
 			if (autoCharacter) {
 				const autoChannel = autoCharacter.getAutoChannel({channelDid,userDid});
-				return {
+				return [{
 					type: autoCharacter.type,
 					postType: autoChannel?.dialogPostType,
 					name: autoCharacter.name,
@@ -401,11 +422,11 @@ export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogConte
 					imageUrl: undefined,
 					embedColor: undefined,
 					content: sageMessage.slicedContent
-				};
+				}];
 			}
 		}
 	}
-	return null;
+	return [];
 }
 
 //#endregion
@@ -413,38 +434,55 @@ export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogConte
 //#region Dialog Listener
 
 /** Returns the dialog content if found or null otherwise. */
-async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TDialogContent> | null> {
+async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TDialogContent[]> | null> {
 	if (!sageMessage.allowDialog) {
 		return null;
 	}
 
-	const dialogContent = parseOrAutoDialogContent(sageMessage);
-	if (!dialogContent?.content) {
+	const dialogContents = parseOrAutoDialogContent(sageMessage);
+	if (!dialogContents?.length) {
 		return null;
 	}
 
 	return {
-		command: dialogContent.type,
+		command: dialogContents.map(d => d.type).join("+"),
 		args: undefined, //new SageMessageArgs(),
-		data: dialogContent
+		data: dialogContents
 	};
 }
 
-async function doDialog(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
-	switch (dialogContent.type) {
-		case "npc": case "enemy": case "ally": case "boss": case "minion": return npcChat(sageMessage, dialogContent);
-		case "gm": return gmChat(sageMessage, dialogContent);
-		case "pc": return pcChat(sageMessage, dialogContent);
-		case "alt": case "companion": case "familiar": case "hireling": return companionChat(sageMessage, dialogContent);
-		case "edit": return editChat(sageMessage, dialogContent);
-		default: return aliasChat(sageMessage, dialogContent);// warn(`Invalid dialogContent.type(${dialogContent.type})`);
+async function doDialog(sageMessage: SageMessage, dialogContents: TDialogContent[]): Promise<void> {
+	const attachmentIndex = Math.max(dialogContents.findIndex(dialogContent => dialogContent.attachment === true), 0);
+	for (let index = 0; index < dialogContents.length; index++) {
+		const dialogContent = dialogContents[index];
+		const options = { skipDelete:index > 0, doAttachment:index === attachmentIndex };
+		switch (dialogContent.type) {
+			case "npc": case "enemy": case "ally": case "boss": case "minion":
+				await npcChat(sageMessage, dialogContent, options);
+				break;
+			case "gm":
+				await gmChat(sageMessage, dialogContent, options);
+				break;
+			case "pc":
+				await pcChat(sageMessage, dialogContent, options);
+				break;
+			case "alt": case "companion": case "familiar": case "hireling":
+				await companionChat(sageMessage, dialogContent, options);
+				break;
+			case "edit":
+				await editChat(sageMessage, dialogContent);
+				break;
+			default:
+				await aliasChat(sageMessage, dialogContent, options);// warn(`Invalid dialogContent.type(${dialogContent.type})`);
+				break;
+		}
 	}
 }
 
 //#endregion
 
 // #region NPC Dialog
-async function npcChat(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
+async function npcChat(sageMessage: SageMessage, dialogContent: TDialogContent, options: ChatOptions): Promise<void> {
 	const npc = dialogContent.name && findNpc(sageMessage, dialogContent.name);
 	if (npc) {
 		return <Promise<void>>sendDialogPost(sageMessage, {
@@ -456,15 +494,15 @@ async function npcChat(sageMessage: SageMessage, dialogContent: TDialogContent):
 			embedColor: dialogContent.embedColor,
 			postType: dialogContent.postType,
 			title: dialogContent.title
-		}).catch(error);
+		}, options).catch(error);
 	} else {
 		return sageMessage.reactWarn();
 	}
 }
 // #endregion
-
+type ChatOptions = { skipDelete: boolean, doAttachment: boolean };
 // #region GM Dialog
-async function gmChat(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
+async function gmChat(sageMessage: SageMessage, dialogContent: TDialogContent, options: ChatOptions): Promise<void> {
 	const gm = await findGm(sageMessage);
 	if (gm) {
 		return <Promise<void>>sendDialogPost(sageMessage, {
@@ -476,14 +514,14 @@ async function gmChat(sageMessage: SageMessage, dialogContent: TDialogContent): 
 			embedColor: dialogContent.embedColor,
 			postType: dialogContent.postType,
 			title: dialogContent.title
-		}).catch(error);
+		}, options).catch(error);
 	}
 	return sageMessage.reactWarn();
 }
 // #endregion
 
 // #region PC Dialog
-async function pcChat(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
+async function pcChat(sageMessage: SageMessage, dialogContent: TDialogContent, options: ChatOptions): Promise<void> {
 	const pc = findPc(sageMessage, dialogContent.name);
 	if (pc) {
 		return <Promise<void>>sendDialogPost(sageMessage, {
@@ -495,14 +533,14 @@ async function pcChat(sageMessage: SageMessage, dialogContent: TDialogContent): 
 			embedColor: dialogContent.embedColor,
 			postType: dialogContent.postType,
 			title: dialogContent.title
-		}).catch(error);
+		}, options).catch(error);
 	}
 	return sageMessage.reactWarn();
 }
 // #endregion
 
 // #region Companion Dialog
-async function companionChat(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
+async function companionChat(sageMessage: SageMessage, dialogContent: TDialogContent, options: ChatOptions): Promise<void> {
 	const companion = findCompanion(sageMessage, dialogContent.name);
 	if (companion) {
 		return <Promise<void>>sendDialogPost(sageMessage, {
@@ -514,7 +552,7 @@ async function companionChat(sageMessage: SageMessage, dialogContent: TDialogCon
 			embedColor: dialogContent.embedColor,
 			postType: dialogContent.postType,
 			title: dialogContent.title
-		}).catch(error);
+		}, options).catch(error);
 	}
 	return sageMessage.reactWarn();
 }
@@ -604,6 +642,7 @@ function updateAliasDialogArgsAndReturnType(sageMessage: SageMessage, dialogCont
 		: _content + dialogContent.content;
 	return {
 		type: aliasContent.type,
+		attachment: dialogContent.attachment ?? aliasContent.attachment,
 		postType: dialogContent.postType ?? aliasContent.postType,
 		name: aliasContent.name,
 		displayName: aliasContent.displayName,
@@ -614,19 +653,19 @@ function updateAliasDialogArgsAndReturnType(sageMessage: SageMessage, dialogCont
 	};
 }
 
-async function aliasChat(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
+async function aliasChat(sageMessage: SageMessage, dialogContent: TDialogContent, options: ChatOptions): Promise<void> {
 	if (dialogContent) {
 		const updatedDialogContent = updateAliasDialogArgsAndReturnType(sageMessage, dialogContent);
 		if (updatedDialogContent) {
 			switch (updatedDialogContent.type) {
 				case "gm":
-					return gmChat(sageMessage, updatedDialogContent);
+					return gmChat(sageMessage, updatedDialogContent, options);
 				case "npc": case "ally": case "enemy": case "boss": case "minion":
-					return npcChat(sageMessage, updatedDialogContent);
+					return npcChat(sageMessage, updatedDialogContent, options);
 				case "pc":
-					return pcChat(sageMessage, updatedDialogContent);
+					return pcChat(sageMessage, updatedDialogContent, options);
 				case "alt": case "companion": case "familiar": case "hireling":
-					return companionChat(sageMessage, updatedDialogContent);
+					return companionChat(sageMessage, updatedDialogContent, options);
 			}
 			return sageMessage.reactWarn();
 		}

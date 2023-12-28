@@ -8,6 +8,7 @@ export * as Comparison from "./Comparison";
 export * as Markdown from "./Markdown";
 export { default as StringMatcher } from "./StringMatcher";
 export * as Tokenizer from "./Tokenizer";
+export { redactCodeBlocks } from "./redactCodeBlocks";
 
 //#region (Single Quotes, Double Quotes, Dequote)
 /*
@@ -313,20 +314,6 @@ export function normalizeAscii(text: string): string {
 }
 
 //#endregion
-
-/** Converts any characters within `` blocks to asterisks. Ex: "a `code` block" becomes "a `****` block" */
-export function redactCodeBlocks(content: string): string {
-	return content
-
-		// reverse the string for simpler regex of escaped back-ticks
-		.split("").reverse().join("")
-
-		// replace any tick quoted blocks with empty strings
-		.replace(/`.*?`(?!\\)/gi, match => `\`${match.slice(1, -1).replace(/./g, "*")}\``)
-
-		// re-reverse the output to have the correct string; minus block quotes
-		.split("").reverse().join("");
-}
 
 /** Removes accents from letters. Ex: "à" becomes "a" */
 export function removeAccents(value: string): string {
