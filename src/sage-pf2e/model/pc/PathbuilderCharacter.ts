@@ -1073,6 +1073,15 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 			}
 		});
 	}
+	/*
+	Pathbuilder uses the Share Character build number by POSTing the following JSON:
+		{ "id": "622381" }
+	to the url:
+		https://pathbuilder2e.com/app/fetch_emailed.php
+	with content type:
+		"application/json"
+	theh results are the raw json used by pathbuilder to manage a character ... NOT THE EXPORTED JSON
+	 */
 
 	//#endregion
 
