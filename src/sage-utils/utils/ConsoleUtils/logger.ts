@@ -40,6 +40,9 @@ export function addLogHandler(level: LogLevel, handler: Function): void {
 let _env: "dev" | "beta" | "stable" = process.env["NODE_ENV"] as "dev" ?? "dev";
 let _logDir: string | undefined;
 
+export function getEnv(): "dev" | "beta" | "stable" {
+	return _env;
+}
 export function setEnv(env: "dev" | "beta" | "stable"): void {
 	_env = env;
 	_logDir = `./data/sage/logs/${env}`;

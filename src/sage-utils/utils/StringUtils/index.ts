@@ -322,7 +322,7 @@ export function removeAccents(value: string): string {
 
 /** Returns the string source of our word character regex. */
 function getWordCharSource(s: "*" | "+" | ""): string {
-	return `[\\w\\pL\\pN]${s}`;
+	return `[\\w\\pL\\pN\\.]${s}`;
 }
 
 /** Returns the string source of our quoted value regex. */

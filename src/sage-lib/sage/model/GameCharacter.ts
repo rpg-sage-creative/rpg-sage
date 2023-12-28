@@ -1,11 +1,13 @@
 import type * as Discord from "discord.js";
-import { PathbuilderCharacter, TPathbuilderCharacter } from "../../../sage-pf2e";
-import type { UUID } from "../../../sage-utils";
 import * as _XRegExp from "xregexp";
+import { PathbuilderCharacter, TPathbuilderCharacter, getExplorationModes, getSkills } from "../../../sage-pf2e";
+import type { Optional, UUID } from "../../../sage-utils";
 import { DiscordKey, NilSnowflake } from "../../discord";
 import CharacterManager from "./CharacterManager";
 import type { IHasSave } from "./NamedCollection";
 import NoteManager, { type TNote } from "./NoteManager";
+import { DialogType } from "../repo/base/IdRepository";
+import { TKeyValuePair } from "./SageMessageArgsManager";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 export type TDialogMessage = {
@@ -19,11 +21,16 @@ export type TDialogMessage = {
 	userDid: Discord.Snowflake;
 };
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion" | "minion";
+type AutoChannelData = {
+	channelDid: Discord.Snowflake;
+	dialogPostType?: DialogType;
+	userDid?: Discord.Snowflake;
+};
 export interface GameCharacterCore {
 	/** short name used to ease dialog access */
 	alias?: string;
 	/** Channels to automatically treat input as dialog */
-	autoChannels?: Discord.Snowflake[];
+	autoChannels?: AutoChannelData[];
 	/** The image used for the right side of the dialog */
 	avatarUrl?: string;
 	/** The character's companion characters */
@@ -40,6 +47,7 @@ export interface GameCharacterCore {
 	notes?: TNote[];
 	/** The character's Pathbuilder build. */
 	pathbuilder?: TPathbuilderCharacter;
+	pathbuilderId?: string;
 	/** The image used to represent the character to the left of the post */
 	tokenUrl?: string;
 	/** The character's user's Discord ID */
@@ -76,18 +84,29 @@ function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage
 
 //#region Core Updates
 
-interface IOldGameCharacterCore extends GameCharacterCore {
+interface IOldGameCharacterCore extends Omit<GameCharacterCore, "autoChannels"> {
+	autoChannels?: (Discord.Snowflake | AutoChannelData)[];
 	iconUrl?: string;
 }
 
 function updateCore(core: IOldGameCharacterCore): GameCharacterCore {
+	//#region update autoChannels
+	if (core.autoChannels) {
+		core.autoChannels = core.autoChannels.map(data => {
+			if (typeof(data) === "string") {
+				return { channelDid:data, userDid:core.userDid };
+			}
+			return data;
+		});
+	}
+	//#endregion
 	//#region move .iconUrl to .avatarUrl
 	if (core.iconUrl) {
 		core.avatarUrl = core.iconUrl;
 	}
 	delete core.iconUrl;
 	//#endregion
-	return core;
+	return core as GameCharacterCore;
 }
 
 //#endregion
@@ -115,7 +134,7 @@ export default class GameCharacter implements IHasSave {
 	public set alias(alias: string | undefined) { this.core.alias = alias; }
 
 	/** Channels to automatically treat input as dialog */
-	public get autoChannels(): Discord.Snowflake[] { return this.core.autoChannels ?? (this.core.autoChannels = []); }
+	public get autoChannels(): AutoChannelData[] { return this.core.autoChannels ?? (this.core.autoChannels = []); }
 
 	/** The image used for the right side of the dialog */
 	public get avatarUrl(): string | undefined { return this.core.avatarUrl; }
@@ -180,13 +199,18 @@ export default class GameCharacter implements IHasSave {
 
 	//#region AutoChannels
 
-	public addAutoChannel(did: Discord.Snowflake, save = true): Promise<boolean> {
-		const autoChannels = this.autoChannels;
-		if (!autoChannels.includes(did)) {
-			autoChannels.push(did);
-			if (save) {
-				return this.save();
-			}
+	public getAutoChannel(data: AutoChannelData): AutoChannelData | null {
+		return this.autoChannels.find(ch => ch.channelDid === data.channelDid && ch.userDid === data.userDid) ?? null;
+	}
+
+	public setAutoChannel(data: AutoChannelData, save = true): Promise<boolean> {
+		const autoChannel = this.getAutoChannel(data);
+		if (autoChannel && autoChannel.dialogPostType !== data.dialogPostType) {
+			this.removeAutoChannel(data);
+		}
+		this.autoChannels.push(data);
+		if (save) {
+			return this.save();
 		}
 		return Promise.resolve(false);
 	}
@@ -201,13 +225,13 @@ export default class GameCharacter implements IHasSave {
 		return Promise.resolve(false);
 	}
 
-	public hasAutoChannel(did: Discord.Snowflake): boolean {
-		return this.autoChannels.includes(did);
+	public hasAutoChannel(data: AutoChannelData): boolean {
+		return !!this.getAutoChannel(data);
 	}
 
-	public removeAutoChannel(did: Discord.Snowflake, save = true): Promise<boolean> {
+	public removeAutoChannel(data: AutoChannelData, save = true): Promise<boolean> {
 		const autoChannels = this.autoChannels;
-		const index = autoChannels.indexOf(did);
+		const index = autoChannels.indexOf(this.getAutoChannel(data)!);
 		if (index > -1) {
 			autoChannels.splice(index, 1);
 			if (save) {
@@ -287,12 +311,99 @@ export default class GameCharacter implements IHasSave {
 		return Promise.resolve(false);
 	}
 
+	public get pathbuilderId(): string | undefined { return this.core.pathbuilderId; }
+	public set pathbuilderId(pathbuilderId: Optional<string>) { this.core.pathbuilderId = pathbuilderId ?? undefined; }
+
 	private _pathbuilder: PathbuilderCharacter | null | undefined;
 	public get pathbuilder(): PathbuilderCharacter | null {
-		if (this._pathbuilder === undefined && this.core.pathbuilder) {
-			this._pathbuilder = new PathbuilderCharacter(this.core.pathbuilder);
+		if (this._pathbuilder === undefined) {
+			if (this.core.pathbuilder) {
+				this._pathbuilder = new PathbuilderCharacter(this.core.pathbuilder);
+			}
+			if (this.core.pathbuilderId) {
+				this._pathbuilder = PathbuilderCharacter.loadCharacterSync(this.core.pathbuilderId);
+			}
 		}
 		return this._pathbuilder ?? null;
+	}
+
+	public getStat(key: string): string | null {
+		if (/^name$/i.test(key)) {
+			return this.name;
+		}
+
+		const noteStat = this.notes.getStat(key)?.note.trim() ?? null;
+		if (noteStat !== null) {
+			return noteStat;
+		}
+
+		const pb = this.pathbuilder;
+		if (pb) {
+			let pbKey = key;
+			if (/^explorationmode$/i.test(key)) pbKey = "activeExploration";
+			if (/^explorationskill$/i.test(key)) pbKey = "initskill";
+			const pbStat = pb.getStat(pbKey) ?? null;
+			if (pbStat !== null) {
+				return String(pbStat);
+			}
+		}
+
+		return null;
+	}
+	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
+		let changes = false;
+		const forNotes: TKeyValuePair[] = [];
+		const pb = this.pathbuilder;
+		for (const pair of pairs) {
+			const { key, value } = pair;
+			let correctedKey: string | undefined;
+			let correctedValue: string | undefined;
+			if (/^name$/i.test(key) && value?.trim() && (this.name !== value || (pb && pb.name !== value))) {
+				this.name = value;
+				if (pb) {
+					pb.name = value;
+				}
+				changes ||= true;
+				continue;
+			}
+			const isExplorationMode = /^explorationmode$/i.test(key);
+			if (isExplorationMode) {
+				correctedKey = "explorationMode";
+				const modeRegex = new RegExp(`^${value.replace(/(\s)/g, "$1?")}$`, "i");
+				correctedValue = getExplorationModes().find(mode => modeRegex.test(mode));
+			}
+			const isExplorationSkill = /^explorationskill$/i.test(key);
+			if (isExplorationSkill) {
+				correctedKey = "explorationSkill";
+				const skillRegex = new RegExp(`^${value.replace(/(\s)/g, "$1?")}$`, "i");
+				correctedValue = getSkills().find(skill => skillRegex.test(skill));
+		}
+			if (pb) {
+				if (/^level$/i.test(key) && +value) {
+					const updatedLevel = await pb.setLevel(+value, save);
+					if (updatedLevel) {
+						this.notes.unsetStats("level");
+					}
+					changes ||= updatedLevel;
+					continue;
+				}
+				if (isExplorationMode) {
+					pb.setSheetValue("activeExploration", correctedValue ?? "Other");
+					this.notes.unsetStats(correctedKey ?? key);
+					continue;
+				}
+				if (isExplorationSkill) {
+					pb.setSheetValue("activeSkill", correctedValue ?? "Perception");
+					this.notes.unsetStats(correctedKey ?? key);
+					continue;
+				}
+				// abilities?
+				// proficiencies?
+			}
+			forNotes.push({ key:correctedKey??key, value:correctedValue??value });
+		}
+		const updatedNotes = await this.notes.updateStats(forNotes, save);
+		return changes || updatedNotes;
 	}
 
 	public update(values: Partial<GameCharacterCore>, save = true): Promise<boolean> {
@@ -335,8 +446,13 @@ export default class GameCharacter implements IHasSave {
 	}
 
 	//#region IHasSave
-	public save(): Promise<boolean> {
-		return this.owner?.save() ?? Promise.resolve(false);
+	public async save(savePathbuilder?: boolean): Promise<boolean> {
+		const ownerSaved = await this.owner?.save() ?? false;
+		if (savePathbuilder && this.pathbuilderId) {
+			const pathbuilderSaved = await this.pathbuilder?.save() ?? false;
+			return ownerSaved && pathbuilderSaved;
+		}
+		return ownerSaved;
 	}
 	//#endregion
 

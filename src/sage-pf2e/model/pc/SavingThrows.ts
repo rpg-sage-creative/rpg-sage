@@ -1,5 +1,5 @@
-import type { TAbility, TSavingThrow } from "../../common";
-import { CONSTITUTION, DEXTERITY, FORTITUDE, REFLEX, toModifier, WILL, WISDOM } from "../../common";
+import type { GetStatPrefix, TAbility, TSavingThrow } from "../../common";
+import { CONSTITUTION, DEXTERITY, FORTITUDE, getSavingThrows, REFLEX, toModifier, WILL, WISDOM } from "../../common";
 import type Armor from "../Armor";
 import Check from "./Check";
 import PathbuilderCharacter from "./PathbuilderCharacter";
@@ -24,7 +24,26 @@ export default abstract class SavingThrows {
 
 	//#region Instance Methods
 
-	public abstract getSavingThrow(savingThrow: TSavingThrow, ability: TAbility): Check;
+	public abstract getSavingThrow(savingThrow: TSavingThrow, ability?: TAbility): Check;
+
+	public getStat(statLower: string, prefix: GetStatPrefix): number | string | null {
+		const savingThrow = getSavingThrows().find(save => {
+			const lower = save.toLowerCase();
+			if (statLower === "fort" && save === "Fortitude") return true;
+			if (statLower === "ref" && save === "Reflex") return true;
+			return statLower === lower;
+		});
+		if (savingThrow) {
+			switch(prefix) {
+				case "dc": return this.getSavingThrow(savingThrow).dc;
+				case "mod": return this.getSavingThrow(savingThrow).modifier;
+				case "prof": return this.getSavingThrow(savingThrow).proficiencyModifier?.modifier ?? 0;
+				case "proficiency": return this.getSavingThrow(savingThrow).proficiencyModifier?.proficiency ?? null;
+				default: return this.getSavingThrow(savingThrow).modifier;
+			}
+		}
+		return null;
+	}
 
 	public toHtml(): string {
 		return `<b>Fort</b> ${toModifier(this.fortitudeMod)}, <b>Ref</b> ${toModifier(this.reflexMod)}, <b>Will</b> ${toModifier(this.willMod)}`;
@@ -57,7 +76,7 @@ class PcSavingThrows extends SavingThrows {
 
 	public constructor(private pc: PlayerCharacter) { super(); }
 
-	public getSavingThrow(savingThrow: TSavingThrow, ability: TAbility): Check {
+	public getSavingThrow(savingThrow: TSavingThrow, ability = SavingThrows.getAbilityForSavingThrow(savingThrow) ?? CONSTITUTION): Check {
 		const eqArmor = this.pc.equipment.armor,
 			check = new Check(this.pc, savingThrow);
 		check.setAbility(ability);
@@ -77,7 +96,7 @@ class PbcSavingThrows extends SavingThrows {
 
 	public constructor(private pbc: PathbuilderCharacter) { super(); }
 
-	public getSavingThrow(savingThrow: TSavingThrow, ability: TAbility): Check {
+	public getSavingThrow(savingThrow: TSavingThrow, ability = SavingThrows.getAbilityForSavingThrow(savingThrow) ?? CONSTITUTION): Check {
 		const check = new Check(this.pbc, savingThrow);
 		check.level = this.pbc.getLevelMod(true);
 		check.setAbility(ability);

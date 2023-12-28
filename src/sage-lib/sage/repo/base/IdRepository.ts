@@ -4,7 +4,7 @@ import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../..
 import utils, { Optional, OrNull, UUID } from "../../../../sage-utils";
 import { EphemeralMap } from "../../../../sage-utils/utils/ArrayUtils/EphemeralMap";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
-import { verbose } from "../../../../sage-utils/utils/ConsoleUtils";
+import { getEnv, verbose } from "../../../../sage-utils/utils/ConsoleUtils";
 import type { DicePostType } from "../../commands/dice";
 import type SageCache from "../../model/SageCache";
 
@@ -188,7 +188,8 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 		}
 
 		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${entity.id}.json`;
-		const saved = await utils.FsUtils.writeFile(path, entity.toJSON(), true).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
+		const formatted = getEnv() === "dev";
+		const saved = await utils.FsUtils.writeFile(path, entity.toJSON(), true, formatted).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
 		if (saved) {
 			this.cacheId(entity.id, entity);
 		}

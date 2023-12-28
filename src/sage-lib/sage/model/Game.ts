@@ -6,9 +6,14 @@ import { IdCore } from "../../../sage-utils/utils/ClassUtils";
 import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { DiscordKey } from "../../discord";
 import type { DicePostType } from "../commands/dice";
+import type { EncounterCore } from "../commands/trackers/encounter/Encounter";
+import { EncounterManager } from "../commands/trackers/encounter/EncounterManager";
+import type { PartyCore } from "../commands/trackers/party/Party";
+import { PartyManager } from "../commands/trackers/party/PartyManager";
 import type { DialogType, IChannel } from "../repo/base/IdRepository";
 import { HasIdCoreAndSageCache, PermissionType, updateChannel } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";
+import type { CharacterShell } from "./CharacterShell";
 import Colors from "./Colors";
 import Emoji from "./Emoji";
 import type GameCharacter from "./GameCharacter";
@@ -66,6 +71,9 @@ export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
 	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
 	playerCharacters?: (GameCharacter | GameCharacterCore)[];
 	gmCharacterName?: string;
+
+	parties?: PartyCore[] | PartyManager;
+	encounters?: EncounterCore[] | EncounterManager;
 }
 
 export type TMappedChannelNameTags = {
@@ -154,6 +162,8 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
+		this.core.encounters = EncounterManager.from(this.core.encounters as EncounterCore[] ?? (this.core.encounters = []), this);
+		this.core.parties = PartyManager.from(this.core.parties as PartyCore[] ?? (this.core.parties = []), this);
 	}
 
 	public get createdDate(): Date { return new Date(this.core.createdTs ?? 283305600000); }
@@ -184,8 +194,21 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
 	public get orphanedPlayerCharacters() { return this.playerCharacters.filter(pc => !pc.userDid || !this.players.includes(pc.userDid)); }
+	public findCharacterOrCompanion(name: string): GameCharacter | CharacterShell | undefined {
+		return this.playerCharacters.findByName(name)
+			?? this.playerCharacters.findCompanionByName(name)
+			?? this.nonPlayerCharacters.findByName(name)
+			?? this.nonPlayerCharacters.findCompanionByName(name)
+			?? this.orphanedPlayerCharacters.findByName(name)
+			?? this.orphanedPlayerCharacters.findCompanionByName(name)
+			?? this.encounters.findCharacter(name)
+			?? this.parties.findCharacter(name);
+	}
 	public get roles(): IGameRole[] { return this.core.roles ?? (this.core.roles = []); }
 	public get users(): IGameUser[] { return this.core.users ?? (this.core.users = []); }
+
+	public get encounters(): EncounterManager { return this.core.encounters as EncounterManager; }
+	public get parties(): PartyManager { return this.core.parties as PartyManager; }
 
 	//#region Guild fetches
 	public async findBestPlayerChannel(): Promise<IChannel | undefined> {
@@ -470,12 +493,14 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	}
 	// #endregion PC actions
 
-	public getAutoCharacterForChannel(userDid: Discord.Snowflake, channelDid: Optional<Discord.Snowflake>): GameCharacter | undefined {
-		if (channelDid) {
-			const char = this.hasGameMaster(userDid)
-				? this.nonPlayerCharacters.findByName(this.gmCharacterName)
-				: this.playerCharacters.findByUser(userDid);
-			return char?.hasAutoChannel(channelDid) ? char : undefined;
+	public getAutoCharacterForChannel(userDid: Discord.Snowflake, ...channelDids: Optional<Discord.Snowflake>[]): GameCharacter | undefined {
+		for (const channelDid of channelDids) {
+			if (channelDid) {
+				const autoChannelData = { channelDid, userDid };
+				return this.playerCharacters.getAutoCharacter(autoChannelData)
+					?? this.nonPlayerCharacters.getAutoCharacter(autoChannelData)
+					?? undefined;
+			}
 		}
 		return undefined;
 	}

@@ -1,15 +1,31 @@
+import { If, MessageActionRow, MessageButton, MessageEmbed, MessageSelectMenu } from "discord.js";
 import { HasCache } from "../../../sage-utils/utils/ClassUtils";
 import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
-import type { DiscordCache, DiscordKey } from "../../discord";
+import type { DiscordCache, DiscordKey, TRenderableContentResolvable } from "../../discord";
 import type Bot from "./Bot";
 import type Game from "./Game";
 import type SageCache from "./SageCache";
 import type Server from "./Server";
 import type User from "./User";
+import { resolveToEmbeds, resolveToTexts } from "../../discord/embeds";
 
 export interface HasSageCacheCore {
 	caches: SageCache;
 }
+
+export type TSendArgs<HasEphemeral extends boolean = boolean> = {
+	content?: TRenderableContentResolvable;
+	embeds?: TRenderableContentResolvable | MessageEmbed[];
+	components?: MessageActionRow<MessageSelectMenu | MessageButton>[];
+	ephemeral?: If<HasEphemeral, boolean | null, never>;
+};
+
+export type TSendOptions<HasEphemeral extends boolean = boolean> = {
+	content?: string;
+	embeds?: MessageEmbed[];
+	components?: MessageActionRow<MessageSelectMenu | MessageButton>[];
+	ephemeral?: If<HasEphemeral, boolean | null, never>;
+};
 
 export default abstract class HasSageCache<T extends HasSageCacheCore, U extends HasSageCache<T, any>> extends HasCache {
 
@@ -77,4 +93,30 @@ export default abstract class HasSageCache<T extends HasSageCacheCore, U extends
 	}
 
 	//#endregion
+
+	protected resolveToOptions(renderableOrArgs: TRenderableContentResolvable | TSendArgs, ephemeral?: boolean): TSendOptions {
+		if ((typeof(renderableOrArgs) === "string") || ("toRenderableContent" in renderableOrArgs)) {
+			return {
+				embeds: resolveToEmbeds(this.caches, renderableOrArgs),
+				ephemeral: ephemeral
+			};
+		}
+
+		const options: TSendOptions = { };
+		if (renderableOrArgs.content) {
+			options.content = typeof(renderableOrArgs.content) === "string"
+				? renderableOrArgs.content
+				: resolveToTexts(this.caches, renderableOrArgs.content).join("\n");
+		}
+		if (renderableOrArgs.embeds) {
+			options.embeds = Array.isArray(renderableOrArgs.embeds)
+				? renderableOrArgs.embeds
+				: resolveToEmbeds(this.caches, renderableOrArgs.embeds);
+		}
+		if (renderableOrArgs.components) {
+			options.components = renderableOrArgs.components;
+		}
+		options.ephemeral = (ephemeral ?? renderableOrArgs.ephemeral) === true;
+		return options;
+	}
 }

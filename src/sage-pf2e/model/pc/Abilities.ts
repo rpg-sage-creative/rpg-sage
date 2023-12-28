@@ -1,4 +1,4 @@
-import type { TAbility } from "../../common";
+import type { GetStatPrefix, TAbility } from "../../common";
 import { ABILITIES, STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA } from "../../common";
 import type PlayerCharacter from "./PlayerCharacter";
 import PathbuilderCharacter from "./PathbuilderCharacter";
@@ -50,6 +50,22 @@ export default abstract class Abilities {
 		return this.getAbilityScoreModifier(this.getKeyAbility(klass)!);
 	}
 
+	public getStat(statLower: string, prefix: GetStatPrefix): number | null {
+		const ability = ABILITIES.find(abil => {
+			const lower = abil.toLowerCase();
+			return statLower === lower || statLower === lower.slice(0, 3);
+		});
+		if (ability) {
+			switch(prefix) {
+				case "dc": return this.getAbilityScoreModifier(ability) + 10;
+				case "mod": return this.getAbilityScoreModifier(ability);
+				case "prof": return null;
+				case "proficiency": return null;
+				default: return this.getAbilityScore(ability);
+			}
+		}
+		return null;
+	}
 	//#endregion
 
 	//#region Static Methods

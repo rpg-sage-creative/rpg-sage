@@ -20,6 +20,7 @@ import { registerInlineHelp } from "./help";
 import { getBuffer } from "../../../sage-utils/utils/HttpsUtils";
 import { errorReturnNull, warnReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { redactCodeBlocks } from "../../../sage-utils/utils/StringUtils";
+import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 
@@ -96,9 +97,9 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 	//#endregion
 	//#region map/movement arrows
 	const regex = /\[(\b(\s|nw|n|ne|w|c|e|sw|s|se))+\]/ig;
-	content = content.replace(regex, match => {
-		return match.slice(1, -1).split(/\s/).filter(s => s).map(s => `[${s}]`).join(" ");
-	});
+	content = content.replace(regex, match =>
+		match.slice(1, -1).split(/\s/).filter(s => s).map(s => `[${s}]`).join(" ")
+	);
 	//#endregion
 	renderableContent.append(content);
 
@@ -118,7 +119,7 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 			if (att.contentType?.match(/image/i) && att.url) {
 				const buffer = await getBuffer(att.url).catch(warnReturnNull);
 				if (buffer !== null) {
-					files.push(new Discord.MessageAttachment(buffer, att.name ?? undefined))
+					files.push(new Discord.MessageAttachment(buffer, att.name ?? undefined));
 				}
 			}
 		}
@@ -405,22 +406,24 @@ export function parseOrAutoDialogContent(sageMessage: SageMessage): TDialogConte
 		return dialogContent;
 	}
 	if (!sageMessage.hasCommandOrQueryOrSlicedContent) {
-		const autoCharacter = sageMessage.game?.getAutoCharacterForChannel(sageMessage.sageUser.did, sageMessage.threadDid)
-			?? sageMessage.game?.getAutoCharacterForChannel(sageMessage.sageUser.did, sageMessage.channelDid)
-			?? sageMessage.sageUser.getAutoCharacterForChannel(sageMessage.threadDid)
-			?? sageMessage.sageUser.getAutoCharacterForChannel(sageMessage.channelDid);
-		if (autoCharacter) {
-			return [{
-				type: autoCharacter.isGM ? "gm" : autoCharacter.isNPC ? "npc" : "pc",
-				attachment: undefined,
-				postType: undefined,
-				name: autoCharacter.name,
-				displayName: undefined,
-				title: undefined,
-				imageUrl: undefined,
-				embedColor: undefined,
-				content: sageMessage.slicedContent
-			}];
+		const userDid = sageMessage.sageUser.did;
+		const channelDids = [sageMessage.threadDid, sageMessage.channelDid].filter(exists);
+		for (const channelDid of channelDids) {
+			const autoCharacter = sageMessage.game?.getAutoCharacterForChannel(userDid, channelDid)
+				?? sageMessage.sageUser.getAutoCharacterForChannel(channelDid);
+			if (autoCharacter) {
+				const autoChannel = autoCharacter.getAutoChannel({channelDid,userDid});
+				return [{
+					type: autoCharacter.type,
+					postType: autoChannel?.dialogPostType,
+					name: autoCharacter.name,
+					displayName: undefined,
+					title: undefined,
+					imageUrl: undefined,
+					embedColor: undefined,
+					content: sageMessage.slicedContent
+				}];
+			}
 		}
 	}
 	return [];
@@ -632,6 +635,11 @@ function updateAliasDialogArgsAndReturnType(sageMessage: SageMessage, dialogCont
 	}
 
 	const aliasContent = parseDialogContent(aliasFound.target, sageMessage.sageUser?.allowDynamicDialogSeparator)!;
+	const textRegex = /{text}/i;
+	const _content = (aliasContent.content ?? "").replace(/\\n/g, "<br/>");
+	const updatedContent = textRegex.test(_content)
+		? _content.replace(textRegex, dialogContent.content)
+		: _content + dialogContent.content;
 	return {
 		type: aliasContent.type,
 		attachment: dialogContent.attachment ?? aliasContent.attachment,
@@ -641,7 +649,7 @@ function updateAliasDialogArgsAndReturnType(sageMessage: SageMessage, dialogCont
 		title: dialogContent.title ?? aliasContent.title,
 		imageUrl: dialogContent.imageUrl ?? aliasContent.imageUrl,
 		embedColor: dialogContent.embedColor ?? aliasContent.embedColor,
-		content: (aliasContent.content ?? "").replace(/\\n/g, "<br/>") + dialogContent.content
+		content: updatedContent
 	};
 }
 

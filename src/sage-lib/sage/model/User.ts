@@ -87,10 +87,14 @@ export default class User extends HasDidCore<UserCore> {
 	public isPatron: boolean;
 	public get isSuperUser(): boolean { return User.isSuperUser(this.did); }
 
-	public getAutoCharacterForChannel(did: Optional<Discord.Snowflake>): GameCharacter | undefined {
-		if (did) {
-			return this.playerCharacters.find(char => char.hasAutoChannel(did))
-				?? this.nonPlayerCharacters.find(char => char.hasAutoChannel(did));
+	public getAutoCharacterForChannel(...channelDids: Optional<Discord.Snowflake>[]): GameCharacter | undefined {
+		for (const channelDid of channelDids) {
+			if (channelDid) {
+				const autoChannelData = { channelDid, userDid:this.did };
+				return this.playerCharacters.getAutoCharacter(autoChannelData)
+					?? this.nonPlayerCharacters.getAutoCharacter(autoChannelData)
+					?? undefined;
+			}
 		}
 		return undefined;
 	}

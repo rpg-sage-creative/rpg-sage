@@ -7,21 +7,25 @@ import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
-	cleanDescription,
-	createValueTestData, CritMethodType, DiceOutputType,
+	CritMethodType, DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
+	TDiceLiteral,
+	TSign,
+	TTestData,
+	TestType,
+	cleanDescription,
+	createValueTestData,
 	gradeRoll, isGradeSuccess,
-	parseTestType,
-	rollDice, TDiceLiteral, TestType, TSign,
-	TTestData
+	parseTestTargetValue,
+	parseTestType
 } from "../../common";
 import {
+	TReduceSignToDropKeep,
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
-	TReduceSignToDropKeep
+	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore
 } from "../base";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
@@ -33,9 +37,10 @@ import type {
 
 //#region Tokenizer
 function getParsers(): TParsers {
-	const parsers = baseGetParsers();
-	parsers["target"] = /(vs\s*ac|vs\s*dc|ac|dc|vs)\s*(\d+)/i;
-	return parsers;
+	return {
+		...baseGetParsers(),
+		target: /(vs\s*ac|vs\s*dc|ac|dc|vs)\s*(\d+|\|\|\d+\|\|)/i
+	};
 }
 const ADVANTAGE = "Advantage";
 const DISADVANTAGE = "Disadvantage";
@@ -57,7 +62,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 
 //#region Targets/Tests
 export enum TargetType { None = 0, AC = 1, DC = 2, VS = 3 }
-export type TTargetData = { type:TargetType; value:number; raw:string; };
+export type TTargetData = { type:TargetType; value:number; hidden:boolean; raw:string; };
 function parseTargetType(targetType: string): TargetType {
 	const targetTypeLower = targetType.toLowerCase();
 	if (targetTypeLower.endsWith("ac")) {
@@ -70,27 +75,26 @@ function parseTargetType(targetType: string): TargetType {
 		return TargetType.None;
 	}
 }
-function parseTargetValue(type: TargetType, value: number): number {
-	return type ? value : 0;
-}
+
 function parseTargetData(token: TToken): OrUndefined<TTargetData> {
 	if (token.matches) {
-		const type = parseTargetType(token.matches[0]),
-			value = parseTargetValue(type, +token.matches[1] || 0);
-		return { type:type, value:value, raw:token.token };
+		const type = parseTargetType(token.matches[0]);
+		const { value = 0, hidden = false } = type ? parseTestTargetValue(token.matches[1]) : { };
+		return { type, value, hidden, raw:token.token };
 	}
 	return undefined;
 }
+
 function targetDataToTestData(targetData: TTargetData | TTestData): OrUndefined<TTestData> {
 	if (targetData) {
 		const alias = (<TTestData>targetData).alias;
 		if (alias) {
 			const testType = parseTestType(alias);
 			if (testType) {
-				return createValueTestData(testType, targetData.value);
+				return createValueTestData(testType, targetData.value, targetData.hidden);
 			}
 		}
-		return createValueTestData(TestType.GreaterThanOrEqual, targetData.value, TargetType[targetData.type].toLowerCase());
+		return createValueTestData(TestType.GreaterThanOrEqual, targetData.value, targetData.hidden, TargetType[targetData.type].toLowerCase());
 	}
 	return undefined;
 }
@@ -157,7 +161,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#endregion
 
 	//#region static
-	public static create({ count, sides, dropKeep, noSort, modifier, sign, description, testOrTarget }: TDicePartCoreArgs = {}): DicePart {
+	public static create({ count, sides, dropKeep, noSort, modifier, sign, description, testOrTarget, fixedRolls }: TDicePartCoreArgs = {}): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.DnD5e,
@@ -166,6 +170,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			count: count ?? 0,
 			description: cleanDescription(description),
 			dropKeep: dropKeep,
+			fixedRolls,
 			modifier: modifier ?? 0,
 			noSort: noSort === true,
 			sides: sides ?? 0,
@@ -191,13 +196,7 @@ type DicePartRollCore = baseDicePartRollCore;
 export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 	//#region static
 	public static create(dicePart: DicePart): DicePartRoll {
-		return new DicePartRoll({
-			objectType: "DicePartRoll",
-			gameType: GameType.DnD5e,
-			id: generate(),
-			dice: dicePart.toJSON(),
-			rolls: rollDice(dicePart.count, dicePart.sides)
-		});
+		return new DicePartRoll(this._createCore(dicePart, GameType.DnD5e));
 	}
 	public static fromCore(core: DicePartRollCore): DicePartRoll {
 		return new DicePartRoll(core);

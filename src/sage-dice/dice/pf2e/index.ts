@@ -7,22 +7,28 @@ import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
-	cleanDescription,
-	createValueTestData, CritMethodType, decreaseGrade, DiceOutputType,
+	CritMethodType,
+	DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
+	TDiceLiteral,
+	TSign,
+	TTestData,
+	TestType,
+	cleanDescription,
+	createValueTestData,
+	decreaseGrade,
 	gradeRoll, increaseGrade,
 	isGradeSuccess,
-	parseTestType,
-	rollDice, TDiceLiteral, TestType, TSign,
-	TTestData
+	parseTestTargetValue,
+	parseTestType
 } from "../../common";
 import {
+	TReduceSignToDropKeep,
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
-	TReduceSignToDropKeep
+	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore
 } from "../base";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
@@ -37,7 +43,7 @@ function getParsers(): TParsers {
 	const parsers = baseGetParsers();
 	// used to make sure we tokenize deadly as a description and not another die to roll
 	parsers["special"] = /(deadly|fatal)\s*d(\d+)/i;
-	parsers["target"] = /(vs\s*ac|vs\s*dc|ac|dc|vs)\s*(\d+)/i;
+	parsers["target"] = /(vs\s*ac|vs\s*dc|ac|dc|vs)\s*(\d+|\|\|\d+\|\|)/i;
 
 	// vs type
 	parsers["concealed"] = /(vs\s*conceal(?:ed|ment)?)/i;
@@ -77,7 +83,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 type TSpecialTestAliasType = "concealed" | "deafened" | "hidden" | "stupefied" | "undetected";
 const SpecialTestAliases: TSpecialTestAliasType[] = ["deafened", "stupefied", "concealed", "hidden", "undetected"];
 export enum TargetType { None = 0, AC = 1, DC = 2, VS = 3, Concealed = 4, Deafened = 5, Hidden = 6, Stupefied = 7, Undetected = 8 }
-export type TTargetData = { type:TargetType; value:number; raw:string; };
+export type TTargetData = { type:TargetType; value:number; hidden:boolean; raw:string; };
 function parseTargetType(targetType: string): TargetType {
 	const targetTypeLower = targetType.toLowerCase();
 	if (targetTypeLower.endsWith("ac")) {
@@ -115,9 +121,10 @@ function parseTargetValue(type: TargetType, value: number): number {
 }
 function parseTargetData(token: TToken): OrUndefined<TTargetData> {
 	if (token.matches) {
-		const type = parseTargetType(token.matches[0]),
-			value = parseTargetValue(type, +token.matches[1] || 0);
-		return { type:type, value:value, raw:token.token };
+		const type = parseTargetType(token.matches[0]);
+		let { value, hidden } = parseTestTargetValue(token.matches[1]);
+		value = parseTargetValue(type, value);
+		return { type, value, hidden, raw:token.token };
 	}
 	return undefined;
 }
@@ -127,10 +134,10 @@ function targetDataToTestData(targetData: TTargetData | TTestData): OrUndefined<
 		if (alias) {
 			const testType = parseTestType(alias);
 			if (testType) {
-				return createValueTestData(testType, targetData.value);
+				return createValueTestData(testType, targetData.value, targetData.hidden);
 			}
 		}
-		return createValueTestData(TestType.GreaterThanOrEqual, targetData.value, TargetType[targetData.type].toLowerCase());
+		return createValueTestData(TestType.GreaterThanOrEqual, targetData.value, targetData.hidden, TargetType[targetData.type].toLowerCase());
 	}
 	return undefined;
 }
@@ -318,7 +325,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#endregion
 
 	//#region static
-	public static create({ count, sides, dropKeep, noSort, modifier, sign, description, testOrTarget }: TDicePartCoreArgs = {}): DicePart {
+	public static create({ count, sides, dropKeep, noSort, modifier, sign, description, testOrTarget, fixedRolls }: TDicePartCoreArgs = {}): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.PF2e,
@@ -327,6 +334,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			count: count ?? 0,
 			description: cleanDescription(description),
 			dropKeep: dropKeep,
+			fixedRolls,
 			modifier: modifier ?? 0,
 			noSort: noSort === true,
 			sides: sides ?? 0,
@@ -352,13 +360,7 @@ type DicePartRollCore = baseDicePartRollCore;
 export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 	//#region static
 	public static create(dicePart: DicePart): DicePartRoll {
-		return new DicePartRoll({
-			objectType: "DicePartRoll",
-			gameType: GameType.PF2e,
-			id: generate(),
-			dice: dicePart.toJSON(),
-			rolls: rollDice(dicePart.count, dicePart.sides)
-		});
+		return new DicePartRoll(this._createCore(dicePart, GameType.PF2e));
 	}
 	public static fromCore(core: DicePartRollCore): DicePartRoll {
 		return new DicePartRoll(core);

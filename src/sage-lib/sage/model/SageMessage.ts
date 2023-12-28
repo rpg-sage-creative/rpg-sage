@@ -5,9 +5,13 @@ import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../s
 import utils, { Optional } from "../../../sage-utils";
 import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
 import { debug, warn } from "../../../sage-utils/utils/ConsoleUtils";
+import { createMessageLink } from "../../../sage-utils/utils/DiscordUtils/createMessageLink";
+import { handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils/errorHandlers";
 import { DMessage, DiscordKey, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
-import { send } from "../../discord/messages";
+import { resolveToTexts } from "../../discord/embeds";
+import { send, sendTo } from "../../discord/messages";
+import { createAdminRenderableContent } from "../commands/cmd";
 import { DicePostType } from "../commands/dice";
 import type Game from "../model/Game";
 import { GameRoleType } from "../model/Game";
@@ -15,10 +19,11 @@ import { DialogType, IChannel } from "../repo/base/IdRepository";
 import type GameCharacter from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";
 import { EmojiType } from "./HasEmojiCore";
-import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
+import HasSageCache, { HasSageCacheCore, TSendArgs } from "./HasSageCache";
 import SageCache from "./SageCache";
 import SageMessageArgsManager from "./SageMessageArgsManager";
 import { TAlias } from "./User";
+import { addMessageDeleteButton } from "./utils/deleteButton";
 
 interface SageMessageCore extends HasSageCacheCore {
 	message: DMessage;
@@ -86,6 +91,10 @@ export default class SageMessage
 
 	private commandAndArgs?: TCommandAndArgs;
 	public get command(): string { return this.commandAndArgs?.command ?? "INVALID COMMAND"; }
+	public commandMatches(value: string | RegExp): boolean {
+		const regex = value instanceof RegExp ? value : new RegExp(`^${value}`, "i");
+		return regex.test(this.command);
+	}
 	public args!: SageMessageArgsManager;
 	public setCommandAndArgs(commandAndArgs?: TCommandAndArgs): SageMessage {
 		this.commandAndArgs = {
@@ -125,8 +134,37 @@ export default class SageMessage
 		}
 		return [];
 	}
+	public sendPost(renderableContentResolvable: TRenderableContentResolvable) {
+		return sendTo({
+			sageCache: this.caches,
+			target: this.message.channel as TChannel,
+			content: resolveToTexts(this.caches, renderableContentResolvable).join("\n"),
+			errMsg: "SageMessage.sendPost"
+		});
+	}
 	public async canSend(targetChannel = this.message.channel as TChannel): Promise<boolean> {
 		return this.caches.canSendMessageTo(DiscordKey.fromChannel(targetChannel));
+	}
+
+	public async whisper(args: TSendArgs): Promise<void>;
+	public async whisper(content: TRenderableContentResolvable): Promise<void>;
+	public async whisper(contentOrArgs: TSendArgs | TRenderableContentResolvable): Promise<void> {
+		const args = typeof(contentOrArgs) === "string" || "toRenderableContent" in contentOrArgs ? { content:contentOrArgs } : contentOrArgs;
+		const sendOptions = this.resolveToOptions(args);
+		const canSend = await this.canSend(this.message.channel as TChannel);
+		if (canSend) {
+			const message = await this.message.reply(sendOptions).catch(handleDiscordErrorReturnNull);
+			//include a button to delete the reply message!
+			await addMessageDeleteButton(message as DMessage, this.sageUser.did);
+		}else {
+			// include a link to the original message!
+			const replyingTo = `*replying to* ${createMessageLink(this.message)}`;
+			const newLine = sendOptions.content ? "\n" : "";
+			const originalContent = sendOptions.content ?? "";
+			sendOptions.content = replyingTo + newLine + originalContent;
+			const message = await this.message.author?.send(sendOptions);
+			await addMessageDeleteButton(message as DMessage, this.sageUser.did);
+		}
 	}
 
 	//#endregion
@@ -137,7 +175,7 @@ export default class SageMessage
 	public get channel(): IChannel | undefined {
 		return this.cache.get("channel", () => {
 			debug(`caching .channel ${this.message.id}`);
-			return this.gameChannel ?? this.serverChannel
+			return this.gameChannel ?? this.serverChannel;
 		});
 	}
 
@@ -272,7 +310,15 @@ export default class SageMessage
 
 	/** Get the PlayerCharacter if there a game and the actor has a PlayerCharacter OR the actor has a PlayerCharacter set to use this channel with AutoChannel */
 	public get playerCharacter(): GameCharacter | undefined {
-		return this.cache.get("playerCharacter", () => this.game?.playerCharacters.findByUser(this.sageUser.did) ?? this.sageUser.playerCharacters.find(pc => pc.hasAutoChannel(this.channel?.did!)) ?? undefined);
+		return this.cache.get("playerCharacter", () => {
+			const channelDid = this.channel?.did!;
+			const userDid = this.sageUser.did;
+			const autoChannelData = { channelDid, userDid };
+			return this.game?.playerCharacters.getAutoCharacter(autoChannelData)
+				?? this.game?.playerCharacters.findByUser(userDid)
+				?? this.sageUser.playerCharacters.getAutoCharacter(autoChannelData)
+				?? undefined;
+		});
 	}
 
 	public get critMethodType(): CritMethodType {
@@ -306,15 +352,18 @@ export default class SageMessage
 	public async react(emojiType: EmojiType, reason?: string): Promise<void> {
 		// TODO: start saving the reason for reactions so users can click them to get a DM about what the fuck is going on
 		const emoji = this.getEmoji(emojiType);
-		if (emoji) {
+		if (!emoji) {
+			warn(`Invalid emojiType: ${emojiType} >> ${reason ?? "no reason given"}`);
+		}
+		if (emoji && !reason) {
 			const reacted = await this._react(this.message, emoji)
 				|| await this._react(this._.get("Dialog") ?? this._.get("Replacement") ?? this._.get("Sent"), emoji);
-			if (!reacted && reason) {
-				// in case we are unable to react to something, we can ping the user and let them know what's up
-				this.message.author?.send(`${emoji} ${reason}\n<${this.message.url}>`);
+			if (!reacted) {
+				reason = `Sorry, we were unable to indicate the results of your action via emoji.\n<${this.message.url}>`;
 			}
-		}else {
-			warn(`Invalid emojiType: ${emojiType} >> ${reason ?? "no reason given"}`)
+		}
+		if (reason) {
+			this.whisper(`${emoji ?? ""} ${reason}`);
 		}
 	}
 	/** This was pulled here to avoid duplicating code. */
@@ -329,7 +378,7 @@ export default class SageMessage
 		if (isDeleted(message.id)) return false;
 
 		const reaction = await message?.react(emoji).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
-		return reaction ? true : false;
+		return !!reaction;
 	}
 
 	public async canReact(message: DMessage = this.message): Promise<boolean> {
@@ -346,6 +395,51 @@ export default class SageMessage
 	public reactSuccessOrFailure(bool: boolean, reason?: string): Promise<void> { return bool ? this.reactSuccess(reason) : this.reactFailure(reason); }
 
 	// #endregion
+
+	//#region deny
+
+	public deny(label: string, what: string, details: string): Promise<void> {
+		const renderable = createAdminRenderableContent(this.getHasColors());
+		if (label) {
+			renderable.appendTitledSection(`<b>${label}</b>`, what);
+		}else {
+			renderable.appendSection(what);
+		}
+		if (details) {
+			if (details.includes("\n> ")) {
+				renderable.append(details);
+			}else {
+				renderable.append(`<i>${details}</i>`);
+			}
+		}
+		return this.whisper({ embeds:renderable });
+	}
+
+	public denyByPerm(label: string, details: string): Promise<void> {
+		return this.deny(label, "You do not have permission to do that!", details);
+	}
+
+	public denyByProv(label: string, details: string): Promise<void> {
+		return this.deny(label, "This channel does not allow that!", details);
+	}
+
+	public denyForGame(label: string): Promise<void> {
+		return this.denyByPerm(label, "Must be a GameMaster or Player for this game or a GameAdmin, Administrator, Manager, or Owner of this server.");
+	}
+
+	public denyForCanAdminGame(label: string): Promise<void> {
+		return this.denyByPerm(label, "Must be a GameMaster for this game or a GameAdmin, Administrator, Manager, or Owner of this server.");
+	}
+
+	public denyForCanAdminGames(label: string): Promise<void> {
+		return this.denyByPerm(label, "Must be GameAdmin, Administrator, Manager, or Owner of this server.");
+	}
+
+	public denyForCanAdminServer(label: string): Promise<void> {
+		return this.denyByPerm(label, "Must be Administrator, Manager, or Owner of this server.");
+	}
+
+	//#endregion
 
 	// #region Permission
 

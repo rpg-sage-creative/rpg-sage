@@ -3,8 +3,10 @@ import type { TMacro } from "../../../sage-lib/sage/model/types";
 import utils, { Optional, OrUndefined } from "../../../sage-utils";
 import CharacterBase, { CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
 import { debug } from "../../../sage-utils/utils/ConsoleUtils";
-import type { TProficiency, TSavingThrow } from "../../common";
-import { toModifier } from "../../common";
+import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../sage-utils/utils/FsUtils";
+import type { GetStatPrefix, TProficiency, TSavingThrow } from "../../common";
+import { getSavingThrows, toModifier } from "../../common";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository";
 import type Weapon from "../Weapon";
 import type { IHasAbilities } from "./Abilities";
@@ -15,8 +17,6 @@ import SavingThrows from "./SavingThrows";
 
 const skillNames = "Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery".split(",");
 const skillStatKeys: TPathbuilderCharacterAbilityKey[] = ["dex", "int", "str", "int", "cha", "cha", "cha", "wis", "wis", "int", "cha", "wis", "int", "dex", "wis", "dex"];
-const saveNames = ["Fortitude", "Reflex", "Will"];
-// const saveStatKeys: TPathbuilderCharacterAbilityKey[] = ["con", "dex", "wis"];
 
 //#region types
 
@@ -258,6 +258,7 @@ export type TPathbuilderCharacter = CharacterBaseCore<"PathbuilderCharacter"> & 
 	formula: TPathbuilderCharacterFormula[];
 	pets: TPathbuilderCharacterPet[];
 	acTotal: TPathbuilderCharacterArmorClassTotal;
+	exportJsonId: number;
 };
 
 type TPathbuilderCharacterResponse = {
@@ -626,7 +627,71 @@ export function getCharacterSections(view: Optional<TCharacterViewType>): TChara
 export type TCharacterViewType = "All" | "Combat" | "Equipment" | "Feats" | "Formulas" | "Pets" | "Spells";
 export const CharacterViewTypes: TCharacterViewType[] = ["All", "Combat", "Equipment", "Feats", "Formulas", "Pets", "Spells"];
 
+function perceptionGetStat(char: PathbuilderCharacter, prefix: GetStatPrefix): number | string | null {
+	switch(prefix) {
+		case "dc": return char.perceptionMod + 10;
+		case "mod": return char.perceptionMod;
+		case "prof": return char.getProficiencyMod("perception");
+		case "proficiency": return char.getProficiency("perception");
+		default: return char.perceptionMod;
+	}
+}
+function skillGetStat(char: PathbuilderCharacter, statLower: string, prefix: GetStatPrefix): number | string | null {
+	const skill = skillNames.find(name => statLower === name.toLowerCase());
+	if (skill) {
+		switch(prefix) {
+			case "dc": return char.getSkillMod(skill) + 10;
+			case "mod": return char.getSkillMod(skill);
+			case "prof": return char.getProficiencyMod(skill as TPathbuilderCharacterProficienciesKey);
+			case "proficiency": return char.getProficiency(skill as TPathbuilderCharacterProficienciesKey);
+			default: return char.getSkillMod(skill);
+		}
+	}
+	return null;
+}
+function loreGetStat(char: PathbuilderCharacter, statLower: string, prefix: GetStatPrefix): number | string | null {
+	const lore = char.lores.find(([name]) => statLower === name.toLowerCase());
+	if (lore) {
+		switch(prefix) {
+			case "dc": return char.getLoreMod(lore[0]) + 10;
+			case "mod": return char.getLoreMod(lore[0]);
+			case "prof": return lore[1];
+			case "proficiency": return PathbuilderCharacterProficiencyType[lore[1]];
+			default: return char.getLoreMod(lore[0]);
+		}
+	}
+	return null;
+}
+
 export default class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+	public get exportJsonId(): number | undefined { return this.core.exportJsonId; }
+
+	public getStat(stat: string): number | string | null {
+		const lower = stat.toLowerCase();
+		const [prefix, statLower] = lower.includes(".") ? lower.split(".") as [GetStatPrefix, string] : ["", lower] as [GetStatPrefix, string];
+
+		switch(statLower) {
+			case "activeexploration": return this.getSheetValue("activeExploration") ?? null;
+			case "initskill": return this.getInitSkill();
+			case "level": return this.level;
+			case "maxhp": return this.maxHp;
+			case "ac": return prefix === "prof" ? this.core.acTotal.acProfBonus : this.core.acTotal.acTotal;
+			case "perception": case "perc": return perceptionGetStat(this, prefix);
+			default: return skillGetStat(this, statLower, prefix)
+				?? loreGetStat(this, statLower, prefix)
+				?? this.savingThrows.getStat(statLower, prefix)
+				?? this.abilities.getStat(statLower, prefix);
+		}
+	}
+
+	public getInitSkill(): string {
+		const activeExploration = this.getSheetValue("activeExploration");
+		switch(activeExploration) {
+			case "Avoid Notice": return "Stealth";
+			case "Other": return this.getSheetValue("activeSkill") ?? "Perception";
+			default: return "Perception";
+		}
+	}
 
 	public constructor(core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
 		super(core);
@@ -675,6 +740,16 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 
 	public get level(): number {
 		return this.core.level;
+	}
+	public async setLevel(level: number, save: boolean): Promise<boolean> {
+		if (level > 0 && level < 21) {
+			this.core.level = level;
+			if (save) {
+				return this.save();
+			}
+			return true;
+		}
+		return false;
 	}
 
 	private get untrainedProficiencyMod(): number {
@@ -733,9 +808,9 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 	private getLore(loreName: string): TPathbuilderCharacterLore | undefined { return this.lores.find(lore => lore[0] === loreName); }
 	public getLoreMod(loreName: string): number {
 		const lore = this.getLore(loreName);
-		const loreMod = lore?.[1] ?? 0;
-		const levelMod = this.getLevelMod(loreMod);
-		return levelMod + loreMod + this.abilities.intMod;
+		const profMod = lore?.[1] ?? 0;
+		const levelMod = this.getLevelMod(profMod);
+		return levelMod + profMod + this.abilities.intMod;
 	}
 
 	public getSkillMod(skillName: string): number {
@@ -757,7 +832,7 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 			const lore = this.getLore(key)!;
 			return [PathbuilderCharacterProficiencyType[lore[1]] as TProficiency, this.getLoreMod(key)];
 		}
-		if (saveNames.includes(key)) {
+		if (getSavingThrows().includes(key as TSavingThrow)) {
 			const ability = SavingThrows.getAbilityForSavingThrow(key as TSavingThrow);
 			const check = this.savingThrows.getSavingThrow(key as TSavingThrow, ability ?? "Constitution");
 			return [this.getProficiency(key as TPathbuilderCharacterProficienciesKey), check.modifier];
@@ -988,14 +1063,66 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 				const json = await utils.HttpsUtils.getJson<TPathbuilderCharacterResponse>(url).catch(reject);
 // utils.FsUtils.writeFileSync(`pathfbuilder2e-${id}.json`, json);
 				if (json?.success) {
+					json.build.exportJsonId = id;
 					resolve(json.build);
 				}else {
 					reject(JSON.stringify(json));
 				}
-			} catch (ex) {
+			}catch (ex) {
 				reject(ex);
 			}
 		});
+	}
+	/*
+	Pathbuilder uses the Share Character build number by POSTing the following JSON:
+		{ "id": "622381" }
+	to the url:
+		https://pathbuilder2e.com/app/fetch_emailed.php
+	with content type:
+		"application/json"
+	theh results are the raw json used by pathbuilder to manage a character ... NOT THE EXPORTED JSON
+	 */
+
+	//#endregion
+
+	//#region save/load
+
+	public static createFilePath(characterId: string): string {
+		return `./data/sage/pb2e/${characterId}.json`;
+	}
+	public static exists(characterId: string): boolean {
+		return fileExistsSync(this.createFilePath(characterId));
+	}
+	public static loadCharacterSync(characterId: string): PathbuilderCharacter | null {
+		try {
+			const core = readJsonFileSync<TPathbuilderCharacter>(this.createFilePath(characterId));
+			return core ? new PathbuilderCharacter(core) : null;
+		}catch(ex) {
+			return errorReturnNull(ex);
+		}
+	}
+	public static async loadCharacter(characterId: string): Promise<PathbuilderCharacter | null> {
+		const core = await readJsonFile<TPathbuilderCharacter>(this.createFilePath(characterId)).catch(errorReturnNull);
+		return core ? new PathbuilderCharacter(core) : null;
+	}
+	public static async saveCharacter(character: TPathbuilderCharacter | PathbuilderCharacter): Promise<boolean> {
+		const json = "toJSON" in character ? character.toJSON() : character;
+		return writeFile(this.createFilePath(character.id), json, true).catch(errorReturnFalse);
+	}
+	public async save(): Promise<boolean> {
+		return PathbuilderCharacter.saveCharacter(this);
+	}
+	public static async refresh(characterId: string, id?: number): Promise<boolean> {
+		const oldChar = await this.loadCharacter(characterId);
+		if (!oldChar) return false;
+		const exportJsonId = id ?? oldChar.exportJsonId;
+		if (!exportJsonId) return false;
+		const newChar = await this.fetchCore(exportJsonId);
+		if (!newChar) return false;
+		newChar.id = oldChar.id;
+		newChar.userDid = oldChar.userDid;
+		newChar.characterId = oldChar.characterId;
+		return this.saveCharacter(newChar);
 	}
 
 	//#endregion

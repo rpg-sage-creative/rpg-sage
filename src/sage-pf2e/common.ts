@@ -24,6 +24,8 @@ import { warn } from "../sage-utils/utils/ConsoleUtils";
 // }
 //#endregion EventListener and EventHandler
 
+export type GetStatPrefix = "" | "dc" | "mod" | "prof" | "proficiency";
+
 //#region Abilities
 export const STRENGTH = "Strength", DEXTERITY = "Dexterity", CONSTITUTION = "Constitution", INTELLIGENCE = "Intelligence", WISDOM = "Wisdom", CHARISMA = "Charisma";
 export const ABILITIES: TAbility[] = [STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA];
@@ -57,9 +59,19 @@ export type TRarity = "Common" | "Uncommon" | "Rare" | "Unique" | "Secret";
 
 //#region Saving Throws
 export const FORTITUDE = "Fortitude", REFLEX = "Reflex", WILL = "Will";
-export const SAVING_THROWS: TSavingThrow[] = [FORTITUDE, REFLEX, WILL];
 export type TSavingThrow = "Fortitude" | "Reflex" | "Will";
+export function getSavingThrows<T extends string = TSavingThrow>(): T[] {
+	return [FORTITUDE, REFLEX, WILL] as T[];
+}
 //#endregion Saving Throws
+
+export function getExplorationModes(): string[] {
+	return ["Avoid Notice", "Defend", "Detect Magic", "Follow the Expert", "Hustle", "Investigate", "Repeat a Spell", "Scout", "Search", "Other"];
+}
+
+export function getSkills(): string[] {
+	return ["Perception", "Acrobatics", "Arcana", "Athletics", "Crafting", "Deception", "Diplomacy", "Intimidation", "Medicine", "Nature", "Occultism", "Performance", "Religion", "Society", "Stealth", "Survival", "Thievery"];
+}
 
 //#region Constants
 
