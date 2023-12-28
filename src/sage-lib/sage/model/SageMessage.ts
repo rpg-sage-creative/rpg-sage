@@ -5,9 +5,13 @@ import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../s
 import utils, { Optional } from "../../../sage-utils";
 import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
 import { debug, warn } from "../../../sage-utils/utils/ConsoleUtils";
+import { createMessageLink } from "../../../sage-utils/utils/DiscordUtils/createMessageLink";
+import { handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils/errorHandlers";
 import { DMessage, DiscordKey, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
+import { resolveToTexts } from "../../discord/embeds";
 import { send, sendTo } from "../../discord/messages";
+import { createAdminRenderableContent } from "../commands/cmd";
 import { DicePostType } from "../commands/dice";
 import type Game from "../model/Game";
 import { GameRoleType } from "../model/Game";
@@ -20,9 +24,6 @@ import SageCache from "./SageCache";
 import SageMessageArgsManager from "./SageMessageArgsManager";
 import { TAlias } from "./User";
 import { addMessageDeleteButton } from "./utils/deleteButton";
-import { resolveToEmbeds, resolveToTexts } from "../../discord/embeds";
-import { handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils/errorHandlers";
-import { createAdminRenderableContent } from "../commands/cmd";
 
 interface SageMessageCore extends HasSageCacheCore {
 	message: DMessage;
@@ -148,7 +149,7 @@ export default class SageMessage
 	public async whisper(args: TSendArgs): Promise<void>;
 	public async whisper(content: TRenderableContentResolvable): Promise<void>;
 	public async whisper(contentOrArgs: TSendArgs | TRenderableContentResolvable): Promise<void> {
-		const args = typeof(contentOrArgs) === "string" ? { content:contentOrArgs } : contentOrArgs;
+		const args = typeof(contentOrArgs) === "string" || "toRenderableContent" in contentOrArgs ? { content:contentOrArgs } : contentOrArgs;
 		const sendOptions = this.resolveToOptions(args);
 		const canSend = await this.canSend(this.message.channel as TChannel);
 		if (canSend) {
@@ -157,7 +158,10 @@ export default class SageMessage
 			await addMessageDeleteButton(message as DMessage, this.sageUser.did);
 		}else {
 			// include a link to the original message!
-			(sendOptions.embeds ?? (sendOptions.embeds = [])).push(...resolveToEmbeds(this.caches, `<a href="${this.message.url}">[link to original message]</a>`));
+			const replyingTo = `*replying to* ${createMessageLink(this.message)}`;
+			const newLine = sendOptions.content ? "\n" : "";
+			const originalContent = sendOptions.content ?? "";
+			sendOptions.content = replyingTo + newLine + originalContent;
 			const message = await this.message.author?.send(sendOptions);
 			await addMessageDeleteButton(message as DMessage, this.sageUser.did);
 		}
