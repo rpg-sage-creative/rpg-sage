@@ -10,6 +10,7 @@ import type { Party } from "../party/Party";
 type CurrentValues = {
 	init?: number;
 	round?: number;
+	state?: "active";
 };
 
 type State = {
@@ -69,7 +70,7 @@ export class Encounter {
 		};
 	}
 
-	public get active() { return false; }
+	public get active() { return this.core.current?.state === "active"; }
 	public get id() { return this.core.id; }
 	public get name() { return this.core.name; }
 
@@ -92,8 +93,31 @@ export class Encounter {
 		return state;
 	}
 
-	public setInit(id: string, value: number | null) {
-		this.getState(id).init = value ?? undefined;
+	public setInit(value: number | null): void;
+	public setInit(id: string, value: number | null): void;
+	public setInit(...args: (string | number | null)[]): void {
+		const id = typeof(args[0]) === "string" ? args.shift() as string : null;
+		const value = args[0] as number | null;
+		if (id) {
+			this.getState(id).init = value ?? undefined;
+		}else {
+			const current = this.core.current ?? (this.core.current = { });
+			current.init = value ?? undefined;
+		}
+	}
+
+	public start(clear = false): void {
+		if (clear) {
+			this.core.states = {};
+		}
+		const current = this.core.current ?? (this.core.current = {});
+		current.init = current.init ?? 0;
+		current.state = "active";
+	}
+
+	public stop(): void {
+		const current = this.core.current ?? (this.core.current = {});
+		delete current.state;
 	}
 
 	public renderInit(): string {
@@ -103,6 +127,7 @@ export class Encounter {
 		if (headerTemplate) {
 			const header = headerTemplate
 				.replace(/{name}/gi, this.name)
+				.replace(/Round {round}/gi, () => this.active ? `Round ${this.core.current?.round ?? "*0*"}` : `*not active*`)
 				.replace(/{round}/gi, String(this.core.current?.round ?? "*0*"))
 				.replace(/{init}/gi, String(this.core.current?.init ?? "*0*"))
 				;
@@ -112,16 +137,16 @@ export class Encounter {
 		const characterTemplate = this.core.templates?.character ?? "{init} {activity} {name} {hp}/{maxhp}: {conditions}\n- {actions}";
 		if (characterTemplate) {
 			const characters = this.getSortedCharacters();
-			characters.forEach(charPair => {
-				const state = this.getState(charPair.id);
+			characters.forEach(shell => {
+				const state = this.getState(shell.id);
 				const line = characterTemplate
 					.replace(/{init}/gi, String(state.init ?? ":question:"))
 					.replace(/{activity}/gi, state.activity ?? ":question:")
-					.replace(/{name}/gi, charPair.name)
-					.replace(/{hp}/gi, charPair.getStat("hp") ?? "?")
-					.replace(/{maxhp}/gi, charPair.getStat("maxhp") ?? "?")
-					.replace(/{conditions}/gi, charPair.getStat("conditions") ?? "*no conditions*")
-					.replace(/{actions}/gi, charPair.getStat("actions") ?? "*no actions*")
+					.replace(/{name}/gi, shell.name)
+					.replace(/{hp}/gi, shell.getStat("hp") ?? "?")
+					.replace(/{maxhp}/gi, shell.getStat("maxhp") ?? "?")
+					.replace(/{conditions}/gi, shell.getStat("conditions") ?? "*no conditions*")
+					.replace(/{actions}/gi, shell.getStat("actions") ?? "*no actions*")
 					;
 				lines.push(line);
 			});

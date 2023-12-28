@@ -35,7 +35,7 @@ export async function pCmdRemove(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	const chars = charArgs.map(charArg => party.getCharPair(charArg.value!)!);
+	const chars = charArgs.map(charArg => party.getCharShell(charArg.value!)!);
 
 	let changes = false;
 	chars.forEach(char => changes = party.removeChar(char.id) || changes);

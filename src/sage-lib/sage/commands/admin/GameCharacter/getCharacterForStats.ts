@@ -15,7 +15,7 @@ export async function getCharacterForStats(sageMessage: SageMessage, characterTy
 		const encounters = game.encounters.all;
 		for (const encounter of encounters) {
 			if (encounter.active) {
-				const char = encounter.getCharPair(name);
+				const char = encounter.getCharShell(name);
 				if (char) {
 					return char.game ?? null;
 				}
@@ -24,7 +24,7 @@ export async function getCharacterForStats(sageMessage: SageMessage, characterTy
 
 		const parties = game.parties.all;
 		for (const party of parties) {
-			const char = party.getCharPair(name);
+			const char = party.getCharShell(name);
 			if (char) {
 				return char.game ?? null;
 			}

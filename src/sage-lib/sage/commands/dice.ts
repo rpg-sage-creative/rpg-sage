@@ -14,7 +14,10 @@ import { DiscordId, DiscordMaxValues, MessageType } from "../../discord";
 import { createMessageEmbed } from "../../discord/embeds";
 import { registerMessageListener } from "../../discord/handlers";
 import { sendTo } from "../../discord/messages";
+import CharacterManager from "../model/CharacterManager";
+import type { CharacterShell } from "../model/CharacterShell";
 import { GameUserType } from "../model/Game";
+import GameCharacter from "../model/GameCharacter";
 import { ColorType } from "../model/HasColorsCore";
 import type NamedCollection from "../model/NamedCollection";
 import SageInteraction from "../model/SageInteraction";
@@ -22,8 +25,7 @@ import SageMessage from "../model/SageMessage";
 import type { TMacro } from "../model/User";
 import { registerCommandRegex } from "./cmd";
 import { registerInlineHelp } from "./help";
-import GameCharacter from "../model/GameCharacter";
-import CharacterManager from "../model/CharacterManager";
+import type { EncounterManager } from "./trackers/encounter/EncounterManager";
 
 type TInteraction = SageMessage | SageInteraction;
 
@@ -75,6 +77,7 @@ type ReplaceStatsArgs = {
 	npcs: CharacterManager;
 	pcs: CharacterManager;
 	pc?: GameCharacter | null;
+	encounters?: EncounterManager;
 };
 function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[] = []): string {
 	const replaced = diceString.replace(new RegExp(args.statRegex, "gi"), match => {
@@ -87,7 +90,7 @@ function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[
 		}
 
 		// get character
-		let char: GameCharacter | null = null;
+		let char: GameCharacter | CharacterShell | null = null;
 		if (name) {
 			const [isPc, isAlt] = args.typeRegex.exec(name) ?? [];
 			if (isPc) {
@@ -99,6 +102,7 @@ function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[
 					?? args.pcs.findCompanionByName(name)
 					?? args.npcs.findByName(name)
 					?? args.npcs.findCompanionByName(name)
+					?? args.encounters?.findActiveChar(name)
 					?? null;
 			}
 		}else {
@@ -138,15 +142,16 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 		return null;
 	}
 
-	const statRegex = /\{(\w+):{2}([^:}]+)(?::([^}]+))?\}/i;
+	const statRegex = /\{([\w ]+|"[\w ]+"):{2}([^:}]+)(?::([^}]+))?\}/i;
 	if (statRegex.test(diceString)) {
 		const { game, isGameMaster, isPlayer } = sageMessage;
 		if (!game || isGameMaster || isPlayer) {
 			const npcs = game?.nonPlayerCharacters ?? sageMessage.sageUser.nonPlayerCharacters;
 			const pcs = game?.playerCharacters ?? sageMessage.sageUser.playerCharacters;
 			const pc = isPlayer && game ? sageMessage.playerCharacter : null;
+			const encounters = game?.encounters;
 			const typeRegex = /^(pc|stat)?(companion|hireling|alt|familiar)?$/i;
-			diceString = replaceStats(diceString, { statRegex, typeRegex, npcs, pcs, pc });
+			diceString = replaceStats(diceString, { statRegex, typeRegex, npcs, pcs, pc, encounters });
 		}
 	}
 

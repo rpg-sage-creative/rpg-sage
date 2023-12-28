@@ -1,5 +1,7 @@
+import { mapSageChannelNameTags } from "../../../model/Game";
 import type SageMessage from "../../../model/SageMessage";
 import { Encounter } from "./Encounter";
+import { addButtons } from "./addButtons";
 
 async function unpinChannel(sageMessage: SageMessage, channelId: string) {
 	const game = sageMessage.game;
@@ -82,14 +84,18 @@ export async function eCmdStatus(sageMessage: SageMessage): Promise<void> {
 
 	//post status
 	const sentMessage = await sageMessage.sendPost(encounter.renderInit()) ?? undefined;
-	if (isPin && sentMessage) {
-		// pin posted status
-		const pinned = await encounter.pin("init", sentMessage);
-		if (pinned) {
-			const saved = await game.save();
-			await sageMessage.reactSuccessOrFailure(saved);
-		}else {
-			await sageMessage.reactWarn("Sorry, something went wrong pinning status.");
+	if (sentMessage) {
+		const gmMode = sageMessage.gameChannel ? mapSageChannelNameTags(sageMessage.gameChannel).gm : false;
+		addButtons(encounter, sentMessage, gmMode);
+		if (isPin) {
+			// pin posted status
+			const pinned = await encounter.pin("init", sentMessage);
+			if (pinned) {
+				const saved = await game.save();
+				await sageMessage.reactSuccessOrFailure(saved);
+			}else {
+				await sageMessage.reactWarn("Sorry, something went wrong pinning status.");
+			}
 		}
 	}
 

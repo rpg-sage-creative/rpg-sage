@@ -1,4 +1,5 @@
 import type { Optional } from "../../../../../sage-utils";
+import { randomSnowflake } from "../../../../../sage-utils/utils/DiscordUtils/randomSnowflake";
 import type { CharacterShellCore } from "../../../model/CharacterShell";
 import type Game from "../../../model/Game";
 import { Manager } from "../common/Manager";
@@ -11,7 +12,7 @@ export class PartyManager extends Manager<PartyCore, Party> {
 	}
 
 	protected createCore(name: string): PartyCore {
-		return { characters:[], id:String(Date.now()), name };
+		return { characters:[], id:randomSnowflake(), name };
 	}
 
 	protected wrap(core: PartyCore): Party {
@@ -22,7 +23,7 @@ export class PartyManager extends Manager<PartyCore, Party> {
 		const characters = this.game.playerCharacters.map(pc => {
 			return {
 				gameCharacterId: pc.id,
-				id: String(Date.now()),
+				id: randomSnowflake(),
 				label: pc.name,
 				nickname: pc.name,
 				type: "pc"
@@ -30,7 +31,7 @@ export class PartyManager extends Manager<PartyCore, Party> {
 		});
 		const core = {
 			characters,
-			id: String(Date.now()),
+			id: randomSnowflake(),
 			name: "Player Characters",
 			// type: "pc"
 		};
@@ -39,7 +40,7 @@ export class PartyManager extends Manager<PartyCore, Party> {
 
 	public getOrDefault(name: Optional<string>): Party {
 		return this.get(name)
-			?? this.first
+			?? this.only
 			?? this.getDefault();
 	}
 

@@ -24,7 +24,7 @@ export async function pCmdDelete(sageMessage: SageMessage): Promise<void> {
 			if (!unpinned) {
 				await sageMessage.whisper(`Error unpinning party "${party.name}", you may have to do it manually.`);
 			}
-			await sageMessage.reactSuccess(`Party "${party.name} removed.`);
+			await sageMessage.reactSuccess(`Party "${party.name}" removed.`);
 		} else {
 			await sageMessage.reactFailure("Unable to delete Party. Don't know what happened, sorry!");
 		}

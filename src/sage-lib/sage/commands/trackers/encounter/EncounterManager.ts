@@ -1,6 +1,8 @@
+import { randomSnowflake } from "../../../../../sage-utils/utils/DiscordUtils/randomSnowflake";
+import { CharacterShell } from "../../../model/CharacterShell";
 import type Game from "../../../model/Game";
-import { Encounter, type EncounterCore } from "./Encounter";
 import { Manager } from "../common/Manager";
+import { Encounter, type EncounterCore } from "./Encounter";
 
 export class EncounterManager extends Manager<EncounterCore, Encounter> {
 
@@ -9,7 +11,19 @@ export class EncounterManager extends Manager<EncounterCore, Encounter> {
 	}
 
 	protected createCore(name: string): EncounterCore {
-		return { characters:[], id:String(Date.now()), name };
+		return { characters:[], id:randomSnowflake(), name };
+	}
+
+	public findActiveChar(name: string): CharacterShell | undefined {
+		const encounters = this.all;
+		const active = encounters.filter(enc => enc.active);
+		for (const enc of active) {
+			const char = enc.getCharShell(name);
+			if (char) {
+				return char;
+			}
+		}
+		return undefined;
 	}
 
 	protected wrap(core: EncounterCore): Encounter {

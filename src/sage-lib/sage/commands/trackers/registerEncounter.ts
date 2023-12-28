@@ -1,4 +1,5 @@
 import { registerAdminCommand } from "../cmd";
+import { registerEncounterStartStopButton } from "./encounter/eBtnStartStop";
 import { eCmdAdd } from "./encounter/eCmdAdd";
 import { eCmdCreate } from "./encounter/eCmdCreate";
 import { eCmdDelete } from "./encounter/eCmdDelete";
@@ -13,4 +14,6 @@ export function registerEncounter(): void {
 	registerAdminCommand(eCmdDelete, "encounter-delete", "delete-encounter");
 	registerAdminCommand(eCmdAdd, "encounter-add");
 	registerAdminCommand(eCmdRemove, "encounter-remove");
+
+	registerEncounterStartStopButton();
 }

@@ -1,3 +1,4 @@
+import { randomSnowflake } from "../../../../../sage-utils/utils/DiscordUtils/randomSnowflake";
 import { CharacterShell, type CharacterShellCore } from "../../../model/CharacterShell";
 import type Game from "../../../model/Game";
 import type GameCharacter from "../../../model/GameCharacter";
@@ -33,7 +34,7 @@ export abstract class HasCharacters<Core extends HasCharactersCore> {
 
 	public addChar(char: GameCharacter, nickname= char.name): CharacterShell {
 		const gameCharacterId = char.id;
-		const id = String(Date.now());
+		const id = randomSnowflake();
 		const type = char.type;
 
 		let suffixIndex = -1;
@@ -67,7 +68,7 @@ export abstract class HasCharacters<Core extends HasCharactersCore> {
 		return characters;
 	}
 
-	public getCharPair(value: string): CharacterShell | null {
+	public getCharShell(value: string): CharacterShell | null {
 		const shellCore = this.findChar(value);
 		return shellCore ? this.pairChar(shellCore) : null;
 	}

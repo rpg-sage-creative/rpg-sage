@@ -24,7 +24,7 @@ export async function eCmdDelete(sageMessage: SageMessage): Promise<void> {
 			if (!unpinned) {
 				await sageMessage.whisper(`Error unpinning encounter "${encounter.name}", you may have to do it manually.`);
 			}
-			await sageMessage.reactSuccess(`Encounter "${encounter.name} removed.`);
+			await sageMessage.reactSuccess(`Encounter "${encounter.name}" removed.`);
 		} else {
 			await sageMessage.reactFailure("Unable to delete Encounter. Don't know what happened, sorry!");
 		}

@@ -17,6 +17,7 @@ export abstract class Manager<Core extends Base, Class extends BaseClass> {
 	public get all(): Class[] { return this.cores.map(core => this.wrap(core)); }
 	public get count(): number { return this.cores.length; }
 	public get first(): Class | undefined { return this.cores.length ? this.wrap(this.cores[0]) : undefined; }
+	public get only(): Class | undefined { return this.cores.length === 1 ? this.wrap(this.cores[0]) : undefined; }
 
 	public add(name: string): Class | null {
 		if (this.has(name)) {
@@ -31,7 +32,7 @@ export abstract class Manager<Core extends Base, Class extends BaseClass> {
 	public findCharacter(name: string): CharacterShell | undefined {
 		const wrapped = this.all;
 		for (const wrap of wrapped) {
-			const charPair = wrap.getCharPair(name);
+			const charPair = wrap.getCharShell(name);
 			if (charPair) {
 				return charPair;
 			}
@@ -50,6 +51,9 @@ export abstract class Manager<Core extends Base, Class extends BaseClass> {
 
 	public getOrFirst(value: Optional<string>): Class | null {
 		return this.get(value) ?? this.first ?? null;
+	}
+	public getOrOnly(value: Optional<string>): Class | null {
+		return this.get(value) ?? this.only ?? null;
 	}
 
 	public has(classOrValue: string | Class): boolean {
