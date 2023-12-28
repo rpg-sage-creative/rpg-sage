@@ -1,9 +1,9 @@
 //#region imports
 
-import { SnowflakeUtil } from "discord.js";
 import { GameType } from "../../../sage-common";
 import type { OrNull, TParsers, TToken } from "../../../sage-utils";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
+import { randomSnowflake } from "../../../sage-utils/utils/DiscordUtils/randomSnowflake";
 import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import type {
 	TDiceLiteral,
@@ -33,7 +33,6 @@ import { explodeDice } from "../common/explodeDice";
 
 //#endregion
 
-function randomSnowflake() { return SnowflakeUtil.generate().toString(); }
 function cleanWhitespace(value: string): string { return value.replace(/\s+/g, " ").trim(); }
 
 /*
