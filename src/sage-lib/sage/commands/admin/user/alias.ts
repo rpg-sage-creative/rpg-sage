@@ -144,7 +144,7 @@ async function aliasUpdate(sageMessage: SageMessage, existing: TAlias, updated: 
 	const updatedPrompt = aliasToPrompt(updated, true);
 
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Update alias?`);
-	promptRenderable.append(`from:${existingPrompt}\nto:${updatedPrompt}`);
+	promptRenderable.append(`from:\n${existingPrompt}to:\n${updatedPrompt}`);
 
 	const bool = await discordPromptYesNo(sageMessage, promptRenderable);
 	if (bool === true) {
@@ -159,11 +159,8 @@ async function aliasSet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Set Alias", "You cannot manage your aliases here.");
 	}
 
-	const namePair = sageMessage.args.removeKeyValuePair("name");
-	const targetPair = sageMessage.args.removeKeyValuePair(/for|target|value/i);
-
-	const aliasName = namePair?.value ?? sageMessage.args.shift()!;
-	const aliasTarget = targetPair?.value ?? sageMessage.args.join(" ");
+	const aliasName = sageMessage.args.removeKeyValuePair("name")?.value;
+	const aliasTarget = sageMessage.args.removeKeyValuePair(/for|target|value/i)?.value ?? sageMessage.args.join(" ");
 
 	const dialogContent = aliasTarget ? parseDialogContent(aliasTarget, sageMessage.sageUser?.allowDynamicDialogSeparator) : null;
 	const validTarget = dialogContent ? aliasTest(sageMessage, dialogContent) : false;
@@ -214,7 +211,7 @@ async function aliasDelete(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Delete Alias", "You cannot manage your aliases here.");
 	}
 
-	const aliasName = sageMessage.args.removeAndReturnName() ?? sageMessage.args.shift();
+	const aliasName = sageMessage.args.removeAndReturnName();
 	const alias = aliasName ? sageMessage.sageUser.aliases.findByName(aliasName) : null;
 	if (!aliasName || !alias) {
 		const details = [
@@ -237,7 +234,7 @@ async function aliasDetails(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Alias Details", "You cannot manage your aliases here.");
 	}
 
-	const aliasName = sageMessage.args.removeAndReturnName() ?? sageMessage.args.shift();
+	const aliasName = sageMessage.args.removeAndReturnName();
 	const alias = aliasName ? sageMessage.sageUser.aliases.findByName(aliasName) : null;
 	if (!aliasName || !alias) {
 		const details = [
