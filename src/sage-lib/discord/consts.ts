@@ -3,7 +3,7 @@ import type { Snowflake } from "discord.js";
 export const DiscordMaxValues = {
 	embed: {
 		titleLength: 256,
-		descriptionLength: 2048,
+		descriptionLength: 2048, // 4096
 		field: {
 			count: 25,
 			nameLength: 256,
