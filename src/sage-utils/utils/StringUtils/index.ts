@@ -288,7 +288,7 @@ export function isNotBlank(text: Optional<string>): text is string {
 /** Converts forward/back apostrophe characters to ' */
 export function normalizeApostrophes(text: string): string {
 	/*// return text.replace(SINGLE_REGEX, SINGLE);*/
-	return text.replace(/[\u2018\u2019]/g, `'`);
+	return text.replace(/[‘’]/g, `'`);
 }
 
 /** Converts m-dash and n-dash characters to - */
@@ -327,7 +327,7 @@ function getWordCharSource(s: "*" | "+" | ""): string {
 
 /** Returns the string source of our quoted value regex. */
 function getQuotedSource(s: "*" | "+"): string {
-	return `(?:“[^”]${s}”|„[^“]${s}“|„[^”]${s}”|"[^"]${s}")`;
+	return `(?:“[^”]${s}”|„[^“]${s}“|„[^”]${s}”|"[^"]${s}"|'[^']${s}'|‘[^’]${s}’)`;
 }
 
 /** Returns the string source of our key/value regex. */
@@ -370,20 +370,20 @@ export function createDiscordEmojiRegex(matchCount = DiscordEmojiRegexMatchCount
 /** Returns true if the value is key=value or key="value" or key="", false otherwise. Passing in a key will make sure they keys match. */
 export function isKeyValueArg(value: string, key?: string): boolean {
 	const regex = XRegExp(`^${getKeyValueArgSource(key)}$`, "i");
-	return value.match(regex) !== null;
+	return regex.test(value);
 }
 
 /** Returns true if the value begins and ends in quotes, false otherwise. */
 export function isQuoted(value: string): boolean {
 	const regex = XRegExp(`^${getQuotedSource("*")}$`);
-	return value.match(regex) !== null;
+	return regex.test(value);
 }
 
 /** Returns [key, value, key=value] if the input is a valid key/value pairing, null otherwise */
 export function parseKeyValueArg(input: string, key?: string): TKeyValueArg | null {
 	if (isKeyValueArg(input, key)) {
 		const index = input.indexOf("=");
-		const key = input.slice(0, index);
+		const key = input.slice(0, index).trim();
 		const keyLower = key.toLowerCase();
 		const value = dequote(input.slice(index + 1).trim());
 		const quoted = quoteValue(value);
