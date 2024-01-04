@@ -483,37 +483,59 @@ export default class SageMessage
 
 	// #endregion
 
-	public findAlias(aliasName: string): TAlias | null {
+	public findAlias(aliasName?: string): TAlias | null {
+		if (!aliasName) {
+			return null;
+		}
+
 		const found = this.sageUser.aliases.findByName(aliasName, true);
-		if (found) return found;
+		if (found) {
+			return found;
+		}
 
 		if (this.game) {
 			if (this.isPlayer) {
 				const pc = this.playerCharacter;
-				if (pc?.matches(aliasName)) return alias(pc);
+				if (pc?.matches(aliasName)) {
+					return alias(pc);
+				}
 
 				const companion = pc?.companions.findByName(aliasName);
-				if (companion) return alias(companion);
+				if (companion) {
+					return alias(companion);
+				}
 
 			}else if (this.isGameMaster) {
 				const npc = this.game.nonPlayerCharacters.findByName(aliasName);
-				if (npc) return alias(npc);
+				if (npc) {
+					return alias(npc);
+				}
 
 				const minion = this.game.nonPlayerCharacters.findCompanionByName(aliasName);
-				if (minion) return alias(minion);
+				if (minion) {
+					return alias(minion);
+				}
 			}
 		}else {
 			let char = this.sageUser.playerCharacters.findByName(aliasName);
-			if (!char) char = this.sageUser.playerCharacters.findCompanionByName(aliasName);
-			if (!char) char = this.sageUser.nonPlayerCharacters.findByName(aliasName);
-			if (!char) char = this.sageUser.nonPlayerCharacters.findCompanionByName(aliasName);
-			if (char) return alias(char);
+			if (!char) {
+				char = this.sageUser.playerCharacters.findCompanionByName(aliasName);
+			}
+			if (!char) {
+				char = this.sageUser.nonPlayerCharacters.findByName(aliasName);
+			}
+			if (!char) {
+				char = this.sageUser.nonPlayerCharacters.findCompanionByName(aliasName);
+			}
+			if (char) {
+				return alias(char);
+			}
 		}
 
 		return null;
 
 		function alias(char: GameCharacter) {
-			return { name:aliasName, target:`${char.type}::${char.name}::` };
+			return { name:aliasName!, target:`${char.type}::${char.name}::` };
 		}
 	}
 }

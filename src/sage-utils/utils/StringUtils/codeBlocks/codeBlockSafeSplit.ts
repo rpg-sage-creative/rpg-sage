@@ -1,6 +1,5 @@
-import * as _XRegExp from "xregexp";
+import XRegExp from "xregexp";
 import { matchCodeBlocks } from "./matchCodeBlocks.js";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 /** @internal Does the heavy lifting of splitting a string while ignoring code blocks. */
 export function codeBlockSafeSplit(value: string, splitter: string | RegExp, limit?: number): string[] {

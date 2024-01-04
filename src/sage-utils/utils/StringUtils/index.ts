@@ -8,7 +8,9 @@ export * as Comparison from "./Comparison";
 export * as Markdown from "./Markdown";
 export { default as StringMatcher } from "./StringMatcher";
 export * as Tokenizer from "./Tokenizer";
-export { redactCodeBlocks } from "./redactCodeBlocks";
+export { redactCodeBlocks, getCodeBlockSafeSplitter } from "./codeBlocks";
+export { cleanWhitespace, createWhitespaceRegex } from "./whitespace";
+export { createUrlRegex, parseUrl } from "./url";
 
 //#region (Single Quotes, Double Quotes, Dequote)
 /*
@@ -211,11 +213,6 @@ function chunkWord(info: TChunkInfo, options: TChunkOptions, word: string, wordI
 
 //#endregion
 
-/** Reduces multiple whitespace characteres to a single space, then trims the string. */
-export function cleanWhitespace(value: string): string {
-	return value.replace(/\s+/g, " ").trim();
-}
-
 /** Removes first and last character if they are both quotes. */
 export function dequote(value: string): string {
 	return isQuoted(value) ? value.slice(1, -1).trim() : value;
@@ -344,11 +341,6 @@ export function createQuotedRegex(allowEmpty: boolean): RegExp {
 /** Convenience for creating/sharing key=value regex in case we change it later. Passing in a key will make sure they keys match. */
 export function createKeyValueArgRegex(key?: string): RegExp {
 	return XRegExp(getKeyValueArgSource(key), "i");
-}
-
-/** Convenience for creating/sharing whitespace regex in case we change it later. */
-export function createWhitespaceRegex(globalFlag = false): RegExp {
-	return globalFlag ? /\s+/ : /\s+/g;
 }
 
 export enum DiscordEmojiRegexMatchCount { AllowEmpty = 0, SingleMatch = 1, MultipleMatches = 2 }

@@ -23,7 +23,6 @@ export const PatronTierSnowflakes: Discord.Snowflake[] = [undefined!, "730147338
 
 export interface UserCore extends DidCore<"User"> {
 	aliases?: TAlias[];
-	allowDynamicDialogSeparator?: boolean;
 	defaultDialogType?: DialogType;
 	defaultSagePostType?: DialogType;
 	macros?: TMacro[];
@@ -70,8 +69,6 @@ export default class User extends HasDidCore<UserCore> {
 		this.isPatron = this.isFriend || this.isInformant || this.isTrusted;
 	}
 	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
-	public get allowDynamicDialogSeparator(): boolean { return this.core.allowDynamicDialogSeparator === true; }
-	public set allowDynamicDialogSeparator(allowDynamicDialogSeparator: boolean) { this.core.allowDynamicDialogSeparator = allowDynamicDialogSeparator === true; }
 	public get defaultDialogType(): DialogType | undefined { return this.core.defaultDialogType; }
 	public get defaultSagePostType(): DialogType | undefined { return this.core.defaultSagePostType; }
 	public get macros(): NamedCollection<TMacro> { return this.core.macros as NamedCollection<TMacro>; }

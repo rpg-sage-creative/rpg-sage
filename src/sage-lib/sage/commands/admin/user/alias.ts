@@ -1,17 +1,18 @@
 import { isNotBlank } from "../../../../../sage-utils/utils/StringUtils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import SageMessage from "../../../model/SageMessage";
+import type SageMessage from "../../../model/SageMessage";
 import type { TAlias } from "../../../model/User";
 import { DialogType } from "../../../repo/base/IdRepository";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
-import { parseDialogContent, type TDialogContent } from "../../dialog";
+import type { DialogContent } from "../../dialog/DialogContent";
+import { parseDialogContent } from "../../dialog/parseDialogContent";
 import { registerAdminCommandHelp } from "../../help";
 
-
-function testGmTarget(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
+function testGmTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
 	if (!sageMessage.game || sageMessage.isGameMaster) {
 		return !!(dialogContent.postType
 			|| dialogContent.name
+			|| dialogContent.who
 			|| dialogContent.displayName
 			|| dialogContent.title
 			|| dialogContent.imageUrl
@@ -20,7 +21,7 @@ function testGmTarget(sageMessage: SageMessage, dialogContent: TDialogContent): 
 	}
 	return false;
 }
-function testNpcTarget(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
+function testNpcTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
 	if (sageMessage.game) {
 		if (sageMessage.isGameMaster) {
 			const found = sageMessage.game.nonPlayerCharacters.findByName(dialogContent.name)
@@ -31,20 +32,20 @@ function testNpcTarget(sageMessage: SageMessage, dialogContent: TDialogContent):
 	}
 	return sageMessage.sageUser.nonPlayerCharacters.findByName(dialogContent.name) !== undefined;
 }
-function testPcTarget(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
+function testPcTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
 	if (sageMessage.game) {
 		return !!sageMessage.playerCharacter && !dialogContent.name;// && !dialogContent.displayName;
 	}
 	return sageMessage.sageUser.playerCharacters.findByName(dialogContent.name) !== undefined;
 }
-function testCompanionTarget(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
+function testCompanionTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
 	if (sageMessage.game) {
 		return sageMessage.playerCharacter?.companions.findByName(dialogContent.name) !== undefined;
 	}
 	return !sageMessage.sageUser.playerCharacters.findCompanionByName(dialogContent.name) !== undefined;
 }
 
-function toNamePart(dialogContent: TDialogContent): string {
+function toNamePart(dialogContent: DialogContent): string {
 	const { name, displayName } = dialogContent;
 	const parts = [
 		name ?? ``,
@@ -60,7 +61,7 @@ function toNamePart(dialogContent: TDialogContent): string {
 	return parts.join("");
 }
 
-function dialogContentToTarget(dialogContent: TDialogContent, separator = "::"): string {
+function dialogContentToTarget(dialogContent: DialogContent, separator = "::"): string {
 	// dialog parts
 	const baseParts = [
 		dialogContent.type,
@@ -101,7 +102,7 @@ async function aliasList(sageMessage: SageMessage): Promise<void> {
 	}
 }
 
-function aliasTest(sageMessage: SageMessage, dialogContent: TDialogContent): boolean {
+function aliasTest(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
 	switch (dialogContent.type) {
 		case "gm":
 			return testGmTarget(sageMessage, dialogContent);
@@ -162,7 +163,7 @@ async function aliasSet(sageMessage: SageMessage): Promise<void> {
 	const aliasName = sageMessage.args.removeKeyValuePair("name")?.value;
 	const aliasTarget = sageMessage.args.removeKeyValuePair(/for|target|value/i)?.value ?? sageMessage.args.join(" ");
 
-	const dialogContent = aliasTarget ? parseDialogContent(aliasTarget, sageMessage.sageUser?.allowDynamicDialogSeparator) : null;
+	const dialogContent = aliasTarget ? parseDialogContent(aliasTarget) : null;
 	const validTarget = dialogContent ? aliasTest(sageMessage, dialogContent) : false;
 	if (!aliasName || !aliasTarget || !dialogContent || !validTarget) {
 		const details = [
@@ -254,22 +255,6 @@ async function aliasDetails(sageMessage: SageMessage): Promise<void> {
 	return <any>sageMessage.sendPost(renderableContent);
 }
 
-// async function toggleAllowDynamicDialogSeparator(sageMessage: SageMessage): Promise<void> {
-// 	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
-// 		return sageMessage.reactBlock();
-// 	}
-// 	discordPromptYesNo(sageMessage, "Do you want to allow dynamic dialog separators?")
-// 		.then(async yesNoOrNull => {
-// 			if (typeof (yesNoOrNull) === "boolean") {
-// 				if (yesNoOrNull !== sageMessage.sageUser.allowDynamicDialogSeparator) {
-// 					sageMessage.sageUser.allowDynamicDialogSeparator = yesNoOrNull;
-// 					const saved = await sageMessage.sageUser.save();
-// 					return sageMessage.reactSuccessOrFailure(saved);
-// 				}
-// 			}
-// 		})
-// }
-
 async function aliasHelp(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
 		return sageMessage.denyByProv("Alias Details", "You cannot manage your aliases here.");
@@ -295,7 +280,5 @@ export default function register(): void {
 	registerAdminCommand(aliasDetails, "alias-details", "alias-view");
 	registerAdminCommand(aliasDelete, "alias-delete", "alias-unset", "alias-remove");
 
-	registerAdminCommandHelp("Dialog", "Alias", "alias list");
-	registerAdminCommandHelp("Dialog", "Alias", "alias set {alias} {dialog prefix}");
-	registerAdminCommandHelp("Dialog", "Alias", "alias delete {alias}");
+	registerAdminCommandHelp("Dialog", "Alias", "alias help");
 }

@@ -1,4 +1,4 @@
-import { codeBlockSafeSplit } from "./internal/codeBlockSafeSplit.js";
+import { codeBlockSafeSplit } from "./codeBlockSafeSplit.js";
 
 type StringSplitter = {
 	/** @private contains the value to split on */
@@ -12,6 +12,9 @@ type StringSplitter = {
  * Defaults to splitting on "\n".
  */
 export function getCodeBlockSafeSplitter(): StringSplitter;
+/**
+ * Creates a string splitter that is capable of ignoring code blocks using backticks (`).
+ */
 export function getCodeBlockSafeSplitter(splitter: string | RegExp): StringSplitter;
 export function getCodeBlockSafeSplitter(splitter: string | RegExp = "\n"): StringSplitter {
 	return {

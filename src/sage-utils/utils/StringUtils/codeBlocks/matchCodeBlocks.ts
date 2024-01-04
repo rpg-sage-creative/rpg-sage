@@ -1,3 +1,5 @@
+import XRegExp from "xregexp";
+
 type CodeBlockMatch = {
 	index: number;
 	length: number;
@@ -6,7 +8,7 @@ type CodeBlockMatch = {
 };
 
 /**
- * @private Finds the next match in the string, starting from the given index
+ * @internal Finds the next match in the string, starting from the given index
  */
 function findNext(content: string, startIndex: number): CodeBlockMatch | null {
 	// let's work with a shorter string
@@ -24,7 +26,7 @@ function findNext(content: string, startIndex: number): CodeBlockMatch | null {
 
 	do {
 		// we try to grab as many ticks as we can
-		const rightRegex = new RegExp(`((?<!\\\\)\`){${ticks}}`);
+		const rightRegex = XRegExp(`((?<!\\\\)\`){${ticks}}`);
 
 		// we need to start out regex after the left ticks
 		const rightMatch = rightRegex.exec(sliced.slice(leftIndex + ticks));
@@ -55,7 +57,7 @@ function findNext(content: string, startIndex: number): CodeBlockMatch | null {
 }
 
 /**
- * @private Finds all the matches in a given string
+ * @internal Finds all the matches in a given string
  */
 export function matchCodeBlocks(content: string): CodeBlockMatch[] {
 	const matches: CodeBlockMatch[] = [];
