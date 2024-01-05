@@ -1,4 +1,3 @@
-import { debug } from "../../../../sage-utils/utils/ConsoleUtils";
 import { capitalize } from "../../../../sage-utils/utils/StringUtils";
 import { DialogType } from "../../repo/base/IdRepository";
 import type { DialogContent } from "./DialogContent";
@@ -21,6 +20,7 @@ export function parseDialogContent(content: string): DialogContent | null {
 				const key = pair.key as any;
 				const value = match[1];
 				const values = match.slice(1);
+				// .length - 2 to leave :: at the beginning of the string
 				const sliceLength = match[0].length - 2;
 				return { key, value, values, sliceLength };
 			}
@@ -31,38 +31,57 @@ export function parseDialogContent(content: string): DialogContent | null {
 	const dialogContent: DialogContent = {
 		type: typeOrAlias.type,
 		alias: typeOrAlias.alias,
-		content: content.slice(typeOrAlias.length + 2)
+		// .length - 2 to leave :: at the beginning of the string
+		content: content.slice(typeOrAlias.length - 2)
 	};
 
 	let match: { key:DialogRegexKey; values:string[]; value:string; sliceLength:number; } | null;
 	while (match = matchPair(dialogContent.content)) {
 		let breakWhile = false;
 		switch(match.key) {
-			case "who":
-				dialogContent.who = match.value;
+			case "postType": {
+				if (dialogContent.postType === undefined) {
+					dialogContent.postType = DialogType[capitalize(match.value) as keyof typeof DialogType];
+				}else {
+					breakWhile = true;
+				}
 				break;
-
-			case "postType":
-				dialogContent.postType = DialogType[capitalize(match.value) as keyof typeof DialogType];
+			}
+			case "nameAndDisplayName": {
+				if (!dialogContent.name && !dialogContent.displayName) {
+					dialogContent.name = match.values[0];
+					dialogContent.displayName = match.values[1];
+				}else {
+					breakWhile = true;
+				}
 				break;
-
-			case "names":
-				dialogContent.name = match.values[0];
-				dialogContent.displayName = match.values[1];
+			}
+			case "displayName": {
+				if (!dialogContent.displayName) {
+					dialogContent.displayName = match.value;
+				}else {
+					breakWhile = true;
+				}
 				break;
-
-			case "title":
-				dialogContent.title = match.value;
+			}
+			case "embedColor": {
+				if (!dialogContent.embedColor) {
+					dialogContent.embedColor = match.value;
+				}else {
+					breakWhile = true;
+				}
 				break;
-
-			case "embedColor":
-				dialogContent.embedColor = match.value;
+			}
+			case "url": {
+				if (!dialogContent.imageUrl) {
+					dialogContent.imageUrl = match.value.startsWith("<") && match.value.endsWith(">")
+						? match.value.slice(1, -1)
+						: match.value;
+				}else {
+					breakWhile = true;
+				}
 				break;
-
-			case "url":
-				dialogContent.imageUrl = match.value;
-				break;
-
+			}
 			default: {
 				if (/^attachment$/i.test(match.value) && dialogContent.attachment !== true) {
 					dialogContent.attachment = true;
@@ -71,6 +90,7 @@ export function parseDialogContent(content: string): DialogContent | null {
 				}else {
 					breakWhile = true;
 				}
+				break;
 			}
 		}
 
@@ -83,9 +103,8 @@ export function parseDialogContent(content: string): DialogContent | null {
 		dialogContent.content = dialogContent.content.slice(match.sliceLength);
 	}
 
-	if (content.includes("`")) {
-		debug({content,dialogContent});
-	}
+	// remove the leading ::
+	dialogContent.content = dialogContent.content.slice(2).trim();
 
 	return dialogContent;
 }
