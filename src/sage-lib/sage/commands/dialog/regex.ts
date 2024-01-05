@@ -3,7 +3,7 @@ import { createUrlRegex, createWhitespaceRegex } from "../../../../sage-utils/ut
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 function getWhitespaceRegex(): string {
-	return createWhitespaceRegex({ horizontalOnly:true, modifier:"*" }).source;
+	return createWhitespaceRegex({ horizontalOnly:false, modifier:"*" }).source;
 }
 
 export function getDialogTypeOrAliasRegex(): RegExp {
@@ -11,19 +11,17 @@ export function getDialogTypeOrAliasRegex(): RegExp {
 	return XRegExp(`^${HWS}([\\pL\\pN]+)${HWS}::`);
 }
 
-export function getDialogWhoRegex(): RegExp {
-	const HWS = getWhitespaceRegex();
-	return XRegExp(`^::${HWS}who=(.*?)${HWS}::`, "i");
-}
-
 export function getDialogNameAndDisplayNameRegex(): RegExp {
 	const HWS = getWhitespaceRegex();
-	return XRegExp(`^::${HWS}([^(]+)(?!::)\(([^)]+)\)${HWS}::`, "i");
+	return XRegExp(`^::${HWS}
+					((?:[^(](?!::))+) # capture the characters before the "(" that isn't followed by "::"
+					\\(([^)]+)\\)     # capture the characters in ()
+					${HWS}::`, "x");
 }
 
-export function getDialogTitleRegex(): RegExp {
+export function getDialogDisplayNameRegex(): RegExp {
 	const HWS = getWhitespaceRegex();
-	return XRegExp(`^::${HWS}\(([^)]+)\)${HWS}::`, "i");
+	return XRegExp(`^::${HWS}\\(([^)]+)\\)${HWS}::`);
 }
 
 export function getDialogPostTypeRegex(): RegExp {
@@ -48,13 +46,12 @@ export function getDialogOtherRegex(): RegExp {
 	return XRegExp(`^::${HWS}(.*?)${HWS}::`, "i");
 }
 
-export type DialogRegexKey = "who" | "names" | "title" | "postType" | "embedColor" | "url" | "other";
+export type DialogRegexKey = "nameAndDisplayName" | "displayName" | "postType" | "embedColor" | "url" | "other";
 type DialogRegexPair = { key:DialogRegexKey; regex:RegExp; };
 export function getDialogRegexPairs(): DialogRegexPair[] {
 	return [
-		{ key:"who", regex:getDialogWhoRegex() },
-		{ key:"names", regex:getDialogNameAndDisplayNameRegex() },
-		{ key:"title", regex:getDialogTitleRegex() },
+		{ key:"nameAndDisplayName", regex:getDialogNameAndDisplayNameRegex() },
+		{ key:"displayName", regex:getDialogDisplayNameRegex() },
 		{ key:"postType", regex:getDialogPostTypeRegex() },
 		{ key:"embedColor", regex:getDialogEmbedColorRegex() },
 		{ key:"url", regex:getDialogUrlRegex() },
