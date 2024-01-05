@@ -8,9 +8,6 @@ export type DialogContent = {
 	/** aliased dialog prefix */
 	alias?: string;
 
-	/** character name/alias when using a dialog alias/macro */
-	who?: string;
-
 	/** if true, post the attachment with this dialog */
 	attachment?: boolean;
 
@@ -21,9 +18,6 @@ export type DialogContent = {
 
 	/** the name to post as */
 	displayName?: string;
-
-	/** the title of the post */
-	title?: string;
 
 	/** url of an image to post in an embed dialog */
 	imageUrl?: string;
