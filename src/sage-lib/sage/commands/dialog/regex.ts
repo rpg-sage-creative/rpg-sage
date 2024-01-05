@@ -2,17 +2,16 @@ import * as _XRegExp from "xregexp";
 import { createUrlRegex, createWhitespaceRegex } from "../../../../sage-utils/utils/StringUtils";
 const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
-function getWhitespaceRegex(): string {
-	return createWhitespaceRegex({ horizontalOnly:false, modifier:"*" }).source;
+function getHWS() {
+	return createWhitespaceRegex({ horizontalOnly:true, quantifier:"*" }).source;
 }
-
 export function getDialogTypeOrAliasRegex(): RegExp {
-	const HWS = getWhitespaceRegex();
+	const HWS = getHWS();
 	return XRegExp(`^${HWS}([\\pL\\pN]+)${HWS}::`);
 }
 
 export function getDialogNameAndDisplayNameRegex(): RegExp {
-	const HWS = getWhitespaceRegex();
+	const HWS = getHWS();
 	return XRegExp(`^::${HWS}
 					((?:[^(](?!::))+) # capture the characters before the "(" that isn't followed by "::"
 					\\(([^)]+)\\)     # capture the characters in ()
@@ -20,29 +19,29 @@ export function getDialogNameAndDisplayNameRegex(): RegExp {
 }
 
 export function getDialogDisplayNameRegex(): RegExp {
-	const HWS = getWhitespaceRegex();
+	const HWS = getHWS();
 	return XRegExp(`^::${HWS}\\(([^)]+)\\)${HWS}::`);
 }
 
 export function getDialogPostTypeRegex(): RegExp {
-	const HWS = getWhitespaceRegex();
+	const HWS = getHWS();
 	return XRegExp(`^::${HWS}(post|embed)${HWS}::`, "i");
 }
 
 export function getDialogEmbedColorRegex(): RegExp {
-	const HWS = getWhitespaceRegex();
+	const HWS = getHWS();
 	return XRegExp(`^::${HWS}(?:0x|#)((?:[0-9a-f]{3}){1,2})${HWS}::`, "i");
 }
 
 export function getDialogUrlRegex(): RegExp {
-	const HWS = getWhitespaceRegex();
-	const escaped = createUrlRegex({ escaped:true }).source;
-	const unescaped = createUrlRegex({ escaped:false }).source;
-	return XRegExp(`^::${HWS}(${escaped}|${unescaped})${HWS}::`, "i");
+	const WS = createWhitespaceRegex({ quantifier:"*" }).source;
+	const escaped = createUrlRegex({ wrapped:"<>" }).source;
+	const unescaped = createUrlRegex().source;
+	return XRegExp(`^::${WS}(${escaped}|${unescaped})${WS}::`, "i");
 }
 
 export function getDialogOtherRegex(): RegExp {
-	const HWS = getWhitespaceRegex();
+	const HWS = getHWS();
 	return XRegExp(`^::${HWS}(.*?)${HWS}::`, "i");
 }
 
