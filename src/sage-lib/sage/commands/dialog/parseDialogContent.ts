@@ -4,6 +4,7 @@ import type { DialogContent } from "./DialogContent";
 import { getTypeOrAlias } from "./getTypeOrAlias";
 import { getDialogRegexPairs, type DialogRegexKey } from "./regex";
 
+/** Parses raw dialog input. */
 export function parseDialogContent(content: string): DialogContent | null {
 	// make sure we have a valid start
 	const typeOrAlias = getTypeOrAlias(content);

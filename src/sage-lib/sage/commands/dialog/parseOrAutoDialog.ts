@@ -5,7 +5,7 @@ import { parseDialogContents } from "./parseDialogContents";
 
 export function parseOrAutoDialogContent(sageMessage: SageMessage): DialogContent[] {
 	const content = sageMessage.slicedContent;
-	const dialogContent = parseDialogContents(content);
+	const dialogContent = parseDialogContents(sageMessage, content);
 	if (dialogContent.length) {
 		return dialogContent;
 	}

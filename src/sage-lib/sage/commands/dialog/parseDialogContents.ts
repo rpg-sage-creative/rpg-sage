@@ -1,20 +1,19 @@
 import { getCodeBlockSafeSplitter } from "../../../../sage-utils/utils/StringUtils";
+import SageMessage from "../../model/SageMessage";
 import type { DialogContent } from "./DialogContent";
-import { parseDialogContent } from "./parseDialogContent";
-import { getDialogTypeOrAliasRegex } from "./regex";
+import { isStartOfDialog } from "./isStartOfDialog";
+import { parseUsableDialogContent } from "./parseUsableDialogContent";
 
-export function parseDialogContents(content: string): DialogContent[] {
-	const typeRegex = getDialogTypeOrAliasRegex();
-
+export function parseDialogContents(sageMessage: SageMessage, content: string): DialogContent[] {
 	// let's require the post to start with dialog before we check for multi dialog
-	if (!typeRegex.test(content)) {
+	if (!isStartOfDialog(sageMessage, content)) {
 		return [];
 	}
 
 	const lines = content.split(getCodeBlockSafeSplitter());
 
 	const dialogLines = lines.reduce((dLines, line) => {
-		if (!dLines.length || typeRegex.test(line)) {
+		if (!dLines.length || isStartOfDialog(sageMessage, line)) {
 			dLines.push(line);
 		}else {
 			dLines[dLines.length - 1] += `\n${line}`;
@@ -23,6 +22,6 @@ export function parseDialogContents(content: string): DialogContent[] {
 	}, [] as string[]);
 
 	return dialogLines
-		.map(lineContent => parseDialogContent(lineContent))
+		.map(lineContent => parseUsableDialogContent(sageMessage, lineContent))
 		.filter(d => d?.content) as DialogContent[];
 }

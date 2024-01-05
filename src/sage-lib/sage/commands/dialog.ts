@@ -1,8 +1,8 @@
+import { debug } from "../../../sage-utils/utils/ConsoleUtils";
 import { MessageType, ReactionType, TCommandAndArgsAndData } from "../../discord";
 import { registerMessageListener, registerReactionListener } from "../../discord/handlers";
 import type SageMessage from "../model/SageMessage";
 import type { DialogContent } from "./dialog/DialogContent";
-import { aliasChat } from "./dialog/chat/aliasChat";
 import { companionChat } from "./dialog/chat/companionChat";
 import { editChat } from "./dialog/chat/editChat";
 import { gmChat } from "./dialog/chat/gmChat";
@@ -56,7 +56,7 @@ async function doDialog(sageMessage: SageMessage, dialogContents: DialogContent[
 				await editChat(sageMessage, dialogContent);
 				break;
 			default:
-				await aliasChat(sageMessage, dialogContent, options);
+				debug(`Invalid dialogContent.type:`, dialogContent);
 				break;
 		}
 	}
