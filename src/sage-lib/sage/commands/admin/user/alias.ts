@@ -10,18 +10,19 @@ import { registerAdminCommandHelp } from "../../help";
 
 function testGmTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
 	if (!sageMessage.game || sageMessage.isGameMaster) {
-		return !!(dialogContent.postType
-			|| dialogContent.name
-			|| dialogContent.who
+		return !!(dialogContent.name
 			|| dialogContent.displayName
-			|| dialogContent.title
-			|| dialogContent.imageUrl
+			|| dialogContent.postType
 			|| dialogContent.embedColor
+			|| dialogContent.imageUrl
 			|| dialogContent.content);
 	}
 	return false;
 }
 function testNpcTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
+	if (dialogContent.name?.toLowerCase() === "{name}") {
+		return true;
+	}
 	if (sageMessage.game) {
 		if (sageMessage.isGameMaster) {
 			const found = sageMessage.game.nonPlayerCharacters.findByName(dialogContent.name)
@@ -33,12 +34,18 @@ function testNpcTarget(sageMessage: SageMessage, dialogContent: DialogContent): 
 	return sageMessage.sageUser.nonPlayerCharacters.findByName(dialogContent.name) !== undefined;
 }
 function testPcTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
+	if (dialogContent.name?.toLowerCase() === "{name}") {
+		return true;
+	}
 	if (sageMessage.game) {
 		return !!sageMessage.playerCharacter && !dialogContent.name;// && !dialogContent.displayName;
 	}
 	return sageMessage.sageUser.playerCharacters.findByName(dialogContent.name) !== undefined;
 }
 function testCompanionTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
+	if (dialogContent.name?.toLowerCase() === "{name}") {
+		return true;
+	}
 	if (sageMessage.game) {
 		return sageMessage.playerCharacter?.companions.findByName(dialogContent.name) !== undefined;
 	}
@@ -66,7 +73,6 @@ function dialogContentToTarget(dialogContent: DialogContent, separator = "::"): 
 	const baseParts = [
 		dialogContent.type,
 		toNamePart(dialogContent),
-		dialogContent.title ? `(${dialogContent.title})` : ``,
 		dialogContent.imageUrl,
 		dialogContent.embedColor,
 		DialogType[dialogContent.postType!],
