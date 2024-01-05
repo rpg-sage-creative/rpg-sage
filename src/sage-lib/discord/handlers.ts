@@ -65,8 +65,8 @@ function isTesterBot(did: Optional<Discord.Snowflake>): boolean {
 
 type TListener = {
 	command?: string;
-	intents: Discord.IntentsString[];
-	permissions: Discord.PermissionString[];
+	intents?: Discord.IntentsString[];
+	permissions?: Discord.PermissionString[];
 	priorityIndex?: number;
 };
 
@@ -120,22 +120,31 @@ function registerListener<T extends TListenerType>(which: TListenerTypeName, lis
 	}
 }
 
-export function registerInteractionListener(tester: TInteractionTester, handler: TInteractionHandler, type?: TInteractionType, intents: Discord.IntentsString[] = [], permissions: Discord.PermissionString[] = [], priorityIndex?: number): void {
-	registerListener("InteractionListener", { tester, handler, type, intents, permissions, priorityIndex });
+type RegisterOptions = {
+	intents?: Discord.IntentsString[];
+	permissions?: Discord.PermissionString[];
+	priorityIndex?: number;
+};
+type RegisterInteractionOptions = RegisterOptions & { type?: TInteractionType; };
+type RegisterMessageOptions = RegisterOptions & { type?: MessageType; };
+type RegisterReactionOptions = RegisterOptions & { type?: ReactionType; };
+
+export function registerInteractionListener(tester: TInteractionTester, handler: TInteractionHandler, { type, ...options }: RegisterInteractionOptions = { }): void {
+	registerListener("InteractionListener", { tester, handler, type, ...options });
 }
 
-export function registerMessageListener(tester: TMessageTester, handler: TMessageHandler, type = MessageType.Post, intents: Discord.IntentsString[] = [], permissions: Discord.PermissionString[] = [], priorityIndex?: number): void {
-	registerListener("MessageListener", { tester, handler, type, intents, permissions, priorityIndex });
+export function registerMessageListener(tester: TMessageTester, handler: TMessageHandler, { type = MessageType.Post, ...options }: RegisterMessageOptions = { }): void {
+	registerListener("MessageListener", { tester, handler, type, ...options });
 }
 
-export function registerReactionListener<T>(tester: TReactionTester<T>, handler: TReactionHandler<T>, type = ReactionType.Both, intents: Discord.IntentsString[] = [], permissions: Discord.PermissionString[] = [], priorityIndex?: number): void {
-	registerListener("ReactionListener", { tester, handler, type, intents, permissions, priorityIndex });
+export function registerReactionListener<T>(tester: TReactionTester<T>, handler: TReactionHandler<T>, { type = ReactionType.Both, ...options }: RegisterReactionOptions = { }): void {
+	registerListener("ReactionListener", { tester, handler, type, ...options });
 }
 
 export function registeredIntents(): Discord.Intents {
 	const registered: Discord.IntentsString[] = [];
-	messageListeners.forEach(listener => registered.push(...listener.intents));
-	reactionListeners.forEach(listener => registered.push(...listener.intents));
+	messageListeners.forEach(listener => registered.push(...listener.intents ?? []));
+	reactionListeners.forEach(listener => registered.push(...listener.intents ?? []));
 
 	const intents = new Discord.Intents();
 	intents.add(

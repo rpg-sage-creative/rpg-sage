@@ -1,7 +1,7 @@
 import { MessageType, ReactionType, TCommandAndArgsAndData } from "../../discord";
 import { registerMessageListener, registerReactionListener } from "../../discord/handlers";
 import type SageMessage from "../model/SageMessage";
-import { DialogContent } from "./dialog/DialogContent";
+import type { DialogContent } from "./dialog/DialogContent";
 import { aliasChat } from "./dialog/chat/aliasChat";
 import { companionChat } from "./dialog/chat/companionChat";
 import { editChat } from "./dialog/chat/editChat";
@@ -28,7 +28,7 @@ async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndDat
 
 	return {
 		command: dialogContents.map(d => d.type).join("+"),
-		args: undefined, //new SageMessageArgs(),
+		// args: undefined,
 		data: dialogContents
 	};
 }
@@ -63,8 +63,8 @@ async function doDialog(sageMessage: SageMessage, dialogContents: DialogContent[
 }
 
 export default function register(): void {
-	registerMessageListener(isDialog, doDialog, MessageType.Both, undefined, undefined, 0);
-	registerReactionListener(isDelete, doDelete, ReactionType.Add);
+	registerMessageListener(isDialog, doDialog, { type:MessageType.Both, priorityIndex:0 });
+	registerReactionListener(isDelete, doDelete, { type:ReactionType.Add });
 	registerReactionListener(isPin, doPin);
 
 	// registerInlineHelp("Dialog", "edit::{content}");

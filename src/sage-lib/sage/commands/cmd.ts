@@ -2,7 +2,6 @@ import * as Discord from "discord.js";
 import utils, { OrNull, type Awaitable } from "../../../sage-utils";
 import { error } from "../../../sage-utils/utils/ConsoleUtils";
 import ArgsManager from "../../discord/ArgsManager";
-import { MessageType } from "../../discord/enums";
 import { registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs, TMessageHandler } from "../../discord/types";
 import ActiveBot from "../model/ActiveBot";
@@ -52,14 +51,12 @@ export function createCommandRenderableContent(title?: string): utils.RenderUtil
 
 // #region Register Commands
 
-export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler): void;
-export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler, type: MessageType): void;
-export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler, type = MessageType.Post): void {
+export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler): void {
 	const _tester = async function (sageMessage: SageMessage): Promise<TCommandAndArgs | null> {
-		if (!sageMessage.hasPrefix || !sageMessage.slicedContent.match(/^\!\!?/)) {
+		if (!sageMessage.hasPrefix || !sageMessage.slicedContent.match(/^!!?/)) {
 			return null;
 		}
-		const match = sageMessage.slicedContent.replace(/^\!\!?/, "").trim().match(matcher);
+		const match = sageMessage.slicedContent.replace(/^!!?/, "").trim().match(matcher);
 		if (match) {
 			//TODO: move to using groups: match.groups
 			return {
@@ -72,7 +69,7 @@ export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler, 
 	const _handler = async function (sageMessage: SageMessage): Promise<void> {
 		return sageMessage.allowCommand ? handler(sageMessage) : sageMessage.reactBlock();
 	};
-	registerMessageListener(_tester, _handler, type);
+	registerMessageListener(_tester, _handler);
 	// registerMessageListener("MessageListener", { command: handler.name || String(matcher), tester: _tester, handler: _handler, type: type, priorityIndex: undefined });
 }
 

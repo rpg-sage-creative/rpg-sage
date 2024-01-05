@@ -10,7 +10,7 @@ import { addCommas } from "../../../sage-utils/utils/NumberUtils";
 import { random, randomItem } from "../../../sage-utils/utils/RandomUtils";
 import { Tokenizer, chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks } from "../../../sage-utils/utils/StringUtils";
 import type { DUser, TChannel, TCommandAndArgsAndData } from "../../discord";
-import { DiscordId, DiscordMaxValues, MessageType } from "../../discord";
+import { DiscordId, DiscordMaxValues } from "../../discord";
 import { createMessageEmbed } from "../../discord/embeds";
 import { registerMessageListener } from "../../discord/handlers";
 import { sendTo } from "../../discord/messages";
@@ -916,7 +916,7 @@ function mapDiceTestResults({ dieSize, iterations, rolls }: { dieSize: number; i
 
 export default function register(): void {
 	registerCommandRegex(/dice test (die|size)=("d?\d+"|\d+)/i, diceTest);
-	registerMessageListener(hasUnifiedDiceCommand, sendDice as any, MessageType.Post, undefined, undefined, 1);
+	registerMessageListener(hasUnifiedDiceCommand, sendDice as any, { priorityIndex:1 });
 
 	registerInlineHelp("Dice", "Basic",
 		`[1d20]`
