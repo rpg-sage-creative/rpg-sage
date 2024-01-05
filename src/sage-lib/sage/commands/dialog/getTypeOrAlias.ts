@@ -14,7 +14,7 @@ export function getTypeOrAlias(content: string) {
 	const alias = !type ? typeOrAlias : undefined;
 
 	// get length of type or alias plus two semicolons
-	const length = typeOrAlias.length;
+	const length = typeOrAliasMatch[0].length;
 
 	return { type, alias, length };
 }
