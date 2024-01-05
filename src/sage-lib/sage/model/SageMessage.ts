@@ -24,6 +24,7 @@ import SageCache from "./SageCache";
 import SageMessageArgsManager from "./SageMessageArgsManager";
 import { TAlias } from "./User";
 import { addMessageDeleteButton } from "./utils/deleteButton";
+import { safeMentions } from "../../../sage-utils/utils/DiscordUtils/safeMentions";
 
 interface SageMessageCore extends HasSageCacheCore {
 	message: DMessage;
@@ -45,10 +46,13 @@ export default class SageMessage
 	}
 
 	public static async fromMessage(message: DMessage, originalMessage: Optional<DMessage>): Promise<SageMessage> {
-		const caches = await SageCache.fromMessage(message),
-			prefix = caches.getPrefixOrDefault(),
-			hasPrefix = message.content?.slice(0, prefix.length).toLowerCase() === prefix.toLowerCase(),
-			slicedContent = ((hasPrefix ? message.content?.slice(prefix.length).trim() : message.content) ?? "").replace(/@everyone/g, "@\\everyone");
+		const caches = await SageCache.fromMessage(message);
+		const prefixes = [caches.getPrefixOrDefault().toLowerCase(), "sage"];
+		const prefixIndex = prefixes.findIndex(prefix => message.content?.slice(0, prefix.length).toLowerCase() === prefix);
+		const hasPrefix = -1 < prefixIndex;
+		const prefix = hasPrefix ? prefixes[prefixIndex] : prefixes[0];
+		const safeContent = safeMentions(message.content ?? "");
+		const slicedContent = hasPrefix ? safeContent.slice(prefix.length).trim() : safeContent;
 		const sageMessage = new SageMessage({
 			message,
 			originalMessage: originalMessage ?? undefined,
