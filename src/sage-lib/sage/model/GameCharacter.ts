@@ -1,5 +1,5 @@
 import type * as Discord from "discord.js";
-import * as _XRegExp from "xregexp";
+import XRegExp from "xregexp";
 import { PathbuilderCharacter, TPathbuilderCharacter, getExplorationModes, getSkills } from "../../../sage-pf2e";
 import type { Optional, UUID } from "../../../sage-utils";
 import { DiscordKey, NilSnowflake } from "../../discord";
@@ -8,7 +8,6 @@ import type { IHasSave } from "./NamedCollection";
 import NoteManager, { type TNote } from "./NoteManager";
 import { DialogType } from "../repo/base/IdRepository";
 import { TKeyValuePair } from "./SageMessageArgsManager";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 export type TDialogMessage = {
 	channelDid: Discord.Snowflake;

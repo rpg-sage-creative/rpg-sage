@@ -1,7 +1,6 @@
-import * as _XRegExp from "xregexp";
+import XRegExp from "xregexp";
 import utils from "../../../sage-utils";
 import type { EmojiType, IEmoji } from "./HasEmojiCore";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 export type TEmojiAndType = { type: EmojiType; replacement: string; };
 

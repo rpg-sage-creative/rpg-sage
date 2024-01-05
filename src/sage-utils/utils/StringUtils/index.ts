@@ -1,6 +1,5 @@
-import * as _XRegExp from "xregexp";
+import XRegExp from "xregexp";
 import type { Optional, TKeyValueArg } from "../..";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 import { default as createEmojiRegex } from "emoji-regex";
 
