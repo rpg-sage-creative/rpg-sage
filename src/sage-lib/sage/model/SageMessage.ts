@@ -487,7 +487,7 @@ export default class SageMessage
 
 	// #endregion
 
-	public findAlias(aliasName?: string): TAlias | null {
+	public findAlias(aliasName?: string): (TAlias & {charAlias?:boolean}) | null {
 		if (!aliasName) {
 			return null;
 		}
@@ -539,7 +539,7 @@ export default class SageMessage
 		return null;
 
 		function alias(char: GameCharacter) {
-			return { name:aliasName!, target:`${char.type}::${char.name}::` };
+			return { name:aliasName!, target:`${char.type}::${char.name}::`, charAlias:true };
 		}
 	}
 }
