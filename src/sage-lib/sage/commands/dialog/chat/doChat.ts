@@ -18,11 +18,10 @@ export async function doChat(sageMessage: SageMessage, { character, colorType, d
 			authorName: dialogContent.displayName, // defaults to character.name
 			character,
 			colorType: colorType ?? undefined,
-			content: dialogContent.content,
+			content: dialogContent.content.replace(/{name}/gi, dialogContent.displayName ?? character.name),
 			imageUrl: dialogContent.imageUrl,
 			embedColor: dialogContent.embedColor,
 			postType: dialogContent.postType,
-			title: dialogContent.title
 		}, options).catch(error);
 	}else {
 		await sageMessage.reactWarn(`Unable to find character for dialog: "${dialogContent.alias ?? dialogContent.type}::"`);
