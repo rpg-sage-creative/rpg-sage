@@ -6,6 +6,11 @@ import { getDialogTypeOrAliasRegex } from "./regex";
 export function parseDialogContents(content: string): DialogContent[] {
 	const typeRegex = getDialogTypeOrAliasRegex();
 
+	// let's require the post to start with dialog before we check for multi dialog
+	if (!typeRegex.test(content)) {
+		return [];
+	}
+
 	const lines = content.split(getCodeBlockSafeSplitter());
 
 	const dialogLines = lines.reduce((dLines, line) => {
