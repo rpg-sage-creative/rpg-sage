@@ -3,7 +3,7 @@ import type { Optional } from "../..";
 import type { TStringMatcher, TStringMatcherResolvable } from "./types";
 
 /** A reusable object for comparing a string without the need to repeatedly manipulate the value. */
-export default class StringMatcher implements TStringMatcher {
+export class StringMatcher implements TStringMatcher {
 	public constructor(
 		/** Stores the raw value. */
 		public value: Optional<string>

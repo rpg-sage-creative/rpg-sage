@@ -6,11 +6,11 @@ import { default as createEmojiRegex } from "emoji-regex";
 
 export * as Comparison from "./Comparison";
 export * as Markdown from "./Markdown";
-export { default as StringMatcher } from "./StringMatcher";
+export * from "./StringMatcher";
 export * as Tokenizer from "./Tokenizer";
-export { redactCodeBlocks, getCodeBlockSafeSplitter } from "./codeBlocks";
-export { cleanWhitespace, createWhitespaceRegex } from "./whitespace";
-export { createUrlRegex, parseUrl } from "./url";
+export * from "./codeBlocks";
+export * from "./whitespace";
+export * from "./url";
 
 //#region (Single Quotes, Double Quotes, Dequote)
 /*

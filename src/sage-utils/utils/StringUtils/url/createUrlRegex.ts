@@ -1,12 +1,15 @@
-type Options = {
+import { RegExpCreateOptions } from "../regex/RegExpCreateOptions.js";
+
+type Options = Omit<RegExpCreateOptions, "quantifier"> & {
 	/** use ^ and $ to anchor the url to the start/end of the string */
 	anchored?: boolean;
-	/** use <> to allow escaped urls for discord */
-	escaped?: boolean;
+
+	/** expects the two characters used to wrap the url, ex: <> for discord */
+	wrapped?: string;
 };
 
 function getProtocolRegex(): RegExp {
-	return /https?:\/\//i;
+	return /(?:s?ftp|https?):\/\//i;
 }
 
 function getDomainRegex(): RegExp {
@@ -17,13 +20,18 @@ function getIp4Regex(): RegExp {
 	return /(?:\d{1,3}\.){3}\d{1,3}/;
 }
 
-function getHostRegex(): RegExp {
+function getHostnameRegex(): RegExp {
 	const sources = [
 		getDomainRegex().source,
 		getIp4Regex().source,
 		"localhost"
 	];
-	return new RegExp(`(?:${sources.join("|")})`, "i");
+	const regex = sources.join("|");
+	return new RegExp(`(?:${regex})`, "i");
+}
+
+function getPortRegex(): RegExp {
+	return /(?::\d{1,5})?/;
 }
 
 function getPathRegex(): RegExp {
@@ -35,26 +43,39 @@ function getQuerystringRegex(): RegExp {
 }
 
 function getAnchorRegex(): RegExp {
-	return /(?:\#[-a-z\d_]*)?/i;
+	return /(?:#[-a-z\d_]*)?/i;
 }
 
 export function createUrlRegex(): RegExp;
 export function createUrlRegex(options: Options): RegExp;
 export function createUrlRegex(options?: Options): RegExp {
+	const capture = options?.capture;
+	const flags = options?.globalFlag ? "gi" : "i";
+
 	const sources = [
 		getProtocolRegex().source,
-		getHostRegex().source,
+		getHostnameRegex().source,
+		getPortRegex().source,
 		getPathRegex().source,
 		getQuerystringRegex().source,
 		getAnchorRegex().source
 	];
-	if (options?.escaped) {
-		sources.unshift("<");
-		sources.push(">");
+	if (options?.wrapped?.length === 2) {
+		const [left, right] = options.wrapped.split("");
+		sources.unshift(left);
+		sources.push(right);
 	}
 	if (options?.anchored) {
 		sources.unshift("^");
 		sources.push("$");
 	}
-	return new RegExp(sources.join(""), "i");
+	const regex = sources.join("");
+
+	if (capture) {
+		if (capture === true) {
+			return new RegExp(`(${regex})`, flags);
+		}
+		return new RegExp(`(?<${capture}>${regex})`, flags);
+	}
+	return new RegExp(sources.join(""), flags);
 }

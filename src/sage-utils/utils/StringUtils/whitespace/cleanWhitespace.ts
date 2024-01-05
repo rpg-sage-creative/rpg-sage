@@ -1,7 +1,10 @@
 import { createWhitespaceRegex } from "./createWhitespaceRegex.js";
 
 type Options = {
+	/** use HORIZONTAL_WHITESPACE_REGEX if true, \s otherwise */
 	horizontalOnly?: boolean;
+
+	/** use replacement instead of " " */
 	replacement?: string;
 };
 
@@ -18,6 +21,6 @@ export function cleanWhitespace(value: string): string;
 export function cleanWhitespace(value: string, options: Options): string;
 
 export function cleanWhitespace(value: string, options?: Options): string {
-	const regex = createWhitespaceRegex({ globalFlag:true, modifier:"+", horizontalOnly:options?.horizontalOnly });
+	const regex = createWhitespaceRegex({ globalFlag:true, quantifier:"+", horizontalOnly:options?.horizontalOnly });
 	return value.replace(regex, options?.replacement ?? " ").trim();
 }
