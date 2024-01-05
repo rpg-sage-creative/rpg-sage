@@ -1,7 +1,7 @@
-import { ZERO_WIDTH_SPACE, type Optional } from "../../../../../sage-utils";
+import { ZERO_WIDTH_SPACE } from "../../../../../sage-utils";
 import { error } from "../../../../../sage-utils/utils/ConsoleUtils";
 import { errorReturnNull } from "../../../../../sage-utils/utils/ConsoleUtils/Catchers";
-import { DiscordId, DiscordKey } from "../../../../discord";
+import { DiscordKey } from "../../../../discord";
 import { deleteMessage } from "../../../../discord/deletedMessages";
 import { embedsToTexts } from "../../../../discord/embeds";
 import { SageDialogWebhookName } from "../../../../discord/messages";
@@ -16,10 +16,6 @@ function dialogMessageToDiscordKey(dialogMessage: TDialogMessage): DiscordKey {
 	return new DiscordKey(dialogMessage.serverDid, dialogMessage.channelDid, dialogMessage.threadDid, dialogMessage.messageDid);
 }
 
-function getDialogArgNotDid(arg: Optional<string>): string | null {
-	return DiscordId.isValidId(arg) ? null : arg ?? null;
-}
-
 export async function editChat(sageMessage: SageMessage, dialogContent: DialogContent): Promise<void> {
 	const messageDid = dialogContent.name ?? sageMessage.message.reference?.messageId,
 		dialogMessage = await findLastMessage(sageMessage, messageDid).catch(errorReturnNull),
@@ -30,10 +26,9 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 	}
 
 	const embed = message.embeds[0],
-		updatedTitle = getDialogArgNotDid(dialogContent.title),
 		updatedImageUrl = dialogContent.imageUrl,
 		updatedContent = sageMessage.caches.format(dialogContent.content),
-		updatedEmbed = updateEmbed(embed, updatedTitle, updatedImageUrl, updatedContent);
+		updatedEmbed = updateEmbed(embed, updatedImageUrl, updatedContent);
 	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, SageDialogWebhookName);
 	if (webhook) {
 		const threadId = sageMessage.threadDid;
