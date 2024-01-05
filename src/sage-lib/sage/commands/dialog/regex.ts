@@ -1,6 +1,5 @@
-import * as _XRegExp from "xregexp";
+import XRegExp from "xregexp";
 import { createUrlRegex, createWhitespaceRegex } from "../../../../sage-utils/utils/StringUtils";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 function getHWS() {
 	return createWhitespaceRegex({ horizontalOnly:true, quantifier:"*" }).source;
