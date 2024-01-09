@@ -12,6 +12,7 @@ logs/
 *.sh
 # negate ignore scripts folder scripts
 !scripts/**/*.sh
+!docker/**/*.sh
 
 # ignore data folder
 data/pf2e/aon/
