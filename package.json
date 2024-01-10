@@ -41,9 +41,9 @@
 		"daemon": "bash scripts/daemon.sh",
 		"deploy": "bash scripts/deploy.sh",
 
-		"scrub-build": "find . -type d -name 'build' -exec rm -rf {} +",
+		"scrub-build": "find . -type d -name 'build' -not -path './node_modules/*' -exec rm -rf {} +",
 		"postscrub-build": "echo 'scrub-build done.'",
-		"scrub-logs": "find . -type f -name '*.log' -exec rm -rf {} +",
+		"scrub-logs": "find . -type f -name '*.log' -not -path './node_modules/*' -exec rm -rf {} +",
 		"postscrub-logs": "echo 'scrub-logs done.'",
 		"scrub": "npm run scrub-build; npm run scrub-logs;",
 		"postscrub": "echo 'scrub done.'",
@@ -58,13 +58,14 @@
 		"mono": "npm run build",
 		"postmono": "cd dist; node --experimental-modules --es-module-specifier-resolution=node mono.mjs botCodeName=dev dataRoot=/Users/randaltmeyer/git/rpg-sage-legacy/dist/data dataRootFoundry=/Users/randaltmeyer/git/rpg-sage/data/foundry superUserId=253330271678627841 homeServerId=963531189254238278",
 
-		"prebuild": "rm -rf dist; rm -rf types",
+		"prebuild": "rm -rf dist; rm -rf types; npm run fixes",
 		"build": "rm -rf tsconfig.tsbuildinfo; tsc --build tsconfig.json",
 		"postbuild": "bash scripts/post-build.sh",
 
 		"pretest": "npm run build",
 		"test": "bash scripts/run-tests.sh",
 
-		"npm-fix": "bash scripts/node-module-fixes.sh"
+		"fixes": "npm run fix-pdf2json",
+		"fix-pdf2json": "[ ! -f \"./node_modules/pdf2json/index.d.ts\" ] && echo 'declare module \"pdf2json\";' > ./node_modules/pdf2json/index.d.ts"
 	}
 }
