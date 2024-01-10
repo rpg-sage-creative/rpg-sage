@@ -1,26 +1,32 @@
 #!/bin/bash
 
-# import constants and functions
-[ -f "./inc/all.sh" ] && source "./inc/all.sh" || source "./scripts/inc/all.sh"
+[ -d "./scripts" ] || cd ..
+
+# start stop restart delete
+ACT="$1"
 
 # warn if any args are missing
-if [ -z "$ACT" ] || [ -z "$ENV" ] || [ -z "$PKG" ] || [ "$ENV" = "local" ]; then
-	echo "/bin/bash daemon.sh start|stop|restart|delete aws dev|beta|stable|maps"
+if [ -z "$ACT" ]; then
+	echo "/bin/bash daemon.sh start|stop|restart|delete aws|mini|docker|local dev|beta|stable"
 	exit 1
 fi
 
-command="pm2 desc sage-$PKG-$ENV >/dev/null && pm2 $ACT sage-$PKG-$ENV"
+# dev beta stable
+ENV="$2"
+if [ -z "$ENV" ]; then ENV="dev"; fi
+
+WHERE="$3"
+if [ -z "$WHERE" ]; then WHERE="local"; fi
+
+COMMAND=
 if [ "$ACT" = "start" ]; then
-	if [ "$PKG" = "maps" ]; then
-		command="[ -f \"map.mjs\" ] && pm2 start map.mjs --name sage-$PKG-$ENV --max-memory-restart 500M --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $PKG"
-	else
-		command="[ -f \"app.mjs\" ] && pm2 start app.mjs --name sage-$PKG-$ENV --max-memory-restart 750M --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $PKG dist"
-	fi
+	COMMAND="pm2 start pm2.config.cjs --env $ENV"
+
+else
+	COMMAND="pm2 $ACT sage-bot-$ENV sage-map-$ENV sage-pdf-$ENV sage-random-$ENV sage-search-$ENV"
+
 fi
 
-sshCommands=(
-	"cd $packageDir"
-	"$command"
-	"pm2 save"
-)
-sshRun "${sshCommands[@]}"
+if [ "$WHERE" = "local" ]; then
+	eval $COMMAND
+fi
