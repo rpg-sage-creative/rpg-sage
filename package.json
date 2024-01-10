@@ -37,29 +37,10 @@
 		"@types/node": "^18.14.0"
 	},
 	"scripts": {
-		"start": "bash scripts/run-dev.sh",
 		"daemon": "bash scripts/daemon.sh",
 		"deploy": "bash scripts/deploy.sh",
 
-		"scrub-build": "scripts/scrub.sh build",
-		"scrub-logs": "scripts/scrub.sh logs",
-		"scrub-pm2": "scripts/scrub.sh pm2",
-		"scrub": "scripts/scrub.sh",
-
-		"premono-pm2": "npm run scrub-pm2",
-		"mono-pm2": "pm2 start mono.config.cjs --env dev",
-
-		"premono": "npm run scrub-pm2",
-		"mono": "npm run build",
-		"postmono": "cd build; node --experimental-modules --es-module-specifier-resolution=node mono.mjs botCodeName=dev dataRoot=/Users/randaltmeyer/git/rpg-sage-legacy-data superUserId=253330271678627841 homeServerId=963531189254238278",
-
 		"build": "bash scripts/build.sh",
-
-		"pretest": "npm run build",
-		"test": "cd ./tests; node --es-module-specifier-resolution=node run.mjs",
-		"posttest": "echo 'test done.'",
-
-		"fix-node_modules": "npm run fix-pdf2json",
-		"fix-pdf2json": "[ ! -f \"./node_modules/pdf2json/index.d.ts\" ] && echo 'declare module \"pdf2json\";' > ./node_modules/pdf2json/index.d.ts || echo 'pdf2json okay.'"
+		"test": "bash scripts/run.sh"
 	}
 }
