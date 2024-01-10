@@ -158,13 +158,6 @@ export function random<T extends Base>(objectType: string, predicate?: BaseFilte
 
 const missing: string[] = [];
 
-export function loadData(): Promise<void> {
-	const dataRoot = getDataRoot();
-	const pf2DataPath = `${dataRoot}/pf2e`;
-	const distPath = `${pf2DataPath}/dist`.replace(/\/+/g, "/");
-	return loadDataFromDist(distPath);
-}
-
 function handleMissingObjectType(core: BaseCore, fromLabel: string): void {
 	if (!missing.includes(core.objectType)) {
 		missing.push(core.objectType);
@@ -230,11 +223,12 @@ function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 	return 1 + childrenParsed;
 }
 
-async function loadDataFromDist(distPath: string): Promise<void> {
-	const files: string[] = await utils.FsUtils.filterFiles(distPath, file => file.endsWith(".json") && !file.includes("pf2t-leftovers"), true)
+export async function loadData(): Promise<void> {
+	const pf2DataPath = `${getDataRoot("pf2e")}`.replace(/\/+/g, "/");
+	const files: string[] = await utils.FsUtils.filterFiles(pf2DataPath, file => file.endsWith(".json"), true)
 		.catch(errorReturnEmptyArray);
 	if (!files.length) {
-		warn(`No files in "${distPath}" ...`);
+		warn(`No files in "${pf2DataPath}" ...`);
 		return Promise.resolve();
 	}
 
