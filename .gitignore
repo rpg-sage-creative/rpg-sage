@@ -8,17 +8,12 @@ node_modules/
 types/
 
 **/.DS_Store
-all-lores.csv
 **/tsconfig.tsbuildinfo
+all-lores.csv
+package-lock.json
 
 # ignore scripts (to ignore the root level links)
 *.sh
 # negate ignore scripts folder scripts
 !scripts/**/*.sh
 !docker/**/*.sh
-
-# ignore data folder
-data/pf2e/aon/
-data/pf2e/dist/
-# data/pf2e/src/
-data/slash/
