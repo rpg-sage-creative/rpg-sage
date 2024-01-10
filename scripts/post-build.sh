@@ -16,7 +16,6 @@ else
 
 	echoAndDo "cd $sageRootDir/dist/data/pf2e"
 	echoAndDo "ln -s ../../../data/pf2e/dist dist"
-	echoAndDo "ln -s ../../../data/pf2e/pf2t-leftovers.json pf2t-leftovers.json"
 
 fi
 
