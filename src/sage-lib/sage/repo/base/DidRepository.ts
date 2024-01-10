@@ -3,8 +3,7 @@ import { existsSync } from "fs";
 import type { Optional, UUID } from "../../../../sage-utils";
 import { EphemeralMap } from "../../../../sage-utils/utils/ArrayUtils/EphemeralMap";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
-import { verbose } from "../../../../sage-utils/utils/ConsoleUtils";
-import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { errorReturnNull, verbose } from "../../../../sage-utils/utils/ConsoleUtils";
 import { readJsonFile, symLinkSync } from "../../../../sage-utils/utils/FsUtils";
 import IdRepository, { HasIdCoreAndSageCache } from "./IdRepository";
 

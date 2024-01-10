@@ -1,4 +1,4 @@
-import { captureProcessExit } from "./sage-utils/utils/ConsoleUtils/process";
+import { captureProcessExit } from "./sage-utils/utils/ConsoleUtils";
 import { RenderableMap } from "./sage-utils/utils/MapUtils";
 
 captureProcessExit();

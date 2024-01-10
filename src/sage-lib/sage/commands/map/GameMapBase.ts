@@ -1,5 +1,5 @@
 import type * as Discord from "discord.js";
-import { errorReturnFalse, errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { errorReturnFalse, errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils";
 import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../../sage-utils/utils/FsUtils";
 import RenderableGameMap from "./RenderableGameMap";
 

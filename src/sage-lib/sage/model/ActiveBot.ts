@@ -1,7 +1,6 @@
 import * as Discord from "discord.js";
 import utils, { Optional } from "../../../sage-utils";
-import { LogLevel, error, info, verbose } from "../../../sage-utils/utils/ConsoleUtils";
-import { captureProcessExit } from "../../../sage-utils/utils/ConsoleUtils/process";
+import { LogLevel, captureProcessExit, error, info, verbose } from "../../../sage-utils/utils/ConsoleUtils";
 import { MessageType, ReactionType } from "../../discord";
 import { setDeleted } from "../../discord/deletedMessages";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";

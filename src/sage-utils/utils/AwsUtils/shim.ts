@@ -1,6 +1,5 @@
 
-import { debug } from "../ConsoleUtils";
-import { errorReturnEmptyArray } from "../ConsoleUtils/Catchers";
+import { debug, errorReturnEmptyArray } from "../ConsoleUtils";
 import { listFiles } from "../FsUtils";
 import type { UUID } from "../types";
 

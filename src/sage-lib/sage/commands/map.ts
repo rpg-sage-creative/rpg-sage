@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import type { Optional } from "../../../sage-utils";
-import { errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils";
 import { getText } from "../../../sage-utils/utils/HttpsUtils";
 import { capitalize, StringMatcher } from "../../../sage-utils/utils/StringUtils";
 import { registerSlashCommand } from "../../../slash.mjs";

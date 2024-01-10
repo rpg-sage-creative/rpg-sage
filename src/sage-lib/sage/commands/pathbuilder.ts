@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 import { PathbuilderCharacter, toModifier } from "../../../sage-pf2e";
 import { TCharacterSectionType, TCharacterViewType, TPathbuilderCharacter, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import { Optional, UUID, isDefined } from "../../../sage-utils";
-import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils";
 import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
 import { DUser, DiscordId, TChannel } from "../../discord";

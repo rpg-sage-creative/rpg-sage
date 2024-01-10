@@ -1,8 +1,7 @@
 import { Snowflake } from "discord.js";
 import { Optional } from "../../sage-utils";
 import { EphemeralSet } from "../../sage-utils/utils/ArrayUtils/EphemeralSet";
-import { debug } from "../../sage-utils/utils/ConsoleUtils";
-import { errorReturnNull } from "../../sage-utils/utils/ConsoleUtils/Catchers";
+import { debug, errorReturnNull } from "../../sage-utils/utils/ConsoleUtils";
 import GameMapBase from "../sage/commands/map/GameMapBase";
 import { DMessage } from "./types";
 
