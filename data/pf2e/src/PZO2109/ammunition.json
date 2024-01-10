@@ -1,7 +1,0 @@
-[
-	{ "objectType": "Ammunition", "name": "Backpack Ballista Bolts", "quantity": 10, "price": "1 sp", "bulk": "L", "group": "Bow", "rarity": "Uncommon", "source": "PZO2109", "id": "0b05d3d1-e0f3-4c2e-8400-4764b4e0b825" },
-	{ "objectType": "Ammunition", "name": "Backpack Catapult Stones", "quantity": 10, "price": "1 sp", "bulk": "1", "group": "Sling", "rarity": "Uncommon", "source": "PZO2109", "id": "af1a30e6-f208-4864-b77d-c8b39a9e9858" },
-	{ "objectType": "Ammunition", "name": "Repeating Crossbow Magazine", "quantity": 5, "price": "9 sp", "bulk": "L", "group": "Bow", "rarity": "Uncommon", "source": "PZO2109", "id": "4a3924e4-342d-482e-a540-29df1dae44ad" },
-	{ "objectType": "Ammunition", "name": "Repeating Hand Magazine", "quantity": 5, "price": "9 sp", "bulk": "L", "group": "Bow", "rarity": "Uncommon", "source": "PZO2109", "id": "c2ebfa71-f932-4c5c-b5c3-294bd2e24a7b" },
-	{ "objectType": "Ammunition", "name": "Repeating Heavy Magazine", "quantity": 5, "price": "9 sp", "bulk": "L", "group": "Bow", "rarity": "Uncommon", "source": "PZO2109", "id": "f65a6ddf-be3b-42bd-a834-28a2c99a33b3" }
-]
