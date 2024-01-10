@@ -80,7 +80,8 @@ function sshRun() {
 		# escape those pesky quotes first!
 		escaped=$(esc "$cmd")
 		# write command to file
-		echoAndDo "echo \"$escaped\" >> $sshFileLocal"
+		eval "echo 'echo \"$escaped\"' >> $sshFileLocal"
+		eval "echo \"$escaped\" >> $sshFileLocal"
 	done
 
 	# send file
