@@ -18,7 +18,7 @@ const apps = appNames.map(app => {
 	const restartMB = app === "bot" ? 750 : 500;
 	return {
 		name: `sage-${app}`,
-		script: `./dist/${app}.mjs`,
+		script: `./build/${app}.mjs`,
 		args: `--max-memory-restart ${restartMB}M`,
 		node_args: "--experimental-modules --es-module-specifier-resolution=node",
 

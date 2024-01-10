@@ -11,7 +11,7 @@ module.exports = {
 	apps: [
 		{
 			name: `sage-legacy-mono`,
-			script: `./dist/mono.mjs`,
+			script: `./build/mono.mjs`,
 			node_args: "--experimental-modules --es-module-specifier-resolution=node",
 
 			append_env_to_name: true,
