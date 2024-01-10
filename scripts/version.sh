@@ -3,12 +3,12 @@
 [ -d "./scripts" ] || cd ..
 
 NOW=`date '+%F-%H%M'`
-FILE="./dist/version.txt"
+FILE="./build/version.txt"
 
 # old
-eval "echo 'VERSION' > $FILE"
-eval "echo 'v1.?.?' >> $FILE"
-eval "echo '' >> $FILE"
+# eval "echo 'VERSION' > $FILE"
+# eval "echo 'v1.?.?' >> $FILE"
+# eval "echo '' >> $FILE"
 
 # new
 eval "echo 'DATE' > $FILE"
