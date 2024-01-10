@@ -4,7 +4,7 @@ import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../..
 import utils, { Optional, OrNull, UUID } from "../../../../sage-utils";
 import { EphemeralMap } from "../../../../sage-utils/utils/ArrayUtils/EphemeralMap";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
-import { verbose } from "../../../../sage-utils/utils/ConsoleUtils";
+import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, verbose } from "../../../../sage-utils/utils/ConsoleUtils";
 import type { DicePostType } from "../../commands/dice";
 import type SageCache from "../../model/SageCache";
 
@@ -96,7 +96,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 	/** Reads all the uuid.json files and returns all the "Id" values. */
 	protected async getIds(): Promise<UUID[]> {
 		const files = await utils.FsUtils.listFiles(`${IdRepository.DataPath}/${this.objectTypePlural}`)
-			.catch<string[]>(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+			.catch<string[]>(errorReturnEmptyArray);
 		return files
 			.filter(file => file.endsWith(".json"))
 			.map(file => file.slice(0, -5))
@@ -126,7 +126,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 	protected readCoreById(id: UUID): Promise<OrNull<T>> {
 		return utils.FsUtils
 			.readJsonFile<T>(`${IdRepository.DataPath}/${this.objectTypePlural}/${id}.json`)
-			.catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+			.catch(errorReturnNull);
 	}
 
 	/** Reads the uuid.json for each given "Id". */
@@ -188,7 +188,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 		}
 
 		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${entity.id}.json`;
-		const saved = await utils.FsUtils.writeFile(path, entity.toJSON(), true).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
+		const saved = await utils.FsUtils.writeFile(path, entity.toJSON(), true).catch(errorReturnFalse);
 		if (saved) {
 			this.cacheId(entity.id, entity);
 		}

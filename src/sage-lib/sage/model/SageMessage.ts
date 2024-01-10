@@ -2,9 +2,10 @@ import type * as Discord from "discord.js";
 import type { IHasChannels, IHasGame } from ".";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import utils, { Optional } from "../../../sage-utils";
+import type { Optional } from "../../../sage-utils";
 import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
-import { debug, warn } from "../../../sage-utils/utils/ConsoleUtils";
+import { debug, errorReturnNull, warn } from "../../../sage-utils/utils/ConsoleUtils";
+import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { DMessage, DiscordKey, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
 import { send } from "../../discord/messages";
@@ -115,7 +116,7 @@ export default class SageMessage
 			return [];
 		}
 		// check to see if we have channel send message permissions
-		const renderableContent = utils.RenderUtils.RenderableContent.resolve(renderableContentResolvable);
+		const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 		if (renderableContent) {
 			const sent = await send(this.caches, targetChannel, renderableContent, originalAuthor);
 			if (sent.length) {
@@ -328,7 +329,7 @@ export default class SageMessage
 		// just in case it was deleted while we were waiting
 		if (isDeleted(message.id)) return false;
 
-		const reaction = await message?.react(emoji).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+		const reaction = await message?.react(emoji).catch(errorReturnNull);
 		return reaction ? true : false;
 	}
 

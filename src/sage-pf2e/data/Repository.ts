@@ -1,5 +1,5 @@
 import utils, { isDefined, Optional, OrNull, OrUndefined, TUuidMatcher, UUID } from "../../sage-utils";
-import { debug, verbose, warn } from "../../sage-utils/utils/ConsoleUtils";
+import { debug, errorReturnEmptyArray, verbose, warn } from "../../sage-utils/utils/ConsoleUtils";
 import { getDataRoot } from "../../sage-utils/utils/EnvUtils";
 import type { TEntity } from "../model";
 import type AonBase from "../model/base/AonBase";
@@ -232,7 +232,7 @@ function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 
 async function loadDataFromDist(distPath: string): Promise<void> {
 	const files: string[] = await utils.FsUtils.filterFiles(distPath, file => file.endsWith(".json") && !file.includes("pf2t-leftovers"), true)
-		.catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		.catch(errorReturnEmptyArray);
 	if (!files.length) {
 		warn(`No files in "${distPath}" ...`);
 		return Promise.resolve();

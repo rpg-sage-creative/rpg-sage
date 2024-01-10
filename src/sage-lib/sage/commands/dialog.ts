@@ -1,7 +1,13 @@
 import * as Discord from "discord.js";
-import * as _XRegExp from "xregexp";
-import utils, { OrUndefined, TParsers, type Optional, ZERO_WIDTH_SPACE } from "../../../sage-utils";
+import XRegExp from "xregexp";
+import type { Optional, OrUndefined, TParsers } from "../../../sage-utils";
+import { ZERO_WIDTH_SPACE } from "../../../sage-utils";
 import { error } from "../../../sage-utils/utils/ConsoleUtils";
+import { errorReturnEmptyArray, errorReturnNull, warnReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { getBuffer } from "../../../sage-utils/utils/HttpsUtils";
+import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import { isBlank } from "../../../sage-utils/utils/StringUtils";
+import { tokenize } from "../../../sage-utils/utils/StringUtils/Tokenizer";
 import { DiscordId, DiscordKey, MessageType, NilSnowflake, ReactionType, TCommand, TCommandAndArgsAndData } from "../../discord";
 import { deleteMessage } from "../../discord/deletedMessages";
 import { embedsToTexts } from "../../discord/embeds";
@@ -17,9 +23,6 @@ import DialogMessageRepository from "../repo/DialogMessageRepository";
 import { DialogType } from "../repo/base/IdRepository";
 import { parseDiceMatches, sendDice } from "./dice";
 import { registerInlineHelp } from "./help";
-import { getBuffer } from "../../../sage-utils/utils/HttpsUtils";
-import { errorReturnNull, warnReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 
 //#region Dialog Post
@@ -39,7 +42,7 @@ type DialogRenderableOptions = {
 	authorOptions: Discord.WebhookMessageOptions;
 	dialogTypeOverride?: DialogType;
 	files?: Discord.MessageAttachment[];
-	renderableContent: utils.RenderUtils.RenderableContent;
+	renderableContent: RenderableContent;
 	sageMessage: SageMessage;
 }
 
@@ -49,10 +52,10 @@ async function sendDialogRenderable({ authorOptions, dialogTypeOverride, files, 
 	const targetChannel = await sageMessage.discord.fetchChannel(sageMessage.channel?.sendDialogTo);
 	const sageCache = sageMessage.caches;
 	if (targetChannel) {
-		const sent = await sendWebhook(targetChannel, { sageCache, renderableContent, authorOptions, dialogType, files }).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		const sent = await sendWebhook(targetChannel, { sageCache, renderableContent, authorOptions, dialogType, files }).catch(errorReturnEmptyArray);
 		return sent;
 	} else {
-		const replaced = await replaceWebhook(sageMessage.message, { sageCache, renderableContent, authorOptions, dialogType, files }).catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		const replaced = await replaceWebhook(sageMessage.message, { sageCache, renderableContent, authorOptions, dialogType, files }).catch(errorReturnEmptyArray);
 		return replaced;
 	}
 }
@@ -64,7 +67,7 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 	}
 
 	const webhook = true; //sageMessage.dialogType === "Webhook";
-	const renderableContent = new utils.RenderUtils.RenderableContent();
+	const renderableContent = new RenderableContent();
 
 	const authorName = postData.authorName || character.name;
 	const title = postData.title || authorName;
@@ -124,7 +127,7 @@ async function sendDialogPost(sageMessage: SageMessage, postData: TDialogPostDat
 	//#endregion
 
 	const messages: Discord.Message[] = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files })
-		.catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+		.catch(errorReturnEmptyArray);
 	if (messages.length) {
 		const last = messages[messages.length - 1];
 
@@ -167,7 +170,7 @@ function findPc(sageMessage: SageMessage, pcNameOrIndex: Optional<string>): Game
 	if (sageMessage.game) {
 		return sageMessage.playerCharacter;
 	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
-		if (utils.StringUtils.isBlank(pcNameOrIndex)) {
+		if (isBlank(pcNameOrIndex)) {
 			return sageMessage.sageUser.playerCharacters.first();
 		}
 		return sageMessage.sageUser.playerCharacters.findByNameOrIndex(pcNameOrIndex);
@@ -184,7 +187,7 @@ function findCompanion(sageMessage: SageMessage, companionNameOrIndex: Optional<
 		companions = sageMessage.sageUser.playerCharacters.first()?.companions;
 	}
 	if (companions) {
-		if (utils.StringUtils.isBlank(companionNameOrIndex)) {
+		if (isBlank(companionNameOrIndex)) {
 			return companions.first();
 		}
 		return companions.findByNameOrIndex(companionNameOrIndex);
@@ -349,7 +352,7 @@ export function parseDialogContent(content: string, allowDynamicDialogSeparator:
 	const typeAndSeparator = getDialogSeparator(content, allowDynamicDialogSeparator);
 	if (typeAndSeparator) {
 		const parsers = getDialogParsers(typeAndSeparator),
-			tokens = utils.StringUtils.Tokenizer.tokenize(content, parsers, "content"),
+			tokens = tokenize(content, parsers, "content"),
 			nameTokens = tokens.filter(token => token.type === "names"),
 			titleTokens = tokens.filter(token => token.type === "title"),
 			partTokens = tokens.filter(token => token.type === "part");
@@ -557,7 +560,7 @@ function getDialogArgNotDid(arg: Optional<string>): string | null {
 
 async function editChat(sageMessage: SageMessage, dialogContent: TDialogContent): Promise<void> {
 	const messageDid = dialogContent.name ?? sageMessage.message.reference?.messageId,
-		dialogMessage = await findLastMessage(sageMessage, messageDid).catch(utils.ConsoleUtils.Catchers.errorReturnNull),
+		dialogMessage = await findLastMessage(sageMessage, messageDid).catch(errorReturnNull),
 		discordKey = dialogMessage ? dialogMessageToDiscordKey(dialogMessage) : null,
 		message = discordKey ? await sageMessage.discord.fetchMessage(discordKey) : null;
 	if (!message) {

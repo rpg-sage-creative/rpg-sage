@@ -1,14 +1,15 @@
 import type * as Discord from "discord.js";
-import utils, { Optional, OrNull } from "../../sage-utils";
-import { error, warn } from "../../sage-utils/utils/ConsoleUtils";
+import type { Optional, OrNull } from "../../sage-utils";
+import { error, errorReturnNull, warn, warnReturnNull } from "../../sage-utils/utils/ConsoleUtils";
+import { createMessageLink } from "../../sage-utils/utils/DiscordUtils/createMessageLink";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
+import { RenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type SageCache from "../sage/model/SageCache";
 import { DialogType } from "../sage/repo/base/IdRepository";
 import DiscordKey from "./DiscordKey";
 import { deleteMessage, deleteMessages } from "./deletedMessages";
 import { createMessageEmbed, embedsToTexts, resolveToEmbeds, resolveToTexts } from "./embeds";
 import type { DMessage, DUser, IMenuRenderable, TChannel, TRenderableContentResolvable } from "./types";
-import { createMessageLink } from "../../sage-utils/utils/DiscordUtils/createMessageLink";
 
 //#region helpers
 
@@ -70,7 +71,7 @@ export const SageDialogWebhookName = "SageDialogWebhookName";
 
 async function sendWebhookAndReturnMessages(webhook: Discord.Webhook, options: Discord.WebhookMessageOptions): Promise<Discord.Message[]> {
 	const messages: Discord.Message[] = [];
-	const response = await webhook.send(options).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+	const response = await webhook.send(options).catch(errorReturnNull);
 	if (response) {
 		if (typeof(response.type) === "string") {
 			messages.push(response as Discord.Message);
@@ -157,7 +158,7 @@ export async function send(caches: SageCache, targetChannel: TChannel, renderabl
 		const menuRenderable = (<IMenuRenderable>renderableContent).toMenuRenderableContent && <IMenuRenderable>renderableContent || null,
 			menuItemCount = menuRenderable?.getMenuLength() ?? 0;
 		if (!menuItemCount) {
-			const resolvedRenderableContent = utils.RenderUtils.RenderableContent.resolve(renderableContent);
+			const resolvedRenderableContent = RenderableContent.resolve(renderableContent);
 			if (resolvedRenderableContent) {
 				return sendRenderableContent(caches, resolvedRenderableContent, targetChannel, originalAuthor);
 			}
@@ -310,7 +311,7 @@ function sendAndAwaitReactions(caches: SageCache, menuRenderable: IMenuRenderabl
 		for (let index = 0; index < menuLength; index++) {
 			let emoji: string;
 			if (!deleted && (emoji = unicodeArray[index])) {
-				const reaction = await lastMessage.react(emoji).catch(utils.ConsoleUtils.Catchers.warnReturnNull);
+				const reaction = await lastMessage.react(emoji).catch(warnReturnNull);
 				if (reaction) {
 					reactions.push(reaction);
 				}

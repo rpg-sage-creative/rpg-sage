@@ -1,4 +1,5 @@
-import utils from "../../../../sage-utils";
+import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
+import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils";
 import { discordPromptYesNo } from "../../../discord/prompts";
 import type Emoji from "../../model/Emoji";
 import type Game from "../../model/Game";
@@ -42,7 +43,7 @@ async function _emojiList(sageMessage: SageMessage, which: BotServerGameType): P
 		if (which !== BotServerGameType.Bot) {
 			const emojiName = getEmojiName(which);
 			const otherName = getOtherName(which);
-			const booleanResponse = await discordPromptYesNo(sageMessage, `**No ${emojiName} Emoji Found!**\n> Sync with ${otherName}?`).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+			const booleanResponse = await discordPromptYesNo(sageMessage, `**No ${emojiName} Emoji Found!**\n> Sync with ${otherName}?`).catch(errorReturnNull);
 			if (booleanResponse) {
 				emoji.sync(getOtherEmoji(sageMessage, which));
 				render = await getWhichEntity(sageMessage, which)?.save() ?? false;
@@ -101,7 +102,7 @@ async function _emojiGet(sageMessage: SageMessage, ...emoji: Emoji[]): Promise<v
 		return sageMessage.reactBlock();
 	}
 
-	emoji = emoji.filter(utils.ArrayUtils.Filters.exists);
+	emoji = emoji.filter(exists);
 
 	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType)!;
 	let inherited = false;

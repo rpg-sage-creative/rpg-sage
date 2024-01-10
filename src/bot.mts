@@ -1,5 +1,5 @@
 import { activate } from "./sage-lib";
-import { captureProcessExit } from "./sage-utils/utils/ConsoleUtils/process";
+import { captureProcessExit } from "./sage-utils/utils/ConsoleUtils";
 
 captureProcessExit();
 activate();
