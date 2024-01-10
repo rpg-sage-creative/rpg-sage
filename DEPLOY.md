@@ -63,3 +63,6 @@ Start maps in pm2
 Update pm2
 <br>
 `pm2 save`
+
+### pm2 config usage
+`pm2 start pm2.config.cjs --env dev`
