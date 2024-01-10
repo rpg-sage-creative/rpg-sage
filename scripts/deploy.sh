@@ -7,14 +7,9 @@ NOW=`date '+%F-%H%M'`;
 
 # warn if any args are missing
 if [ -z "$ENV" ] || [ -z "$PKG" ] || [ "$PKG" = "maps" ]; then
-	echoLog "/bin/bash deploy.sh dev|beta|stable|data aws"
+	echoLog "/bin/bash deploy.sh dev|beta|stable|data aws|docker"
 	exit 1
 fi
-
-[ -f "./pre-build.sh" ] && echoAndDo "/bin/bash ./pre-build.sh" || echoAndDo "/bin/bash ./scripts/pre-build.sh"
-[ -f "./build.sh" ] && echoAndDo "/bin/bash ./build.sh" || echoAndDo "/bin/bash ./scripts/build.sh"
-[ -f "./post-build.sh" ] && echoAndDo "/bin/bash ./post-build.sh" || echoAndDo "/bin/bash ./scripts/post-build.sh"
-[ -f "./run-tests.sh" ] && echoAndDo "/bin/bash ./run-tests.sh" || echoAndDo "/bin/bash ./scripts/run-tests.sh"
 
 # other dir vars
 deployDirRemote="$botDir/deploy"
@@ -22,11 +17,13 @@ deployDirLocal="$sageRootDir/deploy"
 
 #region setup deploy folder, zip deployment, deploy it, and delete local deployment
 
-echoAndDo "rm -rf $deployDirLocal; mkdir $deployDirLocal"
-
-# build a tmp deploy folder and add files that need to get deployed
-echoAndDo "mkdir $deployDirLocal/tmp; cd $deployDirLocal/tmp"
 if [ "$PKG" = "data" ]; then
+	echoAndDo "rm -rf $deployDirLocal; mkdir $deployDirLocal"
+
+	# build a tmp deploy folder
+	echoAndDo "mkdir $deployDirLocal/tmp; cd $deployDirLocal/tmp"
+
+	# add files that need to get deployed
 	echoAndDo "echo 'VERSION' >> version.txt"
 	echoAndDo "echo 'v1.?.?' >> version.txt"
 	echoAndDo "echo '' >> version.txt"
@@ -40,28 +37,18 @@ if [ "$PKG" = "data" ]; then
 	echoAndDo "git log -n 1 --pretty=oneline >> version.txt"
 	echoAndDo "echo 'ver 0.0.0' > sage-data-pf2e.ver"
 	echoAndDo "cp -r $sageRootDir/data/pf2e/dist/* $deployDirLocal/tmp"
-else
-	# echoAndDo "cp -r $sageRootDir/node_modules $deployDirLocal/tmp"
-	echoAndDo "cp -r $sageRootDir/dist/sage* $deployDirLocal/tmp"
-	echoAndDo "cp $sageRootDir/dist/*.mjs $deployDirLocal/tmp"
-	echoAndDo "cp $sageRootDir/package.json $deployDirLocal/tmp"
-fi
 
-# zip deployment files
-echoAndDo "zip -rq9 $deployDirLocal/$PKG.zip *"
+	# zip deployment files
+	echoAndDo "zip -rq9 $deployDirLocal/$PKG.zip *"
 
-# stage files in remote deploy folder
-scpTo "$deployDirLocal/$PKG.zip" "$deployDirRemote/$PKG.zip"
+	# stage files in remote deploy folder
+	scpTo "$deployDirLocal/$PKG.zip" "$deployDirRemote/$PKG.zip"
 
-# remove local deploy
-echoAndDo "rm -rf $deployDirLocal"
+	# remove local deploy
+	echoAndDo "rm -rf $deployDirLocal"
 
-#endregion
-
-# execute the deploy script on the remote
-if [ "$PKG" = "data" ]; then
+	# execute the deploy script on the remote
 	sshCommands=(
-		# "zip -rq9 $packageDir/pf2e/dist-$NOW $packageDir/pf2e/dist"
 		"mv $packageDir/pf2e/dist $packageDir/pf2e/dist-$NOW"
 		"unzip -q $deployDirRemote/data -d $packageDir/pf2e/dist"
 		"rm -f $deployDirRemote/data.zip"
@@ -69,7 +56,9 @@ if [ "$PKG" = "data" ]; then
 		"pm2 desc sage-beta-$ENV >/dev/null && pm2 restart sage-beta-$ENV"
 		"pm2 desc sage-stable-$ENV >/dev/null && pm2 restart sage-stable-$ENV"
 	)
+
 else
+
 	packageDirTmp="$packageDir-tmp"
 	packageDirOld="$packageDir-$NOW"
 	mapsDelete=""
@@ -79,12 +68,13 @@ else
 		mapsStart="pm2 start map.mjs --name sage-maps-$ENV --max-memory-restart 500M --node-args='--experimental-modules --es-module-specifier-resolution=node' -- $PKG"
 	fi
 	sshCommands=(
-		"mkdir $packageDirTmp"
-		"ln -s $botDir/data $packageDirTmp/data"
-		"unzip -q $deployDirRemote/$PKG -d $packageDirTmp"
-		"rm -f $deployDirRemote/$PKG.zip"
+		"git clone git@github.com:randaltmeyer/rpg-sage-legacy.git $packageDirTmp"
 		"cd $packageDirTmp"
 		"npm install"
+		"rm -rf ./node_modules/pdf2json/index.d.ts"
+		"echo 'declare module "pdf2json";' > ./node_modules/pdf2json/index.d.ts"
+		"tsc --build tsconfig.json"
+		"ln -s $botDir/data $packageDirTmp/dist/data"
 		"pm2 desc sage-$PKG-$ENV >/dev/null && pm2 delete sage-$PKG-$ENV"
 		"$mapsDelete"
 		"mv $packageDir $packageDirOld"
@@ -94,5 +84,16 @@ else
 		"$mapsStart"
 		"pm2 save"
 	)
+
 fi
 sshRun "${sshCommands[@]}"
+
+
+#endregion
+
+
+
+
+
+rm -rf $target
+git clone git@github.com:randaltmeyer/rpg-sage-legacy.git $target
