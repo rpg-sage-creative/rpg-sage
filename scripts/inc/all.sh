@@ -37,14 +37,14 @@ function include() {
 function scpTo() {
 	localPath="$1"
 	remotePath="$2"
-	echoAndDo "scp $sshKey $localPath $sshHost:$remotePath"
+	echoAndDo "scp $sshKey $scpPort $localPath $sshHost:$remotePath"
 }
 
 # convenience method to download a file via scp
 function scpFrom() {
 	remotePath="$1"
 	localPath="$2"
-	echoAndDo "scp $sshKey $sshHost:$remotePath $localPath"
+	echoAndDo "scp $sshKey $scpPort $sshHost:$remotePath $localPath"
 }
 
 function esc() {
@@ -87,7 +87,7 @@ function sshRun() {
 	scpTo "$sshFileLocal" "$sshFileRemote"
 
 	# run file
-	echoAndDo "ssh $sshHost $sshKey \"$sshCommand\""
+	echoAndDo "ssh $sshHost $sshKey $sshPort \"$sshCommand\""
 
 	# remove file
 	echoAndDo "rm -f $sshFileLocal"
@@ -133,7 +133,7 @@ PKG=
 while test $# -gt 0; do
 	case "$1" in
 		start|stop|delete|restart) ACT="$1"; shift; ;;
-		aws|local|mini) ENV="$1"; shift; ;;
+		aws|docker|local|mini) ENV="$1"; shift; ;;
 		data|dev|beta|stable|maps) PKG="$1"; shift; ;;
 		-script) outputToScript="true"; shift; ;;
 		*) break; ;;

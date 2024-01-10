@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # ssh connection
-sshHost="ec2-user@Ladnar-Mini.local"
-sshKey="-i '~/.ssh/rpg-sage-mini'"
+sshHost="ec2-user@localhost"
+sshKey="-i '~/.ssh/rpg-sage-docker'"
 sshPort="-p 2022"
 scpPort="-P 2022"
 
 # docker image
-dockerImage="rpg-sage-mini"
+dockerImage="rpg-sage-local"
 
 # remote
 botDir="/home/ec2-user/legacy"
