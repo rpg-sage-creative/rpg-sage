@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync, writeFileSync } from "fs";
 
 const foundrySource = "/Users/randaltmeyer/git/pf2e/packs";
-const dataRootFoundry = "/Users/randaltmeyer/git/rpg-sage/data/foundry";
+const dataRootFoundry = "/Users/randaltmeyer/git/rpg-sage-legacy-data/foundry";
 
 const sources = new Set();
 
