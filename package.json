@@ -58,8 +58,8 @@
 		"mono": "npm run build",
 		"postmono": "cd dist; node --experimental-modules --es-module-specifier-resolution=node mono.mjs botCodeName=dev dataRoot=/Users/randaltmeyer/git/rpg-sage-legacy/dist/data dataRootFoundry=/Users/randaltmeyer/git/rpg-sage/data/foundry superUserId=253330271678627841 homeServerId=963531189254238278",
 
-		"prebuild": "bash scripts/pre-build.sh",
-		"build": "bash scripts/build.sh",
+		"prebuild": "rm -rf dist; rm -rf types",
+		"build": "rm -rf tsconfig.tsbuildinfo; tsc --build tsconfig.json",
 		"postbuild": "bash scripts/post-build.sh",
 
 		"pretest": "npm run build",
