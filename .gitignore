@@ -1,11 +1,14 @@
 .VSCodeCounter/
+/config/*.json
+!/config/*.template.json
 dist/
-node_modules/
-types/
-**/.DS_Store
-all-lores.csv
 localstack/
 logs/
+node_modules/
+types/
+
+**/.DS_Store
+all-lores.csv
 **/tsconfig.tsbuildinfo
 
 # ignore scripts (to ignore the root level links)

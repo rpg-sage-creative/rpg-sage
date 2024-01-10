@@ -11,8 +11,7 @@ module.exports = {
 	apps: [
 		{
 			name: `sage-legacy-mono`,
-			script: `./mono.mjs`,
-			cwd: "./dist",
+			script: `./dist/mono.mjs`,
 			node_args: "--experimental-modules --es-module-specifier-resolution=node",
 
 			append_env_to_name: true,
@@ -22,8 +21,8 @@ module.exports = {
 			env_beta: { ...getJson("env", "mono", "beta"), NODE_ENV: "beta" },
 			env_stable: { ...getJson("env", "mono", "stable"), NODE_ENV: "stable" },
 
-			error_file: `../logs/mono.log`,
-			out_file: `../logs/mono.log`,
+			error_file: `./logs/mono.log`,
+			out_file: `./logs/mono.log`,
 			log_date_format: "YYYY-MM-DD",
 			time: true,
 		}
