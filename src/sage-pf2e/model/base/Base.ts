@@ -15,7 +15,6 @@ import type {
 	TDetail,
 	THasSuccessOrFailure
 } from "./interfaces";
-import type { Pf2tBaseCore } from "./Pf2tBase";
 
 function isSuccessFailureDetail(detail: TDetail | THasSuccessOrFailure): detail is THasSuccessOrFailure {
 	return ((<THasSuccessOrFailure>detail).success?.length ?? 0) > 0
@@ -41,9 +40,7 @@ function tabNewLineOrEmpty(index: number, wasBlock: boolean): "\t" | "\n" | "" {
 	return NEWLINE;
 }
 
-export interface BaseCore<T extends string = string> extends IdCore<T>, ArchivedCore, DetailedCore<T>, LinkedCore, NamedCore {
-	pf2t?: Pf2tBaseCore;
-}
+export interface BaseCore<T extends string = string> extends IdCore<T>, ArchivedCore, DetailedCore<T>, LinkedCore, NamedCore { }
 
 type TChildCoreParser<T extends BaseCore> = (core: T) => T[];
 export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = string>

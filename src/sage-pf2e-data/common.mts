@@ -1,4 +1,3 @@
-import type { Pf2tBaseCore } from "../sage-pf2e";
 import type { SourceCore } from "../sage-pf2e/model/base/Source";
 import type { ClassCore } from "../sage-pf2e/model/Class";
 import utils from "../sage-utils";
@@ -42,21 +41,6 @@ export function getSageCores(objectType?: string): any {
 	return sageCores;
 }
 
-const PF2_TOOLS_URL = "https://character.pf2.tools/assets/json/all.json";
-const pf2tCores = new utils.ArrayUtils.Collection<Pf2tBaseCore>();
-export function getPf2tCores() { return pf2tCores; }
-export async function loadPf2tCores(): Promise<void> {
-	const path = `${SrcDataPath}/pf2t-all.json`;
-	let cores = await utils.FsUtils.readJsonFile<Pf2tBaseCore[]>(path).catch(() => null) ?? [];
-	if (!cores.length) {
-		info(`\t\tFetching PF2 Tools Cores ...`);
-		cores = await utils.HttpsUtils.getJson<Pf2tBaseCore[]>(PF2_TOOLS_URL).catch(() => []);
-		await utils.FsUtils.writeFile(path, cores, true, true);
-	}
-	info(`\t\t${cores.length} Total PF2 Tools Cores loaded`);
-	pf2tCores.push(...cores);
-}
-
 const cleanNames = new Map<string, string>();
 type TData = { id?:string; hash?:string; name?:string; };
 function cleanName(data: TData): string {
@@ -76,11 +60,11 @@ const stringifyMap = new Map<string, string>();
 export function clearStringify(key: string): void {
 	stringifyMap.delete(key);
 }
-export function stringify(core: Pf2tBaseCore | TCore): string;
-export function stringify(core?: Pf2tBaseCore | TCore | undefined): string | undefined;
-export function stringify(core?: Pf2tBaseCore | TCore): string | undefined {
+export function stringify(core: TCore): string;
+export function stringify(core?: TCore | undefined): string | undefined;
+export function stringify(core?: TCore): string | undefined {
 	if (!core) return undefined;
-	const key = (core as Pf2tBaseCore).hash ?? core.id;
+	const key = core.id;
 	if (!stringifyMap.has(key)) {
 		stringifyMap.set(key, JSON.stringify(core));
 	}
