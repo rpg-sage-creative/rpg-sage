@@ -3,6 +3,7 @@ import { PathbuilderCharacter, toModifier } from "../../../sage-pf2e";
 import { TCharacterSectionType, TCharacterViewType, TPathbuilderCharacter, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import { Optional, UUID, isDefined } from "../../../sage-utils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils";
+import { getDataRoot } from "../../../sage-utils/utils/EnvUtils";
 import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
 import { DUser, DiscordId, TChannel } from "../../discord";
@@ -92,7 +93,7 @@ function charFileExists(characterId: string): boolean {
 	return fileExistsSync(getPath(characterId));
 }
 function getPath(characterId: string): string {
-	return `./data/sage/pb2e/${characterId}.json`;
+	return `${getDataRoot("sage")}/pb2e/${characterId}.json`;
 }
 
 async function notifyOfSlicedMacros(sageCache: SageCache, character: PathbuilderCharacter): Promise<void> {
