@@ -57,11 +57,6 @@ function sshRun() {
 
 	sshCommand=""
 
-	# If going to dev, source the shell
-	if [ "$ENV" = "mini" ]; then
-		sshCommand="source ~/.zshrc;"
-	fi
-
 	# execute the remote .sh file
 	sshCommand="$sshCommand /bin/bash $sshFileRemote;"
 
