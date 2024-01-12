@@ -1,6 +1,6 @@
 {
 	"name": "rpg-sage",
-	"version": "1.4.0",
+	"version": "1.5.0",
 	"description": "RPG Sage Bot",
 	"type": "module",
 	"main": "./build/app.mjs",
@@ -41,10 +41,8 @@
 	"scripts": {
 		"daemon": "bash scripts/daemon.sh",
 		"deploy": "bash scripts/deploy.sh",
-
 		"build": "bash scripts/build.sh",
 		"test": "bash scripts/run.sh",
-
 		"release": "bash ./node_modules/@rsc-utils/npm-utils/scripts/release.sh"
 	}
 }
