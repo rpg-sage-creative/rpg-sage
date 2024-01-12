@@ -1,5 +1,5 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import { cleanWhitespace, normalizeAscii, removeAccents } from ".";
-import type { Optional } from "../..";
 import type { TStringMatcher, TStringMatcherResolvable } from "./types";
 
 /** A reusable object for comparing a string without the need to repeatedly manipulate the value. */

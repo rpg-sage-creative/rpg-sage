@@ -1,11 +1,12 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
-import utils, { Optional } from "../../../../../sage-utils";
+import utils from "../../../../../sage-utils";
+import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
 import type SageMessage from "../../../model/SageMessage";
 import type User from "../../../model/User";
 import { DialogType } from "../../../repo/base/IdRepository";
-import { renderCount, registerAdminCommand, createAdminRenderableContent } from "../../cmd";
+import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
-import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
 
 async function userCount(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {

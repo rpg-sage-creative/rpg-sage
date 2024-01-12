@@ -1,4 +1,4 @@
-import type { Optional } from "../..";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { ESCAPED_URL, VALID_URL } from "./types";
 
 /** Returns true if the value starts with http:// or https:// and allows for <> brackets */

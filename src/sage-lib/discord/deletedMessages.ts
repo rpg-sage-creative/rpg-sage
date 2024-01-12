@@ -1,5 +1,5 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import { Snowflake } from "discord.js";
-import { Optional } from "../../sage-utils";
 import { EphemeralSet } from "../../sage-utils/utils/ArrayUtils/EphemeralSet";
 import { debug, errorReturnNull } from "../../sage-utils/utils/ConsoleUtils";
 import GameMapBase from "../sage/commands/map/GameMapBase";

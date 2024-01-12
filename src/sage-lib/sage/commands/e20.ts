@@ -1,3 +1,4 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/essence20";
 import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20";
@@ -8,7 +9,7 @@ import PlayerCharacterPR, { PlayerCharacterCorePR, TCharacterSectionType, TChara
 import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
 import PlayerCharacterTransformer, { PlayerCharacterCoreTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
 import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
-import type { Optional, UUID } from "../../../sage-utils";
+import type { UUID } from "../../../sage-utils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils";
 import { getDataRoot } from "../../../sage-utils/utils/EnvUtils";
 import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";

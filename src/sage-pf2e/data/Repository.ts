@@ -1,4 +1,6 @@
-import utils, { isDefined, Optional, OrNull, OrUndefined, TUuidMatcher, UUID } from "../../sage-utils";
+import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import { isDefined } from "@rsc-utils/type-utils";
+import utils, { type TUuidMatcher, type UUID } from "../../sage-utils";
 import { debug, errorReturnEmptyArray, verbose, warn } from "../../sage-utils/utils/ConsoleUtils";
 import { getDataRoot } from "../../sage-utils/utils/EnvUtils";
 import type { TEntity } from "../model";

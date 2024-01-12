@@ -1,5 +1,6 @@
+import type { Optional } from "@rsc-utils/type-utils";
+import utils from "../../../../../sage-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import utils, { Optional } from "../../../../../sage-utils";
 import type SageMessage from "../../../model/SageMessage";
 import type { TMacro } from "../../../model/User";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";

@@ -1,4 +1,5 @@
-import utils, { isNullOrUndefined, TParsers } from "../../sage-utils";
+import { isNullOrUndefined } from "@rsc-utils/type-utils";
+import utils, { type TParsers } from "../../sage-utils";
 
 export default class ArgsManager extends utils.ArgsUtils.ArgsManager<string> {
 	public constructor(private argsManagerInitialInput: string | ArrayLike<string> | Iterable<string>) {

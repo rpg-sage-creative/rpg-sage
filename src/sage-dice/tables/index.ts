@@ -1,4 +1,4 @@
-import type { Optional, OrNull } from "../../sage-utils";
+import type { Optional, OrNull } from "@rsc-utils/type-utils";
 import utils from "../../sage-utils";
 import { Dice } from "../dice/base";
 import type { TDice } from "../dice/base/types";

@@ -1,4 +1,4 @@
-import type { Optional } from "../../../../sage-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { Collection } from "../../../../sage-utils/utils/ArrayUtils";
 import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
 import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils";

@@ -1,6 +1,7 @@
+import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
 import XRegExp from "xregexp";
-import type { Optional, OrUndefined, TParsers } from "../../../sage-utils";
+import type { TParsers } from "../../../sage-utils";
 import { ZERO_WIDTH_SPACE } from "../../../sage-utils";
 import { error, errorReturnEmptyArray, errorReturnNull, warnReturnNull } from "../../../sage-utils/utils/ConsoleUtils";
 import { getBuffer } from "../../../sage-utils/utils/HttpsUtils";

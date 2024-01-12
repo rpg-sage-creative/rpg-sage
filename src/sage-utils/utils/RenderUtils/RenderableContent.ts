@@ -1,4 +1,5 @@
-import { IRenderable, Optional, TDisplayType, TRenderableContentSection, TRenderableContentSectionColumn } from "../..";
+import type { Optional } from "@rsc-utils/type-utils";
+import { IRenderable, TDisplayType, TRenderableContentSection, TRenderableContentSectionColumn } from "../..";
 import { unique } from "../ArrayUtils/Filters";
 import { error } from "../ConsoleUtils";
 

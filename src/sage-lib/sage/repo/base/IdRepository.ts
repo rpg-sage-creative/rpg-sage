@@ -1,7 +1,8 @@
+import type { Optional, OrNull } from "@rsc-utils/type-utils";
 import { Snowflake } from "discord.js";
 import type { GameType } from "../../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import utils, { Optional, OrNull, UUID } from "../../../../sage-utils";
+import utils, { type UUID } from "../../../../sage-utils";
 import { EphemeralMap } from "../../../../sage-utils/utils/ArrayUtils/EphemeralMap";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
 import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, verbose } from "../../../../sage-utils/utils/ConsoleUtils";

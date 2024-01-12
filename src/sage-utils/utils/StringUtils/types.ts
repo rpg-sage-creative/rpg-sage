@@ -1,4 +1,4 @@
-import type { Optional } from "../..";
+import type { Optional } from "@rsc-utils/type-utils";
 
 export * from "./Comparison/types";
 

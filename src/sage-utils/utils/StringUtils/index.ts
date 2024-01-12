@@ -1,8 +1,7 @@
-import * as _XRegExp from "xregexp";
-import type { Optional, TKeyValueArg } from "../..";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
-
+import type { Optional } from "@rsc-utils/type-utils";
 import { default as createEmojiRegex } from "emoji-regex";
+import XRegExp from "xregexp";
+import { TKeyValueArg } from "./types";
 
 export * as Comparison from "./Comparison";
 export * as Markdown from "./Markdown";

@@ -1,5 +1,6 @@
 // import { discordPromptYesNo } from "../../../../../discord/prompts";
-import utils, { Optional } from "../../../../../sage-utils";
+import type { Optional } from "@rsc-utils/type-utils";
+import utils from "../../../../../sage-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import SageMessage from "../../../model/SageMessage";
 import { TAlias } from "../../../model/User";

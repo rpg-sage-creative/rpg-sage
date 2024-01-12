@@ -1,4 +1,4 @@
-import type { Awaitable } from "../../..";
+import type { Awaitable } from "@rsc-utils/type-utils";
 
 /** Set of all ClassCache objects. */
 let _cacheSet: WeakSet<ClassCache>;

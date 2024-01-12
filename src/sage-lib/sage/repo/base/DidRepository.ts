@@ -1,6 +1,7 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import { Snowflake, SnowflakeUtil } from "discord.js";
 import { existsSync } from "fs";
-import type { Optional, UUID } from "../../../../sage-utils";
+import type { UUID } from "../../../../sage-utils";
 import { EphemeralMap } from "../../../../sage-utils/utils/ArrayUtils/EphemeralMap";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
 import { errorReturnNull, verbose } from "../../../../sage-utils/utils/ConsoleUtils";

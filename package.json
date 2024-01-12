@@ -23,6 +23,7 @@
 	},
 	"homepage": "https://github.com/randaltmeyer/rpg-sage#readme",
 	"dependencies": {
+		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils",
 		"@discordjs/rest": "1.6.0",
 		"@napi-rs/canvas": "0.1.35",
 		"discord-api-types": "0.27.3",
@@ -33,6 +34,7 @@
 		"xregexp": "5.1.1"
 	},
 	"devDependencies": {
+		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
 		"@types/follow-redirects": "^1.14.1",
 		"@types/node": "^18.14.0"
 	},

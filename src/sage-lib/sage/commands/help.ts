@@ -1,5 +1,6 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
-import utils, { Optional } from "../../../sage-utils";
+import utils from "../../../sage-utils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import type { TChannel, TCommandAndArgs } from "../../discord";

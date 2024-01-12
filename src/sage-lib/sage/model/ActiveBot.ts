@@ -1,5 +1,6 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
-import utils, { Optional } from "../../../sage-utils";
+import utils from "../../../sage-utils";
 import { LogLevel, captureProcessExit, error, info, verbose } from "../../../sage-utils/utils/ConsoleUtils";
 import { MessageType, ReactionType } from "../../discord";
 import { setDeleted } from "../../discord/deletedMessages";

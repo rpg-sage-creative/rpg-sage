@@ -1,7 +1,8 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
-import utils, { Optional } from "../../../../../sage-utils";
+import utils from "../../../../../sage-utils";
 import type SageMessage from "../../../model/SageMessage";
 import type Server from "../../../model/Server";
 import { AdminRoleType, IAdminRole } from "../../../model/Server";

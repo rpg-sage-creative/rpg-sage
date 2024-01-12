@@ -1,8 +1,8 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
 import type { IHasChannels, IHasGame } from ".";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import type { Optional } from "../../../sage-utils";
 import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
 import { debug, errorReturnNull, warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";

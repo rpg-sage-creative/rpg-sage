@@ -1,7 +1,9 @@
+import type { Optional } from "@rsc-utils/type-utils";
+import { isDefined } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
 import { PathbuilderCharacter, toModifier } from "../../../sage-pf2e";
 import { TCharacterSectionType, TCharacterViewType, TPathbuilderCharacter, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
-import { Optional, UUID, isDefined } from "../../../sage-utils";
+import type { UUID } from "../../../sage-utils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils";
 import { getDataRoot } from "../../../sage-utils/utils/EnvUtils";
 import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";

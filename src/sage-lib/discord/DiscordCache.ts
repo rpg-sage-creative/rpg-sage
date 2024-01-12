@@ -1,6 +1,6 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Interaction, Message, MessageReaction, PartialMessage, Role, Snowflake, TextChannel, User, Webhook } from "discord.js";
 import { NilSnowflake } from ".";
-import type { Optional } from "../../sage-utils";
 import { Collection } from "../../sage-utils/utils/ArrayUtils";
 import { debug, error, info, warn } from "../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";

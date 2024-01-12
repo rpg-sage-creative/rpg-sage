@@ -1,5 +1,5 @@
+import type { Optional, OrNull } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
-import type { Optional, OrNull } from "../../sage-utils";
 import { error, errorReturnNull, warn, warnReturnNull } from "../../sage-utils/utils/ConsoleUtils";
 import { createMessageLink } from "../../sage-utils/utils/DiscordUtils/createMessageLink";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";

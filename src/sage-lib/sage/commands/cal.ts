@@ -1,8 +1,8 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import GDate from "../../../sage-cal/pf2e/GDate";
 import { DaysPerMonth, Days as GDays, Months } from "../../../sage-cal/pf2e/cal";
 import SDate from "../../../sage-cal/sf1e/SDate";
 import { Days as SDays } from "../../../sage-cal/sf1e/cal";
-import type { Optional } from "../../../sage-utils";
 import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { capitalize } from "../../../sage-utils/utils/StringUtils";
 import { registerSlashCommand } from "../../../slash.mjs";

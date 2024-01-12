@@ -1,6 +1,9 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import type { Snowflake, TextChannel } from "discord.js";
+import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
-import utils, { Optional } from "../../../../../sage-utils";
+import utils from "../../../../../sage-utils";
+import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
 import { DiscordId } from "../../../../discord";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import Game, { GameRoleType, GameUserType, IGameUser, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game";
@@ -11,8 +14,6 @@ import { DialogType, IChannel, PermissionType } from "../../../repo/base/IdRepos
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
 import { registerAdminCommandHelp } from "../../help";
-import { GameType } from "../../../../../sage-common";
-import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
 
 async function getGames(sageMessage: SageMessage): Promise<Game[]> {
 	const guild = sageMessage.discord.guild;

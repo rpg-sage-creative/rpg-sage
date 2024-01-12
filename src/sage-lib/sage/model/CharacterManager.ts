@@ -1,5 +1,6 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
-import utils, { Optional, UUID } from "../../../sage-utils";
+import utils, { type UUID } from "../../../sage-utils";
 import type { DiscordKey } from "../../discord";
 import CharactersMatch from "./CharactersMatch";
 import type Game from "./Game";

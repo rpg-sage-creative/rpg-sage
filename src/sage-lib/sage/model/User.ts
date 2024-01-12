@@ -1,5 +1,5 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
-import type { Optional } from "../../../sage-utils";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
 import type { DialogType } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";

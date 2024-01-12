@@ -1,4 +1,4 @@
-import { isPrimitive } from "./isPrimitive";
+import { isPrimitive } from "@rsc-utils/type-utils";
 
 type UncacheOptions = {
 	/** set all keys to null */

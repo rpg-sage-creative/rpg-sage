@@ -1,6 +1,7 @@
+import type { Awaitable } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
 import type utils from "../../sage-utils";
-import type { Awaitable, IRenderable } from "../../sage-utils";
+import type { IRenderable } from "../../sage-utils";
 import type SageInteraction from "../sage/model/SageInteraction";
 import type SageMessage from "../sage/model/SageMessage";
 import type SageReaction from "../sage/model/SageReaction";

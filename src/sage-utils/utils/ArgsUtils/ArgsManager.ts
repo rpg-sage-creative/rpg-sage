@@ -1,12 +1,12 @@
-import * as _XRegExp from "xregexp";
-import type { Optional, OrNull, OrUndefined, TKeyValueArg, UUID } from "../..";
+import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import XRegExp from "xregexp";
+import type { TKeyValueArg, UUID } from "../..";
 import { Collection } from "../ArrayUtils";
 import { sortDescending } from "../ArrayUtils/Sort";
 import { Color } from "../ColorUtils";
 import { warn } from "../ConsoleUtils";
 import { isKeyValueArg, parseKeyValueArg } from "../StringUtils";
 import { isValid as isValidUuid } from "../UuidUtils";
-const XRegExp: typeof _XRegExp = (_XRegExp as any).default;
 
 type TArgIndexRet<T> = {
 	arg: string;

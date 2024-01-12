@@ -1,4 +1,5 @@
-import utils, { Optional } from "../../../sage-utils";
+import type { Optional } from "@rsc-utils/type-utils";
+import utils from "../../../sage-utils";
 import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { ColorType, IColor } from "./HasColorsCore";
 

@@ -1,8 +1,8 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
-import type { Optional } from "../../../sage-utils";
 import { errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils";
 import { getText } from "../../../sage-utils/utils/HttpsUtils";
-import { capitalize, StringMatcher } from "../../../sage-utils/utils/StringUtils";
+import { StringMatcher, capitalize } from "../../../sage-utils/utils/StringUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import { DiscordId, TChannel, TCommandAndArgsAndData } from "../../discord";

@@ -1,32 +1,35 @@
 //#region imports
 
-import type { OrNull, TParsers, TToken } from "../../../sage-utils";
+import type { OrNull } from "@rsc-utils/type-utils";
+import { GameType } from "../../../sage-common";
+import type { TParsers, TToken } from "../../../sage-utils";
+import { toJSON } from "../../../sage-utils/utils/ClassUtils";
+import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
+import { generate } from "../../../sage-utils/utils/UuidUtils";
 import type {
 	TDiceLiteral,
 	TTestData
 } from "../../common";
 import {
-	cleanDescription,
-	createValueTestData, DiceOutputType,
+	DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade,
+	TestType,
+	cleanDescription,
+	createValueTestData,
 	gradeToEmoji,
-	rollDice, TestType
+	rollDice
 } from "../../common";
-import type {
-	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
-	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
-	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
-} from "../base/types";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
 	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll
 } from "../base";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
-import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
-import { GameType } from "../../../sage-common";
+import type {
+	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
+	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
+	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
+} from "../base/types";
 
 //#endregion
 

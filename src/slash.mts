@@ -9,10 +9,11 @@ import {
 	SlashCommandSubcommandGroupBuilder
 } from "@discordjs/builders";
 import { REST } from "@discordjs/rest";
+import type { Optional } from "@rsc-utils/type-utils";
 import { Routes } from "discord-api-types/v9";
 import { registerSlashCommands } from "./sage-lib/sage/commands";
 import type { IBotCore } from "./sage-lib/sage/model/Bot";
-import utils, { Optional } from "./sage-utils";
+import utils from "./sage-utils";
 import { getBotCodeName, getDataRoot } from "./sage-utils/utils/EnvUtils";
 import type { TNameDescription, TSlashCommand, TSlashCommandChoice, TSlashCommandOption } from "./types";
 

@@ -1,7 +1,8 @@
-import utils, { Optional, UUID } from "../../../sage-utils";
+import type { Optional } from "@rsc-utils/type-utils";
+import utils, { type UUID } from "../../../sage-utils";
 import { IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
-import { PERCEPTION, profToMod, WISDOM } from "../../common";
+import { PERCEPTION, WISDOM, profToMod } from "../../common";
 import * as Repository from "../../data/Repository";
 import type Action from "../Action";
 import Ancestry from "../Ancestry";

@@ -1,6 +1,7 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e";
 import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e";
-import utils, { Optional } from "../../../sage-utils";
+import utils from "../../../sage-utils";
 import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";

@@ -1,7 +1,8 @@
 //#region imports
 
+import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { GameType } from "../../../sage-common";
-import type { OrNull, OrUndefined, TParsers, TToken } from "../../../sage-utils";
+import type { TParsers, TToken } from "../../../sage-utils";
 import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import { Tokenizer } from "../../../sage-utils/utils/StringUtils";

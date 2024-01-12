@@ -1,7 +1,7 @@
 //#region imports
 
+import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { GameType, parseGameType } from "../../../sage-common";
-import type { OrNull, OrUndefined } from "../../../sage-utils";
 import { HasCore, IdCore, toJSON } from "../../../sage-utils/utils/ClassUtils";
 import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
