@@ -1,12 +1,12 @@
 {
-"buildTs":1705092403000,
+"buildTs":1705095214000,
 "buildDate":"2024-01-12",
-"buildTime":"1246",
+"buildTime":"1333",
 "branch":"stable",
-"commit":"457532f0ce539ae7eb99d706bec1d033075d8eee",
-"commitSubject":"include release script; set current version to 1.4.0",
-"commitTs":1705092380000,
+"commit":"e1243a7a2ff16239d49dd667861a1145dba6925f",
+"commitSubject":"update code-version to read build-info",
+"commitTs":1705095194000,
 "commitDate":"2024-01-12",
-"commitTime":"1246",
+"commitTime":"1333",
 "author":"Randal T Meyer"
 }
