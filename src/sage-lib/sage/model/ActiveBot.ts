@@ -37,7 +37,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 
 	public client: Discord.Client;
 
-	private constructor(core: IBotCore, public codeVersion: string) {
+	private constructor(core: IBotCore) {
 		super(core, null!);
 
 		this.client = new Discord.Client(createDiscordClientOptions());
@@ -223,17 +223,17 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		});
 	}
 
-	public static async activate(codeName: TBotCodeName, codeVersion: string): Promise<void> {
+	public static async activate(codeName: TBotCodeName): Promise<void> {
 		const bot = await BotRepo.getByCodeName(codeName);
 		if (bot) {
-			ActiveBot.from(bot, codeVersion);
+			ActiveBot.from(bot);
 		}else {
 			error(`Failure to load: ${codeName}`);
 		}
 	}
 
-	public static from(bot: Bot, codeVersion: string): ActiveBot {
-		return new ActiveBot(bot.toJSON(), codeVersion);
+	public static from(bot: Bot): ActiveBot {
+		return new ActiveBot(bot.toJSON());
 	}
 
 }

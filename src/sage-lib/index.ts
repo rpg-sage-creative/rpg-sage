@@ -8,7 +8,7 @@ import { registerCommandHandlers } from "./sage/commands";
 import ActiveBot from "./sage/model/ActiveBot";
 import BotRepo from "./sage/repo/BotRepo";
 
-export async function activate(ver = "rpg-sage\n0.0.0"): Promise<void> {
+export async function activate(): Promise<void> {
 	const botCodeName = getBotCodeName();
 	const bot = await BotRepo.getByCodeName(botCodeName).catch(err => {
 		error(`BotRepo.coreByCodeName("${botCodeName}") failed!`, err);
@@ -25,7 +25,7 @@ export async function activate(ver = "rpg-sage\n0.0.0"): Promise<void> {
 
 	await registerAndLoad();
 
-	await ActiveBot.activate(botCodeName, ver);
+	await ActiveBot.activate(botCodeName);
 }
 
 /*
