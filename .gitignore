@@ -1,4 +1,5 @@
 .VSCodeCounter/
+config/
 dist/
 node_modules/
 types/
