@@ -42,7 +42,7 @@
 		"daemon": "bash scripts/daemon.sh",
 		"deploy": "bash scripts/deploy.sh",
 		"build": "bash scripts/build.sh",
-		"test": "bash scripts/run.sh",
+		"test": "bash scripts/run-dev.sh",
 		"release": "bash ./node_modules/@rsc-utils/npm-utils/scripts/release.sh"
 	}
 }

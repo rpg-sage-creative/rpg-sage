@@ -3,7 +3,8 @@
 # ensure root folder
 [ -d "./scripts" ] || cd ..
 
-bash scripts/scrub.sh pm2
+# scrub logs
+find . -type f -name '*.log' -not -path './node_modules/*' -exec rm -rf {} +
 
 bash scripts/build.sh
 
