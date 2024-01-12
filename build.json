@@ -1,12 +1,12 @@
 {
-"buildTs":1705095214000,
+"buildTs":1705097094000,
 "buildDate":"2024-01-12",
-"buildTime":"1333",
+"buildTime":"1404",
 "branch":"stable",
-"commit":"e1243a7a2ff16239d49dd667861a1145dba6925f",
-"commitSubject":"update code-version to read build-info",
-"commitTs":1705095194000,
+"commit":"abef911bd51b25f7e9d52d8c3acb0155112eecba",
+"commitSubject":"check root and parent folders for build.json",
+"commitTs":1705097083000,
 "commitDate":"2024-01-12",
-"commitTime":"1333",
+"commitTime":"1404",
 "author":"Randal T Meyer"
 }
