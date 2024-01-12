@@ -14,7 +14,4 @@ echo 'build started.'
 # do the actual build
 tsc --build tsconfig.json
 
-# ensure we have a version.txt listing this build's info
-bash scripts/version.sh
-
 echo 'build done.'
