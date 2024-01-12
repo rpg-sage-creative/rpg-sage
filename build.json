@@ -1,12 +1,12 @@
 {
-"buildTs":1705097094000,
+"buildTs":1705098574000,
 "buildDate":"2024-01-12",
-"buildTime":"1404",
+"buildTime":"1429",
 "branch":"stable",
-"commit":"abef911bd51b25f7e9d52d8c3acb0155112eecba",
-"commitSubject":"check root and parent folders for build.json",
-"commitTs":1705097083000,
+"commit":"0f46e2e45be829e65089a84452f7cd0267e1fc2b",
+"commitSubject":"clarify run-dev; remove unsafe scrub",
+"commitTs":1705098565000,
 "commitDate":"2024-01-12",
-"commitTime":"1404",
+"commitTime":"1429",
 "author":"Randal T Meyer"
 }
