@@ -3,9 +3,6 @@
 # ensure root folder
 [ -d "./scripts" ] || cd ..
 
-# scrub logs
-find . -type f -name '*.log' -not -path './node_modules/*' -exec rm -rf {} +
-
 bash scripts/build.sh
 
 DATA_ROOT="/home/ec2-user/legacy/data"
