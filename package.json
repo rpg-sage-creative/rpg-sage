@@ -26,6 +26,7 @@
 		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils",
 		"@rsc-utils/cache-utils": "github:rpg-sage-creative/cache-utils",
 		"@rsc-utils/console-utils": "github:rpg-sage-creative/console-utils",
+		"@rsc-utils/https-utils": "github:rpg-sage-creative/https-utils",
 		"@discordjs/rest": "^1.6.0",
 		"@napi-rs/canvas": "^0.1.35",
 		"discord-api-types": "^0.27.3",

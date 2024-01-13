@@ -1,7 +1,7 @@
 import { errorReturnNull } from "@rsc-utils/console-utils";
+import { getText } from "@rsc-utils/https-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
-import { getText } from "../../../sage-utils/utils/HttpsUtils";
 import { StringMatcher, capitalize } from "../../../sage-utils/utils/StringUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";

@@ -1,6 +1,6 @@
+import { getBuffer } from "@rsc-utils/https-utils";
 import * as _PDFParser from "pdf2json";
 import { deleteFileSync, writeFile } from "../FsUtils";
-import { getBuffer } from "../HttpsUtils";
 import { generate } from "../UuidUtils";
 const PDFParser: typeof _PDFParser = _PDFParser.default;
 

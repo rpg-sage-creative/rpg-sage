@@ -1,5 +1,5 @@
+import { getText } from "@rsc-utils/https-utils";
 import { existsSync, readFileSync, writeFileSync } from "fs";
-import { getText } from "../../sage-utils/utils/HttpsUtils";
 import { StringMatcher } from "../../sage-utils/utils/StringUtils";
 import type SearchResults from "../SearchResults";
 

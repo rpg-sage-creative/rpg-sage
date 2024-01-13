@@ -1,4 +1,4 @@
-import type { BufferHandlerJsonError, BufferHandlerResponse } from "../../HttpsUtils";
+import type { BufferHandlerJsonError, BufferHandlerResponse } from "@rsc-utils/https-utils";
 import type { MapRenderPayload, MapRenderResponse } from "../types";
 import { renderMap } from "./renderMap.js";
 

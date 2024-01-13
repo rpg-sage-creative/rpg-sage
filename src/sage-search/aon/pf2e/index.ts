@@ -1,9 +1,9 @@
 import { error } from "@rsc-utils/console-utils";
+import { getJson } from "@rsc-utils/https-utils";
 import { GameType } from "../../../sage-common";
 import type AonBase from "../../../sage-pf2e/model/base/AonBase";
 import type { TSortResult } from "../../../sage-utils";
 import { sortAscending, sortDescending } from "../../../sage-utils/utils/ArrayUtils/Sort";
-import { getJson } from "../../../sage-utils/utils/HttpsUtils";
 import { oneToUS } from "../../../sage-utils/utils/LangUtils";
 import type { SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { StringMatcher } from "../../../sage-utils/utils/StringUtils";

@@ -1,4 +1,5 @@
 import { debug, errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
+import { getJson } from "@rsc-utils/https-utils";
 import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/types";
@@ -1060,7 +1061,7 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 		return new Promise<TPathbuilderCharacter>(async (resolve, reject) => {
 			try {
 				const url = `https://pathbuilder2e.com/json.php?id=${id}`;
-				const json = await utils.HttpsUtils.getJson<TPathbuilderCharacterResponse>(url).catch(reject);
+				const json = await getJson<TPathbuilderCharacterResponse>(url).catch(reject);
 // utils.FsUtils.writeFileSync(`pathfbuilder2e-${id}.json`, json);
 				if (json?.success) {
 					json.build.exportJsonId = id;

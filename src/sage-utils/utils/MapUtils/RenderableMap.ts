@@ -1,6 +1,6 @@
-import type { Awaitable } from "@rsc-utils/type-utils";
 import { error, errorReturnNull, verbose, warn } from "@rsc-utils/console-utils";
-import { AppServer, AppServerEndpoint, getJson } from "../HttpsUtils";
+import { AppServer, AppServerEndpoint, getJson } from "@rsc-utils/https-utils";
+import type { Awaitable } from "@rsc-utils/type-utils";
 import { renderMap } from "./internal/renderMap.js";
 import { serverHandler } from "./internal/serverHandler.js";
 import type { GameMap, GameMapBackgroundImage, GameMapData, GameMapLayer, MapRenderPayload, MapRenderResponse, MimeType } from "./types";
