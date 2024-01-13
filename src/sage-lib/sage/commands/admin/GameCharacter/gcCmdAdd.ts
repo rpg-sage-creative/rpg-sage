@@ -1,4 +1,4 @@
-import type { Optional } from "../../../../../sage-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type CharacterManager from "../../../model/CharacterManager";
 import GameCharacter from "../../../model/GameCharacter";
 import type SageMessage from "../../../model/SageMessage";

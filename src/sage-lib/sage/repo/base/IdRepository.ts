@@ -5,8 +5,8 @@ import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../..
 import utils, { type UUID } from "../../../../sage-utils";
 import { EphemeralMap } from "../../../../sage-utils/utils/ArrayUtils/EphemeralMap";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
-import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, getEnv, verbose } from "../../../../sage-utils/utils/ConsoleUtils";
-import { getDataRoot } from "../../../../sage-utils/utils/EnvUtils";
+import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, verbose } from "../../../../sage-utils/utils/ConsoleUtils";
+import { getBotCodeName, getDataRoot } from "../../../../sage-utils/utils/EnvUtils";
 import type { DicePostType } from "../../commands/dice";
 import type SageCache from "../../model/SageCache";
 
@@ -190,7 +190,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 		}
 
 		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${entity.id}.json`;
-		const formatted = getEnv() === "dev";
+		const formatted = getBotCodeName() === "dev";
 		const saved = await utils.FsUtils.writeFile(path, entity.toJSON(), true, formatted).catch(errorReturnFalse);
 		if (saved) {
 			this.cacheId(entity.id, entity);

@@ -1,4 +1,4 @@
-import type { Optional } from "../../../../../sage-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
 import type SageMessage from "../../../model/SageMessage";
 

@@ -1,4 +1,4 @@
-import type { Optional } from "../../../../../sage-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { CharacterShell } from "../../../model/CharacterShell";
 import type Game from "../../../model/Game";
 import type { HasCharacters } from "./HasCharacters";

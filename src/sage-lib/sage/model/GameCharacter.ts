@@ -1,12 +1,13 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, TPathbuilderCharacter, getExplorationModes, getSkills } from "../../../sage-pf2e";
-import type { Optional, UUID } from "../../../sage-utils";
+import type { UUID } from "../../../sage-utils";
 import { DiscordKey, NilSnowflake } from "../../discord";
+import { DialogType } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";
 import type { IHasSave } from "./NamedCollection";
 import NoteManager, { type TNote } from "./NoteManager";
-import { DialogType } from "../repo/base/IdRepository";
 import { TKeyValuePair } from "./SageMessageArgsManager";
 
 export type TDialogMessage = {

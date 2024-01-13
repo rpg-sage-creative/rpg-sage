@@ -1,8 +1,8 @@
+import { Optional } from "@rsc-utils/type-utils";
 import type { Snowflake } from "discord.js";
-import type { Optional } from "../../../../sage-utils";
-import type SageMessage from "../../model/SageMessage";
-import type { TDialogMessage } from "../../model/GameCharacter";
 import { DiscordId, DiscordKey, NilSnowflake } from "../../../discord";
+import type { TDialogMessage } from "../../model/GameCharacter";
+import type SageMessage from "../../model/SageMessage";
 import DialogMessageRepository from "../../repo/DialogMessageRepository";
 
 export async function findLastMessage(sageMessage: SageMessage, messageDid: Optional<Snowflake>): Promise<TDialogMessage | null> {
