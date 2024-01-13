@@ -1,3 +1,5 @@
+import { error } from "@rsc-utils/console-utils";
+
 /**
  * @private
  * Designed for reading a Foundry .db file that is a list of json items on each line, but not an array.
@@ -11,7 +13,7 @@ export function parseJsonDb<T>(raw: string): T[] {
 			try {
 				objects.push(JSON.parse(trimmed));
 			}catch(ex) {
-				console.error({ index, ex });
+				error({ index, ex });
 			}
 		}
 	});

@@ -1,6 +1,6 @@
+import { error } from "@rsc-utils/console-utils";
 import * as Discord from "discord.js";
 import utils from "../../sage-utils";
-import { error } from "../../sage-utils/utils/ConsoleUtils";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageCache from "../sage/model/SageCache";
 import type SageInteraction from "../sage/model/SageInteraction";

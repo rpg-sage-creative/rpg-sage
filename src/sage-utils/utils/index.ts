@@ -3,7 +3,6 @@ export * as ArrayUtils from "./ArrayUtils";
 export * as AwsUtilsShim from "./AwsUtils";
 export * as ClassUtils from "./ClassUtils";
 export * as ColorUtils from "./ColorUtils";
-export * as ConsoleUtils from "./ConsoleUtils";
 export * as DateUtils from "./DateUtils";
 export * as EnumUtils from "./EnumUtils";
 export * as FsUtils from "./FsUtils";

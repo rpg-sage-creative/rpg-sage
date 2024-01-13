@@ -83,7 +83,7 @@
 // 		// else if (reaction === "alt") { }
 // 		else { return null; }
 // 		return channelWizardRenderable(title, gameChannels, menuIndex);
-// 	}).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+// 	}).catch(errorReturnNull);
 
 // 	return gameChannels;
 // }

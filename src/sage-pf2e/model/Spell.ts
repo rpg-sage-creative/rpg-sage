@@ -1,15 +1,15 @@
+import { debug } from "@rsc-utils/console-utils";
 import utils, { UUID } from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
-import { debug } from "../../sage-utils/utils/ConsoleUtils";
 import type { TMagicComponent, TMagicTradition } from '../common';
 import { ABILITIES, NEWLINE, toModifier } from '../common';
 import RenderableContent from '../data/RenderableContent';
 import { find, findByValue } from '../data/Repository';
 import type ArcaneSchool from './ArcaneSchool';
-import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
 import type Domain from './Domain';
 import HeightenedSpell from "./HeightenedSpell";
+import type { SourcedCore } from "./base/HasSource";
+import HasSource from './base/HasSource';
 
 //#region types
 

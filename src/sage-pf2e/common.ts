@@ -1,8 +1,8 @@
+import { warn } from "@rsc-utils/console-utils";
+
 //#region EventListener and EventHandler
 // type TEventListener<T> = (object: T) => void;
 // interface IEventHandler<T> { eventName:string; listeners:TEventListener<T>[]; }
-
-import { warn } from "../sage-utils/utils/ConsoleUtils";
 
 // let handlers: IEventHandler<any>[] = [];
 // export namespace EventHandler {

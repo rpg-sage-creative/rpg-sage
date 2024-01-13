@@ -1,5 +1,5 @@
+import { errorReturnEmptyArray } from "@rsc-utils/console-utils";
 import type { Message, MessageAttachment, WebhookMessageOptions } from "discord.js";
-import { errorReturnEmptyArray } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
 import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import { replaceWebhook, sendWebhook } from "../../../discord/messages";
 import type SageMessage from "../../model/SageMessage";

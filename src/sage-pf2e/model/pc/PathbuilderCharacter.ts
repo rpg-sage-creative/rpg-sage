@@ -1,10 +1,9 @@
+import { debug, errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
 import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/types";
 import utils from "../../../sage-utils";
 import CharacterBase, { CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
-import { debug } from "../../../sage-utils/utils/ConsoleUtils";
-import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../sage-utils/utils/FsUtils";
 import type { GetStatPrefix, TProficiency, TSavingThrow } from "../../common";
 import { getSavingThrows, toModifier } from "../../common";

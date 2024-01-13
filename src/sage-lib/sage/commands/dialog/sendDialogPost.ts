@@ -1,5 +1,5 @@
-import { type Message, MessageAttachment } from "discord.js";
-import { errorReturnEmptyArray, errorReturnNull, warnReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { errorReturnEmptyArray, errorReturnNull, warnReturnNull } from "@rsc-utils/console-utils";
+import { MessageAttachment, type Message } from "discord.js";
 import { getBuffer } from "../../../../sage-utils/utils/HttpsUtils";
 import { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import { DiscordKey } from "../../../discord";

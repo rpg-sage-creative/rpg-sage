@@ -1,5 +1,5 @@
+import { error } from "@rsc-utils/console-utils";
 import utils, { SeasonType } from "../../sage-utils";
-import { error } from "../../sage-utils/utils/ConsoleUtils";
 
 export enum ElevationType { SeaLevel, Lowland, Highland }
 export enum ClimateType { Cold, Temperate, Tropical }

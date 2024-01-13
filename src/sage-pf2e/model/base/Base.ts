@@ -1,6 +1,6 @@
+import { warn } from "@rsc-utils/console-utils";
 import utils, { IComparable, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
 import { IdCore } from "../../../sage-utils/utils/ClassUtils";
-import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { NEWLINE, TAB } from "../../common";
 import RenderableContent from "../../data/RenderableContent";
 import type {

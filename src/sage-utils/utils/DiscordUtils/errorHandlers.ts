@@ -1,4 +1,4 @@
-import { error, warn } from "../ConsoleUtils";
+import { error, warn } from "@rsc-utils/console-utils";
 import { toHumanReadable } from "./humanReadable";
 
 //#region generic error types
@@ -34,7 +34,7 @@ function isInvalidFormBodyError(reason: any): reason is TInvalidFormBodyError {
 function handleInvalidFormBodyError(reason: any): boolean {
 	if (isInvalidFormBodyError(reason)) {
 		const stringValue = Object.prototype.toString.call(reason);
-		console.error(stringValue);
+		error(stringValue);
 		return true;
 	}
 	return false;

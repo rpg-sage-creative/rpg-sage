@@ -1,5 +1,5 @@
+import { warn } from "@rsc-utils/console-utils";
 import utils, { UUID } from "../../../sage-utils";
-import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import type HasSource from "./HasSource";
 import Source from "./Source";
 

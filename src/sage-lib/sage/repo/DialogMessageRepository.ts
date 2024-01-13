@@ -1,4 +1,4 @@
-import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils";
+import { errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
 import { readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import type { DiscordKey } from "../../discord";
 import type { TDialogMessage } from "../model/GameCharacter";

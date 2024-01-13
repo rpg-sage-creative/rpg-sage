@@ -1,5 +1,5 @@
+import { errorReturnNull } from "@rsc-utils/console-utils";
 import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
-import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils";
 import { discordPromptYesNo } from "../../../discord/prompts";
 import type Emoji from "../../model/Emoji";
 import type Game from "../../model/Game";

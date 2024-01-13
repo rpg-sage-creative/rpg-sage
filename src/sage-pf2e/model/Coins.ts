@@ -1,6 +1,6 @@
+import { warn } from "@rsc-utils/console-utils";
 import utils, { IComparable, TSortResult } from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
-import { warn } from "../../sage-utils/utils/ConsoleUtils";
 import Bulk from "./Bulk";
 
 type TMoney = number | string | Coins;

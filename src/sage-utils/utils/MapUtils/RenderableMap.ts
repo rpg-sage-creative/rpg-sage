@@ -1,5 +1,5 @@
 import type { Awaitable } from "@rsc-utils/type-utils";
-import { error, errorReturnNull, verbose, warn } from "../ConsoleUtils";
+import { error, errorReturnNull, verbose, warn } from "@rsc-utils/console-utils";
 import { AppServer, AppServerEndpoint, getJson } from "../HttpsUtils";
 import { renderMap } from "./internal/renderMap.js";
 import { serverHandler } from "./internal/serverHandler.js";

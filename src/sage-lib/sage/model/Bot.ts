@@ -1,6 +1,6 @@
+import { warn } from "@rsc-utils/console-utils";
 import type * as Discord from "discord.js";
 import type { GameType } from "../../../sage-common";
-import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository";
 import Colors from "./Colors";
 import Emoji from "./Emoji";

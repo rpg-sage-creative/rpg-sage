@@ -1,5 +1,5 @@
 
-import { debug, errorReturnEmptyArray } from "../ConsoleUtils";
+import { debug, errorReturnEmptyArray } from "@rsc-utils/console-utils";
 import { listFiles } from "../FsUtils";
 import type { UUID } from "../types";
 

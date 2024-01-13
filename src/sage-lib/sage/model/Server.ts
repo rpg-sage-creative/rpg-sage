@@ -1,9 +1,9 @@
+import { warn } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils from "../../../sage-utils";
-import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { DiscordKey } from "../../discord";
 import { DicePostType } from "../commands/dice";
 import ActiveBot from "../model/ActiveBot";

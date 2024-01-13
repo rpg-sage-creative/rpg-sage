@@ -1,12 +1,12 @@
-import { warn } from "../../sage-utils/utils/ConsoleUtils";
+import { warn } from "@rsc-utils/console-utils";
 import type { HasContents, HasParent, HasQuantity, IHasContents, IHasParent, IHasQuantity, TContentItem, TContentItemArray, TObjectQuantity } from "../common";
 import { MDASH } from "../common";
 import { filter, findByValue } from "../data/Repository";
 import type { TDetail } from "../model/base/interfaces";
+import Bulk from "./Bulk";
 import type Base from "./base/Base";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from "./base/HasSource";
-import Bulk from "./Bulk";
 
 export function toObjectQuantities<T extends HasBulk>(contentItems: TContentItemArray, defaultObjectType: string): TObjectQuantity<T>[] {
 	return (contentItems ?? []).map(contentItem => toObjectQuantity(contentItem, defaultObjectType));

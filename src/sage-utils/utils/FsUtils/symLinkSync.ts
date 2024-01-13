@@ -1,3 +1,4 @@
+import { error } from "@rsc-utils/console-utils";
 import { mkdirSync, rmSync, symlinkSync } from "fs";
 import { toFilePath } from "./internal/toFilePath";
 
@@ -11,7 +12,7 @@ export function symLinkSync(target: string, path: string, options?: Options): bo
 			mkdirSync(toFilePath(path), { recursive:true });
 		}
 	}catch(ex) {
-		console.error(ex);
+		error(ex);
 	}
 	try {
 		// let's just try to make it and catch the EEXIST error
@@ -20,7 +21,7 @@ export function symLinkSync(target: string, path: string, options?: Options): bo
 	}catch(outer: any) {
 		const overwrite = outer.code === "EEXIST" && options?.overwrite;
 		if (!overwrite) {
-			console.error(outer);
+			error(outer);
 			return false;
 		}
 
@@ -32,7 +33,7 @@ export function symLinkSync(target: string, path: string, options?: Options): bo
 			symlinkSync(target, path, "file");
 
 		}catch(inner) {
-			console.error(inner);
+			error(inner);
 			return false;
 		}
 	}

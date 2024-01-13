@@ -1,4 +1,4 @@
-import { captureProcessExit } from "./sage-utils/utils/ConsoleUtils";
+import { captureProcessExit } from "@rsc-utils/console-utils";
 import { getPort } from "./sage-utils/utils/EnvUtils";
 import { RenderableMap } from "./sage-utils/utils/MapUtils";
 

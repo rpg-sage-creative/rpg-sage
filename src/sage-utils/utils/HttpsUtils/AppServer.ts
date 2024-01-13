@@ -1,5 +1,5 @@
-import { error, log } from "../ConsoleUtils";
-import { createServer, Server, IncomingMessage } from "http";
+import { error, info, verbose } from "@rsc-utils/console-utils";
+import { IncomingMessage, Server, createServer } from "http";
 
 export type AppServerEndpoint = {
 	secure: boolean;
@@ -46,7 +46,8 @@ export class AppServer<T> {
 		const url = req ? `("${req.url}")` : ``;
 		const dot = ev ? `.` : ``;
 		const msg = ev ?? "";
-		log(level, `AppServer<${this.name}>${url}${dot}${msg}`);
+		const logger = level === "info" ? info : verbose;
+		logger(level, `AppServer<${this.name}>${url}${dot}${msg}`);
 	}
 	protected verbose(ev: string): void;
 	protected verbose(req: IncomingMessage): void;

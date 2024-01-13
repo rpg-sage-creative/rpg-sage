@@ -1,7 +1,7 @@
 import { uncache } from "@rsc-utils/cache-utils";
+import { debug, errorReturnFalse, silly } from "@rsc-utils/console-utils";
 import type * as Discord from "discord.js";
 import utils from "../../../sage-utils";
-import { debug, errorReturnFalse, silly } from "../../../sage-utils/utils/ConsoleUtils";
 import { DInteraction, DMessage, DReaction, DUser, DiscordCache, DiscordKey, NilSnowflake, TChannel } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
 import ActiveBot from "../model/ActiveBot";

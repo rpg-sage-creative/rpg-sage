@@ -1,7 +1,7 @@
 import { EphemeralSet } from "@rsc-utils/cache-utils";
+import { debug, errorReturnNull } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { Snowflake } from "discord.js";
-import { debug, errorReturnNull } from "../../sage-utils/utils/ConsoleUtils";
 import GameMapBase from "../sage/commands/map/GameMapBase";
 import { DMessage } from "./types";
 

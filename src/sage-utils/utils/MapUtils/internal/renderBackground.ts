@@ -1,5 +1,5 @@
 import { SKRSContext2D, createCanvas } from "@napi-rs/canvas";
-import { error, verbose } from "../../ConsoleUtils";
+import { error, verbose } from "@rsc-utils/console-utils";
 import { calculateValidClip } from "./calculateValidClip.js";
 import { loadImage } from "./loadImage.js";
 import type { MapCache } from "./types";

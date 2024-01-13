@@ -1,4 +1,4 @@
-import { verbose } from "../ConsoleUtils";
+import { verbose } from "@rsc-utils/console-utils";
 import { getProtocol } from "./getProtocol.js";
 
 /**

@@ -2,7 +2,7 @@ import utils from "../../sage-utils";
 
 import * as Repository from '../data/Repository';
 
-import { warn } from "../../sage-utils/utils/ConsoleUtils";
+import { warn } from "@rsc-utils/console-utils";
 import type Domain from "./Domain";
 import type Skill from './Skill';
 import type Spell from './Spell';

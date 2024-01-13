@@ -1,7 +1,7 @@
+import { warn } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
 import utils, { TDisplayType, TRenderableContentSection } from "../../sage-utils";
-import { warn } from "../../sage-utils/utils/ConsoleUtils";
 import type SageCache from "../sage/model/SageCache";
 import { DiscordMaxValues } from "./consts";
 import type { TRenderableContentResolvable } from "./types";

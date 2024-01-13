@@ -1,10 +1,8 @@
+import { warn } from "@rsc-utils/console-utils";
 import utils, { UUID } from "../../../sage-utils";
 import { IdCore } from "../../../sage-utils/utils/ClassUtils";
-import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import type { TQuality } from "../../common";
 import { findById } from "../../data/Repository";
-import type Base from "../base/Base";
-import type HasSource from "../base/HasSource";
 import Bulk from "../Bulk";
 import Coins from "../Coins";
 import type Gear from "../Gear";
@@ -12,6 +10,8 @@ import type HasBulk from "../HasBulk";
 import type { BulkCore } from "../HasBulk";
 import type { IMetadata } from "../Metadata";
 import type Spell from "../Spell";
+import type Base from "../base/Base";
+import type HasSource from "../base/HasSource";
 import type Equipment from "./Equipment";
 import type EquipmentList from "./EquipmentList";
 

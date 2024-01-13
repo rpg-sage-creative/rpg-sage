@@ -1,7 +1,7 @@
+import { error, verbose, warn } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined, isNullOrUndefined } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
-import { error, verbose, warn } from "../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
 import SageInteraction from "../sage/model/SageInteraction";
 import SageMessage from "../sage/model/SageMessage";

@@ -1,7 +1,7 @@
+import { error } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { IRenderable, TDisplayType, TRenderableContentSection, TRenderableContentSectionColumn } from "../..";
 import { unique } from "../ArrayUtils/Filters";
-import { error } from "../ConsoleUtils";
 
 function createSection(index = 0, title: string | null = null, content = <string[]>[], columns = <TRenderableContentSectionColumn[]>[]): TRenderableContentSection {
 	return { index, title:title, content, columns };

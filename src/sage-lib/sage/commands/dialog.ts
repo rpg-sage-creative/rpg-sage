@@ -1,4 +1,4 @@
-import { debug } from "../../../sage-utils/utils/ConsoleUtils";
+import { debug } from "@rsc-utils/console-utils";
 import { MessageType, ReactionType, TCommandAndArgsAndData } from "../../discord";
 import { registerMessageListener, registerReactionListener } from "../../discord/handlers";
 import type SageMessage from "../model/SageMessage";

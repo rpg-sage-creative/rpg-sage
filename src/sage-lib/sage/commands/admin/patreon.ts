@@ -1,4 +1,4 @@
-import { verbose } from "../../../../sage-utils/utils/ConsoleUtils";
+import { verbose } from "@rsc-utils/console-utils";
 import { toHumanReadable } from "../../../../sage-utils/utils/DiscordUtils/humanReadable";
 import { send } from "../../../discord/messages";
 import type SageCache from "../../model/SageCache";

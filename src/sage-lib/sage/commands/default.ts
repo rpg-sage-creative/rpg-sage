@@ -1,6 +1,6 @@
+import { debug, error, verbose } from "@rsc-utils/console-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
-import { debug, error, verbose } from "../../../sage-utils/utils/ConsoleUtils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import ArgsManager from "../../discord/ArgsManager";

@@ -1,5 +1,5 @@
+import { errorReturnEmptyArray } from "@rsc-utils/console-utils";
 import { GameType } from "../../../../sage-common";
-import { errorReturnEmptyArray } from "../../../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../../../sage-utils/utils/DiscordUtils/humanReadable";
 import { getBuildInfo } from "../../../../sage-utils/utils/EnvUtils/getBuildInfo";
 import type Bot from "../../model/Bot";

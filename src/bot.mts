@@ -1,5 +1,5 @@
+import { captureProcessExit } from "@rsc-utils/console-utils";
 import { activate } from "./sage-lib";
-import { captureProcessExit } from "./sage-utils/utils/ConsoleUtils";
 
 captureProcessExit();
 activate();

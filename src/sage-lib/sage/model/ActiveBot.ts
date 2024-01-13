@@ -1,7 +1,7 @@
+import { addLogHandler, captureProcessExit, error, formatArg, info, verbose, type LogLevel } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
 import utils from "../../../sage-utils";
-import { LogLevel, captureProcessExit, error, info, verbose } from "../../../sage-utils/utils/ConsoleUtils";
 import { MessageType, ReactionType } from "../../discord";
 import { setDeleted } from "../../discord/deletedMessages";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
@@ -124,7 +124,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 			this.sageCache = sageCache;
 			ActiveBot.active = this;
 
-			utils.ConsoleUtils.addLogHandler("error", consoleHandler.bind(this));
+			addLogHandler("error", consoleHandler.bind(this));
 
 			info(`Discord.Client.on("ready") [success]`);
 			// Notify super user of successful start.
@@ -136,7 +136,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 
 		async function consoleHandler(this: ActiveBot, logLevel: LogLevel, ...args: any[]): Promise<void> {
 			this.devs.forEach(dev => {
-				const contents = `# ${logLevel}\n${args.map(utils.ConsoleUtils.formatArg).join("\n")}`;
+				const contents = `# ${logLevel}\n${args.map(formatArg).join("\n")}`;
 				const chunks = utils.StringUtils.chunk(contents, 2000);
 				this.sageCache.discord.fetchUser(dev.did)
 					.then(user => user ? chunks.forEach(chunk => user.send(chunk)) : void 0);

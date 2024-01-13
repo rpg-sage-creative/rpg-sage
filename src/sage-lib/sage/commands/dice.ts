@@ -1,10 +1,10 @@
+import { debug, error } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
 import type { GameType } from "../../../sage-common";
 import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "../../../sage-dice";
 import { NEWLINE } from "../../../sage-pf2e";
 import type { TKeyValueArg } from "../../../sage-utils";
-import { debug, error } from "../../../sage-utils/utils/ConsoleUtils";
 import { createMessageLink } from "../../../sage-utils/utils/DiscordUtils/createMessageLink";
 import { toHumanReadable } from "../../../sage-utils/utils/DiscordUtils/humanReadable";
 import { addCommas } from "../../../sage-utils/utils/NumberUtils";

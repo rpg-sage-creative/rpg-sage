@@ -1,5 +1,5 @@
 import { Image, loadImage as _loadImage } from "@napi-rs/canvas";
-import { errorReturnNull } from "../../ConsoleUtils";
+import { errorReturnNull } from "@rsc-utils/console-utils";
 import type { ImageMeta } from "../types";
 import type { MapCache } from "./types";
 

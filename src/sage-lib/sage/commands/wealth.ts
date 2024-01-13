@@ -1,6 +1,6 @@
+import { debug } from "@rsc-utils/console-utils";
 import { Coins, PROFICIENCIES, TProficiency, Table } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
-import { debug } from "../../../sage-utils/utils/ConsoleUtils";
 import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";

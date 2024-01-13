@@ -1,3 +1,4 @@
+import { error } from "@rsc-utils/console-utils";
 import { writeFileSync as fsWriteFileSync, mkdirSync } from "fs";
 import { contentToFileOutput } from "./internal/contentToFileOutput";
 import { toFilePath } from "./internal/toFilePath";
@@ -14,12 +15,12 @@ export function writeFileSync<T>(filePathAndName: string, content: T, makeDir?: 
 			mkdirSync(toFilePath(filePathAndName), { recursive:true });
 		}
 	} catch(ex) {
-		console.error(ex);
+		error(ex);
 	}
 	try {
 		fsWriteFileSync(filePathAndName, contentToFileOutput(content, formatted));
 	} catch(ex) {
-		console.error(ex);
+		error(ex);
 		return false;
 	}
 	return true;

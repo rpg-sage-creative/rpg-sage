@@ -1,10 +1,10 @@
+import { warn } from "@rsc-utils/console-utils";
 import type { Optional, OrNull } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
 import type { GameType } from "../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils, { type IComparable, type UUID } from "../../../sage-utils";
 import { IdCore } from "../../../sage-utils/utils/ClassUtils";
-import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { DiscordKey } from "../../discord";
 import type { DicePostType } from "../commands/dice";
 import type { EncounterCore } from "../commands/trackers/encounter/Encounter";

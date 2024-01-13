@@ -1,7 +1,7 @@
+import { warn } from "@rsc-utils/console-utils";
 import { GameType } from "../sage-common";
 import utils, { TToken } from "../sage-utils";
 import { IdCore } from "../sage-utils/utils/ClassUtils";
-import { warn } from "../sage-utils/utils/ConsoleUtils";
 import type { TDiceRoll } from "./dice/base/types";
 
 //#region rpg.common.ts

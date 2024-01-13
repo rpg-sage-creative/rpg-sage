@@ -1,4 +1,4 @@
-import { error, verbose } from "../../ConsoleUtils";
+import { error, verbose } from "@rsc-utils/console-utils";
 import type { GameMapLayerImage } from "../types";
 import { calculateValidClip } from "./calculateValidClip.js";
 import { gridOffsetToZeroZero } from "./gridOffsetToZeroZero.js";

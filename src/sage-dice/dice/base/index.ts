@@ -1,12 +1,12 @@
 //#region imports
 
+import { warn } from "@rsc-utils/console-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { correctEscapeForEmoji } from "..";
 import { GameType } from "../../../sage-common";
 import type { TParsers, TSortResult, TToken } from "../../../sage-utils";
 import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { Tokenizer, cleanWhitespace, dequote, escapeForRegExp } from "../../../sage-utils/utils/StringUtils";
 import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {

@@ -1,6 +1,6 @@
 import { Cache } from "@rsc-utils/cache-utils";
+import { debug } from "@rsc-utils/console-utils";
 import type * as Discord from "discord.js";
-import { debug } from "../../../sage-utils/utils/ConsoleUtils";
 import { ReactionType } from "../../discord";
 import type { HasSageCacheCore } from "./HasSageCache";
 import HasSageCache from "./HasSageCache";

@@ -1,5 +1,5 @@
+import { info } from "@rsc-utils/console-utils";
 import type * as Discord from "discord.js";
-import { info } from "../../../sage-utils/utils/ConsoleUtils";
 import ActiveBot from "../model/ActiveBot";
 import type SageCache from "../model/SageCache";
 import Server, { ServerCore } from "../model/Server";

@@ -1,6 +1,6 @@
+import { debug } from "@rsc-utils/console-utils";
 import { EmojiIdentifierResolvable, Message, MessageActionRow, MessageButton, MessageButtonStyle, MessageSelectMenu } from "discord.js";
 import type { Encounter } from "./Encounter";
-import { debug } from "../../../../../sage-utils/utils/ConsoleUtils";
 
 type EncounterStatusActionType = "start" | "stop" | "charSelect";
 

@@ -1,3 +1,4 @@
+import { error } from "@rsc-utils/console-utils";
 import { readdirSync } from "fs";
 
 /**
@@ -19,7 +20,7 @@ export function listFilesSync(path: string, ext?: string): string[] {
 		}
 		return files;
 	}catch(ex) {
-		console.error(ex);
+		error(ex);
 	}
 	return [];
 }

@@ -1,5 +1,5 @@
+import { warn } from "@rsc-utils/console-utils";
 import utils, { type TSimpleDice } from "../../sage-utils";
-import { warn } from "../../sage-utils/utils/ConsoleUtils";
 import { ClimateType, WindType } from "./weather";
 
 export interface TableItem { min: number; max: number; }

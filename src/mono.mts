@@ -1,5 +1,5 @@
+import { captureProcessExit } from "@rsc-utils/console-utils";
 import { activate } from "./sage-lib";
-import { captureProcessExit } from "./sage-utils/utils/ConsoleUtils";
 import { getPort } from "./sage-utils/utils/EnvUtils";
 import { RenderableMap } from "./sage-utils/utils/MapUtils";
 

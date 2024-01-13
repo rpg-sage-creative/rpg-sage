@@ -1,4 +1,4 @@
-import { verbose } from "../ConsoleUtils";
+import { verbose } from "@rsc-utils/console-utils";
 import { getText } from "./getText.js";
 
 /** Convenience wrapper for getText(url).then(text => JSON.parse(text)) */
