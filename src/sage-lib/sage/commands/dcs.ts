@@ -1,12 +1,13 @@
-import utils, { Optional } from "../../../sage-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { PROFICIENCIES, Table } from "../../../sage-pf2e";
+import utils from "../../../sage-utils";
+import { registerSlashCommand } from "../../../slash.mjs";
+import type { TSlashCommand } from "../../../types";
+import { registerInteractionListener } from "../../discord/handlers";
+import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
-import { registerSlashCommand } from "../../../slash.mjs";
-import type SageInteraction from "../model/SageInteraction";
-import type { TSlashCommand } from "../../../types";
-import { registerInteractionListener } from "../../discord/handlers";
 
 //#region simple dcs
 

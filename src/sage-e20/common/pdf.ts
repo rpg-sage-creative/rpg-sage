@@ -1,4 +1,4 @@
-import type { Optional } from "../../sage-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { isBlank } from "../../sage-utils/utils/StringUtils";
 
 export type TTextField = { name:string; value:string; };

@@ -1,11 +1,13 @@
-import utils, { isDefined, Optional, OrNull, OrUndefined, TUuidMatcher, UUID } from "../../sage-utils";
-import { debug, verbose, warn } from "../../sage-utils/utils/ConsoleUtils";
+import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import { isDefined } from "@rsc-utils/type-utils";
+import utils, { type TUuidMatcher, type UUID } from "../../sage-utils";
+import { debug, errorReturnEmptyArray, verbose, warn } from "../../sage-utils/utils/ConsoleUtils";
+import { getDataRoot } from "../../sage-utils/utils/EnvUtils";
 import type { TEntity } from "../model";
 import type AonBase from "../model/base/AonBase";
 import type Base from "../model/base/Base";
 import type { BaseCore } from "../model/base/Base";
 import type HasSource from "../model/base/HasSource";
-import Pf2tBase, { type Pf2tBaseCore } from "../model/base/Pf2tBase";
 import type { SourceCore } from "../model/base/Source";
 import Source from "../model/base/Source";
 import type Creature from "../model/bestiary/Creature";
@@ -81,7 +83,7 @@ export function all(objectType: string, source?: string): Base[] {
 }
 
 export function filter<T extends string, U extends TEntity<T> = TEntity<T>>(objectType: T, callbackfn: BaseFilterCallbackFn<U>): U[] {
-	return _all<U>(objectType).filter(callbackfn);
+	return _all<any>(objectType).filter(callbackfn);
 }
 
 export function find(objectType: "Source", predicate: BaseFilterCallbackFn<Source>): OrUndefined<Source>;
@@ -95,7 +97,7 @@ export function find<T extends Base | HasSource>(objectType: string, sourceOrPre
 }
 
 function _findById<T extends string, U extends TEntity<T> = TEntity<T>>(objectType: T, uuidMatcher: TUuidMatcher): OrUndefined<U> {
-	return _all<U>(objectType).find(base => base.equals(uuidMatcher));
+	return _all<any>(objectType).find(base => base.equals(uuidMatcher));
 }
 
 export function findByAonBase<T extends Base | HasSource>(aonBase: AonBase): OrUndefined<T> {
@@ -157,16 +159,6 @@ export function random<T extends Base>(objectType: string, predicate?: BaseFilte
 //#region load data
 
 const missing: string[] = [];
-
-export function loadData(dataPath: string, includePf2ToolsData = false): Promise<void> {
-	const distPath = `${dataPath}/dist`.replace(/\/+/g, "/");
-	return loadDataFromDist(distPath).then(() => {
-		if (includePf2ToolsData) {
-			return loadFromPF2t(distPath);
-		}
-		return Promise.resolve();
-	});
-}
 
 function handleMissingObjectType(core: BaseCore, fromLabel: string): void {
 	if (!missing.includes(core.objectType)) {
@@ -233,11 +225,12 @@ function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 	return 1 + childrenParsed;
 }
 
-async function loadDataFromDist(distPath: string): Promise<void> {
-	const files: string[] = await utils.FsUtils.filterFiles(distPath, file => file.endsWith(".json") && !file.includes("pf2t-leftovers"), true)
-		.catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+export async function loadData(): Promise<void> {
+	const pf2DataPath = `${getDataRoot("pf2e")}`.replace(/\/+/g, "/");
+	const files: string[] = await utils.FsUtils.filterFiles(pf2DataPath, file => file.endsWith(".json"), true)
+		.catch(errorReturnEmptyArray);
 	if (!files.length) {
-		warn(`No files in "${distPath}" ...`);
+		warn(`No files in "${pf2DataPath}" ...`);
 		return Promise.resolve();
 	}
 
@@ -258,27 +251,6 @@ async function loadDataFromDist(distPath: string): Promise<void> {
 	verbose(`\t\t${coresLoaded} Total Cores loaded`);
 
 	return Promise.resolve();
-}
-
-async function loadFromPF2t(distPath: string): Promise<void> {
-	const pathAndFile = `${distPath}/pf2t-leftovers.json`;
-	const cores = await utils.FsUtils.readJsonFile<Pf2tBaseCore[]>(pathAndFile).catch(() => null) ?? [];
-	verbose(`\t\t${cores.length} Total PF2 Tools Cores loaded`);
-	cores.forEach(core => {
-		const data = new Pf2tBase(core);
-		if (!repoMap.has(data.objectType)) {
-			repoMap.set(data.objectType, {
-				constructor: null!,
-				objectType: data.objectType,
-				objectTypeLower: data.objectType.toLowerCase(),
-				objectTypePlural: data.objectType + "s",
-				objectTypePluralLower: data.objectType.toLowerCase() + "s",
-				objects: [],
-				erratad: []
-			});
-		}
-		repoMap.get(data.objectType)!.objects.push(data);
-	});
 }
 
 //#endregion

@@ -1,16 +1,20 @@
 #!/bin/bash
 
-# import constants and functions
-[ -f "./inc/all.sh" ] && source "./inc/all.sh" || source "./scripts/inc/all.sh"
+# ensure root folder
+[ -d "./scripts" ] || cd ..
 
-echoLog "build.sh starting ..."
+# scrub build folders
+find . -type d -name 'build' -not -path './node_modules/*' -exec rm -rf {} +
 
-if [ "$PKG" = "data" ]; then
-	echoLog "processData ?"
-else
-	echoAndDo "cd $sageRootDir"
-	echoAndDo "rm -rf tsconfig.tsbuildinfo"
-	echoAndDo "tsc --build tsconfig.json"
-fi
+# scrub build info
+find . -type f -name 'tsconfig.tsbuildinfo' -not -path './node_modules/*' -exec rm -rf {} +
 
-echoLog "build.sh done."
+# ensure we aren't missing things like pdf2json/index.d.ts
+bash scripts/node-module-fixes.sh
+
+echo 'build started.'
+
+# do the actual build
+tsc --build tsconfig.json
+
+echo 'build done.'

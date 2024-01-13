@@ -1,6 +1,6 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import type { TSkillDie } from "../../sage-dice/dice/essence20";
-import type { Optional } from "../../sage-utils";
-import PlayerCharacterE20, { orQ, PlayerCharacterCoreE20, TAbilityName, TStatE20 } from "../common/PlayerCharacterE20";
+import PlayerCharacterE20, { PlayerCharacterCoreE20, TAbilityName, TStatE20, orQ } from "../common/PlayerCharacterE20";
 
 export type TStatPR = TStatE20 & {
 	morphed?: string;

@@ -127,7 +127,7 @@ function registerDowntime(): void {
 // function linkToUrl(link: TLink): string { return `<a href="${link.url}">${link.title}</a>`; }
 // async function pfsLinks(sageMessage: SageMessage): Promise<void> {
 // 	if (!links || !links.length) {
-// 		links = await utils.FsUtils.readJsonFile<TLink[]>("./data/pf2e/json/links.json");
+// 		links = await utils.FsUtils.readJsonFile<TLink[]>("getDataRoot("pf2e")/json/links.json");
 // 	}
 // 	let renderableContent = createPfsRenderableContent(sageMessage);
 // 	renderableContent.setTitle("<b>Helpful Links (Second Edition)</b>");

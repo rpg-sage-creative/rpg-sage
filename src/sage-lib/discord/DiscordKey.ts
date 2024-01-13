@@ -1,5 +1,5 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
-import type { Optional } from "../../sage-utils";
 import { NilSnowflake } from "./consts";
 import type { DInteraction, DMessage, TChannel } from "./types";
 

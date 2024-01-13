@@ -1,12 +1,12 @@
-import type { OrNull, OrUndefined } from "../../../sage-utils";
-import utils, { UUID } from "../../../sage-utils";
+import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import utils, { type UUID } from "../../../sage-utils";
 import type { TRarity } from "../../common";
 import { COMMON, RARITIES } from "../../common";
 import RenderableContent from "../../data/RenderableContent";
 import * as Repository from "../../data/Repository";
 import Base, { BaseCore } from "./Base";
-import type { IHasRarity, IHasTraits, RarityCore, TraitsCore } from "./interfaces";
 import type Source from "./Source";
+import type { IHasRarity, IHasTraits, RarityCore, TraitsCore } from "./interfaces";
 
 export type TSourceInfoRaw = {
 	page?: number;

@@ -1,10 +1,12 @@
+import type { Optional, OrNull } from "@rsc-utils/type-utils";
 import { Snowflake } from "discord.js";
 import type { GameType } from "../../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import utils, { Optional, OrNull, UUID } from "../../../../sage-utils";
+import utils, { type UUID } from "../../../../sage-utils";
 import { EphemeralMap } from "../../../../sage-utils/utils/ArrayUtils/EphemeralMap";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
-import { getEnv, verbose } from "../../../../sage-utils/utils/ConsoleUtils";
+import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, getEnv, verbose } from "../../../../sage-utils/utils/ConsoleUtils";
+import { getDataRoot } from "../../../../sage-utils/utils/EnvUtils";
 import type { DicePostType } from "../../commands/dice";
 import type SageCache from "../../model/SageCache";
 
@@ -96,7 +98,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 	/** Reads all the uuid.json files and returns all the "Id" values. */
 	protected async getIds(): Promise<UUID[]> {
 		const files = await utils.FsUtils.listFiles(`${IdRepository.DataPath}/${this.objectTypePlural}`)
-			.catch<string[]>(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+			.catch<string[]>(errorReturnEmptyArray);
 		return files
 			.filter(file => file.endsWith(".json"))
 			.map(file => file.slice(0, -5))
@@ -126,7 +128,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 	protected readCoreById(id: UUID): Promise<OrNull<T>> {
 		return utils.FsUtils
 			.readJsonFile<T>(`${IdRepository.DataPath}/${this.objectTypePlural}/${id}.json`)
-			.catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+			.catch(errorReturnNull);
 	}
 
 	/** Reads the uuid.json for each given "Id". */
@@ -189,7 +191,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 
 		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${entity.id}.json`;
 		const formatted = getEnv() === "dev";
-		const saved = await utils.FsUtils.writeFile(path, entity.toJSON(), true, formatted).catch(utils.ConsoleUtils.Catchers.errorReturnFalse);
+		const saved = await utils.FsUtils.writeFile(path, entity.toJSON(), true, formatted).catch(errorReturnFalse);
 		if (saved) {
 			this.cacheId(entity.id, entity);
 		}
@@ -205,5 +207,5 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 	public static get objectTypePlural(): string {
 		return this.objectType + "s";
 	}
-	public static DataPath = "./data/sage";
+	public static DataPath = getDataRoot("sage");
 }

@@ -1,3 +1,4 @@
-export * as Catchers from "./Catchers";
-export * from "./formatArgs";
+export * from "./Catchers";
+export * from "./formatArg";
 export * from "./logger";
+export * from "./process";

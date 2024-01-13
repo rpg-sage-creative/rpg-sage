@@ -1,5 +1,8 @@
+import type { Optional } from "@rsc-utils/type-utils";
+import { Collection } from "../../../../sage-utils/utils/ArrayUtils";
+import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
+import { errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils";
 import { discordPromptYesNo } from "../../../discord/prompts";
-import utils, { Optional } from "../../../../sage-utils";
 import type Colors from "../../model/Colors";
 import type Game from "../../model/Game";
 import { ColorType } from "../../model/HasColorsCore";
@@ -34,7 +37,7 @@ async function _colorList(sageMessage: SageMessage, which: BotServerGameType): P
 	if (!render) {
 		if (which !== BotServerGameType.Bot) {
 			const prompt = `**No ${getColorName(which)} Colors Found!**\n> Sync with ${getOtherName(which)}?`;
-			const booleanResponse = await discordPromptYesNo(sageMessage, prompt).catch(utils.ConsoleUtils.Catchers.errorReturnNull);
+			const booleanResponse = await discordPromptYesNo(sageMessage, prompt).catch(errorReturnNull);
 			if (booleanResponse) {
 				colors.sync(getOtherColors(sageMessage, which));
 				render = await getWhichEntity(sageMessage, which).save();
@@ -64,7 +67,7 @@ async function _colorList(sageMessage: SageMessage, which: BotServerGameType): P
 			const countText = `(${++colorIndex} of ${colorCount})`;
 			return embedColor(color, ColorType[botColor.type], inheritedText, countText);
 		});
-		const embedGroups = utils.ArrayUtils.Collection.partition(embeds, (_, index) => Math.floor(index / 10));
+		const embedGroups = Collection.partition(embeds, (_, index) => Math.floor(index / 10));
 		for (const embedGroup of embedGroups) {
 			await sageMessage.message.channel.send({ embeds:embedGroup });
 		}
@@ -98,7 +101,7 @@ async function _colorGet(sageMessage: SageMessage, ...colors: Optional<Colors>[]
 		return sageMessage.reactBlock();
 	}
 
-	colors = colors.filter(utils.ArrayUtils.Filters.exists);
+	colors = colors.filter(exists);
 
 	const colorType = sageMessage.args.removeAndReturnEnum<ColorType>(ColorType)!;
 	let inherited = false;

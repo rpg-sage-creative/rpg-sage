@@ -1,5 +1,6 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType } from "../../../sage-pf2e";
-import utils, { Optional, SeasonType, TemperateSeasonType, TropicalSeasonType } from "../../../sage-utils";
+import utils, { SeasonType, TemperateSeasonType, TropicalSeasonType } from "../../../sage-utils";
 import { registerSlashCommand } from "../../../slash.mjs";
 import type { TSlashCommand } from "../../../types";
 import { registerInteractionListener } from "../../discord/handlers";

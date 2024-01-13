@@ -1,5 +1,6 @@
+import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import XRegExp from "xregexp";
-import type { Optional, OrNull, OrUndefined, TKeyValueArg, UUID } from "../..";
+import type { TKeyValueArg, UUID } from "../..";
 import { Collection } from "../ArrayUtils";
 import { sortDescending } from "../ArrayUtils/Sort";
 import { Color } from "../ColorUtils";

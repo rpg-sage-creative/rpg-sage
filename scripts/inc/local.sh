@@ -3,6 +3,8 @@
 # ssh connection
 sshHost=""
 sshKey=""
+sshPort=""
+scpPort=""
 
 # remote
 botDir="$sageRootDir"

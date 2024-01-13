@@ -1,6 +1,7 @@
 import XRegExp from "xregexp";
-import type { Optional, TKeyValueArg } from "../..";
+import type { TKeyValueArg } from "../..";
 
+import type { Optional } from "@rsc-utils/type-utils";
 import { default as createEmojiRegex } from "emoji-regex";
 
 export * as Comparison from "./Comparison";
@@ -8,8 +9,8 @@ export * as Markdown from "./Markdown";
 export * from "./StringMatcher";
 export * as Tokenizer from "./Tokenizer";
 export * from "./codeBlocks";
-export * from "./whitespace";
 export * from "./url";
+export * from "./whitespace";
 
 //#region (Single Quotes, Double Quotes, Dequote)
 /*

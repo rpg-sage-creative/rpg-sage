@@ -1,5 +1,5 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import { randomUUID } from "crypto";
-import type { Optional } from "../..";
 import { NilUuid } from "./consts";
 import type { NIL_UUID, NORMALIZED_UUID, UUID, VALID_UUID } from "./types";
 

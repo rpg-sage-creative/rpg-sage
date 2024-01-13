@@ -1,7 +1,9 @@
+import type { Optional } from "@rsc-utils/type-utils";
+import { isDefined } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
 import { PathbuilderCharacter, getExplorationModes, getSavingThrows, getSkills, toModifier } from "../../../sage-pf2e";
 import { TCharacterSectionType, TCharacterViewType, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
-import { Optional, UUID, isDefined } from "../../../sage-utils";
+import { UUID } from "../../../sage-utils";
 import { errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
 import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
 import { DUser, DiscordId, DiscordKey, TChannel } from "../../discord";

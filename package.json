@@ -1,65 +1,48 @@
 {
-  "name": "rpg-sage",
-  "version": "0.0.0",
-  "description": "RPG Sage Bot",
-  "type": "module",
-  "main": "./dist/app.mjs",
-  "files": [
-    "dist"
-  ],
-  "directories": {
-    "lib": "dist"
-  },
-  "keywords": [
-    "RPG",
-    "Sage",
-    "Discord",
-    "Bot"
-  ],
-  "author": "Randal T Meyer <randal.t.meyer@gmail.com> (https://rpgsage.io)",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/randaltmeyer/rpg-sage/issues"
-  },
-  "homepage": "https://github.com/randaltmeyer/rpg-sage#readme",
-  "dependencies": {
-    "@discordjs/rest": "^1.6.0",
-    "@napi-rs/canvas": "^0.1.35",
-    "discord-api-types": "^0.27.3",
-    "discord.js": "^13.16.0",
-    "emoji-regex": "^10.2.1",
-    "follow-redirects": "^1.15.2",
-    "pdf2json": "^2.0.1",
-    "xregexp": "^5.1.1"
-  },
-  "devDependencies": {
-    "@types/follow-redirects": "^1.14.1",
-    "@types/node": "^18.14.0"
-  },
-  "scripts": {
-    "start": "bash scripts/run-dev.sh",
-    "daemon": "bash scripts/daemon.sh",
-    "deploy": "bash scripts/deploy.sh",
-
-		"scrub-logs": "bash scripts/scrub.sh 'logs'",
-
-    "scrub-pm2": "pm2 delete all || true",
-    "postscrub-pm2": "npm run scrub-logs",
-
-    "premono-pm2": "npm run scrub-pm2",
-		"mono-pm2": "pm2 start mono.config.cjs --env dev",
-
-    "premono": "npm run scrub-pm2",
-    "mono": "npm run build",
-		"postmono": "cd dist; node --experimental-modules --es-module-specifier-resolution=node mono.mjs dev botCodeName=dev dataRoot=/Users/randaltmeyer/git/rpg-sage/data/v2 dataRootFoundry=/Users/randaltmeyer/git/rpg-sage/data/foundry superUserId=253330271678627841 homeServerId=963531189254238278",
-
-    "prebuild": "bash scripts/pre-build.sh",
-    "build": "bash scripts/build.sh",
-    "postbuild": "bash scripts/post-build.sh",
-
-    "pretest": "npm run build",
-    "test": "bash scripts/run-tests.sh",
-
-    "npm-fix": "bash scripts/node-module-fixes.sh"
-  }
+	"name": "rpg-sage",
+	"version": "1.5.4",
+	"description": "RPG Sage Bot",
+	"type": "module",
+	"main": "./build/app.mjs",
+	"files": [
+		"build"
+	],
+	"directories": {
+		"lib": "build"
+	},
+	"keywords": [
+		"RPG",
+		"Sage",
+		"Discord",
+		"Bot"
+	],
+	"author": "Randal T Meyer <randal.t.meyer@gmail.com> (https://rpgsage.io)",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/randaltmeyer/rpg-sage/issues"
+	},
+	"homepage": "https://github.com/randaltmeyer/rpg-sage#readme",
+	"dependencies": {
+		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils",
+		"@discordjs/rest": "^1.6.0",
+		"@napi-rs/canvas": "^0.1.35",
+		"discord-api-types": "^0.27.3",
+		"discord.js": "^13.16.0",
+		"emoji-regex": "^10.3.0",
+		"follow-redirects": "^1.15.4",
+		"pdf2json": "^2.0.2",
+		"xregexp": "^5.1.1"
+	},
+	"devDependencies": {
+		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
+		"@types/follow-redirects": "^1.14.1",
+		"@types/node": "^18.18.7"
+	},
+	"scripts": {
+		"daemon": "bash scripts/daemon.sh",
+		"deploy": "bash scripts/deploy.sh",
+		"build": "bash scripts/build.sh",
+		"test": "bash scripts/run-dev.sh",
+		"release": "bash ./node_modules/@rsc-utils/npm-utils/scripts/release.sh"
+	}
 }

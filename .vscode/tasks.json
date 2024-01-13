@@ -2,10 +2,10 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "run-tests",
+			"label": "run-test",
 			"type": "shell",
 			"command": "npm",
-			"args": ["run", "mono"],
+			"args": ["run", "test"],
 			"group": {
 				"kind": "test",
 				"isDefault": true
@@ -20,10 +20,10 @@
 			}
 		},
 		{
-			"label": "Transpile",
-			"type": "typescript",
-			"tsconfig": "tsconfig.json",
-			"problemMatcher": "$tsc",
+			"label": "run-build",
+			"type": "shell",
+			"command": "npm",
+			"args": ["run", "build"],
 			"group": {
 				"kind": "build",
 				"isDefault": true

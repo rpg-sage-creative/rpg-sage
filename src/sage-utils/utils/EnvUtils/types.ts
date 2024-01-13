@@ -1,0 +1,1 @@
+export enum Server { Api, Map, Pdf, Random, Search }

@@ -6,8 +6,6 @@ import registerBestiaryObjects from "./model/bestiary";
 //#region data
 export { default as RenderableContent } from "./data/RenderableContent";
 export * as Repository from "./data/Repository";
-export { default as Pf2tBase } from "./model/base/Pf2tBase";
-export { Pf2tBaseCore } from "./model/base/Pf2tBase";
 //#endregion
 
 //#region map
@@ -99,9 +97,9 @@ export { IWeatherDayResult, IWeatherHourResult, default as WeatherGenerator } fr
 
 export * from "./common";
 
-export function registerAndLoad(pf2DataPath: string, includePf2ToolsData = false): Promise<void> {
+export function registerAndLoad(): Promise<void> {
 	registerBaseObjects();
 	registerBestiaryObjects();
 	registerObjects();
-	return loadData(pf2DataPath, includePf2ToolsData);
+	return loadData();
 }

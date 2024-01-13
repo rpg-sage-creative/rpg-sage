@@ -1,18 +1,20 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/essence20";
-import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf";
 import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20";
-import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse";
+import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf";
 import PlayerCharacterJoe, { PlayerCharacterCoreJoe } from "../../../sage-e20/joe/PlayerCharacterJoe";
+import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse";
+import PlayerCharacterPR, { PlayerCharacterCorePR, TCharacterSectionType, TCharacterViewType, TSkillZord, TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR";
 import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
-import PlayerCharacterPR, { getCharacterSections, PlayerCharacterCorePR, TCharacterSectionType, TCharacterViewType, TSkillZord, TStatZord } from "../../../sage-e20/pr/PlayerCharacterPR";
-import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
 import PlayerCharacterTransformer, { PlayerCharacterCoreTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
-import type { Optional, UUID } from "../../../sage-utils";
-import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
+import type { UUID } from "../../../sage-utils";
+import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils";
+import { getDataRoot } from "../../../sage-utils/utils/EnvUtils";
 import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import { PdfCacher } from "../../../sage-utils/utils/PdfUtils";
-import { DiscordId, DiscordKey, DUser, NilSnowflake, TChannel } from "../../discord";
+import { DUser, DiscordId, DiscordKey, NilSnowflake, TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
 import type SageCache from "../model/SageCache";
@@ -80,7 +82,7 @@ function charFileExists(characterId: string): boolean {
 	return fileExistsSync(getPath(characterId));
 }
 function getPath(characterId: string): string {
-	return `./data/sage/e20/${characterId}.json`;
+	return `${getDataRoot("sage")}/e20/${characterId}.json`;
 }
 
 async function postCharacter(sageCache: SageCache, channel: TChannel, character: TPlayerCharacter, pin: boolean): Promise<void> {

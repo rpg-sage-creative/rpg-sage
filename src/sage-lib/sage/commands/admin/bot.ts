@@ -1,7 +1,7 @@
 import { GameType } from "../../../../sage-common";
-import utils from "../../../../sage-utils";
+import { errorReturnEmptyArray } from "../../../../sage-utils/utils/ConsoleUtils";
 import { toHumanReadable } from "../../../../sage-utils/utils/DiscordUtils/humanReadable";
-import ActiveBot from "../../model/ActiveBot";
+import { getBuildInfo } from "../../../../sage-utils/utils/EnvUtils/getBuildInfo";
 import type Bot from "../../model/Bot";
 import type SageMessage from "../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
@@ -11,7 +11,7 @@ async function botList(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
 		return sageMessage.reactBlock();
 	}
-	const bots: Bot[] = await sageMessage.caches.bots.getAll().catch(utils.ConsoleUtils.Catchers.errorReturnEmptyArray);
+	const bots: Bot[] = await sageMessage.caches.bots.getAll().catch(errorReturnEmptyArray);
 	for (const bot of bots) {
 		await sendBot(sageMessage, bot);
 	}
@@ -99,7 +99,10 @@ async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
 
 async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.isSuperUser) {
-		await sageMessage.send(ActiveBot.active.codeVersion);
+		const buildInfo = getBuildInfo();
+		const keys = Object.keys(buildInfo) as (keyof typeof buildInfo)[];
+		const pairs = keys.map(key => `**${key}**\n- \`${buildInfo[key]}\``);
+		await sageMessage.send(pairs.join("\n"));
 	}
 }
 

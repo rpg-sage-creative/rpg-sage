@@ -12,8 +12,6 @@ import Armor, { type ArmorCore } from "./Armor";
 import ArmorGroup, { type ArmorGroupCore } from "./ArmorGroup";
 import Background, { type BackgroundCore } from "./Background";
 import type { SourcedCore } from "./base/HasSource";
-import type Pf2tBase from "./base/Pf2tBase";
-import type { Pf2tBaseCore } from "./base/Pf2tBase";
 import Class, { type ClassCore } from "./Class";
 import ClassKit, { type ClassKitCore } from "./ClassKit";
 import ClassPath, { type ClassPathCore } from "./ClassPath";
@@ -82,8 +80,7 @@ export type TCore<T extends string> =
 	: T extends "VersatileHeritage" ? VersatileHeritageCore
 	: T extends "Weapon" ? WeaponCore
 	: T extends "WeaponGroup" ? WeaponGroupCore
-	: T extends "Pf2t" ? Pf2tBaseCore
-	: BaseCore
+	: BaseCore;
 
 export type TEntity<T extends string> =
 	T extends "Action" ? Action
@@ -124,7 +121,6 @@ export type TEntity<T extends string> =
 	: T extends "VersatileHeritage" ? VersatileHeritage
 	: T extends "Weapon" ? Weapon
 	: T extends "WeaponGroup" ? WeaponGroup
-	: T extends "Pf2t" ? Pf2tBase
 	: Base;
 
 export default function register(): void {

@@ -1,0 +1,12 @@
+{
+"buildTs":1705098623000,
+"buildDate":"2024-01-12",
+"buildTime":"1430",
+"branch":"stable",
+"commit":"cc8d8b4fbe61210dde4e997dabeef4b378a0e4e2",
+"commitSubject":"don't remove logs when running dev",
+"commitTs":1705098614000,
+"commitDate":"2024-01-12",
+"commitTime":"1430",
+"author":"Randal T Meyer"
+}

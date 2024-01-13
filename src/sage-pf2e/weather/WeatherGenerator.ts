@@ -1,7 +1,8 @@
-import type { TSimpleDice } from "../../sage-utils";
-import utils, { isDefined, SeasonType } from "../../sage-utils";
+import { isDefined } from "@rsc-utils/type-utils";
 import type { CloudCoverTableItem } from "..";
 import GDate from "../../sage-cal/pf2e/GDate";
+import type { TSimpleDice } from "../../sage-utils";
+import utils, { SeasonType } from "../../sage-utils";
 import * as tables from "./tables";
 import {
 	ClimateType,

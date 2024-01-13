@@ -1,5 +1,6 @@
+import type { Awaitable, OrNull } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
-import utils, { OrNull, type Awaitable } from "../../../sage-utils";
+import utils from "../../../sage-utils";
 import { error } from "../../../sage-utils/utils/ConsoleUtils";
 import ArgsManager from "../../discord/ArgsManager";
 import { registerMessageListener } from "../../discord/handlers";

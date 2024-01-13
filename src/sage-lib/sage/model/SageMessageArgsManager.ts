@@ -1,7 +1,8 @@
+import type { Optional } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
 import { GameType, parseGameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, parseCritMethodType, parseDiceOutputType } from "../../../sage-dice";
-import utils, { Optional } from "../../../sage-utils";
+import utils from "../../../sage-utils";
 import ArgsManager from "../../discord/ArgsManager";
 import DiscordId from "../../discord/DiscordId";
 import { DicePostType } from "../commands/dice";

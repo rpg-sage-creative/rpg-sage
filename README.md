@@ -20,7 +20,7 @@ Dev (Manage Roles, Manage Channels, Create Instant Invite, Manage Emojis, Manag
 https://discord.com/api/oauth2/authorize?client_id=653643416311169044&permissions=4026920017&scope=bot%20applications.commands
 
 ## Deploy
-zip -r -v -9 deploy dist/* node_modules -x "**/backup/*.zip"
+@todo update this
 
 ## Usage
 

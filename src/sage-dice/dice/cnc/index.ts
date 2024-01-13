@@ -1,7 +1,8 @@
 //#region imports
 
+import type { OrNull } from "@rsc-utils/type-utils";
 import { GameType } from "../../../sage-common";
-import type { OrNull, TParsers, TToken } from "../../../sage-utils";
+import type { TParsers, TToken } from "../../../sage-utils";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import { randomSnowflake } from "../../../sage-utils/utils/DiscordUtils/randomSnowflake";
 import { Tokenizer } from "../../../sage-utils/utils/StringUtils";

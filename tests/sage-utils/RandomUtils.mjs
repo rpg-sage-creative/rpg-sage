@@ -1,4 +1,4 @@
-import utils from "../../dist/sage-utils";
+import utils from "../../build/sage-utils";
 
 // node --experimental-modules --es-module-specifier-resolution=node run.mjs
 

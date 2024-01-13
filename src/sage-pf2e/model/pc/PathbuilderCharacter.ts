@@ -1,6 +1,7 @@
+import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/types";
-import utils, { Optional, OrUndefined } from "../../../sage-utils";
+import utils from "../../../sage-utils";
 import CharacterBase, { CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
 import { debug } from "../../../sage-utils/utils/ConsoleUtils";
 import { errorReturnFalse, errorReturnNull } from "../../../sage-utils/utils/ConsoleUtils/Catchers";

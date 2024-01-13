@@ -1,7 +1,3 @@
-import { appendFile, existsSync } from "fs";
-import { getDateStrings } from "../DateUtils";
-import { formatArg } from "./formatArgs";
-
 /**
  * @todo figure out better logging so we can have .debug in dev but not in stable.
  * https://www.npmjs.com/package/pino
@@ -37,44 +33,6 @@ export function addLogHandler(level: LogLevel, handler: Function): void {
 	_handlers.get(level)?.add(handler);
 }
 
-let _env: "dev" | "beta" | "stable" = process.env["NODE_ENV"] as "dev" ?? "dev";
-let _logDir: string | undefined;
-
-export function getEnv(): "dev" | "beta" | "stable" {
-	return _env;
-}
-export function setEnv(env: "dev" | "beta" | "stable"): void {
-	_env = env;
-	_logDir = `./data/sage/logs/${env}`;
-	["silly", "debug", "verbose", "info", "warn", "error"].forEach(level => addLogHandler(level as "silly", logToFile))
-}
-
-
-/** Logs the args to file if we have a folder to log to. */
-function logToFile(logLevel: LogLevel, ...args: any[]): void {
-	if (_logDir && existsSync(_logDir)) {
-		const now = getDateStrings();
-		const fileName = `${_logDir}/${now.date}.log`;
-		const lines = args.map(arg => `${now.date}T${now.time}: ${logLevel}:: ${formatArg(arg)}`).concat("").join("\n");
-		appendFile(fileName, lines, err => {
-			if (err) {
-				try {
-					const args = ["Unable to log to file!", fileName, err];
-					handle("error", ...args);
-					console.error(`error::`, ...args);
-				}catch(ex) {
-					/* nothing to do at this point ... */
-				}
-			}
-		});
-	}
-}
-
-function handle(level: LogLevel, ...args: any[]): void {
-	// send the args to any extra handlers
-	_handlers.get(level)?.forEach(handler => handler(level, ...args));
-}
-
 /** Returns the current logger. */
 export function getLogger(): Logger {
 	if (!_logger) {
@@ -82,10 +40,11 @@ export function getLogger(): Logger {
 		/** Single logging function to ensure we don't duplicate code deciding which environment logs what. */
 		function log(level: LogLevel, ...args: any[]) {
 			// ignore certain events based on environment
-			if (_env === "beta") {
+			const env = process.env["NODE_ENV"];
+			if (env === "beta") {
 				if (["silly", "debug"].includes(level)) return;
 			}
-			if (_env === "stable") {
+			if (env === "stable") {
 				if (["silly", "debug", "verbose"].includes(level)) return;
 			}
 
@@ -95,7 +54,7 @@ export function getLogger(): Logger {
 			else console.log(`${level}::`, ...args);
 
 			// send the args to any extra handlers
-			handle(level, ...args);
+			_handlers.get(level)?.forEach(handler => handler(level, ...args));
 		}
 
 		/** Create the default logger. */

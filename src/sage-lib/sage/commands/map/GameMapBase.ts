@@ -1,5 +1,6 @@
 import type * as Discord from "discord.js";
-import { errorReturnFalse, errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils/Catchers";
+import { errorReturnFalse, errorReturnNull } from "../../../../sage-utils/utils/ConsoleUtils";
+import { getDataRoot } from "../../../../sage-utils/utils/EnvUtils";
 import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../../sage-utils/utils/FsUtils";
 import RenderableGameMap from "./RenderableGameMap";
 
@@ -98,7 +99,7 @@ export type TGameMapCore = {
 
 /** returns path to the json file */
 function getMapFilePath(messageId: Discord.Snowflake): string {
-	return `./data/sage/maps/${messageId}.json`;
+	return `${getDataRoot("sage")}/maps/${messageId}.json`;
 }
 
 export default abstract class GameMapBase {

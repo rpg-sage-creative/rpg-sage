@@ -1,21 +1,19 @@
 .VSCodeCounter/
-config/
-dist/
-node_modules/
-types/
-**/.DS_Store
-all-lores.csv
-localstack/
+build/
 logs/
+node_modules/
+
+**/.DS_Store
 **/tsconfig.tsbuildinfo
+package-lock.json
+
+# ignore config json files
+/config/*.json
+# negate ignore on templates
+!/config/*.template.json
 
 # ignore scripts (to ignore the root level links)
 *.sh
 # negate ignore scripts folder scripts
 !scripts/**/*.sh
-
-# ignore data folder
-data/pf2e/aon/
-data/pf2e/dist/
-# data/pf2e/src/
-data/slash/
+!docker/**/*.sh

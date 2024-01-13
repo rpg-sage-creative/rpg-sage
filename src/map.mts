@@ -1,14 +1,8 @@
-import { setEnv } from "./sage-utils/utils/ConsoleUtils";
-import { captureProcessExit } from "./sage-utils/utils/ConsoleUtils/process";
+import { captureProcessExit } from "./sage-utils/utils/ConsoleUtils";
+import { getPort } from "./sage-utils/utils/EnvUtils";
 import { RenderableMap } from "./sage-utils/utils/MapUtils";
 
-type TBot = "dev" | "beta" | "stable";
-
-const args = process.argv.slice(2),
-	botCodeName = ["dev","beta","stable"].find(s => args.includes(s)) as TBot ?? "dev"
-
 captureProcessExit();
-setEnv(botCodeName);
-RenderableMap.startServer(3000);
+RenderableMap.startServer(getPort("Map"));
 
 // node --experimental-modules --es-module-specifier-resolution=node map.mjs

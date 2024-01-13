@@ -1,8 +1,9 @@
 //#region imports
 
+import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { correctEscapeForEmoji } from "..";
 import { GameType } from "../../../sage-common";
-import type { Optional, OrNull, OrUndefined, TParsers, TSortResult, TToken } from "../../../sage-utils";
+import type { TParsers, TSortResult, TToken } from "../../../sage-utils";
 import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import { warn } from "../../../sage-utils/utils/ConsoleUtils";

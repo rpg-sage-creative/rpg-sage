@@ -1,4 +1,4 @@
-import { isPrimitive } from "../TypeUtils";
+import { isPrimitive } from "@rsc-utils/type-utils";
 
 //#region types
 
