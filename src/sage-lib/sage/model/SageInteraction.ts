@@ -1,3 +1,4 @@
+import { Cache } from "@rsc-utils/cache-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
@@ -5,7 +6,6 @@ import type { IHasChannels, IHasGame } from ".";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils from "../../../sage-utils";
-import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
 import { debug } from "../../../sage-utils/utils/ConsoleUtils";
 import type { TGameType } from "../../../slash.mjs";
 import { DInteraction, DUser, DiscordKey, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
@@ -31,7 +31,7 @@ export default class SageInteraction<T extends DInteraction = any>
 	extends HasSageCache<SageInteractionCore, SageInteraction<any>>
 	implements IHasGame, IHasChannels {
 
-	private constructor(protected core: SageInteractionCore, cache?: ClassCache) {
+	private constructor(protected core: SageInteractionCore, cache?: Cache) {
 		super(core, cache);
 	}
 

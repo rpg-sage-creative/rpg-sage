@@ -7,7 +7,7 @@ import type SageInteraction from "../SageInteraction";
 
 export async function addMessageDeleteButton(message: Optional<DMessage>, userId: Snowflake): Promise<boolean> {
 	if (message?.editable) {
-		const buttonRow = new MessageActionRow<MessageButton>().addComponents(new MessageButton({ customId:`message-delete-button-${message.id}-${userId}`, style:"SECONDARY", emoji:"❌", label:"Delete this alert." }));
+		const buttonRow = new MessageActionRow<MessageButton>().addComponents(new MessageButton({ customId:`message-delete-button-${message.id}-${userId}`, style:"SECONDARY", emoji:"❌", label:"Delete this alert.", type:"BUTTON" }));
 		const edited = await message.edit({
 			components: (message.components ?? []) .concat([buttonRow as any]), /** @todo figure out this cast */
 			content: message.content ? message.content : undefined,

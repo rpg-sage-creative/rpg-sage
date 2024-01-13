@@ -1,5 +1,5 @@
+import { Cache } from "@rsc-utils/cache-utils";
 import type * as Discord from "discord.js";
-import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
 import { debug } from "../../../sage-utils/utils/ConsoleUtils";
 import { ReactionType } from "../../discord";
 import type { HasSageCacheCore } from "./HasSageCache";
@@ -19,7 +19,7 @@ interface SageReactionCore extends HasSageCacheCore {
 export default class SageReaction
 	extends HasSageCache<SageReactionCore, SageReaction> {
 
-	private constructor(protected core: SageReactionCore, cache?: ClassCache) {
+	private constructor(protected core: SageReactionCore, cache?: Cache) {
 		super(core, cache);
 	}
 	public clear(): void {

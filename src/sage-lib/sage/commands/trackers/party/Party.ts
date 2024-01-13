@@ -1,4 +1,4 @@
-import { applyMixins } from "../../../../../sage-utils/utils/TypeUtils/applyMixins";
+import { applyMixins } from "@rsc-utils/type-utils";
 import { CharacterShell } from "../../../model/CharacterShell";
 import type Game from "../../../model/Game";
 import GameCharacter from "../../../model/GameCharacter";

@@ -1,12 +1,10 @@
-import utils from "../../sage-utils";
-import { LIGHT_BULK, DASH, MDASH } from "../common";
+import { DASH, LIGHT_BULK, MDASH } from "../common";
 
-export default class Bulk extends utils.ClassUtils.SuperClass {
+export default class Bulk {
 	public constructor();
 	public constructor(bulk: number);
 	public constructor(bulk: string);
 	public constructor(bulk?: number | string) {
-		super();
 		this.isNegligible = false;
 		this.isLight= false;
 		this.lightBulk = Bulk.toLightBulk(bulk!);
@@ -56,7 +54,7 @@ export default class Bulk extends utils.ClassUtils.SuperClass {
 	public add(...bulks: Bulk[]): void;
 	public add(bulk: Bulk, count: number): void;
 	public add(...args: (Bulk | number)[]): void {
-		if (typeof (args[1]) === "number" && Bulk.instanceOf(args[0])) {
+		if (typeof (args[1]) === "number" && args[0] instanceof Bulk) {
 			const bulk = args[0],
 				count = args[1];
 			this.lightBulk += bulk.lightBulk * count;
@@ -95,7 +93,7 @@ export default class Bulk extends utils.ClassUtils.SuperClass {
 		return bulk;
 	}
 	public static isBulk(bulk: any): bulk is Bulk {
-		return Bulk.instanceOf(bulk);
+		return bulk instanceof Bulk;
 	}
 	public static isLight(bulk: number | string): boolean {
 		return bulk === LIGHT_BULK || bulk === 0.1;

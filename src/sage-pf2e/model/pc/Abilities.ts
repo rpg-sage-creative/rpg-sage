@@ -76,7 +76,7 @@ export default abstract class Abilities {
 	}
 
 	public static for(pc: PlayerCharacter | PathbuilderCharacter): Abilities {
-		if (PathbuilderCharacter.instanceOf<PathbuilderCharacter>(pc)) {
+		if (pc instanceof PathbuilderCharacter) {
 			return new PbcAbilities(pc);
 		}
 		return new PcAbilities(pc);

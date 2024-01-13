@@ -1,13 +1,12 @@
+import { Cache, HasCache } from "@rsc-utils/cache-utils";
 import { If, MessageActionRow, MessageButton, MessageEmbed, MessageSelectMenu } from "discord.js";
-import { HasCache } from "../../../sage-utils/utils/ClassUtils";
-import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
 import type { DiscordCache, DiscordKey, TRenderableContentResolvable } from "../../discord";
+import { resolveToEmbeds, resolveToTexts } from "../../discord/embeds";
 import type Bot from "./Bot";
 import type Game from "./Game";
 import type SageCache from "./SageCache";
 import type Server from "./Server";
 import type User from "./User";
-import { resolveToEmbeds, resolveToTexts } from "../../discord/embeds";
 
 export interface HasSageCacheCore {
 	caches: SageCache;
@@ -29,8 +28,8 @@ export type TSendOptions<HasEphemeral extends boolean = boolean> = {
 
 export default abstract class HasSageCache<T extends HasSageCacheCore, U extends HasSageCache<T, any>> extends HasCache {
 
-	protected constructor(protected core: T, cache?: ClassCache | null) {
-		super(cache);
+	protected constructor(protected core: T, cache?: Cache | null) {
+		super(cache as Cache);
 	}
 
 	//#region abstract

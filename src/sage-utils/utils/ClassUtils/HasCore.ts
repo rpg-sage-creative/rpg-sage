@@ -1,4 +1,4 @@
-import { HasCache } from "./HasCache";
+import { HasCache } from "@rsc-utils/cache-utils";
 
 //#region types
 

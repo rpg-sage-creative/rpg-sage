@@ -14,7 +14,7 @@ function bulkCalculator(coins: Coins): Bulk {
 	return new Bulk(Math.floor((coins.cp + coins.sp + coins.gp + coins.pp) / 1000));
 }
 function ensureCoins(value: TMoney): Coins {
-	if (Coins.instanceOf(value)) {
+	if (value instanceof Coins) {
 		return value;
 	}
 	return Coins.parse(typeof (value) === "string" ? value : value + "sp");

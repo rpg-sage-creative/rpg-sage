@@ -1,9 +1,9 @@
+import { Cache } from "@rsc-utils/cache-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
 import type { IHasChannels, IHasGame } from ".";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import { ClassCache } from "../../../sage-utils/utils/ClassUtils/internal/ClassCache";
 import { debug, errorReturnNull, warn } from "../../../sage-utils/utils/ConsoleUtils";
 import { createMessageLink } from "../../../sage-utils/utils/DiscordUtils/createMessageLink";
 import { handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils/errorHandlers";
@@ -41,7 +41,7 @@ export default class SageMessage
 	extends HasSageCache<SageMessageCore, SageMessage>
 	implements IHasGame, IHasChannels {
 
-	private constructor(protected core: SageMessageCore, cache?: ClassCache) {
+	private constructor(protected core: SageMessageCore, cache?: Cache) {
 		super(core, cache);
 		this.setCommandAndArgs();
 	}

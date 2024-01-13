@@ -29,14 +29,14 @@ export default class SpellCollection extends utils.ClassUtils.HasCore<SpellColle
 	public constructor(spells: SpellCollection);
 	public constructor(spells?: SpellCollection | Spell[] | HeightenedSpell[]) {
 		super({ spells: [], objectType: "SpellCollection" });
-		if (SpellCollection.instanceOf<SpellCollection>(spells)) {
+		if (spells instanceof SpellCollection) {
 			this.core.spells = spells.core.spells.slice();
 		} else if (Array.isArray(spells)) {
 			spells.forEach((spell: Spell | HeightenedSpell) => {
-				if (Spell.instanceOf<Spell>(spell)) {
+				if (spell instanceof Spell) {
 					this.core.spells.push(spell.toHeightenedSpell(spell.level).id);
 				}
-				if (HeightenedSpell.instanceOf(spell)) {
+				if (spell instanceof HeightenedSpell) {
 					this.core.spells.push(spell.id);
 				}
 			});

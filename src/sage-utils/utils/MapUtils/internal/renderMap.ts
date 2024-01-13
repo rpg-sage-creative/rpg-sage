@@ -1,4 +1,4 @@
-import { uncache } from "../../TypeUtils";
+import { uncache } from "@rsc-utils/cache-utils";
 import type { GameMapData, MapRenderResponse, MimeType } from "../types";
 import { createMapCache } from "./createMapCache.js";
 import { createMapRenderResponse } from "./createMapRenderResponse.js";
