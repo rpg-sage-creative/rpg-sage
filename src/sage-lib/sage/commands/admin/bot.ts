@@ -102,12 +102,12 @@ async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 		const buildInfo = getBuildInfo();
 		const lines: string[] = [];
 		lines.push(`### ${buildInfo.name}`);
-		lines.push(`**version**\n- \`${buildInfo.version}\``);
-		lines.push(`**branch**\n- \`${buildInfo.branch}\``);
-		lines.push(`**buildDate**\n- \`${buildInfo.buildDate}\``);
+		lines.push(`**version** \`${buildInfo.version}\``);
+		lines.push(`**branch** \`${buildInfo.branch}\``);
+		lines.push(`**buildDate** \`${buildInfo.buildDate}\``);
 		lines.push(`### rsc-utils`);
-		buildInfo.rscLibs.forEach(lib => {
-			lines.push(`- **${lib.name}**\n- \`${buildInfo.version}\``);
+		buildInfo.rscLibs.sort().forEach(lib => {
+			lines.push(`- **${lib.name}** \`${lib.version}\``);
 		});
 		await sageMessage.send(lines.join("\n"));
 	}
