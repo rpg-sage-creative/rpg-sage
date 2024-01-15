@@ -1,5 +1,6 @@
-import utils, { BULLET } from "../../../../sage-utils";
+import { BULLET } from "@rsc-utils/string-utils";
 import dice from "../../../../sage-dice";
+import utils from "../../../../sage-utils";
 import type SageMessage from "../../model/SageMessage";
 import { addScenario, createPfsRenderableContent, TPfsFaction, TTierInfo } from "./pfs";
 

@@ -1,4 +1,4 @@
-import { randomSnowflake } from "../../../../../sage-utils/utils/DiscordUtils/randomSnowflake";
+import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { CharacterShell, type CharacterShellCore } from "../../../model/CharacterShell";
 import type Game from "../../../model/Game";
 import type GameCharacter from "../../../model/GameCharacter";

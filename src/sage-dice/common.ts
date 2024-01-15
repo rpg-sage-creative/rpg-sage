@@ -1,6 +1,7 @@
 import { warn } from "@rsc-utils/console-utils";
+import { cleanWhitespace, type TokenData } from "@rsc-utils/string-utils";
 import { GameType } from "../sage-common";
-import utils, { TToken } from "../sage-utils";
+import utils from "../sage-utils";
 import { IdCore } from "../sage-utils/utils/ClassUtils";
 import type { TDiceRoll } from "./dice/base/types";
 
@@ -65,7 +66,7 @@ export const SECRET_REGEX = /secret/i;
 /** This strips a trailing colon (,) or semicolon (;) */
 export function cleanDescription(description?: string): string {
 	const replaced = (description ?? "").replace(/[;,]\s*$/, "");
-	return utils.StringUtils.cleanWhitespace(replaced);
+	return cleanWhitespace(replaced);
 }
 
 export function filterExists<T>(value: T): boolean {
@@ -147,7 +148,7 @@ export type TDropKeepData = { type:DropKeepType; value:number; alias?:string; };
 export function createValueDropKeepData(type: DropKeepType, value: number, alias = DropKeepTypeAliases[type]): TDropKeepData {
 	return { type:type, value:value, alias:alias };
 }
-export function parseValueDropKeepData(token: TToken): TDropKeepData | undefined {
+export function parseValueDropKeepData(token: TokenData): TDropKeepData | undefined {
 	if (token.matches) {
 		const type = parseDropKeepType(token.matches[0]);
 		const value = +token.matches[1] || 1;
@@ -203,7 +204,7 @@ export function parseTestTargetValue(rawValue: string): { value:number; hidden:b
 	const value = +(hidden ? rawValue.slice(2, -2) : rawValue) || 0;
 	return { value, hidden };
 }
-export function parseValueTestData(token: TToken): TTestData | undefined {
+export function parseValueTestData(token: TokenData): TTestData | undefined {
 	if (token.matches) {
 		const type = parseTestType(token.matches[0]);
 		const { value, hidden } = parseTestTargetValue(token.matches[1]);

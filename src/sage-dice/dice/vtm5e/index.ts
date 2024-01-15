@@ -1,11 +1,8 @@
-//#region imports
-
+import { randomSnowflake } from "@rsc-utils/snowflake-utils";
+import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull } from "@rsc-utils/type-utils";
-import { SnowflakeUtil } from "discord.js";
 import { GameType } from "../../../sage-common";
-import type { TParsers, TToken } from "../../../sage-utils";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import type {
 	TDiceLiteral,
 	TTestData
@@ -28,11 +25,6 @@ import type {
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
 } from "../base/types";
-
-//#endregion
-
-function randomSnowflake() { return SnowflakeUtil.generate().toString(); }
-function cleanWhitespace(value: string): string { return value.replace(/\s+/g, " ").trim(); }
 
 /*
 
@@ -57,25 +49,25 @@ hunger takes priority in critical pairings ...
 
 //#region Tokenizer
 
-function getParsers(): TParsers {
+function getParsers(): TokenParsers {
 	return {
 		dice: /(\d+)?\s*d\s*10\s*(?:h\s*(\d+)|(\d+)\s*h)?/i,
 		target: /(vs)\s*(\d+|\|\|\d+\|\|)/i
 	};
 }
 
-type TokenType = TToken<"dice" | "target" | "desc">;
+type TokenType = TokenData<"dice" | "target" | "desc">;
 
-function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken<any>): T;
+function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData<any>): T;
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenType): T {
-	if (token.type === "dice") {
+	if (token.key === "dice") {
 		core.count = +token.matches[0];
 		core.sides = 10;
 		if (token.matches[1] || token.matches[2]) {
 			core.hunger = +(token.matches[1] ?? token.matches[2]);
 		}
 
-	}else if (token.type === "target") {
+	}else if (token.key === "target") {
 		const { value, hidden } = parseTestTargetValue(token.matches[1]);
 		core.target = { type:TargetType.VS, value, hidden };
 
@@ -367,7 +359,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	public static fromCore(core: DicePartCore): DicePart {
 		return new DicePart(core);
 	}
-	public static fromTokens(tokens: TToken[]): DicePart {
+	public static fromTokens(tokens: TokenData[]): DicePart {
 		const core = tokens.reduce(reduceTokenToDicePartCore, <DicePartCore>{ description:"" });
 		const args = <TDicePartCoreArgs>{ testOrTarget:core.target ?? core.test, ...core };
 		return DicePart.create(args);
@@ -494,11 +486,11 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public static fromCore(core: DiceGroupCore): DiceGroup {
 		return new DiceGroup(core);
 	}
-	public static fromTokens(tokens: TToken[], diceOutputType?: DiceOutputType): DiceGroup {
+	public static fromTokens(tokens: TokenData[], diceOutputType?: DiceOutputType): DiceGroup {
 		return DiceGroup.create([Dice.create([DicePart.fromTokens(tokens)])], diceOutputType);
 	}
 	public static parse(diceString: string, diceOutputType?: DiceOutputType): DiceGroup {
-		const tokens = Tokenizer.tokenize(diceString, getParsers(), "desc");
+		const tokens = tokenize(diceString, getParsers(), "desc");
 		return DiceGroup.fromTokens(tokens, diceOutputType);
 	}
 	public static Part = <typeof baseDice>Dice;

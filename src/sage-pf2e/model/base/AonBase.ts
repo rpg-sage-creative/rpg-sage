@@ -1,11 +1,12 @@
+import { capitalize } from "@rsc-utils/string-utils";
 import type { IComparable, ISearchable, TSortResult } from "../../../sage-utils";
 import utils from "../../../sage-utils";
-import { parseSources, TParsedSource } from "../../data/Repository";
+import { TParsedSource, parseSources } from "../../data/Repository";
 import type Base from "./Base";
 import type { SourcedCore, TSourceInfo } from "./HasSource";
 import HasSource from "./HasSource";
-import type { IHasArchives, IHasLink, IHasName } from "./interfaces";
 import type Source from "./Source";
+import type { IHasArchives, IHasLink, IHasName } from "./interfaces";
 
 /*
 From https://elasticsearch.galdiuz.com/aon/_search
@@ -80,7 +81,7 @@ export default class AonBase
 
 	public constructor(protected core: AonBaseCore) {
 		super(hackCore(core));
-		this._objectType = utils.StringUtils.capitalize(this.core.type);
+		this._objectType = capitalize(this.core.type);
 	}
 
 	public matchesBase(sageData: Base): boolean {

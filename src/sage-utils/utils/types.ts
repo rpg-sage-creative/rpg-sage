@@ -5,6 +5,5 @@ export * from "./DateUtils/types";
 export * from "./RandomUtils/types";
 export * from "./RenderUtils/types";
 export * from "./SearchUtils/types";
-export * from "./StringUtils/types";
 export * from "./TypeUtils/types";
 export * from "./UuidUtils/types";

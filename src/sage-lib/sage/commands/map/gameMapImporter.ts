@@ -1,6 +1,7 @@
 import { debug } from "@rsc-utils/console-utils";
+import { StringMatcher, dequote } from "@rsc-utils/string-utils";
 import * as Discord from "discord.js";
-import { StringMatcher, dequote, escapeForRegExp } from "../../../../sage-utils/utils/StringUtils";
+import XRegExp from "xregexp";
 import { DiscordId } from "../../../discord";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
 import RenderableGameMap from "./RenderableGameMap";
@@ -86,7 +87,7 @@ async function parseUser(guild: Discord.Guild, userValue?: string): Promise<Disc
 
 	// look for proper tag match
 	const tag = `${username}#${discriminator ?? "0"}`;
-	const tagRegex = new RegExp(escapeForRegExp(tag), "i");
+	const tagRegex = XRegExp(XRegExp.escape(tag), "i");
 	const tagMatch = guild.members.cache.find(member => tagRegex.test(member.user.tag));
 	if (tagMatch) {
 		debug(`parseUser match: tag = "${tag}"`);
@@ -94,7 +95,7 @@ async function parseUser(guild: Discord.Guild, userValue?: string): Promise<Disc
 	}
 
 	// look for username, displayName, and nickname matches and only return a singleton
-	const usernameRegex = new RegExp(escapeForRegExp(username), "i");
+	const usernameRegex = XRegExp(XRegExp.escape(username), "i");
 	const usernameMatches = Array.from(guild.members.cache.filter(member => {
 		if (usernameRegex.test(member.user.username)) {
 			debug(`parseUser match: username = "${member.user.username}"`);

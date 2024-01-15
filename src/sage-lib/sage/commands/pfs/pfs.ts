@@ -6,6 +6,7 @@ import { ColorType } from "../../model/HasColorsCore";
 import type SageMessage from "../../model/SageMessage";
 import { createRenderableContent, registerCommandRegex } from "../cmd";
 import { registerCommandHelp } from "../help";
+import { capitalize } from "@rsc-utils/string-utils";
 
 export type TPfsFaction = "Horizon Hunters" | "Vigilant Seal" | "Envoys' Alliance" | "Grand Archive";
 
@@ -49,7 +50,7 @@ function earnIncome(sageMessage: SageMessage): void {
 	const renderable = createPfsRenderableContent(sageMessage),
 		pcLevel = +pcLevelString,
 		taskLevel = Math.max(0, pcLevel - 2),
-		proficiencyLetter = utils.StringUtils.capitalize(proficiencyString ?? "")[0],
+		proficiencyLetter = capitalize(proficiencyString ?? "")[0],
 		proficiencyLetterIndex = PROFICIENCIES.findIndex(_proficiency => _proficiency[0] === proficiencyLetter),
 		proficiency = PROFICIENCIES[proficiencyLetterIndex],
 		modifier = (modifierString.startsWith("-") ? -1 : 1) * +modifierString.match(/\d+/)![0],
@@ -127,7 +128,7 @@ function registerDowntime(): void {
 // function linkToUrl(link: TLink): string { return `<a href="${link.url}">${link.title}</a>`; }
 // async function pfsLinks(sageMessage: SageMessage): Promise<void> {
 // 	if (!links || !links.length) {
-// 		links = await utils.FsUtils.readJsonFile<TLink[]>("getDataRoot("pf2e")/json/links.json");
+// 		links = await readJsonFile<TLink[]>("getDataRoot("pf2e")/json/links.json");
 // 	}
 // 	let renderableContent = createPfsRenderableContent(sageMessage);
 // 	renderableContent.setTitle("<b>Helpful Links (Second Edition)</b>");

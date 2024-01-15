@@ -1,11 +1,8 @@
-//#region imports
-
+import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { correctEscapeForEmoji } from "..";
 import { GameType } from "../../../sage-common";
-import type { TParsers, TToken } from "../../../sage-utils";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
 	DiceOutputType,
@@ -28,8 +25,6 @@ import type {
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
 } from "../base/types";
-
-//#endregion
 
 //#region test dice
 /*
@@ -69,7 +64,7 @@ import type {
 //#endregion
 
 //#region Tokenizer
-function getParsers(): TParsers {
+function getParsers(): TokenParsers {
 	const parsers = baseGetParsers();
 	parsers["suffix"] = /(e|s|\*|up\d+|dn\d+)+/i;
 	parsers["target"] = /\b(vs\s*dif|dif|vs)\s*(\d+|\|\|\d+\|\|)/i;
@@ -99,10 +94,10 @@ function tallyShifts(text: string, shift: "up" | "down"): number {
 	return values.reduce((out, value) => out + value, 0);
 }
 
-function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken, index: number, tokens: TToken[]): T {
-	if (token.type === "suffix") {
+function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData, index: number, tokens: TokenData[]): T {
+	if (token.key === "suffix") {
 		const prevToken = tokens[index - 1];
-		if (prevToken?.type === "dice") {
+		if (prevToken?.key === "dice") {
 			return applyEdgeSnagSpecShift({
 				core,
 				hasEdge: token.token.match(/e/i) !== null,
@@ -113,7 +108,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 			});
 		}
 	}
-	if (token.type === "target") {
+	if (token.key === "target") {
 		core.target = parseTargetData(token);
 		return core;
 	}
@@ -124,7 +119,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToke
 //#region Targets/Tests
 enum TargetType { None = 0, DIF = 1 }
 type TTargetData = { type:TargetType; value:number; hidden:boolean; raw:string; };
-function parseTargetData(token: TToken): OrUndefined<TTargetData> {
+function parseTargetData(token: TokenData): OrUndefined<TTargetData> {
 	if (token.matches) {
 		const type = TargetType.DIF;
 		const { value, hidden } = parseTestTargetValue(token.matches[1]);
@@ -365,7 +360,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	public static fromCore(core: DicePartCore): DicePart {
 		return new DicePart(core);
 	}
-	public static fromTokens(tokens: TToken[]): DicePart {
+	public static fromTokens(tokens: TokenData[]): DicePart {
 		const core = tokens.reduce(reduceTokenToDicePartCore, <DicePartCore>{ description:"" });
 		if (core.sides !== 20 && match(core)) {
 			let hasEdge = false, hasSnag = false, hasSpecialization = false, downShift = 0, upShift = 0;
@@ -533,7 +528,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public static fromCore(core: DiceGroupCore): DiceGroup {
 		return new DiceGroup(core);
 	}
-	public static fromTokens(tokens: TToken[], diceOutputType?: DiceOutputType): DiceGroup {
+	public static fromTokens(tokens: TokenData[], diceOutputType?: DiceOutputType): DiceGroup {
 		let skillDicePart = DicePart.fromTokens(tokens);
 		if (skillDicePart.hasShift) {
 			skillDicePart = skillDicePart.shiftedDicePart!;
@@ -590,7 +585,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return DiceGroup.create(dice, diceOutputType);
 	}
 	public static parse(diceString: string, diceOutputType?: DiceOutputType): DiceGroup {
-		const tokens = Tokenizer.tokenize(diceString, getParsers(), "desc");
+		const tokens = tokenize(diceString, getParsers(), "desc");
 		return DiceGroup.fromTokens(tokens, diceOutputType);
 	}
 	public static Part = <typeof baseDice>Dice;

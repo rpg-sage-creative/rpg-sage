@@ -1,7 +1,8 @@
+import { TokenParsers, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, parseKeyValueArg, tokenize } from "@rsc-utils/string-utils";
 import { isNullOrUndefined } from "@rsc-utils/type-utils";
-import utils, { type TParsers } from "../../sage-utils";
+import { ArgsManager as _ArgsManager } from "../../sage-utils/utils/ArgsUtils";
 
-export default class ArgsManager extends utils.ArgsUtils.ArgsManager<string> {
+export default class ArgsManager extends _ArgsManager<string> {
 	public constructor(private argsManagerInitialInput: string | ArrayLike<string> | Iterable<string>) {
 		super(...ArgsManager.tokenize(argsManagerInitialInput));
 	}
@@ -16,7 +17,7 @@ export default class ArgsManager extends utils.ArgsUtils.ArgsManager<string> {
 		return new ArgsManager(other as string[] ?? []);
 	}
 
-	public static tokenize(content: string | ArrayLike<string> | Iterable<string>, additionalParsers: TParsers = {}): string[] {
+	public static tokenize(content: string | ArrayLike<string> | Iterable<string>, additionalParsers: TokenParsers = {}): string[] {
 		if (isNullOrUndefined(content)) {
 			return [];
 		}
@@ -29,19 +30,18 @@ export default class ArgsManager extends utils.ArgsUtils.ArgsManager<string> {
 			return [];
 		}
 
-		const parsers: TParsers = {
-			arg: utils.StringUtils.createKeyValueArgRegex(),
-			spaces: utils.StringUtils.createWhitespaceRegex(),
-			quotes: utils.StringUtils.createQuotedRegex(true),
+		const parsers: TokenParsers = {
+			arg: createKeyValueArgRegex(),
+			spaces: createWhitespaceRegex(),
+			quotes: createQuotedRegex(true),
 			...additionalParsers
 		};
 
-		return utils.StringUtils.Tokenizer
-			.tokenize(trimmed, parsers)
+		return tokenize(trimmed, parsers)
 			.map(token => token.token.trim())
 			.filter(token => token.length)
-			.map(token => utils.StringUtils.parseKeyValueArg(token)?.clean ?? token)
-			.map(s => utils.StringUtils.dequote(s))
+			.map(token => parseKeyValueArg(token)?.clean ?? token)
+			.map(dequote)
 			;
 	}
 }

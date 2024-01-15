@@ -1,7 +1,7 @@
 import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
 import utils from "../../../../../sage-utils";
-import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
+import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import type SageMessage from "../../../model/SageMessage";
 import type User from "../../../model/User";
 import { DialogType } from "../../../repo/base/IdRepository";

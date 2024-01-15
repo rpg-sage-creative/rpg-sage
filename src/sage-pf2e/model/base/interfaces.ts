@@ -1,4 +1,4 @@
-import type utils from "../../../sage-utils";
+import { StringMatcher } from "@rsc-utils/string-utils";
 import { Core } from "../../../sage-utils/utils/ClassUtils";
 import type { TRarity } from "../../common";
 import type Base from "./Base";
@@ -78,7 +78,7 @@ export interface IHasName {
 	nameLower: string;
 
 	/** This must check to see if the value matches the name, nameClean (when cleaned), or nameLower (when lowered) */
-	matches(value: utils.StringUtils.StringMatcher): boolean;
+	matches(value: StringMatcher): boolean;
 }
 
 // #endregion NamedCore core interface and IHasName class interface

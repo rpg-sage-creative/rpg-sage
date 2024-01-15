@@ -9,7 +9,7 @@ import registerPatreon from "./patreon";
 import registerServer from "./server/index";
 import registerUser from "./user/index";
 
-export default function register(): void {
+export function registerAdmin(): void {
 	registerBot();
 	registerChannel();
 	registerColor();

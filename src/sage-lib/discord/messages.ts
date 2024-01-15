@@ -2,7 +2,7 @@ import { error, errorReturnNull, warn, warnReturnNull } from "@rsc-utils/console
 import type { Optional, OrNull } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
 import { createMessageLink } from "../../sage-utils/utils/DiscordUtils/createMessageLink";
-import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
+import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import { RenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type SageCache from "../sage/model/SageCache";
 import { DialogType } from "../sage/repo/base/IdRepository";

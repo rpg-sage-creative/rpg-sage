@@ -6,7 +6,7 @@ import type Source from "../sage-pf2e/model/base/Source";
 import type { IRenderable, ISearchable } from "../sage-utils";
 import { RenderableContent } from "../sage-utils/utils/RenderUtils";
 import { HasScoredSearchables, SearchInfo, SearchScore } from "../sage-utils/utils/SearchUtils";
-import { StringMatcher } from "../sage-utils/utils/StringUtils";
+import { StringMatcher } from "@rsc-utils/string-utils";
 
 type TRenderableMeta = { hasCompScore:boolean; sources:Source[]; unicodeArray:string[]; unicodeIndex:number; };
 

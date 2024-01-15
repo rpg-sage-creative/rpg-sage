@@ -1,8 +1,6 @@
 import { debug, error, verbose } from "@rsc-utils/console-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
-import { registerSlashCommand } from "../../../slash.mjs";
-import type { TSlashCommand } from "../../../types";
 import ArgsManager from "../../discord/ArgsManager";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
@@ -12,6 +10,7 @@ import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp, registerFindHelp, registerSearchHelp } from "./help";
 import { searchHandler } from "./search";
+import { capitalize } from "@rsc-utils/string-utils";
 
 // #region Common Types and Functions
 
@@ -116,9 +115,9 @@ async function objectsBy(sageMessage: SageMessage): Promise<void> {
 		domain = traitOr === "domain" && Repository.findByValue("Domain", searchTerm);
 	// source = traitOr === "source",
 
-	content.setTitle(`<b>${objectType.objectTypePlural} by ${utils.StringUtils.capitalize(traitOr)} (${searchTerm})</b>`);
+	content.setTitle(`<b>${objectType.objectTypePlural} by ${capitalize(traitOr)} (${searchTerm})</b>`);
 	if (trait) {
-		const capped = utils.StringUtils.capitalize(searchTerm);
+		const capped = capitalize(searchTerm);
 		/** @todo This uses weapon for all to expose traits ... create a HasTraits interface and properly implement */
 		const items = Repository.filter(objectType.objectType as "Weapon", weapon => weapon.Traits?.includes(trait) || weapon.traits.includes(capped));
 		if (items.length) {
@@ -136,7 +135,7 @@ async function objectsBy(sageMessage: SageMessage): Promise<void> {
 			content.appendSection(`<a href="http://2e.aonprd.com/Search.aspx?query=${searchTerm.replace(/\s+/g, "+")}">Search Archives of Nethys</a>`);
 		}
 	} else if (objectType.objectType === "Spell") {
-		const capped = utils.StringUtils.capitalize(searchTerm);
+		const capped = capitalize(searchTerm);
 		const spells = Repository.filter("Spell", spell => spell.traits.includes(capped));
 		if (spells.length) {
 			SourceNotationMap.appendNotatedItems(content, spells);
@@ -236,16 +235,10 @@ async function dmSlashHandler(sageInteraction: SageInteraction): Promise<void> {
 		return sageInteraction.reply(`Sorry, there was a problem!`, true);
 	}
 }
-function dmCommand(): TSlashCommand {
-	return {
-		"name": "DM",
-		"description": "Establish direct message channel with RPG Sage."
-	};
-}
 
 //#endregion
 
-export function registerCommandHandlers(): void {
+export function registerDefault(): void {
 	registerCommandRegex(/^\s*list\s*(weapons|armou?r|spells)\s*by\s*(trait)?\s*(\w+)$/i, objectsBy);
 	registerCommandHelp("Lists", `list weapons by trait TRAIT`);
 	registerCommandHelp("Lists", `list armor by trait TRAIT`);
@@ -307,8 +300,4 @@ export function registerCommandHandlers(): void {
 	});
 
 	registerInteractionListener(dmSlashTester, dmSlashHandler);
-}
-
-export function registerSlashCommands(): void {
-	registerSlashCommand(dmCommand());
 }

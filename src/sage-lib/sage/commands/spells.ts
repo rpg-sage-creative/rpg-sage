@@ -1,4 +1,5 @@
 import { warn } from "@rsc-utils/console-utils";
+import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e";
 import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e";
@@ -31,7 +32,7 @@ async function spellListB(sageMessage: SageMessage): Promise<void> {
 async function _spellList(sageMessage: SageMessage, traditionString: string, levelString: string, by: "school"): Promise<void> {
 	/*// debug("spellList", traditionString, levelString);*/
 	const content = createCommandRenderableContent(),
-		tradition = <TMagicTradition>utils.StringUtils.capitalize(traditionString),
+		tradition = <TMagicTradition>capitalize(traditionString),
 		byTradition = Repository.filter("Spell", spell => spell.traditions.includes(tradition));
 	const sourceMap = new SourceNotationMap();
 	if (!levelString) {
@@ -175,9 +176,9 @@ async function specialistLists(sageMessage: SageMessage): Promise<void> {
 		const trimmed = traditionString.trim();
 		if (SpecialistCommands.includes(trimmed[0])) {
 			modifier = <TSpecialistListModifier>trimmed[0];
-			tradition = <TMagicTradition>utils.StringUtils.capitalize(trimmed.slice(1).trim());
+			tradition = <TMagicTradition>capitalize(trimmed.slice(1).trim());
 		} else {
-			tradition = <TMagicTradition>utils.StringUtils.capitalize(trimmed);
+			tradition = <TMagicTradition>capitalize(trimmed);
 		}
 		return { tradition: tradition, modifier: modifier };
 	});
@@ -210,7 +211,7 @@ async function specialistLists(sageMessage: SageMessage): Promise<void> {
 
 // #endregion
 
-export default function register(): void {
+export function registerSpells(): void {
 	registerCommandRegex(/^\s*spells\s*(arcane|divine|occult|primal)\s*(\d+(?:\s*st|nd|rd|th)?|cantrips?)?(?:\s*by\s*(school))?\s*$/i, spellListB);
 	registerCommandHelp("Spells", `spells {tradition} {level|Cantrips}`);
 	registerCommandHelp("Spells", `spells {tradition} {level|Cantrips} by school`);

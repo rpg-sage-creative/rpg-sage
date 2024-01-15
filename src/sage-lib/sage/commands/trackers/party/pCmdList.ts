@@ -1,4 +1,4 @@
-import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
+import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import type SageMessage from "../../../model/SageMessage";
 
 export async function pCmdList(sageMessage: SageMessage): Promise<void> {

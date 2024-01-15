@@ -9,15 +9,13 @@ import {
 	SlashCommandSubcommandGroupBuilder
 } from "@discordjs/builders";
 import { REST } from "@discordjs/rest";
+import { getBotCodeName, getDataRoot, type BotCodeName } from "@rsc-utils/env-utils";
+import { listFilesSync, readJsonFileSync, writeFileSync } from "@rsc-utils/fs-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { Routes } from "discord-api-types/v9";
-import { registerSlashCommands } from "./sage-lib/sage/commands";
+import type { SlashCommandGameType, TNameDescription, TSlashCommand, TSlashCommandChoice, TSlashCommandOption } from "./SlashTypes";
+import { registerSlashCommands } from "./sage-lib/sage/commands/slash";
 import type { IBotCore } from "./sage-lib/sage/model/Bot";
-import utils from "./sage-utils";
-import { getBotCodeName, getDataRoot } from "./sage-utils/utils/EnvUtils";
-import type { TNameDescription, TSlashCommand, TSlashCommandChoice, TSlashCommandOption } from "./types";
-
-type TBot = "dev" | "beta" | "stable";
 
 const nodeArgs = process.argv.slice(2),
 	isUpdate = nodeArgs.includes("update"),
@@ -29,21 +27,19 @@ const dataPathSage = getDataRoot("sage");
 let characterCount = 0;
 
 const botsPath = `${dataPathSage}/bots`;
-const botJson = utils.FsUtils.listFilesSync(botsPath)
-	.map(file => utils.FsUtils.readJsonFileSync<IBotCore>(`${botsPath}/${file}`))
+const botJson = listFilesSync(botsPath)
+	.map(file => readJsonFileSync<IBotCore>(`${botsPath}/${file}`))
 	.find(json => json?.codeName === botCodeName);
 
 //#region Register Slash Commands
 
 const allSlashCommands = [] as TSlashCommand[];
 
-export type TGameType = "PF1E" | "PF2E" | "SF" | "Finder";
-
 /** Allows a SlashCommand to be registered so that it can be built */
 export function registerSlashCommand(...slashCommands: TSlashCommand[]): void;
-export function registerSlashCommand(gameType: TGameType, ...slashCommands: TSlashCommand[]): void;
-export function registerSlashCommand(...args: (TGameType | TSlashCommand)[]): void {
-	const defaultGameType = args.find(arg => typeof(arg) === "string") as TGameType;
+export function registerSlashCommand(gameType: SlashCommandGameType, ...slashCommands: TSlashCommand[]): void;
+export function registerSlashCommand(...args: (SlashCommandGameType | TSlashCommand)[]): void {
+	const defaultGameType = args.find(arg => typeof(arg) === "string") as SlashCommandGameType;
 	const slashCommands = args.filter(arg => typeof(arg) !== "string") as TSlashCommand[];
 	slashCommands.forEach(slashCommand => {
 		const gameType = defaultGameType ?? slashCommand.game;
@@ -181,7 +177,7 @@ function buildMapContextMenuCommandBuilder(): ContextMenuCommandBuilder {
 		;
 }
 
-function buildUnifiedCommand(which: TBot): (SlashCommandBuilder | ContextMenuCommandBuilder)[] {
+function buildUnifiedCommand(which: BotCodeName): (SlashCommandBuilder | ContextMenuCommandBuilder)[] {
 	const dashWhich = `-${which}`;
 	const parenWhich = ` (${which})`;
 	const slashCommand = { name:`Sage${which === "stable" ? "" : dashWhich}`, description:`RPG Sage${which === "stable" ? "" : parenWhich} Commands`, children:allSlashCommands };
@@ -191,10 +187,10 @@ function buildUnifiedCommand(which: TBot): (SlashCommandBuilder | ContextMenuCom
 	}
 	return commands;
 }
-function buildIndividualCommands(_which: TBot): SlashCommandBuilder[] {
+function buildIndividualCommands(_which: BotCodeName): SlashCommandBuilder[] {
 	return allSlashCommands.map(buildCommand);
 }
-function buildCommands(which: TBot): (SlashCommandBuilder | ContextMenuCommandBuilder)[] {
+function buildCommands(which: BotCodeName): (SlashCommandBuilder | ContextMenuCommandBuilder)[] {
 	return true ? buildUnifiedCommand(which) : buildIndividualCommands(which);
 }
 
@@ -242,7 +238,7 @@ if (!botJson) {
 	}else {
 		try {
 			const built = buildCommands(botCodeName);
-			utils.FsUtils.writeFileSync(`../data/slash/${botCodeName}.json`, built, true, true);
+			writeFileSync(`../data/slash/${botCodeName}.json`, built, true, true);
 			console.log(`Slash Commands built for ${botCodeName}: ${built.length} commands; ${characterCount} characters`);
 		}catch(ex) {
 			console.error(ex);

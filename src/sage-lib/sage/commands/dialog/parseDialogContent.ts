@@ -1,4 +1,4 @@
-import { capitalize } from "../../../../sage-utils/utils/StringUtils";
+import { capitalize } from "@rsc-utils/string-utils";
 import { DialogType } from "../../repo/base/IdRepository";
 import type { DialogContent } from "./DialogContent";
 import { getTypeOrAlias } from "./getTypeOrAlias";

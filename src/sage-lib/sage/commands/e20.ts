@@ -1,4 +1,6 @@
 import { errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
+import { getDataRoot } from "@rsc-utils/env-utils";
+import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/essence20";
@@ -11,8 +13,6 @@ import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
 import PlayerCharacterTransformer, { PlayerCharacterCoreTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
 import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
 import type { UUID } from "../../../sage-utils";
-import { getDataRoot } from "../../../sage-utils/utils/EnvUtils";
-import { fileExistsSync, readJsonFile, writeFile } from "../../../sage-utils/utils/FsUtils";
 import { PdfCacher } from "../../../sage-utils/utils/PdfUtils";
 import { DUser, DiscordId, DiscordKey, NilSnowflake, TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
@@ -450,7 +450,7 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 	return Promise.resolve();
 }
 
-export function registerCommandHandlers(): void {
+export function registerE20(): void {
 	registerInteractionListener(sheetTester, sheetHandler);
 }
 

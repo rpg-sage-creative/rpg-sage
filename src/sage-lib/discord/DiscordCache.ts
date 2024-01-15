@@ -3,7 +3,7 @@ import type { Optional } from "@rsc-utils/type-utils";
 import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Interaction, Message, MessageReaction, PartialMessage, Role, Snowflake, TextChannel, User, Webhook } from "discord.js";
 import { NilSnowflake } from ".";
 import { Collection } from "../../sage-utils/utils/ArrayUtils";
-import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/humanReadable";
+import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageMessage from "../sage/model/SageMessage";
 import DiscordKey from "./DiscordKey";

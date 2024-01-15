@@ -1,4 +1,4 @@
-import utils from "../../sage-utils";
+import { StringMatcher } from "@rsc-utils/string-utils";
 import { findByValue } from "../data/Repository";
 import type ArcaneSchool from "./ArcaneSchool";
 import type { SourcedCore } from "./base/HasSource";
@@ -29,7 +29,7 @@ export default class SingleCasterSpell extends HasSource<SingleCasterSpellCore> 
 	// }
 
 	public static find(caster: string, value: string): SingleCasterSpell {
-		const stringMatcher = utils.StringUtils.StringMatcher.from(value);
+		const stringMatcher = StringMatcher.from(value);
 		return spells[caster].find(spell => spell.matches(stringMatcher))!;
 	}
 

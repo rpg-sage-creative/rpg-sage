@@ -1,7 +1,7 @@
 import { errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
+import { getDataRoot } from "@rsc-utils/env-utils";
+import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/fs-utils";
 import type * as Discord from "discord.js";
-import { getDataRoot } from "../../../../sage-utils/utils/EnvUtils";
-import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../../sage-utils/utils/FsUtils";
 import RenderableGameMap from "./RenderableGameMap";
 
 //#region types

@@ -1,22 +1,22 @@
-import registerAdmin from "./admin";
-import { registerCommandHandlers as registerCal, registerSlashCommands as registerCalSlashCommands } from "./cal";
-import registerCmd from "./cmd";
-import { registerCommandHandlers as registerDcs, registerSlashCommands as registerDcsSlashCommands } from "./dcs";
-import { registerCommandHandlers as registerDefault, registerSlashCommands as registerDefaultSlashCommands } from "./default";
-import registerDialog from "./dialog";
-import registerDice from "./dice";
-import { registerEncounter } from "./trackers/registerEncounter";
-import { registerCommandHandlers as registerE20 } from "./e20";
-import { registerCommandHandlers as registerHelp, registerSlashCommands as registerHelpSlashCommands } from "./help";
-import { registerCommandHandlers as registerImport, registerSlashCommands as registerImportSlashCommands } from "./import";
-import { registerCommandHandlers as registerMap, registerSlashCommands as registerMapSlashCommands } from "./map";
-import { registerParty } from "./trackers/registerParty";
-import { registerCommandHandlers as registerPathbuilder } from "./pathbuilder";
-import registerPfs from "./pfs";
-import registerSpells from "./spells";
-import registerWealth from "./wealth";
-import { registerCommandHandlers as registerWeather, registerSlashCommands as registerWeatherSlashCommands } from "./weather";
 import { registerDeleteButtonHandler } from "../model/utils/deleteButton";
+import { registerAdmin } from "./admin";
+import { registerCal } from "./cal";
+import { registerCmd } from "./cmd";
+import { registerDcs } from "./dcs";
+import { registerDefault } from "./default";
+import { registerDialog } from "./dialog";
+import { registerDice } from "./dice";
+import { registerE20 } from "./e20";
+import { registerHelpCommands } from "./help";
+import { registerImport } from "./import";
+import { registerMap } from "./map";
+import { registerPathbuilder } from "./pathbuilder";
+import { registerPfsCommands } from "./pfs";
+import { registerSpells } from "./spells";
+import { registerEncounter } from "./trackers/registerEncounter";
+import { registerParty } from "./trackers/registerParty";
+import registerWealth from "./wealth";
+import { registerCommandHandlers as registerWeather } from "./weather";
 
 export function registerCommandHandlers(): void {
 	registerAdmin();
@@ -28,12 +28,12 @@ export function registerCommandHandlers(): void {
 	registerDice();
 	registerEncounter();
 	registerE20();
-	registerHelp();
+	registerHelpCommands();
 	registerImport();
 	registerMap();
 	registerParty();
 	registerPathbuilder();
-	registerPfs();
+	registerPfsCommands();
 	registerSpells();
 	registerWealth();
 	registerWeather();
@@ -41,12 +41,3 @@ export function registerCommandHandlers(): void {
 	registerDeleteButtonHandler();
 }
 
-export function registerSlashCommands(): void {
-	registerCalSlashCommands();
-	registerDcsSlashCommands();
-	registerDefaultSlashCommands();
-	registerHelpSlashCommands();
-	registerImportSlashCommands();
-	registerMapSlashCommands();
-	registerWeatherSlashCommands();
-}

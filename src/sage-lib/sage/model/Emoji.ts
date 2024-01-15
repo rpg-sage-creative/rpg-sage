@@ -1,5 +1,5 @@
+import { tokenize } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
-import utils from "../../../sage-utils";
 import type { EmojiType, IEmoji } from "./HasEmojiCore";
 
 export type TEmojiAndType = { type: EmojiType; replacement: string; };
@@ -25,8 +25,8 @@ function emojify(text: string, matches: string[], replacement: string): string {
 		emoji: XRegExp(markedMatches.map(XRegExp.escape).join("|"), "i")
 	};
 
-	const tokenized = utils.StringUtils.Tokenizer.tokenize(text, parsers).map((token, i, arr) => {
-		if (token.type !== "emoji") {
+	const tokenized = tokenize(text, parsers).map((token, i, arr) => {
+		if (token.key !== "emoji") {
 			return token.token;
 		}
 		if (arr[i - 1]?.token === ":" && arr[i + 1]?.token === ":") {

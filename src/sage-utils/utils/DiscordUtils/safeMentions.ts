@@ -1,4 +1,4 @@
-import { ZERO_WIDTH_SPACE } from "../consts";
+import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 
 export function safeMentions(content: string): string {
 	return content

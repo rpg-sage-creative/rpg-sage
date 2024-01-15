@@ -1,6 +1,6 @@
+import { dequote, tokenize } from "@rsc-utils/string-utils";
 import { existsAndUnique } from "../ArrayUtils/Filters";
 import { oneToUS, reduceNoise } from "../LangUtils";
-import { Tokenizer, dequote } from "../StringUtils";
 import SearchScore, { TTermInfo } from "./SearchScore";
 import type { ISearchable } from "./types";
 
@@ -15,7 +15,7 @@ type TSearchableContent = string | string[] | undefined;
 export type TSearchFlag = "" | "g" | "r" | "gr" | "rg";
 
 function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean) {
-	const tokens = Tokenizer.tokenize(term, { quoted:/"[^"]*"/, other:/\S+/ });
+	const tokens = tokenize(term, { quoted:/"[^"]*"/, other:/\S+/ });
 	const terms = tokens.map(token => token.token).map(s => dequote(s)).filter(existsAndUnique);
 	return reduceNoise(terms).map(_term => {
 		const minus = _term.startsWith("-"),

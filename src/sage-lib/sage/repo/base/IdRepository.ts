@@ -1,12 +1,13 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
 import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, verbose } from "@rsc-utils/console-utils";
+import { getBotCodeName, getDataRoot } from "@rsc-utils/env-utils";
+import { listFiles, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
 import type { Optional, OrNull } from "@rsc-utils/type-utils";
 import { Snowflake } from "discord.js";
 import type { GameType } from "../../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
 import utils, { type UUID } from "../../../../sage-utils";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
-import { getBotCodeName, getDataRoot } from "../../../../sage-utils/utils/EnvUtils";
 import type { DicePostType } from "../../commands/dice";
 import type SageCache from "../../model/SageCache";
 
@@ -97,7 +98,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 
 	/** Reads all the uuid.json files and returns all the "Id" values. */
 	protected async getIds(): Promise<UUID[]> {
-		const files = await utils.FsUtils.listFiles(`${IdRepository.DataPath}/${this.objectTypePlural}`)
+		const files = await listFiles(`${IdRepository.DataPath}/${this.objectTypePlural}`)
 			.catch<string[]>(errorReturnEmptyArray);
 		return files
 			.filter(file => file.endsWith(".json"))
@@ -126,8 +127,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 
 	/** Reads the uuid.json for the given "Id". */
 	protected readCoreById(id: UUID): Promise<OrNull<T>> {
-		return utils.FsUtils
-			.readJsonFile<T>(`${IdRepository.DataPath}/${this.objectTypePlural}/${id}.json`)
+		return readJsonFile<T>(`${IdRepository.DataPath}/${this.objectTypePlural}/${id}.json`)
 			.catch(errorReturnNull);
 	}
 
@@ -191,7 +191,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 
 		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${entity.id}.json`;
 		const formatted = getBotCodeName() === "dev";
-		const saved = await utils.FsUtils.writeFile(path, entity.toJSON(), true, formatted).catch(errorReturnFalse);
+		const saved = await writeFile(path, entity.toJSON(), true, formatted).catch(errorReturnFalse);
 		if (saved) {
 			this.cacheId(entity.id, entity);
 		}

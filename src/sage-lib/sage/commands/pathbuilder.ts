@@ -1,11 +1,11 @@
 import { errorReturnNull } from "@rsc-utils/console-utils";
+import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
 import { PathbuilderCharacter, getExplorationModes, getSavingThrows, getSkills, toModifier } from "../../../sage-pf2e";
 import { TCharacterSectionType, TCharacterViewType, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
 import { UUID } from "../../../sage-utils";
-import { StringMatcher } from "../../../sage-utils/utils/StringUtils";
 import { DUser, DiscordId, DiscordKey, TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
@@ -537,7 +537,7 @@ export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction
 
 //#endregion
 
-export function registerCommandHandlers(): void {
+export function registerPathbuilder(): void {
 	registerInteractionListener(sheetTester, sheetHandler);
 }
 

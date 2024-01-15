@@ -1,9 +1,8 @@
-import { captureProcessExit } from "@rsc-utils/console-utils";
+import { getPort, initializeConsoleUtilsByEnvironment } from "@rsc-utils/env-utils";
 import { activate } from "./sage-lib";
-import { getPort } from "./sage-utils/utils/EnvUtils";
 import { RenderableMap } from "./sage-utils/utils/MapUtils";
 
-captureProcessExit();
+initializeConsoleUtilsByEnvironment();
 RenderableMap.startServer(getPort("Map"));
 activate();
 

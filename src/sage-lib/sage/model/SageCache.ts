@@ -1,7 +1,7 @@
 import { uncache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnFalse, silly } from "@rsc-utils/console-utils";
+import { toMarkdown } from "@rsc-utils/string-utils";
 import type * as Discord from "discord.js";
-import utils from "../../../sage-utils";
 import { DInteraction, DMessage, DReaction, DUser, DiscordCache, DiscordKey, NilSnowflake, TChannel } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
 import ActiveBot from "../model/ActiveBot";
@@ -239,7 +239,7 @@ export default class SageCache {
 		return this.bot.emojify(text);
 	}
 	public format(text: string): string {
-		return utils.StringUtils.Markdown.format(this.emojify(text));
+		return toMarkdown(this.emojify(text));
 	}
 	public getPrefixOrDefault(): string {
 		return this.server?.getPrefixOrDefault() ?? "";

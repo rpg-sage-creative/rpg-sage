@@ -1,4 +1,5 @@
 import { debug } from "@rsc-utils/console-utils";
+import { capitalize } from "@rsc-utils/string-utils";
 import utils, { UUID } from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
 import type { TMagicComponent, TMagicTradition } from '../common';
@@ -96,7 +97,7 @@ function creatureToHtml(creature: TSpellCreature): string {
 	const mappedSpeeds = creature.speeds.map(speed => `${speed.type} ${speed.value} feet`).join(", ");
 	return `<blockquote>`
 		+ `<b><u>${creature.name} - Creature ${creature.level}</u></b>`
-		+ `<br/>` + creature.traits.map(t => utils.StringUtils.capitalize(t)).join(", ")
+		+ `<br/>` + creature.traits.map(t => capitalize(t)).join(", ")
 		+ `<br/><b>Perception</b> ${toModifier(creature.perception.value)}; ${creature.perception.senses.join(", ")}`
 		+ `<br/><b>Languages</b> ${(creature.languages || []).length ? creature.languages.join(", ") : "-"}${languagesSpecial}`
 		+ `<br/><b>Skills</b> ${mappedSkills}`
@@ -180,7 +181,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 	public get area(): string | undefined { return this.core.area; }
 	public canHeighten = (this.core.heightenedAs ?? this.core.heightened ?? []).length > 0;
 	public get cast(): string { return this.core.cast; }
-	public components = <TMagicComponent[]>(this.core.components ?? []).map(component => utils.StringUtils.capitalize(component));
+	public components = <TMagicComponent[]>(this.core.components ?? []).map(component => capitalize(component));
 	public get cost(): string | undefined { return this.core.cost; }
 	private _domain?: Domain | null;
 	public get domain(): Domain | undefined {
@@ -203,7 +204,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 	public get requirements(): string | undefined { return this.core.requirements; }
 	public get savingThrow(): string | undefined { return this.core.savingThrow; }
 	public get targets(): string | undefined { return this.core.targets; }
-	public traditions = <TMagicTradition[]>(this.core.traditions || []).map(tradition => utils.StringUtils.capitalize(tradition));
+	public traditions = <TMagicTradition[]>(this.core.traditions || []).map(tradition => capitalize(tradition));
 	public get trigger(): string | undefined { return this.core.trigger; }
 
 	//#endregion
@@ -368,7 +369,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 			score.append(searchInfo.score(this, this.traits, this.traditions, this.archetypeName));
 		}
 
-		const keyTerm = utils.StringUtils.capitalize(searchInfo.keyTerm || "");
+		const keyTerm = capitalize(searchInfo.keyTerm || "");
 		if (findByValue("Class", keyTerm) && !this.traits.includes(keyTerm)) {
 			score.fail();
 		}

@@ -1,7 +1,7 @@
 import { errorReturnEmptyArray } from "@rsc-utils/console-utils";
+import { getBuildInfo } from "@rsc-utils/env-utils";
 import { GameType } from "../../../../sage-common";
-import { toHumanReadable } from "../../../../sage-utils/utils/DiscordUtils/humanReadable";
-import { getBuildInfo } from "../../../../sage-utils/utils/EnvUtils/getBuildInfo";
+import { toHumanReadable } from "../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import type Bot from "../../model/Bot";
 import type SageMessage from "../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
@@ -100,9 +100,16 @@ async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
 async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.isSuperUser) {
 		const buildInfo = getBuildInfo();
-		const keys = Object.keys(buildInfo) as (keyof typeof buildInfo)[];
-		const pairs = keys.map(key => `**${key}**\n- \`${buildInfo[key]}\``);
-		await sageMessage.send(pairs.join("\n"));
+		const lines: string[] = [];
+		lines.push(`### ${buildInfo.name}`);
+		lines.push(`**version**\n- \`${buildInfo.version}\``);
+		lines.push(`**branch**\n- \`${buildInfo.branch}\``);
+		lines.push(`**buildDate**\n- \`${buildInfo.buildDate}\``);
+		lines.push(`### rsc-utils`);
+		buildInfo.rscLibs.forEach(lib => {
+			lines.push(`- **${lib.name}**\n- \`${buildInfo.version}\``);
+		});
+		await sageMessage.send(lines.join("\n"));
 	}
 }
 

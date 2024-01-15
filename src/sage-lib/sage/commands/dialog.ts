@@ -62,7 +62,7 @@ async function doDialog(sageMessage: SageMessage, dialogContents: DialogContent[
 	}
 }
 
-export default function register(): void {
+export function registerDialog(): void {
 	registerMessageListener(isDialog, doDialog, { type:MessageType.Both, priorityIndex:0 });
 	registerReactionListener(isDelete, doDelete, { type:ReactionType.Add });
 	registerReactionListener(isPin, doPin);

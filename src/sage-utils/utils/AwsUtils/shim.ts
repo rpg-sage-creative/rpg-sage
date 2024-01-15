@@ -1,6 +1,6 @@
 
 import { debug, errorReturnEmptyArray } from "@rsc-utils/console-utils";
-import { listFiles } from "../FsUtils";
+import { listFiles } from "@rsc-utils/fs-utils";
 import type { UUID } from "../types";
 
 /*

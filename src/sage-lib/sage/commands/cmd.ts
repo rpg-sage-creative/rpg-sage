@@ -137,6 +137,6 @@ async function adminCommandHandler(sageMessage: SageMessage): Promise<void> {
 
 // #endregion
 
-export default function register(): void {
+export function registerCmd(): void {
 	registerMessageListener(adminCommandTest, adminCommandHandler);
 }

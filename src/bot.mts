@@ -1,7 +1,7 @@
-import { captureProcessExit } from "@rsc-utils/console-utils";
+import { initializeConsoleUtilsByEnvironment } from "@rsc-utils/env-utils";
 import { activate } from "./sage-lib";
 
-captureProcessExit();
+initializeConsoleUtilsByEnvironment();
 activate();
 
 // node --experimental-modules --es-module-specifier-resolution=node bot.mjs

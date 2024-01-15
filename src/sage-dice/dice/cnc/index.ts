@@ -1,11 +1,8 @@
-//#region imports
-
+import { randomSnowflake } from "@rsc-utils/snowflake-utils";
+import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull } from "@rsc-utils/type-utils";
 import { GameType } from "../../../sage-common";
-import type { TParsers, TToken } from "../../../sage-utils";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { randomSnowflake } from "../../../sage-utils/utils/DiscordUtils/randomSnowflake";
-import { Tokenizer } from "../../../sage-utils/utils/StringUtils";
 import type {
 	TDiceLiteral,
 	TTestData
@@ -32,10 +29,6 @@ import type {
 } from "../base/types";
 import { explodeDice } from "../common/explodeDice";
 
-//#endregion
-
-function cleanWhitespace(value: string): string { return value.replace(/\s+/g, " ").trim(); }
-
 /*
 default target ("VS") = 8
 
@@ -59,18 +52,18 @@ final success/failure
 
 //#region Tokenizer
 
-function getParsers(): TParsers {
+function getParsers(): TokenParsers {
 	return {
 		dice: /\s*(\d+)?\s*d\s*(12)/i,
 		target: /(vs)\s*(\d+)/i
 	};
 }
 
-function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TToken): T {
-	if (token.type === "dice") {
+function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData): T {
+	if (token.key === "dice") {
 		core.count = +token.matches[0];
 		core.sides = 12;
-	}else if (token.type === "target") {
+	}else if (token.key === "target") {
 		const { value, hidden } = parseTestTargetValue(token.matches[1]);
 		core.target = { type:TargetType.VS, value, hidden };
 	}else {
@@ -204,7 +197,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	public static fromCore(core: DicePartCore): DicePart {
 		return new DicePart(core);
 	}
-	public static fromTokens(tokens: TToken[]): DicePart {
+	public static fromTokens(tokens: TokenData[]): DicePart {
 		const core = tokens.reduce(reduceTokenToDicePartCore, <DicePartCore>{ description:"" });
 		const args = <TDicePartCoreArgs>{ testOrTarget:core.target ?? core.test, ...core };
 		return DicePart.create(args);
@@ -362,11 +355,11 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public static fromCore(core: DiceGroupCore): DiceGroup {
 		return new DiceGroup(core);
 	}
-	public static fromTokens(tokens: TToken[], diceOutputType?: DiceOutputType): DiceGroup {
+	public static fromTokens(tokens: TokenData[], diceOutputType?: DiceOutputType): DiceGroup {
 		return DiceGroup.create([Dice.create([DicePart.fromTokens(tokens)])], diceOutputType);
 	}
 	public static parse(diceString: string, diceOutputType?: DiceOutputType): DiceGroup {
-		const tokens = Tokenizer.tokenize(diceString, getParsers(), "desc");
+		const tokens = tokenize(diceString, getParsers(), "desc");
 		return DiceGroup.fromTokens(tokens, diceOutputType);
 	}
 	public static Part = <typeof baseDice>Dice;

@@ -1,5 +1,5 @@
-import { createDiscordEmojiRegex } from "../../sage-utils/utils/StringUtils";
-import { tokenize } from "../../sage-utils/utils/StringUtils/Tokenizer";
+import { tokenize } from "@rsc-utils/string-utils";
+import { createDiscordEmojiRegex } from "../../sage-utils/utils/DiscordUtils";
 
 export * as base from "./base";
 export * as cnc from "./cnc";
@@ -24,7 +24,7 @@ export function correctEscapeForEmoji(value: string): string {
 		let output = "", isEmoji = false, isEscaped = false;
 
 		tokens.forEach(token => {
-			isEmoji = token.type === "emojiRegex";
+			isEmoji = token.key === "emojiRegex";
 			// toggle if we are escaped or not, put the tick before we add the token
 			if (isEmoji === isEscaped) {
 				output += "`";

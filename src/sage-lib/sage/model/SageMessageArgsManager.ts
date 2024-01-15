@@ -1,3 +1,4 @@
+import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
 import { GameType, parseGameType } from "../../../sage-common";
@@ -233,7 +234,7 @@ function removeAndReturnPermissionType(args: string[], key: "gamemaster" | "nonp
 		const match = arg.match(regex);
 		if (match && match[1].toLowerCase().replace(/^gm$/, "gamemaster") === key) {
 			args.splice(args.indexOf(arg), 1);
-			return match[3] ? PermissionType[<TPermissionType>utils.StringUtils.capitalize(match[3])] : +match[2];
+			return match[3] ? PermissionType[<TPermissionType>capitalize(match[3])] : +match[2];
 		}
 	}
 	// game.updateChannel ignores arguments that are undefined

@@ -33,7 +33,7 @@
 // 		<content><![CDATA[${msg.content}]]></content>
 // 		<embeds>${msg.embeds.map(embed => `<embed><![CDATA[${embed.description}]]></embed>`).join("\n")}</embeds>
 // 	</message>`);
-// 				const written = await utils.FsUtils.writeFile(`./data/export/${date.getTime()}.xml`, `<messages guildDid="${this.guild&&this.guild.id||""}" channelDid="${this.channel.id}">${xml.join("")}\n</messages>`);
+// 				const written = await writeFile(`./data/export/${date.getTime()}.xml`, `<messages guildDid="${this.guild&&this.guild.id||""}" channelDid="${this.channel.id}">${xml.join("")}\n</messages>`);
 // 				sageMessage.reactSuccessOrFailure(written);
 // 				reaction.remove();
 // 			}

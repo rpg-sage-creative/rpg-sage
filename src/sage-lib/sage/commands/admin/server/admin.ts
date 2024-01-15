@@ -4,7 +4,7 @@ import type SageMessage from "../../../model/SageMessage";
 import { type IAdminUser, AdminRoleType } from "../../../model/Server";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
-import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
+import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 
 
 type TAdminUser = IAdminUser & { discordUser: Discord.User };

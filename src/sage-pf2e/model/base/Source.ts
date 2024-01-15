@@ -1,8 +1,10 @@
+import { StringMatcher } from "@rsc-utils/string-utils";
 import utils from "../../../sage-utils";
 import RenderableContent from "../../data/RenderableContent";
 import type { IFile } from "../../data/Repository";
 import * as Repository from "../../data/Repository";
 import Base, { BaseCore } from "./Base";
+import { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 
 export interface SourceCore extends BaseCore<"Source"> {
 	apName?: string;
@@ -66,9 +68,9 @@ export default class Source extends Base<SourceCore, "Source"> {
 
 	// #region IHasName
 
-	private _codeMatcher?: utils.StringUtils.StringMatcher;
-	public matches(other: utils.StringUtils.StringMatcher): boolean {
-		const codeMatcher = this._codeMatcher ?? (this._codeMatcher = utils.StringUtils.StringMatcher.from(this.code));
+	private _codeMatcher?: StringMatcher;
+	public matches(other: StringMatcher): boolean {
+		const codeMatcher = this._codeMatcher ?? (this._codeMatcher = StringMatcher.from(this.code));
 		return codeMatcher.matches(other) || super.matches(other);
 	}
 
@@ -94,7 +96,7 @@ export default class Source extends Base<SourceCore, "Source"> {
 	// #endregion utils.RenderUtils.IRenderable
 
 	// #region utils.SearchUtils.ISearchable
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		score.append(searchInfo.score(this, this.abbreviation));
 		if (this.isAp) {

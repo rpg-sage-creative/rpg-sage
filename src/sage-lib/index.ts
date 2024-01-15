@@ -1,6 +1,6 @@
 import { error } from "@rsc-utils/console-utils";
 import { registerAndLoad } from "../sage-pf2e";
-import { getBotCodeName } from "../sage-utils/utils/EnvUtils";
+import { getBotCodeName } from "@rsc-utils/env-utils";
 import registerPrompts from "./discord";
 import { setBotMeta } from "./discord/handlers";
 import { SageDialogWebhookName } from "./discord/messages";

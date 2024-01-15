@@ -1,4 +1,5 @@
 import { debug } from "@rsc-utils/console-utils";
+import { capitalize } from "@rsc-utils/string-utils";
 import { Coins, PROFICIENCIES, TProficiency, Table } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
 import type SageMessage from "../model/SageMessage";
@@ -63,7 +64,7 @@ async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, 
 	debug("incomeEarned", taskLevelString, proficiencyString);
 	const table = Table.findByNumber("4-2")!,
 		taskLevel = +taskLevelString,
-		proficiencyLetter = <TProficiency>utils.StringUtils.capitalize(proficiencyString || "")[0],
+		proficiencyLetter = <TProficiency>capitalize(proficiencyString || "")[0],
 		proficiencyIndex = PROFICIENCIES.findIndex(prof => prof[0] === proficiencyLetter),
 		proficiency = PROFICIENCIES[proficiencyIndex];
 	let renderable: utils.RenderUtils.RenderableContent;

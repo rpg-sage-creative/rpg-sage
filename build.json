@@ -1,12 +1,12 @@
 {
-"buildTs":1705098623000,
-"buildDate":"2024-01-12",
-"buildTime":"1430",
-"branch":"stable",
-"commit":"cc8d8b4fbe61210dde4e997dabeef4b378a0e4e2",
-"commitSubject":"don't remove logs when running dev",
-"commitTs":1705098614000,
-"commitDate":"2024-01-12",
-"commitTime":"1430",
+"name":"rpg-sage",
+"version":"1.5.4",
+"branch":"v1.6.0",
+"commit":"0ee541e9658fe4b170739c7be989abc59cad7193",
+"commitSubject":"implement rsc-utils/https-utils",
+"commitTs":1705187346000,
+"commitDate":"2024-01-13-1509",
+"buildTs":1705356751000,
+"buildDate":"2024-01-15-1412",
 "author":"Randal T Meyer"
 }

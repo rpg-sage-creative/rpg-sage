@@ -4,9 +4,7 @@ import { DaysPerMonth, Days as GDays, Months } from "../../../sage-cal/pf2e/cal"
 import SDate from "../../../sage-cal/sf1e/SDate";
 import { Days as SDays } from "../../../sage-cal/sf1e/cal";
 import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import { capitalize } from "../../../sage-utils/utils/StringUtils";
-import { registerSlashCommand } from "../../../slash.mjs";
-import type { TSlashCommand } from "../../../types";
+import { capitalize } from "@rsc-utils/string-utils";
 import { registerInteractionListener } from "../../discord/handlers";
 import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
@@ -104,32 +102,9 @@ async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
 	return sageInteraction.reply(_calDate(date, origin), false);
 }
 
-function dateCommand(): TSlashCommand {
-	return {
-		name: "Date",
-		description: "Show today (or a specific day) for PF/SF Games",
-		options: [
-			{ name:"date", description:"A specific date: yyy-mm-dd" },
-			{ name:"origin", description:"Where does the year originate?", choices:["Absalom", "Earth", "Golarion"] }
-		]
-	};
-}
-function calendarCommand(): TSlashCommand {
-	return {
-		name: "Calendar",
-		description: "Calendar days/months for PF/SF Games"
-	};
-}
-function calCommands(): TSlashCommand[] {
-	return [
-		dateCommand(),
-		calendarCommand()
-	];
-}
-
 //#endregion
 
-export function registerCommandHandlers(): void {
+export function registerCal(): void {
 	registerCommandRegex(/^\s*(?:date|today)\s*(\d{4}\D\d{2}\D\d{2})?\s*(earth|absalom|golarion)?\s*$/i, calDate);
 	registerCommandHelp("Command", "Golarion", "today");
 	registerCommandHelp("Command", "Golarion", "date YYYY-MM-DD");
@@ -138,8 +113,4 @@ export function registerCommandHandlers(): void {
 	registerCommandHelp("Command", "Golarion", "calendar");
 
 	registerInteractionListener(slashTester, slashHandler);
-}
-
-export function registerSlashCommands(): void {
-	registerSlashCommand("Finder", ...calCommands());
 }

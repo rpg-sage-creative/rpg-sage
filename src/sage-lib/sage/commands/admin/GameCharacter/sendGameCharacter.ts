@@ -1,6 +1,6 @@
 import type { Message } from "discord.js";
 import { Collection } from "../../../../../sage-utils/utils/ArrayUtils";
-import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/humanReadable";
+import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import { DiscordId, type TChannel } from "../../../../discord";
 import { sendWebhook } from "../../../../discord/messages";
 import type GameCharacter from "../../../model/GameCharacter";

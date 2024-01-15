@@ -1,15 +1,14 @@
 import { debug, error } from "@rsc-utils/console-utils";
+import { chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, tokenize, type KeyValueArg } from '@rsc-utils/string-utils';
 import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
 import type { GameType } from "../../../sage-common";
 import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "../../../sage-dice";
 import { NEWLINE } from "../../../sage-pf2e";
-import type { TKeyValueArg } from "../../../sage-utils";
 import { createMessageLink } from "../../../sage-utils/utils/DiscordUtils/createMessageLink";
-import { toHumanReadable } from "../../../sage-utils/utils/DiscordUtils/humanReadable";
+import { toHumanReadable } from "../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import { addCommas } from "../../../sage-utils/utils/NumberUtils";
 import { random, randomItem } from "../../../sage-utils/utils/RandomUtils";
-import { Tokenizer, chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks } from "../../../sage-utils/utils/StringUtils";
 import type { DUser, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { DiscordId, DiscordMaxValues } from "../../discord";
 import { createMessageEmbed } from "../../discord/embeds";
@@ -614,19 +613,19 @@ function findPrefixMacroArgs(userMacros: NamedCollection<TMacro>, input: string)
 	return [cleanPrefix, macro, slicedArgs];
 }
 
-type TArgs = { indexed:string[]; named:TKeyValueArg[] };
+type TArgs = { indexed:string[]; named:KeyValueArg[] };
 function parseMacroArgs(argString: string): TArgs {
 	const parsers = {
 		spaces: createWhitespaceRegex(),
 		named: createKeyValueArgRegex(),
 		quotes: createQuotedRegex(true)
 	};
-	const tokens = Tokenizer.tokenize(argString.trim(), parsers);
+	const tokens = tokenize(argString.trim(), parsers);
 	const named = tokens
-		.filter(token => token.type === "named")
+		.filter(token => token.key === "named")
 		.map(token => parseKeyValueArg(token.token)!);
 	const indexed = tokens
-		.filter(token => !["spaces", "named"].includes(token.type))
+		.filter(token => !["spaces", "named"].includes(token.key))
 		.map(token => dequote(token.token).trim());
 	return { indexed, named };
 }
@@ -649,7 +648,7 @@ function nonEmptyStringOrDefaultValue(arg: Optional<string>, def: Optional<strin
 	return argOrEmptyString !== "" ? argOrEmptyString : defOrEmptyString;
 }
 
-function namedArgValueOrDefaultValue(arg: Optional<TKeyValueArg>, def: Optional<string>): string {
+function namedArgValueOrDefaultValue(arg: Optional<KeyValueArg>, def: Optional<string>): string {
 	if (arg) {
 		const value = nonEmptyStringOrDefaultValue(arg.value, def);
 		if (arg.keyLower.match(/^(ac|dc|vs)$/) && value) {
@@ -915,7 +914,7 @@ function mapDiceTestResults({ dieSize, iterations, rolls }: { dieSize: number; i
 
 //#endregion
 
-export default function register(): void {
+export function registerDice(): void {
 	registerCommandRegex(/dice test (die|size)=("d?\d+"|\d+)/i, diceTest);
 	registerMessageListener(hasUnifiedDiceCommand, sendDice as any, { priorityIndex:1 });
 

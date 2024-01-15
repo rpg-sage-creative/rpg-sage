@@ -1,4 +1,4 @@
-import { TStringMatcher } from "../..";
+import { type Matcher } from "@rsc-utils/type-utils";
 
 /** A core with a name */
 export interface NameCore {
@@ -12,5 +12,5 @@ export interface IHasNameCore {
 	name: string;
 
 	/** This must check to see if the value matches the name, nameClean (when cleaned), or nameLower (when lowered) */
-	matches(value: TStringMatcher): boolean;
+	matches(value: Matcher): boolean;
 }

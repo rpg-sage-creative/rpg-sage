@@ -197,7 +197,7 @@ export default class NoteManager {
 	// 		.filter(pair => pair.value === undefined) // confirm that undefined is right, instead of using null or isDefined
 	// 		.map(pair => pair.key);
 	// 	// warn("DON'T USE NoteManager.parseKeys()! reuse other code");
-	// 	// return utils.StringUtils.Tokenizer.tokenize(input, { quote:/"[^"]+"/, nonSpace:/\S+/ })
+	// 	// return tokenize(input, { quote:/"[^"]+"/, nonSpace:/\S+/ })
 	// 	// 	.map(token => SageMessageArgs.dequote(token.token))
 	// 	// 	.filter(key => key);
 	// }

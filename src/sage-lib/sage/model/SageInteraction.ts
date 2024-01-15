@@ -7,7 +7,7 @@ import type { IHasChannels, IHasGame } from ".";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import utils from "../../../sage-utils";
-import type { TGameType } from "../../../slash.mjs";
+import type { SlashCommandGameType } from "../../../SlashTypes.js";
 import { DInteraction, DUser, DiscordKey, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
 import { deleteMessages } from "../../discord/deletedMessages";
 import { resolveToEmbeds } from "../../discord/embeds";
@@ -53,7 +53,7 @@ export default class SageInteraction<T extends DInteraction = any>
 
 	public isCommand(command: string): boolean;
 	public isCommand(sub: string, command: string): boolean;
-	public isCommand(gameType: TGameType, command: string): boolean;
+	public isCommand(gameType: SlashCommandGameType, command: string): boolean;
 	public isCommand(...args: string[]): boolean {
 		if (!this.interaction.isCommand()) {
 			return false;
@@ -62,7 +62,7 @@ export default class SageInteraction<T extends DInteraction = any>
 		const command = args.pop()!;
 		const commandLower = command.toLowerCase();
 
-		const subCommand = args[0] as TGameType;
+		const subCommand = args[0] as SlashCommandGameType;
 		const subCommandLower = subCommand?.toLowerCase();
 
 		const commandValues = this.commandValues.map(s => s.toLowerCase());

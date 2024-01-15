@@ -5,6 +5,7 @@ import utils, { TDisplayType, TRenderableContentSection } from "../../sage-utils
 import type SageCache from "../sage/model/SageCache";
 import { DiscordMaxValues } from "./consts";
 import type { TRenderableContentResolvable } from "./types";
+import { chunk } from "@rsc-utils/string-utils";
 
 
 /** Ensures we have a string, prepending a NewLine if needed. */
@@ -19,7 +20,7 @@ function resolveSection(renderableContent: utils.RenderUtils.RenderableContent, 
 		formattedContent = caches.format(joinedContent),
 		// We want the first chunk to be short enough to fit in the previous embed
 		maxChunkLengthCallback = (chunkIndex: number) => chunkIndex === 0 ? DiscordMaxValues.embed.descriptionLength - renderableContent.paragraphDelimiter.length - embed.length : DiscordMaxValues.embed.descriptionLength,
-		chunkedContent = utils.StringUtils.chunk(formattedContent, maxChunkLengthCallback);
+		chunkedContent = chunk(formattedContent, maxChunkLengthCallback);
 
 	chunkedContent.forEach((chunk, index) => {
 		if (index === 0) {
@@ -54,7 +55,7 @@ function resolveTitledSection(renderableContent: utils.RenderUtils.RenderableCon
 		formattedContent = caches.format(joinedContent),
 		// We want the first chunk to be short enough to fit in a field, which we use to add the title
 		maxChunkLengthCallback = (chunkIndex: number) => chunkIndex === 0 ? DiscordMaxValues.embed.field.valueLength : DiscordMaxValues.embed.descriptionLength,
-		chunkedContent = utils.StringUtils.chunk(formattedContent, maxChunkLengthCallback);
+		chunkedContent = chunk(formattedContent, maxChunkLengthCallback);
 
 	chunkedContent.forEach((chunk, index) => {
 		if (index === 0) {

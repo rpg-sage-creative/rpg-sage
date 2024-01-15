@@ -1,8 +1,10 @@
 import { debug, errorReturnEmptyArray, verbose, warn } from "@rsc-utils/console-utils";
+import { getDataRoot } from "@rsc-utils/env-utils";
+import { filterFiles, readJsonFile } from "@rsc-utils/fs-utils";
+import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import utils, { type TUuidMatcher, type UUID } from "../../sage-utils";
-import { getDataRoot } from "../../sage-utils/utils/EnvUtils";
 import type { TEntity } from "../model";
 import type AonBase from "../model/base/AonBase";
 import type Base from "../model/base/Base";
@@ -76,7 +78,7 @@ export function all<T extends HasSource>(objectType: string, source: string): T[
 export function all(objectType: string, source?: string): Base[] {
 	const items = _all(objectType);
 	if (source) {
-		const stringMatcher = utils.StringUtils.StringMatcher.from(source);
+		const stringMatcher = StringMatcher.from(source);
 		return (<HasSource[]>items).filter((item: HasSource) => item.source?.matches(stringMatcher));
 	}
 	return items.slice();
@@ -140,7 +142,7 @@ export function findByValue<T extends Base<any>>(objectType: string, value: Opti
 		return _findById(objectType, uuidMatcher);
 	}
 
-	const stringMatcher = utils.StringUtils.StringMatcher.from(value);
+	const stringMatcher = StringMatcher.from(value);
 	if (stringMatcher.isBlank) {
 		return undefined;
 	}
@@ -227,7 +229,7 @@ function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 
 export async function loadData(): Promise<void> {
 	const pf2DataPath = `${getDataRoot("pf2e")}`.replace(/\/+/g, "/");
-	const files: string[] = await utils.FsUtils.filterFiles(pf2DataPath, file => file.endsWith(".json"), true)
+	const files: string[] = await filterFiles(pf2DataPath, file => file.endsWith(".json"), true)
 		.catch(errorReturnEmptyArray);
 	if (!files.length) {
 		warn(`No files in "${pf2DataPath}" ...`);
@@ -239,13 +241,13 @@ export async function loadData(): Promise<void> {
 	const sources = files.filter(file => file.includes("/Source/"));
 	verbose(`Loading Data: ${sources.length} sources`);
 	for (const source of sources) {
-		await utils.FsUtils.readJsonFile<BaseCore>(source).then(core => coresLoaded += loadCore(core, source), warn);
+		await readJsonFile<BaseCore>(source).then(core => coresLoaded += loadCore(core, source), warn);
 	}
 
 	const others = files.filter(file => !file.includes("/Source/"));
 	verbose(`Loading Data: ${others.length} objects`);
 	for (const other of others) {
-		await utils.FsUtils.readJsonFile<BaseCore>(other).then(core => coresLoaded += loadCore(core, other), warn);
+		await readJsonFile<BaseCore>(other).then(core => coresLoaded += loadCore(core, other), warn);
 	}
 
 	verbose(`\t\t${coresLoaded} Total Cores loaded`);

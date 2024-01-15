@@ -1,11 +1,12 @@
 import { debug, errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
+import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/fs-utils";
 import { getJson } from "@rsc-utils/https-utils";
+import { StringMatcher, capitalize } from "@rsc-utils/string-utils";
 import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/types";
 import utils from "../../../sage-utils";
 import CharacterBase, { CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
-import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "../../../sage-utils/utils/FsUtils";
 import type { GetStatPrefix, TProficiency, TSavingThrow } from "../../common";
 import { getSavingThrows, toModifier } from "../../common";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository";
@@ -291,7 +292,7 @@ function abilitiesToHtml(char: PathbuilderCharacter): string {
 	const core = char.toJSON();
 	return (<TPathbuilderCharacterAbilityKey[]>["str", "dex", "con", "int", "wis", "cha"]).map(key => {
 		const score = core.abilities[key], mod = Abilities.scoreToMod(score);
-		return `<b>${utils.StringUtils.capitalize(key)}</b> ${toModifier(mod)}`;
+		return `<b>${capitalize(key)}</b> ${toModifier(mod)}`;
 	}).join(", ");
 }
 function itemsToHtml(weapons: TPathbuilderCharacterWeapon[], armors: TPathbuilderCharacterArmor[]): string {
@@ -354,8 +355,8 @@ function spellCasterToLabel(spellCaster: TPathbuilderCharacterSpellCaster): stri
 	if (spellCaster.name === "Other Spells (Staves etc)") {
 		return spellCaster.name;
 	}
-	const tradition = utils.StringUtils.capitalize(spellCaster.magicTradition);
-	const type = utils.StringUtils.capitalize(spellCaster.spellcastingType);
+	const tradition = capitalize(spellCaster.magicTradition);
+	const type = capitalize(spellCaster.spellcastingType);
 	return `${tradition} ${type} Spells`;
 }
 
@@ -605,7 +606,7 @@ function weaponToMacro(char: PathbuilderCharacter, weapon: TPathbuilderCharacter
 
 function eq<T, U>(a: T, b: U, matcher = false): boolean {
 	if (matcher) {
-		return utils.StringUtils.StringMatcher.matches(String(a), String(b));
+		return StringMatcher.matches(String(a), String(b));
 	}
 	return String(a).toLowerCase() === String(b).toLowerCase();
 }
@@ -712,10 +713,10 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 
 	//#region flags/has
 	public hasFeat(value: string): boolean {
-		return utils.StringUtils.StringMatcher.matchesAny(value, this.core.feats.map(feat => feat[0]));
+		return StringMatcher.matchesAny(value, this.core.feats.map(feat => feat[0]));
 	}
 	public hasSpecial(value: string): boolean {
-		return utils.StringUtils.StringMatcher.matchesAny(value, this.core.specials);
+		return StringMatcher.matchesAny(value, this.core.specials);
 	}
 	private _resilientBonus: number | undefined;
 	public get resilientBonus(): number {
@@ -1062,7 +1063,7 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 			try {
 				const url = `https://pathbuilder2e.com/json.php?id=${id}`;
 				const json = await getJson<TPathbuilderCharacterResponse>(url).catch(reject);
-// utils.FsUtils.writeFileSync(`pathfbuilder2e-${id}.json`, json);
+// writeFileSync(`pathfbuilder2e-${id}.json`, json);
 				if (json?.success) {
 					json.build.exportJsonId = id;
 					resolve(json.build);

@@ -1,11 +1,11 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
 import { errorReturnNull, verbose } from "@rsc-utils/console-utils";
+import { readJsonFile, symLinkSync } from "@rsc-utils/fs-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { Snowflake, SnowflakeUtil } from "discord.js";
 import { existsSync } from "fs";
 import type { UUID } from "../../../../sage-utils";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
-import { readJsonFile, symLinkSync } from "../../../../sage-utils/utils/FsUtils";
 import IdRepository, { HasIdCoreAndSageCache } from "./IdRepository";
 
 export interface DidCore<T extends string = string> extends IdCore<T> {

@@ -1,8 +1,7 @@
+import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { PROFICIENCIES, Table } from "../../../sage-pf2e";
-import utils from "../../../sage-utils";
-import { registerSlashCommand } from "../../../slash.mjs";
-import type { TSlashCommand } from "../../../types";
+import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { registerInteractionListener } from "../../discord/handlers";
 import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
@@ -11,9 +10,9 @@ import { registerCommandHelp } from "./help";
 
 //#region simple dcs
 
-function _simpleDcs(proficiency: Optional<string>): utils.RenderUtils.RenderableContent {
+function _simpleDcs(proficiency: Optional<string>): RenderableContent {
 	const table = Table.findByNumber("10-4")!,
-		proficiencyLetter = utils.StringUtils.capitalize(proficiency ?? "")[0],
+		proficiencyLetter = capitalize(proficiency ?? "")[0],
 		proficiencyLetterIndex = PROFICIENCIES.findIndex(prof => prof[0] === proficiencyLetter);
 	if (proficiencyLetterIndex < 0) {
 		return table.toRenderableContent();
@@ -34,7 +33,7 @@ function simpleDcs(sageMessage: SageMessage): Promise<void> {
 
 //#region dcs by level
 
-function _dcsByLevel(bySpell: boolean, level: Optional<number>): utils.RenderUtils.RenderableContent {
+function _dcsByLevel(bySpell: boolean, level: Optional<number>): RenderableContent {
 	const table = Table.findByNumber("10-5")!;
 	if (!level) {
 		return table.toRenderableContent();
@@ -73,25 +72,9 @@ async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
 	return sageInteraction.reply(_dcsByLevel(table === "spell", level), false);
 }
 
-function dcCommand(): TSlashCommand {
-	return {
-		name: "DCs",
-		description: "Show Difficulty Classes",
-		options: [
-			{ name:"table", description:"Which DCs?", choices:[
-				{ name:"Simple", value:"simple" },
-				{ name:"By Level", value:"level" },
-				{ name:"By Spell Level", value:"spell" }
-			], isRequired:true },
-			{ name:"proficiency", description:"What Proficiency?", choices:["U","T","E","M","L"] },
-			{ name:"level", description:"Which Level?", isNumber:true }
-		]
-	};
-}
-
 //#endregion
 
-export function registerCommandHandlers(): void {
+export function registerDcs(): void {
 	registerCommandRegex(/^\s*simple\s*dcs?\s*([a-z]+)\s*$/i, simpleDcs);
 	registerCommandRegex(/^\s*([a-z]+)\s*simple\s*dcs?\s*$/i, simpleDcs);
 	registerCommandHelp("Command", "DCs", `simple dc PROFICIENCY`);
@@ -104,8 +87,4 @@ export function registerCommandHandlers(): void {
 	registerCommandHelp("Command", "DCs", `dc by spell level LEVEL`);
 
 	registerInteractionListener(slashTester, slashHandler);
-}
-
-export function registerSlashCommands(): void {
-	registerSlashCommand("PF2E", dcCommand());
 }

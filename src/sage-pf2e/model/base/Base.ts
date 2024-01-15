@@ -1,4 +1,5 @@
 import { warn } from "@rsc-utils/console-utils";
+import { StringMatcher } from "@rsc-utils/string-utils";
 import utils, { IComparable, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
 import { IdCore } from "../../../sage-utils/utils/ClassUtils";
 import { NEWLINE, TAB } from "../../common";
@@ -221,16 +222,16 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 
 	// #region IHasName
 
-	private _nameMatcher?: utils.StringUtils.StringMatcher;
-	private get nameMatcher(): utils.StringUtils.StringMatcher {
-		return this._nameMatcher ?? (this._nameMatcher = utils.StringUtils.StringMatcher.from(this.name));
+	private _nameMatcher?: StringMatcher;
+	private get nameMatcher(): StringMatcher {
+		return this._nameMatcher ?? (this._nameMatcher = StringMatcher.from(this.name));
 	}
 
 	public get name(): string { return this.core.name; }
 	public get nameClean(): string { return this.nameMatcher.clean; }
 	public get nameLower(): string { return this.nameMatcher.lower; }
 
-	public matches(other: utils.StringUtils.StringMatcher): boolean {
+	public matches(other: StringMatcher): boolean {
 		return this.nameMatcher.matches(other);
 	}
 

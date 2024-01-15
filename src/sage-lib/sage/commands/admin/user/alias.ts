@@ -1,4 +1,4 @@
-import { isNotBlank } from "../../../../../sage-utils/utils/StringUtils";
+import { isNotBlank } from "@rsc-utils/string-utils";
 // import { discordPromptYesNo } from "../../../../../discord/prompts";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import type SageMessage from "../../../model/SageMessage";

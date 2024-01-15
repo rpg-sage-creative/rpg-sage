@@ -1,11 +1,11 @@
 import { warn } from "@rsc-utils/console-utils";
+import { isKeyValueArg, parseKeyValueArg, type KeyValueArg } from "@rsc-utils/string-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import XRegExp from "xregexp";
-import type { TKeyValueArg, UUID } from "../..";
+import type { UUID } from "../..";
 import { Collection } from "../ArrayUtils";
 import { sortDescending } from "../ArrayUtils/Sort";
 import { Color } from "../ColorUtils";
-import { isKeyValueArg, parseKeyValueArg } from "../StringUtils";
 import { isValid as isValidUuid } from "../UuidUtils";
 
 type TArgIndexRet<T> = {
@@ -120,7 +120,7 @@ export default class ArgsManager<T extends string> extends Collection<T> {
 	//#region Key Args (anything with key=value)
 
 	/**  */
-	protected findKeyValueArgIndex(key: string): OrUndefined<TArgIndexRet<TKeyValueArg>> {
+	protected findKeyValueArgIndex(key: string): OrUndefined<TArgIndexRet<KeyValueArg>> {
 		return this.findArgIndexRet(arg => parseKeyValueArg(arg, key));
 	}
 
