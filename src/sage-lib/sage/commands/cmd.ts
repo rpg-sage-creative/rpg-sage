@@ -1,3 +1,4 @@
+import { Color } from "@rsc-utils/color-utils";
 import { error } from "@rsc-utils/console-utils";
 import type { Awaitable, OrNull } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
@@ -24,7 +25,7 @@ export function renderCount(sageMessage: SageMessage, label: string, count: numb
 	return <any>sageMessage.send(renderableContent);
 }
 
-export function embedColor(color: utils.ColorUtils.Color, ...labels: string[]): Discord.MessageEmbed {
+export function embedColor(color: Color, ...labels: string[]): Discord.MessageEmbed {
 	const embed = new Discord.MessageEmbed();
 	embed.setColor(<any>color.toDiscordColor());
 	let desc = color.hex;

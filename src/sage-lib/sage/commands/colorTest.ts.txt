@@ -14,10 +14,10 @@
 // 				client.on("messageReactionRemove", handleColorTestReaction);
 // 			}
 
-// 			let color = utils.ColorUtils.Color.from(hex);
+// 			let color = Color.from(hex);
 // 			// if (!color) {
-// 			// 	utils.ColorUtils.intializeNamedColors();
-// 			// 	color = utils.ColorUtils.Color.from(hex);
+// 			// 	intializeNamedColors();
+// 			// 	color = Color.from(hex);
 // 			// }
 // 			if (color) {
 // 				let message = <Discord.Message>await this.channel.send(sage.commands.embedColor(color));
@@ -39,22 +39,22 @@
 // 			let messageInfo = map.get(reaction.message.id);
 // 			if (messageInfo.authorDid === user.id) {
 // 				if (reaction.emoji.name === arrowRight) {
-// 					let color = utils.ColorUtils.Color.from(messageInfo.color).lighten(1);
+// 					let color = Color.from(messageInfo.color).lighten(1);
 // 					reaction.message.edit(sage.commands.embedColor(color));
 // 					messageInfo.color = color.hex;
 // 				}
 // 				if (reaction.emoji.name === arrowUp) {
-// 					let color = utils.ColorUtils.Color.from(messageInfo.color).lighten();
+// 					let color = Color.from(messageInfo.color).lighten();
 // 					reaction.message.edit(sage.commands.embedColor(color));
 // 					messageInfo.color = color.hex;
 // 				}
 // 				if (reaction.emoji.name === arrowDown) {
-// 					let color = utils.ColorUtils.Color.from(messageInfo.color).darken();
+// 					let color = Color.from(messageInfo.color).darken();
 // 					reaction.message.edit(sage.commands.embedColor(color));
 // 					messageInfo.color = color.hex;
 // 				}
 // 				if (reaction.emoji.name === arrowLeft) {
-// 					let color = utils.ColorUtils.Color.from(messageInfo.color).darken(1);
+// 					let color = Color.from(messageInfo.color).darken(1);
 // 					reaction.message.edit(sage.commands.embedColor(color));
 // 					messageInfo.color = color.hex;
 // 				}

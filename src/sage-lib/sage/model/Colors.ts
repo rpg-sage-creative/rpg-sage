@@ -1,9 +1,9 @@
+import { Color } from "@rsc-utils/color-utils";
 import { warn } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import utils from "../../../sage-utils";
 import { ColorType, IColor } from "./HasColorsCore";
 
-export type TColorAndType = { type: ColorType; color: utils.ColorUtils.Color };
+export type TColorAndType = { type: ColorType; color: Color; };
 
 export default class Colors {
 	public constructor(private colors: IColor[]) { }
@@ -16,9 +16,9 @@ export default class Colors {
 
 	// #region get/set/unset
 
-	public get(type: ColorType): utils.ColorUtils.Color | null {
+	public get(type: ColorType): Color | null {
 		const color = this.findColor(type);
-		return color && utils.ColorUtils.Color.from(color.hex) || null;
+		return color ? Color.from(color.hex) : null;
 	}
 
 	public set(colorAndType: TColorAndType): boolean {

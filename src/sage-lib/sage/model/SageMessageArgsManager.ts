@@ -1,3 +1,4 @@
+import { Color } from "@rsc-utils/color-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import * as Discord from "discord.js";
@@ -383,9 +384,7 @@ export default class SageMessageArgsManager extends ArgsManager {
 				return color;
 			}
 			// return valid color or null
-			return utils.ColorUtils.Color.isValid(color)
-				? utils.ColorUtils.Color.from(color).toDiscordColor()
-				: null;
+			return Color.from(color)?.toDiscordColor() ?? null;
 		}
 		return this.removeAndReturnColor()?.toDiscordColor();
 	}

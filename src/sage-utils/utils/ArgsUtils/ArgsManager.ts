@@ -1,3 +1,4 @@
+import { Color } from "@rsc-utils/color-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { isKeyValueArg, parseKeyValueArg, type KeyValueArg } from "@rsc-utils/string-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
@@ -5,7 +6,6 @@ import XRegExp from "xregexp";
 import type { UUID } from "../..";
 import { Collection } from "../ArrayUtils";
 import { sortDescending } from "../ArrayUtils/Sort";
-import { Color } from "../ColorUtils";
 import { isValid as isValidUuid } from "../UuidUtils";
 
 type TArgIndexRet<T> = {
