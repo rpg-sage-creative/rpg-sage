@@ -4,6 +4,7 @@ import { getJson } from "@rsc-utils/https-utils";
 import { nth } from "@rsc-utils/number-utils";
 import { StringMatcher, capitalize } from "@rsc-utils/string-utils";
 import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
+import { randomUuid } from "@rsc-utils/uuid-utils";
 import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/types";
 import utils from "../../../sage-utils";
@@ -699,7 +700,7 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 	public constructor(core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
 		super(core);
 		if (!core.id) {
-			core.id = utils.UuidUtils.generate();
+			core.id = randomUuid();
 		}
 		Object.keys(flags).forEach(key => {
 			core[key as TPathbuilderCharacterCustomFlag] = flags[key as TPathbuilderCharacterCustomFlag];

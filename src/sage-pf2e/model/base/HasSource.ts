@@ -1,5 +1,6 @@
-import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import utils, { type UUID } from "../../../sage-utils";
+import type { Matcher, OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import utils from "../../../sage-utils";
+import { getIdMatcher } from "../../../sage-utils/utils/ClassUtils/getIdMatcher";
 import type { TRarity } from "../../common";
 import { COMMON, RARITIES } from "../../common";
 import RenderableContent from "../../data/RenderableContent";
@@ -42,7 +43,7 @@ function doPages(sourceInfo: TSourceInfoRaw): string[] {
 function parseSourceInfo(sourceInfo: TSourceInfoRaw): TSourceInfo {
 	const pages = doPages(sourceInfo);
 	const source = Repository.findByValue("Source", sourceInfo.source)!;
-	const version = sourceInfo.version || 0;
+	const version = sourceInfo.version ?? 0;
 	return { pages: pages, source: source, version: version };
 }
 
@@ -90,17 +91,17 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 	public get hasErrata(): boolean { return this.nextId !== undefined; }
 	public get isErrata(): boolean { return this.version !== 0; }
 
-	public get previousId(): OrUndefined<UUID> { return this.core.previousId; }
+	public get previousId(): OrUndefined<string> { return this.core.previousId; }
 
-	private _previousIdMatcher?: utils.UuidUtils.UuidMatcher;
-	protected get previousIdMatcher(): utils.UuidUtils.UuidMatcher {
-		return this._previousIdMatcher ?? (this._previousIdMatcher = utils.UuidUtils.UuidMatcher.from(this.core.previousId!));
+	private _previousIdMatcher?: Matcher;
+	protected get previousIdMatcher(): Matcher {
+		return this._previousIdMatcher ?? (this._previousIdMatcher = getIdMatcher(this.core.previousId!));
 	}
 
 	/** Store null if we look but can't find one. */
-	private _nextId?: OrNull<UUID>;
+	private _nextId?: OrNull<string>;
 	/** Only return a UUID or undefined */
-	public get nextId(): OrUndefined<UUID> {
+	public get nextId(): OrUndefined<string> {
 		if (this._nextId === undefined) {
 			this._nextId = Repository.find<HasSource>(this.objectType, other =>
 				other.isErrata && this.idMatcher.matches(other.previousIdMatcher)

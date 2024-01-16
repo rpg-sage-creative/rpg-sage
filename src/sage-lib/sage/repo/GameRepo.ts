@@ -1,5 +1,5 @@
+import type { UUID } from "@rsc-utils/uuid-utils";
 import type * as Discord from "discord.js";
-import type { UUID } from "../../../sage-utils";
 import type { DiscordKey } from "../../discord";
 import Game, { type IGameCore } from "../model/Game";
 import type SageCache from "../model/SageCache";

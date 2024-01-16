@@ -1,6 +1,7 @@
 import type { Optional } from "@rsc-utils/type-utils";
+import { UUID, randomUuid } from "@rsc-utils/uuid-utils";
 import type * as Discord from "discord.js";
-import utils, { type UUID } from "../../../sage-utils";
+import utils from "../../../sage-utils";
 import type { DiscordKey } from "../../discord";
 import CharactersMatch from "./CharactersMatch";
 import type Game from "./Game";
@@ -13,7 +14,7 @@ import type User from "./User";
 /*
 // function remapCharacters(this: CharacterManager, core: GameCharacterCore, index: number, array: (GameCharacterCore | GameCharacter)[]): void {
 // 	if (!core.id) {
-// 		core.id = utils.UuidUtils.generate();
+// 		core.id = randomUuid();
 // 	}
 // 	array[index] = new GameCharacter(core, this);
 // }
@@ -52,7 +53,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	public async addCharacter(core: GameCharacterCore): Promise<GameCharacter | null> {
 		const found = this.findByUserAndName(core.userDid, core.name);
 		if (!found) {
-			const newCore = <GameCharacterCore>{ ...core, id: utils.UuidUtils.generate() };
+			const newCore = <GameCharacterCore>{ ...core, id: randomUuid() };
 			const character = new GameCharacter(newCore, this),
 				added = await this.pushAndSave(character);
 			return added ? character : null;
@@ -205,7 +206,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		}else if (values) {
 			Array.from(values).forEach(core => {
 				if (!core.id) {
-					core.id = utils.UuidUtils.generate();
+					core.id = randomUuid();
 				}
 				characterManager.push(new GameCharacter(core, characterManager));
 			});

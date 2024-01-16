@@ -1,10 +1,10 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
 import { errorReturnNull, verbose } from "@rsc-utils/console-utils";
 import { readJsonFile, symLinkSync } from "@rsc-utils/fs-utils";
+import { randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { Snowflake, SnowflakeUtil } from "discord.js";
+import type { UUID } from "@rsc-utils/uuid-utils";
 import { existsSync } from "fs";
-import type { UUID } from "../../../../sage-utils";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
 import IdRepository, { HasIdCoreAndSageCache } from "./IdRepository";
 
@@ -101,7 +101,7 @@ export default abstract class DidRepository<T extends DidCore, U extends HasDidC
 	/** Writes the entity's core to uuid.json using (or creating if needed) the "Id". */
 	public async write(entity: U): Promise<boolean> {
 		if (!entity.did) {
-			entity.toJSON().did = SnowflakeUtil.generate();
+			entity.toJSON().did = randomSnowflake();
 			verbose(`Missing ${(<typeof DidRepository>this.constructor).objectType}.did:`, entity.toJSON());
 		}
 

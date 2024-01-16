@@ -1,13 +1,13 @@
 import { warn } from "@rsc-utils/console-utils";
 import { TokenParsers, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import { randomUuid } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
 import { correctEscapeForEmoji } from "..";
 import { GameType } from "../../../sage-common";
 import { TSortResult } from "../../../sage-utils";
 import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -370,7 +370,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.None,
-			id: generate(),
+			id: randomUuid(),
 
 			count: count ?? 0,
 			description: cleanDescription(description),
@@ -458,7 +458,7 @@ export class DicePartRoll<T extends DicePartRollCore, U extends TDicePart> exten
 		return {
 			objectType: "DicePartRoll",
 			gameType,
-			id: generate(),
+			id: randomUuid(),
 			dice: dicePart.toJSON(),
 			rolls
 		};
@@ -544,7 +544,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.None,
-			id: generate(),
+			id: randomUuid(),
 			diceParts: diceParts.map<DicePartCore>(toJSON)
 		});
 	}
@@ -676,7 +676,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			objectType: "DiceRoll",
 			gameType: GameType.None,
 			//Quick rolls can never be reloaded, so we don't need a UUID
-			id: uuid ? generate() : null!,
+			id: uuid ? randomUuid() : null!,
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map<DicePartRollCore>(mapRollToJson)
 		};
@@ -746,7 +746,7 @@ export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDice
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.None,
-			id: generate(),
+			id: randomUuid(),
 			critMethodType: critMethodType,
 			dice: _dice.map<DiceCore>(toJSON),
 			diceOutputType: diceOutputType,
@@ -848,7 +848,7 @@ export class DiceGroupRoll<T extends DiceGroupRollCore, U extends TDiceGroup, V 
 			objectType: "DiceGroupRoll",
 			gameType: GameType.None,
 			//Quick rolls can never be reloaded, so we don't need a UUID
-			id: uuid ? generate() : null!,
+			id: uuid ? randomUuid() : null!,
 			diceGroup: diceGroup.toJSON(),
 			rolls: diceGroup.dice.map<DiceRollCore>(mapRollToJson)
 		});

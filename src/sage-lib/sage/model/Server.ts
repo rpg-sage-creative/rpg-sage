@@ -1,9 +1,9 @@
 import { warn } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
+import { randomUuid } from "@rsc-utils/uuid-utils";
 import type * as Discord from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import utils from "../../../sage-utils";
 import { DiscordKey } from "../../discord";
 import { DicePostType } from "../commands/dice";
 import ActiveBot from "../model/ActiveBot";
@@ -80,7 +80,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 		const diceSecretMethodType = _diceSecretMethodType ?? this.defaultDiceSecretMethodType;
 		const game = new Game({
 			objectType: "Game",
-			id: utils.UuidUtils.generate(),
+			id: randomUuid(),
 			serverDid: this.did,
 			serverId: this.id,
 			createdTs: new Date().getTime(),

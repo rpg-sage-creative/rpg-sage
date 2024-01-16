@@ -1,11 +1,12 @@
-import utils, { UUID } from "../../sage-utils";
+import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
+import utils from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
 import type { TMagicTradition } from "../common";
 import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL } from "../common";
 import * as Repository from "../data/Repository";
 import type ArcaneSchool from "./ArcaneSchool";
-import Source from "./base/Source";
 import SpellCollection from "./SpellCollection";
+import Source from "./base/Source";
 
 /*
 // function valueOfSpell(spellLevel: number): number {
@@ -74,7 +75,7 @@ export default class Spellbook extends utils.ClassUtils.HasCore<SpellbookCore> {
 	public constructor(spells: SpellCollection);
 	public constructor(spells?: any) {
 		super(<any>{ spells: new SpellCollection(spells) });
-		this.id = `Spellbook${DASH}${utils.UuidUtils.generate()}`;
+		this.id = `Spellbook${DASH}${randomUuid()}`;
 	}
 
 	/**************************************************************************************************************************/

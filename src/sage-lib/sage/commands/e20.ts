@@ -2,6 +2,7 @@ import { errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
 import { getDataRoot } from "@rsc-utils/env-utils";
 import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
 import type { Optional } from "@rsc-utils/type-utils";
+import type { UUID } from "@rsc-utils/uuid-utils";
 import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/essence20";
 import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20";
@@ -12,7 +13,6 @@ import PlayerCharacterPR, { PlayerCharacterCorePR, TCharacterSectionType, TChara
 import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
 import PlayerCharacterTransformer, { PlayerCharacterCoreTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
 import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
-import type { UUID } from "../../../sage-utils";
 import { PdfCacher } from "../../../sage-utils/utils/PdfUtils";
 import { DUser, DiscordId, DiscordKey, NilSnowflake, TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";

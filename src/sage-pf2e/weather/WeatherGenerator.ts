@@ -1,3 +1,4 @@
+import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import type { CloudCoverTableItem } from "..";
 import GDate from "../../sage-cal/pf2e/GDate";
@@ -159,7 +160,7 @@ function createExport(days: IWeatherDayResult[], delimiter: "," | "\t"): string 
 			const hourColumns = [
 				hour.hour,
 				hour.temp,
-				utils.TempUtils.fahrenheitToCelsius(hour.temp),
+				fahrenheitToCelsius(hour.temp),
 				CloudCoverType[hour.cloudCover],
 				hour.precipitation,
 				WindType[hour.windStrength!],

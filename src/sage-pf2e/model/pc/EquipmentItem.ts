@@ -1,6 +1,7 @@
 import { warn } from "@rsc-utils/console-utils";
-import utils, { UUID } from "../../../sage-utils";
-import { IdCore } from "../../../sage-utils/utils/ClassUtils";
+import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
+import utils from "../../../sage-utils";
+import type { IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { TQuality } from "../../common";
 import { findById } from "../../data/Repository";
 import Bulk from "../Bulk";
@@ -345,7 +346,7 @@ export default class EquipmentItem extends utils.ClassUtils.HasIdCore<EquipmentI
 		this.core.count -= count;
 		const core = <EquipmentItemCore>JSON.parse(JSON.stringify(this.core));
 		core.count = count;
-		core.id = utils.UuidUtils.generate();
+		core.id = randomUuid();
 		this.eq.addItem(new EquipmentItem(this.eq, core));
 	}
 	public unequip(): void {
@@ -383,7 +384,7 @@ export default class EquipmentItem extends utils.ClassUtils.HasIdCore<EquipmentI
 			entries: undefined,
 			itemId: item.id,
 			itemQuality: "Standard",
-			id: utils.UuidUtils.generate(),
+			id: randomUuid(),
 			isInvested: false,
 			isRaised: false,
 			listId: undefined,

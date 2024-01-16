@@ -1,4 +1,5 @@
 import type { Optional } from "@rsc-utils/type-utils";
+import { isNonNilUuid, randomUuid } from "@rsc-utils/uuid-utils";
 import type { Snowflake, TextChannel } from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
@@ -144,7 +145,7 @@ function formatDateTime(date: Date): string | null {
 async function showGameGetGame(sageMessage: SageMessage): Promise<Game | null> {
 	let game: Optional<Game> = sageMessage.game;
 	if (!game) {
-		const gameId = sageMessage.args.find(utils.UuidUtils.isValid);
+		const gameId = sageMessage.args.find(isNonNilUuid);
 		if (gameId) {
 			game = await sageMessage.caches.games.getById(gameId);
 		}
@@ -438,7 +439,7 @@ async function getGameUsers(sageMessage: SageMessage): Promise<IGameUser[]> {
 function createGame(sageMessage: SageMessage, name: string, gameValues: TGameDefaults, channels: IChannel[], users: IGameUser[]): Game {
 	return new Game({
 		objectType: "Game",
-		id: utils.UuidUtils.generate(),
+		id: randomUuid(),
 		serverDid: sageMessage.server.did,
 		serverId: sageMessage.server.id,
 		createdTs: new Date().getTime(),

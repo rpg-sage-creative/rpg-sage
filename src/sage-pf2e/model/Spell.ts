@@ -1,7 +1,8 @@
 import { debug } from "@rsc-utils/console-utils";
 import { nth } from "@rsc-utils/number-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import utils, { UUID } from "../../sage-utils";
+import type { UUID } from "@rsc-utils/uuid-utils";
+import utils from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
 import type { TMagicComponent, TMagicTradition } from '../common';
 import { ABILITIES, NEWLINE, toModifier } from '../common';

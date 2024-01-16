@@ -1,9 +1,9 @@
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import { randomUuid } from "@rsc-utils/uuid-utils";
 import { correctEscapeForEmoji } from "..";
 import { GameType } from "../../../sage-common";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
 	DiceOutputType,
 	DiceSecretMethodType, DropKeepType,
@@ -339,7 +339,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.E20,
-			id: generate(),
+			id: randomUuid(),
 
 			count: count ?? 1,
 			description: cleanDescription(description),
@@ -422,7 +422,7 @@ export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 		return new DicePartRoll({
 			objectType: "DicePartRoll",
 			gameType: GameType.E20,
-			id: generate(),
+			id: randomUuid(),
 			dice: dp.toJSON(),
 			rolls: dpRolls
 		});
@@ -453,7 +453,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.E20,
-			id: generate(),
+			id: randomUuid(),
 			diceParts: diceParts.map<DicePartCore>(toJSON)
 		});
 	}
@@ -487,7 +487,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		return new DiceRoll({
 			objectType: "DiceRoll",
 			gameType: GameType.E20,
-			id: generate(),
+			id: randomUuid(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
 		});
@@ -518,7 +518,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.E20,
-			id: generate(),
+			id: randomUuid(),
 			critMethodType: undefined,
 			dice: _dice.map<DiceCore>(toJSON),
 			diceOutputType: diceOutputType,
@@ -539,7 +539,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 			const d20DicePartCore: DicePartCore = {
 				objectType: "DicePart",
 				gameType: GameType.E20,
-				id: generate(),
+				id: randomUuid(),
 				count: 1,
 				sides: 20,
 				description: "",
@@ -571,7 +571,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 					dice.push(Dice.create([new DicePart({
 						objectType: "DicePart",
 						gameType: GameType.E20,
-						id: generate(),
+						id: randomUuid(),
 						count: +count || 1,
 						sides: +sides || 0,
 						description: "",
@@ -656,7 +656,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		return new DiceGroupRoll({
 			objectType: "DiceGroupRoll",
 			gameType: GameType.E20,
-			id: generate(),
+			id: randomUuid(),
 			diceGroup: diceGroup.toJSON(),
 			rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
 		});

@@ -1,6 +1,5 @@
 export * as ArgsUtils from "./ArgsUtils";
 export * as ArrayUtils from "./ArrayUtils";
-export * as AwsUtilsShim from "./AwsUtils";
 export * as ClassUtils from "./ClassUtils";
 export * as DateUtils from "./DateUtils";
 export * as EnumUtils from "./EnumUtils";
@@ -10,5 +9,3 @@ export * as MathUtils from "./MathUtils";
 export * as RandomUtils from "./RandomUtils";
 export * as RenderUtils from "./RenderUtils";
 export * as SearchUtils from "./SearchUtils";
-export * as TempUtils from "./TempUtils";
-export * as UuidUtils from "./UuidUtils";

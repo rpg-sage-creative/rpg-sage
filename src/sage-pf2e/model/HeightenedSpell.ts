@@ -1,4 +1,5 @@
-import utils, { UUID } from "../../sage-utils";
+import type { UUID } from "@rsc-utils/uuid-utils";
+import utils from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
 import { DASH } from '../common';
 import Spell from "./Spell";

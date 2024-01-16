@@ -1,10 +1,11 @@
-import utils, { UUID } from "../../sage-utils";
+import type { UUID } from "@rsc-utils/uuid-utils";
+import utils from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
 import type { TMagicTradition } from "../common";
 import type ArcaneSchool from "./ArcaneSchool";
-import type Source from "./base/Source";
 import HeightenedSpell from "./HeightenedSpell";
 import Spell from "./Spell";
+import type Source from "./base/Source";
 
 
 function uniqueClean<T>(array: (T | undefined)[]): T[] {

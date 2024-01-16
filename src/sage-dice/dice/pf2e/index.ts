@@ -1,9 +1,9 @@
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import { randomUuid } from "@rsc-utils/uuid-utils";
 import { GameType } from "../../../sage-common";
 import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
-import { generate } from "../../../sage-utils/utils/UuidUtils";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -325,7 +325,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.PF2e,
-			id: generate(),
+			id: randomUuid(),
 
 			count: count ?? 0,
 			description: cleanDescription(description),
@@ -419,7 +419,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.PF2e,
-			id: generate(),
+			id: randomUuid(),
 			diceParts: diceParts.map<DicePartCore>(toJSON)
 		});
 	}
@@ -470,7 +470,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		return new DiceRoll({
 			objectType: "DiceRoll",
 			gameType: GameType.PF2e,
-			id: generate(),
+			id: randomUuid(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
 		});
@@ -563,7 +563,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.PF2e,
-			id: generate(),
+			id: randomUuid(),
 			critMethodType: critMethodType,
 			dice: _dice.map<DiceCore>(toJSON),
 			diceOutputType: diceOutputType,
@@ -630,7 +630,7 @@ function createDiceGroupRoll(diceGroup: DiceGroup): DiceGroupRoll {
 	const core: DiceGroupRollCore = {
 		objectType: "DiceGroupRoll",
 		gameType: GameType.PF2e,
-		id: generate(),
+		id: randomUuid(),
 		diceGroup: diceGroup.toJSON(),
 		rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
 	};

@@ -1,6 +1,7 @@
 import type { Optional } from "@rsc-utils/type-utils";
-import utils, { type UUID } from "../../../sage-utils";
-import { IdCore } from "../../../sage-utils/utils/ClassUtils";
+import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
+import utils from "../../../sage-utils";
+import type { IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
 import { PERCEPTION, WISDOM, profToMod } from "../../common";
 import * as Repository from "../../data/Repository";
@@ -115,7 +116,7 @@ export default class PlayerCharacter extends utils.ClassUtils.HasIdCore<PlayerCh
 			core.bio = <any>{};
 		}
 		if (!core.id) {
-			core.id = utils.UuidUtils.generate();
+			core.id = randomUuid();
 		}
 		if (!core.effects) {
 			core.effects = [];

@@ -2,9 +2,10 @@ import { debug, errorReturnEmptyArray, verbose, warn } from "@rsc-utils/console-
 import { getDataRoot } from "@rsc-utils/env-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/fs-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
-import utils, { type TUuidMatcher, type UUID } from "../../sage-utils";
+import { UuidMatcher, type UUID } from "@rsc-utils/uuid-utils";
+import utils from "../../sage-utils";
 import type { TEntity } from "../model";
 import type AonBase from "../model/base/AonBase";
 import type Base from "../model/base/Base";
@@ -98,8 +99,8 @@ export function find<T extends Base | HasSource>(objectType: string, sourceOrPre
 	return _all(objectType).find(<BaseFilterCallbackFn<Base>>sourceOrPredicate) as T;
 }
 
-function _findById<T extends string, U extends TEntity<T> = TEntity<T>>(objectType: T, uuidMatcher: TUuidMatcher): OrUndefined<U> {
-	return _all<any>(objectType).find(base => base.equals(uuidMatcher));
+function _findById<T extends string, U extends TEntity<T> = TEntity<T>>(objectType: T, matcher: Matcher): OrUndefined<U> {
+	return _all<any>(objectType).find(base => base.equals(matcher));
 }
 
 export function findByAonBase<T extends Base | HasSource>(aonBase: AonBase): OrUndefined<T> {
@@ -115,7 +116,7 @@ export function findByAonBase<T extends Base | HasSource>(aonBase: AonBase): OrU
 
 /** Finds the object for the given UUID. */
 export function findById<T extends Base>(id: OrUndefined<UUID>): OrUndefined<T> {
-	const uuidMatcher = id ? utils.UuidUtils.UuidMatcher.from(id) : null;
+	const uuidMatcher = id ? UuidMatcher.from(id) : null;
 	if (uuidMatcher?.isValid) {
 		for (const objectType of getObjectTypes()) {
 			const found = _findById(objectType, uuidMatcher);
@@ -137,7 +138,7 @@ export function findByValue<T extends Base<any>>(objectType: string, value: Opti
 		return undefined;
 	}
 
-	const uuidMatcher = utils.UuidUtils.UuidMatcher.from(value);
+	const uuidMatcher = UuidMatcher.from(value);
 	if (uuidMatcher.isValid) {
 		return _findById(objectType, uuidMatcher);
 	}

@@ -1,6 +1,6 @@
 import { error } from "@rsc-utils/console-utils";
+import { randomUuid } from "@rsc-utils/uuid-utils";
 import * as Discord from "discord.js";
-import utils from "../../sage-utils";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageCache from "../sage/model/SageCache";
 import type SageInteraction from "../sage/model/SageInteraction";
@@ -15,7 +15,7 @@ export type TPromptButton = { label:string; style:Discord.MessageButtonStyle; };
 function createButtons(buttons: TPromptButton[]): Discord.MessageButton[] {
 	return buttons.map(button => {
 		const messageButton = new Discord.MessageButton();
-		messageButton.setCustomId(utils.UuidUtils.generate());
+		messageButton.setCustomId(randomUuid());
 		messageButton.setLabel(button.label);
 		messageButton.setStyle(button.style);
 		return messageButton;

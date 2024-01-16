@@ -3,10 +3,11 @@ import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, verbose } fro
 import { getBotCodeName, getDataRoot } from "@rsc-utils/env-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
 import type { Optional, OrNull } from "@rsc-utils/type-utils";
+import { UUID, isNonNilUuid, randomUuid } from "@rsc-utils/uuid-utils";
 import { Snowflake } from "discord.js";
 import type { GameType } from "../../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import utils, { type UUID } from "../../../../sage-utils";
+import utils from "../../../../sage-utils";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
 import type { DicePostType } from "../../commands/dice";
 import type SageCache from "../../model/SageCache";
@@ -103,7 +104,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 		return files
 			.filter(file => file.endsWith(".json"))
 			.map(file => file.slice(0, -5))
-			.filter(utils.UuidUtils.isValid);
+			.filter(isNonNilUuid);
 	}
 
 	//#endregion
@@ -185,7 +186,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 	/** Writes the entity's core to uuid.json using (or creating if needed) the "Id". */
 	public async write(entity: U): Promise<boolean> {
 		if (!entity.id) {
-			entity.toJSON().id = utils.UuidUtils.generate();
+			entity.toJSON().id = randomUuid();
 			verbose(`Missing ${(<typeof IdRepository>this.constructor).objectType}.id:`, entity.toJSON());
 		}
 

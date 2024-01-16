@@ -2,11 +2,10 @@ import { Color } from "@rsc-utils/color-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { isKeyValueArg, parseKeyValueArg, type KeyValueArg } from "@rsc-utils/string-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import { UUID, isNonNilUuid } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
-import type { UUID } from "../..";
 import { Collection } from "../ArrayUtils";
 import { sortDescending } from "../ArrayUtils/Sort";
-import { isValid as isValidUuid } from "../UuidUtils";
 
 type TArgIndexRet<T> = {
 	arg: string;
@@ -293,7 +292,7 @@ export default class ArgsManager<T extends string> extends Collection<T> {
 
 	/** Removes and returns UUID. */
 	public removeAndReturnUuid(): OrUndefined<UUID> {
-		return this.findArgAndRemove(isValidUuid);
+		return this.findArgAndRemove(isNonNilUuid);
 	}
 
 	//#endregion

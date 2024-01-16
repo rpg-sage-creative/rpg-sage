@@ -1,3 +1,4 @@
+import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType } from "../../../sage-pf2e";
 import utils, { SeasonType, TemperateSeasonType, TropicalSeasonType } from "../../../sage-utils";
@@ -48,8 +49,8 @@ function createWeatherRenderable({ climateType, elevationType, seasonType }: TWe
 		`<b>Climate</b> ${ClimateType[climateType]}`,
 		`<b>Elevation</b> ${ElevationType[elevationType]}`,
 		`<b>Season</b> ${SeasonType[seasonType]}`,
-		`<b>High</b> ${today.high} °F (${utils.TempUtils.fahrenheitToCelsius(today.high)} °C)`,
-		`<b>Low</b> ${today.low} °F (${utils.TempUtils.fahrenheitToCelsius(today.low)} °C)`,
+		`<b>High</b> ${today.high} °F (${fahrenheitToCelsius(today.high)} °C)`,
+		`<b>Low</b> ${today.low} °F (${fahrenheitToCelsius(today.low)} °C)`,
 		`<b>Cloud Cover</b> ${CloudCoverType[today.cloudCover] ?? "None"}`,
 		`<b>Precipitation</b> ${today.precipItem?.precipitation ?? "None"}`,
 		`<b>Wind</b> ${WindType[today.windStrength!] ?? "None"}`

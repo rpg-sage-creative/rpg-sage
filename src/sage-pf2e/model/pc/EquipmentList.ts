@@ -1,8 +1,9 @@
+import { randomUuid } from "@rsc-utils/uuid-utils";
 import utils from "../../../sage-utils";
-import { IdCore } from "../../../sage-utils/utils/ClassUtils";
-import type { NamedCore } from "../base/interfaces";
+import type { IdCore } from "../../../sage-utils/utils/ClassUtils";
 import Bulk from "../Bulk";
 import Coins from "../Coins";
+import type { NamedCore } from "../base/interfaces";
 import type Equipment from "./Equipment";
 import type EquipmentItem from "./EquipmentItem";
 
@@ -46,7 +47,7 @@ export default class EquipmentList extends utils.ClassUtils.HasIdCore<EquipmentL
 
 	public static createCore(name: string): EquipmentListCore {
 		return {
-			id: utils.UuidUtils.generate(),
+			id: randomUuid(),
 			name: name,
 			objectType: "EquipmentList"
 		};
