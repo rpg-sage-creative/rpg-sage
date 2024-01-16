@@ -1,4 +1,5 @@
 import { warn } from "@rsc-utils/console-utils";
+import { toSuperscript } from "@rsc-utils/number-utils";
 import utils, { UUID } from "../../../sage-utils";
 import type HasSource from "./HasSource";
 import Source from "./Source";
@@ -36,14 +37,14 @@ export default class SourceNotationMap<T extends HasSource> {
 	public formatSourceNames(delimiter: string): string;
 	public formatSourceNames(delimiter?: string): string | string[] {
 		const mapped = this.sources
-			.map((source, index) => `${utils.NumberUtils.toSuperscript(index)}${source.toVerboseString().replace(/Pathfinder Adventure Path/g, "AP")}`)
+			.map((source, index) => `${toSuperscript(index)}${source.toVerboseString().replace(/Pathfinder Adventure Path/g, "AP")}`)
 			.slice(this.includeCore ? 0 : 1);
 		return delimiter ? mapped.join(delimiter) : mapped;
 	}
 	public get(sourceId?: UUID): string {
 		const sourceIndex = this.sources.findIndex(source => source.id === sourceId);
 		const includeCore = this.includeCore ? 0 : 1;
-		return sourceIndex < includeCore ? "" : utils.NumberUtils.toSuperscript(sourceIndex);
+		return sourceIndex < includeCore ? "" : toSuperscript(sourceIndex);
 	}
 	public getBySource(source?: Source): string {
 		return this.get(source?.id);

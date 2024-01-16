@@ -32,6 +32,7 @@
 		"@rsc-utils/env-utils": "github:rpg-sage-creative/env-utils",
 		"@rsc-utils/fs-utils": "github:rpg-sage-creative/fs-utils",
 		"@rsc-utils/color-utils": "github:rpg-sage-creative/color-utils",
+		"@rsc-utils/number-utils": "github:rpg-sage-creative/number-utils",
 		"@discordjs/rest": "^1.6.0",
 		"@napi-rs/canvas": "^0.1.35",
 		"discord-api-types": "^0.27.3",

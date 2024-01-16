@@ -1,6 +1,7 @@
 import { debug, errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/fs-utils";
 import { getJson } from "@rsc-utils/https-utils";
+import { nth } from "@rsc-utils/number-utils";
 import { StringMatcher, capitalize } from "@rsc-utils/string-utils";
 import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import { ABILITIES } from "../..";
@@ -404,9 +405,9 @@ function spellCasterLevelToHtml(char: PathbuilderCharacter, spellCaster: TPathbu
 		}
 	}
 	if (spells.spellLevel) {
-		return utils.NumberUtils.nth(spells.spellLevel);
+		return nth(spells.spellLevel);
 	}
-	return `Cantrips (${utils.NumberUtils.nth(Math.max(cantripLevel, 1))})`;
+	return `Cantrips (${nth(Math.max(cantripLevel, 1))})`;
 }
 
 //#endregion

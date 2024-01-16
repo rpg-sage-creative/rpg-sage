@@ -1,3 +1,4 @@
+import { nth } from "@rsc-utils/number-utils";
 import utils from "../../sage-utils";
 import { rarityToSuper } from "../common";
 import RenderableContent from "../data/RenderableContent";
@@ -26,7 +27,7 @@ function toRenderableContentByLevel(byLevel: string[][]): string[] {
 		if (!levelArray.length) {
 			return "";
 		}
-		const levelString = level < 1 || level > 20 ? `` : `<b>${utils.NumberUtils.nth(level)}</b>`;
+		const levelString = level < 1 || level > 20 ? `` : `<b>${nth(level)}</b>`;
 		const featStrings = levelArray.map(featNameToOutput);
 		return `${levelString} ${featStrings.join(", ")}`.trim();
 	}).filter(s => s);

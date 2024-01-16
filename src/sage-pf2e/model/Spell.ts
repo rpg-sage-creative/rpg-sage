@@ -1,4 +1,5 @@
 import { debug } from "@rsc-utils/console-utils";
+import { nth } from "@rsc-utils/number-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import utils, { UUID } from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
@@ -286,7 +287,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 	private toRenderableContentHeighten(content: utils.RenderUtils.RenderableContent): void {
 		if (this.canHeighten) {
 			content.append("");
-			const heightenedList = (this.core.heightened ?? []).map(h => `<b>Heightened (${h.bump ? "+" + h.bump : utils.NumberUtils.nth(h.level!)})</b> ${h.change}`);
+			const heightenedList = (this.core.heightened ?? []).map(h => `<b>Heightened (${h.bump ? "+" + h.bump : nth(h.level!)})</b> ${h.change}`);
 			if (this.core.heightenedAs) {
 				content.append(`<b>Heightened</b> As <i>${this.core.heightenedAs}</i>`);
 				if (heightenedList.length) {

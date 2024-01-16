@@ -1,4 +1,5 @@
 import { warn } from "@rsc-utils/console-utils";
+import { nth } from "@rsc-utils/number-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e";
@@ -46,7 +47,7 @@ async function _spellList(sageMessage: SageMessage, traditionString: string, lev
 				// 	levels[spellLevel] = (levels[spellLevel] || 0) + 1;
 				// 	return levels;
 				// }, <number[]>[]);
-				// content.appendTitledSection(`<b>${school.name} (${byLevel.length})</b>`, byLevel.map((spellCount, index) => `${index ? utils.NumberUtils.nth(index) : "Cantrips"} (${spellCount})`).join(", "));
+				// content.appendTitledSection(`<b>${school.name} (${byLevel.length})</b>`, byLevel.map((spellCount, index) => `${index ? nth(index) : "Cantrips"} (${spellCount})`).join(", "));
 				const filteredBySchool = bySchool.filter(spell => spell.traits.includes(school.name));
 				sourceMap.addByHasSource(filteredBySchool);
 				content.appendTitledSection(`<b>${school.name} (${filteredBySchool.length})</b>`, `${sourceMap.formatNames(filteredBySchool, ", ")}`);
@@ -61,8 +62,8 @@ async function _spellList(sageMessage: SageMessage, traditionString: string, lev
 				return levels;
 			}, <number[]>[]);
 			content.setTitle(`<b>${tradition} Spells</b> (${byTradition.length}) <i>by Level</i>`);
-			/*// byLevel.forEach((spellCount, index) => content.append(`<b>${index ? utils.NumberUtils.nth(index) : "Cantrips"}</b> (${spellCount})`));*/
-			content.append(byLevel.map((spellCount, index) => `${index ? utils.NumberUtils.nth(index) : "Cantrips"} (${spellCount})`).join(", "));
+			/*// byLevel.forEach((spellCount, index) => content.append(`<b>${index ? nth(index) : "Cantrips"}</b> (${spellCount})`));*/
+			content.append(byLevel.map((spellCount, index) => `${index ? nth(index) : "Cantrips"} (${spellCount})`).join(", "));
 		}
 
 	} else {
@@ -74,7 +75,7 @@ async function _spellList(sageMessage: SageMessage, traditionString: string, lev
 		} else {
 			const level = +levelString.match(/\d+/)![0];
 			filtered = byTradition.filter(spell => spell.level === level && !spell.isCantrip);
-			content.setTitle(`<b>${utils.NumberUtils.nth(level)} Level ${tradition} Spells</b> (${filtered.length})${bySchool}`);
+			content.setTitle(`<b>${nth(level)} Level ${tradition} Spells</b> (${filtered.length})${bySchool}`);
 		}
 		sourceMap.addByHasSource(filtered);
 		if (bySchool) {
@@ -201,7 +202,7 @@ async function specialistLists(sageMessage: SageMessage): Promise<void> {
 	});
 
 	const content = createCommandRenderableContent();
-	const spellsLevel = isCantrip ? "Cantrips" : `${utils.NumberUtils.nth(spellLevel!)} Level`;
+	const spellsLevel = isCantrip ? "Cantrips" : `${nth(spellLevel!)} Level`;
 	const traditionsJoin = traditionsAndModifiers.map(tam => `${tam.modifier} ${tam.tradition}`).join(" ").slice(1);
 	content.setTitle(`<b>${spellsLevel} Spells: ${traditionsJoin}</b> (${spells.length})`);
 	SourceNotationMap.appendNotatedItems(content, spells);

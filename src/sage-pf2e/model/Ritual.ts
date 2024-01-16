@@ -1,9 +1,10 @@
+import { nth } from "@rsc-utils/number-utils";
 import utils from "../../sage-utils";
 import { NEWLINE } from "../common";
 import RenderableContent from "../data/RenderableContent";
+import type { TSpellHeighten } from "./Spell";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from "./base/HasSource";
-import type { TSpellHeighten } from "./Spell";
 
 export interface RitualCore extends SourcedCore<"Ritual"> {
 	level: number;
@@ -109,7 +110,7 @@ export default class Ritual extends HasSource<RitualCore> {
 
 		if (this.canHeighten) {
 			content.append("");
-			const heightenedList = (this.core.heightened || []).map(h => `<b>Heightened (${h.bump ? "+" + h.bump : utils.NumberUtils.nth(h.level!)})</b> ${h.change}`);
+			const heightenedList = (this.core.heightened || []).map(h => `<b>Heightened (${h.bump ? "+" + h.bump : nth(h.level!)})</b> ${h.change}`);
 			if (this.core.heightenedAs) {
 				content.append(`<b>Heightened</b> As <i>${this.core.heightenedAs}</i>`);
 				if (heightenedList.length) {

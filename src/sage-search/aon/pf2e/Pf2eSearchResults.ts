@@ -1,3 +1,4 @@
+import { toSuperscript } from "@rsc-utils/number-utils";
 import type { OrUndefined } from "@rsc-utils/type-utils";
 import { createSearchUrl } from ".";
 import { findByAonBase } from "../../../sage-pf2e/data/Repository";
@@ -5,7 +6,6 @@ import AonBase from "../../../sage-pf2e/model/base/AonBase";
 import type Base from "../../../sage-pf2e/model/base/Base";
 import type HasSource from "../../../sage-pf2e/model/base/HasSource";
 import type Source from "../../../sage-pf2e/model/base/Source";
-import { toSuperscript } from "../../../sage-utils/utils/NumberUtils";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import type { GameSearchInfo } from "../../GameSearchInfo";

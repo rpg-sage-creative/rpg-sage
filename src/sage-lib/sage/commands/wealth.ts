@@ -1,4 +1,5 @@
 import { debug } from "@rsc-utils/console-utils";
+import { addCommas, nth } from "@rsc-utils/number-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { Coins, PROFICIENCIES, TProficiency, Table } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
@@ -22,7 +23,7 @@ async function spUtils(sageMessage: SageMessage): Promise<void> {
 		}
 	});
 	const content = createCommandRenderableContent(`<b>Coin Counter</b>`);
-	content.append(`${data}\n\n${coins.toString()}\n(${utils.NumberUtils.addCommas(coins.spValue)} sp)`);
+	content.append(`${data}\n\n${coins.toString()}\n(${addCommas(coins.spValue)} sp)`);
 	return <any>sageMessage.send(content);
 }
 // #endregion
@@ -39,7 +40,7 @@ async function startingWealth(sageMessage: SageMessage): Promise<void> {
 	} else {
 		renderable = createCommandRenderableContent();
 		const levelRow = table.rows[level];
-		renderable.setTitle(`<b>Starting Wealth</b> (${utils.NumberUtils.nth(level)} Level)`);
+		renderable.setTitle(`<b>Starting Wealth</b> (${nth(level)} Level)`);
 		renderable.append(`<b>Permanent Items</b>`, `<blockquote>${levelRow[1].split(/,\s*/).join("\n")}</blockquote>`);
 		renderable.append(`<b>Currency</b> ${levelRow[2]}`);
 		renderable.append(`<h1>Optionally</h1>`);

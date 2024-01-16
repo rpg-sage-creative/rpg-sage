@@ -1,4 +1,5 @@
 import { warn } from "@rsc-utils/console-utils";
+import { addCommas, round } from "@rsc-utils/number-utils";
 import utils, { IComparable, TSortResult } from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
 import Bulk from "./Bulk";
@@ -22,16 +23,16 @@ function ensureCoins(value: TMoney): Coins {
 function format(pp: number, gp: number, sp: number, cp: number, neg: boolean): string {
 	const parts: string[] = [];
 	if (pp) {
-		parts.push(`${utils.NumberUtils.addCommas(pp)} pp`);
+		parts.push(`${addCommas(pp)} pp`);
 	}
 	if (gp) {
-		parts.push(`${utils.NumberUtils.addCommas(gp)} gp`);
+		parts.push(`${addCommas(gp)} gp`);
 	}
 	if (sp) {
-		parts.push(`${utils.NumberUtils.addCommas(sp)} sp`);
+		parts.push(`${addCommas(sp)} sp`);
 	}
 	if (cp) {
-		parts.push(`${utils.NumberUtils.addCommas(cp)} cp`);
+		parts.push(`${addCommas(cp)} cp`);
 	}
 	const negOut = neg ? "-" : "";
 	const partsOut = parts.filter(part => part).join(", ");
@@ -39,7 +40,7 @@ function format(pp: number, gp: number, sp: number, cp: number, neg: boolean): s
 }
 function updateValues(coins: Coins): void {
 	coins.bulk = bulkCalculator(coins);
-	coins.spValue = utils.NumberUtils.round(coins.pp * 100 + coins.gp * 10 + coins.sp + coins.cp / 10, 1);
+	coins.spValue = round(coins.pp * 100 + coins.gp * 10 + coins.sp + coins.cp / 10, 1);
 	if (coins.neg) {
 		coins.spValue *= -1;
 	}
