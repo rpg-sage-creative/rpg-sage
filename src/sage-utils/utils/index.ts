@@ -5,7 +5,6 @@ export * as DateUtils from "./DateUtils";
 export * as EnumUtils from "./EnumUtils";
 export * as LangUtils from "./LangUtils";
 export * as MapUtils from "./MapUtils";
-export * as MathUtils from "./MathUtils";
 export * as RandomUtils from "./RandomUtils";
 export * as RenderUtils from "./RenderUtils";
 export * as SearchUtils from "./SearchUtils";
