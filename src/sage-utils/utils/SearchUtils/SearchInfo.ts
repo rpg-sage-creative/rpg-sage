@@ -1,11 +1,11 @@
+import { oneToUS, reduceNoiseUS } from "@rsc-utils/language-utils";
 import { dequote, tokenize } from "@rsc-utils/string-utils";
 import { existsAndUnique } from "../ArrayUtils/Filters";
-import { oneToUS, reduceNoise } from "../LangUtils";
 import SearchScore, { TTermInfo } from "./SearchScore";
 import type { ISearchable } from "./types";
 
 function escapeRegexCharacters(value: string): string {
-	return value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+	return value.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 function createRegex(value: string, flags = "gi"): RegExp {
 	return new RegExp(escapeRegexCharacters(value), flags);
@@ -17,7 +17,7 @@ export type TSearchFlag = "" | "g" | "r" | "gr" | "rg";
 function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean) {
 	const tokens = tokenize(term, { quoted:/"[^"]*"/, other:/\S+/ });
 	const terms = tokens.map(token => token.token).map(s => dequote(s)).filter(existsAndUnique);
-	return reduceNoise(terms).map(_term => {
+	return reduceNoiseUS(terms).map(_term => {
 		const minus = _term.startsWith("-"),
 			plus = _term.startsWith("+"),
 			cleanTerm = oneToUS(minus || plus ? _term.slice(1) : _term);

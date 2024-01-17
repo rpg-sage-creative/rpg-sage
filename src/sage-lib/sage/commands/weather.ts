@@ -1,3 +1,4 @@
+import { parseEnum } from "@rsc-utils/enum-utils";
 import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType } from "../../../sage-pf2e";
@@ -15,9 +16,9 @@ type TWeatherArgs = {
 };
 
 function parseWeatherArgs(climate: Optional<string>, elevation: Optional<string>, season: Optional<string>): TWeatherArgs {
-	const elevationType = utils.EnumUtils.parse<ElevationType>(ElevationType, elevation!) ?? ElevationType.Lowland;
-	let climateType = utils.EnumUtils.parse<ClimateType>(ClimateType, climate!);
-	let seasonType = utils.EnumUtils.parse<SeasonType>(SeasonType, season!);
+	const elevationType = parseEnum<ElevationType>(ElevationType, elevation!) ?? ElevationType.Lowland;
+	let climateType = parseEnum<ClimateType>(ClimateType, climate!);
+	let seasonType = parseEnum<SeasonType>(SeasonType, season!);
 	if (climateType === undefined && seasonType !== undefined) {
 		climateType = [SeasonType.Dry, SeasonType.Wet].includes(seasonType) ? ClimateType.Tropical : ClimateType.Temperate;
 	}else if (climateType === undefined) {
@@ -25,8 +26,8 @@ function parseWeatherArgs(climate: Optional<string>, elevation: Optional<string>
 	}
 	if (seasonType === undefined) {
 		seasonType = climateType === ClimateType.Tropical
-			? utils.EnumUtils.parse<SeasonType>(TropicalSeasonType, climate!) ?? utils.DateUtils.getTropicalSeason() as unknown as SeasonType
-			: utils.EnumUtils.parse<SeasonType>(TemperateSeasonType, climate!) ?? utils.DateUtils.getTemperateSeason() as unknown as SeasonType;
+			? parseEnum<SeasonType>(TropicalSeasonType, climate!) ?? utils.DateUtils.getTropicalSeason() as unknown as SeasonType
+			: parseEnum<SeasonType>(TemperateSeasonType, climate!) ?? utils.DateUtils.getTemperateSeason() as unknown as SeasonType;
 	}
 	return { climateType, elevationType, seasonType };
 }

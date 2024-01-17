@@ -1,4 +1,6 @@
 import { debug, error, verbose } from "@rsc-utils/console-utils";
+import { oneToUS } from "@rsc-utils/language-utils";
+import { capitalize } from "@rsc-utils/string-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
 import utils from "../../../sage-utils";
 import ArgsManager from "../../discord/ArgsManager";
@@ -10,7 +12,6 @@ import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp, registerFindHelp, registerSearchHelp } from "./help";
 import { searchHandler } from "./search";
-import { capitalize } from "@rsc-utils/string-utils";
 
 // #region Common Types and Functions
 
@@ -106,7 +107,7 @@ export function renderAll(objectType: string, objectTypePlural: string, _bySourc
 
 async function objectsBy(sageMessage: SageMessage): Promise<void> {
 	const objectTypePlural = sageMessage.args.shift()!,
-		objectType = Repository.parseObjectType(utils.LangUtils.oneToUS(objectTypePlural.replace(/gods/i, "deities")))!,
+		objectType = Repository.parseObjectType(oneToUS(objectTypePlural.replace(/gods/i, "deities")))!,
 		traitOr = sageMessage.args.shift() ?? (objectType.objectType === "Deity" ? "domain" : "trait"),
 		searchTerm = sageMessage.args.shift()!;
 
@@ -169,7 +170,7 @@ function searchTester(sageMessage: SageMessage): TCommandAndArgs | null {
 // 	const bySourceMatch = searchInfo.searchText.match(/\s*(\w+)\s*by\s*source\s*/i);
 // 	const bySource = bySourceMatch !== null;
 // 	const objectType = bySource && bySourceMatch[1] || searchInfo.searchText;
-// 	const usObjectType = utils.LangUtils.oneToUS(objectType.replace(/^gods?$/i, "deity"));
+// 	const usObjectType = oneToUS(objectType.replace(/^gods?$/i, "deity"));
 // 	const pluralObjectType = Repository.parseObjectType(usObjectType);
 // 	if (pluralObjectType) {
 // 		const renderables = renderAll(pluralObjectType.objectType, pluralObjectType.objectTypePlural, bySource);

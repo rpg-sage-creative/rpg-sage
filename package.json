@@ -35,6 +35,8 @@
 		"@rsc-utils/color-utils": "github:rpg-sage-creative/color-utils",
 		"@rsc-utils/number-utils": "github:rpg-sage-creative/number-utils",
 		"@rsc-utils/temperature-utils": "github:rpg-sage-creative/temperature-utils",
+		"@rsc-utils/enum-utils": "github:rpg-sage-creative/enum-utils",
+		"@rsc-utils/language-utils": "github:rpg-sage-creative/language-utils",
 		"@discordjs/rest": "^1.6.0",
 		"@napi-rs/canvas": "^0.1.35",
 		"discord-api-types": "^0.27.3",

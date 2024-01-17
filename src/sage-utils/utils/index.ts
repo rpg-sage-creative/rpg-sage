@@ -2,8 +2,6 @@ export * as ArgsUtils from "./ArgsUtils";
 export * as ArrayUtils from "./ArrayUtils";
 export * as ClassUtils from "./ClassUtils";
 export * as DateUtils from "./DateUtils";
-export * as EnumUtils from "./EnumUtils";
-export * as LangUtils from "./LangUtils";
 export * as MapUtils from "./MapUtils";
 export * as RandomUtils from "./RandomUtils";
 export * as RenderUtils from "./RenderUtils";

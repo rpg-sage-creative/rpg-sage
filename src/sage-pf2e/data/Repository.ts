@@ -1,6 +1,7 @@
 import { debug, errorReturnEmptyArray, verbose, warn } from "@rsc-utils/console-utils";
 import { getDataRoot } from "@rsc-utils/env-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/fs-utils";
+import { initializeNoiseUS, initializeUKtoUS } from "@rsc-utils/language-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
@@ -252,6 +253,12 @@ export async function loadData(): Promise<void> {
 	}
 
 	verbose(`\t\t${coresLoaded} Total Cores loaded`);
+
+	const pairs = initializeUKtoUS();
+	verbose(`UK to US pairs loaded: ${pairs}`);
+
+	const noise = initializeNoiseUS();
+	verbose(`US noise words loaded: ${noise}`);
 
 	return Promise.resolve();
 }
