@@ -1,4 +1,4 @@
-import { rollDice } from "@rsc-utils/dice-utils";
+import { explodeDice, rollDice } from "@rsc-utils/dice-utils";
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull } from "@rsc-utils/type-utils";
@@ -27,7 +27,6 @@ import type {
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
 } from "../base/types";
-import { explodeDice } from "../common/explodeDice";
 
 /*
 default target ("VS") = 8
