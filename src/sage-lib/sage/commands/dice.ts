@@ -1,5 +1,7 @@
 import { debug, error } from "@rsc-utils/console-utils";
+import { rollDie } from "@rsc-utils/dice-utils";
 import { addCommas } from "@rsc-utils/number-utils";
+import { randomItem } from "@rsc-utils/random-utils";
 import { chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, tokenize, type KeyValueArg } from '@rsc-utils/string-utils';
 import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
@@ -8,7 +10,6 @@ import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "
 import { NEWLINE } from "../../../sage-pf2e";
 import { createMessageLink } from "../../../sage-utils/utils/DiscordUtils/createMessageLink";
 import { toHumanReadable } from "../../../sage-utils/utils/DiscordUtils/toHumanReadable";
-import { random, randomItem } from "../../../sage-utils/utils/RandomUtils";
 import type { DUser, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { DiscordId, DiscordMaxValues } from "../../discord";
 import { createMessageEmbed } from "../../discord/embeds";
@@ -758,7 +759,7 @@ async function diceTest(sageMessage: SageMessage): Promise<void> {
 	const rolls: number[] = [];
 	let counter = iterations;
 	do {
-		rolls.push(random(dieSize));
+		rolls.push(rollDie(dieSize));
 	} while(--counter);
 
 	//#endregion

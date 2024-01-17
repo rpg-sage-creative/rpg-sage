@@ -1,5 +1,7 @@
-import testSageUtils from "./sage-utils"
 
 // node --experimental-modules --es-module-specifier-resolution=node run.mjs
 
-testSageUtils();
+async function main() {
+	console.log(`Create rpg-sage-legacy tests`);
+}
+main();

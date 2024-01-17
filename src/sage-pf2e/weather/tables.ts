@@ -1,5 +1,6 @@
 import { warn } from "@rsc-utils/console-utils";
-import utils, { type TSimpleDice } from "../../sage-utils";
+import type { SimpleDice } from "@rsc-utils/dice-utils";
+import { randomInt } from "@rsc-utils/random-utils";
 import { ClimateType, WindType } from "./weather";
 
 export interface TableItem { min: number; max: number; }
@@ -56,7 +57,7 @@ export function rollOnTable(tableName: string): TableItem | null {
 		return null;
 	}
 
-	const rand = utils.RandomUtils.random(min, max);
+	const rand = randomInt(min, max);
 	const item = table.find(_item => _item.min <= rand && rand <= _item.max) ?? null;
 	// We clone the item so that we can manipulate the values when tinkering with weather
 	return JSON.parse(JSON.stringify(item));
@@ -67,8 +68,8 @@ export function rollTemperatureVariation(climate: ClimateType): TemperatureVaria
 }
 
 export interface TemperatureVariationTableItem extends TableItem {
-	variation: TSimpleDice | "0";
-	duration: TSimpleDice;
+	variation: SimpleDice | "0";
+	duration: SimpleDice;
 }
 
 export const ColdRegionTemperatureVariations: TemperatureVariationTableItem[] = [
@@ -99,7 +100,7 @@ export const TropicalRegionTemperatureVariations: TemperatureVariationTableItem[
 
 export interface PrecipitationTableItem extends TableItem {
 	precipitation: string;
-	duration: TSimpleDice | "1";
+	duration: SimpleDice | "1";
 }
 
 const LightFog = "Light Fog";
@@ -185,7 +186,7 @@ export const TorrentialFrozenPrecipitation: PrecipitationTableItem[] = [
 
 export interface WindTableItem extends TableItem {
 	strength: keyof typeof WindType;
-	speed: TSimpleDice;
+	speed: SimpleDice;
 }
 export const ThunderstormWinds: WindTableItem[] = [
 	{ min: 1, max: 50, strength: "Strong", speed: "1d10+20" },

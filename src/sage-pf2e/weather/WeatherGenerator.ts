@@ -1,35 +1,36 @@
+import { rollDiceString, rollDie, type SimpleDice } from "@rsc-utils/dice-utils";
+import { randomBoolean, randomInt } from "@rsc-utils/random-utils";
 import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import type { CloudCoverTableItem } from "..";
 import GDate from "../../sage-cal/pf2e/GDate";
-import type { TSimpleDice } from "../../sage-utils";
-import utils, { SeasonType } from "../../sage-utils";
+import { SeasonType } from "../../sage-utils";
 import * as tables from "./tables";
 import {
 	ClimateType,
 	CloudCoverType,
 	ElevationType,
+	PrecipitationFrequencyType,
+	PrecipitationIntensityType,
+	WindType,
 	getBasePrecipitationFrequency,
 	getBasePrecipitationIntensity,
 	getBaseTemp,
-	PrecipitationFrequencyType,
-	PrecipitationIntensityType,
-	testForPrecipitation,
-	WindType
+	testForPrecipitation
 } from "./weather";
 
 const HeavySnow = "Heavy Snow";
 
 //TODO: integrate the time data from https://sunrise-sunset.org/api
 
-function roll(diceString: TSimpleDice | "0" | "1"): number {
+function roll(diceString: SimpleDice | "0" | "1"): number {
 	if (diceString === "0" || diceString === "1") {
 		return +diceString;
 	}
-	return utils.RandomUtils.randomRoll(diceString) ?? 0;
+	return rollDiceString(diceString) ?? 0;
 }
 function rollDelta(): number {
-	const multiplier = utils.RandomUtils.randomBoolean() ? 1 : -1;
+	const multiplier = randomBoolean() ? 1 : -1;
 	return roll("1d3-1") * multiplier;
 }
 
@@ -292,7 +293,7 @@ function createHourlyResults(days: IWeatherDayResult[]): void {
 			if (precip.precipitation === HeavySnow && day.windStrength >= WindType.Severe) {
 				// If Heavy Snow and Severe Wind, there is a 20% (1 in 5) chance of a Blizzard
 				precip = <tables.PrecipitationTableItem>{ precipitation: "Blizzard", duration: "2d12", min: 1, max: 1 };
-				if (utils.RandomUtils.random(5) === 5) {
+				if (rollDie(5) === 5) {
 					day.precipDuration = roll("2d12");
 				}
 			}
@@ -421,7 +422,7 @@ function randomWeather(properties: IGenParameters, date: GDate): IWeatherDayResu
 			low: low,
 			cloudCover: cloudCover,
 			precipIntensity: precipIntensity,
-			precipStart: hasPrecip ? utils.RandomUtils.random(0, 23) : undefined,
+			precipStart: hasPrecip ? randomInt(0, 23) : undefined,
 			precipDuration: undefined,
 			precipItem: undefined,
 			windStrength: undefined,

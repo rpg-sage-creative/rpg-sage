@@ -1,3 +1,4 @@
+import { rollDie } from "@rsc-utils/dice-utils";
 import type { Optional, OrNull } from "@rsc-utils/type-utils";
 import utils from "../../sage-utils";
 import { Dice } from "../dice/base";
@@ -201,7 +202,7 @@ export class NextTableInfo {
 			nextTable = allTables[nextItem.tableName];
 			spread = nextTable.getTotalSpread();
 			for (let loopIndex = nextItem.times; loopIndex--;) {
-				value = utils.RandomUtils.random(spread);
+				value = rollDie(spread);
 				nextResults = <TRI>nextTable.createTableResultsItem(value);
 				nextResults.descriptor = nextItem.descriptor;
 				items[itemIndex++] = nextResults;
@@ -228,7 +229,7 @@ export class TableResults<TI extends TableItem> {
 		let counter = rolls,
 			value: number;
 		while (counter--) {
-			value = utils.RandomUtils.random(totalSpread);
+			value = rollDie(totalSpread);
 			items[counter] = table.createTableResultsItem(value);
 		}
 	}

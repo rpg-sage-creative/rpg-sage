@@ -1,4 +1,5 @@
 import { warn } from "@rsc-utils/console-utils";
+import { rollDice } from "@rsc-utils/dice-utils";
 import { TokenParsers, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
@@ -27,7 +28,6 @@ import {
 	mapRollToJson,
 	parseValueDropKeepData,
 	parseValueTestData,
-	rollDice,
 	sum,
 	sumDicePartRolls,
 	sumDropKeep

@@ -1,3 +1,4 @@
+import { rollDice } from "@rsc-utils/dice-utils";
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull } from "@rsc-utils/type-utils";
@@ -14,8 +15,7 @@ import {
 	TestType, UNICODE_LEFT_ARROW,
 	cleanDescription,
 	gradeToEmoji,
-	parseTestTargetValue,
-	rollDice
+	parseTestTargetValue
 } from "../../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,

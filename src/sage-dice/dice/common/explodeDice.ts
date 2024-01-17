@@ -1,4 +1,4 @@
-import { rollDice } from "../../common";
+import { rollDice } from "@rsc-utils/dice-utils";
 
 /**
  * Checks a set of die roll values for exloding dice, rolling exploded dice as needed

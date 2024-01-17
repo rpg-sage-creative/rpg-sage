@@ -1,5 +1,6 @@
 import { error } from "@rsc-utils/console-utils";
-import utils, { SeasonType } from "../../sage-utils";
+import { rollDie } from "@rsc-utils/dice-utils";
+import { SeasonType } from "../../sage-utils";
 
 export enum ElevationType { SeaLevel, Lowland, Highland }
 export enum ClimateType { Cold, Temperate, Tropical }
@@ -83,7 +84,7 @@ export function getBaseTemp(climate: ClimateType, season: SeasonType, elevation:
 }
 
 export function testForPrecipitation(frequency: PrecipitationFrequencyType): boolean {
-	const roll = utils.RandomUtils.random(100);
+	const roll = rollDie(100);
 	switch (frequency) {
 		case PrecipitationFrequencyType.Drought: return roll <= 5;
 		case PrecipitationFrequencyType.Rare: return roll <= 15;

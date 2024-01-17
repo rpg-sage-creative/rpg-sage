@@ -1,10 +1,9 @@
+import { rollDie } from "@rsc-utils/dice-utils";
+import { shuffle } from "@rsc-utils/random-utils";
 import { BULLET } from "@rsc-utils/string-utils";
-import dice from "../../../../sage-dice";
 import utils from "../../../../sage-utils";
 import type SageMessage from "../../model/SageMessage";
 import { addScenario, createPfsRenderableContent, TPfsFaction, TTierInfo } from "./pfs";
-
-const roll = dice.base.Dice.roll;
 
 type TMission = "Flotsam Graveyard" | "Petals District" | "Precipice Quarter" | "Westgate";
 type TFactionLeader = {
@@ -26,7 +25,7 @@ type TFactionLeader = {
 };
 const AllAttendees = ["Aaqir al-Hakam", "Ambrus Valsin", "Gloriana Morilla", "Kreighton Shane", "Sorrina Westyr", "Tamrin Credence", "Urwal", "Valais Durant", "Zarta Dralneen"];
 function s0101(tierInfo: TTierInfo): Map<string, TFactionLeader> {
-	let randomAttendees = utils.RandomUtils.shuffle(AllAttendees).slice(0, 4);
+	let randomAttendees = shuffle(AllAttendees).slice(0, 4);
 	let factionLeaders = <TFactionLeader[]>[
 		{ name: "Calisro Benarry", faction: "Horizon Hunters", horizonHunters: true, missions: ["Flotsam Graveyard", "Precipice Quarter", "Westgate"], mission: "", attendee: "", additionalAidOptions: ["minor healing potion", "lesser healing potion"], additionalAid: "" },
 		{ name: "Eando Kline", faction: "Vigilant Seal", vigilantSeal: true, missions: ["Flotsam Graveyard", "Petals District", "Westgate"], mission: "", attendee: "", additionalAidOptions: ["", ""], additionalAid: "" },
@@ -37,7 +36,7 @@ function s0101(tierInfo: TTierInfo): Map<string, TFactionLeader> {
 	for (let i = factionLeaders.length; i--;) {
 		let mission: TMission;
 		do {
-			let result = roll("1d3");
+			let result = rollDie(3);
 			mission = factionLeaders[i].missions[result - 1];
 		} while (factionLeadersByMission.has(mission));
 		factionLeaders[i].mission = mission;
@@ -74,11 +73,11 @@ const FleshForgeAbilitiesHighTier = ["",
 function s0101A(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): utils.RenderUtils.RenderableContent {
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	renderableContent.appendTitledSection(`<b>A: Flotsam Graveyard - Surfaced Wreck (${faction})</b>`, `<b>A2 - Cargo Hold</b>`);
-	renderableContent.append(`<b>Fleshforge ${tierInfo.lowTier ? "Dreg" : "Prototype"}</b>`, `<blockquote>${FleshforgeTemperament[roll("1d6")]}</blockquote>`);
-	let fleshforgeRolls = [roll("1d6")];
+	renderableContent.append(`<b>Fleshforge ${tierInfo.lowTier ? "Dreg" : "Prototype"}</b>`, `<blockquote>${FleshforgeTemperament[rollDie(6)]}</blockquote>`);
+	let fleshforgeRolls = [rollDie(6)];
 	if (tierInfo.pcCount > 4) {
 		let result: number;
-		while (fleshforgeRolls.includes(result = roll("1d6"))) { }
+		while (fleshforgeRolls.includes(result = rollDie(6))) { }
 		fleshforgeRolls.push(result);
 	}
 	let additionalAbilites = fleshforgeRolls.map(fleshforgeRoll =>
@@ -106,7 +105,7 @@ function s0101B(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFact
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	renderableContent.appendTitledSection(`<b>B: Petals District - Blakros Museum (${faction})</b>`, `<b>B5 - Third Floor</b>`);
 	renderableContent.append(`<b>${tierInfo.lowTier ? "" : "Deeply "}Flawed Ritual (${tierInfo.lowTier ? "" : "Greater "}Shadow Wisp)</b>`);
-	let flawRoll = roll("1d4"),
+	let flawRoll = rollDie(4),
 		totalFlaws = 7 + (tierInfo.pcCount > 4 ? tierInfo.pcCount - 4 : 0);
 	renderableContent.append(`> <b>Ritual Flaws</b> ${totalFlaws} (3 initially contained); <b>DCs</b> Occultism ${tierInfo.lowTier ? 22 : 24}, Flaw Skill ${tierInfo.lowTier ? 18 : 20}`);
 	switch (flawRoll) {
@@ -131,7 +130,7 @@ function s0101B(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFact
 function s0101C(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): utils.RenderUtils.RenderableContent {
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	renderableContent.appendTitledSection(`<b>C: Precipice Quarter - Mavedarus Manor (${faction})</b>`, `<b>Haunted Past</b>`);
-	let hauntRoll = roll("1d6");
+	let hauntRoll = rollDie(6);
 	switch (hauntRoll) {
 		case 1:
 			renderableContent.append(`> <b>Owner Practices</b> Archdevil worshippers sacrificing innocents`);
@@ -193,7 +192,7 @@ function s0101D(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFact
 	let leaderCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0],
 		totalLeaders = 3 + (tierInfo.pcCount > 4 ? tierInfo.pcCount - 4 : 0);
 	for (let i = totalLeaders; i--;) {
-		leaderCounts[roll("1d8")]++;
+		leaderCounts[rollDie(8)]++;
 	}
 	renderableContent.appendTitledSection(`<b>D: Westgate - Statue Street (${faction})</b>`, `<b>Crowd ${tierInfo.lowTier ? "Leaders" : "Agitators"}</b> ${totalLeaders}`);
 	leaderCounts.forEach((leaderCount, leaderIndex) => {

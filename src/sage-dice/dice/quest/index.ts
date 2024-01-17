@@ -1,3 +1,4 @@
+import { rollDice } from "@rsc-utils/dice-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
@@ -15,8 +16,7 @@ import {
 	cleanDescription,
 	createValueTestData,
 	gradeToEmoji,
-	parseTestTargetValue,
-	rollDice
+	parseTestTargetValue
 } from "../../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,

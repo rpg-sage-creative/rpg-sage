@@ -1,3 +1,4 @@
+import { randomItem } from "@rsc-utils/random-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import utils from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
@@ -120,7 +121,7 @@ export default class SpellCollection extends utils.ClassUtils.HasCore<SpellColle
 	}
 
 	public random(): HeightenedSpell {
-		return utils.RandomUtils.randomItem(this.heightenedSpells)!;
+		return randomItem(this.heightenedSpells)!;
 	}
 
 }

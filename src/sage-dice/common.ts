@@ -77,14 +77,6 @@ export function filterExists<T>(value: T): boolean {
 
 //#region rollDice, sum, toMod
 
-export function rollDice(count: number, sides: number): number[] {
-	const rolls: number[] = [];
-	for (let i = count; i--;) {
-		rolls.push(utils.RandomUtils.random(sides));
-	}
-	return rolls;
-}
-
 export function sum(values: number[]): number {
 	return values.reduce((total, value) => total + value, 0);
 }

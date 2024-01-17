@@ -1,3 +1,5 @@
+import { rollDie } from "@rsc-utils/dice-utils";
+import { randomItem } from "@rsc-utils/random-utils";
 import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
 import utils from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
@@ -55,7 +57,7 @@ function calcMaxSpellLevel(level: number): number {
 export const CasterClasses = ["Bard", "Cleric", "Druid", "Sorcerer", "Wizard"];
 
 export function randomCasterClass(): string {
-	return utils.RandomUtils.randomItem(CasterClasses)!;
+	return randomItem(CasterClasses)!;
 }
 
 export interface SpellbookCore extends Core<"Spellbook"> {
@@ -228,17 +230,17 @@ function addSpells({ casterSpecialty, isWizardSpecialist, maxSpellLevelAtThisLev
 	while (spells.count < totalSpellsAtThisLevel) {
 		//pick a random level and remove opposed schools and current spells
 		let pool = traditionCollection
-			.filter(utils.RandomUtils.random(maxSpellLevelAtThisLevel))
+			.filter(rollDie(maxSpellLevelAtThisLevel))
 			.filter(sourceFilter)
 			.exclude(spells.names);
 
 		//75% chance of core spell
-		if (utils.RandomUtils.random(100) > 25 && pool.filter(Source.Core).count) {
+		if (rollDie(100) > 25 && pool.filter(Source.Core).count) {
 			pool = pool.filter(Source.Core);
 		}
 
 		//50% chance of specialty school
-		if (isWizardSpecialist && utils.RandomUtils.random(100) > 50 && pool.filter(casterSpecialty!).count) {
+		if (isWizardSpecialist && rollDie(100) > 50 && pool.filter(casterSpecialty!).count) {
 			pool = pool.filter(casterSpecialty!);
 		}
 
