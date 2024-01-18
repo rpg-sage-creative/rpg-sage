@@ -1,10 +1,10 @@
-import type * as Discord from "discord.js";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import type SageMessage from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
-import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 
-export async function gameUserList(sageMessage: SageMessage, who: string, userDids: Discord.Snowflake[] = []): Promise<void> {
+export async function gameUserList(sageMessage: SageMessage, who: string, userDids: Snowflake[] = []): Promise<void> {
 	if (!sageMessage.canAdminGame) {
 		return sageMessage.reactBlock();
 	}

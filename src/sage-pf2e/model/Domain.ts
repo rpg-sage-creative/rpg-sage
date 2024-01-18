@@ -1,5 +1,5 @@
 import { warn } from "@rsc-utils/console-utils";
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import RenderableContent from '../data/RenderableContent';
 import { findByValue } from '../data/Repository';
 import type FocusSpell from './FocusSpell';
@@ -22,7 +22,7 @@ export default class Domain extends HasSource<DomainCore> {
 	/**************************************************************************************************************************/
 	// utils.RenderUtils.IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 		content.setTitle(`<b>${this.name}</b> (Domain)`);
 		content.append(this.description);

@@ -1,8 +1,8 @@
 import { filterAsync } from "@rsc-utils/async-array-utils";
 import { debug, error, info, warn } from "@rsc-utils/console-utils";
+import { NIL_SNOWFLAKE, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Interaction, Message, MessageReaction, PartialMessage, Role, Snowflake, TextChannel, User, Webhook } from "discord.js";
-import { NilSnowflake } from ".";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageMessage from "../sage/model/SageMessage";
@@ -65,7 +65,7 @@ async function dFetchGuild(client: Client, guildResolvable: TGuildResolvable): P
 }
 
 function createWebhookKey(channel: TextChannel, name: string): string {
-	const guildDid = channel.guild?.id ?? NilSnowflake;
+	const guildDid = orNilSnowflake(channel.guild?.id);
 	return `${guildDid}-${channel.id}-${name}`;
 }
 
@@ -76,7 +76,7 @@ export default class DiscordCache {
 		this.channelMap = new Map();
 		this.guildMap = new Map();
 		this.guildPreviewMap = new Map();
-		this.guildMemberMap = new Map([[NilSnowflake, null]]);
+		this.guildMemberMap = new Map([[NIL_SNOWFLAKE, null]]);
 		this.guildMemberRoleMap = new Map();
 		this.messageMap = new Map();
 		this.roleMap = new Map();
@@ -253,7 +253,7 @@ export default class DiscordCache {
 	private userMap: Map<Snowflake, User | null>;
 
 	public async fetchUser(userDid: Snowflake): Promise<User | null> {
-		if (!this.userMap.has(userDid) && userDid !== NilSnowflake) {
+		if (!this.userMap.has(userDid) && isNonNilSnowflake(userDid)) {
 			const user = await this.client.users.fetch(userDid, { cache:true, force:true }).catch(warnUnknownElseErrorReturnNull);
 			this.userMap.set(userDid, user ?? null);
 		}

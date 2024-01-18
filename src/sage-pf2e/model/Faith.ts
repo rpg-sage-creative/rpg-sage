@@ -1,4 +1,4 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { TAlignment } from '../common';
 import { ALIGNMENTS } from '../common';
 import RenderableContent from '../data/RenderableContent';
@@ -36,7 +36,7 @@ export default class Faith<T extends string = "Faith", U extends FaithCoreBase<T
 		return followerAlignments;
 	}
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 		content.setTitle(`<b>${this.name}</b>`);
 		this.appendDetailsTo(content);

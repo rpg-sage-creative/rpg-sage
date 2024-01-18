@@ -1,5 +1,5 @@
 import { warn } from "@rsc-utils/console-utils";
-import type * as Discord from "discord.js";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { GameType } from "../../../sage-common";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository";
 import Colors from "./Colors";
@@ -13,7 +13,7 @@ export type TBotCodeName = "dev" | "beta" | "stable";
 export type TCoreAuthor = { iconUrl?: string; name?: string; url?: string; };
 export type TCorePrefixes = { command?: string; search?: string; };
 
-export type TDev = { did: Discord.Snowflake; };
+export type TDev = { did: Snowflake; };
 
 /**
  * key = GameType

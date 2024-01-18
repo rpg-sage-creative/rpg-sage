@@ -1,8 +1,9 @@
 import { uncache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnFalse, silly } from "@rsc-utils/console-utils";
+import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
-import type * as Discord from "discord.js";
-import { DInteraction, DMessage, DReaction, DUser, DiscordCache, DiscordKey, NilSnowflake, TChannel } from "../../discord";
+import type { Client, DMChannel, GuildMember, NewsChannel, PartialDMChannel, TextChannel, ThreadChannel } from "discord.js";
+import { DiscordCache, DiscordKey, TChannel, type DInteraction, type DMessage, type DReaction, type DUser } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
 import ActiveBot from "../model/ActiveBot";
 import BotRepo from "../repo/BotRepo";
@@ -12,7 +13,7 @@ import UserRepo from "../repo/UserRepo";
 import type Bot from "./Bot";
 import type Game from "./Game";
 import type Server from "./Server";
-import type User from "./User";
+import type { User } from "./User";
 
 export type TSageCacheCore = {
 	discord: DiscordCache;
@@ -42,7 +43,7 @@ function createCoreAndCache(): [TSageCacheCore, SageCache] {
 	return [core, sageCache];
 }
 
-type DMessageChannel = Discord.DMChannel | Discord.PartialDMChannel | Discord.NewsChannel | Discord.TextChannel | Discord.ThreadChannel;
+type DMessageChannel = DMChannel | PartialDMChannel | NewsChannel | TextChannel | ThreadChannel;
 export async function canSendMessageTo(channel: DMessageChannel): Promise<boolean> {
 	if (!channel.isText()) {
 		return false;
@@ -61,8 +62,8 @@ export async function canSendMessageTo(channel: DMessageChannel): Promise<boolea
 
 // type TMeta = {
 // 	diceSent?: [];
-// 	messagesDeleted?: Discord.Message[];
-// 	messagesSent?: Discord.Message[];
+// 	messagesDeleted?: Message[];
+// 	messagesSent?: Message[];
 // };
 
 export default class SageCache {
@@ -85,8 +86,8 @@ export default class SageCache {
 			if (discordKey.isDm) {
 				this.canSendMessageToMap.set(key, true);
 			}else {
-				const thread = await this.discord.fetchChannel<Discord.ThreadChannel>(discordKey.thread);
-				const channel = await this.discord.fetchChannel<Discord.TextChannel>(discordKey.channel);
+				const thread = await this.discord.fetchChannel<ThreadChannel>(discordKey.thread);
+				const channel = await this.discord.fetchChannel<TextChannel>(discordKey.channel);
 				const botUser = await this.discord.fetchUser(ActiveBot.active.did);
 				if (botUser && (thread || channel)) {
 					const sendPerm = thread ? "SEND_MESSAGES_IN_THREADS" : "SEND_MESSAGES";
@@ -121,11 +122,11 @@ export default class SageCache {
 			// // debug({tupperId,tupper:!!tupper});
 			// if (!tupper) return false;
 
-			const thread = await sageCache.discord.fetchChannel<Discord.ThreadChannel>(discordKey.thread);
+			const thread = await sageCache.discord.fetchChannel<ThreadChannel>(discordKey.thread);
 			// debug({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId)});
 			if (thread?.guildMembers.has(tupperId)) return true;
 
-			const channel = await sageCache.discord.fetchChannel<Discord.TextChannel>(discordKey.channel);
+			const channel = await sageCache.discord.fetchChannel<TextChannel>(discordKey.channel);
 			// debug({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId),channelId:discordKey.channel,channel:!!channel?.members.has(tupperId)});
 			return channel?.members.has(tupperId) === true;
 		}
@@ -157,7 +158,7 @@ export default class SageCache {
 				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
 				const thread = await sageCache.discord.fetchChannel(discordKey.thread);
 				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
-				const channel = await sageCache.discord.fetchChannel<Discord.TextChannel>(discordKey.channel);
+				const channel = await sageCache.discord.fetchChannel<TextChannel>(discordKey.channel);
 				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
 				const botUser = await sageCache.discord.fetchUser(ActiveBot.active.did);
 				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
@@ -180,7 +181,7 @@ export default class SageCache {
 				this.canWebhookToMap.set(key, false);
 			}else {
 				const thread = await this.discord.fetchChannel(discordKey.thread);
-				const channel = await this.discord.fetchChannel<Discord.TextChannel>(discordKey.channel);
+				const channel = await this.discord.fetchChannel<TextChannel>(discordKey.channel);
 				const botUser = await this.discord.fetchUser(ActiveBot.active.did);
 				if (botUser && (thread || channel)) {
 					const sendPerm = thread ? "SEND_MESSAGES_IN_THREADS" : "SEND_MESSAGES";
@@ -198,7 +199,7 @@ export default class SageCache {
 	public get discord(): DiscordCache { return this.core.discord; }
 	public get discordKey(): DiscordKey { return this.core.discordKey; }
 	/** @deprecated start setting this.core.discordUser or remove it! */
-	public get userDid(): Discord.Snowflake { return this.core.discordUser?.id ?? this.core.user?.did ?? NilSnowflake; }
+	public get userDid(): Snowflake { return orNilSnowflake(this.core.discordUser?.id ?? this.core.user?.did); }
 
 	// public meta: TMeta[] = [];
 
@@ -252,14 +253,14 @@ export default class SageCache {
 		return new SageCache(core);
 	}
 
-	public static async fromClient(client: Discord.Client): Promise<SageCache> {
+	public static async fromClient(client: Client): Promise<SageCache> {
 		const [core, sageCache] = createCoreAndCache();
 		core.discord = new DiscordCache(client, null);
 		core.bot = ActiveBot.active;
 		core.home = await core.servers.getHome();
 		return sageCache;
 	}
-	public static async fromGuildMember(guildMember: Discord.GuildMember): Promise<SageCache> {
+	public static async fromGuildMember(guildMember: GuildMember): Promise<SageCache> {
 		const [core, sageCache] = createCoreAndCache();
 		core.discord = DiscordCache.fromGuildMember(guildMember);
 		core.bot = ActiveBot.active;
@@ -270,7 +271,7 @@ export default class SageCache {
 		core.user = await core.users.getOrCreateByDid(guildMember.id);
 		return sageCache;
 	}
-	public static async fromMessage(message: DMessage, userDid: Discord.Snowflake = message.author?.id ?? NilSnowflake): Promise<SageCache> {
+	public static async fromMessage(message: DMessage, userDid = message.author?.id): Promise<SageCache> {
 		const [core, sageCache] = createCoreAndCache();
 		core.discord = DiscordCache.fromMessage(message);
 		core.discordKey = DiscordKey.fromMessage(message);
@@ -280,7 +281,7 @@ export default class SageCache {
 			core.server = await core.servers.getOrCreateByGuild(message.guild);
 			core.game = await core.games.findActiveByDiscordKey(core.discordKey);
 		}
-		core.user = await core.users.getOrCreateByDid(userDid);
+		core.user = await core.users.getOrCreateByDid(orNilSnowflake(userDid));
 		return sageCache;
 	}
 	public static async fromMessageReaction(messageReaction: DReaction, user: DUser): Promise<SageCache> {

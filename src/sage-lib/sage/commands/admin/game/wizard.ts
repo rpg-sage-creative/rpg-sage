@@ -1,4 +1,3 @@
-// import type * as Discord from "discord.js";
 // import { discordPrompt } from "../../../../discord/prompts";
 // import type SageMessage from "../../../model/SageMessage";
 // import { registerAdminCommand } from "../../cmd";

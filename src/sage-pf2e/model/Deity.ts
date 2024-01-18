@@ -1,4 +1,4 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { TAlignment } from '../common';
 import RenderableContent from '../data/RenderableContent';
 import type { TDevoteeBenefitsCore } from "./DevoteeBenefits";
@@ -38,7 +38,7 @@ export default class Deity extends HasFaith<"Deity", DeityCore> {
 	/**************************************************************************************************************************/
 	// utils.RenderUtils.IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 		if (this.source.isCore) {
 			content.setThumbnailUrl(`http://rpgsage.io/images/religious/${this.name.replace(/\s/g, "")}.png`);

@@ -1,4 +1,4 @@
-import type * as Discord from "discord.js";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { IBotCore, TBotCodeName } from "../model/Bot";
 import Bot from "../model/Bot";
 import type SageCache from "../model/SageCache";
@@ -18,8 +18,8 @@ export default class BotRepo extends DidRepository<IBotCore, Bot> {
 		return botRepo.getById(botCore.id) as Promise<Bot>;
 	}
 
-	public static isTesterBot(userDid: Discord.Snowflake): boolean;
-	public static isTesterBot(_: Discord.Snowflake): boolean {
+	public static isTesterBot(userDid: Snowflake): boolean;
+	public static isTesterBot(_: Snowflake): boolean {
 		return false;
 	}
 

@@ -1,4 +1,5 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import RenderableContent from "../data/RenderableContent";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from "./base/HasSource";
@@ -14,7 +15,7 @@ export default class Language extends HasSource<LanguageCore> {
 
 	//#region utils.SearchUtils.ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.speakers));
@@ -22,7 +23,7 @@ export default class Language extends HasSource<LanguageCore> {
 		return score;
 	}
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 		content.setTitle(`<b>${this.name}</b> (Language)`);
 		content.append(`<b>Rarity</b> ${this.rarity}`);

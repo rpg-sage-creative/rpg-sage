@@ -1,14 +1,9 @@
 import { Cache } from "@rsc-utils/cache-utils";
 import { debug } from "@rsc-utils/console-utils";
-import type * as Discord from "discord.js";
-import { ReactionType } from "../../discord";
+import { ReactionType, type DMessage, type DReaction, type DUser } from "../../discord";
 import type { HasSageCacheCore } from "./HasSageCache";
 import HasSageCache from "./HasSageCache";
 import SageCache from "./SageCache";
-
-type DUser = Discord.User | Discord.PartialUser;
-type DMessage = Discord.Message | Discord.PartialMessage;
-type DReaction = Discord.MessageReaction | Discord.PartialMessageReaction;
 
 interface SageReactionCore extends HasSageCacheCore {
 	messageReaction: DReaction;

@@ -1,8 +1,9 @@
 import { sortStringIgnoreCase, type Comparable } from "@rsc-utils/array-utils";
 import { warn } from "@rsc-utils/console-utils";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional, type OrNull } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import type * as Discord from "discord.js";
+import type { GuildChannel, GuildMember, Message, Role } from "discord.js";
 import type { GameType } from "../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import { IdCore } from "../../../sage-utils/utils/ClassUtils";
@@ -38,13 +39,13 @@ export function getRoleTypes(roleType: GameRoleType): GameRoleType[] {
 	}
 }
 export interface IGameRole {
-	did: Discord.Snowflake;
+	did: Snowflake;
 	type: GameRoleType;
 	dicePing: boolean;
 }
 
 export enum GameUserType { Unknown = 0, Player = 1, GameMaster = 2 }
-export interface IGameUser { did: Discord.Snowflake; type: GameUserType; dicePing: boolean; }
+export interface IGameUser { did: Snowflake; type: GameUserType; dicePing: boolean; }
 
 export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
 	objectType: "Game";
@@ -61,7 +62,7 @@ export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
 	defaultDiceSecretMethodType?: DiceSecretMethodType;
 
 	serverId: UUID;
-	serverDid: Discord.Snowflake;
+	serverDid: Snowflake;
 
 	channels: IChannel[];
 	roles?: IGameRole[];
@@ -83,9 +84,9 @@ export type TMappedChannelNameTags = {
 	misc: boolean;
 };
 export type TMappedGameChannel = {
-	did: Discord.Snowflake;
+	did: Snowflake;
 	sChannel: IChannel;
-	gChannel: Discord.GuildChannel | undefined;
+	gChannel: GuildChannel | undefined;
 	nameTags: TMappedChannelNameTags;
 };
 
@@ -123,7 +124,7 @@ export function nameTagsToType(nameTags: TMappedChannelNameTags): string {
 }
 
 /** Reads GuildChannel.name to determine channel type: IC, GM, OOC, MISC */
-function mapGuildChannelNameTags(channel: Discord.GuildChannel): TMappedChannelNameTags {
+function mapGuildChannelNameTags(channel: GuildChannel): TMappedChannelNameTags {
 	const ic = channel.name.match(/\bic\b/i) !== null;
 	const gm = !ic && channel.name.match(/\bgms?\b/i) !== null;
 	const ooc = !ic && !gm && channel.name.match(/\booc\b/i) !== null;
@@ -143,7 +144,7 @@ async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<
 			nameTags: mapSageChannelNameTags(sChannel)
 		});
 
-		const gChannel = await sageCache.discord.fetchChannel(sChannel.did) as Discord.GuildChannel;
+		const gChannel = await sageCache.discord.fetchChannel(sChannel.did) as GuildChannel;
 		if (gChannel) {
 			gChannels.push({
 				did: sChannel.did,
@@ -177,19 +178,19 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 	public get defaultDiceOutputType(): DiceOutputType | undefined { return this.core.defaultDiceOutputType; }
 	public get defaultDicePostType(): DicePostType | undefined { return this.core.defaultDicePostType; }
 	public get defaultDiceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.defaultDiceSecretMethodType; }
-	public get serverDid(): Discord.Snowflake { return this.core.serverDid; }
+	public get serverDid(): Snowflake { return this.core.serverDid; }
 	public get serverId(): UUID { return this.core.serverId; }
 	private get discord() { return this.sageCache.discord; }
 
 	public get gmRole(): IGameRole | undefined { return this.roles.find(role => role.type === GameRoleType.GameMaster); }
-	public get gmRoleDid(): Discord.Snowflake | undefined { return this.gmRole?.did; }
+	public get gmRoleDid(): Snowflake | undefined { return this.gmRole?.did; }
 
 	public get playerRole(): IGameRole | undefined { return this.roles.find(role => role.type === GameRoleType.Player); }
-	public get playerRoleDid(): Discord.Snowflake | undefined { return this.playerRole?.did; }
-	public get players(): Discord.Snowflake[] { return this.users.filter(user => user.type === GameUserType.Player).map(user => user.did); }
+	public get playerRoleDid(): Snowflake | undefined { return this.playerRole?.did; }
+	public get players(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.Player).map(user => user.did); }
 
 	public get channels(): IChannel[] { return this.core.channels ?? (this.core.channels = []); }
-	public get gameMasters(): Discord.Snowflake[] { return this.users.filter(user => user.type === GameUserType.GameMaster).map(user => user.did); }
+	public get gameMasters(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.GameMaster).map(user => user.did); }
 	public get gmCharacterName(): string { return this.core.gmCharacterName ?? this.server.defaultGmCharacterName; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
@@ -228,18 +229,18 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 				?? allChannels[0]
 			)?.sChannel;
 	}
-	public async gmGuildChannel(): Promise<OrNull<Discord.GuildChannel>> {
+	public async gmGuildChannel(): Promise<OrNull<GuildChannel>> {
 		for (const sChannel of this.channels) {
 			if (sChannel.gameMaster === PermissionType.Write && !sChannel.player) {
 				const gChannel = await this.discord.fetchChannel(sChannel.did);
 				if (gChannel) {
-					return gChannel as Discord.GuildChannel;
+					return gChannel as GuildChannel;
 				}
 			}
 		}
 		return null;
 	}
-	public async pGuildMembers(): Promise<Discord.GuildMember[]> {
+	public async pGuildMembers(): Promise<GuildMember[]> {
 		// TODO: investiage iterating over guild.memebers as "cleaner"
 		// return Promise.all(this.players.map(player => this.discord.fetchGuildMember(player)));
 
@@ -255,9 +256,9 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 		}
 		return pGuildMembers;
 	}
-	public async guildChannels(): Promise<Discord.GuildChannel[]> {
+	public async guildChannels(): Promise<GuildChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
-		return all.filter(isDefined) as Discord.GuildChannel[];
+		return all.filter(isDefined) as GuildChannel[];
 	}
 	public async orphanChannels(): Promise<IChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
@@ -267,7 +268,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 		const all = await Promise.all(this.users.map(user => this.discord.fetchUser(user.did)));
 		return this.users.filter((_, index) => !all[index]);
 	}
-	public async gmGuildMembers(): Promise<Discord.GuildMember[]> {
+	public async gmGuildMembers(): Promise<GuildMember[]> {
 		const gmGuildMembers = (await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)))).filter(isDefined);
 		const gmRoleDid = this.gmRoleDid;
 		if (gmRoleDid) {
@@ -279,10 +280,10 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 		}
 		return gmGuildMembers;
 	}
-	public async gmGuildMember(): Promise<Discord.GuildMember | null> {
+	public async gmGuildMember(): Promise<GuildMember | null> {
 		return this.discord.fetchGuildMember(this.gameMasters[0]);
 		//TODO: LEARN HOW TO CHECK ONLINE STATUS
-		// let first: Discord.GuildMember;
+		// let first: GuildMember;
 		// for (const gameMaster of this.gameMasters) {
 		// 	const guildMember = await this.discord.fetchGuildMember(gameMaster);
 		// 	const user = guildMember?.user;
@@ -293,7 +294,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 		// }
 		// return first || null;
 	}
-	public async guildRoles(): Promise<Discord.Role[]> {
+	public async guildRoles(): Promise<Role[]> {
 		return (await Promise.all(this.roles.map(role => this.discord.fetchGuildRole(role.did)))).filter(isDefined);
 	}
 	//#endregion
@@ -312,7 +313,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 		return this.save();
 	}
 
-	public async removeChannels(...channelDids: Discord.Snowflake[]): Promise<boolean> {
+	public async removeChannels(...channelDids: Snowflake[]): Promise<boolean> {
 		const count = (this.core.channels || []).length;
 		if (!count) {
 			return false;
@@ -325,7 +326,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 	// #endregion
 
 	// #region Role actions
-	public async addRole(roleType: GameRoleType, roleDid: Discord.Snowflake): Promise<boolean> {
+	public async addRole(roleType: GameRoleType, roleDid: Snowflake): Promise<boolean> {
 		const found = this.getRole(roleType);
 		if (found) {
 			return false;
@@ -342,7 +343,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 		*/
 		return this.save();
 	}
-	public async updateRole(roleType: GameRoleType, roleDid: Discord.Snowflake): Promise<boolean> {
+	public async updateRole(roleType: GameRoleType, roleDid: Snowflake): Promise<boolean> {
 		const role = this.getRole(roleType);
 		if (!role || role.did === roleDid) {
 			return false;
@@ -380,8 +381,8 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 	// #endregion
 
 	// #region GameMaster actions
-	public async addGameMasters(userDids: Discord.Snowflake[]): Promise<boolean> {
-		const filtered: Discord.Snowflake[] = [];
+	public async addGameMasters(userDids: Snowflake[]): Promise<boolean> {
+		const filtered: Snowflake[] = [];
 		for (const userDid of userDids) {
 			const user = this.getUser(userDid);
 			if (user) {
@@ -412,7 +413,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 		*/
 		return this.save();
 	}
-	public async removeGameMasters(userDids: Discord.Snowflake[]): Promise<boolean> {
+	public async removeGameMasters(userDids: Snowflake[]): Promise<boolean> {
 		const filtered = userDids.filter(userDid => this.hasGameMaster(userDid));
 		if (!filtered.length) {
 			return false;
@@ -437,8 +438,8 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 	// #endregion GameMaster actions
 
 	// #region Player actions
-	public async addPlayers(userDids: Discord.Snowflake[]): Promise<boolean> {
-		const filtered: Discord.Snowflake[] = [];
+	public async addPlayers(userDids: Snowflake[]): Promise<boolean> {
+		const filtered: Snowflake[] = [];
 		for (const userDid of userDids) {
 			const user = this.getUser(userDid);
 			if (user) {
@@ -469,7 +470,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 		*/
 		return this.save();
 	}
-	public async removePlayers(userDids: Discord.Snowflake[]): Promise<boolean> {
+	public async removePlayers(userDids: Snowflake[]): Promise<boolean> {
 		const filtered = userDids.filter(userDid => this.hasPlayer(userDid));
 		if (!filtered.length) {
 			return false;
@@ -493,7 +494,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 	}
 	// #endregion PC actions
 
-	public getAutoCharacterForChannel(userDid: Discord.Snowflake, ...channelDids: Optional<Discord.Snowflake>[]): GameCharacter | undefined {
+	public getAutoCharacterForChannel(userDid: Snowflake, ...channelDids: Optional<Snowflake>[]): GameCharacter | undefined {
 		for (const channelDid of channelDids) {
 			if (channelDid) {
 				const autoChannelData = { channelDid, userDid };
@@ -523,7 +524,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 		return this.save();
 	}
 
-	public async updateDicePing(userOrRoleDid: Discord.Snowflake, dicePing: boolean): Promise<boolean> {
+	public async updateDicePing(userOrRoleDid: Snowflake, dicePing: boolean): Promise<boolean> {
 		const gameUser = this.getUser(userOrRoleDid);
 		if (gameUser) {
 			if (gameUser.dicePing !== dicePing) {
@@ -550,8 +551,8 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 	// #region Get
 
 	public getChannel(discordKey: DiscordKey): IChannel | undefined;
-	public getChannel(channelDid: Optional<Discord.Snowflake>): IChannel | undefined;
-	public getChannel(didOrKey: Optional<Discord.Snowflake> | DiscordKey): IChannel | undefined {
+	public getChannel(channelDid: Optional<Snowflake>): IChannel | undefined;
+	public getChannel(didOrKey: Optional<Snowflake> | DiscordKey): IChannel | undefined {
 		if (didOrKey) {
 			if (typeof(didOrKey) === "string") {
 				return this.channels.find(channel => channel.did === didOrKey);
@@ -572,15 +573,15 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 		return this.roles.find(role => role.type === roleType);
 	}
 
-	public getUser(userDid: Optional<Discord.Snowflake>): IGameUser | undefined {
+	public getUser(userDid: Optional<Snowflake>): IGameUser | undefined {
 		return this.users.find(user => user.did === userDid);
 	}
 
-	public getPlayer(userDid: Optional<Discord.Snowflake>): IGameUser | undefined {
+	public getPlayer(userDid: Optional<Snowflake>): IGameUser | undefined {
 		return this.users.find(user => user.did === userDid && user.type === GameUserType.Player);
 	}
 
-	public getUsersByRole(roleType: GameRoleType): Discord.Snowflake[] {
+	public getUsersByRole(roleType: GameRoleType): Snowflake[] {
 		if ([GameRoleType.Cast, GameRoleType.Table].includes(roleType)) {
 			return this.gameMasters.concat(this.players);
 		}else if (roleType === GameRoleType.GameMaster) {
@@ -596,24 +597,24 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 	// #region Has
 
 	public hasChannel(discordKey: DiscordKey): boolean;
-	public hasChannel(channelDid: Optional<Discord.Snowflake>): boolean;
-	public hasChannel(didOrKey: Optional<Discord.Snowflake> | DiscordKey): boolean {
+	public hasChannel(channelDid: Optional<Snowflake>): boolean;
+	public hasChannel(didOrKey: Optional<Snowflake> | DiscordKey): boolean {
 		return this.getChannel(didOrKey as DiscordKey) !== undefined;
 	}
 
-	public hasGameMaster(userDid: Optional<Discord.Snowflake>): boolean {
+	public hasGameMaster(userDid: Optional<Snowflake>): boolean {
 		return this.getUser(userDid)?.type === GameUserType.GameMaster;
 	}
 
-	public hasPlayer(userDid: Optional<Discord.Snowflake>): boolean {
+	public hasPlayer(userDid: Optional<Snowflake>): boolean {
 		return this.getUser(userDid)?.type === GameUserType.Player;
 	}
 
 	/** Returns true if the game has the given User. */
-	public async hasUser(userDid: Optional<Discord.Snowflake>): Promise<boolean>;
+	public async hasUser(userDid: Optional<Snowflake>): Promise<boolean>;
 	/** Returns true if the game has the given User for the given RoleType. */
-	public async hasUser(userDid: Optional<Discord.Snowflake>, roleType: GameRoleType): Promise<boolean>;
-	public async hasUser(userDid: Optional<Discord.Snowflake>, roleType?: GameRoleType): Promise<boolean> {
+	public async hasUser(userDid: Optional<Snowflake>, roleType: GameRoleType): Promise<boolean>;
+	public async hasUser(userDid: Optional<Snowflake>, roleType?: GameRoleType): Promise<boolean> {
 		if (!userDid) {
 			return false;
 		}
@@ -639,7 +640,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 		}
 		return false;
 
-		async function hasRole(sageCache: SageCache, _userDid: Discord.Snowflake, _roleDid: Discord.Snowflake): Promise<boolean> {
+		async function hasRole(sageCache: SageCache, _userDid: Snowflake, _roleDid: Snowflake): Promise<boolean> {
 			const guildMember = await sageCache.discord.fetchGuildMember(_userDid);
 			const roleDids = Array.from(guildMember?.roles.cache.values() ?? []).map(role => role.id);
 			return roleDids.includes(_roleDid);
@@ -702,7 +703,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Co
 
 	// #endregion
 
-	public static async from(message: Discord.Message, sageCache: SageCache): Promise<Game | null> {
+	public static async from(message: Message, sageCache: SageCache): Promise<Game | null> {
 		if (message.guild) {
 			const game = await sageCache.games.findByDiscordKey(DiscordKey.fromMessage(message));
 			if (game) {

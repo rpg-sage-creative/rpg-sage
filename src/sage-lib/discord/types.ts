@@ -1,39 +1,39 @@
 import type { Awaitable } from "@rsc-utils/type-utils";
-import type * as Discord from "discord.js";
-import type utils from "../../sage-utils";
+import type { ButtonInteraction, CommandInteraction, DMChannel, Guild, Message, MessageComponentInteraction, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, SelectMenuInteraction, Snowflake, TextChannel, ThreadChannel, User } from "discord.js";
 import type { IRenderable } from "../../sage-utils";
+import type { RenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type SageInteraction from "../sage/model/SageInteraction";
 import type SageMessage from "../sage/model/SageMessage";
 import type SageReaction from "../sage/model/SageReaction";
 import type ArgsManager from "./ArgsManager";
 
-export type TRenderableContentResolvable = string | IRenderable | utils.RenderUtils.RenderableContent;
+export type TRenderableContentResolvable = string | IRenderable | RenderableContent;
 
 export interface IMenuRenderable extends IRenderable {
 	getMenuLength(): number;
 	getMenuUnicodeArray(): string[];
-	toMenuRenderableContent(): utils.RenderUtils.RenderableContent;
-	toMenuRenderableContent(index: number): utils.RenderUtils.RenderableContent;
+	toMenuRenderableContent(): RenderableContent;
+	toMenuRenderableContent(index: number): RenderableContent;
 }
 
-export type DInteraction = Discord.CommandInteraction | Discord.ButtonInteraction | Discord.SelectMenuInteraction | Discord.MessageComponentInteraction;
+export type DInteraction = CommandInteraction | ButtonInteraction | SelectMenuInteraction | MessageComponentInteraction;
 
 /** Discord Message or Partial Message */
-export type DMessage = Discord.Message | Discord.PartialMessage;
+export type DMessage = Message | PartialMessage;
 
-export type DReaction = Discord.MessageReaction | Discord.PartialMessageReaction;
+export type DReaction = MessageReaction | PartialMessageReaction;
 
 /** Discord User or Partial User */
-export type DUser = Discord.User | Discord.PartialUser;
+export type DUser = User | PartialUser;
 
 /** Guild or Guild Snowflake */
-export type TGuildResolvable = Discord.Guild | Discord.Snowflake;
+export type TGuildResolvable = Guild | Snowflake;
 
 /** Text Channel */
-export type TChannel = Discord.ThreadChannel | Discord.TextChannel | Discord.DMChannel;
+export type TChannel = ThreadChannel | TextChannel | DMChannel;
 
 /** Text Channel or Channel Snowflake */
-export type TChannelResolvable = TChannel | Discord.Snowflake;
+export type TChannelResolvable = TChannel | Snowflake;
 
 export type THandlerOutput = { tested: number; handled: number; };
 

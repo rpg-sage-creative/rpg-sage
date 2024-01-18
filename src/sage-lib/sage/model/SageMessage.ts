@@ -1,7 +1,8 @@
 import { Cache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnNull, warn } from "@rsc-utils/console-utils";
+import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import type * as Discord from "discord.js";
+import type { Message, User } from "discord.js";
 import type { IHasChannels, IHasGame } from ".";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
@@ -9,7 +10,7 @@ import { createMessageLink } from "../../../sage-utils/utils/DiscordUtils/create
 import { handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils/errorHandlers";
 import { safeMentions } from "../../../sage-utils/utils/DiscordUtils/safeMentions";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import { DMessage, DiscordKey, NilSnowflake, TChannel, TCommandAndArgs, TRenderableContentResolvable } from "../../discord";
+import { DiscordKey, type DMessage, type TChannel, type TCommandAndArgs, type TRenderableContentResolvable } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
 import { resolveToTexts } from "../../discord/embeds";
 import { send, sendTo } from "../../discord/messages";
@@ -117,10 +118,10 @@ export default class SageMessage
 	//#region Send / Replace
 
 	public _ = new Map<"Dialog" | "Dice" | "Replacement" | "Sent", DMessage>();
-	public send(renderableContentResolvable: TRenderableContentResolvable): Promise<Discord.Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel): Promise<Discord.Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel, originalAuthor: Discord.User): Promise<Discord.Message[]>;
-	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.message.channel as TChannel, originalAuthor = this.message.author, notifyIfBlocked = false): Promise<Discord.Message[]> {
+	public send(renderableContentResolvable: TRenderableContentResolvable): Promise<Message[]>;
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel): Promise<Message[]>;
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.message.channel as TChannel, originalAuthor = this.message.author, notifyIfBlocked = false): Promise<Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			if (notifyIfBlocked) {
@@ -185,7 +186,7 @@ export default class SageMessage
 	}
 
 	/** Returns the channelDid this message (or its thread) is in. */
-	public get channelDid(): Discord.Snowflake | undefined {
+	public get channelDid(): Snowflake | undefined {
 		return this.cache.get("channelDid", () => {
 			if (this.message.channel.isThread()) {
 				return this.message.channel.parent?.id;
@@ -205,7 +206,7 @@ export default class SageMessage
 	}
 
 	/** Returns the threadDid this message is in. */
-	public get threadDid(): Discord.Snowflake | undefined {
+	public get threadDid(): Snowflake | undefined {
 		return this.cache.get("threadDid", () => {
 			if (this.message.channel.isThread()) {
 				return this.message.channel.id;
@@ -215,7 +216,7 @@ export default class SageMessage
 	}
 
 	/** Returns either the message's threadDid or channelDid if there is no thread. */
-	public get threadOrChannelDid(): Discord.Snowflake {
+	public get threadOrChannelDid(): Snowflake {
 		return this.cache.get("channelDid", () => this.threadDid ?? this.channelDid ?? this.message.channel.id);
 	}
 
@@ -224,8 +225,8 @@ export default class SageMessage
 	// #region User flags
 
 	/** Author of the message */
-	public get authorDid(): Discord.Snowflake {
-		return this.cache.get("authorDid", () => this.message.author?.id ?? NilSnowflake);
+	public get authorDid(): Snowflake {
+		return this.cache.get("authorDid", () => orNilSnowflake(this.message.author?.id));
 	}
 
 	/** Is the author the owner of the message's server */
@@ -449,7 +450,7 @@ export default class SageMessage
 	// #region Permission
 
 	/** Ensures we are either in the channel being targeted or we are in an admin channel. */
-	public testChannelAdmin(channelDid: Optional<Discord.Snowflake>): boolean {
+	public testChannelAdmin(channelDid: Optional<Snowflake>): boolean {
 		//TODO: figure out if i even need this or if there is a better way
 		return channelDid === this.channelDid || this.channel?.admin === true;
 	}

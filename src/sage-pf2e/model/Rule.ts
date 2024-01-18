@@ -1,4 +1,5 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import RenderableContent from "../data/RenderableContent";
 import type { ActionCore } from "./Action";
 import type { SourcedCore } from "./base/HasSource";
@@ -43,7 +44,7 @@ export default class Rule extends HasSource<RuleCore> {
 	}
 
 	// #region utils.RenderUtils.IRenderable
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b>`);
 		this.appendDescriptionTo(renderable);
@@ -63,7 +64,7 @@ export default class Rule extends HasSource<RuleCore> {
 	// #endregion utils.RenderUtils.IRenderable
 
 	// #region utils.SearchUtils.ISearchable
-	public searchRecursive(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this>[] {
+	public searchRecursive(searchInfo: SearchInfo): SearchScore<this>[] {
 		const scores = [];
 		scores.push(this.search(searchInfo));
 		this.children.forEach(child => {

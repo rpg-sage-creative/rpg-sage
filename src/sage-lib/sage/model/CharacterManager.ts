@@ -1,7 +1,7 @@
 import { Collection } from "@rsc-utils/array-utils";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { UUID, randomUuid } from "@rsc-utils/uuid-utils";
-import type * as Discord from "discord.js";
+import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
 import type { DiscordKey } from "../../discord";
 import CharactersMatch from "./CharactersMatch";
 import type Game from "./Game";
@@ -9,7 +9,7 @@ import type { GameCharacterCore, TDialogMessage, TGameCharacterType } from "./Ga
 import GameCharacter from "./GameCharacter";
 import type { IHasSave } from "./NamedCollection";
 import { NamedCollection } from "./NamedCollection";
-import type User from "./User";
+import type { User } from "./User";
 
 /*
 // function remapCharacters(this: CharacterManager, core: GameCharacterCore, index: number, array: (GameCharacterCore | GameCharacter)[]): void {
@@ -23,13 +23,13 @@ import type User from "./User";
 type TGameCharacterOwner = Game | GameCharacter | User;
 
 export class CharacterManager extends NamedCollection<GameCharacter> implements IHasSave {
-	// 			public async addCharacter(userDid: Discord.Snowflake, name: string, iconUrl: string): Promise<boolean> {
+	// 			public async addCharacter(userDid: Snowflake, name: string, iconUrl: string): Promise<boolean> {
 	// 				const found = findByUserDidAndName(this, userDid, name);
 	// 				if (found) {
 	// 					return false;
 	//				}
 	//			}
-	// 			public getCharacter(userDid: Discord.Snowflake, name: string): IGameCharacter {
+	// 			public getCharacter(userDid: Snowflake, name: string): IGameCharacter {
 	// 				return findByUserDidAndName(this, userDid, name);
 	//			}
 
@@ -67,7 +67,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	}
 
 	/** Returns all characters with the given userDid. */
-	public filterByUser(userDid: Discord.Snowflake): NamedCollection<GameCharacter> {
+	public filterByUser(userDid: Snowflake): NamedCollection<GameCharacter> {
 		return this.filter(character => character.userDid === userDid) as NamedCollection<GameCharacter>;
 	}
 
@@ -105,7 +105,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	}
 
 	/** Returns the first character with the given userDid. */
-	public findByUser(userDid: Discord.Snowflake): GameCharacter | undefined {
+	public findByUser(userDid: Snowflake): GameCharacter | undefined {
 		if (!userDid) {
 			return undefined;
 		}
@@ -113,7 +113,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	}
 
 	/** Filters by userDid (if it exists) and then returns the first character that matches the given name. */
-	public findByUserAndName(userDid: Optional<Discord.Snowflake>, name: Optional<string>): GameCharacter | undefined {
+	public findByUserAndName(userDid: Optional<Snowflake>, name: Optional<string>): GameCharacter | undefined {
 		if (userDid && name) {
 			const characters = this.filterByUser(userDid);
 			return characters.find(character => character.matches(name));
@@ -125,7 +125,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	//#region Companion
 
 	/** Finds the character for the given userDid and characterName and then returns the first companion that matches the given companion name. */
-	public findCompanion(userDid: Optional<Discord.Snowflake>, characterName: Optional<string>, companionName: Optional<string>): GameCharacter | undefined {
+	public findCompanion(userDid: Optional<Snowflake>, characterName: Optional<string>, companionName: Optional<string>): GameCharacter | undefined {
 		return this.findByUserAndName(userDid, characterName)?.companions.findByName(companionName);
 	}
 
@@ -167,7 +167,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		return CharactersMatch.match(this, input);
 	}
 
-	public getAutoCharacter(autoChannelData: {channelDid:Discord.Snowflake;userDid:Discord.Snowflake;}): GameCharacter | null {
+	public getAutoCharacter(autoChannelData: {channelDid:Snowflake;userDid:Snowflake;}): GameCharacter | null {
 		for (const char of this) {
 			if (char.hasAutoChannel(autoChannelData)) {
 				return char;

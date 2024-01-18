@@ -1,4 +1,3 @@
-import type { Snowflake } from "discord.js";
 
 export const DiscordMaxValues = {
 	embed: {
@@ -21,5 +20,3 @@ export const DiscordMaxValues = {
 	},
 	usernameLength: 80
 };
-
-export const NilSnowflake: Snowflake = "000000000000000000";

@@ -1,4 +1,4 @@
-import type utils from "../../sage-utils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TQuality } from "../common";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from "./base/HasSource";
@@ -36,7 +36,7 @@ export default class Material extends HasSource<MaterialCore> {
 	/**************************************************************************************************************************/
 	// utils.SearchUtils.ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.cost.map(cost => cost.quality), this.rarity, this.requirements, this.traits));

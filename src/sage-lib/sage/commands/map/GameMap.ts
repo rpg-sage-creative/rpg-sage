@@ -1,10 +1,10 @@
-import type * as Discord from "discord.js";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import GameMapBase, { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, UserLayerType } from "./GameMapBase";
 
 /** shuffles an image on a layer */
 export type TShuffleUpDown = "up" | "down";
 export type TShuffleDirection = "top" | "bottom" | "up" | "down";
-function shuffleImage(images: TGameMapImage[], imageId: Discord.Snowflake, direction: TShuffleDirection): boolean {
+function shuffleImage(images: TGameMapImage[], imageId: Snowflake, direction: TShuffleDirection): boolean {
 	const image = images.find(img => img.id === imageId);
 	if (!image) {
 		return false;
@@ -89,7 +89,7 @@ function move(image: TGameMapImage, ...posDirs: [0 | 1, -1 | 1][]): boolean {
 
 export default class GameMap extends GameMapBase {
 	/** constructs a map for the given core and user */
-	public constructor(core: TGameMapCore, public userId: Discord.Snowflake) {
+	public constructor(core: TGameMapCore, public userId: Snowflake) {
 		super(core);
 	}
 
@@ -316,7 +316,7 @@ export default class GameMap extends GameMapBase {
 	//#region static
 
 	/** loads the map for the given id for the given user */
-	public static async forUser(messageId: Discord.Snowflake, userId: Discord.Snowflake, existingOnly = false) {
+	public static async forUser(messageId: Snowflake, userId: Snowflake, existingOnly = false) {
 		const core = await GameMapBase.readCore(messageId);
 		const map = core ? new GameMap(core, userId) : null;
 		if (map) {

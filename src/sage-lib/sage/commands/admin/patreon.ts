@@ -4,7 +4,7 @@ import { send } from "../../../discord/messages";
 import type SageCache from "../../model/SageCache";
 import type SageMessage from "../../model/SageMessage";
 import Server from "../../model/Server";
-import User, { PatronTierSnowflakes, PatronTierType } from "../../model/User";
+import { PatronTierSnowflakes, PatronTierType, User } from "../../model/User";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 
 

@@ -1,6 +1,7 @@
 import { errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
 import { getDataRoot } from "@rsc-utils/env-utils";
 import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
+import { NIL_SNOWFLAKE } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
@@ -14,7 +15,7 @@ import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
 import PlayerCharacterTransformer, { PlayerCharacterCoreTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
 import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
 import { PdfCacher } from "../../../sage-utils/utils/PdfUtils";
-import { DUser, DiscordId, DiscordKey, NilSnowflake, TChannel } from "../../discord";
+import { DiscordId, DiscordKey, type DUser, type TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
 import type SageCache from "../model/SageCache";
@@ -471,7 +472,7 @@ export async function slashHandlerEssence20(sageInteraction: SageInteraction): P
 		rawJson = await PdfCacher.read<TRawJson>(value);
 	}else if (isMessageUrl) {
 		const [serverDid, channelDid, messageDid] = value.split("/").slice(-3);
-		const discordKey = new DiscordKey(serverDid.replace("@me", NilSnowflake), channelDid, NilSnowflake, messageDid);
+		const discordKey = new DiscordKey(serverDid.replace("@me", NIL_SNOWFLAKE), channelDid, NIL_SNOWFLAKE, messageDid);
 		const message = await sageInteraction.discord.fetchMessage(discordKey);
 		const attachment = message?.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
 		if (attachment) {

@@ -1,4 +1,4 @@
-import type * as Discord from "discord.js";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { GameType } from "../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import type { DicePostType } from "../commands/dice";
@@ -36,11 +36,11 @@ export interface IHasGame {
 
 export interface IHasChannels {
 	channel: IChannel | undefined;
-	channelDid: Discord.Snowflake | undefined;
+	channelDid: Snowflake | undefined;
 	gameChannel: IChannel | undefined;
 	serverChannel: IChannel | undefined;
-	threadDid: Discord.Snowflake | undefined;
-	threadOrChannelDid: Discord.Snowflake;
+	threadDid: Snowflake | undefined;
+	threadOrChannelDid: Snowflake;
 }
 
 export default {

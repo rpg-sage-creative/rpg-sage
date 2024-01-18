@@ -1,4 +1,4 @@
-import type utils from "../../sage-utils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from './base/HasSource';
 
@@ -12,7 +12,7 @@ export default class Glossary extends HasSource<GlossaryCore> {
 
 	//#region utils.SearchUtils.ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.abbrev));

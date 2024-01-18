@@ -1,4 +1,4 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { TAbility } from '../common';
 import { CONSTITUTION, DEXTERITY, STRENGTH } from '../common';
 import RenderableContent from '../data/RenderableContent';
@@ -70,7 +70,7 @@ export default class Skill extends HasSource<SkillCore> {
 	/**************************************************************************************************************************/
 	// utils.RenderUtils.IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 		content.setTitle(`<b>${this.name}</b> (${this.ability.slice(0, 3)})`);
 		content.append(...this.details.map((s, i) => (i ? "\t" : "") + s));

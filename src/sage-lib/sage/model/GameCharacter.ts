@@ -1,30 +1,30 @@
+import { NIL_SNOWFLAKE, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import type * as Discord from "discord.js";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, TPathbuilderCharacter, getExplorationModes, getSkills } from "../../../sage-pf2e";
-import { DiscordKey, NilSnowflake } from "../../discord";
+import { DiscordKey } from "../../discord";
 import { DialogType } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";
 import type { IHasSave } from "./NamedCollection";
 import NoteManager, { type TNote } from "./NoteManager";
-import { TKeyValuePair } from "./SageMessageArgsManager";
+import type { TKeyValuePair } from "./SageMessageArgsManager";
 
 export type TDialogMessage = {
-	channelDid: Discord.Snowflake;
+	channelDid: Snowflake;
 	characterId: UUID;
 	gameId: UUID;
-	messageDid: Discord.Snowflake;
-	serverDid: Discord.Snowflake;
-	threadDid: Discord.Snowflake;
+	messageDid: Snowflake;
+	serverDid: Snowflake;
+	threadDid: Snowflake;
 	timestamp: number;
-	userDid: Discord.Snowflake;
+	userDid: Snowflake;
 };
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion" | "minion";
 type AutoChannelData = {
-	channelDid: Discord.Snowflake;
+	channelDid: Snowflake;
 	dialogPostType?: DialogType;
-	userDid?: Discord.Snowflake;
+	userDid?: Snowflake;
 };
 export interface GameCharacterCore {
 	/** short name used to ease dialog access */
@@ -51,7 +51,7 @@ export interface GameCharacterCore {
 	/** The image used to represent the character to the left of the post */
 	tokenUrl?: string;
 	/** The character's user's Discord ID */
-	userDid?: Discord.Snowflake;
+	userDid?: Snowflake;
 }
 // 		export type TPlayerCharacterImageType = "Default"
 // 												| "Token" | "TokenBloody" | "TokenDying"
@@ -59,19 +59,19 @@ export interface GameCharacterCore {
 // 												| "Full" | "FullBloody" | "FullDying";
 
 /** Determine if the snowflakes are different. */
-function diff(a?: Discord.Snowflake, b?: Discord.Snowflake) {
-	return (a ?? NilSnowflake) !== (b ?? NilSnowflake);
+function diff(a?: Snowflake, b?: Snowflake) {
+	return (a ?? NIL_SNOWFLAKE) !== (b ?? NIL_SNOWFLAKE);
 }
 
 /** Temp convenience function to get a DiscordKey from varying input */
-export function toDiscordKey(channelDidOrDiscordKey: DiscordKey | Discord.Snowflake, threadDid?: Discord.Snowflake): DiscordKey {
+export function toDiscordKey(channelDidOrDiscordKey: DiscordKey | Snowflake, threadDid?: Snowflake): DiscordKey {
 	if (channelDidOrDiscordKey instanceof DiscordKey) {
 		return channelDidOrDiscordKey;
 	}
 	return new DiscordKey(null, channelDidOrDiscordKey, threadDid);
 }
 function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage): boolean {
-	const hasThread = (dialogMessage.threadDid ?? NilSnowflake) !== NilSnowflake;
+	const hasThread = (dialogMessage.threadDid ?? NIL_SNOWFLAKE) !== NIL_SNOWFLAKE;
 	if (hasThread) {
 		return dialogMessage.channelDid === discordKey.channel
 			&& dialogMessage.threadDid === discordKey.thread;
@@ -85,7 +85,7 @@ function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage
 //#region Core Updates
 
 interface IOldGameCharacterCore extends Omit<GameCharacterCore, "autoChannels"> {
-	autoChannels?: (Discord.Snowflake | AutoChannelData)[];
+	autoChannels?: (Snowflake | AutoChannelData)[];
 	iconUrl?: string;
 }
 
@@ -194,8 +194,8 @@ export default class GameCharacter implements IHasSave {
 	public get type(): TGameCharacterType { return this.owner?.characterType ?? "gm"; }
 
 	/** The character's user's Discord ID */
-	public get userDid(): Discord.Snowflake | undefined { return this.core.userDid; }
-	public set userDid(userDid: Discord.Snowflake | undefined) { this.core.userDid = userDid; }
+	public get userDid(): Snowflake | undefined { return this.core.userDid; }
+	public set userDid(userDid: Snowflake | undefined) { this.core.userDid = userDid; }
 
 	//#region AutoChannels
 

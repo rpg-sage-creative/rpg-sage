@@ -1,17 +1,17 @@
+import { NIL_SNOWFLAKE, isNonNilSnowflake, orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import type * as Discord from "discord.js";
-import { NilSnowflake } from "./consts";
+import type { GuildChannel, MessageReaction } from "discord.js";
 import type { DInteraction, DMessage, TChannel } from "./types";
 
-interface IHasSnowflakeId { id:Discord.Snowflake; }
+interface IHasSnowflakeId { id:Snowflake; }
 type TSnowflakeResolvable = string | IHasSnowflakeId;
 
 export default class DiscordKey {
 
-	public server: Discord.Snowflake;
-	public channel: Discord.Snowflake;
-	public thread: Discord.Snowflake;
-	public message: Discord.Snowflake;
+	public server: Snowflake;
+	public channel: Snowflake;
+	public thread: Snowflake;
+	public message: Snowflake;
 
 	public isDm: boolean;
 	public isEmpty: boolean;
@@ -30,24 +30,24 @@ export default class DiscordKey {
 		thread?: Optional<TSnowflakeResolvable>,
 		message?: Optional<TSnowflakeResolvable>
 	) {
-		this.server = DiscordKey.resolveDid(server) ?? NilSnowflake;
-		this.channel = DiscordKey.resolveDid(channel) ?? NilSnowflake;
-		this.thread = DiscordKey.resolveDid(thread) ?? NilSnowflake;
-		this.message = DiscordKey.resolveDid(message) ?? NilSnowflake;
+		this.server = DiscordKey.resolveDid(server);
+		this.channel = DiscordKey.resolveDid(channel);
+		this.thread = DiscordKey.resolveDid(thread);
+		this.message = DiscordKey.resolveDid(message);
 
-		this.isDm = this.server === NilSnowflake;
+		this.isDm = this.server === NIL_SNOWFLAKE;
 		this.key = DiscordKey.createKey(server, channel, thread, message);
 		this.shortKey = DiscordKey.createKey(server, message ?? thread ?? channel);
 
-		this.hasServer = this.server !== NilSnowflake;
-		this.hasChannel = this.channel !== NilSnowflake;
-		this.hasThread = this.thread !== NilSnowflake;
-		this.hasMessage = this.message !== NilSnowflake;
+		this.hasServer = isNonNilSnowflake(this.server);
+		this.hasChannel = isNonNilSnowflake(this.channel);
+		this.hasThread = isNonNilSnowflake(this.thread);
+		this.hasMessage = isNonNilSnowflake(this.message);
 		this.isEmpty = !this.hasServer && !this.hasChannel && !this.hasThread && !this.hasMessage;
 		this.isValid = (this.isDm && this.hasChannel) || (this.hasServer && (this.hasChannel || this.hasThread || this.hasMessage));
 	}
 
-	public get threadOrChannel(): Discord.Snowflake {
+	public get threadOrChannel(): Snowflake {
 		return this.hasThread ? this.thread : this.channel;
 	}
 
@@ -55,12 +55,12 @@ export default class DiscordKey {
 
 	public static createKey(...resolvables: Optional<TSnowflakeResolvable>[]): string {
 		return resolvables
-			.map(resolvable => DiscordKey.resolveDid(resolvable) ?? NilSnowflake)
+			.map(resolvable => DiscordKey.resolveDid(resolvable))
 			.join("-");
 	}
 
 	public static fromChannel(channel: TChannel): DiscordKey {
-		const guildId = (channel as Discord.GuildChannel).guild?.id;
+		const guildId = (channel as GuildChannel).guild?.id;
 		if (channel.isThread()) {
 			const threadDid = channel.id;
 			const channelDid = channel.parent?.id;
@@ -81,7 +81,7 @@ export default class DiscordKey {
 
 	public static fromMessage(message: DMessage): DiscordKey {
 		const channel = message.channel;
-		const guildId = (channel as Discord.GuildChannel).guild?.id;
+		const guildId = (channel as GuildChannel).guild?.id;
 		if (channel.isThread()) {
 			const threadDid = channel.id;
 			const channelDid = channel.parent?.id;
@@ -90,13 +90,12 @@ export default class DiscordKey {
 		return new DiscordKey(guildId, message.channel.id, null, message.id);
 	}
 
-	public static fromMessageReaction(messageReaction: Discord.MessageReaction): DiscordKey {
+	public static fromMessageReaction(messageReaction: MessageReaction): DiscordKey {
 		return DiscordKey.fromMessage(messageReaction.message);
 	}
 
-	public static resolveDid(resolvable: TSnowflakeResolvable): Discord.Snowflake;
-	public static resolveDid(resolvable: Optional<TSnowflakeResolvable>): Discord.Snowflake | undefined;
-	public static resolveDid(resolvable: Optional<TSnowflakeResolvable>): Discord.Snowflake | undefined {
-		return typeof(resolvable) === "string" ? resolvable : resolvable?.id;
+	/** Resolves to a nonNilSnowflake or NIL_SNOWFLAKE. */
+	public static resolveDid(resolvable: Optional<TSnowflakeResolvable>): Snowflake | NIL_SNOWFLAKE {
+		return orNilSnowflake(typeof(resolvable) === "string" ? resolvable : resolvable?.id);
 	}
 }

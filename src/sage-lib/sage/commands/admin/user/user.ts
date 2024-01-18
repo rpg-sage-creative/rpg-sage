@@ -1,10 +1,10 @@
 import { filterAsync, forEachAsync } from "@rsc-utils/async-array-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import type * as Discord from "discord.js";
+import type { User as DUser } from "discord.js";
 import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import type { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
 import type SageMessage from "../../../model/SageMessage";
-import type User from "../../../model/User";
+import type { User as SUser } from "../../../model/User";
 import { DialogType } from "../../../repo/base/IdRepository";
 import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
@@ -17,7 +17,7 @@ async function userCount(sageMessage: SageMessage): Promise<void> {
 	return renderCount(sageMessage, "Users", users.length);
 }
 
-async function renderUser(renderableContent: RenderableContent, user: User, discordUser: Optional<Discord.User>): Promise<void> {
+async function renderUser(renderableContent: RenderableContent, user: SUser, discordUser: Optional<DUser>): Promise<void> {
 	renderableContent.appendTitledSection(`<b>${toHumanReadable(discordUser) || "<i>Unknown</i>"}</b>`);
 	renderableContent.append(`<b>User Id</b> ${user.did}`);
 	renderableContent.append(`<b>UUID</b> ${user.id}`);
@@ -65,7 +65,7 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 }
 
 async function userDetails(sageMessage: SageMessage): Promise<void> {
-	let user: User | null = sageMessage.sageUser;
+	let user: SUser | null = sageMessage.sageUser;
 	if (sageMessage.isSuperUser) {
 		const userDid = await sageMessage.args.removeAndReturnUserDid();
 		if (userDid) {

@@ -1,7 +1,8 @@
 import { warn } from "@rsc-utils/console-utils";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
-import type * as Discord from "discord.js";
+import type { Guild } from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import { DiscordKey } from "../../discord";
@@ -17,8 +18,8 @@ import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
 export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdmin = 3 }
-export interface IAdminRole { did: Discord.Snowflake; type: AdminRoleType; }
-export interface IAdminUser { did: Discord.Snowflake; role: AdminRoleType; }
+export interface IAdminRole { did: Snowflake; type: AdminRoleType; }
+export interface IAdminUser { did: Snowflake; role: AdminRoleType; }
 
 export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji {
 	admins: IAdminUser[];
@@ -64,10 +65,10 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	// #endregion
 
 	// #region Game actions
-	public async findActiveGameByChannelDid(channelDid: Discord.Snowflake): Promise<Game | undefined> {
+	public async findActiveGameByChannelDid(channelDid: Snowflake): Promise<Game | undefined> {
 		return this.sageCache.games.findActiveByDiscordKey(new DiscordKey(this.did, channelDid));
 	}
-	public async addGame(channelDid: Discord.Snowflake, name: string, _gameType: Optional<GameType>, _dialogType: Optional<DialogType>, _critMethodType: Optional<CritMethodType>, _diceOutputType: Optional<DiceOutputType>, _dicePostType: Optional<DicePostType>, _diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
+	public async addGame(channelDid: Snowflake, name: string, _gameType: Optional<GameType>, _dialogType: Optional<DialogType>, _critMethodType: Optional<CritMethodType>, _diceOutputType: Optional<DiceOutputType>, _dicePostType: Optional<DicePostType>, _diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
 		const found = await this.findActiveGameByChannelDid(channelDid);
 		if (found) {
 			return false;
@@ -102,7 +103,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	// #endregion
 
 	// #region Role actions
-	public async addRole(roleType: AdminRoleType, roleDid: Discord.Snowflake): Promise<boolean> {
+	public async addRole(roleType: AdminRoleType, roleDid: Snowflake): Promise<boolean> {
 		const found = this.getRole(roleType);
 		if (found) {
 			return false;
@@ -116,7 +117,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 		// }
 		return saved;
 	}
-	public async updateRole(roleType: AdminRoleType, roleDid: Discord.Snowflake): Promise<boolean> {
+	public async updateRole(roleType: AdminRoleType, roleDid: Snowflake): Promise<boolean> {
 		const role = this.getRole(roleType);
 		if (!role || role.did === roleDid) {
 			return false;
@@ -146,7 +147,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	// #endregion
 
 	// #region Admin actions
-	public async addAdmin(userDid: Discord.Snowflake, roleType: AdminRoleType): Promise<boolean> {
+	public async addAdmin(userDid: Snowflake, roleType: AdminRoleType): Promise<boolean> {
 		const found = this.getAdmin(userDid);
 		if (found) {
 			return false;
@@ -160,7 +161,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 		// }
 		return saved;
 	}
-	public async updateAdminRole(userDid: Discord.Snowflake, roleType: AdminRoleType): Promise<boolean> {
+	public async updateAdminRole(userDid: Snowflake, roleType: AdminRoleType): Promise<boolean> {
 		const found = this.getAdmin(userDid);
 		if (!found) {
 			return false;
@@ -175,7 +176,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 		// }
 		return saved;
 	}
-	public async removeAdmin(userDid: Discord.Snowflake): Promise<boolean> {
+	public async removeAdmin(userDid: Snowflake): Promise<boolean> {
 		const found = this.getAdmin(userDid);
 		if (!found) {
 			return false;
@@ -202,7 +203,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 		});
 		return this.save();
 	}
-	public async removeChannels(...channelDids: Optional<Discord.Snowflake>[]): Promise<boolean> {
+	public async removeChannels(...channelDids: Optional<Snowflake>[]): Promise<boolean> {
 		const count = (this.core.channels ?? []).length;
 		if (!count) {
 			return false;
@@ -218,13 +219,13 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 
 	// #region get
 
-	public getAdmin(userDid: Discord.Snowflake): IAdminUser | undefined {
+	public getAdmin(userDid: Snowflake): IAdminUser | undefined {
 		return this.admins.find(admin => admin.did === userDid);
 	}
 
 	public getChannel(discordKey: DiscordKey): IChannel | undefined;
-	public getChannel(channelDid: Optional<Discord.Snowflake>): IChannel | undefined;
-	public getChannel(didOrKey: Optional<Discord.Snowflake> | DiscordKey): IChannel | undefined {
+	public getChannel(channelDid: Optional<Snowflake>): IChannel | undefined;
+	public getChannel(didOrKey: Optional<Snowflake> | DiscordKey): IChannel | undefined {
 		if (didOrKey) {
 			if (typeof(didOrKey) === "string") {
 				return this.channels.find(channel => channel.did === didOrKey);
@@ -258,23 +259,23 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 	// #region has
 
 	public hasChannel(discordKey: DiscordKey): boolean;
-	public hasChannel(channelDid: Optional<Discord.Snowflake>): boolean;
-	public hasChannel(didOrKey: Optional<Discord.Snowflake> | DiscordKey): boolean {
+	public hasChannel(channelDid: Optional<Snowflake>): boolean;
+	public hasChannel(didOrKey: Optional<Snowflake> | DiscordKey): boolean {
 		return this.getChannel(didOrKey as DiscordKey) !== undefined;
 	}
 
 	/** Can admin anything Sage related. */
-	public hasSageAdmin(userDid: Discord.Snowflake): boolean {
+	public hasSageAdmin(userDid: Snowflake): boolean {
 		return this.admins.find(admin => admin.did === userDid && admin.role === AdminRoleType.SageAdmin) !== undefined;
 	}
 
 	/** Can admin only server options. */
-	public hasServerAdmin(userDid: Discord.Snowflake): boolean {
+	public hasServerAdmin(userDid: Snowflake): boolean {
 		return this.admins.find(admin => admin.did === userDid && admin.role === AdminRoleType.ServerAdmin) !== undefined;
 	}
 
 	/** Can admin only game options. */
-	public hasGameAdmin(userDid: Discord.Snowflake): boolean {
+	public hasGameAdmin(userDid: Snowflake): boolean {
 		return this.admins.find(admin => admin.did === userDid && admin.role === AdminRoleType.GameAdmin) !== undefined;
 	}
 
@@ -368,7 +369,7 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 
 	// #endregion
 
-	public static createCore(guild: Discord.Guild): ServerCore {
+	public static createCore(guild: Guild): ServerCore {
 		const activeBot = ActiveBot.active;
 		return {
 			admins: [],
@@ -391,8 +392,8 @@ export default class Server extends HasDidCore<ServerCore> implements IHasColors
 		};
 	}
 
-	public static HomeServerDid: Discord.Snowflake = "480488957889609733";
-	public static isHome(serverDid: Discord.Snowflake): boolean {
+	public static HomeServerDid: Snowflake = "480488957889609733";
+	public static isHome(serverDid: Snowflake): boolean {
 		return serverDid === Server.HomeServerDid;
 	}
 }

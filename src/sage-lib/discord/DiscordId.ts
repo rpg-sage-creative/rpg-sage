@@ -1,9 +1,8 @@
 import { and, toUniqueDefined } from "@rsc-utils/array-utils";
-import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
+import { isNonNilSnowflake, orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import { Formatters } from "discord.js";
-import { NilSnowflake } from "./consts";
 import { SnowflakeType } from "./enums";
 import type { DMessage } from "./types";
 
@@ -34,19 +33,17 @@ type TDiscordKey = { server:Snowflake; channel:Snowflake; message:Snowflake; };
 function urlToKey(url: Optional<string>): TDiscordKey | null {
 	return urlsToKeys([url])[0] ?? null;
 }
-function isNilSnowflake(value: Optional<Snowflake>): boolean {
-	return value?.match(/^0{16,}$/) !== null;
-}
-function orNilSnowflake(value: Optional<Snowflake>): Snowflake {
-	return value?.match(/^\d{16,}$/) && !isNilSnowflake(value) ? value : NilSnowflake;
-}
 function urlsToKeys(urls: Optional<string>[]): TDiscordKey[] {
 	const regex = createUrlRegex();
 	return urls.map(url => {
 		const match = url?.match(regex);
 		if (match) {
 			const [_url, server, channel, message] = match;
-			return { server:orNilSnowflake(server), channel:orNilSnowflake(channel), message:orNilSnowflake(message) };
+			return {
+				server: orNilSnowflake(server),
+				channel: orNilSnowflake(channel),
+				message: orNilSnowflake(message)
+			};
 		}
 		return null;
 	}).filter(key => key !== null) as TDiscordKey[];
@@ -114,11 +111,11 @@ export default class DiscordId {
 	}
 
 	public static parseId(value: string): Snowflake {
-		return (value?.match(/\d{16,}/) ?? [])[0] ?? NilSnowflake;
+		return orNilSnowflake((value?.match(/\d{16,}/) ?? [])[0]);
 	}
 
 	public static isChannelLink(value: string): boolean {
-		return !isNilSnowflake(urlToKey(value)?.channel);
+		return isNonNilSnowflake(urlToKey(value)?.channel);
 	}
 
 	public static isChannelReference(value: string): boolean {

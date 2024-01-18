@@ -6,12 +6,12 @@ import type { UUID } from "@rsc-utils/uuid-utils";
 import { MessageActionRow, MessageAttachment, MessageButton, MessageSelectMenu, type ButtonInteraction, type Message, type MessageButtonStyleResolvable, type MessageEmbed, type SelectMenuInteraction } from "discord.js";
 import { PathbuilderCharacter, getExplorationModes, getSavingThrows, getSkills, toModifier } from "../../../sage-pf2e";
 import { TCharacterSectionType, TCharacterViewType, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
-import { DUser, DiscordId, DiscordKey, TChannel } from "../../discord";
+import { DiscordId, DiscordKey, type DUser, type TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
 import type SageCache from "../model/SageCache";
 import type SageInteraction from "../model/SageInteraction";
-import type User from "../model/User";
+import type { User } from "../model/User";
 import type { TMacro } from "../model/types";
 import { parseDiceMatches, sendDice } from "./dice";
 

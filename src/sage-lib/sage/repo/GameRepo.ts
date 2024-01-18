@@ -1,5 +1,5 @@
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import type * as Discord from "discord.js";
 import type { DiscordKey } from "../../discord";
 import Game, { type IGameCore } from "../model/Game";
 import type SageCache from "../model/SageCache";
@@ -29,7 +29,7 @@ export default class GameRepo extends IdRepository<IGameCore, Game> {
 		);
 	}
 
-	public async getByServerDid(serverDid: Discord.Snowflake): Promise<Game[]> {
+	public async getByServerDid(serverDid: Snowflake): Promise<Game[]> {
 		const allGames = await this.getAll();
 		return allGames.filter(game => game.serverDid === serverDid);
 	}

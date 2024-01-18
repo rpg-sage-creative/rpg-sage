@@ -1,12 +1,12 @@
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { Optional } from "@rsc-utils/type-utils";
-import type { Snowflake } from "discord.js";
-import { DiscordId, DiscordKey, NilSnowflake } from "../../../discord";
+import { DiscordKey } from "../../../discord";
 import type { TDialogMessage } from "../../model/GameCharacter";
 import type SageMessage from "../../model/SageMessage";
 import DialogMessageRepository from "../../repo/DialogMessageRepository";
 
 export async function findLastMessage(sageMessage: SageMessage, messageDid: Optional<Snowflake>): Promise<TDialogMessage | null> {
-	if (DiscordId.isValidId(messageDid) && messageDid !== NilSnowflake) {
+	if (isNonNilSnowflake(messageDid)) {
 		const messageKey = new DiscordKey(sageMessage.server?.did, null, null, messageDid);
 		return DialogMessageRepository.read(messageKey);
 	}

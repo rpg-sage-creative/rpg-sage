@@ -1,4 +1,5 @@
 import { toUniqueDefined } from "@rsc-utils/array-utils";
+import { getSuperUserId } from "@rsc-utils/env-utils";
 import { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
@@ -9,7 +10,6 @@ import { send } from "../../discord/messages";
 import type SageCache from "../model/SageCache";
 import type SageInteraction from "../model/SageInteraction";
 import type SageMessage from "../model/SageMessage";
-import User from "../model/User";
 import { createCommandRenderableContent } from "./cmd";
 
 // #region Register Help Text
@@ -96,7 +96,7 @@ async function appendHelpSection(renderableContent: RenderableContent, prefix: s
 
 type TSuperUserFilter = (value: string) => boolean;
 function getSuperUserFilter(authorDid: Optional<Snowflake>): TSuperUserFilter {
-	return User.isSuperUser(authorDid) ? isDefined : (value: string) => value !== "SuperUser";
+	return getSuperUserId() === authorDid ? isDefined : (value: string) => value !== "SuperUser";
 }
 async function renderHelpAll(caches: SageCache): Promise<RenderableContent> {
 	const renderableContent = createCommandRenderableContent();
@@ -225,7 +225,7 @@ function renderHelpTester(sageMessage: SageMessage): TCommandAndArgs | null {
 		return null;
 	}
 
-	if (User.isSuperUser(sageMessage?.message?.author?.id) && sageMessage.slicedContent === "!help-all") {
+	if (getSuperUserId() === sageMessage?.message?.author?.id && sageMessage.slicedContent === "!help-all") {
 		return {
 			command: "help",
 			args: new ArgsManager(["help", "all"])

@@ -1,4 +1,4 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import { MDASH, NEWLINE, TAB, toModifier } from "../common";
 import RenderableContent from "../data/RenderableContent";
 import type { BulkCore } from "./HasBulk";
@@ -30,7 +30,7 @@ export default class Shield extends HasBulk<ShieldCore, Shield> {
 	public get price(): string | undefined { return this.core.price; }
 	public get speedPenalty(): number | undefined { return this.core.speedPenalty; }
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 
 		const level = this.level ? `(level ${this.level})` : ``;

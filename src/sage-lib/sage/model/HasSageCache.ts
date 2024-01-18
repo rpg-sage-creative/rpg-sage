@@ -6,7 +6,7 @@ import type Bot from "./Bot";
 import type Game from "./Game";
 import type SageCache from "./SageCache";
 import type Server from "./Server";
-import type User from "./User";
+import type { User } from "./User";
 
 export interface HasSageCacheCore {
 	caches: SageCache;

@@ -1,6 +1,6 @@
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import type * as Discord from "discord.js";
-import { DidCore, HasDidCore } from "../repo/base/DidRepository";
+import { type DidCore, HasDidCore } from "../repo/base/DidRepository";
 import type { DialogType } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";
 import type GameCharacter from "./GameCharacter";
@@ -19,7 +19,7 @@ export type TMacro = {
 	dice: string;
 };
 export enum PatronTierType { None = 0, Friend = 1, Informant = 2, Trusted = 3 }
-export const PatronTierSnowflakes: Discord.Snowflake[] = [undefined!, "730147338529669220", "730147486446125057", "730147633867259904"];
+export const PatronTierSnowflakes: Snowflake[] = [undefined!, "730147338529669220", "730147486446125057", "730147633867259904"];
 
 export interface UserCore extends DidCore<"User"> {
 	aliases?: TAlias[];
@@ -51,7 +51,7 @@ function updateCore(core: IOldUserCore): UserCore {
 
 //#endregion
 
-export default class User extends HasDidCore<UserCore> {
+export class User extends HasDidCore<UserCore> {
 	public constructor(core: UserCore, sageCache: SageCache) {
 		super(updateCore(core), sageCache);
 
@@ -84,7 +84,7 @@ export default class User extends HasDidCore<UserCore> {
 	public isPatron: boolean;
 	public get isSuperUser(): boolean { return User.isSuperUser(this.did); }
 
-	public getAutoCharacterForChannel(...channelDids: Optional<Discord.Snowflake>[]): GameCharacter | undefined {
+	public getAutoCharacterForChannel(...channelDids: Optional<Snowflake>[]): GameCharacter | undefined {
 		for (const channelDid of channelDids) {
 			if (channelDid) {
 				const autoChannelData = { channelDid, userDid:this.did };
@@ -108,12 +108,12 @@ export default class User extends HasDidCore<UserCore> {
 		return this.sageCache.users.write(this);
 	}
 
-	public static createCore(userDid: Discord.Snowflake): UserCore {
+	public static createCore(userDid: Snowflake): UserCore {
 		return { objectType: "User", did: userDid, id: null! };
 	}
 
 	public static SuperUserDid = "253330271678627841";
-	public static isSuperUser(userDid: Optional<Discord.Snowflake>): boolean {
+	public static isSuperUser(userDid: Optional<Snowflake>): boolean {
 		return userDid === User.SuperUserDid;
 	}
 

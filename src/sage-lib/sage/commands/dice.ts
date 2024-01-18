@@ -4,7 +4,7 @@ import { addCommas } from "@rsc-utils/number-utils";
 import { randomItem } from "@rsc-utils/random-utils";
 import { chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, tokenize, type KeyValueArg } from '@rsc-utils/string-utils';
 import type { Optional } from "@rsc-utils/type-utils";
-import type * as Discord from "discord.js";
+import type { ButtonInteraction, MessageEmbed } from "discord.js";
 import type { GameType } from "../../../sage-common";
 import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "../../../sage-dice";
 import { NEWLINE } from "../../../sage-pf2e";
@@ -350,7 +350,7 @@ async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFo
 	}
 }
 
-function createDiceOutputEmbeds(sageMessage: TInteraction, embedContent?: string): Discord.MessageEmbed[] {
+function createDiceOutputEmbeds(sageMessage: TInteraction, embedContent?: string): MessageEmbed[] {
 	if (embedContent) {
 		const chunks = chunk(embedContent, DiscordMaxValues.embed.totalLength);
 		return chunks.map(chunk => createMessageEmbed("", chunk, sageMessage.toDiscordColor(ColorType.Dice)));
@@ -473,7 +473,7 @@ function formatDiceOutput(sageMessage: TInteraction, diceRoll: TDiceOutput, noGm
 	};
 }
 
-function createEmbedOrNull(sageMessage: TInteraction, embedContent?: string): Discord.MessageEmbed | null {
+function createEmbedOrNull(sageMessage: TInteraction, embedContent?: string): MessageEmbed | null {
 	return embedContent ? createMessageEmbed("", embedContent, sageMessage.toDiscordColor(ColorType.Dice)) : null;
 }
 
@@ -538,7 +538,7 @@ async function ensureTargetChannel(sageMessage: TInteraction): Promise<TChannel>
 		return channel;
 	}
 	if (sageMessage instanceof SageInteraction) {
-		return (sageMessage.interaction as Discord.ButtonInteraction).channel as TChannel;
+		return (sageMessage.interaction as ButtonInteraction).channel as TChannel;
 	}
 	return sageMessage.message.channel as TChannel;
 }

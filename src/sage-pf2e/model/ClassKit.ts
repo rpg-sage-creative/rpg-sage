@@ -1,4 +1,4 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { TObjectQuantity } from "../common";
 import RenderableContent from "../data/RenderableContent";
 import { findByValue } from "../data/Repository";
@@ -120,7 +120,7 @@ export default class ClassKit extends HasSource<ClassKitCore> {
 	public get weapons(): TObjectQuantity<Weapon>[] { return this._weapons ?? (this._weapons = toObjectQuantities<Weapon>(this.core.weapons!, "Weapon")); }
 	public get hasWeapons(): boolean { return this.weapons.length > 0; }
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 		content.setTitle(`<b>${this.name}</b> (Class Kit)`);
 		content.append(`<b>Price</b> ${this.price}; <b>Bulk</b> ${this.bulk}; <b>Money Left Over</b> ${this.moneyLeftOver}`);

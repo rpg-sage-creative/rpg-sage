@@ -1,6 +1,6 @@
-import type * as Discord from "discord.js";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type SageCache from "../model/SageCache";
-import User, { UserCore } from "../model/User";
+import { User, type UserCore } from "../model/User";
 import DidRepository from "./base/DidRepository";
 
 export default class UserRepo extends DidRepository<UserCore, User> {
@@ -9,7 +9,7 @@ export default class UserRepo extends DidRepository<UserCore, User> {
 		return this.getByDid(User.SuperUserDid) as Promise<User>;
 	}
 
-	public async getOrCreateByDid(userDid: Discord.Snowflake): Promise<User> {
+	public async getOrCreateByDid(userDid: Snowflake): Promise<User> {
 		return await this.getByDid(userDid) ?? new User(User.createCore(userDid), this.sageCache);
 	}
 

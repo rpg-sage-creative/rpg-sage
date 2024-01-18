@@ -1,4 +1,4 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import RenderableContent from "../data/RenderableContent";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from "./base/HasSource";
@@ -25,7 +25,7 @@ export default class VersatileHeritage extends HasSource<VersatileHeritageCore> 
 
 	//#region utils.RenderUtils.IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (Versatile Heritage)`);
 		this.appendDescriptionTo(renderable);
