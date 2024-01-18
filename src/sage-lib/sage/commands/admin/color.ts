@@ -1,7 +1,6 @@
+import { partition } from "@rsc-utils/array-utils";
 import { errorReturnNull } from "@rsc-utils/console-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import { Collection } from "../../../../sage-utils/utils/ArrayUtils";
-import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
+import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import { discordPromptYesNo } from "../../../discord/prompts";
 import type Colors from "../../model/Colors";
 import type Game from "../../model/Game";
@@ -67,7 +66,7 @@ async function _colorList(sageMessage: SageMessage, which: BotServerGameType): P
 			const countText = `(${++colorIndex} of ${colorCount})`;
 			return embedColor(color, ColorType[botColor.type], inheritedText, countText);
 		});
-		const embedGroups = Collection.partition(embeds, (_, index) => Math.floor(index / 10));
+		const embedGroups = partition(embeds, (_, index) => Math.floor(index / 10));
 		for (const embedGroup of embedGroups) {
 			await sageMessage.message.channel.send({ embeds:embedGroup });
 		}
@@ -101,7 +100,7 @@ async function _colorGet(sageMessage: SageMessage, ...colors: Optional<Colors>[]
 		return sageMessage.reactBlock();
 	}
 
-	colors = colors.filter(exists);
+	colors = colors.filter(isDefined);
 
 	const colorType = sageMessage.args.removeAndReturnEnum<ColorType>(ColorType)!;
 	let inherited = false;

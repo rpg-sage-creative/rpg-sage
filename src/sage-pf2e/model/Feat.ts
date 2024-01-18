@@ -1,5 +1,6 @@
-import type utils from "../../sage-utils";
-import type { TSortResult } from "../../sage-utils";
+import type { SortResult } from "@rsc-utils/array-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TAction } from "../common";
 import RenderableContent from "../data/RenderableContent";
 import HasSource, { SourcedCore } from "../model/base/HasSource";
@@ -61,8 +62,8 @@ export default class Feat<T extends string = "Feat", U extends FeatCore<T> = Fea
 	public isGeneral = this.traits.includes("General");
 	public isSkill = this.traits.includes("Skill");
 
-	// #region utils.ArrayUtils.Sort.IComparable<T>
-	public compareTo(other: Feat<T, U>): TSortResult {
+	// #region Comparable<T>
+	public compareTo(other: Feat<T, U>): SortResult {
 		if (this.core.objectType !== other.objectType) {
 			return this.core.objectType < other.core.objectType ? -1 : 1;
 		}
@@ -74,10 +75,10 @@ export default class Feat<T extends string = "Feat", U extends FeatCore<T> = Fea
 		}
 		return this.nameLower < other.nameLower ? -1 : 1;
 	}
-	// #endregion utils.ArrayUtils.Sort.IComparable<T>
+	// #endregion Comparable<T>
 
 	// #region utils.RenderUtils.IRenderable
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 
 		const title = `<b>${this.name}</b> - Feat ${this.level}`;
@@ -97,7 +98,7 @@ export default class Feat<T extends string = "Feat", U extends FeatCore<T> = Fea
 		/*
 		// let spells: Spell[] = [this];
 		// spells.push(...content.findMatches(/<i>(.*?)<\/i>/gi).map(spellName => Repository.findByValue<Spell>("Spell", spellName.slice(3, -4))).filter(sp => sp && sp !== this));
-		// content.addAonLink(...utils.ArrayUtils.unique(spells).slice(1).map(spell => spell.toAonLink()));
+		// content.addAonLink(...toUnique(spells).slice(1).map(spell => spell.toAonLink()));
 		*/
 
 		return content;
@@ -118,7 +119,7 @@ export default class Feat<T extends string = "Feat", U extends FeatCore<T> = Fea
 		return `${types.join(" ")} Feat ${this.level} ${rarity}`;
 	}
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.access, this.cost, this.frequency, this.prerequisites, this.special, this.traits, this.trigger));

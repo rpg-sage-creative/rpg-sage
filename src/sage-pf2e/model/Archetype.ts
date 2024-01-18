@@ -1,8 +1,9 @@
+import { sortPrimitive, sortStringIgnoreCase } from "@rsc-utils/array-utils";
 import { nth } from "@rsc-utils/number-utils";
-import utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import { rarityToSuper } from "../common";
 import RenderableContent from "../data/RenderableContent";
-import * as Repository from "../data/Repository";
+import { all, find, findByValue } from "../data/Repository";
 import HasSource, { SourcedCore } from "../model/base/HasSource";
 import type DedicationFeat from "./DedicationFeat";
 import type Feat from "./Feat";
@@ -13,7 +14,7 @@ export interface ArchetypeCore extends SourcedCore<"Archetype"> {
 }
 
 function featNameToOutput(featName: string): string {
-	const feat = Repository.findByValue("Feat", featName);
+	const feat = findByValue("Feat", featName);
 	if (!feat?.source) {
 		return featName;
 	}
@@ -34,7 +35,7 @@ function toRenderableContentByLevel(byLevel: string[][]): string[] {
 }
 
 function findFeats(archetype: Archetype): Feat[] {
-	const allFeats = Repository.all<Feat>("Feat");
+	const allFeats = all<Feat>("Feat");
 
 	const feats: Feat<any>[] = [];
 	const dedication = archetype.dedication;
@@ -43,8 +44,8 @@ function findFeats(archetype: Archetype): Feat[] {
 		feats.push(...findChildrenFeats(dedication.name));
 	}
 	feats.sort((a, b) => {
-		return utils.ArrayUtils.Sort.number(a.level, b.level)
-			|| utils.ArrayUtils.Sort.stringIgnoreCase(a.name, b.name);
+		return sortPrimitive(a.level, b.level)
+			|| sortStringIgnoreCase(a.name, b.name);
 	});
 	return feats;
 
@@ -62,14 +63,14 @@ export default class Archetype extends HasSource<ArchetypeCore> {
 	private _dedication?: DedicationFeat;
 	public get dedication(): DedicationFeat {
 		if (!this._dedication) {
-			this._dedication = Repository.find("DedicationFeat", dedication => dedication.archetype === this);
+			this._dedication = find("DedicationFeat", dedication => dedication.archetype === this);
 		}
 		return this._dedication!;
 	}
 
 	//#region utils.RenderUtils.IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.hasDescription) {

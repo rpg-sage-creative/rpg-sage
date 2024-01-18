@@ -1,4 +1,4 @@
-import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
+import { isDefined } from "@rsc-utils/type-utils";
 import type SageMessage from "../../model/SageMessage";
 import type { DialogContent } from "./DialogContent";
 import { parseDialogContents } from "./parseDialogContents";
@@ -12,7 +12,7 @@ export function parseOrAutoDialogContent(sageMessage: SageMessage): DialogConten
 
 	if (!sageMessage.hasCommandOrQueryOrSlicedContent) {
 		const userDid = sageMessage.sageUser.did;
-		const channelDids = [sageMessage.threadDid, sageMessage.channelDid].filter(exists);
+		const channelDids = [sageMessage.threadDid, sageMessage.channelDid].filter(isDefined);
 		for (const channelDid of channelDids) {
 			const autoCharacter = sageMessage.game?.getAutoCharacterForChannel(userDid, channelDid)
 				?? sageMessage.sageUser.getAutoCharacterForChannel(channelDid);

@@ -5,7 +5,7 @@ import type { DialogType } from "../repo/base/IdRepository";
 import CharacterManager from "./CharacterManager";
 import type GameCharacter from "./GameCharacter";
 import type { GameCharacterCore } from "./GameCharacter";
-import NamedCollection from "./NamedCollection";
+import { NamedCollection } from "./NamedCollection";
 import NoteManager, { TNote } from "./NoteManager";
 import type SageCache from "./SageCache";
 

@@ -1,7 +1,7 @@
 import { rollDie } from "@rsc-utils/dice-utils";
 import { shuffle } from "@rsc-utils/random-utils";
 import { BULLET } from "@rsc-utils/string-utils";
-import utils from "../../../../sage-utils";
+import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import type SageMessage from "../../model/SageMessage";
 import { addScenario, createPfsRenderableContent, TPfsFaction, TTierInfo } from "./pfs";
 
@@ -70,7 +70,7 @@ const FleshForgeAbilitiesHighTier = ["",
 	`<b>Roots</b> [A] The fleshforge prototype roots into the surface it is standing on. It gains fast healing 5 until it leaves that space.`,
 	`<b>Leaping Charge</b> [A] The fleshforge prototype Strides up to 10 feet, ignoring difficult terrain as it leaps over obstacles. It then makes a fist Strike, gaining a +1 circumstance bonus to its attack roll.`
 ];
-function s0101A(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): utils.RenderUtils.RenderableContent {
+function s0101A(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): RenderableContent {
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	renderableContent.appendTitledSection(`<b>A: Flotsam Graveyard - Surfaced Wreck (${faction})</b>`, `<b>A2 - Cargo Hold</b>`);
 	renderableContent.append(`<b>Fleshforge ${tierInfo.lowTier ? "Dreg" : "Prototype"}</b>`, `<blockquote>${FleshforgeTemperament[rollDie(6)]}</blockquote>`);
@@ -101,7 +101,7 @@ function s0101A(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFact
 	}
 	return renderableContent;
 }
-function s0101B(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): utils.RenderUtils.RenderableContent {
+function s0101B(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): RenderableContent {
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	renderableContent.appendTitledSection(`<b>B: Petals District - Blakros Museum (${faction})</b>`, `<b>B5 - Third Floor</b>`);
 	renderableContent.append(`<b>${tierInfo.lowTier ? "" : "Deeply "}Flawed Ritual (${tierInfo.lowTier ? "" : "Greater "}Shadow Wisp)</b>`);
@@ -127,7 +127,7 @@ function s0101B(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFact
 	}
 	return renderableContent;
 }
-function s0101C(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): utils.RenderUtils.RenderableContent {
+function s0101C(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): RenderableContent {
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	renderableContent.appendTitledSection(`<b>C: Precipice Quarter - Mavedarus Manor (${faction})</b>`, `<b>Haunted Past</b>`);
 	let hauntRoll = rollDie(6);
@@ -187,7 +187,7 @@ function s0101C(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFact
 	}
 	return renderableContent;
 }
-function s0101D(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): utils.RenderUtils.RenderableContent {
+function s0101D(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFaction): RenderableContent {
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	let leaderCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0],
 		totalLeaders = 3 + (tierInfo.pcCount > 4 ? tierInfo.pcCount - 4 : 0);
@@ -239,7 +239,7 @@ function s0101D(sageMessage: SageMessage, tierInfo: TTierInfo, faction: TPfsFact
 	return renderableContent;
 }
 
-function randomize(sageMessage: SageMessage, tierInfo: TTierInfo): utils.RenderUtils.RenderableContent {
+function randomize(sageMessage: SageMessage, tierInfo: TTierInfo): RenderableContent {
 	let renderableContent = createPfsRenderableContent(sageMessage);
 	renderableContent.setTitle(`<b>PFS2e Scenario 1-01</b>`);
 	renderableContent.append(`<b>Tier</b> ${tierInfo.tier}`);

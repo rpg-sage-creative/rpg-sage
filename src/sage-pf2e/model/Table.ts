@@ -1,6 +1,6 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import RenderableContent from "../data/RenderableContent";
-import * as Repository from "../data/Repository";
+import { find } from "../data/Repository";
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from "./base/HasSource";
 
@@ -30,7 +30,7 @@ export default class Table extends HasSource<TableCore> {
 	public get bodies(): string[][][] { return this.core.bodies || [this.core.rows || []]; }
 	public get rows(): string[][] { return this.bodies.reduce((all, body) => all.concat(body), []); }
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(this.header.bold());
 		this.bodies.forEach(body => renderable.appendSection(mapTable(body)));
@@ -41,7 +41,7 @@ export default class Table extends HasSource<TableCore> {
 	}
 
 	public static findByNumber(number: string, source?: string): Table | undefined {
-		return Repository.find("Table", source, table => table.number === number);
+		return find("Table", source, table => table.number === number);
 	}
 
 }

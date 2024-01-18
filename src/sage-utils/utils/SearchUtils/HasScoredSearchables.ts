@@ -1,12 +1,12 @@
+import { sortPrimitive } from "@rsc-utils/array-utils";
 import type { SearchScore } from ".";
-import { sortAscending } from "../ArrayUtils/Sort";
-import type { ISearchable } from "./types";
 import type { HasSource } from "../../../sage-pf2e";
+import type { ISearchable } from "./types";
 
 function sortByCompScore<T extends ISearchable>(a: SearchScore<T>, b: SearchScore<T>): number {
-	return sortAscending(b.compScore ?? 0, a.compScore ?? 0)
-		|| sortAscending(b.totalScore, a.totalScore)
-		|| sortAscending(a.searchable.name, b.searchable.name);
+	return sortPrimitive(b.compScore ?? 0, a.compScore ?? 0)
+		|| sortPrimitive(b.totalScore, a.totalScore)
+		|| sortPrimitive(a.searchable.name, b.searchable.name);
 }
 
 function searchableToLabel<T extends ISearchable>(score: SearchScore<T>): string {

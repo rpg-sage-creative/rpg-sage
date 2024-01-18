@@ -1,11 +1,12 @@
 import { warn } from "@rsc-utils/console-utils";
+import { chunk } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import * as Discord from "discord.js";
-import utils, { TDisplayType, TRenderableContentSection } from "../../sage-utils";
+import { MessageEmbed, type ColorResolvable, type HexColorString } from "discord.js";
+import { TDisplayType, type TRenderableContentSection } from "../../sage-utils";
+import { RenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type SageCache from "../sage/model/SageCache";
 import { DiscordMaxValues } from "./consts";
 import type { TRenderableContentResolvable } from "./types";
-import { chunk } from "@rsc-utils/string-utils";
 
 
 /** Ensures we have a string, prepending a NewLine if needed. */
@@ -14,7 +15,7 @@ function getValueToAppend(value: string | null, newLine: boolean): string {
 }
 
 /** Resolves a simple text section. */
-function resolveSection(renderableContent: utils.RenderUtils.RenderableContent, caches: SageCache, embeds: Discord.MessageEmbed[], section: TRenderableContentSection): void {
+function resolveSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], section: TRenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
 	const joinedContent = section.content.join(renderableContent.paragraphDelimiter),
 		formattedContent = caches.format(joinedContent),
@@ -33,7 +34,7 @@ function resolveSection(renderableContent: utils.RenderUtils.RenderableContent, 
 }
 
 /** Resolves a section that has columns. */
-function resolveColumnedSection(renderableContent: utils.RenderUtils.RenderableContent, caches: SageCache, embeds: Discord.MessageEmbed[], columnedSection: TRenderableContentSection): void {
+function resolveColumnedSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], columnedSection: TRenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
 	columnedSection.columns.forEach(column => {
 		const formattedTitle = caches.format(column.title),
@@ -48,7 +49,7 @@ function resolveColumnedSection(renderableContent: utils.RenderUtils.RenderableC
 }
 
 /** Resolves a section that has a title. */
-function resolveTitledSection(renderableContent: utils.RenderUtils.RenderableContent, caches: SageCache, embeds: Discord.MessageEmbed[], titledSection: TRenderableContentSection): void {
+function resolveTitledSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], titledSection: TRenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
 	const formattedTitle = caches.format(titledSection.title ?? ""),
 		joinedContent = titledSection.content.join(renderableContent.paragraphDelimiter),
@@ -74,7 +75,7 @@ function resolveTitledSection(renderableContent: utils.RenderUtils.RenderableCon
 	});
 }
 
-function resolveSections(caches: SageCache, renderableContent: utils.RenderUtils.RenderableContent, embeds: Discord.MessageEmbed[]): void {
+function resolveSections(caches: SageCache, renderableContent: RenderableContent, embeds: MessageEmbed[]): void {
 	for (const section of renderableContent.sections) {
 		if (section.title) {
 			resolveTitledSection(renderableContent, caches, embeds, section);
@@ -87,13 +88,13 @@ function resolveSections(caches: SageCache, renderableContent: utils.RenderUtils
 }
 
 /** Converts the given renderableContent to MessageEmbed objects, using the given caches. */
-export function resolveToEmbeds(caches: SageCache, renderableContentResolvable: TRenderableContentResolvable): Discord.MessageEmbed[] {
-	const renderableContent = utils.RenderUtils.RenderableContent.resolve(renderableContentResolvable);
+export function resolveToEmbeds(caches: SageCache, renderableContentResolvable: TRenderableContentResolvable): MessageEmbed[] {
+	const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 	if (!renderableContent) {
 		return [];
 	}
 
-	const embed: Discord.MessageEmbed = createMessageEmbed(undefined, undefined, <Discord.HexColorString>renderableContent.color);
+	const embed: MessageEmbed = createMessageEmbed(undefined, undefined, <HexColorString>renderableContent.color);
 
 	const title = caches.format(renderableContent.title ?? "");
 	if (renderableContent.display === TDisplayType.Compact && title && renderableContent.thumbnailUrl) {
@@ -112,7 +113,7 @@ export function resolveToEmbeds(caches: SageCache, renderableContentResolvable: 
 	return embeds;
 }
 
-export function embedsToTexts(embeds: Discord.MessageEmbed[]): string[] {
+export function embedsToTexts(embeds: MessageEmbed[]): string[] {
 	return embeds.map(embed => {
 		let text = "";
 		text += getValueToAppend(embed.title, !!text);
@@ -134,8 +135,8 @@ export function resolveToTexts(caches: SageCache, renderableContent: TRenderable
 }
 
 /** Creates a new MessageEmbed, setting the title, description, and color if given. */
-export function createMessageEmbed(title?: Optional<string>, description?: Optional<string>, color?: Optional<string>): Discord.MessageEmbed {
-	const embed = new Discord.MessageEmbed();
+export function createMessageEmbed(title?: Optional<string>, description?: Optional<string>, color?: Optional<string>): MessageEmbed {
+	const embed = new MessageEmbed();
 
 	if (title) {
 		if (title.length > DiscordMaxValues.embed.titleLength) {
@@ -154,7 +155,7 @@ export function createMessageEmbed(title?: Optional<string>, description?: Optio
 	}
 
 	if (color) {
-		embed.setColor(<Discord.ColorResolvable>color);
+		embed.setColor(<ColorResolvable>color);
 	}
 
 	return embed;

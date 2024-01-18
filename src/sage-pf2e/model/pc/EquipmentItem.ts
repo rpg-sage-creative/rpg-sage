@@ -1,7 +1,6 @@
 import { warn } from "@rsc-utils/console-utils";
 import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
-import utils from "../../../sage-utils";
-import type { IdCore } from "../../../sage-utils/utils/ClassUtils";
+import { HasIdCore, type IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { TQuality } from "../../common";
 import { findById } from "../../data/Repository";
 import Bulk from "../Bulk";
@@ -38,7 +37,7 @@ function toUuid(equipmentItemResolvable: TEquipmentItemResolvable): UUID {
 	return typeof (equipmentItemResolvable) === "string" ? equipmentItemResolvable : equipmentItemResolvable.id;
 }
 
-export default class EquipmentItem extends utils.ClassUtils.HasIdCore<EquipmentItemCore> {
+export default class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 
 	public constructor(private eq: Equipment, core: EquipmentItemCore) {
 		super(core);

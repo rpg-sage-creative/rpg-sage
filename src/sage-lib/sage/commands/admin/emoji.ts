@@ -1,5 +1,5 @@
 import { errorReturnNull } from "@rsc-utils/console-utils";
-import { exists } from "../../../../sage-utils/utils/ArrayUtils/Filters";
+import { isDefined } from "@rsc-utils/type-utils";
 import { discordPromptYesNo } from "../../../discord/prompts";
 import type Emoji from "../../model/Emoji";
 import type Game from "../../model/Game";
@@ -102,7 +102,7 @@ async function _emojiGet(sageMessage: SageMessage, ...emoji: Emoji[]): Promise<v
 		return sageMessage.reactBlock();
 	}
 
-	emoji = emoji.filter(exists);
+	emoji = emoji.filter(isDefined);
 
 	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType)!;
 	let inherited = false;

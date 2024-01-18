@@ -1,5 +1,6 @@
+import { remove } from "@rsc-utils/array-utils";
+import { createWhitespaceRegex } from "@rsc-utils/string-utils";
 import { GameType } from "../sage-common";
-import type { Collection } from "../sage-utils/utils/ArrayUtils";
 import type SearchResults from "./SearchResults";
 import { searchAonPf1e } from "./aon/pf1e";
 import { searchAonPf2e } from "./aon/pf2e";
@@ -14,13 +15,14 @@ export type TParsedSearchInfo = {
 	minusRarities: string[];
 };
 
-export function parseSearchInfo(searchTerms: Collection<string>, rarities: string[] = []): TParsedSearchInfo {
+export function parseSearchInfo(searchTerms: string[], rarities: string[] = []): TParsedSearchInfo {
 	const lowerRarities = rarities.map(rarity => rarity.toLowerCase());
-	const plusTypes = searchTerms.remove(term => term.startsWith("+")).map(term => term.slice(1));
-	const plusRarities = plusTypes.remove(term => findRarity(term));
-	const minusTypes = searchTerms.remove(term => term.startsWith("-")).map(term => term.slice(1));
-	const minusRarities = minusTypes.remove(term => findRarity(term));
-	const searchText = searchTerms.map(term => term.match(/\s+/) ? `"${term}"` : term).join(" ");
+	const plusTypes = remove(searchTerms, term => term.startsWith("+")).map(term => term.slice(1));
+	const plusRarities = remove(plusTypes, term => findRarity(term));
+	const minusTypes = remove(searchTerms, term => term.startsWith("-")).map(term => term.slice(1));
+	const minusRarities = remove(minusTypes, term => findRarity(term));
+	const spaceRegex = createWhitespaceRegex();
+	const searchText = searchTerms.map(term => spaceRegex.test(term) ? `"${term}"` : term).join(" ");
 	return { searchText, searchTerms, plusTypes, minusTypes, plusRarities, minusRarities };
 
 	function findRarity(term: string): boolean {

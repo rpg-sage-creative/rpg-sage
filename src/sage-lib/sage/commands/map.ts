@@ -1,8 +1,9 @@
 import { errorReturnNull } from "@rsc-utils/console-utils";
 import { getText } from "@rsc-utils/https-utils";
+import { randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { StringMatcher, capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import * as Discord from "discord.js";
+import { Message, MessageActionRow, MessageButton, type ButtonInteraction, type MessageAttachment, type MessageButtonStyleResolvable } from "discord.js";
 import { DiscordId, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { deleteMessage, deleteMessages } from "../../discord/deletedMessages";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
@@ -23,8 +24,8 @@ type TMapAction = "MapUpLeft"   | "MapUp"     | "MapUpRight"   | "MapTerrain" | 
 	const MapActions = "MapUpLeft,MapUp,MapUpRight,MapTerrain,MapRaise,MapLeft,MapConfig,MapRight,MapAura,MapDelete,MapDownLeft,MapDown,MapDownRight,MapToken,MapLower".split(",");
 	const MapActionEmojis = "↖️,⬆️,↗️,⛰️,🔼,⬅️,⚙️,➡️,🟡,❌,↙️,⬇️,↘️,👤,🔽".split(",");
 
-function createButton(gameMap: GameMap, label: string, style: Discord.MessageButtonStyleResolvable): Discord.MessageButton {
-	const button = new Discord.MessageButton();
+function createButton(gameMap: GameMap, label: string, style: MessageButtonStyleResolvable): MessageButton {
+	const button = new MessageButton();
 	button.setCustomId(`${gameMap.id}|${label}`);
 	if (MapActions.includes(label)) {
 		button.setEmoji(MapActionEmojis[MapActions.indexOf(label)]);
@@ -44,13 +45,13 @@ function createButton(gameMap: GameMap, label: string, style: Discord.MessageBut
 	return button;
 }
 
-function createButtonRow(gameMap: GameMap, ...labels: TMapAction[]): Discord.MessageActionRow {
-	const actionRow = new Discord.MessageActionRow();
+function createButtonRow(gameMap: GameMap, ...labels: TMapAction[]): MessageActionRow {
+	const actionRow = new MessageActionRow();
 	labels.forEach(label => actionRow.addComponents(createButton(gameMap, label, "SECONDARY")));
 	return actionRow;
 }
 
-function createMapComponents(gameMap: GameMap): Discord.MessageActionRow[] {
+function createMapComponents(gameMap: GameMap): MessageActionRow[] {
 	return [
 		createButtonRow(gameMap, "MapUpLeft", "MapUp", "MapUpRight", "MapTerrain", "MapRaise"),
 		createButtonRow(gameMap, "MapLeft", "MapConfig", "MapRight", "MapAura", "MapDelete"),
@@ -135,7 +136,7 @@ function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameM
 				gameMap.tokens.push({
 					auras: [],
 					characterId: char.id,
-					id: Discord.SnowflakeUtil.generate(),
+					id: randomSnowflake(),
 					layer: LayerType.Token,
 					name: charName,
 					pos: gameMap.spawn ?? [1,1],
@@ -180,7 +181,7 @@ async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: G
 	const toggledAura = gameMap.activeAura;
 	sageInteraction.reply(`Setting active aura for ${activeToken?.name} to ${toggledAura?.name ?? "none"} ...`, false);
 	updated = toggled
-		&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+		&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	if (updated) {
 		return sageInteraction.reply(`Your active aura for ${activeToken?.name} is: ${toggledAura?.name ?? "none"}`, false);
 	}
@@ -194,7 +195,7 @@ async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: 
 	sageInteraction.reply(`Setting ${activeToken?.name} as active ...`, false);
 	let updated = false;
 	if (added) {
-		updated = await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	}else {
 		updated = toggled && await gameMap.save();
 	}
@@ -229,7 +230,7 @@ async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: 
 			break;
 	}
 	if (updated) {
-		updated = await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	}
 	if (updated) {
 		return sageInteraction.reply(output, false);
@@ -262,7 +263,7 @@ async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: 
 			break;
 	}
 	if (updated) {
-		updated = await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	}
 	if (updated) {
 		return sageInteraction.reply(output, false);
@@ -283,7 +284,7 @@ async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap:
 			deleteMessage(msgConfirm);
 			const deleted = gameMap.deleteImage(activeImage);
 			const updated = deleted
-				&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+				&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
 			if (updated) {
 				return sageInteraction.reply(`Deleted image: ${activeImage.name}`, false);
 			}
@@ -306,7 +307,7 @@ async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData
 		const moved = gameMap.moveActiveToken(mapAction.slice(3).toLowerCase() as TMoveDirection);
 		const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
 		updated = (moved || shuffled)
-			&& await renderMap(sageInteraction.interaction.message as Discord.Message, gameMap);
+			&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
 		if (updated) {
 			return sageInteraction.deleteReply();
 		}
@@ -330,7 +331,7 @@ async function actionHandler(sageInteraction: SageInteraction, actionData: TActi
 
 //#region map import handler
 
-function getValidUrl(attachment: Discord.MessageAttachment): string | null {
+function getValidUrl(attachment: MessageAttachment): string | null {
 	const regex = /map\.txt$/i;
 	if (regex.test(attachment.url.split("?")[0])) {
 		return attachment.url;
@@ -471,7 +472,7 @@ function mapTokenTester(sageInteraction: SageInteraction): boolean {
 // 		auras: [],
 // 		clip: clip as [number, number, number, number],
 // 		grid: [sageInteraction.getNumber("cols", true), sageInteraction.getNumber("rows", true)],
-// 		id: Discord.SnowflakeUtil.generate(),
+// 		id: randomSnowflake(),
 // 		messageId: undefined!,
 // 		name: sageInteraction.getString("name", true),
 // 		spawn: spawn as [number, number],
@@ -564,7 +565,7 @@ async function mapTokenHandler(sageInteraction: SageInteraction): Promise<void> 
 //#endregion
 
 /** reads the interaction's channel's messages to find the map */
-async function findGameMap(sageInteraction: SageInteraction<Discord.ButtonInteraction>): Promise<GameMap | null> {
+async function findGameMap(sageInteraction: SageInteraction<ButtonInteraction>): Promise<GameMap | null> {
 	const mapValue = sageInteraction.getString("map", true);
 	if (DiscordId.isValidId(mapValue)) {
 		return GameMap.forUser(mapValue, sageInteraction.user.id);
@@ -573,7 +574,7 @@ async function findGameMap(sageInteraction: SageInteraction<Discord.ButtonIntera
 	if (!messages) {
 		return null;
 	}
-	let messageId: Discord.Snowflake | undefined;
+	let messageId: Snowflake | undefined;
 	messages.find(msg => {
 		if (msg.attachments.size && msg.components.length && GameMap.matches(msg.id, mapValue)) {
 			messageId = msg.id;
@@ -597,7 +598,7 @@ async function parseInput<T extends TGameMapImage>(sageInteraction: SageInteract
 
 	const image: TGameMapImage = {
 		auras: [],
-		id: Discord.SnowflakeUtil.generate(),
+		id: randomSnowflake(),
 		layer: LayerType[layerValue],
 		name: sageInteraction.getString("name", true),
 		pos: [
@@ -615,7 +616,7 @@ async function parseInput<T extends TGameMapImage>(sageInteraction: SageInteract
 	return [gameMap, image as T];
 }
 
-async function renderMap(messageOrChannel: Optional<Discord.Message | TChannel>, gameMap: GameMap): Promise<boolean> {
+async function renderMap(messageOrChannel: Optional<Message | TChannel>, gameMap: GameMap): Promise<boolean> {
 	if (!messageOrChannel) {
 		return false;
 	}
@@ -624,7 +625,7 @@ async function renderMap(messageOrChannel: Optional<Discord.Message | TChannel>,
 		const content = `**${gameMap.name}**`;
 		const files = [buffer];
 		const components = createMapComponents(gameMap);
-		const message = messageOrChannel instanceof Discord.Message
+		const message = messageOrChannel instanceof Message
 			? await messageOrChannel.edit({ content, files, components }).catch(errorReturnNull)
 			: await messageOrChannel.send({ content, files, components }).catch(errorReturnNull);
 		if (message) {
@@ -665,7 +666,7 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 			const moved = gameMap.moveActiveToken(...directions);
 			const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
 			const updated = (moved || shuffled)
-				&& await renderMap(await sageMessage.message.fetchReference() as Discord.Message, gameMap);
+				&& await renderMap(await sageMessage.message.fetchReference() as Message, gameMap);
 			if (updated) {
 				await deleteMessages(movingMessage);
 				await sageMessage.reactSuccess();

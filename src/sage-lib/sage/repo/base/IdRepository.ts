@@ -2,13 +2,12 @@ import { EphemeralMap } from "@rsc-utils/cache-utils";
 import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, verbose } from "@rsc-utils/console-utils";
 import { getBotCodeName, getDataRoot } from "@rsc-utils/env-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
-import type { Optional, OrNull } from "@rsc-utils/type-utils";
+import { isDefined, type Optional, type OrNull } from "@rsc-utils/type-utils";
 import { UUID, isNonNilUuid, randomUuid } from "@rsc-utils/uuid-utils";
 import { Snowflake } from "discord.js";
 import type { GameType } from "../../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import utils from "../../../../sage-utils";
-import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
+import { HasIdCore, IdCore } from "../../../../sage-utils/utils/ClassUtils";
 import type { DicePostType } from "../../commands/dice";
 import type SageCache from "../../model/SageCache";
 
@@ -58,13 +57,13 @@ export function updateChannel(channel: IChannel, changes: IChannelOptions): ICha
 	return channel;
 }
 
-export class HasIdCoreAndSageCache<T extends IdCore<U>, U extends string = string> extends utils.ClassUtils.HasIdCore<T, U> {
+export class HasIdCoreAndSageCache<T extends IdCore<U>, U extends string = string> extends HasIdCore<T, U> {
 	public constructor(core: T, protected sageCache: SageCache) { super(core); }
 }
 
-type TParser<T extends IdCore, U extends utils.ClassUtils.HasIdCore<T>> = (core: T, sageCache: SageCache) => Promise<U>;
+type TParser<T extends IdCore, U extends HasIdCore<T>> = (core: T, sageCache: SageCache) => Promise<U>;
 
-export default abstract class IdRepository<T extends IdCore, U extends utils.ClassUtils.HasIdCore<T>> {
+export default abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
 	//#region Cache
 
@@ -115,7 +114,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 	protected async readAllCores(): Promise<T[]> {
 		const ids = await this.getIds(),
 			cores = await this.readCoresByIds(...ids);
-		return cores.filter(utils.ArrayUtils.Filters.exists);
+		return cores.filter(isDefined);
 	}
 
 	/** Reads all uncached cores by iterating all uuid.json files and checking cache. */
@@ -123,7 +122,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 		const ids = await this.getIds(),
 			uncachedIds = ids.filter(id => !this.idToEntityMap.has(id)),
 			cores = await this.readCoresByIds(...uncachedIds);
-		return cores.filter(utils.ArrayUtils.Filters.exists);
+		return cores.filter(isDefined);
 	}
 
 	/** Reads the uuid.json for the given "Id". */
@@ -149,7 +148,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 	public async getAll(): Promise<U[]> {
 		const ids = await this.getIds(),
 			entities = await this.getByIds(...ids);
-		return entities.filter(utils.ArrayUtils.Filters.exists);
+		return entities.filter(isDefined);
 	}
 
 	/** Gets the entity by id, checking cache first. */
@@ -200,7 +199,7 @@ export default abstract class IdRepository<T extends IdCore, U extends utils.Cla
 	}
 	//#endregion
 
-	public static fromCore: TParser<IdCore, utils.ClassUtils.HasIdCore<IdCore>>;
+	public static fromCore: TParser<IdCore, HasIdCore<IdCore>>;
 
 	public static get objectType(): string {
 		return this.name.replace(/Repo(sitory)?$/, "");

@@ -1,7 +1,7 @@
+import { Collection } from "@rsc-utils/array-utils";
 import { Base, RARITIES } from "../../../sage-pf2e";
 import type SearchResults from "../../../sage-search/SearchResults";
 import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common";
-import { Collection } from "../../../sage-utils/utils/ArrayUtils";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { TChannel } from "../../discord";
 import { deleteMessages } from "../../discord/deletedMessages";

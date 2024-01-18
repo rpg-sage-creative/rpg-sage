@@ -1,8 +1,8 @@
+import { sortPrimitive } from "@rsc-utils/array-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { cleanWhitespace, type TokenData } from "@rsc-utils/string-utils";
 import { GameType } from "../sage-common";
-import utils from "../sage-utils";
-import { IdCore } from "../sage-utils/utils/ClassUtils";
+import { HasIdCore, IdCore } from "../sage-utils/utils/ClassUtils";
 import type { TDiceRoll } from "./dice/base/types";
 
 //#region rpg.common.ts
@@ -69,10 +69,6 @@ export function cleanDescription(description?: string): string {
 	return cleanWhitespace(replaced);
 }
 
-export function filterExists<T>(value: T): boolean {
-	return utils.ArrayUtils.Filters.exists(value) && <unknown>value !== "";
-}
-
 //#endregion
 
 //#region rollDice, sum, toMod
@@ -85,7 +81,7 @@ export function sumDropKeep(values: number[], dropKeep?: TDropKeepData): number 
 	if (!dropKeep) {
 		return sum(values);
 	}
-	const sorted = values.slice().sort(utils.ArrayUtils.Sort.sortAscending);
+	const sorted = values.slice().sort(sortPrimitive);
 	switch (dropKeep.type) {
 		case DropKeepType.DropHighest:
 			return sum(sorted.slice(0, -dropKeep.value));
@@ -290,7 +286,7 @@ export type TSign = "+" | "-" | "*" | "/";
 export interface DieCore<T extends string = string> extends IdCore<T> {
 	gameType: GameType;
 }
-export abstract class HasDieCore<T extends DieCore<U>, U extends string = string> extends utils.ClassUtils.HasIdCore<T, U> {
+export abstract class HasDieCore<T extends DieCore<U>, U extends string = string> extends HasIdCore<T, U> {
 	public get gameType(): GameType { return this.core.gameType; }
 }
 

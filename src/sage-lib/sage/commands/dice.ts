@@ -20,7 +20,7 @@ import type { CharacterShell } from "../model/CharacterShell";
 import { GameUserType } from "../model/Game";
 import GameCharacter from "../model/GameCharacter";
 import { ColorType } from "../model/HasColorsCore";
-import type NamedCollection from "../model/NamedCollection";
+import type { NamedCollection } from "../model/NamedCollection";
 import SageInteraction from "../model/SageInteraction";
 import SageMessage from "../model/SageMessage";
 import type { TMacro } from "../model/User";

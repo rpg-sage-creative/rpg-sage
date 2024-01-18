@@ -1,4 +1,4 @@
-import { exists } from "../../../../../sage-utils/utils/ArrayUtils/Filters";
+import { isDefined } from "@rsc-utils/type-utils";
 import type SageMessage from "../../../model/SageMessage";
 import type { Party } from "../party/Party";
 
@@ -12,5 +12,5 @@ export function getPartyArgs(sageMessage: SageMessage): Party[] {
 	return sageMessage.args.keyValuePairs()
 		.filter(kvp => keyRegex.test(kvp.key))
 		.map(kvp => game.parties.get(kvp.value))
-		.filter(exists);
+		.filter(isDefined);
 }

@@ -1,10 +1,11 @@
+import { sortComparable } from "@rsc-utils/array-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isNonNilUuid, randomUuid } from "@rsc-utils/uuid-utils";
 import type { Snowflake, TextChannel } from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
-import utils from "../../../../../sage-utils";
 import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
+import { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
 import { DiscordId } from "../../../../discord";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import Game, { GameRoleType, GameUserType, IGameUser, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game";
@@ -115,7 +116,7 @@ async function gameList(sageMessage: SageMessage): Promise<void> {
 		const lower = filter.toLowerCase();
 		games = games.filter(game => game.name && game.name.toLowerCase().includes(lower));
 	}
-	games.sort(utils.ArrayUtils.Sort.sortComparable);
+	games.sort(sortComparable);
 
 	const renderableContent = createAdminRenderableContent(sageMessage.bot);
 	renderableContent.setTitle(`<b>game${archived ? "-archive" : ""}-list</b>`);
@@ -159,13 +160,13 @@ async function showGameGetGame(sageMessage: SageMessage): Promise<Game | null> {
 	return game ?? null;
 }
 
-function showGameRenderGameType(renderableContent: utils.RenderUtils.RenderableContent, game: Game): void {
+function showGameRenderGameType(renderableContent: RenderableContent, game: Game): void {
 	const inheritedGameType = game.gameType ?? game.server.defaultGameType ?? GameType.None;
 	const gameType = GameType[game.gameType!] ?? `<i>inherited (${GameType[inheritedGameType]})</i>`;
 	renderableContent.append(`<b>GameType</b> ${gameType}`);
 }
 
-async function showGameRenderDialogType(renderableContent: utils.RenderUtils.RenderableContent, sageMessage: SageMessage, game: Game): Promise<void> {
+async function showGameRenderDialogType(renderableContent: RenderableContent, sageMessage: SageMessage, game: Game): Promise<void> {
 	const inheritedDialogType = game.defaultDialogType ?? game.server.defaultDialogType ?? DialogType.Embed;
 	const dialogType = DialogType[game.defaultDialogType!] ?? `<i>inherited (${DialogType[inheritedDialogType]})</i>`;
 	renderableContent.append(`<b>DialogType</b> ${dialogType}`);
@@ -186,7 +187,7 @@ async function showGameRenderDialogType(renderableContent: utils.RenderUtils.Ren
 	}
 }
 
-function gameDetailsAppendDice(renderableContent: utils.RenderUtils.RenderableContent, game: Game): void {
+function gameDetailsAppendDice(renderableContent: RenderableContent, game: Game): void {
 	const server = game.server;
 	renderableContent.append(`<b>Default Dice Options</b>`);
 
@@ -211,7 +212,7 @@ function gameDetailsAppendDice(renderableContent: utils.RenderUtils.RenderableCo
 	renderableContent.append(`[spacer]<b>Secret Checks</b> ${diceSecretMethodType ?? `<i>inherited (${inheritedDiceSecretMethodType})</i>`}`);
 }
 
-async function showGameRenderServer(renderableContent: utils.RenderUtils.RenderableContent, sageMessage: SageMessage, game: Game): Promise<void> {
+async function showGameRenderServer(renderableContent: RenderableContent, sageMessage: SageMessage, game: Game): Promise<void> {
 	if (sageMessage.game && game !== sageMessage.game && sageMessage.isSuperUser) {
 		renderableContent.appendTitledSection("<b>Server</b>", game.serverDid, game.serverId);
 		const guild = await sageMessage.discord.fetchGuild(game.serverDid);
@@ -224,7 +225,7 @@ async function showGameRenderServer(renderableContent: utils.RenderUtils.Rendera
 	}
 }
 
-async function showGameRenderChannels(renderableContent: utils.RenderUtils.RenderableContent, sageMessage: SageMessage, game: Game): Promise<void> {
+async function showGameRenderChannels(renderableContent: RenderableContent, sageMessage: SageMessage, game: Game): Promise<void> {
 	renderableContent.append(`<b>Channels</b> ${game.channels.length}`);
 
 	const tags = ["ic", "ooc", "gm", "misc"];

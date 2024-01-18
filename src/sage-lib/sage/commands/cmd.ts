@@ -1,8 +1,8 @@
 import { Color } from "@rsc-utils/color-utils";
 import { error } from "@rsc-utils/console-utils";
 import type { Awaitable, OrNull } from "@rsc-utils/type-utils";
-import * as Discord from "discord.js";
-import utils from "../../../sage-utils";
+import { MessageEmbed } from "discord.js";
+import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import ArgsManager from "../../discord/ArgsManager";
 import { registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs, TMessageHandler } from "../../discord/types";
@@ -25,8 +25,8 @@ export function renderCount(sageMessage: SageMessage, label: string, count: numb
 	return <any>sageMessage.send(renderableContent);
 }
 
-export function embedColor(color: Color, ...labels: string[]): Discord.MessageEmbed {
-	const embed = new Discord.MessageEmbed();
+export function embedColor(color: Color, ...labels: string[]): MessageEmbed {
+	const embed = new MessageEmbed();
 	embed.setColor(<any>color.toDiscordColor());
 	let desc = color.hex;
 	if (color.name) {
@@ -39,13 +39,13 @@ export function embedColor(color: Color, ...labels: string[]): Discord.MessageEm
 	return embed;
 }
 
-export function createRenderableContent(hasColors: IHasColorsCore, colorType: ColorType, title?: string): utils.RenderUtils.RenderableContent {
-	const renderableContent = new utils.RenderUtils.RenderableContent(title);
+export function createRenderableContent(hasColors: IHasColorsCore, colorType: ColorType, title?: string): RenderableContent {
+	const renderableContent = new RenderableContent(title);
 	renderableContent.setColor(hasColors.toDiscordColor(colorType));
 	return renderableContent;
 }
 
-export function createCommandRenderableContent(title?: string): utils.RenderUtils.RenderableContent {
+export function createCommandRenderableContent(title?: string): RenderableContent {
 	return createRenderableContent(ActiveBot.active, ColorType.Command, title);
 }
 
@@ -79,8 +79,8 @@ export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler):
 
 // #region Admin Command Registration
 
-export function createAdminRenderableContent(hasColors: IHasColorsCore, title?: string): utils.RenderUtils.RenderableContent {
-	const renderableContent = new utils.RenderUtils.RenderableContent(title);
+export function createAdminRenderableContent(hasColors: IHasColorsCore, title?: string): RenderableContent {
+	const renderableContent = new RenderableContent(title);
 	renderableContent.setColor(hasColors.toDiscordColor(ColorType.AdminCommand));
 	return renderableContent;
 }

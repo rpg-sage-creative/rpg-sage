@@ -1,6 +1,6 @@
+import { toUniqueDefined } from "@rsc-utils/array-utils";
 import { rollDie } from "@rsc-utils/dice-utils";
 import type { Optional, OrNull } from "@rsc-utils/type-utils";
-import utils from "../../sage-utils";
 import { Dice } from "../dice/base";
 import type { TDice } from "../dice/base/types";
 
@@ -285,7 +285,7 @@ export class TableResultsItem<TI extends TableItem> {
 				labels = labels.concat(items[itemIndex].getUniqueLabels());
 			}
 		}
-		return labels.filter(utils.ArrayUtils.Filters.existsAndUnique);
+		return labels.filter(toUniqueDefined);
 	}
 	public toHtmlString(tabLevel: number): string {
 		let html = "<div class='Result'><table><tr>";

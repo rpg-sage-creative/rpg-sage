@@ -1,7 +1,8 @@
 import { error, verbose, warn } from "@rsc-utils/console-utils";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined, isNullOrUndefined } from "@rsc-utils/type-utils";
-import * as Discord from "discord.js";
+import { Intents, type IntentsString, type Interaction, type PermissionString } from "discord.js";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import SageInteraction from "../sage/model/SageInteraction";
 import SageMessage from "../sage/model/SageMessage";
@@ -45,20 +46,20 @@ export async function isAuthorBotOrWebhook(messageOrReaction: SageMessage | Sage
 
 //#endregion
 
-type TBotMeta = { activeBotDid?: Discord.Snowflake; testBotDid?: Discord.Snowflake; dialogWebhookName?: string; };
+type TBotMeta = { activeBotDid?: Snowflake; testBotDid?: Snowflake; dialogWebhookName?: string; };
 const botMeta: TBotMeta = {};
 export function setBotMeta(meta: TBotMeta): void {
 	botMeta.activeBotDid = meta.activeBotDid;
 	botMeta.dialogWebhookName = meta.dialogWebhookName;
 	botMeta.testBotDid = meta.testBotDid;
 }
-// export function getActiveBotId(): Discord.Snowflake {
+// export function getActiveBotId(): Snowflake {
 // 	return botMeta.activeBotId!;
 // }
-function isActiveBot(did: Optional<Discord.Snowflake>): boolean {
+function isActiveBot(did: Optional<Snowflake>): boolean {
 	return did && botMeta.activeBotDid ? did === botMeta.activeBotDid : false;
 }
-function isTesterBot(did: Optional<Discord.Snowflake>): boolean {
+function isTesterBot(did: Optional<Snowflake>): boolean {
 	return did && botMeta.testBotDid ? did === botMeta.testBotDid : false;
 }
 
@@ -66,8 +67,8 @@ function isTesterBot(did: Optional<Discord.Snowflake>): boolean {
 
 type TListener = {
 	command?: string;
-	intents?: Discord.IntentsString[];
-	permissions?: Discord.PermissionString[];
+	intents?: IntentsString[];
+	permissions?: PermissionString[];
 	priorityIndex?: number;
 };
 
@@ -122,8 +123,8 @@ function registerListener<T extends TListenerType>(which: TListenerTypeName, lis
 }
 
 type RegisterOptions = {
-	intents?: Discord.IntentsString[];
-	permissions?: Discord.PermissionString[];
+	intents?: IntentsString[];
+	permissions?: PermissionString[];
 	priorityIndex?: number;
 };
 type RegisterInteractionOptions = RegisterOptions & { type?: TInteractionType; };
@@ -142,14 +143,14 @@ export function registerReactionListener<T>(tester: TReactionTester<T>, handler:
 	registerListener("ReactionListener", { tester, handler, type, ...options });
 }
 
-export function registeredIntents(): Discord.Intents {
-	const registered: Discord.IntentsString[] = [];
+export function registeredIntents(): Intents {
+	const registered: IntentsString[] = [];
 	messageListeners.forEach(listener => registered.push(...listener.intents ?? []));
 	reactionListeners.forEach(listener => registered.push(...listener.intents ?? []));
 
-	const intents = new Discord.Intents();
+	const intents = new Intents();
 	intents.add(
-		// registered.filter(utils.ArrayUtils.Filters.unique)
+		// registered.filter(toUnique)
 		[
 		"DIRECT_MESSAGES",
 		"DIRECT_MESSAGE_REACTIONS",
@@ -169,7 +170,7 @@ export function registeredIntents(): Discord.Intents {
 
 //#region interactions
 
-export async function handleInteraction(interaction: Discord.Interaction): Promise<THandlerOutput> {
+export async function handleInteraction(interaction: Interaction): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
 		const isCommand = interaction.isCommand();

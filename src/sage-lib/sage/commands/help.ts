@@ -1,6 +1,7 @@
-import type { Optional } from "@rsc-utils/type-utils";
-import type * as Discord from "discord.js";
-import utils from "../../../sage-utils";
+import { toUniqueDefined } from "@rsc-utils/array-utils";
+import { Snowflake } from "@rsc-utils/snowflake-utils";
+import { isDefined, type Optional } from "@rsc-utils/type-utils";
+import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { TChannel, TCommandAndArgs } from "../../discord";
 import ArgsManager from "../../discord/ArgsManager";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
@@ -83,22 +84,21 @@ function getHelpSubCategories(categoryKey: string, depth: number): string[] {
 	return Array.from(helpTextMaps.keys())
 		.filter(key => key.startsWith(categoryKey))
 		.map(key => key.split(",").slice(depth)[0])
-		.filter(utils.ArrayUtils.Filters.exists)
-		.filter(utils.ArrayUtils.Filters.unique)
+		.filter(toUniqueDefined)
 		.sort()
 		;
 }
-async function appendHelpSection(renderableContent: utils.RenderUtils.RenderableContent, prefix: string, helpCategoryKey: string): Promise<void> {
+async function appendHelpSection(renderableContent: RenderableContent, prefix: string, helpCategoryKey: string): Promise<void> {
 	const helpTexts = getHelpTexts(helpCategoryKey);
 	renderableContent.appendTitledSection(`<i>${toCategoryDisplayText(helpCategoryKey.split(",").pop() || "")}</i>`);
 	renderableContent.append(`${helpTexts.map(helpText => prefix + helpText).join("\n")}`);
 }
 
 type TSuperUserFilter = (value: string) => boolean;
-function getSuperUserFilter(authorDid: Optional<Discord.Snowflake>): TSuperUserFilter {
-	return User.isSuperUser(authorDid) ? utils.ArrayUtils.Filters.exists : (value: string) => value !== "SuperUser";
+function getSuperUserFilter(authorDid: Optional<Snowflake>): TSuperUserFilter {
+	return User.isSuperUser(authorDid) ? isDefined : (value: string) => value !== "SuperUser";
 }
-async function renderHelpAll(caches: SageCache): Promise<utils.RenderUtils.RenderableContent> {
+async function renderHelpAll(caches: SageCache): Promise<RenderableContent> {
 	const renderableContent = createCommandRenderableContent();
 	const prefix = caches.getPrefixOrDefault();
 	renderableContent.appendTitledSection("<i>help syntax</i>", `<code>${prefix}!help {category}</code>`);
@@ -121,7 +121,7 @@ async function renderHelpAll(caches: SageCache): Promise<utils.RenderUtils.Rende
 		}
 	}
 }
-async function renderMainHelp(caches: SageCache): Promise<utils.RenderUtils.RenderableContent> {
+async function renderMainHelp(caches: SageCache): Promise<RenderableContent> {
 	const renderableContent = createCommandRenderableContent();
 	const suFilter = getSuperUserFilter(caches.userDid);
 	const prefix = caches.getPrefixOrDefault();
@@ -131,14 +131,14 @@ async function renderMainHelp(caches: SageCache): Promise<utils.RenderUtils.Rend
 	renderableContent.appendTitledSection("<i>examples</i>", `<code>${prefix}!help command</code>`, `<code>${prefix}!help search</code>`);
 	return renderableContent;
 }
-async function renderTextsOnly(caches: SageCache, categories: string[]): Promise<utils.RenderUtils.RenderableContent> {
+async function renderTextsOnly(caches: SageCache, categories: string[]): Promise<RenderableContent> {
 	const renderableContent = createCommandRenderableContent();
 	const prefix = caches.getPrefixOrDefault();
 	const helpCategoryKey = toHelpCategoryKey(categories);
 	appendHelpSection(renderableContent, prefix, helpCategoryKey);
 	return renderableContent;
 }
-async function renderSubCategoriesOnly(caches: SageCache, categories: string[]): Promise<utils.RenderUtils.RenderableContent> {
+async function renderSubCategoriesOnly(caches: SageCache, categories: string[]): Promise<RenderableContent> {
 	const renderableContent = createCommandRenderableContent(),
 		helpCategoryKey = toHelpCategoryKey(categories),
 		category = categories.slice().pop(),
@@ -165,7 +165,7 @@ async function renderSubCategoriesOnly(caches: SageCache, categories: string[]):
 
 	return renderableContent;
 }
-async function renderSubCategoriesAndText(caches: SageCache, categories: string[]): Promise<utils.RenderUtils.RenderableContent> {
+async function renderSubCategoriesAndText(caches: SageCache, categories: string[]): Promise<RenderableContent> {
 	const renderableContent = createCommandRenderableContent(),
 		helpCategoryKey = toHelpCategoryKey(categories),
 		category = categories.slice().pop(),
@@ -201,7 +201,7 @@ function hasSubCategoriesAndText(categories: string[]): boolean {
 		helpSubCategories = getHelpSubCategories(helpCategoryKey, categories.length);
 	return helpTexts.length !== 0 && helpSubCategories.length !== 0;
 }
-async function createHelpRenderable(caches: SageCache, categories: string[]): Promise<utils.RenderUtils.RenderableContent> {
+async function createHelpRenderable(caches: SageCache, categories: string[]): Promise<RenderableContent> {
 	const renderableContent = createCommandRenderableContent(`<b>Sage Help</b>`);
 	if (isHelpAll(categories)) {
 		renderableContent.appendSections(...(await renderHelpAll(caches)).sections);

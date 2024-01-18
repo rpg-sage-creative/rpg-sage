@@ -1,9 +1,9 @@
 import { Color } from "@rsc-utils/color-utils";
-import { isNonNilSnowflake } from "@rsc-utils/snowflake-utils";
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isNonNilUuid } from "@rsc-utils/uuid-utils";
-import * as Discord from "discord.js";
+import type { Collection, MessageAttachment } from "discord.js";
 import { GameType, parseGameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, parseCritMethodType, parseDiceOutputType } from "../../../sage-dice";
 import ArgsManager from "../../discord/ArgsManager";
@@ -50,7 +50,7 @@ function removeAndReturnBooleanFlag(args: string[], key: TValidBooleanFlags): bo
 type TValidTargetChannelFlags = "admin" | "command" | "commands" | "dialog" | "dice" | "search";
 
 /** /^(admin|commands?|dialog|dice|search)(?:to)?=(\d{16,}|<#\d{16,}>)$/i */
-function removeAndReturnChannelSnowflake(args: string[], key: TValidTargetChannelFlags): Discord.Snowflake | undefined {
+function removeAndReturnChannelSnowflake(args: string[], key: TValidTargetChannelFlags): Snowflake | undefined {
 	const lower = key.toLowerCase().replace("commands", "command");
 	const regex = /^(admin|commands?|dialog|dice|search)(?:to)?="(\d{16,}|<#\d{16,}>|https:\/\/discord\.com\/channels\/\d{16,}\/\d{16,})"$/i;
 	for (const arg of args) {
@@ -250,7 +250,7 @@ export default class SageMessageArgsManager extends ArgsManager {
 		super(argsManager ?? []);
 	}
 
-	private attachments?: Discord.Collection<Discord.Snowflake, Discord.MessageAttachment>;
+	private attachments?: Collection<Snowflake, MessageAttachment>;
 	public removeAndReturnAttachmentUrl(): string | undefined {
 		const attachments = this.attachments ?? (this.attachments = this.sageMessage.message.attachments.clone());
 		if (attachments.size) {
@@ -261,13 +261,13 @@ export default class SageMessageArgsManager extends ArgsManager {
 		return this.removeAndReturnUrl();
 	}
 
-	protected async findChannelIndexWithDid(): Promise<TArgIndexRet<Discord.Snowflake> | undefined> {
+	protected async findChannelIndexWithDid(): Promise<TArgIndexRet<Snowflake> | undefined> {
 		if (this.isEmpty) {
 			return undefined;
 		}
 
-		return <Promise<TArgIndexRet<Discord.Snowflake> | undefined>>this.asyncFindArgIndexRet(async arg => {
-			let did: Discord.Snowflake | undefined;
+		return <Promise<TArgIndexRet<Snowflake> | undefined>>this.asyncFindArgIndexRet(async arg => {
+			let did: Snowflake | undefined;
 			if (isNonNilSnowflake(arg)) did = arg;
 			if (DiscordId.isChannelReference(arg)) did = DiscordId.parseId(arg);
 			if (DiscordId.isChannelLink(arg)) did = DiscordId.from(arg)?.did;
@@ -278,10 +278,10 @@ export default class SageMessageArgsManager extends ArgsManager {
 			return undefined;
 		});
 	}
-	public async removeAndReturnChannelDid(): Promise<Discord.Snowflake | null>;
-	public async removeAndReturnChannelDid(defaultThisChannel: false): Promise<Discord.Snowflake | null>;
-	public async removeAndReturnChannelDid(defaultThisChannel: true): Promise<Discord.Snowflake>;
-	public async removeAndReturnChannelDid(defaultThisChannel = false): Promise<Discord.Snowflake | null> {
+	public async removeAndReturnChannelDid(): Promise<Snowflake | null>;
+	public async removeAndReturnChannelDid(defaultThisChannel: false): Promise<Snowflake | null>;
+	public async removeAndReturnChannelDid(defaultThisChannel: true): Promise<Snowflake>;
+	public async removeAndReturnChannelDid(defaultThisChannel = false): Promise<Snowflake | null> {
 		const withIndex = await this.findChannelIndexWithDid();
 		if (withIndex) {
 			this.removeByArgAndIndex(withIndex);
@@ -319,7 +319,7 @@ export default class SageMessageArgsManager extends ArgsManager {
 		return channelOptions;
 	}
 
-	public removeAndReturnCharacterOptions(names: TNames, userDid?: Discord.Snowflake): GameCharacterCore {
+	public removeAndReturnCharacterOptions(names: TNames, userDid?: Snowflake): GameCharacterCore {
 		const characterCore: GameCharacterCore = {
 			alias: this.removeByKey("alias")!,
 			autoChannels: undefined,
@@ -450,12 +450,12 @@ export default class SageMessageArgsManager extends ArgsManager {
 		return names;
 	}
 
-	public async removeAndReturnRoleDid(): Promise<Discord.Snowflake | null> {
+	public async removeAndReturnRoleDid(): Promise<Snowflake | null> {
 		if (this.isEmpty) {
 			return null;
 		}
 
-		const roleDid = await this.asyncFindArgAndRemoveAndMap<Discord.Snowflake | undefined>(async arg =>
+		const roleDid = await this.asyncFindArgAndRemoveAndMap<Snowflake | undefined>(async arg =>
 			DiscordId.isRoleMention(arg) ? DiscordId.parseId(arg)
 			: isNonNilSnowflake(arg) ? (await this.sageMessage.discord.fetchGuildRole(arg))?.id
 			: undefined
@@ -505,9 +505,9 @@ export default class SageMessageArgsManager extends ArgsManager {
 	// 	while (userDid = await this.removeAndReturnUserDid()) {
 	// 		userDids.push(userDid);
 	// 	}
-	// 	return userDids.filter(utils.ArrayUtils.Filters.unique);
+	// 	return userDids.filter(toUnique);
 	// }
-	public async removeAndReturnUserDid(argKey?: string, defaultIfNoArg = true): Promise<Discord.Snowflake | null> {
+	public async removeAndReturnUserDid(argKey?: string, defaultIfNoArg = true): Promise<Snowflake | null> {
 		if (this.isEmpty) {
 			return null;
 		}
@@ -515,16 +515,16 @@ export default class SageMessageArgsManager extends ArgsManager {
 		const discord = this.sageMessage.caches.discord;
 		const userRepo = this.sageMessage.caches.users;
 
-		let userDid: Optional<Discord.Snowflake>;
+		let userDid: Optional<Snowflake>;
 		if (argKey && this.findKeyValueArgIndex(argKey)) {
 			userDid = await argToSnowflake(this.removeByKey(argKey)!);
 		}
 		if (!userDid && defaultIfNoArg) {
-			userDid = await this.asyncFindArgAndRemoveAndMap<Discord.Snowflake | undefined>(async arg => argToSnowflake(arg));
+			userDid = await this.asyncFindArgAndRemoveAndMap<Snowflake | undefined>(async arg => argToSnowflake(arg));
 		}
 		return userDid ?? null;
 
-		async function argToSnowflake(arg: string): Promise<Discord.Snowflake | undefined> {
+		async function argToSnowflake(arg: string): Promise<Snowflake | undefined> {
 			return DiscordId.isUserMention(arg) ? DiscordId.parseId(arg)
 				: isNonNilUuid(arg) ? (await userRepo.getById(arg))?.did
 				: isNonNilSnowflake(arg) ? (await discord.fetchGuildMember(arg))?.id

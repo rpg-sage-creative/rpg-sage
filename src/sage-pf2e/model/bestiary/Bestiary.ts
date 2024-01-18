@@ -1,8 +1,4 @@
 /*
-// /// <reference path="../../../utils/ArrayUtils.Sort.ts" />
-// /// <reference path="../Item.ts" />
-// /// <reference path="./Creature.ts" />
-// /// <reference path="./CreatureCategory.ts" />
 // namespace pf {
 // 	export namespace model {
 // 		export namespace bestiary {
@@ -32,7 +28,7 @@
 // 				public get creatureCategories(): CreatureCategory[] {
 // 					if (!this._creatureCategories) {
 // 						this._creatureCategories = this.core.creatureCategories.map(category => new CreatureCategory(category));
-// 						this._creatureCategories.sort((a, b) => utils.ArrayUtils.Sort.stringIgnoreCase(a.name, b.name));
+// 						this._creatureCategories.sort((a, b) => sortStringIgnoreCase(a.name, b.name));
 // 					}
 // 					return this._creatureCategories.slice();
 // 				}

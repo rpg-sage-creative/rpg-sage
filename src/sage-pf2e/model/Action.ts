@@ -1,5 +1,6 @@
-import type utils from "../../sage-utils";
-import type { TSortResult } from "../../sage-utils";
+import type { SortResult } from "@rsc-utils/array-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TAction, TSkill } from "../common";
 import { NEWLINE, TAB } from "../common";
 import RenderableContent from "../data/RenderableContent";
@@ -39,9 +40,9 @@ export default class Action<T extends string = "Action", U extends ActionCore<T>
 
 	//#endregion
 
-	//#region utils.ArrayUtils.Sort.IComparable<T>
+	//#region Comparable<T>
 
-	public compareTo(other: Action<T, U>): TSortResult {
+	public compareTo(other: Action<T, U>): SortResult {
 		const result = super.compareTo(other);
 		if (result !== 0) {
 			return result;
@@ -65,9 +66,9 @@ export default class Action<T extends string = "Action", U extends ActionCore<T>
 
 	//#endregion
 
-	//#region utils.RenderUtils.IRenderable
+	//#region IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 
 		content.setTitle(`<b>${this.name}</b> ${this.actionType}`);
@@ -87,10 +88,10 @@ export default class Action<T extends string = "Action", U extends ActionCore<T>
 
 	//#region utils.SearchUtils.ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
-			score.append(searchInfo.score(this, this.skill || "", this.trained ? "trained" : "", this.traits, this.frequency, this.trigger, this.requirements, this.effect));
+			score.append(searchInfo.score(this, this.skill ?? "", this.trained ? "trained" : "", this.traits, this.frequency, this.trigger, this.requirements, this.effect));
 		}
 		return score;
 	}

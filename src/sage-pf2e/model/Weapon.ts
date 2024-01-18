@@ -1,8 +1,9 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TWeaponCategory, TWeaponGroup, TWeaponHands, TWeaponType } from "../common";
 import { MDASH, NEWLINE, TAB } from "../common";
 import RenderableContent from "../data/RenderableContent";
-import * as Repository from "../data/Repository";
+import { filter, findByValue } from "../data/Repository";
 import type Ammunition from "./Ammunition";
 import type { BulkCore } from "./HasBulk";
 import HasBulk from "./HasBulk";
@@ -27,13 +28,13 @@ export default class Weapon extends HasBulk<WeaponCore, Weapon> {
 	/**************************************************************************************************************************/
 	// Properties
 
-	public get ammunition(): Ammunition | undefined { return Repository.findByValue("Ammunition", this.core.ammunition); }
+	public get ammunition(): Ammunition | undefined { return findByValue("Ammunition", this.core.ammunition); }
 	public get category(): TWeaponCategory { return this.core.category; }
 	public get damage(): string | undefined { return this.core.damage; }
 	private _group?: WeaponGroup | null;
 	public get group(): WeaponGroup | undefined {
 		if (this._group === undefined) {
-			this._group = Repository.findByValue("WeaponGroup", this.core.group) ?? null;
+			this._group = findByValue("WeaponGroup", this.core.group) ?? null;
 		}
 		return this._group ?? undefined;
 	}
@@ -47,13 +48,13 @@ export default class Weapon extends HasBulk<WeaponCore, Weapon> {
 	public get Traits(): Trait[] {
 		if (!this._Traits) {
 			const coreTraits = this.nonRarityTraits.map(t => t.split(/ /)[0]);
-			this._Traits = Repository.filter("Trait", trait => coreTraits.includes(trait.name));
+			this._Traits = filter("Trait", trait => coreTraits.includes(trait.name));
 		}
 		return this._Traits;
 	}
 	public get type(): TWeaponType { return this.core.type || null; }
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 
 		const level = this.level ? `(level ${this.level})` : ``;
@@ -91,7 +92,7 @@ export default class Weapon extends HasBulk<WeaponCore, Weapon> {
 	/**************************************************************************************************************************/
 	// utils.SearchUtils.ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			const terms: string[] = [];

@@ -1,4 +1,4 @@
-import { explodeDice, rollDice } from "@rsc-utils/dice-utils";
+import { ExplodeDice, rollDice } from "@rsc-utils/dice-utils";
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull } from "@rsc-utils/type-utils";
@@ -295,7 +295,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		const dicePartsRollsJson = dicePartsRolls.map(dicePartRoll => dicePartRoll.toJSON());
 		const explodedDice: number[] = [];
 		dicePartsRolls.forEach(dicePartRoll => {
-			explodedDice.push(...explodeDice(12, dicePartRoll.rolls, 12));
+			explodedDice.push(...ExplodeDice.explode(12, dicePartRoll.rolls));
 		});
 		if (explodedDice.length) {
 			dicePartsRollsJson.push({

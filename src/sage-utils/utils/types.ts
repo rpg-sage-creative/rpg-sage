@@ -1,4 +1,3 @@
-export * from "./ArrayUtils/types";
 export * from "./ClassUtils/types";
 export * from "./DateUtils/types";
 export * from "./RenderUtils/types";

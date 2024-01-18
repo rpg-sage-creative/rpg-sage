@@ -1,7 +1,10 @@
+import { type Comparable, type SortResult, sortPrimitive } from "@rsc-utils/array-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import utils, { IComparable, IRenderable, ISearchable, TSortResult } from "../../../sage-utils";
-import { IdCore } from "../../../sage-utils/utils/ClassUtils";
+import type { IRenderable, ISearchable } from "../../../sage-utils";
+import { HasIdCore, type IdCore } from "../../../sage-utils/utils/ClassUtils";
+import type { RenderableContent as UtilsRenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { NEWLINE, TAB } from "../../common";
 import RenderableContent from "../../data/RenderableContent";
 import type {
@@ -46,10 +49,10 @@ export interface BaseCore<T extends string = string> extends IdCore<T>, Archived
 type TChildCoreParser<T extends BaseCore> = (core: T) => T[];
 export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = string>
 	extends
-		utils.ClassUtils.HasIdCore<T, U>
+		HasIdCore<T, U>
 	implements
 		IHasArchives,
-		IComparable<Base<T, U>>,
+		Comparable<Base<T, U>>,
 		IHasDetails,
 		IHasLink,
 		IHasName,
@@ -238,7 +241,7 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 	// #endregion IHasName
 
 	// #region utils.RenderUtils.IRenderable
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		this.appendDescriptionTo(renderable);
@@ -247,16 +250,16 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 	}
 	// #endregion utils.RenderUtils.IRenderable
 
-	// #region utils.ArrayUtils.Sort.IComparable
+	// #region Comparable
 
-	public compareTo(other: Base<T, U>): TSortResult {
-		return utils.ArrayUtils.Sort.sortAscending(this.objectType, other.objectType)
-			|| utils.ArrayUtils.Sort.sortAscending(this.nameClean, other.nameClean)
-			|| utils.ArrayUtils.Sort.sortAscending(this.nameLower, other.nameLower)
-			|| utils.ArrayUtils.Sort.sortAscending(this.name, other.name);
+	public compareTo(other: Base<T, U>): SortResult {
+		return sortPrimitive(this.objectType, other.objectType)
+			|| sortPrimitive(this.nameClean, other.nameClean)
+			|| sortPrimitive(this.nameLower, other.nameLower)
+			|| sortPrimitive(this.name, other.name);
 	}
 
-	// #endregion utils.ArrayUtils.Sort.IComparable
+	// #endregion Comparable
 
 	// #region utils.SearchUtils.ISearchable
 
@@ -264,7 +267,7 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 		return this.objectType as unknown as string;
 	}
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = searchInfo.score(this, this.name);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.description));
@@ -279,7 +282,7 @@ export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends strin
 		return score;
 	}
 
-	public searchRecursive(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this>[] {
+	public searchRecursive(searchInfo: SearchInfo): SearchScore<this>[] {
 		return [this.search(searchInfo)];
 	}
 

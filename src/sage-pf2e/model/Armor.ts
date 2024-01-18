@@ -1,7 +1,8 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import { MDASH, NEWLINE, TAB, toModifier } from "../common";
 import RenderableContent from "../data/RenderableContent";
-import * as Repository from "../data/Repository";
+import { filter, findByValue } from "../data/Repository";
 import type ArmorGroup from "./ArmorGroup";
 import type { BulkCore } from "./HasBulk";
 import HasBulk from "./HasBulk";
@@ -10,15 +11,15 @@ import type Trait from "./Trait";
 /*
 // function sortGear(a: Gear, b: Gear): number {
 // 	if (a.category != b.category) {
-// 		return utils.ArrayUtils.Sort.asStringIgnoreCase(`${a.category || ""}${a.name}`, `${b.category || ""}${b.name}`);
+// 		return sortStringIgnoreCase(`${a.category || ""}${a.name}`, `${b.category || ""}${b.name}`);
 // 	}
 // 	if (!a.category) {
-// 		return utils.ArrayUtils.Sort.asStringIgnoreCase(a.name, b.name);
+// 		return sortStringIgnoreCase(a.name, b.name);
 // 	}
 // 	if (a.price != b.price) {
 // 		return rpg.SpUtils.parse(a.price) < rpg.SpUtils.parse(b.price) ? -1 : 1;
 // 	}
-// 	return utils.ArrayUtils.Sort.asStringIgnoreCase(a.name, b.name);
+// 	return sortStringIgnoreCase(a.name, b.name);
 // }
 */
 
@@ -46,7 +47,7 @@ export default class Armor extends HasBulk<ArmorCore, Armor> {
 	private _group?: ArmorGroup | null;
 	public get group(): ArmorGroup | undefined {
 		if (this._group === undefined) {
-			this._group = Repository.findByValue("ArmorGroup", this.core.group) ?? null;
+			this._group = findByValue("ArmorGroup", this.core.group) ?? null;
 		}
 		return this._group ?? undefined;
 	}
@@ -59,14 +60,14 @@ export default class Armor extends HasBulk<ArmorCore, Armor> {
 	public get Traits(): Trait[] {
 		if (!this._Traits) {
 			const coreTraits = this.traits;
-			this._Traits = Repository.filter("Trait", trait => coreTraits.includes(trait.name));
+			this._Traits = filter("Trait", trait => coreTraits.includes(trait.name));
 		}
 		return this._Traits;
 	}
 
 	public hasTrait(traitName: string): boolean { return this.Traits.find(trait => trait.name === traitName) !== undefined; }
 
-	public toRenderableContentCategoryGroup(content: utils.RenderUtils.RenderableContent): void {
+	public toRenderableContentCategoryGroup(content: UtilsRenderableContent): void {
 		const catGroupTraits = [`<b>Category</b> ${this.category}`];
 		if (this.group) {
 			catGroupTraits.push(`<b>Group</b> ${this.group || MDASH}`);
@@ -74,7 +75,7 @@ export default class Armor extends HasBulk<ArmorCore, Armor> {
 		catGroupTraits.push(`<b>Traits</b> ${this.nonRarityTraits.join(", ") || MDASH}`);
 		content.append(catGroupTraits.join("; "));
 	}
-	public toRenderableContentStrengthGroupTraits(content: utils.RenderUtils.RenderableContent): void {
+	public toRenderableContentStrengthGroupTraits(content: UtilsRenderableContent): void {
 		if (this.strength) {
 			content.appendTitledSection(`<b>Strength</b>`, `This entry indicates the Strength score at which you are strong enough to overcome some of the armor's penalties. If your Strength is equal to or greater than this value, you no longer take the armor's check penalty, and you decrease the Speed penalty by 5 feet (to no penalty if the penalty was –5 feet, or to a –5-foot penalty if the penalty was –10 feet).`);
 		}
@@ -83,7 +84,7 @@ export default class Armor extends HasBulk<ArmorCore, Armor> {
 		}
 		this.Traits.forEach(trait => content.appendTitledSection(`<b>Trait</b> ${trait}`, ...trait.details.map((d, i) => (i ? TAB : NEWLINE) + d)));
 	}
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 
 		const level = this.level ? `(level ${this.level})` : ``;
@@ -114,7 +115,7 @@ export default class Armor extends HasBulk<ArmorCore, Armor> {
 	/**************************************************************************************************************************/
 	// utils.SearchUtils.ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			const terms: string[] = [];

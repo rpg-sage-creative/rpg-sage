@@ -1,10 +1,10 @@
+import { toUniqueDefined } from "@rsc-utils/array-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { nth } from "@rsc-utils/number-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e";
 import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e";
-import utils from "../../../sage-utils";
 import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { renderAll } from "./default";
@@ -121,10 +121,10 @@ async function spellListFocus(sageMessage: SageMessage): Promise<void> {
 		const focusSpells = Repository.all<Spell>("FocusSpell");
 
 		const allClassNames = Repository.all("Class").map(clss => clss.name);
-		const classNames = focusSpells.map(spell => spell.traits.find(trait => allClassNames.includes(trait))).filter(utils.ArrayUtils.Filters.existsAndUnique);
+		const classNames = focusSpells.map(spell => spell.traits.find(trait => allClassNames.includes(trait))).filter(toUniqueDefined);
 		content.append(`<b>Classes (${classNames.length})</b> ${classNames.map(className => `${className} (${focusSpells.filter(spell => spell.traits.includes(className)).length})`).join(", ")}`);
 
-		const archetypeNames = focusSpells.map(spell => spell.archetypeName).filter(utils.ArrayUtils.Filters.existsAndUnique);
+		const archetypeNames = focusSpells.map(spell => spell.archetypeName).filter(toUniqueDefined);
 		content.append(`\n<b>Archetypes (${archetypeNames.length})</b> ${archetypeNames.map(archetypeName => `${archetypeName} (${focusSpells.filter(spell => spell.archetypeName === archetypeName).length})`).join(", ")}`);
 
 	} else if (!archetypeName && !className && !domain) {

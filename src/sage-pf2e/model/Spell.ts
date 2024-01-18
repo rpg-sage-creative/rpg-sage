@@ -1,9 +1,11 @@
+import { toUnique } from "@rsc-utils/array-utils";
 import { debug } from "@rsc-utils/console-utils";
 import { nth } from "@rsc-utils/number-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import utils from "../../sage-utils";
 import { Core } from "../../sage-utils/utils/ClassUtils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TMagicComponent, TMagicTradition } from '../common';
 import { ABILITIES, NEWLINE, toModifier } from '../common';
 import RenderableContent from '../data/RenderableContent';
@@ -223,7 +225,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 	//#endregion
 
 	//#region utils.RenderUtils.IRenderable
-	private toRenderableContentTitle(content: utils.RenderUtils.RenderableContent): void {
+	private toRenderableContentTitle(content: UtilsRenderableContent): void {
 		const cantrip = this.isCantrip ? " Cantrip" : "";
 		const focus = !this.isCantrip && this.isFocus ? " Focus" : "";
 		const spell = !this.isCantrip && !this.isFocus ? " Spell" : "";
@@ -285,7 +287,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 		}
 		return savingThrowDuration.join("; ");
 	}
-	private toRenderableContentHeighten(content: utils.RenderUtils.RenderableContent): void {
+	private toRenderableContentHeighten(content: UtilsRenderableContent): void {
 		if (this.canHeighten) {
 			content.append("");
 			const heightenedList = (this.core.heightened ?? []).map(h => `<b>Heightened (${h.bump ? "+" + h.bump : nth(h.level!)})</b> ${h.change}`);
@@ -299,7 +301,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 			}
 		}
 	}
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 
 		this.toRenderableContentTitle(content);
@@ -349,7 +351,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 		const italicPhrases = italicMatches.map(match => match.slice(3, -4));
 		const spellSearches = italicPhrases.map(Spell.find);
 		const validSpells = <Spell[]>spellSearches.filter(sp => sp && sp !== this);
-		const uniqueSpells = [this, ...validSpells].filter(utils.ArrayUtils.Filters.unique);
+		const uniqueSpells = [this, ...validSpells].filter(toUnique);
 		const otherSpells = uniqueSpells.slice(1);
 		content.addAonLink(...otherSpells.map(spell => spell.toAonLink()));
 
@@ -365,7 +367,7 @@ export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T
 		return `${level} ${rarity}`;
 	}
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.traits, this.traditions, this.archetypeName));

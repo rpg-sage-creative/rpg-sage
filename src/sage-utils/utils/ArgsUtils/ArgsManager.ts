@@ -1,11 +1,9 @@
+import { Collection, sortPrimitive } from "@rsc-utils/array-utils";
 import { Color } from "@rsc-utils/color-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { isKeyValueArg, parseKeyValueArg, type KeyValueArg } from "@rsc-utils/string-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { UUID, isNonNilUuid } from "@rsc-utils/uuid-utils";
-import XRegExp from "xregexp";
-import { Collection } from "../ArrayUtils";
-import { sortDescending } from "../ArrayUtils/Sort";
+import { isNonNilUuid, type UUID } from "@rsc-utils/uuid-utils";
 
 type TArgIndexRet<T> = {
 	arg: string;
@@ -99,7 +97,7 @@ export default class ArgsManager<T extends string> extends Collection<T> {
 
 	/** Removes and returns the key/value pair with a key that matches the given string or RegExp. */
 	public removeKeyValuePair<U extends string = string>(key: string | RegExp): OrUndefined<TKeyValuePair<U>> {
-		const regex = typeof(key) === "string" ? XRegExp(`^${key}$`, "i") : key;
+		const regex = typeof(key) === "string" ? new RegExp(`^${key}$`, "i") : key;
 		const keyValuePair = this.parseKeyValuePairs<U>().find(pair => pair?.key.match(regex));
 		const index = keyValuePair?.index ?? -1;
 		if (index > -1) {
@@ -112,7 +110,8 @@ export default class ArgsManager<T extends string> extends Collection<T> {
 
 	/** Removes the given arg/index from the args. */
 	protected removeByArgAndIndex(...withIndexes: TArgAndIndex[]): void {
-		withIndexes.sort((a, b) => sortDescending(a.index, b.index));
+		withIndexes.sort((a, b) => sortPrimitive(a.index, b.index));
+		withIndexes.reverse();
 		withIndexes.forEach(withIndex => this.removeAt(withIndex.index));
 	}
 

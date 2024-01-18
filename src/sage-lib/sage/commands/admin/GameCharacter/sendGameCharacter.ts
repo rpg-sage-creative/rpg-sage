@@ -1,5 +1,5 @@
+import { mapAsync } from "@rsc-utils/async-array-utils";
 import type { Message } from "discord.js";
-import { Collection } from "../../../../../sage-utils/utils/ArrayUtils";
 import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import { DiscordId, type TChannel } from "../../../../discord";
 import { sendWebhook } from "../../../../discord/messages";
@@ -34,7 +34,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	renderableContent.append(`<b>Dialog Color</b> ${character.embedColor ?? "<i>unset</i>"}`);
 
 	const autoChannels = character.autoChannels;
-	const autoChannelItems = await Collection.mapAsync(autoChannels, async data => {
+	const autoChannelItems = await mapAsync(autoChannels, async data => {
 		const parts: string[] = [];
 		parts.push(DiscordId.toChannelReference(data.channelDid) ?? data.channelDid);
 		if (data.dialogPostType !== undefined) {

@@ -1,7 +1,9 @@
 import { addLogHandler, captureProcessExit, error, formatArg, info, verbose, type LogLevel } from "@rsc-utils/console-utils";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { chunk } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import * as Discord from "discord.js";
+import type { ClientOptions, Guild, GuildBan, GuildMember, Interaction, Message, MessageReaction, PartialGuildMember, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
+import { Client } from "discord.js";
 import { MessageType, ReactionType } from "../../discord";
 import { setDeleted } from "../../discord/deletedMessages";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
@@ -12,35 +14,35 @@ import SageCache from "./SageCache";
 
 interface IClientEventHandler {
 	onClientReady(): void;
-	onClientGuildCreate(guild: Discord.Guild): void;
-	onClientGuildDelete(guild: Discord.Guild): void;
-	onClientGuildBanAdd(ban: Discord.GuildBan): void;
-	onClientGuildBanRemove(ban: Discord.GuildBan): void;
-	onClientGuildMemberUpdate(member: Discord.GuildMember | Discord.PartialGuildMember, originalMember: Discord.GuildMember): void;
-	onClientGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember): void;
-	onClientMessageCreate(message: Discord.Message): void;
-	onClientMessageUpdate(originalMessage: Discord.Message | Discord.PartialMessage, message: Discord.Message | Discord.PartialMessage): void;
-	onClientMessageReactionAdd(messageReaction: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.User | Discord.PartialUser): void;
-	onClientMessageReactionRemove(messageReaction: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.User | Discord.PartialUser): void;
+	onClientGuildCreate(guild: Guild): void;
+	onClientGuildDelete(guild: Guild): void;
+	onClientGuildBanAdd(ban: GuildBan): void;
+	onClientGuildBanRemove(ban: GuildBan): void;
+	onClientGuildMemberUpdate(member: GuildMember | PartialGuildMember, originalMember: GuildMember): void;
+	onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void;
+	onClientMessageCreate(message: Message): void;
+	onClientMessageUpdate(originalMessage: Message | PartialMessage, message: Message | PartialMessage): void;
+	onClientMessageReactionAdd(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void;
+	onClientMessageReactionRemove(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void;
 }
 
-function createDiscordClientOptions(): Discord.ClientOptions {
+function createDiscordClientOptions(): ClientOptions {
 	return { intents:registeredIntents() };
 }
 
 export default class ActiveBot extends Bot implements IClientEventHandler {
 	public static active: ActiveBot;
 	public static get isDev(): boolean { return ActiveBot.active?.codeName === "dev"; }
-	public static isActiveBot(userDid: Optional<Discord.Snowflake>): boolean {
+	public static isActiveBot(userDid: Optional<Snowflake>): boolean {
 		return ActiveBot.active?.did === userDid;
 	}
 
-	public client: Discord.Client;
+	public client: Client;
 
 	private constructor(core: IBotCore) {
 		super(core, null!);
 
-		this.client = new Discord.Client(createDiscordClientOptions());
+		this.client = new Client(createDiscordClientOptions());
 		captureProcessExit(() => {
 			info("Destroying Discord.Client");
 			this.client.destroy();
@@ -103,7 +105,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		this.client.login(this.token);
 	}
 
-	onInteractionCreate(interaction: Discord.Interaction): void {
+	onInteractionCreate(interaction: Interaction): void {
 		handleInteraction(interaction).then(data => {
 			if (data.handled > 0 || data.tested > 0) {
 				const commandName = interaction.isCommand() ? interaction.commandName : "";
@@ -144,19 +146,19 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		}
 	}
 
-	onClientGuildCreate(guild: Discord.Guild): void {
+	onClientGuildCreate(guild: Guild): void {
 		this.sageCache.servers.initializeServer(guild).then(initialized => {
 			verbose(`Discord.Client.on("guildCreate", "${guild.id}::${guild.name}") => ${initialized}`);
 		});
 	}
 
-	onClientGuildDelete(guild: Discord.Guild): void {
+	onClientGuildDelete(guild: Guild): void {
 		this.sageCache.servers.retireServer(guild).then(retired => {
 			verbose(`NOT IMPLEMENTED: Discord.Client.on("guildDelete", "${guild.id}::${guild.name}") => ${retired}`);
 		});
 	}
 
-	onClientGuildBanAdd(ban: Discord.GuildBan): void {
+	onClientGuildBanAdd(ban: GuildBan): void {
 		const user = ban.user;
 		if (ActiveBot.isActiveBot(user.id)) {
 			const guild = ban.guild;
@@ -166,7 +168,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		}
 	}
 
-	onClientGuildBanRemove(ban: Discord.GuildBan): void {
+	onClientGuildBanRemove(ban: GuildBan): void {
 		const user = ban.user;
 		if (ActiveBot.isActiveBot(user.id)) {
 			const guild = ban.guild;
@@ -175,7 +177,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		}
 	}
 
-	onClientGuildMemberUpdate(originalMember: Discord.GuildMember | Discord.PartialGuildMember, updatedMember: Discord.GuildMember): void {
+	onClientGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): void {
 		handleGuildMemberUpdate(originalMember, updatedMember).then(updated => {
 			if (updated) {
 				verbose(`Discord.Client.on("guildMemberUpdate", "${originalMember.id}::${originalMember.displayName}", "${updatedMember.id}::${updatedMember.displayName}")`);
@@ -183,7 +185,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		});
 	}
 
-	onClientGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember): void {
+	onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void {
 		if (ActiveBot.isActiveBot(member.id)) {
 			this.sageCache.servers.retireServer(member.guild, true).then(retired => {
 				verbose(`NOT IMPLEMENTED: Discord.Client.on("guildMemberRemove", "${member.id}::${member.displayName}") => ${retired}`);
@@ -191,7 +193,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		}
 	}
 
-	onClientMessageCreate(message: Discord.Message): void {
+	onClientMessageCreate(message: Message): void {
 		handleMessage(message, null, MessageType.Post).then(data => {
 			if (data.handled > 0) {
 				verbose(`Discord.Client.on("message", "${message.id}") => ${data.tested}.${data.handled}`);
@@ -199,7 +201,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		});
 	}
 
-	onClientMessageUpdate(originalMessage: Discord.Message | Discord.PartialMessage, updatedMessage: Discord.Message | Discord.PartialMessage): void {
+	onClientMessageUpdate(originalMessage: Message | PartialMessage, updatedMessage: Message | PartialMessage): void {
 		handleMessage(updatedMessage, originalMessage, MessageType.Edit).then(data => {
 			if (data.handled > 0) {
 				verbose(`Discord.Client.on("messageUpdate", "${originalMessage.id}", "${updatedMessage.id}") => ${data.tested}.${data.handled}`);
@@ -207,7 +209,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		});
 	}
 
-	onClientMessageReactionAdd(messageReaction: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.User | Discord.PartialUser): void {
+	onClientMessageReactionAdd(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void {
 		handleReaction(messageReaction, user, ReactionType.Add).then(data => {
 			if (data.handled > 0) {
 				verbose(`Discord.Client.on("messageReactionAdd", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
@@ -215,7 +217,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 		});
 	}
 
-	onClientMessageReactionRemove(messageReaction: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.User | Discord.PartialUser): void {
+	onClientMessageReactionRemove(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void {
 		handleReaction(messageReaction, user, ReactionType.Remove).then(data => {
 			if (data.handled > 0) {
 				verbose(`Discord.Client.on("messageReactionRemove", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
@@ -238,7 +240,7 @@ export default class ActiveBot extends Bot implements IClientEventHandler {
 
 }
 
-async function handleGuildMemberUpdate(originalMember: Discord.GuildMember | Discord.PartialGuildMember, updatedMember: Discord.GuildMember): Promise<boolean>;
-async function handleGuildMemberUpdate(_: Discord.GuildMember | Discord.PartialGuildMember, __: Discord.GuildMember): Promise<boolean> {
+async function handleGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): Promise<boolean>;
+async function handleGuildMemberUpdate(_: GuildMember | PartialGuildMember, __: GuildMember): Promise<boolean> {
 	return true;
 }

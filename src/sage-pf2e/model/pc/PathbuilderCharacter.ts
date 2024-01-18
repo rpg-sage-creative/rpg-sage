@@ -1,3 +1,4 @@
+import { Collection } from "@rsc-utils/array-utils";
 import { debug, errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/fs-utils";
 import { getJson } from "@rsc-utils/https-utils";
@@ -7,7 +8,6 @@ import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/types";
-import utils from "../../../sage-utils";
 import CharacterBase, { CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
 import type { GetStatPrefix, TProficiency, TSavingThrow } from "../../common";
 import { getSavingThrows, toModifier } from "../../common";
@@ -707,7 +707,7 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 		});
 
 		this.abilities = Abilities.for(this);
-		this.feats = utils.ArrayUtils.Collection.from(this.core.feats ?? []);
+		this.feats = Collection.from(this.core.feats ?? []);
 		this.savingThrows = SavingThrows.for(this);
 	}
 
@@ -739,7 +739,7 @@ export default class PathbuilderCharacter extends CharacterBase<TPathbuilderChar
 
 	/** Implements IHasAbilities */
 	public abilities: Abilities;
-	public feats: utils.ArrayUtils.Collection<TPathbuilderCharacterFeat>;
+	public feats: Collection<TPathbuilderCharacterFeat>;
 	public savingThrows: SavingThrows;
 
 	public get level(): number {

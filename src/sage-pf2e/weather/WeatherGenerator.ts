@@ -2,10 +2,9 @@ import { rollDiceString, rollDie, type SimpleDice } from "@rsc-utils/dice-utils"
 import { randomBoolean, randomInt } from "@rsc-utils/random-utils";
 import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import { isDefined } from "@rsc-utils/type-utils";
-import type { CloudCoverTableItem } from "..";
+import { WindStrength, rollOnTable, rollTemperatureVariation, type CloudCoverTableItem, type PrecipitationTableItem, type WindTableItem } from "..";
 import GDate from "../../sage-cal/pf2e/GDate";
 import { SeasonType } from "../../sage-utils";
-import * as tables from "./tables";
 import {
 	ClimateType,
 	CloudCoverType,
@@ -44,7 +43,7 @@ export interface IWeatherDayResult {
 	precipIntensity?: PrecipitationIntensityType;
 	precipStart?: number;
 	precipDuration?: number;
-	precipItem?: tables.PrecipitationTableItem;
+	precipItem?: PrecipitationTableItem;
 	windStrength?: WindType;
 	hours: IWeatherHourResult[];
 	description?: string;
@@ -263,7 +262,7 @@ function cloudCoverToString(cloudCover: CloudCoverType): string {
 	}
 	return cloudCover ? "Overcast" : "Clear";
 }
-function mapHours({ oldResult, hour, precip, day, windItem }: { oldResult: IWeatherHourResult; hour: number; precip?:tables.PrecipitationTableItem; day:IWeatherDayResult; windItem:tables.WindTableItem; }): IWeatherHourResult {
+function mapHours({ oldResult, hour, precip, day, windItem }: { oldResult: IWeatherHourResult; hour: number; precip?:PrecipitationTableItem; day:IWeatherDayResult; windItem:WindTableItem; }): IWeatherHourResult {
 	const hourPrecip = precip && day.precipStart! <= hour && hour < day.precipStart! + day.precipDuration! ? precip.precipitation : undefined,
 		hourResult = createHourResult(day, hour, oldResult.temp, hourPrecip, windItem);
 	if (!hourResult.precipitation) {
@@ -277,9 +276,9 @@ function createHourlyResults(days: IWeatherDayResult[]): void {
 	/*// const nowHour = (new Date()).getHours();*/
 	days.forEach((day, dayIndex) => {
 		let hasPrecip = false;
-		let precip: tables.PrecipitationTableItem | undefined;
+		let precip: PrecipitationTableItem | undefined;
 		let precipEnd: number | null = null;
-		let windItem: tables.WindTableItem;
+		let windItem: WindTableItem;
 		if (isDefined(day.precipIntensity) && isDefined(day.precipStart)) {
 			hasPrecip = true;
 
@@ -292,7 +291,7 @@ function createHourlyResults(days: IWeatherDayResult[]): void {
 
 			if (precip.precipitation === HeavySnow && day.windStrength >= WindType.Severe) {
 				// If Heavy Snow and Severe Wind, there is a 20% (1 in 5) chance of a Blizzard
-				precip = <tables.PrecipitationTableItem>{ precipitation: "Blizzard", duration: "2d12", min: 1, max: 1 };
+				precip = <PrecipitationTableItem>{ precipitation: "Blizzard", duration: "2d12", min: 1, max: 1 };
 				if (rollDie(5) === 5) {
 					day.precipDuration = roll("2d12");
 				}
@@ -321,7 +320,7 @@ function doYesterday(days: IWeatherDayResult[], todayIndex: number, todayHasPrec
 }
 
 /** If precipitation carroes over to the next day, we need to preconfigure the weather event in .hours */
-function doTomorrow(days: IWeatherDayResult[], todayIndex: number, todayHasPrecip: boolean, windItem: tables.WindTableItem, precipEnd: number | null, precip?: tables.PrecipitationTableItem): void {
+function doTomorrow(days: IWeatherDayResult[], todayIndex: number, todayHasPrecip: boolean, windItem: WindTableItem, precipEnd: number | null, precip?: PrecipitationTableItem): void {
 	if (todayHasPrecip && precipEnd! > 23) {
 		const tomorrow = days[todayIndex + 1];
 		if (tomorrow) {
@@ -331,7 +330,7 @@ function doTomorrow(days: IWeatherDayResult[], todayIndex: number, todayHasPreci
 		}
 	}
 }
-function createHourResult(day: IWeatherDayResult, hour: number, temp: number, precipitation?: string, wind?: tables.WindTableItem): IWeatherHourResult {
+function createHourResult(day: IWeatherDayResult, hour: number, temp: number, precipitation?: string, wind?: WindTableItem): IWeatherHourResult {
 	if (precipitation && precipitation.includes("Sleet")) {
 		precipitation = precipitation.split("|")[temp < 40 ? 1 : 0];
 	}
@@ -370,21 +369,21 @@ function normalizeHourlyResults(days: IWeatherDayResult[]): void {
 	});
 }
 
-function getPrecipitation(intensity: PrecipitationIntensityType, temp: number): tables.PrecipitationTableItem {
+function getPrecipitation(intensity: PrecipitationIntensityType, temp: number): PrecipitationTableItem {
 	const key = `${PrecipitationIntensityType[intensity]}${temp < 32 ? "F" : "Unf"}rozenPrecipitation`;
-	return tables.rollOnTable(key);
+	return rollOnTable(key);
 }
-function getWind(precip?: tables.PrecipitationTableItem): tables.WindTableItem {
+function getWind(precip?: PrecipitationTableItem): WindTableItem {
 	if (precip) {
 		const lower = precip.precipitation.toLowerCase();
 		if (lower.includes("fog")) {
-			return JSON.parse(JSON.stringify(tables.WindStrength[0]));
+			return JSON.parse(JSON.stringify(WindStrength[0]));
 		}
 		if (lower.includes("thunderstorm")) {
-			return tables.rollOnTable("ThunderstormWinds");
+			return rollOnTable("ThunderstormWinds");
 		}
 	}
-	return tables.rollOnTable("WindStrength");
+	return rollOnTable("WindStrength");
 }
 function getOvercastVariation(isOvercast: boolean, hasPrecip: boolean, season: SeasonType): -10 | 0 | 10 {
 	if (isOvercast && !hasPrecip) {
@@ -394,7 +393,7 @@ function getOvercastVariation(isOvercast: boolean, hasPrecip: boolean, season: S
 }
 function randomWeather(properties: IGenParameters, date: GDate): IWeatherDayResult[] {
 	const season = date.temperateSeasonType as unknown as SeasonType,
-		tempVariationItem = tables.rollTemperatureVariation(properties.climate),
+		tempVariationItem = rollTemperatureVariation(properties.climate),
 		tempVariation = roll(tempVariationItem.variation),
 		days: IWeatherDayResult[] = [];
 
@@ -404,7 +403,7 @@ function randomWeather(properties: IGenParameters, date: GDate): IWeatherDayResu
 			hasPrecip = testForPrecipitation(precipFrequency),
 			precipIntensity = hasPrecip ? getBasePrecipitationIntensity(properties.climate, season, properties.elevation) : undefined,
 
-			cloudCoverItem = hasPrecip ? null : tables.rollOnTable<CloudCoverTableItem>("CloudCover"),
+			cloudCoverItem = hasPrecip ? null : rollOnTable<CloudCoverTableItem>("CloudCover"),
 			cloudCover = hasPrecip ? CloudCoverType.Overcast : CloudCoverType[<keyof typeof CloudCoverType>cloudCoverItem!.cloudCover],
 			isOvercast = cloudCover === CloudCoverType.Overcast,
 

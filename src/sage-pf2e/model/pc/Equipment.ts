@@ -1,6 +1,5 @@
 import { warn } from "@rsc-utils/console-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import utils from "../../../sage-utils";
 import { DEXTERITY, STRENGTH } from "../../common";
 import AlchemicalItem from "../AlchemicalItem";
 import Bulk from "../Bulk";
@@ -173,7 +172,7 @@ export default class Equipment {
 		const iterator = args.pop(),
 			filter = args.pop();
 		if (filter) {
-			utils.ArrayUtils.Collection.filterThenEach(this.items as T[], filter as TFilter<T>, iterator as TFilteredIterator<T>, this);
+			(this.items as T[]).filter(filter, this).forEach(iterator as TIterator<T>, this);
 		}else {
 			(this.items as T[]).forEach(iterator as TIterator<T>, this);
 		}

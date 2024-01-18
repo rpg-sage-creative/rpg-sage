@@ -1,4 +1,4 @@
-import NamedCollection from "./NamedCollection";
+import type { NamedCollection } from "./NamedCollection";
 
 export type TMacro = {
 	category?: string;

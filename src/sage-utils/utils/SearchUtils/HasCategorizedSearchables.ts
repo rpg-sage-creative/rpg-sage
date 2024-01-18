@@ -1,4 +1,4 @@
-import { sortAscending } from "../ArrayUtils/Sort";
+import { sortPrimitive } from "@rsc-utils/array-utils";
 import type { ISearchable } from "./types";
 
 type TCategorizedSearchables<T extends ISearchable> = {
@@ -26,15 +26,16 @@ function partitionCategorizedSearchables<T extends ISearchable>(searchables: T[]
 }
 
 function sortByLabel<T extends ISearchable>(a: TCategorizedSearchables<T>, b: TCategorizedSearchables<T>): number {
-	return sortAscending(a.label, b.label);
+	return sortPrimitive(a.label, b.label);
 }
 
 function sortByName<T extends ISearchable>(a: T, b: T): number {
-	return sortAscending(a.name, b.name);
+	return sortPrimitive(a.name, b.name);
 }
 
 function sortByCountThenLabel<T extends ISearchable>(a: TCategorizedSearchables<T>, b: TCategorizedSearchables<T>): number {
-	return sortAscending(b.searchables.length, a.searchables.length) || sortAscending(a.label, b.label);
+	return sortPrimitive(b.searchables.length, a.searchables.length)
+		|| sortPrimitive(a.label, b.label);
 }
 
 export default class HasCategorizedSearchables<T extends ISearchable> {

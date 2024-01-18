@@ -1,6 +1,7 @@
+import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/array-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import type { IComparable, ISearchable, TSortResult } from "../../../sage-utils";
-import utils from "../../../sage-utils";
+import type { ISearchable } from "../../../sage-utils";
+import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { TParsedSource, parseSources } from "../../data/Repository";
 import type Base from "./Base";
 import type { SourcedCore, TSourceInfo } from "./HasSource";
@@ -74,7 +75,7 @@ export default class AonBase
 		HasSource<AonBaseCore>
 	implements
 		IHasArchives,
-		IComparable<AonBase>,
+		Comparable<AonBase>,
 		IHasLink,
 		IHasName,
 		ISearchable {
@@ -138,17 +139,17 @@ export default class AonBase
 
 	// #endregion IHasLink
 
-	// #region utils.ArrayUtils.Sort.IComparable
+	// #region Comparable
 
-	public compareTo(other: AonBase): TSortResult {
-		const sortAscending = utils.ArrayUtils.Sort.sortAscending;
+	public compareTo(other: AonBase): SortResult {
+		const sortAscending = sortPrimitive;
 		return sortAscending(this.objectType, other.objectType)
 			|| sortAscending(this.nameClean, other.nameClean)
 			|| sortAscending(this.nameLower, other.nameLower)
 			|| sortAscending(this.name, other.name);
 	}
 
-	// #endregion utils.ArrayUtils.Sort.IComparable
+	// #endregion Comparable
 
 	// #region utils.SearchUtils.ISearchable
 
@@ -158,11 +159,11 @@ export default class AonBase
 			: this.objectType;
 	}
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		return searchInfo.score(this, searchInfo.globalFlag ? this.core.text : this.name);
 	}
 
-	public searchRecursive(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this>[] {
+	public searchRecursive(searchInfo: SearchInfo): SearchScore<this>[] {
 		return [this.search(searchInfo)];
 	}
 
@@ -172,7 +173,7 @@ export default class AonBase
 
 	// #endregion utils.SearchUtils.ISearchable
 
-	public static searchRecursive(core: AonBaseCore, searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<AonBase>[] {
+	public static searchRecursive(core: AonBaseCore, searchInfo: SearchInfo): SearchScore<AonBase>[] {
 		return new AonBase(core).searchRecursive(searchInfo);
 	}
 }

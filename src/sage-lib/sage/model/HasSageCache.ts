@@ -77,7 +77,7 @@ export default abstract class HasSageCache<T extends HasSageCacheCore, U extends
 		// 		// for (const channel of categoryChannels) {
 		// 		// 	categoryGames.push(await server.getActiveGameByChannelDid(channel.id));
 		// 		// }
-		// 		// const categoryGames = await utils.ArrayUtils.Async.map(categoryChannels, channel => server.getActiveGameByChannelDid(channel.id));
+		// 		// const categoryGames = await mapAsync(categoryChannels, channel => server.getActiveGameByChannelDid(channel.id));
 		// 		const categoryGame = categoryGames[0];
 		// 		if (categoryGame) {
 		// 			return this.caches.games.getById(categoryGame.id);

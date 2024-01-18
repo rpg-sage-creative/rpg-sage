@@ -1,10 +1,9 @@
 import { StringMatcher } from "@rsc-utils/string-utils";
-import utils from "../../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import RenderableContent from "../../data/RenderableContent";
-import type { IFile } from "../../data/Repository";
-import * as Repository from "../../data/Repository";
+import { findByValue, type IFile } from "../../data/Repository";
 import Base, { BaseCore } from "./Base";
-import { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 
 export interface SourceCore extends BaseCore<"Source"> {
 	apName?: string;
@@ -77,7 +76,7 @@ export default class Source extends Base<SourceCore, "Source"> {
 	// #endregion IHasName
 
 	// #region utils.RenderUtils.IRenderable
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.isAp || this.is3PP) {
@@ -111,7 +110,7 @@ export default class Source extends Base<SourceCore, "Source"> {
 
 	// #region Static Properties
 	public static CoreCode = "PZO2101";
-	public static get Core(): Source { return crb ?? (crb = Repository.findByValue("Source", Source.CoreCode)); }
+	public static get Core(): Source { return crb ?? (crb = findByValue("Source", Source.CoreCode)); }
 
 	// #endregion Static Properties
 

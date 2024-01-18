@@ -1,7 +1,7 @@
 import { warn } from "@rsc-utils/console-utils";
 import { toSuperscript } from "@rsc-utils/number-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import utils from "../../../sage-utils";
+import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type HasSource from "./HasSource";
 import Source from "./Source";
 
@@ -14,7 +14,7 @@ export default class SourceNotationMap<T extends HasSource> {
 		this.addByHasSource(items);
 	}
 
-	public appendNotatedItems(content: utils.RenderUtils.RenderableContent, items: T[]): void {
+	public appendNotatedItems(content: RenderableContent, items: T[]): void {
 		if (this.isEmpty) {
 			content.append(items.map(item => item.toSearchResult()).join(", "));
 		} else {
@@ -60,7 +60,7 @@ export default class SourceNotationMap<T extends HasSource> {
 		return this.sources.length - (this.includeCore ? 0 : 1);
 	}
 
-	public static appendNotatedItems<T extends HasSource>(content: utils.RenderUtils.RenderableContent, items: T[]): void {
+	public static appendNotatedItems<T extends HasSource>(content: RenderableContent, items: T[]): void {
 		new SourceNotationMap(items).appendNotatedItems(content, items);
 	}
 	public static filterByHasSource<T extends HasSource>(item: T): boolean {

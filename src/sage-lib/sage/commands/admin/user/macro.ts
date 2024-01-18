@@ -1,6 +1,6 @@
+import { toUniqueDefined } from "@rsc-utils/array-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import utils from "../../../../../sage-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import type SageMessage from "../../../model/SageMessage";
 import type { TMacro } from "../../../model/User";
@@ -55,7 +55,7 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 
 	} else {
 		const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>macro-list</b>`);
-		const categories = macros.map(macro => macro.category).filter<string>(utils.ArrayUtils.Filters.existsAndUnique);
+		const categories = macros.map(macro => macro.category).filter<string>(toUniqueDefined);
 		categories.unshift(UNCATEGORIZED);
 		categories.forEach(category => {
 			const byCategory = macros.filter(macro => (macro.category ?? UNCATEGORIZED) === category);

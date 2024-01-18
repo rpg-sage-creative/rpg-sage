@@ -1,13 +1,14 @@
 import { Cache } from "@rsc-utils/cache-utils";
 import { debug } from "@rsc-utils/console-utils";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
-import type * as Discord from "discord.js";
+import type { Message, MessageAttachment, User } from "discord.js";
 import type { IHasChannels, IHasGame } from ".";
+import type { SlashCommandGameType } from "../../../SlashTypes.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import utils from "../../../sage-utils";
-import type { SlashCommandGameType } from "../../../SlashTypes.js";
+import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { DInteraction, DUser, DiscordKey, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
 import { deleteMessages } from "../../discord/deletedMessages";
 import { resolveToEmbeds } from "../../discord/embeds";
@@ -91,9 +92,9 @@ export default class SageInteraction<T extends DInteraction = any>
 
 	//#endregion
 
-	public getAttachment(name: string): Discord.MessageAttachment | null;
-	public getAttachment(name: string, required: true): Discord.MessageAttachment;
-	public getAttachment(name: string, required = false): Discord.MessageAttachment | null {
+	public getAttachment(name: string): MessageAttachment | null;
+	public getAttachment(name: string, required: true): MessageAttachment;
+	public getAttachment(name: string, required = false): MessageAttachment | null {
 		return this.interaction.isCommand() ? this.interaction.options.getAttachment(name, required) : null;
 	}
 
@@ -101,9 +102,9 @@ export default class SageInteraction<T extends DInteraction = any>
 		return this.getAttachment(name) !== null;
 	}
 
-	public getAttachmentPdf(name: string): Discord.MessageAttachment | null;
-	public getAttachmentPdf(name: string, required: true): Discord.MessageAttachment;
-	public getAttachmentPdf(name: string, required = false): Discord.MessageAttachment | null {
+	public getAttachmentPdf(name: string): MessageAttachment | null;
+	public getAttachmentPdf(name: string, required: true): MessageAttachment;
+	public getAttachmentPdf(name: string, required = false): MessageAttachment | null {
 		const attachment = this.interaction.isCommand() ? this.interaction.options.getAttachment(name, required) : null;
 		return attachment?.contentType === "application/pdf" ? attachment : null;
 	}
@@ -161,7 +162,7 @@ export default class SageInteraction<T extends DInteraction = any>
 	//#region defer/reply
 
 	/** Flag toggled when followUp() is called. */
-	private updates: Discord.Message<boolean>[] = [];
+	private updates: Message<boolean>[] = [];
 
 	/** Defers the interaction so that a reply can be sent later. */
 	public defer(ephemeral: boolean): Promise<void> {
@@ -203,7 +204,7 @@ export default class SageInteraction<T extends DInteraction = any>
 			const embeds = resolveToEmbeds(this.caches, renderable);
 			if (this.interaction.deferred || this.interaction.replied) {
 				if (ephemeral || this.interaction.ephemeral) {
-					this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Discord.Message<boolean>);
+					this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Message<boolean>);
 					return Promise.resolve();
 				}else {
 					return this.interaction.editReply({ embeds:embeds }) as any;
@@ -219,7 +220,7 @@ export default class SageInteraction<T extends DInteraction = any>
 		return this.pushToReplyStack(async () => {
 			if (this.interaction.replied) {
 				const embeds = resolveToEmbeds(this.caches, renderable);
-				this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Discord.Message<boolean>);
+				this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Message<boolean>);
 			}else {
 				await this.reply(renderable, ephemeral);
 			}
@@ -227,16 +228,16 @@ export default class SageInteraction<T extends DInteraction = any>
 	}
 
 	/** Sends a full message to the channel or user the interaction originated in. */
-	public send(renderableContentResolvable: TRenderableContentResolvable): Promise<Discord.Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel): Promise<Discord.Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel, originalAuthor: Discord.User): Promise<Discord.Message[]>;
-	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.interaction.channel as TChannel, originalAuthor = this.interaction.user): Promise<Discord.Message[]> {
+	public send(renderableContentResolvable: TRenderableContentResolvable): Promise<Message[]>;
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel): Promise<Message[]>;
+	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.interaction.channel as TChannel, originalAuthor = this.interaction.user): Promise<Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			return [];
 		}
 		// check to see if we have channel send message permissions
-		const renderableContent = utils.RenderUtils.RenderableContent.resolve(renderableContentResolvable);
+		const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 		if (renderableContent) {
 			return send(this.caches, targetChannel, renderableContent, originalAuthor);
 		}
@@ -256,7 +257,7 @@ export default class SageInteraction<T extends DInteraction = any>
 	}
 
 	/** Returns the channelDid this message (or its thread) is in. */
-	public get channelDid(): Discord.Snowflake | undefined {
+	public get channelDid(): Snowflake | undefined {
 		return this.cache.get("channelDid", () => {
 			if (this.interaction.channel?.isThread()) {
 				return this.interaction.channel.parentId ?? undefined;
@@ -276,7 +277,7 @@ export default class SageInteraction<T extends DInteraction = any>
 	}
 
 	/** Returns the threadDid this message is in. */
-	public get threadDid(): Discord.Snowflake | undefined {
+	public get threadDid(): Snowflake | undefined {
 		return this.cache.get("threadDid", () => {
 			if (this.interaction.channel?.isThread()) {
 				return this.interaction.channelId;
@@ -286,7 +287,7 @@ export default class SageInteraction<T extends DInteraction = any>
 	}
 
 	/** Returns either the message's threadDid or channelDid if there is no thread. */
-	public get threadOrChannelDid(): Discord.Snowflake {
+	public get threadOrChannelDid(): Snowflake {
 		return this.cache.get("channelDid", () => this.threadDid ?? this.channelDid ?? this.interaction.channelId);
 	}
 

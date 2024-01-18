@@ -1,8 +1,7 @@
 import { deleteFileSync, writeFile } from "@rsc-utils/fs-utils";
 import { getBuffer } from "@rsc-utils/https-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
-import * as _PDFParser from "pdf2json";
-const PDFParser: typeof _PDFParser = _PDFParser.default;
+import PDFParser from "pdf2json";
 
 export class PdfCacher {
 

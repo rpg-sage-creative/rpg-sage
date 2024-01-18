@@ -1,11 +1,10 @@
+import { type SortResult, sortPrimitive } from "@rsc-utils/array-utils";
 import { error } from "@rsc-utils/console-utils";
 import { getJson } from "@rsc-utils/https-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import { GameType } from "../../../sage-common";
 import type AonBase from "../../../sage-pf2e/model/base/AonBase";
-import type { TSortResult } from "../../../sage-utils";
-import { sortAscending, sortDescending } from "../../../sage-utils/utils/ArrayUtils/Sort";
 import type { SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { GameSearchInfo } from "../../GameSearchInfo";
 import type { TParsedSearchInfo } from "../../common";
@@ -113,22 +112,24 @@ function ensurePlusMinusTypes(plus: string[], minus: string[]): TPlusMinus {
 	return { plus, minus };
 }
 
-function sort(aValue: string, bValue: string, plusMinus: TPlusMinus, plus: boolean): TSortResult {
-	const sorter = plus ? sortDescending : sortAscending,
+function sort(aValue: string, bValue: string, plusMinus: TPlusMinus, plus: boolean): SortResult {
+	const sorter = sortPrimitive,
 		array = plusMinus[plus ? "plus" : "minus"],
 		aIndex = array.indexOf(aValue),
 		bIndex = array.indexOf(bValue);
-	return sorter(aIndex, bIndex);
+	return plus
+		? sorter(aIndex, bIndex)
+		: sorter(bIndex, aIndex);
 }
 
 // function sortResults(a: TScore, b: TScore, types: TPlusMinus, rarities: TPlusMinus): TSortResult {
-function sortResults(a: TScore, b: TScore, types: TPlusMinus, _: TPlusMinus): TSortResult {
+function sortResults(a: TScore, b: TScore, types: TPlusMinus, _: TPlusMinus): SortResult {
 	return sort(a.searchable.objectTypeLower, b.searchable.objectTypeLower, types, true)
 		// || sort(a.searchable.rarityLower, b.searchable.rarityLower, rarities, true)
 		// || sort(a.searchable.rarityLower, b.searchable.rarityLower, rarities, false)
 		|| sort(a.searchable.objectTypeLower, b.searchable.objectTypeLower, types, false)
-		|| sortDescending(a.totalHits, b.totalHits)
-		|| sortAscending(a.searchable.name, b.searchable.name);
+		|| sortPrimitive(b.totalHits, a.totalHits)
+		|| sortPrimitive(a.searchable.name, b.searchable.name);
 }
 
 //#endregion

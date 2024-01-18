@@ -1,14 +1,14 @@
+import { Collection } from "@rsc-utils/array-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { UUID, randomUuid } from "@rsc-utils/uuid-utils";
 import type * as Discord from "discord.js";
-import utils from "../../../sage-utils";
 import type { DiscordKey } from "../../discord";
 import CharactersMatch from "./CharactersMatch";
 import type Game from "./Game";
 import type { GameCharacterCore, TDialogMessage, TGameCharacterType } from "./GameCharacter";
 import GameCharacter from "./GameCharacter";
 import type { IHasSave } from "./NamedCollection";
-import NamedCollection from "./NamedCollection";
+import { NamedCollection } from "./NamedCollection";
 import type User from "./User";
 
 /*
@@ -157,8 +157,8 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	}
 
 	/** We likely don't want a CharacterManager if we map to a non-named value. */
-	public map<T>(callbackfn: (value: GameCharacter, index: number, collection: CharacterManager) => T, thisArg?: any): utils.ArrayUtils.Collection<T> {
-		const mapped = new utils.ArrayUtils.Collection<T>();
+	public map<T>(callbackfn: (value: GameCharacter, index: number, collection: CharacterManager) => T, thisArg?: any): Collection<T> {
+		const mapped = new Collection<T>();
 		this.forEach((value, index, collection) => mapped.push(callbackfn.call(thisArg, value, index, collection)));
 		return mapped;
 	}
@@ -226,7 +226,7 @@ export interface CharacterManager {
 
 	forEach(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => void, thisArg?: any): void;
 
-	map<T>(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => T, thisArg?: any): utils.ArrayUtils.Collection<T>;
+	map<T>(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => T, thisArg?: any): Collection<T>;
 	// map<T extends GameCharacter>(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => T, thisArg?: any): NamedCollection<T>;
 
 	reduce(callbackfn: (previousValue: GameCharacter, currentValue: GameCharacter, currentIndex: number, manager: CharacterManager) => GameCharacter): GameCharacter;

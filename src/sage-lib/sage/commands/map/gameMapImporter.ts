@@ -1,6 +1,7 @@
 import { debug } from "@rsc-utils/console-utils";
+import { randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { StringMatcher, dequote } from "@rsc-utils/string-utils";
-import * as Discord from "discord.js";
+import type { Guild } from "discord.js";
 import XRegExp from "xregexp";
 import { DiscordId } from "../../../discord";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
@@ -70,7 +71,7 @@ function matchUrlAndName(lines: string[]): [string?, string?] {
 	return [url, name];
 }
 
-async function parseUser(guild: Discord.Guild, userValue?: string): Promise<Discord.Snowflake | undefined> {
+async function parseUser(guild: Guild, userValue?: string): Promise<Snowflake | undefined> {
 	// don't waste time
 	if (!userValue) {
 		return undefined;
@@ -147,7 +148,7 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 		auras: [],
 		clip: clip as [number, number, number, number],
 		grid: [cols, rows, gridColor],
-		id: Discord.SnowflakeUtil.generate(),
+		id: randomSnowflake(),
 		name: name,
 		spawn: spawn as [number, number],
 		terrain: [],
@@ -186,7 +187,7 @@ function mapSectionTo<T extends TGameMapImage>(lines: string[], layerType: Layer
 
 	return {
 		auras: [],
-		id: Discord.SnowflakeUtil.generate(),
+		id: randomSnowflake(),
 		layer: layerType,
 		name,
 		pos,
@@ -286,7 +287,7 @@ export default function gameMapImporter(raw: string): TParsedGameMapCore | null 
 }
 
 
-export async function validateMapCore(parsedCore: TParsedGameMapCore, guild: Discord.Guild): Promise<TValidatedGameMapCore> {
+export async function validateMapCore(parsedCore: TParsedGameMapCore, guild: Guild): Promise<TValidatedGameMapCore> {
 	const testRenderResponse = await RenderableGameMap.testRender(parsedCore);
 
 	const invalidUserSet = new Set<string>();

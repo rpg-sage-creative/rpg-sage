@@ -1,10 +1,10 @@
 import type { Matcher, OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import utils from "../../../sage-utils";
 import { getIdMatcher } from "../../../sage-utils/utils/ClassUtils/getIdMatcher";
+import type { RenderableContent as UtilsRenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { TRarity } from "../../common";
 import { COMMON, RARITIES } from "../../common";
 import RenderableContent from "../../data/RenderableContent";
-import * as Repository from "../../data/Repository";
+import { find, findByValue } from "../../data/Repository";
 import Base, { BaseCore } from "./Base";
 import type Source from "./Source";
 import type { IHasRarity, IHasTraits, RarityCore, TraitsCore } from "./interfaces";
@@ -42,7 +42,7 @@ function doPages(sourceInfo: TSourceInfoRaw): string[] {
 }
 function parseSourceInfo(sourceInfo: TSourceInfoRaw): TSourceInfo {
 	const pages = doPages(sourceInfo);
-	const source = Repository.findByValue("Source", sourceInfo.source)!;
+	const source = findByValue("Source", sourceInfo.source)!;
 	const version = sourceInfo.version ?? 0;
 	return { pages: pages, source: source, version: version };
 }
@@ -71,7 +71,7 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 	private _source?: Source;
 	public get source(): Source {
 		if (this._source === undefined) {
-			this._source = Repository.findByValue("Source", this.core.source)!;
+			this._source = findByValue("Source", this.core.source)!;
 		}
 		return this._source;
 	}
@@ -103,7 +103,7 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 	/** Only return a UUID or undefined */
 	public get nextId(): OrUndefined<string> {
 		if (this._nextId === undefined) {
-			this._nextId = Repository.find<HasSource>(this.objectType, other =>
+			this._nextId = find<HasSource>(this.objectType, other =>
 				other.isErrata && this.idMatcher.matches(other.previousIdMatcher)
 			)?.id ?? null;
 		}
@@ -140,7 +140,7 @@ export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<a
 
 	// #region utils.RenderUtils.IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.hasTraits || this.isNotCommon) {

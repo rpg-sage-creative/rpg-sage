@@ -1,13 +1,15 @@
-import utils from "../../sage-utils";
+import { sortStringIgnoreCase } from "@rsc-utils/array-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { IHasContents, TObjectQuantity } from "../common";
 import { COMMON, MDASH } from "../common";
 import RenderableContent from "../data/RenderableContent";
 import { findByValue } from "../data/Repository";
-import type { TDetail } from "./base/interfaces";
 import Coins from "./Coins";
 import type GearCategory from "./GearCategory";
 import type { BulkCore } from "./HasBulk";
 import HasBulk from "./HasBulk";
+import type { TDetail } from "./base/interfaces";
 
 //#region Helpers
 
@@ -26,15 +28,15 @@ function contentToString(objectQuantity: TObjectQuantity<Gear>): string {
 
 export function sortGear(a: Gear, b: Gear): number {
 	if (a.category && b.category && a.category !== b.category) {
-		return utils.ArrayUtils.Sort.asStringIgnoreCase(`${a.category.name || ""}${a.name}`, `${b.category.name || ""}${b.name}`);
+		return sortStringIgnoreCase(`${a.category.name || ""}${a.name}`, `${b.category.name || ""}${b.name}`);
 	}
 	if (!a.category) {
-		return utils.ArrayUtils.Sort.asStringIgnoreCase(a.name, b.name);
+		return sortStringIgnoreCase(a.name, b.name);
 	}
 	if (a.price && b.price && a.price !== b.price) {
 		return Coins.compare(a.price, b.price);
 	}
-	return utils.ArrayUtils.Sort.asStringIgnoreCase(a.name, b.name);
+	return sortStringIgnoreCase(a.name, b.name);
 }
 
 //#endregion
@@ -95,7 +97,7 @@ export default class Gear extends HasBulk<GearCore, Gear> {
 
 	//#endregion
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 
 		const rarityAndLevelValues: string[] = [];
@@ -124,7 +126,7 @@ export default class Gear extends HasBulk<GearCore, Gear> {
 
 	//#region utils.SearchUtils.ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			const terms: string[] = [];

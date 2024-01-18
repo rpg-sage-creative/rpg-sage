@@ -1,3 +1,4 @@
+import { sortPrimitive, type SortResult } from "@rsc-utils/array-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
 import { TokenParsers, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
@@ -6,8 +7,6 @@ import { randomUuid } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
 import { correctEscapeForEmoji } from "..";
 import { GameType } from "../../../sage-common";
-import { TSortResult } from "../../../sage-utils";
-import { sortAscending } from "../../../sage-utils/utils/ArrayUtils/Sort";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import {
 	CritMethodType,
@@ -197,13 +196,13 @@ function mapRollAndIndex(sides: number, roll: number, index: number, fixed: bool
 
 type TMappedAndSortedRolls = { byIndex:TRollAndIndex[]; byRoll:TRollAndIndex[]; length:number };
 
-function sortRollAndIndex(a: TRollAndIndex, b: TRollAndIndex): TSortResult {
-	const byRoll = sortAscending(a.roll, b.roll);
+function sortRollAndIndex(a: TRollAndIndex, b: TRollAndIndex): SortResult {
+	const byRoll = sortPrimitive(a.roll, b.roll);
 	if (byRoll !== 0) {
 		return byRoll;
 	}
 	// The second sort of .index ensures that the first of two equal rolls is on the left so that we properly strike them in order.
-	return sortAscending(a.index, b.index);
+	return sortPrimitive(a.index, b.index);
 }
 
 function mapAndSortRolls({ dice, rolls }: TDicePartRoll): TMappedAndSortedRolls {

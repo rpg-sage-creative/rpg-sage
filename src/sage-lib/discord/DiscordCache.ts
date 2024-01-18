@@ -1,8 +1,8 @@
+import { filterAsync } from "@rsc-utils/async-array-utils";
 import { debug, error, info, warn } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Interaction, Message, MessageReaction, PartialMessage, Role, Snowflake, TextChannel, User, Webhook } from "discord.js";
 import { NilSnowflake } from ".";
-import { Collection } from "../../sage-utils/utils/ArrayUtils";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import ActiveBot from "../sage/model/ActiveBot";
 import type SageMessage from "../sage/model/SageMessage";
@@ -391,7 +391,7 @@ export default class DiscordCache {
 		if (!filter) {
 			return array;
 		}
-		return Collection.filterAsync(array, filter);
+		return filterAsync(array, filter);
 	}
 
 	public static fromSageMessage(sageMessage: SageMessage): DiscordCache {

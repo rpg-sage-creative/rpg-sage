@@ -1,8 +1,10 @@
+import { filterAndMap, sortComparable, toUnique, toUniqueDefined } from "@rsc-utils/array-utils";
 import { debug, error, verbose } from "@rsc-utils/console-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
 import { capitalize } from "@rsc-utils/string-utils";
+import { isDefined } from "@rsc-utils/type-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
-import utils from "../../../sage-utils";
+import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import ArgsManager from "../../discord/ArgsManager";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
@@ -15,20 +17,20 @@ import { searchHandler } from "./search";
 
 // #region Common Types and Functions
 
-function renderAllSource(objectType: string, objectTypePlural: string): utils.RenderUtils.RenderableContent {
+function renderAllSource(objectType: string, objectTypePlural: string): RenderableContent {
 	const content = createCommandRenderableContent();
-	const all = Repository.all<Source>(objectType), //.sort(utils.ArrayUtils.Sort.sortComparable),
-		categories = all.map(source => source.searchResultCategory).filter(utils.ArrayUtils.Filters.unique);
+	const all = Repository.all<Source>(objectType), //.sort(sortComparable),
+		categories = all.map(source => source.searchResultCategory).filter(toUnique);
 	content.setTitle(`<b>${objectTypePlural} (${all.length})</b>`);
 	categories.forEach(category => {
-		const byCategory = utils.ArrayUtils.Collection.filterThenMap(all, source => source.searchResultCategory === category, source => source.toSearchResult());
+		const byCategory = filterAndMap(all, source => source.searchResultCategory === category, source => source.toSearchResult());
 		content.append(`<b>${category} (${byCategory.length})</b>\n> ${byCategory.join("\n> ")}`);
 	});
 	return content;
 }
-function renderAllSkill(objectType: string, objectTypePlural: string): utils.RenderUtils.RenderableContent {
+function renderAllSkill(objectType: string, objectTypePlural: string): RenderableContent {
 	const content = createCommandRenderableContent();
-	const all = Repository.all<Skill>(objectType).sort(utils.ArrayUtils.Sort.sortComparable);
+	const all = Repository.all<Skill>(objectType).sort(sortComparable);
 	const sourceMap = new SourceNotationMap(all);
 
 	const nonLore = all.filter(skill => !skill.isSpecialty);
@@ -47,17 +49,17 @@ function renderAllSkill(objectType: string, objectTypePlural: string): utils.Ren
 // 	if (a === b) return 0;
 // 	const aParts = a.split(" ["), aLeft = aParts[0];
 // 	const bParts = b.split(" ["), bLeft = bParts[0];
-// 	const left = utils.ArrayUtils.Sort.stringIgnoreCase(aLeft, bLeft);
+// 	const left = sortStringIgnoreCase(aLeft, bLeft);
 // 	if (left === 0) return 0;
 // 	const aRight = aParts[1]?.split("]")[0] ?? "", aRarity = RARITIES.indexOf(<any>aRight);
 // 	const bRight = bParts[1]?.split("]")[0] ?? "", bRarity = RARITIES.indexOf(<any>bRight);
 // 	if (aRarity !== bRarity) return aRarity < bRarity ? -1 : 1;
-// 	return utils.ArrayUtils.Sort.stringIgnoreCase(aRight, bRight);
+// 	return sortStringIgnoreCase(aRight, bRight);
 
 // }
-function renderAllBySource(objectType: string, objectTypePlural: string): utils.RenderUtils.RenderableContent[] {
+function renderAllBySource(objectType: string, objectTypePlural: string): RenderableContent[] {
 	const _content = createCommandRenderableContent();
-	const all = Repository.all<HasSource>(objectType).sort(utils.ArrayUtils.Sort.sortComparable);
+	const all = Repository.all<HasSource>(objectType).sort(sortComparable);
 	_content.setTitle(`<b>${objectTypePlural} (${all.length})</b>`);
 
 	const sources = Repository.all<Source>("Source");
@@ -66,11 +68,11 @@ function renderAllBySource(objectType: string, objectTypePlural: string): utils.
 		if (bySource.length) {
 			const content = createCommandRenderableContent();
 			content.setTitle(`<b>${source.name} ${objectTypePlural} (${bySource.length})</b>`);
-			const categories = bySource.map(hasSource => hasSource.searchResultCategory).filter(utils.ArrayUtils.Filters.existsAndUnique);
+			const categories = bySource.map(hasSource => hasSource.searchResultCategory).filter(toUniqueDefined);
 			// categories.sort(sortCatWithRarity);
 			if (categories.length) {
 				categories.forEach(category => {
-					const byCategory = utils.ArrayUtils.Collection.filterThenMap(bySource, item => item.searchResultCategory === category, item => item.toSearchResult());
+					const byCategory = filterAndMap(bySource, item => item.searchResultCategory === category, item => item.toSearchResult());
 					content.append(`<b>${category} (${byCategory.length})</b>\n> ${byCategory.join(", ")}`);
 				});
 			} else {
@@ -79,10 +81,10 @@ function renderAllBySource(objectType: string, objectTypePlural: string): utils.
 			return content;
 		}
 		return null;
-	}).filter(utils.ArrayUtils.Filters.exists);
+	}).filter(isDefined);
 	return [_content].concat(mapped);
 }
-export function renderAll(objectType: string, objectTypePlural: string, _bySource = false): utils.RenderUtils.RenderableContent[] {
+export function renderAll(objectType: string, objectTypePlural: string, _bySource = false): RenderableContent[] {
 	verbose("renderAll", objectType, objectTypePlural);
 	try {
 		if (objectType === "Source") {
@@ -94,7 +96,7 @@ export function renderAll(objectType: string, objectTypePlural: string, _bySourc
 		if (_bySource) {
 			return renderAllBySource(objectType, objectTypePlural);
 		}
-		const all = Repository.all<HasSource>(objectType).sort(utils.ArrayUtils.Sort.sortComparable);
+		const all = Repository.all<HasSource>(objectType).sort(sortComparable);
 		const content = createCommandRenderableContent(`<b>${objectTypePlural} (${all.length})</b>`);
 		SourceNotationMap.appendNotatedItems(content, all);
 		return [content];

@@ -1,12 +1,13 @@
-import utils from "../../sage-utils";
+import { remove } from "@rsc-utils/array-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import RenderableContent from "../data/RenderableContent";
 import { findByValue } from "../data/Repository";
 import Ancestry from "./Ancestry";
-import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
 import type { FeatureCore } from "./Feature";
 import type { FeatureLevelCore } from "./Features";
 import Features from "./Features";
+import type { SourcedCore } from "./base/HasSource";
+import HasSource from "./base/HasSource";
 
 export interface HeritageCore extends SourcedCore<"Heritage"> {
 	ancestry: string;
@@ -24,7 +25,7 @@ export default class Heritage extends HasSource<HeritageCore> {
 
 	//#region utils.RenderUtils.IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		this.appendDescriptionTo(renderable);
@@ -40,7 +41,7 @@ export default class Heritage extends HasSource<HeritageCore> {
 	public static FeatureObjectType = "HeritageFeature";
 
 	public static removeFeatures(features: FeatureCore[]): FeatureCore[] {
-		return utils.ArrayUtils.Collection.remove(features, feature => feature.objectType === Heritage.FeatureObjectType);
+		return remove(features, feature => feature.objectType === Heritage.FeatureObjectType);
 	}
 	public static replaceFeatures(level: FeatureLevelCore, heritage: Heritage): void {
 		Ancestry.removeFeatures(level.features);

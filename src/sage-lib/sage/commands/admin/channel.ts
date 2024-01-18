@@ -1,9 +1,11 @@
+import { filterAsync, mapAsync } from "@rsc-utils/async-array-utils";
 import { warn } from "@rsc-utils/console-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import type * as Discord from "discord.js";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import { isDefined, type Optional } from "@rsc-utils/type-utils";
+import { GuildChannel } from "discord.js";
 import { GameType } from "../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import utils from "../../../../sage-utils";
+import { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import { DiscordCache, DiscordId, DiscordKey } from "../../../discord";
 import type Game from "../../model/Game";
 import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game";
@@ -32,7 +34,7 @@ async function channelAdd(sageMessage: SageMessage): Promise<void> {
 
 	// Grab channels from mentions, filter out those in active games
 	let channelDids = DiscordId.parseMentions(sageMessage.message).channelIds;
-	channelDids = await utils.ArrayUtils.Collection.filterAsync(channelDids, async channelDid => !(await server.findActiveGameByChannelDid(channelDid)));
+	channelDids = await filterAsync(channelDids, async channelDid => !(await server.findActiveGameByChannelDid(channelDid)));
 	if (!channelDids.length) {
 		return sageMessage.reactFailure();
 	}
@@ -48,11 +50,11 @@ async function channelAdd(sageMessage: SageMessage): Promise<void> {
 
 //#region details
 
-async function fetchGuildChannelName(discord: DiscordCache, channelDid: Discord.Snowflake): Promise<string> {
+async function fetchGuildChannelName(discord: DiscordCache, channelDid: Snowflake): Promise<string> {
 	return discord.fetchChannelName(channelDid);
 }
 
-function channelDetailsAppendActions(renderableContent: utils.RenderUtils.RenderableContent, channel: IChannel): void {
+function channelDetailsAppendActions(renderableContent: RenderableContent, channel: IChannel): void {
 	const allowed: string[] = [], blocked: string[] = [];
 	(channel.admin ? allowed : blocked).push("Admin");
 	(channel.commands ? allowed : blocked).push("Commands");
@@ -64,7 +66,7 @@ function channelDetailsAppendActions(renderableContent: utils.RenderUtils.Render
 	renderableContent.append(`[spacer]<b>Blocked</b> ${blocked.join(", ") || "<i>none</i>"}`);
 }
 
-async function channelDetailsAppendAdmin(renderableContent: utils.RenderUtils.RenderableContent, server: Server, channel: IChannel): Promise<void> {
+async function channelDetailsAppendAdmin(renderableContent: RenderableContent, server: Server, channel: IChannel): Promise<void> {
 	if (channel.admin && channel.sendCommandTo) {
 		renderableContent.append(`<b>Admin Options</b>`);
 
@@ -73,7 +75,7 @@ async function channelDetailsAppendAdmin(renderableContent: utils.RenderUtils.Re
 	}
 }
 
-async function channelDetailsAppendCommand(renderableContent: utils.RenderUtils.RenderableContent, server: Server, channel: IChannel): Promise<void> {
+async function channelDetailsAppendCommand(renderableContent: RenderableContent, server: Server, channel: IChannel): Promise<void> {
 	if (channel.commands && channel.sendCommandTo) {
 		renderableContent.append(`<b>Command Options</b>`);
 
@@ -82,7 +84,7 @@ async function channelDetailsAppendCommand(renderableContent: utils.RenderUtils.
 	}
 }
 
-async function channelDetailsAppendDialog(renderableContent: utils.RenderUtils.RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): Promise<void> {
+async function channelDetailsAppendDialog(renderableContent: RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): Promise<void> {
 	if (channel.dialog) {
 		renderableContent.append(`<b>Dialog Options</b>`);
 
@@ -97,7 +99,7 @@ async function channelDetailsAppendDialog(renderableContent: utils.RenderUtils.R
 	}
 }
 
-async function channelDetailsAppendDice(renderableContent: utils.RenderUtils.RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): Promise<void> {
+async function channelDetailsAppendDice(renderableContent: RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): Promise<void> {
 	if (channel.dice) {
 		renderableContent.append(`<b>Dice Options</b>`);
 
@@ -126,7 +128,7 @@ async function channelDetailsAppendDice(renderableContent: utils.RenderUtils.Ren
 	}
 }
 
-async function channelDetailsAppendSearch(renderableContent: utils.RenderUtils.RenderableContent, server: Server, channel: IChannel): Promise<void> {
+async function channelDetailsAppendSearch(renderableContent: RenderableContent, server: Server, channel: IChannel): Promise<void> {
 	if (channel.search && channel.sendSearchTo) {
 		renderableContent.append(`<b>Search Options</b>`);
 
@@ -135,7 +137,7 @@ async function channelDetailsAppendSearch(renderableContent: utils.RenderUtils.R
 	}
 }
 
-function channelDetailsAppendGame(renderableContent: utils.RenderUtils.RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): void {
+function channelDetailsAppendGame(renderableContent: RenderableContent, server: Server, game: Optional<Game>, channel: IChannel): void {
 	if (game) {
 		const gameType = GameType[game.gameType!] ?? "None";
 		const gameTypeText = gameType === "None" ? "" : `<i>(${gameType})</i>`;
@@ -158,7 +160,7 @@ function channelDetailsAppendGame(renderableContent: utils.RenderUtils.Renderabl
 	}
 }
 
-async function getChannelNameAndActiveGame(sageCache: SageCache, channelDid: Discord.Snowflake): Promise<[string, Game | undefined]> {
+async function getChannelNameAndActiveGame(sageCache: SageCache, channelDid: Snowflake): Promise<[string, Game | undefined]> {
 	const channel = await sageCache.discord.fetchChannel(channelDid);
 	if (!channel || channel.type === "DM") {
 		return ["DM", undefined];
@@ -202,9 +204,9 @@ export async function channelDetails(sageMessage: SageMessage, channel?: IChanne
 
 //#region list
 
-async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: IChannel[]): Promise<Discord.GuildChannel[]> {
-	const guildChannels = await utils.ArrayUtils.Collection.mapAsync(channels, async channel => sageMessage.discord.fetchChannel(channel.did));
-	const existing = guildChannels.filter(utils.ArrayUtils.Filters.exists) as Discord.GuildChannel[];
+async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: IChannel[]): Promise<GuildChannel[]> {
+	const guildChannels = await mapAsync(channels, async channel => sageMessage.discord.fetchChannel(channel.did));
+	const existing = guildChannels.filter(isDefined) as GuildChannel[];
 
 	const filter = sageMessage.args.join(" ").trim();
 	if (filter && existing.length) {

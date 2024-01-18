@@ -1,8 +1,9 @@
+import { mapAsync } from "@rsc-utils/async-array-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import type * as Discord from "discord.js";
+import type { Role } from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
-import utils from "../../../../../sage-utils";
+import { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
 import type SageMessage from "../../../model/SageMessage";
 import type Server from "../../../model/Server";
 import { AdminRoleType, IAdminRole } from "../../../model/Server";
@@ -69,7 +70,7 @@ async function serverInit(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(saved);
 }
 
-function serverDetailsDefaultTypes(renderableContent: utils.RenderUtils.RenderableContent, server: Server): void {
+function serverDetailsDefaultTypes(renderableContent: RenderableContent, server: Server): void {
 	renderableContent.append(`<b>Default Dialog Type</b> ${DialogType[server.defaultDialogType!] ?? "<i>unset (Embed)</i>"}`);
 	renderableContent.append(`<b>Default Game Type</b> ${GameType[server.defaultGameType!] ?? "<i>unset (None)</i>"}`);
 	if (server.defaultGameType === GameType.PF2e) {
@@ -79,7 +80,7 @@ function serverDetailsDefaultTypes(renderableContent: utils.RenderUtils.Renderab
 	renderableContent.append(`<b>Default Dice Post Type</b> ${DicePostType[server.defaultDicePostType!] ?? "<i>unset (Post)</i>"}`);
 	renderableContent.append(`<b>Default Dice Secret Method Type</b> ${DiceSecretMethodType[server.defaultDiceSecretMethodType!] ?? "<i>unset (Ignore)</i>"}`);
 }
-type TRole = { role:IAdminRole, discordRole:Discord.Role };
+type TRole = { role:IAdminRole, discordRole:Role };
 async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	let server: Optional<Server> = sageMessage.server;
 	if (server && !sageMessage.canAdminServer) {
@@ -92,7 +93,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const roles = <TRole[]>await utils.ArrayUtils.Collection.mapAsync(server.roles, async role => {
+	const roles = <TRole[]>await mapAsync(server.roles, async role => {
 		return {
 			role: role,
 			discordRole: await sageMessage.discord.fetchGuildRole(role.did)

@@ -1,12 +1,13 @@
-import utils from "../../sage-utils";
+import { remove } from "@rsc-utils/array-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import RenderableContent from "../data/RenderableContent";
-import * as Repository from "../data/Repository";
-import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { filter } from "../data/Repository";
 import type { FeatureCore } from "./Feature";
 import Feature from "./Feature";
 import Features from "./Features";
 import type Heritage from "./Heritage";
+import type { SourcedCore } from "./base/HasSource";
+import HasSource from "./base/HasSource";
 
 export interface AncestryCore extends SourcedCore<"Ancestry"> {
 	// adventurers: string[];
@@ -28,7 +29,7 @@ export default class Ancestry extends HasSource<AncestryCore> {
 
 	// public get adventurers(): string[] { return this.core.adventurers || []; }
 	public features = new Features([{ level: 1, features: this.core.features ?? [] }]);
-	public get heritages(): Heritage[] { return Repository.filter("Heritage", h => h.ancestry === this); }
+	public get heritages(): Heritage[] { return filter("Heritage", h => h.ancestry === this); }
 
 	//#endregion
 
@@ -45,7 +46,7 @@ export default class Ancestry extends HasSource<AncestryCore> {
 
 	//#region utils.RenderUtils.IRenderable
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
 		if (this.hasTraits || this.isNotCommon) {
@@ -91,7 +92,7 @@ export default class Ancestry extends HasSource<AncestryCore> {
 	}
 
 	public static removeFeatures(features: FeatureCore[]): FeatureCore[] {
-		return utils.ArrayUtils.Collection.remove(features, feature => feature.objectType === Ancestry.FeatureObjectType);
+		return remove(features, feature => feature.objectType === Ancestry.FeatureObjectType);
 	}
 
 	//#endregion

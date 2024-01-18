@@ -1,7 +1,8 @@
+import { filterAsync, forEachAsync } from "@rsc-utils/async-array-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type * as Discord from "discord.js";
-import utils from "../../../../../sage-utils";
 import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
+import type { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
 import type SageMessage from "../../../model/SageMessage";
 import type User from "../../../model/User";
 import { DialogType } from "../../../repo/base/IdRepository";
@@ -16,7 +17,7 @@ async function userCount(sageMessage: SageMessage): Promise<void> {
 	return renderCount(sageMessage, "Users", users.length);
 }
 
-async function renderUser(renderableContent: utils.RenderUtils.RenderableContent, user: User, discordUser: Optional<Discord.User>): Promise<void> {
+async function renderUser(renderableContent: RenderableContent, user: User, discordUser: Optional<Discord.User>): Promise<void> {
 	renderableContent.appendTitledSection(`<b>${toHumanReadable(discordUser) || "<i>Unknown</i>"}</b>`);
 	renderableContent.append(`<b>User Id</b> ${user.did}`);
 	renderableContent.append(`<b>UUID</b> ${user.id}`);
@@ -32,7 +33,7 @@ async function userList(sageMessage: SageMessage): Promise<void> {
 		const filter = sageMessage.args.join(" ");
 		if (filter && users.length) {
 			const lower = filter.toLowerCase();
-			users = await utils.ArrayUtils.Collection.filterAsync(users, async user => {
+			users = await filterAsync(users, async user => {
 				const discordUser = await sageMessage.discord.fetchUser(user.did);
 				return discordUser?.username?.toLowerCase().includes(lower) ?? false;
 			});
@@ -41,7 +42,7 @@ async function userList(sageMessage: SageMessage): Promise<void> {
 		const renderableContent = createAdminRenderableContent(sageMessage.bot);
 		renderableContent.setTitle(`<b>user-list</b>`);
 		if (users.length) {
-			await utils.ArrayUtils.Collection.forEachAsync(users, async user => renderUser(renderableContent, user, await sageMessage.discord.fetchUser(user.did)));
+			await forEachAsync(users, async user => renderUser(renderableContent, user, await sageMessage.discord.fetchUser(user.did)));
 		} else {
 			renderableContent.append(`<blockquote>No Users Found!</blockquote>`);
 		}

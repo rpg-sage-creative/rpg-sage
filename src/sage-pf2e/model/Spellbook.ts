@@ -1,11 +1,10 @@
 import { rollDie } from "@rsc-utils/dice-utils";
 import { randomItem } from "@rsc-utils/random-utils";
 import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
-import utils from "../../sage-utils";
-import { Core } from "../../sage-utils/utils/ClassUtils";
+import { HasCore, type Core } from "../../sage-utils/utils/ClassUtils";
 import type { TMagicTradition } from "../common";
 import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL } from "../common";
-import * as Repository from "../data/Repository";
+import { filter, findByValue } from "../data/Repository";
 import type ArcaneSchool from "./ArcaneSchool";
 import SpellCollection from "./SpellCollection";
 import Source from "./base/Source";
@@ -68,7 +67,7 @@ export interface SpellbookCore extends Core<"Spellbook"> {
 	sources: string[];
 }
 
-export default class Spellbook extends utils.ClassUtils.HasCore<SpellbookCore> {
+export default class Spellbook extends HasCore<SpellbookCore> {
 
 	/**************************************************************************************************************************/
 	// Constructors
@@ -83,7 +82,7 @@ export default class Spellbook extends utils.ClassUtils.HasCore<SpellbookCore> {
 	/**************************************************************************************************************************/
 	// Properties
 
-	public get arcaneSchool(): ArcaneSchool | undefined { return this.casterClass === "Wizard" && this.core.casterSpecialty ? Repository.findByValue("ArcaneSchool", this.core.casterSpecialty) : undefined; }
+	public get arcaneSchool(): ArcaneSchool | undefined { return this.casterClass === "Wizard" && this.core.casterSpecialty ? findByValue("ArcaneSchool", this.core.casterSpecialty) : undefined; }
 	public set arcaneSchool(arcaneSchool: ArcaneSchool | undefined) { this.core.casterSpecialty = arcaneSchool?.id; }
 
 	public get bloodline(): UUID | undefined { return this.casterClass === "Sorcerer" ? this.core.casterSpecialty : undefined; }
@@ -103,7 +102,7 @@ export default class Spellbook extends utils.ClassUtils.HasCore<SpellbookCore> {
 
 	// public get maxSpellLevel(): number { let levels = this.spells.levels; return levels[levels.length - 1]; }
 
-	public get sources(): Source[] { return this.core.sources.map(source => Repository.findByValue("Source", source)); }
+	public get sources(): Source[] { return this.core.sources.map(source => findByValue("Source", source)); }
 	public set sources(sources: Source[]) { this.core.sources = sources.map(source => source.code); }
 
 	public get spells(): SpellCollection { return this.core.spells; }
@@ -139,11 +138,11 @@ export default class Spellbook extends utils.ClassUtils.HasCore<SpellbookCore> {
 	public static random(casterClass: string, casterLevel: number, casterSpecialty?: string, sources?: string[]): Spellbook;
 	public static random(casterClass = "Wizard", casterLevel = 1, casterSpecialty?: string, sources: string[] = []): Spellbook {
 		const tradition = getTradition(casterClass, casterSpecialty),
-			traditionSpells = Repository.filter("Spell", spell => spell.traditions.includes(tradition)),
+			traditionSpells = filter("Spell", spell => spell.traditions.includes(tradition)),
 			traditionCollection = new SpellCollection(traditionSpells);
 
-		const sourceFilter = sources.map(source => Repository.findByValue("Source", source)),
-			arcaneSchool = Repository.findByValue("ArcaneSchool", casterSpecialty),
+		const sourceFilter = sources.map(source => findByValue("Source", source)),
+			arcaneSchool = findByValue("ArcaneSchool", casterSpecialty),
 			isWizardSpecialist = casterClass === "Wizard" && arcaneSchool !== undefined,
 			// CRB = !sourceFilter.length || sourceFilter.find(source => source.isCore) ? Source.Core : null,
 			spells: SpellCollection = new SpellCollection();

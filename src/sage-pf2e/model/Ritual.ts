@@ -1,5 +1,6 @@
 import { nth } from "@rsc-utils/number-utils";
-import utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import { NEWLINE } from "../common";
 import RenderableContent from "../data/RenderableContent";
 import type { TSpellHeighten } from "./Spell";
@@ -77,7 +78,7 @@ export default class Ritual extends HasSource<RitualCore> {
 		}
 		return rangeAreaTargets.join("; ");
 	}
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 
 		const title = `<b>${this.name}</b> - Ritual ${this.level}`;
@@ -127,7 +128,7 @@ export default class Ritual extends HasSource<RitualCore> {
 		// 	Repository.findByValue<Spell>("Spell", spellName.slice(3, -4))
 		// 	?? Repository.findByValue<Ritual>("Ritual", spellName.slice(3, -4))
 		// 	).filter(sp => sp && sp !== this));
-		// content.addAonLink(...spellsOrRituals.filter(utils.ArrayUtils.Filters.unique).slice(1).map(spell => spell.toAonLink()));
+		// content.addAonLink(...spellsOrRituals.filter(toUnique).slice(1).map(spell => spell.toAonLink()));
 		*/
 
 		return content;
@@ -142,7 +143,7 @@ export default class Ritual extends HasSource<RitualCore> {
 		return `${level} ${rarity}`;
 	}
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			score.append(searchInfo.score(this, this.cast, this.cost, this.secondaryCasters, this.primaryCheck, this.secondaryChecks, this.area, this.range, this.targets, this.duration));

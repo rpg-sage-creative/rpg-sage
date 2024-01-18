@@ -1,16 +1,16 @@
 import { error, warn } from "@rsc-utils/console-utils";
+import { capitalize } from "@rsc-utils/string-utils";
 import _dice, { DieRollGrade } from "../../../../sage-dice";
 import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e";
-import utils from "../../../../sage-utils";
+import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import { ColorType } from "../../model/HasColorsCore";
 import type SageMessage from "../../model/SageMessage";
 import { createRenderableContent, registerCommandRegex } from "../cmd";
 import { registerCommandHelp } from "../help";
-import { capitalize } from "@rsc-utils/string-utils";
 
 export type TPfsFaction = "Horizon Hunters" | "Vigilant Seal" | "Envoys' Alliance" | "Grand Archive";
 
-export function createPfsRenderableContent(sageMessage: SageMessage): utils.RenderUtils.RenderableContent {
+export function createPfsRenderableContent(sageMessage: SageMessage): RenderableContent {
 	return createRenderableContent(sageMessage.getHasColors(), ColorType.PfsCommand);
 }
 
@@ -241,7 +241,7 @@ function registerTiers(): void {
 // #endregion Tier Calculator
 
 // #region Scenario/Quest Randomizer/Scaler
-export type TScenarioCallback = (sageMessage: SageMessage, tierInfo: TTierInfo) => utils.RenderUtils.RenderableContent;
+export type TScenarioCallback = (sageMessage: SageMessage, tierInfo: TTierInfo) => RenderableContent;
 export type TScenario = { id: string; tier: string; callback: TScenarioCallback; }
 const scenarios: TScenario[] = [];
 export function addScenario(scenarioId: string, tier: string, callback: TScenarioCallback): void {

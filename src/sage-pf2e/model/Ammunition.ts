@@ -1,7 +1,8 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import { MDASH, NEWLINE, TAB } from "../common";
 import RenderableContent from "../data/RenderableContent";
-import * as Repository from "../data/Repository";
+import { filter } from "../data/Repository";
 import type { BulkCore } from "./HasBulk";
 import HasBulk from "./HasBulk";
 import type Weapon from "./Weapon";
@@ -22,12 +23,12 @@ export default class Ammunition extends HasBulk<AmmunitionCore, Ammunition>{
 	private _weapons?: Weapon[];
 	public get weapons(): Weapon[] {
 		if (!this._weapons) {
-			this._weapons = Repository.filter("Weapon", weapon => weapon.ammunition === this);
+			this._weapons = filter("Weapon", weapon => weapon.ammunition === this);
 		}
 		return this._weapons;
 	}
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 		content.setTitle(`<b>${this.name}</b> (Ammunition)`);
 		content.append(`<b>Quantity</b> ${this.quantity}; <b>Price</b> ${this.price || MDASH}; ${this.toRenderableBulkString()}`);
@@ -39,7 +40,7 @@ export default class Ammunition extends HasBulk<AmmunitionCore, Ammunition>{
 	/**************************************************************************************************************************/
 	// utils.SearchUtils.ISearchable
 
-	public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore<this> {
+	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		if (searchInfo.globalFlag) {
 			const terms: string[] = [];

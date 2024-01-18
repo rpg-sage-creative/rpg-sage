@@ -1,8 +1,7 @@
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
-import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import { isDefined, type OrNull, type OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import { GameType } from "../../../sage-common";
-import { exists } from "../../../sage-utils/utils/ArrayUtils/Filters";
 import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import {
 	CritMethodType,
@@ -545,7 +544,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		const nonOtherDice = SpecialTestAliases
 			.map(testAlias => this.getDiceByTestAlias(testAlias))
 			.concat([this.attackDice, this.damageDice])
-			.filter(exists);
+			.filter(isDefined);
 		return this.dice.filter(_dice => !nonOtherDice.includes(_dice));
 	}
 	//#endregion
@@ -554,7 +553,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		const sortedDice = SpecialTestAliases.map(testAlias => this.getDiceByTestAlias(testAlias))
 			.concat([this.attackDice, this.damageDice])
 			.concat(this.otherDice)
-			.filter(exists);
+			.filter(isDefined);
 		return `[${sortedDice.map(_dice => _dice.toString(outputType)).join("; ")}]`;
 	}
 
@@ -747,7 +746,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		const nonOtherRolls = SpecialTestAliases
 			.map(testAlias => this.getRollByTestAlias(testAlias))
 			.concat([this.attackRoll, this.damageRoll])
-			.filter(exists);
+			.filter(isDefined);
 		return this.core.rolls.filter(rollCore => !nonOtherRolls.find(roll => roll.is(rollCore))).map(DiceRoll.fromCore);
 	}
 

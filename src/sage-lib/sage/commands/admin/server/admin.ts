@@ -1,15 +1,16 @@
-import type * as Discord from "discord.js";
-import utils from "../../../../../sage-utils";
+import { forEachAsync, mapAsync } from "@rsc-utils/async-array-utils";
+import type { User } from "discord.js";
+import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
+import { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
 import type SageMessage from "../../../model/SageMessage";
-import { type IAdminUser, AdminRoleType } from "../../../model/Server";
+import { AdminRoleType, type IAdminUser } from "../../../model/Server";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
-import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 
 
-type TAdminUser = IAdminUser & { discordUser: Discord.User };
+type TAdminUser = IAdminUser & { discordUser: User };
 
-async function renderUser(renderableContent: utils.RenderUtils.RenderableContent, user: TAdminUser): Promise<void> {
+async function renderUser(renderableContent: RenderableContent, user: TAdminUser): Promise<void> {
 	renderableContent.appendTitledSection(`<b>${toHumanReadable(user?.discordUser) || "<i>Unknown</i>"}</b>`);
 	// renderableContent.append(`<b>User Id</b> ${user.discordUser?.id}`);
 	// renderableContent.append(`<b>Username</b> ${user?.discordUser?.username || "<i>Unknown</i>"}`);
@@ -20,7 +21,7 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminSage) {
 		return sageMessage.reactBlock();
 	}
-	let users: TAdminUser[] = <TAdminUser[]>await utils.ArrayUtils.Collection.mapAsync(sageMessage.server.admins, async admin => {
+	let users: TAdminUser[] = <TAdminUser[]>await mapAsync(sageMessage.server.admins, async admin => {
 		return {
 			discordUser: await sageMessage.discord.fetchUser(admin.did),
 			...admin
@@ -36,7 +37,7 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 		const renderableContent = createAdminRenderableContent(sageMessage.server);
 		renderableContent.setTitle(`<b>admin-list</b>`);
 		if (users.length) {
-			await utils.ArrayUtils.Collection.forEachAsync(users, async user => renderUser(renderableContent, user));
+			await forEachAsync(users, async user => renderUser(renderableContent, user));
 		} else {
 			renderableContent.append(`<blockquote>No Admins Found!</blockquote>`);
 		}

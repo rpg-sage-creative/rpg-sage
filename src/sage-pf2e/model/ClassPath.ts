@@ -1,6 +1,6 @@
-import type utils from "../../sage-utils";
+import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import RenderableContent from '../data/RenderableContent';
-import * as Repository from '../data/Repository';
+import { findByValue } from '../data/Repository';
 import type { SourcedCore } from "./base/HasSource";
 import HasSource from './base/HasSource';
 
@@ -14,11 +14,11 @@ export default class ClassPath extends HasSource<ClassPathCore> {
 		super(core);
 	}
 
-	public class = Repository.findByValue("Class", this.core.class)!;
+	public class = findByValue("Class", this.core.class)!;
 
 	//#region Instance Methods
 
-	public toRenderableContent(): utils.RenderUtils.RenderableContent {
+	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.class.classPath})`);
 		if (this.hasTraits || this.isNotCommon) {

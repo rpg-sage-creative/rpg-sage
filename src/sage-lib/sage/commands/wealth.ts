@@ -2,7 +2,7 @@ import { debug } from "@rsc-utils/console-utils";
 import { addCommas, nth } from "@rsc-utils/number-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { Coins, PROFICIENCIES, TProficiency, Table } from "../../../sage-pf2e";
-import utils from "../../../sage-utils";
+import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type SageMessage from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
@@ -34,7 +34,7 @@ async function startingWealth(sageMessage: SageMessage): Promise<void> {
 
 	const table = Table.findByNumber("10-10")!,
 		level = +levelString.replace(/st|nd|rd|th/, "");
-	let renderable: utils.RenderUtils.RenderableContent;
+	let renderable: RenderableContent;
 	if (isNaN(level) || level < 1 || 20 < level) {
 		renderable = table.toRenderableContent();
 	} else {
@@ -68,7 +68,7 @@ async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, 
 		proficiencyLetter = <TProficiency>capitalize(proficiencyString || "")[0],
 		proficiencyIndex = PROFICIENCIES.findIndex(prof => prof[0] === proficiencyLetter),
 		proficiency = PROFICIENCIES[proficiencyIndex];
-	let renderable: utils.RenderUtils.RenderableContent;
+	let renderable: RenderableContent;
 	if (isNaN(taskLevel) || taskLevel < 0 || 20 < taskLevel) {
 		renderable = table.toRenderableContent();
 	} else {

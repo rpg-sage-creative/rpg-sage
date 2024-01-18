@@ -1,10 +1,10 @@
+import { sortStringIgnoreCase, type Comparable } from "@rsc-utils/array-utils";
 import { warn } from "@rsc-utils/console-utils";
-import type { Optional, OrNull } from "@rsc-utils/type-utils";
+import { isDefined, type Optional, type OrNull } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import type * as Discord from "discord.js";
 import type { GameType } from "../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import utils, { type IComparable } from "../../../sage-utils";
 import { IdCore } from "../../../sage-utils/utils/ClassUtils";
 import { DiscordKey } from "../../discord";
 import type { DicePostType } from "../commands/dice";
@@ -24,8 +24,6 @@ import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
 import type SageCache from "./SageCache";
 import type Server from "./Server";
-
-const exists = utils.ArrayUtils.Filters.exists;
 
 export type TGameRoleType = keyof typeof GameRoleType;
 export enum GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Cast = 4, Table = 5 }
@@ -158,7 +156,7 @@ async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<
 	return [gChannels.concat(sChannels), gChannels, sChannels];
 }
 
-export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IComparable<Game>, IHasColorsCore, IHasEmojiCore {
+export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable<Game>, IHasColorsCore, IHasEmojiCore {
 	public constructor(core: IGameCore, public server: Server, sageCache: SageCache) {
 		super(core, sageCache);
 
@@ -246,7 +244,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		// return Promise.all(this.players.map(player => this.discord.fetchGuildMember(player)));
 
 		const pGuildMembers = (await Promise.all(this.players.map(player => this.discord.fetchGuildMember(player))))
-			.filter(exists);
+			.filter(isDefined);
 		const pRoleDid = this.playerRoleDid;
 		if (pRoleDid) {
 			const discordRole = await this.discord.fetchGuildRole(pRoleDid);
@@ -259,7 +257,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 	}
 	public async guildChannels(): Promise<Discord.GuildChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
-		return all.filter(exists) as Discord.GuildChannel[];
+		return all.filter(isDefined) as Discord.GuildChannel[];
 	}
 	public async orphanChannels(): Promise<IChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
@@ -270,7 +268,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		return this.users.filter((_, index) => !all[index]);
 	}
 	public async gmGuildMembers(): Promise<Discord.GuildMember[]> {
-		const gmGuildMembers = (await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)))).filter(exists);
+		const gmGuildMembers = (await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)))).filter(isDefined);
 		const gmRoleDid = this.gmRoleDid;
 		if (gmRoleDid) {
 			const discordRole = await this.discord.fetchGuildRole(gmRoleDid);
@@ -296,7 +294,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 		// return first || null;
 	}
 	public async guildRoles(): Promise<Discord.Role[]> {
-		return (await Promise.all(this.roles.map(role => this.discord.fetchGuildRole(role.did)))).filter(exists);
+		return (await Promise.all(this.roles.map(role => this.discord.fetchGuildRole(role.did)))).filter(isDefined);
 	}
 	//#endregion
 
@@ -656,7 +654,7 @@ export default class Game extends HasIdCoreAndSageCache<IGameCore> implements IC
 
 	// #region IComparable
 	public compareTo(other: Game): -1 | 0 | 1 {
-		return utils.ArrayUtils.Sort.stringIgnoreCase(this.name, other.name);
+		return sortStringIgnoreCase(this.name, other.name);
 	}
 	// #endregion
 

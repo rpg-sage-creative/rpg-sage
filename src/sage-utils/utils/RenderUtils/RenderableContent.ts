@@ -1,7 +1,7 @@
+import { toUnique } from "@rsc-utils/array-utils";
 import { error } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { IRenderable, TDisplayType, TRenderableContentSection, TRenderableContentSectionColumn } from "../..";
-import { unique } from "../ArrayUtils/Filters";
+import { TDisplayType, type IRenderable, type TRenderableContentSection, type TRenderableContentSectionColumn } from "../..";
 
 function createSection(index = 0, title: string | null = null, content = <string[]>[], columns = <TRenderableContentSectionColumn[]>[]): TRenderableContentSection {
 	return { index, title:title, content, columns };
@@ -58,7 +58,7 @@ export default class RenderableContent implements IRenderable {
 			// TODO: see why i was gonna use this --> if (section.title) matches.push(...(section.title.match(regex) || []));
 			section.content.forEach(s => matches.push(...(s.match(regex) || [])));
 		});
-		return matches.filter(unique);
+		return matches.filter(toUnique);
 	}
 
 	public setColor(color: Optional<string>): void {
