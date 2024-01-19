@@ -1,9 +1,8 @@
+import { Season, TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason } from "@rsc-utils/date-utils";
 import { parseEnum } from "@rsc-utils/enum-utils";
 import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType } from "../../../sage-pf2e";
-import { SeasonType, TemperateSeasonType, TropicalSeasonType } from "../../../sage-utils";
-import { DateUtils } from "../../../sage-utils/utils";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { registerInteractionListener } from "../../discord/handlers";
 import type { SageInteraction } from "../model/SageInteraction";
@@ -14,22 +13,22 @@ import { registerCommandHelp } from "./help";
 type TWeatherArgs = {
 	climateType: ClimateType;
 	elevationType: ElevationType;
-	seasonType: SeasonType
+	seasonType: Season
 };
 
 function parseWeatherArgs(climate: Optional<string>, elevation: Optional<string>, season: Optional<string>): TWeatherArgs {
 	const elevationType = parseEnum<ElevationType>(ElevationType, elevation) ?? ElevationType.Lowland;
 	let climateType = parseEnum<ClimateType>(ClimateType, climate);
-	let seasonType = parseEnum<SeasonType>(SeasonType, season);
+	let seasonType = parseEnum<Season>(Season, season);
 	if (climateType === undefined && seasonType !== undefined) {
-		climateType = [SeasonType.Dry, SeasonType.Wet].includes(seasonType) ? ClimateType.Tropical : ClimateType.Temperate;
+		climateType = [Season.Dry, Season.Wet].includes(seasonType) ? ClimateType.Tropical : ClimateType.Temperate;
 	}else if (climateType === undefined) {
 		climateType = ClimateType.Temperate;
 	}
 	if (seasonType === undefined) {
 		seasonType = climateType === ClimateType.Tropical
-			? parseEnum<SeasonType>(TropicalSeasonType, climate) ?? DateUtils.getTropicalSeason() as unknown as SeasonType
-			: parseEnum<SeasonType>(TemperateSeasonType, climate) ?? DateUtils.getTemperateSeason() as unknown as SeasonType;
+			? parseEnum<Season>(TropicalSeason, climate) ?? getTropicalSeason() as unknown as Season
+			: parseEnum<Season>(TemperateSeason, climate) ?? getTemperateSeason() as unknown as Season;
 	}
 	return { climateType, elevationType, seasonType };
 }
@@ -37,7 +36,7 @@ function parseWeatherArgs(climate: Optional<string>, elevation: Optional<string>
 async function weatherRandom(sageMessage: SageMessage): Promise<void> {
 	const climate = ClimateType[sageMessage.args.removeAndReturnEnum<ClimateType>(ClimateType, true)!];
 	const elevation = ElevationType[sageMessage.args.removeAndReturnEnum<ElevationType>(ElevationType, true)!];
-	const season = SeasonType[sageMessage.args.removeAndReturnEnum<SeasonType>(SeasonType, true)!];
+	const season = Season[sageMessage.args.removeAndReturnEnum<Season>(Season, true)!];
 	const args = parseWeatherArgs(climate, elevation, season);
 	const renderable = createWeatherRenderable(args);
 	return <any>sageMessage.send(renderable);
@@ -51,7 +50,7 @@ function createWeatherRenderable({ climateType, elevationType, seasonType }: TWe
 	content.append(...[
 		`<b>Climate</b> ${ClimateType[climateType]}`,
 		`<b>Elevation</b> ${ElevationType[elevationType]}`,
-		`<b>Season</b> ${SeasonType[seasonType]}`,
+		`<b>Season</b> ${Season[seasonType]}`,
 		`<b>High</b> ${today.high} °F (${fahrenheitToCelsius(today.high)} °C)`,
 		`<b>Low</b> ${today.low} °F (${fahrenheitToCelsius(today.low)} °C)`,
 		`<b>Cloud Cover</b> ${CloudCoverType[today.cloudCover] ?? "None"}`,

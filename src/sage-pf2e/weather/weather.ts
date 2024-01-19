@@ -1,6 +1,6 @@
 import { error } from "@rsc-utils/console-utils";
+import { Season } from "@rsc-utils/date-utils";
 import { rollDie } from "@rsc-utils/dice-utils";
-import { SeasonType } from "../../sage-utils";
 
 export enum ElevationType { SeaLevel, Lowland, Highland }
 export enum ClimateType { Cold, Temperate, Tropical }
@@ -14,21 +14,21 @@ export const ElevationTypes = [ElevationType.SeaLevel, ElevationType.Lowland, El
 /** [Cold, Temperate, Tropical] */
 export const ClimateTypes = [ClimateType.Cold, ClimateType.Temperate, ClimateType.Tropical];
 /** [Winter, Spring, Summer, Fall] */
-export const SeasonTypes = [SeasonType.Winter, SeasonType.Spring, SeasonType.Summer, SeasonType.Fall];
-/** usage: BaselineTemps[ClimateTypes.indexOf(climateType)][SeasonTypes.indexOf(seasonType)] */
+export const Seasons = [Season.Winter, Season.Spring, Season.Summer, Season.Fall];
+/** usage: BaselineTemps[ClimateTypes.indexOf(climateType)][Seasons.indexOf(seasonType)] */
 export const BaselineTemps = [[20, 30, 40, 30], [30, 60, 80, 60], [50, 75, 95, 75]];
 
-export function getBasePrecipitationFrequency(climate: ClimateType, season: SeasonType, elevation: ElevationType): PrecipitationFrequencyType {
+export function getBasePrecipitationFrequency(climate: ClimateType, season: Season, elevation: ElevationType): PrecipitationFrequencyType {
 	let frequency: PrecipitationFrequencyType = 0;
 	switch (season) {
-		case SeasonType.Fall:
-		case SeasonType.Spring:
+		case Season.Fall:
+		case Season.Spring:
 			frequency = climate === ClimateType.Tropical ? PrecipitationFrequencyType.Common : PrecipitationFrequencyType.Intermittent;
 			break;
-		case SeasonType.Summer:
+		case Season.Summer:
 			frequency = climate === ClimateType.Tropical ? PrecipitationFrequencyType.Intermittent : PrecipitationFrequencyType.Common;
 			break;
-		case SeasonType.Winter:
+		case Season.Winter:
 			frequency = PrecipitationFrequencyType.Rare;
 			break;
 		default:
@@ -49,7 +49,7 @@ export function getBasePrecipitationFrequency(climate: ClimateType, season: Seas
 	}
 }
 
-export function getBasePrecipitationIntensity(climate: ClimateType, _: SeasonType, elevation: ElevationType): PrecipitationIntensityType {
+export function getBasePrecipitationIntensity(climate: ClimateType, _: Season, elevation: ElevationType): PrecipitationIntensityType {
 	let intensity = PrecipitationIntensityType.Medium;
 	if (elevation === ElevationType.SeaLevel) {
 		intensity = PrecipitationIntensityType.Heavy;
@@ -69,9 +69,9 @@ export function getBasePrecipitationIntensity(climate: ClimateType, _: SeasonTyp
 	}
 }
 
-export function getBaseTemp(climate: ClimateType, season: SeasonType, elevation: ElevationType): number {
+export function getBaseTemp(climate: ClimateType, season: Season, elevation: ElevationType): number {
 	const climateIndex = ClimateTypes.indexOf(climate);
-	const seasonIndex = SeasonTypes.indexOf(season);
+	const seasonIndex = Seasons.indexOf(season);
 	let temp = BaselineTemps[climateIndex][seasonIndex];
 	if (elevation === ElevationType.SeaLevel) {
 		temp += 10;

@@ -41,6 +41,7 @@
 		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils",
 		"@rsc-utils/array-utils": "github:rpg-sage-creative/array-utils",
 		"@rsc-utils/async-array-utils": "github:rpg-sage-creative/async-array-utils",
+		"@rsc-utils/date-utils": "github:rpg-sage-creative/date-utils",
 		"@discordjs/rest": "^1.6.0",
 		"@napi-rs/canvas": "^0.1.35",
 		"discord-api-types": "^0.27.3",

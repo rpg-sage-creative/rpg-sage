@@ -4,7 +4,6 @@ import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import { WindStrength, rollOnTable, rollTemperatureVariation, type CloudCoverTableItem, type PrecipitationTableItem, type WindTableItem } from "..";
 import { GDate } from "../../sage-cal/pf2e/GDate";
-import { SeasonType } from "../../sage-utils";
 import {
 	ClimateType,
 	CloudCoverType,
@@ -17,6 +16,7 @@ import {
 	getBaseTemp,
 	testForPrecipitation
 } from "./weather";
+import { Season } from "@rsc-utils/date-utils";
 
 const HeavySnow = "Heavy Snow";
 
@@ -385,14 +385,14 @@ function getWind(precip?: PrecipitationTableItem): WindTableItem {
 	}
 	return rollOnTable("WindStrength");
 }
-function getOvercastVariation(isOvercast: boolean, hasPrecip: boolean, season: SeasonType): -10 | 0 | 10 {
+function getOvercastVariation(isOvercast: boolean, hasPrecip: boolean, season: Season): -10 | 0 | 10 {
 	if (isOvercast && !hasPrecip) {
-		return season === SeasonType.Fall || season === SeasonType.Winter ? 10 : -10;
+		return season === Season.Fall || season === Season.Winter ? 10 : -10;
 	}
 	return 0;
 }
 function randomWeather(properties: IGenParameters, date: GDate): IWeatherDayResult[] {
-	const season = date.temperateSeasonType as unknown as SeasonType,
+	const season = date.temperateSeason as unknown as Season,
 		tempVariationItem = rollTemperatureVariation(properties.climate),
 		tempVariation = roll(tempVariationItem.variation),
 		days: IWeatherDayResult[] = [];

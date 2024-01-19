@@ -1,17 +1,14 @@
-import { getDateStrings } from "../sage-utils/utils/DateUtils";
-import { Days, Months } from "../sage-utils/utils/DateUtils/consts";
-import type { DayType, MonthType } from "../sage-utils/utils/DateUtils/enums";
-import type { IDate, TDayType, TMonthType } from "../sage-utils/utils/DateUtils/types";
+import { DateLike, Day, DayName, Month, MonthName, getDateStrings, getDayNames, getMonthNames } from "@rsc-utils/date-utils";
 
 const DayMS = 1000 * 60 * 60 * 24;
 
 export class SageDate<
 		S extends SageDate<any, any, any, any, any>,
-		T extends number = DayType,
-		U extends string = TDayType,
-		V extends number = MonthType,
-		W extends string = TMonthType
-		> implements IDate {
+		T extends number = Day,
+		U extends string = DayName,
+		V extends number = Month,
+		W extends string = MonthName
+		> implements DateLike {
 	public _: Date;
 
 	public constructor();
@@ -43,10 +40,10 @@ export class SageDate<
 	}
 
 	public get dayType(): T { return this._.getDay() as T; }
-	public get day(): U { return Days[this._.getDay()] as U; }
+	public get day(): U { return getDayNames()[this._.getDay()] as U; }
 
 	public get monthType(): V { return this._.getMonth() as V; }
-	public get month(): W { return Months[this._.getMonth()] as W; }
+	public get month(): W { return getMonthNames()[this._.getMonth()] as W; }
 
 	public getPrevDay(): S {
 		const cnstr = this.constructor as typeof SageDate;
@@ -69,17 +66,22 @@ export class SageDate<
 		return getDateStrings(this._).date;
 	}
 	public toLongEarthString(): string {
-		const day = Days[this._.getDay()];
-		const month = Months[this._.getMonth()];
+		const day = getDayNames()[this._.getDay()];
+		const month = getMonthNames()[this._.getMonth()];
 		return `${day}, ${month} ${this.getDate()}, ${this.getEarthFullYear()}`;
 	}
 
 	public getEarthFullYear(): number { return this._.getFullYear(); }
 
-	//#region IDate
+	//#region DateLike
 	public getFullYear(): number { return this._.getFullYear() + (this.constructor as typeof SageDate).YearDelta; }
 	public getMonth(): number { return this._.getMonth(); }
 	public getDate(): number { return this._.getDate(); }
+	public getHours(): number { return this._.getHours(); }
+	public getMinutes(): number { return this._.getMinutes(); }
+	public getSeconds(): number { return this._.getSeconds(); }
+	public getMilliseconds(): number { return this._.getMilliseconds(); }
+	public getTime(): number { return this._.getTime(); }
 	//#endregion
 
 	public static YearDelta = 0;
