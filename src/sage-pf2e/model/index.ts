@@ -17,12 +17,12 @@ import { Condition, type ConditionCore } from "./Condition";
 import { DedicationFeat } from "./DedicationFeat";
 import { Deity, type DeityCore } from "./Deity";
 import { Domain, type DomainCore } from "./Domain";
+import { Faith, type FaithCore } from "./Faith";
 import { Feat, type FeatCore } from "./Feat";
 import { FocusSpell, type FocusSpellCore } from "./FocusSpell";
 import { Gear, type GearCore } from "./Gear";
 import { GearCategory } from "./GearCategory";
 import { Glossary, type GlossaryCore } from "./Glossary";
-import { HasFaith, type FaithCore } from "./HasFaith";
 import { Heritage, type HeritageCore } from "./Heritage";
 import { Item, type ItemCore } from "./Item";
 import { Language, type LanguageCore } from "./Language";
@@ -104,7 +104,7 @@ export type TEntity<T extends string> =
 	: T extends "Gear" ? Gear
 	: T extends "GearCategory" ? GearCategory
 	: T extends "Glossary" ? Glossary
-	: T extends "Faith" ? HasFaith
+	: T extends "Faith" ? Faith
 	: T extends "Heritage" ? Heritage
 	: T extends "Item" ? Item
 	: T extends "Language" ? Language
@@ -145,7 +145,7 @@ export function registerObjects(): void {
 	registerObject(Gear);
 	registerObject(GearCategory);
 	registerObject(Glossary);
-	registerObject(HasFaith);
+	registerObject(Faith);
 	registerObject(Heritage);
 	registerObject(Item);
 	registerObject(Language);

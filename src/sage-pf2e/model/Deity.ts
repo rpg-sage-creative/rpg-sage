@@ -4,8 +4,8 @@ import { RenderableContent } from '../data/RenderableContent';
 import type { TDevoteeBenefitsCore } from "./DevoteeBenefits";
 import { DevoteeBenefits } from "./DevoteeBenefits";
 import type { Domain } from "./Domain";
-import type { FaithCoreBase } from "./HasFaith";
-import { HasFaith } from "./HasFaith";
+import type { FaithCoreBase } from "./Faith";
+import { Faith } from "./Faith";
 
 export type TDeitySpell = {
 	level: number;
@@ -20,7 +20,7 @@ export interface DeityCore extends FaithCoreBase<"Deity"> {
 //TODO: cleanup the data to not need these xxxToContent functions
 //TODO: figure out how to handle spells with (x only) or (appears as x) alterations
 
-export class Deity extends HasFaith<"Deity", DeityCore> {
+export class Deity extends Faith<"Deity", DeityCore> {
 
 	public constructor(core: DeityCore) {
 		super(core);

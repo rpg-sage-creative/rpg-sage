@@ -1,7 +1,4 @@
-export * from "./common";
-export * from "./dice/base/types";
-export * from "./dice/discord";
-export * from "./tables";
+import * as dice from "./dice";
+export const roll = dice.base.Dice.roll;
 
-import { Dice } from "./dice/base/index";
-export const roll = Dice.roll;
+export * from "./common";

@@ -62,7 +62,7 @@ export { Condition } from "./model/Condition";
 export { DedicationFeat } from "./model/DedicationFeat";
 export { Deity } from "./model/Deity";
 export { Domain } from "./model/Domain";
-export { HasFaith } from "./model/HasFaith";
+export { Faith } from "./model/Faith";
 export { Feat } from "./model/Feat";
 export { FocusSpell } from "./model/FocusSpell";
 export { Gear } from "./model/Gear";

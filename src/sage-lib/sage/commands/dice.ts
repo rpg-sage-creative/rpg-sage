@@ -6,7 +6,8 @@ import { chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex
 import type { Optional } from "@rsc-utils/type-utils";
 import type { ButtonInteraction, MessageEmbed } from "discord.js";
 import type { GameType } from "../../../sage-common";
-import { DiceOutputType, DiceSecretMethodType, DiscordDice, TDiceOutput } from "../../../sage-dice";
+import { DiceOutputType, DiceSecretMethodType, TDiceOutput } from "../../../sage-dice";
+import { DiscordDice } from "../../../sage-dice/dice/discord";
 import { NEWLINE } from "../../../sage-pf2e";
 import { createMessageLink } from "../../../sage-utils/utils/DiscordUtils/createMessageLink";
 import { toHumanReadable } from "../../../sage-utils/utils/DiscordUtils/toHumanReadable";
