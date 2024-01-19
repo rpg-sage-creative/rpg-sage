@@ -1,3 +1,4 @@
+import { addCommas } from "@rsc-utils/number-utils";
 import { createSearchUrl } from ".";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { SearchResults } from "../../SearchResults";
@@ -20,7 +21,7 @@ export class Pf1eSearchResults extends SearchResults<AonPf1SearchBase> {
 
 		const content = new RenderableContent(title);
 		if (!this.isEmpty) {
-			content.append(`<b>First ${this.getMenuLength()} Matches</b> (of ${this.scores.length})`);
+			content.append(`<b>First ${this.getMenuLength()} Matches</b> (of ${addCommas(this.scores.length)})`);
 		}
 		return content;
 	}

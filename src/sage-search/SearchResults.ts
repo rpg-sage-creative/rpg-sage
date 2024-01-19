@@ -1,3 +1,5 @@
+import { addCommas } from "@rsc-utils/number-utils";
+import { StringMatcher } from "@rsc-utils/string-utils";
 import type { OrUndefined } from "@rsc-utils/type-utils";
 import { UNICODE_ZERO_TO_TEN } from "../sage-common";
 import type { IMenuRenderable } from "../sage-lib/discord";
@@ -6,7 +8,6 @@ import type { Source } from "../sage-pf2e/model/base/Source";
 import type { IRenderable, ISearchable } from "../sage-utils";
 import { RenderableContent } from "../sage-utils/utils/RenderUtils";
 import { HasScoredSearchables, SearchInfo, SearchScore } from "../sage-utils/utils/SearchUtils";
-import { StringMatcher } from "@rsc-utils/string-utils";
 
 type TRenderableMeta = { hasCompScore:boolean; sources:Source[]; unicodeArray:string[]; unicodeIndex:number; };
 
@@ -120,7 +121,7 @@ export class SearchResults<T extends TSearchable = TSearchable> extends HasScore
 
 		const content = new RenderableContent(title);
 		if (!isEmpty) {
-			content.append(hasComp ? `<i>Did you mean ...</i>` : `<b>Top Matches</b> (of ${this.scores.length})`);
+			content.append(hasComp ? `<i>Did you mean ...</i>` : `<b>Top Matches</b> (of ${addCommas(this.scores.length)})`);
 			content.append(`[spacer] <i><b>(#)</b> represents number of search term hits.</i>`);
 		}
 		return content;

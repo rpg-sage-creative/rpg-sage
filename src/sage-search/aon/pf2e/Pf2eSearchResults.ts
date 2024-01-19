@@ -1,4 +1,4 @@
-import { toSuperscript } from "@rsc-utils/number-utils";
+import { addCommas, toSuperscript } from "@rsc-utils/number-utils";
 import type { OrUndefined } from "@rsc-utils/type-utils";
 import { createSearchUrl } from ".";
 import { findByAonBase } from "../../../sage-pf2e/data/Repository";
@@ -91,7 +91,7 @@ export class Pf2eSearchResults extends SearchResults<AonBase> {
 
 		const content = new RenderableContent(title);
 		if (!isEmpty) {
-			content.append(hasComp ? `<i>Did you mean ...</i>` : `<b>Top Matches</b> (of ${this.totalHits})`);
+			content.append(hasComp ? `<i>Did you mean ...</i>` : `<b>Top Matches</b> (of ${addCommas(this.totalHits)})`);
 			content.append(`[spacer] <i><b>(#)</b> represents number of search term hits.</i>`);
 		}
 		return content;
