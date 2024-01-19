@@ -4,8 +4,8 @@ import type { Role } from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
 import { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
-import type SageMessage from "../../../model/SageMessage";
-import type Server from "../../../model/Server";
+import type { SageMessage } from "../../../model/SageMessage";
+import type { Server } from "../../../model/Server";
 import { AdminRoleType, IAdminRole } from "../../../model/Server";
 import { DialogType } from "../../../repo/base/IdRepository";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
@@ -152,7 +152,7 @@ async function serverSet(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(updated);
 }
 
-export default function register(): void {
+export function registerServer(): void {
 	registerAdminCommand(serverCount, "server-count");
 	registerAdminCommand(serverList, "server-list");
 	registerAdminCommand(serverInit, "server-init");

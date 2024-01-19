@@ -2,15 +2,15 @@ import { sortStringIgnoreCase } from "@rsc-utils/array-utils";
 import type { TProficiency } from "../../common";
 import { DEXTERITY, EXPERT, LEGENDARY, MASTER, NO_ARMOR, TRAINED, UNTRAINED } from "../../common";
 import { all, findByValue } from "../../data/Repository";
-import type Action from "../Action";
-import type Armor from "../Armor";
-import type Shield from "../Shield";
-import type Skill from "../Skill";
-import Check from "./Check";
-import type EquipmentItem from "./EquipmentItem";
-import type PlayerCharacter from "./PlayerCharacter";
+import type { Action } from "../Action";
+import type { Armor } from "../Armor";
+import type { Shield } from "../Shield";
+import type { Skill } from "../Skill";
+import { Check } from "./Check";
+import type { EquipmentItem } from "./EquipmentItem";
+import type { PlayerCharacter } from "./PlayerCharacter";
 
-export default class Skills {
+export class Skills {
 
 	public constructor(public pc: PlayerCharacter) { }
 

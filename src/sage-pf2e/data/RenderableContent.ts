@@ -1,12 +1,12 @@
 import type { TRenderableContentSection } from "../../sage-utils";
 import { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import { NEWLINE, TAB } from "../common";
-import type Base from "../model/base/Base";
-import type HasSource from "../model/base/HasSource";
+import type { Base } from "../model/base/Base";
+import type { HasSource } from "../model/base/HasSource";
 
 type TRenderable = Base | HasSource;
 
-export default class RenderableContent extends UtilsRenderableContent {
+export class RenderableContent extends UtilsRenderableContent {
 
 	private _aonLinksSection?: TRenderableContentSection;
 	private get aonLinksSection(): TRenderableContentSection {

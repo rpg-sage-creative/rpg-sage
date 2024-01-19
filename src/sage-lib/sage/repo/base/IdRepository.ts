@@ -9,7 +9,7 @@ import type { GameType } from "../../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
 import { HasIdCore, IdCore } from "../../../../sage-utils/utils/ClassUtils";
 import type { DicePostType } from "../../commands/dice";
-import type SageCache from "../../model/SageCache";
+import type { SageCache } from "../../model/SageCache";
 
 export type TPermissionType = keyof typeof PermissionType;
 export enum PermissionType { None = 0, Read = 1, React = 2, Write = 3 }
@@ -63,7 +63,7 @@ export class HasIdCoreAndSageCache<T extends IdCore<U>, U extends string = strin
 
 type TParser<T extends IdCore, U extends HasIdCore<T>> = (core: T, sageCache: SageCache) => Promise<U>;
 
-export default abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
+export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
 	//#region Cache
 

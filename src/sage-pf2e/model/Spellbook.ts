@@ -5,9 +5,9 @@ import { HasCore, type Core } from "../../sage-utils/utils/ClassUtils";
 import type { TMagicTradition } from "../common";
 import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL } from "../common";
 import { filter, findByValue } from "../data/Repository";
-import type ArcaneSchool from "./ArcaneSchool";
-import SpellCollection from "./SpellCollection";
-import Source from "./base/Source";
+import type { ArcaneSchool } from "./ArcaneSchool";
+import { SpellCollection } from "./SpellCollection";
+import { Source } from "./base/Source";
 
 /*
 // function valueOfSpell(spellLevel: number): number {
@@ -67,7 +67,7 @@ export interface SpellbookCore extends Core<"Spellbook"> {
 	sources: string[];
 }
 
-export default class Spellbook extends HasCore<SpellbookCore> {
+export class Spellbook extends HasCore<SpellbookCore> {
 
 	/**************************************************************************************************************************/
 	// Constructors

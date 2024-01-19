@@ -1,11 +1,11 @@
 import { errorReturnNull } from "@rsc-utils/console-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import { discordPromptYesNo } from "../../../discord/prompts";
-import type Emoji from "../../model/Emoji";
-import type Game from "../../model/Game";
+import type { Emoji } from "../../model/Emoji";
+import type { Game } from "../../model/Game";
 import { EmojiType } from "../../model/HasEmojiCore";
-import type SageMessage from "../../model/SageMessage";
-import type Server from "../../model/Server";
+import type { SageMessage } from "../../model/SageMessage";
+import type { Server } from "../../model/Server";
 import { BotServerGameType, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
 
@@ -298,7 +298,7 @@ async function emojiUnset(sageMessage: SageMessage): Promise<void> {
 
 //#endregion
 
-export default function register(): void {
+export function registerEmoji(): void {
 	registerAdminCommand(emojiListBot, "emoji-list-bot");
 	registerAdminCommand(emojiListServer, "emoji-list-server");
 	registerAdminCommand(emojiListGame, "emoji-list-game");

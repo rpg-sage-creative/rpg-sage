@@ -1,4 +1,4 @@
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { updateSheet } from "../../pathbuilder";
 import { getCharacterForStats } from "./getCharacterForStats";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta";

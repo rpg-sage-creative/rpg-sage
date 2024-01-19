@@ -3,7 +3,7 @@ import { MessageActionRow, MessageButton, type ButtonInteraction, type Snowflake
 import { handleDiscordErrorReturnNull } from "../../../../sage-utils/utils/DiscordUtils/errorHandlers";
 import type { DMessage } from "../../../discord";
 import { registerInteractionListener } from "../../../discord/handlers";
-import type SageInteraction from "../SageInteraction";
+import type { SageInteraction } from "../SageInteraction";
 
 export async function addMessageDeleteButton(message: Optional<DMessage>, userId: Snowflake): Promise<boolean> {
 	if (message?.editable) {

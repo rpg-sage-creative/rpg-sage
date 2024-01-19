@@ -3,8 +3,8 @@ import { GameType } from "../../../sage-common";
 import { SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { GameSearchInfo } from "../../GameSearchInfo";
 import type { TParsedSearchInfo } from "../../common";
-import AonSf1SearchBase from "./AonSf1SearchBase";
-import Sf1eSearchResults from "./Sf1eSearchResults";
+import { AonSf1SearchBase } from "./AonSf1SearchBase";
+import { Sf1eSearchResults } from "./Sf1eSearchResults";
 
 export function createSearchUrl(searchText: string): string {
 	const cleanSearchText = searchText.replace(/\s+/g, "+");

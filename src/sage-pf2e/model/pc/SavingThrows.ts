@@ -1,13 +1,13 @@
 import type { GetStatPrefix, TAbility, TSavingThrow } from "../../common";
 import { CONSTITUTION, DEXTERITY, FORTITUDE, getSavingThrows, REFLEX, toModifier, WILL, WISDOM } from "../../common";
-import type Armor from "../Armor";
-import Check from "./Check";
-import PathbuilderCharacter from "./PathbuilderCharacter";
-import type PlayerCharacter from "./PlayerCharacter";
+import type { Armor } from "../Armor";
+import { Check } from "./Check";
+import { PathbuilderCharacter } from "./PathbuilderCharacter";
+import type { PlayerCharacter } from "./PlayerCharacter";
 
 export interface IHasSavingThrows { savingThrows: SavingThrows; }
 
-export default abstract class SavingThrows {
+export abstract class SavingThrows {
 
 	//#region Properties
 

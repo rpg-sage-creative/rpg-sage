@@ -5,7 +5,7 @@ import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e";
 import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e";
-import type SageMessage from "../model/SageMessage";
+import type { SageMessage } from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { renderAll } from "./default";
 import { registerCommandHelp } from "./help";

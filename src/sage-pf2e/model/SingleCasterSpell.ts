@@ -1,8 +1,8 @@
 import { StringMatcher } from "@rsc-utils/string-utils";
 import { findByValue } from "../data/Repository";
-import type ArcaneSchool from "./ArcaneSchool";
+import type { ArcaneSchool } from "./ArcaneSchool";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface SingleCasterSpellCore extends SourcedCore<"SingleCasterSpell"> {
 	caster: string;
@@ -12,7 +12,7 @@ export interface SingleCasterSpellCore extends SourcedCore<"SingleCasterSpell"> 
 
 const promises: { [caster: string]: Promise<void>; } = {};
 const spells: { [caster: string]: SingleCasterSpell[] } = {};
-export default class SingleCasterSpell extends HasSource<SingleCasterSpellCore> {
+export class SingleCasterSpell extends HasSource<SingleCasterSpellCore> {
 
 	public get caster(): string { return this.core.caster; }
 	public get level(): number { return this.core.level; }

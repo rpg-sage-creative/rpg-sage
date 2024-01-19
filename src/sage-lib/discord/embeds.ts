@@ -4,7 +4,7 @@ import type { Optional } from "@rsc-utils/type-utils";
 import { MessageEmbed, type ColorResolvable, type HexColorString } from "discord.js";
 import { TDisplayType, type TRenderableContentSection } from "../../sage-utils";
 import { RenderableContent } from "../../sage-utils/utils/RenderUtils";
-import type SageCache from "../sage/model/SageCache";
+import type { SageCache } from "../sage/model/SageCache";
 import { DiscordMaxValues } from "./consts";
 import type { TRenderableContentResolvable } from "./types";
 

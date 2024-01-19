@@ -1,11 +1,11 @@
-import registerAdmin from "./admin";
-import registerPrefix from "./prefix";
-import registerRole from "./role";
-import registerServer from "./server";
+import { registerAdmin } from "./admin.js";
+import { registerPrefix } from "./prefix.js";
+import { registerRole } from "./role.js";
+import { registerServer as _registerServer } from "./server.js";
 
-export default function register(): void {
+export function registerServer(): void {
 	registerAdmin();
 	registerPrefix();
 	registerRole();
-	registerServer();
+	_registerServer();
 }

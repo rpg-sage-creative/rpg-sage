@@ -4,9 +4,9 @@ import { NIL_SNOWFLAKE, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/sno
 import type { Optional } from "@rsc-utils/type-utils";
 import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Interaction, Message, MessageReaction, PartialMessage, Role, Snowflake, TextChannel, User, Webhook } from "discord.js";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/toHumanReadable";
-import ActiveBot from "../sage/model/ActiveBot";
-import type SageMessage from "../sage/model/SageMessage";
-import DiscordKey from "./DiscordKey";
+import { ActiveBot } from "../sage/model/ActiveBot";
+import type { SageMessage } from "../sage/model/SageMessage";
+import { DiscordKey } from "./DiscordKey";
 import { channelToName } from "./messages";
 import type { TChannel, TChannelResolvable, TGuildResolvable } from "./types";
 
@@ -71,7 +71,7 @@ function createWebhookKey(channel: TextChannel, name: string): string {
 
 //#endregion
 
-export default class DiscordCache {
+export class DiscordCache {
 	public constructor(public client: Client, public guild: Guild | null = null, channel: TChannel | null = null) {
 		this.channelMap = new Map();
 		this.guildMap = new Map();

@@ -18,7 +18,7 @@ function searchableToLabel<T extends ISearchable>(score: SearchScore<T>): string
 	return `${score.searchable.toSearchResult()}${source}`;
 }
 
-export default class HasScoredSearchables<T extends ISearchable> {
+export class HasScoredSearchables<T extends ISearchable> {
 
 	// #region properties
 

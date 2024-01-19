@@ -1,9 +1,9 @@
-import registerAlias from "./alias";
-import registerMacro from "./macro";
-import registerUser from "./user";
+import { registerAlias } from "./alias.js";
+import { registerMacro } from "./macro.js";
+import { registerUser as _registerUser } from "./user.js";
 
-export default function register(): void {
+export function registerUser(): void {
 	registerAlias();
 	registerMacro();
-	registerUser();
+	_registerUser();
 }

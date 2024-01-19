@@ -1,9 +1,9 @@
 import { verbose } from "@rsc-utils/console-utils";
 import { toHumanReadable } from "../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import { send } from "../../../discord/messages";
-import type SageCache from "../../model/SageCache";
-import type SageMessage from "../../model/SageMessage";
-import Server from "../../model/Server";
+import type { SageCache } from "../../model/SageCache";
+import type { SageMessage } from "../../model/SageMessage";
+import { Server } from "../../model/Server";
 import { PatronTierSnowflakes, PatronTierType, User } from "../../model/User";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 
@@ -65,6 +65,6 @@ export async function syncPatreon(sageCache: SageCache): Promise<void> {
 	send(sageCache, dmChannel, renderableContent, superUser);
 }
 
-export default function register(): void {
+export function registerPatreon(): void {
 	registerAdminCommand(patreonSync, "patreon-sync");
 }

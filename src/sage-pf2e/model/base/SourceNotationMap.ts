@@ -2,11 +2,11 @@ import { warn } from "@rsc-utils/console-utils";
 import { toSuperscript } from "@rsc-utils/number-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import type HasSource from "./HasSource";
-import Source from "./Source";
+import type { HasSource } from "./HasSource";
+import { Source } from "./Source";
 
 
-export default class SourceNotationMap<T extends HasSource> {
+export class SourceNotationMap<T extends HasSource> {
 	private sources: Source[];
 
 	public constructor(items: T[] = [], public includeCore = false) {

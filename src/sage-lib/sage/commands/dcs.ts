@@ -3,8 +3,8 @@ import type { Optional } from "@rsc-utils/type-utils";
 import { PROFICIENCIES, Table } from "../../../sage-pf2e";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { registerInteractionListener } from "../../discord/handlers";
-import type SageInteraction from "../model/SageInteraction";
-import type SageMessage from "../model/SageMessage";
+import type { SageInteraction } from "../model/SageInteraction";
+import type { SageMessage } from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
 

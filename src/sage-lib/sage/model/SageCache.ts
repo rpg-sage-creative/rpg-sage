@@ -5,14 +5,14 @@ import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Client, DMChannel, GuildMember, NewsChannel, PartialDMChannel, TextChannel, ThreadChannel } from "discord.js";
 import { DiscordCache, DiscordKey, TChannel, type DInteraction, type DMessage, type DReaction, type DUser } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
-import ActiveBot from "../model/ActiveBot";
-import BotRepo from "../repo/BotRepo";
-import GameRepo from "../repo/GameRepo";
-import ServerRepo from "../repo/ServerRepo";
-import UserRepo from "../repo/UserRepo";
-import type Bot from "./Bot";
-import type Game from "./Game";
-import type Server from "./Server";
+import { ActiveBot } from "../model/ActiveBot";
+import { BotRepo } from "../repo/BotRepo";
+import { GameRepo } from "../repo/GameRepo";
+import { ServerRepo } from "../repo/ServerRepo";
+import { UserRepo } from "../repo/UserRepo";
+import type { Bot } from "./Bot";
+import type { Game } from "./Game";
+import type { Server } from "./Server";
 import type { User } from "./User";
 
 export type TSageCacheCore = {
@@ -66,7 +66,7 @@ export async function canSendMessageTo(channel: DMessageChannel): Promise<boolea
 // 	messagesSent?: Message[];
 // };
 
-export default class SageCache {
+export class SageCache {
 	constructor(protected core: TSageCacheCore) { }
 
 	/** Clears the cache/maps in an attempt to avoid memory leaks. */

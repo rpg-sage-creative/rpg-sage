@@ -1,8 +1,8 @@
 import { Optional } from "@rsc-utils/type-utils";
 import { isBlank } from "@rsc-utils/string-utils";
-import type CharacterManager from "../../../model/CharacterManager";
-import type GameCharacter from "../../../model/GameCharacter";
-import type SageMessage from "../../../model/SageMessage";
+import type { CharacterManager } from "../../../model/CharacterManager";
+import type { GameCharacter } from "../../../model/GameCharacter";
+import type { SageMessage } from "../../../model/SageMessage";
 
 export function findCompanion(sageMessage: SageMessage, companionNameOrIndex: Optional<string>): GameCharacter | undefined {
 	let companions: CharacterManager | undefined;

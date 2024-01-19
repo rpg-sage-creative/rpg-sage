@@ -5,7 +5,7 @@ import { deleteMessage } from "../../../../discord/deletedMessages";
 import { embedsToTexts } from "../../../../discord/embeds";
 import { SageDialogWebhookName } from "../../../../discord/messages";
 import type { TDialogMessage } from "../../../model/GameCharacter";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { DialogType } from "../../../repo/base/IdRepository";
 import type { DialogContent } from "../DialogContent";
 import { findLastMessage } from "../findLastMessage";

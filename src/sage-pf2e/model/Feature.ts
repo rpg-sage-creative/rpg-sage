@@ -1,14 +1,14 @@
 import type { SourcedCore } from "../model/base/HasSource";
-import HasSource from "../model/base/HasSource";
+import { HasSource } from "../model/base/HasSource";
 import type { IHasMetadata, IMetadata } from "./Metadata";
-import Metadata from "./Metadata";
+import { Metadata } from "./Metadata";
 
 export interface FeatureCore extends SourcedCore<"Feature"> {
 	level: number;
 	metadata: Partial<IMetadata>;
 }
 
-export default class Feature extends HasSource<FeatureCore, "Feature"> implements IHasMetadata {
+export class Feature extends HasSource<FeatureCore, "Feature"> implements IHasMetadata {
 
 	public constructor(core: FeatureCore) {
 		super(core);

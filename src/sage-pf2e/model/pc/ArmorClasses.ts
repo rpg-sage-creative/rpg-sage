@@ -1,11 +1,11 @@
 import { ARMOR_UNARMORED, DEXTERITY, NO_ARMOR, NO_SHIELD } from "../../common";
 import { findByValue } from "../../data/Repository";
-import type Armor from "../Armor";
-import type Shield from "../Shield";
-import Check from "./Check";
-import type PlayerCharacter from "./PlayerCharacter";
+import type { Armor } from "../Armor";
+import type { Shield } from "../Shield";
+import { Check } from "./Check";
+import type { PlayerCharacter } from "./PlayerCharacter";
 
-export default class ArmorClasses {
+export class ArmorClasses {
 	/**************************************************************************************************************************/
 	// Constructor
 

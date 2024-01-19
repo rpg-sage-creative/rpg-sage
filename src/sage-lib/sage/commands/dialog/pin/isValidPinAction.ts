@@ -1,5 +1,5 @@
 import { EmojiType } from "../../../model/HasEmojiCore";
-import SageReaction from "../../../model/SageReaction";
+import { SageReaction } from "../../../model/SageReaction";
 
 export function isValidPinAction(sageReaction: SageReaction): boolean {
 	const message = sageReaction.messageReaction.message;

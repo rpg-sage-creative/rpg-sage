@@ -1,4 +1,4 @@
-import SageMessage from "../../model/SageMessage";
+import { SageMessage } from "../../model/SageMessage";
 import { getTypeOrAlias } from "./getTypeOrAlias";
 
 /**

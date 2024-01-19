@@ -1,6 +1,6 @@
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface SnareCore extends SourcedCore<"Snare"> {
 	price: string;
@@ -8,7 +8,7 @@ export interface SnareCore extends SourcedCore<"Snare"> {
 	craftRequirements: string[];
 }
 
-export default class Snare extends HasSource<SnareCore> {
+export class Snare extends HasSource<SnareCore> {
 
 	/**************************************************************************************************************************/
 	// Properties

@@ -1,7 +1,7 @@
 import { remove } from "@rsc-utils/array-utils";
 import { createWhitespaceRegex } from "@rsc-utils/string-utils";
 import { GameType } from "../sage-common";
-import type SearchResults from "./SearchResults";
+import type { SearchResults } from "./SearchResults";
 import { searchAonPf1e } from "./aon/pf1e";
 import { searchAonPf2e } from "./aon/pf2e";
 import { searchAonSf1e } from "./aon/sf1e";

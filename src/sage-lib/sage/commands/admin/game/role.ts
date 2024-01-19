@@ -1,5 +1,5 @@
 import { IGameRole, TGameRoleType, GameRoleType } from "../../../model/Game";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
@@ -74,7 +74,7 @@ async function gameRoleRemove(sageMessage: SageMessage): Promise<void> {
 //TODO: remove roles by mentioning them
 //TODO: have a generic set of role commands that dyanmically figure out game or server roletype
 
-export default function register(): void {
+export function registerRole(): void {
 	registerAdminCommand(gameRoleList, "game-role-list");
 	registerAdminCommandHelp("Admin", "Game", "role list");
 

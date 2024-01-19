@@ -7,12 +7,12 @@ import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
 import { DiscordKey } from "../../discord";
 import { DicePostType } from "../commands/dice";
-import ActiveBot from "../model/ActiveBot";
+import { ActiveBot } from "../model/ActiveBot";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
 import { DialogType, IChannel, updateChannel } from "../repo/base/IdRepository";
-import Colors from "./Colors";
-import Emoji from "./Emoji";
-import Game from "./Game";
+import { Colors } from "./Colors";
+import { Emoji } from "./Emoji";
+import { Game } from "./Game";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
 
@@ -36,7 +36,7 @@ export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji {
 	roles: IAdminRole[];
 }
 
-export default class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IHasEmojiCore {
+export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IHasEmojiCore {
 
 	// #region Public Properties
 	public get admins(): IAdminUser[] { return this.core.admins ?? []; }

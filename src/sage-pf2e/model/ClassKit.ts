@@ -1,16 +1,16 @@
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { TObjectQuantity } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import { findByValue } from "../data/Repository";
-import type Ammunition from "./Ammunition";
-import type Armor from "./Armor";
+import type { Ammunition } from "./Ammunition";
+import type { Armor } from "./Armor";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
-import Bulk from "./Bulk";
-import Coins from "./Coins";
-import type Gear from "./Gear";
+import { HasSource } from "./base/HasSource";
+import { Bulk } from "./Bulk";
+import { Coins } from "./Coins";
+import type { Gear } from "./Gear";
 import { getQuantity, toObjectQuantities } from "./HasBulk";
-import type Weapon from "./Weapon";
+import type { Weapon } from "./Weapon";
 
 type TClassKitItem = Weapon | Ammunition | Armor | Gear;
 
@@ -55,7 +55,7 @@ function _toString<T extends TClassKitItem>(objectQuantities: TObjectQuantity<T>
 	}).join(", ");
 }
 
-export default class ClassKit extends HasSource<ClassKitCore> {
+export class ClassKit extends HasSource<ClassKitCore> {
 	private _armor?: Armor | null;
 	public get armor(): Armor | undefined {
 		if (this._armor === undefined) {

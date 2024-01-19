@@ -1,12 +1,12 @@
 import { Collection } from "@rsc-utils/array-utils";
 import { Base, RARITIES } from "../../../sage-pf2e";
-import type SearchResults from "../../../sage-search/SearchResults";
+import type { SearchResults } from "../../../sage-search/SearchResults";
 import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { TChannel } from "../../discord";
 import { deleteMessages } from "../../discord/deletedMessages";
 import { send } from "../../discord/messages";
-import type SageMessage from "../model/SageMessage";
+import type { SageMessage } from "../model/SageMessage";
 
 function theOneOrMatchToSage(searchResults: SearchResults<any>, match = false): Base | null {
 	const aon = searchResults.theOne ?? (match ? searchResults.theMatch : null);

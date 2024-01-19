@@ -5,32 +5,32 @@ import { HasIdCore, type IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
 import { PERCEPTION, WISDOM, profToMod } from "../../common";
 import { findById, findByValue } from "../../data/Repository";
-import type Action from "../Action";
-import Ancestry from "../Ancestry";
-import Background from "../Background";
-import Class from "../Class";
-import type Deity from "../Deity";
-import type Feature from "../Feature";
+import type { Action } from "../Action";
+import { Ancestry } from "../Ancestry";
+import { Background } from "../Background";
+import { Class } from "../Class";
+import type { Deity } from "../Deity";
+import type { Feature } from "../Feature";
 import type { FeatureCore } from "../Feature";
 import type { FeatureLevelCore } from "../Features";
-import Features from "../Features";
-import Heritage from "../Heritage";
-import Language from "../Language";
+import { Features } from "../Features";
+import { Heritage } from "../Heritage";
+import { Language } from "../Language";
 import type { IHasMetadata } from "../Metadata";
-import type Spell from "../Spell";
+import type { Spell } from "../Spell";
 import type { IWealth } from "../Wealth";
-import Wealth from "../Wealth";
+import { Wealth } from "../Wealth";
 import type { IHasAbilities } from "./Abilities";
-import Abilities from "./Abilities";
-import ArmorClasses from "./ArmorClasses";
-import Check from "./Check";
-import Encumbrance from "./Encumbrance";
+import { Abilities } from "./Abilities";
+import { ArmorClasses } from "./ArmorClasses";
+import { Check } from "./Check";
+import { Encumbrance } from "./Encumbrance";
 import type { IEquipment } from "./Equipment";
-import Equipment from "./Equipment";
+import { Equipment } from "./Equipment";
 import type { IHasSavingThrows } from "./SavingThrows";
-import SavingThrows from "./SavingThrows";
-import Skills from "./Skills";
-import Speeds from "./Speeds";
+import { SavingThrows } from "./SavingThrows";
+import { Skills } from "./Skills";
+import { Speeds } from "./Speeds";
 
 //#region Interfaces & Types
 
@@ -102,7 +102,7 @@ export interface IHasProficiencies {
 	getProficiencyMod(subject: string): number;
 }
 
-export default class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerCharacter"> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerCharacter"> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
 	private _background?: Background;
 	private _class?: Class;
 	private _deity?: Deity;

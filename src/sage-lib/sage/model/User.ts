@@ -2,12 +2,12 @@ import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { type DidCore, HasDidCore } from "../repo/base/DidRepository";
 import type { DialogType } from "../repo/base/IdRepository";
-import CharacterManager from "./CharacterManager";
-import type GameCharacter from "./GameCharacter";
+import { CharacterManager } from "./CharacterManager";
+import type { GameCharacter } from "./GameCharacter";
 import type { GameCharacterCore } from "./GameCharacter";
 import { NamedCollection } from "./NamedCollection";
-import NoteManager, { TNote } from "./NoteManager";
-import type SageCache from "./SageCache";
+import { NoteManager, TNote } from "./NoteManager";
+import type { SageCache } from "./SageCache";
 
 export type TAlias = {
 	name: string;

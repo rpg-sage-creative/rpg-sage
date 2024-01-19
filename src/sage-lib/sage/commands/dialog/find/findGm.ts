@@ -1,5 +1,5 @@
-import GameCharacter, { type GameCharacterCore } from "../../../model/GameCharacter";
-import type SageMessage from "../../../model/SageMessage";
+import { GameCharacter, type GameCharacterCore } from "../../../model/GameCharacter";
+import type { SageMessage } from "../../../model/SageMessage";
 import { findNpc } from "./findNpc";
 
 /** Finds the Game Master NPC, using the saved name or the default name, creating one if not found and the user is a GameMaster. */

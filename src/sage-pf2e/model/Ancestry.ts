@@ -1,13 +1,13 @@
 import { remove } from "@rsc-utils/array-utils";
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import { filter } from "../data/Repository";
 import type { FeatureCore } from "./Feature";
-import Feature from "./Feature";
-import Features from "./Features";
-import type Heritage from "./Heritage";
+import { Feature } from "./Feature";
+import { Features } from "./Features";
+import type { Heritage } from "./Heritage";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface AncestryCore extends SourcedCore<"Ancestry"> {
 	// adventurers: string[];
@@ -23,7 +23,7 @@ function toUl(items: string[]): string {
 	return `<ul>${listItems}</ul>`;
 }
 
-export default class Ancestry extends HasSource<AncestryCore> {
+export class Ancestry extends HasSource<AncestryCore> {
 
 	//#region properties
 

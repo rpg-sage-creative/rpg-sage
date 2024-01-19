@@ -1,8 +1,8 @@
-import Check from "./Check";
-import type PlayerCharacter from "./PlayerCharacter";
+import { Check } from "./Check";
+import type { PlayerCharacter } from "./PlayerCharacter";
 import { STRENGTH } from "../../common";
 
-export default class Encumbrance {
+export class Encumbrance {
 
 	public constructor(private pc: PlayerCharacter) { }
 

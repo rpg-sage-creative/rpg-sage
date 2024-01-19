@@ -1,5 +1,5 @@
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
@@ -52,7 +52,7 @@ async function prefixUnset(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(saved);
 }
 
-export default function register(): void {
+export function registerPrefix(): void {
 	registerAdminCommand(prefixSet, "prefix-set");
 	registerAdminCommandHelp("Admin", "Prefix", "prefix set {commandPrefix; ex: sage}");
 

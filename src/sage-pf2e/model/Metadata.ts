@@ -104,7 +104,7 @@ export interface IHasMetadata {
 	objectType: string;
 }
 
-export default class Metadata {
+export class Metadata {
 	/**************************************************************************************************************************/
 	// Constructor
 

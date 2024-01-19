@@ -5,7 +5,7 @@ import type { IDate, TDayType, TMonthType } from "../sage-utils/utils/DateUtils/
 
 const DayMS = 1000 * 60 * 60 * 24;
 
-export default class SageDate<
+export class SageDate<
 		S extends SageDate<any, any, any, any, any>,
 		T extends number = DayType,
 		U extends string = TDayType,
@@ -49,12 +49,12 @@ export default class SageDate<
 	public get month(): W { return Months[this._.getMonth()] as W; }
 
 	public getPrevDay(): S {
-		const constructor = this.constructor as typeof SageDate
-		return new constructor(new Date(this._.getTime() - DayMS)) as S;
+		const cnstr = this.constructor as typeof SageDate;
+		return new cnstr(new Date(this._.getTime() - DayMS)) as S;
 	}
 	public getNextDay(): S {
-		const constructor = this.constructor as typeof SageDate
-		return new constructor(new Date(this._.getTime() + DayMS)) as S;
+		const cnstr = this.constructor as typeof SageDate;
+		return new cnstr(new Date(this._.getTime() + DayMS)) as S;
 	}
 
 	public toDate(): Date { return new Date(this._.getDate()); }

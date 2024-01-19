@@ -5,7 +5,7 @@ import type { Guild } from "discord.js";
 import XRegExp from "xregexp";
 import { DiscordId } from "../../../discord";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
-import RenderableGameMap from "./RenderableGameMap";
+import { RenderableGameMap } from "./RenderableGameMap";
 
 export type TParsedGameMapCore = Omit<TGameMapCore, "messageId">;
 export type TValidatedGameMapCore = TParsedGameMapCore & {
@@ -238,7 +238,7 @@ function matchAnchor(mapCore: TParsedGameMapCore, aura: TGameMapAura | null): vo
 	}
 }
 
-export default function gameMapImporter(raw: string): TParsedGameMapCore | null {
+export function gameMapImporter(raw: string): TParsedGameMapCore | null {
 	const lines = raw.split(/\r?\n\r?/);
 
 	//#region map

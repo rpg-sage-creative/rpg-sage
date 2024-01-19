@@ -2,7 +2,7 @@ import { forEachAsync, mapAsync } from "@rsc-utils/async-array-utils";
 import type { User } from "discord.js";
 import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { AdminRoleType, type IAdminUser } from "../../../model/Server";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
@@ -108,7 +108,7 @@ async function adminRemove(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(removed);
 }
 
-export default function register(): void {
+export function registerAdmin(): void {
 	registerAdminCommand(adminList, "admin-list");
 	registerAdminCommandHelp("Admin", "SuperUser", "Admin", "admin list");
 	registerAdminCommandHelp("Admin", "SuperUser", "Admin", "admin list {optionalNameFilter}");

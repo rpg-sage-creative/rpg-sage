@@ -1,1 +1,1 @@
-export { default as RenderableContent } from "./RenderableContent";
+export {  RenderableContent } from "./RenderableContent";

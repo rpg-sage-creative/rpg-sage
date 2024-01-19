@@ -3,9 +3,9 @@ import type { RenderableContent as UtilsRenderableContent } from "../../sage-uti
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TAction, TSkill } from "../common";
 import { NEWLINE, TAB } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface ActionCore<T extends string = "Action"> extends SourcedCore<T> {
 	actionType?: TAction;
@@ -18,7 +18,7 @@ export interface ActionCore<T extends string = "Action"> extends SourcedCore<T> 
 	trigger: string[];
 }
 
-export default class Action<T extends string = "Action", U extends ActionCore<T> = ActionCore<T>>  extends HasSource<U, T> {
+export class Action<T extends string = "Action", U extends ActionCore<T> = ActionCore<T>>  extends HasSource<U, T> {
 	//#region Constructor
 
 	public constructor(core: U) {

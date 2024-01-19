@@ -2,7 +2,7 @@ import { toUniqueDefined } from "@rsc-utils/array-utils";
 import { oneToUS, reduceNoiseUS } from "@rsc-utils/language-utils";
 import { dequote, tokenize } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
-import SearchScore, { TTermInfo } from "./SearchScore";
+import { SearchScore, TTermInfo } from "./SearchScore";
 import type { ISearchable } from "./types";
 
 function createRegex(value: string, flags = "gi"): RegExp {
@@ -34,7 +34,7 @@ function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean) {
 	});
 }
 
-export default class SearchInfo {
+export class SearchInfo {
 	public globalFlag: boolean;
 	public hasMinus = false;
 	public hasPlus = false;

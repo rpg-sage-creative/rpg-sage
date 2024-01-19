@@ -1,13 +1,13 @@
 import { info } from "@rsc-utils/console-utils";
 import type { Guild } from "discord.js";
-import ActiveBot from "../model/ActiveBot";
-import type SageCache from "../model/SageCache";
-import Server, { type ServerCore } from "../model/Server";
-import DidRepository from "./base/DidRepository";
+import { ActiveBot } from "../model/ActiveBot";
+import type { SageCache } from "../model/SageCache";
+import { Server, type ServerCore } from "../model/Server";
+import { DidRepository } from "./base/DidRepository";
 
 const UnkownBotCodeName = "<UnknownBot>";
 
-export default class ServerRepo extends DidRepository<ServerCore, Server> {
+export class ServerRepo extends DidRepository<ServerCore, Server> {
 
 	public getHome(): Promise<Server> {
 		return <Promise<Server>>this.getByDid(Server.HomeServerDid);

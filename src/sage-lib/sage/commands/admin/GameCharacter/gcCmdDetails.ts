@@ -1,5 +1,5 @@
-import GameCharacter from "../../../model/GameCharacter";
-import type SageMessage from "../../../model/SageMessage";
+import { GameCharacter } from "../../../model/GameCharacter";
+import type { SageMessage } from "../../../model/SageMessage";
 import type { TNames } from "../../../model/SageMessageArgsManager";
 import { findCompanion } from "./findCompanion";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta";

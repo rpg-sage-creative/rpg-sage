@@ -1,8 +1,8 @@
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import { find } from "../data/Repository";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 
 // #region Core Interface
@@ -23,7 +23,7 @@ function mapTable(rows: string[][]): string {
 	return `<table>${rows.map(mapTr).join("")}</table>`;
 }
 
-export default class Table extends HasSource<TableCore> {
+export class Table extends HasSource<TableCore> {
 	public get footer(): string[] { return this.core.footer || []; }
 	public get header(): string { return `Table ${this.number}: ${this.name}`; }
 	public get number(): string { return this.core.number; }

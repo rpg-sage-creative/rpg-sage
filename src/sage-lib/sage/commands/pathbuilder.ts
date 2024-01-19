@@ -9,8 +9,8 @@ import { TCharacterSectionType, TCharacterViewType, getCharacterSections } from 
 import { DiscordId, DiscordKey, type DUser, type TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
-import type SageCache from "../model/SageCache";
-import type SageInteraction from "../model/SageInteraction";
+import type { SageCache } from "../model/SageCache";
+import type { SageInteraction } from "../model/SageInteraction";
 import type { User } from "../model/User";
 import type { TMacro } from "../model/types";
 import { parseDiceMatches, sendDice } from "./dice";

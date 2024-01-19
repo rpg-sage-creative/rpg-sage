@@ -1,5 +1,5 @@
 import { CharacterShell } from "../../../model/CharacterShell";
-import type GameCharacter from "../../../model/GameCharacter";
+import type { GameCharacter } from "../../../model/GameCharacter";
 import { Wealth } from "./Wealth";
 import { summarizeWealth } from "./summarizeWealth";
 

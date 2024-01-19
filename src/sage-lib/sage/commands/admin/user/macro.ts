@@ -2,7 +2,7 @@ import { toUniqueDefined } from "@rsc-utils/array-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import type { TMacro } from "../../../model/User";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
@@ -289,7 +289,7 @@ async function macroDelete(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactFailure();
 }
 
-export default function register(): void {
+export function registerMacro(): void {
 	registerAdminCommand(macroList, "macro-list");
 
 	registerAdminCommand(macroSet, "macro-set", "macro-add");

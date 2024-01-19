@@ -38,7 +38,7 @@ function sortByCountThenLabel<T extends ISearchable>(a: TCategorizedSearchables<
 		|| sortPrimitive(a.label, b.label);
 }
 
-export default class HasCategorizedSearchables<T extends ISearchable> {
+export class HasCategorizedSearchables<T extends ISearchable> {
 
 	protected _unsortedSearchables: T[] = [];
 

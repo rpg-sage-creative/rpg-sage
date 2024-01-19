@@ -1,6 +1,6 @@
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { BulkCore } from "./HasBulk";
-import HasBulk from "./HasBulk";
+import { HasBulk } from "./HasBulk";
 
 /**************************************************************************************************************************/
 // Interface and Class
@@ -10,7 +10,7 @@ export interface AlchemicalItemCore extends BulkCore<"AlchemicalItem"> {
 	price: string;
 }
 
-export default class AlchemicalItem extends HasBulk<AlchemicalItemCore, AlchemicalItem> {
+export class AlchemicalItem extends HasBulk<AlchemicalItemCore, AlchemicalItem> {
 
 	/**************************************************************************************************************************/
 	// Constructor

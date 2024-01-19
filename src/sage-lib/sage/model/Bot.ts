@@ -2,11 +2,11 @@ import { warn } from "@rsc-utils/console-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { GameType } from "../../../sage-common";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository";
-import Colors from "./Colors";
-import Emoji from "./Emoji";
+import { Colors } from "./Colors";
+import { Emoji } from "./Emoji";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
-import type SageCache from "./SageCache";
+import type { SageCache } from "./SageCache";
 
 export type TBotCodeName = "dev" | "beta" | "stable";
 
@@ -38,7 +38,7 @@ export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	searchStatus: TSearchStatus;
 }
 
-export default class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmojiCore {
+export class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmojiCore {
 	public constructor(core: IBotCore, sageCache: SageCache) { super(core, sageCache); }
 	public get codeName(): TBotCodeName { return this.core.codeName; }
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }

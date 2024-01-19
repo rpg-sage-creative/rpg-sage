@@ -5,7 +5,7 @@ import { ColorType, IColor } from "./HasColorsCore";
 
 export type TColorAndType = { type: ColorType; color: Color; };
 
-export default class Colors {
+export class Colors {
 	public constructor(private colors: IColor[]) { }
 
 	private findColor(type: Optional<ColorType>): IColor | undefined {

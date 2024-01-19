@@ -4,9 +4,9 @@ import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined, isNullOrUndefined } from "@rsc-utils/type-utils";
 import { Intents, type IntentsString, type Interaction, type PermissionString } from "discord.js";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/toHumanReadable";
-import SageInteraction from "../sage/model/SageInteraction";
-import SageMessage from "../sage/model/SageMessage";
-import SageReaction from "../sage/model/SageReaction";
+import { SageInteraction } from "../sage/model/SageInteraction";
+import { SageMessage } from "../sage/model/SageMessage";
+import { SageReaction } from "../sage/model/SageReaction";
 import { MessageType, ReactionType } from "./enums";
 import type { DMessage, DReaction, DUser, TChannel, TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
 

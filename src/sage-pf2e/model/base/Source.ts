@@ -1,9 +1,9 @@
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { RenderableContent as UtilsRenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
-import RenderableContent from "../../data/RenderableContent";
+import { RenderableContent } from "../../data/RenderableContent";
 import { findByValue, type IFile } from "../../data/Repository";
-import Base, { BaseCore } from "./Base";
+import { Base, BaseCore } from "./Base";
 
 export interface SourceCore extends BaseCore<"Source"> {
 	apName?: string;
@@ -19,7 +19,7 @@ export interface SourceCore extends BaseCore<"Source"> {
 }
 
 let crb: Source;
-export default class Source extends Base<SourceCore, "Source"> {
+export class Source extends Base<SourceCore, "Source"> {
 	// #region Instance Properties
 
 	/** @deprecated */

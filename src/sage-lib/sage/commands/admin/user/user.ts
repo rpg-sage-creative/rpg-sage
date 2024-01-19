@@ -3,7 +3,7 @@ import type { Optional } from "@rsc-utils/type-utils";
 import type { User as DUser } from "discord.js";
 import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import type { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import type { User as SUser } from "../../../model/User";
 import { DialogType } from "../../../repo/base/IdRepository";
 import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
@@ -117,7 +117,7 @@ async function userDetails(sageMessage: SageMessage): Promise<void> {
 	return <any>sageMessage.send(renderableContent);
 }
 
-export default function register(): void {
+export function registerUser(): void {
 	registerAdminCommand(userCount, "user-count");
 	registerAdminCommandHelp("Admin", "SuperUser", "User", "user count");
 

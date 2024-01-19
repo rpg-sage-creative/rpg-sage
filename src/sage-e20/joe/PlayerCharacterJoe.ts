@@ -1,6 +1,6 @@
 import type { Optional } from "@rsc-utils/type-utils";
 import type { PlayerCharacterCoreE20, TArmorE20, TWeaponE20 } from "../common/PlayerCharacterE20";
-import PlayerCharacterE20 from "../common/PlayerCharacterE20";
+import { PlayerCharacterE20 } from "../common/PlayerCharacterE20";
 
 export type TArmorJoe = TArmorE20 & {
 	upgrades?: string;
@@ -46,7 +46,7 @@ export interface PlayerCharacterCoreJoe extends PlayerCharacterCoreE20 {
 	weapons: TWeaponJoe[];
 }
 
-export default class PlayerCharacterJoe extends PlayerCharacterE20<PlayerCharacterCoreJoe> {
+export class PlayerCharacterJoe extends PlayerCharacterE20<PlayerCharacterCoreJoe> {
 
 	public toHtmlName(): string {
 		const name = this.core.name ?? "Unnamed Character";

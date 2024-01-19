@@ -1,7 +1,7 @@
 import { isNotBlank } from "@rsc-utils/string-utils";
 // import { discordPromptYesNo } from "../../../../../discord/prompts";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import type { TAlias } from "../../../model/User";
 import { DialogType } from "../../../repo/base/IdRepository";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
@@ -280,7 +280,7 @@ async function aliasHelp(sageMessage: SageMessage): Promise<void> {
 
 }
 
-export default function register(): void {
+export function registerAlias(): void {
 	registerAdminCommand(aliasHelp, "alias-help", "alias");
 	registerAdminCommand(aliasList, "alias-list");
 	registerAdminCommand(aliasSet, "alias-set", "alias-add");

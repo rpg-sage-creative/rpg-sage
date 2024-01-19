@@ -5,9 +5,9 @@ import XRegExp from "xregexp";
 import { PathbuilderCharacter, TPathbuilderCharacter, getExplorationModes, getSkills } from "../../../sage-pf2e";
 import { DiscordKey } from "../../discord";
 import { DialogType } from "../repo/base/IdRepository";
-import CharacterManager from "./CharacterManager";
+import { CharacterManager } from "./CharacterManager";
 import type { IHasSave } from "./NamedCollection";
-import NoteManager, { type TNote } from "./NoteManager";
+import { NoteManager, type TNote } from "./NoteManager";
 import type { TKeyValuePair } from "./SageMessageArgsManager";
 
 export type TDialogMessage = {
@@ -111,7 +111,7 @@ function updateCore(core: IOldGameCharacterCore): GameCharacterCore {
 
 //#endregion
 
-export default class GameCharacter implements IHasSave {
+export class GameCharacter implements IHasSave {
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
 		updateCore(core);
 

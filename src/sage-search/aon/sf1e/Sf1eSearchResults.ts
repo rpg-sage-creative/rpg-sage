@@ -1,14 +1,14 @@
 import { createSearchUrl } from ".";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import SearchResults from "../../SearchResults";
-import type AonPf1SearchBase from "./AonSf1SearchBase";
+import { SearchResults } from "../../SearchResults.js";
+import type { AonSf1SearchBase } from "./AonSf1SearchBase.js";
 
-function createClickableSearchLink(searchResults: Pf1eSearchResults, label: string): string {
+function createClickableSearchLink(searchResults: Sf1eSearchResults, label: string): string {
 	const url = createSearchUrl(searchResults.searchInfo.searchText);
 	return `<a href="${url}">${label}</a>`;
 }
 
-export default class Pf1eSearchResults extends SearchResults<AonPf1SearchBase> {
+export class Sf1eSearchResults extends SearchResults<AonSf1SearchBase> {
 
 	protected createRenderable(): RenderableContent {
 		// const labelPrefix = this.objectType ? `${this.objectType} ` : ``;
@@ -25,8 +25,8 @@ export default class Pf1eSearchResults extends SearchResults<AonPf1SearchBase> {
 		return content;
 	}
 
-	public get theOne(): AonPf1SearchBase | null { return null; }
-	public get theMatch(): AonPf1SearchBase | null { return null; }
+	public get theOne(): AonSf1SearchBase | null { return null; }
+	public get theMatch(): AonSf1SearchBase | null { return null; }
 
 	// #region utils.DiscordUtils.IMenuRenderable
 

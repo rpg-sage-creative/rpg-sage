@@ -3,10 +3,10 @@ import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
 import type { DiscordKey } from "../../discord";
-import CharactersMatch from "./CharactersMatch";
-import type Game from "./Game";
+import { CharactersMatch } from "./CharactersMatch";
+import type { Game } from "./Game";
 import type { GameCharacterCore, TDialogMessage, TGameCharacterType } from "./GameCharacter";
-import GameCharacter from "./GameCharacter";
+import { GameCharacter } from "./GameCharacter";
 import type { IHasSave } from "./NamedCollection";
 import { NamedCollection } from "./NamedCollection";
 import type { User } from "./User";
@@ -244,5 +244,3 @@ export interface CharacterManager {
 	splice(start: number, deleteCount?: number): CharacterManager;
 	splice(start: number, deleteCount: number, ...items: GameCharacter[]): CharacterManager;
 }
-
-export default CharacterManager;

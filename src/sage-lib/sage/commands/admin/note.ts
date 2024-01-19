@@ -67,5 +67,5 @@ Game PC Notes
 // registerAdminCommandHelp("Admin", "Journal", `journal update {entry title}\n{updated journal entry}`);
 // registerAdminCommandHelp("Admin", "Journal", `journal remove {entry title}`);
 
-export default function register(): void {
+export function registerNote(): void {
 }

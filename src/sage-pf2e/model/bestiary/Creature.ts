@@ -1,11 +1,11 @@
 import type { IAbilityModifiers, IAttack, ISourceReference } from "../../common";
-import HasSource from "../base/HasSource";
-import type CreatureCategory from "./CreatureCategory";
-import CreatureLanguages from "./CreatureLanguages";
+import { HasSource } from "../base/HasSource";
+import type { CreatureCategory } from "./CreatureCategory";
+import { CreatureLanguages } from "./CreatureLanguages";
 import type { ICreature, ICreatureAcTac, ICreatureHp, ICreaturePerception, ICreatureSavingThrows, ICreatureSkills, ICreatureSpeed, ICreatureSpells, IOtherBlock } from "./ICreature";
 
 
-export default class Creature extends HasSource<ICreature> {
+export class Creature extends HasSource<ICreature> {
 	public category?: CreatureCategory;
 	public get fullName(): string { return this.core.fullName ?? this.name; }
 	public get reference(): ISourceReference { return this.core.reference; }

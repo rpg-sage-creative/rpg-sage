@@ -1,5 +1,5 @@
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import GameMapBase, { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, UserLayerType } from "./GameMapBase";
+import { COL, GameMapBase, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, UserLayerType } from "./GameMapBase";
 
 /** shuffles an image on a layer */
 export type TShuffleUpDown = "up" | "down";
@@ -87,7 +87,7 @@ function move(image: TGameMapImage, ...posDirs: [0 | 1, -1 | 1][]): boolean {
 	return true;
 }
 
-export default class GameMap extends GameMapBase {
+export class GameMap extends GameMapBase {
 	/** constructs a map for the given core and user */
 	public constructor(core: TGameMapCore, public userId: Snowflake) {
 		super(core);

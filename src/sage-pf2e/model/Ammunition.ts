@@ -1,18 +1,18 @@
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import { MDASH, NEWLINE, TAB } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import { filter } from "../data/Repository";
 import type { BulkCore } from "./HasBulk";
-import HasBulk from "./HasBulk";
-import type Weapon from "./Weapon";
+import { HasBulk } from "./HasBulk";
+import type { Weapon } from "./Weapon";
 
 export interface AmmunitionCore extends BulkCore<"Ammunition"> {
 	quantity: number;
 	price: string;
 }
 
-export default class Ammunition extends HasBulk<AmmunitionCore, Ammunition>{
+export class Ammunition extends HasBulk<AmmunitionCore, Ammunition>{
 
 	/**************************************************************************************************************************/
 	// Properties

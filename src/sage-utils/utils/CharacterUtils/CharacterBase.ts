@@ -14,7 +14,7 @@ export interface CharacterBaseCore<T extends string = string> extends IdCore<T> 
 	userDid?: string;
 }
 
-export default abstract class CharacterBase<T extends CharacterBaseCore<U> = CharacterBaseCore<any>, U extends string = string> extends HasIdCore<T, U> {
+export abstract class CharacterBase<T extends CharacterBaseCore<U> = CharacterBaseCore<any>, U extends string = string> extends HasIdCore<T, U> {
 	public get name(): string { return this.core.name ?? ""; }
 	public set name(name: string) { this.core.name = name; }
 

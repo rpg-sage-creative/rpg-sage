@@ -1,5 +1,5 @@
 import { ColorType } from "../../../model/HasColorsCore";
-import SageMessage from "../../../model/SageMessage";
+import { SageMessage } from "../../../model/SageMessage";
 import { DialogContent } from "../DialogContent";
 import { findGm } from "../find/findGm";
 import { ChatOptions } from "./ChatOptions";

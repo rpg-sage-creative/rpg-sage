@@ -1,7 +1,7 @@
 import { debug } from "@rsc-utils/console-utils";
 import { ButtonInteraction } from "discord.js";
 import { registerInteractionListener } from "../../../../discord/handlers";
-import SageInteraction from "../../../model/SageInteraction";
+import { SageInteraction } from "../../../model/SageInteraction";
 
 // return `encounter-${encounter.id}-status-action-${action}`;
 function isEncounterStartStopButton(sageInteraction: SageInteraction<ButtonInteraction>): boolean {

@@ -1,5 +1,5 @@
-import GameCharacter from "../../../model/GameCharacter";
-import SageMessage from "../../../model/SageMessage";
+import { GameCharacter } from "../../../model/GameCharacter";
+import { SageMessage } from "../../../model/SageMessage";
 
 export function findNpc(sageMessage: SageMessage, npcName: string): GameCharacter | undefined {
 	if (sageMessage.gameChannel && sageMessage.isGameMaster) {

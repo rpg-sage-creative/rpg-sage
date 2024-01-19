@@ -7,11 +7,11 @@ import { GameType } from "../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
 import { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import { DiscordCache, DiscordId, DiscordKey } from "../../../discord";
-import type Game from "../../model/Game";
+import type { Game } from "../../model/Game";
 import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game";
-import type SageCache from "../../model/SageCache";
-import type SageMessage from "../../model/SageMessage";
-import type Server from "../../model/Server";
+import type { SageCache } from "../../model/SageCache";
+import type { SageMessage } from "../../model/SageMessage";
+import type { Server } from "../../model/Server";
 import { DialogType, PermissionType, type IChannel } from "../../repo/base/IdRepository";
 import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
@@ -309,7 +309,7 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 
 //#endregion
 
-export default function register(): void {
+export function registerChannel(): void {
 	registerAdminCommand(channelAdd, "channel-add");
 	registerAdminCommand(channelDetails, "channel-details");
 	registerAdminCommand(channelListServer, "channel-list-server");

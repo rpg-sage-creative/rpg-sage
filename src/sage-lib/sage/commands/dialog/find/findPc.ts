@@ -1,7 +1,7 @@
 import { Optional } from "@rsc-utils/type-utils";
 import { isBlank } from "@rsc-utils/string-utils";
-import type GameCharacter from "../../../model/GameCharacter";
-import type SageMessage from "../../../model/SageMessage";
+import type { GameCharacter } from "../../../model/GameCharacter";
+import type { SageMessage } from "../../../model/SageMessage";
 
 export function findPc(sageMessage: SageMessage, pcNameOrIndex: Optional<string>): GameCharacter | undefined {
 	if (sageMessage.game) {

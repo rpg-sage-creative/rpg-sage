@@ -6,7 +6,7 @@ import { HasIdCore, type IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { RenderableContent as UtilsRenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { NEWLINE, TAB } from "../../common";
-import RenderableContent from "../../data/RenderableContent";
+import { RenderableContent } from "../../data/RenderableContent";
 import type {
 	ArchivedCore,
 	DetailedCore,
@@ -47,7 +47,7 @@ function tabNewLineOrEmpty(index: number, wasBlock: boolean): "\t" | "\n" | "" {
 export interface BaseCore<T extends string = string> extends IdCore<T>, ArchivedCore, DetailedCore<T>, LinkedCore, NamedCore { }
 
 type TChildCoreParser<T extends BaseCore> = (core: T) => T[];
-export default class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = string>
+export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = string>
 	extends
 		HasIdCore<T, U>
 	implements

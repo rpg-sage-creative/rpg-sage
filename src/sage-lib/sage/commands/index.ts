@@ -15,7 +15,7 @@ import { registerPfsCommands } from "./pfs";
 import { registerSpells } from "./spells";
 import { registerEncounter } from "./trackers/registerEncounter";
 import { registerParty } from "./trackers/registerParty";
-import registerWealth from "./wealth";
+import { registerWealth } from "./wealth";
 import { registerCommandHandlers as registerWeather } from "./weather";
 
 export function registerCommandHandlers(): void {

@@ -1,10 +1,11 @@
 import { error, warn } from "@rsc-utils/console-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import _dice, { DieRollGrade } from "../../../../sage-dice";
+import { DieRollGrade } from "../../../../sage-dice";
+import { Dice } from "../../../../sage-dice/dice/pf2e";
 import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e";
 import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import { ColorType } from "../../model/HasColorsCore";
-import type SageMessage from "../../model/SageMessage";
+import type { SageMessage } from "../../model/SageMessage";
 import { createRenderableContent, registerCommandRegex } from "../cmd";
 import { registerCommandHelp } from "../help";
 
@@ -75,7 +76,7 @@ function earnIncome(sageMessage: SageMessage): void {
 		renderable.append(`<blockquote><b>Success</b> ${levelRow[1 + proficiencyLetterIndex]}\n<b>Critical Success</b> ${critRow[1 + proficiencyLetterIndex]}</blockquote>`);
 
 		const rolls: TIncomeRoll[] = [];
-		const dice = _dice.pf2e.Dice.parse(`1d20+${modifier}dc${dc}`);
+		const dice = Dice.parse(`1d20+${modifier}dc${dc}`);
 		let dayCounter = days;
 		do {
 			const diceRoll = dice.roll();
@@ -281,7 +282,7 @@ function registerScenarios(): void {
 }
 // #endregion Scenario/Quest Randomizer
 
-export default function register(): void {
+export function registerPfs(): void {
 	registerDowntime();
 	registerTiers();
 	registerScenarios();

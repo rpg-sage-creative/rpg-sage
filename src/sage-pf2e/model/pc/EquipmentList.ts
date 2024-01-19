@@ -1,14 +1,14 @@
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import { HasIdCore, type IdCore } from "../../../sage-utils/utils/ClassUtils";
-import Bulk from "../Bulk";
-import Coins from "../Coins";
+import { Bulk } from "../Bulk";
+import { Coins } from "../Coins";
 import type { NamedCore } from "../base/interfaces";
-import type Equipment from "./Equipment";
-import type EquipmentItem from "./EquipmentItem";
+import type { Equipment } from "./Equipment";
+import type { EquipmentItem } from "./EquipmentItem";
 
 export interface EquipmentListCore extends IdCore<"EquipmentList">, NamedCore { }
 
-export default class EquipmentList extends HasIdCore<EquipmentListCore, "EquipmentList"> {
+export class EquipmentList extends HasIdCore<EquipmentListCore, "EquipmentList"> {
 
 	public constructor(private eq: Equipment, core: EquipmentListCore) {
 		super(core);

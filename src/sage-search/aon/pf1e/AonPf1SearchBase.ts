@@ -11,7 +11,7 @@ import { StringMatcher } from "@rsc-utils/string-utils";
  * temp solution for pf1 search results using the existing search output mechanism
  * ultimately this should house the results and not the categories ... but i wanna just get *A* solution first
  */
-export default class AonPf1SearchBase
+export class AonPf1SearchBase
 	extends
 		HasCore<TResultsLink, string>
 	implements

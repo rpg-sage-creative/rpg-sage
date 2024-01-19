@@ -1,7 +1,7 @@
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TQuality } from "../common";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 /**************************************************************************************************************************/
 // Interfaces and Class
@@ -25,7 +25,7 @@ export interface MaterialCore extends SourcedCore<"Material"> {
 	requirements: string[];
 }
 
-export default class Material extends HasSource<MaterialCore> {
+export class Material extends HasSource<MaterialCore> {
 	/**************************************************************************************************************************/
 	// Properties
 

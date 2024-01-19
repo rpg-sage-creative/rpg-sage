@@ -2,10 +2,10 @@ import { nth } from "@rsc-utils/number-utils";
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import { NEWLINE } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import type { TSpellHeighten } from "./Spell";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface RitualCore extends SourcedCore<"Ritual"> {
 	level: number;
@@ -22,7 +22,7 @@ export interface RitualCore extends SourcedCore<"Ritual"> {
 	heightenedAs?: string[];
 }
 
-export default class Ritual extends HasSource<RitualCore> {
+export class Ritual extends HasSource<RitualCore> {
 	public constructor(core: RitualCore) {
 		super(core);
 		this.canHeighten = !!core.heightenedAs || (core.heightened?.length ?? 0) > 0;

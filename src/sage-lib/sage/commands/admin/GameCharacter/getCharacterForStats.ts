@@ -1,5 +1,5 @@
 import type { Snowflake } from "discord.js";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import type { TNames } from "../../../model/SageMessageArgsManager";
 import { getCharacter } from "./getCharacter";
 import type { TCharacterTypeMeta } from "./getCharacterTypeMeta";

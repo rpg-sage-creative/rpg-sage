@@ -1,5 +1,5 @@
 import { mapSageChannelNameTags } from "../../../model/Game";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { Encounter } from "./Encounter";
 import { addButtons } from "./addButtons";
 

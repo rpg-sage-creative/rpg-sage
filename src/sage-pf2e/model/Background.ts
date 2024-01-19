@@ -1,11 +1,11 @@
 import { remove } from "@rsc-utils/array-utils";
 import { findByValue } from "../data/Repository";
-import type Ancestry from "./Ancestry";
+import type { Ancestry } from "./Ancestry";
 import type { FeatureCore } from "./Feature";
 import type { FeatureLevelCore } from "./Features";
-import Features from "./Features";
+import { Features } from "./Features";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface BackgroundCore extends SourcedCore<"Background"> {
 	ancestry?: string;
@@ -13,7 +13,7 @@ export interface BackgroundCore extends SourcedCore<"Background"> {
 	features: FeatureCore[];
 }
 
-export default class Background extends HasSource<BackgroundCore> {
+export class Background extends HasSource<BackgroundCore> {
 	// #region Constructor
 	// public constructor(core: IBackground) {
 	// 	super(core);

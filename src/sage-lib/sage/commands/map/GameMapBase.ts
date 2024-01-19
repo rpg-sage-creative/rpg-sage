@@ -2,7 +2,7 @@ import { errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
 import { getDataRoot } from "@rsc-utils/env-utils";
 import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/fs-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import RenderableGameMap from "./RenderableGameMap";
+import { RenderableGameMap } from "./RenderableGameMap";
 
 //#region types
 
@@ -102,7 +102,7 @@ function getMapFilePath(messageId: Snowflake): string {
 	return `${getDataRoot("sage")}/maps/${messageId}.json`;
 }
 
-export default abstract class GameMapBase {
+export abstract class GameMapBase {
 	/** constructs a map for the given core */
 	public constructor(protected core: TGameMapCore) { }
 

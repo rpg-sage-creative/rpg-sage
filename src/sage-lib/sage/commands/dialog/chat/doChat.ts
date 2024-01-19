@@ -1,7 +1,7 @@
 import { error } from "@rsc-utils/console-utils";
-import type GameCharacter from "../../../model/GameCharacter";
+import type { GameCharacter } from "../../../model/GameCharacter";
 import type { ColorType } from "../../../model/HasColorsCore";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import type { DialogContent } from "../DialogContent";
 import { sendDialogPost } from "../sendDialogPost";
 import type { ChatOptions } from "./ChatOptions";

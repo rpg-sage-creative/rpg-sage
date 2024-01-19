@@ -2,7 +2,7 @@ import { TokenParsers, createKeyValueArgRegex, createQuotedRegex, createWhitespa
 import { isNullOrUndefined } from "@rsc-utils/type-utils";
 import { ArgsManager as _ArgsManager } from "../../sage-utils/utils/ArgsUtils";
 
-export default class ArgsManager extends _ArgsManager<string> {
+export class ArgsManager extends _ArgsManager<string> {
 	public constructor(private argsManagerInitialInput: string | ArrayLike<string> | Iterable<string>) {
 		super(...ArgsManager.tokenize(argsManagerInitialInput));
 	}

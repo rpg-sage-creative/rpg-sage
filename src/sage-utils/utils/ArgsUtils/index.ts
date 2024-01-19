@@ -1,1 +1,1 @@
-export { default as ArgsManager } from "./ArgsManager";
+export {  ArgsManager } from "./ArgsManager";

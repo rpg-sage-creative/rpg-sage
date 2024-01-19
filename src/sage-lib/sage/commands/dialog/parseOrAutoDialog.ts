@@ -1,5 +1,5 @@
 import { isDefined } from "@rsc-utils/type-utils";
-import type SageMessage from "../../model/SageMessage";
+import type { SageMessage } from "../../model/SageMessage";
 import type { DialogContent } from "./DialogContent";
 import { parseDialogContents } from "./parseDialogContents";
 

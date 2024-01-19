@@ -1,5 +1,5 @@
-import type GameCharacter from "../../../model/GameCharacter";
-import type SageMessage from "../../../model/SageMessage";
+import type { GameCharacter } from "../../../model/GameCharacter";
+import type { SageMessage } from "../../../model/SageMessage";
 
 export type CharArg = {
 	name: string;

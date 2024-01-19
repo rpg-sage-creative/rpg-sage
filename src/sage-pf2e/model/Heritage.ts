@@ -1,20 +1,20 @@
 import { remove } from "@rsc-utils/array-utils";
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import { findByValue } from "../data/Repository";
-import Ancestry from "./Ancestry";
+import { Ancestry } from "./Ancestry";
 import type { FeatureCore } from "./Feature";
 import type { FeatureLevelCore } from "./Features";
-import Features from "./Features";
+import { Features } from "./Features";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface HeritageCore extends SourcedCore<"Heritage"> {
 	ancestry: string;
 	features: FeatureCore[];
 }
 
-export default class Heritage extends HasSource<HeritageCore> {
+export class Heritage extends HasSource<HeritageCore> {
 
 	//#region properties
 

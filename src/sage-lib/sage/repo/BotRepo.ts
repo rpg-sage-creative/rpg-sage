@@ -1,10 +1,10 @@
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { IBotCore, TBotCodeName } from "../model/Bot";
-import Bot from "../model/Bot";
-import type SageCache from "../model/SageCache";
-import DidRepository from "./base/DidRepository";
+import { Bot } from "../model/Bot";
+import type { SageCache } from "../model/SageCache";
+import { DidRepository } from "./base/DidRepository";
 
-export default class BotRepo extends DidRepository<IBotCore, Bot> {
+export class BotRepo extends DidRepository<IBotCore, Bot> {
 	// public static active: ActiveBot;
 
 	public static async fromCore<T = IBotCore, U = Bot>(core: T, sageCache: SageCache): Promise<U> {

@@ -8,13 +8,13 @@ import type { RenderableContent as UtilsRenderableContent } from "../../sage-uti
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TMagicComponent, TMagicTradition } from '../common';
 import { ABILITIES, NEWLINE, toModifier } from '../common';
-import RenderableContent from '../data/RenderableContent';
+import { RenderableContent } from '../data/RenderableContent';
 import { find, findByValue } from '../data/Repository';
-import type ArcaneSchool from './ArcaneSchool';
-import type Domain from './Domain';
-import HeightenedSpell from "./HeightenedSpell";
+import type { ArcaneSchool } from './ArcaneSchool';
+import type { Domain } from './Domain';
+import { HeightenedSpell } from "./HeightenedSpell";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
+import { HasSource } from './base/HasSource';
 
 //#region types
 
@@ -152,7 +152,7 @@ function heightenSpell(spellId: UUID, core: SpellCore): HeightenedSpell[] {
 
 //#endregion
 
-export default class Spell<T extends string = "Spell", U extends SpellCoreBase<T> = SpellCoreBase<T>> extends HasSource<U, T> {
+export class Spell<T extends string = "Spell", U extends SpellCoreBase<T> = SpellCoreBase<T>> extends HasSource<U, T> {
 	public constructor(core: U) {
 		super(core);
 		/*

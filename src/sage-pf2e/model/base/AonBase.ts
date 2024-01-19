@@ -3,10 +3,10 @@ import { capitalize } from "@rsc-utils/string-utils";
 import type { ISearchable } from "../../../sage-utils";
 import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { TParsedSource, parseSources } from "../../data/Repository";
-import type Base from "./Base";
+import type { Base } from "./Base";
 import type { SourcedCore, TSourceInfo } from "./HasSource";
-import HasSource from "./HasSource";
-import type Source from "./Source";
+import { HasSource } from "./HasSource";
+import type { Source } from "./Source";
 import type { IHasArchives, IHasLink, IHasName } from "./interfaces";
 
 /*
@@ -70,7 +70,7 @@ function hackCore(core: AonBaseCore): AonBaseCore {
 	return core;
 }
 
-export default class AonBase
+export class AonBase
 	extends
 		HasSource<AonBaseCore>
 	implements

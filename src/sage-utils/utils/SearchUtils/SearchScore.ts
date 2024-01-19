@@ -23,7 +23,7 @@ function getNameMultiplier(included: boolean): number {
 	return included ? 2 : 1;
 }
 
-export default class SearchScore<T extends ISearchable> {
+export class SearchScore<T extends ISearchable> {
 	public constructor(public searchable: T, public compScore?: number) { }
 
 	/** All criteria has been met, no minus matches, all plus matches, any other matches */

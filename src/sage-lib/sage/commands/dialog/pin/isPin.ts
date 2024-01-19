@@ -1,6 +1,6 @@
 import type { TCommand } from "../../../../discord";
 import { isAuthorBotOrWebhook } from "../../../../discord/handlers";
-import type SageReaction from "../../../model/SageReaction";
+import type { SageReaction } from "../../../model/SageReaction";
 import { isValidPinAction } from "./isValidPinAction";
 
 export async function isPin(sageReaction: SageReaction): Promise<TCommand | null> {

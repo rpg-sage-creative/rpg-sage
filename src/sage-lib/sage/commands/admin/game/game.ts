@@ -8,10 +8,10 @@ import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/to
 import { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
 import { DiscordId } from "../../../../discord";
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import Game, { GameRoleType, GameUserType, IGameUser, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game";
-import GameCharacter from "../../../model/GameCharacter";
-import type SageMessage from "../../../model/SageMessage";
-import type Server from "../../../model/Server";
+import { Game, GameRoleType, GameUserType, IGameUser, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game";
+import { GameCharacter } from "../../../model/GameCharacter";
+import type { SageMessage } from "../../../model/SageMessage";
+import type { Server } from "../../../model/Server";
 import { DialogType, IChannel, PermissionType } from "../../../repo/base/IdRepository";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { DicePostType } from "../../dice";
@@ -546,7 +546,7 @@ async function gameToggleDicePing(sageMessage: SageMessage): Promise<void> {
 	return Promise.resolve();
 }
 
-export default function register(): void {
+export function registerGame(): void {
 	registerAdminCommand(gameCount, "game-count");
 	registerAdminCommandHelp("Admin", "Game", "game count");
 

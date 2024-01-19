@@ -1,5 +1,5 @@
 import { registerInteractionListener } from "../../discord/handlers.js";
-import type SageInteraction from "../model/SageInteraction";
+import type { SageInteraction } from "../model/SageInteraction";
 import { e20Pdf, slashHandlerEssence20 } from "./e20.js";
 import { pb2eId, slashHandlerPathbuilder2e } from "./pathbuilder.js";
 

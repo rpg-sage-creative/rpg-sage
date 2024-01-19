@@ -1,14 +1,14 @@
 import type { TRenderableContentSection } from "../../sage-utils";
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import { TAB } from "../common";
-import RenderableContent from "../data/RenderableContent";
-import HasSource, { SourcedCore } from "./base/HasSource";
+import { RenderableContent } from "../data/RenderableContent";
+import { HasSource, SourcedCore } from "./base/HasSource";
 
 export interface WeaponGroupCore extends SourcedCore<"WeaponGroup"> {
 	specializationEffect: string[];
 }
 
-export default class WeaponGroup extends HasSource<WeaponGroupCore> {
+export class WeaponGroup extends HasSource<WeaponGroupCore> {
 
 	public get specializationEffect(): string[] {
 		return this.core.specializationEffect ?? [];

@@ -1,7 +1,7 @@
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { CharacterShellCore } from "../../../model/CharacterShell";
-import type Game from "../../../model/Game";
+import type { Game } from "../../../model/Game";
 import { Manager } from "../common/Manager";
 import { Party, type PartyCore } from "./Party";
 

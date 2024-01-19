@@ -1,4 +1,4 @@
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 import { gameUserList } from "./player";
@@ -27,7 +27,7 @@ async function removeGameMaster(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(added);
 }
 
-export default function register(): void {
+export function registerGameMaster(): void {
 	registerAdminCommand(listGameMasters, "gm-list", "gms-list");
 	registerAdminCommandHelp("Admin", "GM", "gm list");
 

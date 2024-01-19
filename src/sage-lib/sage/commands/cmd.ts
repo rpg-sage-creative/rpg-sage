@@ -3,13 +3,13 @@ import { error } from "@rsc-utils/console-utils";
 import type { Awaitable, OrNull } from "@rsc-utils/type-utils";
 import { MessageEmbed } from "discord.js";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import ArgsManager from "../../discord/ArgsManager";
+import { ArgsManager } from "../../discord/ArgsManager";
 import { registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs, TMessageHandler } from "../../discord/types";
-import ActiveBot from "../model/ActiveBot";
+import { ActiveBot } from "../model/ActiveBot";
 import type { IHasColorsCore } from "../model/HasColorsCore";
 import { ColorType } from "../model/HasColorsCore";
-import type SageMessage from "../model/SageMessage";
+import type { SageMessage } from "../model/SageMessage";
 
 export enum BotServerGameType { Bot, Server, Game }
 

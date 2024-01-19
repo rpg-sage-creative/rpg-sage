@@ -6,7 +6,7 @@ import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import { existsSync } from "fs";
 import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
-import IdRepository, { HasIdCoreAndSageCache } from "./IdRepository";
+import { HasIdCoreAndSageCache, IdRepository } from "./IdRepository";
 
 export interface DidCore<T extends string = string> extends IdCore<T> {
 	did: Snowflake;
@@ -16,7 +16,7 @@ export class HasDidCore<T extends DidCore<U>, U extends string = string> extends
 	public get did(): Snowflake { return this.core.did; }
 }
 
-export default abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> extends IdRepository<T, U> {
+export abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> extends IdRepository<T, U> {
 
 	//#region Cache
 
@@ -113,7 +113,7 @@ export default abstract class DidRepository<T extends DidCore, U extends HasDidC
 			if (linked) {
 				this.cacheDid(entity.did, entity.id);
 			}
-			return saved && linked;
+			return linked;
 		}
 		return saved;
 	}

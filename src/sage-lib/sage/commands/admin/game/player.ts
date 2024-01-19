@@ -1,6 +1,6 @@
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
 
@@ -53,7 +53,7 @@ async function playerRemove(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(removed);
 }
 
-export default function register(): void {
+export function registerPlayer(): void {
 	registerAdminCommand(playerList, "player-list", "players-list");
 	registerAdminCommandHelp("Admin", "Player", "player list");
 

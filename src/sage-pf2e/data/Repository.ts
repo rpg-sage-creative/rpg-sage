@@ -8,13 +8,13 @@ import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/type-uti
 import { isDefined } from "@rsc-utils/type-utils";
 import { UuidMatcher, type UUID } from "@rsc-utils/uuid-utils";
 import type { TEntity } from "../model";
-import type AonBase from "../model/base/AonBase";
-import type Base from "../model/base/Base";
+import type { AonBase } from "../model/base/AonBase";
+import type { Base } from "../model/base/Base";
 import type { BaseCore } from "../model/base/Base";
-import type HasSource from "../model/base/HasSource";
+import type { HasSource } from "../model/base/HasSource";
 import type { SourceCore } from "../model/base/Source";
-import Source from "../model/base/Source";
-import type Creature from "../model/bestiary/Creature";
+import { Source } from "../model/base/Source";
+import type { Creature } from "../model/bestiary/Creature";
 
 export type TObjectTypeAndPlural = { objectType: string; objectTypePlural: string; };
 

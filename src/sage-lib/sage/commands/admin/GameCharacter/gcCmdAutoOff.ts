@@ -1,6 +1,6 @@
 import { DiscordId } from "../../../../discord";
-import GameCharacter from "../../../model/GameCharacter";
-import type SageMessage from "../../../model/SageMessage";
+import { GameCharacter } from "../../../model/GameCharacter";
+import type { SageMessage } from "../../../model/SageMessage";
 import { getCharacter } from "./getCharacter";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta";
 import { promptCharConfirm } from "./promptCharConfirm";

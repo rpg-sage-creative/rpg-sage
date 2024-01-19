@@ -2,7 +2,7 @@ import { rollDie } from "@rsc-utils/dice-utils";
 import { shuffle } from "@rsc-utils/random-utils";
 import { BULLET } from "@rsc-utils/string-utils";
 import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
-import type SageMessage from "../../model/SageMessage";
+import type { SageMessage } from "../../model/SageMessage";
 import { addScenario, createPfsRenderableContent, TPfsFaction, TTierInfo } from "./pfs";
 
 type TMission = "Flotsam Graveyard" | "Petals District" | "Precipice Quarter" | "Westgate";
@@ -261,6 +261,6 @@ function randomize(sageMessage: SageMessage, tierInfo: TTierInfo): RenderableCon
 	return renderableContent;
 }
 
-export default function register(): void {
+export function registerS101(): void {
 	addScenario("S1-01", "1-4", randomize);
 }

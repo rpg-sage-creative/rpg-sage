@@ -1,4 +1,4 @@
-import type Colors from "./Colors";
+import type { Colors } from "./Colors";
 
 export enum ColorType {
 	Command = 1,

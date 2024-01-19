@@ -1,15 +1,15 @@
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
-import Feature from "./Feature";
+import { HasSource } from "./base/HasSource";
+import { Feature } from "./Feature";
 
 export interface LanguageCore extends SourcedCore<"Language"> {
 	speakers: string[];
 }
 
-export default class Language extends HasSource<LanguageCore> {
+export class Language extends HasSource<LanguageCore> {
 
 	public get speakers(): string[] { return this.core.speakers || []; }
 

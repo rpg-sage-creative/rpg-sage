@@ -49,7 +49,7 @@ function urlsToKeys(urls: Optional<string>[]): TDiscordKey[] {
 	}).filter(key => key !== null) as TDiscordKey[];
 }
 
-export default class DiscordId {
+export class DiscordId {
 	protected constructor(
 		public type: SnowflakeType,
 		public did: Snowflake,

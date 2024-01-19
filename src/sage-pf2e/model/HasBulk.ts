@@ -3,10 +3,10 @@ import type { HasContents, HasParent, HasQuantity, IHasContents, IHasParent, IHa
 import { MDASH } from "../common";
 import { filter, findByValue } from "../data/Repository";
 import type { TDetail } from "../model/base/interfaces";
-import Bulk from "./Bulk";
-import type Base from "./base/Base";
+import { Bulk } from "./Bulk";
+import type { Base } from "./base/Base";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export function toObjectQuantities<T extends HasBulk>(contentItems: TContentItemArray, defaultObjectType: string): TObjectQuantity<T>[] {
 	return (contentItems ?? []).map(contentItem => toObjectQuantity(contentItem, defaultObjectType));
@@ -45,7 +45,7 @@ export interface BulkCore<T extends string = string> extends SourcedCore<T>, IHa
 	wornBulk: string;
 }
 
-export default class HasBulk<T extends BulkCore = BulkCore, U extends HasBulk<T, U> = HasBulk<any, any>> extends HasSource<T> implements HasContents<U>, HasParent<U> {
+export class HasBulk<T extends BulkCore = BulkCore, U extends HasBulk<T, U> = HasBulk<any, any>> extends HasSource<T> implements HasContents<U>, HasParent<U> {
 	private _bulk?: Bulk;
 	public get bulk(): Bulk {
 		if (!this._bulk) {

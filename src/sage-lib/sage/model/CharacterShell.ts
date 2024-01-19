@@ -1,7 +1,7 @@
 import type { Wealth } from "../commands/trackers/wealth/Wealth";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth";
-import type CharacterManager from "./CharacterManager";
-import type GameCharacter from "./GameCharacter";
+import type { CharacterManager } from "./CharacterManager";
+import type { GameCharacter } from "./GameCharacter";
 import type { TGameCharacterType } from "./GameCharacter";
 import type { TKeyValuePair } from "./SageMessageArgsManager";
 

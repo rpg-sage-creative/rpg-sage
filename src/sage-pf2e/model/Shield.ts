@@ -1,8 +1,8 @@
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import { MDASH, NEWLINE, TAB, toModifier } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import type { BulkCore } from "./HasBulk";
-import HasBulk from "./HasBulk";
+import { HasBulk } from "./HasBulk";
 
 /**************************************************************************************************************************/
 // Interface and Class
@@ -18,7 +18,7 @@ export interface ShieldCore extends BulkCore<"Shield"> {
 	speedPenalty?: number;
 }
 
-export default class Shield extends HasBulk<ShieldCore, Shield> {
+export class Shield extends HasBulk<ShieldCore, Shield> {
 
 	public get acBonus(): number { return this.core.acBonus ?? 0; }
 	public get breakThreshold(): number { return this.core.breakThreshold ?? (this.hitPoints / 2); }

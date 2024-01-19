@@ -7,7 +7,7 @@ function createSection(index = 0, title: string | null = null, content = <string
 	return { index, title:title, content, columns };
 }
 
-export default class RenderableContent implements IRenderable {
+export class RenderableContent implements IRenderable {
 	private _sections: TRenderableContentSection[] = [];
 	private _appendSection(section: TRenderableContentSection): TRenderableContentSection {
 		this._sections.push(section);

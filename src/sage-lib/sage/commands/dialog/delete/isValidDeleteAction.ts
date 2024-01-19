@@ -1,5 +1,5 @@
 import { EmojiType } from "../../../model/HasEmojiCore";
-import type SageReaction from "../../../model/SageReaction";
+import type { SageReaction } from "../../../model/SageReaction";
 
 export function isValidDeleteAction(sageReaction: SageReaction): boolean {
 	const message = sageReaction.messageReaction.message;

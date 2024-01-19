@@ -1,9 +1,9 @@
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import type { ActionCore } from "./Action";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 type TRuleChildArray = (RuleCore | ActionCore)[];
 
@@ -32,7 +32,7 @@ function parseChildren(cores?: TRuleChildArray): Rule[] {
 	return filtered.map(Rule.from);
 }
 
-export default class Rule extends HasSource<RuleCore> {
+export class Rule extends HasSource<RuleCore> {
 	private _children?: Rule[];
 	public get children(): Rule[] {
 		return this._children ?? (this._children = parseChildren(this.core.children));

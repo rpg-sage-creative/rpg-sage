@@ -1,11 +1,11 @@
 import { TemperateSeasonType, TropicalSeasonType } from "../../sage-utils";
 import { getTemperateSeason, getTropicalSeason } from "../../sage-utils/utils/DateUtils";
-import SageDate from "../SageDate";
+import { SageDate } from "../SageDate";
 import {
 	Days, DayType, Months, MonthType, TDayType, TMonthType
 } from "./cal";
 
-export default class GDate extends SageDate<GDate, DayType, TDayType, MonthType, TMonthType> {
+export class GDate extends SageDate<GDate, DayType, TDayType, MonthType, TMonthType> {
 
 	public get dayType(): DayType { return this._.getDay(); }
 	public get day(): TDayType { return Days[this._.getDay()]; }

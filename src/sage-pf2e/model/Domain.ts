@@ -1,16 +1,16 @@
 import { warn } from "@rsc-utils/console-utils";
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
-import RenderableContent from '../data/RenderableContent';
+import { RenderableContent } from '../data/RenderableContent';
 import { findByValue } from '../data/Repository';
-import type FocusSpell from './FocusSpell';
+import type { FocusSpell } from './FocusSpell';
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
+import { HasSource } from './base/HasSource';
 
 export interface DomainCore extends SourcedCore<"Domain"> {
 	spells: string[];
 }
 
-export default class Domain extends HasSource<DomainCore> {
+export class Domain extends HasSource<DomainCore> {
 	private _spells?: FocusSpell[];
 
 	public get spells(): FocusSpell[] {

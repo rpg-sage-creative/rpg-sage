@@ -1,4 +1,4 @@
-import type Emoji from "./Emoji";
+import type { Emoji } from "./Emoji";
 
 export enum EmojiType {
 

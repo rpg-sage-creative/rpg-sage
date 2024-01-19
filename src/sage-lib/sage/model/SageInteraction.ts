@@ -16,10 +16,10 @@ import { send } from "../../discord/messages";
 import { DicePostType } from "../commands/dice";
 import type { IChannel } from "../repo/base/IdRepository";
 import { GameRoleType } from "./Game";
-import type GameCharacter from "./GameCharacter";
+import type { GameCharacter } from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";
-import HasSageCache, { HasSageCacheCore } from "./HasSageCache";
-import SageCache from "./SageCache";
+import { HasSageCache, HasSageCacheCore } from "./HasSageCache";
+import { SageCache } from "./SageCache";
 
 interface SageInteractionCore extends HasSageCacheCore {
 	interaction: DInteraction;
@@ -28,7 +28,7 @@ interface SageInteractionCore extends HasSageCacheCore {
 	isPlayer?: boolean;
 }
 
-export default class SageInteraction<T extends DInteraction = any>
+export class SageInteraction<T extends DInteraction = any>
 	extends HasSageCache<SageInteractionCore, SageInteraction<any>>
 	implements IHasGame, IHasChannels {
 

@@ -1,10 +1,10 @@
 import { error } from "@rsc-utils/console-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import { MessageActionRow, MessageButton, type Interaction, type Message, type MessageButtonStyle } from "discord.js";
-import ActiveBot from "../sage/model/ActiveBot";
-import type SageCache from "../sage/model/SageCache";
-import type SageInteraction from "../sage/model/SageInteraction";
-import SageMessage from "../sage/model/SageMessage";
+import { ActiveBot } from "../sage/model/ActiveBot";
+import type { SageCache } from "../sage/model/SageCache";
+import type { SageInteraction } from "../sage/model/SageInteraction";
+import { SageMessage } from "../sage/model/SageMessage";
 import { resolveToEmbeds } from "./embeds";
 import type { DUser, TChannel, TRenderableContentResolvable } from "./types";
 

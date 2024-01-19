@@ -1,12 +1,12 @@
 import { all, find, findByValue } from '../data/Repository';
-import type Domain from './Domain';
+import type { Domain } from './Domain';
 import type { SpellCoreBase } from './Spell';
-import Spell from './Spell';
+import { Spell } from './Spell';
 
 export type FocusSpellCore = SpellCoreBase<"FocusSpell">;
 /*// export interface FocusSpellCore extends SpellCoreBase<"FocusSpell"> { }*/
 
-export default class FocusSpell extends Spell<"FocusSpell", FocusSpellCore> {
+export class FocusSpell extends Spell<"FocusSpell", FocusSpellCore> {
 
 	public constructor(core: FocusSpellCore) {
 		super(core);

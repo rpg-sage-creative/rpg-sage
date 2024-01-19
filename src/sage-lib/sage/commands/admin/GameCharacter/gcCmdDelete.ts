@@ -1,4 +1,4 @@
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta";
 import { getUserDid } from "./getUserDid";
 import { promptCharConfirm } from "./promptCharConfirm";

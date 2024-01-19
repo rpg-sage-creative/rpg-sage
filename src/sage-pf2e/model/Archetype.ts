@@ -2,11 +2,11 @@ import { sortPrimitive, sortStringIgnoreCase } from "@rsc-utils/array-utils";
 import { nth } from "@rsc-utils/number-utils";
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import { rarityToSuper } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import { all, find, findByValue } from "../data/Repository";
-import HasSource, { SourcedCore } from "../model/base/HasSource";
-import type DedicationFeat from "./DedicationFeat";
-import type Feat from "./Feat";
+import { HasSource, SourcedCore } from "../model/base/HasSource";
+import type { DedicationFeat } from "./DedicationFeat";
+import type { Feat } from "./Feat";
 
 export type TAdditionalFeat = string | { level: number; name: string; };
 export interface ArchetypeCore extends SourcedCore<"Archetype"> {
@@ -58,7 +58,7 @@ function findFeats(archetype: Archetype): Feat[] {
 	}
 }
 
-export default class Archetype extends HasSource<ArchetypeCore> {
+export class Archetype extends HasSource<ArchetypeCore> {
 
 	private _dedication?: DedicationFeat;
 	public get dedication(): DedicationFeat {

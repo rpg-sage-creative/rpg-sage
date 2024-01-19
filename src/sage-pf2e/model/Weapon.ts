@@ -2,13 +2,13 @@ import type { RenderableContent as UtilsRenderableContent } from "../../sage-uti
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TWeaponCategory, TWeaponGroup, TWeaponHands, TWeaponType } from "../common";
 import { MDASH, NEWLINE, TAB } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import { filter, findByValue } from "../data/Repository";
-import type Ammunition from "./Ammunition";
+import type { Ammunition } from "./Ammunition";
 import type { BulkCore } from "./HasBulk";
-import HasBulk from "./HasBulk";
-import type Trait from "./Trait";
-import type WeaponGroup from "./WeaponGroup";
+import { HasBulk } from "./HasBulk";
+import type { Trait } from "./Trait";
+import type { WeaponGroup } from "./WeaponGroup";
 
 export interface WeaponCore extends BulkCore<"Weapon"> {
 	ammunition?: string;
@@ -23,7 +23,7 @@ export interface WeaponCore extends BulkCore<"Weapon"> {
 	type: TWeaponType;
 }
 
-export default class Weapon extends HasBulk<WeaponCore, Weapon> {
+export class Weapon extends HasBulk<WeaponCore, Weapon> {
 
 	/**************************************************************************************************************************/
 	// Properties

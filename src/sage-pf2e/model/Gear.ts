@@ -3,12 +3,12 @@ import type { RenderableContent as UtilsRenderableContent } from "../../sage-uti
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { IHasContents, TObjectQuantity } from "../common";
 import { COMMON, MDASH } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import { findByValue } from "../data/Repository";
-import Coins from "./Coins";
-import type GearCategory from "./GearCategory";
+import { Coins } from "./Coins";
+import type { GearCategory } from "./GearCategory";
 import type { BulkCore } from "./HasBulk";
-import HasBulk from "./HasBulk";
+import { HasBulk } from "./HasBulk";
 import type { TDetail } from "./base/interfaces";
 
 //#region Helpers
@@ -50,7 +50,7 @@ export interface GearCore extends BulkCore<"Gear">, IHasContents {
 	quantity: number;
 }
 
-export default class Gear extends HasBulk<GearCore, Gear> {
+export class Gear extends HasBulk<GearCore, Gear> {
 	// #region IHasName
 	private _name?: string;
 	public get name(): string {

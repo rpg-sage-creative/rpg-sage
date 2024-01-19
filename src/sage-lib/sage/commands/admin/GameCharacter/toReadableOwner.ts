@@ -1,6 +1,6 @@
 import type { Optional } from "@rsc-utils/type-utils";
 import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 
 export async function toReadableOwner(sageMessage: SageMessage, userId: Optional<string>): Promise<string | null> {
 	if (userId) {

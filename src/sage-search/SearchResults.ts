@@ -2,7 +2,7 @@ import type { OrUndefined } from "@rsc-utils/type-utils";
 import { UNICODE_ZERO_TO_TEN } from "../sage-common";
 import type { IMenuRenderable } from "../sage-lib/discord";
 import type { IHasName } from "../sage-pf2e";
-import type Source from "../sage-pf2e/model/base/Source";
+import type { Source } from "../sage-pf2e/model/base/Source";
 import type { IRenderable, ISearchable } from "../sage-utils";
 import { RenderableContent } from "../sage-utils/utils/RenderUtils";
 import { HasScoredSearchables, SearchInfo, SearchScore } from "../sage-utils/utils/SearchUtils";
@@ -25,7 +25,7 @@ function scoreToLineItem<T extends TSearchable>(this: SearchResults<T>, meta: TR
 	return `${emoji} <b>(${score.totalHits})</b> ${label}`;
 }
 
-export default class SearchResults<T extends TSearchable = TSearchable> extends HasScoredSearchables<T> implements IMenuRenderable {
+export class SearchResults<T extends TSearchable = TSearchable> extends HasScoredSearchables<T> implements IMenuRenderable {
 
 	public constructor(public searchInfo: SearchInfo, public objectType?: string) {
 		super();

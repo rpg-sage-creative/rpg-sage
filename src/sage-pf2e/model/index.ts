@@ -1,45 +1,44 @@
 import { registerObject } from "../data/Repository";
-import type Base from "../model/base/Base";
-import type { BaseCore } from "../model/base/Base";
-import Action, { type ActionCore } from "./Action";
-import Activity, { type ActivityCore } from "./Activity";
-import AlchemicalItem, { type AlchemicalItemCore } from "./AlchemicalItem";
-import Ammunition, { type AmmunitionCore } from "./Ammunition";
-import Ancestry, { type AncestryCore } from "./Ancestry";
-import ArcaneSchool, { type ArcaneSchoolCore } from "./ArcaneSchool";
-import Archetype, { type ArchetypeCore } from "./Archetype";
-import Armor, { type ArmorCore } from "./Armor";
-import ArmorGroup, { type ArmorGroupCore } from "./ArmorGroup";
-import Background, { type BackgroundCore } from "./Background";
+import type { Base, BaseCore } from "../model/base/Base";
+import { Action, type ActionCore } from "./Action";
+import { Activity, type ActivityCore } from "./Activity";
+import { AlchemicalItem, type AlchemicalItemCore } from "./AlchemicalItem";
+import { Ammunition, type AmmunitionCore } from "./Ammunition";
+import { Ancestry, type AncestryCore } from "./Ancestry";
+import { ArcaneSchool, type ArcaneSchoolCore } from "./ArcaneSchool";
+import { Archetype, type ArchetypeCore } from "./Archetype";
+import { Armor, type ArmorCore } from "./Armor";
+import { ArmorGroup, type ArmorGroupCore } from "./ArmorGroup";
+import { Background, type BackgroundCore } from "./Background";
+import { Class, type ClassCore } from "./Class";
+import { ClassKit, type ClassKitCore } from "./ClassKit";
+import { ClassPath, type ClassPathCore } from "./ClassPath";
+import { Condition, type ConditionCore } from "./Condition";
+import { DedicationFeat } from "./DedicationFeat";
+import { Deity, type DeityCore } from "./Deity";
+import { Domain, type DomainCore } from "./Domain";
+import { Feat, type FeatCore } from "./Feat";
+import { FocusSpell, type FocusSpellCore } from "./FocusSpell";
+import { Gear, type GearCore } from "./Gear";
+import { GearCategory } from "./GearCategory";
+import { Glossary, type GlossaryCore } from "./Glossary";
+import { HasFaith, type FaithCore } from "./HasFaith";
+import { Heritage, type HeritageCore } from "./Heritage";
+import { Item, type ItemCore } from "./Item";
+import { Language, type LanguageCore } from "./Language";
+import { Material, type MaterialCore } from "./Material";
+import { Ritual, type RitualCore } from "./Ritual";
+import { Rule, type RuleCore } from "./Rule";
+import { Shield, type ShieldCore } from "./Shield";
+import { Skill, type SkillCore } from "./Skill";
+import { Snare, type SnareCore } from "./Snare";
+import { Spell, type SpellCore } from "./Spell";
+import { Table, type TableCore } from "./Table";
+import { Trait } from "./Trait";
+import { VersatileHeritage, type VersatileHeritageCore } from "./VersatileHeritage";
+import { Weapon, type WeaponCore } from "./Weapon";
+import { WeaponGroup, type WeaponGroupCore } from "./WeaponGroup";
 import type { SourcedCore } from "./base/HasSource";
-import Class, { type ClassCore } from "./Class";
-import ClassKit, { type ClassKitCore } from "./ClassKit";
-import ClassPath, { type ClassPathCore } from "./ClassPath";
-import Condition, { type ConditionCore } from "./Condition";
-import DedicationFeat from "./DedicationFeat";
-import Deity, { type DeityCore } from "./Deity";
-import Domain, { type DomainCore } from "./Domain";
-import Feat, { type FeatCore } from "./Feat";
-import FocusSpell, { type FocusSpellCore } from "./FocusSpell";
-import Gear, { type GearCore } from "./Gear";
-import GearCategory from "./GearCategory";
-import Glossary, { type GlossaryCore } from "./Glossary";
-import Faith, { type FaithCore } from "./Faith";
-import Heritage, { type HeritageCore } from "./Heritage";
-import Item, { type ItemCore } from "./Item";
-import Language, { type LanguageCore } from "./Language";
-import Material, { type MaterialCore } from "./Material";
-import Ritual, { type RitualCore } from "./Ritual";
-import Rule, { type RuleCore } from "./Rule";
-import Shield, { type ShieldCore } from "./Shield";
-import Skill, { type SkillCore } from "./Skill";
-import Snare, { type SnareCore } from "./Snare";
-import Spell, { type SpellCore } from "./Spell";
-import Table, { type TableCore } from "./Table";
-import Trait from "./Trait";
-import VersatileHeritage, { type VersatileHeritageCore } from "./VersatileHeritage";
-import Weapon, { type WeaponCore } from "./Weapon";
-import WeaponGroup, { type WeaponGroupCore } from "./WeaponGroup";
 
 export type TCore<T extends string> =
 	T extends "Action" ? ActionCore
@@ -105,7 +104,7 @@ export type TEntity<T extends string> =
 	: T extends "Gear" ? Gear
 	: T extends "GearCategory" ? GearCategory
 	: T extends "Glossary" ? Glossary
-	: T extends "Faith" ? Faith
+	: T extends "Faith" ? HasFaith
 	: T extends "Heritage" ? Heritage
 	: T extends "Item" ? Item
 	: T extends "Language" ? Language
@@ -123,7 +122,7 @@ export type TEntity<T extends string> =
 	: T extends "WeaponGroup" ? WeaponGroup
 	: Base;
 
-export default function register(): void {
+export function registerObjects(): void {
 	registerObject(Action);
 	registerObject(Activity);
 	registerObject(AlchemicalItem);
@@ -146,7 +145,7 @@ export default function register(): void {
 	registerObject(Gear);
 	registerObject(GearCategory);
 	registerObject(Glossary);
-	registerObject(Faith);
+	registerObject(HasFaith);
 	registerObject(Heritage);
 	registerObject(Item);
 	registerObject(Language);

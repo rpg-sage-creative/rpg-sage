@@ -1,14 +1,14 @@
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
-import RenderableContent from '../data/RenderableContent';
+import { RenderableContent } from '../data/RenderableContent';
 import { findByValue } from '../data/Repository';
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
+import { HasSource } from './base/HasSource';
 
 export interface ClassPathCore extends SourcedCore<"ClassPath"> {
 	class: string;
 }
 
-export default class ClassPath extends HasSource<ClassPathCore> {
+export class ClassPath extends HasSource<ClassPathCore> {
 
 	public constructor(core: ClassPathCore) {
 		super(core);

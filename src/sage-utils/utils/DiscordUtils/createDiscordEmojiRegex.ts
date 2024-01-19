@@ -1,5 +1,5 @@
-import { default as createEmojiRegex } from "emoji-regex";
 import XRegExp from "xregexp";
+import createEmojiRegex from "emoji-regex";
 
 export enum DiscordEmojiRegexMatchCount { AllowEmpty = 0, SingleMatch = 1, MultipleMatches = 2 }
 

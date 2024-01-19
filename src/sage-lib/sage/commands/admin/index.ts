@@ -1,13 +1,13 @@
-import registerBot from "./bot";
-import registerChannel from "./channel";
-import registerColor from "./color";
-import registerEmoji from "./emoji";
-import registerGame from "./game/index";
-import registerGameCharacter from "./gameCharacter";
-import registerNote from "./note";
-import registerPatreon from "./patreon";
-import registerServer from "./server/index";
-import registerUser from "./user/index";
+import { registerBot } from "./bot.js";
+import { registerChannel } from "./channel.js";
+import { registerColor } from "./color.js";
+import { registerEmoji } from "./emoji.js";
+import { registerGame } from "./game";
+import { registerGameCharacter } from "./gameCharacter.js";
+import { registerNote } from "./note.js";
+import { registerPatreon } from "./patreon.js";
+import { registerServer } from "./server";
+import { registerUser } from "./user";
 
 export function registerAdmin(): void {
 	registerBot();

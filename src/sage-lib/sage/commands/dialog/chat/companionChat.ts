@@ -1,4 +1,4 @@
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import type { DialogContent } from "../DialogContent";
 import { findCompanion } from "../find/findCompanion";
 import { getColorType } from "../getColorType";

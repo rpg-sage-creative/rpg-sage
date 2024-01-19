@@ -1,6 +1,6 @@
 import type { IPoison, TAction } from "./../common";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface ItemCore extends SourcedCore<"Item"> {
 	level: number;
@@ -12,7 +12,7 @@ export interface ItemCore extends SourcedCore<"Item"> {
 	poison?: IPoison;
 }
 
-export default class Item extends HasSource<ItemCore, "Item"> {
+export class Item extends HasSource<ItemCore, "Item"> {
 
 	public get level(): number { return this.core.level; }
 }

@@ -2,8 +2,8 @@ import { Cache } from "@rsc-utils/cache-utils";
 import { debug } from "@rsc-utils/console-utils";
 import { ReactionType, type DMessage, type DReaction, type DUser } from "../../discord";
 import type { HasSageCacheCore } from "./HasSageCache";
-import HasSageCache from "./HasSageCache";
-import SageCache from "./SageCache";
+import { HasSageCache } from "./HasSageCache";
+import { SageCache } from "./SageCache";
 
 interface SageReactionCore extends HasSageCacheCore {
 	messageReaction: DReaction;
@@ -11,7 +11,7 @@ interface SageReactionCore extends HasSageCacheCore {
 	reactionType: ReactionType;
 };
 
-export default class SageReaction
+export class SageReaction
 	extends HasSageCache<SageReactionCore, SageReaction> {
 
 	private constructor(protected core: SageReactionCore, cache?: Cache) {

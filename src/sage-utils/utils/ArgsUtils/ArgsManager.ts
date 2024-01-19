@@ -54,7 +54,7 @@ function cleanUrl(value: Optional<string>): Optional<string> {
 	return value;
 }
 
-export default class ArgsManager<T extends string> extends Collection<T> {
+export class ArgsManager<T extends string> extends Collection<T> {
 	public constructor();
 	public constructor(arrayLength: number);
 	public constructor(...items: T[]);

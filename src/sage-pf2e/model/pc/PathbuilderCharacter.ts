@@ -8,16 +8,16 @@ import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/types";
-import CharacterBase, { CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
+import { CharacterBase, CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
 import type { GetStatPrefix, TProficiency, TSavingThrow } from "../../common";
 import { getSavingThrows, toModifier } from "../../common";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository";
-import type Weapon from "../Weapon";
+import type { Weapon } from "../Weapon";
 import type { IHasAbilities } from "./Abilities";
-import Abilities from "./Abilities";
+import { Abilities } from "./Abilities";
 import type { IHasProficiencies } from "./PlayerCharacter";
 import type { IHasSavingThrows } from "./SavingThrows";
-import SavingThrows from "./SavingThrows";
+import { SavingThrows } from "./SavingThrows";
 
 const skillNames = "Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery".split(",");
 const skillStatKeys: TPathbuilderCharacterAbilityKey[] = ["dex", "int", "str", "int", "cha", "cha", "cha", "wis", "wis", "int", "cha", "wis", "int", "dex", "wis", "dex"];
@@ -667,7 +667,7 @@ function loreGetStat(char: PathbuilderCharacter, statLower: string, prefix: GetS
 	return null;
 }
 
-export default class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
 	public get exportJsonId(): number | undefined { return this.core.exportJsonId; }
 
 	public getStat(stat: string): number | string | null {

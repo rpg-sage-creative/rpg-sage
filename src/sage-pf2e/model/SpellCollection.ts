@@ -4,10 +4,10 @@ import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import { HasCore, type Core } from "../../sage-utils/utils/ClassUtils";
 import type { TMagicTradition } from "../common";
-import type ArcaneSchool from "./ArcaneSchool";
-import HeightenedSpell from "./HeightenedSpell";
-import Spell from "./Spell";
-import type Source from "./base/Source";
+import type { ArcaneSchool } from "./ArcaneSchool";
+import { HeightenedSpell } from "./HeightenedSpell";
+import { Spell } from "./Spell";
+import type { Source } from "./base/Source";
 
 
 function uniqueClean<T>(array: Optional<T>[], sorter: Sorter = sortPrimitive): T[] {
@@ -21,7 +21,7 @@ export interface SpellCollectionCore extends Core {
 	spells: UUID[];
 }
 
-export default class SpellCollection extends HasCore<SpellCollectionCore> {
+export class SpellCollection extends HasCore<SpellCollectionCore> {
 
 	/**************************************************************************************************************************/
 	// Constructors

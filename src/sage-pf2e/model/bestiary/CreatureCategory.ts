@@ -2,10 +2,10 @@ import type { ISourceReference } from "../../common";
 import { findByValue } from "../../data/Repository";
 import type { BaseCore } from "../base/Base";
 import type { SourcedCore } from "../base/HasSource";
-import HasSource from "../base/HasSource";
-import type Item from "../Item";
+import { HasSource } from "../base/HasSource";
+import type { Item } from "../Item";
 import type { ItemCore } from "../Item";
-import type Creature from "./Creature";
+import type { Creature } from "./Creature";
 import type { ICreature } from "./ICreature";
 
 export interface IHasLevelAndName { level: number; name: string; }
@@ -32,7 +32,7 @@ export interface CreatureCategoryCore extends SourcedCore<"CreatureCategory"> {
 	items: ItemCore[];
 }
 
-export default class CreatureCategory extends HasSource<CreatureCategoryCore, "CreatureCategory"> {
+export class CreatureCategory extends HasSource<CreatureCategoryCore, "CreatureCategory"> {
 
 	/**************************************************************************************************************************/
 	// Properties

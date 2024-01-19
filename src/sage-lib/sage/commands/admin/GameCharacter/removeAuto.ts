@@ -1,6 +1,6 @@
 import type { Snowflake } from "discord.js";
-import type GameCharacter from "../../../model/GameCharacter";
-import type SageMessage from "../../../model/SageMessage";
+import type { GameCharacter } from "../../../model/GameCharacter";
+import type { SageMessage } from "../../../model/SageMessage";
 
 export async function removeAuto(sageMessage: SageMessage, ...channelDids: Snowflake[]): Promise<void> {
 	const { game, sageUser } = sageMessage;

@@ -1,5 +1,5 @@
 import { getCodeBlockSafeSplitter } from "@rsc-utils/string-utils";
-import SageMessage from "../../model/SageMessage";
+import { SageMessage } from "../../model/SageMessage";
 import type { DialogContent } from "./DialogContent";
 import { isStartOfDialog } from "./isStartOfDialog";
 import { parseUsableDialogContent } from "./parseUsableDialogContent";

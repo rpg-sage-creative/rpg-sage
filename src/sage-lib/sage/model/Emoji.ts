@@ -38,7 +38,7 @@ function emojify(text: string, matches: string[], replacement: string): string {
 	return tokenized.join("");
 }
 
-export default class Emoji {
+export class Emoji {
 	public constructor(private emoji: IEmoji[]) { }
 
 	private findEmoji(type: EmojiType): IEmoji | undefined {

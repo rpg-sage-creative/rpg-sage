@@ -1,12 +1,12 @@
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
+import { HasSource } from './base/HasSource';
 
 export interface GlossaryCore extends SourcedCore<"Glossary"> {
 	abbrev: string;
 }
 
-export default class Glossary extends HasSource<GlossaryCore> {
+export class Glossary extends HasSource<GlossaryCore> {
 
 	public get abbrev(): string { return this.core.abbrev || ""; }
 

@@ -31,7 +31,7 @@ class RenderableGameMapLayer implements IMapLayer {
 }
 
 RenderableMap.setEndpoint({port:3000});
-export default class RenderableGameMap extends RenderableMap {
+export class RenderableGameMap extends RenderableMap {
 	public constructor (protected core: TGameMapCore) {
 		super();
 	}

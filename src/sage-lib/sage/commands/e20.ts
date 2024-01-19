@@ -8,18 +8,18 @@ import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, Messag
 import { shiftDie } from "../../../sage-dice/dice/essence20";
 import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20";
 import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf";
-import PlayerCharacterJoe, { PlayerCharacterCoreJoe } from "../../../sage-e20/joe/PlayerCharacterJoe";
+import { PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe";
 import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse";
-import PlayerCharacterPR, { PlayerCharacterCorePR, TCharacterSectionType, TCharacterViewType, TSkillZord, TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR";
+import { PlayerCharacterCorePR, PlayerCharacterPR, TCharacterSectionType, TCharacterViewType, TSkillZord, TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR";
 import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
-import PlayerCharacterTransformer, { PlayerCharacterCoreTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
+import { PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
 import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
 import { PdfCacher } from "../../../sage-utils/utils/PdfUtils";
 import { DiscordId, DiscordKey, type DUser, type TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
-import type SageCache from "../model/SageCache";
-import type SageInteraction from "../model/SageInteraction";
+import type { SageCache } from "../model/SageCache";
+import type { SageInteraction } from "../model/SageInteraction";
 import { parseDiceMatches, sendDice } from "./dice";
 
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;

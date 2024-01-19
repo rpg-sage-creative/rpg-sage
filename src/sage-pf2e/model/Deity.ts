@@ -1,11 +1,11 @@
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { TAlignment } from '../common';
-import RenderableContent from '../data/RenderableContent';
+import { RenderableContent } from '../data/RenderableContent';
 import type { TDevoteeBenefitsCore } from "./DevoteeBenefits";
-import DevoteeBenefits from "./DevoteeBenefits";
-import type Domain from "./Domain";
-import type { FaithCoreBase } from "./Faith";
-import HasFaith from "./Faith";
+import { DevoteeBenefits } from "./DevoteeBenefits";
+import type { Domain } from "./Domain";
+import type { FaithCoreBase } from "./HasFaith";
+import { HasFaith } from "./HasFaith";
 
 export type TDeitySpell = {
 	level: number;
@@ -20,7 +20,7 @@ export interface DeityCore extends FaithCoreBase<"Deity"> {
 //TODO: cleanup the data to not need these xxxToContent functions
 //TODO: figure out how to handle spells with (x only) or (appears as x) alterations
 
-export default class Deity extends HasFaith<"Deity", DeityCore> {
+export class Deity extends HasFaith<"Deity", DeityCore> {
 
 	public constructor(core: DeityCore) {
 		super(core);

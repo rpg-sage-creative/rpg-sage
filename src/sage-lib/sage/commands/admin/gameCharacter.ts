@@ -26,7 +26,7 @@ function registerHelp(): void {
 	});
 }
 
-export default function register(): void {
+export function registerGameCharacter(): void {
 	registerAdminCommand(gcCmdList, "pc-list", "pcs-list", "my-pc-list", "my-pcs");
 	registerAdminCommand(gcCmdList, "npc-list", "npcs-list", "my-npc-list", "my-npcs");
 	registerAdminCommand(gcCmdList, "companion-list", "my-companion-list", "my-companions");

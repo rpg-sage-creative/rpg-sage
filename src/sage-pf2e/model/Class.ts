@@ -1,12 +1,12 @@
 import { remove } from "@rsc-utils/array-utils";
 import type { TProficiency } from "../common";
 import type { FeatureCore } from "./Feature";
-import Feature from './Feature';
+import { Feature } from './Feature';
 import type { FeatureLevelCore } from "./Features";
-import Features from './Features';
+import { Features } from './Features';
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
-import Source from './base/Source';
+import { HasSource } from './base/HasSource';
+import { Source } from './base/Source';
 
 /** Returns the highest Skill Proficiency you can have at the given level. */
 function levelToSkillIncreaseMaxProficiency(level: number): TProficiency {
@@ -33,7 +33,7 @@ export interface ClassCore extends SourcedCore {
 	spellsPerDay: number[][];
 }
 
-export default class Class extends HasSource<ClassCore> {
+export class Class extends HasSource<ClassCore> {
 	/**************************************************************************************************************************/
 	// Constructor
 

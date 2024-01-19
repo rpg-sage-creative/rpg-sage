@@ -1,9 +1,9 @@
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type SageCache from "../model/SageCache";
+import type { SageCache } from "../model/SageCache";
 import { User, type UserCore } from "../model/User";
-import DidRepository from "./base/DidRepository";
+import { DidRepository } from "./base/DidRepository";
 
-export default class UserRepo extends DidRepository<UserCore, User> {
+export class UserRepo extends DidRepository<UserCore, User> {
 
 	public getSuperUser(): Promise<User> {
 		return this.getByDid(User.SuperUserDid) as Promise<User>;

@@ -1,12 +1,12 @@
 import type { GetStatPrefix, TAbility } from "../../common";
 import { ABILITIES, STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA } from "../../common";
-import type PlayerCharacter from "./PlayerCharacter";
-import PathbuilderCharacter from "./PathbuilderCharacter";
+import type { PlayerCharacter } from "./PlayerCharacter";
+import { PathbuilderCharacter } from "./PathbuilderCharacter";
 import type { TPathbuilderCharacterAbilityKey } from "./PathbuilderCharacter";
 
 export interface IHasAbilities { abilities: Abilities; }
 
-export default abstract class Abilities {
+export abstract class Abilities {
 
 	//#region Properties
 

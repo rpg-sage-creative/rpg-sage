@@ -8,7 +8,7 @@ export interface WeatherCalendarCore extends IdCore<"WeatherCalendar"> {
 	name: string;
 	location: IMapLocation;
 }
-export default class WeatherCalendar extends HasIdCore<WeatherCalendarCore> {
+export class WeatherCalendar extends HasIdCore<WeatherCalendarCore> {
 
 	public get name() { return this.core?.name ?? null; }
 	public get location() { return this.core?.location ?? null; }

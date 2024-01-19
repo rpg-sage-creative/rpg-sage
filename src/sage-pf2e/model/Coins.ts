@@ -2,7 +2,7 @@ import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/arra
 import { warn } from "@rsc-utils/console-utils";
 import { addCommas, round } from "@rsc-utils/number-utils";
 import { HasCore, type Core } from "../../sage-utils/utils/ClassUtils";
-import Bulk from "./Bulk";
+import { Bulk } from "./Bulk";
 
 type TMoney = number | string | Coins;
 
@@ -60,7 +60,7 @@ export interface CoinsCore extends Core<"Coins"> {
 	pp: number;
 }
 
-export default class Coins extends HasCore<CoinsCore> implements Comparable<Coins> {
+export class Coins extends HasCore<CoinsCore> implements Comparable<Coins> {
 	/**************************************************************************************************************************/
 	// Constructors
 

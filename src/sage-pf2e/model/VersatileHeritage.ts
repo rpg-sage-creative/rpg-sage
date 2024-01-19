@@ -1,7 +1,7 @@
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export interface VersatileHeritageCore extends SourcedCore<"VersatileHeritage"> {
 	// features: FeatureCore[];
@@ -15,7 +15,7 @@ function toList(items: string[]): string {
 	return `<ul>${listItems.join("")}</ul>`;
 }
 
-export default class VersatileHeritage extends HasSource<VersatileHeritageCore> {
+export class VersatileHeritage extends HasSource<VersatileHeritageCore> {
 
 	//#region properties
 

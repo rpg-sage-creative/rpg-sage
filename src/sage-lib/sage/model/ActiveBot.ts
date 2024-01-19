@@ -7,10 +7,10 @@ import { Client } from "discord.js";
 import { MessageType, ReactionType } from "../../discord";
 import { setDeleted } from "../../discord/deletedMessages";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
-import BotRepo from "../repo/BotRepo";
+import { BotRepo } from "../repo/BotRepo";
 import type { IBotCore } from "./Bot";
-import Bot, { TBotCodeName } from "./Bot";
-import SageCache from "./SageCache";
+import { Bot, TBotCodeName } from "./Bot";
+import { SageCache } from "./SageCache";
 
 interface IClientEventHandler {
 	onClientReady(): void;
@@ -30,7 +30,7 @@ function createDiscordClientOptions(): ClientOptions {
 	return { intents:registeredIntents() };
 }
 
-export default class ActiveBot extends Bot implements IClientEventHandler {
+export class ActiveBot extends Bot implements IClientEventHandler {
 	public static active: ActiveBot;
 	public static get isDev(): boolean { return ActiveBot.active?.codeName === "dev"; }
 	public static isActiveBot(userDid: Optional<Snowflake>): boolean {

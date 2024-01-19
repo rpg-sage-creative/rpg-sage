@@ -1,4 +1,4 @@
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import { getCharArgs } from "../common/getCharArgs";
 import { shareJoins } from "../common/shareJoins";
 

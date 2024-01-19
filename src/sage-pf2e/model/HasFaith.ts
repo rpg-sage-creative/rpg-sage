@@ -1,9 +1,9 @@
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { TAlignment } from '../common';
 import { ALIGNMENTS } from '../common';
-import RenderableContent from '../data/RenderableContent';
+import { RenderableContent } from '../data/RenderableContent';
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
+import { HasSource } from './base/HasSource';
 
 
 export interface FaithCoreBase<T extends string = string> extends SourcedCore<T> {
@@ -15,7 +15,7 @@ export interface FaithCoreBase<T extends string = string> extends SourcedCore<T>
 export type FaithCore = FaithCoreBase<"Faith">;
 /*// export interface FaithCore extends FaithCoreBase<"Faith"> { }*/
 
-export default class Faith<T extends string = "Faith", U extends FaithCoreBase<T> = FaithCoreBase<T>> extends HasSource<U, T> {
+export class HasFaith<T extends string = "Faith", U extends FaithCoreBase<T> = FaithCoreBase<T>> extends HasSource<U, T> {
 
 	/**************************************************************************************************************************/
 	// Properties

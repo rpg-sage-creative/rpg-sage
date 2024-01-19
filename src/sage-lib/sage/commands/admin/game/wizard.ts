@@ -1,5 +1,5 @@
 // import { discordPrompt } from "../../../../discord/prompts";
-// import type SageMessage from "../../../model/SageMessage";
+// import type { SageMessage } from "../../../model/SageMessage";
 // import { registerAdminCommand } from "../../cmd";
 
 // // const POINT_RIGHT = "➡️";
@@ -178,6 +178,6 @@
 // 	return gameChannels;
 // }
 
-// export default function register(): void {
+// export function register(): void {
 // 	registerAdminCommand(gameWizard, "new game");
 // }

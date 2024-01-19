@@ -1,7 +1,7 @@
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
-export default class GearCategory extends HasSource<SourcedCore<"GearCategory">> {
+export class GearCategory extends HasSource<SourcedCore<"GearCategory">> {
 	// public toRenderableContent(): utils.RenderUtils.RenderableContent {
 	// 	let content = new RenderableContent(this);
 	// 	content.setTitle(`<b>${this.name}</b> (Armor Group)`);

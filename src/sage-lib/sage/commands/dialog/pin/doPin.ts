@@ -1,4 +1,4 @@
-import type SageReaction from "../../../model/SageReaction";
+import type { SageReaction } from "../../../model/SageReaction";
 
 export async function doPin(sageReaction: SageReaction): Promise<void> {
 	if (sageReaction.isAdd) {

@@ -1,4 +1,4 @@
-import SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 
 export async function pCmdLoot(sageMessage: SageMessage): Promise<void> {
 	const game = sageMessage.game;

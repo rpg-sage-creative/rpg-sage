@@ -1,6 +1,6 @@
 import { DASH, LIGHT_BULK, MDASH } from "../common";
 
-export default class Bulk {
+export class Bulk {
 	public constructor();
 	public constructor(bulk: number);
 	public constructor(bulk: string);

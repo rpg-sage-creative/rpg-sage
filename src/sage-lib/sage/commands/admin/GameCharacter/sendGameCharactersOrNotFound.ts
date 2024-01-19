@@ -1,7 +1,7 @@
 import type { Optional } from "@rsc-utils/type-utils";
-import type CharacterManager from "../../../model/CharacterManager";
-import type GameCharacter from "../../../model/GameCharacter";
-import type SageMessage from "../../../model/SageMessage";
+import type { CharacterManager } from "../../../model/CharacterManager";
+import type { GameCharacter } from "../../../model/GameCharacter";
+import type { SageMessage } from "../../../model/SageMessage";
 import { createAdminRenderableContent } from "../../cmd";
 import { sendGameCharacter } from "./sendGameCharacter";
 import { sendNotFound } from "./sendNotFound";

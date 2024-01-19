@@ -75,10 +75,10 @@ function removeDesc(description: string, desc: string): string {
 /** Returns a new object with the default dice parsers for use with Tokenizer */
 export function getParsers(): TokenParsers {
 	return {
-		dice: /([\-\+\*\/])?(?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?(?:\s*(\d+)\s*|\b)d\s*(\d+)/i,
+		dice: /([-+*/])?(?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?(?:\s*(\d+)\s*|\b)d\s*(\d+)/i,
 		dropKeep: /(dl|dh|kl|kh)\s*(\d+)?/i,
 		noSort: /(ns)/i,
-		mod: /([\-\+\*\/])\s*(\d+)(?!d\d)/i,
+		mod: /([-+*/])\s*(\d+)(?!d\d)/i,
 		quotes: /`[^`]+`|“[^”]+”|„[^“]+“|„[^”]+”|"[^"]+"/,
 		test: /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i
 	};
@@ -555,7 +555,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 	}
 	public static parse(diceString: string): TDice {
 		const diceGroup = DiceGroup.parse(diceString);
-		return diceGroup && diceGroup.dice[0] || null;
+		return diceGroup?.dice[0] ?? null;
 	}
 	/** Returns null if diceString can't be parsed, otherwise it returns the results */
 	public static roll(diceString: TDiceLiteral): number;

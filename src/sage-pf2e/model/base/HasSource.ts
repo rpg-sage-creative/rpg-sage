@@ -3,10 +3,10 @@ import { getIdMatcher } from "../../../sage-utils/utils/ClassUtils/getIdMatcher"
 import type { RenderableContent as UtilsRenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { TRarity } from "../../common";
 import { COMMON, RARITIES } from "../../common";
-import RenderableContent from "../../data/RenderableContent";
+import { RenderableContent } from "../../data/RenderableContent";
 import { find, findByValue } from "../../data/Repository";
-import Base, { BaseCore } from "./Base";
-import type Source from "./Source";
+import { Base, BaseCore } from "./Base";
+import type { Source } from "./Source";
 import type { IHasRarity, IHasTraits, RarityCore, TraitsCore } from "./interfaces";
 
 export type TSourceInfoRaw = {
@@ -49,7 +49,7 @@ function parseSourceInfo(sourceInfo: TSourceInfoRaw): TSourceInfo {
 
 
 
-export default abstract class HasSource<T extends SourcedCore<U> = SourcedCore<any>, U extends string = string>
+export abstract class HasSource<T extends SourcedCore<U> = SourcedCore<any>, U extends string = string>
 	extends
 		Base<T, U>
 	implements

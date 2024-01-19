@@ -15,16 +15,16 @@ import type { PartyCore } from "../commands/trackers/party/Party";
 import { PartyManager } from "../commands/trackers/party/PartyManager";
 import type { DialogType, IChannel } from "../repo/base/IdRepository";
 import { HasIdCoreAndSageCache, PermissionType, updateChannel } from "../repo/base/IdRepository";
-import CharacterManager from "./CharacterManager";
+import { CharacterManager } from "./CharacterManager";
 import type { CharacterShell } from "./CharacterShell";
-import Colors from "./Colors";
-import Emoji from "./Emoji";
-import type GameCharacter from "./GameCharacter";
+import { Colors } from "./Colors";
+import { Emoji } from "./Emoji";
+import type { GameCharacter } from "./GameCharacter";
 import type { GameCharacterCore } from "./GameCharacter";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
-import type SageCache from "./SageCache";
-import type Server from "./Server";
+import type { SageCache } from "./SageCache";
+import type { Server } from "./Server";
 
 export type TGameRoleType = keyof typeof GameRoleType;
 export enum GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Cast = 4, Table = 5 }
@@ -157,7 +157,7 @@ async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<
 	return [gChannels.concat(sChannels), gChannels, sChannels];
 }
 
-export default class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable<Game>, IHasColorsCore, IHasEmojiCore {
+export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable<Game>, IHasColorsCore, IHasEmojiCore {
 	public constructor(core: IGameCore, public server: Server, sageCache: SageCache) {
 		super(core, sageCache);
 

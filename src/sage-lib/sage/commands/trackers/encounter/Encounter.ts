@@ -1,6 +1,6 @@
 import { applyMixins } from "@rsc-utils/type-utils";
 import type { CharacterShell } from "../../../model/CharacterShell";
-import type Game from "../../../model/Game";
+import type { Game } from "../../../model/Game";
 import { CharacterSorter, HasCharacters, type HasCharactersCore } from "../common/HasCharacters";
 import { HasCore } from "../common/HasCore";
 import { HasPins, type HasPinsCore } from "../common/HasPins";

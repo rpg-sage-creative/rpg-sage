@@ -1,6 +1,6 @@
 import { registerObject } from "../../data/Repository";
-import Source from "./Source";
+import { Source } from "./Source";
 
-export default function register(): void {
+export function registerBaseObjects(): void {
 	registerObject(Source);
 }

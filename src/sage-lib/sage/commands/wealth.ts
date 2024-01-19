@@ -3,7 +3,7 @@ import { addCommas, nth } from "@rsc-utils/number-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { Coins, PROFICIENCIES, TProficiency, Table } from "../../../sage-pf2e";
 import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import type SageMessage from "../model/SageMessage";
+import type { SageMessage } from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
 
@@ -99,7 +99,7 @@ async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, 
 	sageMessage.send(renderable);
 }
 
-export default function register(): void {
+export function registerWealth(): void {
 	registerCommandRegex(/^((?:\s*[\-\+]?\s*\d+(?:,\d{3})*\s*[csgp]p)+)$/i, spUtils);
 	registerCommandHelp("Wealth", "Coin Counter", `{1pp} {2gp} {3sp} {4cp}\n{1pp} {-2gp} {+3sp} {-4cp}`);
 

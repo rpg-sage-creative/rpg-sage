@@ -3,9 +3,9 @@ import { isDefined } from "@rsc-utils/type-utils";
 import type { TProficiency } from "../common";
 import { ARMOR_UNARMORED, profToMod, TRAINED, UNTRAINED } from "../common";
 import { findById, findByValue } from "../data/Repository";
-import type Feat from "./Feat";
+import type { Feat } from "./Feat";
 import type { FeatureCore } from "./Feature";
-import Feature from "./Feature";
+import { Feature } from "./Feature";
 import type { IHasMetadata } from "./Metadata";
 
 export type TFeatureFilter = (feature: Feature, level: number) => boolean;
@@ -17,7 +17,7 @@ export interface FeatureLevelCore {
 	level: number;
 }
 
-export default class Features {
+export class Features {
 	public constructor(protected levels: FeatureLevelCore[]) { }
 
 	public add(...features: Feature[]): void {

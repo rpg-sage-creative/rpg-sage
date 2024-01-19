@@ -1,12 +1,12 @@
 import { error } from "@rsc-utils/console-utils";
-import { registerAndLoad } from "../sage-pf2e";
 import { getBotCodeName } from "@rsc-utils/env-utils";
-import registerPrompts from "./discord";
+import { registerAndLoad } from "../sage-pf2e";
+import { registerPrompts } from "./discord";
 import { setBotMeta } from "./discord/handlers";
 import { SageDialogWebhookName } from "./discord/messages";
 import { registerCommandHandlers } from "./sage/commands";
-import ActiveBot from "./sage/model/ActiveBot";
-import BotRepo from "./sage/repo/BotRepo";
+import { ActiveBot } from "./sage/model/ActiveBot";
+import { BotRepo } from "./sage/repo/BotRepo";
 
 export async function activate(): Promise<void> {
 	const botCodeName = getBotCodeName();

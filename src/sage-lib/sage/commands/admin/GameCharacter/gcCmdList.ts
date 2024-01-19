@@ -1,6 +1,6 @@
 import type { Optional } from "@rsc-utils/type-utils";
-import type CharacterManager from "../../../model/CharacterManager";
-import type SageMessage from "../../../model/SageMessage";
+import type { CharacterManager } from "../../../model/CharacterManager";
+import type { SageMessage } from "../../../model/SageMessage";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta";
 import { getUserDid } from "./getUserDid";
 import { sendGameCharactersOrNotFound } from "./sendGameCharactersOrNotFound";

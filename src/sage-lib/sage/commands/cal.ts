@@ -1,13 +1,13 @@
 import type { Optional } from "@rsc-utils/type-utils";
-import GDate from "../../../sage-cal/pf2e/GDate";
+import { GDate } from "../../../sage-cal/pf2e/GDate";
 import { DaysPerMonth, Days as GDays, Months } from "../../../sage-cal/pf2e/cal";
-import SDate from "../../../sage-cal/sf1e/SDate";
+import { SDate } from "../../../sage-cal/sf1e/SDate";
 import { Days as SDays } from "../../../sage-cal/sf1e/cal";
 import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { registerInteractionListener } from "../../discord/handlers";
-import type SageInteraction from "../model/SageInteraction";
-import type SageMessage from "../model/SageMessage";
+import type { SageInteraction } from "../model/SageInteraction";
+import type { SageMessage } from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";
 

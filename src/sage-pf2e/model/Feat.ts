@@ -2,9 +2,9 @@ import type { SortResult } from "@rsc-utils/array-utils";
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TAction } from "../common";
-import RenderableContent from "../data/RenderableContent";
-import HasSource, { SourcedCore } from "../model/base/HasSource";
-import type Metadata from "./Metadata";
+import { RenderableContent } from "../data/RenderableContent";
+import { HasSource, SourcedCore } from "../model/base/HasSource";
+import type { Metadata } from "./Metadata";
 import type { IHasMetadata, IMetadata } from "./Metadata";
 
 /**************************************************************************************************************************/
@@ -29,7 +29,7 @@ function ensureArray(input: string | string[]): string[] {
 	return typeof (input) === "string" ? [input] : [];
 }
 
-export default class Feat<T extends string = "Feat", U extends FeatCore<T> = FeatCore<T>> extends HasSource<U, T> implements IHasMetadata {
+export class Feat<T extends string = "Feat", U extends FeatCore<T> = FeatCore<T>> extends HasSource<U, T> implements IHasMetadata {
 	/**************************************************************************************************************************/
 	// Constructor
 

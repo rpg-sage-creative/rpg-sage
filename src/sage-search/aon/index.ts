@@ -1,7 +1,7 @@
 import { getText } from "@rsc-utils/https-utils";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import type SearchResults from "../SearchResults";
+import type { SearchResults } from "../SearchResults";
 
 export type TResultsLink = {
 	cat: string;

@@ -1,5 +1,5 @@
 import type { Snowflake } from "discord.js";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 
 export async function removeAndReturnChannelDids(sageMessage: SageMessage): Promise<Snowflake[]> {
 	const channelDids = <Snowflake[]>[];

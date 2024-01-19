@@ -3,17 +3,17 @@ import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
 import { HasIdCore, type IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { TQuality } from "../../common";
 import { findById } from "../../data/Repository";
-import Bulk from "../Bulk";
-import Coins from "../Coins";
-import type Gear from "../Gear";
-import type HasBulk from "../HasBulk";
+import { Bulk } from "../Bulk";
+import { Coins } from "../Coins";
+import type { Gear } from "../Gear";
+import type { HasBulk } from "../HasBulk";
 import type { BulkCore } from "../HasBulk";
 import type { IMetadata } from "../Metadata";
-import type Spell from "../Spell";
-import type Base from "../base/Base";
-import type HasSource from "../base/HasSource";
-import type Equipment from "./Equipment";
-import type EquipmentList from "./EquipmentList";
+import type { Spell } from "../Spell";
+import type { Base } from "../base/Base";
+import type { HasSource } from "../base/HasSource";
+import type { Equipment } from "./Equipment";
+import type { EquipmentList } from "./EquipmentList";
 
 export interface EquipmentItemCore extends IdCore<"EquipmentItem"> {
 	containerId?: UUID;
@@ -37,7 +37,7 @@ function toUuid(equipmentItemResolvable: TEquipmentItemResolvable): UUID {
 	return typeof (equipmentItemResolvable) === "string" ? equipmentItemResolvable : equipmentItemResolvable.id;
 }
 
-export default class EquipmentItem extends HasIdCore<EquipmentItemCore> {
+export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 
 	public constructor(private eq: Equipment, core: EquipmentItemCore) {
 		super(core);

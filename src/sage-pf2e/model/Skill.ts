@@ -1,11 +1,11 @@
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { TAbility } from '../common';
 import { CONSTITUTION, DEXTERITY, STRENGTH } from '../common';
-import RenderableContent from '../data/RenderableContent';
+import { RenderableContent } from '../data/RenderableContent';
 import { filter, findByValue } from '../data/Repository';
-import type Action from './Action';
+import type { Action } from './Action';
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from './base/HasSource';
+import { HasSource } from './base/HasSource';
 
 /**************************************************************************************************************************/
 // Interface and Class
@@ -19,7 +19,7 @@ export interface SkillCore extends SourcedCore<"Skill"> {
 
 const ARMOR_PENALTY_ABILITIES = [STRENGTH, DEXTERITY, CONSTITUTION];
 
-export default class Skill extends HasSource<SkillCore> {
+export class Skill extends HasSource<SkillCore> {
 
 	public constructor(core: SkillCore) {
 		super(core);

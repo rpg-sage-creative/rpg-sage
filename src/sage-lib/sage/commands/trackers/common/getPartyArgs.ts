@@ -1,5 +1,5 @@
 import { isDefined } from "@rsc-utils/type-utils";
-import type SageMessage from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage";
 import type { Party } from "../party/Party";
 
 export function getPartyArgs(sageMessage: SageMessage): Party[] {

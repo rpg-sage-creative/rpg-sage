@@ -16,15 +16,15 @@ import { resolveToTexts } from "../../discord/embeds";
 import { send, sendTo } from "../../discord/messages";
 import { createAdminRenderableContent } from "../commands/cmd";
 import { DicePostType } from "../commands/dice";
-import type Game from "../model/Game";
+import type { Game } from "../model/Game";
 import { GameRoleType } from "../model/Game";
 import { DialogType, IChannel } from "../repo/base/IdRepository";
-import type GameCharacter from "./GameCharacter";
+import type { GameCharacter } from "./GameCharacter";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore";
 import { EmojiType } from "./HasEmojiCore";
-import HasSageCache, { HasSageCacheCore, TSendArgs } from "./HasSageCache";
-import SageCache from "./SageCache";
-import SageMessageArgsManager from "./SageMessageArgsManager";
+import { HasSageCache, HasSageCacheCore, TSendArgs } from "./HasSageCache";
+import { SageCache } from "./SageCache";
+import { SageMessageArgsManager } from "./SageMessageArgsManager";
 import { TAlias } from "./User";
 import { addMessageDeleteButton } from "./utils/deleteButton";
 
@@ -38,7 +38,7 @@ interface SageMessageCore extends HasSageCacheCore {
 	isPlayer?: boolean;
 }
 
-export default class SageMessage
+export class SageMessage
 	extends HasSageCache<SageMessageCore, SageMessage>
 	implements IHasGame, IHasChannels {
 

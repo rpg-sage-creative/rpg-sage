@@ -1,7 +1,7 @@
 import { debug } from "@rsc-utils/console-utils";
 import { MessageType, ReactionType, TCommandAndArgsAndData } from "../../discord";
 import { registerMessageListener, registerReactionListener } from "../../discord/handlers";
-import type SageMessage from "../model/SageMessage";
+import type { SageMessage } from "../model/SageMessage";
 import type { DialogContent } from "./dialog/DialogContent";
 import { companionChat } from "./dialog/chat/companionChat";
 import { editChat } from "./dialog/chat/editChat";

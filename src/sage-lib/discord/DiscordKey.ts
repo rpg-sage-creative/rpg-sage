@@ -6,7 +6,7 @@ import type { DInteraction, DMessage, TChannel } from "./types";
 interface IHasSnowflakeId { id:Snowflake; }
 type TSnowflakeResolvable = string | IHasSnowflakeId;
 
-export default class DiscordKey {
+export class DiscordKey {
 
 	public server: Snowflake;
 	public channel: Snowflake;

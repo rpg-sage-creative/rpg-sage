@@ -2,8 +2,8 @@ import { errorReturnEmptyArray } from "@rsc-utils/console-utils";
 import { getBuildInfo } from "@rsc-utils/env-utils";
 import { GameType } from "../../../../sage-common";
 import { toHumanReadable } from "../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
-import type Bot from "../../model/Bot";
-import type SageMessage from "../../model/SageMessage";
+import type { Bot } from "../../model/Bot";
+import type { SageMessage } from "../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
 
@@ -113,7 +113,7 @@ async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 	}
 }
 
-export default function register(): void {
+export function registerBot(): void {
 	registerAdminCommand(botList, "bot-list");
 	registerAdminCommandHelp("Admin", "SuperUser", "Bot", "bot list");
 

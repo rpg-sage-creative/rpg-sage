@@ -2,11 +2,11 @@ import { partition } from "@rsc-utils/array-utils";
 import { errorReturnNull } from "@rsc-utils/console-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import { discordPromptYesNo } from "../../../discord/prompts";
-import type Colors from "../../model/Colors";
-import type Game from "../../model/Game";
+import type { Colors } from "../../model/Colors";
+import type { Game } from "../../model/Game";
 import { ColorType } from "../../model/HasColorsCore";
-import type SageMessage from "../../model/SageMessage";
-import type Server from "../../model/Server";
+import type { SageMessage } from "../../model/SageMessage";
+import type { Server } from "../../model/Server";
 import { BotServerGameType, embedColor, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
 
@@ -293,7 +293,7 @@ async function colorUnset(sageMessage: SageMessage): Promise<void> {
 
 //#endregion
 
-export default function register(): void {
+export function registerColor(): void {
 	registerAdminCommand(colorListBot, "color-list-bot");
 	registerAdminCommand(colorListServer, "color-list-server");
 	registerAdminCommand(colorListGame, "color-list-game");

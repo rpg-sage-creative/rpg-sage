@@ -3,7 +3,7 @@ import { randomBoolean, randomInt } from "@rsc-utils/random-utils";
 import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import { WindStrength, rollOnTable, rollTemperatureVariation, type CloudCoverTableItem, type PrecipitationTableItem, type WindTableItem } from "..";
-import GDate from "../../sage-cal/pf2e/GDate";
+import { GDate } from "../../sage-cal/pf2e/GDate";
 import { SeasonType } from "../../sage-utils";
 import {
 	ClimateType,
@@ -66,7 +66,7 @@ interface IGenParameters {
 	desert: boolean;
 }
 
-export default class WeatherGenerator {
+export class WeatherGenerator {
 	public desert = false;
 	public constructor(public climate: ClimateType, public elevation: ElevationType, public date = new GDate()) { }
 

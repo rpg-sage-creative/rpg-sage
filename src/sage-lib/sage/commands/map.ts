@@ -8,12 +8,12 @@ import { DiscordId, TChannel, TCommandAndArgsAndData } from "../../discord";
 import { deleteMessage, deleteMessages } from "../../discord/deletedMessages";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import { discordPromptYesNoDeletable } from "../../discord/prompts";
-import SageInteraction from "../model/SageInteraction";
-import type SageMessage from "../model/SageMessage";
+import { SageInteraction } from "../model/SageInteraction";
+import type { SageMessage } from "../model/SageMessage";
 import { registerCommandRegex } from "./cmd";
-import GameMap, { TCompassDirection, TMoveDirection } from "./map/GameMap";
+import { GameMap, TCompassDirection, TMoveDirection } from "./map/GameMap";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, TGameMapTerrain, TGameMapToken } from "./map/GameMapBase";
-import gameMapImporter, { TParsedGameMapCore, validateMapCore } from "./map/gameMapImporter";
+import { TParsedGameMapCore, gameMapImporter, validateMapCore } from "./map/gameMapImporter";
 
 //#region buttons
 

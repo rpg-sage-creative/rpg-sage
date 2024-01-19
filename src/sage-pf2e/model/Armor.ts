@@ -1,12 +1,12 @@
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import { MDASH, NEWLINE, TAB, toModifier } from "../common";
-import RenderableContent from "../data/RenderableContent";
+import { RenderableContent } from "../data/RenderableContent";
 import { filter, findByValue } from "../data/Repository";
-import type ArmorGroup from "./ArmorGroup";
+import type { ArmorGroup } from "./ArmorGroup";
 import type { BulkCore } from "./HasBulk";
-import HasBulk from "./HasBulk";
-import type Trait from "./Trait";
+import { HasBulk } from "./HasBulk";
+import type { Trait } from "./Trait";
 
 /*
 // function sortGear(a: Gear, b: Gear): number {
@@ -35,7 +35,7 @@ export interface ArmorCore extends BulkCore<"Armor"> {
 	strength?: number;
 }
 
-export default class Armor extends HasBulk<ArmorCore, Armor> {
+export class Armor extends HasBulk<ArmorCore, Armor> {
 
 	/**************************************************************************************************************************/
 	// Properties

@@ -1,6 +1,6 @@
 import { discordPromptYesNo } from "../../../../discord/prompts";
-import type GameCharacter from "../../../model/GameCharacter";
-import type SageMessage from "../../../model/SageMessage";
+import type { GameCharacter } from "../../../model/GameCharacter";
+import type { SageMessage } from "../../../model/SageMessage";
 import { createAdminRenderableContent } from "../../cmd";
 import { sendGameCharacter } from "./sendGameCharacter";
 

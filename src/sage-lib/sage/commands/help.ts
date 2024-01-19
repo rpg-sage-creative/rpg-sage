@@ -4,12 +4,12 @@ import { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { TChannel, TCommandAndArgs } from "../../discord";
-import ArgsManager from "../../discord/ArgsManager";
+import { ArgsManager } from "../../discord/ArgsManager";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import { send } from "../../discord/messages";
-import type SageCache from "../model/SageCache";
-import type SageInteraction from "../model/SageInteraction";
-import type SageMessage from "../model/SageMessage";
+import type { SageCache } from "../model/SageCache";
+import type { SageInteraction } from "../model/SageInteraction";
+import type { SageMessage } from "../model/SageMessage";
 import { createCommandRenderableContent } from "./cmd";
 
 // #region Register Help Text

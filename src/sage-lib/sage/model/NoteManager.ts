@@ -27,7 +27,7 @@ function compare(input: string, lower: string): boolean {
 	return ensure(input).toLowerCase() === lower;
 }
 
-export default class NoteManager {
+export class NoteManager {
 	public constructor(private notes: TNote[], protected owner?: IHasSave) { }
 
 	public getCategories(): string[] {

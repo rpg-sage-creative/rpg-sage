@@ -1,8 +1,8 @@
 import type { SourcedCore } from "./base/HasSource";
-import HasSource from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 export type ConditionCore = SourcedCore<"Condition">;
 /*//export interface ConditionCore extends SourcedCore<"Condition"> { }*/
 
-export default class Condition extends HasSource<ConditionCore> {
+export class Condition extends HasSource<ConditionCore> {
 }

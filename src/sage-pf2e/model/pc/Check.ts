@@ -33,7 +33,7 @@ interface IProficiencyModifier {
 
 export type TCheckPlayerCharacter = IHasAbilities & IHasProficiencies;
 
-export default class Check {
+export class Check {
 	/**************************************************************************************************************************/
 	// Constructor
 

@@ -2,9 +2,9 @@
 import { warn } from "@rsc-utils/console-utils";
 import { nth } from "@rsc-utils/number-utils";
 import { findByValue } from "../data/Repository";
-import type Domain from "./Domain";
-import type Skill from './Skill';
-import type Spell from './Spell';
+import type { Domain } from "./Domain";
+import type { Skill } from './Skill';
+import type { Spell } from './Spell';
 
 export type TDevoteeBenefitsCore = {
 	divineFont: string[];
@@ -15,7 +15,7 @@ export type TDevoteeBenefitsCore = {
 	alternateDomains: string[];
 };
 
-export default class DevoteeBenefits {
+export class DevoteeBenefits {
 
 	public constructor(private core: TDevoteeBenefitsCore) { }
 
