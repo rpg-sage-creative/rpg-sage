@@ -3,7 +3,8 @@
 # ensure root folder
 [ -d "./scripts" ] || cd ..
 
-bash scripts/build.sh
+npm run test
+if [ "$?" != "0" ]; then echo "Unable to Start 'mono'!"; exit 1; fi
 
 DATA_ROOT="/home/ec2-user/legacy/data"
 if [ -d "/Users/randaltmeyer/git/rpg-sage-legacy-data" ]; then
