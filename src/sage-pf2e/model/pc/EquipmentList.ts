@@ -1,5 +1,5 @@
+import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
-import { HasIdCore, type IdCore } from "../../../sage-utils/utils/ClassUtils";
 import { Bulk } from "../Bulk";
 import { Coins } from "../Coins";
 import type { NamedCore } from "../base/interfaces";

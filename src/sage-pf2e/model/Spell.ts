@@ -1,9 +1,9 @@
 import { toUnique } from "@rsc-utils/array-utils";
+import { type Core } from "@rsc-utils/class-utils";
 import { debug } from "@rsc-utils/console-utils";
 import { nth } from "@rsc-utils/number-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import { Core } from "../../sage-utils/utils/ClassUtils";
 import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TMagicComponent, TMagicTradition } from '../common';

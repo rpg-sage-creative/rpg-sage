@@ -1,5 +1,5 @@
+import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { HasIdCore, IdCore } from "../ClassUtils";
 
 type TSimpleMap = { [key:string]:any; };
 

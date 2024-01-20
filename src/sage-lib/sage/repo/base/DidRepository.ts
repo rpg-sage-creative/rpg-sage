@@ -1,11 +1,11 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
+import { type IdCore } from "@rsc-utils/class-utils";
 import { errorReturnNull, verbose } from "@rsc-utils/console-utils";
 import { readJsonFile, symLinkSync } from "@rsc-utils/fs-utils";
 import { randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import { existsSync } from "fs";
-import { IdCore } from "../../../../sage-utils/utils/ClassUtils";
 import { HasIdCoreAndSageCache, IdRepository } from "./IdRepository";
 
 export interface DidCore<T extends string = string> extends IdCore<T> {

@@ -3,7 +3,6 @@ import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull } from "@rsc-utils/type-utils";
 import { GameType } from "../../../sage-common";
-import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import type {
 	TDiceLiteral,
 	TTestData
@@ -411,7 +410,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 			objectType: "Dice",
 			gameType: GameType.VtM5e,
 			id: randomSnowflake(),
-			diceParts: diceParts.map<DicePartCore>(toJSON)
+			diceParts: diceParts.map<DicePartCore>(this.toJSON)
 		});
 	}
 	public static fromCore(core: DiceCore): Dice {
@@ -478,7 +477,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 			gameType: GameType.VtM5e,
 			id: randomSnowflake(),
 			critMethodType: undefined,
-			dice: _dice.map<DiceCore>(toJSON),
+			dice: _dice.map<DiceCore>(this.toJSON),
 			diceOutputType: diceOutputType,
 			diceSecretMethodType: DiceSecretMethodType.Ignore
 		});

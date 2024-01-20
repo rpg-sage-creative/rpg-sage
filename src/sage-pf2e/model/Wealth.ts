@@ -1,4 +1,4 @@
-import { Core, HasCore } from "../../sage-utils/utils/ClassUtils";
+import { HasCore, type Core } from "@rsc-utils/class-utils";
 import type { CoinsCore } from "./Coins";
 import { Coins } from "./Coins";
 

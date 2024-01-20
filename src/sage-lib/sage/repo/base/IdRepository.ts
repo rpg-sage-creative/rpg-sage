@@ -1,4 +1,5 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
+import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, verbose } from "@rsc-utils/console-utils";
 import { getBotCodeName, getDataRoot } from "@rsc-utils/env-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
@@ -7,7 +8,6 @@ import { UUID, isNonNilUuid, randomUuid } from "@rsc-utils/uuid-utils";
 import { Snowflake } from "discord.js";
 import type { GameType } from "../../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import { HasIdCore, IdCore } from "../../../../sage-utils/utils/ClassUtils";
 import type { DicePostType } from "../../commands/dice";
 import type { SageCache } from "../../model/SageCache";
 

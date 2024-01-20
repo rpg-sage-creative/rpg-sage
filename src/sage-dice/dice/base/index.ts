@@ -7,7 +7,6 @@ import { randomUuid } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
 import { correctEscapeForEmoji } from "..";
 import { GameType } from "../../../sage-common";
-import { toJSON } from "../../../sage-utils/utils/ClassUtils";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -390,7 +389,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 		return DicePart.create(core);
 	}
 	public static toCore(dicePartOrCore: TDicePart | DicePartCore): DicePartCore {
-		return toJSON(dicePartOrCore);
+		return this.toJSON(dicePartOrCore);
 	}
 	public static Roll: typeof DicePartRoll;
 	//#endregion
@@ -507,7 +506,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 
 	//#region methods
 	public includes(dicePartOrCore: TDicePart | DicePartCore): boolean {
-		const dicePartCore = toJSON<DicePartCore>(dicePartOrCore);
+		const dicePartCore = Dice.toJSON<DicePartCore>(dicePartOrCore);
 		return this.diceParts.find(_dicePart => _dicePart.toJSON() === dicePartCore) !== undefined;
 	}
 
@@ -544,7 +543,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 			objectType: "Dice",
 			gameType: GameType.None,
 			id: randomUuid(),
-			diceParts: diceParts.map<DicePartCore>(toJSON)
+			diceParts: diceParts.map<DicePartCore>(this.toJSON)
 		});
 	}
 	public static fromCore(core: DiceCore): TDice {
@@ -747,7 +746,7 @@ export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDice
 			gameType: GameType.None,
 			id: randomUuid(),
 			critMethodType: critMethodType,
-			dice: _dice.map<DiceCore>(toJSON),
+			dice: _dice.map<DiceCore>(this.toJSON),
 			diceOutputType: diceOutputType,
 			diceSecretMethodType: diceSecretMethodType
 		});

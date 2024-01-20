@@ -1,5 +1,5 @@
 import { partition } from "@rsc-utils/array-utils";
-import { HasIdCore, IdCore } from "../../sage-utils/utils/ClassUtils";
+import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import type { IMapLocation } from "../map/map";
 import type { IWeatherDayResult } from "./WeatherGenerator";
 

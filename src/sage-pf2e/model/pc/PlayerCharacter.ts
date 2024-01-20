@@ -1,7 +1,7 @@
 import { sortAsPrimitive, toUnique } from "@rsc-utils/array-utils";
+import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
-import { HasIdCore, type IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
 import { PERCEPTION, WISDOM, profToMod } from "../../common";
 import { findById, findByValue } from "../../data/Repository";
@@ -10,8 +10,7 @@ import { Ancestry } from "../Ancestry";
 import { Background } from "../Background";
 import { Class } from "../Class";
 import type { Deity } from "../Deity";
-import type { Feature } from "../Feature";
-import type { FeatureCore } from "../Feature";
+import type { Feature, FeatureCore } from "../Feature";
 import type { FeatureLevelCore } from "../Features";
 import { Features } from "../Features";
 import { Heritage } from "../Heritage";

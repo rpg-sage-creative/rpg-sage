@@ -1,8 +1,8 @@
 import { sortComparable, sortPrimitive, toUniqueDefined, type Sorter } from "@rsc-utils/array-utils";
+import { HasCore, type Core } from "@rsc-utils/class-utils";
 import { randomItem } from "@rsc-utils/random-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import { HasCore, type Core } from "../../sage-utils/utils/ClassUtils";
 import type { TMagicTradition } from "../common";
 import type { ArcaneSchool } from "./ArcaneSchool";
 import { HeightenedSpell } from "./HeightenedSpell";

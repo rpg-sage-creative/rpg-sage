@@ -1,8 +1,8 @@
-import { type Comparable, type SortResult, sortPrimitive } from "@rsc-utils/array-utils";
+import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/array-utils";
+import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { IRenderable, ISearchable } from "../../../sage-utils";
-import { HasIdCore, type IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { RenderableContent as UtilsRenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { NEWLINE, TAB } from "../../common";

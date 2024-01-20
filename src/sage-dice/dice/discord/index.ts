@@ -1,7 +1,7 @@
+import { HasCore, type IdCore } from "@rsc-utils/class-utils";
 import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import { GameType, parseGameType } from "../../../sage-common";
-import { HasCore, IdCore, toJSON } from "../../../sage-utils/utils/ClassUtils";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -205,7 +205,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 		const core: DiscordDiceCore = {
 			objectType: "DiscordDice",
 			id: randomUuid(),
-			diceGroups: diceGroups.map<baseDiceGroupCore>(toJSON)
+			diceGroups: diceGroups.map<baseDiceGroupCore>(this.toJSON)
 		};
 		return new DiscordDice(core);
 	}

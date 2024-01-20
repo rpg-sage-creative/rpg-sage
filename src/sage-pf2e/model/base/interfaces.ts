@@ -1,8 +1,7 @@
+import { type Core } from "@rsc-utils/class-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import { Core } from "../../../sage-utils/utils/ClassUtils";
 import type { TRarity } from "../../common";
-import type { Base } from "./Base";
-import type { BaseCore } from "./Base";
+import type { Base, BaseCore } from "./Base";
 
 // #region DetailedCore core interface and HasDetails class interface
 

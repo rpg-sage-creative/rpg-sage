@@ -1,13 +1,12 @@
+import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
-import { HasIdCore, type IdCore } from "../../../sage-utils/utils/ClassUtils";
 import type { TQuality } from "../../common";
 import { findById } from "../../data/Repository";
 import { Bulk } from "../Bulk";
 import { Coins } from "../Coins";
 import type { Gear } from "../Gear";
-import type { HasBulk } from "../HasBulk";
-import type { BulkCore } from "../HasBulk";
+import type { BulkCore, HasBulk } from "../HasBulk";
 import type { IMetadata } from "../Metadata";
 import type { Spell } from "../Spell";
 import type { Base } from "../base/Base";

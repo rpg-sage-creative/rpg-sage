@@ -1,7 +1,7 @@
 import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/array-utils";
+import { HasCore, type Core } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { addCommas, round } from "@rsc-utils/number-utils";
-import { HasCore, type Core } from "../../sage-utils/utils/ClassUtils";
 import { Bulk } from "./Bulk";
 
 type TMoney = number | string | Coins;

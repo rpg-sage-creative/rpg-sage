@@ -1,11 +1,11 @@
+import { HasCore } from "@rsc-utils/class-utils";
+import { StringMatcher } from "@rsc-utils/string-utils";
 import { createSearchResultUrl } from ".";
 import type { TResultsLink } from "../";
 import type { IHasName } from "../../../sage-pf2e";
 import type { IRenderable, ISearchable } from "../../../sage-utils";
-import { HasCore } from "../../../sage-utils/utils/ClassUtils";
 import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
-import { StringMatcher } from "@rsc-utils/string-utils";
 
 /**
  * temp solution for Sf1 search results using the existing search output mechanism

@@ -1,8 +1,8 @@
 import { sortPrimitive } from "@rsc-utils/array-utils";
+import { HasIdCore, IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { cleanWhitespace, type TokenData } from "@rsc-utils/string-utils";
 import { GameType } from "../sage-common";
-import { HasIdCore, IdCore } from "../sage-utils/utils/ClassUtils";
 import type { TDiceRoll } from "./dice/base/types";
 
 //#region rpg.common.ts

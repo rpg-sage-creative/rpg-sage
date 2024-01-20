@@ -1,5 +1,5 @@
+import { getIdMatcher } from "@rsc-utils/class-utils";
 import type { Matcher, OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { getIdMatcher } from "../../../sage-utils/utils/ClassUtils/getIdMatcher";
 import type { RenderableContent as UtilsRenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { TRarity } from "../../common";
 import { COMMON, RARITIES } from "../../common";
