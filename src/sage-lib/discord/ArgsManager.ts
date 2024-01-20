@@ -1,6 +1,6 @@
+import { ArgsManager as _ArgsManager } from "@rsc-utils/args-utils";
 import { TokenParsers, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, parseKeyValueArg, tokenize } from "@rsc-utils/string-utils";
 import { isNullOrUndefined } from "@rsc-utils/type-utils";
-import { ArgsManager as _ArgsManager } from "../../sage-utils/utils/ArgsUtils";
 
 export class ArgsManager extends _ArgsManager<string> {
 	public constructor(private argsManagerInitialInput: string | ArrayLike<string> | Iterable<string>) {

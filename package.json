@@ -44,6 +44,7 @@
 		"@rsc-utils/temperature-utils": "github:rpg-sage-creative/temperature-utils",
 		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils",
 		"@rsc-utils/uuid-utils": "github:rpg-sage-creative/uuid-utils",
+		"@rsc-utils/args-utils": "github:rpg-sage-creative/args-utils",
 		"discord-api-types": "^0.27.3",
 		"discord.js": "^13.16.0",
 		"emoji-regex": "^10.3.0",
