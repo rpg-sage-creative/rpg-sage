@@ -145,7 +145,7 @@ export function findByValue<T extends Base<any>>(objectType: string, value: Opti
 	}
 
 	const stringMatcher = StringMatcher.from(value);
-	if (stringMatcher.isBlank) {
+	if (!stringMatcher.isNonNil) {
 		return undefined;
 	}
 

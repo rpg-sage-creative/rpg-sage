@@ -14,7 +14,7 @@ import { PlayerCharacterCorePR, PlayerCharacterPR, TCharacterSectionType, TChara
 import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
 import { PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
 import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
-import { PdfCacher } from "../../../sage-utils/utils/PdfUtils";
+import { PdfCacher } from "@rsc-utils/pdf-utils";
 import { DiscordId, DiscordKey, type DUser, type TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";

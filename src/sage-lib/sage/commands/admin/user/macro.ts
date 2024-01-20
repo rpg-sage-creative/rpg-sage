@@ -11,16 +11,16 @@ const UNCATEGORIZED = "Uncategorized";
 
 function findMacro(sageMessage: SageMessage, name?: string, category?: string): TMacro | undefined {
 	const nameMatcher = StringMatcher.from(name);
-	if (nameMatcher.isBlank) {
+	if (!nameMatcher.isNonNil) {
 		return undefined;
 	}
 
 	const categoryMatcher = StringMatcher.from(category);
-	if (categoryMatcher.isBlank) {
-		return sageMessage.sageUser.macros.find(macro => nameMatcher.matches(macro.name));
+	if (categoryMatcher.isNonNil) {
+		return sageMessage.sageUser.macros.find(macro => nameMatcher.matches(macro.name) && macro.category && categoryMatcher.matches(macro.category));
 	}
 
-	return sageMessage.sageUser.macros.find(macro => nameMatcher.matches(macro.name) && macro.category && categoryMatcher.matches(macro.category));
+	return sageMessage.sageUser.macros.find(macro => nameMatcher.matches(macro.name));
 }
 
 async function noMacrosFound(sageMessage: SageMessage): Promise<void> {

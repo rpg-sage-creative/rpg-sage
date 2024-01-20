@@ -231,7 +231,7 @@ export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = stri
 	}
 
 	public get name(): string { return this.core.name; }
-	public get nameClean(): string { return this.nameMatcher.clean; }
+	public get nameClean(): string { return this.nameMatcher.matchValue; }
 	public get nameLower(): string { return this.nameMatcher.lower; }
 
 	public matches(other: StringMatcher): boolean {

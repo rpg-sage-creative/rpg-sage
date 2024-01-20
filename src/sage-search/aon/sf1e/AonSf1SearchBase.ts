@@ -27,7 +27,7 @@ export class AonSf1SearchBase
 	}
 
 	public get name(): string { return this.core.label; }
-	public get nameClean(): string { return this.nameMatcher.clean; }
+	public get nameClean(): string { return this.nameMatcher.matchValue; }
 	public get nameLower(): string { return this.nameMatcher.lower; }
 
 	public matches(other: StringMatcher): boolean {
