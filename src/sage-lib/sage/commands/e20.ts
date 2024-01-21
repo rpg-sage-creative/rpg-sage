@@ -1,6 +1,7 @@
 import { errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
 import { getDataRoot } from "@rsc-utils/env-utils";
 import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
+import { PdfCacher } from "@rsc-utils/pdf-utils";
 import { NIL_SNOWFLAKE } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
@@ -14,7 +15,6 @@ import { PlayerCharacterCorePR, PlayerCharacterPR, TCharacterSectionType, TChara
 import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
 import { PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
 import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
-import { PdfCacher } from "@rsc-utils/pdf-utils";
 import { DiscordId, DiscordKey, type DUser, type TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
@@ -123,7 +123,7 @@ function createViewSelectRow(character: TPlayerCharacter): MessageActionRow {
 
 	const activeSections = getActiveSections(character);
 
-	const validSectionTypes: TCharacterSectionType[] = character.getValidSectionsTypes();
+	const validSectionTypes: TCharacterSectionType[] = character.getValidSections();
 	validSectionTypes.sort();
 	validSectionTypes.forEach(sectionType => {
 		selectMenu.addOptions({
@@ -133,7 +133,7 @@ function createViewSelectRow(character: TPlayerCharacter): MessageActionRow {
 		});
 	});
 
-	const validViewTypes: TCharacterViewType[] = character.getValidViewTypes();
+	const validViewTypes: TCharacterViewType[] = character.getValidViews();
 	validViewTypes.forEach(view => {
 		const sections = getCharacterSections(view) ?? [];
 		sections.sort();

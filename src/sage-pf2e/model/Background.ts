@@ -47,13 +47,13 @@ export class Background extends HasSource<BackgroundCore> {
 	// }
 	// #endregion
 
-	// #region utils.SearchUtils.ISearchable
+	// #region Searchable
 	public get searchResultCategory(): string {
 		const region = this.region ? `(${this.region})` : ``;
 		const rarity = this.isNotCommon ? ` [${this.rarity}]` : ``;
 		return `Background ${region} ${rarity}`;
 	}
-	// #endregion utils.SearchUtils.ISearchable
+	// #endregion
 
 	// #region static
 

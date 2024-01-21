@@ -1,11 +1,10 @@
 import { HasCore } from "@rsc-utils/class-utils";
 import { RenderableContent, type Renderable } from "@rsc-utils/render-utils";
+import type { SearchInfo, SearchScore, Searchable } from "@rsc-utils/search-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import { createSearchResultUrl } from ".";
 import type { TResultsLink } from "../";
 import type { IHasName } from "../../../sage-pf2e";
-import type { ISearchable } from "../../../sage-utils";
-import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 
 /**
  * temp solution for pf1 search results using the existing search output mechanism
@@ -17,7 +16,7 @@ export class AonPf1SearchBase
 	implements
 		IHasName,
 		Renderable,
-		ISearchable {
+		Searchable {
 
 	// #region IHasName
 
@@ -36,7 +35,7 @@ export class AonPf1SearchBase
 
 	// #endregion IHasName
 
-	//#region utils.SearchUtils.ISearchable
+	//#region Searchable
 
 	public get searchResultCategory(): string { return this.core.cat; }
 

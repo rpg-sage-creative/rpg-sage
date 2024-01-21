@@ -1,5 +1,5 @@
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { RenderableContent } from "../data/RenderableContent";
 import type { ActionCore } from "./Action";
 import type { SourcedCore } from "./base/HasSource";
@@ -63,7 +63,7 @@ export class Rule extends HasSource<RuleCore> {
 	}
 	// #endregion Renderable
 
-	// #region utils.SearchUtils.ISearchable
+	// #region Searchable
 	public searchRecursive(searchInfo: SearchInfo): SearchScore<this>[] {
 		const scores = [];
 		scores.push(this.search(searchInfo));
@@ -72,7 +72,7 @@ export class Rule extends HasSource<RuleCore> {
 		});
 		return scores;
 	}
-	// #endregion utils.SearchUtils.ISearchable
+	// #endregion
 
 	public static from(core: RuleCore): Rule { return new Rule(core); }
 }

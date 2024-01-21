@@ -1,6 +1,6 @@
 import { sortStringIgnoreCase } from "@rsc-utils/array-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import type { IHasContents, TObjectQuantity } from "../common";
 import { COMMON, MDASH } from "../common";
 import { RenderableContent } from "../data/RenderableContent";
@@ -124,7 +124,7 @@ export class Gear extends HasBulk<GearCore, Gear> {
 		return content;
 	}
 
-	//#region utils.SearchUtils.ISearchable
+	//#region Searchable
 
 	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);

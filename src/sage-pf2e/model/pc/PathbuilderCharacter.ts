@@ -1,5 +1,7 @@
 import { Collection } from "@rsc-utils/array-utils";
+import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/character-utils";
 import { debug, errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
+import { getDataRoot } from "@rsc-utils/env-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/fs-utils";
 import { getJson } from "@rsc-utils/https-utils";
 import { nth } from "@rsc-utils/number-utils";
@@ -8,7 +10,6 @@ import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import { ABILITIES } from "../..";
 import type { TMacro } from "../../../sage-lib/sage/model/types";
-import { CharacterBase, CharacterBaseCore } from "../../../sage-utils/utils/CharacterUtils/CharacterBase";
 import type { GetStatPrefix, TProficiency, TSavingThrow } from "../../common";
 import { getSavingThrows, toModifier } from "../../common";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository";
@@ -868,7 +869,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 
 	//#region toHtml
 
-	private toHtmlName(): string {
+	public toHtmlName(): string {
 		const name = this.core.name;
 		const klass = this.core.class;
 		const dualClass = this.core.dualClass ? `/${this.core.dualClass}` : ``;
@@ -965,7 +966,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 			}
 		}
 	}
-	public getValidSectionsTypes(): TCharacterSectionType[] {
+	public getValidSections<V extends string = TCharacterSectionType>(): V[] {
 		const outputTypes: TCharacterSectionType[] = [
 			"Traits",
 			"Perception"
@@ -1015,9 +1016,9 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 			outputTypes.push("Formulas");
 		}
 
-		return outputTypes;
+		return outputTypes as V[];
 	}
-	public getValidViewTypes(): TCharacterViewType[] {
+	public getValidViews<V extends string = TCharacterViewType>(): V[] {
 		const outputTypes: TCharacterViewType[] = [];
 
 		if (this.core.weapons?.length) {
@@ -1048,7 +1049,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 			outputTypes.push("Spells");
 		}
 
-		return outputTypes;
+		return outputTypes as V[];
 	}
 
 	//#endregion
@@ -1092,7 +1093,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 	//#region save/load
 
 	public static createFilePath(characterId: string): string {
-		return `./data/sage/pb2e/${characterId}.json`;
+		return `${getDataRoot("sage")}/pb2e/${characterId}.json`;
 	}
 	public static exists(characterId: string): boolean {
 		return fileExistsSync(this.createFilePath(characterId));

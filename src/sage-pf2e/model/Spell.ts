@@ -3,9 +3,9 @@ import { type Core } from "@rsc-utils/class-utils";
 import { debug } from "@rsc-utils/console-utils";
 import { nth } from "@rsc-utils/number-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TMagicComponent, TMagicTradition } from '../common';
 import { ABILITIES, NEWLINE, toModifier } from '../common';
 import { RenderableContent } from '../data/RenderableContent';
@@ -359,7 +359,7 @@ export class Spell<T extends string = "Spell", U extends SpellCoreBase<T> = Spel
 	}
 	//#endregion Renderable
 
-	//#region utils.SearchUtils.ISearchable
+	//#region Searchable
 
 	public get searchResultCategory(): string {
 		const level = this.isCantrip ? `Cantrip` : `Spell ${this.level}`;
@@ -384,7 +384,7 @@ export class Spell<T extends string = "Spell", U extends SpellCoreBase<T> = Spel
 		return this.name.italics();
 	}
 
-	//#endregion utils.SearchUtils.ISearchable
+	//#endregion
 
 	//#region static
 

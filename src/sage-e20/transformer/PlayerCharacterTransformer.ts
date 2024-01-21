@@ -264,8 +264,8 @@ export class PlayerCharacterTransformer extends PlayerCharacterE20<PlayerCharact
 		return `[spacer]${name}${range}${hardpoint}${traits}${attack}${effects}${altEffects}`;
 	}
 
-	public getValidSectionsTypes<T extends string = TCharacterSectionType>(): T[] {
-		const outputTypes: TCharacterSectionType[] = super.getValidSectionsTypes();
+	public getValidSections<T extends string = TCharacterSectionType>(): T[] {
+		const outputTypes: TCharacterSectionType[] = super.getValidSections();
 		if (this.core.energon) {
 			outputTypes.push("Energon");
 		}

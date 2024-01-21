@@ -1,4 +1,4 @@
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import type { TQuality } from "../common";
 import type { SourcedCore } from "./base/HasSource";
 import { HasSource } from "./base/HasSource";
@@ -34,7 +34,7 @@ export class Material extends HasSource<MaterialCore> {
 	public get requirements(): string[] { return this.core.requirements; }
 
 	/**************************************************************************************************************************/
-	// utils.SearchUtils.ISearchable
+	// Searchable
 
 	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);

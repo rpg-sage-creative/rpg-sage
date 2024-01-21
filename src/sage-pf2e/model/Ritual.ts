@@ -1,6 +1,6 @@
 import { nth } from "@rsc-utils/number-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { NEWLINE } from "../common";
 import { RenderableContent } from "../data/RenderableContent";
 import type { TSpellHeighten } from "./Spell";
@@ -135,7 +135,7 @@ export class Ritual extends HasSource<RitualCore> {
 	}
 	//#endregion Renderable
 
-	//#region utils.SearchUtils.ISearchable
+	//#region Searchable
 
 	public get searchResultCategory(): string {
 		const level = `Ritual ${this.level}`;
@@ -155,6 +155,6 @@ export class Ritual extends HasSource<RitualCore> {
 		return this.name.italics();
 	}
 
-	//#endregion utils.SearchUtils.ISearchable
+	//#endregion
 
 }

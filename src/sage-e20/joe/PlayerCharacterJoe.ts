@@ -195,8 +195,8 @@ export class PlayerCharacterJoe extends PlayerCharacterE20<PlayerCharacterCoreJo
 		return base + upgrades;
 	}
 
-	public getValidSectionsTypes<T extends string = TCharacterSectionType>(): T[] {
-		const outputTypes: TCharacterSectionType[] = super.getValidSectionsTypes();
+	public getValidSections<T extends string = TCharacterSectionType>(): T[] {
+		const outputTypes: TCharacterSectionType[] = super.getValidSections();
 		if (this.core.focus) {
 			outputTypes.push("Focus");
 		}

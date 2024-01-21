@@ -73,9 +73,9 @@ export class CreatureCategory extends HasSource<CreatureCategoryCore, "CreatureC
 	// }
 
 	/**************************************************************************************************************************/
-	// utils.SearchUtils.ISearchable
+	// Searchable
 
-	// public search(searchInfo: utils.SearchUtils.SearchInfo): utils.SearchUtils.SearchScore {
+	// public search(searchInfo: SearchInfo): SearchScore {
 	// 	let score = super.search(searchInfo);
 	// 	if (searchInfo.globalFlag) {
 	// 		score.append(searchInfo.score(this.description, this.details));

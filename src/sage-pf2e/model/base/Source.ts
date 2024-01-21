@@ -1,6 +1,6 @@
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { RenderableContent } from "../../data/RenderableContent";
 import { findByValue, type IFile } from "../../data/Repository";
 import { Base, BaseCore } from "./Base";
@@ -94,7 +94,7 @@ export class Source extends Base<SourceCore, "Source"> {
 	}
 	// #endregion Renderable
 
-	// #region utils.SearchUtils.ISearchable
+	// #region Searchable
 	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);
 		score.append(searchInfo.score(this, this.abbreviation));
@@ -106,7 +106,7 @@ export class Source extends Base<SourceCore, "Source"> {
 	public get searchResultCategory(): string {
 		return `Source (${this.productLine})`;
 	}
-	// #endregion utils.SearchUtils.ISearchable
+	// #endregion
 
 	// #region Static Properties
 	public static CoreCode = "PZO2101";

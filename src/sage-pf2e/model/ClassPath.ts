@@ -37,7 +37,7 @@ export class ClassPath extends HasSource<ClassPathCore> {
 
 	//#endregion
 
-	//#region utils.SearchUtils.ISearchable
+	//#region Searchable
 
 	public get searchResultCategory(): string {
 		return this.class.classPath;

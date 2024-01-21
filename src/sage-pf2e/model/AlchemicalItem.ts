@@ -1,4 +1,4 @@
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import type { BulkCore } from "./HasBulk";
 import { HasBulk } from "./HasBulk";
 
@@ -27,7 +27,7 @@ export class AlchemicalItem extends HasBulk<AlchemicalItemCore, AlchemicalItem> 
 	public get price(): string | undefined { return this.core.price ?? undefined; }
 
 	/**************************************************************************************************************************/
-	// utils.SearchUtils.ISearchable
+	// Searchable
 
 	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);

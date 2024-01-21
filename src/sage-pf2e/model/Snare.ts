@@ -1,4 +1,4 @@
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import type { SourcedCore } from "./base/HasSource";
 import { HasSource } from "./base/HasSource";
 
@@ -18,7 +18,7 @@ export class Snare extends HasSource<SnareCore> {
 	public get craftRequirements(): string[] { return this.core.craftRequirements || []; }
 
 	/**************************************************************************************************************************/
-	// utils.SearchUtils.ISearchable
+	// Searchable
 
 	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);

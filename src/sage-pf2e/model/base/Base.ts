@@ -2,9 +2,8 @@ import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/arra
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
 import type { Renderable, RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
+import { SearchInfo, SearchScore, Searchable } from "@rsc-utils/search-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import type { ISearchable } from "../../../sage-utils";
-import { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { NEWLINE, TAB } from "../../common";
 import { RenderableContent } from "../../data/RenderableContent";
 import type {
@@ -57,7 +56,7 @@ export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = stri
 		IHasLink,
 		IHasName,
 		Renderable,
-		ISearchable {
+		Searchable {
 
 	// #region Constructor
 
@@ -261,7 +260,7 @@ export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = stri
 
 	// #endregion Comparable
 
-	// #region utils.SearchUtils.ISearchable
+	// #region Searchable
 
 	public get searchResultCategory(): string {
 		return this.objectType as unknown as string;
@@ -290,5 +289,5 @@ export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = stri
 		return this.core.name;
 	}
 
-	// #endregion utils.SearchUtils.ISearchable
+	// #endregion
 }

@@ -289,8 +289,8 @@ export class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacterCorePR>
 		}
 	}
 
-	public getValidSectionsTypes<T extends string = TCharacterSectionType>(): T[] {
-		const outputTypes: TCharacterSectionType[] = super.getValidSectionsTypes();
+	public getValidSections<T extends string = TCharacterSectionType>(): T[] {
+		const outputTypes: TCharacterSectionType[] = super.getValidSections();
 		if (this.core.inventory) {
 			outputTypes.push("Inventory");
 		}

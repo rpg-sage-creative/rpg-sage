@@ -1,17 +1,16 @@
 import { addCommas } from "@rsc-utils/number-utils";
 import { RenderableContent, type Renderable } from "@rsc-utils/render-utils";
+import { HasScoredSearchables, SearchInfo, SearchScore, type Searchable } from "@rsc-utils/search-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { OrUndefined } from "@rsc-utils/type-utils";
 import { UNICODE_ZERO_TO_TEN } from "../sage-common";
 import type { IMenuRenderable } from "../sage-lib/discord";
 import type { IHasName } from "../sage-pf2e";
 import type { Source } from "../sage-pf2e/model/base/Source";
-import type { ISearchable } from "../sage-utils";
-import { HasScoredSearchables, SearchInfo, SearchScore } from "../sage-utils/utils/SearchUtils";
 
 type TRenderableMeta = { hasCompScore:boolean; sources:Source[]; unicodeArray:string[]; unicodeIndex:number; };
 
-type TSearchable = IHasName & ISearchable & Renderable;
+type TSearchable = IHasName & Searchable & Renderable;
 
 function scoreToLineItem<T extends TSearchable>(this: SearchResults<T>, meta: TRenderableMeta, score: SearchScore<T>, scoreIndex: number): string {
 	const searchable = this.searchables[scoreIndex],

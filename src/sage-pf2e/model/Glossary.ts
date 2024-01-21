@@ -1,4 +1,4 @@
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import type { SourcedCore } from "./base/HasSource";
 import { HasSource } from './base/HasSource';
 
@@ -10,7 +10,7 @@ export class Glossary extends HasSource<GlossaryCore> {
 
 	public get abbrev(): string { return this.core.abbrev || ""; }
 
-	//#region utils.SearchUtils.ISearchable
+	//#region Searchable
 
 	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);

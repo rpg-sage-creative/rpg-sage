@@ -1,6 +1,6 @@
+import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/character-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { TSkillDie } from "../../sage-dice/dice/essence20";
-import { CharacterBase, CharacterBaseCore } from "../../sage-utils/utils/CharacterUtils/CharacterBase";
 
 export type TArmorE20 = {
 	name?: string;
@@ -91,7 +91,7 @@ export abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> exten
 
 	public get abilities(): TStatE20[] { return this.core.abilities ?? []; }
 
-	public getValidSectionsTypes<U extends string>(): U[] {
+	public getValidSections<U extends string>(): U[] {
 		const outputTypes: string[] = [];
 		if (this.core.origin) {
 			outputTypes.push("Origin");
@@ -138,7 +138,7 @@ export abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> exten
 		return outputTypes as U[];
 	}
 
-	public getValidViewTypes<U extends string>(): U[] {
+	public getValidViews<U extends string>(): U[] {
 		return ["Combat", "Skills"] as U[];
 	}
 

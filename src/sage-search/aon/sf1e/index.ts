@@ -1,6 +1,6 @@
+import { SearchScore } from "@rsc-utils/search-utils";
 import { TResultsLink, getSearchResultsLinks, sortSearchResults } from "../";
 import { GameType } from "../../../sage-common";
-import { SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { GameSearchInfo } from "../../GameSearchInfo";
 import type { TParsedSearchInfo } from "../../common";
 import { AonSf1SearchBase } from "./AonSf1SearchBase";

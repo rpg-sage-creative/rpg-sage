@@ -1,11 +1,11 @@
-import { type SortResult, sortPrimitive } from "@rsc-utils/array-utils";
+import { sortPrimitive, type SortResult } from "@rsc-utils/array-utils";
 import { error } from "@rsc-utils/console-utils";
 import { getJson } from "@rsc-utils/https-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
+import type { SearchScore } from "@rsc-utils/search-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import { GameType } from "../../../sage-common";
 import type { AonBase } from "../../../sage-pf2e/model/base/AonBase";
-import type { SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { GameSearchInfo } from "../../GameSearchInfo";
 import type { TParsedSearchInfo } from "../../common";
 import { Pf2eSearchResults } from "./Pf2eSearchResults";

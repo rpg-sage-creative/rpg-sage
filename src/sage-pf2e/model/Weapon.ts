@@ -1,5 +1,5 @@
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import type { TWeaponCategory, TWeaponGroup, TWeaponHands, TWeaponType } from "../common";
 import { MDASH, NEWLINE, TAB } from "../common";
 import { RenderableContent } from "../data/RenderableContent";
@@ -90,7 +90,7 @@ export class Weapon extends HasBulk<WeaponCore, Weapon> {
 	}
 
 	/**************************************************************************************************************************/
-	// utils.SearchUtils.ISearchable
+	// Searchable
 
 	public search(searchInfo: SearchInfo): SearchScore<this> {
 		const score = super.search(searchInfo);

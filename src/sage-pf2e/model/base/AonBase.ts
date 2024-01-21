@@ -1,7 +1,6 @@
 import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/array-utils";
+import type { SearchInfo, SearchScore, Searchable } from "@rsc-utils/search-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import type { ISearchable } from "../../../sage-utils";
-import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { TParsedSource, parseSources } from "../../data/Repository";
 import type { Base } from "./Base";
 import type { SourcedCore, TSourceInfo } from "./HasSource";
@@ -78,7 +77,7 @@ export class AonBase
 		Comparable<AonBase>,
 		IHasLink,
 		IHasName,
-		ISearchable {
+		Searchable {
 
 	public constructor(protected core: AonBaseCore) {
 		super(hackCore(core));
@@ -151,7 +150,7 @@ export class AonBase
 
 	// #endregion Comparable
 
-	// #region utils.SearchUtils.ISearchable
+	// #region Searchable
 
 	public get searchResultCategory(): string {
 		return this.core.level
@@ -171,7 +170,7 @@ export class AonBase
 		return this.core.name;
 	}
 
-	// #endregion utils.SearchUtils.ISearchable
+	// #endregion
 
 	public static searchRecursive(core: AonBaseCore, searchInfo: SearchInfo): SearchScore<AonBase>[] {
 		return new AonBase(core).searchRecursive(searchInfo);

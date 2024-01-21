@@ -151,7 +151,7 @@ function createViewSelectRow(character: PathbuilderCharacter): MessageActionRow 
 
 	const activeSections = getActiveSections(character);
 
-	const validSectionTypes = character.getValidSectionsTypes();
+	const validSectionTypes = character.getValidSections();
 	validSectionTypes.sort();
 	validSectionTypes.forEach(sectionType => {
 		selectMenu.addOptions({
@@ -161,7 +161,7 @@ function createViewSelectRow(character: PathbuilderCharacter): MessageActionRow 
 		});
 	});
 
-	const validViewTypes = character.getValidViewTypes();
+	const validViewTypes = character.getValidViews();
 	validViewTypes.forEach(view => {
 		const sections = getCharacterSections(view) ?? [];
 		sections.sort();
