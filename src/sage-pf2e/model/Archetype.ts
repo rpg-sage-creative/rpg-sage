@@ -1,6 +1,6 @@
 import { sortPrimitive, sortStringIgnoreCase } from "@rsc-utils/array-utils";
 import { nth } from "@rsc-utils/number-utils";
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { rarityToSuper } from "../common";
 import { RenderableContent } from "../data/RenderableContent";
 import { all, find, findByValue } from "../data/Repository";
@@ -68,7 +68,7 @@ export class Archetype extends HasSource<ArchetypeCore> {
 		return this._dedication!;
 	}
 
-	//#region utils.RenderUtils.IRenderable
+	//#region Renderable
 
 	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);

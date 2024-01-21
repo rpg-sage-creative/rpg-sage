@@ -1,5 +1,4 @@
-import type { TRenderableContentSection } from "../../sage-utils";
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContentSection, RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { TAB } from "../common";
 import { RenderableContent } from "../data/RenderableContent";
 import { HasSource, SourcedCore } from "./base/HasSource";
@@ -22,11 +21,11 @@ export class WeaponGroup extends HasSource<WeaponGroupCore> {
 		return content;
 	}
 
-	public toRenderableContentTitledSection(): TRenderableContentSection {
+	public toRenderableContentTitledSection(): RenderableContentSection {
 		return {
 			title: `<b>Critical Specialization Effect</b> ${this.name}`,
 			content: this.specializationEffect.map((s, i) => (i ? TAB : "") + s)
-		} as TRenderableContentSection;
+		} as RenderableContentSection;
 	}
 
 }

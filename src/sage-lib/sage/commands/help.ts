@@ -1,8 +1,8 @@
 import { toUniqueDefined } from "@rsc-utils/array-utils";
 import { getSuperUserId } from "@rsc-utils/env-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { TChannel, TCommandAndArgs } from "../../discord";
 import { ArgsManager } from "../../discord/ArgsManager";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";

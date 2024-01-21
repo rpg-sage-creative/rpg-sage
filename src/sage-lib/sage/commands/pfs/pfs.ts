@@ -1,9 +1,9 @@
 import { error, warn } from "@rsc-utils/console-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { DieRollGrade } from "../../../../sage-dice";
 import { Dice } from "../../../../sage-dice/dice/pf2e";
 import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e";
-import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import { ColorType } from "../../model/HasColorsCore";
 import type { SageMessage } from "../../model/SageMessage";
 import { createRenderableContent, registerCommandRegex } from "../cmd";

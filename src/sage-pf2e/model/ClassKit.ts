@@ -1,16 +1,16 @@
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { TObjectQuantity } from "../common";
 import { RenderableContent } from "../data/RenderableContent";
 import { findByValue } from "../data/Repository";
 import type { Ammunition } from "./Ammunition";
 import type { Armor } from "./Armor";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
 import { Bulk } from "./Bulk";
 import { Coins } from "./Coins";
 import type { Gear } from "./Gear";
 import { getQuantity, toObjectQuantities } from "./HasBulk";
 import type { Weapon } from "./Weapon";
+import type { SourcedCore } from "./base/HasSource";
+import { HasSource } from "./base/HasSource";
 
 type TClassKitItem = Weapon | Ammunition | Armor | Gear;
 

@@ -1,6 +1,7 @@
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
+import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { If, MessageActionRow, MessageButton, MessageEmbed, MessageSelectMenu } from "discord.js";
-import type { DiscordCache, DiscordKey, TRenderableContentResolvable } from "../../discord";
+import type { DiscordCache, DiscordKey } from "../../discord";
 import { resolveToEmbeds, resolveToTexts } from "../../discord/embeds";
 import type { Bot } from "./Bot";
 import type { Game } from "./Game";
@@ -13,8 +14,8 @@ export interface HasSageCacheCore {
 }
 
 export type TSendArgs<HasEphemeral extends boolean = boolean> = {
-	content?: TRenderableContentResolvable;
-	embeds?: TRenderableContentResolvable | MessageEmbed[];
+	content?: RenderableContentResolvable;
+	embeds?: RenderableContentResolvable | MessageEmbed[];
 	components?: MessageActionRow<MessageSelectMenu | MessageButton>[];
 	ephemeral?: If<HasEphemeral, boolean | null, never>;
 };
@@ -93,7 +94,7 @@ export abstract class HasSageCache<T extends HasSageCacheCore, U extends HasSage
 
 	//#endregion
 
-	protected resolveToOptions(renderableOrArgs: TRenderableContentResolvable | TSendArgs, ephemeral?: boolean): TSendOptions {
+	protected resolveToOptions(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): TSendOptions {
 		if ((typeof(renderableOrArgs) === "string") || ("toRenderableContent" in renderableOrArgs)) {
 			return {
 				embeds: resolveToEmbeds(this.caches, renderableOrArgs),

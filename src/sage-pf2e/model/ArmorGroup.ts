@@ -1,5 +1,4 @@
-import type { TRenderableContentSection } from "../../sage-utils";
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContentSection, RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { TAB } from "../common";
 import { RenderableContent } from "../data/RenderableContent";
 import type { SourcedCore } from "./base/HasSource";
@@ -17,11 +16,11 @@ export class ArmorGroup extends HasSource<ArmorGroupCore> {
 		content.append(...this.specializationEffect.map((d, i) => (i ? TAB : "") + d));
 		return content;
 	}
-	public toRenderableContentTitledSection(): TRenderableContentSection {
+	public toRenderableContentTitledSection(): RenderableContentSection {
 		return {
 			title: `<b>Specialization Effect</b> ${this.name}`,
 			content: this.specializationEffect.map((s, i) => (i ? TAB : "") + s)
-		} as TRenderableContentSection;
+		} as RenderableContentSection;
 	}
 
 }

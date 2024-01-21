@@ -1,10 +1,10 @@
 import { filterAndMap, sortComparable, toUnique, toUniqueDefined } from "@rsc-utils/array-utils";
 import { debug, error, verbose } from "@rsc-utils/console-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { ArgsManager } from "../../discord/ArgsManager";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";

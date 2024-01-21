@@ -1,9 +1,9 @@
 import { mapAsync } from "@rsc-utils/async-array-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Role } from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
-import { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
 import type { SageMessage } from "../../../model/SageMessage";
 import type { Server } from "../../../model/Server";
 import { AdminRoleType, IAdminRole } from "../../../model/Server";

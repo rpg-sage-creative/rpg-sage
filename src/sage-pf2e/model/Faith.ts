@@ -1,4 +1,4 @@
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { TAlignment } from '../common';
 import { ALIGNMENTS } from '../common';
 import { RenderableContent } from '../data/RenderableContent';

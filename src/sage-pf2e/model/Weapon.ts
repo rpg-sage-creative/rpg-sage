@@ -1,4 +1,4 @@
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TWeaponCategory, TWeaponGroup, TWeaponHands, TWeaponType } from "../common";
 import { MDASH, NEWLINE, TAB } from "../common";

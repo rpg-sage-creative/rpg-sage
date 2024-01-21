@@ -1,4 +1,4 @@
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { TAbility } from '../common';
 import { CONSTITUTION, DEXTERITY, STRENGTH } from '../common';
 import { RenderableContent } from '../data/RenderableContent';
@@ -68,7 +68,7 @@ export class Skill extends HasSource<SkillCore> {
 	public get trainedDetails(): string[] { return this.core.trainedDetails || []; }
 
 	/**************************************************************************************************************************/
-	// utils.RenderUtils.IRenderable
+	// Renderable
 
 	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);

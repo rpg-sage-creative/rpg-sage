@@ -1,5 +1,6 @@
 import { Cache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnNull, warn } from "@rsc-utils/console-utils";
+import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Message, User } from "discord.js";
@@ -9,8 +10,7 @@ import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../s
 import { createMessageLink } from "../../../sage-utils/utils/DiscordUtils/createMessageLink";
 import { handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils/errorHandlers";
 import { safeMentions } from "../../../sage-utils/utils/DiscordUtils/safeMentions";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import { DiscordKey, type DMessage, type TChannel, type TCommandAndArgs, type TRenderableContentResolvable } from "../../discord";
+import { DiscordKey, type DMessage, type TChannel, type TCommandAndArgs } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
 import { resolveToTexts } from "../../discord/embeds";
 import { send, sendTo } from "../../discord/messages";
@@ -118,10 +118,10 @@ export class SageMessage
 	//#region Send / Replace
 
 	public _ = new Map<"Dialog" | "Dice" | "Replacement" | "Sent", DMessage>();
-	public send(renderableContentResolvable: TRenderableContentResolvable): Promise<Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel): Promise<Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel, originalAuthor: User): Promise<Message[]>;
-	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.message.channel as TChannel, originalAuthor = this.message.author, notifyIfBlocked = false): Promise<Message[]> {
+	public send(renderableContentResolvable: RenderableContentResolvable): Promise<Message[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: TChannel): Promise<Message[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: TChannel, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.message.channel as TChannel, originalAuthor = this.message.author, notifyIfBlocked = false): Promise<Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			if (notifyIfBlocked) {
@@ -140,7 +140,7 @@ export class SageMessage
 		}
 		return [];
 	}
-	public sendPost(renderableContentResolvable: TRenderableContentResolvable) {
+	public sendPost(renderableContentResolvable: RenderableContentResolvable) {
 		return sendTo({
 			sageCache: this.caches,
 			target: this.message.channel as TChannel,
@@ -153,8 +153,8 @@ export class SageMessage
 	}
 
 	public async whisper(args: TSendArgs): Promise<void>;
-	public async whisper(content: TRenderableContentResolvable): Promise<void>;
-	public async whisper(contentOrArgs: TSendArgs | TRenderableContentResolvable): Promise<void> {
+	public async whisper(content: RenderableContentResolvable): Promise<void>;
+	public async whisper(contentOrArgs: TSendArgs | RenderableContentResolvable): Promise<void> {
 		const args = typeof(contentOrArgs) === "string" || "toRenderableContent" in contentOrArgs ? { content:contentOrArgs } : contentOrArgs;
 		const sendOptions = this.resolveToOptions(args);
 		const canSend = await this.canSend(this.message.channel as TChannel);

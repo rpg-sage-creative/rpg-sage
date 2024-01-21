@@ -1,7 +1,7 @@
 import { rollDie } from "@rsc-utils/dice-utils";
 import { shuffle } from "@rsc-utils/random-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import { BULLET } from "@rsc-utils/string-utils";
-import type { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import type { SageMessage } from "../../model/SageMessage";
 import { addScenario, createPfsRenderableContent, TPfsFaction, TTierInfo } from "./pfs";
 

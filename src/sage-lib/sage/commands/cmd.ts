@@ -1,8 +1,8 @@
 import { Color } from "@rsc-utils/color-utils";
 import { error } from "@rsc-utils/console-utils";
+import { RenderableContent } from "@rsc-utils/render-utils";
 import type { Awaitable, OrNull } from "@rsc-utils/type-utils";
 import { MessageEmbed } from "discord.js";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { ArgsManager } from "../../discord/ArgsManager";
 import { registerMessageListener } from "../../discord/handlers";
 import type { TCommandAndArgs, TMessageHandler } from "../../discord/types";

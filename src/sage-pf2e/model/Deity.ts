@@ -1,4 +1,4 @@
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { TAlignment } from '../common';
 import { RenderableContent } from '../data/RenderableContent';
 import type { TDevoteeBenefitsCore } from "./DevoteeBenefits";
@@ -36,7 +36,7 @@ export class Deity extends Faith<"Deity", DeityCore> {
 	public hasDomain(domain: Domain): boolean { return this.devoteeBenefits.domains.includes(domain) || this.devoteeBenefits.alternateDomains.includes(domain); }
 
 	/**************************************************************************************************************************/
-	// utils.RenderUtils.IRenderable
+	// Renderable
 
 	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);

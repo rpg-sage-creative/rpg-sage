@@ -1,6 +1,6 @@
 import { addCommas } from "@rsc-utils/number-utils";
+import { RenderableContent } from "@rsc-utils/render-utils";
 import { createSearchUrl } from ".";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { SearchResults } from "../../SearchResults";
 import type { AonPf1SearchBase } from "./AonPf1SearchBase";
 

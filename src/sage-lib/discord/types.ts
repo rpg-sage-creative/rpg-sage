@@ -1,15 +1,12 @@
+import type { Renderable, RenderableContent } from "@rsc-utils/render-utils";
 import type { Awaitable } from "@rsc-utils/type-utils";
 import type { ButtonInteraction, CommandInteraction, DMChannel, Guild, Message, MessageComponentInteraction, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, SelectMenuInteraction, Snowflake, TextChannel, ThreadChannel, User } from "discord.js";
-import type { IRenderable } from "../../sage-utils";
-import type { RenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { SageInteraction } from "../sage/model/SageInteraction";
 import type { SageMessage } from "../sage/model/SageMessage";
 import type { SageReaction } from "../sage/model/SageReaction";
 import type { ArgsManager } from "./ArgsManager";
 
-export type TRenderableContentResolvable = string | IRenderable | RenderableContent;
-
-export interface IMenuRenderable extends IRenderable {
+export interface IMenuRenderable extends Renderable {
 	getMenuLength(): number;
 	getMenuUnicodeArray(): string[];
 	toMenuRenderableContent(): RenderableContent;

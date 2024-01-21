@@ -2,9 +2,9 @@ import { toUnique } from "@rsc-utils/array-utils";
 import { type Core } from "@rsc-utils/class-utils";
 import { debug } from "@rsc-utils/console-utils";
 import { nth } from "@rsc-utils/number-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TMagicComponent, TMagicTradition } from '../common';
 import { ABILITIES, NEWLINE, toModifier } from '../common';
@@ -224,7 +224,7 @@ export class Spell<T extends string = "Spell", U extends SpellCoreBase<T> = Spel
 
 	//#endregion
 
-	//#region utils.RenderUtils.IRenderable
+	//#region Renderable
 	private toRenderableContentTitle(content: UtilsRenderableContent): void {
 		const cantrip = this.isCantrip ? " Cantrip" : "";
 		const focus = !this.isCantrip && this.isFocus ? " Focus" : "";
@@ -357,7 +357,7 @@ export class Spell<T extends string = "Spell", U extends SpellCoreBase<T> = Spel
 
 		return content;
 	}
-	//#endregion utils.RenderUtils.IRenderable
+	//#endregion Renderable
 
 	//#region utils.SearchUtils.ISearchable
 

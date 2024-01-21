@@ -1,5 +1,6 @@
 import { Cache } from "@rsc-utils/cache-utils";
 import { debug } from "@rsc-utils/console-utils";
+import { RenderableContent, RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
@@ -8,8 +9,7 @@ import type { IHasChannels, IHasGame } from ".";
 import type { SlashCommandGameType } from "../../../SlashTypes.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
-import { DInteraction, DUser, DiscordKey, InteractionType, TChannel, TRenderableContentResolvable } from "../../discord";
+import { DInteraction, DUser, DiscordKey, InteractionType, TChannel } from "../../discord";
 import { deleteMessages } from "../../discord/deletedMessages";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { send } from "../../discord/messages";
@@ -199,7 +199,7 @@ export class SageInteraction<T extends DInteraction = any>
 	}
 
 	/** Uses reply() it not replied to yet or editReply() to edit the previous reply. */
-	public async reply(renderable: TRenderableContentResolvable, ephemeral: boolean): Promise<void> {
+	public async reply(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void> {
 		return this.pushToReplyStack(async () => {
 			const embeds = resolveToEmbeds(this.caches, renderable);
 			if (this.interaction.deferred || this.interaction.replied) {
@@ -216,7 +216,7 @@ export class SageInteraction<T extends DInteraction = any>
 	}
 
 	/** Uses followUp() if a reply was given, otherwise uses reply()  */
-	public async update(renderable: TRenderableContentResolvable, ephemeral: boolean): Promise<void> {
+	public async update(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void> {
 		return this.pushToReplyStack(async () => {
 			if (this.interaction.replied) {
 				const embeds = resolveToEmbeds(this.caches, renderable);
@@ -228,10 +228,10 @@ export class SageInteraction<T extends DInteraction = any>
 	}
 
 	/** Sends a full message to the channel or user the interaction originated in. */
-	public send(renderableContentResolvable: TRenderableContentResolvable): Promise<Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel): Promise<Message[]>;
-	public send(renderableContentResolvable: TRenderableContentResolvable, targetChannel: TChannel, originalAuthor: User): Promise<Message[]>;
-	public async send(renderableContentResolvable: TRenderableContentResolvable, targetChannel = this.interaction.channel as TChannel, originalAuthor = this.interaction.user): Promise<Message[]> {
+	public send(renderableContentResolvable: RenderableContentResolvable): Promise<Message[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: TChannel): Promise<Message[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: TChannel, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.interaction.channel as TChannel, originalAuthor = this.interaction.user): Promise<Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			return [];

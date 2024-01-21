@@ -1,11 +1,11 @@
 import { filterAsync, mapAsync } from "@rsc-utils/async-array-utils";
 import { warn } from "@rsc-utils/console-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import { GuildChannel } from "discord.js";
 import { GameType } from "../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import { DiscordCache, DiscordId, DiscordKey } from "../../../discord";
 import type { Game } from "../../model/Game";
 import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game";

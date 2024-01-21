@@ -1,11 +1,11 @@
 import { sortComparable } from "@rsc-utils/array-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isNonNilUuid, randomUuid } from "@rsc-utils/uuid-utils";
 import type { Snowflake, TextChannel } from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
 import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
-import { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
 import { DiscordId } from "../../../../discord";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import { Game, GameRoleType, GameUserType, IGameUser, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game";

@@ -1,13 +1,11 @@
 import { warn } from "@rsc-utils/console-utils";
+import type { RenderableContentResolvable, RenderableContentSection } from "@rsc-utils/render-utils";
+import { RenderableContent } from "@rsc-utils/render-utils";
 import { chunk } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { MessageEmbed, type ColorResolvable, type HexColorString } from "discord.js";
-import { TDisplayType, type TRenderableContentSection } from "../../sage-utils";
-import { RenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { SageCache } from "../sage/model/SageCache";
 import { DiscordMaxValues } from "./consts";
-import type { TRenderableContentResolvable } from "./types";
-
 
 /** Ensures we have a string, prepending a NewLine if needed. */
 function getValueToAppend(value: string | null, newLine: boolean): string {
@@ -15,7 +13,7 @@ function getValueToAppend(value: string | null, newLine: boolean): string {
 }
 
 /** Resolves a simple text section. */
-function resolveSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], section: TRenderableContentSection): void {
+function resolveSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], section: RenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
 	const joinedContent = section.content.join(renderableContent.paragraphDelimiter),
 		formattedContent = caches.format(joinedContent),
@@ -34,7 +32,7 @@ function resolveSection(renderableContent: RenderableContent, caches: SageCache,
 }
 
 /** Resolves a section that has columns. */
-function resolveColumnedSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], columnedSection: TRenderableContentSection): void {
+function resolveColumnedSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], columnedSection: RenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
 	columnedSection.columns.forEach(column => {
 		const formattedTitle = caches.format(column.title),
@@ -49,7 +47,7 @@ function resolveColumnedSection(renderableContent: RenderableContent, caches: Sa
 }
 
 /** Resolves a section that has a title. */
-function resolveTitledSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], titledSection: TRenderableContentSection): void {
+function resolveTitledSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], titledSection: RenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
 	const formattedTitle = caches.format(titledSection.title ?? ""),
 		joinedContent = titledSection.content.join(renderableContent.paragraphDelimiter),
@@ -88,7 +86,7 @@ function resolveSections(caches: SageCache, renderableContent: RenderableContent
 }
 
 /** Converts the given renderableContent to MessageEmbed objects, using the given caches. */
-export function resolveToEmbeds(caches: SageCache, renderableContentResolvable: TRenderableContentResolvable): MessageEmbed[] {
+export function resolveToEmbeds(caches: SageCache, renderableContentResolvable: RenderableContentResolvable): MessageEmbed[] {
 	const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 	if (!renderableContent) {
 		return [];
@@ -97,15 +95,11 @@ export function resolveToEmbeds(caches: SageCache, renderableContentResolvable: 
 	const embed: MessageEmbed = createMessageEmbed(undefined, undefined, <HexColorString>renderableContent.color);
 
 	const title = caches.format(renderableContent.title ?? "");
-	if (renderableContent.display === TDisplayType.Compact && title && renderableContent.thumbnailUrl) {
-		embed.setAuthor(title, renderableContent.thumbnailUrl);
-	}else {
-		if (title) {
-			embed.setTitle(title);
-		}
-		if (renderableContent.thumbnailUrl) {
-			embed.setThumbnail(renderableContent.thumbnailUrl);
-		}
+	if (title) {
+		embed.setTitle(title);
+	}
+	if (renderableContent.thumbnailUrl) {
+		embed.setThumbnail(renderableContent.thumbnailUrl);
 	}
 
 	const embeds = [embed];
@@ -129,7 +123,7 @@ export function embedsToTexts(embeds: MessageEmbed[]): string[] {
 }
 
 /** Converts RenderableContent to embeds and then to lines of simple text with markup. */
-export function resolveToTexts(caches: SageCache, renderableContent: TRenderableContentResolvable): string[] {
+export function resolveToTexts(caches: SageCache, renderableContent: RenderableContentResolvable): string[] {
 	const embeds = resolveToEmbeds(caches, renderableContent);
 	return embedsToTexts(embeds);
 }

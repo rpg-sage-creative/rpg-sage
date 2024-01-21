@@ -1,5 +1,5 @@
-import type { TRenderableContentSection } from "../../sage-utils";
-import { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContentSection } from "@rsc-utils/render-utils";
+import { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { NEWLINE, TAB } from "../common";
 import type { Base } from "../model/base/Base";
 import type { HasSource } from "../model/base/HasSource";
@@ -8,24 +8,24 @@ type TRenderable = Base | HasSource;
 
 export class RenderableContent extends UtilsRenderableContent {
 
-	private _aonLinksSection?: TRenderableContentSection;
-	private get aonLinksSection(): TRenderableContentSection {
+	private _aonLinksSection?: RenderableContentSection;
+	private get aonLinksSection(): RenderableContentSection {
 		if (!this._aonLinksSection) {
 			this._aonLinksSection = { index: -1, title: `<b>Archives of Nethys</b>`, content: [], columns: [] };
 		}
 		return this._aonLinksSection;
 	}
 
-	private _sourceSection?: TRenderableContentSection;
-	private get sourceSection(): TRenderableContentSection {
+	private _sourceSection?: RenderableContentSection;
+	private get sourceSection(): RenderableContentSection {
 		if (!this._sourceSection) {
 			this._sourceSection = { index: -1, title: `<b>Source</b>`, content: [], columns: [] };
 		}
 		return this._sourceSection;
 	}
 
-	private _otherLinksSection?: TRenderableContentSection;
-	private get otherLinksSection(): TRenderableContentSection {
+	private _otherLinksSection?: RenderableContentSection;
+	private get otherLinksSection(): RenderableContentSection {
 		if (!this._otherLinksSection) {
 			this._otherLinksSection = { index: -1, title: `<b>Links</b>`, content: [], columns: [] };
 		}
@@ -51,7 +51,7 @@ export class RenderableContent extends UtilsRenderableContent {
 
 	}
 
-	public get sections(): TRenderableContentSection[] {
+	public get sections(): RenderableContentSection[] {
 		const sections = super.sections;
 		if (this._sourceSection) {
 			this._sourceSection.index = sections.length;

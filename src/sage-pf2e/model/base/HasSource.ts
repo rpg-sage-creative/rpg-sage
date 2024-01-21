@@ -1,6 +1,6 @@
 import { getIdMatcher } from "@rsc-utils/class-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { Matcher, OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import type { RenderableContent as UtilsRenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { TRarity } from "../../common";
 import { COMMON, RARITIES } from "../../common";
 import { RenderableContent } from "../../data/RenderableContent";
@@ -138,7 +138,7 @@ export abstract class HasSource<T extends SourcedCore<U> = SourcedCore<any>, U e
 
 	//#endregion
 
-	// #region utils.RenderUtils.IRenderable
+	// #region Renderable
 
 	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
@@ -158,5 +158,5 @@ export abstract class HasSource<T extends SourcedCore<U> = SourcedCore<any>, U e
 		return renderable;
 	}
 
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion Renderable
 }

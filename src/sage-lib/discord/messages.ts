@@ -1,15 +1,15 @@
 import { error, errorReturnNull, warn, warnReturnNull } from "@rsc-utils/console-utils";
+import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Optional, OrNull } from "@rsc-utils/type-utils";
+import type { Guild, GuildTextBasedChannel, Message, MessageAttachment, MessageEmbed, MessageReaction, TextBasedChannel, User, Webhook, WebhookMessageOptions } from "discord.js";
 import { createMessageLink } from "../../sage-utils/utils/DiscordUtils/createMessageLink";
 import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/toHumanReadable";
-import { RenderableContent } from "../../sage-utils/utils/RenderUtils";
 import type { SageCache } from "../sage/model/SageCache";
 import { DialogType } from "../sage/repo/base/IdRepository";
 import { DiscordKey } from "./DiscordKey";
 import { deleteMessage, deleteMessages } from "./deletedMessages";
 import { createMessageEmbed, embedsToTexts, resolveToEmbeds, resolveToTexts } from "./embeds";
-import type { DMessage, DUser, IMenuRenderable, TChannel, TRenderableContentResolvable } from "./types";
-import type { Guild, GuildTextBasedChannel, Message, MessageAttachment, MessageEmbed, MessageReaction, TextBasedChannel, User, Webhook, WebhookMessageOptions } from "discord.js";
+import type { DMessage, DUser, IMenuRenderable, TChannel } from "./types";
 
 //#region helpers
 
@@ -86,7 +86,7 @@ type WebhookOptions = {
 	authorOptions: WebhookMessageOptions;
 	dialogType: DialogType;
 	files?: MessageAttachment[];
-	renderableContent: TRenderableContentResolvable;
+	renderableContent: RenderableContentResolvable;
 	sageCache: SageCache;
 	skipDelete?: boolean;
 };
@@ -148,7 +148,7 @@ export async function replaceWebhook(originalMessage: DMessage, { authorOptions,
 
 //#endregion
 
-export async function replace(caches: SageCache, originalMessage: DMessage, renderableContent: TRenderableContentResolvable): Promise<Message[]> {
+export async function replace(caches: SageCache, originalMessage: DMessage, renderableContent: RenderableContentResolvable): Promise<Message[]> {
 	if (!originalMessage.deletable) {
 		return Promise.reject(`Cannot Delete Message: ${messageToDetails(originalMessage)}`);
 	}
@@ -156,7 +156,7 @@ export async function replace(caches: SageCache, originalMessage: DMessage, rend
 	return send(caches, originalMessage.channel as TChannel, renderableContent, originalMessage.author);
 }
 
-export async function send(caches: SageCache, targetChannel: TChannel, renderableContent: TRenderableContentResolvable, originalAuthor: User | null): Promise<Message[]> {
+export async function send(caches: SageCache, targetChannel: TChannel, renderableContent: RenderableContentResolvable, originalAuthor: User | null): Promise<Message[]> {
 	try {
 		const menuRenderable = (<IMenuRenderable>renderableContent).toMenuRenderableContent && <IMenuRenderable>renderableContent || null,
 			menuItemCount = menuRenderable?.getMenuLength() ?? 0;
@@ -175,7 +175,7 @@ export async function send(caches: SageCache, targetChannel: TChannel, renderabl
 	return [];
 }
 
-async function sendRenderableContent(sageCache: SageCache, renderableContent: TRenderableContentResolvable, targetChannel: TChannel, originalAuthor: User | null): Promise<Message[]> {
+async function sendRenderableContent(sageCache: SageCache, renderableContent: RenderableContentResolvable, targetChannel: TChannel, originalAuthor: User | null): Promise<Message[]> {
 	const messages: Message[] = [],
 		embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel), renderableContent);
 	if (embeds.length > 2) {

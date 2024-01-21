@@ -1,4 +1,5 @@
 import { error } from "@rsc-utils/console-utils";
+import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import { MessageActionRow, MessageButton, type Interaction, type Message, type MessageButtonStyle } from "discord.js";
 import { ActiveBot } from "../sage/model/ActiveBot";
@@ -6,7 +7,7 @@ import type { SageCache } from "../sage/model/SageCache";
 import type { SageInteraction } from "../sage/model/SageInteraction";
 import { SageMessage } from "../sage/model/SageMessage";
 import { resolveToEmbeds } from "./embeds";
-import type { DUser, TChannel, TRenderableContentResolvable } from "./types";
+import type { DUser, TChannel } from "./types";
 
 const TIMEOUT_MILLI = 60 * 1000;
 
@@ -22,7 +23,7 @@ function createButtons(buttons: TPromptButton[]): MessageButton[] {
 	});
 }
 
-export async function discordPromptYesNo(sageMessage: SageMessage, resolvable: TRenderableContentResolvable): Promise<boolean | null> {
+export async function discordPromptYesNo(sageMessage: SageMessage, resolvable: RenderableContentResolvable): Promise<boolean | null> {
 	const yesNo: TPromptButton[] = [{ label:"Yes", style:"SUCCESS"}, { label:"No", style:"SECONDARY" }];
 	const result = await prompt(sageMessage, resolvable, yesNo);
 	if (result) {
@@ -31,7 +32,7 @@ export async function discordPromptYesNo(sageMessage: SageMessage, resolvable: T
 	return null;
 }
 
-export async function discordPromptYesNoDeletable(hasSageCache: SageMessage | SageInteraction, resolvable: TRenderableContentResolvable): Promise<[boolean | null, Message | null]> {
+export async function discordPromptYesNoDeletable(hasSageCache: SageMessage | SageInteraction, resolvable: RenderableContentResolvable): Promise<[boolean | null, Message | null]> {
 	const yesNo: TPromptButton[] = [{ label:"Yes", style:"SUCCESS"}, { label:"No", style:"SECONDARY" }];
 	const channel = hasSageCache instanceof SageMessage ? hasSageCache.message.channel : hasSageCache.interaction.channel;
 	const [result, message] = await _prompt(hasSageCache.caches, resolvable, yesNo, channel as TChannel);
@@ -41,12 +42,12 @@ export async function discordPromptYesNoDeletable(hasSageCache: SageMessage | Sa
 	return [null, message];
 }
 
-export async function prompt(sageMessage: SageMessage, resolvable: TRenderableContentResolvable, buttons: TPromptButton[]): Promise<string | null> {
+export async function prompt(sageMessage: SageMessage, resolvable: RenderableContentResolvable, buttons: TPromptButton[]): Promise<string | null> {
 	const [value] = await _prompt(sageMessage.caches, resolvable, buttons, sageMessage.message.channel as TChannel);
 	return value;
 }
 
-export async function _prompt(sageCache: SageCache, resolvable: TRenderableContentResolvable, buttons: TPromptButton[], targetChannel: TChannel | DUser): Promise<[string | null, Message | null]> {
+export async function _prompt(sageCache: SageCache, resolvable: RenderableContentResolvable, buttons: TPromptButton[], targetChannel: TChannel | DUser): Promise<[string | null, Message | null]> {
 	return new Promise<[string | null, Message | null]>(async resolve => {
 		const buttonRow = new MessageActionRow();
 		const messageButtons = createButtons(buttons);

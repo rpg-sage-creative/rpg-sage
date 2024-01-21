@@ -1,9 +1,9 @@
 import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/array-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
+import type { Renderable, RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import type { IRenderable, ISearchable } from "../../../sage-utils";
-import type { RenderableContent as UtilsRenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import type { ISearchable } from "../../../sage-utils";
 import { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { NEWLINE, TAB } from "../../common";
 import { RenderableContent } from "../../data/RenderableContent";
@@ -56,7 +56,7 @@ export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = stri
 		IHasDetails,
 		IHasLink,
 		IHasName,
-		IRenderable,
+		Renderable,
 		ISearchable {
 
 	// #region Constructor
@@ -240,7 +240,7 @@ export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = stri
 
 	// #endregion IHasName
 
-	// #region utils.RenderUtils.IRenderable
+	// #region Renderable
 	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
@@ -248,7 +248,7 @@ export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = stri
 		this.appendDetailsTo(renderable);
 		return renderable;
 	}
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion Renderable
 
 	// #region Comparable
 

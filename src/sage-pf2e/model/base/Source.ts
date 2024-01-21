@@ -1,5 +1,5 @@
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import type { RenderableContent as UtilsRenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 import { RenderableContent } from "../../data/RenderableContent";
 import { findByValue, type IFile } from "../../data/Repository";
@@ -75,7 +75,7 @@ export class Source extends Base<SourceCore, "Source"> {
 
 	// #endregion IHasName
 
-	// #region utils.RenderUtils.IRenderable
+	// #region Renderable
 	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b> (${this.objectType})`);
@@ -92,7 +92,7 @@ export class Source extends Base<SourceCore, "Source"> {
 		}
 		return renderable;
 	}
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion Renderable
 
 	// #region utils.SearchUtils.ISearchable
 	public search(searchInfo: SearchInfo): SearchScore<this> {

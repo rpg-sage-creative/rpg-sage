@@ -1,9 +1,9 @@
 import { Season, TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason } from "@rsc-utils/date-utils";
 import { parseEnum } from "@rsc-utils/enum-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType } from "../../../sage-pf2e";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
 import { registerInteractionListener } from "../../discord/handlers";
 import type { SageInteraction } from "../model/SageInteraction";
 import type { SageMessage } from "../model/SageMessage";

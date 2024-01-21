@@ -2,7 +2,7 @@ import { debug } from "@rsc-utils/console-utils";
 import { addCommas, nth } from "@rsc-utils/number-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { Coins, PROFICIENCIES, TProficiency, Table } from "../../../sage-pf2e";
-import type { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { SageMessage } from "../model/SageMessage";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
 import { registerCommandHelp } from "./help";

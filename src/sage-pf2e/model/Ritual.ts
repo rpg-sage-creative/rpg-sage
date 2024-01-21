@@ -1,5 +1,5 @@
 import { nth } from "@rsc-utils/number-utils";
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import { NEWLINE } from "../common";
 import { RenderableContent } from "../data/RenderableContent";
@@ -41,7 +41,7 @@ export class Ritual extends HasSource<RitualCore> {
 
 	public canHeighten: boolean;
 
-	//#region utils.RenderUtils.IRenderable
+	//#region Renderable
 	private toCastCostSecondaries(): string {
 		const castCostSecondaries: string[] = [];
 		if (this.cast) {
@@ -133,7 +133,7 @@ export class Ritual extends HasSource<RitualCore> {
 
 		return content;
 	}
-	//#endregion utils.RenderUtils.IRenderable
+	//#endregion Renderable
 
 	//#region utils.SearchUtils.ISearchable
 

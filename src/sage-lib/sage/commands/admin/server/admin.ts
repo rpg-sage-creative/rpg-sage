@@ -1,7 +1,7 @@
 import { forEachAsync, mapAsync } from "@rsc-utils/async-array-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { User } from "discord.js";
 import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
-import { RenderableContent } from "../../../../../sage-utils/utils/RenderUtils";
 import type { SageMessage } from "../../../model/SageMessage";
 import { AdminRoleType, type IAdminUser } from "../../../model/Server";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";

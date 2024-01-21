@@ -42,6 +42,7 @@
 		"@rsc-utils/number-utils": "github:rpg-sage-creative/number-utils",
 		"@rsc-utils/pdf-utils": "github:rpg-sage-creative/pdf-utils",
 		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils",
+		"@rsc-utils/render-utils": "github:rpg-sage-creative/render-utils",
 		"@rsc-utils/snowflake-utils": "github:rpg-sage-creative/snowflake-utils",
 		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
 		"@rsc-utils/temperature-utils": "github:rpg-sage-creative/temperature-utils",

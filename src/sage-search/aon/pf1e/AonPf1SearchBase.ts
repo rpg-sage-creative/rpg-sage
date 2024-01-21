@@ -1,10 +1,10 @@
 import { HasCore } from "@rsc-utils/class-utils";
+import { RenderableContent, type Renderable } from "@rsc-utils/render-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import { createSearchResultUrl } from ".";
 import type { TResultsLink } from "../";
 import type { IHasName } from "../../../sage-pf2e";
-import type { IRenderable, ISearchable } from "../../../sage-utils";
-import { RenderableContent } from "../../../sage-utils/utils/RenderUtils";
+import type { ISearchable } from "../../../sage-utils";
 import type { SearchInfo, SearchScore } from "../../../sage-utils/utils/SearchUtils";
 
 /**
@@ -16,7 +16,7 @@ export class AonPf1SearchBase
 		HasCore<TResultsLink, string>
 	implements
 		IHasName,
-		IRenderable,
+		Renderable,
 		ISearchable {
 
 	// #region IHasName
@@ -56,7 +56,7 @@ export class AonPf1SearchBase
 
 	//#endregion
 
-	// #region utils.RenderUtils.IRenderable
+	// #region Renderable
 
 	public toRenderableContent(): RenderableContent {
 		const renderable = new RenderableContent(this.name);
@@ -65,6 +65,6 @@ export class AonPf1SearchBase
 		return renderable;
 	}
 
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion Renderable
 
 }

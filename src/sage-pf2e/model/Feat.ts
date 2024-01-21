@@ -1,11 +1,10 @@
 import type { SortResult } from "@rsc-utils/array-utils";
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import type { TAction } from "../common";
 import { RenderableContent } from "../data/RenderableContent";
 import { HasSource, SourcedCore } from "../model/base/HasSource";
-import type { Metadata } from "./Metadata";
-import type { IHasMetadata, IMetadata } from "./Metadata";
+import type { IHasMetadata, IMetadata, Metadata } from "./Metadata";
 
 /**************************************************************************************************************************/
 // Interface and Class
@@ -77,7 +76,7 @@ export class Feat<T extends string = "Feat", U extends FeatCore<T> = FeatCore<T>
 	}
 	// #endregion Comparable<T>
 
-	// #region utils.RenderUtils.IRenderable
+	// #region Renderable
 	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 
@@ -103,7 +102,7 @@ export class Feat<T extends string = "Feat", U extends FeatCore<T> = FeatCore<T>
 
 		return content;
 	}
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion Renderable
 
 	// #region utils.SearchUtils.ISearchable
 

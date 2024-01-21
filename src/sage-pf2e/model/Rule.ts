@@ -1,4 +1,4 @@
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { SearchInfo, SearchScore } from "../../sage-utils/utils/SearchUtils";
 import { RenderableContent } from "../data/RenderableContent";
 import type { ActionCore } from "./Action";
@@ -43,7 +43,7 @@ export class Rule extends HasSource<RuleCore> {
 		return this._hasChildren ?? (this._hasChildren = this.children.length > 0);
 	}
 
-	// #region utils.RenderUtils.IRenderable
+	// #region Renderable
 	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
 		renderable.setTitle(`<b>${this.name}</b>`);
@@ -61,7 +61,7 @@ export class Rule extends HasSource<RuleCore> {
 		}
 		this.children.forEach(child => child.appendAsChild(renderable));
 	}
-	// #endregion utils.RenderUtils.IRenderable
+	// #endregion Renderable
 
 	// #region utils.SearchUtils.ISearchable
 	public searchRecursive(searchInfo: SearchInfo): SearchScore<this>[] {

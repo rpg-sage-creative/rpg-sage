@@ -1,10 +1,9 @@
 import { errorReturnEmptyArray, errorReturnNull, warnReturnNull } from "@rsc-utils/console-utils";
 import { getBuffer } from "@rsc-utils/https-utils";
+import { RenderableContent } from "@rsc-utils/render-utils";
 import { MessageAttachment, type Message } from "discord.js";
-import { RenderableContent } from "../../../../sage-utils/utils/RenderUtils";
 import { DiscordKey } from "../../../discord";
-import type { GameCharacter } from "../../model/GameCharacter";
-import type { TDialogMessage } from "../../model/GameCharacter";
+import type { GameCharacter, TDialogMessage } from "../../model/GameCharacter";
 import type { ColorType } from "../../model/HasColorsCore";
 import { EmojiType } from "../../model/HasEmojiCore";
 import type { SageMessage } from "../../model/SageMessage";

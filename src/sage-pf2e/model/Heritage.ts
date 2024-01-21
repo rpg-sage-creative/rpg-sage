@@ -1,5 +1,5 @@
 import { remove } from "@rsc-utils/array-utils";
-import type { RenderableContent as UtilsRenderableContent } from "../../sage-utils/utils/RenderUtils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { RenderableContent } from "../data/RenderableContent";
 import { findByValue } from "../data/Repository";
 import { Ancestry } from "./Ancestry";
@@ -23,7 +23,7 @@ export class Heritage extends HasSource<HeritageCore> {
 
 	//#endregion
 
-	//#region utils.RenderUtils.IRenderable
+	//#region Renderable
 
 	public toRenderableContent(): UtilsRenderableContent {
 		const renderable = new RenderableContent(this);
