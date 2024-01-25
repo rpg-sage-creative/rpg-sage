@@ -1,8 +1,8 @@
 import { Collection } from "@rsc-utils/array-utils";
+import type { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
-import type { DiscordKey } from "../../discord";
 import { CharactersMatch } from "./CharactersMatch";
 import type { Game } from "./Game";
 import type { GameCharacterCore, TDialogMessage, TGameCharacterType } from "./GameCharacter";

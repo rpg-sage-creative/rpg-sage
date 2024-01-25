@@ -1,5 +1,5 @@
+import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
-import { DiscordKey } from "../../../../discord";
 import type { Game } from "../../../model/Game";
 
 export type PinData = { channelId:string; messageId:string; };

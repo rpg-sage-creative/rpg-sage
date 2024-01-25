@@ -1,5 +1,5 @@
+import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import type { SageMessage } from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";

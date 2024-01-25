@@ -1,4 +1,5 @@
 import { addLogHandler, captureProcessExit, error, formatArg, info, verbose, type LogLevel } from "@rsc-utils/console-utils";
+import type { DMessage } from "@rsc-utils/discord-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { chunk } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
@@ -194,7 +195,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	}
 
 	onClientMessageCreate(message: Message): void {
-		handleMessage(message, null, MessageType.Post).then(data => {
+		handleMessage(message as DMessage, null, MessageType.Post).then(data => {
 			if (data.handled > 0) {
 				verbose(`Discord.Client.on("message", "${message.id}") => ${data.tested}.${data.handled}`);
 			}
@@ -202,7 +203,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	}
 
 	onClientMessageUpdate(originalMessage: Message | PartialMessage, updatedMessage: Message | PartialMessage): void {
-		handleMessage(updatedMessage, originalMessage, MessageType.Edit).then(data => {
+		handleMessage(updatedMessage as DMessage, originalMessage as DMessage, MessageType.Edit).then(data => {
 			if (data.handled > 0) {
 				verbose(`Discord.Client.on("messageUpdate", "${originalMessage.id}", "${updatedMessage.id}") => ${data.tested}.${data.handled}`);
 			}

@@ -1,5 +1,6 @@
 import { Cache } from "@rsc-utils/cache-utils";
-import { debug } from "@rsc-utils/console-utils";
+import { debug, warn } from "@rsc-utils/console-utils";
+import { DiscordKey, type DInteraction, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
 import { RenderableContent, RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
@@ -9,7 +10,7 @@ import type { IHasChannels, IHasGame } from ".";
 import type { SlashCommandGameType } from "../../../SlashTypes.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import { DInteraction, DUser, DiscordKey, InteractionType, TChannel } from "../../discord";
+import { InteractionType } from "../../discord";
 import { deleteMessages } from "../../discord/deletedMessages";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { send } from "../../discord/messages";
@@ -173,7 +174,8 @@ export class SageInteraction<T extends DInteraction = any>
 			if ("deferUpdate" in this.interaction) {
 				return this.interaction.deferUpdate();
 			}
-			return this.interaction.deferReply({
+			warn(`IDE says we should never reach this code ...`);
+			return (this.interaction as any).deferReply({
 				ephemeral:this.caches.server ? (ephemeral ?? true) : false
 			});
 		});
@@ -229,9 +231,9 @@ export class SageInteraction<T extends DInteraction = any>
 
 	/** Sends a full message to the channel or user the interaction originated in. */
 	public send(renderableContentResolvable: RenderableContentResolvable): Promise<Message[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: TChannel): Promise<Message[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: TChannel, originalAuthor: User): Promise<Message[]>;
-	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.interaction.channel as TChannel, originalAuthor = this.interaction.user): Promise<Message[]> {
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: DMessageChannel): Promise<Message[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: DMessageChannel, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.interaction.channel as DMessageChannel, originalAuthor = this.interaction.user): Promise<Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			return [];
@@ -243,7 +245,7 @@ export class SageInteraction<T extends DInteraction = any>
 		}
 		return [];
 	}
-	public async canSend(targetChannel = this.interaction.channel as TChannel): Promise<boolean> {
+	public async canSend(targetChannel = this.interaction.channel as DMessageChannel): Promise<boolean> {
 		return this.caches.canSendMessageTo(DiscordKey.fromChannel(targetChannel));
 	}
 
@@ -262,7 +264,7 @@ export class SageInteraction<T extends DInteraction = any>
 			if (this.interaction.channel?.isThread()) {
 				return this.interaction.channel.parentId ?? undefined;
 			}
-			return this.interaction.channelId;
+			return this.interaction.channelId ?? undefined;
 		});
 	}
 
@@ -280,7 +282,7 @@ export class SageInteraction<T extends DInteraction = any>
 	public get threadDid(): Snowflake | undefined {
 		return this.cache.get("threadDid", () => {
 			if (this.interaction.channel?.isThread()) {
-				return this.interaction.channelId;
+				return this.interaction.channelId ?? undefined;
 			}
 			return undefined;
 		});
@@ -288,7 +290,7 @@ export class SageInteraction<T extends DInteraction = any>
 
 	/** Returns either the message's threadDid or channelDid if there is no thread. */
 	public get threadOrChannelDid(): Snowflake {
-		return this.cache.get("channelDid", () => this.threadDid ?? this.channelDid ?? this.interaction.channelId);
+		return this.cache.get("channelDid", () => this.threadDid ?? this.channelDid ?? this.interaction.channelId!);
 	}
 
 	// #endregion

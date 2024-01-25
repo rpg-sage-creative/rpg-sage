@@ -1,4 +1,4 @@
-import { DiscordId } from "../../../../discord";
+import { toChannelMention } from "@rsc-utils/discord-utils";
 import { GameCharacter } from "../../../model/GameCharacter";
 import type { SageMessage } from "../../../model/SageMessage";
 import { getCharacter } from "./getCharacter";
@@ -28,7 +28,7 @@ export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 	}
 
 	if (character) {
-		const channelLinks = channelDids.map(channelDid => DiscordId.toChannelReference(channelDid));
+		const channelLinks = channelDids.map(channelDid => toChannelMention(channelDid));
 		const prompt = channelDids.length > 1 || channelDids[0] !== sageMessage.channelDid
 			? `Stop using Auto Dialog with ${character.name} for the given channel(s)?\n> ${channelLinks.join("\n> ")}`
 			: `Stop using Auto Dialog with ${character.name}?`;

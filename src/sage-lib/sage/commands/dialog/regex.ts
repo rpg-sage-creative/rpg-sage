@@ -34,9 +34,8 @@ export function getDialogEmbedColorRegex(): RegExp {
 
 export function getDialogUrlRegex(): RegExp {
 	const WS = createWhitespaceRegex({ quantifier:"*" }).source;
-	const escaped = createUrlRegex({ wrapped:"<>" }).source;
-	const unescaped = createUrlRegex().source;
-	return XRegExp(`^::${WS}(${escaped}|${unescaped})${WS}::`, "i");
+	const url = createUrlRegex({ wrapChars:"<>", wrapOptional:true }).source;
+	return XRegExp(`^::${WS}(${url})${WS}::`, "i");
 }
 
 export function getDialogOtherRegex(): RegExp {

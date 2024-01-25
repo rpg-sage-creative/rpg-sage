@@ -205,7 +205,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 		const core: DiscordDiceCore = {
 			objectType: "DiscordDice",
 			id: randomUuid(),
-			diceGroups: diceGroups.map<baseDiceGroupCore>(this.toJSON)
+			diceGroups: diceGroups.map<baseDiceGroupCore>(DiscordDice.toJSON)
 		};
 		return new DiscordDice(core);
 	}

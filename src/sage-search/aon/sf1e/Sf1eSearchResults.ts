@@ -29,7 +29,7 @@ export class Sf1eSearchResults extends SearchResults<AonSf1SearchBase> {
 	public get theOne(): AonSf1SearchBase | null { return null; }
 	public get theMatch(): AonSf1SearchBase | null { return null; }
 
-	// #region utils.DiscordUtils.IMenuRenderable
+	// #region IMenuRenderable
 
 	public getMenuLength(): number {
 		return Math.min(this.count, 10);

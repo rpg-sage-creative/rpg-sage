@@ -7,7 +7,6 @@ import type { Collection, MessageAttachment } from "discord.js";
 import { GameType, parseGameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType, parseCritMethodType, parseDiceOutputType } from "../../../sage-dice";
 import { ArgsManager } from "../../discord/ArgsManager";
-import { DiscordId } from "../../discord/DiscordId";
 import { DicePostType } from "../commands/dice";
 import { DialogType, PermissionType, type IChannel, type IChannelOptions, type TPermissionType } from "../repo/base/IdRepository";
 import type { TColorAndType } from "./Colors";
@@ -15,6 +14,7 @@ import type { GameCharacterCore } from "./GameCharacter";
 import { ColorType } from "./HasColorsCore";
 import type { SageMessage } from "./SageMessage";
 import type { Server } from "./Server";
+import { parseId } from "@rsc-utils/discord-utils";
 
 export type TKeyValuePair = { key: string; value: string; };
 
@@ -57,7 +57,7 @@ function removeAndReturnChannelSnowflake(args: string[], key: TValidTargetChanne
 		const match = arg.match(regex);
 		if (match && match[1].toLowerCase().replace("commands", "command") === lower) {
 			args.splice(args.indexOf(arg), 1);
-			return DiscordId.from(match[2])?.did ?? undefined;
+			return parseId(match[2], "channel") ?? undefined;
 		}
 	}
 	// server.updateChannel ignores arguments that are undefined
@@ -267,10 +267,7 @@ export class SageMessageArgsManager extends ArgsManager {
 		}
 
 		return <Promise<TArgIndexRet<Snowflake> | undefined>>this.asyncFindArgIndexRet(async arg => {
-			let did: Snowflake | undefined;
-			if (isNonNilSnowflake(arg)) did = arg;
-			if (DiscordId.isChannelReference(arg)) did = DiscordId.parseId(arg);
-			if (DiscordId.isChannelLink(arg)) did = DiscordId.from(arg)?.did;
+			const did = isNonNilSnowflake(arg) ? arg : parseId(arg, "channel");
 			if (did) {
 				const channel = await this.sageMessage.discord.fetchChannel(did);
 				return channel?.id;
@@ -455,11 +452,14 @@ export class SageMessageArgsManager extends ArgsManager {
 			return null;
 		}
 
-		const roleDid = await this.asyncFindArgAndRemoveAndMap<Snowflake | undefined>(async arg =>
-			DiscordId.isRoleMention(arg) ? DiscordId.parseId(arg)
-			: isNonNilSnowflake(arg) ? (await this.sageMessage.discord.fetchGuildRole(arg))?.id
-			: undefined
-		);
+		const roleDid = await this.asyncFindArgAndRemoveAndMap<Snowflake | undefined>(async arg => {
+			const did = isNonNilSnowflake(arg) ? arg : parseId(arg, "role");
+			if (did) {
+				const role = await this.sageMessage.discord.fetchGuildRole(did);
+				return role?.id;
+			}
+			return undefined;
+		});
 
 		return roleDid ?? null;
 	}
@@ -525,10 +525,20 @@ export class SageMessageArgsManager extends ArgsManager {
 		return userDid ?? null;
 
 		async function argToSnowflake(arg: string): Promise<Snowflake | undefined> {
-			return DiscordId.isUserMention(arg) ? DiscordId.parseId(arg)
-				: isNonNilUuid(arg) ? (await userRepo.getById(arg))?.did
-				: isNonNilSnowflake(arg) ? (await discord.fetchGuildMember(arg))?.id
-				: undefined;
+			const userId = parseId(arg, "user");
+			if (userId) return userId;
+
+			if (isNonNilSnowflake(arg)) {
+				const member = await discord.fetchGuildMember(arg);
+				return member?.id;
+			}
+
+			if (isNonNilUuid(arg)) {
+				const user = await userRepo.getById(arg);
+				return user?.did;
+			}
+
+			return undefined;
 		}
 	}
 

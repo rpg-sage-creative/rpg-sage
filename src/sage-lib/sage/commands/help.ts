@@ -3,7 +3,7 @@ import { getSuperUserId } from "@rsc-utils/env-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
-import type { TChannel, TCommandAndArgs } from "../../discord";
+import type { TCommandAndArgs } from "../../discord";
 import { ArgsManager } from "../../discord/ArgsManager";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import { send } from "../../discord/messages";
@@ -245,7 +245,7 @@ async function renderHelpHandler(sageMessage: SageMessage): Promise<void> {
 	const renderableContent = createCommandRenderableContent(`<b>RPG Sage Help</b>`);
 	renderableContent.appendTitledSection("Slash Command", `/sage help`);
 	renderableContent.appendTitledSection("Guides", `<a href="https://rpgsage.io">Command Guide</a>`, `<a href="https://rpgsage.io/quick.html">Quick Start Guide</a>`);
-	await send(sageMessage.caches, sageMessage.message.channel as TChannel, renderableContent, sageMessage.message.author);
+	await send(sageMessage.caches, sageMessage.message.channel, renderableContent, sageMessage.message.author);
 }
 // #endregion
 

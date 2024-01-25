@@ -1,12 +1,11 @@
 import { sortComparable } from "@rsc-utils/array-utils";
+import { parseId, toChannelMention, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isNonNilUuid, randomUuid } from "@rsc-utils/uuid-utils";
 import type { Snowflake, TextChannel } from "discord.js";
 import { GameType } from "../../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
-import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
-import { DiscordId } from "../../../../discord";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import { Game, GameRoleType, GameUserType, IGameUser, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game";
 import { GameCharacter } from "../../../model/GameCharacter";
@@ -86,7 +85,7 @@ async function myGameList(sageMessage: SageMessage): Promise<void> {
 					renderableContent.append(`[spacer][spacer]<b>Character</b> ${myPC?.name ?? "<i>None</i>"}`);
 				}
 				if (channel) {
-					renderableContent.append(`[spacer][spacer]<b>Channel</b> ${DiscordId.toChannelReference(channel.did)}`);
+					renderableContent.append(`[spacer][spacer]<b>Channel</b> ${toChannelMention(channel.did)}`);
 				}
 			}
 		}
@@ -388,8 +387,10 @@ function getGameValues(sageMessage: SageMessage): TGameDefaults {
 }
 function channelArgToDid(arg: string | undefined | null): Snowflake | undefined {
 	if (arg) {
-		if (DiscordId.isChannelReference(arg)) return DiscordId.parseId(arg);
-		if (DiscordId.isChannelLink(arg)) return DiscordId.from(arg)?.did;
+		const channelId = parseId(arg, "channel");
+		if (channelId) {
+			return channelId;
+		}
 	}
 	return undefined;
 }
@@ -418,20 +419,25 @@ async function getGameUsers(sageMessage: SageMessage): Promise<IGameUser[]> {
 	const users: IGameUser[] = [];
 
 	const gm = sageMessage.args.removeKeyValuePair("gm")?.value;
-	if (gm && DiscordId.isUserMention(gm)) {
-		users.push({ did:DiscordId.parseId(gm), type:GameUserType.GameMaster, dicePing:true });
+	if (gm) {
+		const userId = parseId(gm, "user");
+		if (userId) {
+			users.push({ did:userId, type:GameUserType.GameMaster, dicePing:true });
+		}
 	}
 
 	const role = sageMessage.args.removeKeyValuePair(/(players|table|role)/i)?.value;
-	if (role && DiscordId.isRoleMention(role)) {
-		const roleDid = DiscordId.parseId(role);
-		const guildRole = await sageMessage.discord.fetchGuildRole(roleDid);
-		if (guildRole) {
-			guildRole.members.forEach(guildMember => {
-				if (!users.find(user => user.did === guildMember.id)) {
-					users.push({ did:guildMember.id, type:GameUserType.Player, dicePing:true });
-				}
-			});
+	if (role) {
+		const roleId = parseId(role, "role");
+		if (roleId) {
+			const guildRole = await sageMessage.discord.fetchGuildRole(roleId);
+			if (guildRole) {
+				guildRole.members.forEach(guildMember => {
+					if (!users.find(user => user.did === guildMember.id)) {
+						users.push({ did:guildMember.id, type:GameUserType.Player, dicePing:true });
+					}
+				});
+			}
 		}
 	}
 

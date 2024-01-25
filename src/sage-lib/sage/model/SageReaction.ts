@@ -1,6 +1,7 @@
 import { Cache } from "@rsc-utils/cache-utils";
 import { debug } from "@rsc-utils/console-utils";
-import { ReactionType, type DMessage, type DReaction, type DUser } from "../../discord";
+import type { DMessage, DReaction, DUser } from "@rsc-utils/discord-utils";
+import { ReactionType } from "../../discord";
 import type { HasSageCacheCore } from "./HasSageCache";
 import { HasSageCache } from "./HasSageCache";
 import { SageCache } from "./SageCache";
@@ -50,7 +51,7 @@ export class SageReaction
 	}
 
 	public get message(): DMessage {
-		return this.core.messageReaction.message;
+		return this.core.messageReaction.message as DMessage;
 	}
 
 	public clone(): SageReaction {

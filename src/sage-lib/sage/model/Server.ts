@@ -1,11 +1,11 @@
 import { warn } from "@rsc-utils/console-utils";
+import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import type { Guild } from "discord.js";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import { DiscordKey } from "../../discord";
 import { DicePostType } from "../commands/dice";
 import { ActiveBot } from "../model/ActiveBot";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository";
@@ -230,13 +230,14 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 			if (typeof(didOrKey) === "string") {
 				return this.channels.find(channel => channel.did === didOrKey);
 			}
-			if (didOrKey.hasThread && didOrKey.hasChannel) {
-				return this.channels.find(channel => channel.did === didOrKey.thread)
-					?? this.channels.find(channel => channel.did === didOrKey.channel);
-			}else if (didOrKey.hasThread) {
-				return this.channels.find(channel => channel.did === didOrKey.thread);
-			}else if (didOrKey.hasChannel) {
-				return this.channels.find(channel => channel.did === didOrKey.channel);
+			const channelAndThread = didOrKey.channelAndThread;
+			if (channelAndThread.thread && channelAndThread.channel) {
+				return this.channels.find(channel => channel.did === channelAndThread.thread)
+					?? this.channels.find(channel => channel.did === channelAndThread.channel);
+			}else if (channelAndThread.thread) {
+				return this.channels.find(channel => channel.did === channelAndThread.thread);
+			}else if (channelAndThread.channel) {
+				return this.channels.find(channel => channel.did === channelAndThread.channel);
 			}
 		}
 		return undefined;

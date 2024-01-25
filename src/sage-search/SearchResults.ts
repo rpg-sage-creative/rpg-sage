@@ -69,7 +69,7 @@ export class SearchResults<T extends TSearchable = TSearchable> extends HasScore
 	// #endregion
 
 
-	// #region utils.DiscordUtils.IMenuRenderable
+	// #region IMenuRenderable
 
 	public getMenuLength(): number {
 		return Math.min(this.count, UNICODE_ZERO_TO_TEN.length);

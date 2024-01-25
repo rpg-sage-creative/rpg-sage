@@ -1,8 +1,8 @@
 import { filterAsync, forEachAsync } from "@rsc-utils/async-array-utils";
+import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { User as DUser } from "discord.js";
-import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import type { SageMessage } from "../../../model/SageMessage";
 import type { User as SUser } from "../../../model/User";
 import { DialogType } from "../../../repo/base/IdRepository";

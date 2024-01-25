@@ -1,7 +1,8 @@
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
+import type { DiscordKey } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { If, MessageActionRow, MessageButton, MessageEmbed, MessageSelectMenu } from "discord.js";
-import type { DiscordCache, DiscordKey } from "../../discord";
+import type { DiscordCache } from "../../discord";
 import { resolveToEmbeds, resolveToTexts } from "../../discord/embeds";
 import type { Bot } from "./Bot";
 import type { Game } from "./Game";

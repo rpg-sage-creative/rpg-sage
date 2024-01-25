@@ -1,8 +1,8 @@
 import { errorReturnEmptyArray, errorReturnNull, warnReturnNull } from "@rsc-utils/console-utils";
+import { DiscordKey, type DMessage } from "@rsc-utils/discord-utils";
 import { getBuffer } from "@rsc-utils/https-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
-import { MessageAttachment, type Message } from "discord.js";
-import { DiscordKey } from "../../../discord";
+import { MessageAttachment } from "discord.js";
 import type { GameCharacter, TDialogMessage } from "../../model/GameCharacter";
 import type { ColorType } from "../../model/HasColorsCore";
 import { EmojiType } from "../../model/HasEmojiCore";
@@ -24,7 +24,7 @@ type DialogPostData = {
 	title?: string;
 };
 
-export async function sendDialogPost(sageMessage: SageMessage, postData: DialogPostData, { doAttachment, skipDelete }: ChatOptions): Promise<Message[]> {
+export async function sendDialogPost(sageMessage: SageMessage, postData: DialogPostData, { doAttachment, skipDelete }: ChatOptions): Promise<DMessage[]> {
 	const character = postData?.character;
 	if (!character) {
 		return Promise.reject("Invalid TDialogPostData");
@@ -94,7 +94,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	}
 	//#endregion
 
-	const messages: Message[] = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files, skipDelete })
+	const messages: DMessage[] = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files, skipDelete })
 		.catch(errorReturnEmptyArray);
 	if (messages.length) {
 		const last = messages[messages.length - 1];

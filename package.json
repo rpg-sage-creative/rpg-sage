@@ -35,6 +35,7 @@
 		"@rsc-utils/console-utils": "github:rpg-sage-creative/console-utils",
 		"@rsc-utils/date-utils": "github:rpg-sage-creative/date-utils",
 		"@rsc-utils/dice-utils": "github:rpg-sage-creative/dice-utils",
+		"@rsc-utils/discord-utils": "github:rpg-sage-creative/discord-utils",
 		"@rsc-utils/enum-utils": "github:rpg-sage-creative/enum-utils",
 		"@rsc-utils/env-utils": "github:rpg-sage-creative/env-utils",
 		"@rsc-utils/fs-utils": "github:rpg-sage-creative/fs-utils",

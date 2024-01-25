@@ -3,7 +3,6 @@ import { RenderableContent } from "@rsc-utils/render-utils";
 import { Base, RARITIES } from "../../../sage-pf2e";
 import type { SearchResults } from "../../../sage-search/SearchResults";
 import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common";
-import type { TChannel } from "../../discord";
 import { deleteMessages } from "../../discord/deletedMessages";
 import { send } from "../../discord/messages";
 import type { SageMessage } from "../model/SageMessage";
@@ -29,7 +28,7 @@ async function invalidGame(sageMessage: SageMessage): Promise<void> {
 	unableSearchResults.append(`<code>sage!!server set gameType="PF2E"</code>`);
 	unableSearchResults.append(`<br/>Acceptable gameType values are:<ul><li>"PF" (Pathfinder)</li><li>"PF2E" (Pathfinder 2e)</li><li>"SF" (Starfinder)</li></ul>`);
 	unableSearchResults.append(`<br/>For more information, see <https://rpgsage.io>`);
-	await send(sageMessage.caches, sageMessage.message.channel as TChannel, unableSearchResults, sageMessage.message.author);
+	await send(sageMessage.caches, sageMessage.message.channel, unableSearchResults, sageMessage.message.author);
 	return Promise.resolve();
 }
 
@@ -38,7 +37,7 @@ async function currentlyDisabled(sageMessage: SageMessage): Promise<void> {
 	unableSearchResults.append(`We are sorry, we have disabled the search engine for this game system for the following reason:`);
 	unableSearchResults.append(`<br/>${sageMessage.bot.getSearchStatus(sageMessage.gameType)}`);
 	unableSearchResults.append(`<br/>For more information, join us at <https://discord.com/invite/pfAcUMN>`);
-	await send(sageMessage.caches, sageMessage.message.channel as TChannel, unableSearchResults, sageMessage.message.author);
+	await send(sageMessage.caches, sageMessage.message.channel, unableSearchResults, sageMessage.message.author);
 	return Promise.resolve();
 }
 
@@ -60,7 +59,7 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 	}
 
 	// Let em know we are busy ...
-	const promise = send(sageMessage.caches, sageMessage.message.channel as TChannel, `> Searching ${searchEngine.name}, please wait ...`, sageMessage.message.author);
+	const promise = send(sageMessage.caches, sageMessage.message.channel, `> Searching ${searchEngine.name}, please wait ...`, sageMessage.message.author);
 
 	// Parse the query
 	const parsedSearchInfo = parseSearchInfo(Collection.from(sageMessage.args), RARITIES);
@@ -76,7 +75,7 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 	deleteMessages(messages);
 
 	// Send the proper results
-	await send(sageMessage.caches, sageMessage.message.channel as TChannel, renderableToSend, sageMessage.message.author);
+	await send(sageMessage.caches, sageMessage.message.channel, renderableToSend, sageMessage.message.author);
 
 	return Promise.resolve();
 }

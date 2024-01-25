@@ -1,9 +1,8 @@
 import { debug } from "@rsc-utils/console-utils";
-import { randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
+import { isNonNilSnowflake, randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { StringMatcher, dequote } from "@rsc-utils/string-utils";
 import type { Guild } from "discord.js";
 import XRegExp from "xregexp";
-import { DiscordId } from "../../../discord";
 import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
 import { RenderableGameMap } from "./RenderableGameMap";
 
@@ -78,7 +77,7 @@ async function parseUser(guild: Guild, userValue?: string): Promise<Snowflake | 
 	}
 
 	// if we have a discord snowflake ... make sure it is valid
-	if (DiscordId.isValidId(userValue)) {
+	if (isNonNilSnowflake(userValue) as boolean) {
 		const user = await guild.client.users.fetch(userValue);
 		return user?.id;
 	}

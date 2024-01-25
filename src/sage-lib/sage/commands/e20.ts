@@ -1,4 +1,5 @@
 import { errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
+import { DiscordKey, toUserMention, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
 import { getDataRoot } from "@rsc-utils/env-utils";
 import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
 import { PdfCacher } from "@rsc-utils/pdf-utils";
@@ -15,7 +16,6 @@ import { PlayerCharacterCorePR, PlayerCharacterPR, TCharacterSectionType, TChara
 import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
 import { PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
 import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
-import { DiscordId, DiscordKey, type DUser, type TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
 import type { SageCache } from "../model/SageCache";
@@ -32,7 +32,7 @@ function createSelectMenuRow(selectMenu: MessageSelectMenu): MessageActionRow {
 	return new MessageActionRow().addComponents(selectMenu);
 }
 
-async function attachCharacter(sageCache: SageCache, channel: TChannel | DUser, attachmentName: string, character: TPlayerCharacter, pin: boolean): Promise<void> {
+async function attachCharacter(sageCache: SageCache, channel: DMessageChannel | DUser, attachmentName: string, character: TPlayerCharacter, pin: boolean): Promise<void> {
 	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.description).join("");
 	const buffer = Buffer.from(raw, "utf-8");
 	const attachment = new MessageAttachment(buffer, `${attachmentName}.txt`);
@@ -86,7 +86,7 @@ function getPath(characterId: string): string {
 	return `${getDataRoot("sage")}/e20/${characterId}.json`;
 }
 
-async function postCharacter(sageCache: SageCache, channel: TChannel, character: TPlayerCharacter, pin: boolean): Promise<void> {
+async function postCharacter(sageCache: SageCache, channel: DMessageChannel, character: TPlayerCharacter, pin: boolean): Promise<void> {
 	const saved = await saveCharacter(character);
 	if (saved) {
 		const output = prepareOutput(sageCache, character);
@@ -422,7 +422,7 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
-		await sageInteraction.interaction.channel?.send(`${DiscordId.toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`);
+		await sageInteraction.interaction.channel?.send(`${toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`);
 	}
 
 	function findSkill(ability: Optional<TStatE20>, value: string): TSkillE20 | undefined {
@@ -465,7 +465,7 @@ export async function slashHandlerEssence20(sageInteraction: SageInteraction): P
 	const isMessageUrl = value.startsWith("https://discord.com/channels/");
 
 	let fileName: string | undefined;
-	let rawJson: TRawJson | undefined;
+	let rawJson: Optional<TRawJson>;
 	if (isPdfUrl) {
 		fileName = value.split("/").pop();
 		await sageInteraction.reply(`Attempting to read character from ${fileName} ...`, false);

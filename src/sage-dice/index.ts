@@ -1,4 +1,4 @@
-import * as dice from "./dice";
-export const roll = dice.base.Dice.roll;
+import { Dice } from "./dice/base";
+export const roll = Dice.roll;
 
 export * from "./common";

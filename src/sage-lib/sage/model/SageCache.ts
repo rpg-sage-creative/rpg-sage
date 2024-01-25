@@ -1,9 +1,10 @@
 import { uncache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnFalse, silly } from "@rsc-utils/console-utils";
+import { DiscordKey, type DInteraction, type DMessage, type DMessageChannel, type DReaction, type DUser } from "@rsc-utils/discord-utils";
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
-import type { Client, DMChannel, GuildMember, NewsChannel, PartialDMChannel, TextChannel, ThreadChannel } from "discord.js";
-import { DiscordCache, DiscordKey, TChannel, type DInteraction, type DMessage, type DReaction, type DUser } from "../../discord";
+import type { Client, GuildMember } from "discord.js";
+import { DiscordCache } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
 import { ActiveBot } from "../model/ActiveBot";
 import { BotRepo } from "../repo/BotRepo";
@@ -43,7 +44,6 @@ function createCoreAndCache(): [TSageCacheCore, SageCache] {
 	return [core, sageCache];
 }
 
-type DMessageChannel = DMChannel | PartialDMChannel | NewsChannel | TextChannel | ThreadChannel;
 export async function canSendMessageTo(channel: DMessageChannel): Promise<boolean> {
 	if (!channel.isText()) {
 		return false;
@@ -86,10 +86,9 @@ export class SageCache {
 			if (discordKey.isDm) {
 				this.canSendMessageToMap.set(key, true);
 			}else {
-				const thread = await this.discord.fetchChannel<ThreadChannel>(discordKey.thread);
-				const channel = await this.discord.fetchChannel<TextChannel>(discordKey.channel);
+				const { thread, channel } = await this.discord.fetchChannelAndThread(discordKey);
 				const botUser = await this.discord.fetchUser(ActiveBot.active.did);
-				if (botUser && (thread || channel)) {
+				if (botUser && channel) {
 					const sendPerm = thread ? "SEND_MESSAGES_IN_THREADS" : "SEND_MESSAGES";
 					const perms = thread?.permissionsFor(botUser) ?? channel?.permissionsFor(botUser);
 					this.canSendMessageToMap.set(key, perms?.has(sendPerm) ?? true);
@@ -122,11 +121,10 @@ export class SageCache {
 			// // debug({tupperId,tupper:!!tupper});
 			// if (!tupper) return false;
 
-			const thread = await sageCache.discord.fetchChannel<ThreadChannel>(discordKey.thread);
+			const { thread, channel } = await sageCache.discord.fetchChannelAndThread(discordKey);
 			// debug({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId)});
 			if (thread?.guildMembers.has(tupperId)) return true;
 
-			const channel = await sageCache.discord.fetchChannel<TextChannel>(discordKey.channel);
 			// debug({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId),channelId:discordKey.channel,channel:!!channel?.members.has(tupperId)});
 			return channel?.members.has(tupperId) === true;
 		}
@@ -155,16 +153,13 @@ export class SageCache {
 			if (discordKey.isDm) {
 				return true;
 			}else {
-				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
-				const thread = await sageCache.discord.fetchChannel(discordKey.thread);
-				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
-				const channel = await sageCache.discord.fetchChannel<TextChannel>(discordKey.channel);
+				const { thread, channel } = await sageCache.discord.fetchChannelAndThread(discordKey);
 				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
 				const botUser = await sageCache.discord.fetchUser(ActiveBot.active.did);
 				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
-				if (botUser && (thread || channel)) {
+				if (botUser && channel) {
 					const reactPerm = "ADD_REACTIONS";
-					const perms = channel?.permissionsFor(botUser);
+					const perms = thread?.permissionsFor(botUser) ?? channel?.permissionsFor(botUser);
 					return perms?.has(reactPerm) ?? true;
 				}else {
 					return false;
@@ -180,10 +175,9 @@ export class SageCache {
 			if (discordKey.isDm) {
 				this.canWebhookToMap.set(key, false);
 			}else {
-				const thread = await this.discord.fetchChannel(discordKey.thread);
-				const channel = await this.discord.fetchChannel<TextChannel>(discordKey.channel);
+				const { thread, channel } = await this.discord.fetchChannelAndThread(discordKey);
 				const botUser = await this.discord.fetchUser(ActiveBot.active.did);
-				if (botUser && (thread || channel)) {
+				if (botUser && channel) {
 					const sendPerm = thread ? "SEND_MESSAGES_IN_THREADS" : "SEND_MESSAGES";
 					const hookPerm = "MANAGE_WEBHOOKS";
 					const perms = channel?.permissionsFor(ActiveBot.active.did);
@@ -217,7 +211,7 @@ export class SageCache {
 	private clone(core: TSageCacheCore): SageCache {
 		return new SageCache(core);
 	}
-	public cloneForChannel(channel: TChannel): SageCache {
+	public cloneForChannel(channel: DMessageChannel): SageCache {
 		const core = { ...this.core };
 		core.discordKey = DiscordKey.fromChannel(channel);
 		return this.clone(core);
@@ -285,7 +279,7 @@ export class SageCache {
 		return sageCache;
 	}
 	public static async fromMessageReaction(messageReaction: DReaction, user: DUser): Promise<SageCache> {
-		return SageCache.fromMessage(messageReaction.message, user.id);
+		return SageCache.fromMessage(messageReaction.message as DMessage, user.id);
 	}
 	public static async fromInteraction(interaction: DInteraction): Promise<SageCache> {
 		const [core, sageCache] = createCoreAndCache();

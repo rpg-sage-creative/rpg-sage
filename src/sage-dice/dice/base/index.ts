@@ -389,7 +389,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 		return DicePart.create(core);
 	}
 	public static toCore(dicePartOrCore: TDicePart | DicePartCore): DicePartCore {
-		return this.toJSON(dicePartOrCore);
+		return DicePart.toJSON(dicePartOrCore);
 	}
 	public static Roll: typeof DicePartRoll;
 	//#endregion
@@ -543,7 +543,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 			objectType: "Dice",
 			gameType: GameType.None,
 			id: randomUuid(),
-			diceParts: diceParts.map<DicePartCore>(this.toJSON)
+			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
 	}
 	public static fromCore(core: DiceCore): TDice {
@@ -746,7 +746,7 @@ export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDice
 			gameType: GameType.None,
 			id: randomUuid(),
 			critMethodType: critMethodType,
-			dice: _dice.map<DiceCore>(this.toJSON),
+			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
 			diceOutputType: diceOutputType,
 			diceSecretMethodType: diceSecretMethodType
 		});

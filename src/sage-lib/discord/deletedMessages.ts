@@ -1,16 +1,16 @@
 import { EphemeralSet } from "@rsc-utils/cache-utils";
 import { debug, errorReturnNull } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { Snowflake } from "discord.js";
+import type { Message, PartialMessage, Snowflake } from "discord.js";
 import { GameMapBase } from "../sage/commands/map/GameMapBase";
-import { DMessage } from "./types";
 
 const deleted = new EphemeralSet<Snowflake>(1000 * 60);
 
 /* We only really need to store deleted state for seconds due to races with Tupper. */
 
 export function setDeleted(...messageIds: Snowflake[]): void {
-	debug(`${Date.now()}: setDeleted(${messageIds.map(id => `"${id}"`).join(", ")})`);
+	const idList = messageIds.map(id => `"${id}"`).join(", ");
+	debug(`${Date.now()}: setDeleted(${idList})`);
 	for (const messageId of messageIds) {
 		deleted.add(messageId);
 		GameMapBase.delete(messageId);
@@ -30,14 +30,14 @@ export enum MessageDeleteResults { InvalidMessage = -2, NotDeletable = -1, NotDe
  * It is then checked against known deleted messages.
  * Only then is a delete call attempted.
  */
-export async function deleteMessage(message: Optional<DMessage>): Promise<MessageDeleteResults> {
+export async function deleteMessage(message: Optional<Message | PartialMessage>): Promise<MessageDeleteResults> {
 	const result = await _deleteMessage(message);
 	debug(`deleteMessage(${message?.id}) = ${MessageDeleteResults[result]}`);
 	return result;
 }
 
 /** @private Worker function for deleteMessage. */
-async function _deleteMessage(message: Optional<DMessage>): Promise<MessageDeleteResults> {
+async function _deleteMessage(message: Optional<Message | PartialMessage>): Promise<MessageDeleteResults> {
 	if (!message?.id) return MessageDeleteResults.InvalidMessage;
 	if (!message.deletable) return MessageDeleteResults.NotDeletable;
 	if (isDeleted(message.id)) return MessageDeleteResults.AlreadyDeleted;
@@ -49,7 +49,7 @@ async function _deleteMessage(message: Optional<DMessage>): Promise<MessageDelet
 /**
  * Tries to safely delete all the given messages.
  */
-export async function deleteMessages(messages: Optional<DMessage>[]): Promise<MessageDeleteResults[]> {
+export async function deleteMessages(messages: Optional<Message | PartialMessage>[]): Promise<MessageDeleteResults[]> {
 	const results = [];
 	for (const message of messages) {
 		results.push(await deleteMessage(message));

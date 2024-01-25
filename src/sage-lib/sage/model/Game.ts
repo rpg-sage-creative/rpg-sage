@@ -1,13 +1,13 @@
 import { sortStringIgnoreCase, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
+import { DiscordKey, type DMessage } from "@rsc-utils/discord-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional, type OrNull } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import type { GuildChannel, GuildMember, Message, Role } from "discord.js";
+import type { GuildChannel, GuildMember, Role } from "discord.js";
 import type { GameType } from "../../../sage-common";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import { DiscordKey } from "../../discord";
 import type { DicePostType } from "../commands/dice";
 import type { EncounterCore } from "../commands/trackers/encounter/Encounter";
 import { EncounterManager } from "../commands/trackers/encounter/EncounterManager";
@@ -556,13 +556,14 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 			if (typeof(didOrKey) === "string") {
 				return this.channels.find(channel => channel.did === didOrKey);
 			}
-			if (didOrKey.hasThread && didOrKey.hasChannel) {
-				return this.channels.find(channel => channel.did === didOrKey.thread)
-					?? this.channels.find(channel => channel.did === didOrKey.channel);
-			}else if (didOrKey.hasThread) {
-				return this.channels.find(channel => channel.did === didOrKey.thread);
-			}else if (didOrKey.hasChannel) {
-				return this.channels.find(channel => channel.did === didOrKey.channel);
+			const channelAndThread = didOrKey.channelAndThread;
+			if (channelAndThread.thread && channelAndThread.channel) {
+				return this.channels.find(channel => channel.did === channelAndThread.thread)
+					?? this.channels.find(channel => channel.did === channelAndThread.channel);
+			}else if (channelAndThread.thread) {
+				return this.channels.find(channel => channel.did === channelAndThread.thread);
+			}else if (channelAndThread.channel) {
+				return this.channels.find(channel => channel.did === channelAndThread.channel);
 			}
 		}
 		return undefined;
@@ -702,7 +703,7 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 
 	// #endregion
 
-	public static async from(message: Message, sageCache: SageCache): Promise<Game | null> {
+	public static async from(message: DMessage, sageCache: SageCache): Promise<Game | null> {
 		if (message.guild) {
 			const game = await sageCache.games.findByDiscordKey(DiscordKey.fromMessage(message));
 			if (game) {

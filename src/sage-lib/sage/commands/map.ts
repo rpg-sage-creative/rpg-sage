@@ -1,10 +1,11 @@
 import { errorReturnNull } from "@rsc-utils/console-utils";
+import type { DMessageChannel } from "@rsc-utils/discord-utils";
 import { getText } from "@rsc-utils/https-utils";
-import { randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
+import { isNonNilSnowflake, randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { StringMatcher, capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { Message, MessageActionRow, MessageButton, type ButtonInteraction, type MessageAttachment, type MessageButtonStyleResolvable } from "discord.js";
-import { DiscordId, TChannel, TCommandAndArgsAndData } from "../../discord";
+import { TCommandAndArgsAndData } from "../../discord";
 import { deleteMessage, deleteMessages } from "../../discord/deletedMessages";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
 import { discordPromptYesNoDeletable } from "../../discord/prompts";
@@ -389,7 +390,7 @@ async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore 
 			if (!mapCore.userId) {
 				mapCore.userId = sageMessage.sageUser.did;
 			}
-			const success = await renderMap(channel as TChannel, new GameMap(mapCore as TGameMapCore, mapCore.userId));
+			const success = await renderMap(channel, new GameMap(mapCore as TGameMapCore, mapCore.userId));
 			if (!success) {
 				await channel.send(`Sorry, something went wrong importing the map.`);
 			}
@@ -482,7 +483,7 @@ function mapTokenTester(sageInteraction: SageInteraction): boolean {
 // 		userId: userId
 // 	};
 
-// 	const success = await renderMap(sageInteraction.interaction.channel as TChannel, new GameMap(mapCore, userId));
+// 	const success = await renderMap(sageInteraction.interaction.channel as DMessageChannel, new GameMap(mapCore, userId));
 // 	if (success) {
 // 		return sageInteraction.deleteReply();
 // 	}
@@ -567,7 +568,7 @@ async function mapTokenHandler(sageInteraction: SageInteraction): Promise<void> 
 /** reads the interaction's channel's messages to find the map */
 async function findGameMap(sageInteraction: SageInteraction<ButtonInteraction>): Promise<GameMap | null> {
 	const mapValue = sageInteraction.getString("map", true);
-	if (DiscordId.isValidId(mapValue)) {
+	if (isNonNilSnowflake(mapValue)) {
 		return GameMap.forUser(mapValue, sageInteraction.user.id);
 	}
 	const messages = await sageInteraction.interaction.channel?.messages.fetch();
@@ -616,7 +617,7 @@ async function parseInput<T extends TGameMapImage>(sageInteraction: SageInteract
 	return [gameMap, image as T];
 }
 
-async function renderMap(messageOrChannel: Optional<Message | TChannel>, gameMap: GameMap): Promise<boolean> {
+async function renderMap(messageOrChannel: Optional<Message | DMessageChannel>, gameMap: GameMap): Promise<boolean> {
 	if (!messageOrChannel) {
 		return false;
 	}

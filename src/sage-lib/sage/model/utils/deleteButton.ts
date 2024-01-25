@@ -1,7 +1,6 @@
+import { handleDiscordErrorReturnNull, type DMessage } from "@rsc-utils/discord-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { MessageActionRow, MessageButton, type ButtonInteraction, type Snowflake } from "discord.js";
-import { handleDiscordErrorReturnNull } from "../../../../sage-utils/utils/DiscordUtils/errorHandlers";
-import type { DMessage } from "../../../discord";
 import { registerInteractionListener } from "../../../discord/handlers";
 import type { SageInteraction } from "../SageInteraction";
 

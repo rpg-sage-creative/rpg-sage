@@ -101,7 +101,7 @@ export class Pf2eSearchResults extends SearchResults<AonBase> {
 	/** Total items that contained a hit for the search terms, even if we have a lower number loaded into the results. */
 	public get totalHits(): number { return this._totalHits ?? this.scores.length; }
 
-	// #region utils.DiscordUtils.IMenuRenderable
+	// #region IMenuRenderable
 
 	public toMenuRenderableContent(): RenderableContent;
 	public toMenuRenderableContent(index: number): RenderableContent;

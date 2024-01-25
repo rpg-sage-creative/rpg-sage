@@ -30,7 +30,7 @@ export class Pf1eSearchResults extends SearchResults<AonPf1SearchBase> {
 	public get theMatch(): AonPf1SearchBase | null { return null; }
 
 
-	// #region utils.DiscordUtils.IMenuRenderable
+	// #region IMenuRenderable
 
 	public getMenuLength(): number {
 		return Math.min(this.count, 10);

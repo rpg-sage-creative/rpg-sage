@@ -1,14 +1,14 @@
 import { error, verbose, warn } from "@rsc-utils/console-utils";
+import { toHumanReadable, type DInteraction, type DMessage, type DReaction, type DUser } from "@rsc-utils/discord-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined, isNullOrUndefined } from "@rsc-utils/type-utils";
 import { Intents, type IntentsString, type Interaction, type PermissionString } from "discord.js";
-import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import { SageInteraction } from "../sage/model/SageInteraction";
 import { SageMessage } from "../sage/model/SageMessage";
 import { SageReaction } from "../sage/model/SageReaction";
 import { MessageType, ReactionType } from "./enums";
-import type { DMessage, DReaction, DUser, TChannel, TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
+import type { TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
 
 //#region helpers
 
@@ -34,13 +34,13 @@ function isActionableType(listener: TMessageListener | TReactionListener, type: 
 export async function isAuthorBotOrWebhook(sageMessage: SageMessage): Promise<boolean>;
 export async function isAuthorBotOrWebhook(sageReaction: SageReaction): Promise<boolean>;
 export async function isAuthorBotOrWebhook(messageOrReaction: SageMessage | SageReaction): Promise<boolean> {
-	const message = ((<SageReaction>messageOrReaction).messageReaction ?? (<SageMessage>messageOrReaction)).message;
+	const message = ((<SageReaction>messageOrReaction).messageReaction ?? (<SageMessage>messageOrReaction)).message as DMessage;
 	const messageAuthorDid = message.author?.id;
 	if (isActiveBot(messageAuthorDid)) {
 		return true;
 	}
 	//TODO: This next line throws an exception if we don't have webhook access. TEST FOR IT FIRST!
-	const webhook = await messageOrReaction.caches.discord.fetchWebhook(message.guild!, message.channel as TChannel, botMeta.dialogWebhookName!);
+	const webhook = await messageOrReaction.caches.discord.fetchWebhook(message.guild!, message.channel, botMeta.dialogWebhookName!);
 	return webhook?.id === messageAuthorDid;
 }
 
@@ -173,11 +173,13 @@ export function registeredIntents(): Intents {
 export async function handleInteraction(interaction: Interaction): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
-		const isCommand = interaction.isCommand();
 		const isButton = interaction.isButton();
+		const isCommand = interaction.isCommand();
+		const isComponent = interaction.isMessageComponent();
 		const isSelectMenu = interaction.isSelectMenu();
-		if (isCommand || isButton || isSelectMenu) {
-			const sageInteraction = await SageInteraction.fromInteraction(interaction);
+		const isModal = interaction.isModalSubmit();
+		if (isButton || isCommand || isComponent || isSelectMenu || isModal) {
+			const sageInteraction = await SageInteraction.fromInteraction(interaction as DInteraction);
 			await handleInteractions(sageInteraction, output);
 			sageInteraction.clear();
 		}

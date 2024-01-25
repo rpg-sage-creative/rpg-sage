@@ -1,14 +1,11 @@
 import { filterAsync } from "@rsc-utils/async-array-utils";
 import { debug, error, info, warn } from "@rsc-utils/console-utils";
+import { DTextChannel, DThreadChannel, DiscordKey, toHumanReadable, type DChannelResolvable, type DGuildResolvable, type DMessageChannel } from "@rsc-utils/discord-utils";
 import { NIL_SNOWFLAKE, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Interaction, Message, MessageReaction, PartialMessage, Role, Snowflake, TextChannel, User, Webhook } from "discord.js";
-import { toHumanReadable } from "../../sage-utils/utils/DiscordUtils/toHumanReadable";
 import { ActiveBot } from "../sage/model/ActiveBot";
 import type { SageMessage } from "../sage/model/SageMessage";
-import { DiscordKey } from "./DiscordKey";
-import { channelToName } from "./messages";
-import type { TChannel, TChannelResolvable, TGuildResolvable } from "./types";
 
 //#region Helpers
 
@@ -55,13 +52,13 @@ function dGet<T>(manager: CachedManager<Snowflake, any, T>, did: Snowflake): T |
 	return manager?.cache.get(did) ?? null;
 }
 
-async function dFetchGuild(client: Client, guildResolvable: TGuildResolvable): Promise<Guild | null> {
+async function dFetchGuild(client: Client, guildResolvable: DGuildResolvable): Promise<Guild | null> {
 	if (!guildResolvable) {
 		return null;
 	}
-	const guildDid = guildResolvable instanceof Guild ? guildResolvable.id : guildResolvable;
-	debug(`dFetchGuild(${guildDid})`);
-	return client.guilds.fetch(guildDid).catch(warnUnknownElseErrorReturnNull) ?? null;
+	const guildId = typeof(guildResolvable) === "string" ? guildResolvable : guildResolvable.id;
+	debug(`dFetchGuild(${guildId})`);
+	return client.guilds.fetch(guildId).catch(warnUnknownElseErrorReturnNull) ?? null;
 }
 
 function createWebhookKey(channel: TextChannel, name: string): string {
@@ -72,7 +69,7 @@ function createWebhookKey(channel: TextChannel, name: string): string {
 //#endregion
 
 export class DiscordCache {
-	public constructor(public client: Client, public guild: Guild | null = null, channel: TChannel | null = null) {
+	public constructor(public client: Client, public guild: Guild | null = null, channel: DMessageChannel | null = null) {
 		this.channelMap = new Map();
 		this.guildMap = new Map();
 		this.guildPreviewMap = new Map();
@@ -109,11 +106,11 @@ export class DiscordCache {
 
 	//#region channel
 
-	private channelMap: Map<string, TChannel | null>;
+	private channelMap: Map<string, DMessageChannel | null>;
 
-	public async fetchChannel<T extends TChannel>(discordKey: DiscordKey): Promise<T | null>;
-	public async fetchChannel<T extends TChannel>(channelDid: Optional<Snowflake>): Promise<T | null>;
-	public async fetchChannel(didOrKey: DiscordKey | Optional<Snowflake>): Promise<TChannel | null> {
+	public async fetchChannel<T extends DMessageChannel>(discordKey: DiscordKey): Promise<T | null>;
+	public async fetchChannel<T extends DMessageChannel>(channelDid: Optional<Snowflake>): Promise<T | null>;
+	public async fetchChannel(didOrKey: DiscordKey | Optional<Snowflake>): Promise<DMessageChannel | null> {
 		if (!didOrKey) {
 			return null;
 		}
@@ -127,8 +124,20 @@ export class DiscordCache {
 		return this.channelMap.get(discordKey.shortKey) ?? null;
 	}
 
+	public async fetchChannelAndThread(discordKey: DiscordKey): Promise<{ channel?:DTextChannel|null; thread?:DThreadChannel|null; }> {
+		const threadOrChannel = await this.fetchChannel(discordKey.threadOrChannel);
+		if (threadOrChannel?.isThread()) {
+			const channel = await this.fetchChannel<DTextChannel>(threadOrChannel.parentId);
+			return { channel, thread:threadOrChannel };
+		}
+		if (threadOrChannel?.isText()) {
+			return { channel:threadOrChannel as DTextChannel };
+		}
+		return { };
+	}
+
 	private async fetchDmChannel(discordKey: DiscordKey): Promise<DMChannel | null> {
-		const user = discordKey.isDm ? await this.fetchUser(discordKey.channel) : null;
+		const user = discordKey.isDm ? await this.fetchUser(discordKey.user!) : null;
 		return user ? user.dmChannel : null;
 	}
 
@@ -157,10 +166,15 @@ export class DiscordCache {
 
 	private guildMap: Map<Snowflake, Guild | null>;
 
-	public async fetchGuild(guildResolvable: TGuildResolvable): Promise<Guild | null> {
+	public async fetchGuild(guildResolvable: DGuildResolvable): Promise<Guild | null> {
 		if (guildResolvable instanceof Guild) {
 			this.guildMap.set(guildResolvable.id, guildResolvable);
 			return guildResolvable;
+		}
+		if (guildResolvable instanceof GuildPreview) {
+			const guild = await dFetchGuild(this.client, guildResolvable);
+			this.guildMap.set(guildResolvable.id, guild);
+			return guild;
 		}
 		if (!this.guildMap.has(guildResolvable)) {
 			this.guildMap.set(guildResolvable, await dFetchGuild(this.client, guildResolvable));
@@ -174,8 +188,8 @@ export class DiscordCache {
 
 	private guildPreviewMap: Map<Snowflake, GuildPreview | null>;
 
-	public async fetchGuildName(guildResolvable: TGuildResolvable, defaultValue?: string): Promise<string> {
-		if (guildResolvable instanceof Guild) {
+	public async fetchGuildName(guildResolvable: DGuildResolvable, defaultValue?: string): Promise<string> {
+		if (guildResolvable instanceof Guild || guildResolvable instanceof GuildPreview) {
 			const guild = await this.fetchGuild(guildResolvable);
 			return guild?.name ?? defaultValue ?? "ERROR_FETCHING_GUILD";
 		}
@@ -266,7 +280,7 @@ export class DiscordCache {
 
 	private webhookMap: Map<string, Webhook | null>;
 
-	public async fetchWebhook(guildResolvable: TGuildResolvable, channelResolvable: TChannelResolvable, name: string): Promise<Webhook | null> {
+	public async fetchWebhook(guildResolvable: DGuildResolvable, channelResolvable: DChannelResolvable, name: string): Promise<Webhook | null> {
 		if (!guildResolvable || !channelResolvable || !name) {
 			return null;
 		}
@@ -285,7 +299,7 @@ export class DiscordCache {
 		return this.webhookMap.get(key) ?? null;
 	}
 
-	private async fetchWebhookChannel(guildResolvable: TGuildResolvable, channelResolvable: TChannelResolvable): Promise<TextChannel | null> {
+	private async fetchWebhookChannel(guildResolvable: DGuildResolvable, channelResolvable: DChannelResolvable): Promise<TextChannel | null> {
 		const discordKey = new DiscordKey(guildResolvable, channelResolvable);
 		const guildOrThreadChannel = await this.fetchChannel(discordKey);
 		const parentChannel = guildOrThreadChannel?.isThread() ? guildOrThreadChannel.parent : null;
@@ -309,14 +323,14 @@ export class DiscordCache {
 		if (!this.manageWebhooksPermMap.has(did)) {
 			const hasPerm = channel.permissionsFor(ActiveBot.active.did, true)?.has("MANAGE_WEBHOOKS");
 			if (!hasPerm) {
-				info(`No Permission (MANAGE_WEBHOOKS): ${channelToName(channel)}`);
+				info(`No Permission (MANAGE_WEBHOOKS): ${toHumanReadable(channel)}`);
 			}
 			this.manageWebhooksPermMap.set(did, hasPerm);
 		}
 		return this.manageWebhooksPermMap.get(did) === true;
 	}
 
-	public async fetchOrCreateWebhook(guildResolvable: TGuildResolvable, channelResolvable: TChannelResolvable, name: string, avatar?: string): Promise<Webhook | null> {
+	public async fetchOrCreateWebhook(guildResolvable: DGuildResolvable, channelResolvable: DChannelResolvable, name: string, avatar?: string): Promise<Webhook | null> {
 		if (!guildResolvable || !channelResolvable || !name) {
 			return null;
 		}
@@ -341,7 +355,7 @@ export class DiscordCache {
 		return null;
 	}
 
-	public async findLastWebhookMessageByAuthor(guildResolvable: TGuildResolvable, channelResolvable: TChannelResolvable, name: string, filter: (authorName: string, index: number, messages: Message[]) => Promise<unknown>): Promise<Message | null> {
+	public async findLastWebhookMessageByAuthor(guildResolvable: DGuildResolvable, channelResolvable: DChannelResolvable, name: string, filter: (authorName: string, index: number, messages: Message[]) => Promise<unknown>): Promise<Message | null> {
 		const webhook = await this.fetchWebhook(guildResolvable, channelResolvable, name);
 		if (!webhook) {
 			return null;
@@ -374,7 +388,7 @@ export class DiscordCache {
 		return null;
 	}
 
-	public static async filterChannelMessages(channel: TChannel, filter: (message: Message, index: number, messages: Message[]) => Promise<unknown>, lastMessageId?: Snowflake, limit?: number): Promise<Message[]> {
+	public static async filterChannelMessages(channel: DMessageChannel, filter: (message: Message, index: number, messages: Message[]) => Promise<unknown>, lastMessageId?: Snowflake, limit?: number): Promise<Message[]> {
 		if (!channel) {
 			return [];
 		}

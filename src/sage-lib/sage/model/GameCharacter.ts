@@ -1,9 +1,9 @@
-import { NIL_SNOWFLAKE, type Snowflake } from "@rsc-utils/snowflake-utils";
+import { DiscordKey } from "@rsc-utils/discord-utils";
+import { NIL_SNOWFLAKE, isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, TPathbuilderCharacter, getExplorationModes, getSkills } from "../../../sage-pf2e";
-import { DiscordKey } from "../../discord";
 import { DialogType } from "../repo/base/IdRepository";
 import { CharacterManager } from "./CharacterManager";
 import type { IHasSave } from "./NamedCollection";
@@ -71,15 +71,16 @@ export function toDiscordKey(channelDidOrDiscordKey: DiscordKey | Snowflake, thr
 	return new DiscordKey(null, channelDidOrDiscordKey, threadDid);
 }
 function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage): boolean {
-	const hasThread = (dialogMessage.threadDid ?? NIL_SNOWFLAKE) !== NIL_SNOWFLAKE;
+	const { channel, thread } = discordKey.channelAndThread;
+	const hasThread = isNonNilSnowflake(dialogMessage.threadDid);
 	if (hasThread) {
-		return dialogMessage.channelDid === discordKey.channel
-			&& dialogMessage.threadDid === discordKey.thread;
+		return dialogMessage.channelDid === channel
+			&& dialogMessage.threadDid === thread;
 	}
-	if (discordKey.hasThread) {
-		return dialogMessage.channelDid === discordKey.thread;
+	if (thread) {
+		return dialogMessage.channelDid === thread;
 	}
-	return dialogMessage.channelDid === discordKey.channel;
+	return dialogMessage.channelDid === channel;
 }
 
 //#region Core Updates

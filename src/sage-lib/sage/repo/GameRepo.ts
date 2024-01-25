@@ -1,6 +1,6 @@
+import type { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import type { DiscordKey } from "../../discord";
 import { Game, type IGameCore } from "../model/Game";
 import type { SageCache } from "../model/SageCache";
 import { IdRepository } from "./base/IdRepository";

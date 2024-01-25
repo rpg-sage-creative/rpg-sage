@@ -1,11 +1,11 @@
 import { warn } from "@rsc-utils/console-utils";
+import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable, RenderableContentSection } from "@rsc-utils/render-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
 import { chunk } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { MessageEmbed, type ColorResolvable, type HexColorString } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache";
-import { DiscordMaxValues } from "./consts";
 
 /** Ensures we have a string, prepending a NewLine if needed. */
 function getValueToAppend(value: string | null, newLine: boolean): string {

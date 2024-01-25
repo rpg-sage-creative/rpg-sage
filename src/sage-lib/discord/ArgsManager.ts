@@ -33,7 +33,7 @@ export class ArgsManager extends _ArgsManager<string> {
 		const parsers: TokenParsers = {
 			arg: createKeyValueArgRegex(),
 			spaces: createWhitespaceRegex(),
-			quotes: createQuotedRegex(true),
+			quotes: createQuotedRegex({lengthQuantifier:"*"}),
 			...additionalParsers
 		};
 

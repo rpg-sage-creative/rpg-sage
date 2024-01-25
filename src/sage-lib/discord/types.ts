@@ -1,6 +1,5 @@
 import type { Renderable, RenderableContent } from "@rsc-utils/render-utils";
 import type { Awaitable } from "@rsc-utils/type-utils";
-import type { ButtonInteraction, CommandInteraction, DMChannel, Guild, Message, MessageComponentInteraction, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, SelectMenuInteraction, Snowflake, TextChannel, ThreadChannel, User } from "discord.js";
 import type { SageInteraction } from "../sage/model/SageInteraction";
 import type { SageMessage } from "../sage/model/SageMessage";
 import type { SageReaction } from "../sage/model/SageReaction";
@@ -13,24 +12,15 @@ export interface IMenuRenderable extends Renderable {
 	toMenuRenderableContent(index: number): RenderableContent;
 }
 
-export type DInteraction = CommandInteraction | ButtonInteraction | SelectMenuInteraction | MessageComponentInteraction;
+// export type DInteraction = CommandInteraction | _DInteraction;
 
-/** Discord Message or Partial Message */
-export type DMessage = Message | PartialMessage;
+// export type DMessage = _DMessage | Message | PartialMessage;
 
-export type DReaction = MessageReaction | PartialMessageReaction;
+// /** Text Channel */
+// export type TChannel = DMessageChannel;
 
-/** Discord User or Partial User */
-export type DUser = User | PartialUser;
-
-/** Guild or Guild Snowflake */
-export type TGuildResolvable = Guild | Snowflake;
-
-/** Text Channel */
-export type TChannel = ThreadChannel | TextChannel | DMChannel;
-
-/** Text Channel or Channel Snowflake */
-export type TChannelResolvable = TChannel | Snowflake;
+// /** Text Channel or Channel Snowflake */
+// export type TChannelResolvable = DChannelResolvable;
 
 export type THandlerOutput = { tested: number; handled: number; };
 

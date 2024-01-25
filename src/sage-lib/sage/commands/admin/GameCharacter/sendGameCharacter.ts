@@ -1,7 +1,6 @@
 import { mapAsync } from "@rsc-utils/async-array-utils";
+import { toChannelMention, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
-import { toHumanReadable } from "../../../../../sage-utils/utils/DiscordUtils/toHumanReadable";
-import { DiscordId, type TChannel } from "../../../../discord";
 import { sendWebhook } from "../../../../discord/messages";
 import type { GameCharacter } from "../../../model/GameCharacter";
 import type { SageMessage } from "../../../model/SageMessage";
@@ -36,7 +35,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	const autoChannels = character.autoChannels;
 	const autoChannelItems = await mapAsync(autoChannels, async data => {
 		const parts: string[] = [];
-		parts.push(DiscordId.toChannelReference(data.channelDid) ?? data.channelDid);
+		parts.push(toChannelMention(data.channelDid) ?? data.channelDid);
 		if (data.dialogPostType !== undefined) {
 			parts.push(`(${DialogType[data.dialogPostType]})`);
 		}
@@ -63,7 +62,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.appendTitledSection(`<b>Notes</b>`, ...notes);
 	}
 
-	const targetChannel = (await sageMessage.caches.discord.fetchChannel(sageMessage.channel?.sendCommandTo)) ?? sageMessage.message.channel as TChannel;
+	const targetChannel = (await sageMessage.caches.discord.fetchChannel(sageMessage.channel?.sendCommandTo)) ?? sageMessage.message.channel;
 	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
 
 	const sageCache = sageMessage.caches;

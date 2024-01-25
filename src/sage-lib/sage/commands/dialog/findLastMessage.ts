@@ -1,6 +1,6 @@
+import { DiscordKey } from "@rsc-utils/discord-utils";
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { Optional } from "@rsc-utils/type-utils";
-import { DiscordKey } from "../../../discord";
 import type { TDialogMessage } from "../../model/GameCharacter";
 import type { SageMessage } from "../../model/SageMessage";
 import { DialogMessageRepository } from "../../repo/DialogMessageRepository";

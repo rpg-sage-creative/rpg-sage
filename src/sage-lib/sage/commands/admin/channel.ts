@@ -1,12 +1,13 @@
 import { filterAsync, mapAsync } from "@rsc-utils/async-array-utils";
 import { warn } from "@rsc-utils/console-utils";
+import { DiscordKey, parseIds } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import { GuildChannel } from "discord.js";
 import { GameType } from "../../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import { DiscordCache, DiscordId, DiscordKey } from "../../../discord";
+import type { DiscordCache } from "../../../discord";
 import type { Game } from "../../model/Game";
 import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game";
 import type { SageCache } from "../../model/SageCache";
@@ -33,7 +34,7 @@ async function channelAdd(sageMessage: SageMessage): Promise<void> {
 	}
 
 	// Grab channels from mentions, filter out those in active games
-	let channelDids = DiscordId.parseMentions(sageMessage.message).channelIds;
+	let channelDids = parseIds(sageMessage.message, "channel");
 	channelDids = await filterAsync(channelDids, async channelDid => !(await server.findActiveGameByChannelDid(channelDid)));
 	if (!channelDids.length) {
 		return sageMessage.reactFailure();
@@ -253,8 +254,8 @@ async function channelRemove(sageMessage: SageMessage): Promise<void> {
 	}
 
 	// Grab channels from mentions and filter for the game
-	const channelDids = DiscordId.parseMentions(sageMessage.message)
-		.channelIds.filter(channelDid => game.hasChannel(channelDid));
+	const channelDids = parseIds(sageMessage.message, "channel")
+		.filter(channelDid => game.hasChannel(channelDid));
 	if (!channelDids.length && sageMessage.game) {
 		const channelDid = await sageMessage.args.removeAndReturnChannelDid(true);
 		channelDids.push(channelDid);

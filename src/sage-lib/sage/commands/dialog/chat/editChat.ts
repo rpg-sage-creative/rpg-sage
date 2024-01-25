@@ -1,6 +1,6 @@
 import { error, errorReturnNull } from "@rsc-utils/console-utils";
+import { DiscordKey } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
-import { DiscordKey } from "../../../../discord";
 import { deleteMessage } from "../../../../discord/deletedMessages";
 import { embedsToTexts } from "../../../../discord/embeds";
 import { SageDialogWebhookName } from "../../../../discord/messages";

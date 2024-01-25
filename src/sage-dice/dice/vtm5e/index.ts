@@ -410,7 +410,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 			objectType: "Dice",
 			gameType: GameType.VtM5e,
 			id: randomSnowflake(),
-			diceParts: diceParts.map<DicePartCore>(this.toJSON)
+			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
 	}
 	public static fromCore(core: DiceCore): Dice {
@@ -477,7 +477,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 			gameType: GameType.VtM5e,
 			id: randomSnowflake(),
 			critMethodType: undefined,
-			dice: _dice.map<DiceCore>(this.toJSON),
+			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
 			diceOutputType: diceOutputType,
 			diceSecretMethodType: DiceSecretMethodType.Ignore
 		});

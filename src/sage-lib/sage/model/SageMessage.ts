@@ -1,5 +1,6 @@
 import { Cache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnNull, warn } from "@rsc-utils/console-utils";
+import { DiscordKey, handleDiscordErrorReturnNull, safeMentions, toMessageUrl, type DMessage, type DMessageChannel } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
@@ -7,10 +8,7 @@ import type { Message, User } from "discord.js";
 import type { IHasChannels, IHasGame } from ".";
 import { GameType } from "../../../sage-common";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import { createMessageLink } from "../../../sage-utils/utils/DiscordUtils/createMessageLink";
-import { handleDiscordErrorReturnNull } from "../../../sage-utils/utils/DiscordUtils/errorHandlers";
-import { safeMentions } from "../../../sage-utils/utils/DiscordUtils/safeMentions";
-import { DiscordKey, type DMessage, type TChannel, type TCommandAndArgs } from "../../discord";
+import { type TCommandAndArgs } from "../../discord";
 import { isDeleted } from "../../discord/deletedMessages";
 import { resolveToTexts } from "../../discord/embeds";
 import { send, sendTo } from "../../discord/messages";
@@ -119,9 +117,9 @@ export class SageMessage
 
 	public _ = new Map<"Dialog" | "Dice" | "Replacement" | "Sent", DMessage>();
 	public send(renderableContentResolvable: RenderableContentResolvable): Promise<Message[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: TChannel): Promise<Message[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: TChannel, originalAuthor: User): Promise<Message[]>;
-	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.message.channel as TChannel, originalAuthor = this.message.author, notifyIfBlocked = false): Promise<Message[]> {
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: DMessageChannel): Promise<Message[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: DMessageChannel, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.message.channel, originalAuthor = this.message.author, notifyIfBlocked = false): Promise<Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			if (notifyIfBlocked) {
@@ -134,7 +132,7 @@ export class SageMessage
 		if (renderableContent) {
 			const sent = await send(this.caches, targetChannel, renderableContent, originalAuthor);
 			if (sent.length) {
-				this._.set("Sent", sent[sent.length - 1]);
+				this._.set("Sent", sent[sent.length - 1] as DMessage);
 			}
 			return sent;
 		}
@@ -143,12 +141,12 @@ export class SageMessage
 	public sendPost(renderableContentResolvable: RenderableContentResolvable) {
 		return sendTo({
 			sageCache: this.caches,
-			target: this.message.channel as TChannel,
+			target: this.message.channel,
 			content: resolveToTexts(this.caches, renderableContentResolvable).join("\n"),
 			errMsg: "SageMessage.sendPost"
 		});
 	}
-	public async canSend(targetChannel = this.message.channel as TChannel): Promise<boolean> {
+	public async canSend(targetChannel = this.message.channel): Promise<boolean> {
 		return this.caches.canSendMessageTo(DiscordKey.fromChannel(targetChannel));
 	}
 
@@ -157,14 +155,14 @@ export class SageMessage
 	public async whisper(contentOrArgs: TSendArgs | RenderableContentResolvable): Promise<void> {
 		const args = typeof(contentOrArgs) === "string" || "toRenderableContent" in contentOrArgs ? { content:contentOrArgs } : contentOrArgs;
 		const sendOptions = this.resolveToOptions(args);
-		const canSend = await this.canSend(this.message.channel as TChannel);
+		const canSend = await this.canSend(this.message.channel);
 		if (canSend) {
 			const message = await this.message.reply(sendOptions).catch(handleDiscordErrorReturnNull);
 			//include a button to delete the reply message!
 			await addMessageDeleteButton(message as DMessage, this.sageUser.did);
 		}else {
 			// include a link to the original message!
-			const replyingTo = `*replying to* ${createMessageLink(this.message)}`;
+			const replyingTo = `*replying to* ${toMessageUrl(this.message)}`;
 			const newLine = sendOptions.content ? "\n" : "";
 			const originalContent = sendOptions.content ?? "";
 			sendOptions.content = replyingTo + newLine + originalContent;

@@ -22,8 +22,8 @@
 // 				if (!message) return sageMessage.reactWarn();
 
 // 				let embed = message.embeds[0];
-// 				let updatedTitle = sageMessage.args[DialogArgIndex.Name] && !DiscordUtils.Id.isValidId(sageMessage.args[DialogArgIndex.Name]) && sageMessage.args[DialogArgIndex.Name]
-// 					|| sageMessage.args[DialogArgIndex.DisplayName] && !DiscordUtils.Id.isValidId(sageMessage.args[DialogArgIndex.DisplayName]) && sageMessage.args[DialogArgIndex.DisplayName];
+// 				let updatedTitle = sageMessage.args[DialogArgIndex.Name] && !isSnowflake(sageMessage.args[DialogArgIndex.Name]) && sageMessage.args[DialogArgIndex.Name]
+// 					|| sageMessage.args[DialogArgIndex.DisplayName] && !isSnowflake(sageMessage.args[DialogArgIndex.DisplayName]) && sageMessage.args[DialogArgIndex.DisplayName];
 // 				let updatedContent = sageMessage.args[DialogArgIndex.Content];
 // 				message.edit(updateEmbed(embed, updatedTitle, updatedContent)).then(deleteMessage, error);
 // 			}

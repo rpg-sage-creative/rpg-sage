@@ -1,12 +1,12 @@
 import { errorReturnNull } from "@rsc-utils/console-utils";
+import { DiscordKey, toUserMention, type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import { MessageActionRow, MessageAttachment, MessageButton, MessageSelectMenu, type ButtonInteraction, type Message, type MessageButtonStyleResolvable, type MessageEmbed, type SelectMenuInteraction } from "discord.js";
+import { CommandInteraction, MessageActionRow, MessageAttachment, MessageButton, MessageSelectMenu, type ButtonInteraction, type Message, type MessageButtonStyleResolvable, type MessageEmbed, type SelectMenuInteraction } from "discord.js";
 import { PathbuilderCharacter, getExplorationModes, getSavingThrows, getSkills, toModifier } from "../../../sage-pf2e";
 import { TCharacterSectionType, TCharacterViewType, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
-import { DiscordId, DiscordKey, type DUser, type TChannel } from "../../discord";
 import { resolveToEmbeds } from "../../discord/embeds";
 import { registerInteractionListener } from "../../discord/handlers";
 import type { SageCache } from "../model/SageCache";
@@ -71,7 +71,7 @@ function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
 	}
 }
 
-async function attachCharacter(sageCache: SageCache, channel: TChannel | DUser, pathbuilderId: number, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+async function attachCharacter(sageCache: SageCache, channel: DMessageTarget, pathbuilderId: number, character: PathbuilderCharacter, pin: boolean): Promise<void> {
 	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.description).join("");
 	const buffer = Buffer.from(raw, "utf-8");
 	const attachment = new MessageAttachment(buffer, `pathbuilder2e-${pathbuilderId}.txt`);
@@ -95,7 +95,7 @@ async function notifyOfSlicedMacros(sageCache: SageCache, character: Pathbuilder
 	}
 }
 
-async function postCharacter(sageCache: SageCache, channel: TChannel, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+async function postCharacter(sageCache: SageCache, channel: DMessageChannel, character: PathbuilderCharacter, pin: boolean): Promise<void> {
 	setMacroUser(character, sageCache.user);
 	const saved = await character.save();
 	if (saved) {
@@ -396,7 +396,7 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: Pa
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
-		await sageInteraction.interaction.channel?.send(`${DiscordId.toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`);
+		await sageInteraction.interaction.channel?.send(`${toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`);
 	}
 }
 
@@ -514,7 +514,7 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 
 export const pb2eId = "pathbuilder2e-id";
 
-export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction): Promise<void> {
+export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction<CommandInteraction>): Promise<void> {
 	const pathbuilderId = sageInteraction.getNumber(pb2eId, true);
 	await sageInteraction.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, false);
 
@@ -523,7 +523,7 @@ export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction
 		return sageInteraction.reply(`Failed to fetch Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}!`, false);
 	}
 
-	const channel = sageInteraction.interaction.channel as TChannel ?? sageInteraction.user;
+	const channel = sageInteraction.interaction.channel as DMessageChannel ?? sageInteraction.user;
 
 	const pin = sageInteraction.getBoolean("pin") ?? false;
 	const attach = sageInteraction.getBoolean("attach") ?? false;
