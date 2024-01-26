@@ -8,6 +8,7 @@ import { pCmdRemove } from "./party/pCmdRemove";
 import { pCmdStatus } from "./party/pCmdStatus";
 
 export function registerParty(): void {
+	return;
 	registerAdminCommand(pCmdList, "party-list");
 	registerAdminCommand(pCmdLoot, "party-loot");
 	registerAdminCommand(pCmdStatus, "party-status", "party-status-pin", "party-status-unpin", "party-status-unpin-all");

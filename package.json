@@ -52,7 +52,7 @@
 		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils",
 		"@rsc-utils/uuid-utils": "github:rpg-sage-creative/uuid-utils",
 		"discord-api-types": "^0.27.3",
-		"discord.js": "^13.16.0",
+		"discord.js": "^13.17.1",
 		"emoji-regex": "^10.3.0",
 		"follow-redirects": "^1.15.4",
 		"pdf2json": "^2.0.2",
