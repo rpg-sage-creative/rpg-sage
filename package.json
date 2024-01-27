@@ -41,6 +41,7 @@
 		"@rsc-utils/fs-utils": "github:rpg-sage-creative/fs-utils",
 		"@rsc-utils/https-utils": "github:rpg-sage-creative/https-utils",
 		"@rsc-utils/language-utils": "github:rpg-sage-creative/language-utils",
+		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
 		"@rsc-utils/number-utils": "github:rpg-sage-creative/number-utils",
 		"@rsc-utils/pdf-utils": "github:rpg-sage-creative/pdf-utils",
 		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils",
@@ -59,7 +60,6 @@
 		"xregexp": "^5.1.1"
 	},
 	"devDependencies": {
-		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
 		"@types/follow-redirects": "^1.14.1",
 		"@types/node": "^18.18.7"
 	},

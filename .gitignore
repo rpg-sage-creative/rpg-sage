@@ -5,7 +5,6 @@ node_modules/
 
 **/.DS_Store
 **/tsconfig.tsbuildinfo
-package-lock.json
 
 # ignore config json files
 /config/*.json

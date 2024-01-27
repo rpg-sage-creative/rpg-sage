@@ -6,8 +6,13 @@
 	},
 	"exclude": [
 		"build",
+		"config",
+		"data",
+		"docker",
+		"docs",
 		"logs",
 		"node_modules",
-		"scripts"
+		"scripts",
+		"test"
 	]
 }
