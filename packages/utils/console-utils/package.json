@@ -1,0 +1,5 @@
+{"name":"@rsc-utils/console-utils","version":"0.0.13","main":"build/index.js","type":"module","dependencies":{},"devDependencies":{
+  "@types/node": "^18.18.7"
+},"peerDependencies":{
+  "@rsc-utils/npm-utils": "0.0.x"
+}}

@@ -6,11 +6,7 @@ Ensure no existing tmp dir
 
 Clone repo into tmp dir
 <br>
-`git clone git@github.com:randaltmeyer/rpg-sage-legacy.git /home/ec2-user/legacy/dev-tmp`
-
-Change branch/commit (for non-master, beta/dev builds)
-<br>
-`git checkout branch_or_hash`
+`git clone -b BRANCH_NAME --single-branch git@github.com:randaltmeyer/rpg-sage-legacy.git /home/ec2-user/legacy/dev-tmp`
 
 Choose tmp dir
 <br>
@@ -18,7 +14,7 @@ Choose tmp dir
 
 Load node modules
 <br>
-`npm install`
+`npm ci`
 
 Make sure pdf2json has index.d.ts
 <br>

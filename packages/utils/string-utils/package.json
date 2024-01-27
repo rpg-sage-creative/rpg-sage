@@ -1,0 +1,10 @@
+{"name":"@rsc-utils/string-utils","version":"0.0.11","main":"build/index.js","type":"module","dependencies":{
+  "@rsc-utils/type-utils": "0.0.x",
+  "xregexp": "^5.1.1"
+},"devDependencies":{
+  "@rsc-utils/array-utils": "0.0.x",
+  "@rsc-utils/console-utils": "0.0.x",
+  "@types/node": "^18.18.7"
+},"peerDependencies":{
+  "@rsc-utils/npm-utils": "0.0.x"
+}}

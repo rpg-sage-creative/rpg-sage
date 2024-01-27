@@ -1,0 +1,11 @@
+{"name":"@rsc-utils/https-utils","version":"0.0.2","main":"build/index.js","type":"module","dependencies":{
+  "@rsc-utils/console-utils": "0.0.x",
+  "@rsc-utils/progress-utils": "0.0.x",
+  "@rsc-utils/type-utils": "0.0.x",
+  "follow-redirects": "^1.15.4"
+},"devDependencies":{
+  "@types/follow-redirects": "^1.14.3",
+  "@types/node": "^18.18.7"
+},"peerDependencies":{
+  "@rsc-utils/npm-utils": "0.0.x"
+}}

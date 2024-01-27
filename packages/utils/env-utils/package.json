@@ -1,0 +1,9 @@
+{"name":"@rsc-utils/env-utils","version":"0.0.10","main":"build/index.js","type":"module","dependencies":{
+  "@rsc-utils/console-utils": "0.0.x",
+  "@rsc-utils/snowflake-utils": "0.0.x",
+  "@rsc-utils/string-utils": "0.0.x"
+},"devDependencies":{
+  "@types/node": "^18.18.7"
+},"peerDependencies":{
+  "@rsc-utils/npm-utils": "0.0.x"
+}}

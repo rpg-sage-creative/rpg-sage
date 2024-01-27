@@ -12,7 +12,38 @@
 		"docs",
 		"logs",
 		"node_modules",
+		"packages",
 		"scripts",
 		"test"
+	],
+	"references": [
+		{ "path": "./packages/utils/console-utils" },
+		{ "path": "./packages/utils/date-utils" },
+		{ "path": "./packages/utils/enum-utils" },
+		{ "path": "./packages/utils/number-utils" },
+			{ "path": "./packages/utils/color-utils" },
+		{ "path": "./packages/utils/temperature-utils" },
+
+		{ "path": "./packages/utils/type-utils" },
+			{ "path": "./packages/utils/array-utils" },
+				{ "path": "./packages/utils/render-utils" },
+			{ "path": "./packages/utils/class-utils" },
+				{ "path": "./packages/utils/character-utils" },
+			{ "path": "./packages/utils/https-utils" },
+				// { "path": "./packages/utils/maps-utils" },
+			{ "path": "./packages/utils/snowflake-utils" },
+			{ "path": "./packages/utils/string-utils" },
+				{ "path": "./packages/utils/env-utils" },
+				{ "path": "./packages/utils/json-utils" },
+					{ "path": "./packages/utils/fs-utils" },
+						{ "path": "./packages/utils/pdf-utils" },
+						{ "path": "./packages/utils/random-utils" },
+				{ "path": "./packages/utils/language-utils" },
+					{ "path": "./packages/utils/search-utils" },
+			{ "path": "./packages/utils/uuid-utils" },
+
+
+		{ "path": "./packages/utils/args-utils" },
+		{ "path": "./packages/utils/discord-utils" }
 	]
 }
