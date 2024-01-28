@@ -1,8 +1,4 @@
 {"name":"@rsc-utils/character-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
   "@rsc-utils/class-utils": "^0.0.0",
   "@rsc-utils/type-utils": "^0.0.0"
-},"devDependencies":{
-  "@rsc-utils/npm-utils": "^0.0.0",
-  "@rsc-utils/console-utils": "^0.0.0",
-  "@types/node": "^18.18.7"
-},"peerDependencies":{}}
+}}

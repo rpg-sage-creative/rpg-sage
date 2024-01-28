@@ -69,9 +69,7 @@ for repoName in "${repoNames[@]}"; do
 	jsonVer='"0.0.0"'
 	# jsonVer=$(npm pkg get version)
 	jsonDep=$(npm pkg get dependencies)
-	jsonDevDep=$(npm pkg get devDependencies)
-	jsonPeerDep=$(npm pkg get peerDependencies)
-	jsonRaw="{\"name\":$jsonName,\"version\":$jsonVer,\"private\":true,\"main\":\"build/index.js\",\"type\":\"module\",\"dependencies\":$jsonDep,\"devDependencies\":$jsonDevDep,\"peerDependencies\":$jsonPeerDep}"
+	jsonRaw="{\"name\":$jsonName,\"version\":$jsonVer,\"private\":true,\"main\":\"build/index.js\",\"type\":\"module\",\"dependencies\":$jsonDep}"
 	echo "$jsonRaw" | sed -e 's/github:rpg-sage-creative\/[a-zA-Z]*-utils/^0.0.0/g' > "$destDir/package.json"
 
 	# update tsconfig.json
