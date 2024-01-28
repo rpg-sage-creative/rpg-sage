@@ -6,4 +6,7 @@
   "discord.js": "^13.17.1",
   "emoji-regex": "^10.3.0",
   "xregexp": "^5.1.1"
-},"devDependencies":{},"peerDependencies":{}}
+},"devDependencies":{
+  "@rsc-utils/npm-utils": "^0.0.0",
+  "@types/node": "^18.18.7"
+},"peerDependencies":{}}

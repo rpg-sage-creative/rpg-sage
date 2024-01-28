@@ -56,36 +56,27 @@ fi
 for repoName in "${repoNames[@]}"; do
 	srcDir="$utilsDir/$repoName"
 	destDir="$packagesDir/$repoName"
-	if [ -d "$srcDir" ] && [ ! -d "$destDir" ]; then
-		echo "Adding Package: $repoName ..."
 
-		# make source dir and package.json
-		mkdir "$destDir"
-		cd $destDir
-		ln -s "$srcDir/src"
-	fi
+	echo "Adding Package: $repoName ..."
+	rm -rf "$destDir"
+	mkdir "$destDir"
+	cp -r "$srcDir/src" "$destDir/src"
 
-	if [ -d "$srcDir" ] && [ ! -f "$destDir/package.json" ]; then
-		# update package.json details
-		echo "Adding $repoName/package.json ..."
-		cd "$srcDir"
-		jsonName=$(npm pkg get name)
-		jsonVer='"0.0.0"'
-		# jsonVer=$(npm pkg get version)
-		jsonDep=$(npm pkg get dependencies)
-		jsonDevDep="{}"
-		jsonPeerDep="{}"
-		# jsonDevDep=$(npm pkg get devDependencies)
-		# jsonPeerDep=$(npm pkg get peerDependencies)
-		jsonRaw="{\"name\":$jsonName,\"version\":$jsonVer,\"private\":true,\"main\":\"build/index.js\",\"type\":\"module\",\"dependencies\":$jsonDep,\"devDependencies\":$jsonDevDep,\"peerDependencies\":$jsonPeerDep}"
-		echo "$jsonRaw" | sed -e 's/github:rpg-sage-creative\/[a-zA-Z]*-utils/^0.0.0/g' > "$destDir/package.json"
-	fi
+	# update package.json details
+	echo "Adding $repoName/package.json ..."
+	cd "$srcDir"
+	jsonName=$(npm pkg get name)
+	jsonVer='"0.0.0"'
+	# jsonVer=$(npm pkg get version)
+	jsonDep=$(npm pkg get dependencies)
+	jsonDevDep=$(npm pkg get devDependencies)
+	jsonPeerDep=$(npm pkg get peerDependencies)
+	jsonRaw="{\"name\":$jsonName,\"version\":$jsonVer,\"private\":true,\"main\":\"build/index.js\",\"type\":\"module\",\"dependencies\":$jsonDep,\"devDependencies\":$jsonDevDep,\"peerDependencies\":$jsonPeerDep}"
+	echo "$jsonRaw" | sed -e 's/github:rpg-sage-creative\/[a-zA-Z]*-utils/^0.0.0/g' > "$destDir/package.json"
 
-	if [ ! -f "$destDir/tsconfig.json" ]; then
-		# update tsconfig.json
-		echo "Adding $repoName/tsconfig.json ..."
-		echo "{\"extends\":\"../../../tsconfig.base.json\",\"compilerOptions\":{\"outDir\":\"./build\",\"rootDir\":\"./src\"}}" > "$destDir/tsconfig.json"
-	fi
+	# update tsconfig.json
+	echo "Adding $repoName/tsconfig.json ..."
+	echo "{\"extends\":\"../../../tsconfig.base.json\",\"compilerOptions\":{\"outDir\":\"./build\",\"rootDir\":\"./src\"}}" > "$destDir/tsconfig.json"
 done
 
 echo "Configuring Packages ... done."
