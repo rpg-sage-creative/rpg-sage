@@ -1,6 +1,1 @@
-{"name":"@rsc-utils/type-utils","version":"0.0.7","main":"build/index.js","type":"module","dependencies":{},"devDependencies":{
-  "@rsc-utils/console-utils": "0.0.x",
-  "@types/node": "^18.18.7"
-},"peerDependencies":{
-  "@rsc-utils/npm-utils": "0.0.x"
-}}
+{"name":"@rsc-utils/type-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{},"devDependencies":{},"peerDependencies":{}}

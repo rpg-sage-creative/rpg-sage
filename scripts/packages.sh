@@ -70,12 +70,15 @@ for repoName in "${repoNames[@]}"; do
 		echo "Adding $repoName/package.json ..."
 		cd "$srcDir"
 		jsonName=$(npm pkg get name)
-		jsonVer=$(npm pkg get version)
+		jsonVer='"0.0.0"'
+		# jsonVer=$(npm pkg get version)
 		jsonDep=$(npm pkg get dependencies)
-		jsonDevDep=$(npm pkg get devDependencies)
-		jsonPeerDep=$(npm pkg get peerDependencies)
-		jsonRaw="{\"name\":$jsonName,\"version\":$jsonVer,\"main\":\"build/index.js\",\"type\":\"module\",\"dependencies\":$jsonDep,\"devDependencies\":$jsonDevDep,\"peerDependencies\":$jsonPeerDep}"
-		echo "$jsonRaw" | sed -e 's/github:rpg-sage-creative\/[a-zA-Z]*-utils/0.0.x/g' > "$destDir/package.json"
+		jsonDevDep="{}"
+		jsonPeerDep="{}"
+		# jsonDevDep=$(npm pkg get devDependencies)
+		# jsonPeerDep=$(npm pkg get peerDependencies)
+		jsonRaw="{\"name\":$jsonName,\"version\":$jsonVer,\"private\":true,\"main\":\"build/index.js\",\"type\":\"module\",\"dependencies\":$jsonDep,\"devDependencies\":$jsonDevDep,\"peerDependencies\":$jsonPeerDep}"
+		echo "$jsonRaw" | sed -e 's/github:rpg-sage-creative\/[a-zA-Z]*-utils/^0.0.0/g' > "$destDir/package.json"
 	fi
 
 	if [ ! -f "$destDir/tsconfig.json" ]; then

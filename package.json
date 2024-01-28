@@ -11,32 +11,53 @@
 		"lib": "build"
 	},
 	"keywords": [
-		"RPG",
-		"Sage",
-		"Discord",
-		"Bot"
+		"discord",
+		"bot",
+		"rpg",
+		"ttrpg",
+		"play-by-post",
+		"pbp",
+		"play-by-discord",
+		"pbd",
+		"pathfinder",
+		"pathfinder2e",
+		"pf2e",
+		"essence20",
+		"e20"
 	],
+	"private": true,
 	"author": "Randal T Meyer <randal.t.meyer@gmail.com> (https://rpgsage.io)",
+	"contributors": [],
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/randaltmeyer/rpg-sage/issues"
+		"url": "https://github.com/randaltmeyer/rpg-sage-legacy/issues",
+		"email": "bugs@rpgsage.io"
 	},
-	"homepage": "https://github.com/randaltmeyer/rpg-sage#readme",
-	"dependencies": {
+	"homepage": "https://github.com/randaltmeyer/rpg-sage-legacy#readme",
+	"funding": {
+		"type": "patreon",
+		"url": "https://www.patreon.com/rpgsage"
+	},
+	"repository": "github:randaltmeyer/rpg-sage-legacy",
+	"workspaces": [
+		"packages/utils/*"
+	],
+	"devDependencies": {
 		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
+		"@types/follow-redirects": "^1.14.1",
+		"@types/node": "^18.18.7"
+	},
+	"dependencies": {
 		"@discordjs/rest": "^1.6.0",
 		"@napi-rs/canvas": "^0.1.35",
 		"discord-api-types": "^0.27.3",
 		"discord.js": "^13.17.1",
 		"emoji-regex": "^10.3.0",
 		"follow-redirects": "^1.15.4",
+		"image-size": "^1.0.2",
 		"pdf2json": "^2.0.2",
-		"xregexp": "^5.1.1",
-		"image-size": "^1.0.2"
-	},
-	"devDependencies": {
-		"@types/follow-redirects": "^1.14.1",
-		"@types/node": "^18.18.7"
+		"verbose": "^0.2.3",
+		"xregexp": "^5.1.1"
 	},
 	"scripts": {
 		"daemon": "bash scripts/daemon.sh",
@@ -45,8 +66,5 @@
 		"build": "bash ./node_modules/@rsc-utils/npm-utils/scripts/build.sh --skipIndexTs",
 		"release": "bash ./node_modules/@rsc-utils/npm-utils/scripts/release.sh",
 		"test": "bash ./node_modules/@rsc-utils/npm-utils/scripts/test.sh"
-	},
-	"workspaces": [
-		"./packages/utils/*"
-	]
+	}
 }
