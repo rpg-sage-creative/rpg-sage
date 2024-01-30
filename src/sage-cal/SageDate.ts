@@ -1,4 +1,4 @@
-import { DateLike, Day, DayName, Month, MonthName, getDateStrings, getDayNames, getMonthNames } from "@rsc-utils/date-utils";
+import { DateLike, Day, DayName, Month, MonthName, getDateStrings } from "@rsc-utils/date-utils";
 
 const DayMS = 1000 * 60 * 60 * 24;
 
@@ -40,10 +40,10 @@ export class SageDate<
 	}
 
 	public get dayType(): T { return this._.getDay() as T; }
-	public get day(): U { return getDayNames()[this._.getDay()] as U; }
+	public get day(): U { return Day[this._.getDay()] as U; }
 
 	public get monthType(): V { return this._.getMonth() as V; }
-	public get month(): W { return getMonthNames()[this._.getMonth()] as W; }
+	public get month(): W { return Month[this._.getMonth()] as W; }
 
 	public getPrevDay(): S {
 		const cnstr = this.constructor as typeof SageDate;
@@ -66,8 +66,8 @@ export class SageDate<
 		return getDateStrings(this._).date;
 	}
 	public toLongEarthString(): string {
-		const day = getDayNames()[this._.getDay()];
-		const month = getMonthNames()[this._.getMonth()];
+		const day = Day[this._.getDay()];
+		const month = Month[this._.getMonth()];
 		return `${day}, ${month} ${this.getDate()}, ${this.getEarthFullYear()}`;
 	}
 
