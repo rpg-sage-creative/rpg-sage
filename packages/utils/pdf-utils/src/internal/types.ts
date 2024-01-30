@@ -19,3 +19,6 @@ export type PageJson = { Fields:FieldJson[]; Boxsets:BoxsetJson[]; Texts:{ R?:{ 
 
 /** @internal @private */
 export type RawJson = { Pages:PageJson[]; Meta?:{ Title?:string; }; };
+
+/** @internal @private */
+export type Optional<T> = T | null | undefined;

@@ -1,4 +1,3 @@
-import type { Optional } from "@rsc-utils/type-utils";
 
 let _UKtoUS: Map<string, string>;
 
@@ -17,7 +16,7 @@ export function getUKtoUS(): Map<string, string> {
  * @internal
  * @private
  */
-export function ukToUS(uk: Optional<string>): string | undefined {
+export function ukToUS(uk?: string | null): string | undefined {
 	return uk ? _UKtoUS?.get(uk) : undefined;
 }
 
@@ -25,6 +24,6 @@ export function ukToUS(uk: Optional<string>): string | undefined {
  * @internal
  * @private
  */
-export function hasUKtoUS(uk: Optional<string>): boolean {
+export function hasUKtoUS(uk?: string | null): boolean {
 	return uk ? _UKtoUS?.has(uk) ?? false : false;
 }

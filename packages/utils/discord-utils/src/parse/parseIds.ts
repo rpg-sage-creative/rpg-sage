@@ -1,8 +1,8 @@
-import { Snowflake, isNonNilSnowflake } from "@rsc-utils/snowflake-utils";
-import { Optional } from "@rsc-utils/type-utils";
+import { type Snowflake, isNonNilSnowflake } from "@rsc-utils/snowflake-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { createMentionRegex } from "./createMentionRegex.js";
 import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
-import { DMessage } from "../types.js";
+import { type DMessage } from "../types.js";
 
 type IdType = "channel";
 

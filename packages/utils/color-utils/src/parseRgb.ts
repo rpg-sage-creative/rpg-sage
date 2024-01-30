@@ -1,5 +1,5 @@
 import { round } from "@rsc-utils/number-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "./internal/Optional.js";
 import { matchRgb } from "./internal/matchRgb.js";
 
 /** Simple type to store r/g/b values */
