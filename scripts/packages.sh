@@ -61,6 +61,12 @@ for repoName in "${repoNames[@]}"; do
 	rm -rf "$destDir"
 	mkdir "$destDir"
 	cp -r "$srcDir/src" "$destDir/src"
+	if [ "$repoName" = "console-utils" ]; then
+		cp -r "$srcDir/scripts" "$destDir/scripts"
+	fi
+	if [ "$repoName" = "language-utils" ]; then
+		cp -r "$srcDir/data" "$destDir/data"
+	fi
 
 	# update package.json details
 	echo "Adding $repoName/package.json ..."
@@ -78,3 +84,7 @@ for repoName in "${repoNames[@]}"; do
 done
 
 echo "Configuring Packages ... done."
+
+cd "$repoDir"
+rm -rf node_modules package-lock.json
+npm i
