@@ -1,22 +1,10 @@
-import { rollDice } from "@rsc-utils/dice-utils";
+import { DiceTest, DiceTestData, DiceTestType, DieRollGrade, gradeToEmoji, parseDiceTestTargetValue, rollDice } from "@rsc-utils/dice-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import { GameType } from "../../../sage-common";
-import type {
-	TDiceLiteral,
-	TTestData
-} from "../../common";
-import {
-	DiceOutputType,
-	DiceSecretMethodType,
-	DieRollGrade,
-	TestType,
-	cleanDescription,
-	createValueTestData,
-	gradeToEmoji,
-	parseTestTargetValue
-} from "../../common";
+import type { TDiceLiteral } from "../../common";
+import { DiceOutputType, DiceSecretMethodType, cleanDescription } from "../../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
@@ -40,7 +28,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 		core.count = 1;
 		core.sides = 20;
 	}else if (token.key === "target") {
-		const { value, hidden } = parseTestTargetValue(token.matches[1]);
+		const { value, hidden } = parseDiceTestTargetValue(token.matches[1]);
 		core.target = { type:TargetType.VS, value, hidden };
 	}else {
 		core.description = (core.description || "") + token.token;
@@ -52,8 +40,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 //#region Targets/Tests
 enum TargetType { None = 0, VS = 1 }
 type TTargetData = { type:TargetType; value:number; hidden:boolean; };
-function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	return !targetData ? null : createValueTestData(TestType.GreaterThan, targetData.value, targetData.hidden, "vs");
+function targetDataToTestData(targetData: TTargetData): OrNull<DiceTestData> {
+	return !targetData ? null : DiceTest.create(DiceTestType.GreaterThan, targetData.value, targetData.hidden, "vs");
 }
 //#endregion
 
@@ -91,7 +79,7 @@ interface DicePartCore extends baseDicePartCore {
 	target?: TTargetData;
 }
 type TDicePartCoreArgs = baseTDicePartCoreArgs & {
-	testOrTarget?: TTestData | TTargetData;
+	testOrTarget?: DiceTestData | TTargetData;
 };
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region static
@@ -108,7 +96,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			noSort: false,
 			sides: 20,
 			sign: undefined,
-			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget ?? null,
+			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <DiceTestData>testOrTarget ?? null,
 			target: <TTargetData>testOrTarget ?? null
 		});
 	}

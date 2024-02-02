@@ -1,6 +1,6 @@
-import type { DiceDropKeepData } from "@rsc-utils/dice-utils";
+import type { DiceDropKeepData, DiceTestData } from "@rsc-utils/dice-utils";
 import type { Dice, DiceGroup, DiceGroupRoll, DicePart, DicePartRoll, DiceRoll } from ".";
-import type { CritMethodType, DiceOutputType, DiceSecretMethodType, DieCore, TSign, TTestData } from "../..";
+import type { CritMethodType, DiceOutputType, DiceSecretMethodType, DieCore, TSign } from "../..";
 
 //#region DicePart
 
@@ -31,7 +31,7 @@ interface DicePartCoreBase {
 	sign?: TSign;
 
 	/** target test information */
-	test?: TTestData;
+	test?: DiceTestData;
 }
 
 export type TDicePartCoreArgs = Partial<DicePartCoreBase>;

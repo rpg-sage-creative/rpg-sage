@@ -1,19 +1,10 @@
-import { rollDice } from "@rsc-utils/dice-utils";
+import { DiceTest, DiceTestData, DiceTestType, parseDiceTestTargetValue, rollDice } from "@rsc-utils/dice-utils";
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull } from "@rsc-utils/type-utils";
 import { GameType } from "../../../sage-common";
-import type {
-	TDiceLiteral,
-	TTestData
-} from "../../common";
-import {
-	DiceOutputType,
-	DiceSecretMethodType,
-	TestType, UNICODE_LEFT_ARROW,
-	cleanDescription,
-	parseTestTargetValue
-} from "../../common";
+import type { TDiceLiteral } from "../../common";
+import { DiceOutputType, DiceSecretMethodType, UNICODE_LEFT_ARROW, cleanDescription } from "../../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
@@ -67,7 +58,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 		}
 
 	}else if (token.key === "target") {
-		const { value, hidden } = parseTestTargetValue(token.matches[1]);
+		const { value, hidden } = parseDiceTestTargetValue(token.matches[1]);
 		core.target = { type:TargetType.VS, value, hidden };
 
 	}else {
@@ -84,8 +75,8 @@ enum TargetType { None = 0, VS = 1 }
 
 type TTargetData = { type:TargetType; value:number; hidden:boolean; };
 
-function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	return !targetData ? null : { alias:"vs", type: TestType.GreaterThanOrEqual, value:targetData.value, hidden:targetData.hidden };
+function targetDataToTestData(targetData: TTargetData): OrNull<DiceTestData> {
+	return !targetData ? null : DiceTest.create(DiceTestType.GreaterThanOrEqual, targetData.value, targetData.hidden, "vs");
 }
 
 //#endregion
@@ -319,7 +310,7 @@ interface DicePartCore extends baseDicePartCore {
 
 type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 	hunger?: number;
-	testOrTarget?: TTestData | TTargetData;
+	testOrTarget?: DiceTestData | TTargetData;
 };
 
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
@@ -351,7 +342,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			noSort: false,
 			sides: 10,
 			sign: undefined,
-			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as TTestData ?? null,
+			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as DiceTestData ?? null,
 			target: testOrTarget as TTargetData ?? null
 		});
 	}

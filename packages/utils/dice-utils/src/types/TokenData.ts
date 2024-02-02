@@ -1,7 +1,6 @@
 
 /**
  * @internal
- * @private
  * A token returned from Tokenizer.tokenize()
  */
 export type TokenData<Key extends string = string> = {

@@ -47,6 +47,10 @@ repoNames=(
 	"uuid-utils"
 )
 
+if [ ! -z "$1" ]; then
+	repoNames=( "$1" )
+fi
+
 echo "Configuring Packages ..."
 
 packagesDir="$repoDir/packages/utils"

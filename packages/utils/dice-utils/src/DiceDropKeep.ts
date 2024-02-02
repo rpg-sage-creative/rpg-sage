@@ -1,16 +1,9 @@
-import type { TokenData, TokenParsers } from "./types/index.js";
-import { strike } from "./markup.js";
+import { numberSorter } from "./internal/numberSorter.js";
+import { rollDataSorter } from "./internal/rollDataSorter.js";
+import { markAsDropped } from "./markup.js";
 import { sum } from "./sum.js";
-import { RollIndexOutput } from "./types/RollIndexOutput.js";
-
-function sortNumbers(a: number, b: number): -1 | 0 | 1 {
-	if (a < b) {
-		return -1;
-	}else if (a > b) {
-		return 1;
-	}
-	return 0;
-}
+import { RollData } from "./types/RollData.js";
+import type { TokenData, TokenParsers } from "./types/index.js";
 
 export enum DiceDropKeepType {
 	None = 0,
@@ -31,7 +24,7 @@ export type DiceDropKeepData = {
 };
 
 /** Tests if a particular roll should be dropped. */
-function isDropped(this: DiceDropKeepData, _roll: RollIndexOutput, index: number, rolls: RollIndexOutput[]): boolean {
+function shouldBeDropped(this: DiceDropKeepData, _roll: RollData, index: number, rolls: RollData[]): boolean {
 	switch(this.type) {
 		case DiceDropKeepType.DropHighest:
 			return index >= (rolls.length - this.value);
@@ -68,19 +61,24 @@ export class DiceDropKeep {
 		return count;
 	}
 
-	/** Modifies all dropped rolls' outputs to be ~striked~ (struck). */
-	public strikeDropped(rolls: RollIndexOutput[]): void {
+	/** Marks all rolls to be dropped as such. */
+	public markDropped(rolls: RollData[]): void {
 		if (!this.isEmpty) {
-			DiceDropKeep.sort(rolls)
-				.filter(isDropped, this.data)
-				.forEach(roll => roll.output = strike(roll.output));
+			const sorted = rolls.slice();
+			sorted.sort(rollDataSorter);
+			sorted.filter(shouldBeDropped, this.data).forEach(roll => {
+				if (!roll.isDropped) {
+					roll.isDropped = true;
+					roll.output = markAsDropped(roll.output);
+				}
+			});
 		}
 	}
 
 	/** Adjusts the sum by removing any dice that were dropped. */
 	public adjustSum(values: number[]): number {
 		if (!this.isEmpty) {
-			const sorted = values.slice().sort(sortNumbers);
+			const sorted = values.slice().sort(numberSorter);
 			switch (this.type) {
 				case DiceDropKeepType.DropHighest:
 					return sum(sorted.slice(0, -this.value));
@@ -127,18 +125,4 @@ export class DiceDropKeep {
 		return undefined;
 	}
 
-	/** Sorts the rolls so that the correct values can be ~striked~ (struck?). */
-	public static sort(rolls: RollIndexOutput[]): RollIndexOutput[] {
-		const sorted = rolls.slice();
-		sorted.sort((a, b) => {
-			// sort lowest to highest first
-			const byRoll = sortNumbers(a.roll, b.roll);
-			if (byRoll !== 0) {
-				return byRoll;
-			}
-			// The second sort of .index ensures that the first of two equal rolls is on the left so that we properly strike them in order.
-			return sortNumbers(a.index, b.index);
-		});
-		return sorted;
-	}
 }

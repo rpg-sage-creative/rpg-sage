@@ -1,6 +1,5 @@
-import { sortPrimitive, type SortResult } from "@rsc-utils/array-utils";
 import { warn } from "@rsc-utils/console-utils";
-import { DiceDropKeep, DiceDropKeepType, rollDice } from "@rsc-utils/dice-utils";
+import { DiceDropKeep, DiceDropKeepType, DiceTest, DiceTestData, DieRollGrade, createSortedRollData, gradeRoll, gradeToEmoji, rollDice, sum } from "@rsc-utils/dice-utils";
 import { TokenParsers, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
 import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
@@ -11,18 +10,14 @@ import {
 	CritMethodType,
 	DiceOutputType,
 	DiceSecretMethodType,
-	DieRollGrade,
 	HasDieCore, IDiceBase,
 	IRollBase,
 	SECRET_REGEX,
 	TDiceLiteral,
 	TSign,
-	TTestData, UNICODE_LEFT_ARROW,
+	UNICODE_LEFT_ARROW,
 	cleanDescription,
-	gradeRoll, gradeToEmoji,
 	mapRollToJson,
-	parseValueTestData,
-	sum,
 	sumDicePartRolls,
 } from "../../common";
 import type {
@@ -31,13 +26,6 @@ import type {
 } from "./types";
 
 //#region html formatting
-
-function bold(value: string): string {
-	return `<b>${value}</b>`;
-}
-function italics(value: string): string {
-	return `<i>${value}</i>`;
-}
 
 function detick(value: string): string {
 	return value.replace(/`/g, "");
@@ -137,7 +125,7 @@ function reduceModToken<T extends DicePartCore>(core: T, token: TokenData): T {
 }
 
 function reduceTestToken<T extends DicePartCore>(core: T, token: TokenData): T {
-	core.test = parseValueTestData(token);
+	core.test = DiceTest.parse(token);
 	return core;
 }
 
@@ -160,55 +148,10 @@ export function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token
 
 //#region dicePartRollToString
 
-type TRollAndIndex = {
-	/** Is the roll/result fixed. */
-	fixed: boolean;
-	/** The original index of the roll (order it was rolled in) */
-	index: number;
-	/** String output to be bolded, italicized, or striked */
-	output: string;
-	/** The roll value */
-	roll: number;
-};
-
-function mapRollAndIndex(sides: number, roll: number, index: number, fixed: boolean): TRollAndIndex {
-	let output = String(roll);
-	if (roll === sides) {
-		output = bold(output);
-	}
-	if (roll === 1) {
-		output = italics(output);
-	}
-	if (fixed) {
-		output += "f";
-	}
-	return { fixed, index, output, roll };
-}
-
-type TMappedAndSortedRolls = { byIndex:TRollAndIndex[]; byRoll:TRollAndIndex[]; length:number };
-
-function sortRollAndIndex(a: TRollAndIndex, b: TRollAndIndex): SortResult {
-	const byRoll = sortPrimitive(a.roll, b.roll);
-	if (byRoll !== 0) {
-		return byRoll;
-	}
-	// The second sort of .index ensures that the first of two equal rolls is on the left so that we properly strike them in order.
-	return sortPrimitive(a.index, b.index);
-}
-
-function mapAndSortRolls({ dice, rolls }: TDicePartRoll): TMappedAndSortedRolls {
-	const { fixedRolls, sides } = dice;
-	const fixedRollsLength = fixedRolls?.length ?? 0;
-	const byIndex = rolls.map((roll, index) => mapRollAndIndex(sides, roll, index, index < fixedRollsLength));
-	const byRoll = byIndex.slice().sort(sortRollAndIndex);
-	return { byIndex:byIndex, byRoll:byRoll, length:rolls.length };
-}
-
 function dicePartRollToString(dicePartRoll: TDicePartRoll): string {
-	const rollsAndIndexes = mapAndSortRolls(dicePartRoll);
-	dicePartRoll.dice.dropKeep.strikeDropped(rollsAndIndexes.byRoll);
-	const outputRollsAndIndexes = dicePartRoll.dice.noSort ? rollsAndIndexes.byIndex : rollsAndIndexes.byRoll;
-	const mappedOutuputRolls = outputRollsAndIndexes.map(rollAndIndex => rollAndIndex.output);
+	const sortedRollData = createSortedRollData(dicePartRoll, true);
+	const outputRollsAndIndexes = dicePartRoll.dice.noSort ? sortedRollData.byIndex : sortedRollData.byRoll;
+	const mappedOutuputRolls = outputRollsAndIndexes.map(rollData => rollData.output);
 	return `[${mappedOutuputRolls.join(", ")}]`;
 }
 
@@ -272,7 +215,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	public get fixedRolls(): OrUndefined<number[]> { return this.core.fixedRolls; }
 	public get sides(): number { return this.core.sides; }
 	public get sign(): OrUndefined<TSign> { return this.core.sign; }
-	public get test(): OrUndefined<TTestData> { return this.core.test; }
+	public get test(): OrUndefined<DiceTestData> { return this.core.test; }
 	//#endregion
 
 	//#region calculated
@@ -460,7 +403,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 	public get baseDicePart(): OrUndefined<U> { return this.diceParts.find(dicePart => dicePart.hasDie); }
 	public get max(): number { return sum(this.diceParts.map(dicePart => dicePart.max)); }
 	public get min(): number { return sum(this.diceParts.map(dicePart => dicePart.min)); }
-	public get test(): OrUndefined<TTestData> { return this.diceParts.find(dicePart => dicePart.hasTest)?.test; }
+	public get test(): OrUndefined<DiceTestData> { return this.diceParts.find(dicePart => dicePart.hasTest)?.test; }
 	//#endregion
 
 	//#region flags
@@ -603,7 +546,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		const gradeEmoji = gradeToEmoji(this.grade),
 			outputEmoji = hideRolls ? ":question:" : gradeEmoji ?? "",
 			fixedOutput = this.dice.hasFixed ? "f" : "",
-			totalString = italics(bold(String(this.total) + fixedOutput)),
+			totalString = `<i><b>${this.total}${fixedOutput}</b></i>`,
 			totalOutput = hideRolls ? `||${totalString}||` : totalString,
 			output = `${outputEmoji} ${totalOutput}`;
 		return cleanWhitespace(output);

@@ -12,7 +12,6 @@ maybe use lt (lowest threshold) and ht (highest threshold) to match dh and dl an
 
 /**
  * @internal
- * @private
  */
 export class DiceThreshold {
 

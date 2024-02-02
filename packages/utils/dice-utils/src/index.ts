@@ -1,4 +1,5 @@
 export * from "./types/index.js";
+export * from "./createSortedRollData.js";
 export * from "./DiceDropKeep.js";
 export * from "./DiceTest.js";
 export * from "./DiceThreshold.js";

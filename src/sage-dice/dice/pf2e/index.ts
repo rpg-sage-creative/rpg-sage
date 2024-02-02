@@ -1,3 +1,4 @@
+import { DiceDropKeepType, DiceTest, DiceTestData, DiceTestType, DieRollGrade, decreaseGrade, gradeRoll, increaseGrade, isGradeSuccess, parseDiceTestTargetValue, parseDiceTestType } from "@rsc-utils/dice-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import { isDefined, type OrNull, type OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
@@ -6,18 +7,9 @@ import {
 	CritMethodType,
 	DiceOutputType,
 	DiceSecretMethodType,
-	DieRollGrade,
 	TDiceLiteral,
 	TSign,
-	TTestData,
-	TestType,
-	cleanDescription,
-	createValueTestData,
-	decreaseGrade,
-	gradeRoll, increaseGrade,
-	isGradeSuccess,
-	parseTestTargetValue,
-	parseTestType
+	cleanDescription
 } from "../../common";
 import {
 	TReduceSignToDropKeep,
@@ -30,7 +22,6 @@ import type {
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
 } from "../base/types";
-import { DiceDropKeepType } from "@rsc-utils/dice-utils";
 
 //#region Tokenizer
 function getParsers(): TokenParsers {
@@ -116,22 +107,22 @@ function parseTargetValue(type: TargetType, value: number): number {
 function parseTargetData(token: TokenData): OrUndefined<TTargetData> {
 	if (token.matches) {
 		const type = parseTargetType(token.matches[0]);
-		let { value, hidden } = parseTestTargetValue(token.matches[1]);
+		let { value, hidden } = parseDiceTestTargetValue(token.matches[1]);
 		value = parseTargetValue(type, value);
 		return { type, value, hidden, raw:token.token };
 	}
 	return undefined;
 }
-function targetDataToTestData(targetData: TTargetData | TTestData): OrUndefined<TTestData> {
+function targetDataToTestData(targetData: TTargetData | DiceTestData): OrUndefined<DiceTestData> {
 	if (targetData) {
-		const alias = (<TTestData>targetData).alias;
+		const alias = (<DiceTestData>targetData).alias;
 		if (alias) {
-			const testType = parseTestType(alias);
+			const testType = parseDiceTestType(alias);
 			if (testType) {
-				return createValueTestData(testType, targetData.value, targetData.hidden);
+				return DiceTest.create(testType, targetData.value, targetData.hidden);
 			}
 		}
-		return createValueTestData(TestType.GreaterThanOrEqual, targetData.value, targetData.hidden, TargetType[targetData.type].toLowerCase());
+		return DiceTest.create(DiceTestType.GreaterThanOrEqual, targetData.value, targetData.hidden, TargetType[targetData.type].toLowerCase());
 	}
 	return undefined;
 }
@@ -306,7 +297,7 @@ interface DicePartCore extends baseDicePartCore {
 	target?: TTargetData;
 }
 type TDicePartCoreArgs = baseTDicePartCoreArgs & {
-	testOrTarget?: TTestData | TTargetData;
+	testOrTarget?: DiceTestData | TTargetData;
 };
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region flags
@@ -333,7 +324,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			noSort: noSort === true,
 			sides: sides ?? 0,
 			sign: sign,
-			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget,
+			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as DiceTestData,
 			target: <TTargetData>testOrTarget
 		});
 	}
@@ -694,7 +685,7 @@ function manipulateCriticalDamage(diceGroupRoll: DiceGroupRoll): void {
 			damageRollCores = diceGroupRoll.damageRoll!.toJSON().rolls,
 			hasFatal = diceGroupRoll.hasFatal,
 			baseDamage = hasFatal ? damageDice.baseDicePart : null,
-			fatalSides = hasFatal && baseDamage ? diceGroupRoll.fatalDie || increaseDieSize(baseDamage.sides) : null;
+			fatalSides = hasFatal && baseDamage ? diceGroupRoll.fatalDie ?? increaseDieSize(baseDamage.sides) : null;
 		if (hasFatal && baseDamage && fatalSides) {
 			const fatalBaseDicePart = DicePart.create({ count: baseDamage.count, sides: fatalSides, description: cleanDescription(`${baseDamage.description} <i>(fatal)</i>`) }),
 				baseDamageIndex = damageDice.diceParts.indexOf(baseDamage);

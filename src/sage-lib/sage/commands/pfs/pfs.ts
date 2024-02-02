@@ -1,7 +1,7 @@
 import { error, warn } from "@rsc-utils/console-utils";
+import { DieRollGrade } from "@rsc-utils/dice-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import { DieRollGrade } from "../../../../sage-dice";
 import { Dice } from "../../../../sage-dice/dice/pf2e";
 import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e";
 import { ColorType } from "../../model/HasColorsCore";

@@ -1,19 +1,10 @@
-import { DiceDropKeepType, rollDice } from "@rsc-utils/dice-utils";
+import { DiceDropKeepType, DiceTest, DiceTestData, DiceTestType, parseDiceTestTargetValue, rollDice } from "@rsc-utils/dice-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import { correctEscapeForEmoji } from "..";
 import { GameType } from "../../../sage-common";
-import {
-	DiceOutputType,
-	DiceSecretMethodType,
-	TDiceLiteral,
-	TTestData,
-	TestType,
-	cleanDescription,
-	createValueTestData,
-	parseTestTargetValue
-} from "../../common";
+import { DiceOutputType, DiceSecretMethodType, TDiceLiteral, cleanDescription } from "../../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
@@ -122,13 +113,13 @@ type TTargetData = { type:TargetType; value:number; hidden:boolean; raw:string; 
 function parseTargetData(token: TokenData): OrUndefined<TTargetData> {
 	if (token.matches) {
 		const type = TargetType.DIF;
-		const { value, hidden } = parseTestTargetValue(token.matches[1]);
+		const { value, hidden } = parseDiceTestTargetValue(token.matches[1]);
 		return { type, value, hidden, raw:token.token };
 	}
 	return undefined;
 }
-function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	return !targetData ? null : createValueTestData(TestType.GreaterThanOrEqual, targetData.value, targetData.hidden, "dif");
+function targetDataToTestData(targetData: TTargetData): OrNull<DiceTestData> {
+	return !targetData ? null : DiceTest.create(DiceTestType.GreaterThanOrEqual, targetData.value, targetData.hidden, "dif");
 }
 //#endregion
 
@@ -273,7 +264,7 @@ type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 	downShift?: number;
 	upShift?: number;
 	specialization?: boolean;
-	testOrTarget?: TTestData | TTargetData;
+	testOrTarget?: DiceTestData | TTargetData;
 	/** ex: d4↑1 */
 	shiftedDesc?: string;
 	skillDie?: TSkillDie;
@@ -352,7 +343,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			sign: sign,
 			skillDie: skillDie ?? `${count ?? ""}d${sides ?? 20}`.replace(/^1d/, "d") as TSkillDie,
 			specialization,
-			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget ?? null,
+			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as DiceTestData ?? null,
 			target: <TTargetData>testOrTarget ?? null,
 			upShift: upShift ?? undefined
 		});
