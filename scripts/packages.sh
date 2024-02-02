@@ -42,6 +42,7 @@ repoNames=(
 	"snowflake-utils"
 	"string-utils"
 	"temperature-utils"
+	"test-utils"
 	"type-utils"
 	"uuid-utils"
 )
