@@ -1,4 +1,4 @@
-import { parseRgb } from "../parseRgb.js";
+import { parseRgbColor } from "../parseRgbColor.js";
 import { alphaToHex, numberToHex } from "./toHex.js";
 
 function rgbaToHexa(red: number, green: number, blue: number, alpha?: number): string {
@@ -16,7 +16,7 @@ export function rgbToHex(rgbaOrRed: string | number, alphaOrGreen?: number, blue
 			? hex.slice(0, 7)
 			: hex;
 	}
-	const rgb = parseRgb(rgbaOrRed);
+	const rgb = parseRgbColor(rgbaOrRed);
 	if (rgb) {
 		const hex = rgbaToHexa(rgb.red, rgb.green, rgb.blue, alphaOrGreen ?? rgb.alpha);
 		return (alphaOrGreen ?? rgb.alpha) === undefined

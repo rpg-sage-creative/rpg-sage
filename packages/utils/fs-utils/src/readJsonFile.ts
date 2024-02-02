@@ -1,4 +1,4 @@
-import { readText } from "./readText";
+import { readText } from "./readText.js";
 
 /**
  * Convenience for: readTextFile(path).then(json => JSON.parse(json));

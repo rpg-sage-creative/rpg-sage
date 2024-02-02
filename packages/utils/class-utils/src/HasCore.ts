@@ -27,12 +27,7 @@ export abstract class HasCore<
 		return this.core.objectType;
 	}
 
-	/** Returns true if the given object is this object's core. */
-	public is(core: TypedCore): boolean;
-
-	/** Returns true if the given object is this object. */
-	public is(hasCore: HasCore<TypedCore, ObjectType>): boolean;
-
+	/** Returns true if the given object is this object or this object's core. */
 	public is(value: TypedCore | HasCore<TypedCore, ObjectType>): boolean {
 		if (!value) {
 			return false;

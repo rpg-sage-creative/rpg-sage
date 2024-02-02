@@ -1,6 +1,6 @@
 import { error } from "@rsc-utils/console-utils";
 import { mkdirSync, rmSync, symlinkSync } from "fs";
-import { toFilePath } from "./internal/toFilePath";
+import { toFilePath } from "./internal/toFilePath.js";
 
 type Options = { mkdir?:boolean; overwrite?:boolean; };
 

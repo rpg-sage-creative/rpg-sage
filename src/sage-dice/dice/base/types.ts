@@ -1,5 +1,6 @@
-import type { DicePart, DicePartRoll, DiceRoll, Dice, DiceGroupRoll, DiceGroup } from ".";
-import type { DieCore, TDropKeepData, TSign, TTestData, CritMethodType, DiceOutputType, DiceSecretMethodType } from "../..";
+import type { DiceDropKeepData } from "@rsc-utils/dice-utils";
+import type { Dice, DiceGroup, DiceGroupRoll, DicePart, DicePartRoll, DiceRoll } from ".";
+import type { CritMethodType, DiceOutputType, DiceSecretMethodType, DieCore, TSign, TTestData } from "../..";
 
 //#region DicePart
 
@@ -12,7 +13,7 @@ interface DicePartCoreBase {
 	description: string;
 
 	/** drop/keep notation info */
-	dropKeep?: TDropKeepData;
+	dropKeep?: DiceDropKeepData;
 
 	/** values to use instead of rolling */
 	fixedRolls?: number[];

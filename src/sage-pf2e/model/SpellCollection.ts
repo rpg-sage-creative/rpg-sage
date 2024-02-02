@@ -10,7 +10,7 @@ import { Spell } from "./Spell";
 import type { Source } from "./base/Source";
 
 
-function uniqueClean<T>(array: Optional<T>[], sorter: Sorter = sortPrimitive): T[] {
+function uniqueClean<T>(array: Optional<T>[], sorter: Sorter<T> = sortPrimitive as Sorter<T>): T[] {
 	return array.filter(toUniqueDefined).sort(sorter);
 }
 function flatUniqueClean<T>(array: T[][]): T[] {
@@ -53,9 +53,9 @@ export class SpellCollection extends HasCore<SpellCollectionCore> {
 	public get heightenedSpells(): HeightenedSpell[] { return this.core.spells.map(spell => HeightenedSpell.find(spell)!); }
 	public get names(): string[] { return uniqueClean(this.spells.map(spell => spell.name)); }
 	public get levels(): number[] { return uniqueClean(this.spells.map(spell => spell.level)); }
-	public get schools(): ArcaneSchool[] { return uniqueClean(this.spells.map(spell => spell.arcaneSchool), sortComparable); }
-	public get spells(): Spell[] { return uniqueClean(this.heightenedSpells.map(spell => spell.spell), sortComparable); }
-	public get sources(): Source[] { return uniqueClean(this.spells.map(spell => spell.source), sortComparable); }
+	public get schools(): ArcaneSchool[] { return uniqueClean(this.spells.map(spell => spell.arcaneSchool), sortComparable as Sorter<ArcaneSchool>); }
+	public get spells(): Spell[] { return uniqueClean(this.heightenedSpells.map(spell => spell.spell), sortComparable as Sorter<Spell>); }
+	public get sources(): Source[] { return uniqueClean(this.spells.map(spell => spell.source), sortComparable as Sorter<Source>); }
 	public get traditions(): TMagicTradition[] { return flatUniqueClean<TMagicTradition>(this.spells.map(spell => spell.traditions)); }
 
 	/**************************************************************************************************************************/

@@ -1,5 +1,5 @@
-import { parseJsonDb } from "./internal/parseJsonDb";
-import { readText } from "./readText";
+import { parseJsonDb } from "./internal/parseJsonDb.js";
+import { readText } from "./readText.js";
 
 /**
  * Designed for reading a Foundry .db file that is a list of json items on each line, but not an array.

@@ -1,4 +1,4 @@
-import { listFiles } from "./listFiles";
+import { listFiles } from "./listFiles.js";
 
 /**
  * Lists all the file paths that exist in the given path and *pass* the filter given.

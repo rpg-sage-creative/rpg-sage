@@ -3,6 +3,9 @@ import { isPrimitive } from "@rsc-utils/type-utils";
 type UncacheOptions = {
 	/** set all keys to null */
 	nullify?: boolean;
+
+	/** set all keys to undefined using delete */
+	undefine?: boolean;
 };
 
 /** @private attempt to call the named function on the given object. */
@@ -42,6 +45,9 @@ export function uncache(object: any, options?: UncacheOptions): null {
 		attempt(value, "destroy");
 		if (options?.nullify) {
 			object[key] = null;
+		}
+		if (options?.undefine) {
+			delete object[key];
 		}
 	});
 

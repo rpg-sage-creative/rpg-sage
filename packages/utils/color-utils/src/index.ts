@@ -4,5 +4,5 @@ export * from "./intializeNamedColors.js";
 export * from "./isHex.js";
 export * from "./isRgb.js";
 export * from "./namedColors.js";
-export * from "./parseHex.js";
-export * from "./parseRgb.js";
+export * from "./parseHexColor.js";
+export * from "./parseRgbColor.js";

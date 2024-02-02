@@ -1,6 +1,6 @@
 import type { Matcher } from "@rsc-utils/type-utils";
-import { HasCore, type Core } from "./HasCore";
-import { getIdMatcher } from "./getIdMatcher";
+import { HasCore, type Core } from "./HasCore.js";
+import { getIdMatcher } from "./getIdMatcher.js";
 
 //#region types
 
@@ -39,13 +39,14 @@ export abstract class HasIdCore<
 		return this._idMatcher ?? (this._idMatcher = getIdMatcher(this.core.id));
 	}
 
-	/** Returns true if the given id matches this object's id. */
-	public equals(id: IdType): boolean;
-	/** Returns true if the given string matches this object's id. */
-	public equals(id: string): boolean;
-	/** Returns true if the given Matcher represents this object's id. */
-	public equals(other: Matcher): boolean;
-	public equals(other: string | Matcher): boolean {
+	/** Returns true if the given object represents this object, it's core, or it's id. */
+	public equals(other: string | IdType | Matcher | HasIdCore<any>): boolean {
+		if (!other) {
+			return false;
+		}
+		if (other instanceof HasIdCore) {
+			return this.is(other as HasIdCore<any, any>);
+		}
 		return this.idMatcher.matches(other);
 	}
 

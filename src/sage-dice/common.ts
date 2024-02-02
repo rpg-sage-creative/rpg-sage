@@ -1,5 +1,4 @@
-import { sortPrimitive } from "@rsc-utils/array-utils";
-import { HasIdCore, IdCore } from "@rsc-utils/class-utils";
+import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { cleanWhitespace, type TokenData } from "@rsc-utils/string-utils";
 import { GameType } from "../sage-common";
@@ -77,25 +76,25 @@ export function sum(values: number[]): number {
 	return values.reduce((total, value) => total + value, 0);
 }
 
-export function sumDropKeep(values: number[], dropKeep?: TDropKeepData): number {
-	if (!dropKeep) {
-		return sum(values);
-	}
-	const sorted = values.slice().sort(sortPrimitive);
-	switch (dropKeep.type) {
-		case DropKeepType.DropHighest:
-			return sum(sorted.slice(0, -dropKeep.value));
-		case DropKeepType.DropLowest:
-			return sum(sorted.slice(dropKeep.value));
-		case DropKeepType.KeepHighest:
-			return sum(sorted.slice(-dropKeep.value));
-		case DropKeepType.KeepLowest:
-			return sum(sorted.slice(0, dropKeep.value));
-		default:
-			warn(`Invalid dropKeep.type = ${dropKeep.type} (${DropKeepType[dropKeep.type]})`);
-			return sum(values);
-	}
-}
+// export function sumDropKeep(values: number[], dropKeep?: TDropKeepData): number {
+// 	if (!dropKeep) {
+// 		return sum(values);
+// 	}
+// 	const sorted = values.slice().sort(sortPrimitive);
+// 	switch (dropKeep.type) {
+// 		case DropKeepType.DropHighest:
+// 			return sum(sorted.slice(0, -dropKeep.value));
+// 		case DropKeepType.DropLowest:
+// 			return sum(sorted.slice(dropKeep.value));
+// 		case DropKeepType.KeepHighest:
+// 			return sum(sorted.slice(-dropKeep.value));
+// 		case DropKeepType.KeepLowest:
+// 			return sum(sorted.slice(0, dropKeep.value));
+// 		default:
+// 			warn(`Invalid dropKeep.type = ${dropKeep.type} (${DropKeepType[dropKeep.type]})`);
+// 			return sum(values);
+// 	}
+// }
 
 type THasSignAndTotal = { sign?:TSign; total:number; };
 export function sumDicePartRolls(dicePartRolls: THasSignAndTotal[]): number {
@@ -116,43 +115,6 @@ export function toMod(mod: number, spaced = false): string {
 	return `${mod < 0 ? "-" : "+"}${spaced ? " " : ""}${Math.abs(mod)}`;
 }
 
-//#endregion
-
-//#region DropKeep
-export enum DropKeepType { None = 0, DropLowest = 1, DropHighest = 2, KeepLowest = 3, KeepHighest = 4 }
-export function parseDropKeepType(dropKeepType: string): DropKeepType {
-	const cleanedDropKeepTypeString = dropKeepType.toLowerCase().slice(0, 2);
-	switch(cleanedDropKeepTypeString) {
-		case "dl": return DropKeepType.DropLowest;
-		case "dh": return DropKeepType.DropHighest;
-		case "kl": return DropKeepType.KeepLowest;
-		case "kh": return DropKeepType.KeepHighest;
-		default: return DropKeepType.None;
-	}
-}
-
-const DropKeepTypeAliases = [undefined, "dl", "dh", "kl", "kh" ];
-export type TDropKeepData = { type:DropKeepType; value:number; alias?:string; };
-export function createValueDropKeepData(type: DropKeepType, value: number, alias = DropKeepTypeAliases[type]): TDropKeepData {
-	return { type:type, value:value, alias:alias };
-}
-export function parseValueDropKeepData(token: TokenData): TDropKeepData | undefined {
-	if (token.matches) {
-		const type = parseDropKeepType(token.matches[0]);
-		const value = +token.matches[1] || 1;
-		return createValueDropKeepData(type, value);
-	}
-	return undefined;
-}
-export function dropKeepToString(dropKeep: TDropKeepData): string {
-	if (dropKeep) {
-		if (DropKeepTypeAliases.includes(dropKeep.alias)) {
-			return `${dropKeep.alias} ${dropKeep.value}`;
-		}
-		return `(${dropKeep.alias})`;
-	}
-	return ``;
-}
 //#endregion
 
 //#region Tests

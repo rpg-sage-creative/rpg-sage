@@ -1,3 +1,4 @@
+import { colorPrefix } from "./colors/colorPrefix.js";
 import { getHandlers } from "./handlers/getHandlers.js";
 import type { LogLevelName } from "./logLevels/LogLevel.js";
 import { isLogLevelEnabled } from "./logLevels/isLogLevelEnabled.js";
@@ -27,7 +28,7 @@ export function getLogger(): Logger {
 			}
 
 			// we only want logLevel:: if we have args; otherwise we want a blank line ...
-			const outArgs = args.length ? [`${logLevel}::`].concat(args) : [``];
+			const outArgs = args.length ? [colorPrefix(logLevel)].concat(args) : [``];
 
 			// send updated outArgs to the proper logger function
 			if (logLevel === "error") {

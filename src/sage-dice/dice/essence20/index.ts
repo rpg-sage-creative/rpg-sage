@@ -1,4 +1,4 @@
-import { rollDice } from "@rsc-utils/dice-utils";
+import { DiceDropKeepType, rollDice } from "@rsc-utils/dice-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
@@ -6,7 +6,7 @@ import { correctEscapeForEmoji } from "..";
 import { GameType } from "../../../sage-common";
 import {
 	DiceOutputType,
-	DiceSecretMethodType, DropKeepType,
+	DiceSecretMethodType,
 	TDiceLiteral,
 	TTestData,
 	TestType,
@@ -73,9 +73,9 @@ function getParsers(): TokenParsers {
 
 function applyEdgeSnagSpecShift<T extends DicePartCore>({ core, hasEdge, hasSnag, hasSpecialization, upShift, downShift }: { core: T, hasEdge: boolean, hasSnag: boolean, hasSpecialization: boolean, upShift: number, downShift: number }): T {
 	if (hasEdge && !hasSnag) {
-		core.dropKeep = { type:DropKeepType.KeepHighest, value:1 };
+		core.dropKeep = { type:DiceDropKeepType.KeepHighest, value:1 };
 	}else if (!hasEdge && hasSnag) {
-		core.dropKeep = { type:DropKeepType.KeepLowest, value:1 };
+		core.dropKeep = { type:DiceDropKeepType.KeepLowest, value:1 };
 	}
 	if (hasSpecialization) {
 		core.sign = "+";
@@ -549,7 +549,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 			};
 			if (skillDicePart.hasDropKeep) {
 				d20DicePartCore.count = 2;
-				d20DicePartCore.dropKeep = skillDicePart.dropKeep;
+				d20DicePartCore.dropKeep = skillDicePart.dropKeep.toJSON();
 				delete skillDicePart.toJSON().dropKeep;
 			}
 			const d20DicePart = new DicePart(d20DicePartCore);

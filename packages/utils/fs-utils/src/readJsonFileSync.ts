@@ -1,4 +1,4 @@
-import { readTextSync } from "./readTextSync";
+import { readTextSync } from "./readTextSync.js";
 
 /**
  * Convenience for: JSON.parse(readTextFile(path));

@@ -1,4 +1,4 @@
-import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
+import type { TokenData, TokenParsers } from "./types/index.js";
 import type { DiceRoll } from "./types/DiceRoll.js";
 
 export enum DiceTestType {

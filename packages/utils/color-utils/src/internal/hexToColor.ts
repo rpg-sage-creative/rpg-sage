@@ -1,13 +1,12 @@
-import { round } from "@rsc-utils/number-utils";
 import { ColorData } from "../ColorData.js";
 import { getNamedColor } from "../namedColors.js";
-import { parseHex } from "../parseHex.js";
+import { parseHexColor } from "../parseHexColor.js";
 import { hexToAlpha } from "./hexToAlpha.js";
 import { alphaToHex } from "./toHex.js";
 
 /** Converts a hex/hexa value (with optional new alpha) to a Color object */
 export function hexToColor(value: string, newAlpha?: number): ColorData | null {
-	let hexa = parseHex(value);
+	let hexa = parseHexColor(value);
 	if (!hexa) {
 		return null;
 	}
@@ -22,7 +21,7 @@ export function hexToColor(value: string, newAlpha?: number): ColorData | null {
 		return color.data;
 	}
 
-	const alpha = round(hexToAlpha(hexa.slice(-2)), 3);
+	const alpha = hexToAlpha(hexa.slice(-2));
 
 	const red = parseInt(hexa.slice(1, 3), 16),
 		green = parseInt(hexa.slice(3, 5), 16),

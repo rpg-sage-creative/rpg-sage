@@ -1,8 +1,16 @@
-import { sortPrimitive } from "@rsc-utils/array-utils";
-import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
-import { strike } from "./markup";
-import { sum } from "./sum";
-import { RollIndexOutput } from "./types/RollIndexOutput";
+import type { TokenData, TokenParsers } from "./types/index.js";
+import { strike } from "./markup.js";
+import { sum } from "./sum.js";
+import { RollIndexOutput } from "./types/RollIndexOutput.js";
+
+function sortNumbers(a: number, b: number): -1 | 0 | 1 {
+	if (a < b) {
+		return -1;
+	}else if (a > b) {
+		return 1;
+	}
+	return 0;
+}
 
 export enum DiceDropKeepType {
 	None = 0,
@@ -72,7 +80,7 @@ export class DiceDropKeep {
 	/** Adjusts the sum by removing any dice that were dropped. */
 	public adjustSum(values: number[]): number {
 		if (!this.isEmpty) {
-			const sorted = values.slice().sort(sortPrimitive);
+			const sorted = values.slice().sort(sortNumbers);
 			switch (this.type) {
 				case DiceDropKeepType.DropHighest:
 					return sum(sorted.slice(0, -this.value));
@@ -93,7 +101,7 @@ export class DiceDropKeep {
 	}
 
 	/** Generates string output for the given DropKeepData */
-	public toString(leftPad?: string, rightPad?: string) {
+	public toString(leftPad = "", rightPad = ""): string {
 		if (this.isEmpty) {
 			return ``;
 		}
@@ -109,8 +117,8 @@ export class DiceDropKeep {
 	}
 
 	/** Parses the given TokenData into DropKeepData */
-	public static parse(token: TokenData): DiceDropKeepData | undefined {
-		if (token.key === "dropKeep") {
+	public static parse(token?: TokenData | null): DiceDropKeepData | undefined {
+		if (token?.key === "dropKeep") {
 			const alias = token.matches[0].toLowerCase().slice(0, 2);
 			const type = [null, "dl", "dh", "kl", "kh"].indexOf(alias);
 			const value = +token.matches[1] || 1;
@@ -119,17 +127,17 @@ export class DiceDropKeep {
 		return undefined;
 	}
 
-	/** Sorts the rolls so that the correct values can be ~striked~ (struck). */
+	/** Sorts the rolls so that the correct values can be ~striked~ (struck?). */
 	public static sort(rolls: RollIndexOutput[]): RollIndexOutput[] {
 		const sorted = rolls.slice();
 		sorted.sort((a, b) => {
 			// sort lowest to highest first
-			const byRoll = sortPrimitive(a.roll, b.roll);
+			const byRoll = sortNumbers(a.roll, b.roll);
 			if (byRoll !== 0) {
 				return byRoll;
 			}
 			// The second sort of .index ensures that the first of two equal rolls is on the left so that we properly strike them in order.
-			return sortPrimitive(a.index, b.index);
+			return sortNumbers(a.index, b.index);
 		});
 		return sorted;
 	}

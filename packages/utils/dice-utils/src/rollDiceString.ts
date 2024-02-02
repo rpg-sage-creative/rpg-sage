@@ -1,4 +1,4 @@
-import { SimpleDice } from "./SimpleDice.js";
+import { SimpleDice } from "./types/SimpleDice.js";
 import { rollDie } from "./rollDie.js";
 
 /**

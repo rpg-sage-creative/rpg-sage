@@ -1,8 +1,8 @@
 import { sortPrimitive, type SortResult } from "@rsc-utils/array-utils";
 import { warn } from "@rsc-utils/console-utils";
-import { rollDice } from "@rsc-utils/dice-utils";
+import { DiceDropKeep, DiceDropKeepType, rollDice } from "@rsc-utils/dice-utils";
 import { TokenParsers, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
-import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
 import { correctEscapeForEmoji } from "..";
@@ -12,23 +12,18 @@ import {
 	DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade,
-	DropKeepType,
 	HasDieCore, IDiceBase,
 	IRollBase,
 	SECRET_REGEX,
 	TDiceLiteral,
-	TDropKeepData,
 	TSign,
 	TTestData, UNICODE_LEFT_ARROW,
 	cleanDescription,
-	dropKeepToString,
 	gradeRoll, gradeToEmoji,
 	mapRollToJson,
-	parseValueDropKeepData,
 	parseValueTestData,
 	sum,
 	sumDicePartRolls,
-	sumDropKeep
 } from "../../common";
 import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
@@ -42,9 +37,6 @@ function bold(value: string): string {
 }
 function italics(value: string): string {
 	return `<i>${value}</i>`;
-}
-function strike(value: string): string {
-	return `<s>${value}</s>`;
 }
 
 function detick(value: string): string {
@@ -75,7 +67,7 @@ function removeDesc(description: string, desc: string): string {
 export function getParsers(): TokenParsers {
 	return {
 		dice: /([-+*/])?(?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?(?:\s*(\d+)\s*|\b)d\s*(\d+)/i,
-		dropKeep: /(dl|dh|kl|kh)\s*(\d+)?/i,
+		...DiceDropKeep.getParsers(),
 		noSort: /(ns)/i,
 		mod: /([-+*/])\s*(\d+)(?!d\d)/i,
 		quotes: /`[^`]+`|“[^”]+”|„[^“]+“|„[^”]+”|"[^"]+"/,
@@ -93,7 +85,7 @@ function reduceDescriptionToken<T extends DicePartCore>(core: T, token: TokenDat
 
 export type TReduceSignToDropKeep = {
 	sign: TSign;
-	type: DropKeepType;
+	type: DiceDropKeepType;
 	value: number;
 	alias: string;
 	test: (core: DicePartCore, token: TokenData) => boolean;
@@ -122,7 +114,7 @@ function reduceDiceToken<T extends DicePartCore>(core: T, token: TokenData, redu
 
 function reduceDropKeepToken<T extends DicePartCore>(core: T, token: TokenData, lastToken: TokenData): T {
 	if (["dice", "noSort"].includes(lastToken?.key)) {
-		core.dropKeep = parseValueDropKeepData(token);
+		core.dropKeep = DiceDropKeep.parse(token);
 		return core;
 	}
 	return reduceDescriptionToken(core, token);
@@ -212,27 +204,9 @@ function mapAndSortRolls({ dice, rolls }: TDicePartRoll): TMappedAndSortedRolls 
 	return { byIndex:byIndex, byRoll:byRoll, length:rolls.length };
 }
 
-function shouldStrikeRoll(dropKeep: TDropKeepData, rollCount: number, sortedIndex: number): boolean {
-	return dropKeep.type === DropKeepType.DropHighest && sortedIndex >= (rollCount - dropKeep.value)
-		|| dropKeep.type === DropKeepType.DropLowest && sortedIndex < dropKeep.value
-		|| dropKeep.type === DropKeepType.KeepHighest && sortedIndex < (rollCount - dropKeep.value)
-		|| dropKeep.type === DropKeepType.KeepLowest && sortedIndex >= dropKeep.value;
-}
-
-function strikeDroppedRolls(dropKeep: Optional<TDropKeepData>, sortedRolls: TRollAndIndex[]): void {
-	if (dropKeep) {
-		const rollCount = sortedRolls.length;
-		sortedRolls.forEach((rollAndIndex, sortedIndex) => {
-			if (shouldStrikeRoll(dropKeep, rollCount, sortedIndex)) {
-				rollAndIndex.output = strike(rollAndIndex.output);
-			}
-		});
-	}
-}
-
 function dicePartRollToString(dicePartRoll: TDicePartRoll): string {
 	const rollsAndIndexes = mapAndSortRolls(dicePartRoll);
-	strikeDroppedRolls(dicePartRoll.dice.dropKeep, rollsAndIndexes.byRoll);
+	dicePartRoll.dice.dropKeep.strikeDropped(rollsAndIndexes.byRoll);
 	const outputRollsAndIndexes = dicePartRoll.dice.noSort ? rollsAndIndexes.byIndex : rollsAndIndexes.byRoll;
 	const mappedOutuputRolls = outputRollsAndIndexes.map(rollAndIndex => rollAndIndex.output);
 	return `[${mappedOutuputRolls.join(", ")}]`;
@@ -289,7 +263,10 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	//#region from this.core
 	public get count(): number { return this.core.count; }
 	public get description(): string { return this.core.description; }
-	public get dropKeep(): OrUndefined<TDropKeepData> { return this.core.dropKeep; }
+
+	private _dropKeep?: DiceDropKeep;
+	public get dropKeep(): DiceDropKeep { return this._dropKeep ?? (this._dropKeep = new DiceDropKeep(this.core.dropKeep)); }
+
 	public get modifier(): number { return this.core.modifier; }
 	public get noSort(): boolean { return this.core.noSort; }
 	public get fixedRolls(): OrUndefined<number[]> { return this.core.fixedRolls; }
@@ -299,20 +276,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	//#endregion
 
 	//#region calculated
-	public get adjustedCount(): number {
-		const dropKeep = this.dropKeep;
-		if (dropKeep) {
-			switch(dropKeep.type) {
-				case DropKeepType.DropHighest:
-				case DropKeepType.DropLowest:
-					return this.count - dropKeep.value;
-				case DropKeepType.KeepHighest:
-				case DropKeepType.KeepLowest:
-					return dropKeep.value;
-			}
-		}
-		return this.count;
-	}
+	public get adjustedCount(): number { return this.dropKeep.adjustCount(this.count); }
 	private get biggest(): number { return this.adjustedCount * this.sides + this.modifier; }
 	private get smallest(): number { return this.adjustedCount + this.modifier; }
 	public get max(): number { return this.sign === "-" ? -1 * this.smallest : this.biggest; }
@@ -322,7 +286,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	//#region flags
 	public get hasDescription(): boolean { return this.core.description.length > 0; }
 	public get hasDie(): boolean { return this.count > 0 && this.sides > 0; }
-	public get hasDropKeep(): boolean { return this.dropKeep !== null && this.dropKeep !== undefined; }
+	public get hasDropKeep(): boolean { return !this.dropKeep.isEmpty; }
 	public get hasTest(): boolean { return this.test !== null && this.test !== undefined; }
 	public get isEmpty(): boolean { return this.count === 0 && this.sides === 0 && this.modifier === 0; }
 	//#endregion
@@ -351,7 +315,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	}
 	public toString(index?: number, outputType?: DiceOutputType): string {
 		const die = this.count && this.sides ? `${this.count}d${this.sides}` : ``,
-			dropKeep = this.dropKeep ? ` ${dropKeepToString(this.dropKeep)}` : ``,
+			dropKeep = this.dropKeep.toString(),
 			mod = this.modifier ? ` ${this.modifier}` : ``,
 			valueTest = this.hasTest ? ` ${this.test!.alias} ${this.test!.hidden ? "??" : this.test!.value}` : ``,
 			withoutDescription = die + dropKeep + mod + valueTest;
@@ -408,8 +372,10 @@ export class DicePartRoll<T extends DicePartRollCore, U extends TDicePart> exten
 
 	//#region calculated
 	public get total(): number {
+		const mod = this.dice.modifier;
+		const adjustedSum = this.dice.dropKeep.adjustSum(this.rolls);
 		const mult = this.sign === "-" ? -1 : 1;
-		return mult * (this.dice.modifier + sumDropKeep(this.rolls, this.dice.dropKeep));
+		return mult * (mod + adjustedSum);
 	}
 	//#endregion
 

@@ -6,7 +6,6 @@ import {
 	CritMethodType, DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade,
-	DropKeepType,
 	TDiceLiteral,
 	TSign,
 	TTestData,
@@ -28,6 +27,7 @@ import type {
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
 } from "../base/types";
+import { DiceDropKeepType } from "@rsc-utils/dice-utils";
 
 
 //#region Tokenizer
@@ -47,8 +47,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 	const reduceSignToDropKeepData: TReduceSignToDropKeep[] = [];
 	if (token.key === "dice") {
 		reduceSignToDropKeepData.push(
-			{ sign:"+" as TSign, type:DropKeepType.KeepHighest, value:1, alias:ADVANTAGE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "+" },
-			{ sign:"-" as TSign, type:DropKeepType.KeepLowest, value:1, alias:DISADVANTAGE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "-" }
+			{ sign:"+" as TSign, type:DiceDropKeepType.KeepHighest, value:1, alias:ADVANTAGE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "+" },
+			{ sign:"-" as TSign, type:DiceDropKeepType.KeepLowest, value:1, alias:DISADVANTAGE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "-" }
 		);
 	}
 	return baseReduceTokenToDicePartCore(core, token, index, tokens, reduceSignToDropKeepData);
@@ -148,10 +148,10 @@ type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region flags
 	public get hasAdvantage(): boolean {
-		return this.dropKeep?.alias === ADVANTAGE;
+		return this.dropKeep.alias === ADVANTAGE;
 	}
 	public get hasDisadvantage(): boolean {
-		return this.dropKeep?.alias === DISADVANTAGE;
+		return this.dropKeep.alias === DISADVANTAGE;
 	}
 	//#endregion
 
