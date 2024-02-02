@@ -18,6 +18,7 @@
 	],
 	"references": [
 		{ "path": "./packages/utils/console-utils" },
+		{ "path": "./packages/utils/test-utils" },
 		{ "path": "./packages/utils/date-utils" },
 		{ "path": "./packages/utils/enum-utils" },
 		{ "path": "./packages/utils/math-utils" },
