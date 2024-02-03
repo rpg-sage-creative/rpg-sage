@@ -119,7 +119,7 @@ function parseTargetData(token: TokenData): OrUndefined<TTargetData> {
 	return undefined;
 }
 function targetDataToTestData(targetData: TTargetData): OrNull<DiceTestData> {
-	return !targetData ? null : DiceTest.create(DiceTestType.GreaterThanOrEqual, targetData.value, targetData.hidden, "dif");
+	return !targetData ? null : DiceTest.createData(DiceTestType.GreaterThanOrEqual, targetData.value, targetData.hidden, "dif");
 }
 //#endregion
 

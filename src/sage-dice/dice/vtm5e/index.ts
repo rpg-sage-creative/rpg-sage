@@ -76,7 +76,7 @@ enum TargetType { None = 0, VS = 1 }
 type TTargetData = { type:TargetType; value:number; hidden:boolean; };
 
 function targetDataToTestData(targetData: TTargetData): OrNull<DiceTestData> {
-	return !targetData ? null : DiceTest.create(DiceTestType.GreaterThanOrEqual, targetData.value, targetData.hidden, "vs");
+	return !targetData ? null : DiceTest.createData(DiceTestType.GreaterThanOrEqual, targetData.value, targetData.hidden, "vs");
 }
 
 //#endregion

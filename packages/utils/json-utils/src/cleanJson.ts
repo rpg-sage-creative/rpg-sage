@@ -4,10 +4,12 @@ import { isPrimitive } from "@rsc-utils/type-utils";
 
 /** Determines how the JSON is cleaned. */
 export type JsonCleanRules = {
+	deleteBlankString?: boolean;
 	deleteEmptyArray?: boolean;
 	deleteEmptyObject?: boolean;
 	deleteEmptyString?: boolean;
 	deleteFalse?: boolean;
+	deleteNaN?: boolean;
 	deleteNull?: boolean;
 	deleteUndefined?: boolean;
 	deleteZero?: boolean;
@@ -22,12 +24,15 @@ type TObject = { [key: string]: any; };
 //#region helpers
 
 /** Checks the rules to see if the value given can have its key deleted. */
-function canDeleteValueKey(value: boolean | number | string, rules: JsonCleanRules): boolean {
-	return value === undefined && rules.deleteUndefined === true
-		|| value === null && rules.deleteNull === true
-		|| value === "" && rules.deleteEmptyString === true
-		|| value === false && rules.deleteFalse === true
-		|| value === 0 && rules.deleteZero === true;
+function canDeleteValueKey(value: boolean | number | string, rules: JsonCleanRules | true): boolean {
+	return value === undefined && (rules === true || rules.deleteUndefined === true)
+		|| value === null && (rules === true || rules.deleteNull === true)
+		|| value === "" && (rules === true || rules.deleteEmptyString === true)
+		|| value === false && (rules === true || rules.deleteFalse === true)
+		|| value === 0 && (rules === true || rules.deleteZero === true)
+		|| isNaN(value as number) && (rules === true || rules.deleteNaN === true)
+		|| (typeof(value) === "string" && value.trim() === "") && (rules === true || rules.deleteBlankString === true)
+		;
 }
 
 //#endregion
@@ -44,14 +49,12 @@ export function cleanJson<T>(value: T, rulesOrScrub?: JsonCleanRules | "scrub"):
 		return value;
 	}
 
-	const rules = rulesOrScrub === "scrub"
-		? { deleteFalse: true, deleteNull: true, deleteEmptyArray: true, deleteEmptyObject: true, deleteEmptyString: true, deleteUndefined: true, deleteZero: true, recursive: true }
-		: rulesOrScrub ?? { deleteUndefined: true };
+	const rules = rulesOrScrub === "scrub" ? true : rulesOrScrub ?? { deleteUndefined: true };
 
 	// If it is an array, we only clean it if the rules include recursion
 	if (Array.isArray(value)) {
-		if (value.length && rules.recursive) {
-			value.forEach(v => cleanJson(v, rules));
+		if (value.length && (rules === true || rules.recursive)) {
+			value.forEach(v => cleanJson(v, rulesOrScrub as JsonCleanRules));
 		}
 		return value;
 	}
@@ -61,7 +64,7 @@ export function cleanJson<T>(value: T, rulesOrScrub?: JsonCleanRules | "scrub"):
 }
 
 /** This is where the magic happens. */
-function cleanObject(object: TObject, rules: JsonCleanRules): void {
+function cleanObject(object: TObject, rules: JsonCleanRules | true): void {
 	const keys = Object.keys(object);
 	for (const key of keys) {
 		const value = object[key];
@@ -70,20 +73,20 @@ function cleanObject(object: TObject, rules: JsonCleanRules): void {
 
 		}else if (Array.isArray(value)) {
 			if (value.length) {
-				if (rules.recursive) {
-					value.forEach(v => cleanJson(v, rules));
+				if (rules === true || rules.recursive) {
+					value.forEach(v => cleanJson(v, rules as JsonCleanRules));
 				}
-			}else if (rules.deleteEmptyArray) {
+			}else if (rules === true || rules.deleteEmptyArray) {
 				delete object[key];
 			}
 
 		}else if (String(value) === "[object Object]") {
-			if (rules.recursive) {
-				cleanJson(value, rules);
+			if (rules === true || rules.recursive) {
+				cleanJson(value, rules as JsonCleanRules);
 			}
 
 			// We have cleaned the object, check to see if it is now empty
-			if (rules.deleteEmptyObject && Object.keys(value).length === 0) {
+			if ((rules === true || rules.deleteEmptyObject) && Object.keys(value).length === 0) {
 				delete object[key];
 			}
 		}

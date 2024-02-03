@@ -88,21 +88,26 @@ export class DiceTest {
 		return { test:/(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i };
 	}
 
-	/** Parses the given TokenData into DiceTestData */
-	public static parse(token: TokenData): DiceTestData | undefined {
-		if (token.key === "test") {
-			const type = parseDiceTestType(token.matches[0]);
-			const { value, hidden } = parseDiceTestTargetValue(token.matches[1]);
-			return this.create(type, value, hidden);
-		}
-		return undefined;
-	}
-
-	public static create(type: DiceTestType, value: number, hidden: boolean, alias?: string): DiceTestData {
+	public static createData(type: DiceTestType, value: number, hidden: boolean, alias?: string): DiceTestData {
 		if (!alias) {
 			alias = [undefined, "=", ">", ">=", "<", "<="][type];
 		}
 		return { type, value, hidden, alias };
+	}
+
+	/** Parses the given TokenData into DiceTestData */
+	public static parseData(token: TokenData): DiceTestData | undefined {
+		if (token.key === "test") {
+			const type = parseDiceTestType(token.matches[0]);
+			const { value, hidden } = parseDiceTestTargetValue(token.matches[1]);
+			return DiceTest.createData(type, value, hidden);
+		}
+		return undefined;
+	}
+
+	/** Parses the given TokenData into DiceTestData */
+	public static from(token: TokenData): DiceTest {
+		return new DiceTest(DiceTest.parseData(token));
 	}
 
 	/** Tests the roll for pass/fail. If isEmpty, undefined is returned instead. */

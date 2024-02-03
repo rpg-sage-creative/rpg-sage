@@ -41,7 +41,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 enum TargetType { None = 0, VS = 1 }
 type TTargetData = { type:TargetType; value:number; hidden:boolean; };
 function targetDataToTestData(targetData: TTargetData): OrNull<DiceTestData> {
-	return !targetData ? null : DiceTest.create(DiceTestType.GreaterThan, targetData.value, targetData.hidden, "vs");
+	return !targetData ? null : DiceTest.createData(DiceTestType.GreaterThan, targetData.value, targetData.hidden, "vs");
 }
 //#endregion
 

@@ -115,7 +115,7 @@ export class DiceDropKeep {
 	}
 
 	/** Parses the given TokenData into DropKeepData */
-	public static parse(token?: TokenData | null): DiceDropKeepData | undefined {
+	public static parseData(token?: TokenData | null): DiceDropKeepData | undefined {
 		if (token?.key === "dropKeep") {
 			const alias = token.matches[0].toLowerCase().slice(0, 2);
 			const type = [null, "dl", "dh", "kl", "kh"].indexOf(alias);
@@ -125,4 +125,7 @@ export class DiceDropKeep {
 		return undefined;
 	}
 
+	public static from(token?: TokenData | null): DiceDropKeep {
+		return new DiceDropKeep(DiceDropKeep.parseData(token));
+	}
 }

@@ -73,10 +73,10 @@ function targetDataToTestData(targetData: TTargetData | DiceTestData): OrUndefin
 		if (alias) {
 			const testType = parseDiceTestType(alias);
 			if (testType) {
-				return DiceTest.create(testType, targetData.value, targetData.hidden);
+				return DiceTest.createData(testType, targetData.value, targetData.hidden);
 			}
 		}
-		return DiceTest.create(DiceTestType.GreaterThanOrEqual, targetData.value, targetData.hidden, TargetType[targetData.type].toLowerCase());
+		return DiceTest.createData(DiceTestType.GreaterThanOrEqual, targetData.value, targetData.hidden, TargetType[targetData.type].toLowerCase());
 	}
 	return undefined;
 }

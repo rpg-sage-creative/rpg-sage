@@ -102,7 +102,7 @@ function reduceDiceToken<T extends DicePartCore>(core: T, token: TokenData, redu
 
 function reduceDropKeepToken<T extends DicePartCore>(core: T, token: TokenData, lastToken: TokenData): T {
 	if (["dice", "noSort"].includes(lastToken?.key)) {
-		core.dropKeep = DiceDropKeep.parse(token);
+		core.dropKeep = DiceDropKeep.parseData(token);
 		return core;
 	}
 	return reduceDescriptionToken(core, token);
@@ -125,7 +125,7 @@ function reduceModToken<T extends DicePartCore>(core: T, token: TokenData): T {
 }
 
 function reduceTestToken<T extends DicePartCore>(core: T, token: TokenData): T {
-	core.test = DiceTest.parse(token);
+	core.test = DiceTest.parseData(token);
 	return core;
 }
 
