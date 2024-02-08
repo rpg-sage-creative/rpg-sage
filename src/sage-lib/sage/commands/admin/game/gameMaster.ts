@@ -1,3 +1,4 @@
+import { parseIds } from "@rsc-utils/discord-utils";
 import type { SageMessage } from "../../../model/SageMessage";
 import { registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
@@ -22,8 +23,8 @@ async function removeGameMaster(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const users = Array.from(sageMessage.message.mentions.users.values());
-	const added = await sageMessage.game!.removeGameMasters(users.map(user => user.id));
+	const possibleUserIds = parseIds(sageMessage.message, "user", true);
+	const added = await sageMessage.game!.removeGameMasters(possibleUserIds);
 	return sageMessage.reactSuccessOrFailure(added);
 }
 

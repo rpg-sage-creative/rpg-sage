@@ -1,4 +1,4 @@
-import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { parseIds, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { SageMessage } from "../../../model/SageMessage";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
@@ -48,8 +48,8 @@ async function playerRemove(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const users = Array.from(sageMessage.message.mentions.users.values());
-	const removed = await sageMessage.game!.removePlayers(users.map(user => user.id));
+	const possibleUserIds = parseIds(sageMessage.message, "user", true);
+	const removed = await sageMessage.game!.removePlayers(possibleUserIds);
 	return sageMessage.reactSuccessOrFailure(removed);
 }
 
