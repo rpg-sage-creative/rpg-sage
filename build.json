@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.5.4",
+"version":"1.6.0",
 "branch":"v1.6.0",
-"commit":"0ee541e9658fe4b170739c7be989abc59cad7193",
-"commitSubject":"implement rsc-utils/https-utils",
-"commitTs":1705187346000,
-"commitDate":"2024-01-13-1509",
-"buildTs":1705356751000,
-"buildDate":"2024-01-15-1412",
+"commit":"2035faa09f8904c33b452a4bb8330141c59b7c74",
+"commitSubject":"update package lock",
+"commitTs":1707937768000,
+"commitDate":"2024-02-14-1109",
+"buildTs":1707937812000,
+"buildDate":"2024-02-14-1110",
 "author":"Randal T Meyer"
 }
