@@ -1,3 +1,7 @@
 {"name":"@rsc-utils/dice-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
-  "@rsc-utils/random-utils": "^0.0.0"
+  "@rsc-utils/class-utils": "^0.0.0",
+  "@rsc-utils/number-utils": "^0.0.0",
+  "@rsc-utils/random-utils": "^0.0.0",
+  "@rsc-utils/snowflake-utils": "^0.0.0",
+  "@rsc-utils/string-utils": "^0.0.0"
 }}

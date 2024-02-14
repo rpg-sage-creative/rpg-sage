@@ -66,7 +66,7 @@ type TDiceMatch = {
 //#region parse and map
 
 const BASE_REGEX = /\[+[^\]]+\]+/ig;
-const MATH_REGEX = /\[[ \d\+\-\*\/\(\)\^]+[\+\-\*\/\^]+[ \d\+\-\*\/\(\)\^]+\]/i;
+const MATH_REGEX = /\[[ \d+\-*/()^]+[+\-*/^]+[ \d+\-*/()^]+\]/i;
 const RANDOM_REGEX = /\[(\d+[usgm]*#)?([^,\]]+)(,([^,\]]+))+\]/i;
 
 type ReplaceStatsArgs = {

@@ -1,6 +1,9 @@
-import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { cleanWhitespace } from "@rsc-utils/string-utils";
 import { GameType } from "../sage-common";
+
+export { Dice as BaseDice, DiceGroup as BaseDiceGroup, DicePart as BaseDicePart } from "@rsc-utils/dice-utils";
+export type { TDice as TBaseDice, TDiceGroup as TBaseDiceGroup, TDicePart as TBaseDicePart } from "@rsc-utils/dice-utils";
+export type { DicePartCore as BaseDicePartCore, DiceCore as BaseDiceCore, DiceGroupCore as BaseDiceGroupCore } from "@rsc-utils/dice-utils";
 
 //#region rpg.common.ts
 
@@ -54,8 +57,6 @@ export function getCritMethodRegex(gameType: GameType | undefined): RegExp | nul
 
 export const UNICODE_LEFT_ARROW = "\u27f5";
 
-export const SECRET_REGEX = /secret/i;
-
 //#endregion
 
 //#region DiceString
@@ -65,25 +66,11 @@ export function cleanDescription(description?: string): string {
 	const replaced = (description ?? "").replace(/[;,]\s*$/, "");
 	return cleanWhitespace(replaced);
 }
-
 //#endregion
 
 //#region rollDice, sum, toMod
 
-type THasSignAndTotal = { sign?:TSign; total:number; };
-export function sumDicePartRolls(dicePartRolls: THasSignAndTotal[]): number {
-	return dicePartRolls.reduce((value, dicePartRoll) => {
-		if (dicePartRoll.sign === "-") {
-			return value + dicePartRoll.total;
-		} else if (dicePartRoll.sign === "*") {
-			return value * dicePartRoll.total;
-		} else if (dicePartRoll.sign === "/") {
-			return value / dicePartRoll.total;
-		} else {
-			return value + dicePartRoll.total;
-		}
-	}, 0);
-}
+
 
 export function toMod(mod: number, spaced = false): string {
 	return `${mod < 0 ? "-" : "+"}${spaced ? " " : ""}${Math.abs(mod)}`;
@@ -103,29 +90,6 @@ export type TDiceOutput = {
 };
 
 export type TSign = "+" | "-" | "*" | "/";
-
-export interface DieCore<T extends string = string> extends IdCore<T> {
-	gameType: GameType;
-}
-export abstract class HasDieCore<T extends DieCore<U>, U extends string = string> extends HasIdCore<T, U> {
-	public get gameType(): GameType { return this.core.gameType; }
-}
-
-export interface IDiceBase<T extends IRollBase = IRollBase<any>> extends HasDieCore<DieCore> {
-	hasSecret: boolean;
-	roll(): T;
-}
-
-export interface IRollBase<T extends IDiceBase = IDiceBase<any>, U = any> extends HasDieCore<DieCore> {
-	hasSecret: boolean;
-	dice: T;
-	rolls: U[];
-	toString(outputType?: DiceOutputType): string;
-}
-
-export function mapRollToJson<T extends IDiceBase, U extends DieCore>(die: T): U {
-	return die.roll().toJSON() as U;
-}
 
 //#endregion
 

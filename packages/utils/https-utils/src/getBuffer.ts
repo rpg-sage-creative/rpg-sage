@@ -76,8 +76,8 @@ export function getBuffer<T = any>(url: string, postData?: T, opts?: Opts): Prom
 			req.once("timeout", reject);
 			if (method === "request") {
 				req.write(payload);
-				req.end();
 			}
+			req.end();
 		}catch(ex) {
 			reject(ex);
 		}

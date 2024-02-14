@@ -1,20 +1,19 @@
-import { DiceDropKeepType, DiceTest, DiceTestData, DiceTestType, parseDiceTestTargetValue, rollDice } from "@rsc-utils/dice-utils";
+import { DiceDropKeepType, DiceTest, DiceTestType, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore, parseDiceTestTargetValue, rollDice, type DiceTestData, type DicePartCore as baseDicePartCore, type DicePartRollCore as baseDicePartRollCore, type DicePartCoreArgs as baseTDicePartCoreArgs } from "@rsc-utils/dice-utils";
+import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
-import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
+import { type OrNull, type OrUndefined } from "@rsc-utils/type-utils";
 import { correctEscapeForEmoji } from "..";
 import { GameType } from "../../../sage-common";
-import { DiceOutputType, DiceSecretMethodType, TDiceLiteral, cleanDescription } from "../../common";
+import { BaseDicePart, BaseDicePartRoll, DiceOutputType, DiceSecretMethodType, TDiceLiteral, cleanDescription } from "../../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
-	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers,
-	reduceTokenToDicePartCore as baseReduceTokenToDicePartCore
+	DiceGroupRoll as baseDiceGroupRoll,
+	DiceRoll as baseDiceRoll, getParsers as baseGetParsers
 } from "../base";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
-	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
-	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
+	DiceGroupRollCore as baseDiceGroupRollCore,
+	DiceRollCore as baseDiceRollCore
 } from "../base/types";
 
 //#region test dice
@@ -64,9 +63,9 @@ function getParsers(): TokenParsers {
 
 function applyEdgeSnagSpecShift<T extends DicePartCore>({ core, hasEdge, hasSnag, hasSpecialization, upShift, downShift }: { core: T, hasEdge: boolean, hasSnag: boolean, hasSpecialization: boolean, upShift: number, downShift: number }): T {
 	if (hasEdge && !hasSnag) {
-		core.dropKeep = { type:DiceDropKeepType.KeepHighest, value:1 };
+		core.manipulation = [{ dropKeep:{ type:DiceDropKeepType.KeepHighest, value:1 } }];
 	}else if (!hasEdge && hasSnag) {
-		core.dropKeep = { type:DiceDropKeepType.KeepLowest, value:1 };
+		core.manipulation = [{ dropKeep:{ type:DiceDropKeepType.KeepLowest, value:1 } }];
 	}
 	if (hasSpecialization) {
 		core.sign = "+";
@@ -269,7 +268,7 @@ type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 	shiftedDesc?: string;
 	skillDie?: TSkillDie;
 };
-export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
+export class DicePart extends BaseDicePart<DicePartCore, DicePartRoll> {
 	public get shiftedDicePart(): DicePart | null {
 		if (this.hasShift) {
 			const { skillDie, shiftedDie, shiftArrow, shiftNumber, count, sides } = shiftDie(this.skillDie, [`+${this.upShift}`, `-${this.downShift}`]);
@@ -283,7 +282,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 				skillDie: shiftedDie,
 				specialization: this.core.specialization,
 				testOrTarget: this.core.target ?? this.core.test,
-				dropKeep: this.core.dropKeep
+				manipulation: this.core.manipulation
 			});
 		}
 		return null;
@@ -326,18 +325,17 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	public get hasSpecialization(): boolean { return this.core.specialization === true; }
 
 	//#region static
-	public static create({ count, description, dropKeep, sides, sign, specialization, testOrTarget, downShift, upShift, shiftedDesc, skillDie }: TDicePartCoreArgs = { }): DicePart {
+	public static create({ count, description, manipulation, sides, sign, specialization, testOrTarget, downShift, upShift, shiftedDesc, skillDie }: TDicePartCoreArgs = { }): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.E20,
-			id: randomUuid(),
+			id: randomSnowflake(),
 
 			count: count ?? 1,
 			description: cleanDescription(description),
-			dropKeep: dropKeep ?? undefined,
+			manipulation: manipulation ?? undefined,
 			downShift: downShift ?? undefined,
 			modifier: 0,
-			noSort: false,
 			shiftedDesc,
 			sides: sides ?? 0,
 			sign: sign,
@@ -405,7 +403,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 
 //#region DicePartRoll
 type DicePartRollCore = baseDicePartRollCore;
-export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
+export class DicePartRoll extends BaseDicePartRoll<DicePartRollCore, DicePart> {
 	//#region static
 	public static create(dicePart: DicePart): DicePartRoll {
 		const dp = dicePart.shiftedDicePart ?? dicePart;
@@ -413,7 +411,7 @@ export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 		return new DicePartRoll({
 			objectType: "DicePartRoll",
 			gameType: GameType.E20,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			dice: dp.toJSON(),
 			rolls: dpRolls
 		});
@@ -444,7 +442,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.E20,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
 	}
@@ -478,7 +476,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		return new DiceRoll({
 			objectType: "DiceRoll",
 			gameType: GameType.E20,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
 		});
@@ -509,7 +507,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.E20,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			critMethodType: undefined,
 			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
 			diceOutputType: diceOutputType,
@@ -530,24 +528,23 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 			const d20DicePartCore: DicePartCore = {
 				objectType: "DicePart",
 				gameType: GameType.E20,
-				id: randomUuid(),
+				id: randomSnowflake(),
 				count: 1,
 				sides: 20,
 				description: "",
 				modifier: 0,
-				noSort: false,
 				skillDie: "d20"
 			};
-			if (skillDicePart.hasDropKeep) {
+			if (skillDicePart.hasManipulation) {
 				d20DicePartCore.count = 2;
-				d20DicePartCore.dropKeep = skillDicePart.dropKeep.toJSON();
-				delete skillDicePart.toJSON().dropKeep;
+				d20DicePartCore.manipulation = skillDicePart.manipulation.toJSON();
+				delete skillDicePart.toJSON().manipulation;
 			}
 			const d20DicePart = new DicePart(d20DicePartCore);
 			const d20Dice = Dice.create([d20DicePart]);
 			dice.unshift(d20Dice);
 		}else {
-			if (skillDicePart.hasDropKeep) {
+			if (skillDicePart.hasManipulation) {
 				skillDicePart.toJSON().count = 2;
 			}
 		}
@@ -562,12 +559,11 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 					dice.push(Dice.create([new DicePart({
 						objectType: "DicePart",
 						gameType: GameType.E20,
-						id: randomUuid(),
+						id: randomSnowflake(),
 						count: +count || 1,
 						sides: +sides || 0,
 						description: "",
 						modifier: 0,
-						noSort: false,
 						skillDie: stepSkillDie
 					})]));
 				}
@@ -647,7 +643,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		return new DiceGroupRoll({
 			objectType: "DiceGroupRoll",
 			gameType: GameType.E20,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			diceGroup: diceGroup.toJSON(),
 			rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
 		});

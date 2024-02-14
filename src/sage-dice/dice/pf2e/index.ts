@@ -1,26 +1,18 @@
-import { DiceDropKeepType, DiceTest, DiceTestData, DiceTestType, DieRollGrade, decreaseGrade, gradeRoll, increaseGrade, isGradeSuccess, parseDiceTestTargetValue, parseDiceTestType } from "@rsc-utils/dice-utils";
+import { DiceDropKeepType, DiceTest, DiceTestType, DieRollGrade, DicePart as baseDicePart, DicePartRoll as baseDicePartRoll, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore, decreaseGrade, gradeRoll, increaseGrade, isGradeSuccess, parseDiceTestTargetValue, parseDiceTestType, type DiceTestData, type ReduceSignToDropKeep, type DicePartCore as baseDicePartCore, type DicePartRollCore as baseDicePartRollCore, type DicePartCoreArgs as baseTDicePartCoreArgs } from "@rsc-utils/dice-utils";
+import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import { isDefined, type OrNull, type OrUndefined } from "@rsc-utils/type-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
 import { GameType } from "../../../sage-common";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType, TDiceLiteral, TSign, cleanDescription } from "../../common";
 import {
-	CritMethodType,
-	DiceOutputType,
-	DiceSecretMethodType,
-	TDiceLiteral,
-	TSign,
-	cleanDescription
-} from "../../common";
-import {
-	TReduceSignToDropKeep,
 	Dice as baseDice, DiceGroup as baseDiceGroup,
-	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore
+	DiceGroupRoll as baseDiceGroupRoll,
+	DiceRoll as baseDiceRoll, getParsers as baseGetParsers
 } from "../base";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
-	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
-	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
+	DiceGroupRollCore as baseDiceGroupRollCore,
+	DiceRollCore as baseDiceRollCore
 } from "../base/types";
 
 //#region Tokenizer
@@ -53,7 +45,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 		core.target = parseTargetData(token);
 		return core;
 	}
-	const reduceSignToDropKeepData: TReduceSignToDropKeep[] = [];
+	const reduceSignToDropKeepData: ReduceSignToDropKeep[] = [];
 	if (token.key === "dice") {
 		reduceSignToDropKeepData.push(
 			{ sign:"+" as TSign, type:DiceDropKeepType.KeepHighest, value:1, alias:FORTUNE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "+" },
@@ -302,28 +294,27 @@ type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region flags
 	public get hasFortune(): boolean {
-		return this.dropKeep.alias === FORTUNE;
+		return this.manipulation.dropKeep.alias === FORTUNE;
 	}
 	public get hasMisfortune(): boolean {
-		return this.dropKeep.alias === MISFORTUNE;
+		return this.manipulation.dropKeep.alias === MISFORTUNE;
 	}
 	//#endregion
 
 	//#region static
-	public static create({ count, sides, dropKeep, noSort, modifier, sign, description, testOrTarget, fixedRolls }: TDicePartCoreArgs = {}): DicePart {
+	public static create({ count, sides, manipulation, modifier, sign, description, testOrTarget, fixedRolls }: TDicePartCoreArgs = {}): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.PF2e,
-			id: randomUuid(),
+			id: randomSnowflake(),
 
 			count: count ?? 0,
 			description: cleanDescription(description),
-			dropKeep: dropKeep,
 			fixedRolls,
+			manipulation,
 			modifier: modifier ?? 0,
-			noSort: noSort === true,
 			sides: sides ?? 0,
-			sign: sign,
+			sign,
 			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as DiceTestData,
 			target: <TTargetData>testOrTarget
 		});
@@ -408,7 +399,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.PF2e,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
 	}
@@ -422,12 +413,12 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		const diceGroup = DiceGroup.parse(diceString);
 		return diceGroup && diceGroup.dice[0] || null;
 	}
-	public static roll(diceString: TDiceLiteral): number;
-	public static roll(diceString: string): OrNull<number>;
-	public static roll(diceString: string): OrNull<number> {
-		const _dice = Dice.parse(diceString);
-		return _dice?.quickRoll() ?? null;
-	}
+	// public static roll(diceString: TDiceLiteral): number;
+	// public static roll(diceString: string): OrNull<number>;
+	// public static roll(diceString: string): OrNull<number> {
+	// 	const _dice = Dice.parse(diceString);
+	// 	return _dice?.quickRoll() ?? null;
+	// }
 
 	public static Part = <typeof baseDicePart>DicePart;
 	//#endregion
@@ -459,7 +450,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		return new DiceRoll({
 			objectType: "DiceRoll",
 			gameType: GameType.PF2e,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
 		});
@@ -552,7 +543,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.PF2e,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			critMethodType: critMethodType,
 			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
 			diceOutputType: diceOutputType,
@@ -619,7 +610,7 @@ function createDiceGroupRoll(diceGroup: DiceGroup): DiceGroupRoll {
 	const core: DiceGroupRollCore = {
 		objectType: "DiceGroupRoll",
 		gameType: GameType.PF2e,
-		id: randomUuid(),
+		id: randomSnowflake(),
 		diceGroup: diceGroup.toJSON(),
 		rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
 	};

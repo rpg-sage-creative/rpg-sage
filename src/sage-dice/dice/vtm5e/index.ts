@@ -1,19 +1,18 @@
-import { DiceTest, DiceTestData, DiceTestType, parseDiceTestTargetValue, rollDice } from "@rsc-utils/dice-utils";
+import { DiceTest, DiceTestType, DicePart as baseDicePart, DicePartRoll as baseDicePartRoll, parseDiceTestTargetValue, rollDice, type DiceTestData, type DicePartCore as baseDicePartCore, type DicePartRollCore as baseDicePartRollCore, type DicePartCoreArgs as baseTDicePartCoreArgs } from "@rsc-utils/dice-utils";
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
-import type { OrNull } from "@rsc-utils/type-utils";
+import { type OrNull } from "@rsc-utils/type-utils";
 import { GameType } from "../../../sage-common";
-import type { TDiceLiteral } from "../../common";
-import { DiceOutputType, DiceSecretMethodType, UNICODE_LEFT_ARROW, cleanDescription } from "../../common";
+import { DiceOutputType, DiceSecretMethodType, TDiceLiteral, UNICODE_LEFT_ARROW, cleanDescription } from "../../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
-	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll
+	DiceGroupRoll as baseDiceGroupRoll,
+	DiceRoll as baseDiceRoll
 } from "../base";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
-	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
-	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
+	DiceGroupRollCore as baseDiceGroupRollCore,
+	DiceRollCore as baseDiceRollCore
 } from "../base/types";
 
 /*
@@ -336,10 +335,9 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 
 			count: count ?? 1,
 			description: cleanDescription(description),
-			dropKeep: undefined,
 			hunger: hunger,
+			manipulation: undefined,
 			modifier: 0,
-			noSort: false,
 			sides: 10,
 			sign: undefined,
 			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as DiceTestData ?? null,

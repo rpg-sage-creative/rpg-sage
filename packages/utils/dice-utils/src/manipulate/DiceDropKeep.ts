@@ -1,9 +1,7 @@
-import { numberSorter } from "./internal/numberSorter.js";
-import { rollDataSorter } from "./internal/rollDataSorter.js";
-import { markAsDropped } from "./markup.js";
-import { sum } from "./sum.js";
-import { RollData } from "./types/RollData.js";
-import type { TokenData, TokenParsers } from "./types/index.js";
+import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
+import { rollDataSorter } from "../internal/rollDataSorter.js";
+import type { RollData } from "../types/RollData.js";
+import { DiceManipulation } from "./DiceManipulation.js";
 
 export enum DiceDropKeepType {
 	None = 0,
@@ -38,64 +36,20 @@ function shouldBeDropped(this: DiceDropKeepData, _roll: RollData, index: number,
 	}
 }
 
-export class DiceDropKeep {
-	public constructor(protected data?: DiceDropKeepData) { }
-
+export class DiceDropKeep extends DiceManipulation<DiceDropKeepData> {
 	public get alias(): string { return this.data?.alias ?? ""; }
-	public get isEmpty(): boolean { return !this.type || !this.value; }
 	public get type(): DiceDropKeepType { return this.data?.type ?? DiceDropKeepType.None; }
 	public get value(): number { return this.data?.value ?? 0; }
 
-	/** Adjusts the count by removing any dice that were dropped. */
-	public adjustCount(count: number): number {
-		if (!this.isEmpty) {
-			switch(this.type) {
-				case DiceDropKeepType.DropHighest:
-				case DiceDropKeepType.DropLowest:
-					return count - this.value;
-				case DiceDropKeepType.KeepHighest:
-				case DiceDropKeepType.KeepLowest:
-					return this.value;
-			}
-		}
-		return count;
-	}
-
 	/** Marks all rolls to be dropped as such. */
-	public markDropped(rolls: RollData[]): void {
+	public manipulateRolls(rolls: RollData[]): void {
 		if (!this.isEmpty) {
 			const sorted = rolls.slice();
 			sorted.sort(rollDataSorter);
 			sorted.filter(shouldBeDropped, this.data).forEach(roll => {
-				if (!roll.isDropped) {
-					roll.isDropped = true;
-					roll.output = markAsDropped(roll.output);
-				}
+				roll.isDropped = true;
 			});
 		}
-	}
-
-	/** Adjusts the sum by removing any dice that were dropped. */
-	public adjustSum(values: number[]): number {
-		if (!this.isEmpty) {
-			const sorted = values.slice().sort(numberSorter);
-			switch (this.type) {
-				case DiceDropKeepType.DropHighest:
-					return sum(sorted.slice(0, -this.value));
-				case DiceDropKeepType.DropLowest:
-					return sum(sorted.slice(this.value));
-				case DiceDropKeepType.KeepHighest:
-					return sum(sorted.slice(-this.value));
-				case DiceDropKeepType.KeepLowest:
-					return sum(sorted.slice(0, this.value));
-			}
-			console.warn(`Invalid dropKeep.type = ${this.type} (${DiceDropKeepType[this.type]})`);
-		}
-		return sum(values);
-	}
-
-	public toJSON() {
-		return this.data;
 	}
 
 	/** Generates string output for the given DropKeepData */
@@ -104,7 +58,7 @@ export class DiceDropKeep {
 			return ``;
 		}
 		if (["dl", "dh", "kl", "kh"].includes(this.alias)) {
-			return `${leftPad}${this.alias} ${this.value}${rightPad}`;
+			return `${leftPad}${this.alias}${this.value}${rightPad}`;
 		}
 		return `${leftPad}(${this.alias})${rightPad}`;
 	}
@@ -125,7 +79,4 @@ export class DiceDropKeep {
 		return undefined;
 	}
 
-	public static from(token?: TokenData | null): DiceDropKeep {
-		return new DiceDropKeep(DiceDropKeep.parseData(token));
-	}
 }

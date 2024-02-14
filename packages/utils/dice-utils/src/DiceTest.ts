@@ -1,5 +1,6 @@
-import type { TokenData, TokenParsers } from "./types/index.js";
-import type { DiceRoll } from "./types/DiceRoll.js";
+import { warn } from "@rsc-utils/console-utils";
+import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
+import type { TDice } from "./dice/Dice.js";
 
 export enum DiceTestType {
 	None = 0,
@@ -10,7 +11,6 @@ export enum DiceTestType {
 	LessThanOrEqual = 5
 }
 
-
 /** The information about how to test dice results for success/failure and how to display that in the output. */
 export type DiceTestData = {
 	/** a human readable alternative output */
@@ -20,6 +20,13 @@ export type DiceTestData = {
 	/** the fundamental test */
 	type: DiceTestType;
 	/** the value to test against */
+	value: number;
+};
+
+type DiceTestTargetValue = {
+	/** is the value hidden from players? */
+	hidden: boolean;
+	/** the actual value */
 	value: number;
 };
 
@@ -44,16 +51,35 @@ export function parseDiceTestType(matchValue: string): DiceTestType {
 	return DiceTestType.None;
 }
 
-export function parseDiceTestTargetValue(rawValue: string): { value:number; hidden:boolean; } {
+export function parseDiceTestTargetValue(rawValue: string): DiceTestTargetValue {
 	const hidden = rawValue.length > 4 && rawValue.startsWith("||") && rawValue.endsWith("||");
 	const value = +(hidden ? rawValue.slice(2, -2) : rawValue) || 0;
 	return { value, hidden };
+}
+
+export type HasDiceTestData = {
+	test?: DiceTestData;
+};
+
+export type HasDiceTest = {
+	test?: DiceTest;
+	hasTest: boolean;
+};
+
+export function appendTestToCore(core: HasDiceTestData, token: TokenData, _index: number, _tokens: TokenData[]): boolean {
+	const diceTest = DiceTest.from(token);
+	if (!diceTest.isEmpty) {
+		core.test = diceTest.toJSON();
+		return true;
+	}
+	return false;
 }
 
 export class DiceTest {
 	public constructor(protected data?: DiceTestData) { }
 
 	public get alias(): string { return this.data?.alias ?? ""; }
+	public get isHidden(): boolean { return this.data?.hidden ?? false; }
 	public get isEmpty(): boolean { return !this.data?.type || isNaN(this.data.value); }
 	public get type(): DiceTestType { return this.data?.type ?? DiceTestType.None; }
 	public get value(): number { return this.data?.value ?? 0; }
@@ -73,7 +99,7 @@ export class DiceTest {
 				case DiceTestType.LessThanOrEqual:
 					return total <= this.value;
 				default:
-					console.warn(`testRoll(): invalid roll.dice.test.type = ${this.type} (${this.alias})`);
+					warn(`testRoll(): invalid roll.dice.test.type = ${this.type} (${this.alias})`);
 			}
 		}
 		return undefined;
@@ -81,6 +107,14 @@ export class DiceTest {
 
 	public toJSON() {
 		return this.data;
+	}
+
+	public toString(leftPad = "", rightPad = ""): string {
+		if (this.isEmpty) {
+			return ``;
+		}
+		const value = this.isHidden ? "??" : this.value;
+		return `${leftPad}${this.alias} ${value}${rightPad}`;
 	}
 
 	/** The token key/regex used to generate DiceTestData */
@@ -111,7 +145,9 @@ export class DiceTest {
 	}
 
 	/** Tests the roll for pass/fail. If isEmpty, undefined is returned instead. */
-	public static test(roll: DiceRoll): boolean | undefined {
-		return new DiceTest(roll.dice.test).test(roll.total);
+	public static test(dice: TDice): boolean | undefined {
+		return dice.test.test(dice.total);
 	}
+
+	public static readonly EmptyTest = new DiceTest();
 }

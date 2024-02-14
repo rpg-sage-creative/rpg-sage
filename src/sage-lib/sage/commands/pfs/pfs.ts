@@ -1,8 +1,8 @@
 import { error, warn } from "@rsc-utils/console-utils";
-import { DieRollGrade } from "@rsc-utils/dice-utils";
+import { DieRollGrade, isGradeCritical, isGradeSuccess } from "@rsc-utils/dice-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import { Dice } from "../../../../sage-dice/dice/pf2e";
+import { Dice, DiceGroup } from "../../../../sage-dice/dice/pf2e";
 import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e";
 import { ColorType } from "../../model/HasColorsCore";
 import type { SageMessage } from "../../model/SageMessage";
@@ -76,13 +76,13 @@ function earnIncome(sageMessage: SageMessage): void {
 		renderable.append(`<blockquote><b>Success</b> ${levelRow[1 + proficiencyLetterIndex]}\n<b>Critical Success</b> ${critRow[1 + proficiencyLetterIndex]}</blockquote>`);
 
 		const rolls: TIncomeRoll[] = [];
-		const dice = Dice.parse(`1d20+${modifier}dc${dc}`);
+		const dice = DiceGroup.parse(`1d20+${modifier}dc${dc}`);
 		let dayCounter = days;
 		do {
 			const diceRoll = dice.roll();
 			const roll = <TIncomeRoll>{
-				crit: diceRoll.grade === DieRollGrade.CriticalFailure || diceRoll.grade === DieRollGrade.CriticalSuccess,
-				success: diceRoll.grade === DieRollGrade.Success || diceRoll.grade === DieRollGrade.CriticalSuccess,
+				crit: isGradeCritical(diceRoll.grade),
+				success: isGradeSuccess(diceRoll.grade),
 				dieResult: diceRoll.rolls[0].rolls[0],
 				modifiedResult: diceRoll.total,
 				days: 1,

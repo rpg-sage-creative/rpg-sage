@@ -1,5 +1,5 @@
 import { DiceTest } from "./DiceTest.js";
-import type { DiceRoll } from "./types/DiceRoll.js";
+import type { TDice } from "./dice/Dice.js";
 
 export enum DieRollGrade { Unknown = 0, CriticalFailure = 1, Failure = 2, Success = 3, CriticalSuccess = 4 }
 
@@ -10,6 +10,11 @@ const DieRollGradeEmojis: TDieRollGradeEmoji[] = [undefined, "[critical-failure]
 /** Makes sure the value is a valid failure or success value. */
 function isValid(grade: number): grade is DieRollGrade {
 	return [1,2,3,4].includes(grade);
+}
+
+/** Returns true if critical failure or critical success. */
+export function isGradeCritical(grade: DieRollGrade): boolean {
+	return grade === DieRollGrade.CriticalFailure || grade === DieRollGrade.CriticalSuccess;
 }
 
 /** Returns true if success or critical success. */
@@ -52,6 +57,6 @@ function booleanToGrade(value?: boolean | null): DieRollGrade {
 }
 
 /** Grades the given dice roll to simple success/failure/unknown. No critical logic. */
-export function gradeRoll(roll: DiceRoll): DieRollGrade {
-	return booleanToGrade(DiceTest.test(roll));
+export function gradeRoll(dice: TDice): DieRollGrade {
+	return booleanToGrade(DiceTest.test(dice));
 }

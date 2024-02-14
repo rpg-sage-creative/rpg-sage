@@ -1,6 +1,9 @@
-import type { TokenData, TokenParsers } from "./types/index.js";
-import { DiceTestType } from "./DiceTest.js";
-import { rollDie } from "./rollDie.js";
+import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
+import { DiceTestType } from "../DiceTest.js";
+import { rollDataMapper } from "../internal/rollDataMapper.js";
+import { rollDie } from "../roll/rollDie.js";
+import type { RollData } from "../types/RollData.js";
+import { DiceManipulation } from "./DiceManipulation.js";
 
 export type DiceExplodeData = {
 	alias: string;
@@ -10,25 +13,31 @@ export type DiceExplodeData = {
 	value: number;
 };
 
-export class DiceExplode {
-	public constructor(protected data?: DiceExplodeData) { }
+export class DiceExplode extends DiceManipulation<DiceExplodeData> {
 
 	public get alias(): string { return this.data?.alias ?? ""; }
-	public get isEmpty(): boolean { return !this.type || !this.value; }
 	public get type(): DiceTestType { return this.data?.type ?? DiceTestType.None; }
 	public get value(): number { return this.data?.value ?? 0; }
 
-	public explode(dieSize: number, dieValues: number[]): number[] {
-		const explodedValues: number[] = [];
-		let extra = dieValues.filter(value => this.shouldExplode(value)).length;
-		while (extra > 0) {
-			const rollValue = rollDie(dieSize);
-			explodedValues.push(rollValue);
-			if (!this.shouldExplode(rollValue)) {
-				extra--;
+	public manipulateRolls(rolls: RollData[]): RollData[] {
+		const explosionRolls: RollData[] = [];
+		if (!this.isEmpty) {
+			const rollsToCheck = rolls.slice();
+			while (rollsToCheck.length) {
+				const rollToCheck = rollsToCheck.shift()!;
+				/** @todo decide if i want to explode values more than once if explode syntax found more than once. */
+				if (this.shouldExplode(rollToCheck.threshold ?? rollToCheck.value)) {
+					rollToCheck.isExploded = true;
+					const explosionValue = rollDie(rollToCheck.dieSize);
+					const explosionIndex = rolls.length + explosionRolls.length;
+					const explosionRoll = rollDataMapper(explosionValue, explosionIndex, rollToCheck.dieSize, false);
+					explosionRoll.isExplosion = true;
+					explosionRolls.push(explosionRoll);
+					rollsToCheck.push(explosionRoll);
+				}
 			}
 		}
-		return explodedValues;
+		return explosionRolls;
 	}
 
 	public shouldExplode(value: number): boolean {
@@ -45,12 +54,8 @@ export class DiceExplode {
 		return false;
 	}
 
-	public toJSON() {
-		return this.data;
-	}
-
 	/** Generates string output for the given DiceExplodeData */
-	public toString(leftPad?: string, rightPad?: string) {
+	public toString(leftPad = "", rightPad = "") {
 		if (this.isEmpty) {
 			return ``;
 		}
@@ -58,7 +63,7 @@ export class DiceExplode {
 			// get the type if not simply exploding the given value.
 			const test = ["", "", ">", ">=", "<", "<="][this.type];
 			// put the values into an array, filter on non-empty non-zero values, join with spaces
-			const output = ["x", test, this.value].filter(value => value).join(" ");
+			const output = ["x", test, this.value].filter(value => value).join("");
 			return `${leftPad}${output}${rightPad}`;
 		}
 		return `${leftPad}(${this.alias})${rightPad}`;
@@ -66,26 +71,24 @@ export class DiceExplode {
 
 	/** The token key/regex used to generate DiceExplodeData */
 	public static getParsers(): TokenParsers {
-		return { explode:/((x)\s*(<=|<|>=|>|=)?\s*(\d+)?)/i };
+		return { explode:/(x)(?:\s*(<=|<|>=|>|=)?\s*(\d+))?/i };
 	}
 
 	/** Parses the given TokenData into DiceExplodeData */
-	public static parseData(token: TokenData): DiceExplodeData | undefined {
+	public static parseData(token: TokenData, dieSize?: number): DiceExplodeData | undefined {
 		if (token.key === "explode") {
 			const alias = token.matches[0].toLowerCase();
 			const type = ["", "=", ">", ">=", "<", "<="].indexOf(token.matches[1] ?? "=");
-			const value = +token.matches[2] || 0;
+			const value = +(token.matches[2] ?? dieSize ?? 0);
 			return { alias, type, value };
 		}
 		return undefined;
 	}
 
-	public static from(token: TokenData): DiceExplode {
-		return new DiceExplode(DiceExplode.parseData(token));
-	}
-
 	public static explode(dieSize: number, dieValues: number[]): number[] {
 		const exploder = new DiceExplode({ alias:"x", type:DiceTestType.Equal, value:dieSize });
-		return exploder.explode(dieSize, dieValues);
+		const rollData = dieValues.map((roll, index) => rollDataMapper(roll, index, dieSize, false));
+		const explodedData = exploder.manipulateRolls(rollData);
+		return explodedData.map(exploded => exploded.value);
 	}
 }

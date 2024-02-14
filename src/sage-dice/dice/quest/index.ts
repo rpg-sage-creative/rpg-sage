@@ -1,29 +1,20 @@
-import { DiceTest, DiceTestData, DiceTestType, DieRollGrade, gradeToEmoji, parseDiceTestTargetValue, rollDice } from "@rsc-utils/dice-utils";
-import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
-import type { OrNull } from "@rsc-utils/type-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
+import { Dice, DiceBase, DiceCore, DiceGroup, DiceGroupCore, DiceGroupCoreArgs, DicePart, DicePartCore, DicePartCoreArgs, DiceTest, DiceTestType, DieRollGrade, TDice, TDiceGroup, TDicePart, cleanDicePartDescription, gradeToEmoji, parseDiceTestTargetValue, type DiceTestData } from "@rsc-utils/dice-utils";
+import { randomSnowflake } from "@rsc-utils/snowflake-utils";
+import { type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
+import { type OrNull } from "@rsc-utils/type-utils";
 import { GameType } from "../../../sage-common";
-import type { TDiceLiteral } from "../../common";
-import { DiceOutputType, DiceSecretMethodType, cleanDescription } from "../../common";
-import {
-	Dice as baseDice, DiceGroup as baseDiceGroup,
-	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll
-} from "../base";
-import type {
-	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
-	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
-	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
-} from "../base/types";
+import { DiceSecretMethodType } from "../../common";
 
 //#region Tokenizer
-function getParsers(): TokenParsers {
+
+function getDiceTokenParsers(): TokenParsers {
 	return {
 		dice: /\s*(1)?\s*d\s*(20)/i,
 		target: /(vs)\s*(\d+|\|\|\d+\|\|)/i
 	};
 }
-function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData): T {
+
+function reduceTokenToDicePartCore<T extends QuestDicePartCore>(core: T, token: TokenData): T {
 	if (token.key === "dice") {
 		core.count = 1;
 		core.sides = 20;
@@ -35,213 +26,111 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 	}
 	return core;
 }
+
 //#endregion
 
 //#region Targets/Tests
+
 enum TargetType { None = 0, VS = 1 }
+
 type TTargetData = { type:TargetType; value:number; hidden:boolean; };
+
 function targetDataToTestData(targetData: TTargetData): OrNull<DiceTestData> {
 	return !targetData ? null : DiceTest.createData(DiceTestType.GreaterThan, targetData.value, targetData.hidden, "vs");
 }
+
 //#endregion
 
 //#region Grades
-function gradeResults(roll: DiceRoll): DieRollGrade {
-	const test = roll.dice.test;
+
+function gradeResults(dice: QuestDice): DieRollGrade {
+	const test = dice.test;
 	if (test) {
-		return roll.total > test.value ? DieRollGrade.Success : DieRollGrade.Failure;
+		return dice.total > test.value ? DieRollGrade.Success : DieRollGrade.Failure;
 	}
-	if (roll.total === 20) {
+	if (dice.total === 20) {
 		return DieRollGrade.CriticalSuccess;
-	}else if (roll.total > 10) {
+	}else if (dice.total > 10) {
 		return DieRollGrade.Success;
-	}else if (roll.total > 5) {
+	}else if (dice.total > 5) {
 		return DieRollGrade.Failure;
-	}else if (roll.total > 1) {
+	}else if (dice.total > 1) {
 		return DieRollGrade.CriticalFailure;
 	}else {
 		return DieRollGrade.Unknown;
 	}
 }
+
 //#endregion
 
-//#region diceGroupRollToString
 function _gradeEmoji(grade: DieRollGrade, vs: boolean): string {
 	if (vs) {
 		return gradeToEmoji(grade) || `:question:`;
 	}
 	return gradeToEmoji(grade) || `:bangbang:`;
 }
-//#endregion
 
-//#region DicePart
-interface DicePartCore extends baseDicePartCore {
+type QuestDicePartCore = DicePartCore & {
 	target?: TTargetData;
-}
-type TDicePartCoreArgs = baseTDicePartCoreArgs & {
+};
+
+type QuestDicePartCoreArgs = DicePartCoreArgs & {
 	testOrTarget?: DiceTestData | TTargetData;
 };
-export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
-	//#region static
-	public static create({ description, testOrTarget }: TDicePartCoreArgs = {}): DicePart {
-		return new DicePart({
+
+export class QuestDicePart extends DicePart<QuestDicePartCore, GameType> {
+
+	public static create<DicePartType extends TDicePart>({ description, testOrTarget }: QuestDicePartCoreArgs = {}): DicePartType {
+		return new this({
 			objectType: "DicePart",
-			gameType: GameType.Quest,
-			id: randomUuid(),
+			gameType: this.GameType,
+			id: randomSnowflake(),
 
 			count: 1,
-			description: cleanDescription(description),
-			dropKeep: undefined,
+			description: cleanDicePartDescription(description),
+			manipulation: undefined!,
 			modifier: 0,
-			noSort: false,
+			fixedRolls: undefined!,
 			sides: 20,
-			sign: undefined,
-			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <DiceTestData>testOrTarget ?? null,
-			target: <TTargetData>testOrTarget ?? null
-		});
+			sign: undefined!,
+			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as DiceTestData ?? null,
+			target: testOrTarget as TTargetData ?? null,
+
+			children: undefined!
+		}) as DicePartType;
 	}
-	public static fromCore(core: DicePartCore): DicePart {
-		return new DicePart(core);
-	}
-	public static fromTokens(tokens: TokenData[]): DicePart {
-		const core = tokens.reduce(reduceTokenToDicePartCore, <DicePartCore>{ description:"" });
-		const args = <TDicePartCoreArgs>{ testOrTarget:core.target ?? core.test, ...core };
-		return DicePart.create(args);
-	}
-	//#endregion
+
+	public static readonly reduceTokenToCore = reduceTokenToDicePartCore;
+
+	public static readonly GameType = GameType.Quest;
 }
-//#endregion
 
-//#region DicePartRoll
-type DicePartRollCore = baseDicePartRollCore;
-export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
-	//#region static
-	public static create(dicePart: DicePart): DicePartRoll {
-		return new DicePartRoll({
-			objectType: "DicePartRoll",
-			gameType: GameType.Quest,
-			id: randomUuid(),
-			dice: dicePart.toJSON(),
-			rolls: rollDice(dicePart.count, dicePart.sides)
-		});
-	}
-	public static fromCore(core: DicePartRollCore): DicePartRoll {
-		return new DicePartRoll(core);
-	}
-	public static Dice = <typeof baseDicePart>DicePart;
-	//#endregion
+export class QuestDice extends Dice<DiceCore, QuestDicePart, GameType> {
+
+	public static readonly Child = QuestDicePart as typeof DiceBase;
+
+	public static readonly GameType = GameType.Quest;
 }
-DicePart.Roll = <typeof baseDicePartRoll>DicePartRoll;
-//#endregion
 
-//#region Dice
-type DiceCore = baseDiceCore;
-export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
-	//#region static
-	public static create(diceParts: DicePart[]): Dice {
-		return new Dice({
-			objectType: "Dice",
-			gameType: GameType.Quest,
-			id: randomUuid(),
-			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
-		});
-	}
-	public static fromCore(core: DiceCore): Dice {
-		return new Dice(core);
-	}
-	public static fromDicePartCores(dicePartCores: DicePartCore[]): Dice {
-		return Dice.create(dicePartCores.map(DicePart.fromCore));
-	}
-	public static parse(diceString: string): Dice {
-		const diceGroup = DiceGroup.parse(diceString);
-		return diceGroup && diceGroup.dice[0] || null;
-	}
-	public static roll(diceString: TDiceLiteral): number;
-	public static roll(diceString: string): OrNull<number>;
-	public static roll(diceString: string): OrNull<number> {
-		const _dice = Dice.parse(diceString);
-		return _dice?.quickRoll() ?? null;
-	}
+export class QuestDiceGroup extends DiceGroup<DiceGroupCore, QuestDice, GameType> {
 
-	public static Part = <typeof baseDicePart>DicePart;
-	//#endregion
-}
-//#endregion
-
-//#region DiceRoll
-type DiceRollCore = baseDiceRollCore;
-export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
-	public toString(): string { return `${this.total} ${_gradeEmoji(gradeResults(this), this.dice.hasTest)}`; }
-	//#region static
-	public static create(_dice: Dice): DiceRoll {
-		return new DiceRoll({
-			objectType: "DiceRoll",
-			gameType: GameType.Quest,
-			id: randomUuid(),
-			dice: _dice.toJSON(),
-			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
-		});
-	}
-	public static fromCore(core: DiceRollCore): DiceRoll {
-		return new DiceRoll(core);
-	}
-	public static Dice = <typeof baseDice>Dice;
-	//#endregion
-}
-Dice.Roll = <typeof baseDiceRoll>DiceRoll;
-//#endregion
-
-//#region DiceGroup
-type DiceGroupCore = baseDiceGroupCore;
-export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll> {
-	//#region static
-	public static create(_dice: Dice[], diceOutputType?: DiceOutputType): DiceGroup {
-		return new DiceGroup({
+	public static create<DiceGroupType extends TDiceGroup, DiceType extends TDice>(dice: DiceType[], args?: DiceGroupCoreArgs): DiceGroupType {
+		return new this({
 			objectType: "DiceGroup",
-			gameType: GameType.Quest,
-			id: randomUuid(),
-			critMethodType: undefined,
-			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
-			diceOutputType: diceOutputType,
-			diceSecretMethodType: DiceSecretMethodType.Ignore
-		});
-	}
-	public static fromCore(core: DiceGroupCore): DiceGroup {
-		return new DiceGroup(core);
-	}
-	public static fromTokens(tokens: TokenData[], diceOutputType?: DiceOutputType): DiceGroup {
-		return DiceGroup.create([Dice.create([DicePart.fromTokens(tokens)])], diceOutputType);
-	}
-	public static parse(diceString: string, diceOutputType?: DiceOutputType): DiceGroup {
-		const tokens = tokenize(diceString, getParsers(), "desc");
-		return DiceGroup.fromTokens(tokens, diceOutputType);
-	}
-	public static Part = <typeof baseDice>Dice;
-	public static Roll: typeof baseDiceGroupRoll;
-	//#endregion
-}
-//#endregion
+			gameType: this.GameType,
+			id: randomSnowflake(),
 
-//#region DiceGroupRoll
-type DiceGroupRollCore = baseDiceGroupRollCore;
-export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGroup, DiceRoll> {
-	public toString(outputType: DiceOutputType): string;
-	public toString(): string {
-		return this.rolls[0].toString();
+			children: dice.map(d => d.toJSON()),
+			criticalMethodType: undefined!,
+			outputType: args?.outputType,
+			secretMethodType: DiceSecretMethodType.Ignore,
+		}) as DiceGroupType;
 	}
-	public static create(diceGroup: DiceGroup): DiceGroupRoll {
-		return new DiceGroupRoll({
-			objectType: "DiceGroupRoll",
-			gameType: GameType.Quest,
-			id: randomUuid(),
-			diceGroup: diceGroup.toJSON(),
-			rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
-		});
-	}
-	public static fromCore(core: DiceGroupRollCore): DiceGroupRoll {
-		return new DiceGroupRoll(core);
-	}
-	public static Dice = <typeof baseDiceGroup>DiceGroup;
+
+	public static readonly getTokenParsers = getDiceTokenParsers;
+
+	public static readonly Child = QuestDice as typeof DiceBase;
+
+	public static readonly GameType = GameType.Quest;
+
 }
-DiceGroup.Roll = <typeof baseDiceGroupRoll>DiceGroupRoll;
-//#endregion

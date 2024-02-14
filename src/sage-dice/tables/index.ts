@@ -1,8 +1,6 @@
 import { toUniqueDefined } from "@rsc-utils/array-utils";
-import { rollDie } from "@rsc-utils/dice-utils";
+import { DiceGroup, rollDiceString, rollDie, type TDice } from "@rsc-utils/dice-utils";
 import type { Optional, OrNull } from "@rsc-utils/type-utils";
-import { Dice } from "../dice/base";
-import type { TDice } from "../dice/base/types";
 
 const allTables: { [key: string]: Table<TableItem> } = {};
 
@@ -167,7 +165,7 @@ export class NextTableInfo {
 			times = timesArray[count] || timesArray[0] || "1";
 			neg = times.startsWith("-");
 			if (neg) {
-				times = times.substr(1);
+				times = times.slice(1);
 			}
 
 			parts = target.split("(");
@@ -176,8 +174,8 @@ export class NextTableInfo {
 
 			this.items[count] = {
 				tableName: target,
-				dice: Dice.parse(dice),
-				times: Dice.roll(times)!,
+				dice: DiceGroup.parse(dice).primary!,
+				times: rollDiceString(times)!,
 				descriptor: desc
 			};
 		}

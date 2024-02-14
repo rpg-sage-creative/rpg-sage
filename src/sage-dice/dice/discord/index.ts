@@ -1,70 +1,43 @@
 import { HasCore, type IdCore } from "@rsc-utils/class-utils";
+import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
 import { GameType, parseGameType } from "../../../sage-common";
 import {
+	BaseDiceGroup,
 	CritMethodType,
 	DiceOutputType,
 	DiceSecretMethodType,
-	TDiceOutput,
 	getCritMethodRegex,
-	parseCritMethodType, parseDiceOutputType
+	parseCritMethodType, parseDiceOutputType,
+	type TBaseDiceGroup,
+	type TDiceOutput
 } from "../../common";
-import {
-	Dice as baseDice,
-	DiceGroup as baseDiceGroup,
-	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart
-} from "../base";
-import type {
-	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
-	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore, TDice as baseTDice,
-	TDiceGroup as baseTDiceGroup,
-	TDiceGroupRoll as baseTDiceGroupRoll,
-	TDicePart as baseTDicePart
-} from "../base/types";
-import {
-	DiceGroup as cncDiceGroup,
-	DiceGroupRoll as cndDiceGroupRoll
-} from "../cnc";
-import {
-	DiceGroup as dnd5eDiceGroup,
-	DiceGroupRoll as dnd5eDiceGroupRoll
-} from "../dnd5e";
-import {
-	DiceGroup as e20DiceGroup,
-	DiceGroupRoll as e20DiceGroupRoll
-} from "../essence20";
-import {
-	DiceGroup as pf2eDiceGroup,
-	DiceGroupRoll as pf2eDiceGroupRoll
-} from "../pf2e";
-import {
-	DiceGroup as questDiceGroup,
-	DiceGroupRoll as questDiceGroupRoll
-} from "../quest";
-import {
-	DiceGroup as vtm5eDiceGroup,
-	DiceGroupRoll as vtm5eDiceGroupRoll
-} from "../vtm5e";
+import { DiceGroup as cncDiceGroup } from "../cnc";
+import { DiceGroup as dnd5eDiceGroup } from "../dnd5e";
+import { DiceGroup as e20DiceGroup } from "../essence20";
+import { DiceGroup as pf2eDiceGroup } from "../pf2e";
+import { DiceGroup as questDiceGroup } from "../quest";
+import { DiceGroup as vtm5eDiceGroup } from "../vtm5e";
 
 const DICE_REGEX = /\[[^\]]*d\d+[^\]]*\]/ig;
 const GAME_CHECK = /^(?:(cnc|dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest|vtm5|vtm5e)\b)?/i;
 const DICE_OUTPUT_CHECK = /^(?:(xxs|xs|s|m|xxl|xl|l|rollem)\b)?/i;
 const COUNT_CHECK = /^(\d+)(map\-\d+)?\#/i;
 
-function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {
+type BaseDiceGroupType = typeof BaseDiceGroup;
+function getDiceGroupForGame(gameType: GameType): BaseDiceGroupType {
 	switch (gameType) {
-		case GameType.CnC: return <typeof baseDiceGroup>cncDiceGroup;
-		case GameType.DnD5e: return <typeof baseDiceGroup>dnd5eDiceGroup;
-		case GameType.E20: return <typeof baseDiceGroup>e20DiceGroup;
-		case GameType.PF2e: return <typeof baseDiceGroup>pf2eDiceGroup;
-		case GameType.Quest: return <typeof baseDiceGroup>questDiceGroup;
-		case GameType.VtM5e: return <typeof baseDiceGroup>vtm5eDiceGroup;
-		default: return baseDiceGroup;
+		case GameType.CnC: return cncDiceGroup as BaseDiceGroupType;
+		case GameType.DnD5e: return dnd5eDiceGroup as BaseDiceGroupType;
+		case GameType.E20: return e20DiceGroup as BaseDiceGroupType;
+		case GameType.PF2e: return pf2eDiceGroup as BaseDiceGroupType;
+		case GameType.Quest: return questDiceGroup as BaseDiceGroupType;
+		case GameType.VtM5e: return vtm5eDiceGroup as BaseDiceGroupType;
+		default: return BaseDiceGroup;
 	}
 }
 
-function parseDice(diceString: string, gameType?: GameType, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): baseTDiceGroup {
+function parseDice(diceString: string, gameType?: GameType, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): TBaseDiceGroup {
 	switch (gameType) {
 		case GameType.CnC:
 			return cncDiceGroup.parse(diceString, diceOutputType);
@@ -87,12 +60,11 @@ function cloneDicePart<T extends baseDicePartCore, U extends baseTDicePart>(clss
 	return <U>clss.fromCore({
 		count: core.count,
 		description: core.description,
-		dropKeep: core.dropKeep ? { ...core.dropKeep } : undefined,
 		fixedRolls: core.fixedRolls,
 		gameType: core.gameType,
-		id: randomUuid(),
+		id: randomSnowflake(),
+		manipulation: core.manipulation?.map(m => ({ ...m})),
 		modifier: core.modifier,
-		noSort: core.noSort,
 		objectType: core.objectType,
 		sides: core.sides,
 		sign: core.sign,
@@ -111,7 +83,7 @@ function cloneDice<T extends baseDiceCore, U extends baseTDice>(clss: typeof bas
 			dropKeep: undefined,
 			fixedRolls: diceParts[0].fixedRolls,
 			gameType: gameType,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			modifier: Math.abs(map),
 			noSort: false,
 			objectType: "DicePart",
@@ -133,7 +105,7 @@ function cloneDice<T extends baseDiceCore, U extends baseTDice>(clss: typeof bas
 				diceParts.splice(diceParts.indexOf(testCore), 0, mapCore);
 			}else {
 				// split dice/mod from test
-				// const newTestCore = <baseDicePartCore>{ count:0, description:"", dropKeep:null, gameType:gameType, id:randomUuid(), modifier:0, noSort:false, objectType:"DicePart", sides:0, sign:"+", test:testCore.test };
+				// const newTestCore = <baseDicePartCore>{ count:0, description:"", dropKeep:null, gameType:gameType, id:randomSnowflake(), modifier:0, noSort:false, objectType:"DicePart", sides:0, sign:"+", test:testCore.test };
 				mapCore.test = testCore.test;
 				delete testCore.test;
 				//put mapCore and newTestCore after testCore //, newTestCore); <-- after splice
@@ -144,7 +116,7 @@ function cloneDice<T extends baseDiceCore, U extends baseTDice>(clss: typeof bas
 	return <U>clss.fromCore({
 		diceParts: diceParts,
 		gameType: core.gameType,
-		id: randomUuid(),
+		id: randomSnowflake(),
 		objectType: <"Dice">core.objectType
 	});
 }
@@ -156,7 +128,7 @@ function cloneDiceGroup<T extends baseDiceGroupCore, U extends baseTDiceGroup>(c
 		diceOutputType: core.diceOutputType,
 		diceSecretMethodType: core.diceSecretMethodType,
 		gameType: core.gameType,
-		id: randomUuid(),
+		id: randomSnowflake(),
 		objectType: <"DiceGroup">core.objectType
 	});
 }
@@ -204,7 +176,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 	public static create(diceGroups: baseTDiceGroup[]): DiscordDice {
 		const core: DiscordDiceCore = {
 			objectType: "DiscordDice",
-			id: randomUuid(),
+			id: randomSnowflake(),
 			diceGroups: diceGroups.map<baseDiceGroupCore>(DiscordDice.toJSON)
 		};
 		return new DiscordDice(core);
@@ -385,7 +357,7 @@ export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 	public static create(discordDice: DiscordDice): DiscordDiceRoll {
 		const core: DiscordDiceRollCore = {
 			objectType: "DiscordDiceRoll",
-			id: randomUuid(),
+			id: randomSnowflake(),
 			discordDice: discordDice.toJSON(),
 			rolls: discordDice.diceGroups.map(diceGroup => diceGroup.roll().toJSON())
 		};
