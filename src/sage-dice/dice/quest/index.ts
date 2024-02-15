@@ -1,20 +1,19 @@
-import { Dice, DiceBase, DiceCore, DiceGroup, DiceGroupCore, DiceGroupCoreArgs, DicePart, DicePartCore, DicePartCoreArgs, DiceTest, DiceTestType, DieRollGrade, TDice, TDiceGroup, TDicePart, cleanDicePartDescription, gradeToEmoji, parseDiceTestTargetValue, type DiceTestData } from "@rsc-utils/dice-utils";
+import { Dice, DiceGroup, DicePart, DiceTest, DiceTestType, DieRollGrade, cleanDicePartDescription, parseDiceTestTargetValue, type DiceBase, type DiceCore, type DiceGroupCore, type DiceGroupCoreArgs, type DicePartCore, type DicePartCoreArgs, type DiceTestData, type TDice, type TDiceGroup, type TDicePart } from "@rsc-utils/dice-utils";
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
-import { type OrNull } from "@rsc-utils/type-utils";
 import { GameType } from "../../../sage-common";
 import { DiceSecretMethodType } from "../../common";
 
 //#region Tokenizer
 
-function getDiceTokenParsers(): TokenParsers {
+function getTokenParsers(): TokenParsers {
 	return {
 		dice: /\s*(1)?\s*d\s*(20)/i,
 		target: /(vs)\s*(\d+|\|\|\d+\|\|)/i
 	};
 }
 
-function reduceTokenToDicePartCore<T extends QuestDicePartCore>(core: T, token: TokenData): T {
+function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData): T {
 	if (token.key === "dice") {
 		core.count = 1;
 		core.sides = 20;
@@ -22,7 +21,7 @@ function reduceTokenToDicePartCore<T extends QuestDicePartCore>(core: T, token: 
 		const { value, hidden } = parseDiceTestTargetValue(token.matches[1]);
 		core.target = { type:TargetType.VS, value, hidden };
 	}else {
-		core.description = (core.description || "") + token.token;
+		core.description = (core.description ?? "") + token.token;
 	}
 	return core;
 }
@@ -33,19 +32,20 @@ function reduceTokenToDicePartCore<T extends QuestDicePartCore>(core: T, token: 
 
 enum TargetType { None = 0, VS = 1 }
 
-type TTargetData = { type:TargetType; value:number; hidden:boolean; };
-
-function targetDataToTestData(targetData: TTargetData): OrNull<DiceTestData> {
-	return !targetData ? null : DiceTest.createData(DiceTestType.GreaterThan, targetData.value, targetData.hidden, "vs");
+function targetDataToTestData(targetData?: DiceTestData<TargetType>): DiceTestData | undefined {
+	if (targetData) {
+		return DiceTest.createData(DiceTestType.GreaterThan, targetData.value, targetData.hidden, "vs");
+	}
+	return undefined;
 }
 
 //#endregion
 
 //#region Grades
 
-function gradeResults(dice: QuestDice): DieRollGrade {
+function gradeRoll(dice: QuestDice): DieRollGrade {
 	const test = dice.test;
-	if (test) {
+	if (!test.isEmpty) {
 		return dice.total > test.value ? DieRollGrade.Success : DieRollGrade.Failure;
 	}
 	if (dice.total === 20) {
@@ -61,46 +61,39 @@ function gradeResults(dice: QuestDice): DieRollGrade {
 	}
 }
 
-//#endregion
-
-function _gradeEmoji(grade: DieRollGrade, vs: boolean): string {
+function gradeToEmoji(grade: DieRollGrade, vs?: boolean): string | undefined {
 	if (vs) {
-		return gradeToEmoji(grade) || `:question:`;
+		return Dice.gradeToEmoji(grade) ?? `:question:`;
 	}
-	return gradeToEmoji(grade) || `:bangbang:`;
+	return Dice.gradeToEmoji(grade) ?? `:bangbang:`;
 }
 
-type QuestDicePartCore = DicePartCore & {
-	target?: TTargetData;
-};
+//#endregion
 
-type QuestDicePartCoreArgs = DicePartCoreArgs & {
-	testOrTarget?: DiceTestData | TTargetData;
-};
+export class QuestDicePart extends DicePart<DicePartCore<TargetType>, TargetType, GameType> {
 
-export class QuestDicePart extends DicePart<QuestDicePartCore, GameType> {
-
-	public static create<DicePartType extends TDicePart>({ description, testOrTarget }: QuestDicePartCoreArgs = {}): DicePartType {
+	public static create<DicePartType extends TDicePart>({ description, target }: DicePartCoreArgs = {}): DicePartType {
 		return new this({
 			objectType: "DicePart",
 			gameType: this.GameType,
 			id: randomSnowflake(),
 
+			children: undefined!,
 			count: 1,
 			description: cleanDicePartDescription(description),
+			fixedRolls: undefined!,
 			manipulation: undefined!,
 			modifier: 0,
-			fixedRolls: undefined!,
 			sides: 20,
 			sign: undefined!,
-			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as DiceTestData ?? null,
-			target: testOrTarget as TTargetData ?? null,
-
-			children: undefined!
+			test: this.targetDataToTestData(target),
+			target
 		}) as DicePartType;
 	}
 
 	public static readonly reduceTokenToCore = reduceTokenToDicePartCore;
+
+	public static readonly targetDataToTestData = targetDataToTestData;
 
 	public static readonly GameType = GameType.Quest;
 }
@@ -110,6 +103,10 @@ export class QuestDice extends Dice<DiceCore, QuestDicePart, GameType> {
 	public static readonly Child = QuestDicePart as typeof DiceBase;
 
 	public static readonly GameType = GameType.Quest;
+
+	public static readonly gradeRoll = gradeRoll;
+
+	public static readonly gradeToEmoji = gradeToEmoji;
 }
 
 export class QuestDiceGroup extends DiceGroup<DiceGroupCore, QuestDice, GameType> {
@@ -127,7 +124,7 @@ export class QuestDiceGroup extends DiceGroup<DiceGroupCore, QuestDice, GameType
 		}) as DiceGroupType;
 	}
 
-	public static readonly getTokenParsers = getDiceTokenParsers;
+	public static readonly getTokenParsers = getTokenParsers;
 
 	public static readonly Child = QuestDice as typeof DiceBase;
 
