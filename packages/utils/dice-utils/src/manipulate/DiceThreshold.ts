@@ -6,8 +6,6 @@ Bottom Threshold is the LOWEST value you can get, regardless of the rolled value
 Working codes are tt and bt.
 Ex: [1d8tt7] would mean that when an 8 is rolled, a value of 7 would be used.
 Ex: [1d8bt2] would mean that when a 1 is rolled, a value of 2 would be used.
-
-maybe use lt (lowest threshold) and ht (highest threshold) to match dh and dl and kh and kl (drop/keep)
 */
 
 import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
@@ -16,8 +14,8 @@ import { DiceManipulation } from "./DiceManipulation.js";
 
 export enum DiceThresholdType {
 	None = 0,
-	LowestThreshold = 1,
-	HighestThreshold = 2
+	BottomThreshold = 1,
+	TopThreshold = 2
 }
 
 /** The information about how manipulate rolls to meet the threshold. */
@@ -41,7 +39,7 @@ export class DiceThreshold extends DiceManipulation<DiceThresholdData> {
 			rolls.forEach(roll => {
 				if (this.shouldUpdate(roll.threshold ?? roll.value)) {
 					roll.threshold = this.value;
-					if (this.type === DiceThresholdType.HighestThreshold) {
+					if (this.type === DiceThresholdType.TopThreshold) {
 						roll.isAboveThreshold = true;
 					}else {
 						roll.isBelowThreshold = true;
@@ -54,8 +52,8 @@ export class DiceThreshold extends DiceManipulation<DiceThresholdData> {
 	public shouldUpdate(value: number): boolean {
 		if (!this.isEmpty) {
 			switch(this.type) {
-				case DiceThresholdType.HighestThreshold: return value > this.value;
-				case DiceThresholdType.LowestThreshold: return value < this.value;
+				case DiceThresholdType.TopThreshold: return value > this.value;
+				case DiceThresholdType.BottomThreshold: return value < this.value;
 				case DiceThresholdType.None: return false;
 			}
 		}
@@ -71,7 +69,7 @@ export class DiceThreshold extends DiceManipulation<DiceThresholdData> {
 		if (this.isEmpty) {
 			return ``;
 		}
-		if (["lt", "ht"].includes(this.alias)) {
+		if (["bt", "tt"].includes(this.alias)) {
 			return `${leftPad}${this.alias}${this.value}${rightPad}`;
 		}
 		return `${leftPad}(${this.alias})${rightPad}`;
@@ -79,16 +77,14 @@ export class DiceThreshold extends DiceManipulation<DiceThresholdData> {
 
 	/** The token key/regex used to generate ThresholdData */
 	public static getParsers(): TokenParsers {
-		return { threshold:/(lt|ht)\s*(\d+)/i };
-		// return { threshold:/(bt|lt|ht|tt)\s*(\d+)/i };
+		return { threshold:/(bt|tt)\s*(\d+)/i };
 	}
 
 	/** Parses the given TokenData into ThresholdData */
 	public static parseData(token?: TokenData | null): DiceThresholdData | undefined {
 		if (token?.key === "threshold") {
 			const alias = token.matches[0].toLowerCase().slice(0, 2);
-				// .replace(/bt/, "lt").replace(/tt/, "ht");
-			const type = [null, "lt", "ht"].indexOf(alias);
+			const type = [null, "bt", "tt"].indexOf(alias);
 			const value = +token.matches[1];
 			return { alias, type, value };
 		}

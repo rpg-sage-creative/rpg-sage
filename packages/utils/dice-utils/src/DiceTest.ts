@@ -1,6 +1,5 @@
 import { warn } from "@rsc-utils/console-utils";
 import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
-import type { TDice } from "./dice/Dice.js";
 
 export enum DiceTestType {
 	None = 0,
@@ -12,13 +11,13 @@ export enum DiceTestType {
 }
 
 /** The information about how to test dice results for success/failure and how to display that in the output. */
-export type DiceTestData = {
+export type DiceTestData<Type extends number = DiceTestType> = {
 	/** a human readable alternative output */
 	alias?: string;
 	/** wether or not this test should be hidden */
 	hidden: boolean;
 	/** the fundamental test */
-	type: DiceTestType;
+	type: Type;
 	/** the value to test against */
 	value: number;
 };
@@ -142,11 +141,6 @@ export class DiceTest {
 	/** Parses the given TokenData into DiceTestData */
 	public static from(token: TokenData): DiceTest {
 		return new DiceTest(DiceTest.parseData(token));
-	}
-
-	/** Tests the roll for pass/fail. If isEmpty, undefined is returned instead. */
-	public static test(dice: TDice): boolean | undefined {
-		return dice.test.test(dice.total);
 	}
 
 	public static readonly EmptyTest = new DiceTest();

@@ -1,5 +1,6 @@
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
-import { DiceTest, type DiceTestData } from "../DiceTest.js";
+import type { TokenData } from "@rsc-utils/string-utils";
+import { DiceTest, type DiceTestData, type DiceTestType } from "../DiceTest.js";
 import { cleanDicePartDescription } from "../cleanDicePartDescription.js";
 import { hasSecretFlag } from "../internal/hasSecretFlag.js";
 import { DiceDropKeep } from "../manipulate/DiceDropKeep.js";
@@ -7,15 +8,14 @@ import { DiceExplode } from "../manipulate/DiceExplode.js";
 import { type DiceManipulationData } from "../manipulate/DiceManipulationData.js";
 import { DiceThreshold } from "../manipulate/DiceThreshold.js";
 import { rollDicePart } from "../roll/rollDicePart.js";
+import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 import type { DiceOperator } from "../types/DiceOperator.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 import type { RollData } from "../types/RollData.js";
 import type { SortedRollData } from "../types/SortedDataRoll.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
-import { TokenData } from "@rsc-utils/string-utils";
-import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 
-type DicePartCoreBase = {
+type DicePartCoreBase<TargetType extends number = DiceTestType> = {
 
 	/** number of dice */
 	count?: number;
@@ -40,21 +40,24 @@ type DicePartCoreBase = {
 
 	sortedRollData?: SortedRollData;
 
-	/** target test information */
+	/** a target value test parsed generically */
 	test?: DiceTestData;
 
+	/** a target value data specific to the game system */
+	target?: DiceTestData<TargetType>;
 };
 
-export type DicePartCoreArgs = Partial<DicePartCoreBase>;
+export type DicePartCoreArgs = Partial<DicePartCoreBase<number>>;
 
-export type DicePartCore<GameType extends number = number>
-	= DicePartCoreBase
+export type DicePartCore<TargetType extends number = number, GameType extends number = number>
+	= DicePartCoreBase<TargetType>
 	& DiceBaseCore<never, "DicePart", GameType>;
 
 export type TDicePart = DicePart<DicePartCore>;
 
 export class DicePart<
-			CoreType extends DicePartCore<GameType>,
+			CoreType extends DicePartCore<TargetType, GameType>,
+			TargetType extends number = number,
 			GameType extends number = number
 			>extends DiceBase<CoreType, never, "DicePart", GameType> {
 
@@ -192,17 +195,17 @@ export class DicePart<
 			gameType: this.GameType,
 			id: randomSnowflake(),
 
+			children: undefined!,
 			count: args.count ?? 0,
 			description: cleanDicePartDescription(args.description),
+			fixedRolls: args.fixedRolls,
 			manipulation: args.manipulation,
 			modifier: args.modifier ?? 0,
-			fixedRolls: args.fixedRolls,
 			sides: args.sides ?? 0,
 			sign: args.sign,
 			sortedRollData: args.sortedRollData,
-			test: args.test,
-
-			children: undefined!
+			target: args.target,
+			test: this.targetDataToTestData(args.target) ?? args.test,
 		});
 	}
 
@@ -215,7 +218,9 @@ export class DicePart<
 		return this.create(core);
 	}
 
-	public static reduceTokenToCore = reduceTokenToDicePartCore; //NOSONAR
+	public static readonly reduceTokenToCore = reduceTokenToDicePartCore;
+
+	public static readonly targetDataToTestData: (targetData?: DiceTestData<number>) => DiceTestData | undefined = () => undefined;
 
 	//#endregion
 }

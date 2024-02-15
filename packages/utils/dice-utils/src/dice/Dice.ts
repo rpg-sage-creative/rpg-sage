@@ -108,7 +108,7 @@ export class Dice<
 	}
 
 	protected toRollStringXXS(hideRolls: boolean): string {
-		const gradeEmoji = (this.constructor as typeof Dice).gradeToEmoji(this.grade),
+		const gradeEmoji = (this.constructor as typeof Dice).gradeToEmoji(this.grade, this.hasTest),
 			outputEmoji = hideRolls ? ":question:" : gradeEmoji ?? "",
 			fixedOutput = this.hasFixed ? "f" : "",
 			totalString = `<i><b>${this.total}${fixedOutput}</b></i>`,
@@ -148,7 +148,7 @@ export class Dice<
 
 	public static readonly Child = DicePart as typeof DiceBase;
 
-	public static correctEscapeForEmoji: (diceOutput: string) => string = (diceOutput: string) => diceOutput; //NOSONAR
+	public static readonly correctEscapeForEmoji: (diceOutput: string) => string = (diceOutput: string) => diceOutput;
 
 	public static readonly gradeRoll = gradeRoll;
 
