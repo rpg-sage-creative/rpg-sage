@@ -26,7 +26,7 @@ type TSearchStatus = { [key: number]: undefined | boolean | string; };
 export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	codeName: TBotCodeName;
 	commandPrefix?: string;
-	devs?: TDev[];
+	// devs?: TDev[];
 
 	/** Discord API bot token */
 	token: string;
@@ -42,7 +42,7 @@ export class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmo
 	public constructor(core: IBotCore, sageCache: SageCache) { super(core, sageCache); }
 	public get codeName(): TBotCodeName { return this.core.codeName; }
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }
-	public get devs(): TDev[] { return this.core.devs ?? []; }
+	// public get devs(): TDev[] { return this.core.devs ?? []; }
 	public get token(): string { return this.core.token; }
 	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
 

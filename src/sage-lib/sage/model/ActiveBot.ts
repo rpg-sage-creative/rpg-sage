@@ -1,5 +1,6 @@
-import { addLogHandler, captureProcessExit, error, formatArg, info, verbose, type LogLevel } from "@rsc-utils/console-utils";
+import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, info, verbose } from "@rsc-utils/console-utils";
 import type { DMessage } from "@rsc-utils/discord-utils";
+import { getSuperUserId } from "@rsc-utils/env-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { chunk } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
@@ -36,6 +37,14 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	public static get isDev(): boolean { return ActiveBot.active?.codeName === "dev"; }
 	public static isActiveBot(userDid: Optional<Snowflake>): boolean {
 		return ActiveBot.active?.did === userDid;
+	}
+	public static async sendToSuperUser(...contents: string[]): Promise<void> {
+		const user = await ActiveBot.active.sageCache.discord.fetchUser(getSuperUserId()).catch(errorReturnNull);
+		if (user) {
+			for (const content of contents) {
+				user.send(content);
+			}
+		}
 	}
 
 	public client: Client;
@@ -127,24 +136,17 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 			this.sageCache = sageCache;
 			ActiveBot.active = this;
 
-			addLogHandler("error", consoleHandler.bind(this));
+			addLogHandler("error", (...args: any[]) => {
+				ActiveBot.sendToSuperUser(...chunk(`# error\n${args.map(formatArg).join("\n")}`, 2000));
+			});
 
 			info(`Discord.Client.on("ready") [success]`);
-			// Notify super user of successful start.
-			this.sageCache.discord.fetchUser("253330271678627841").then(user => user?.send(`Discord.Client.on("ready") [success]`));
+			ActiveBot.sendToSuperUser(`Discord.Client.on("ready") [success]`);
+
 		}, err => {
 			error(`Discord.Client.on("ready") [error]`, err);
 			process.exit(1);
 		});
-
-		async function consoleHandler(this: ActiveBot, logLevel: LogLevel, ...args: any[]): Promise<void> {
-			this.devs.forEach(dev => {
-				const contents = `# ${logLevel}\n${args.map(formatArg).join("\n")}`;
-				const chunks = chunk(contents, 2000);
-				this.sageCache.discord.fetchUser(dev.did)
-					.then(user => user ? chunks.forEach(chunk => user.send(chunk)) : void 0);
-			});
-		}
 	}
 
 	onClientGuildCreate(guild: Guild): void {
