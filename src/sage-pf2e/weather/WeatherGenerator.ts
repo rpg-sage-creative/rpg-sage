@@ -392,7 +392,7 @@ function getOvercastVariation(isOvercast: boolean, hasPrecip: boolean, season: S
 	return 0;
 }
 function randomWeather(properties: IGenParameters, date: GDate): IWeatherDayResult[] {
-	const season = date.temperateSeason as unknown as Season,
+	const season = date.temperateSeasonType as number as Season,
 		tempVariationItem = rollTemperatureVariation(properties.climate),
 		tempVariation = roll(tempVariationItem.variation),
 		days: IWeatherDayResult[] = [];
