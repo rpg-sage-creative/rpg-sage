@@ -47,11 +47,14 @@ export class SageMessage
 
 	public static async fromMessage(message: DMessage, originalMessage: Optional<DMessage>): Promise<SageMessage> {
 		const caches = await SageCache.fromMessage(message);
-		const prefixes = [caches.getPrefixOrDefault().toLowerCase(), "sage"];
-		const prefixIndex = prefixes.findIndex(prefix => message.content?.slice(0, prefix.length).toLowerCase() === prefix);
-		const hasPrefix = -1 < prefixIndex;
-		const prefix = hasPrefix ? prefixes[prefixIndex] : prefixes[0];
-		const safeContent = safeMentions(message.content ?? "");
+		const prefixOrDefault = caches.getPrefixOrDefault();
+		const prefixRegex = prefixOrDefault
+			? new RegExp(`^\s*(sage|${prefixOrDefault})[!?][!]?`, "i")
+			: new RegExp(`^\s*(sage)?[!?][!]?`, "i");
+		const prefixMatch = prefixRegex.exec(message.content ?? "") ?? [];
+		const hasPrefix = prefixMatch.length > 0;
+		const prefix = hasPrefix ? prefixMatch[1] ?? "" : prefixOrDefault;
+		const safeContent = safeMentions(message.content ?? "").trim();
 		const slicedContent = hasPrefix ? safeContent.slice(prefix.length).trim() : safeContent;
 		const sageMessage = new SageMessage({
 			message,
