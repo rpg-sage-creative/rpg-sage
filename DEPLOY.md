@@ -62,3 +62,6 @@ Update pm2
 
 ### pm2 config usage
 `pm2 start pm2.config.cjs --env dev`
+
+# Get a Single Branch
+`git clone -b v1.6.0 --single-branch git@github.com:randaltmeyer/rpg-sage-legacy.git rpg-sage-legacy-v1.6.0`
