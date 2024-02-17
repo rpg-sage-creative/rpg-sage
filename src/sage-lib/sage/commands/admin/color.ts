@@ -7,8 +7,9 @@ import type { Game } from "../../model/Game";
 import { ColorType } from "../../model/HasColorsCore";
 import type { SageMessage } from "../../model/SageMessage";
 import type { Server } from "../../model/Server";
-import { BotServerGameType, embedColor, registerAdminCommand } from "../cmd";
+import { BotServerGameType, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
+import { embedColor } from "./color/embedColor";
 
 //#region list
 
