@@ -9,7 +9,7 @@ import type { SageMessage } from "../../model/SageMessage";
 import type { Server } from "../../model/Server";
 import { BotServerGameType, registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
-import { embedColor } from "./color/embedColor";
+import { embedColor } from "../helpers/embedColor";
 
 //#region list
 

@@ -6,8 +6,9 @@ import { Dice } from "../../../../sage-dice/dice/pf2e";
 import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e";
 import { ColorType } from "../../model/HasColorsCore";
 import type { SageMessage } from "../../model/SageMessage";
-import { createRenderableContent, registerCommandRegex } from "../cmd";
+import { registerCommandRegex } from "../cmd";
 import { registerCommandHelp } from "../help";
+import { createRenderableContent } from "../helpers/createRenderableContent";
 
 export type TPfsFaction = "Horizon Hunters" | "Vigilant Seal" | "Envoys' Alliance" | "Grand Archive";
 

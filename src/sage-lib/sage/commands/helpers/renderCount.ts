@@ -1,5 +1,5 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import { createAdminRenderableContent } from "../../cmd";
+import type { SageMessage } from "../../model/SageMessage";
+import { createAdminRenderableContent } from "../cmd";
 
 export function renderCount(sageMessage: SageMessage, label: string, count: number, active?: number): Promise<void> {
 	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>count-${label.toLowerCase()}</b>`);
