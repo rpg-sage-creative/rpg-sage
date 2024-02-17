@@ -66,10 +66,11 @@ function isTesterBot(did: Optional<Snowflake>): boolean {
 //#region listeners
 
 type TListener = {
-	command?: string;
+	command: string;
 	intents?: IntentsString[];
 	permissions?: PermissionString[];
 	priorityIndex?: number;
+	which: TListenerTypeName;
 };
 
 type TInteractionType = undefined;
@@ -77,13 +78,16 @@ type TInteractionListener = TListener & {
 	tester: TInteractionTester;
 	handler: TInteractionHandler;
 	type?: TInteractionType;
+	which: "InteractionListener";
 };
 const interactionListeners: TInteractionListener[] = [];
 
 type TMessageListener = TListener & {
 	tester: TMessageTester;
 	handler: TMessageHandler;
+	regex?: RegExp;
 	type: MessageType;
+	which: "MessageListener";
 };
 const messageListeners: TMessageListener[] = [];
 
@@ -91,6 +95,7 @@ type TReactionListener = TListener & {
 	tester: TReactionTester;
 	handler: TReactionHandler;
 	type: ReactionType;
+	which: "ReactionListener";
 };
 const reactionListeners: TReactionListener[] = [];
 
@@ -105,24 +110,56 @@ function getListeners<T extends TListenerType>(which: TListenerTypeName): T[] {
 }
 
 type TListenerTypeName = "InteractionListener" | "MessageListener" | "ReactionListener";
-function registerListener<T extends TListenerType>(which: TListenerTypeName, listener: T): void {
+function registerListener<T extends TListenerType>(listener: T): void {
 	if (!botMeta.activeBotDid) {
 		error(`Please call setBotMeta({ activeBotDid:"", testBotDid?:"", dialogWebhookName:"" })`);
 	}
-	const listeners: T[] = getListeners(which);
+
+	const listeners: T[] = getListeners(listener.which);
+
 	if (isNullOrUndefined(listener.priorityIndex)) {
-		verbose(`Registering ${which} #${listeners.length + 1}: ${listener.command ?? listener.tester.name}`);
-		listeners.push(listener);
+		verbose(`Registering ${listener.which} #${listeners.length + 1}: ${listener.command ?? listener.tester.name}`);
 	} else {
-		verbose(`Registering ${which} #${listeners.length + 1} at priorityIndex ${listener.priorityIndex}: ${listener.command ?? listener.tester.name}`);
+		verbose(`Registering ${listener.which} #${listeners.length + 1} at priorityIndex ${listener.priorityIndex}: ${listener.command ?? listener.tester.name}`);
 		if (listeners.find(l => l.priorityIndex === listener.priorityIndex)) {
-			warn(`${which} at priorityIndex ${listener.priorityIndex} already exists!`);
+			warn(`${listener.which} at priorityIndex ${listener.priorityIndex} already exists!`);
 		}
-		listeners.splice(listener.priorityIndex, 0, listener);
 	}
+
+	listeners.push(listener);
+
+	listeners.sort((a, b) => {
+		// we want to check priority first, lower priority means lower index means first checked
+		const aPriority = a.priorityIndex ?? 999;
+		const bPriority = b.priorityIndex ?? 999;
+		if (aPriority < bPriority) {
+			return -1;
+		}else if (aPriority > bPriority) {
+			return 1;
+		}
+
+		// we check command length next, make longer commands a lower index to check them before shorter commands
+		const aCmdLength = a.command.length ?? 0;
+		const bCmdLength = b.command.length ?? 0;
+		if (aCmdLength < bCmdLength) {
+			return 1;
+		}else if (aCmdLength > bCmdLength) {
+			return -1;
+		}
+
+		// sort by command text last, for funsies
+		if (a.command < b.command) {
+			return -1;
+		}else if (a.command > b.command) {
+			return 1;
+		}
+
+		return 0;
+	});
 }
 
 type RegisterOptions = {
+	command?: string;
 	intents?: IntentsString[];
 	permissions?: PermissionString[];
 	priorityIndex?: number;
@@ -131,16 +168,21 @@ type RegisterInteractionOptions = RegisterOptions & { type?: TInteractionType; }
 type RegisterMessageOptions = RegisterOptions & { type?: MessageType; };
 type RegisterReactionOptions = RegisterOptions & { type?: ReactionType; };
 
-export function registerInteractionListener(tester: TInteractionTester, handler: TInteractionHandler, { type, ...options }: RegisterInteractionOptions = { }): void {
-	registerListener("InteractionListener", { tester, handler, type, ...options });
+export function registerInteractionListener(tester: TInteractionTester, handler: TInteractionHandler, { type, command, ...options }: RegisterInteractionOptions = { }): void {
+	command = (command ?? tester.name ?? handler.name).trim();
+	registerListener({ which:"InteractionListener", tester, handler, type, command, ...options });
 }
 
-export function registerMessageListener(tester: TMessageTester, handler: TMessageHandler, { type = MessageType.Post, ...options }: RegisterMessageOptions = { }): void {
-	registerListener("MessageListener", { tester, handler, type, ...options });
+export function registerMessageListener(tester: TMessageTester, handler: TMessageHandler, { type = MessageType.Post, command, ...options }: RegisterMessageOptions = { }): void {
+	command = (command ?? tester.name ?? handler.name).trim();
+	const keyRegex = command.toLowerCase().replace(/[\-\s]+/g, "[\\-\\s]*");
+	const regex = RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
+	registerListener({ which:"MessageListener", tester, handler, type, command, regex, ...options });
 }
 
-export function registerReactionListener<T>(tester: TReactionTester<T>, handler: TReactionHandler<T>, { type = ReactionType.Both, ...options }: RegisterReactionOptions = { }): void {
-	registerListener("ReactionListener", { tester, handler, type, ...options });
+export function registerReactionListener<T>(tester: TReactionTester<T>, handler: TReactionHandler<T>, { type = ReactionType.Both, command, ...options }: RegisterReactionOptions = { }): void {
+	command = (command ?? tester.name ?? handler.name).trim();
+	registerListener({ which:"ReactionListener", tester, handler, type, command, ...options });
 }
 
 export function registeredIntents(): Intents {

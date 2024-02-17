@@ -14,9 +14,10 @@ import type { SageCache } from "../../model/SageCache";
 import type { SageMessage } from "../../model/SageMessage";
 import type { Server } from "../../model/Server";
 import { DialogType, PermissionType, type IChannel } from "../../repo/base/IdRepository";
-import { BotServerGameType, createAdminRenderableContent, registerAdminCommand } from "../cmd";
+import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";
+import { BotServerGameType } from "../helpers/BotServerGameType";
 
 //#region add
 

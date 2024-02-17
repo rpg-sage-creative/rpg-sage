@@ -6,8 +6,9 @@ import type { Game } from "../../model/Game";
 import { EmojiType } from "../../model/HasEmojiCore";
 import type { SageMessage } from "../../model/SageMessage";
 import type { Server } from "../../model/Server";
-import { BotServerGameType, registerAdminCommand } from "../cmd";
+import { registerAdminCommand } from "../cmd";
 import { registerAdminCommandHelp } from "../help";
+import { BotServerGameType } from "../helpers/BotServerGameType";
 
 //#region list
 
