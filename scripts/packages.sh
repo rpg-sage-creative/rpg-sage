@@ -42,9 +42,14 @@ repoNames=(
 	"snowflake-utils"
 	"string-utils"
 	"temperature-utils"
+	"test-utils"
 	"type-utils"
 	"uuid-utils"
 )
+
+if [ ! -z "$1" ]; then
+	repoNames=( "$1" )
+fi
 
 echo "Configuring Packages ..."
 
@@ -61,6 +66,12 @@ for repoName in "${repoNames[@]}"; do
 	rm -rf "$destDir"
 	mkdir "$destDir"
 	cp -r "$srcDir/src" "$destDir/src"
+	if [ "$repoName" = "console-utils" ]; then
+		cp -r "$srcDir/scripts" "$destDir/scripts"
+	fi
+	if [ "$repoName" = "language-utils" ]; then
+		cp -r "$srcDir/data" "$destDir/data"
+	fi
 
 	# update package.json details
 	echo "Adding $repoName/package.json ..."
@@ -78,3 +89,7 @@ for repoName in "${repoNames[@]}"; do
 done
 
 echo "Configuring Packages ... done."
+
+cd "$repoDir"
+rm -rf node_modules package-lock.json
+npm i
