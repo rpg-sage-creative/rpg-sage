@@ -2,6 +2,7 @@ import { toUnique } from "@rsc-utils/array-utils";
 import { error } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Renderable, RenderableContentSection, RenderableContentSectionColumn } from "./types.js";
+import { stringify } from "@rsc-utils/json-utils";
 
 function createSection(index = 0, title: string | null = null, content = <string[]>[], columns = <RenderableContentSectionColumn[]>[]): RenderableContentSection {
 	return { index, title:title, content, columns };
@@ -120,7 +121,7 @@ export class RenderableContent implements Renderable {
 			}catch(ex) {
 				const toStringValue = Object.prototype.toString.call(resolvable) ?? "No toString";
 				const constructorName = resolvable?.constructor?.name ?? "No Constructor";
-				error(`Unable to resolve Renderable: ${toStringValue} (${constructorName}); "toRenderableContent in resolvable === ${"toRenderableContent" in resolvable}`, JSON.stringify(resolvable));
+				error(`Unable to resolve Renderable: ${toStringValue} (${constructorName}); "toRenderableContent in resolvable === ${"toRenderableContent" in resolvable}`, stringify(resolvable));
 			}
 		}
 
