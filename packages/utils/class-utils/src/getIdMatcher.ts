@@ -16,7 +16,8 @@ export function getIdMatcher(value: string): Matcher {
 			return new UuidMatcher(value);
 		}
 	}
-	debug(`Invalid ID value: ${JSON.stringify(value)}`);
+	const outVal = typeof(value) === "string" ? `"${value}"` : `${value}`;
+	debug(`Invalid ID value: ${outVal}`);
 	return {
 		isNonNil: false,
 		isValid: false,
