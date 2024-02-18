@@ -1,5 +1,6 @@
 {"name":"@rsc-utils/https-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
   "@rsc-utils/console-utils": "^0.0.0",
+  "@rsc-utils/json-utils": "^0.0.0",
   "@rsc-utils/progress-utils": "^0.0.0",
   "@rsc-utils/type-utils": "^0.0.0",
   "follow-redirects": "^1.15.4"

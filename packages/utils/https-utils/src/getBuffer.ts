@@ -1,5 +1,6 @@
 import { verbose } from "@rsc-utils/console-utils";
-import { type ProgressTracker } from "@rsc-utils/progress-utils";
+import { stringify } from "@rsc-utils/json-utils";
+import type { ProgressTracker } from "@rsc-utils/progress-utils";
 import { createHttpLogger } from "./createHttpLogger.js";
 import { getProtocol } from "./getProtocol.js";
 
@@ -14,7 +15,7 @@ export function getBuffer(url: string): Promise<Buffer>;
 /**
  * You can pass in a fully formed url or leave off the protocol and allow it to prepend "https://".
  * If you pass in a url with "http://" it will downgrade to use http protocol instead of https.
- * Sending postData will JSON.stringify the value and then do a POST instead of a GET.
+ * Sending postData will stringify the value and then do a POST instead of a GET.
 */
 export function getBuffer<T = any>(url: string, postData: T): Promise<Buffer>;
 
@@ -40,7 +41,7 @@ export function getBuffer<T = any>(url: string, postData?: T, opts?: Opts): Prom
 		try {
 			const protocol = getProtocol(url);
 			const method = postData ? "request" : "get";
-			const payload = postData ? JSON.stringify(postData) : null;
+			const payload = postData ? stringify(postData) : null;
 					const options = payload ? {
 				headers: {
 					'Content-Type': 'application/json',
@@ -76,8 +77,9 @@ export function getBuffer<T = any>(url: string, postData?: T, opts?: Opts): Prom
 			req.once("timeout", reject);
 			if (method === "request") {
 				req.write(payload);
-				req.end();
 			}
+			/** @todo do I need this req.end() ??? */
+			req.end();
 		}catch(ex) {
 			reject(ex);
 		}

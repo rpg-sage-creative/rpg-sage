@@ -1,4 +1,4 @@
-import { formattedStringify } from "@rsc-utils/json-utils";
+import { formattedStringify, stringify } from "@rsc-utils/json-utils";
 
 /**
  * @private
@@ -14,5 +14,5 @@ export function contentToFileOutput<T>(content: T, formatted?: boolean): string 
 	}
 	return formatted
 		? formattedStringify(content)
-		: JSON.stringify(content);
+		: stringify(content);
 }
