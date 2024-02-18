@@ -1,5 +1,5 @@
+import { getHandlers } from "@rsc-utils/console-utils";
 import type { AssertMode } from "../assert/AssertMode.js";
-import { getHandlers } from "./getHandlers.js";
 
 /** Adds an extra handler to the given assert mode. */
 export function addAssertHandler(assertMode: AssertMode, handler: Function): void {

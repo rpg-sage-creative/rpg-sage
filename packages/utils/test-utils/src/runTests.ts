@@ -1,9 +1,6 @@
+import { enableColorLevels, enableLogLevels, error, info } from "@rsc-utils/console-utils";
 import { isPromise } from "util/types";
-import { getAssertData } from "./assert/AssertData.js";
-import { startAsserting, stopAsserting } from "./assert/AssertLabel.js";
-import { enableLogLevels } from "./logLevels/enableLogLevels.js";
-import { error } from "./loggers/error.js";
-import { info } from "./loggers/info.js";
+import { getAssertData, startAsserting, stopAsserting } from "./assert/index.js";
 
 function showSummary(ex?: unknown) {
 	if (ex) {
@@ -38,6 +35,7 @@ export async function runTests(exitOnFail: boolean, ...tests: Function[]): Promi
 export async function runTests(...args: (boolean | Function)[]): Promise<void> {
 	const exitOnFail = args.includes(true);
 	const tests = args.filter((arg): arg is Function => typeof(arg) === "function");
+	enableColorLevels("development");
 	enableLogLevels("development");
 	for (const test of tests) {
 		startAsserting(test.name);

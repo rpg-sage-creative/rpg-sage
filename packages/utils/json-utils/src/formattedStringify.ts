@@ -1,3 +1,4 @@
+import { stringify } from "./stringify.js";
 
 function cleanWhitespaceIfShort(value: string, maxLineLength: number): string {
 	return value.length > maxLineLength
@@ -18,7 +19,9 @@ export function formattedStringify<T>(object: T): string;
 /** Formats JSON as readable, while trying to keep {} or [] on a single line <= maxLineLength characters. */
 export function formattedStringify<T>(object: T, maxLineLength: number): string;
 export function formattedStringify<T>(object: T, maxLineLength = 250): string {
-	if (object === null || object === undefined) return String(object);
-	const stringified = JSON.stringify(object, (_, value: string) => value, "\t");
+	if (object === null || object === undefined) {
+		return String(object);
+	}
+	const stringified = stringify(object, null, "\t");
 	return inlineCurlyBraces(inlineSquareBrackets(stringified, maxLineLength), maxLineLength);
 }

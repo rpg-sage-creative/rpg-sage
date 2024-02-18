@@ -30,5 +30,7 @@ export function formatArg(arg: any): string {
 	if (!asString.startsWith("[object")) {
 		return asString;
 	}
-	return JSON.stringify(arg);
+	return JSON.stringify(arg, (_, value) =>
+		typeof(value) === "bigint" ? `bigint-${value}n` : value
+	);
 }
