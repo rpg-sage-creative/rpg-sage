@@ -17,6 +17,7 @@ import {
 	testForPrecipitation
 } from "./weather";
 import { Season } from "@rsc-utils/date-utils";
+import { parse, stringify } from "@rsc-utils/json-utils";
 
 const HeavySnow = "Heavy Snow";
 
@@ -377,7 +378,7 @@ function getWind(precip?: PrecipitationTableItem): WindTableItem {
 	if (precip) {
 		const lower = precip.precipitation.toLowerCase();
 		if (lower.includes("fog")) {
-			return JSON.parse(JSON.stringify(WindStrength[0]));
+			return parse(stringify(WindStrength[0]));
 		}
 		if (lower.includes("thunderstorm")) {
 			return rollOnTable("ThunderstormWinds");

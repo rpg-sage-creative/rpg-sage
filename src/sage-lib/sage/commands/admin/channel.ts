@@ -18,6 +18,7 @@ import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
 import { DicePostType } from "../dice";
 import { registerAdminCommandHelp } from "../help";
 import { BotServerGameType } from "../helpers/BotServerGameType";
+import { stringify } from "@rsc-utils/json-utils";
 
 //#region add
 
@@ -286,7 +287,7 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 
 	const channelOptions = sageMessage.args.removeAndReturnChannelOptions();
 	if (!channelOptions) {
-		warn(`No or Invalid Channel Options: ${JSON.stringify(channelOptions)}`);
+		warn(`No or Invalid Channel Options: ${stringify(channelOptions)}`);
 		return sageMessage.reactFailure();
 	}
 
