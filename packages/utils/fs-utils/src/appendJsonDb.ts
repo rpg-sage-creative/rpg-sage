@@ -1,6 +1,6 @@
 import { appendFile, mkdir } from "fs";
-import { contentToFileOutput } from "./internal/contentToFileOutput";
-import { toFilePath } from "./internal/toFilePath";
+import { contentToFileOutput } from "./internal/contentToFileOutput.js";
+import { toFilePath } from "./internal/toFilePath.js";
 
 function append<T>(filePathAndName: string, content: T): Promise<boolean> {
 	return new Promise((resolve, reject) => {

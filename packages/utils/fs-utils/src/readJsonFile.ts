@@ -1,7 +1,8 @@
-import { readText } from "./readText";
+import { parse } from "@rsc-utils/json-utils";
+import { readText } from "./readText.js";
 
 /**
- * Convenience for: readTextFile(path).then(json => JSON.parse(json));
+ * Convenience for: readTextFile(path).then(json => parse(json));
  * An error while parsing will be rejected.
  * Rejections from readTextFile and readFile are bubbled.
  */
@@ -10,7 +11,7 @@ export function readJsonFile<T>(path: string): Promise<T | null> {
 		readText(path).then(json => {
 			let object: T | null | undefined;
 			try {
-				object = JSON.parse(json);
+				object = parse(json);
 			}catch(ex) {
 				reject(ex);
 			}
