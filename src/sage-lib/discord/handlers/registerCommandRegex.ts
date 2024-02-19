@@ -1,12 +1,13 @@
-import type { SageMessage } from "../../sage/model/SageMessage";
-import { ArgsManager } from "../ArgsManager";
-import { registerMessageListener } from "../handlers";
-import type { TCommandAndArgs, TMessageHandler } from "../types";
-import { hasCommandPrefix } from "./hasCommandPrefix";
+import type { SageMessage } from "../../sage/model/SageMessage.js";
+import { ArgsManager } from "../ArgsManager.js";
+import { registerMessageListener } from "../handlers.js";
+import type { TCommandAndArgs, TMessageHandler } from "../types.js";
 
+/** @deprecated use RegisterCommand(handler, ...commands[]) */
 export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler): void {
 	const _tester = async function (sageMessage: SageMessage): Promise<TCommandAndArgs | null> {
-		if (!hasCommandPrefix(sageMessage)) {
+		const hasPrefix = sageMessage.hasPrefix && /^!!?/.test(sageMessage.slicedContent);
+		if (!hasPrefix) {
 			return null;
 		}
 		const match = sageMessage.slicedContent.replace(/^!!?/, "").trim().match(matcher);
