@@ -126,6 +126,10 @@ function registerListener<T extends TListenerType>(listener: T): void {
 		}
 	}
 
+	if (listener.which === "MessageListener" && listeners.some(l => l.command === listener.command)) {
+		warn(`${listener.which} command ${listener.command} already exists!`);
+	}
+
 	listeners.push(listener);
 
 	listeners.sort((a, b) => {
@@ -303,6 +307,9 @@ async function handleMessages(sageMessage: SageMessage, messageType: MessageType
 				break;
 			}
 		}
+	}
+	if (!output.handled && sageMessage.hasPrefix && /^!!?/.test(sageMessage.slicedContent)) {
+		error(`I got ${messageListeners.length} message handlers, but "${sageMessage.slicedContent}" ain't one!`);
 	}
 }
 
