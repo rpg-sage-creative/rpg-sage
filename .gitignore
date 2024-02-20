@@ -16,3 +16,4 @@ node_modules/
 # negate ignore scripts folder scripts
 !scripts/**/*.sh
 !docker/**/*.sh
+!**/console-utils/**/*.sh
