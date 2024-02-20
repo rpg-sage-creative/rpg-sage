@@ -16,10 +16,6 @@ Load node modules
 <br>
 `npm ci`
 
-Make sure pdf2json has index.d.ts
-<br>
-`[ ! -f "./node_modules/pdf2json/index.d.ts" ] && echo 'declare module "pdf2json";' > ./node_modules/pdf2json/index.d.ts`
-
 Build repo
 <br>
 `npm run build`
@@ -48,22 +44,17 @@ Choose bot dir
 <br>
 `cd /home/ec2-user/legacy`
 
-Start bot in pm2
+Start apps in pm2
 <br>
-`pm2 start bot.mjs --name sage-bot-dev --max-memory-restart 750M --node-args='--experimental-modules --es-module-specifier-resolution=node' -- dev`
-
-Start maps in pm2
+`pm2 start pm2.config.cjs --env dev`
 <br>
-`pm2 start map.mjs --name sage-bot-dev --max-memory-restart 500M --node-args='--experimental-modules --es-module-specifier-resolution=node' -- dev`
+`pm2 start pm2.config.cjs --env beta --only sage-bot`
+<br>
+`pm2 start pm2.config.cjs --env stable`
 
 Update pm2
 <br>
 `pm2 save`
-
-### pm2 config usage
-`pm2 start pm2.config.cjs --env dev`
-`pm2 start pm2.config.cjs --env beta --only sage-bot`
-`pm2 start pm2.config.cjs --env stable`
 
 # Get a Single Branch
 `git clone -b v1.6.0 --single-branch git@github.com:randaltmeyer/rpg-sage-legacy.git rpg-sage-legacy-v1.6.0`
