@@ -170,17 +170,22 @@ function parseDiscordMacro(sageMessage: TInteraction, macroString: string, macro
 	const macroAndOutput = macroToDice(sageMessage.sageUser.macros, debrace(macroString));
 	if (macroAndOutput) {
 		const { macro, output } = macroAndOutput;
-		if (macroStack.includes(macro.name)) {
+		if (macroStack.includes(macro.name) && !RANDOM_REGEX.test(macroString)) {
 			error(`Macro Recursion`, { macroString, macroStack });
 			return parseDiscordDice(sageMessage, `[1d1 Recursion!]`)?.roll().toStrings() ?? [];
 		}
 
 		const diceToParse = output.match(BASE_REGEX) ?? [];
 
-		return diceToParse.map(dice =>
-			parseDiscordMacro(sageMessage, dice, macroStack.concat([macro.name]))
-			?? parseMatch(sageMessage, dice, { diceOutputType: DiceOutputType.XXL })
-		).flat();
+		return diceToParse.map(dice => {
+			if (!RANDOM_REGEX.test(dice)) {
+				const diceMacro = parseDiscordMacro(sageMessage, dice, macroStack.concat([macro.name]));
+				if (diceMacro) {
+					return diceMacro;
+				}
+			}
+			return parseMatch(sageMessage, dice, { diceOutputType: DiceOutputType.XXL });
+		}).flat();
 	}
 	return null;
 }
@@ -220,7 +225,8 @@ export function parseDiceMatches(sageMessage: TInteraction, content: string): TD
 		const match = execArray[0];
 		const index = execArray.index;
 		const inline = match.match(/^\[{2}/) && match.match(/\]{2}$/) ? true : false;
-		const output = parseDiscordMacro(sageMessage, content.slice(index, index + match.length)) ?? parseMatch(sageMessage, content.slice(index, index + match.length));
+		const output = parseDiscordMacro(sageMessage, content.slice(index, index + match.length))
+			?? parseMatch(sageMessage, content.slice(index, index + match.length));
 		if (output.length) {
 			diceMatches.push({ match, index, inline, output });
 		}
