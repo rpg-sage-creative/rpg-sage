@@ -1,31 +1,57 @@
-import { Snowflake, isNonNilSnowflake } from "@rsc-utils/snowflake-utils";
-import { Optional } from "@rsc-utils/type-utils";
-import { createMentionRegex } from "./createMentionRegex.js";
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
+import type { Optional } from "@rsc-utils/type-utils";
+import type { Collection } from "discord.js";
+import { type DMessage } from "../types.js";
 import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
-import { DMessage } from "../types.js";
+import { createMentionRegex } from "./createMentionRegex.js";
 
-type IdType = "channel";
+type MentionIdType = "channel" | "role" | "user";
+type UrlIdType = "channel" | "message";
+type IdType = MentionIdType | UrlIdType;
 
-type GroupKey = "channelId";
-function getGroupKey(type: IdType): GroupKey {
+/** Validate MentionIdType */
+function isMentionIdType(type: IdType): type is MentionIdType {
+	return ["channel", "role", "user"].includes(type);
+}
+
+/** Validate UrlIdType */
+function isUrlIdType(type: IdType): type is UrlIdType {
+	return ["channel", "message"].includes(type);
+}
+
+/** RegExp match group key */
+type GroupKey = "channelId" | "messageId" | "roleId" | "userId";
+
+/** Get GroupKey for the IdType */
+function getGroupKey(type: IdType): GroupKey { // NOSONAR
 	switch(type) {
 		case "channel": return "channelId";
+		case "message": return "messageId";
+		case "role": return "roleId";
+		case "user": return "userId";
 	}
 }
 
-type MentionKey = "channels";
-function getMentionKey(type: IdType): MentionKey {
+/** Key of Collection in message.mentions */
+type MentionKey = "channels" | "roles" | "users";
+
+/** Get the proper Collection key for the MentionIdType */
+function getMentionKey(type: MentionIdType): MentionKey { // NOSONAR
 	switch(type) {
 		case "channel": return "channels";
+		case "role": return "roles";
+		case "user": return "users";
 	}
 }
 
+/** Reusable type for Snowflake | undefined. */
 type PossibleSnowflake = Snowflake | undefined;
 
+/** Parses the content for mentions of the given IdType and returns the id/snowflakes. */
 function getContentMentionIds(type: IdType, content: Optional<string>): PossibleSnowflake[] {
-	if (content) {
+	if (isMentionIdType(type) && content) {
 		const globalRegex = createMentionRegex(type, { globalFlag:true });
-		const mentions = content.match(globalRegex) ?? [];
+		const mentions = content.match(globalRegex) ?? []; // NOSONAR
 		if (mentions.length) {
 			const regex = createMentionRegex(type);
 			return mentions.map(mention => regex.exec(mention)?.groups?.[getGroupKey(type)]);
@@ -34,10 +60,23 @@ function getContentMentionIds(type: IdType, content: Optional<string>): Possible
 	return [];
 }
 
+/** Reusable type for objects that have Snowflake id values. */
+type HasId = { id:Snowflake; };
+
+/** Gets the ids from the Collection for the given IdType. */
+function getMessageMentionIds(type: IdType, message: DMessage): PossibleSnowflake[] {
+	if (isMentionIdType(type)) {
+		const collection = message.mentions[getMentionKey(type)] as Collection<Snowflake, HasId>;
+		return collection.map(mention => mention.id);
+	}
+	return [];
+}
+
+/** Parses the content for urls of the given IdType and returns the ids/snowflakes. */
 function getContentUrlIds(type: IdType, content: Optional<string>): PossibleSnowflake[] {
-	if (content) {
+	if (isUrlIdType(type) && content) {
 		const globalRegex = createDiscordUrlRegex(type, { globalFlag:true });
-		const urls = content.match(globalRegex) ?? [];
+		const urls = content.match(globalRegex) ?? []; // NOSONAR
 		if (urls.length) {
 			const regex = createDiscordUrlRegex(type);
 			return urls.map(url => regex.exec(url)?.groups?.[getGroupKey(type)]);
@@ -46,13 +85,16 @@ function getContentUrlIds(type: IdType, content: Optional<string>): PossibleSnow
 	return [];
 }
 
+/** A filter that only returns unique nonNil snowflakes. */
 function uniqueNonNilSnowflakeFilter(value: PossibleSnowflake, index: number, array: PossibleSnowflake[]): value is Snowflake {
-	return array.indexOf(value) === index && isNonNilSnowflake(value);
+	return isNonNilSnowflake(value) && array.indexOf(value) === index;
 }
 
-export function parseIds(message: DMessage, type: IdType): Snowflake[] {
+/** Returns all unique nonNil Snowflakes of the given IdType from the given Message. */
+export function parseIds(message: DMessage, type: IdType, includeRaw?: boolean): Snowflake[] {
 	const contentMentionIds = getContentMentionIds(type, message.content);
 	const contentUrlIds = getContentUrlIds(type, message.content);
-	const mentionIds = message.mentions[getMentionKey(type)].map(mention => mention.id);
-	return [...contentMentionIds, ...contentUrlIds, ...mentionIds].filter(uniqueNonNilSnowflakeFilter);
+	const mentionIds = getMessageMentionIds(type, message);
+	const rawIds = includeRaw ? (message.content ?? "").match(/\d{16,}/g) ?? [] : [];
+	return [...contentMentionIds, ...contentUrlIds, ...mentionIds, ...rawIds].filter(uniqueNonNilSnowflakeFilter);
 }
