@@ -8,7 +8,7 @@ import { getWhitespaceRegexSource } from "../whitespace/getWhitespaceRegexSource
  * @todo redo this logic to enforce a strict no space policy.
  */
 export function getKeyValueArgSource(key?: string): string {
-	key = key ?? getWordCharacterRegexSource({ quantifier:"+" });
+	key = key ?? getWordCharacterRegexSource({ allowDotNotation:true, quantifier:"+" });
 	const space = getWhitespaceRegexSource({ horizontalOnly:true, quantifier:"*" });
 	const quotedRegexSource = getQuotedRegexSource({ lengthQuantifier:"*" });
 	return `${key}${space}=${space}(?:${quotedRegexSource}|\\S+)`;
