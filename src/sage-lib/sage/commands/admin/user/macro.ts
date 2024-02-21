@@ -1,10 +1,16 @@
 import { toUniqueDefined } from "@rsc-utils/array-utils";
-import { StringMatcher } from "@rsc-utils/string-utils";
+import { error } from "@rsc-utils/console-utils";
+import { getText } from "@rsc-utils/https-utils";
+import { StringMatcher, unwrap, wrap } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts";
 import type { SageMessage } from "../../../model/SageMessage";
 import type { TMacro } from "../../../model/User";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
+import { isGoogleSheetTsvUrl } from "../../dice/isGoogleSheetTsvUrl";
+import { isMath } from "../../dice/isMath";
+import { isRandomItem } from "../../dice/isRandomItem";
+import { isTable } from "../../dice/isTable";
 import { registerAdminCommandHelp } from "../../help";
 
 const UNCATEGORIZED = "Uncategorized";
@@ -74,11 +80,34 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 }
 
 function _macroToPrompt(macro: TMacro, usage: boolean, warning: boolean): string {
-	const parts = [
-		`\n> **Name:** ${macro.name}`,
-		`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
-		`\n> **Dice:** \`\`${macro.dice}\`\``
-	];
+	let parts: string[];
+	if (isGoogleSheetTsvUrl(macro.dice)) {
+		parts = [
+			`\n> **Name:** ${macro.name}`,
+			`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
+			`\n> **Table Url:** \`${unwrap(macro.dice, "[]")}\``
+		];
+	}else if (isTable(macro.dice)) {
+		parts = [
+			`\n> **Name:** ${macro.name}`,
+			`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
+			`\n> **Table:** \`\`\`${unwrap(macro.dice, "[]").replace(/\n/g, "\n> ")}\`\`\``
+		];
+	}else if (isRandomItem(macro.dice)) {
+		parts = [
+			`\n> **Name:** ${macro.name}`,
+			`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
+			`\n> **Items:** \n${unwrap(macro.dice, "[]").split(",").map(item => `> - ${item}`).join("\n")}`
+		];
+	}else {
+		const _isMath = isMath(macro.dice);
+		const label = _isMath ? "Math" : "Dice";
+		parts = [
+			`\n> **Name:** ${macro.name}`,
+			`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
+			`\n> **${label}:** \`\`${macro.dice.replace(/\n/g, "\n> ")}\`\``
+		];
+	}
 	if (usage) {
 		parts.push(`\n\n*Usage:* \`[${macro.name.toLowerCase()}]\``);
 	}
@@ -136,7 +165,17 @@ async function macroSet(sageMessage: SageMessage): Promise<void> {
 
 	const namePair = sageMessage.args.removeKeyValuePair("name");
 	const categoryPair = sageMessage.args.removeKeyValuePair(/cat(egory)?/i);
-	const contentPair = sageMessage.args.removeKeyValuePair(/dice|macro|value/i);
+	const contentPair = sageMessage.args.removeKeyValuePair(/dice|macro|value|table/i);
+	if (contentPair?.key === "table") {
+		let tableValue = unwrap(contentPair.value ?? "", "[]");
+		if (isGoogleSheetTsvUrl(tableValue)) {
+			tableValue = await getText(tableValue).catch(error) ?? "";
+		}
+		if (!isTable(tableValue)) {
+			return sageMessage.reactFailure("Invalid Table Data");
+		}
+		contentPair.value = wrap(tableValue, "[]");
+	}
 
 	const content = sageMessage.args.join(" ");
 	const diceMatch = (contentPair?.value ?? content).match(/\[[^\]]+\]/ig);

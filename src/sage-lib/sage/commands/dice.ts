@@ -2,8 +2,7 @@ import { debug, error } from "@rsc-utils/console-utils";
 import { rollDie } from "@rsc-utils/dice-utils";
 import { DiscordMaxValues, toHumanReadable, toMessageUrl, toRoleMention, toUserMention, type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
 import { addCommas } from "@rsc-utils/number-utils";
-import { randomItem } from "@rsc-utils/random-utils";
-import { chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, tokenize, type KeyValueArg } from '@rsc-utils/string-utils';
+import { chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, type KeyValueArg } from '@rsc-utils/string-utils';
 import type { Optional } from "@rsc-utils/type-utils";
 import type { ButtonInteraction, MessageEmbed } from "discord.js";
 import type { GameType } from "../../../sage-common";
@@ -24,6 +23,13 @@ import { SageInteraction } from "../model/SageInteraction";
 import { SageMessage } from "../model/SageMessage";
 import type { TMacro } from "../model/User";
 import { registerCommandRegex } from "./cmd";
+import { doMath } from "./dice/doMath";
+import { isMath } from "./dice/isMath";
+import { isRandomItem } from "./dice/isRandomItem";
+import { isTable } from "./dice/isTable";
+import { rollMath } from "./dice/rollMath";
+import { rollRandomItem } from "./dice/rollRandomItem";
+import { rollTable } from "./dice/rollTable";
 import { registerInlineHelp } from "./help";
 import type { EncounterManager } from "./trackers/encounter/EncounterManager";
 
@@ -66,8 +72,6 @@ type TDiceMatch = {
 //#region parse and map
 
 const BASE_REGEX = /\[+[^\]]+\]+/ig;
-const MATH_REGEX = /\[[ \d\+\-\*\/\(\)\^]+[\+\-\*\/\^]+[ \d\+\-\*\/\(\)\^]+\]/i;
-const RANDOM_REGEX = /\[(\d+[usgm]*#)?([^,\]]+)(,([^,\]]+))+\]/i;
 
 type ReplaceStatsArgs = {
 	/** /\{(\w+):{2}([^:}]+)(?::([^}]+))?\}/i */
@@ -127,8 +131,8 @@ function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[
 	// check for piped "hidden" values
 	const hasPipes = (/\|{2}[^|]+\|{2}/).test(replaced);
 	const unpiped = replaced.replace(/\|{2}/g, "");
-	if (MATH_REGEX.test(`[${unpiped}]`)) {
-		const value = _doMath(unpiped);
+	if (isMath(`[${unpiped}]`)) {
+		const value = doMath(unpiped);
 		if (value !== null) {
 			return hasPipes ? `||${value}||` : value;
 		}
@@ -167,10 +171,10 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 function parseDiscordMacro(sageMessage: TInteraction, macroString: string, macroStack: string[] = []): TDiceOutput[] | null {
 	if (!(sageMessage instanceof SageMessage)) return null;
 
-	const macroAndOutput = macroToDice(sageMessage.sageUser.macros, debrace(macroString));
+	const macroAndOutput = macroToDice(sageMessage.sageUser.macros, unwrap(macroString, "[]"));
 	if (macroAndOutput) {
 		const { macro, output } = macroAndOutput;
-		if (macroStack.includes(macro.name) && !RANDOM_REGEX.test(macroString)) {
+		if (macroStack.includes(macro.name) && !isRandomItem(macroString)) {
 			error(`Macro Recursion`, { macroString, macroStack });
 			return parseDiscordDice(sageMessage, `[1d1 Recursion!]`)?.roll().toStrings() ?? [];
 		}
@@ -178,7 +182,7 @@ function parseDiscordMacro(sageMessage: TInteraction, macroString: string, macro
 		const diceToParse = output.match(BASE_REGEX) ?? [];
 
 		return diceToParse.map(dice => {
-			if (!RANDOM_REGEX.test(dice)) {
+			if (!isRandomItem(dice)) {
 				const diceMacro = parseDiscordMacro(sageMessage, dice, macroStack.concat([macro.name]));
 				if (diceMacro) {
 					return diceMacro;
@@ -190,28 +194,23 @@ function parseDiscordMacro(sageMessage: TInteraction, macroString: string, macro
 	return null;
 }
 
-/** Removes all braces: [] or [[]]  */
-function debrace(input: string): string {
-	while (input.startsWith("[") && input.endsWith("]")) {
-		input = input.slice(1, -1);
-	}
-	return input;
-}
-
 function parseMatch(sageMessage: TInteraction, match: string, overrides?: TDiscordDiceParseOptions): TDiceOutput[] {
-	const noBraces = debrace(match);
+	const noBraces = unwrap(match, "[]");
+	if (isTable(match)) {
+		return doTable(sageMessage, noBraces);
+	}
 	const dice = parseDiscordDice(sageMessage, `[${noBraces}]`, overrides);
 	if (dice) {
 		// debug("dice", match);
 		return dice.roll().toStrings(sageMessage.diceOutputType);
 	}
-	if (match.match(RANDOM_REGEX)) {
-		// verbose("simple", match);
-		return doSimple(sageMessage, noBraces);
-	}
-	if (match.match(MATH_REGEX)) {
+	if (isMath(match)) {
 		// verbose("math", match);
-		return doMath(sageMessage, noBraces);
+		return rollMath(sageMessage, noBraces);
+	}
+	if (isRandomItem(match)) {
+		// verbose("simple", match);
+		return rollRandomItem(sageMessage, noBraces);
 	}
 	return [];
 }
@@ -405,56 +404,17 @@ export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]
 	}
 	return { allSecret, count, countPublic, countSecret, hasGmChannel, hasSecret };
 }
-function _doMath(noBraces: string): string | null {
-	try {
-		if (noBraces.match(/^[\s\(\)\d\*\/\+\-\^]+$/i)) {
-			const equation = noBraces
-				.replace(/ /g, "")
-				.replace(/(\d+)\(([^)]+)\)/g, "($1*($2))")
-				.replace(/(\d)\(/g, "$1*(")
-				.replace(/\^/g, "**")
-				;
-			return String(eval(equation));
-		}
-	} catch (ex) {
-		/* ignore */
+function doTable(_: TInteraction, input: string): TDiceOutput[] {
+	const result = rollTable(input);
+	if (result) {
+		return [{
+			hasSecret: false,
+			inlineOutput: result,
+			input: input,
+			output: result
+		}];
 	}
-	return null;
-}
-function doMath(_: TInteraction, input: string): TDiceOutput[] {
-	const result = _doMath(input) ?? "INVALID!";
-	return [{
-		hasSecret: false,
-		inlineOutput: result,
-		input: input,
-		output: `${result} ${"\u27f5"} ${input.replace(/\*/g, "\\*")}`
-	}];
-}
-
-function doSimple(_: TInteraction, input: string): TDiceOutput[] {
-	const match = input.match(/^(?:(\d*)([ usgm]*)#)?(.*?)$/i) ?? [];
-	const count = +match[1] || 1;
-	const unique = !!(match[2] ?? "").match(/u/i);
-	const sort = !!(match[2] ?? "").match(/s/i);
-	const hasSecret = !!(match[2] ?? "").match(/gm/i);
-	const options = (match[3] ?? "").split(",").map(s => s.trim());
-	const selections: string[] = [];
-	const total = (unique ? Math.min(options.length, count) : count);
-	do {
-		const random = randomItem(options)!;
-		if (!unique || !selections.includes(random)) {
-			selections.push(random);
-		}
-	} while (selections.length < total);
-	if (sort) {
-		selections.sort();
-	}
-	return [{
-		hasSecret: hasSecret,
-		inlineOutput: selections.join(", "),
-		input: input,
-		output: `${selections.join(", ")} ${"\u27f5"} ${input}`
-	}];
+	return [];
 }
 
 //#endregion
