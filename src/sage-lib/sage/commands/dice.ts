@@ -2,7 +2,7 @@ import { debug, error } from "@rsc-utils/console-utils";
 import { rollDie } from "@rsc-utils/dice-utils";
 import { DiscordMaxValues, toHumanReadable, toMessageUrl, toRoleMention, toUserMention, type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
 import { addCommas } from "@rsc-utils/number-utils";
-import { chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, type KeyValueArg } from '@rsc-utils/string-utils';
+import { chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
 import type { Optional } from "@rsc-utils/type-utils";
 import type { ButtonInteraction, MessageEmbed } from "discord.js";
 import type { GameType } from "../../../sage-common";
@@ -197,7 +197,13 @@ function parseDiscordMacro(sageMessage: TInteraction, macroString: string, macro
 function parseMatch(sageMessage: TInteraction, match: string, overrides?: TDiscordDiceParseOptions): TDiceOutput[] {
 	const noBraces = unwrap(match, "[]");
 	if (isTable(match)) {
-		return doTable(sageMessage, noBraces);
+		const tableResults = rollTable(sageMessage, noBraces);
+		const tableResultsDice = tableResults[0]?.itemRolls?.map(rollText => wrap(unwrap(rollText, "[]"), "[]").match(BASE_REGEX) ?? []).flat() ?? [];
+		// debug({tableResults,tableResultsDice})
+		tableResultsDice.forEach(diceToParse => {
+			tableResults.push(...parseMatch(sageMessage, diceToParse, overrides).flat());
+		});
+		return tableResults;
 	}
 	const dice = parseDiscordDice(sageMessage, `[${noBraces}]`, overrides);
 	if (dice) {
@@ -403,18 +409,6 @@ export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]
 		await sendDiceToSingle(sageMessage, formattedOutputs, targetChannel, gmTargetChannel);
 	}
 	return { allSecret, count, countPublic, countSecret, hasGmChannel, hasSecret };
-}
-function doTable(_: TInteraction, input: string): TDiceOutput[] {
-	const result = rollTable(input);
-	if (result) {
-		return [{
-			hasSecret: false,
-			inlineOutput: result,
-			input: input,
-			output: result
-		}];
-	}
-	return [];
 }
 
 //#endregion
