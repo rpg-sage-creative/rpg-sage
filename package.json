@@ -43,7 +43,6 @@
 		"packages/utils/*"
 	],
 	"devDependencies": {
-		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
 		"@types/follow-redirects": "^1.14.1",
 		"@types/node": "^18.18.7"
 	},
