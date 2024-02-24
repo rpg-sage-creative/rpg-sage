@@ -1,6 +1,5 @@
 import { getQuotedRegexSource } from "../quote/getQuotedRegexSource.js";
 import { getWordCharacterRegexSource } from "../regex/getWordCharacterRegexSource.js";
-import { getWhitespaceRegexSource } from "../whitespace/getWhitespaceRegexSource.js";
 
 /**
  * @internal
@@ -9,7 +8,6 @@ import { getWhitespaceRegexSource } from "../whitespace/getWhitespaceRegexSource
  */
 export function getKeyValueArgSource(key?: string): string {
 	key = key ?? getWordCharacterRegexSource({ allowDotNotation:true, quantifier:"+" });
-	const space = getWhitespaceRegexSource({ horizontalOnly:true, quantifier:"*" });
 	const quotedRegexSource = getQuotedRegexSource({ lengthQuantifier:"*" });
-	return `${key}${space}=${space}(?:${quotedRegexSource}|\\S+)`;
+	return `${key}=(?:${quotedRegexSource}|\\S+)`;
 }
