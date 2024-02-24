@@ -1,9 +1,12 @@
-import type { WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
+import type { MessageOptions, WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
 import { DiscordMaxValues } from "../DiscordMaxValues.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 import { validateEmbedLengths } from "../embed/validateEmbedLengths.js";
 
-export function validateWebhookPayload<T extends WebhookMessageOptions | WebhookEditMessageOptions>(options: T): boolean {
+type Options = WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions;
+
+/** Returns true if all lengths of the given options are under the allowed values for a single messge post. */
+export function validateMessageOptions<T extends Options>(options: T): boolean {
 	const contentLength = options.content?.length ?? 0;
 	if (contentLength > DiscordMaxValues.message.contentLength) {
 		return false;

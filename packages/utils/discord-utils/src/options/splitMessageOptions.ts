@@ -1,12 +1,14 @@
 import { chunk } from "@rsc-utils/string-utils";
-import type { WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
+import type { MessageOptions, WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
 import { DiscordMaxValues } from "../DiscordMaxValues.js";
 import type { EmbedResolvable } from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 
-/** Used to convert a single webhook options object into an array to ensure we don't break posting limits. */
-export function createWebhookPayloads<T extends WebhookMessageOptions | WebhookEditMessageOptions>(options: T): T[] {
+type Options = WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions;
+
+/** Used to convert a single message options object into an array to ensure we don't break posting limits. */
+export function splitMessageOptions<T extends Options>(options: T): T[] {
 	// break out the content, embeds, and files; saving the remaining options to be used in each payload
 	const { content, embeds, files, ...baseOptions } = options;
 
