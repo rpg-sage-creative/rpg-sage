@@ -1,43 +1,40 @@
 import { Cache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnNull, warn } from "@rsc-utils/console-utils";
-import { DiscordKey, handleDiscordErrorReturnNull, safeMentions, toMessageUrl, type DMessage, type DMessageChannel } from "@rsc-utils/discord-utils";
+import { DiscordKey, handleDiscordErrorReturnNull, safeMentions, toHumanReadable, toMessageUrl, type DMessage, type DMessageChannel } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Message, User } from "discord.js";
-import type { IHasChannels, IHasGame } from ".";
-import { GameType } from "../../../sage-common";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import { type TCommandAndArgs } from "../../discord";
-import { isDeleted } from "../../discord/deletedMessages";
-import { resolveToTexts } from "../../discord/embeds";
-import { send, sendTo } from "../../discord/messages";
-import { createAdminRenderableContent } from "../commands/cmd";
-import { DicePostType } from "../commands/dice";
-import type { Game } from "../model/Game";
-import { GameRoleType } from "../model/Game";
-import { DialogType, IChannel } from "../repo/base/IdRepository";
-import type { GameCharacter } from "./GameCharacter";
-import type { ColorType, IHasColorsCore } from "./HasColorsCore";
-import { EmojiType } from "./HasEmojiCore";
-import { HasSageCache, HasSageCacheCore, TSendArgs } from "./HasSageCache";
-import { SageCache } from "./SageCache";
-import { SageMessageArgsManager } from "./SageMessageArgsManager";
-import { TAlias } from "./User";
-import { addMessageDeleteButton } from "./utils/deleteButton";
+import { GameType } from "../../../sage-common/index.js";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/index.js";
+import { isDeleted } from "../../discord/deletedMessages.js";
+import { resolveToTexts } from "../../discord/embeds.js";
+import { send, sendTo } from "../../discord/messages.js";
+import { type TCommandAndArgs } from "../../discord/types.js";
+import { createAdminRenderableContent } from "../commands/cmd.js";
+import { DicePostType } from "../commands/dice.js";
+import type { Game } from "../model/Game.js";
+import { GameRoleType } from "../model/Game.js";
+import { DialogType, type IChannel } from "../repo/base/IdRepository.js";
+import type { GameCharacter } from "./GameCharacter.js";
+import { EmojiType } from "./HasEmojiCore.js";
+import { SageCache } from "./SageCache.js";
+import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
+import { SageMessageArgsManager } from "./SageMessageArgsManager.js";
+import type { TAlias } from "./User.js";
+import type { IHasChannels, IHasGame } from "./index.js";
+import { addMessageDeleteButton } from "./utils/deleteButton.js";
 
-interface SageMessageCore extends HasSageCacheCore {
+interface SageMessageCore extends SageCommandCore {
 	message: DMessage;
 	originalMessage?: DMessage;
 	prefix: string;
 	hasPrefix: boolean;
 	slicedContent: string;
-	isGameMaster?: boolean;
-	isPlayer?: boolean;
 }
 
 export class SageMessage
-	extends HasSageCache<SageMessageCore, SageMessage>
+	extends SageCommand<SageMessageCore, SageMessage>
 	implements IHasGame, IHasChannels {
 
 	private constructor(protected core: SageMessageCore, cache?: Cache) {
@@ -46,8 +43,8 @@ export class SageMessage
 	}
 
 	public static async fromMessage(message: DMessage, originalMessage: Optional<DMessage>): Promise<SageMessage> {
-		const caches = await SageCache.fromMessage(message);
-		const prefixOrDefault = caches.getPrefixOrDefault();
+		const sageCache = await SageCache.fromMessage(message);
+		const prefixOrDefault = sageCache.getPrefixOrDefault();
 		const prefixRegex = prefixOrDefault
 			? new RegExp(`^\s*(sage|${prefixOrDefault})[!?][!]?`, "i")
 			: new RegExp(`^\s*(sage)?[!?][!]?`, "i");
@@ -62,14 +59,14 @@ export class SageMessage
 			prefix,
 			hasPrefix,
 			slicedContent,
-			caches
+			sageCache
 		});
 		sageMessage.isGameMaster = await sageMessage.game?.hasUser(message.author?.id, GameRoleType.GameMaster) ?? false;
 		sageMessage.isPlayer = await sageMessage.game?.hasUser(message.author?.id, GameRoleType.Player) ?? false;
 		return sageMessage;
 	}
 
-	// TODO: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE!
+	/** @todo: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE! */
 	public clone(): SageMessage {
 		const clone = new SageMessage(this.core, this.cache);
 		clone._ = this._;
@@ -78,7 +75,7 @@ export class SageMessage
 	public clear(): void {
 		debug("Clearing SageMessage");
 		this.cache.clear();
-		this.caches.clear();
+		this.sageCache.clear();
 	}
 
 	//#region core
@@ -103,7 +100,7 @@ export class SageMessage
 		return regex.test(this.command);
 	}
 	public args!: SageMessageArgsManager;
-	public setCommandAndArgs(commandAndArgs?: TCommandAndArgs): SageMessage {
+	public setCommandAndArgs(commandAndArgs?: TCommandAndArgs): this {
 		this.commandAndArgs = {
 			command: commandAndArgs?.command,
 			args: SageMessageArgsManager.from(commandAndArgs?.args!)
@@ -126,14 +123,14 @@ export class SageMessage
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			if (notifyIfBlocked) {
-				await this.reactBlock(`Unable to send message because Sage doesn't have permissions to channel: ${targetChannel}`);
+				await this.reactBlock(`Unable to send message because Sage doesn't have permissions to channel: ${toHumanReadable(targetChannel)}`);
 			}
 			return [];
 		}
 		// check to see if we have channel send message permissions
 		const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 		if (renderableContent) {
-			const sent = await send(this.caches, targetChannel, renderableContent, originalAuthor);
+			const sent = await send(this.sageCache, targetChannel, renderableContent, originalAuthor);
 			if (sent.length) {
 				this._.set("Sent", sent[sent.length - 1] as DMessage);
 			}
@@ -143,14 +140,14 @@ export class SageMessage
 	}
 	public sendPost(renderableContentResolvable: RenderableContentResolvable) {
 		return sendTo({
-			sageCache: this.caches,
+			sageCache: this.sageCache,
 			target: this.message.channel,
-			content: resolveToTexts(this.caches, renderableContentResolvable).join("\n"),
+			content: resolveToTexts(this.sageCache, renderableContentResolvable).join("\n"),
 			errMsg: "SageMessage.sendPost"
 		});
 	}
 	public async canSend(targetChannel = this.message.channel): Promise<boolean> {
-		return this.caches.canSendMessageTo(DiscordKey.fromChannel(targetChannel));
+		return this.sageCache.canSendMessageTo(DiscordKey.fromChannel(targetChannel));
 	}
 
 	public async whisper(args: TSendArgs): Promise<void>;
@@ -178,14 +175,6 @@ export class SageMessage
 
 	// #region IHasChannels
 
-	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
-	public get channel(): IChannel | undefined {
-		return this.cache.get("channel", () => {
-			debug(`caching .channel ${this.message.id}`);
-			return this.gameChannel ?? this.serverChannel;
-		});
-	}
-
 	/** Returns the channelDid this message (or its thread) is in. */
 	public get channelDid(): Snowflake | undefined {
 		return this.cache.get("channelDid", () => {
@@ -196,15 +185,6 @@ export class SageMessage
 		});
 	}
 
-	/** Returns the gameChannel meta for the message, checking the thread before checking its channel. */
-	public get gameChannel(): IChannel | undefined {
-		return this.cache.get("gameChannel", () => this.game?.getChannel(this.discordKey));
-	}
-
-	/** Returns the serverChannel meta for the message, checking the thread before checking its channel. */
-	public get serverChannel(): IChannel | undefined {
-		return this.cache.get("serverChannel", () => this.server?.getChannel(this.discordKey));
-	}
 
 	/** Returns the threadDid this message is in. */
 	public get threadDid(): Snowflake | undefined {
@@ -304,48 +284,6 @@ export class SageMessage
 
 	// #endregion
 
-	//#region IHasGame
-
-	public get gameType(): GameType {
-		return this.cache.get("gameType", () => this.game?.gameType ?? this.serverChannel?.defaultGameType ?? this.server?.defaultGameType ?? GameType.None);
-	}
-
-	public get isGameMaster() { return this.core.isGameMaster === true; }
-	public set isGameMaster(bool: boolean) { this.core.isGameMaster = bool === true; }
-	public get isPlayer() { return this.core.isPlayer === true; }
-	public set isPlayer(bool: boolean) { this.core.isPlayer = bool === true; }
-
-	/** Get the PlayerCharacter if there a game and the actor has a PlayerCharacter OR the actor has a PlayerCharacter set to use this channel with AutoChannel */
-	public get playerCharacter(): GameCharacter | undefined {
-		return this.cache.get("playerCharacter", () => {
-			const channelDid = this.channel?.did!;
-			const userDid = this.sageUser.did;
-			const autoChannelData = { channelDid, userDid };
-			return this.game?.playerCharacters.getAutoCharacter(autoChannelData)
-				?? this.game?.playerCharacters.findByUser(userDid)
-				?? this.sageUser.playerCharacters.getAutoCharacter(autoChannelData)
-				?? undefined;
-		});
-	}
-
-	public get critMethodType(): CritMethodType {
-		return this.cache.get("critMethodType", () => this.gameChannel?.defaultCritMethodType ?? this.game?.defaultCritMethodType ?? this.serverChannel?.defaultCritMethodType ?? this.server?.defaultCritMethodType ?? CritMethodType.Unknown);
-	}
-
-	public get dicePostType(): DicePostType {
-		return this.cache.get("dicePostType", () => this.gameChannel?.defaultDicePostType ?? this.game?.defaultDicePostType ?? this.serverChannel?.defaultDicePostType ?? this.server?.defaultDicePostType ?? DicePostType.SinglePost);
-	}
-
-	public get diceOutputType(): DiceOutputType {
-		return this.cache.get("diceOutputType", () => this.gameChannel?.defaultDiceOutputType ?? this.game?.defaultDiceOutputType ?? this.serverChannel?.defaultDiceOutputType ?? this.server?.defaultDiceOutputType ?? DiceOutputType.M);
-	}
-
-	public get diceSecretMethodType(): DiceSecretMethodType {
-		return this.cache.get("diceSecretMethodType", () => this.gameChannel?.defaultDiceSecretMethodType ?? this.game?.defaultDiceSecretMethodType ?? this.serverChannel?.defaultDiceSecretMethodType ?? this.server?.defaultDiceSecretMethodType ?? DiceSecretMethodType.Ignore);
-	}
-
-	//#endregion
-
 	// #region Reactions
 
 	/** Get the given emoji, checking first the game, then server, then the bot. */
@@ -357,7 +295,7 @@ export class SageMessage
 
 	/** If the given emoji is valid, react to this message with it. If this message posted a new message, react to it. */
 	public async react(emojiType: EmojiType, reason?: string): Promise<void> {
-		// TODO: start saving the reason for reactions so users can click them to get a DM about what the fuck is going on
+		/** @todo: start saving the reason for reactions so users can click them to get a DM about what the fuck is going on */
 		const emoji = this.getEmoji(emojiType);
 		if (!emoji) {
 			warn(`Invalid emojiType: ${emojiType} >> ${reason ?? "no reason given"}`);
@@ -375,14 +313,20 @@ export class SageMessage
 	}
 	/** This was pulled here to avoid duplicating code. */
 	private async _react(message: Optional<DMessage>, emoji: string): Promise<boolean> {
-		if (!message) return false;
+		if (!message) {
+			return false;
+		}
 
-		await this.caches.pauseForTupper(DiscordKey.fromMessage(message));
+		await this.sageCache.pauseForTupper(DiscordKey.fromMessage(message));
 
-		if (!(await this.canReact(message))) return false;
+		if (!(await this.canReact(message))) {
+			return false;
+		}
 
 		// just in case it was deleted while we were waiting
-		if (isDeleted(message.id)) return false;
+		if (isDeleted(message.id)) {
+			return false;
+		}
 
 		const reaction = await message?.react(emoji).catch(errorReturnNull);
 		return !!reaction;
@@ -390,7 +334,7 @@ export class SageMessage
 
 	public async canReact(message: DMessage = this.message): Promise<boolean> {
 		if (!message) return false;
-		return this.caches.canReactTo(DiscordKey.fromMessage(message));
+		return this.sageCache.canReactTo(DiscordKey.fromMessage(message));
 	}
 
 	public reactBlock(reason?: string): Promise<void> { return this.react(EmojiType.PermissionDenied, reason); }
@@ -452,7 +396,7 @@ export class SageMessage
 
 	/** Ensures we are either in the channel being targeted or we are in an admin channel. */
 	public testChannelAdmin(channelDid: Optional<Snowflake>): boolean {
-		//TODO: figure out if i even need this or if there is a better way
+		/** @todo: figure out if i even need this or if there is a better way */
 		return channelDid === this.channelDid || this.channel?.admin === true;
 	}
 
@@ -464,28 +408,6 @@ export class SageMessage
 	/** Ensures we are either in an admin channel or are the server owner or SuperUser. */
 	public testServerAdmin(): boolean {
 		return this.isOwner || this.isSuperUser || this.serverChannel?.admin === true;
-	}
-
-	// #endregion
-
-	// #region IHasColorsCore
-
-	public getHasColors(): IHasColorsCore {
-		return this.game || this.server || this.bot;
-	}
-
-	// public colors = this.game?.colors ?? this.server?.colors ?? this.bot.colors;
-	public toDiscordColor(colorType: Optional<ColorType>): string | null {
-		if (!colorType) {
-			return null;
-		}
-		if (this.game) {
-			return this.game.toDiscordColor(colorType);
-		}
-		if (this.server) {
-			return this.server.toDiscordColor(colorType);
-		}
-		return this.bot.toDiscordColor(colorType);
 	}
 
 	// #endregion

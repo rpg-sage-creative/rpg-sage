@@ -3,34 +3,30 @@ import { debug, warn } from "@rsc-utils/console-utils";
 import { DiscordKey, type DInteraction, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
 import { RenderableContent, RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import type { Message, MessageAttachment, User } from "discord.js";
-import type { IHasChannels, IHasGame } from ".";
 import type { SlashCommandGameType } from "../../../SlashTypes.js";
-import { GameType } from "../../../sage-common";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import { InteractionType } from "../../discord";
-import { deleteMessages } from "../../discord/deletedMessages";
-import { resolveToEmbeds } from "../../discord/embeds";
-import { send } from "../../discord/messages";
-import { DicePostType } from "../commands/dice";
-import type { IChannel } from "../repo/base/IdRepository";
-import { GameRoleType } from "./Game";
-import type { GameCharacter } from "./GameCharacter";
-import type { ColorType, IHasColorsCore } from "./HasColorsCore";
-import { HasSageCache, HasSageCacheCore } from "./HasSageCache";
-import { SageCache } from "./SageCache";
+import { GameType } from "../../../sage-common/index.js";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/index.js";
+import { deleteMessages } from "../../discord/deletedMessages.js";
+import { resolveToEmbeds } from "../../discord/embeds.js";
+import { InteractionType } from "../../discord/index.js";
+import { send } from "../../discord/messages.js";
+import { DicePostType } from "../commands/dice.js";
+import type { IChannel } from "../repo/base/IdRepository.js";
+import { GameRoleType } from "./Game.js";
+import type { GameCharacter } from "./GameCharacter.js";
+import { SageCache } from "./SageCache.js";
+import { SageCommand, type SageCommandCore } from "./SageCommand.js";
+import type { IHasChannels, IHasGame } from "./index.js";
 
-interface SageInteractionCore extends HasSageCacheCore {
+interface SageInteractionCore extends SageCommandCore {
 	interaction: DInteraction;
 	type: InteractionType;
-	isGameMaster?: boolean;
-	isPlayer?: boolean;
 }
 
 export class SageInteraction<T extends DInteraction = any>
-	extends HasSageCache<SageInteractionCore, SageInteraction<any>>
+	extends SageCommand<SageInteractionCore, SageInteraction<any>>
 	implements IHasGame, IHasChannels {
 
 	private constructor(protected core: SageInteractionCore, cache?: Cache) {
@@ -39,6 +35,7 @@ export class SageInteraction<T extends DInteraction = any>
 
 	//#region HasSageCache
 
+	/** @todo: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE! */
 	public clone(): SageInteraction<T> {
 		return new SageInteraction(this.core, this.cache);
 	}
@@ -46,7 +43,7 @@ export class SageInteraction<T extends DInteraction = any>
 	public clear(): void {
 		debug("Clearing SageInteraction");
 		this.cache.clear();
-		this.caches.clear();
+		this.sageCache.clear();
 	}
 
 	//#endregion
@@ -176,7 +173,7 @@ export class SageInteraction<T extends DInteraction = any>
 			}
 			warn(`IDE says we should never reach this code ...`);
 			return (this.interaction as any).deferReply({
-				ephemeral:this.caches.server ? (ephemeral ?? true) : false
+				ephemeral:this.sageCache.server ? (ephemeral ?? true) : false
 			});
 		});
 	}
@@ -195,7 +192,9 @@ export class SageInteraction<T extends DInteraction = any>
 
 	private replyStack?: Promise<any>;
 	private pushToReplyStack(fn: () => Promise<any>): Promise<any> {
-		if (!this.replyStack) this.replyStack = Promise.resolve();
+		if (!this.replyStack) {
+			this.replyStack = Promise.resolve();
+		}
 		this.replyStack = this.replyStack.then(fn);
 		return this.replyStack;
 	}
@@ -203,7 +202,7 @@ export class SageInteraction<T extends DInteraction = any>
 	/** Uses reply() it not replied to yet or editReply() to edit the previous reply. */
 	public async reply(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void> {
 		return this.pushToReplyStack(async () => {
-			const embeds = resolveToEmbeds(this.caches, renderable);
+			const embeds = resolveToEmbeds(this.sageCache, renderable);
 			if (this.interaction.deferred || this.interaction.replied) {
 				if (ephemeral || this.interaction.ephemeral) {
 					this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Message<boolean>);
@@ -212,7 +211,7 @@ export class SageInteraction<T extends DInteraction = any>
 					return this.interaction.editReply({ embeds:embeds }) as any;
 				}
 			}else {
-				return this.interaction.reply({ embeds:embeds, ephemeral:this.caches.server ? (ephemeral ?? true) : false });
+				return this.interaction.reply({ embeds:embeds, ephemeral:this.sageCache.server ? (ephemeral ?? true) : false });
 			}
 		});
 	}
@@ -221,7 +220,7 @@ export class SageInteraction<T extends DInteraction = any>
 	public async update(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void> {
 		return this.pushToReplyStack(async () => {
 			if (this.interaction.replied) {
-				const embeds = resolveToEmbeds(this.caches, renderable);
+				const embeds = resolveToEmbeds(this.sageCache, renderable);
 				this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Message<boolean>);
 			}else {
 				await this.reply(renderable, ephemeral);
@@ -241,12 +240,12 @@ export class SageInteraction<T extends DInteraction = any>
 		// check to see if we have channel send message permissions
 		const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 		if (renderableContent) {
-			return send(this.caches, targetChannel, renderableContent, originalAuthor);
+			return send(this.sageCache, targetChannel, renderableContent, originalAuthor);
 		}
 		return [];
 	}
 	public async canSend(targetChannel = this.interaction.channel as DMessageChannel): Promise<boolean> {
-		return this.caches.canSendMessageTo(DiscordKey.fromChannel(targetChannel));
+		return this.sageCache.canSendMessageTo(DiscordKey.fromChannel(targetChannel));
 	}
 
 	//#endregion
@@ -301,11 +300,6 @@ export class SageInteraction<T extends DInteraction = any>
 		return this.cache.get("gameType", () => this.game?.gameType ?? this.serverChannel?.defaultGameType ?? this.server?.defaultGameType ?? GameType.None);
 	}
 
-	public get isGameMaster() { return this.core.isGameMaster === true; }
-	public set isGameMaster(bool: boolean) { this.core.isGameMaster = bool === true; }
-	public get isPlayer() { return this.core.isPlayer === true; }
-	public set isPlayer(bool: boolean) { this.core.isPlayer = bool === true; }
-
 	/** Get the PlayerCharacter if there a game and the actor has a PlayerCharacter OR the actor has a PlayerCharacter set to use this channel with AutoChannel */
 	public get playerCharacter(): GameCharacter | undefined {
 		return this.cache.get("playerCharacter", () => {
@@ -337,33 +331,11 @@ export class SageInteraction<T extends DInteraction = any>
 
 	//#endregion
 
-	// #region IHasColorsCore
-
-	public getHasColors(): IHasColorsCore {
-		return this.game || this.server || this.bot;
-	}
-
-	// public colors = this.game?.colors ?? this.server?.colors ?? this.bot.colors;
-	public toDiscordColor(colorType: Optional<ColorType>): string | null {
-		if (!colorType) {
-			return null;
-		}
-		if (this.game) {
-			return this.game.toDiscordColor(colorType);
-		}
-		if (this.server) {
-			return this.server.toDiscordColor(colorType);
-		}
-		return this.bot.toDiscordColor(colorType);
-	}
-
-	// #endregion
-
 	public static async fromInteraction<T extends DInteraction>(interaction: T): Promise<SageInteraction<T>> {
-		const caches = await SageCache.fromInteraction(interaction);
+		const sageCache = await SageCache.fromInteraction(interaction);
 		const type = InteractionType.Unknown;
 		const sageInteraction = new SageInteraction({
-			caches,
+			sageCache,
 			interaction,
 			type
 		});

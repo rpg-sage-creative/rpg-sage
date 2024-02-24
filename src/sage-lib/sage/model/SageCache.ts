@@ -4,17 +4,17 @@ import { DiscordKey, type DInteraction, type DMessage, type DMessageChannel, typ
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Client, GuildMember } from "discord.js";
-import { DiscordCache } from "../../discord";
-import { isDeleted } from "../../discord/deletedMessages";
-import { ActiveBot } from "../model/ActiveBot";
-import { BotRepo } from "../repo/BotRepo";
-import { GameRepo } from "../repo/GameRepo";
-import { ServerRepo } from "../repo/ServerRepo";
-import { UserRepo } from "../repo/UserRepo";
-import type { Bot } from "./Bot";
-import type { Game } from "./Game";
-import type { Server } from "./Server";
-import type { User } from "./User";
+import { DiscordCache } from "../../discord/DiscordCache.js";
+import { isDeleted } from "../../discord/deletedMessages.js";
+import { ActiveBot } from "../model/ActiveBot.js";
+import { BotRepo } from "../repo/BotRepo.js";
+import { GameRepo } from "../repo/GameRepo.js";
+import { ServerRepo } from "../repo/ServerRepo.js";
+import { UserRepo } from "../repo/UserRepo.js";
+import type { Bot } from "./Bot.js";
+import type { Game } from "./Game.js";
+import type { Server } from "./Server.js";
+import type { User } from "./User.js";
 
 export type TSageCacheCore = {
 	discord: DiscordCache;
@@ -98,6 +98,9 @@ export class SageCache {
 			}
 		}
 		return this.canSendMessageToMap.get(key)!;
+	}
+	public canSendMessageToChannel(channel: DMessageChannel): Promise<boolean> {
+		return this.canSendMessageTo(DiscordKey.fromChannel(channel));
 	}
 
 	private hasTupperMap = new Map<string, boolean>();
