@@ -1,4 +1,4 @@
-import { readFileSync } from "./readFileSync";
+import { readFileSync } from "./readFileSync.js";
 
 /**
  * Convenience for: readFileSync(path).toString(encoding);

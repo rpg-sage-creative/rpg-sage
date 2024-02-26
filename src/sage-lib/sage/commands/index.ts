@@ -1,7 +1,6 @@
 import { registerDeleteButtonHandler } from "../model/utils/deleteButton";
 import { registerAdmin } from "./admin";
 import { registerCal } from "./cal";
-import { registerCmd } from "./cmd";
 import { registerDcs } from "./dcs";
 import { registerDefault } from "./default";
 import { registerDialog } from "./dialog";
@@ -21,7 +20,6 @@ import { registerCommandHandlers as registerWeather } from "./weather";
 export function registerCommandHandlers(): void {
 	registerAdmin();
 	registerCal();
-	registerCmd();
 	registerDcs();
 	registerDefault();
 	registerDialog();

@@ -1,25 +1,21 @@
-import { listFiles } from "./listFiles";
+import { isPromise } from "util/types";
+import { listFiles } from "./listFiles.js";
 
 /**
- * Lists all the file paths that exist in the given path and *pass* the filter given.
+ * Lists all the file paths that exist in the given path (optionally recursively) and *pass* the filter given.
  * @returns Array of file paths (not just file names).
  */
-export async function filterFiles(path: string, filter: (fileName: string, filePath: string) => boolean): Promise<string[]>;
-
-/**
- * Lists all the file paths that exist in the given path (recursively) and *pass* the filter given.
- * @returns Array of file paths (not just file names).
- */
-export async function filterFiles(path: string, filter: (fileName: string, filePath: string) => boolean, recursive: true): Promise<string[]>;
-
-export async function filterFiles(path: string, filter: (fileName: string, filePath: string) => boolean, recursive = false): Promise<string[]> {
+export async function filterFiles(path: string, filter: (fileName: string, filePath: string) => boolean | PromiseLike<boolean>, recursive?: boolean): Promise<string[]> {
 	const output: string[] = [];
 	const files = await listFiles(path).catch(() => []);
 	for (const fileName of files) {
 		const filePath = `${path}/${fileName}`;
-		if (filter(fileName, filePath)) {
+		const promise = filter(fileName, filePath);
+		const result = isPromise(promise) ? await promise : promise;
+		if (result) {
 			output.push(filePath);
-		}else if (recursive) {
+		}
+		if (recursive) {
 			output.push(...(await filterFiles(filePath, filter, true)));
 		}
 	}

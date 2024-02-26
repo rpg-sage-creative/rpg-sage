@@ -1,7 +1,7 @@
 import { error } from "@rsc-utils/console-utils";
 import { writeFileSync as fsWriteFileSync, mkdirSync } from "fs";
-import { contentToFileOutput } from "./internal/contentToFileOutput";
-import { toFilePath } from "./internal/toFilePath";
+import { contentToFileOutput } from "./internal/contentToFileOutput.js";
+import { toFilePath } from "./internal/toFilePath.js";
 
 /** Writes the given content to the given file path/name. */
 export function writeFileSync<T>(filePathAndName: string, content: T): boolean;

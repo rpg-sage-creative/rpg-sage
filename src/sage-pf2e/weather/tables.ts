@@ -1,5 +1,6 @@
 import { warn } from "@rsc-utils/console-utils";
 import type { SimpleDice } from "@rsc-utils/dice-utils";
+import { parse, stringify } from "@rsc-utils/json-utils";
 import { randomInt } from "@rsc-utils/random-utils";
 import { ClimateType, WindType } from "./weather";
 
@@ -60,7 +61,7 @@ export function rollOnTable(tableName: string): TableItem | null {
 	const rand = randomInt(min, max);
 	const item = table.find(_item => _item.min <= rand && rand <= _item.max) ?? null;
 	// We clone the item so that we can manipulate the values when tinkering with weather
-	return JSON.parse(JSON.stringify(item));
+	return parse(stringify(item));
 }
 
 export function rollTemperatureVariation(climate: ClimateType): TemperatureVariationTableItem {

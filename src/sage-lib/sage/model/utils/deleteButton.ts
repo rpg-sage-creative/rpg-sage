@@ -18,11 +18,14 @@ export async function addMessageDeleteButton(message: Optional<DMessage>, userId
 }
 
 function messageDeleteButtonTester(sageInteraction: SageInteraction<ButtonInteraction>): boolean {
-	const customId = sageInteraction.interaction.customId;
-	const regex = /^message-delete-button-(\d{16,})-(\d{16,})$/;
-	const match = regex.exec(customId) ?? [];
-	return sageInteraction.interaction.message.id === match[1]
-		&& sageInteraction.user.id === match[2];
+	if (sageInteraction.interaction.isButton()) {
+		const customId = sageInteraction.interaction.customId;
+		const regex = /^message-delete-button-(\d{16,})-(\d{16,})$/;
+		const match = regex.exec(customId) ?? [];
+		return sageInteraction.interaction.message.id === match[1]
+			&& sageInteraction.user.id === match[2];
+	}
+	return false;
 }
 
 async function messageDeleteButtonHandler(sageInteraction: SageInteraction<ButtonInteraction>): Promise<void> {

@@ -1,6 +1,7 @@
 import { getText } from "@rsc-utils/https-utils";
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { stringify } from "@rsc-utils/json-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import type { SearchResults } from "../SearchResults";
 
 export type TResultsLink = {
@@ -94,7 +95,7 @@ function parseResultsHtml(html: string, writeDevCache: boolean): TResultsLink[] 
 		});
 	});
 	if (writeDevCache) {
-		writeFileSync("../aon-results.json", JSON.stringify(results));
+		writeFileSync("../aon-results.json", stringify(results));
 	}
 	return results;
 }

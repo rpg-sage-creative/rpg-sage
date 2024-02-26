@@ -49,28 +49,23 @@ function resolveColumnedSection(renderableContent: RenderableContent, caches: Sa
 /** Resolves a section that has a title. */
 function resolveTitledSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], titledSection: RenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
-	const formattedTitle = caches.format(titledSection.title ?? ""),
-		joinedContent = titledSection.content.join(renderableContent.paragraphDelimiter),
-		formattedContent = caches.format(joinedContent),
-		// We want the first chunk to be short enough to fit in a field, which we use to add the title
-		maxChunkLengthCallback = (chunkIndex: number) => chunkIndex === 0 ? DiscordMaxValues.embed.field.valueLength : DiscordMaxValues.embed.descriptionLength,
-		chunkedContent = chunk(formattedContent, maxChunkLengthCallback);
+
+	const formattedTitle = caches.format(titledSection.title ?? "");
+	const joinedContent = titledSection.content.join(renderableContent.paragraphDelimiter);
+	const formattedContent = caches.format(joinedContent);
+	const titleAndContent = `### ${formattedTitle}${renderableContent.paragraphDelimiter}${formattedContent}`;
+	const maxChunkLengthCallback = (chunkIndex: number) => chunkIndex === 0 ? DiscordMaxValues.embed.descriptionLength - renderableContent.paragraphDelimiter.length - embed.length : DiscordMaxValues.embed.descriptionLength;
+	const chunkedContent = chunk(titleAndContent, maxChunkLengthCallback);
 
 	chunkedContent.forEach((chunk, index) => {
 		if (index === 0) {
-			// We need to add a field for the first chunk so that we can add a title
-			if (embed.fields.length === DiscordMaxValues.embed.field.count
-					|| embed.length + formattedTitle.length + chunk.length > DiscordMaxValues.embed.totalLength) {
-				embed = createMessageEmbed(undefined, undefined, renderableContent.color);
-				embeds.push(embed);
-			}
-			embed.addFields({ name:formattedTitle, value:chunk });
+			embed.description = (embed.description ?? "") + renderableContent.paragraphDelimiter + chunk;
 		}else {
-			// Subsequent chunks don't need a title so we can just create a new embed
 			embed = createMessageEmbed(undefined, chunk, renderableContent.color);
 			embeds.push(embed);
 		}
 	});
+
 }
 
 function resolveSections(caches: SageCache, renderableContent: RenderableContent, embeds: MessageEmbed[]): void {

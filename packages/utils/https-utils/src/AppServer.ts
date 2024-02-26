@@ -1,6 +1,7 @@
 import { error, info, verbose } from "@rsc-utils/console-utils";
-import { createServer, Server, IncomingMessage } from "http";
-import { BufferHandler, BufferHandlerJsonError, BufferHandlerResponse } from "./types.js";
+import { stringify } from "@rsc-utils/json-utils";
+import { createServer, type IncomingMessage, type Server } from "http";
+import type { BufferHandler, BufferHandlerJsonError, BufferHandlerResponse } from "./types.js";
 
 /** Logs via error() and then returns a 500 error. */
 function errorReturn500(ex: any): BufferHandlerResponse<BufferHandlerJsonError> {
@@ -15,7 +16,7 @@ function errorReturn500(ex: any): BufferHandlerResponse<BufferHandlerJsonError> 
 /** Makes sure the output is a Buffer or string. */
 function ensureOutput<T>(output: T): Buffer | string {
 	if (output === null || output === undefined) {
-		return JSON.stringify({ error:"null or undefined output" });
+		return stringify({ error:"null or undefined output" });
 	}
 	if (Buffer.isBuffer(output)) {
 		return output;
@@ -23,7 +24,7 @@ function ensureOutput<T>(output: T): Buffer | string {
 	if (typeof(output) === "string") {
 		return output;
 	}
-	return JSON.stringify(output);
+	return stringify(output);
 }
 
 /**
@@ -72,7 +73,7 @@ export class AppServer<T> {
 				}) as () => void);
 			}else {
 				res.writeHead(405, { 'Content-type':'application/json' });
-				res.write(JSON.stringify({ error: "Method not allowed!" }));
+				res.write(stringify({ error: "Method not allowed!" }));
 				res.end();
 				this.verbose(req, `res.end(405)`);
 			}

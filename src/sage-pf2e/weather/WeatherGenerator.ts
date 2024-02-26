@@ -17,6 +17,7 @@ import {
 	testForPrecipitation
 } from "./weather";
 import { Season } from "@rsc-utils/date-utils";
+import { parse, stringify } from "@rsc-utils/json-utils";
 
 const HeavySnow = "Heavy Snow";
 
@@ -377,7 +378,7 @@ function getWind(precip?: PrecipitationTableItem): WindTableItem {
 	if (precip) {
 		const lower = precip.precipitation.toLowerCase();
 		if (lower.includes("fog")) {
-			return JSON.parse(JSON.stringify(WindStrength[0]));
+			return parse(stringify(WindStrength[0]));
 		}
 		if (lower.includes("thunderstorm")) {
 			return rollOnTable("ThunderstormWinds");
@@ -392,7 +393,7 @@ function getOvercastVariation(isOvercast: boolean, hasPrecip: boolean, season: S
 	return 0;
 }
 function randomWeather(properties: IGenParameters, date: GDate): IWeatherDayResult[] {
-	const season = date.temperateSeason as unknown as Season,
+	const season = date.temperateSeasonType as number as Season,
 		tempVariationItem = rollTemperatureVariation(properties.climate),
 		tempVariation = roll(tempVariationItem.variation),
 		days: IWeatherDayResult[] = [];

@@ -1,5 +1,5 @@
 import { error, errorReturnNull } from "@rsc-utils/console-utils";
-import { DiscordKey } from "@rsc-utils/discord-utils";
+import { DiscordKey, splitMessageOptions, validateMessageOptions } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages";
 import { embedsToTexts } from "../../../../discord/embeds";
@@ -24,19 +24,28 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 		return sageMessage.reactWarn();
 	}
 
-	const embed = message.embeds[0],
-		updatedImageUrl = dialogContent.imageUrl,
-		updatedContent = sageMessage.caches.format(dialogContent.content),
-		updatedEmbed = updateEmbed(embed, updatedImageUrl, updatedContent);
 	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, SageDialogWebhookName);
 	if (webhook) {
+		const embed = message.embeds[0],
+			updatedImageUrl = dialogContent.imageUrl,
+			updatedContent = sageMessage.caches.format(dialogContent.content),
+			updatedEmbed = updateEmbed(embed, updatedImageUrl, updatedContent);
+
 		const threadId = sageMessage.threadDid;
 		const postType = dialogContent.postType ?? (embed ? DialogType.Embed : DialogType.Post);
 		const content = postType === DialogType.Post ? embedsToTexts([updatedEmbed]).join("\n") : ZERO_WIDTH_SPACE;
 		const embeds = postType === DialogType.Embed ? [updatedEmbed] : [];
-			await webhook.editMessage(message.id, { content, embeds, threadId }).then(() => deleteMessage(sageMessage.message), error);
+		const payloads = splitMessageOptions({ content, embeds, threadId });
+		const isValid = validateMessageOptions(payloads[0]);
+		if (isValid) {
+			await webhook.editMessage(message.id, payloads[0]).then(() => deleteMessage(sageMessage.message), error);
+		}
+		/** @todo handle content/embed lengths that are too long and alert the user */
+		if (payloads.length > 1 || !isValid) {
+			sageMessage.reactWarn("The content you were trying to post was too long.");
+		}
 	}else {
-		return sageMessage.reactWarn();
+		return sageMessage.reactWarn("Unable to find webhook; Sage may not have access to post in this channel/thread.");
 	}
 	return Promise.resolve();
 }

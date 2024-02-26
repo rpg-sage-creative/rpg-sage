@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.6.0",
-"branch":"v1.6.0",
-"commit":"2035faa09f8904c33b452a4bb8330141c59b7c74",
-"commitSubject":"update package lock",
-"commitTs":1707937768000,
-"commitDate":"2024-02-14-1109",
-"buildTs":1707937812000,
-"buildDate":"2024-02-14-1110",
+"version":"1.6.1",
+"branch":"v1.6.1",
+"commit":"6bb1dea175e1f1637e98dffa442cba8bebaebf34",
+"commitSubject":"fix broken build",
+"commitTs":1708974412000,
+"commitDate":"2024-02-26-1106",
+"buildTs":1708976464000,
+"buildDate":"2024-02-26-1141",
 "author":"Randal T Meyer"
 }

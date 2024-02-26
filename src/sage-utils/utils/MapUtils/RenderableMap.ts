@@ -1,5 +1,6 @@
 import { error, errorReturnNull, verbose, warn } from "@rsc-utils/console-utils";
-import { AppServer, AppServerEndpoint, getJson } from "@rsc-utils/https-utils";
+import { AppServer, getJson, type AppServerEndpoint } from "@rsc-utils/https-utils";
+import { stringify } from "@rsc-utils/json-utils";
 import type { Awaitable } from "@rsc-utils/type-utils";
 import { renderMap } from "./internal/renderMap.js";
 import { serverHandler } from "./internal/serverHandler.js";
@@ -103,7 +104,7 @@ export abstract class RenderableMap implements GameMap {
 			const port = endpointOrUrl.port ?? 0;
 			RenderableMap.endpointUrl = `${protocol}://${hostname}:${port}`;
 		}
-		verbose(`RenderableMap.setEndpoint(${JSON.stringify(endpointOrUrl)}) = ${RenderableMap.endpointUrl}`);
+		verbose(`RenderableMap.setEndpoint(${stringify(endpointOrUrl)}) = ${RenderableMap.endpointUrl}`);
 	}
 
 	public static setEndpoints(data: { aws:string; port:number; }): void {

@@ -1,4 +1,5 @@
 import { verbose } from "@rsc-utils/console-utils";
+import { stringify } from "@rsc-utils/json-utils";
 
 /**
  * @internal
@@ -9,6 +10,6 @@ import { verbose } from "@rsc-utils/console-utils";
  * @returns
  */
 export function logAndReturn<T>(key: string, value: string | number): T {
-	verbose(`Environment Variable: ${key}=${JSON.stringify(value)}`);
+	verbose(`Environment Variable: ${key}=${stringify(value)}`);
 	return value as T;
 }

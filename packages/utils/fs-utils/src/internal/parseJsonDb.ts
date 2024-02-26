@@ -1,4 +1,5 @@
 import { error } from "@rsc-utils/console-utils";
+import { parse } from "@rsc-utils/json-utils";
 
 /**
  * @private
@@ -11,7 +12,7 @@ export function parseJsonDb<T>(raw: string): T[] {
 		const trimmed = line.trim();
 		if (trimmed.length > 0) {
 			try {
-				objects.push(JSON.parse(trimmed));
+				objects.push(parse(trimmed));
 			}catch(ex) {
 				error({ index, ex });
 			}

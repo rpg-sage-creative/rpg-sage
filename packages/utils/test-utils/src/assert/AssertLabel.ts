@@ -1,4 +1,4 @@
-import { info } from "../loggers/info.js";
+import { info } from "@rsc-utils/console-utils";
 
 let _assertingLabel: string | null;
 

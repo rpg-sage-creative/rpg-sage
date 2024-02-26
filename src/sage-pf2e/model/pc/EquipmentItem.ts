@@ -13,6 +13,7 @@ import type { Base } from "../base/Base";
 import type { HasSource } from "../base/HasSource";
 import type { Equipment } from "./Equipment";
 import type { EquipmentList } from "./EquipmentList";
+import { parse, stringify } from "@rsc-utils/json-utils";
 
 export interface EquipmentItemCore extends IdCore<"EquipmentItem"> {
 	containerId?: UUID;
@@ -329,7 +330,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 		this.eq.removeItem(this);
 	}
 	public removeEntry(entry: string): void;
-	public removeEntry(spell: Spell): void
+	public removeEntry(spell: Spell): void;
 	public removeEntry(entryOrEntity: string | Base): void {
 		const entry = typeof (entryOrEntity) === "string" ? entryOrEntity : entryOrEntity.name;
 		if (this.entries.includes(entry)) {
@@ -342,7 +343,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 	}
 	public split(count = 1): void {
 		this.core.count -= count;
-		const core = <EquipmentItemCore>JSON.parse(JSON.stringify(this.core));
+		const core = parse(stringify(this.core)) as EquipmentItemCore;
 		core.count = count;
 		core.id = randomUuid();
 		this.eq.addItem(new EquipmentItem(this.eq, core));

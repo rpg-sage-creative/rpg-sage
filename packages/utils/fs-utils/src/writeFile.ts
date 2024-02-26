@@ -1,6 +1,6 @@
 import { writeFile as fsWriteFile, mkdir } from "fs";
-import { contentToFileOutput } from "./internal/contentToFileOutput";
-import { toFilePath } from "./internal/toFilePath";
+import { contentToFileOutput } from "./internal/contentToFileOutput.js";
+import { toFilePath } from "./internal/toFilePath.js";
 
 function write<T>(filePathAndName: string, content: T, formatted?: boolean): Promise<boolean> {
 	return new Promise((resolve, reject) => {

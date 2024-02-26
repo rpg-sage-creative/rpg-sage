@@ -1,12 +1,15 @@
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
-import type { DiscordKey } from "@rsc-utils/discord-utils";
+import type { DInteraction, DiscordKey } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
-import { If, MessageActionRow, MessageButton, MessageEmbed, MessageSelectMenu } from "discord.js";
+import type { If, MessageActionRow, MessageButton, MessageEmbed, MessageSelectMenu } from "discord.js";
 import type { DiscordCache } from "../../discord";
 import { resolveToEmbeds, resolveToTexts } from "../../discord/embeds";
 import type { Bot } from "./Bot";
 import type { Game } from "./Game";
 import type { SageCache } from "./SageCache";
+import type { SageInteraction } from "./SageInteraction";
+import type { SageMessage } from "./SageMessage";
+import type { SageReaction } from "./SageReaction";
 import type { Server } from "./Server";
 import type { User } from "./User";
 
@@ -33,6 +36,10 @@ export abstract class HasSageCache<T extends HasSageCacheCore, U extends HasSage
 	protected constructor(protected core: T, cache?: Cache | null) {
 		super(cache as Cache);
 	}
+
+	public isSageInteraction<T extends DInteraction = any>(): this is SageInteraction<T> { return "interaction" in this; }
+	public isSageMessage(): this is SageMessage { return "isEdit" in this; }
+	public isSageReaction(): this is SageReaction { return "messageReaction" in this; }
 
 	//#region abstract
 

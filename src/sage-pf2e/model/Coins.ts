@@ -261,7 +261,7 @@ export class Coins extends HasCore<CoinsCore> implements Comparable<Coins> {
 	public subtract(coins: string): void;
 	public subtract(coinsOrString: Coins | string): void {
 		//TODO: Some extra debugging to ensure that this logic is right (it seems to be good so far!)
-		// debug(`(${JSON.stringify(this)}).subtract(${JSON.stringify(coinsOrString)})`)
+		// debug(`(${stringify(this)}).subtract(${stringify(coinsOrString)})`)
 		const coins = typeof (coinsOrString) === "string" ? Coins.parse(coinsOrString) : coinsOrString,
 			thisValue = this.spValue,
 			coinsValue = coins.spValue,

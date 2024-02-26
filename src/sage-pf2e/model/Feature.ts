@@ -1,3 +1,4 @@
+import { parse, stringify } from "@rsc-utils/json-utils";
 import type { SourcedCore } from "../model/base/HasSource";
 import { HasSource } from "../model/base/HasSource";
 import type { IHasMetadata, IMetadata } from "./Metadata";
@@ -21,6 +22,6 @@ export class Feature extends HasSource<FeatureCore, "Feature"> implements IHasMe
 	public get level(): number { return this.core.level ?? 0; }
 	public metadata: Metadata;
 
-	public clone(): Feature { return new Feature(JSON.parse(JSON.stringify(this.core))); }
+	public clone(): Feature { return new Feature(parse(stringify(this.core))); }
 
 }

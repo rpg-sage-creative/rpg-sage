@@ -4,6 +4,7 @@ import { debug, errorReturnFalse, errorReturnNull } from "@rsc-utils/console-uti
 import { getDataRoot } from "@rsc-utils/env-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/fs-utils";
 import { getJson } from "@rsc-utils/https-utils";
+import { stringify } from "@rsc-utils/json-utils";
 import { nth } from "@rsc-utils/number-utils";
 import { StringMatcher, capitalize } from "@rsc-utils/string-utils";
 import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
@@ -456,7 +457,7 @@ function doPets(char: PathbuilderCharacter): string[] {
 			const equipment = pet.equipment.length ? `; ${equipmentToHtml(pet.equipment)}` : ``;
 			return `<b>${pet.type}</b> ${name}${specializations}${armor}${equipment}`;
 		}else {
-			debug(JSON.stringify(pet));
+			debug(stringify(pet));
 			return pet.name;
 		}
 	});
@@ -1071,7 +1072,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 					json.build.exportJsonId = id;
 					resolve(json.build);
 				}else {
-					reject(JSON.stringify(json));
+					reject(stringify(json));
 				}
 			}catch (ex) {
 				reject(ex);

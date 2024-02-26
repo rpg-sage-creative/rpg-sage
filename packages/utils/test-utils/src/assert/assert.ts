@@ -1,4 +1,5 @@
 import { isDate } from "util/types";
+import { jsonStringify } from "../internal/jsonStringify.js";
 import { incrementAssertData } from "./AssertData.js";
 import { getAssertLabel } from "./AssertLabel.js";
 import { getAssertMode } from "./AssertMode.js";
@@ -8,14 +9,15 @@ function stringify(value: any): string {
 	if (value === null || value === undefined) {
 		return String(value);
 	}
-	return JSON.stringify(value);
+	return jsonStringify(value);
 }
 
 /** Returns the correct prefix for logging based on the current AssertMode. */
 function getAssertPrefix(value: boolean): string | null {
 	const tab = getAssertLabel() ? "  " : "";
 	const indicator = value ? "pass" : "fail";
-	const prefix = `${tab}assert-${indicator}::`;
+	const colorCode = value ? 32 : 31;
+	const prefix = `\x1b[${colorCode}m${tab}assert-${indicator}::\x1b[0m`;
 	const mode = getAssertMode();
 	switch(mode) {
 		case "pass": return value ? prefix : null;
@@ -45,7 +47,7 @@ function compareValues(expected: unknown, actual: unknown): boolean {
 		return expected.every((v, i) => compareValues(v, actual[i]));
 	}
 	if (typeof(expected) === "object" && typeof(actual) === "object") {
-		return JSON.stringify(expected) === JSON.stringify(actual);
+		return jsonStringify(expected) === jsonStringify(actual);
 	}
 	return false;
 }

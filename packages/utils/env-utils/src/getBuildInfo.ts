@@ -1,3 +1,4 @@
+import { parse } from "@rsc-utils/json-utils";
 import { existsSync, readFileSync, readdirSync } from "fs";
 
 type BuildInfo = {
@@ -27,7 +28,7 @@ function getRootPath(): string {
 
 function readBuildInfo(repoPath: string, utilName?: string): BuildInfo | null {
 	try {
-		const buildInfo = JSON.parse(readFileSync(`${repoPath}/build.json`).toString());
+		const buildInfo = parse(readFileSync(`${repoPath}/build.json`).toString());
 		if (!buildInfo.name && utilName) {
 			buildInfo.name = utilName;
 		}

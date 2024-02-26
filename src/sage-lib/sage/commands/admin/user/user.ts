@@ -6,8 +6,9 @@ import type { User as DUser } from "discord.js";
 import type { SageMessage } from "../../../model/SageMessage";
 import type { User as SUser } from "../../../model/User";
 import { DialogType } from "../../../repo/base/IdRepository";
-import { createAdminRenderableContent, registerAdminCommand, renderCount } from "../../cmd";
+import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
 import { registerAdminCommandHelp } from "../../help";
+import { renderCount } from "../../helpers/renderCount";
 
 async function userCount(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {

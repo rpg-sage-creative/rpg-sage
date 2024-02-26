@@ -101,7 +101,7 @@
 // 	const prefixLower = gamePrefix.trim().toLowerCase();
 
 // 	const gameChannels = await channelWizard(sageMessage, `<u><b>New Game Wizard:</b> ${nameLower}</u>`, prefixLower);
-// 	debug(JSON.stringify(gameChannels));
+// 	debug(stringify(gameChannels));
 
 // 	/*
 // 	// const members = Array.from(mentions.members.values());
