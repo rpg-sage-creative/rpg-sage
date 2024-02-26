@@ -1,5 +1,5 @@
 import { error, errorReturnNull } from "@rsc-utils/console-utils";
-import { DiscordKey, createWebhookPayloads, validateWebhookPayload } from "@rsc-utils/discord-utils";
+import { DiscordKey, splitMessageOptions, validateMessageOptions } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages";
 import { embedsToTexts } from "../../../../discord/embeds";
@@ -35,8 +35,8 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 		const postType = dialogContent.postType ?? (embed ? DialogType.Embed : DialogType.Post);
 		const content = postType === DialogType.Post ? embedsToTexts([updatedEmbed]).join("\n") : ZERO_WIDTH_SPACE;
 		const embeds = postType === DialogType.Embed ? [updatedEmbed] : [];
-		const payloads = createWebhookPayloads({ content, embeds, threadId });
-		const isValid = validateWebhookPayload(payloads[0]);
+		const payloads = splitMessageOptions({ content, embeds, threadId });
+		const isValid = validateMessageOptions(payloads[0]);
 		if (isValid) {
 			await webhook.editMessage(message.id, payloads[0]).then(() => deleteMessage(sageMessage.message), error);
 		}

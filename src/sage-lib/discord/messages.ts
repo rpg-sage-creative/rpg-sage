@@ -1,5 +1,5 @@
 import { error, errorReturnNull, warn, warnReturnNull } from "@rsc-utils/console-utils";
-import { DiscordKey, createWebhookPayloads, toHumanReadable, toInviteUrl, toMessageUrl, toUserUrl, type DMessage, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
+import { DiscordKey, splitMessageOptions, toHumanReadable, toInviteUrl, toMessageUrl, toUserUrl, type DMessage, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Message, MessageAttachment, MessageEmbed, MessageReaction, User, Webhook, WebhookMessageOptions } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache";
@@ -31,7 +31,7 @@ export const SageDialogWebhookName = "SageDialogWebhookName";
 
 async function sendWebhookAndReturnMessages(webhook: Webhook, options: WebhookMessageOptions): Promise<Message[]> {
 	const messages: Message[] = [];
-	const payloads = createWebhookPayloads(options);
+	const payloads = splitMessageOptions(options);
 	for (const payload of payloads) {
 		const response = await webhook.send(payload).catch(errorReturnNull);
 		if (response) {
