@@ -22,6 +22,11 @@ export function chunk(input: string, maxChunkLengthCallback: MaxChunkLengthCallb
 // export function chunk(input: string, maxChunkLength: number, opts: TChunkOptions): string[];
 
 export function chunk(input: string, argOne?: number | ChunkOptions | MaxChunkLengthCallback, argTwo?: ChunkOptions): string[] {
+	// don't waste any time on an empty/undefined string
+	if (!input?.length) {
+		return [];
+	}
+
 	const options = parseChunkOptions(argOne, argTwo);
 
 	// Split into lines
