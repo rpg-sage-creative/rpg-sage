@@ -1,5 +1,5 @@
 import { chunk } from "@rsc-utils/string-utils";
-import { MessageEmbed, MessageEmbedOptions, MessageOptions, WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
+import { ColorResolvable, MessageEmbed, MessageEmbedOptions, MessageOptions, WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
 import { DiscordMaxValues } from "../DiscordMaxValues.js";
 import type { EmbedResolvable } from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
@@ -7,13 +7,15 @@ import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 
 type MsgOptions = WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions;
 
-export type SplitOptions = {
+type SplitOptions = {
 	/** Use in place of blank content (null, undefined, empty string, whitespcae only), ie: ZERO_WIDTH_SPACE */
 	blankContentValue?: string;
 	/** Convert all content to embeds? */
 	contentToEmbeds?: boolean;
 	/** Convert all embeds to content? */
 	embedsToContent?: boolean;
+	/** Color of the embed */
+	embedColor?: ColorResolvable;
 };
 
 type MsgEmbed = MessageEmbed | MessageEmbedOptions;
@@ -46,12 +48,12 @@ function embedsToContent(embeds?: MsgEmbed[] | null): string | undefined {
 }
 
 /** Converts content into embeds. */
-function contentToEmbeds(content?: string | null): MessageEmbed[] | undefined {
+function contentToEmbeds(content?: string | null, color?: ColorResolvable): MessageEmbed[] | undefined {
 	const trimmedContent = content?.trim();
 	if (trimmedContent?.length) {
 		const chunks = chunk(trimmedContent, DiscordMaxValues.embed.descriptionLength);
 		if (chunks.length) {
-			return chunks.map(description => new MessageEmbed({ description }));
+			return chunks.map(description => new MessageEmbed({ color, description }));
 		}
 	}
 	return undefined;
@@ -80,9 +82,9 @@ function mergeContent(content?: string | null, embeds?: MsgEmbed[] | null): stri
 }
 
 /** Merges content into embeds */
-function mergeEmbeds(content?: string | null, embeds?: MsgEmbed[] | null): MessageEmbed[] | undefined {
+function mergeEmbeds(content?: string | null, embeds?: MsgEmbed[] | null, color?: ColorResolvable): MessageEmbed[] | undefined {
 	// get content embeds
-	const contentEmbeds = contentToEmbeds(content);
+	const contentEmbeds = contentToEmbeds(content, embeds?.[0].color as ColorResolvable ?? color);
 
 	// get has flags
 	const hasContentEmbeds = !!contentEmbeds?.length;
@@ -104,7 +106,7 @@ function mergeEmbeds(content?: string | null, embeds?: MsgEmbed[] | null): Messa
 /** Used to convert a single message options object into an array to ensure we don't break posting limits. */
 export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOptions?: SplitOptions): T[] {
 	// break out the content, embeds, and files; saving the remaining options to be used in each payload
-	const { content, embeds, files, ...baseOptions } = msgOptions;
+	const { components, content, embeds, files, ...baseOptions } = msgOptions;
 
 	let contentToChunk: string | undefined;
 	let embedsToPost: MessageEmbed[] | undefined;
@@ -115,19 +117,17 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOp
 
 	}else if (splitOptions?.contentToEmbeds) {
 		// merge the content into the embeds
-		embedsToPost = mergeEmbeds(content, embeds as MsgEmbed[]);
+		embedsToPost = mergeEmbeds(content, embeds as MsgEmbed[], splitOptions.embedColor);
 
 	}else {
 		contentToChunk = content ?? undefined;
 		embedsToPost = embeds as MessageEmbed[];
 	}
 
-	// chunk content into valid lengths
-	const contentChunks = contentToChunk?.trim()
-		? chunk(contentToChunk, DiscordMaxValues.message.contentLength)
-		: [];
-
 	const payloads: T[] = [];
+
+	// chunk content into valid lengths
+	const contentChunks = chunk(contentToChunk?.trim() ?? "", DiscordMaxValues.message.contentLength);
 
 	// create a payload for each chunk
 	contentChunks.forEach(contentChunk => {
@@ -137,6 +137,12 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOp
 			...baseOptions
 		} as T);
 	});
+
+	// cannot send an empty string for content
+	let blankContent = splitOptions?.blankContentValue?.trim();
+	if (!blankContent?.length) {
+		blankContent = undefined; //NOSONAR
+	}
 
 	// iterate the embeds
 	embedsToPost?.forEach(embed => {
@@ -155,14 +161,17 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOp
 
 			// create a new embed
 			}else {
-				payloads.push({ content:splitOptions?.blankContentValue, embeds:[embed], ...baseOptions } as T);
+				payloads.push({ content:blankContent, embeds:[embed], ...baseOptions } as T);
 			}
 
 		// no payload, create a new one
 		}else {
-			payloads.push({ content:splitOptions?.blankContentValue, embeds:[embed], ...baseOptions } as T);
+			payloads.push({ content:blankContent, embeds:[embed], ...baseOptions } as T);
 		}
 	});
+
+	// only include components in the first payload
+	payloads[0].components = components;
 
 	// only include files in the first payload
 	payloads[0].files = files;
