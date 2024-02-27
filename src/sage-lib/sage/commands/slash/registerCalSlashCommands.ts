@@ -6,7 +6,7 @@ function dateCommand(): TSlashCommand {
 		name: "Date",
 		description: "Show today (or a specific day) for PF/SF Games",
 		options: [
-			{ name:"date", description:"A specific date: yyy-mm-dd" },
+			{ name:"date", description:"A specific date: yyyy-mm-dd" },
 			{ name:"origin", description:"Where does the year originate?", choices:["Absalom", "Earth", "Golarion"] }
 		]
 	};
