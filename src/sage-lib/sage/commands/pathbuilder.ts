@@ -5,15 +5,15 @@ import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import { CommandInteraction, MessageActionRow, MessageAttachment, MessageButton, MessageSelectMenu, type ButtonInteraction, type Message, type MessageButtonStyleResolvable, type MessageEmbed, type SelectMenuInteraction } from "discord.js";
-import { PathbuilderCharacter, getExplorationModes, getSavingThrows, getSkills, toModifier } from "../../../sage-pf2e";
-import { TCharacterSectionType, TCharacterViewType, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
-import { resolveToEmbeds } from "../../discord/embeds";
-import { registerInteractionListener } from "../../discord/handlers";
-import type { SageCache } from "../model/SageCache";
-import type { SageInteraction } from "../model/SageInteraction";
-import type { User } from "../model/User";
-import type { TMacro } from "../model/types";
-import { parseDiceMatches, sendDice } from "./dice";
+import { PathbuilderCharacter, getExplorationModes, getSavingThrows, getSkills, toModifier } from "../../../sage-pf2e/index.js";
+import { TCharacterSectionType, TCharacterViewType, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
+import { registerInteractionListener } from "../../discord/handlers.js";
+import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
+import type { SageCache } from "../model/SageCache.js";
+import type { SageInteraction } from "../model/SageInteraction.js";
+import type { User } from "../model/User.js";
+import type { TMacro } from "../model/types.js";
+import { parseDiceMatches, sendDice } from "./dice.js";
 
 type SageButtonInteraction = SageInteraction<ButtonInteraction>;
 type SageSelectInteraction = SageInteraction<SelectMenuInteraction>;
@@ -392,7 +392,7 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: Pa
 	const scoutMod = character.getSheetValue("activeExploration") === "Scout" ? 1 : 0;
 	const initMod = init ? Math.max(incredibleMod, scoutMod) : 0;
 	const dice = `[1d20+${skillMod+initMod} ${character.name}${secret ? " Secret" : ""} ${skill}${init ? " (Initiative)" : ""}]`;
-	const matches = parseDiceMatches(sageInteraction, dice);
+	const matches = await parseDiceMatches(sageInteraction, dice);
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
@@ -407,7 +407,7 @@ async function macroRollHandler(sageInteraction: SageButtonInteraction, characte
 	// check by id first (proper) then by name second (fallback to old renders)
 	const macro = macros.find(m => m.id === activeMacro) ?? macros.find(m => m.name === activeMacro);
 	if (macro) {
-		const matches = parseDiceMatches(sageInteraction, macro.dice.replace(/\{.*?\}/g, match => match.slice(1,-1).split(":")[1] ?? ""));
+		const matches = await parseDiceMatches(sageInteraction, macro.dice.replace(/\{.*?\}/g, match => match.slice(1,-1).split(":")[1] ?? ""));
 		const output = matches.map(match => match.output).flat();
 		await sendDice(sageInteraction, output);
 	}else {

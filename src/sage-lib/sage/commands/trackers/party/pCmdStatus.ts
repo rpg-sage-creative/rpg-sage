@@ -1,5 +1,5 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import { Party } from "./Party";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { Party } from "./Party.js";
 
 
 async function unpinChannel(sageMessage: SageMessage, channelId: string) {
@@ -82,10 +82,10 @@ export async function pCmdStatus(sageMessage: SageMessage): Promise<void> {
 	}
 
 	//post status
-	const sentMessage = await sageMessage.sendPost(party.renderStatus()) ?? undefined;
-	if (isPin && sentMessage) {
+	const sentMessage = await sageMessage.sendPost(party.renderStatus());
+	if (isPin && sentMessage?.length) {
 		// pin posted status
-		const pinned = await party.pin("status", sentMessage);
+		const pinned = await party.pin("status", sentMessage[0]);
 		if (pinned) {
 			const saved = await game.save();
 			await sageMessage.reactSuccessOrFailure(saved);

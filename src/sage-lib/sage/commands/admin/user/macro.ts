@@ -1,17 +1,16 @@
 import { toUniqueDefined } from "@rsc-utils/array-utils";
-import { error } from "@rsc-utils/console-utils";
-import { getText } from "@rsc-utils/https-utils";
+import { isUrl } from "@rsc-utils/https-utils";
 import { StringMatcher, unwrap, wrap } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { discordPromptYesNo } from "../../../../discord/prompts";
-import type { SageMessage } from "../../../model/SageMessage";
-import type { TMacro } from "../../../model/User";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
-import { isGoogleSheetTsvUrl } from "../../dice/isGoogleSheetTsvUrl";
-import { isMath } from "../../dice/isMath";
-import { isRandomItem } from "../../dice/isRandomItem";
-import { isTable } from "../../dice/isTable";
-import { registerAdminCommandHelp } from "../../help";
+import { discordPromptYesNo } from "../../../../discord/prompts.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import type { TMacro } from "../../../model/User.js";
+import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
+import { fetchTableFromUrl } from "../../dice/fetchTableFromUrl.js";
+import { isMath } from "../../dice/isMath.js";
+import { isRandomItem } from "../../dice/isRandomItem.js";
+import { parseTable } from "../../dice/parseTable.js";
+import { registerAdminCommandHelp } from "../../help.js";
 
 const UNCATEGORIZED = "Uncategorized";
 
@@ -81,23 +80,24 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 
 function _macroToPrompt(macro: TMacro, usage: boolean, warning: boolean): string {
 	let parts: string[];
-	if (isGoogleSheetTsvUrl(macro.dice)) {
+	const unwrapped = unwrap(macro.dice, "[]");
+	if (isUrl(unwrapped)) {
 		parts = [
 			`\n> **Name:** ${macro.name}`,
 			`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
-			`\n> **Table Url:** \`${unwrap(macro.dice, "[]")}\``
+			`\n> **Table Url:** \`${unwrapped}\``
 		];
-	}else if (isTable(macro.dice)) {
+	}else if (parseTable(macro.dice)) {
 		parts = [
 			`\n> **Name:** ${macro.name}`,
 			`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
-			`\n> **Table:** \`\`\`${unwrap(macro.dice, "[]").replace(/\n/g, "\n> ")}\`\`\``
+			`\n> **Table:** \`\`\`${unwrapped.replace(/\n/g, "\n> ")}\`\`\``
 		];
 	}else if (isRandomItem(macro.dice)) {
 		parts = [
 			`\n> **Name:** ${macro.name}`,
 			`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
-			`\n> **Items:** \n${unwrap(macro.dice, "[]").split(",").map(item => `> - ${item}`).join("\n")}`
+			`\n> **Items:** \n${unwrapped.split(",").map(item => `> - ${item}`).join("\n")}`
 		];
 	}else {
 		const _isMath = isMath(macro.dice);
@@ -166,14 +166,24 @@ async function macroSet(sageMessage: SageMessage): Promise<void> {
 	const namePair = sageMessage.args.removeKeyValuePair("name");
 	const categoryPair = sageMessage.args.removeKeyValuePair(/cat(egory)?/i);
 	const contentPair = sageMessage.args.removeKeyValuePair(/dice|macro|value|table/i);
+
+	// check the table value specifically to ensure we have a valid table before saving the macro
 	if (contentPair?.key === "table") {
-		let tableValue = unwrap(contentPair.value ?? "", "[]");
-		if (isGoogleSheetTsvUrl(tableValue)) {
-			tableValue = await getText(tableValue).catch(error) ?? "";
-		}
-		if (!isTable(tableValue)) {
+		const tableValue = unwrap(contentPair.value ?? "", "[]");
+
+		// fetch and parse a url
+		if (isUrl(tableValue)) {
+			const table = await fetchTableFromUrl(tableValue);
+			if (!table) {
+				return sageMessage.reactFailure("Invalid Table Data");
+			}
+
+		// validate manually entered tables
+		}else if (!parseTable(tableValue)) {
 			return sageMessage.reactFailure("Invalid Table Data");
 		}
+
+		// wrap the value to pass the following diceMatch test (requires being wrapped in [])
 		contentPair.value = wrap(tableValue, "[]");
 	}
 

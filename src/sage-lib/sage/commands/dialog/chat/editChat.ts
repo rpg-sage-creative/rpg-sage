@@ -1,8 +1,7 @@
 import { error, errorReturnNull } from "@rsc-utils/console-utils";
-import { DiscordKey, createWebhookPayloads, validateWebhookPayload } from "@rsc-utils/discord-utils";
+import { DiscordKey, splitMessageOptions, validateMessageOptions } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages";
-import { embedsToTexts } from "../../../../discord/embeds";
 import { SageDialogWebhookName } from "../../../../discord/messages";
 import type { TDialogMessage } from "../../../model/GameCharacter";
 import type { SageMessage } from "../../../model/SageMessage";
@@ -26,23 +25,29 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 
 	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, SageDialogWebhookName);
 	if (webhook) {
-		const embed = message.embeds[0],
-			updatedImageUrl = dialogContent.imageUrl,
-			updatedContent = sageMessage.caches.format(dialogContent.content),
-			updatedEmbed = updateEmbed(embed, updatedImageUrl, updatedContent);
-
+		const embed = message.embeds[0];
+		const updatedImageUrl = dialogContent.imageUrl;
+		const updatedContent = sageMessage.caches.format(dialogContent.content);
+		const updatedEmbed = updateEmbed(embed, updatedImageUrl, updatedContent);
 		const threadId = sageMessage.threadDid;
+		const msgOptions = { embeds:[updatedEmbed], threadId };
+
 		const postType = dialogContent.postType ?? (embed ? DialogType.Embed : DialogType.Post);
-		const content = postType === DialogType.Post ? embedsToTexts([updatedEmbed]).join("\n") : ZERO_WIDTH_SPACE;
-		const embeds = postType === DialogType.Embed ? [updatedEmbed] : [];
-		const payloads = createWebhookPayloads({ content, embeds, threadId });
-		const isValid = validateWebhookPayload(payloads[0]);
+		const splitOptions = {
+			blankContentValue: ZERO_WIDTH_SPACE,
+			contentToEmbeds: postType === DialogType.Embed,
+			embedsToContent: postType === DialogType.Post
+		};
+
+		const payloads = splitMessageOptions(msgOptions, splitOptions);
+		const isValid = validateMessageOptions(payloads[0]);
 		if (isValid) {
 			await webhook.editMessage(message.id, payloads[0]).then(() => deleteMessage(sageMessage.message), error);
 		}
+
 		/** @todo handle content/embed lengths that are too long and alert the user */
 		if (payloads.length > 1 || !isValid) {
-			sageMessage.reactWarn("The content you were trying to post was too long.");
+			sageMessage.reactWarn("The content you were trying to post was invalid in some way, likely too long.");
 		}
 	}else {
 		return sageMessage.reactWarn("Unable to find webhook; Sage may not have access to post in this channel/thread.");

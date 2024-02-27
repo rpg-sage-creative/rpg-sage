@@ -5,17 +5,15 @@ import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Message, User } from "discord.js";
-import { GameType } from "../../../sage-common/index.js";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/index.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
-import { resolveToTexts } from "../../discord/embeds.js";
-import { send, sendTo } from "../../discord/messages.js";
+import { send } from "../../discord/messages.js";
+import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
+import { sendTo } from "../../discord/sendTo.js";
 import { type TCommandAndArgs } from "../../discord/types.js";
 import { createAdminRenderableContent } from "../commands/cmd.js";
-import { DicePostType } from "../commands/dice.js";
 import type { Game } from "../model/Game.js";
 import { GameRoleType } from "../model/Game.js";
-import { DialogType, type IChannel } from "../repo/base/IdRepository.js";
+import { DialogType } from "../repo/base/IdRepository.js";
 import type { GameCharacter } from "./GameCharacter.js";
 import { EmojiType } from "./HasEmojiCore.js";
 import { SageCache } from "./SageCache.js";
@@ -142,9 +140,9 @@ export class SageMessage
 		return sendTo({
 			sageCache: this.sageCache,
 			target: this.message.channel,
-			content: resolveToTexts(this.sageCache, renderableContentResolvable).join("\n"),
+			content: resolveToContent(this.sageCache, renderableContentResolvable).join("\n"),
 			errMsg: "SageMessage.sendPost"
-		});
+		}, { });
 	}
 	public async canSend(targetChannel = this.message.channel): Promise<boolean> {
 		return this.sageCache.canSendMessageTo(DiscordKey.fromChannel(targetChannel));

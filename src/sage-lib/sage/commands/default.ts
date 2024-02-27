@@ -4,16 +4,16 @@ import { oneToUS } from "@rsc-utils/language-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { isDefined } from "@rsc-utils/type-utils";
-import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
-import { ArgsManager } from "../../discord/ArgsManager";
-import { resolveToEmbeds } from "../../discord/embeds";
-import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
-import type { TCommandAndArgs } from "../../discord/types";
-import type { SageInteraction } from "../model/SageInteraction";
-import type { SageMessage } from "../model/SageMessage";
-import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
-import { registerCommandHelp, registerFindHelp, registerSearchHelp } from "./help";
-import { searchHandler } from "./search";
+import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e/index.js";
+import { ArgsManager } from "../../discord/ArgsManager.js";
+import { registerInteractionListener, registerMessageListener } from "../../discord/handlers.js";
+import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
+import type { TCommandAndArgs } from "../../discord/types.js";
+import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageMessage } from "../model/SageMessage.js";
+import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
+import { registerCommandHelp, registerFindHelp, registerSearchHelp } from "./help.js";
+import { searchHandler } from "./search.js";
 
 // #region Common Types and Functions
 

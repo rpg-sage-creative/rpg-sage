@@ -3,15 +3,15 @@ import { DiscordKey, type DMessage } from "@rsc-utils/discord-utils";
 import { getBuffer } from "@rsc-utils/https-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
 import { MessageAttachment } from "discord.js";
-import type { GameCharacter, TDialogMessage } from "../../model/GameCharacter";
-import type { ColorType } from "../../model/HasColorsCore";
-import { EmojiType } from "../../model/HasEmojiCore";
-import type { SageMessage } from "../../model/SageMessage";
-import { DialogMessageRepository } from "../../repo/DialogMessageRepository";
-import type { DialogType } from "../../repo/base/IdRepository";
-import { parseDiceMatches, sendDice } from "../dice";
-import type { ChatOptions } from "./chat/ChatOptions";
-import { sendDialogRenderable } from "./sendDialogRenderable";
+import type { GameCharacter, TDialogMessage } from "../../model/GameCharacter.js";
+import type { ColorType } from "../../model/HasColorsCore.js";
+import { EmojiType } from "../../model/HasEmojiCore.js";
+import type { SageMessage } from "../../model/SageMessage.js";
+import { DialogMessageRepository } from "../../repo/DialogMessageRepository.js";
+import type { DialogType } from "../../repo/base/IdRepository.js";
+import { parseDiceMatches, sendDice } from "../dice.js";
+import type { ChatOptions } from "./chat/ChatOptions.js";
+import { sendDialogRenderable } from "./sendDialogRenderable.js";
 
 type DialogPostData = {
 	authorName?: string;
@@ -45,7 +45,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	let content = postData.content;
 
 	//#region dice lists
-	const diceMatches = parseDiceMatches(sageMessage, content);
+	const diceMatches = await parseDiceMatches(sageMessage, content);
 	const inlineDiceMatches = diceMatches.filter(match => match.inline);
 	const otherDiceMatches = diceMatches.filter(match => !match.inline);
 	//#endregion

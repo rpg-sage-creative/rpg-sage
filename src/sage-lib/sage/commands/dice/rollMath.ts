@@ -1,11 +1,9 @@
-import type { TDiceOutput } from "../../../../sage-dice";
-import type { SageInteraction } from "../../model/SageInteraction";
-import type { SageMessage } from "../../model/SageMessage";
-import { doMath } from "./doMath";
+import type { TDiceOutput } from "../../../../sage-dice/index.js";
+import type { SageCommand } from "../../model/SageCommand.js";
+import { doMath } from "./doMath.js";
 
-type TInteraction = SageMessage | SageInteraction;
-
-export function rollMath(_: TInteraction, input: string): TDiceOutput[] {
+/** Returns the output data for the given math equation. */
+export function rollMath(_: SageCommand, input: string): TDiceOutput[] {
 	const result = doMath(input) ?? "INVALID!";
 	return [{
 		hasSecret: false,

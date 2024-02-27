@@ -3,11 +3,11 @@ import type { DMessageChannel, DMessageTarget } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { MessageActionRow, MessageButton, type Interaction, type Message, type MessageButtonStyle } from "discord.js";
-import { ActiveBot } from "../sage/model/ActiveBot";
-import type { SageCache } from "../sage/model/SageCache";
-import type { SageInteraction } from "../sage/model/SageInteraction";
-import { SageMessage } from "../sage/model/SageMessage";
-import { resolveToEmbeds } from "./embeds";
+import { ActiveBot } from "../sage/model/ActiveBot.js";
+import type { SageCache } from "../sage/model/SageCache.js";
+import type { SageCommand } from "../sage/model/SageCommand.js";
+import type { SageMessage } from "../sage/model/SageMessage.js";
+import { resolveToEmbeds } from "./resolvers/resolveToEmbeds.js";
 
 const TIMEOUT_MILLI = 60 * 1000;
 
@@ -23,27 +23,28 @@ function createButtons(buttons: TPromptButton[]): MessageButton[] {
 	});
 }
 
-export async function discordPromptYesNo(sageMessage: SageMessage, resolvable: RenderableContentResolvable): Promise<boolean | null> {
+export async function discordPromptYesNo(sageCommand: SageCommand, resolvable: RenderableContentResolvable): Promise<boolean | null> {
 	const yesNo: TPromptButton[] = [{ label:"Yes", style:"SUCCESS"}, { label:"No", style:"SECONDARY" }];
-	const result = await prompt(sageMessage, resolvable, yesNo);
+	const result = await prompt(sageCommand, resolvable, yesNo);
 	if (result) {
 		return result === "Yes";
 	}
 	return null;
 }
 
-export async function discordPromptYesNoDeletable(hasSageCache: SageMessage | SageInteraction, resolvable: RenderableContentResolvable): Promise<[boolean | null, Message | null]> {
+export async function discordPromptYesNoDeletable(sageCommand: SageCommand, resolvable: RenderableContentResolvable): Promise<[boolean | null, Message | null]> {
 	const yesNo: TPromptButton[] = [{ label:"Yes", style:"SUCCESS"}, { label:"No", style:"SECONDARY" }];
-	const channel = hasSageCache instanceof SageMessage ? hasSageCache.message.channel : hasSageCache.interaction.channel;
-	const [result, message] = await _prompt(hasSageCache.caches, resolvable, yesNo, channel as DMessageChannel);
+	const channel = sageCommand.isSageInteraction() ? sageCommand.interaction.channel : (sageCommand as SageMessage).message.channel;
+	const [result, message] = await _prompt(sageCommand.sageCache, resolvable, yesNo, channel as DMessageChannel);
 	if (result) {
 		return [result === "Yes", message];
 	}
 	return [null, message];
 }
 
-export async function prompt(sageMessage: SageMessage, resolvable: RenderableContentResolvable, buttons: TPromptButton[]): Promise<string | null> {
-	const [value] = await _prompt(sageMessage.caches, resolvable, buttons, sageMessage.message.channel as DMessageChannel);
+export async function prompt(sageCommand: SageCommand, resolvable: RenderableContentResolvable, buttons: TPromptButton[]): Promise<string | null> {
+	const channel = sageCommand.isSageInteraction() ? sageCommand.interaction.channel : (sageCommand as SageMessage).message.channel;
+	const [value] = await _prompt(sageCommand.sageCache, resolvable, buttons, channel);
 	return value;
 }
 

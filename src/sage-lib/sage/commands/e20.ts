@@ -7,20 +7,20 @@ import { NIL_SNOWFLAKE } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
-import { shiftDie } from "../../../sage-dice/dice/essence20";
-import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20";
-import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf";
-import { PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe";
-import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse";
-import { PlayerCharacterCorePR, PlayerCharacterPR, TCharacterSectionType, TCharacterViewType, TSkillZord, TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR";
-import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
-import { PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
-import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
-import { resolveToEmbeds } from "../../discord/embeds";
-import { registerInteractionListener } from "../../discord/handlers";
-import type { SageCache } from "../model/SageCache";
-import type { SageInteraction } from "../model/SageInteraction";
-import { parseDiceMatches, sendDice } from "./dice";
+import { shiftDie } from "../../../sage-dice/dice/essence20/index.js";
+import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
+import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf.js";
+import { PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe.js";
+import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse.js";
+import { PlayerCharacterCorePR, PlayerCharacterPR, TCharacterSectionType, TCharacterViewType, TSkillZord, TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR.js";
+import { PdfJsonParserPR } from "../../../sage-e20/pr/parse.js";
+import { PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer.js";
+import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse.js";
+import { registerInteractionListener } from "../../discord/handlers.js";
+import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
+import type { SageCache } from "../model/SageCache.js";
+import type { SageInteraction } from "../model/SageInteraction.js";
+import { parseDiceMatches, sendDice } from "./dice.js";
 
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
 type TPlayerCharacterCore = PlayerCharacterCoreJoe | PlayerCharacterCorePR | PlayerCharacterCoreTransformer;
@@ -418,7 +418,7 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 			dice = `[${label} ${charName} ${skillName}${specName}${shiftArrow}]`;
 		}
 	}
-	const matches = parseDiceMatches(sageInteraction, dice);
+	const matches = await parseDiceMatches(sageInteraction, dice);
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {

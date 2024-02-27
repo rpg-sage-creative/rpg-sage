@@ -1,11 +1,9 @@
 import { randomItem } from "@rsc-utils/random-utils";
-import type { TDiceOutput } from "../../../../sage-dice";
-import type { SageInteraction } from "../../model/SageInteraction";
-import type { SageMessage } from "../../model/SageMessage";
+import type { TDiceOutput } from "../../../../sage-dice/index.js";
+import type { SageCommand } from "../../model/SageCommand.js";
 
-type TInteraction = SageMessage | SageInteraction;
-
-export function rollRandomItem(_: TInteraction, input: string): TDiceOutput[] {
+/** Performs the random item selection and returns the results. */
+export function rollRandomItem(_: SageCommand, input: string): TDiceOutput[] {
 	const match = /^(?:(\d*)([ usgm]*)#)?(.*?)$/i.exec(input) ?? [];
 	const count = +match[1] || 1;
 	const unique = /u/i.test(match[2] ?? "");

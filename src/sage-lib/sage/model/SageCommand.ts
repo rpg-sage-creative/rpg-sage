@@ -4,8 +4,12 @@ import type { DInteraction, DiscordKey } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { If, MessageActionRow, MessageButton, MessageEmbed, MessageSelectMenu } from "discord.js";
+import type { GameType } from "../../../sage-common/index.js";
+import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/common.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
-import { resolveToEmbeds, resolveToTexts } from "../../discord/embeds.js";
+import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
+import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
+import type { DicePostType } from "../commands/dice.js";
 import type { IChannel } from "../repo/base/IdRepository.js";
 import type { Bot } from "./Bot.js";
 import type { Game } from "./Game.js";
@@ -17,9 +21,6 @@ import type { SageMessage } from "./SageMessage.js";
 import type { SageReaction } from "./SageReaction.js";
 import type { Server } from "./Server.js";
 import type { User } from "./User.js";
-import type { GameType } from "../../../sage-common/index.js";
-import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/common.js";
-import type { DicePostType } from "../commands/dice.js";
 
 export interface SageCommandCore {
 	sageCache: SageCache;
@@ -226,7 +227,7 @@ export abstract class SageCommand<T extends SageCommandCore = any, U extends Sag
 		if (renderableOrArgs.content) {
 			options.content = typeof(renderableOrArgs.content) === "string"
 				? renderableOrArgs.content
-				: resolveToTexts(this.sageCache, renderableOrArgs.content).join("\n");
+				: resolveToContent(this.sageCache, renderableOrArgs.content).join("\n");
 		}
 		if (renderableOrArgs.embeds) {
 			options.embeds = Array.isArray(renderableOrArgs.embeds)

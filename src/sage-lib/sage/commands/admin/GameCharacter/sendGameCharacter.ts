@@ -68,5 +68,6 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	const sageCache = sageMessage.caches;
 	const authorOptions = { avatarURL: avatarUrl, username: character.name };
 	const dialogType = sageMessage.dialogType;
-	return sendWebhook(targetChannel, { authorOptions, dialogType, renderableContent, sageCache });
+	const messages = await sendWebhook(targetChannel, { authorOptions, dialogType, renderableContent, sageCache });
+	return messages ?? [];
 }
