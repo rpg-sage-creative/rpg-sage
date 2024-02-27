@@ -1,13 +1,12 @@
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { type DidCore, HasDidCore } from "../repo/base/DidRepository";
-import type { DialogType } from "../repo/base/IdRepository";
-import { CharacterManager } from "./CharacterManager";
-import type { GameCharacter } from "./GameCharacter";
-import type { GameCharacterCore } from "./GameCharacter";
-import { NamedCollection } from "./NamedCollection";
-import { NoteManager, TNote } from "./NoteManager";
-import type { SageCache } from "./SageCache";
+import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
+import type { DialogType } from "../repo/base/IdRepository.js";
+import { CharacterManager } from "./CharacterManager.js";
+import type { GameCharacter, GameCharacterCore } from "./GameCharacter.js";
+import { NamedCollection } from "./NamedCollection.js";
+import { NoteManager, TNote } from "./NoteManager.js";
+import type { SageCache } from "./SageCache.js";
 
 export type TAlias = {
 	name: string;
