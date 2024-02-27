@@ -1,13 +1,17 @@
+import { splitChars } from "./splitChars.js";
 
-/** Used to unwrap parentheses, brackets, or braces from around a piece of text. */
-export function unwrap(input: string, chars: "[]"): string;
-export function unwrap(input: string, chars: "{}"): string;
-export function unwrap(input: string, chars: "()"): string;
-export function unwrap(input: string, chars: string): string;
+/**
+ * Used to unwrap a piece of text, usually (), [], or {}.
+ * If the chars argument is even, then they are split and used as left/right.
+ * If the chars argument is odd, then they are uesd as left and then they are reversed and used as right.
+ */
 export function unwrap(input: string, chars: string): string {
-	const [l, r] = chars;
-	while (input.startsWith(l) && input.endsWith(r)) {
-		input = input.slice(1, -1);
+	const leftRight = splitChars(chars);
+	if (leftRight) {
+		const { left, right } = leftRight;
+		while (input.startsWith(left) && input.endsWith(right)) {
+			input = input.slice(left.length, -right.length);
+		}
 	}
 	return input;
 }
