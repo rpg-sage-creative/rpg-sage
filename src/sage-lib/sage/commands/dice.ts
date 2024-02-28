@@ -148,7 +148,7 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 		return null;
 	}
 
-	const statRegex = /(?<!`)\{([\w ]+|"[\w ]+"):{2}([^:{}}]+)(?::([^}]+))?\}(?!`)/i;
+	const statRegex = /(?<!`)\{([\w ]+|"[\w ]+"):{2}([^:{}}]+)(?::([^{}]+))?\}(?!`)/i;
 	if (statRegex.test(diceString)) {
 		const { game, isGameMaster, isPlayer } = sageMessage;
 		if (!game || isGameMaster || isPlayer) {
