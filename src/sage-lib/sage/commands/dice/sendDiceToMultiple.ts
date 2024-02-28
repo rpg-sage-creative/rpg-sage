@@ -1,17 +1,12 @@
 import { toMessageUrl, type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import type { MessageEmbed } from "discord.js";
-import { createMessageEmbed } from "../../../discord/createMessageEmbed.js";
+import type { ColorResolvable } from "discord.js";
 import { sendTo } from "../../../discord/sendTo.js";
 import { ColorType } from "../../model/HasColorsCore.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 import type { FormattedDiceOutput } from "./FormattedDiceOutput.js";
 import { createMentionLine } from "./createMentionLine.js";
 
-/** Only creates the embed if content was given, returns undefined otherwise. */
-function createEmbed(sageCommand: SageCommand, embedContent?: string): MessageEmbed | undefined {
-	return embedContent?.trim() ? createMessageEmbed({ description:embedContent, color:sageCommand.toDiscordColor(ColorType.Dice) }) : undefined;
-}
 
 /** This function sends each dice roll to the channel as its own post. */
 export async function sendDiceToMultiple(sageCommand: SageCommand, formattedOutputs: FormattedDiceOutput[], targetChannel: DMessageChannel, gmTargetChannel: Optional<DMessageTarget>): Promise<void> {
@@ -26,10 +21,8 @@ export async function sendDiceToMultiple(sageCommand: SageCommand, formattedOutp
 	let doGmMention = hasSecret && !!gmTargetChannel;
 	let doMention = !allSecret;
 
+	const splitOptions = { embedColor:sageCommand.toDiscordColor(ColorType.Dice) as ColorResolvable ?? undefined };
 	for (const formattedOutput of formattedOutputs) {
-		const embed = createEmbed(sageCommand, formattedOutput.embedContent);
-		const embeds = embed ? [embed] : [];
-
 		// handle secret dice with a gm channel
 		if (formattedOutput.hasSecret && gmTargetChannel) {
 			// prepend the gm mention if we haven't done so yet
@@ -39,7 +32,7 @@ export async function sendDiceToMultiple(sageCommand: SageCommand, formattedOutp
 			doGmMention = false;
 
 			// send the gm message
-			await sendTo({ target: gmTargetChannel, content: gmPostContent.trim(), embeds, sageCache }, { });
+			await sendTo({ target: gmTargetChannel, content: gmPostContent.trim(), embedContent:formattedOutput.embedContent, sageCache }, splitOptions);
 
 			if (!allSecret) {
 				// prepend the player mention if we haven't done so yet
@@ -49,7 +42,7 @@ export async function sendDiceToMultiple(sageCommand: SageCommand, formattedOutp
 				doMention = false;
 
 				// send the player message
-				await sendTo({ target: targetChannel, content: notificationContent.trim(), sageCache }, { });
+				await sendTo({ target: targetChannel, content: notificationContent.trim(), sageCache }, splitOptions);
 			}
 
 		// handle all other dice
@@ -61,7 +54,7 @@ export async function sendDiceToMultiple(sageCommand: SageCommand, formattedOutp
 			doMention = false;
 
 			// send the message
-			await sendTo({ target: targetChannel, content: postContent.trim(), embeds, sageCache }, { });
+			await sendTo({ target: targetChannel, content: postContent.trim(), embedContent:formattedOutput.embedContent, sageCache }, splitOptions);
 		}
 	}
 	if (allSecret && isSageMessage) {

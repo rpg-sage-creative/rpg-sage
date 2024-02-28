@@ -70,7 +70,7 @@ export async function sendWebhook(targetChannel: DMessageChannel, { authorOption
 }
 
 function stripAuthorOptions(inOptions: WebhookMessageOptions) {
-	const { content, embeds, files, ...outOptions } = inOptions;
+	const { components, content, embeds, files, ...outOptions } = inOptions;
 	return outOptions;
 }
 

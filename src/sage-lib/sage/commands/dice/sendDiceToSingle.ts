@@ -2,6 +2,7 @@ import { debug } from "@rsc-utils/console-utils";
 import { toMessageUrl, type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
 import { isNotBlank } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
+import type { ColorResolvable } from "discord.js";
 import { sendTo } from "../../../discord/sendTo.js";
 import { ColorType } from "../../model/HasColorsCore.js";
 import type { SageCommand } from "../../model/SageCommand.js";
@@ -16,6 +17,7 @@ export async function sendDiceToSingle(sageCommand: SageCommand, formattedOutput
 	const publicMentionLine = await createMentionLine(sageCommand);
 	const secretMentionLine = await createMentionLine(sageCommand, true);
 	const secretReferenceLink = isSageMessage ? toMessageUrl(sageCommand.message) : ``;
+	const splitOptions = { embedColor:sageCommand.toDiscordColor(ColorType.Dice) as ColorResolvable ?? undefined };
 
 	const gmPostContents: Optional<string>[] = [];
 	const gmEmbedContents: Optional<string>[] = [];
@@ -51,9 +53,8 @@ export async function sendDiceToSingle(sageCommand: SageCommand, formattedOutput
 				sageCache: sageCommand.sageCache,
 				target: gmTargetChannel,
 				content: gmPostContent,
-				embedContent: gmEmbedContent,
-				embedContentColor: sageCommand.toDiscordColor(ColorType.Dice) ?? undefined
-			}, { });
+				embedContent: gmEmbedContent
+			}, splitOptions);
 		}else {
 			debug("no gmTargetChannel!");
 		}
@@ -67,9 +68,8 @@ export async function sendDiceToSingle(sageCommand: SageCommand, formattedOutput
 				sageCache: sageCommand.sageCache,
 				target: targetChannel,
 				content: mainPostContent,
-				embedContent: mainEmbedContent,
-				embedContentColor: sageCommand.toDiscordColor(ColorType.Dice) ?? undefined
-			}, { });
+				embedContent: mainEmbedContent
+			}, splitOptions);
 		}else {
 			debug("no targetChannel!");
 		}
