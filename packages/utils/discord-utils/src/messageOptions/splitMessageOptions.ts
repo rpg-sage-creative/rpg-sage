@@ -5,9 +5,9 @@ import type { EmbedResolvable } from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 
-type MsgOptions = WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions;
+type MsgOptions = (WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions) & { embedContent?:string; };
 
-type SplitOptions = {
+export type SplitOptions = {
 	/** Use in place of blank content (null, undefined, empty string, whitespcae only), ie: ZERO_WIDTH_SPACE */
 	blankContentValue?: string;
 	/** Convert all content to embeds? */
@@ -106,22 +106,28 @@ function mergeEmbeds(content?: string | null, embeds?: MsgEmbed[] | null, color?
 /** Used to convert a single message options object into an array to ensure we don't break posting limits. */
 export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOptions?: SplitOptions): T[] {
 	// break out the content, embeds, and files; saving the remaining options to be used in each payload
-	const { components, content, embeds, files, ...baseOptions } = msgOptions;
+	const { components, content, embedContent, embeds, files, ...baseOptions } = msgOptions;
+
+	// convert incoming embedContent to embeds
+	const convertedEmbeds = contentToEmbeds(embedContent, splitOptions?.embedColor) as MsgEmbed[] ?? [];
+
+	// merge those with other incoming embeds
+	const allIncomingEmbeds = convertedEmbeds.concat(embeds as MsgEmbed[] ?? []);
 
 	let contentToChunk: string | undefined;
 	let embedsToPost: MessageEmbed[] | undefined;
 
 	if (splitOptions?.embedsToContent) {
 		// merge the incoming content with the embeds
-		contentToChunk = mergeContent(content, embeds as MsgEmbed[]);
+		contentToChunk = mergeContent(content, allIncomingEmbeds);
 
 	}else if (splitOptions?.contentToEmbeds) {
 		// merge the content into the embeds
-		embedsToPost = mergeEmbeds(content, embeds as MsgEmbed[], splitOptions.embedColor);
+		embedsToPost = mergeEmbeds(content, allIncomingEmbeds, splitOptions.embedColor);
 
 	}else {
 		contentToChunk = content ?? undefined;
-		embedsToPost = embeds as MessageEmbed[];
+		embedsToPost = allIncomingEmbeds as MessageEmbed[];
 	}
 
 	const payloads: T[] = [];
