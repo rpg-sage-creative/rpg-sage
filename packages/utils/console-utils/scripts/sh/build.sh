@@ -27,11 +27,11 @@ fi
 
 # scrub build folders
 echo "Scrubbing build folders ..."
-find . -type d -name 'build' -not -path './node_modules/*' -exec rm -rf {} +
+find . -type d -name 'build' -not -path './node_modules/*' -not -path './workspaces/*'  -exec rm -rf {} +
 
 # scrub build info
 echo "Scrubbing tsbuildinfo files ..."
-find . -type f -name 'tsconfig.tsbuildinfo' -not -path './node_modules/*' -exec rm -rf {} +
+find . -type f -name '*.tsbuildinfo' -not -path './node_modules/*' -exec rm -rf {} +
 
 # we have a known issue with this lib needing this "declare module"
 if [ -d "./node_modules/pdf2json" ]; then
@@ -66,6 +66,16 @@ if [ -f "./tsconfig.d.json" ]; then
 	echo "Building tsconfig.d.json ..."
 	tsc --build tsconfig.d.json
 	if [ "$?" != "0" ]; then echo "Build Failed!"; exit 1; fi
+fi
+
+# iterate workspaces to fix documentation
+if [ -d "./workspaces" ]; then
+	for dir in ./workspaces/*/; do
+		dirName=$(basename -- "$dir")
+		echo "Building workspaces/$dirName/tsconfig.d.json ..."
+		cd "$dir"
+		tsc --build tsconfig.d.json
+	done
 fi
 
 echo "Building: $repoName ... done."

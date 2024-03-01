@@ -40,7 +40,7 @@
 	},
 	"repository": "github:randaltmeyer/rpg-sage-legacy",
 	"workspaces": [
-		"packages/utils/*"
+		"packages/utils/*", "workspaces/*"
 	],
 	"devDependencies": {
 		"@types/follow-redirects": "^1.14.1",

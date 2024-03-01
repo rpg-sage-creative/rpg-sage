@@ -1,0 +1,3 @@
+[submodule "workspaces/discord-utils"]
+	path = workspaces/discord-utils
+	url = git@github.com:rpg-sage-creative/discord-utils.git

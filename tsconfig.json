@@ -14,7 +14,8 @@
 		"node_modules",
 		"packages",
 		"scripts",
-		"test"
+		"test",
+		"workspaces"
 	],
 	"references": [
 		{ "path": "./packages/utils/console-utils" },
@@ -62,7 +63,7 @@
 		{ "path": "./packages/utils/env-utils" },
 
 		// console-utils, snowflake-utils, string-utils, type-utils
-		{ "path": "./packages/utils/discord-utils" },
+		{ "path": "./workspaces/discord-utils" },
 
 		// console-utils, json-utils
 		{ "path": "./packages/utils/fs-utils" },
