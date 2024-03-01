@@ -1,4 +1,4 @@
-import { chunk } from "@rsc-utils/string-utils";
+import { chunk, isNotBlank } from "@rsc-utils/string-utils";
 import { ColorResolvable, MessageEmbed, MessageEmbedOptions, MessageOptions, WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
 import { DiscordMaxValues } from "../DiscordMaxValues.js";
 import type { EmbedResolvable } from "../embed/EmbedResolvable.js";
@@ -22,7 +22,10 @@ type MsgEmbed = MessageEmbed | MessageEmbedOptions;
 
 /** Ensures we have a string, prepending a NewLine or title markdown if needed. */
 function getValueToAppend(value?: string | null, newLine?: boolean, title?: boolean): string {
-	return `${title ? "### " : ""}${newLine ? "\n" : ""}${value ?? ""}`;
+	const titleOut = isNotBlank(value) && title ? "### " : "";
+	const newLineOut = newLine ? "\n" : "";
+	const valueOut = value?.trim() ?? "";
+	return titleOut + newLineOut + valueOut;
 }
 
 /** Converts embeds into content. */
