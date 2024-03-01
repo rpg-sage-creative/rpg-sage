@@ -18,7 +18,7 @@
 		"workspaces"
 	],
 	"references": [
-		{ "path": "./packages/utils/console-utils" },
+		{ "path": "./workspaces/console-utils" },
 		{ "path": "./packages/utils/math-utils" },
 		{ "path": "./packages/utils/number-utils" },
 		{ "path": "./packages/utils/random-utils" },
