@@ -1,5 +1,0 @@
-
-export function roundToPrecision(x: number, precision = 1) {
-	const y = x + precision / 2;
-	return y - (y % precision);
-}
