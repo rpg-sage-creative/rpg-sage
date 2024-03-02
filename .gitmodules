@@ -14,3 +14,6 @@
 [submodule "packages/utils/character-utils"]
 	path = packages/utils/character-utils
 	url = git@github.com:rpg-sage-creative/character-utils.git
+[submodule "packages/utils/class-utils"]
+	path = packages/utils/class-utils
+	url = git@github.com:rpg-sage-creative/class-utils.git
