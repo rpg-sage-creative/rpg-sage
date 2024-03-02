@@ -124,3 +124,6 @@
 [submodule "packages/utils/dice-utils"]
 	path = packages/utils/dice-utils
 	url = git@github.com:rpg-sage-creative/dice-utils.git
+[submodule "packages/utils/discord-utils"]
+	path = packages/utils/discord-utils
+	url = git@github.com:rpg-sage-creative/discord-utils.git
