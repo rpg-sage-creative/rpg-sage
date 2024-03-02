@@ -5,3 +5,6 @@
 [submodule "packages/utils/array-utils"]
 	path = packages/utils/array-utils
 	url = git@github.com:rpg-sage-creative/array-utils.git
+[submodule "packages/utils/async-array-utils"]
+	path = packages/utils/async-array-utils
+	url = git@github.com:rpg-sage-creative/async-array-utils.git
