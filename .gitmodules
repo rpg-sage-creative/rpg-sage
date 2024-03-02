@@ -94,3 +94,6 @@
 [submodule "/Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/uuid-utils"]
 	path = /Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/uuid-utils
 	url = git@github.com:rpg-sage-creative/uuid-utils.git
+[submodule "packages/utils/args-utils"]
+	path = packages/utils/args-utils
+	url = git@github.com:rpg-sage-creative/args-utils.git
