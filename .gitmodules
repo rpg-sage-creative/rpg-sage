@@ -4,3 +4,6 @@
 [submodule "workspaces/console-utils"]
 	path = workspaces/console-utils
 	url = git@github.com:rpg-sage-creative/console-utils.git
+[submodule "/Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/args-utils"]
+	path = /Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/args-utils
+	url = git@github.com:rpg-sage-creative/args-utils.git
