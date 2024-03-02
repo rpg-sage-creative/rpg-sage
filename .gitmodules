@@ -46,3 +46,6 @@
 [submodule "packages/utils/json-utils"]
 	path = packages/utils/json-utils
 	url = git@github.com:rpg-sage-creative/json-utils.git
+[submodule "packages/utils/language-utils"]
+	path = packages/utils/language-utils
+	url = git@github.com:rpg-sage-creative/language-utils.git
