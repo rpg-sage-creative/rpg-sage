@@ -130,3 +130,6 @@
 [submodule "packages/utils/enum-utils"]
 	path = packages/utils/enum-utils
 	url = git@github.com:rpg-sage-creative/enum-utils.git
+[submodule "packages/utils/env-utils"]
+	path = packages/utils/env-utils
+	url = git@github.com:rpg-sage-creative/env-utils.git
