@@ -154,3 +154,6 @@
 [submodule "packages/utils/pdf-utils"]
 	path = packages/utils/pdf-utils
 	url = git@github.com:rpg-sage-creative/pdf-utils.git
+[submodule "packages/utils/progress-utils"]
+	path = packages/utils/progress-utils
+	url = git@github.com:rpg-sage-creative/progress-utils.git
