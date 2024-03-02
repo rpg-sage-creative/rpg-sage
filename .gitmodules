@@ -175,3 +175,6 @@
 [submodule "packages/utils/temperature-utils"]
 	path = packages/utils/temperature-utils
 	url = git@github.com:rpg-sage-creative/temperature-utils.git
+[submodule "packages/utils/test-utils"]
+	path = packages/utils/test-utils
+	url = git@github.com:rpg-sage-creative/test-utils.git
