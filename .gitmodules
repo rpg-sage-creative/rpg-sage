@@ -19,3 +19,6 @@
 [submodule "/Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/character-utils"]
 	path = /Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/character-utils
 	url = git@github.com:rpg-sage-creative/character-utils.git
+[submodule "/Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/class-utils"]
+	path = /Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/class-utils
+	url = git@github.com:rpg-sage-creative/class-utils.git
