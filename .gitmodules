@@ -17,3 +17,6 @@
 [submodule "packages/utils/class-utils"]
 	path = packages/utils/class-utils
 	url = git@github.com:rpg-sage-creative/class-utils.git
+[submodule "packages/utils/color-utils"]
+	path = packages/utils/color-utils
+	url = git@github.com:rpg-sage-creative/color-utils.git
