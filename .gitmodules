@@ -32,3 +32,6 @@
 [submodule "packages/utils/discord-utils"]
 	path = packages/utils/discord-utils
 	url = git@github.com:rpg-sage-creative/discord-utils.git
+[submodule "packages/utils/enum-utils"]
+	path = packages/utils/enum-utils
+	url = git@github.com:rpg-sage-creative/enum-utils.git
