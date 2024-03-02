@@ -62,3 +62,6 @@
 [submodule "packages/utils/progress-utils"]
 	path = packages/utils/progress-utils
 	url = git@github.com:rpg-sage-creative/progress-utils.git
+[submodule "packages/utils/random-utils"]
+	path = packages/utils/random-utils
+	url = git@github.com:rpg-sage-creative/random-utils.git
