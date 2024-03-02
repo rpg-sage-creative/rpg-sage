@@ -10,3 +10,6 @@
 [submodule "/Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/array-utils"]
 	path = /Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/array-utils
 	url = git@github.com:rpg-sage-creative/array-utils.git
+[submodule "/Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/async-array-utils"]
+	path = /Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/async-array-utils
+	url = git@github.com:rpg-sage-creative/async-array-utils.git
