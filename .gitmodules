@@ -41,3 +41,6 @@
 [submodule "packages/utils/fs-utils"]
 	path = packages/utils/fs-utils
 	url = git@github.com:rpg-sage-creative/fs-utils.git
+[submodule "packages/utils/https-utils"]
+	path = packages/utils/https-utils
+	url = git@github.com:rpg-sage-creative/https-utils.git
