@@ -10,7 +10,7 @@ import { Spell } from "./Spell";
 import type { Source } from "./base/Source";
 
 
-function uniqueClean<T>(array: Optional<T>[], sorter: Sorter = sortPrimitive): T[] {
+function uniqueClean<T>(array: Optional<T>[], sorter: Sorter<any> = sortPrimitive): T[] {
 	return array.filter(toUniqueDefined).sort(sorter);
 }
 function flatUniqueClean<T>(array: T[][]): T[] {

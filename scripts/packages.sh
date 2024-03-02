@@ -8,11 +8,6 @@ if [ ! -d "./.git" ]; then
 	echo "cd $(pwd)"
 fi
 
-repoDir=$(pwd)
-cd ../rsc
-utilsDir=$(pwd)
-cd "$repoDir"
-
 repoNames=(
 	"args-utils"
 	"array-utils"
@@ -51,45 +46,52 @@ if [ ! -z "$1" ]; then
 	repoNames=( "$1" )
 fi
 
+# get current working dir (should be project/repo/git root dir)
+repoDir=$(pwd)
+
 echo "Configuring Packages ..."
 
+# make sure we have ./packages/utils
 packagesDir="$repoDir/packages/utils"
 if [ ! -d "$packagesDir" ]; then
 	mkdir -p "$packagesDir"
 fi
 
+nodeModulesDir="$repoDir/node_modules/@rsc-utils"
+if [ ! -d "$nodeModulesDir" ]; then
+	mkdir -p "$nodeModulesDir"
+fi
+
+rm -f .gitmodules
+echo "" > .gitmodules
+
 for repoName in "${repoNames[@]}"; do
-	srcDir="$utilsDir/$repoName"
-	destDir="$packagesDir/$repoName"
+	# start in the repo dir
+	cd "$repoDir"
 
-	echo "Adding Package: $repoName ..."
-	rm -rf "$destDir"
-	mkdir "$destDir"
-	cp -r "$srcDir/src" "$destDir/src"
-	if [ "$repoName" = "console-utils" ]; then
-		cp -r "$srcDir/scripts" "$destDir/scripts"
-	fi
-	if [ "$repoName" = "language-utils" ]; then
-		cp -r "$srcDir/data" "$destDir/data"
+	# delete a non-repo
+	if [ ! -d "./packages/utils/$repoName/.gitignore" ]; then
+		echo "Removing old junk: ./packages/utils/$repoName ..."
+		rm -rf "./packages/utils/$repoName"
+		git rm -r --cached "./packages/utils/$repoName"
+		git commit -m "moved to submodule"
 	fi
 
-	# update package.json details
-	echo "Adding $repoName/package.json ..."
-	cd "$srcDir"
-	jsonName=$(npm pkg get name)
-	jsonVer='"0.0.0"'
-	# jsonVer=$(npm pkg get version)
-	jsonDep=$(npm pkg get dependencies)
-	jsonRaw="{\"name\":$jsonName,\"version\":$jsonVer,\"private\":true,\"main\":\"build/index.js\",\"type\":\"module\",\"dependencies\":$jsonDep}"
-	echo "$jsonRaw" | sed -e 's/github:rpg-sage-creative\/[a-zA-Z]*-utils/^0.0.0/g' > "$destDir/package.json"
+	# get repo url and dir
+	repoUrl="git@github.com:rpg-sage-creative/$repoName.git"
+	destDir="./packages/utils/$repoName"
 
-	# update tsconfig.json
-	echo "Adding $repoName/tsconfig.json ..."
-	echo "{\"extends\":\"../../../tsconfig.base.json\",\"compilerOptions\":{\"outDir\":\"./build\",\"rootDir\":\"./src\"}}" > "$destDir/tsconfig.json"
+	echo "Adding submodule: $repoName ..."
+	git submodule add -f "$repoUrl" "$destDir"
+
+	# update node_modules symbolic links
+	rm -rf "$nodeModulesDir/$repoName"
+	cd "$nodeModulesDir"
+	ln -s "../../packages/utils/$repoName" "$repoName"
 done
 
 echo "Configuring Packages ... done."
 
 cd "$repoDir"
-rm -rf node_modules package-lock.json
-npm i
+rm -rf package-lock.json
+# npm i

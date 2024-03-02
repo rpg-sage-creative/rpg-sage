@@ -4,7 +4,7 @@ logs/
 node_modules/
 
 **/.DS_Store
-**/tsconfig.tsbuildinfo
+**/*.tsbuildinfo
 
 # ignore config json files
 /config/*.json
