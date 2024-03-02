@@ -50,3 +50,6 @@
 [submodule "packages/utils/language-utils"]
 	path = packages/utils/language-utils
 	url = git@github.com:rpg-sage-creative/language-utils.git
+[submodule "packages/utils/math-utils"]
+	path = packages/utils/math-utils
+	url = git@github.com:rpg-sage-creative/math-utils.git
