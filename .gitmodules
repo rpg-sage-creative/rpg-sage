@@ -163,3 +163,6 @@
 [submodule "packages/utils/render-utils"]
 	path = packages/utils/render-utils
 	url = git@github.com:rpg-sage-creative/render-utils.git
+[submodule "packages/utils/search-utils"]
+	path = packages/utils/search-utils
+	url = git@github.com:rpg-sage-creative/search-utils.git
