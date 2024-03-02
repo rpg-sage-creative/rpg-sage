@@ -178,3 +178,6 @@
 [submodule "packages/utils/test-utils"]
 	path = packages/utils/test-utils
 	url = git@github.com:rpg-sage-creative/test-utils.git
+[submodule "packages/utils/type-utils"]
+	path = packages/utils/type-utils
+	url = git@github.com:rpg-sage-creative/type-utils.git
