@@ -115,3 +115,6 @@
 [submodule "packages/utils/color-utils"]
 	path = packages/utils/color-utils
 	url = git@github.com:rpg-sage-creative/color-utils.git
+[submodule "packages/utils/console-utils"]
+	path = packages/utils/console-utils
+	url = git@github.com:rpg-sage-creative/console-utils.git
