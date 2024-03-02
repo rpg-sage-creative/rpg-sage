@@ -169,3 +169,6 @@
 [submodule "packages/utils/snowflake-utils"]
 	path = packages/utils/snowflake-utils
 	url = git@github.com:rpg-sage-creative/snowflake-utils.git
+[submodule "packages/utils/string-utils"]
+	path = packages/utils/string-utils
+	url = git@github.com:rpg-sage-creative/string-utils.git
