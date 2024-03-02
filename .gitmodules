@@ -106,3 +106,6 @@
 [submodule "packages/utils/cache-utils"]
 	path = packages/utils/cache-utils
 	url = git@github.com:rpg-sage-creative/cache-utils.git
+[submodule "packages/utils/character-utils"]
+	path = packages/utils/character-utils
+	url = git@github.com:rpg-sage-creative/character-utils.git
