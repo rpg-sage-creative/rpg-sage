@@ -65,3 +65,6 @@
 [submodule "packages/utils/random-utils"]
 	path = packages/utils/random-utils
 	url = git@github.com:rpg-sage-creative/random-utils.git
+[submodule "packages/utils/render-utils"]
+	path = packages/utils/render-utils
+	url = git@github.com:rpg-sage-creative/render-utils.git
