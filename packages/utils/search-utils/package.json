@@ -1,7 +1,0 @@
-{"name":"@rsc-utils/search-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
-  "@rsc-utils/array-utils": "^0.0.0",
-  "@rsc-utils/language-utils": "^0.0.0",
-  "@rsc-utils/string-utils": "^0.0.0",
-  "@rsc-utils/type-utils": "^0.0.0",
-  "xregexp": "^5.1.1"
-}}
