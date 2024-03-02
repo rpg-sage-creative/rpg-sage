@@ -148,3 +148,6 @@
 [submodule "packages/utils/math-utils"]
 	path = packages/utils/math-utils
 	url = git@github.com:rpg-sage-creative/math-utils.git
+[submodule "packages/utils/number-utils"]
+	path = packages/utils/number-utils
+	url = git@github.com:rpg-sage-creative/number-utils.git
