@@ -1,3 +1,6 @@
 [submodule "packages/utils/args-utils"]
 	path = packages/utils/args-utils
 	url = git@github.com:rpg-sage-creative/args-utils.git
+[submodule "packages/utils/array-utils"]
+	path = packages/utils/array-utils
+	url = git@github.com:rpg-sage-creative/array-utils.git
