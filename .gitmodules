@@ -58,3 +58,6 @@
 [submodule "/Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/math-utils"]
 	path = /Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/math-utils
 	url = git@github.com:rpg-sage-creative/math-utils.git
+[submodule "/Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/number-utils"]
+	path = /Users/randaltmeyer/git/rpg-sage-v1.6.x-submodules/packages/utils/number-utils
+	url = git@github.com:rpg-sage-creative/number-utils.git
