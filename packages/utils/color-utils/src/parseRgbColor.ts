@@ -1,5 +1,5 @@
 import { round } from "@rsc-utils/number-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "./internal/Optional.js";
 import { matchRgb } from "./internal/matchRgb.js";
 
 /** Simple type to store r/g/b values */
@@ -9,15 +9,15 @@ type RGB = { red:number; green:number; blue:number; };
 type RGBA = { red:number; green:number; blue:number; alpha?:number; };
 
 /** Parses the value to get all the r/g/b/a component values, alpha only if present. */
-export function parseRgb(value: Optional<string>): RGBA | null;
+export function parseRgbColor(value: Optional<string>): RGBA | null;
 
 /** Parses the value to get all the r/g/b/a component values. */
-export function parseRgb(value: Optional<string>, includeAlpha: true): RGBA | null;
+export function parseRgbColor(value: Optional<string>, includeAlpha: true): RGBA | null;
 
 /** Parses the value to get all the r/g/b component values. */
-export function parseRgb(value: Optional<string>, includeAlpha: false): RGB | null;
+export function parseRgbColor(value: Optional<string>, includeAlpha: false): RGB | null;
 
-export function parseRgb(value: Optional<string>, includeAlpha?: boolean): RGBA | null {
+export function parseRgbColor(value: Optional<string>, includeAlpha?: boolean): RGBA | null {
 	const match = matchRgb(value);
 	if (!match) {
 		return null;
@@ -29,7 +29,8 @@ export function parseRgb(value: Optional<string>, includeAlpha?: boolean): RGBA 
 			blue: +match[3]
 		};
 	}
-	let alpha = match[4] !== undefined ? round(+match[4], 3) : undefined;
+	// Because this is a decimal representation of 0%-100%, values are rounded to precision 2: 0.00
+	let alpha = match[4] !== undefined ? round(+match[4], 2) : undefined;
 	if (alpha === undefined && includeAlpha) {
 		alpha = 1;
 	}

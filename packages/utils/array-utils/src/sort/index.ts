@@ -5,4 +5,3 @@ export * from "./sortComparable.js";
 export * from "./Sorter.js";
 export * from "./sortPrimitive.js";
 export * from "./SortResult.js";
-export * from "./sortStringIgnoreCase.js";

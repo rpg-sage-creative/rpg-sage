@@ -1,7 +1,6 @@
-import type { Optional } from "@rsc-utils/type-utils";
 import { collectCheckFields } from "./collectCheckFields.js";
 import { collectTextFields } from "./collectTextFields.js";
-import type { Field, RawJson } from "./types.js";
+import type { Field, Optional, RawJson } from "./types.js";
 
 /**
  * @internal

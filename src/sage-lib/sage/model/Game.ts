@@ -1,4 +1,4 @@
-import { sortStringIgnoreCase, type Comparable } from "@rsc-utils/array-utils";
+import { sortPrimitive, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { DiscordKey, type DMessage } from "@rsc-utils/discord-utils";
@@ -655,7 +655,7 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 
 	// #region IComparable
 	public compareTo(other: Game): -1 | 0 | 1 {
-		return sortStringIgnoreCase(this.name, other.name);
+		return sortPrimitive(this.name, other.name);
 	}
 	// #endregion
 

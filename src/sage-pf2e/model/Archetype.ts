@@ -1,4 +1,4 @@
-import { sortPrimitive, sortStringIgnoreCase } from "@rsc-utils/array-utils";
+import { sortByKey } from "@rsc-utils/array-utils";
 import { nth } from "@rsc-utils/number-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { rarityToSuper } from "../common";
@@ -43,10 +43,7 @@ function findFeats(archetype: Archetype): Feat[] {
 		feats.push(dedication);
 		feats.push(...findChildrenFeats(dedication.name));
 	}
-	feats.sort((a, b) => {
-		return sortPrimitive(a.level, b.level)
-			|| sortStringIgnoreCase(a.name, b.name);
-	});
+	feats.sort(sortByKey("level", "name"));
 	return feats;
 
 	function findChildrenFeats(featName: string): Feat[] {

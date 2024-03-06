@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "./internal/Optional.js";
 import { matchHex } from "./internal/matchHex.js";
 
 /** Tests for HEX or HEXA */

@@ -1,4 +1,4 @@
-import { sortStringIgnoreCase } from "@rsc-utils/array-utils";
+import { sortByKey } from "@rsc-utils/array-utils";
 import type { TSlashCommand } from "../../../../SlashTypes";
 import { registerSlashCommand } from "../../../../slash.mjs";
 
@@ -53,7 +53,7 @@ function helpCommand(): TSlashCommand {
 		]
 	};
 	// command.options[0].choices.forEach(choice => delete choice.description);
-	command.options[0].choices.sort((a, b) => sortStringIgnoreCase(a.name, b.name));
+	command.options[0].choices.sort(sortByKey("name"));
 	return command;
 }
 

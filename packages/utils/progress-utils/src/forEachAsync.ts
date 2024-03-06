@@ -1,7 +1,9 @@
 import { warn } from "@rsc-utils/console-utils";
-import type { Awaitable } from "@rsc-utils/type-utils";
 import { isPromise } from "util/types";
 import { PercentLogger } from "./PercentLogger.js";
+
+/** Represents an object or a promise to get that object. */
+type Awaitable<T> = T | PromiseLike<T>;
 
 /**
  * Uses asynchronous logic to iterate over an array and log the progress.

@@ -1,4 +1,4 @@
-import { sortStringIgnoreCase } from "@rsc-utils/array-utils";
+import { sortPrimitive } from "@rsc-utils/array-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import type { IHasContents, TObjectQuantity } from "../common";
@@ -28,15 +28,15 @@ function contentToString(objectQuantity: TObjectQuantity<Gear>): string {
 
 export function sortGear(a: Gear, b: Gear): number {
 	if (a.category && b.category && a.category !== b.category) {
-		return sortStringIgnoreCase(`${a.category.name || ""}${a.name}`, `${b.category.name || ""}${b.name}`);
+		return sortPrimitive(`${a.category.name || ""}${a.name}`, `${b.category.name || ""}${b.name}`);
 	}
 	if (!a.category) {
-		return sortStringIgnoreCase(a.name, b.name);
+		return sortPrimitive(a.name, b.name);
 	}
 	if (a.price && b.price && a.price !== b.price) {
 		return Coins.compare(a.price, b.price);
 	}
-	return sortStringIgnoreCase(a.name, b.name);
+	return sortPrimitive(a.name, b.name);
 }
 
 //#endregion

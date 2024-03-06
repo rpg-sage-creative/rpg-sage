@@ -3,7 +3,7 @@ import { isNilUuid } from "./isNilUuid.js";
 import { isNonNilUuid } from "./isNonNillUuid.js";
 import { isUuid } from "./isUuid.js";
 import { orNilUuid } from "./orNilUuid.js";
-import type { UUID } from "./types";
+import type { UUID } from "./types.js";
 
 /** Convenience type for UUID | UuidMatcher */
 export type UuidMatcherResolvable = Optional<UUID> | UuidMatcher;

@@ -1,9 +1,11 @@
 #!/bin/bash
 
+FULL=
 SKIP_INDEX_TS=
 while test $# -gt 0; do
 	case "$1" in
 		--skipIndexTs) SKIP_INDEX_TS="true"; shift; ;;
+		--full|-f) FULL="true"; shift; ;;
 		*) break; ;;
 	esac
 done
@@ -25,13 +27,15 @@ if [ ! -f "./tsconfig.json" ]; then
 	exit 0
 fi
 
-# scrub build folders
-echo "Scrubbing build folders ..."
-find . -type d -name 'build' -not -path './node_modules/*' -exec rm -rf {} +
+if [ ! -z "$FULL" ]; then
+	# scrub build folders
+	echo "Scrubbing build folders ..."
+	find . -type d -name 'build' -not -path './node_modules/*' -not -path './packages/*'  -exec rm -rf {} +
 
-# scrub build info
-echo "Scrubbing tsbuildinfo files ..."
-find . -type f -name 'tsconfig.tsbuildinfo' -not -path './node_modules/*' -exec rm -rf {} +
+	# scrub build info
+	echo "Scrubbing tsbuildinfo files ..."
+	find . -type f -name '*.tsbuildinfo' -not -path './node_modules/*' -exec rm -rf {} +
+fi
 
 # we have a known issue with this lib needing this "declare module"
 if [ -d "./node_modules/pdf2json" ]; then
@@ -67,5 +71,15 @@ if [ -f "./tsconfig.d.json" ]; then
 	tsc --build tsconfig.d.json
 	if [ "$?" != "0" ]; then echo "Build Failed!"; exit 1; fi
 fi
+
+# # iterate packages to fix documentation
+# if [ -d "./packages" ]; then
+# 	rootDir="$(pwd)"
+# 	for dir in ./packages/*/*; do
+# 		echo "Building $dir/tsconfig.d.json ..."
+# 		cd "$rootDir/$dir"
+# 		tsc --build tsconfig.d.json
+# 	done
+# fi
 
 echo "Building: $repoName ... done."

@@ -1,4 +1,4 @@
-import { sortStringIgnoreCase } from "@rsc-utils/array-utils";
+import { sortByKey } from "@rsc-utils/array-utils";
 import type { TProficiency } from "../../common";
 import { DEXTERITY, EXPERT, LEGENDARY, MASTER, NO_ARMOR, TRAINED, UNTRAINED } from "../../common";
 import { all, findByValue } from "../../data/Repository";
@@ -29,7 +29,7 @@ export class Skills {
 				skills.push(skill);
 			}
 		});
-		skills.sort((a, b) => sortStringIgnoreCase(a.name, b.name));
+		skills.sort(sortByKey("name"));
 		return skills;
 	}
 

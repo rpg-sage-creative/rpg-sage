@@ -1,4 +1,4 @@
-import type { Searchable } from "./Searchable";
+import type { Searchable } from "./Searchable.js";
 
 export type SearchTermData = {
 	term: string;

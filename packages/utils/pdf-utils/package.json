@@ -3,6 +3,5 @@
   "@rsc-utils/fs-utils": "^0.0.0",
   "@rsc-utils/https-utils": "^0.0.0",
   "@rsc-utils/snowflake-utils": "^0.0.0",
-  "@rsc-utils/type-utils": "^0.0.0",
   "pdf2json": "^2.0.2"
 }}
