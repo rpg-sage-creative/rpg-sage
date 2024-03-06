@@ -6,13 +6,19 @@ import type { TParsedSearchInfo } from "../../common.js";
 import { AonSf1SearchBase } from "./AonSf1SearchBase.js";
 import { Sf1eSearchResults } from "./Sf1eSearchResults.js";
 
+function urlRoot() {
+	return "https://www.aonsrd.com/";
+}
+
 export function createSearchUrl(searchText: string): string {
 	const cleanSearchText = searchText.replace(/\s+/g, "+");
-	return `https://www.aonsrd.com/Search.aspx?Query=${cleanSearchText}`;
+	return `${urlRoot()}Search.aspx?Query=${cleanSearchText}`;
 }
+
 export function createSearchResultUrl(link: TResultsLink): string {
-	const cleanUrl = link.url.replace(/\s+/g, "+");
-	return `https://www.aonsrd.com/${cleanUrl}`;
+	const root = urlRoot();
+	const cleanUrl = link.url.replace(/\s+/g, "+").replace(new RegExp("^" + root, "i"), "");
+	return root + cleanUrl;
 }
 
 export async function searchAonSf1e(parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<Sf1eSearchResults> {
