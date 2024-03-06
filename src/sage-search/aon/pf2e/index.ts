@@ -13,9 +13,13 @@ import type { TPostData, TResponseData } from "./types";
 
 const PF2E_SEARCH_URL = `https://elasticsearch.aonprd.com/aon/_search`;
 
+function urlRoot() {
+	return "https://2e.aonprd.com/";
+}
+
 export function createSearchUrl(searchText: string): string | null {
 	const cleanSearchText = searchText.replace(/\s+/g, "+");
-	return `https://2e.aonprd.com/Search.aspx?query=${cleanSearchText}`;
+	return `${urlRoot()}Search.aspx?query=${cleanSearchText}`;
 }
 
 export async function searchAonPf2e(parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<Pf2eSearchResults> {
