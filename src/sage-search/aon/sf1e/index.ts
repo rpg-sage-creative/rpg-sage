@@ -1,10 +1,10 @@
 import { SearchScore } from "@rsc-utils/search-utils";
-import { TResultsLink, getSearchResultsLinks, sortSearchResults } from "../";
-import { GameType } from "../../../sage-common";
-import { GameSearchInfo } from "../../GameSearchInfo";
-import type { TParsedSearchInfo } from "../../common";
-import { AonSf1SearchBase } from "./AonSf1SearchBase";
-import { Sf1eSearchResults } from "./Sf1eSearchResults";
+import { TResultsLink, getSearchResultsLinks, sortSearchResults } from "../index.js";
+import { GameType } from "../../../sage-common/index.js";
+import { GameSearchInfo } from "../../GameSearchInfo.js";
+import type { TParsedSearchInfo } from "../../common.js";
+import { AonSf1SearchBase } from "./AonSf1SearchBase.js";
+import { Sf1eSearchResults } from "./Sf1eSearchResults.js";
 
 export function createSearchUrl(searchText: string): string {
 	const cleanSearchText = searchText.replace(/\s+/g, "+");
@@ -12,7 +12,7 @@ export function createSearchUrl(searchText: string): string {
 }
 export function createSearchResultUrl(link: TResultsLink): string {
 	const cleanUrl = link.url.replace(/\s+/g, "+");
-	return `https://www.aonprd.com/${cleanUrl}`;
+	return `https://www.aonsrd.com/${cleanUrl}`;
 }
 
 export async function searchAonSf1e(parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<Sf1eSearchResults> {
