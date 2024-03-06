@@ -72,14 +72,16 @@ if [ -f "./tsconfig.d.json" ]; then
 	if [ "$?" != "0" ]; then echo "Build Failed!"; exit 1; fi
 fi
 
-# # iterate packages to fix documentation
-# if [ -d "./packages" ]; then
-# 	rootDir="$(pwd)"
-# 	for dir in ./packages/*/*; do
-# 		echo "Building $dir/tsconfig.d.json ..."
-# 		cd "$rootDir/$dir"
-# 		tsc --build tsconfig.d.json
-# 	done
-# fi
+# iterate packages to fix documentation
+if [ -d "./packages" ]; then
+	rootDir="$(pwd)"
+	for dir in ./packages/*/*; do
+		cd "$rootDir/$dir"
+		if [ -f "./tsconfig.d.json" ]; then
+			echo "Building $dir/tsconfig.d.json ..."
+			tsc --build tsconfig.d.json
+		fi
+	done
+fi
 
 echo "Building: $repoName ... done."
