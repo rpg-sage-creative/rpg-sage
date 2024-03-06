@@ -1,7 +1,6 @@
 import { error } from "@rsc-utils/console-utils";
 import { rollDie } from "@rsc-utils/dice-utils";
 import { type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
-import { isUrl } from "@rsc-utils/https-utils";
 import { addCommas } from "@rsc-utils/number-utils";
 import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
 import type { Optional } from "@rsc-utils/type-utils";
@@ -21,6 +20,7 @@ import { SageMessage } from "../model/SageMessage.js";
 import type { TMacro } from "../model/User.js";
 import { registerCommandRegex } from "./cmd.js";
 import { doMath } from "./dice/doMath.js";
+import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
 import { formatDiceOutput } from "./dice/formatDiceOutput.js";
 import { isMath } from "./dice/isMath.js";
 import { isRandomItem } from "./dice/isRandomItem.js";
@@ -199,9 +199,8 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 async function parseMatch(sageMessage: TInteraction, match: string, overrides?: TDiscordDiceParseOptions): Promise<TDiceOutput[]> {
 	const noBraces = unwrap(match, "[]");
 
-	const isTableUrl = isUrl(match);
-	const table = parseTable(match);
-	if (isTableUrl || table) {
+	const table = await fetchTableFromUrl(match) ?? parseTable(match);
+	if (table) {
 		const tableResults = await rollTable(sageMessage, noBraces, table);
 		const childDice = tableResults[0]?.children?.map(child => wrap(unwrap(child, "[]"), "[]").match(BASE_REGEX) ?? []).flat() ?? [];
 		// debug({tableResults,tableResultsDice})
