@@ -264,7 +264,7 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 		return this.channels.filter((_, index) => !all[index]);
 	}
 	public async orphanUsers(): Promise<IGameUser[]> {
-		const all = await Promise.all(this.users.map(user => this.discord.fetchUser(user.did)));
+		const all = await Promise.all(this.users.map(user => this.discord.fetchGuildMember(user.did)));
 		return this.users.filter((_, index) => !all[index]);
 	}
 	public async gmGuildMembers(): Promise<GuildMember[]> {
