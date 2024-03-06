@@ -4,17 +4,17 @@ import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isNonNilUuid, randomUuid } from "@rsc-utils/uuid-utils";
 import type { Snowflake, TextChannel } from "discord.js";
-import { GameType } from "../../../../../sage-common";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
-import { discordPromptYesNo } from "../../../../discord/prompts";
-import { Game, GameRoleType, GameUserType, IGameUser, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game";
-import { GameCharacter } from "../../../model/GameCharacter";
-import type { SageMessage } from "../../../model/SageMessage";
-import type { Server } from "../../../model/Server";
-import { DialogType, IChannel, PermissionType } from "../../../repo/base/IdRepository";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
-import { DicePostType } from "../../dice";
-import { registerAdminCommandHelp } from "../../help";
+import { GameType } from "../../../../../sage-common/index.js";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice/index.js";
+import { discordPromptYesNo } from "../../../../discord/prompts.js";
+import { Game, GameRoleType, GameUserType, IGameUser, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
+import { GameCharacter } from "../../../model/GameCharacter.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import type { Server } from "../../../model/Server.js";
+import { DialogType, IChannel, PermissionType } from "../../../repo/base/IdRepository.js";
+import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
+import { DicePostType } from "../../dice.js";
+import { registerAdminCommandHelp } from "../../help.js";
 
 async function getGames(sageMessage: SageMessage): Promise<Game[]> {
 	const guild = sageMessage.discord.guild;
@@ -241,11 +241,6 @@ async function showGameRenderChannels(renderableContent: RenderableContent, sage
 			}
 		}
 	}
-
-	const orphanChannels = (await game.orphanChannels()).map(channel => channel ? `#${channel.did}` : `<i>unavailable</i>`);
-	if (orphanChannels.length) {
-		renderableContent.append(`<b>Orphaned Channels</b> ${orphanChannels.length}; ${orphanChannels.join(", ")}`);
-	}
 }
 
 async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: Game): Promise<void> {
@@ -268,6 +263,12 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 
 	await showGameRenderChannels(renderableContent, sageMessage, game);
 
+	const orphanChannels = await game.orphanChannels();
+	if (orphanChannels.length) {
+		const orphanChannelIds = orphanChannels.map(channel => `#${channel.did}`);
+		renderableContent.append(`<b>Orphaned Channels</b> ${orphanChannelIds.length}; ${orphanChannelIds.join(", ")}`);
+	}
+
 	const guildRoles = await game.guildRoles();
 	const roles = guildRoles.map(guildRole => guildRole ? `@${guildRole.name} (${GameRoleType[game.roles.find(role => role.did === guildRole.id)?.type!]})` : `<i>unavailable</i>`);
 	renderableContent.append(`<b>Roles</b> ${roles.length}; ${roles.join(", ")}`);
@@ -286,9 +287,10 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 	renderableContent.append(`<b>Players (Characters)</b> ${players.length}`);
 	players.forEach((player, index) => renderableContent.append(`[spacer]${player}${playerCharacters[index]}`));
 
-	const orphanUsers = (await game.orphanUsers()).map(user => user ? `@${user.did}` : `<i>unavailable</i>`);
+	const orphanUsers = await game.orphanUsers();
 	if (orphanUsers.length) {
-		renderableContent.append(`<b>Orphaned Users</b> ${orphanUsers.length}; ${orphanUsers.join(", ")}`);
+		const orphanUserIds = orphanUsers.map(user => `@${user.did}`);
+		renderableContent.append(`<b>Orphaned Users</b> ${orphanUserIds.length}; ${orphanUserIds.join(", ")}`);
 	}
 
 	const orphanPCs = game.orphanedPlayerCharacters;
@@ -303,22 +305,20 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 	await sageMessage.send(renderableContent);
 
 	if (sageMessage.server && !skipPrune) {
-		const missingPlayerSnowflakes = playerGuildMembers
-			.map((guildMember, index) => { return { guildMember: guildMember, index: index }; })
-			.filter(meta => !meta.guildMember)
-			.map(meta => game.players[meta.index]);
+		const missingPlayerSnowflakes = orphanUsers.filter(user => game.hasPlayer(user.did)).map(user => user.did);
 		const missingPlayers = missingPlayerSnowflakes.length > 0;
 
-		const missingGmSnowflakes = gmGuildMembers
-			.map((guildMember, index) => { return { guildMember: guildMember, index: index }; })
-			.filter(meta => !meta.guildMember)
-			.map(meta => game.gameMasters[meta.index]);
+		const missingGmSnowflakes = orphanUsers.filter(user => game.hasGameMaster(user.did)).map(user => user.did);
 		const missingGms = missingGmSnowflakes.length > 0;
 
-		if (missingPlayers || missingGms) {
+		const missingChannelSnowflakes = orphanChannels.map(channel => channel.did);
+		const missingChannels = missingChannelSnowflakes.length > 0;
+
+		if (missingPlayers || missingGms || missingChannels) {
 			const message = [
 				missingPlayers ? `${missingPlayerSnowflakes.length} player(s) left the server.` : ``,
 				missingGms ? `${missingGmSnowflakes.length} game master(s) left the server.` : ``,
+				missingChannels ? `${missingChannelSnowflakes.length} channel(s) have been deleted.` : ``,
 				`Remove them from the game?`
 			].filter(s => s).join("\n");
 
@@ -340,6 +340,14 @@ async function gameDetails(sageMessage: SageMessage, skipPrune = false, _game?: 
 						showAgain = true;
 					} else {
 						unable.push(`<i>Unable to remove game master(s)!</i>`);
+					}
+				}
+				if (missingChannels) {
+					const removed = await game.removeChannels(...missingChannelSnowflakes);
+					if (removed) {
+						showAgain = true;
+					}else {
+						unable.push(`<i>Unable to remove channel(s)!</i>`);
 					}
 				}
 				if (showAgain) {
