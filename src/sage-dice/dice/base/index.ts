@@ -1,12 +1,12 @@
 import { sortPrimitive, type SortResult } from "@rsc-utils/array-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
-import { TokenParsers, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
+import { TokenParsers, ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
-import { correctEscapeForEmoji } from "..";
-import { GameType } from "../../../sage-common";
+import { correctEscapeForEmoji } from "../index.js";
+import { GameType } from "../../../sage-common/index.js";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -29,11 +29,11 @@ import {
 	sum,
 	sumDicePartRolls,
 	sumDropKeep
-} from "../../common";
+} from "../../common.js";
 import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
 	DicePartCore, DicePartRollCore, DiceRollCore, TDice, TDiceGroup, TDiceGroupRoll, TDicePart, TDicePartCoreArgs, TDicePartRoll, TDiceRoll
-} from "./types";
+} from "./types.js";
 
 //#region html formatting
 
@@ -620,8 +620,8 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			return correctEscapeForEmoji(cleanWhitespace(output));
 		}else {
 			const output = desc
-				? `${xxs} \`${detick(dequote(desc))}\` ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
-				: `${xxs} ${UNICODE_LEFT_ARROW} ${description}`;
+				? `${xxs} ${ZERO_WIDTH_SPACE}  \`${detick(dequote(desc))}\` ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
+				: `${xxs} ${ZERO_WIDTH_SPACE} ${UNICODE_LEFT_ARROW} ${description}`;
 			return correctEscapeForEmoji(cleanWhitespace(output));
 		}
 	}
@@ -629,7 +629,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		const xxs = this.toStringXXS(hideRolls);
 		const desc = this.dice.diceParts.find(dp => dp.hasDescription)?.description;
 		const output = desc
-			? `${xxs} \`${detick(dequote(desc)) ?? ""}\``
+			? `${xxs} ${ZERO_WIDTH_SPACE} \`${detick(dequote(desc)) ?? ""}\``
 			: xxs;
 		return correctEscapeForEmoji(cleanWhitespace(output));
 	}
