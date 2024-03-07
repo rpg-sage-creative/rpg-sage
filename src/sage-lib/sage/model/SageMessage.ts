@@ -32,13 +32,19 @@ interface SageMessageCore extends SageCommandCore {
 }
 
 export class SageMessage
-	extends SageCommand<SageMessageCore, SageMessage>
+	extends SageCommand<SageMessageCore, SageMessageArgsManager>
 	implements IHasGame, IHasChannels {
 
 	private constructor(protected core: SageMessageCore, cache?: Cache) {
 		super(core, cache);
 		this.setCommandAndArgs();
 	}
+
+	public isCommand(...args: string[]): boolean {
+		const commandValues = this.commandValues;
+		return args.every((arg, index) => commandValues[index] === arg.toLowerCase());
+	}
+	public get commandValues(): string[] { return this.commandAndArgs?.command?.toLowerCase().split(/\s+|-/) ?? []; }
 
 	public static async fromMessage(message: DMessage, originalMessage: Optional<DMessage>): Promise<SageMessage> {
 		const sageCache = await SageCache.fromMessage(message);
@@ -65,10 +71,10 @@ export class SageMessage
 	}
 
 	/** @todo: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE! */
-	public clone(): SageMessage {
+	public clone(): this {
 		const clone = new SageMessage(this.core, this.cache);
 		clone._ = this._;
-		return clone;
+		return clone as this;
 	}
 	public clear(): void {
 		debug("Clearing SageMessage");
@@ -148,10 +154,21 @@ export class SageMessage
 		return this.sageCache.canSendMessageTo(DiscordKey.fromChannel(targetChannel));
 	}
 
+	public async reply(args: TSendArgs): Promise<void>;
+	public async reply(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void>;
+	public async reply(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void> {
+		const canSend = await this.canSend(this.message.channel);
+		if (!canSend) {
+			return this.reactBlock(`Unable to reply to your message because Sage doesn't have permissions to channel: ${toHumanReadable(this.message.channel)}`);
+		}
+		const args = this.resolveToOptions(renderableOrArgs, ephemeral);
+		await this.message.reply(args);
+	}
+
 	public async whisper(args: TSendArgs): Promise<void>;
 	public async whisper(content: RenderableContentResolvable): Promise<void>;
 	public async whisper(contentOrArgs: TSendArgs | RenderableContentResolvable): Promise<void> {
-		const args = typeof(contentOrArgs) === "string" || "toRenderableContent" in contentOrArgs ? { content:contentOrArgs } : contentOrArgs;
+		const args = typeof(contentOrArgs) === "string" ? { content:contentOrArgs } : contentOrArgs;
 		const sendOptions = this.resolveToOptions(args);
 		const canSend = await this.canSend(this.message.channel);
 		if (canSend) {

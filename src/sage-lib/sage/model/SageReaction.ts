@@ -5,6 +5,7 @@ import { ReactionType } from "../../discord/index.js";
 import { GameRoleType } from "./Game.js";
 import { SageCache } from "./SageCache.js";
 import { SageCommand, type SageCommandCore } from "./SageCommand.js";
+import { SageReactionArgs } from "./SageReactionArgs.js";
 
 interface SageReactionCore extends SageCommandCore {
 	messageReaction: DReaction;
@@ -13,29 +14,21 @@ interface SageReactionCore extends SageCommandCore {
 };
 
 export class SageReaction
-	extends SageCommand<SageReactionCore, SageReaction> {
+	extends SageCommand<SageReactionCore, SageReactionArgs> {
+
+	public args: SageReactionArgs;
+
+	public command: string | null = null;
+
+	public isCommand(): boolean { return false; }
+
+	public commandValues: string[] = [];
 
 	private constructor(protected core: SageReactionCore, cache?: Cache) {
 		super(core, cache);
-	}
-	public clear(): void {
-		debug("Clearing SageReaction");
-		this.cache.clear();
-		this.sageCache.clear();
+		this.args = new SageReactionArgs();
 	}
 
-	public static async fromMessageReaction(messageReaction: DReaction, user: DUser, reactionType: ReactionType): Promise<SageReaction> {
-		const sageCache = await SageCache.fromMessageReaction(messageReaction, user);
-		const sageReaction = new SageReaction({
-			sageCache,
-			messageReaction,
-			reactionType,
-			user
-		});
-		sageReaction.isGameMaster = await sageReaction.game?.hasUser(user.id, GameRoleType.GameMaster) ?? false;
-		sageReaction.isPlayer = await sageReaction.game?.hasUser(user.id, GameRoleType.Player) ?? false;
-		return sageReaction;
-	}
 	public get isAdd(): boolean {
 		return this.core.reactionType === ReactionType.Add;
 	}
@@ -57,10 +50,31 @@ export class SageReaction
 		return this.core.messageReaction.message as DMessage;
 	}
 
-	public clone(): SageReaction {
-		return new SageReaction(this.core, this.cache);
+	public clear(): void {
+		debug("Clearing SageReaction");
+		this.cache.clear();
+		this.sageCache.clear();
 	}
 
-	public command: string | null = null;
+	public clone(): this {
+		return new SageReaction(this.core, this.cache) as this;
+	}
+
+	public reply(): Promise<void> { return Promise.resolve(); }
+
+	public whisper(): Promise<void> { return Promise.resolve(); }
+
+	public static async fromMessageReaction(messageReaction: DReaction, user: DUser, reactionType: ReactionType): Promise<SageReaction> {
+		const sageCache = await SageCache.fromMessageReaction(messageReaction, user);
+		const sageReaction = new SageReaction({
+			sageCache,
+			messageReaction,
+			reactionType,
+			user
+		});
+		sageReaction.isGameMaster = await sageReaction.game?.hasUser(user.id, GameRoleType.GameMaster) ?? false;
+		sageReaction.isPlayer = await sageReaction.game?.hasUser(user.id, GameRoleType.Player) ?? false;
+		return sageReaction;
+	}
 
 }

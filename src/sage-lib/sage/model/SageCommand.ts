@@ -3,7 +3,7 @@ import { debug } from "@rsc-utils/console-utils";
 import type { DInteraction, DiscordKey } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import type { If, MessageActionRow, MessageButton, MessageEmbed, MessageSelectMenu } from "discord.js";
+import type { If, MessageActionRow, MessageAttachment, MessageButton, MessageEmbed, MessageSelectMenu } from "discord.js";
 import type { GameType } from "../../../sage-common/index.js";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/common.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
@@ -16,6 +16,7 @@ import type { Game } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
 import { ColorType, type IHasColorsCore } from "./HasColorsCore.js";
 import type { SageCache } from "./SageCache.js";
+import type { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageInteraction } from "./SageInteraction.js";
 import type { SageMessage } from "./SageMessage.js";
 import type { SageReaction } from "./SageReaction.js";
@@ -34,6 +35,7 @@ export type TSendArgs<HasEphemeral extends boolean = boolean> = {
 	embeds?: RenderableContentResolvable | MessageEmbed[];
 	components?: MessageActionRow<MessageSelectMenu | MessageButton>[];
 	ephemeral?: If<HasEphemeral, boolean | null, never>;
+	files?: MessageAttachment[];
 };
 
 export type TSendOptions<HasEphemeral extends boolean = boolean> = {
@@ -41,13 +43,20 @@ export type TSendOptions<HasEphemeral extends boolean = boolean> = {
 	embeds?: MessageEmbed[];
 	components?: MessageActionRow<MessageSelectMenu | MessageButton>[];
 	ephemeral?: If<HasEphemeral, boolean | null, never>;
+	files?: MessageAttachment[];
 };
 
-export abstract class SageCommand<T extends SageCommandCore = any, U extends SageCommand<T, any> = any> extends HasCache {
+export abstract class SageCommand<
+			T extends SageCommandCore = any,
+			U extends SageCommandArgs = SageCommandArgs
+			> extends HasCache {
 
 	protected constructor(protected core: T, cache?: Cache | null) {
 		super(cache as Cache);
 	}
+
+	public abstract commandValues: string[];
+	public abstract isCommand(...args: string[]): boolean;
 
 	public isSageInteraction<T extends DInteraction = any>(): this is SageInteraction<T> { return "interaction" in this; }
 	public isSageMessage(): this is SageMessage { return "isEdit" in this; }
@@ -55,8 +64,16 @@ export abstract class SageCommand<T extends SageCommandCore = any, U extends Sag
 
 	//#region abstract
 
+	public abstract args: U;
+
 	/** @todo: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE! */
-	public abstract clone(): U;
+	public clone(): this { return this; }
+
+	/** @todo what is the reason for both reply /AND/ whisper? */
+	public abstract reply(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void>;
+
+	/** @todo what is the reason for both reply /AND/ whisper? */
+	public abstract whisper(renderableOrArgs: RenderableContentResolvable | TSendArgs): Promise<void>;
 
 	//#endregion
 
@@ -215,12 +232,13 @@ export abstract class SageCommand<T extends SageCommandCore = any, U extends Sag
 
 	//#endregion
 
-	protected resolveToOptions(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): TSendOptions {
+	/** @todo figure out where splitMessageOptions comes into this workflow */
+	protected resolveToOptions<T extends TSendOptions>(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): T {
 		if ((typeof(renderableOrArgs) === "string") || ("toRenderableContent" in renderableOrArgs)) {
 			return {
 				embeds: resolveToEmbeds(this.sageCache, renderableOrArgs),
 				ephemeral: ephemeral
-			};
+			} as T;
 		}
 
 		const options: TSendOptions = { };
@@ -237,7 +255,10 @@ export abstract class SageCommand<T extends SageCommandCore = any, U extends Sag
 		if (renderableOrArgs.components) {
 			options.components = renderableOrArgs.components;
 		}
+		if (renderableOrArgs.files) {
+			options.files = renderableOrArgs.files;
+		}
 		options.ephemeral = (ephemeral ?? renderableOrArgs.ephemeral) === true;
-		return options;
+		return options as T;
 	}
 }

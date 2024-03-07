@@ -3,21 +3,22 @@ import { debug, warn } from "@rsc-utils/console-utils";
 import { DiscordKey, type DInteraction, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
 import { RenderableContent, RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import { isString } from "@rsc-utils/string-utils";
 import { isDefined } from "@rsc-utils/type-utils";
-import type { Message, MessageAttachment, User } from "discord.js";
+import type { InteractionReplyOptions, Message, MessageAttachment, User } from "discord.js";
 import type { SlashCommandGameType } from "../../../SlashTypes.js";
 import { GameType } from "../../../sage-common/index.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/index.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
 import { InteractionType } from "../../discord/index.js";
 import { send } from "../../discord/messages.js";
-import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import { DicePostType } from "../commands/dice.js";
 import type { IChannel } from "../repo/base/IdRepository.js";
 import { GameRoleType } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
 import { SageCache } from "./SageCache.js";
-import { SageCommand, type SageCommandCore } from "./SageCommand.js";
+import { SageCommand, TSendArgs, type SageCommandCore } from "./SageCommand.js";
+import { SageInteractionArgs } from "./SageInteractionArgs.js";
 import type { IHasChannels, IHasGame } from "./index.js";
 
 interface SageInteractionCore extends SageCommandCore {
@@ -26,22 +27,27 @@ interface SageInteractionCore extends SageCommandCore {
 }
 
 export class SageInteraction<T extends DInteraction = any>
-	extends SageCommand<SageInteractionCore, SageInteraction<any>>
+	extends SageCommand<SageInteractionCore, SageInteractionArgs>
 	implements IHasGame, IHasChannels {
 
 	private constructor(protected core: SageInteractionCore, cache?: Cache) {
 		super(core, cache);
+		this.args = new SageInteractionArgs(core.interaction);
 	}
 
 	//#region HasSageCache
 
+	public args: SageInteractionArgs;
+
 	/** @todo: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE! */
-	public clone(): SageInteraction<T> {
-		return new SageInteraction(this.core, this.cache);
+	public clone(): this {
+		return new SageInteraction(this.core, this.cache) as this;
 	}
 
+	/** @todo should this be destroy and call super.destroy() ? */
 	public clear(): void {
 		debug("Clearing SageInteraction");
+		this.args.clear();
 		this.cache.clear();
 		this.sageCache.clear();
 	}
@@ -111,42 +117,6 @@ export class SageInteraction<T extends DInteraction = any>
 		return this.getAttachmentPdf(name) !== null;
 	}
 
-	/** Gets the named option as a boolean or null */
-	public getBoolean(name: string): boolean | null;
-	/** Gets the named option as a boolean */
-	public getBoolean(name: string, required: true): boolean;
-	public getBoolean(name: string, required = false): boolean | null {
-		return this.interaction.isCommand() ? this.interaction.options.getBoolean(name, required) : null;
-	}
-	/** Returns true if the argument was given a value. */
-	public hasBoolean(name: string): boolean {
-		return this.getBoolean(name) !== null;
-	}
-
-	/** Gets the named option as a number or null */
-	public getNumber(name: string): number | null;
-	/** Gets the named option as a number */
-	public getNumber(name: string, required: true): number;
-	public getNumber(name: string, required = false): number | null {
-		return this.interaction.isCommand() ? this.interaction.options.getNumber(name, required) : null;
-	}
-	/** Returns true if the argument was given a value. */
-	public hasNumber(name: string): boolean {
-		return this.getNumber(name) !== null;
-	}
-
-	/** Gets the named option as a string or null */
-	public getString<U extends string = string>(name: string): U | null;
-	/** Gets the named option as a string */
-	public getString<U extends string = string>(name: string, required: true): U;
-	public getString(name: string, required = false): string | null {
-		return this.interaction.isCommand() ? this.interaction.options.getString(name, required) : null;
-	}
-	/** Returns true if the argument was given a value. */
-	public hasString(name: string): boolean {
-		return this.getString(name) !== null;
-	}
-
 	/** Returns the interaction */
 	public get interaction(): T {
 		return this.core.interaction as T;
@@ -199,19 +169,22 @@ export class SageInteraction<T extends DInteraction = any>
 		return this.replyStack;
 	}
 
-	/** Uses reply() it not replied to yet or editReply() to edit the previous reply. */
-	public async reply(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void> {
+	/** Uses reply() if not replied to yet or editReply() to edit the previous reply. */
+	public async reply(args: TSendArgs): Promise<void>;
+	public async reply(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void>;
+	public async reply(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void> {
 		return this.pushToReplyStack(async () => {
-			const embeds = resolveToEmbeds(this.sageCache, renderable);
+			const args = this.resolveToOptions(renderableOrArgs, ephemeral);
 			if (this.interaction.deferred || this.interaction.replied) {
+				/** @todo confirm that we need to do the followup step here */
 				if (ephemeral || this.interaction.ephemeral) {
-					this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Message<boolean>);
-					return Promise.resolve();
+					const message = await this.interaction.followUp(args as InteractionReplyOptions) as Message<boolean>;
+					this.updates.push(message);
 				}else {
-					return this.interaction.editReply({ embeds:embeds }) as any;
+					await this.interaction.editReply(args) as any;
 				}
 			}else {
-				return this.interaction.reply({ embeds:embeds, ephemeral:this.sageCache.server ? (ephemeral ?? true) : false });
+				await this.interaction.reply(args as InteractionReplyOptions);
 			}
 		});
 	}
@@ -220,8 +193,8 @@ export class SageInteraction<T extends DInteraction = any>
 	public async update(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void> {
 		return this.pushToReplyStack(async () => {
 			if (this.interaction.replied) {
-				const embeds = resolveToEmbeds(this.sageCache, renderable);
-				this.updates.push(await this.interaction.followUp({ embeds:embeds }) as Message<boolean>);
+				const args = this.resolveToOptions(renderable, ephemeral);
+				this.updates.push(await this.interaction.followUp(args as InteractionReplyOptions) as Message<boolean>);
 			}else {
 				await this.reply(renderable, ephemeral);
 			}
@@ -246,6 +219,14 @@ export class SageInteraction<T extends DInteraction = any>
 	}
 	public async canSend(targetChannel = this.interaction.channel as DMessageChannel): Promise<boolean> {
 		return this.sageCache.canSendMessageTo(DiscordKey.fromChannel(targetChannel));
+	}
+
+	public async whisper(args: TSendArgs): Promise<void>;
+	public async whisper(content: string): Promise<void>;
+	public async whisper(contentOrArgs: string | TSendArgs): Promise<void> {
+		const args = isString(contentOrArgs) ? { content:contentOrArgs } : { ...contentOrArgs };
+		args.ephemeral = !!this.sageCache.server;
+		return this.reply(args);
 	}
 
 	//#endregion

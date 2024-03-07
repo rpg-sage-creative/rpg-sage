@@ -1,20 +1,23 @@
 import { Color } from "@rsc-utils/color-utils";
+import { parseId } from "@rsc-utils/discord-utils";
+import { parseEnum } from "@rsc-utils/enum-utils";
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import { isNonNilUuid } from "@rsc-utils/uuid-utils";
-import type { Collection, MessageAttachment } from "discord.js";
-import { GameType, parseGameType } from "../../../sage-common";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType, parseCritMethodType, parseDiceOutputType } from "../../../sage-dice";
-import { ArgsManager } from "../../discord/ArgsManager";
-import { DicePostType } from "../commands/dice";
-import { DialogType, PermissionType, type IChannel, type IChannelOptions, type TPermissionType } from "../repo/base/IdRepository";
-import type { TColorAndType } from "./Colors";
-import type { GameCharacterCore } from "./GameCharacter";
-import { ColorType } from "./HasColorsCore";
-import type { SageMessage } from "./SageMessage";
-import type { Server } from "./Server";
-import { parseId } from "@rsc-utils/discord-utils";
+import { isDefined, type Optional } from "@rsc-utils/type-utils";
+import { UUID, isNonNilUuid, isUuid } from "@rsc-utils/uuid-utils";
+import type { Collection, GuildBasedChannel, MessageAttachment, Role } from "discord.js";
+import { GameType, parseGameType } from "../../../sage-common/index.js";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType, parseCritMethodType, parseDiceOutputType } from "../../../sage-dice/index.js";
+import { ArgsManager } from "../../discord/ArgsManager.js";
+import { DicePostType } from "../commands/dice.js";
+import { DialogType, PermissionType, type IChannel, type IChannelOptions, type TPermissionType } from "../repo/base/IdRepository.js";
+import type { TColorAndType } from "./Colors.js";
+import type { GameCharacterCore } from "./GameCharacter.js";
+import { ColorType } from "./HasColorsCore.js";
+import { EnumLike, SageCommandArgs } from "./SageCommandArgs.js";
+import type { SageMessage } from "./SageMessage.js";
+import type { Server } from "./Server.js";
+import { debug } from "@rsc-utils/console-utils";
 
 export type TKeyValuePair = { key: string; value: string; };
 
@@ -245,10 +248,12 @@ function removeAndReturnPermissionType(args: string[], key: "gamemaster" | "nonp
 
 // #endregion
 
-export class SageMessageArgsManager extends ArgsManager {
+export class SageMessageArgsManager extends ArgsManager implements SageCommandArgs {
 	public constructor(protected sageMessage: SageMessage, argsManager: ArgsManager) {
 		super(argsManager ?? []);
 	}
+
+	//#region Old
 
 	private attachments?: Collection<Snowflake, MessageAttachment>;
 	public removeAndReturnAttachmentUrl(): string | undefined {
@@ -542,4 +547,259 @@ export class SageMessageArgsManager extends ArgsManager {
 		}
 	}
 
+	//#endregion
+
+	//#region SageCommandArgs
+
+	/** @todo determine if we really need this ... is this a leak we /actually/ have? */
+	public clear(): void {
+		(this as any).sageMessage = undefined!;
+	}
+
+	private getKeyValueArg(key: string) {
+		const keyValueArg = this.findKeyValueArgIndex(key)?.ret;
+
+		const hasKey = !!keyValueArg;
+		if (!keyValueArg) {
+			return { hasKey };
+		}
+
+		const hasValue = isDefined(keyValueArg.value);
+		if (!hasValue) {
+			return { hasKey, hasValue };
+		}
+
+		const value = keyValueArg.value;
+		const hasUnset = /^\s*unset\s*$/i.test(value);
+		const isEmpty = value === "";
+		const isBlank = value?.trim() === "";
+
+		return { hasKey, hasUnset, hasValue, isEmpty, isBlank, value };
+	}
+
+	/** Returns true if an argument matches the given key, regardless of value. */
+	public hasKey(name: string): boolean {
+		return !!this.findKeyValueArgIndex(name);
+	}
+
+	/** Returns true if the argument matching the given key has the value "unset". */
+	public hasUnset(name: string): boolean {
+		return /^\s*unset\s*$/i.test(this.findKeyValueArgIndex(name)?.ret?.value ?? "");
+	}
+
+	/**
+	 * Gets the named option as a boolean.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid boolean or "unset".
+	 */
+	public getBoolean(name: string): Optional<boolean>;
+	/** Gets the named option as a boolean */
+	public getBoolean(name: string, required: true): boolean;
+	public getBoolean(name: string): Optional<boolean> {
+		const string = this.getString(name);
+		if (isDefined(string)) {
+			if (/^(1|yes|y|true|t)$/i.test(string)) {
+				return true;
+			}else if (/^(0|no|n|false|f)$/i.test(string)) {
+				return false;
+			}
+			return null;
+		}
+		return string;
+	}
+
+	/** Returns true if getBoolean(name) is not null and not undefined. */
+	public hasBoolean(name: string): boolean {
+		return isDefined(this.getBoolean(name));
+	}
+
+	/**
+	 * Gets the named option as a GuildBasedChannel.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid GuildBasedChannel or "unset".
+	 */
+	public getChannel<T extends GuildBasedChannel>(name: string): Optional<T>;
+	/** Gets the named option as a GuildBasedChannel */
+	public getChannel<T extends GuildBasedChannel>(name: string, required: true): T;
+	public getChannel<T extends GuildBasedChannel>(name: string): Optional<T> {
+		const keyValueArg = this.getKeyValueArg(name);
+		if (!keyValueArg.hasKey) return undefined;
+		if (keyValueArg.hasUnset) return null;
+		if (keyValueArg.hasValue) {
+			const channelId = parseId(keyValueArg.value, "channel");
+			if (channelId) {
+				const channel = this.sageMessage.message.mentions.channels.get(channelId) ?? null;
+				return channel as T;
+			}
+		}
+		return null;
+	}
+
+	/** Returns true if getChannel(name) is not null and not undefined. */
+	public hasChannel(name: string): boolean {
+		return isDefined(this.getChannel(name));
+	}
+
+	/**
+	 * Gets the named option as a Snowflake.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid Snowflake or "unset".
+	 */
+	public getChannelId(name: string): Optional<Snowflake>;
+	/** Gets the named option as a Snowflake */
+	public getChannelId(name: string, required: true): Snowflake;
+	public getChannelId(name: string): Optional<Snowflake> {
+		const channel = this.getChannel(name);
+		return channel ? channel.id : channel;
+	}
+
+	/** Returns true if getChannelId(name) is not null and not undefined. */
+	public hasChannelId(name: string): boolean {
+		return isDefined(this.getChannelId(name));
+	}
+
+	/**
+	 * Gets the named option as a value from the given enum type.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid enum value or "unset".
+	 */
+	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): Optional<V>;
+	/** Gets the named option as a value from the given enum type. */
+	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string, required: true): V;
+	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): Optional<V> {
+		const string = this.getString(name);
+		if (isDefined(string)) {
+			return parseEnum(type, string) ?? null;
+		}
+		return string;
+	}
+
+	/** Returns true if getEnum(type, name) is not null and not undefined. */
+	public hasEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): boolean {
+		return isDefined(this.getEnum(type, name));
+	}
+
+	/**
+	 * Gets the named option as a number.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid number or "unset".
+	 */
+	public getNumber(name: string): Optional<number>;
+	/** Gets the named option as a number */
+	public getNumber(name: string, required: true): number;
+	public getNumber(name: string): Optional<number> {
+		const string = this.getString(name);
+		if (isDefined(string)) {
+			const number = +string;
+			return isNaN(number) ? null : number;
+		}
+		return string;
+	}
+
+	/** Returns true if getNumber(name) is not null and not undefined. */
+	public hasNumber(name: string): boolean {
+		return isDefined(this.getNumber(name));
+	}
+
+	/**
+	 * Gets the named option as a Role.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid GuildBasedChannel or "unset".
+	 */
+	public getRole(name: string): Optional<Role>;
+	/** Gets the named option as a GuildBasedChannel */
+	public getRole(name: string, required: true): Role;
+	public getRole(name: string): Optional<Role> {
+		const keyValueArg = this.getKeyValueArg(name);
+		if (!keyValueArg.hasKey) return undefined;
+		if (keyValueArg.hasUnset) return null;
+		if (keyValueArg.hasValue) {
+			const roleId = parseId(keyValueArg.value, "role");
+			if (roleId) {
+				return this.sageMessage.message.mentions.roles.get(roleId) ?? null;
+			}
+		}
+		return null;
+	}
+
+	/** Returns true if getRole(name) is not null and not undefined. */
+	public hasRole(name: string): boolean {
+		return isDefined(this.getRole(name));
+	}
+
+	/**
+	 * Gets the named option as a Snowflake.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid Snowflake or "unset".
+	 */
+	public getRoleId(name: string): Optional<Snowflake>;
+	/** Gets the named option as a Snowflake */
+	public getRoleId(name: string, required: true): Snowflake;
+	public getRoleId(name: string): Optional<Snowflake> {
+		const role = this.getRole(name);
+		return role ? role.id : role;
+	}
+
+	/** Returns true if getRoleId(name) is not null and not undefined. */
+	public hasRoleId(name: string): boolean {
+		return isDefined(this.getRoleId(name));
+	}
+
+	/**
+	 * Gets the named option as a string.
+	 * Returns undefined if not found.
+	 * Returns null if empty or "unset".
+	 */
+	public getString<U extends string = string>(name: string): Optional<U>;
+	/** Gets the named option as a string */
+	public getString<U extends string = string>(name: string, required: true): U;
+	public getString(name: string): Optional<string> {
+		const keyValueArg = this.getKeyValueArg(name);
+		debug({name,keyValueArg});
+		if (!keyValueArg.hasKey) return undefined;
+		if (keyValueArg.hasUnset) return null;
+		if (keyValueArg.hasValue && keyValueArg.value.trim() !== "") {
+			return keyValueArg.value;
+		}
+		return null;
+	}
+
+	/** Returns true if getString(name) is not null and not undefined. */
+	public hasString(name: string): boolean;
+	/** Returns true if the argument was given the value passed. */
+	public hasString(name: string, value: string): boolean;
+	/** Returns true if the argument matches the given regex. */
+	public hasString(name: string, regex: RegExp): boolean;
+	public hasString(name: string, value?: string | RegExp): boolean {
+		const argValue = this.getString(name);
+		if (!argValue) return false;
+		if (value) {
+			if (typeof(value) === "string") return argValue === value;
+			return value.test(argValue);
+		}
+		return true;
+	}
+
+	/**
+	 * Gets the named option as a VALID_UUID.
+	 * Returns undefined if not found.
+	 * Returns null if empty or "unset".
+	 */
+	public getUuid(name: string): Optional<UUID>;
+	/** Gets the named option as a VALID_UUID. */
+	public getUuid(name: string, required: true): UUID;
+	public getUuid(name: string): Optional<UUID> {
+		const value = this.getString(name);
+		if (value) {
+			return isUuid(value) ? value : null;
+		}
+		return value as null | undefined;
+	}
+
+	/** Returns true if getUuid(name) is not null and not undefined. */
+	public hasUuid(name: string): boolean {
+		return isDefined(this.getUuid(name));
+	}
+
+	//#endregion
 }
