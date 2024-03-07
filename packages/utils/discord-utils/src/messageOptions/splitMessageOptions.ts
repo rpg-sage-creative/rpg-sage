@@ -179,11 +179,19 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOp
 		}
 	});
 
-	// only include components in the first payload
-	payloads[0].components = components;
+	// only set components or files /if/ we have them
+	if (components?.length || files?.length) {
+		// if we somehow don't have a payload, add one
+		if (!payloads.length) {
+			payloads.push({ } as T);
+		}
 
-	// only include files in the first payload
-	payloads[0].files = files;
+		// only include components in the first payload
+		payloads[0].components = components;
+
+		// only include files in the first payload
+		payloads[0].files = files;
+	}
 
 	return payloads;
 }
