@@ -515,7 +515,7 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 export const pb2eId = "pathbuilder2e-id";
 
 export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction<CommandInteraction>): Promise<void> {
-	const pathbuilderId = sageInteraction.getNumber(pb2eId, true);
+	const pathbuilderId = sageInteraction.args.getNumber(pb2eId, true);
 	await sageInteraction.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, false);
 
 	const pathbuilderChar = await PathbuilderCharacter.fetch(pathbuilderId, { });
@@ -525,8 +525,8 @@ export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction
 
 	const channel = sageInteraction.interaction.channel as DMessageChannel ?? sageInteraction.user;
 
-	const pin = sageInteraction.getBoolean("pin") ?? false;
-	const attach = sageInteraction.getBoolean("attach") ?? false;
+	const pin = sageInteraction.args.getBoolean("pin") ?? false;
+	const attach = sageInteraction.args.getBoolean("attach") ?? false;
 	if (attach) {
 		await attachCharacter(sageInteraction.caches, channel, pathbuilderId, pathbuilderChar, pin);
 	}else {

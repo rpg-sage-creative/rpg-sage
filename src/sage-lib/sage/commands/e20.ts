@@ -460,7 +460,7 @@ export const e20Pdf = "e20-pdf";
 export async function slashHandlerEssence20(sageInteraction: SageInteraction): Promise<void> {
 	await sageInteraction.reply(`Attempting to import character ...`, false);
 
-	const value = sageInteraction.getString(e20Pdf, true);
+	const value = sageInteraction.args.getString(e20Pdf, true);
 	const isPdfUrl = value.match(/^http.*?\.pdf$/) !== null;
 	const isMessageUrl = value.startsWith("https://discord.com/channels/");
 
@@ -494,8 +494,8 @@ export async function slashHandlerEssence20(sageInteraction: SageInteraction): P
 
 	const channel = sageInteraction.interaction.channel ?? sageInteraction.user;
 
-	const pin = sageInteraction.getBoolean("pin") ?? false;
-	const attach = sageInteraction.getBoolean("attach") ?? false;
+	const pin = sageInteraction.args.getBoolean("pin") ?? false;
+	const attach = sageInteraction.args.getBoolean("attach") ?? false;
 	if (attach) {
 		await attachCharacter(sageInteraction.caches, channel, fileName!, character, pin);
 	}else {

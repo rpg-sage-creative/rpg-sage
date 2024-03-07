@@ -63,12 +63,12 @@ function slashTester(sageInteraction: SageInteraction): boolean {
 }
 
 async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
-	const table = sageInteraction.getString<"simple" | "level" | "spell">("table", true);
+	const table = sageInteraction.args.getString<"simple" | "level" | "spell">("table", true);
 	if (table === "simple") {
-		const proficiency = sageInteraction.getString("proficiency");
+		const proficiency = sageInteraction.args.getString("proficiency");
 		return sageInteraction.reply(_simpleDcs(proficiency), false);
 	}
-	const level = sageInteraction.getNumber("level");
+	const level = sageInteraction.args.getNumber("level");
 	return sageInteraction.reply(_dcsByLevel(table === "spell", level), false);
 }
 
