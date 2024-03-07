@@ -85,6 +85,10 @@ export class SageInteractionArgs implements SageCommandArgs {
 		return isDefined(this.getChannelId(name));
 	}
 
+	public findEnum<K extends string = string, V extends number = number>(_type: EnumLike<K, V>): Optional<V> {
+		return undefined;
+	}
+
 	/**
 	 * Gets the named option as a value from the given enum type.
 	 * Returns undefined if not found.

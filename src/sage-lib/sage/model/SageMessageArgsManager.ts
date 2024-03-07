@@ -2,7 +2,7 @@ import { Color } from "@rsc-utils/color-utils";
 import { parseId } from "@rsc-utils/discord-utils";
 import { parseEnum } from "@rsc-utils/enum-utils";
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
-import { capitalize } from "@rsc-utils/string-utils";
+import { capitalize, isNotBlank } from "@rsc-utils/string-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import { UUID, isNonNilUuid, isUuid } from "@rsc-utils/uuid-utils";
 import type { Collection, GuildBasedChannel, MessageAttachment, Role } from "discord.js";
@@ -17,7 +17,6 @@ import { ColorType } from "./HasColorsCore.js";
 import { EnumLike, SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageMessage } from "./SageMessage.js";
 import type { Server } from "./Server.js";
-import { debug } from "@rsc-utils/console-utils";
 
 export type TKeyValuePair = { key: string; value: string; };
 
@@ -571,10 +570,8 @@ export class SageMessageArgsManager extends ArgsManager implements SageCommandAr
 
 		const value = keyValueArg.value;
 		const hasUnset = /^\s*unset\s*$/i.test(value);
-		const isEmpty = value === "";
-		const isBlank = value?.trim() === "";
 
-		return { hasKey, hasUnset, hasValue, isEmpty, isBlank, value };
+		return { hasKey, hasUnset, hasValue, value };
 	}
 
 	/** Returns true if an argument matches the given key, regardless of value. */
@@ -656,6 +653,16 @@ export class SageMessageArgsManager extends ArgsManager implements SageCommandAr
 	/** Returns true if getChannelId(name) is not null and not undefined. */
 	public hasChannelId(name: string): boolean {
 		return isDefined(this.getChannelId(name));
+	}
+
+	public findEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>): Optional<V> {
+		for (const arg of this) {
+			const value = parseEnum(type, arg);
+			if (value !== undefined) {
+				return value as V;
+			}
+		}
+		return undefined;
 	}
 
 	/**
@@ -755,10 +762,9 @@ export class SageMessageArgsManager extends ArgsManager implements SageCommandAr
 	public getString<U extends string = string>(name: string, required: true): U;
 	public getString(name: string): Optional<string> {
 		const keyValueArg = this.getKeyValueArg(name);
-		debug({name,keyValueArg});
 		if (!keyValueArg.hasKey) return undefined;
 		if (keyValueArg.hasUnset) return null;
-		if (keyValueArg.hasValue && keyValueArg.value.trim() !== "") {
+		if (keyValueArg.hasValue && isNotBlank(keyValueArg.value)) {
 			return keyValueArg.value;
 		}
 		return null;

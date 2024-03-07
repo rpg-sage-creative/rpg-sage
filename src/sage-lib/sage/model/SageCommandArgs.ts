@@ -53,6 +53,8 @@ export interface SageCommandArgs {
 	/** Returns true if getChannelId(name) is not null and not undefined. */
 	hasChannelId(name: string): boolean;
 
+	findEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>): Optional<V>;
+
 	/**
 	 * Gets the named option as a value from the given enum type.
 	 * Returns undefined if not found.
