@@ -4,11 +4,11 @@ import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined, isNullOrUndefined } from "@rsc-utils/type-utils";
 import { Intents, type IntentsString, type Interaction, type PermissionString } from "discord.js";
-import { SageInteraction } from "../sage/model/SageInteraction";
-import { SageMessage } from "../sage/model/SageMessage";
-import { SageReaction } from "../sage/model/SageReaction";
-import { MessageType, ReactionType } from "./enums";
-import type { TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
+import { SageInteraction } from "../sage/model/SageInteraction.js";
+import { SageMessage } from "../sage/model/SageMessage.js";
+import { SageReaction } from "../sage/model/SageReaction.js";
+import { MessageType, ReactionType } from "./enums.js";
+import type { TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types.js";
 
 //#region helpers
 
@@ -254,6 +254,25 @@ async function handleInteractions(sageInteraction: SageInteraction<any>, output:
 
 // #region messages
 
+/** Performs various checks of the content for embed urls. */
+function checkContentForUrls(content: string | null, urls: (string | null)[]) {
+	if (content) {
+		return urls.every(url => {
+			if (url) {
+				if (content.includes(url)) {
+					return true;
+				}
+				// discord did something funky, recently, that i just notice (2024-03-07) ... adding %22 at the end of embed urls ...
+				if (url.endsWith("%22") && content.includes(url.replace(/%22$/, ""))) {
+					return true;
+				}
+			}
+			return false;
+		});
+	}
+	return false;
+}
+
 /**
  * Discord edits posts with urls to add image and summary information as embeds.
  * We are already responding to the original, so we should ignore the edits.
@@ -267,14 +286,17 @@ function isEditWeCanIgnore(message: DMessage, originalMessage: Optional<DMessage
 
 	// Embedding images and website cards don't change the message content
 	const matchingContent = originalMessage.content === message.content;
+
 	// The new message should have more embeds than the original
 	const moreEmbedLengths = originalMessage.embeds.length < message.embeds.length;
-	// If an embed's url is in the content, the edit was simply to create the embed
-	const url = message.embeds[0]?.url;
-	const contentIncludesUrl = url ? message.content?.includes(url) ?? false : false;
-	//TODO: should i iterate through the embeds? ? ?
 
-	return matchingContent && moreEmbedLengths && contentIncludesUrl;
+	// the first of the new embeds
+	const newEmbedIndex = originalMessage.embeds.length;
+
+	// If an embed's url is in the content, the edit was simply to create the embed
+	const contentIncludesUrls = checkContentForUrls(message.content, message.embeds.slice(newEmbedIndex).map(embed => embed.url));
+
+	return matchingContent && moreEmbedLengths && contentIncludesUrls;
 }
 
 export async function handleMessage(message: DMessage, originalMessage: Optional<DMessage>, messageType: MessageType): Promise<THandlerOutput> {
