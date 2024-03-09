@@ -1,12 +1,7 @@
-import type { GuildBasedChannel, Role } from "discord.js";
-// import { DiceCritMethodType } from "@rsc-sage/types";
-// import { DicePostType } from "@rsc-sage/types";
-// import { DiceSecretMethodType } from "@rsc-sage/types";
-// import { GameChannelType, parseGameChannelType } from "@rsc-sage/types";
-// import { GameType, parseGameType } from "@rsc-sage/types";
-import type { Args, Optional } from "@rsc-utils/type-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
+import type { GuildBasedChannel, Role } from "discord.js";
 
 export type EnumLike<K extends string = string, V extends number = number> = Record<K, V>;
 
@@ -127,34 +122,6 @@ export interface SageCommandArgs {
 	/** Returns true if getUuid(name) is not null and not undefined. */
 	hasUuid(name: string): boolean;
 
-}
-
-/** Returns true if any of the values has a valid other than /undefined/. */
-export function hasValues<T>(args: Args<T>): boolean {
-	const keys = Object.keys(args) as (keyof typeof args)[];
-	if (keys.find(key => args[key] !== undefined)) {
-		return true;
-	}
-	return false;
-}
-
-/** Applies args changes to core, returning true if anything changed. */
-export function applyValues<T>(core: Partial<T>, args: Args<T>): boolean {
-	const keys = Object.keys(args) as (keyof typeof args)[];
-	let changes = false;
-	for (const key of keys) {
-		const oldValue = core[key];
-		const newValue = args[key];
-		if (newValue === null) {
-			core[key] = undefined;
-		}else if (newValue !== undefined) {
-			core[key] = newValue as T[keyof T];
-		}
-		if (oldValue !== newValue) {
-			changes = true;
-		}
-	}
-	return changes;
 }
 
 // export function getEnum<K extends string = string, V extends number = number>(args: SageCommandArgs, enumLike: EnumLike<K, V>, ...keys: string[]): Optional<V> {
