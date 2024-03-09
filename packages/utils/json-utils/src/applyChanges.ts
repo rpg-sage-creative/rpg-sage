@@ -1,20 +1,36 @@
 
 /**
- * Iterates the keys in {changes} to find any with a value that is NOT undefined.
- * These values are then applied to {value}.
- * {value} is then returned.
+ * Finds all keys of {changes} with values that are !undefined;
+ * These values are then applied to {base}.
+ * base.key is set to undefined when changes.key is null unless {unsetValue} is null.
+ * Returns true if any changes were made.
 */
-export function applyChanges<T>(value: T, changes: Partial<T>): T {
-	// make sure we have two objects
-	if (value && changes) {
-		// get and cast the keys
-		const keys = Object.keys(changes) as (keyof T)[];
-		keys.forEach(key => {
-			if (changes[key] !== undefined) {
-				// cast value as any to avoid ts(2322)
-				value[key] = changes[key] as any;
+export function applyChanges<T>(base: T, changed: Partial<T>, unsetValue?: null): boolean {
+	let hasChanges = false;
+	if (base && changed) {
+		const keys = Object.keys(changed) as (keyof T)[];
+		for (const key of keys) {
+			// we only modify it if the new value is not undefined
+			const newValue = changed[key];
+			if (newValue !== undefined) {
+				// save for comparison
+				const oldValue = base[key];
+
+				// unset when value is null
+				if (newValue === null) {
+					// cast as any to avoid ts(2322)
+					base[key] = unsetValue as any;
+
+				// set it otherwise
+				}else {
+					// cast as any to avoid ts(2322)
+					base[key] = newValue as any;
+				}
+
+				// compare original value to final value
+				hasChanges = hasChanges || oldValue !== base[key];
 			}
-		});
+		}
 	}
-	return value;
+	return hasChanges;
 }
