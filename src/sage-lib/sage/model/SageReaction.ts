@@ -1,6 +1,7 @@
 import { Cache } from "@rsc-utils/cache-utils";
 import { debug } from "@rsc-utils/console-utils";
 import type { DMessage, DReaction, DUser } from "@rsc-utils/discord-utils";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { ReactionType } from "../../discord/index.js";
 import { GameRoleType } from "./Game.js";
 import { SageCache } from "./SageCache.js";
@@ -48,6 +49,16 @@ export class SageReaction
 
 	public get message(): DMessage {
 		return this.core.messageReaction.message as DMessage;
+	}
+
+	/** Returns the channelDid this message (or its thread) is in. */
+	public get channelDid(): Snowflake | undefined {
+		return this.cache.get("channelDid", () => {
+			if (this.message.channel.isThread()) {
+				return this.message.channel.parent?.id;
+			}
+			return this.message.channel.id;
+		});
 	}
 
 	public clear(): void {

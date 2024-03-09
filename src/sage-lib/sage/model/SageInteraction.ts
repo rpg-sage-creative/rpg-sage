@@ -1,7 +1,7 @@
-import { Cache } from "@rsc-utils/cache-utils";
+import type { Cache } from "@rsc-utils/cache-utils";
 import { debug, warn } from "@rsc-utils/console-utils";
 import { DiscordKey, type DInteraction, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
-import { RenderableContent, RenderableContentResolvable } from "@rsc-utils/render-utils";
+import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isString } from "@rsc-utils/string-utils";
 import { isDefined } from "@rsc-utils/type-utils";
@@ -17,7 +17,7 @@ import type { IChannel } from "../repo/base/IdRepository.js";
 import { GameRoleType } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
 import { SageCache } from "./SageCache.js";
-import { SageCommand, TSendArgs, type SageCommandCore } from "./SageCommand.js";
+import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageInteractionArgs } from "./SageInteractionArgs.js";
 import type { IHasChannels, IHasGame } from "./index.js";
 
