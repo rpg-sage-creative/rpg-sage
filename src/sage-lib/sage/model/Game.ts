@@ -2,6 +2,7 @@ import { sortPrimitive, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { DiscordKey, type DMessage } from "@rsc-utils/discord-utils";
+import { applyChanges } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional, type OrNull } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
@@ -14,7 +15,7 @@ import { EncounterManager } from "../commands/trackers/encounter/EncounterManage
 import type { PartyCore } from "../commands/trackers/party/Party.js";
 import { PartyManager } from "../commands/trackers/party/PartyManager.js";
 import type { DialogType, IChannel } from "../repo/base/IdRepository.js";
-import { HasIdCoreAndSageCache, PermissionType, updateChannel } from "../repo/base/IdRepository.js";
+import { HasIdCoreAndSageCache, PermissionType } from "../repo/base/IdRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { CharacterShell } from "./CharacterShell.js";
 import { Colors } from "./Colors.js";
@@ -304,7 +305,7 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 		channels.forEach(channel => {
 			const found = this.getChannel(new DiscordKey(this.serverDid, channel.did));
 			if (found) {
-				updateChannel(found, channel);
+				applyChanges(found, channel);
 			} else {
 				(this.core.channels || (this.core.channels = [])).push({ ...channel });
 			}

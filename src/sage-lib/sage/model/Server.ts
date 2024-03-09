@@ -1,20 +1,21 @@
 import { warn } from "@rsc-utils/console-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
+import { applyChanges } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import type { Guild } from "discord.js";
-import { GameType } from "../../../sage-common";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import { DicePostType } from "../commands/dice";
-import { ActiveBot } from "../model/ActiveBot";
-import { DidCore, HasDidCore } from "../repo/base/DidRepository";
-import { DialogType, IChannel, updateChannel } from "../repo/base/IdRepository";
-import { Colors } from "./Colors";
-import { Emoji } from "./Emoji";
-import { Game } from "./Game";
-import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
-import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
+import { GameType } from "../../../sage-common/index.js";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/index.js";
+import { DicePostType } from "../commands/dice.js";
+import { ActiveBot } from "../model/ActiveBot.js";
+import { DidCore, HasDidCore } from "../repo/base/DidRepository.js";
+import { DialogType, IChannel } from "../repo/base/IdRepository.js";
+import { Colors } from "./Colors.js";
+import { Emoji } from "./Emoji.js";
+import { Game } from "./Game.js";
+import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
+import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
 export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdmin = 3 }
@@ -196,7 +197,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 		channels.forEach(channel => {
 			const found = this.getChannel(channel.did);
 			if (found) {
-				updateChannel(found, channel);
+				applyChanges(found, channel);
 			} else {
 				(this.core.channels || (this.core.channels = [])).push({ ...channel });
 			}

@@ -3,13 +3,13 @@ import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, verbose } from "@rsc-utils/console-utils";
 import { getBotCodeName, getDataRoot } from "@rsc-utils/env-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional, type OrNull } from "@rsc-utils/type-utils";
-import { UUID, isNonNilUuid, randomUuid } from "@rsc-utils/uuid-utils";
-import { Snowflake } from "discord.js";
-import type { GameType } from "../../../../sage-common";
-import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import type { DicePostType } from "../../commands/dice";
-import type { SageCache } from "../../model/SageCache";
+import { isNonNilUuid, randomUuid, type UUID } from "@rsc-utils/uuid-utils";
+import type { GameType } from "../../../../sage-common/index.js";
+import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice/index.js";
+import type { DicePostType } from "../../commands/dice.js";
+import type { SageCache } from "../../model/SageCache.js";
 
 export type TPermissionType = keyof typeof PermissionType;
 export enum PermissionType { None = 0, Read = 1, React = 2, Write = 3 }
@@ -44,17 +44,6 @@ export interface IChannelOptions {
 }
 export interface IChannel extends IChannelOptions {
 	did: Snowflake;
-}
-
-type IChannelKey = keyof IChannel;
-type IChannelOptionsKey = keyof IChannelOptions;
-export function updateChannel(channel: IChannel, changes: IChannelOptions): IChannel {
-	Object.keys(changes).forEach(key => {
-		if (changes[<IChannelOptionsKey>key] !== undefined) {
-			(<any>channel[<IChannelKey>key]) = changes[<IChannelOptionsKey>key];
-		}
-	});
-	return channel;
 }
 
 export class HasIdCoreAndSageCache<T extends IdCore<U>, U extends string = string> extends HasIdCore<T, U> {
