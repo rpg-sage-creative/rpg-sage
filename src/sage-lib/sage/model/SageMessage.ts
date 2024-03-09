@@ -2,7 +2,7 @@ import { Cache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnNull, warn } from "@rsc-utils/console-utils";
 import { DiscordKey, handleDiscordErrorReturnNull, safeMentions, toHumanReadable, toMessageUrl, type DMessage, type DMessageChannel } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
-import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
+import { type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Message, User } from "discord.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
@@ -13,7 +13,6 @@ import { type TCommandAndArgs } from "../../discord/types.js";
 import { createAdminRenderableContent } from "../commands/cmd.js";
 import type { Game } from "../model/Game.js";
 import { GameRoleType } from "../model/Game.js";
-import { DialogType } from "../repo/base/IdRepository.js";
 import type { GameCharacter } from "./GameCharacter.js";
 import { EmojiType } from "./HasEmojiCore.js";
 import { SageCache } from "./SageCache.js";
@@ -218,86 +217,6 @@ export class SageMessage
 
 	// #endregion
 
-	// #region User flags
-
-	/** Author of the message */
-	public get authorDid(): Snowflake {
-		return this.cache.get("authorDid", () => orNilSnowflake(this.message.author?.id));
-	}
-
-	/** Is the author the owner of the message's server */
-	public get isOwner(): boolean {
-		return this.cache.get("isOwner", () => this.message.guild?.ownerId === this.authorDid);
-	}
-
-	/** Can admin Sage settings, Server channels, Games, and Game channels */
-	public get isSageAdmin(): boolean {
-		return this.cache.get("isSageAdmin", () => (this.authorDid && this.server?.hasSageAdmin(this.authorDid)) === true);
-	}
-
-	/** Can admin Server channels and Game channels */
-	public get isServerAdmin(): boolean {
-		return this.cache.get("isServerAdmin", () => (this.authorDid && this.server?.hasServerAdmin(this.authorDid)) === true);
-	}
-
-	/** Can admin Games and Game channels */
-	public get isGameAdmin(): boolean {
-		return this.cache.get("isGameAdmin", () => (this.authorDid && this.server?.hasGameAdmin(this.authorDid)) === true);
-	}
-
-	// #endregion
-
-	// #region Permission Flags
-
-	/** Quick flag for Sage admins (isSuperUser || isOwner || isSageAdmin) */
-	public get canAdminSage(): boolean {
-		return this.cache.get("canAdminSage", () => this.isSuperUser || this.isOwner || this.isSageAdmin);
-	}
-
-	/** Quick flag for Server admins (canAdminSage || isServerAdmin) */
-	public get canAdminServer(): boolean {
-		return this.cache.get("canAdminServer", () => this.canAdminSage || this.isServerAdmin);
-	}
-
-	/** Quick flag for Game admins (canAdminServer || isGameAdmin) */
-	public get canAdminGames(): boolean {
-		return this.cache.get("canAdminGames", () => this.canAdminServer || this.isGameAdmin);
-	}
-
-	/** Quick flag for "this" Game (game && (canAdminGames || isGameMaster)) */
-	public get canAdminGame(): boolean {
-		return this.cache.get("canAdminGame", () => !!this.game && (this.canAdminGames || this.isGameMaster));
-	}
-
-	// #endregion
-
-	// #region Function flags
-
-	public get allowAdmin(): boolean {
-		return this.cache.get("allowAdmin", () => !this.channel || this.channel.admin === true);
-	}
-
-	public get allowCommand(): boolean {
-		return this.cache.get("allowCommand", () => !this.channel || this.channel.commands === true);
-	}
-
-	public get allowDialog(): boolean {
-		return this.cache.get("allowDialog", () => this.server && this.channel?.dialog === true);
-	}
-
-	public get allowDice(): boolean {
-		return this.cache.get("allowDice", () => !this.channel || this.channel.dice === true);
-	}
-
-	public get allowSearch(): boolean {
-		return this.cache.get("allowSearch", () => !this.channel || this.channel.search === true);
-	}
-
-	public get dialogType(): DialogType {
-		return this.cache.get("dialogType", () => this.sageUser.defaultDialogType ?? this.channel?.defaultDialogType ?? this.game?.defaultDialogType ?? this.server?.defaultDialogType ?? DialogType.Embed);
-	}
-
-	// #endregion
 
 	// #region Reactions
 

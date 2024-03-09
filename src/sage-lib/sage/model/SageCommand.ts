@@ -2,20 +2,20 @@ import { Cache, HasCache } from "@rsc-utils/cache-utils";
 import { debug } from "@rsc-utils/console-utils";
 import type { DInteraction, DiscordKey } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { type If, type MessageActionRow, type MessageAttachment, type MessageButton, type MessageEmbed, type MessageSelectMenu } from "discord.js";
+import type { If, MessageActionRow, MessageAttachment, MessageButton, MessageEmbed, MessageSelectMenu } from "discord.js";
 import type { GameType } from "../../../sage-common/index.js";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/common.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { DicePostType } from "../commands/dice.js";
-import type { IChannel } from "../repo/base/IdRepository.js";
+import type { DialogType, IChannel } from "../repo/base/IdRepository.js";
 import type { Bot } from "./Bot.js";
 import type { Game } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
-import { ColorType, type IHasColorsCore } from "./HasColorsCore.js";
+import type { ColorType, IHasColorsCore } from "./HasColorsCore.js";
 import type { SageCache } from "./SageCache.js";
 import type { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageInteraction } from "./SageInteraction.js";
@@ -91,6 +91,92 @@ export abstract class SageCommand<
 	public get server(): Server { return this.sageCache.server; }
 
 	//#endregion
+
+
+	// #region User flags
+
+	/** Author of the message */
+	public get authorDid(): Snowflake {
+		return this.cache.get("authorDid", () => orNilSnowflake(this.sageCache.user.did));
+	}
+
+	/** Is the author the owner of the message's server */
+	public get isOwner(): boolean {
+		return this.cache.get("isOwner", () => {
+			if (this.isSageInteraction()) return this.interaction.guild?.ownerId === this.authorDid;
+			if (this.isSageMessage() || this.isSageReaction()) return this.message.guild?.ownerId === this.authorDid;
+			return false;
+		});
+	}
+
+	/** Can admin Sage settings, Server channels, Games, and Game channels */
+	public get isSageAdmin(): boolean {
+		return this.cache.get("isSageAdmin", () => (this.authorDid && this.server?.hasSageAdmin(this.authorDid)) === true);
+	}
+
+	/** Can admin Server channels and Game channels */
+	public get isServerAdmin(): boolean {
+		return this.cache.get("isServerAdmin", () => (this.authorDid && this.server?.hasServerAdmin(this.authorDid)) === true);
+	}
+
+	/** Can admin Games and Game channels */
+	public get isGameAdmin(): boolean {
+		return this.cache.get("isGameAdmin", () => (this.authorDid && this.server?.hasGameAdmin(this.authorDid)) === true);
+	}
+
+	// #endregion
+
+	// #region Permission Flags
+
+	/** Quick flag for Sage admins (isSuperUser || isOwner || isSageAdmin) */
+	public get canAdminSage(): boolean {
+		return this.cache.get("canAdminSage", () => this.isSuperUser || this.isOwner || this.isSageAdmin);
+	}
+
+	/** Quick flag for Server admins (canAdminSage || isServerAdmin) */
+	public get canAdminServer(): boolean {
+		return this.cache.get("canAdminServer", () => this.canAdminSage || this.isServerAdmin);
+	}
+
+	/** Quick flag for Game admins (canAdminServer || isGameAdmin) */
+	public get canAdminGames(): boolean {
+		return this.cache.get("canAdminGames", () => this.canAdminServer || this.isGameAdmin);
+	}
+
+	/** Quick flag for "this" Game (game && (canAdminGames || isGameMaster)) */
+	public get canAdminGame(): boolean {
+		return this.cache.get("canAdminGame", () => !!this.game && (this.canAdminGames || this.isGameMaster));
+	}
+
+	// #endregion
+
+	// #region Function flags
+
+	public get allowAdmin(): boolean {
+		return this.cache.get("allowAdmin", () => !this.channel || this.channel.admin === true);
+	}
+
+	public get allowCommand(): boolean {
+		return this.cache.get("allowCommand", () => !this.channel || this.channel.commands === true);
+	}
+
+	public get allowDialog(): boolean {
+		return this.cache.get("allowDialog", () => this.server && this.channel?.dialog === true);
+	}
+
+	public get allowDice(): boolean {
+		return this.cache.get("allowDice", () => !this.channel || this.channel.dice === true);
+	}
+
+	public get allowSearch(): boolean {
+		return this.cache.get("allowSearch", () => !this.channel || this.channel.search === true);
+	}
+
+	public get dialogType(): DialogType {
+		return this.cache.get("dialogType", () => this.sageUser.defaultDialogType ?? this.channel?.defaultDialogType ?? this.game?.defaultDialogType ?? this.server?.defaultDialogType ?? 0);
+	}
+
+	// #endregion
 
 	//#region channels
 
