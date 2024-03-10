@@ -77,6 +77,8 @@
 		{ "path": "./packages/utils/search-utils" },
 
 		// array-utils, color-utils, console-utils, string-utils, type-utils, uuid-utils
-		{ "path": "./packages/utils/args-utils" }
+		{ "path": "./packages/utils/args-utils" },
+
+		{ "path": "./packages/sage/types" }
 	]
 }
