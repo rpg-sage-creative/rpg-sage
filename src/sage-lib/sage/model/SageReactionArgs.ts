@@ -68,6 +68,9 @@ export class SageReactionArgs implements SageCommandArgs {
 		return isDefined(this.getChannelId(name));
 	}
 
+	public getChannelIds(_name: string, _expandRole?: boolean): Snowflake[] { return []; }
+
+
 	public findEnum<K extends string = string, V extends number = number>(_type: EnumLike<K, V>): Optional<V> {
 		return undefined;
 	}
@@ -167,6 +170,8 @@ export class SageReactionArgs implements SageCommandArgs {
 		}
 		return true;
 	}
+
+	public async getUserIds(_name: string, _expandRole?: boolean): Promise<Snowflake[]> { return []; }
 
 	/**
 	 * Gets the named option as a VALID_UUID.

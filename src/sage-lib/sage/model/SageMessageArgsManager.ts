@@ -1,5 +1,5 @@
 import { Color } from "@rsc-utils/color-utils";
-import { parseId } from "@rsc-utils/discord-utils";
+import { parseId, parseIds } from "@rsc-utils/discord-utils";
 import { parseEnum } from "@rsc-utils/enum-utils";
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { capitalize, isNotBlank } from "@rsc-utils/string-utils";
@@ -655,6 +655,15 @@ export class SageMessageArgsManager extends ArgsManager implements SageCommandAr
 		return isDefined(this.getChannelId(name));
 	}
 
+	/** Returns an array of channelIds passed in for the given argument. */
+	public getChannelIds(name: string): Snowflake[] {
+		const stringValue = this.getString(name);
+		if (stringValue) {
+			return parseIds(stringValue, "channel");
+		}
+		return [];
+	}
+
 	public findEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>): Optional<V> {
 		for (const arg of this) {
 			const value = parseEnum(type, arg);
@@ -784,6 +793,27 @@ export class SageMessageArgsManager extends ArgsManager implements SageCommandAr
 			return value.test(argValue);
 		}
 		return true;
+	}
+
+	/** Returns an array of user snowflakes passed in for the given argument. Optionally finds roles and gets all the users from the roles. */
+	public async getUserIds(name: string, expandRoles?: boolean): Promise<Snowflake[]> {
+		/** @todo investigate iterating over all the message.mentions and testing the stringValue for the \bSNOWFLAKE\b */
+		const stringValue = this.getString(name);
+		if (stringValue) {
+			const userIds = parseIds(stringValue, "user");
+			const userIdSet = new Set(userIds);
+			if (expandRoles) {
+				const roleIds = parseIds(stringValue, "role");
+				for (const roleId of roleIds) {
+					const guildRole = await this.sageMessage.discord.fetchGuildRole(roleId);
+					if (guildRole) {
+						guildRole.members.forEach(guildMember => userIdSet.add(guildMember.id));
+					}
+				}
+			}
+			return [...userIdSet];
+		}
+		return [];
 	}
 
 	/**

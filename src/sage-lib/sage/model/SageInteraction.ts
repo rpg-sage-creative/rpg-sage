@@ -32,7 +32,7 @@ export class SageInteraction<T extends DInteraction = any>
 
 	private constructor(protected core: SageInteractionCore, cache?: Cache) {
 		super(core, cache);
-		this.args = new SageInteractionArgs(core.interaction);
+		this.args = new SageInteractionArgs(this);
 	}
 
 	//#region HasSageCache

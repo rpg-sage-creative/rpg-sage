@@ -1,19 +1,20 @@
-import type { DInteraction } from "@rsc-utils/discord-utils";
+import { parseIds } from "@rsc-utils/discord-utils";
 import { parseEnum } from "@rsc-utils/enum-utils";
 import { isDefined, type Optional, } from "@rsc-utils/type-utils";
 import { isUuid, type UUID } from "@rsc-utils/uuid-utils";
 import type { CommandInteraction, GuildBasedChannel, Role, Snowflake } from "discord.js";
 import type { EnumLike, SageCommandArgs } from "./SageCommandArgs.js";
+import type { SageInteraction } from "./SageInteraction.js";
 
 export class SageInteractionArgs implements SageCommandArgs {
-	public constructor(private _interaction: DInteraction) { }
+	public constructor(private sageInteraction: SageInteraction) { }
 
 	/** @todo determine if we really need this ... is this a leak we /actually/ have? */
 	public clear(): void {
-		this._interaction = null!;
+		this.sageInteraction = undefined!;
 	}
 
-	private get interaction(): CommandInteraction { return this._interaction as CommandInteraction; }
+	private get interaction(): CommandInteraction { return this.sageInteraction.interaction as CommandInteraction; }
 
 	/** Returns true if an argument matches the given key, regardless of value. */
 	public hasKey(name: string): boolean {
@@ -83,6 +84,15 @@ export class SageInteractionArgs implements SageCommandArgs {
 	/** Returns true if getChannelId(name) is not null and not undefined. */
 	public hasChannelId(name: string): boolean {
 		return isDefined(this.getChannelId(name));
+	}
+
+	/** Returns an array of channelIds passed in for the given argument. */
+	public getChannelIds(name: string): Snowflake[] {
+		const stringValue = this.getString(name);
+		if (stringValue) {
+			return parseIds(stringValue, "channel");
+		}
+		return [];
 	}
 
 	public findEnum<K extends string = string, V extends number = number>(_type: EnumLike<K, V>): Optional<V> {
@@ -195,6 +205,26 @@ export class SageInteractionArgs implements SageCommandArgs {
 			return value.test(argValue);
 		}
 		return true;
+	}
+
+	/** Returns an array of user snowflakes passed in for the given argument. Optionally finds roles and gets all the users from the roles. */
+	public async getUserIds(name: string, expandRoles?: boolean): Promise<Snowflake[]> {
+		const stringValue = this.getString(name);
+		if (stringValue) {
+			const userIds = parseIds(stringValue, "user");
+			const userIdSet = new Set(userIds);
+			if (expandRoles) {
+				const roleIds = parseIds(stringValue, "role");
+				for (const roleId of roleIds) {
+					const guildRole = await this.sageInteraction.discord.fetchGuildRole(roleId);
+					if (guildRole) {
+						guildRole.members.forEach(guildMember => userIdSet.add(guildMember.id));
+					}
+				}
+			}
+			return [...userIdSet];
+		}
+		return [];
 	}
 
 	/**

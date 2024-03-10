@@ -48,6 +48,9 @@ export interface SageCommandArgs {
 	/** Returns true if getChannelId(name) is not null and not undefined. */
 	hasChannelId(name: string): boolean;
 
+	/** Returns an array of channelIds passed in for the given argument. */
+	getChannelIds(name: string): Snowflake[];
+
 	findEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>): Optional<V>;
 
 	/**
@@ -110,6 +113,9 @@ export interface SageCommandArgs {
 	hasString(name: string, value: string): boolean;
 	/** Returns true if the argument matches the given regex. */
 	hasString(name: string, regex: RegExp): boolean;
+
+	/** Returns an array of user snowflakes passed in for the given argument. Optionally finds roles and gets all the users from the roles. */
+	getUserIds(name: string, expandRole?: boolean): Promise<Snowflake[]>;
 
 	/**
 	 * Gets the named option as a VALID_UUID.
