@@ -91,10 +91,13 @@ function uniqueNonNilSnowflakeFilter(value: PossibleSnowflake, index: number, ar
 }
 
 /** Returns all unique nonNil Snowflakes of the given IdType from the given Message. */
-export function parseIds(message: DMessage, type: IdType, includeRaw?: boolean): Snowflake[] {
-	const contentMentionIds = getContentMentionIds(type, message.content);
-	const contentUrlIds = getContentUrlIds(type, message.content);
-	const mentionIds = getMessageMentionIds(type, message);
-	const rawIds = includeRaw ? (message.content ?? "").match(/\d{16,}/g) ?? [] : [];
+export function parseIds(messageOrContent: DMessage | string, type: IdType, includeRaw?: boolean): Snowflake[] {
+	const isString = typeof(messageOrContent) === "string";
+	const content = isString ? messageOrContent : messageOrContent.content;
+	const message = isString ? undefined : messageOrContent;
+	const contentMentionIds = getContentMentionIds(type, content);
+	const contentUrlIds = getContentUrlIds(type, content);
+	const mentionIds = message ? getMessageMentionIds(type, message) : [];
+	const rawIds = includeRaw ? (content ?? "").match(/\d{16,}/g) ?? [] : [];
 	return [...contentMentionIds, ...contentUrlIds, ...mentionIds, ...rawIds].filter(uniqueNonNilSnowflakeFilter);
 }
