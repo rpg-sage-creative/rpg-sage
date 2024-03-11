@@ -1,7 +1,6 @@
-import { registerSlashCommand } from "../../../../slash.mjs";
-import type { TSlashCommand } from "../../../../SlashTypes";
+import type { SlashCommand } from "../../types.js";
 
-function weatherCommand(): TSlashCommand {
+export function registerCommand(): SlashCommand {
 	return {
 		name: "Weather",
 		description: "Create random weather reports.",
@@ -11,8 +10,4 @@ function weatherCommand(): TSlashCommand {
 			{ name:"season", description:"Temperate: Spring, Summer, Fall, Winter; Tropical: Wet, Dry", choices:["Spring", "Summer", "Fall", "Winter", "Wet", "Dry"] }
 		]
 	};
-}
-
-export function registerWeatherSlashCommands(): void {
-	registerSlashCommand(weatherCommand());
 }

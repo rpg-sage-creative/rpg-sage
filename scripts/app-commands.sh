@@ -13,9 +13,5 @@ if [ "$1" = "beta" ] || [ "$2" = "beta" ]; then which="beta"; fi
 if [ "$1" = "stable" ] || [ "$2" = "stable" ]; then which="stable"; fi
 
 
-node --experimental-modules \
-	--es-module-specifier-resolution=node \
-	slash.mjs \
-	"$update" \
-	"botCodeName=$which" \
+node app-commands.mjs "$update" "botCodeName=$which" \
 	dataRoot=/Users/randaltmeyer/git/rpg-sage-legacy-data

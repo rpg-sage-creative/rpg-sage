@@ -1,7 +1,6 @@
-import { registerSlashCommand } from "../../../../slash.mjs";
-import type { TSlashCommand } from "../../../../SlashTypes";
+import type { SlashCommand } from "../../types.js";
 
-function mapCommand(): TSlashCommand {
+export function registerCommand(): SlashCommand {
 	const isNumber = true;
 	const isRequired = true;
 	return {
@@ -36,8 +35,4 @@ function mapCommand(): TSlashCommand {
 			}
 		]
 	};
-}
-
-export function registerMapSlashCommands(): void {
-	registerSlashCommand(mapCommand());
 }

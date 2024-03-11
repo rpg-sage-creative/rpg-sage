@@ -6,7 +6,7 @@ import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isString } from "@rsc-utils/string-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import type { InteractionReplyOptions, Message, MessageAttachment, User } from "discord.js";
-import type { SlashCommandGameType } from "../../../SlashTypes.js";
+import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { GameType } from "../../../sage-common/index.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/index.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";

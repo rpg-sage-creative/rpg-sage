@@ -1,8 +1,7 @@
 import { sortByKey } from "@rsc-utils/array-utils";
-import type { TSlashCommand } from "../../../../SlashTypes";
-import { registerSlashCommand } from "../../../../slash.mjs";
+import type { SlashCommand } from "../../types.js";
 
-function helpCommand(): TSlashCommand {
+export function registerCommand(): SlashCommand {
 	const command = {
 		name: "Help",
 		description: "Get basic Help for RPG Sage.",
@@ -55,8 +54,4 @@ function helpCommand(): TSlashCommand {
 	// command.options[0].choices.forEach(choice => delete choice.description);
 	command.options[0].choices.sort(sortByKey("name"));
 	return command;
-}
-
-export function registerHelpSlashCommands(): void {
-	registerSlashCommand(helpCommand());
 }

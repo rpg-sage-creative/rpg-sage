@@ -1,7 +1,6 @@
-import { registerSlashCommand } from "../../../../slash.mjs";
-import type { TSlashCommand } from "../../../../SlashTypes";
+import type { SlashCommand } from "../../../types.js";
 
-function dcCommand(): TSlashCommand {
+export function registerCommand(): SlashCommand {
 	return {
 		name: "DCs",
 		description: "Show Difficulty Classes",
@@ -15,8 +14,4 @@ function dcCommand(): TSlashCommand {
 			{ name:"level", description:"Which Level?", isNumber:true }
 		]
 	};
-}
-
-export function registerDcsSlashCommands(): void {
-	registerSlashCommand("PF2E", dcCommand());
 }

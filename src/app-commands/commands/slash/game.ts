@@ -1,15 +1,11 @@
+import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameType } from "@rsc-sage/types";
 import { getEnumKeys } from "@rsc-utils/enum-utils";
-import type { TSlashCommand } from "../../../../../SlashTypes.js";
-import { GameType } from "../../../../../sage-common/index.js";
-import { registerSlashCommand } from "../../../../../slash.mjs";
-import { DialogType } from "../../../repo/base/IdRepository.js";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice/common.js";
-import { DicePostType } from "../../dice.js";
+import type { SlashCommand } from "../../types.js";
 
-function gameCreateCommand(): TSlashCommand {
+export function registerCommand(): SlashCommand {
 	const gameTypeOption = { name:"gameType", description:"Game System, ex: PF2e or DnD5e", choices:getEnumKeys(GameType) };
-	const dialogTypeOption = { name:"dialogType", choices:getEnumKeys(DialogType) };
-	const critMethodOption = { name:"critMethod", choices:getEnumKeys(CritMethodType) };
+	const dialogTypeOption = { name:"dialogType", choices:getEnumKeys(DialogPostType) };
+	const critMethodOption = { name:"critMethod", choices:getEnumKeys(DiceCritMethodType) };
 	const diceOutputOption = { name:"diceOutput", choices:getEnumKeys(DiceOutputType) };
 	const dicePostOption = { name:"dicePost", choices:getEnumKeys(DicePostType) };
 	const diceSecretOption = { name:"diceSecret", choices:getEnumKeys(DiceSecretMethodType) };
@@ -50,8 +46,4 @@ function gameCreateCommand(): TSlashCommand {
 			}
 		]
 	};
-}
-
-export function registerGameSlashCommands(): void {
-	registerSlashCommand(gameCreateCommand());
 }

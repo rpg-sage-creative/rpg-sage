@@ -1,10 +1,9 @@
-import { registerSlashCommand } from "../../../../slash.mjs";
-import type { TSlashCommand } from "../../../../SlashTypes.js";
-import { e20Pdf } from "../e20.js";
-import { pb2eId } from "../pathbuilder.js";
+import type { SlashCommand } from "../../types.js";
 
+const e20Pdf = "e20-pdf";
+const pb2eId = "pathbuilder2e-id";
 
-function importCommand(): TSlashCommand {
+export function registerCommand(): SlashCommand {
 	return {
 		name: "Import",
 		description: "Import a character to Sage",
@@ -16,9 +15,3 @@ function importCommand(): TSlashCommand {
 		]
 	};
 }
-
-
-export function registerImportSlashCommands(): void {
-	registerSlashCommand(importCommand());
-}
-
