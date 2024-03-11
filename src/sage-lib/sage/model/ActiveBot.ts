@@ -1,5 +1,5 @@
 import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, info, verbose } from "@rsc-utils/console-utils";
-import type { DMessage } from "@rsc-utils/discord-utils";
+import { wrapUrl, type DMessage } from "@rsc-utils/discord-utils";
 import { getSuperUserId } from "@rsc-utils/env-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { chunk } from "@rsc-utils/string-utils";
@@ -42,7 +42,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		const user = await ActiveBot.active.sageCache.discord.fetchUser(getSuperUserId()).catch(errorReturnNull);
 		if (user) {
 			for (const content of contents) {
-				user.send(content);
+				user.send(wrapUrl(content, true));
 			}
 		}
 	}

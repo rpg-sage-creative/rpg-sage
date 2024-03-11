@@ -235,7 +235,7 @@ export async function parseDiceMatches(sageMessage: TInteraction, content: strin
 	while (execArray = regex.exec(withoutCodeBlocks)) {
 		const match = execArray[0];
 		const index = execArray.index;
-		const inline = !!isWrapped(match, "[[]]");
+		const inline = isWrapped(match, "[[]]");
 		const output = await parseDiscordMacro(sageMessage, content.slice(index, index + match.length))
 			?? await parseMatch(sageMessage, content.slice(index, index + match.length));
 		if (output.length) {
