@@ -4,6 +4,7 @@ import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, TPathbuilderCharacter, getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
+import { doStatMath } from "../commands/dice/doStatMath.js";
 import { DialogType } from "../repo/base/IdRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { IHasSave } from "./NamedCollection.js";
@@ -346,6 +347,14 @@ export class GameCharacter implements IHasSave {
 			const pbStat = pb.getStat(pbKey) ?? null;
 			if (pbStat !== null) {
 				return String(pbStat);
+			}
+		}
+
+		// provide a temp shortcut for off-guard ac for PF2e
+		if (/^ogac$/i.test(key)) {
+			const ac = this.getStat("ac");
+			if (ac !== null) {
+				return doStatMath(ac + "-2");
 			}
 		}
 

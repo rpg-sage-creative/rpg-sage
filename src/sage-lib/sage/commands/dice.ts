@@ -19,7 +19,7 @@ import { SageInteraction } from "../model/SageInteraction.js";
 import { SageMessage } from "../model/SageMessage.js";
 import type { TMacro } from "../model/User.js";
 import { registerCommandRegex } from "./cmd.js";
-import { doMath } from "./dice/doMath.js";
+import { doStatMath } from "./dice/doStatMath.js";
 import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
 import { formatDiceOutput } from "./dice/formatDiceOutput.js";
 import { isMath } from "./dice/isMath.js";
@@ -122,18 +122,8 @@ function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[
 		return "`" + match + "`";
 	});
 
-	// check for piped "hidden" values
-	const hasPipes = (/\|{2}[^|]+\|{2}/).test(replaced);
-	const unpiped = replaced.replace(/\|{2}/g, "");
-	if (isMath(`[${unpiped}]`)) {
-		const value = doMath(unpiped);
-		if (value !== null) {
-			return hasPipes ? `||${value}||` : value;
-		}
-	}
-
-	// return updated value
-	return replaced;
+	// ensure any math is handled
+	return doStatMath(replaced);
 }
 function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): DiscordDice | null {
 	if (!diceString) {
