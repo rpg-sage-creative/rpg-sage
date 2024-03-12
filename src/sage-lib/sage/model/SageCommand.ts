@@ -1,10 +1,10 @@
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
 import { debug } from "@rsc-utils/console-utils";
-import type { DInteraction, DiscordKey } from "@rsc-utils/discord-utils";
+import type { DInteraction, DTextChannel, DiscordKey } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import type { If, MessageActionRow, MessageAttachment, MessageButton, MessageEmbed, MessageSelectMenu } from "discord.js";
+import { CommandInteraction, type If, type MessageActionRow, type MessageAttachment, type MessageButton, type MessageEmbed, type MessageSelectMenu } from "discord.js";
 import type { GameType } from "../../../sage-common/index.js";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/common.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
@@ -179,6 +179,12 @@ export abstract class SageCommand<
 	// #endregion
 
 	//#region channels
+
+	public get dChannel(): DTextChannel | undefined {
+		return this.isSageInteraction<CommandInteraction>()
+			? this.interaction.channel as DTextChannel
+			: (this as unknown as SageMessage).message.channel as DTextChannel;
+	}
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
 	public get channel(): IChannel | undefined {
