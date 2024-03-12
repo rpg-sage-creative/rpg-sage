@@ -10,7 +10,7 @@ export function registerCommand(handler: TSageMessageHandler, ...commands: strin
 	commands.forEach(key => {
 		const command = key.trim().toLowerCase();
 		const keyRegex = command.replace(/[\-\s]+/g, "[\\-\\s]*");
-		const matcher = RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
+		const matcher = new RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
 
 		const _tester = async function (sageMessage: SageMessage): Promise<TCommandAndArgs | null> {
 			if (sageMessage.hasPrefix && /^!!?/.test(sageMessage.slicedContent)) {
