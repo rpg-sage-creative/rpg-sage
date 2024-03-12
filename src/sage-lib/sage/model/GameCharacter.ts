@@ -3,12 +3,12 @@ import { NIL_SNOWFLAKE, isNonNilSnowflake, type Snowflake } from "@rsc-utils/sno
 import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
-import { PathbuilderCharacter, TPathbuilderCharacter, getExplorationModes, getSkills } from "../../../sage-pf2e";
-import { DialogType } from "../repo/base/IdRepository";
-import { CharacterManager } from "./CharacterManager";
-import type { IHasSave } from "./NamedCollection";
-import { NoteManager, type TNote } from "./NoteManager";
-import type { TKeyValuePair } from "./SageMessageArgsManager";
+import { PathbuilderCharacter, TPathbuilderCharacter, getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
+import { DialogType } from "../repo/base/IdRepository.js";
+import { CharacterManager } from "./CharacterManager.js";
+import type { IHasSave } from "./NamedCollection.js";
+import { NoteManager, type TNote } from "./NoteManager.js";
+import type { TKeyValuePair } from "./SageMessageArgsManager.js";
 
 export type TDialogMessage = {
 	channelDid: Snowflake;
@@ -357,8 +357,6 @@ export class GameCharacter implements IHasSave {
 		const pb = this.pathbuilder;
 		for (const pair of pairs) {
 			const { key, value } = pair;
-			let correctedKey: string | undefined;
-			let correctedValue: string | undefined;
 			if (/^name$/i.test(key) && value?.trim() && (this.name !== value || (pb && pb.name !== value))) {
 				this.name = value;
 				if (pb) {
@@ -367,18 +365,21 @@ export class GameCharacter implements IHasSave {
 				changes ||= true;
 				continue;
 			}
+
+			let correctedKey: string | undefined;
+			let correctedValue: string | undefined;
 			const isExplorationMode = /^explorationmode$/i.test(key);
-			if (isExplorationMode) {
-				correctedKey = "explorationMode";
-				const modeRegex = new RegExp(`^${value.replace(/(\s)/g, "$1?")}$`, "i");
-				correctedValue = getExplorationModes().find(mode => modeRegex.test(mode));
-			}
 			const isExplorationSkill = /^explorationskill$/i.test(key);
-			if (isExplorationSkill) {
-				correctedKey = "explorationSkill";
-				const skillRegex = new RegExp(`^${value.replace(/(\s)/g, "$1?")}$`, "i");
-				correctedValue = getSkills().find(skill => skillRegex.test(skill));
-		}
+			if (isExplorationMode || isExplorationSkill) {
+				if (isExplorationMode) {
+					correctedKey = "explorationMode";
+					correctedValue = getExplorationModes().find(mode => XRegExp(`^${mode.replace(/(\s)/g, "$1?")}$`, "i").test(value));
+				}
+				if (isExplorationSkill) {
+					correctedKey = "explorationSkill";
+					correctedValue = getSkills().find(skill => XRegExp(`^${skill.replace(/(\s)/g, "$1?")}$`, "i").test(value));
+				}
+			}
 			if (pb) {
 				if (/^level$/i.test(key) && +value) {
 					const updatedLevel = await pb.setLevel(+value, save);
