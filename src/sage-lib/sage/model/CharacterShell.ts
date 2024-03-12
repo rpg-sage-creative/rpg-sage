@@ -1,9 +1,9 @@
-import type { Wealth } from "../commands/trackers/wealth/Wealth";
-import { getCharWealth } from "../commands/trackers/wealth/getCharWealth";
-import type { CharacterManager } from "./CharacterManager";
-import type { GameCharacter } from "./GameCharacter";
-import type { TGameCharacterType } from "./GameCharacter";
-import type { TKeyValuePair } from "./SageMessageArgsManager";
+import XRegExp from "xregexp";
+import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
+import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
+import type { CharacterManager } from "./CharacterManager.js";
+import type { GameCharacter, TGameCharacterType } from "./GameCharacter.js";
+import type { TKeyValuePair } from "./SageMessageArgsManager.js";
 
 export type CharacterShellCore = {
 	/** id of the GameCharacter */
@@ -46,7 +46,7 @@ export class CharacterShell {
 	public getStat(key: string): string | null | undefined {
 		const partyStats = this.core.stats;
 		if (partyStats) {
-			const keyRegex = new RegExp(`^${key}$`, "i");
+			const keyRegex = new RegExp(`^${XRegExp.escape(key)}$`, "i");
 			const statKey = Object.keys(partyStats).find(pKey => keyRegex.test(pKey));
 			if (statKey) {
 				const statValue = partyStats[statKey] ?? null;
@@ -70,7 +70,7 @@ export class CharacterShell {
 		const partyStats = this.core.stats ?? (this.core.stats = {});
 		for (const pair of pairs) {
 			const { key, value } = pair;
-			const keyRegex = new RegExp(`^${key}$`, "i");
+			const keyRegex = new RegExp(`^${XRegExp.escape(key)}$`, "i");
 			const statKey = Object.keys(partyStats).find(pKey => keyRegex.test(pKey)) ?? key;
 			if (partyStats[statKey] !== value) {
 				if (!value.trim()) {

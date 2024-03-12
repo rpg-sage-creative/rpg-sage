@@ -1,5 +1,6 @@
 import { Collection, toUniqueDefined } from "@rsc-utils/array-utils";
 import { isDefined } from "@rsc-utils/type-utils";
+import XRegExp from "xregexp";
 
 export interface IHasSave {
 	save(): Promise<boolean>;
@@ -9,6 +10,7 @@ interface IHasName {
 	name: string;
 }
 
+/** @deprecated Move where needed or create a mixin. */
 export class NamedCollection<T extends IHasName> extends Collection<T> {
 
 	/** The owner of this collection that can be saved when changes are made. */
@@ -28,7 +30,7 @@ export class NamedCollection<T extends IHasName> extends Collection<T> {
 		if (!name) {
 			return undefined;
 		}
-		const regex = new RegExp(`^${name}$`, ignoreCase ? "i" : undefined);
+		const regex = XRegExp(`^${XRegExp.escape(name)}$`, ignoreCase ? "i" : undefined);
 		return this.find(value => regex.test(value.name));
 	}
 

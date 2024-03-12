@@ -2,7 +2,8 @@ import { getText } from "@rsc-utils/https-utils";
 import { stringify } from "@rsc-utils/json-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import { existsSync, readFileSync, writeFileSync } from "fs";
-import type { SearchResults } from "../SearchResults";
+import XRegExp from "xregexp";
+import type { SearchResults } from "../SearchResults.js";
 
 export type TResultsLink = {
 	cat: string;
@@ -109,12 +110,17 @@ export async function getSearchResultsLinks(url: string, useDevCache = false): P
 
 export function sortSearchResults(searchResults: SearchResults): void {
 	const searchText = searchResults.searchInfo.searchText;
+	const escapedSearchText = XRegExp.escape(searchText);
+
 	const stringMatcher = StringMatcher.from(searchText);
 	const nameMatches = searchResults.scores.filter(score => score.searchable.matches(stringMatcher));
-	const wordRegex = new RegExp(`\b${searchText}\b`, "i");
+
+	const wordRegex = new RegExp(`\b${escapedSearchText}\b`, "i");
 	const wordMatches = searchResults.scores.filter(score => !nameMatches.includes(score) && score.searchable.name.match(wordRegex));
-	const partialRegex = new RegExp(searchText, "i");
+
+	const partialRegex = new RegExp(escapedSearchText, "i");
 	const partialMatches = searchResults.scores.filter(score => !nameMatches.includes(score) && !wordMatches.includes(score) && score.searchable.name.match(partialRegex));
+
 	if (nameMatches.length || wordMatches.length || partialMatches.length) {
 		searchResults.scores = nameMatches
 			.concat(wordMatches)

@@ -1,5 +1,6 @@
-import type { CharacterManager } from "./CharacterManager";
-import { GameCharacter } from "./GameCharacter";
+import XRegExp from "xregexp";
+import type { CharacterManager } from "./CharacterManager.js";
+import { GameCharacter } from "./GameCharacter.js";
 
 export type TCharacterMatch = {
 	index: number;
@@ -14,7 +15,8 @@ export class CharactersMatch {
 	public get length(): number { return this.matches.length; }
 	public static match(characterManager: CharacterManager, input: string): CharactersMatch {
 		const matches = characterManager.map(char => {
-			const match = input.match(new RegExp(`"\\s*${char.name}\\s*"|${char.name}`, "i"));
+			const escapedName = XRegExp.escape(char.name);
+			const match = input.match(new RegExp(`"\\s*${escapedName}\\s*"|${escapedName}`, "i"));
 			if (match) {
 				return <TCharacterMatch>{
 					index: match.index,

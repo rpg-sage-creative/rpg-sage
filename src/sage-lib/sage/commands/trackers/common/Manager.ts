@@ -1,8 +1,9 @@
 import type { Optional } from "@rsc-utils/type-utils";
-import type { CharacterShell } from "../../../model/CharacterShell";
-import type { Game } from "../../../model/Game";
-import type { HasCharacters } from "./HasCharacters";
-import type { HasPins } from "./HasPins";
+import XRegExp from "xregexp";
+import type { CharacterShell } from "../../../model/CharacterShell.js";
+import type { Game } from "../../../model/Game.js";
+import type { HasCharacters } from "./HasCharacters.js";
+import type { HasPins } from "./HasPins.js";
 
 type Base = { id:string; name:string; };
 type BaseClass = HasCharacters<any> & HasPins<any, any>;
@@ -44,7 +45,7 @@ export abstract class Manager<Core extends Base, Class extends BaseClass> {
 		if (!value) {
 			return null;
 		}
-		const regex = new RegExp(`^${value}$`, "i");
+		const regex = new RegExp(`^${XRegExp.escape(value)}$`, "i");
 		const core = this.cores.find(core => regex.test(core.id) || regex.test(core.name));
 		return core ? this.wrap(core) : null;
 	}
@@ -58,7 +59,7 @@ export abstract class Manager<Core extends Base, Class extends BaseClass> {
 
 	public has(classOrValue: string | Class): boolean {
 		const value = typeof(classOrValue) === "string" ? classOrValue : classOrValue.id;
-		const regex = new RegExp(`^${value}$`, "i");
+		const regex = new RegExp(`^${XRegExp.escape(value)}$`, "i");
 		return !!this.cores.find(core => regex.test(core.id) || regex.test(core.name));
 	}
 
@@ -66,7 +67,7 @@ export abstract class Manager<Core extends Base, Class extends BaseClass> {
 		if (!this.has(value)) {
 			return false;
 		}
-		const regex = new RegExp(`^${value}$`, "i");
+		const regex = new RegExp(`^${XRegExp.escape(value)}$`, "i");
 		this.cores = this.cores.filter(p => !regex.test(p.id) && !regex.test(p.name));
 		this.changed();
 		return true;
