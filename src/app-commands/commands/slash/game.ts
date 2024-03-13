@@ -3,7 +3,7 @@ import { getEnumKeys } from "@rsc-utils/enum-utils";
 import type { SlashCommand } from "../../types.js";
 
 export function registerCommand(): SlashCommand {
-	const gameTypeOption = { name:"gameType", description:"Game System, ex: PF2e or DnD5e", choices:getEnumKeys(GameType) };
+	const gameTypeOption = { name:"system", description:"Game System, ex: PF2e or DnD5e", choices:getEnumKeys(GameType) };
 	const dialogTypeOption = { name:"dialogType", choices:getEnumKeys(DialogPostType) };
 	const critMethodOption = { name:"critMethod", choices:getEnumKeys(DiceCritMethodType) };
 	const diceOutputOption = { name:"diceOutput", choices:getEnumKeys(DiceOutputType) };
