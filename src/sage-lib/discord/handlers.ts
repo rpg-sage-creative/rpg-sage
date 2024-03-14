@@ -271,7 +271,7 @@ function isEditWeCanIgnore(message: DMessage, originalMessage: Optional<DMessage
 	const moreEmbedLengths = originalMessage.embeds.length < message.embeds.length;
 	// If an embed's url is in the content, the edit was simply to create the embed
 	const url = message.embeds[0]?.url;
-	const contentIncludesUrl = url ? message.content?.includes(url) ?? false : false;
+	const contentIncludesUrl = url ? message.content?.includes(url.replace(/%22$/, "")) ?? false : false;
 	//TODO: should i iterate through the embeds? ? ?
 
 	return matchingContent && moreEmbedLengths && contentIncludesUrl;

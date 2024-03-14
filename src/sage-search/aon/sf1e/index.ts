@@ -11,8 +11,8 @@ export function createSearchUrl(searchText: string): string {
 	return `https://www.aonsrd.com/Search.aspx?Query=${cleanSearchText}`;
 }
 export function createSearchResultUrl(link: TResultsLink): string {
-	const cleanUrl = link.url.replace(/\s+/g, "+");
-	return `https://www.aonprd.com/${cleanUrl}`;
+	const cleanUrl = link.url.replace(/\s+/g, "+").replace(new RegExp("^https://www.aonsrd.com/", "i"), "");
+	return `https://www.aonsrd.com/${cleanUrl}`;
 }
 
 export async function searchAonSf1e(parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<Sf1eSearchResults> {
