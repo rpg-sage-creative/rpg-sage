@@ -19,7 +19,7 @@ export function rollRandomItem(_: TInteraction, input: string): TDiceOutput[] {
 		if (!unique || !selections.includes(random)) {
 			selections.push(random);
 		}
-	} while (selections.length < total);
+	} while (selections.length < total && options.find(option => !selections.includes(option)));
 	if (sort) {
 		selections.sort();
 	}
