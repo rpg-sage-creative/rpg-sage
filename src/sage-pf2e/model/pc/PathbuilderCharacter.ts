@@ -9,17 +9,15 @@ import { nth } from "@rsc-utils/number-utils";
 import { StringMatcher, capitalize } from "@rsc-utils/string-utils";
 import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
-import { ABILITIES } from "../..";
-import type { TMacro } from "../../../sage-lib/sage/model/types";
-import type { GetStatPrefix, TProficiency, TSavingThrow } from "../../common";
-import { getSavingThrows, toModifier } from "../../common";
-import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository";
-import type { Weapon } from "../Weapon";
-import type { IHasAbilities } from "./Abilities";
-import { Abilities } from "./Abilities";
-import type { IHasProficiencies } from "./PlayerCharacter";
-import type { IHasSavingThrows } from "./SavingThrows";
-import { SavingThrows } from "./SavingThrows";
+import { ABILITIES } from "../../index.js";
+import type { TMacro } from "../../../sage-lib/sage/model/types.js";
+import type { GetStatPrefix, TProficiency, TSavingThrow } from "../../common.js";
+import { getSavingThrows, toModifier } from "../../common.js";
+import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository.js";
+import type { Weapon } from "../Weapon.js";
+import { Abilities, type IHasAbilities } from "./Abilities.js";
+import type { IHasProficiencies } from "./PlayerCharacter.js";
+import { SavingThrows, type IHasSavingThrows } from "./SavingThrows.js";
 
 const skillNames = "Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery".split(",");
 const skillStatKeys: TPathbuilderCharacterAbilityKey[] = ["dex", "int", "str", "int", "cha", "cha", "cha", "wis", "wis", "int", "cha", "wis", "int", "dex", "wis", "dex"];
@@ -1118,18 +1116,34 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 	public async save(): Promise<boolean> {
 		return PathbuilderCharacter.saveCharacter(this);
 	}
-	public static async refresh(characterId: string, id?: number): Promise<boolean> {
+	public static async refresh(characterId: string, id?: number, newName?: string): Promise<RefreshResult> {
 		const oldChar = await this.loadCharacter(characterId);
-		if (!oldChar) return false;
+		if (!oldChar) {
+			return "INVALID_CHARACTER_ID";
+		}
+
 		const exportJsonId = id ?? oldChar.exportJsonId;
-		if (!exportJsonId) return false;
+		if (!exportJsonId) {
+			return "MISSING_JSON_ID";
+		}
+
 		const newChar = await this.fetchCore(exportJsonId);
-		if (!newChar) return false;
+		if (!newChar) {
+			return "INVALID_JSON_ID";
+		}
+
+		if (oldChar.name !== newChar.name && newChar.name !== newName) {
+			return "INVALID_CHARACTER_NAME";
+		}
+
 		newChar.id = oldChar.id;
-		newChar.userDid = oldChar.userDid;
 		newChar.characterId = oldChar.characterId;
+		newChar.messageId = oldChar.messageId;
+		newChar.userDid = oldChar.userDid;
+
 		return this.saveCharacter(newChar);
 	}
 
 	//#endregion
 }
+type RefreshResult = "INVALID_CHARACTER_ID" | "MISSING_JSON_ID" | "INVALID_JSON_ID" | "INVALID_CHARACTER_NAME" | true | false;
