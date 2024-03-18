@@ -6,8 +6,8 @@ import { isDefined, type Args } from "@rsc-utils/type-utils";
 import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType } from "../../../sage-pf2e/index.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
 import { registerCommand } from "../../discord/handlers/registerCommand.js";
-import { SageCommand } from "../model/SageCommand.js";
-import { EnumLike } from "../model/SageCommandArgs.js";
+import type { SageCommand } from "../model/SageCommand.js";
+import type { EnumLike } from "../model/SageCommandArgs.js";
 import { createCommandRenderableContent } from "./cmd.js";
 import { registerCommandHelp } from "./help.js";
 import { GDate } from "../../../sage-cal/pf2e/GDate.js";
@@ -83,10 +83,6 @@ function createWeatherRenderable(args: WeatherArgs): RenderableContent {
 
 //#region slash command
 
-function slashTester(sageCommand: SageCommand): boolean {
-	return sageCommand.isCommand("Weather");
-}
-
 /** Checks the command for the arg/enum to either process or alert of an issue. */
 function getEnumInfo<K extends string = string, V extends number = number>({ args }: SageCommand, enumType: EnumLike<K, V>, key: string) {
 	const keyValue = args.getEnum(enumType, key);
@@ -161,5 +157,5 @@ export function registerCommandHandlers(): void {
 	registerCommand(weatherHandler, "weather");
 	registerCommand(showHelp, "weather-help");
 	registerCommandHelp("Command", "Weather", getHelpText());
-	registerInteractionListener(slashTester, weatherHandler);
+	registerInteractionListener(cmd => cmd.isCommand("Weather"), weatherHandler);
 }
