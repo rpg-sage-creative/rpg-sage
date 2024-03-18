@@ -1,3 +1,4 @@
+import type { Args } from "@rsc-utils/type-utils";
 
 /**
  * Finds all keys of {changes} with values that are !undefined;
@@ -5,7 +6,7 @@
  * base.key is set to undefined when changes.key is null unless {unsetValue} is null.
  * Returns true if any changes were made.
 */
-export function applyChanges<T>(base: T, changed: Partial<T>, unsetValue?: null): boolean {
+export function applyChanges<T>(base: T, changed: Args<T>, unsetValue?: null): boolean {
 	let hasChanges = false;
 	if (base && changed) {
 		const keys = Object.keys(changed) as (keyof T)[];
