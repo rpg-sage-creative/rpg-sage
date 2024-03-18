@@ -1,19 +1,18 @@
+import { DiceCritMethodType, DiceOutputType, GameType } from "@rsc-sage/types";
 import { sortPrimitive } from "@rsc-utils/array-utils";
 import { HasIdCore, IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { cleanWhitespace, type TokenData } from "@rsc-utils/string-utils";
-import { GameType } from "../sage-common";
-import type { TDiceRoll } from "./dice/base/types";
+import type { TDiceRoll } from "./dice/base/types.js";
+
+/** @deprecated @todo Update imports for these enums. */
+export { DiceCritMethodType as CritMethodType, DiceOutputType, DiceSecretMethodType } from "@rsc-sage/types";
 
 //#region rpg.common.ts
-
-export enum DiceSecretMethodType { Ignore = 0, Hide = 1, GameMasterChannel = 2, GameMasterDirect = 3 }
 
 //#region DiceOutputType
 
 export type TDiceOutputType = keyof typeof DiceOutputType;
-
-export enum DiceOutputType { XXS = -3, XS = -2, S = -1, M = 0, L = 1, XL = 2, XXL = 3, ROLLEM = 5 }
 
 export function parseDiceOutputType(outputType: string, defaultOutputType?: DiceOutputType): DiceOutputType | undefined {
 	return DiceOutputType[<TDiceOutputType>String(outputType).toUpperCase()] ?? defaultOutputType;
@@ -23,16 +22,14 @@ export function parseDiceOutputType(outputType: string, defaultOutputType?: Dice
 
 //#region CritMethodType
 
-export enum CritMethodType { Unknown = 0, TimesTwo = 1, RollTwice = 2, AddMax = 3 }
-
 type TTypedMap<T> = { [key: string]: T; };
 
-const CritMethodTypeMap: TTypedMap<TTypedMap<CritMethodType>> = {
-	"DND5E":{ "TIMESTWO":CritMethodType.TimesTwo, "ROLLTWICE":CritMethodType.RollTwice, "ADDMAX":CritMethodType.AddMax },
-	"PF2E":{ "TIMESTWO":CritMethodType.TimesTwo, "ROLLTWICE":CritMethodType.RollTwice, "ADDMAX":CritMethodType.AddMax }
+const CritMethodTypeMap: TTypedMap<TTypedMap<DiceCritMethodType>> = {
+	"DND5E":{ "TIMESTWO":DiceCritMethodType.TimesTwo, "ROLLTWICE":DiceCritMethodType.RollTwice, "ADDMAX":DiceCritMethodType.AddMax },
+	"PF2E":{ "TIMESTWO":DiceCritMethodType.TimesTwo, "ROLLTWICE":DiceCritMethodType.RollTwice, "ADDMAX":DiceCritMethodType.AddMax }
 };
 
-export function parseCritMethodType(gameType: GameType | undefined, critMethod: string, defaultCritMethod?: CritMethodType): CritMethodType | undefined {
+export function parseCritMethodType(gameType: GameType | undefined, critMethod: string, defaultCritMethod?: DiceCritMethodType): DiceCritMethodType | undefined {
 	const map = CritMethodTypeMap[String(GameType[gameType!]).toUpperCase()];
 	if (map) {
 		return map[String(critMethod).toUpperCase()] ?? defaultCritMethod;
