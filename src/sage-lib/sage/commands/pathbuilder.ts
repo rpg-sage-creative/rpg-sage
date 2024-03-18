@@ -4,13 +4,14 @@ import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import { CommandInteraction, MessageActionRow, MessageAttachment, MessageButton, MessageSelectMenu, type ButtonInteraction, type Message, type MessageButtonStyleResolvable, type MessageEmbed, type SelectMenuInteraction } from "discord.js";
+import { type CommandInteraction, MessageActionRow, MessageAttachment, MessageButton, MessageSelectMenu, type ButtonInteraction, type Message, type MessageButtonStyleResolvable, type MessageEmbed, type SelectMenuInteraction } from "discord.js";
 import { PathbuilderCharacter, getExplorationModes, getSavingThrows, getSkills, toModifier } from "../../../sage-pf2e/index.js";
-import { TCharacterSectionType, TCharacterViewType, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
+import { getCharacterSections, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { SageCache } from "../model/SageCache.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageMessage } from "../model/SageMessage.js";
 import type { User } from "../model/User.js";
 import type { TMacro } from "../model/types.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
@@ -322,8 +323,11 @@ function parseCustomId(customId: string): TActionIdType {
 	return parts as TActionIdType;
 }
 
-function sheetTester(sageInteraction: SageButtonInteraction): boolean {
-	const customId = sageInteraction.interaction.customId;
+export function getValidPathbuilderCharacterId(customId?: string | null): string | undefined {
+	if (!customId) {
+		return undefined;
+	}
+
 	// old regex didn't include PB2E, which was added when E20 importer was made
 	const matches = matchesActionRegex(customId) || matchesOldActionRegex(customId);
 	if (matches) {
@@ -335,9 +339,16 @@ function sheetTester(sageInteraction: SageButtonInteraction): boolean {
 		TODO: figure out when this can go away!
 		*/
 		const [_pb2e, characterId] = parseCustomId(customId);
-		return _pb2e === "PB2E" && PathbuilderCharacter.exists(characterId);
+		if (_pb2e === "PB2E" && PathbuilderCharacter.exists(characterId)) {
+			return characterId;
+		};
 	}
-	return false;
+	return undefined;
+}
+
+function sheetTester(sageInteraction: SageButtonInteraction): boolean {
+	const customId = sageInteraction.interaction.customId;
+	return getValidPathbuilderCharacterId(customId) !== undefined;
 }
 
 async function viewHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
@@ -514,7 +525,7 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 
 export const pb2eId = "pathbuilder2e-id";
 
-export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction<CommandInteraction>): Promise<void> {
+export async function handlePathbuilder2eImport(sageInteraction: SageInteraction<CommandInteraction>): Promise<void> {
 	const pathbuilderId = sageInteraction.args.getNumber(pb2eId, true);
 	await sageInteraction.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, false);
 
@@ -537,7 +548,43 @@ export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction
 
 //#endregion
 
+//#region reimport
+
+async function handleReimportError(sageCommand: SageMessage, errorMessage: string): Promise<void> {
+	const content = [
+		`Reimport Error!`,
+		`> ` + errorMessage,
+		`To reimport, please reply to your imported character sheet with:`,
+		"```sage!reimport id=\"\"```",
+		`If your updated charater has a new name, please include it:`,
+		"```sage!reimport id=\"\" name=\"\"```",
+		`***id** is the "Export JSON" id*`,
+	];
+	return sageCommand.whisper(content.join("\n"));
+}
+
+export async function handlePathbuilder2eReimport(sageCommand: SageMessage, message: Message, characterId: string): Promise<void> {
+	const pathbuilderId = sageCommand.args.getNumber("id") ?? undefined;
+	const updatedName = sageCommand.args.getString("name") ?? undefined;
+	const refreshResult = await PathbuilderCharacter.refresh(characterId, pathbuilderId, updatedName);
+	switch (refreshResult) {
+		case "INVALID_CHARACTER_ID": return handleReimportError(sageCommand, "Unable to find an imported character to update.");
+		case "MISSING_JSON_ID": return handleReimportError(sageCommand, "You are missing a 'Export JSON' id.");
+		case "INVALID_JSON_ID": return handleReimportError(sageCommand, "Unable to fetch the 'Export JSON' id.");
+		case "INVALID_CHARACTER_NAME": return handleReimportError(sageCommand, "The character names do not match!");
+		case false: return sageCommand.whisper("Sorry, we don't know what happened!");
+		default:
+			const char = await PathbuilderCharacter.loadCharacter(characterId);
+			await updateSheet(sageCommand.sageCache, char!, message);
+			await sageCommand.message.delete();
+			return;
+	}
+}
+
+//#endregion
+
 export function registerPathbuilder(): void {
 	registerInteractionListener(sheetTester, sheetHandler);
+
 }
 

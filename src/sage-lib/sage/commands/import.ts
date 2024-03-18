@@ -1,7 +1,11 @@
+import { DiscordKey } from "@rsc-utils/discord-utils";
+import type { Message } from "discord.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
-import type { SageInteraction } from "../model/SageInteraction";
-import { e20Pdf, slashHandlerEssence20 } from "./e20.js";
-import { pb2eId, slashHandlerPathbuilder2e } from "./pathbuilder.js";
+import { registerCommand } from "../../discord/handlers/registerCommand.js";
+import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageMessage } from "../model/SageMessage.js";
+import { e20Pdf, getValidE20CharacterId, handleEssence20Import, handleEssence20Reimport } from "./e20.js";
+import { getValidPathbuilderCharacterId, handlePathbuilder2eImport, handlePathbuilder2eReimport, pb2eId } from "./pathbuilder.js";
 
 // pb2eId=118142
 function slashTester(sageInteraction: SageInteraction): boolean {
@@ -14,14 +18,59 @@ function slashTester(sageInteraction: SageInteraction): boolean {
 
 async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
 	if (sageInteraction.args.hasNumber(pb2eId)) {
-		return slashHandlerPathbuilder2e(sageInteraction);
+		return handlePathbuilder2eImport(sageInteraction);
 	}
 	if (sageInteraction.args.hasString(e20Pdf)) {
-		return slashHandlerEssence20(sageInteraction);
+		return handleEssence20Import(sageInteraction);
 	}
 	return sageInteraction.reply(`Sorry, unable to import your character at this time.`, true);
 }
 
+type ImportedCharacter = { id:string; type:"E20"|"PB2E"; };
+function findImportedCharacter(message: Message): ImportedCharacter | undefined {
+	for (const componentRow of message.components) {
+		for (const component of componentRow.components) {
+			const customId = component.customId;
+			const pathbuilderCharacterId = getValidPathbuilderCharacterId(customId);
+			if (pathbuilderCharacterId) {
+				return { id:pathbuilderCharacterId, type:"PB2E" };
+			}
+			const e20CharacterId = getValidE20CharacterId(customId);
+			if (e20CharacterId) {
+				return { id:e20CharacterId, type:"E20" };
+			}
+		}
+	}
+	return undefined;
+}
+
+async function reimportHelp(sageCommand: SageMessage): Promise<void> {
+	await sageCommand.whisper("To reimport, please reply to your imported character sheet with:\n```sage!reimport id=\"\"```or```sage!reimport pdf=\"\"```");
+}
+async function reimportHandler(sageCommand: SageMessage): Promise<void> {
+	// no reference means no reply, means no link back to the character to reimport
+	const reference = sageCommand.message.reference;
+	if (!reference) {
+		return reimportHelp(sageCommand);
+	}
+
+	// no message, means no components to find the characterId
+	const discordKey = new DiscordKey(reference.guildId, reference.channelId, undefined, reference.messageId);
+	const charMessage = await sageCommand.discord.fetchMessage(discordKey);
+	if (!charMessage) {
+		return reimportHelp(sageCommand);
+	}
+
+	const importedCharacter = findImportedCharacter(charMessage);
+	switch (importedCharacter?.type) {
+		case "E20": return handleEssence20Reimport(sageCommand, charMessage, importedCharacter.id);
+		case "PB2E": return handlePathbuilder2eReimport(sageCommand, charMessage, importedCharacter.id);
+		default: return reimportHelp(sageCommand);
+	}
+
+}
+
 export function registerImport(): void {
 	registerInteractionListener(slashTester, slashHandler);
+	registerCommand(reimportHandler, "reimport");
 }

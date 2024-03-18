@@ -21,6 +21,7 @@ import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { SageCache } from "../model/SageCache.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
+import { SageMessage } from "../model/SageMessage.js";
 
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
 type TPlayerCharacterCore = PlayerCharacterCoreJoe | PlayerCharacterCorePR | PlayerCharacterCoreTransformer;
@@ -328,13 +329,21 @@ function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): TOutp
 
 const uuidActionRegex = /^E20\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Skill|Spec|EdgeSnag|EdgeSnagShift|Roll|Secret|Init|Untrained)$/i;
 
+export function getValidE20CharacterId(customId?: string | null): string | undefined {
+	if (!customId || !uuidActionRegex.test(customId)) {
+		return undefined;
+	}
+
+	const [_e20, characterId] = customId.split("|");
+	if (_e20 === "E20" && charFileExists(characterId)) {
+		return characterId;
+	}
+	return undefined;
+}
+
 function sheetTester(sageInteraction: SageInteraction): boolean {
 	const customId = sageInteraction.interaction.customId;
-	if (!uuidActionRegex.test(customId)) {
-		return false;
-	}
-	const [_e20, characterId] = customId.split("|");
-	return _e20 === "E20" && charFileExists(characterId);
+	return getValidE20CharacterId(customId) !== undefined;
 }
 
 async function viewHandler(sageInteraction: SageInteraction<SelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
@@ -457,7 +466,7 @@ export function registerE20(): void {
 
 export const e20Pdf = "e20-pdf";
 
-export async function slashHandlerEssence20(sageInteraction: SageInteraction): Promise<void> {
+export async function handleEssence20Import(sageInteraction: SageInteraction): Promise<void> {
 	await sageInteraction.reply(`Attempting to import character ...`, false);
 
 	const value = sageInteraction.args.getString(e20Pdf, true);
@@ -503,3 +512,41 @@ export async function slashHandlerEssence20(sageInteraction: SageInteraction): P
 	}
 	return sageInteraction.deleteReply();
 }
+
+//#region reimport
+
+// async function handleReimportError(sageCommand: SageMessage, errorMessage: string): Promise<void> {
+// 	const content = [
+// 		`Reimport Error!`,
+// 		`> ` + errorMessage,
+// 		`To reimport, please reply to your imported character sheet with:`,
+// 		"```sage!reimport pdf=\"\"```",
+// 		`If your updated charater has a new name, please include it:`,
+// 		"```sage!reimport pdf=\"\" name=\"\"```",
+// 		`***pdf** is url to the pdf*`,
+// 	];
+// 	return sageCommand.whisper(content.join("\n"));
+// }
+
+export async function handleEssence20Reimport(sageCommand: SageMessage, message: Message, characterId: string): Promise<void> {
+	sageCommand.whisper("Sorry, not yet enabled!");
+	message;
+	characterId;
+	// const pathbuilderId = sageCommand.args.getNumber("id") ?? undefined;
+	// const updatedName = sageCommand.args.getString("name") ?? undefined;
+	// const refreshResult = await PathbuilderCharacter.refresh(characterId, pathbuilderId, updatedName);
+	// switch (refreshResult) {
+	// 	case "INVALID_CHARACTER_ID": return handleReimportError(sageCommand, "Unable to find an imported character to update.");
+	// 	case "MISSING_JSON_ID": return handleReimportError(sageCommand, "You are missing a 'Export JSON' id.");
+	// 	case "INVALID_JSON_ID": return handleReimportError(sageCommand, "Unable to fetch the 'Export JSON' id.");
+	// 	case "INVALID_CHARACTER_NAME": return handleReimportError(sageCommand, "The character names do not match!");
+	// 	case false: return sageCommand.whisper("Sorry, we don't know what happened!");
+	// 	default:
+	// 		const char = await PathbuilderCharacter.loadCharacter(characterId);
+	// 		await updateSheet(sageCommand.sageCache, char!, message);
+	// 		await sageCommand.message.delete();
+	// 		return;
+	// }
+}
+
+//#endregion
