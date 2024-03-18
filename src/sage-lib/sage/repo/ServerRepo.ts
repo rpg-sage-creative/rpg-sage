@@ -1,16 +1,17 @@
 import { info } from "@rsc-utils/console-utils";
+import { getHomeServerId } from "@rsc-utils/env-utils";
 import type { Guild } from "discord.js";
-import { ActiveBot } from "../model/ActiveBot";
-import type { SageCache } from "../model/SageCache";
-import { Server, type ServerCore } from "../model/Server";
-import { DidRepository } from "./base/DidRepository";
+import { ActiveBot } from "../model/ActiveBot.js";
+import type { SageCache } from "../model/SageCache.js";
+import { Server, type ServerCore } from "../model/Server.js";
+import { DidRepository } from "./base/DidRepository.js";
 
 const UnkownBotCodeName = "<UnknownBot>";
 
 export class ServerRepo extends DidRepository<ServerCore, Server> {
 
-	public getHome(): Promise<Server> {
-		return <Promise<Server>>this.getByDid(Server.HomeServerDid);
+	public async getHome(): Promise<Server> {
+		return this.getByDid(getHomeServerId()) as Promise<Server>;
 	}
 
 	/** This finds or creates the server object. It also updates the server name if changed. */
@@ -55,8 +56,10 @@ export class ServerRepo extends DidRepository<ServerCore, Server> {
 		return false;
 	}
 
-	public static fromCore<T = ServerCore, U = Server>(core: T, sageCache: SageCache): Promise<U> {
-		return <Promise<U>><unknown>Promise.resolve(new Server(<ServerCore><unknown>core, sageCache));
+	public static fromCore<T = ServerCore, U = Server>(core: T, sageCache: SageCache): Promise<U>;
+	public static fromCore(core: ServerCore, sageCache: SageCache): Promise<Server> {
+		const server = new Server(core, sageCache);
+		return Promise.resolve(server);
 	}
 
 }
