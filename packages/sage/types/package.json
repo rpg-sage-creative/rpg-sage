@@ -1,2 +1,4 @@
 {"name":"@rsc-sage/types","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
+	"@rsc-utils/console-utils": "^0.0.0",
+	"@rsc-utils/type-utils": "^0.0.0"
 }}
