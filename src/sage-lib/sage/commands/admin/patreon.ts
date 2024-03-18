@@ -1,11 +1,12 @@
 import { verbose } from "@rsc-utils/console-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import { send } from "../../../discord/messages";
-import type { SageCache } from "../../model/SageCache";
-import type { SageMessage } from "../../model/SageMessage";
-import { Server } from "../../model/Server";
-import { PatronTierSnowflakes, PatronTierType, User } from "../../model/User";
-import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
+import { getSuperUserId } from "@rsc-utils/env-utils";
+import { send } from "../../../discord/messages.js";
+import type { SageCache } from "../../model/SageCache.js";
+import type { SageMessage } from "../../model/SageMessage.js";
+import { Server } from "../../model/Server.js";
+import { PatronTierSnowflakes, PatronTierType, User } from "../../model/User.js";
+import { createAdminRenderableContent, registerAdminCommand } from "../cmd.js";
 
 
 async function patreonSync(sageMessage: SageMessage): Promise<void> {
@@ -60,7 +61,7 @@ export async function syncPatreon(sageCache: SageCache): Promise<void> {
 		}
 	});
 
-	const superUser = (await sageCache.discord.fetchUser(User.SuperUserDid))!;
+	const superUser = (await sageCache.discord.fetchUser(getSuperUserId()))!;
 	const dmChannel = superUser.dmChannel ?? await superUser.createDM();
 	send(sageCache, dmChannel, renderableContent, superUser);
 }
