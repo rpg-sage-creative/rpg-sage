@@ -1,7 +1,7 @@
+import { GameType, parseGameSystem } from "@rsc-sage/types";
 import { HasCore, type IdCore } from "@rsc-utils/class-utils";
 import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
-import { GameType, parseGameType } from "../../../sage-common";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -9,48 +9,48 @@ import {
 	TDiceOutput,
 	getCritMethodRegex,
 	parseCritMethodType, parseDiceOutputType
-} from "../../common";
+} from "../../common.js";
 import {
 	Dice as baseDice,
 	DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart
-} from "../base";
+} from "../base/index.js";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore, TDice as baseTDice,
 	TDiceGroup as baseTDiceGroup,
 	TDiceGroupRoll as baseTDiceGroupRoll,
 	TDicePart as baseTDicePart
-} from "../base/types";
+} from "../base/types.js";
 import {
 	DiceGroup as cncDiceGroup,
 	DiceGroupRoll as cndDiceGroupRoll
-} from "../cnc";
+} from "../cnc/index.js";
 import {
 	DiceGroup as dnd5eDiceGroup,
 	DiceGroupRoll as dnd5eDiceGroupRoll
-} from "../dnd5e";
+} from "../dnd5e/index.js";
 import {
 	DiceGroup as e20DiceGroup,
 	DiceGroupRoll as e20DiceGroupRoll
-} from "../essence20";
+} from "../essence20/index.js";
 import {
 	DiceGroup as pf2eDiceGroup,
 	DiceGroupRoll as pf2eDiceGroupRoll
-} from "../pf2e";
+} from "../pf2e/index.js";
 import {
 	DiceGroup as questDiceGroup,
 	DiceGroupRoll as questDiceGroupRoll
-} from "../quest";
+} from "../quest/index.js";
 import {
 	DiceGroup as vtm5eDiceGroup,
 	DiceGroupRoll as vtm5eDiceGroupRoll
-} from "../vtm5e";
+} from "../vtm5e/index.js";
 
 const DICE_REGEX = /\[[^\]]*d\d+[^\]]*\]/ig;
 const GAME_CHECK = /^(?:(cnc|dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest|vtm5|vtm5e)\b)?/i;
 const DICE_OUTPUT_CHECK = /^(?:(xxs|xs|s|m|xxl|xl|l|rollem)\b)?/i;
-const COUNT_CHECK = /^(\d+)(map\-\d+)?\#/i;
+const COUNT_CHECK = /^(\d+)(map-\d+)?#/i;
 
 function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {
 	switch (gameType) {
@@ -267,7 +267,7 @@ function matchGameType(match: string, defaultGameType: OrUndefined<GameType>): [
 		const gameTypeString = gameMatch[0];
 		return [
 			match.slice(gameTypeString.length).trim(),
-			parseGameType(gameTypeString, defaultGameType)!
+			parseGameSystem(gameTypeString)?.type ?? defaultGameType
 		];
 	}
 	return [match, defaultGameType];
