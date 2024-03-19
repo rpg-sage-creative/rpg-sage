@@ -7,12 +7,9 @@ import { isString } from "@rsc-utils/string-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import type { InteractionReplyOptions, Message, MessageAttachment, User } from "discord.js";
 import type { SlashCommandGameType } from "../../../app-commands/types.js";
-import { GameType } from "../../../sage-common/index.js";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/index.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
 import { InteractionType } from "../../discord/index.js";
 import { send } from "../../discord/messages.js";
-import { DicePostType } from "../commands/dice.js";
 import type { IChannel } from "../repo/base/IdRepository.js";
 import { GameRoleType } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
@@ -277,14 +274,10 @@ export class SageInteraction<T extends DInteraction = any>
 
 	//#region IHasGame
 
-	public get gameType(): GameType {
-		return this.cache.get("gameType", () => this.game?.gameType ?? this.serverChannel?.defaultGameType ?? this.server?.defaultGameType ?? GameType.None);
-	}
-
 	/** Get the PlayerCharacter if there a game and the actor has a PlayerCharacter OR the actor has a PlayerCharacter set to use this channel with AutoChannel */
 	public get playerCharacter(): GameCharacter | undefined {
 		return this.cache.get("playerCharacter", () => {
-			const channelDid = this.channel?.did!;
+			const channelDid = this.channel?.id!;
 			const userDid = this.sageUser.did;
 			const autoChannelData = { channelDid, userDid };
 			return this.game?.playerCharacters.getAutoCharacter(autoChannelData)
@@ -292,22 +285,6 @@ export class SageInteraction<T extends DInteraction = any>
 				?? this.sageUser.playerCharacters.getAutoCharacter(autoChannelData)
 				?? undefined;
 		});
-	}
-
-	public get critMethodType(): CritMethodType {
-		return this.cache.get("critMethodType", () => this.gameChannel?.defaultCritMethodType ?? this.game?.defaultCritMethodType ?? this.serverChannel?.defaultCritMethodType ?? this.server?.defaultCritMethodType ?? CritMethodType.Unknown);
-	}
-
-	public get dicePostType(): DicePostType {
-		return this.cache.get("dicePostType", () => this.gameChannel?.defaultDicePostType ?? this.game?.defaultDicePostType ?? this.serverChannel?.defaultDicePostType ?? this.server?.defaultDicePostType ?? DicePostType.SinglePost);
-	}
-
-	public get diceOutputType(): DiceOutputType {
-		return this.cache.get("diceOutputType", () => this.gameChannel?.defaultDiceOutputType ?? this.game?.defaultDiceOutputType ?? this.serverChannel?.defaultDiceOutputType ?? this.server?.defaultDiceOutputType ?? DiceOutputType.M);
-	}
-
-	public get diceSecretMethodType(): DiceSecretMethodType {
-		return this.cache.get("diceSecretMethodType", () => this.gameChannel?.defaultDiceSecretMethodType ?? this.game?.defaultDiceSecretMethodType ?? this.serverChannel?.defaultDiceSecretMethodType ?? this.server?.defaultDiceSecretMethodType ?? DiceSecretMethodType.Ignore);
 	}
 
 	//#endregion

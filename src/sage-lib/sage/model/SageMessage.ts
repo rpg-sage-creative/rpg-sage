@@ -17,10 +17,12 @@ import type { GameCharacter } from "./GameCharacter.js";
 import { EmojiType } from "./HasEmojiCore.js";
 import { SageCache } from "./SageCache.js";
 import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
-import { SageMessageArgsManager } from "./SageMessageArgsManager.js";
+import { SageMessageArgs } from "./SageMessageArgs.js";
 import type { TAlias } from "./User.js";
 import type { IHasChannels, IHasGame } from "./index.js";
 import { addMessageDeleteButton } from "./utils/deleteButton.js";
+import { SageChannelType } from "@rsc-sage/types";
+import { ArgsManager } from "../../discord/ArgsManager.js";
 
 interface SageMessageCore extends SageCommandCore {
 	message: DMessage;
@@ -31,7 +33,7 @@ interface SageMessageCore extends SageCommandCore {
 }
 
 export class SageMessage
-	extends SageCommand<SageMessageCore, SageMessageArgsManager>
+	extends SageCommand<SageMessageCore, SageMessageArgs>
 	implements IHasGame, IHasChannels {
 
 	private constructor(protected core: SageMessageCore, cache?: Cache) {
@@ -102,13 +104,13 @@ export class SageMessage
 		const regex = value instanceof RegExp ? value : new RegExp(`^${value}`, "i");
 		return regex.test(this.command);
 	}
-	public args!: SageMessageArgsManager;
+	public args!: SageMessageArgs;
 	public setCommandAndArgs(commandAndArgs?: TCommandAndArgs): this {
 		this.commandAndArgs = {
 			command: commandAndArgs?.command,
-			args: SageMessageArgsManager.from(commandAndArgs?.args!)
+			args: ArgsManager.from(commandAndArgs?.args!)
 		};
-		this.args = new SageMessageArgsManager(this, this.commandAndArgs.args!);
+		this.args = new SageMessageArgs(this, this.commandAndArgs.args!);
 		return this;
 	}
 
@@ -170,19 +172,17 @@ export class SageMessage
 		const args = typeof(contentOrArgs) === "string" ? { content:contentOrArgs } : contentOrArgs;
 		const sendOptions = this.resolveToOptions(args);
 		const canSend = await this.canSend(this.message.channel);
-		if (canSend) {
-			const message = await this.message.reply(sendOptions).catch(handleDiscordErrorReturnNull);
-			//include a button to delete the reply message!
-			await addMessageDeleteButton(message as DMessage, this.sageUser.did);
-		}else {
+		const deleted = isDeleted(this.message.id);
+		let message = canSend && !deleted ? await this.message.reply(sendOptions).catch(handleDiscordErrorReturnNull) : null;
+		if (!message) {
 			// include a link to the original message!
-			const replyingTo = `*replying to* ${toMessageUrl(this.message)}`;
+			const replyingTo = `*replying to* ${deleted ? "~~deleted message~~" : toMessageUrl(this.message)}`;
 			const newLine = sendOptions.content ? "\n" : "";
 			const originalContent = sendOptions.content ?? "";
 			sendOptions.content = replyingTo + newLine + originalContent;
-			const message = await this.message.author?.send(sendOptions);
-			await addMessageDeleteButton(message as DMessage, this.sageUser.did);
+			message = await this.message.author?.send(sendOptions) ?? null;
 		}
+		await addMessageDeleteButton(message as DMessage, this.sageUser.did);
 	}
 
 	//#endregion
@@ -331,7 +331,7 @@ export class SageMessage
 	/** Ensures we are either in the channel being targeted or we are in an admin channel. */
 	public testChannelAdmin(channelDid: Optional<Snowflake>): boolean {
 		/** @todo: figure out if i even need this or if there is a better way */
-		return channelDid === this.channelDid || this.channel?.admin === true;
+		return channelDid === this.channelDid || ![SageChannelType.None, SageChannelType.Dice].includes(this.channel?.type!);
 	}
 
 	/** Ensures we have a game and can admin games or are the GM. */
@@ -341,7 +341,7 @@ export class SageMessage
 
 	/** Ensures we are either in an admin channel or are the server owner or SuperUser. */
 	public testServerAdmin(): boolean {
-		return this.isOwner || this.isSuperUser || this.serverChannel?.admin === true;
+		return this.isOwner || this.isSuperUser || ![SageChannelType.None, SageChannelType.Dice].includes(this.serverChannel?.type!);
 	}
 
 	// #endregion

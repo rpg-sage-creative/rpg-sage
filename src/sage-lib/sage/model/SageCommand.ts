@@ -1,3 +1,4 @@
+import { SageChannelType, GameSystemType, PostType } from "@rsc-sage/types";
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
 import { debug } from "@rsc-utils/console-utils";
 import type { DInteraction, DTextChannel, DiscordKey } from "@rsc-utils/discord-utils";
@@ -5,13 +6,11 @@ import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { CommandInteraction, type If, type MessageActionRow, type MessageAttachment, type MessageButton, type MessageEmbed, type MessageSelectMenu } from "discord.js";
-import type { GameType } from "../../../sage-common/index.js";
 import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/common.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
-import type { DicePostType } from "../commands/dice.js";
-import type { DialogType, IChannel } from "../repo/base/IdRepository.js";
+import type { IChannel } from "../repo/base/IdRepository.js";
 import type { Bot } from "./Bot.js";
 import type { Game } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
@@ -49,7 +48,7 @@ export type TSendOptions<HasEphemeral extends boolean = boolean> = {
 
 export abstract class SageCommand<
 			T extends SageCommandCore = any,
-			U extends SageCommandArgs = SageCommandArgs
+			U extends SageCommandArgs<any> = SageCommandArgs<any>
 			> extends HasCache {
 
 	protected constructor(protected core: T, cache?: Cache | null) {
@@ -103,8 +102,11 @@ export abstract class SageCommand<
 	/** Is the author the owner of the message's server */
 	public get isOwner(): boolean {
 		return this.cache.get("isOwner", () => {
-			if (this.isSageInteraction()) return this.interaction.guild?.ownerId === this.authorDid;
-			if (this.isSageMessage() || this.isSageReaction()) return this.message.guild?.ownerId === this.authorDid;
+			if (this.isSageInteraction()) {
+				return this.interaction.guild?.ownerId === this.authorDid;
+			}else if (this.isSageMessage() || this.isSageReaction()) {
+				return this.message.guild?.ownerId === this.authorDid;
+			}
 			return false;
 		});
 	}
@@ -152,28 +154,53 @@ export abstract class SageCommand<
 
 	// #region Function flags
 
+	/** @deprecated Use .allowCommand */
 	public get allowAdmin(): boolean {
-		return this.cache.get("allowAdmin", () => !this.channel || this.channel.admin === true);
+		return this.allowCommand;
 	}
 
 	public get allowCommand(): boolean {
-		return this.cache.get("allowCommand", () => !this.channel || this.channel.commands === true);
+		return this.cache.get("allowCommand", () => {
+			const channel = this.channel;
+			// allow all in unconfigured channels
+			if (!channel) {
+				return true;
+			}
+
+			const blockedTypes = [SageChannelType.None, SageChannelType.InCharacter];
+
+			// we only stop commands in None or InCharacter
+			if (!blockedTypes.includes(channel.type!)) {
+				return true;
+			}
+
+			if (this.game) {
+				//  we need to make sure the game isn't all blocked channels
+				const gameChannels = this.game?.channels;
+				const othersNotBlocked = gameChannels?.some(channel => !blockedTypes.includes(channel.type!));
+				return !othersNotBlocked;
+			}
+
+			// blocked
+			return false;
+		});
 	}
 
 	public get allowDialog(): boolean {
-		return this.cache.get("allowDialog", () => this.server && this.channel?.dialog === true);
+		return this.cache.get("allowDialog", () => !this.channel || ![SageChannelType.None,SageChannelType.Dice].includes(this.channel.type!));
 	}
 
 	public get allowDice(): boolean {
-		return this.cache.get("allowDice", () => !this.channel || this.channel.dice === true);
+		return this.cache.get("allowDice", () => !this.channel || this.channel.type !== SageChannelType.None);
 	}
 
+	/** @deprecated Use .allowCommand */
 	public get allowSearch(): boolean {
-		return this.cache.get("allowSearch", () => !this.channel || this.channel.search === true);
+		return this.allowCommand;
 	}
 
-	public get dialogType(): DialogType {
-		return this.cache.get("dialogType", () => this.sageUser.defaultDialogType ?? this.channel?.defaultDialogType ?? this.game?.defaultDialogType ?? this.server?.defaultDialogType ?? 0);
+	public get dialogPostType(): PostType {
+		return this.cache.get("dialogPostType", () => this.sageUser.dialogPostType ?? this.gameChannel?.dialogPostType ?? this.game?.dialogPostType ?? this.serverChannel?.dialogPostType ?? this.server?.dialogPostType ?? 0);
 	}
 
 	// #endregion
@@ -219,7 +246,7 @@ export abstract class SageCommand<
 	 */
 	public get playerCharacter(): GameCharacter | undefined {
 		return this.cache.get("playerCharacter", () => {
-			const channelDid = this.channel?.did!;
+			const channelDid = this.channel?.id!;
 			const userDid = this.sageUser.did;
 			const autoChannelData = { channelDid, userDid };
 			return this.game?.playerCharacters.getAutoCharacter(autoChannelData)
@@ -258,24 +285,24 @@ export abstract class SageCommand<
 
 	//#region dice settings
 
-	public get gameType(): GameType {
-		return this.cache.get("gameType", () => this.game?.gameType ?? this.serverChannel?.defaultGameType ?? this.server?.defaultGameType ?? 0);
+	public get gameSystemType(): GameSystemType {
+		return this.cache.get("gameType", () => this.game?.gameSystemType ?? this.serverChannel?.gameSystemType ?? this.server?.gameSystemType ?? 0) as GameSystemType;
 	}
 
-	public get critMethodType(): CritMethodType {
-		return this.cache.get("critMethodType", () => this.gameChannel?.defaultCritMethodType ?? this.game?.defaultCritMethodType ?? this.serverChannel?.defaultCritMethodType ?? this.server?.defaultCritMethodType ?? 0);
+	public get diceCritMethodType(): CritMethodType {
+		return this.cache.get("diceCritMethodType", () => this.gameChannel?.diceCritMethodType ?? this.game?.diceCritMethodType ?? this.serverChannel?.diceCritMethodType ?? this.server?.diceCritMethodType ?? 0);
 	}
 
-	public get dicePostType(): DicePostType {
-		return this.cache.get("dicePostType", () => this.gameChannel?.defaultDicePostType ?? this.game?.defaultDicePostType ?? this.serverChannel?.defaultDicePostType ?? this.server?.defaultDicePostType ?? 0);
+	public get dicePostType(): PostType {
+		return this.cache.get("dicePostType", () => this.gameChannel?.dicePostType ?? this.game?.dicePostType ?? this.serverChannel?.dicePostType ?? this.server?.dicePostType ?? 0);
 	}
 
 	public get diceOutputType(): DiceOutputType {
-		return this.cache.get("diceOutputType", () => this.gameChannel?.defaultDiceOutputType ?? this.game?.defaultDiceOutputType ?? this.serverChannel?.defaultDiceOutputType ?? this.server?.defaultDiceOutputType ?? 0);
+		return this.cache.get("diceOutputType", () => this.gameChannel?.diceOutputType ?? this.game?.diceOutputType ?? this.serverChannel?.diceOutputType ?? this.server?.diceOutputType ?? 0);
 	}
 
 	public get diceSecretMethodType(): DiceSecretMethodType {
-		return this.cache.get("diceSecretMethodType", () => this.gameChannel?.defaultDiceSecretMethodType ?? this.game?.defaultDiceSecretMethodType ?? this.serverChannel?.defaultDiceSecretMethodType ?? this.server?.defaultDiceSecretMethodType ?? 0);
+		return this.cache.get("diceSecretMethodType", () => this.gameChannel?.diceSecretMethodType ?? this.game?.diceSecretMethodType ?? this.serverChannel?.diceSecretMethodType ?? this.server?.diceSecretMethodType ?? 0);
 	}
 
 	//#endregion
@@ -295,30 +322,6 @@ export abstract class SageCommand<
 	//#endregion
 
 	//#region games
-
-	public async findCategoryGame(): Promise<Game | null> {
-		// const category = (<Discord.TextChannel>this.message.channel).parent;
-		// if (category) {
-		// 	const server = this.server;
-		// 	if (server) {
-		// 		// const categoryChannels = category.children.array();
-		// 		const categoryGames: Game[] = [];
-		// 		// for (const channel of categoryChannels) {
-		// 		// 	categoryGames.push(await server.getActiveGameByChannelDid(channel.id));
-		// 		// }
-		// 		// const categoryGames = await mapAsync(categoryChannels, channel => server.getActiveGameByChannelDid(channel.id));
-		// 		const categoryGame = categoryGames[0];
-		// 		if (categoryGame) {
-		// 			return this.caches.games.getById(categoryGame.id);
-		// 		}
-		// 	}
-		// }
-		return null;
-	}
-
-	public async getGameOrCategoryGame(): Promise<Game | null> {
-		return this.game ?? this.findCategoryGame();
-	}
 
 	public get isGameMaster() { return this.core.isGameMaster === true; }
 	public set isGameMaster(bool: boolean) { this.core.isGameMaster = bool === true; }
