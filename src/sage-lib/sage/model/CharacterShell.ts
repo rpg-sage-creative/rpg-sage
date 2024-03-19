@@ -3,7 +3,7 @@ import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
 import type { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, TGameCharacterType } from "./GameCharacter.js";
-import type { TKeyValuePair } from "./SageMessageArgsManager.js";
+import type { TKeyValuePair } from "./SageMessageArgs.js";
 
 export type CharacterShellCore = {
 	/** id of the GameCharacter */
