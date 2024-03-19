@@ -1,6 +1,6 @@
 import { toUniqueDefined } from "@rsc-utils/array-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type { TKeyValuePair } from "./SageMessageArgsManager";
+import type { TKeyValuePair } from "./SageMessageArgs";
 
 interface IHasSave { save(): Promise<boolean>; }
 
