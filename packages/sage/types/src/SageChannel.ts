@@ -31,6 +31,8 @@ export type ChannelOptions = {
 export type SageChannelOptions = DialogOptions & DiceOptions & SystemOptions & ChannelOptions;
 
 export type SageChannel = Partial<SageChannelOptions> & {
+	/** @deprecated */
+	did?: string;
 	id: Snowflake;
 };
 

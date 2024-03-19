@@ -5,5 +5,6 @@ export * from "./DiceOutputType.js";
 export * from "./DicePostType.js";
 export * from "./DiceSecretMethodType.js";
 export * from "./GameSystem.js";
+export * from "./parseEnum.js";
 export * from "./PostType.js";
 export * from "./SageChannel.js";

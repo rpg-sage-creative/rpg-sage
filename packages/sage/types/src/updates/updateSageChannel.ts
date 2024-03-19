@@ -26,7 +26,8 @@ export function updateSageChannel(channel: any): void;
 export function updateSageChannel(channel: OldSageChannel): void {
 	debug(`\tUpdating Channel: ${channel.did??channel.id} ...`);
 	channel.id = channel.did ?? channel.id;
-	delete channel.did;
+	channel.did = channel.id;
+	// delete channel.did;
 
 	updateChannelOptions(channel);
 	updateDialogOptions(channel);
