@@ -2,7 +2,7 @@ import type { Snowflake } from "discord.js";
 import type { CharacterManager } from "../../../model/CharacterManager";
 import { GameCharacter } from "../../../model/GameCharacter";
 import type { SageMessage } from "../../../model/SageMessage";
-import type { TNames } from "../../../model/SageMessageArgsManager";
+import type { TNames } from "../../../model/SageMessageArgs";
 import type { TCharacterTypeMeta } from "./getCharacterTypeMeta";
 
 /** Reusable code to get GameCharacter for the commands. */
