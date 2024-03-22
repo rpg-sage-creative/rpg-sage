@@ -1,13 +1,14 @@
 import { Optional } from "@rsc-utils/type-utils";
 import type { Snowflake } from "discord.js";
+import type { DialogPostType } from "./DialogPostType.js";
 import type { DiceCritMethodType } from "./DiceCritMethodType.js";
 import type { DiceOutputType } from "./DiceOutputType.js";
+import type { DicePostType } from "./DicePostType.js";
 import type { DiceSecretMethodType } from "./DiceSecretMethodType.js";
 import type { GameSystemType } from "./GameSystem.js";
-import type { PostType } from "./PostType.js";
 
 export type DialogOptions = {
-	dialogPostType: PostType;
+	dialogPostType: DialogPostType;
 	gmCharacterName: string;
 	sendDialogTo: Snowflake;
 };
@@ -15,7 +16,7 @@ export type DialogOptions = {
 export type DiceOptions = {
 	diceCritMethodType: DiceCritMethodType;
 	diceOutputType: DiceOutputType;
-	dicePostType: PostType;
+	dicePostType: DicePostType;
 	diceSecretMethodType: DiceSecretMethodType;
 	sendDiceTo: Snowflake;
 };
