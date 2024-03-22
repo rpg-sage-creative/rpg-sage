@@ -1,27 +1,24 @@
+import type { DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannel } from "@rsc-sage/types";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type { GameType } from "../../../sage-common";
-import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import type { DicePostType } from "../commands/dice";
-import type { IChannel } from "../repo/base/IdRepository";
-import { GameCharacter } from "./GameCharacter";
+import { GameCharacter } from "./GameCharacter.js";
 
-export interface IHasGame {
-	gameType: GameType;
+export interface HasGame {
+	gameSystemType: GameSystemType;
 	isGameMaster: boolean;
 	isPlayer: boolean;
 	playerCharacter: GameCharacter | undefined;
 
-	critMethodType: CritMethodType;
+	diceCritMethodType: DiceCritMethodType;
 	dicePostType: DicePostType;
 	diceOutputType: DiceOutputType;
 	diceSecretMethodType: DiceSecretMethodType;
 }
 
-export interface IHasChannels {
-	channel: IChannel | undefined;
+export type HasChannels = {
+	channel: SageChannel | undefined;
 	channelDid: Snowflake | undefined;
-	gameChannel: IChannel | undefined;
-	serverChannel: IChannel | undefined;
+	gameChannel: SageChannel | undefined;
+	serverChannel: SageChannel | undefined;
 	threadDid: Snowflake | undefined;
 	threadOrChannelDid: Snowflake;
-}
+};
