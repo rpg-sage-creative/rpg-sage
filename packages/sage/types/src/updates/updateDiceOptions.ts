@@ -1,5 +1,4 @@
 import { isDefined } from "@rsc-utils/type-utils";
-import { PostType } from "../PostType.js";
 import type { DiceOptions } from "../SageChannel.js";
 
 export type OldDiceOptions = DiceOptions & {
@@ -25,7 +24,7 @@ export function updateDiceOptions(options: OldDiceOptions): void {
 	}
 
 	if (isDefined(options.defaultDicePostType)) {
-		options.dicePostType = options.defaultDicePostType === 1 ? PostType.Embed : PostType.Content;
+		options.dicePostType = options.defaultDicePostType;
 		delete options.defaultDicePostType;
 	}
 
