@@ -2,15 +2,14 @@ import { Season, TemperateSeason, TropicalSeason, getTemperateSeason, getTropica
 import { parseEnum } from "@rsc-utils/enum-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
-import { isDefined, type Args } from "@rsc-utils/type-utils";
+import { isDefined, type Args, type EnumLike } from "@rsc-utils/type-utils";
+import { GDate } from "../../../sage-cal/pf2e/GDate.js";
 import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType } from "../../../sage-pf2e/index.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
 import { registerCommand } from "../../discord/handlers/registerCommand.js";
 import type { SageCommand } from "../model/SageCommand.js";
-import type { EnumLike } from "../model/SageCommandArgs.js";
 import { createCommandRenderableContent } from "./cmd.js";
 import { registerCommandHelp } from "./help.js";
-import { GDate } from "../../../sage-cal/pf2e/GDate.js";
 
 /** Single object to hold the args */
 type WeatherArgs = {

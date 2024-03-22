@@ -1,11 +1,11 @@
 import type { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import { Game, type IGameCore } from "../model/Game";
-import type { SageCache } from "../model/SageCache";
-import { IdRepository } from "./base/IdRepository";
+import { Game, type GameCore } from "../model/Game.js";
+import type { SageCache } from "../model/SageCache.js";
+import { IdRepository } from "./base/IdRepository.js";
 
-export class GameRepo extends IdRepository<IGameCore, Game> {
+export class GameRepo extends IdRepository<GameCore, Game> {
 
 	//TODO: consider historical game lookup/cleanup
 
@@ -39,8 +39,11 @@ export class GameRepo extends IdRepository<IGameCore, Game> {
 		return super.write(game);
 	}
 
-	public static async fromCore<T = IGameCore, U = Game>(core: T, sageCache: SageCache): Promise<U> {
-		return <U><unknown>new Game(<IGameCore><unknown>core, (await sageCache.servers.getById((<IGameCore><unknown>core).serverId))!, sageCache);
+	public static async fromCore<T = GameCore, U = Game>(core: T, sageCache: SageCache): Promise<U>;
+	public static async fromCore(core: GameCore, sageCache: SageCache): Promise<Game> {
+		const serverId = core.serverId;
+		const server = await sageCache.servers.getById(serverId);
+		return new Game(core, server!, sageCache);
 	}
 
 }
