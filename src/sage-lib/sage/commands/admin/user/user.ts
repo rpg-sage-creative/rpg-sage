@@ -1,64 +1,26 @@
-import { filterAsync, forEachAsync } from "@rsc-utils/async-array-utils";
+import { DialogPostType } from "@rsc-sage/types";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import type { RenderableContent } from "@rsc-utils/render-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import type { User as DUser } from "discord.js";
-import type { SageMessage } from "../../../model/SageMessage";
-import type { User as SUser } from "../../../model/User";
-import { DialogType } from "../../../repo/base/IdRepository";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
-import { registerAdminCommandHelp } from "../../help";
-import { renderCount } from "../../helpers/renderCount";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import type { User as SUser } from "../../../model/User.js";
+import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
+import { registerAdminCommandHelp } from "../../help.js";
+import { renderCount } from "../../helpers/renderCount.js";
 
 async function userCount(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
 		return sageMessage.reactBlock();
 	}
-	const users = await sageMessage.caches.users.getAll();
+	const users = await sageMessage.sageCache.users.getAll();
 	return renderCount(sageMessage, "Users", users.length);
-}
-
-async function renderUser(renderableContent: RenderableContent, user: SUser, discordUser: Optional<DUser>): Promise<void> {
-	renderableContent.appendTitledSection(`<b>${toHumanReadable(discordUser) || "<i>Unknown</i>"}</b>`);
-	renderableContent.append(`<b>User Id</b> ${user.did}`);
-	renderableContent.append(`<b>UUID</b> ${user.id}`);
-	renderableContent.append(`<b>Username</b> ${discordUser?.username || "<i>Unknown</i>"}`);
-}
-
-async function userList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
-	let users = await sageMessage.caches.users.getAll();
-	if (users) {
-		const filter = sageMessage.args.join(" ");
-		if (filter && users.length) {
-			const lower = filter.toLowerCase();
-			users = await filterAsync(users, async user => {
-				const discordUser = await sageMessage.discord.fetchUser(user.did);
-				return discordUser?.username?.toLowerCase().includes(lower) ?? false;
-			});
-		}
-
-		const renderableContent = createAdminRenderableContent(sageMessage.bot);
-		renderableContent.setTitle(`<b>user-list</b>`);
-		if (users.length) {
-			await forEachAsync(users, async user => renderUser(renderableContent, user, await sageMessage.discord.fetchUser(user.did)));
-		} else {
-			renderableContent.append(`<blockquote>No Users Found!</blockquote>`);
-		}
-		await sageMessage.send(renderableContent);
-	}
-	return Promise.resolve();
 }
 
 async function userUpdate(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin) {
 		return sageMessage.reactBlock();
 	}
-	const dialogType = sageMessage.args.removeAndReturnDialogType();
-	const sagePostType = sageMessage.args.removeAndReturnSagePostType();
-	const updated = await sageMessage.sageUser.update({ dialogType, sagePostType });
+	const dialogPostType = sageMessage.args.getEnum(DialogPostType, "dialogPostType");
+	const sagePostType = sageMessage.args.getEnum(DialogPostType, "sagePostType");
+	const updated = await sageMessage.sageUser.update({ dialogPostType, sagePostType });
 	if (updated) {
 		return userDetails(sageMessage);
 	}
@@ -68,13 +30,13 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 async function userDetails(sageMessage: SageMessage): Promise<void> {
 	let user: SUser | null = sageMessage.sageUser;
 	if (sageMessage.isSuperUser) {
-		const userDid = await sageMessage.args.removeAndReturnUserDid();
+		const userDid = sageMessage.args.getUserId("user");
 		if (userDid) {
-			user = await sageMessage.caches.users.getByDid(userDid);
+			user = await sageMessage.sageCache.users.getByDid(userDid);
 		}
 		if (!user) {
-			const userId = sageMessage.args.removeAndReturnUuid();
-			user = await sageMessage.caches.users.getById(userId);
+			const userId = sageMessage.args.getUuid("user");
+			user = await sageMessage.sageCache.users.getById(userId);
 		}
 		if (!user) {
 			user = sageMessage.sageUser;
@@ -105,10 +67,10 @@ async function userDetails(sageMessage: SageMessage): Promise<void> {
 		renderableContent.append("");
 		renderableContent.append(`<b>RPG Sage Id</b> ${user.id}`);
 
-		const dialogType = DialogType[user.defaultDialogType!] ?? `<i>unset (Embed)</i>`;
-		renderableContent.append(`<b>Preferred Dialog Type</b> ${dialogType}`);
+		const dialogPostType = DialogPostType[user.dialogPostType!] ?? `<i>unset (Embed)</i>`;
+		renderableContent.append(`<b>Preferred Dialog Type</b> ${dialogPostType}`);
 
-		const sagePostType = DialogType[user.defaultSagePostType!] ?? `<i>unset (Embed)</i>`;
+		const sagePostType = DialogPostType[user.sagePostType!] ?? `<i>unset (Embed)</i>`;
 		renderableContent.append(`<b>Preferred Sage Post Type</b> ${sagePostType}`);
 
 		// TODO: List any games, gameRoles, servers, serverRoles!
@@ -122,13 +84,9 @@ export function registerUser(): void {
 	registerAdminCommand(userCount, "user-count");
 	registerAdminCommandHelp("Admin", "SuperUser", "User", "user count");
 
-	registerAdminCommand(userList, "user-list");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user list");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user list {optionalNameFilter}");
-
 	registerAdminCommand(userDetails, "user-details");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user details {@UserMention}");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user details {UserId}");
+	registerAdminCommandHelp("Admin", "SuperUser", "User", "user details *@UserMention*");
+	registerAdminCommandHelp("Admin", "SuperUser", "User", "user details *uuid*");
 
 	registerAdminCommand(userUpdate, "user-set", "user-update");
 }
