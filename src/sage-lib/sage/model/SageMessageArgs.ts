@@ -14,7 +14,7 @@ import type { TColorAndType } from "./Colors.js";
 import type { GameOptions } from "./Game.js";
 import type { GameCharacterCore } from "./GameCharacter.js";
 import { ColorType } from "./HasColorsCore.js";
-import { SageCommandArgs } from "./SageCommandArgs.js";
+import { SageCommandArgs, type Names } from "./SageCommandArgs.js";
 import type { SageMessage } from "./SageMessage.js";
 import type { Server, ServerOptions } from "./Server.js";
 
@@ -22,13 +22,7 @@ export type TKeyValuePair = { key: string; value: string; };
 
 type TArgIndexRet<T> = { arg: string; index: number; ret: T };
 
-export type TNames = {
-	charName?: string;
-	oldName?: string;
-	name?: string;
-	newName?: string;
-	count?: number;
-};
+
 
 export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	public constructor(sageMessage: SageMessage, private argsManager: ArgsManager) {
@@ -152,7 +146,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return serverOptions;
 	}
 
-	public getCharacterOptions(names: TNames, userDid?: Snowflake): GameCharacterCore {
+	public getCharacterOptions(names: Names, userDid?: Snowflake): GameCharacterCore {
 		// get the options directly
 		const characterCore: GameCharacterCore = {
 			alias: this.getString("alias")!,
@@ -253,14 +247,14 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return undefined;
 	}
 
-	public removeAndReturnNames(defaultJoinRemaining = false, defaultJoinSeparator = " "): TNames {
-		const names = <TNames>{
+	public removeAndReturnNames(defaultJoinRemaining = false, defaultJoinSeparator = " "): Names {
+		const names = {
 			charName: this.argsManager.removeByKey("charName") ?? this.argsManager.removeByKey("char"),
 			oldName: this.argsManager.removeByKey("oldName"),
 			name: this.argsManager.removeByKey("name"),
 			newName: this.argsManager.removeByKey("newName"),
 			count: 0
-		};
+		} as Names;
 		names.count = (names.charName ? 1 : 0) + (names.oldName ? 1 : 0) + (names.name ? 1 : 0) + (names.newName ? 1 : 0);
 		if (!names.count) {
 			names.name = this.removeAndReturnName(defaultJoinRemaining, defaultJoinSeparator);
