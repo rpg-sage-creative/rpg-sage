@@ -7,6 +7,20 @@ import { isUuid, type UUID } from "@rsc-utils/uuid-utils";
 import type { GuildBasedChannel, Role, User } from "discord.js";
 import type { SageCommand } from "./SageCommand.js";
 
+/** An object containing names. */
+export type Names = {
+	/** Name of the parent character.  */
+	charName?: string;
+	/** Old name when renaming. */
+	oldName?: string;
+	/** Name of the character. */
+	name?: string;
+	/** New name when renaming. */
+	newName?: string;
+	/** Count of names present in the object. */
+	count: number;
+};
+
 export abstract class SageCommandArgs<T extends SageCommand> {
 	public constructor(public sageCommand: T) { }
 
@@ -96,6 +110,16 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	/** Returns true if getEnum(type, name) is not null and not undefined. */
 	public hasEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): boolean {
 		return isDefined(this.getEnum(type, name));
+	}
+
+	/** Gets all the different names that might be passed into the command. */
+	public getNames(): Names {
+		const charName = this.getString("charName") ?? this.getString("char") ?? undefined;
+		const oldName = this.getString("oldName") ?? undefined;
+		const name = this.getString("name") ?? undefined;
+		const newName = this.getString("newName") ?? undefined;
+		const count = (charName ? 1 : 0) + (oldName ? 1 : 0) + (name ? 1 : 0) + (newName ? 1 : 0);
+		return { charName, oldName, name, newName, count };
 	}
 
 	/**
