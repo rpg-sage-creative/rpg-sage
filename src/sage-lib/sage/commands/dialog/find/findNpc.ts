@@ -1,12 +1,11 @@
-import { GameCharacter } from "../../../model/GameCharacter";
-import { SageMessage } from "../../../model/SageMessage";
+import type { GameCharacter } from "../../../model/GameCharacter.js";
+import type { SageCommand } from "../../../model/SageCommand.js";
 
-export function findNpc(sageMessage: SageMessage, npcName: string): GameCharacter | undefined {
-	if (sageMessage.gameChannel && sageMessage.isGameMaster) {
-			return sageMessage.game!.nonPlayerCharacters.findByName(npcName)
-				?? sageMessage.game!.nonPlayerCharacters.findCompanionByName(npcName);
-	} else if (!sageMessage.channel || sageMessage.channel.dialog) {
-		return sageMessage.sageUser.nonPlayerCharacters.findByName(npcName);
+export function findNpc(sageCommand: SageCommand, npcName: string): GameCharacter | undefined {
+	if (sageCommand.gameChannel && sageCommand.isGameMaster) {
+			return sageCommand.game!.nonPlayerCharacters.findByName(npcName)
+				?? sageCommand.game!.nonPlayerCharacters.findCompanionByName(npcName);
 	}
-	return undefined;
+	return sageCommand.sageUser.nonPlayerCharacters.findByName(npcName)
+		?? sageCommand.sageUser.nonPlayerCharacters.findByCompanionName(npcName);
 }
