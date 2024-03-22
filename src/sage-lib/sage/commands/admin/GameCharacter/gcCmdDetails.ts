@@ -1,12 +1,12 @@
-import { GameCharacter } from "../../../model/GameCharacter";
-import type { SageMessage } from "../../../model/SageMessage";
-import type { TNames } from "../../../model/SageMessageArgsManager";
-import { findCompanion } from "./findCompanion";
-import { getCharacterTypeMeta } from "./getCharacterTypeMeta";
-import { getUserDid } from "./getUserDid";
-import { sendGameCharacter } from "./sendGameCharacter";
-import { sendNotFound } from "./sendNotFound";
-import { testCanAdminCharacter } from "./testCanAdminCharacter";
+import { GameCharacter } from "../../../model/GameCharacter.js";
+import type { Names } from "../../../model/SageCommandArgs.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { findCompanion } from "./findCompanion.js";
+import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
+import { getUserDid } from "./getUserDid.js";
+import { sendGameCharacter } from "./sendGameCharacter.js";
+import { sendNotFound } from "./sendNotFound.js";
+import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 export async function gcCmdDetails(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -17,7 +17,7 @@ export async function gcCmdDetails(sageMessage: SageMessage): Promise<void> {
 	const userDid = await getUserDid(sageMessage),
 		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser,
 		characterManager = characterTypeMeta.isGmOrNpcOrMinion ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
-		names = characterTypeMeta.isGm ? <TNames>{ name: sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName } : sageMessage.args.removeAndReturnNames(true);
+		names = characterTypeMeta.isGm ? <Names>{ name: sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName } : sageMessage.args.removeAndReturnNames(true);
 
 	const character =
 		characterTypeMeta.isCompanion ? findCompanion(characterManager, userDid, names)

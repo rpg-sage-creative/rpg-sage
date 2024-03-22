@@ -1,11 +1,11 @@
 import type { Optional } from "@rsc-utils/type-utils";
-import type { CharacterManager } from "../../../model/CharacterManager";
-import { GameCharacter } from "../../../model/GameCharacter";
-import type { SageMessage } from "../../../model/SageMessage";
-import { getCharacterTypeMeta } from "./getCharacterTypeMeta";
-import { getUserDid } from "./getUserDid";
-import { promptCharConfirm } from "./promptCharConfirm";
-import { testCanAdminCharacter } from "./testCanAdminCharacter";
+import type { CharacterManager } from "../../../model/CharacterManager.js";
+import { GameCharacter } from "../../../model/GameCharacter.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
+import { getUserDid } from "./getUserDid.js";
+import { promptCharConfirm } from "./promptCharConfirm.js";
+import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 function urlToName(url: Optional<string>): string | undefined {
 	return url?.split("/").pop()?.split(".").shift();
@@ -19,7 +19,7 @@ export async function gcCmdAdd(sageMessage: SageMessage): Promise<void> {
 
 	const userDid = await getUserDid(sageMessage),
 		names = sageMessage.args.removeAndReturnNames(),
-		core = sageMessage.args.removeAndReturnCharacterOptions(names, userDid!);
+		core = sageMessage.args.getCharacterOptions(names, userDid!);
 
 	if (!core.name) {
 		core.name = urlToName(core.tokenUrl) ?? urlToName(core.avatarUrl)!;
