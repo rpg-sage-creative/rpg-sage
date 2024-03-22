@@ -8,7 +8,7 @@ import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { isNotBlank, unwrap } from "@rsc-utils/string-utils";
 import { isDefined, type Args, type EnumLike, type Optional } from "@rsc-utils/type-utils";
 import { isNonNilUuid } from "@rsc-utils/uuid-utils";
-import type { Collection, GuildBasedChannel, MessageAttachment, Role } from "discord.js";
+import type { Collection, GuildBasedChannel, MessageAttachment, Role, User } from "discord.js";
 import { ArgsManager } from "../../discord/ArgsManager.js";
 import type { TColorAndType } from "./Colors.js";
 import type { GameOptions } from "./Game.js";
@@ -517,6 +517,27 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		if (keyValueArg.hasUnset) return null;
 		if (keyValueArg.hasValue && isNotBlank(keyValueArg.value)) {
 			return keyValueArg.value;
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the named option as a User.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid User or "unset".
+	 */
+	public getUser(name: string): Optional<User>;
+	/** Gets the named option as a User */
+	public getUser(name: string, required: true): User;
+	public getUser(name: string): Optional<User> {
+		const keyValueArg = this.getKeyValueArg(name);
+		if (!keyValueArg.hasKey) return undefined;
+		if (keyValueArg.hasUnset) return null;
+		if (keyValueArg.hasValue) {
+			const userId = parseId(keyValueArg.value, "user");
+			if (userId) {
+				return this.sageCommand.message.mentions.users.get(userId) ?? null;
+			}
 		}
 		return null;
 	}

@@ -1,7 +1,6 @@
-import { isDefined, type Optional } from "@rsc-utils/type-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
-import type { GuildBasedChannel, Role, Snowflake } from "discord.js";
-import { SageCommandArgs, type EnumLike } from "./SageCommandArgs.js";
+import type { EnumLike, Optional } from "@rsc-utils/type-utils";
+import type { GuildBasedChannel, Role, User } from "discord.js";
+import { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageReaction } from "./SageReaction.js";
 
 export class SageReactionArgs extends SageCommandArgs<SageReaction> {
@@ -82,6 +81,16 @@ export class SageReactionArgs extends SageCommandArgs<SageReaction> {
 		return null;
 	}
 
-	public async getUserIds(_name: string, _expandRole?: boolean): Promise<Snowflake[]> { return []; }
+	/**
+	 * Gets the named option as a User.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid User or "unset".
+	 */
+	public getUser(name: string): Optional<User>;
+	/** Gets the named option as a User */
+	public getUser(name: string, required: true): User;
+	public getUser(): Optional<User> {
+		return null;
+	}
 
 }

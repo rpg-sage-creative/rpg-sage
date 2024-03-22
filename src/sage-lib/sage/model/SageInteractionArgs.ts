@@ -1,10 +1,9 @@
-import { type Optional } from "@rsc-utils/type-utils";
-import type { CommandInteraction, GuildBasedChannel, Role } from "discord.js";
-import { type EnumLike, SageCommandArgs } from "./SageCommandArgs.js";
+import type { EnumLike, Optional } from "@rsc-utils/type-utils";
+import type { CommandInteraction, GuildBasedChannel, Role, User } from "discord.js";
+import { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageInteraction } from "./SageInteraction.js";
 
 export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
-
 
 	private get interaction(): CommandInteraction { return this.sageCommand.interaction as CommandInteraction; }
 
@@ -93,6 +92,20 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 		if (!this.hasKey(name)) return undefined;
 		if (this.hasUnset(name)) return null;
 		return this.interaction.options.getString(name, required);
+	}
+
+	/**
+	 * Gets the named option as a User.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid User or "unset".
+	 */
+	public getUser(name: string): Optional<User>;
+	/** Gets the named option as a User */
+	public getUser(name: string, required: true): User;
+	public getUser(name: string): Optional<User> {
+		if (!this.hasKey(name)) return undefined;
+		if (this.hasUnset(name)) return null;
+		return this.interaction.options.getUser(name) as User;
 	}
 
 }

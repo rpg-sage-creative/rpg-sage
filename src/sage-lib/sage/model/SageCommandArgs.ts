@@ -1,11 +1,11 @@
 import { DiceCritMethodType, DicePostType, DiceSecretMethodType, PostType, SageChannelType, parseSageChannelType } from "@rsc-sage/types";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import { isDefined, type Optional } from "@rsc-utils/type-utils";
-import { isUuid, type UUID } from "@rsc-utils/uuid-utils";
-import type { GuildBasedChannel, Role } from "discord.js";
-import type { SageCommand } from "./SageCommand";
 import { parseIds } from "@rsc-utils/discord-utils";
 import { parseEnum } from "@rsc-utils/enum-utils";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import { isDefined, type EnumLike, type Optional } from "@rsc-utils/type-utils";
+import { isUuid, type UUID } from "@rsc-utils/uuid-utils";
+import type { GuildBasedChannel, Role, User } from "discord.js";
+import type { SageCommand } from "./SageCommand.js";
 
 export abstract class SageCommandArgs<T extends SageCommand> {
 	public constructor(public sageCommand: T) { }
@@ -169,6 +169,38 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 		return true;
 	}
 
+	/**
+	 * Gets the named option as a User.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid User or "unset".
+	 */
+	public abstract getUser(name: string): Optional<User>;
+	/** Gets the named option as a User */
+	public abstract getUser(name: string, required: true): User;
+
+	/** Returns true if getUser(name) is not null and not undefined. */
+	public hasUser(name: string): boolean {
+		return isDefined(this.getUser(name));
+	}
+
+	/**
+	 * Gets the named option as a Snowflake.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid Snowflake or "unset".
+	 */
+	public getUserId(name: string): Optional<Snowflake>;
+	/** Gets the named option as a Snowflake */
+	public getUserId(name: string, required: true): Snowflake;
+	public getUserId(name: string): Optional<Snowflake> {
+		const user = this.getUser(name);
+		return user ? user.id : user;
+	}
+
+	/** Returns true if getUserId(name) is not null and not undefined. */
+	public hasUserId(name: string): boolean {
+		return isDefined(this.getUserId(name));
+	}
+
 	/** Returns an array of user snowflakes passed in for the given argument. Optionally finds roles and gets all the users from the roles. */
 	public async getUserIds(name: string, expandRoles?: boolean): Promise<Snowflake[]> {
 		/** @todo investigate iterating over all the message.mentions and testing the stringValue for the \bSNOWFLAKE\b */
@@ -226,7 +258,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 export function cleanEnumArgValues<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>, value: string): string;
 export function cleanEnumArgValues(enumLike: EnumLike<any, any>, value: string): string {
 	if (enumLike === PostType) {
-		return /post/i.test(value) ? "content" : value;
+		return /post/i.test(value) ? "Content" : value;
 	}
 	if (enumLike === SageChannelType) {
 		return SageChannelType[parseSageChannelType(value)!];
@@ -235,8 +267,14 @@ export function cleanEnumArgValues(enumLike: EnumLike<any, any>, value: string):
 		return /x2/i.test(value) ? "TimesTwo" : value;
 	}
 	// DiceOutputType = fine
-	if (enumLike === PostType) {
-		return value.replace(/post/i, "content");
+	if (enumLike === DicePostType) {
+		const multi = /multi/i.test(value);
+		if (/embed/i.test(value)) {
+			return multi ? "MultipleEmbeds" : "SingleEmbed";
+		}else if (/post/.test(value)) {
+			return multi ? "MultiplePosts" : "SinglePost";
+		}
+		return value;
 	}
 	if (enumLike === DiceSecretMethodType) {
 		if (/gm/i.test(value)) {
