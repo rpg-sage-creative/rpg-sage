@@ -3,48 +3,11 @@ import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, verbose } from "@rsc-utils/console-utils";
 import { getBotCodeName, getDataRoot } from "@rsc-utils/env-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional, type OrNull } from "@rsc-utils/type-utils";
 import { isNonNilUuid, randomUuid, type UUID } from "@rsc-utils/uuid-utils";
-import type { GameType } from "../../../../sage-common/index.js";
-import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice/index.js";
-import type { DicePostType } from "../../commands/dice.js";
 import type { SageCache } from "../../model/SageCache.js";
 
-export type TPermissionType = keyof typeof PermissionType;
-export enum PermissionType { None = 0, Read = 1, React = 2, Write = 3 }
-export type TDialogType = keyof typeof DialogType;
-export enum DialogType { Embed = 0, Post = 1 }
-export interface IChannelOptions {
-	// Features
-	admin?: boolean;
-	commands?: boolean;
-	dialog?: boolean;
-	dice?: boolean;
-	search?: boolean;
-
-	// Access
-	gameMaster?: PermissionType;
-	player?: PermissionType;
-	nonPlayer?: PermissionType;
-
-	//Defaults
-	defaultDialogType?: DialogType;
-	defaultCritMethodType?: CritMethodType;
-	defaultDicePostType?: DicePostType;
-	defaultDiceOutputType?: DiceOutputType;
-	defaultDiceSecretMethodType?: DiceSecretMethodType;
-	defaultGameType?: GameType;
-
-	// Future Use
-	sendCommandTo?: Snowflake;
-	sendDialogTo?: Snowflake;
-	sendDiceTo?: Snowflake;
-	sendSearchTo?: Snowflake;
-}
-export interface IChannel extends IChannelOptions {
-	did: Snowflake;
-}
+export { DialogPostType as DialogType, SageChannel as IChannel } from "@rsc-sage/types";
 
 export class HasIdCoreAndSageCache<T extends IdCore<U>, U extends string = string> extends HasIdCore<T, U> {
 	public constructor(core: T, protected sageCache: SageCache) { super(core); }
@@ -196,5 +159,5 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 	public static get objectTypePlural(): string {
 		return this.objectType + "s";
 	}
-	public static DataPath = getDataRoot("sage");
+	public static readonly DataPath = getDataRoot("sage");
 }
