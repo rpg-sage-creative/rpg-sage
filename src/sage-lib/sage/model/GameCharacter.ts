@@ -1,15 +1,15 @@
+import type { DialogPostType } from "@rsc-sage/types";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import { NIL_SNOWFLAKE, isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
-import { PathbuilderCharacter, TPathbuilderCharacter, getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
+import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
 import { doStatMath } from "../commands/dice/doStatMath.js";
-import { DialogType } from "../repo/base/IdRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
-import type { TKeyValuePair } from "./SageMessageArgsManager.js";
+import type { TKeyValuePair } from "./SageMessageArgs.js";
 
 export type TDialogMessage = {
 	channelDid: Snowflake;
@@ -24,7 +24,7 @@ export type TDialogMessage = {
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion" | "minion";
 type AutoChannelData = {
 	channelDid: Snowflake;
-	dialogPostType?: DialogType;
+	dialogPostType?: DialogPostType;
 	userDid?: Snowflake;
 };
 export interface GameCharacterCore {
