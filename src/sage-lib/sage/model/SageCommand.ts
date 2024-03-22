@@ -1,4 +1,4 @@
-import { SageChannelType, GameSystemType, PostType } from "@rsc-sage/types";
+import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannelType } from "@rsc-sage/types";
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
 import { debug } from "@rsc-utils/console-utils";
 import type { DInteraction, DTextChannel, DiscordKey } from "@rsc-utils/discord-utils";
@@ -6,7 +6,6 @@ import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { CommandInteraction, type If, type MessageActionRow, type MessageAttachment, type MessageButton, type MessageEmbed, type MessageSelectMenu } from "discord.js";
-import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/common.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
@@ -199,7 +198,7 @@ export abstract class SageCommand<
 		return this.allowCommand;
 	}
 
-	public get dialogPostType(): PostType {
+	public get dialogPostType(): DialogPostType {
 		return this.cache.get("dialogPostType", () => this.sageUser.dialogPostType ?? this.gameChannel?.dialogPostType ?? this.game?.dialogPostType ?? this.serverChannel?.dialogPostType ?? this.server?.dialogPostType ?? 0);
 	}
 
@@ -286,14 +285,14 @@ export abstract class SageCommand<
 	//#region dice settings
 
 	public get gameSystemType(): GameSystemType {
-		return this.cache.get("gameType", () => this.game?.gameSystemType ?? this.serverChannel?.gameSystemType ?? this.server?.gameSystemType ?? 0) as GameSystemType;
+		return this.cache.get("gameType", () => this.game?.gameSystemType ?? this.serverChannel?.gameSystemType ?? this.server?.gameSystemType ?? 0);
 	}
 
-	public get diceCritMethodType(): CritMethodType {
+	public get diceCritMethodType(): DiceCritMethodType {
 		return this.cache.get("diceCritMethodType", () => this.gameChannel?.diceCritMethodType ?? this.game?.diceCritMethodType ?? this.serverChannel?.diceCritMethodType ?? this.server?.diceCritMethodType ?? 0);
 	}
 
-	public get dicePostType(): PostType {
+	public get dicePostType(): DicePostType {
 		return this.cache.get("dicePostType", () => this.gameChannel?.dicePostType ?? this.game?.dicePostType ?? this.serverChannel?.dicePostType ?? this.server?.dicePostType ?? 0);
 	}
 

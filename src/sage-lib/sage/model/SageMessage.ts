@@ -1,3 +1,4 @@
+import { SageChannelType } from "@rsc-sage/types";
 import { Cache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnNull, warn } from "@rsc-utils/console-utils";
 import { DiscordKey, handleDiscordErrorReturnNull, safeMentions, toHumanReadable, toMessageUrl, type DMessage, type DMessageChannel } from "@rsc-utils/discord-utils";
@@ -5,6 +6,7 @@ import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/
 import { type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Message, User } from "discord.js";
+import { ArgsManager } from "../../discord/ArgsManager.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
@@ -19,10 +21,8 @@ import { SageCache } from "./SageCache.js";
 import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageMessageArgs } from "./SageMessageArgs.js";
 import type { TAlias } from "./User.js";
-import type { IHasChannels, IHasGame } from "./index.js";
+import type { HasChannels, HasGame } from "./index.js";
 import { addMessageDeleteButton } from "./utils/deleteButton.js";
-import { SageChannelType } from "@rsc-sage/types";
-import { ArgsManager } from "../../discord/ArgsManager.js";
 
 interface SageMessageCore extends SageCommandCore {
 	message: DMessage;
@@ -34,7 +34,7 @@ interface SageMessageCore extends SageCommandCore {
 
 export class SageMessage
 	extends SageCommand<SageMessageCore, SageMessageArgs>
-	implements IHasGame, IHasChannels {
+	implements HasGame, HasChannels {
 
 	private constructor(protected core: SageMessageCore, cache?: Cache) {
 		super(core, cache);
@@ -187,7 +187,7 @@ export class SageMessage
 
 	//#endregion
 
-	// #region IHasChannels
+	// #region HasChannels
 
 	/** Returns the channelDid this message (or its thread) is in. */
 	public get channelDid(): Snowflake | undefined {

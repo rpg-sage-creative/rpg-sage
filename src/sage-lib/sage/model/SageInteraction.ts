@@ -16,7 +16,7 @@ import type { GameCharacter } from "./GameCharacter.js";
 import { SageCache } from "./SageCache.js";
 import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageInteractionArgs } from "./SageInteractionArgs.js";
-import type { IHasChannels, IHasGame } from "./index.js";
+import type { HasChannels, HasGame } from "./index.js";
 
 interface SageInteractionCore extends SageCommandCore {
 	interaction: DInteraction;
@@ -25,7 +25,7 @@ interface SageInteractionCore extends SageCommandCore {
 
 export class SageInteraction<T extends DInteraction = any>
 	extends SageCommand<SageInteractionCore, SageInteractionArgs>
-	implements IHasGame, IHasChannels {
+	implements HasGame, HasChannels {
 
 	private constructor(protected core: SageInteractionCore, cache?: Cache) {
 		super(core, cache);
@@ -228,7 +228,7 @@ export class SageInteraction<T extends DInteraction = any>
 
 	//#endregion
 
-	// #region IHasChannels
+	// #region HasChannels
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
 	public get channel(): IChannel | undefined {
@@ -272,7 +272,7 @@ export class SageInteraction<T extends DInteraction = any>
 
 	// #endregion
 
-	//#region IHasGame
+	//#region HasGame
 
 	/** Get the PlayerCharacter if there a game and the actor has a PlayerCharacter OR the actor has a PlayerCharacter set to use this channel with AutoChannel */
 	public get playerCharacter(): GameCharacter | undefined {
