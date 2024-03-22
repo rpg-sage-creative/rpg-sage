@@ -1,6 +1,5 @@
-import { DiceCritMethodType, DicePostType, DiceSecretMethodType, PostType, SageChannelType, parseSageChannelType } from "@rsc-sage/types";
+import { parseEnum } from "@rsc-sage/types";
 import { parseIds } from "@rsc-utils/discord-utils";
-import { parseEnum } from "@rsc-utils/enum-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type EnumLike, type Optional } from "@rsc-utils/type-utils";
 import { isUuid, type UUID } from "@rsc-utils/uuid-utils";
@@ -102,7 +101,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): Optional<V> {
 		const string = this.getString(name);
 		if (isDefined(string)) {
-			return parseEnum(type, cleanEnumArgValues(type, string)) ?? null;
+			return parseEnum(type, string) ?? null;
 		}
 		return string;
 	}
@@ -267,47 +266,4 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 		return isDefined(this.getUuid(name));
 	}
 
-}
-
-// export function getEnum<K extends string = string, V extends number = number>(args: SageCommandArgs, enumLike: EnumLike<K, V>, ...keys: string[]): Optional<V> {
-// 	for (const key of keys) {
-// 		const value = args.getEnum(enumLike, key);
-// 		if (value !== undefined) {
-// 			return value;
-// 		}
-// 	}
-// 	return undefined;
-// }
-
-export function cleanEnumArgValues<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>, value: string): string;
-export function cleanEnumArgValues(enumLike: EnumLike<any, any>, value: string): string {
-	if (enumLike === PostType) {
-		return /post/i.test(value) ? "Content" : value;
-	}
-	if (enumLike === SageChannelType) {
-		return SageChannelType[parseSageChannelType(value)!];
-	}
-	if (enumLike === DiceCritMethodType) {
-		return /x2/i.test(value) ? "TimesTwo" : value;
-	}
-	// DiceOutputType = fine
-	if (enumLike === DicePostType) {
-		const multi = /multi/i.test(value);
-		if (/embed/i.test(value)) {
-			return multi ? "MultipleEmbeds" : "SingleEmbed";
-		}else if (/post/.test(value)) {
-			return multi ? "MultiplePosts" : "SinglePost";
-		}
-		return value;
-	}
-	if (enumLike === DiceSecretMethodType) {
-		if (/gm/i.test(value)) {
-			return "GameMasterChannel";
-		}else if (/dm/i.test(value)) {
-			return "GameMasterDirect";
-		}
-		return value;
-	}
-	// GameType = fine
-	return value;
 }
