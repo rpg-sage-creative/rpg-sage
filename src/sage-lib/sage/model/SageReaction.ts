@@ -27,7 +27,7 @@ export class SageReaction
 
 	private constructor(protected core: SageReactionCore, cache?: Cache) {
 		super(core, cache);
-		this.args = new SageReactionArgs();
+		this.args = new SageReactionArgs(this);
 	}
 
 	public get isAdd(): boolean {

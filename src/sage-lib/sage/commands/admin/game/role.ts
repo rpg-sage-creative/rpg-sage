@@ -1,7 +1,7 @@
-import { IGameRole, TGameRoleType, GameRoleType } from "../../../model/Game";
-import type { SageMessage } from "../../../model/SageMessage";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
-import { registerAdminCommandHelp } from "../../help";
+import { type IGameRole, type TGameRoleType, GameRoleType } from "../../../model/Game.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
+import { registerAdminCommandHelp } from "../../help.js";
 
 function getGameRoleLabel(gameRole: IGameRole): TGameRoleType {
 	return <TGameRoleType>GameRoleType[gameRole.type || 0];
@@ -34,8 +34,8 @@ async function gameRoleSet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const roleDid = await sageMessage.args.removeAndReturnRoleDid();
-	const roleType = sageMessage.args.removeAndReturnEnum<GameRoleType>(GameRoleType);
+	const roleDid = sageMessage.args.getRoleId("role");
+	const roleType = sageMessage.args.getEnum(GameRoleType, "type");
 	if (!roleDid || !roleType) {
 		return sageMessage.reactFailure();
 	}
@@ -62,8 +62,8 @@ async function gameRoleRemove(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const roleType = sageMessage.args.removeAndReturnEnum<GameRoleType>(GameRoleType);
-	if (roleType === undefined) {
+	const roleType = sageMessage.args.getEnum(GameRoleType, "type");
+	if (!roleType) {
 		return sageMessage.reactFailure();
 	}
 

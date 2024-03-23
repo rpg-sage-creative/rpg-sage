@@ -1,14 +1,14 @@
-import { discordPromptYesNo } from "../../../../discord/prompts";
-import type { SageMessage } from "../../../model/SageMessage";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
-import { registerAdminCommandHelp } from "../../help";
+import { discordPromptYesNo } from "../../../../discord/prompts.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
+import { registerAdminCommandHelp } from "../../help.js";
 
 async function prefixSet(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminSage) {
 		return sageMessage.reactBlock();
 	}
 
-	if (sageMessage.args?.length > 1) {
+	if (sageMessage.args?.toArray().length > 1) {
 		return sageMessage.reactFailure();
 	}
 

@@ -1,8 +1,8 @@
+import { GameSystemType } from "@rsc-sage/types";
 import { SearchScore } from "@rsc-utils/search-utils";
-import { TResultsLink, getSearchResultsLinks, sortSearchResults } from "../index.js";
-import { GameType } from "../../../sage-common/index.js";
 import { GameSearchInfo } from "../../GameSearchInfo.js";
 import type { TParsedSearchInfo } from "../../common.js";
+import { type TResultsLink, getSearchResultsLinks, sortSearchResults } from "../index.js";
 import { AonPf1SearchBase } from "./AonPf1SearchBase.js";
 import { Pf1eSearchResults } from "./Pf1eSearchResults.js";
 
@@ -25,7 +25,7 @@ export async function searchAonPf1e(parsedSearchInfo: TParsedSearchInfo, nameOnl
 	const url = createSearchUrl(parsedSearchInfo.searchText);
 	const links = await getSearchResultsLinks(url);
 
-	const searchInfo = new GameSearchInfo(GameType.PF1e, parsedSearchInfo.searchText, nameOnly ? "" : "g");
+	const searchInfo = new GameSearchInfo(GameSystemType.PF1e, parsedSearchInfo.searchText, nameOnly ? "" : "g");
 	const searchResults = new Pf1eSearchResults(searchInfo);
 	links.forEach(link => searchResults.add(new SearchScore(new AonPf1SearchBase(link))));
 	sortSearchResults(searchResults);

@@ -3,12 +3,12 @@ import { warn } from "@rsc-utils/console-utils";
 import { nth } from "@rsc-utils/number-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e";
-import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e";
-import type { SageMessage } from "../model/SageMessage";
-import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
-import { renderAll } from "./default";
-import { registerCommandHelp } from "./help";
+import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e/index.js";
+import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e/index.js";
+import type { SageMessage } from "../model/SageMessage.js";
+import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
+import { renderAll } from "./default.js";
+import { registerCommandHelp } from "./help.js";
 
 // #region Spell
 function reduceByLevel<T extends Spell<string, any>>(spells: T[]): T[][] {
@@ -105,7 +105,7 @@ function filterFocusSpells(archetypeName: Optional<string>, className: Optional<
 	}
 }
 async function spellListFocus(sageMessage: SageMessage): Promise<void> {
-	const archetypeOrClassOrDomain = (sageMessage.args.find(s => s?.trim()) || "").trim();
+	const archetypeOrClassOrDomain = sageMessage.args.nonKeyValuePairs()[0] ?? "";
 	if (archetypeOrClassOrDomain.toLowerCase() === "help") {
 		//TODO: short circuit help command?
 		return;
@@ -129,7 +129,7 @@ async function spellListFocus(sageMessage: SageMessage): Promise<void> {
 
 	} else if (!archetypeName && !className && !domain) {
 		if (archetypeOrClassOrDomain.replace(/\W/g, "") === "bysource") {
-			for (let renderableContent of renderAll("FocusSpell", "FocusSpells", true)) {
+			for (const renderableContent of renderAll("FocusSpell", "FocusSpells", true)) {
 				await sageMessage.send(renderableContent);
 			}
 			return;

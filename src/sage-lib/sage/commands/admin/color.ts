@@ -1,16 +1,16 @@
 import { partition } from "@rsc-utils/array-utils";
 import { errorReturnNull } from "@rsc-utils/console-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
-import { discordPromptYesNo } from "../../../discord/prompts";
-import type { Colors } from "../../model/Colors";
-import type { Game } from "../../model/Game";
-import { ColorType } from "../../model/HasColorsCore";
-import type { SageMessage } from "../../model/SageMessage";
-import type { Server } from "../../model/Server";
-import { registerAdminCommand } from "../cmd";
-import { registerAdminCommandHelp } from "../help";
-import { BotServerGameType } from "../helpers/BotServerGameType";
-import { embedColor } from "../helpers/embedColor";
+import { discordPromptYesNo } from "../../../discord/prompts.js";
+import type { Colors } from "../../model/Colors.js";
+import type { Game } from "../../model/Game.js";
+import { ColorType } from "../../model/HasColorsCore.js";
+import type { SageMessage } from "../../model/SageMessage.js";
+import type { Server } from "../../model/Server.js";
+import { registerAdminCommand } from "../cmd.js";
+import { registerAdminCommandHelp } from "../help.js";
+import { BotServerGameType } from "../helpers/BotServerGameType.js";
+import { embedColor } from "../helpers/embedColor.js";
 
 //#region list
 
@@ -104,7 +104,7 @@ async function _colorGet(sageMessage: SageMessage, ...colors: Optional<Colors>[]
 
 	colors = colors.filter(isDefined);
 
-	const colorType = sageMessage.args.removeAndReturnEnum<ColorType>(ColorType)!;
+	const colorType = sageMessage.args.getEnum(ColorType, "type")!;
 	let inherited = false;
 	let color = colors.shift()!.get(colorType);
 	while (!color && colors.length) {
@@ -260,7 +260,7 @@ async function colorUnsetServer(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const colorType = sageMessage.args.removeAndReturnEnum<ColorType>(ColorType);
+	const colorType = sageMessage.args.getEnum(ColorType, "type")!;
 	const unset = sageMessage.server.colors.unset(colorType);
 	if (!unset) {
 		return sageMessage.reactFailure();
@@ -277,7 +277,7 @@ async function colorUnsetGame(sageMessage: SageMessage): Promise<void> {
 
 	const game = sageMessage.game!;
 
-	const colorType = sageMessage.args.removeAndReturnEnum<ColorType>(ColorType);
+	const colorType = sageMessage.args.getEnum(ColorType, "type")!;
 	const unset = game.colors.unset(colorType);
 	if (!unset) {
 		return sageMessage.reactFailure();

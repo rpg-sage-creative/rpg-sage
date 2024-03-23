@@ -17,7 +17,7 @@ export type Names = {
 	/** New name when renaming. */
 	newName?: string;
 	/** Count of names present in the object. */
-	count: number;
+	count?: number;
 };
 
 export abstract class SageCommandArgs<T extends SageCommand> {

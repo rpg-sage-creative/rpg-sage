@@ -1,14 +1,14 @@
 import { error, warn } from "@rsc-utils/console-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import { DieRollGrade } from "../../../../sage-dice";
-import { Dice } from "../../../../sage-dice/dice/pf2e";
-import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e";
-import { ColorType } from "../../model/HasColorsCore";
-import type { SageMessage } from "../../model/SageMessage";
-import { registerCommandRegex } from "../cmd";
-import { registerCommandHelp } from "../help";
-import { createRenderableContent } from "../helpers/createRenderableContent";
+import { Dice } from "../../../../sage-dice/dice/pf2e/index.js";
+import { DieRollGrade } from "../../../../sage-dice/index.js";
+import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e/index.js";
+import { ColorType } from "../../model/HasColorsCore.js";
+import type { SageMessage } from "../../model/SageMessage.js";
+import { registerCommandRegex } from "../cmd.js";
+import { registerCommandHelp } from "../help.js";
+import { createRenderableContent } from "../helpers/createRenderableContent.js";
 
 export type TPfsFaction = "Horizon Hunters" | "Vigilant Seal" | "Envoys' Alliance" | "Grand Archive";
 
@@ -212,8 +212,9 @@ function calculateTierInfo(tier: string, pcLevels: number[]): TTierInfo {
 	};
 }
 function pfsTier(sageMessage: SageMessage): void {
-	const tierString = sageMessage.args.shift()!;
-	const pcLevelStrings = sageMessage.args;
+	const args = sageMessage.args.nonKeyValuePairs();
+	const tierString = args.shift()!;
+	const pcLevelStrings = args;
 	//this: Discord.Message, tierString: string, ...pcLevelStrings: string[]
 
 	const tierInfo = calculateTierInfo(tierString, cleanPcLevels(pcLevelStrings)),
@@ -244,18 +245,19 @@ function registerTiers(): void {
 
 // #region Scenario/Quest Randomizer/Scaler
 export type TScenarioCallback = (sageMessage: SageMessage, tierInfo: TTierInfo) => RenderableContent;
-export type TScenario = { id: string; tier: string; callback: TScenarioCallback; }
+export type TScenario = { id: string; tier: string; callback: TScenarioCallback; };
 const scenarios: TScenario[] = [];
 export function addScenario(scenarioId: string, tier: string, callback: TScenarioCallback): void {
 	scenarios.push({ id: scenarioId, tier: tier, callback: callback });
 }
 
 function pfsScenario(sageMessage: SageMessage): void {
-	const scenarioOrQuestId = sageMessage.args.shift();
-	const pcLevelStrings = sageMessage.args;
+	const args = sageMessage.args.nonKeyValuePairs();
+	const scenarioOrQuestId = args.shift();
+	const pcLevelStrings = args;
 	//this: Discord.Message, tierString: string, ...pcLevelStrings: string[]
 	try {
-		const scenarioOrQuestIdUpper = scenarioOrQuestId && scenarioOrQuestId.toUpperCase() || null,
+		const scenarioOrQuestIdUpper = scenarioOrQuestId?.toUpperCase() ?? null,
 			scenario = scenarios.find(_scenario => _scenario.id === scenarioOrQuestIdUpper);
 		if (!scenario) {
 			const renderableContent = createPfsRenderableContent(sageMessage);

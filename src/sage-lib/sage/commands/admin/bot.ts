@@ -1,11 +1,11 @@
+import { GameSystemType } from "@rsc-sage/types";
 import { errorReturnEmptyArray } from "@rsc-utils/console-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { getBuildInfo } from "@rsc-utils/env-utils";
-import { GameType } from "../../../../sage-common";
-import type { Bot } from "../../model/Bot";
-import type { SageMessage } from "../../model/SageMessage";
-import { createAdminRenderableContent, registerAdminCommand } from "../cmd";
-import { registerAdminCommandHelp } from "../help";
+import type { Bot } from "../../model/Bot.js";
+import type { SageMessage } from "../../model/SageMessage.js";
+import { createAdminRenderableContent, registerAdminCommand } from "../cmd.js";
+import { registerAdminCommandHelp } from "../help.js";
 
 async function botList(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
@@ -38,12 +38,12 @@ function searchStatusToReadable(status: string | boolean): string {
 	}
 	return status;
 }
-function keyAndStatusToOutput(gameType: GameType, status: boolean | string): string {
+function keyAndStatusToOutput(gameType: GameSystemType, status: boolean | string): string {
 	const emoji = status === true ? ":green_circle:" : status === false ? ":no_entry_sign:" : ":yellow_circle:";
-	return `[spacer] ${emoji} <b>${GameType[gameType]}</b> ${searchStatusToReadable(status)}`;
+	return `[spacer] ${emoji} <b>${GameSystemType[gameType]}</b> ${searchStatusToReadable(status)}`;
 }
 function getBotSearchStatus(bot: Bot): string[] {
-	return Object.keys(GameType)
+	return Object.keys(GameSystemType)
 		.filter(key => +key)
 		.map(key => keyAndStatusToOutput(+key, bot.getSearchStatus(+key)));
 }
@@ -81,13 +81,14 @@ async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
 		return sageMessage.reactBlock();
 	}
-	const gameType = sageMessage.args.removeAndReturnGameType();
+	const gameType = sageMessage.args.getEnum(GameSystemType, "system");
 	if (!gameType) {
 		return sageMessage.reactFailure("Unable to parse GameType.");
 	}
 
-	const setEnabled = sageMessage.args.length === 1 && sageMessage.args[0] === "true";
-	const setInactive = sageMessage.args.length === 1 && sageMessage.args[0] === "false";
+	const args = sageMessage.args.toArray();
+	const setEnabled = args.length === 1 && args[0] === "true";
+	const setInactive = args.length === 1 && args[0] === "false";
 	const disabledMessage = sageMessage.args.join(" ");
 	const status = setEnabled ? true : setInactive ? false : (disabledMessage || "Unknown Reason");
 	const saved = await sageMessage.bot.setSearchStatus(gameType, status);

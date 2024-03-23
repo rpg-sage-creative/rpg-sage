@@ -1,4 +1,4 @@
-import { DiceCritMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, PostType, SageChannelType, type DialogOptions, type DiceOptions, type SageChannel, type SageChannelOptions, type SystemOptions } from "@rsc-sage/types";
+import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannelType, type DialogOptions, type DiceOptions, type SageChannel, type SageChannelOptions, type SystemOptions } from "@rsc-sage/types";
 import { Color } from "@rsc-utils/color-utils";
 import { parseId } from "@rsc-utils/discord-utils";
 import { parseEnum } from "@rsc-utils/enum-utils";
@@ -9,7 +9,7 @@ import { isNotBlank, unwrap } from "@rsc-utils/string-utils";
 import { isDefined, type Args, type EnumLike, type Optional } from "@rsc-utils/type-utils";
 import { isNonNilUuid } from "@rsc-utils/uuid-utils";
 import type { Collection, GuildBasedChannel, MessageAttachment, Role, User } from "discord.js";
-import { ArgsManager } from "../../discord/ArgsManager.js";
+import type { ArgsManager } from "../../discord/ArgsManager.js";
 import type { TColorAndType } from "./Colors.js";
 import type { GameOptions } from "./Game.js";
 import type { GameCharacterCore } from "./GameCharacter.js";
@@ -22,8 +22,6 @@ export type TKeyValuePair = { key: string; value: string; };
 
 type TArgIndexRet<T> = { arg: string; index: number; ret: T };
 
-
-
 export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	public constructor(sageMessage: SageMessage, private argsManager: ArgsManager) {
 		super(sageMessage);
@@ -31,11 +29,17 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 	//#region deprecated passthroughs
 	/** @deprecated */
+	public join(joiner?: string) { return this.argsManager.join(joiner); }
+	/** @deprecated */
 	public shift() { return this.argsManager.shift(); }
 	/** @deprecated */
 	public keyValuePairs() { return this.argsManager.keyValuePairs(); }
 	/** @deprecated */
 	public filter(predicate: (value: string, index: number, array: string[]) => unknown, arg?: any) { return this.argsManager.filter(predicate, arg); }
+	/** @deprecated */
+	public nonKeyValuePairs() { return this.argsManager.findArgIndexNonArgs().map(non => non.arg).filter(s => s.trim()); }
+	/** @deprecated */
+	public toArray(): string[] { return this.argsManager; }
 	//#endregion
 
 	//#region Old
@@ -91,7 +95,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	}
 	public getDialogOptions(): Args<DialogOptions> | undefined {
 		const dialogOptions = {
-			dialogPostType: this.getEnum(PostType, "dialogPost"),
+			dialogPostType: this.getEnum(DialogPostType, "dialogPost"),
 			gmCharacterName: this.getString("gmCharName"),
 			sendDialogTo: this.getChannelId("dialogTo"),
 		};
@@ -104,7 +108,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		const diceOptions = {
 			diceCritMethodType: this.getEnum(DiceCritMethodType, "diceCrit"),
 			diceOutputType: this.getEnum(DiceOutputType, "diceOutput"),
-			dicePostType: this.getEnum(PostType, "dicePost"),
+			dicePostType: this.getEnum(DicePostType, "dicePost"),
 			diceSecretMethodType: this.getEnum(DiceSecretMethodType, "diceSecret"),
 			sendDiceTo: this.getChannelId("diceTo"),
 		};
@@ -279,6 +283,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return roleDid ?? null;
 	}
 
+	/** @deprecated */
 	public async removeAndReturnServer(): Promise<Optional<Server>> {
 		if (this.argsManager.isEmpty) {
 			return null;
@@ -293,24 +298,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		);
 
 		return server ?? null;
-	}
-
-	public async removeAndReturnServerChannel(): Promise<SageChannel | null> {
-		const server = this.sageCommand.server;
-		if (!server) {
-			return null;
-		}
-
-		const withIndex = await this.findChannelIndexWithDid();
-		if (withIndex) {
-			const channel = server.getChannel(withIndex.ret);
-			if (channel) {
-				this.argsManager.removeAt(withIndex.index);
-				return channel;
-			}
-		}
-
-		return server.getChannel(this.sageCommand.discordKey) ?? null;
 	}
 
 	// public async removeAndReturnUserDids(): Promise<Discord.Snowflake[]> {

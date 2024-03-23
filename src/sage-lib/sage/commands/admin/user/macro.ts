@@ -3,6 +3,7 @@ import { isUrl } from "@rsc-utils/https-utils";
 import { StringMatcher, unwrap, wrap } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
+import { SageCommand } from "../../../model/SageCommand.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { TMacro } from "../../../model/User.js";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
@@ -49,7 +50,7 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 		return noMacrosFound(sageMessage);
 	}
 
-	const categoryInput = sageMessage.args.removeKeyValuePair(/cat(egory)?/i)?.value ?? sageMessage.args[0] ?? "";
+	const categoryInput = sageMessage.args.getString("cat") ?? sageMessage.args.getString("category") ?? "";
 	const cleanCategory = StringMatcher.clean(categoryInput);
 	const filtered = macros.filter(macro => macro.category && cleanCategory === StringMatcher.clean(macro.category));
 	if (filtered.length) {
@@ -158,14 +159,21 @@ async function macroUpdate(sageMessage: SageMessage, existing: TMacro, updated: 
 	}
 	return false;
 }
+function pair(sageComand: SageCommand, ...keys: string[]): { key:string; value:string; } | undefined | null {
+	for (const key of keys) {
+		const value = sageComand.args.getString(key);
+		if (value) return { key, value };
+	}
+	return undefined;
+}
 async function macroSet(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
 		return sageMessage.reactBlock();
 	}
 
-	const namePair = sageMessage.args.removeKeyValuePair("name");
-	const categoryPair = sageMessage.args.removeKeyValuePair(/cat(egory)?/i);
-	const contentPair = sageMessage.args.removeKeyValuePair(/dice|macro|value|table/i);
+	const namePair = pair(sageMessage, "name");
+	const categoryPair = pair(sageMessage, "cat", "category");
+	const contentPair = pair(sageMessage, "dice", "macro", "value", "table");
 
 	// check the table value specifically to ensure we have a valid table before saving the macro
 	if (contentPair?.key === "table") {
@@ -216,8 +224,8 @@ async function macroMove(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const categoryPair = sageMessage.args.removeKeyValuePair(/cat(egory)?/i);
-	const macroName = sageMessage.args.removeAndReturnName(true);
+	const categoryPair = pair(sageMessage, "cat", "category");
+	const macroName = sageMessage.args.getString("name");
 	if (!macroName || !categoryPair) {
 		return sageMessage.reactFailure();
 	}
@@ -281,7 +289,7 @@ async function macroDeleteCategory(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const category = sageMessage.args.removeKeyValuePair(/cat(egory)?/i)?.value ?? sageMessage.args[0];
+	const category = sageMessage.args.getString("cat") ?? sageMessage.args.getString("category") ?? sageMessage.args.toArray()[0];
 	if (category) {
 		return deleteCategory(sageMessage, category);
 	}
@@ -323,8 +331,8 @@ async function macroDelete(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const macroCategory = sageMessage.args.removeKeyValuePair(/cat(egory)?/i)?.value;
-	const macroName = sageMessage.args.removeAndReturnName(true);
+	const macroCategory = sageMessage.args.getString("category") ?? sageMessage.args.getString("cat");
+	const macroName = sageMessage.args.getString("name");
 	if (macroCategory) {
 		if (!macroName) {
 			return deleteCategory(sageMessage, macroCategory);

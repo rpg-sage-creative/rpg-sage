@@ -1,3 +1,4 @@
+import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
 import { error } from "@rsc-utils/console-utils";
 import { rollDie } from "@rsc-utils/dice-utils";
 import { type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
@@ -5,9 +6,8 @@ import { addCommas } from "@rsc-utils/number-utils";
 import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
 import type { Optional } from "@rsc-utils/type-utils";
 import type { ButtonInteraction } from "discord.js";
-import type { GameType } from "../../../sage-common/index.js";
+import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
-import { DiceOutputType, DiceSecretMethodType, TDiceOutput } from "../../../sage-dice/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
 import { CharacterManager } from "../model/CharacterManager.js";
@@ -37,20 +37,10 @@ type TInteraction = SageMessage | SageInteraction;
 
 type TGmChannel = Optional<DMessageTarget>;
 
-// type TDiceOutput = {
-// 	hasSecret: boolean;
-// 	inlineOutput: string;
-// 	input: string,
-// 	output: string;
-// };
-
-export enum DicePostType { SinglePost = 0, SingleEmbed = 1, MultiplePosts = 2, MultipleEmbeds = 3 }
-// export enum DiceSecretMethodType { Ignore = 0, Hide = 1, GameMasterChannel = 2, GameMasterDirect = 3 }
-
 type TDiscordDiceParseOptions = {
-	gameType?: GameType;
+	gameSystemType?: GameSystemType;
 	diceOutputType?: DiceOutputType;
-	critMethodType?: number;
+	diceCritMethodType?: DiceCritMethodType;
 	diceSecretMethodType?: DiceSecretMethodType;
 };
 
@@ -145,9 +135,9 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 
 	return DiscordDice.parse({
 		diceString: diceString,
-		defaultGameType: overrides?.gameType ?? sageMessage.gameType,
+		defaultGameType: overrides?.gameSystemType ?? sageMessage.gameSystemType,
 		defaultDiceOutputType: overrides?.diceOutputType ?? sageMessage.diceOutputType,
-		defaultCritMethodType: overrides?.critMethodType ?? sageMessage.critMethodType,
+		defaultCritMethodType: overrides?.diceCritMethodType ?? sageMessage.diceCritMethodType,
 		defaultDiceSecretMethodType: overrides?.diceSecretMethodType ?? sageMessage.diceSecretMethodType
 	});
 }
@@ -500,7 +490,7 @@ async function diceTest(sageMessage: SageMessage): Promise<void> {
 
 	const pairs = sageMessage.args.keyValuePairs(),
 		filtered = pairs.filter(pair => ["die", "sides", "type"].includes(pair.key.toLowerCase())),
-		pair = filtered.shift() ?? { key:sageMessage.args[0], value:+dequote(sageMessage.args[1]) };
+		pair = filtered.shift();
 	if (!pair?.value) {
 		await sageMessage.message.reply("*Die type not given!*");
 		return;

@@ -66,7 +66,7 @@ async function adminAdd(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const roleType = getAdminRoleType(sageMessage.command) ?? sageMessage.args.removeAndReturnEnum(AdminRoleType) ?? null;
+	const roleType = getAdminRoleType(sageMessage.command) ?? sageMessage.args.getEnum(AdminRoleType, "type") ?? null;
 	if (roleType === null) {
 		return sageMessage.reactFailure();
 	}
@@ -85,7 +85,7 @@ async function adminUpdate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const roleType = getAdminRoleType(sageMessage.command) ?? sageMessage.args.removeAndReturnEnum(AdminRoleType) ?? null;
+	const roleType = getAdminRoleType(sageMessage.command) ?? sageMessage.args.getEnum(AdminRoleType, "type") ?? null;
 	if (roleType === null) {
 		return sageMessage.reactFailure();
 	}

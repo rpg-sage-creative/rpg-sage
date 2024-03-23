@@ -1,3 +1,4 @@
+import { GameType } from "@rsc-sage/types";
 import { sortPrimitive, type SortResult } from "@rsc-utils/array-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
@@ -5,8 +6,6 @@ import { TokenParsers, ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, typ
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
-import { correctEscapeForEmoji } from "../index.js";
-import { GameType } from "../../../sage-common/index.js";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -30,6 +29,7 @@ import {
 	sumDicePartRolls,
 	sumDropKeep
 } from "../../common.js";
+import { correctEscapeForEmoji } from "../index.js";
 import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
 	DicePartCore, DicePartRollCore, DiceRollCore, TDice, TDiceGroup, TDiceGroupRoll, TDicePart, TDicePartCoreArgs, TDicePartRoll, TDiceRoll

@@ -1,10 +1,10 @@
 import type { Snowflake } from "discord.js";
-import type { SageMessage } from "../../../model/SageMessage";
-import type { TNames } from "../../../model/SageMessageArgs";
-import { getCharacter } from "./getCharacter";
-import type { TCharacterTypeMeta } from "./getCharacterTypeMeta";
+import type { Names } from "../../../model/SageCommandArgs.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { getCharacter } from "./getCharacter.js";
+import type { TCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 
-export async function getCharacterForStats(sageMessage: SageMessage, characterTypeMeta: TCharacterTypeMeta, userDid: Snowflake, names: TNames) {
+export async function getCharacterForStats(sageMessage: SageMessage, characterTypeMeta: TCharacterTypeMeta, userDid: Snowflake, names: Names) {
 	const { name } = names;
 	if (!name) {
 		return null;

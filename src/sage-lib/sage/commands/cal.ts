@@ -1,15 +1,15 @@
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { GDate } from "../../../sage-cal/pf2e/GDate";
-import { DaysPerMonth, Days as GDays, Months } from "../../../sage-cal/pf2e/cal";
-import { SDate } from "../../../sage-cal/sf1e/SDate";
-import { Days as SDays } from "../../../sage-cal/sf1e/cal";
-import { registerInteractionListener } from "../../discord/handlers";
-import type { SageInteraction } from "../model/SageInteraction";
-import type { SageMessage } from "../model/SageMessage";
-import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
-import { registerCommandHelp } from "./help";
+import { GDate } from "../../../sage-cal/pf2e/GDate.js";
+import { DaysPerMonth, Days as GDays, Months } from "../../../sage-cal/pf2e/cal.js";
+import { SDate } from "../../../sage-cal/sf1e/SDate.js";
+import { Days as SDays } from "../../../sage-cal/sf1e/cal.js";
+import { registerInteractionListener } from "../../discord/handlers.js";
+import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageMessage } from "../model/SageMessage.js";
+import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
+import { registerCommandHelp } from "./help.js";
 
 function calcYearDelta(from: TYearOrigin, to: TYearOrigin): number {
 	if (from === to) {
@@ -66,8 +66,9 @@ function _calDate(value?: Optional<string>, origin?: Optional<TYearOrigin>): Ren
 	return content;
 }
 function calDate(sageMessage: SageMessage): Promise<void> {
-	const date = sageMessage.args[0];
-	const origin = capitalize(sageMessage.args[1]) as TYearOrigin;
+	const args = sageMessage.args.toArray();
+	const date = args[0];
+	const origin = capitalize(args[1]) as TYearOrigin;
 	return sageMessage.send(_calDate(date, origin)) as Promise<any>;
 }
 

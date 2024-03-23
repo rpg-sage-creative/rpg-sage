@@ -1,6 +1,6 @@
-import { DiceSecretMethodType, type TDiceOutput } from "../../../../sage-dice";
+import { DicePostType } from "@rsc-sage/types";
+import { DiceSecretMethodType, type TDiceOutput } from "../../../../sage-dice/index.js";
 import type { SageCommand } from "../../model/SageCommand.js";
-import { DicePostType } from "../dice.js";
 import type { FormattedDiceOutput } from "./FormattedDiceOutput.js";
 
 /** Formats the output based on secret method and determines if we are posting or embedding. Also includes notification text in case needed. */

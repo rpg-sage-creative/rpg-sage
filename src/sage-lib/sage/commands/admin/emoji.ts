@@ -105,7 +105,7 @@ async function _emojiGet(sageMessage: SageMessage, ...emoji: Emoji[]): Promise<v
 
 	emoji = emoji.filter(isDefined);
 
-	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType)!;
+	const emojiType = sageMessage.args.getEnum(EmojiType, "type")!;
 	let inherited = false;
 	let _emoji = emoji.shift()!.get(emojiType);
 	while (!_emoji && emoji.length) {
@@ -150,7 +150,7 @@ async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
 
 	const server = sageMessage.server;
 
-	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType) ?? null;
+	const emojiType = sageMessage.args.getEnum(EmojiType, "type") ?? null;
 	const replacement = sageMessage.args.join("");
 	if (emojiType === null || !replacement) {
 		return sageMessage.reactFailure();
@@ -176,8 +176,8 @@ async function emojiSetGame(sageMessage: SageMessage): Promise<void> {
 
 	const game = sageMessage.game!;
 
-	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType) ?? null;
-	const replacement = sageMessage.args.join("");
+	const emojiType = sageMessage.args.getEnum(EmojiType, "type") ?? null;
+	const replacement = sageMessage.args.nonKeyValuePairs().join("");
 	if (emojiType === null || !replacement) {
 		return sageMessage.reactFailure();
 	}
@@ -264,7 +264,7 @@ async function emojiUnsetServer(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType)!;
+	const emojiType = sageMessage.args.getEnum(EmojiType, "type")!;
 	const unset = sageMessage.server.emoji.unset(emojiType);
 	if (!unset) {
 		return sageMessage.reactFailure();
@@ -281,7 +281,7 @@ async function emojiUnsetGame(sageMessage: SageMessage): Promise<void> {
 
 	const game = sageMessage.game!;
 
-	const emojiType = sageMessage.args.removeAndReturnEnum<EmojiType>(EmojiType)!;
+	const emojiType = sageMessage.args.getEnum(EmojiType, "type")!;
 	const unset = game.emoji.unset(emojiType);
 	if (!unset) {
 		return sageMessage.reactFailure();

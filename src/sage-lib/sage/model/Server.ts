@@ -1,55 +1,62 @@
+import type { DialogOptions, DialogPostType, DiceCritMethodType, DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, SageChannel, SystemOptions } from "@rsc-sage/types";
+import { parseGameSystem, updateServer } from "@rsc-sage/types";
 import { warn } from "@rsc-utils/console-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
+import { getHomeServerId } from "@rsc-utils/env-utils";
 import { applyChanges } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
+import type { Args, Optional } from "@rsc-utils/type-utils";
 import type { Guild } from "discord.js";
-import { GameType } from "../../../sage-common/index.js";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice/index.js";
-import { DicePostType } from "../commands/dice.js";
 import { ActiveBot } from "../model/ActiveBot.js";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository.js";
-import { DialogType, IChannel } from "../repo/base/IdRepository.js";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
-import { Game } from "./Game.js";
+import type { Game } from "./Game.js";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
+import type { SageCache } from "./SageCache.js";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
 export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdmin = 3 }
 export interface IAdminRole { did: Snowflake; type: AdminRoleType; }
 export interface IAdminUser { did: Snowflake; role: AdminRoleType; }
 
-export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji {
+export type ServerOptions = DialogOptions & DiceOptions & SystemOptions;
+
+export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, Partial<ServerOptions> {
 	admins: IAdminUser[];
-	channels: IChannel[];
+	channels: SageChannel[];
 	commandPrefix?: string;
-	defaultCritMethodType?: CritMethodType;
-	defaultDialogType?: DialogType;
-	defaultDiceOutputType?: DiceOutputType;
-	defaultDicePostType?: DicePostType;
-	defaultDiceSecretMethodType?: DiceSecretMethodType;
-	defaultGameType?: GameType;
-	defaultGmCharacterName: string;
 	name: string;
 	roles: IAdminRole[];
 }
 
+// export abstract class HasDiceOptions<Core extends Partial<DiceOptions>> {
+// 	declare protected core: Core;
+// 	public get diceCritMethodType(): DiceCritMethodType | undefined { return this.core.diceCritMethodType; }
+// 	public get diceOutputType(): DiceOutputType | undefined { return this.core.diceOutputType; }
+// 	public get dicePostType(): PostType | undefined { return this.core.dicePostType; }
+// 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
+// }
+
 export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IHasEmojiCore {
+	public constructor(core: ServerCore, sageCache: SageCache) {
+		super(updateServer(core), sageCache);
+	}
 
 	// #region Public Properties
 	public get admins(): IAdminUser[] { return this.core.admins ?? []; }
-	public get channels(): IChannel[] { return this.core.channels ?? []; }
+	public get channels(): SageChannel[] { return this.core.channels ?? []; }
 	public get commandPrefix(): string | undefined { return this.core.commandPrefix; }
-	public get defaultCritMethodType(): CritMethodType | undefined { return this.core.defaultCritMethodType; }
-	public get defaultDialogType(): DialogType | undefined { return this.core.defaultDialogType; }
-	public get defaultDiceOutputType(): DiceOutputType | undefined { return this.core.defaultDiceOutputType; }
-	public get defaultDicePostType(): DicePostType | undefined { return this.core.defaultDicePostType; }
-	public get defaultDiceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.defaultDiceSecretMethodType; }
-	public get defaultGameType(): GameType | undefined { return this.core.defaultGameType; }
-	public get defaultGmCharacterName(): string { return this.core.defaultGmCharacterName; }
+	public get dialogPostType(): DialogPostType | undefined { return this.core.dialogPostType; }
+	public get diceCritMethodType(): DiceCritMethodType | undefined { return this.core.diceCritMethodType; }
+	public get diceOutputType(): DiceOutputType | undefined { return this.core.diceOutputType; }
+	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
+	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
+	private _gameSystem?: GameSystem | null;
+	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
+	public get gameSystemType(): GameSystemType | undefined { return this.gameSystemType; }
+	public get gmCharacterName(): string { return this.core.gmCharacterName ?? "Game Master"; }
 	public get discord() { return this.sageCache.discord; }
 	public get name(): string { return this.core.name; }
 	public get roles(): IAdminRole[] { return this.core.roles ?? []; }
@@ -69,38 +76,38 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	public async findActiveGameByChannelDid(channelDid: Snowflake): Promise<Game | undefined> {
 		return this.sageCache.games.findActiveByDiscordKey(new DiscordKey(this.did, channelDid));
 	}
-	public async addGame(channelDid: Snowflake, name: string, _gameType: Optional<GameType>, _dialogType: Optional<DialogType>, _critMethodType: Optional<CritMethodType>, _diceOutputType: Optional<DiceOutputType>, _dicePostType: Optional<DicePostType>, _diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
-		const found = await this.findActiveGameByChannelDid(channelDid);
-		if (found) {
-			return false;
-		}
-		const gameType = _gameType ?? this.defaultGameType;
-		const critMethodType = _critMethodType ?? this.defaultCritMethodType;
-		const dialogType = _dialogType ?? this.defaultDialogType;
-		const diceOutputType = _diceOutputType ?? this.defaultDiceOutputType;
-		const dicePostType = _dicePostType ?? this.defaultDicePostType;
-		const diceSecretMethodType = _diceSecretMethodType ?? this.defaultDiceSecretMethodType;
-		const game = new Game({
-			objectType: "Game",
-			id: randomUuid(),
-			serverDid: this.did,
-			serverId: this.id,
-			createdTs: new Date().getTime(),
-			name: name,
-			gameType: gameType,
-			defaultCritMethodType: critMethodType,
-			defaultDialogType: dialogType,
-			defaultDiceOutputType: diceOutputType,
-			defaultDicePostType: dicePostType,
-			defaultDiceSecretMethodType: diceSecretMethodType,
-			channels: [{ did: channelDid, admin: true }],
-			colors: this.colors.toArray()
-		}, this, this.sageCache);
-		if (await game.save()) {
-			return this.save();
-		}
-		return false;
-	}
+	// public async addGame(channelDid: Snowflake, name: string, _gameType: Optional<GameType>, _dialogType: Optional<DialogType>, _critMethodType: Optional<CritMethodType>, _diceOutputType: Optional<DiceOutputType>, _dicePostType: Optional<DicePostType>, _diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
+	// 	const found = await this.findActiveGameByChannelDid(channelDid);
+	// 	if (found) {
+	// 		return false;
+	// 	}
+	// 	const gameType = _gameType ?? this.defaultGameType;
+	// 	const critMethodType = _critMethodType ?? this.defaultCritMethodType;
+	// 	const dialogType = _dialogType ?? this.defaultDialogType;
+	// 	const diceOutputType = _diceOutputType ?? this.defaultDiceOutputType;
+	// 	const dicePostType = _dicePostType ?? this.defaultDicePostType;
+	// 	const diceSecretMethodType = _diceSecretMethodType ?? this.defaultDiceSecretMethodType;
+	// 	const game = new Game({
+	// 		objectType: "Game",
+	// 		id: randomUuid(),
+	// 		serverDid: this.did,
+	// 		serverId: this.id,
+	// 		createdTs: new Date().getTime(),
+	// 		name: name,
+	// 		gameType: gameType,
+	// 		defaultCritMethodType: critMethodType,
+	// 		defaultDialogType: dialogType,
+	// 		defaultDiceOutputType: diceOutputType,
+	// 		defaultDicePostType: dicePostType,
+	// 		defaultDiceSecretMethodType: diceSecretMethodType,
+	// 		channels: [{ id: channelDid, admin: true }],
+	// 		colors: this.colors.toArray()
+	// 	}, this, this.sageCache);
+	// 	if (await game.save()) {
+	// 		return this.save();
+	// 	}
+	// 	return false;
+	// }
 	// #endregion
 
 	// #region Role actions
@@ -193,13 +200,15 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	// #endregion
 
 	// #region Channel actions
-	public async addOrUpdateChannels(...channels: IChannel[]): Promise<boolean> {
+	public async addOrUpdateChannels(...channels: Args<SageChannel>[]): Promise<boolean> {
 		channels.forEach(channel => {
-			const found = this.getChannel(channel.did);
+			const found = this.getChannel(new DiscordKey(this.did, channel.id));
 			if (found) {
 				applyChanges(found, channel);
 			} else {
-				(this.core.channels || (this.core.channels = [])).push({ ...channel });
+				const newChannel = { } as SageChannel;
+				applyChanges(newChannel, channel);
+				(this.core.channels || (this.core.channels = [])).push(newChannel);
 			}
 		});
 		return this.save();
@@ -211,7 +220,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 		}
 		channelDids.forEach(channelDid => {
 			if (channelDid) {
-				this.core.channels = this.core.channels.filter(_channel => _channel.did !== channelDid);
+				this.core.channels = this.core.channels.filter(_channel => _channel.id !== channelDid);
 			}
 		});
 		return this.core.channels.length !== count ? this.save() : false;
@@ -224,21 +233,21 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 		return this.admins.find(admin => admin.did === userDid);
 	}
 
-	public getChannel(discordKey: DiscordKey): IChannel | undefined;
-	public getChannel(channelDid: Optional<Snowflake>): IChannel | undefined;
-	public getChannel(didOrKey: Optional<Snowflake> | DiscordKey): IChannel | undefined {
+	public getChannel(discordKey: DiscordKey): SageChannel | undefined;
+	public getChannel(channelDid: Optional<Snowflake>): SageChannel | undefined;
+	public getChannel(didOrKey: Optional<Snowflake> | DiscordKey): SageChannel | undefined {
 		if (didOrKey) {
 			if (typeof(didOrKey) === "string") {
-				return this.channels.find(channel => channel.did === didOrKey);
+				return this.channels.find(channel => channel.id === didOrKey);
 			}
 			const channelAndThread = didOrKey.channelAndThread;
 			if (channelAndThread.thread && channelAndThread.channel) {
-				return this.channels.find(channel => channel.did === channelAndThread.thread)
-					?? this.channels.find(channel => channel.did === channelAndThread.channel);
+				return this.channels.find(channel => channel.id === channelAndThread.thread)
+					?? this.channels.find(channel => channel.id === channelAndThread.channel);
 			}else if (channelAndThread.thread) {
-				return this.channels.find(channel => channel.did === channelAndThread.thread);
+				return this.channels.find(channel => channel.id === channelAndThread.thread);
 			}else if (channelAndThread.channel) {
-				return this.channels.find(channel => channel.did === channelAndThread.channel);
+				return this.channels.find(channel => channel.id === channelAndThread.channel);
 			}
 		}
 		return undefined;
@@ -317,14 +326,12 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	// #endregion
 
 	//#region update (defaultGame, defaultDiceOutput)
-	public async update(gameType: Optional<GameType>, dialogType: Optional<DialogType>, critMethodType: Optional<CritMethodType>, diceOutputType: Optional<DiceOutputType>, dicePostType: Optional<DicePostType>, diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
-		this.core.defaultCritMethodType = critMethodType === null ? undefined : critMethodType ?? this.core.defaultCritMethodType;
-		this.core.defaultDialogType = dialogType === null ? undefined : dialogType ?? this.core.defaultDialogType;
-		this.core.defaultDiceOutputType = diceOutputType === null ? undefined : diceOutputType ?? this.core.defaultDiceOutputType;
-		this.core.defaultDicePostType = dicePostType === null ? undefined : dicePostType ?? this.core.defaultDicePostType;
-		this.core.defaultDiceSecretMethodType = diceSecretMethodType === null ? undefined : diceSecretMethodType ?? this.core.defaultDiceSecretMethodType;
-		this.core.defaultGameType = gameType === null ? undefined : gameType ?? this.core.defaultGameType;
-		return this.save();
+	public async update(changes: Args<ServerOptions>): Promise<boolean> {
+		const changed = applyChanges(this.core, changes);
+		if (changed) {
+			return this.save();
+		}
+		return false;
 	}
 	//#endregion
 
@@ -379,13 +386,13 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 			colors: activeBot.colors.toArray(),
 			did: guild.id,
 			emoji: [],
-			defaultCritMethodType: 0,
-			defaultDialogType: DialogType.Embed,
-			defaultDiceOutputType: DiceOutputType.M,
-			defaultDicePostType: DicePostType.SinglePost,
-			defaultDiceSecretMethodType: DiceSecretMethodType.Ignore,
-			defaultGameType: GameType.None,
-			defaultGmCharacterName: "Game Master",
+			// dialogPostType: DialogPostType.Embed,
+			// diceCritMethodType: DiceCritMethodType.Unknown,
+			// diceOutputType: DiceOutputType.M,
+			// dicePostType: DicePostType.SinglePost,
+			// diceSecretMethodType: DiceSecretMethodType.Ignore,
+			// gameSystemType: GameSystemType.None,
+			gmCharacterName: "Game Master",
 			id: null!,
 			name: guild.name,
 			objectType: "Server",
@@ -394,8 +401,11 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 		};
 	}
 
-	public static HomeServerDid: Snowflake = "480488957889609733";
-	public static isHome(serverDid: Snowflake): boolean {
-		return serverDid === Server.HomeServerDid;
+	public static isHome(serverId: Snowflake): boolean {
+		return serverId === getHomeServerId();
 	}
 }
+
+// export interface Server extends HasDiceOptions<ServerCore> { }
+
+// applyMixins(Server, [HasDiceOptions]);

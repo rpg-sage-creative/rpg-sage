@@ -1,10 +1,11 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import { updateSheet } from "../../pathbuilder";
-import { getCharacterForStats } from "./getCharacterForStats";
-import { getCharacterTypeMeta } from "./getCharacterTypeMeta";
-import { getUserDid } from "./getUserDid";
-import { promptCharConfirm } from "./promptCharConfirm";
-import { testCanAdminCharacter } from "./testCanAdminCharacter";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import type { TKeyValuePair } from "../../../model/SageMessageArgs.js";
+import { updateSheet } from "../../pathbuilder.js";
+import { getCharacterForStats } from "./getCharacterForStats.js";
+import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
+import { getUserDid } from "./getUserDid.js";
+import { promptCharConfirm } from "./promptCharConfirm.js";
+import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 export async function gcCmdStats(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -21,7 +22,7 @@ export async function gcCmdStats(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	await character.updateStats(sageMessage.args.keyValuePairs(), false);
+	await character.updateStats(sageMessage.args.keyValuePairs() as TKeyValuePair[], false);
 	return promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
 		const charSaved = await char.save(true);
 		if (charSaved) {
