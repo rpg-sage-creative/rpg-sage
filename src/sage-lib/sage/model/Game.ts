@@ -164,7 +164,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	public get name(): string { return this.core.name; }
 	private _gameSystem?: GameSystem | null;
 	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
-	public get gameSystemType(): GameSystemType | undefined { return this.gameSystemType; }
+	public get gameSystemType(): GameSystemType | undefined { return this.core.gameSystemType; }
 	/** @deprecated use .gameSystemType */
 	public get gameType(): GameSystemType | undefined { return this.core.gameSystemType; }
 	public get dialogPostType(): DialogPostType | undefined { return this.core.dialogPostType; }

@@ -55,7 +55,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
 	private _gameSystem?: GameSystem | null;
 	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
-	public get gameSystemType(): GameSystemType | undefined { return this.gameSystemType; }
+	public get gameSystemType(): GameSystemType | undefined { return this.core.gameSystemType; }
 	public get gmCharacterName(): string { return this.core.gmCharacterName ?? "Game Master"; }
 	public get discord() { return this.sageCache.discord; }
 	public get name(): string { return this.core.name; }
