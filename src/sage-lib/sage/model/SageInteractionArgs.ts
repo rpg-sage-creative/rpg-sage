@@ -16,7 +16,8 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	/** Returns true if the argument matching the given key has the value "unset". */
 	public hasUnset(name: string): boolean {
 		if (!this.hasKey(name)) return false;
-		const value = this.interaction.options.getString(name) ?? "";
+		const option = this.interaction.options.data.find(opt => opt.name === name);
+		const value = String(option?.value ?? "");
 		return /^\s*unset\s*$/i.test(value);
 	}
 
