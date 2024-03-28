@@ -10,7 +10,13 @@ export function registerCommand(): SlashCommand {
 				{ name:"By Level", value:"level" },
 				{ name:"By Spell Level", value:"spell" }
 			], isRequired:true },
-			{ name:"proficiency", description:"What Proficiency?", choices:["U","T","E","M","L"] },
+			{ name:"proficiency", description:"What Proficiency?", choices:[
+				["Untrained", "U"],
+				["Trained", "T"],
+				["Expert", "E"],
+				["Master", "M"],
+				["Legendary", "L"],
+			] },
 			{ name:"level", description:"Which Level?", isNumber:true }
 		]
 	};

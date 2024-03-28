@@ -23,8 +23,7 @@ export function addOptions<T extends BuilderCommand>(builder: T, options?: Slash
 			builder.addStringOption(opt => {
 				setNameAndRequired(opt, option);
 				option.choices?.forEach(choice => {
-					const [name, value] = toChoice(choice);
-					opt.addChoices({ name, value });
+					opt.addChoices(toChoice(choice));
 				});
 				return opt;
 			});
