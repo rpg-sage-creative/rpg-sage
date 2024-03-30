@@ -104,39 +104,62 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		return this[index];
 	}
 
-	/** Returns the first character with the given userDid. */
-	public findByUser(userDid: Snowflake): GameCharacter | undefined {
-		if (!userDid) {
-			return undefined;
+	/**
+	 * Finds character by user and name, if both given.
+	 * If only id is given, the first character for that user is returned.
+	 * If only name is given, the first character to match is returned.
+	 */
+	public findByUser(userDid: Optional<Snowflake>, name?: Optional<string>): GameCharacter | undefined {
+		if (userDid && name) {
+			return this.filterByUser(userDid).find(character => character.matches(name));
+		}else if (userDid) {
+			return this.find(character => character.userDid === userDid);
+		}else if (name) {
+			return this.find(character => character.matches(name));
 		}
-		return this.find(character => character.userDid === userDid);
+		return undefined;
 	}
 
-	/** Filters by userDid (if it exists) and then returns the first character that matches the given name. */
+	/** @deprecated use .findByUser() */
 	public findByUserAndName(userDid: Optional<Snowflake>, name: Optional<string>): GameCharacter | undefined {
-		if (userDid && name) {
-			const characters = this.filterByUser(userDid);
-			return characters.find(character => character.matches(name));
-		}
-		return this.findByName(name);
+		return this.findByUser(userDid, name);
 	}
+
 	//#endregion
 
 	//#region Companion
 
-	/** Finds the character for the given userDid and characterName and then returns the first companion that matches the given companion name. */
-	public findCompanion(userDid: Optional<Snowflake>, characterName: Optional<string>, companionName: Optional<string>): GameCharacter | undefined {
-		return this.findByUserAndName(userDid, characterName)?.companions.findByName(companionName);
-	}
+	/** Finds the first companion that matches the given companion name. */
+	public findCompanion(companionName: Optional<string>): GameCharacter | undefined;
+	/** Filters the characters for the given userDid and returns the first companion that matches the given companion name. */
+	public findCompanion(userDid: Optional<Snowflake>, companionName: Optional<string>): GameCharacter | undefined;
+	/** Filters the characters for the given userDid and characterName and returns the first companion that matches the given companion name. */
+	public findCompanion(userDid: Optional<Snowflake>, characterName: Optional<string>, companionName: Optional<string>): GameCharacter | undefined;
+	public findCompanion(...args: Optional<string>[]): GameCharacter | undefined {
+		// grab the args
+		const companionName = args.pop();
+		const userDid = args.shift();
+		const characterName = args.shift();
 
-	/** Iterates all the characters' companions and returns the first that matches the given companion name. */
-	public findCompanionByName(companionName: Optional<string>): GameCharacter | undefined {
-		let companion: GameCharacter | undefined;
-		if (companionName) {
-			this.find(character => companion = character.companions.findByName(companionName));
+		// filter on user
+		let characters = userDid ? this.filter(char => char.userDid === userDid) : this;
+
+		// filter on character
+		if (characterName) {
+			characters = characters.filter(char => char.matches(characterName));
 		}
+
+		// find companion
+		let companion: GameCharacter | undefined;
+		characters.find(character => companion = character.companions.findByName(companionName));
 		return companion;
 	}
+
+	/** @deprecated use .findCompanion(companionName) */
+	public findCompanionByName(companionName: Optional<string>): GameCharacter | undefined {
+		return this.findCompanion(companionName);
+	}
+
 	//#endregion
 
 	/** Returns the newest dialog message from all characters and companions. (Helpful for NPCs) */
