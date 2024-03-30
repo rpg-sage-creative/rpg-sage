@@ -6,7 +6,11 @@ import type { ChatOptions } from "./ChatOptions";
 import { doChat } from "./doChat";
 
 export async function pcChat(sageMessage: SageMessage, dialogContent: DialogContent, options: ChatOptions): Promise<void> {
-	const character = findPc(sageMessage, dialogContent.name);
+	let character = findPc(sageMessage, dialogContent.name);
+	if (!character && dialogContent.displayName) {
+		character = findPc(sageMessage, `${dialogContent.name} (${dialogContent.displayName})`);
+		if (character) dialogContent.displayName = undefined;
+	}
 	if (character) {
 		await doChat(sageMessage, { character, colorType:ColorType.PlayerCharacter, dialogContent }, options);
 	}else {
