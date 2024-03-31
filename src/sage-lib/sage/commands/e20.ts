@@ -20,8 +20,8 @@ import { registerInteractionListener } from "../../discord/handlers.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { SageCache } from "../model/SageCache.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
-import { parseDiceMatches, sendDice } from "./dice.js";
 import { SageMessage } from "../model/SageMessage.js";
+import { parseDiceMatches, sendDice } from "./dice.js";
 
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
 type TPlayerCharacterCore = PlayerCharacterCoreJoe | PlayerCharacterCorePR | PlayerCharacterCoreTransformer;
@@ -316,8 +316,10 @@ function createComponents(character: TPlayerCharacter): MessageActionRow[] {
 		createEdgeSnagShiftRow(character),
 		createSkillSelectRow(character, includeSpecs),
 		!includeSpecs ? createSkillSpecializationSelectRow(character) : null!,
+	].filter(row => row?.components.every(component => (component as MessageSelectMenu).options.length))
+	.concat([
 		createRollButtonRow(character)
-	].filter(row => row);
+	]);
 }
 
 type TOutput = { embeds:MessageEmbed[], components:MessageActionRow[] };
