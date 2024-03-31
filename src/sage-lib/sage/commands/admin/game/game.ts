@@ -355,8 +355,8 @@ async function gameDetails(sageCommand: SageCommand, skipPrune = false, _game?: 
 }
 
 function getServerValues(server: Server): Partial<GameOptions> {
-	const { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType } = server;
-	return { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType };
+	const { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType, gmCharacterName } = server;
+	return { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType, gmCharacterName };
 }
 
 function getArgValues(sageCommand: SageCommand): Args<GameOptions> {
@@ -367,8 +367,9 @@ function getArgValues(sageCommand: SageCommand): Args<GameOptions> {
 	const dicePostType = sageCommand.args.getEnum(DicePostType, "dicePost");
 	const diceSecretMethodType = sageCommand.args.getEnum(DiceSecretMethodType, "diceSecret");
 	const gameSystemType = sageCommand.args.getEnum(GameSystemType, "system");
-	debug({ dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType });
-	return { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType };
+	const gmCharacterName = sageCommand.args.getString("gmName");
+	debug({ dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType, gmCharacterName });
+	return { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType, gmCharacterName };
 }
 
 function getGameValues(sageCommand: SageCommand): Partial<GameOptions> {
@@ -447,7 +448,7 @@ async function postGameCreate(sageMessage: SageMessage): Promise<void> {
 		await sageMessage.reactFailure("Unknown Error; Game NOT Created!");
 
 	}else if (updated === null) {
-		await sageMessage.reactFailure("Please try:\n`sage!!game create name=\"GAME NAME\" type=\"PF2E\" ic=\"#IN_CHARACTER_CHANNEL\" ooc=\"OUT_OF_CHARACTER_CHANNEL\" gm=\"@GM_MENTION\" players=\"@PLAYER_ROLE_MENTION\"`");
+		await sageMessage.reactFailure("Please try:\n`sage!!game create name=\"GAME NAME\" type=\"PF2E\" ic=\"#IN_CHARACTER_CHANNEL\" ooc=\"OUT_OF_CHARACTER_CHANNEL\" gms=\"@GM_MENTION\" players=\"@PLAYER_ROLE_MENTION\"`");
 
 	}else if (updated === undefined) {
 		// do nothing
