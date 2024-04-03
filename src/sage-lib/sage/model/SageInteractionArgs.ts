@@ -10,13 +10,14 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	/** Returns true if an argument matches the given key, regardless of value. */
 	public hasKey(name: string): boolean {
 		if (!this.interaction.isApplicationCommand()) return false;
-		return this.interaction.options.get(name) !== null;
+		return this.interaction.options.get(name.toLowerCase()) !== null;
 	}
 
 	/** Returns true if the argument matching the given key has the value "unset". */
 	public hasUnset(name: string): boolean {
 		if (!this.hasKey(name)) return false;
-		const option = this.interaction.options.data.find(opt => opt.name === name);
+		const lower = name.toLowerCase();
+		const option = this.interaction.options.data.find(opt => opt.name === lower);
 		const value = String(option?.value ?? "");
 		return /^\s*unset\s*$/i.test(value);
 	}
@@ -32,7 +33,7 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	public getBoolean(name: string, required = false): Optional<boolean> {
 		if (!this.hasKey(name)) return undefined;
 		if (this.hasUnset(name)) return null;
-		return this.interaction.options.getBoolean(name, required);
+		return this.interaction.options.getBoolean(name.toLowerCase(), required);
 	}
 
 	/**
@@ -46,7 +47,7 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	public getChannel(name: string): Optional<GuildBasedChannel> {
 		if (!this.hasKey(name)) return undefined;
 		if (this.hasUnset(name)) return null;
-		return this.interaction.options.getChannel(name) as GuildBasedChannel;
+		return this.interaction.options.getChannel(name.toLowerCase()) as GuildBasedChannel;
 	}
 
 	public findEnum<K extends string = string, V extends number = number>(_type: EnumLike<K, V>): Optional<V> {
@@ -64,7 +65,7 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	public getNumber(name: string, required = false): Optional<number> {
 		if (!this.hasKey(name)) return undefined;
 		if (this.hasUnset(name)) return null;
-		return this.interaction.options.getNumber(name, required);
+		return this.interaction.options.getNumber(name.toLowerCase(), required);
 	}
 
 	/**
@@ -78,7 +79,7 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	public getRole(name: string): Optional<Role> {
 		if (!this.hasKey(name)) return undefined;
 		if (this.hasUnset(name)) return null;
-		return this.interaction.options.getRole(name) as Role;
+		return this.interaction.options.getRole(name.toLowerCase()) as Role;
 	}
 
 	/**
@@ -92,7 +93,7 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	public getString(name: string, required = false): Optional<string> {
 		if (!this.hasKey(name)) return undefined;
 		if (this.hasUnset(name)) return null;
-		return this.interaction.options.getString(name, required);
+		return this.interaction.options.getString(name.toLowerCase(), required);
 	}
 
 	/**
@@ -106,7 +107,7 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	public getUser(name: string): Optional<User> {
 		if (!this.hasKey(name)) return undefined;
 		if (this.hasUnset(name)) return null;
-		return this.interaction.options.getUser(name) as User;
+		return this.interaction.options.getUser(name.toLowerCase()) as User;
 	}
 
 }
