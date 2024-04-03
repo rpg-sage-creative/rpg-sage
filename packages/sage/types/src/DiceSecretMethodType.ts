@@ -5,7 +5,7 @@ export enum DiceSecretMethodType {
 	Hide = 1,
 	GameMasterChannel = 2,
 	GameMasterDirect = 3,
-	GameMasterThread = 4
+	// GameMasterThread = 4
 }
 
 export function parseDiceSecretMethodType(value: Optional<string>): DiceSecretMethodType | undefined {
@@ -22,9 +22,9 @@ export function parseDiceSecretMethodType(value: Optional<string>): DiceSecretMe
 		if (/dm/i.test(value)) {
 			return DiceSecretMethodType.GameMasterDirect;
 		}
-		if (/thread/i.test(value)) {
-			return DiceSecretMethodType.GameMasterThread;
-		}
+		// if (/thread/i.test(value)) {
+		// 	return DiceSecretMethodType.GameMasterThread;
+		// }
 	}
 	return undefined;
 }
