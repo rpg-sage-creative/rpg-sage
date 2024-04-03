@@ -11,7 +11,7 @@ function urlToName(url: Optional<string>): string | undefined {
 	return url?.split("/").pop()?.split(".").shift();
 }
 
-export async function gcCmdAdd(sageMessage: SageMessage): Promise<void> {
+export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
 	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
 		return sageMessage.reactBlock();

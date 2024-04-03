@@ -1,13 +1,13 @@
-import { registerAdminCommand } from "../cmd";
-import { registerAdminCommandHelp } from "../help";
-import { gcCmdAdd } from "./GameCharacter/gcCmdAdd";
-import { gcCmdAutoOff } from "./GameCharacter/gcCmdAutoOff";
-import { gcCmdAutoOn } from "./GameCharacter/gcCmdAutoOn";
-import { gcCmdDelete } from "./GameCharacter/gcCmdDelete";
-import { gcCmdDetails } from "./GameCharacter/gcCmdDetails";
-import { gcCmdList } from "./GameCharacter/gcCmdList";
-import { gcCmdStats } from "./GameCharacter/gcCmdStats";
-import { gcCmdUpdate } from "./GameCharacter/gcCmdUpdate";
+import { registerAdminCommand } from "../cmd.js";
+import { registerAdminCommandHelp } from "../help.js";
+import { gcCmdAutoOff } from "./GameCharacter/gcCmdAutoOff.js";
+import { gcCmdAutoOn } from "./GameCharacter/gcCmdAutoOn.js";
+import { gcCmdCreate } from "./GameCharacter/gcCmdCreate.js";
+import { gcCmdDelete } from "./GameCharacter/gcCmdDelete.js";
+import { gcCmdDetails } from "./GameCharacter/gcCmdDetails.js";
+import { gcCmdList } from "./GameCharacter/gcCmdList.js";
+import { gcCmdStats } from "./GameCharacter/gcCmdStats.js";
+import { gcCmdUpdate } from "./GameCharacter/gcCmdUpdate.js";
 
 function registerHelp(): void {
 	const AdminCategory = "Admin";
@@ -32,7 +32,7 @@ export function registerGameCharacter(): void {
 	registerAdminCommand(gcCmdList, "companion-list", "my-companion-list", "my-companions");
 	registerAdminCommand(gcCmdList, "minion-list", "my-minion-list", "my-minions");
 	registerAdminCommand(gcCmdDetails, "pc-details", "npc-details", "companion-details", "gm-details", "minion-details");
-	registerAdminCommand(gcCmdAdd, `pc-create`, `npc-create`, `companion-create`, `minion-create`);
+	registerAdminCommand(gcCmdCreate, `pc-create`, `npc-create`, `companion-create`, `minion-create`);
 	registerAdminCommand(gcCmdUpdate, "pc-update", "npc-update", "companion-update", "gm-update", "minion-update");
 	registerAdminCommand(gcCmdStats, "pc-stats", "npc-stats", "companion-stats", "minion-stats");
 	registerAdminCommand(gcCmdDelete, "pc-delete", "npc-delete", "companion-delete", "minion-delete");
