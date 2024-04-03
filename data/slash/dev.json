@@ -99,6 +99,7 @@
 								"description": "dialogPost",
 								"required": false
 							},
+							{ "type": 3, "name": "gmcharname", "description": "Game Master Character Name", "required": false },
 							{
 								"choices": [
 									{ "name": "Unknown", "value": "Unknown" },
@@ -187,6 +188,7 @@
 								"description": "dialogPost",
 								"required": false
 							},
+							{ "type": 3, "name": "gmcharname", "description": "Game Master Character Name", "required": false },
 							{
 								"choices": [
 									{ "name": "Unknown", "value": "Unknown" },
