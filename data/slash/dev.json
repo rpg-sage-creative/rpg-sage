@@ -1,73 +1,248 @@
 [
 	{
 		"options": [
+			{ "type": 1, "name": "dm", "description": "Establish direct message channel with RPG Sage.", "options": [] },
+			{ "type": 1, "name": "calendar", "description": "Calendar days/months for PF/SF Games", "options": [] },
+			{
+				"type": 1,
+				"name": "date",
+				"description": "Show today (or a specific day) for PF/SF Games",
+				"options": [
+					{ "type": 3, "name": "date", "description": "A specific date: yyyy-mm-dd", "required": false },
+					{
+						"choices": [
+							{ "name": "Absalom", "value": "Absalom" },
+							{ "name": "Earth", "value": "Earth" },
+							{ "name": "Golarion", "value": "Golarion" }
+						],
+						"type": 3,
+						"name": "origin",
+						"description": "Where does the year originate?",
+						"required": false
+					}
+				]
+			},
+			{
+				"type": 1,
+				"name": "dcs",
+				"description": "Show Difficulty Classes",
+				"options": [
+					{
+						"choices": [
+							{ "name": "Simple", "value": "simple" },
+							{ "name": "By Level", "value": "level" },
+							{ "name": "By Spell Level", "value": "spell" }
+						],
+						"type": 3,
+						"name": "table",
+						"description": "Which DCs?",
+						"required": true
+					},
+					{
+						"choices": [
+							{ "name": "Untrained", "value": "U" },
+							{ "name": "Trained", "value": "T" },
+							{ "name": "Expert", "value": "E" },
+							{ "name": "Master", "value": "M" },
+							{ "name": "Legendary", "value": "L" }
+						],
+						"type": 3,
+						"name": "proficiency",
+						"description": "What Proficiency?",
+						"required": false
+					},
+					{ "type": 10, "name": "level", "description": "Which Level?", "required": false }
+				]
+			},
 			{
 				"type": 2,
-				"name": "finder",
-				"description": "Finder",
+				"name": "game",
+				"description": "Game",
 				"options": [
 					{
 						"type": 1,
-						"name": "date",
-						"description": "Show today (or a specific day) for PF/SF Games",
+						"name": "create",
+						"description": "Creates a new RPG Sage Game",
 						"options": [
-							{ "type": 3, "name": "date", "description": "A specific date: yyy-mm-dd", "required": false },
+							{ "type": 3, "name": "name", "description": "name", "required": true },
 							{
 								"choices": [
-									{ "name": "Absalom", "value": "Absalom" },
-									{ "name": "Earth", "value": "Earth" },
-									{ "name": "Golarion", "value": "Golarion" }
+									{ "name": "None", "value": "None" },
+									{ "name": "PF1e", "value": "PF1e" },
+									{ "name": "PF2e", "value": "PF2e" },
+									{ "name": "SF1e", "value": "SF1e" },
+									{ "name": "SF2e", "value": "SF2e" },
+									{ "name": "CnC", "value": "CnC" },
+									{ "name": "E20", "value": "E20" },
+									{ "name": "DnD5e", "value": "DnD5e" },
+									{ "name": "Quest", "value": "Quest" },
+									{ "name": "VtM5e", "value": "VtM5e" }
 								],
 								"type": 3,
-								"name": "origin",
-								"description": "Where does the year originate?",
+								"name": "system",
+								"description": "Game System, ex: PF2e or DnD5e",
+								"required": false
+							},
+							{ "type": 3, "name": "ic", "description": "In Character Channel", "required": false },
+							{ "type": 3, "name": "ooc", "description": "Out of Character Channel", "required": false },
+							{ "type": 3, "name": "gm", "description": "GM Only Channel", "required": false },
+							{ "type": 3, "name": "misc", "description": "Misc Channel", "required": false },
+							{ "type": 3, "name": "gms", "description": "Game Masters", "required": false },
+							{ "type": 3, "name": "players", "description": "Players", "required": false },
+							{
+								"choices": [
+									{ "name": "Embed", "value": "Embed" },
+									{ "name": "Post", "value": "Post" }
+								],
+								"type": 3,
+								"name": "dialogpost",
+								"description": "dialogPost",
+								"required": false
+							},
+							{
+								"choices": [
+									{ "name": "Unknown", "value": "Unknown" },
+									{ "name": "TimesTwo", "value": "TimesTwo" },
+									{ "name": "RollTwice", "value": "RollTwice" },
+									{ "name": "AddMax", "value": "AddMax" }
+								],
+								"type": 3,
+								"name": "dicecrit",
+								"description": "Critical Hit Method, ex: RollTwice, TimesTwo",
+								"required": false
+							},
+							{
+								"choices": [
+									{ "name": "XXS", "value": "XXS" },
+									{ "name": "XS", "value": "XS" },
+									{ "name": "S", "value": "S" },
+									{ "name": "M", "value": "M" },
+									{ "name": "L", "value": "L" },
+									{ "name": "XL", "value": "XL" },
+									{ "name": "XXL", "value": "XXL" },
+									{ "name": "ROLLEM", "value": "ROLLEM" }
+								],
+								"type": 3,
+								"name": "diceoutput",
+								"description": "diceOutput",
+								"required": false
+							},
+							{
+								"choices": [
+									{ "name": "SinglePost", "value": "SinglePost" },
+									{ "name": "SingleEmbed", "value": "SingleEmbed" },
+									{ "name": "MultiplePosts", "value": "MultiplePosts" },
+									{ "name": "MultipleEmbeds", "value": "MultipleEmbeds" }
+								],
+								"type": 3,
+								"name": "dicepost",
+								"description": "dicePost",
+								"required": false
+							},
+							{
+								"choices": [
+									{ "name": "Ignore", "value": "Ignore" },
+									{ "name": "Hide", "value": "Hide" },
+									{ "name": "GameMasterChannel", "value": "GameMasterChannel" },
+									{ "name": "GameMasterDirect", "value": "GameMasterDirect" }
+								],
+								"type": 3,
+								"name": "dicesecret",
+								"description": "diceSecret",
 								"required": false
 							}
 						]
 					},
-					{ "type": 1, "name": "calendar", "description": "Calendar days/months for PF/SF Games", "options": [] }
-				]
-			},
-			{
-				"type": 2,
-				"name": "pf2e",
-				"description": "PF2E",
-				"options": [
 					{
 						"type": 1,
-						"name": "dcs",
-						"description": "Show Difficulty Classes",
+						"name": "update",
+						"description": "Updates an RPG Sage Game",
 						"options": [
+							{ "type": 3, "name": "name", "description": "name", "required": false },
 							{
 								"choices": [
-									{ "name": "Simple", "value": "simple" },
-									{ "name": "By Level", "value": "level" },
-									{ "name": "By Spell Level", "value": "spell" }
+									{ "name": "None", "value": "None" },
+									{ "name": "PF1e", "value": "PF1e" },
+									{ "name": "PF2e", "value": "PF2e" },
+									{ "name": "SF1e", "value": "SF1e" },
+									{ "name": "SF2e", "value": "SF2e" },
+									{ "name": "CnC", "value": "CnC" },
+									{ "name": "E20", "value": "E20" },
+									{ "name": "DnD5e", "value": "DnD5e" },
+									{ "name": "Quest", "value": "Quest" },
+									{ "name": "VtM5e", "value": "VtM5e" }
 								],
 								"type": 3,
-								"name": "table",
-								"description": "Which DCs?",
-								"required": true
-							},
-							{
-								"choices": [
-									{ "name": "U", "value": "U" },
-									{ "name": "T", "value": "T" },
-									{ "name": "E", "value": "E" },
-									{ "name": "M", "value": "M" },
-									{ "name": "L", "value": "L" }
-								],
-								"type": 3,
-								"name": "proficiency",
-								"description": "What Proficiency?",
+								"name": "system",
+								"description": "Game System, ex: PF2e or DnD5e",
 								"required": false
 							},
-							{ "type": 10, "name": "level", "description": "Which Level?", "required": false }
+							{
+								"choices": [
+									{ "name": "Embed", "value": "Embed" },
+									{ "name": "Post", "value": "Post" }
+								],
+								"type": 3,
+								"name": "dialogpost",
+								"description": "dialogPost",
+								"required": false
+							},
+							{
+								"choices": [
+									{ "name": "Unknown", "value": "Unknown" },
+									{ "name": "TimesTwo", "value": "TimesTwo" },
+									{ "name": "RollTwice", "value": "RollTwice" },
+									{ "name": "AddMax", "value": "AddMax" }
+								],
+								"type": 3,
+								"name": "dicecrit",
+								"description": "Critical Hit Method, ex: RollTwice, TimesTwo",
+								"required": false
+							},
+							{
+								"choices": [
+									{ "name": "XXS", "value": "XXS" },
+									{ "name": "XS", "value": "XS" },
+									{ "name": "S", "value": "S" },
+									{ "name": "M", "value": "M" },
+									{ "name": "L", "value": "L" },
+									{ "name": "XL", "value": "XL" },
+									{ "name": "XXL", "value": "XXL" },
+									{ "name": "ROLLEM", "value": "ROLLEM" }
+								],
+								"type": 3,
+								"name": "diceoutput",
+								"description": "diceOutput",
+								"required": false
+							},
+							{
+								"choices": [
+									{ "name": "SinglePost", "value": "SinglePost" },
+									{ "name": "SingleEmbed", "value": "SingleEmbed" },
+									{ "name": "MultiplePosts", "value": "MultiplePosts" },
+									{ "name": "MultipleEmbeds", "value": "MultipleEmbeds" }
+								],
+								"type": 3,
+								"name": "dicepost",
+								"description": "dicePost",
+								"required": false
+							},
+							{
+								"choices": [
+									{ "name": "Ignore", "value": "Ignore" },
+									{ "name": "Hide", "value": "Hide" },
+									{ "name": "GameMasterChannel", "value": "GameMasterChannel" },
+									{ "name": "GameMasterDirect", "value": "GameMasterDirect" }
+								],
+								"type": 3,
+								"name": "dicesecret",
+								"description": "diceSecret",
+								"required": false
+							}
 						]
 					}
 				]
 			},
-			{ "type": 1, "name": "dm", "description": "Establish direct message channel with RPG Sage.", "options": [] },
 			{
 				"type": 1,
 				"name": "help",
