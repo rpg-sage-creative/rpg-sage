@@ -1,4 +1,4 @@
-import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannelType, type DialogOptions, type DiceOptions, type SageChannel, type SageChannelOptions, type SystemOptions } from "@rsc-sage/types";
+import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannelType, type DialogOptions, type DiceOptions, type GameOptions, type SageChannel, type SageChannelOptions, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
 import { Color } from "@rsc-utils/color-utils";
 import { parseId } from "@rsc-utils/discord-utils";
 import { parseEnum } from "@rsc-utils/enum-utils";
@@ -11,12 +11,11 @@ import { isNonNilUuid } from "@rsc-utils/uuid-utils";
 import type { Collection, GuildBasedChannel, MessageAttachment, Role, User } from "discord.js";
 import type { ArgsManager } from "../../discord/ArgsManager.js";
 import type { TColorAndType } from "./Colors.js";
-import type { GameOptions } from "./Game.js";
 import type { GameCharacterCore } from "./GameCharacter.js";
 import { ColorType } from "./HasColorsCore.js";
 import { SageCommandArgs, type Names } from "./SageCommandArgs.js";
 import type { SageMessage } from "./SageMessage.js";
-import type { Server, ServerOptions } from "./Server.js";
+import type { Server } from "./Server.js";
 
 export type TKeyValuePair = { key: string; value: string; };
 

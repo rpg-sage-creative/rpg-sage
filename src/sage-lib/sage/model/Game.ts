@@ -1,4 +1,4 @@
-import { DialogOptions, DialogPostType, DiceOptions, DicePostType, GameSystem, GameSystemType, SageChannelType, SystemOptions, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type SageChannel } from "@rsc-sage/types";
+import { DialogPostType, DicePostType, GameSystemType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type GameSystem, type SageChannel } from "@rsc-sage/types";
 import { sortPrimitive, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
@@ -43,10 +43,6 @@ export interface IGameRole {
 
 export enum GameUserType { Unknown = 0, Player = 1, GameMaster = 2 }
 export interface IGameUser { did: Snowflake; type: GameUserType; dicePing: boolean; }
-
-export type GameOptions = SystemOptions & DiceOptions & DialogOptions & {
-	name: string;
-};
 
 export interface GameCore extends IdCore, IHasColors, IHasEmoji, Partial<GameOptions> {
 	objectType: "Game";

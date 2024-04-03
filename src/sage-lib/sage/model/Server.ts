@@ -1,4 +1,4 @@
-import type { DialogOptions, DialogPostType, DiceCritMethodType, DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, SageChannel, SystemOptions } from "@rsc-sage/types";
+import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, SageChannel, ServerOptions } from "@rsc-sage/types";
 import { parseGameSystem, updateServer } from "@rsc-sage/types";
 import { warn } from "@rsc-utils/console-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
@@ -20,8 +20,6 @@ export type TAdminRoleType = keyof typeof AdminRoleType;
 export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdmin = 3 }
 export interface IAdminRole { did: Snowflake; type: AdminRoleType; }
 export interface IAdminUser { did: Snowflake; role: AdminRoleType; }
-
-export type ServerOptions = DialogOptions & DiceOptions & SystemOptions;
 
 export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, Partial<ServerOptions> {
 	admins: IAdminUser[];

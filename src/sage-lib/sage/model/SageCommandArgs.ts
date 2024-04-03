@@ -1,7 +1,8 @@
-import { parseEnum } from "@rsc-sage/types";
+import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, type GameOptions, GameSystemType, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
 import { parseIds } from "@rsc-utils/discord-utils";
+import { isEmpty } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import { isDefined, type EnumLike, type Optional } from "@rsc-utils/type-utils";
+import { type Args, type EnumLike, isDefined, type Optional } from "@rsc-utils/type-utils";
 import { isUuid, type UUID } from "@rsc-utils/uuid-utils";
 import type { GuildBasedChannel, Role, User } from "discord.js";
 import type { SageCommand } from "./SageCommand.js";
@@ -25,6 +26,8 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 
 	/** @todo determine if we really need this ... is this a memory leak we /actually/ have? */
 	public clear(): void { this.sageCommand = undefined!; }
+
+	//#region basic get/has
 
 	/** Returns true if an argument matches the given key, regardless of value. */
 	public abstract hasKey(key: string): boolean;
@@ -109,16 +112,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	/** Returns true if getEnum(type, name) is not null and not undefined. */
 	public hasEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): boolean {
 		return isDefined(this.getEnum(type, name));
-	}
-
-	/** Gets all the different names that might be passed into the command. */
-	public getNames(): Names {
-		const charName = this.getString("charName") ?? this.getString("char") ?? undefined;
-		const oldName = this.getString("oldName") ?? undefined;
-		const name = this.getString("name") ?? undefined;
-		const newName = this.getString("newName") ?? undefined;
-		const count = (charName ? 1 : 0) + (oldName ? 1 : 0) + (name ? 1 : 0) + (newName ? 1 : 0);
-		return { charName, oldName, name, newName, count };
 	}
 
 	/**
@@ -266,4 +259,94 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 		return isDefined(this.getUuid(name));
 	}
 
+	//#endregion
+
+	//#region complex get
+
+	public getChannelOptions(): Args<SageChannelOptions> | undefined {
+		const channelOptions = {
+			...this.getDialogOptions(),
+			...this.getDiceOptions(),
+			...this.getSystemOptions(),
+			type: this.getEnum(SageChannelType, "type"),
+		};
+		if (isEmpty(channelOptions)) {
+			return undefined;
+		}
+		return channelOptions;
+	}
+
+	public getDialogOptions(): Args<DialogOptions> | undefined {
+		const dialogOptions = {
+			dialogPostType: this.getEnum(DialogPostType, "dialogPost"),
+			gmCharacterName: this.getString("gmCharName") ?? this.getString("gmName"),
+			sendDialogTo: this.getChannelId("dialogTo"),
+		};
+		if (isEmpty(dialogOptions)) {
+			return undefined;
+		}
+		return dialogOptions;
+	}
+
+	public getDiceOptions(): Args<DiceOptions> | undefined {
+		const diceOptions = {
+			diceCritMethodType: this.getEnum(DiceCritMethodType, "diceCrit"),
+			diceOutputType: this.getEnum(DiceOutputType, "diceOutput"),
+			dicePostType: this.getEnum(DicePostType, "dicePost"),
+			diceSecretMethodType: this.getEnum(DiceSecretMethodType, "diceSecret"),
+			sendDiceTo: this.getChannelId("diceTo"),
+		};
+		if (isEmpty(diceOptions)) {
+			return undefined;
+		}
+		return diceOptions;
+	}
+
+	/** Returns GameOptions pulled from command arguments. */
+	public getGameOptions(): Args<GameOptions> | undefined {
+		const gameOptions = {
+			...this.getDialogOptions(),
+			...this.getDiceOptions(),
+			...this.getSystemOptions(),
+			name: this.getString("name"),
+		};
+		if (isEmpty(gameOptions)) {
+			return undefined;
+		}
+		return gameOptions;
+	}
+
+	/** Gets all the different names that might be passed into the command. */
+	public getNames(): Names {
+		const charName = this.getString("charName") ?? this.getString("char") ?? undefined;
+		const oldName = this.getString("oldName") ?? undefined;
+		const name = this.getString("name") ?? undefined;
+		const newName = this.getString("newName") ?? undefined;
+		const count = (charName ? 1 : 0) + (oldName ? 1 : 0) + (name ? 1 : 0) + (newName ? 1 : 0);
+		return { charName, oldName, name, newName, count };
+	}
+
+	public getServerOptions(): Args<ServerOptions> | undefined {
+		const serverOptions = {
+			...this.getDialogOptions(),
+			...this.getDiceOptions(),
+			...this.getSystemOptions(),
+		};
+		if (isEmpty(serverOptions)) {
+			return undefined;
+		}
+		return serverOptions;
+	}
+
+	public getSystemOptions(): Args<SystemOptions> | undefined {
+		const serverOptions = {
+			gameSystemType: this.getEnum(GameSystemType, "gameSystem") ?? this.getEnum(GameSystemType, "system"),
+		};
+		if (isEmpty(serverOptions)) {
+			return undefined;
+		}
+		return serverOptions;
+	}
+
+	//#endregion
 }
