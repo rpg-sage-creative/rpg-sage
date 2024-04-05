@@ -1,12 +1,11 @@
-import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannelType, type DialogOptions, type DiceOptions, type GameOptions, type SageChannel, type SageChannelOptions, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
+import { type SageChannel } from "@rsc-sage/types";
 import { Color } from "@rsc-utils/color-utils";
 import { parseId } from "@rsc-utils/discord-utils";
 import { parseEnum } from "@rsc-utils/enum-utils";
 import { isUrl } from "@rsc-utils/https-utils";
-import { isEmpty } from "@rsc-utils/json-utils";
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { isNotBlank, unwrap } from "@rsc-utils/string-utils";
-import { isDefined, type Args, type EnumLike, type Optional } from "@rsc-utils/type-utils";
+import { isDefined, type EnumLike, type Optional } from "@rsc-utils/type-utils";
 import { isNonNilUuid } from "@rsc-utils/uuid-utils";
 import type { Collection, GuildBasedChannel, MessageAttachment, Role, User } from "discord.js";
 import type { ArgsManager } from "../../discord/ArgsManager.js";
@@ -78,75 +77,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			return withIndex.ret;
 		}
 		return defaultThisChannel ? this.sageCommand.threadOrChannelDid : null;
-	}
-
-	public getChannelOptions(): Args<SageChannelOptions> | undefined {
-		const channelOptions = {
-			...this.getDialogOptions(),
-			...this.getDiceOptions(),
-			...this.getSystemOptions(),
-			type: this.getEnum(SageChannelType, "type"),
-		};
-		if (isEmpty(channelOptions)) {
-			return undefined;
-		}
-		return channelOptions;
-	}
-	public getDialogOptions(): Args<DialogOptions> | undefined {
-		const dialogOptions = {
-			dialogPostType: this.getEnum(DialogPostType, "dialogPost"),
-			gmCharacterName: this.getString("gmCharName"),
-			sendDialogTo: this.getChannelId("dialogTo"),
-		};
-		if (isEmpty(dialogOptions)) {
-			return undefined;
-		}
-		return dialogOptions;
-	}
-	public getDiceOptions(): Args<DiceOptions> | undefined {
-		const diceOptions = {
-			diceCritMethodType: this.getEnum(DiceCritMethodType, "diceCrit"),
-			diceOutputType: this.getEnum(DiceOutputType, "diceOutput"),
-			dicePostType: this.getEnum(DicePostType, "dicePost"),
-			diceSecretMethodType: this.getEnum(DiceSecretMethodType, "diceSecret"),
-			sendDiceTo: this.getChannelId("diceTo"),
-		};
-		if (isEmpty(diceOptions)) {
-			return undefined;
-		}
-		return diceOptions;
-	}
-	public getGameOptions(): Args<GameOptions> | undefined {
-		const gameOptions = {
-			...this.getDialogOptions(),
-			...this.getDiceOptions(),
-			...this.getSystemOptions(),
-			name: this.getString("name"),
-		};
-		if (isEmpty(gameOptions)) {
-			return undefined;
-		}
-		return gameOptions;
-	}
-	public getServerOptions(): Args<ServerOptions> | undefined {
-		const serverOptions = {
-			...this.getDialogOptions(),
-			...this.getDiceOptions(),
-			...this.getSystemOptions(),
-		};
-		if (isEmpty(serverOptions)) {
-			return undefined;
-		}
-		return serverOptions;
-	}
-	public getSystemOptions(): Args<SystemOptions> | undefined {
-		const serverOptions = {
-			gameSystemType: this.getEnum(GameSystemType, "gameSystem"),
-		};
-		if (isEmpty(serverOptions)) {
-			return undefined;
-		}
-		return serverOptions;
 	}
 
 	public getCharacterOptions(names: Names, userDid?: Snowflake): GameCharacterCore {
