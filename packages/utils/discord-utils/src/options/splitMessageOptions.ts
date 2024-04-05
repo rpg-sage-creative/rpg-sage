@@ -10,7 +10,7 @@ type Options = WebhookMessageOptions | WebhookEditMessageOptions | MessageOption
 /** Used to convert a single message options object into an array to ensure we don't break posting limits. */
 export function splitMessageOptions<T extends Options>(options: T): T[] {
 	// break out the content, embeds, and files; saving the remaining options to be used in each payload
-	const { content, embeds, files, ...baseOptions } = options;
+	const { components, content, embeds, files, ...baseOptions } = options;
 
 	const payloads: T[] = [];
 
@@ -52,8 +52,19 @@ export function splitMessageOptions<T extends Options>(options: T): T[] {
 		}
 	});
 
-	// only include files in the first payload
-	payloads[0].files = files;
+	// only set components or files /if/ we have them
+	if (components?.length || files?.length) {
+		// if we somehow don't have a payload, add one
+		if (!payloads.length) {
+			payloads.push({ } as T);
+		}
+
+		// only include components in the first payload
+		payloads[0].components = components;
+
+		// only include files in the first payload
+		payloads[0].files = files;
+	}
 
 	return payloads;
 }
