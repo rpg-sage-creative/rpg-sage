@@ -117,6 +117,7 @@ async function showGameRenderServer(renderableContent: RenderableContent, sageCo
 	}
 }
 
+/** @todo split into a "createDetails" and "showDetails" (that allows prune) */
 export async function gameDetails(sageCommand: SageCommand, skipPrune = false, _game?: Game): Promise<void> {
 	const game = _game ?? await showGameGetGame(sageCommand);
 	if (!game) {
@@ -149,7 +150,7 @@ export async function gameDetails(sageCommand: SageCommand, skipPrune = false, _
 
 	const gmGuildMembers = await game.gmGuildMembers();
 	const gameMasters = gmGuildMembers.map((gmGuildMember, index) => gmGuildMember ? toHumanReadable(gmGuildMember) : `<i>${game.gameMasters[index]}</i>`);
-	renderableContent.append(`<b>Game Master Name</b>`, `[spacer]${game.gmCharacterName ?? `<i>inherited (${game.server.gmCharacterName ?? GameCharacter.defaultGmCharacterName})</i>`}`);
+	renderableContent.append(`<b>GM Character Name</b>`, `[spacer]${game.gmCharacterName ?? `<i>inherited (${game.server.gmCharacterName ?? GameCharacter.defaultGmCharacterName})</i>`}`);
 	renderableContent.append(`<b>Game Masters</b> ${gameMasters.length}`);
 	gameMasters.forEach(gm => renderableContent.append(`[spacer]${gm}`));
 
