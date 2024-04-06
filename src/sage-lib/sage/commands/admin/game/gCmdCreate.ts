@@ -1,4 +1,6 @@
 import { SageChannelType, type GameOptions, type SageChannel } from "@rsc-sage/types";
+import { debug } from "@rsc-utils/console-utils";
+import { DiscordKey, toChannelMention } from "@rsc-utils/discord-utils";
 import { isEmpty } from "@rsc-utils/json-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
@@ -6,10 +8,8 @@ import { Game, GameUserType, type IGameUser } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import { getGameValues } from "./getGameValues.js";
 import { gameDetails } from "./gameDetails.js";
-import { DiscordKey, toChannelMention } from "@rsc-utils/discord-utils";
-import { debug } from "@rsc-utils/console-utils";
+import { getGameValues } from "./getGameValues.js";
 
 function getGameChannels(sageCommand: SageCommand): SageChannel[] {
 	const channels: SageChannel[] = [];
@@ -85,7 +85,7 @@ async function postGameCreate(sageMessage: SageMessage): Promise<void> {
 }
 
 async function slashGameCreate(sageInteraction: SageInteraction): Promise<void> {
-	sageInteraction.defer(true);
+	sageInteraction.interaction.deferReply().then(() => sageInteraction.interaction.deleteReply());
 
 	const updated = await gameCreate(sageInteraction);
 	if (updated === true) {
@@ -95,12 +95,11 @@ async function slashGameCreate(sageInteraction: SageInteraction): Promise<void> 
 		await sageInteraction.whisper({ content:"Unknown Error; Game NOT Created!" });
 
 	}else if (updated === null) {
-		await sageInteraction.whisper({ content:"Please try:\n`sage!!game create name=\"GAME NAME\" type=\"PF2E\" ic=\"#IN_CHARACTER_CHANNEL\" ooc=\"OUT_OF_CHARACTER_CHANNEL\" gm=\"@GM_MENTION\" players=\"@PLAYER_ROLE_MENTION\"`" });
+		await sageInteraction.whisper({ content:"Please try /sage-game-create" });
 
 	}else if (updated === undefined) {
 		// do nothing
 	}
-
 }
 
 async function gameCreate(sageCommand: SageCommand): Promise<boolean | undefined | null> {
