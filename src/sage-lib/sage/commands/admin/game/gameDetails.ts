@@ -4,6 +4,7 @@ import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { TextChannel } from "discord.js";
+import { getMissingChannelPerms } from "../../../../discord/permissions/getMissingChannelPerms.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import { resolveToEmbeds } from "../../../../discord/resolvers/resolveToEmbeds.js";
 import { Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
@@ -52,6 +53,10 @@ async function showGameRenderChannels(renderableContent: RenderableContent, sage
 				const guildChannel = await sageCommand.discord.fetchChannel<TextChannel>(meta.sageChannel.id);
 				const guildChannelName = guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`;
 				renderableContent.append(`[spacer][spacer]${guildChannelName}`);
+				const missingPerms = await getMissingChannelPerms(sageCommand, guildChannel);
+				if (missingPerms.length) {
+					renderableContent.append(`[spacer][spacer][spacer]Missing Perms: ${missingPerms.join(", ")}`);
+				}
 			}
 		}
 	}
