@@ -2,8 +2,11 @@ import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { gSendDetails } from "./gSendDetails.js";
 
-export async function gPruneUsers(sageCommand: SageCommand) {
-	const game = sageCommand.game!;
+export async function gPruneUsers(sageCommand: SageCommand): Promise<void> {
+	const game = sageCommand.game;
+	if (!game) {
+		return;
+	}
 
 	const orphanUsers = await game.orphanUsers();
 	const missingPlayerSnowflakes = orphanUsers.filter(user => game.hasPlayer(user.did)).map(user => user.did);
