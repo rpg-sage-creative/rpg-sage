@@ -9,8 +9,8 @@ import type { SageMessage } from "../../../model/SageMessage.js";
 import type { Server } from "../../../model/Server.js";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
 import { registerAdminCommandHelp } from "../../help.js";
-import { gameDetails } from "./gameDetails.js";
 import { gCmdCreate } from "./gCmdCreate.js";
+import { gCmdDetails } from "./gCmdDetails.js";
 import { gSendDetails } from "./gSendDetails.js";
 
 async function getGames(sageCommand: SageCommand): Promise<Game[]> {
@@ -186,13 +186,10 @@ export function registerGame(): void {
 	registerAdminCommandHelp("Admin", "Game", "game archive list");
 	registerAdminCommandHelp("Admin", "Game", "game list");
 
-	registerAdminCommand(gameDetails, "game-details");
-	registerAdminCommandHelp("Admin", "Game", "game details");
-
 	registerAdminCommand(gameUpdate, "game-update", "game-set");
-	registerAdminCommandHelp("Admin", "Game", `game update name="{New Name}"`);
-	registerAdminCommandHelp("Admin", "Game", "game update game={DND5E|E20|PF2E|Quest|VtM5e|NONE}");
-	registerAdminCommandHelp("Admin", "Game", "game update diceoutput={XXS|XS|S|M|L|XL|XXL|ROLLEM|UNSET}");
+	registerAdminCommandHelp("Admin", "Game", `game update name="New Name"`);
+	registerAdminCommandHelp("Admin", "Game", "game update game=DND5E|E20|PF2E|Quest|VtM5e|NONE");
+	registerAdminCommandHelp("Admin", "Game", "game update diceoutput=XXS|XS|S|M|L|XL|XXL|ROLLEM|UNSET");
 
 	registerAdminCommand(gameToggleDicePing, "game-toggle-dice-ping");
 	registerAdminCommandHelp("Admin", "Game", `game toggle dice ping`);
@@ -201,5 +198,6 @@ export function registerGame(): void {
 	registerAdminCommandHelp("Admin", "Game", "game archive");
 
 	registerListeners({ commands:["game-create", "create-game"], interaction:gCmdCreate, message:gCmdCreate });
+	registerListeners({ commands:["game-details"], interaction:gCmdDetails, message:gCmdDetails });
 
 }
