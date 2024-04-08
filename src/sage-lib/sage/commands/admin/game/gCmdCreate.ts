@@ -65,7 +65,8 @@ function createGame(sageCommand: SageCommand, name: string, gameValues: Partial<
 
 async function postGameCreate(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminGames) {
-		return sageMessage.reactBlock("Sorry, You aren't allowed to create Games.");
+		await sageMessage.reactBlock("Sorry, you aren't allowed to create Games.");
+		return;
 	}
 
 	const updated = await gameCreate(sageMessage);
@@ -76,7 +77,7 @@ async function postGameCreate(sageMessage: SageMessage): Promise<void> {
 		await sageMessage.reactFailure("Unknown Error; Game NOT Created!");
 
 	}else if (updated === null) {
-		await sageMessage.reactFailure("Please try:\n`sage!!game create name=\"GAME NAME\" type=\"PF2E\" ic=\"#IN_CHARACTER_CHANNEL\" ooc=\"OUT_OF_CHARACTER_CHANNEL\" gms=\"@GM_MENTION\" players=\"@PLAYER_ROLE_MENTION\"`");
+		await sageMessage.reactFailure("Please try:\n`sage!!game create name=\"GAME NAME\" type=\"PF2E\" ic=\"#IN_CHARACTER_CHANNEL\" ooc=\"OUT_OF_CHARACTER_CHANNEL\" gms=\"@GM_MENTION\" players=\"@PLAYER_OR_ROLE_MENTIONS\"`");
 
 	}else if (updated === undefined) {
 		// do nothing
@@ -85,6 +86,11 @@ async function postGameCreate(sageMessage: SageMessage): Promise<void> {
 }
 
 async function slashGameCreate(sageInteraction: SageInteraction): Promise<void> {
+	if (!sageInteraction.canAdminGames) {
+		await sageInteraction.reply("Sorry, you aren't allowed to create Games.", true);
+		return;
+	}
+
 	sageInteraction.interaction.deferReply().then(() => sageInteraction.interaction.deleteReply());
 
 	const updated = await gameCreate(sageInteraction);
