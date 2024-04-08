@@ -8,8 +8,8 @@ import { Game, GameUserType, type IGameUser } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import { gameDetails } from "./gameDetails.js";
 import { getGameValues } from "./getGameValues.js";
+import { gSendDetails } from "./gSendDetails.js";
 
 function getGameChannels(sageCommand: SageCommand): SageChannel[] {
 	const channels: SageChannel[] = [];
@@ -135,7 +135,7 @@ async function gameCreate(sageCommand: SageCommand): Promise<boolean | undefined
 	}
 
 	const game = createGame(sageCommand, name, gameValues, freeGameChannels, gameUsers);
-	await gameDetails(sageCommand, true, game);
+	await gSendDetails(sageCommand, game);
 	const create = await discordPromptYesNo(sageCommand, `Create Game?`);
 
 	if (create) {

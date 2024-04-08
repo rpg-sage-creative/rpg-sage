@@ -11,6 +11,7 @@ import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js
 import { registerAdminCommandHelp } from "../../help.js";
 import { gameDetails } from "./gameDetails.js";
 import { gCmdCreate } from "./gCmdCreate.js";
+import { gSendDetails } from "./gSendDetails.js";
 
 async function getGames(sageCommand: SageCommand): Promise<Game[]> {
 	const guild = sageCommand.discord.guild;
@@ -139,7 +140,7 @@ async function gameUpdate(sageMessage: SageMessage): Promise<void> {
 
 	const updated = await sageMessage.game!.update(gameOptions);
 	if (updated) {
-		return gameDetails(sageMessage, true, sageMessage.game);
+		return gSendDetails(sageMessage);
 	}
 	return sageMessage.reactSuccessOrFailure(updated);
 }
@@ -151,7 +152,7 @@ async function gameArchive(sageMessage: SageMessage): Promise<void> {
 
 	// TODO: consider allowing removing games by messaging bot directly
 
-	await gameDetails(sageMessage);
+	await gSendDetails(sageMessage);
 	const archive = await discordPromptYesNo(sageMessage, `Archive Game?`);
 	if (archive) {
 		const archived = await sageMessage.game!.archive();
