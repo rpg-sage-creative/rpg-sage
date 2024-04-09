@@ -177,7 +177,8 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 
 	public get playerRole(): IGameRole | undefined { return this.roles.find(role => role.type === GameRoleType.Player); }
 	public get playerRoleDid(): Snowflake | undefined { return this.playerRole?.did; }
-	public get players(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.Player).map(user => user.did); }
+	/** Returns users assigned manually, NOT users assigned via Player role. */
+	private get players(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.Player).map(user => user.did); }
 
 	public get channels(): SageChannel[] { return this.core.channels ?? (this.core.channels = []); }
 	public get gameMasters(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.GameMaster).map(user => user.did); }
@@ -190,8 +191,6 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 			?? this.playerCharacters.findCompanionByName(name)
 			?? this.nonPlayerCharacters.findByName(name)
 			?? this.nonPlayerCharacters.findCompanionByName(name)
-			?? this.orphanedPlayerCharacters.findByName(name)
-			?? this.orphanedPlayerCharacters.findCompanionByName(name)
 			?? this.encounters.findCharacter(name)
 			?? this.parties.findCharacter(name);
 	}
@@ -230,21 +229,19 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		}
 		return null;
 	}
-	public async pGuildMembers(): Promise<GuildMember[]> {
-		// TODO: investiage iterating over guild.memebers as "cleaner"
-		// return Promise.all(this.players.map(player => this.discord.fetchGuildMember(player)));
 
-		const pGuildMembers = (await Promise.all(this.players.map(player => this.discord.fetchGuildMember(player))))
-			.filter(isDefined);
+	/** Returns all players (manual and role) as GuildMember objects. */
+	public async pGuildMembers(): Promise<GuildMember[]> {
+		const pGuildMembers = await Promise.all(this.players.map(player => this.discord.fetchGuildMember(player)));
 		const pRoleDid = this.playerRoleDid;
 		if (pRoleDid) {
 			const discordRole = await this.discord.fetchGuildRole(pRoleDid);
 			if (discordRole) {
-				const roleOnly = discordRole.members.filter(guildMember => !pGuildMembers.find(p => p.id === guildMember.id));
+				const roleOnly = discordRole.members.filter(guildMember => !pGuildMembers.some(p => p?.id === guildMember.id));
 				pGuildMembers.push(...roleOnly.values());
 			}
 		}
-		return pGuildMembers;
+		return pGuildMembers.filter(isDefined);
 	}
 	public async guildChannels(): Promise<GuildChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.id)));
@@ -259,33 +256,31 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		return this.users.filter((_, index) => !all[index]);
 	}
 	public async gmGuildMembers(): Promise<GuildMember[]> {
-		const gmGuildMembers = (await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)))).filter(isDefined);
+		const gmGuildMembers = await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)));
 		const gmRoleDid = this.gmRoleDid;
 		if (gmRoleDid) {
 			const discordRole = await this.discord.fetchGuildRole(gmRoleDid);
 			if (discordRole) {
-				const roleOnly = discordRole.members.filter(guildMember => !gmGuildMembers.find(gm => gm.id === guildMember.id));
+				const roleOnly = discordRole.members.filter(guildMember => !gmGuildMembers.some(gm => gm?.id === guildMember.id));
 				gmGuildMembers.push(...roleOnly.values());
 			}
 		}
-		return gmGuildMembers;
+		return gmGuildMembers.filter(isDefined);
 	}
-	public async gmGuildMember(): Promise<GuildMember | null> {
-		return this.discord.fetchGuildMember(this.gameMasters[0]);
-		//TODO: LEARN HOW TO CHECK ONLINE STATUS
-		// let first: GuildMember;
-		// for (const gameMaster of this.gameMasters) {
-		// 	const guildMember = await this.discord.fetchGuildMember(gameMaster);
-		// 	const user = guildMember?.user;
-		// 	if (["online"].includes(user?.presence?.status)) {
-		// 		return guildMember;
-		// 	}
-		// 	first = first || guildMember;
-		// }
-		// return first || null;
+	public async gmGuildMember(): Promise<GuildMember | undefined> {
+		const gmGuildMembers = await this.gmGuildMembers();
+		if (gmGuildMembers.length > 1) {
+			for (const guildMember of gmGuildMembers) {
+				if ("online" === guildMember.presence?.status) {
+					return guildMember;
+				}
+			}
+		}
+		return gmGuildMembers[0];
 	}
 	public async guildRoles(): Promise<Role[]> {
-		return (await Promise.all(this.roles.map(role => this.discord.fetchGuildRole(role.did)))).filter(isDefined);
+		const all = await Promise.all(this.roles.map(role => this.discord.fetchGuildRole(role.did)));
+		return all.filter(isDefined);
 	}
 	//#endregion
 
@@ -527,8 +522,6 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		return false;
 	}
 
-	public updateGmCharacterName(gmCharacterName: string): void { this.core.gmCharacterName = gmCharacterName; }
-
 	public async archive(): Promise<boolean> {
 		this.core.archivedTs = new Date().getTime();
 		return this.save();
@@ -562,21 +555,6 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 
 	public getUser(userDid: Optional<Snowflake>): IGameUser | undefined {
 		return this.users.find(user => user.did === userDid);
-	}
-
-	public getPlayer(userDid: Optional<Snowflake>): IGameUser | undefined {
-		return this.users.find(user => user.did === userDid && user.type === GameUserType.Player);
-	}
-
-	public getUsersByRole(roleType: GameRoleType): Snowflake[] {
-		if ([GameRoleType.Cast, GameRoleType.Table].includes(roleType)) {
-			return this.gameMasters.concat(this.players);
-		}else if (roleType === GameRoleType.GameMaster) {
-			return this.gameMasters;
-		}else if (roleType === GameRoleType.Player) {
-			return this.players;
-		}
-		return [];
 	}
 
 	// #endregion

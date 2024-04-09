@@ -1,7 +1,6 @@
 import { type SageChannel } from "@rsc-sage/types";
 import { sortComparable } from "@rsc-utils/array-utils";
 import { toChannelMention } from "@rsc-utils/discord-utils";
-import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
@@ -9,10 +8,6 @@ import type { SageMessage } from "../../../model/SageMessage.js";
 import type { Server } from "../../../model/Server.js";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
 import { registerAdminCommandHelp } from "../../help.js";
-import { gCmdArchive } from "./gCmdArchive.js";
-import { gCmdCreate } from "./gCmdCreate.js";
-import { gCmdDetails } from "./gCmdDetails.js";
-import { gCmdUpdate } from "./gCmdUpdate.js";
 
 async function getGames(sageCommand: SageCommand): Promise<Game[]> {
 	const guild = sageCommand.discord.guild;
@@ -153,9 +148,5 @@ export function registerGame(): void {
 	registerAdminCommand(gameToggleDicePing, "game-toggle-dice-ping");
 	registerAdminCommandHelp("Admin", "Game", `game toggle dice ping`);
 
-	registerListeners({ commands:["game-create", "create-game"], interaction:gCmdCreate, message:gCmdCreate });
-	registerListeners({ commands:["game-details"], interaction:gCmdDetails, message:gCmdDetails });
-	registerListeners({ commands:["game-update", "update-game"], interaction:gCmdUpdate, message:gCmdUpdate });
-	registerListeners({ commands:["game-archive", "archive-game"], interaction:gCmdArchive, message:gCmdArchive });
 
 }

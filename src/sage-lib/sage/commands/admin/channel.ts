@@ -1,7 +1,7 @@
 import { DicePostType, GameSystemType, PostType, SageChannel, SageChannelType, parseGameSystem } from "@rsc-sage/types";
-import { filterAsync, mapAsync } from "@rsc-utils/async-array-utils";
+import { mapAsync } from "@rsc-utils/async-array-utils";
 import { warn } from "@rsc-utils/console-utils";
-import { DiscordKey, parseIds } from "@rsc-utils/discord-utils";
+import { DiscordKey } from "@rsc-utils/discord-utils";
 import { stringify } from "@rsc-utils/json-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
@@ -17,37 +17,6 @@ import type { Server } from "../../model/Server.js";
 import { createAdminRenderableContent, registerAdminCommand } from "../cmd.js";
 import { registerAdminCommandHelp } from "../help.js";
 import { BotServerGameType } from "../helpers/BotServerGameType.js";
-
-//#region add
-
-async function channelAdd(sageMessage: SageMessage): Promise<void> {
-	// Don't allow this command in DMs
-	const server = sageMessage.server;
-	if (!server) {
-		return sageMessage.reactBlock();
-	}
-
-	// Make sure we have a game
-	const game = sageMessage.game;
-	if (!sageMessage.testGameAdmin(game)) {
-		return sageMessage.reactBlock();
-	}
-
-	// Grab channels from mentions, filter out those in active games
-	let channelIds = parseIds(sageMessage.message, "channel");
-	channelIds = await filterAsync(channelIds, async id => !(await server.findActiveGameByChannelDid(id)));
-	if (!channelIds.length) {
-		return sageMessage.reactFailure();
-	}
-
-	const channelOptions = sageMessage.args.getChannelOptions() ?? { type:SageChannelType.OutOfCharacter };
-	const channels = channelIds.map(id => ({ id, ...channelOptions } as SageChannel));
-	const saved = await game.addOrUpdateChannels(...channels);
-	return sageMessage.reactSuccessOrFailure(saved);
-	// TODO: should i render the channels' details?
-}
-
-//#endregion
 
 //#region details
 
@@ -193,31 +162,6 @@ async function channelList(sageMessage: SageMessage): Promise<void> {
 
 //#endregion
 
-//#region remove
-
-async function channelRemove(sageMessage: SageMessage): Promise<void> {
-	const game = sageMessage.game;
-	if (!sageMessage.testGameAdmin(game)) {
-		return sageMessage.reactBlock();
-	}
-
-	// Grab channels from mentions and filter for the game
-	const channelDids = parseIds(sageMessage.message, "channel")
-		.filter(channelDid => game.hasChannel(channelDid));
-	if (!channelDids.length && sageMessage.game) {
-		const channelDid = await sageMessage.args.removeAndReturnChannelDid(true);
-		channelDids.push(channelDid);
-	}
-	if (!channelDids.length) {
-		return sageMessage.reactFailure();
-	}
-
-	const saved = await game.removeChannels(...channelDids);
-	return sageMessage.reactSuccessOrFailure(saved);
-}
-
-//#endregion
-
 //#region set
 
 async function channelSet(sageMessage: SageMessage): Promise<void> {
@@ -257,18 +201,14 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 //#endregion
 
 export function registerChannel(): void {
-	registerAdminCommand(channelAdd, "channel-add");
 	registerAdminCommand(channelDetails, "channel-details");
 	registerAdminCommand(channelListServer, "channel-list-server");
 	registerAdminCommand(channelListGame, "channel-list-game");
 	registerAdminCommand(channelList, "channel-list");
-	registerAdminCommand(channelRemove, "channel-remove");
 	registerAdminCommand(channelSet, "channel-set", "channel-update");
 
-	registerAdminCommandHelp("Admin", "Channel", "channel add {#ChannelReference} {optionKey}={optionValue}");
 	registerAdminCommandHelp("Admin", "Channel", "channel details");
 	registerAdminCommandHelp("Admin", "Channel", "channel list");
 	registerAdminCommandHelp("Admin", "Channel", "channel list {game|server}");
-	registerAdminCommandHelp("Admin", "Channel", "channel remove {#ChannelReference}");
 	registerAdminCommandHelp("Admin", "Channel", "channel set {optionKey}={optionValue}");
 }

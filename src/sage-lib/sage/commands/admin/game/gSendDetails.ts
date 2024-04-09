@@ -172,10 +172,9 @@ export async function gSendDetails(sageCommand: SageCommand, _game?: Game): Prom
 	renderableContent.append(`<b>NonPlayer Characters</b> ${game.nonPlayerCharacters.length}`);
 
 	const playerGuildMembers = await game.pGuildMembers();
-	const players = playerGuildMembers.map((pGuildMember, index) => pGuildMember ? toHumanReadable(pGuildMember) : `<i>${game.players[index]}</i>`);
-	const playerCharacters = playerGuildMembers.map(pGuildMember => game.playerCharacters.findByUser(pGuildMember?.id)?.name).map(name => name ? ` (${name})` : ``);
+	const players = playerGuildMembers.map(pGuildMember => ({ name:toHumanReadable(pGuildMember), character:game.playerCharacters.findByUser(pGuildMember.id)?.name }));
 	renderableContent.append(`<b>Players (Characters)</b> ${players.length}`);
-	players.forEach((player, index) => renderableContent.append(`[spacer]${player}${playerCharacters[index]}`));
+	players.forEach(player => renderableContent.append(`[spacer]${player.name}${player.character ? ` (${player.character})` : ``}`));
 
 	const orphanUsers = await game.orphanUsers();
 	if (orphanUsers.length) {
