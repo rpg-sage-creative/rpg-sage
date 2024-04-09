@@ -20,17 +20,20 @@ async function buildUnifiedCommand(): Promise<BuilderType[]> {
 
 	const builders: BuilderType[] = [];
 	builders.push(...buildSlash(slashCommand));
-	builders.push(...buildContext());
-	builders.push(...buildUser());
+	builders.push(...commands.message.map(buildContext).flat());
+	builders.push(...commands.message.map(buildUser).flat());
 	return builders;
 }
 
 async function buildIndividualCommands(): Promise<BuilderType[]> {
+	const which = getBotCodeName();
 	const commands = await registerCommands();
+	commands.slash.forEach(cmd => cmd.name = `sage-${which}-${cmd.name}`);
+
 	const builders: BuilderType[] = [];
 	builders.push(...commands.slash.map(buildSlash).flat());
-	builders.push(...buildContext());
-	builders.push(...buildUser());
+	builders.push(...commands.message.map(buildContext).flat());
+	builders.push(...commands.message.map(buildUser).flat());
 	return builders;
 }
 
