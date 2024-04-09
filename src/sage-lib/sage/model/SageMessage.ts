@@ -217,15 +217,7 @@ export class SageMessage
 
 	// #endregion
 
-
 	// #region Reactions
-
-	/** Get the given emoji, checking first the game, then server, then the bot. */
-	public getEmoji(emojiType: EmojiType): string | null {
-		return this.game?.emoji.get(emojiType)
-			?? this.server?.emoji.get(emojiType)
-			?? this.bot.emoji.get(emojiType);
-	}
 
 	/** If the given emoji is valid, react to this message with it. If this message posted a new message, react to it. */
 	public async react(emojiType: EmojiType, reason?: string): Promise<void> {

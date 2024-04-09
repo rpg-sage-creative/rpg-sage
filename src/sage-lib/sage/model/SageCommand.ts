@@ -14,6 +14,7 @@ import type { Bot } from "./Bot.js";
 import type { Game } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore.js";
+import type { EmojiType } from "./HasEmojiCore.js";
 import type { SageCache } from "./SageCache.js";
 import type { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageInteraction } from "./SageInteraction.js";
@@ -281,6 +282,18 @@ export abstract class SageCommand<
 	}
 
 	// #endregion
+
+	//#region emoji
+
+	/** Get the given emoji, checking first the game, then server, then the bot. */
+	public getEmoji(emojiType: EmojiType): string | null {
+		return this.game?.emoji.get(emojiType)
+			?? this.server?.emoji.get(emojiType)
+			?? this.bot.emoji.get(emojiType);
+	}
+
+	//#endregion
+
 
 	//#region dice settings
 
