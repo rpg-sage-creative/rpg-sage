@@ -156,9 +156,12 @@ export async function gSendDetails(sageCommand: SageCommand, _game?: Game): Prom
 		renderableContent.append(`<b>Orphaned Channels</b> ${orphanChannelIds.length}; ${orphanChannelIds.join(", ")}`);
 	}
 
+	/** @todo fix the game / role interaction to actually work as expected. */
 	const guildRoles = await game.guildRoles();
-	const roles = guildRoles.map(guildRole => guildRole ? `@${guildRole.name} (${GameRoleType[game.roles.find(role => role.did === guildRole.id)?.type!]})` : `<i>unavailable</i>`);
-	renderableContent.append(`<b>Roles</b> ${roles.length}; ${roles.join(", ")}`);
+	if (guildRoles.length) {
+		const roles = guildRoles.map(guildRole => guildRole ? `@${guildRole.name} (${GameRoleType[game.roles.find(role => role.did === guildRole.id)?.type!]})` : `<i>unavailable</i>`);
+		renderableContent.append(`<b>Roles</b> ${roles.length}; ${roles.join(", ")}`);
+	}
 
 	const gmGuildMembers = await game.gmGuildMembers();
 	const gameMasters = gmGuildMembers.map((gmGuildMember, index) => gmGuildMember ? toHumanReadable(gmGuildMember) : `<i>${game.gameMasters[index]}</i>`);
