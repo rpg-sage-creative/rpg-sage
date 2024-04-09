@@ -7,38 +7,54 @@ import type { SageCommand } from "../../../model/SageCommand.js";
 import { getGameChannels } from "./getGameChannels.js";
 import { getGameUsers } from "./getGameUsers.js";
 import { gSendDetails } from "./gSendDetails.js";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
 
-function updateGame(sageCommand: SageCommand, gameOptions: Args<GameOptions>, channels: SageChannel[], users: IGameUser[]): Game {
-	const game = sageCommand.game!.toJSON();
-	applyChanges(game, gameOptions);
-	return new Game({
-		...game,
-		channels: game.channels.concat(channels),
-		users: (game.users ?? []).concat(users)
-	}, sageCommand.server, sageCommand.sageCache);
+type UpdateGameOptions = {
+	gameOptions: Args<GameOptions>;
+	channelsToAdd: SageChannel[];
+	usersToAdd: IGameUser[];
+	channelsToRemove: Snowflake[];
+	usersToRemove: Snowflake[];
+};
+
+function updateGame(sageCommand: SageCommand, options: UpdateGameOptions): Game {
+	const json = sageCommand.game!.toJSON();
+	applyChanges(json, options.gameOptions);
+	json.channels = (json.channels ?? []).concat(options.channelsToAdd).filter(channel => !options.channelsToRemove.includes(channel.id));
+	json.users = (json.users ?? []).concat(options.usersToAdd).filter(user => !options.usersToRemove.includes(user.did));
+	return new Game(json, sageCommand.server, sageCommand.sageCache);
 }
 
 async function gameUpdate(sageCommand: SageCommand): Promise<boolean | undefined | null> {
 
 	// get channels first to avoid more logic if we are going to exit early for reused channels
 	const gameChannels = await getGameChannels(sageCommand, false);
-	if (!gameChannels.used.length) {
+	if (gameChannels.used.length) {
 		// exit out with warning about reusing channels
 		return undefined;
 	}
+
+	// get channels to add
+	const channelsToAdd = gameChannels.free;
+
+	// get channels to remove from args
+	const channelsToRemove = sageCommand.args.getChannelIds("remove");
 
 	// get gameOptions from args
 	const gameOptions = sageCommand.args.getGameOptions() ?? { };
 
 	// get users from args
-	const gameUsers = await getGameUsers(sageCommand);
+	const usersToAdd = await getGameUsers(sageCommand);
+
+	// get users to remove from args
+	const usersToRemove = await sageCommand.args.getUserIds("remove", true);
 
 	// exit out to the command example feedback
-	if (isEmpty(gameOptions) && !gameChannels.free.length && !gameUsers.length) {
+	if (isEmpty(gameOptions) && !channelsToAdd.length && !channelsToRemove.length && !usersToAdd.length && !usersToRemove.length) {
 		return null;
 	}
 
-	const game = updateGame(sageCommand, gameOptions, gameChannels.free, gameUsers);
+	const game = updateGame(sageCommand, { gameOptions, channelsToAdd, channelsToRemove, usersToAdd, usersToRemove });
 	await gSendDetails(sageCommand, game);
 	const update = await discordPromptYesNo(sageCommand, `Update Game?`);
 
