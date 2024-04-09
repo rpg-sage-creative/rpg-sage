@@ -58,6 +58,7 @@ export class SageInteraction<T extends DInteraction = any>
 	public isCommand(gameType: SlashCommandGameType, command: string): boolean;
 	public isCommand(...args: string[]): boolean {
 		if (!this.interaction.isCommand()) {
+			debug({ what:"Unexpected Interaction Type", type:this.interaction.type });
 			return false;
 		}
 
@@ -70,6 +71,9 @@ export class SageInteraction<T extends DInteraction = any>
 		const commandValues = this.commandValues.map(s => s.toLowerCase());
 		if (["sage", "sage-stable", "sage-beta", "sage-dev"].includes(commandValues[0])) {
 			commandValues.shift();
+		}
+		if (commandValues[0]?.startsWith("sage-")) {
+			commandValues[0] = commandValues[0].replace(/^sage-(dev-|beta-)?/i, "");
 		}
 
 		if (subCommand) {
