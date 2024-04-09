@@ -1,54 +1,15 @@
-import { SageChannelType, type GameOptions, type SageChannel } from "@rsc-sage/types";
-import { debug } from "@rsc-utils/console-utils";
-import { DiscordKey, toChannelMention } from "@rsc-utils/discord-utils";
-import { isEmpty } from "@rsc-utils/json-utils";
+import { type GameOptions, type SageChannel } from "@rsc-sage/types";
+import { applyChanges } from "@rsc-utils/json-utils";
 import { randomUuid } from "@rsc-utils/uuid-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
-import { Game, GameUserType, type IGameUser } from "../../../model/Game.js";
+import { Game, type IGameUser } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
-import type { SageInteraction } from "../../../model/SageInteraction.js";
-import type { SageMessage } from "../../../model/SageMessage.js";
-import { getGameValues } from "./getGameValues.js";
+import { getGameChannels } from "./getGameChannels.js";
+import { getGameUsers } from "./getGameUsers.js";
+import { gFixPerms } from "./gFixPerms.js";
 import { gSendDetails } from "./gSendDetails.js";
 
-function getGameChannels(sageCommand: SageCommand): SageChannel[] {
-	const channels: SageChannel[] = [];
-
-	const icIds = sageCommand.args.getChannelIds("ic");
-	icIds.forEach(id => channels.push({ id, type:SageChannelType.InCharacter }));
-
-	const oocIds = sageCommand.args.getChannelIds("ooc");
-	oocIds.forEach(id => channels.push({ id, type:SageChannelType.OutOfCharacter }));
-
-	const gmIds = sageCommand.args.getChannelIds("gm");
-	gmIds.forEach(id => channels.push({ id, type:SageChannelType.GameMaster }));
-
-	const diceIds = sageCommand.args.getChannelIds("dice");
-	diceIds.forEach(id => channels.push({ id, type:SageChannelType.Dice }));
-
-	if (!channels.length && sageCommand.channelDid) {
-		channels.push({ id:sageCommand.channelDid, type:SageChannelType.OutOfCharacter });
-	}
-
-	return channels;
-}
-
-async function getGameUsers(sageCommand: SageCommand): Promise<IGameUser[]> {
-	const users: IGameUser[] = [];
-
-	// do both "gm" and "gms" in case a posted command has the old gm= for the GM and not for the GM Channel
-	const gmIds = await sageCommand.args.getUserIds("gm", true);
-	gmIds.forEach(did => users.push({ did, type:GameUserType.GameMaster, dicePing:true }));
-	const gmsIds = await sageCommand.args.getUserIds("gms", true);
-	gmsIds.forEach(did => users.push({ did, type:GameUserType.GameMaster, dicePing:true }));
-
-	const playerIds = await sageCommand.args.getUserIds("players", true);
-	playerIds.forEach(did => users.push({ did, type:GameUserType.Player, dicePing:true }));
-
-	return users;
-}
-
-function createGame(sageCommand: SageCommand, name: string, gameValues: Partial<GameOptions>, channels: SageChannel[], users: IGameUser[]): Game {
+function createGame(sageCommand: SageCommand, gameOptions: Partial<GameOptions>, channels: SageChannel[], users: IGameUser[]): Game {
 	return new Game({
 		objectType: "Game",
 		id: randomUuid(),
@@ -58,102 +19,76 @@ function createGame(sageCommand: SageCommand, name: string, gameValues: Partial<
 		channels: channels,
 		colors: sageCommand.server.colors.toArray(),
 		users,
-		...gameValues,
-		name,
+		...gameOptions,
+		name: gameOptions.name!,
 	}, sageCommand.server, sageCommand.sageCache);
 }
 
-async function postGameCreate(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGames) {
-		await sageMessage.reactBlock("Sorry, you aren't allowed to create Games.");
-		return;
-	}
+function getGameOptions(sageCommand: SageCommand): GameOptions {
+	// get default gameOptions from server
+	const { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType, gmCharacterName } = sageCommand.server;
+	const gameOptions = { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType, gmCharacterName } as GameOptions;
 
-	const updated = await gameCreate(sageMessage);
-	if (updated === true) {
-		await sageMessage.reactSuccess("Game Created.");
+	// get gameOptions from args applied to server defaults
+	const gameOptionArgs = sageCommand.args.getGameOptions() ?? { };
+	applyChanges(gameOptions, gameOptionArgs);
 
-	}else if (updated === false) {
-		await sageMessage.reactFailure("Unknown Error; Game NOT Created!");
-
-	}else if (updated === null) {
-		await sageMessage.reactFailure("Please try:\n`sage!!game create name=\"GAME NAME\" type=\"PF2E\" ic=\"#IN_CHARACTER_CHANNEL\" ooc=\"OUT_OF_CHARACTER_CHANNEL\" gms=\"@GM_MENTION\" players=\"@PLAYER_OR_ROLE_MENTIONS\"`");
-
-	}else if (updated === undefined) {
-		// do nothing
-
-	}
-}
-
-async function slashGameCreate(sageInteraction: SageInteraction): Promise<void> {
-	if (!sageInteraction.canAdminGames) {
-		await sageInteraction.reply("Sorry, you aren't allowed to create Games.", true);
-		return;
-	}
-
-	sageInteraction.interaction.deferReply().then(() => sageInteraction.interaction.deleteReply());
-
-	const updated = await gameCreate(sageInteraction);
-	if (updated === true) {
-		await sageInteraction.whisper({ content:"Game Created." });
-
-	}else if (updated === false) {
-		await sageInteraction.whisper({ content:"Unknown Error; Game NOT Created!" });
-
-	}else if (updated === null) {
-		await sageInteraction.whisper({ content:"Please try /sage-game-create" });
-
-	}else if (updated === undefined) {
-		// do nothing
-	}
+	return gameOptions;
 }
 
 async function gameCreate(sageCommand: SageCommand): Promise<boolean | undefined | null> {
-	const server = sageCommand.server;
-	const name = sageCommand.args.getString("name");
-	const gameValues = getGameValues(sageCommand);
-	const gameChannels = getGameChannels(sageCommand);
-	const gameUsers = await getGameUsers(sageCommand);
-
-	const freeGameChannels: SageChannel[] = [];
-	const usedGameChannels: SageChannel[] = [];
-	for (const channel of gameChannels) {
-		const discordKey = new DiscordKey(server.did, channel.id);
-		const otherGame = await sageCommand.sageCache.games.findActiveByDiscordKey(discordKey);
-		if (otherGame) {
-			usedGameChannels.push(channel);
-		}else {
-			freeGameChannels.push(channel);
-		}
-	}
-	if (usedGameChannels.length) {
-		const channelLinks = usedGameChannels.map(channel => "\n- " + toChannelMention(channel.id));
-		const channelist = channelLinks.join("");
-		await sageCommand.whisper(`The following channels are already part of a game:` + channelist);
+	// get channels first to avoid more logic if we are going to exit early for reused channels
+	const gameChannels = await getGameChannels(sageCommand, true);
+	if (!gameChannels.used.length) {
+		// exit out with warning about reusing channels
 		return undefined;
 	}
 
-	const hasName = !!name;
-	const hasValues = !isEmpty(gameValues);
-	const hasChannel = !!freeGameChannels.length;
-	if (!hasName || !hasValues || !hasChannel) {
+	// get gameOptions from args applied to server defaults
+	const gameOptions = getGameOptions(sageCommand);
+
+	// get users from args
+	const gameUsers = await getGameUsers(sageCommand);
+
+	// exit out to the command example feedback
+	if (!gameOptions.name || !gameChannels.free.length) {
 		return null;
 	}
 
-	const game = createGame(sageCommand, name, gameValues, freeGameChannels, gameUsers);
+	const game = createGame(sageCommand, gameOptions, gameChannels.free, gameUsers);
 	await gSendDetails(sageCommand, game);
 	const create = await discordPromptYesNo(sageCommand, `Create Game?`);
 
 	if (create) {
 		const gameSaved = game ? await game.save() : false;
 		const serverSaved = gameSaved ? await sageCommand.server.save() : false;
-		return gameSaved && serverSaved;
+		if (gameSaved && serverSaved) {
+			await gFixPerms(sageCommand, game);
+			return true;
+		}
 	}
 	return undefined;
 }
 
 export async function gCmdCreate(sageCommand: SageCommand): Promise<void> {
-	if (sageCommand.isSageMessage()) return postGameCreate(sageCommand);
-	if (sageCommand.isSageInteraction()) return slashGameCreate(sageCommand);
-	debug(`Unused Handler: gCmdCreate`);
+	if (!sageCommand.canAdminGames) {
+		await sageCommand.whisper("Sorry, you aren't allowed to create Games.");
+		return;
+	}
+
+	sageCommand.noDefer();
+
+	const updated = await gameCreate(sageCommand);
+	if (updated === true) {
+		await sageCommand.whisper({ content:"Game Created." });
+
+	}else if (updated === false) {
+		await sageCommand.whisper({ content:"Unknown Error; Game NOT Created!" });
+
+	}else if (updated === null) {
+		await sageCommand.whisper({ content:"Please try /sage-game-create" });
+
+	}else if (updated === undefined) {
+		// do nothing
+	}
 }
