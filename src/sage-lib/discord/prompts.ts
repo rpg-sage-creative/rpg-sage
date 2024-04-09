@@ -23,6 +23,21 @@ function createButtons(buttons: TPromptButton[]): MessageButton[] {
 	});
 }
 
+type ConfirmOptions = { cancelLabel?:string; confirmLabel?:string; content:RenderableContentResolvable; };
+type ConfirmResults = { confirmed:boolean; message?:Message; };
+export async function confirm(sageCommand: SageCommand, options: ConfirmOptions): Promise<ConfirmResults> {
+	const content = options?.content ?? "Confirm or Cancel?";
+	const confirmLabel = options?.confirmLabel ?? "Confirm";
+	const cancelLabel = options?.cancelLabel ?? "Cancel";
+	const buttons: TPromptButton[] = [ { label:confirmLabel, style:"SUCCESS" }, { label:cancelLabel, style:"SECONDARY" } ];
+	const channel = sageCommand.dChannel as DMessageChannel;
+	const [result, message] = await _prompt(sageCommand.sageCache, content, buttons, channel);
+	return {
+		confirmed: result === confirmLabel,
+		message: message ?? undefined
+	};
+}
+
 export async function discordPromptYesNo(sageCommand: SageCommand, resolvable: RenderableContentResolvable): Promise<boolean | null> {
 	const yesNo: TPromptButton[] = [{ label:"Yes", style:"SUCCESS"}, { label:"No", style:"SECONDARY" }];
 	const result = await prompt(sageCommand, resolvable, yesNo);
