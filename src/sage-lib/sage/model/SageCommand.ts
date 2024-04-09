@@ -61,6 +61,13 @@ export abstract class SageCommand<
 	public isSageInteraction<T extends DInteraction = any>(): this is SageInteraction<T> { return "interaction" in this; }
 	public isSageMessage(): this is SageMessage { return "isEdit" in this; }
 	public isSageReaction(): this is SageReaction { return "messageReaction" in this; }
+	/** Convenience for .interation.deferReply().then(() => .interaction.deleteReply()) */
+	public async noDefer(): Promise<void> {
+		if (this.isSageInteraction()) {
+			await this.interaction.deferReply();
+			await this.interaction.deleteReply();
+		}
+	}
 
 	//#region abstract
 
