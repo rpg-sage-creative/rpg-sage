@@ -39,7 +39,7 @@ function getGameOptions(sageCommand: SageCommand): GameOptions {
 async function gameCreate(sageCommand: SageCommand): Promise<boolean | undefined | null> {
 	// get channels first to avoid more logic if we are going to exit early for reused channels
 	const gameChannels = await getGameChannels(sageCommand, true);
-	if (!gameChannels.used.length) {
+	if (gameChannels.used.length) {
 		// exit out with warning about reusing channels
 		return undefined;
 	}
