@@ -1,6 +1,7 @@
+import { toUnique } from "@rsc-utils/array-utils";
 import { errorReturnNull } from "@rsc-utils/console-utils";
 import { DiscordKey, toUserMention, type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
-import { StringMatcher } from "@rsc-utils/string-utils";
+import { StringMatcher, isNotBlank } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
@@ -203,7 +204,7 @@ function createSkillSelectRow(character: PathbuilderCharacter): MessageActionRow
 	const activeSkill = character.getSheetValue("activeSkill");
 	const lores = character.lores.map(lore => lore[0]);
 	const saves = getSavingThrows<string>();
-	const savesSkillsAndLores = saves.concat(getSkills(), lores);
+	const savesSkillsAndLores = saves.concat(getSkills(), lores).filter(isNotBlank).filter(toUnique);
 	savesSkillsAndLores.forEach(skill => {
 		const labelPrefix = saves.includes(skill) ? "Save" : "Skill";
 		const skillAndMod = character.getProficiencyAndMod(skill);
