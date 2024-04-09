@@ -31,8 +31,7 @@ export async function gcCmdUpdate(sageMessage: SageMessage): Promise<void> {
 		return promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
 			const charSaved = await char.save();
 			if (charSaved && characterTypeMeta.isGm) {
-				sageMessage.game!.updateGmCharacterName(char.name);
-				return sageMessage.game!.save();
+				return sageMessage.game!.update({ gmCharacterName:char.name });
 			}
 			return charSaved;
 		});

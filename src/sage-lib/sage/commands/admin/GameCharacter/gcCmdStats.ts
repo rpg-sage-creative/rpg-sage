@@ -29,8 +29,7 @@ export async function gcCmdStats(sageMessage: SageMessage): Promise<void> {
 			const { game } = sageMessage;
 			if (game) {
 				if (characterTypeMeta.isGm) {
-					game.updateGmCharacterName(char.name);
-					return game.save();
+					return game.update({ gmCharacterName:char.name });
 				}else {
 					await game.encounters.updatePins();
 					await game.parties.updatePins();
