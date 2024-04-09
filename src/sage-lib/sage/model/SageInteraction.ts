@@ -5,7 +5,7 @@ import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isString } from "@rsc-utils/string-utils";
 import { isDefined } from "@rsc-utils/type-utils";
-import type { InteractionReplyOptions, Message, MessageAttachment, User } from "discord.js";
+import type { InteractionReplyOptions, InteractionUpdateOptions, Message, MessageAttachment, User } from "discord.js";
 import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
 import { InteractionType } from "../../discord/index.js";
@@ -132,16 +132,18 @@ export class SageInteraction<T extends DInteraction = any>
 	/** Defers the interaction so that a reply can be sent later. */
 	public defer(ephemeral: boolean): Promise<void> {
 		return this.pushToReplyStack(() => {
-			if (this.interaction.deferred) {
-				return Promise.resolve();
+			if (!this.interaction.deferred) {
+				if ("deferUpdate" in this.interaction) {
+					return this.interaction.deferUpdate();
+				}
+				if ("deferReply" in this.interaction) {
+					return this.interaction.deferReply({
+						ephemeral:this.sageCache.server ? (ephemeral ?? true) : false
+					});
+				}
+				warn(`IDE says we should never reach this code ...`);
 			}
-			if ("deferUpdate" in this.interaction) {
-				return this.interaction.deferUpdate();
-			}
-			warn(`IDE says we should never reach this code ...`);
-			return (this.interaction as any).deferReply({
-				ephemeral:this.sageCache.server ? (ephemeral ?? true) : false
-			});
+			return Promise.resolve();
 		});
 	}
 
@@ -180,23 +182,27 @@ export class SageInteraction<T extends DInteraction = any>
 				}else {
 					await this.interaction.editReply(args) as any;
 				}
-			}else {
+
+			}else if ("update" in this.interaction) {
+				await this.interaction.update(args as InteractionUpdateOptions);
+
+			}else if ("reply" in this.interaction) {
 				await this.interaction.reply(args as InteractionReplyOptions);
 			}
 		});
 	}
 
-	/** Uses followUp() if a reply was given, otherwise uses reply()  */
-	public async update(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void> {
-		return this.pushToReplyStack(async () => {
-			if (this.interaction.replied) {
-				const args = this.resolveToOptions(renderable, ephemeral);
-				this.updates.push(await this.interaction.followUp(args as InteractionReplyOptions) as Message<boolean>);
-			}else {
-				await this.reply(renderable, ephemeral);
-			}
-		});
-	}
+	// /** Uses followUp() if a reply was given, otherwise uses this.reply()  */
+	// public async update(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void> {
+	// 	return this.pushToReplyStack(async () => {
+	// 		if (this.interaction.replied) {
+	// 			const args = this.resolveToOptions(renderable, ephemeral);
+	// 			this.updates.push(await this.interaction.followUp(args as InteractionReplyOptions) as Message<boolean>);
+	// 		}else {
+	// 			await this.reply(renderable, ephemeral);
+	// 		}
+	// 	});
+	// }
 
 	/** Sends a full message to the channel or user the interaction originated in. */
 	public send(renderableContentResolvable: RenderableContentResolvable): Promise<Message[]>;
