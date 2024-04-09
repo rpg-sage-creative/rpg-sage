@@ -16,6 +16,9 @@ type Args = {
 	/** Commands */
 	commands: string[];
 
+	/** Listen to all? */
+	handler?: SageCommandHandler;
+
 	/** List to slash commands? */
 	interaction?: SageCommandHandler | SageInteractionHandler;
 
@@ -26,22 +29,22 @@ type Args = {
 	reaction?: SageCommandHandler | SageReactionHandler;
 };
 
-export function registerListeners({ commands, interaction, message, reaction }: Args): void {
+export function registerListeners({ commands, interaction, message, reaction, handler }: Args): void {
 	for (const command of commands) {
 		const commandParts = command.split("-");
 		const tester = (cmd: SageCommand) => cmd.isCommand(...commandParts);
 
-		if (interaction) {
-			registerInteractionListener(tester, interaction);
+		if (handler || interaction) {
+			registerInteractionListener(tester, handler ?? interaction!);
 		}
 
-		if (message) {
-			registerCommand(message, command);
+		if (handler || message) {
+			registerCommand(handler ?? message!, command);
 		}
 
-		if (reaction) {
+		if (handler || reaction) {
+			// registerReactionListener(handler ?? tester!, interaction);
 			debug(`Unregistered Reaction Handler`);
-		// 	registerReactionListener(tester, interaction);
 		}
 
 	}
