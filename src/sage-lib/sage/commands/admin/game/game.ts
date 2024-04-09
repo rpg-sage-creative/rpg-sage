@@ -9,9 +9,10 @@ import type { SageMessage } from "../../../model/SageMessage.js";
 import type { Server } from "../../../model/Server.js";
 import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
 import { registerAdminCommandHelp } from "../../help.js";
+import { gCmdArchive } from "./gCmdArchive.js";
 import { gCmdCreate } from "./gCmdCreate.js";
 import { gCmdDetails } from "./gCmdDetails.js";
-import { gSendDetails } from "./gSendDetails.js";
+import { gCmdUpdate } from "./gCmdUpdate.js";
 
 async function getGames(sageCommand: SageCommand): Promise<Game[]> {
 	const guild = sageCommand.discord.guild;
@@ -124,43 +125,6 @@ async function gameList(sageMessage: SageMessage): Promise<void> {
 	return <any>sageMessage.send(renderableContent);
 }
 
-async function gameUpdate(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
-		return sageMessage.reactBlock();
-	}
-
-	// TODO: consider allowing updating games by messaging bot directly
-
-	const gameOptions = sageMessage.args.getGameOptions();
-	// gameOptions.name = sageMessage.args.getString("newName") ?? gameOptions?.name;
-
-	if (!gameOptions) {
-		return sageMessage.reactFailure();
-	}
-
-	const updated = await sageMessage.game!.update(gameOptions);
-	if (updated) {
-		return gSendDetails(sageMessage);
-	}
-	return sageMessage.reactSuccessOrFailure(updated);
-}
-
-async function gameArchive(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
-		return sageMessage.reactBlock();
-	}
-
-	// TODO: consider allowing removing games by messaging bot directly
-
-	await gSendDetails(sageMessage);
-	const archive = await discordPromptYesNo(sageMessage, `Archive Game?`);
-	if (archive) {
-		const archived = await sageMessage.game!.archive();
-		return sageMessage.reactSuccessOrFailure(archived);
-	}
-	return Promise.resolve();
-}
-
 async function gameToggleDicePing(sageMessage: SageMessage): Promise<void> {
 	const gameChannel = sageMessage.gameChannel;
 	if (gameChannel && (sageMessage.isGameMaster || sageMessage.isPlayer)) {
@@ -186,18 +150,12 @@ export function registerGame(): void {
 	registerAdminCommandHelp("Admin", "Game", "game archive list");
 	registerAdminCommandHelp("Admin", "Game", "game list");
 
-	registerAdminCommand(gameUpdate, "game-update", "game-set");
-	registerAdminCommandHelp("Admin", "Game", `game update name="New Name"`);
-	registerAdminCommandHelp("Admin", "Game", "game update game=DND5E|E20|PF2E|Quest|VtM5e|NONE");
-	registerAdminCommandHelp("Admin", "Game", "game update diceoutput=XXS|XS|S|M|L|XL|XXL|ROLLEM|UNSET");
-
 	registerAdminCommand(gameToggleDicePing, "game-toggle-dice-ping");
 	registerAdminCommandHelp("Admin", "Game", `game toggle dice ping`);
 
-	registerAdminCommand(gameArchive, "game-archive");
-	registerAdminCommandHelp("Admin", "Game", "game archive");
-
 	registerListeners({ commands:["game-create", "create-game"], interaction:gCmdCreate, message:gCmdCreate });
 	registerListeners({ commands:["game-details"], interaction:gCmdDetails, message:gCmdDetails });
+	registerListeners({ commands:["game-update", "update-game"], interaction:gCmdUpdate, message:gCmdUpdate });
+	registerListeners({ commands:["game-archive", "archive-game"], interaction:gCmdArchive, message:gCmdArchive });
 
 }
