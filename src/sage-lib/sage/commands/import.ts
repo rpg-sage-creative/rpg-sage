@@ -1,30 +1,12 @@
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
-import { registerInteractionListener } from "../../discord/handlers.js";
 import { registerCommand } from "../../discord/handlers/registerCommand.js";
-import type { SageInteraction } from "../model/SageInteraction.js";
+import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { SageMessage } from "../model/SageMessage.js";
-import { e20Pdf, getValidE20CharacterId, handleEssence20Import, handleEssence20Reimport } from "./e20.js";
-import { getValidPathbuilderCharacterId, handlePathbuilder2eImport, handlePathbuilder2eReimport, pb2eId } from "./pathbuilder.js";
+import { getValidE20CharacterId, handleEssence20Import, handleEssence20Reimport } from "./e20.js";
+import { getValidPathbuilderCharacterId, handlePathbuilder2eImport, handlePathbuilder2eReimport } from "./pathbuilder.js";
 
 // pb2eId=118142
-function slashTester(sageInteraction: SageInteraction): boolean {
-	if (sageInteraction.isCommand("import")) {
-		return sageInteraction.args.hasNumber(pb2eId)
-			|| sageInteraction.args.hasString(e20Pdf);
-	}
-	return false;
-}
-
-async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
-	if (sageInteraction.args.hasNumber(pb2eId)) {
-		return handlePathbuilder2eImport(sageInteraction);
-	}
-	if (sageInteraction.args.hasString(e20Pdf)) {
-		return handleEssence20Import(sageInteraction);
-	}
-	return sageInteraction.reply(`Sorry, unable to import your character at this time.`, true);
-}
 
 type ImportedCharacter = { id:string; type:"E20"|"PB2E"; };
 function findImportedCharacter(message: Message): ImportedCharacter | undefined {
@@ -71,6 +53,7 @@ async function reimportHandler(sageCommand: SageMessage): Promise<void> {
 }
 
 export function registerImport(): void {
-	registerInteractionListener(slashTester, slashHandler);
+	registerListeners({ commands:["import-pathbuilder2e"], interaction:handlePathbuilder2eImport, message:handlePathbuilder2eImport });
+	registerListeners({ commands:["import-essence20"], interaction:handleEssence20Import, message:handleEssence20Import });
 	registerCommand(reimportHandler, "reimport");
 }

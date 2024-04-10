@@ -5,12 +5,13 @@ import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import { MessageActionRow, MessageAttachment, MessageButton, MessageSelectMenu, type ButtonInteraction, type CommandInteraction, type Message, type MessageButtonStyleResolvable, type MessageEmbed, type SelectMenuInteraction } from "discord.js";
+import { MessageActionRow, MessageAttachment, MessageButton, MessageSelectMenu, type ButtonInteraction, type Message, type MessageButtonStyleResolvable, type MessageEmbed, type SelectMenuInteraction } from "discord.js";
 import { getExplorationModes, getSavingThrows, getSkills, PathbuilderCharacter, toModifier } from "../../../sage-pf2e/index.js";
 import { getCharacterSections, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { SageCache } from "../model/SageCache.js";
+import type { SageCommand } from "../model/SageCommand.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import type { User } from "../model/User.js";
@@ -524,27 +525,29 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 
 //#region slash command
 
-export const pb2eId = "pathbuilder2e-id";
-
-export async function handlePathbuilder2eImport(sageInteraction: SageInteraction<CommandInteraction>): Promise<void> {
-	const pathbuilderId = sageInteraction.args.getNumber(pb2eId, true);
-	await sageInteraction.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, false);
+export async function handlePathbuilder2eImport(sageCommand: SageCommand): Promise<void> {
+	const pathbuilderId = sageCommand.args.getNumber("id", true);
+	await sageCommand.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, false);
 
 	const pathbuilderChar = await PathbuilderCharacter.fetch(pathbuilderId, { });
 	if (!pathbuilderChar) {
-		return sageInteraction.reply(`Failed to fetch Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}!`, false);
+		return sageCommand.reply(`Failed to fetch Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}!`, false);
 	}
 
-	const channel = sageInteraction.interaction.channel as DMessageChannel ?? sageInteraction.user;
+	const channel = sageCommand.dChannel as DMessageChannel;
+	const user = channel ? undefined : await sageCommand.sageCache.discord.fetchUser(sageCommand.sageUser.did);
 
-	const pin = sageInteraction.args.getBoolean("pin") ?? false;
-	const attach = sageInteraction.args.getBoolean("attach") ?? false;
+	const pin = sageCommand.args.getBoolean("pin") ?? false;
+	const attach = sageCommand.args.getBoolean("attach") ?? false;
 	if (attach) {
-		await attachCharacter(sageInteraction.sageCache, channel, pathbuilderId, pathbuilderChar, pin);
+		await attachCharacter(sageCommand.sageCache, channel ?? user, pathbuilderId, pathbuilderChar, pin);
 	}else {
-		await postCharacter(sageInteraction.sageCache, channel, pathbuilderChar, pin);
+		await postCharacter(sageCommand.sageCache, channel ?? user, pathbuilderChar, pin);
 	}
-	return sageInteraction.deleteReply();
+
+	if (sageCommand.isSageInteraction()) {
+		await sageCommand.deleteReply();
+	}
 }
 
 //#endregion
@@ -574,11 +577,12 @@ export async function handlePathbuilder2eReimport(sageCommand: SageMessage, mess
 		case "INVALID_JSON_ID": return handleReimportError(sageCommand, "Unable to fetch the 'Export JSON' id.");
 		case "INVALID_CHARACTER_NAME": return handleReimportError(sageCommand, "The character names do not match!");
 		case false: return sageCommand.whisper("Sorry, we don't know what happened!");
-		default:
+		default: {
 			const char = await PathbuilderCharacter.loadCharacter(characterId);
 			await updateSheet(sageCommand.sageCache, char!, message);
 			await sageCommand.message.delete();
 			return;
+		}
 	}
 }
 

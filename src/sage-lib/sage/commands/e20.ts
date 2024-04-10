@@ -19,8 +19,9 @@ import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse.js
 import { registerInteractionListener } from "../../discord/handlers.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { SageCache } from "../model/SageCache.js";
+import type { SageCommand } from "../model/SageCommand.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
-import { SageMessage } from "../model/SageMessage.js";
+import type { SageMessage } from "../model/SageMessage.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
 
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
@@ -466,53 +467,55 @@ export function registerE20(): void {
 	registerInteractionListener(sheetTester, sheetHandler);
 }
 
-export const e20Pdf = "e20-pdf";
+export async function handleEssence20Import(sageCommand: SageCommand): Promise<void> {
+	await sageCommand.reply(`Attempting to import character ...`, false);
 
-export async function handleEssence20Import(sageInteraction: SageInteraction): Promise<void> {
-	await sageInteraction.reply(`Attempting to import character ...`, false);
-
-	const value = sageInteraction.args.getString(e20Pdf, true);
-	const isPdfUrl = value.match(/^http.*?\.pdf$/) !== null;
+	const value = sageCommand.args.getString("pdf", true);
+	const isPdfUrl = /^http.*?\.pdf$/.test(value);
 	const isMessageUrl = value.startsWith("https://discord.com/channels/");
 
 	let fileName: string | undefined;
 	let rawJson: Optional<TRawJson>;
 	if (isPdfUrl) {
 		fileName = value.split("/").pop();
-		await sageInteraction.reply(`Attempting to read character from ${fileName} ...`, false);
+		await sageCommand.reply(`Attempting to read character from ${fileName} ...`, false);
 		rawJson = await PdfCacher.read<TRawJson>(value);
 	}else if (isMessageUrl) {
 		const [serverDid, channelDid, messageDid] = value.split("/").slice(-3);
 		const discordKey = new DiscordKey(serverDid.replace("@me", NIL_SNOWFLAKE), channelDid, NIL_SNOWFLAKE, messageDid);
-		const message = await sageInteraction.discord.fetchMessage(discordKey);
+		const message = await sageCommand.discord.fetchMessage(discordKey);
 		const attachment = message?.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
 		if (attachment) {
 			fileName = attachment.name ?? undefined;
-			await sageInteraction.reply(`Attempting to read character from ${fileName} ...`, false);
+			await sageCommand.reply(`Attempting to read character from ${fileName} ...`, false);
 			rawJson = await PdfCacher.read<TRawJson>(attachment?.url);
 		}
 	}
 	if (!rawJson) {
-		return sageInteraction.reply(`Failed to find pdf!`, false);
+		return sageCommand.reply(`Failed to find pdf!`, false);
 	}
 
 	const character = jsonToCharacter(rawJson);
 	if (!character) {
-		return sageInteraction.reply(`Failed to import character from: ${fileName}!`, false);
+		return sageCommand.reply(`Failed to import character from: ${fileName}!`, false);
 	}
 
-	await sageInteraction.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
+	await sageCommand.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
 
-	const channel = sageInteraction.interaction.channel ?? sageInteraction.user;
+	const channel = sageCommand.dChannel as DMessageChannel;
+	const user = channel ? undefined : await sageCommand.sageCache.discord.fetchUser(sageCommand.sageUser.did);
 
-	const pin = sageInteraction.args.getBoolean("pin") ?? false;
-	const attach = sageInteraction.args.getBoolean("attach") ?? false;
+	const pin = sageCommand.args.getBoolean("pin") ?? false;
+	const attach = sageCommand.args.getBoolean("attach") ?? false;
 	if (attach) {
-		await attachCharacter(sageInteraction.caches, channel, fileName!, character, pin);
+		await attachCharacter(sageCommand.sageCache, channel ?? user, fileName!, character, pin);
 	}else {
-		await postCharacter(sageInteraction.caches, channel, character, pin);
+		await postCharacter(sageCommand.sageCache, channel ?? user, character, pin);
 	}
-	return sageInteraction.deleteReply();
+
+	if (sageCommand.isSageInteraction()) {
+		await sageCommand.deleteReply();
+	}
 }
 
 //#region reimport
