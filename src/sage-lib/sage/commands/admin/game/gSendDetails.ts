@@ -6,7 +6,7 @@ import type { Optional } from "@rsc-utils/type-utils";
 import type { TextChannel } from "discord.js";
 import { getMissingChannelPerms } from "../../../../discord/permissions/getMissingChannelPerms.js";
 import { resolveToEmbeds } from "../../../../discord/resolvers/resolveToEmbeds.js";
-import { Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
+import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
@@ -129,11 +129,10 @@ async function showGameRenderServer(renderableContent: RenderableContent, sageCo
 	}
 }
 
-/** @todo split into a "createDetails" and "showDetails" (that allows prune) */
-export async function gSendDetails(sageCommand: SageCommand, _game?: Game): Promise<void> {
+async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<RenderableContent | undefined> {
 	const game = _game ?? await showGameGetGame(sageCommand);
 	if (!game) {
-		return Promise.resolve();
+		return undefined;
 	}
 
 	const renderableContent = createAdminRenderableContent(game);
@@ -191,6 +190,20 @@ export async function gSendDetails(sageCommand: SageCommand, _game?: Game): Prom
 	await showGameRenderDialogType(renderableContent, sageCommand, game);
 	gameDetailsAppendDice(renderableContent, game);
 	await showGameRenderServer(renderableContent, sageCommand, game);
-	// await sageMessage.send(renderableContent);
-	await sageCommand.dChannel?.send({embeds:resolveToEmbeds(sageCommand.sageCache, renderableContent)});
+
+	return renderableContent;
+}
+
+export async function gSendDetails(sageCommand: SageCommand, game?: Game): Promise<void> {
+	const renderableContent = await createDetails(sageCommand, game);
+	if (renderableContent) {
+		await sageCommand.dChannel?.send({ embeds:resolveToEmbeds(sageCommand.sageCache, renderableContent) });
+	}
+}
+
+export async function gReplyDetails(sageCommand: SageCommand, game?: Game): Promise<void> {
+	const renderableContent = await createDetails(sageCommand, game);
+	if (renderableContent) {
+		await sageCommand.reply(renderableContent, true);
+	}
 }
