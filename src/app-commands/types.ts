@@ -41,6 +41,10 @@ export type SlashCommand = NameAndDescription & {
 	game?: SlashCommandGameType;
 };
 
+export type MessageCommand = { name:string; type:3; };
+export type UserCommand = { name:string; type:2; };
+export type ContextCommand = MessageCommand | UserCommand;
+
 export type Builder = SlashCommandBuilder | SlashCommandSubcommandBuilder | SlashCommandSubcommandGroupBuilder;
 export type BuilderCommand = SlashCommandBuilder | SlashCommandSubcommandBuilder;
 export type BuilderOption = SlashCommandAttachmentOption | SlashCommandBooleanOption | SlashCommandNumberOption | SlashCommandStringOption;
