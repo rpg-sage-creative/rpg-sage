@@ -34,7 +34,7 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 	}
 
 	const message = [
-		`RPG Sage is missing permissions for ${channelsMissingPerms.length} channels.`,
+		`RPG Sage is missing permissions for ${channelsMissingPerms.length} channel(s).`,
 		`Fix RPG Sage's Permissions?`
 	].join("\n");
 
