@@ -70,7 +70,7 @@ export function parseDialogContent(content: string): DialogContent | null {
 			}
 			case "embedColor": {
 				if (!dialogContent.embedColor) {
-					dialogContent.embedColor = match.value;
+					dialogContent.embedColor = "0x" + match.value;
 				}else {
 					breakWhile = true;
 				}
