@@ -312,6 +312,11 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return { hasKey, hasUnset, hasValue, value };
 	}
 
+	/** Returns a list of all argument keys passed to the command. */
+	public keys(): string[] {
+		return this.argsManager.keyValuePairs().map(kvp => kvp.key);
+	}
+
 	/** Returns true if an argument matches the given key, regardless of value. */
 	public hasKey(name: string): boolean {
 		return !!this.argsManager.findKeyValueArgIndex(name);

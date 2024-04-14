@@ -29,6 +29,26 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 
 	//#region basic get/has
 
+	/** Returns a list of all argument keys passed to the command. */
+	public abstract keys(): string[];
+
+	/** Returns keys partitioned into valid/invalid */
+	public validateKeys(validKeys: string[]) {
+		const toLower = (key: string) => key.toLowerCase();
+		const allKeysLower = this.keys().map(toLower);
+		const validKeysLower = validKeys.map(toLower);
+		return allKeysLower.reduce((keys, key) => {
+			if (validKeysLower.includes(key)) {
+				keys.hasValidKeys = true;
+				keys.validKeys.push(validKeys[validKeysLower.indexOf(key)]);
+			}else {
+				keys.hasInvalidKeys = true;
+				keys.invalidKeys.push(key);
+			}
+			return keys;
+		}, { hasValidKeys:false, validKeys:[] as string[], hasInvalidKeys:false, invalidKeys:[] as string[] });
+	}
+
 	/** Returns true if an argument matches the given key, regardless of value. */
 	public abstract hasKey(key: string): boolean;
 

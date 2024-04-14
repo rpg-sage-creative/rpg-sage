@@ -5,6 +5,11 @@ import type { SageReaction } from "./SageReaction.js";
 
 export class SageReactionArgs extends SageCommandArgs<SageReaction> {
 
+	/** Returns a list of all argument keys passed to the command. */
+	public keys(): string[] {
+		return [];
+	}
+
 	/** Returns true if an argument matches the given key, regardless of value. */
 	public hasKey(name: string): boolean;
 	public hasKey(): boolean {

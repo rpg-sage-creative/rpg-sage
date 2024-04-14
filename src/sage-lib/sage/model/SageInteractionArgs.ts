@@ -7,6 +7,11 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 
 	private get interaction(): CommandInteraction { return this.sageCommand.interaction as CommandInteraction; }
 
+	/** Returns a list of all argument keys passed to the command. */
+	public keys(): string[] {
+		return this.interaction.options.data.map(opt => opt.name);
+	}
+
 	/** Returns true if an argument matches the given key, regardless of value. */
 	public hasKey(name: string): boolean {
 		if (!this.interaction.isApplicationCommand()) return false;
