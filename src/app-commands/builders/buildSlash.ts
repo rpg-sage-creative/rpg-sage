@@ -4,7 +4,7 @@ import { addOptions } from "./addOptions.js";
 import { addSubcommands } from "./addSubCommands.js";
 import { setName } from "./setName.js";
 
-export function buildSlash(raw: SlashCommand): SlashCommandBuilder[] {
+function buildOne(raw: SlashCommand): SlashCommandBuilder {
 	const cmd = setName(new SlashCommandBuilder(), raw);
 	raw.children?.forEach(child => {
 		if (child.children?.length) {
@@ -18,5 +18,24 @@ export function buildSlash(raw: SlashCommand): SlashCommandBuilder[] {
 		}
 	});
 	addOptions(cmd, raw.options);
-	return [cmd];
+	return cmd;
+}
+
+export function buildSlash(all: SlashCommand[]): SlashCommandBuilder[] {
+	const builders: SlashCommandBuilder[] = [];
+	const games = new Map<string, SlashCommand[]>();
+	all.forEach(cmd => {
+		if (cmd.game) {
+			if (!games.has(cmd.game)) {
+				games.set(cmd.game, []);
+			}
+			games.get(cmd.game)?.push(cmd);
+		}else {
+			builders.push(buildOne(cmd));
+		}
+	});
+	for (const [game, cmds] of games) {
+		builders.push(buildOne({ name:game, children:cmds }));
+	}
+	return builders;
 }

@@ -1,14 +1,14 @@
 
 import { error } from "@rsc-utils/console-utils";
 import { filterFiles } from "@rsc-utils/fs-utils";
-import type { SlashCommand } from "../types.js";
+import type { MessageCommand, SlashCommand, UserCommand } from "../types.js";
 
-type CommandType = SlashCommand;
-type CommandImport = { registerCommand:() => CommandType; }
+type CommandType = SlashCommand | MessageCommand | UserCommand;
+type CommandImport<T extends CommandType> = { registerCommand:() => T; };
 type Commands = {
-	message: SlashCommand[];
+	message: MessageCommand[];
 	slash: SlashCommand[];
-	user: SlashCommand[];
+	user: UserCommand[];
 };
 
 export async function registerCommands(): Promise<Commands> {
@@ -16,7 +16,7 @@ export async function registerCommands(): Promise<Commands> {
 	try {
 		const commandPaths = await filterFiles("./app-commands/commands", fileName => fileName.endsWith(".js") && fileName !== "registerCommands.js", true);
 		for (const commandPath of commandPaths) {
-			const { registerCommand } = await import(commandPath.replace("./app-commands/commands", ".")) as CommandImport;
+			const { registerCommand } = await import(commandPath.replace("./app-commands/commands", ".")) as CommandImport<any>;
 			if (commandPath.includes("/message/")) {
 				commands.message.push(registerCommand());
 			}else if (commandPath.includes("/user/")) {
