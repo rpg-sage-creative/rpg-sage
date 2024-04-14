@@ -222,9 +222,10 @@ export async function handleInteraction(interaction: Interaction): Promise<THand
 		const isButton = interaction.isButton();
 		const isCommand = interaction.isCommand();
 		const isComponent = interaction.isMessageComponent();
+		const isContext = interaction.isContextMenu();
 		const isSelectMenu = interaction.isSelectMenu();
 		const isModal = interaction.isModalSubmit();
-		if (isButton || isCommand || isComponent || isSelectMenu || isModal) {
+		if (isButton || isCommand || isComponent || isContext || isSelectMenu || isModal) {
 			const sageInteraction = await SageInteraction.fromInteraction(interaction as DInteraction);
 			await handleInteractions(sageInteraction, output);
 			sageInteraction.clear();

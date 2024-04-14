@@ -57,7 +57,7 @@ export class SageInteraction<T extends DInteraction = any>
 	public isCommand(sub: string, command: string): boolean;
 	public isCommand(gameType: SlashCommandGameType, command: string): boolean;
 	public isCommand(...args: string[]): boolean {
-		if (!this.interaction.isCommand()) {
+		if (!this.interaction.isCommand() && !this.interaction.isContextMenu()) {
 			debug({ what:"Unexpected Interaction Type", type:this.interaction.type });
 			return false;
 		}
@@ -85,14 +85,19 @@ export class SageInteraction<T extends DInteraction = any>
 	}
 
 	public get commandValues(): string[] {
-		if (!this.interaction.isCommand()) {
-			return [];
+		if (this.interaction.isCommand()) {
+			return [
+				this.interaction.commandName,
+				this.interaction.options.getSubcommandGroup(false),
+				this.interaction.options.getSubcommand(false)
+			].filter(isDefined);
 		}
-		return [
-			this.interaction.commandName,
-			this.interaction.options.getSubcommandGroup(false),
-			this.interaction.options.getSubcommand(false)
-		].filter(isDefined);
+		if (this.interaction.isContextMenu()) {
+			return [
+				this.interaction.commandName
+			];
+		}
+		return [];
 	}
 
 	//#endregion

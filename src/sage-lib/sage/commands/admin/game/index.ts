@@ -13,7 +13,7 @@ export function registerGame(): void {
 	// registerWizard();
 
 	registerListeners({ commands:["game-create", "create-game"], interaction:gCmdCreate, message:gCmdCreate });
-	registerListeners({ commands:["game-details"], interaction:gCmdDetails, message:gCmdDetails });
+	registerListeners({ commands:["game-details", "Game Details"], interaction:gCmdDetails, message:gCmdDetails });
 	registerListeners({ commands:["game-update", "update-game"], interaction:gCmdUpdate, message:gCmdUpdate });
 	registerListeners({ commands:["game-archive", "archive-game"], interaction:gCmdArchive, message:gCmdArchive });
 }
