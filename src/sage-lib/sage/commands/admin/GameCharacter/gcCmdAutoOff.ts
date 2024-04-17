@@ -47,4 +47,6 @@ export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 
 	const label = channelDids.length > 1 ? "those channels" : "that channel";
 	await sageMessage.whisper(`You aren't using Auto Dialog with ${character.name} in ${label}.`);
+
+	/** @todo change auto to be a command where i list ganme channels and autos for them and provide dropdown selects of characters for each channel to make your selections */
 }
