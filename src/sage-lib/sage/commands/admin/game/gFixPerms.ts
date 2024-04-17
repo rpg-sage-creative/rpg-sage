@@ -1,25 +1,26 @@
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import { TextChannel } from "discord.js";
+import type { TextChannel } from "discord.js";
 import { fixMissingChannelPerms } from "../../../../discord/permissions/fixMissingChannelPerms.js";
 import { getMissingChannelPerms } from "../../../../discord/permissions/getMissingChannelPerms.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
-import { gSendDetails } from "./gSendDetails.js";
 
-export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise<void> {
+/** Fixes Sage's perms for the game's channels. Returns true if a change was made. */
+export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise<boolean> {
 	const game = _game ?? sageCommand.game;
 	if (!game) {
-		return;
+		return false;
 	}
 
 	const bot = await sageCommand.discord.fetchGuildMember(sageCommand.bot.did);
 	if (!bot) {
-		return;
+		return false;
 	}
 
 	const channelsMissingPerms: TextChannel[] = [];
-	for (const gameChannel of game.channels) {
+	const gameChannels = game.channels;
+	for (const gameChannel of gameChannels) {
 		const guildChannel = await sageCommand.discord.fetchChannel<TextChannel>(gameChannel.id);
 		if (guildChannel) {
 			const missingPerms = await getMissingChannelPerms(bot, guildChannel);
@@ -30,7 +31,7 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 	}
 
 	if (!channelsMissingPerms.length) {
-		return;
+		return false;
 	}
 
 	const message = [
@@ -40,24 +41,24 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 
 	const fix = await discordPromptYesNo(sageCommand, message);
 	if (!fix) {
-		return;
+		return false;
 	}
 
-	let showAgain = false;
+	let changed = false;
+
 	const unable: string[] = [];
 	for (const guildChannel of channelsMissingPerms) {
 		const results = await fixMissingChannelPerms(bot, guildChannel);
-		if (results.success) {
-			showAgain = true;
-		}else {
+		if (results.fixSuccess) {
+			changed = true;
+		}else if (!results.permsCorrect) {
 			unable.push(`<i>Unable to fix #${toHumanReadable(guildChannel)}</i>`);
 		}
 	}
 
-	if (showAgain) {
-		await gSendDetails(sageCommand);
-	}
 	if (unable.length) {
 		await sageCommand.reply(unable.join("<br/>"));
 	}
+
+	return changed;
 }

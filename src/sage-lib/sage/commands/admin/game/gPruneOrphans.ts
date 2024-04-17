@@ -1,11 +1,11 @@
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
-import { gSendDetails } from "./gSendDetails.js";
 
-export async function gPruneOrphans(sageCommand: SageCommand): Promise<void> {
+/** Prune orphan players, gamemasters, and channels the game. Returns true if a change was made. */
+export async function gPruneOrphans(sageCommand: SageCommand): Promise<boolean> {
 	const game = sageCommand.game;
 	if (!game) {
-		return;
+		return false;
 	}
 
 	const orphanUsers = await game.orphanUsers();
@@ -20,7 +20,7 @@ export async function gPruneOrphans(sageCommand: SageCommand): Promise<void> {
 	const missingChannels = missingChannelSnowflakes.length > 0;
 
 	if (!missingPlayers && !missingGms && !missingChannels) {
-		return;
+		return false;
 	}
 
 	const message = [
@@ -32,16 +32,16 @@ export async function gPruneOrphans(sageCommand: SageCommand): Promise<void> {
 
 	const remove = await discordPromptYesNo(sageCommand, message);
 	if (!remove) {
-		return;
+		return false;
 	}
 
-	let showAgain = false;
+	let changed = false;
 	const unable: string[] = [];
 
 	if (missingPlayers) {
 		const removed = await game.removePlayers(missingPlayerSnowflakes);
 		if (removed) {
-			showAgain = true;
+			changed = true;
 		}else {
 			unable.push(`<i>Unable to remove player(s)!</i>`);
 		}
@@ -50,7 +50,7 @@ export async function gPruneOrphans(sageCommand: SageCommand): Promise<void> {
 	if (missingGms) {
 		const removed = await game.removeGameMasters(missingGmSnowflakes);
 		if (removed) {
-			showAgain = true;
+			changed = true;
 		}else {
 			unable.push(`<i>Unable to remove game master(s)!</i>`);
 		}
@@ -59,16 +59,15 @@ export async function gPruneOrphans(sageCommand: SageCommand): Promise<void> {
 	if (missingChannels) {
 		const removed = await game.removeChannels(...missingChannelSnowflakes);
 		if (removed) {
-			showAgain = true;
+			changed = true;
 		}else {
 			unable.push(`<i>Unable to remove channel(s)!</i>`);
 		}
 	}
 
-	if (showAgain) {
-		await gSendDetails(sageCommand);
-	}
 	if (unable.length) {
 		await sageCommand.reply(unable.join("<br/>"));
 	}
+
+	return changed;
 }

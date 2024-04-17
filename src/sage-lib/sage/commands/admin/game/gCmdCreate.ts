@@ -8,6 +8,7 @@ import { getGameChannels } from "./getGameChannels.js";
 import { getGameUsers } from "./getGameUsers.js";
 import { gFixPerms } from "./gFixPerms.js";
 import { gSendDetails } from "./gSendDetails.js";
+import { gBlockBots } from "./gBlockBots.js";
 
 function createGame(sageCommand: SageCommand, gameOptions: Partial<GameOptions>, channels: SageChannel[], users: IGameUser[]): Game {
 	return new Game({
@@ -63,7 +64,11 @@ async function gameCreate(sageCommand: SageCommand): Promise<boolean | undefined
 		const gameSaved = game ? await game.save() : false;
 		const serverSaved = gameSaved ? await sageCommand.server.save() : false;
 		if (gameSaved && serverSaved) {
-			await gFixPerms(sageCommand, game);
+			const fixed = await gFixPerms(sageCommand, game);
+			const blocked = await gBlockBots(sageCommand, game);
+			if (fixed || blocked) {
+				await gSendDetails(sageCommand, game);
+			}
 			return true;
 		}
 	}
