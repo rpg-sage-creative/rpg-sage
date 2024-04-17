@@ -24,6 +24,8 @@ else
 		botCodeName=dev \
 		"dataRoot=$DATA_ROOT" \
 		superUserId=253330271678627841 \
-		homeServerId=963531189254238278
+		homeServerId=963531189254238278 \
+		tupperBoxId=431544605209788416 \
+		rollemId=240732567744151553
 
 fi
