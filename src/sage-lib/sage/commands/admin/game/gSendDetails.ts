@@ -1,6 +1,7 @@
 import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/types";
 import { getDateStrings } from "@rsc-utils/date-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { getRollemId, getTupperBoxId } from "@rsc-utils/env-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { TextChannel } from "discord.js";
@@ -46,6 +47,27 @@ async function checkForMissingPerms(sageCommand: SageCommand, guildChannel?: Tex
 	return [];
 }
 
+async function checkForOtherBots(sageCommand: SageCommand, guildChannel?: TextChannel | null): Promise<string[]> {
+	const botNames: string[] = [];
+
+	if (!guildChannel) {
+		return botNames;
+	}
+
+	const bots = [["Tupperbox", getTupperBoxId()], ["Rollem", getRollemId()]];
+	for (const [botName, botId] of bots) {
+		const botGuildMember = await sageCommand.discord.fetchGuildMember(botId);
+		if (botGuildMember) {
+			const hasAccess = guildChannel.permissionsFor(botGuildMember).has("VIEW_CHANNEL");
+			if (hasAccess) {
+				botNames.push(botName);
+			}
+		}
+	}
+
+	return botNames;
+}
+
 async function showGameRenderChannels(renderableContent: RenderableContent, sageCommand: SageCommand, game: Game): Promise<void> {
 	renderableContent.append(`<b>Channels</b> ${game.channels.length}`);
 
@@ -63,6 +85,10 @@ async function showGameRenderChannels(renderableContent: RenderableContent, sage
 				const missingPerms = await checkForMissingPerms(sageCommand, guildChannel);
 				if (missingPerms.length) {
 					renderableContent.append(`[spacer][spacer][spacer]Missing Perms: ${missingPerms.join(", ")}`);
+				}
+				const otherBots = await checkForOtherBots(sageCommand, guildChannel);
+				if (otherBots.length) {
+					renderableContent.append(`[spacer][spacer][spacer]Other Bots: ${otherBots.join(", ")}`);
 				}
 			}
 		}
