@@ -2,7 +2,6 @@ import { error, errorReturnNull } from "@rsc-utils/console-utils";
 import { DiscordKey, splitMessageOptions, validateMessageOptions } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages";
-import { SageDialogWebhookName } from "../../../../discord/messages";
 import type { TDialogMessage } from "../../../model/GameCharacter";
 import type { SageMessage } from "../../../model/SageMessage";
 import { DialogType } from "../../../repo/base/IdRepository";
@@ -23,7 +22,7 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 		return sageMessage.reactWarn();
 	}
 
-	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, SageDialogWebhookName);
+	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, "dialog");
 	if (webhook) {
 		const embed = message.embeds[0];
 		const updatedImageUrl = dialogContent.imageUrl;

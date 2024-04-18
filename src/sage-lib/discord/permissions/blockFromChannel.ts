@@ -1,4 +1,5 @@
-import { GuildMember, TextChannel } from "discord.js";
+import type { GuildMember, NonThreadGuildBasedChannel } from "discord.js";
+import { getPermsFor } from "./getPermsFor";
 
 /*
 https://discord.com/developers/docs/topics/permissions
@@ -8,52 +9,56 @@ type BlockResults = {
 	/** Could Sage manage the channel? */
 	canManageChannel: boolean;
 
+	/** Could Sage see the channel? */
+	canViewChannel: boolean;
+
 	/** was member blocked before the edit */
 	blockedBefore?: boolean;
 
 	/** was an edit attempted? */
 	fixAttempted?: boolean;
 
-	/** is member blocked after the edit */
-	blockedAfter?: boolean;
-
 	/** was there a successful edit */
 	fixSuccess?: boolean;
+
+	/** is member blocked after the edit */
+	blockedAfter?: boolean;
 
 	/** regardless of changes, is the member blocked? */
 	blockCorrect: boolean;
 };
 
 /** Blocks the given target from the given channel. */
-export async function blockFromChannel(sageGuildMember: GuildMember, channel: TextChannel, memberToBlock: GuildMember): Promise<BlockResults> {
+export async function blockFromChannel(sage: GuildMember, channel: NonThreadGuildBasedChannel, memberToBlock: GuildMember): Promise<BlockResults> {
 	// see if we can manage the channel
-	const canManageChannel = channel.permissionsFor(sageGuildMember).has("MANAGE_CHANNELS");
+	const { canManageChannel, canViewChannel } = getPermsFor(channel, sage);
 
 	// check the state before we do any work
-	const permsBefore = channel.permissionsFor(memberToBlock);
-	const blockedBefore = !permsBefore.has("VIEW_CHANNEL");
+	const blockedBefore = !getPermsFor(channel, memberToBlock).canViewChannel;
 
 	// if we can't manage or we don't need to, return now
-	if (!canManageChannel || blockedBefore) {
-		return { canManageChannel, blockCorrect:true };
+	if (!canManageChannel || !canViewChannel || blockedBefore) {
+		return { canManageChannel, canViewChannel, blockCorrect:blockedBefore };
 	}
 
 	// prepare perms
 	const overwrites = { "VIEW_CHANNEL":false };
 
 	// update perms
-	const updatedChannel = await channel.permissionOverwrites.create(memberToBlock, overwrites);
+	let fixError = false;
+	const updatedChannel = await channel.permissionOverwrites.create(memberToBlock, overwrites)
+		.catch(() => { fixError = true; return null; }); // NOSONAR
 
 	// recheck perms
-	const permsAfter = updatedChannel.permissionsFor(memberToBlock);
-	const blockedAfter = !permsAfter.has("VIEW_CHANNEL");
+	const blockedAfter = !getPermsFor(updatedChannel ?? channel, memberToBlock).canViewChannel;
 
 	return {
 		canManageChannel,
+		canViewChannel,
 		blockedBefore,
 		fixAttempted: true,
+		fixSuccess: !fixError,
 		blockedAfter,
-		fixSuccess: blockedAfter,
 		blockCorrect: blockedAfter
 	};
 }

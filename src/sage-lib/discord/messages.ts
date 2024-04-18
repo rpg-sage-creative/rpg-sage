@@ -29,8 +29,6 @@ function logIfNotTimeout(typeOfReason: string, reason: string): void {
 
 //#region webhook
 
-export const SageDialogWebhookName = "SageDialogWebhookName";
-
 type WebhookOptions = {
 	authorOptions: WebhookMessageOptions;
 	dialogType: DialogType;
@@ -49,9 +47,9 @@ export async function sendWebhook(targetChannel: DMessageChannel, { authorOption
 		return [];
 	}
 
-	const webhook = await sageCache.discord.fetchOrCreateWebhook(targetChannel.guild, targetChannel, SageDialogWebhookName);
+	const webhook = await sageCache.discord.fetchOrCreateWebhook(targetChannel.guild, targetChannel, "dialog");
 	if (!webhook) {
-		return Promise.reject(`Cannot Find Webhook: ${targetChannel.guild?.id}-${targetChannel.id}-${SageDialogWebhookName}`);
+		return Promise.reject(`Cannot Find Webhook: ${targetChannel.guild?.id}-${targetChannel.id}-dialog`);
 	}
 
 	const embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel), renderableContent);
@@ -78,12 +76,14 @@ export async function replaceWebhook(originalMessage: DMessage, { authorOptions,
 	if (!skipDelete && !originalMessage.deletable) {
 		return Promise.reject(`Cannot Delete Message: ${messageToDetails(originalMessage)}`);
 	}
+
 	if (!originalMessage.guild) {
 		return Promise.reject(`Cannot Find Webhook w/o a Guild: ${originalMessage.channel?.id}`);
 	}
-	const webhook = await sageCache.discord.fetchOrCreateWebhook(originalMessage.guild, originalMessage.channel as DMessageChannel, SageDialogWebhookName);
+
+	const webhook = await sageCache.discord.fetchOrCreateWebhook(originalMessage.guild, originalMessage.channel as DMessageChannel, "dialog");
 	if (!webhook) {
-		return Promise.reject(`Cannot Find Webhook: ${originalMessage.guild?.id}-${originalMessage.channel?.id}-${SageDialogWebhookName}`);
+		return Promise.reject(`Cannot Find Webhook: ${originalMessage.guild?.id}-${originalMessage.channel?.id}-dialog`);
 	}
 
 	await sageCache.pauseForTupper(DiscordKey.fromMessage(originalMessage));

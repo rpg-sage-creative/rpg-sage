@@ -1,5 +1,7 @@
 import type { GuildMember, TextChannel } from "discord.js";
-import { type BotPermPairs, getRequiredChannelPerms } from "./getRequiredChannelPerms.js";
+import { getPermsFor } from "./getPermsFor.js";
+import { getRequiredChannelPerms } from "./getRequiredChannelPerms.js";
+import { ChannelPermissionString } from "./ChannelPermissionString.js";
 
 /*
 https://discord.com/developers/docs/topics/permissions
@@ -9,17 +11,20 @@ type FixPermResults = {
 	/** Could Sage manage the channel? */
 	canManageChannel: boolean;
 
+	/** Could Sage see the channel? */
+	canViewChannel: boolean;
+
 	/** perms missing before the edit */
-	missingBefore?: BotPermPairs[];
+	missingBefore?: ChannelPermissionString[];
 
 	/** was an edit attempted? */
 	fixAttempted?: boolean;
 
-	/** perms missing after the edit */
-	missingAfter?: BotPermPairs[];
-
 	/** was there a successful edit? */
 	fixSuccess?: boolean;
+
+	/** perms missing after the edit */
+	missingAfter?: ChannelPermissionString[];
 
 	/** regardless of changes, are the final perms correct? */
 	permsCorrect: boolean;
@@ -27,38 +32,36 @@ type FixPermResults = {
 
 /** Checks the given channel to see what perms are missing. */
 export async function fixMissingChannelPerms(botGuildMember: GuildMember, channel: TextChannel): Promise<FixPermResults> {
-	// see if we can manage the channel
-	const permsBefore = channel.permissionsFor(botGuildMember);
-	const canManageChannel = permsBefore.has("MANAGE_CHANNELS");
-
 	// check the state before we do any work
-	const requiredPairs = getRequiredChannelPerms();
-	const missingBefore = requiredPairs.filter(pair => !permsBefore.has(pair.perm));
+	const before = getPermsFor(channel, botGuildMember, ...getRequiredChannelPerms());
+	const { canManageChannel, canViewChannel } = before;
 
 	// if we can't manage or we don't need to, return now
-	if (!canManageChannel || missingBefore.length === 0) {
-		return { canManageChannel, permsCorrect:true };
+	if (!canManageChannel || !canViewChannel || before.missing.length) {
+		return { canManageChannel, canViewChannel, permsCorrect:!before.missing.length };
 	}
 
 	// prepare perms
 	const overwrites: { [key: string]: boolean; } = { };
-	for (const pair of missingBefore) {
-		overwrites[pair.perm] = true;
+	for (const perm of before.missing) {
+		overwrites[perm] = true;
 	}
 
 	// update perms
-	const updatedChannel = await channel.permissionOverwrites.create(botGuildMember, overwrites);
+	let fixError = false;
+	const updatedChannel = await channel.permissionOverwrites.create(botGuildMember, overwrites)
+		.catch(() => { fixError = true; return null; }); // NOSONAR
 
 	// recheck perms
-	const permsAfter = updatedChannel.permissionsFor(botGuildMember);
-	const missingAfter = requiredPairs.filter(pair => !permsAfter.has(pair.perm));
+	const after = getPermsFor(updatedChannel ?? channel, botGuildMember, ...getRequiredChannelPerms());
 
 	return {
 		canManageChannel,
-		missingBefore,
+		canViewChannel,
+		missingBefore: before.missing,
 		fixAttempted: true,
-		missingAfter,
-		fixSuccess: missingAfter.length === 0,
-		permsCorrect: missingAfter.length === 0
+		fixSuccess: !fixError,
+		missingAfter: after.missing,
+		permsCorrect: !after.missing.length
 	};
 }

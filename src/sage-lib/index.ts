@@ -1,12 +1,11 @@
+import { setSageId } from "@rsc-sage/env";
 import { error } from "@rsc-utils/console-utils";
 import { getBotCodeName } from "@rsc-utils/env-utils";
 import { registerAndLoad } from "../sage-pf2e";
-import { registerPrompts } from "./discord";
-import { setBotMeta } from "./discord/handlers";
-import { SageDialogWebhookName } from "./discord/messages";
-import { registerCommandHandlers } from "./sage/commands";
-import { ActiveBot } from "./sage/model/ActiveBot";
-import { BotRepo } from "./sage/repo/BotRepo";
+import { registerPrompts } from "./discord/index.js";
+import { registerCommandHandlers } from "./sage/commands/index.js";
+import { ActiveBot } from "./sage/model/ActiveBot.js";
+import { BotRepo } from "./sage/repo/BotRepo.js";
 
 export async function activate(): Promise<void> {
 	const botCodeName = getBotCodeName();
@@ -18,7 +17,9 @@ export async function activate(): Promise<void> {
 		process.exit(1);
 	}
 
-	setBotMeta({ activeBotDid:bot.did, dialogWebhookName:SageDialogWebhookName, testBotDid:undefined });
+	setSageId(bot.did);
+	//setSageDialogWebhookName()
+	//setTestBotId();
 
 	registerCommandHandlers();
 	registerPrompts();

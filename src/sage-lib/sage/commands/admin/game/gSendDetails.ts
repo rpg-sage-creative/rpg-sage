@@ -5,12 +5,14 @@ import { getRollemId, getTupperBoxId } from "@rsc-utils/env-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { TextChannel } from "discord.js";
-import { getMissingChannelPerms } from "../../../../discord/permissions/getMissingChannelPerms.js";
+import { getPermissionLabel } from "../../../../discord/permissions/getPermissionLabel.js";
+import { getPermsFor } from "../../../../discord/permissions/getPermsFor.js";
 import { resolveToEmbeds } from "../../../../discord/resolvers/resolveToEmbeds.js";
 import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
+import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";
 
 async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
 	let game: Optional<Game> = sageCommand.game;
@@ -42,12 +44,12 @@ function showGameRenderGameType(renderableContent: RenderableContent, game: Game
 async function checkForMissingPerms(sageCommand: SageCommand, guildChannel?: TextChannel | null): Promise<string[]> {
 	const bot = await sageCommand.discord.fetchGuildMember(sageCommand.bot.did);
 	if (bot && guildChannel) {
-		return getMissingChannelPerms(bot, guildChannel);
+		return getPermsFor(guildChannel, bot, ...getRequiredChannelPerms()).missing.map(getPermissionLabel);
 	}
 	return [];
 }
 
-async function checkForOtherBots(sageCommand: SageCommand, guildChannel?: TextChannel | null): Promise<string[]> {
+async function checkForOtherBots(guildChannel?: TextChannel | null): Promise<string[]> {
 	const botNames: string[] = [];
 
 	if (!guildChannel) {
@@ -56,12 +58,9 @@ async function checkForOtherBots(sageCommand: SageCommand, guildChannel?: TextCh
 
 	const bots = [["Tupperbox", getTupperBoxId()], ["Rollem", getRollemId()]];
 	for (const [botName, botId] of bots) {
-		const botGuildMember = await sageCommand.discord.fetchGuildMember(botId);
-		if (botGuildMember) {
-			const hasAccess = guildChannel.permissionsFor(botGuildMember).has("VIEW_CHANNEL");
-			if (hasAccess) {
-				botNames.push(botName);
-			}
+		const { canViewChannel } = getPermsFor(guildChannel, botId);
+		if (canViewChannel) {
+			botNames.push(botName);
 		}
 	}
 
@@ -86,7 +85,7 @@ async function showGameRenderChannels(renderableContent: RenderableContent, sage
 				if (missingPerms.length) {
 					renderableContent.append(`[spacer][spacer][spacer]Missing Perms: ${missingPerms.join(", ")}`);
 				}
-				const otherBots = await checkForOtherBots(sageCommand, guildChannel);
+				const otherBots = await checkForOtherBots(guildChannel);
 				if (otherBots.length) {
 					renderableContent.append(`[spacer][spacer][spacer]Other Bots: ${otherBots.join(", ")}`);
 				}

@@ -1,7 +1,8 @@
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { TextChannel } from "discord.js";
 import { fixMissingChannelPerms } from "../../../../discord/permissions/fixMissingChannelPerms.js";
-import { getMissingChannelPerms } from "../../../../discord/permissions/getMissingChannelPerms.js";
+import { getPermsFor } from "../../../../discord/permissions/getPermsFor.js";
+import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
@@ -20,17 +21,26 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 
 	const channelsMissingPerms: TextChannel[] = [];
 	const gameChannels = game.channels;
+	let cannotView = 0;
 	for (const gameChannel of gameChannels) {
 		const guildChannel = await sageCommand.discord.fetchChannel<TextChannel>(gameChannel.id);
 		if (guildChannel) {
-			const missingPerms = await getMissingChannelPerms(bot, guildChannel);
-			if (missingPerms.length > 0) {
+			const perms = getPermsFor(guildChannel, bot, ...getRequiredChannelPerms());
+			if (!perms.canViewChannel) {
+				cannotView++;
+			}
+			if (perms.missing.length) {
 				channelsMissingPerms.push(guildChannel);
 			}
 		}
 	}
 
 	if (!channelsMissingPerms.length) {
+		return false;
+	}
+
+	if (cannotView) {
+		await sageCommand.reply(`RPG Sage cannot see ${cannotView} channel(s).\nPlease have a server admin fix RPG Sage's permissions.`);
 		return false;
 	}
 

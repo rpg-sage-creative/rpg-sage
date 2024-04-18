@@ -1,11 +1,12 @@
+import { getSageId, getWebhookName, SageWebhookType } from "@rsc-sage/env";
 import { filterAsync } from "@rsc-utils/async-array-utils";
 import { debug, error, info, warn } from "@rsc-utils/console-utils";
 import { DTextChannel, DThreadChannel, DiscordKey, toHumanReadable, type DChannelResolvable, type DGuildResolvable, type DMessageChannel } from "@rsc-utils/discord-utils";
 import { NIL_SNOWFLAKE, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Interaction, Message, MessageReaction, PartialMessage, Role, Snowflake, TextChannel, User, Webhook } from "discord.js";
-import { ActiveBot } from "../sage/model/ActiveBot";
-import type { SageMessage } from "../sage/model/SageMessage";
+import type { SageMessage } from "../sage/model/SageMessage.js";
+import { getPermsFor } from "./permissions/getPermsFor.js";
 
 //#region Helpers
 
@@ -280,8 +281,8 @@ export class DiscordCache {
 
 	private webhookMap: Map<string, Webhook | null>;
 
-	public async fetchWebhook(guildResolvable: DGuildResolvable, channelResolvable: DChannelResolvable, name: string): Promise<Webhook | null> {
-		if (!guildResolvable || !channelResolvable || !name) {
+	public async fetchWebhook(guildResolvable: DGuildResolvable, channelResolvable: DChannelResolvable, type: SageWebhookType): Promise<Webhook | null> {
+		if (!guildResolvable || !channelResolvable) {
 			return null;
 		}
 
@@ -290,10 +291,15 @@ export class DiscordCache {
 			return null;
 		}
 
-		const key = createWebhookKey(channel, name);
+		const webhookName = getWebhookName(type);
+		if (!webhookName) {
+			return null;
+		}
+
+		const key = createWebhookKey(channel, webhookName);
 		if (!this.webhookMap.has(key)) {
 			const webhooksCollection = await channel.fetchWebhooks().catch(warnUnknownElseErrorReturnNull),
-				webhook = webhooksCollection?.find(w => w.name === name);
+				webhook = webhooksCollection?.find(w => w.name === webhookName);
 			this.webhookMap.set(key, webhook ?? null);
 		}
 		return this.webhookMap.get(key) ?? null;
@@ -315,27 +321,27 @@ export class DiscordCache {
 	 * Logging is done here, once, because this is sometimes called twice in fetchOrCreateWebhook.
 	 */
 	private hasManageWebhooksPerm(channel: Optional<TextChannel>): channel is TextChannel {
-		if (!channel || !channel.createWebhook || !channel.fetchWebhooks) {
+		if (!channel?.createWebhook || !channel?.fetchWebhooks) {
 			return false;
 		}
 
 		const did = channel.id;
 		if (!this.manageWebhooksPermMap.has(did)) {
-			const hasPerm = channel.permissionsFor(ActiveBot.active.did, true)?.has("MANAGE_WEBHOOKS");
-			if (!hasPerm) {
+			const { canManageWebhooks } = getPermsFor(channel, getSageId());
+			if (!canManageWebhooks) {
 				info(`No Permission (MANAGE_WEBHOOKS): ${toHumanReadable(channel)}`);
 			}
-			this.manageWebhooksPermMap.set(did, hasPerm);
+			this.manageWebhooksPermMap.set(did, canManageWebhooks);
 		}
 		return this.manageWebhooksPermMap.get(did) === true;
 	}
 
-	public async fetchOrCreateWebhook(guildResolvable: DGuildResolvable, channelResolvable: DChannelResolvable, name: string, avatar?: string): Promise<Webhook | null> {
-		if (!guildResolvable || !channelResolvable || !name) {
+	public async fetchOrCreateWebhook(guildResolvable: DGuildResolvable, channelResolvable: DChannelResolvable, type: SageWebhookType, avatar?: string): Promise<Webhook | null> {
+		if (!guildResolvable || !channelResolvable) {
 			return null;
 		}
 
-		const existing = await this.fetchWebhook(guildResolvable, channelResolvable, name);
+		const existing = await this.fetchWebhook(guildResolvable, channelResolvable, type);
 		if (existing) {
 			return existing;
 		}
@@ -346,8 +352,9 @@ export class DiscordCache {
 		}
 
 		if (!channel.isThread()) {
-			const created = await channel.createWebhook(name, { avatar:avatar }).catch(warnUnknownElseErrorReturnNull);
-			const key = createWebhookKey(channel, name);
+			const webhookName = getWebhookName(type);
+			const created = await channel.createWebhook(webhookName, { avatar:avatar }).catch(warnUnknownElseErrorReturnNull);
+			const key = createWebhookKey(channel, webhookName);
 			this.webhookMap.set(key, created ?? null);
 			return created;
 		}
@@ -355,8 +362,8 @@ export class DiscordCache {
 		return null;
 	}
 
-	public async findLastWebhookMessageByAuthor(guildResolvable: DGuildResolvable, channelResolvable: DChannelResolvable, name: string, filter: (authorName: string, index: number, messages: Message[]) => Promise<unknown>): Promise<Message | null> {
-		const webhook = await this.fetchWebhook(guildResolvable, channelResolvable, name);
+	public async findLastWebhookMessageByAuthor(guildResolvable: DGuildResolvable, channelResolvable: DChannelResolvable, type: SageWebhookType, filter: (authorName: string, index: number, messages: Message[]) => Promise<unknown>): Promise<Message | null> {
+		const webhook = await this.fetchWebhook(guildResolvable, channelResolvable, type);
 		if (!webhook) {
 			return null;
 		}
