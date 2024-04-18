@@ -17,16 +17,17 @@ import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequ
 async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
 	let game: Optional<Game> = sageCommand.game;
 	if (!game) {
-		const gameId = sageCommand.args.getUuid("id");
+		const gameId = sageCommand.args.getString("id");
 		if (gameId) {
 			game = await sageCommand.sageCache.games.getById(gameId);
 		}
 		if (!game) {
-			await sageCommand.reply("*No Game Found!*");
+			await sageCommand.whisper("No Game Found!");
 		}
 	}
 	if (!sageCommand.canAdminGames && !game?.hasGameMaster(sageCommand.authorDid)) {
-		await sageCommand.reply("*Server Admin, Game Admin, or Game Master privilege required!*");
+		await sageCommand.whisper("*Server Admin, Game Admin, or Game Master privilege required!*");
+		return null;
 	}
 	return game ?? null;
 }
