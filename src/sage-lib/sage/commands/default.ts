@@ -6,7 +6,8 @@ import { capitalize } from "@rsc-utils/string-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e/index.js";
 import { ArgsManager } from "../../discord/ArgsManager.js";
-import { registerInteractionListener, registerMessageListener } from "../../discord/handlers.js";
+import { registerMessageListener } from "../../discord/handlers.js";
+import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { TCommandAndArgs } from "../../discord/types.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
@@ -220,22 +221,19 @@ async function findHandler(sageMessage: SageMessage): Promise<void> {
 
 //#region dm slash command
 
-function dmSlashTester(sageInteraction: SageInteraction): boolean {
-	return sageInteraction.isCommand("DM");
-}
 async function dmSlashHandler(sageInteraction: SageInteraction): Promise<void> {
 	return sageInteraction.defer(true).then(deferred, failure);
 
 	function deferred(): Promise<void> {
-		const dmContent = `Hello!\nRPG Sage will now reply to your Direct Messages.\n*Note: Anytime RPG Sage is disconnected from Discord, you will need to reestablish this channel. I apologize for the inconvenience.*`;
+		const dmContent = `Hello!\nRPG Sage will now reply to your Direct Messages.\n*Note: Anytime RPG Sage is disconnected from Discord, you may need to reestablish this connection. We apologize for the inconvenience.*`;
 		return sageInteraction.user.send(dmContent).then(success, failure);
 	}
 	function success(): Promise<void> {
-		return sageInteraction.reply(`Please check your DMs!`, true);
+		return sageInteraction.whisper(`Please check your DMs!`);
 	}
 	function failure(reason: any): Promise<void> {
 		error(reason);
-		return sageInteraction.reply(`Sorry, there was a problem!`, true);
+		return sageInteraction.whisper(`Sorry, there was a problem!`);
 	}
 }
 
@@ -302,5 +300,5 @@ export function registerDefault(): void {
 		}
 	});
 
-	registerInteractionListener(dmSlashTester, dmSlashHandler);
+	registerListeners({ commands:["dm"], interaction:dmSlashHandler });
 }
