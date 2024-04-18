@@ -58,7 +58,6 @@ export class SageInteraction<T extends DInteraction = any>
 	public isCommand(gameType: SlashCommandGameType, command: string): boolean;
 	public isCommand(...args: string[]): boolean {
 		if (!this.interaction.isCommand() && !this.interaction.isContextMenu()) {
-			debug({ what:"Unexpected Interaction Type", type:this.interaction.type });
 			return false;
 		}
 
