@@ -1,4 +1,4 @@
-import { debug } from "@rsc-utils/console-utils";
+// import { debug } from "@rsc-utils/console-utils";
 import { type SageChannel } from "../SageChannel.js";
 import { updateChannelOptions, type OldChannelOptions } from "./updateChannelOptions.js";
 import { updateDialogOptions, type OldDialogOptions } from "./updateDialogOptions.js";
@@ -24,7 +24,7 @@ export type OldSageChannel = SageChannel
 /** @todo fix this cast */
 export function updateSageChannel(channel: any): void;
 export function updateSageChannel(channel: OldSageChannel): void {
-	debug(`\tUpdating Channel: ${channel.did??channel.id} ...`);
+	// debug(`\tUpdating Channel: ${channel.did??channel.id} ...`);
 	channel.id = channel.did ?? channel.id;
 	channel.did = channel.id;
 	// delete channel.did;
@@ -37,5 +37,5 @@ export function updateSageChannel(channel: OldSageChannel): void {
 	delete channel.nickName;
 	delete channel.sendCommandTo;
 	delete channel.sendSearchTo;
-	debug(`\tUpdating Channel: ${channel.id} ... done.`);
+	// debug(`\tUpdating Channel: ${channel.id} ... done.`);
 }
