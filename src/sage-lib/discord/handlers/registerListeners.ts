@@ -31,7 +31,7 @@ type Args = {
 
 export function registerListeners({ commands, interaction, message, reaction, handler }: Args): void {
 	for (const command of commands) {
-		const commandParts = command.split("-");
+		const commandParts = command.split("|");
 		const tester = (cmd: SageCommand) => cmd.isCommand(...commandParts);
 
 		if (handler || interaction) {

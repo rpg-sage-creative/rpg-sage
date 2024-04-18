@@ -136,5 +136,5 @@ export function registerUser(): void {
 	registerAdminCommandHelp("Admin", "SuperUser", "User", "user count");
 
 	registerAdminCommand(userUpdate, "user-set", "user-update");
-	registerListeners({ commands:["user-details", "User Details"], interaction:userDetails, message:userDetails });
+	registerListeners({ commands:["user|details", "User Details"], interaction:userDetails, message:userDetails });
 }

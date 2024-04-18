@@ -53,7 +53,7 @@ async function reimportHandler(sageCommand: SageMessage): Promise<void> {
 }
 
 export function registerImport(): void {
-	registerListeners({ commands:["import-pathbuilder2e"], interaction:handlePathbuilder2eImport, message:handlePathbuilder2eImport });
-	registerListeners({ commands:["import-essence20"], interaction:handleEssence20Import, message:handleEssence20Import });
+	registerListeners({ commands:["import|pathbuilder-2e"], interaction:handlePathbuilder2eImport, message:handlePathbuilder2eImport });
+	registerListeners({ commands:["import|essence20-pdf"], interaction:handleEssence20Import, message:handleEssence20Import });
 	registerCommand(reimportHandler, "reimport");
 }
