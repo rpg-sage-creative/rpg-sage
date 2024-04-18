@@ -1,0 +1,14 @@
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
+
+let _sageId: Snowflake;
+export function setSageId(sageId: Snowflake): void {
+	_sageId = sageId;
+}
+
+export function getSageId(): Snowflake {
+	return _sageId;
+}
+
+export function isSageId(id?: Snowflake | null): id is Snowflake {
+	return _sageId && id ? _sageId === id : false;
+}

@@ -79,6 +79,7 @@
 		// array-utils, color-utils, console-utils, string-utils, type-utils, uuid-utils
 		{ "path": "./packages/utils/args-utils" },
 
+		{ "path": "./packages/sage/env" },
 		{ "path": "./packages/sage/types" }
 	]
 }
