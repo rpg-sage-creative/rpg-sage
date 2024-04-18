@@ -1,4 +1,4 @@
-import { stringify } from "./stringify.js";
+import { stringify } from "./bigint/stringify.js";
 
 function cleanWhitespaceIfShort(value: string, maxLineLength: number): string {
 	return value.length > maxLineLength
