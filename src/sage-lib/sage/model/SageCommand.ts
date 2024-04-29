@@ -61,13 +61,17 @@ export abstract class SageCommand<
 	public isSageInteraction<T extends DInteraction = any>(): this is SageInteraction<T> { return "interaction" in this; }
 	public isSageMessage(): this is SageMessage { return "isEdit" in this; }
 	public isSageReaction(): this is SageReaction { return "messageReaction" in this; }
-	/** Convenience for .interation.deferReply().then(() => .interaction.deleteReply()) */
-	public async noDefer(): Promise<void> {
-		if (this.isSageInteraction()) {
-			await this.interaction.deferReply();
-			await this.interaction.deleteReply();
-		}
-	}
+
+	/**
+	 * Enables us to call defer on the base class to cause Interactions to defer.
+	 * @TODO should we add logic for SageMessage to post a "Sage is thinking" ?
+	 */
+	public async defer(_ephemeral: boolean): Promise<void> { }
+	/**
+	 * Deletes a deferred Interaction reply.
+	 * @TODO If we add logic to defer for SageMessage, make sure we have logic here to delete that defer message.
+	 */
+	public async noDefer(): Promise<void> { }
 
 	//#region abstract
 

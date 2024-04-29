@@ -137,6 +137,18 @@ export class SageInteraction<T extends DInteraction = any>
 	/** Flag toggled when followUp() is called. */
 	private updates: Message<boolean>[] = [];
 
+	/** Convenience for .interation.deferReply().then(() => .interaction.deleteReply()) */
+	public async noDefer(): Promise<void> {
+		return this.pushToReplyStack(async () => {
+			if (!this.interaction.deferred) {
+				await this.interaction.deferReply();
+			}
+			if (this.interaction.replied) {
+				await this.interaction.deleteReply();
+			}
+		});
+	}
+
 	/** Defers the interaction so that a reply can be sent later. */
 	public defer(ephemeral: boolean): Promise<void> {
 		return this.pushToReplyStack(() => {
