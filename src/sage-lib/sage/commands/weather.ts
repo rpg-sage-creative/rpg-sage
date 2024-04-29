@@ -5,11 +5,9 @@ import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import { isDefined, type Args, type EnumLike } from "@rsc-utils/type-utils";
 import { GDate } from "../../../sage-cal/pf2e/GDate.js";
 import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType } from "../../../sage-pf2e/index.js";
-import { registerInteractionListener } from "../../discord/handlers.js";
-import { registerCommand } from "../../discord/handlers/registerCommand.js";
+import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import { createCommandRenderableContent } from "./cmd.js";
-import { registerCommandHelp } from "./help.js";
 
 /** Single object to hold the args */
 type WeatherArgs = {
@@ -134,7 +132,7 @@ async function weatherHandler(sageCommand: SageCommand): Promise<void> {
 	const seasonInfo = getEnumInfo(sageCommand, Season, "season");
 
 	if (sageCommand.isSageMessage() && (climateInfo.isInvalid || elevationInfo.isInvalid || seasonInfo.isInvalid)) {
-		await sageCommand.whisper("Error: Please see Help command for usage details\n```sage! weather help\nor\n/sage help category:Random Weather Report```");
+		await sageCommand.whisper("Error: Please see [Wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Weather>) Help command for usage details\n```sage! weather help```");
 
 	}else {
 
@@ -152,9 +150,6 @@ async function weatherHandler(sageCommand: SageCommand): Promise<void> {
 //#endregion
 
 export function registerCommandHandlers(): void {
-	// registerCommandRegex(/^\s*weather(?:\s+(\w+))?(?:\s+(\w+))?(?:\s+(\w+))?/i, weatherRandom);
-	registerCommand(weatherHandler, "weather");
-	registerCommand(showHelp, "weather-help");
-	registerCommandHelp("Command", "Weather", getHelpText());
-	registerInteractionListener(cmd => cmd.isCommand("Weather"), weatherHandler);
+	registerListeners({ commands:["weather"], interaction:weatherHandler, message:weatherHandler });
+	registerListeners({ commands:["weather-help"], message:showHelp });
 }
