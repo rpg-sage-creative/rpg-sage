@@ -1,4 +1,4 @@
-import { getSuperUserId } from "@rsc-utils/env-utils";
+import { getSuperAdminId, getSuperUserId } from "@rsc-utils/env-utils";
 import { applyChanges } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { type Optional } from "@rsc-utils/type-utils";
@@ -68,6 +68,9 @@ export class User extends HasDidCore<UserCore> {
 		this.isInformant = this.core.patronTier === PatronTierType.Informant;
 		this.isTrusted = this.core.patronTier === PatronTierType.Trusted;
 		this.isPatron = this.isFriend || this.isInformant || this.isTrusted;
+
+		this.isSuperAdmin = core.did === getSuperAdminId();
+		this.isSuperUser = core.did === getSuperUserId();
 	}
 	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
 	/** @deprecated */
@@ -87,7 +90,8 @@ export class User extends HasDidCore<UserCore> {
 	public isInformant: boolean;
 	public isTrusted: boolean;
 	public isPatron: boolean;
-	public get isSuperUser(): boolean { return User.isSuperUser(this.did); }
+	public isSuperAdmin: boolean;
+	public isSuperUser: boolean;
 
 	public getAutoCharacterForChannel(...channelDids: Optional<Snowflake>[]): GameCharacter | undefined {
 		for (const channelDid of channelDids) {
@@ -112,10 +116,6 @@ export class User extends HasDidCore<UserCore> {
 
 	public static createCore(userDid: Snowflake): UserCore {
 		return { objectType: "User", did: userDid, id: null! };
-	}
-
-	public static isSuperUser(userDid: Optional<Snowflake>): boolean {
-		return userDid === getSuperUserId();
 	}
 
 }
