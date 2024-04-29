@@ -45,7 +45,9 @@ export class SageMessage
 		const commandValues = this.commandValues;
 		return args.every((arg, index) => commandValues[index] === arg.toLowerCase());
 	}
-	public get commandValues(): string[] { return this.commandAndArgs?.command?.toLowerCase().split(/\s+|-/) ?? []; }
+	public get commandValues(): string[] {
+		return this.commandAndArgs?.command?.toLowerCase().split("|") ?? [];
+	}
 
 	public static async fromMessage(message: DMessage, originalMessage: Optional<DMessage>): Promise<SageMessage> {
 		const sageCache = await SageCache.fromMessage(message);
