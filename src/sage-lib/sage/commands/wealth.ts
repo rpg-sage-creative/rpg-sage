@@ -69,7 +69,7 @@ async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, 
 		proficiencyIndex = PROFICIENCIES.findIndex(prof => prof[0] === proficiencyLetter),
 		proficiency = PROFICIENCIES[proficiencyIndex];
 	let renderable: RenderableContent;
-	if (isNaN(taskLevel) || taskLevel < 0 || 20 < taskLevel) {
+	if (!taskLevelString.trim() || isNaN(taskLevel) || taskLevel < 0 || 20 < taskLevel) {
 		renderable = table.toRenderableContent();
 	} else {
 		const levelRow = table.rows[taskLevel + 1],
