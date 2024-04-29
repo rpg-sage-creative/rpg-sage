@@ -39,6 +39,8 @@ function _dcsByLevel(bySpell: boolean, level: Optional<number>): RenderableConte
 		return table.toRenderableContent();
 	}
 
+	level = Math.max(0, Math.min(bySpell ? 10 : 20, level));
+
 	let rowIndex = level + 1;
 	if (bySpell) {
 		rowIndex += 26;
