@@ -2,7 +2,7 @@ import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { PROFICIENCIES, Table } from "../../../sage-pf2e/index.js";
-import { registerInteractionListener } from "../../discord/handlers.js";
+import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
@@ -59,10 +59,6 @@ async function dcsByLevel(sageMessage: SageMessage): Promise<void> {
 
 //#region slash command
 
-function slashTester(sageInteraction: SageInteraction): boolean {
-	return sageInteraction.isCommand("PF2E", "DCs");
-}
-
 async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
 	const table = sageInteraction.args.getString<"simple" | "level" | "spell">("table", true);
 	if (table === "simple") {
@@ -87,5 +83,5 @@ export function registerDcs(): void {
 	registerCommandHelp("Command", "DCs", `dc by level LEVEL`);
 	registerCommandHelp("Command", "DCs", `dc by spell level LEVEL`);
 
-	registerInteractionListener(slashTester, slashHandler);
+	registerListeners({ commands:["PF2E|DCs"], interaction:slashHandler });
 }

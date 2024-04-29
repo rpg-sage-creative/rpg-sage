@@ -2,6 +2,7 @@ import type { SlashCommand } from "../../../types.js";
 
 export function registerCommand(): SlashCommand {
 	return {
+		game: "PF2E",
 		name: "DCs",
 		description: "Show Difficulty Classes",
 		options: [
