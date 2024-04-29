@@ -341,6 +341,10 @@ export abstract class SageCommand<
 	public get isSuperUser(): boolean {
 		return this.sageUser.isSuperUser === true;
 	}
+	/** Is the author SuperAdmin or SuperUser */
+	public get canSuperAdmin(): boolean {
+		return this.sageUser.isSuperAdmin || this.sageUser.isSuperUser;
+	}
 
 	//#endregion
 
