@@ -7,7 +7,7 @@ export function registerCommand(): SlashCommand {
 		description: "Show today (or a specific day) for PF/SF Games",
 		options: [
 			{ name:"date", description:"A specific date: yyyy-mm-dd" },
-			{ name:"origin", description:"Where does the year originate?", choices:["Absalom", "Earth", "Golarion"] }
+			{ name:"origin", description:"Where does the year originate?", choices:["Absalom Station", "Earth", "Golarion"] }
 		]
 	};
 }
