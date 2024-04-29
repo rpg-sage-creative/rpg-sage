@@ -77,7 +77,7 @@ export async function gCmdUpdate(sageCommand: SageCommand): Promise<void> {
 		return;
 	}
 
-	sageCommand.noDefer();
+	sageCommand.defer(false);
 
 	const updated = await gameUpdate(sageCommand);
 	if (updated === true) {
@@ -90,6 +90,6 @@ export async function gCmdUpdate(sageCommand: SageCommand): Promise<void> {
 		await sageCommand.whisper({ content:"Please try /sage-game-update" });
 
 	}else if (updated === undefined) {
-		// do nothing
+		sageCommand.noDefer();
 	}
 }

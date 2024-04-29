@@ -13,12 +13,12 @@ export async function gCmdArchive(sageCommand: SageCommand): Promise<void> {
 		return;
 	}
 
-	sageCommand.noDefer();
+	sageCommand.defer(false);
 
 	await gSendDetails(sageCommand);
 	const archive = await discordPromptYesNo(sageCommand, `Archive Game?`);
 	if (!archive) {
-		return;
+		return sageCommand.noDefer();
 	}
 
 	const archived = await sageCommand.game.archive();
