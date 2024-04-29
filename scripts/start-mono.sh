@@ -23,6 +23,7 @@ else
 		mono.mjs \
 		botCodeName=dev \
 		"dataRoot=$DATA_ROOT" \
+		superAdminId=1144784137111212132 \
 		superUserId=253330271678627841 \
 		homeServerId=963531189254238278 \
 		tupperBoxId=431544605209788416 \
