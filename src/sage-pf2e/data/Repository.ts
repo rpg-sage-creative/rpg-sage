@@ -37,7 +37,16 @@ export function parseObjectType(objectType: string): OrNull<TObjectTypeAndPlural
 	const repoItem = Array.from(repoMap.values())
 		.find(_repoItem => _repoItem.objectTypeLower === objectTypeLower || _repoItem.objectTypePluralLower === objectTypeLower);
 	if (!repoItem) {
-		return null;
+		if (/s?$/.test(objectType)) {
+			return {
+				objectType: objectType.slice(0, -1),
+				objectTypePlural: objectType
+			};
+		}
+		return {
+			objectType,
+			objectTypePlural: objectType + "s"
+		};
 	}
 	return {
 		objectType: repoItem.objectType,
