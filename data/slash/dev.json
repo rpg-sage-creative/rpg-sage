@@ -3,37 +3,6 @@
 	{
 		"options": [
 			{
-				"choices": [
-					{ "name": "Simple", "value": "simple" },
-					{ "name": "By Level", "value": "level" },
-					{ "name": "By Spell Level", "value": "spell" }
-				],
-				"type": 3,
-				"name": "table",
-				"description": "Which DCs?",
-				"required": true
-			},
-			{
-				"choices": [
-					{ "name": "Untrained", "value": "U" },
-					{ "name": "Trained", "value": "T" },
-					{ "name": "Expert", "value": "E" },
-					{ "name": "Master", "value": "M" },
-					{ "name": "Legendary", "value": "L" }
-				],
-				"type": 3,
-				"name": "proficiency",
-				"description": "What Proficiency?",
-				"required": false
-			},
-			{ "type": 10, "name": "level", "description": "Which Level?", "required": false }
-		],
-		"name": "sage-dev-dcs",
-		"description": "Show Difficulty Classes"
-	},
-	{
-		"options": [
-			{
 				"type": 1,
 				"name": "create",
 				"description": "Create a new RPG Sage Game",
@@ -293,37 +262,6 @@
 	{
 		"options": [
 			{
-				"type": 1,
-				"name": "addimage",
-				"description": "Adds an image to a map",
-				"options": [
-					{ "type": 3, "name": "map", "description": "Map Id?", "required": true },
-					{
-						"choices": [
-							{ "name": "aura", "value": "aura" },
-							{ "name": "terrain", "value": "terrain" },
-							{ "name": "token", "value": "token" }
-						],
-						"type": 3,
-						"name": "layer",
-						"description": "Which map layer?",
-						"required": true
-					},
-					{ "type": 3, "name": "url", "description": "Url to the token image.", "required": true },
-					{ "type": 3, "name": "name", "description": "What/Who is this image?", "required": true },
-					{ "type": 10, "name": "cols", "description": "How many columns wide is this image?", "required": true },
-					{ "type": 10, "name": "rows", "description": "How many rows tall is this image?", "required": true },
-					{ "type": 10, "name": "col", "description": "Column # (starting with 1) to place this image's top left corner.", "required": true },
-					{ "type": 10, "name": "row", "description": "Row # (starting with 1) to place this image's top left corner.", "required": true }
-				]
-			}
-		],
-		"name": "sage-dev-map",
-		"description": "Map Commands"
-	},
-	{
-		"options": [
-			{
 				"choices": [
 					{ "name": "Cold", "value": "Cold" },
 					{ "name": "Temperate", "value": "Temperate" },
@@ -365,16 +303,16 @@
 	},
 	{
 		"options": [
-			{ "type": 1, "name": "sage-dev-calendar", "description": "Calendar days/months for PF/SF Games", "options": [] },
+			{ "type": 1, "name": "calendar", "description": "Calendar days/months for PF/SF Games", "options": [] },
 			{
 				"type": 1,
-				"name": "sage-dev-date",
+				"name": "date",
 				"description": "Show today (or a specific day) for PF/SF Games",
 				"options": [
 					{ "type": 3, "name": "date", "description": "A specific date: yyyy-mm-dd", "required": false },
 					{
 						"choices": [
-							{ "name": "Absalom", "value": "Absalom" },
+							{ "name": "Absalom Station", "value": "Absalom Station" },
 							{ "name": "Earth", "value": "Earth" },
 							{ "name": "Golarion", "value": "Golarion" }
 						],
@@ -386,9 +324,45 @@
 				]
 			}
 		],
-		"name": "finder",
-		"description": "Finder"
+		"name": "sage-dev-finder",
+		"description": "sage-dev-Finder"
 	},
-	{ "name": "Game Details", "type": 3 },
-	{ "name": "User Details", "type": 2 }
+	{
+		"options": [
+			{
+				"type": 1,
+				"name": "dcs",
+				"description": "Show Difficulty Classes",
+				"options": [
+					{
+						"choices": [
+							{ "name": "Simple", "value": "simple" },
+							{ "name": "By Level", "value": "level" },
+							{ "name": "By Spell Level", "value": "spell" }
+						],
+						"type": 3,
+						"name": "table",
+						"description": "Which DCs?",
+						"required": true
+					},
+					{
+						"choices": [
+							{ "name": "Untrained", "value": "U" },
+							{ "name": "Trained", "value": "T" },
+							{ "name": "Expert", "value": "E" },
+							{ "name": "Master", "value": "M" },
+							{ "name": "Legendary", "value": "L" }
+						],
+						"type": 3,
+						"name": "proficiency",
+						"description": "What Proficiency?",
+						"required": false
+					},
+					{ "type": 10, "name": "level", "description": "Which Level?", "required": false }
+				]
+			}
+		],
+		"name": "sage-dev-pf2e",
+		"description": "sage-dev-PF2E"
+	}
 ]

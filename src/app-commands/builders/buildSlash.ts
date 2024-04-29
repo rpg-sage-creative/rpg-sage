@@ -3,9 +3,14 @@ import type { SlashCommand } from "../types.js";
 import { addOptions } from "./addOptions.js";
 import { addSubcommands } from "./addSubCommands.js";
 import { setName } from "./setName.js";
+import { getBotCodeName } from "@rsc-utils/env-utils";
 
 function buildOne(raw: SlashCommand): SlashCommandBuilder {
+	const which = getBotCodeName();
+	raw.name = `sage-${which}-${raw.name}`;
+
 	const cmd = setName(new SlashCommandBuilder(), raw);
+
 	raw.children?.forEach(child => {
 		if (child.children?.length) {
 			cmd.addSubcommandGroup(grp =>
