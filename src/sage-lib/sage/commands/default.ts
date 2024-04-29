@@ -1,5 +1,5 @@
 import { filterAndMap, sortComparable, toUnique, toUniqueDefined } from "@rsc-utils/array-utils";
-import { debug, error, verbose } from "@rsc-utils/console-utils";
+import { error, verbose } from "@rsc-utils/console-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
@@ -8,7 +8,6 @@ import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../.
 import { ArgsManager } from "../../discord/ArgsManager.js";
 import { registerMessageListener } from "../../discord/handlers.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
-import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { TCommandAndArgs } from "../../discord/types.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
@@ -258,45 +257,9 @@ export function registerDefault(): void {
 	registerFindHelp("Search", "Find", `WORD OR WORDS -CATEGORY\n\tCATEGORY can be armor, spell, weapon, etc.`);
 
 	registerCommandRegex(/shutdown/, async (sageMessage: SageMessage) => {
-		if (sageMessage.isSuperUser) {
+		if (sageMessage.canSuperAdmin) {
 			await sageMessage.reactSuccess();
 			process.exit(0);
-		}
-	});
-	registerCommandRegex(/debug\-log\-all\-items/, async (sageMessage: SageMessage) => {
-		if (sageMessage.isSuperUser) {
-			debug(`debug-log-all-items: begin`);
-			let maxEmbeds = 0;
-			let maxCharacters = 0;
-			const clean = <string[]>[];
-			const objectTypes = Repository.getObjectTypes();
-			for (const objectType of objectTypes) {
-				debug(`\tdebug-log-all-items(${objectType}): begin`);
-				const broken = <string[]>[];
-				const objects = Repository.all(objectType);
-				for (const object of objects) {
-					try {
-						// debug(`\t\t${objectType}::${object.id}::${object.name}`);
-						const renderable = object.toRenderableContent();
-// debug((renderable as any)?.prototype?.constructor?.name ?? Object.prototype.toString.call(object));
-						const embeds = resolveToEmbeds(sageMessage.caches, renderable);
-						maxEmbeds = Math.max(maxEmbeds, embeds.length);
-						const string = renderable.toString();
-						maxCharacters = Math.max(maxCharacters, string.length);
-					} catch (ex) {
-						broken.push(`${object.id}::${object.name}`);
-						// error(ex);
-					}
-				}
-				if (!broken.length) {
-					clean.push(objectType);
-				} else {
-					await sageMessage.send(`__**${objectType}: ${broken.length} errors.**__\n${broken.join("\n")}`);
-				}
-				debug(`\tdebug-log-all-items(${objectType}): end`);
-			}
-			await sageMessage.send(`__**Clean Objects (${clean.length}):**__ ${clean.join(", ")}; maxEmbeds (${maxEmbeds}), maxCharacters (${maxCharacters})`);
-			debug(`debug-log-all-items: end`);
 		}
 	});
 
