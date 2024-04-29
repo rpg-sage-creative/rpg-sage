@@ -20,9 +20,8 @@ function theOneOrMatchToSage(searchResults: SearchResults<any>, match = false): 
 
 async function invalidGame(sageMessage: SageMessage): Promise<void> {
 	const unableSearchResults = new RenderableContent(`<b>Cannot Perform Search</b>`);
-	unableSearchResults.append(`Currently, we can only search Pathfinder or Starfinder content. Please set your channel, game, or server to Pathfinder or Starfinder if you would like to enable searching for content, or disable searching if you don't wish to see this message again.`);
+	unableSearchResults.append(`Currently, we can only search Pathfinder or Starfinder content. Please set your channel, game, or server to Pathfinder or Starfinder if you would like to enable searching for content.`);
 	unableSearchResults.append(`<br/>Example:`);
-	unableSearchResults.append(`<code>sage!!channel set search="false"</code>`);
 	unableSearchResults.append(`<code>sage!!channel set gameType="PF2E"</code>`);
 	unableSearchResults.append(`<code>sage!!game set gameType="PF2E"</code>`);
 	unableSearchResults.append(`<code>sage!!server set gameType="PF2E"</code>`);
