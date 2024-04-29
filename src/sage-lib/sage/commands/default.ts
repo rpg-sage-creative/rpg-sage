@@ -1,5 +1,6 @@
 import { filterAndMap, sortComparable, toUnique, toUniqueDefined } from "@rsc-utils/array-utils";
-import { error, verbose } from "@rsc-utils/console-utils";
+import { error, info, verbose } from "@rsc-utils/console-utils";
+import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
@@ -259,6 +260,8 @@ export function registerDefault(): void {
 	registerCommandRegex(/shutdown/, async (sageMessage: SageMessage) => {
 		if (sageMessage.canSuperAdmin) {
 			await sageMessage.reactSuccess();
+			const user = await sageMessage.discord.fetchUser(sageMessage.authorDid);
+			info(`Shutdown command given by: ${toHumanReadable(user)}`);
 			process.exit(0);
 		}
 	});
