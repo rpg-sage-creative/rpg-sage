@@ -21,13 +21,17 @@ export class SageReaction
 
 	public command: string | null = null;
 
-	public isCommand(): boolean { return false; }
+	public isCommand(emoji: string, action: "add" | "remove"): boolean {
+		return this.commandValues[0] === emoji
+			&& [action, "both"].includes(this.commandValues[1]);
+	}
 
-	public commandValues: string[] = [];
+	public commandValues: string[];
 
 	private constructor(protected core: SageReactionCore, cache?: Cache) {
 		super(core, cache);
 		this.args = new SageReactionArgs(this);
+		this.commandValues = [core.messageReaction.emoji.toString(), ReactionType[core.reactionType].toLowerCase()];
 	}
 
 	public get isAdd(): boolean {
