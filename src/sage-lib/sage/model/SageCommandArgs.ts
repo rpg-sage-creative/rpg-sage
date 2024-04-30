@@ -1,4 +1,5 @@
 import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, type GameOptions, GameSystemType, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
+import { Color } from "@rsc-utils/color-utils";
 import { parseIds } from "@rsc-utils/discord-utils";
 import { isEmpty } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
@@ -296,6 +297,14 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 		return channelOptions;
 	}
 
+	public getColor(key: string): Color | null | undefined {
+		const color = this.getString(key);
+		if (isDefined(color)) {
+			return Color.from(color) ?? null;
+		}
+		return color;
+	}
+
 	public getDialogOptions(): Args<DialogOptions> | undefined {
 		const dialogOptions = {
 			dialogPostType: this.getEnum(DialogPostType, "dialogPost"),
@@ -320,6 +329,14 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 			return undefined;
 		}
 		return diceOptions;
+	}
+
+	public getDiscordColor(key: string): string | null | undefined {
+		const color = this.getColor(key);
+		if (color) {
+			return color.toDiscordColor() ?? null;
+		}
+		return color;
 	}
 
 	/** Returns GameOptions pulled from command arguments. */
