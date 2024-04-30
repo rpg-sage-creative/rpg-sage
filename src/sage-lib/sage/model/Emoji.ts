@@ -1,6 +1,7 @@
 import { tokenize } from "@rsc-utils/string-utils";
+import { Optional } from "@rsc-utils/type-utils";
 import XRegExp from "xregexp";
-import type { EmojiType, IEmoji } from "./HasEmojiCore";
+import type { EmojiType, IEmoji } from "./HasEmojiCore.js";
 
 export type TEmojiAndType = { type: EmojiType; replacement: string; };
 
@@ -41,7 +42,7 @@ function emojify(text: string, matches: string[], replacement: string): string {
 export class Emoji {
 	public constructor(private emoji: IEmoji[]) { }
 
-	private findEmoji(type: EmojiType): IEmoji | undefined {
+	private findEmoji(type: Optional<EmojiType>): IEmoji | undefined {
 		return this.emoji.find(emoji => emoji.type === type);
 	}
 
@@ -55,22 +56,23 @@ export class Emoji {
 		return this.findEmoji(type)?.replacement ?? null;
 	}
 
-	public set(type: EmojiType, replacement: string): boolean {
-		if (!replacement) {
+	public set(emojiAndType: TEmojiAndType): boolean {
+		if (!emojiAndType?.replacement || !emojiAndType?.type) {
 			return false;
 		}
 
-		let found = this.findEmoji(type);
+		let found = this.findEmoji(emojiAndType.type);
 		if (!found) {
-			found = { type: type, matches: [], replacement: undefined! };
+			found = { type: emojiAndType.type, matches: [], replacement: undefined! };
 			this.emoji.push(found);
 		}
 
-		found.replacement = replacement;
+		found.replacement = emojiAndType.replacement;
+
 		return true;
 	}
 
-	public unset(type: EmojiType): boolean {
+	public unset(type: Optional<EmojiType>): boolean {
 		const found = this.findEmoji(type);
 		if (!found) {
 			return false;
