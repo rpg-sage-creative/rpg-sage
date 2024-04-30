@@ -1,5 +1,4 @@
 import { type SageChannel } from "@rsc-sage/types";
-import { Color } from "@rsc-utils/color-utils";
 import { parseId } from "@rsc-utils/discord-utils";
 import { parseEnum } from "@rsc-utils/enum-utils";
 import { isUrl } from "@rsc-utils/https-utils";
@@ -42,7 +41,10 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 	//#region Old
 
+	/** @deprecated */
 	private attachments?: Collection<Snowflake, MessageAttachment>;
+
+	/** @deprecated */
 	public removeAndReturnAttachmentUrl(): string | undefined {
 		const attachments = this.attachments ?? (this.attachments = this.sageCommand.message.attachments.clone());
 		if (attachments.size) {
@@ -53,6 +55,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return this.argsManager.removeAndReturnUrl();
 	}
 
+	/** @deprecated */
 	protected async findChannelIndexWithDid(): Promise<TArgIndexRet<Snowflake> | undefined> {
 		if (this.argsManager.isEmpty) {
 			return undefined;
@@ -67,9 +70,14 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			return undefined;
 		});
 	}
+
+	/** @deprecated */
 	public async removeAndReturnChannelDid(): Promise<Snowflake | null>;
+	/** @deprecated */
 	public async removeAndReturnChannelDid(defaultThisChannel: false): Promise<Snowflake | null>;
+	/** @deprecated */
 	public async removeAndReturnChannelDid(defaultThisChannel: true): Promise<Snowflake>;
+	/** @deprecated */
 	public async removeAndReturnChannelDid(defaultThisChannel = false): Promise<Snowflake | null> {
 		const withIndex = await this.findChannelIndexWithDid();
 		if (withIndex) {
@@ -79,6 +87,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return defaultThisChannel ? this.sageCommand.threadOrChannelDid : null;
 	}
 
+	/** @deprecated */
 	public getCharacterOptions(names: Names, userDid?: Snowflake): GameCharacterCore {
 		// get the options directly
 		const characterCore: GameCharacterCore = {
@@ -113,6 +122,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return characterCore;
 	}
 
+	/** @deprecated */
 	public removeAndReturnColorAndType(): TColorAndType | null {
 		if (this.argsManager.isEmpty) {
 			return null;
@@ -126,19 +136,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return null;
 	}
 
-	// public removeAndReturnDiscordColor(argKey?: string): Optional<string> {
-	// 	if (argKey) {
-	// 		const color = this.removeByKey(argKey);
-	// 		// return appropriate null or undefined
-	// 		if (typeof(color) !== "string") {
-	// 			return color;
-	// 		}
-	// 		// return valid color or null
-	// 		return Color.from(color)?.toDiscordColor() ?? null;
-	// 	}
-	// 	return this.removeAndReturnColor()?.toDiscordColor();
-	// }
-
+	/** @deprecated */
 	public async removeAndReturnGameChannel(): Promise<SageChannel | null> {
 		const game = this.sageCommand.game;
 		if (!game) {
@@ -157,6 +155,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return game.getChannel(this.sageCommand.channelDid) ?? null;
 	}
 
+	/** @deprecated */
 	public removeAndReturnName(defaultJoinRemaining = false, defaultJoinSeparator = " "): string | undefined {
 		const keyValue = this.argsManager.removeKeyValuePair("name");
 		if (keyValue) {
@@ -180,6 +179,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return undefined;
 	}
 
+	/** @deprecated */
 	public removeAndReturnNames(defaultJoinRemaining = false, defaultJoinSeparator = " "): Names {
 		const names = {
 			charName: this.argsManager.removeByKey("charName") ?? this.argsManager.removeByKey("char"),
@@ -195,6 +195,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return names;
 	}
 
+	/** @deprecated */
 	public async removeAndReturnRoleDid(): Promise<Snowflake | null> {
 		if (this.argsManager.isEmpty) {
 			return null;
@@ -229,15 +230,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return server ?? null;
 	}
 
-	// public async removeAndReturnUserDids(): Promise<Discord.Snowflake[]> {
-	// 	const users = this.sageCommand.message.mentions.users.array();
-	// 	const userDids = users.map(user => <Discord.Snowflake>user.id);
-	// 	let userDid: Discord.Snowflake;
-	// 	while (userDid = await this.removeAndReturnUserDid()) {
-	// 		userDids.push(userDid);
-	// 	}
-	// 	return userDids.filter(toUnique);
-	// }
+	/** @deprecated */
 	public async removeAndReturnUserDid(argKey?: string, defaultIfNoArg = true): Promise<Snowflake | null> {
 		if (this.argsManager.isEmpty) {
 			return null;
@@ -274,14 +267,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	}
 
 	//#endregion
-
-	public getDiscordColor(key: string): string | null | undefined {
-		const color = this.getString(key);
-		if (color) {
-			return Color.from(color)?.toDiscordColor() ?? null;
-		}
-		return color;
-	}
 
 	public getUrl(key: string): string | null | undefined {
 		const url = this.getString(key);
