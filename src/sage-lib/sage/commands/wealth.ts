@@ -1,11 +1,10 @@
 import { debug } from "@rsc-utils/console-utils";
 import { addCommas, nth } from "@rsc-utils/number-utils";
-import { capitalize } from "@rsc-utils/string-utils";
-import { Coins, PROFICIENCIES, TProficiency, Table } from "../../../sage-pf2e";
 import type { RenderableContent } from "@rsc-utils/render-utils";
-import type { SageMessage } from "../model/SageMessage";
-import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
-import { registerCommandHelp } from "./help";
+import { capitalize } from "@rsc-utils/string-utils";
+import { Coins, PROFICIENCIES, TProficiency, Table } from "../../../sage-pf2e/index.js";
+import type { SageMessage } from "../model/SageMessage.js";
+import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
 
 // #region rpg.SpUtils
 async function spUtils(sageMessage: SageMessage): Promise<void> {
