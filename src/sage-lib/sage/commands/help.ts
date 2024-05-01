@@ -35,20 +35,6 @@ export function registerAdminCommandHelp(...args: string[]): void {
 	registerHelp(...args);
 }
 
-export function registerSearchHelp(category: string, helpText: string): void;
-export function registerSearchHelp(category: string, subCategory: string, helpText: string): void;
-export function registerSearchHelp(...args: string[]): void {
-	args[args.length - 1] = `? ${args[args.length - 1]}`;
-	registerHelp(...args);
-}
-
-export function registerFindHelp(category: string, helpText: string): void;
-export function registerFindHelp(category: string, subCategory: string, helpText: string): void;
-export function registerFindHelp(...args: string[]): void {
-	args[args.length - 1] = `?! ${args[args.length - 1]}`;
-	registerHelp(...args);
-}
-
 const helpTextMaps = new Map<string, string[]>();
 
 function toHelpCategoryKey(categories: string[]): string {

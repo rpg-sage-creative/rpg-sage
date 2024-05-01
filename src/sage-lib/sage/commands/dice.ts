@@ -30,7 +30,6 @@ import { rollRandomItem } from "./dice/rollRandomItem.js";
 import { rollTable } from "./dice/rollTable.js";
 import { sendDiceToMultiple } from "./dice/sendDiceToMultiple.js";
 import { sendDiceToSingle } from "./dice/sendDiceToSingle.js";
-import { registerInlineHelp } from "./help.js";
 import type { EncounterManager } from "./trackers/encounter/EncounterManager.js";
 
 type TInteraction = SageMessage | SageInteraction;
@@ -670,46 +669,4 @@ function mapDiceTestResults({ dieSize, iterations, rolls }: { dieSize: number; i
 export function registerDice(): void {
 	registerCommandRegex(/dice test (die|size)=("d?\d+"|\d+)/i, diceTest);
 	registerMessageListener(hasUnifiedDiceCommand, sendDice as any, { priorityIndex:1 });
-
-	registerInlineHelp("Dice", "Basic",
-		`[1d20]`
-		+ `\n[1d20 + 5] *(modifiers)*`
-		+ `\n[1d20 prof + 5 str] *(descriptions)*`
-		+ `\n`
-		+ `\n__Tests__`
-		+ `\n[1d20 >= 10] *(<, <=, >, >=, =)*`
-		+ `\n[1d20 gteq 10] *(lt, lteq, gt, gteq, eq)*`
-		+ `\n - *to avoid keyboard switching on mobile*`
-		+ `\n`
-		+ `\n__Types vs Sets__`
-		+ `\n[1d8 + 1d4] *(added together)*`
-		+ `\n[1d20 attack; 1d8 damage] *(rolled separately)*`
-		+ `\n`
-		+ `\n__Sets w/ Tests__`
-		+ `\n[1d20 > 10 attack; 1d8 damage]`
-		+ `\n - *only rolls second set if the first is successful*`
-		+ `\n`
-		+ `\n__Drop / Keep / NoSort__`
-		+ `\n[3d6ns] *(no sort)*`
-		+ `\n[4d6dl] *(drop lowest 1)*`
-		+ `\n[5d6dl2] *(drop lowest X)*`
-		+ `\n[6d6kh] *(keep highest 1)*`
-		+ `\n[7d6kh3] *(keep highest X)*`
-		+ `\n`
-		+ `\n__Output Size Override__`
-		+ `\n[xxs 1d20 + 5 attack; 1d8 + 1d6 + 1 damage]`
-		+ `\n - *(xxs, xs, s, m, l, xl, xxl; default: m)*`
-		+ `\n`
-		+ `\n__Game Override__`
-		+ `\n[pf2e 1d20 + 5 attack ac 10; 1d8 + 1d6 + 1 damage]`
-		+ `\n - *(pf2e, quest; more to be added)*`
-	);
-
-	registerInlineHelp("Dice", "PF2e",
-		`[1d20 ac 10] *(ac acts as >=)*`
-		+ `\n[1d20 dc 10] *(dc acts as >=)*`
-		+ `\n[1d20 vs 10] *(vs acts as >=)*`
-	);
-
-	registerInlineHelp("Dice", "Macro", "*see Macro help* `!help macro`");
 }

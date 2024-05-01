@@ -13,7 +13,6 @@ import type { TCommandAndArgs } from "../../discord/types.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
-import { registerCommandHelp, registerFindHelp, registerSearchHelp } from "./help.js";
 import { searchHandler } from "./search.js";
 
 // #region Common Types and Functions
@@ -241,21 +240,12 @@ async function dmSlashHandler(sageInteraction: SageInteraction): Promise<void> {
 
 export function registerDefault(): void {
 	registerCommandRegex(/^\s*list\s*(weapons|armou?r|spells)\s*by\s*(trait)?\s*(\w+)$/i, objectsBy);
-	registerCommandHelp("Lists", `list weapons by trait TRAIT`);
-	registerCommandHelp("Lists", `list armor by trait TRAIT`);
-	registerCommandHelp("Lists", `list spells by trait TRAIT`);
 
 	registerCommandRegex(/^\s*list\s*(deities|gods)\s*by\s*(domain)?\s*(\w+)$/i, objectsBy);
-	registerCommandHelp("Lists", `list deities by domain DOMAIN`);
-	registerCommandHelp("Lists", `list gods by domain DOMAIN`);
 
 	registerMessageListener(searchTester, searchHandler);
-	registerSearchHelp("Search", `WORD OR WORDS`);
-	registerSearchHelp("Search", `WORD OR WORDS -CATEGORY\n\tCATEGORY can be armor, spell, weapon, etc.`);
 
 	registerMessageListener(findTester, findHandler);
-	registerFindHelp("Search", "Find", `WORD OR WORDS`);
-	registerFindHelp("Search", "Find", `WORD OR WORDS -CATEGORY\n\tCATEGORY can be armor, spell, weapon, etc.`);
 
 	registerCommandRegex(/shutdown/, async (sageMessage: SageMessage) => {
 		if (sageMessage.canSuperAdmin) {
