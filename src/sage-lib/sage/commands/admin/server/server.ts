@@ -4,12 +4,12 @@ import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Role } from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice/index.js";
+import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { Server } from "../../../model/Server.js";
 import { AdminRoleType, IAdminRole } from "../../../model/Server.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
-import { registerAdminCommandHelp } from "../../help.js";
+import { createAdminRenderableContent } from "../../cmd.js";
 
 async function serverCount(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
@@ -122,7 +122,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	return <any>sageMessage.send(renderableContent);
 }
 
-async function serverSet(sageMessage: SageMessage): Promise<void> {
+async function serverUpdate(sageMessage: SageMessage): Promise<void> {
 	let server: Optional<Server> = sageMessage.server;
 	if (server && !sageMessage.canAdminServer) {
 		return sageMessage.reactBlock();
@@ -144,15 +144,9 @@ async function serverSet(sageMessage: SageMessage): Promise<void> {
 }
 
 export function registerServer(): void {
-	registerAdminCommand(serverCount, "server-count");
-	registerAdminCommand(serverList, "server-list");
-	registerAdminCommand(serverInit, "server-init");
-	registerAdminCommand(serverDetails, "server-details");
-	registerAdminCommand(serverSet, "server-set");
-
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server count");
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server list");
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server list {optionalFilter}");
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server details");
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server set game=PF2E|NONE diceoutput=XXS|XS|S|M|L|XL|UNSET dicepost=POST|EMBED|UNSET crit=TIMESTWO|ROLLTWICE");
+	registerListeners({ commands:["server|count"], message:serverCount });
+	registerListeners({ commands:["server|list"], message:serverList });
+	registerListeners({ commands:["server|init"], message:serverInit });
+	registerListeners({ commands:["server|details"], message:serverDetails });
+	registerListeners({ commands:["server|update"], message:serverUpdate });
 }
