@@ -6,7 +6,6 @@ import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
-import { registerCommandHelp } from "./help.js";
 
 //#region simple dcs
 
@@ -76,14 +75,9 @@ async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
 export function registerDcs(): void {
 	registerCommandRegex(/^\s*simple\s*dcs?\s*([a-z]+)\s*$/i, simpleDcs);
 	registerCommandRegex(/^\s*([a-z]+)\s*simple\s*dcs?\s*$/i, simpleDcs);
-	registerCommandHelp("Command", "DCs", `simple dc PROFICIENCY`);
-	registerCommandHelp("Command", "DCs", `PROFICIENCY simple dc`);
 
 	registerCommandRegex(/^\s*dcs?\s*by\s*level\s*$/i, dcsByLevel);
 	registerCommandRegex(/^\s*dc(?:\s*by)?\s*(spell)?\s*level\s*(\d+)(?:st|nd|rd|th)?\s*$/i, dcsByLevel);
-	registerCommandHelp("Command", "DCs", `dcs by level`);
-	registerCommandHelp("Command", "DCs", `dc by level LEVEL`);
-	registerCommandHelp("Command", "DCs", `dc by spell level LEVEL`);
 
 	registerListeners({ commands:["PF2E|DCs"], interaction:slashHandler });
 }
