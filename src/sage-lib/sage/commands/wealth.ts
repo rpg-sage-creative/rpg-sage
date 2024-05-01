@@ -101,17 +101,7 @@ async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, 
 
 export function registerWealth(): void {
 	registerCommandRegex(/^((?:\s*[\-\+]?\s*\d+(?:,\d{3})*\s*[csgp]p)+)$/i, spUtils);
-	registerCommandHelp("Wealth", "Coin Counter", `{1pp} {2gp} {3sp} {4cp}\n{1pp} {-2gp} {+3sp} {-4cp}`);
-
 	registerCommandRegex(/^\s*(?:starting|character)\s*wealth\s*(\d+(?:st|nd|rd|th)?)?\s*$/i, startingWealth);
-	const CHARACTER_WEALTH = "Starting Wealth";
-	registerCommandHelp("Wealth", CHARACTER_WEALTH, `starting wealth`);
-	registerCommandHelp("Wealth", CHARACTER_WEALTH, `starting wealth {level}`);
-
 	registerCommandRegex(/^\s*income\s*earned\s*(\d{1,2})?\s*(trained|expert|master|legendary|t|e|m|l)?\s*$/i, incomeEarnedA);
 	registerCommandRegex(/^\s*income\s*earned\s*(trained|expert|master|legendary|t|e|m|l)\s*(\d{1,2})\s*$/i, incomeEarnedB);
-	const INCOME_EARNED = "Income Earned";
-	registerCommandHelp("Wealth", INCOME_EARNED, `income earned`);
-	registerCommandHelp("Wealth", INCOME_EARNED, `income earned {taskLevel}`);
-	registerCommandHelp("Wealth", INCOME_EARNED, `income earned {taskLevel} {proficiency}`);
 }

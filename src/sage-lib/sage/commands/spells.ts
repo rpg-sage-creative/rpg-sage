@@ -8,7 +8,6 @@ import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e/in
 import type { SageMessage } from "../model/SageMessage.js";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
 import { renderAll } from "./default.js";
-import { registerCommandHelp } from "./help.js";
 
 // #region Spell
 function reduceByLevel<T extends Spell<string, any>>(spells: T[]): T[][] {
@@ -214,25 +213,9 @@ async function specialistLists(sageMessage: SageMessage): Promise<void> {
 
 export function registerSpells(): void {
 	registerCommandRegex(/^\s*spells\s*(arcane|divine|occult|primal)\s*(\d+(?:\s*st|nd|rd|th)?|cantrips?)?(?:\s*by\s*(school))?\s*$/i, spellListB);
-	registerCommandHelp("Spells", `spells {tradition} {level|Cantrips}`);
-	registerCommandHelp("Spells", `spells {tradition} {level|Cantrips} by school`);
-
 	registerCommandRegex(/^\s*(\d+(?:\s*st|nd|rd|th)?)\s*(?:level)?\s*(arcane|divine|occult|primal)\s*spells(?:\s*by\s*(school))?\s*$/i, spellListA);
-	registerCommandHelp("Spells", `{level} {tradition} spells`);
-	registerCommandHelp("Spells", `{level} {tradition} spells by school`);
-
 	registerCommandRegex(/^\s*(arcane|divine|occult|primal)\s*(cantrips?)(?:\s*by\s*(school))?\s*$/i, spellListB);
-	registerCommandHelp("Spells", `{tradition} cantrips`);
-	registerCommandHelp("Spells", `{tradition} cantrips by school`);
-
 	registerCommandRegex(/^\s*(arcane|divine|occult|primal)\s*spells\s*(\d+(?:\s*st|nd|rd|th)?|cantrips?)?(?:\s*by\s*(school))?\s*$/i, spellListB);
-	registerCommandHelp("Spells", `{tradition} spells {level|Cantrips}`);
-	registerCommandHelp("Spells", `{tradition} spells {level|Cantrips} by school`);
-
 	registerCommandRegex(/^(?:\s*focus\s*spells\s*(.*?)|\s*(.*?)\s*focus\s*spells)$/i, spellListFocus);
-	registerCommandHelp("Spells", "Focus Spells", `focus spells {Archetype|Class|Domain}`);
-	registerCommandHelp("Spells", "Focus Spells", `{Archetype|Class|Domain} focus spells`);
-
 	registerCommandRegex(/^\s*spells\s*(\d+(?:\s*st|nd|rd|th)?|cantrips?)\s*(arcane|divine|occult|primal)(\s*(?:\-|\+|\||\&)\s*(?:arcane|divine|occult|primal))?(\s*(?:\-|\+|\||\&)\s*(?:arcane|divine|occult|primal))?(\s*(?:\-|\+|\||\&)\s*(?:arcane|divine|occult|primal))?\s*$/i, specialistLists);
-	registerCommandHelp("Spells", "Custom List", `spells {level|Cantrips} {+tradition} {-tradition} {|tradition} {&tradition}`);
 }
