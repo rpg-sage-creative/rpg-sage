@@ -42,7 +42,7 @@ function emojify(text: string, matches: string[], replacement: string): string {
 export class Emoji {
 	public constructor(private emoji: IEmoji[]) { }
 
-	private findEmoji(type: Optional<EmojiType>): IEmoji | undefined {
+	public findEmoji(type: Optional<EmojiType>): IEmoji | undefined {
 		return this.emoji.find(emoji => emoji.type === type);
 	}
 
