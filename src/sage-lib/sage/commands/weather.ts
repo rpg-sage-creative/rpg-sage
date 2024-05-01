@@ -132,7 +132,7 @@ async function weatherHandler(sageCommand: SageCommand): Promise<void> {
 	const seasonInfo = getEnumInfo(sageCommand, Season, "season");
 
 	if (sageCommand.isSageMessage() && (climateInfo.isInvalid || elevationInfo.isInvalid || seasonInfo.isInvalid)) {
-		await sageCommand.whisper("Error: Please see [Wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Weather>) Help command for usage details\n```sage! weather help```");
+		await sageCommand.whisperWikiHelp({ message:"For Help, try\n```sage! weather help```... or ...", page:"Weather" });
 
 	}else {
 
