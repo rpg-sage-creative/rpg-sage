@@ -1,6 +1,7 @@
 import { partition } from "@rsc-utils/array-utils";
 import { errorReturnNull } from "@rsc-utils/console-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
+import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
 import type { Colors, TColorAndType } from "../../model/Colors.js";
 import type { Game } from "../../model/Game.js";
@@ -8,7 +9,6 @@ import { ColorType } from "../../model/HasColorsCore.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import type { Server } from "../../model/Server.js";
-import { registerAdminCommand } from "../cmd.js";
 import { BotServerGameType } from "../helpers/BotServerGameType.js";
 import { embedColor } from "../helpers/embedColor.js";
 
@@ -111,6 +111,10 @@ async function _colorGet(sageMessage: SageMessage, ...colors: Optional<Colors>[]
 	colors = colors.filter(isDefined);
 
 	const colorType = sageMessage.args.getEnum(ColorType, "type")!;
+	if (!isDefined(colorType)) {
+		return sageMessage.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
+	}
+
 	let inherited = false;
 	let color = colors.shift()!.get(colorType);
 	while (!color && colors.length) {
@@ -118,7 +122,7 @@ async function _colorGet(sageMessage: SageMessage, ...colors: Optional<Colors>[]
 		color = colors.shift()!.get(colorType);
 	}
 	if (!color) {
-		return sageMessage.whisper(`Sorry, you couldn't find a color type named: ${colorType}`);
+		return sageMessage.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
 	}
 
 	const inheritedText = inherited ? ` (unset, inherited)` : ``;
@@ -197,7 +201,7 @@ async function colorSetServer(sageMessage: SageMessage): Promise<void> {
 
 	const colorAndType = getColorAndType(sageMessage);
 	if (!colorAndType) {
-		return sageMessage.whisper(`Please see Help for [Color Management](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Color-Management>).`);
+		return sageMessage.whisperWikiHelp({ message:`Invalid Input.`, page:`Color Management` });
 	}
 
 	const set = sageMessage.server.colors.set(colorAndType);
@@ -220,7 +224,7 @@ async function colorSetGame(sageMessage: SageMessage): Promise<void> {
 
 	const colorAndType = getColorAndType(sageMessage);
 	if (!colorAndType) {
-		return sageMessage.whisper(`Please see Help for [Color Management](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Color-Management>).`);
+		return sageMessage.whisperWikiHelp({ message:`Invalid Input.`, page:`Color Management` });
 	}
 
 	const set = sageMessage.game!.colors.set(colorAndType);
@@ -304,8 +308,12 @@ async function colorUnsetServer(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.whisper(`Sorry, you aren't allowed to change Server colors in this channel.`);
 	}
 
-	const colorType = sageMessage.args.getEnum(ColorType, "type")!;
-	const unset = sageMessage.server.colors.unset(colorType);
+	const type = sageMessage.args.getEnum(ColorType, "type");
+	if (!isDefined(type)) {
+		return sageMessage.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
+	}
+
+	const unset = sageMessage.server.colors.unset(type);
 	if (!unset) {
 		return sageMessage.whisper(`Sorry, we were unable unset your color!`);
 	}
@@ -315,6 +323,7 @@ async function colorUnsetServer(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.whisper(`Sorry, we were unable unset your color!`);
 	}
 
+	/** @todo return the unset/default color */
 	return sageMessage.reactSuccess();
 }
 
@@ -325,8 +334,12 @@ async function colorUnsetGame(sageMessage: SageMessage): Promise<void> {
 
 	const game = sageMessage.game!;
 
-	const colorType = sageMessage.args.getEnum(ColorType, "type")!;
-	const unset = game.colors.unset(colorType);
+	const type = sageMessage.args.getEnum(ColorType, "type");
+	if (!isDefined(type)) {
+		return sageMessage.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
+	}
+
+	const unset = game.colors.unset(type);
 	if (!unset) {
 		return sageMessage.whisper(`Sorry, we were unable unset your color!`);
 	}
@@ -336,6 +349,7 @@ async function colorUnsetGame(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.whisper(`Sorry, we were unable unset your color!`);
 	}
 
+	/** @todo return the unset/default color */
 	return sageMessage.reactSuccess();
 }
 
@@ -346,25 +360,25 @@ async function colorUnset(sageMessage: SageMessage): Promise<void> {
 //#endregion
 
 export function registerColor(): void {
-	registerAdminCommand(colorListBot, "color-list-bot");
-	registerAdminCommand(colorListServer, "color-list-server");
-	registerAdminCommand(colorListGame, "color-list-game");
-	registerAdminCommand(colorList, "color-list");
+	registerListeners({ commands:["color-list-bot"], message:colorListBot });
+	registerListeners({ commands:["color-list-server"], message:colorListServer });
+	registerListeners({ commands:["color-list-game"], message:colorListGame });
+	registerListeners({ commands:["color-list"], message:colorList });
 
-	registerAdminCommand(colorGetBot, "color-get-bot");
-	registerAdminCommand(colorGetServer, "color-get-server");
-	registerAdminCommand(colorGetGame, "color-get-game");
-	registerAdminCommand(colorGet, "color-get");
+	registerListeners({ commands:["color-get-bot"], message:colorGetBot });
+	registerListeners({ commands:["color-get-server"], message:colorGetServer });
+	registerListeners({ commands:["color-get-game"], message:colorGetGame });
+	registerListeners({ commands:["color-get"], message:colorGet });
 
-	registerAdminCommand(colorSetServer, "color-set-server");
-	registerAdminCommand(colorSetGame, "color-set-game");
-	registerAdminCommand(colorSet, "color-set");
+	registerListeners({ commands:["color-set-server"], message:colorSetServer });
+	registerListeners({ commands:["color-set-game"], message:colorSetGame });
+	registerListeners({ commands:["color-set"], message:colorSet });
 
-	registerAdminCommand(colorSyncServer, "color-sync-server");
-	registerAdminCommand(colorSyncGame, "color-sync-game");
-	registerAdminCommand(colorSync, "color-sync");
+	registerListeners({ commands:["color-sync-server"], message:colorSyncServer });
+	registerListeners({ commands:["color-sync-game"], message:colorSyncGame });
+	registerListeners({ commands:["color-sync"], message:colorSync });
 
-	registerAdminCommand(colorUnsetServer, "color-unset-server");
-	registerAdminCommand(colorUnsetGame, "color-unset-game");
-	registerAdminCommand(colorUnset, "color-unset");
+	registerListeners({ commands:["color-unset-server"], message:colorUnsetServer });
+	registerListeners({ commands:["color-unset-game"], message:colorUnsetGame });
+	registerListeners({ commands:["color-unset"], message:colorUnset });
 }
