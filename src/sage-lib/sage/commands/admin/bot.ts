@@ -2,10 +2,11 @@ import { GameSystemType } from "@rsc-sage/types";
 import { errorReturnEmptyArray } from "@rsc-utils/console-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { getBuildInfo } from "@rsc-utils/env-utils";
+import { isDefined } from "@rsc-utils/type-utils";
+import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { Bot } from "../../model/Bot.js";
 import type { SageMessage } from "../../model/SageMessage.js";
-import { createAdminRenderableContent, registerAdminCommand } from "../cmd.js";
-import { registerAdminCommandHelp } from "../help.js";
+import { createAdminRenderableContent } from "../cmd.js";
 
 async function botList(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
@@ -38,9 +39,9 @@ function searchStatusToReadable(status: string | boolean): string {
 	}
 	return status;
 }
-function keyAndStatusToOutput(gameType: GameSystemType, status: boolean | string): string {
+function keyAndStatusToOutput(gameSystem: GameSystemType, status: boolean | string): string {
 	const emoji = status === true ? ":green_circle:" : status === false ? ":no_entry_sign:" : ":yellow_circle:";
-	return `[spacer] ${emoji} <b>${GameSystemType[gameType]}</b> ${searchStatusToReadable(status)}`;
+	return `[spacer] ${emoji} <b>${GameSystemType[gameSystem]}</b> ${searchStatusToReadable(status)}`;
 }
 function getBotSearchStatus(bot: Bot): string[] {
 	return Object.keys(GameSystemType)
@@ -81,17 +82,16 @@ async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
 		return sageMessage.reactBlock();
 	}
-	const gameType = sageMessage.args.getEnum(GameSystemType, "system");
-	if (!gameType) {
-		return sageMessage.reactFailure("Unable to parse GameType.");
+	const gameSystem = sageMessage.args.getEnum(GameSystemType, "gameSystem");
+	const enabled = sageMessage.args.getBoolean("enabled");
+	if (!gameSystem || !isDefined(enabled)) {
+		return sageMessage.whisper("Invalid `gameSystem` or `enabled` value.");
 	}
 
-	const args = sageMessage.args.toArray();
-	const setEnabled = args.length === 1 && args[0] === "true";
-	const setInactive = args.length === 1 && args[0] === "false";
-	const disabledMessage = sageMessage.args.join(" ");
-	const status = setEnabled ? true : setInactive ? false : (disabledMessage || "Unknown Reason");
-	const saved = await sageMessage.bot.setSearchStatus(gameType, status);
+	const message = sageMessage.args.getString("message");
+
+	const status = enabled ? true : message ?? false;
+	const saved = await sageMessage.bot.setSearchStatus(gameSystem, status);
 	await sageMessage.reactSuccessOrFailure(saved);
 	if (saved) {
 		return sendBot(sageMessage, sageMessage.bot);
@@ -115,15 +115,8 @@ async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 }
 
 export function registerBot(): void {
-	registerAdminCommand(botList, "bot-list");
-	registerAdminCommandHelp("Admin", "SuperUser", "Bot", "bot list");
-
-	registerAdminCommand(botDetails, "bot-details");
-	registerAdminCommandHelp("Admin", "SuperUser", "Bot", "bot details");
-	registerAdminCommandHelp("Admin", "SuperUser", "Bot", "bot details {@UserMention}");
-	registerAdminCommandHelp("Admin", "SuperUser", "Bot", "bot details {UserId}");
-
-	registerAdminCommand(botCodeVersion, "code-version");
-
-	registerAdminCommand(setBotSearchStatus, "bot-set-search-status");
+	registerListeners({ commands:["bot|list"], message:botList });
+	registerListeners({ commands:["bot|details"], message:botDetails });
+	registerListeners({ commands:["code|version"], message:botCodeVersion });
+	registerListeners({ commands:["bot|set|search|status"], message:setBotSearchStatus });
 }
