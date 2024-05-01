@@ -86,6 +86,13 @@ export abstract class SageCommand<
 	/** @todo what is the reason for both reply /AND/ whisper? */
 	public abstract whisper(renderableOrArgs: RenderableContentResolvable | TSendArgs): Promise<void>;
 
+	public async whisperWikiHelp({ message, page, label }: { message?:string; page:string; label?:string; }): Promise<void> {
+		const url = `https://github.com/rpg-sage-creative/rpg-sage/wiki/${page.replace(/ /g, "-")}`;
+		const seeHelp = `Please see Help for [${label ?? page.replace(/-/g, " ")}](<${url}>).`;
+		const content = message ? `${message}\n${seeHelp}` : seeHelp;
+		return this.whisper(content);
+	}
+
 	//#endregion
 
 	//#region caches
