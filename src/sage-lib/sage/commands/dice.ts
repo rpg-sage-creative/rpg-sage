@@ -9,6 +9,7 @@ import type { ButtonInteraction } from "discord.js";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
+import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
 import { CharacterManager } from "../model/CharacterManager.js";
 import type { CharacterShell } from "../model/CharacterShell.js";
@@ -18,7 +19,6 @@ import { SageCommand } from "../model/SageCommand.js";
 import { SageInteraction } from "../model/SageInteraction.js";
 import { SageMessage } from "../model/SageMessage.js";
 import type { TMacro } from "../model/User.js";
-import { registerCommandRegex } from "./cmd.js";
 import { doStatMath } from "./dice/doStatMath.js";
 import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
 import { formatDiceOutput } from "./dice/formatDiceOutput.js";
@@ -487,15 +487,13 @@ async function diceTest(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	const pairs = sageMessage.args.keyValuePairs(),
-		filtered = pairs.filter(pair => ["die", "sides", "type"].includes(pair.key.toLowerCase())),
-		pair = filtered.shift();
-	if (!pair?.value) {
+	const dieValue = sageMessage.args.getString("die") ?? sageMessage.args.getString("sides") ?? sageMessage.args.getString("type");
+	if (!dieValue) {
 		await sageMessage.message.reply("*Die type not given!*");
 		return;
 	}
 
-	const dieSize = +pair.value;
+	const dieSize = +dieValue.replace(/\D/g, "");
 	if (![2,3,4,6,8,10,12,20].includes(dieSize)) {
 		await sageMessage.message.reply("*Die type not valid! (2, 3, 4, 6, 8, 10, 12, 20)*");
 		return;
@@ -667,6 +665,6 @@ function mapDiceTestResults({ dieSize, iterations, rolls }: { dieSize: number; i
 //#endregion
 
 export function registerDice(): void {
-	registerCommandRegex(/dice test (die|size)=("d?\d+"|\d+)/i, diceTest);
+	registerListeners({ commands:["dice|test"], message:diceTest });
 	registerMessageListener(hasUnifiedDiceCommand, sendDice as any, { priorityIndex:1 });
 }
