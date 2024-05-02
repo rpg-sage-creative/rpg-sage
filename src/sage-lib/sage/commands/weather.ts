@@ -151,5 +151,5 @@ async function weatherHandler(sageCommand: SageCommand): Promise<void> {
 
 export function registerCommandHandlers(): void {
 	registerListeners({ commands:["weather"], interaction:weatherHandler, message:weatherHandler });
-	registerListeners({ commands:["weather-help"], message:showHelp });
+	registerListeners({ commands:["weather|help"], message:showHelp });
 }
