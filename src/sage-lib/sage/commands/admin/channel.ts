@@ -8,14 +8,14 @@ import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import { GuildChannel } from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice/index.js";
+import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { DiscordCache } from "../../../discord/index.js";
 import type { Game } from "../../model/Game.js";
 import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game.js";
 import type { SageCache } from "../../model/SageCache.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import type { Server } from "../../model/Server.js";
-import { createAdminRenderableContent, registerAdminCommand } from "../cmd.js";
-import { registerAdminCommandHelp } from "../help.js";
+import { createAdminRenderableContent } from "../cmd.js";
 import { BotServerGameType } from "../helpers/BotServerGameType.js";
 
 //#region details
@@ -201,14 +201,9 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 //#endregion
 
 export function registerChannel(): void {
-	registerAdminCommand(channelDetails, "channel-details");
-	registerAdminCommand(channelListServer, "channel-list-server");
-	registerAdminCommand(channelListGame, "channel-list-game");
-	registerAdminCommand(channelList, "channel-list");
-	registerAdminCommand(channelSet, "channel-set", "channel-update");
-
-	registerAdminCommandHelp("Admin", "Channel", "channel details");
-	registerAdminCommandHelp("Admin", "Channel", "channel list");
-	registerAdminCommandHelp("Admin", "Channel", "channel list {game|server}");
-	registerAdminCommandHelp("Admin", "Channel", "channel set {optionKey}={optionValue}");
+	registerListeners({ commands:["channel|details"], message:channelDetails });
+	registerListeners({ commands:["channel|list|server"], message:channelListServer });
+	registerListeners({ commands:["channel|list|game"], message:channelListGame });
+	registerListeners({ commands:["channel|list"], message:channelList });
+	registerListeners({ commands:["channel|update", "channel|set"], message:channelSet });
 }
