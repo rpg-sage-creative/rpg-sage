@@ -80,9 +80,10 @@ async function _emojiList(sageMessage: SageMessage, which: BotServerGameType, ca
 	}
 
 	const botEmoji = sageMessage.bot.emoji.toArray();
+	const content = `### RPG Sage ${BotServerGameType[which]} Emoji *(${botEmoji.length})*`;
 	const text = botEmoji.map(_emoji => renderEmoji(sageMessage, which, _emoji.type)).join("\n");
 
-	await sageMessage.send(text);
+	await sageMessage.send(`${content}\n${text}`);
 }
 
 async function emojiListBot(sageMessage: SageMessage): Promise<void> {
@@ -94,7 +95,11 @@ async function emojiListServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiListGame(sageMessage: SageMessage): Promise<void> {
-	await _emojiList(sageMessage, BotServerGameType.Game, sageMessage.canAdminGame);
+	if (sageMessage.game) {
+		await _emojiList(sageMessage, BotServerGameType.Game, sageMessage.canAdminGame);
+	}else {
+		await sageMessage.whisper("Game not found.");
+	}
 }
 
 async function emojiList(sageMessage: SageMessage): Promise<void> {
@@ -156,6 +161,9 @@ async function emojiGetServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiGetGame(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.game) {
+		return sageMessage.whisper("Game not found.");
+	}
 	if (!sageMessage.canAdminGame && !sageMessage.isPlayer) {
 		return sageMessage.whisper(`Sorry, you aren't allowed to access this Game.`);
 	}
@@ -231,6 +239,9 @@ async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiSetGame(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.game) {
+		return sageMessage.whisper("Game not found.");
+	}
 	if (!sageMessage.canAdminGame) {
 		return sageMessage.whisper(`Sorry, you aren't allowed to change Game emoji.`);
 	}
@@ -285,6 +296,9 @@ async function emojiSyncServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiSyncGame(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.game) {
+		return sageMessage.whisper("Game not found.");
+	}
 	if (!sageMessage.canAdminGame) {
 		return sageMessage.whisper(`Sorry, you aren't allowed to change Game emoji.`);
 	}
@@ -328,7 +342,7 @@ async function emojiUnsetServer(sageMessage: SageMessage): Promise<void> {
 
 	const unset = sageMessage.server.emoji.unset(type);
 	if (!unset) {
-		return sageMessage.whisper(`Sorry, we were unable unset your emoji!`);
+		return sageMessage.whisper(`Nothing to unset!`);
 	}
 
 	const saved = await sageMessage.server.save();
@@ -340,6 +354,9 @@ async function emojiUnsetServer(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiUnsetGame(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.game) {
+		return sageMessage.whisper("Game not found.");
+	}
 	if (!sageMessage.canAdminGame) {
 		return sageMessage.whisper(`Sorry, you aren't allowed to change Game emoji.`);
 	}
@@ -353,7 +370,7 @@ async function emojiUnsetGame(sageMessage: SageMessage): Promise<void> {
 
 	const unset = game.emoji.unset(type);
 	if (!unset) {
-		return sageMessage.whisper(`Sorry, we were unable unset your emoji!`);
+		return sageMessage.whisper(`Nothing to unset!`);
 	}
 
 	const saved = await game.save();
@@ -371,25 +388,25 @@ async function emojiUnset(sageMessage: SageMessage): Promise<void> {
 //#endregion
 
 export function registerEmoji(): void {
-	registerListeners({ commands:["emoji-list-bot"], message:emojiListBot });
-	registerListeners({ commands:["emoji-list-server"], message:emojiListServer });
-	registerListeners({ commands:["emoji-list-game"], message:emojiListGame });
-	registerListeners({ commands:["emoji-list"], message:emojiList });
+	registerListeners({ commands:["emoji|list|bot"], message:emojiListBot });
+	registerListeners({ commands:["emoji|list|server"], message:emojiListServer });
+	registerListeners({ commands:["emoji|list|game"], message:emojiListGame });
+	registerListeners({ commands:["emoji|list"], message:emojiList });
 
-	registerListeners({ commands:["emoji-get-bot"], message:emojiGetBot });
-	registerListeners({ commands:["emoji-get-server"], message:emojiGetServer });
-	registerListeners({ commands:["emoji-get-game"], message:emojiGetGame });
-	registerListeners({ commands:["emoji-get"], message:emojiGet });
+	registerListeners({ commands:["emoji|get|bot"], message:emojiGetBot });
+	registerListeners({ commands:["emoji|get|server"], message:emojiGetServer });
+	registerListeners({ commands:["emoji|get|game"], message:emojiGetGame });
+	registerListeners({ commands:["emoji|get"], message:emojiGet });
 
-	registerListeners({ commands:["emoji-set-server"], message:emojiSetServer });
-	registerListeners({ commands:["emoji-set-game"], message:emojiSetGame });
-	registerListeners({ commands:["emoji-set"], message:emojiSet });
+	registerListeners({ commands:["emoji|set|server"], message:emojiSetServer });
+	registerListeners({ commands:["emoji|set|game"], message:emojiSetGame });
+	registerListeners({ commands:["emoji|set"], message:emojiSet });
 
-	registerListeners({ commands:["emoji-sync-server"], message:emojiSyncServer });
-	registerListeners({ commands:["emoji-sync-game"], message:emojiSyncGame });
-	registerListeners({ commands:["emoji-sync"], message:emojiSync });
+	registerListeners({ commands:["emoji|sync|server"], message:emojiSyncServer });
+	registerListeners({ commands:["emoji|sync|game"], message:emojiSyncGame });
+	registerListeners({ commands:["emoji|sync"], message:emojiSync });
 
-	registerListeners({ commands:["emoji-unset-server"], message:emojiUnsetServer });
-	registerListeners({ commands:["emoji-unset-game"], message:emojiUnsetGame });
-	registerListeners({ commands:["emoji-unset"], message:emojiUnset });
+	registerListeners({ commands:["emoji|unset|server"], message:emojiUnsetServer });
+	registerListeners({ commands:["emoji|unset|game"], message:emojiUnsetGame });
+	registerListeners({ commands:["emoji|unset"], message:emojiUnset });
 }
