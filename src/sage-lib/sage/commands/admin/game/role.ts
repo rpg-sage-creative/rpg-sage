@@ -1,7 +1,7 @@
+import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { type IGameRole, type TGameRoleType, GameRoleType } from "../../../model/Game.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
-import { registerAdminCommandHelp } from "../../help.js";
+import { createAdminRenderableContent } from "../../cmd.js";
 
 function getGameRoleLabel(gameRole: IGameRole): TGameRoleType {
 	return <TGameRoleType>GameRoleType[gameRole.type || 0];
@@ -75,12 +75,7 @@ async function gameRoleRemove(sageMessage: SageMessage): Promise<void> {
 //TODO: have a generic set of role commands that dyanmically figure out game or server roletype
 
 export function registerRole(): void {
-	registerAdminCommand(gameRoleList, "game-role-list");
-	registerAdminCommandHelp("Admin", "Game", "role list");
-
-	registerAdminCommand(gameRoleSet, "game-role-set");
-	registerAdminCommandHelp("Admin", "Game", "game role set {@RoleMention} {GameRoleType}");
-
-	registerAdminCommand(gameRoleRemove, "game-role-remove", "game-role-delete", "game-role-unset");
-	registerAdminCommandHelp("Admin", "Game", "game role remove {GameRoleType}");
+	registerListeners({ commands:["game|role|list"], message:gameRoleList });
+	registerListeners({ commands:["game|role|add", "game|role|create", "game|role|set"], message:gameRoleSet });
+	registerListeners({ commands:["game|role|remove", "game|role|delete", "game|role|unset"], message:gameRoleRemove });
 }
