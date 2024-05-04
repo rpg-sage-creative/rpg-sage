@@ -1,19 +1,18 @@
 import { debug } from "@rsc-utils/console-utils";
-import { MessageType, ReactionType, TCommandAndArgsAndData } from "../../discord";
-import { registerMessageListener, registerReactionListener } from "../../discord/handlers";
-import type { SageMessage } from "../model/SageMessage";
-import type { DialogContent } from "./dialog/DialogContent";
-import { companionChat } from "./dialog/chat/companionChat";
-import { editChat } from "./dialog/chat/editChat";
-import { gmChat } from "./dialog/chat/gmChat";
-import { npcChat } from "./dialog/chat/npcChat";
-import { pcChat } from "./dialog/chat/pcChat";
-import { doDelete } from "./dialog/delete/doDelete";
-import { isDelete } from "./dialog/delete/isDelete";
-import { parseOrAutoDialogContent } from "./dialog/parseOrAutoDialog";
-import { doPin } from "./dialog/pin/doPin";
-import { isPin } from "./dialog/pin/isPin";
-import { registerInlineHelp } from "./help";
+import { registerMessageListener, registerReactionListener } from "../../discord/handlers.js";
+import { MessageType, ReactionType, TCommandAndArgsAndData } from "../../discord/index.js";
+import type { SageMessage } from "../model/SageMessage.js";
+import type { DialogContent } from "./dialog/DialogContent.js";
+import { companionChat } from "./dialog/chat/companionChat.js";
+import { editChat } from "./dialog/chat/editChat.js";
+import { gmChat } from "./dialog/chat/gmChat.js";
+import { npcChat } from "./dialog/chat/npcChat.js";
+import { pcChat } from "./dialog/chat/pcChat.js";
+import { doDelete } from "./dialog/delete/doDelete.js";
+import { isDelete } from "./dialog/delete/isDelete.js";
+import { parseOrAutoDialogContent } from "./dialog/parseOrAutoDialog.js";
+import { doPin } from "./dialog/pin/doPin.js";
+import { isPin } from "./dialog/pin/isPin.js";
 
 /** Returns the dialog content if found or null otherwise. */
 async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<DialogContent[]> | null> {
@@ -66,33 +65,4 @@ export function registerDialog(): void {
 	registerMessageListener(isDialog, doDialog, { type:MessageType.Both, priorityIndex:0 });
 	registerReactionListener(isDelete, doDelete, { type:ReactionType.Add });
 	registerReactionListener(isPin, doPin);
-
-	// registerInlineHelp("Dialog", "edit::{content}");
-	// registerInlineHelp("Dialog", "{type}::{content}");
-	// registerInlineHelp("Dialog", "{type}::{name}::{content}");
-	// registerInlineHelp("Dialog", "{type}::{name}(display name)::{content}");
-	// registerInlineHelp("Dialog", "{type}::{name}(display name)::(title)::{content}");
-	// registerInlineHelp("Dialog", "{type} :: {name} ( {display name} ) :: ( {title} ) :: {color} :: {content}");
-	registerInlineHelp("Dialog",
-		"\ntype::name(display name)::(title)::color::avatar::content"
-		+ "\n - <b>type</b>: gm, npc, enemy, ally, boss, minion, pc, alt, companion, familiar, hireling"
-		+ "\n - <b>name</b>: the name of the npc, pc, or companion to post as"
-		+ "\n - - <i>optional for PCs in a game</i>"
-		+ "\n - <b>display name</b>: the name to post as"
-		+ "\n - - <i>optional: defaults to character name or 'Game Master' for GM</i>"
-		+ "\n - <b>title</b>: a title or descripiton of the dialog <i>optional</i>"
-		+ "\n - <b>color</b>: a color to override the dialog color with"
-		+ "\n - - <i>optional: expects hex value 0x000000 or #FFFFFF</i>"
-		+ "\n - <b>avatar</b>: a url to override the avatar image"
-		+ "\n - - <i>optional</i>"
-		+ "\n - <b>content</b>: everything you want to post in your dialog"
-		+ "\n - - accepts normal discord/markup as well as custom Sage markup"
-		+ "\n"
-		+ "\n<u>Examples:</u>"
-		+ "\ngm::You see a fork in the road up ahead."
-		+ "\ngm::(The Weather turns ...)::The wind picks up, rain begins to fall, and lightning flashes!"
-		+ `\nnpc::Seela::"Hello, and well met!"`
-		+ `\npc::I move behind the spork to flank and attack!`
-		+ "\nedit::I move behind the orc to flank and attack!"
-	);
 }
