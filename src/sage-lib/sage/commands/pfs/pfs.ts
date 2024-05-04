@@ -7,7 +7,6 @@ import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e/i
 import { ColorType } from "../../model/HasColorsCore.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { registerCommandRegex } from "../cmd.js";
-import { registerCommandHelp } from "../help.js";
 import { createRenderableContent } from "../helpers/createRenderableContent.js";
 
 export type TPfsFaction = "Horizon Hunters" | "Vigilant Seal" | "Envoys' Alliance" | "Grand Archive";
@@ -119,8 +118,6 @@ function earnIncome(sageMessage: SageMessage): void {
 }
 function registerDowntime(): void {
 	registerCommandRegex(/^\s*pfs\s*income\s*(\d{1,2})\s*(\w+)\s*([\+\-]?\d{1,2})(?:\s+(\d+)\s*(days)?)?\s*$/i, earnIncome);
-	registerCommandHelp("PFS", "Downtime", `pfs income {pcLevel} {skillProficiency} {skillModifier}`);
-	registerCommandHelp("PFS", "Downtime", `pfs income {pcLevel} {skillProficiency} {skillModifier} {days}`);
 }
 // #endregion Earn Income
 
@@ -144,7 +141,6 @@ function registerDowntime(): void {
 // 	sageMessage.send(renderableContent);
 // }
 // registerCommandRegex(/^\s*(pfs\s*)?links\s*$/, pfsLinks);
-// registerCommandHelp("PFS", `pfs links`);
 // #endregion Links
 
 // #region Tier Calculator
@@ -239,7 +235,6 @@ function pfsTier(sageMessage: SageMessage): void {
 }
 function registerTiers(): void {
 	registerCommandRegex(/^pfs\s*tier\s+(\d+-\d+)\s+(\d+)(?:\s+|\s*,\s*)(\d+)(?:\s+|\s*,\s*)(\d+)(?:\s+|\s*,\s*)(\d+)((?:\s+|\s*,\s*)\d+)?((?:\s+|\s*,\s*)\d+)?((?:\s+|\s*,\s*)\d+)?\s*$/i, pfsTier);
-	registerCommandHelp("PFS", "Tiers", `pfs tier {minLevel}-{maxLevel} {pc1Level} {pc2Level} {pc3Level} {pc4Level} {pc5Level} {pc6Level}`);
 }
 // #endregion Tier Calculator
 
@@ -281,7 +276,6 @@ function pfsScenario(sageMessage: SageMessage): void {
 }
 function registerScenarios(): void {
 	registerCommandRegex(/^\s*pfs\s*((?:s\d+\-\d+)|(?:q\d+))\s+(\d+)(?:\s+|\s*,\s*)(\d+)(?:\s+|\s*,\s*)(\d+)(?:\s+|\s*,\s*)(\d+)((?:\s+|\s*,\s*)\d+)?((?:\s+|\s*,\s*)\d+)?((?:\s+|\s*,\s*)\d+)?\s*$/i, pfsScenario);
-	registerCommandHelp("PFS", "Scenarios", `pfs s1-01 {pc1Level}, {pc2Level}, {pc3Level}, {pc4Level}, {pc5Level}, {pc6Level}`);
 }
 // #endregion Scenario/Quest Randomizer
 
