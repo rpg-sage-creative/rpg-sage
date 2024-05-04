@@ -24,11 +24,12 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	const ownerTag = await toReadableOwner(sageMessage, character.userDid);
 	renderableContent.append(`<b>${ownerOrPlayer}</b> ${ownerTag ?? "<i>none</i>"}`);
 
-	if (character.isCompanion) {
+	if (character.isCompanion || character.isMinion) {
 		renderableContent.append(`<b>Character</b> ${character.parent?.name ?? "<i>unknown</i>"}`);
 	} else {
 		const companionNames = character.companions.map(companion => companion.name).join("\n- ");
-		renderableContent.append(`<b>Companions</b> ${companionNames || "<i>none</i>"}`);
+		const companionType = character.isPC ? `Companions` : `Minions`;
+		renderableContent.append(`<b>${companionType}</b> ${companionNames || "<i>none</i>"}`);
 	}
 	renderableContent.append(`<b>Dialog Color</b> ${character.embedColor ?? "<i>unset</i>"}`);
 
