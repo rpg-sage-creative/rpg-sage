@@ -1,13 +1,13 @@
 import { type SageChannel } from "@rsc-sage/types";
 import { sortComparable } from "@rsc-utils/array-utils";
 import { toChannelMention } from "@rsc-utils/discord-utils";
+import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { Server } from "../../../model/Server.js";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
-import { registerAdminCommandHelp } from "../../help.js";
+import { createAdminRenderableContent } from "../../cmd.js";
 
 async function getGames(sageCommand: SageCommand): Promise<Game[]> {
 	const guild = sageCommand.discord.guild;
@@ -136,17 +136,8 @@ async function gameToggleDicePing(sageMessage: SageMessage): Promise<void> {
 }
 
 export function registerGame(): void {
-	registerAdminCommand(gameCount, "game-count");
-	registerAdminCommandHelp("Admin", "Game", "game count");
-
-	registerAdminCommand(myGameList, "my-games");
-
-	registerAdminCommand(gameList, "game-list", "games-list", "game-archive-list", "games-archive-list");
-	registerAdminCommandHelp("Admin", "Game", "game archive list");
-	registerAdminCommandHelp("Admin", "Game", "game list");
-
-	registerAdminCommand(gameToggleDicePing, "game-toggle-dice-ping");
-	registerAdminCommandHelp("Admin", "Game", `game toggle dice ping`);
-
-
+	registerListeners({ commands:["game|count"], message:gameCount });
+	registerListeners({ commands:["my|games"], message:myGameList });
+	registerListeners({ commands:["game|list", "games|list", "game|archive|list", "games|archive|list"], message:gameList });
+	registerListeners({ commands:["game|toggle|dice|ping"], message:gameToggleDicePing });
 }
