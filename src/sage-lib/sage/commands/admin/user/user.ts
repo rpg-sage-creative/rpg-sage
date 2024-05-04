@@ -4,8 +4,7 @@ import { registerListeners } from "../../../../discord/handlers/registerListener
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { User as SUser } from "../../../model/User.js";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
-import { registerAdminCommandHelp } from "../../help.js";
+import { createAdminRenderableContent } from "../../cmd.js";
 import { renderCount } from "../../helpers/renderCount.js";
 
 async function userCount(sageCommand: SageCommand): Promise<void> {
@@ -132,9 +131,7 @@ async function userDetails(sageMessage: SageCommand): Promise<void> {
 }
 
 export function registerUser(): void {
-	registerAdminCommand(userCount, "user-count");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user count");
-
-	registerAdminCommand(userUpdate, "user-set", "user-update");
+	registerListeners({ commands:["user|count"], message:userCount });
+	registerListeners({ commands:["user|set", "user|update"], message:userUpdate });
 	registerListeners({ commands:["user|details", "User Details"], interaction:userDetails, message:userDetails });
 }
