@@ -2,16 +2,16 @@ import { toUniqueDefined } from "@rsc-utils/array-utils";
 import { isUrl } from "@rsc-utils/https-utils";
 import { StringMatcher, unwrap, wrap } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
+import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import { SageCommand } from "../../../model/SageCommand.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { TMacro } from "../../../model/User.js";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
+import { createAdminRenderableContent } from "../../cmd.js";
 import { fetchTableFromUrl } from "../../dice/fetchTableFromUrl.js";
 import { isMath } from "../../dice/isMath.js";
 import { isRandomItem } from "../../dice/isRandomItem.js";
 import { parseTable } from "../../dice/parseTable.js";
-import { registerAdminCommandHelp } from "../../help.js";
 
 const UNCATEGORIZED = "Uncategorized";
 
@@ -347,32 +347,11 @@ async function macroDelete(sageMessage: SageMessage): Promise<void> {
 }
 
 export function registerMacro(): void {
-	registerAdminCommand(macroList, "macro-list");
-
-	registerAdminCommand(macroSet, "macro-set", "macro-add");
-
-	registerAdminCommand(macroMove, "macro-move");
-
-	registerAdminCommand(macroDetails, "macro-details");
-
-	registerAdminCommand(macroDeleteAll, "macro-delete-all");
-	registerAdminCommand(macroDelete, "macro-delete", "macro-unset", "macro-remove");
-	registerAdminCommand(macroDeleteCategory, "macro-delete-category");
-
-
-	registerAdminCommandHelp("Macro", "Delete", `macro delete all`);
-	registerAdminCommandHelp("Macro", "Delete", `macro delete name="NAME"`);
-	registerAdminCommandHelp("Macro", "Delete", `macro delete category="CATEGORY"`);
-
-	registerAdminCommandHelp("Macro", "Details", `macro details name="NAME"`);
-
-	registerAdminCommandHelp("Macro", "List", "macro list");
-	registerAdminCommandHelp("Macro", "List", `macro list category="CATEGORY"`);
-
-	registerAdminCommandHelp("Macro", "Move", `macro move name="NAME" category="CATEGORY"`);
-
-	registerAdminCommandHelp("Macro", "Set", `macro set name="NAME"  [DICE]`);
-	registerAdminCommandHelp("Macro", "Set", `macro set name="NAME"  dice="[DICE]"`);
-	registerAdminCommandHelp("Macro", "Set", `macro set name="NAME" category="CATEGORY" [DICE]`);
-	registerAdminCommandHelp("Macro", "Set", `macro set name="NAME" category="CATEGORY" dice="[DICE]"`);
+	registerListeners({ commands:["macro|list"], message:macroList });
+	registerListeners({ commands:["macro|add", "macro|create", "macro|set"], message:macroSet });
+	registerListeners({ commands:["macro|move"], message:macroMove });
+	registerListeners({ commands:["macro|details"], message:macroDetails });
+	registerListeners({ commands:["macro|delete|all"], message:macroDeleteAll });
+	registerListeners({ commands:["macro|delete|category"], message:macroDeleteCategory });
+	registerListeners({ commands:["macro|remove", "macro|delete", "macro|unset"], message:macroDelete });
 }
