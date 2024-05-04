@@ -1,7 +1,7 @@
+import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
-import { registerAdminCommandHelp } from "../../help.js";
+import { createAdminRenderableContent } from "../../cmd.js";
 
 async function prefixSet(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminSage) {
@@ -53,15 +53,8 @@ async function prefixUnset(sageMessage: SageMessage): Promise<void> {
 }
 
 export function registerPrefix(): void {
-	registerAdminCommand(prefixSet, "prefix-set");
-	registerAdminCommandHelp("Admin", "Prefix", "prefix set {commandPrefix; ex: sage}");
-
-	registerAdminCommand(prefixGet, "prefix-get");
-	registerAdminCommandHelp("Admin", "Prefix", "prefix get");
-
-	registerAdminCommand(prefixSync, "prefix-sync");
-	registerAdminCommandHelp("Admin", "Prefix", "prefix sync");
-
-	registerAdminCommand(prefixUnset, "prefix-unset");
-	registerAdminCommandHelp("Admin", "Prefix", "prefix unset");
+	registerListeners({ commands:["prefix|set"], message:prefixSet });
+	registerListeners({ commands:["prefix|get"], message:prefixGet });
+	registerListeners({ commands:["prefix|sync"], message:prefixSync });
+	registerListeners({ commands:["prefix|unset"], message:prefixUnset });
 }
