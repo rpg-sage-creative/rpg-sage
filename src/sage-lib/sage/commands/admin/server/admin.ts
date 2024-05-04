@@ -2,10 +2,10 @@ import { forEachAsync, mapAsync } from "@rsc-utils/async-array-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { User } from "discord.js";
+import { registerListeners } from "../../../../discord/handlers/registerListeners";
 import type { SageMessage } from "../../../model/SageMessage";
 import { AdminRoleType, type IAdminUser } from "../../../model/Server";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
-import { registerAdminCommandHelp } from "../../help";
+import { createAdminRenderableContent } from "../../cmd";
 
 
 type TAdminUser = IAdminUser & { discordUser: User };
@@ -109,16 +109,8 @@ async function adminRemove(sageMessage: SageMessage): Promise<void> {
 }
 
 export function registerAdmin(): void {
-	registerAdminCommand(adminList, "admin-list");
-	registerAdminCommandHelp("Admin", "SuperUser", "Admin", "admin list");
-	registerAdminCommandHelp("Admin", "SuperUser", "Admin", "admin list {optionalNameFilter}");
-
-	registerAdminCommand(adminAdd, "admin-add", "add-admin", "add-game-admin", "add-server-admin");
-	registerAdminCommandHelp("Admin", "Admin", "admin add {@UserMention} {GameAdmin|ServerAdmin|SageAdmin}");
-
-	registerAdminCommand(adminUpdate, "admin-update");
-	registerAdminCommandHelp("Admin", "Admin", "admin update {@UserMention} {GameAdmin|ServerAdmin|SageAdmin}");
-
-	registerAdminCommand(adminRemove, "admin-remove");
-	registerAdminCommandHelp("Admin", "Admin", "admin remove {@UserMention}");
+	registerListeners({ commands:["admin|list"], message:adminList });
+	registerListeners({ commands:["admin|add", "add|admin", "add|game|admin", "add|server|admin"], message:adminAdd });
+	registerListeners({ commands:["admin|update"], message:adminUpdate });
+	registerListeners({ commands:["admin|remove"], message:adminRemove });
 }
