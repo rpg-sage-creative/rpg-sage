@@ -46,7 +46,7 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const newChar = new GameCharacter(core, characterManager);
-	return promptCharConfirm(sageMessage, newChar, `Create ${newChar.name}?`, async char => {
+	return promptCharConfirm(sageMessage, newChar, `Create ${characterTypeMeta.singularDescriptor} ${newChar.name}?`, async char => {
 		if (sageMessage.game && userDid) {
 			// why? debug("Checking owner's status as player/gm ...");
 			if (characterTypeMeta.isNpc) {
