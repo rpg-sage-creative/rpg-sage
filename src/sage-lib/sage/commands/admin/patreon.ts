@@ -1,12 +1,13 @@
 import { verbose } from "@rsc-utils/console-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { getSuperUserId } from "@rsc-utils/env-utils";
+import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { send } from "../../../discord/messages.js";
 import type { SageCache } from "../../model/SageCache.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { Server } from "../../model/Server.js";
 import { PatronTierSnowflakes, PatronTierType, User } from "../../model/User.js";
-import { createAdminRenderableContent, registerAdminCommand } from "../cmd.js";
+import { createAdminRenderableContent } from "../cmd.js";
 
 
 async function patreonSync(sageMessage: SageMessage): Promise<void> {
@@ -67,5 +68,5 @@ export async function syncPatreon(sageCache: SageCache): Promise<void> {
 }
 
 export function registerPatreon(): void {
-	registerAdminCommand(patreonSync, "patreon-sync");
+	registerListeners({ commands:["patreon|sync"], message:patreonSync });
 }
