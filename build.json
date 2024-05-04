@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.6.2",
-"branch":"main",
-"commit":"3b1f2aa1b483accf908204529d0b1b6ae5d49d96",
-"commitSubject":"Merge pull request #76 from rpg-sage-creative/v1.6.2",
-"commitTs":1712690285000,
-"commitDate":"2024-04-09-1218",
-"buildTs":1712690424000,
-"buildDate":"2024-04-09-1220",
-"author":"Randal"
+"version":"1.6.3",
+"branch":"v1.6.x-bug-fixes",
+"commit":"ade820e2e7e3c14c732aba09695f240f704af4d5",
+"commitSubject":"Merge remote-tracking branch 'origin' into v1.6.x-bug-fixes",
+"commitTs":1714860905000,
+"commitDate":"2024-05-04-1515",
+"buildTs":1714860947000,
+"buildDate":"2024-05-04-1515",
+"author":"Randal T Meyer"
 }
