@@ -32,7 +32,7 @@ Game PC Notes
 // 	// }
 // 	await renderNotesList(sageMessage, notes);
 // }
-// registerAdminCommand(notesList, "notes-list");
+// registerListeners(notesList, "notes-list");
 
 // async function journalEntry(sageMessage: SageMessage): Promise<void> {
 // 	const gameCharacter = sageMessage.game ? sageMessage.playerCharacter : sageMessage.user.playerCharacters.first();
@@ -59,7 +59,7 @@ Game PC Notes
 // 	}
 // 	return sageMessage.reactWarn();
 // }
-// registerAdminCommand(journalEntry, "journal-add", "journal-append", "journal-update", "journal-remove");
+// registerListeners(journalEntry, "journal-add", "journal-append", "journal-update", "journal-remove");
 
 export function registerNote(): void {
 }
