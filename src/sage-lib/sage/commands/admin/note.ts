@@ -33,8 +33,6 @@ Game PC Notes
 // 	await renderNotesList(sageMessage, notes);
 // }
 // registerAdminCommand(notesList, "notes-list");
-// registerAdminCommandHelp("Admin", "Notes", "notes list");
-// registerAdminCommandHelp("Admin", "Notes", "notes list {optionalCategoryFilter}");
 
 // async function journalEntry(sageMessage: SageMessage): Promise<void> {
 // 	const gameCharacter = sageMessage.game ? sageMessage.playerCharacter : sageMessage.user.playerCharacters.first();
@@ -62,10 +60,6 @@ Game PC Notes
 // 	return sageMessage.reactWarn();
 // }
 // registerAdminCommand(journalEntry, "journal-add", "journal-append", "journal-update", "journal-remove");
-// registerAdminCommandHelp("Admin", "Journal", `journal add {entry title}\n{journal entry}`);
-// registerAdminCommandHelp("Admin", "Journal", `journal append {entry title}\n{journal entry addition}`);
-// registerAdminCommandHelp("Admin", "Journal", `journal update {entry title}\n{updated journal entry}`);
-// registerAdminCommandHelp("Admin", "Journal", `journal remove {entry title}`);
 
 export function registerNote(): void {
 }
