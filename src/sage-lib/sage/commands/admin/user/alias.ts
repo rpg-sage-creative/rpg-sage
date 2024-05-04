@@ -1,12 +1,12 @@
 import { isNotBlank } from "@rsc-utils/string-utils";
+import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { TAlias } from "../../../model/User.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd.js";
+import { createAdminRenderableContent } from "../../cmd.js";
 import type { DialogContent } from "../../dialog/DialogContent.js";
 import { parseDialogContent } from "../../dialog/parseDialogContent.js";
-import { registerAdminCommandHelp } from "../../help.js";
 
 function testGmTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
 	if (!sageMessage.game || sageMessage.isGameMaster) {
@@ -244,7 +244,7 @@ async function aliasDetails(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Alias Details", "You cannot manage your aliases here.");
 	}
 
-	const aliasName = sageMessage.args.removeAndReturnName();
+	const aliasName = sageMessage.args.getString("name") ?? sageMessage.args.removeAndReturnName();
 	const alias = aliasName ? sageMessage.sageUser.aliases.findByName(aliasName) : null;
 	if (!aliasName || !alias) {
 		const details = [
@@ -283,11 +283,9 @@ async function aliasHelp(sageMessage: SageMessage): Promise<void> {
 }
 
 export function registerAlias(): void {
-	registerAdminCommand(aliasHelp, "alias-help", "alias");
-	registerAdminCommand(aliasList, "alias-list");
-	registerAdminCommand(aliasSet, "alias-set", "alias-add");
-	registerAdminCommand(aliasDetails, "alias-details", "alias-view");
-	registerAdminCommand(aliasDelete, "alias-delete", "alias-unset", "alias-remove");
-
-	registerAdminCommandHelp("Dialog", "Alias", "alias help");
+	registerListeners({ commands:["alias|help", "alias"], message:aliasHelp });
+	registerListeners({ commands:["alias|list"], message:aliasList });
+	registerListeners({ commands:["alias|set", "alias|add", "alias|create"], message:aliasSet });
+	registerListeners({ commands:["alias|details", "alias|view"], message:aliasDetails });
+	registerListeners({ commands:["alias|unset", "alias|remove", "alias|delete"], message:aliasDelete });
 }
