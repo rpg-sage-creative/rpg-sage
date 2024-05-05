@@ -10,7 +10,10 @@ RETVAL=""
 function readJsonProperty() {
 	RETVAL=""
 	jsonKey="$1"
-	RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" "./config/$botCodeName.env.json")
+	RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" "./config/env.mono.$botCodeName.json")
+	if [ -z "$RETVAL" ]; then
+		RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" ./config/env.mono.json)
+	fi
 	if [ -z "$RETVAL" ]; then
 		RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" ./config/env.json)
 	fi
