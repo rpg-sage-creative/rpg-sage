@@ -1,5 +1,5 @@
 [
-	{ "options": [], "name": "sage-stable-dm", "description": "Establish direct message channel with RPG Sage." },
+	{ "options": [], "name": "sage-dm", "description": "Establish direct message channel with RPG Sage." },
 	{
 		"options": [
 			{
@@ -73,10 +73,8 @@
 					},
 					{
 						"choices": [
-							{ "name": "Ignore", "value": "Ignore" },
-							{ "name": "Hide", "value": "Hide" },
-							{ "name": "GM Channel", "value": "GameMasterChannel" },
-							{ "name": "GM Message", "value": "GameMasterDirect" }
+							{ "name": "Post", "value": "SinglePost" },
+							{ "name": "Embed", "value": "SingleEmbed" }
 						],
 						"type": 3,
 						"name": "dicepost",
@@ -85,8 +83,10 @@
 					},
 					{
 						"choices": [
-							{ "name": "Post", "value": "SinglePost" },
-							{ "name": "Embed", "value": "SingleEmbed" }
+							{ "name": "Ignore", "value": "Ignore" },
+							{ "name": "Hide", "value": "Hide" },
+							{ "name": "GM Channel", "value": "GameMasterChannel" },
+							{ "name": "GM Message", "value": "GameMasterDirect" }
 						],
 						"type": 3,
 						"name": "dicesecret",
@@ -167,10 +167,8 @@
 					},
 					{
 						"choices": [
-							{ "name": "Ignore", "value": "Ignore" },
-							{ "name": "Hide", "value": "Hide" },
-							{ "name": "GM Channel", "value": "GameMasterChannel" },
-							{ "name": "GM Message", "value": "GameMasterDirect" }
+							{ "name": "Post", "value": "SinglePost" },
+							{ "name": "Embed", "value": "SingleEmbed" }
 						],
 						"type": 3,
 						"name": "dicepost",
@@ -179,8 +177,10 @@
 					},
 					{
 						"choices": [
-							{ "name": "Post", "value": "SinglePost" },
-							{ "name": "Embed", "value": "SingleEmbed" }
+							{ "name": "Ignore", "value": "Ignore" },
+							{ "name": "Hide", "value": "Hide" },
+							{ "name": "GM Channel", "value": "GameMasterChannel" },
+							{ "name": "GM Message", "value": "GameMasterDirect" }
 						],
 						"type": 3,
 						"name": "dicesecret",
@@ -192,10 +192,10 @@
 			},
 			{ "type": 1, "name": "archive", "description": "Archive an RPG Sage Game", "options": [] }
 		],
-		"name": "sage-stable-game",
-		"description": "sage-stable-Game"
+		"name": "sage-game",
+		"description": "sage-Game"
 	},
-	{ "options": [], "name": "sage-stable-help", "description": "Get basic Help for RPG Sage." },
+	{ "options": [], "name": "sage-help", "description": "Get basic Help for RPG Sage." },
 	{
 		"options": [
 			{
@@ -219,7 +219,7 @@
 				]
 			}
 		],
-		"name": "sage-stable-import",
+		"name": "sage-import",
 		"description": "Import a character to Sage"
 	},
 	{
@@ -261,7 +261,7 @@
 				"required": false
 			}
 		],
-		"name": "sage-stable-weather",
+		"name": "sage-weather",
 		"description": "Create random weather reports."
 	},
 	{
@@ -287,8 +287,8 @@
 				]
 			}
 		],
-		"name": "sage-stable-finder",
-		"description": "sage-stable-Finder"
+		"name": "sage-finder",
+		"description": "sage-Finder"
 	},
 	{
 		"options": [
@@ -325,7 +325,7 @@
 				]
 			}
 		],
-		"name": "sage-stable-pf2e",
-		"description": "sage-stable-PF2E"
+		"name": "sage-pf2e",
+		"description": "sage-PF2E"
 	}
 ]
