@@ -1,5 +1,5 @@
 [
-	{ "options": [], "name": "sage-dev-dm", "description": "Establish direct message channel with RPG Sage." },
+	{ "options": [], "name": "sage-beta-dm", "description": "Establish direct message channel with RPG Sage." },
 	{
 		"options": [
 			{
@@ -192,10 +192,10 @@
 			},
 			{ "type": 1, "name": "archive", "description": "Archive an RPG Sage Game", "options": [] }
 		],
-		"name": "sage-dev-game",
-		"description": "sage-dev-Game"
+		"name": "sage-beta-game",
+		"description": "sage-beta-Game"
 	},
-	{ "options": [], "name": "sage-dev-help", "description": "Get basic Help for RPG Sage." },
+	{ "options": [], "name": "sage-beta-help", "description": "Get basic Help for RPG Sage." },
 	{
 		"options": [
 			{
@@ -219,7 +219,7 @@
 				]
 			}
 		],
-		"name": "sage-dev-import",
+		"name": "sage-beta-import",
 		"description": "Import a character to Sage"
 	},
 	{
@@ -261,7 +261,7 @@
 				"required": false
 			}
 		],
-		"name": "sage-dev-weather",
+		"name": "sage-beta-weather",
 		"description": "Create random weather reports."
 	},
 	{
@@ -287,8 +287,8 @@
 				]
 			}
 		],
-		"name": "sage-dev-finder",
-		"description": "sage-dev-Finder"
+		"name": "sage-beta-finder",
+		"description": "sage-beta-Finder"
 	},
 	{
 		"options": [
@@ -325,7 +325,7 @@
 				]
 			}
 		],
-		"name": "sage-dev-pf2e",
-		"description": "sage-dev-PF2E"
+		"name": "sage-beta-pf2e",
+		"description": "sage-beta-PF2E"
 	}
 ]
