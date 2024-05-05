@@ -7,7 +7,7 @@ import { getBotCodeName } from "@rsc-utils/env-utils";
 
 function buildOne(raw: SlashCommand): SlashCommandBuilder {
 	const which = getBotCodeName();
-	raw.name = `sage-${which}-${raw.name}`;
+	raw.name = /stable/i.test(which) ? `sage-${raw.name}` : `sage-${which}-${raw.name}`;
 
 	const cmd = setName(new SlashCommandBuilder(), raw);
 
