@@ -22,7 +22,7 @@ async function main() {
 	const dataPathSage = getDataRoot("sage");
 
 	const botsPath = `${dataPathSage}/bots`;
-	const botJson = listFilesSync(botsPath)
+	const botJson = listFilesSync(botsPath, "json")
 		.map(file => readJsonFileSync<BotCore>(`${botsPath}/${file}`))
 		.find(json => json?.codeName === botCodeName);
 
