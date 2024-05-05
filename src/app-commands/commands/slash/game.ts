@@ -16,8 +16,8 @@ function getCreateUpdateOptions(isUpdate: boolean) {
 		{ name:"gmCharName", description:"Game Master Character Name" },
 		{ name:"diceCrit", choices:getEnumKeys(DiceCritMethodType), description:"Critical Hit Method, ex: RollTwice, TimesTwo" },
 		{ name:"diceOutput", choices:getEnumKeys(DiceOutputType) },
-		{ name:"dicePost", choices:["Ignore", "Hide", { name:"GM Channel", value:"GameMasterChannel" }, { name:"GM Message", value:"GameMasterDirect" }] },
-		{ name:"diceSecret", choices:[{ name:"Post", value:"SinglePost" }, { name:"Embed", value:"SingleEmbed" }] },
+		{ name:"dicePost", choices:[{ name:"Post", value:"SinglePost" }, { name:"Embed", value:"SingleEmbed" }] },
+		{ name:"diceSecret", choices:["Ignore", "Hide", { name:"GM Channel", value:"GameMasterChannel" }, { name:"GM Message", value:"GameMasterDirect" }] },
 	];
 	if (isUpdate) {
 		options.push({ name:"remove", description:"Channels or Users to Remove from the Game" });
