@@ -1,19 +1,19 @@
 import { filterAndMap, sortComparable, toUnique, toUniqueDefined } from "@rsc-utils/array-utils";
-import { debug, error, verbose } from "@rsc-utils/console-utils";
+import { error, info, verbose } from "@rsc-utils/console-utils";
+import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { isDefined } from "@rsc-utils/type-utils";
-import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e";
-import { ArgsManager } from "../../discord/ArgsManager";
-import { resolveToEmbeds } from "../../discord/embeds";
-import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
-import type { TCommandAndArgs } from "../../discord/types";
-import type { SageInteraction } from "../model/SageInteraction";
-import type { SageMessage } from "../model/SageMessage";
-import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
-import { registerCommandHelp, registerFindHelp, registerSearchHelp } from "./help";
-import { searchHandler } from "./search";
+import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e/index.js";
+import { ArgsManager } from "../../discord/ArgsManager.js";
+import { registerMessageListener } from "../../discord/handlers.js";
+import { registerListeners } from "../../discord/handlers/registerListeners.js";
+import type { TCommandAndArgs } from "../../discord/types.js";
+import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageMessage } from "../model/SageMessage.js";
+import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
+import { searchHandler } from "./search.js";
 
 // #region Common Types and Functions
 
@@ -220,22 +220,19 @@ async function findHandler(sageMessage: SageMessage): Promise<void> {
 
 //#region dm slash command
 
-function dmSlashTester(sageInteraction: SageInteraction): boolean {
-	return sageInteraction.isCommand("DM");
-}
 async function dmSlashHandler(sageInteraction: SageInteraction): Promise<void> {
 	return sageInteraction.defer(true).then(deferred, failure);
 
 	function deferred(): Promise<void> {
-		const dmContent = `Hello!\nRPG Sage will now reply to your Direct Messages.\n*Note: Anytime RPG Sage is disconnected from Discord, you will need to reestablish this channel. I apologize for the inconvenience.*`;
+		const dmContent = `Hello!\nRPG Sage will now reply to your Direct Messages.\n*Note: Anytime RPG Sage is disconnected from Discord, you may need to reestablish this connection. We apologize for the inconvenience.*`;
 		return sageInteraction.user.send(dmContent).then(success, failure);
 	}
 	function success(): Promise<void> {
-		return sageInteraction.reply(`Please check your DMs!`, true);
+		return sageInteraction.whisper(`Please check your DMs!`);
 	}
 	function failure(reason: any): Promise<void> {
 		error(reason);
-		return sageInteraction.reply(`Sorry, there was a problem!`, true);
+		return sageInteraction.whisper(`Sorry, there was a problem!`);
 	}
 }
 
@@ -243,64 +240,21 @@ async function dmSlashHandler(sageInteraction: SageInteraction): Promise<void> {
 
 export function registerDefault(): void {
 	registerCommandRegex(/^\s*list\s*(weapons|armou?r|spells)\s*by\s*(trait)?\s*(\w+)$/i, objectsBy);
-	registerCommandHelp("Lists", `list weapons by trait TRAIT`);
-	registerCommandHelp("Lists", `list armor by trait TRAIT`);
-	registerCommandHelp("Lists", `list spells by trait TRAIT`);
 
 	registerCommandRegex(/^\s*list\s*(deities|gods)\s*by\s*(domain)?\s*(\w+)$/i, objectsBy);
-	registerCommandHelp("Lists", `list deities by domain DOMAIN`);
-	registerCommandHelp("Lists", `list gods by domain DOMAIN`);
 
 	registerMessageListener(searchTester, searchHandler);
-	registerSearchHelp("Search", `WORD OR WORDS`);
-	registerSearchHelp("Search", `WORD OR WORDS -CATEGORY\n\tCATEGORY can be armor, spell, weapon, etc.`);
 
 	registerMessageListener(findTester, findHandler);
-	registerFindHelp("Search", "Find", `WORD OR WORDS`);
-	registerFindHelp("Search", "Find", `WORD OR WORDS -CATEGORY\n\tCATEGORY can be armor, spell, weapon, etc.`);
 
 	registerCommandRegex(/shutdown/, async (sageMessage: SageMessage) => {
-		if (sageMessage.isSuperUser) {
+		if (sageMessage.canSuperAdmin) {
 			await sageMessage.reactSuccess();
+			const user = await sageMessage.discord.fetchUser(sageMessage.authorDid);
+			info(`Shutdown command given by: ${toHumanReadable(user)}`);
 			process.exit(0);
 		}
 	});
-	registerCommandRegex(/debug\-log\-all\-items/, async (sageMessage: SageMessage) => {
-		if (sageMessage.isSuperUser) {
-			debug(`debug-log-all-items: begin`);
-			let maxEmbeds = 0;
-			let maxCharacters = 0;
-			const clean = <string[]>[];
-			const objectTypes = Repository.getObjectTypes();
-			for (const objectType of objectTypes) {
-				debug(`\tdebug-log-all-items(${objectType}): begin`);
-				const broken = <string[]>[];
-				const objects = Repository.all(objectType);
-				for (const object of objects) {
-					try {
-						// debug(`\t\t${objectType}::${object.id}::${object.name}`);
-						const renderable = object.toRenderableContent();
-// debug((renderable as any)?.prototype?.constructor?.name ?? Object.prototype.toString.call(object));
-						const embeds = resolveToEmbeds(sageMessage.caches, renderable);
-						maxEmbeds = Math.max(maxEmbeds, embeds.length);
-						const string = renderable.toString();
-						maxCharacters = Math.max(maxCharacters, string.length);
-					} catch (ex) {
-						broken.push(`${object.id}::${object.name}`);
-						// error(ex);
-					}
-				}
-				if (!broken.length) {
-					clean.push(objectType);
-				} else {
-					await sageMessage.send(`__**${objectType}: ${broken.length} errors.**__\n${broken.join("\n")}`);
-				}
-				debug(`\tdebug-log-all-items(${objectType}): end`);
-			}
-			await sageMessage.send(`__**Clean Objects (${clean.length}):**__ ${clean.join(", ")}; maxEmbeds (${maxEmbeds}), maxCharacters (${maxCharacters})`);
-			debug(`debug-log-all-items: end`);
-		}
-	});
 
-	registerInteractionListener(dmSlashTester, dmSlashHandler);
+	registerListeners({ commands:["dm"], interaction:dmSlashHandler });
 }

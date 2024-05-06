@@ -1,4 +1,3 @@
-import type { Optional } from "@rsc-utils/type-utils";
 
 let _noiseUS: Set<string>;
 
@@ -17,6 +16,6 @@ export function getNoiseUS(): Set<string> {
  * @internal
  * @private
  */
-export function isNoiseUS(word: Optional<string>): boolean {
+export function isNoiseUS(word?: string | null): boolean {
 	return word ? _noiseUS?.has(word) ?? false : false;
 }

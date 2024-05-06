@@ -1,14 +1,15 @@
+import type { DialogPostType } from "@rsc-sage/types";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import { NIL_SNOWFLAKE, isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
-import { PathbuilderCharacter, TPathbuilderCharacter, getExplorationModes, getSkills } from "../../../sage-pf2e";
-import { DialogType } from "../repo/base/IdRepository";
-import { CharacterManager } from "./CharacterManager";
-import type { IHasSave } from "./NamedCollection";
-import { NoteManager, type TNote } from "./NoteManager";
-import type { TKeyValuePair } from "./SageMessageArgsManager";
+import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
+import { doStatMath } from "../commands/dice/doStatMath.js";
+import { CharacterManager } from "./CharacterManager.js";
+import type { IHasSave } from "./NamedCollection.js";
+import { NoteManager, type TNote } from "./NoteManager.js";
+import type { TKeyValuePair } from "./SageMessageArgs.js";
 
 export type TDialogMessage = {
 	channelDid: Snowflake;
@@ -23,7 +24,7 @@ export type TDialogMessage = {
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion" | "minion";
 type AutoChannelData = {
 	channelDid: Snowflake;
-	dialogPostType?: DialogType;
+	dialogPostType?: DialogPostType;
 	userDid?: Snowflake;
 };
 export interface GameCharacterCore {
@@ -116,16 +117,20 @@ export class GameCharacter implements IHasSave {
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
 		updateCore(core);
 
-		const characterType = owner?.characterType === "pc" ? "companion" : "minion";
-		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, characterType);
-
 		this.isGM = this.type === "npc" && this.name === (this.owner?.gmCharacterName ?? GameCharacter.defaultGmCharacterName);
 		this.isNPC = this.type === "npc";
+		this.isMinion = this.type === "minion";
 		this.isGMorNPC = this.isGM || this.isNPC;
+		this.isGMorNPCorMinion = this.isGM || this.isNPC || this.isMinion;
 
 		this.isCompanion = this.type === "companion";
 		this.isPC = this.type === "pc";
 		this.isPCorCompanion = this.isPC || this.isCompanion;
+
+		this.isCompanionOrMinion = this.isCompanion || this.isMinion;
+
+		const companionType = this.isPCorCompanion ? "companion" : "minion";
+		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, companionType);
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []), this.owner);
 	}
@@ -151,12 +156,15 @@ export class GameCharacter implements IHasSave {
 	/** Unique ID of this character */
 	public get id(): UUID { return this.core.id; }
 
-	public isCompanion: boolean;// = this.type === "companion";
 	public isGM: boolean;// = this.type === "npc" && this.name === (this.owner?.gmCharacterName ?? GameCharacter.defaultGmCharacterName);
 	public isNPC: boolean;// = this.type === "npc";
+	public isMinion: boolean;
 	public isGMorNPC: boolean;// = this.isGM || this.isNPC;
+	public isGMorNPCorMinion: boolean;
 	public isPC: boolean;// = this.type === "pc";
+	public isCompanion: boolean;// = this.type === "companion";
 	public isPCorCompanion: boolean;// = this.isPC || this.isCompanion;
+	public isCompanionOrMinion: boolean;
 
 	/** A list of the character's last messages by channel. */
 	public get lastMessages(): TDialogMessage[] {
@@ -175,8 +183,8 @@ export class GameCharacter implements IHasSave {
 	public get parent(): GameCharacter | undefined {
 		if (this._parent === undefined) {
 			// Due to the .owner property not being public, I have to cast it as any ...
-			// TODO: FIND A BETTER WAY!
-			this._parent = this.type === "companion" && this.owner ? (this.owner as any).owner ?? null : null;
+			/** @todo: FIND A BETTER WAY! */
+			this._parent = this.isCompanionOrMinion && this.owner ? (this.owner as any).owner ?? null : null;
 		}
 		return this._parent ?? undefined;
 	}
@@ -349,6 +357,14 @@ export class GameCharacter implements IHasSave {
 			}
 		}
 
+		// provide a temp shortcut for off-guard ac for PF2e
+		if (/^ogac$/i.test(key)) {
+			const ac = this.getStat("ac");
+			if (ac !== null) {
+				return doStatMath(ac + "-2");
+			}
+		}
+
 		return null;
 	}
 	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
@@ -357,8 +373,6 @@ export class GameCharacter implements IHasSave {
 		const pb = this.pathbuilder;
 		for (const pair of pairs) {
 			const { key, value } = pair;
-			let correctedKey: string | undefined;
-			let correctedValue: string | undefined;
 			if (/^name$/i.test(key) && value?.trim() && (this.name !== value || (pb && pb.name !== value))) {
 				this.name = value;
 				if (pb) {
@@ -367,18 +381,21 @@ export class GameCharacter implements IHasSave {
 				changes ||= true;
 				continue;
 			}
+
+			let correctedKey: string | undefined;
+			let correctedValue: string | undefined;
 			const isExplorationMode = /^explorationmode$/i.test(key);
-			if (isExplorationMode) {
-				correctedKey = "explorationMode";
-				const modeRegex = new RegExp(`^${value.replace(/(\s)/g, "$1?")}$`, "i");
-				correctedValue = getExplorationModes().find(mode => modeRegex.test(mode));
-			}
 			const isExplorationSkill = /^explorationskill$/i.test(key);
-			if (isExplorationSkill) {
-				correctedKey = "explorationSkill";
-				const skillRegex = new RegExp(`^${value.replace(/(\s)/g, "$1?")}$`, "i");
-				correctedValue = getSkills().find(skill => skillRegex.test(skill));
-		}
+			if (isExplorationMode || isExplorationSkill) {
+				if (isExplorationMode) {
+					correctedKey = "explorationMode";
+					correctedValue = getExplorationModes().find(mode => XRegExp(`^${mode.replace(/(\s)/g, "$1?")}$`, "i").test(value));
+				}
+				if (isExplorationSkill) {
+					correctedKey = "explorationSkill";
+					correctedValue = getSkills().find(skill => XRegExp(`^${skill.replace(/(\s)/g, "$1?")}$`, "i").test(value));
+				}
+			}
 			if (pb) {
 				if (/^level$/i.test(key) && +value) {
 					const updatedLevel = await pb.setLevel(+value, save);

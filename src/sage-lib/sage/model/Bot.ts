@@ -1,12 +1,12 @@
+import { GameSystemType } from "@rsc-sage/types";
 import { warn } from "@rsc-utils/console-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type { GameType } from "../../../sage-common";
-import { HasDidCore, type DidCore } from "../repo/base/DidRepository";
-import { Colors } from "./Colors";
-import { Emoji } from "./Emoji";
-import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
-import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
-import type { SageCache } from "./SageCache";
+import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
+import { Colors } from "./Colors.js";
+import { Emoji } from "./Emoji.js";
+import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
+import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
+import type { SageCache } from "./SageCache.js";
 
 export type TBotCodeName = "dev" | "beta" | "stable";
 
@@ -47,13 +47,13 @@ export class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmo
 	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
 
 	/** returns true if we can search the given game */
-	public canSearch(gameType: GameType): boolean { return this.core.searchStatus?.[gameType] === true; }
+	public canSearch(gameType: GameSystemType): boolean { return this.core.searchStatus?.[gameType] === true; }
 	/** returns string if disabled, true if enabled, or false if gameType not found (no search logic for this game) */
-	public getSearchStatus(gameType: GameType): boolean | string {
+	public getSearchStatus(gameType: GameSystemType): boolean | string {
 		const status = this.core.searchStatus?.[gameType];
 		return typeof(status) === "string" ? status : status === true;
 	}
-	public setSearchStatus(gameType: GameType, status: boolean | string): Promise<boolean> {
+	public setSearchStatus(gameType: GameSystemType, status: boolean | string): Promise<boolean> {
 		const searchStatus = this.core.searchStatus ?? (this.core.searchStatus = {});
 		searchStatus[gameType] = status;
 		return this.sageCache.bots.write(this);

@@ -60,6 +60,9 @@ export function parseDialogContent(content: string): DialogContent | null {
 			case "displayName": {
 				if (!dialogContent.displayName) {
 					dialogContent.displayName = match.value;
+				}else if (dialogContent.name && dialogContent.displayName) {
+					dialogContent.name = `${dialogContent.name} (${dialogContent.displayName})`;
+					dialogContent.displayName = match.value;
 				}else {
 					breakWhile = true;
 				}
@@ -67,7 +70,7 @@ export function parseDialogContent(content: string): DialogContent | null {
 			}
 			case "embedColor": {
 				if (!dialogContent.embedColor) {
-					dialogContent.embedColor = match.value;
+					dialogContent.embedColor = "0x" + match.value;
 				}else {
 					breakWhile = true;
 				}

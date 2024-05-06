@@ -24,23 +24,36 @@ if [ -z "$TYPE" ]; then
 	exit 1
 fi
 
-test -z `git ls-files --exclude-standard --others`
-if [ "$?" != "0" ]; then
-	echo "You have untracked files, cannot release $TYPE."
-	exit 1
-fi
+function promptForce {
+	local yn
+	read -p "Force release $TYPE? (y/n) " yn
+	if [ "$yn" != "y" ]; then
+		exit 1
+	fi
+}
 
-git diff-index --quiet --cached HEAD --
-if [ "$?" != "0" ]; then
-	echo "You have uncommitted staged changes, cannot release $TYPE."
-	exit 1
-fi
+function lookForFilesToCommit {
+	test -z `git ls-files --exclude-standard --others`
+	if [ "$?" != "0" ]; then
+		echo "You have untracked files, cannot release $TYPE."
+		promptForce
+	fi
 
-git diff-files --quiet
-if [ "$?" != "0" ]; then
-	echo "You have unstaged changes, cannot release $TYPE."
-	exit 1
-fi
+	git diff-index --quiet --cached HEAD --
+	if [ "$?" != "0" ]; then
+		echo "You have uncommitted staged changes, cannot release $TYPE."
+		promptForce
+	fi
+
+	git diff-files --ignore-space-at-eol --quiet
+	if [ "$?" != "0" ]; then
+		echo "You have unstaged changes, cannot release $TYPE."
+		promptForce
+	fi
+}
+
+# check before we build/run
+lookForFilesToCommit
 
 npm run build
 if [ "$?" != "0" ]; then
@@ -53,6 +66,9 @@ if [ "$?" != "0" ]; then
 	echo "Test failed, cannot release $TYPE."
 	exit 1
 fi
+
+# check after we build/run (in case building/testing altered files)
+lookForFilesToCommit
 
 SCRIPT_DIR="./scripts"
 if [ -d "./node_modules/@rsc-utils/console-utils" ]; then

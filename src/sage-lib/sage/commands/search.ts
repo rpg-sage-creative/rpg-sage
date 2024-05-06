@@ -1,11 +1,11 @@
 import { Collection } from "@rsc-utils/array-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
-import { Base, RARITIES } from "../../../sage-pf2e";
-import type { SearchResults } from "../../../sage-search/SearchResults";
-import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common";
-import { deleteMessages } from "../../discord/deletedMessages";
-import { send } from "../../discord/messages";
-import type { SageMessage } from "../model/SageMessage";
+import { type Base, RARITIES } from "../../../sage-pf2e/index.js";
+import type { SearchResults } from "../../../sage-search/SearchResults.js";
+import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common.js";
+import { deleteMessages } from "../../discord/deletedMessages.js";
+import { send } from "../../discord/messages.js";
+import type { SageMessage } from "../model/SageMessage.js";
 
 function theOneOrMatchToSage(searchResults: SearchResults<any>, match = false): Base | null {
 	const aon = searchResults.theOne ?? (match ? searchResults.theMatch : null);
@@ -20,9 +20,8 @@ function theOneOrMatchToSage(searchResults: SearchResults<any>, match = false): 
 
 async function invalidGame(sageMessage: SageMessage): Promise<void> {
 	const unableSearchResults = new RenderableContent(`<b>Cannot Perform Search</b>`);
-	unableSearchResults.append(`Currently, we can only search Pathfinder or Starfinder content. Please set your channel, game, or server to Pathfinder or Starfinder if you would like to enable searching for content, or disable searching if you don't wish to see this message again.`);
+	unableSearchResults.append(`Currently, we can only search Pathfinder or Starfinder content. Please set your channel, game, or server to Pathfinder or Starfinder if you would like to enable searching for content.`);
 	unableSearchResults.append(`<br/>Example:`);
-	unableSearchResults.append(`<code>sage!!channel set search="false"</code>`);
 	unableSearchResults.append(`<code>sage!!channel set gameType="PF2E"</code>`);
 	unableSearchResults.append(`<code>sage!!game set gameType="PF2E"</code>`);
 	unableSearchResults.append(`<code>sage!!server set gameType="PF2E"</code>`);
@@ -35,7 +34,7 @@ async function invalidGame(sageMessage: SageMessage): Promise<void> {
 async function currentlyDisabled(sageMessage: SageMessage): Promise<void> {
 	const unableSearchResults = new RenderableContent(`<b>Cannot Perform Search</b>`);
 	unableSearchResults.append(`We are sorry, we have disabled the search engine for this game system for the following reason:`);
-	unableSearchResults.append(`<br/>${sageMessage.bot.getSearchStatus(sageMessage.gameType)}`);
+	unableSearchResults.append(`<br/>${sageMessage.bot.getSearchStatus(sageMessage.gameSystemType)}`);
 	unableSearchResults.append(`<br/>For more information, join us at <https://discord.com/invite/pfAcUMN>`);
 	await send(sageMessage.caches, sageMessage.message.channel, unableSearchResults, sageMessage.message.author);
 	return Promise.resolve();
@@ -47,13 +46,13 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 	}
 
 	// make sure we have a game at AoN
-	const searchEngine = getSearchEngine(sageMessage.gameType);
+	const searchEngine = getSearchEngine(sageMessage.gameSystemType);
 	if (!searchEngine) {
 		return invalidGame(sageMessage);
 	}
 
 	// make sure we haven't disabled the search for some reason
-	const searchEnabled = sageMessage.bot.canSearch(sageMessage.gameType);
+	const searchEnabled = sageMessage.bot.canSearch(sageMessage.gameSystemType);
 	if (!searchEnabled) {
 		return currentlyDisabled(sageMessage);
 	}
@@ -62,7 +61,7 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 	const promise = send(sageMessage.caches, sageMessage.message.channel, `> Searching ${searchEngine.name}, please wait ...`, sageMessage.message.author);
 
 	// Parse the query
-	const parsedSearchInfo = parseSearchInfo(Collection.from(sageMessage.args), RARITIES);
+	const parsedSearchInfo = parseSearchInfo(Collection.from(sageMessage.args.toArray()), RARITIES);
 
 	// start the search
 	const searchResults = await searchEngine.search(parsedSearchInfo, nameOnly);

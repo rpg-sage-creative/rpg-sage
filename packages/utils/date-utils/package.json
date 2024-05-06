@@ -1,4 +1,1 @@
-{"name":"@rsc-utils/date-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
-  "@rsc-utils/enum-utils": "^0.0.0",
-  "@rsc-utils/type-utils": "^0.0.0"
-}}
+{"name":"@rsc-utils/date-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{}}

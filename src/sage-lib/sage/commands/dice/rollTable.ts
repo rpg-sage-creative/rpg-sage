@@ -1,15 +1,18 @@
 import { randomInt } from "@rsc-utils/random-utils";
-import type { TDiceOutput } from "../../../../sage-dice";
-import type { SageInteraction } from "../../model/SageInteraction";
-import type { SageMessage } from "../../model/SageMessage";
-import { parseTable } from "./parseTable";
-import { parseTsvTable } from "./parseTsvTable";
+import { unwrap } from "@rsc-utils/string-utils";
+import type { TDiceOutput } from "../../../../sage-dice/index.js";
+import type { SageCommand } from "../../model/SageCommand.js";
+import { SimpleRollableTable } from "./SimpleRollableTable.js";
+import { fetchTableFromUrl } from "./fetchTableFromUrl.js";
 
-type TInteraction = SageMessage | SageInteraction;
-type TableOutput = TDiceOutput & { itemText?:string; itemRolls?:string[]; };
+type TableOutput = TDiceOutput & { children?:string[]; };
 
-export function rollTable(_: TInteraction, input: string): TableOutput[] {
-	const table = parseTsvTable(input) ?? parseTable(input);
+/**
+ * Rolls on the given table.
+ * If given a url it fetches the table first.
+ */
+export async function rollTable(_: SageCommand, input: string, table?: SimpleRollableTable): Promise<TableOutput[]> {
+	table = table ?? await fetchTableFromUrl(unwrap(input, "[]"));
 	if (table) {
 		const roll = randomInt(table.min, table.max);
 		const item = table.items.find(item => item.min <= roll && roll <= item.max);
@@ -20,7 +23,7 @@ export function rollTable(_: TInteraction, input: string): TableOutput[] {
 				inlineOutput: result,
 				input: input,
 				output: result,
-				itemRolls: item.rolls
+				children: item.children
 			}];
 		}
 	}

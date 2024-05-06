@@ -2,8 +2,8 @@ import { toUniqueDefined } from "@rsc-utils/array-utils";
 import { oneToUS, reduceNoiseUS } from "@rsc-utils/language-utils";
 import { dequote, tokenize } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
-import { SearchScore, type SearchTermData } from "./SearchScore";
-import type { Searchable } from "./Searchable";
+import { SearchScore, type SearchTermData } from "./SearchScore.js";
+import type { Searchable } from "./Searchable.js";
 
 function createRegex(value: string, flags = "gi"): RegExp {
 	return new RegExp(XRegExp.escape(value), flags);

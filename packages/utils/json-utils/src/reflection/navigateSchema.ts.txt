@@ -1,0 +1,64 @@
+import { JSONSchema7Type, JSONSchema7, JSONSchema7Definition } from "json-schema";
+
+type NavigateResults<ValueType extends JSONSchema7Type = JSONSchema7Type, IsFull extends boolean = boolean> = {
+	/** number of keys navigated */
+	depth: number;
+
+	/** the path navigated */
+	path: string;
+
+	/** was the path fully navigated? */
+	isFull: IsFull;
+
+	/** the last object/array navigated */
+	parent: IsFull extends true ? JSONSchema7Type : unknown;
+
+	/** the last key navigated */
+	key: string;
+
+	/** the requested value; only present if isFull === true */
+	value?: IsFull extends true ? ValueType : never;
+};
+
+export function navigateSchema(schema: JSONSchema7, path: string): NavigateResults {
+	// store navigated keys
+	const navigated: string[] = [];
+
+	// prepare keys
+	const keys = path.split(".");
+
+	// reusable fn for shifting keys and checking them for successful navigation
+	const shiftKey = () => {
+		const key = keys.shift()!;
+		if (inObject(key)) {
+			navigated.push(key);
+			return { key, value:object[key] };
+		}
+		return { key };
+	};
+
+	let parent = schema;
+
+	// navigtate the schema
+	while (keys.length) {
+		// always remove the key (even if not used) to ensure we use them all
+		const key = keys.shift()!;
+
+		// grab the next object from either items or properties
+		if (/^\d+$/.test(key) && schema?.type === "array") {
+			schema = schema?.items;
+		}else {
+			schema = schema?.properties?.[key];
+		}
+	}
+
+	const _path = navigated.join(".");
+	return {
+		depth: navigated.length,
+		path: _path,
+		isFull: _path === path,
+		parent: null,
+		key: null,
+		value: null
+	};
+}

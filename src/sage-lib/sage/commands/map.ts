@@ -440,19 +440,19 @@ async function actionTester(sageInteraction: SageInteraction): Promise<TActionDa
 function mapAuraTester(sageInteraction: SageInteraction): boolean {
 	return !!sageInteraction.interaction.channel
 		&& sageInteraction.isCommand("Map", "AddImage")
-		&& sageInteraction.getString("layer") === "aura";
+		&& sageInteraction.args.hasString("layer", "aura");
 }
 
 function mapTerrainTester(sageInteraction: SageInteraction): boolean {
 	return !!sageInteraction.interaction.channel
 		&& sageInteraction.isCommand("Map", "AddImage")
-		&& sageInteraction.getString("layer") === "terrain";
+		&& sageInteraction.args.hasString("layer", "terrain");
 }
 
 function mapTokenTester(sageInteraction: SageInteraction): boolean {
 	return !!sageInteraction.interaction.channel
 		&& sageInteraction.isCommand("Map", "AddImage")
-		&& sageInteraction.getString("layer") === "token";
+		&& sageInteraction.args.hasString("layer", "token");
 }
 
 //#endregion
@@ -500,7 +500,7 @@ async function mapAuraHandler(sageInteraction: SageInteraction): Promise<void> {
 
 	aura.opacity = 0.5;
 
-	const anchorName = sageInteraction.getString("anchor");
+	const anchorName = sageInteraction.args.getString("anchor");
 	const matcher = new StringMatcher(anchorName);
 	const anchor = gameMap.userTokens.find(token => matcher.matches(token.name));
 	if (anchor) {
@@ -567,7 +567,7 @@ async function mapTokenHandler(sageInteraction: SageInteraction): Promise<void> 
 
 /** reads the interaction's channel's messages to find the map */
 async function findGameMap(sageInteraction: SageInteraction<ButtonInteraction>): Promise<GameMap | null> {
-	const mapValue = sageInteraction.getString("map", true);
+	const mapValue = sageInteraction.args.getString("map")!;
 	if (isNonNilSnowflake(mapValue)) {
 		return GameMap.forUser(mapValue, sageInteraction.user.id);
 	}
@@ -595,22 +595,22 @@ async function parseInput<T extends TGameMapImage>(sageInteraction: SageInteract
 		return [null, null];
 	}
 
-	const layerValue = capitalize(sageInteraction.getString("layer", true)) as "Aura" | "Terrain" | "Token";
+	const layerValue = capitalize(sageInteraction.args.getString("layer", true)) as "Aura" | "Terrain" | "Token";
 
 	const image: TGameMapImage = {
 		auras: [],
 		id: randomSnowflake(),
 		layer: LayerType[layerValue],
-		name: sageInteraction.getString("name", true),
+		name: sageInteraction.args.getString("name", true),
 		pos: [
-			sageInteraction.getNumber("col") ?? gameMap.spawn[COL],
-			sageInteraction.getNumber("row") ?? gameMap.spawn[ROW]
+			sageInteraction.args.getNumber("col") ?? gameMap.spawn[COL],
+			sageInteraction.args.getNumber("row") ?? gameMap.spawn[ROW]
 		],
 		size: [
-			sageInteraction.getNumber("cols") ?? 1,
-			sageInteraction.getNumber("rows") ?? 1
+			sageInteraction.args.getNumber("cols") ?? 1,
+			sageInteraction.args.getNumber("rows") ?? 1
 		],
-		url: sageInteraction.getString("url", true),
+		url: sageInteraction.args.getString("url", true),
 		userId: sageInteraction.user.id
 	};
 

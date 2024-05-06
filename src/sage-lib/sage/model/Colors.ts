@@ -1,7 +1,7 @@
 import { Color } from "@rsc-utils/color-utils";
 import { warn } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { ColorType, IColor } from "./HasColorsCore";
+import { ColorType, type IColor } from "./HasColorsCore.js";
 
 export type TColorAndType = { type: ColorType; color: Color; };
 
@@ -25,12 +25,15 @@ export class Colors {
 		if (!colorAndType?.color || !colorAndType?.type) {
 			return false;
 		}
+
 		let found = this.findColor(colorAndType.type);
 		if (!found) {
 			found = { type: colorAndType.type, hex: undefined! };
 			this.colors.push(found);
 		}
+
 		found.hex = colorAndType.color.toDiscordColor();
+
 		return true;
 	}
 

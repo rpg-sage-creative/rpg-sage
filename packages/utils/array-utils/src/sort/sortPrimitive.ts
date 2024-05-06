@@ -2,8 +2,13 @@ import type { Optional } from "@rsc-utils/type-utils";
 import { isDate } from "util/types";
 import type { SortResult } from "./SortResult.js";
 
-/** Sorts values in ascending order. */
-export function sortPrimitive<T extends Date | number | string>(a: Optional<T>, b: Optional<T>): SortResult {
+/**
+ * Sorts values in ascending order.
+ * undefined is considered the "greatest" value.
+ * null is considered the "second greatest" value.
+ * string vs string comparison is first done ignoring case.
+ */
+export function sortPrimitive<T extends boolean | Date | number | string>(a: Optional<T>, b: Optional<T>): SortResult {
 	// undefined is the "greatest" value
 	if (a === undefined) {
 		return 1;
@@ -18,24 +23,36 @@ export function sortPrimitive<T extends Date | number | string>(a: Optional<T>, 
 		return -1;
 	}
 
+	// get lowercase values from strings for good/reliable alpha sorting
+	const aLower = (a as string)?.toLowerCase?.() ?? a;
+	const bLower = (b as string)?.toLowerCase?.() ?? b;
+
 	// return less than / greater than results
-	if (a < b) {
+	if (aLower < bLower) {
 		return -1;
-	}else if (a > b) {
+	}else if (aLower > bLower) {
 		return 1;
 	}
 
 	// check data types
 	if (a !== b) {
+		const aType = isDate(a) ? "date" : typeof(a);
+		const bType = isDate(b) ? "date" : typeof(b);
+
 		// dates are objects and equal dates still fail ===
-		const aDate = isDate(a);
-		const bDate = isDate(b);
+		const aDate = aType === "date";
+		const bDate = bType === "date";
 		if (aDate || bDate) {
 			return sortPrimitive(aDate ? +a as T : a, bDate ? +b as T : b);
 		}
 
+		// strings that differ only by case
+		if (aType === "string" && bType === "string") {
+			return a < b ? -1 : 1;
+		}
+
 		// "2" !== 2; sorting by type makes results consistent
-		return (typeof(a)) < (typeof(b)) ? -1 : 1;
+		return aType < bType ? -1 : 1;
 	}
 
 	return 0;

@@ -1,13 +1,14 @@
+import { getSuperAdminId, getSuperUserId } from "@rsc-utils/env-utils";
+import { applyChanges } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import { type DidCore, HasDidCore } from "../repo/base/DidRepository";
-import type { DialogType } from "../repo/base/IdRepository";
-import { CharacterManager } from "./CharacterManager";
-import type { GameCharacter } from "./GameCharacter";
-import type { GameCharacterCore } from "./GameCharacter";
-import { NamedCollection } from "./NamedCollection";
-import { NoteManager, TNote } from "./NoteManager";
-import type { SageCache } from "./SageCache";
+import { type Optional } from "@rsc-utils/type-utils";
+import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
+import type { DialogType } from "../repo/base/IdRepository.js";
+import { CharacterManager } from "./CharacterManager.js";
+import type { GameCharacter, GameCharacterCore } from "./GameCharacter.js";
+import { NamedCollection } from "./NamedCollection.js";
+import { NoteManager, type TNote } from "./NoteManager.js";
+import type { SageCache } from "./SageCache.js";
 
 export type TAlias = {
 	name: string;
@@ -30,7 +31,7 @@ export interface UserCore extends DidCore<"User"> {
 	notes?: TNote[];
 	patronTier?: PatronTierType;
 	playerCharacters?: (GameCharacter | GameCharacterCore)[];
-}
+	}
 
 //#region Core Updates
 
@@ -67,10 +68,17 @@ export class User extends HasDidCore<UserCore> {
 		this.isInformant = this.core.patronTier === PatronTierType.Informant;
 		this.isTrusted = this.core.patronTier === PatronTierType.Trusted;
 		this.isPatron = this.isFriend || this.isInformant || this.isTrusted;
+
+		this.isSuperAdmin = core.did === getSuperAdminId();
+		this.isSuperUser = core.did === getSuperUserId();
 	}
 	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
-	public get defaultDialogType(): DialogType | undefined { return this.core.defaultDialogType; }
-	public get defaultSagePostType(): DialogType | undefined { return this.core.defaultSagePostType; }
+	/** @deprecated */
+	public get defaultDialogType(): DialogType | undefined { return this.dialogPostType; }
+	public get dialogPostType(): DialogType | undefined { return this.core.defaultDialogType; }
+	/** @deprecated */
+	public get defaultSagePostType(): DialogType | undefined { return this.sagePostType; }
+	public get sagePostType(): DialogType | undefined { return this.core.defaultSagePostType; }
 	public get macros(): NamedCollection<TMacro> { return this.core.macros as NamedCollection<TMacro>; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public notes: NoteManager;
@@ -82,7 +90,8 @@ export class User extends HasDidCore<UserCore> {
 	public isInformant: boolean;
 	public isTrusted: boolean;
 	public isPatron: boolean;
-	public get isSuperUser(): boolean { return User.isSuperUser(this.did); }
+	public isSuperAdmin: boolean;
+	public isSuperUser: boolean;
 
 	public getAutoCharacterForChannel(...channelDids: Optional<Snowflake>[]): GameCharacter | undefined {
 		for (const channelDid of channelDids) {
@@ -96,12 +105,9 @@ export class User extends HasDidCore<UserCore> {
 		return undefined;
 	}
 
-	private updateDialogType(dialogType: Optional<DialogType>): void { this.core.defaultDialogType = dialogType === null ? undefined : dialogType ?? this.core.defaultDialogType; }
-	private updateSagePostType(sagePostType: Optional<DialogType>): void { this.core.defaultSagePostType = sagePostType === null ? undefined : sagePostType ?? this.core.defaultSagePostType; }
-	public update({ dialogType, sagePostType }: { dialogType?: Optional<DialogType>, sagePostType?: Optional<DialogType> }): Promise<boolean> {
-		this.updateDialogType(dialogType);
-		this.updateSagePostType(sagePostType);
-		return this.save();
+	public async update({ dialogPostType, sagePostType }: { dialogPostType?: Optional<DialogType>, sagePostType?: Optional<DialogType> }): Promise<boolean> {
+		const changed = applyChanges(this.core, { defaultDialogType:dialogPostType, defaultSagePostType:sagePostType });
+		return changed ? this.save() : false;
 	}
 
 	public async save(): Promise<boolean> {
@@ -110,11 +116,6 @@ export class User extends HasDidCore<UserCore> {
 
 	public static createCore(userDid: Snowflake): UserCore {
 		return { objectType: "User", did: userDid, id: null! };
-	}
-
-	public static SuperUserDid = "253330271678627841";
-	public static isSuperUser(userDid: Optional<Snowflake>): boolean {
-		return userDid === User.SuperUserDid;
 	}
 
 }

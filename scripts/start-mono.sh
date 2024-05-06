@@ -3,17 +3,49 @@
 # ensure root folder
 [ -d "./scripts" ] || cd ..
 
+botCodeName="dev"
+echo "botCodeName=\"$botCodeName\""
+
+RETVAL=""
+function readJsonProperty() {
+	RETVAL=""
+	jsonKey="$1"
+	RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" "./config/env.mono.$botCodeName.json")
+	if [ -z "$RETVAL" ]; then
+		RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" ./config/env.mono.json)
+	fi
+	if [ -z "$RETVAL" ]; then
+		RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" ./config/env.json)
+	fi
+	RETVAL=$(sed -r 's/"([^"]+)": ?"([^"]+)",?/\2/g' <<< "$RETVAL")
+	RETVAL=$(xargs <<< "$RETVAL")
+	echo "$jsonKey=\"$RETVAL\""
+}
+
+readJsonProperty "dataRoot"
+jsonDataRoot="$RETVAL"
+
+readJsonProperty "homeServerId"
+jsonHomeServerId="$RETVAL"
+
+readJsonProperty "rollemId"
+jsonRollemId="$RETVAL"
+
+readJsonProperty "superAdminId"
+jsonSuperAdminId="$RETVAL"
+
+readJsonProperty "superUserId"
+jsonSuperUserId="$RETVAL"
+
+readJsonProperty "tupperBoxId"
+jsonTupperBoxId="$RETVAL"
+
 npm run test
 if [ "$?" != "0" ]; then echo "Unable to Start 'mono'!"; exit 1; fi
 
-DATA_ROOT="/home/ec2-user/legacy/data"
-if [ -d "/Users/randaltmeyer/git/rpg-sage-legacy-data" ]; then
-	DATA_ROOT="/Users/randaltmeyer/git/rpg-sage-legacy-data"
-fi
-
 if [ "$1" = "pm2" ]; then
 
-	pm2 start mono.config.cjs --env dev
+	pm2 start mono.config.cjs --env "$botCodeName"
 
 else
 
@@ -21,9 +53,12 @@ else
 	node --experimental-modules \
 		--es-module-specifier-resolution=node \
 		mono.mjs \
-		botCodeName=dev \
-		"dataRoot=$DATA_ROOT" \
-		superUserId=253330271678627841 \
-		homeServerId=963531189254238278
+		"botCodeName=$botCodeName" \
+		"dataRoot=$jsonDataRoot" \
+		"homeServerId=$jsonHomeServerId" \
+		"rollemId=$jsonRollemId" \
+		"superAdminId=$jsonSuperAdminId" \
+		"superUserId=$jsonSuperUserId" \
+		"tupperBoxId=$jsonTupperBoxId"
 
 fi

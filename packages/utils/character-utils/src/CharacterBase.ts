@@ -1,5 +1,7 @@
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+
+/** Represents an object that can be null or undefined. */
+type Optional<T> = T | null | undefined;
 
 type TSimpleMap = { [key:string]:any; };
 

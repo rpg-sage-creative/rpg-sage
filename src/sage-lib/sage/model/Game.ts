@@ -1,29 +1,27 @@
-import { sortStringIgnoreCase, type Comparable } from "@rsc-utils/array-utils";
+import { DialogPostType, DicePostType, GameSystemType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type GameSystem, type SageChannel } from "@rsc-sage/types";
+import { sortPrimitive, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/console-utils";
 import { DiscordKey, type DMessage } from "@rsc-utils/discord-utils";
+import { applyChanges } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import { isDefined, type Optional, type OrNull } from "@rsc-utils/type-utils";
+import { Args, isDefined, type Optional, type OrNull } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import type { GuildChannel, GuildMember, Role } from "discord.js";
-import type { GameType } from "../../../sage-common";
-import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../sage-dice";
-import type { DicePostType } from "../commands/dice";
-import type { EncounterCore } from "../commands/trackers/encounter/Encounter";
-import { EncounterManager } from "../commands/trackers/encounter/EncounterManager";
-import type { PartyCore } from "../commands/trackers/party/Party";
-import { PartyManager } from "../commands/trackers/party/PartyManager";
-import type { DialogType, IChannel } from "../repo/base/IdRepository";
-import { HasIdCoreAndSageCache, PermissionType, updateChannel } from "../repo/base/IdRepository";
-import { CharacterManager } from "./CharacterManager";
-import type { CharacterShell } from "./CharacterShell";
-import { Colors } from "./Colors";
-import { Emoji } from "./Emoji";
-import type { GameCharacter, GameCharacterCore } from "./GameCharacter";
-import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore";
-import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore";
-import type { SageCache } from "./SageCache";
-import type { Server } from "./Server";
+import type { EncounterCore } from "../commands/trackers/encounter/Encounter.js";
+import { EncounterManager } from "../commands/trackers/encounter/EncounterManager.js";
+import type { PartyCore } from "../commands/trackers/party/Party.js";
+import { PartyManager } from "../commands/trackers/party/PartyManager.js";
+import { HasIdCoreAndSageCache } from "../repo/base/IdRepository.js";
+import { CharacterManager } from "./CharacterManager.js";
+import type { CharacterShell } from "./CharacterShell.js";
+import { Colors } from "./Colors.js";
+import { Emoji } from "./Emoji.js";
+import type { GameCharacter, GameCharacterCore } from "./GameCharacter.js";
+import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
+import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
+import type { SageCache } from "./SageCache.js";
+import type { Server } from "./Server.js";
 
 export type TGameRoleType = keyof typeof GameRoleType;
 export enum GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Cast = 4, Table = 5 }
@@ -46,31 +44,23 @@ export interface IGameRole {
 export enum GameUserType { Unknown = 0, Player = 1, GameMaster = 2 }
 export interface IGameUser { did: Snowflake; type: GameUserType; dicePing: boolean; }
 
-export interface IGameCore extends IdCore, IHasColors, IHasEmoji {
+export interface GameCore extends IdCore, IHasColors, IHasEmoji, Partial<GameOptions> {
 	objectType: "Game";
 	createdTs: number;
 	archivedTs?: number;
 
 	name: string;
-	gameType?: GameType;
-
-	defaultDialogType?: DialogType;
-	defaultCritMethodType?: CritMethodType;
-	defaultDiceOutputType?: DiceOutputType;
-	defaultDicePostType?: DicePostType;
-	defaultDiceSecretMethodType?: DiceSecretMethodType;
 
 	serverId: UUID;
 	serverDid: Snowflake;
 
-	channels: IChannel[];
+	channels: SageChannel[];
 	roles?: IGameRole[];
 
 	users?: IGameUser[];
 
 	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
 	playerCharacters?: (GameCharacter | GameCharacterCore)[];
-	gmCharacterName?: string;
 
 	parties?: PartyCore[] | PartyManager;
 	encounters?: EncounterCore[] | EncounterManager;
@@ -80,31 +70,29 @@ export type TMappedChannelNameTags = {
 	ic: boolean;
 	ooc: boolean;
 	gm: boolean;
+	dice: boolean;
 	misc: boolean;
 };
 export type TMappedGameChannel = {
-	did: Snowflake;
-	sChannel: IChannel;
+	id: Snowflake;
+	sChannel: SageChannel;
 	gChannel: GuildChannel | undefined;
 	nameTags: TMappedChannelNameTags;
 };
 
+function sageChannelTypeToNameTags(channelType?: SageChannelType): TMappedChannelNameTags {
+	const gm = channelType === SageChannelType.GameMaster;
+	const ooc = channelType === SageChannelType.OutOfCharacter;
+	const ic = channelType === SageChannelType.InCharacter;
+	const dice = channelType === SageChannelType.Dice;
+	const misc = !gm && !ooc && !ic && !dice;
+
+	return { ic, gm, ooc, dice, misc };
+}
+
 /** Reads IChannel properties to determine channel type: IC, GM, OOC, MISC */
-export function mapSageChannelNameTags(channel: IChannel): TMappedChannelNameTags {
-	const gmWrite = channel.gameMaster === PermissionType.Write;
-	const pcWrite = channel.player === PermissionType.Write;
-	const bothWrite = gmWrite && pcWrite;
-
-	const dialog = channel.dialog === true;
-	const commands = channel.commands === true;
-	const search = channel.search === true;
-
-	const gm = gmWrite && !pcWrite;
-	const ooc = bothWrite && (!dialog || commands || search);
-	const ic = bothWrite && !ooc && dialog;
-	const misc = !ic && !ooc && !gm;
-
-	return { ic, gm, ooc, misc };
+export function mapSageChannelNameTags(channel: SageChannel): TMappedChannelNameTags {
+	return sageChannelTypeToNameTags(channel.type);
 }
 export function nameTagsToType(nameTags: TMappedChannelNameTags): string {
 	if (nameTags.gm) {
@@ -116,6 +104,9 @@ export function nameTagsToType(nameTags: TMappedChannelNameTags): string {
 	if (nameTags.ooc) {
 		return "OOC <i>(Out of Character)</i>";
 	}
+	if (nameTags.dice) {
+		return "Dice";
+	}
 	if (nameTags.misc) {
 		return "Misc";
 	}
@@ -124,29 +115,25 @@ export function nameTagsToType(nameTags: TMappedChannelNameTags): string {
 
 /** Reads GuildChannel.name to determine channel type: IC, GM, OOC, MISC */
 function mapGuildChannelNameTags(channel: GuildChannel): TMappedChannelNameTags {
-	const ic = channel.name.match(/\bic\b/i) !== null;
-	const gm = !ic && channel.name.match(/\bgms?\b/i) !== null;
-	const ooc = !ic && !gm && channel.name.match(/\booc\b/i) !== null;
-	const misc = !ic && !ooc && !gm;
-	return { ic, ooc, gm, misc };
+	return sageChannelTypeToNameTags(parseSageChannelType(channel.name));
 }
 
 /** Returns [guildChannels.concat(sageChannels), guildChannels, sageChannels] */
-async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<[TMappedGameChannel[], TMappedGameChannel[], TMappedGameChannel[]]> {
+async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promise<[TMappedGameChannel[], TMappedGameChannel[], TMappedGameChannel[]]> {
 	const sChannels: TMappedGameChannel[] = [];
 	const gChannels: TMappedGameChannel[] = [];
 	for (const sChannel of channels) {
 		sChannels.push({
-			did: sChannel.did,
+			id: sChannel.id,
 			sChannel: sChannel,
 			gChannel: undefined,
 			nameTags: mapSageChannelNameTags(sChannel)
 		});
 
-		const gChannel = await sageCache.discord.fetchChannel(sChannel.did) as GuildChannel;
+		const gChannel = await sageCache.discord.fetchChannel(sChannel.id) as GuildChannel;
 		if (gChannel) {
 			gChannels.push({
-				did: sChannel.did,
+				id: sChannel.id,
 				sChannel: sChannel,
 				gChannel: gChannel,
 				nameTags: mapGuildChannelNameTags(gChannel)
@@ -156,9 +143,9 @@ async function mapChannels(channels: IChannel[], sageCache: SageCache): Promise<
 	return [gChannels.concat(sChannels), gChannels, sChannels];
 }
 
-export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable<Game>, IHasColorsCore, IHasEmojiCore {
-	public constructor(core: IGameCore, public server: Server, sageCache: SageCache) {
-		super(core, sageCache);
+export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<Game>, IHasColorsCore, IHasEmojiCore {
+	public constructor(core: GameCore, public server: Server, sageCache: SageCache) {
+		super(updateGame(core), sageCache);
 
 		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
@@ -171,12 +158,16 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 	public get isArchived(): boolean { return this.core.createdTs && this.core.archivedTs ? this.core.createdTs < this.core.archivedTs : false; }
 
 	public get name(): string { return this.core.name; }
-	public get gameType(): GameType | undefined { return this.core.gameType; }
-	public get defaultCritMethodType(): CritMethodType | undefined { return this.core.defaultCritMethodType; }
-	public get defaultDialogType(): DialogType | undefined { return this.core.defaultDialogType; }
-	public get defaultDiceOutputType(): DiceOutputType | undefined { return this.core.defaultDiceOutputType; }
-	public get defaultDicePostType(): DicePostType | undefined { return this.core.defaultDicePostType; }
-	public get defaultDiceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.defaultDiceSecretMethodType; }
+	private _gameSystem?: GameSystem | null;
+	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
+	public get gameSystemType(): GameSystemType | undefined { return this.core.gameSystemType; }
+	/** @deprecated use .gameSystemType */
+	public get gameType(): GameSystemType | undefined { return this.core.gameSystemType; }
+	public get dialogPostType(): DialogPostType | undefined { return this.core.dialogPostType; }
+	public get diceCritMethodType(): DiceCritMethodType | undefined { return this.core.diceCritMethodType; }
+	public get diceOutputType(): DiceOutputType | undefined { return this.core.diceOutputType; }
+	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
+	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
 	public get serverDid(): Snowflake { return this.core.serverDid; }
 	public get serverId(): UUID { return this.core.serverId; }
 	private get discord() { return this.sageCache.discord; }
@@ -186,11 +177,12 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 
 	public get playerRole(): IGameRole | undefined { return this.roles.find(role => role.type === GameRoleType.Player); }
 	public get playerRoleDid(): Snowflake | undefined { return this.playerRole?.did; }
-	public get players(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.Player).map(user => user.did); }
+	/** Returns users assigned manually, NOT users assigned via Player role. */
+	private get players(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.Player).map(user => user.did); }
 
-	public get channels(): IChannel[] { return this.core.channels ?? (this.core.channels = []); }
+	public get channels(): SageChannel[] { return this.core.channels ?? (this.core.channels = []); }
 	public get gameMasters(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.GameMaster).map(user => user.did); }
-	public get gmCharacterName(): string { return this.core.gmCharacterName ?? this.server.defaultGmCharacterName; }
+	public get gmCharacterName(): string { return this.core.gmCharacterName ?? this.server.gmCharacterName; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
 	public get orphanedPlayerCharacters() { return this.playerCharacters.filter(pc => !pc.userDid || !this.players.includes(pc.userDid)); }
@@ -199,8 +191,6 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 			?? this.playerCharacters.findCompanionByName(name)
 			?? this.nonPlayerCharacters.findByName(name)
 			?? this.nonPlayerCharacters.findCompanionByName(name)
-			?? this.orphanedPlayerCharacters.findByName(name)
-			?? this.orphanedPlayerCharacters.findCompanionByName(name)
 			?? this.encounters.findCharacter(name)
 			?? this.parties.findCharacter(name);
 	}
@@ -211,7 +201,7 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 	public get parties(): PartyManager { return this.core.parties as PartyManager; }
 
 	//#region Guild fetches
-	public async findBestPlayerChannel(): Promise<IChannel | undefined> {
+	public async findBestPlayerChannel(): Promise<SageChannel | undefined> {
 		const [allChannels, gChannels, sChannels] = await mapChannels(this.channels, this.sageCache);
 		return (
 				allChannels.find(channel => channel.nameTags.ic)
@@ -220,7 +210,7 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 				?? gChannels.find(channel => !channel.nameTags.gm)
 			)?.sChannel;
 	}
-	public async findBestGameMasterChannel(): Promise<IChannel> {
+	public async findBestGameMasterChannel(): Promise<SageChannel> {
 		const [allChannels] = await mapChannels(this.channels, this.sageCache);
 		return (
 				allChannels.find(channel => channel.nameTags.gm)
@@ -230,8 +220,8 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 	}
 	public async gmGuildChannel(): Promise<OrNull<GuildChannel>> {
 		for (const sChannel of this.channels) {
-			if (sChannel.gameMaster === PermissionType.Write && !sChannel.player) {
-				const gChannel = await this.discord.fetchChannel(sChannel.did);
+			if (sChannel.type === SageChannelType.GameMaster) {
+				const gChannel = await this.discord.fetchChannel(sChannel.id);
 				if (gChannel) {
 					return gChannel as GuildChannel;
 				}
@@ -239,74 +229,72 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 		}
 		return null;
 	}
-	public async pGuildMembers(): Promise<GuildMember[]> {
-		// TODO: investiage iterating over guild.memebers as "cleaner"
-		// return Promise.all(this.players.map(player => this.discord.fetchGuildMember(player)));
 
-		const pGuildMembers = (await Promise.all(this.players.map(player => this.discord.fetchGuildMember(player))))
-			.filter(isDefined);
+	/** Returns all players (manual and role) as GuildMember objects. */
+	public async pGuildMembers(): Promise<GuildMember[]> {
+		const pGuildMembers = await Promise.all(this.players.map(player => this.discord.fetchGuildMember(player)));
 		const pRoleDid = this.playerRoleDid;
 		if (pRoleDid) {
 			const discordRole = await this.discord.fetchGuildRole(pRoleDid);
 			if (discordRole) {
-				const roleOnly = discordRole.members.filter(guildMember => !pGuildMembers.find(p => p.id === guildMember.id));
+				const roleOnly = discordRole.members.filter(guildMember => !pGuildMembers.some(p => p?.id === guildMember.id));
 				pGuildMembers.push(...roleOnly.values());
 			}
 		}
-		return pGuildMembers;
+		return pGuildMembers.filter(isDefined);
 	}
 	public async guildChannels(): Promise<GuildChannel[]> {
-		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
+		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.id)));
 		return all.filter(isDefined) as GuildChannel[];
 	}
-	public async orphanChannels(): Promise<IChannel[]> {
-		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.did)));
+	public async orphanChannels(): Promise<SageChannel[]> {
+		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.id)));
 		return this.channels.filter((_, index) => !all[index]);
 	}
 	public async orphanUsers(): Promise<IGameUser[]> {
-		const all = await Promise.all(this.users.map(user => this.discord.fetchUser(user.did)));
+		const all = await Promise.all(this.users.map(user => this.discord.fetchGuildMember(user.did)));
 		return this.users.filter((_, index) => !all[index]);
 	}
 	public async gmGuildMembers(): Promise<GuildMember[]> {
-		const gmGuildMembers = (await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)))).filter(isDefined);
+		const gmGuildMembers = await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)));
 		const gmRoleDid = this.gmRoleDid;
 		if (gmRoleDid) {
 			const discordRole = await this.discord.fetchGuildRole(gmRoleDid);
 			if (discordRole) {
-				const roleOnly = discordRole.members.filter(guildMember => !gmGuildMembers.find(gm => gm.id === guildMember.id));
+				const roleOnly = discordRole.members.filter(guildMember => !gmGuildMembers.some(gm => gm?.id === guildMember.id));
 				gmGuildMembers.push(...roleOnly.values());
 			}
 		}
-		return gmGuildMembers;
+		return gmGuildMembers.filter(isDefined);
 	}
-	public async gmGuildMember(): Promise<GuildMember | null> {
-		return this.discord.fetchGuildMember(this.gameMasters[0]);
-		//TODO: LEARN HOW TO CHECK ONLINE STATUS
-		// let first: GuildMember;
-		// for (const gameMaster of this.gameMasters) {
-		// 	const guildMember = await this.discord.fetchGuildMember(gameMaster);
-		// 	const user = guildMember?.user;
-		// 	if (["online"].includes(user?.presence?.status)) {
-		// 		return guildMember;
-		// 	}
-		// 	first = first || guildMember;
-		// }
-		// return first || null;
+	public async gmGuildMember(): Promise<GuildMember | undefined> {
+		const gmGuildMembers = await this.gmGuildMembers();
+		if (gmGuildMembers.length > 1) {
+			for (const guildMember of gmGuildMembers) {
+				if ("online" === guildMember.presence?.status) {
+					return guildMember;
+				}
+			}
+		}
+		return gmGuildMembers[0];
 	}
 	public async guildRoles(): Promise<Role[]> {
-		return (await Promise.all(this.roles.map(role => this.discord.fetchGuildRole(role.did)))).filter(isDefined);
+		const all = await Promise.all(this.roles.map(role => this.discord.fetchGuildRole(role.did)));
+		return all.filter(isDefined);
 	}
 	//#endregion
 
 	// #region Channel actions
 
-	public async addOrUpdateChannels(...channels: IChannel[]): Promise<boolean> {
+	public async addOrUpdateChannels(...channels: Args<SageChannel>[]): Promise<boolean> {
 		channels.forEach(channel => {
-			const found = this.getChannel(new DiscordKey(this.serverDid, channel.did));
+			const found = this.getChannel(new DiscordKey(this.serverDid, channel.id));
 			if (found) {
-				updateChannel(found, channel);
+				applyChanges(found, channel);
 			} else {
-				(this.core.channels || (this.core.channels = [])).push({ ...channel });
+				const newChannel = { } as SageChannel;
+				applyChanges(newChannel, channel);
+				(this.core.channels || (this.core.channels = [])).push(newChannel);
 			}
 		});
 		return this.save();
@@ -318,7 +306,7 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 			return false;
 		}
 		channelDids.forEach(channelDid => {
-			this.core.channels = this.core.channels.filter(_channel => _channel.did !== channelDid);
+			this.core.channels = this.core.channels.filter(_channel => _channel.id !== channelDid);
 		});
 		return this.core.channels.length !== count ? this.save() : false;
 	}
@@ -505,22 +493,16 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 		return undefined;
 	}
 
-	private updateName(name: Optional<string>): void { this.core.name = name ?? this.core.name ?? ""; }
-	private updateGameType(gameType: Optional<GameType>): void { this.core.gameType = gameType === null ? undefined : gameType ?? this.core.gameType; }
-	private updateCritMethodType(critMethodType: Optional<CritMethodType>): void { this.core.defaultCritMethodType = critMethodType === null ? undefined : critMethodType ?? this.core.defaultCritMethodType; }
-	private updateDialogType(dialogType: Optional<DialogType>): void { this.core.defaultDialogType = dialogType === null ? undefined : dialogType ?? this.core.defaultDialogType; }
-	private updateDiceOutputType(diceOutputType: Optional<DiceOutputType>): void { this.core.defaultDiceOutputType = diceOutputType === null ? undefined : diceOutputType ?? this.core.defaultDiceOutputType; }
-	private updateDicePostType(dicePostType: Optional<DicePostType>): void { this.core.defaultDicePostType = dicePostType === null ? undefined : dicePostType ?? this.core.defaultDicePostType; }
-	private updateDiceSecretMethodType(diceSecretMethodType: Optional<DiceSecretMethodType>): void { this.core.defaultDiceSecretMethodType = diceSecretMethodType === null ? undefined : diceSecretMethodType ?? this.core.defaultDiceSecretMethodType; }
-	public async update(name: Optional<string>, gameType: Optional<GameType>, dialogType: Optional<DialogType>, critMethodType: Optional<CritMethodType>, diceOutputType: Optional<DiceOutputType>, dicePostType: Optional<DicePostType>, diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
-		this.updateName(name);
-		this.updateGameType(gameType);
-		this.updateCritMethodType(critMethodType);
-		this.updateDialogType(dialogType);
-		this.updateDiceOutputType(diceOutputType);
-		this.updateDicePostType(dicePostType);
-		this.updateDiceSecretMethodType(diceSecretMethodType);
-		return this.save();
+	// private updateName(name: Optional<string>): void { this.core.name = name ?? this.core.name ?? ""; }
+	public async update(changes: Args<GameOptions>): Promise<boolean> {
+		const { name, ...otherChanges } = changes;
+		const oldName = this.core.name;
+		this.core.name = name ?? this.core.name ?? "";
+		const changed = applyChanges(this.core as GameOptions, otherChanges);
+		if (changed || oldName !== this.core.name) {
+			return this.save();
+		}
+		return false;
 	}
 
 	public async updateDicePing(userOrRoleDid: Snowflake, dicePing: boolean): Promise<boolean> {
@@ -540,8 +522,6 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 		return false;
 	}
 
-	public updateGmCharacterName(gmCharacterName: string): void { this.core.gmCharacterName = gmCharacterName; }
-
 	public async archive(): Promise<boolean> {
 		this.core.archivedTs = new Date().getTime();
 		return this.save();
@@ -549,21 +529,21 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 
 	// #region Get
 
-	public getChannel(discordKey: DiscordKey): IChannel | undefined;
-	public getChannel(channelDid: Optional<Snowflake>): IChannel | undefined;
-	public getChannel(didOrKey: Optional<Snowflake> | DiscordKey): IChannel | undefined {
+	public getChannel(discordKey: DiscordKey): SageChannel | undefined;
+	public getChannel(channelDid: Optional<Snowflake>): SageChannel | undefined;
+	public getChannel(didOrKey: Optional<Snowflake> | DiscordKey): SageChannel | undefined {
 		if (didOrKey) {
 			if (typeof(didOrKey) === "string") {
-				return this.channels.find(channel => channel.did === didOrKey);
+				return this.channels.find(channel => channel.id === didOrKey);
 			}
 			const channelAndThread = didOrKey.channelAndThread;
 			if (channelAndThread.thread && channelAndThread.channel) {
-				return this.channels.find(channel => channel.did === channelAndThread.thread)
-					?? this.channels.find(channel => channel.did === channelAndThread.channel);
+				return this.channels.find(channel => channel.id === channelAndThread.thread)
+					?? this.channels.find(channel => channel.id === channelAndThread.channel);
 			}else if (channelAndThread.thread) {
-				return this.channels.find(channel => channel.did === channelAndThread.thread);
+				return this.channels.find(channel => channel.id === channelAndThread.thread);
 			}else if (channelAndThread.channel) {
-				return this.channels.find(channel => channel.did === channelAndThread.channel);
+				return this.channels.find(channel => channel.id === channelAndThread.channel);
 			}
 		}
 		return undefined;
@@ -575,21 +555,6 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 
 	public getUser(userDid: Optional<Snowflake>): IGameUser | undefined {
 		return this.users.find(user => user.did === userDid);
-	}
-
-	public getPlayer(userDid: Optional<Snowflake>): IGameUser | undefined {
-		return this.users.find(user => user.did === userDid && user.type === GameUserType.Player);
-	}
-
-	public getUsersByRole(roleType: GameRoleType): Snowflake[] {
-		if ([GameRoleType.Cast, GameRoleType.Table].includes(roleType)) {
-			return this.gameMasters.concat(this.players);
-		}else if (roleType === GameRoleType.GameMaster) {
-			return this.gameMasters;
-		}else if (roleType === GameRoleType.Player) {
-			return this.players;
-		}
-		return [];
 	}
 
 	// #endregion
@@ -655,7 +620,7 @@ export class Game extends HasIdCoreAndSageCache<IGameCore> implements Comparable
 
 	// #region IComparable
 	public compareTo(other: Game): -1 | 0 | 1 {
-		return sortStringIgnoreCase(this.name, other.name);
+		return sortPrimitive(this.name, other.name);
 	}
 	// #endregion
 

@@ -1,87 +1,95 @@
-import { filterAsync, forEachAsync } from "@rsc-utils/async-array-utils";
+import { DialogPostType } from "@rsc-sage/types";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import type { RenderableContent } from "@rsc-utils/render-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import type { User as DUser } from "discord.js";
-import type { SageMessage } from "../../../model/SageMessage";
-import type { User as SUser } from "../../../model/User";
-import { DialogType } from "../../../repo/base/IdRepository";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
-import { registerAdminCommandHelp } from "../../help";
-import { renderCount } from "../../helpers/renderCount";
+import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
+import type { SageCommand } from "../../../model/SageCommand.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import type { User as SUser } from "../../../model/User.js";
+import { createAdminRenderableContent } from "../../cmd.js";
+import { renderCount } from "../../helpers/renderCount.js";
 
-async function userCount(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
+async function userCount(sageCommand: SageCommand): Promise<void> {
+	if (sageCommand.isSuperUser) {
+		const users = await sageCommand.sageCache.users.getAll();
+		return renderCount(sageCommand, "Users", users.length);
 	}
-	const users = await sageMessage.caches.users.getAll();
-	return renderCount(sageMessage, "Users", users.length);
 }
 
-async function renderUser(renderableContent: RenderableContent, user: SUser, discordUser: Optional<DUser>): Promise<void> {
-	renderableContent.appendTitledSection(`<b>${toHumanReadable(discordUser) || "<i>Unknown</i>"}</b>`);
-	renderableContent.append(`<b>User Id</b> ${user.did}`);
-	renderableContent.append(`<b>UUID</b> ${user.id}`);
-	renderableContent.append(`<b>Username</b> ${discordUser?.username || "<i>Unknown</i>"}`);
-}
-
-async function userList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
-	let users = await sageMessage.caches.users.getAll();
-	if (users) {
-		const filter = sageMessage.args.join(" ");
-		if (filter && users.length) {
-			const lower = filter.toLowerCase();
-			users = await filterAsync(users, async user => {
-				const discordUser = await sageMessage.discord.fetchUser(user.did);
-				return discordUser?.username?.toLowerCase().includes(lower) ?? false;
-			});
-		}
-
-		const renderableContent = createAdminRenderableContent(sageMessage.bot);
-		renderableContent.setTitle(`<b>user-list</b>`);
-		if (users.length) {
-			await forEachAsync(users, async user => renderUser(renderableContent, user, await sageMessage.discord.fetchUser(user.did)));
-		} else {
-			renderableContent.append(`<blockquote>No Users Found!</blockquote>`);
-		}
-		await sageMessage.send(renderableContent);
-	}
-	return Promise.resolve();
-}
+/**
+ * @todo include other organized play ids:
+ * "Cypher Play" (Monte Cook Games)
+ * https://dnd.wizards.com/adventurers-league
+ * https://www.chaosium.com/organized-play/
+ * https://www.facebook.com/groups/2757897967823921 (Frog God Games: https://discord.gg/dzpXfGG)
+ * https://stargatetherpg.com/files/file/44-stargate-phoenix-series-guide/
+ * https://www.shadowruntabletop.com/missions/
+ * https://fasagames.com/earthdawn-whatis/legendsofbarsaive/
+ * L5R has a fan run Org Play campaign, Heroes of Rokugan
+ * Kobold Press had something for their Midgard Campiagn it will probably carry over to Tales of the Valiant
+ * Evil Genius Games with Everyday Heroes: EGO (https://evilgeniusgames.com/the-organized-play/)
+ */
 
 async function userUpdate(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin) {
-		return sageMessage.reactBlock();
+	if (!sageMessage.allowCommand) {
+		return sageMessage.denyByProv("User Update", "You cannot manage your settings here.");
 	}
-	const dialogType = sageMessage.args.removeAndReturnDialogType();
-	const sagePostType = sageMessage.args.removeAndReturnSagePostType();
-	const updated = await sageMessage.sageUser.update({ dialogType, sagePostType });
-	if (updated) {
+
+	const { validKeys, hasValidKeys, hasInvalidKeys } = sageMessage.args.validateKeys(["dialogPostType", "sagePostType", "orgPlayId"]);
+	if (!hasValidKeys || hasInvalidKeys) {
+		const details = [
+			"The command for updating your User settings is:",
+			"> ```sage!user update dialogPostType=\"\" sagePostType=\"\" orgPlayId=\"\"```",
+			"Acceptable PostType values are:",
+			"> `embed`, `post`, or `unset`",
+			"For example:",
+			"> ```sage!user update dialogPostType=\"embed\" sagePostType=\"post\"```",
+			"> ```sage!user update orgPlayId=\"999999\"```",
+			"> ```sage!user update dialogPostType=\"unset\" orgPlayId=\"unset\"```",
+		];
+		return sageMessage.whisper(details.join("\n"));
+	}
+
+	let opUpdated = false;
+	let ptUpdated = false;
+
+	if (validKeys.includes("orgPlayId")) {
+		const orgPlayId = sageMessage.args.getString("orgPlayId");
+		if (orgPlayId) {
+			opUpdated = await sageMessage.sageUser.notes.setUncategorizedNote("orgPlayId", orgPlayId);
+		}else {
+			opUpdated = await sageMessage.sageUser.notes.unsetUncategorizedNote("orgPlayId");
+		}
+	}
+
+	if (validKeys.includes("dialogPostType") || validKeys.includes("sagePostType")) {
+		const dialogPostType = sageMessage.args.getEnum(DialogPostType, "dialogPostType");
+		const sagePostType = sageMessage.args.getEnum(DialogPostType, "sagePostType");
+		ptUpdated = await sageMessage.sageUser.update({ dialogPostType, sagePostType });
+	}
+
+	if (opUpdated || ptUpdated) {
 		return userDetails(sageMessage);
 	}
-	return sageMessage.reactSuccessOrFailure(updated);
+
+	return sageMessage.reply("Sorry, we were unable to save your changes.", true);
 }
 
-async function userDetails(sageMessage: SageMessage): Promise<void> {
+async function userDetails(sageMessage: SageCommand): Promise<void> {
 	let user: SUser | null = sageMessage.sageUser;
 	if (sageMessage.isSuperUser) {
-		const userDid = await sageMessage.args.removeAndReturnUserDid();
+		const userDid = sageMessage.args.getUserId("user");
 		if (userDid) {
-			user = await sageMessage.caches.users.getByDid(userDid);
+			user = await sageMessage.sageCache.users.getByDid(userDid);
 		}
 		if (!user) {
-			const userId = sageMessage.args.removeAndReturnUuid();
-			user = await sageMessage.caches.users.getById(userId);
+			const userId = sageMessage.args.getUuid("user");
+			user = await sageMessage.sageCache.users.getById(userId);
 		}
 		if (!user) {
 			user = sageMessage.sageUser;
 		}
 	}
 
-	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>user-details</b>`);
+	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>User Details</b>`);
 	if (user) {
 		const discordUser = await sageMessage.discord.fetchUser(user.did);
 		if (discordUser) {
@@ -102,33 +110,28 @@ async function userDetails(sageMessage: SageMessage): Promise<void> {
 			renderableContent.append(`<b>Status</b> ${"<i>NOT FOUND</i>"}`);
 		}
 
-		renderableContent.append("");
+		renderableContent.append();
 		renderableContent.append(`<b>RPG Sage Id</b> ${user.id}`);
 
-		const dialogType = DialogType[user.defaultDialogType!] ?? `<i>unset (Embed)</i>`;
-		renderableContent.append(`<b>Preferred Dialog Type</b> ${dialogType}`);
+		const dialogPostType = DialogPostType[user.dialogPostType!] ?? `<i>unset (Embed)</i>`;
+		renderableContent.append(`<b>Preferred Dialog Type</b> ${dialogPostType}`);
 
-		const sagePostType = DialogType[user.defaultSagePostType!] ?? `<i>unset (Embed)</i>`;
+		const sagePostType = DialogPostType[user.sagePostType!] ?? `<i>unset (Embed)</i>`;
 		renderableContent.append(`<b>Preferred Sage Post Type</b> ${sagePostType}`);
+
+		const orgPlayId = sageMessage.sageUser.notes.getUncategorizedNote("orgPlayId")?.note ?? `<i>unset</i>`;
+		renderableContent.append(`<b>Paizo Organized Play #</b> ${orgPlayId}`);
 
 		// TODO: List any games, gameRoles, servers, serverRoles!
 	} else {
 		renderableContent.append(`<blockquote>User Not Found!</blockquote>`);
 	}
-	return <any>sageMessage.send(renderableContent);
+
+	await sageMessage.reply(renderableContent, true);
 }
 
 export function registerUser(): void {
-	registerAdminCommand(userCount, "user-count");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user count");
-
-	registerAdminCommand(userList, "user-list");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user list");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user list {optionalNameFilter}");
-
-	registerAdminCommand(userDetails, "user-details");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user details {@UserMention}");
-	registerAdminCommandHelp("Admin", "SuperUser", "User", "user details {UserId}");
-
-	registerAdminCommand(userUpdate, "user-set", "user-update");
+	registerListeners({ commands:["user|count"], message:userCount });
+	registerListeners({ commands:["user|set", "user|update"], message:userUpdate });
+	registerListeners({ commands:["user|details", "User Details"], interaction:userDetails, message:userDetails });
 }

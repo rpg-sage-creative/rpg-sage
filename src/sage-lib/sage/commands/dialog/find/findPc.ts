@@ -1,17 +1,17 @@
-import { Optional } from "@rsc-utils/type-utils";
 import { isBlank } from "@rsc-utils/string-utils";
-import type { GameCharacter } from "../../../model/GameCharacter";
-import type { SageMessage } from "../../../model/SageMessage";
+import { Optional } from "@rsc-utils/type-utils";
+import type { GameCharacter } from "../../../model/GameCharacter.js";
+import type { SageCommand } from "../../../model/SageCommand.js";
 
-export function findPc(sageMessage: SageMessage, pcNameOrIndex: Optional<string>): GameCharacter | undefined {
-	if (sageMessage.game) {
-		return sageMessage.playerCharacter;
+export function findPc(sageCommand: SageCommand, pcNameOrIndex: Optional<string>): GameCharacter | undefined {
+	if (sageCommand.game) {
+		return sageCommand.playerCharacter;
 	}
-	if (!sageMessage.channel || sageMessage.channel.dialog) {
+	if (sageCommand.allowDialog) {
 		if (isBlank(pcNameOrIndex)) {
-			return sageMessage.sageUser.playerCharacters.first();
+			return sageCommand.sageUser.playerCharacters.first();
 		}
-		return sageMessage.sageUser.playerCharacters.findByNameOrIndex(pcNameOrIndex);
+		return sageCommand.sageUser.playerCharacters.findByNameOrIndex(pcNameOrIndex);
 	}
 	return undefined;
 }

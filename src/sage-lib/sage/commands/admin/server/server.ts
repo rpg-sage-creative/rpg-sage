@@ -1,16 +1,15 @@
+import { DicePostType, GameSystemType } from "@rsc-sage/types";
 import { mapAsync } from "@rsc-utils/async-array-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Role } from "discord.js";
-import { GameType } from "../../../../../sage-common";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice";
-import type { SageMessage } from "../../../model/SageMessage";
-import type { Server } from "../../../model/Server";
-import { AdminRoleType, IAdminRole } from "../../../model/Server";
-import { DialogType } from "../../../repo/base/IdRepository";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
-import { DicePostType } from "../../dice";
-import { registerAdminCommandHelp } from "../../help";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice/index.js";
+import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import type { Server } from "../../../model/Server.js";
+import { AdminRoleType, IAdminRole } from "../../../model/Server.js";
+import { DialogType } from "../../../repo/base/IdRepository.js";
+import { createAdminRenderableContent } from "../../cmd.js";
 
 async function serverCount(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
@@ -71,14 +70,14 @@ async function serverInit(sageMessage: SageMessage): Promise<void> {
 }
 
 function serverDetailsDefaultTypes(renderableContent: RenderableContent, server: Server): void {
-	renderableContent.append(`<b>Default Dialog Type</b> ${DialogType[server.defaultDialogType!] ?? "<i>unset (Embed)</i>"}`);
-	renderableContent.append(`<b>Default Game Type</b> ${GameType[server.defaultGameType!] ?? "<i>unset (None)</i>"}`);
-	if (server.defaultGameType === GameType.PF2e) {
-		renderableContent.append(`<b>Default Crit Method Type</b> ${CritMethodType[server.defaultCritMethodType!] ?? "<i>unset (x2)</i>"}`);
+	renderableContent.append(`<b>Default Dialog Type</b> ${DialogType[server.dialogPostType!] ?? "<i>unset (Embed)</i>"}`);
+	renderableContent.append(`<b>Default Game Type</b> ${GameSystemType[server.gameSystemType!] ?? "<i>unset (None)</i>"}`);
+	if (server.gameSystemType === GameSystemType.PF2e) {
+		renderableContent.append(`<b>Default Crit Method Type</b> ${CritMethodType[server.diceCritMethodType!] ?? "<i>unset (x2)</i>"}`);
 	}
-	renderableContent.append(`<b>Default Dice Output Type</b> ${DiceOutputType[server.defaultDiceOutputType!] ?? "<i>unset (M)</i>"}`);
-	renderableContent.append(`<b>Default Dice Post Type</b> ${DicePostType[server.defaultDicePostType!] ?? "<i>unset (Post)</i>"}`);
-	renderableContent.append(`<b>Default Dice Secret Method Type</b> ${DiceSecretMethodType[server.defaultDiceSecretMethodType!] ?? "<i>unset (Ignore)</i>"}`);
+	renderableContent.append(`<b>Default Dice Output Type</b> ${DiceOutputType[server.diceOutputType!] ?? "<i>unset (M)</i>"}`);
+	renderableContent.append(`<b>Default Dice Post Type</b> ${DicePostType[server.dicePostType!] ?? "<i>unset (Post)</i>"}`);
+	renderableContent.append(`<b>Default Dice Secret Method Type</b> ${DiceSecretMethodType[server.diceSecretMethodType!] ?? "<i>unset (Ignore)</i>"}`);
 }
 type TRole = { role:IAdminRole, discordRole:Role };
 async function serverDetails(sageMessage: SageMessage): Promise<void> {
@@ -123,7 +122,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	return <any>sageMessage.send(renderableContent);
 }
 
-async function serverSet(sageMessage: SageMessage): Promise<void> {
+async function serverUpdate(sageMessage: SageMessage): Promise<void> {
 	let server: Optional<Server> = sageMessage.server;
 	if (server && !sageMessage.canAdminServer) {
 		return sageMessage.reactBlock();
@@ -135,33 +134,19 @@ async function serverSet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	// TODO: consider allowing updating games by messaging bot directly
-
-	const gameType = sageMessage.args.removeAndReturnGameType();
-	const critMethodType = sageMessage.args.removeAndReturnCritMethodType();
-	const dialogType = sageMessage.args.removeAndReturnDialogType();
-	const diceOutputType = sageMessage.args.removeAndReturnDiceOutputType();
-	const dicePostType = sageMessage.args.removeAndReturnDicePostType();
-	const diceSecretMethodType = sageMessage.args.removeAndReturnDiceSecretMethodType();
-
-	if (gameType === undefined && dialogType === undefined && critMethodType === undefined && diceOutputType === undefined && dicePostType === undefined && diceSecretMethodType === undefined) {
+	const serverOptions = sageMessage.args.getServerOptions();
+	if (!serverOptions) {
 		return sageMessage.reactFailure();
 	}
 
-	const updated = await sageMessage.server.update(gameType, dialogType, critMethodType, diceOutputType, dicePostType, diceSecretMethodType);
+	const updated = await sageMessage.server.update(serverOptions);
 	return sageMessage.reactSuccessOrFailure(updated);
 }
 
 export function registerServer(): void {
-	registerAdminCommand(serverCount, "server-count");
-	registerAdminCommand(serverList, "server-list");
-	registerAdminCommand(serverInit, "server-init");
-	registerAdminCommand(serverDetails, "server-details");
-	registerAdminCommand(serverSet, "server-set");
-
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server count");
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server list");
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server list {optionalFilter}");
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server details");
-	registerAdminCommandHelp("Admin", "SuperUser", "Server", "server set game=PF2E|NONE diceoutput=XXS|XS|S|M|L|XL|UNSET dicepost=POST|EMBED|UNSET crit=TIMESTWO|ROLLTWICE");
+	registerListeners({ commands:["server|count"], message:serverCount });
+	registerListeners({ commands:["server|list"], message:serverList });
+	registerListeners({ commands:["server|init"], message:serverInit });
+	registerListeners({ commands:["server|details"], message:serverDetails });
+	registerListeners({ commands:["server|update"], message:serverUpdate });
 }

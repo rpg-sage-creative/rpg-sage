@@ -1,12 +1,12 @@
 import { mapAsync } from "@rsc-utils/async-array-utils";
 import { toChannelMention, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
-import { sendWebhook } from "../../../../discord/messages";
-import type { GameCharacter } from "../../../model/GameCharacter";
-import type { SageMessage } from "../../../model/SageMessage";
-import { DialogType } from "../../../repo/base/IdRepository";
-import { createAdminRenderableContent } from "../../cmd";
-import { toReadableOwner } from "./toReadableOwner";
+import { sendWebhook } from "../../../../discord/messages.js";
+import type { GameCharacter } from "../../../model/GameCharacter.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { DialogType } from "../../../repo/base/IdRepository.js";
+import { createAdminRenderableContent } from "../../cmd.js";
+import { toReadableOwner } from "./toReadableOwner.js";
 
 export async function sendGameCharacter(sageMessage: SageMessage, character: GameCharacter): Promise<Message[]> {
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), character.name);
@@ -24,11 +24,12 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	const ownerTag = await toReadableOwner(sageMessage, character.userDid);
 	renderableContent.append(`<b>${ownerOrPlayer}</b> ${ownerTag ?? "<i>none</i>"}`);
 
-	if (character.isCompanion) {
+	if (character.isCompanion || character.isMinion) {
 		renderableContent.append(`<b>Character</b> ${character.parent?.name ?? "<i>unknown</i>"}`);
 	} else {
 		const companionNames = character.companions.map(companion => companion.name).join("\n- ");
-		renderableContent.append(`<b>Companions</b> ${companionNames || "<i>none</i>"}`);
+		const companionType = character.isPC ? `Companions` : `Minions`;
+		renderableContent.append(`<b>${companionType}</b> ${companionNames || "<i>none</i>"}`);
 	}
 	renderableContent.append(`<b>Dialog Color</b> ${character.embedColor ?? "<i>unset</i>"}`);
 
@@ -62,11 +63,12 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.appendTitledSection(`<b>Notes</b>`, ...notes);
 	}
 
-	const targetChannel = (await sageMessage.caches.discord.fetchChannel(sageMessage.channel?.sendCommandTo)) ?? sageMessage.message.channel;
+	const targetChannel = sageMessage.message.channel;
 	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
 
 	const sageCache = sageMessage.caches;
 	const authorOptions = { avatarURL: avatarUrl, username: character.name };
-	const dialogType = sageMessage.dialogType;
-	return sendWebhook(targetChannel, { authorOptions, dialogType, renderableContent, sageCache });
+	const dialogType = sageMessage.dialogPostType;
+	const messages = await sendWebhook(targetChannel, { authorOptions, dialogType, renderableContent, sageCache });
+	return messages ?? [];
 }

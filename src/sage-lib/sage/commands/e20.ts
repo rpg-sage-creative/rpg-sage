@@ -7,20 +7,22 @@ import { NIL_SNOWFLAKE } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
-import { shiftDie } from "../../../sage-dice/dice/essence20";
-import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20";
-import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf";
-import { PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe";
-import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse";
-import { PlayerCharacterCorePR, PlayerCharacterPR, TCharacterSectionType, TCharacterViewType, TSkillZord, TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR";
-import { PdfJsonParserPR } from "../../../sage-e20/pr/parse";
-import { PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer";
-import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse";
-import { resolveToEmbeds } from "../../discord/embeds";
-import { registerInteractionListener } from "../../discord/handlers";
-import type { SageCache } from "../model/SageCache";
-import type { SageInteraction } from "../model/SageInteraction";
-import { parseDiceMatches, sendDice } from "./dice";
+import { shiftDie } from "../../../sage-dice/dice/essence20/index.js";
+import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
+import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf.js";
+import { PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe.js";
+import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse.js";
+import { PlayerCharacterCorePR, PlayerCharacterPR, TCharacterSectionType, TCharacterViewType, TSkillZord, TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR.js";
+import { PdfJsonParserPR } from "../../../sage-e20/pr/parse.js";
+import { PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer.js";
+import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse.js";
+import { registerInteractionListener } from "../../discord/handlers.js";
+import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
+import type { SageCache } from "../model/SageCache.js";
+import type { SageCommand } from "../model/SageCommand.js";
+import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageMessage } from "../model/SageMessage.js";
+import { parseDiceMatches, sendDice } from "./dice.js";
 
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
 type TPlayerCharacterCore = PlayerCharacterCoreJoe | PlayerCharacterCorePR | PlayerCharacterCoreTransformer;
@@ -315,8 +317,10 @@ function createComponents(character: TPlayerCharacter): MessageActionRow[] {
 		createEdgeSnagShiftRow(character),
 		createSkillSelectRow(character, includeSpecs),
 		!includeSpecs ? createSkillSpecializationSelectRow(character) : null!,
+	].filter(row => row?.components.every(component => (component as MessageSelectMenu).options.length))
+	.concat([
 		createRollButtonRow(character)
-	].filter(row => row);
+	]);
 }
 
 type TOutput = { embeds:MessageEmbed[], components:MessageActionRow[] };
@@ -328,13 +332,21 @@ function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): TOutp
 
 const uuidActionRegex = /^E20\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Skill|Spec|EdgeSnag|EdgeSnagShift|Roll|Secret|Init|Untrained)$/i;
 
+export function getValidE20CharacterId(customId?: string | null): string | undefined {
+	if (!customId || !uuidActionRegex.test(customId)) {
+		return undefined;
+	}
+
+	const [_e20, characterId] = customId.split("|");
+	if (_e20 === "E20" && charFileExists(characterId)) {
+		return characterId;
+	}
+	return undefined;
+}
+
 function sheetTester(sageInteraction: SageInteraction): boolean {
 	const customId = sageInteraction.interaction.customId;
-	if (!uuidActionRegex.test(customId)) {
-		return false;
-	}
-	const [_e20, characterId] = customId.split("|");
-	return _e20 === "E20" && charFileExists(characterId);
+	return getValidE20CharacterId(customId) !== undefined;
 }
 
 async function viewHandler(sageInteraction: SageInteraction<SelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
@@ -418,7 +430,7 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 			dice = `[${label} ${charName} ${skillName}${specName}${shiftArrow}]`;
 		}
 	}
-	const matches = parseDiceMatches(sageInteraction, dice);
+	const matches = await parseDiceMatches(sageInteraction, dice);
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
@@ -455,51 +467,91 @@ export function registerE20(): void {
 	registerInteractionListener(sheetTester, sheetHandler);
 }
 
-export const e20Pdf = "e20-pdf";
+export async function handleEssence20Import(sageCommand: SageCommand): Promise<void> {
+	await sageCommand.reply(`Attempting to import character ...`, false);
 
-export async function slashHandlerEssence20(sageInteraction: SageInteraction): Promise<void> {
-	await sageInteraction.reply(`Attempting to import character ...`, false);
-
-	const value = sageInteraction.getString(e20Pdf, true);
-	const isPdfUrl = value.match(/^http.*?\.pdf$/) !== null;
+	const value = sageCommand.args.getString("pdf", true);
+	const isPdfUrl = /^http.*?\.pdf$/.test(value);
 	const isMessageUrl = value.startsWith("https://discord.com/channels/");
 
 	let fileName: string | undefined;
 	let rawJson: Optional<TRawJson>;
 	if (isPdfUrl) {
 		fileName = value.split("/").pop();
-		await sageInteraction.reply(`Attempting to read character from ${fileName} ...`, false);
+		await sageCommand.reply(`Attempting to read character from ${fileName} ...`, false);
 		rawJson = await PdfCacher.read<TRawJson>(value);
 	}else if (isMessageUrl) {
 		const [serverDid, channelDid, messageDid] = value.split("/").slice(-3);
 		const discordKey = new DiscordKey(serverDid.replace("@me", NIL_SNOWFLAKE), channelDid, NIL_SNOWFLAKE, messageDid);
-		const message = await sageInteraction.discord.fetchMessage(discordKey);
+		const message = await sageCommand.discord.fetchMessage(discordKey);
 		const attachment = message?.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
 		if (attachment) {
 			fileName = attachment.name ?? undefined;
-			await sageInteraction.reply(`Attempting to read character from ${fileName} ...`, false);
+			await sageCommand.reply(`Attempting to read character from ${fileName} ...`, false);
 			rawJson = await PdfCacher.read<TRawJson>(attachment?.url);
 		}
 	}
 	if (!rawJson) {
-		return sageInteraction.reply(`Failed to find pdf!`, false);
+		return sageCommand.reply(`Failed to find pdf!`, false);
 	}
 
 	const character = jsonToCharacter(rawJson);
 	if (!character) {
-		return sageInteraction.reply(`Failed to import character from: ${fileName}!`, false);
+		return sageCommand.reply(`Failed to import character from: ${fileName}!`, false);
 	}
 
-	await sageInteraction.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
+	await sageCommand.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
 
-	const channel = sageInteraction.interaction.channel ?? sageInteraction.user;
+	const channel = sageCommand.dChannel as DMessageChannel;
+	const user = channel ? undefined : await sageCommand.sageCache.discord.fetchUser(sageCommand.sageUser.did);
 
-	const pin = sageInteraction.getBoolean("pin") ?? false;
-	const attach = sageInteraction.getBoolean("attach") ?? false;
+	const pin = sageCommand.args.getBoolean("pin") ?? false;
+	const attach = sageCommand.args.getBoolean("attach") ?? false;
 	if (attach) {
-		await attachCharacter(sageInteraction.caches, channel, fileName!, character, pin);
+		await attachCharacter(sageCommand.sageCache, channel ?? user, fileName!, character, pin);
 	}else {
-		await postCharacter(sageInteraction.caches, channel, character, pin);
+		await postCharacter(sageCommand.sageCache, channel ?? user, character, pin);
 	}
-	return sageInteraction.deleteReply();
+
+	if (sageCommand.isSageInteraction()) {
+		await sageCommand.deleteReply();
+	}
 }
+
+//#region reimport
+
+// async function handleReimportError(sageCommand: SageMessage, errorMessage: string): Promise<void> {
+// 	const content = [
+// 		`Reimport Error!`,
+// 		`> ` + errorMessage,
+// 		`To reimport, please reply to your imported character sheet with:`,
+// 		"```sage!reimport pdf=\"\"```",
+// 		`If your updated charater has a new name, please include it:`,
+// 		"```sage!reimport pdf=\"\" name=\"\"```",
+// 		`***pdf** is url to the pdf*`,
+// 	];
+// 	return sageCommand.whisper(content.join("\n"));
+// }
+
+export async function handleEssence20Reimport(sageCommand: SageMessage, message: Message, characterId: string): Promise<void> {
+	sageCommand.whisper("Sorry, not yet enabled!");
+	message;
+	characterId;
+	// const pathbuilderId = sageCommand.args.getNumber("id") ?? undefined;
+	// const updatedName = sageCommand.args.getString("name") ?? undefined;
+	// const refreshResult = await PathbuilderCharacter.refresh(characterId, pathbuilderId, updatedName);
+	// switch (refreshResult) {
+	// 	case "INVALID_CHARACTER_ID": return handleReimportError(sageCommand, "Unable to find an imported character to update.");
+	// 	case "MISSING_JSON_ID": return handleReimportError(sageCommand, "You are missing a 'Export JSON' id.");
+	// 	case "INVALID_JSON_ID": return handleReimportError(sageCommand, "Unable to fetch the 'Export JSON' id.");
+	// 	case "INVALID_CHARACTER_NAME": return handleReimportError(sageCommand, "The character names do not match!");
+	// 	case false: return sageCommand.whisper("Sorry, we don't know what happened!");
+	// 	default:
+	// 		const char = await PathbuilderCharacter.loadCharacter(characterId);
+	// 		await updateSheet(sageCommand.sageCache, char!, message);
+	// 		await sageCommand.message.delete();
+	// 		return;
+	// }
+}
+
+//#endregion

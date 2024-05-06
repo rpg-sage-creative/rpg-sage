@@ -1,14 +1,14 @@
+import { hasSageId, isSageId, isTestBotId } from "@rsc-sage/env";
 import { error, verbose, warn } from "@rsc-utils/console-utils";
 import { toHumanReadable, type DInteraction, type DMessage, type DReaction, type DUser } from "@rsc-utils/discord-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined, isNullOrUndefined } from "@rsc-utils/type-utils";
 import { Intents, type IntentsString, type Interaction, type PermissionString } from "discord.js";
-import { SageInteraction } from "../sage/model/SageInteraction";
-import { SageMessage } from "../sage/model/SageMessage";
-import { SageReaction } from "../sage/model/SageReaction";
-import { MessageType, ReactionType } from "./enums";
-import type { TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types";
+import { SageInteraction } from "../sage/model/SageInteraction.js";
+import { SageMessage } from "../sage/model/SageMessage.js";
+import { SageReaction } from "../sage/model/SageReaction.js";
+import { MessageType, ReactionType } from "./enums.js";
+import type { TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types.js";
 
 //#region helpers
 
@@ -36,32 +36,15 @@ export async function isAuthorBotOrWebhook(sageReaction: SageReaction): Promise<
 export async function isAuthorBotOrWebhook(messageOrReaction: SageMessage | SageReaction): Promise<boolean> {
 	const message = ((<SageReaction>messageOrReaction).messageReaction ?? (<SageMessage>messageOrReaction)).message as DMessage;
 	const messageAuthorDid = message.author?.id;
-	if (isActiveBot(messageAuthorDid)) {
+	if (isSageId(messageAuthorDid)) {
 		return true;
 	}
-	//TODO: This next line throws an exception if we don't have webhook access. TEST FOR IT FIRST!
-	const webhook = await messageOrReaction.caches.discord.fetchWebhook(message.guild!, message.channel, botMeta.dialogWebhookName!);
+
+	const webhook = await messageOrReaction.sageCache.discord.fetchWebhook(message.guild!, message.channel, "dialog");
 	return webhook?.id === messageAuthorDid;
 }
 
 //#endregion
-
-type TBotMeta = { activeBotDid?: Snowflake; testBotDid?: Snowflake; dialogWebhookName?: string; };
-const botMeta: TBotMeta = {};
-export function setBotMeta(meta: TBotMeta): void {
-	botMeta.activeBotDid = meta.activeBotDid;
-	botMeta.dialogWebhookName = meta.dialogWebhookName;
-	botMeta.testBotDid = meta.testBotDid;
-}
-// export function getActiveBotId(): Snowflake {
-// 	return botMeta.activeBotId!;
-// }
-function isActiveBot(did: Optional<Snowflake>): boolean {
-	return did && botMeta.activeBotDid ? did === botMeta.activeBotDid : false;
-}
-function isTesterBot(did: Optional<Snowflake>): boolean {
-	return did && botMeta.testBotDid ? did === botMeta.testBotDid : false;
-}
 
 //#region listeners
 
@@ -111,8 +94,8 @@ function getListeners<T extends TListenerType>(which: TListenerTypeName): T[] {
 
 type TListenerTypeName = "InteractionListener" | "MessageListener" | "ReactionListener";
 function registerListener<T extends TListenerType>(listener: T): void {
-	if (!botMeta.activeBotDid) {
-		error(`Please call setBotMeta({ activeBotDid:"", testBotDid?:"", dialogWebhookName:"" })`);
+	if (!hasSageId()) {
+		error(`Please call setSageId()`);
 	}
 
 	const listeners: T[] = getListeners(listener.which);
@@ -179,7 +162,7 @@ export function registerInteractionListener(tester: TInteractionTester, handler:
 
 export function registerMessageListener(tester: TMessageTester, handler: TMessageHandler, { type = MessageType.Post, command, ...options }: RegisterMessageOptions = { }): void {
 	command = (command ?? tester.name ?? handler.name).trim();
-	const keyRegex = command.toLowerCase().replace(/[\-\s]+/g, "[\\-\\s]*");
+	const keyRegex = command.toLowerCase().replace(/[-\s]+/g, "[\\-\\s]*");
 	const regex = RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
 	registerListener({ which:"MessageListener", tester, handler, type, command, regex, ...options });
 }
@@ -222,9 +205,10 @@ export async function handleInteraction(interaction: Interaction): Promise<THand
 		const isButton = interaction.isButton();
 		const isCommand = interaction.isCommand();
 		const isComponent = interaction.isMessageComponent();
+		const isContext = interaction.isContextMenu();
 		const isSelectMenu = interaction.isSelectMenu();
 		const isModal = interaction.isModalSubmit();
-		if (isButton || isCommand || isComponent || isSelectMenu || isModal) {
+		if (isButton || isCommand || isComponent || isContext || isSelectMenu || isModal) {
 			const sageInteraction = await SageInteraction.fromInteraction(interaction as DInteraction);
 			await handleInteractions(sageInteraction, output);
 			sageInteraction.clear();
@@ -254,6 +238,25 @@ async function handleInteractions(sageInteraction: SageInteraction<any>, output:
 
 // #region messages
 
+/** Performs various checks of the content for embed urls. */
+function checkContentForUrls(content: string | null, urls: (string | null)[]) {
+	if (content) {
+		return urls.every(url => {
+			if (url) {
+				if (content.includes(url)) {
+					return true;
+				}
+				// discord did something funky, recently, that i just notice (2024-03-07) ... adding %22 at the end of embed urls ...
+				if (url.endsWith("%22") && content.includes(url.replace(/%22$/, ""))) {
+					return true;
+				}
+			}
+			return false;
+		});
+	}
+	return false;
+}
+
 /**
  * Discord edits posts with urls to add image and summary information as embeds.
  * We are already responding to the original, so we should ignore the edits.
@@ -267,20 +270,23 @@ function isEditWeCanIgnore(message: DMessage, originalMessage: Optional<DMessage
 
 	// Embedding images and website cards don't change the message content
 	const matchingContent = originalMessage.content === message.content;
+
 	// The new message should have more embeds than the original
 	const moreEmbedLengths = originalMessage.embeds.length < message.embeds.length;
-	// If an embed's url is in the content, the edit was simply to create the embed
-	const url = message.embeds[0]?.url;
-	const contentIncludesUrl = url ? message.content?.includes(url.replace(/%22$/, "")) ?? false : false;
-	//TODO: should i iterate through the embeds? ? ?
 
-	return matchingContent && moreEmbedLengths && contentIncludesUrl;
+	// the first of the new embeds
+	const newEmbedIndex = originalMessage.embeds.length;
+
+	// If an embed's url is in the content, the edit was simply to create the embed
+	const contentIncludesUrls = checkContentForUrls(message.content, message.embeds.slice(newEmbedIndex).map(embed => embed.url));
+
+	return matchingContent && moreEmbedLengths && contentIncludesUrls;
 }
 
 export async function handleMessage(message: DMessage, originalMessage: Optional<DMessage>, messageType: MessageType): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
-		const isBot = message.author?.bot && !isTesterBot(message.author.id);
+		const isBot = message.author?.bot && !isTestBotId(message.author.id);
 		const isWebhook = !!message.webhookId;
 		const canIgnore = isEditWeCanIgnore(message, originalMessage);
 		if (!isBot && !isWebhook && !canIgnore) {
@@ -321,7 +327,7 @@ async function handleMessages(sageMessage: SageMessage, messageType: MessageType
 export async function handleReaction(messageReaction: DReaction, user: DUser, reactionType: ReactionType): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
-		const isBot = user.bot && !isTesterBot(user.id);
+		const isBot = user.bot && !isTestBotId(user.id);
 		if (!isBot) {
 			const sageReaction = await SageReaction.fromMessageReaction(messageReaction, user, reactionType);
 			await handleReactions(sageReaction, reactionType, output);

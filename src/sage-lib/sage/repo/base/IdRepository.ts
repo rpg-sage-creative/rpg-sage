@@ -4,58 +4,10 @@ import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, verbose } fro
 import { getBotCodeName, getDataRoot } from "@rsc-utils/env-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
 import { isDefined, type Optional, type OrNull } from "@rsc-utils/type-utils";
-import { UUID, isNonNilUuid, randomUuid } from "@rsc-utils/uuid-utils";
-import { Snowflake } from "discord.js";
-import type { GameType } from "../../../../sage-common";
-import type { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice";
-import type { DicePostType } from "../../commands/dice";
-import type { SageCache } from "../../model/SageCache";
+import { isNonNilUuid, randomUuid, type UUID } from "@rsc-utils/uuid-utils";
+import type { SageCache } from "../../model/SageCache.js";
 
-export type TPermissionType = keyof typeof PermissionType;
-export enum PermissionType { None = 0, Read = 1, React = 2, Write = 3 }
-export type TDialogType = keyof typeof DialogType;
-export enum DialogType { Embed = 0, Post = 1 }
-export interface IChannelOptions {
-	// Features
-	admin?: boolean;
-	commands?: boolean;
-	dialog?: boolean;
-	dice?: boolean;
-	search?: boolean;
-
-	// Access
-	gameMaster?: PermissionType;
-	player?: PermissionType;
-	nonPlayer?: PermissionType;
-
-	//Defaults
-	defaultDialogType?: DialogType;
-	defaultCritMethodType?: CritMethodType;
-	defaultDicePostType?: DicePostType;
-	defaultDiceOutputType?: DiceOutputType;
-	defaultDiceSecretMethodType?: DiceSecretMethodType;
-	defaultGameType?: GameType;
-
-	// Future Use
-	sendCommandTo?: Snowflake;
-	sendDialogTo?: Snowflake;
-	sendDiceTo?: Snowflake;
-	sendSearchTo?: Snowflake;
-}
-export interface IChannel extends IChannelOptions {
-	did: Snowflake;
-}
-
-type IChannelKey = keyof IChannel;
-type IChannelOptionsKey = keyof IChannelOptions;
-export function updateChannel(channel: IChannel, changes: IChannelOptions): IChannel {
-	Object.keys(changes).forEach(key => {
-		if (changes[<IChannelOptionsKey>key] !== undefined) {
-			(<any>channel[<IChannelKey>key]) = changes[<IChannelOptionsKey>key];
-		}
-	});
-	return channel;
-}
+export { DialogPostType as DialogType, SageChannel as IChannel } from "@rsc-sage/types";
 
 export class HasIdCoreAndSageCache<T extends IdCore<U>, U extends string = string> extends HasIdCore<T, U> {
 	public constructor(core: T, protected sageCache: SageCache) { super(core); }
@@ -207,5 +159,5 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 	public static get objectTypePlural(): string {
 		return this.objectType + "s";
 	}
-	public static DataPath = getDataRoot("sage");
+	public static readonly DataPath = getDataRoot("sage");
 }

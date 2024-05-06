@@ -19,7 +19,7 @@ export type TCharacterTypeMeta = TCharacterTypeMetaMatchFlags & {
 
 function getCharacterTypeMetaMatchFlags(sageMessage: SageMessage): TCharacterTypeMetaMatchFlags {
 	return {
-		isCompanion: sageMessage.commandMatches(/^(my-?)?(companion|alt|familiar)/i),
+		isCompanion: sageMessage.commandMatches(/^(my-?)?(alt|companion|familiar|hireling)/i),
 		isGm: sageMessage.commandMatches(/^(my-?)?(gm|gamemaster)/i),
 		isMinion: sageMessage.commandMatches(/^(my-?)?(minion)/i),
 		isMy: sageMessage.commandMatches(/^my/i),

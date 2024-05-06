@@ -7,14 +7,13 @@ import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import { UuidMatcher, type UUID } from "@rsc-utils/uuid-utils";
-import type { TEntity } from "../model";
-import type { AonBase } from "../model/base/AonBase";
-import type { Base } from "../model/base/Base";
-import type { BaseCore } from "../model/base/Base";
-import type { HasSource } from "../model/base/HasSource";
-import type { SourceCore } from "../model/base/Source";
-import { Source } from "../model/base/Source";
-import type { Creature } from "../model/bestiary/Creature";
+import type { AonBase } from "../model/base/AonBase.js";
+import type { Base, BaseCore } from "../model/base/Base.js";
+import type { HasSource } from "../model/base/HasSource.js";
+import type { SourceCore } from "../model/base/Source.js";
+import { Source } from "../model/base/Source.js";
+import type { Creature } from "../model/bestiary/Creature.js";
+import type { TEntity } from "../model/index.js";
 
 export type TObjectTypeAndPlural = { objectType: string; objectTypePlural: string; };
 
@@ -38,7 +37,16 @@ export function parseObjectType(objectType: string): OrNull<TObjectTypeAndPlural
 	const repoItem = Array.from(repoMap.values())
 		.find(_repoItem => _repoItem.objectTypeLower === objectTypeLower || _repoItem.objectTypePluralLower === objectTypeLower);
 	if (!repoItem) {
-		return null;
+		if (/s?$/.test(objectType)) {
+			return {
+				objectType: objectType.slice(0, -1),
+				objectTypePlural: objectType
+			};
+		}
+		return {
+			objectType,
+			objectTypePlural: objectType + "s"
+		};
 	}
 	return {
 		objectType: repoItem.objectType,
@@ -237,6 +245,8 @@ export async function loadData(): Promise<void> {
 		warn(`No files in "${pf2DataPath}" ...`);
 		return Promise.resolve();
 	}
+
+	verbose(`Loading Data from: ${pf2DataPath}`);
 
 	let coresLoaded = 0;
 

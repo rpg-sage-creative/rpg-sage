@@ -8,5 +8,6 @@ export function getDayOfYear(date: DateLike): number;
 
 export function getDayOfYear(dt: DateLike = new Date()): number {
 	const oneJanDate = new Date(dt.getFullYear(), 0, 1);
-	return Math.ceil((dt.getTime() - oneJanDate.getTime()) / 86400000);
+	const dateOnly = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
+	return Math.ceil((dateOnly.getTime() - oneJanDate.getTime()) / 86400000) + 1;
 }

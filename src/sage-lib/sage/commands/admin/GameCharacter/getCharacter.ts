@@ -1,13 +1,13 @@
 import type { Snowflake } from "discord.js";
-import type { CharacterManager } from "../../../model/CharacterManager";
-import { GameCharacter } from "../../../model/GameCharacter";
-import type { SageMessage } from "../../../model/SageMessage";
-import type { TNames } from "../../../model/SageMessageArgsManager";
-import type { TCharacterTypeMeta } from "./getCharacterTypeMeta";
+import type { CharacterManager } from "../../../model/CharacterManager.js";
+import { GameCharacter } from "../../../model/GameCharacter.js";
+import type { Names } from "../../../model/SageCommandArgs.js";
+import type { TCharacterTypeMeta } from "./getCharacterTypeMeta.js";
+import type { SageCommand } from "../../../model/SageCommand.js";
 
 /** Reusable code to get GameCharacter for the commands. */
-export async function getCharacter(sageMessage: SageMessage, characterTypeMeta: TCharacterTypeMeta, userDid: Snowflake, names: TNames): Promise<GameCharacter | undefined> {
-	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
+export async function getCharacter(sageCommand: SageCommand, characterTypeMeta: TCharacterTypeMeta, userDid: Snowflake, names: Names): Promise<GameCharacter | undefined> {
+	const hasCharacters = sageCommand.game && !characterTypeMeta.isMy ? sageCommand.game : sageCommand.sageUser;
 	let characterManager: CharacterManager | undefined = characterTypeMeta.isGmOrNpcOrMinion ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
 		characterManager = characterManager?.findByUserAndName(userDid, names.charName)?.companions;
@@ -16,17 +16,17 @@ export async function getCharacter(sageMessage: SageMessage, characterTypeMeta: 
 	}
 	let name = names.oldName ?? names.name;
 	if (!name && characterTypeMeta.isGm) {
-		name = sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName;
+		name = sageCommand.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName;
 	}
 	return characterManager?.findByName(name);
 }
 
-// async function getCharacter(sageMessage: SageMessage): Promise<GameCharacter> {
-// 	const characterTypeMeta = getCharacterTypeMeta(sageMessage),
-// 		userDid = await getUserDid(sageMessage),
-// 		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser,
+// async function getCharacter(sageCommand: sageCommand): Promise<GameCharacter> {
+// 	const characterTypeMeta = getCharacterTypeMeta(sageCommand),
+// 		userDid = await getUserDid(sageCommand),
+// 		hasCharacters = sageCommand.game && !characterTypeMeta.isMy ? sageCommand.game : sageCommand.sageUser,
 // 		characterManager = characterTypeMeta.isNpc ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
-// 		names = sageMessage.args.removeAndReturnNames("charName", "name");
+// 		names = sageCommand.args.removeAndReturnNames("charName", "name");
 
 // 	return characterTypeMeta.isCompanionOrMinion
 // 		? characterManager.findCompanion(userDid, names.charName, names.name)

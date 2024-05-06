@@ -3,12 +3,11 @@ import { warn } from "@rsc-utils/console-utils";
 import { nth } from "@rsc-utils/number-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e";
-import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e";
-import type { SageMessage } from "../model/SageMessage";
-import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
-import { renderAll } from "./default";
-import { registerCommandHelp } from "./help";
+import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e/index.js";
+import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e/index.js";
+import type { SageMessage } from "../model/SageMessage.js";
+import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
+import { renderAll } from "./default.js";
 
 // #region Spell
 function reduceByLevel<T extends Spell<string, any>>(spells: T[]): T[][] {
@@ -105,7 +104,7 @@ function filterFocusSpells(archetypeName: Optional<string>, className: Optional<
 	}
 }
 async function spellListFocus(sageMessage: SageMessage): Promise<void> {
-	const archetypeOrClassOrDomain = (sageMessage.args.find(s => s?.trim()) || "").trim();
+	const archetypeOrClassOrDomain = sageMessage.args.nonKeyValuePairs()[0] ?? "";
 	if (archetypeOrClassOrDomain.toLowerCase() === "help") {
 		//TODO: short circuit help command?
 		return;
@@ -129,7 +128,7 @@ async function spellListFocus(sageMessage: SageMessage): Promise<void> {
 
 	} else if (!archetypeName && !className && !domain) {
 		if (archetypeOrClassOrDomain.replace(/\W/g, "") === "bysource") {
-			for (let renderableContent of renderAll("FocusSpell", "FocusSpells", true)) {
+			for (const renderableContent of renderAll("FocusSpell", "FocusSpells", true)) {
 				await sageMessage.send(renderableContent);
 			}
 			return;
@@ -214,25 +213,9 @@ async function specialistLists(sageMessage: SageMessage): Promise<void> {
 
 export function registerSpells(): void {
 	registerCommandRegex(/^\s*spells\s*(arcane|divine|occult|primal)\s*(\d+(?:\s*st|nd|rd|th)?|cantrips?)?(?:\s*by\s*(school))?\s*$/i, spellListB);
-	registerCommandHelp("Spells", `spells {tradition} {level|Cantrips}`);
-	registerCommandHelp("Spells", `spells {tradition} {level|Cantrips} by school`);
-
 	registerCommandRegex(/^\s*(\d+(?:\s*st|nd|rd|th)?)\s*(?:level)?\s*(arcane|divine|occult|primal)\s*spells(?:\s*by\s*(school))?\s*$/i, spellListA);
-	registerCommandHelp("Spells", `{level} {tradition} spells`);
-	registerCommandHelp("Spells", `{level} {tradition} spells by school`);
-
 	registerCommandRegex(/^\s*(arcane|divine|occult|primal)\s*(cantrips?)(?:\s*by\s*(school))?\s*$/i, spellListB);
-	registerCommandHelp("Spells", `{tradition} cantrips`);
-	registerCommandHelp("Spells", `{tradition} cantrips by school`);
-
 	registerCommandRegex(/^\s*(arcane|divine|occult|primal)\s*spells\s*(\d+(?:\s*st|nd|rd|th)?|cantrips?)?(?:\s*by\s*(school))?\s*$/i, spellListB);
-	registerCommandHelp("Spells", `{tradition} spells {level|Cantrips}`);
-	registerCommandHelp("Spells", `{tradition} spells {level|Cantrips} by school`);
-
 	registerCommandRegex(/^(?:\s*focus\s*spells\s*(.*?)|\s*(.*?)\s*focus\s*spells)$/i, spellListFocus);
-	registerCommandHelp("Spells", "Focus Spells", `focus spells {Archetype|Class|Domain}`);
-	registerCommandHelp("Spells", "Focus Spells", `{Archetype|Class|Domain} focus spells`);
-
 	registerCommandRegex(/^\s*spells\s*(\d+(?:\s*st|nd|rd|th)?|cantrips?)\s*(arcane|divine|occult|primal)(\s*(?:\-|\+|\||\&)\s*(?:arcane|divine|occult|primal))?(\s*(?:\-|\+|\||\&)\s*(?:arcane|divine|occult|primal))?(\s*(?:\-|\+|\||\&)\s*(?:arcane|divine|occult|primal))?\s*$/i, specialistLists);
-	registerCommandHelp("Spells", "Custom List", `spells {level|Cantrips} {+tradition} {-tradition} {|tradition} {&tradition}`);
 }

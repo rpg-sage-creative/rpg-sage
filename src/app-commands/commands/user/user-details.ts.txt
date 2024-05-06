@@ -1,0 +1,8 @@
+import type { UserCommand } from "../../types.js";
+
+export function registerCommand(): UserCommand {
+	return {
+		name: "User Details",
+		type: 2,
+	};
+}

@@ -1,7 +1,7 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import { AdminRoleType, IAdminRole, TAdminRoleType } from "../../../model/Server";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
-import { registerAdminCommandHelp } from "../../help";
+import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { AdminRoleType, type IAdminRole, type TAdminRoleType } from "../../../model/Server.js";
+import { createAdminRenderableContent } from "../../cmd.js";
 
 function getAdminRoleLabel(adminRole: IAdminRole): TAdminRoleType {
 	return <TAdminRoleType>AdminRoleType[adminRole.type || 0];
@@ -40,8 +40,8 @@ async function serverRoleSet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const roleDid = await sageMessage.args.removeAndReturnRoleDid();
-	const roleType = sageMessage.args.removeAndReturnEnum<AdminRoleType>(AdminRoleType);
+	const roleDid = await sageMessage.args.getRoleId("role");
+	const roleType = sageMessage.args.getEnum(AdminRoleType, "type");
 	if (!roleDid || !roleType) {
 		return sageMessage.reactFailure();
 	}
@@ -69,8 +69,8 @@ async function serverRoleRemove(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const roleType = sageMessage.args.removeAndReturnEnum<AdminRoleType>(AdminRoleType);
-	if (roleType === undefined) {
+	const roleType = sageMessage.args.getEnum(AdminRoleType, "type");
+	if (!roleType) {
 		return sageMessage.reactFailure();
 	}
 
@@ -82,12 +82,7 @@ async function serverRoleRemove(sageMessage: SageMessage): Promise<void> {
 //TODO: have a generic set of role commands that dyanmically figure out game or server roletype
 
 export function registerRole(): void {
-	registerAdminCommand(serverRoleList, "server-role-list");
-	registerAdminCommandHelp("Admin", "Server", "server role list");
-
-	registerAdminCommand(serverRoleSet, "server-role-set");
-	registerAdminCommandHelp("Admin", "Server", "server role set {@RoleMention} {ServerRoleType}");
-
-	registerAdminCommand(serverRoleRemove, "server-role-remove", "server-role-delete", "server-role-unset");
-	registerAdminCommandHelp("Admin", "Server", "server role remove {ServerRoleType}");
+	registerListeners({ commands:["server|role|list"], message:serverRoleList });
+	registerListeners({ commands:["server|role|set"], message:serverRoleSet });
+	registerListeners({ commands:["server|role|remove", "server|role|delete", "server|role|unset"], message:serverRoleRemove });
 }

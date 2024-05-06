@@ -7,6 +7,8 @@ export * from "./getDataRoot.js";
 export * from "./getEnvironmentName.js";
 export * from "./getHomeServerId.js";
 export * from "./getPort.js";
+export * from "./getRollemId.js";
+export * from "./getSuperAdminId.js";
 export * from "./getSuperUserId.js";
 export * from "./getTupperBoxId.js";
 export * from "./initializeConsoleUtilsByEnvironment.js";

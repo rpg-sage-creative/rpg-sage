@@ -1,10 +1,10 @@
-import { GameCharacter } from "../../../model/GameCharacter";
-import type { SageMessage } from "../../../model/SageMessage";
-import { getCharacter } from "./getCharacter";
-import { getCharacterTypeMeta } from "./getCharacterTypeMeta";
-import { getUserDid } from "./getUserDid";
-import { promptCharConfirm } from "./promptCharConfirm";
-import { testCanAdminCharacter } from "./testCanAdminCharacter";
+import { GameCharacter } from "../../../model/GameCharacter.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { getCharacter } from "./getCharacter.js";
+import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
+import { getUserDid } from "./getUserDid.js";
+import { promptCharConfirm } from "./promptCharConfirm.js";
+import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 export async function gcCmdUpdate(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -24,15 +24,14 @@ export async function gcCmdUpdate(sageMessage: SageMessage): Promise<void> {
 
 	const userDid = await getUserDid(sageMessage),
 		newUserDid = await sageMessage.args.removeAndReturnUserDid("newuser") ?? await sageMessage.args.removeAndReturnUserDid("user"),
-		core = sageMessage.args.removeAndReturnCharacterOptions(names, newUserDid ?? userDid!),
+		core = sageMessage.args.getCharacterOptions(names, newUserDid ?? userDid!),
 		character = await getCharacter(sageMessage, characterTypeMeta, userDid!, names);
 	if (character) {
 		await character.update(core, false);
 		return promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
 			const charSaved = await char.save();
 			if (charSaved && characterTypeMeta.isGm) {
-				sageMessage.game!.updateGmCharacterName(char.name);
-				return sageMessage.game!.save();
+				return sageMessage.game!.update({ gmCharacterName:char.name });
 			}
 			return charSaved;
 		});

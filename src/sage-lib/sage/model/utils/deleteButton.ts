@@ -6,6 +6,7 @@ import type { SageInteraction } from "../SageInteraction";
 
 export async function addMessageDeleteButton(message: Optional<DMessage>, userId: Snowflake): Promise<boolean> {
 	if (message?.editable) {
+		/** @todo update all Sage "delete" icons to use custom trashcan or wastebin emoji 🗑️ instead of ❌ */
 		const buttonRow = new MessageActionRow<MessageButton>().addComponents(new MessageButton({ customId:`message-delete-button-${message.id}-${userId}`, style:"SECONDARY", emoji:"❌", label:"Delete this alert.", type:"BUTTON" }));
 		const edited = await message.edit({
 			components: (message.components ?? []) .concat([buttonRow as any]), /** @todo figure out this cast */

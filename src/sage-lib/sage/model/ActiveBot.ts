@@ -1,18 +1,16 @@
+import { isSageId } from "@rsc-sage/env";
 import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, info, verbose } from "@rsc-utils/console-utils";
-import type { DMessage } from "@rsc-utils/discord-utils";
+import { wrapUrl, type DMessage } from "@rsc-utils/discord-utils";
 import { getSuperUserId } from "@rsc-utils/env-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { chunk } from "@rsc-utils/string-utils";
-import type { Optional } from "@rsc-utils/type-utils";
 import type { ClientOptions, Guild, GuildBan, GuildMember, Interaction, Message, MessageReaction, PartialGuildMember, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
 import { Client } from "discord.js";
-import { MessageType, ReactionType } from "../../discord";
-import { setDeleted } from "../../discord/deletedMessages";
-import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers";
-import { BotRepo } from "../repo/BotRepo";
-import type { IBotCore } from "./Bot";
-import { Bot, TBotCodeName } from "./Bot";
-import { SageCache } from "./SageCache";
+import { setDeleted } from "../../discord/deletedMessages.js";
+import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers.js";
+import { MessageType, ReactionType } from "../../discord/index.js";
+import { BotRepo } from "../repo/BotRepo.js";
+import { Bot, type IBotCore, type TBotCodeName } from "./Bot.js";
+import { SageCache } from "./SageCache.js";
 
 interface IClientEventHandler {
 	onClientReady(): void;
@@ -35,14 +33,11 @@ function createDiscordClientOptions(): ClientOptions {
 export class ActiveBot extends Bot implements IClientEventHandler {
 	public static active: ActiveBot;
 	public static get isDev(): boolean { return ActiveBot.active?.codeName === "dev"; }
-	public static isActiveBot(userDid: Optional<Snowflake>): boolean {
-		return ActiveBot.active?.did === userDid;
-	}
 	public static async sendToSuperUser(...contents: string[]): Promise<void> {
 		const user = await ActiveBot.active.sageCache.discord.fetchUser(getSuperUserId()).catch(errorReturnNull);
 		if (user) {
 			for (const content of contents) {
-				user.send(content);
+				user.send(wrapUrl(content, true));
 			}
 		}
 	}
@@ -128,7 +123,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		this.client.user?.setPresence({
 			status: "online"
 		});
-		this.client.user?.setActivity("rpgsage.io; /sage help", {
+		this.client.user?.setActivity("rpgsage.io; /sage-help", {
 			type: "PLAYING"
 		});
 
@@ -163,7 +158,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 
 	onClientGuildBanAdd(ban: GuildBan): void {
 		const user = ban.user;
-		if (ActiveBot.isActiveBot(user.id)) {
+		if (isSageId(user.id)) {
 			const guild = ban.guild;
 			this.sageCache.servers.retireServer(guild, false, true).then(retired => {
 				verbose(`NOT IMPLEMENTED: Discord.Client.on("guildBanAdd", "${guild.id}::${guild.name}", "${user.id}::${user.username}") => ${retired}`);
@@ -173,7 +168,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 
 	onClientGuildBanRemove(ban: GuildBan): void {
 		const user = ban.user;
-		if (ActiveBot.isActiveBot(user.id)) {
+		if (isSageId(user.id)) {
 			const guild = ban.guild;
 			//TODO: IMPLEMENT UNARCHIVE/UNRETIRE?
 			verbose(`NOT IMPLEMENTED: Discord.Client.on("guildBanRemove", "${guild.id}::${guild.name}", "${user.id}::${user.username}")`);
@@ -189,7 +184,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	}
 
 	onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void {
-		if (ActiveBot.isActiveBot(member.id)) {
+		if (isSageId(member.id)) {
 			this.sageCache.servers.retireServer(member.guild, true).then(retired => {
 				verbose(`NOT IMPLEMENTED: Discord.Client.on("guildMemberRemove", "${member.id}::${member.displayName}") => ${retired}`);
 			});

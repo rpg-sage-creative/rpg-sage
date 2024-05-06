@@ -1,20 +1,22 @@
 import { toUnique } from "@rsc-utils/array-utils";
 import { errorReturnNull } from "@rsc-utils/console-utils";
 import { DiscordKey, toUserMention, type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
-import { StringMatcher, isNotBlank } from "@rsc-utils/string-utils";
+import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { isDefined } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
-import { CommandInteraction, MessageActionRow, MessageAttachment, MessageButton, MessageSelectMenu, type ButtonInteraction, type Message, type MessageButtonStyleResolvable, type MessageEmbed, type SelectMenuInteraction } from "discord.js";
-import { PathbuilderCharacter, getExplorationModes, getSavingThrows, getSkills, toModifier } from "../../../sage-pf2e";
-import { TCharacterSectionType, TCharacterViewType, getCharacterSections } from "../../../sage-pf2e/model/pc/PathbuilderCharacter";
-import { resolveToEmbeds } from "../../discord/embeds";
-import { registerInteractionListener } from "../../discord/handlers";
-import type { SageCache } from "../model/SageCache";
-import type { SageInteraction } from "../model/SageInteraction";
-import type { User } from "../model/User";
-import type { TMacro } from "../model/types";
-import { parseDiceMatches, sendDice } from "./dice";
+import { MessageActionRow, MessageAttachment, MessageButton, MessageSelectMenu, type ButtonInteraction, type Message, type MessageButtonStyleResolvable, type MessageEmbed, type SelectMenuInteraction } from "discord.js";
+import { getExplorationModes, getSavingThrows, getSkills, PathbuilderCharacter, toModifier } from "../../../sage-pf2e/index.js";
+import { getCharacterSections, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
+import { registerInteractionListener } from "../../discord/handlers.js";
+import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
+import type { SageCache } from "../model/SageCache.js";
+import type { SageCommand } from "../model/SageCommand.js";
+import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageMessage } from "../model/SageMessage.js";
+import type { User } from "../model/User.js";
+import type { TMacro } from "../model/types.js";
+import { parseDiceMatches, sendDice } from "./dice.js";
 
 type SageButtonInteraction = SageInteraction<ButtonInteraction>;
 type SageSelectInteraction = SageInteraction<SelectMenuInteraction>;
@@ -323,8 +325,11 @@ function parseCustomId(customId: string): TActionIdType {
 	return parts as TActionIdType;
 }
 
-function sheetTester(sageInteraction: SageButtonInteraction): boolean {
-	const customId = sageInteraction.interaction.customId;
+export function getValidPathbuilderCharacterId(customId?: string | null): string | undefined {
+	if (!customId) {
+		return undefined;
+	}
+
 	// old regex didn't include PB2E, which was added when E20 importer was made
 	const matches = matchesActionRegex(customId) || matchesOldActionRegex(customId);
 	if (matches) {
@@ -336,9 +341,16 @@ function sheetTester(sageInteraction: SageButtonInteraction): boolean {
 		TODO: figure out when this can go away!
 		*/
 		const [_pb2e, characterId] = parseCustomId(customId);
-		return _pb2e === "PB2E" && PathbuilderCharacter.exists(characterId);
+		if (_pb2e === "PB2E" && PathbuilderCharacter.exists(characterId)) {
+			return characterId;
+		};
 	}
-	return false;
+	return undefined;
+}
+
+function sheetTester(sageInteraction: SageButtonInteraction): boolean {
+	const customId = sageInteraction.interaction.customId;
+	return getValidPathbuilderCharacterId(customId) !== undefined;
 }
 
 async function viewHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
@@ -357,21 +369,21 @@ async function viewHandler(sageInteraction: SageSelectInteraction, character: Pa
 	character.setSheetValue("activeView", undefined);
 	character.setSheetValue("activeSections", activeSections);
 	await character.save();
-	return updateSheet(sageInteraction.caches, character, sageInteraction.interaction.message as Message);
+	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
 }
 
 async function explorationHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeExploration = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeExploration", activeExploration);
 	await character.save();
-	return updateSheet(sageInteraction.caches, character, sageInteraction.interaction.message as Message);
+	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
 }
 
 async function skillHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeSkill = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeSkill", activeSkill);
 	await character.save();
-	return updateSheet(sageInteraction.caches, character, sageInteraction.interaction.message as Message);
+	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
 }
 
 async function macroHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
@@ -382,7 +394,7 @@ async function macroHandler(sageInteraction: SageSelectInteraction, character: P
 		character.setSheetValue("activeMacro", activeMacro);
 	}
 	await character.save();
-	return updateSheet(sageInteraction.caches, character, sageInteraction.interaction.message as Message);
+	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
 }
 
 
@@ -393,7 +405,7 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: Pa
 	const scoutMod = character.getSheetValue("activeExploration") === "Scout" ? 1 : 0;
 	const initMod = init ? Math.max(incredibleMod, scoutMod) : 0;
 	const dice = `[1d20+${skillMod+initMod} ${character.name}${secret ? " Secret" : ""} ${skill}${init ? " (Initiative)" : ""}]`;
-	const matches = parseDiceMatches(sageInteraction, dice);
+	const matches = await parseDiceMatches(sageInteraction, dice);
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
@@ -402,19 +414,19 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: Pa
 }
 
 async function macroRollHandler(sageInteraction: SageButtonInteraction, character: PathbuilderCharacter): Promise<void> {
-	const macroUser = await sageInteraction.caches.users.getById(character.getSheetValue("macroUserId"));
+	const macroUser = await sageInteraction.sageCache.users.getById(character.getSheetValue("macroUserId"));
 	const activeMacro = character.getSheetValue("activeMacro");
 	const macros = getMacros(character, macroUser);
 	// check by id first (proper) then by name second (fallback to old renders)
 	const macro = macros.find(m => m.id === activeMacro) ?? macros.find(m => m.name === activeMacro);
 	if (macro) {
-		const matches = parseDiceMatches(sageInteraction, macro.dice.replace(/\{.*?\}/g, match => match.slice(1,-1).split(":")[1] ?? ""));
+		const matches = await parseDiceMatches(sageInteraction, macro.dice.replace(/\{.*?\}/g, match => match.slice(1,-1).split(":")[1] ?? ""));
 		const output = matches.map(match => match.output).flat();
 		await sendDice(sageInteraction, output);
 	}else {
 		setMacroUser(character, sageInteraction.sageUser);
 		await character.save();
-		await updateSheet(sageInteraction.caches, character, sageInteraction.interaction.message as Message);
+		await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
 		if (macros.length) {
 			sageInteraction.send("Invalid Macro!");
 		}
@@ -441,7 +453,7 @@ async function linkHandler(sageInteraction: SageButtonInteraction, character: Pa
 		const charSaved = await character.save();
 		const gameSaved = charSaved ? await (game ?? sageUser).save() : false;
 		if (gameSaved) {
-			await updateSheet(sageInteraction.caches, character, sageInteraction.interaction.message as Message);
+			await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
 			return sageInteraction.reply("Character Successfully Linked.", true);
 		}else {
 			return sageInteraction.reply("Sorry, unable to link character.", true);
@@ -471,7 +483,7 @@ async function unlinkHandler(sageInteraction: SageButtonInteraction, character: 
 		const charSaved = await character.save();
 		const gameSaved = charSaved ? await (game ?? sageUser).save() : false;
 		if (gameSaved) {
-			await updateSheet(sageInteraction.caches, character, sageInteraction.interaction.message as Message);
+			await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
 			return sageInteraction.reply("Character Successfully Unlinked.", true);
 		}else {
 			return sageInteraction.reply("Sorry, unable to unlink character.", true);
@@ -490,7 +502,7 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 
 		// if we matched the old regex, force the sheet to update
 		if (!matchesActionRegex(customId)) {
-			await updateSheet(sageInteraction.caches, character, sageInteraction.interaction.message as Message);
+			await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
 		}
 
 		switch(command) {
@@ -513,32 +525,71 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 
 //#region slash command
 
-export const pb2eId = "pathbuilder2e-id";
-
-export async function slashHandlerPathbuilder2e(sageInteraction: SageInteraction<CommandInteraction>): Promise<void> {
-	const pathbuilderId = sageInteraction.getNumber(pb2eId, true);
-	await sageInteraction.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, false);
+export async function handlePathbuilder2eImport(sageCommand: SageCommand): Promise<void> {
+	const pathbuilderId = sageCommand.args.getNumber("id", true);
+	await sageCommand.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, false);
 
 	const pathbuilderChar = await PathbuilderCharacter.fetch(pathbuilderId, { });
 	if (!pathbuilderChar) {
-		return sageInteraction.reply(`Failed to fetch Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}!`, false);
+		return sageCommand.reply(`Failed to fetch Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}!`, false);
 	}
 
-	const channel = sageInteraction.interaction.channel as DMessageChannel ?? sageInteraction.user;
+	const channel = sageCommand.dChannel as DMessageChannel;
+	const user = channel ? undefined : await sageCommand.sageCache.discord.fetchUser(sageCommand.sageUser.did);
 
-	const pin = sageInteraction.getBoolean("pin") ?? false;
-	const attach = sageInteraction.getBoolean("attach") ?? false;
+	const pin = sageCommand.args.getBoolean("pin") ?? false;
+	const attach = sageCommand.args.getBoolean("attach") ?? false;
 	if (attach) {
-		await attachCharacter(sageInteraction.caches, channel, pathbuilderId, pathbuilderChar, pin);
+		await attachCharacter(sageCommand.sageCache, channel ?? user, pathbuilderId, pathbuilderChar, pin);
 	}else {
-		await postCharacter(sageInteraction.caches, channel, pathbuilderChar, pin);
+		await postCharacter(sageCommand.sageCache, channel ?? user, pathbuilderChar, pin);
 	}
-	return sageInteraction.deleteReply();
+
+	if (sageCommand.isSageInteraction()) {
+		await sageCommand.deleteReply();
+	}
+}
+
+//#endregion
+
+//#region reimport
+
+async function handleReimportError(sageCommand: SageMessage, errorMessage: string): Promise<void> {
+	const content = [
+		`Reimport Error!`,
+		`> ` + errorMessage,
+		`To reimport, please reply to your imported character sheet with:`,
+		"```sage!reimport id=\"\"```",
+		`If your updated charater has a new name, please include it:`,
+		"```sage!reimport id=\"\" name=\"\"```",
+		`***id** is the "Export JSON" id*`,
+	];
+	return sageCommand.whisper(content.join("\n"));
+}
+
+export async function handlePathbuilder2eReimport(sageCommand: SageMessage, message: Message, characterId: string): Promise<void> {
+	const pathbuilderId = sageCommand.args.getNumber("id") ?? undefined;
+	const updatedName = sageCommand.args.getString("name") ?? undefined;
+	const refreshResult = await PathbuilderCharacter.refresh(characterId, pathbuilderId, updatedName);
+	switch (refreshResult) {
+		case "INVALID_CHARACTER_ID": return handleReimportError(sageCommand, "Unable to find an imported character to update.");
+		case "MISSING_JSON_ID": return handleReimportError(sageCommand, "You are missing a 'Export JSON' id.");
+		case "INVALID_JSON_ID": return handleReimportError(sageCommand, "Unable to fetch the 'Export JSON' id.");
+		case "INVALID_CHARACTER_NAME": return handleReimportError(sageCommand, "The character names do not match!");
+		case false: return sageCommand.whisper("Sorry, we don't know what happened!");
+		default: {
+			const char = await PathbuilderCharacter.loadCharacter(characterId);
+			await updateSheet(sageCommand.sageCache, char!, message);
+			await sageCommand.message.delete();
+			return;
+		}
+	}
 }
 
 //#endregion
 
 export function registerPathbuilder(): void {
 	registerInteractionListener(sheetTester, sheetHandler);
+
 }
 

@@ -13,42 +13,60 @@ cd ../rsc
 utilsDir=$(pwd)
 cd "$repoDir"
 
-repoNames=(
-	"args-utils"
-	"array-utils"
-	"async-array-utils"
-	"cache-utils"
-	"character-utils"
-	"class-utils"
-	"color-utils"
-	"console-utils"
-	"date-utils"
-	"dice-utils"
-	"discord-utils"
-	"enum-utils"
-	"env-utils"
-	"fs-utils"
-	"https-utils"
-	"json-utils"
-	"language-utils"
-	# "maps-utils"
-	"math-utils"
-	"number-utils"
-	"pdf-utils"
-	"progress-utils"
-	"random-utils"
-	"render-utils"
-	"search-utils"
-	"snowflake-utils"
-	"string-utils"
-	"temperature-utils"
-	"test-utils"
-	"type-utils"
-	"uuid-utils"
-)
+doAll=
+doOne=
+doNPM=
 
-if [ ! -z "$1" ]; then
+if [ "$1" = "npm" ] || [ "$2" = "npm" ]; then
+	doNPM=true
+fi
+
+if [ "$1" = "all" ] || [ "$2" = "all" ]; then
+	doAll=true
+	repoNames=(
+		"args-utils"
+		"array-utils"
+		"async-array-utils"
+		"cache-utils"
+		"character-utils"
+		"class-utils"
+		"color-utils"
+		"console-utils"
+		"date-utils"
+		# "dice-utils"
+		"discord-utils"
+		"enum-utils"
+		"env-utils"
+		"fs-utils"
+		"https-utils"
+		"json-utils"
+		"language-utils"
+		# "maps-utils"
+		"math-utils"
+		"number-utils"
+		"pdf-utils"
+		"progress-utils"
+		"random-utils"
+		"render-utils"
+		"search-utils"
+		"snowflake-utils"
+		"string-utils"
+		"temperature-utils"
+		"test-utils"
+		"type-utils"
+		"uuid-utils"
+	)
+elif [ ! -z "$1" ] && [ -d "$utilsDir/$1" ]; then
+	doOne=true
 	repoNames=( "$1" )
+elif [ ! -z "$2" ] && [ -d "$utilsDir/$2" ]; then
+	doOne=true
+	repoNames=( "$2" )
+else
+	echo "packages.sh all"
+	echo "or"
+	echo "packages.sh discord-utils"
+	exit 1
 fi
 
 echo "Configuring Packages ..."
@@ -90,6 +108,8 @@ done
 
 echo "Configuring Packages ... done."
 
-cd "$repoDir"
-rm -rf node_modules package-lock.json
-npm i
+if [ "$doNPM" ]; then
+	cd "$repoDir"
+	rm -rf node_modules package-lock.json
+	npm i
+fi

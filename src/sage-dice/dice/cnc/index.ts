@@ -1,8 +1,8 @@
+import { GameType } from "@rsc-sage/types";
 import { ExplodeDice, rollDice } from "@rsc-utils/dice-utils";
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull } from "@rsc-utils/type-utils";
-import { GameType } from "../../../sage-common";
 import type {
 	TDiceLiteral,
 	TTestData

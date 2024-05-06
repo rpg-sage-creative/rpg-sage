@@ -1,10 +1,10 @@
+import { GameSystemType } from "@rsc-sage/types";
 import { remove } from "@rsc-utils/array-utils";
 import { createWhitespaceRegex } from "@rsc-utils/string-utils";
-import { GameType } from "../sage-common";
-import type { SearchResults } from "./SearchResults";
-import { searchAonPf1e } from "./aon/pf1e";
-import { searchAonPf2e } from "./aon/pf2e";
-import { searchAonSf1e } from "./aon/sf1e";
+import type { SearchResults } from "./SearchResults.js";
+import { searchAonPf1e } from "./aon/pf1e/index.js";
+import { searchAonPf2e } from "./aon/pf2e/index.js";
+import { searchAonSf1e } from "./aon/sf1e/index.js";
 
 export type TParsedSearchInfo = {
 	searchText: string;
@@ -35,11 +35,11 @@ type TSearchSource = {
 	search: (parsedSearchInfo:TParsedSearchInfo, nameOnly:boolean) => Promise<SearchResults>;
 }
 
-export function getSearchEngine(gameType: GameType): TSearchSource | null {
-	switch(gameType) {
-		case GameType.PF1e: return { name:"Archives of Nethys", search:searchAonPf1e };
-		case GameType.PF2e: return { name:"Archives of Nethys", search:searchAonPf2e };
-		case GameType.SF1e: return { name:"Archives of Nethys", search:searchAonSf1e };
+export function getSearchEngine(gameSystemType: GameSystemType): TSearchSource | null {
+	switch(gameSystemType) {
+		case GameSystemType.PF1e: return { name:"Archives of Nethys", search:searchAonPf1e };
+		case GameSystemType.PF2e: return { name:"Archives of Nethys", search:searchAonPf2e };
+		case GameSystemType.SF1e: return { name:"Archives of Nethys", search:searchAonSf1e };
 		default: return null;
 	}
 }

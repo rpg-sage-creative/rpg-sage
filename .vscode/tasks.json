@@ -36,7 +36,7 @@
 			"label": "run-build",
 			"type": "shell",
 			"command": "npm",
-			"args": ["run", "build"],
+			"args": ["run", "build", "--", "-f"],
 			"group": {
 				"kind": "build",
 				"isDefault": true

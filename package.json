@@ -1,6 +1,6 @@
 {
 	"name": "rpg-sage",
-	"version": "1.6.2",
+	"version": "1.6.3",
 	"description": "RPG Sage Bot",
 	"type": "module",
 	"main": "./build/app.mjs",
@@ -30,17 +30,17 @@
 	"contributors": [],
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/randaltmeyer/rpg-sage-legacy/issues",
+		"url": "https://github.com/randaltmeyer/rpg-sage/issues",
 		"email": "bugs@rpgsage.io"
 	},
-	"homepage": "https://github.com/randaltmeyer/rpg-sage-legacy#readme",
+	"homepage": "https://github.com/randaltmeyer/rpg-sage#readme",
 	"funding": {
 		"type": "patreon",
 		"url": "https://www.patreon.com/rpgsage"
 	},
-	"repository": "github:randaltmeyer/rpg-sage-legacy",
+	"repository": "github:randaltmeyer/rpg-sage",
 	"workspaces": [
-		"packages/utils/*"
+		"packages/*/*"
 	],
 	"devDependencies": {
 		"@types/follow-redirects": "^1.14.1",

@@ -1,11 +1,10 @@
 import { debug } from "@rsc-utils/console-utils";
 import { addCommas, nth } from "@rsc-utils/number-utils";
-import { capitalize } from "@rsc-utils/string-utils";
-import { Coins, PROFICIENCIES, TProficiency, Table } from "../../../sage-pf2e";
 import type { RenderableContent } from "@rsc-utils/render-utils";
-import type { SageMessage } from "../model/SageMessage";
-import { createCommandRenderableContent, registerCommandRegex } from "./cmd";
-import { registerCommandHelp } from "./help";
+import { capitalize } from "@rsc-utils/string-utils";
+import { Coins, PROFICIENCIES, TProficiency, Table } from "../../../sage-pf2e/index.js";
+import type { SageMessage } from "../model/SageMessage.js";
+import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
 
 // #region rpg.SpUtils
 async function spUtils(sageMessage: SageMessage): Promise<void> {
@@ -69,7 +68,7 @@ async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, 
 		proficiencyIndex = PROFICIENCIES.findIndex(prof => prof[0] === proficiencyLetter),
 		proficiency = PROFICIENCIES[proficiencyIndex];
 	let renderable: RenderableContent;
-	if (isNaN(taskLevel) || taskLevel < 0 || 20 < taskLevel) {
+	if (!taskLevelString.trim() || isNaN(taskLevel) || taskLevel < 0 || 20 < taskLevel) {
 		renderable = table.toRenderableContent();
 	} else {
 		const levelRow = table.rows[taskLevel + 1],
@@ -101,17 +100,7 @@ async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, 
 
 export function registerWealth(): void {
 	registerCommandRegex(/^((?:\s*[\-\+]?\s*\d+(?:,\d{3})*\s*[csgp]p)+)$/i, spUtils);
-	registerCommandHelp("Wealth", "Coin Counter", `{1pp} {2gp} {3sp} {4cp}\n{1pp} {-2gp} {+3sp} {-4cp}`);
-
 	registerCommandRegex(/^\s*(?:starting|character)\s*wealth\s*(\d+(?:st|nd|rd|th)?)?\s*$/i, startingWealth);
-	const CHARACTER_WEALTH = "Starting Wealth";
-	registerCommandHelp("Wealth", CHARACTER_WEALTH, `starting wealth`);
-	registerCommandHelp("Wealth", CHARACTER_WEALTH, `starting wealth {level}`);
-
 	registerCommandRegex(/^\s*income\s*earned\s*(\d{1,2})?\s*(trained|expert|master|legendary|t|e|m|l)?\s*$/i, incomeEarnedA);
 	registerCommandRegex(/^\s*income\s*earned\s*(trained|expert|master|legendary|t|e|m|l)\s*(\d{1,2})\s*$/i, incomeEarnedB);
-	const INCOME_EARNED = "Income Earned";
-	registerCommandHelp("Wealth", INCOME_EARNED, `income earned`);
-	registerCommandHelp("Wealth", INCOME_EARNED, `income earned {taskLevel}`);
-	registerCommandHelp("Wealth", INCOME_EARNED, `income earned {taskLevel} {proficiency}`);
 }

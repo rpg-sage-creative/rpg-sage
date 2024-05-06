@@ -1,62 +1,45 @@
-import { debug, error } from "@rsc-utils/console-utils";
+import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
+import { error } from "@rsc-utils/console-utils";
 import { rollDie } from "@rsc-utils/dice-utils";
-import { DiscordMaxValues, toHumanReadable, toMessageUrl, toRoleMention, toUserMention, type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
+import { type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
 import { addCommas } from "@rsc-utils/number-utils";
-import { chunk, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isNotBlank, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
+import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
 import type { Optional } from "@rsc-utils/type-utils";
-import type { ButtonInteraction, MessageEmbed } from "discord.js";
-import type { GameType } from "../../../sage-common";
-import { DiceOutputType, DiceSecretMethodType, TDiceOutput } from "../../../sage-dice";
-import { DiscordDice } from "../../../sage-dice/dice/discord";
-import { NEWLINE } from "../../../sage-pf2e";
-import type { TCommandAndArgsAndData } from "../../discord";
-import { createMessageEmbed } from "../../discord/embeds";
-import { registerMessageListener } from "../../discord/handlers";
-import { sendTo } from "../../discord/messages";
-import { CharacterManager } from "../model/CharacterManager";
-import type { CharacterShell } from "../model/CharacterShell";
-import { GameUserType } from "../model/Game";
-import { GameCharacter } from "../model/GameCharacter";
-import { ColorType } from "../model/HasColorsCore";
-import type { NamedCollection } from "../model/NamedCollection";
-import { SageInteraction } from "../model/SageInteraction";
-import { SageMessage } from "../model/SageMessage";
-import type { TMacro } from "../model/User";
-import { registerCommandRegex } from "./cmd";
-import { doMath } from "./dice/doMath";
-import { isMath } from "./dice/isMath";
-import { isRandomItem } from "./dice/isRandomItem";
-import { isTable } from "./dice/isTable";
-import { rollMath } from "./dice/rollMath";
-import { rollRandomItem } from "./dice/rollRandomItem";
-import { rollTable } from "./dice/rollTable";
-import { registerInlineHelp } from "./help";
-import type { EncounterManager } from "./trackers/encounter/EncounterManager";
+import type { ButtonInteraction } from "discord.js";
+import type { TDiceOutput } from "../../../sage-dice/common.js";
+import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
+import { registerMessageListener } from "../../discord/handlers.js";
+import { registerListeners } from "../../discord/handlers/registerListeners.js";
+import type { TCommandAndArgsAndData } from "../../discord/index.js";
+import { CharacterManager } from "../model/CharacterManager.js";
+import type { CharacterShell } from "../model/CharacterShell.js";
+import { GameCharacter } from "../model/GameCharacter.js";
+import type { NamedCollection } from "../model/NamedCollection.js";
+import { SageCommand } from "../model/SageCommand.js";
+import { SageInteraction } from "../model/SageInteraction.js";
+import { SageMessage } from "../model/SageMessage.js";
+import type { TMacro } from "../model/User.js";
+import { doStatMath } from "./dice/doStatMath.js";
+import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
+import { formatDiceOutput } from "./dice/formatDiceOutput.js";
+import { isMath } from "./dice/isMath.js";
+import { isRandomItem } from "./dice/isRandomItem.js";
+import { parseTable } from "./dice/parseTable.js";
+import { rollMath } from "./dice/rollMath.js";
+import { rollRandomItem } from "./dice/rollRandomItem.js";
+import { rollTable } from "./dice/rollTable.js";
+import { sendDiceToMultiple } from "./dice/sendDiceToMultiple.js";
+import { sendDiceToSingle } from "./dice/sendDiceToSingle.js";
+import type { EncounterManager } from "./trackers/encounter/EncounterManager.js";
 
 type TInteraction = SageMessage | SageInteraction;
 
 type TGmChannel = Optional<DMessageTarget>;
 
-// type TDiceOutput = {
-// 	hasSecret: boolean;
-// 	inlineOutput: string;
-// 	input: string,
-// 	output: string;
-// };
-
-export enum DicePostType { SinglePost = 0, SingleEmbed = 1, MultiplePosts = 2, MultipleEmbeds = 3 }
-// export enum DiceSecretMethodType { Ignore = 0, Hide = 1, GameMasterChannel = 2, GameMasterDirect = 3 }
-type TFormattedDiceOutput = {
-	hasSecret: boolean;
-	postContent?: string;
-	embedContent?: string;
-	notificationContent: string;
-};
-
 type TDiscordDiceParseOptions = {
-	gameType?: GameType;
+	gameSystemType?: GameSystemType;
 	diceOutputType?: DiceOutputType;
-	critMethodType?: number;
+	diceCritMethodType?: DiceCritMethodType;
 	diceSecretMethodType?: DiceSecretMethodType;
 };
 
@@ -128,18 +111,8 @@ function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[
 		return "`" + match + "`";
 	});
 
-	// check for piped "hidden" values
-	const hasPipes = (/\|{2}[^|]+\|{2}/).test(replaced);
-	const unpiped = replaced.replace(/\|{2}/g, "");
-	if (isMath(`[${unpiped}]`)) {
-		const value = doMath(unpiped);
-		if (value !== null) {
-			return hasPipes ? `||${value}||` : value;
-		}
-	}
-
-	// return updated value
-	return replaced;
+	// ensure any math is handled
+	return doStatMath(replaced);
 }
 function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): DiscordDice | null {
 	if (!diceString) {
@@ -161,50 +134,62 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 
 	return DiscordDice.parse({
 		diceString: diceString,
-		defaultGameType: overrides?.gameType ?? sageMessage.gameType,
+		defaultGameType: overrides?.gameSystemType ?? sageMessage.gameSystemType,
 		defaultDiceOutputType: overrides?.diceOutputType ?? sageMessage.diceOutputType,
-		defaultCritMethodType: overrides?.critMethodType ?? sageMessage.critMethodType,
+		defaultCritMethodType: overrides?.diceCritMethodType ?? sageMessage.diceCritMethodType,
 		defaultDiceSecretMethodType: overrides?.diceSecretMethodType ?? sageMessage.diceSecretMethodType
 	});
 }
 
-function parseDiscordMacro(sageMessage: TInteraction, macroString: string, macroStack: string[] = []): TDiceOutput[] | null {
-	if (!(sageMessage instanceof SageMessage)) return null;
+async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, macroStack: string[] = []): Promise<TDiceOutput[] | null> {
+	if (!sageCommand.isSageMessage()) {
+		return null;
+	}
 
-	const macroAndOutput = macroToDice(sageMessage.sageUser.macros, unwrap(macroString, "[]"));
+	const macroAndOutput = macroToDice(sageCommand.sageUser.macros, unwrap(macroString, "[]"));
 	if (macroAndOutput) {
 		const { macro, output } = macroAndOutput;
 		if (macroStack.includes(macro.name) && !isRandomItem(macroString)) {
 			error(`Macro Recursion`, { macroString, macroStack });
-			return parseDiscordDice(sageMessage, `[1d1 Recursion!]`)?.roll().toStrings() ?? [];
+			return parseDiscordDice(sageCommand, `[1d1 Recursion!]`)?.roll().toStrings() ?? [];
 		}
 
 		const diceToParse = output.match(BASE_REGEX) ?? [];
 
-		return diceToParse.map(dice => {
+		const outputs: TDiceOutput[] = [];
+		for (const dice of diceToParse) {
 			if (!isRandomItem(dice)) {
-				const diceMacro = parseDiscordMacro(sageMessage, dice, macroStack.concat([macro.name]));
-				if (diceMacro) {
-					return diceMacro;
+				const diceMacroOutputs = await parseDiscordMacro(sageCommand, dice, macroStack.concat([macro.name]));
+				if (diceMacroOutputs?.length) {
+					outputs.push(...diceMacroOutputs);
+					continue;
 				}
 			}
-			return parseMatch(sageMessage, dice, { diceOutputType: DiceOutputType.XXL });
-		}).flat();
+			const matchOutputs = await parseMatch(sageCommand, dice, { diceOutputType: DiceOutputType.XXL });
+			if (matchOutputs?.length) {
+				outputs.push(...matchOutputs);
+			}
+		}
+		return outputs;
 	}
 	return null;
 }
 
-function parseMatch(sageMessage: TInteraction, match: string, overrides?: TDiscordDiceParseOptions): TDiceOutput[] {
+async function parseMatch(sageMessage: TInteraction, match: string, overrides?: TDiscordDiceParseOptions): Promise<TDiceOutput[]> {
 	const noBraces = unwrap(match, "[]");
-	if (isTable(match)) {
-		const tableResults = rollTable(sageMessage, noBraces);
-		const tableResultsDice = tableResults[0]?.itemRolls?.map(rollText => wrap(unwrap(rollText, "[]"), "[]").match(BASE_REGEX) ?? []).flat() ?? [];
+
+	const table = await fetchTableFromUrl(match) ?? parseTable(match);
+	if (table) {
+		const tableResults = await rollTable(sageMessage, noBraces, table);
+		const childDice = tableResults[0]?.children?.map(child => wrap(unwrap(child, "[]"), "[]").match(BASE_REGEX) ?? []).flat() ?? [];
 		// debug({tableResults,tableResultsDice})
-		tableResultsDice.forEach(diceToParse => {
-			tableResults.push(...parseMatch(sageMessage, diceToParse, overrides).flat());
-		});
+		for (const diceToParse of childDice) {
+			const childMatches = await parseMatch(sageMessage, diceToParse, overrides);
+			tableResults.push(...childMatches.flat());
+		}
 		return tableResults;
 	}
+
 	const dice = parseDiscordDice(sageMessage, `[${noBraces}]`, overrides);
 	if (dice) {
 		// debug("dice", match);
@@ -221,7 +206,7 @@ function parseMatch(sageMessage: TInteraction, match: string, overrides?: TDisco
 	return [];
 }
 
-export function parseDiceMatches(sageMessage: TInteraction, content: string): TDiceMatch[] {
+export async function parseDiceMatches(sageMessage: TInteraction, content: string): Promise<TDiceMatch[]> {
 	const diceMatches: TDiceMatch[] = [];
 	const withoutCodeBlocks = redactCodeBlocks(content);
 	const regex = new RegExp(BASE_REGEX);
@@ -229,9 +214,9 @@ export function parseDiceMatches(sageMessage: TInteraction, content: string): TD
 	while (execArray = regex.exec(withoutCodeBlocks)) {
 		const match = execArray[0];
 		const index = execArray.index;
-		const inline = match.match(/^\[{2}/) && match.match(/\]{2}$/) ? true : false;
-		const output = parseDiscordMacro(sageMessage, content.slice(index, index + match.length))
-			?? parseMatch(sageMessage, content.slice(index, index + match.length));
+		const inline = isWrapped(match, "[[]]");
+		const output = await parseDiscordMacro(sageMessage, content.slice(index, index + match.length))
+			?? await parseMatch(sageMessage, content.slice(index, index + match.length));
 		if (output.length) {
 			diceMatches.push({ match, index, inline, output });
 		}
@@ -245,144 +230,22 @@ export function parseDiceMatches(sageMessage: TInteraction, content: string): TD
 
 async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TDiceOutput[]> | null> {
 	if (!sageMessage.allowDice) return null;
-	if (sageMessage.slicedContent.match(/^\!*\s*((add|set)[ \-]?macro|macro[ \-]?(add|set))/i)) {
+	if (sageMessage.slicedContent.match(/^!*\s*((add|set)[ -]?macro|macro[ -]?(add|set))/i)) {
 		return null;
 	}
-	if (sageMessage.slicedContent.match(/^\!*\s*((add|set)[ \-]?alias|alias[ \-]?(add|set))/i)) {
+	if (sageMessage.slicedContent.match(/^!*\s*((add|set)[ -]?alias|alias[ -]?(add|set))/i)) {
 		return null;
 	}
 	if (sageMessage.game && !(sageMessage.isGameMaster || sageMessage.isPlayer)) {
 		return null;
 	}
 
-	const matches = parseDiceMatches(sageMessage, sageMessage.slicedContent);
+	const matches = await parseDiceMatches(sageMessage, sageMessage.slicedContent);
 	if (matches.length > 0) {
 		const output = matches.map(m => m.output).flat();
 		return { command: "unified-dice", data: output };
 	}
 	return null;
-}
-
-async function sendDiceToMultiple(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: DMessageChannel, gmTargetChannel: TGmChannel): Promise<void> {
-	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0,
-		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
-		publicMentionLine = await createMentionLine(sageMessage),
-		secretMentionLine = await createMentionLine(sageMessage, true),
-		secretReferenceLink = sageMessage instanceof SageMessage ? toMessageUrl(sageMessage.message) : ``,
-		sageCache = sageMessage.caches;
-
-	let doGmMention = hasSecret && !!gmTargetChannel;
-	let doMention = !allSecret;
-
-	for (const formattedOutput of formattedOutputs) {
-		const embed = createEmbedOrNull(sageMessage, formattedOutput.embedContent);
-		const embeds = embed ? [embed] : [];
-		// figure out where to send results and info about secret rolls
-		if (formattedOutput.hasSecret && gmTargetChannel) {
-			// prepend the mention if we haven't done so yet; stop us from doing it again; send the message
-			const gmPostContent = doGmMention ? `${secretMentionLine}\n${formattedOutput.postContent}` : formattedOutput.postContent!;
-			doGmMention = false;
-			await sendTo({ target: gmTargetChannel, content: gmPostContent.trim(), embeds, sageCache });
-
-			if (!allSecret) {
-				// prepend the mention if we haven't done so yet; stop use from doing it again; send the message
-				const notificationContent = doMention ? `${publicMentionLine} ${secretReferenceLink}\n${formattedOutput.notificationContent}` : formattedOutput.notificationContent;
-				doMention = false;
-				await sendTo({ target: targetChannel, content: notificationContent.trim(), sageCache });
-			}
-		} else {
-			// prepend the mention if we haven't done so yet; stop use from doing it again; send the message
-			const postContent = doMention ? `${publicMentionLine}\n${formattedOutput.postContent}` : formattedOutput.postContent!;
-			doMention = false;
-			await sendTo({ target: targetChannel, content: postContent.trim(), embeds, sageCache });
-		}
-	}
-	if (allSecret && sageMessage instanceof SageMessage) {
-		await sageMessage.reactDie();
-	}
-}
-
-async function sendDiceToSingle(sageMessage: TInteraction, formattedOutputs: TFormattedDiceOutput[], targetChannel: DMessageChannel, gmTargetChannel: TGmChannel): Promise<void> {
-	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0,
-		allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length,
-		publicMentionLine = await createMentionLine(sageMessage),
-		secretMentionLine = await createMentionLine(sageMessage, true),
-		secretReferenceLink = sageMessage instanceof SageMessage ? toMessageUrl(sageMessage.message) : ``;
-
-	const gmPostContents: Optional<string>[] = [];
-	const gmEmbedContents: Optional<string>[] = [];
-	const mainPostContents: Optional<string>[] = [];
-	const mainEmbedContents: Optional<string>[] = [];
-
-	if (hasSecret && gmTargetChannel) {
-		gmPostContents.push(`${secretMentionLine} ${secretReferenceLink}`);
-	}
-	if (!allSecret) {
-		mainPostContents.push(publicMentionLine);
-	}
-
-	for (const formattedOutput of formattedOutputs) {
-		// figure out where to send results and info about secret rolls
-		if (formattedOutput.hasSecret && gmTargetChannel) {
-			gmPostContents.push(formattedOutput.postContent);
-			gmEmbedContents.push(formattedOutput.embedContent);
-			if (!allSecret) {
-				mainPostContents.push(formattedOutput.notificationContent);
-			}
-		} else {
-			mainPostContents.push(formattedOutput.postContent);
-			mainEmbedContents.push(formattedOutput.embedContent);
-		}
-	}
-
-	const gmPostContent = gmPostContents.filter(isNotBlank).join(NEWLINE);
-	const gmEmbedContent = gmEmbedContents.filter(isNotBlank).join(NEWLINE);
-	if (gmPostContent || gmEmbedContent) {
-		if (gmTargetChannel) {
-			await _sendTo(sageMessage, gmTargetChannel, gmPostContent, gmEmbedContent);
-		}else {
-			debug("no gmTargetChannel!");
-		}
-	}
-
-	const mainPostContent = mainPostContents.filter(isNotBlank).join(NEWLINE);
-	const mainEmbedContent = mainEmbedContents.filter(isNotBlank).join(NEWLINE);
-	if (mainPostContent || mainEmbedContent) {
-		if (targetChannel) {
-			await _sendTo(sageMessage, targetChannel, mainPostContent, mainEmbedContent);
-		}else {
-			debug("no targetChannel!");
-		}
-	}
-
-	if (allSecret && sageMessage instanceof SageMessage) {
-		await sageMessage.reactDie();
-	}
-}
-
-function createDiceOutputEmbeds(sageMessage: TInteraction, embedContent?: string): MessageEmbed[] {
-	if (embedContent) {
-		const chunks = chunk(embedContent, DiscordMaxValues.embed.totalLength);
-		return chunks.map(chunk => createMessageEmbed("", chunk, sageMessage.toDiscordColor(ColorType.Dice)));
-	}
-	return [];
-}
-
-async function _sendTo(sageMessage: TInteraction, target: DMessageTarget, postContent: string, embedContent: string): Promise<void> {
-	const sageCache = sageMessage.caches;
-	const _embeds = createDiceOutputEmbeds(sageMessage, embedContent);
-	const _chunks = chunk(postContent, DiscordMaxValues.message.contentLength);
-	while (_chunks.length) {
-		// if last chunk and we have embeds, grab the first embed
-		const embeds = _chunks.length === 1 && _embeds.length > 0 ? [_embeds.shift()!] : [];
-		const content = _chunks.shift();
-		await sendTo({ target, content, embeds, sageCache });
-	}
-	for (const embed of _embeds) {
-		const embeds = [embed];
-		const content = "";
-		await sendTo({ target, content, embeds, sageCache });
-	}
 }
 
 type TSendDiceResults = {
@@ -417,77 +280,6 @@ export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]
 
 //#region dice
 
-//#region Message
-
-function formatDiceOutput(sageMessage: TInteraction, diceRoll: TDiceOutput, noGmTargetChannel: boolean): TFormattedDiceOutput {
-	const formatted = sageMessage.caches.format(diceRoll.output),
-		output = diceRoll.hasSecret && (sageMessage.diceSecretMethodType === DiceSecretMethodType.Hide || noGmTargetChannel) ? `||${formatted}||` : formatted,
-		isEmbed = sageMessage.dicePostType === DicePostType.SingleEmbed || sageMessage.dicePostType === DicePostType.MultipleEmbeds
-		;
-	return {
-		hasSecret: diceRoll.hasSecret,
-		postContent: isEmbed ? undefined : output,
-		embedContent: isEmbed ? output : undefined,
-		notificationContent: sageMessage.caches.format(`${diceRoll.input} [die]`)
-	};
-}
-
-function createEmbedOrNull(sageMessage: TInteraction, embedContent?: string): MessageEmbed | null {
-	return embedContent ? createMessageEmbed("", embedContent, sageMessage.toDiscordColor(ColorType.Dice)) : null;
-}
-
-//#endregion
-
-//#region Mentions
-
-function createGmMention(sageMessage: TInteraction): string {
-	const game = sageMessage.game;
-	if (!game) {
-		return "";
-	}
-
-	const gmRole = game.gmRole;
-	if (gmRole) {
-		return gmRole.dicePing ? toRoleMention(gmRole.did) ?? "" : "";
-	}
-
-	const gameUser = game.users.find(user => user.type === GameUserType.GameMaster && user.dicePing !== false);
-	return toUserMention(gameUser?.did) ?? "";
-}
-
-async function createAuthorMention(sageMessage: TInteraction, isSecretMention = false): Promise<string | null> {
-	const userDid = sageMessage instanceof SageMessage ? sageMessage.authorDid : sageMessage.user.id;
-	const gameUser = sageMessage.game?.getUser(userDid);
-	if (!gameUser) {
-		return toUserMention(userDid);
-	}
-
-	let authorReference = toUserMention(gameUser.did);
-	if (isSecretMention || gameUser.dicePing === false) {
-		const user = await sageMessage.discord.fetchUser(userDid);
-		authorReference = toHumanReadable(user);
-	}
-	if (sageMessage.playerCharacter) {
-		authorReference = authorReference
-			? `${authorReference} (${sageMessage.playerCharacter.name})`
-			: sageMessage.playerCharacter.name;
-	}
-	return authorReference;
-}
-
-async function createMentionLine(sageMessage: TInteraction, isSecretMention = false/*, hasSecret:boolean, isTargetChannel: boolean, isGmChannel: boolean, isGmUser: boolean*/): Promise<string | null> {
-	const gmMention = createGmMention(sageMessage);
-	if (sageMessage.isGameMaster) {
-		return gmMention;
-	}
-	const authorMention = await createAuthorMention(sageMessage, isSecretMention);
-	if (gmMention) {
-		return `${gmMention}, ${authorMention}`;
-	}
-	return authorMention;
-}
-
-//#endregion
 
 //#region Channels
 
@@ -695,15 +487,13 @@ async function diceTest(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	const pairs = sageMessage.args.keyValuePairs(),
-		filtered = pairs.filter(pair => ["die", "sides", "type"].includes(pair.key.toLowerCase())),
-		pair = filtered.shift() ?? { key:sageMessage.args[0], value:+dequote(sageMessage.args[1]) };
-	if (!pair?.value) {
+	const dieValue = sageMessage.args.getString("die") ?? sageMessage.args.getString("sides") ?? sageMessage.args.getString("type");
+	if (!dieValue) {
 		await sageMessage.message.reply("*Die type not given!*");
 		return;
 	}
 
-	const dieSize = +pair.value;
+	const dieSize = +dieValue.replace(/\D/g, "");
 	if (![2,3,4,6,8,10,12,20].includes(dieSize)) {
 		await sageMessage.message.reply("*Die type not valid! (2, 3, 4, 6, 8, 10, 12, 20)*");
 		return;
@@ -875,48 +665,6 @@ function mapDiceTestResults({ dieSize, iterations, rolls }: { dieSize: number; i
 //#endregion
 
 export function registerDice(): void {
-	registerCommandRegex(/dice test (die|size)=("d?\d+"|\d+)/i, diceTest);
+	registerListeners({ commands:["dice|test"], message:diceTest });
 	registerMessageListener(hasUnifiedDiceCommand, sendDice as any, { priorityIndex:1 });
-
-	registerInlineHelp("Dice", "Basic",
-		`[1d20]`
-		+ `\n[1d20 + 5] *(modifiers)*`
-		+ `\n[1d20 prof + 5 str] *(descriptions)*`
-		+ `\n`
-		+ `\n__Tests__`
-		+ `\n[1d20 >= 10] *(<, <=, >, >=, =)*`
-		+ `\n[1d20 gteq 10] *(lt, lteq, gt, gteq, eq)*`
-		+ `\n - *to avoid keyboard switching on mobile*`
-		+ `\n`
-		+ `\n__Types vs Sets__`
-		+ `\n[1d8 + 1d4] *(added together)*`
-		+ `\n[1d20 attack; 1d8 damage] *(rolled separately)*`
-		+ `\n`
-		+ `\n__Sets w/ Tests__`
-		+ `\n[1d20 > 10 attack; 1d8 damage]`
-		+ `\n - *only rolls second set if the first is successful*`
-		+ `\n`
-		+ `\n__Drop / Keep / NoSort__`
-		+ `\n[3d6ns] *(no sort)*`
-		+ `\n[4d6dl] *(drop lowest 1)*`
-		+ `\n[5d6dl2] *(drop lowest X)*`
-		+ `\n[6d6kh] *(keep highest 1)*`
-		+ `\n[7d6kh3] *(keep highest X)*`
-		+ `\n`
-		+ `\n__Output Size Override__`
-		+ `\n[xxs 1d20 + 5 attack; 1d8 + 1d6 + 1 damage]`
-		+ `\n - *(xxs, xs, s, m, l, xl, xxl; default: m)*`
-		+ `\n`
-		+ `\n__Game Override__`
-		+ `\n[pf2e 1d20 + 5 attack ac 10; 1d8 + 1d6 + 1 damage]`
-		+ `\n - *(pf2e, quest; more to be added)*`
-	);
-
-	registerInlineHelp("Dice", "PF2e",
-		`[1d20 ac 10] *(ac acts as >=)*`
-		+ `\n[1d20 dc 10] *(dc acts as >=)*`
-		+ `\n[1d20 vs 10] *(vs acts as >=)*`
-	);
-
-	registerInlineHelp("Dice", "Macro", "*see Macro help* `!help macro`");
 }

@@ -4,17 +4,19 @@ import { DiscordKey, type DInteraction, type DMessage, type DMessageChannel, typ
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Client, GuildMember } from "discord.js";
-import { DiscordCache } from "../../discord";
-import { isDeleted } from "../../discord/deletedMessages";
-import { ActiveBot } from "../model/ActiveBot";
-import { BotRepo } from "../repo/BotRepo";
-import { GameRepo } from "../repo/GameRepo";
-import { ServerRepo } from "../repo/ServerRepo";
-import { UserRepo } from "../repo/UserRepo";
-import type { Bot } from "./Bot";
-import type { Game } from "./Game";
-import type { Server } from "./Server";
-import type { User } from "./User";
+import { DiscordCache } from "../../discord/DiscordCache.js";
+import { isDeleted } from "../../discord/deletedMessages.js";
+import { ActiveBot } from "../model/ActiveBot.js";
+import { BotRepo } from "../repo/BotRepo.js";
+import { GameRepo } from "../repo/GameRepo.js";
+import { ServerRepo } from "../repo/ServerRepo.js";
+import { UserRepo } from "../repo/UserRepo.js";
+import type { Bot } from "./Bot.js";
+import type { Game } from "./Game.js";
+import type { Server } from "./Server.js";
+import type { User } from "./User.js";
+import { getTupperBoxId } from "@rsc-utils/env-utils";
+import { getPermsFor } from "../../discord/permissions/getPermsFor.js";
 
 export type TSageCacheCore = {
 	discord: DiscordCache;
@@ -44,20 +46,14 @@ function createCoreAndCache(): [TSageCacheCore, SageCache] {
 	return [core, sageCache];
 }
 
-export async function canSendMessageTo(channel: DMessageChannel): Promise<boolean> {
+function canSendMessageTo(channel: DMessageChannel): boolean {
 	if (!channel.isText()) {
 		return false;
 	}
-	if (channel.type !== "DM") {
-		const perms = channel.permissionsFor(ActiveBot.active.did);
-		if (perms) {
-			if (channel.isThread()) {
-				return perms.has("SEND_MESSAGES_IN_THREADS") ?? false;
-			}
-			return perms.has("SEND_MESSAGES") ?? false;
-		}
+	if (channel.type === "DM") {
+		return true;
 	}
-	return true;
+	return getPermsFor(channel).canSendMessages;
 }
 
 // type TMeta = {
@@ -87,11 +83,8 @@ export class SageCache {
 				this.canSendMessageToMap.set(key, true);
 			}else {
 				const { thread, channel } = await this.discord.fetchChannelAndThread(discordKey);
-				const botUser = await this.discord.fetchUser(ActiveBot.active.did);
-				if (botUser && channel) {
-					const sendPerm = thread ? "SEND_MESSAGES_IN_THREADS" : "SEND_MESSAGES";
-					const perms = thread?.permissionsFor(botUser) ?? channel?.permissionsFor(botUser);
-					this.canSendMessageToMap.set(key, perms?.has(sendPerm) ?? true);
+				if (channel) {
+					this.canSendMessageToMap.set(key, canSendMessageTo(thread ?? channel));
 				}else {
 					this.canSendMessageToMap.set(key, false);
 				}
@@ -99,35 +92,33 @@ export class SageCache {
 		}
 		return this.canSendMessageToMap.get(key)!;
 	}
+	public canSendMessageToChannel(channel: DMessageChannel): Promise<boolean> {
+		return this.canSendMessageTo(DiscordKey.fromChannel(channel));
+	}
 
 	private hasTupperMap = new Map<string, boolean>();
 	public async hasTupper(discordKey: DiscordKey): Promise<boolean> {
+		if (!discordKey.hasServer) {
+			return false;
+		}
+
+		// check the server before checking/fetching channels
+		if (!this.hasTupperMap.has(discordKey.server)) {
+			const guild = await this.discord.fetchGuild(discordKey.server);
+			const isInGuild = guild?.members.cache.has(getTupperBoxId()) === true;
+			this.hasTupperMap.set(discordKey.server, isInGuild);
+		}
+		if (this.hasTupperMap.get(discordKey.server) === false) {
+			return false;
+		}
+
 		const key = discordKey.key;
 		if (!this.hasTupperMap.has(key)) {
-			this.hasTupperMap.set(key, await _hasTupper(this, discordKey).catch(errorReturnFalse));
+			const { thread, channel } = await this.discord.fetchChannelAndThread(discordKey);
+			const isInChannel = channel ? getPermsFor(thread ?? channel, getTupperBoxId()).isInChannel : false;
+			this.hasTupperMap.set(key, isInChannel);
 		}
 		return this.hasTupperMap.get(key) ?? false;
-
-		async function _hasTupper(sageCache: SageCache, discordKey: DiscordKey): Promise<boolean> {
-			if (!discordKey.hasServer) return false;
-
-			const tupperId = "431544605209788416";
-
-			const guild = await sageCache.discord.fetchGuild(discordKey.server);
-			if (!guild) return false;
-			if (!guild.members.cache.has(tupperId)) return false;
-
-			// const tupper = await sageCache.discord.fetchGuildMember(tupperId);
-			// // debug({tupperId,tupper:!!tupper});
-			// if (!tupper) return false;
-
-			const { thread, channel } = await sageCache.discord.fetchChannelAndThread(discordKey);
-			// debug({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId)});
-			if (thread?.guildMembers.has(tupperId)) return true;
-
-			// debug({tupperId,tupper:!!tupper,threadId:discordKey.thread,thread:!!thread?.guildMembers.has(tupperId),channelId:discordKey.channel,channel:!!channel?.members.has(tupperId)});
-			return channel?.members.has(tupperId) === true;
-		}
 	}
 
 	public async pauseForTupper(discordKey: DiscordKey): Promise<void> {
@@ -154,13 +145,9 @@ export class SageCache {
 				return true;
 			}else {
 				const { thread, channel } = await sageCache.discord.fetchChannelAndThread(discordKey);
-				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
-				const botUser = await sageCache.discord.fetchUser(ActiveBot.active.did);
-				if (isDeleted(discordKey.message)) return false; // keep checking before and after each fetch
-				if (botUser && channel) {
-					const reactPerm = "ADD_REACTIONS";
-					const perms = thread?.permissionsFor(botUser) ?? channel?.permissionsFor(botUser);
-					return perms?.has(reactPerm) ?? true;
+				if (isDeleted(discordKey.message)) return false; // check deleted messages just in case
+				if (channel) {
+					return getPermsFor(thread ?? channel).canAddReactions;
 				}else {
 					return false;
 				}
@@ -176,12 +163,9 @@ export class SageCache {
 				this.canWebhookToMap.set(key, false);
 			}else {
 				const { thread, channel } = await this.discord.fetchChannelAndThread(discordKey);
-				const botUser = await this.discord.fetchUser(ActiveBot.active.did);
-				if (botUser && channel) {
-					const sendPerm = thread ? "SEND_MESSAGES_IN_THREADS" : "SEND_MESSAGES";
-					const hookPerm = "MANAGE_WEBHOOKS";
-					const perms = channel?.permissionsFor(ActiveBot.active.did);
-					this.canWebhookToMap.set(key, (perms?.has(sendPerm) ?? true) && (perms?.has(hookPerm) ?? true));
+				if (channel) {
+					const { canManageWebhooks, canSendMessages } = getPermsFor(thread ?? channel);
+					this.canWebhookToMap.set(key, canManageWebhooks && canSendMessages);
 				}else {
 					this.canWebhookToMap.set(key, false);
 				}

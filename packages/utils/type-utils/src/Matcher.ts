@@ -1,4 +1,4 @@
-import { Optional } from "./generics.js";
+import type { Optional } from "./generics.js";
 
 /** Convenience type for Optional<string> | TMatcher */
 export type MatcherResolvable<Type extends string = string> = Optional<Type> | Matcher<Type>;

@@ -1,17 +1,17 @@
 import { toUniqueDefined } from "@rsc-utils/array-utils";
-import { error } from "@rsc-utils/console-utils";
-import { getText } from "@rsc-utils/https-utils";
+import { isUrl } from "@rsc-utils/https-utils";
 import { StringMatcher, unwrap, wrap } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { discordPromptYesNo } from "../../../../discord/prompts";
-import type { SageMessage } from "../../../model/SageMessage";
-import type { TMacro } from "../../../model/User";
-import { createAdminRenderableContent, registerAdminCommand } from "../../cmd";
-import { isGoogleSheetTsvUrl } from "../../dice/isGoogleSheetTsvUrl";
-import { isMath } from "../../dice/isMath";
-import { isRandomItem } from "../../dice/isRandomItem";
-import { isTable } from "../../dice/isTable";
-import { registerAdminCommandHelp } from "../../help";
+import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
+import { discordPromptYesNo } from "../../../../discord/prompts.js";
+import { SageCommand } from "../../../model/SageCommand.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import type { TMacro } from "../../../model/User.js";
+import { createAdminRenderableContent } from "../../cmd.js";
+import { fetchTableFromUrl } from "../../dice/fetchTableFromUrl.js";
+import { isMath } from "../../dice/isMath.js";
+import { isRandomItem } from "../../dice/isRandomItem.js";
+import { parseTable } from "../../dice/parseTable.js";
 
 const UNCATEGORIZED = "Uncategorized";
 
@@ -50,7 +50,7 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 		return noMacrosFound(sageMessage);
 	}
 
-	const categoryInput = sageMessage.args.removeKeyValuePair(/cat(egory)?/i)?.value ?? sageMessage.args[0] ?? "";
+	const categoryInput = sageMessage.args.getString("cat") ?? sageMessage.args.getString("category") ?? "";
 	const cleanCategory = StringMatcher.clean(categoryInput);
 	const filtered = macros.filter(macro => macro.category && cleanCategory === StringMatcher.clean(macro.category));
 	if (filtered.length) {
@@ -81,23 +81,24 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 
 function _macroToPrompt(macro: TMacro, usage: boolean, warning: boolean): string {
 	let parts: string[];
-	if (isGoogleSheetTsvUrl(macro.dice)) {
+	const unwrapped = unwrap(macro.dice, "[]");
+	if (isUrl(unwrapped)) {
 		parts = [
 			`\n> **Name:** ${macro.name}`,
 			`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
-			`\n> **Table Url:** \`${unwrap(macro.dice, "[]")}\``
+			`\n> **Table Url:** \`${unwrapped}\``
 		];
-	}else if (isTable(macro.dice)) {
+	}else if (parseTable(macro.dice)) {
 		parts = [
 			`\n> **Name:** ${macro.name}`,
 			`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
-			`\n> **Table:** \`\`\`${unwrap(macro.dice, "[]").replace(/\n/g, "\n> ")}\`\`\``
+			`\n> **Table:** \`\`\`${unwrapped.replace(/\n/g, "\n> ")}\`\`\``
 		];
 	}else if (isRandomItem(macro.dice)) {
 		parts = [
 			`\n> **Name:** ${macro.name}`,
 			`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
-			`\n> **Items:** \n${unwrap(macro.dice, "[]").split(",").map(item => `> - ${item}`).join("\n")}`
+			`\n> **Items:** \n${unwrapped.split(",").map(item => `> - ${item}`).join("\n")}`
 		];
 	}else {
 		const _isMath = isMath(macro.dice);
@@ -158,22 +159,39 @@ async function macroUpdate(sageMessage: SageMessage, existing: TMacro, updated: 
 	}
 	return false;
 }
+function pair(sageComand: SageCommand, ...keys: string[]): { key:string; value:string; } | undefined | null {
+	for (const key of keys) {
+		const value = sageComand.args.getString(key);
+		if (value) return { key, value };
+	}
+	return undefined;
+}
 async function macroSet(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
 		return sageMessage.reactBlock();
 	}
 
-	const namePair = sageMessage.args.removeKeyValuePair("name");
-	const categoryPair = sageMessage.args.removeKeyValuePair(/cat(egory)?/i);
-	const contentPair = sageMessage.args.removeKeyValuePair(/dice|macro|value|table/i);
+	const namePair = pair(sageMessage, "name");
+	const categoryPair = pair(sageMessage, "cat", "category");
+	const contentPair = pair(sageMessage, "dice", "macro", "value", "table");
+
+	// check the table value specifically to ensure we have a valid table before saving the macro
 	if (contentPair?.key === "table") {
-		let tableValue = unwrap(contentPair.value ?? "", "[]");
-		if (isGoogleSheetTsvUrl(tableValue)) {
-			tableValue = await getText(tableValue).catch(error) ?? "";
-		}
-		if (!isTable(tableValue)) {
+		const tableValue = unwrap(contentPair.value ?? "", "[]");
+
+		// fetch and parse a url
+		if (isUrl(tableValue)) {
+			const table = await fetchTableFromUrl(tableValue);
+			if (!table) {
+				return sageMessage.reactFailure("Invalid Table Data");
+			}
+
+		// validate manually entered tables
+		}else if (!parseTable(tableValue)) {
 			return sageMessage.reactFailure("Invalid Table Data");
 		}
+
+		// wrap the value to pass the following diceMatch test (requires being wrapped in [])
 		contentPair.value = wrap(tableValue, "[]");
 	}
 
@@ -206,8 +224,8 @@ async function macroMove(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const categoryPair = sageMessage.args.removeKeyValuePair(/cat(egory)?/i);
-	const macroName = sageMessage.args.removeAndReturnName(true);
+	const categoryPair = pair(sageMessage, "cat", "category");
+	const macroName = sageMessage.args.getString("name");
 	if (!macroName || !categoryPair) {
 		return sageMessage.reactFailure();
 	}
@@ -271,7 +289,7 @@ async function macroDeleteCategory(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const category = sageMessage.args.removeKeyValuePair(/cat(egory)?/i)?.value ?? sageMessage.args[0];
+	const category = sageMessage.args.getString("cat") ?? sageMessage.args.getString("category") ?? sageMessage.args.toArray()[0];
 	if (category) {
 		return deleteCategory(sageMessage, category);
 	}
@@ -313,8 +331,8 @@ async function macroDelete(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const macroCategory = sageMessage.args.removeKeyValuePair(/cat(egory)?/i)?.value;
-	const macroName = sageMessage.args.removeAndReturnName(true);
+	const macroCategory = sageMessage.args.getString("category") ?? sageMessage.args.getString("cat");
+	const macroName = sageMessage.args.getString("name");
 	if (macroCategory) {
 		if (!macroName) {
 			return deleteCategory(sageMessage, macroCategory);
@@ -329,32 +347,11 @@ async function macroDelete(sageMessage: SageMessage): Promise<void> {
 }
 
 export function registerMacro(): void {
-	registerAdminCommand(macroList, "macro-list");
-
-	registerAdminCommand(macroSet, "macro-set", "macro-add");
-
-	registerAdminCommand(macroMove, "macro-move");
-
-	registerAdminCommand(macroDetails, "macro-details");
-
-	registerAdminCommand(macroDeleteAll, "macro-delete-all");
-	registerAdminCommand(macroDelete, "macro-delete", "macro-unset", "macro-remove");
-	registerAdminCommand(macroDeleteCategory, "macro-delete-category");
-
-
-	registerAdminCommandHelp("Macro", "Delete", `macro delete all`);
-	registerAdminCommandHelp("Macro", "Delete", `macro delete name="NAME"`);
-	registerAdminCommandHelp("Macro", "Delete", `macro delete category="CATEGORY"`);
-
-	registerAdminCommandHelp("Macro", "Details", `macro details name="NAME"`);
-
-	registerAdminCommandHelp("Macro", "List", "macro list");
-	registerAdminCommandHelp("Macro", "List", `macro list category="CATEGORY"`);
-
-	registerAdminCommandHelp("Macro", "Move", `macro move name="NAME" category="CATEGORY"`);
-
-	registerAdminCommandHelp("Macro", "Set", `macro set name="NAME"  [DICE]`);
-	registerAdminCommandHelp("Macro", "Set", `macro set name="NAME"  dice="[DICE]"`);
-	registerAdminCommandHelp("Macro", "Set", `macro set name="NAME" category="CATEGORY" [DICE]`);
-	registerAdminCommandHelp("Macro", "Set", `macro set name="NAME" category="CATEGORY" dice="[DICE]"`);
+	registerListeners({ commands:["macro|list"], message:macroList });
+	registerListeners({ commands:["macro|add", "macro|create", "macro|set"], message:macroSet });
+	registerListeners({ commands:["macro|move"], message:macroMove });
+	registerListeners({ commands:["macro|details"], message:macroDetails });
+	registerListeners({ commands:["macro|delete|all"], message:macroDeleteAll });
+	registerListeners({ commands:["macro|delete|category"], message:macroDeleteCategory });
+	registerListeners({ commands:["macro|remove", "macro|delete", "macro|unset"], message:macroDelete });
 }

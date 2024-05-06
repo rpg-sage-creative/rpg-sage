@@ -1,26 +1,11 @@
+import { splitChars } from "./splitChars.js";
 
-/** Returns the characters wrapping the content (if parentheses, brackets, or braces) or false. */
-export function isWrapped(input: string): string | false;
-
-/** Returns the given chars if it is wrapping the content. Retruns false otherwise. */
-export function isWrapped(input: string, chars: "[]"): string | false;
-
-/** Returns the given chars if it is wrapping the content. Retruns false otherwise. */
-export function isWrapped(input: string, chars: "{}"): string | false;
-
-/** Returns the given chars if it is wrapping the content. Retruns false otherwise. */
-export function isWrapped(input: string, chars: "()"): string | false;
-
-/** Returns the given chars if it is wrapping the content. Retruns false otherwise. */
-export function isWrapped(input: string, chars: string): string | false;
-
-export function isWrapped(input: string, chars?: string): string | false {
-	const checks: string[] = [];
-	if (chars?.length === 2) {
-		checks.push(chars);
-	}
-	if (!checks.length) {
-		checks.push("[]", "{}", "()");
-	}
-	return checks.find(([l, r]) => input.startsWith(l) && input.endsWith(r)) ?? false;
+/**
+ * Returns true if the input has characters wrapped by the given characters, false otherwise.
+ * If the chars argument is even, then they are split and used as left/right.
+ * If the chars argument is odd, then they are uesd as left and then they are reversed and used as right.
+ */
+export function isWrapped(input: string, chars: string): boolean {
+	const { left, right } = splitChars(chars);
+	return input.length > left.length + right.length && input.startsWith(left) && input.endsWith(right);
 }

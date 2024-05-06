@@ -1,15 +1,43 @@
 import { ArgsManager as _ArgsManager } from "@rsc-utils/args-utils";
-import { TokenParsers, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, parseKeyValueArg, tokenize } from "@rsc-utils/string-utils";
-import { isNullOrUndefined } from "@rsc-utils/type-utils";
+import { KeyValueArg, TokenParsers, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, parseKeyValueArg, tokenize } from "@rsc-utils/string-utils";
+import { Optional, OrUndefined, isNullOrUndefined } from "@rsc-utils/type-utils";
 
-export class ArgsManager extends _ArgsManager<string> {
+type TArgIndexRet<T> = {
+	arg: string;
+	index: number;
+	ret: T | null
+};
+type TArgAndIndex = TArgIndexRet<any>;
+
+export class ArgsManager<T extends string = string> extends _ArgsManager<T> {
 	public constructor(private argsManagerInitialInput: string | ArrayLike<string> | Iterable<string>) {
-		super(...ArgsManager.tokenize(argsManagerInitialInput));
+		super(...ArgsManager.tokenize(argsManagerInitialInput) as T[]);
 	}
 
-	public static from<T>(arrayLike: ArrayLike<T> | Iterable<T>): ArgsManager;
-	public static from(other: ArgsManager): ArgsManager;
-	public static from<T>(other: ArrayLike<T> | Iterable<T> | ArgsManager): ArgsManager {
+	//#region overrides to make things public ahead of rewrite
+	public async asyncFindArgIndexRet<U>(predicate: (value: T, index: number, obj: T[]) => Promise<U>, thisArg?: any): Promise<OrUndefined<TArgIndexRet<U>>> {
+		return super.asyncFindArgIndexRet(predicate, thisArg);
+	}
+	public removeByArgAndIndex(...withIndexes: TArgAndIndex[]): void {
+		return super.removeByArgAndIndex(...withIndexes);
+	}
+	public findArgIndexNonArgs(): TArgIndexRet<string>[] {
+		return super.findArgIndexNonArgs();
+	}
+	public removeAndReturnNonArgs(): TArgIndexRet<string>[] {
+		return super.removeAndReturnNonArgs();
+	}
+	public removeByKey(key: string): Optional<string> {
+		return super.removeByKey(key);
+	}
+	public findKeyValueArgIndex(key: string): OrUndefined<TArgIndexRet<KeyValueArg>> {
+		return super.findKeyValueArgIndex(key);
+	}
+	//#endregion
+
+	public static from<T extends string = string>(arrayLike: ArrayLike<T> | Iterable<T>): ArgsManager<T>;
+	public static from(other: ArgsManager<string>): ArgsManager<string>;
+	public static from<T extends string = string>(other: ArrayLike<T> | Iterable<T> | ArgsManager): ArgsManager {
 		// TODO: Decide if I really want to recreate it from scratch after I might have removed values for a reason ...
 		if (other && "argsManagerInitialInput" in other) {
 			return new ArgsManager(other.argsManagerInitialInput);

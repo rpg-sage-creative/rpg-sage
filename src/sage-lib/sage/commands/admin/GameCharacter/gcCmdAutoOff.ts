@@ -22,21 +22,31 @@ export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 	if (characterTypeMeta.isGm) {
 		name = sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName;
 	}
+
 	let character = await getCharacter(sageMessage, characterTypeMeta, sageMessage.sageUser.did, { name });
 	if (!character && characterTypeMeta.isPc) {
 		character = sageMessage.playerCharacter;
 	}
 
-	if (character) {
-		const channelLinks = channelDids.map(channelDid => toChannelMention(channelDid));
-		const prompt = channelDids.length > 1 || channelDids[0] !== sageMessage.channelDid
+	if (!character) {
+		return sendNotFound(sageMessage, `${characterTypeMeta.commandDescriptor}-auto-off`, characterTypeMeta.singularDescriptor!, name);
+	}
+
+	const autoChannelDids = channelDids.filter(did => character?.autoChannels.find(channel => channel.channelDid === did));
+	if (autoChannelDids.length) {
+		const channelLinks = autoChannelDids.map(channelDid => toChannelMention(channelDid));
+		const prompt = autoChannelDids.length > 1 || autoChannelDids[0] !== sageMessage.channelDid
 			? `Stop using Auto Dialog with ${character.name} for the given channel(s)?\n> ${channelLinks.join("\n> ")}`
 			: `Stop using Auto Dialog with ${character.name}?`;
 
 		return promptCharConfirm(sageMessage, character, prompt, async char => {
-			await removeAuto(sageMessage, ...channelDids);
+			await removeAuto(sageMessage, ...autoChannelDids);
 			return char.save();
 		});
 	}
-	return sendNotFound(sageMessage, `${characterTypeMeta.commandDescriptor}-auto-off`, characterTypeMeta.singularDescriptor!, name);
+
+	const label = channelDids.length > 1 ? "those channels" : "that channel";
+	await sageMessage.whisper(`You aren't using Auto Dialog with ${character.name} in ${label}.`);
+
+	/** @todo change auto to be a command where i list ganme channels and autos for them and provide dropdown selects of characters for each channel to make your selections */
 }

@@ -1,7 +1,8 @@
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import type { GuildMember } from "discord.js";
+import type { GuildMember, Webhook } from "discord.js";
 import type { DChannel, DForumChannel, DMessage, DUser } from "./types.js";
+import { APIUser } from "discord-api-types/v9.js";
 
 function channelToName(channel: Optional<DChannel | DForumChannel>): string | null {
 	if (channel) {
@@ -27,7 +28,7 @@ function messageToChannelName(message: DMessage): string {
 	}
 }
 
-function userToMention(user: Optional<DUser>): string {
+function userToMention(user: Optional<DUser | APIUser>): string {
 	if (user) {
 		if ("displayName" in user && user.displayName) {
 			return `@${ZERO_WIDTH_SPACE}${user.displayName}`;
@@ -48,7 +49,20 @@ function memberToMention(member: Optional<GuildMember>): string {
 	return "@UnknownMember";
 }
 
-type Target = DChannel | DForumChannel | DMessage | DUser | GuildMember;
+function webhookToName(webhook: Optional<Webhook>): string {
+	if (webhook) {
+		if (webhook.sourceGuild) {
+			return `${webhook.sourceGuild.name}$${webhook.name}`;
+		}
+		if (webhook.owner) {
+			return `${userToMention(webhook.owner)}$${webhook.name}`;
+		}
+		return `$${webhook.name}`;
+	}
+	return "$UnknownWebhook";
+}
+
+type Target = DChannel | DForumChannel | DMessage | DUser | GuildMember | Webhook;
 
 /**
  * Returns a string that represents the Discord object in a meaningful way.
@@ -59,6 +73,9 @@ export function toHumanReadable<T extends Target>(target: T): string;
 export function toHumanReadable<T extends Target>(target: Optional<T>): string | null;
 export function toHumanReadable<T extends Target>(target: Optional<T>): string | null {
 	if (target) {
+		if ("token" in target) {
+			return webhookToName(target);
+		}
 		if ("createDM" in target) {
 			if ("user" in target) {
 				return memberToMention(target);

@@ -10,7 +10,7 @@ function getJson(...args) {
 module.exports = {
 	apps: [
 		{
-			name: `sage-legacy-mono`,
+			name: `sage-mono`,
 			script: `./build/mono.mjs`,
 			node_args: "--experimental-modules --es-module-specifier-resolution=node",
 

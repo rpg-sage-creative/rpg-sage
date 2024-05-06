@@ -83,13 +83,13 @@ export async function eCmdStatus(sageMessage: SageMessage): Promise<void> {
 	}
 
 	//post status
-	const sentMessage = await sageMessage.sendPost(encounter.renderInit()) ?? undefined;
+	const sentMessage = await sageMessage.sendPost(encounter.renderInit());
 	if (sentMessage) {
 		const gmMode = sageMessage.gameChannel ? mapSageChannelNameTags(sageMessage.gameChannel).gm : false;
-		addButtons(encounter, sentMessage, gmMode);
+		addButtons(encounter, sentMessage[0], gmMode);
 		if (isPin) {
 			// pin posted status
-			const pinned = await encounter.pin("init", sentMessage);
+			const pinned = await encounter.pin("init", sentMessage[0]);
 			if (pinned) {
 				const saved = await game.save();
 				await sageMessage.reactSuccessOrFailure(saved);

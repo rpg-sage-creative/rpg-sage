@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "./internal/Optional.js";
 import type { Color } from "./Color.js";
 
 let _namedColors: Map<string, Color>;

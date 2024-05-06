@@ -1,3 +1,4 @@
+import { DialogPostType } from "@rsc-sage/types";
 import { toChannelMention } from "@rsc-utils/discord-utils";
 import { GameCharacter } from "../../../model/GameCharacter";
 import type { SageMessage } from "../../../model/SageMessage";
@@ -18,7 +19,7 @@ export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 
 	// MUST RUN removeAndReturnChannelDids BEFORE NAME
 	const channelDids = await removeAndReturnChannelDids(sageMessage);
-	const dialogPostType = sageMessage.args.removeAndReturnDialogType() ?? undefined;
+	const dialogPostType = sageMessage.args.getEnum(DialogPostType, "dialogPostType") ?? undefined;
 
 	let name = sageMessage.args.removeAndReturnName();
 	if (characterTypeMeta.isGm) {
