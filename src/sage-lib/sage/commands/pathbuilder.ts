@@ -16,6 +16,7 @@ import type { SageInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import type { User } from "../model/User.js";
 import type { TMacro } from "../model/types.js";
+import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
 
 type SageButtonInteraction = SageInteraction<ButtonInteraction>;
@@ -409,7 +410,10 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: Pa
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
-		await sageInteraction.interaction.channel?.send(`${toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`);
+		await sageInteraction.interaction.channel?.send({
+			content: `${toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`,
+			components: createMessageDeleteButtonComponents(sageInteraction.user.id)
+		});
 	}
 }
 
