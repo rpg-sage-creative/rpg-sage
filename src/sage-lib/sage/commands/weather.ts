@@ -99,7 +99,7 @@ function getEnumInfo<K extends string = string, V extends number = number>({ arg
 function getHelpText(): string {
 	return [
 		"The slash command for creating random weather is:",
-		"```/sage weather```",
+		"```/sage-weather```",
 		"The message command for creating random weather is:",
 		"```sage! weather climate=\"\" elevation=\"\" season=\"\"```",
 		"Climate, elevation, and season are optional, for example:",

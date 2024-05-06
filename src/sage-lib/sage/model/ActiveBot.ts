@@ -123,7 +123,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		this.client.user?.setPresence({
 			status: "online"
 		});
-		this.client.user?.setActivity("rpgsage.io; /sage help", {
+		this.client.user?.setActivity("rpgsage.io; /sage-help", {
 			type: "PLAYING"
 		});
 
