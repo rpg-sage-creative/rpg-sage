@@ -86,11 +86,13 @@ export abstract class SageCommand<
 	/** @todo what is the reason for both reply /AND/ whisper? */
 	public abstract whisper(renderableOrArgs: RenderableContentResolvable | TSendArgs): Promise<void>;
 
-	public async whisperWikiHelp(...pages: { message?:string; page:string; label?:string; }[]): Promise<void> {
-		const content = pages.filter(isDefined).map(({ message, page, label }) => {
+	public async whisperWikiHelp(...pages: { isHelp?:boolean; message?:string; page:string; label?:string; }[]): Promise<void> {
+		const notValidText = `The command you attempted isn't valid.`;
+		const content = pages.filter(isDefined).map(({ isHelp, message, page, label }) => {
+			const notValidMessage = isHelp === false ? notValidText : ``;
 			const url = `https://github.com/rpg-sage-creative/rpg-sage/wiki/${page.replace(/ /g, "-")}`;
 			const seeHelp = `- Please see Help for [${label ?? page.replace(/-/g, " ")}](<${url}>).`;
-			return `${message ?? ""}\n${seeHelp}`.trim();
+			return `${notValidMessage ?? ""}\n${message ?? ""}\n${seeHelp}`.replace(/\n+/g, "\n").trim();
 		}).join("\n");
 		return this.whisper(content);
 	}
