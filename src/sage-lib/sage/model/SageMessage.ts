@@ -232,7 +232,10 @@ export class SageMessage
 			const reacted = await this._react(this.message, emoji)
 				|| await this._react(this._.get("Dialog") ?? this._.get("Replacement") ?? this._.get("Sent"), emoji);
 			if (!reacted) {
-				reason = `Sorry, we were unable to indicate the results of your action via emoji.\n<${this.message.url}>`;
+				/** @todo Tupper often deletes the post the dice roll came from, so let's just not report on those ... */
+				if (emojiType !== EmojiType.Die) {
+					reason = `Sorry, we were unable to indicate the results of your action via emoji.\n<${this.message.url}>`;
+				}
 			}
 		}
 		if (reason) {
