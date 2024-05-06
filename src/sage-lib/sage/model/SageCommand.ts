@@ -4,7 +4,7 @@ import { debug } from "@rsc-utils/console-utils";
 import type { DInteraction, DTextChannel, DiscordKey } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import { CommandInteraction, type If, type MessageActionRow, type MessageAttachment, type MessageButton, type MessageEmbed, type MessageSelectMenu } from "discord.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
@@ -86,10 +86,14 @@ export abstract class SageCommand<
 	/** @todo what is the reason for both reply /AND/ whisper? */
 	public abstract whisper(renderableOrArgs: RenderableContentResolvable | TSendArgs): Promise<void>;
 
-	public async whisperWikiHelp({ message, page, label }: { message?:string; page:string; label?:string; }): Promise<void> {
-		const url = `https://github.com/rpg-sage-creative/rpg-sage/wiki/${page.replace(/ /g, "-")}`;
-		const seeHelp = `Please see Help for [${label ?? page.replace(/-/g, " ")}](<${url}>).`;
-		const content = message ? `${message}\n${seeHelp}` : seeHelp;
+	public async whisperWikiHelp(...pages: { isHelp?:boolean; message?:string; page:string; label?:string; }[]): Promise<void> {
+		const notValidText = `The command you attempted isn't valid.`;
+		const content = pages.filter(isDefined).map(({ isHelp, message, page, label }) => {
+			const notValidMessage = isHelp === false ? notValidText : ``;
+			const url = `https://github.com/rpg-sage-creative/rpg-sage/wiki/${page.replace(/ /g, "-")}`;
+			const seeHelp = `- Please see Help for [${label ?? page.replace(/-/g, " ")}](<${url}>).`;
+			return `${notValidMessage ?? ""}\n${message ?? ""}\n${seeHelp}`.replace(/\n+/g, "\n").trim();
+		}).join("\n");
 		return this.whisper(content);
 	}
 

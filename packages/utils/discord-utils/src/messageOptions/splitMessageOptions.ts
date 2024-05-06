@@ -73,7 +73,7 @@ function mergeContent(content?: string | null, embeds?: MsgEmbed[] | null): stri
 
 	// return non blank output
 	if (hasContent && hasEmbedContent) {
-		return `${content}\n\n${hasEmbedContent}`;
+		return `${content}\n\n${embedContent}`;
 	}else if (hasEmbedContent) {
 		return embedContent!;
 	}else if (hasContent) {

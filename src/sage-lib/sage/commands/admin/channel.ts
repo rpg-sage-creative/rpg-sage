@@ -13,6 +13,7 @@ import type { DiscordCache } from "../../../discord/index.js";
 import type { Game } from "../../model/Game.js";
 import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game.js";
 import type { SageCache } from "../../model/SageCache.js";
+import type { SageCommand } from "../../model/SageCommand.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import type { Server } from "../../model/Server.js";
 import { createAdminRenderableContent } from "../cmd.js";
@@ -200,10 +201,19 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 
 //#endregion
 
+async function channelHelp(sageCommand: SageCommand): Promise<void> {
+	const isHelp = sageCommand.isCommand("channel", "help");
+	await sageCommand.whisperWikiHelp(
+		{ isHelp, page:"Channel-Management" },
+		{ message:"If you are trying to manage a Game's Channels:", page:"Game-Management#channels" }
+	);
+}
+
 export function registerChannel(): void {
 	registerListeners({ commands:["channel|details"], message:channelDetails });
 	registerListeners({ commands:["channel|list|server"], message:channelListServer });
 	registerListeners({ commands:["channel|list|game"], message:channelListGame });
 	registerListeners({ commands:["channel|list"], message:channelList });
 	registerListeners({ commands:["channel|update", "channel|set"], message:channelSet });
+	registerListeners({ commands:["channel", "channel|help"], handler:channelHelp });
 }

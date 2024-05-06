@@ -22,6 +22,7 @@ import type { SageCache } from "../model/SageCache.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
+import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
 
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
@@ -434,7 +435,10 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
-		await sageInteraction.interaction.channel?.send(`${toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`);
+		await sageInteraction.interaction.channel?.send({
+			content: `${toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`,
+			components: createMessageDeleteButtonComponents(sageInteraction.user.id)
+		});
 	}
 
 	function findSkill(ability: Optional<TStatE20>, value: string): TSkillE20 | undefined {
