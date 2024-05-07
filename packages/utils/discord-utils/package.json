@@ -3,6 +3,7 @@
   "@rsc-utils/snowflake-utils": "^0.0.0",
   "@rsc-utils/string-utils": "^0.0.0",
   "@rsc-utils/type-utils": "^0.0.0",
+  "discord-api-types": "^0.27.3",
   "discord.js": "^13.17.1",
   "emoji-regex": "^10.3.0",
   "xregexp": "^5.1.1"

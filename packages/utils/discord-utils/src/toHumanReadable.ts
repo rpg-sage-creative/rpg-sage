@@ -1,8 +1,8 @@
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
+import type { APIUser } from "discord-api-types/v9";
 import type { GuildMember, Webhook } from "discord.js";
 import type { DChannel, DForumChannel, DMessage, DUser } from "./types.js";
-import { APIUser } from "discord-api-types/v9.js";
 
 function channelToName(channel: Optional<DChannel | DForumChannel>): string | null {
 	if (channel) {
