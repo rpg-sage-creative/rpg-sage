@@ -1,5 +1,5 @@
+import { getPermsFor } from "@rsc-utils/discord-utils";
 import type { GuildMember, NonThreadGuildBasedChannel } from "discord.js";
-import { getPermsFor } from "./getPermsFor";
 
 /*
 https://discord.com/developers/docs/topics/permissions

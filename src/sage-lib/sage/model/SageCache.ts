@@ -1,6 +1,8 @@
+import { getSageId } from "@rsc-sage/env";
 import { uncache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnFalse, silly } from "@rsc-utils/console-utils";
-import { DiscordKey, type DInteraction, type DMessage, type DMessageChannel, type DReaction, type DUser } from "@rsc-utils/discord-utils";
+import { DiscordKey, getPermsFor, isDMBased, type DInteraction, type DMessage, type DMessageChannel, type DReaction, type DUser } from "@rsc-utils/discord-utils";
+import { getTupperBoxId } from "@rsc-utils/env-utils";
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Client, GuildMember } from "discord.js";
@@ -15,8 +17,6 @@ import type { Bot } from "./Bot.js";
 import type { Game } from "./Game.js";
 import type { Server } from "./Server.js";
 import type { User } from "./User.js";
-import { getTupperBoxId } from "@rsc-utils/env-utils";
-import { getPermsFor } from "../../discord/permissions/getPermsFor.js";
 
 export type TSageCacheCore = {
 	discord: DiscordCache;
@@ -47,13 +47,10 @@ function createCoreAndCache(): [TSageCacheCore, SageCache] {
 }
 
 function canSendMessageTo(channel: DMessageChannel): boolean {
-	if (!channel.isText()) {
-		return false;
-	}
-	if (channel.type === "DM") {
+	if (isDMBased(channel)) {
 		return true;
 	}
-	return getPermsFor(channel).canSendMessages;
+	return getPermsFor(channel, getSageId()).canSendMessages;
 }
 
 // type TMeta = {
@@ -147,7 +144,7 @@ export class SageCache {
 				const { thread, channel } = await sageCache.discord.fetchChannelAndThread(discordKey);
 				if (isDeleted(discordKey.message)) return false; // check deleted messages just in case
 				if (channel) {
-					return getPermsFor(thread ?? channel).canAddReactions;
+					return getPermsFor(thread ?? channel, getSageId()).canAddReactions;
 				}else {
 					return false;
 				}
@@ -164,7 +161,7 @@ export class SageCache {
 			}else {
 				const { thread, channel } = await this.discord.fetchChannelAndThread(discordKey);
 				if (channel) {
-					const { canManageWebhooks, canSendMessages } = getPermsFor(thread ?? channel);
+					const { canManageWebhooks, canSendMessages } = getPermsFor(thread ?? channel, getSageId());
 					this.canWebhookToMap.set(key, canManageWebhooks && canSendMessages);
 				}else {
 					this.canWebhookToMap.set(key, false);
