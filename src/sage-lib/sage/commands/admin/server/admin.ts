@@ -2,10 +2,12 @@ import { forEachAsync, mapAsync } from "@rsc-utils/async-array-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { User } from "discord.js";
-import { registerListeners } from "../../../../discord/handlers/registerListeners";
-import type { SageMessage } from "../../../model/SageMessage";
-import { AdminRoleType, type IAdminUser } from "../../../model/Server";
-import { createAdminRenderableContent } from "../../cmd";
+import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { AdminRoleType, type IAdminUser } from "../../../model/Server.js";
+import { createAdminRenderableContent } from "../../cmd.js";
+import { isDefined } from "@rsc-utils/type-utils";
+import { SageCommand } from "../../../model/SageCommand.js";
 
 
 type TAdminUser = IAdminUser & { discordUser: User };
@@ -19,14 +21,16 @@ async function renderUser(renderableContent: RenderableContent, user: TAdminUser
 
 async function adminList(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminSage) {
-		return sageMessage.reactBlock();
+		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
-	let users: TAdminUser[] = <TAdminUser[]>await mapAsync(sageMessage.server.admins, async admin => {
+
+	let users: TAdminUser[] = await mapAsync(sageMessage.server.admins, async admin => {
 		return {
 			discordUser: await sageMessage.discord.fetchUser(admin.did),
 			...admin
-		};
+		} as TAdminUser;
 	});
+
 	if (users) {
 		const filter = sageMessage.args.join(" ");
 		if (filter && users.length) {
@@ -43,74 +47,98 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 		}
 		await sageMessage.send(renderableContent);
 	}
-	return Promise.resolve();
-}
 
-function getAdminRoleType(command: string): AdminRoleType | null {
-	if (command.includes("game-admin")) {
-		return AdminRoleType.GameAdmin;
-	}
-	if (command.includes("server-admin")) {
-		return AdminRoleType.ServerAdmin;
-	}
-	return null;
+	return Promise.resolve();
 }
 
 async function adminAdd(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminSage) {
-		return sageMessage.reactBlock();
+		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
 
 	const userDid = await sageMessage.args.removeAndReturnUserDid();
-	if (!userDid) {
-		return sageMessage.reactFailure();
+	const roleType = sageMessage.args.getEnum(AdminRoleType, "type") ?? null;
+	const hasRoleType = isDefined(roleType);
+	if (!userDid || !hasRoleType) {
+		const message = [
+			`Sorry, we cannot process your request:`,
+			userDid ? null : `- Missing/Invalid User.`,
+			hasRoleType ? null : `- Invalid AdminRoleType: ${sageMessage.args.getString("type") ?? "*not found*"}.`,
+			`Example: \`sage! admin add @UserMention type="GameAdmin"\``
+		].filter(isDefined).join("\n");
+		return sageMessage.whisperWikiHelp({ message, page:`Sage-Admin-Tiers` });
 	}
 
-	const roleType = getAdminRoleType(sageMessage.command) ?? sageMessage.args.getEnum(AdminRoleType, "type") ?? null;
-	if (roleType === null) {
-		return sageMessage.reactFailure();
+	const saved = await sageMessage.server.addAdmin(userDid, roleType);
+	if (!saved) {
+		return sageMessage.whisper(`Sorry, we were unable to add your admin!`);
 	}
 
-	const added = await sageMessage.server.addAdmin(userDid, roleType);
-	return sageMessage.reactSuccessOrFailure(added);
+	return sageMessage.reactSuccess();
 }
 
 async function adminUpdate(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminSage) {
-		return sageMessage.reactBlock();
+		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
 
 	const userDid = await sageMessage.args.removeAndReturnUserDid();
-	if (!userDid) {
-		return sageMessage.reactFailure();
+	const roleType = sageMessage.args.getEnum(AdminRoleType, "type") ?? null;
+	const hasRoleType = isDefined(roleType);
+	if (!userDid || !hasRoleType) {
+		const message = [
+			`Sorry, we cannot process your request:`,
+			userDid ? null : `- Missing/Invalid User.`,
+			hasRoleType ? null : `- Invalid AdminRoleType: ${sageMessage.args.getString("type") ?? "*not found*"}.`,
+			`Example: \`sage! admin update @UserMention type="GameAdmin"\``
+		].filter(isDefined).join("\n");
+		return sageMessage.whisperWikiHelp({ message, page:`Sage-Admin-Tiers` });
 	}
 
-	const roleType = getAdminRoleType(sageMessage.command) ?? sageMessage.args.getEnum(AdminRoleType, "type") ?? null;
-	if (roleType === null) {
-		return sageMessage.reactFailure();
+	const saved = await sageMessage.server.updateAdminRole(userDid, roleType);
+	if (!saved) {
+		return sageMessage.whisper(`Sorry, we were unable to update your admin!`);
 	}
 
-	const updated = await sageMessage.server.updateAdminRole(userDid, roleType);
-	return sageMessage.reactSuccessOrFailure(updated);
+	return sageMessage.reactSuccess();
 }
 
 async function adminRemove(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminSage) {
-		return sageMessage.reactBlock();
+		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
 
 	const userDid = await sageMessage.args.removeAndReturnUserDid();
 	if (!userDid) {
-		return sageMessage.reactFailure();
+		const message = `Sorry, we cannot process your request:\n- Missing/Invalid User.\nExample: \`sage! admin remove @UserMention\``;
+		return sageMessage.whisperWikiHelp({ message, page:`Sage-Admin-Tiers` });
 	}
 
-	const removed = await sageMessage.server.removeAdmin(userDid);
-	return sageMessage.reactSuccessOrFailure(removed);
+	const saved = await sageMessage.server.removeAdmin(userDid);
+	if (!saved) {
+		return sageMessage.whisper(`Sorry, we were unable to remove your admin!`);
+	}
+
+	return sageMessage.reactSuccess();
+}
+
+async function adminHelp(sageCommand: SageCommand): Promise<void> {
+	const isHelp = sageCommand.isCommand("admin", "help");
+	const message = [
+		`Usage Examples:`,
+		"```",
+		`sage! admin add @UserMention type="GameAdmin"`,
+		`sage! admin update @UserMention type="ServerAdmin"`,
+		`sage! admin remove @UserMention`,
+		"```",
+	].join("\n");
+	await sageCommand.whisperWikiHelp({ isHelp, message, page:"Sage-Admin-Tiers" });
 }
 
 export function registerAdmin(): void {
 	registerListeners({ commands:["admin|list"], message:adminList });
-	registerListeners({ commands:["admin|add", "add|admin", "add|game|admin", "add|server|admin"], message:adminAdd });
-	registerListeners({ commands:["admin|update"], message:adminUpdate });
-	registerListeners({ commands:["admin|remove"], message:adminRemove });
+	registerListeners({ commands:["admin|add", "add|admin"], message:adminAdd });
+	registerListeners({ commands:["admin|update", "update|admin"], message:adminUpdate });
+	registerListeners({ commands:["admin|remove", "remove|admin"], message:adminRemove });
+	registerListeners({ commands:["admin", "admin|help"], message:adminHelp });
 }
