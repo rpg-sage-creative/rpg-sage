@@ -1,51 +1,13 @@
 import { SageWebhookType, getSageId, getWebhookName } from "@rsc-sage/env";
 import { filterAsync } from "@rsc-utils/async-array-utils";
-import { debug, error, info, warn } from "@rsc-utils/console-utils";
-import { DTextChannel, DThreadChannel, DiscordKey, getPermsFor, toHumanReadable, type DChannelResolvable, type DGuildResolvable, type DMessageChannel } from "@rsc-utils/discord-utils";
+import { debug, info } from "@rsc-utils/console-utils";
+import { DTextChannel, DThreadChannel, DiscordKey, getPermsFor, handleDiscordErrorReturnNull, toHumanReadable, type DChannelResolvable, type DGuildResolvable, type DMessageChannel } from "@rsc-utils/discord-utils";
 import { NIL_SNOWFLAKE, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Interaction, Message, MessageReaction, PartialMessage, Role, Snowflake, TextChannel, User, Webhook } from "discord.js";
 import type { SageMessage } from "../sage/model/SageMessage.js";
 
 //#region Helpers
-
-function isDiscordApiErrorMissingPermissionsFetchWebhook(reason: any): boolean {
-	const stringValue = Object.prototype.toString.call(reason);
-	return stringValue.includes("DiscordAPIError: Missing Permissions")
-		&& stringValue.includes("TextChannel.fetchWebhooks");
-}
-type TDiscordApiError = {
-	name: "DiscordAPIError";
-	message: string;
-	path: string;
-	/** https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes */
-	code: number;
-	method: "GET"|"POST"|"PATCH"|"PUT"|"DELETE"
-};
-function isDiscordApiError(reason: any): reason is TDiscordApiError {
-	return reason?.name === "DiscordAPIError";
-}
-function isUnknownGuild(reason: TDiscordApiError): boolean {
-	return reason?.message === "Unknown Guild";
-}
-function isUnknownMember(reason: TDiscordApiError): boolean {
-	return reason?.message === "Unknown Member";
-}
-function isUnknownUser(reason: TDiscordApiError): boolean {
-	return reason?.message === "Unknown User";
-}
-function warnUnknownElseErrorReturnNull(reason: any): null {
-	if (isDiscordApiErrorMissingPermissionsFetchWebhook(reason)) {
-		warn(`DiscordAPIError: Missing Permissions (TextChannel.fetchWebhooks)`);
-	}else {
-		if (isDiscordApiError(reason) && (isUnknownMember(reason) || isUnknownGuild(reason) || isUnknownUser(reason))) {
-			warn(`${reason.message}: ${reason.path}`);
-		}else {
-			error(reason);
-		}
-	}
-	return null;
-}
 
 function dGet<T>(manager: CachedManager<Snowflake, any, T>, did: Snowflake): T | null {
 	debug(`dGet(${manager ? manager.constructor?.name ?? Object.prototype.toString.apply(manager) : String(manager)}, ${did})`);
@@ -58,7 +20,7 @@ async function dFetchGuild(client: Client, guildResolvable: DGuildResolvable): P
 	}
 	const guildId = typeof(guildResolvable) === "string" ? guildResolvable : guildResolvable.id;
 	debug(`dFetchGuild(${guildId})`);
-	return client.guilds.fetch(guildId).catch(warnUnknownElseErrorReturnNull) ?? null;
+	return client.guilds.fetch(guildId).catch(handleDiscordErrorReturnNull) ?? null;
 }
 
 function createWebhookKey(channel: TextChannel, name: string): string {
@@ -195,7 +157,7 @@ export class DiscordCache {
 		}
 
 		if (!this.guildPreviewMap.has(guildResolvable)) {
-			const guildPreview = await this.client.fetchGuildPreview(guildResolvable).catch(warnUnknownElseErrorReturnNull);
+			const guildPreview = await this.client.fetchGuildPreview(guildResolvable).catch(handleDiscordErrorReturnNull);
 			this.guildPreviewMap.set(guildResolvable, guildPreview);
 		}
 		return this.guildPreviewMap.get(guildResolvable)?.name ?? defaultValue ?? "ERROR_FETCHING_GUILD_PREVIEW";
@@ -209,7 +171,7 @@ export class DiscordCache {
 
 	public async fetchGuildMember(userDid: Snowflake): Promise<GuildMember | null> {
 		if (!this.guildMemberMap.has(userDid)) {
-			const guildMember = await this.guild?.members.fetch({ user:userDid, cache:true, force:true }).catch(warnUnknownElseErrorReturnNull);
+			const guildMember = await this.guild?.members.fetch({ user:userDid, cache:true, force:true }).catch(handleDiscordErrorReturnNull);
 			this.guildMemberMap.set(userDid, guildMember ?? null);
 		}
 		return this.guildMemberMap.get(userDid) ?? null;
@@ -254,7 +216,7 @@ export class DiscordCache {
 
 	public async fetchGuildRole(roleDid: Snowflake): Promise<Role | null> {
 		if (!this.roleMap.has(roleDid)) {
-			const role = await this.guild?.roles.fetch(roleDid, { cache:true, force:true }).catch(warnUnknownElseErrorReturnNull);
+			const role = await this.guild?.roles.fetch(roleDid, { cache:true, force:true }).catch(handleDiscordErrorReturnNull);
 			this.roleMap.set(roleDid, role ?? null);
 		}
 		return this.roleMap.get(roleDid) ?? null;
@@ -268,7 +230,7 @@ export class DiscordCache {
 
 	public async fetchUser(userDid: Snowflake): Promise<User | null> {
 		if (!this.userMap.has(userDid) && isNonNilSnowflake(userDid)) {
-			const user = await this.client.users.fetch(userDid, { cache:true, force:true }).catch(warnUnknownElseErrorReturnNull);
+			const user = await this.client.users.fetch(userDid, { cache:true, force:true }).catch(handleDiscordErrorReturnNull);
 			this.userMap.set(userDid, user ?? null);
 		}
 		return this.userMap.get(userDid) ?? null;
@@ -297,7 +259,7 @@ export class DiscordCache {
 
 		const key = createWebhookKey(channel, webhookName);
 		if (!this.webhookMap.has(key)) {
-			const webhooksCollection = await channel.fetchWebhooks().catch(warnUnknownElseErrorReturnNull),
+			const webhooksCollection = await channel.fetchWebhooks().catch(handleDiscordErrorReturnNull),
 				webhook = webhooksCollection?.find(w => w.name === webhookName);
 			this.webhookMap.set(key, webhook ?? null);
 		}
@@ -352,7 +314,7 @@ export class DiscordCache {
 
 		if (!channel.isThread()) {
 			const webhookName = getWebhookName(type);
-			const created = await channel.createWebhook(webhookName, { avatar:avatar }).catch(warnUnknownElseErrorReturnNull);
+			const created = await channel.createWebhook(webhookName, { avatar:avatar }).catch(handleDiscordErrorReturnNull);
 			const key = createWebhookKey(channel, webhookName);
 			this.webhookMap.set(key, created ?? null);
 			return created;
@@ -374,7 +336,7 @@ export class DiscordCache {
 		}
 		const options = { before: channel.lastMessageId, limit: 25 },
 			cacheOptions = { cache:true, force:true },
-			collection = await channel.messages.fetch(options, cacheOptions).catch(warnUnknownElseErrorReturnNull);
+			collection = await channel.messages.fetch(options, cacheOptions).catch(handleDiscordErrorReturnNull);
 		if (!collection) {
 			return null;
 		}
@@ -403,7 +365,7 @@ export class DiscordCache {
 			limit: limit || 25
 		};
 		const cacheOptions = { cache:true, force:true };
-		const collection = await channel.messages.fetch(options, cacheOptions).catch(warnUnknownElseErrorReturnNull);
+		const collection = await channel.messages.fetch(options, cacheOptions).catch(handleDiscordErrorReturnNull);
 		if (!collection) {
 			return [];
 		}

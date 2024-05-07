@@ -1,7 +1,7 @@
 import { getSageId } from "@rsc-sage/env";
 import { uncache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnFalse, silly } from "@rsc-utils/console-utils";
-import { DiscordKey, getPermsFor, isDMBased, type DInteraction, type DMessage, type DMessageChannel, type DReaction, type DUser } from "@rsc-utils/discord-utils";
+import { canSendMessageTo, DiscordKey, getPermsFor, type DInteraction, type DMessage, type DMessageChannel, type DReaction, type DUser } from "@rsc-utils/discord-utils";
 import { getTupperBoxId } from "@rsc-utils/env-utils";
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
@@ -46,13 +46,6 @@ function createCoreAndCache(): [TSageCacheCore, SageCache] {
 	return [core, sageCache];
 }
 
-function canSendMessageTo(channel: DMessageChannel): boolean {
-	if (isDMBased(channel)) {
-		return true;
-	}
-	return getPermsFor(channel, getSageId()).canSendMessages;
-}
-
 // type TMeta = {
 // 	diceSent?: [];
 // 	messagesDeleted?: Message[];
@@ -81,7 +74,7 @@ export class SageCache {
 			}else {
 				const { thread, channel } = await this.discord.fetchChannelAndThread(discordKey);
 				if (channel) {
-					this.canSendMessageToMap.set(key, canSendMessageTo(thread ?? channel));
+					this.canSendMessageToMap.set(key, canSendMessageTo(getSageId(), thread ?? channel));
 				}else {
 					this.canSendMessageToMap.set(key, false);
 				}
