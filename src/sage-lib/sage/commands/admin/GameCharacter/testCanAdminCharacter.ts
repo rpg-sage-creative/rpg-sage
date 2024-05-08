@@ -1,15 +1,15 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import type { TCharacterTypeMeta } from "./getCharacterTypeMeta";
+import type { SageCommand } from "../../../model/SageCommand.js";
+import type { TCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 
-export function testCanAdminCharacter(sageMessage: SageMessage, characterTypeMeta: TCharacterTypeMeta): boolean {
-	if (!sageMessage.allowAdmin) {
+export function testCanAdminCharacter(sageCommand: SageCommand, characterTypeMeta: TCharacterTypeMeta): boolean {
+	if (!sageCommand.allowAdmin) {
 		return false;
 	}
 
-	if (sageMessage.game) {
+	if (sageCommand.game) {
 		return characterTypeMeta.isPcOrCompanion
-			? sageMessage.isGameMaster || sageMessage.isPlayer
-			: sageMessage.isGameMaster;
+			? sageCommand.isGameMaster || sageCommand.isPlayer
+			: sageCommand.isGameMaster;
 	}
 
 	return characterTypeMeta.isPcOrCompanion;
