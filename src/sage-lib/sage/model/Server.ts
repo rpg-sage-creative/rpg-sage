@@ -1,5 +1,5 @@
 import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, SageChannel, ServerOptions } from "@rsc-sage/types";
-import { parseGameSystem, updateServer } from "@rsc-sage/types";
+import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, updateServer } from "@rsc-sage/types";
 import { warn } from "@rsc-utils/console-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import { getHomeServerId } from "@rsc-utils/env-utils";
@@ -54,7 +54,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	private _gameSystem?: GameSystem | null;
 	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
 	public get gameSystemType(): GameSystemType | undefined { return this.core.gameSystemType; }
-	public get gmCharacterName(): string { return this.core.gmCharacterName ?? "Game Master"; }
+	public get gmCharacterName(): string { return this.core.gmCharacterName ?? DEFAULT_GM_CHARACTER_NAME; }
 	public get discord() { return this.sageCache.discord; }
 	public get name(): string { return this.core.name; }
 	public get roles(): IAdminRole[] { return this.core.roles ?? []; }
