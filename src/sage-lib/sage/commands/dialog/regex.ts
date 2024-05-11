@@ -42,7 +42,7 @@ export function getDialogOtherRegex(): RegExp {
 	const HWS = getHWS();
 	// return XRegExp(`^::${HWS}(.*?)${HWS}::`, "i");
 	return XRegExp(`^::${HWS}
-					.*?(?![^[]*\\]|[^{]*}) # let's not have brackets [] or braces {}
+					(.*?)(?![^[]*\\]|[^{]*}) # let's not have brackets [] or braces {}
 					${HWS}::`, "x");
 }
 
