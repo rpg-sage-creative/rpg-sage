@@ -40,7 +40,10 @@ export function getDialogUrlRegex(): RegExp {
 
 export function getDialogOtherRegex(): RegExp {
 	const HWS = getHWS();
-	return XRegExp(`^::${HWS}(.*?)${HWS}::`, "i");
+	// return XRegExp(`^::${HWS}(.*?)${HWS}::`, "i");
+	return XRegExp(`^::${HWS}
+					.*?(?![^[]*\\]|[^{]*}) # let's not have brackets [] or braces {}
+					${HWS}::`, "x");
 }
 
 export type DialogRegexKey = "nameAndDisplayName" | "displayName" | "postType" | "embedColor" | "url" | "other";

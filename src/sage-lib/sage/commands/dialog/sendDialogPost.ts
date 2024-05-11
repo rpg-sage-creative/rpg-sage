@@ -2,6 +2,7 @@ import { errorReturnEmptyArray, errorReturnNull, warnReturnNull } from "@rsc-uti
 import { DiscordKey, type DMessage } from "@rsc-utils/discord-utils";
 import { getBuffer } from "@rsc-utils/https-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
+import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { MessageAttachment } from "discord.js";
 import type { GameCharacter, TDialogMessage } from "../../model/GameCharacter.js";
 import type { ColorType } from "../../model/HasColorsCore.js";
@@ -24,6 +25,12 @@ type DialogPostData = {
 	title?: string;
 };
 
+function formatName(char: GameCharacter, name?: string): string {
+	const template = stringOrUndefined(name) ?? char.getStat("displayName.template");
+	return template?.replace(/{[^}]+}/g, match => char.getStat(match.slice(1, -1)) ?? match)
+		?? char.name;
+}
+
 export async function sendDialogPost(sageMessage: SageMessage, postData: DialogPostData, { doAttachment, skipDelete }: ChatOptions): Promise<DMessage[]> {
 	const character = postData?.character;
 	if (!character) {
@@ -33,7 +40,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const webhook = true; //sageMessage.dialogType === "Webhook";
 	const renderableContent = new RenderableContent();
 
-	const authorName = postData.authorName || character.name;
+	const authorName = formatName(character, postData.authorName);
 	const title = postData.title || authorName;
 	if (!webhook || title !== authorName) {
 		renderableContent.setTitle(title);
