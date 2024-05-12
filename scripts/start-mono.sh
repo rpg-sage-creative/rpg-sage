@@ -6,17 +6,38 @@
 botCodeName="dev"
 echo "botCodeName=\"$botCodeName\""
 
+envMonoCodeFile="./config/env.mono.$botCodeName.json"
+if [ ! -f "$envMonoCodeFile" ]; then
+	echo "File Not Found: $envMonoCodeFile"
+fi
+
+envMonoFile="./config/env.mono.json"
+if [ ! -f "$envMonoFile" ]; then
+	echo "File Not Found: $envMonoFile"
+fi
+
+envFile="./config/env.json"
+if [ ! -f "$envFile" ]; then
+	echo "File Not Found: $envFile"
+fi
+
 RETVAL=""
 function readJsonProperty() {
 	RETVAL=""
 	jsonKey="$1"
-	RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" "./config/env.mono.$botCodeName.json")
-	if [ -z "$RETVAL" ]; then
-		RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" ./config/env.mono.json)
+
+	if [ -f "$envMonoCodeFile" ]; then
+		RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" "$envMonoCodeFile")
 	fi
-	if [ -z "$RETVAL" ]; then
-		RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" ./config/env.json)
+
+	if [ -z "$RETVAL" ] && [ -f "$envMonoFile" ]; then
+		RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" "$envMonoFile")
 	fi
+
+	if [ -z "$RETVAL" ] && [ -f "$envFile" ]; then
+		RETVAL=$(grep -E "\"$jsonKey\"\: ?\"([^\"]+)\"" "$envFile")
+	fi
+
 	RETVAL=$(sed -r 's/"([^"]+)": ?"([^"]+)",?/\2/g' <<< "$RETVAL")
 	RETVAL=$(xargs <<< "$RETVAL")
 	echo "$jsonKey=\"$RETVAL\""
