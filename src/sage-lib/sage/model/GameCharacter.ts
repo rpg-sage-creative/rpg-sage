@@ -1,7 +1,8 @@
-import type { DialogPostType } from "@rsc-sage/types";
+import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType } from "@rsc-sage/types";
 import { DiscordKey } from "@rsc-utils/discord-utils";
+import { applyChanges } from "@rsc-utils/json-utils";
 import { NIL_SNOWFLAKE, isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Args, Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
@@ -117,7 +118,7 @@ export class GameCharacter implements IHasSave {
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
 		updateCore(core);
 
-		this.isGM = this.type === "npc" && this.name === (this.owner?.gmCharacterName ?? GameCharacter.defaultGmCharacterName);
+		this.isGM = this.type === "gm";
 		this.isNPC = this.type === "npc";
 		this.isMinion = this.type === "minion";
 		this.isGMorNPC = this.isGM || this.isNPC;
@@ -307,6 +308,7 @@ export class GameCharacter implements IHasSave {
 		}
 		return recursive && this.companions.hasMatching(name, true);
 	}
+
 	public toJSON(): GameCharacterCore {
 		return this.core;
 	}
@@ -424,43 +426,18 @@ export class GameCharacter implements IHasSave {
 		return changes || updatedNotes;
 	}
 
-	public update(values: Partial<GameCharacterCore>, save = true): Promise<boolean> {
-		let changed = false;
-		if (values.alias !== undefined) {
-			this.alias = values.alias;
-			this._preparedAlias = undefined;
-			changed = true;
-		}
-		if (values.avatarUrl !== undefined) {
-			this.avatarUrl = values.avatarUrl;
-			changed = true;
-		}
-		if (values.embedColor !== undefined) {
-			this.embedColor = values.embedColor;
-			changed = true;
-		}
-		if (values.tokenUrl !== undefined) {
-			this.tokenUrl = values.tokenUrl;
-			changed = true;
-		}
-		if (values.name !== undefined && values.name !== this.name) {
-			this.name = values.name;
-			this._preparedName = undefined;
-			changed = true;
-		}
-		if (values.userDid !== undefined && values.userDid !== this.userDid) {
-			this.userDid = values.userDid;
-			changed = true;
-		}
-		if (values.pathbuilder !== undefined) {
-			this.core.pathbuilder = values.pathbuilder;
+	public async update({ alias, avatarUrl, embedColor, name, pathbuilder, pathbuilderId, tokenUrl, userDid }: Args<GameCharacterCore>, save = true): Promise<boolean> {
+		// we only use the values that are changable, leaving the needed arrays intact
+		const changed = applyChanges(this.core, { alias, avatarUrl, embedColor, name, pathbuilder, pathbuilderId, tokenUrl, userDid });
+		if (changed) {
+			delete this._preparedAlias;
+			delete this._preparedName;
 			delete this._pathbuilder;
-			changed = true;
+			if (save) {
+				return this.save();
+			}
 		}
-		if (changed && save) {
-			return this.save();
-		}
-		return Promise.resolve(false);
+		return false;
 	}
 
 	//#region IHasSave
@@ -474,7 +451,7 @@ export class GameCharacter implements IHasSave {
 	}
 	//#endregion
 
-	public static defaultGmCharacterName = "Game Master";
+	public static readonly defaultGmCharacterName = DEFAULT_GM_CHARACTER_NAME;
 
 	public static prepareName(name: string): string {
 		return XRegExp.replace(name ?? "", XRegExp("[^\\pL\\pN]+"), "", "all").toLowerCase();
