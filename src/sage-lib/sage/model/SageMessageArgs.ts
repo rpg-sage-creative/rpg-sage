@@ -1,15 +1,13 @@
 import { type SageChannel } from "@rsc-sage/types";
 import { parseId } from "@rsc-utils/discord-utils";
 import { parseEnum } from "@rsc-utils/enum-utils";
-import { isUrl } from "@rsc-utils/https-utils";
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
-import { isNotBlank, unwrap } from "@rsc-utils/string-utils";
+import { isNotBlank } from "@rsc-utils/string-utils";
 import { isDefined, type EnumLike, type Optional } from "@rsc-utils/type-utils";
 import { isNonNilUuid } from "@rsc-utils/uuid-utils";
 import type { Collection, GuildBasedChannel, MessageAttachment, Role, User } from "discord.js";
 import type { ArgsManager } from "../../discord/ArgsManager.js";
 import type { TColorAndType } from "./Colors.js";
-import type { GameCharacterCore } from "./GameCharacter.js";
 import { ColorType } from "./HasColorsCore.js";
 import { SageCommandArgs, type Names } from "./SageCommandArgs.js";
 import type { SageMessage } from "./SageMessage.js";
@@ -85,41 +83,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			return withIndex.ret;
 		}
 		return defaultThisChannel ? this.sageCommand.threadOrChannelDid : null;
-	}
-
-	/** @deprecated */
-	public getCharacterOptions(names: Names, userDid?: Snowflake): GameCharacterCore {
-		// get the options directly
-		const characterCore: GameCharacterCore = {
-			alias: this.getString("alias")!,
-			autoChannels: undefined,
-			avatarUrl: this.getUrl("avatar")!,
-			companions: undefined,
-			embedColor: this.getDiscordColor("color")!,
-			id: undefined!,
-			tokenUrl: this.getUrl("token")!,
-			name: names.newName ?? names.name!,
-			userDid: userDid ?? undefined
-		};
-
-		// see if they simply attached an image
-		const needsToken = characterCore.tokenUrl === undefined;
-		const needsAvatar = characterCore.avatarUrl === undefined;
-		if (needsToken || needsAvatar) {
-			const { attachments } = this.sageCommand.message;
-			if (attachments.size) {
-				const first = attachments.first()?.url;
-				if (needsToken && needsAvatar) {
-					characterCore.tokenUrl = first;
-					characterCore.avatarUrl = attachments.at(1)?.url;
-				}else if (needsToken) {
-					characterCore.tokenUrl = first;
-				}else if (needsAvatar) {
-					characterCore.avatarUrl = first;
-				}
-			}
-		}
-		return characterCore;
 	}
 
 	/** @deprecated */
@@ -267,14 +230,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	}
 
 	//#endregion
-
-	public getUrl(key: string): string | null | undefined {
-		const url = this.getString(key);
-		if (url) {
-			return isUrl(url) ? unwrap(url, "<>") : null;
-		}
-		return url;
-	}
 
 	//#region SageCommandArgs
 

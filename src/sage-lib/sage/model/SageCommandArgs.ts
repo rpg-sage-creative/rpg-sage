@@ -1,11 +1,14 @@
 import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, type GameOptions, GameSystemType, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
 import { Color } from "@rsc-utils/color-utils";
 import { parseIds } from "@rsc-utils/discord-utils";
+import { isUrl } from "@rsc-utils/https-utils";
 import { isEmpty } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import { unwrap } from "@rsc-utils/string-utils";
 import { type Args, type EnumLike, isDefined, type Optional } from "@rsc-utils/type-utils";
 import { isUuid, type UUID } from "@rsc-utils/uuid-utils";
 import type { GuildBasedChannel, Role, User } from "discord.js";
+import type { GameCharacterCore } from "./GameCharacter.js";
 import type { SageCommand } from "./SageCommand.js";
 
 /** An object containing names. */
@@ -207,6 +210,24 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	}
 
 	/**
+	 * Gets the named option as an unwrapped url (meaning without <>).
+	 * Returns undefined if not found.
+	 * Returns null if empty, invalid or "unset".
+	 */
+	public getUrl(name: string): string | null | undefined {
+		const url = this.getString(name);
+		if (url) {
+			return isUrl(url) ? unwrap(url, "<>") : null;
+		}
+		return url;
+	}
+
+	/** Returns true if getUrl(name) is not null and not undefined. */
+	public hasUrl(name: string): boolean {
+		return isDefined(this.getUrl(name));
+	}
+
+	/**
 	 * Gets the named option as a User.
 	 * Returns undefined if not found.
 	 * Returns null if not a valid User or "unset".
@@ -295,6 +316,49 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 			return undefined;
 		}
 		return channelOptions;
+	}
+
+	public getCharacterOptions(): Args<GameCharacterCore> {
+		const names = this.getNames();
+
+		// get the options directly
+		const characterCore: Args<GameCharacterCore> = {
+			alias: this.getString("alias"),
+			// autoChannels: undefined,
+			avatarUrl: this.getUrl("avatar"),
+			// companions: undefined,
+			embedColor: this.getDiscordColor("color"),
+			// id: undefined,
+			// lastMessages: undefined,
+			name: names.newName ?? names.name,
+			// notes: undefined,
+			// pathbuilder: undefined,
+			// pathbuilderId: undefined,
+			userDid: this.getUserId("newUser"),
+			tokenUrl: this.getUrl("token")!,
+		};
+
+		// see if they simply attached an image
+		if (this.sageCommand.isSageMessage()) {
+			const needsToken = !characterCore.tokenUrl;
+			const needsAvatar = !characterCore.avatarUrl;
+			if (needsToken || needsAvatar) {
+				const { attachments } = this.sageCommand.message;
+				if (attachments.size) {
+					const first = attachments.first()?.url;
+					if (needsToken && needsAvatar) {
+						characterCore.tokenUrl = first;
+						characterCore.avatarUrl = attachments.at(1)?.url;
+					}else if (needsToken) {
+						characterCore.tokenUrl = first;
+					}else if (needsAvatar) {
+						characterCore.avatarUrl = first;
+					}
+				}
+			}
+		}
+
+		return characterCore;
 	}
 
 	public getColor(key: string): Color | null | undefined {
