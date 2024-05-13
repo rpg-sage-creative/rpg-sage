@@ -12,7 +12,7 @@ import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { IChannel } from "../repo/base/IdRepository.js";
 import type { Bot } from "./Bot.js";
 import type { Game } from "./Game.js";
-import type { GameCharacter } from "./GameCharacter.js";
+import { GameCharacter } from "./GameCharacter.js";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType } from "./HasEmojiCore.js";
 import type { SageCache } from "./SageCache.js";
@@ -276,6 +276,12 @@ export abstract class SageCommand<
 				?? this.sageUser.playerCharacters.getAutoCharacter(autoChannelData)
 				?? undefined;
 		});
+	}
+
+	public get gmCharacter(): GameCharacter {
+		return this.cache.get("gmCharacter", () =>
+			this.game?.gmCharacter ?? new GameCharacter({ id:"", name:this.server.gmCharacterName })
+		);
 	}
 
 	//#endregion
