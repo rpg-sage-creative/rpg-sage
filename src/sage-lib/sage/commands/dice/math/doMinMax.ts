@@ -1,7 +1,19 @@
+import XRegExp from "xregexp";
 
 type Options = { globalFlag?: boolean; };
 export function getMinMaxRegex(options?: Options): RegExp {
-	const MIN_MAX_REGEX = /(min|max)\(\s*(\d+(?:\s*,\s*\d+)+)\s*\)/i;
+	const MIN_MAX_REGEX = XRegExp(`
+							(min|max)                      # function name
+							\\(\\s*                        # open parentheses, optional spaces
+							(                              # open capture group
+								[-+]?\\d+(?:\\.\\d+)?      # first +- decimal number
+								(?:                        # open non-capture group
+									\\s*,\\s*              # comma, optional spaces
+									[-+]?\\d+(?:\\.\\d+)?  # additional +- decimal number
+								)*                         # close non-capture group, allow any number of them
+							)                              # close capture group
+							\\s*\\)                        # close parentheses, optional spaces
+							`, "xi");
 	return options?.globalFlag
 		? new RegExp(MIN_MAX_REGEX, "gi")
 		: MIN_MAX_REGEX;
