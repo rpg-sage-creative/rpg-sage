@@ -27,6 +27,10 @@ export function doStatMath(value: string): string {
 		}
 	}
 
-	// return untouched input
+	// if we actually did some math, return the change
+	if (processed !== unpiped) {
+		return hasPipes ? `||${processed}||` : processed;
+	}
+
 	return value;
 }
