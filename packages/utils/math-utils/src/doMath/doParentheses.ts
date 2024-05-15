@@ -4,11 +4,11 @@ import { doSimple } from "./doSimple.js";
 type Options = { globalFlag?: boolean; };
 export function getParenthesesRegex(options?: Options): RegExp {
 	const PAREN_REGEX = XRegExp(`
-		\\(        # open parentheses
-		[^()]*     # optional non-parentheses
-		[^\\d.()]  # we need a non-number/decimal *and* non-parentheses
-		[^()]*     # optional non-parentheses
-		\\)        # close parentheses
+		\\(         # open parentheses
+		[^()]*      # optional non-parentheses
+		[^\\d.()-]  # we need a non-number/decimal *and* non-parentheses
+		[^()]*      # optional non-parentheses
+		\\)         # close parentheses
 		`, "x");
 	return options?.globalFlag
 		? new RegExp(PAREN_REGEX, "gi")
