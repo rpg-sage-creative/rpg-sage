@@ -1,6 +1,6 @@
+import { doMathFunctions } from "@rsc-utils/math-utils";
 import { doMath } from "./doMath.js";
 import { isMath } from "./isMath.js";
-import { doMathFunctions } from "./math/doMathFunctions.js";
 
 /**
  * Checks the stat value for math.

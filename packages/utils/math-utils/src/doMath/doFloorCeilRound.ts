@@ -3,13 +3,13 @@ import XRegExp from "xregexp";
 type Options = { globalFlag?: boolean; };
 export function getFloorCeilRoundRegex(options?: Options): RegExp {
 	const FLOOR_CEIL_REGEX = XRegExp(`
-							(floor|ceil|round)         # function name
-							\\(\\s*                    # open parentheses, optional spaces
-							(                          # open capture group
-								[-+]?\\d+(?:\\.\\d+)?  # +- decimal number
-							)                          # close capture group
-							\\s*\\)                    # close parentheses, optional spaces
-							`, "xi");
+		(floor|ceil|round)         # function name
+		\\(\\s*                    # open parentheses, optional spaces
+		(                          # open capture group
+			[-+]?\\d+(?:\\.\\d+)?  # +- decimal number
+		)                          # close capture group
+		\\s*\\)                    # close parentheses, optional spaces
+		`, "xi");
 	return options?.globalFlag
 		? new RegExp(FLOOR_CEIL_REGEX, "gi")
 		: FLOOR_CEIL_REGEX;
