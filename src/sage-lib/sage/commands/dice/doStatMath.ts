@@ -1,5 +1,6 @@
 import { doMath } from "./doMath.js";
 import { isMath } from "./isMath.js";
+import { doMathFunctions } from "./math/doMathFunctions.js";
 
 /**
  * Checks the stat value for math.
@@ -11,12 +12,21 @@ import { isMath } from "./isMath.js";
 export function doStatMath(value: string): string {
 	// check for piped "hidden" values
 	const hasPipes = (/\|{2}[^|]+\|{2}/).test(value);
+
+	// remove pipes
 	const unpiped = value.replace(/\|{2}/g, "");
-	if (isMath(`[${unpiped}]`)) {
-		const value = doMath(unpiped);
+
+	// process other math functions before passing to simple math
+	const processed = doMathFunctions(unpiped);
+
+	// handle simple math if applicable
+	if (isMath(`[${processed}]`)) {
+		const value = doMath(processed);
 		if (value !== null) {
 			return hasPipes ? `||${value}||` : value;
 		}
 	}
+
+	// return untouched input
 	return value;
 }
