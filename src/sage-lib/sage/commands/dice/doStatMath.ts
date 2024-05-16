@@ -1,3 +1,4 @@
+import { doMathFunctions } from "@rsc-utils/math-utils";
 import { doMath } from "./doMath.js";
 import { isMath } from "./isMath.js";
 
@@ -11,12 +12,25 @@ import { isMath } from "./isMath.js";
 export function doStatMath(value: string): string {
 	// check for piped "hidden" values
 	const hasPipes = (/\|{2}[^|]+\|{2}/).test(value);
+
+	// remove pipes
 	const unpiped = value.replace(/\|{2}/g, "");
-	if (isMath(`[${unpiped}]`)) {
-		const value = doMath(unpiped);
+
+	// process other math functions before passing to simple math
+	const processed = doMathFunctions(unpiped);
+
+	// handle simple math if applicable
+	if (isMath(`[${processed}]`)) {
+		const value = doMath(processed);
 		if (value !== null) {
 			return hasPipes ? `||${value}||` : value;
 		}
 	}
+
+	// if we actually did some math, return the change
+	if (processed !== unpiped) {
+		return hasPipes ? `||${processed}||` : processed;
+	}
+
 	return value;
 }
