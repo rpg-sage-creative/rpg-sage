@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.6.3",
-"branch":"v1.6.x-bug-fixes",
-"commit":"ade820e2e7e3c14c732aba09695f240f704af4d5",
-"commitSubject":"Merge remote-tracking branch 'origin' into v1.6.x-bug-fixes",
-"commitTs":1714860905000,
-"commitDate":"2024-05-04-1515",
-"buildTs":1714860947000,
-"buildDate":"2024-05-04-1515",
-"author":"Randal T Meyer"
+"version":"1.6.4",
+"branch":"main",
+"commit":"bbfa7b0e8d415cda30c7739dc9930d522c2a4c0e",
+"commitSubject":"Merge pull request #81 from rpg-sage-creative/more-stat-math",
+"commitTs":1715821008000,
+"commitDate":"2024-05-15-1756",
+"buildTs":1715821479000,
+"buildDate":"2024-05-15-1804",
+"author":"Randal"
 }
