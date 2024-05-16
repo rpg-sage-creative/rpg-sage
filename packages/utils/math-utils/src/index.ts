@@ -1,3 +1,4 @@
+export * from "./doMath/index.js";
 export * from "./acosDeg.js";
 export * from "./asinDeg.js";
 export * from "./cosDeg.js";
