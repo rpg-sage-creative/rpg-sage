@@ -4,6 +4,7 @@ import { doParentheses, hasParentheses } from "./doParentheses.js";
 import { doSimple, isSimple } from "./doSimple.js";
 import { unwrapNumbers, hasWrappedNumbers } from "./unwrapNumbers.js";
 
+/** Checks to see if the value it matches any of the "doMath" functions. */
 export function hasMathFunctions(value: string): boolean {
 	return hasMinMax(value)
 		|| hasFloorCeilRound(value)
@@ -13,6 +14,7 @@ export function hasMathFunctions(value: string): boolean {
 		;
 }
 
+/** Processes the value against the "doMath" functions until none are found. */
 export function doMathFunctions(value: string): string {
 	let done = false;
 	do {

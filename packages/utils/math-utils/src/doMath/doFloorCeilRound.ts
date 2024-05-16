@@ -1,6 +1,8 @@
 import XRegExp from "xregexp";
 
 type Options = { globalFlag?: boolean; };
+
+/** Returns a regular expression that finds: floor(number) or ceil(number) or round(number) */
 export function getFloorCeilRoundRegex(options?: Options): RegExp {
 	const FLOOR_CEIL_REGEX = XRegExp(`
 		(floor|ceil|round)         # function name
@@ -15,11 +17,12 @@ export function getFloorCeilRoundRegex(options?: Options): RegExp {
 		: FLOOR_CEIL_REGEX;
 }
 
+/** Convenience for getFloorCeilRoundRegex().test(value) */
 export function hasFloorCeilRound(value: string): boolean {
 	return getFloorCeilRoundRegex().test(value);
 }
 
-/** Checks the value for floor(left,right) or ceil(left,right) and replaces it with the result. */
+/** Checks the value for floor(number) or ceil(number) or round(number) and replaces it with the result. */
 export function doFloorCeilRound(value: string): string {
 	const regex = getFloorCeilRoundRegex({ globalFlag:true });
 	while (regex.test(value)) {

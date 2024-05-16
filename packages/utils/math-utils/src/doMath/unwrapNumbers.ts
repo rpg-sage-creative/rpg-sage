@@ -1,6 +1,8 @@
 import XRegExp from "xregexp";
 
 type Options = { globalFlag?: boolean; };
+
+/** Returns a regular expression that finds a number wrapped in parentheses */
 export function getWrappedNumberRegex(options?: Options): RegExp {
 	const WRAPPED_REGEX = XRegExp(`
 		\\(\\s*                    # open parentheses, optional spaces
@@ -14,6 +16,7 @@ export function getWrappedNumberRegex(options?: Options): RegExp {
 		: WRAPPED_REGEX;
 }
 
+/** Convenience for getWrappedNumberRegex().test(value) */
 export function hasWrappedNumbers(value: string): boolean {
 	return getWrappedNumberRegex().test(value);
 }

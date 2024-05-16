@@ -1,6 +1,8 @@
 import XRegExp from "xregexp";
 
 type Options = { globalFlag?: boolean; };
+
+/** Returns a regular expression that finds: min(...number[]) or max(...number[]) */
 export function getMinMaxRegex(options?: Options): RegExp {
 	const MIN_MAX_REGEX = XRegExp(`
 		(min|max)                      # function name
@@ -19,11 +21,12 @@ export function getMinMaxRegex(options?: Options): RegExp {
 		: MIN_MAX_REGEX;
 }
 
+/** Convenience for getMinMaxRegex().test(value) */
 export function hasMinMax(value: string): boolean {
 	return getMinMaxRegex().test(value);
 }
 
-/** Checks the value for min(left,right) or max(left,right) and replaces it with the result. */
+/** Checks the value for min(...number[]) or max(...number[]) and replaces it with the result. */
 export function doMinMax(value: string): string {
 	const regex = getMinMaxRegex({ globalFlag:true });
 	while (regex.test(value)) {
