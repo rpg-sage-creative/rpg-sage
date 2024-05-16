@@ -28,17 +28,17 @@
 	"private": true,
 	"author": "Randal T Meyer <randal.t.meyer@gmail.com> (https://rpgsage.io)",
 	"contributors": [],
-	"license": "ISC",
+	"license": "GPL-3.0-only",
 	"bugs": {
-		"url": "https://github.com/randaltmeyer/rpg-sage/issues",
+		"url": "https://github.com/rpg-sage-creative/rpg-sage/issues",
 		"email": "bugs@rpgsage.io"
 	},
-	"homepage": "https://github.com/randaltmeyer/rpg-sage#readme",
+	"homepage": "https://github.com/rpg-sage-creative/rpg-sage#readme",
 	"funding": {
 		"type": "patreon",
 		"url": "https://www.patreon.com/rpgsage"
 	},
-	"repository": "github:randaltmeyer/rpg-sage",
+	"repository": "github:rpg-sage-creative/rpg-sage",
 	"workspaces": [
 		"packages/*/*"
 	],
