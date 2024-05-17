@@ -223,22 +223,32 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 		if (this.hasUser(name)) {
 			return [this.getUserId(name)!];
 		}
-		const stringValue = this.getRoleId(name) ?? this.getString(name);
-		if (stringValue) {
-			const userIds = parseIds(stringValue, "user");
-			const userIdSet = new Set(userIds);
+		const userIdSet = new Set<string>();
+		const expandRoleId = async (roleId: string) => {
+			const guildRole = await this.sageCommand.discord.fetchGuildRole(roleId);
+			if (guildRole) {
+				guildRole.members.forEach(guildMember => userIdSet.add(guildMember.id));
+			}
+		}
+		if (this.hasUser(name)) {
+			userIdSet.add(this.getUserId(name)!);
+		}else if (this.hasRole(name)) {
 			if (expandRoles) {
-				const roleIds = parseIds(stringValue, "role");
-				for (const roleId of roleIds) {
-					const guildRole = await this.sageCommand.discord.fetchGuildRole(roleId);
-					if (guildRole) {
-						guildRole.members.forEach(guildMember => userIdSet.add(guildMember.id));
+				await expandRoleId(this.getRoleId(name)!);
+			}
+		}else {
+			const stringValue = this.getString(name);
+			if (stringValue) {
+				parseIds(stringValue, "user").forEach(userId => userIdSet.add(userId));
+				if (expandRoles) {
+					const roleIds = parseIds(stringValue, "role");
+					for (const roleId of roleIds) {
+						await expandRoleId(roleId);
 					}
 				}
 			}
-			return [...userIdSet];
 		}
-		return [];
+		return [...userIdSet];
 	}
 
 	/**
