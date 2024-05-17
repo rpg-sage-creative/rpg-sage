@@ -26,12 +26,12 @@
 						"description": "Game System, ex: PF2e or DnD5e",
 						"required": false
 					},
-					{ "type": 3, "name": "ic", "description": "In Character Channel", "required": false },
-					{ "type": 3, "name": "ooc", "description": "Out of Character Channel", "required": false },
-					{ "type": 3, "name": "gm", "description": "GM Only Channel", "required": false },
-					{ "type": 3, "name": "misc", "description": "Misc Channel", "required": false },
-					{ "type": 3, "name": "gms", "description": "Game Masters", "required": false },
-					{ "type": 3, "name": "players", "description": "Players", "required": false },
+					{ "name": "ic", "description": "In Character Channel", "required": false, "type": 7 },
+					{ "name": "ooc", "description": "Out of Character Channel", "required": false, "type": 7 },
+					{ "name": "gm", "description": "GM Only Channel", "required": false, "type": 7 },
+					{ "name": "misc", "description": "Misc Channel", "required": false, "type": 7 },
+					{ "name": "gms", "description": "Game Masters", "required": false, "type": 9 },
+					{ "name": "players", "description": "Players", "required": false, "type": 9 },
 					{
 						"choices": [
 							{ "name": "Embed", "value": "Embed" },
@@ -120,12 +120,12 @@
 						"description": "Game System, ex: PF2e or DnD5e",
 						"required": false
 					},
-					{ "type": 3, "name": "ic", "description": "In Character Channel", "required": false },
-					{ "type": 3, "name": "ooc", "description": "Out of Character Channel", "required": false },
-					{ "type": 3, "name": "gm", "description": "GM Only Channel", "required": false },
-					{ "type": 3, "name": "misc", "description": "Misc Channel", "required": false },
-					{ "type": 3, "name": "gms", "description": "Game Masters", "required": false },
-					{ "type": 3, "name": "players", "description": "Players", "required": false },
+					{ "name": "ic", "description": "In Character Channel", "required": false, "type": 7 },
+					{ "name": "ooc", "description": "Out of Character Channel", "required": false, "type": 7 },
+					{ "name": "gm", "description": "GM Only Channel", "required": false, "type": 7 },
+					{ "name": "misc", "description": "Misc Channel", "required": false, "type": 7 },
+					{ "name": "gms", "description": "Game Masters", "required": false, "type": 9 },
+					{ "name": "players", "description": "Players", "required": false, "type": 9 },
 					{
 						"choices": [
 							{ "name": "Embed", "value": "Embed" },
