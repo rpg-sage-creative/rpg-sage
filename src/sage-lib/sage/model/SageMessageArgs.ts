@@ -317,9 +317,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid boolean or "unset".
 	 */
-	public getBoolean(name: string): Optional<boolean>;
-	/** Gets the named option as a boolean */
-	public getBoolean(name: string, required: true): boolean;
 	public getBoolean(name: string): Optional<boolean> {
 		const string = this.getString(name);
 		if (isDefined(string)) {
@@ -338,9 +335,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
-	public getChannel<T extends GuildBasedChannel>(name: string): Optional<T>;
-	/** Gets the named option as a GuildBasedChannel */
-	public getChannel<T extends GuildBasedChannel>(name: string, required: true): T;
 	public getChannel<T extends GuildBasedChannel>(name: string): Optional<T> {
 		const keyValueArg = this.getKeyValueArg(name);
 		if (!keyValueArg.hasKey) return undefined;
@@ -370,9 +364,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid number or "unset".
 	 */
-	public getNumber(name: string): Optional<number>;
-	/** Gets the named option as a number */
-	public getNumber(name: string, required: true): number;
 	public getNumber(name: string): Optional<number> {
 		const string = this.getString(name);
 		if (isDefined(string)) {
@@ -387,9 +378,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
-	public getRole(name: string): Optional<Role>;
-	/** Gets the named option as a GuildBasedChannel */
-	public getRole(name: string, required: true): Role;
 	public getRole(name: string): Optional<Role> {
 		const keyValueArg = this.getKeyValueArg(name);
 		if (!keyValueArg.hasKey) return undefined;
@@ -408,15 +396,12 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	 * Returns undefined if not found.
 	 * Returns null if empty or "unset".
 	 */
-	public getString<U extends string = string>(name: string): Optional<U>;
-	/** Gets the named option as a string */
-	public getString<U extends string = string>(name: string, required: true): U;
-	public getString(name: string): Optional<string> {
+	public getString<U extends string = string>(name: string): Optional<U> {
 		const keyValueArg = this.getKeyValueArg(name);
 		if (!keyValueArg.hasKey) return undefined;
 		if (keyValueArg.hasUnset) return null;
 		if (keyValueArg.hasValue && isNotBlank(keyValueArg.value)) {
-			return keyValueArg.value;
+			return keyValueArg.value as U;
 		}
 		return null;
 	}
@@ -426,9 +411,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid User or "unset".
 	 */
-	public getUser(name: string): Optional<User>;
-	/** Gets the named option as a User */
-	public getUser(name: string, required: true): User;
 	public getUser(name: string): Optional<User> {
 		const keyValueArg = this.getKeyValueArg(name);
 		if (!keyValueArg.hasKey) return undefined;
