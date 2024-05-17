@@ -474,7 +474,7 @@ export function registerE20(): void {
 export async function handleEssence20Import(sageCommand: SageCommand): Promise<void> {
 	await sageCommand.reply(`Attempting to import character ...`, false);
 
-	const value = sageCommand.args.getString("pdf", true);
+	const value = sageCommand.args.getString("pdf") ?? "";
 	const isPdfUrl = /^http.*?\.pdf$/.test(value);
 	const isMessageUrl = value.startsWith("https://discord.com/channels/");
 

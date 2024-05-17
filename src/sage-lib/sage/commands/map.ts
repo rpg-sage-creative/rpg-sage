@@ -595,13 +595,13 @@ async function parseInput<T extends TGameMapImage>(sageInteraction: SageInteract
 		return [null, null];
 	}
 
-	const layerValue = capitalize(sageInteraction.args.getString("layer", true)) as "Aura" | "Terrain" | "Token";
+	const layerValue = capitalize(sageInteraction.args.getString("layer")) as "Aura" | "Terrain" | "Token";
 
 	const image: TGameMapImage = {
 		auras: [],
 		id: randomSnowflake(),
 		layer: LayerType[layerValue],
-		name: sageInteraction.args.getString("name", true),
+		name: sageInteraction.args.getString("name")!,
 		pos: [
 			sageInteraction.args.getNumber("col") ?? gameMap.spawn[COL],
 			sageInteraction.args.getNumber("row") ?? gameMap.spawn[ROW]
@@ -610,7 +610,7 @@ async function parseInput<T extends TGameMapImage>(sageInteraction: SageInteract
 			sageInteraction.args.getNumber("cols") ?? 1,
 			sageInteraction.args.getNumber("rows") ?? 1
 		],
-		url: sageInteraction.args.getString("url", true),
+		url: sageInteraction.args.getString("url")!,
 		userId: sageInteraction.user.id
 	};
 
