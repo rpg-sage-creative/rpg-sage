@@ -1,13 +1,15 @@
 import { error, errorReturnNull } from "@rsc-utils/console-utils";
-import { DiscordKey, splitMessageOptions, validateMessageOptions } from "@rsc-utils/discord-utils";
+import { DiscordKey, DMessage, splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
-import { deleteMessage } from "../../../../discord/deletedMessages";
-import type { TDialogMessage } from "../../../model/GameCharacter";
-import type { SageMessage } from "../../../model/SageMessage";
-import { DialogType } from "../../../repo/base/IdRepository";
-import type { DialogContent } from "../DialogContent";
-import { findLastMessage } from "../findLastMessage";
-import { updateEmbed } from "../updateEmbed";
+import { MessageAttachment } from "discord.js";
+import { deleteMessage } from "../../../../discord/deletedMessages.js";
+import type { TDialogMessage } from "../../../model/GameCharacter.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { addMessageDeleteButton } from "../../../model/utils/deleteButton.js";
+import { DialogType } from "../../../repo/base/IdRepository.js";
+import type { DialogContent } from "../DialogContent.js";
+import { findLastMessage } from "../findLastMessage.js";
+import { updateEmbed } from "../updateEmbed.js";
 
 function dialogMessageToDiscordKey(dialogMessage: TDialogMessage): DiscordKey {
 	return new DiscordKey(dialogMessage.serverDid, dialogMessage.channelDid, dialogMessage.threadDid, dialogMessage.messageDid);
@@ -25,10 +27,12 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, "dialog");
 	if (webhook) {
 		const embed = message.embeds[0];
+		const originalContent = embed?.description ?? message.content;
 		const updatedImageUrl = dialogContent.imageUrl;
 		const updatedContent = sageMessage.caches.format(dialogContent.content);
 		const updatedEmbed = updateEmbed(embed, updatedImageUrl, updatedContent);
 		const threadId = sageMessage.threadDid;
+
 		const msgOptions = { embeds:[updatedEmbed], threadId };
 
 		const postType = dialogContent.postType ?? (embed ? DialogType.Embed : DialogType.Post);
@@ -42,6 +46,15 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 		const isValid = validateMessageOptions(payloads[0]);
 		if (isValid) {
 			await webhook.editMessage(message.id, payloads[0]).then(() => deleteMessage(sageMessage.message), error);
+
+			const user = await sageMessage.discord.fetchUser(sageMessage.authorDid);
+			if (user) {
+				const content = `You edited: ${toMessageUrl(message as DMessage)}\nThe original content has been attached to this message.`;
+				const files = [new MessageAttachment(Buffer.from(originalContent, "utf-8"), `original-content.md`)];
+				const sent = await user.send({ content, files });
+				await addMessageDeleteButton(sent as DMessage, user.id);
+			}
+
 		}
 
 		/** @todo handle content/embed lengths that are too long and alert the user */
