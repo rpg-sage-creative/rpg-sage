@@ -530,7 +530,7 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 //#region slash command
 
 export async function handlePathbuilder2eImport(sageCommand: SageCommand): Promise<void> {
-	const pathbuilderId = sageCommand.args.getNumber("id", true);
+	const pathbuilderId = sageCommand.args.getNumber("id") ?? 0;
 	await sageCommand.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, false);
 
 	const pathbuilderChar = await PathbuilderCharacter.fetch(pathbuilderId, { });

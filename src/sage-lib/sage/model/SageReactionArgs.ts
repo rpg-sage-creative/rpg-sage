@@ -27,9 +27,6 @@ export class SageReactionArgs extends SageCommandArgs<SageReaction> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid boolean or "unset".
 	 */
-	public getBoolean(name: string): Optional<boolean>;
-	/** Gets the named option as a boolean */
-	public getBoolean(name: string, required: true): boolean;
 	public getBoolean(): Optional<boolean> {
 		return false;
 	}
@@ -39,9 +36,6 @@ export class SageReactionArgs extends SageCommandArgs<SageReaction> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
-	public getChannel(name: string): Optional<GuildBasedChannel>;
-	/** Gets the named option as a GuildBasedChannel */
-	public getChannel(name: string, required: true): GuildBasedChannel;
 	public getChannel(): Optional<GuildBasedChannel> {
 		return null;
 	}
@@ -55,9 +49,6 @@ export class SageReactionArgs extends SageCommandArgs<SageReaction> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid number or "unset".
 	 */
-	public getNumber(name: string): Optional<number>;
-	/** Gets the named option as a number */
-	public getNumber(name: string, required: true): number;
 	public getNumber(): Optional<number> {
 		return null;
 	}
@@ -67,9 +58,6 @@ export class SageReactionArgs extends SageCommandArgs<SageReaction> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid Role or "unset".
 	 */
-	public getRole(name: string): Optional<Role>;
-	/** Gets the named option as a GuildBasedChannel */
-	public getRole(name: string, required: true): Role;
 	public getRole(): Optional<Role> {
 		return null;
 	}
@@ -79,10 +67,7 @@ export class SageReactionArgs extends SageCommandArgs<SageReaction> {
 	 * Returns undefined if not found.
 	 * Returns null if empty or "unset".
 	 */
-	public getString<U extends string = string>(name: string): Optional<U>;
-	/** Gets the named option as a string */
-	public getString<U extends string = string>(name: string, required: true): U;
-	public getString(): Optional<string> {
+	public getString<U extends string = string>(): Optional<U> {
 		return null;
 	}
 

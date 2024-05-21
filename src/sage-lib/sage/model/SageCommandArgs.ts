@@ -62,8 +62,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns null if not a valid boolean or "unset".
 	 */
 	public abstract getBoolean(key: string): Optional<boolean>;
-	/** Gets the named option as a boolean */
-	public abstract getBoolean(key: string, required: true): boolean;
 
 	/** Returns true if getBoolean(name) is not null and not undefined. */
 	public hasBoolean(key: string): boolean {
@@ -76,8 +74,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
 	public abstract getChannel(name: string): Optional<GuildBasedChannel>;
-	/** Gets the named option as a GuildBasedChannel */
-	public abstract getChannel(name: string, required: true): GuildBasedChannel;
 
 	/** Returns true if getChannel(name) is not null and not undefined. */
 	public hasChannel(name: string): boolean {
@@ -89,9 +85,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid Snowflake or "unset".
 	 */
-	public getChannelId(name: string): Optional<Snowflake>;
-	/** Gets the named option as a Snowflake */
-	public getChannelId(name: string, required: true): Snowflake;
 	public getChannelId(name: string): Optional<Snowflake> {
 		const channel = this.getChannel(name);
 		return channel ? channel.id : channel;
@@ -104,6 +97,9 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 
 	/** Returns an array of channelIds passed in for the given argument. */
 	public getChannelIds(name: string): Snowflake[] {
+		if (this.hasChannel(name)) {
+			return [this.getChannelId(name)!];
+		}
 		const stringValue = this.getString(name);
 		if (stringValue) {
 			return parseIds(stringValue, "channel");
@@ -119,9 +115,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid enum value or "unset".
 	 */
-	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): Optional<V>;
-	/** Gets the named option as a value from the given enum type. */
-	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string, required: true): V;
 	public getEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>, name: string): Optional<V> {
 		const string = this.getString(name);
 		if (isDefined(string)) {
@@ -141,8 +134,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns null if not a valid number or "unset".
 	 */
 	public abstract getNumber(name: string): Optional<number>;
-	/** Gets the named option as a number */
-	public abstract getNumber(name: string, required: true): number;
 
 	/** Returns true if getNumber(name) is not null and not undefined. */
 	public hasNumber(name: string): boolean {
@@ -155,8 +146,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns null if not a valid Role or "unset".
 	 */
 	public abstract getRole(name: string): Optional<Role>;
-	/** Gets the named option as a Role */
-	public abstract getRole(name: string, required: true): Role;
 
 	/** Returns true if getRole(name) is not null and not undefined. */
 	public hasRole(name: string): boolean {
@@ -168,9 +157,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid Snowflake or "unset".
 	 */
-	public getRoleId(name: string): Optional<Snowflake>;
-	/** Gets the named option as a Snowflake */
-	public getRoleId(name: string, required: true): Snowflake;
 	public getRoleId(name: string): Optional<Snowflake> {
 		const role = this.getRole(name);
 		return role ? role.id : role;
@@ -187,8 +173,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns null if empty or "unset".
 	 */
 	public abstract getString<U extends string = string>(name: string): Optional<U>;
-	/** Gets the named option as a string */
-	public abstract getString<U extends string = string>(name: string, required: true): U;
 
 	/** Returns true if getString(name) is not null and not undefined. */
 	public hasString(name: string): boolean;
@@ -212,8 +196,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns null if not a valid User or "unset".
 	 */
 	public abstract getUser(name: string): Optional<User>;
-	/** Gets the named option as a User */
-	public abstract getUser(name: string, required: true): User;
 
 	/** Returns true if getUser(name) is not null and not undefined. */
 	public hasUser(name: string): boolean {
@@ -225,9 +207,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid Snowflake or "unset".
 	 */
-	public getUserId(name: string): Optional<Snowflake>;
-	/** Gets the named option as a Snowflake */
-	public getUserId(name: string, required: true): Snowflake;
 	public getUserId(name: string): Optional<Snowflake> {
 		const user = this.getUser(name);
 		return user ? user.id : user;
@@ -241,22 +220,35 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	/** Returns an array of user snowflakes passed in for the given argument. Optionally finds roles and gets all the users from the roles. */
 	public async getUserIds(name: string, expandRoles?: boolean): Promise<Snowflake[]> {
 		/** @todo investigate iterating over all the message.mentions and testing the stringValue for the \bSNOWFLAKE\b */
-		const stringValue = this.getString(name);
-		if (stringValue) {
-			const userIds = parseIds(stringValue, "user");
-			const userIdSet = new Set(userIds);
+		if (this.hasUser(name)) {
+			return [this.getUserId(name)!];
+		}
+		const userIdSet = new Set<string>();
+		const expandRoleId = async (roleId: string) => {
+			const guildRole = await this.sageCommand.discord.fetchGuildRole(roleId);
+			if (guildRole) {
+				guildRole.members.forEach(guildMember => userIdSet.add(guildMember.id));
+			}
+		}
+		if (this.hasUser(name)) {
+			userIdSet.add(this.getUserId(name)!);
+		}else if (this.hasRole(name)) {
 			if (expandRoles) {
-				const roleIds = parseIds(stringValue, "role");
-				for (const roleId of roleIds) {
-					const guildRole = await this.sageCommand.discord.fetchGuildRole(roleId);
-					if (guildRole) {
-						guildRole.members.forEach(guildMember => userIdSet.add(guildMember.id));
+				await expandRoleId(this.getRoleId(name)!);
+			}
+		}else {
+			const stringValue = this.getString(name);
+			if (stringValue) {
+				parseIds(stringValue, "user").forEach(userId => userIdSet.add(userId));
+				if (expandRoles) {
+					const roleIds = parseIds(stringValue, "role");
+					for (const roleId of roleIds) {
+						await expandRoleId(roleId);
 					}
 				}
 			}
-			return [...userIdSet];
 		}
-		return [];
+		return [...userIdSet];
 	}
 
 	/**
@@ -264,9 +256,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns undefined if not found.
 	 * Returns null if empty or "unset".
 	 */
-	public getUuid(name: string): Optional<UUID>;
-	/** Gets the named option as a VALID_UUID. */
-	public getUuid(name: string, required: true): UUID;
 	public getUuid(name: string): Optional<UUID> {
 		const value = this.getString(name);
 		if (value) {

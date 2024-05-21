@@ -81,8 +81,6 @@ export async function gCmdCreate(sageCommand: SageCommand): Promise<void> {
 		return;
 	}
 
-	sageCommand.defer(false);
-
 	const updated = await gameCreate(sageCommand);
 	if (updated === true) {
 		await sageCommand.whisper({ content:"Game Created." });
@@ -94,6 +92,6 @@ export async function gCmdCreate(sageCommand: SageCommand): Promise<void> {
 		await sageCommand.whisper({ content:"Please try /sage-game-create" });
 
 	}else if (updated === undefined) {
-		sageCommand.noDefer();
+		// do nothing
 	}
 }

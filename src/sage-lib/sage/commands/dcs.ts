@@ -61,7 +61,7 @@ async function dcsByLevel(sageMessage: SageMessage): Promise<void> {
 //#region slash command
 
 async function slashHandler(sageInteraction: SageInteraction): Promise<void> {
-	const table = sageInteraction.args.getString<"simple" | "level" | "spell">("table", true);
+	const table = sageInteraction.args.getString<"simple" | "level" | "spell">("table");
 	if (table === "simple") {
 		const proficiency = sageInteraction.args.getString("proficiency");
 		return sageInteraction.reply(_simpleDcs(proficiency), false);
