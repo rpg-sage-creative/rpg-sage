@@ -109,7 +109,7 @@ function mergeEmbeds(content?: string | null, embeds?: MsgEmbed[] | null, color?
 /** Used to convert a single message options object into an array to ensure we don't break posting limits. */
 export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOptions?: SplitOptions): T[] {
 	// break out the content, embeds, and files; saving the remaining options to be used in each payload
-	const { components, content, embedContent, embeds, files, ...baseOptions } = msgOptions;
+	const { attachments, components, content, embedContent, embeds, files, ...baseOptions } = msgOptions;
 
 	// convert incoming embedContent to embeds
 	const convertedEmbeds = contentToEmbeds(embedContent, splitOptions?.embedColor) as MsgEmbed[] ?? [];
@@ -180,11 +180,14 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOp
 	});
 
 	// only set components or files /if/ we have them
-	if (components?.length || files?.length) {
+	if (attachments?.length || components?.length || files?.length) {
 		// if we somehow don't have a payload, add one
 		if (!payloads.length) {
 			payloads.push({ } as T);
 		}
+
+		// only include attachments in the first payload
+		payloads[0].attachments = attachments;
 
 		// only include components in the first payload
 		payloads[0].components = components;
