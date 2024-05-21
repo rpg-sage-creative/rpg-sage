@@ -224,12 +224,14 @@ export async function gSendDetails(sageCommand: SageCommand, game?: Game): Promi
 	const renderableContent = await createDetails(sageCommand, game);
 	if (renderableContent) {
 		await sageCommand.dChannel?.send({ embeds:resolveToEmbeds(sageCommand.sageCache, renderableContent) });
+		await sageCommand.noDefer();
 	}
 }
 
-export async function gReplyDetails(sageCommand: SageCommand, game?: Game): Promise<void> {
-	const renderableContent = await createDetails(sageCommand, game);
-	if (renderableContent) {
-		await sageCommand.reply(renderableContent, true);
-	}
-}
+// export async function gReplyDetails(sageCommand: SageCommand, game?: Game): Promise<void> {
+// 	const renderableContent = await createDetails(sageCommand, game);
+// 	if (renderableContent) {
+// 		await sageCommand.reply(renderableContent, true);
+// 		await sageCommand.noDefer();
+// 	}
+// }

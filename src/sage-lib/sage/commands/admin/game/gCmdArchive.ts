@@ -13,21 +13,17 @@ export async function gCmdArchive(sageCommand: SageCommand): Promise<void> {
 		return;
 	}
 
-	sageCommand.defer(false);
-
 	await gSendDetails(sageCommand);
 	const archive = await discordPromptYesNo(sageCommand, `Archive Game?`);
-	if (!archive) {
-		return sageCommand.noDefer();
-	}
+	if (archive) {
+		const archived = await sageCommand.game.archive();
+		if (archived) {
+			await sageCommand.whisper("Game Archived.");
 
-	const archived = await sageCommand.game.archive();
-	if (archived) {
-		await sageCommand.whisper("Game Archived.");
+		}else {
+			await sageCommand.whisper("Unknown Error; Game NOT Archived!");
 
-	}else {
-		await sageCommand.whisper("Unknown Error; Game NOT Archived!");
-
+		}
 	}
 
 }
