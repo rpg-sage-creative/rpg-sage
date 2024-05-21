@@ -26,10 +26,10 @@
 						"description": "Game System, ex: PF2e or DnD5e",
 						"required": false
 					},
-					{ "name": "ic", "description": "In Character Channel", "required": false, "type": 7 },
-					{ "name": "ooc", "description": "Out of Character Channel", "required": false, "type": 7 },
-					{ "name": "gm", "description": "GM Only Channel", "required": false, "type": 7 },
-					{ "name": "misc", "description": "Misc Channel", "required": false, "type": 7 },
+					{ "name": "ic-channel", "description": "In Character Channel", "required": false, "type": 7 },
+					{ "name": "ooc-channel", "description": "Out of Character Channel", "required": false, "type": 7 },
+					{ "name": "gm-channel", "description": "GM Only Channel", "required": false, "type": 7 },
+					{ "name": "misc-channel", "description": "Misc Channel", "required": false, "type": 7 },
 					{ "name": "gms", "description": "Game Masters", "required": false, "type": 9 },
 					{ "name": "players", "description": "Players", "required": false, "type": 9 },
 					{
@@ -120,10 +120,10 @@
 						"description": "Game System, ex: PF2e or DnD5e",
 						"required": false
 					},
-					{ "name": "ic", "description": "In Character Channel", "required": false, "type": 7 },
-					{ "name": "ooc", "description": "Out of Character Channel", "required": false, "type": 7 },
-					{ "name": "gm", "description": "GM Only Channel", "required": false, "type": 7 },
-					{ "name": "misc", "description": "Misc Channel", "required": false, "type": 7 },
+					{ "name": "ic-channel", "description": "In Character Channel", "required": false, "type": 7 },
+					{ "name": "ooc-channel", "description": "Out of Character Channel", "required": false, "type": 7 },
+					{ "name": "gm-channel", "description": "GM Only Channel", "required": false, "type": 7 },
+					{ "name": "misc-channel", "description": "Misc Channel", "required": false, "type": 7 },
 					{ "name": "gms", "description": "Game Masters", "required": false, "type": 9 },
 					{ "name": "players", "description": "Players", "required": false, "type": 9 },
 					{
