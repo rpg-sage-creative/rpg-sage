@@ -10,19 +10,19 @@ export enum DiceSecretMethodType {
 
 export function parseDiceSecretMethodType(value: Optional<string>): DiceSecretMethodType | undefined {
 	if (value) {
-		if (/ignore/i.test(value)) {
+		if (/Ignore/i.test(value)) {
 			return DiceSecretMethodType.Ignore;
 		}
-		if (/hide/i.test(value)) {
+		if (/Hide/i.test(value)) {
 			return DiceSecretMethodType.Hide;
 		}
-		if (/gm/i.test(value)) {
+		if (/gm|GameMasterChannel/i.test(value)) {
 			return DiceSecretMethodType.GameMasterChannel;
 		}
-		if (/dm/i.test(value)) {
+		if (/dm|GameMasterDirect/i.test(value)) {
 			return DiceSecretMethodType.GameMasterDirect;
 		}
-		// if (/thread/i.test(value)) {
+		// if (/thread|GameMasterThread/i.test(value)) {
 		// 	return DiceSecretMethodType.GameMasterThread;
 		// }
 	}

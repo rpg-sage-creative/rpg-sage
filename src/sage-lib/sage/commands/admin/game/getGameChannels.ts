@@ -4,22 +4,30 @@ import { DiscordKey, toChannelMention } from "@rsc-utils/discord-utils";
 
 type Results = { free:SageChannel[]; used:SageChannel[]; };
 
+function getChannelIds({ args }: SageCommand, name: string): string[] {
+	const channelName = `${name}-channel`;
+	if (args.hasChannel(channelName)) {
+		return args.getChannelIds(channelName);
+	}
+	return args.getChannelIds(name);
+}
+
 export async function getGameChannels(sageCommand: SageCommand, includeThisChannel: boolean): Promise<Results> {
 	const channels: SageChannel[] = [];
 
-	const icIds = sageCommand.args.getChannelIds("ic");
+	const icIds = getChannelIds(sageCommand, "ic");
 	icIds.forEach(id => channels.push({ id, type:SageChannelType.InCharacter }));
 
-	const oocIds = sageCommand.args.getChannelIds("ooc");
+	const oocIds = getChannelIds(sageCommand, "ooc");
 	oocIds.forEach(id => channels.push({ id, type:SageChannelType.OutOfCharacter }));
 
-	const gmIds = sageCommand.args.getChannelIds("gm");
+	const gmIds = getChannelIds(sageCommand, "gm");
 	gmIds.forEach(id => channels.push({ id, type:SageChannelType.GameMaster }));
 
-	const diceIds = sageCommand.args.getChannelIds("dice");
+	const diceIds = getChannelIds(sageCommand, "dice");
 	diceIds.forEach(id => channels.push({ id, type:SageChannelType.Dice }));
 
-	const miscIds = sageCommand.args.getChannelIds("misc");
+	const miscIds = getChannelIds(sageCommand, "misc");
 	miscIds.forEach(id => channels.push({ id, type:SageChannelType.Miscellaneous }));
 
 	if (!channels.length && includeThisChannel && sageCommand.channelDid) {

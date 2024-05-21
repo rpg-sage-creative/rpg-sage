@@ -1,6 +1,6 @@
 import type { Cache } from "@rsc-utils/cache-utils";
 import { debug, warn } from "@rsc-utils/console-utils";
-import { DiscordKey, type DInteraction, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
+import { DiscordKey, DMessage, type DInteraction, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isString } from "@rsc-utils/string-utils";
@@ -17,6 +17,7 @@ import { SageCache } from "./SageCache.js";
 import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageInteractionArgs } from "./SageInteractionArgs.js";
 import type { HasChannels, HasGame } from "./index.js";
+import { addMessageDeleteButton } from "./utils/deleteButton.js";
 
 interface SageInteractionCore extends SageCommandCore {
 	interaction: DInteraction;
@@ -139,90 +140,67 @@ export class SageInteraction<T extends DInteraction = any>
 
 	/** Convenience for .interation.deferReply().then(() => .interaction.deleteReply()) */
 	public async noDefer(): Promise<void> {
-		return this.pushToReplyStack(async () => {
-			if (!this.interaction.deferred) {
-				await this.interaction.deferReply();
-			}
-			if (this.interaction.replied) {
-				await this.interaction.deleteReply();
-			}
-		});
+		if (!this.interaction.deferred && !this.interaction.replied) {
+			await this.defer(true);
+			await this.interaction.deleteReply();
+			this._noReply = true;
+		}
 	}
 
+	private _noReply = false;
+
 	/** Defers the interaction so that a reply can be sent later. */
-	public defer(ephemeral: boolean): Promise<void> {
-		return this.pushToReplyStack(() => {
-			if (!this.interaction.deferred) {
-				if ("deferUpdate" in this.interaction) {
-					return this.interaction.deferUpdate();
-				}
-				if ("deferReply" in this.interaction) {
-					return this.interaction.deferReply({
-						ephemeral:this.sageCache.server ? (ephemeral ?? true) : false
-					});
-				}
+	public async defer(ephemeral: boolean): Promise<void> {
+		if (!this.interaction.deferred) {
+			if ("deferUpdate" in this.interaction) {
+				await this.interaction.deferUpdate();
+			}else if ("deferReply" in this.interaction) {
+				await this.interaction.deferReply({
+					ephemeral:this.sageCache.server ? (ephemeral ?? true) : false
+				});
+			}else {
 				warn(`IDE says we should never reach this code ...`);
 			}
-			return Promise.resolve();
-		});
+		}
 	}
 
 	/** Deletes the reply and any updates (ONLY IF NOT EPHEMERAL) */
 	public async deleteReply(): Promise<void> {
-		return this.pushToReplyStack(async () => {
-			if (this.interaction.replied) {
-				if (this.updates.length) {
-					await deleteMessages(this.updates);
-				}
-				await this.interaction.deleteReply();
-			}
-		});
-	}
-
-	private replyStack?: Promise<any>;
-	private pushToReplyStack(fn: () => Promise<any>): Promise<any> {
-		if (!this.replyStack) {
-			this.replyStack = Promise.resolve();
+		if (this.updates.length) {
+			await deleteMessages(this.updates);
+			this.updates.length = 0;
 		}
-		this.replyStack = this.replyStack.then(fn);
-		return this.replyStack;
+		await this.interaction.deleteReply();
 	}
 
 	/** Uses reply() if not replied to yet or editReply() to edit the previous reply. */
 	public async reply(args: TSendArgs): Promise<void>;
 	public async reply(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void>;
 	public async reply(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void> {
-		return this.pushToReplyStack(async () => {
-			const args = this.resolveToOptions(renderableOrArgs, ephemeral);
-			if (this.interaction.deferred || this.interaction.replied) {
-				/** @todo confirm that we need to do the followup step here */
-				if (ephemeral || this.interaction.ephemeral) {
-					const message = await this.interaction.followUp(args as InteractionReplyOptions) as Message<boolean>;
-					this.updates.push(message);
-				}else {
-					await this.interaction.editReply(args) as any;
-				}
-
-			}else if ("update" in this.interaction) {
-				await this.interaction.update(args as InteractionUpdateOptions);
-
-			}else if ("reply" in this.interaction) {
-				await this.interaction.reply(args as InteractionReplyOptions);
+		const args = this.resolveToOptions(renderableOrArgs, ephemeral);
+		if (this._noReply) {
+			const message = await this.interaction.channel?.send(args);
+			if (message) {
+				await addMessageDeleteButton(message as DMessage, this.sageUser.did);
+				this.updates.push(message);
 			}
-		});
-	}
 
-	// /** Uses followUp() if a reply was given, otherwise uses this.reply()  */
-	// public async update(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void> {
-	// 	return this.pushToReplyStack(async () => {
-	// 		if (this.interaction.replied) {
-	// 			const args = this.resolveToOptions(renderable, ephemeral);
-	// 			this.updates.push(await this.interaction.followUp(args as InteractionReplyOptions) as Message<boolean>);
-	// 		}else {
-	// 			await this.reply(renderable, ephemeral);
-	// 		}
-	// 	});
-	// }
+		}else if (this.interaction.deferred || this.interaction.replied) {
+			/** @todo confirm that we need to do the followup step here */
+			// if (ephemeral || this.interaction.ephemeral) {
+				const message = await this.interaction.followUp(args as InteractionReplyOptions) as Message<boolean>;
+				this.updates.push(message);
+			// }else {
+			// 	await this.interaction.editReply(args) as any;
+			// }
+
+		}else if ("update" in this.interaction) {
+			await this.interaction.update(args as InteractionUpdateOptions);
+
+		}else if ("reply" in this.interaction) {
+			await this.interaction.reply(args as InteractionReplyOptions);
+		}
+	}
 
 	/** Sends a full message to the channel or user the interaction originated in. */
 	public send(renderableContentResolvable: RenderableContentResolvable): Promise<Message[]>;

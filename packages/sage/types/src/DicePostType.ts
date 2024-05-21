@@ -15,10 +15,10 @@ export function parseDicePostType(value: Optional<string>): DicePostType | undef
 		if (/\bmulti(ple)?[ -]?posts?\b/i.test(value)) {
 			return DicePostType.MultiplePosts;
 		}
-		if (/\bembed\b/i.test(value)) {
+		if (/\b(single)?embed\b/i.test(value)) {
 			return DicePostType.SingleEmbed;
 		}
-		if (/\bpost\b/i.test(value)) {
+		if (/\b(single)?post\b/i.test(value)) {
 			return DicePostType.SinglePost;
 		}
 	}

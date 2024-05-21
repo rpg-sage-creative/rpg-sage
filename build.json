@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.6.4",
+"version":"1.6.5",
 "branch":"main",
-"commit":"bbfa7b0e8d415cda30c7739dc9930d522c2a4c0e",
-"commitSubject":"Merge pull request #81 from rpg-sage-creative/more-stat-math",
-"commitTs":1715821008000,
-"commitDate":"2024-05-15-1756",
-"buildTs":1715821479000,
-"buildDate":"2024-05-15-1804",
+"commit":"4fc2f7e692a9c40a0c236e77aa49d2414a0e4161",
+"commitSubject":"Merge pull request #84 from rpg-sage-creative/game-slash-mentionables",
+"commitTs":1716269828000,
+"commitDate":"2024-05-20-2237",
+"buildTs":1716269903000,
+"buildDate":"2024-05-20-2238",
 "author":"Randal"
 }
