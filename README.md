@@ -7,7 +7,10 @@ While originally written specific to Pathfinder 2e, the core dialog and dice fun
 
 ## Dev Setup
 
-To ensure compatibility, use VSCode, Node 18.14.1, and Typescript 4.7.4 (other TS versions break it currently)!
+For transparency, and to ensure compatibility, the following versions are used:
+- The Dev Lab: use VSCode, NVM 0.39.7, Node 18.20.2, and Typescript 5.4.5
+- The Server: NVM 0.39.7, Node 18.15.0, and Typescript 5.1.6
+
 The tasks.json file's build task includes a dependency that creates an index.d.ts for pdf2json ... mind it!
 
 ## Installation
