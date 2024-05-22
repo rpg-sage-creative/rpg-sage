@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.6.6",
+"version":"1.6.7",
 "branch":"main",
-"commit":"c8165309805f615e9af29f6a806bfbea23f9de2f",
-"commitSubject":"Merge pull request #86 from rpg-sage-creative/dm-original-content-on-edit",
-"commitTs":1716330545000,
-"commitDate":"2024-05-21-1529",
-"buildTs":1716330595000,
-"buildDate":"2024-05-21-1529",
+"commit":"eb28ebf4968553ede946f3c7efa5e103d354705c",
+"commitSubject":"Merge pull request #87 from rpg-sage-creative/stat-math-fixed-dice-fix",
+"commitTs":1716399171000,
+"commitDate":"2024-05-22-1032",
+"buildTs":1716399205000,
+"buildDate":"2024-05-22-1033",
 "author":"Randal"
 }
