@@ -1,4 +1,4 @@
-import { getSageId, getWebhookName, SageWebhookType } from "@rsc-sage/env";
+import { getSageId, getWebhookName, type SageWebhookType } from "@rsc-sage/env";
 import { filterAsync } from "@rsc-utils/async-array-utils";
 import { debug, error, info, warn } from "@rsc-utils/console-utils";
 import { DTextChannel, DThreadChannel, DiscordKey, toHumanReadable, type DChannelResolvable, type DGuildResolvable, type DMessageChannel } from "@rsc-utils/discord-utils";
@@ -146,19 +146,6 @@ export class DiscordCache {
 		const guildDid = discordKey.hasServer ? discordKey.server : this.guild?.id;
 		const guild = guildDid ? await this.fetchGuild(guildDid) : null;
 		return guild ? dGet<TextChannel>(guild.channels, discordKey.threadOrChannel) : null;
-	}
-
-	public async fetchChannelName(channelDid: Snowflake): Promise<string>;
-	public async fetchChannelName(discordKey: DiscordKey): Promise<string>;
-	public async fetchChannelName(didOrKey: Snowflake | DiscordKey): Promise<string> {
-		const channel = await this.fetchChannel(didOrKey as DiscordKey);
-		if (channel) {
-			if (channel.type === "DM") {
-				return `dm${toHumanReadable(channel.recipient)}`;
-			}
-			return `${channel.guild.name}#${channel.name}`;
-		}
-		return "ERROR_FETCHING_GUILD_CHANNEL";
 	}
 
 	//#endregion

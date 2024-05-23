@@ -340,7 +340,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		if (!keyValueArg.hasKey) return undefined;
 		if (keyValueArg.hasUnset) return null;
 		if (keyValueArg.hasValue) {
-			const channelId = parseId(keyValueArg.value, "channel");
+			const channelId = parseId(keyValueArg.value.trim(), "channel");
 			if (channelId) {
 				const channel = this.sageCommand.message.mentions.channels.get(channelId) ?? null;
 				return channel as T;

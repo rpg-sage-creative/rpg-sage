@@ -1,7 +1,7 @@
 import { DicePostType, GameSystemType, PostType, SageChannel, SageChannelType, parseGameSystem } from "@rsc-sage/types";
 import { mapAsync } from "@rsc-utils/async-array-utils";
 import { warn } from "@rsc-utils/console-utils";
-import { DiscordKey } from "@rsc-utils/discord-utils";
+import { DiscordKey, toChannelMention } from "@rsc-utils/discord-utils";
 import { stringify } from "@rsc-utils/json-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
@@ -9,7 +9,6 @@ import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import { GuildChannel } from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice/index.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
-import type { DiscordCache } from "../../../discord/index.js";
 import type { Game } from "../../model/Game.js";
 import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game.js";
 import type { SageCache } from "../../model/SageCache.js";
@@ -21,10 +20,6 @@ import { BotServerGameType } from "../helpers/BotServerGameType.js";
 
 //#region details
 
-async function fetchGuildChannelName(discord: DiscordCache, channelDid: Snowflake): Promise<string> {
-	return discord.fetchChannelName(channelDid);
-}
-
 async function channelDetailsAppendDialog(renderableContent: RenderableContent, server: Server, game: Optional<Game>, channel: SageChannel): Promise<void> {
 	if (![SageChannelType.None, SageChannelType.Dice].includes(channel.type!)) {
 		renderableContent.append(`<b>Dialog Options</b>`);
@@ -34,8 +29,7 @@ async function channelDetailsAppendDialog(renderableContent: RenderableContent, 
 		renderableContent.append(`[spacer]<b>Dialog Type</b> ${dialogType ?? `<i>inherited (${inheritedDialogType})</i>`}`);
 
 		if (channel.sendDialogTo) {
-			const sendToName = await fetchGuildChannelName(server.discord, channel.sendDialogTo);
-			renderableContent.append(`[spacer]<b>Send Dialog To</b> #${sendToName} (${channel.sendDialogTo})`);
+			renderableContent.append(`[spacer]<b>Send Dialog To</b> ${toChannelMention(channel.sendDialogTo) ?? "<i>unknown</i>"}`);
 		}
 	}
 }
@@ -62,8 +56,7 @@ async function channelDetailsAppendDice(renderableContent: RenderableContent, se
 	renderableContent.append(`[spacer]<b>Secret Checks</b> ${diceSecretMethodType ?? `<i>inherited (${inheritedDiceSecretMethodType})</i>`}`);
 
 	if (channel.sendDiceTo) {
-		const sendToName = await fetchGuildChannelName(server.discord, channel.sendDiceTo);
-		renderableContent.append(`[spacer]<b>Send Dice To</b> #${sendToName} (${channel.sendDiceTo})`);
+		renderableContent.append(`[spacer]<b>Send Dice To</b> ${toChannelMention(channel.sendDiceTo) ?? "<i>unknown</i>"}`);
 	}
 }
 
