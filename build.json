@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.6.7",
+"version":"1.6.8",
 "branch":"main",
-"commit":"eb28ebf4968553ede946f3c7efa5e103d354705c",
-"commitSubject":"Merge pull request #87 from rpg-sage-creative/stat-math-fixed-dice-fix",
-"commitTs":1716399171000,
-"commitDate":"2024-05-22-1032",
-"buildTs":1716399205000,
-"buildDate":"2024-05-22-1033",
+"commit":"5a4d6f5541aa0c56af7527811e567d380cc10fd6",
+"commitSubject":"fix sagemessageargs getchannel (trim value); also use mentions in channel details",
+"commitTs":1716502327000,
+"commitDate":"2024-05-23-1512",
+"buildTs":1716502448000,
+"buildDate":"2024-05-23-1514",
 "author":"Randal"
 }
