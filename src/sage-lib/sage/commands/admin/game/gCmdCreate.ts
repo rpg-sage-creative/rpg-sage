@@ -71,6 +71,7 @@ async function gameCreate(sageCommand: SageCommand): Promise<boolean | undefined
 			}
 			return true;
 		}
+		return false;
 	}
 	return undefined;
 }
