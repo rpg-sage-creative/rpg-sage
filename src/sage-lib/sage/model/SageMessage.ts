@@ -6,6 +6,7 @@ import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/
 import { type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Message, User } from "discord.js";
+import XRegExp from "xregexp";
 import { ArgsManager } from "../../discord/ArgsManager.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
@@ -52,9 +53,8 @@ export class SageMessage
 	public static async fromMessage(message: DMessage, originalMessage: Optional<DMessage>): Promise<SageMessage> {
 		const sageCache = await SageCache.fromMessage(message);
 		const prefixOrDefault = sageCache.getPrefixOrDefault();
-		const prefixRegex = prefixOrDefault
-			? new RegExp(`^\s*(sage|${prefixOrDefault})[!?][!]?`, "i")
-			: new RegExp(`^\s*(sage)?[!?][!]?`, "i");
+		const regexOr = prefixOrDefault ? `sage|${XRegExp.escape(prefixOrDefault)}`.replace(/sage\|sage/i, "sage") : `sage`;
+		const prefixRegex = XRegExp(`^\\s*(${regexOr})?[!?][!]?`, "i");
 		const prefixMatch = prefixRegex.exec(message.content ?? "") ?? [];
 		const hasPrefix = prefixMatch.length > 0;
 		const prefix = hasPrefix ? prefixMatch[1] ?? "" : prefixOrDefault;
@@ -103,7 +103,7 @@ export class SageMessage
 	private commandAndArgs?: TCommandAndArgs;
 	public get command(): string { return this.commandAndArgs?.command ?? "INVALID COMMAND"; }
 	public commandMatches(value: string | RegExp): boolean {
-		const regex = value instanceof RegExp ? value : new RegExp(`^${value}`, "i");
+		const regex = value instanceof RegExp ? value : XRegExp(`^${value}`, "i");
 		return regex.test(this.command);
 	}
 	public args!: SageMessageArgs;
