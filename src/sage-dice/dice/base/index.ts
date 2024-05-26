@@ -14,7 +14,6 @@ import {
 	DropKeepType,
 	HasDieCore, IDiceBase,
 	IRollBase,
-	SECRET_REGEX,
 	TDiceLiteral,
 	TDropKeepData,
 	TSign,
@@ -343,7 +342,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 
 	//#region DiceBase
 	public get hasSecret(): boolean {
-		return this.description.match(SECRET_REGEX) !== null;
+		return this.description.match(/secret/i) !== null;
 	}
 	public roll(): U {
 		const _constructor = <typeof DicePart>this.constructor;

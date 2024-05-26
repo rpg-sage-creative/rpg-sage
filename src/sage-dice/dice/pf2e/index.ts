@@ -139,8 +139,6 @@ function targetDataToTestData(targetData: TTargetData | TTestData): OrUndefined<
 
 //#region CONST
 
-export const DEADLY_REGEX = /deadly\s*d(\d+)/i;
-export const FATAL_REGEX = /fatal\s*d(\d+)/i;
 
 //#endregion
 
@@ -370,10 +368,12 @@ type DiceCore = baseDiceCore;
 export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 	//#region calculated
 	public get deadlyDie(): OrNull<number> {
+		const DEADLY_REGEX = /deadly\s*d(\d+)/i;
 		const deadlyDieMatch = mapFirst(this.diceParts, dicePart => dicePart.description.match(DEADLY_REGEX)) ?? [];
 		return +deadlyDieMatch[1] || null;
 	}
 	public get fatalDie(): OrNull<number> {
+		const FATAL_REGEX = /fatal\s*d(\d+)/i;
 		const fatalDieMatch = mapFirst(this.diceParts, dicePart => dicePart.description.match(FATAL_REGEX)) ?? [];
 		return +fatalDieMatch[1] || null;
 	}

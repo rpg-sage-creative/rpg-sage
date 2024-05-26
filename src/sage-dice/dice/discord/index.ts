@@ -48,10 +48,6 @@ import {
 } from "../vtm5e/index.js";
 import { getBasicDiceRegex } from "../../getBasicDiceRegex.js";
 
-const GAME_CHECK = /^(?:(cnc|dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest|vtm5|vtm5e)\b)?/i;
-const DICE_OUTPUT_CHECK = /^(?:(xxs|xs|s|m|xxl|xl|l|rollem)\b)?/i;
-const COUNT_CHECK = /^(\d+)(map-\d+)?#/i;
-
 function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {
 	switch (gameType) {
 		case GameType.CnC: return <typeof baseDiceGroup>cncDiceGroup;
@@ -262,6 +258,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 
 /** Returns the GameType at the beginning of the match along with the rest of the match. */
 function matchGameType(match: string, defaultGameType: OrUndefined<GameType>): [string, OrUndefined<GameType>] {
+	const GAME_CHECK = /^(?:(cnc|dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest|vtm5|vtm5e)\b)?/i;
 	const gameMatch = match.match(GAME_CHECK);
 	if (gameMatch) {
 		const gameTypeString = gameMatch[0];
@@ -275,6 +272,7 @@ function matchGameType(match: string, defaultGameType: OrUndefined<GameType>): [
 
 /** Returns the DiceOutputType at the beginning of the match along with the rest of the match. */
 function matchDiceOutputType(match: string, defaultDiceOutputType: OrUndefined<DiceOutputType>): [string, OrUndefined<DiceOutputType>] {
+	const DICE_OUTPUT_CHECK = /^(?:(xxs|xs|s|m|xxl|xl|l|rollem)\b)?/i;
 	const diceOutputMatch = match.match(DICE_OUTPUT_CHECK);
 	if (diceOutputMatch) {
 		const diceOutputTypeString = diceOutputMatch[0];
@@ -304,6 +302,7 @@ function matchCritMethodType(match: string, gameType: OrUndefined<GameType>, def
 
 /** Returns the Count and MAP at the beginning of the match along with the rest of the match. */
 function matchCountAndMap(match: string): [string, number, number] {
+	const COUNT_CHECK = /^(\d+)(map-\d+)?#/i;
 	const countMatch = match.match(COUNT_CHECK);
 	if (countMatch) {
 		const countString = countMatch[0];

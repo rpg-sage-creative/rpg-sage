@@ -6,6 +6,7 @@ import { addCommas } from "@rsc-utils/number-utils";
 import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
 import type { Optional } from "@rsc-utils/type-utils";
 import type { ButtonInteraction } from "discord.js";
+import XRegExp from "xregexp";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
@@ -54,12 +55,12 @@ type TDiceMatch = {
 
 //#region parse and map
 
-const BASE_REGEX = /\[+[^\]]+\]+/ig;
+function getBasicBracketRegex(): RegExp {
+	return /\[+[^\]]+\]+/ig;
+}
 
 type ReplaceStatsArgs = {
-	/** /\{(\w+):{2}([^:}]+)(?::([^}]+))?\}/i */
 	statRegex: RegExp;
-	/** /^(pc|stat)?(companion|hireling|alt|familiar)?$/i */
 	typeRegex: RegExp;
 	npcs: CharacterManager;
 	pcs: CharacterManager;
@@ -118,12 +119,55 @@ function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[
 	// return updated value
 	return replaced;
 }
+
+function getStatRegex() {
+	return XRegExp(`
+		# no tick
+		(?<!\`)
+
+		\\{
+			# char name or quoted char name
+			(
+				[\\w ]+    # <-- should we drop this space?
+				|          # <-- in other places we allow alias (no spaces) or "quoted name with spaces"
+				"[\\w ]+"
+			)
+
+			# separator
+			:{2}
+
+			# stat key
+			(
+				[^:{}]+
+			)
+
+			# default value
+			(?:
+				:
+				([^{}]+)
+			)?
+		\\}
+
+		# no tick
+		(?!\`)
+	`, "xi");
+}
+
+function getCharTypeRegex() {
+	return XRegExp(`
+		^
+		(pc|stat)?
+		(companion|hireling|alt|familiar)?
+		$
+	`, "xi");
+}
+
 function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): DiscordDice | null {
 	if (!diceString) {
 		return null;
 	}
 
-	const statRegex = /(?<!`)\{([\w ]+|"[\w ]+"):{2}([^:{}}]+)(?::([^{}]+))?\}(?!`)/i;
+	const statRegex = getStatRegex();
 	if (statRegex.test(diceString)) {
 		const { game, isGameMaster, isPlayer } = sageMessage;
 		if (!game || isGameMaster || isPlayer) {
@@ -131,7 +175,7 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 			const pcs = game?.playerCharacters ?? sageMessage.sageUser.playerCharacters;
 			const pc = isPlayer && game ? sageMessage.playerCharacter : null;
 			const encounters = game?.encounters;
-			const typeRegex = /^(pc|stat)?(companion|hireling|alt|familiar)?$/i;
+			const typeRegex = getCharTypeRegex();
 			diceString = replaceStats(diceString, { statRegex, typeRegex, npcs, pcs, pc, encounters });
 		}
 	}
@@ -158,7 +202,7 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 			return parseDiscordDice(sageCommand, `[1d1 Recursion!]`)?.roll().toStrings() ?? [];
 		}
 
-		const diceToParse = output.match(BASE_REGEX) ?? [];
+		const diceToParse = output.match(getBasicBracketRegex()) ?? [];
 
 		const outputs: TDiceOutput[] = [];
 		for (const dice of diceToParse) {
@@ -185,7 +229,7 @@ async function parseMatch(sageMessage: TInteraction, match: string, overrides?: 
 	const table = await fetchTableFromUrl(match) ?? parseTable(match);
 	if (table) {
 		const tableResults = await rollTable(sageMessage, noBraces, table);
-		const childDice = tableResults[0]?.children?.map(child => wrap(unwrap(child, "[]"), "[]").match(BASE_REGEX) ?? []).flat() ?? [];
+		const childDice = tableResults[0]?.children?.map(child => wrap(unwrap(child, "[]"), "[]").match(getBasicBracketRegex()) ?? []).flat() ?? [];
 		// debug({tableResults,tableResultsDice})
 		for (const diceToParse of childDice) {
 			const childMatches = await parseMatch(sageMessage, diceToParse, overrides);
@@ -213,7 +257,7 @@ async function parseMatch(sageMessage: TInteraction, match: string, overrides?: 
 export async function parseDiceMatches(sageMessage: TInteraction, content: string): Promise<TDiceMatch[]> {
 	const diceMatches: TDiceMatch[] = [];
 	const withoutCodeBlocks = redactCodeBlocks(content);
-	const regex = new RegExp(BASE_REGEX);
+	const regex = new RegExp(getBasicBracketRegex());
 	let execArray: RegExpExecArray | null;
 	while (execArray = regex.exec(withoutCodeBlocks)) {
 		const match = execArray[0];

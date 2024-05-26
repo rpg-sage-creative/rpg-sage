@@ -54,8 +54,6 @@ export function getCritMethodRegex(gameType: GameType | undefined): RegExp | nul
 
 export const UNICODE_LEFT_ARROW = "\u27f5";
 
-export const SECRET_REGEX = /secret/i;
-
 //#endregion
 
 //#region DiceString
