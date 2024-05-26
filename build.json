@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.6.9",
+"version":"1.6.10",
 "branch":"main",
-"commit":"b0b7b4ecec5139ba895a9129031e913f3a8a5004",
-"commitSubject":"escape sage prefix before using it in regex",
-"commitTs":1716525152000,
-"commitDate":"2024-05-23-2132",
-"buildTs":1716525171000,
-"buildDate":"2024-05-23-2132",
+"commit":"1c9ccde6037600904f0ccf8532d1f59d2989a8a7",
+"commitSubject":"Merge pull request #89 from rpg-sage-creative/basic-dice-regex-and-macros",
+"commitTs":1716695858000,
+"commitDate":"2024-05-25-2057",
+"buildTs":1716696202000,
+"buildDate":"2024-05-25-2103",
 "author":"Randal"
 }
