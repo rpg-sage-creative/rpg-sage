@@ -46,8 +46,8 @@ import {
 	DiceGroup as vtm5eDiceGroup,
 	DiceGroupRoll as vtm5eDiceGroupRoll
 } from "../vtm5e/index.js";
+import { getBasicDiceRegex } from "../../getBasicDiceRegex.js";
 
-const DICE_REGEX = /\[[^\]]*d\d+[^\]]*\]/ig;
 const GAME_CHECK = /^(?:(cnc|dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest|vtm5|vtm5e)\b)?/i;
 const DICE_OUTPUT_CHECK = /^(?:(xxs|xs|s|m|xxl|xl|l|rollem)\b)?/i;
 const COUNT_CHECK = /^(\d+)(map-\d+)?#/i;
@@ -225,7 +225,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 		defaultCritMethodType?: CritMethodType;
 		defaultDiceSecretMethodType?: DiceSecretMethodType;
 	}): OrNull<DiscordDice> {
-		const matchArray = diceString.match(DICE_REGEX);
+		const matchArray = diceString.match(getBasicDiceRegex());
 		if (!matchArray) {
 			return null;
 		}
