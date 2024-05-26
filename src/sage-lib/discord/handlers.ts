@@ -314,7 +314,7 @@ async function handleMessages(sageMessage: SageMessage, messageType: MessageType
 			}
 		}
 	}
-	if (!output.handled && sageMessage.hasPrefix && /^!!?/.test(sageMessage.slicedContent)) {
+	if (!output.handled && sageMessage.hasPrefix && sageMessage.prefix && /^!!?/.test(sageMessage.slicedContent)) {
 		error(`I got ${messageListeners.length} message handlers, but "${sageMessage.slicedContent}" ain't one!`);
 	}
 }
