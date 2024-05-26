@@ -12,6 +12,7 @@ import { fetchTableFromUrl } from "../../dice/fetchTableFromUrl.js";
 import { isMath } from "../../dice/isMath.js";
 import { isRandomItem } from "../../dice/isRandomItem.js";
 import { parseTable } from "../../dice/parseTable.js";
+import { getBasicDiceRegex } from "../../../../../sage-dice/getBasicDiceRegex.js";
 
 const UNCATEGORIZED = "Uncategorized";
 
@@ -94,7 +95,8 @@ function _macroToPrompt(macro: TMacro, usage: boolean, warning: boolean): string
 			`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
 			`\n> **Table:** \`\`\`${unwrapped.replace(/\n/g, "\n> ")}\`\`\``
 		];
-	}else if (isRandomItem(macro.dice)) {
+	}else if (isRandomItem(macro.dice) && !getBasicDiceRegex().test(macro.dice)) {
+	// }else if (isRandomItem(macro.dice)) {
 		parts = [
 			`\n> **Name:** ${macro.name}`,
 			`\n> **Category:** ${macro.category ?? UNCATEGORIZED}`,
