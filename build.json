@@ -1,6 +1,6 @@
 {
 "name":"rpg-sage",
-"version":"1.6.10",
+"version":"1.6.9",
 "branch":"main",
 "commit":"1c9ccde6037600904f0ccf8532d1f59d2989a8a7",
 "commitSubject":"Merge pull request #89 from rpg-sage-creative/basic-dice-regex-and-macros",
