@@ -35,12 +35,11 @@ function createInteractionTester(commandParts: string[]) {
 }
 
 function createMessageTester(command: string) {
-	const commandParts = command.split("|");
-	const keyRegex = commandParts.join(" ").replace(/[-\s]+/g, "[\\-\\s]");
-	const matcher = new RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
-
 	return async function (sageMessage: SageMessage): Promise<TCommandAndArgs | null> {
 		if (sageMessage.hasPrefix && /^!!?/.test(sageMessage.slicedContent)) {
+			const commandParts = command.split("|");
+			const keyRegex = commandParts.join(" ").replace(/[-\s]+/g, "[\\-\\s]");
+			const matcher = new RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
 			const match = matcher.exec(sageMessage.slicedContent.replace(/^!!?/, "").trim());
 			if (match) {
 				return { command, args: new ArgsManager(match[1]) };

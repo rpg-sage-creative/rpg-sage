@@ -12,8 +12,8 @@ export function parseAttributes(attributesString: string): Map<string, string> {
 		return attributes;
 	}
 
-	const pairRegex = /(\w+)="([^"]+)"/i;
 	matches.forEach(pair => {
+		const pairRegex = /(\w+)="([^"]+)"/i;
 		const match = pairRegex.exec(pair);
 		if (match) {
 			attributes.set(match[1], match[2]);

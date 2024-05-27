@@ -53,8 +53,7 @@ function getContentMentionIds(type: IdType, content: Optional<string>): Possible
 		const globalRegex = createMentionRegex(type, { globalFlag:true });
 		const mentions = content.match(globalRegex) ?? []; // NOSONAR
 		if (mentions.length) {
-			const regex = createMentionRegex(type);
-			return mentions.map(mention => regex.exec(mention)?.groups?.[getGroupKey(type)]);
+			return mentions.map(mention => createMentionRegex(type).exec(mention)?.groups?.[getGroupKey(type)]);
 		}
 	}
 	return [];
@@ -78,8 +77,7 @@ function getContentUrlIds(type: IdType, content: Optional<string>): PossibleSnow
 		const globalRegex = createDiscordUrlRegex(type, { globalFlag:true });
 		const urls = content.match(globalRegex) ?? []; // NOSONAR
 		if (urls.length) {
-			const regex = createDiscordUrlRegex(type);
-			return urls.map(url => regex.exec(url)?.groups?.[getGroupKey(type)]);
+			return urls.map(url => createDiscordUrlRegex(type).exec(url)?.groups?.[getGroupKey(type)]);
 		}
 	}
 	return [];

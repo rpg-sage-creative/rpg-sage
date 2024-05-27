@@ -18,7 +18,7 @@ function cellToMinMax(cell?: string): [number, number] | undefined {
 }
 
 /** Parses each line, either by tabs or by simply grabbing the numbers from the front of the line */
-function lineToTableItem(line: string, lineRegex: RegExp): SimpleRollableTableItem | undefined {
+function lineToTableItem(line: string): SimpleRollableTableItem | undefined {
 	let cells: string[];
 
 	// split on tabs for TSV
@@ -27,6 +27,7 @@ function lineToTableItem(line: string, lineRegex: RegExp): SimpleRollableTableIt
 
 	// use regex to split number(s) from the start of the line
 	}else {
+		const lineRegex = /^(\d+(?:\s*-\s*\d+)?)\s+(.*?)$/;
 		cells = (lineRegex.exec(line.trim()) ?? []).slice(1);
 	}
 
@@ -56,11 +57,9 @@ function lineToTableItem(line: string, lineRegex: RegExp): SimpleRollableTableIt
 export function parseTable(value?: string | null): SimpleRollableTable | undefined {
 	const table: SimpleRollableTable = { min:undefined!, max:undefined!, count:0, items:[] };
 
-	const lineRegex = /^(\d+(?:\s*-\s*\d+)?)\s+(.*?)$/;
-
 	const lines = normalizeDashes(unwrap(value?.trim() ?? "", "[]")).split(/\n/);
 	for (const line of lines) {
-		const tableItem = lineToTableItem(line, lineRegex);
+		const tableItem = lineToTableItem(line);
 		if (!tableItem) {
 			// debug({line});
 			return undefined;
