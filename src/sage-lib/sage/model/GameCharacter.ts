@@ -365,6 +365,16 @@ export class GameCharacter implements IHasSave {
 			}
 		}
 
+		// provide a temp shortcut for cantrip rank for PF2e
+		if (/^cantrip\.rank$/i.test(key)) {
+			const level = this.getStat("level");
+			if (level !== null) {
+				const mathed = doStatMath(level);
+				const rank = Math.ceil(+mathed / 2);
+				return String(rank);
+			}
+		}
+
 		return null;
 	}
 	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
