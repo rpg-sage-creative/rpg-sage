@@ -5,11 +5,11 @@ import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
-import { doStatMath } from "../commands/dice/doStatMath.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
+import { doStatMath } from "../commands/dice/stats/doStatMath.js";
 
 export type TDialogMessage = {
 	channelDid: Snowflake;
