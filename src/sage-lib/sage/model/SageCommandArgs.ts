@@ -97,14 +97,18 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 
 	/** Returns an array of channelIds passed in for the given argument. */
 	public getChannelIds(name: string): Snowflake[] {
+		const channelIdSet = new Set<string>();
+
 		if (this.hasChannel(name)) {
-			return [this.getChannelId(name)!];
+			channelIdSet.add(this.getChannelId(name)!);
 		}
+
 		const stringValue = this.getString(name);
 		if (stringValue) {
-			return parseIds(stringValue, "channel");
+			parseIds(stringValue, "channel").forEach(channelId => channelIdSet.add(channelId));
 		}
-		return [];
+
+		return [...channelIdSet];
 	}
 
 	/** @deprecated */
@@ -219,35 +223,33 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 
 	/** Returns an array of user snowflakes passed in for the given argument. Optionally finds roles and gets all the users from the roles. */
 	public async getUserIds(name: string, expandRoles?: boolean): Promise<Snowflake[]> {
-		/** @todo investigate iterating over all the message.mentions and testing the stringValue for the \bSNOWFLAKE\b */
-		if (this.hasUser(name)) {
-			return [this.getUserId(name)!];
-		}
 		const userIdSet = new Set<string>();
 		const expandRoleId = async (roleId: string) => {
 			const guildRole = await this.sageCommand.discord.fetchGuildRole(roleId);
 			if (guildRole) {
 				guildRole.members.forEach(guildMember => userIdSet.add(guildMember.id));
 			}
-		}
+		};
+
 		if (this.hasUser(name)) {
 			userIdSet.add(this.getUserId(name)!);
-		}else if (this.hasRole(name)) {
+		}
+
+		if (this.hasRole(name)) {
+			await expandRoleId(this.getRoleId(name)!);
+		}
+
+		const stringValue = this.getString(name);
+		if (stringValue) {
+			parseIds(stringValue, "user").forEach(userId => userIdSet.add(userId));
 			if (expandRoles) {
-				await expandRoleId(this.getRoleId(name)!);
-			}
-		}else {
-			const stringValue = this.getString(name);
-			if (stringValue) {
-				parseIds(stringValue, "user").forEach(userId => userIdSet.add(userId));
-				if (expandRoles) {
-					const roleIds = parseIds(stringValue, "role");
-					for (const roleId of roleIds) {
-						await expandRoleId(roleId);
-					}
+				const roleIds = parseIds(stringValue, "role");
+				for (const roleId of roleIds) {
+					await expandRoleId(roleId);
 				}
 			}
 		}
+
 		return [...userIdSet];
 	}
 
