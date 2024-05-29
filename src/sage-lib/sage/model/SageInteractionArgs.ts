@@ -78,10 +78,13 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
 	public getChannel(name: string): Optional<GuildBasedChannel> {
-		const { nameLower, hasKey, hasUnset } = this.getOption(name);
+		const { nameLower, hasKey, hasUnset, type } = this.getOption(name);
 		if (!hasKey) return undefined; //NOSONAR
 		if (hasUnset) return null; //NOSONAR
-		return this.interaction.options.getChannel(nameLower) as GuildBasedChannel;
+		if (type === "CHANNEL") {
+			return this.interaction.options.getChannel(nameLower) as GuildBasedChannel;
+		}
+		return null;
 	}
 
 	public findEnum<K extends string = string, V extends number = number>(_type: EnumLike<K, V>): Optional<V> {
@@ -113,7 +116,10 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 			}
 			return null;
 		}
-		return this.interaction.options.getRole(nameLower) as Role;
+		if (type === "ROLE") {
+			return this.interaction.options.getRole(nameLower) as Role;
+		}
+		return null;
 	}
 
 	/**
@@ -143,7 +149,10 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 			}
 			return null;
 		}
-		return this.interaction.options.getUser(nameLower);
+		if (type === "USER") {
+			return this.interaction.options.getUser(nameLower);
+		}
+		return null;
 	}
 
 }
