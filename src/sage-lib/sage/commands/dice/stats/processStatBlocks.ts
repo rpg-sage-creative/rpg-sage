@@ -1,4 +1,3 @@
-import { debug } from "@rsc-utils/console-utils";
 import { doStatMath } from "./doStatMath.js";
 import { hasStatBlock, replaceStatBlocks } from "./StatBlock.js";
 import type { StatsCharacter, StatsCharacterManager, StatsEncounterManager } from "./types.js";
@@ -43,7 +42,6 @@ export function processStatBlocks(diceString: string, args: ProcessStatsArgs, st
 			// get stat
 			const statVal = char?.getStat(statKey);
 			const statValue = statVal ?? defaultValue ?? "";
-			debug({statBlock,char,statVal,statValue});
 			if (statValue.length) {
 				return processStatBlocks(statValue, args, stack.concat([stackValue]));
 			}

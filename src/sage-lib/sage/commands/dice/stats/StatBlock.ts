@@ -1,4 +1,3 @@
-import { debug } from "@rsc-utils/console-utils";
 import { dequote } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 
@@ -98,7 +97,6 @@ type ReplaceHandler = (block: StatBlockResults) => string | null;
 export function replaceStatBlocks(value: string, handler: ReplaceHandler, stack: string[]): string {
 	return XRegExp.replace(value, getStatBlockRegex(), match => {
 		const statBlock = parseStatBlock(match.toString());
-		debug({value,match,statBlock});
 		let result: string | null = null;
 		if (statBlock && !stack.includes(statBlock.stackValue)) {
 			result = handler(statBlock);
