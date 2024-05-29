@@ -91,9 +91,14 @@ export async function replaceWebhook(originalMessage: DMessage, { authorOptions,
 		await deleteMessage(originalMessage);
 	}
 
-	const content = originalMessage.reference
-		? `*replying to* ${toMessageUrl(originalMessage.reference)}`
-		: undefined;
+	let content = undefined;
+	let replyingTo: string | undefined;
+	if (originalMessage.reference) {
+		const discordKey = new DiscordKey(originalMessage.reference.guildId, originalMessage.reference.channelId, undefined, originalMessage.reference.messageId);
+		const referenceMessage = await sageCache.discord.fetchMessage(discordKey);
+		const displayName = referenceMessage ? `*${referenceMessage.author.displayName}*` : ``;
+		replyingTo = `*replying to* ${displayName} ${toMessageUrl(originalMessage.reference)}`;
+	}
 
 	const embeds = resolveToEmbeds(sageCache.cloneForChannel(originalMessage.channel as DMessageChannel), renderableContent);
 
@@ -104,7 +109,7 @@ export async function replaceWebhook(originalMessage: DMessage, { authorOptions,
 
 	const strippedAuthorOptions = stripAuthorOptions(authorOptions);
 
-	const messages = await sendTo({ sageCache, target:webhook, content, embeds, files, threadId, ...strippedAuthorOptions }, { contentToEmbeds, embedsToContent });
+	const messages = await sendTo({ sageCache, target:webhook, content, embeds, files, replyingTo, threadId, ...strippedAuthorOptions }, { contentToEmbeds, embedsToContent });
 	if (!messages) {
 		warn(`replaceWebhook -> sendTo = ${messages}`);
 		return [];

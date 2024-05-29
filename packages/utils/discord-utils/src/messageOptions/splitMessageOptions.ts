@@ -5,7 +5,8 @@ import type { EmbedResolvable } from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 
-type MsgOptions = (WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions) & { embedContent?:string; };
+type MsgOptions = (WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions)
+				& { embedContent?:string; replyingTo?:string; };
 
 export type SplitOptions = {
 	/** Use in place of blank content (null, undefined, empty string, whitespcae only), ie: ZERO_WIDTH_SPACE */
@@ -109,7 +110,7 @@ function mergeEmbeds(content?: string | null, embeds?: MsgEmbed[] | null, color?
 /** Used to convert a single message options object into an array to ensure we don't break posting limits. */
 export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOptions?: SplitOptions): T[] {
 	// break out the content, embeds, and files; saving the remaining options to be used in each payload
-	const { attachments, components, content, embedContent, embeds, files, ...baseOptions } = msgOptions;
+	const { attachments, components, content, embedContent, embeds, files, replyingTo, ...baseOptions } = msgOptions;
 
 	// convert incoming embedContent to embeds
 	const convertedEmbeds = contentToEmbeds(embedContent, splitOptions?.embedColor) as MsgEmbed[] ?? [];
@@ -133,6 +134,10 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOp
 		embedsToPost = allIncomingEmbeds as MessageEmbed[];
 	}
 
+	if (replyingTo && contentToChunk) {
+		contentToChunk = replyingTo + "\n\n" + contentToChunk;
+	}
+
 	const payloads: T[] = [];
 
 	// chunk content into valid lengths
@@ -148,7 +153,7 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOp
 	});
 
 	// cannot send an empty string for content
-	let blankContent = splitOptions?.blankContentValue?.trim();
+	let blankContent = (contentToChunk ? null : replyingTo) ?? splitOptions?.blankContentValue?.trim();
 	if (!blankContent?.length) {
 		blankContent = undefined; //NOSONAR
 	}
