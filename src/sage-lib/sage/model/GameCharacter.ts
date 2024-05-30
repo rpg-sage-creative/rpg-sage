@@ -438,7 +438,7 @@ export class GameCharacter implements IHasSave {
 		let changed = false;
 		if (values.alias !== undefined) {
 			this.alias = values.alias;
-			this._preparedAlias = undefined;
+			delete this._preparedAlias;
 			changed = true;
 		}
 		if (values.avatarUrl !== undefined) {
@@ -453,10 +453,14 @@ export class GameCharacter implements IHasSave {
 			this.tokenUrl = values.tokenUrl;
 			changed = true;
 		}
-		if (values.name !== undefined && values.name !== this.name) {
-			this.name = values.name;
-			this._preparedName = undefined;
-			changed = true;
+		if (values.name !== undefined) {
+			const notAlias = this.preparedAlias !== GameCharacter.prepareName(values.name);
+			const aliasMatchesName = this.preparedName === this.preparedAlias;
+			if (notAlias || aliasMatchesName) {
+				this.name = values.name;
+				delete this._preparedName;
+				changed = true;
+			}
 		}
 		if (values.userDid !== undefined && values.userDid !== this.userDid) {
 			this.userDid = values.userDid;
