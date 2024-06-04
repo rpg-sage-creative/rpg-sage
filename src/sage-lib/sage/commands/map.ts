@@ -218,18 +218,18 @@ async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: 
 	switch(gameMap.activeLayer) {
 		case LayerType.Aura:
 			updated = gameMap.shiftOpacity("up");
-			stack.editReply(`Increasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"}`);
+			stack.editReply(`Increasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"} ... ${ReplyStack.SpinnerEmoji}`);
 			output = `Aura Opacity Increased: ${gameMap.activeAura?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Terrain:
 			updated = gameMap.shuffleActiveTerrain("up");
-			stack.editReply(`Raising Terrain: ${gameMap.activeTerrain?.name ?? "Unknown"}`);
+			stack.editReply(`Raising Terrain: ${gameMap.activeTerrain?.name ?? "Unknown"} ... ${ReplyStack.SpinnerEmoji}`);
 			output = `Terrain Raised: ${gameMap.activeTerrain?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Token:
 		default:
 			updated = gameMap.shuffleActiveToken("up");
-			stack.editReply(`Raising Token: ${gameMap.activeToken?.name ?? "Unknown"}`);
+			stack.editReply(`Raising Token: ${gameMap.activeToken?.name ?? "Unknown"} ... ${ReplyStack.SpinnerEmoji}`);
 			output = `Token Raised: ${gameMap.activeToken?.name ?? "Unknown"}`;
 			break;
 	}
@@ -252,18 +252,18 @@ async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: 
 	switch(gameMap.activeLayer) {
 		case LayerType.Aura:
 			updated = gameMap.shiftOpacity("down");
-			stack.editReply(`Decreasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"}`);
+			stack.editReply(`Decreasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"} ... ${ReplyStack.SpinnerEmoji}`);
 			output = `Aura Opacity Decreased: ${gameMap.activeAura?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Terrain:
 			updated = gameMap.shuffleActiveTerrain("down");
-			stack.editReply(`Lowering Terain: ${gameMap.activeTerrain?.name ?? "Unknown"}`);
+			stack.editReply(`Lowering Terain: ${gameMap.activeTerrain?.name ?? "Unknown"} ... ${ReplyStack.SpinnerEmoji}`);
 			output = `Terrain Lowered: ${gameMap.activeTerrain?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Token:
 		default:
 			updated = gameMap.shuffleActiveToken("down");
-			stack.editReply(`Lowering Token: ${gameMap.activeToken?.name ?? "Unknown"}`);
+			stack.editReply(`Lowering Token: ${gameMap.activeToken?.name ?? "Unknown"} ... ${ReplyStack.SpinnerEmoji}`);
 			output = `Token Lowered: ${gameMap.activeToken?.name ?? "Unknown"}`;
 			break;
 	}
