@@ -1,11 +1,11 @@
 import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannelType } from "@rsc-sage/types";
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
 import { debug } from "@rsc-utils/console-utils";
-import type { DInteraction, DTextChannel, DiscordKey } from "@rsc-utils/discord-utils";
+import type { DInteraction, DRepliableInteraction, DTextChannel, DiscordKey } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
-import { CommandInteraction, type If, type MessageActionRow, type MessageAttachment, type MessageButton, type MessageEmbed, type MessageSelectMenu } from "discord.js";
+import { type AutocompleteInteraction, type ButtonInteraction, type CommandInteraction, type If, type InteractionType, type MessageActionRow, type MessageAttachment, type MessageButton, type MessageComponentInteraction, type MessageComponentType, type MessageEmbed, type MessageSelectMenu, type ModalSubmitInteraction, type SelectMenuInteraction } from "discord.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
@@ -58,7 +58,51 @@ export abstract class SageCommand<
 	public abstract commandValues: string[];
 	public abstract isCommand(...args: string[]): boolean;
 
-	public isSageInteraction<T extends DInteraction = any>(): this is SageInteraction<T> { return "interaction" in this; }
+	public isSageInteraction(type: "BUTTON"): this is SageInteraction<ButtonInteraction>;
+	public isSageInteraction(type: "SELECT"): this is SageInteraction<SelectMenuInteraction>;
+	public isSageInteraction(type: "TEXT"): this is SageInteraction<MessageComponentInteraction>;
+	public isSageInteraction(type: "COMPONENT"): this is SageInteraction<MessageComponentInteraction>;
+	public isSageInteraction(type: "AUTO"): this is SageInteraction<AutocompleteInteraction>;
+	public isSageInteraction(type: "MODAL"): this is SageInteraction<ModalSubmitInteraction>;
+	public isSageInteraction(type: "SLASH"): this is SageInteraction<CommandInteraction>;
+	public isSageInteraction<T extends DRepliableInteraction>(type: "REPLIABLE"): this is SageInteraction<T>;
+	public isSageInteraction<T extends DInteraction = any>(): this is SageInteraction<T>;
+	public isSageInteraction(_type?: "AUTO" | "MODAL" | "SLASH" | "BUTTON" | "SELECT" | "TEXT" | "COMPONENT" | "REPLIABLE"): boolean {
+		if ("interaction" in this) {
+			if (!_type) {
+				return true;
+			}
+
+			const interaction = this.interaction as DInteraction;
+
+			if (_type === "REPLIABLE") {
+				return interaction.isRepliable();
+				// return "reply" in interaction;
+			}
+
+			let type: InteractionType | MessageComponentType;
+			switch(_type) {
+				// InteractionType
+				case "AUTO": type = "APPLICATION_COMMAND_AUTOCOMPLETE"; break; //NOSONAR
+				case "MODAL": type = "MODAL_SUBMIT"; break; //NOSONAR
+				case "SLASH": type = "APPLICATION_COMMAND"; break; //NOSONAR
+				// MessageComponentType
+				case "BUTTON": type = _type; break; //NOSONAR
+				case "SELECT": type = "SELECT_MENU"; break; //NOSONAR
+				case "TEXT": type = "TEXT_INPUT"; break; //NOSONAR
+				case "COMPONENT": type = "MESSAGE_COMPONENT"; break; //NOSONAR
+			}
+
+			if (interaction.type === type) {
+				return true;
+			}
+
+			if ("componentType" in interaction) {
+				return type === interaction.componentType;
+			}
+		}
+		return false;
+	}
 	public isSageMessage(): this is SageMessage { return "isEdit" in this; }
 	public isSageReaction(): this is SageReaction { return "messageReaction" in this; }
 
@@ -370,11 +414,12 @@ export abstract class SageCommand<
 	//#endregion
 
 	/** @todo figure out where splitMessageOptions comes into this workflow */
-	protected resolveToOptions<T extends TSendOptions>(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): T {
+	protected resolveToOptions<T extends TSendOptions>(renderableOrArgs: RenderableContentResolvable | TSendArgs, _ephemeral?: boolean): T {
 		if ((typeof(renderableOrArgs) === "string") || ("toRenderableContent" in renderableOrArgs)) {
 			return {
 				embeds: resolveToEmbeds(this.sageCache, renderableOrArgs),
-				ephemeral: ephemeral
+				ephemeral: false
+				// ephemeral: ephemeral
 			} as T;
 		}
 
@@ -395,7 +440,8 @@ export abstract class SageCommand<
 		if (renderableOrArgs.files) {
 			options.files = renderableOrArgs.files;
 		}
-		options.ephemeral = (ephemeral ?? renderableOrArgs.ephemeral) === true;
+		options.ephemeral = false;
+		// options.ephemeral = (ephemeral ?? renderableOrArgs.ephemeral) === true;
 		return options as T;
 	}
 }
