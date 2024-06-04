@@ -1,20 +1,22 @@
 import { errorReturnNull } from "@rsc-utils/console-utils";
 import type { DMessageChannel } from "@rsc-utils/discord-utils";
 import { getText } from "@rsc-utils/https-utils";
-import { isNonNilSnowflake, randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
-import { StringMatcher, capitalize } from "@rsc-utils/string-utils";
+import { randomSnowflake } from "@rsc-utils/snowflake-utils";
+import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { Message, MessageActionRow, MessageButton, type ButtonInteraction, type MessageAttachment, type MessageButtonStyleResolvable } from "discord.js";
-import { TCommandAndArgsAndData } from "../../discord";
-import { deleteMessage, deleteMessages } from "../../discord/deletedMessages";
-import { registerInteractionListener, registerMessageListener } from "../../discord/handlers";
-import { discordPromptYesNoDeletable } from "../../discord/prompts";
-import { SageInteraction } from "../model/SageInteraction";
-import type { SageMessage } from "../model/SageMessage";
-import { registerCommandRegex } from "./cmd";
-import { GameMap, TCompassDirection, TMoveDirection } from "./map/GameMap";
-import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, TGameMapTerrain, TGameMapToken } from "./map/GameMapBase";
-import { TParsedGameMapCore, gameMapImporter, validateMapCore } from "./map/gameMapImporter";
+import { Message, MessageActionRow, MessageButton, type MessageAttachment, type MessageButtonStyleResolvable } from "discord.js";
+import { deleteMessage } from "../../discord/deletedMessages.js";
+import { registerInteractionListener, registerMessageListener } from "../../discord/handlers.js";
+import { TCommandAndArgsAndData } from "../../discord/index.js";
+import { discordPromptYesNo } from "../../discord/prompts.js";
+import { ReplyStack } from "../model/ReplyStack.js";
+import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageMessage } from "../model/SageMessage.js";
+import { includeDeleteButton } from "../model/utils/deleteButton.js";
+import { registerCommandRegex } from "./cmd.js";
+import { GameMap, TCompassDirection, TMoveDirection } from "./map/GameMap.js";
+import { LayerType, TGameMapCore } from "./map/GameMapBase.js";
+import { TParsedGameMapCore, gameMapImporter, validateMapCore } from "./map/gameMapImporter.js";
 
 //#region buttons
 
@@ -108,16 +110,13 @@ function namesMatch(a: string, b: string | undefined): boolean {
 	return a && b ? StringMatcher.matches(a, b) : false;
 }
 
-/** If the user is a player in a game, this will ensure their tokens (pc/companions) are on the map */
-function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameMap: GameMap): boolean {
-	function reply(content: string, ephemeral: boolean) {
-		if ("message" in sageCommand) {
-			sageCommand.message.reply(content)
-		}else {
-			sageCommand.reply(content, ephemeral);
-		}
-	}
 
+
+/** If the user is a player in a game, this will ensure their tokens (pc/companions) are on the map */
+function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameMap: GameMap, stack: ReplyStack): boolean {
+	if (sageCommand.isGameMaster) {
+		return false;
+	}
 	const pc = sageCommand.playerCharacter;
 	if (!pc) {
 		return false;
@@ -133,7 +132,7 @@ function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameM
 				?? gameMap.tokens.find(token => namesMatch(token.name, charName) || namesMatch(token.name, charAlias))
 				?? gameMap.tokens.find(token => urlsMatch(token.url, tokenUrl) || urlsMatch(token.url, avatarUrl));
 			if (!found) {
-				reply(`Adding token for ${charName} ...`, false);
+				stack.editReply(`Adding token for ${charName} ... ${ReplyStack.SpinnerEmoji}`);
 				gameMap.tokens.push({
 					auras: [],
 					characterId: char.id,
@@ -148,7 +147,7 @@ function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameM
 				updated = true;
 			}else {
 				if (found.name !== charName || found.url !== charUrl) {
-					reply(`Updating token for ${charName} ...`, false);
+					stack.editReply(`Updating token for ${charName} ... ${ReplyStack.SpinnerEmoji}`);
 					found.name = charName;
 					found.url = charUrl;
 					updated = true;
@@ -165,35 +164,38 @@ function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameM
 }
 
 async function actionHandlerMapTerrain(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+	const stack = new ReplyStack(sageInteraction);
 	const toggled = gameMap.cycleActiveTerrain();
 	const activeTerrain = gameMap.activeTerrain;
-	sageInteraction.reply(`Setting ${activeTerrain?.name} as active ...`, false);
+	stack.reply(`Setting ${activeTerrain?.name} as active ... ${ReplyStack.SpinnerEmoji}`);
 	const updated = toggled && await gameMap.save();
 	if (updated) {
-		return sageInteraction.reply(`Your active terrain is: ${activeTerrain?.name ?? "Unknown"}`, false);
+		return stack.editReply(`Your active terrain is: ${activeTerrain?.name ?? "Unknown"}`);
 	}
-	return sageInteraction.deleteReply();
+	return stack.deleteReply();
 }
 
 async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+	const stack = new ReplyStack(sageInteraction);
 	const activeToken = gameMap.activeToken;
-	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
+	let updated = ensurePlayerCharacter(sageInteraction, gameMap, stack);
 	const toggled = gameMap.cycleActiveAura();
 	const toggledAura = gameMap.activeAura;
-	sageInteraction.reply(`Setting active aura for ${activeToken?.name} to ${toggledAura?.name ?? "none"} ...`, false);
+	stack.editReply(`Setting active aura for ${activeToken?.name} to ${toggledAura?.name ?? "none"} ... ${ReplyStack.SpinnerEmoji}`);
 	updated = toggled
 		&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	if (updated) {
-		return sageInteraction.reply(`Your active aura for ${activeToken?.name} is: ${toggledAura?.name ?? "none"}`, false);
+		return stack.editReply(`Your active aura for ${activeToken?.name} is: ${toggledAura?.name ?? "none"}`);
 	}
-	return sageInteraction.deleteReply();
+	return stack.deleteReply();
 }
 
 async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
-	const added = ensurePlayerCharacter(sageInteraction, gameMap);
+	const stack = new ReplyStack(sageInteraction);
+	const added = ensurePlayerCharacter(sageInteraction, gameMap, stack);
 	const toggled = gameMap.cycleActiveToken();
 	const activeToken = gameMap.activeToken;
-	sageInteraction.reply(`Setting ${activeToken?.name} as active ...`, false);
+	stack.editReply(`Setting ${activeToken?.name} as active ... ${ReplyStack.SpinnerEmoji}`);
 	let updated = false;
 	if (added) {
 		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
@@ -201,32 +203,33 @@ async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: 
 		updated = toggled && await gameMap.save();
 	}
 	if (updated) {
-		return sageInteraction.reply(`Your active token is: ${activeToken?.name ?? "Unknown"}`, false);
+		return stack.editReply(`Your active token is: ${activeToken?.name ?? "Unknown"}`);
 	}
-	return sageInteraction.deleteReply();
+	return stack.deleteReply();
 }
 
 async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	if (!gameMap.isOwner) {
 		return sageInteraction.reply(`You can't edit somebody else's map!`, true);
 	}
+	const stack = new ReplyStack(sageInteraction);
 	let updated = false;
 	let output = "";
 	switch(gameMap.activeLayer) {
 		case LayerType.Aura:
 			updated = gameMap.shiftOpacity("up");
-			sageInteraction.reply(`Increasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"}`, false);
+			stack.editReply(`Increasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"}`);
 			output = `Aura Opacity Increased: ${gameMap.activeAura?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Terrain:
 			updated = gameMap.shuffleActiveTerrain("up");
-			sageInteraction.reply(`Raising Terrain: ${gameMap.activeTerrain?.name ?? "Unknown"}`, false);
+			stack.editReply(`Raising Terrain: ${gameMap.activeTerrain?.name ?? "Unknown"}`);
 			output = `Terrain Raised: ${gameMap.activeTerrain?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Token:
 		default:
 			updated = gameMap.shuffleActiveToken("up");
-			sageInteraction.reply(`Raising Token: ${gameMap.activeToken?.name ?? "Unknown"}`, false);
+			stack.editReply(`Raising Token: ${gameMap.activeToken?.name ?? "Unknown"}`);
 			output = `Token Raised: ${gameMap.activeToken?.name ?? "Unknown"}`;
 			break;
 	}
@@ -234,32 +237,33 @@ async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: 
 		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	}
 	if (updated) {
-		return sageInteraction.reply(output, false);
+		return stack.editReply(output);
 	}
-	return sageInteraction.deleteReply();
+	return stack.deleteReply();
 }
 
 async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	if (!gameMap.isOwner) {
 		return sageInteraction.reply(`You can't edit somebody else's map!`, true);
 	}
+	const stack = new ReplyStack(sageInteraction);
 	let updated = false;
 	let output = "";
 	switch(gameMap.activeLayer) {
 		case LayerType.Aura:
 			updated = gameMap.shiftOpacity("down");
-			sageInteraction.reply(`Decreasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"}`, false);
+			stack.editReply(`Decreasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"}`);
 			output = `Aura Opacity Decreased: ${gameMap.activeAura?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Terrain:
 			updated = gameMap.shuffleActiveTerrain("down");
-			sageInteraction.reply(`Lowering Terain: ${gameMap.activeTerrain?.name ?? "Unknown"}`, false);
+			stack.editReply(`Lowering Terain: ${gameMap.activeTerrain?.name ?? "Unknown"}`);
 			output = `Terrain Lowered: ${gameMap.activeTerrain?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Token:
 		default:
 			updated = gameMap.shuffleActiveToken("down");
-			sageInteraction.reply(`Lowering Token: ${gameMap.activeToken?.name ?? "Unknown"}`, false);
+			stack.editReply(`Lowering Token: ${gameMap.activeToken?.name ?? "Unknown"}`);
 			output = `Token Lowered: ${gameMap.activeToken?.name ?? "Unknown"}`;
 			break;
 	}
@@ -267,54 +271,55 @@ async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: 
 		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	}
 	if (updated) {
-		return sageInteraction.reply(output, false);
+		return stack.editReply(output);
 	}
-	return sageInteraction.deleteReply();
+	return stack.deleteReply();
 }
 
 async function actionHandlerMapConfig(sageInteraction: SageInteraction, _: GameMap): Promise<void> {
-	return sageInteraction.reply(`Coming Soon ...`, true);
+	return sageInteraction.reply(`Not Implemented ... Yet.`, true);
 }
 
 async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	const activeImage = gameMap.activeImage;
 	if (activeImage) {
-		await sageInteraction.reply(`Deleting image: ${activeImage.name} ...`, false);
-		const [boolConfirm, msgConfirm] = await discordPromptYesNoDeletable(sageInteraction, `Delete image: ${activeImage.name}?`);
-		if (boolConfirm) {
-			deleteMessage(msgConfirm);
+		const stack = new ReplyStack(sageInteraction);
+		stack.defer();
+		const boolDelete = await discordPromptYesNo(sageInteraction, `Delete image: ${activeImage.name}?`, true);
+		if (boolDelete) {
+			stack.editReply(`Deleting image: ${activeImage.name} ... ${ReplyStack.SpinnerEmoji}`);
 			const deleted = gameMap.deleteImage(activeImage);
 			const updated = deleted
 				&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
 			if (updated) {
-				return sageInteraction.reply(`Deleted image: ${activeImage.name}`, false);
+				return stack.editReply(`Deleted image: ${activeImage.name}`);
 			}
-			return sageInteraction.reply(`Error deleting image ...`, false);
+			return stack.editReply(`Error deleting image!`);
 		}
-		deleteMessage(msgConfirm);
-		return sageInteraction.deleteReply();
+		return stack.deleteReply();
 	}else {
-		return sageInteraction.reply(`You have no image to delete ...`, true);
+		return sageInteraction.reply(`You have no image to delete!`, true);
 	}
 }
 
 async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData: TActionData): Promise<void> {
+	const stack = new ReplyStack(sageInteraction);
 	const gameMap = actionData.gameMap;
-	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
+	let updated = ensurePlayerCharacter(sageInteraction, gameMap, stack);
 	const activeImage = gameMap.activeImage;
 	const mapAction = actionData.mapAction;
 	if (activeImage) {
-		sageInteraction.reply(`Moving ${activeImage.name} ${toDirection(mapAction)} ...`, false);
+		stack.editReply(`Moving ${activeImage.name} ${toDirection(mapAction)} ... ${ReplyStack.SpinnerEmoji}`);
 		const moved = gameMap.moveActiveToken(mapAction.slice(3).toLowerCase() as TMoveDirection);
 		const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
 		updated = (moved || shuffled)
 			&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
 		if (updated) {
-			return sageInteraction.deleteReply();
+			return stack.deleteReply();
 		}
-		return sageInteraction.reply(`Error moving image ...`, false);
+		return stack.editReply(`Error moving image!`);
 	}
-	return sageInteraction.reply(`You have no image to move ...`, true);
+	return sageInteraction.reply(`You have no image to move!`, true);
 }
 async function actionHandler(sageInteraction: SageInteraction, actionData: TActionData): Promise<void> {
 	const gameMap = actionData.gameMap;
@@ -371,11 +376,10 @@ async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArg
 }
 
 async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore | TParsedGameMapCore): Promise<void> {
-	const [boolImport, msgImport] = await discordPromptYesNoDeletable(sageMessage, `Try to import map: ${mapCore.name}?`);
+	const boolImport = await discordPromptYesNo(sageMessage, `Try to import map: ${mapCore.name}?`, true);
 	if (boolImport) {
 		const channel = sageMessage.message.channel;
-		const pwConfiguring = await channel.send(`Importing and configuring: ${mapCore.name} ...`);
-		deleteMessage(msgImport);
+		const pwConfiguring = await channel.send(`Importing and configuring: ${mapCore.name} ... ${ReplyStack.SpinnerEmoji}`);
 
 		const validatedCore = await validateMapCore(mapCore as TParsedGameMapCore, sageMessage.message.guild!);
 		const invalidUsers = validatedCore.invalidUsers ?? [];
@@ -398,7 +402,6 @@ async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore 
 
 		deleteMessage(pwConfiguring);
 	}
-	deleteMessage(msgImport);
 }
 
 //#endregion
@@ -406,9 +409,9 @@ async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore 
 export function registerMap(): void {
 	registerInteractionListener(actionTester, actionHandler);
 	// registerInteractionListener(mapCreateTester, mapCreateHandler);
-	registerInteractionListener(mapAuraTester, mapAuraHandler);
-	registerInteractionListener(mapTerrainTester, mapTerrainHandler);
-	registerInteractionListener(mapTokenTester, mapTokenHandler);
+	// registerInteractionListener(mapAuraTester, mapAuraHandler);
+	// registerInteractionListener(mapTerrainTester, mapTerrainHandler);
+	// registerInteractionListener(mapTokenTester, mapTokenHandler);
 	registerMessageListener(mapImportTester, mapImportHandler);
 	registerCommandRegex(/^map(-|\s+)move(\s*\[(\b(\s|nw|n|ne|w|e|sw|s|se))+\])+\s*$/i, mapMoveHandler);
 }
@@ -437,23 +440,23 @@ async function actionTester(sageInteraction: SageInteraction): Promise<TActionDa
 // 		&& sageInteraction.isCommand("map", "create");
 // }
 
-function mapAuraTester(sageInteraction: SageInteraction): boolean {
-	return !!sageInteraction.interaction.channel
-		&& sageInteraction.isCommand("Map", "AddImage")
-		&& sageInteraction.args.hasString("layer", "aura");
-}
+// function mapAuraTester(sageInteraction: SageInteraction): boolean {
+// 	return !!sageInteraction.interaction.channel
+// 		&& sageInteraction.isCommand("Map", "AddImage")
+// 		&& sageInteraction.args.hasString("layer", "aura");
+// }
 
-function mapTerrainTester(sageInteraction: SageInteraction): boolean {
-	return !!sageInteraction.interaction.channel
-		&& sageInteraction.isCommand("Map", "AddImage")
-		&& sageInteraction.args.hasString("layer", "terrain");
-}
+// function mapTerrainTester(sageInteraction: SageInteraction): boolean {
+// 	return !!sageInteraction.interaction.channel
+// 		&& sageInteraction.isCommand("Map", "AddImage")
+// 		&& sageInteraction.args.hasString("layer", "terrain");
+// }
 
-function mapTokenTester(sageInteraction: SageInteraction): boolean {
-	return !!sageInteraction.interaction.channel
-		&& sageInteraction.isCommand("Map", "AddImage")
-		&& sageInteraction.args.hasString("layer", "token");
-}
+// function mapTokenTester(sageInteraction: SageInteraction): boolean {
+// 	return !!sageInteraction.interaction.channel
+// 		&& sageInteraction.isCommand("Map", "AddImage")
+// 		&& sageInteraction.args.hasString("layer", "token");
+// }
 
 //#endregion
 
@@ -461,7 +464,7 @@ function mapTokenTester(sageInteraction: SageInteraction): boolean {
 
 /** creates a new map from the interaction */
 // async function mapCreateHandler(sageInteraction: SageInteraction): Promise<void> {
-// 	sageInteraction.reply(`Fetching image and configuring map ...`, true);
+// 	sageInteraction.reply(`Fetching image and configuring map ... ${ReplyStack.SpinnerEmoji}`, true);
 
 // 	const userId = sageInteraction.user.id;
 
@@ -491,131 +494,132 @@ function mapTokenTester(sageInteraction: SageInteraction): boolean {
 // 	return sageInteraction.reply(`Sorry, something went wrong.`, true);
 // }
 
-async function mapAuraHandler(sageInteraction: SageInteraction): Promise<void> {
-	sageInteraction.reply(`Fetching image and adding to map ...`, false);
-	const [gameMap, aura] = await parseInput<TGameMapAura>(sageInteraction);
-	if (!gameMap || !aura) {
-		return Promise.resolve();
-	}
+// async function mapAuraHandler(sageInteraction: SageInteraction): Promise<void> {
+// 	const stack = new ReplyStack(sageInteraction);
+// 	stack.reply(`Fetching image and adding to map ... ${ReplyStack.SpinnerEmoji}`);
+// 	const [gameMap, aura] = await parseInput<TGameMapAura>(sageInteraction);
+// 	if (!gameMap || !aura) {
+// 		return stack.editReply("Sorry, no aura found!");
+// 	}
 
-	aura.opacity = 0.5;
+// 	aura.opacity = 0.5;
 
-	const anchorName = sageInteraction.args.getString("anchor");
-	const matcher = new StringMatcher(anchorName);
-	const anchor = gameMap.userTokens.find(token => matcher.matches(token.name));
-	if (anchor) {
-		aura.anchorId = anchor.id;
-		anchor.auras.push(aura);
-		anchor.auraId = aura.id;
-		gameMap.activeImage = anchor;
-	}else {
-		gameMap.auras.push(aura);
-		gameMap.activeImage = aura;
-	}
+// 	const anchorName = sageInteraction.args.getString("anchor");
+// 	const matcher = new StringMatcher(anchorName);
+// 	const anchor = gameMap.userTokens.find(token => matcher.matches(token.name));
+// 	if (anchor) {
+// 		aura.anchorId = anchor.id;
+// 		anchor.auras.push(aura);
+// 		anchor.auraId = aura.id;
+// 		gameMap.activeImage = anchor;
+// 	}else {
+// 		gameMap.auras.push(aura);
+// 		gameMap.activeImage = aura;
+// 	}
 
-	const message = await sageInteraction.interaction.channel?.messages.fetch(gameMap.messageId);
-	const success = await renderMap(message, gameMap);
+// 	const message = await sageInteraction.interaction.channel?.messages.fetch(gameMap.messageId);
+// 	const success = await renderMap(message, gameMap);
 
-	if (success) {
-		return sageInteraction.deleteReply();
-	}
+// 	if (success) {
+// 		return sageInteraction.deleteReply();
+// 	}
 
-	return sageInteraction.reply(`Sorry, something went wrong.`, false);
-}
+// 	return stack.editReply(`Sorry, something went wrong.`);
+// }
 
-async function mapTerrainHandler(sageInteraction: SageInteraction): Promise<void> {
-	sageInteraction.reply(`Fetching image and adding to map ...`, false);
-	const [gameMap, terrain] = await parseInput<TGameMapTerrain>(sageInteraction);
-	if (!gameMap || !terrain) {
-		return Promise.resolve();
-	}
+// async function mapTerrainHandler(sageInteraction: SageInteraction): Promise<void> {
+// 	sageInteraction.reply(`Fetching image and adding to map ...`, false);
+// 	const [gameMap, terrain] = await parseInput<TGameMapTerrain>(sageInteraction);
+// 	if (!gameMap || !terrain) {
+// 		return Promise.resolve();
+// 	}
 
-	gameMap.terrain.push(terrain);
-	gameMap.activeImage = terrain;
+// 	gameMap.terrain.push(terrain);
+// 	gameMap.activeImage = terrain;
 
-	const message = await sageInteraction.interaction.channel?.messages.fetch(gameMap.messageId);
-	const success = await renderMap(message, gameMap);
+// 	const message = await sageInteraction.interaction.channel?.messages.fetch(gameMap.messageId);
+// 	const success = await renderMap(message, gameMap);
 
-	if (success) {
-		return sageInteraction.deleteReply();
-	}
+// 	if (success) {
+// 		return sageInteraction.deleteReply();
+// 	}
 
-	return sageInteraction.reply(`Sorry, something went wrong.`, false);
-}
+// 	return sageInteraction.reply(`Sorry, something went wrong.`, false);
+// }
 
-async function mapTokenHandler(sageInteraction: SageInteraction): Promise<void> {
-	sageInteraction.reply(`Fetching image and adding to map ...`, false);
-	const [gameMap, token] = await parseInput<TGameMapToken>(sageInteraction);
-	if (!gameMap || !token) {
-		return Promise.resolve();
-	}
+// async function mapTokenHandler(sageInteraction: SageInteraction): Promise<void> {
+// 	sageInteraction.reply(`Fetching image and adding to map ...`, false);
+// 	const [gameMap, token] = await parseInput<TGameMapToken>(sageInteraction);
+// 	if (!gameMap || !token) {
+// 		return Promise.resolve();
+// 	}
 
-	gameMap.tokens.push(token);
-	gameMap.activeImage = token;
+// 	gameMap.tokens.push(token);
+// 	gameMap.activeImage = token;
 
-	const message = await sageInteraction.interaction.channel?.messages.fetch(gameMap.messageId);
-	const success = await renderMap(message, gameMap);
+// 	const message = await sageInteraction.interaction.channel?.messages.fetch(gameMap.messageId);
+// 	const success = await renderMap(message, gameMap);
 
-	if (success) {
-		return sageInteraction.deleteReply();
-	}
+// 	if (success) {
+// 		return sageInteraction.deleteReply();
+// 	}
 
-	return sageInteraction.reply(`Sorry, something went wrong.`, false);
-}
+// 	return sageInteraction.reply(`Sorry, something went wrong.`, false);
+// }
 
 //#endregion
 
 /** reads the interaction's channel's messages to find the map */
-async function findGameMap(sageInteraction: SageInteraction<ButtonInteraction>): Promise<GameMap | null> {
-	const mapValue = sageInteraction.args.getString("map")!;
-	if (isNonNilSnowflake(mapValue)) {
-		return GameMap.forUser(mapValue, sageInteraction.user.id);
-	}
-	const messages = await sageInteraction.interaction.channel?.messages.fetch();
-	if (!messages) {
-		return null;
-	}
-	let messageId: Snowflake | undefined;
-	messages.find(msg => {
-		if (msg.attachments.size && msg.components.length && GameMap.matches(msg.id, mapValue)) {
-			messageId = msg.id;
-			return true;
-		}
-		return false;
-	});
-	return messageId
-		? GameMap.forUser(messageId, sageInteraction.user.id)
-		: null;
-}
+// async function findGameMap(sageInteraction: SageInteraction<ButtonInteraction>): Promise<GameMap | null> {
+// 	const mapValue = sageInteraction.args.getString("map")!;
+// 	if (isNonNilSnowflake(mapValue)) {
+// 		return GameMap.forUser(mapValue, sageInteraction.user.id);
+// 	}
+// 	const messages = await sageInteraction.interaction.channel?.messages.fetch();
+// 	if (!messages) {
+// 		return null;
+// 	}
+// 	let messageId: Snowflake | undefined;
+// 	messages.find(msg => {
+// 		if (msg.attachments.size && msg.components.length && GameMap.matches(msg.id, mapValue)) {
+// 			messageId = msg.id;
+// 			return true;
+// 		}
+// 		return false;
+// 	});
+// 	return messageId
+// 		? GameMap.forUser(messageId, sageInteraction.user.id)
+// 		: null;
+// }
 
-async function parseInput<T extends TGameMapImage>(sageInteraction: SageInteraction): Promise<[GameMap | null, T | null]> {
-	const gameMap = await findGameMap(sageInteraction);
-	if (!gameMap) {
-		await sageInteraction.reply("Invalid Map!", true);
-		return [null, null];
-	}
+// async function parseInput<T extends TGameMapImage>(sageInteraction: SageInteraction): Promise<[GameMap | null, T | null]> {
+// 	const gameMap = await findGameMap(sageInteraction);
+// 	if (!gameMap) {
+// 		await sageInteraction.reply("Invalid Map!", true);
+// 		return [null, null];
+// 	}
 
-	const layerValue = capitalize(sageInteraction.args.getString("layer")) as "Aura" | "Terrain" | "Token";
+// 	const layerValue = capitalize(sageInteraction.args.getString("layer")) as "Aura" | "Terrain" | "Token";
 
-	const image: TGameMapImage = {
-		auras: [],
-		id: randomSnowflake(),
-		layer: LayerType[layerValue],
-		name: sageInteraction.args.getString("name")!,
-		pos: [
-			sageInteraction.args.getNumber("col") ?? gameMap.spawn[COL],
-			sageInteraction.args.getNumber("row") ?? gameMap.spawn[ROW]
-		],
-		size: [
-			sageInteraction.args.getNumber("cols") ?? 1,
-			sageInteraction.args.getNumber("rows") ?? 1
-		],
-		url: sageInteraction.args.getString("url")!,
-		userId: sageInteraction.user.id
-	};
+// 	const image: TGameMapImage = {
+// 		auras: [],
+// 		id: randomSnowflake(),
+// 		layer: LayerType[layerValue],
+// 		name: sageInteraction.args.getString("name")!,
+// 		pos: [
+// 			sageInteraction.args.getNumber("col") ?? gameMap.spawn[COL],
+// 			sageInteraction.args.getNumber("row") ?? gameMap.spawn[ROW]
+// 		],
+// 		size: [
+// 			sageInteraction.args.getNumber("cols") ?? 1,
+// 			sageInteraction.args.getNumber("rows") ?? 1
+// 		],
+// 		url: sageInteraction.args.getString("url")!,
+// 		userId: sageInteraction.user.id
+// 	};
 
-	return [gameMap, image as T];
-}
+// 	return [gameMap, image as T];
+// }
 
 async function renderMap(messageOrChannel: Optional<Message | DMessageChannel>, gameMap: GameMap): Promise<boolean> {
 	if (!messageOrChannel) {
@@ -647,35 +651,35 @@ function inputToCompassDirections(sageMessage: SageMessage): TCompassDirection[]
 }
 
 async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
-	const directions = inputToCompassDirections(sageMessage);
 	const mapUserId = sageMessage.sageUser.did;
+
 	const mapMessageId = sageMessage.message.reference?.messageId;
-	const mapExists = mapMessageId && directions.length && GameMap.exists(mapMessageId);
+	const mapExists = mapMessageId && GameMap.exists(mapMessageId);
+	if (!mapExists) {
+		return sageMessage.reply(includeDeleteButton({ content:`Please reply to the map you wish to move your token on.` }, mapUserId));
+	}
+
+	const directions = inputToCompassDirections(sageMessage);
 	const gameMap = mapExists ? await GameMap.forUser(mapMessageId, mapUserId, true) : null;
 	if (gameMap) {
-		ensurePlayerCharacter(sageMessage, gameMap);
+		const stack = new ReplyStack(sageMessage);
+		ensurePlayerCharacter(sageMessage, gameMap, stack);
 		const activeImage = gameMap.activeImage;
 		if (!activeImage) {
-			await sageMessage.message.reply(`You have no image to move ...`);
-			return;
+			return stack.editReply(`You have no image to move!`);
 		}
 		const moveEmoji = directions.map(dir => `[${dir}]`).join(" ");
-		const [bool, promptMsg] = await discordPromptYesNoDeletable(sageMessage, `Move ${activeImage.name} ${moveEmoji} ?`);
-		await deleteMessage(promptMsg);
-		if (bool === true) {
-			const movingMessage = await sageMessage.send(`Moving ${activeImage.name} ${moveEmoji} ...`);
+		const boolMove = await discordPromptYesNo(sageMessage, `Move ${activeImage.name} ${moveEmoji} ?`, true);
+		if (boolMove === true) {
+			stack.editReply(`Moving ${activeImage.name} ${moveEmoji} ... ${ReplyStack.SpinnerEmoji}`);
 			const moved = gameMap.moveActiveToken(...directions);
 			const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
 			const updated = (moved || shuffled)
-				&& await renderMap(await sageMessage.message.fetchReference() as Message, gameMap);
-			if (updated) {
-				await deleteMessages(movingMessage);
-				await sageMessage.reactSuccess();
-				return;
+				&& await renderMap(await sageMessage.message.fetchReference(), gameMap);
+			if (!updated) {
+				return stack.editReply(`Error moving image!`);
 			}
-			await sageMessage.message.reply(`Error moving image ...`);
-		}else {
-			await sageMessage.reactFailure();
 		}
+		return stack.deleteReply();
 	}
 }
