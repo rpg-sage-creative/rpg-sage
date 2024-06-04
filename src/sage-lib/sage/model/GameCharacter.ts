@@ -5,11 +5,11 @@ import type { Optional } from "@rsc-utils/type-utils";
 import type { UUID } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
-import { doStatMath } from "../commands/dice/doStatMath.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
+import { doStatMath } from "../commands/dice/stats/doStatMath.js";
 
 export type TDialogMessage = {
 	channelDid: Snowflake;
@@ -365,6 +365,16 @@ export class GameCharacter implements IHasSave {
 			}
 		}
 
+		// provide a temp shortcut for cantrip rank for PF2e
+		if (/^cantrip\.rank$/i.test(key)) {
+			const level = this.getStat("level");
+			if (level !== null) {
+				const mathed = doStatMath(level);
+				const rank = Math.ceil(+mathed / 2);
+				return String(rank);
+			}
+		}
+
 		return null;
 	}
 	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
@@ -428,7 +438,7 @@ export class GameCharacter implements IHasSave {
 		let changed = false;
 		if (values.alias !== undefined) {
 			this.alias = values.alias;
-			this._preparedAlias = undefined;
+			delete this._preparedAlias;
 			changed = true;
 		}
 		if (values.avatarUrl !== undefined) {
@@ -443,10 +453,14 @@ export class GameCharacter implements IHasSave {
 			this.tokenUrl = values.tokenUrl;
 			changed = true;
 		}
-		if (values.name !== undefined && values.name !== this.name) {
-			this.name = values.name;
-			this._preparedName = undefined;
-			changed = true;
+		if (values.name !== undefined) {
+			const notAlias = this.preparedAlias !== GameCharacter.prepareName(values.name);
+			const aliasMatchesName = this.preparedName === this.preparedAlias;
+			if (notAlias || aliasMatchesName) {
+				this.name = values.name;
+				delete this._preparedName;
+				changed = true;
+			}
 		}
 		if (values.userDid !== undefined && values.userDid !== this.userDid) {
 			this.userDid = values.userDid;

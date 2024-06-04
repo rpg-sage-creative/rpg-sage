@@ -6,21 +6,16 @@ import { addCommas } from "@rsc-utils/number-utils";
 import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
 import type { Optional } from "@rsc-utils/type-utils";
 import type { ButtonInteraction } from "discord.js";
-import XRegExp from "xregexp";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
-import { CharacterManager } from "../model/CharacterManager.js";
-import type { CharacterShell } from "../model/CharacterShell.js";
-import { GameCharacter } from "../model/GameCharacter.js";
 import type { NamedCollection } from "../model/NamedCollection.js";
 import { SageCommand } from "../model/SageCommand.js";
 import { SageInteraction } from "../model/SageInteraction.js";
 import { SageMessage } from "../model/SageMessage.js";
 import type { TMacro } from "../model/User.js";
-import { doStatMath } from "./dice/doStatMath.js";
 import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
 import { formatDiceOutput } from "./dice/formatDiceOutput.js";
 import { isMath } from "./dice/isMath.js";
@@ -31,7 +26,7 @@ import { rollRandomItem } from "./dice/rollRandomItem.js";
 import { rollTable } from "./dice/rollTable.js";
 import { sendDiceToMultiple } from "./dice/sendDiceToMultiple.js";
 import { sendDiceToSingle } from "./dice/sendDiceToSingle.js";
-import type { EncounterManager } from "./trackers/encounter/EncounterManager.js";
+import { processStatBlocks } from "./dice/stats/processStatBlocks.js";
 
 type TInteraction = SageMessage | SageInteraction;
 
@@ -59,125 +54,18 @@ function getBasicBracketRegex(): RegExp {
 	return /\[+[^\]]+\]+/ig;
 }
 
-type ReplaceStatsArgs = {
-	statRegex: RegExp;
-	typeRegex: RegExp;
-	npcs: CharacterManager;
-	pcs: CharacterManager;
-	pc?: GameCharacter | null;
-	encounters?: EncounterManager;
-};
-function replaceStats(diceString: string, args: ReplaceStatsArgs, stack: string[] = []): string {
-	let replaced = diceString;
-	while (args.statRegex.test(replaced)) {
-		replaced = replaced.replace(new RegExp(args.statRegex, "gi"), match => {
-			const [_, name, stat, defaultValue] = args.statRegex.exec(match) ?? [];
-
-			// check stack for recursion
-			const stackValue = `${name}::${stat}`.toLowerCase();
-			if (stack.includes(stackValue)) {
-				return "`" + match + "`";
-			}
-
-			// get character
-			let char: GameCharacter | CharacterShell | null = null;
-			if (name) {
-				const [isPc, isAlt] = args.typeRegex.exec(name) ?? [];
-				if (isPc) {
-					char = args.pc ?? null;
-				}else if (isAlt) {
-					char = args.pc?.companions[0] ?? null;
-				}else {
-					char = args.pcs.findByName(name)
-						?? args.pcs.findCompanionByName(name)
-						?? args.npcs.findByName(name)
-						?? args.npcs.findCompanionByName(name)
-						?? args.encounters?.findActiveChar(name)
-						?? null;
-				}
-			}else {
-				char = args.pc ?? null;
-			}
-
-			// get stat
-			const statVal = char?.getStat(stat);
-			const statValue = statVal ?? defaultValue?.trim() ?? "";
-			if (statValue.length) {
-				// check for nested stat block
-				if (args.statRegex.test(statValue)) {
-					return replaceStats(statValue, args, stack.concat([stackValue]));
-				}
-				return statValue;
-			}
-
-			// return escaped match
-			return "`" + match + "`";
-		});
-		// ensure any math is handled
-		return doStatMath(replaced);
-	}
-	// return updated value
-	return replaced;
-}
-
-function getStatRegex() {
-	return XRegExp(`
-		# no tick
-		(?<!\`)
-
-		\\{
-			# char name or quoted char name
-			(
-				[\\w ]+    # <-- should we drop this space?
-				|          # <-- in other places we allow alias (no spaces) or "quoted name with spaces"
-				"[\\w ]+"
-			)
-
-			# separator
-			:{2}
-
-			# stat key
-			(
-				[^:{}]+
-			)
-
-			# default value
-			(?:
-				:
-				([^{}]+)
-			)?
-		\\}
-
-		# no tick
-		(?!\`)
-	`, "xi");
-}
-
-function getCharTypeRegex() {
-	return XRegExp(`
-		^
-		(pc|stat)?
-		(companion|hireling|alt|familiar)?
-		$
-	`, "xi");
-}
-
 function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): DiscordDice | null {
 	if (!diceString) {
 		return null;
 	}
 
-	const statRegex = getStatRegex();
-	if (statRegex.test(diceString)) {
-		const { game, isGameMaster, isPlayer } = sageMessage;
-		if (!game || isGameMaster || isPlayer) {
-			const npcs = game?.nonPlayerCharacters ?? sageMessage.sageUser.nonPlayerCharacters;
-			const pcs = game?.playerCharacters ?? sageMessage.sageUser.playerCharacters;
-			const pc = isPlayer && game ? sageMessage.playerCharacter : null;
-			const encounters = game?.encounters;
-			const typeRegex = getCharTypeRegex();
-			diceString = replaceStats(diceString, { statRegex, typeRegex, npcs, pcs, pc, encounters });
-		}
+	const { game, isGameMaster, isPlayer } = sageMessage;
+	if (!game || isGameMaster || isPlayer) {
+		const npcs = game?.nonPlayerCharacters ?? sageMessage.sageUser.nonPlayerCharacters;
+		const pcs = game?.playerCharacters ?? sageMessage.sageUser.playerCharacters;
+		const pc = isPlayer && game ? sageMessage.playerCharacter : null;
+		const encounters = game?.encounters;
+		diceString = processStatBlocks(diceString, { npcs, pcs, pc, encounters });
 	}
 
 	return DiscordDice.parse({
@@ -223,7 +111,7 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 	return null;
 }
 
-async function parseMatch(sageMessage: TInteraction, match: string, overrides?: TDiscordDiceParseOptions): Promise<TDiceOutput[]> {
+async function parseMatch(sageMessage: TInteraction, match: string, overrides?: TDiscordDiceParseOptions, tableIterations = 0): Promise<TDiceOutput[]> {
 	const noBraces = unwrap(match, "[]");
 
 	const table = await fetchTableFromUrl(match) ?? parseTable(match);
@@ -232,7 +120,7 @@ async function parseMatch(sageMessage: TInteraction, match: string, overrides?: 
 		const childDice = tableResults[0]?.children?.map(child => wrap(unwrap(child, "[]"), "[]").match(getBasicBracketRegex()) ?? []).flat() ?? [];
 		// debug({tableResults,tableResultsDice})
 		for (const diceToParse of childDice) {
-			const childMatches = await parseMatch(sageMessage, diceToParse, overrides);
+			const childMatches = await parseMatch(sageMessage, diceToParse, overrides, tableIterations + 1);
 			tableResults.push(...childMatches.flat());
 		}
 		return tableResults;

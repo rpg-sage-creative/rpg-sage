@@ -1,10 +1,10 @@
 import type { TDiceOutput } from "../../../../sage-dice/index.js";
 import type { SageCommand } from "../../model/SageCommand.js";
-import { doMath } from "./doMath.js";
+import { doSimple } from "./math/doSimple.js";
 
 /** Returns the output data for the given math equation. */
 export function rollMath(_: SageCommand, input: string): TDiceOutput[] {
-	const result = doMath(input) ?? "INVALID!";
+	const result = doSimple(input) ?? "INVALID!";
 	return [{
 		hasSecret: false,
 		inlineOutput: result,

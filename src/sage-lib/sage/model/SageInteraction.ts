@@ -140,6 +140,8 @@ export class SageInteraction<T extends DInteraction = any>
 
 	/** Convenience for .interation.deferReply().then(() => .interaction.deleteReply()) */
 	public async noDefer(): Promise<void> {
+		if (!this.isSageInteraction("REPLIABLE")) return; // NOSONAR
+
 		if (!this.interaction.deferred && !this.interaction.replied) {
 			await this.defer(true);
 			await this.interaction.deleteReply();
@@ -150,13 +152,16 @@ export class SageInteraction<T extends DInteraction = any>
 	private _noReply = false;
 
 	/** Defers the interaction so that a reply can be sent later. */
-	public async defer(ephemeral: boolean): Promise<void> {
+	public async defer(_ephemeral: boolean): Promise<void> {
+		if (!this.isSageInteraction("REPLIABLE")) return; // NOSONAR
+
 		if (!this.interaction.deferred) {
 			if ("deferUpdate" in this.interaction) {
 				await this.interaction.deferUpdate();
 			}else if ("deferReply" in this.interaction) {
 				await this.interaction.deferReply({
-					ephemeral:this.sageCache.server ? (ephemeral ?? true) : false
+					ephemeral: false
+					// ephemeral:this.sageCache.server ? (ephemeral ?? true) : false
 				});
 			}else {
 				warn(`IDE says we should never reach this code ...`);
@@ -166,6 +171,8 @@ export class SageInteraction<T extends DInteraction = any>
 
 	/** Deletes the reply and any updates (ONLY IF NOT EPHEMERAL) */
 	public async deleteReply(): Promise<void> {
+		if (!this.isSageInteraction("REPLIABLE")) return; // NOSONAR
+
 		if (this.updates.length) {
 			await deleteMessages(this.updates);
 			this.updates.length = 0;
@@ -177,6 +184,8 @@ export class SageInteraction<T extends DInteraction = any>
 	public async reply(args: TSendArgs): Promise<void>;
 	public async reply(renderable: RenderableContentResolvable, ephemeral: boolean): Promise<void>;
 	public async reply(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void> {
+		if (!this.isSageInteraction("REPLIABLE")) return; // NOSONAR
+
 		const args = this.resolveToOptions(renderableOrArgs, ephemeral);
 		if (this._noReply) {
 			const message = await this.interaction.channel?.send(args);
@@ -226,7 +235,8 @@ export class SageInteraction<T extends DInteraction = any>
 	public async whisper(content: string): Promise<void>;
 	public async whisper(contentOrArgs: string | TSendArgs): Promise<void> {
 		const args = isString(contentOrArgs) ? { content:contentOrArgs } : { ...contentOrArgs };
-		args.ephemeral = !!this.sageCache.server;
+		args.ephemeral = false;
+		// args.ephemeral = !!this.sageCache.server;
 		return this.reply(args);
 	}
 

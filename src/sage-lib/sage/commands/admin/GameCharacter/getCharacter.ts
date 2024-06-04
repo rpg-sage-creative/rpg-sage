@@ -6,7 +6,7 @@ import type { TCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
 /** Reusable code to get GameCharacter for the commands. */
-export async function getCharacter(sageCommand: SageCommand, characterTypeMeta: TCharacterTypeMeta, userDid: Snowflake, names: Names): Promise<GameCharacter | undefined> {
+export async function getCharacter(sageCommand: SageCommand, characterTypeMeta: TCharacterTypeMeta, userDid: Snowflake, names: Names, alias?: string): Promise<GameCharacter | undefined> {
 	const hasCharacters = sageCommand.game && !characterTypeMeta.isMy ? sageCommand.game : sageCommand.sageUser;
 	let characterManager: CharacterManager | undefined = characterTypeMeta.isGmOrNpcOrMinion ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
@@ -18,7 +18,8 @@ export async function getCharacter(sageCommand: SageCommand, characterTypeMeta: 
 	if (!name && characterTypeMeta.isGm) {
 		name = sageCommand.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName;
 	}
-	return characterManager?.findByName(name);
+	return characterManager?.findByName(name)
+		?? characterManager?.findByName(alias);
 }
 
 // async function getCharacter(sageCommand: sageCommand): Promise<GameCharacter> {

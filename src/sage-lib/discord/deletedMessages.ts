@@ -1,28 +1,45 @@
 import { EphemeralSet } from "@rsc-utils/cache-utils";
-import { debug, errorReturnNull } from "@rsc-utils/console-utils";
+import { debug, errorReturnNull, verbose } from "@rsc-utils/console-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Message, PartialMessage, Snowflake } from "discord.js";
 import { GameMapBase } from "../sage/commands/map/GameMapBase";
 
+/* We only really need to store deleted state for seconds due to races with Tupper. */
 const deleted = new EphemeralSet<Snowflake>(1000 * 60);
 
-/* We only really need to store deleted state for seconds due to races with Tupper. */
-
+/** Marks the given messageIds as deleted and attempts to delete map data if it exists. */
 export function setDeleted(...messageIds: Snowflake[]): void {
 	const idList = messageIds.map(id => `"${id}"`).join(", ");
-	debug(`${Date.now()}: setDeleted(${idList})`);
+	verbose(`${Date.now()}: setDeleted(${idList})`);
 	for (const messageId of messageIds) {
 		deleted.add(messageId);
 		GameMapBase.delete(messageId);
 	}
 }
 
+/** Checks to see if the given messageId is currently in our deleted set. */
 export function isDeleted(messageId: Snowflake): boolean {
-	debug(`${Date.now()}: isDeleted("${messageId}") = ${deleted.has(messageId)}`);
+	verbose(`${Date.now()}: isDeleted("${messageId}") = ${deleted.has(messageId)}`);
 	return deleted.has(messageId);
 }
 
+/** Checks to see if the value given is a message that is marked deletable and also isn't in our deleted set. */
+export function isDeletable(message: Optional<Message>): message is Message {
+	return message ? message.deletable && !isDeleted(message.id) : false;
+}
+
 export enum MessageDeleteResults { InvalidMessage = -2, NotDeletable = -1, NotDeleted = 0, Deleted = 1, AlreadyDeleted = 2 }
+
+/**
+ * Tries to safely delete all the given messages.
+ */
+export async function deleteMessages(messages: Optional<Message | PartialMessage>[]): Promise<MessageDeleteResults[]> {
+	const results = [];
+	for (const message of messages) {
+		results.push(await deleteMessage(message));
+	}
+	return results;
+}
 
 /**
  * Tries to safely delete a message.
@@ -38,21 +55,10 @@ export async function deleteMessage(message: Optional<Message | PartialMessage>)
 
 /** @private Worker function for deleteMessage. */
 async function _deleteMessage(message: Optional<Message | PartialMessage>): Promise<MessageDeleteResults> {
-	if (!message?.id) return MessageDeleteResults.InvalidMessage;
-	if (!message.deletable) return MessageDeleteResults.NotDeletable;
-	if (isDeleted(message.id)) return MessageDeleteResults.AlreadyDeleted;
+	if (!message?.id) return MessageDeleteResults.InvalidMessage; //NOSONAR
+	if (!message.deletable) return MessageDeleteResults.NotDeletable; //NOSONAR
+	if (isDeleted(message.id)) return MessageDeleteResults.AlreadyDeleted; //NOSONAR
 	const results = await message.delete().catch(errorReturnNull);
-	if (results?.deletable === false) return MessageDeleteResults.Deleted;
+	if (results?.deletable === false) return MessageDeleteResults.Deleted; //NOSONAR
 	return MessageDeleteResults.NotDeleted;
-}
-
-/**
- * Tries to safely delete all the given messages.
- */
-export async function deleteMessages(messages: Optional<Message | PartialMessage>[]): Promise<MessageDeleteResults[]> {
-	const results = [];
-	for (const message of messages) {
-		results.push(await deleteMessage(message));
-	}
-	return results;
 }

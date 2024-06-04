@@ -22,10 +22,10 @@ export async function gcCmdUpdate(sageMessage: SageMessage): Promise<void> {
 		}
 	}
 
-	const userDid = await getUserDid(sageMessage),
-		newUserDid = await sageMessage.args.removeAndReturnUserDid("newuser") ?? await sageMessage.args.removeAndReturnUserDid("user"),
-		core = sageMessage.args.getCharacterOptions(names, newUserDid ?? userDid!),
-		character = await getCharacter(sageMessage, characterTypeMeta, userDid!, names);
+	const userDid = await getUserDid(sageMessage);
+	const newUserDid = await sageMessage.args.removeAndReturnUserDid("newuser") ?? await sageMessage.args.removeAndReturnUserDid("user");
+	const core = sageMessage.args.getCharacterOptions(names, newUserDid ?? userDid!);
+	const character = await getCharacter(sageMessage, characterTypeMeta, userDid!, names, core.alias);
 	if (character) {
 		await character.update(core, false);
 		return promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {

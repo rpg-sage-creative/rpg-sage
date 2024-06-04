@@ -1,7 +1,7 @@
-import { doMathFunctions } from "@rsc-utils/math-utils";
 import { tokenize } from "@rsc-utils/string-utils";
-import { doMath } from "./doMath.js";
-import { isMath } from "./isMath.js";
+import { doMathFunctions } from "../math/doMathFunctions.js";
+import { doSimple } from "../math/doSimple.js";
+import { getDiceRegex } from "./getDiceRegex.js";
 
 /**
  * Checks the stat value for math.
@@ -17,18 +17,15 @@ export function doStatMath(value: string): string {
 	// remove pipes
 	const unpiped = value.replace(/\|{2}/g, "");
 
-	/** @todo identify a way we can integrate this test for fixed dice without duplicating the regex ... if it is possible */
-	const tokens = tokenize(unpiped, { fixed:/\(\s*\d*(?:\s*,\s*\d+)*\s*\)(?:\s*\d+\s*|\b)d\s*\d+/i });
-	// process other math functions before passing to simple math
-	const processedTokens = tokens.map(({ token, key }) => key === "fixed" ? token : doMathFunctions(token));
+	// process other math functions on non-dice parts of the value
+	const tokens = tokenize(unpiped, { dice:getDiceRegex() });
+	const processedTokens = tokens.map(({ token, key }) => key === "dice" ? token : doMathFunctions(token));
 	const processed = processedTokens.join("");
 
 	// handle simple math if applicable
-	if (isMath(`[${processed}]`)) {
-		const value = doMath(processed);
-		if (value !== null) {
-			return hasPipes ? `||${value}||` : value;
-		}
+	const simpleValue = doSimple(processed);
+	if (simpleValue !== null) {
+		return hasPipes ? `||${simpleValue}||` : simpleValue;
 	}
 
 	// if we actually did some math, return the change

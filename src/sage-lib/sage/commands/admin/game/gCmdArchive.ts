@@ -14,7 +14,7 @@ export async function gCmdArchive(sageCommand: SageCommand): Promise<void> {
 	}
 
 	await gSendDetails(sageCommand);
-	const archive = await discordPromptYesNo(sageCommand, `Archive Game?`);
+	const archive = await discordPromptYesNo(sageCommand, `Archive Game?`, true);
 	if (archive) {
 		const archived = await sageCommand.game.archive();
 		if (archived) {

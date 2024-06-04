@@ -13,6 +13,7 @@ type TSendToArgs = {
 	embeds?: MessageEmbed[];
 	errMsg?: string;
 	files?: MessageAttachment[];
+	replyingTo?: string;
 	sageCache: SageCache;
 	target: DMessageChannel | DUser | Webhook;
 	threadId?: Snowflake;
@@ -23,7 +24,7 @@ type TSendToArgs = {
  * Returns Message[] upon success, null upon error, and undefined if Sage doesn't have permissions to send to this channel/thread.
  */
  export async function sendTo(sendArgs: TSendToArgs, splitOptions: SplitOptions): Promise<Message[] | null | undefined> {
-	const { avatarURL, components, content, embedContent, embeds, errMsg, files, sageCache, target, threadId, username } = sendArgs;
+	const { avatarURL, components, content, embedContent, embeds, errMsg, files, replyingTo, sageCache, target, threadId, username } = sendArgs;
 
 	// if we can check permissions then let's do so first
 	const canTest = target && ("permissionsFor" in target);
@@ -38,7 +39,7 @@ type TSendToArgs = {
 	const embedsToContent = splitOptions.embedsToContent === true || sageCache.user.defaultSagePostType === DialogType.Post;
 
 	// create post length safe payloads
-	const payloads = splitMessageOptions({ avatarURL, components, content, embedContent, embeds, files, threadId, username }, { ...splitOptions, contentToEmbeds, embedsToContent });
+	const payloads = splitMessageOptions({ avatarURL, components, content, embedContent, embeds, files, replyingTo, threadId, username }, { ...splitOptions, contentToEmbeds, embedsToContent });
 
 	// create a rejection catcher
 	const catcher = (err: unknown) => {

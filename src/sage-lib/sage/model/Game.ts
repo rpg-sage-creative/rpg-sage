@@ -143,9 +143,34 @@ async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promi
 	return [gChannels.concat(sChannels), gChannels, sChannels];
 }
 
+/** Cleans up the users from the time we weren't correctly validating duplicate users when adding them. */
+function fixDupeUsers(game: GameCore): void {
+	// 0 = unkonwn, 1 = player, 2 = gm
+	const sets = [new Set<string>(), new Set<string>(), new Set<string>()];
+
+	const users = game.users ?? [];
+	users?.forEach(user => sets[user.type ?? 0].add(user.did));
+
+	const filtered: IGameUser[] = [];
+	while (sets.length) {
+		// do them in priority order: gm, player, other
+		const set = sets.pop()!;
+		// we just popped the set, so length is the user type
+		const type = sets.length;
+		for (const did of set) {
+			const found = users.find(user => user.did === did && user.type === type);
+			if (found && !filtered.find(user => user.did === did)) {
+				filtered.push(found);
+			}
+		}
+	}
+	game.users = filtered;
+}
+
 export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<Game>, IHasColorsCore, IHasEmojiCore {
 	public constructor(core: GameCore, public server: Server, sageCache: SageCache) {
 		super(updateGame(core), sageCache);
+		fixDupeUsers(core);
 
 		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
@@ -355,6 +380,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 			return false;
 		}
 		this.core.roles = this.core.roles!.filter(_role => _role !== role);
+		/** @todo this will likely orphan pcs and npcs, which we are removing linkage to in the functions below ... */
 		/*
 		// const saved = await this.save();
 		// if (saved) {
@@ -385,7 +411,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 			return false;
 		}
 
-		const gameMasters = userDids.map(userDid => (<IGameUser>{ did: userDid, type: GameUserType.GameMaster }));
+		const gameMasters = filtered.map(userDid => ({ did: userDid, type: GameUserType.GameMaster, dicePing:true }));
 		(this.core.users ?? (this.core.users = [])).push(...gameMasters);
 		/*
 		// const saved = await this.save();
@@ -406,8 +432,12 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 			return false;
 		}
 
-		const nonPlayerCharacters = this.nonPlayerCharacters;
-		filtered.map(userDid => nonPlayerCharacters.filter(npc => npc.userDid === userDid)).forEach(npcs => npcs.forEach(npc => delete npc.userDid));
+		// unlink npcs from ex-GMs
+		this.nonPlayerCharacters.forEach(char => {
+			if (filtered.includes(char.userDid!)) {
+				delete char.userDid;
+			}
+		});
 
 		this.core.users = this.core.users!.filter(user => user.type !== GameUserType.GameMaster || !filtered.includes(user.did));
 		/*
@@ -442,7 +472,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 			return false;
 		}
 
-		const players = userDids.map(userDid => (<IGameUser>{ did: userDid, type: GameUserType.Player }));
+		const players = filtered.map(userDid => (<IGameUser>{ did: userDid, type: GameUserType.Player }));
 		(this.core.users ?? (this.core.users = [])).push(...players);
 		/*
 		// const saved = await this.save();
@@ -463,8 +493,12 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 			return false;
 		}
 
-		const playerCharacters = this.playerCharacters;
-		filtered.map(userDid => playerCharacters.filter(pc => pc.userDid === userDid)).forEach(pcs => pcs.forEach(pc => delete pc.userDid));
+		// unlink pcs from ex-Players
+		this.playerCharacters.forEach(char => {
+			if (filtered.includes(char.userDid!)) {
+				delete char.userDid;
+			}
+		});
 
 		this.core.users = this.core.users!.filter(user => user.type !== GameUserType.Player || !filtered.includes(user.did));
 		/*
