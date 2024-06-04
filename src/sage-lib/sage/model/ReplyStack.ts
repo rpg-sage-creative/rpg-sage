@@ -1,6 +1,6 @@
 import type { DMessage } from "@rsc-utils/discord-utils";
 import type { InteractionReplyOptions, Message, MessageOptions } from "discord.js";
-import { deleteMessage, isDeleted } from "../../discord/deletedMessages.js";
+import { deleteMessage, isDeletable } from "../../discord/deletedMessages.js";
 import type { SageCommand } from "./SageCommand.js";
 import { addMessageDeleteButton, includeDeleteButton } from "./utils/deleteButton.js";
 
@@ -8,8 +8,6 @@ type Options = {
 	updateLast: boolean;
 	updateReply: boolean;
 };
-
-type ReplyStackWithReply = ReplyStack & { replyMessage:Message; };
 
 /**
  * A temporary placeholder for new send/reply logic.
@@ -82,11 +80,13 @@ export class ReplyStack {
 			const { interaction } = this.sageCommand;
 			if (!interaction.deferred && !interaction.replied) {
 				if ("deferUpdate" in interaction) {
-					const message = await interaction.deferUpdate({ fetchReply:true }) as Message;
-					return this.processMessage(message, options);
+					return interaction.deferUpdate();
+					// const message = await interaction.deferUpdate({ fetchReply:true }) as Message;
+					// return this.processMessage(message, options);
 				}
-				const message = await interaction.deferReply({ fetchReply:true }) as Message;
-				return this.processMessage(message, options);
+				return interaction.deferReply();
+				// const message = await interaction.deferReply({ fetchReply:true }) as Message;
+				// return this.processMessage(message, options);
 			}
 		}
 
@@ -136,7 +136,7 @@ export class ReplyStack {
 			const { interaction } = this.sageCommand;
 
 			// in case we replied to the interaction without the ReplyStack, treat it as a send instead
-			if (interaction.replied) {
+			if (interaction.replied || interaction.deferred) {
 				return this._send(content, options);
 
 			// it should be safe to use the interaction reply mechanism
@@ -154,14 +154,9 @@ export class ReplyStack {
 		return this.pushToReplyStack(async () => this._reply(content));
 	}
 
-	private canEditReply(): this is ReplyStackWithReply {
-		return this.replyMessage
-			? this.replyMessage.deletable && !isDeleted(this.replyMessage.id)
-			: false;
-	}
 	private async _editReply(content: string) {
 		// to avoid interaction conflicts, edit the message directly instead of through the interaction
-		if (this.canEditReply()) {
+		if (isDeletable(this.replyMessage)) {
 			const editArgs = this.createArgs({ content, components:this.replyMessage.components });
 			await this.replyMessage.edit(editArgs);
 
