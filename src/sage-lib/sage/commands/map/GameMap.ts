@@ -10,28 +10,23 @@ function shuffleImage(images: TGameMapImage[], imageId: Snowflake, direction: TS
 		return false;
 	}
 	const index = images.indexOf(image);
+	let newIndex: number;
 	switch(direction) {
 		case "top":
-			images = images.filter(t => t !== image).concat([image]);
+			newIndex = images.length - 1;
 			break;
 		case "bottom":
-			images = [image].concat(images.filter(t => t !== image));
+			newIndex = 0;
 			break;
 		case "up":
-			if (images.slice().pop() !== image) {
-				const newIndex = index + 1;
-				images = images.filter(t => t !== image);
-				images.splice(newIndex, 0, image);
-			}
+			newIndex = Math.min(index + 1, images.length - 1);
 			break;
 		case "down":
-			if (images[0] === image) {
-				const newIndex = index - 1;
-				images = images.filter(t => t !== image);
-				images.splice(newIndex, 0, image);
-			}
+			newIndex = Math.max(index - 1, 0);
 			break;
 	}
+	images.splice(index, 1);
+	images.splice(newIndex, 0, image);
 	return index !== images.indexOf(image);
 }
 
