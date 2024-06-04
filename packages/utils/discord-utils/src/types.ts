@@ -1,10 +1,20 @@
-import type { ButtonInteraction, CacheType, CommandInteraction, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, Snowflake, TextChannel, ThreadChannel, User } from "discord.js";
+import type { AutocompleteInteraction, ButtonInteraction, CacheType, CommandInteraction, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, SelectMenuInteraction, Snowflake, TextChannel, ThreadChannel, User } from "discord.js";
 
 export type DInteraction<Cached extends CacheType = CacheType>
+	= ButtonInteraction<Cached> // button
+	| SelectMenuInteraction<Cached> // select
+	| MessageComponentInteraction<Cached> // button or select or text
+	| AutocompleteInteraction<Cached> // autocomplete
+	| CommandInteraction<Cached> // slash
+	| ModalSubmitInteraction<Cached> // modal
+	;
+export type DRepliableInteraction<Cached extends CacheType = CacheType>
 	= ButtonInteraction<Cached>
-	| CommandInteraction<Cached>
+	| SelectMenuInteraction<Cached>
 	| MessageComponentInteraction<Cached>
-	| ModalSubmitInteraction<Cached>;
+	| CommandInteraction<Cached>
+	| ModalSubmitInteraction<Cached>
+	;
 
 export type DReaction = MessageReaction | PartialMessageReaction;
 
