@@ -1,6 +1,6 @@
 import { debug, errorReturnEmptyArray, verbose, warn } from "@rsc-utils/core-utils";
 import { getDataRoot } from "@rsc-utils/core-utils";
-import { filterFiles, readJsonFile } from "@rsc-utils/fs-utils";
+import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { initializeNoiseUS, initializeUKtoUS } from "@rsc-utils/language-utils";
 import { randomItem } from "@rsc-utils/dice-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";

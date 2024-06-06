@@ -1,6 +1,6 @@
 import { errorReturnEmptyArray, errorReturnNull, warnReturnNull } from "@rsc-utils/core-utils";
 import { DiscordKey, type DMessage } from "@rsc-utils/discord-utils";
-import { getBuffer } from "@rsc-utils/https-utils";
+import { getBuffer } from "@rsc-utils/io-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { MessageAttachment } from "discord.js";

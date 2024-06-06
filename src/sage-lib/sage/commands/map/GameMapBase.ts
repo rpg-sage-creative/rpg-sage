@@ -1,6 +1,6 @@
 import { errorReturnFalse, errorReturnNull } from "@rsc-utils/core-utils";
 import { getDataRoot } from "@rsc-utils/core-utils";
-import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/fs-utils";
+import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import type { Snowflake } from "@rsc-utils/core-utils";
 import { RenderableGameMap } from "./RenderableGameMap";
 

@@ -1,6 +1,6 @@
 import { error, info } from "@rsc-utils/core-utils";
 import { getBotCodeName, getDataRoot, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
-import { listFilesSync, readJsonFileSync, writeFileSync } from "@rsc-utils/fs-utils";
+import { listFilesSync, readJsonFileSync, writeFileSync } from "@rsc-utils/io-utils";
 import { buildCommands } from "./app-commands/builders/buildCommands.js";
 import { countCharacters } from "./app-commands/builders/countCharacters.js";
 import { updateSlashCommands } from "./app-commands/rest/updateSlashCommands.js";

@@ -1,5 +1,5 @@
 import { error, errorReturnNull, verbose, warn } from "@rsc-utils/core-utils";
-import { AppServer, getJson, type AppServerEndpoint } from "@rsc-utils/https-utils";
+import { AppServer, getJson, type AppServerEndpoint } from "@rsc-utils/io-utils";
 import { stringify } from "@rsc-utils/core-utils";
 import type { Awaitable } from "@rsc-utils/core-utils";
 import { renderMap } from "./internal/renderMap.js";

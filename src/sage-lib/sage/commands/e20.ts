@@ -1,8 +1,8 @@
 import { errorReturnFalse, errorReturnNull } from "@rsc-utils/core-utils";
 import { DiscordKey, toUserMention, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
 import { getDataRoot } from "@rsc-utils/core-utils";
-import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
-import { PdfCacher } from "@rsc-utils/pdf-utils";
+import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { PdfCacher } from "@rsc-utils/io-utils";
 import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 import type { Optional } from "@rsc-utils/core-utils";
 import type { UUID } from "@rsc-utils/core-utils";

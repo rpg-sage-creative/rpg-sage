@@ -1,5 +1,5 @@
 import { toUniqueDefined } from "@rsc-utils/array-utils";
-import { isUrl } from "@rsc-utils/https-utils";
+import { isUrl } from "@rsc-utils/io-utils";
 import { StringMatcher, unwrap, wrap } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/core-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";

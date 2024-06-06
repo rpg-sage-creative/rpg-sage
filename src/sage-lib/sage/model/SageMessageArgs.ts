@@ -1,7 +1,7 @@
 import { type SageChannel } from "@rsc-sage/types";
 import { parseId } from "@rsc-utils/discord-utils";
 import { parseEnum } from "@rsc-utils/core-utils";
-import { isUrl } from "@rsc-utils/https-utils";
+import { isUrl } from "@rsc-utils/io-utils";
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { isNotBlank, unwrap } from "@rsc-utils/string-utils";
 import { isDefined, type EnumLike, type Optional } from "@rsc-utils/core-utils";

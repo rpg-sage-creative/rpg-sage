@@ -2,7 +2,7 @@ import { EphemeralMap } from "@rsc-utils/cache-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, verbose } from "@rsc-utils/core-utils";
 import { getBotCodeName, getDataRoot } from "@rsc-utils/core-utils";
-import { listFiles, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
+import { listFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { isDefined, type Optional, type OrNull } from "@rsc-utils/core-utils";
 import { isNonNilUuid, randomUuid, type UUID } from "@rsc-utils/core-utils";
 import type { SageCache } from "../../model/SageCache.js";

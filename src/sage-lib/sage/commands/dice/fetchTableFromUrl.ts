@@ -1,5 +1,5 @@
 import { warnReturnNull } from "@rsc-utils/core-utils";
-import { getText, isUrl } from "@rsc-utils/https-utils";
+import { getText, isUrl } from "@rsc-utils/io-utils";
 import { unwrap } from "@rsc-utils/string-utils";
 import type { SimpleRollableTable } from "./SimpleRollableTable.js";
 import { parseTable } from "./parseTable.js";

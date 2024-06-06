@@ -1,6 +1,6 @@
 import { errorReturnNull } from "@rsc-utils/core-utils";
 import type { DMessageChannel } from "@rsc-utils/discord-utils";
-import { getText } from "@rsc-utils/https-utils";
+import { getText } from "@rsc-utils/io-utils";
 import { randomSnowflake } from "@rsc-utils/core-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/core-utils";
