@@ -1,4 +1,4 @@
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { COL, GameMapBase, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, UserLayerType } from "./GameMapBase";
 
 /** shuffles an image on a layer */

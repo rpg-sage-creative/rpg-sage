@@ -1,4 +1,4 @@
-import { debug } from "@rsc-utils/console-utils";
+import { debug } from "@rsc-utils/core-utils";
 import { addCommas, nth } from "@rsc-utils/number-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";

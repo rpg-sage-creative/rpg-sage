@@ -1,4 +1,4 @@
-import { parse, stringify } from "@rsc-utils/json-utils";
+import { parse, stringify } from "@rsc-utils/core-utils";
 import type { SourcedCore } from "../model/base/HasSource";
 import { HasSource } from "../model/base/HasSource";
 import type { IHasMetadata, IMetadata } from "./Metadata";

@@ -1,9 +1,9 @@
 import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/types";
 import { getDateStrings } from "@rsc-utils/date-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import { getRollemId, getTupperBoxId } from "@rsc-utils/env-utils";
+import { getRollemId, getTupperBoxId } from "@rsc-utils/core-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { TextChannel } from "discord.js";
 import { getPermissionLabel } from "../../../../discord/permissions/getPermissionLabel.js";
 import { getPermsFor } from "../../../../discord/permissions/getPermsFor.js";

@@ -1,5 +1,5 @@
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/character-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { TSkillDie } from "../../sage-dice/dice/essence20";
 
 export type TArmorE20 = {

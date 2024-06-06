@@ -1,12 +1,12 @@
-import { debug, errorReturnEmptyArray, verbose, warn } from "@rsc-utils/console-utils";
-import { getDataRoot } from "@rsc-utils/env-utils";
+import { debug, errorReturnEmptyArray, verbose, warn } from "@rsc-utils/core-utils";
+import { getDataRoot } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/fs-utils";
 import { initializeNoiseUS, initializeUKtoUS } from "@rsc-utils/language-utils";
 import { randomItem } from "@rsc-utils/random-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { isDefined } from "@rsc-utils/type-utils";
-import { UuidMatcher, type UUID } from "@rsc-utils/uuid-utils";
+import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
+import { isDefined } from "@rsc-utils/core-utils";
+import { UuidMatcher, type UUID } from "@rsc-utils/core-utils";
 import type { AonBase } from "../model/base/AonBase.js";
 import type { Base, BaseCore } from "../model/base/Base.js";
 import type { HasSource } from "../model/base/HasSource.js";

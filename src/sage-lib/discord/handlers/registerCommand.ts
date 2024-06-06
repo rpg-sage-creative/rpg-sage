@@ -1,4 +1,4 @@
-import type { Awaitable } from "@rsc-utils/type-utils";
+import type { Awaitable } from "@rsc-utils/core-utils";
 import type { SageMessage } from "../../sage/model/SageMessage.js";
 import { ArgsManager } from "../ArgsManager.js";
 import { registerMessageListener } from "../handlers.js";

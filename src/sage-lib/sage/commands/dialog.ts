@@ -1,4 +1,4 @@
-import { debug } from "@rsc-utils/console-utils";
+import { debug } from "@rsc-utils/core-utils";
 import { registerMessageListener, registerReactionListener } from "../../discord/handlers.js";
 import { MessageType, ReactionType, TCommandAndArgsAndData } from "../../discord/index.js";
 import type { SageMessage } from "../model/SageMessage.js";

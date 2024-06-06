@@ -1,6 +1,6 @@
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { PROFICIENCIES, Table } from "../../../sage-pf2e/index.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { SageInteraction } from "../model/SageInteraction.js";

@@ -1,11 +1,11 @@
 import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, SageChannel, ServerOptions } from "@rsc-sage/types";
 import { parseGameSystem, updateServer } from "@rsc-sage/types";
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
-import { getHomeServerId } from "@rsc-utils/env-utils";
-import { applyChanges } from "@rsc-utils/json-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Args, Optional } from "@rsc-utils/type-utils";
+import { getHomeServerId } from "@rsc-utils/core-utils";
+import { applyChanges } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
+import type { Args, Optional } from "@rsc-utils/core-utils";
 import type { Guild } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository.js";

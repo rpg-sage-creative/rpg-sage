@@ -1,4 +1,4 @@
-import { warnReturnNull } from "@rsc-utils/console-utils";
+import { warnReturnNull } from "@rsc-utils/core-utils";
 import { getText, isUrl } from "@rsc-utils/https-utils";
 import { unwrap } from "@rsc-utils/string-utils";
 import type { SimpleRollableTable } from "./SimpleRollableTable.js";

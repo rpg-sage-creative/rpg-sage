@@ -1,10 +1,10 @@
 import type { Cache } from "@rsc-utils/cache-utils";
-import { debug, warn } from "@rsc-utils/console-utils";
+import { debug, warn } from "@rsc-utils/core-utils";
 import { DiscordKey, DMessage, type DInteraction, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { isString } from "@rsc-utils/string-utils";
-import { isDefined } from "@rsc-utils/type-utils";
+import { isDefined } from "@rsc-utils/core-utils";
 import type { InteractionReplyOptions, InteractionUpdateOptions, Message, MessageAttachment, User } from "discord.js";
 import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";

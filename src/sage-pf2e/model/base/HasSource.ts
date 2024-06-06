@@ -1,6 +1,6 @@
 import { getIdMatcher } from "@rsc-utils/class-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import type { Matcher, OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import type { Matcher, OrNull, OrUndefined } from "@rsc-utils/core-utils";
 import type { TRarity } from "../../common";
 import { COMMON, RARITIES } from "../../common";
 import { RenderableContent } from "../../data/RenderableContent";

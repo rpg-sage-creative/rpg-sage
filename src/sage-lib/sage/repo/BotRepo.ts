@@ -1,4 +1,4 @@
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import type { IBotCore, TBotCodeName } from "../model/Bot";
 import { Bot } from "../model/Bot";
 import type { SageCache } from "../model/SageCache";

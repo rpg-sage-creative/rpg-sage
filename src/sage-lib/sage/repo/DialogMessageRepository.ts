@@ -1,4 +1,4 @@
-import { errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
+import { errorReturnFalse, errorReturnNull } from "@rsc-utils/core-utils";
 import type { DiscordKey } from "@rsc-utils/discord-utils";
 import { readJsonFile, writeFile } from "@rsc-utils/fs-utils";
 import type { TDialogMessage } from "../model/GameCharacter";

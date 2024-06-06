@@ -1,4 +1,4 @@
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 
 let _sageId: Snowflake;
 export function setSageId(sageId: Snowflake): void {

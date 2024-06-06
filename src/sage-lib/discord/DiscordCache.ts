@@ -1,9 +1,9 @@
 import { getSageId, getWebhookName, type SageWebhookType } from "@rsc-sage/env";
 import { filterAsync } from "@rsc-utils/async-array-utils";
-import { debug, error, info, warn } from "@rsc-utils/console-utils";
+import { debug, error, info, warn } from "@rsc-utils/core-utils";
 import { DTextChannel, DThreadChannel, DiscordKey, toHumanReadable, type DChannelResolvable, type DGuildResolvable, type DMessageChannel } from "@rsc-utils/discord-utils";
-import { NIL_SNOWFLAKE, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import { NIL_SNOWFLAKE, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { CachedManager, Client, DMChannel, Guild, GuildMember, GuildPreview, Interaction, Message, MessageReaction, PartialMessage, Role, Snowflake, TextChannel, User, Webhook } from "discord.js";
 import type { SageMessage } from "../sage/model/SageMessage.js";
 import { getPermsFor } from "./permissions/getPermsFor.js";

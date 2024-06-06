@@ -1,4 +1,4 @@
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import { MessageEmbed, type ColorResolvable } from "discord.js";
 

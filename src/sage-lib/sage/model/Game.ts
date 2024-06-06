@@ -1,12 +1,12 @@
 import { DialogPostType, DicePostType, GameSystemType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type GameSystem, type SageChannel } from "@rsc-sage/types";
 import { sortPrimitive, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 import { DiscordKey, type DMessage } from "@rsc-utils/discord-utils";
-import { applyChanges } from "@rsc-utils/json-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import { Args, isDefined, type Optional, type OrNull } from "@rsc-utils/type-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
+import { applyChanges } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
+import { Args, isDefined, type Optional, type OrNull } from "@rsc-utils/core-utils";
+import type { UUID } from "@rsc-utils/core-utils";
 import type { GuildChannel, GuildMember, Role } from "discord.js";
 import type { EncounterCore } from "../commands/trackers/encounter/Encounter.js";
 import { EncounterManager } from "../commands/trackers/encounter/EncounterManager.js";

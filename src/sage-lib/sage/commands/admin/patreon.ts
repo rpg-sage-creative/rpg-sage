@@ -1,6 +1,6 @@
-import { verbose } from "@rsc-utils/console-utils";
+import { verbose } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import { getSuperUserId } from "@rsc-utils/env-utils";
+import { getSuperUserId } from "@rsc-utils/core-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { send } from "../../../discord/messages.js";
 import type { SageCache } from "../../model/SageCache.js";

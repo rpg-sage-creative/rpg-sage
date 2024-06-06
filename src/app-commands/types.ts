@@ -12,7 +12,7 @@ import type {
 	SlashCommandSubcommandGroupBuilder,
 	SlashCommandUserOption
 } from "@discordjs/builders";
-import type { BotCodeName } from "@rsc-utils/env-utils";
+import type { BotCodeName } from "@rsc-utils/core-utils";
 
 export type SlashCommandGameType = "PF1E" | "PF2E" | "SF" | "Finder";
 

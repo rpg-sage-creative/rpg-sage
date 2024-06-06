@@ -1,6 +1,6 @@
 import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/array-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 import type { Renderable, RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { SearchInfo, SearchScore, Searchable } from "@rsc-utils/search-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";

@@ -1,4 +1,4 @@
-// import { debug } from "@rsc-utils/console-utils";
+// import { debug } from "@rsc-utils/core-utils";
 import { OldDialogOptions, updateDialogOptions } from "./updateDialogOptions.js";
 import { OldDiceOptions, updateDiceOptions } from "./updateDiceOptions.js";
 import { updateSageChannel, type OldSageChannel } from "./updateSageChannel.js";

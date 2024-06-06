@@ -1,6 +1,6 @@
 import { partition } from "@rsc-utils/array-utils";
-import { errorReturnNull } from "@rsc-utils/console-utils";
-import { isDefined } from "@rsc-utils/type-utils";
+import { errorReturnNull } from "@rsc-utils/core-utils";
+import { isDefined } from "@rsc-utils/core-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
 import type { Colors, TColorAndType } from "../../model/Colors.js";

@@ -1,5 +1,5 @@
 import type { Renderable, RenderableContent } from "@rsc-utils/render-utils";
-import type { Awaitable } from "@rsc-utils/type-utils";
+import type { Awaitable } from "@rsc-utils/core-utils";
 import type { SageInteraction } from "../sage/model/SageInteraction";
 import type { SageMessage } from "../sage/model/SageMessage";
 import type { SageReaction } from "../sage/model/SageReaction";

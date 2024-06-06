@@ -1,7 +1,7 @@
 import { DicePostType, GameSystemType } from "@rsc-sage/types";
 import { mapAsync } from "@rsc-utils/async-array-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { Role } from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice/index.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";

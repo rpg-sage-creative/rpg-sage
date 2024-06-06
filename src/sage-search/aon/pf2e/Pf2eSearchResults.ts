@@ -1,7 +1,7 @@
 import { addCommas, toSuperscript } from "@rsc-utils/number-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
 import type { SearchScore } from "@rsc-utils/search-utils";
-import type { OrUndefined } from "@rsc-utils/type-utils";
+import type { OrUndefined } from "@rsc-utils/core-utils";
 import { createSearchUrl } from ".";
 import { findByAonBase } from "../../../sage-pf2e/data/Repository";
 import { AonBase } from "../../../sage-pf2e/model/base/AonBase";

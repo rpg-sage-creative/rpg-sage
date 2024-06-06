@@ -1,5 +1,5 @@
-import { orNilSnowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import { orNilSnowflake } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { Snowflake } from "discord.js";
 import type { CharacterManager } from "../../../model/CharacterManager.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";

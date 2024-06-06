@@ -1,10 +1,10 @@
 import { toUnique } from "@rsc-utils/array-utils";
-import { errorReturnNull } from "@rsc-utils/console-utils";
+import { errorReturnNull } from "@rsc-utils/core-utils";
 import { DiscordKey, toUserMention, type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
 import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import { isDefined } from "@rsc-utils/type-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { isDefined } from "@rsc-utils/core-utils";
+import type { UUID } from "@rsc-utils/core-utils";
 import { MessageActionRow, MessageAttachment, MessageButton, MessageSelectMenu, type ButtonInteraction, type Message, type MessageButtonStyleResolvable, type MessageEmbed, type SelectMenuInteraction } from "discord.js";
 import { getExplorationModes, getSavingThrows, getSkills, PathbuilderCharacter, toModifier } from "../../../sage-pf2e/index.js";
 import { getCharacterSections, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";

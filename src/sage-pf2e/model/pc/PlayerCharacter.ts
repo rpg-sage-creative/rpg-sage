@@ -1,7 +1,7 @@
 import { sortAsPrimitive, toUnique } from "@rsc-utils/array-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { randomUuid, type UUID } from "@rsc-utils/core-utils";
 import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
 import { PERCEPTION, WISDOM, profToMod } from "../../common";
 import { findById, findByValue } from "../../data/Repository";

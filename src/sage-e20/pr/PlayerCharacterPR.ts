@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { TSkillDie } from "../../sage-dice/dice/essence20";
 import { PlayerCharacterCoreE20, PlayerCharacterE20, TAbilityName, TStatE20, orQ } from "../common/PlayerCharacterE20";
 

@@ -1,4 +1,4 @@
-import { error } from "@rsc-utils/console-utils";
+import { error } from "@rsc-utils/core-utils";
 import { Season } from "@rsc-utils/date-utils";
 import { rollDie } from "@rsc-utils/dice-utils";
 

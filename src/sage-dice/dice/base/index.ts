@@ -1,10 +1,10 @@
 import { GameType } from "@rsc-sage/types";
 import { sortPrimitive, type SortResult } from "@rsc-utils/array-utils";
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
 import { TokenParsers, ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
-import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
+import type { Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
+import { randomUuid } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
 import {
 	CritMethodType,

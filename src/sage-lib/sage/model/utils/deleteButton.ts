@@ -1,6 +1,6 @@
 import { handleDiscordErrorReturnNull, toChannelMention, toUserMention, type DMessage } from "@rsc-utils/discord-utils";
 import { isNotBlank } from "@rsc-utils/string-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { InteractionReplyOptions, MessageActionRow, MessageButton, MessageButtonOptions, MessageButtonStyle, MessageEditOptions, MessageOptions, type ButtonInteraction, type MessageActionRowComponent, type Snowflake } from "discord.js";
 import { deleteMessage } from "../../../discord/deletedMessages.js";
 import { registerInteractionListener } from "../../../discord/handlers.js";

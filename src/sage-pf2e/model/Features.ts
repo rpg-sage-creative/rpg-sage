@@ -1,5 +1,5 @@
 import { sortPrimitive } from "@rsc-utils/array-utils";
-import { isDefined } from "@rsc-utils/type-utils";
+import { isDefined } from "@rsc-utils/core-utils";
 import type { TProficiency } from "../common";
 import { ARMOR_UNARMORED, profToMod, TRAINED, UNTRAINED } from "../common";
 import { findById, findByValue } from "../data/Repository";

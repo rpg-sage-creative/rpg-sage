@@ -1,7 +1,7 @@
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 import { toSuperscript } from "@rsc-utils/number-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
+import type { UUID } from "@rsc-utils/core-utils";
 import type { HasSource } from "./HasSource";
 import { Source } from "./Source";
 

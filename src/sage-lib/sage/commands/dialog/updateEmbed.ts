@@ -1,4 +1,4 @@
-import { Optional } from "@rsc-utils/type-utils";
+import { Optional } from "@rsc-utils/core-utils";
 import { ColorResolvable, MessageEmbed } from "discord.js";
 
 export function updateEmbed(originalEmbed: MessageEmbed | undefined, imageUrl: Optional<string>, content: string): MessageEmbed {

@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { GDate } from "../../../sage-cal/pf2e/GDate.js";
 import { DaysPerMonth, Days as GDays, Months } from "../../../sage-cal/pf2e/cal.js";
 import { SDate } from "../../../sage-cal/sf1e/SDate.js";

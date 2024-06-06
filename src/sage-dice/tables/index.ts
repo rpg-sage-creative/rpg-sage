@@ -1,6 +1,6 @@
 import { toUniqueDefined } from "@rsc-utils/array-utils";
 import { rollDie } from "@rsc-utils/dice-utils";
-import type { Optional, OrNull } from "@rsc-utils/type-utils";
+import type { Optional, OrNull } from "@rsc-utils/core-utils";
 import { Dice } from "../dice/base";
 import type { TDice } from "../dice/base/types";
 

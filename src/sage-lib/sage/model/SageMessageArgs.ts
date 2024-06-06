@@ -1,11 +1,11 @@
 import { type SageChannel } from "@rsc-sage/types";
 import { parseId } from "@rsc-utils/discord-utils";
-import { parseEnum } from "@rsc-utils/enum-utils";
+import { parseEnum } from "@rsc-utils/core-utils";
 import { isUrl } from "@rsc-utils/https-utils";
-import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { isNotBlank, unwrap } from "@rsc-utils/string-utils";
-import { isDefined, type EnumLike, type Optional } from "@rsc-utils/type-utils";
-import { isNonNilUuid } from "@rsc-utils/uuid-utils";
+import { isDefined, type EnumLike, type Optional } from "@rsc-utils/core-utils";
+import { isNonNilUuid } from "@rsc-utils/core-utils";
 import type { Collection, GuildBasedChannel, MessageAttachment, Role, User } from "discord.js";
 import type { ArgsManager } from "../../discord/ArgsManager.js";
 import type { TColorAndType } from "./Colors.js";

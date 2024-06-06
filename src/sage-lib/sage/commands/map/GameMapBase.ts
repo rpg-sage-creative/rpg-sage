@@ -1,7 +1,7 @@
-import { errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
-import { getDataRoot } from "@rsc-utils/env-utils";
+import { errorReturnFalse, errorReturnNull } from "@rsc-utils/core-utils";
+import { getDataRoot } from "@rsc-utils/core-utils";
 import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/fs-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { RenderableGameMap } from "./RenderableGameMap";
 
 //#region types

@@ -1,6 +1,6 @@
-import { error, warn } from "@rsc-utils/console-utils";
+import { error, warn } from "@rsc-utils/core-utils";
 import { splitMessageOptions, toHumanReadable, type DMessageChannel, type DUser, type SplitOptions } from "@rsc-utils/discord-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { Message, MessageActionRow, MessageAttachment, MessageEmbed, Webhook } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { DialogType } from "../sage/repo/base/IdRepository.js";

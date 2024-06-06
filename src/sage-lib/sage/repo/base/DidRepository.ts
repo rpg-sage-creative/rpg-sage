@@ -1,10 +1,10 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
-import { errorReturnNull, verbose } from "@rsc-utils/console-utils";
+import { errorReturnNull, verbose } from "@rsc-utils/core-utils";
 import { readJsonFile, symLinkSync } from "@rsc-utils/fs-utils";
-import { randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
+import { randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import type { UUID } from "@rsc-utils/core-utils";
 import { existsSync } from "fs";
 import { HasIdCoreAndSageCache, IdRepository } from "./IdRepository";
 

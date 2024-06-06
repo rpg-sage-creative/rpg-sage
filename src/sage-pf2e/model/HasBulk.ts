@@ -1,4 +1,4 @@
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 import type { HasContents, HasParent, HasQuantity, IHasContents, IHasParent, IHasQuantity, TContentItem, TContentItemArray, TObjectQuantity } from "../common";
 import { MDASH } from "../common";
 import { filter, findByValue } from "../data/Repository";

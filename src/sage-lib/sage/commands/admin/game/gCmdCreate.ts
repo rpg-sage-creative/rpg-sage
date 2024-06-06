@@ -1,6 +1,6 @@
 import { type GameOptions, type SageChannel } from "@rsc-sage/types";
-import { applyChanges } from "@rsc-utils/json-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
+import { applyChanges } from "@rsc-utils/core-utils";
+import { randomUuid } from "@rsc-utils/core-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import { Game, type IGameUser } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";

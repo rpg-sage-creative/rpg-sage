@@ -1,5 +1,5 @@
 import type { BufferHandlerJsonError, BufferHandlerResponse } from "@rsc-utils/https-utils";
-import { parse } from "@rsc-utils/json-utils";
+import { parse } from "@rsc-utils/core-utils";
 import type { MapRenderPayload, MapRenderResponse } from "../types";
 import { renderMap } from "./renderMap.js";
 

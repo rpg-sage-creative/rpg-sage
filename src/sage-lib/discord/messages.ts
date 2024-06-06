@@ -1,4 +1,4 @@
-import { error, warn, warnReturnNull } from "@rsc-utils/console-utils";
+import { error, warn, warnReturnNull } from "@rsc-utils/core-utils";
 import { DiscordKey, toHumanReadable, toInviteUrl, toMessageUrl, toUserUrl, type DMessage, type DMessageChannel } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Message, MessageAttachment, MessageReaction, User, WebhookMessageOptions } from "discord.js";

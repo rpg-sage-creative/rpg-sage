@@ -1,4 +1,4 @@
-import { getPort, initializeConsoleUtilsByEnvironment } from "@rsc-utils/env-utils";
+import { getPort, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
 import { RenderableMap } from "./sage-utils/utils/MapUtils";
 
 initializeConsoleUtilsByEnvironment();

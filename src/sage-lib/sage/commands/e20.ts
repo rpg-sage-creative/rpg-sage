@@ -1,11 +1,11 @@
-import { errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
+import { errorReturnFalse, errorReturnNull } from "@rsc-utils/core-utils";
 import { DiscordKey, toUserMention, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
-import { getDataRoot } from "@rsc-utils/env-utils";
+import { getDataRoot } from "@rsc-utils/core-utils";
 import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
 import { PdfCacher } from "@rsc-utils/pdf-utils";
-import { NIL_SNOWFLAKE } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
+import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import type { UUID } from "@rsc-utils/core-utils";
 import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/essence20/index.js";
 import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";

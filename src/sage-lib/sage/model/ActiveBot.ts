@@ -1,7 +1,7 @@
 import { isSageId } from "@rsc-sage/env";
-import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, info, verbose } from "@rsc-utils/console-utils";
+import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, info, verbose } from "@rsc-utils/core-utils";
 import { wrapUrl, type DMessage } from "@rsc-utils/discord-utils";
-import { getSuperUserId } from "@rsc-utils/env-utils";
+import { getSuperUserId } from "@rsc-utils/core-utils";
 import { chunk } from "@rsc-utils/string-utils";
 import type { ClientOptions, Guild, GuildBan, GuildMember, Interaction, Message, MessageReaction, PartialGuildMember, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
 import { Client } from "discord.js";

@@ -1,9 +1,9 @@
-import { errorReturnNull } from "@rsc-utils/console-utils";
+import { errorReturnNull } from "@rsc-utils/core-utils";
 import type { DMessageChannel } from "@rsc-utils/discord-utils";
 import { getText } from "@rsc-utils/https-utils";
-import { randomSnowflake } from "@rsc-utils/snowflake-utils";
+import { randomSnowflake } from "@rsc-utils/core-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { Message, MessageActionRow, MessageButton, type MessageAttachment, type MessageButtonStyleResolvable } from "discord.js";
 import { deleteMessage } from "../../discord/deletedMessages.js";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers.js";

@@ -1,4 +1,4 @@
-import { Optional } from "@rsc-utils/type-utils";
+import { Optional } from "@rsc-utils/core-utils";
 
 export enum PostType {
 	Content = 0,

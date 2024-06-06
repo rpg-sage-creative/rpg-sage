@@ -1,10 +1,10 @@
 import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannelType } from "@rsc-sage/types";
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
-import { debug } from "@rsc-utils/console-utils";
+import { debug } from "@rsc-utils/core-utils";
 import type { DInteraction, DRepliableInteraction, DTextChannel, DiscordKey } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
-import { orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
-import { isDefined, type Optional } from "@rsc-utils/type-utils";
+import { orNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, type Optional } from "@rsc-utils/core-utils";
 import { type AutocompleteInteraction, type ButtonInteraction, type CommandInteraction, type If, type InteractionType, type MessageActionRow, type MessageAttachment, type MessageButton, type MessageComponentInteraction, type MessageComponentType, type MessageEmbed, type MessageSelectMenu, type ModalSubmitInteraction, type SelectMenuInteraction } from "discord.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";

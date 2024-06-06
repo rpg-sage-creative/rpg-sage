@@ -1,6 +1,6 @@
 import { setSageId } from "@rsc-sage/env";
-import { error } from "@rsc-utils/console-utils";
-import { getBotCodeName } from "@rsc-utils/env-utils";
+import { error } from "@rsc-utils/core-utils";
+import { getBotCodeName } from "@rsc-utils/core-utils";
 import { registerAndLoad } from "../sage-pf2e";
 import { registerPrompts } from "./discord/index.js";
 import { registerCommandHandlers } from "./sage/commands/index.js";

@@ -1,5 +1,5 @@
-import { warn } from "@rsc-utils/console-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
+import { warn } from "@rsc-utils/core-utils";
+import type { UUID } from "@rsc-utils/core-utils";
 import { DEXTERITY, STRENGTH } from "../../common";
 import { AlchemicalItem } from "../AlchemicalItem";
 import { Bulk } from "../Bulk";

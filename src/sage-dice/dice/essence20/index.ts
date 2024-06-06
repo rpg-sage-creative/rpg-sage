@@ -1,7 +1,7 @@
 import { rollDice } from "@rsc-utils/dice-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
-import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
+import type { OrNull, OrUndefined } from "@rsc-utils/core-utils";
+import { randomUuid } from "@rsc-utils/core-utils";
 import { correctEscapeForEmoji } from "..";
 import { GameType } from "@rsc-sage/types";
 import {

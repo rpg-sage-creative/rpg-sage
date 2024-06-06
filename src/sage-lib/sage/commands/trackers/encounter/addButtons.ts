@@ -1,4 +1,4 @@
-import { debug } from "@rsc-utils/console-utils";
+import { debug } from "@rsc-utils/core-utils";
 import { EmojiIdentifierResolvable, Message, MessageActionRow, MessageButton, MessageButtonStyle, MessageSelectMenu } from "discord.js";
 import type { Encounter } from "./Encounter";
 

@@ -1,5 +1,5 @@
-import { error, verbose } from "@rsc-utils/console-utils";
-import { stringify } from "@rsc-utils/json-utils";
+import { error, verbose } from "@rsc-utils/core-utils";
+import { stringify } from "@rsc-utils/core-utils";
 import type { GameMapLayerImage } from "../types";
 import { calculateValidClip } from "./calculateValidClip.js";
 import { gridOffsetToZeroZero } from "./gridOffsetToZeroZero.js";

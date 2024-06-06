@@ -1,5 +1,5 @@
-import { info } from "@rsc-utils/console-utils";
-import { getHomeServerId } from "@rsc-utils/env-utils";
+import { info } from "@rsc-utils/core-utils";
+import { getHomeServerId } from "@rsc-utils/core-utils";
 import type { Guild } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
 import type { SageCache } from "../model/SageCache.js";

@@ -1,6 +1,6 @@
 import { GameSystemType } from "@rsc-sage/types";
-import { warn } from "@rsc-utils/console-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import { warn } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";

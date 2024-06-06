@@ -1,5 +1,5 @@
 import { DiceCritMethodType, DiceOutputType, GameType } from "@rsc-sage/types";
-import { getEnumKeys } from "@rsc-utils/enum-utils";
+import { getEnumKeys } from "@rsc-utils/core-utils";
 import type { SlashCommand } from "../../types.js";
 
 function getCreateUpdateOptions(isUpdate: boolean) {

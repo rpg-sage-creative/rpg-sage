@@ -1,6 +1,6 @@
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 import type { SimpleDice } from "@rsc-utils/dice-utils";
-import { parse, stringify } from "@rsc-utils/json-utils";
+import { parse, stringify } from "@rsc-utils/core-utils";
 import { randomInt } from "@rsc-utils/random-utils";
 import { ClimateType, WindType } from "./weather";
 

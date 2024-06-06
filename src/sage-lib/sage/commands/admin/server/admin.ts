@@ -6,7 +6,7 @@ import { registerListeners } from "../../../../discord/handlers/registerListener
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { AdminRoleType, type IAdminUser } from "../../../model/Server.js";
 import { createAdminRenderableContent } from "../../cmd.js";
-import { isDefined } from "@rsc-utils/type-utils";
+import { isDefined } from "@rsc-utils/core-utils";
 import { SageCommand } from "../../../model/SageCommand.js";
 
 

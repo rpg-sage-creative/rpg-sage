@@ -1,7 +1,7 @@
 import { GameType } from "@rsc-sage/types";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
-import { isDefined, type OrNull, type OrUndefined } from "@rsc-utils/type-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
+import { isDefined, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
+import { randomUuid } from "@rsc-utils/core-utils";
 
 import {
 	CritMethodType, DiceOutputType,

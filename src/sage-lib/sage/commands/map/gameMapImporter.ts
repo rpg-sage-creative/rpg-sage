@@ -1,5 +1,5 @@
-import { debug } from "@rsc-utils/console-utils";
-import { isNonNilSnowflake, randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
+import { debug } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { StringMatcher, dequote } from "@rsc-utils/string-utils";
 import type { Guild } from "discord.js";
 import XRegExp from "xregexp";

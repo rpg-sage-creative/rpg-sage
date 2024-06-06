@@ -1,6 +1,6 @@
 import { Color } from "@rsc-utils/color-utils";
-import { warn } from "@rsc-utils/console-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import { warn } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { ColorType, type IColor } from "./HasColorsCore.js";
 
 export type TColorAndType = { type: ColorType; color: Color; };

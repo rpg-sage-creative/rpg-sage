@@ -1,4 +1,4 @@
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { RenderableContent } from '../data/RenderableContent';
 import { findByValue } from '../data/Repository';

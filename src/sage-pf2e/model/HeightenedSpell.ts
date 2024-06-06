@@ -1,5 +1,5 @@
 import { HasCore, type Core } from "@rsc-utils/class-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
+import type { UUID } from "@rsc-utils/core-utils";
 import { DASH } from '../common';
 import { Spell } from "./Spell";
 

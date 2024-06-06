@@ -1,5 +1,5 @@
-import { debug } from "@rsc-utils/console-utils";
-import type { Awaitable } from "@rsc-utils/type-utils";
+import { debug } from "@rsc-utils/core-utils";
+import type { Awaitable } from "@rsc-utils/core-utils";
 import type { SageCommand } from "../../sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage/model/SageInteraction.js";
 import type { SageMessage } from "../../sage/model/SageMessage.js";

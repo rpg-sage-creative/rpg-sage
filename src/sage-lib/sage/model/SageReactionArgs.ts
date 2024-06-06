@@ -1,4 +1,4 @@
-import type { EnumLike, Optional } from "@rsc-utils/type-utils";
+import type { EnumLike, Optional } from "@rsc-utils/core-utils";
 import type { GuildBasedChannel, Role, User } from "discord.js";
 import { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageReaction } from "./SageReaction.js";

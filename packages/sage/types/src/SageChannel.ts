@@ -1,4 +1,4 @@
-import { Optional } from "@rsc-utils/type-utils";
+import { Optional } from "@rsc-utils/core-utils";
 import type { Snowflake } from "discord.js";
 import type { DialogPostType } from "./DialogPostType.js";
 import type { DiceCritMethodType } from "./DiceCritMethodType.js";

@@ -1,6 +1,6 @@
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import { getRollemId, getTupperBoxId } from "@rsc-utils/env-utils";
-import { isDefined } from "@rsc-utils/type-utils";
+import { getRollemId, getTupperBoxId } from "@rsc-utils/core-utils";
+import { isDefined } from "@rsc-utils/core-utils";
 import type { TextChannel } from "discord.js";
 import { blockFromChannel } from "../../../../discord/permissions/blockFromChannel.js";
 import { getPermsFor } from "../../../../discord/permissions/getPermsFor.js";

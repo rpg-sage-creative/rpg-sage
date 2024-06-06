@@ -1,6 +1,6 @@
-import { error } from "@rsc-utils/console-utils";
+import { error } from "@rsc-utils/core-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
-import { randomSnowflake } from "@rsc-utils/snowflake-utils";
+import { randomSnowflake } from "@rsc-utils/core-utils";
 import { MessageActionRow, MessageButton, Snowflake, type Interaction, type Message, type MessageButtonStyle } from "discord.js";
 import { ActiveBot } from "../sage/model/ActiveBot.js";
 import type { SageCommand } from "../sage/model/SageCommand.js";

@@ -1,4 +1,4 @@
-import { errorReturnEmptyArray, errorReturnNull, warnReturnNull } from "@rsc-utils/console-utils";
+import { errorReturnEmptyArray, errorReturnNull, warnReturnNull } from "@rsc-utils/core-utils";
 import { DiscordKey, type DMessage } from "@rsc-utils/discord-utils";
 import { getBuffer } from "@rsc-utils/https-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";

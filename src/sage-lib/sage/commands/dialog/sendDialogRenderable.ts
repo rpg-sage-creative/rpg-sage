@@ -1,4 +1,4 @@
-import { errorReturnEmptyArray } from "@rsc-utils/console-utils";
+import { errorReturnEmptyArray } from "@rsc-utils/core-utils";
 import type { DMessage } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { MessageAttachment, WebhookMessageOptions } from "discord.js";

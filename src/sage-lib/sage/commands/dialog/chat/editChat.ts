@@ -1,4 +1,4 @@
-import { error, errorReturnNull } from "@rsc-utils/console-utils";
+import { error, errorReturnNull } from "@rsc-utils/core-utils";
 import { DiscordKey, DMessage, splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { MessageAttachment } from "discord.js";

@@ -1,7 +1,7 @@
 import { Cache } from "@rsc-utils/cache-utils";
-import { debug } from "@rsc-utils/console-utils";
+import { debug } from "@rsc-utils/core-utils";
 import type { DMessage, DReaction, DUser } from "@rsc-utils/discord-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { ReactionType } from "../../discord/index.js";
 import { GameRoleType } from "./Game.js";
 import { SageCache } from "./SageCache.js";

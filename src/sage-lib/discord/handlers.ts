@@ -1,8 +1,8 @@
 import { hasSageId, isSageId, isTestBotId } from "@rsc-sage/env";
-import { error, verbose, warn } from "@rsc-utils/console-utils";
+import { error, verbose, warn } from "@rsc-utils/core-utils";
 import { toHumanReadable, type DInteraction, type DMessage, type DReaction, type DUser } from "@rsc-utils/discord-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import { isDefined, isNullOrUndefined } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { isDefined, isNullOrUndefined } from "@rsc-utils/core-utils";
 import { Intents, type IntentsString, type Interaction, type PermissionString } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";

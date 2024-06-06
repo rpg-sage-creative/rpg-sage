@@ -1,6 +1,6 @@
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import { warn } from "@rsc-utils/console-utils";
-import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
+import { warn } from "@rsc-utils/core-utils";
+import { randomUuid, type UUID } from "@rsc-utils/core-utils";
 import type { TQuality } from "../../common";
 import { findById } from "../../data/Repository";
 import { Bulk } from "../Bulk";
@@ -13,7 +13,7 @@ import type { Base } from "../base/Base";
 import type { HasSource } from "../base/HasSource";
 import type { Equipment } from "./Equipment";
 import type { EquipmentList } from "./EquipmentList";
-import { parse, stringify } from "@rsc-utils/json-utils";
+import { parse, stringify } from "@rsc-utils/core-utils";
 
 export interface EquipmentItemCore extends IdCore<"EquipmentItem"> {
 	containerId?: UUID;
