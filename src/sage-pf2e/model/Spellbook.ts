@@ -1,6 +1,6 @@
 import { HasCore, type Core } from "@rsc-utils/class-utils";
 import { rollDie } from "@rsc-utils/dice-utils";
-import { randomItem } from "@rsc-utils/random-utils";
+import { randomItem } from "@rsc-utils/dice-utils";
 import { randomUuid, type UUID } from "@rsc-utils/core-utils";
 import type { TMagicTradition } from "../common";
 import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL } from "../common";

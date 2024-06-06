@@ -1,4 +1,4 @@
-import { randomInt } from "@rsc-utils/random-utils";
+import { randomInt } from "@rsc-utils/dice-utils";
 import { unwrap } from "@rsc-utils/string-utils";
 import type { TDiceOutput } from "../../../../sage-dice/index.js";
 import type { SageCommand } from "../../model/SageCommand.js";

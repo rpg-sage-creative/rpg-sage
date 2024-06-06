@@ -1,5 +1,5 @@
 import { rollDie } from "@rsc-utils/dice-utils";
-import { shuffle } from "@rsc-utils/random-utils";
+import { shuffle } from "@rsc-utils/dice-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { BULLET } from "@rsc-utils/string-utils";
 import type { SageMessage } from "../../model/SageMessage";

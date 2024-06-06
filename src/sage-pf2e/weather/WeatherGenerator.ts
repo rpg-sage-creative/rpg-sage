@@ -1,5 +1,5 @@
 import { rollDiceString, rollDie, type SimpleDice } from "@rsc-utils/dice-utils";
-import { randomBoolean, randomInt } from "@rsc-utils/random-utils";
+import { randomBoolean, randomInt } from "@rsc-utils/dice-utils";
 import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import { isDefined } from "@rsc-utils/core-utils";
 import { WindStrength, rollOnTable, rollTemperatureVariation, type CloudCoverTableItem, type PrecipitationTableItem, type WindTableItem } from "..";

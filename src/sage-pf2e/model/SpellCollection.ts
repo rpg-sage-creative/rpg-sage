@@ -1,6 +1,6 @@
 import { sortComparable, sortPrimitive, toUniqueDefined, type Sorter } from "@rsc-utils/array-utils";
 import { HasCore, type Core } from "@rsc-utils/class-utils";
-import { randomItem } from "@rsc-utils/random-utils";
+import { randomItem } from "@rsc-utils/dice-utils";
 import type { Optional } from "@rsc-utils/core-utils";
 import type { UUID } from "@rsc-utils/core-utils";
 import type { TMagicTradition } from "../common";

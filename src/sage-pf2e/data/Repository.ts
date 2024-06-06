@@ -2,7 +2,7 @@ import { debug, errorReturnEmptyArray, verbose, warn } from "@rsc-utils/core-uti
 import { getDataRoot } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/fs-utils";
 import { initializeNoiseUS, initializeUKtoUS } from "@rsc-utils/language-utils";
-import { randomItem } from "@rsc-utils/random-utils";
+import { randomItem } from "@rsc-utils/dice-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
 import { isDefined } from "@rsc-utils/core-utils";
