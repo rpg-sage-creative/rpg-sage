@@ -1,11 +1,8 @@
+import { getHomeServerId } from "@rsc-sage/env";
 import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, SageChannel, ServerOptions } from "@rsc-sage/types";
 import { parseGameSystem, updateServer } from "@rsc-sage/types";
-import { warn } from "@rsc-utils/core-utils";
+import { applyChanges, warn, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
-import { getHomeServerId } from "@rsc-utils/core-utils";
-import { applyChanges } from "@rsc-utils/core-utils";
-import type { Snowflake } from "@rsc-utils/core-utils";
-import type { Args, Optional } from "@rsc-utils/core-utils";
 import type { Guild } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
 import { DidCore, HasDidCore } from "../repo/base/DidRepository.js";
@@ -87,7 +84,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	// 	const diceSecretMethodType = _diceSecretMethodType ?? this.defaultDiceSecretMethodType;
 	// 	const game = new Game({
 	// 		objectType: "Game",
-	// 		id: randomUuid(),
+	// 		id: randomSnowflake(),
 	// 		serverDid: this.did,
 	// 		serverId: this.id,
 	// 		createdTs: new Date().getTime(),
