@@ -2,7 +2,6 @@ import { readFile } from "./readFile.js";
 
 /**
  * @internal
- * @private
  * For reading word pairs, such as ukToUS.
  */
 export function readWordPairs(filePath: string | undefined, orFileName: string): string[][] {

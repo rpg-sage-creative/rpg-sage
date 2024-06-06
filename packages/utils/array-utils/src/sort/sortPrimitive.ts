@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { isDate } from "util/types";
 import type { SortResult } from "./SortResult.js";
 

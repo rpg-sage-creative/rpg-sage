@@ -1,8 +1,6 @@
 import { toUnique } from "@rsc-utils/array-utils";
-import { error } from "@rsc-utils/console-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import { error, stringify, type Optional } from "@rsc-utils/core-utils";
 import type { Renderable, RenderableContentSection, RenderableContentSectionColumn } from "./types.js";
-import { stringify } from "@rsc-utils/json-utils";
 
 function createSection(index = 0, title: string | null = null, content = <string[]>[], columns = <RenderableContentSectionColumn[]>[]): RenderableContentSection {
 	return { index, title:title, content, columns };

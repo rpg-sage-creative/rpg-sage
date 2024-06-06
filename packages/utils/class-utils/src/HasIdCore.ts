@@ -1,4 +1,4 @@
-import type { Matcher } from "@rsc-utils/type-utils";
+import type { Matcher } from "@rsc-utils/core-utils";
 import { HasCore, type Core } from "./HasCore.js";
 import { getIdMatcher } from "./getIdMatcher.js";
 

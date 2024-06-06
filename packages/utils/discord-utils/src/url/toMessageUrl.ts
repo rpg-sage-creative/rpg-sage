@@ -1,5 +1,4 @@
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import type { MessageReference } from "discord.js";
 import type { DiscordKey } from "../DiscordKey.js";
 import type { DMessage } from "../types.js";

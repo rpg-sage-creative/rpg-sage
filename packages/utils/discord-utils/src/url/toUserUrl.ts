@@ -1,4 +1,4 @@
-import type { Optional, OrNull } from "@rsc-utils/type-utils";
+import type { Optional, OrNull } from "@rsc-utils/core-utils";
 import type { DUserResolvable } from "../types.js";
 
 export function toUserUrl(user: DUserResolvable): string;

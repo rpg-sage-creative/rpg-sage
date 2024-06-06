@@ -2,7 +2,6 @@ import type { Optional } from "./Optional.js";
 
 /**
  * @internal
- * @private
  * Gets a RegExpMatchArray from the value that includes color and alpha.
  */
 export function matchHex(value: Optional<string>): RegExpMatchArray | null {

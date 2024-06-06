@@ -1,4 +1,4 @@
-import { error, warn, formatArg } from "@rsc-utils/console-utils";
+import { error, warn, formatArg } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "./toHumanReadable.js";
 
 //#region generic error types

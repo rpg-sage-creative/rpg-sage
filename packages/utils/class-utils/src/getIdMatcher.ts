@@ -1,7 +1,4 @@
-import { debug } from "@rsc-utils/console-utils";
-import { SnowflakeMatcher, isSnowflake } from "@rsc-utils/snowflake-utils";
-import { Matcher } from "@rsc-utils/type-utils";
-import { UuidMatcher, isUuid } from "@rsc-utils/uuid-utils";
+import { SnowflakeMatcher, UuidMatcher, debug, isSnowflake, isUuid, type Matcher } from "@rsc-utils/core-utils";
 
 /**
  * Used to create a matcher for an ID.

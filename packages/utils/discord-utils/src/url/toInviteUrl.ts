@@ -1,5 +1,5 @@
-import { error } from "@rsc-utils/console-utils";
-import type { Optional, OrNull } from "@rsc-utils/type-utils";
+import { error } from "@rsc-utils/core-utils";
+import type { Optional, OrNull } from "@rsc-utils/core-utils";
 import type { Channel, Guild } from "discord.js";
 
 function isTextChannel(channel: Optional<Channel>): boolean {

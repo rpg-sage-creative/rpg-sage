@@ -1,4 +1,4 @@
-import type { Awaitable } from "@rsc-utils/type-utils";
+import type { Awaitable } from "@rsc-utils/core-utils";
 import { EphemeralMap } from "./EphemeralMap.js";
 
 /** Set of all ClassCache objects. */

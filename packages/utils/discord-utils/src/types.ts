@@ -1,4 +1,4 @@
-import type { AutocompleteInteraction, ButtonInteraction, CacheType, CommandInteraction, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, SelectMenuInteraction, Snowflake, TextChannel, ThreadChannel, User } from "discord.js";
+import type { AutocompleteInteraction, ButtonInteraction, CacheType, CommandInteraction, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, SelectMenuInteraction, Snowflake, TextChannel, ThreadChannel, User, VoiceChannel } from "discord.js";
 
 export type DInteraction<Cached extends CacheType = CacheType>
 	= ButtonInteraction<Cached> // button
@@ -31,10 +31,14 @@ export type DDMChannel = DMChannel | PartialDMChannel;
 
 export type DForumChannel = ForumChannel & { type: "GUILD_FORUM"; };
 export type DTextChannel = TextChannel & { type: "GUILD_TEXT"; };
-export type DThreadChannel = ThreadChannel & { type: "GUILD_PUBLIC_THREAD" | "GUILD_PRIVATE_THREAD"; };
+export type DThreadChannel = ThreadChannel & {
+	type: "GUILD_PUBLIC_THREAD" | "GUILD_PRIVATE_THREAD";
+	parent: DTextChannel | DForumChannel;
+};
 // export type DForumChannel = ForumChannel & { type: ChannelType.GuildForum; };
 // export type DTextChannel = TextChannel & { type: ChannelType.GuildText; };
 // export type DThreadChannel = ThreadChannel & { type: ChannelType.PublicThread | ChannelType.PrivateThread; };
+export type DVoiceChannel = VoiceChannel & { type: "GUILD_VOICE"; };
 
 export type DGuildChannel = DForumChannel | DTextChannel | DThreadChannel;
 export type DWebhookChannel = DTextChannel | DForumChannel;

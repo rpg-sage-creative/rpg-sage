@@ -1,5 +1,5 @@
-import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
-import type { DiceRoll } from "./types/DiceRoll.js";
+import { warn } from "@rsc-utils/core-utils";
+import type { TokenData, TokenParsers } from "./internal/tokenize.js";
 
 export enum DiceTestType {
 	None = 0,
@@ -10,21 +10,27 @@ export enum DiceTestType {
 	LessThanOrEqual = 5
 }
 
-
 /** The information about how to test dice results for success/failure and how to display that in the output. */
-export type DiceTestData = {
+export type DiceTestData<Type extends number = DiceTestType> = {
 	/** a human readable alternative output */
 	alias?: string;
 	/** wether or not this test should be hidden */
 	hidden: boolean;
 	/** the fundamental test */
-	type: DiceTestType;
+	type: Type;
 	/** the value to test against */
 	value: number;
 };
 
+type DiceTestTargetValue = {
+	/** is the value hidden from players? */
+	hidden: boolean;
+	/** the actual value */
+	value: number;
+};
+
 /** Finds the DiceTestType for the given matched value from the RegExp */
-function parseDiceTestType(matchValue: string): DiceTestType {
+export function parseDiceTestType(matchValue: string): DiceTestType {
 	const testType = matchValue.replace(/=+/g, "=").toLowerCase();
 	if (["eq", "="].includes(testType)) {
 		return DiceTestType.Equal;
@@ -44,16 +50,35 @@ function parseDiceTestType(matchValue: string): DiceTestType {
 	return DiceTestType.None;
 }
 
-function parseDiceTestTargetValue(rawValue: string): { value:number; hidden:boolean; } {
+export function parseDiceTestTargetValue(rawValue: string): DiceTestTargetValue {
 	const hidden = rawValue.length > 4 && rawValue.startsWith("||") && rawValue.endsWith("||");
 	const value = +(hidden ? rawValue.slice(2, -2) : rawValue) || 0;
 	return { value, hidden };
+}
+
+export type HasDiceTestData = {
+	test?: DiceTestData;
+};
+
+export type HasDiceTest = {
+	test?: DiceTest;
+	hasTest: boolean;
+};
+
+export function appendTestToCore(core: HasDiceTestData, token: TokenData, _index: number, _tokens: TokenData[]): boolean {
+	const diceTest = DiceTest.from(token);
+	if (!diceTest.isEmpty) {
+		core.test = diceTest.toJSON();
+		return true;
+	}
+	return false;
 }
 
 export class DiceTest {
 	public constructor(protected data?: DiceTestData) { }
 
 	public get alias(): string { return this.data?.alias ?? ""; }
+	public get isHidden(): boolean { return this.data?.hidden ?? false; }
 	public get isEmpty(): boolean { return !this.data?.type || isNaN(this.data.value); }
 	public get type(): DiceTestType { return this.data?.type ?? DiceTestType.None; }
 	public get value(): number { return this.data?.value ?? 0; }
@@ -73,7 +98,7 @@ export class DiceTest {
 				case DiceTestType.LessThanOrEqual:
 					return total <= this.value;
 				default:
-					console.warn(`testRoll(): invalid roll.dice.test.type = ${this.type} (${this.alias})`);
+					warn(`testRoll(): invalid roll.dice.test.type = ${this.type} (${this.alias})`);
 			}
 		}
 		return undefined;
@@ -83,30 +108,40 @@ export class DiceTest {
 		return this.data;
 	}
 
+	public toString(leftPad = "", rightPad = ""): string {
+		if (this.isEmpty) {
+			return ``;
+		}
+		const value = this.isHidden ? "??" : this.value;
+		return `${leftPad}${this.alias} ${value}${rightPad}`;
+	}
+
 	/** The token key/regex used to generate DiceTestData */
 	public static getParsers(): TokenParsers {
 		return { test:/(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i };
 	}
 
-	/** Parses the given TokenData into DiceTestData */
-	public static parse(token: TokenData): DiceTestData | undefined {
-		if (token.key === "test") {
-			const type = parseDiceTestType(token.matches[0]);
-			const { value, hidden } = parseDiceTestTargetValue(token.matches[1]);
-			return this.create(type, value, hidden);
-		}
-		return undefined;
-	}
-
-	public static create(type: DiceTestType, value: number, hidden: boolean, alias?: string): DiceTestData {
+	public static createData(type: DiceTestType, value: number, hidden: boolean, alias?: string): DiceTestData {
 		if (!alias) {
 			alias = [undefined, "=", ">", ">=", "<", "<="][type];
 		}
 		return { type, value, hidden, alias };
 	}
 
-	/** Tests the roll for pass/fail. If isEmpty, undefined is returned instead. */
-	public static test(roll: DiceRoll): boolean | undefined {
-		return new DiceTest(roll.dice.test).test(roll.total);
+	/** Parses the given TokenData into DiceTestData */
+	public static parseData(token: TokenData): DiceTestData | undefined {
+		if (token.key === "test") {
+			const type = parseDiceTestType(token.matches[0]);
+			const { value, hidden } = parseDiceTestTargetValue(token.matches[1]);
+			return DiceTest.createData(type, value, hidden);
+		}
+		return undefined;
 	}
+
+	/** Parses the given TokenData into DiceTestData */
+	public static from(token: TokenData): DiceTest {
+		return new DiceTest(DiceTest.parseData(token));
+	}
+
+	public static readonly EmptyTest = new DiceTest();
 }

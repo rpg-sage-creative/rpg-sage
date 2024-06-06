@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { isBlank } from "./isBlank.js";
 
 /** Returns a non-blank string or undefined. */

@@ -1,5 +1,5 @@
-import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import type { Collection } from "discord.js";
 import { type DMessage } from "../types.js";
 import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
@@ -53,7 +53,8 @@ function getContentMentionIds(type: IdType, content: Optional<string>): Possible
 		const globalRegex = createMentionRegex(type, { globalFlag:true });
 		const mentions = content.match(globalRegex) ?? []; // NOSONAR
 		if (mentions.length) {
-			return mentions.map(mention => createMentionRegex(type).exec(mention)?.groups?.[getGroupKey(type)]);
+			const regex = createMentionRegex(type);
+			return mentions.map(mention => regex.exec(mention)?.groups?.[getGroupKey(type)]);
 		}
 	}
 	return [];
@@ -77,7 +78,8 @@ function getContentUrlIds(type: IdType, content: Optional<string>): PossibleSnow
 		const globalRegex = createDiscordUrlRegex(type, { globalFlag:true });
 		const urls = content.match(globalRegex) ?? []; // NOSONAR
 		if (urls.length) {
-			return urls.map(url => createDiscordUrlRegex(type).exec(url)?.groups?.[getGroupKey(type)]);
+			const regex = createDiscordUrlRegex(type);
+			return urls.map(url => regex.exec(url)?.groups?.[getGroupKey(type)]);
 		}
 	}
 	return [];

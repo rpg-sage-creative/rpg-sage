@@ -20,7 +20,7 @@ export function getQuotedRegexSource(): string;
  */
 export function getQuotedRegexSource(options: Options): string;
 
-/** @internal @private */
+/** @internal */
 export function getQuotedRegexSource(options?: Options): string;
 
 export function getQuotedRegexSource(options?: Options): string {

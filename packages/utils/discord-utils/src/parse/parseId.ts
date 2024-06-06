@@ -1,7 +1,6 @@
-import { type Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import { createMentionRegex } from "./createMentionRegex.js";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
+import { createMentionRegex } from "./createMentionRegex.js";
 
 type IdType = "channel" | "message" | "role" | "user";
 
@@ -11,7 +10,7 @@ function getGroupKey(type: IdType): GroupKey {
 		case "channel": return "channelId";
 		case "message": return "messageId";
 		case "role": return "roleId";
-		case "user": return "userId";
+		case "user": default: return "userId";
 	}
 }
 

@@ -1,3 +1,4 @@
+export * from "./async/index.js";
 export * from "./filter/index.js";
 export * from "./sort/index.js";
 export * from "./Collection.js";

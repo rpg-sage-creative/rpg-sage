@@ -1,3 +1,4 @@
 {"name":"@rsc-utils/character-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
+  "@rsc-utils/core-utils": "^0.0.0",
   "@rsc-utils/class-utils": "^0.0.0"
 }}

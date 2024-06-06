@@ -1,4 +1,4 @@
-import { Optional } from "@rsc-utils/type-utils";
+import { Optional } from "@rsc-utils/core-utils";
 import { SortResult } from "./SortResult.js";
 import type { Sorter } from "./Sorter.js";
 import { sortPrimitive } from "./sortPrimitive.js";

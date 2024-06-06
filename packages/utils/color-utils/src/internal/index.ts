@@ -4,5 +4,6 @@ export * from "./matchHex.js";
 export * from "./matchRgb.js";
 export * from "./Optional.js";
 export * from "./rgbToHex.js";
+export * from "./round.js";
 export * from "./toColorData.js";
 export * from "./toHex.js";

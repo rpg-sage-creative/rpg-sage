@@ -1,10 +1,7 @@
 
 let _noiseUS: Set<string>;
 
-/**
- * @internal
- * @private
- */
+/** @internal */
 export function getNoiseUS(): Set<string> {
 	if (!_noiseUS) {
 		_noiseUS = new Set();
@@ -12,10 +9,7 @@ export function getNoiseUS(): Set<string> {
 	return _noiseUS;
 }
 
-/**
- * @internal
- * @private
- */
+/** @internal */
 export function isNoiseUS(word?: string | null): boolean {
 	return word ? _noiseUS?.has(word) ?? false : false;
 }

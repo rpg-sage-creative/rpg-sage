@@ -1,4 +1,4 @@
-import { isDefined } from "@rsc-utils/type-utils";
+import { isDefined } from "@rsc-utils/core-utils";
 import type { Collection } from "./Collection.js";
 import { removeAt } from "./removeAt.js";
 

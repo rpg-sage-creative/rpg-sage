@@ -7,7 +7,7 @@ type Options = Omit<RegExpCreateOptions, "quantifier"> & {
 };
 
 /**
- * @internal @private
+ * @internal
  * Returns a regex that will match the given type of mention, including named capture groups based on type: channelId, roleId, userId.
  * RegExp Reminder: globalFlag ("g") only matches multiples at top level when you use "".match(); .exec() returns next match
  * Default options: { globalFlag:false, anchored:false }

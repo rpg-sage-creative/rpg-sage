@@ -1,4 +1,4 @@
-import { isDefined, type Matcher, type MatcherResolvable, type Optional } from "@rsc-utils/type-utils";
+import { isDefined, type Matcher, type MatcherResolvable, type Optional } from "@rsc-utils/core-utils";
 import { isBlank } from "./blank/isBlank.js";
 import { isNotBlank } from "./blank/isNotBlank.js";
 import { normalizeAscii } from "./normalize/normalizeAscii.js";

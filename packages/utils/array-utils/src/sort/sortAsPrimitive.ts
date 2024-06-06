@@ -1,4 +1,4 @@
-import { isDefined } from "@rsc-utils/type-utils";
+import { isDefined } from "@rsc-utils/core-utils";
 import type { Sorter } from "./Sorter.js";
 import { getDataConverter } from "./internal/getDataConverter.js";
 import { sortPrimitive } from "./sortPrimitive.js";

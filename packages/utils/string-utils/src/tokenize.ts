@@ -1,3 +1,5 @@
+import XRegExp from "xregexp";
+
 //#region types
 
 /** A group of regular expressions used for Tokenizer.tokenize() */
@@ -27,7 +29,7 @@ export type TokenData<Key extends string = string> = {
 * - Returns an array of token objects
 *
 * tokenize('this is text.', { word:/\w+/, whitespace:/\s+/, punctuation:/[^\w\s]/ }, 'invalid');
-* result => [{ token="this", type="word" }, { token=" ", type="whitespace" }, { token="is", type="word" }, ... ]
+* result => [{ token:"this", key:"word" }, { token:" ", key:"whitespace" }, { token:"is", key:"word" }, ... ]
 *
 */
 export function tokenize(input: string, parsers: TokenParsers, defaultKey = "unknown"): TokenData[] {
@@ -38,7 +40,7 @@ export function tokenize(input: string, parsers: TokenParsers, defaultKey = "unk
 		token = null;
 		matchIndex = input.length;
 		for (const key in parsers) {
-			const regExpMatchArray = parsers[key].exec(input);
+			const regExpMatchArray = XRegExp.exec(input, parsers[key]);
 			// try to choose the best match if there are several
 			// where "best" is the closest to the current starting point
 			if (regExpMatchArray?.index !== undefined && regExpMatchArray.index < matchIndex) {

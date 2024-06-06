@@ -1,4 +1,4 @@
-import { round } from "@rsc-utils/number-utils";
+import { round } from "./round.js";
 
 /**
  * Converts a decimal number (between 0-1) alpha to Hex.
