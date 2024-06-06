@@ -1,6 +1,6 @@
 import { setSageId } from "@rsc-sage/env";
 import { error } from "@rsc-utils/core-utils";
-import { getBotCodeName } from "@rsc-utils/core-utils";
+import { getCodeName } from "@rsc-utils/core-utils";
 import { registerAndLoad } from "../sage-pf2e";
 import { registerPrompts } from "./discord/index.js";
 import { registerCommandHandlers } from "./sage/commands/index.js";
@@ -8,7 +8,7 @@ import { ActiveBot } from "./sage/model/ActiveBot.js";
 import { BotRepo } from "./sage/repo/BotRepo.js";
 
 export async function activate(): Promise<void> {
-	const botCodeName = getBotCodeName();
+	const botCodeName = getCodeName();
 	const bot = await BotRepo.getByCodeName(botCodeName).catch(err => {
 		error(`BotRepo.coreByCodeName("${botCodeName}") failed!`, err);
 		return null;
