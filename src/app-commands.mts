@@ -1,5 +1,5 @@
 import { error, info } from "@rsc-utils/core-utils";
-import { getBotCodeName, getDataRoot, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
+import { getCodeName, getDataRoot, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
 import { listFilesSync, readJsonFileSync, writeFileSync } from "@rsc-utils/io-utils";
 import { buildCommands } from "./app-commands/builders/buildCommands.js";
 import { countCharacters } from "./app-commands/builders/countCharacters.js";
@@ -18,7 +18,7 @@ initializeConsoleUtilsByEnvironment();
 // }
 
 async function main() {
-	const botCodeName = getBotCodeName();
+	const botCodeName = getCodeName();
 	const dataPathSage = getDataRoot("sage");
 
 	const botsPath = `${dataPathSage}/bots`;
