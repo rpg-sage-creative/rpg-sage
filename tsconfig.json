@@ -17,24 +17,16 @@
 		"test"
 	],
 	"references": [
-		{ "path": "./packages/utils/console-utils" },
-		{ "path": "./packages/utils/math-utils" },
+		{ "path": "./packages/utils/core-utils" },
 		{ "path": "./packages/utils/number-utils" },
-		{ "path": "./packages/utils/random-utils" },
-		{ "path": "./packages/utils/type-utils" },
 
-		// type-utils
+		// core-utils
 		{ "path": "./packages/utils/array-utils" },
 		{ "path": "./packages/utils/cache-utils" },
-		{ "path": "./packages/utils/enum-utils" },
-		{ "path": "./packages/utils/json-utils" },
 		{ "path": "./packages/utils/language-utils" },
-		{ "path": "./packages/utils/snowflake-utils" },
 		{ "path": "./packages/utils/string-utils" },
-		{ "path": "./packages/utils/uuid-utils" },
 
 		// console-utils, type-utils
-		{ "path": "./packages/utils/async-array-utils" },
 		{ "path": "./packages/utils/progress-utils" },
 
 		// number-utils
@@ -55,20 +47,11 @@
 		// array-utils, random-utils, string-utils, type-utils
 		{ "path": "./packages/utils/dice-utils" },
 
-		// console-utils, progress-utils, type-utils
-		{ "path": "./packages/utils/https-utils" },
-
-		// console-utils, snowflake-utils, string-utils
-		{ "path": "./packages/utils/env-utils" },
-
 		// console-utils, snowflake-utils, string-utils, type-utils
 		{ "path": "./packages/utils/discord-utils" },
 
 		// console-utils, json-utils
-		{ "path": "./packages/utils/fs-utils" },
-
-		// env-utils, fs-utils, https-utils, snowflake-utils, type-utils
-		{ "path": "./packages/utils/pdf-utils" },
+		{ "path": "./packages/utils/io-utils" },
 
 		// array-utils, console-utils, type-utils
 		{ "path": "./packages/utils/render-utils" },
@@ -79,7 +62,8 @@
 		// array-utils, color-utils, console-utils, string-utils, type-utils, uuid-utils
 		{ "path": "./packages/utils/args-utils" },
 
+		{ "path": "./packages/sage/types" },
 		{ "path": "./packages/sage/env" },
-		{ "path": "./packages/sage/types" }
+
 	]
 }
