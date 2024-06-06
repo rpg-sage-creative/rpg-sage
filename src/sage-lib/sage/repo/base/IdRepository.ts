@@ -1,10 +1,8 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, verbose } from "@rsc-utils/core-utils";
-import { getBotCodeName, getDataRoot } from "@rsc-utils/core-utils";
+import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, getCodeName, getDataRoot, isDefined, isNonNilSnowflake, isNonNilUuid, verbose, type Optional, type OrNull, type UUID } from "@rsc-utils/core-utils";
+import { randomSnowflake } from "@rsc-utils/dice-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { isDefined, type Optional, type OrNull } from "@rsc-utils/core-utils";
-import { isNonNilUuid, randomUuid, type UUID } from "@rsc-utils/core-utils";
 import type { SageCache } from "../../model/SageCache.js";
 
 export { DialogPostType as DialogType, SageChannel as IChannel } from "@rsc-sage/types";
@@ -17,7 +15,7 @@ type TParser<T extends IdCore, U extends HasIdCore<T>> = (core: T, sageCache: Sa
 
 export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
-	//#region Cache
+	//#region CacheÒ
 
 	private idToEntityMap = new EphemeralMap<UUID, U>(15000);
 
@@ -55,7 +53,7 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 		return files
 			.filter(file => file.endsWith(".json"))
 			.map(file => file.slice(0, -5))
-			.filter(isNonNilUuid);
+			.filter(id => isNonNilUuid(id) || isNonNilSnowflake(id));
 	}
 
 	//#endregion
@@ -137,12 +135,12 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 	/** Writes the entity's core to uuid.json using (or creating if needed) the "Id". */
 	public async write(entity: U): Promise<boolean> {
 		if (!entity.id) {
-			entity.toJSON().id = randomUuid();
+			entity.toJSON().id = randomSnowflake();
 			verbose(`Missing ${(<typeof IdRepository>this.constructor).objectType}.id:`, entity.toJSON());
 		}
 
 		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${entity.id}.json`;
-		const formatted = getBotCodeName() === "dev";
+		const formatted = getCodeName() === "dev";
 		const saved = await writeFile(path, entity.toJSON(), true, formatted).catch(errorReturnFalse);
 		if (saved) {
 			this.cacheId(entity.id, entity);
