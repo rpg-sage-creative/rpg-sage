@@ -1,6 +1,6 @@
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import { warn } from "@rsc-utils/core-utils";
-import { randomUuid, type UUID } from "@rsc-utils/core-utils";
+import { Snowflake, warn } from "@rsc-utils/core-utils";
+import { randomSnowflake } from "@rsc-utils/dice-utils";
 import type { TQuality } from "../../common";
 import { findById } from "../../data/Repository";
 import { Bulk } from "../Bulk";
@@ -16,14 +16,14 @@ import type { EquipmentList } from "./EquipmentList";
 import { parse, stringify } from "@rsc-utils/core-utils";
 
 export interface EquipmentItemCore extends IdCore<"EquipmentItem"> {
-	containerId?: UUID;
+	containerId?: Snowflake;
 	count: number;
 	entries?: string[];
-	itemId: UUID;
+	itemId: Snowflake;
 	itemQuality: TQuality;
 	isInvested: boolean;
 	isRaised: boolean;
-	listId?: UUID;
+	listId?: Snowflake;
 	name: string;
 }
 
@@ -31,9 +31,9 @@ interface IHasTraits extends HasBulk<BulkCore, IHasTraits> {
 	traits: string[];
 }
 
-type TEquipmentItemResolvable = EquipmentItem | UUID;
+type TEquipmentItemResolvable = EquipmentItem | Snowflake;
 
-function toUuid(equipmentItemResolvable: TEquipmentItemResolvable): UUID {
+function toUuid(equipmentItemResolvable: TEquipmentItemResolvable): Snowflake {
 	return typeof (equipmentItemResolvable) === "string" ? equipmentItemResolvable : equipmentItemResolvable.id;
 }
 
@@ -98,10 +98,10 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 	public get container(): EquipmentItem | undefined {
 		return this.core.containerId ? this.eq.getItem(this.core.containerId) : undefined;
 	}
-	public get containerId(): UUID | undefined {
+	public get containerId(): Snowflake | undefined {
 		return this.core.containerId;
 	}
-	public set containerId(containerId: UUID | undefined) {
+	public set containerId(containerId: Snowflake | undefined) {
 		this.core.containerId = containerId;
 	}
 	//#endregion
@@ -124,10 +124,10 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 		}
 		return undefined;
 	}
-	public get listId(): UUID | undefined {
+	public get listId(): Snowflake | undefined {
 		return this.core.listId;
 	}
-	public set listId(listId: UUID | undefined) {
+	public set listId(listId: Snowflake | undefined) {
 		this.core.listId = listId;
 	}
 	//#endregion
@@ -288,8 +288,8 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 		// This is hacked to allow an item with .traits, we must assume it may not exist.
 		return traits?.includes(trait) === true;
 	}
-	public includes(itemId: UUID): boolean;
-	public includes(itemId: UUID, deep?: boolean): boolean;
+	public includes(itemId: Snowflake): boolean;
+	public includes(itemId: Snowflake, deep?: boolean): boolean;
 	public includes(item: EquipmentItem): boolean;
 	public includes(item: EquipmentItem, deep?: boolean): boolean;
 	public includes(itemOrId: TEquipmentItemResolvable, deep = false): boolean {
@@ -314,7 +314,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 			item.remove();
 		}
 	}
-	public move(containerId: UUID): void;
+	public move(containerId: Snowflake): void;
 	public move(container: EquipmentItem): void;
 	public move(containerOrId: TEquipmentItemResolvable): void {
 		this.core.containerId = toUuid(containerOrId);
@@ -345,7 +345,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 		this.core.count -= count;
 		const core = parse(stringify(this.core)) as EquipmentItemCore;
 		core.count = count;
-		core.id = randomUuid();
+		core.id = randomSnowflake();
 		this.eq.addItem(new EquipmentItem(this.eq, core));
 	}
 	public unequip(): void {
@@ -383,7 +383,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 			entries: undefined,
 			itemId: item.id,
 			itemQuality: "Standard",
-			id: randomUuid(),
+			id: randomSnowflake(),
 			isInvested: false,
 			isRaised: false,
 			listId: undefined,

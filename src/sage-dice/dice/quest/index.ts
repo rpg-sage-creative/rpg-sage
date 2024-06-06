@@ -1,8 +1,7 @@
 import { GameType } from "@rsc-sage/types";
-import { rollDice } from "@rsc-utils/dice-utils";
-import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type { OrNull } from "@rsc-utils/core-utils";
-import { randomUuid } from "@rsc-utils/core-utils";
+import { randomSnowflake, rollDice } from "@rsc-utils/dice-utils";
+import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type {
 	TDiceLiteral,
 	TTestData
@@ -99,7 +98,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.Quest,
-			id: randomUuid(),
+			id: randomSnowflake(),
 
 			count: 1,
 			description: cleanDescription(description),
@@ -132,7 +131,7 @@ export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 		return new DicePartRoll({
 			objectType: "DicePartRoll",
 			gameType: GameType.Quest,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			dice: dicePart.toJSON(),
 			rolls: rollDice(dicePart.count, dicePart.sides)
 		});
@@ -154,7 +153,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.Quest,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
 	}
@@ -189,7 +188,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		return new DiceRoll({
 			objectType: "DiceRoll",
 			gameType: GameType.Quest,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
 		});
@@ -211,7 +210,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.Quest,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			critMethodType: undefined,
 			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
 			diceOutputType: diceOutputType,
@@ -245,7 +244,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		return new DiceGroupRoll({
 			objectType: "DiceGroupRoll",
 			gameType: GameType.Quest,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			diceGroup: diceGroup.toJSON(),
 			rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
 		});

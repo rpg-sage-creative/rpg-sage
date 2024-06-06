@@ -1,19 +1,19 @@
 import { type GameOptions, type SageChannel } from "@rsc-sage/types";
 import { applyChanges } from "@rsc-utils/core-utils";
-import { randomUuid } from "@rsc-utils/core-utils";
+import { randomSnowflake } from "@rsc-utils/dice-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import { Game, type IGameUser } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
+import { gBlockBots } from "./gBlockBots.js";
 import { getGameChannels } from "./getGameChannels.js";
 import { getGameUsers } from "./getGameUsers.js";
 import { gFixPerms } from "./gFixPerms.js";
 import { gSendDetails } from "./gSendDetails.js";
-import { gBlockBots } from "./gBlockBots.js";
 
 function createGame(sageCommand: SageCommand, gameOptions: Partial<GameOptions>, channels: SageChannel[], users: IGameUser[]): Game {
 	return new Game({
 		objectType: "Game",
-		id: randomUuid(),
+		id: randomSnowflake(),
 		serverDid: sageCommand.server.did,
 		serverId: sageCommand.server.id,
 		createdTs: new Date().getTime(),

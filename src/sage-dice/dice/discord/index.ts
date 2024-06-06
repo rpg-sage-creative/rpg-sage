@@ -1,7 +1,7 @@
 import { GameType, parseGameSystem } from "@rsc-sage/types";
 import { HasCore, type IdCore } from "@rsc-utils/class-utils";
 import type { OrNull, OrUndefined } from "@rsc-utils/core-utils";
-import { randomUuid } from "@rsc-utils/core-utils";
+import { randomSnowflake } from "@rsc-utils/dice-utils";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -10,6 +10,7 @@ import {
 	getCritMethodRegex,
 	parseCritMethodType, parseDiceOutputType
 } from "../../common.js";
+import { getBasicDiceRegex } from "../../getBasicDiceRegex.js";
 import {
 	Dice as baseDice,
 	DiceGroup as baseDiceGroup,
@@ -46,7 +47,6 @@ import {
 	DiceGroup as vtm5eDiceGroup,
 	DiceGroupRoll as vtm5eDiceGroupRoll
 } from "../vtm5e/index.js";
-import { getBasicDiceRegex } from "../../getBasicDiceRegex.js";
 
 function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {
 	switch (gameType) {
@@ -86,7 +86,7 @@ function cloneDicePart<T extends baseDicePartCore, U extends baseTDicePart>(clss
 		dropKeep: core.dropKeep ? { ...core.dropKeep } : undefined,
 		fixedRolls: core.fixedRolls,
 		gameType: core.gameType,
-		id: randomUuid(),
+		id: randomSnowflake(),
 		modifier: core.modifier,
 		noSort: core.noSort,
 		objectType: core.objectType,
@@ -107,7 +107,7 @@ function cloneDice<T extends baseDiceCore, U extends baseTDice>(clss: typeof bas
 			dropKeep: undefined,
 			fixedRolls: diceParts[0].fixedRolls,
 			gameType: gameType,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			modifier: Math.abs(map),
 			noSort: false,
 			objectType: "DicePart",
@@ -129,7 +129,7 @@ function cloneDice<T extends baseDiceCore, U extends baseTDice>(clss: typeof bas
 				diceParts.splice(diceParts.indexOf(testCore), 0, mapCore);
 			}else {
 				// split dice/mod from test
-				// const newTestCore = <baseDicePartCore>{ count:0, description:"", dropKeep:null, gameType:gameType, id:randomUuid(), modifier:0, noSort:false, objectType:"DicePart", sides:0, sign:"+", test:testCore.test };
+				// const newTestCore = <baseDicePartCore>{ count:0, description:"", dropKeep:null, gameType:gameType, id:randomSnowflake(), modifier:0, noSort:false, objectType:"DicePart", sides:0, sign:"+", test:testCore.test };
 				mapCore.test = testCore.test;
 				delete testCore.test;
 				//put mapCore and newTestCore after testCore //, newTestCore); <-- after splice
@@ -140,7 +140,7 @@ function cloneDice<T extends baseDiceCore, U extends baseTDice>(clss: typeof bas
 	return <U>clss.fromCore({
 		diceParts: diceParts,
 		gameType: core.gameType,
-		id: randomUuid(),
+		id: randomSnowflake(),
 		objectType: <"Dice">core.objectType
 	});
 }
@@ -152,7 +152,7 @@ function cloneDiceGroup<T extends baseDiceGroupCore, U extends baseTDiceGroup>(c
 		diceOutputType: core.diceOutputType,
 		diceSecretMethodType: core.diceSecretMethodType,
 		gameType: core.gameType,
-		id: randomUuid(),
+		id: randomSnowflake(),
 		objectType: <"DiceGroup">core.objectType
 	});
 }
@@ -200,7 +200,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 	public static create(diceGroups: baseTDiceGroup[]): DiscordDice {
 		const core: DiscordDiceCore = {
 			objectType: "DiscordDice",
-			id: randomUuid(),
+			id: randomSnowflake(),
 			diceGroups: diceGroups.map<baseDiceGroupCore>(DiscordDice.toJSON)
 		};
 		return new DiscordDice(core);
@@ -384,7 +384,7 @@ export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 	public static create(discordDice: DiscordDice): DiscordDiceRoll {
 		const core: DiscordDiceRollCore = {
 			objectType: "DiscordDiceRoll",
-			id: randomUuid(),
+			id: randomSnowflake(),
 			discordDice: discordDice.toJSON(),
 			rolls: discordDice.diceGroups.map(diceGroup => diceGroup.roll().toJSON())
 		};

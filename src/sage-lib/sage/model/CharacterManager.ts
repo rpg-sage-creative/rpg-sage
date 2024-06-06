@@ -1,8 +1,7 @@
 import { Collection } from "@rsc-utils/array-utils";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { randomSnowflake } from "@rsc-utils/dice-utils";
 import type { DiscordKey } from "@rsc-utils/discord-utils";
-import type { Snowflake } from "@rsc-utils/core-utils";
-import type { Optional } from "@rsc-utils/core-utils";
-import { randomUuid, type UUID } from "@rsc-utils/core-utils";
 import { CharactersMatch } from "./CharactersMatch";
 import type { Game } from "./Game";
 import type { GameCharacterCore, TDialogMessage, TGameCharacterType } from "./GameCharacter";
@@ -14,7 +13,7 @@ import type { User } from "./User";
 /*
 // function remapCharacters(this: CharacterManager, core: GameCharacterCore, index: number, array: (GameCharacterCore | GameCharacter)[]): void {
 // 	if (!core.id) {
-// 		core.id = randomUuid();
+// 		core.id = randomSnowflake();
 // 	}
 // 	array[index] = new GameCharacter(core, this);
 // }
@@ -53,7 +52,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	public async addCharacter(core: GameCharacterCore): Promise<GameCharacter | null> {
 		const found = this.findByUserAndName(core.userDid, core.name);
 		if (!found) {
-			const newCore = <GameCharacterCore>{ ...core, id: randomUuid() };
+			const newCore = <GameCharacterCore>{ ...core, id: randomSnowflake() };
 			const character = new GameCharacter(newCore, this),
 				added = await this.pushAndSave(character);
 			return added ? character : null;
@@ -229,7 +228,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		}else if (values) {
 			Array.from(values).forEach(core => {
 				if (!core.id) {
-					core.id = randomUuid();
+					core.id = randomSnowflake();
 				}
 				characterManager.push(new GameCharacter(core, characterManager));
 			});

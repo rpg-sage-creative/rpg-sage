@@ -1,7 +1,7 @@
 import { sortAsPrimitive, toUnique } from "@rsc-utils/array-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import type { Optional } from "@rsc-utils/core-utils";
-import { randomUuid, type UUID } from "@rsc-utils/core-utils";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { randomSnowflake } from "@rsc-utils/dice-utils";
 import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
 import { PERCEPTION, WISDOM, profToMod } from "../../common";
 import { findById, findByValue } from "../../data/Repository";
@@ -37,7 +37,7 @@ interface IPlayerCharacterBio {
 	age: number;
 	alignment: TAlignment;
 	characterName: string;
-	deityId?: UUID;
+	deityId?: Snowflake;
 	// languages: string[];
 	objectType: "Bio";
 	playerName: string;
@@ -115,7 +115,7 @@ export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerChara
 			core.bio = <any>{};
 		}
 		if (!core.id) {
-			core.id = randomUuid();
+			core.id = randomSnowflake();
 		}
 		if (!core.effects) {
 			core.effects = [];

@@ -1,5 +1,5 @@
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import { randomUuid } from "@rsc-utils/core-utils";
+import { randomSnowflake } from "@rsc-utils/dice-utils";
 import { Bulk } from "../Bulk";
 import { Coins } from "../Coins";
 import type { NamedCore } from "../base/interfaces";
@@ -46,7 +46,7 @@ export class EquipmentList extends HasIdCore<EquipmentListCore, "EquipmentList">
 
 	public static createCore(name: string): EquipmentListCore {
 		return {
-			id: randomUuid(),
+			id: randomSnowflake(),
 			name: name,
 			objectType: "EquipmentList"
 		};

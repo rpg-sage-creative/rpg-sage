@@ -1,7 +1,7 @@
 import { GameType } from "@rsc-sage/types";
-import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import { isDefined, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
-import { randomUuid } from "@rsc-utils/core-utils";
+import { randomSnowflake } from "@rsc-utils/dice-utils";
+import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 
 import {
 	CritMethodType, DiceOutputType,
@@ -161,7 +161,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.DnD5e,
-			id: randomUuid(),
+			id: randomSnowflake(),
 
 			count: count ?? 0,
 			description: cleanDescription(description),
@@ -212,7 +212,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.DnD5e,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
 	}
@@ -250,7 +250,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		return new DiceRoll({
 			objectType: "DiceRoll",
 			gameType: GameType.DnD5e,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
 		});
@@ -333,7 +333,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.DnD5e,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			critMethodType: critMethodType,
 			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
 			diceOutputType: diceOutputType,
@@ -400,7 +400,7 @@ function createDiceGroupRoll(diceGroup: DiceGroup): DiceGroupRoll {
 	const core: DiceGroupRollCore = {
 		objectType: "DiceGroupRoll",
 		gameType: GameType.DnD5e,
-		id: randomUuid(),
+		id: randomSnowflake(),
 		diceGroup: diceGroup.toJSON(),
 		rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
 	};
