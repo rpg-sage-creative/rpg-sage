@@ -1,4 +1,4 @@
-import { forEachAsync, mapAsync } from "@rsc-utils/async-array-utils";
+import { forEachAsync, mapAsync } from "@rsc-utils/array-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { User } from "discord.js";

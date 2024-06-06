@@ -1,5 +1,5 @@
 import { DicePostType, GameSystemType, PostType, SageChannel, SageChannelType, parseGameSystem } from "@rsc-sage/types";
-import { mapAsync } from "@rsc-utils/async-array-utils";
+import { mapAsync } from "@rsc-utils/array-utils";
 import { warn } from "@rsc-utils/core-utils";
 import { DiscordKey, toChannelMention } from "@rsc-utils/discord-utils";
 import { stringify } from "@rsc-utils/core-utils";

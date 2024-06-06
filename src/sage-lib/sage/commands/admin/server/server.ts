@@ -1,5 +1,5 @@
 import { DicePostType, GameSystemType } from "@rsc-sage/types";
-import { mapAsync } from "@rsc-utils/async-array-utils";
+import { mapAsync } from "@rsc-utils/array-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/core-utils";
 import type { Role } from "discord.js";

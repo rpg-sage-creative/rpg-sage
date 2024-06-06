@@ -1,5 +1,5 @@
 import { getSageId, getWebhookName, type SageWebhookType } from "@rsc-sage/env";
-import { filterAsync } from "@rsc-utils/async-array-utils";
+import { filterAsync } from "@rsc-utils/array-utils";
 import { debug, error, info, warn } from "@rsc-utils/core-utils";
 import { DTextChannel, DThreadChannel, DiscordKey, toHumanReadable, type DChannelResolvable, type DGuildResolvable, type DMessageChannel } from "@rsc-utils/discord-utils";
 import { NIL_SNOWFLAKE, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/core-utils";
