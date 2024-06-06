@@ -2,13 +2,11 @@ import { Collection } from "@rsc-utils/array-utils";
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { randomSnowflake } from "@rsc-utils/dice-utils";
 import type { DiscordKey } from "@rsc-utils/discord-utils";
-import { CharactersMatch } from "./CharactersMatch";
-import type { Game } from "./Game";
-import type { GameCharacterCore, TDialogMessage, TGameCharacterType } from "./GameCharacter";
-import { GameCharacter } from "./GameCharacter";
-import type { IHasSave } from "./NamedCollection";
-import { NamedCollection } from "./NamedCollection";
-import type { User } from "./User";
+import { CharactersMatch } from "./CharactersMatch.js";
+import type { Game } from "./Game.js";
+import { GameCharacter, type GameCharacterCore, type TDialogMessage, type TGameCharacterType } from "./GameCharacter.js";
+import { NamedCollection, type IHasSave } from "./NamedCollection.js";
+import type { User } from "./User.js";
 
 /*
 // function remapCharacters(this: CharacterManager, core: GameCharacterCore, index: number, array: (GameCharacterCore | GameCharacter)[]): void {
@@ -76,7 +74,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	}
 
 	/** Returns the character with the given id, recursively. */
-	public findById(characterId: UUID): GameCharacter | undefined {
+	public findById(characterId: Snowflake): GameCharacter | undefined {
 		for (const character of this) {
 			if (character.id === characterId) {
 				return character;

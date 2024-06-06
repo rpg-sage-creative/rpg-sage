@@ -1,4 +1,4 @@
-import { randomSnowflake } from "@rsc-utils/core-utils";
+import { randomSnowflake } from "@rsc-utils/dice-utils";
 import { CharacterShell } from "../../../model/CharacterShell";
 import type { Game } from "../../../model/Game";
 import { Manager } from "../common/Manager";

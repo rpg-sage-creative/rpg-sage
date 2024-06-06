@@ -1,10 +1,10 @@
-import { debug } from "@rsc-utils/core-utils";
-import { isNonNilSnowflake, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { debug, isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { randomSnowflake } from "@rsc-utils/dice-utils";
 import { StringMatcher, dequote } from "@rsc-utils/string-utils";
 import type { Guild } from "discord.js";
 import XRegExp from "xregexp";
-import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
-import { RenderableGameMap } from "./RenderableGameMap";
+import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase.js";
+import { RenderableGameMap } from "./RenderableGameMap.js";
 
 export type TParsedGameMapCore = Omit<TGameMapCore, "messageId">;
 export type TValidatedGameMapCore = TParsedGameMapCore & {
