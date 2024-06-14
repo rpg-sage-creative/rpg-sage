@@ -1,11 +1,10 @@
 import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { type Channel } from "discord.js";
+import { type AnyThreadChannel, type Channel } from "discord.js";
 import { isDMBased, isThread } from "../typeChecks.js";
 import { getPermsFor } from "./getPermsFor.js";
 
-function isLockedOrArchivedThread(channel: Channel): boolean {
+function isLockedOrArchivedThread(channel: Channel): channel is AnyThreadChannel {
 	if (isThread(channel)) {
-		/** @todo look into checking channel.sendable */
 		if (channel.locked) {
 			return true;
 		}
@@ -33,7 +32,8 @@ export function canSendMessageTo(botId: Snowflake, channel: Optional<Channel>): 
 		return true;
 	}
 
-	if (isLockedOrArchivedThread(channel)) {
+
+	if (isLockedOrArchivedThread(channel) && !channel.sendable) {
 		return false;
 	}
 

@@ -1,3 +1,4 @@
+import type { Awaitable } from "../types/generics.js";
 import { error } from "./loggers/error.js";
 import { info } from "./loggers/info.js";
 
@@ -48,9 +49,7 @@ async function onSignal(eventName: SignalEventName, code?: number): Promise<void
 
 let captured = false;
 
-type AsyncSignalHandler = (eventName: SignalEventName, code?: number) => Promise<void>;
-type SyncSignalHandler = (eventName: SignalEventName, code?: number) => void;
-type SignalHandler = AsyncSignalHandler | SyncSignalHandler;
+type SignalHandler = (eventName: SignalEventName, code?: number) => Awaitable<void>;
 
 let signalHandlers: Set<SignalHandler>;
 
@@ -71,7 +70,7 @@ export function captureProcessExit(signalHandler?: SignalHandler): void {
 		signalHandlers.add(signalHandler);
 	}
 	if (!captured) {
-		process.on("SIGINT", onSignal as SyncSignalHandler);
+		process.on("SIGINT", onSignal);
 		captured = true;
 	}
 }

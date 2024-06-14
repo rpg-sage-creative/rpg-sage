@@ -1,26 +1,26 @@
-import { error, type Optional, type OrNull } from "@rsc-utils/core-utils";
+import { error, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { Guild } from "discord.js";
 
-export function toInviteUrl(guild: Optional<Guild>): OrNull<string> {
+export function toInviteUrl(guild: Optional<Guild>): OrUndefined<string> {
 	if (!guild) {
-		return null;
+		return undefined;
 	}
 	try {
 		const bestInvite = guild.invites.cache.find(invite => {
-			if (!invite.channel?.isTextBased()) return false;
-			if (invite.guildScheduledEvent) return false;
-			if (invite.maxAge) return false;
-			if (invite.maxUses) return false;
-			if (invite.stageInstance) return false;
-			if (invite.targetApplication) return false;
-			if (invite.targetUser) return false;
-			if (invite.targetType) return false;
-			if (invite.temporary) return false;
+			if (!invite.channel?.isTextBased()) return false; //NOSONAR
+			if (invite.guildScheduledEvent) return false; //NOSONAR
+			if (invite.maxAge) return false; //NOSONAR
+			if (invite.maxUses) return false; //NOSONAR
+			if (invite.stageInstance) return false; //NOSONAR
+			if (invite.targetApplication) return false; //NOSONAR
+			if (invite.targetUser) return false; //NOSONAR
+			if (invite.targetType) return false; //NOSONAR
+			if (invite.temporary) return false; //NOSONAR
 			return true;
 		});
-		return bestInvite?.url ?? null;
+		return bestInvite?.url ?? undefined;
 	}catch(ex) {
 		error(ex);
 	}
-	return null;
+	return undefined;
 }

@@ -288,7 +288,7 @@ export class ArgsManager<T extends string> extends Collection<T> {
 
 	/** Removes and returns UUID. */
 	public removeAndReturnUuid(): OrUndefined<UUID> {
-		return this.findArgAndRemove(isNonNilUuid) as UUID;
+		return this.findArgAndRemove(isNonNilUuid);
 	}
 
 	//#endregion

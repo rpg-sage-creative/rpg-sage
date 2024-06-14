@@ -18,7 +18,7 @@ let _assertData: AssertData | undefined;
 
 /** Clears any assertion data. */
 export function clearAssertData(): void {
-	_assertData = undefined;
+	_assertData = undefined; //NOSONAR
 }
 
 /** Returns the current totals, or all 0s if no assertions have been incremented. */

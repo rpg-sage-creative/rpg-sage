@@ -18,9 +18,13 @@ function showSummary(ex?: unknown) {
 	}
 }
 
-async function runTest(fn: Function, exitOnFail?: boolean): Promise<void> {
+/** Convenient test process for dev/test. */
+export async function runTests(testFn: Function, exitOnFail?: boolean, ...args: unknown[]): Promise<void> {
+	enableColorLevels("development");
+	enableLogLevels("development");
+	startAsserting(testFn.name);
 	try {
-		const res = fn();
+		const res = testFn(...args);
 		if (isPromise(res)) {
 			res.catch(showSummary);
 		}
@@ -28,23 +32,9 @@ async function runTest(fn: Function, exitOnFail?: boolean): Promise<void> {
 	}catch(ex) {
 		showSummary(ex);
 	}
+	stopAsserting();
 	if (exitOnFail && getAssertData()?.failed) {
 		process.exit(1);
-	}
-}
-
-/** Convenient test process for dev/test. */
-export async function runTests(...tests: Function[]): Promise<void>;
-export async function runTests(exitOnFail: boolean, ...tests: Function[]): Promise<void>;
-export async function runTests(...args: (boolean | Function)[]): Promise<void> {
-	const exitOnFail = args.includes(true);
-	const tests = args.filter((arg): arg is Function => typeof(arg) === "function");
-	enableColorLevels("development");
-	enableLogLevels("development");
-	for (const test of tests) {
-		startAsserting(test.name);
-		await runTest(test, exitOnFail);
-		stopAsserting();
 	}
 	showSummary();
 }

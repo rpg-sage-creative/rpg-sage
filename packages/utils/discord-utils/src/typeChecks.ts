@@ -1,5 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { AnyThreadChannel, Channel, GuildBasedChannel, MessageTarget, NonThreadGuildBasedChannel, PartialGroupDMChannel, PartialUser, User } from "discord.js";
+import type { AnyThreadChannel, Channel, GuildBasedChannel, MessageTarget, PartialGroupDMChannel, PartialUser, User } from "discord.js";
 import type { DMBasedChannel, UserOrPartial, WebhookChannel } from "./types.js";
 
 type ChannelOrUser = Channel | UserOrPartial;
@@ -30,10 +30,6 @@ export function isGroupDMBased(value: Optional<ChannelOrUser>): value is Partial
 
 export function isGuildBased(value: Optional<ChannelOrUser>): value is GuildBasedChannel {
 	return isChannel(value) && "guild" in value;
-}
-
-export function isNonThread(value: Optional<ChannelOrUser>): value is NonThreadGuildBasedChannel {
-	return isChannel(value) && !value.isThread();
 }
 
 export function isThread(value: Optional<ChannelOrUser>): value is AnyThreadChannel {

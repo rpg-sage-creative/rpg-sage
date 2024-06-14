@@ -5,6 +5,5 @@ import type { Snowflake } from "./types.js";
 export function parseSnowflake(value: Optional<string>): Snowflake | undefined {
 	const regex = /(?<id>\d{16,})/;
 	const match = regex.exec(value ?? "");
-	const id = match?.groups?.id as Snowflake;
-	return id ?? undefined;
+	return match?.groups?.id as Snowflake ?? undefined;
 }

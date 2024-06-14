@@ -1,3 +1,4 @@
+export * from "./components/index.js";
 export * from "./embed/index.js";
 export * from "./emojiRegex/index.js";
 export * from "./mention/index.js";
@@ -9,6 +10,7 @@ export * from "./DiscordKey.js";
 export * from "./DiscordMaxValues.js";
 export * from "./errorHandlers.js";
 export * from "./resolveSnowflake.js";
+export * from "./runDiscordTests.js";
 export * from "./safeMentions.js";
 export * from "./toHumanReadable.js";
 export * from "./typeChecks.js";
