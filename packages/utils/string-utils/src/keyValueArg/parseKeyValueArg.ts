@@ -1,6 +1,6 @@
 import { dequote } from "../quote/dequote.js";
 import { quote } from "../quote/quote.js";
-import { KeyValueArg } from "./KeyValueArg.js";
+import { type KeyValueArg } from "./KeyValueArg.js";
 import { isKeyValueArg } from "./isKeyValueArg.js";
 
 /** Returns KeyValueArg if the input is a valid key/value pairing, null otherwise. */

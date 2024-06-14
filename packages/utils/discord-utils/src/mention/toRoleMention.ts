@@ -1,6 +1,8 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { Formatters } from "discord.js";
+import { type Optional } from "@rsc-utils/core-utils";
+import { roleMention } from "discord.js";
+import { resolveSnowflake, type SnowflakeResolvable } from "../resolveSnowflake.js";
 
-export function toRoleMention(id: Optional<Snowflake>): string | null {
-	return id ? Formatters.roleMention(id) : null;
+export function toRoleMention(resolvable: Optional<SnowflakeResolvable>): string | undefined {
+	const id = resolveSnowflake(resolvable);
+	return id ? roleMention(id) : undefined;
 }

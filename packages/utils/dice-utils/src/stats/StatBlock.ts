@@ -91,13 +91,13 @@ function parseStatBlock(value: string): StatBlockResults | undefined {
 	};
 }
 
-type ReplaceHandler = (block: StatBlockResults) => string | null;
+type ReplaceHandler = (block: StatBlockResults) => string | undefined;
 
 /** Wraps the value.replace with logic that parses the stat block, checks for recursion, and returns tick blocked match when needed. */
 export function replaceStatBlocks(value: string, handler: ReplaceHandler, stack: string[]): string {
 	return XRegExp.replace(value, getStatBlockRegex(), match => {
 		const statBlock = parseStatBlock(match.toString());
-		let result: string | null = null;
+		let result: string | undefined;
 		if (statBlock && !stack.includes(statBlock.stackValue)) {
 			result = handler(statBlock);
 		}

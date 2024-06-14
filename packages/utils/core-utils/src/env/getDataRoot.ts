@@ -1,7 +1,8 @@
 import { existsSync, mkdirSync } from "fs";
+import type { Optional } from "../types/generics.js";
 import { getFromProcess } from "./internal/getFromProcess.js";
 
-function isValid(value: string | number | null | undefined): value is string {
+function isValid(value: Optional<string | number>): value is string {
 	return !!value && existsSync(String(value));
 }
 

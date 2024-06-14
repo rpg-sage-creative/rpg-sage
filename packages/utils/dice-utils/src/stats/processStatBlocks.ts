@@ -6,7 +6,7 @@ export type ProcessStatsArgs = {
 	encounters?: StatsEncounterManager;
 	npcs: StatsCharacterManager;
 	pcs: StatsCharacterManager;
-	pc?: StatsCharacter | null;
+	pc?: StatsCharacter;
 };
 
 export function processStatBlocks(diceString: string, args: ProcessStatsArgs): string;
@@ -23,20 +23,20 @@ export function processStatBlocks(diceString: string, args: ProcessStatsArgs, st
 			const { charName, isPcType, isAltType, stackValue, statKey, defaultValue } = statBlock;
 
 			// get character
-			let char: StatsCharacter | null = null;
+			let char: StatsCharacter | undefined;
 			if (isPcType) {
-				char = args.pc ?? null;
+				char = args.pc ?? undefined;
 			}else if (isAltType) {
-				char = args.pc?.companions?.[0] ?? null;
+				char = args.pc?.companions?.[0] ?? undefined;
 			}else if (charName) {
 				char = args.pcs.findByName(charName)
 					?? args.pcs.findCompanion(charName)
 					?? args.npcs.findByName(charName)
 					?? args.npcs.findCompanion(charName)
 					?? args.encounters?.findActiveChar(charName)
-					?? null;
+					?? undefined;
 			}else {
-				char = args.pc ?? null;
+				char = args.pc ?? undefined;
 			}
 
 			// get stat
@@ -47,7 +47,7 @@ export function processStatBlocks(diceString: string, args: ProcessStatsArgs, st
 			}
 
 			// return null
-			return null;
+			return undefined;
 		}, stack);
 	}while (hasStatBlock(replaced));
 

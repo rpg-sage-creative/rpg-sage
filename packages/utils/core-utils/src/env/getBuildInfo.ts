@@ -26,7 +26,7 @@ function getRootPath(): string {
 	return _rootPath;
 }
 
-function readBuildInfo(repoPath: string, utilName?: string): BuildInfo | null {
+function readBuildInfo(repoPath: string, utilName?: string): BuildInfo | undefined {
 	try {
 		const buildInfo = parse(readFileSync(`${repoPath}/build.json`).toString());
 		if (!buildInfo.name && utilName) {
@@ -36,7 +36,7 @@ function readBuildInfo(repoPath: string, utilName?: string): BuildInfo | null {
 	}catch(ex) {
 		// ignore
 	}
-	return null;
+	return undefined;
 }
 
 function getRscLibsBuildInfo(): BuildInfo[] {
@@ -48,7 +48,7 @@ function getRscLibsBuildInfo(): BuildInfo[] {
 	return buildInfos.filter(info => !!info) as BuildInfo[];
 }
 
-let buildInfo: BuildInfo | null;
+let buildInfo: BuildInfo | undefined;
 
 export function getBuildInfo(): BuildInfo {
 	if (!buildInfo) {

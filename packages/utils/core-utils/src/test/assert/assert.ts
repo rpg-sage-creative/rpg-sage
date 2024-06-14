@@ -1,4 +1,5 @@
 import { isDate } from "util/types";
+import { isNullOrUndefined } from "../../types/index.js";
 import { jsonStringify } from "../internal/jsonStringify.js";
 import { incrementAssertData } from "./AssertData.js";
 import { getAssertLabel } from "./AssertLabel.js";
@@ -6,24 +7,24 @@ import { getAssertMode } from "./AssertMode.js";
 
 /** Quoting strings makes it easier to distinguish between null and "null". */
 function stringify(value: any): string {
-	if (value === null || value === undefined) {
+	if (isNullOrUndefined(value)) {
 		return String(value);
 	}
 	return jsonStringify(value);
 }
 
 /** Returns the correct prefix for logging based on the current AssertMode. */
-function getAssertPrefix(value: boolean): string | null {
+function getAssertPrefix(value: boolean): string | undefined {
 	const tab = getAssertLabel() ? "  " : "";
 	const indicator = value ? "pass" : "fail";
 	const colorCode = value ? 32 : 31;
 	const prefix = `\x1b[${colorCode}m${tab}assert-${indicator}::\x1b[0m`;
 	const mode = getAssertMode();
 	switch(mode) {
-		case "pass": return value ? prefix : null;
-		case "fail": return !value ? prefix : null;
+		case "pass": return value ? prefix : undefined;
+		case "fail": return !value ? prefix : undefined;
 		case "both": return prefix;
-		default: return null;
+		default: return undefined;
 	}
 }
 

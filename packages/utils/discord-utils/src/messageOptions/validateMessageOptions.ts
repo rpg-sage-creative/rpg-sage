@@ -1,9 +1,9 @@
-import type { MessageOptions, WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
+import { type APIEmbed, type MessageCreateOptions, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
 import { DiscordMaxValues } from "../DiscordMaxValues.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 import { validateEmbedLengths } from "../embed/validateEmbedLengths.js";
 
-type Options = WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions;
+type Options = WebhookMessageCreateOptions | WebhookMessageEditOptions | MessageCreateOptions;
 
 /** Returns true if all lengths of the given options are under the allowed values for a single messge post. */
 export function validateMessageOptions<T extends Options>(options: T): boolean {
@@ -12,7 +12,7 @@ export function validateMessageOptions<T extends Options>(options: T): boolean {
 		return false;
 	}
 
-	const embeds = options.embeds ?? [];
+	const embeds = options.embeds as APIEmbed[] ?? [];
 
 	if (embeds.length > DiscordMaxValues.message.embedCount) {
 		return false;

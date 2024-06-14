@@ -1,4 +1,4 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 import { createMentionRegex } from "./createMentionRegex.js";
 
@@ -14,7 +14,7 @@ function getGroupKey(type: IdType): GroupKey {
 	}
 }
 
-export function parseId(value: Optional<string>, type: IdType): Snowflake | null {
+export function parseId(value: Optional<string>, type: IdType): Snowflake | undefined {
 	if (value) {
 		const groupKey = getGroupKey(type);
 
@@ -22,7 +22,7 @@ export function parseId(value: Optional<string>, type: IdType): Snowflake | null
 			const mentionRegex = createMentionRegex(type, { anchored:true });
 			const mentionMatch = mentionRegex.exec(value);
 			if (mentionMatch?.groups?.[groupKey]) {
-				return mentionMatch.groups[groupKey];
+				return mentionMatch.groups[groupKey] as Snowflake; //NOSONAR
 			}
 		}
 
@@ -30,9 +30,9 @@ export function parseId(value: Optional<string>, type: IdType): Snowflake | null
 			const urlRegex = createDiscordUrlRegex(type);
 			const urlMatch = urlRegex.exec(value);
 			if (urlMatch?.groups?.[groupKey]) {
-				return urlMatch.groups[groupKey];
+				return urlMatch.groups[groupKey] as Snowflake; //NOSONAR
 			}
 		}
 	}
-	return null;
+	return undefined;
 }

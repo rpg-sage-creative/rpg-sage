@@ -6,7 +6,7 @@ import { rollDice } from "./rollDice.js";
  * Otherwise, returns the results of rolling simple dice: 1d6 or 1d8+1 or 1d10-2.
  * Returns null if the input isn't a valid simple dice roll, or has 0 count or 0 sides.
  */
-export function rollDiceString(diceString: string): number | null {
+export function rollDiceString(diceString: string): number | undefined {
 	const cleanDiceString = (diceString ?? "").replace(/\s+/g, "");
 	if (/^\d+$/.test(cleanDiceString)) {
 		return +cleanDiceString;
@@ -15,14 +15,14 @@ export function rollDiceString(diceString: string): number | null {
 	const regex = /^([-+])?(\d+)d(\d+)(?:([-+])(\d+))?$/i;
 	const match = regex.exec(cleanDiceString);
 	if (!match) {
-		return null;
+		return undefined;
 	}
 
 	const diceSign = match[1];
 	const diceCount = +match[2];
 	const diceSides = +match[3];
 	if (!diceCount || !diceSides) {
-		return null;
+		return undefined;
 	}
 
 	const modifierSign = match[4];

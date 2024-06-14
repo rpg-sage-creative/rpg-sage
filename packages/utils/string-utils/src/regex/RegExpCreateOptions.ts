@@ -1,4 +1,4 @@
-import { RegExpQuantifier } from "./RegExpQuantifier.js";
+import type { RegExpQuantifier } from "./RegExpQuantifier.js";
 
 /** Base options for creating RegExp expressions. */
 export type RegExpCreateOptions = {

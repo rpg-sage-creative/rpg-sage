@@ -1,4 +1,5 @@
 import type { Optional } from "../types/generics.js";
+import { isNullOrUndefined } from "../types/index.js";
 import type { Matcher, MatcherResolvable } from "../types/Matcher.js";
 import { isNilSnowflake } from "./isNilSnowflake.js";
 import { isNonNilSnowflake } from "./isNonNilSnowflake.js";
@@ -40,11 +41,11 @@ export class SnowflakeMatcher implements Matcher<Snowflake> {
 	}
 
 	/** Stores the raw value. */
-	public value?: Snowflake | null;
+	public value: Optional<Snowflake>;
 
 	/** Returns true if the given value is considered a match. */
 	public matches<T extends MatcherResolvable>(other: T): boolean {
-		if (!this.isValid || other === null || other === undefined) {
+		if (!this.isValid || isNullOrUndefined(other)) {
 			return false;
 		}
 		if (typeof(other) === "string") {
@@ -71,11 +72,11 @@ export class SnowflakeMatcher implements Matcher<Snowflake> {
 
 	/** Returns the original value. */
 	public toString(): Optional<Snowflake> {
-		return this.value ?? "";
+		return this.value;
 	}
 
 	/** Convenience method for new SnowflakeMatcher(value) */
 	public static from(value: Optional<MatcherResolvable>): SnowflakeMatcher {
-		return new SnowflakeMatcher(typeof(value) === "string" ? value : value?.value);
+		return new SnowflakeMatcher((typeof(value) === "string" ? value : value?.value) as Snowflake);
 	}
 }

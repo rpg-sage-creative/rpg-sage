@@ -1,4 +1,4 @@
-import type { PermissionString } from "discord.js";
+import { type PermissionsString } from "discord.js";
 
 /*
 https://discord.com/developers/docs/topics/permissions
@@ -15,4 +15,4 @@ type SageChannelPermissionString = "VIEW_CHANNEL"
 	| "USE_EXTERNAL_EMOJIS";
 
 /** A composite type that uses the correct valid strings but narrows it down for our usage. */
-export type ChannelPermissionString = PermissionString & SageChannelPermissionString;
+export type ChannelPermissionString = PermissionsString & SageChannelPermissionString;

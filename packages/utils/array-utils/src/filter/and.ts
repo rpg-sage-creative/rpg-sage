@@ -1,4 +1,4 @@
-import type { Filter } from "./Filter.js";
+import { type Filter } from "./Filter.js";
 
 /**
  * Creates a single Filter function that tests each array element against the given filters.

@@ -1,5 +1,4 @@
-import { getDataRoot } from "@rsc-utils/core-utils";
-import { randomUUID, type UUID } from "crypto";
+import { getDataRoot, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import PDFParser from "pdf2json";
 import { deleteFileSync } from "../fs/deleteFileSync.js";
 import { writeFile } from "../fs/writeFile.js";
@@ -10,14 +9,14 @@ import type { Optional } from "./internal/types.js";
 export class PdfCacher {
 
 	/** The local file id. */
-	private id: UUID;
+	private id: Snowflake;
 
 	/** The path to the local file. */
 	private cachedPdfPath: string;
 
 	/** Creates a new PdfCacher for the given url. */
 	public constructor(private url: string) {
-		this.id = randomUUID();
+		this.id = randomSnowflake();
 		this.cachedPdfPath = `${getDataRoot("cache/pdf", true)}/${this.id}.pdf`;
 	}
 

@@ -1,4 +1,4 @@
-import { TDicePart } from "./dice/DicePart.js";
+import type { TDicePart } from "./dice/DicePart.js";
 
 type MapDicePartRollOptions = {
 	hideRolls: boolean;

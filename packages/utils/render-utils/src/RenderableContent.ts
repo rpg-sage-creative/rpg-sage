@@ -1,4 +1,3 @@
-import { toUnique } from "@rsc-utils/array-utils";
 import { error, stringify, type Optional } from "@rsc-utils/core-utils";
 import type { Renderable, RenderableContentSection, RenderableContentSectionColumn } from "./types.js";
 
@@ -65,7 +64,7 @@ export class RenderableContent implements Renderable {
 			// TODO: see why i was gonna use this --> if (section.title) matches.push(...(section.title.match(regex) || []));
 			section.content.forEach(s => matches.push(...(s.match(regex) || [])));
 		});
-		return matches.filter(toUnique);
+		return matches.filter((s, i, a) => a.indexOf(s) === i);
 	}
 
 	/** Sets the border color. */

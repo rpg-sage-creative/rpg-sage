@@ -1,9 +1,9 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { type Channel } from "discord.js";
 import { isDMBased, isThread } from "../typeChecks.js";
-import type { DChannel } from "../types.js";
 import { getPermsFor } from "./getPermsFor.js";
 
-function isLockedOrArchivedThread(channel: DChannel): boolean {
+function isLockedOrArchivedThread(channel: Channel): boolean {
 	if (isThread(channel)) {
 		/** @todo look into checking channel.sendable */
 		if (channel.locked) {
@@ -24,7 +24,7 @@ function isLockedOrArchivedThread(channel: DChannel): boolean {
  * Otherwise, we check the bot's perms to see if it has SEND_MESSAGES or SEND_MESSAGES_IN_THREADS as appropriate.
  * @returns true if we can send to the channel
  */
-export function canSendMessageTo(botId: Snowflake, channel: Optional<DChannel>): boolean {
+export function canSendMessageTo(botId: Snowflake, channel: Optional<Channel>): boolean {
 	if (!channel) {
 		return false;
 	}
@@ -41,7 +41,7 @@ export function canSendMessageTo(botId: Snowflake, channel: Optional<DChannel>):
 	return perms.canSendMessages;
 }
 
-export function canReactTo(botId: Snowflake, channel: Optional<DChannel>): boolean {
+export function canReactTo(botId: Snowflake, channel: Optional<Channel>): boolean {
 	if (!channel) {
 		return false;
 	}
@@ -58,7 +58,7 @@ export function canReactTo(botId: Snowflake, channel: Optional<DChannel>): boole
 	return perms.canAddReactions;
 }
 
-export function canWebhookTo(botId: Snowflake, channel: Optional<DChannel>): boolean {
+export function canWebhookTo(botId: Snowflake, channel: Optional<Channel>): boolean {
 	if (!channel) {
 		return false;
 	}

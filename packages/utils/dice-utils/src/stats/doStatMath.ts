@@ -24,7 +24,7 @@ export function doStatMath(value: string): string {
 
 	// handle simple math if applicable
 	const simpleValue = doSimple(processed);
-	if (simpleValue !== null) {
+	if (simpleValue) {
 		return hasPipes ? `||${simpleValue}||` : simpleValue;
 	}
 

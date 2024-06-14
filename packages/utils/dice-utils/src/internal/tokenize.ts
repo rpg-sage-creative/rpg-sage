@@ -35,9 +35,9 @@ export type TokenData<Key extends string = string> = {
 export function tokenize(input: string, parsers: TokenParsers, defaultKey = "unknown"): TokenData[] {
 	const tokens: TokenData[] = [];
 	let matchIndex: number,
-		token: TokenData | null;
+		token: TokenData | undefined;
 	while (input) {
-		token = null;
+		token = undefined;
 		matchIndex = input.length;
 		for (const key in parsers) {
 			const regExpMatchArray = XRegExp.exec(input, parsers[key]);

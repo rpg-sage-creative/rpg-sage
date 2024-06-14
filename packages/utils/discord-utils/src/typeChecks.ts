@@ -1,41 +1,45 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { GuildBasedChannel, TextBasedChannel } from "discord.js";
-import type { DChannel, DDMChannel, DGuildChannel, DTextChannel, DThreadChannel, DUser, DWebhookChannel } from "./types.js";
+import type { AnyThreadChannel, Channel, GuildBasedChannel, MessageTarget, NonThreadGuildBasedChannel, PartialGroupDMChannel, PartialUser, User } from "discord.js";
+import type { DMBasedChannel, UserOrPartial, WebhookChannel } from "./types.js";
 
-type DChannelOrUser = DChannel | DWebhookChannel | DUser;
+type ChannelOrUser = Channel | UserOrPartial;
 
-export function canCheckPermissionsFor(user: Optional<DUser>): false;
-export function canCheckPermissionsFor(channel: Optional<DChannel>): channel is DGuildChannel;
-export function canCheckPermissionsFor(channel: Optional<DWebhookChannel>): channel is DWebhookChannel;
-export function canCheckPermissionsFor(channel: Optional<DChannelOrUser>): channel is DWebhookChannel;
-export function canCheckPermissionsFor(channel: Optional<DChannelOrUser>): boolean {
-	return channel ? "permissionsFor" in channel : false;
+export function canCheckPermissionsFor(value: Optional<ChannelOrUser>): value is GuildBasedChannel {
+	return isChannel(value) && "permissionsFor" in value;
 }
 
-export function canFetchWebhooksFor(user: Optional<DUser>): false;
-export function canFetchWebhooksFor(channel: Optional<DChannel>): channel is DTextChannel;
-export function canFetchWebhooksFor(channel: Optional<DWebhookChannel>): channel is DWebhookChannel;
-export function canFetchWebhooksFor(channel: Optional<DChannelOrUser>): channel is DWebhookChannel;
-export function canFetchWebhooksFor(channel: Optional<DChannelOrUser>): boolean {
-	return channel ? "fetchWebhooks" in channel : false;
+export function canFetchWebhooksFor(value: Optional<ChannelOrUser>): value is WebhookChannel {
+	return isChannel(value) && "fetchWebhooks" in value;
 }
 
-export function isDMBased(user: Optional<DUser>): false;
-export function isDMBased(channel: Optional<DChannel>): channel is DDMChannel;
-export function isDMBased(channel: Optional<DWebhookChannel>): false;
-export function isDMBased(channel: Optional<DChannelOrUser>): channel is DDMChannel;
-export function isDMBased(channel: Optional<DChannelOrUser>): boolean {
-	return channel ? ("recipient" in channel) || ("recipients" in channel) : false;
+export function isChannel(value: Optional<ChannelOrUser>): value is Channel {
+	return value ? "isThread" in value : false;
 }
 
-export function isGuildBased(channel: Optional<DChannel | GuildBasedChannel>): channel is DGuildChannel {
-	const types = ["GUILD_TEXT", "GUILD_PRIVATE_THREAD", "GUILD_PUBLIC_THREAD", "GUILD_FORUM"];
-	return types.includes(channel?.type!);
+export function isMessageTarget(value: Optional<ChannelOrUser | MessageTarget>): value is MessageTarget {
+	return value ? "send" in value : false;
 }
 
-export function isThread(channel: Optional<DChannel | TextBasedChannel>): channel is DThreadChannel {
-	if (channel?.isThread()) {
-		return isGuildBased(channel.parent);
-	}
-	return false;
+export function isDMBased(value: Optional<ChannelOrUser>): value is DMBasedChannel {
+	return isChannel(value) && value.isDMBased();
+}
+
+export function isGroupDMBased(value: Optional<ChannelOrUser>): value is PartialGroupDMChannel {
+	return isDMBased(value) && "recipients" in value;
+}
+
+export function isGuildBased(value: Optional<ChannelOrUser>): value is GuildBasedChannel {
+	return isChannel(value) && "guild" in value;
+}
+
+export function isNonThread(value: Optional<ChannelOrUser>): value is NonThreadGuildBasedChannel {
+	return isChannel(value) && !value.isThread();
+}
+
+export function isThread(value: Optional<ChannelOrUser>): value is AnyThreadChannel {
+	return isChannel(value) && value.isThread();
+}
+
+export function isUser(value: Optional<ChannelOrUser>): value is User | PartialUser {
+	return value ? "createDM" in value : false;
 }

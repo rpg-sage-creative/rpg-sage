@@ -1,4 +1,4 @@
-import { RollData } from "../types/RollData.js";
+import type { RollData } from "../types/RollData.js";
 import { numberSorter } from "./numberSorter.js";
 
 /** @internal */

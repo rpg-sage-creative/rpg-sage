@@ -16,7 +16,7 @@ export function isSimple(value: string): boolean {
  * Valid math symbols: ^/*+- and spaces and numbers.
  * Returns null if the value isn't simple math or an error occurred during eval().
  */
-export function doSimple(value: string): string | null {
+export function doSimple(value: string): string | undefined {
 	try {
 		if (getSimpleRegex().test(value)) {
 			value = cleanSigns(value);
@@ -33,5 +33,5 @@ export function doSimple(value: string): string | null {
 	} catch (ex) {
 		/* ignore */
 	}
-	return null;
+	return undefined;
 }

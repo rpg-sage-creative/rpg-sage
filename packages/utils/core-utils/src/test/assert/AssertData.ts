@@ -14,15 +14,15 @@ type AssertData = AssertCounts & {
 	labeled: LabeledAssertCounts[];
 };
 
-let _assertData: AssertData | null;
+let _assertData: AssertData | undefined;
 
 /** Clears any assertion data. */
 export function clearAssertData(): void {
-	_assertData = null;
+	_assertData = undefined;
 }
 
 /** Returns the current totals, or all 0s if no assertions have been incremented. */
-export function getAssertData(): AssertData | null {
+export function getAssertData(): AssertData {
 	return _assertData ?? { total:0, passed:0, failed:0, labeled:[] };
 }
 

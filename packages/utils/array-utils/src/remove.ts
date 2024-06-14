@@ -1,5 +1,5 @@
 import { isDefined } from "@rsc-utils/core-utils";
-import type { Collection } from "./Collection.js";
+import { type Collection } from "./Collection.js";
 import { removeAt } from "./removeAt.js";
 
 /** Removes the values that return a truthy value, returning values that are defined (!null && !undefined). */

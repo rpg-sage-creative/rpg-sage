@@ -8,7 +8,7 @@ type Awaitable<T> = T | PromiseLike<T>;
 /**
  * Uses asynchronous logic to iterate over an array and log the progress.
  * Exceptions in the callback will be sent to console.warn.
- * Based on forEachAsync from array-utils.
+ * Based on forEachAsync from async-array-utils.
  */
 export async function forEachAsync
 		<T>

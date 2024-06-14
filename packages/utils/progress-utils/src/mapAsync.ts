@@ -8,7 +8,7 @@ type Awaitable<T> = T | PromiseLike<T>;
 /**
  * Uses asynchronous logic to map an array and log the progress.
  * Exceptions in the callback will be sent to console.warn and the valued at that index will be undefined.
- * Based on mapAsync from array-utils.
+ * Based on mapAsync from async-array-utils.
  */
 export async function mapAsync
 		<T, U>
@@ -18,7 +18,7 @@ export async function mapAsync
 /**
  * Uses asynchronous logic to map an array and log the progress.
  * Exceptions in the callback will be sent to console.warn and the valued at that index will be undefined.
- * Based on mapAsync from array-utils.
+ * Based on mapAsync from async-array-utils.
  */
 export async function mapAsync
 		<T extends Array<U>, U, V extends Array<W>, W>

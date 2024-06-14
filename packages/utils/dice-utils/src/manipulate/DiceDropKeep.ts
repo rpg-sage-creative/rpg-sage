@@ -1,3 +1,4 @@
+import type { Optional } from "@rsc-utils/core-utils";
 import { rollDataSorter } from "../internal/rollDataSorter.js";
 import type { TokenData, TokenParsers } from "../internal/tokenize.js";
 import type { RollData } from "../types/RollData.js";
@@ -69,7 +70,7 @@ export class DiceDropKeep extends DiceManipulation<DiceDropKeepData> {
 	}
 
 	/** Parses the given TokenData into DropKeepData */
-	public static parseData(token?: TokenData | null): DiceDropKeepData | undefined {
+	public static parseData(token: Optional<TokenData>): DiceDropKeepData | undefined {
 		if (token?.key === "dropKeep") {
 			const alias = token.matches[0].toLowerCase().slice(0, 2);
 			const type = [null, "dl", "dh", "kl", "kh"].indexOf(alias);

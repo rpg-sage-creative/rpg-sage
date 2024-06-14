@@ -1,6 +1,5 @@
-
-/** Represents an object that can be null or undefined. */
-type Optional<T> = T | null | undefined;
+import type { Optional } from "../generics.js";
+import { isNullOrUndefined } from "../typeGuards/isNullOrUndefined.js";
 
 /** Returns the (number) value of the enum for the given string value (ignoring case), or undefined. */
 export function parseEnum<T>(_enum: unknown, value: Optional<string>): T | undefined;
@@ -15,7 +14,7 @@ export function parseEnum<T>(_enum: unknown, value: Optional<string>, defaultVal
 export function parseEnum<T>(_enum: unknown, value: Optional<number>, defaultValue: T): T;
 
 export function parseEnum<T>(_enum: any, value: Optional<string | number>, defaultValue?: T): T | undefined {
-	if (value === null || value === undefined) {
+	if (isNullOrUndefined(value)) {
 		return defaultValue;
 	}
 

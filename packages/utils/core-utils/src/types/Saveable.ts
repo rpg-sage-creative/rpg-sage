@@ -1,4 +1,4 @@
-import { Awaitable } from "./generics.js";
+import type { Awaitable } from "./generics.js";
 
 /** Represents an object that can be saved. */
 export type Saveable = {

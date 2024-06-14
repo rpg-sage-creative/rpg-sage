@@ -40,6 +40,7 @@ export const DiscordMaxValues = {
 		},
 		select: {
 			idLength: 100,
+			labelLength: 100,
 			optionCount: 25,
 			placeholderLength: 150
 		}

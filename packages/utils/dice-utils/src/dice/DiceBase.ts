@@ -1,4 +1,4 @@
-import type { Snowflake } from "discord.js";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import type { TokenData } from "../internal/tokenize.js";
 import type { DiceOutputType } from "../types/DiceOutputType.js";
 

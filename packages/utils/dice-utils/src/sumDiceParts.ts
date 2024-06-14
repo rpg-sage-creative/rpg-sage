@@ -1,6 +1,6 @@
 import type { TDicePart } from "./dice/DicePart.js";
 import { sum } from "./sum.js";
-import { DiceOperator } from "./types/DiceOperator.js";
+import type { DiceOperator } from "./types/DiceOperator.js";
 
 export function sumDiceParts(diceParts: TDicePart[]): number {
 	// group the parts such that we only multiply/divide adjacent values; THEN do a sum

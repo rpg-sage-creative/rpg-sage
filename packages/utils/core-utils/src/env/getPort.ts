@@ -1,8 +1,9 @@
+import type { Optional } from "../types/generics.js";
 import { getCodeName } from "./getCodeName.js";
 import { getFromProcess } from "./internal/getFromProcess.js";
 import { logAndReturn } from "./internal/logAndReturn.js";
 
-function isValid(value: string | number | null | undefined): value is string {
+function isValid(value: Optional<string | number>): value is string {
 	return /^\d+$/.test(String(value));
 }
 

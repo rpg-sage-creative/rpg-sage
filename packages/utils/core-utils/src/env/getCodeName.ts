@@ -1,17 +1,21 @@
 import { enableLogLevels } from "../console/logLevels/enableLogLevels.js";
-import { CodeName } from "./CodeName.js";
+import type { Optional } from "../types/generics.js";
+import type { CodeName } from "./CodeName.js";
 import { codeNameToEnvironmentName } from "./internal/codeNameToEnvironmentName.js";
 import { getFromProcess } from "./internal/getFromProcess.js";
 
+/** Checks that the given string is a valid CodeName. */
 function isValidCodeName(value: string): value is CodeName {
 	return ["dev", "beta", "stable"].includes(value);
 }
 
-function isValid(value: string | number | null | undefined): value is CodeName {
-	return isValidCodeName(String(value));
+/** Checks that the given value is a string and is a valid CodeName. */
+function isValid(value: Optional<string | number>): value is CodeName {
+	return typeof(value) === "string" ? isValidCodeName(value) : false;
 }
 
-function enableLogLevelsIfValid(value: string | number | null | undefined): value is CodeName {
+/** Checks that the gicen value is a string and a valid CodeName and enables the appropriate log levels. */
+function enableLogLevelsIfValid(value: Optional<string | number>): value is CodeName {
 	const stringValue = String(value);
 	if (isValidCodeName(stringValue)) {
 		enableLogLevels(codeNameToEnvironmentName(stringValue));
@@ -22,9 +26,7 @@ function enableLogLevelsIfValid(value: string | number | null | undefined): valu
 
 let _codeName: CodeName;
 
-/**
- * Returns the codeName.
- */
+/** Returns the codeName. */
 export function getCodeName(): CodeName;
 
 /**

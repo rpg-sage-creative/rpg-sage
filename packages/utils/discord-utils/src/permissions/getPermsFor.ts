@@ -1,8 +1,7 @@
-import { PermissionFlagsBits } from "discord-api-types/v9";
-import type { GuildBasedChannel, GuildMember, GuildMemberResolvable, Role, RoleResolvable } from "discord.js";
+import { PermissionFlagsBits, type Channel, type GuildMember, type GuildMemberResolvable, type Role, type RoleResolvable } from "discord.js";
 import { canCheckPermissionsFor, canFetchWebhooksFor, isGuildBased, isThread as isThreadChannel } from "../typeChecks.js";
-import type { DWebhookChannel } from "../types.js";
-import type { ChannelPermissionString } from "./ChannelPermissionString.js";
+import { type WebhookChannel } from "../types.js";
+import { type ChannelPermissionString } from "./ChannelPermissionString.js";
 
 type AccessResults = {
 	/** perms.has("MANAGE_CHANNELS") */
@@ -27,7 +26,7 @@ type AccessResults = {
 	canSendWebhooks: boolean;
 
 	/** Only returned if canSendWebhooks === true; the channel or thread parent that has webhooks */
-	webhookChannel?: DWebhookChannel;
+	webhookChannel?: WebhookChannel;
 };
 
 type CheckedResults = AccessResults & {
@@ -50,12 +49,12 @@ type CheckedResults = AccessResults & {
 type GuildMemberOrRoleResolvable = GuildMember | GuildMemberResolvable | Role | RoleResolvable;
 
 /** A quick check to see if a member or role can view or manage a channel. */
-export function getPermsFor(channel: GuildBasedChannel, memberOrRole: GuildMemberOrRoleResolvable): AccessResults;
+export function getPermsFor(channel: Channel, memberOrRole: GuildMemberOrRoleResolvable): AccessResults;
 
 /** Checks the user/role and channel to see which of the given permissions are missing or present. */
-export function getPermsFor(channel: GuildBasedChannel, memberOrRole: GuildMemberOrRoleResolvable, ...permsToCheck: ChannelPermissionString[]): CheckedResults;
+export function getPermsFor(channel: Channel, memberOrRole: GuildMemberOrRoleResolvable, ...permsToCheck: ChannelPermissionString[]): CheckedResults;
 
-export function getPermsFor(channel: GuildBasedChannel, memberOrRole?: GuildMemberOrRoleResolvable, ...checked: ChannelPermissionString[]): AccessResults | CheckedResults {
+export function getPermsFor(channel: Channel, memberOrRole?: GuildMemberOrRoleResolvable, ...checked: ChannelPermissionString[]): AccessResults | CheckedResults {
 	// resolve an object to an id; use SageId when we don't have a member or role
 	const memberId = typeof(memberOrRole) === "string" ? memberOrRole : memberOrRole?.id;
 	// return false if member or channel are not valid

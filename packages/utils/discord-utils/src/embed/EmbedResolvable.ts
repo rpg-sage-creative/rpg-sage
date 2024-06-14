@@ -1,4 +1,4 @@
-import type { APIEmbed } from "discord-api-types/v9";
-import type { MessageEmbed, MessageEmbedOptions } from "discord.js";
+import { type Embed, type APIEmbed, type JSONEncodable } from "discord.js";
+import { type EmbedBuilder } from "./EmbedBuilder.js";
 
-export type EmbedResolvable = MessageEmbed | MessageEmbedOptions | APIEmbed;
+export type EmbedResolvable = Embed | APIEmbed | EmbedBuilder | JSONEncodable<APIEmbed>;

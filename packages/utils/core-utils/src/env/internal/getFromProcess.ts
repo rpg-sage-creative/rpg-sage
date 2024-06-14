@@ -1,8 +1,9 @@
+import type { Optional } from "../../types/generics.js";
 import { getFromProcessArgv } from "./getFromProcessArgv.js";
 import { getFromProcessEnv } from "./getFromProcessEnv.js";
 import { logAndReturn } from "./logAndReturn.js";
 
-type Validator = (value: string | number | null | undefined) => value is string | number;
+type Validator = (value: Optional<string | number>) => value is string | number;
 
 /**
  * @internal

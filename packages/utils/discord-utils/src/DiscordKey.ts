@@ -1,13 +1,11 @@
-import { isNilSnowflake, isNonNilSnowflake, orNilSnowflake, type NIL_SNOWFLAKE, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import type { MessageReference } from "discord.js";
+import { isNilSnowflake, isNonNilSnowflake, type NIL_SNOWFLAKE, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { type MessageReference } from "discord.js";
 import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
-import type { DGuildChannel, DInteraction, DMessage, DMessageChannel, DReaction } from "./types.js";
+import { resolveSnowflake, type SnowflakeResolvable } from "./resolveSnowflake.js";
+import { isGuildBased, isThread } from "./typeChecks.js";
+import { type DInteraction, type MessageOrPartial, type MessageTarget, type ReactionOrPartial } from "./types.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
-import { isThread } from "./typeChecks.js";
-
-interface IHasSnowflakeId { id:Snowflake; }
-type TSnowflakeResolvable = string | IHasSnowflakeId;
 
 export class DiscordKey implements MessageReference {
 	//#region MessageReference
@@ -41,11 +39,11 @@ export class DiscordKey implements MessageReference {
 	public hasMessage: boolean;
 
 	public constructor(
-		server: Optional<TSnowflakeResolvable>,
-		channel: Optional<TSnowflakeResolvable>,
+		server: Optional<SnowflakeResolvable>,
+		channel: Optional<SnowflakeResolvable>,
 		/** @deprecated */
-		thread?: Optional<TSnowflakeResolvable>,
-		message?: Optional<TSnowflakeResolvable>
+		thread?: Optional<SnowflakeResolvable>,
+		message?: Optional<SnowflakeResolvable>
 	) {
 		this.server = DiscordKey.resolveId(server);
 		this.channel = DiscordKey.resolveId(channel);
@@ -76,15 +74,15 @@ export class DiscordKey implements MessageReference {
 		return this.hasThread ? this.thread : this.channel;
 	}
 	/** @deprecated */
-	public get channelAndThread(): { channel:Snowflake|null; thread:Snowflake|null } {
+	public get channelAndThread(): { channel:Snowflake|undefined; thread:Snowflake|undefined } {
 		return {
-			channel: this.hasChannel ? this.channel : null,
-			thread: this.hasThread ? this.thread : null
+			channel: this.hasChannel ? this.channel : undefined,
+			thread: this.hasThread ? this.thread : undefined
 		};
 	}
 	/** @deprecated */
-	public get user(): Snowflake | null {
-		return this.isDm ? this.channel : null;
+	public get user(): Snowflake | undefined {
+		return this.isDm ? this.channel : undefined;
 	}
 
 	public toString(): string { return this.key; }
@@ -92,19 +90,19 @@ export class DiscordKey implements MessageReference {
 	public toChannelUrl(): string {
 		return toChannelUrl(this);
 	}
-	public toMessageUrl(): string | null {
+	public toMessageUrl(): string | undefined {
 		return toMessageUrl(this);
 	}
 	public toUrl(): string {
 		return this.toMessageUrl() ?? this.toChannelUrl();
 	}
 
-	public static createKey(...resolvables: Optional<TSnowflakeResolvable>[]): string {
+	public static createKey(...resolvables: Optional<SnowflakeResolvable>[]): string {
 		return resolvables.map(DiscordKey.resolveId).join("-");
 	}
 
-	public static fromChannel(channel: DMessageChannel): DiscordKey {
-		const guildId = (channel as DGuildChannel).guild?.id;
+	public static fromChannel(channel: MessageTarget): DiscordKey {
+		const guildId = isGuildBased(channel) ? channel.guildId : undefined;
 		if (isThread(channel)) {
 			const threadId = channel.id;
 			const channelId = channel.parent?.id;
@@ -123,9 +121,9 @@ export class DiscordKey implements MessageReference {
 		return new DiscordKey(interaction.guildId, interaction.channelId);
 	}
 
-	public static fromMessage(message: DMessage): DiscordKey {
+	public static fromMessage(message: MessageOrPartial): DiscordKey {
 		const channel = message.channel;
-		const guildId = (channel as DGuildChannel).guild?.id;
+		const guildId = isGuildBased(channel) ? channel.guildId : undefined;
 		if (isThread(channel)) {
 			const threadId = channel.id;
 			const channelId = channel.parent?.id;
@@ -134,16 +132,16 @@ export class DiscordKey implements MessageReference {
 		return new DiscordKey(guildId, message.channel.id, null, message.id);
 	}
 
-	public static fromMessageReaction(messageReaction: DReaction): DiscordKey {
-		return DiscordKey.fromMessage(messageReaction.message as DMessage);
+	public static fromMessageReaction(messageReaction: ReactionOrPartial): DiscordKey {
+		return DiscordKey.fromMessage(messageReaction.message);
 	}
 
 	/** Resolves to a nonNilSnowflake or NIL_SNOWFLAKE. */
-	public static resolveId(resolvable: Optional<TSnowflakeResolvable>): Snowflake | NIL_SNOWFLAKE {
-		return orNilSnowflake(typeof(resolvable) === "string" ? resolvable : resolvable?.id);
+	public static resolveId(resolvable: Optional<SnowflakeResolvable>): Snowflake | NIL_SNOWFLAKE {
+		return resolveSnowflake(resolvable, true);
 	}
 
-	public static fromUrl(url: string): DiscordKey | null {
+	public static fromUrl(url: string): DiscordKey | undefined {
 		const messageMatch = createDiscordUrlRegex("message").exec(url);
 		if (messageMatch?.groups) {
 			const { guildId, channelId, messageId } = messageMatch.groups;
@@ -156,6 +154,6 @@ export class DiscordKey implements MessageReference {
 			return new DiscordKey(guildId, channelId, channelId);
 		}
 
-		return null;
+		return undefined;
 	}
 }

@@ -1,4 +1,4 @@
 {"name":"@rsc-utils/dice-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
-  "discord.js": ">13.0.0",
+  "@rsc-utils/core-utils": "^0.0.0",
   "xregexp": "^5.1.1"
 }}

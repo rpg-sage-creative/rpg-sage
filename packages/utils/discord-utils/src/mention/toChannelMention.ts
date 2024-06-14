@@ -1,6 +1,8 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { Formatters } from "discord.js";
+import { type Optional } from "@rsc-utils/core-utils";
+import { channelMention } from "discord.js";
+import { resolveSnowflake, type SnowflakeResolvable } from "../resolveSnowflake.js";
 
-export function toChannelMention(id: Optional<Snowflake>): string | null {
-	return id ? Formatters.channelMention(id) : null;
+export function toChannelMention(resolvable: Optional<SnowflakeResolvable>): string | undefined {
+	const id = resolveSnowflake(resolvable);
+	return id ? channelMention(id) : undefined;
 }

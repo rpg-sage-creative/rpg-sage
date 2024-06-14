@@ -8,6 +8,7 @@ Ex: [1d8tt7] would mean that when an 8 is rolled, a value of 7 would be used.
 Ex: [1d8bt2] would mean that when a 1 is rolled, a value of 2 would be used.
 */
 
+import type { Optional } from "@rsc-utils/core-utils";
 import type { TokenData, TokenParsers } from "../internal/tokenize.js";
 import type { RollData } from "../types/RollData.js";
 import { DiceManipulation } from "./DiceManipulation.js";
@@ -81,7 +82,7 @@ export class DiceThreshold extends DiceManipulation<DiceThresholdData> {
 	}
 
 	/** Parses the given TokenData into ThresholdData */
-	public static parseData(token?: TokenData | null): DiceThresholdData | undefined {
+	public static parseData(token: Optional<TokenData>): DiceThresholdData | undefined {
 		if (token?.key === "threshold") {
 			const alias = token.matches[0].toLowerCase().slice(0, 2);
 			const type = [null, "bt", "tt"].indexOf(alias);

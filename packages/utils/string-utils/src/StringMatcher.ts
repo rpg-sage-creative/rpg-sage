@@ -41,7 +41,7 @@ export class StringMatcher implements Matcher {
 	}
 
 	/** Stores the raw value. */
-	public value?: string | null;
+	public value: Optional<string>;
 
 	/** Compares the clean values. */
 	public matches<T extends MatcherResolvable>(other: T): boolean {
@@ -71,8 +71,8 @@ export class StringMatcher implements Matcher {
 	}
 
 	/** Returns the original value. */
-	public toString(): string {
-		return this.value ?? "";
+	public toString(): Optional<string> {
+		return this.value;
 	}
 
 	/**
