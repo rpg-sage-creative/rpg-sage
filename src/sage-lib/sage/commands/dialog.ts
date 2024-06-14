@@ -1,6 +1,6 @@
 import { debug } from "@rsc-utils/core-utils";
 import { registerMessageListener, registerReactionListener } from "../../discord/handlers.js";
-import { MessageType, ReactionType, TCommandAndArgsAndData } from "../../discord/index.js";
+import { MessageType, ReactionType, type TCommandAndArgsAndData } from "../../discord/index.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import type { DialogContent } from "./dialog/DialogContent.js";
 import { companionChat } from "./dialog/chat/companionChat.js";
