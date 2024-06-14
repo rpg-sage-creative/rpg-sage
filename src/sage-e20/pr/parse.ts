@@ -1,7 +1,7 @@
-import type { TSkillDie } from "../../sage-dice/dice/essence20";
-import { filterValuesWithKeys, PdfJsonParserE20, SkillPairKey } from "../common/parse";
-import type { TField, TRawJson } from "../common/pdf";
-import type { PlayerCharacterCorePR, TAttackZord, TSkillZord, TStatPR, TStatZord, TZord } from "./PlayerCharacterPR";
+import type { TSkillDie } from "../../sage-dice/dice/essence20/index.js";
+import { filterValuesWithKeys, PdfJsonParserE20, type SkillPairKey } from "../common/parse.js";
+import type { TField, TRawJson } from "../common/pdf.js";
+import type { PlayerCharacterCorePR, TAttackZord, TSkillZord, TStatPR, TStatZord, TZord } from "./PlayerCharacterPR.js";
 
 const ZordSkills = {
 	Strength: [

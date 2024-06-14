@@ -1,7 +1,5 @@
-import { SageDate } from "../SageDate";
-import {
-	Days, DayType, Months, MonthType, TDayType, TMonthType
-} from "./cal";
+import { SageDate } from "../SageDate.js";
+import { Days, DayType, Months, MonthType, type TDayType, type TMonthType } from "./cal.js";
 
 export class SDate extends SageDate<SDate, DayType, TDayType, MonthType, TMonthType> {
 

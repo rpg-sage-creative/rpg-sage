@@ -1,6 +1,6 @@
 import { warn } from "@rsc-utils/core-utils";
-import { DiscordMaxValues } from "@rsc-utils/discord-utils";
-import { MessageEmbed, type ColorResolvable } from "discord.js";
+import { DiscordMaxValues, EmbedBuilder } from "@rsc-utils/discord-utils";
+import { type ColorResolvable } from "discord.js";
 
 type Options = {
 	title?: string | null;
@@ -9,8 +9,8 @@ type Options = {
 };
 
 /** Creates a new MessageEmbed, setting the title, description, and color if given. */
-export function createMessageEmbed({ title, description, color }: Options = { }): MessageEmbed {
-	const embed = new MessageEmbed();
+export function createMessageEmbed({ title, description, color }: Options = { }): EmbedBuilder {
+	const embed = new EmbedBuilder();
 
 	if (title) {
 		if (title.length > DiscordMaxValues.embed.titleLength) {
