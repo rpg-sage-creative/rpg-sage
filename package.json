@@ -44,18 +44,16 @@
 	],
 	"devDependencies": {
 		"@types/follow-redirects": "^1.14.1",
-		"@types/node": "^18.18.7"
+		"@types/node": "^18.19.34"
 	},
 	"dependencies": {
 		"@discordjs/rest": "^1.6.0",
 		"@napi-rs/canvas": "^0.1.35",
-		"discord-api-types": "^0.27.3",
-		"discord.js": "^13.17.1",
+		"discord.js": "^14.15.3",
 		"emoji-regex": "^10.3.0",
 		"follow-redirects": "^1.15.4",
 		"image-size": "^1.0.2",
 		"pdf2json": "^2.0.2",
-		"verbose": "^0.2.3",
 		"xregexp": "^5.1.1"
 	},
 	"scripts": {

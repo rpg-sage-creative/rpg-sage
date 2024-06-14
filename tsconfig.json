@@ -18,48 +18,38 @@
 	],
 	"references": [
 		{ "path": "./packages/utils/core-utils" },
-		{ "path": "./packages/utils/number-utils" },
 
 		// core-utils
 		{ "path": "./packages/utils/array-utils" },
 		{ "path": "./packages/utils/cache-utils" },
+		{ "path": "./packages/utils/date-utils" },
+		{ "path": "./packages/utils/dice-utils" },
 		{ "path": "./packages/utils/language-utils" },
+		{ "path": "./packages/utils/number-utils" },
+		{ "path": "./packages/utils/progress-utils" },
+		{ "path": "./packages/utils/render-utils" },
 		{ "path": "./packages/utils/string-utils" },
 
-		// console-utils, type-utils
-		{ "path": "./packages/utils/progress-utils" },
-
-		// number-utils
-		{ "path": "./packages/utils/temperature-utils" },
-
-		// number-utils, type-utils
-		{ "path": "./packages/utils/color-utils" },
-
-		// cache-utils, console-utils, snowflake-utils, type-utils, uuid-utils
-		{ "path": "./packages/utils/class-utils" },
-
-		// class-utils, type-utils
-		{ "path": "./packages/utils/character-utils" },
-
-		// enum-utils, type-utils
-		{ "path": "./packages/utils/date-utils" },
-
-		// array-utils, random-utils, string-utils, type-utils
-		{ "path": "./packages/utils/dice-utils" },
-
-		// console-utils, snowflake-utils, string-utils, type-utils
-		{ "path": "./packages/utils/discord-utils" },
-
-		// console-utils, json-utils
+		// progress-utils
 		{ "path": "./packages/utils/io-utils" },
 
-		// array-utils, console-utils, type-utils
-		{ "path": "./packages/utils/render-utils" },
+		// number-utils
+		{ "path": "./packages/utils/color-utils" },
+		{ "path": "./packages/utils/temperature-utils" },
 
-		// array-utils, language-utils, string-utils, type-utils
+		// cache-utils
+		{ "path": "./packages/utils/class-utils" },
+
+		// class-utils
+		{ "path": "./packages/utils/character-utils" },
+
+		// string-utils
+		{ "path": "./packages/utils/discord-utils" },
+
+		// array-utils, language-utils, string-utils
 		{ "path": "./packages/utils/search-utils" },
 
-		// array-utils, color-utils, console-utils, string-utils, type-utils, uuid-utils
+		// array-utils, color-utils, string-utils
 		{ "path": "./packages/utils/args-utils" },
 
 		{ "path": "./packages/sage/types" },
