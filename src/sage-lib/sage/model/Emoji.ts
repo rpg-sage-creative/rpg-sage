@@ -57,7 +57,7 @@ export class Emoji {
 	}
 
 	public set(emoji: IEmoji): boolean {
-		if (!emoji?.replacement || !emoji?.type) {
+		if (!emoji?.replacement || !emoji?.type || !emoji.matches?.length) {
 			return false;
 		}
 
