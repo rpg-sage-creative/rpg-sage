@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.6.10",
-"branch":"v1.6.10-patch",
-"commit":"433f348ff7bd97ec334b2fa899348551bf3b2976",
-"commitSubject":"fix package ver",
-"commitTs":1717543253000,
-"commitDate":"2024-06-04-1620",
-"buildTs":1717543265000,
-"buildDate":"2024-06-04-1621",
+"version":"1.6.11",
+"branch":"main",
+"commit":"e97f35616372c9b40d616ad10ad8367616c557ac",
+"commitSubject":"Merge pull request #92 from rpg-sage-creative/emoji-fix",
+"commitTs":1718663563000,
+"commitDate":"2024-06-17-1532",
+"buildTs":1718663599000,
+"buildDate":"2024-06-17-1533",
 "author":"Randal"
 }
