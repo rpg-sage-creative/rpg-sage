@@ -56,18 +56,19 @@ export class Emoji {
 		return this.findEmoji(type)?.replacement ?? null;
 	}
 
-	public set(emojiAndType: TEmojiAndType): boolean {
-		if (!emojiAndType?.replacement || !emojiAndType?.type) {
+	public set(emoji: IEmoji): boolean {
+		if (!emoji?.replacement || !emoji?.type) {
 			return false;
 		}
 
-		let found = this.findEmoji(emojiAndType.type);
+		let found = this.findEmoji(emoji.type);
 		if (!found) {
-			found = { type: emojiAndType.type, matches: [], replacement: undefined! };
+			found = { ...emoji };
 			this.emoji.push(found);
 		}
 
-		found.replacement = emojiAndType.replacement;
+		found.matches = emoji.matches;
+		found.replacement = emoji.replacement;
 
 		return true;
 	}
