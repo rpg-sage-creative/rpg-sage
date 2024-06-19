@@ -240,7 +240,6 @@ export type TPathbuilderCharacter = CharacterBaseCore<"PathbuilderCharacter"> & 
 	ancestry: string;
 	heritage: string;
 	background: string;
-	alignment: string;
 	gender: string;
 	age: string;
 	deity: string;
@@ -882,7 +881,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		push(`<b><u>${this.toHtmlName()}</u></b>`);
 
 		if (includes(["All", "Traits"])) {
-			push(`${bracketTraits(this.core.alignment, PathbuilderCharacterSizeType[this.core.size], this.core.ancestry, this.core.heritage)}`);
+			push(`${bracketTraits(PathbuilderCharacterSizeType[this.core.size], this.core.ancestry, this.core.heritage)}`);
 		}
 
 		if (includes(["All", "Perception"])) {
