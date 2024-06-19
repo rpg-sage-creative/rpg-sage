@@ -97,6 +97,13 @@ export class User extends HasDidCore<UserCore> {
 	public isSuperAdmin: boolean;
 	public isSuperUser: boolean;
 
+	public findCharacterOrCompanion(name: string): GameCharacter | undefined {
+		return this.playerCharacters.findByName(name)
+			?? this.playerCharacters.findCompanionByName(name)
+			?? this.nonPlayerCharacters.findByName(name)
+			?? this.nonPlayerCharacters.findCompanionByName(name);
+	}
+
 	public getAutoCharacterForChannel(...channelDids: Optional<Snowflake>[]): GameCharacter | undefined {
 		for (const channelDid of channelDids) {
 			if (channelDid) {
