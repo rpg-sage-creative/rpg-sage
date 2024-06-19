@@ -1,4 +1,4 @@
-import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannelType } from "@rsc-sage/types";
+import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, SageChannelType } from "@rsc-sage/types";
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
 import { debug } from "@rsc-utils/console-utils";
 import type { DInteraction, DRepliableInteraction, DTextChannel, DiscordKey } from "@rsc-utils/discord-utils";
@@ -381,6 +381,10 @@ export abstract class SageCommand<
 
 	public get diceSecretMethodType(): DiceSecretMethodType {
 		return this.cache.get("diceSecretMethodType", () => this.gameChannel?.diceSecretMethodType ?? this.game?.diceSecretMethodType ?? this.serverChannel?.diceSecretMethodType ?? this.server?.diceSecretMethodType ?? 0);
+	}
+
+	public get diceSortType(): DiceSortType {
+		return this.cache.get("diceSortType", () => this.gameChannel?.diceSortType ?? this.game?.diceSortType ?? this.serverChannel?.diceSortType ?? this.server?.diceSortType ?? 0);
 	}
 
 	//#endregion

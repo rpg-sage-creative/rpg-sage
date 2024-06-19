@@ -27,8 +27,8 @@ function createGame(sageCommand: SageCommand, gameOptions: Partial<GameOptions>,
 
 function getGameOptions(sageCommand: SageCommand): GameOptions {
 	// get default gameOptions from server
-	const { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType, gmCharacterName } = sageCommand.server;
-	const gameOptions = { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType, gmCharacterName } as GameOptions;
+	const { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, diceSortType, gameSystemType, gmCharacterName } = sageCommand.server;
+	const gameOptions = { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, diceSortType, gameSystemType, gmCharacterName } as GameOptions;
 
 	// get gameOptions from args applied to server defaults
 	const gameOptionArgs = sageCommand.args.getGameOptions() ?? { };

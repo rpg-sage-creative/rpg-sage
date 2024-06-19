@@ -1,5 +1,5 @@
 import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, SageChannel, ServerOptions } from "@rsc-sage/types";
-import { parseGameSystem, updateServer } from "@rsc-sage/types";
+import { DiceSortType, parseGameSystem, updateServer } from "@rsc-sage/types";
 import { warn } from "@rsc-utils/console-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import { getHomeServerId } from "@rsc-utils/env-utils";
@@ -51,6 +51,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	public get diceOutputType(): DiceOutputType | undefined { return this.core.diceOutputType; }
 	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
+	public get diceSortType(): DiceSortType | undefined { return this.core.diceSortType; }
 	private _gameSystem?: GameSystem | null;
 	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
 	public get gameSystemType(): GameSystemType | undefined { return this.core.gameSystemType; }

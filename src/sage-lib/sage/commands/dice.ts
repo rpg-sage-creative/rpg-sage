@@ -129,7 +129,8 @@ async function parseMatch(sageMessage: TInteraction, match: string, overrides?: 
 	const dice = parseDiscordDice(sageMessage, `[${noBraces}]`, overrides);
 	if (dice) {
 		// debug("dice", match);
-		return dice.roll().toStrings(sageMessage.diceOutputType);
+		const diceSort = sageMessage.diceSortType === 2 ? "noSort" : sageMessage.diceSortType === 1 ? "sort" : undefined; // NOSONAR
+		return dice.roll().toStrings(sageMessage.diceOutputType, diceSort);
 	}
 	if (isMath(match)) {
 		// verbose("math", match);

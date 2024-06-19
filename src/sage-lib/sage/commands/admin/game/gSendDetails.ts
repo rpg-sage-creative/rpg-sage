@@ -1,4 +1,4 @@
-import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/types";
+import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType } from "@rsc-sage/types";
 import { getDateStrings } from "@rsc-utils/date-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { getRollemId, getTupperBoxId } from "@rsc-utils/env-utils";
@@ -140,6 +140,11 @@ function gameDetailsAppendDice(renderableContent: RenderableContent, game: Game)
 	const diceSecretMethodType: keyof typeof DiceSecretMethodType | undefined = <keyof typeof DiceSecretMethodType>DiceSecretMethodType[game.diceSecretMethodType!];
 	const inheritedDiceSecretMethodType = DiceSecretMethodType[server.diceSecretMethodType ?? DiceSecretMethodType.Ignore];
 	renderableContent.append(`[spacer]<b>Secret Checks</b> ${diceSecretMethodType ?? `<i>inherited (${inheritedDiceSecretMethodType})</i>`}`);
+
+	const diceSortType: keyof typeof DiceSortType | undefined = <keyof typeof DiceSortType>DiceSortType[game.diceSortType!];
+	const inheritedDiceSortType = DiceSortType[server.diceSortType ?? DiceSortType.None];
+	renderableContent.append(`[spacer]<b>Sort Method</b> ${diceSortType ?? `<i>inherited (${inheritedDiceSortType})</i>`}`);
+
 }
 
 async function showGameRenderServer(renderableContent: RenderableContent, sageCommand: SageCommand, game: Game): Promise<void> {

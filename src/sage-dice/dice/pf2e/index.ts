@@ -257,7 +257,7 @@ function _hideDamageRolls(testDiceResult: TestDiceResult, attackGrade: DieRollGr
 	return	!attackSuccess || _hideAttackRoll(testDiceResult, attackGrade);
 }
 
-function diceGroupRollToString(diceGroupRoll: DiceGroupRoll, outputType: DiceOutputType, joiner = "\n"): string {
+function diceGroupRollToString(diceGroupRoll: DiceGroupRoll, outputType: DiceOutputType, joiner = "\n", diceSort?: "noSort" | "sort"): string {
 	const rollOutputs: string[] = [],
 		attackRoll = diceGroupRoll.attackRoll,
 		attackGrade = attackRoll?.grade ?? DieRollGrade.Unknown,
@@ -265,15 +265,15 @@ function diceGroupRollToString(diceGroupRoll: DiceGroupRoll, outputType: DiceOut
 	if (testDiceResult !== TestDiceResult.Failure) {
 		if (attackRoll) {
 			const hideAttackRoll = _hideAttackRoll(testDiceResult, attackGrade);
-			rollOutputs.push(attackRoll.toString(outputType, hideAttackRoll));
+			rollOutputs.push(attackRoll.toString(outputType, hideAttackRoll, diceSort));
 		}
 		const damageRoll = diceGroupRoll.damageRoll;
 		const hideDamageRolls = _hideDamageRolls(testDiceResult, attackGrade);
 		if (attackRoll && damageRoll && (!attackGrade || !hideDamageRolls)) {
 			const emoji = attackGrade ? `[damage] ` : ``;
-			rollOutputs.push(`${emoji}${damageRoll.toString(outputType)}`);
+			rollOutputs.push(`${emoji}${damageRoll.toString(outputType, diceSort)}`);
 		}
-		diceGroupRoll.otherRolls.forEach(diceRoll => rollOutputs.push(diceRoll.toString(outputType)));
+		diceGroupRoll.otherRolls.forEach(diceRoll => rollOutputs.push(diceRoll.toString(outputType, diceSort)));
 	}
 	return rollOutputs.join(joiner);
 }
@@ -789,13 +789,21 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 	}
 	//#endregion
 
-	public toString(outputType?: DiceOutputType, inline = false): string {
+	public toString(): string;
+	public toString(outputType: DiceOutputType): string;
+	public toString(outputType: DiceOutputType, inline: boolean): string;
+	public toString(outputType: DiceOutputType, noSort: "noSort" | "sort"): string;
+	public toString(...args: (DiceOutputType | boolean | "noSort" | "sort")[]): string {
+		const outputType = args.find(arg => typeof(arg) === "number") as DiceOutputType;
+		const inline = args.find(arg => typeof(arg) === "boolean");
+		const noSort = args.find(arg => arg === "noSort" || arg === "sort") as "noSort" | "sort";
+
 		let _outputType = this.dice.diceOutputType ?? outputType ?? DiceOutputType.M;
 		if (inline) {
 			_outputType = <DiceOutputType>Math.min(_outputType, DiceOutputType.M);
 		}
 		const joiner = _outputType < DiceOutputType.L ? "; " : "\n";
-		return diceGroupRollToString(this, _outputType, joiner);
+		return diceGroupRollToString(this, _outputType, joiner, noSort);
 	}
 
 	public static create(diceGroup: DiceGroup): DiceGroupRoll {

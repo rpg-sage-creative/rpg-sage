@@ -1,4 +1,4 @@
-import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, type GameOptions, GameSystemType, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
+import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, type GameOptions, GameSystemType, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
 import { Color } from "@rsc-utils/color-utils";
 import { parseIds } from "@rsc-utils/discord-utils";
 import { isEmpty } from "@rsc-utils/json-utils";
@@ -314,6 +314,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 			diceOutputType: this.getEnum(DiceOutputType, "diceOutput"),
 			dicePostType: this.getEnum(DicePostType, "dicePost"),
 			diceSecretMethodType: this.getEnum(DiceSecretMethodType, "diceSecret"),
+			diceSortType: this.getEnum(DiceSortType, "diceSort"),
 			sendDiceTo: this.getChannelId("diceTo"),
 		};
 		if (isEmpty(diceOptions)) {
