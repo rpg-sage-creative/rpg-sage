@@ -13,6 +13,7 @@ import type { DialogType } from "../../repo/base/IdRepository.js";
 import { parseDiceMatches, sendDice } from "../dice.js";
 import type { ChatOptions } from "./chat/ChatOptions.js";
 import { sendDialogRenderable } from "./sendDialogRenderable.js";
+import { DialogDiceBehaviorType } from "../../model/User.js";
 
 type DialogPostData = {
 	authorName?: string;
@@ -53,8 +54,9 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 
 	//#region dice lists
 	const diceMatches = await parseDiceMatches(sageMessage, content);
-	const inlineDiceMatches = diceMatches.filter(match => match.inline);
-	const otherDiceMatches = diceMatches.filter(match => !match.inline);
+	const reverseInline = sageMessage.sageUser.dialogDiceBehaviorType === DialogDiceBehaviorType.Inline;
+	const inlineDiceMatches = diceMatches.filter(dice => reverseInline ? !dice.inline : dice.inline);
+	const otherDiceMatches = diceMatches.filter(dice => reverseInline ? dice.inline : !dice.inline);
 	//#endregion
 
 	//#region inline dice

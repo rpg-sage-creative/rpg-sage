@@ -22,16 +22,19 @@ export type TMacro = {
 export enum PatronTierType { None = 0, Friend = 1, Informant = 2, Trusted = 3 }
 export const PatronTierSnowflakes: Snowflake[] = [undefined!, "730147338529669220", "730147486446125057", "730147633867259904"];
 
+export enum DialogDiceBehaviorType { Default = 0, Inline = 1 };
+
 export interface UserCore extends DidCore<"User"> {
 	aliases?: TAlias[];
 	defaultDialogType?: DialogType;
 	defaultSagePostType?: DialogType;
+	dialogDiceBehaviorType?: DialogDiceBehaviorType;
 	macros?: TMacro[];
 	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
 	notes?: TNote[];
 	patronTier?: PatronTierType;
 	playerCharacters?: (GameCharacter | GameCharacterCore)[];
-	}
+}
 
 //#region Core Updates
 
@@ -75,6 +78,7 @@ export class User extends HasDidCore<UserCore> {
 	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
 	/** @deprecated */
 	public get defaultDialogType(): DialogType | undefined { return this.dialogPostType; }
+	public get dialogDiceBehaviorType() { return this.core.dialogDiceBehaviorType; }
 	public get dialogPostType(): DialogType | undefined { return this.core.defaultDialogType; }
 	/** @deprecated */
 	public get defaultSagePostType(): DialogType | undefined { return this.sagePostType; }
@@ -105,8 +109,8 @@ export class User extends HasDidCore<UserCore> {
 		return undefined;
 	}
 
-	public async update({ dialogPostType, sagePostType }: { dialogPostType?: Optional<DialogType>, sagePostType?: Optional<DialogType> }): Promise<boolean> {
-		const changed = applyChanges(this.core, { defaultDialogType:dialogPostType, defaultSagePostType:sagePostType });
+	public async update({ dialogDiceBehaviorType, dialogPostType, sagePostType }: { dialogDiceBehaviorType?: Optional<DialogDiceBehaviorType>; dialogPostType?: Optional<DialogType>, sagePostType?: Optional<DialogType> }): Promise<boolean> {
+		const changed = applyChanges(this.core, { dialogDiceBehaviorType, defaultDialogType:dialogPostType, defaultSagePostType:sagePostType });
 		return changed ? this.save() : false;
 	}
 

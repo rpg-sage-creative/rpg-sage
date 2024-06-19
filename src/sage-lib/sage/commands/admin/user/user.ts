@@ -3,7 +3,7 @@ import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import type { User as SUser } from "../../../model/User.js";
+import { DialogDiceBehaviorType, type User as SUser } from "../../../model/User.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 import { renderCount } from "../../helpers/renderCount.js";
 
@@ -33,7 +33,7 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("User Update", "You cannot manage your settings here.");
 	}
 
-	const { validKeys, hasValidKeys, hasInvalidKeys } = sageMessage.args.validateKeys(["dialogPostType", "sagePostType", "orgPlayId"]);
+	const { validKeys, hasValidKeys, hasInvalidKeys } = sageMessage.args.validateKeys(["dialogDiceBehavior", "dialogPostType", "sagePostType", "orgPlayId"]);
 	if (!hasValidKeys || hasInvalidKeys) {
 		const details = [
 			"The command for updating your User settings is:",
@@ -60,10 +60,11 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		}
 	}
 
-	if (validKeys.includes("dialogPostType") || validKeys.includes("sagePostType")) {
+	if (validKeys.includes("dialogDiceBehavior") || validKeys.includes("dialogPostType") || validKeys.includes("sagePostType")) {
+		const dialogDiceBehaviorType = sageMessage.args.getEnum(DialogDiceBehaviorType, "dialogDiceBehavior");
 		const dialogPostType = sageMessage.args.getEnum(DialogPostType, "dialogPostType");
 		const sagePostType = sageMessage.args.getEnum(DialogPostType, "sagePostType");
-		ptUpdated = await sageMessage.sageUser.update({ dialogPostType, sagePostType });
+		ptUpdated = await sageMessage.sageUser.update({ dialogDiceBehaviorType, dialogPostType, sagePostType });
 	}
 
 	if (opUpdated || ptUpdated) {
@@ -112,6 +113,9 @@ async function userDetails(sageMessage: SageCommand): Promise<void> {
 
 		renderableContent.append();
 		renderableContent.append(`<b>RPG Sage Id</b> ${user.id}`);
+
+		const dialogDiceBehaviorType = DialogDiceBehaviorType[user.dialogDiceBehaviorType!] ?? `<i>unset (Normal)</i>`;
+		renderableContent.append(`<b>Preferred Dialog Dice Behavior</b> ${dialogDiceBehaviorType}`);
 
 		const dialogPostType = DialogPostType[user.dialogPostType!] ?? `<i>unset (Embed)</i>`;
 		renderableContent.append(`<b>Preferred Dialog Type</b> ${dialogPostType}`);
