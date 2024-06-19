@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.6.11",
+"version":"1.6.12",
 "branch":"main",
-"commit":"e97f35616372c9b40d616ad10ad8367616c557ac",
-"commitSubject":"Merge pull request #92 from rpg-sage-creative/emoji-fix",
-"commitTs":1718663563000,
-"commitDate":"2024-06-17-1532",
-"buildTs":1718663599000,
-"buildDate":"2024-06-17-1533",
+"commit":"3d2c3182546d312d0695eeff44207a4bdf6581b1",
+"commitSubject":"implement default diceSort setting for channel/game/server",
+"commitTs":1718840402000,
+"commitDate":"2024-06-19-1640",
+"buildTs":1718841115000,
+"buildDate":"2024-06-19-1651",
 "author":"Randal"
 }
