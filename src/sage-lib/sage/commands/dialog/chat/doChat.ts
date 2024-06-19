@@ -6,6 +6,7 @@ import type { DialogContent } from "../DialogContent";
 import { sendDialogPost } from "../sendDialogPost";
 import type { ChatOptions } from "./ChatOptions";
 import { toUserMention } from "@rsc-utils/discord-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 
 type ChatContent = {
 	character?: GameCharacter | null;
@@ -13,18 +14,24 @@ type ChatContent = {
 	dialogContent: DialogContent;
 };
 
-function replaceCharacterMention(mention: string, sageMessage: SageMessage): string {
+function replaceCharacterMention(mention: string, sageMessage: SageMessage, gmUserId: Optional<string>): string {
 	const sliced = mention.slice(1);
 	let charName: string | undefined;
 	let userMention: string | undefined;
-	if (sageMessage.game) {
-		const charOrShell = sageMessage.game.findCharacterOrCompanion(sliced);
+	const { game } = sageMessage;
+	if (game) {
+		const charOrShell = game.findCharacterOrCompanion(sliced);
 		if (charOrShell) {
 			charName = charOrShell.name;
-			if ("game" in charOrShell) {
-				userMention = toUserMention(charOrShell.game?.userDid) ?? "";
-			}else {
-				userMention = toUserMention(charOrShell.userDid) ?? "";
+			const char = "game" in charOrShell ? charOrShell.game : charOrShell;
+			if (char) {
+				userMention = toUserMention(char.userDid) ?? "";
+				if (!userMention && gmUserId) {
+					const npc = game.nonPlayerCharacters.findById(char.id);
+					if (npc) {
+						userMention = toUserMention(gmUserId) ?? "";
+					}
+				}
 			}
 		}
 	}else {
@@ -35,7 +42,7 @@ function replaceCharacterMention(mention: string, sageMessage: SageMessage): str
 		}
 	}
 	if (charName && userMention) {
-		return `${userMention} (${charName})`;
+		return `${charName} (${userMention})`;
 	}
 	return mention;
 }
@@ -45,8 +52,15 @@ export async function doChat(sageMessage: SageMessage, { character, colorType, d
 		let { content, displayName, imageUrl, embedColor, postType } = dialogContent;
 
 		// do some content manipulation
-		content = content.replace(/{name}/gi, displayName ?? character.name);
-		content = content.replace(/@\w+/g, mention => replaceCharacterMention(mention, sageMessage));
+		const nameRegex = /{name}/gi;
+		if (nameRegex.test(content)) {
+			content = content.replace(nameRegex, displayName ?? character.name);
+		}
+		const aliasRegex = /@\w+/g;
+		if (aliasRegex.test(content)) {
+			const gmUserId = await sageMessage.game?.gmGuildMember();
+			content = content.replace(aliasRegex, mention => replaceCharacterMention(mention, sageMessage, gmUserId?.id));
+		}
 
 		await sendDialogPost(sageMessage, {
 			authorName: displayName, // defaults to character.name
