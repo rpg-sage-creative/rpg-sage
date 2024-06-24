@@ -62,7 +62,8 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		}
 
 		return <Promise<TArgIndexRet<Snowflake> | undefined>>this.argsManager.asyncFindArgIndexRet(async arg => {
-			const did = isNonNilSnowflake(arg) ? arg : parseId(arg, "channel");
+			const trimmed = arg?.trim();
+			const did = isNonNilSnowflake(trimmed) ? trimmed : parseId(trimmed, "channel");
 			if (did) {
 				const channel = await this.sageCommand.discord.fetchChannel(did);
 				return channel?.id;
@@ -202,7 +203,8 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		}
 
 		const roleDid = await this.argsManager.asyncFindArgAndRemoveAndMap<Snowflake | undefined>(async arg => {
-			const did = isNonNilSnowflake(arg) ? arg : parseId(arg, "role");
+			const trimmed = arg?.trim();
+			const did = isNonNilSnowflake(trimmed) ? trimmed : parseId(trimmed, "role");
 			if (did) {
 				const role = await this.sageCommand.discord.fetchGuildRole(did);
 				return role?.id;
@@ -249,7 +251,8 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return userDid ?? null;
 
 		async function argToSnowflake(arg: string): Promise<Snowflake | undefined> {
-			const userId = parseId(arg, "user");
+			const trimmed = arg?.trim();
+			const userId = isNonNilSnowflake(trimmed) ? trimmed : parseId(trimmed, "user");
 			if (userId) return userId;
 
 			if (isNonNilSnowflake(arg)) {
@@ -383,7 +386,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		if (!keyValueArg.hasKey) return undefined;
 		if (keyValueArg.hasUnset) return null;
 		if (keyValueArg.hasValue) {
-			const roleId = parseId(keyValueArg.value, "role");
+			const roleId = parseId(keyValueArg.value.trim(), "role");
 			if (roleId) {
 				return this.sageCommand.message.mentions.roles.get(roleId) ?? null;
 			}
@@ -416,7 +419,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		if (!keyValueArg.hasKey) return undefined;
 		if (keyValueArg.hasUnset) return null;
 		if (keyValueArg.hasValue) {
-			const userId = parseId(keyValueArg.value, "user");
+			const userId = parseId(keyValueArg.value.trim(), "user");
 			if (userId) {
 				return this.sageCommand.message.mentions.users.get(userId) ?? null;
 			}
