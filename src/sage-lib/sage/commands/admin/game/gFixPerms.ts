@@ -7,8 +7,12 @@ import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
+const DISABLE_TIL_FURTHER_NOTICE = true;
+
 /** Fixes Sage's perms for the game's channels. Returns true if a change was made. */
 export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise<boolean> {
+	if (DISABLE_TIL_FURTHER_NOTICE) return false; // NOSONAR
+
 	const game = _game ?? sageCommand.game;
 	if (!game) {
 		return false;
