@@ -1,5 +1,5 @@
 import { initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
-import { activate } from "./sage-lib";
+import { activate } from "./sage-lib/index.js";
 
 initializeConsoleUtilsByEnvironment();
 activate();

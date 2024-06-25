@@ -1,5 +1,4 @@
-import { error, info } from "@rsc-utils/core-utils";
-import { getCodeName, getDataRoot, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
+import { error, getCodeName, getDataRoot, info, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
 import { listFilesSync, readJsonFileSync, writeFileSync } from "@rsc-utils/io-utils";
 import { buildCommands } from "./app-commands/builders/buildCommands.js";
 import { countCharacters } from "./app-commands/builders/countCharacters.js";
