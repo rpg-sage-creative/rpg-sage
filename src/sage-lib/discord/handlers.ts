@@ -1,6 +1,6 @@
 import { hasSageId, isSageId, isTestBotId } from "@rsc-sage/env";
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { error, isDefined, isNullOrUndefined, verbose, warn } from "@rsc-utils/core-utils";
+import { error, isNullOrUndefined, verbose, warn } from "@rsc-utils/core-utils";
 import { toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { GatewayIntentBits, IntentsBitField, PermissionFlagsBits, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
@@ -15,8 +15,8 @@ import type { TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteract
  * We only call a handler if the tester returns a value other than: undefined, null, false
  * @param object
  */
-function isActionableObject(object: any): boolean {
-	return isDefined(object) && object !== false;
+function isActionableObject<T>(object: T | null | undefined | false): object is T {
+	return object !== null && object !== undefined && object !== false;
 }
 
 /**

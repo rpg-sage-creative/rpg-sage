@@ -1,6 +1,6 @@
 import type { DialogPostType } from "@rsc-sage/types";
-import type { Optional } from "@rsc-utils/core-utils";
-import { NIL_SNOWFLAKE, isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { Color, type HexColorString } from "@rsc-utils/color-utils";
+import { NIL_SNOWFLAKE, isNonNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
@@ -35,8 +35,8 @@ export interface GameCharacterCore {
 	avatarUrl?: string;
 	/** The character's companion characters */
 	companions?: (GameCharacter | GameCharacterCore)[];
-	/** Discord compatible color: 0x001122 */
-	embedColor?: string;
+	/** Discord compatible color: #001122 */
+	embedColor?: HexColorString;
 	/** Unique ID of this character */
 	id: Snowflake;
 	/** A list of the character's last messages by channel. */
@@ -85,8 +85,9 @@ function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage
 
 //#region Core Updates
 
-interface IOldGameCharacterCore extends Omit<GameCharacterCore, "autoChannels"> {
+interface IOldGameCharacterCore extends Omit<GameCharacterCore, "autoChannels" | "embedColor"> {
 	autoChannels?: (Snowflake | AutoChannelData)[];
+	embedColor?: string;
 	iconUrl?: string;
 }
 
@@ -99,6 +100,11 @@ function updateCore(core: IOldGameCharacterCore): GameCharacterCore {
 			}
 			return data;
 		});
+	}
+	//#endregion
+	//#region update embedColor
+	if (core.embedColor) {
+		core.embedColor = Color.from(core.embedColor)?.hex;
 	}
 	//#endregion
 	//#region move .iconUrl to .avatarUrl
@@ -148,9 +154,9 @@ export class GameCharacter implements IHasSave {
 	/** The character's companion characters. */
 	public get companions(): CharacterManager { return this.core.companions as CharacterManager; }
 
-	/** Discord compatible color: 0x001122 */
-	public get embedColor(): string | undefined { return this.core.embedColor; }
-	public set embedColor(embedColor: string | undefined) { this.core.embedColor = embedColor; }
+	/** Discord compatible color: #001122 */
+	public get embedColor(): HexColorString | undefined { return this.core.embedColor; }
+	public set embedColor(embedColor: HexColorString | undefined) { this.core.embedColor = embedColor; }
 
 	/** Unique ID of this character */
 	public get id(): Snowflake { return this.core.id; }

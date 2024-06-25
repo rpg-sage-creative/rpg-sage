@@ -3,7 +3,7 @@ import { sortPrimitive, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
 import { applyChanges, isDefined, warn, type Args, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
-import type { GuildChannel, GuildMember, Message, Role } from "discord.js";
+import type { GuildChannel, GuildMember, HexColorString, Message, Role } from "discord.js";
 import type { EncounterCore } from "../commands/trackers/encounter/Encounter.js";
 import { EncounterManager } from "../commands/trackers/encounter/EncounterManager.js";
 import type { PartyCore } from "../commands/trackers/party/Party.js";
@@ -667,13 +667,13 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		return this._colors;
 	}
 
-	public toDiscordColor(colorType: ColorType): string | null {
+	public toHexColorString(colorType: ColorType): HexColorString | undefined {
 		if (!this.core.colors.length) {
 			warn(`Colors Missing: Game (${this.name || this.id})`);
-			return this.server.toDiscordColor(colorType);
+			return this.server.toHexColorString(colorType);
 		}
-		return this.colors.toDiscordColor(colorType)
-			?? this.server.toDiscordColor(colorType);
+		return this.colors.toHexColorString(colorType)
+			?? this.server.toHexColorString(colorType);
 	}
 
 	// #endregion

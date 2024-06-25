@@ -5,6 +5,8 @@ function createSection(index = 0, title: string | null = null, content = <string
 	return { index, title:title, content, columns };
 }
 
+type HexColorString = `#${string}`;
+
 export class RenderableContent implements Renderable {
 	private _sections: RenderableContentSection[] = [];
 	private _appendSection(section: RenderableContentSection): RenderableContentSection {
@@ -14,7 +16,7 @@ export class RenderableContent implements Renderable {
 
 	public paragraphDelimiter = "\n";
 	public thumbnailUrl: string | undefined;
-	public color: string | undefined;
+	public color: HexColorString | undefined;
 
 	public constructor(public title?: string) { }
 
@@ -68,7 +70,7 @@ export class RenderableContent implements Renderable {
 	}
 
 	/** Sets the border color. */
-	public setColor(color: Optional<string>): void {
+	public setColor(color: Optional<HexColorString>): void {
 		this.color = color ?? undefined;
 	}
 

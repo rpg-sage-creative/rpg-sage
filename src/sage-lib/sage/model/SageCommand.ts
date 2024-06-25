@@ -3,7 +3,7 @@ import { Cache, HasCache } from "@rsc-utils/cache-utils";
 import { debug, isDefined, orNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { DInteraction, DRepliableInteraction, DiscordKey, EmbedBuilder } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
-import { ComponentType, InteractionType, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
+import { ComponentType, InteractionType, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
@@ -333,17 +333,17 @@ export abstract class SageCommand<
 	// public colors = this.game?.colors ?? this.server?.colors ?? this.bot.colors;
 
 	/** Gets the correct color by working up the "ladder" of color heirarchy. */
-	public toDiscordColor(colorType: Optional<ColorType>): string | null {
+	public toHexColorString(colorType: Optional<ColorType>): HexColorString | undefined {
 		if (!colorType) {
-			return null;
+			return undefined;
 		}
 		if (this.game) {
-			return this.game.toDiscordColor(colorType);
+			return this.game.toHexColorString(colorType);
 		}
 		if (this.server) {
-			return this.server.toDiscordColor(colorType);
+			return this.server.toHexColorString(colorType);
 		}
-		return this.bot.toDiscordColor(colorType);
+		return this.bot.toHexColorString(colorType);
 	}
 
 	// #endregion

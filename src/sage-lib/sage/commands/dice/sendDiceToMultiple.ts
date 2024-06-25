@@ -1,6 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
 import { toMessageUrl, type MessageChannel, type MessageTarget } from "@rsc-utils/discord-utils";
-import type { ColorResolvable } from "discord.js";
 import { sendTo } from "../../../discord/sendTo.js";
 import { ColorType } from "../../model/HasColorsCore.js";
 import type { SageCommand } from "../../model/SageCommand.js";
@@ -21,7 +20,7 @@ export async function sendDiceToMultiple(sageCommand: SageCommand, formattedOutp
 	let doGmMention = hasSecret && !!gmTargetChannel;
 	let doMention = !allSecret;
 
-	const splitOptions = { embedColor:sageCommand.toDiscordColor(ColorType.Dice) as ColorResolvable ?? undefined };
+	const splitOptions = { embedColor:sageCommand.toHexColorString(ColorType.Dice) ?? undefined };
 	for (const formattedOutput of formattedOutputs) {
 		// handle secret dice with a gm channel
 		if (formattedOutput.hasSecret && gmTargetChannel) {

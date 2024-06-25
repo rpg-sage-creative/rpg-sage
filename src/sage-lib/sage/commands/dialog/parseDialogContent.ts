@@ -5,11 +5,11 @@ import { getTypeOrAlias } from "./getTypeOrAlias";
 import { getDialogRegexPairs, type DialogRegexKey } from "./regex";
 
 /** Parses raw dialog input. */
-export function parseDialogContent(content: string): DialogContent | null {
+export function parseDialogContent(content: string): DialogContent | undefined {
 	// make sure we have a valid start
 	const typeOrAlias = getTypeOrAlias(content);
 	if (!typeOrAlias) {
-		return null;
+		return undefined;
 	}
 
 	const regexPairs = getDialogRegexPairs();
@@ -70,7 +70,7 @@ export function parseDialogContent(content: string): DialogContent | null {
 			}
 			case "embedColor": {
 				if (!dialogContent.embedColor) {
-					dialogContent.embedColor = "0x" + match.value;
+					dialogContent.embedColor = `#${match.value}`;
 				}else {
 					breakWhile = true;
 				}

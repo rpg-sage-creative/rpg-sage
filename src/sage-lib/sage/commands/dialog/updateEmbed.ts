@@ -9,6 +9,6 @@ export function updateEmbed(originalEmbed: Embed | undefined, imageUrl: Optional
 		updatedEmbed.setThumbnail(imageUrl);
 	}
 	// updatedEmbed.setThumbnail(imageUrl ?? originalEmbed?.thumbnail?.url ?? "");
-	// updatedEmbed.setColor(originalEmbed?.color as ColorResolvable);
+	// updatedEmbed.setColor(originalEmbed?.color);
 	return updatedEmbed;
 }

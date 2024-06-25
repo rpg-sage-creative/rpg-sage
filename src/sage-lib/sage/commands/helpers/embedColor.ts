@@ -10,7 +10,7 @@ export function embedColor(color: Color, ...labels: string[]) {
 		desc += ` ${labels.join(" ")}`;
 	}
 	return createMessageEmbed({
-		color: color.toDiscordColor(),
+		color: color.hex,
 		description: desc
 	});
 }

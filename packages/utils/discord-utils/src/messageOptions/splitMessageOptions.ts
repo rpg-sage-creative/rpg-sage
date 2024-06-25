@@ -1,11 +1,11 @@
+import type { Optional } from "@rsc-utils/core-utils";
 import { chunk, isNotBlank } from "@rsc-utils/string-utils";
-import { type APIEmbed, type ColorResolvable, type Embed, type MessageCreateOptions, type MessageEditOptions, resolveColor, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
-import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
+import { type APIEmbed, type Embed, type HexColorString, type MessageCreateOptions, type MessageEditOptions, resolveColor, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
 import { EmbedBuilder } from "../embed/EmbedBuilder.js";
 import { type EmbedResolvable } from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
-import type { Optional } from "@rsc-utils/core-utils";
+import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 
 type MessageOptions = MessageCreateOptions | MessageEditOptions | WebhookMessageCreateOptions | WebhookMessageEditOptions;
 type SplitMessageOptions<T extends MessageOptions> = T & { embedContent?:string; replyingTo?:string; };
@@ -18,7 +18,7 @@ export type SplitOptions = {
 	/** Convert all embeds to content? */
 	embedsToContent?: boolean;
 	/** Color of the embed */
-	embedColor?: ColorResolvable;
+	embedColor?: HexColorString;
 };
 
 type MsgEmbed = Embed | APIEmbed;
@@ -54,7 +54,7 @@ function embedsToContent(embeds?: Optional<MsgEmbed[]>): string | undefined {
 }
 
 /** Converts content into embeds. */
-function contentToEmbeds(content?: Optional<string>, colorResolvable?: ColorResolvable): EmbedBuilder[] | undefined {
+function contentToEmbeds(content?: Optional<string>, colorResolvable?: number | HexColorString): EmbedBuilder[] | undefined {
 	const trimmedContent = content?.trim();
 	if (trimmedContent?.length) {
 		const chunks = chunk(trimmedContent, DiscordMaxValues.embed.descriptionLength);
@@ -89,9 +89,9 @@ function mergeContent(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>)
 }
 
 /** Merges content into embeds */
-function mergeEmbeds(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>, color?: ColorResolvable): EmbedBuilder[] | undefined {
+function mergeEmbeds(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>, color?: HexColorString): EmbedBuilder[] | undefined {
 	// get content embeds
-	const contentEmbeds = contentToEmbeds(content, embeds?.[0].color as ColorResolvable ?? color);
+	const contentEmbeds = contentToEmbeds(content, embeds?.[0].color ?? color);
 
 	// get has flags
 	const hasContentEmbeds = !!contentEmbeds?.length;

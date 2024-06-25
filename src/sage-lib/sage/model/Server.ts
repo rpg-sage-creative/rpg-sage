@@ -3,7 +3,7 @@ import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, 
 import { parseGameSystem, updateServer } from "@rsc-sage/types";
 import { applyChanges, warn, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
-import type { Guild } from "discord.js";
+import type { Guild, HexColorString } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
 import { type DidCore, HasDidCore } from "../repo/base/DidRepository.js";
 import { Colors } from "./Colors.js";
@@ -341,13 +341,13 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 		return this._colors;
 	}
 
-	public toDiscordColor(colorType: ColorType): string | null {
+	public toHexColorString(colorType: ColorType): HexColorString | undefined {
 		if (!this.core.colors.length) {
 			warn(`Colors Missing: Server (${this.discord?.guild?.name ?? this.id})`);
-			return this.sageCache.bot.toDiscordColor(colorType);
+			return this.sageCache.bot.toHexColorString(colorType);
 		}
-		return this.colors.toDiscordColor(colorType)
-			?? this.sageCache.bot.toDiscordColor(colorType);
+		return this.colors.toHexColorString(colorType)
+			?? this.sageCache.bot.toHexColorString(colorType);
 	}
 
 	// #endregion

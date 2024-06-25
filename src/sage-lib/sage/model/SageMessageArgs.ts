@@ -92,7 +92,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			autoChannels: undefined,
 			avatarUrl: this.getUrl("avatar")!,
 			companions: undefined,
-			embedColor: this.getDiscordColor("color")!,
+			embedColor: this.getHexColorString("color")!,
 			id: undefined!,
 			tokenUrl: this.getUrl("token")!,
 			name: names.newName ?? names.name!,

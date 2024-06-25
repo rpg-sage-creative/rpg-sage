@@ -1,11 +1,8 @@
 import { RenderableContent } from "@rsc-utils/render-utils";
 import type { IHasColorsCore } from "../../model/HasColorsCore";
 import { ColorType } from "../../model/HasColorsCore";
+import { createRenderableContent } from "./createRenderableContent";
 
 export function createAdminRenderableContent(hasColors: IHasColorsCore, title?: string): RenderableContent {
-	const renderableContent = new RenderableContent(title);
-	renderableContent.setColor(hasColors.toDiscordColor(ColorType.AdminCommand));
-	return renderableContent;
+	return createRenderableContent(hasColors, ColorType.AdminCommand, title);
 }
-
-//#endregion

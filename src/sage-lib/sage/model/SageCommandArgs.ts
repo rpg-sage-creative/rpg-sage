@@ -1,5 +1,5 @@
 import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, type GameOptions, GameSystemType, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
-import { Color } from "@rsc-utils/color-utils";
+import { Color, type HexColorString } from "@rsc-utils/color-utils";
 import { type Args, type EnumLike, isDefined, isEmpty, isSnowflake, isUuid, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { type MessageChannel, parseIds } from "@rsc-utils/discord-utils";
 import type { Role, User } from "discord.js";
@@ -319,10 +319,10 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 		return diceOptions;
 	}
 
-	public getDiscordColor(key: string): string | null | undefined {
+	public getHexColorString(key: string): HexColorString | null | undefined {
 		const color = this.getColor(key);
 		if (color) {
-			return color.toDiscordColor() ?? null;
+			return color.hex ?? null;
 		}
 		return color;
 	}

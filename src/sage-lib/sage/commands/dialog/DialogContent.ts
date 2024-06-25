@@ -1,5 +1,6 @@
-import type { DialogType } from "../../repo/base/IdRepository";
-import type { TDialogType } from "./TDialogType";
+import type { HexColorString } from "@rsc-utils/color-utils";
+import type { DialogType } from "../../repo/base/IdRepository.js";
+import type { TDialogType } from "./TDialogType.js";
 
 export type DialogContent = {
 	/** preset dialog prefix */
@@ -23,7 +24,7 @@ export type DialogContent = {
 	imageUrl?: string;
 
 	/** color on the left of the embedded dialog box */
-	embedColor?: string;
+	embedColor?: HexColorString;
 
 	/** the dialog content */
 	content: string;

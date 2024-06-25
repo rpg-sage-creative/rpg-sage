@@ -164,16 +164,18 @@ export async function parseDiceMatches(sageMessage: TInteraction, content: strin
 
 //#region listener / handler
 
-async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TDiceOutput[]> | null> {
-	if (!sageMessage.allowDice) return null;
+async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TDiceOutput[]> | undefined> {
+	if (!sageMessage.allowDice) {
+		return undefined;
+	}
 	if (sageMessage.slicedContent.match(/^!*\s*((add|set)[ -]?macro|macro[ -]?(add|set))/i)) {
-		return null;
+		return undefined;
 	}
 	if (sageMessage.slicedContent.match(/^!*\s*((add|set)[ -]?alias|alias[ -]?(add|set))/i)) {
-		return null;
+		return undefined;
 	}
 	if (sageMessage.game && !(sageMessage.isGameMaster || sageMessage.isPlayer)) {
-		return null;
+		return undefined;
 	}
 
 	const matches = await parseDiceMatches(sageMessage, sageMessage.slicedContent);
@@ -181,7 +183,7 @@ async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommand
 		const output = matches.map(m => m.output).flat();
 		return { command: "unified-dice", data: output };
 	}
-	return null;
+	return undefined;
 }
 
 type TSendDiceResults = {

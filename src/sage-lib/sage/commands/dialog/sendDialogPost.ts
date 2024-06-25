@@ -1,3 +1,4 @@
+import type { HexColorString } from "@rsc-utils/color-utils";
 import { errorReturnEmptyArray, errorReturnNull, warnReturnNull, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import { getBuffer } from "@rsc-utils/io-utils";
@@ -19,7 +20,7 @@ type DialogPostData = {
 	character: GameCharacter;
 	colorType?: ColorType;
 	content: string;
-	embedColor?: string;
+	embedColor?: HexColorString;
 	imageUrl?: string;
 	postType?: DialogType;
 	title?: string;
@@ -46,7 +47,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 		renderableContent.setTitle(title);
 	}
 
-	const color = postData.embedColor ?? character.embedColor ?? sageMessage.toDiscordColor(postData.colorType);
+	const color = postData.embedColor ?? character.embedColor ?? sageMessage.toHexColorString(postData.colorType);
 	renderableContent.setColor(color);
 
 	let content = postData.content;
