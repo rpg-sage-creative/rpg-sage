@@ -11,7 +11,7 @@ export function toColorData(color: string, alpha: number): ColorData;
 export function toColorData(color: ColorData, alpha: number): ColorData;
 export function toColorData(red: number, green: number, blue: number): ColorData;
 export function toColorData(red: number, green: number, blue: number, alpha: number): ColorData;
-export function toColorData(colorOrRed: string | number | ColorData, alphaOrGreen?: number, blue?: number, alpha?: number): ColorData | null {
+export function toColorData(colorOrRed: string | number | ColorData, alphaOrGreen?: number, blue?: number, alpha?: number): ColorData | undefined {
 	if (typeof(colorOrRed) === "number") {
 		if (alpha !== undefined) {
 			return hexToColor(rgbToHex(colorOrRed, alphaOrGreen!, blue!, alpha));
@@ -34,5 +34,5 @@ export function toColorData(colorOrRed: string | number | ColorData, alphaOrGree
 		return hexToColor(rgbToHex(colorOrRed), alphaOrGreen);
 	}
 
-	return null;
+	return undefined;
 }

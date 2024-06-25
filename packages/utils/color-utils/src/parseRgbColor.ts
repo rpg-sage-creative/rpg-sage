@@ -9,18 +9,18 @@ type RGB = { red:number; green:number; blue:number; };
 type RGBA = { red:number; green:number; blue:number; alpha?:number; };
 
 /** Parses the value to get all the r/g/b/a component values, alpha only if present. */
-export function parseRgbColor(value: Optional<string>): RGBA | null;
+export function parseRgbColor(value: Optional<string>): RGBA | undefined;
 
 /** Parses the value to get all the r/g/b/a component values. */
-export function parseRgbColor(value: Optional<string>, includeAlpha: true): RGBA | null;
+export function parseRgbColor(value: Optional<string>, includeAlpha: true): RGBA | undefined;
 
 /** Parses the value to get all the r/g/b component values. */
-export function parseRgbColor(value: Optional<string>, includeAlpha: false): RGB | null;
+export function parseRgbColor(value: Optional<string>, includeAlpha: false): RGB | undefined;
 
-export function parseRgbColor(value: Optional<string>, includeAlpha?: boolean): RGBA | null {
+export function parseRgbColor(value: Optional<string>, includeAlpha?: boolean): RGBA | undefined {
 	const match = matchRgb(value);
 	if (!match) {
-		return null;
+		return undefined;
 	}
 	if (includeAlpha === false) {
 		return {
@@ -38,6 +38,6 @@ export function parseRgbColor(value: Optional<string>, includeAlpha?: boolean): 
 		red: +match[1],
 		green: +match[2],
 		blue: +match[3],
-		alpha: alpha
+		alpha
 	};
 }
