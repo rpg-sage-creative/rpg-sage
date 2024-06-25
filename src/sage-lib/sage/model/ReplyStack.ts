@@ -1,5 +1,4 @@
-import type { DMessage } from "@rsc-utils/discord-utils";
-import type { InteractionReplyOptions, Message, MessageOptions } from "discord.js";
+import type { BaseMessageOptions, InteractionReplyOptions, Message } from "discord.js";
 import { deleteMessage, isDeletable } from "../../discord/deletedMessages.js";
 import type { SageCommand } from "./SageCommand.js";
 import { addMessageDeleteButton, includeDeleteButton } from "./utils/deleteButton.js";
@@ -39,7 +38,7 @@ export class ReplyStack {
 			if (this.deletableBy) {
 				const ephemeral = this.sageCommand.isSageInteraction("REPLIABLE") && this.sageCommand.interaction.ephemeral;
 				if (!ephemeral) {
-					await addMessageDeleteButton(message as DMessage, this.deletableBy);
+					await addMessageDeleteButton(message, this.deletableBy);
 				}
 			}
 			return message;
@@ -47,7 +46,7 @@ export class ReplyStack {
 		return undefined;
 	}
 
-	private createArgs<T extends MessageOptions | InteractionReplyOptions>(args: T): T {
+	private createArgs<T extends BaseMessageOptions | InteractionReplyOptions>(args: T): T {
 		if (args.content) {
 			args.content = this.sageCommand.sageCache.format(args.content);
 		}
@@ -142,7 +141,8 @@ export class ReplyStack {
 			// it should be safe to use the interaction reply mechanism
 			}else {
 				const replyArgs = this.createArgs({ content, fetchReply:true });
-				const message = await interaction.reply(replyArgs) as Message;
+				const response = await interaction.reply(replyArgs);
+				const message = await response.fetch();
 				return this.processMessage(message, options);
 			}
 		}

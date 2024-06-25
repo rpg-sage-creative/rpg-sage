@@ -1,22 +1,21 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { errorReturnNull } from "@rsc-utils/core-utils";
-import { randomSnowflake } from "@rsc-utils/dice-utils";
-import type { DMessageChannel } from "@rsc-utils/discord-utils";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnNull, randomSnowflake } from "@rsc-utils/core-utils";
+import type { MessageTarget } from "@rsc-utils/discord-utils";
 import { getText } from "@rsc-utils/io-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import { Message, MessageActionRow, MessageButton, type MessageAttachment, type MessageButtonStyleResolvable } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, type Attachment } from "discord.js";
 import { deleteMessage } from "../../discord/deletedMessages.js";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers.js";
-import { TCommandAndArgsAndData } from "../../discord/index.js";
+import type { TCommandAndArgsAndData } from "../../discord/index.js";
 import { discordPromptYesNo } from "../../discord/prompts.js";
 import { ReplyStack } from "../model/ReplyStack.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { includeDeleteButton } from "../model/utils/deleteButton.js";
 import { registerCommandRegex } from "./cmd.js";
-import { GameMap, TCompassDirection, TMoveDirection } from "./map/GameMap.js";
-import { LayerType, TGameMapCore } from "./map/GameMapBase.js";
-import { TParsedGameMapCore, gameMapImporter, validateMapCore } from "./map/gameMapImporter.js";
+import { GameMap, type TCompassDirection, type TMoveDirection } from "./map/GameMap.js";
+import { LayerType, type TGameMapCore } from "./map/GameMapBase.js";
+import { gameMapImporter, validateMapCore, type TParsedGameMapCore } from "./map/gameMapImporter.js";
 
 //#region buttons
 
@@ -27,8 +26,8 @@ type TMapAction = "MapUpLeft"   | "MapUp"     | "MapUpRight"   | "MapTerrain" | 
 	const MapActions = "MapUpLeft,MapUp,MapUpRight,MapTerrain,MapRaise,MapLeft,MapConfig,MapRight,MapAura,MapDelete,MapDownLeft,MapDown,MapDownRight,MapToken,MapLower".split(",");
 	const MapActionEmojis = "↖️,⬆️,↗️,⛰️,🔼,⬅️,⚙️,➡️,🟡,❌,↙️,⬇️,↘️,👤,🔽".split(",");
 
-function createButton(gameMap: GameMap, label: string, style: MessageButtonStyleResolvable): MessageButton {
-	const button = new MessageButton();
+function createButton(gameMap: GameMap, label: string, style: ButtonStyle): ButtonBuilder {
+	const button = new ButtonBuilder();
 	button.setCustomId(`${gameMap.id}|${label}`);
 	if (MapActions.includes(label)) {
 		button.setEmoji(MapActionEmojis[MapActions.indexOf(label)]);
@@ -48,13 +47,13 @@ function createButton(gameMap: GameMap, label: string, style: MessageButtonStyle
 	return button;
 }
 
-function createButtonRow(gameMap: GameMap, ...labels: TMapAction[]): MessageActionRow {
-	const actionRow = new MessageActionRow();
-	labels.forEach(label => actionRow.addComponents(createButton(gameMap, label, "SECONDARY")));
+function createButtonRow(gameMap: GameMap, ...labels: TMapAction[]): ActionRowBuilder<ButtonBuilder> {
+	const actionRow = new ActionRowBuilder<ButtonBuilder>();
+	labels.forEach(label => actionRow.addComponents(createButton(gameMap, label, ButtonStyle.Secondary)));
 	return actionRow;
 }
 
-function createMapComponents(gameMap: GameMap): MessageActionRow[] {
+function createMapComponents(gameMap: GameMap): ActionRowBuilder<ButtonBuilder>[] {
 	return [
 		createButtonRow(gameMap, "MapUpLeft", "MapUp", "MapUpRight", "MapTerrain", "MapRaise"),
 		createButtonRow(gameMap, "MapLeft", "MapConfig", "MapRight", "MapAura", "MapDelete"),
@@ -337,7 +336,7 @@ async function actionHandler(sageInteraction: SageInteraction, actionData: TActi
 
 //#region map import handler
 
-function getValidUrl(attachment: MessageAttachment): string | null {
+function getValidUrl(attachment: Attachment): string | null {
 	const regex = /map\.txt$/i;
 	if (regex.test(attachment.url.split("?")[0])) {
 		return attachment.url;
@@ -346,7 +345,7 @@ function getValidUrl(attachment: MessageAttachment): string | null {
 		return attachment.proxyURL;
 	}
 	if (attachment.name && regex.test(attachment.name)) {
-		return attachment.attachment.toString();
+		return attachment.name;
 	}
 	return null;
 }
@@ -427,7 +426,7 @@ async function actionTester(sageInteraction: SageInteraction): Promise<TActionDa
 	const messageId = sageInteraction.interaction.message?.id;
 	if (MapActions.includes(mapAction) && messageId && GameMap.exists(messageId)) {
 		const userDid = sageInteraction.user?.id;
-		const gameMap = userDid ? await GameMap.forUser(messageId, sageInteraction.user.id, true) : null;
+		const gameMap = userDid ? await GameMap.forUser(messageId, sageInteraction.user.id as Snowflake, true) : null;
 		if (gameMap) {
 			return { gameMap, mapAction };
 		}
@@ -621,7 +620,7 @@ async function actionTester(sageInteraction: SageInteraction): Promise<TActionDa
 // 	return [gameMap, image as T];
 // }
 
-async function renderMap(messageOrChannel: Optional<Message | DMessageChannel>, gameMap: GameMap): Promise<boolean> {
+async function renderMap(messageOrChannel: Optional<Message | MessageTarget>, gameMap: GameMap): Promise<boolean> {
 	if (!messageOrChannel) {
 		return false;
 	}
@@ -634,7 +633,7 @@ async function renderMap(messageOrChannel: Optional<Message | DMessageChannel>, 
 			? await messageOrChannel.edit({ content, files, components }).catch(errorReturnNull)
 			: await messageOrChannel.send({ content, files, components }).catch(errorReturnNull);
 		if (message) {
-			gameMap.messageId = message.id;
+			gameMap.messageId = message.id as Snowflake;
 			return gameMap.save();
 		}
 	}

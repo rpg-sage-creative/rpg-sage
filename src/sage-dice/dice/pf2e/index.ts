@@ -1,6 +1,5 @@
 import { GameType } from "@rsc-sage/types";
-import { isDefined, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
-import { randomSnowflake } from "@rsc-utils/dice-utils";
+import { isDefined, randomSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import {
 	CritMethodType,
@@ -8,9 +7,6 @@ import {
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
-	TDiceLiteral,
-	TSign,
-	TTestData,
 	TestType,
 	cleanDescription,
 	createValueTestData,
@@ -18,13 +14,16 @@ import {
 	gradeRoll, increaseGrade,
 	isGradeSuccess,
 	parseTestTargetValue,
-	parseTestType
+	parseTestType,
+	type TDiceLiteral,
+	type TSign,
+	type TTestData
 } from "../../common";
 import {
-	TReduceSignToDropKeep,
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore
+	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
+	type TReduceSignToDropKeep
 } from "../base";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,

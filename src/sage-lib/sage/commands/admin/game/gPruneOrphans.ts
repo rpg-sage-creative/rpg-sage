@@ -1,3 +1,4 @@
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
@@ -16,7 +17,7 @@ export async function gPruneOrphans(sageCommand: SageCommand): Promise<boolean> 
 	const missingGms = missingGmSnowflakes.length > 0;
 
 	const orphanChannels = await game.orphanChannels();
-	const missingChannelSnowflakes = orphanChannels.map(channel => channel.id);
+	const missingChannelSnowflakes = orphanChannels.map(channel => channel.id as Snowflake);
 	const missingChannels = missingChannelSnowflakes.length > 0;
 
 	if (!missingPlayers && !missingGms && !missingChannels) {

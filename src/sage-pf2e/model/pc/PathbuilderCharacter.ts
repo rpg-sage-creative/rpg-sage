@@ -1,7 +1,6 @@
 import { Collection } from "@rsc-utils/array-utils";
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/character-utils";
-import { debug, errorReturnFalse, errorReturnNull, getDataRoot, stringify, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
-import { randomSnowflake } from "@rsc-utils/dice-utils";
+import { debug, errorReturnFalse, errorReturnNull, getDataRoot, randomSnowflake, stringify, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { fileExistsSync, getJson, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { nth } from "@rsc-utils/number-utils";
 import { StringMatcher, capitalize } from "@rsc-utils/string-utils";

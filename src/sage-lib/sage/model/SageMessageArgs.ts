@@ -1,12 +1,9 @@
 import { type SageChannel } from "@rsc-sage/types";
-import { parseId } from "@rsc-utils/discord-utils";
-import { parseEnum } from "@rsc-utils/core-utils";
+import { isDefined, isNonNilSnowflake, isNonNilUuid, parseEnum, type EnumLike, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { parseId, type MessageChannel } from "@rsc-utils/discord-utils";
 import { isUrl } from "@rsc-utils/io-utils";
-import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { isNotBlank, unwrap } from "@rsc-utils/string-utils";
-import { isDefined, type EnumLike, type Optional } from "@rsc-utils/core-utils";
-import { isNonNilUuid } from "@rsc-utils/core-utils";
-import type { Collection, GuildBasedChannel, MessageAttachment, Role, User } from "discord.js";
+import type { Attachment, Collection, Role, User } from "discord.js";
 import type { ArgsManager } from "../../discord/ArgsManager.js";
 import type { TColorAndType } from "./Colors.js";
 import type { GameCharacterCore } from "./GameCharacter.js";
@@ -42,7 +39,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	//#region Old
 
 	/** @deprecated */
-	private attachments?: Collection<Snowflake, MessageAttachment>;
+	private attachments?: Collection<string, Attachment>;
 
 	/** @deprecated */
 	public removeAndReturnAttachmentUrl(): string | undefined {
@@ -205,7 +202,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			const did = isNonNilSnowflake(arg) ? arg : parseId(arg, "role");
 			if (did) {
 				const role = await this.sageCommand.discord.fetchGuildRole(did);
-				return role?.id;
+				return role?.id as Snowflake;
 			}
 			return undefined;
 		});
@@ -254,7 +251,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 			if (isNonNilSnowflake(arg)) {
 				const member = await discord.fetchGuildMember(arg);
-				return member?.id;
+				return member?.id as Snowflake;
 			}
 
 			if (isNonNilUuid(arg)) {
@@ -335,7 +332,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
-	public getChannel<T extends GuildBasedChannel>(name: string): Optional<T> {
+	public getChannel<T extends MessageChannel>(name: string): Optional<T> {
 		const keyValueArg = this.getKeyValueArg(name);
 		if (!keyValueArg.hasKey) return undefined;
 		if (keyValueArg.hasUnset) return null;
@@ -343,7 +340,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			const channelId = parseId(keyValueArg.value.trim(), "channel");
 			if (channelId) {
 				const channel = this.sageCommand.message.mentions.channels.get(channelId) ?? null;
-				return channel as T;
+				return channel as unknown as T;
 			}
 		}
 		return null;

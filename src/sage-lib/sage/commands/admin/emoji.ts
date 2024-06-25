@@ -1,10 +1,9 @@
-import { errorReturnNull } from "@rsc-utils/core-utils";
-import { isDefined } from "@rsc-utils/core-utils";
+import { errorReturnNull, isDefined } from "@rsc-utils/core-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
 import type { Emoji, TEmojiAndType } from "../../model/Emoji.js";
 import type { Game } from "../../model/Game.js";
-import { EmojiType, IEmoji } from "../../model/HasEmojiCore.js";
+import { EmojiType, type IEmoji } from "../../model/HasEmojiCore.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import type { Server } from "../../model/Server.js";

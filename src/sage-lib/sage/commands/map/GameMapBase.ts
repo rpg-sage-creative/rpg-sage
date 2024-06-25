@@ -1,7 +1,5 @@
-import { errorReturnFalse, errorReturnNull } from "@rsc-utils/core-utils";
-import { getDataRoot } from "@rsc-utils/core-utils";
+import { errorReturnFalse, errorReturnNull, getDataRoot, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
-import type { Snowflake } from "@rsc-utils/core-utils";
 import { RenderableGameMap } from "./RenderableGameMap";
 
 //#region types
@@ -164,8 +162,8 @@ export abstract class GameMapBase {
 	//#region static
 
 	/** returns true if a map for the given id exists */
-	public static exists(messageId: Snowflake): boolean {
-		return fileExistsSync(getMapFilePath(messageId));
+	public static exists(messageId: Optional<string>): messageId is Snowflake {
+		return messageId ? fileExistsSync(getMapFilePath(messageId as Snowflake)) : false;
 	}
 
 	public static delete(messageId: Snowflake): boolean {

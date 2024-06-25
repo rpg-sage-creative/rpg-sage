@@ -1,9 +1,8 @@
 import { hasSageId, isSageId, isTestBotId } from "@rsc-sage/env";
-import { error, verbose, warn } from "@rsc-utils/core-utils";
-import { toHumanReadable, type DInteraction, type DMessage, type DReaction, type DUser } from "@rsc-utils/discord-utils";
-import type { Optional } from "@rsc-utils/core-utils";
-import { isDefined, isNullOrUndefined } from "@rsc-utils/core-utils";
-import { Intents, type IntentsString, type Interaction, type PermissionString } from "discord.js";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { error, isDefined, isNullOrUndefined, verbose, warn } from "@rsc-utils/core-utils";
+import { toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { GatewayIntentBits, IntentsBitField, PermissionFlagsBits, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
 import { SageReaction } from "../sage/model/SageReaction.js";
@@ -34,13 +33,15 @@ function isActionableType(listener: TMessageListener | TReactionListener, type: 
 export async function isAuthorBotOrWebhook(sageMessage: SageMessage): Promise<boolean>;
 export async function isAuthorBotOrWebhook(sageReaction: SageReaction): Promise<boolean>;
 export async function isAuthorBotOrWebhook(messageOrReaction: SageMessage | SageReaction): Promise<boolean> {
-	const message = ((<SageReaction>messageOrReaction).messageReaction ?? (<SageMessage>messageOrReaction)).message as DMessage;
+	const message = ((<SageReaction>messageOrReaction).messageReaction ?? (<SageMessage>messageOrReaction)).message;
 	const messageAuthorDid = message.author?.id;
 	if (isSageId(messageAuthorDid)) {
 		return true;
 	}
 
-	const webhook = await messageOrReaction.sageCache.discord.fetchWebhook(message.guild!, message.channel, "dialog");
+	if (!message.guild) return false;
+
+	const webhook = await messageOrReaction.sageCache.discord.fetchWebhook(message.guild, message.channel);
 	return webhook?.id === messageAuthorDid;
 }
 
@@ -48,10 +49,12 @@ export async function isAuthorBotOrWebhook(messageOrReaction: SageMessage | Sage
 
 //#region listeners
 
+type PermFlagBitsKeys = keyof typeof PermissionFlagsBits;
+
 type TListener = {
 	command: string;
-	intents?: IntentsString[];
-	permissions?: PermissionString[];
+	intents?: GatewayIntentBits[];
+	permissions?: PermFlagBitsKeys[];
 	priorityIndex?: number;
 	which: TListenerTypeName;
 };
@@ -147,8 +150,8 @@ function registerListener<T extends TListenerType>(listener: T): void {
 
 type RegisterOptions = {
 	command?: string;
-	intents?: IntentsString[];
-	permissions?: PermissionString[];
+	intents?: GatewayIntentBits[];
+	permissions?: PermFlagBitsKeys[];
 	priorityIndex?: number;
 };
 type RegisterInteractionOptions = RegisterOptions & { type?: TInteractionType; };
@@ -172,27 +175,35 @@ export function registerReactionListener<T>(tester: TReactionTester<T>, handler:
 	registerListener({ which:"ReactionListener", tester, handler, type, command, ...options });
 }
 
-export function registeredIntents(): Intents {
-	const registered: IntentsString[] = [];
-	messageListeners.forEach(listener => registered.push(...listener.intents ?? []));
-	reactionListeners.forEach(listener => registered.push(...listener.intents ?? []));
+export function registeredIntents() {
+	// const registered: IntentsString[] = [];
+	// messageListeners.forEach(listener => registered.push(...listener.intents ?? []));
+	// reactionListeners.forEach(listener => registered.push(...listener.intents ?? []));
 
-	const intents = new Intents();
-	intents.add(
-		// registered.filter(toUnique)
-		[
-		"DIRECT_MESSAGES",
-		"DIRECT_MESSAGE_REACTIONS",
-		"GUILDS",
-		"GUILD_BANS",
-		"GUILD_EMOJIS_AND_STICKERS",
-		"GUILD_MEMBERS",
-		"GUILD_MESSAGES",
-		"GUILD_MESSAGE_REACTIONS",
-		"GUILD_PRESENCES",
-		"GUILD_WEBHOOKS"
-	]);
-	return intents;
+	return [
+		IntentsBitField.Flags.Guilds,
+		IntentsBitField.Flags.GuildMembers,
+		IntentsBitField.Flags.GuildModeration,
+		// IntentsBitField.Flags.GuildBans <-- deprecated
+		IntentsBitField.Flags.GuildEmojisAndStickers,
+		// IntentsBitField.Flags.GuildIntegrations
+		IntentsBitField.Flags.GuildWebhooks,
+		IntentsBitField.Flags.GuildInvites,
+		// IntentsBitField.Flags.GuildVoiceStates,
+		IntentsBitField.Flags.GuildPresences,
+		IntentsBitField.Flags.GuildMessages,
+		IntentsBitField.Flags.GuildMessageReactions,
+		// IntentsBitField.Flags.GuildMessageTyping,
+		IntentsBitField.Flags.DirectMessages,
+		IntentsBitField.Flags.DirectMessageReactions,
+		// IntentsBitField.Flags.DirectMessageTyping,
+		IntentsBitField.Flags.MessageContent,
+		IntentsBitField.Flags.GuildScheduledEvents,
+		// IntentsBitField.Flags.AutoModerationConfiguration,
+		// IntentsBitField.Flags.AutoModerationExecution,
+		IntentsBitField.Flags.GuildMessagePolls,
+		IntentsBitField.Flags.DirectMessagePolls,
+	];
 }
 
 //#endregion
@@ -205,8 +216,8 @@ export async function handleInteraction(interaction: Interaction): Promise<THand
 		const isButton = interaction.isButton();
 		const isCommand = interaction.isCommand();
 		const isComponent = interaction.isMessageComponent();
-		const isContext = interaction.isContextMenu();
-		const isSelectMenu = interaction.isSelectMenu();
+		const isContext = interaction.isContextMenuCommand();
+		const isSelectMenu = interaction.isAnySelectMenu();
 		const isModal = interaction.isModalSubmit();
 		if (isButton || isCommand || isComponent || isContext || isSelectMenu || isModal) {
 			const sageInteraction = await SageInteraction.fromInteraction(interaction as DInteraction);
@@ -263,7 +274,7 @@ function checkContentForUrls(content: string | null, urls: (string | null)[]) {
  * 1. ignore image embeds
  * @param botTesterMessage
  */
-function isEditWeCanIgnore(message: DMessage, originalMessage: Optional<DMessage>): boolean {
+function isEditWeCanIgnore(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>): boolean {
 	if (!originalMessage) {
 		return false;
 	}
@@ -283,10 +294,10 @@ function isEditWeCanIgnore(message: DMessage, originalMessage: Optional<DMessage
 	return matchingContent && moreEmbedLengths && contentIncludesUrls;
 }
 
-export async function handleMessage(message: DMessage, originalMessage: Optional<DMessage>, messageType: MessageType): Promise<THandlerOutput> {
+export async function handleMessage(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>, messageType: MessageType): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
-		const isBot = message.author?.bot && !isTestBotId(message.author.id);
+		const isBot = message.author?.bot && !isTestBotId(message.author.id as Snowflake);
 		const isWebhook = !!message.webhookId;
 		const canIgnore = isEditWeCanIgnore(message, originalMessage);
 		if (!isBot && !isWebhook && !canIgnore) {
@@ -324,10 +335,10 @@ async function handleMessages(sageMessage: SageMessage, messageType: MessageType
 // #region reactions
 
 /** Returns the number of handlers executed. */
-export async function handleReaction(messageReaction: DReaction, user: DUser, reactionType: ReactionType): Promise<THandlerOutput> {
+export async function handleReaction(messageReaction: ReactionOrPartial, user: UserOrPartial, reactionType: ReactionType): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
-		const isBot = user.bot && !isTestBotId(user.id);
+		const isBot = user.bot && !isTestBotId(user.id as Snowflake);
 		if (!isBot) {
 			const sageReaction = await SageReaction.fromMessageReaction(messageReaction, user, reactionType);
 			await handleReactions(sageReaction, reactionType, output);

@@ -1,7 +1,6 @@
 import { Collection } from "@rsc-utils/array-utils";
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { randomSnowflake } from "@rsc-utils/dice-utils";
-import type { DiscordKey } from "@rsc-utils/discord-utils";
+import { randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { resolveSnowflake, type CanBeSnowflakeResolvable, type DiscordKey } from "@rsc-utils/discord-utils";
 import { CharactersMatch } from "./CharactersMatch.js";
 import type { Game } from "./Game.js";
 import { GameCharacter, type GameCharacterCore, type TDialogMessage, type TGameCharacterType } from "./GameCharacter.js";
@@ -74,7 +73,8 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	}
 
 	/** Returns the character with the given id, recursively. */
-	public findById(characterId: Snowflake): GameCharacter | undefined {
+	public findById(resolvable: CanBeSnowflakeResolvable): GameCharacter | undefined {
+		const characterId = resolveSnowflake(resolvable) ?? resolvable;
 		for (const character of this) {
 			if (character.id === characterId) {
 				return character;

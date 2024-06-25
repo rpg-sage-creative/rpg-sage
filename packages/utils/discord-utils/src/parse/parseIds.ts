@@ -1,5 +1,6 @@
 import { isNonNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { type Collection, type Message } from "discord.js";
+import type { Collection } from "discord.js";
+import type { MessageOrPartial } from "../types/types.js";
 import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 import { createMentionRegex } from "./createMentionRegex.js";
 
@@ -62,7 +63,7 @@ function getContentMentionIds(type: IdType, content: Optional<string>): Possible
 type HasId = { id:Snowflake; };
 
 /** Gets the ids from the Collection for the given IdType. */
-function getMessageMentionIds(type: IdType, message: Message): PossibleSnowflake[] {
+function getMessageMentionIds(type: IdType, message: MessageOrPartial): PossibleSnowflake[] {
 	if (isMentionIdType(type)) {
 		const collection = message.mentions[getMentionKey(type)] as Collection<Snowflake, HasId>;
 		return collection.map(mention => mention.id);
@@ -89,7 +90,7 @@ function uniqueNonNilSnowflakeFilter(value: PossibleSnowflake, index: number, ar
 }
 
 /** Returns all unique nonNil Snowflakes of the given IdType from the given Message. */
-export function parseIds(messageOrContent: Message | string, type: IdType, includeRaw?: boolean): Snowflake[] {
+export function parseIds(messageOrContent: MessageOrPartial | string, type: IdType, includeRaw?: boolean): Snowflake[] {
 	const isString = typeof(messageOrContent) === "string";
 	const content = isString ? messageOrContent : messageOrContent.content;
 	const message = isString ? undefined : messageOrContent;

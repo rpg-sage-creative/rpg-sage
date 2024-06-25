@@ -1,5 +1,5 @@
 import { embedLength } from "discord.js";
-import { DiscordMaxValues } from "../DiscordMaxValues.js";
+import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 import { type EmbedResolvable } from "./EmbedResolvable.js";
 import { resolveEmbed } from "./resolveEmbed.js";
 

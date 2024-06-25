@@ -9,5 +9,5 @@ export class SDate extends SageDate<SDate, DayType, TDayType, MonthType, TMonthT
 	public get monthType(): MonthType { return this._.getMonth(); }
 	public get month(): TMonthType { return Months[this._.getMonth()]; }
 
-	public static YearDelta = -1700;
+	public static readonly YearDelta = -1700;
 }

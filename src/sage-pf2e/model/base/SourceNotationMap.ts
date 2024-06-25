@@ -1,9 +1,9 @@
+import type { UUID } from "@rsc-utils/core-utils";
 import { warn } from "@rsc-utils/core-utils";
 import { toSuperscript } from "@rsc-utils/number-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
-import type { UUID } from "@rsc-utils/core-utils";
-import type { HasSource } from "./HasSource";
-import { Source } from "./Source";
+import type { HasSource } from "./HasSource.js";
+import { Source } from "./Source.js";
 
 
 export class SourceNotationMap<T extends HasSource> {
@@ -48,7 +48,7 @@ export class SourceNotationMap<T extends HasSource> {
 		return sourceIndex < includeCore ? "" : toSuperscript(sourceIndex);
 	}
 	public getBySource(source?: Source): string {
-		return this.get(source?.id);
+		return this.get(source?.id as UUID);
 	}
 	public getByHasSource(hasSource?: T): string {
 		return this.getBySource(hasSource?.source);

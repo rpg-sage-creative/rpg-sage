@@ -42,7 +42,7 @@ export async function blockFromChannel(sage: GuildMember, channel: NonThreadGuil
 	}
 
 	// prepare perms
-	const overwrites = { "VIEW_CHANNEL":false };
+	const overwrites = { "ViewChannel":false };
 
 	// update perms
 	let fixError = false;

@@ -1,6 +1,5 @@
 import { type GameOptions, type SageChannel } from "@rsc-sage/types";
-import { applyChanges } from "@rsc-utils/core-utils";
-import { randomSnowflake } from "@rsc-utils/dice-utils";
+import { applyChanges, randomSnowflake, type UUID } from "@rsc-utils/core-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import { Game, type IGameUser } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
@@ -15,7 +14,7 @@ function createGame(sageCommand: SageCommand, gameOptions: Partial<GameOptions>,
 		objectType: "Game",
 		id: randomSnowflake(),
 		serverDid: sageCommand.server.did,
-		serverId: sageCommand.server.id,
+		serverId: sageCommand.server.id as UUID,
 		createdTs: new Date().getTime(),
 		channels: channels,
 		colors: sageCommand.server.colors.toArray(),

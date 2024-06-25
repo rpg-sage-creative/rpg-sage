@@ -1,6 +1,6 @@
 import { chunk, isNotBlank } from "@rsc-utils/string-utils";
 import { type APIEmbed, type ColorResolvable, type Embed, type MessageCreateOptions, type MessageEditOptions, resolveColor, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
-import { DiscordMaxValues } from "../DiscordMaxValues.js";
+import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 import { EmbedBuilder } from "../embed/EmbedBuilder.js";
 import { type EmbedResolvable } from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
@@ -156,7 +156,7 @@ export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitM
 	});
 
 	// cannot send an empty string for content
-	let blankContent = (contentToChunk ? null : replyingTo) ?? splitOptions?.blankContentValue?.trim();
+	let blankContent = (contentToChunk ? undefined : replyingTo) ?? splitOptions?.blankContentValue?.trim();
 	if (!blankContent?.length) {
 		blankContent = undefined; //NOSONAR
 	}

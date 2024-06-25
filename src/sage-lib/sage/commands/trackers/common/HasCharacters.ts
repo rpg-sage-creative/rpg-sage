@@ -1,4 +1,4 @@
-import { randomSnowflake } from "@rsc-utils/dice-utils";
+import { randomSnowflake } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
 import { CharacterShell, type CharacterShellCore } from "../../../model/CharacterShell.js";
 import type { Game } from "../../../model/Game.js";

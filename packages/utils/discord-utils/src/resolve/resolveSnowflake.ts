@@ -3,12 +3,14 @@ import { isSnowflake, NIL_SNOWFLAKE, orNilSnowflake, type Optional, type Snowfla
 type HasSnowflakeId = { id:Snowflake; };
 /** @deprecated */
 type HasSnowflakeDid = { did:Snowflake; };
-export type SnowflakeResolvable = Snowflake | string | HasSnowflakeId | HasSnowflakeDid;
 
-type CanHaveSnowflakeId = { id?:Snowflake; };
+export type SnowflakeResolvable = Snowflake | HasSnowflakeId | HasSnowflakeDid;
+
+type CanHaveSnowflakeId = { id?:Snowflake; } | { id?:string; };
 /** @deprecated */
-type CanHaveSnowflakeDid = { did?:Snowflake; };
-type CanBeSnowflakeResolvable = CanHaveSnowflakeId | CanHaveSnowflakeDid;
+type CanHaveSnowflakeDid = { did?:Snowflake; } | { did?:string; };
+
+export type CanBeSnowflakeResolvable = string | CanHaveSnowflakeId | CanHaveSnowflakeDid;
 
 /** Assumes a valid snowflake resolvable. */
 export function resolveSnowflake(resolvable: SnowflakeResolvable): Snowflake;
@@ -25,7 +27,7 @@ export function resolveSnowflake(resolvable: Optional<SnowflakeResolvable>): Sno
 /** Returns NIL_SNOWFLAKE if the value is not resolvable. */
 export function resolveSnowflake(resolvable: Optional<SnowflakeResolvable>, orNil: true): Snowflake | NIL_SNOWFLAKE;
 
-export function resolveSnowflake(resolvable: Optional<SnowflakeResolvable | CanBeSnowflakeResolvable>, orNil?: true): Snowflake | NIL_SNOWFLAKE | undefined {
+export function resolveSnowflake(resolvable: Optional<CanBeSnowflakeResolvable>, orNil?: true): Snowflake | NIL_SNOWFLAKE | undefined {
 	const out = orNil ? orNilSnowflake : (value: Optional<string>) => isSnowflake(value) ? value : undefined;
 	if (resolvable) {
 		if (typeof(resolvable) === "string") {

@@ -37,10 +37,10 @@ export class SpellCollection extends HasCore<SpellCollectionCore> {
 		} else if (Array.isArray(spells)) {
 			spells.forEach((spell: Spell | HeightenedSpell) => {
 				if (spell instanceof Spell) {
-					this.core.spells.push(spell.toHeightenedSpell(spell.level).id);
+					this.core.spells.push(spell.toHeightenedSpell(spell.level).id as UUID);
 				}
 				if (spell instanceof HeightenedSpell) {
-					this.core.spells.push(spell.id);
+					this.core.spells.push(spell.id as UUID);
 				}
 			});
 		}
@@ -68,8 +68,8 @@ export class SpellCollection extends HasCore<SpellCollectionCore> {
 		if (spell instanceof Spell) {
 			spellId = spell.toHeightenedSpell().id;
 		}
-		if (!this.core.spells.includes(spellId)) {
-			this.core.spells.push(spell.id);
+		if (!this.core.spells.includes(spellId as UUID)) {
+			this.core.spells.push(spell.id as UUID);
 		}
 	}
 

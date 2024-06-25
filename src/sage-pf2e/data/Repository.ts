@@ -1,12 +1,9 @@
-import { debug, errorReturnEmptyArray, verbose, warn } from "@rsc-utils/core-utils";
-import { getDataRoot } from "@rsc-utils/core-utils";
+import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
+import { debug, errorReturnEmptyArray, getDataRoot, isDefined, SnowflakeMatcher, UuidMatcher, verbose, warn } from "@rsc-utils/core-utils";
+import { randomItem } from "@rsc-utils/dice-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { initializeNoiseUS, initializeUKtoUS } from "@rsc-utils/language-utils";
-import { randomItem } from "@rsc-utils/dice-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
-import { isDefined } from "@rsc-utils/core-utils";
-import { UuidMatcher, type UUID } from "@rsc-utils/core-utils";
 import type { AonBase } from "../model/base/AonBase.js";
 import type { Base, BaseCore } from "../model/base/Base.js";
 import type { HasSource } from "../model/base/HasSource.js";
@@ -124,25 +121,40 @@ export function findByAonBase<T extends Base | HasSource>(aonBase: AonBase): OrU
 }
 
 /** Finds the object for the given UUID. */
-export function findById<T extends Base>(id: OrUndefined<UUID>): OrUndefined<T> {
-	const uuidMatcher = id ? UuidMatcher.from(id) : null;
-	if (uuidMatcher?.isValid) {
-		for (const objectType of getObjectTypes()) {
-			const found = _findById(objectType, uuidMatcher);
-			if (found) {
-				return <T>found;
+export function findById<T extends Base>(id: OrUndefined<string>): OrUndefined<T> {
+	if (id) {
+		const uuidMatcher = UuidMatcher.from(id);
+		if (uuidMatcher.isValid) {
+			for (const objectType of getObjectTypes()) {
+				const found = _findById(objectType, uuidMatcher);
+				if (found) {
+					return <T>found;
+				}
+			}
+			verbose(`findById(${uuidMatcher?.value ?? id}) not found!`);
+		}else {
+			const snowflakeMatcher = SnowflakeMatcher.from(id);
+			if (snowflakeMatcher.isValid) {
+				for (const objectType of getObjectTypes()) {
+					const found = _findById(objectType, snowflakeMatcher);
+					if (found) {
+						return <T>found;
+					}
+				}
+				verbose(`findById(${snowflakeMatcher?.value ?? id}) not found!`);
 			}
 		}
+	}else {
+		verbose(`findById(${id}) not found!`);
 	}
-	verbose(`findById(${uuidMatcher?.value ?? id}) not found!`);
 	return undefined;
 }
 
-/** Finds an object of the given objectType that has a UUID or Name that matches the given value. */
-export function findByValue(objectType: "Creature", value: UUID): OrUndefined<Creature>;
-export function findByValue(objectType: "Source", value: UUID): Source;
-export function findByValue<T extends string>(objectType: T, value: Optional<UUID>): OrUndefined<TEntity<T>>;
-export function findByValue<T extends Base<any>>(objectType: string, value: Optional<UUID>): OrUndefined<T> {
+/** Finds an object of the given objectType that has a ID or Name that matches the given value. */
+export function findByValue(objectType: "Creature", value: string): OrUndefined<Creature>;
+export function findByValue(objectType: "Source", value: string): Source;
+export function findByValue<T extends string>(objectType: T, value: Optional<string>): OrUndefined<TEntity<T>>;
+export function findByValue<T extends Base<any>>(objectType: string, value: Optional<string>): OrUndefined<T> {
 	if (!value) {
 		return undefined;
 	}
@@ -150,6 +162,11 @@ export function findByValue<T extends Base<any>>(objectType: string, value: Opti
 	const uuidMatcher = UuidMatcher.from(value);
 	if (uuidMatcher.isValid) {
 		return _findById(objectType, uuidMatcher);
+	}
+
+	const snowflakeMatcher = SnowflakeMatcher.from(value);
+	if (snowflakeMatcher.isValid) {
+		return _findById(objectType, snowflakeMatcher);
 	}
 
 	const stringMatcher = StringMatcher.from(value);

@@ -1,5 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { randomSnowflake } from "@rsc-utils/dice-utils";
+import { randomSnowflake, type Optional } from "@rsc-utils/core-utils";
 import type { CharacterShellCore } from "../../../model/CharacterShell";
 import type { Game } from "../../../model/Game";
 import { Manager } from "../common/Manager";

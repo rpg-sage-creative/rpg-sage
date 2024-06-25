@@ -1,8 +1,8 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
-import { error } from "@rsc-utils/core-utils";
-import { randomSnowflake } from "@rsc-utils/dice-utils";
+import { error, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { createActionRow } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
-import { MessageActionRow, MessageButton, Snowflake, type Interaction, type Message, type MessageButtonStyle } from "discord.js";
+import { ButtonBuilder, ButtonStyle, ComponentType, type APIButtonComponentWithCustomId, type Interaction, type Message } from "discord.js";
 import { ActiveBot } from "../sage/model/ActiveBot.js";
 import type { SageCommand } from "../sage/model/SageCommand.js";
 import { deleteMessage } from "./deletedMessages.js";
@@ -11,15 +11,17 @@ import { resolveToEmbeds } from "./resolvers/resolveToEmbeds.js";
 
 const TIMEOUT_MILLI = 60 * 1000;
 
-export type TPromptButton<T = any> = { label:string; style:MessageButtonStyle; data?:T; };
+export type TPromptButton<T = any> = { label:string; style:ButtonStyle; data?:T; };
 
-function createButtons(buttons: TPromptButton[]): MessageButton[] {
+type NonLinkButtonBuilder = ButtonBuilder & { data:APIButtonComponentWithCustomId; };
+
+function createButtons(buttons: TPromptButton[]): NonLinkButtonBuilder[] {
 	return buttons.map(button => {
-		const messageButton = new MessageButton();
+		const messageButton = new ButtonBuilder();
 		messageButton.setCustomId(randomSnowflake());
 		messageButton.setLabel(button.label);
 		messageButton.setStyle(button.style);
-		return messageButton;
+		return messageButton as NonLinkButtonBuilder;
 	});
 }
 
@@ -36,7 +38,7 @@ export async function confirm(sageCommand: SageCommand, options: ConfirmOptions)
 	const content = options?.content ?? "Confirm or Cancel?";
 	const confirmLabel = options?.confirmLabel ?? "Confirm";
 	const cancelLabel = options?.cancelLabel ?? "Cancel";
-	const buttons: TPromptButton[] = [ { label:confirmLabel, style:"SUCCESS" }, { label:cancelLabel, style:"SECONDARY" } ];
+	const buttons: TPromptButton[] = [ { label:confirmLabel, style:ButtonStyle.Success }, { label:cancelLabel, style:ButtonStyle.Secondary } ];
 	const deleteAfter = options?.deleteAfter;
 	const results = await prompt({ sageCommand, content, buttons, deleteAfter });
 	return results?.value ? results.value === confirmLabel : null;
@@ -89,16 +91,16 @@ async function sendPromptMessage(args: PromptArgs): Promise<PromptMessageSentDat
 
 	// create buttons/components
 	const messageButtons = createButtons(args.buttons);
-	const buttonRow = new MessageActionRow().setComponents(...messageButtons);
+	const buttonRow = createActionRow(...messageButtons);
 	const components = [buttonRow];
 
 	// send message
 	const message = await dChannel.send({ content, embeds, components });
 	if (message) {
 		// map button data only if successful
-		const buttons = args.buttons.map((argBtn, index) => {
-			const btn = messageButtons[index];
-			return { customId:btn.customId!, label:argBtn.label, data:argBtn.data };
+		const buttons = args.buttons.map(({ label, data }, index) => {
+			const customId = messageButtons[index].data.custom_id as Snowflake;
+			return { customId, label, data };
 		});
 		return { message, buttons };
 	}
@@ -111,7 +113,13 @@ async function disablePromptMessage(message: Message, deleteInstead: boolean | u
 	if (deleteInstead) {
 		await deleteMessage(message);
 	}else {
-		message.components.forEach(row => row.components.forEach(btn => btn.setDisabled(true)));
+		message.components.forEach(row => {
+			row.components.forEach(comp => {
+				if (comp.type === ComponentType.Button) {
+					ButtonBuilder.from(comp).setDisabled(true);
+				}
+			});
+		});
 		await message.edit({ content:message.content, embeds:message.embeds, components:message.components });
 	}
 }
@@ -135,7 +143,7 @@ async function handlePrompt(interaction: Interaction): Promise<void> {
 	if (!interaction.isButton()) return; //NOSONAR
 
 	// we know we store the prompt by messageId
-	const messageId = interaction.message.id;
+	const messageId = interaction.message.id as Snowflake;
 	const promptMap = getPromptMap();
 	if (!promptMap.has(messageId)) return; //NOSONAR
 
@@ -152,7 +160,7 @@ async function handlePrompt(interaction: Interaction): Promise<void> {
 
 	await interaction.deferUpdate();
 
-	await resolvePrompt(messageId, customId);
+	await resolvePrompt(messageId, customId as Snowflake);
 }
 
 let _handling = false;
@@ -186,12 +194,12 @@ export async function prompt(args: PromptArgs): Promise<PromptResults | null> {
 		}
 
 		const promptMap = getPromptMap();
-		promptMap.set(message.id, {
+		promptMap.set(message.id as Snowflake, {
 			buttons,
 			deleteAfter: args.deleteAfter,
 			message,
 			resolve,
-			timeout: setTimeout(resolvePrompt, TIMEOUT_MILLI, message.id),
+			timeout: setTimeout(resolvePrompt, TIMEOUT_MILLI, message.id as Snowflake),
 			userId: args.sageCommand.authorDid
 		});
 	})

@@ -1,8 +1,6 @@
 import { GameSystemType } from "@rsc-sage/types";
-import { errorReturnEmptyArray } from "@rsc-utils/core-utils";
+import { errorReturnEmptyArray, getBuildInfo, isDefined, type Snowflake } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import { getBuildInfo } from "@rsc-utils/core-utils";
-import { isDefined } from "@rsc-utils/core-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { Bot } from "../../model/Bot.js";
 import type { SageMessage } from "../../model/SageMessage.js";
@@ -25,7 +23,7 @@ async function botDetails(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const firstMention = sageMessage.message.mentions.users.first();
-	const botDid = firstMention && firstMention.id || await sageMessage.args.removeAndReturnUserDid();
+	const botDid = firstMention?.id as Snowflake ?? await sageMessage.args.removeAndReturnUserDid();
 	const bot = botDid && (await sageMessage.caches.bots.getByDid(botDid)) || sageMessage.bot;
 
 	return sendBot(sageMessage, bot);

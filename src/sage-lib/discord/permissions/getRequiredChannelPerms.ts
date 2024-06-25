@@ -1,19 +1,21 @@
-import type { ChannelPermissionString } from "./ChannelPermissionString.js";
+import type { PermissionFlagsBits } from "discord.js";
 
 /*
 https://discord.com/developers/docs/topics/permissions
 */
 
+type PermFlagBitsKeys = keyof typeof PermissionFlagsBits;
+
 /** Gets the set of permissions Sage needs for the channel. */
-export function getRequiredChannelPerms(): ChannelPermissionString[] {
+export function getRequiredChannelPerms(): PermFlagBitsKeys[] {
 	return [
-		"VIEW_CHANNEL",
-		"MANAGE_MESSAGES",
-		"MANAGE_WEBHOOKS",
-		"READ_MESSAGE_HISTORY",
-		"SEND_MESSAGES",
-		"SEND_MESSAGES_IN_THREADS",
-		"ADD_REACTIONS",
-		"USE_EXTERNAL_EMOJIS"
+		"ViewChannel",
+		"ManageMessages",
+		"ManageWebhooks",
+		"ReadMessageHistory",
+		"SendMessages",
+		"SendMessagesInThreads",
+		"AddReactions",
+		"UseExternalEmojis",
 	];
 }

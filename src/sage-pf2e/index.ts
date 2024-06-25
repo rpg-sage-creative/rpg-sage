@@ -1,101 +1,101 @@
-import { loadData } from "./data/Repository";
-import { registerObjects } from "./model";
-import { registerBaseObjects } from "./model/base";
-import { registerBestiaryObjects } from "./model/bestiary";
+import { loadData } from "./data/Repository.js";
+import { registerObjects } from "./model/index.js";
+import { registerBaseObjects } from "./model/base/index.js";
+import { registerBestiaryObjects } from "./model/bestiary/index.js";
 
 //#region data
-export { RenderableContent } from "./data/RenderableContent";
-export * as Repository from "./data/Repository";
+export { RenderableContent } from "./data/RenderableContent.js";
+export * as Repository from "./data/Repository.js";
 //#endregion
 
 //#region map
-export * from "./map/map";
+export * from "./map/map.js";
 //#endregion
 
 //#region model
 //#region model/base
-export { Base, BaseCore } from "./model/base/Base";
-export { HasSource, SourcedCore, TSourceInfo, TSourceInfoRaw } from "./model/base/HasSource";
-export { Source, SourceCore } from "./model/base/Source";
-export { SourceNotationMap } from "./model/base/SourceNotationMap";
-export * from "./model/base/interfaces";
+export { Base, type BaseCore } from "./model/base/Base.js";
+export { HasSource, type SourcedCore, type TSourceInfo, type TSourceInfoRaw } from "./model/base/HasSource.js";
+export { Source, type SourceCore } from "./model/base/Source.js";
+export { SourceNotationMap } from "./model/base/SourceNotationMap.js";
+export * from "./model/base/interfaces.js";
 //#endregion
 
 //#region model/bestiary
-export { Creature } from "./model/bestiary/Creature";
-export { CreatureCategory, CreatureCategoryCore, IHasLevelAndName, sortByLevelThenName } from "./model/bestiary/CreatureCategory";
-export { CreatureLanguages } from "./model/bestiary/CreatureLanguages";
-export * from "./model/bestiary/ICreature";
+export { Creature } from "./model/bestiary/Creature.js";
+export { CreatureCategory, type CreatureCategoryCore, type IHasLevelAndName, sortByLevelThenName } from "./model/bestiary/CreatureCategory.js";
+export { CreatureLanguages } from "./model/bestiary/CreatureLanguages.js";
+export * from "./model/bestiary/ICreature.js";
 //#endregion
 
 //#region model/pc
-export { Abilities, IHasAbilities } from "./model/pc/Abilities";
-export { ArmorClasses } from "./model/pc/ArmorClasses";
-export { Check, TCheckPlayerCharacter } from "./model/pc/Check";
-export { Encumbrance } from "./model/pc/Encumbrance";
-export { Equipment, IEquipment } from "./model/pc/Equipment";
-export { EquipmentItem, EquipmentItemCore } from "./model/pc/EquipmentItem";
-export { EquipmentList, EquipmentListCore } from "./model/pc/EquipmentList";
-export { PathbuilderCharacter, TPathbuilderCharacter, TPathbuilderCharacterAbilityKey } from "./model/pc/PathbuilderCharacter";
-export { IHasProficiencies, PlayerCharacter, PlayerCharacterCore } from "./model/pc/PlayerCharacter";
-export { IHasSavingThrows, SavingThrows } from "./model/pc/SavingThrows";
-export { Skills } from "./model/pc/Skills";
-export { Speeds } from "./model/pc/Speeds";
+export { Abilities, type IHasAbilities } from "./model/pc/Abilities.js";
+export { ArmorClasses } from "./model/pc/ArmorClasses.js";
+export { Check, type TCheckPlayerCharacter } from "./model/pc/Check.js";
+export { Encumbrance } from "./model/pc/Encumbrance.js";
+export { Equipment, type IEquipment } from "./model/pc/Equipment.js";
+export { EquipmentItem, type EquipmentItemCore } from "./model/pc/EquipmentItem.js";
+export { EquipmentList, type EquipmentListCore } from "./model/pc/EquipmentList.js";
+export { PathbuilderCharacter, type TPathbuilderCharacter, type TPathbuilderCharacterAbilityKey } from "./model/pc/PathbuilderCharacter.js";
+export { type IHasProficiencies, PlayerCharacter, type PlayerCharacterCore } from "./model/pc/PlayerCharacter.js";
+export { type IHasSavingThrows, SavingThrows } from "./model/pc/SavingThrows.js";
+export { Skills } from "./model/pc/Skills.js";
+export { Speeds } from "./model/pc/Speeds.js";
 //#endregion
 
 //#region model/.
-export { Action, ActionCore } from "./model/Action";
-export { Activity, ActivityCore } from "./model/Activity";
-export { AlchemicalItem, AlchemicalItemCore } from "./model/AlchemicalItem";
-export { Ammunition, AmmunitionCore } from "./model/Ammunition";
-export { Ancestry } from "./model/Ancestry";
-export { ArcaneSchool } from "./model/ArcaneSchool";
-export { Archetype } from "./model/Archetype";
-export { Armor } from "./model/Armor";
-export { ArmorGroup } from "./model/ArmorGroup";
-export { Background } from "./model/Background";
-export { Class } from "./model/Class";
-export { ClassKit } from "./model/ClassKit";
-export { ClassPath } from "./model/ClassPath";
-export { Coins, CoinsCore } from "./model/Coins";
-export { Condition } from "./model/Condition";
-export { DedicationFeat } from "./model/DedicationFeat";
-export { Deity } from "./model/Deity";
-export { Domain } from "./model/Domain";
-export { Faith } from "./model/Faith";
-export { Feat } from "./model/Feat";
-export { FocusSpell } from "./model/FocusSpell";
-export { Gear } from "./model/Gear";
-export { GearCategory } from "./model/GearCategory";
-export { Glossary } from "./model/Glossary";
-export { Heritage } from "./model/Heritage";
-export { Item } from "./model/Item";
-export { Language } from "./model/Language";
-export { Material } from "./model/Material";
-export { Ritual } from "./model/Ritual";
-export { Rule } from "./model/Rule";
-export { Shield } from "./model/Shield";
-export { Skill } from "./model/Skill";
-export { Snare } from "./model/Snare";
-export { Spell } from "./model/Spell";
-export { Table } from "./model/Table";
-export { Trait } from "./model/Trait";
-export { VersatileHeritage } from "./model/VersatileHeritage";
-export { Weapon } from "./model/Weapon";
-export { WeaponGroup } from "./model/WeaponGroup";
-export { TCore, TEntity } from "./model/index";
+export { Action, type ActionCore } from "./model/Action.js";
+export { Activity, type ActivityCore } from "./model/Activity.js";
+export { AlchemicalItem, type AlchemicalItemCore } from "./model/AlchemicalItem.js";
+export { Ammunition, type AmmunitionCore } from "./model/Ammunition.js";
+export { Ancestry } from "./model/Ancestry.js";
+export { ArcaneSchool } from "./model/ArcaneSchool.js";
+export { Archetype } from "./model/Archetype.js";
+export { Armor } from "./model/Armor.js";
+export { ArmorGroup } from "./model/ArmorGroup.js";
+export { Background } from "./model/Background.js";
+export { Class } from "./model/Class.js";
+export { ClassKit } from "./model/ClassKit.js";
+export { ClassPath } from "./model/ClassPath.js";
+export { Coins, type CoinsCore } from "./model/Coins.js";
+export { Condition } from "./model/Condition.js";
+export { DedicationFeat } from "./model/DedicationFeat.js";
+export { Deity } from "./model/Deity.js";
+export { Domain } from "./model/Domain.js";
+export { Faith } from "./model/Faith.js";
+export { Feat } from "./model/Feat.js";
+export { FocusSpell } from "./model/FocusSpell.js";
+export { Gear } from "./model/Gear.js";
+export { GearCategory } from "./model/GearCategory.js";
+export { Glossary } from "./model/Glossary.js";
+export { Heritage } from "./model/Heritage.js";
+export { Item } from "./model/Item.js";
+export { Language } from "./model/Language.js";
+export { Material } from "./model/Material.js";
+export { Ritual } from "./model/Ritual.js";
+export { Rule } from "./model/Rule.js";
+export { Shield } from "./model/Shield.js";
+export { Skill } from "./model/Skill.js";
+export { Snare } from "./model/Snare.js";
+export { Spell } from "./model/Spell.js";
+export { Table } from "./model/Table.js";
+export { Trait } from "./model/Trait.js";
+export { VersatileHeritage } from "./model/VersatileHeritage.js";
+export { Weapon } from "./model/Weapon.js";
+export { WeaponGroup } from "./model/WeaponGroup.js";
+export { type TCore, type TEntity } from "./model/index.js";
 //#endregion
 //#endregion
 
 //#region weather
-export { WeatherCalendar, WeatherCalendarCore } from "./weather/WeatherCalendar";
-export { IWeatherDayResult, IWeatherHourResult, WeatherGenerator } from "./weather/WeatherGenerator";
-export * from "./weather/tables";
-export * from "./weather/terms";
-export * from "./weather/weather";
+export { WeatherCalendar, type WeatherCalendarCore } from "./weather/WeatherCalendar.js";
+export { type IWeatherDayResult, type IWeatherHourResult, WeatherGenerator } from "./weather/WeatherGenerator.js";
+export * from "./weather/tables.js";
+export * from "./weather/terms.js";
+export * from "./weather/weather.js";
 //#endregion
 
-export * from "./common";
+export * from "./common.js";
 
 export function registerAndLoad(): Promise<void> {
 	registerBaseObjects();

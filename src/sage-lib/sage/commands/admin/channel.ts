@@ -1,11 +1,8 @@
-import { DicePostType, GameSystemType, PostType, SageChannel, SageChannelType, parseGameSystem } from "@rsc-sage/types";
+import { DicePostType, GameSystemType, PostType, SageChannelType, parseGameSystem, type SageChannel } from "@rsc-sage/types";
 import { mapAsync } from "@rsc-utils/array-utils";
-import { warn } from "@rsc-utils/core-utils";
-import { DiscordKey, toChannelMention } from "@rsc-utils/discord-utils";
-import { stringify } from "@rsc-utils/core-utils";
+import { isDefined, stringify, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordKey, isDMBased, isMessageTarget, toChannelMention } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
-import type { Snowflake } from "@rsc-utils/core-utils";
-import { isDefined, type Optional } from "@rsc-utils/core-utils";
 import { GuildChannel } from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice/index.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
@@ -78,10 +75,10 @@ function channelDetailsAppendGame(renderableContent: RenderableContent, server: 
 
 async function getChannelNameAndActiveGame(sageCache: SageCache, channelDid: Snowflake): Promise<[string, Game | undefined]> {
 	const channel = await sageCache.discord.fetchChannel(channelDid);
-	if (!channel || channel.type === "DM") {
+	if (!isMessageTarget(channel) || isDMBased(channel)) {
 		return ["DM", undefined];
 	}
-	const discordKey = DiscordKey.fromChannel(channel);
+	const discordKey = DiscordKey.from(channel);
 	return [channel.name, await sageCache.games.findActiveByDiscordKey(discordKey)];
 }
 

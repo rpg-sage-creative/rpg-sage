@@ -1,6 +1,6 @@
 import { DiceCritMethodType, DiceOutputType, GameType } from "@rsc-sage/types";
 import { sortPrimitive } from "@rsc-utils/array-utils";
-import { HasIdCore, IdCore } from "@rsc-utils/class-utils";
+import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/core-utils";
 import { cleanWhitespace, type TokenData } from "@rsc-utils/string-utils";
 import type { TDiceRoll } from "./dice/base/types.js";

@@ -1,5 +1,5 @@
 import { error, warn, warnReturnNull, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, isDMBased, isGuildBased, toHumanReadable, toInviteUrl, toMessageUrl, toUserUrl, type MessageTarget } from "@rsc-utils/discord-utils";
+import { DiscordKey, isDMBased, isGuildBased, toHumanReadable, toInviteUrl, toMessageUrl, toUserUrl, type MessageOrPartial, type MessageTarget } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Channel, Message, MessageReaction, User } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
@@ -12,7 +12,7 @@ import type { IMenuRenderable } from "./types.js";
 
 //#region helpers
 
-function messageToDetails(message: Message): string {
+function messageToDetails(message: MessageOrPartial): string {
 	const channelName = toHumanReadable(message),
 		profileUrl = toUserUrl(message.author) ?? "Invalid ProfileUrl",
 		inviteUrl = toInviteUrl(message.guild) ?? "Invalid InviteUrl";
@@ -58,12 +58,12 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 		return [];
 	}
 
-	const webhook = await sageCache.discord.fetchOrCreateWebhook(targetChannel.guild, targetChannel, "dialog");
+	const webhook = await sageCache.discord.fetchOrCreateWebhook(targetChannel.guild, targetChannel);
 	if (!webhook) {
 		return Promise.reject(`Cannot Find Webhook: ${targetChannel.guild?.id}-${targetChannel.id}-dialog`);
 	}
 
-	const embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel), renderableContent);
+	const embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel as MessageTarget), renderableContent);
 	const contentToEmbeds = dialogType === DialogType.Embed;
 	const embedsToContent = dialogType === DialogType.Post;
 	// const content = dialogType === DialogType.Post ? resolveToTexts(sageCache.cloneForChannel(targetChannel), renderableContent).join("\n") : undefined;
@@ -75,7 +75,7 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 	return sendTo({ sageCache, target:webhook, embeds, files, threadId, ...authorOptions }, { contentToEmbeds, embedsToContent });
 }
 
-export async function replaceWebhook(originalMessage: Message, webhookOptions: WebhookOptions): Promise<Message[]> {
+export async function replaceWebhook(originalMessage: MessageOrPartial, webhookOptions: WebhookOptions): Promise<Message[]> {
 	const { authorOptions, renderableContent, dialogType, files, sageCache, skipDelete } = webhookOptions;
 
 	if (!skipDelete && !originalMessage.deletable) {
@@ -86,13 +86,13 @@ export async function replaceWebhook(originalMessage: Message, webhookOptions: W
 		return Promise.reject(`Cannot Find Webhook w/o a Guild: ${originalMessage.channel?.id}`);
 	}
 
-	const webhook = await sageCache.discord.fetchOrCreateWebhook(originalMessage.guild, originalMessage.channel, "dialog");
+	const webhook = await sageCache.discord.fetchOrCreateWebhook(originalMessage.guild, originalMessage.channel);
 	if (!webhook) {
 		return Promise.reject(`Cannot Find Webhook: ${originalMessage.guild?.id}-${originalMessage.channel?.id}-dialog`);
 	}
 
 	// this pauses in case Tupper is also deleting the message so that our delete attempt can detect if it was deleted to avoid errors
-	await sageCache.pauseForTupper(DiscordKey.fromMessage(originalMessage));
+	await sageCache.pauseForTupper(DiscordKey.from(originalMessage));
 	if (!skipDelete) {
 		await deleteMessage(originalMessage);
 	}
@@ -131,7 +131,7 @@ export async function replace(caches: SageCache, originalMessage: Message, rende
 	return send(caches, originalMessage.channel, renderableContent, originalMessage.author);
 }
 
-export async function send(caches: SageCache, targetChannel: MessageTarget, renderableContent: RenderableContentResolvable, originalAuthor: User | null): Promise<Message[]> {
+export async function send(caches: SageCache, targetChannel: MessageTarget, renderableContent: RenderableContentResolvable, originalAuthor: Optional<User>): Promise<Message[]> {
 	try {
 		const menuRenderable = (<IMenuRenderable>renderableContent).toMenuRenderableContent && <IMenuRenderable>renderableContent || null,
 			menuItemCount = menuRenderable?.getMenuLength() ?? 0;
@@ -150,7 +150,7 @@ export async function send(caches: SageCache, targetChannel: MessageTarget, rend
 	return [];
 }
 
-async function sendRenderableContent(sageCache: SageCache, renderableContent: RenderableContentResolvable, targetChannel: MessageTarget, originalAuthor: User | null): Promise<Message[]> {
+async function sendRenderableContent(sageCache: SageCache, renderableContent: RenderableContentResolvable, targetChannel: MessageTarget, originalAuthor: Optional<User>): Promise<Message[]> {
 	const messages: Message[] = [];
 	const embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel), renderableContent);
 	if (embeds.length > 2) {
@@ -170,7 +170,7 @@ async function sendRenderableContent(sageCache: SageCache, renderableContent: Re
 	return messages;
 }
 
-function sendMenuRenderableContent(caches: SageCache, menuRenderable: IMenuRenderable, targetChannel: MessageTarget, originalAuthor: User | null): void {
+function sendMenuRenderableContent(caches: SageCache, menuRenderable: IMenuRenderable, targetChannel: MessageTarget, originalAuthor: Optional<User>): void {
 	const menuLength = menuRenderable.getMenuLength();
 	if (menuLength > 1) {
 		sendAndAwaitReactions(caches, menuRenderable, targetChannel, originalAuthor).then(index => {
@@ -188,7 +188,7 @@ function sendMenuRenderableContent(caches: SageCache, menuRenderable: IMenuRende
 
 const TIMEOUT = "TIMEOUT";
 const TIMEOUT_MILLI = 60 * 1000;
-function sendAndAwaitReactions(caches: SageCache, menuRenderable: IMenuRenderable, targetChannel: MessageTarget, originalAuthor: User | null): Promise<number> {
+function sendAndAwaitReactions(caches: SageCache, menuRenderable: IMenuRenderable, targetChannel: MessageTarget, originalAuthor: Optional<User>): Promise<number> {
 	return new Promise<number>(async (resolve, reject) => {
 		const menuLength = menuRenderable.getMenuLength();
 		if (menuLength < 1) {

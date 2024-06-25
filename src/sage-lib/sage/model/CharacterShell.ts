@@ -4,6 +4,7 @@ import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
 import type { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, TGameCharacterType } from "./GameCharacter.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
+import type { Snowflake } from "@rsc-utils/core-utils";
 
 export type CharacterShellCore = {
 	/** id of the GameCharacter */
@@ -39,7 +40,7 @@ export class CharacterShell {
 		// }
 		// return nickname;
 	}
-	public get userId(): string | undefined {
+	public get userId(): Snowflake | undefined {
 		return this.game?.userDid;
 	}
 

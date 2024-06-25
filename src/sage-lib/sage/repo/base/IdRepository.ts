@@ -1,15 +1,17 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, getCodeName, getDataRoot, isDefined, isNonNilSnowflake, isNonNilUuid, verbose, type Optional, type OrNull, type UUID } from "@rsc-utils/core-utils";
-import { randomSnowflake } from "@rsc-utils/dice-utils";
+import { errorReturnEmptyArray, errorReturnFalse, errorReturnNull, getCodeName, getDataRoot, isDefined, isNonNilSnowflake, isNonNilUuid, verbose, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { randomSnowflake } from "@rsc-utils/core-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import type { SageCache } from "../../model/SageCache.js";
 
-export { DialogPostType as DialogType, SageChannel as IChannel } from "@rsc-sage/types";
+export { DialogPostType as DialogType, type SageChannel as IChannel } from "@rsc-sage/types";
 
 export class HasIdCoreAndSageCache<T extends IdCore<U>, U extends string = string> extends HasIdCore<T, U> {
 	public constructor(core: T, protected sageCache: SageCache) { super(core); }
 }
+
+type IdType = Snowflake | UUID;
 
 type TParser<T extends IdCore, U extends HasIdCore<T>> = (core: T, sageCache: SageCache) => Promise<U>;
 
@@ -17,10 +19,10 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
 	//#region CacheÒ
 
-	private idToEntityMap = new EphemeralMap<UUID, U>(15000);
+	private idToEntityMap = new EphemeralMap<IdType, U>(15000);
 
 	/** Caches the given id/entity pair. */
-	protected cacheId(id: UUID, entity: U): void {
+	protected cacheId(id: IdType, entity: U): void {
 		if (id && entity) {
 			this.idToEntityMap.set(id, entity);
 		}
@@ -47,13 +49,13 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 	//#region Ids
 
 	/** Reads all the uuid.json files and returns all the "Id" values. */
-	protected async getIds(): Promise<UUID[]> {
+	protected async getIds(): Promise<IdType[]> {
 		const files = await listFiles(`${IdRepository.DataPath}/${this.objectTypePlural}`)
 			.catch<string[]>(errorReturnEmptyArray);
 		return files
 			.filter(file => file.endsWith(".json"))
 			.map(file => file.slice(0, -5))
-			.filter(id => isNonNilUuid(id) || isNonNilSnowflake(id));
+			.filter(id => isNonNilUuid(id) || isNonNilSnowflake(id)) as IdType[];
 	}
 
 	//#endregion
@@ -76,13 +78,13 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 	}
 
 	/** Reads the uuid.json for the given "Id". */
-	protected readCoreById(id: UUID): Promise<OrNull<T>> {
+	protected readCoreById(id: IdType): Promise<OrNull<T>> {
 		return readJsonFile<T>(`${IdRepository.DataPath}/${this.objectTypePlural}/${id}.json`)
 			.catch(errorReturnNull);
 	}
 
 	/** Reads the uuid.json for each given "Id". */
-	protected async readCoresByIds(...ids: UUID[]): Promise<OrNull<T>[]> {
+	protected async readCoresByIds(...ids: IdType[]): Promise<OrNull<T>[]> {
 		const cores: OrNull<T>[] = [];
 		for (const id of ids) {
 			cores.push(await this.readCoreById(id));
@@ -102,7 +104,7 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 	}
 
 	/** Gets the entity by id, checking cache first. */
-	public async getById(id: Optional<UUID>): Promise<OrNull<U>> {
+	public async getById(id: Optional<IdType>): Promise<OrNull<U>> {
 		if (!id) {
 			return null;
 		}
@@ -113,7 +115,7 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 	}
 
 	/** Gets the entities by id, checking cache first. */
-	public async getByIds(...ids: UUID[]): Promise<OrNull<U>[]> {
+	public async getByIds(...ids: IdType[]): Promise<OrNull<U>[]> {
 		const entities: OrNull<U>[] = [];
 		for (const id of ids) {
 			entities.push(await this.getById(id));
@@ -122,7 +124,7 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 	}
 
 	/** Gets the entity using .readCoreById(), caching the value before returning it. */
-	protected async readById(id: UUID): Promise<OrNull<U>> {
+	protected async readById(id: IdType): Promise<OrNull<U>> {
 		const core = await this.readCoreById(id);
 		if (core) {
 			const entity = <U>await (<typeof IdRepository>this.constructor).fromCore(core, this.sageCache);
@@ -143,7 +145,7 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 		const formatted = getCodeName() === "dev";
 		const saved = await writeFile(path, entity.toJSON(), true, formatted).catch(errorReturnFalse);
 		if (saved) {
-			this.cacheId(entity.id, entity);
+			this.cacheId(entity.id as IdType, entity);
 		}
 		return saved;
 	}

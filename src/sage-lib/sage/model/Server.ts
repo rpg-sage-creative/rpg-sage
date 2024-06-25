@@ -5,7 +5,7 @@ import { applyChanges, warn, type Args, type Optional, type Snowflake } from "@r
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Guild } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
-import { DidCore, HasDidCore } from "../repo/base/DidRepository.js";
+import { type DidCore, HasDidCore } from "../repo/base/DidRepository.js";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
 import type { Game } from "./Game.js";
@@ -379,7 +379,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 			admins: [],
 			channels: [],
 			colors: activeBot.colors.toArray(),
-			did: guild.id,
+			did: guild.id as Snowflake,
 			emoji: [],
 			// dialogPostType: DialogPostType.Embed,
 			// diceCritMethodType: DiceCritMethodType.Unknown,

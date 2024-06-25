@@ -1,7 +1,7 @@
 import type { RenderableContentSection, RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import { TAB } from "../common";
-import { RenderableContent } from "../data/RenderableContent";
-import { HasSource, SourcedCore } from "./base/HasSource";
+import { TAB } from "../common.js";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 export interface WeaponGroupCore extends SourcedCore<"WeaponGroup"> {
 	specializationEffect: string[];

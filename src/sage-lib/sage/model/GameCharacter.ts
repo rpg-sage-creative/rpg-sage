@@ -1,20 +1,19 @@
 import type { DialogPostType } from "@rsc-sage/types";
-import { DiscordKey } from "@rsc-utils/discord-utils";
-import { NIL_SNOWFLAKE, isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import type { Optional } from "@rsc-utils/core-utils";
-import type { UUID } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordKey } from "@rsc-utils/discord-utils";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
+import { doStatMath } from "../commands/dice/stats/doStatMath.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
-import { doStatMath } from "../commands/dice/stats/doStatMath.js";
 
 export type TDialogMessage = {
 	channelDid: Snowflake;
-	characterId: UUID;
-	gameId: UUID;
+	characterId: Snowflake;
+	gameId: Snowflake;
 	messageDid: Snowflake;
 	serverDid: Snowflake;
 	threadDid: Snowflake;
@@ -39,7 +38,7 @@ export interface GameCharacterCore {
 	/** Discord compatible color: 0x001122 */
 	embedColor?: string;
 	/** Unique ID of this character */
-	id: UUID;
+	id: Snowflake;
 	/** A list of the character's last messages by channel. */
 	lastMessages?: TDialogMessage[];
 	/** The character's name */
@@ -154,7 +153,7 @@ export class GameCharacter implements IHasSave {
 	public set embedColor(embedColor: string | undefined) { this.core.embedColor = embedColor; }
 
 	/** Unique ID of this character */
-	public get id(): UUID { return this.core.id; }
+	public get id(): Snowflake { return this.core.id; }
 
 	public isGM: boolean;// = this.type === "npc" && this.name === (this.owner?.gmCharacterName ?? GameCharacter.defaultGmCharacterName);
 	public isNPC: boolean;// = this.type === "npc";
@@ -189,7 +188,7 @@ export class GameCharacter implements IHasSave {
 		return this._parent ?? undefined;
 	}
 	/** The ID of the parent of a companion. */
-	public get parentId(): UUID | undefined { return this.parent?.id; }
+	public get parentId(): Snowflake | undefined { return this.parent?.id; }
 
 	private _preparedAlias?: string;
 	private get preparedAlias(): string { return this._preparedAlias ?? (this._preparedAlias = GameCharacter.prepareName(this.alias ?? this.name)); }

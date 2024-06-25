@@ -1,12 +1,12 @@
 import { GameType, parseGameSystem } from "@rsc-sage/types";
 import { HasCore, type IdCore } from "@rsc-utils/class-utils";
-import type { OrNull, OrUndefined } from "@rsc-utils/core-utils";
-import { randomSnowflake } from "@rsc-utils/dice-utils";
+import { type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
+import { randomSnowflake } from "@rsc-utils/core-utils";
 import {
 	CritMethodType,
 	DiceOutputType,
 	DiceSecretMethodType,
-	TDiceOutput,
+	type TDiceOutput,
 	getCritMethodRegex,
 	parseCritMethodType, parseDiceOutputType
 } from "../../common.js";

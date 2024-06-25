@@ -1,12 +1,12 @@
 import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/array-utils";
 import type { SearchInfo, SearchScore, Searchable } from "@rsc-utils/search-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import { TParsedSource, parseSources } from "../../data/Repository";
-import type { Base } from "./Base";
-import type { SourcedCore, TSourceInfo } from "./HasSource";
-import { HasSource } from "./HasSource";
-import type { Source } from "./Source";
-import type { IHasArchives, IHasLink, IHasName } from "./interfaces";
+import { type TParsedSource, parseSources } from "../../data/Repository.js";
+import type { Base } from "./Base.js";
+import type { SourcedCore, TSourceInfo } from "./HasSource.js";
+import { HasSource } from "./HasSource.js";
+import type { Source } from "./Source.js";
+import type { IHasArchives, IHasLink, IHasName } from "./interfaces.js";
 
 /*
 From https://elasticsearch.galdiuz.com/aon/_search

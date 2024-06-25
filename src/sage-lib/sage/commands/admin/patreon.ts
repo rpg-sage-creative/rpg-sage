@@ -1,5 +1,5 @@
 import { getSuperUserId } from "@rsc-sage/env";
-import { verbose } from "@rsc-utils/core-utils";
+import { verbose, type Snowflake } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { send } from "../../../discord/messages.js";
@@ -12,7 +12,7 @@ import { createAdminRenderableContent } from "../cmd.js";
 
 async function patreonSync(sageMessage: SageMessage): Promise<void> {
 	const isHome = Server.isHome(sageMessage.server?.did),
-		isDm = sageMessage.message.channel.type === "DM";
+		isDm = sageMessage.message.channel.isDMBased();
 	if (!sageMessage.isSuperUser || !(isHome || isDm)) {
 		return sageMessage.reactBlock();
 	}
@@ -48,7 +48,7 @@ export async function syncPatreon(sageCache: SageCache): Promise<void> {
 					renderableContent.append(`Updating Patron ${sageUser.did} from ${PatronTierType[oldTier || 0]} to ${PatronTierType[tier]} ... ${saved}`);
 				}
 			} else {
-				sageUser = new User(User.createCore(member.id), sageCache);
+				sageUser = new User(User.createCore(member.id as Snowflake), sageCache);
 				sageUser.patronTier = tier;
 				const saved = await sageUser.save();
 				renderableContent.append(`Adding Patron ${sageUser.did} to ${PatronTierType[tier]} ... ${saved}`);

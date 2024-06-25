@@ -1,11 +1,9 @@
 import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannelType } from "@rsc-sage/types";
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
-import { debug } from "@rsc-utils/core-utils";
-import type { DInteraction, DRepliableInteraction, DTextChannel, DiscordKey } from "@rsc-utils/discord-utils";
+import { debug, isDefined, orNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { DInteraction, DRepliableInteraction, DiscordKey, EmbedBuilder } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
-import { orNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
-import { isDefined, type Optional } from "@rsc-utils/core-utils";
-import { type AutocompleteInteraction, type ButtonInteraction, type CommandInteraction, type If, type InteractionType, type MessageActionRow, type MessageAttachment, type MessageButton, type MessageComponentInteraction, type MessageComponentType, type MessageEmbed, type MessageSelectMenu, type ModalSubmitInteraction, type SelectMenuInteraction } from "discord.js";
+import { ComponentType, InteractionType, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
@@ -32,18 +30,18 @@ export interface SageCommandCore {
 
 export type TSendArgs<HasEphemeral extends boolean = boolean> = {
 	content?: RenderableContentResolvable;
-	embeds?: RenderableContentResolvable | MessageEmbed[];
-	components?: MessageActionRow<MessageSelectMenu | MessageButton>[];
+	embeds?: RenderableContentResolvable | EmbedBuilder[];
+	components?: ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[];
 	ephemeral?: If<HasEphemeral, boolean | null, never>;
-	files?: MessageAttachment[];
+	files?: AttachmentBuilder[];
 };
 
 export type TSendOptions<HasEphemeral extends boolean = boolean> = {
 	content?: string;
-	embeds?: MessageEmbed[];
-	components?: MessageActionRow<MessageSelectMenu | MessageButton>[];
+	embeds?: EmbedBuilder[];
+	components?: ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[];
 	ephemeral?: If<HasEphemeral, boolean | null, never>;
-	files?: MessageAttachment[];
+	files?: AttachmentBuilder[];
 };
 
 export abstract class SageCommand<
@@ -59,7 +57,7 @@ export abstract class SageCommand<
 	public abstract isCommand(...args: string[]): boolean;
 
 	public isSageInteraction(type: "BUTTON"): this is SageInteraction<ButtonInteraction>;
-	public isSageInteraction(type: "SELECT"): this is SageInteraction<SelectMenuInteraction>;
+	public isSageInteraction(type: "SELECT"): this is SageInteraction<StringSelectMenuInteraction>;
 	public isSageInteraction(type: "TEXT"): this is SageInteraction<MessageComponentInteraction>;
 	public isSageInteraction(type: "COMPONENT"): this is SageInteraction<MessageComponentInteraction>;
 	public isSageInteraction(type: "AUTO"): this is SageInteraction<AutocompleteInteraction>;
@@ -80,17 +78,18 @@ export abstract class SageCommand<
 				// return "reply" in interaction;
 			}
 
-			let type: InteractionType | MessageComponentType;
+			let type: InteractionType | ComponentType;
 			switch(_type) {
 				// InteractionType
-				case "AUTO": type = "APPLICATION_COMMAND_AUTOCOMPLETE"; break; //NOSONAR
-				case "MODAL": type = "MODAL_SUBMIT"; break; //NOSONAR
-				case "SLASH": type = "APPLICATION_COMMAND"; break; //NOSONAR
+				case "AUTO": type = InteractionType.ApplicationCommandAutocomplete; break; //NOSONAR
+				case "MODAL": type = InteractionType.ModalSubmit; break; //NOSONAR
+				case "SLASH": type = InteractionType.ApplicationCommand; break; //NOSONAR
 				// MessageComponentType
-				case "BUTTON": type = _type; break; //NOSONAR
-				case "SELECT": type = "SELECT_MENU"; break; //NOSONAR
-				case "TEXT": type = "TEXT_INPUT"; break; //NOSONAR
-				case "COMPONENT": type = "MESSAGE_COMPONENT"; break; //NOSONAR
+				case "BUTTON": type = ComponentType.Button; break; //NOSONAR
+				case "SELECT": type = ComponentType.StringSelect; break; //NOSONAR
+				case "TEXT": type = ComponentType.TextInput; break; //NOSONAR
+				// case "COMPONENT": type = ComponentType.; break; //NOSONAR
+				default: return false;
 			}
 
 			if (interaction.type === type) {
@@ -273,10 +272,10 @@ export abstract class SageCommand<
 
 	//#region channels
 
-	public get dChannel(): DTextChannel | undefined {
+	public get dChannel(): TextBasedChannel | undefined {
 		return this.isSageInteraction<CommandInteraction>()
-			? this.interaction.channel as DTextChannel
-			: (this as unknown as SageMessage).message.channel as DTextChannel;
+			? this.interaction.channel ?? undefined
+			: (this as unknown as SageMessage).message.channel;
 	}
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
@@ -312,7 +311,7 @@ export abstract class SageCommand<
 	 */
 	public get playerCharacter(): GameCharacter | undefined {
 		return this.cache.get("playerCharacter", () => {
-			const channelDid = this.channel?.id!;
+			const channelDid = this.channel?.id as Snowflake;
 			const userDid = this.sageUser.did;
 			const autoChannelData = { channelDid, userDid };
 			return this.game?.playerCharacters.getAutoCharacter(autoChannelData)

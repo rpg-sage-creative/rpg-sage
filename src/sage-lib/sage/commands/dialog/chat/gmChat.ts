@@ -1,9 +1,9 @@
-import { ColorType } from "../../../model/HasColorsCore";
-import { SageMessage } from "../../../model/SageMessage";
-import { DialogContent } from "../DialogContent";
-import { findGm } from "../find/findGm";
-import { ChatOptions } from "./ChatOptions";
-import { doChat } from "./doChat";
+import { ColorType } from "../../../model/HasColorsCore.js";
+import { SageMessage } from "../../../model/SageMessage.js";
+import type { DialogContent } from "../DialogContent.js";
+import { findGm } from "../find/findGm.js";
+import type { ChatOptions } from "./ChatOptions.js";
+import { doChat } from "./doChat.js";
 
 export async function gmChat(sageMessage: SageMessage, dialogContent: DialogContent, options: ChatOptions): Promise<void> {
 	const gm = await findGm(sageMessage);

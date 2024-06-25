@@ -1,7 +1,7 @@
 import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { type AnyThreadChannel, type Channel } from "discord.js";
-import { isDMBased, isThread } from "../typeChecks.js";
 import { getPermsFor } from "./getPermsFor.js";
+import { isDMBased, isThread } from "../types/types.js";
 
 function isLockedOrArchivedThread(channel: Channel): channel is AnyThreadChannel {
 	if (isThread(channel)) {

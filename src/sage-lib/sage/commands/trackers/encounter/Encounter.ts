@@ -1,11 +1,11 @@
 import { applyMixins } from "@rsc-utils/core-utils";
-import type { CharacterShell } from "../../../model/CharacterShell";
-import type { Game } from "../../../model/Game";
-import { CharacterSorter, HasCharacters, type HasCharactersCore } from "../common/HasCharacters";
-import { HasCore } from "../common/HasCore";
-import { HasPins, type HasPinsCore } from "../common/HasPins";
-import { HasTemplates, type HasTemplatesCore } from "../common/HasTemplates";
-import type { Party } from "../party/Party";
+import type { CharacterShell } from "../../../model/CharacterShell.js";
+import type { Game } from "../../../model/Game.js";
+import { type CharacterSorter, HasCharacters, type HasCharactersCore } from "../common/HasCharacters.js";
+import { HasCore } from "../common/HasCore.js";
+import { HasPins, type HasPinsCore } from "../common/HasPins.js";
+import { HasTemplates, type HasTemplatesCore } from "../common/HasTemplates.js";
+import type { Party } from "../party/Party.js";
 
 type CurrentValues = {
 	init?: number;

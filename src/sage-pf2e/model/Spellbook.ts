@@ -1,6 +1,6 @@
 import { HasCore, type Core } from "@rsc-utils/class-utils";
-import type { Snowflake } from "@rsc-utils/core-utils";
-import { randomItem, randomSnowflake, rollDie } from "@rsc-utils/dice-utils";
+import { randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { randomItem, rollDie } from "@rsc-utils/dice-utils";
 import type { TMagicTradition } from "../common";
 import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL } from "../common";
 import { filter, findByValue } from "../data/Repository";
@@ -82,7 +82,7 @@ export class Spellbook extends HasCore<SpellbookCore> {
 	// Properties
 
 	public get arcaneSchool(): ArcaneSchool | undefined { return this.casterClass === "Wizard" && this.core.casterSpecialty ? findByValue("ArcaneSchool", this.core.casterSpecialty) : undefined; }
-	public set arcaneSchool(arcaneSchool: ArcaneSchool | undefined) { this.core.casterSpecialty = arcaneSchool?.id; }
+	public set arcaneSchool(arcaneSchool: ArcaneSchool | undefined) { this.core.casterSpecialty = arcaneSchool?.id as Snowflake; }
 
 	public get bloodline(): Snowflake | undefined { return this.casterClass === "Sorcerer" ? this.core.casterSpecialty : undefined; }
 	public set bloodline(bloodline: Snowflake | undefined) { this.core.casterSpecialty = bloodline; }
@@ -178,7 +178,7 @@ export class Spellbook extends HasCore<SpellbookCore> {
 		const spellbook = new Spellbook();
 		spellbook.core.casterClass = casterClass;
 		spellbook.core.casterLevel = casterLevel;
-		spellbook.core.casterSpecialty = casterSpecialty;
+		spellbook.core.casterSpecialty = casterSpecialty as Snowflake;
 		spellbook.core.sources = sources;
 		spellbook.spells = spells;
 		return spellbook;

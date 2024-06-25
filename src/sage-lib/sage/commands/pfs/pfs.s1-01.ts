@@ -3,7 +3,7 @@ import { shuffle } from "@rsc-utils/dice-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { BULLET } from "@rsc-utils/string-utils";
 import type { SageMessage } from "../../model/SageMessage";
-import { addScenario, createPfsRenderableContent, TPfsFaction, TTierInfo } from "./pfs";
+import { addScenario, createPfsRenderableContent, type TPfsFaction, type TTierInfo } from "./pfs";
 
 type TMission = "Flotsam Graveyard" | "Petals District" | "Precipice Quarter" | "Westgate";
 type TFactionLeader = {

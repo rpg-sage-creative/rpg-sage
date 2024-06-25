@@ -3,7 +3,7 @@ import { StringMatcher } from "@rsc-utils/string-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { RenderableContent } from "../../data/RenderableContent";
 import { findByValue, type IFile } from "../../data/Repository";
-import { Base, BaseCore } from "./Base";
+import { Base, type BaseCore } from "./Base";
 
 export interface SourceCore extends BaseCore<"Source"> {
 	apName?: string;

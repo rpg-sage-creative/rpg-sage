@@ -1,12 +1,12 @@
 import { sortByKey } from "@rsc-utils/array-utils";
 import { nth } from "@rsc-utils/number-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import { rarityToSuper } from "../common";
-import { RenderableContent } from "../data/RenderableContent";
-import { all, find, findByValue } from "../data/Repository";
-import { HasSource, SourcedCore } from "../model/base/HasSource";
-import type { DedicationFeat } from "./DedicationFeat";
-import type { Feat } from "./Feat";
+import { rarityToSuper } from "../common.js";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { all, find, findByValue } from "../data/Repository.js";
+import { HasSource, type SourcedCore } from "../model/base/HasSource.js";
+import type { DedicationFeat } from "./DedicationFeat.js";
+import type { Feat } from "./Feat.js";
 
 export type TAdditionalFeat = string | { level: number; name: string; };
 export interface ArchetypeCore extends SourcedCore<"Archetype"> {

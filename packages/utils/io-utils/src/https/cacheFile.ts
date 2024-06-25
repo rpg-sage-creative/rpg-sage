@@ -1,6 +1,8 @@
-import { verbose } from "@rsc-utils/core-utils";
+import { verbose, type Optional } from "@rsc-utils/core-utils";
 import { type ProgressTracker } from "@rsc-utils/progress-utils";
+import type { RedirectableRequest } from "follow-redirects";
 import { WriteStream, createWriteStream, existsSync, mkdirSync, rmSync, statSync } from "fs";
+import type { ClientRequest, IncomingMessage } from "http";
 import { createHttpLogger } from "./createHttpLogger.js";
 import { getProtocol } from "./getProtocol.js";
 
@@ -41,14 +43,21 @@ export function cacheFile(...args: (string | Opts)[]): Promise<boolean> {
 			rmSync(filePath);
 		}
 
-		verbose(`Opening file for stream: ${filePath}`);
-		let writeStream: WriteStream | null = createWriteStream(filePath, { encoding:"utf8" });
-		let pTracker = useLogger ? options.progressTracker ?? createHttpLogger(`Fetching Bytes: ${url}`, 0) : null;
-		const resolve = () => {
+		let writeStream: Optional<WriteStream>;
+		let pTracker: Optional<ProgressTracker>;
+		let request: Optional<RedirectableRequest<ClientRequest, IncomingMessage>>;
+
+		const clean = () => {
+			request?.destroy();
+			request = undefined!;
 			pTracker?.finish();
-			pTracker = null;
+			pTracker = undefined!;
 			writeStream?.close();
-			writeStream = null;
+			writeStream = undefined!;
+		};
+
+		const resolve = () => {
+			clean();
 			if (existsSync(filePath)) {
 				const fileSize = statSync(filePath).size;
 				if (fileSize > 0) {
@@ -61,29 +70,29 @@ export function cacheFile(...args: (string | Opts)[]): Promise<boolean> {
 			}
 		};
 		const reject = (err: any) => {
-			pTracker?.error(err);
-			pTracker = null;
-			writeStream?.close();
-			writeStream = null;
+			clean();
 			_reject(err);
 		};
 		try {
-			const protocol = getProtocol(url);
-			const req = protocol.get(url, response => {
+			verbose(`Opening file for stream: ${filePath}`);
+			writeStream = createWriteStream(filePath, { encoding:"utf8" });
+			writeStream.once("close", resolve);
+			writeStream.once("error", reject);
+
+			pTracker = useLogger ? options.progressTracker ?? createHttpLogger(`Fetching Bytes: ${url}`, 0) : undefined;
+
+			request = getProtocol(url).get(url, response => {
 				try {
 					response.pipe(writeStream!);
 					response.on("data", (chunk: Buffer) => pTracker?.increment(chunk.byteLength));
-					response.once("close", reject);
-					response.once("end", resolve);
 					response.once("error", reject);
 				}catch(ex) {
 					reject(ex);
 				}
 			});
-			req.once("response", resp => pTracker?.start(+(resp.headers["content-length"] ?? 0)));
-			req.once("close", reject);
-			req.once("error", reject);
-			req.once("timeout", reject);
+			request.once("response", resp => pTracker?.start(+(resp.headers["content-length"] ?? 0)));
+			request.once("error", reject);
+			request.once("timeout", reject);
 		}catch(ex) {
 			reject(ex);
 		}

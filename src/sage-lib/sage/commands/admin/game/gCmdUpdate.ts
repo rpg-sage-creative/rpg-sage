@@ -1,7 +1,6 @@
 import type { GameOptions, SageChannel } from "@rsc-sage/types";
+import type { Args, Snowflake } from "@rsc-utils/core-utils";
 import { applyChanges, cloneJson, isEmpty } from "@rsc-utils/core-utils";
-import type { Snowflake } from "@rsc-utils/core-utils";
-import type { Args } from "@rsc-utils/core-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import { Game, type GameCore, type IGameUser } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
@@ -20,7 +19,7 @@ type UpdateGameOptions = {
 function updateGame(sageCommand: SageCommand, options: UpdateGameOptions): Game {
 	const json = cloneJson<GameCore>(sageCommand.game);
 	applyChanges(json, options.gameOptions);
-	json.channels = (json.channels ?? []).concat(options.channelsToAdd).filter(channel => !options.channelsToRemove.includes(channel.id));
+	json.channels = (json.channels ?? []).concat(options.channelsToAdd).filter(channel => !options.channelsToRemove.includes(channel.id as Snowflake));
 	json.users = (json.users ?? []).concat(options.usersToAdd).filter(user => !options.usersToRemove.includes(user.did));
 	return new Game(json, sageCommand.server, sageCommand.sageCache);
 }

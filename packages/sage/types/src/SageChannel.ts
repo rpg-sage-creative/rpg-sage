@@ -1,5 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import type { Snowflake } from "discord.js";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import type { DialogPostType } from "./DialogPostType.js";
 import type { DiceCritMethodType } from "./DiceCritMethodType.js";
 import type { DiceOutputType } from "./DiceOutputType.js";
@@ -33,7 +32,7 @@ export type SageChannelOptions = DialogOptions & DiceOptions & SystemOptions & C
 
 export type SageChannel = Partial<SageChannelOptions> & {
 	/** @deprecated */
-	did?: string;
+	did?: Snowflake;
 	id: Snowflake;
 };
 

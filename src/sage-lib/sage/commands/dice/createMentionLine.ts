@@ -7,7 +7,7 @@ import { createGmMention } from "./createGmMention.js";
  * The GM is always tagged first.
  * If the roll belongs to a player, then they are tagged second.
  */
-export async function createMentionLine(sageCommand: SageCommand, isSecretMention = false/*, hasSecret:boolean, isTargetChannel: boolean, isGmChannel: boolean, isGmUser: boolean*/): Promise<string | null> {
+export async function createMentionLine(sageCommand: SageCommand, isSecretMention = false/*, hasSecret:boolean, isTargetChannel: boolean, isGmChannel: boolean, isGmUser: boolean*/): Promise<string | undefined> {
 	// start with the gm mention
 	const gmMention = createGmMention(sageCommand);
 

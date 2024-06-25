@@ -1,10 +1,10 @@
 import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
+import type { Optional } from "@rsc-utils/core-utils";
 import { error } from "@rsc-utils/core-utils";
 import { rollDie } from "@rsc-utils/dice-utils";
-import { type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
+import { type MessageChannel, type MessageTarget } from "@rsc-utils/discord-utils";
 import { addCommas } from "@rsc-utils/number-utils";
 import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
-import type { Optional } from "@rsc-utils/core-utils";
 import type { ButtonInteraction } from "discord.js";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
@@ -30,7 +30,7 @@ import { processStatBlocks } from "./dice/stats/processStatBlocks.js";
 
 type TInteraction = SageMessage | SageInteraction;
 
-type TGmChannel = Optional<DMessageTarget>;
+type TGmChannel = Optional<MessageTarget>;
 
 type TDiscordDiceParseOptions = {
 	gameSystemType?: GameSystemType;
@@ -219,15 +219,15 @@ export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]
 
 //#region Channels
 
-async function ensureTargetChannel(sageMessage: TInteraction): Promise<DMessageChannel> {
+async function ensureTargetChannel(sageMessage: TInteraction): Promise<MessageChannel> {
 	const channel = await sageMessage.discord.fetchChannel(sageMessage.channel?.sendDiceTo);
 	if (channel) {
-		return channel;
+		return channel as MessageChannel;
 	}
 	if (sageMessage instanceof SageInteraction) {
-		return (sageMessage.interaction as ButtonInteraction).channel as DMessageChannel;
+		return (sageMessage.interaction as ButtonInteraction).channel as MessageChannel;
 	}
-	return sageMessage.message.channel as DMessageChannel;
+	return sageMessage.message.channel as MessageChannel;
 }
 
 async function ensureGmTargetChannel(sageMessage: TInteraction, hasSecret: boolean): Promise<TGmChannel> {
@@ -237,7 +237,7 @@ async function ensureGmTargetChannel(sageMessage: TInteraction, hasSecret: boole
 	if (sageMessage.diceSecretMethodType === DiceSecretMethodType.GameMasterChannel) {
 		const channel = await sageMessage.game?.gmGuildChannel();
 		if (channel) {
-			return channel as DMessageChannel;
+			return channel as MessageChannel;
 		}
 	}
 	const member = await sageMessage.game?.gmGuildMember();

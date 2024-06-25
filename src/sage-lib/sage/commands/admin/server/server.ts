@@ -1,13 +1,13 @@
 import { DicePostType, GameSystemType } from "@rsc-sage/types";
 import { mapAsync } from "@rsc-utils/array-utils";
-import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/core-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Role } from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice/index.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { Server } from "../../../model/Server.js";
-import { AdminRoleType, IAdminRole } from "../../../model/Server.js";
+import { AdminRoleType, type IAdminRole } from "../../../model/Server.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 

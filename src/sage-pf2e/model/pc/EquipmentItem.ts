@@ -1,21 +1,19 @@
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import { Snowflake, warn } from "@rsc-utils/core-utils";
-import { randomSnowflake } from "@rsc-utils/dice-utils";
-import type { TQuality } from "../../common";
-import { findById } from "../../data/Repository";
-import { Bulk } from "../Bulk";
-import { Coins } from "../Coins";
-import type { Gear } from "../Gear";
-import type { BulkCore, HasBulk } from "../HasBulk";
-import type { IMetadata } from "../Metadata";
-import type { Spell } from "../Spell";
-import type { Base } from "../base/Base";
-import type { HasSource } from "../base/HasSource";
-import type { Equipment } from "./Equipment";
-import type { EquipmentList } from "./EquipmentList";
-import { parse, stringify } from "@rsc-utils/core-utils";
+import { parse, randomSnowflake, type Snowflake, stringify, warn } from "@rsc-utils/core-utils";
+import type { TQuality } from "../../common.js";
+import { findById } from "../../data/Repository.js";
+import { Bulk } from "../Bulk.js";
+import { Coins } from "../Coins.js";
+import type { Gear } from "../Gear.js";
+import type { BulkCore, HasBulk } from "../HasBulk.js";
+import type { IMetadata } from "../Metadata.js";
+import type { Spell } from "../Spell.js";
+import type { Base } from "../base/Base.js";
+import type { HasSource } from "../base/HasSource.js";
+import type { Equipment } from "./Equipment.js";
+import type { EquipmentList } from "./EquipmentList.js";
 
-export interface EquipmentItemCore extends IdCore<"EquipmentItem"> {
+export interface EquipmentItemCore extends IdCore<"EquipmentItem", Snowflake> {
 	containerId?: Snowflake;
 	count: number;
 	entries?: string[];
@@ -34,7 +32,7 @@ interface IHasTraits extends HasBulk<BulkCore, IHasTraits> {
 type TEquipmentItemResolvable = EquipmentItem | Snowflake;
 
 function toUuid(equipmentItemResolvable: TEquipmentItemResolvable): Snowflake {
-	return typeof (equipmentItemResolvable) === "string" ? equipmentItemResolvable : equipmentItemResolvable.id;
+	return typeof (equipmentItemResolvable) === "string" ? equipmentItemResolvable : equipmentItemResolvable.id as Snowflake;
 }
 
 export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
@@ -144,9 +142,9 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 	/**************************************************************************************************************************/
 	// Instance Methods
 
-	public canAdd(itemId: string): boolean;
+	public canAdd(itemId: Snowflake): boolean;
 	public canAdd(item: EquipmentItem): boolean;
-	public canAdd(itemOrId: string | EquipmentItem): boolean {
+	public canAdd(itemOrId: Snowflake | EquipmentItem): boolean {
 		const item = typeof (itemOrId) === "string" ? this.eq.getItem(itemOrId) : itemOrId;
 		if (!item) {
 			return false;
@@ -204,7 +202,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 		if (this.id === item.id || this.id === item.containerId) {
 			return false;
 		}
-		if (this.includes(item) || item.includes(this.id, true)) {
+		if (this.includes(item) || item.includes(this.id as Snowflake, true)) {
 			return false;
 		}
 		if (this.includes(item, true)) {
@@ -237,25 +235,25 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 		if (this.isContainer || this.isSheath) {
 			return false;
 		}
-		const item = itemId ? this.eq.getItem(itemId) : undefined;
+		const item = itemId ? this.eq.getItem(itemId as Snowflake) : undefined;
 		return item ? EquipmentItem.canMerge(this, item) : false;
 	}
 	public carry(): void {
 		delete this.core.containerId;
-		this.core.listId = this.eq.carried.id;
+		this.core.listId = this.eq.carried.id as Snowflake;
 		this.eq.update();
 	}
 	public drop(): void {
 		delete this.core.containerId;
 		this.core.isRaised = false;
-		this.core.listId = this.eq.dropped.id;
+		this.core.listId = this.eq.dropped.id as Snowflake;
 		this.eq.update();
 	}
 	public empty(): void {
 		this.items.forEach(item => {
 			delete item.core.containerId;
 			item.core.isRaised = false;
-			item.core.listId = this.eq.dropped.id;
+			item.core.listId = this.eq.dropped.id as Snowflake;
 		});
 		this.eq.update();
 	}
@@ -270,7 +268,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 			equipped = this.eq.shield;
 		}
 		delete this.core.containerId;
-		this.core.listId = this.eq.equipped.id;
+		this.core.listId = this.eq.equipped.id as Snowflake;
 		if (equipped) {
 			if (containerId) {
 				if (this.eq.getItem(containerId)?.canAdd(equipped)) {
@@ -278,7 +276,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 					delete equipped.listId;
 				}
 			} else {
-				equipped.listId = listId ?? this.eq.carried.id;
+				equipped.listId = listId ?? this.eq.carried.id as Snowflake;
 			}
 		}
 		this.eq.update();
@@ -308,7 +306,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 		this.eq.update();
 	}
 	public merge(itemId: string): void {
-		const item = this.eq.getItem(itemId);
+		const item = this.eq.getItem(itemId as Snowflake);
 		if (item && EquipmentItem.canMerge(this, item)) {
 			this.core.count += item.count;
 			item.remove();
@@ -351,7 +349,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 	public unequip(): void {
 		delete this.core.containerId;
 		this.core.isRaised = false;
-		this.core.listId = this.eq.carried.id;
+		this.core.listId = this.eq.carried.id as Snowflake;
 		this.eq.update();
 	}
 	public uninvest(): void {
@@ -360,7 +358,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 	}
 	public wear(): void {
 		delete this.core.containerId;
-		this.core.listId = this.eq.worn.id;
+		this.core.listId = this.eq.worn.id as Snowflake;
 		this.eq.update();
 	}
 
@@ -381,7 +379,7 @@ export class EquipmentItem extends HasIdCore<EquipmentItemCore> {
 			containerId: undefined,
 			count: 1,
 			entries: undefined,
-			itemId: item.id,
+			itemId: item.id as Snowflake,
 			itemQuality: "Standard",
 			id: randomSnowflake(),
 			isInvested: false,

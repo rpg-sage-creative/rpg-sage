@@ -16,3 +16,5 @@ export * from "./readTextSync.js";
 export * from "./symLinkSync.js";
 export * from "./writeFile.js";
 export * from "./writeFileSync.js";
+export * from "./writeJsonDb.js";
+export * from "./writeJsonDbSync.js";

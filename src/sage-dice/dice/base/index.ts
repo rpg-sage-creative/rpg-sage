@@ -1,9 +1,9 @@
 import { GameType } from "@rsc-sage/types";
 import { sortPrimitive, type SortResult } from "@rsc-utils/array-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
-import { warn } from "@rsc-utils/core-utils";
-import { randomSnowflake, rollDice } from "@rsc-utils/dice-utils";
-import { TokenParsers, ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
+import { randomSnowflake, warn } from "@rsc-utils/core-utils";
+import { rollDice } from "@rsc-utils/dice-utils";
+import { type TokenParsers, ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import {
 	CritMethodType,
@@ -11,12 +11,12 @@ import {
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
-	HasDieCore, IDiceBase,
-	IRollBase,
-	TDiceLiteral,
-	TDropKeepData,
-	TSign,
-	TTestData, UNICODE_LEFT_ARROW,
+	HasDieCore, type IDiceBase,
+	type IRollBase,
+	type TDiceLiteral,
+	type TDropKeepData,
+	type TSign,
+	type TTestData, UNICODE_LEFT_ARROW,
 	cleanDescription,
 	dropKeepToString,
 	gradeRoll, gradeToEmoji,
