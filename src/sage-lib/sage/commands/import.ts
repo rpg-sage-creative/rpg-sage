@@ -32,12 +32,12 @@ async function reimportHelp(sageCommand: SageMessage): Promise<void> {
 async function reimportHandler(sageCommand: SageMessage): Promise<void> {
 	// no reference means no reply, means no link back to the character to reimport
 	const reference = sageCommand.message.reference;
-	if (!reference) {
+	if (!reference?.messageId) {
 		return reimportHelp(sageCommand);
 	}
 
 	// no message, means no components to find the characterId
-	const discordKey = new DiscordKey(reference.guildId, reference.channelId, undefined, reference.messageId);
+	const discordKey = DiscordKey.from(reference);
 	const charMessage = await sageCommand.discord.fetchMessage(discordKey);
 	if (!charMessage) {
 		return reimportHelp(sageCommand);

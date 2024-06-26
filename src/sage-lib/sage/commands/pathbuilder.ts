@@ -133,7 +133,7 @@ export async function updateSheet(sageCache: SageCache, character: PathbuilderCh
 		}
 	}else {
 		if (character.messageId) {
-			const discordKey = new DiscordKey(sageCache.server.did, undefined, undefined, character.messageId);
+			const discordKey = DiscordKey.from({ guildId:sageCache.server.did, channelId:undefined!, messageId:character.messageId });
 			message = await sageCache.discord.fetchMessage(discordKey) ?? undefined;
 		}
 	}
@@ -415,7 +415,7 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: Pa
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
 		await sageInteraction.interaction.channel?.send({
-			content: `${toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`,
+			content: `${toUserMention(sageInteraction.user.id as Snowflake)} *Secret Dice sent to the GM* 🎲`,
 			components: createMessageDeleteButtonComponents(sageInteraction.user.id as Snowflake)
 		});
 	}

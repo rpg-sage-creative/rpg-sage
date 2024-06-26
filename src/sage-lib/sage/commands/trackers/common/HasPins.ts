@@ -62,7 +62,7 @@ export abstract class HasPins<Core extends HasPinsCore, Type extends string> {
 	private async _unpin(type: Type, channelId: string): Promise<boolean> {
 		const messageId = this.getPin(type, channelId)?.messageId;
 		if (messageId) {
-			const discordKey = new DiscordKey(this.game.serverDid, channelId, undefined, messageId);
+			const discordKey = DiscordKey.from({ guildId:this.game.serverDid, channelId, messageId });
 			const message = await this.game.server.discord.fetchMessage(discordKey);
 			if (message?.pinned) {
 				await message.unpin();
@@ -73,7 +73,7 @@ export abstract class HasPins<Core extends HasPinsCore, Type extends string> {
 			const array = pins[type];
 			if (array) {
 				pins[type] = array.filter(data => data.channelId !== channelId);
-				if (pins[type]!.length < array.length) {
+				if (pins[type].length < array.length) {
 					this.changed();
 					return true;
 				}
@@ -114,7 +114,7 @@ export abstract class HasPins<Core extends HasPinsCore, Type extends string> {
 		if (pins.length) {
 			const content = this.render(pinType);
 			for (const pin of pins) {
-				const discordKey = new DiscordKey(this.game.server.did, pin.channelId, undefined, pin.messageId);
+				const discordKey = DiscordKey.from({ guildId:this.game.server.did, channelId:pin.channelId, messageId:pin.messageId });
 				const message = await this.game.server.discord.fetchMessage(discordKey);
 				if (message?.editable && message.content !== content) {
 					await message.edit(content);

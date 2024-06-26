@@ -99,8 +99,8 @@ export async function replaceWebhook(originalMessage: MessageOrPartial, webhookO
 
 	let content = undefined;
 	let replyingTo: string | undefined;
-	if (originalMessage.reference) {
-		const discordKey = new DiscordKey(originalMessage.reference.guildId, originalMessage.reference.channelId, undefined, originalMessage.reference.messageId);
+	if (originalMessage.reference?.messageId) {
+		const discordKey = DiscordKey.from(originalMessage.reference);
 		const referenceMessage = await sageCache.discord.fetchMessage(discordKey);
 		const displayName = referenceMessage ? `*${referenceMessage.author.displayName}*` : ``;
 		replyingTo = `*replying to* ${displayName} ${toMessageUrl(originalMessage.reference)}`;

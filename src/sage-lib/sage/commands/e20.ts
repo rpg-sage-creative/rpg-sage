@@ -1,5 +1,5 @@
 import type { Optional, Snowflake, UUID } from "@rsc-utils/core-utils";
-import { NIL_SNOWFLAKE, errorReturnFalse, errorReturnNull, getDataRoot } from "@rsc-utils/core-utils";
+import { errorReturnFalse, errorReturnNull, getDataRoot } from "@rsc-utils/core-utils";
 import { DiscordKey, type MessageTarget, toUserMention } from "@rsc-utils/discord-utils";
 import { PdfCacher, fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { ActionRowBuilder, AttachmentBuilder, type BaseMessageOptions, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
@@ -481,9 +481,8 @@ export async function handleEssence20Import(sageCommand: SageCommand): Promise<v
 		await sageCommand.reply(`Attempting to read character from ${fileName} ...`, false);
 		rawJson = await PdfCacher.read<TRawJson>(value);
 	}else if (isMessageUrl) {
-		const [serverDid, channelDid, messageDid] = value.split("/").slice(-3);
-		const discordKey = new DiscordKey(serverDid.replace("@me", NIL_SNOWFLAKE), channelDid, NIL_SNOWFLAKE, messageDid);
-		const message = await sageCommand.discord.fetchMessage(discordKey);
+		const discordKey = DiscordKey.fromUrl(value);
+		const message = discordKey ? await sageCommand.discord.fetchMessage(discordKey) : undefined;
 		const attachment = message?.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
 		if (attachment) {
 			fileName = attachment.name ?? undefined;
