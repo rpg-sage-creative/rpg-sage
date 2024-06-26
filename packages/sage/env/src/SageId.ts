@@ -1,9 +1,10 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import type { CanBeSnowflakeResolvable } from "@rsc-utils/discord-utils";
+import { DiscordCache, type CanBeSnowflakeResolvable } from "@rsc-utils/discord-utils";
 
 let _sageId: Snowflake;
 export function setSageId(sageId: Snowflake): void {
 	_sageId = sageId;
+	DiscordCache.setSageId(sageId);
 }
 
 export function getSageId(): Snowflake {
