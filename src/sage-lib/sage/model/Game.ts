@@ -3,7 +3,7 @@ import { sortPrimitive, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
 import { applyChanges, isDefined, warn, type Args, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
-import type { GuildChannel, GuildMember, HexColorString, Message, Role } from "discord.js";
+import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Message, Role } from "discord.js";
 import type { EncounterCore } from "../commands/trackers/encounter/Encounter.js";
 import { EncounterManager } from "../commands/trackers/encounter/EncounterManager.js";
 import type { PartyCore } from "../commands/trackers/party/Party.js";
@@ -72,7 +72,7 @@ export type TMappedChannelNameTags = {
 export type TMappedGameChannel = {
 	id: Snowflake;
 	sChannel: SageChannel;
-	gChannel: GuildChannel | undefined;
+	gChannel: GuildTextBasedChannel | undefined;
 	nameTags: TMappedChannelNameTags;
 };
 
@@ -110,7 +110,7 @@ export function nameTagsToType(nameTags: TMappedChannelNameTags): string {
 }
 
 /** Reads GuildChannel.name to determine channel type: IC, GM, OOC, MISC */
-function mapGuildChannelNameTags(channel: GuildChannel): TMappedChannelNameTags {
+function mapGuildChannelNameTags(channel: GuildTextBasedChannel): TMappedChannelNameTags {
 	return sageChannelTypeToNameTags(parseSageChannelType(channel.name));
 }
 
@@ -120,16 +120,16 @@ async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promi
 	const gChannels: TMappedGameChannel[] = [];
 	for (const sChannel of channels) {
 		sChannels.push({
-			id: sChannel.id as Snowflake,
+			id: sChannel.id,
 			sChannel: sChannel,
-			gChannel: undefined,
+			gChannel: undefined, // NOSONAR
 			nameTags: mapSageChannelNameTags(sChannel)
 		});
 
-		const gChannel = await sageCache.discord.fetchChannel(sChannel.id) as GuildChannel;
+		const gChannel = await sageCache.discord.fetchChannel<GuildTextBasedChannel>(sChannel.id);
 		if (gChannel) {
 			gChannels.push({
-				id: sChannel.id as Snowflake,
+				id: sChannel.id,
 				sChannel: sChannel,
 				gChannel: gChannel,
 				nameTags: mapGuildChannelNameTags(gChannel)
@@ -264,9 +264,9 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		}
 		return pGuildMembers.filter(isDefined);
 	}
-	public async guildChannels(): Promise<GuildChannel[]> {
+	public async guildChannels(): Promise<GuildTextBasedChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.id)));
-		return all.filter(isDefined) as GuildChannel[];
+		return all.filter(isDefined) as GuildTextBasedChannel[];
 	}
 	public async orphanChannels(): Promise<SageChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.id)));
