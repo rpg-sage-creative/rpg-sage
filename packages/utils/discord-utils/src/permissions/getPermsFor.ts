@@ -1,24 +1,24 @@
-import { PermissionFlagsBits, type Channel, type GuildMember, type GuildMemberResolvable, type PermissionResolvable, type Role, type RoleResolvable } from "discord.js";
+import { PermissionFlagsBits, type Channel, type GuildMember, type GuildMemberResolvable, type Role, type RoleResolvable } from "discord.js";
 import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
 import { isGuildBased, isThread as isThreadChannel, isWebhookChannel, type WebhookChannel } from "../types/types.js";
 
 type AccessResults = {
-	/** perms.has("MANAGE_CHANNELS") */
+	/** perms.has("ManageChannels") */
 	canManageChannel: boolean;
 
-	/** perms.has("MANAGE_WEBHOOKS") */
+	/** perms.has("ManageWebhooks") */
 	canManageWebhooks: boolean;
 
-	/** perms.has("VIEW_CHANNEL") */
+	/** perms.has("ViewChannel") */
 	canViewChannel: boolean;
 
 	/** is the member in the members list (has joined a thread) */
 	isInChannel: boolean;
 
-	/** perms.has("SEND_MESSAGES") or perms.has("SEND_MESSAGES_IN_THREADS") */
+	/** perms.has("SendMessages") or perms.has("SendMessagesInThreads") */
 	canSendMessages: boolean;
 
-	/** perms.has("ADD_REACTIONS") */
+	/** perms.has("AddReactions") */
 	canAddReactions: boolean;
 
 	/** canManageWebhooks and "fetchWebhooks" in channel */
@@ -47,7 +47,7 @@ type PermFlagBitsKeys = keyof typeof PermissionFlagsBits;
 
 type CheckedResults = AccessResults & {
 	/** the perms checked */
-	checked: PermissionResolvable[];
+	checked: PermFlagBitsKeys[];
 
 	/** missing.length > 0 */
 	// hasMissing: boolean;

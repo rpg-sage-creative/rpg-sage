@@ -106,9 +106,12 @@ export class DiscordKey implements MessageReference {
 		return resolvables.map(resolvable => resolveSnowflake(resolvable, true)).join("-");
 	}
 
-	public static from(resolvable: MessageTarget | Interaction | MessageOrPartial | ReactionOrPartial): DiscordKey {
+	public static from(resolvable: MessageTarget | Interaction | MessageOrPartial | ReactionOrPartial | MessageReference): DiscordKey {
+		if ("messageId" in resolvable) {
+			return new DiscordKey(resolvable.guildId, resolvable.channelId, resolvable.messageId);
+		}
 		if ("message" in resolvable) {
-			return DiscordKey.from(resolvable.message!);
+			resolvable = resolvable.message as MessageOrPartial;
 		}
 		const channel = "channel" in resolvable ? resolvable.channel : resolvable;
 		const guildId = isGuildBased(channel) ? channel.guildId : undefined;

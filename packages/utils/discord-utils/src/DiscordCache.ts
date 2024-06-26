@@ -1,15 +1,15 @@
 import type { Awaitable, Optional, Snowflake } from "@rsc-utils/core-utils";
-import { NIL_SNOWFLAKE, debug, errorReturnFalse, isNonNilSnowflake } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, errorReturnFalse, isNonNilSnowflake } from "@rsc-utils/core-utils";
 import { Client, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel } from "discord.js";
-import { DiscordApiError } from "../DiscordApiError.js";
-import { DiscordKey } from "../DiscordKey.js";
-import { getPermsFor } from "../permissions/getPermsFor.js";
-import { resolveChannelGuildId } from "../resolve/internal/resolveChannelGuildId.js";
-import { resolveChannelId, type CanBeChannelIdResolvable, type ChannelIdResolvable } from "../resolve/resolveChannelId.js";
-import { resolveGuildId, type CanBeGuildIdResolvable, type GuildIdResolvable } from "../resolve/resolveGuildId.js";
-import { resolveRoleId, type CanBeRoleIdResolvable } from "../resolve/resolveRoleId.js";
-import { resolveUserId, type CanBeUserIdResolvable } from "../resolve/resolveUserId.js";
-import { isMessageTarget, isNonThread, isThread, isWebhookChannel, type MessageChannel, type NonThreadChannel, type WebhookChannel } from "../types/types.js";
+import { DiscordApiError } from "./DiscordApiError.js";
+import { DiscordKey } from "./DiscordKey.js";
+import { getPermsFor } from "./permissions/getPermsFor.js";
+import { resolveChannelGuildId } from "./resolve/internal/resolveChannelGuildId.js";
+import { resolveChannelId, type CanBeChannelIdResolvable, type ChannelIdResolvable } from "./resolve/resolveChannelId.js";
+import { resolveGuildId, type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
+import { resolveRoleId, type CanBeRoleIdResolvable } from "./resolve/resolveRoleId.js";
+import { resolveUserId, type CanBeUserIdResolvable } from "./resolve/resolveUserId.js";
+import { isMessageTarget, isNonThread, isThread, isWebhookChannel, type MessageChannel, type NonThreadChannel, type WebhookChannel } from "./types/types.js";
 
 //#region Helpers
 
@@ -45,25 +45,27 @@ export class DiscordCache {
 
 	/** Clears the cache/maps in an attempt to avoid memory leaks. */
 	public clear(): void {
-		debug("Clearing DiscordCache");
 		this.#cached.clear();
 		this.webhookMap.clear();
 	}
 
 	//#region channel
 
-	public async fetchChannel<T extends Channel = Channel>(resolvable: Optional<CanBeChannelIdResolvable>): Promise<T | undefined> {
+	public async fetchChannel<T extends Channel = Channel>(resolvable: Optional<CanBeChannelIdResolvable>, isDm?: true): Promise<T | undefined> {
 		const channelId = resolveChannelId(resolvable);
 		if (!isNonNilSnowflake(channelId)) return undefined; //NOSONAR
+
+		if (isDm) {
+			const user = await this.fetchUser(channelId);
+			return user?.dmChannel as T ?? undefined;
+		}
 
 		const guildId = resolveChannelGuildId(resolvable);
 		if (guildId) {
 			const guild = await this.fetchGuild(guildId);
 			return guild?.channels?.cache.get(channelId) as T;
 		}
-
-		const user = await this.fetchUser(channelId);
-		return user?.dmChannel as T ?? undefined;
+		return undefined;
 	}
 
 	public async fetchChannelAndThread(resolvable: Optional<CanBeChannelIdResolvable>): Promise<ChannelAndThread> {
@@ -149,7 +151,7 @@ export class DiscordCache {
 		if (!isNonNilSnowflake(messageId)) return undefined; //NOSONAR
 
 		const cache = this.#cached.has(messageId);
-		const channel = await this.fetchChannel(discordKey);
+		const channel = await this.fetchChannel(discordKey, discordKey.isDm ? true : undefined);
 		const message = isMessageTarget(channel) ? await channel.messages.fetch({ message:messageId, cache, force:!cache }) : undefined;
 
 		this.#cached.set(messageId, true);
@@ -216,8 +218,7 @@ export class DiscordCache {
 		const channelId = resolveChannelId(channelIdResolvable);
 		if (!isNonNilSnowflake(guildId) || !isNonNilSnowflake(channelId)) return undefined; // NOSONAR
 
-		const discordKey = new DiscordKey(guildId, channelId);
-		const { channel } = await this.fetchChannelAndThread(discordKey);
+		const { channel } = await this.fetchChannelAndThread({ guildId, id:channelId });
 		return isWebhookChannel(channel) ? channel : undefined;
 	}
 
@@ -262,9 +263,8 @@ export class DiscordCache {
 		const webhook = await this.fetchWebhook(guildIdResolvable, channelIdResolvable, webhookOptions);
 		if (!webhook) return undefined; // NOSONAR
 
-		const discordKey = new DiscordKey(webhook.guildId, channelIdResolvable);
-		const channel = await this.fetchChannel(discordKey);
-		if (!isMessageTarget(channel)) return undefined; // NOSONAR
+		const channel = await this.fetchWebhookChannel(guildIdResolvable, channelIdResolvable);
+		if (!channel) return undefined; // NOSONAR
 
 		const options = {
 			before: channel.lastMessageId ?? undefined,
