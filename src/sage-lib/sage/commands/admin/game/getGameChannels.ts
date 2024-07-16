@@ -1,6 +1,6 @@
 import { SageChannelType, type SageChannel } from "@rsc-sage/types";
-import type { SageCommand } from "../../../model/SageCommand.js";
 import { DiscordKey, toChannelMention } from "@rsc-utils/discord-utils";
+import type { SageCommand } from "../../../model/SageCommand.js";
 
 type Results = { free:SageChannel[]; used:SageChannel[]; };
 
@@ -49,7 +49,7 @@ export async function getGameChannels(sageCommand: SageCommand, includeThisChann
 	if (used.length) {
 		const channelLinks = used.map(channel => "\n- " + toChannelMention(channel.id));
 		const channelist = channelLinks.join("");
-		await sageCommand.whisper(`The following channels are already part of an active game:` + channelist);
+		await sageCommand.replyStack.whisper(`The following channels are already part of an active game:` + channelist);
 	}
 
 	return { free, used };

@@ -76,7 +76,7 @@ export async function gBlockBots(sageCommand: SageCommand, _game?: Game): Promis
 		}
 
 		if (unable.length) {
-			await sageCommand.reply(unable.join("<br/>"));
+			await sageCommand.dChannel?.send(unable.join("<br/>"));
 		}
 	}
 
