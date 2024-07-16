@@ -59,6 +59,7 @@ async function _deleteMessage(message: Optional<Message | PartialMessage>): Prom
 	if (!message.deletable) return MessageDeleteResults.NotDeletable; //NOSONAR
 	if (isDeleted(message.id)) return MessageDeleteResults.AlreadyDeleted; //NOSONAR
 	const results = await message.delete().catch(errorReturnNull);
-	if (results?.deletable === false) return MessageDeleteResults.Deleted; //NOSONAR
+	if (results) return MessageDeleteResults.Deleted; // NOSONAR
+	// if (results?.deletable === false) return MessageDeleteResults.Deleted; //NOSONAR
 	return MessageDeleteResults.NotDeleted;
 }
