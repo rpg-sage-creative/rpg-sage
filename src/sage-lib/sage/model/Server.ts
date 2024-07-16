@@ -154,10 +154,10 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	// #endregion
 
 	// #region Admin actions
-	public async addAdmin(userDid: Snowflake, roleType: AdminRoleType): Promise<boolean> {
+	public async addAdmin(userDid: Snowflake, roleType: AdminRoleType): Promise<boolean | AdminRoleType> {
 		const found = this.getAdmin(userDid);
 		if (found) {
-			return false;
+			return found.role;
 		}
 		const admin: IAdminUser = { did: userDid, role: roleType };
 		(this.core.admins || (this.core.admins = [])).push(admin);
@@ -168,10 +168,13 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 		// }
 		return saved;
 	}
-	public async updateAdminRole(userDid: Snowflake, roleType: AdminRoleType): Promise<boolean> {
+	public async updateAdminRole(userDid: Snowflake, roleType: AdminRoleType): Promise<Optional<boolean>> {
 		const found = this.getAdmin(userDid);
 		if (!found) {
-			return false;
+			return null;
+		}
+		if (found.role === roleType) {
+			return undefined;
 		}
 		// const oldRoleType = found.role;
 		found.role = roleType;
@@ -183,10 +186,10 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 		// }
 		return saved;
 	}
-	public async removeAdmin(userDid: Snowflake): Promise<boolean> {
+	public async removeAdmin(userDid: Snowflake): Promise<boolean | null> {
 		const found = this.getAdmin(userDid);
 		if (!found) {
-			return false;
+			return null;
 		}
 		this.core.admins = this.core.admins.filter(admin => admin !== found);
 		const saved = await this.save();
