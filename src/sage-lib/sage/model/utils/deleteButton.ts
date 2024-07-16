@@ -8,24 +8,32 @@ import type { SageInteraction } from "../SageInteraction.js";
 
 type ButtonOptions = { style?:MessageButtonStyle; emoji?:string; label?:string; };
 
+/** Creates regex to test if the customId is a valid delete button customId. */
 function getCustomIdRegex(): RegExp {
 	return /^rpg-sage-message-delete-button-(?<userId>\d{16,})$/;
 }
 
+/** Creates a delete button customId for the given userId. */
 function createCustomId(userId: Snowflake): string {
 	return `rpg-sage-message-delete-button-${userId}`;
 }
 
+/** Checks to see if the given customId is for the given userId. */
 function isMatchingCustomId(customId: string, userId: Snowflake): boolean {
 	return getUserId(customId) === userId;
 }
 
+/** Extracts the userId from a valid delete button customId. */
 function getUserId(customId: string): Snowflake | undefined {
 	return getCustomIdRegex().exec(customId)?.groups?.userId;
 }
 
+/**
+ * Creates a "Delete" MessageButton.
+ * The button responds only the given user and deletes the message the button is attached to.
+ * Optionally, the style, emoji, or label can be changed.
+ */
 export function createMessageDeleteButton(userId: Snowflake, options?: ButtonOptions): MessageButton {
-
 	/** @todo update all Sage "delete" icons to use custom trashcan or wastebin emoji 🗑️ instead of ❌ */
 	return new MessageButton({
 		customId: createCustomId(userId),
@@ -45,13 +53,14 @@ export function createMessageDeleteButtonRow(userId: Snowflake, options?: Button
 }
 
 /**
- * Creates an array of MessageActionRows that with one MessageActionRow containing one Delete button.
+ * Creates an array of MessageActionRows with one MessageActionRow containing one Delete button.
  * The button responds only the given user and deletes the message the button is attached to.
  */
 export function createMessageDeleteButtonComponents(userId: Snowflake, options?: ButtonOptions): MessageActionRow<MessageActionRowComponent>[] {
 	return [createMessageDeleteButtonRow(userId, options)];
 }
 
+/** Checks all components to see if a valid delete button customId exists. */
 function hasDeleteButton(message: DMessage | MessageEditOptions | MessageOptions | InteractionReplyOptions, userId: Snowflake): boolean {
 	return message?.components?.some(row =>
 		row.components.some(btn =>
@@ -60,7 +69,7 @@ function hasDeleteButton(message: DMessage | MessageEditOptions | MessageOptions
 	) ?? false;
 }
 
-/** Adds a Delete button to the given message that responds only the given user and deletes the attached message. */
+/** Adds a Delete button to the given message (after it is created) that responds only the given user and deletes the attached message. */
 export async function addMessageDeleteButton(message: Optional<DMessage>, userId: Snowflake, options?: ButtonOptions): Promise<boolean> {
 	if (message?.editable && !hasDeleteButton(message, userId)) {
 		const components = (message.components ?? []).concat(createMessageDeleteButtonComponents(userId, options));
@@ -73,6 +82,7 @@ export async function addMessageDeleteButton(message: Optional<DMessage>, userId
 	return false;
 }
 
+/** Adds a Delete button to the given options (before a message is created) that responds only the given user and deletes the attached message. */
 export function includeDeleteButton<T extends MessageEditOptions | MessageOptions | InteractionReplyOptions>(args: T, userId: Snowflake, btnOptions?: ButtonOptions): T {
 	if (hasDeleteButton(args, userId)) return args; //NOSONAR
 

@@ -15,6 +15,7 @@ import type { Game } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType } from "./HasEmojiCore.js";
+import { ReplyStack } from "./ReplyStack.js";
 import type { SageCache } from "./SageCache.js";
 import type { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageInteraction } from "./SageInteraction.js";
@@ -105,6 +106,9 @@ export abstract class SageCommand<
 	}
 	public isSageMessage(): this is SageMessage { return "isEdit" in this; }
 	public isSageReaction(): this is SageReaction { return "messageReaction" in this; }
+
+	private _replyStack: ReplyStack | undefined;
+	public get replyStack(): ReplyStack { return this._replyStack ?? (this._replyStack = new ReplyStack(this)); }
 
 	/**
 	 * Enables us to call defer on the base class to cause Interactions to defer.
@@ -418,7 +422,7 @@ export abstract class SageCommand<
 	//#endregion
 
 	/** @todo figure out where splitMessageOptions comes into this workflow */
-	protected resolveToOptions<T extends TSendOptions>(renderableOrArgs: RenderableContentResolvable | TSendArgs, _ephemeral?: boolean): T {
+	public resolveToOptions<T extends TSendOptions>(renderableOrArgs: RenderableContentResolvable | TSendArgs, _ephemeral?: boolean): T {
 		if ((typeof(renderableOrArgs) === "string") || ("toRenderableContent" in renderableOrArgs)) {
 			return {
 				embeds: resolveToEmbeds(this.sageCache, renderableOrArgs),

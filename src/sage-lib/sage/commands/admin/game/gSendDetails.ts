@@ -7,12 +7,11 @@ import type { Optional } from "@rsc-utils/type-utils";
 import type { TextChannel } from "discord.js";
 import { getPermissionLabel } from "../../../../discord/permissions/getPermissionLabel.js";
 import { getPermsFor } from "../../../../discord/permissions/getPermsFor.js";
-import { resolveToEmbeds } from "../../../../discord/resolvers/resolveToEmbeds.js";
+import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";
 import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
-import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";
 
 async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
 	let game: Optional<Game> = sageCommand.game;
@@ -228,8 +227,7 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 export async function gSendDetails(sageCommand: SageCommand, game?: Game): Promise<void> {
 	const renderableContent = await createDetails(sageCommand, game);
 	if (renderableContent) {
-		await sageCommand.dChannel?.send({ embeds:resolveToEmbeds(sageCommand.sageCache, renderableContent) });
-		await sageCommand.noDefer();
+		await sageCommand.replyStack.send({ embeds:renderableContent });
 	}
 }
 

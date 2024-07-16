@@ -3,27 +3,33 @@ import type { SageCommand } from "../../../model/SageCommand.js";
 import { gSendDetails } from "./gSendDetails.js";
 
 export async function gCmdArchive(sageCommand: SageCommand): Promise<void> {
+	sageCommand.replyStack.startThinking();
+
 	if (!sageCommand.game) {
-		await sageCommand.whisper("There is no Game to archive!");
-		return;
+		return sageCommand.replyStack.whisper("There is no Game to archive!");
 	}
 
 	if (!sageCommand.canAdminGame) {
-		await sageCommand.whisper("Sorry, you aren't allowed to archive this Game.");
-		return;
+		return sageCommand.replyStack.whisper("Sorry, you aren't allowed to archive this Game.");
 	}
 
 	await gSendDetails(sageCommand);
+
+	sageCommand.replyStack.stopThinking();
+
 	const archive = await discordPromptYesNo(sageCommand, `Archive Game?`, true);
 	if (archive) {
 		const archived = await sageCommand.game.archive();
 		if (archived) {
-			await sageCommand.whisper("Game Archived.");
+			await sageCommand.replyStack.editLast("Game Archived.");
 
 		}else {
-			await sageCommand.whisper("Unknown Error; Game NOT Archived!");
+			await sageCommand.replyStack.whisper("Unknown Error; Game NOT Archived!");
 
 		}
+	}else {
+		await sageCommand.replyStack.editLast("Game ***NOT*** Archived.");
+
 	}
 
 }

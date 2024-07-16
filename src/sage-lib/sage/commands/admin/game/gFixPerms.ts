@@ -44,7 +44,7 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 	}
 
 	if (cannotView) {
-		await sageCommand.reply(`RPG Sage cannot see ${cannotView} channel(s).\nPlease have a server admin fix RPG Sage's permissions.`);
+		await sageCommand.replyStack.reply(`RPG Sage cannot see ${cannotView} channel(s).\nPlease have a server admin fix RPG Sage's permissions.`);
 		return false;
 	}
 
@@ -71,7 +71,7 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 	}
 
 	if (unable.length) {
-		await sageCommand.reply(unable.join("<br/>"));
+		await sageCommand.dChannel?.send(unable.join("<br/>"));
 	}
 
 	return changed;
