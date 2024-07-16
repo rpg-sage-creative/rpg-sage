@@ -21,11 +21,11 @@ async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
 			game = await sageCommand.sageCache.games.getById(gameId);
 		}
 		if (!game) {
-			await sageCommand.whisper("No Game Found!");
+			await sageCommand.replyStack.whisper("No Game Found!");
 		}
 	}
 	if (!sageCommand.canAdminGames && !game?.hasGameMaster(sageCommand.authorDid)) {
-		await sageCommand.whisper("*Server Admin, Game Admin, or Game Master privilege required!*");
+		await sageCommand.replyStack.whisper("*Server Admin, Game Admin, or Game Master privilege required!*");
 		return null;
 	}
 	return game ?? null;
