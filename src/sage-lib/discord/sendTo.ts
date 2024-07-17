@@ -60,7 +60,7 @@ type TSendToArgs = {
 	for (const payload of payloads) {
 		const message = await target.send(payload).catch(catcher);
 		if (message) {
-			if (typeof(message.type) === "string") {
+			if (typeof(message.type) === "number") {
 				messages.push(message);
 			}else {
 				warn(`sendTo(): I should not hit this line of code.`);
