@@ -73,8 +73,8 @@ function channelDetailsAppendGame(renderableContent: RenderableContent, server: 
 	}
 }
 
-async function getChannelNameAndActiveGame(sageCache: SageCache, channelDid: Snowflake): Promise<[string, Game | undefined]> {
-	const channel = await sageCache.discord.fetchChannel(channelDid);
+async function getChannelNameAndActiveGame(sageCache: SageCache, channelId: Snowflake): Promise<[string, Game | undefined]> {
+	const channel = await sageCache.discord.fetchChannel({ id:channelId, guildId:sageCache.server.did });
 	if (!isMessageTarget(channel) || isDMBased(channel)) {
 		return ["DM", undefined];
 	}
@@ -88,10 +88,10 @@ export async function channelDetails(sageMessage: SageMessage, channel?: SageCha
 	}
 
 	// Get channel from args if it isn't passed
-	const channelDid = channel?.id ?? await sageMessage.args.removeAndReturnChannelDid(true);
-	const [guildChannelName, game] = await getChannelNameAndActiveGame(sageMessage.sageCache, channelDid);
+	const channelId = channel?.id ?? sageMessage.args.getChannelId("channel") ?? sageMessage.threadOrChannelDid;
+	const [guildChannelName, game] = await getChannelNameAndActiveGame(sageMessage.sageCache, channelId);
 	const server = sageMessage.server;
-	channel = game?.getChannel(channelDid) ?? server?.getChannel(channelDid);
+	channel = game?.getChannel(channelId) ?? server?.getChannel(channelId);
 
 	if (!channel) {
 		const notProvisionedContent = createAdminRenderableContent(sageMessage.getHasColors());
@@ -100,7 +100,7 @@ export async function channelDetails(sageMessage: SageMessage, channel?: SageCha
 	}
 
 	const renderableContent = createAdminRenderableContent(server);
-	renderableContent.appendTitledSection(`<b>#${guildChannelName}</b>`, `<b>Channel Id</b> ${channelDid}`);
+	renderableContent.appendTitledSection(`<b>#${guildChannelName}</b>`, `<b>Channel Id</b> ${channelId}`);
 
 	channelDetailsAppendGame(renderableContent, server, game, channel);
 	await channelDetailsAppendDialog(renderableContent, server, game, channel);
