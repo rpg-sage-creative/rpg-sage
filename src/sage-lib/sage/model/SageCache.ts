@@ -222,7 +222,7 @@ export class SageCache {
 
 	public static async fromClient(client: Client): Promise<SageCache> {
 		const [core, sageCache] = createCoreAndCache();
-		core.discord = new DiscordCache(client, null);
+		core.discord = DiscordCache.from({ client, guild:null });
 		core.bot = ActiveBot.active;
 		core.home = await core.servers.getHome();
 		return sageCache;

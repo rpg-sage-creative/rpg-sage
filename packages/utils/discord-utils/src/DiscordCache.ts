@@ -30,8 +30,10 @@ function createWebhookKey(channelIdResolvable: ChannelIdResolvable, name: string
 //#endregion
 
 export class DiscordCache {
+
 	#cached: Map<string, boolean>;
-	public constructor(public client: Client, public guild?: Optional<Guild>, channel?: Optional<Channel>) {
+
+	private constructor(public client: Client, public guild?: Optional<Guild>, channel?: Optional<Channel>) {
 		this.#cached = new Map();
 		this.webhookMap = new Map();
 
