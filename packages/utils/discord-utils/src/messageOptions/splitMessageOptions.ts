@@ -1,11 +1,12 @@
+import type { Optional } from "@rsc-utils/core-utils";
 import { chunk, isNotBlank } from "@rsc-utils/string-utils";
 import { type APIEmbed, type ColorResolvable, type Embed, type MessageCreateOptions, type MessageEditOptions, resolveColor, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
-import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 import { EmbedBuilder } from "../embed/EmbedBuilder.js";
 import { type EmbedResolvable } from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
-import type { Optional } from "@rsc-utils/core-utils";
+import { resolveEmbed } from "../embed/resolveEmbed.js";
+import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 
 type MessageOptions = MessageCreateOptions | MessageEditOptions | WebhookMessageCreateOptions | WebhookMessageEditOptions;
 type SplitMessageOptions<T extends MessageOptions> = T & { embedContent?:string; replyingTo?:string; };
@@ -34,16 +35,24 @@ function getValueToAppend(value?: Optional<string>, newLine?: boolean, title?: b
 /** Converts embeds into content. */
 function embedsToContent(embeds?: Optional<MsgEmbed[]>): string | undefined {
 	// map the embeds to content and join them
-	const content = embeds?.map(embed => {
+	const content = embeds?.map(_embed => {
+		const embed = resolveEmbed(_embed);
+
 		let text = "";
-		text += getValueToAppend(embed.title, !!text, true);
-		text += getValueToAppend(embed.description, !!text, false);
-		if (embed.fields?.length) {
-			embed.fields.forEach(field => {
-				text += getValueToAppend(field.name, !!text, true);
-				text += getValueToAppend(field.value, !!text, false);
-			});
-		}
+
+		text += getValueToAppend(embed.title, false, true);
+		let newLine = text.length > 0;
+
+		text += getValueToAppend(embed.description, newLine);
+		newLine ||= text.length > 0;
+
+		embed.fields?.forEach(field => {
+			text += getValueToAppend(field.name, newLine, true);
+			newLine ||= text.length > 0;
+
+			text += getValueToAppend(field.value, newLine);
+			newLine ||= text.length > 0;
+		});
 		return text;
 	}).join("\n\n");
 
@@ -90,12 +99,12 @@ function mergeContent(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>)
 
 /** Merges content into embeds */
 function mergeEmbeds(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>, color?: ColorResolvable): EmbedBuilder[] | undefined {
-	// get content embeds
-	const contentEmbeds = contentToEmbeds(content, embeds?.[0].color as ColorResolvable ?? color);
-
-	// get has flags
-	const hasContentEmbeds = !!contentEmbeds?.length;
 	const hasEmbeds = !!embeds?.length;
+
+	// get content embeds
+	const embedColor = hasEmbeds ? resolveEmbed(embeds[0]).color as ColorResolvable : undefined;
+	const contentEmbeds = contentToEmbeds(content, embedColor ?? color);
+	const hasContentEmbeds = !!contentEmbeds?.length;
 
 	// return defined embeds
 	if (hasContentEmbeds && hasEmbeds) {
