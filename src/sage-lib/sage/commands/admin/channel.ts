@@ -1,4 +1,4 @@
-import { DicePostType, GameSystemType, PostType, SageChannelType, parseGameSystem, type SageChannel } from "@rsc-sage/types";
+import { DialogPostType, DicePostType, GameSystemType, SageChannelType, parseGameSystem, type SageChannel } from "@rsc-sage/types";
 import { mapAsync } from "@rsc-utils/array-utils";
 import { isDefined, stringify, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, isDMBased, isMessageTarget, toChannelMention } from "@rsc-utils/discord-utils";
@@ -21,8 +21,8 @@ async function channelDetailsAppendDialog(renderableContent: RenderableContent, 
 	if (![SageChannelType.None, SageChannelType.Dice].includes(channel.type!)) {
 		renderableContent.append(`<b>Dialog Options</b>`);
 
-		const dialogType = PostType[channel.dialogPostType!];
-		const inheritedDialogType = PostType[game?.dialogPostType ?? server.dialogPostType ?? PostType.Embed];
+		const dialogType = DialogPostType[channel.dialogPostType!];
+		const inheritedDialogType = DialogPostType[game?.dialogPostType ?? server.dialogPostType ?? DialogPostType.Embed];
 		renderableContent.append(`[spacer]<b>Dialog Type</b> ${dialogType ?? `<i>inherited (${inheritedDialogType})</i>`}`);
 
 		if (channel.sendDialogTo) {
