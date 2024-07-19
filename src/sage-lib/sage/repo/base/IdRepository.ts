@@ -8,7 +8,7 @@ import type { SageCache } from "../../model/SageCache.js";
 export { DialogPostType as DialogType, type SageChannel as IChannel } from "@rsc-sage/types";
 
 export class HasIdCoreAndSageCache<T extends IdCore<U>, U extends string = string> extends HasIdCore<T, U> {
-	public constructor(core: T, protected sageCache: SageCache) { super(core); }
+	public constructor(core: T, public sageCache: SageCache) { super(core); }
 }
 
 type IdType = Snowflake | UUID;
