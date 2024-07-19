@@ -7,6 +7,22 @@ import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import { createCommandRenderableContent } from "./cmd.js";
 
+function getDateRegex(): RegExp {
+	return /^(?<year>\d{4})-(?<month>\d{2})-(?<date>\d{2})$/;
+}
+function isValidDateString(dateString: Optional<string>): dateString is `${number}-${number}-${number}` {
+	return getDateRegex().test(dateString ?? "");
+}
+type ParsedDate = { year:number; month:number; date:number; };
+function parseDateString(dateString: Optional<string>): ParsedDate | undefined {
+	const { groups } = getDateRegex().exec(dateString ?? "") ?? { };
+	if (groups) {
+		const { year, month, date } = groups;
+		return { year:+year, month:+month, date:+date };
+	}
+	return undefined;
+}
+
 function calcYearDelta(from: TYearOrigin, to: TYearOrigin): number {
 	if (from === to) {
 		return 0;
@@ -31,22 +47,18 @@ function calcYearDelta(from: TYearOrigin, to: TYearOrigin): number {
 
 type TYearOrigin = "Absalom Station" | "Earth" | "Golarion";
 function getGDateOrToday(arg: Optional<string>, origin: TYearOrigin): GDate {
-	if (arg) {
-		const parts = arg.split(/\D/);
-		if (arg.length === 10 && parts.length === 3) {
-			const yearDelta = calcYearDelta(origin, "Earth");
-			return new GDate(+parts[0] + yearDelta, +parts[1] - 1, +parts[2]);
-		}
+	const date = parseDateString(arg);
+	if (date) {
+		const yearDelta = calcYearDelta(origin, "Earth");
+		return new GDate(date.year + yearDelta, date.month - 1, date.date);
 	}
 	return new GDate();
 }
 function getSDateOrToday(arg: Optional<string>, origin: TYearOrigin): SDate {
-	if (arg) {
-		const parts = arg.split(/\D/);
-		if (arg.length === 10 && parts.length === 3) {
-			const yearDelta = calcYearDelta(origin, "Earth");
-			return new SDate(+parts[0] + yearDelta, +parts[1] - 1, +parts[2]);
-		}
+	const date = parseDateString(arg);
+	if (date) {
+		const yearDelta = calcYearDelta(origin, "Earth");
+		return new SDate(date.year + yearDelta, date.month - 1, date.date);
 	}
 	return new SDate();
 }
@@ -81,9 +93,10 @@ async function dateHandler(sageCommand: SageCommand): Promise<void> {
 	const gDate = getGDateOrToday(date, origin ?? "Earth");
 	const sDate = getSDateOrToday(date, origin ?? "Earth");
 	const content = createCommandRenderableContent();
-	content.appendTitledSection(`<b>Today's Date (Earth)</b>`, gDate.toLongEarthString());
-	content.appendTitledSection(`<b>Today's Date (Golarion)</b>`, gDate.toLongString());
-	content.appendTitledSection(`<b>Today's Date (Absalom Station)</b>`, sDate.toLongString());
+	const today = isValidDateString(date) ? "Your" : "Today's";
+	content.appendTitledSection(`<b>${today} Date (Earth)</b>`, gDate.toLongEarthString());
+	content.appendTitledSection(`<b>${today} Date (Golarion)</b>`, gDate.toLongString());
+	content.appendTitledSection(`<b>${today} Date (Absalom Station)</b>`, sDate.toLongString());
 	content.appendTitledSection(`<b>Terrestrial Season (Northern Hemisphere)</b>`, `<b>Temperate</b> ${gDate.temperateSeason}`, `<b>Tropical</b> ${gDate.tropicalSeason}`);
 	return sageCommand.reply(content, false);
 }
