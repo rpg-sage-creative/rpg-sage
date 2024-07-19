@@ -34,8 +34,8 @@ export async function gBlockBots(sageCommand: SageCommand, _game?: Game): Promis
 
 		const gameChannels = game.channels;
 		for (const gameChannel of gameChannels) {
-			const guildChannel = await sageCommand.discord.fetchChannel<TextChannel>(gameChannel.id);
-			if (guildChannel) {
+			const guildChannel = await sageCommand.sageCache.fetchChannel<TextChannel>(gameChannel.id);
+				if (guildChannel) {
 				const sagePerms = getPermsFor(guildChannel, sageGuildMember);
 				if (!sagePerms.canViewChannel || !sagePerms.canManageChannel) {
 					continue;

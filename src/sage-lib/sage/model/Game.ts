@@ -126,7 +126,7 @@ async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promi
 			nameTags: mapSageChannelNameTags(sChannel)
 		});
 
-		const gChannel = await sageCache.discord.fetchChannel<GuildTextBasedChannel>(sChannel.id);
+		const gChannel = await sageCache.fetchChannel<GuildTextBasedChannel>(sChannel.id);
 		if (gChannel) {
 			gChannels.push({
 				id: sChannel.id,
@@ -242,7 +242,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	public async gmGuildChannel(): Promise<OrNull<GuildChannel>> {
 		for (const sChannel of this.channels) {
 			if (sChannel.type === SageChannelType.GameMaster) {
-				const gChannel = await this.discord.fetchChannel(sChannel.id);
+				const gChannel = await this.sageCache.fetchChannel(sChannel.id);
 				if (gChannel) {
 					return gChannel as GuildChannel;
 				}
@@ -265,11 +265,11 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		return pGuildMembers.filter(isDefined);
 	}
 	public async guildChannels(): Promise<GuildTextBasedChannel[]> {
-		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.id)));
+		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel(channel.id)));
 		return all.filter(isDefined) as GuildTextBasedChannel[];
 	}
 	public async orphanChannels(): Promise<SageChannel[]> {
-		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.id)));
+		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel(channel.id)));
 		return this.channels.filter((_, index) => !all[index]);
 	}
 	public async orphanUsers(): Promise<IGameUser[]> {

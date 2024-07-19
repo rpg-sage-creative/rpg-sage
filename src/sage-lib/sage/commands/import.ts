@@ -38,7 +38,7 @@ async function reimportHandler(sageCommand: SageMessage): Promise<void> {
 
 	// no message, means no components to find the characterId
 	const discordKey = DiscordKey.from(reference);
-	const charMessage = await sageCommand.discord.fetchMessage(discordKey);
+	const charMessage = await sageCommand.sageCache.fetchMessage(discordKey);
 	if (!charMessage) {
 		return reimportHelp(sageCommand);
 	}

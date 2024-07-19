@@ -23,7 +23,7 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 	const gameChannels = game.channels;
 	let cannotView = 0;
 	for (const gameChannel of gameChannels) {
-		const guildChannel = await sageCommand.discord.fetchChannel<TextChannel>(gameChannel.id);
+		const guildChannel = await sageCommand.sageCache.fetchChannel<TextChannel>(gameChannel.id);
 		if (guildChannel) {
 			const perms = getPermsFor(guildChannel, bot, ...getRequiredChannelPerms());
 			if (!perms.canViewChannel) {

@@ -41,7 +41,7 @@ export async function isAuthorBotOrWebhook(messageOrReaction: SageMessage | Sage
 
 	if (!message.guild) return false;
 
-	const webhook = await messageOrReaction.sageCache.discord.fetchWebhook(message.guild, message.channel);
+	const webhook = await messageOrReaction.sageCache.discord.fetchWebhook(message);
 	return webhook?.id === messageAuthorDid;
 }
 

@@ -74,7 +74,7 @@ function channelDetailsAppendGame(renderableContent: RenderableContent, server: 
 }
 
 async function getChannelNameAndActiveGame(sageCache: SageCache, channelId: Snowflake): Promise<[string, Game | undefined]> {
-	const channel = await sageCache.discord.fetchChannel({ id:channelId, guildId:sageCache.server.did });
+	const channel = await sageCache.fetchChannel(channelId);
 	if (!isMessageTarget(channel) || isDMBased(channel)) {
 		return ["DM", undefined];
 	}
@@ -114,7 +114,7 @@ export async function channelDetails(sageMessage: SageMessage, channel?: SageCha
 //#region list
 
 async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: SageChannel[]): Promise<GuildChannel[]> {
-	const guildChannels = await mapAsync(channels, async channel => sageMessage.discord.fetchChannel({ id:channel.id, guildId:sageMessage.server.did }));
+	const guildChannels = await mapAsync(channels, async channel => sageMessage.sageCache.fetchChannel(channel.id));
 	const existing = guildChannels.filter(isDefined) as GuildChannel[];
 
 	const filter = sageMessage.args.join(" ").trim();

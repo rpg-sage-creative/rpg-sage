@@ -222,7 +222,7 @@ export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]
 //#region Channels
 
 async function ensureTargetChannel(sageMessage: TInteraction): Promise<MessageChannel> {
-	const channel = await sageMessage.discord.fetchChannel(sageMessage.channel?.sendDiceTo);
+	const channel = await sageMessage.sageCache.fetchChannel(sageMessage.channel?.sendDiceTo);
 	if (channel) {
 		return channel as MessageChannel;
 	}

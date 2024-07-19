@@ -22,7 +22,7 @@ export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, 
 	const sageCache = sageMessage.caches;
 	const dialogType = dialogTypeOverride ?? sageMessage.dialogPostType;
 
-	const targetChannel = await sageMessage.discord.fetchChannel(sageMessage.channel?.sendDialogTo);
+	const targetChannel = await sageMessage.sageCache.fetchChannel(sageMessage.channel?.sendDialogTo);
 	if (targetChannel) {
 		const sent = await sendWebhook(targetChannel, { sageCache, renderableContent, authorOptions, dialogType, files }).catch(errorReturnEmptyArray);
 		return sent?.filter(msg => msg) ?? [];

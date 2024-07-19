@@ -1,7 +1,7 @@
 import { toUnique } from "@rsc-utils/array-utils";
 import type { Optional, Snowflake, UUID } from "@rsc-utils/core-utils";
-import { errorReturnNull, isDefined } from "@rsc-utils/core-utils";
-import { DiscordKey, DiscordMaxValues, EmbedBuilder, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
+import { errorReturnNull, isDefined, warn } from "@rsc-utils/core-utils";
+import { DiscordMaxValues, EmbedBuilder, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
 import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
 import { getExplorationModes, getSavingThrows, getSkills, PathbuilderCharacter, toModifier } from "../../../sage-pf2e/index.js";
@@ -133,8 +133,9 @@ export async function updateSheet(sageCache: SageCache, character: PathbuilderCh
 		}
 	}else {
 		if (character.messageId) {
-			const discordKey = DiscordKey.from({ guildId:sageCache.server.did, channelId:undefined!, messageId:character.messageId });
-			message = await sageCache.discord.fetchMessage(discordKey) ?? undefined;
+			const messageReference = { guildId:sageCache.server.did, channelId:undefined!, messageId:character.messageId };
+			warn(`Pretty sure this channelId:undefined is going to be a problem!`);
+			message = await sageCache.fetchMessage(messageReference) ?? undefined;
 		}
 	}
 	if (message) {

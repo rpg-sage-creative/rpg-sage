@@ -58,7 +58,7 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 		return [];
 	}
 
-	const webhook = await sageCache.discord.fetchOrCreateWebhook(targetChannel.guild, targetChannel);
+	const webhook = await sageCache.discord.fetchOrCreateWebhook(targetChannel);
 	if (!webhook) {
 		return Promise.reject(`Cannot Find Webhook: ${targetChannel.guild?.id}-${targetChannel.id}-dialog`);
 	}
@@ -86,7 +86,7 @@ export async function replaceWebhook(originalMessage: MessageOrPartial, webhookO
 		return Promise.reject(`Cannot Find Webhook w/o a Guild: ${originalMessage.channel?.id}`);
 	}
 
-	const webhook = await sageCache.discord.fetchOrCreateWebhook(originalMessage.guild, originalMessage.channel);
+	const webhook = await sageCache.discord.fetchOrCreateWebhook(originalMessage);
 	if (!webhook) {
 		return Promise.reject(`Cannot Find Webhook: ${originalMessage.guild?.id}-${originalMessage.channel?.id}-dialog`);
 	}
@@ -100,8 +100,7 @@ export async function replaceWebhook(originalMessage: MessageOrPartial, webhookO
 	let content = undefined;
 	let replyingTo: string | undefined;
 	if (originalMessage.reference?.messageId) {
-		const discordKey = DiscordKey.from(originalMessage.reference);
-		const referenceMessage = await sageCache.discord.fetchMessage(discordKey);
+		const referenceMessage = await sageCache.fetchMessage(originalMessage.reference);
 		const displayName = referenceMessage ? `*${referenceMessage.author.displayName}*` : ``;
 		replyingTo = `*replying to* ${displayName} ${toMessageUrl(originalMessage.reference)}`;
 	}

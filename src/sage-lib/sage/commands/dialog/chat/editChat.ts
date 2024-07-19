@@ -19,12 +19,13 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 	const messageDid = dialogContent.name ?? sageMessage.message.reference?.messageId,
 		dialogMessage = await findLastMessage(sageMessage, messageDid).catch(errorReturnNull),
 		discordKey = dialogMessage ? dialogMessageToDiscordKey(dialogMessage) : null,
-		message = discordKey ? await sageMessage.discord.fetchMessage(discordKey) : null;
+		message = discordKey ? await sageMessage.sageCache.fetchMessage(discordKey) : null;
 	if (!message) {
 		return sageMessage.reactWarn();
 	}
 
-	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid);
+	const webhookChannelReference = { guildId:sageMessage.server.did, channelId:sageMessage.threadOrChannelDid };
+	const webhook = await sageMessage.discord.fetchWebhook(webhookChannelReference);
 	if (webhook) {
 		const embed = message.embeds[0];
 		const originalContent = embed?.description ?? message.content;

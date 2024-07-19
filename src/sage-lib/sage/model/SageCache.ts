@@ -1,9 +1,9 @@
 import { getTupperBoxId } from "@rsc-sage/env";
 import { uncache } from "@rsc-utils/cache-utils";
-import { debug, errorReturnFalse, orNilSnowflake, silly, type Snowflake } from "@rsc-utils/core-utils";
+import { debug, errorReturnFalse, orNilSnowflake, silly, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { canSendMessageTo, DiscordKey, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageTarget, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
-import type { Client, GuildMember, Interaction } from "discord.js";
+import type { Channel, Client, GuildMember, Interaction, Message, MessageReference } from "discord.js";
 import { DiscordCache } from "../../discord/DiscordCache.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { getPermsFor } from "../../discord/permissions/getPermsFor.js";
@@ -211,6 +211,19 @@ export class SageCache {
 	}
 	public getPrefixOrDefault(): string {
 		return this.server?.getPrefixOrDefault() ?? "";
+	}
+
+	public async fetchChannel<T extends Channel = Channel>(channelId: Optional<Snowflake>): Promise<T | undefined> {
+		if (!channelId) return undefined;
+		const guildId = this.server?.did;
+		if (guildId) {
+			return this.discord.fetchChannel({ guildId, channelId });
+		}
+		return this.discord.fetchDmChannel({ channelId, userId:this.user.did }) as Promise<T>;
+	}
+
+	public async fetchMessage(keyOrReference: DiscordKey | MessageReference): Promise<Message | undefined> {
+		return this.discord.fetchMessage(keyOrReference, this.user.did);
 	}
 
 	// protected static create<T extends IHandlerCachesCore>(core: T): HandlerCaches<T> {

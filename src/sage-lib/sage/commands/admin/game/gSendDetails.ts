@@ -78,7 +78,7 @@ async function showGameRenderChannels(renderableContent: RenderableContent, sage
 		if (metas.length) {
 			renderableContent.append(`[spacer]<b>${nameTagsToType(metas[0].nameTags)}</b>`);
 			for (const meta of metas) {
-				const guildChannel = await sageCommand.discord.fetchChannel<TextChannel>(meta.sageChannel.id);
+				const guildChannel = await sageCommand.sageCache.fetchChannel<TextChannel>(meta.sageChannel.id);
 				const guildChannelName = guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`;
 				renderableContent.append(`[spacer][spacer]${guildChannelName}`);
 				const missingPerms = await checkForMissingPerms(sageCommand, guildChannel);

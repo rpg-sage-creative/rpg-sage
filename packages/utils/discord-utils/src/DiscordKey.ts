@@ -1,13 +1,14 @@
 import { isNilSnowflake, isNonNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { type Interaction, type MessageReference } from "discord.js";
 import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
+import type { ChannelReference } from "./resolve/resolveChannelReference.js";
 import { resolveSnowflake, type CanBeSnowflakeResolvable, type SnowflakeResolvable } from "./resolve/resolveSnowflake.js";
 import { isGuildBased, isMessage, isThread, type MessageOrPartial, type MessageTarget, type ReactionOrPartial } from "./types/types.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
 
-export class DiscordKey implements MessageReference {
-	//#region MessageReference
+export class DiscordKey implements MessageReference, ChannelReference {
+	//#region ChannelReference/MessageReference
 	public get guildId(): Snowflake | undefined {
 		return this.hasServer ? this.server : undefined;
 	}

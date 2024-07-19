@@ -482,7 +482,7 @@ export async function handleEssence20Import(sageCommand: SageCommand): Promise<v
 		rawJson = await PdfCacher.read<TRawJson>(value);
 	}else if (isMessageUrl) {
 		const discordKey = DiscordKey.fromUrl(value);
-		const message = discordKey ? await sageCommand.discord.fetchMessage(discordKey) : undefined;
+		const message = discordKey ? await sageCommand.sageCache.fetchMessage(discordKey) : undefined;
 		const attachment = message?.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
 		if (attachment) {
 			fileName = attachment.name ?? undefined;
