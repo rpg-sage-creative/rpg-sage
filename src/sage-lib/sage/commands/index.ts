@@ -3,6 +3,7 @@ import { registerAdmin } from "./admin";
 import { registerCal } from "./cal";
 import { registerDcs } from "./dcs";
 import { registerDefault } from "./default";
+import { registerDeleteAfter } from "./deleteAfter";
 import { registerDialog } from "./dialog";
 import { registerDice } from "./dice";
 import { registerE20 } from "./e20";
@@ -37,5 +38,6 @@ export function registerCommandHandlers(): void {
 	registerWeather();
 
 	registerDeleteButtonHandler();
+	registerDeleteAfter();
 }
 

@@ -9,6 +9,7 @@
 				"options": [
 					{ "type": 3, "name": "name", "description": "name", "required": true },
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "None", "value": "None" },
 							{ "name": "PF1e", "value": "PF1e" },
@@ -21,7 +22,6 @@
 							{ "name": "Quest", "value": "Quest" },
 							{ "name": "VtM5e", "value": "VtM5e" }
 						],
-						"type": 3,
 						"name": "system",
 						"description": "Game System, ex: PF2e or DnD5e",
 						"required": false
@@ -33,29 +33,30 @@
 					{ "name": "gms", "description": "Game Masters", "required": false, "type": 9 },
 					{ "name": "players", "description": "Players", "required": false, "type": 9 },
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "Embed", "value": "Embed" },
 							{ "name": "Post", "value": "Post" }
 						],
-						"type": 3,
 						"name": "dialogpost",
 						"description": "dialogPost",
 						"required": false
 					},
 					{ "type": 3, "name": "gmcharname", "description": "Game Master Character Name", "required": false },
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "Unknown", "value": "Unknown" },
 							{ "name": "TimesTwo", "value": "TimesTwo" },
 							{ "name": "RollTwice", "value": "RollTwice" },
 							{ "name": "AddMax", "value": "AddMax" }
 						],
-						"type": 3,
 						"name": "dicecrit",
 						"description": "Critical Hit Method, ex: RollTwice, TimesTwo",
 						"required": false
 					},
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "XXS", "value": "XXS" },
 							{ "name": "XS", "value": "XS" },
@@ -66,29 +67,28 @@
 							{ "name": "XXL", "value": "XXL" },
 							{ "name": "ROLLEM", "value": "ROLLEM" }
 						],
-						"type": 3,
 						"name": "diceoutput",
 						"description": "diceOutput",
 						"required": false
 					},
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "Post", "value": "SinglePost" },
 							{ "name": "Embed", "value": "SingleEmbed" }
 						],
-						"type": 3,
 						"name": "dicepost",
 						"description": "dicePost",
 						"required": false
 					},
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "Ignore", "value": "Ignore" },
 							{ "name": "Hide", "value": "Hide" },
 							{ "name": "GM Channel", "value": "GameMasterChannel" },
 							{ "name": "GM Message", "value": "GameMasterDirect" }
 						],
-						"type": 3,
 						"name": "dicesecret",
 						"description": "diceSecret",
 						"required": false
@@ -103,6 +103,7 @@
 				"options": [
 					{ "type": 3, "name": "name", "description": "name", "required": false },
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "None", "value": "None" },
 							{ "name": "PF1e", "value": "PF1e" },
@@ -115,7 +116,6 @@
 							{ "name": "Quest", "value": "Quest" },
 							{ "name": "VtM5e", "value": "VtM5e" }
 						],
-						"type": 3,
 						"name": "system",
 						"description": "Game System, ex: PF2e or DnD5e",
 						"required": false
@@ -127,29 +127,30 @@
 					{ "name": "gms", "description": "Game Masters", "required": false, "type": 9 },
 					{ "name": "players", "description": "Players", "required": false, "type": 9 },
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "Embed", "value": "Embed" },
 							{ "name": "Post", "value": "Post" }
 						],
-						"type": 3,
 						"name": "dialogpost",
 						"description": "dialogPost",
 						"required": false
 					},
 					{ "type": 3, "name": "gmcharname", "description": "Game Master Character Name", "required": false },
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "Unknown", "value": "Unknown" },
 							{ "name": "TimesTwo", "value": "TimesTwo" },
 							{ "name": "RollTwice", "value": "RollTwice" },
 							{ "name": "AddMax", "value": "AddMax" }
 						],
-						"type": 3,
 						"name": "dicecrit",
 						"description": "Critical Hit Method, ex: RollTwice, TimesTwo",
 						"required": false
 					},
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "XXS", "value": "XXS" },
 							{ "name": "XS", "value": "XS" },
@@ -160,29 +161,28 @@
 							{ "name": "XXL", "value": "XXL" },
 							{ "name": "ROLLEM", "value": "ROLLEM" }
 						],
-						"type": 3,
 						"name": "diceoutput",
 						"description": "diceOutput",
 						"required": false
 					},
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "Post", "value": "SinglePost" },
 							{ "name": "Embed", "value": "SingleEmbed" }
 						],
-						"type": 3,
 						"name": "dicepost",
 						"description": "dicePost",
 						"required": false
 					},
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "Ignore", "value": "Ignore" },
 							{ "name": "Hide", "value": "Hide" },
 							{ "name": "GM Channel", "value": "GameMasterChannel" },
 							{ "name": "GM Message", "value": "GameMasterDirect" }
 						],
-						"type": 3,
 						"name": "dicesecret",
 						"description": "diceSecret",
 						"required": false
@@ -225,28 +225,29 @@
 	{
 		"options": [
 			{
+				"type": 3,
 				"choices": [
 					{ "name": "Cold", "value": "Cold" },
 					{ "name": "Temperate", "value": "Temperate" },
 					{ "name": "Tropical", "value": "Tropical" }
 				],
-				"type": 3,
 				"name": "climate",
 				"description": "Cold, Temperate, Tropical",
 				"required": false
 			},
 			{
+				"type": 3,
 				"choices": [
 					{ "name": "SeaLevel", "value": "SeaLevel" },
 					{ "name": "Lowland", "value": "Lowland" },
 					{ "name": "Highland", "value": "Highland" }
 				],
-				"type": 3,
 				"name": "elevation",
 				"description": "SeaLevel, Lowland, Highland",
 				"required": false
 			},
 			{
+				"type": 3,
 				"choices": [
 					{ "name": "Spring", "value": "Spring" },
 					{ "name": "Summer", "value": "Summer" },
@@ -255,7 +256,6 @@
 					{ "name": "Wet", "value": "Wet" },
 					{ "name": "Dry", "value": "Dry" }
 				],
-				"type": 3,
 				"name": "season",
 				"description": "Temperate: Spring, Summer, Fall, Winter; Tropical: Wet, Dry",
 				"required": false
@@ -274,12 +274,12 @@
 				"options": [
 					{ "type": 3, "name": "date", "description": "A specific date: yyyy-mm-dd", "required": false },
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "Absalom Station", "value": "Absalom Station" },
 							{ "name": "Earth", "value": "Earth" },
 							{ "name": "Golarion", "value": "Golarion" }
 						],
-						"type": 3,
 						"name": "origin",
 						"description": "Where does the year originate?",
 						"required": false
@@ -298,17 +298,18 @@
 				"description": "Show Difficulty Classes",
 				"options": [
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "Simple", "value": "simple" },
 							{ "name": "By Level", "value": "level" },
 							{ "name": "By Spell Level", "value": "spell" }
 						],
-						"type": 3,
 						"name": "table",
 						"description": "Which DCs?",
 						"required": true
 					},
 					{
+						"type": 3,
 						"choices": [
 							{ "name": "Untrained", "value": "U" },
 							{ "name": "Trained", "value": "T" },
@@ -316,7 +317,6 @@
 							{ "name": "Master", "value": "M" },
 							{ "name": "Legendary", "value": "L" }
 						],
-						"type": 3,
 						"name": "proficiency",
 						"description": "What Proficiency?",
 						"required": false
@@ -327,5 +327,6 @@
 		],
 		"name": "sage-dev-pf2e",
 		"description": "sage-dev-PF2E"
-	}
+	},
+	{ "name": "Delete After", "type": 3 }
 ]
