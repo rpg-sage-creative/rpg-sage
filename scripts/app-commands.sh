@@ -16,5 +16,5 @@ if [ "$1" = "beta" ] || [ "$2" = "beta" ] || [ "$3" = "beta" ]; then which="beta
 if [ "$1" = "stable" ] || [ "$2" = "stable" ] || [ "$3" = "stable" ]; then which="stable"; fi
 
 
-node app-commands.mjs "$update" "$unified" "botCodeName=$which" \
+node app-commands.mjs "$update" "$unified" "codeName=$which" \
 	dataRoot=/Users/randaltmeyer/git/rpg-sage-legacy-data
