@@ -9,10 +9,31 @@ export type CheckField = { name:string; checked:boolean; };
 export type Field = TextField | CheckField;
 
 /** @internal */
-export type FieldJson = { id?:{ Id:string; }; T?:{ Name:string; }; V?:string; };
+export type FieldJson = {
+	id?: { Id: string; };
+	T?: { Name: string; };
+	V?: string;
+};
 
 /** @internal */
-export type BoxsetJson = { boxes:{ id?:{ Id:string; }; T?:{ Name:string; }; checked?:boolean; }[]; };
+export type BoxsetJson = {
+	boxes: {
+		id?: { Id:string; };
+		T?: { Name:string; };
+		checked?: boolean;
+	}[];
+};
 
 /** @internal */
-export type PageJson = { Fields:FieldJson[]; Boxsets:BoxsetJson[]; Texts:{ R?:{ T:string; }[]; }[]; };
+export type TextJson = {
+	R?: {
+		T: string;
+	}[];
+}
+
+/** @internal */
+export type PageJson = {
+	Fields: FieldJson[];
+	Boxsets: BoxsetJson[];
+	Texts: TextJson[];
+};
