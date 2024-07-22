@@ -19,6 +19,10 @@ export class PdfJsonManager<T extends PdfJson = PdfJson> {
 		this.fields = PdfJsonFieldManager.from(this.json);
 	}
 
+	public get title(): string | undefined {
+		return this.json?.Meta?.Title;
+	}
+
 	public hasAllFields(...names: string[]): boolean {
 		return names.every(name => this.hasField(name));
 	}
