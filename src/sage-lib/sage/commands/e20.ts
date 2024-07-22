@@ -1,11 +1,11 @@
 import type { Optional, Snowflake, UUID } from "@rsc-utils/core-utils";
 import { errorReturnFalse, errorReturnNull, getDataRoot } from "@rsc-utils/core-utils";
 import { DiscordKey, type MessageTarget, toUserMention } from "@rsc-utils/discord-utils";
-import { PdfCacher, fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import type { PdfJson } from "@rsc-utils/io-utils";
+import { PdfCacher, PdfJsonManager, fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { ActionRowBuilder, AttachmentBuilder, type BaseMessageOptions, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/essence20/index.js";
 import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
-import { PdfJsonFields, type TRawJson } from "../../../sage-e20/common/pdf.js";
 import { type PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe.js";
 import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse.js";
 import { type PlayerCharacterCorePR, PlayerCharacterPR, type TCharacterSectionType, type TCharacterViewType, type TSkillZord, type TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR.js";
@@ -28,6 +28,9 @@ function createSelectMenuRow(selectMenu: StringSelectMenuBuilder): ActionRowBuil
 	if (selectMenu.options.length > 25) {
 		selectMenu.options.length = 25;
 	}
+	if (selectMenu.data.min_values) {
+		selectMenu.setMaxValues(selectMenu.options.length);
+	}
 	return new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(selectMenu);
 }
 
@@ -45,18 +48,18 @@ async function attachCharacter(sageCache: SageCache, channel: MessageTarget, att
 	return Promise.resolve();
 }
 
-function jsonToCharacter(rawJson: TRawJson): TPlayerCharacter | null {
-	const fields = PdfJsonFields.inputToFields(rawJson);
-	if (PdfJsonParserJoe.isJoePdf(rawJson, fields)) {
-		const core = PdfJsonParserJoe.parseCharacter(fields);
+function jsonToCharacter(rawJson: PdfJson): TPlayerCharacter | null {
+	const pdfJsonManager = PdfJsonManager.from(rawJson);
+	if (PdfJsonParserJoe.isJoePdf(pdfJsonManager)) {
+		const core = PdfJsonParserJoe.parseCharacter(pdfJsonManager);
 		return core ? new PlayerCharacterJoe(core) : null;
 	}
-	if (PdfJsonParserPR.isPowerRangerPdf(rawJson, fields)) {
-		const core = PdfJsonParserPR.parseCharacter(fields);
+	if (PdfJsonParserPR.isPowerRangerPdf(pdfJsonManager)) {
+		const core = PdfJsonParserPR.parseCharacter(pdfJsonManager);
 		return core ? new PlayerCharacterPR(core) : null;
 	}
-	if (PdfJsonParserTransformer.isTransformerPdf(rawJson, fields)) {
-		const core = PdfJsonParserTransformer.parseCharacter(fields);
+	if (PdfJsonParserTransformer.isTransformerPdf(pdfJsonManager)) {
+		const core = PdfJsonParserTransformer.parseCharacter(pdfJsonManager);
 		return core ? new PlayerCharacterTransformer(core) : null;
 	}
 	return null;
@@ -329,7 +332,7 @@ function createComponents(character: TPlayerCharacter): ActionRowBuilder<ButtonB
 }
 
 export function getValidE20CharacterId(customId?: string | null): string | undefined {
-	const uuidActionRegex = /^E20\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Skill|Spec|EdgeSnag|EdgeSnagShift|Roll|Secret|Init|Untrained)$/i;
+	const uuidActionRegex = /^E20\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Skill|Spec|EdgeSnag|EdgeSnagShift|Roll|Secret|Init|Untrained)$/i;
 	if (!customId || !uuidActionRegex.test(customId)) {
 		return undefined;
 	}
@@ -475,11 +478,11 @@ export async function handleEssence20Import(sageCommand: SageCommand): Promise<v
 	const isMessageUrl = value.startsWith("https://discord.com/channels/");
 
 	let fileName: string | undefined;
-	let rawJson: Optional<TRawJson>;
+	let rawJson: Optional<PdfJson>;
 	if (isPdfUrl) {
 		fileName = value.split("/").pop();
 		await sageCommand.reply(`Attempting to read character from ${fileName} ...`, false);
-		rawJson = await PdfCacher.read<TRawJson>(value);
+		rawJson = await PdfCacher.read<PdfJson>(value);
 	}else if (isMessageUrl) {
 		const discordKey = DiscordKey.fromUrl(value);
 		const message = discordKey ? await sageCommand.sageCache.fetchMessage(discordKey) : undefined;
@@ -487,7 +490,7 @@ export async function handleEssence20Import(sageCommand: SageCommand): Promise<v
 		if (attachment) {
 			fileName = attachment.name ?? undefined;
 			await sageCommand.reply(`Attempting to read character from ${fileName} ...`, false);
-			rawJson = await PdfCacher.read<TRawJson>(attachment?.url);
+			rawJson = await PdfCacher.read<PdfJson>(attachment?.url);
 		}
 	}
 	if (!rawJson) {

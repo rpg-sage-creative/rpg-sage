@@ -1,6 +1,6 @@
-import { PdfJsonParserE20 } from "../common/parse";
-import type { TField, TRawJson } from "../common/pdf";
-import type { PlayerCharacterCoreJoe, TArmorJoe, TWeaponJoe } from "./PlayerCharacterJoe";
+import type { PdfJsonManager } from "@rsc-utils/io-utils";
+import { PdfJsonParserE20 } from "../common/parse.js";
+import type { PlayerCharacterCoreJoe, TArmorJoe, TWeaponJoe } from "./PlayerCharacterJoe.js";
 
 export class PdfJsonParserJoe extends PdfJsonParserE20 {
 
@@ -29,11 +29,11 @@ export class PdfJsonParserJoe extends PdfJsonParserE20 {
 	}
 
 	/** checks the json/fields to see if this is a GI Joe character */
-	public static isJoePdf(rawJson: TRawJson, _fields: TField[]): boolean {
-		if (String(rawJson.Meta?.Title).includes("_GI_")) {
+	public static isJoePdf(pdfJsonManager: PdfJsonManager): boolean {
+		if (pdfJsonManager.title?.includes("_GI_")) {
 			return true;
 		}
-		if (this.isRenegadePdf(rawJson, "RENEGADE%20", "GAME%20", "STUDIOS.%20", "G.I.%20", "JOE%20")) {
+		if (pdfJsonManager.hasAllSnippets("RENEGADE%20", "GAME%20", "STUDIOS.%20", "G.I.%20", "JOE%20")) {
 			/*
 			© 2021 RENEGADE GAME STUDIOS. G.I. JOE AND ALL RELATED CHARACTERS ARETRADEMARKS OF HASBRO AND ARE USED WITH PERMISSION. ©2021 HASBRO. ALL RIGHTS RESERVED. LICENSED BY HASBRO.
 			*/
@@ -42,8 +42,8 @@ export class PdfJsonParserJoe extends PdfJsonParserE20 {
 		return false;
 	}
 
-	public static parseCharacter(fields: TField[]): PlayerCharacterCoreJoe {
-		return new PdfJsonParserJoe(fields).parseCharacter();
+	public static parseCharacter(pdfJsonManager: PdfJsonManager): PlayerCharacterCoreJoe {
+		return new PdfJsonParserJoe(pdfJsonManager).parseCharacter();
 	}
 
 }
