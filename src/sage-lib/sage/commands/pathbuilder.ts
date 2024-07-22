@@ -22,8 +22,13 @@ type SageSelectInteraction = SageInteraction<StringSelectMenuInteraction>;
 
 function createActionRow<T extends ButtonBuilder | StringSelectMenuBuilder>(...components: T[]): ActionRowBuilder<T> {
 	components.forEach(comp => {
-		if ("options" in comp && comp.options.length > 25) {
-			comp.options.length = 25;
+		if ("options" in comp) {
+			if (comp.options.length > 25) {
+				comp.options.length = 25;
+			}
+			if (comp.data.min_values) {
+				comp.setMaxValues(comp.options.length);
+			}
 		}
 	});
 	return new ActionRowBuilder<T>().setComponents(...components);
