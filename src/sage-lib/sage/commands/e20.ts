@@ -332,8 +332,8 @@ function createComponents(character: TPlayerCharacter): ActionRowBuilder<ButtonB
 }
 
 export function getValidE20CharacterId(customId?: string | null): string | undefined {
-	const uuidActionRegex = /^E20\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Skill|Spec|EdgeSnag|EdgeSnagShift|Roll|Secret|Init|Untrained)$/i;
-	if (!customId || !uuidActionRegex.test(customId)) {
+	const actionRegex = /^E20\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Skill|Spec|EdgeSnag|EdgeSnagShift|Roll|Secret|Init|Untrained)$/i;
+	if (!customId || !actionRegex.test(customId)) {
 		return undefined;
 	}
 

@@ -1,5 +1,5 @@
 import { toUnique } from "@rsc-utils/array-utils";
-import type { Optional, Snowflake, UUID } from "@rsc-utils/core-utils";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { errorReturnNull, isDefined, warn } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
 import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
@@ -310,16 +310,16 @@ function prepareOutput(sageCache: SageCache, character: PathbuilderCharacter, ma
 
 //#region button command
 
-type TActionIdType = ["PB2E", UUID, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll" | "Link" | "Unlink"];
+type TActionIdType = ["PB2E", string, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll" | "Link" | "Unlink"];
 
 function matchesOldActionRegex(customId: string): boolean {
-	const _uuidActionRegex = /^(?:PB2E\|)*(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll)$/i;
-	return _uuidActionRegex.test(customId);
+	const actionRegex = /^(?:PB2E\|)*(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll)$/i;
+	return actionRegex.test(customId);
 }
 
 function matchesActionRegex(customId: string): boolean {
-	const uuidActionRegex = /^(?:PB2E)\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll|Link|Unlink)$/i;
-	return uuidActionRegex.test(customId);
+	const actionRegex = /^(?:PB2E)\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll|Link|Unlink)$/i;
+	return actionRegex.test(customId);
 }
 
 function parseCustomId(customId: string): TActionIdType {
