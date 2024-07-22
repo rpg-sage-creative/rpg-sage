@@ -1,4 +1,4 @@
-import type { Optional } from "./types.js";
+import type { Optional } from "@rsc-utils/core-utils";
 
 /**
  * @internal

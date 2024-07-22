@@ -9,12 +9,10 @@ export function listFiles(path: string, ext?: string): Promise<string[]> {
 		readdir(path, (error: NodeJS.ErrnoException | null, files: string[]) => {
 			if (error) {
 				reject(error);
+			}else if (ext) {
+				resolve(files.filter(createExtFilter(ext)));
 			}else {
-				if (ext) {
-					resolve(files.filter(createExtFilter(ext)));
-				}else {
-					resolve(files);
-				}
+				resolve(files);
 			}
 		});
 	});

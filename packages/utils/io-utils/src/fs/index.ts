@@ -3,6 +3,8 @@ export * from "./deleteFileSync.js";
 export * from "./fileExistsSync.js";
 export * from "./filterFiles.js";
 export * from "./filterFilesSync.js";
+export * from "./isDir.js";
+export * from "./isDirSync.js";
 export * from "./listFiles.js";
 export * from "./listFilesSync.js";
 export * from "./readFile.js";

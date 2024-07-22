@@ -1,9 +1,8 @@
-import { getDataRoot, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { getDataRoot, randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import PDFParser from "pdf2json";
 import { deleteFileSync } from "../fs/deleteFileSync.js";
 import { writeFile } from "../fs/writeFile.js";
 import { getBuffer } from "../https/getBuffer.js";
-import type { Optional } from "./internal/types.js";
 
 /** Copies a pdf from the given url to a local file before trying to read it. */
 export class PdfCacher {

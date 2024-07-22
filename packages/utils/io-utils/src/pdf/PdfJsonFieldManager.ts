@@ -1,6 +1,8 @@
+import type { Optional } from "@rsc-utils/core-utils";
 import { collectFields } from "./internal/collectFields.js";
 import { stringOrUndefined } from "./internal/stringOrUndefined.js";
-import type { CheckField, Field, Optional, RawJson, TextField } from "./internal/types.js";
+import type { CheckField, Field, TextField } from "./internal/types.js";
+import type { PdfJson } from "./types.js";
 
 export class PdfJsonFieldManager {
 	public constructor(private fields: Field[]) { }
@@ -40,7 +42,7 @@ export class PdfJsonFieldManager {
 		}
 	}
 
-	public static from<T extends RawJson>(input: T): PdfJsonFieldManager {
+	public static from<T extends PdfJson>(input: T): PdfJsonFieldManager {
 		return new PdfJsonFieldManager(collectFields(input));
 	}
 

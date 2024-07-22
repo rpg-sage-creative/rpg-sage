@@ -1,4 +1,5 @@
 import { createExtFilter } from "./internal/createExtFilter.js";
+import { isDirSync } from "./isDirSync.js";
 import { listFilesSync } from "./listFilesSync.js";
 
 type FilterFn = (fileName: string, filePath: string) => boolean;
@@ -21,7 +22,7 @@ export function filterFilesSync(path: string, extOrFilter: string | FilterFn, re
 		if (result) {
 			output.push(filePath);
 		}
-		if (recursive) {
+		if (recursive && isDirSync(filePath)) {
 			output.push(...filterFilesSync(filePath, filter, true));
 		}
 	}

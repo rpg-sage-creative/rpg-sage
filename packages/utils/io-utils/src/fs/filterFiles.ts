@@ -1,6 +1,7 @@
 import type { Awaitable } from "@rsc-utils/core-utils";
 import { isPromise } from "util/types";
 import { createExtFilter } from "./internal/createExtFilter.js";
+import { isDir } from "./isDir.js";
 import { listFiles } from "./listFiles.js";
 
 type FilterFn = (fileName: string, filePath: string) => Awaitable<boolean>;
@@ -28,7 +29,7 @@ export async function filterFiles(path: string, extOrFilter: string | FilterFn, 
 		if (result) {
 			output.push(filePath);
 		}
-		if (recursive) {
+		if (recursive && (await isDir(filePath))) {
 			output.push(...(await filterFiles(filePath, filter, true)));
 		}
 	}
