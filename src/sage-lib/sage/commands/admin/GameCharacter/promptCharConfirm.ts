@@ -8,7 +8,7 @@ export async function promptCharConfirm(sageMessage: SageMessage, character: Gam
 	await sendGameCharacter(sageMessage, character);
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
 	promptRenderable.append(prompt);
-	const yes = await discordPromptYesNo(sageMessage, promptRenderable);
+	const yes = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (yes === true) {
 		const updated = await action(character);
 		await sageMessage.reactSuccessOrFailure(updated);
