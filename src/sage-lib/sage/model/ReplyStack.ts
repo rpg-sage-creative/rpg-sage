@@ -1,8 +1,6 @@
-import { error, warn } from "@rsc-utils/console-utils";
-import type { DMessage } from "@rsc-utils/discord-utils";
-import { RenderableContentResolvable } from "@rsc-utils/render-utils";
-import { Optional } from "@rsc-utils/type-utils";
-import type { InteractionReplyOptions, Message, MessageEditOptions, MessageOptions } from "discord.js";
+import { error, type Optional, warn } from "@rsc-utils/core-utils";
+import { type RenderableContentResolvable } from "@rsc-utils/render-utils";
+import type { BaseMessageOptions, InteractionReplyOptions, Message, MessageEditOptions } from "discord.js";
 import { deleteMessage, isDeletable } from "../../discord/deletedMessages.js";
 import type { SageCommand, TSendArgs } from "./SageCommand.js";
 import { addMessageDeleteButton, includeDeleteButton } from "./utils/deleteButton.js";
@@ -136,7 +134,7 @@ export class ReplyStack {
 			await this._defer();
 			this.thinkingMessage = this.deferMessage;
 			if (this.deletable) {
-				await addMessageDeleteButton(this.thinkingMessage as DMessage, this.deletableBy);
+				await addMessageDeleteButton(this.thinkingMessage, this.deletableBy);
 			}
 		}else {
 			warn(`startThinking(): not isSageMessage() && !isSageInteraction("REPLIABLE")`);
@@ -194,9 +192,9 @@ export class ReplyStack {
 	//#endregion
 
 
-	private resolveArgs(renderable: RenderableContentResolvable | TSendArgs, options?: { appendSpinner?:boolean; }): MessageOptions;
+	private resolveArgs(renderable: RenderableContentResolvable | TSendArgs, options?: { appendSpinner?:boolean; }): BaseMessageOptions;
 	private resolveArgs(renderable: RenderableContentResolvable | TSendArgs, options: { fetchReply:true }): InteractionReplyOptions & { fetchReply:true };
-	private resolveArgs(renderable: RenderableContentResolvable | TSendArgs, options?: ResolveArgs): MessageOptions | InteractionReplyOptions {
+	private resolveArgs(renderable: RenderableContentResolvable | TSendArgs, options?: ResolveArgs): BaseMessageOptions | InteractionReplyOptions {
 		const args = typeof(renderable) === "string" ? { content:renderable } : renderable;
 		const messageOptions = this.sageCommand.resolveToOptions(args);
 		if (options?.appendSpinner) {

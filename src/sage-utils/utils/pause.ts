@@ -1,4 +1,4 @@
-import { silly } from "@rsc-utils/console-utils";
+import { silly } from "@rsc-utils/core-utils";
 
 type PauseOptions<T> = {
 	data: T;

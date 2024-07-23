@@ -18,7 +18,7 @@ type DialogRenderableOptions = {
 /**
  * @todo sort out why i am casting caches to <any>
  */
-export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, files, renderableContent, sageMessage, skipDelete }: DialogRenderableOptions): Promise<DMessage[]> {
+export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, files, renderableContent, sageMessage, skipDelete }: DialogRenderableOptions): Promise<Message[]> {
 	if (/discord/i.test(authorOptions.username ?? "")) {
 		await sageMessage.message.reply({ content:`Due to Discord policy, you cannot have a username with "discord" in the name!` });
 		return [];

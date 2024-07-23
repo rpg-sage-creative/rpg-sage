@@ -60,9 +60,9 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 		return <Promise<TArgIndexRet<Snowflake> | undefined>>this.argsManager.asyncFindArgIndexRet(async arg => {
 			const trimmed = arg?.trim();
-			const did = isNonNilSnowflake(trimmed) ? trimmed : parseId(trimmed, "channel");
-			if (did) {
-				const channel = await this.sageCommand.discord.fetchChannel(did);
+			const channelId = isNonNilSnowflake(trimmed) ? trimmed : parseId(trimmed, "channel");
+			if (channelId) {
+				const channel = await this.sageCommand.sageCache.fetchChannel(channelId);
 				return channel?.id;
 			}
 			return undefined;
